@@ -34,6 +34,8 @@ extern "C" {
  */
 extern Objects_Information _POSIX_Semaphore_Information;
 
+#define POSIX_SEMAPHORE_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )
 {

@@ -43,6 +43,7 @@ int _POSIX_Semaphore_Wait_support(
 
   status = _CORE_semaphore_Seize(
     &the_semaphore->Semaphore,
+    POSIX_SEMAPHORE_TQ_OPERATIONS,
     _Thread_Executing,
     blocking,
     timeout,

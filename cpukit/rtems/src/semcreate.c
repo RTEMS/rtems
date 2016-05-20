@@ -61,10 +61,9 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 )
 {
-  Semaphore_Control          *the_semaphore;
-  CORE_mutex_Attributes       the_mutex_attr;
-  CORE_semaphore_Disciplines  semaphore_discipline;
-  Status_Control              status;
+  Semaphore_Control     *the_semaphore;
+  CORE_mutex_Attributes  the_mutex_attr;
+  Status_Control         status;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -125,6 +124,8 @@ rtems_status_code rtems_semaphore_create(
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
+  the_semaphore->is_global = _Attributes_Is_global( attribute_set );
+
   if ( _Attributes_Is_global( attribute_set ) &&
        ! ( _Objects_MP_Allocate_and_open( &_Semaphore_Information, name,
                             the_semaphore->Object.id, false ) ) ) {
@@ -136,29 +137,25 @@ rtems_status_code rtems_semaphore_create(
 
   the_semaphore->attribute_set = attribute_set;
 
+  if ( _Attributes_Is_priority( attribute_set ) ) {
+    the_semaphore->discipline = SEMAPHORE_DISCIPLINE_PRIORITY;
+  } else {
+    the_semaphore->discipline = SEMAPHORE_DISCIPLINE_FIFO;
+  }
+
   /*
    *  Initialize it as a counting semaphore.
    */
   if ( _Attributes_Is_counting_semaphore( attribute_set ) ) {
-    if ( _Attributes_Is_priority( attribute_set ) )
-      semaphore_discipline = CORE_SEMAPHORE_DISCIPLINES_PRIORITY;
-    else
-      semaphore_discipline = CORE_SEMAPHORE_DISCIPLINES_FIFO;
-
-    /*
-     *  The following are just to make Purify happy.
-     */
-    the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-    the_mutex_attr.priority_ceiling = PRIORITY_MINIMUM;
-
+    the_semaphore->variant = SEMAPHORE_VARIANT_COUNTING;
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
-      semaphore_discipline,
       count
     );
     status = STATUS_SUCCESSFUL;
 #if defined(RTEMS_SMP)
   } else if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
+    the_semaphore->variant = SEMAPHORE_VARIANT_MRSP;
     status = _MRSP_Initialize(
       &the_semaphore->Core_control.mrsp,
       priority_ceiling,
@@ -167,6 +164,8 @@ rtems_status_code rtems_semaphore_create(
     );
 #endif
   } else {
+    the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX;
+
     /*
      *  It is either simple binary semaphore or a more powerful mutex
      *  style binary semaphore.  This is the mutex style.

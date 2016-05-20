@@ -22,14 +22,12 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_semaphore_release( rtems_id id )
 {
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
-  rtems_attribute       attribute_set;
   Status_Control        status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
@@ -47,27 +45,31 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     _Semaphore_Core_mutex_mp_support
   );
 
-  attribute_set = the_semaphore->attribute_set;
+  switch ( the_semaphore->variant ) {
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    status = _MRSP_Surrender(
-      &the_semaphore->Core_control.mrsp,
-      _Thread_Executing,
-      &queue_context
-    );
-  } else
+    case SEMAPHORE_VARIANT_MRSP:
+      status = _MRSP_Surrender(
+        &the_semaphore->Core_control.mrsp,
+        _Thread_Executing,
+        &queue_context
+      );
+      break;
 #endif
-  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    status = _CORE_mutex_Surrender(
-      &the_semaphore->Core_control.mutex,
-      &queue_context
-    );
-  } else {
-    status = _CORE_semaphore_Surrender(
-      &the_semaphore->Core_control.semaphore,
-      UINT32_MAX,
-      &queue_context
-    );
+    case SEMAPHORE_VARIANT_MUTEX:
+      status = _CORE_mutex_Surrender(
+        &the_semaphore->Core_control.mutex,
+        &queue_context
+      );
+      break;
+    default:
+      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      status = _CORE_semaphore_Surrender(
+        &the_semaphore->Core_control.semaphore,
+        _Semaphore_Get_operations( the_semaphore ),
+        UINT32_MAX,
+        &queue_context
+      );
+      break;
   }
 
   return _Status_Get( status );

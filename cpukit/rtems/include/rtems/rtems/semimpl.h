@@ -26,11 +26,36 @@
 extern "C" {
 #endif
 
+typedef enum {
+  SEMAPHORE_VARIANT_MUTEX,
+  SEMAPHORE_VARIANT_COUNTING
+#if defined(RTEMS_SMP)
+  ,
+  SEMAPHORE_VARIANT_MRSP
+#endif
+} Semaphore_Variant;
+
+typedef enum {
+  SEMAPHORE_DISCIPLINE_PRIORITY,
+  SEMAPHORE_DISCIPLINE_FIFO
+} Semaphore_Discipline;
+
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.
  */
 extern Objects_Information _Semaphore_Information;
+
+RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
+  const Semaphore_Control *the_semaphore
+)
+{
+  if ( the_semaphore->discipline == SEMAPHORE_DISCIPLINE_PRIORITY ) {
+    return &_Thread_queue_Operations_priority;
+  } else {
+    return &_Thread_queue_Operations_FIFO;
+  }
+}
 
 /**
  *  @brief Allocates a semaphore control block from

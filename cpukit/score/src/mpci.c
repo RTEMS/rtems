@@ -35,6 +35,8 @@ RTEMS_STATIC_ASSERT(
   MPCI_Internal_packet
 );
 
+#define MPCI_SEMAPHORE_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
 bool _System_state_Is_multiprocessing;
 
 rtems_multiprocessing_table *_Configuration_MP_table;
@@ -119,7 +121,6 @@ static void _MPCI_Handler_initialization( void )
 
   _CORE_semaphore_Initialize(
     &_MPCI_Semaphore,
-    CORE_SEMAPHORE_DISCIPLINES_FIFO,
     0                         /* initial_value */
   );
 }
@@ -335,6 +336,7 @@ void _MPCI_Receive_server(
     _ISR_lock_ISR_disable( &queue_context.Lock_context );
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
+      MPCI_SEMAPHORE_TQ_OPERATIONS,
       executing,
       true,
       WATCHDOG_NO_TIMEOUT,
@@ -373,7 +375,12 @@ void _MPCI_Announce ( void )
   Thread_queue_Context queue_context;
 
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, UINT32_MAX, &queue_context );
+  (void) _CORE_semaphore_Surrender(
+    &_MPCI_Semaphore,
+    MPCI_SEMAPHORE_TQ_OPERATIONS,
+    UINT32_MAX,
+    &queue_context
+  );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (

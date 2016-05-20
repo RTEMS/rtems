@@ -53,22 +53,27 @@ rtems_status_code rtems_semaphore_delete(
     &queue_context.Lock_context
   );
 
+  switch ( the_semaphore->variant ) {
+    case SEMAPHORE_VARIANT_MUTEX:
+      if (
+        _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex )
+          && !_Attributes_Is_simple_binary_semaphore( attribute_set )
+      ) {
+        status = STATUS_RESOURCE_IN_USE;
+      } else {
+        status = STATUS_SUCCESSFUL;
+      }
+
+      break;
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
-  } else
+    case SEMAPHORE_VARIANT_MRSP:
+      status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
+      break;
 #endif
-  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    if (
-      _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex )
-        && !_Attributes_Is_simple_binary_semaphore( attribute_set )
-    ) {
-      status = STATUS_RESOURCE_IN_USE;
-    } else {
+    default:
+      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
       status = STATUS_SUCCESSFUL;
-    }
-  } else {
-    status = STATUS_SUCCESSFUL;
+      break;
   }
 
   if ( status != STATUS_SUCCESSFUL ) {
@@ -82,27 +87,32 @@ rtems_status_code rtems_semaphore_delete(
 
   _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
+  switch ( the_semaphore->variant ) {
+    case SEMAPHORE_VARIANT_MUTEX:
+      _CORE_mutex_Flush(
+        &the_semaphore->Core_control.mutex,
+        _Thread_queue_Flush_status_object_was_deleted,
+        &queue_context
+      );
+      _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
+      break;
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &queue_context );
-  } else
+    case SEMAPHORE_VARIANT_MRSP:
+      _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &queue_context );
+      break;
 #endif
-  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    _CORE_mutex_Flush(
-      &the_semaphore->Core_control.mutex,
-      _Thread_queue_Flush_status_object_was_deleted,
-      &queue_context
-    );
-    _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
-  } else {
-    _CORE_semaphore_Destroy(
-      &the_semaphore->Core_control.semaphore,
-      &queue_context
-    );
+    default:
+      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _CORE_semaphore_Destroy(
+        &the_semaphore->Core_control.semaphore,
+        _Semaphore_Get_operations( the_semaphore ),
+        &queue_context
+      );
+      break;
   }
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( _Attributes_Is_global( attribute_set ) ) {
+  if ( the_semaphore->is_global ) {
 
     _Objects_MP_Close( &_Semaphore_Information, id );
 

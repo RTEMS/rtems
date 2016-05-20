@@ -19,13 +19,11 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/attrimpl.h>
 
 rtems_status_code rtems_semaphore_flush( rtems_id id )
 {
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
-  rtems_attribute       attribute_set;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
 
@@ -39,38 +37,40 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
     return RTEMS_INVALID_ID;
   }
 
-  attribute_set = the_semaphore->attribute_set;
-
+  _Thread_queue_Acquire_critical(
+    &the_semaphore->Core_control.Wait_queue,
+    &queue_context.Lock_context
+  );
   _Thread_queue_Context_set_MP_callout(
     &queue_context,
     _Semaphore_MP_Send_object_was_deleted
   );
 
+  switch ( the_semaphore->variant ) {
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    _ISR_lock_ISR_enable( &queue_context.Lock_context );
-    return RTEMS_NOT_DEFINED;
-  } else
+    case SEMAPHORE_VARIANT_MRSP:
+      _Thread_queue_Release(
+        &the_semaphore->Core_control.Wait_queue,
+        &queue_context.Lock_context
+      );
+      return RTEMS_NOT_DEFINED;
 #endif
-  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    _CORE_mutex_Acquire_critical(
-      &the_semaphore->Core_control.mutex,
-      &queue_context
-    );
-    _CORE_mutex_Flush(
-      &the_semaphore->Core_control.mutex,
-      _Thread_queue_Flush_status_unavailable,
-      &queue_context
-    );
-  } else {
-    _CORE_semaphore_Acquire_critical(
-      &the_semaphore->Core_control.semaphore,
-      &queue_context
-    );
-    _CORE_semaphore_Flush(
-      &the_semaphore->Core_control.semaphore,
-      &queue_context
-    );
+    case SEMAPHORE_VARIANT_MUTEX:
+      _CORE_mutex_Flush(
+        &the_semaphore->Core_control.mutex,
+        _Thread_queue_Flush_status_unavailable,
+        &queue_context
+      );
+      break;
+    default:
+      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _CORE_semaphore_Flush(
+        &the_semaphore->Core_control.semaphore,
+        _Semaphore_Get_operations( the_semaphore ),
+        &queue_context
+      );
+      break;
   }
+
   return RTEMS_SUCCESSFUL;
 }

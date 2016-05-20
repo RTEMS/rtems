@@ -97,6 +97,24 @@ typedef struct {
   } Core_control;
 
   /**
+   * @brief The semaphore variant.
+   *
+   * @see Semaphore_Variant.
+   */
+  unsigned int variant : 3;
+
+  /**
+   * @brief The semaphore thread queue discipline.
+   *
+   * @see Semaphore_Discipline.
+   */
+  unsigned int discipline : 1;
+
+#if defined(RTEMS_MULTIPROCESSING)
+  unsigned int is_global : 1;
+#endif
+
+  /**
    *  This is the Classic API attribute provided to the create directive.
    *  It is translated into behavioral attributes on the SuperCore Semaphore
    *  or Mutex instance.

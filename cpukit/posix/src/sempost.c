@@ -40,6 +40,7 @@ int sem_post(
 
   status = _CORE_semaphore_Surrender(
     &the_semaphore->Semaphore,
+    POSIX_SEMAPHORE_TQ_OPERATIONS,
     SEM_VALUE_MAX,
     &queue_context
   );

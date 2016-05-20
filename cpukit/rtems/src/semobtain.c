@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/statusimpl.h>
 
@@ -54,7 +53,6 @@ rtems_status_code rtems_semaphore_obtain(
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
   Thread_Control       *executing;
-  rtems_attribute       attribute_set;
   bool                  wait;
   Status_Control        status;
 
@@ -69,36 +67,40 @@ rtems_status_code rtems_semaphore_obtain(
   }
 
   executing = _Thread_Executing;
-  attribute_set = the_semaphore->attribute_set;
   wait = !_Options_Is_no_wait( option_set );
+
+  switch ( the_semaphore->variant ) {
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    status = _MRSP_Seize(
-      &the_semaphore->Core_control.mrsp,
-      executing,
-      wait,
-      timeout,
-      &queue_context
-    );
-  } else
+    case SEMAPHORE_VARIANT_MRSP:
+      status = _MRSP_Seize(
+        &the_semaphore->Core_control.mrsp,
+        executing,
+        wait,
+        timeout,
+        &queue_context
+      );
+      break;
 #endif
-  if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    status = _CORE_mutex_Seize(
-      &the_semaphore->Core_control.mutex,
-      executing,
-      wait,
-      timeout,
-      &queue_context
-    );
-  } else {
-    /* must be a counting semaphore */
-    status = _CORE_semaphore_Seize(
-      &the_semaphore->Core_control.semaphore,
-      executing,
-      wait,
-      timeout,
-      &queue_context
-    );
+    case SEMAPHORE_VARIANT_MUTEX:
+      status = _CORE_mutex_Seize(
+        &the_semaphore->Core_control.mutex,
+        executing,
+        wait,
+        timeout,
+        &queue_context
+      );
+      break;
+    default:
+      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      status = _CORE_semaphore_Seize(
+        &the_semaphore->Core_control.semaphore,
+        _Semaphore_Get_operations( the_semaphore ),
+        executing,
+        wait,
+        timeout,
+        &queue_context
+      );
+      break;
   }
 
   return _Status_Get( status );

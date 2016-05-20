@@ -92,11 +92,7 @@ int _POSIX_Semaphore_Create_support(
    *  thing is certain, no matter what we decide, it won't be
    *  the same as  all other POSIX implementations. :)
    */
-  _CORE_semaphore_Initialize(
-    &the_semaphore->Semaphore,
-    CORE_SEMAPHORE_DISCIPLINES_FIFO,
-    value
-  );
+  _CORE_semaphore_Initialize( &the_semaphore->Semaphore, value );
 
   /*
    *  Make the semaphore available for use.

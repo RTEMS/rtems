@@ -38,18 +38,6 @@ extern "C" {
 /**@{*/
 
 /**
- *  Blocking disciplines for a semaphore.
- */
-typedef enum {
-  /** This specifies that threads will wait for the semaphore in FIFO order. */
-  CORE_SEMAPHORE_DISCIPLINES_FIFO,
-  /** This specifies that threads will wait for the semaphore in
-   *  priority order.
-   */
-  CORE_SEMAPHORE_DISCIPLINES_PRIORITY
-}   CORE_semaphore_Disciplines;
-
-/**
  *  The following defines the control block used to manage each
  *  counting semaphore.
  */
@@ -58,11 +46,6 @@ typedef struct {
    *  which are blocked waiting to obtain the semaphore.
    */
   Thread_queue_Control        Wait_queue;
-
-  /**
-   * @brief The thread queue operations according to the blocking discipline.
-   */
-  const Thread_queue_Operations *operations;
 
   /** This element contains the current count of this semaphore. */
   uint32_t                    count;
