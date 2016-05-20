@@ -12,48 +12,19 @@
 #endif
 
 #include <rtems/posix/condimpl.h>
-
-static bool _POSIX_Condition_variables_Check_id_and_auto_init(
-  pthread_cond_t *cond
-)
-{
-  if ( cond == NULL ) {
-    return false;
-  }
-
-  if ( *cond == PTHREAD_COND_INITIALIZER ) {
-    int eno;
-
-    _Once_Lock();
-
-    if ( *cond == PTHREAD_COND_INITIALIZER ) {
-      eno = pthread_cond_init( cond, NULL );
-    } else {
-      eno = 0;
-    }
-
-    _Once_Unlock();
-
-    if ( eno != 0 ) {
-      return false;
-    }
-  }
-
-  return true;
-}
+#include <rtems/posix/posixapi.h>
 
 POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
   pthread_cond_t   *cond,
   ISR_lock_Context *lock_context
 )
 {
-  if ( !_POSIX_Condition_variables_Check_id_and_auto_init( cond ) ) {
-    return NULL;
-  }
-
-  return (POSIX_Condition_variables_Control *) _Objects_Get_local(
-    (Objects_Id) *cond,
+  _POSIX_Get_object_body(
+    POSIX_Condition_variables_Control,
+    cond,
     lock_context,
-    &_POSIX_Condition_variables_Information
+    &_POSIX_Condition_variables_Information,
+    PTHREAD_COND_INITIALIZER,
+    pthread_cond_init
   );
 }

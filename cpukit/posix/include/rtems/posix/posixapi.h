@@ -21,6 +21,7 @@
 
 #include <rtems/config.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/apimutex.h>
 #include <rtems/score/objectimpl.h>
 
 /**
@@ -58,6 +59,37 @@ RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
   _Assert( (size_t) error < RTEMS_ARRAY_SIZE( _POSIX_Get_by_name_error_table ) );
   return _POSIX_Get_by_name_error_table[ error ];
 }
+
+/**
+ * @brief Macro to generate a function body to get a POSIX object by
+ * identifier.
+ *
+ * Generates a function body to get the object for the specified indentifier.
+ * Performs automatic initialization if requested and necessary.  This is an
+ * ugly macro, since C lacks support for templates.
+ */
+#define _POSIX_Get_object_body( \
+  type, \
+  id, \
+  lock_context, \
+  info, \
+  initializer, \
+  init \
+) \
+  Objects_Control *the_object; \
+  if ( id == NULL ) { \
+    return NULL; \
+  } \
+  the_object = _Objects_Get_local( (Objects_Id) *id, lock_context, info ); \
+  if ( the_object == NULL ) { \
+    _Once_Lock(); \
+    if ( *id == initializer ) { \
+      init( id, NULL ); \
+    } \
+    _Once_Unlock(); \
+    the_object = _Objects_Get_local( (Objects_Id) *id, lock_context, info ); \
+  } \
+  return (type *) the_object
 
 /** @} */
 
