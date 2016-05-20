@@ -50,7 +50,7 @@ void force_error()
       "WARNING - Test not applicable on this target architecture.\n"
       "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE.\n"
     );
-    rtems_test_endk();
+    TEST_END();
     rtems_test_exit(0);
   #endif
 }

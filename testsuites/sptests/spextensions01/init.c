@@ -16,11 +16,12 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <assert.h>
 #include <limits.h>
 #include <stdlib.h>
-
-#include <rtems/test.h>
 
 #include <bsp.h>
 
@@ -199,7 +200,7 @@ static void two_fatal(
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_reverse_order(2);
     assert(counter == 72);
-    rtems_test_endk();
+    TEST_END();
   }
 }
 
@@ -424,7 +425,7 @@ static void test(void)
 
 static void Init(rtems_task_argument arg)
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   test();
 

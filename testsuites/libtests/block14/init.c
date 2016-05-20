@@ -118,7 +118,10 @@ static int test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
 
 static void test_actions(rtems_disk_device *dd)
 {
+  rtems_printer printer;
   int i;
+
+  rtems_print_printer_printf(&printer);
 
   for (i = 0; i < ACTION_COUNT; ++i) {
     const test_action *action = &actions [i];
@@ -155,7 +158,7 @@ static void test_actions(rtems_disk_device *dd)
     );
   }
 
-  rtems_blkdev_print_stats(&dd->stats, 0, 1, 2, rtems_printf_plugin, NULL);
+  rtems_blkdev_print_stats(&dd->stats, 0, 1, 2, &printer);
 }
 
 static void test(void)

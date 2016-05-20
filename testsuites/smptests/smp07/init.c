@@ -18,7 +18,7 @@ const char rtems_test_name[] = "SMP 7";
 
 volatile bool TaskRan = false;
 volatile bool TSRFired = false;
-rtems_id      Semaphore; 
+rtems_id      Semaphore;
 
 rtems_task Init(
   rtems_task_argument argument
@@ -30,7 +30,7 @@ rtems_task Test_task(
 
 static void success(void)
 {
-  rtems_test_end_with_plugin(locked_printf_plugin, NULL);
+  rtems_test_end( );
   rtems_test_exit( 0 );
 }
 
@@ -63,8 +63,8 @@ rtems_task Test_task(
 
   /* Print that the task is up and running. */
   locked_printf(
-    " CPU %" PRIu32 " running Task %s after semaphore release\n", 
-    cpu_num, 
+    " CPU %" PRIu32 " running Task %s after semaphore release\n",
+    cpu_num,
     name
   );
 
@@ -98,7 +98,7 @@ rtems_task Init(
   rtems_id           Timer;
 
   locked_print_initialize();
-  rtems_test_begin_with_plugin(locked_printf_plugin, NULL);
+  rtems_test_begin();
 
   if ( rtems_get_processor_count() == 1 ) {
     success();
@@ -107,7 +107,7 @@ rtems_task Init(
   /* Create/verify semaphore */
   status = rtems_semaphore_create(
     rtems_build_name ('S', 'E', 'M', '1'),
-    1,                                             
+    1,
     RTEMS_LOCAL                   |
     RTEMS_SIMPLE_BINARY_SEMAPHORE |
     RTEMS_PRIORITY,
@@ -157,7 +157,7 @@ rtems_task Init(
     if ( TSRFired && TaskRan )
       break;
   };
-  
+
   /* Validate the timer fired and that the task ran */
   if ( !TSRFired )
     locked_printf( "*** ERROR TSR DID NOT FIRE ***" );

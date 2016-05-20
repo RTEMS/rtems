@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @brief Write Character to Stream 
+ *  @brief Write Character to Stream
  *  @ingroup libcsupport
  */
 
@@ -23,11 +23,13 @@
 /**
  * Kernel putk (e.g. puts) function requiring minimal infrastrure.
  */
-void putk(const char *s)
+int putk(const char *s)
 {
   const char *p;
+  int len_out = 0;
 
-  for (p=s ; *p ; p++ )
+  for (p=s ; *p ; p++, len_out++ )
     BSP_output_char(*p);
   BSP_output_char('\n');
+  return len_out + 1;
 }

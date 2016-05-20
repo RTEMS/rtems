@@ -74,8 +74,6 @@ int locked_printf(const char *fmt, ...);
 
 int locked_vprintf(const char *fmt, va_list ap);
 
-int locked_printf_plugin(void *context, const char *fmt, ...);
-
 void locked_printk(const char *fmt, ...);
 
 #ifdef __cplusplus

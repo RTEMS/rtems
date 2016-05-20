@@ -18,7 +18,7 @@
 #define _MW_UID_H
 
 #include <sys/types.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 
 /**
  *  @defgroup libmisc_fb_mw Input Devices for MicroWindows
@@ -179,14 +179,11 @@ void uid_print_message(
  * This methods prints the specified UID message using your fprintf
  * style method of choice.
  *
- * @param[in] context is a pointer to a data area which may be
- *            used by some print handlers
- * @param[in] handler is the fprintf style method to invoke
+ * @param[in] RTEMS printer
  * @param[in] uid points to the message to print
  */
 void uid_print_message_with_plugin(
-  void                  *context,
-  rtems_printk_plugin_t  handler,
+  const rtems_printer   *printer,
   struct MW_UID_MESSAGE *uid
 );
 

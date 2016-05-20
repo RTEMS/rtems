@@ -1,4 +1,4 @@
-/* 
+/*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -14,7 +14,23 @@
 #include "test_support.h"
 #include "tmacros.h"
 
-static rtems_id locked_print_semaphore;      /* synchronisation semaphore */ 
+static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
+
+rtems_printer rtems_test_printer;
+
+static int locked_printf_plugin(void *context, const char *fmt, ...)
+{
+  int rv;
+  va_list ap;
+
+  (void) context;
+
+  va_start(ap, fmt);
+  rv = locked_vprintf(fmt, ap);
+  va_end(ap);
+
+  return rv;
+}
 
 void locked_print_initialize(void)
 {
@@ -29,7 +45,7 @@ void locked_print_initialize(void)
   /* Create/verify synchronisation semaphore */
   sc = rtems_semaphore_create(
     rtems_build_name ('S', 'E', 'M', '1'),
-    1,                                             
+    1,
     RTEMS_LOCAL                   |
     RTEMS_BINARY_SEMAPHORE |
     RTEMS_PRIORITY_CEILING |
@@ -38,6 +54,12 @@ void locked_print_initialize(void)
     &locked_print_semaphore
   );
   directive_failed( sc, "rtems_semaphore_create" );
+
+  /*
+   * Set up the printer to use the locked printf printer.
+   */
+  rtems_test_printer.context = NULL;
+  rtems_test_printer.context = locked_printf_plugin;
 }
 
 int locked_vprintf(const char *fmt, va_list ap)
@@ -56,20 +78,6 @@ int locked_vprintf(const char *fmt, va_list ap)
 
   /* Release the semaphore  */
   rtems_semaphore_release( locked_print_semaphore );
-
-  return rv;
-}
-
-int locked_printf_plugin(void *context, const char *fmt, ...)
-{
-  int rv;
-  va_list ap;
-
-  (void) context;
-
-  va_start(ap, fmt);
-  rv = locked_vprintf(fmt, ap);
-  va_end(ap);
 
   return rv;
 }

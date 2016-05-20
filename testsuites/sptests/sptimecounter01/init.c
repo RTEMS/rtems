@@ -16,11 +16,12 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <assert.h>
 
 #include <bsp/bootcard.h>
-
-#include <rtems/test.h>
 
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/todimpl.h>
@@ -54,7 +55,7 @@ void boot_card(const char *cmdline)
   struct timeval tv;
   struct timespec ts;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   assert(time(NULL) == TOD_SECONDS_1970_THROUGH_1988);
 
@@ -148,7 +149,7 @@ void boot_card(const char *cmdline)
   assert(bt.sec == 1);
   assert(bt.frac == 18446742522092);
 
-  rtems_test_endk();
+  TEST_END();
 
   _Terminate(RTEMS_FATAL_SOURCE_EXIT, false, 0);
 }

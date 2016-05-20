@@ -60,7 +60,7 @@ bool enqueue_next_action(
     return false;
 
   termios_test_driver_set_rx_enqueue_now( true );
-  
+
   termios_test_driver_set_rx( &actions[Mouse_Index], to_enqueue );
   Mouse_Index += to_enqueue;
 
@@ -95,9 +95,10 @@ void printf_uid_message(
   struct MW_UID_MESSAGE *uid
 )
 {
+  rtems_printer printer;
+  rtems_print_printer_printf( &printer );
   uid_print_message_with_plugin(
-    stdout,
-    (rtems_printk_plugin_t)fprintf,
+    &printer,
     uid
   );
 }
@@ -135,16 +136,16 @@ rtems_task Init(
   TEST_BEGIN();
 
   open_it();
-  register_it(); 
+  register_it();
   do {
     more_data = enqueue_next_action(
       Mouse_Actions,
-      Mouse_Actions_Size, 
+      Mouse_Actions_Size,
       Mouse_Actions_Per_Iteration
     );
     receive_uid_message();
   } while (more_data);
-  close_it(); 
+  close_it();
   TEST_END();
   rtems_test_exit( 0 );
 }

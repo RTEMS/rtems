@@ -115,13 +115,15 @@ static void test_iterate(void)
 
 static void test_report_xml(void)
 {
+  rtems_printer printer;
   rtems_status_code sc;
   int rv;
 
   sc = rtems_task_wake_after(3);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rv = rtems_profiling_report_xml("X", rtems_printf_plugin, NULL, 1, "  ");
+  rtems_print_printer_printf(&printer);
+  rv = rtems_profiling_report_xml("X", &printer, 1, "  ");
   printf("characters produced by rtems_profiling_report_xml(): %i\n", rv);
 }
 

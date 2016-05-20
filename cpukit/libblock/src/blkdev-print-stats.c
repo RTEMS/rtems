@@ -32,12 +32,11 @@ void rtems_blkdev_print_stats(
   uint32_t media_block_size,
   uint32_t media_block_count,
   uint32_t block_size,
-  rtems_printk_plugin_t print,
-  void *print_arg
+  const rtems_printer* printer
 )
 {
-  (*print)(
-     print_arg,
+  rtems_printf(
+     printer,
      "-------------------------------------------------------------------------------\n"
      "                               DEVICE STATISTICS\n"
      "----------------------+--------------------------------------------------------\n"

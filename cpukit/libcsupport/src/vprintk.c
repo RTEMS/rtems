@@ -30,7 +30,7 @@
 #include <stdbool.h>
 #include <rtems/bspIo.h>
 
-static void printNum(
+static int printNum(
   long long num,
   unsigned base,
   bool sign,
@@ -45,11 +45,12 @@ static void printNum(
  * Arguments:
  *    as in printf: fmt - format string, ... - unnamed arguments.
  */
-void vprintk(
+int vprintk(
   const char *fmt,
   va_list     ap
 )
 {
+  int len_out = 0;
   for (; *fmt != '\0'; fmt++) {
     unsigned base = 0;
     unsigned width = 0;
@@ -66,6 +67,7 @@ void vprintk(
 
     if (c != '%') {
       rtems_putc(c);
+      ++len_out;
       continue;
     }
 
@@ -101,6 +103,7 @@ void vprintk(
       /* need a cast here since va_arg() only takes fully promoted types */
       char chr = (char) va_arg(ap, int);
       rtems_putc(chr);
+      ++len_out;
       continue;
     }
 
@@ -120,7 +123,7 @@ void vprintk(
 
       /* leading spaces */
       if ( !minus )
-        for ( i=len ; i<width ; i++ )
+        for ( i=len ; i<width ; i++, len_out++ )
           rtems_putc(' ');
 
       /* no width option */
@@ -129,12 +132,12 @@ void vprintk(
       }
 
       /* output the string */
-      for ( i=0 ; i<width && *str ; str++ )
+      for ( i=0 ; i<width && *str ; str++, len_out++ )
         rtems_putc(*str);
 
       /* trailing spaces */
       if ( minus )
-        for ( i=len ; i<width ; i++ )
+        for ( i=len ; i<width ; i++, len_out++ )
           rtems_putc(' ');
 
       continue;
@@ -154,6 +157,7 @@ void vprintk(
       base = 16; sign = false; lflag = LFLAG_LONG;
     } else {
       rtems_putc(c);
+      ++len_out;
       continue;
     }
 
@@ -172,8 +176,10 @@ void vprintk(
         break;
     }
 
-    printNum(num, base, sign, width, lead);
+    len_out += printNum(num, base, sign, width, lead);
   }
+
+  return len_out;
 }
 
 /**
@@ -181,7 +187,7 @@ void vprintk(
  *  @param[in] num is the number to print
  *  @param[in] base is the base used to print the number
  */
-static void printNum(
+static int printNum(
   long long num,
   unsigned base,
   bool sign,
@@ -194,9 +200,11 @@ static void printNum(
   unsigned count;
   #define UINT64_MAX_IN_OCTAL_FORMAT "1777777777777777777777"
   char toPrint[sizeof(UINT64_MAX_IN_OCTAL_FORMAT)];
+  int len_out = 0;
 
   if ( sign && (num <  0) ) {
     rtems_putc('-');
+    ++len_out;
     unsigned_num = (unsigned long long) -num;
     if (maxwidth) maxwidth--;
   } else {
@@ -210,10 +218,12 @@ static void printNum(
   }
   toPrint[count++] = (char) unsigned_num;
 
-  for (n=maxwidth ; n > count; n-- )
+  for (n=maxwidth ; n > count; n--, len_out++ )
     rtems_putc(lead);
 
-  for (n = 0; n < count; n++) {
+  for (n = 0; n < count; n++, len_out++) {
     rtems_putc("0123456789ABCDEF"[(int)(toPrint[count-(n+1)])]);
   }
+
+  return len_out;
 }

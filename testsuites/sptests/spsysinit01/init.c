@@ -16,6 +16,9 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -29,7 +32,6 @@
 #include <rtems/ioimpl.h>
 #include <rtems/libio_.h>
 #include <rtems/sysinit.h>
-#include <rtems/test.h>
 
 #include <rtems/extensionimpl.h>
 #ifdef RTEMS_POSIX_API
@@ -173,7 +175,7 @@ static void next_step(init_step expected)
 
 FIRST(RTEMS_SYSINIT_BSP_WORK_AREAS)
 {
-  rtems_test_begink();
+  TEST_BEGIN();
   assert(_Workspace_Area.area_begin == 0);
   next_step(BSP_WORK_AREAS_PRE);
 }
@@ -674,7 +676,7 @@ static void Init(rtems_task_argument arg)
   pthread_cleanup_pop(0);
 #endif /* RTEMS_POSIX_API */
   next_step(INIT_TASK);
-  rtems_test_endk();
+  TEST_END();
   exit(0);
 }
 

@@ -16,8 +16,10 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <rtems.h>
-#include <rtems/test.h>
 #include <rtems/score/smpimpl.h>
 
 #include <bsp.h>
@@ -93,14 +95,14 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   if (
     source == RTEMS_FATAL_SOURCE_SMP
       && !is_internal
       && code == SMP_FATAL_START_OF_MANDATORY_PROCESSOR_FAILED
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 

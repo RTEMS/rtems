@@ -16,6 +16,7 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 #include <limits.h>
@@ -51,7 +52,7 @@ static void provoke_aligment_or_data_access_exception( void )
 
 static void Init( rtems_task_argument arg )
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   provoke_aligment_or_data_access_exception();
 
@@ -69,7 +70,7 @@ static void fatal_extension(
 
   rtems_exception_frame_print( (const rtems_exception_frame *) code );
 
-  rtems_test_endk();
+  TEST_END();
 }
 
 #define CONFIGURE_INITIAL_EXTENSIONS \

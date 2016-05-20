@@ -11,6 +11,9 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #define CONFIGURE_INIT
 #include "system.h"
 
@@ -22,7 +25,7 @@ static void print_test_begin_message(void)
 
   if (!done) {
     done = true;
-    rtems_test_begink();
+    TEST_BEGIN();
   }
 }
 
@@ -95,7 +98,6 @@ void Fatal_extension(
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
       && error == FATAL_ERROR_EXPECTED_ERROR
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
-

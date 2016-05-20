@@ -13,6 +13,8 @@
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       RTEMS_TOO_MANY
 
+#define TESTS_USE_PRINTK
+
 #include <rtems/devnull.h>
 #include "tmacros.h"
 
@@ -28,4 +30,3 @@ void force_error()
   /* A fatal error would be raised in previous call */
   /* we will not run this far */
 }
-

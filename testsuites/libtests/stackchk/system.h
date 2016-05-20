@@ -11,6 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
 
 /* macros */

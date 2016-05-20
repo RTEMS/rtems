@@ -25,6 +25,8 @@
 
 #include <stdint.h>
 
+#include <rtems/print.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -306,24 +308,10 @@ void rtems_profiling_iterate(
 );
 
 /**
- * @brief Function for formatted output.
- *
- * @param[in, out] arg Some argument.
- * @param[in] format The output format as specified by printf().
- * @param[in] ... More parameters according to format.
- *
- * @returns As specified by printf().
- *
- * @see rtems_profiling_report_xml().
- */
-typedef int (*rtems_profiling_printf)(void *arg, const char *format, ...);
-
-/**
  * @brief Reports profiling data as XML.
  *
  * @param[in] name The name of the profiling report.
- * @param[in] printf_func The formatted output function.
- * @param[in, out] printf_arg The formatted output function argument.
+ * @param[in] printer The RTEMS printer to send the output too.
  * @param[in] indentation_level The current indentation level.
  * @param[in] indentation The string used for indentation.
  *
@@ -331,8 +319,7 @@ typedef int (*rtems_profiling_printf)(void *arg, const char *format, ...);
  */
 int rtems_profiling_report_xml(
   const char *name,
-  rtems_profiling_printf printf_func,
-  void *printf_arg,
+  const rtems_printer *printer,
   uint32_t indentation_level,
   const char *indentation
 );

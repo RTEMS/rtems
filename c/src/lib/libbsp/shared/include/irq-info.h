@@ -23,7 +23,7 @@
 #define LIBBSP_SHARED_IRQ_INFO_H
 
 #include <rtems/shell.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,8 +34,7 @@ extern "C" {
  * context @a context.
  */
 void bsp_interrupt_report_with_plugin(
-  void *context,
-  rtems_printk_plugin_t print
+  const rtems_printer *printer
 );
 
 /**

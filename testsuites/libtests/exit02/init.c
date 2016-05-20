@@ -16,13 +16,15 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <stdlib.h>
 
 /* Use assert() not rtems_test_assert() since it uses exit() */
 #include <assert.h>
 
 #include <rtems.h>
-#include <rtems/test.h>
 
 const char rtems_test_name[] = "EXIT 2";
 
@@ -44,7 +46,7 @@ static void fatal_extension(
       && !is_internal
       && error == EXIT_STATUS
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 
@@ -63,7 +65,7 @@ static void Init(rtems_task_argument arg)
   rtems_status_code sc;
   rtems_id id;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   sc = rtems_task_create(
     rtems_build_name('E', 'X', 'I', 'T'),

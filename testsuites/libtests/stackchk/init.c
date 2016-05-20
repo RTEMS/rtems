@@ -101,6 +101,6 @@ void Fatal_extension(
   } else if ( error != rtems_build_name( 'T', 'A', '1', ' ' ) ) {
     printk( "unexpected fatal error\n" );
   } else {
-    rtems_test_endk();
+    TEST_END();
   }
 }

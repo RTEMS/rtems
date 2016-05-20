@@ -23,8 +23,7 @@
 #include <inttypes.h>
 
 typedef struct {
-  rtems_profiling_printf printf_func;
-  void *printf_arg;
+  const rtems_printer *printer;
   uint32_t indentation_level;
   const char *indentation;
   int retval;
@@ -43,7 +42,7 @@ static void indent(context *ctx, uint32_t indentation_level)
   uint32_t i;
 
   for (i = 0; i < n; ++i) {
-    int rv = (*ctx->printf_func)(ctx->printf_arg, "%s", ctx->indentation);
+    int rv = rtems_printf(ctx->printer, "%s", ctx->indentation);
 
     update_retval(ctx, rv);
   }
@@ -56,21 +55,19 @@ static uint64_t arithmetic_mean(uint64_t total, uint64_t count)
 
 static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
 {
-  rtems_profiling_printf printf_func = ctx->printf_func;
-  void *printf_arg = ctx->printf_arg;
   int rv;
 
   indent(ctx, 1);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<PerCPUProfilingReport processorIndex=\"%" PRIu32 "\">\n",
     per_cpu->processor_index
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MaxThreadDispatchDisabledTime unit=\"ns\">%" PRIu32
       "</MaxThreadDispatchDisabledTime>\n",
     per_cpu->max_thread_dispatch_disabled_time
@@ -78,8 +75,8 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MeanThreadDispatchDisabledTime unit=\"ns\">%" PRIu64
       "</MeanThreadDispatchDisabledTime>\n",
     arithmetic_mean(
@@ -90,8 +87,8 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<TotalThreadDispatchDisabledTime unit=\"ns\">%" PRIu64
       "</TotalThreadDispatchDisabledTime>\n",
     per_cpu->total_thread_dispatch_disabled_time
@@ -99,24 +96,24 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<ThreadDispatchDisabledCount>%" PRIu64 "</ThreadDispatchDisabledCount>\n",
     per_cpu->thread_dispatch_disabled_count
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MaxInterruptDelay unit=\"ns\">%" PRIu32 "</MaxInterruptDelay>\n",
     per_cpu->max_interrupt_delay
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MaxInterruptTime unit=\"ns\">%" PRIu32
       "</MaxInterruptTime>\n",
     per_cpu->max_interrupt_time
@@ -124,8 +121,8 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MeanInterruptTime unit=\"ns\">%" PRIu64
       "</MeanInterruptTime>\n",
     arithmetic_mean(
@@ -136,24 +133,24 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<TotalInterruptTime unit=\"ns\">%" PRIu64 "</TotalInterruptTime>\n",
     per_cpu->total_interrupt_time
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<InterruptCount>%" PRIu64 "</InterruptCount>\n",
     per_cpu->interrupt_count
   );
   update_retval(ctx, rv);
 
   indent(ctx, 1);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "</PerCPUProfilingReport>\n"
   );
   update_retval(ctx, rv);
@@ -161,38 +158,36 @@ static void report_per_cpu(context *ctx, const rtems_profiling_per_cpu *per_cpu)
 
 static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lock)
 {
-  rtems_profiling_printf printf_func = ctx->printf_func;
-  void *printf_arg = ctx->printf_arg;
   int rv;
   uint32_t i;
 
   indent(ctx, 1);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<SMPLockProfilingReport name=\"%s\">\n",
     smp_lock->name
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MaxAcquireTime unit=\"ns\">%" PRIu32 "</MaxAcquireTime>\n",
     smp_lock->max_acquire_time
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MaxSectionTime unit=\"ns\">%" PRIu32 "</MaxSectionTime>\n",
     smp_lock->max_section_time
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MeanAcquireTime unit=\"ns\">%" PRIu64
       "</MeanAcquireTime>\n",
     arithmetic_mean(
@@ -203,8 +198,8 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<MeanSectionTime unit=\"ns\">%" PRIu64
       "</MeanSectionTime>\n",
     arithmetic_mean(
@@ -215,24 +210,24 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<TotalAcquireTime unit=\"ns\">%" PRIu64 "</TotalAcquireTime>\n",
     smp_lock->total_acquire_time
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<TotalSectionTime unit=\"ns\">%" PRIu64 "</TotalSectionTime>\n",
     smp_lock->total_section_time
   );
   update_retval(ctx, rv);
 
   indent(ctx, 2);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "<UsageCount>%" PRIu64 "</UsageCount>\n",
     smp_lock->usage_count
   );
@@ -240,8 +235,8 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
 
   for (i = 0; i < RTEMS_PROFILING_SMP_LOCK_CONTENTION_COUNTS; ++i) {
     indent(ctx, 2);
-    rv = (*printf_func)(
-      printf_arg,
+    rv = rtems_printf(
+      ctx->printer,
       "<ContentionCount initialQueueLength=\"%" PRIu32 "\">%"
         PRIu64 "</ContentionCount>\n",
       i,
@@ -251,8 +246,8 @@ static void report_smp_lock(context *ctx, const rtems_profiling_smp_lock *smp_lo
   }
 
   indent(ctx, 1);
-  rv = (*printf_func)(
-    printf_arg,
+  rv = rtems_printf(
+    ctx->printer,
     "</SMPLockProfilingReport>\n"
   );
   update_retval(ctx, rv);
@@ -276,16 +271,14 @@ static void report(void *arg, const rtems_profiling_data *data)
 
 int rtems_profiling_report_xml(
   const char *name,
-  rtems_profiling_printf printf_func,
-  void *printf_arg,
+  const rtems_printer *printer,
   uint32_t indentation_level,
   const char *indentation
 )
 {
 #ifdef RTEMS_PROFILING
   context ctx_instance = {
-    .printf_func = printf_func,
-    .printf_arg = printf_arg,
+    .printer = printer,
     .indentation_level = indentation_level,
     .indentation = indentation,
     .retval = 0
@@ -294,20 +287,19 @@ int rtems_profiling_report_xml(
   int rv;
 
   indent(ctx, 0);
-  rv = (*printf_func)(printf_arg, "<ProfilingReport name=\"%s\">\n", name);
+  rv = rtems_printf(printer, "<ProfilingReport name=\"%s\">\n", name);
   update_retval(ctx, rv);
 
   rtems_profiling_iterate(report, ctx);
 
   indent(ctx, 0);
-  rv = (*printf_func)(printf_arg, "</ProfilingReport>\n");
+  rv = rtems_printf(printer, "</ProfilingReport>\n");
   update_retval(ctx, rv);
 
   return ctx->retval;
 #else /* RTEMS_PROFILING */
   (void) name;
-  (void) printf_func;
-  (void) printf_arg;
+  (void) printer;
   (void) indentation_level;
   (void) indentation;
 

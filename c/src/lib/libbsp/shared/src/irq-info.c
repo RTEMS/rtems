@@ -21,12 +21,13 @@
 
 #include <inttypes.h>
 
+#include <rtems/print.h>
+
 #include <bsp/irq-generic.h>
 #include <bsp/irq-info.h>
 
 typedef struct {
-  void *context;
-  rtems_printk_plugin_t print;
+  const rtems_printer *printer;
   rtems_vector_number vector;
 } bsp_interrupt_report_entry;
 
@@ -41,9 +42,9 @@ static void bsp_interrupt_report_per_handler_routine(
   bsp_interrupt_report_entry *e = (bsp_interrupt_report_entry *) arg;
   const char *opt = options == RTEMS_INTERRUPT_UNIQUE ? "UNIQUE" : "SHARED";
 
-  e->print(
-    e->context,
-    "%7" PRIu32 " | %-32s | %7s | %010p | %010p\n",
+  rtems_printf(
+    e->printer,
+    "%7" PRIu32 " | %-32s | %7s | %p | %p\n",
     e->vector,
     info,
     opt,
@@ -53,19 +54,17 @@ static void bsp_interrupt_report_per_handler_routine(
 }
 
 void bsp_interrupt_report_with_plugin(
-  void *context,
-  rtems_printk_plugin_t print
+  const rtems_printer *printer
 )
 {
   rtems_vector_number v = 0;
   bsp_interrupt_report_entry e = {
-    .context = context,
-    .print = print,
+    .printer = printer,
     .vector = 0
   };
 
-  print(
-    context,
+  rtems_printf(
+    printer,
     "-------------------------------------------------------------------------------\n"
     "                             INTERRUPT INFORMATION\n"
     "--------+----------------------------------+---------+------------+------------\n"
@@ -82,13 +81,15 @@ void bsp_interrupt_report_with_plugin(
     );
   }
 
-  print(
-    context,
+  rtems_printf(
+    printer,
     "--------+----------------------------------+---------+------------+------------\n"
   );
 }
 
 void bsp_interrupt_report(void)
 {
-  bsp_interrupt_report_with_plugin(NULL, printk_plugin);
+  rtems_printer printer;
+  rtems_print_printer_printk(&printer);
+  bsp_interrupt_report_with_plugin(&printer);
 }

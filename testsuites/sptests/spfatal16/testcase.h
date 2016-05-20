@@ -7,7 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-/* generate fatal errors in termios.c 
+/* generate fatal errors in termios.c
  *    rtems_semaphore_create( rtems_build_name ('T', 'R', 'r', c),...);
  */
 
@@ -25,6 +25,6 @@
 void force_error()
 {
   /* This fatal error depends on the Termios device configuration */
-  rtems_test_endk();
+  TEST_END();
   rtems_test_exit(0);
 }

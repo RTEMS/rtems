@@ -11,7 +11,9 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
+
 #include "test_support.h"
 #include <errno.h>
 #include <rtems/error.h>
@@ -32,7 +34,7 @@ static void fatal_extension(
       && !is_internal
       && error == 1
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 
@@ -44,7 +46,7 @@ rtems_task Init(
 
   errno = ENOMEM;
   rtems_error(
-    RTEMS_NO_MEMORY | RTEMS_ERROR_ABORT, 
+    RTEMS_NO_MEMORY | RTEMS_ERROR_ABORT,
     "Dummy: Resources unavailable\n"
   );
 

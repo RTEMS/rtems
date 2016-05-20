@@ -69,9 +69,10 @@ void printf_uid_message(
   struct MW_UID_MESSAGE *uid
 )
 {
+  rtems_printer printer;
+  rtems_print_printer_printf( &printer );
   uid_print_message_with_plugin(
-    stdout,
-    (rtems_printk_plugin_t)fprintf,
+    &printer,
     uid
   );
 }
@@ -111,12 +112,12 @@ rtems_task Init(
   /* No message should ever be recieved. With a timeout val of 0, this
    * call will never return. We use this to check if patch was correct
    * by passing a number of ticks greater than 0 and less than 1. If
-   * patch was correct, this call will timeout instead of waiting 
+   * patch was correct, this call will timeout instead of waiting
    * indefinitely.
    */
   receive_uid_message();
 
-  close_it(); 
+  close_it();
   TEST_END();
   rtems_test_exit( 0 );
 }

@@ -16,8 +16,10 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <rtems.h>
-#include <rtems/test.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/smpbarrier.h>
@@ -62,7 +64,7 @@ static void fatal_extension(
         assert(state == PER_CPU_STATE_SHUTDOWN);
       }
 
-      rtems_test_endk();
+      TEST_END();
     }
   }
 
@@ -79,7 +81,7 @@ static rtems_status_code test_driver_init(
   uint32_t cpu_count = rtems_get_processor_count();
   uint32_t cpu;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   assert(rtems_configuration_get_maximum_processors() == MAX_CPUS);
 
@@ -107,7 +109,7 @@ static rtems_status_code test_driver_init(
 
     per_cpu->state = PER_CPU_STATE_SHUTDOWN;
   } else {
-    rtems_test_endk();
+    TEST_END();
     exit(0);
   }
 

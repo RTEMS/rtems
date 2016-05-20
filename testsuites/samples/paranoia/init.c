@@ -19,6 +19,7 @@
 extern int paranoia(int, char **);
 
 const char rtems_test_name[] = "PARANOIA";
+rtems_printer rtems_test_printer;
 
 char *args[2] = { "paranoia", 0 };
 
@@ -35,6 +36,7 @@ rtems_task Init(
   M68KFPSPInstallExceptionHandlers ();
 #endif
 
+  rtems_print_printer_printf(&rtems_test_printer);
   rtems_test_begin();
   paranoia(1, args);
   rtems_test_end();

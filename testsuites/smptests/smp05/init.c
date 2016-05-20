@@ -27,7 +27,7 @@ rtems_task Test_task(
 
 static void success(void)
 {
-  rtems_test_end_with_plugin(locked_printf_plugin, NULL);
+  rtems_test_end();
   rtems_test_exit( 0 );
 }
 
@@ -50,7 +50,7 @@ rtems_task Init(
   rtems_status_code  status;
 
   locked_print_initialize();
-  rtems_test_begin_with_plugin(locked_printf_plugin, NULL);
+  rtems_test_begin();
 
   if ( rtems_get_processor_count() == 1 ) {
     success();

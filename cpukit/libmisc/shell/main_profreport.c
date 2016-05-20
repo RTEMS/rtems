@@ -24,10 +24,11 @@
 
 static int rtems_shell_main_profreport(int argc, char **argv)
 {
+  rtems_printer printer;
+  rtems_print_printer_printf(&printer);
   rtems_profiling_report_xml(
     "Shell",
-    (rtems_profiling_printf) fprintf,
-    stdout,
+    &printer,
     0,
     "  "
   );

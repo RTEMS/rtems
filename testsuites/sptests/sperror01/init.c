@@ -11,7 +11,9 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
+
 #include "test_support.h"
 #include "rtems/error.h"
 #include <errno.h>
@@ -32,7 +34,7 @@ static void fatal_extension(
       && !is_internal
       && error == ENOMEM
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 

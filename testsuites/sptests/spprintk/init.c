@@ -13,10 +13,18 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 
 const char rtems_test_name[] = "SPPRINTK";
+
+/*
+ * Undefined the RTEMS_PRINTF_ATTRIBUTE and make it nothing. The test code
+ * contained in the file is suppose to be wrong.
+ */
+#undef RTEMS_PRINTF_ATTRIBUTE
+#define RTEMS_PRINTF_ATTRIBUTE(_a, _b)
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
@@ -38,7 +46,7 @@ void do_getchark(void)
   poll_char = BSP_poll_char;
 
   BSP_poll_char = NULL;
-  
+
   putk( "getchark - NULL getchar method - return -1" );
   sc = getchark();
   rtems_test_assert( sc == -1 );
@@ -124,7 +132,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   do_putk();
   putk("");
@@ -134,7 +142,7 @@ rtems_task Init(
 
   do_getchark();
 
-  rtems_test_endk();
+  TEST_END();
   rtems_test_exit( 0 );
 }
 
@@ -151,4 +159,3 @@ rtems_task Init(
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-

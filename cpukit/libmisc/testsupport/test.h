@@ -16,7 +16,7 @@
 #define _RTEMS_TEST_H
 
 #include <rtems.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
 
@@ -38,6 +38,11 @@ extern "C" {
 extern const char rtems_test_name[];
 
 /**
+ * @brief Each test must define a printer.
+ */
+extern rtems_printer rtems_test_printer;
+
+/**
  * @brief Fatal extension for tests.
  */
 void rtems_test_fatal_extension(
@@ -53,70 +58,35 @@ void rtems_test_fatal_extension(
   { NULL, NULL, NULL, NULL, NULL, NULL, NULL, rtems_test_fatal_extension }
 
 /**
- * @brief Prints a begin of test message.
- *
- * @param[in] printf_func The formatted output function.
- * @param[in, out] printf_arg The formatted output function argument.
- *
- * @returns As specified by printf().
+ * @brief Begin of test message format string.
  */
-int rtems_test_begin_with_plugin(
-  rtems_printk_plugin_t printf_func,
-  void *printf_arg
-);
+#define TEST_BEGIN_STRING "\n\n*** BEGIN OF TEST %s ***\n", rtems_test_name
+
+/**
+ * @brief End of test message format string.
+ */
+#define TEST_END_STRING "*** END OF TEST %s ***\n", rtems_test_name
 
 /**
  * @brief Prints a begin of test message using printf().
  *
  * @returns As specified by printf().
  */
-static inline int rtems_test_begin(void)
-{
-  return rtems_test_begin_with_plugin(rtems_printf_plugin, NULL);
-}
-
-/**
- * @brief Prints a begin of test message using printk().
- *
- * @returns As specified by printf().
- */
-static inline int rtems_test_begink(void)
-{
-  return rtems_test_begin_with_plugin(printk_plugin, NULL);
-}
-
-/**
- * @brief Prints an end of test message.
- *
- * @param[in] printf_func The formatted output function.
- * @param[in, out] printf_arg The formatted output function argument.
- *
- * @returns As specified by printf().
- */
-int rtems_test_end_with_plugin(
-  rtems_printk_plugin_t printf_func,
-  void *printf_arg
-);
+int rtems_test_begin(void);
 
 /**
  * @brief Prints an end of test message using printf().
  *
  * @returns As specified by printf().
  */
-static inline int rtems_test_end(void)
-{
-  return rtems_test_end_with_plugin(rtems_printf_plugin, NULL);
-}
+int rtems_test_end(void);
 
 /**
- * @brief Prints an end of test message using printk().
+ * @brief Prints via the RTEMS printer.
  *
  * @returns As specified by printf().
  */
-static inline int rtems_test_endk(void)
-{
-  return rtems_test_end_with_plugin(printk_plugin, NULL);
-}
+int rtems_test_print(const char* format, ...) RTEMS_PRINTF_ATTRIBUTE(1, 2);
 
 /**
  * @brief Internal context for parallel job execution.

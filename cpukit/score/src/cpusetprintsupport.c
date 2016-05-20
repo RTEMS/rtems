@@ -23,16 +23,15 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 #include <rtems/score/cpusetimpl.h>
 
 #ifdef __RTEMS_HAVE_SYS_CPUSET_H__
 
   void _CPU_set_Show_with_plugin(
-    void                  *context,
-    rtems_printk_plugin_t  print,
-    const char            *description,
-    const cpu_set_t       *cpuset
+    const rtems_printer *printer,
+    const char          *description,
+    const cpu_set_t     *cpuset
   );
 
   /*
@@ -42,21 +41,16 @@
    * print plugin .
    */
   void _CPU_set_Show_with_plugin(
-    void                  *context,
-    rtems_printk_plugin_t  print,
-    const char            *description,
-    const cpu_set_t       *cpuset
+    const rtems_printer *printer,
+    const char          *description,
+    const cpu_set_t     *cpuset
   )
   {
     int i;
-
-    if ( !print )
-      return;
-
-    (*print)(context ,"%s: ", description);
+    rtems_printf(printer ,"%s: ", description);
     for(i=0; i<_NCPUWORDS; i++)
-      (*print)(context ,"%x", cpuset->__bits[i]);
-    (*print)(context ,"\n");
+      rtems_printf(printer ,"%x", cpuset->__bits[i]);
+    rtems_printf(printer ,"\n");
   }
 
   /*
@@ -67,7 +61,9 @@
    */
   void _CPU_set_Show( const char *description, const cpu_set_t   *cpuset)
   {
-    _CPU_set_Show_with_plugin( NULL, printk_plugin, description, cpuset );
+    rtems_printer printer;
+    rtems_print_printer_printk( &printer );
+    _CPU_set_Show_with_plugin( &printer, description, cpuset );
   }
 
   /*

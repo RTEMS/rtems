@@ -16,8 +16,10 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <rtems.h>
-#include <rtems/test.h>
 #include <rtems/score/smpimpl.h>
 
 #include <assert.h>
@@ -36,14 +38,14 @@ static void fatal_extension(
   rtems_fatal_code code
 )
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   if (
     source == RTEMS_FATAL_SOURCE_SMP
       && !is_internal
       && code == SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 

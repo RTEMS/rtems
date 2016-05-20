@@ -35,7 +35,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -356,14 +356,13 @@ void rtems_rate_monotonic_reset_all_statistics( void );
  *  @brief RTEMS Report Rate Monotonic Statistics
  *
  *  This routine allows a thread to print the statistics information
- *  on ALL period instances which have non-zero counts using printk.
- *  The implementation of this directive straddles the fence between
- *  inside and outside of RTEMS.  It is presented as part of the Manager
- *  but actually uses other services of the Manager.
+ *  on ALL period instances which have non-zero counts using the RTEMS
+ *  printer. The implementation of this directive straddles the fence
+ *  between inside and outside of RTEMS.  It is presented as part of
+ *  the Manager but actually uses other services of the Manager.
  */
 void rtems_rate_monotonic_report_statistics_with_plugin(
-  void                  *context,
-  rtems_printk_plugin_t  print
+  const rtems_printer *printer
 );
 
 /**

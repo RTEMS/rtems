@@ -495,7 +495,7 @@ static void test_check_access(void)
 
 static void Init(rtems_task_argument arg)
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   test_initial_values();
   test_location_obtain();
@@ -506,7 +506,7 @@ static void Init(rtems_task_argument arg)
   test_user_env();
   test_check_access();
 
-  rtems_test_endk();
+  TEST_END();
   exit(0);
 }
 

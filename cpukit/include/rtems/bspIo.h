@@ -37,6 +37,15 @@ extern "C" {
  */
 
 /**
+ * Print format function attribute for warning checks. Can be defined if
+ * checking needs to be disabled.
+ */
+#ifndef RTEMS_PRINTF_ATTRIBUTE
+#define RTEMS_PRINTF_ATTRIBUTE(_format_pos, _ap_pos) \
+  __attribute__((format(__printf__, _format_pos, _ap_pos)))
+#endif
+
+/**
  * This type defines the prototype for the BSP provided method to
  * print a single character. It is assumed to be polled.
  */
@@ -84,8 +93,10 @@ extern int getchark(void);
  *
  * @param[in] fmt is a printf()-style format string
  * @param[in] ap is a va_list pointer to arguments
+ *
+ * @return The number of characters output.
  */
-extern void vprintk(const char *fmt, va_list ap);
+extern int vprintk(const char *fmt, va_list ap);
 
 /**
  * @brief Kernel Print
@@ -93,8 +104,10 @@ extern void vprintk(const char *fmt, va_list ap);
  * This method allows the user to perform a debug printk().
  *
  * @param[in] fmt is a printf()-style format string
+ *
+ * @return The number of characters output.
  */
-extern void printk(const char *fmt, ...);
+extern int printk(const char *fmt, ...) RTEMS_PRINTF_ATTRIBUTE(1, 2);
 
 /**
  * @brief Kernel Put String
@@ -102,8 +115,10 @@ extern void printk(const char *fmt, ...);
  * This method allows the user to perform a debug puts().
  *
  * @param[in] s is the string to print
+ *
+ * @return The number of characters output.
  */
-extern void putk(const char *s);
+extern int putk(const char *s);
 
 /**
  * @brief Kernel Put Character
@@ -118,15 +133,13 @@ extern void rtems_putc(char c);
  * Type definition for function which can be plugged in to
  * certain reporting routines to redirect the output.
  *
- * Methods following this prototype may be passed into RTEMS reporting
- * functions that allow their output to be redirected.  In particular,
- * the cpu usage, period usage, and stack usage reporting
- * functions use this.
+ * Use the RTEMS Print interface to call these functions. Do not
+ * directly use them.
  *
  * If the user provides their own "printf plugin", then they may
  * redirect those reports as they see fit.
  */
-typedef int (*rtems_printk_plugin_t)(void *, const char *format, ...);
+typedef int (*rtems_print_plugin_t)(void *, const char *format, va_list ap);
 
 /**
  * @brief Reporting Methods printk() Plugin
@@ -136,7 +149,7 @@ typedef int (*rtems_printk_plugin_t)(void *, const char *format, ...);
  *
  * @return The number of characters printed.
  */
-extern int printk_plugin(void *context, const char *fmt, ...);
+extern int printk_plugin(void *context, const char *fmt, va_list ap);
 
 /**
  * @brief Reporting Methods printf() Plugin
@@ -149,7 +162,7 @@ extern int printk_plugin(void *context, const char *fmt, ...);
  *
  * @return The number of characters printed.
  */
-extern int rtems_printf_plugin(void *context, const char *fmt, ...);
+extern int rtems_printf_plugin(void *context, const char *fmt, va_list ap);
 
 /**@}*/
 

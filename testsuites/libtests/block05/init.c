@@ -24,6 +24,7 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 #include <stdarg.h>
 #include <errno.h>
@@ -426,7 +427,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   unsigned i = 0;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   task_id_init = rtems_task_self();
 
@@ -505,7 +506,7 @@ static rtems_task Init(rtems_task_argument argument)
     }
   }
 
-  rtems_test_endk();
+  TEST_END();
 
   exit(0);
 }

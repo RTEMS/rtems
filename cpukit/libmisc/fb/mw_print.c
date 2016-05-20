@@ -43,12 +43,13 @@ void uid_print_message(
   struct MW_UID_MESSAGE *uid
 )
 {
-  uid_print_message_with_plugin( NULL, printk_plugin, uid );
+  rtems_printer printer;
+  rtems_print_printer_printk(&printer);
+  uid_print_message_with_plugin( &printer, uid );
 }
 
 void uid_print_message_with_plugin(
-  void                  *context,
-  rtems_printk_plugin_t  handler,
+  const rtems_printer   *printer,
   struct MW_UID_MESSAGE *uid
 )
 {
@@ -56,11 +57,11 @@ void uid_print_message_with_plugin(
 
   switch (uid->type) {
     case MV_UID_INVALID:
-      (*handler)( context, "MV_UID_INVALID\n" );
+      rtems_printf( printer, "MV_UID_INVALID\n" );
       break;
     case MV_UID_REL_POS:
-      (*handler)(
-        context,
+      rtems_printf(
+        printer,
         "MV_UID_REL_POS - %s x=%d y=%d z=%d\n",
         uid_buttons( uid->m.pos.btns, buttons, sizeof(buttons)),
         uid->m.pos.x,    /* x location */
@@ -69,8 +70,8 @@ void uid_print_message_with_plugin(
       );
       break;
     case MV_UID_ABS_POS:
-      (*handler)(
-        context,
+      rtems_printf(
+        printer,
         "MV_UID_ABS_POS - %s x=%d y=%d z=%d\n",
         uid_buttons( uid->m.pos.btns, buttons, sizeof(buttons)),
         uid->m.pos.x,    /* x location */
@@ -79,7 +80,7 @@ void uid_print_message_with_plugin(
       );
       break;
     case MV_UID_KBD:
-      (*handler)( context,
+      rtems_printf( printer,
         "MV_UID_KBD - code=0x%04x modifiers=0x%02x mode=0x%02x\n",
         uid->m.kbd.code,        /* keycode or scancode        */
         uid->m.kbd.modifiers,   /* key modifiers              */
@@ -87,10 +88,10 @@ void uid_print_message_with_plugin(
       );
       break;
    case MV_UID_TIMER:
-      (*handler)( context, "MV_UID_TIMER\n" );
+      rtems_printf( printer, "MV_UID_TIMER\n" );
       break;
     default:
-      (*handler)( context, "Invalid device type\n" );
+      rtems_printf( printer, "Invalid device type\n" );
       break;
   }
 

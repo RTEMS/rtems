@@ -16,7 +16,7 @@
 
 #include <rtems.h>
 #include <rtems/diskdevs.h>
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
 
@@ -348,15 +348,14 @@ void rtems_blkdev_print_stats(
   uint32_t media_block_size,
   uint32_t media_block_count,
   uint32_t block_size,
-  rtems_printk_plugin_t print,
-  void *print_arg
+  const rtems_printer* printer
 );
 
 /**
  * @brief Block device statistics command.
  */
 void rtems_blkstats(
-  FILE *output,
+  const rtems_printer *printer,
   const char *device,
   bool reset
 );

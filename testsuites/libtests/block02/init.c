@@ -24,6 +24,7 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 #include <rtems.h>
@@ -82,7 +83,7 @@ static void task_low(rtems_task_argument arg)
 
   rtems_test_assert(bd->dd == dd_a);
 
-  rtems_test_endk();
+  TEST_END();
 
   exit(0);
 }
@@ -136,7 +137,7 @@ static rtems_task Init(rtems_task_argument argument)
   dev_t dev_a = 0;
   dev_t dev_b = 0;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);

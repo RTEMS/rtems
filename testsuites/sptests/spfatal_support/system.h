@@ -14,9 +14,11 @@
 /*
  *  Some of the fatal error cases require the ability to peek inside RTEMS
  */
+
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <rtems.h>
-#include <rtems/test.h>
-#include <tmacros.h>
 
 /* functions */
 

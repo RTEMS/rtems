@@ -19,6 +19,8 @@
 #include "config.h"
 #endif
 
+#include "tmacros.h"
+
 #define CONFIGURE_INIT
 #include "system.h"
 
@@ -30,10 +32,9 @@ const char rtems_test_name[] = "BLOCK 8";
 
 rtems_task Init(rtems_task_argument argument)
 {
-  rtems_test_begin();
+  TEST_BEGIN();
   run_bdbuf_tests();
-  rtems_test_end();
+  TEST_END();
 
   exit(0);
 }
-

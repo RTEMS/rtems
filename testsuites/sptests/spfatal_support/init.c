@@ -22,7 +22,7 @@ static void print_test_begin_message(void)
 
   if (!done) {
     done = true;
-    rtems_test_begink();
+    TEST_BEGIN();
   }
 }
 
@@ -107,7 +107,6 @@ void Fatal_extension(
       && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
       && is_expected_error( error )
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
-

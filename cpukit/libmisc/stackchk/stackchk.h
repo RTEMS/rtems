@@ -25,7 +25,7 @@
 #include <stdbool.h> /* bool */
 
 #include <rtems/score/thread.h> /* Thread_Control */
-#include <rtems/bspIo.h>
+#include <rtems/print.h>
 
 /**
  *  @defgroup libmisc_stackchk Stack Checker Mechanism
@@ -71,8 +71,7 @@ void rtems_stack_checker_report_usage( void );
  * @note It uses the caller's routine to print the report.
  */
 void rtems_stack_checker_report_usage_with_plugin(
-  void                  *context,
-  rtems_printk_plugin_t  print
+  const rtems_printer *printer
 );
 
 /*************************************************************

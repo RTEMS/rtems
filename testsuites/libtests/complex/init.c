@@ -27,6 +27,7 @@
 #include <rtems/test.h>
 
 const char rtems_test_name[] = "COMPLEX";
+rtems_printer rtems_test_printer;
 #endif
 
 #include <stdio.h>
@@ -60,11 +61,12 @@ int main( void )
 #endif
 {
 #if __rtems__
+  rtems_print_printer_printf(&rtems_test_printer);
   rtems_test_begin();
 #endif
 
   docomplex();
-  docomplexf();  
+  docomplexf();
   docomplexl();
 #if __rtems__
   rtems_test_end();

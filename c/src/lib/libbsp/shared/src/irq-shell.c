@@ -27,7 +27,9 @@
 
 static int bsp_interrupt_shell_main(int argc, char **argv)
 {
-  bsp_interrupt_report_with_plugin(stdout, (rtems_printk_plugin_t) fprintf);
+  rtems_printer printer;
+  rtems_print_printer_printf(&printer);
+  bsp_interrupt_report_with_plugin(&printer);
 
   return 0;
 }

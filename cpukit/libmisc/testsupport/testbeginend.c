@@ -18,26 +18,35 @@
 
 #include <rtems/test.h>
 
-int rtems_test_begin_with_plugin(
-  rtems_printk_plugin_t printf_func,
-  void *printf_arg
-)
+int rtems_test_begin(void)
 {
-  return (*printf_func)(
-    printf_arg,
-    "\n\n*** BEGIN OF TEST %s ***\n",
-    rtems_test_name
+  return rtems_printf(
+    &rtems_test_printer,
+    TEST_BEGIN_STRING
   );
 }
 
-int rtems_test_end_with_plugin(
-  rtems_printk_plugin_t printf_func,
-  void *printf_arg
+int rtems_test_end(void)
+{
+  return rtems_printf(
+    &rtems_test_printer,
+    TEST_END_STRING
+  );
+}
+
+int rtems_test_print(
+  const char* format,
+  ...
 )
 {
-  return (*printf_func)(
-    printf_arg,
-    "*** END OF TEST %s ***\n",
-    rtems_test_name
+  va_list ap;
+  int len;
+  va_start(ap, format);
+  len = rtems_vprintf(
+    &rtems_test_printer,
+    format,
+    ap
   );
+  va_end(ap);
+  return len;
 }

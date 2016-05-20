@@ -29,9 +29,10 @@ static int rtems_shell_main_perioduse(
    *  When invoked with no arguments, print the report.
    */
   if ( argc == 1 ) {
+    rtems_printer printer;
+    rtems_print_printer_printf(&printer);
     rtems_rate_monotonic_report_statistics_with_plugin(
-      stdout,
-      (rtems_printk_plugin_t)fprintf
+      &printer
     );
     return 0;
   }

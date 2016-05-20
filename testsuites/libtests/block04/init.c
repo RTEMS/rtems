@@ -24,6 +24,7 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 #include <rtems.h>
@@ -101,7 +102,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: release done: 0\n");
 
-  rtems_test_endk();
+  TEST_END();
 
   exit(0);
 }
@@ -111,7 +112,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   dev_t dev = 0;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);

@@ -33,6 +33,9 @@ void rtems_test_fatal_extension(
 {
 #if defined(RTEMS_PROFILING)
   rtems_interrupt_lock_context lock_context;
+  rtems_printer printer;
+
+  rtems_print_printer_printk( &printer );
 
   /*
    * Ensures to report only once on SMP machines and ensures that the report is
@@ -50,8 +53,7 @@ void rtems_test_fatal_extension(
 
     rtems_profiling_report_xml(
       rtems_test_name,
-      printk_plugin,
-      NULL,
+      &printer,
       1,
       "  "
     );

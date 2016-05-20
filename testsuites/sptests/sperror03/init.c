@@ -11,7 +11,8 @@
 #include "config.h"
 #endif
 
-#include <tmacros.h>
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
 #include "test_support.h"
 
 const char rtems_test_name[] = "SPERROR 3";
@@ -30,7 +31,7 @@ static void fatal_extension(
       && !is_internal
       && error == 0
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 

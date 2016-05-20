@@ -16,10 +16,11 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <bsp.h>
 #include <bsp/bootcard.h>
-
-#include <rtems/test.h>
 
 const char rtems_test_name[] = "SPINTERNALERROR 1";
 
@@ -40,14 +41,14 @@ static void fatal_extension(
   Internal_errors_t error
 )
 {
-  rtems_test_begink();
+  TEST_BEGIN();
 
   if (
     source == FATAL_SOURCE
       && is_internal == FATAL_IS_INTERNAL
       && error == FATAL_ERROR
   ) {
-    rtems_test_endk();
+    TEST_END();
   }
 }
 

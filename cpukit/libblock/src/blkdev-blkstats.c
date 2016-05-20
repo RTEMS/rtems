@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <string.h>
 
-void rtems_blkstats(FILE *output, const char *device, bool reset)
+void rtems_blkstats(const rtems_printer* printer, const char *device, bool reset)
 {
   int fd = open(device, O_RDONLY);
 
@@ -45,7 +45,7 @@ void rtems_blkstats(FILE *output, const char *device, bool reset)
         if (reset) {
           rv = rtems_disk_fd_reset_device_stats(fd);
           if (rv != 0) {
-            fprintf(output, "error: reset stats: %s\n", strerror(errno));
+            rtems_printf(printer, "error: reset stats: %s\n", strerror(errno));
           }
         } else {
           uint32_t media_block_size = 0;
@@ -64,25 +64,24 @@ void rtems_blkstats(FILE *output, const char *device, bool reset)
               media_block_size,
               media_block_count,
               block_size,
-              (rtems_printk_plugin_t) fprintf,
-              output
+              printer
             );
           } else {
-            fprintf(output, "error: get stats: %s\n", strerror(errno));
+            rtems_printf(printer, "error: get stats: %s\n", strerror(errno));
           }
         }
       } else {
-        fprintf(output, "error: not a block device\n");
+        rtems_printf(printer, "error: not a block device\n");
       }
     } else {
-      fprintf(output, "error: get file stats: %s\n", strerror(errno));
+      rtems_printf(printer, "error: get file stats: %s\n", strerror(errno));
     }
 
     rv = close(fd);
     if (rv != 0) {
-      fprintf(output, "error: close device: %s\n", strerror(errno));
+      rtems_printf(printer, "error: close device: %s\n", strerror(errno));
     }
   } else {
-    fprintf(output, "error: open device: %s\n", strerror(errno));
+    rtems_printf(printer, "error: open device: %s\n", strerror(errno));
   }
 }

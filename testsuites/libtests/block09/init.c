@@ -24,6 +24,9 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
+#include "tmacros.h"
+
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -176,7 +179,7 @@ static rtems_task Init(rtems_task_argument argument)
   dev_t dev = 0;
   rtems_disk_device *dd = NULL;
 
-  rtems_test_begink();
+  TEST_BEGIN();
 
   sc = rtems_disk_io_initialize();
   ASSERT_SC(sc);
@@ -224,7 +227,7 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_disk_release(dd);
   ASSERT_SC(sc);
 
-  rtems_test_endk();
+  TEST_END();
 
   exit(0);
 }

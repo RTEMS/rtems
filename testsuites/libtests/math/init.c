@@ -22,11 +22,16 @@
 #include "config.h"
 #endif
 
+/*
+ * @fixme This test should use the test macros but the include paths are
+ *        are wrong in the build system.
+ */
 #if __rtems__
 #include <bsp.h> /* for device driver prototypes */
 #include <rtems/test.h>
 
 const char rtems_test_name[] = "MATH";
+rtems_printer rtems_test_printer;
 #endif
 
 #include <stdio.h>
@@ -58,6 +63,7 @@ int main( void )
 #endif
 {
 #if __rtems__
+  rtems_print_printer_printf(&rtems_test_printer);
   rtems_test_begin();
 #endif
 
@@ -68,4 +74,3 @@ int main( void )
 #endif
   exit( 0 );
 }
-

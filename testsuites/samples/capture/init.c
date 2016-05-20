@@ -27,6 +27,7 @@ rtems_task Init(rtems_task_argument argument);
 static void notification(int fd, int seconds_remaining, void *arg);
 
 const char rtems_test_name[] = "CAPTURE ENGINE";
+rtems_printer rtems_test_printer;
 
 volatile int can_proceed = 1;
 
@@ -46,6 +47,7 @@ rtems_task Init(
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
 
+  rtems_print_printer_printf(&rtems_test_printer);
   rtems_test_begin();
 
   status = rtems_shell_wait_for_input(

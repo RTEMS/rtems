@@ -32,7 +32,7 @@
 
 #include <bsp.h>
 
-#include <tmacros.h>
+#include "tmacros.h"
 
 const char rtems_test_name[] = "BLOCK 6";
 
