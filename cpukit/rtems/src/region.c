@@ -51,18 +51,6 @@ static void _Region_Manager_initialization(void)
     RTEMS_MAXIMUM_NAME_LENGTH, /* maximum length of an object name */
     NULL                       /* Proxy extraction support callout */
   );
-
-  /*
-   *  Register the MP Process Packet routine.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_REGION,
-    0  /* Multiprocessing is not currently supported for Regions */
-  );
-#endif
-
 }
 
 RTEMS_SYSINIT_ITEM(
