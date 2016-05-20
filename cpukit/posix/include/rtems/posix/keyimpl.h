@@ -140,8 +140,8 @@ RTEMS_INLINE_ROUTINE void *_POSIX_Keys_Key_value_map( RBTree_Node *node )
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Keys_Key_value_pair *_POSIX_Keys_Key_value_find(
-  pthread_key_t   key,
-  Thread_Control *the_thread
+  pthread_key_t         key,
+  const Thread_Control *the_thread
 )
 {
   return _RBTree_Find_inline(
