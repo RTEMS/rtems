@@ -22,37 +22,27 @@ rtems_status_code rtems_partition_return_buffer(
 )
 {
   Partition_Control *the_partition;
-  Objects_Locations  location;
   ISR_lock_Context   lock_context;
 
-  the_partition = _Partition_Get( id, &location, &lock_context );
-  switch ( location ) {
+  the_partition = _Partition_Get( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _Partition_Acquire_critical( the_partition, &lock_context );
-
-      if ( _Partition_Is_buffer_valid( buffer, the_partition ) ) {
-        _Partition_Free_buffer( the_partition, buffer );
-        the_partition->number_of_used_blocks -= 1;
-        _Partition_Release( the_partition, &lock_context );
-        return RTEMS_SUCCESSFUL;
-      }
-
-      _Partition_Release( the_partition, &lock_context );
-      return RTEMS_INVALID_ADDRESS;
-
+  if ( the_partition == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      return _Partition_MP_Send_request_packet(
-          PARTITION_MP_RETURN_BUFFER_REQUEST,
-          id,
-          buffer
-        );
+    return _Partition_MP_Return_buffer( id, buffer );
+#else
+    return RTEMS_INVALID_ID;
 #endif
-
-    case OBJECTS_ERROR:
-      break;
   }
 
-  return RTEMS_INVALID_ID;
+  _Partition_Acquire_critical( the_partition, &lock_context );
+
+  if ( !_Partition_Is_buffer_valid( buffer, the_partition ) ) {
+    _Partition_Release( the_partition, &lock_context );
+    return RTEMS_INVALID_ADDRESS;
+  }
+
+  _Partition_Free_buffer( the_partition, buffer );
+  the_partition->number_of_used_blocks -= 1;
+  _Partition_Release( the_partition, &lock_context );
+  return RTEMS_SUCCESSFUL;
 }

@@ -181,17 +181,15 @@ RTEMS_INLINE_ROUTINE void _Partition_Free (
   _Objects_Free( &_Partition_Information, &the_partition->Object );
 }
 
-RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get (
+RTEMS_INLINE_ROUTINE Partition_Control *_Partition_Get(
   Objects_Id         id,
-  Objects_Locations *location,
   ISR_lock_Context  *lock_context
 )
 {
-  return (Partition_Control *) _Objects_Get_isr_disable(
-    &_Partition_Information,
+  return (Partition_Control *) _Objects_Get_local(
     id,
-    location,
-    lock_context
+    lock_context,
+    &_Partition_Information
   );
 }
 

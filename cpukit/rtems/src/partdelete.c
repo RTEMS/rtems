@@ -26,57 +26,52 @@ rtems_status_code rtems_partition_delete(
 )
 {
   Partition_Control *the_partition;
-  Objects_Locations  location;
   ISR_lock_Context   lock_context;
 
   _Objects_Allocator_lock();
-  the_partition = _Partition_Get( id, &location, &lock_context );
-  switch ( location ) {
+  the_partition = _Partition_Get( id, &lock_context );
 
-    case OBJECTS_LOCAL:
-      _Partition_Acquire_critical( the_partition, &lock_context );
-
-      if ( the_partition->number_of_used_blocks == 0 ) {
-        _Objects_Close( &_Partition_Information, &the_partition->Object );
-#if defined(RTEMS_MULTIPROCESSING)
-        if ( _Attributes_Is_global( the_partition->attribute_set ) ) {
-
-          _Objects_MP_Close(
-            &_Partition_Information,
-            the_partition->Object.id
-          );
-
-          _Partition_MP_Send_process_packet(
-            PARTITION_MP_ANNOUNCE_DELETE,
-            the_partition->Object.id,
-            0,                         /* Not used */
-            0                          /* Not used */
-          );
-        }
-#endif
-
-        _Partition_Release( the_partition, &lock_context );
-        _Partition_Destroy( the_partition );
-        _Partition_Free( the_partition );
-        _Objects_Allocator_unlock();
-        return RTEMS_SUCCESSFUL;
-      }
-
-      _Partition_Release( the_partition, &lock_context );
-      _Objects_Allocator_unlock();
-      return RTEMS_RESOURCE_IN_USE;
+  if ( the_partition == NULL ) {
+    _Objects_Allocator_unlock();
 
 #if defined(RTEMS_MULTIPROCESSING)
-    case OBJECTS_REMOTE:
-      _Objects_Allocator_unlock();
+    if ( _Partition_MP_Is_remote( id ) ) {
       return RTEMS_ILLEGAL_ON_REMOTE_OBJECT;
+    }
 #endif
 
-    case OBJECTS_ERROR:
-      break;
+    return RTEMS_INVALID_ID;
   }
 
-  _Objects_Allocator_unlock();
+  _Partition_Acquire_critical( the_partition, &lock_context );
 
-  return RTEMS_INVALID_ID;
+  if ( the_partition->number_of_used_blocks != 0 ) {
+    _Partition_Release( the_partition, &lock_context );
+    _Objects_Allocator_unlock();
+    return RTEMS_RESOURCE_IN_USE;
+  }
+
+  _Objects_Close( &_Partition_Information, &the_partition->Object );
+  _Partition_Release( the_partition, &lock_context );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Attributes_Is_global( the_partition->attribute_set ) ) {
+    _Objects_MP_Close(
+      &_Partition_Information,
+      the_partition->Object.id
+    );
+
+    _Partition_MP_Send_process_packet(
+      PARTITION_MP_ANNOUNCE_DELETE,
+      the_partition->Object.id,
+      0,                         /* Not used */
+      0                          /* Not used */
+    );
+  }
+#endif
+
+  _Partition_Destroy( the_partition );
+  _Partition_Free( the_partition );
+  _Objects_Allocator_unlock();
+  return RTEMS_SUCCESSFUL;
 }
