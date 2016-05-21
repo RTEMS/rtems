@@ -124,8 +124,12 @@ bcm2835_mailbox_init_frame_buffer(bcm2835_init_frame_buffer_entries* _entries)
   _entries->xvirt = buffer.set_virtual_size.body.resp.vwidth;
   _entries->yvirt = buffer.set_virtual_size.body.resp.vheight;
   _entries->depth = buffer.set_depth.body.resp.depth;
+#if (BSP_IS_RPI2 == 1)
+  _entries->base = buffer.allocate_buffer.body.resp.base;
+#else
   _entries->base = buffer.allocate_buffer.body.resp.base
                     - BCM2835_VC_MEMORY_MAPPING;
+#endif
   _entries->size = buffer.allocate_buffer.body.resp.size;
   _entries->pixel_order = buffer.set_pixel_order.body.resp.pixel_order;
   _entries->alpha_mode = buffer.set_alpha_mode.body.resp.alpha_mode;
