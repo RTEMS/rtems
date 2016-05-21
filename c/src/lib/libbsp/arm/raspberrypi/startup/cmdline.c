@@ -19,8 +19,8 @@
 #include <bsp/vc.h>
 
 #define MAX_CMDLINE_LENGTH 1024
-static int rpi_cmdline_ready;
-static char rpi_cmdline_cached[MAX_CMDLINE_LENGTH];
+static int rpi_cmdline_ready = -1;
+static char rpi_cmdline_cached[MAX_CMDLINE_LENGTH] = "force .data placement";
 static bcm2835_get_cmdline_entries rpi_cmdline_entries;
 
 const char *rpi_cmdline_get_raw(void)
@@ -32,7 +32,7 @@ const char *rpi_cmdline_get_raw(void)
 
 const char *rpi_cmdline_get_cached(void)
 {
-  if (!rpi_cmdline_ready) {
+  if (rpi_cmdline_ready <= 0) {
     const char *line = rpi_cmdline_get_raw();
     strncpy(rpi_cmdline_cached, line, MAX_CMDLINE_LENGTH - 1);
     rpi_cmdline_cached[MAX_CMDLINE_LENGTH - 1] = 0;
@@ -43,5 +43,9 @@ const char *rpi_cmdline_get_cached(void)
 
 const char *rpi_cmdline_get_arg(const char* arg)
 {
-  return strstr (rpi_cmdline_get_cached(), arg);
+  const char *opt_data;
+  opt_data = strstr(rpi_cmdline_get_cached(), arg);
+  if (opt_data)
+    opt_data += strlen(arg);
+  return opt_data;
 }
