@@ -21,6 +21,7 @@
 #ifndef LIBBSP_ARM_RASPBERRYPI_RASPBERRYPI_H
 #define LIBBSP_ARM_RASPBERRYPI_RASPBERRYPI_H
 
+#include <bspopts.h>
 #include <stdint.h>
 #include <bsp/utility.h>
 

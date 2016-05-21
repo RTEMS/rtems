@@ -16,6 +16,7 @@
  *
  */
 
+#include <bsp.h>
 #include <rtems.h>
 #include <rtems/btimer.h>
 #include <bsp/raspberrypi.h>

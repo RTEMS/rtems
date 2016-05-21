@@ -17,6 +17,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <bsp.h>
 #include <bsp/raspberrypi.h>
 #include <bsp/mailbox.h>
 

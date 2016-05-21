@@ -14,6 +14,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/raspberrypi.h>
 #include <bsp/irq-generic.h>
 #include <bsp/gpio.h>
