@@ -36,9 +36,9 @@
  */
 
 MEMORY {
-        VECTOR_RAM     (AIW) : ORIGIN = 0x0       , LENGTH = 0x8000
-        RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 48K
-	RAM_MMU        (AIW) : ORIGIN = 128M - 16k, LENGTH = 16k
+        VECTOR_RAM     (AIW) : ORIGIN = 0x0       , LENGTH = 16k
+	RAM_MMU        (AIW) : ORIGIN = 0x00004000, LENGTH = 16k
+        RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 32k
 }
 
 REGION_ALIAS ("REGION_START", RAM);

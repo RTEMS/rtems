@@ -83,7 +83,6 @@ libbsp_a_LIBADD =
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
@@ -97,6 +96,7 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 libbsp_a_SOURCES += ../../shared/bspreset_loop.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/cmdline.c
+libbsp_a_SOURCES += startup/bspgetworkarea.c
 
 # IRQ
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
