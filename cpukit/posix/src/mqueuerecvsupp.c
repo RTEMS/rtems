@@ -44,24 +44,24 @@ ssize_t _POSIX_Message_queue_Receive_support(
 )
 {
   POSIX_Message_queue_Control *the_mq;
-  ISR_lock_Context             lock_context;
+  Thread_queue_Context         queue_context;
   size_t                       length_out;
   bool                         do_wait;
   Thread_Control              *executing;
 
-  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
+  the_mq = _POSIX_Message_queue_Get( mqdes, &queue_context );
 
   if ( the_mq == NULL ) {
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
   if ( ( the_mq->oflag & O_ACCMODE ) == O_WRONLY ) {
-    _ISR_lock_ISR_enable( &lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context );
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
   if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-    _ISR_lock_ISR_enable( &lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context );
     rtems_set_errno_and_return_minus_one( EMSGSIZE );
   }
 
@@ -83,11 +83,11 @@ ssize_t _POSIX_Message_queue_Receive_support(
 
   _CORE_message_queue_Acquire_critical(
     &the_mq->Message_queue,
-    &lock_context
+    &queue_context
   );
 
   if ( the_mq->open_count == 0 ) {
-    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    _CORE_message_queue_Release( &the_mq->Message_queue, &queue_context );
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
@@ -102,7 +102,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
     &length_out,
     do_wait,
     timeout,
-    &lock_context
+    &queue_context
   );
 
   if ( msg_prio != NULL ) {

@@ -15,14 +15,14 @@
 #include <rtems/posix/posixapi.h>
 
 POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
-  pthread_cond_t   *cond,
-  ISR_lock_Context *lock_context
+  pthread_cond_t       *cond,
+  Thread_queue_Context *queue_context
 )
 {
   _POSIX_Get_object_body(
     POSIX_Condition_variables_Control,
     cond,
-    lock_context,
+    queue_context,
     &_POSIX_Condition_variables_Information,
     PTHREAD_COND_INITIALIZER,
     pthread_cond_init

@@ -27,14 +27,18 @@ rtems_status_code rtems_message_queue_send(
 )
 {
   Message_queue_Control     *the_message_queue;
-  ISR_lock_Context           lock_context;
+  Thread_queue_Context       queue_context;
   CORE_message_queue_Status  status;
 
   if ( buffer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get( id, &lock_context );
+  the_message_queue = _Message_queue_Get(
+    id,
+    &queue_context,
+    _Message_queue_Core_message_queue_mp_support
+  );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -46,16 +50,15 @@ rtems_status_code rtems_message_queue_send(
 
   _CORE_message_queue_Acquire_critical(
     &the_message_queue->message_queue,
-    &lock_context
+    &queue_context
   );
   status = _CORE_message_queue_Send(
     &the_message_queue->message_queue,
     buffer,
     size,
-    _Message_queue_Core_message_queue_mp_support,
     false,   /* sender does not block */
     0,       /* no timeout */
-    &lock_context
+    &queue_context
   );
 
   /*

@@ -29,20 +29,20 @@ int pthread_cond_destroy(
 )
 {
   POSIX_Condition_variables_Control *the_cond;
-  ISR_lock_Context                   lock_context;
+  Thread_queue_Context               queue_context;
 
   _Objects_Allocator_lock();
-  the_cond = _POSIX_Condition_variables_Get( cond, &lock_context );
+  the_cond = _POSIX_Condition_variables_Get( cond, &queue_context );
 
   if ( the_cond == NULL ) {
     _Objects_Allocator_unlock();
     return EINVAL;
   }
 
-  _POSIX_Condition_variables_Acquire_critical( the_cond, &lock_context );
+  _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
 
   if ( !_Thread_queue_Is_empty( &the_cond->Wait_queue.Queue ) ) {
-    _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    _POSIX_Condition_variables_Release( the_cond, &queue_context );
     _Objects_Allocator_unlock();
     return EBUSY;
   }
@@ -51,7 +51,7 @@ int pthread_cond_destroy(
     &_POSIX_Condition_variables_Information,
     &the_cond->Object
   );
-  _POSIX_Condition_variables_Release( the_cond, &lock_context );
+  _POSIX_Condition_variables_Release( the_cond, &queue_context );
   _POSIX_Condition_variables_Destroy( the_cond );
   _POSIX_Condition_variables_Free( the_cond );
   _Objects_Allocator_unlock();

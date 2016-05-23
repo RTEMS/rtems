@@ -21,13 +21,10 @@
 
 #include <rtems/score/corebarrierimpl.h>
 
-uint32_t _CORE_barrier_Do_surrender(
+uint32_t _CORE_barrier_Do_flush(
   CORE_barrier_Control      *the_barrier,
   Thread_queue_Flush_filter  filter,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout    mp_callout,
-#endif
-  ISR_lock_Context          *lock_context
+  Thread_queue_Context      *queue_context
 )
 {
   the_barrier->number_of_waiting_threads = 0;
@@ -35,7 +32,6 @@ uint32_t _CORE_barrier_Do_surrender(
     &the_barrier->Wait_queue.Queue,
     CORE_BARRIER_TQ_OPERATIONS,
     filter,
-    mp_callout,
-    lock_context
+    queue_context
   );
 }

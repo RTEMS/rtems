@@ -22,14 +22,14 @@
 #include <rtems/posix/posixapi.h>
 
 POSIX_Mutex_Control *_POSIX_Mutex_Get(
-  pthread_mutex_t  *mutex,
-  ISR_lock_Context *lock_context
+  pthread_mutex_t      *mutex,
+  Thread_queue_Context *queue_context
 )
 {
   _POSIX_Get_object_body(
     POSIX_Mutex_Control,
     mutex,
-    lock_context,
+    queue_context,
     &_POSIX_Mutex_Information,
     PTHREAD_MUTEX_INITIALIZER,
     pthread_mutex_init

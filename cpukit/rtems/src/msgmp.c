@@ -576,17 +576,7 @@ void _Message_queue_MP_Send_extract_proxy (
   );
 }
 
-/*
- *  _Message_queue_Core_message_queue_mp_support
- *
- *  Input parameters:
- *    the_thread - the remote thread the message was submitted to
- *    id         - id of the message queue
- *
- *  Output parameters: NONE
- */
-
-void  _Message_queue_Core_message_queue_mp_support (
+void  _Message_queue_Core_message_queue_mp_support(
   Thread_Control *the_thread,
   Objects_Id      id
 )

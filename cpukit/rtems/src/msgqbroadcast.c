@@ -28,7 +28,7 @@ rtems_status_code rtems_message_queue_broadcast(
 )
 {
   Message_queue_Control     *the_message_queue;
-  ISR_lock_Context           lock_context;
+  Thread_queue_Context       queue_context;
   CORE_message_queue_Status  status;
 
   if ( buffer == NULL ) {
@@ -39,7 +39,11 @@ rtems_status_code rtems_message_queue_broadcast(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get( id, &lock_context );
+  the_message_queue = _Message_queue_Get(
+    id,
+    &queue_context,
+    _Message_queue_Core_message_queue_mp_support
+  );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -53,9 +57,8 @@ rtems_status_code rtems_message_queue_broadcast(
     &the_message_queue->message_queue,
     buffer,
     size,
-    _Message_queue_Core_message_queue_mp_support,
     count,
-    &lock_context
+    &queue_context
   );
   return _Message_queue_Translate_core_message_queue_return_code( status );
 }

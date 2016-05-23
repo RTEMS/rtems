@@ -22,11 +22,11 @@
 #include <rtems/score/schedulerimpl.h>
 
 static rtems_status_code _Semaphore_Set_priority(
-  Semaphore_Control   *the_semaphore,
-  rtems_id             scheduler_id,
-  rtems_task_priority  new_priority,
-  rtems_task_priority *old_priority_p,
-  ISR_lock_Context    *lock_context
+  Semaphore_Control    *the_semaphore,
+  rtems_id              scheduler_id,
+  rtems_task_priority   new_priority,
+  rtems_task_priority  *old_priority_p,
+  Thread_queue_Context *queue_context
 )
 {
   rtems_status_code   sc;
@@ -40,7 +40,7 @@ static rtems_status_code _Semaphore_Set_priority(
     MRSP_Control *mrsp = &the_semaphore->Core_control.mrsp;
     uint32_t scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
 
-    _MRSP_Acquire_critical( mrsp, lock_context );
+    _MRSP_Acquire_critical( mrsp, queue_context );
 
     old_priority = _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
 
@@ -48,7 +48,7 @@ static rtems_status_code _Semaphore_Set_priority(
       _MRSP_Set_ceiling_priority( mrsp, scheduler_index, new_priority );
     }
 
-    _MRSP_Release( mrsp, lock_context );
+    _MRSP_Release( mrsp, queue_context );
 
     sc = RTEMS_SUCCESSFUL;
   } else
@@ -56,7 +56,7 @@ static rtems_status_code _Semaphore_Set_priority(
   if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
     CORE_mutex_Control *mutex = &the_semaphore->Core_control.mutex;
 
-    _CORE_mutex_Acquire_critical( mutex, lock_context );
+    _CORE_mutex_Acquire_critical( mutex, queue_context );
 
     old_priority = mutex->Attributes.priority_ceiling;
 
@@ -64,11 +64,11 @@ static rtems_status_code _Semaphore_Set_priority(
       mutex->Attributes.priority_ceiling = new_priority;
     }
 
-    _CORE_mutex_Release( mutex, lock_context );
+    _CORE_mutex_Release( mutex, queue_context );
 
     sc = RTEMS_SUCCESSFUL;
   } else {
-    _ISR_lock_ISR_enable( lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context );
 
     old_priority = 0;
 
@@ -87,8 +87,8 @@ rtems_status_code rtems_semaphore_set_priority(
   rtems_task_priority *old_priority
 )
 {
-  Semaphore_Control *the_semaphore;
-  ISR_lock_Context   lock_context;
+  Semaphore_Control    *the_semaphore;
+  Thread_queue_Context  queue_context;
 
   if ( new_priority != RTEMS_CURRENT_PRIORITY &&
        !_RTEMS_tasks_Priority_is_valid( new_priority ) ) {
@@ -103,7 +103,7 @@ rtems_status_code rtems_semaphore_set_priority(
     return RTEMS_INVALID_ID;
   }
 
-  the_semaphore = _Semaphore_Get( semaphore_id, &lock_context );
+  the_semaphore = _Semaphore_Get( semaphore_id, &queue_context, NULL );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -120,6 +120,6 @@ rtems_status_code rtems_semaphore_set_priority(
     scheduler_id,
     new_priority,
     old_priority,
-    &lock_context
+    &queue_context
   );
 }

@@ -37,14 +37,14 @@ int pthread_barrier_wait(
 )
 {
   POSIX_Barrier_Control *the_barrier;
-  ISR_lock_Context       lock_context;
+  Thread_queue_Context   queue_context;
   Thread_Control        *executing;
 
   if ( barrier == NULL ) {
     return EINVAL;
   }
 
-  the_barrier = _POSIX_Barrier_Get( barrier, &lock_context );
+  the_barrier = _POSIX_Barrier_Get( barrier, &queue_context );
 
   if ( the_barrier == NULL ) {
     return EINVAL;
@@ -56,8 +56,7 @@ int pthread_barrier_wait(
     executing,
     true,
     0,
-    NULL,
-    &lock_context
+    &queue_context
   );
   return _POSIX_Barrier_Translate_core_barrier_return_code(
     executing->Wait.return_code

@@ -23,11 +23,15 @@
 
 rtems_status_code rtems_semaphore_flush( rtems_id id )
 {
-  Semaphore_Control *the_semaphore;
-  ISR_lock_Context   lock_context;
-  rtems_attribute    attribute_set;
+  Semaphore_Control    *the_semaphore;
+  Thread_queue_Context  queue_context;
+  rtems_attribute       attribute_set;
 
-  the_semaphore = _Semaphore_Get( id, &lock_context );
+  the_semaphore = _Semaphore_Get(
+    id,
+    &queue_context,
+    _Semaphore_MP_Send_object_was_deleted
+  );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -43,30 +47,28 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
 
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    _ISR_lock_ISR_enable( &lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context );
     return RTEMS_NOT_DEFINED;
   } else
 #endif
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     _CORE_mutex_Acquire_critical(
       &the_semaphore->Core_control.mutex,
-      &lock_context
+      &queue_context
     );
     _CORE_mutex_Flush(
       &the_semaphore->Core_control.mutex,
       _CORE_mutex_Unsatisfied_nowait,
-      _Semaphore_MP_Send_object_was_deleted,
-      &lock_context
+      &queue_context
     );
   } else {
     _CORE_semaphore_Acquire_critical(
       &the_semaphore->Core_control.semaphore,
-      &lock_context
+      &queue_context
     );
     _CORE_semaphore_Flush(
       &the_semaphore->Core_control.semaphore,
-      _Semaphore_MP_Send_object_was_deleted,
-      &lock_context
+      &queue_context
     );
   }
   return RTEMS_SUCCESSFUL;

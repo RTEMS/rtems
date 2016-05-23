@@ -101,17 +101,30 @@ RTEMS_INLINE_ROUTINE void _Message_queue_Free (
   _Objects_Free( &_Message_queue_Information, &the_message_queue->Object );
 }
 
-RTEMS_INLINE_ROUTINE Message_queue_Control * _Message_queue_Get(
-  Objects_Id         id,
-  ISR_lock_Context  *lock_context
+RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Do_get(
+  Objects_Id               id,
+  Thread_queue_Context    *queue_context
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout  mp_callout
+#endif
 )
 {
+  _Thread_queue_Context_initialize( queue_context, mp_callout );
   return (Message_queue_Control *) _Objects_Get(
     id,
-    lock_context,
+    &queue_context->Lock_context,
     &_Message_queue_Information
   );
 }
+
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Message_queue_Get( id, queue_context, mp_callout ) \
+    _Message_queue_Do_get( id, queue_context, mp_callout )
+#else
+  #define _Message_queue_Get( id, queue_context, mp_callout ) \
+    _Message_queue_Do_get( id, queue_context )
+#endif
 
 RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Allocate( void )
 {

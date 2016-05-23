@@ -25,10 +25,10 @@ int pthread_rwlock_rdlock(
 )
 {
   POSIX_RWLock_Control *the_rwlock;
-  ISR_lock_Context      lock_context;
+  Thread_queue_Context  queue_context;
   Thread_Control       *executing;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &lock_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
   if ( the_rwlock == NULL ) {
     return EINVAL;
@@ -40,7 +40,7 @@ int pthread_rwlock_rdlock(
     executing,
     true,                 /* we are willing to wait forever */
     0,
-    &lock_context
+    &queue_context
   );
   return _POSIX_RWLock_Translate_core_RWLock_return_code(
     (CORE_RWLock_Status) executing->Wait.return_code

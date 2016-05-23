@@ -30,7 +30,7 @@ int mq_unlink(
 {
   POSIX_Message_queue_Control *the_mq;
   Objects_Get_by_name_error    error;
-  ISR_lock_Context             lock_context;
+  Thread_queue_Context         queue_context;
 
   _Objects_Allocator_lock();
 
@@ -42,10 +42,10 @@ int mq_unlink(
 
   _POSIX_Message_queue_Namespace_remove( the_mq );
 
-  _CORE_message_queue_Acquire( &the_mq->Message_queue, &lock_context );
+  _CORE_message_queue_Acquire( &the_mq->Message_queue, &queue_context );
 
   the_mq->linked = false;
-  _POSIX_Message_queue_Delete( the_mq, &lock_context );
+  _POSIX_Message_queue_Delete( the_mq, &queue_context );
 
   _Objects_Allocator_unlock();
   return 0;

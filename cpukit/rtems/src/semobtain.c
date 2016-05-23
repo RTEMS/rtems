@@ -38,13 +38,13 @@ rtems_status_code rtems_semaphore_obtain(
   rtems_interval  timeout
 )
 {
-  Semaphore_Control *the_semaphore;
-  ISR_lock_Context   lock_context;
-  Thread_Control    *executing;
-  rtems_attribute    attribute_set;
-  bool               wait;
+  Semaphore_Control    *the_semaphore;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
+  rtems_attribute       attribute_set;
+  bool                  wait;
 
-  the_semaphore = _Semaphore_Get( id, &lock_context );
+  the_semaphore = _Semaphore_Get( id, &queue_context, NULL );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -66,7 +66,7 @@ rtems_status_code rtems_semaphore_obtain(
       executing,
       wait,
       timeout,
-      &lock_context
+      &queue_context
     );
     return _Semaphore_Translate_MRSP_status_code( mrsp_status );
   } else
@@ -77,7 +77,7 @@ rtems_status_code rtems_semaphore_obtain(
       executing,
       wait,
       timeout,
-      &lock_context
+      &queue_context
     );
     return _Semaphore_Translate_core_mutex_return_code(
       executing->Wait.return_code
@@ -90,7 +90,7 @@ rtems_status_code rtems_semaphore_obtain(
     executing,
     wait,
     timeout,
-    &lock_context
+    &queue_context
   );
   return _Semaphore_Translate_core_semaphore_return_code(
     executing->Wait.return_code

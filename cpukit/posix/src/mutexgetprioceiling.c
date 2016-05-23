@@ -30,26 +30,26 @@ int pthread_mutex_getprioceiling(
   int               *prioceiling
 )
 {
-  POSIX_Mutex_Control *the_mutex;
-  ISR_lock_Context     lock_context;
+  POSIX_Mutex_Control  *the_mutex;
+  Thread_queue_Context  queue_context;
 
   if ( prioceiling == NULL ) {
     return EINVAL;
   }
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;
   }
 
-  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &lock_context );
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &queue_context );
 
   *prioceiling = _POSIX_Priority_From_core(
     the_mutex->Mutex.Attributes.priority_ceiling
   );
 
-  _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+  _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
 
   return 0;
 }

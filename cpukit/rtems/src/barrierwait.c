@@ -27,11 +27,11 @@ rtems_status_code rtems_barrier_wait(
   rtems_interval  timeout
 )
 {
-  Barrier_Control  *the_barrier;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
+  Barrier_Control      *the_barrier;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
 
-  the_barrier = _Barrier_Get( id, &lock_context );
+  the_barrier = _Barrier_Get( id, &queue_context );
 
   if ( the_barrier == NULL ) {
     return RTEMS_INVALID_ID;
@@ -43,8 +43,7 @@ rtems_status_code rtems_barrier_wait(
     executing,
     true,
     timeout,
-    NULL,
-    &lock_context
+    &queue_context
   );
   return _Barrier_Translate_core_barrier_return_code(
     executing->Wait.return_code

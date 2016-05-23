@@ -25,25 +25,22 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
-CORE_message_queue_Status _CORE_message_queue_Do_submit(
+CORE_message_queue_Status _CORE_message_queue_Submit(
   CORE_message_queue_Control       *the_message_queue,
   Thread_Control                   *executing,
   const void                       *buffer,
   size_t                            size,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout           mp_callout,
-#endif
   CORE_message_queue_Submit_types   submit_type,
   bool                              wait,
   Watchdog_Interval                 timeout,
-  ISR_lock_Context                 *lock_context
+  Thread_queue_Context             *queue_context
 )
 {
   CORE_message_queue_Buffer_control *the_message;
   Thread_Control                    *the_thread;
 
   if ( size > the_message_queue->maximum_message_size ) {
-    _CORE_message_queue_Release( the_message_queue, lock_context );
+    _CORE_message_queue_Release( the_message_queue, queue_context );
     return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
   }
 
@@ -55,9 +52,8 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
     the_message_queue,
     buffer,
     size,
-    mp_callout,
     submit_type,
-    lock_context
+    queue_context
   );
   if ( the_thread != NULL ) {
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
@@ -90,20 +86,20 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
     ) {
       ( *the_message_queue->notify_handler )(
         the_message_queue,
-        lock_context
+        queue_context
       );
     } else {
-      _CORE_message_queue_Release( the_message_queue, lock_context );
+      _CORE_message_queue_Release( the_message_queue, queue_context );
     }
 #else
-    _CORE_message_queue_Release( the_message_queue, lock_context );
+    _CORE_message_queue_Release( the_message_queue, queue_context );
 #endif
 
     return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   }
 
   #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
-    _CORE_message_queue_Release( the_message_queue, lock_context );
+    _CORE_message_queue_Release( the_message_queue, queue_context );
     return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
   #else
     /*
@@ -112,7 +108,7 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
      *  on the queue.
      */
     if ( !wait ) {
-      _CORE_message_queue_Release( the_message_queue, lock_context );
+      _CORE_message_queue_Release( the_message_queue, queue_context );
       return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
     }
 
@@ -121,7 +117,7 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
      *  deadly to block in an ISR.
      */
     if ( _ISR_Is_in_progress() ) {
-      _CORE_message_queue_Release( the_message_queue, lock_context );
+      _CORE_message_queue_Release( the_message_queue, queue_context );
       return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
     }
 
@@ -143,7 +139,7 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
       STATES_WAITING_FOR_MESSAGE,
       timeout,
       CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
-      lock_context
+      &queue_context->Lock_context
     );
     return executing->Wait.return_code;
   #endif

@@ -23,7 +23,7 @@
 
 uint32_t   _CORE_message_queue_Flush(
   CORE_message_queue_Control *the_message_queue,
-  ISR_lock_Context           *lock_context
+  Thread_queue_Context       *queue_context
 )
 {
   Chain_Node *inactive_head;
@@ -59,7 +59,7 @@ uint32_t   _CORE_message_queue_Flush(
    *  fixed execution time that only deals with pending messages.
    */
 
-  _CORE_message_queue_Acquire_critical( the_message_queue, lock_context );
+  _CORE_message_queue_Acquire_critical( the_message_queue, queue_context );
 
   count = the_message_queue->number_of_pending_messages;
   if ( count != 0 ) {
@@ -78,6 +78,6 @@ uint32_t   _CORE_message_queue_Flush(
     _Chain_Initialize_empty( &the_message_queue->Pending_messages );
   }
 
-  _CORE_message_queue_Release( the_message_queue, lock_context );
+  _CORE_message_queue_Release( the_message_queue, queue_context );
   return count;
 }

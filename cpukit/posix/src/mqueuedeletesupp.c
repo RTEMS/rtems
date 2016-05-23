@@ -22,17 +22,13 @@
 
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq,
-  ISR_lock_Context            *lock_context
+  Thread_queue_Context        *queue_context
 )
 {
   if ( !the_mq->linked && the_mq->open_count == 0 ) {
-    _CORE_message_queue_Close(
-      &the_mq->Message_queue,
-      NULL,        /* no MP support */
-      lock_context
-    );
+    _CORE_message_queue_Close( &the_mq->Message_queue, queue_context );
     _POSIX_Message_queue_Free( the_mq );
   } else {
-    _CORE_message_queue_Release( &the_mq->Message_queue, lock_context );
+    _CORE_message_queue_Release( &the_mq->Message_queue, queue_context );
   }
 }

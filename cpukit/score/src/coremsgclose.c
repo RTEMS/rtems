@@ -22,9 +22,9 @@
 #include <rtems/score/wkspace.h>
 
 static Thread_Control *_CORE_message_queue_Was_deleted(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
   the_thread->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED;
@@ -32,12 +32,9 @@ static Thread_Control *_CORE_message_queue_Was_deleted(
   return the_thread;
 }
 
-void _CORE_message_queue_Do_close(
+void _CORE_message_queue_Close(
   CORE_message_queue_Control *the_message_queue,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout     mp_callout,
-#endif
-  ISR_lock_Context           *lock_context
+  Thread_queue_Context       *queue_context
 )
 {
 
@@ -50,8 +47,7 @@ void _CORE_message_queue_Do_close(
     &the_message_queue->Wait_queue.Queue,
     the_message_queue->operations,
     _CORE_message_queue_Was_deleted,
-    mp_callout,
-    lock_context
+    queue_context
   );
 
   (void) _Workspace_Free( the_message_queue->message_buffers );

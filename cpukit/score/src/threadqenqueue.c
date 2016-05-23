@@ -99,7 +99,7 @@ bool _Thread_queue_Do_extract_locked(
   Thread_Control                *the_thread
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout
+  const Thread_queue_Context    *queue_context
 #endif
 )
 {
@@ -108,12 +108,13 @@ bool _Thread_queue_Do_extract_locked(
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-    Thread_Proxy_control *the_proxy;
-
-    _Assert( mp_callout != NULL );
+    Thread_Proxy_control    *the_proxy;
+    Thread_queue_MP_callout  mp_callout;
 
     the_proxy = (Thread_Proxy_control *) the_thread;
-    the_proxy->thread_queue_callout = mp_callout;
+    mp_callout = queue_context->mp_callout;
+    _Assert( mp_callout != NULL );
+    the_proxy->thread_queue_callout = queue_context->mp_callout;
   }
 #endif
 
@@ -164,14 +165,11 @@ void _Thread_queue_Unblock_critical(
   }
 }
 
-void _Thread_queue_Do_extract_critical(
+void _Thread_queue_Extract_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout        mp_callout,
-#endif
-  ISR_lock_Context              *lock_context
+  Thread_queue_Context          *queue_context
 )
 {
   bool unblock;
@@ -180,24 +178,28 @@ void _Thread_queue_Do_extract_critical(
     queue,
     operations,
     the_thread,
-    mp_callout
+    queue_context
   );
 
   _Thread_queue_Unblock_critical(
     unblock,
     queue,
     the_thread,
-    lock_context
+    &queue_context->Lock_context
   );
 }
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
 {
-  ISR_lock_Context    lock_context;
-  void               *lock;
-  Thread_queue_Queue *queue;
+  Thread_queue_Context  queue_context;
+  void                 *lock;
+  Thread_queue_Queue   *queue;
 
-  lock = _Thread_Lock_acquire( the_thread, &lock_context );
+  _Thread_queue_Context_initialize(
+    &queue_context,
+    _Thread_queue_MP_callout_do_nothing
+  );
+  lock = _Thread_Lock_acquire( the_thread, &queue_context.Lock_context );
 
   queue = the_thread->Wait.queue;
 
@@ -208,11 +210,10 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       queue,
       the_thread->Wait.operations,
       the_thread,
-      _Thread_queue_MP_callout_do_nothing,
-      &lock_context
+      &queue_context
     );
   } else {
-    _Thread_Lock_release( lock, &lock_context );
+    _Thread_Lock_release( lock, &queue_context.Lock_context );
   }
 }
 
@@ -225,10 +226,11 @@ Thread_Control *_Thread_queue_Do_dequeue(
 #endif
 )
 {
-  ISR_lock_Context  lock_context;
-  Thread_Control   *the_thread;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *the_thread;
 
-  _Thread_queue_Acquire( the_thread_queue, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context, mp_callout );
+  _Thread_queue_Acquire( the_thread_queue, &queue_context.Lock_context );
 
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
 
@@ -239,11 +241,10 @@ Thread_Control *_Thread_queue_Do_dequeue(
       &the_thread_queue->Queue,
       operations,
       the_thread,
-      mp_callout,
-      &lock_context
+      &queue_context
     );
   } else {
-    _Thread_queue_Release( the_thread_queue, &lock_context );
+    _Thread_queue_Release( the_thread_queue, &queue_context.Lock_context );
   }
 
   return the_thread;

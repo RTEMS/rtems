@@ -36,30 +36,30 @@ int pthread_barrier_destroy(
 )
 {
   POSIX_Barrier_Control *the_barrier;
-  ISR_lock_Context       lock_context;
+  Thread_queue_Context   queue_context;
 
   if ( barrier == NULL ) {
     return EINVAL;
   }
 
   _Objects_Allocator_lock();
-  the_barrier = _POSIX_Barrier_Get( barrier, &lock_context );
+  the_barrier = _POSIX_Barrier_Get( barrier, &queue_context );
 
   if ( the_barrier == NULL ) {
     _Objects_Allocator_unlock();
     return EINVAL;
   }
 
-  _CORE_barrier_Acquire_critical( &the_barrier->Barrier, &lock_context );
+  _CORE_barrier_Acquire_critical( &the_barrier->Barrier, &queue_context );
 
   if ( the_barrier->Barrier.number_of_waiting_threads != 0 ) {
-    _CORE_barrier_Release( &the_barrier->Barrier, &lock_context );
+    _CORE_barrier_Release( &the_barrier->Barrier, &queue_context );
     _Objects_Allocator_unlock();
     return EBUSY;
   }
 
   _Objects_Close( &_POSIX_Barrier_Information, &the_barrier->Object );
-  _CORE_barrier_Release( &the_barrier->Barrier, &lock_context );
+  _CORE_barrier_Release( &the_barrier->Barrier, &queue_context );
   _POSIX_Barrier_Free( the_barrier );
   _Objects_Allocator_unlock();
   return 0;

@@ -321,24 +321,25 @@ void _MPCI_Receive_server(
 )
 {
 
-  MP_packet_Prefix         *the_packet;
-  MPCI_Packet_processor     the_function;
-  Thread_Control           *executing;
-  ISR_lock_Context          lock_context;
+  MP_packet_Prefix      *the_packet;
+  MPCI_Packet_processor  the_function;
+  Thread_Control        *executing;
+  Thread_queue_Context   queue_context;
 
   executing = _Thread_Get_executing();
+  _Thread_queue_Context_initialize( &queue_context, NULL );
 
   for ( ; ; ) {
 
     executing->receive_packet = NULL;
 
-    _ISR_lock_ISR_disable( &lock_context );
+    _ISR_lock_ISR_disable( &queue_context.Lock_context );
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
       executing,
       true,
       WATCHDOG_NO_TIMEOUT,
-      &lock_context
+      &queue_context
     );
 
     for ( ; ; ) {
@@ -370,10 +371,10 @@ void _MPCI_Receive_server(
 
 void _MPCI_Announce ( void )
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
-  _ISR_lock_ISR_disable( &lock_context );
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, &lock_context );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, &queue_context );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (

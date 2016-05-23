@@ -23,12 +23,9 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
 
-CORE_mutex_Status _CORE_mutex_Do_surrender(
-  CORE_mutex_Control      *the_mutex,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout  mp_callout,
-#endif
-  ISR_lock_Context        *lock_context
+CORE_mutex_Status _CORE_mutex_Surrender(
+  CORE_mutex_Control   *the_mutex,
+  Thread_queue_Context *queue_context
 )
 {
   Thread_Control *the_thread;
@@ -46,17 +43,17 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
 
   if ( the_mutex->Attributes.only_owner_release ) {
     if ( !_Thread_Is_executing( holder ) ) {
-      _ISR_lock_ISR_enable( lock_context );
+      _ISR_lock_ISR_enable( &queue_context->Lock_context );
       return CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE;
     }
   }
 
-  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, lock_context );
+  _CORE_mutex_Acquire_critical( the_mutex, queue_context );
 
   /* XXX already unlocked -- not right status */
 
   if ( !the_mutex->nest_count ) {
-    _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+    _CORE_mutex_Release( the_mutex, queue_context );
     return CORE_MUTEX_STATUS_SUCCESSFUL;
   }
 
@@ -71,12 +68,12 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
     #if defined(RTEMS_DEBUG)
       switch ( the_mutex->Attributes.lock_nesting_behavior ) {
         case CORE_MUTEX_NESTING_ACQUIRES:
-          _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+          _CORE_mutex_Release( the_mutex, queue_context );
           return CORE_MUTEX_STATUS_SUCCESSFUL;
         #if defined(RTEMS_POSIX_API)
           case CORE_MUTEX_NESTING_IS_ERROR:
             /* should never occur */
-            _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+            _CORE_mutex_Release( the_mutex, queue_context );
             return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
         #endif
         case CORE_MUTEX_NESTING_BLOCKS:
@@ -84,7 +81,7 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
           break;
       }
     #else
-      _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+      _CORE_mutex_Release( the_mutex, queue_context );
       /* must be CORE_MUTEX_NESTING_ACQUIRES or we wouldn't be here */
       return CORE_MUTEX_STATUS_SUCCESSFUL;
     #endif
@@ -126,7 +123,7 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
       &the_mutex->Wait_queue.Queue,
       the_mutex->operations,
       the_thread,
-      mp_callout
+      queue_context
     );
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -155,10 +152,10 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
       unblock,
       &the_mutex->Wait_queue.Queue,
       the_thread,
-      lock_context
+      &queue_context->Lock_context
     );
   } else {
-    _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+    _CORE_mutex_Release( the_mutex, queue_context );
   }
 
   /*

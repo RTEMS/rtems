@@ -53,6 +53,49 @@ typedef struct {
 #endif
 } Thread_queue_Syslock_queue;
 
+RTEMS_INLINE_ROUTINE void _Thread_queue_Do_context_initialize(
+  Thread_queue_Context    *queue_context
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  Thread_queue_MP_callout  mp_callout
+#endif
+)
+{
+#if defined(RTEMS_MULTIPROCESSING)
+  queue_context->mp_callout = mp_callout;
+#else
+  (void) queue_context;
+#endif
+}
+
+/**
+ * @brief Initializes a thread queue context.
+ *
+ * @param queue_context The thread queue context to initialize.
+ * @param mp_callout Callout to unblock the thread in case it is actually a
+ *   thread proxy.  This parameter is only used on multiprocessing
+ *   configurations.  Used by thread queue extract and unblock methods for
+ *   objects with multiprocessing (MP) support.
+ */
+#if defined(RTEMS_MULTIPROCESSING)
+  #define _Thread_queue_Context_initialize( \
+    queue_context, \
+    mp_callout \
+  ) \
+    _Thread_queue_Do_context_initialize( \
+      queue_context, \
+      mp_callout \
+    )
+#else
+  #define _Thread_queue_Context_initialize( \
+    queue_context, \
+    mp_callout \
+  ) \
+    _Thread_queue_Do_context_initialize( \
+      queue_context \
+    )
+#endif
+
 RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
   Thread_queue_Heads *heads
 )
@@ -344,7 +387,7 @@ bool _Thread_queue_Do_extract_locked(
   Thread_Control                *the_thread
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout
+  const Thread_queue_Context    *queue_context
 #endif
 );
 
@@ -358,9 +401,8 @@ bool _Thread_queue_Do_extract_locked(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
- * @param[in] mp_callout Callout to unblock the thread in case it is actually a
- *   thread proxy.  This parameter is only used on multiprocessing
- *   configurations.
+ * @param[in] queue_context The thread queue context.  This parameter is only
+ *   used on multiprocessing configurations.
  *
  * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
  * True indicates, that this thread must be unblocked by the scheduler later in
@@ -375,20 +417,20 @@ bool _Thread_queue_Do_extract_locked(
     unblock, \
     queue, \
     the_thread, \
-    mp_callout \
+    queue_context \
   ) \
     _Thread_queue_Do_extract_locked( \
       unblock, \
       queue, \
       the_thread, \
-      mp_callout \
+      queue_context \
     )
 #else
   #define _Thread_queue_Extract_locked( \
     unblock, \
     queue, \
     the_thread, \
-    mp_callout \
+    queue_context \
   ) \
     _Thread_queue_Do_extract_locked( \
       unblock, \
@@ -418,16 +460,6 @@ void _Thread_queue_Unblock_critical(
   ISR_lock_Context   *lock_context
 );
 
-void _Thread_queue_Do_extract_critical(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout        mp_callout,
-#endif
-  ISR_lock_Context              *lock_context
-);
-
 /**
  * @brief Extracts the thread from the thread queue and unblocks it.
  *
@@ -450,10 +482,11 @@ void _Thread_queue_Do_extract_critical(
  *
  * void _Mutex_Release( Mutex *mutex )
  * {
- *   ISR_lock_Context  lock_context;
- *   Thread_Control   *first;
+ *   Thread_queue_Context  queue_context;
+ *   Thread_Control       *first;
  *
- *   _Thread_queue_Acquire( &mutex->Queue, &lock_context );
+ *   _Thread_queue_Context_initialize( &queue_context, NULL );
+ *   _Thread_queue_Acquire( &mutex->Queue, &queue_context.Lock_context );
  *
  *   first = _Thread_queue_First_locked( &mutex->Queue );
  *   mutex->owner = first;
@@ -463,9 +496,7 @@ void _Thread_queue_Do_extract_critical(
  *       &mutex->Queue.Queue,
  *       mutex->Queue.operations,
  *       first,
- *       NULL,
- *       0,
- *       &lock_context
+ *       &queue_context
  *   );
  * }
  * @endcode
@@ -473,41 +504,14 @@ void _Thread_queue_Do_extract_critical(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
- * @param[in] mp_callout Callout to unblock the thread in case it is actually a
- *   thread proxy.  This parameter is only used on multiprocessing
- *   configurations.
- * @param[in] lock_context The lock context of the lock acquire.
+ * @param[in] queue_context The thread queue context of the lock acquire.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Extract_critical( \
-    queue, \
-    operations, \
-    the_thread, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_extract_critical( \
-      queue, \
-      operations, \
-      the_thread, \
-      mp_callout, \
-      lock_context \
-    )
-#else
-  #define _Thread_queue_Extract_critical( \
-    queue, \
-    operations, \
-    the_thread, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_extract_critical( \
-      queue, \
-      operations, \
-      the_thread, \
-      lock_context \
-    )
-#endif
+void _Thread_queue_Extract_critical(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  Thread_queue_Context          *queue_context
+);
 
 /**
  *  @brief Extracts thread from thread queue.
@@ -592,9 +596,10 @@ Thread_Control *_Thread_queue_First(
  *   optimize for architectures that use the same register for the first
  *   parameter and the return value.
  * @param queue The actual thread queue.
- * @param lock_context The lock context of the lock acquire.  May be used to
- *   pass additional data to the filter function via an overlay structure.  The
- *   filter function should not release or acquire the thread queue lock.
+ * @param queue_context The thread queue context of the lock acquire.  May be
+ *   used to pass additional data to the filter function via an overlay
+ *   structure.  The filter function should not release or acquire the thread
+ *   queue lock.
  *
  * @retval the_thread Extract this thread.
  * @retval NULL Do not extract this thread and stop the thread queue flush
@@ -602,9 +607,9 @@ Thread_Control *_Thread_queue_First(
  *   operation.
  */
 typedef Thread_Control *( *Thread_queue_Flush_filter )(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 );
 
 /**
@@ -612,24 +617,14 @@ typedef Thread_Control *( *Thread_queue_Flush_filter )(
  *
  * @param the_thread The thread to extract.
  * @param queue Unused.
- * @param lock_context Unused.
+ * @param queue_context Unused.
  *
  * @retval the_thread Extract this thread.
  */
 Thread_Control *_Thread_queue_Flush_default_filter(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
-);
-
-size_t _Thread_queue_Do_flush_critical(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_queue_Flush_filter      filter,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout        mp_callout,
-#endif
-  ISR_lock_Context              *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 );
 
 /**
@@ -647,41 +642,19 @@ size_t _Thread_queue_Do_flush_critical(
  *   the thread queue lock, for example to set the thread wait return code.
  *   The return value of the filter function controls if the thread queue flush
  *   operation should stop or continue.
- * @param mp_callout Callout to extract the proxy of a remote thread.  This
- *   parameter is only used on multiprocessing configurations.
+ * @param queue_context The thread queue context of the lock acquire.  May be
+ *   used to pass additional data to the filter function via an overlay
+ *   structure.  The filter function should not release or acquire the thread
+ *   queue lock.
  *
  * @return The count of extracted threads.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Flush_critical( \
-    queue, \
-    operations, \
-    filter, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_flush_critical( \
-      queue, \
-      operations, \
-      filter, \
-      mp_callout, \
-      lock_context \
-    )
-#else
-  #define _Thread_queue_Flush_critical( \
-    queue, \
-    operations, \
-    filter, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_flush_critical( \
-      queue, \
-      operations, \
-      filter, \
-      lock_context \
-    )
-#endif
+size_t _Thread_queue_Flush_critical(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Flush_filter      filter,
+  Thread_queue_Context          *queue_context
+);
 
 void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
 

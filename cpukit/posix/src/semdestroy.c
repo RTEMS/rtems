@@ -27,10 +27,10 @@ int sem_destroy(
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
 
   _Objects_Allocator_lock();
-  the_semaphore = _POSIX_Semaphore_Get( sem, &lock_context );
+  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
   if ( the_semaphore == NULL ) {
     _Objects_Allocator_unlock();
@@ -39,17 +39,17 @@ int sem_destroy(
 
   _CORE_semaphore_Acquire_critical(
     &the_semaphore->Semaphore,
-    &lock_context
+    &queue_context
   );
 
   if ( the_semaphore->named ) {
     /* Undefined operation on a named semaphore */
-    _CORE_semaphore_Release( &the_semaphore->Semaphore, &lock_context );
+    _CORE_semaphore_Release( &the_semaphore->Semaphore, &queue_context );
     _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _POSIX_Semaphore_Delete( the_semaphore, &lock_context );
+  _POSIX_Semaphore_Delete( the_semaphore, &queue_context );
 
   _Objects_Allocator_unlock();
   return 0;

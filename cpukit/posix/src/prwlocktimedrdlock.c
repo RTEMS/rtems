@@ -27,7 +27,7 @@ int pthread_rwlock_timedrdlock(
 )
 {
   POSIX_RWLock_Control                    *the_rwlock;
-  ISR_lock_Context                         lock_context;
+  Thread_queue_Context                     queue_context;
   Watchdog_Interval                        ticks;
   bool                                     do_wait;
   TOD_Absolute_timeout_conversion_results  status;
@@ -49,7 +49,7 @@ int pthread_rwlock_timedrdlock(
   status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
   do_wait = ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE );
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &lock_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
   if ( the_rwlock == NULL ) {
     return EINVAL;
@@ -61,7 +61,7 @@ int pthread_rwlock_timedrdlock(
     executing,
     do_wait,
     ticks,
-    &lock_context
+    &queue_context
   );
 
   if (

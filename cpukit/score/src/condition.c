@@ -220,54 +220,54 @@ int _Condition_Wait_recursive_timed(
 }
 
 typedef struct {
-  ISR_lock_Context Base;
-  int              count;
-} Condition_Lock_context;
+  Thread_queue_Context Base;
+  int                  count;
+} Condition_Context;
 
 static Thread_Control *_Condition_Flush_filter(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
-  Condition_Lock_context *condition_lock_context;
+  Condition_Context *context;
 
-  condition_lock_context = (Condition_Lock_context *) lock_context;
+  context = (Condition_Context *) queue_context;
 
-  if ( condition_lock_context->count <= 0 ) {
+  if ( context->count <= 0 ) {
     return NULL;
   }
 
-  --condition_lock_context->count;
+  --context->count;
 
   return the_thread;
 }
 
 static void _Condition_Wake( struct _Condition_Control *_condition, int count )
 {
-  Condition_Control      *condition;
-  Condition_Lock_context  lock_context;
+  Condition_Control *condition;
+  Condition_Context  context;
 
   condition = _Condition_Get( _condition );
-  _ISR_lock_ISR_disable( &lock_context.Base );
-  _Condition_Queue_acquire_critical( condition, &lock_context.Base );
+  _Thread_queue_Context_initialize( &context.Base, NULL );
+  _ISR_lock_ISR_disable( &context.Base.Lock_context );
+  _Condition_Queue_acquire_critical( condition, &context.Base.Lock_context );
 
   /*
    * In common uses cases of condition variables there are normally no threads
    * on the queue, so check this condition early.
    */
   if ( __predict_true( _Thread_queue_Is_empty( &condition->Queue.Queue ) ) ) {
-    _Condition_Queue_release( condition, &lock_context.Base );
+    _Condition_Queue_release( condition, &context.Base.Lock_context );
     return;
   }
 
-  lock_context.count = count;
+  context.count = count;
   _Thread_queue_Flush_critical(
     &condition->Queue.Queue,
     CONDITION_TQ_OPERATIONS,
     _Condition_Flush_filter,
-    NULL,
-    &lock_context.Base
+    &context.Base
   );
 }
 

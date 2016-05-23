@@ -84,30 +84,25 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Destroy(
 
 RTEMS_INLINE_ROUTINE void _CORE_barrier_Acquire_critical(
   CORE_barrier_Control *the_barrier,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_barrier->Wait_queue, lock_context );
+  _Thread_queue_Acquire_critical(
+    &the_barrier->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
   CORE_barrier_Control *the_barrier,
-  ISR_lock_Context     *lock_context
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release( &the_barrier->Wait_queue, lock_context );
+  _Thread_queue_Release(
+    &the_barrier->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
-
-void _CORE_barrier_Do_seize(
-  CORE_barrier_Control    *the_barrier,
-  Thread_Control          *executing,
-  bool                     wait,
-  Watchdog_Interval        timeout,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout  mp_callout,
-#endif
-  ISR_lock_Context        *lock_context
-);
 
 /**
  *  @brief Wait for the barrier.
@@ -127,48 +122,18 @@ void _CORE_barrier_Do_seize(
  *
  * @note Status is returned via the thread control block.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _CORE_barrier_Seize( \
-    the_barrier, \
-    executing, \
-    wait, \
-    timeout, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_seize( \
-      the_barrier, \
-      executing, \
-      wait, \
-      timeout, \
-      mp_callout, \
-      lock_context \
-    )
-#else
-  #define _CORE_barrier_Seize( \
-    the_barrier, \
-    executing, \
-    wait, \
-    timeout, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_seize( \
-      the_barrier, \
-      executing, \
-      wait, \
-      timeout, \
-      lock_context \
-    )
-#endif
+void _CORE_barrier_Seize(
+  CORE_barrier_Control *the_barrier,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
+);
 
-uint32_t _CORE_barrier_Do_surrender(
+uint32_t _CORE_barrier_Do_flush(
   CORE_barrier_Control      *the_barrier,
   Thread_queue_Flush_filter  filter,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout    mp_callout,
-#endif
-  ISR_lock_Context          *lock_context
+  Thread_queue_Context      *queue_context
 );
 
 /**
@@ -183,62 +148,35 @@ uint32_t _CORE_barrier_Do_surrender(
  *
  *  @retval the number of unblocked threads
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _CORE_barrier_Surrender( \
-    the_barrier, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_surrender( \
-      the_barrier, \
-      _Thread_queue_Flush_default_filter, \
-      mp_callout, \
-      lock_context \
-    )
-#else
-  #define _CORE_barrier_Surrender( \
-    the_barrier, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_surrender( \
-      the_barrier, \
-      _Thread_queue_Flush_default_filter, \
-      lock_context \
-    )
-#endif
+RTEMS_INLINE_ROUTINE uint32_t _CORE_barrier_Surrender(
+  CORE_barrier_Control *the_barrier,
+  Thread_queue_Context *queue_context
+)
+{
+  return _CORE_barrier_Do_flush(
+    the_barrier,
+    _Thread_queue_Flush_default_filter,
+    queue_context
+  );
+}
 
 Thread_Control *_CORE_barrier_Was_deleted(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 );
 
-/* Must be a macro due to the multiprocessing dependent parameters */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _CORE_barrier_Flush( \
-    the_barrier, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_surrender( \
-      the_barrier, \
-      _CORE_barrier_Was_deleted, \
-      mp_callout, \
-      lock_context \
-    )
-#else
-  #define _CORE_barrier_Flush( \
-    the_barrier, \
-    mp_callout, \
-    lock_context \
-  ) \
-    _CORE_barrier_Do_surrender( \
-      the_barrier, \
-      _CORE_barrier_Was_deleted, \
-      lock_context \
-    )
-#endif
+RTEMS_INLINE_ROUTINE void _CORE_barrier_Flush(
+  CORE_barrier_Control *the_barrier,
+  Thread_queue_Context *queue_context
+)
+{
+  _CORE_barrier_Do_flush(
+    the_barrier,
+    _CORE_barrier_Was_deleted,
+    queue_context
+  );
+}
 
 /**
  * This function returns true if the automatic release attribute is

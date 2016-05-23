@@ -125,11 +125,11 @@ static void _Mutex_Acquire_slow(
 }
 
 static void _Mutex_Release_slow(
-  Mutex_Control      *mutex,
-  Thread_Control     *executing,
-  Thread_queue_Heads *heads,
-  bool                keep_priority,
-  ISR_lock_Context   *lock_context
+  Mutex_Control        *mutex,
+  Thread_Control       *executing,
+  Thread_queue_Heads   *heads,
+  bool                  keep_priority,
+  Thread_queue_Context *queue_context
 )
 {
   if (heads != NULL) {
@@ -146,17 +146,17 @@ static void _Mutex_Release_slow(
       &mutex->Queue.Queue,
       operations,
       first,
-      NULL
+      queue_context
     );
     _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
     _Thread_queue_Unblock_critical(
       unblock,
       &mutex->Queue.Queue,
       first,
-      lock_context
+      &queue_context->Lock_context
     );
   } else {
-    _Mutex_Queue_release( mutex, lock_context);
+    _Mutex_Queue_release( mutex, &queue_context->Lock_context );
   }
 
   if ( !keep_priority ) {
@@ -169,9 +169,9 @@ static void _Mutex_Release_slow(
 }
 
 static void _Mutex_Release_critical(
-  Mutex_Control *mutex,
-  Thread_Control *executing,
-  ISR_lock_Context *lock_context
+  Mutex_Control        *mutex,
+  Thread_Control       *executing,
+  Thread_queue_Context *queue_context
 )
 {
   Thread_queue_Heads *heads;
@@ -193,14 +193,14 @@ static void _Mutex_Release_critical(
     || !executing->priority_restore_hint;
 
   if ( __predict_true( heads == NULL && keep_priority ) ) {
-    _Mutex_Queue_release( mutex, lock_context );
+    _Mutex_Queue_release( mutex, &queue_context->Lock_context );
   } else {
     _Mutex_Release_slow(
       mutex,
       executing,
       heads,
       keep_priority,
-      lock_context
+      queue_context
     );
   }
 }
@@ -297,16 +297,17 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 
 void _Mutex_Release( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control    *mutex;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
+  Mutex_Control        *mutex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
 
   mutex = _Mutex_Get( _mutex );
-  executing = _Mutex_Queue_acquire( mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context, NULL );
+  executing = _Mutex_Queue_acquire( mutex, &queue_context.Lock_context );
 
   _Assert( mutex->owner == executing );
 
-  _Mutex_Release_critical( mutex, executing, &lock_context );
+  _Mutex_Release_critical( mutex, executing, &queue_context );
 }
 
 static Mutex_recursive_Control *_Mutex_recursive_Get(
@@ -426,23 +427,27 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
 void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
 {
   Mutex_recursive_Control *mutex;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   Thread_Control          *executing;
   unsigned int             nest_level;
 
   mutex = _Mutex_recursive_Get( _mutex );
-  executing = _Mutex_Queue_acquire( &mutex->Mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context, NULL );
+  executing = _Mutex_Queue_acquire(
+    &mutex->Mutex,
+    &queue_context.Lock_context
+  );
 
   _Assert( mutex->Mutex.owner == executing );
 
   nest_level = mutex->nest_level;
 
   if ( __predict_true( nest_level == 0 ) ) {
-    _Mutex_Release_critical( &mutex->Mutex, executing, &lock_context );
+    _Mutex_Release_critical( &mutex->Mutex, executing, &queue_context );
   } else {
     mutex->nest_level = nest_level - 1;
 
-    _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context.Lock_context );
   }
 }
 

@@ -24,19 +24,16 @@
 
 void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
 {
-  ISR_lock_Context  lock_context;
-  Thread_Life_state previous_thread_life_state;
-  bool              restore_thread_life_protection;
+  Thread_queue_Context queue_context;
+  Thread_Life_state    previous_thread_life_state;
+  bool                 restore_thread_life_protection;
 
   previous_thread_life_state = the_mutex->previous_thread_life_state;
   restore_thread_life_protection = the_mutex->Mutex.nest_count == 1;
 
-  _ISR_lock_ISR_disable( &lock_context );
-  _CORE_mutex_Surrender(
-    &the_mutex->Mutex,
-    NULL,
-    &lock_context
-  );
+  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
 
   if ( restore_thread_life_protection ) {
     _Thread_Set_life_protection( previous_thread_life_state );

@@ -24,24 +24,24 @@ int pthread_rwlock_destroy(
 )
 {
   POSIX_RWLock_Control *the_rwlock;
-  ISR_lock_Context      lock_context;
+  Thread_queue_Context  queue_context;
 
   _Objects_Allocator_lock();
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &lock_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
   if ( the_rwlock == NULL ) {
     _Objects_Allocator_unlock();
     return EINVAL;
   }
 
-  _CORE_RWLock_Acquire_critical( &the_rwlock->RWLock, &lock_context );
+  _CORE_RWLock_Acquire_critical( &the_rwlock->RWLock, &queue_context );
 
   /*
    *  If there is at least one thread waiting, then do not delete it.
    */
 
   if ( !_Thread_queue_Is_empty( &the_rwlock->RWLock.Wait_queue.Queue ) ) {
-    _CORE_RWLock_Release( &the_rwlock->RWLock, &lock_context );
+    _CORE_RWLock_Release( &the_rwlock->RWLock, &queue_context );
     _Objects_Allocator_unlock();
     return EBUSY;
   }
@@ -51,7 +51,7 @@ int pthread_rwlock_destroy(
    */
 
   _Objects_Close( &_POSIX_RWLock_Information, &the_rwlock->Object );
-  _CORE_RWLock_Release( &the_rwlock->RWLock, &lock_context );
+  _CORE_RWLock_Release( &the_rwlock->RWLock, &queue_context );
   _POSIX_RWLock_Free( the_rwlock );
   _Objects_Allocator_unlock();
   return 0;

@@ -477,9 +477,10 @@ rtems_task Floating_point_task_2(
 
 void complete_test( void )
 {
-  uint32_t         index;
-  rtems_id         task_id;
-  ISR_lock_Context lock_context;
+  uint32_t             index;
+  rtems_id             task_id;
+  ISR_lock_Context     lock_context;
+  Thread_queue_Context queue_context;
 
   benchmark_timer_initialize();
     thread_resume( Middle_tcb );
@@ -513,8 +514,8 @@ void complete_test( void )
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
-      (void) _Semaphore_Get( Semaphore_id, &lock_context );
-      _ISR_lock_ISR_enable( &lock_context );
+      (void) _Semaphore_Get( Semaphore_id, &queue_context, NULL );
+      _ISR_lock_ISR_enable( &queue_context.Lock_context );
     }
   semaphore_get_time = benchmark_timer_read();
 

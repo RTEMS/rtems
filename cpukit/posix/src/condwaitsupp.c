@@ -35,7 +35,7 @@ int _POSIX_Condition_variables_Wait_support(
 {
   POSIX_Condition_variables_Control *the_cond;
   POSIX_Mutex_Control               *the_mutex;
-  ISR_lock_Context                   lock_context;
+  Thread_queue_Context               queue_context;
   int                                status;
   int                                mutex_status;
   CORE_mutex_Status                  core_mutex_status;
@@ -46,25 +46,25 @@ int _POSIX_Condition_variables_Wait_support(
     return EINVAL;
   }
 
-  the_cond = _POSIX_Condition_variables_Get( cond, &lock_context );
+  the_cond = _POSIX_Condition_variables_Get( cond, &queue_context );
 
   if ( the_cond == NULL ) {
     return EINVAL;
   }
 
-  _POSIX_Condition_variables_Acquire_critical( the_cond, &lock_context );
+  _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
 
   if (
     the_cond->mutex != POSIX_CONDITION_VARIABLES_NO_MUTEX
       && the_cond->mutex != *mutex
   ) {
-    _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    _POSIX_Condition_variables_Release( the_cond, &queue_context );
     return EINVAL;
   }
 
   the_cond->mutex = *mutex;
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context.Lock_context );
   executing = _Per_CPU_Get_executing( cpu_self );
 
   /*
@@ -78,7 +78,7 @@ int _POSIX_Condition_variables_Wait_support(
     the_mutex == NULL
       || !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing )
   ) {
-    _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    _POSIX_Condition_variables_Release( the_cond, &queue_context );
     _Thread_Dispatch_enable( cpu_self );
     return EPERM;
   }
@@ -92,18 +92,17 @@ int _POSIX_Condition_variables_Wait_support(
       STATES_WAITING_FOR_CONDITION_VARIABLE,
       timeout,
       ETIMEDOUT,
-      &lock_context
+      &queue_context.Lock_context
     );
   } else {
-    _POSIX_Condition_variables_Release( the_cond, &lock_context );
+    _POSIX_Condition_variables_Release( the_cond, &queue_context );
     executing->Wait.return_code = ETIMEDOUT;
   }
 
-  _ISR_lock_ISR_disable( &lock_context );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context );
   core_mutex_status = _CORE_mutex_Surrender(
     &the_mutex->Mutex,
-    NULL,
-    &lock_context
+    &queue_context
   );
   _Assert( core_mutex_status == CORE_MUTEX_STATUS_SUCCESSFUL );
   (void) core_mutex_status;

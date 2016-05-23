@@ -63,18 +63,21 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Destroy(
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Acquire_critical(
   POSIX_Condition_variables_Control *the_cond,
-  ISR_lock_Context                  *lock_context
+  Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_cond->Wait_queue, lock_context );
+  _Thread_queue_Acquire_critical(
+    &the_cond->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
   POSIX_Condition_variables_Control *the_cond,
-  ISR_lock_Context                  *lock_context
+  Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Release( &the_cond->Wait_queue, lock_context );
+  _Thread_queue_Release( &the_cond->Wait_queue, &queue_context->Lock_context );
 }
 
 /**
@@ -107,8 +110,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
 }
 
 POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
-  pthread_cond_t   *cond,
-  ISR_lock_Context *lock_context
+  pthread_cond_t       *cond,
+  Thread_queue_Context *queue_context
 );
 
 /**

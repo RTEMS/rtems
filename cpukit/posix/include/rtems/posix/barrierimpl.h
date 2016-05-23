@@ -77,14 +77,15 @@ RTEMS_INLINE_ROUTINE void _POSIX_Barrier_Free (
   _Objects_Free( &_POSIX_Barrier_Information, &the_barrier->Object );
 }
 
-RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get (
+RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get(
   const pthread_barrier_t *barrier,
-  ISR_lock_Context        *lock_context
+  Thread_queue_Context    *queue_context
 )
 {
+  _Thread_queue_Context_initialize( queue_context, NULL );
   return (POSIX_Barrier_Control *) _Objects_Get(
     (Objects_Id) *barrier,
-    lock_context,
+    &queue_context->Lock_context,
     &_POSIX_Barrier_Information
   );
 }

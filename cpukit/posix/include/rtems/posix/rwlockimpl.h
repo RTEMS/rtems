@@ -87,8 +87,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
 }
 
 POSIX_RWLock_Control *_POSIX_RWLock_Get(
-  pthread_rwlock_t *rwlock,
-  ISR_lock_Context *lock_context
+  pthread_rwlock_t     *rwlock,
+  Thread_queue_Context *queue_context
 );
 
 #ifdef __cplusplus

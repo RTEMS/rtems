@@ -26,13 +26,13 @@ rtems_status_code rtems_message_queue_flush(
 )
 {
   Message_queue_Control *the_message_queue;
-  ISR_lock_Context       lock_context;
+  Thread_queue_Context   queue_context;
 
   if ( count == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get( id, &lock_context );
+  the_message_queue = _Message_queue_Get( id, &queue_context, NULL );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -44,7 +44,7 @@ rtems_status_code rtems_message_queue_flush(
 
   *count = _CORE_message_queue_Flush(
     &the_message_queue->message_queue,
-    &lock_context
+    &queue_context
   );
   return RTEMS_SUCCESSFUL;
 }

@@ -43,7 +43,7 @@ extern Objects_Information _POSIX_Message_queue_Information;
  */
 void _POSIX_Message_queue_Delete(
   POSIX_Message_queue_Control *the_mq,
-  ISR_lock_Context            *lock_context
+  Thread_queue_Context        *queue_context
 );
 
 /*@
@@ -107,12 +107,16 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Free(
 
 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
-  Objects_Id        id,
-  ISR_lock_Context *lock_context
+  Objects_Id            id,
+  Thread_queue_Context *queue_context
 )
 {
-  return (POSIX_Message_queue_Control *)
-    _Objects_Get( id, lock_context, &_POSIX_Message_queue_Information );
+  _Thread_queue_Context_initialize( queue_context, NULL );
+  return (POSIX_Message_queue_Control *) _Objects_Get(
+    id,
+    &queue_context->Lock_context,
+    &_POSIX_Message_queue_Information
+  );
 }
 
 /*

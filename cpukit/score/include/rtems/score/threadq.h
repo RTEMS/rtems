@@ -58,6 +58,18 @@ typedef void ( *Thread_queue_MP_callout )(
 #endif
 
 /**
+ * @brief Thread queue context for the thread queue methods.
+ *
+ * @see _Thread_queue_Context_initialize().
+ */
+typedef struct {
+  ISR_lock_Context Lock_context;
+#if defined(RTEMS_MULTIPROCESSING)
+  Thread_queue_MP_callout mp_callout;
+#endif
+} Thread_queue_Context;
+
+/**
  * @brief Thread priority queue.
  */
 typedef struct {

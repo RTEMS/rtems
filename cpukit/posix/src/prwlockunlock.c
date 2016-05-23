@@ -27,15 +27,15 @@ int pthread_rwlock_unlock(
 )
 {
   POSIX_RWLock_Control *the_rwlock;
-  ISR_lock_Context      lock_context;
+  Thread_queue_Context  queue_context;
   CORE_RWLock_Status    status;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &lock_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
   if ( the_rwlock == NULL ) {
     return EINVAL;
   }
 
-  status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, &lock_context );
+  status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, &queue_context );
   return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
 }

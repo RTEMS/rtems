@@ -71,7 +71,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
 #define _POSIX_Get_object_body( \
   type, \
   id, \
-  lock_context, \
+  queue_context, \
   info, \
   initializer, \
   init \
@@ -80,14 +80,16 @@ RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
   if ( id == NULL ) { \
     return NULL; \
   } \
-  the_object = _Objects_Get( (Objects_Id) *id, lock_context, info ); \
+  the_object = \
+    _Objects_Get( (Objects_Id) *id, &queue_context->Lock_context, info ); \
   if ( the_object == NULL ) { \
     _Once_Lock(); \
     if ( *id == initializer ) { \
       init( id, NULL ); \
     } \
     _Once_Unlock(); \
-    the_object = _Objects_Get( (Objects_Id) *id, lock_context, info ); \
+    the_object = \
+      _Objects_Get( (Objects_Id) *id, &queue_context->Lock_context, info ); \
   } \
   return (type *) the_object
 

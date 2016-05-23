@@ -24,11 +24,11 @@
 #include <rtems/score/watchdog.h>
 
 void _CORE_RWLock_Seize_for_writing(
-  CORE_RWLock_Control *the_rwlock,
-  Thread_Control      *executing,
-  bool                 wait,
-  Watchdog_Interval    timeout,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
   /*
@@ -38,12 +38,12 @@ void _CORE_RWLock_Seize_for_writing(
    *  If any thread is waiting, then we wait.
    */
 
-  _CORE_RWLock_Acquire_critical( the_rwlock, lock_context );
+  _CORE_RWLock_Acquire_critical( the_rwlock, queue_context );
 
   switch ( the_rwlock->current_state ) {
     case CORE_RWLOCK_UNLOCKED:
       the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
-      _CORE_RWLock_Release( the_rwlock, lock_context );
+      _CORE_RWLock_Release( the_rwlock, queue_context );
       executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
       return;
 
@@ -57,7 +57,7 @@ void _CORE_RWLock_Seize_for_writing(
    */
 
   if ( !wait ) {
-    _CORE_RWLock_Release( the_rwlock, lock_context );
+    _CORE_RWLock_Release( the_rwlock, queue_context );
     executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
     return;
   }
@@ -76,6 +76,6 @@ void _CORE_RWLock_Seize_for_writing(
      STATES_WAITING_FOR_RWLOCK,
      timeout,
      CORE_RWLOCK_TIMEOUT,
-     lock_context
+     &queue_context->Lock_context
   );
 }

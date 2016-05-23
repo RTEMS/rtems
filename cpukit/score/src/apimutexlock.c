@@ -25,20 +25,21 @@
 
 void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
 {
-  Thread_Life_state previous_thread_life_state;
-  ISR_lock_Context  lock_context;
+  Thread_Life_state    previous_thread_life_state;
+  Thread_queue_Context queue_context;
 
   previous_thread_life_state =
     _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
 
-  _ISR_lock_ISR_disable( &lock_context );
+  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context );
 
   _CORE_mutex_Seize(
     &the_mutex->Mutex,
     _Thread_Executing,
     true,
     0,
-    &lock_context
+    &queue_context
   );
 
   if ( the_mutex->Mutex.nest_count == 1 ) {

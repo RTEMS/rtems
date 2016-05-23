@@ -21,22 +21,19 @@
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/statesimpl.h>
 
-void _CORE_barrier_Do_seize(
-  CORE_barrier_Control    *the_barrier,
-  Thread_Control          *executing,
-  bool                     wait,
-  Watchdog_Interval        timeout,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout  mp_callout,
-#endif
-  ISR_lock_Context        *lock_context
+void _CORE_barrier_Seize(
+  CORE_barrier_Control *the_barrier,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
   uint32_t number_of_waiting_threads;
 
   executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
 
-  _CORE_barrier_Acquire_critical( the_barrier, lock_context );
+  _CORE_barrier_Acquire_critical( the_barrier, queue_context );
 
   number_of_waiting_threads = the_barrier->number_of_waiting_threads;
   ++number_of_waiting_threads;
@@ -46,7 +43,7 @@ void _CORE_barrier_Do_seize(
       && number_of_waiting_threads == the_barrier->Attributes.maximum_count
   ) {
     executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
-    _CORE_barrier_Surrender( the_barrier, mp_callout, lock_context );
+    _CORE_barrier_Surrender( the_barrier, queue_context );
   } else {
     the_barrier->number_of_waiting_threads = number_of_waiting_threads;
     _Thread_queue_Enqueue_critical(
@@ -56,7 +53,7 @@ void _CORE_barrier_Do_seize(
       STATES_WAITING_FOR_BARRIER,
       timeout,
       CORE_BARRIER_TIMEOUT,
-      lock_context
+      &queue_context->Lock_context
     );
   }
 }

@@ -28,11 +28,11 @@ int _POSIX_Mutex_Lock_support(
   Watchdog_Interval  timeout
 )
 {
-  POSIX_Mutex_Control *the_mutex;
-  ISR_lock_Context     lock_context;
-  Thread_Control      *executing;
+  POSIX_Mutex_Control  *the_mutex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;
@@ -44,7 +44,7 @@ int _POSIX_Mutex_Lock_support(
     executing,
     blocking,
     timeout,
-    &lock_context
+    &queue_context
   );
   return _POSIX_Mutex_Translate_core_mutex_return_code(
     (CORE_mutex_Status) executing->Wait.return_code

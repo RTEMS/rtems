@@ -24,14 +24,14 @@
 #include <rtems/posix/posixapi.h>
 
 POSIX_RWLock_Control *_POSIX_RWLock_Get(
-  pthread_rwlock_t *rwlock,
-  ISR_lock_Context *lock_context
+  pthread_rwlock_t     *rwlock,
+  Thread_queue_Context *queue_context
 )
 {
   _POSIX_Get_object_body(
     POSIX_RWLock_Control,
     rwlock,
-    lock_context,
+    queue_context,
     &_POSIX_RWLock_Information,
     PTHREAD_RWLOCK_INITIALIZER,
     pthread_rwlock_init

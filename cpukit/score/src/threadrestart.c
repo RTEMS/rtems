@@ -87,24 +87,24 @@ static void _Thread_Raise_real_priority(
 }
 
 typedef struct {
-  ISR_lock_Context  Base;
+  Thread_queue_Context  Base;
 #if defined(RTEMS_POSIX_API)
-  void             *exit_value;
+  void                 *exit_value;
 #endif
-} Thread_Join_lock_context;
+} Thread_Join_context;
 
 #if defined(RTEMS_POSIX_API)
 static Thread_Control *_Thread_Join_flush_filter(
-  Thread_Control      *the_thread,
-  Thread_queue_Queue  *queue,
-  ISR_lock_Context    *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
-  Thread_Join_lock_context *join_lock_context;
+  Thread_Join_context *join_context;
 
-  join_lock_context = (Thread_Join_lock_context *) lock_context;
+  join_context = (Thread_Join_context *) queue_context;
 
-  the_thread->Wait.return_argument = join_lock_context->exit_value;
+  the_thread->Wait.return_argument = join_context->exit_value;
 
   return the_thread;
 }
@@ -112,13 +112,17 @@ static Thread_Control *_Thread_Join_flush_filter(
 
 static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
 {
-  Thread_Join_lock_context join_lock_context;
+  Thread_Join_context join_context;
 
 #if defined(RTEMS_POSIX_API)
-  join_lock_context.exit_value = the_thread->Life.exit_value;
+  join_context.exit_value = the_thread->Life.exit_value;
 #endif
 
-  _Thread_State_acquire( the_thread, &join_lock_context.Base );
+  _Thread_queue_Context_initialize( &join_context.Base, NULL );
+  _Thread_queue_Acquire(
+    &the_thread->Join_queue,
+    &join_context.Base.Lock_context
+  );
   _Thread_queue_Flush_critical(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
@@ -127,8 +131,7 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
 #else
     _Thread_queue_Flush_default_filter,
 #endif
-    NULL,
-    &join_lock_context.Base
+    &join_context.Base
   );
 }
 

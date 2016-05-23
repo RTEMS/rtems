@@ -122,7 +122,7 @@ typedef enum {
    */
   typedef void (*CORE_message_queue_Notify_Handler)(
     CORE_message_queue_Control *,
-    ISR_lock_Context *
+    Thread_queue_Context *
   );
 #endif
 

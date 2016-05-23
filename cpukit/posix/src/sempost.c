@@ -27,9 +27,9 @@ int sem_post(
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &lock_context );
+  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
   if ( the_semaphore == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -37,8 +37,7 @@ int sem_post(
 
   _CORE_semaphore_Surrender(
     &the_semaphore->Semaphore,
-    NULL,
-    &lock_context
+    &queue_context
   );
   return 0;
 }

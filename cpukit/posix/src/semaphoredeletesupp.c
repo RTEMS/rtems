@@ -22,18 +22,14 @@
 
 void _POSIX_Semaphore_Delete(
   POSIX_Semaphore_Control *the_semaphore,
-  ISR_lock_Context        *lock_context
+  Thread_queue_Context    *queue_context
 )
 {
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
     _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
-    _CORE_semaphore_Destroy(
-      &the_semaphore->Semaphore,
-      NULL,
-      lock_context
-    );
+    _CORE_semaphore_Destroy( &the_semaphore->Semaphore, queue_context );
     _POSIX_Semaphore_Free( the_semaphore );
   } else {
-    _CORE_semaphore_Release( &the_semaphore->Semaphore, lock_context );
+    _CORE_semaphore_Release( &the_semaphore->Semaphore, queue_context );
   }
 }

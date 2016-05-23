@@ -25,12 +25,16 @@ rtems_status_code rtems_semaphore_delete(
   rtems_id   id
 )
 {
-  Semaphore_Control *the_semaphore;
-  ISR_lock_Context   lock_context;
-  rtems_attribute    attribute_set;
+  Semaphore_Control    *the_semaphore;
+  Thread_queue_Context  queue_context;
+  rtems_attribute       attribute_set;
 
   _Objects_Allocator_lock();
-  the_semaphore = _Semaphore_Get( id, &lock_context );
+  the_semaphore = _Semaphore_Get(
+    id,
+    &queue_context,
+    _Semaphore_MP_Send_object_was_deleted
+  );
 
   if ( the_semaphore == NULL ) {
     _Objects_Allocator_unlock();
@@ -52,13 +56,13 @@ rtems_status_code rtems_semaphore_delete(
 
     _MRSP_Acquire_critical(
       &the_semaphore->Core_control.mrsp,
-      &lock_context
+      &queue_context
     );
     mrsp_status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
     if ( mrsp_status != MRSP_SUCCESSFUL ) {
       _MRSP_Release(
         &the_semaphore->Core_control.mrsp,
-        &lock_context
+        &queue_context
       );
       _Objects_Allocator_unlock();
       return _Semaphore_Translate_MRSP_status_code( mrsp_status );
@@ -68,7 +72,7 @@ rtems_status_code rtems_semaphore_delete(
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     _CORE_mutex_Acquire_critical(
       &the_semaphore->Core_control.mutex,
-      &lock_context
+      &queue_context
     );
 
     if (
@@ -77,7 +81,7 @@ rtems_status_code rtems_semaphore_delete(
     ) {
       _CORE_mutex_Release(
         &the_semaphore->Core_control.mutex,
-        &lock_context
+        &queue_context
       );
       _Objects_Allocator_unlock();
       return RTEMS_RESOURCE_IN_USE;
@@ -85,7 +89,7 @@ rtems_status_code rtems_semaphore_delete(
   } else {
     _CORE_semaphore_Acquire_critical(
       &the_semaphore->Core_control.semaphore,
-      &lock_context
+      &queue_context
     );
   }
 
@@ -93,22 +97,20 @@ rtems_status_code rtems_semaphore_delete(
 
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &lock_context );
+    _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &queue_context );
   } else
 #endif
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     _CORE_mutex_Flush(
       &the_semaphore->Core_control.mutex,
       _CORE_mutex_Was_deleted,
-      _Semaphore_MP_Send_object_was_deleted,
-      &lock_context
+      &queue_context
     );
     _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
   } else {
     _CORE_semaphore_Destroy(
       &the_semaphore->Core_control.semaphore,
-      _Semaphore_MP_Send_object_was_deleted,
-      &lock_context
+      &queue_context
     );
   }
 

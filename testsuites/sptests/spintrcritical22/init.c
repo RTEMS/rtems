@@ -33,12 +33,12 @@ static test_context ctx_instance;
 
 static Semaphore_Control *get_semaphore_control(rtems_id id)
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
   Semaphore_Control *sem;
 
-  sem = _Semaphore_Get(id, &lock_context);
+  sem = _Semaphore_Get(id, &queue_context, NULL);
   rtems_test_assert(sem != NULL);
-  _ISR_lock_ISR_enable(&lock_context);
+  _ISR_lock_ISR_enable(&queue_context.Lock_context);
 
   return sem;
 }

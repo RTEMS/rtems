@@ -42,13 +42,13 @@ int mq_getattr(
 )
 {
   POSIX_Message_queue_Control *the_mq;
-  ISR_lock_Context             lock_context;
+  Thread_queue_Context         queue_context;
 
   if ( mqstat == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  the_mq = _POSIX_Message_queue_Get( mqdes, &lock_context );
+  the_mq = _POSIX_Message_queue_Get( mqdes, &queue_context );
 
   if ( the_mq == NULL ) {
     rtems_set_errno_and_return_minus_one( EBADF );
@@ -56,11 +56,11 @@ int mq_getattr(
 
   _CORE_message_queue_Acquire_critical(
     &the_mq->Message_queue,
-    &lock_context
+    &queue_context
   );
 
   if ( the_mq->open_count == 0 ) {
-    _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+    _CORE_message_queue_Release( &the_mq->Message_queue, &queue_context );
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
@@ -72,6 +72,6 @@ int mq_getattr(
   mqstat->mq_maxmsg  = the_mq->Message_queue.maximum_pending_messages;
   mqstat->mq_curmsgs = the_mq->Message_queue.number_of_pending_messages;
 
-  _CORE_message_queue_Release( &the_mq->Message_queue, &lock_context );
+  _CORE_message_queue_Release( &the_mq->Message_queue, &queue_context );
   return 0;
 }

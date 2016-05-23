@@ -24,7 +24,6 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/wkspace.h>
 
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control *the_message_queue,
@@ -33,7 +32,7 @@ void _CORE_message_queue_Seize(
   size_t                     *size_p,
   bool                        wait,
   Watchdog_Interval           timeout,
-  ISR_lock_Context           *lock_context
+  Thread_queue_Context       *queue_context
 )
 {
   CORE_message_queue_Buffer_control *the_message;
@@ -58,7 +57,7 @@ void _CORE_message_queue_Seize(
        *  So return immediately.
        */
       _CORE_message_queue_Free_message_buffer(the_message_queue, the_message);
-      _CORE_message_queue_Release( the_message_queue, lock_context );
+      _CORE_message_queue_Release( the_message_queue, queue_context );
       return;
     #else
     {
@@ -80,7 +79,7 @@ void _CORE_message_queue_Seize(
           the_message_queue,
           the_message
         );
-        _CORE_message_queue_Release( the_message_queue, lock_context );
+        _CORE_message_queue_Release( the_message_queue, queue_context );
         return;
       }
 
@@ -100,8 +99,7 @@ void _CORE_message_queue_Seize(
         &the_message_queue->Wait_queue.Queue,
         the_message_queue->operations,
         the_thread,
-        NULL,
-        lock_context
+        queue_context
       );
       return;
     }
@@ -109,7 +107,7 @@ void _CORE_message_queue_Seize(
   }
 
   if ( !wait ) {
-    _CORE_message_queue_Release( the_message_queue, lock_context );
+    _CORE_message_queue_Release( the_message_queue, queue_context );
     executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT;
     return;
   }
@@ -125,6 +123,6 @@ void _CORE_message_queue_Seize(
     STATES_WAITING_FOR_MESSAGE,
     timeout,
     CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
-    lock_context
+    &queue_context->Lock_context
   );
 }

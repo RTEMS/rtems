@@ -54,19 +54,19 @@ RTEMS_INLINE_ROUTINE void _MRSP_Giant_release( ISR_lock_Context *lock_context )
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
-  MRSP_Control     *mrsp,
-  ISR_lock_Context *lock_context
+  MRSP_Control         *mrsp,
+  Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Acquire( &mrsp->Lock, lock_context );
+  _ISR_lock_Acquire( &mrsp->Lock, &queue_context->Lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Release(
-  MRSP_Control     *mrsp,
-  ISR_lock_Context *lock_context
+  MRSP_Control         *mrsp,
+  Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, lock_context );
+  _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, &queue_context->Lock_context );
 }
 
 RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(
@@ -104,11 +104,11 @@ RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
-  MRSP_Control     *mrsp,
-  Thread_Control   *new_owner,
-  Priority_Control  initial_priority,
-  Priority_Control  ceiling_priority,
-  ISR_lock_Context *lock_context
+  MRSP_Control         *mrsp,
+  Thread_Control       *new_owner,
+  Priority_Control      initial_priority,
+  Priority_Control      ceiling_priority,
+  Thread_queue_Context *queue_context
 )
 {
   Per_CPU_Control *cpu_self;
@@ -118,8 +118,8 @@ RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
   mrsp->initial_priority_of_owner = initial_priority;
   _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
 
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _MRSP_Release( mrsp, lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
+  _MRSP_Release( mrsp, queue_context );
 
   _Thread_Raise_priority( new_owner, ceiling_priority );
 
@@ -180,10 +180,11 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
   MRSP_Rival *rival = RTEMS_CONTAINER_OF( watchdog, MRSP_Rival, Watchdog );
   MRSP_Control *mrsp = rival->resource;
   Thread_Control *thread = rival->thread;
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
-  _ISR_lock_ISR_disable( &lock_context );
-  _MRSP_Acquire_critical( mrsp, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  _MRSP_Acquire_critical( mrsp, &queue_context );
 
   if ( rival->status == MRSP_WAIT_FOR_OWNERSHIP ) {
     ISR_lock_Context giant_lock_context;
@@ -200,20 +201,20 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
 
     rival->status = MRSP_TIMEOUT;
 
-    _MRSP_Release( mrsp, &lock_context );
+    _MRSP_Release( mrsp, &queue_context );
   } else {
-    _MRSP_Release( mrsp, &lock_context );
+    _MRSP_Release( mrsp, &queue_context );
   }
 }
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
-  MRSP_Control      *mrsp,
-  Resource_Node     *owner,
-  Thread_Control    *executing,
-  Priority_Control   initial_priority,
-  Priority_Control   ceiling_priority,
-  Watchdog_Interval  timeout,
-  ISR_lock_Context  *lock_context
+  MRSP_Control         *mrsp,
+  Resource_Node        *owner,
+  Thread_Control       *executing,
+  Priority_Control      initial_priority,
+  Priority_Control      ceiling_priority,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
   MRSP_Status status;
@@ -243,8 +244,8 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 
   _MRSP_Giant_release( &giant_lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _MRSP_Release( mrsp, lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
+  _MRSP_Release( mrsp, queue_context );
 
   _Thread_Raise_priority( executing, ceiling_priority );
 
@@ -286,11 +287,11 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Wait_for_ownership(
 }
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
-  MRSP_Control      *mrsp,
-  Thread_Control    *executing,
-  bool               wait,
-  Watchdog_Interval  timeout,
-  ISR_lock_Context  *lock_context
+  MRSP_Control         *mrsp,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
   MRSP_Status status;
@@ -306,11 +307,11 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
   Resource_Node *owner;
 
   if ( !priority_ok) {
-    _ISR_lock_ISR_enable( lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context );
     return MRSP_INVALID_PRIORITY;
   }
 
-  _MRSP_Acquire_critical( mrsp, lock_context );
+  _MRSP_Acquire_critical( mrsp, queue_context );
   owner = _Resource_Get_owner( &mrsp->Resource );
   if ( owner == NULL ) {
     _MRSP_Claim_ownership(
@@ -318,7 +319,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
       executing,
       initial_priority,
       ceiling_priority,
-      lock_context
+      queue_context
     );
     status = MRSP_SUCCESSFUL;
   } else if (
@@ -332,10 +333,10 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
       initial_priority,
       ceiling_priority,
       timeout,
-      lock_context
+      queue_context
     );
   } else {
-    _MRSP_Release( mrsp, lock_context );
+    _MRSP_Release( mrsp, queue_context );
     /* Not available, nested access or deadlock */
     status = MRSP_UNSATISFIED;
   }
@@ -344,9 +345,9 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Seize(
 }
 
 RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Surrender(
-  MRSP_Control     *mrsp,
-  Thread_Control   *executing,
-  ISR_lock_Context *lock_context
+  MRSP_Control         *mrsp,
+  Thread_Control       *executing,
+  Thread_queue_Context *queue_context
 )
 {
   Priority_Control initial_priority;
@@ -354,7 +355,7 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Surrender(
   ISR_lock_Context giant_lock_context;
 
   if ( _Resource_Get_owner( &mrsp->Resource ) != &executing->Resource_node ) {
-    _ISR_lock_ISR_enable( lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context );
     return MRSP_NOT_OWNER_OF_RESOURCE;
   }
 
@@ -364,13 +365,13 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Surrender(
       &executing->Resource_node
     )
   ) {
-    _ISR_lock_ISR_enable( lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context );
     return MRSP_INCORRECT_STATE;
   }
 
   initial_priority = mrsp->initial_priority_of_owner;
 
-  _MRSP_Acquire_critical( mrsp, lock_context );
+  _MRSP_Acquire_critical( mrsp, queue_context );
 
   _MRSP_Giant_acquire( &giant_lock_context );
 
@@ -405,8 +406,8 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Surrender(
 
   _MRSP_Giant_release( &giant_lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _MRSP_Release( mrsp, lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
+  _MRSP_Release( mrsp, queue_context );
 
   _MRSP_Restore_priority( executing, initial_priority );
 
@@ -425,11 +426,11 @@ RTEMS_INLINE_ROUTINE MRSP_Status _MRSP_Can_destroy( MRSP_Control *mrsp )
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Destroy(
-  MRSP_Control     *mrsp,
-  ISR_lock_Context *lock_context
+  MRSP_Control         *mrsp,
+  Thread_queue_Context *queue_context
 )
 {
-  _MRSP_Release( mrsp, lock_context );
+  _MRSP_Release( mrsp, queue_context );
   _ISR_lock_Destroy( &mrsp->Lock );
   _Workspace_Free( mrsp->ceiling_priorities );
 }

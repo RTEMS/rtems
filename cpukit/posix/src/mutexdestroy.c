@@ -28,16 +28,16 @@ int pthread_mutex_destroy(
   pthread_mutex_t           *mutex
 )
 {
-  POSIX_Mutex_Control *the_mutex;
-  ISR_lock_Context     lock_context;
-  int                  eno;
+  POSIX_Mutex_Control  *the_mutex;
+  Thread_queue_Context  queue_context;
+  int                   eno;
 
   _Objects_Allocator_lock();
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex != NULL ) {
-    _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &lock_context );
+    _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &queue_context );
 
     /*
      * XXX: There is an error for the mutex being locked
@@ -46,12 +46,12 @@ int pthread_mutex_destroy(
 
     if ( !_CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
-      _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+      _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
       _CORE_mutex_Destroy( &the_mutex->Mutex );
       _POSIX_Mutex_Free( the_mutex );
       eno = 0;
     } else {
-      _CORE_mutex_Release( &the_mutex->Mutex, &lock_context );
+      _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
       eno = EBUSY;
     }
   } else {

@@ -33,9 +33,9 @@ void _CORE_barrier_Initialize(
 }
 
 Thread_Control *_CORE_barrier_Was_deleted(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
   the_thread->Wait.return_code = CORE_BARRIER_WAS_DELETED;

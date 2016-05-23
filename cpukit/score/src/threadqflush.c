@@ -21,24 +21,21 @@
 #include <rtems/score/threadimpl.h>
 
 Thread_Control *_Thread_queue_Flush_default_filter(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
   (void) queue;
-  (void) lock_context;
+  (void) queue_context;
   return the_thread;
 }
 
-size_t _Thread_queue_Do_flush_critical(
+size_t _Thread_queue_Flush_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_queue_Flush_filter      filter,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout        mp_callout,
-#endif
-  ISR_lock_Context              *lock_context
+  Thread_queue_Context          *queue_context
 )
 {
   size_t         flushed;
@@ -60,7 +57,7 @@ size_t _Thread_queue_Do_flush_critical(
     }
 
     first = ( *operations->first )( heads );
-    first = ( *filter )( first, queue, lock_context );
+    first = ( *filter )( first, queue, queue_context );
     if ( first == NULL ) {
       break;
     }
@@ -69,7 +66,7 @@ size_t _Thread_queue_Do_flush_critical(
       queue,
       operations,
       first,
-      mp_callout
+      queue_context
     );
     if ( do_unblock ) {
       _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );
@@ -84,8 +81,10 @@ size_t _Thread_queue_Do_flush_critical(
   if ( node != tail ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-    _Thread_queue_Queue_release( queue, lock_context );
+    cpu_self = _Thread_Dispatch_disable_critical(
+      &queue_context->Lock_context
+    );
+    _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
 
     do {
       Thread_Control *the_thread;
@@ -100,7 +99,7 @@ size_t _Thread_queue_Do_flush_critical(
 
     _Thread_Dispatch_enable( cpu_self );
   } else {
-    _Thread_queue_Queue_release( queue, lock_context );
+    _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
   }
 
   return flushed;

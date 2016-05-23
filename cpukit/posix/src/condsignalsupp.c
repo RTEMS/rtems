@@ -36,15 +36,15 @@ int _POSIX_Condition_variables_Signal_support(
 
   do {
     POSIX_Condition_variables_Control *the_cond;
-    ISR_lock_Context                   lock_context;
+    Thread_queue_Context               queue_context;
 
-    the_cond = _POSIX_Condition_variables_Get( cond, &lock_context );
+    the_cond = _POSIX_Condition_variables_Get( cond, &queue_context );
 
     if ( the_cond == NULL ) {
       return EINVAL;
     }
 
-    _POSIX_Condition_variables_Acquire_critical( the_cond, &lock_context );
+    _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
 
     the_thread = _Thread_queue_First_locked(
       &the_cond->Wait_queue,
@@ -56,12 +56,11 @@ int _POSIX_Condition_variables_Signal_support(
         &the_cond->Wait_queue.Queue,
         POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
         the_thread,
-        NULL,
-        &lock_context
+        &queue_context
       );
     } else {
       the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
-      _POSIX_Condition_variables_Release( the_cond, &lock_context );
+      _POSIX_Condition_variables_Release( the_cond, &queue_context );
     }
   } while ( is_broadcast && the_thread != NULL );
 

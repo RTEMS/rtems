@@ -127,8 +127,8 @@ RTEMS_INLINE_ROUTINE int _POSIX_Mutex_Translate_core_mutex_return_code(
  *  @note: This version of the method uses an interrupt critical section.
  */
 POSIX_Mutex_Control *_POSIX_Mutex_Get(
-  pthread_mutex_t  *mutex,
-  ISR_lock_Context *lock_context
+  pthread_mutex_t      *mutex,
+  Thread_queue_Context *queue_context
 );
 
 RTEMS_INLINE_ROUTINE POSIX_Mutex_Control *_POSIX_Mutex_Get_no_protection(

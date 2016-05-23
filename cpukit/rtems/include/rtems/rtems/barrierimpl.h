@@ -70,12 +70,13 @@ RTEMS_INLINE_ROUTINE void _Barrier_Free (
 }
 
 RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
-  Objects_Id        id,
-  ISR_lock_Context *lock_context
+  Objects_Id            id,
+  Thread_queue_Context *queue_context
 )
 {
+  _Thread_queue_Context_initialize( queue_context, NULL );
   return (Barrier_Control *)
-    _Objects_Get( id, lock_context, &_Barrier_Information );
+    _Objects_Get( id, &queue_context->Lock_context, &_Barrier_Information );
 }
 
 /**

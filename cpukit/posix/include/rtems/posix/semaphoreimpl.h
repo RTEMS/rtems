@@ -61,13 +61,14 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
-  const sem_t       *id,
-  ISR_lock_Context  *lock_context
+  const sem_t          *id,
+  Thread_queue_Context *queue_context
 )
 {
+  _Thread_queue_Context_initialize( queue_context, NULL );
   return (POSIX_Semaphore_Control *) _Objects_Get(
     (Objects_Id) *id,
-    lock_context,
+    &queue_context->Lock_context,
     &_POSIX_Semaphore_Information
   );
 }
@@ -93,7 +94,7 @@ int _POSIX_Semaphore_Create_support(
  */
 void _POSIX_Semaphore_Delete(
   POSIX_Semaphore_Control *the_semaphore,
-  ISR_lock_Context        *lock_context
+  Thread_queue_Context    *queue_context
 );
 
 /**

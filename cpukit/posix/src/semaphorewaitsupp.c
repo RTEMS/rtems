@@ -32,9 +32,9 @@ int _POSIX_Semaphore_Wait_support(
 {
   POSIX_Semaphore_Control *the_semaphore;
   Thread_Control          *executing;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &lock_context );
+  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
   if ( the_semaphore == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -47,7 +47,7 @@ int _POSIX_Semaphore_Wait_support(
     executing,
     blocking,
     timeout,
-    &lock_context
+    &queue_context
   );
 
   if ( executing->Wait.return_code == CORE_SEMAPHORE_STATUS_SUCCESSFUL ) {

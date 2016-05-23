@@ -30,20 +30,16 @@ int pthread_mutex_unlock(
   pthread_mutex_t           *mutex
 )
 {
-  POSIX_Mutex_Control *the_mutex;
-  CORE_mutex_Status    status;
-  ISR_lock_Context     lock_context;
+  POSIX_Mutex_Control  *the_mutex;
+  CORE_mutex_Status     status;
+  Thread_queue_Context  queue_context;
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;
   }
 
-  status = _CORE_mutex_Surrender(
-    &the_mutex->Mutex,
-    NULL,
-    &lock_context
-  );
+  status = _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
   return _POSIX_Mutex_Translate_core_mutex_return_code( status );
 }

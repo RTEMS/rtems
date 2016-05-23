@@ -30,9 +30,13 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   CORE_mutex_Status      mutex_status;
   CORE_semaphore_Status  semaphore_status;
   rtems_attribute        attribute_set;
-  ISR_lock_Context       lock_context;
+  Thread_queue_Context   queue_context;
 
-  the_semaphore = _Semaphore_Get( id, &lock_context );
+  the_semaphore = _Semaphore_Get(
+    id,
+    &queue_context,
+    _Semaphore_Core_mutex_mp_support
+  );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -50,7 +54,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     mrsp_status = _MRSP_Surrender(
       &the_semaphore->Core_control.mrsp,
       _Thread_Executing,
-      &lock_context
+      &queue_context
     );
     return _Semaphore_Translate_MRSP_status_code( mrsp_status );
   } else
@@ -58,15 +62,13 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     mutex_status = _CORE_mutex_Surrender(
       &the_semaphore->Core_control.mutex,
-      _Semaphore_Core_mutex_mp_support,
-      &lock_context
+      &queue_context
     );
     return _Semaphore_Translate_core_mutex_return_code( mutex_status );
   } else {
     semaphore_status = _CORE_semaphore_Surrender(
       &the_semaphore->Core_control.semaphore,
-      _Semaphore_Core_mutex_mp_support,
-      &lock_context
+      &queue_context
     );
     return _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
   }

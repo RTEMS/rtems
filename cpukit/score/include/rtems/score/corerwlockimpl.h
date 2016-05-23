@@ -87,19 +87,25 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Acquire_critical(
-  CORE_RWLock_Control *the_rwlock,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_rwlock->Wait_queue, lock_context );
+  _Thread_queue_Acquire_critical(
+    &the_rwlock->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
-  CORE_RWLock_Control *the_rwlock,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release( &the_rwlock->Wait_queue, lock_context );
+  _Thread_queue_Release(
+    &the_rwlock->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
 
 /**
@@ -116,11 +122,11 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
  */
 
 void _CORE_RWLock_Seize_for_reading(
-  CORE_RWLock_Control *the_rwlock,
-  Thread_Control      *executing,
-  bool                 wait,
-  Watchdog_Interval    timeout,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 );
 
 /**
@@ -136,11 +142,11 @@ void _CORE_RWLock_Seize_for_reading(
  * @note Status is returned via the thread control block.
  */
 void _CORE_RWLock_Seize_for_writing(
-  CORE_RWLock_Control *the_rwlock,
-  Thread_Control      *executing,
-  bool                 wait,
-  Watchdog_Interval    timeout,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_Control       *executing,
+  bool                  wait,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 );
 
 /**
@@ -154,8 +160,8 @@ void _CORE_RWLock_Seize_for_writing(
  *  @retval Status is returned to indicate successful or failure.
  */
 CORE_RWLock_Status _CORE_RWLock_Surrender(
-  CORE_RWLock_Control *the_rwlock,
-  ISR_lock_Context    *lock_context
+  CORE_RWLock_Control  *the_rwlock,
+  Thread_queue_Context *queue_context
 );
 
 /** @} */

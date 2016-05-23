@@ -26,10 +26,14 @@ rtems_status_code rtems_message_queue_delete(
 )
 {
   Message_queue_Control *the_message_queue;
-  ISR_lock_Context       lock_context;
+  Thread_queue_Context   queue_context;
 
   _Objects_Allocator_lock();
-  the_message_queue = _Message_queue_Get( id, &lock_context );
+  the_message_queue = _Message_queue_Get(
+    id,
+    &queue_context,
+    _Message_queue_MP_Send_object_was_deleted
+  );
 
   if ( the_message_queue == NULL ) {
     _Objects_Allocator_unlock();
@@ -45,15 +49,14 @@ rtems_status_code rtems_message_queue_delete(
 
   _CORE_message_queue_Acquire_critical(
     &the_message_queue->message_queue,
-    &lock_context
+    &queue_context
   );
 
   _Objects_Close( &_Message_queue_Information, &the_message_queue->Object );
 
   _CORE_message_queue_Close(
     &the_message_queue->message_queue,
-    _Message_queue_MP_Send_object_was_deleted,
-    &lock_context
+    &queue_context
   );
 
 #if defined(RTEMS_MULTIPROCESSING)

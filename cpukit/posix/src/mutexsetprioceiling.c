@@ -33,7 +33,7 @@ int pthread_mutex_setprioceiling(
 {
   register POSIX_Mutex_Control *the_mutex;
   Priority_Control              the_priority;
-  ISR_lock_Context              lock_context;
+  Thread_queue_Context          queue_context;
 
   if ( !old_ceiling )
     return EINVAL;
@@ -57,7 +57,7 @@ int pthread_mutex_setprioceiling(
    *  NOTE: This makes it easier to get 100% binary coverage since the
    *        bad Id case is handled by the switch.
    */
-  the_mutex = _POSIX_Mutex_Get( mutex, &lock_context );
+  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex == NULL ) {
     return EINVAL;
@@ -73,8 +73,7 @@ int pthread_mutex_setprioceiling(
    */
   _CORE_mutex_Surrender(
     &the_mutex->Mutex,
-    NULL,
-    &lock_context
+    &queue_context
   );
   return 0;
 }

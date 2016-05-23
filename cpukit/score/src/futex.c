@@ -104,25 +104,25 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
 }
 
 typedef struct {
-  ISR_lock_Context Base;
-  int              count;
-} Futex_Lock_context;
+  Thread_queue_Context Base;
+  int                  count;
+} Futex_Context;
 
 static Thread_Control *_Futex_Flush_filter(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *queue,
-  ISR_lock_Context   *lock_context
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
-  Futex_Lock_context *futex_lock_context;
+  Futex_Context *context;
 
-  futex_lock_context = (Futex_Lock_context *) lock_context;
+  context = (Futex_Context *) queue_context;
 
-  if ( futex_lock_context->count <= 0 ) {
+  if ( context->count <= 0 ) {
     return NULL;
   }
 
-  --futex_lock_context->count;
+  --context->count;
 
   return the_thread;
 }
@@ -130,10 +130,10 @@ static Thread_Control *_Futex_Flush_filter(
 int _Futex_Wake( struct _Futex_Control *_futex, int count )
 {
   Futex_Control      *futex;
-  Futex_Lock_context  lock_context;
+  Futex_Context  context;
 
   futex = _Futex_Get( _futex );
-  _Futex_Queue_acquire( futex, &lock_context.Base );
+  _Futex_Queue_acquire( futex, &context.Base.Lock_context );
 
   /*
    * For some synchronization objects like barriers the _Futex_Wake() must be
@@ -141,17 +141,16 @@ int _Futex_Wake( struct _Futex_Control *_futex, int count )
    * check this condition early.
    */
   if ( __predict_true( _Thread_queue_Is_empty( &futex->Queue.Queue ) ) ) {
-    _Futex_Queue_release( futex, &lock_context.Base );
+    _Futex_Queue_release( futex, &context.Base.Lock_context );
     return 0;
   }
 
-  lock_context.count = count;
+  context.count = count;
   return (int) _Thread_queue_Flush_critical(
     &futex->Queue.Queue,
     FUTEX_TQ_OPERATIONS,
     _Futex_Flush_filter,
-    NULL,
-    &lock_context.Base
+    &context.Base
   );
 }
 
