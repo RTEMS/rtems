@@ -101,7 +101,6 @@ rtems_status_code rtems_semaphore_delete(
       &the_semaphore->Core_control.mutex,
       _CORE_mutex_Was_deleted,
       _Semaphore_MP_Send_object_was_deleted,
-      id,
       &lock_context
     );
     _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
@@ -109,7 +108,6 @@ rtems_status_code rtems_semaphore_delete(
     _CORE_semaphore_Destroy(
       &the_semaphore->Core_control.semaphore,
       _Semaphore_MP_Send_object_was_deleted,
-      id,
       &lock_context
     );
   }

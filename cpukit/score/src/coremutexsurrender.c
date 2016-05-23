@@ -27,7 +27,6 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
   CORE_mutex_Control      *the_mutex,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
 #endif
   ISR_lock_Context        *lock_context
 )
@@ -127,8 +126,7 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
       &the_mutex->Wait_queue.Queue,
       the_mutex->operations,
       the_thread,
-      mp_callout,
-      mp_id
+      mp_callout
     );
 
 #if defined(RTEMS_MULTIPROCESSING)

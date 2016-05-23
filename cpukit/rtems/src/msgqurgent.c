@@ -53,7 +53,6 @@ rtems_status_code rtems_message_queue_urgent(
     buffer,
     size,
     _Message_queue_Core_message_queue_mp_support,
-    id,
     false,   /* sender does not block */
     0,       /* no timeout */
     &lock_context

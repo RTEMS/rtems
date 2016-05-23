@@ -56,7 +56,6 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
       &the_semaphore->Core_control.mutex,
       _CORE_mutex_Unsatisfied_nowait,
       _Semaphore_MP_Send_object_was_deleted,
-      id,
       &lock_context
     );
   } else {
@@ -67,7 +66,6 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
     _CORE_semaphore_Flush(
       &the_semaphore->Core_control.semaphore,
       _Semaphore_MP_Send_object_was_deleted,
-      id,
       &lock_context
     );
   }

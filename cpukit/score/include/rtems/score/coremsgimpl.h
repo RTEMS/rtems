@@ -130,7 +130,6 @@ void _CORE_message_queue_Do_close(
   CORE_message_queue_Control *the_message_queue,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout     mp_callout,
-  Objects_Id                  mp_id,
 #endif
   ISR_lock_Context           *lock_context
 );
@@ -148,7 +147,6 @@ void _CORE_message_queue_Do_close(
  *  @param[in] the_message_queue points to the message queue to close
  *  @param[in] mp_callout is the routine to call for each thread
  *         that is extracted from the set of waiting threads
- *  @param[in] mp_id the object identifier of the message queue object
  *  @param[in] lock_context The lock context of the
  *    _CORE_message_queue_Acquire() or _CORE_message_queue_Acquire_critical().
  */
@@ -156,20 +154,17 @@ void _CORE_message_queue_Do_close(
   #define _CORE_message_queue_Close( \
     the_message_queue, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_message_queue_Do_close( \
       the_message_queue, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
   #define _CORE_message_queue_Close( \
     the_message_queue, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_message_queue_Do_close( \
@@ -221,7 +216,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
   size_t                      size,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout     mp_callout,
-  Objects_Id                  mp_id,
 #endif
   uint32_t                   *count,
   ISR_lock_Context           *lock_context
@@ -242,8 +236,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
  *  @param[in] size is the size of the message being broadcast
  *  @param[in] mp_callout is the routine to invoke if
  *         a thread that is unblocked is actually a remote thread.
- *  @param[in] mp_id is the RTEMS object Id associated with this message queue.
- *         It is used when unblocking a remote thread.
  *  @param[out] count points to the variable that will contain the
  *         number of tasks that are sent this message
  *  @param[in] lock_context The lock context of the interrupt disable.
@@ -256,7 +248,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     count, \
     lock_context \
   ) \
@@ -265,7 +256,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
       buffer, \
       size, \
       mp_callout, \
-      mp_id, \
       count, \
       lock_context \
     )
@@ -275,7 +265,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_broadcast(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     count, \
     lock_context \
   ) \
@@ -295,7 +284,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
   size_t                            size,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout           mp_callout,
-  Objects_Id                        mp_id,
 #endif
   CORE_message_queue_Submit_types   submit_type,
   bool                              wait,
@@ -318,8 +306,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
  *  @param[in] size is the size of the message being send
  *  @param[in] mp_callout is the routine to invoke if
  *         a thread that is unblocked is actually a remote thread.
- *  @param[in] mp_id is the RTEMS object Id associated with this message queue.
- *         It is used when unblocking a remote thread.
  *  @param[in] submit_type determines whether the message is prepended,
  *         appended, or enqueued in priority order.
  *  @param[in] wait indicates whether the calling thread is willing to block
@@ -336,7 +322,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     submit_type, \
     wait, \
     timeout, \
@@ -348,7 +333,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
       buffer, \
       size, \
       mp_callout, \
-      mp_id, \
       submit_type, \
       wait, \
       timeout, \
@@ -361,7 +345,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     submit_type, \
     wait, \
     timeout, \
@@ -451,7 +434,6 @@ void _CORE_message_queue_Insert_message(
   buffer, \
   size, \
   mp_callout, \
-  mp_id, \
   wait, \
   timeout, \
   lock_context \
@@ -462,7 +444,6 @@ void _CORE_message_queue_Insert_message(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     CORE_MESSAGE_QUEUE_SEND_REQUEST, \
     wait, \
     timeout, \
@@ -477,7 +458,6 @@ void _CORE_message_queue_Insert_message(
   buffer, \
   size, \
   mp_callout, \
-  mp_id, \
   wait, \
   timeout, \
   lock_context \
@@ -488,7 +468,6 @@ void _CORE_message_queue_Insert_message(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     CORE_MESSAGE_QUEUE_URGENT_REQUEST, \
     wait,\
     timeout, \
@@ -624,7 +603,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(
   size_t                           size,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout          mp_callout,
-  Objects_Id                       mp_id,
 #endif
   CORE_message_queue_Submit_types  submit_type,
   ISR_lock_Context                *lock_context
@@ -670,7 +648,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(
     the_message_queue->operations,
     the_thread,
     mp_callout,
-    mp_id,
     lock_context
   );
 
@@ -683,7 +660,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     submit_type, \
     lock_context \
   ) \
@@ -692,7 +668,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(
       buffer, \
       size, \
       mp_callout, \
-      mp_id, \
       submit_type, \
       lock_context \
     )
@@ -702,7 +677,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_message_queue_Do_dequeue_receiver(
     buffer, \
     size, \
     mp_callout, \
-    mp_id, \
     submit_type, \
     lock_context \
   ) \

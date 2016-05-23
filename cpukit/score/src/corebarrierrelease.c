@@ -26,7 +26,6 @@ uint32_t _CORE_barrier_Do_surrender(
   Thread_queue_Flush_filter  filter,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout    mp_callout,
-  Objects_Id                 mp_id,
 #endif
   ISR_lock_Context          *lock_context
 )
@@ -37,7 +36,6 @@ uint32_t _CORE_barrier_Do_surrender(
     CORE_BARRIER_TQ_OPERATIONS,
     filter,
     mp_callout,
-    mp_id,
     lock_context
   );
 }

@@ -53,7 +53,6 @@ rtems_status_code rtems_message_queue_delete(
   _CORE_message_queue_Close(
     &the_message_queue->message_queue,
     _Message_queue_MP_Send_object_was_deleted,
-    id,
     &lock_context
   );
 

@@ -42,7 +42,6 @@ rtems_status_code rtems_barrier_release(
   *released = _CORE_barrier_Surrender(
     &the_barrier->Barrier,
     NULL,
-    0,
     &lock_context
   );
   return RTEMS_SUCCESSFUL;

@@ -30,7 +30,6 @@ void _POSIX_Semaphore_Delete(
     _CORE_semaphore_Destroy(
       &the_semaphore->Semaphore,
       NULL,
-      0,
       lock_context
     );
     _POSIX_Semaphore_Free( the_semaphore );

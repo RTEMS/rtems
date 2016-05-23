@@ -128,7 +128,6 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
     _Thread_queue_Flush_default_filter,
 #endif
     NULL,
-    0,
     &join_lock_context.Base
   );
 }

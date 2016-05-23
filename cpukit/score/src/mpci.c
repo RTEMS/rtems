@@ -373,7 +373,7 @@ void _MPCI_Announce ( void )
   ISR_lock_Context lock_context;
 
   _ISR_lock_ISR_disable( &lock_context );
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, 0, &lock_context );
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, 0, &lock_context );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (

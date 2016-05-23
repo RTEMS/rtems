@@ -35,7 +35,6 @@ void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
   _CORE_mutex_Surrender(
     &the_mutex->Mutex,
     NULL,
-    0,
     &lock_context
   );
 

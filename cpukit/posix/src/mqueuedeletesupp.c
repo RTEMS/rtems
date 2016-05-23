@@ -29,7 +29,6 @@ void _POSIX_Message_queue_Delete(
     _CORE_message_queue_Close(
       &the_mq->Message_queue,
       NULL,        /* no MP support */
-      0,
       lock_context
     );
     _POSIX_Message_queue_Free( the_mq );

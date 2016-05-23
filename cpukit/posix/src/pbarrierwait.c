@@ -57,7 +57,6 @@ int pthread_barrier_wait(
     true,
     0,
     NULL,
-    0,
     &lock_context
   );
   return _POSIX_Barrier_Translate_core_barrier_return_code(

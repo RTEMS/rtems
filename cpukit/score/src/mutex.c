@@ -146,8 +146,7 @@ static void _Mutex_Release_slow(
       &mutex->Queue.Queue,
       operations,
       first,
-      NULL,
-      0
+      NULL
     );
     _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
     _Thread_queue_Unblock_critical(

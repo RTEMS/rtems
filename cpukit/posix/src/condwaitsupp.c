@@ -103,7 +103,6 @@ int _POSIX_Condition_variables_Wait_support(
   core_mutex_status = _CORE_mutex_Surrender(
     &the_mutex->Mutex,
     NULL,
-    0,
     &lock_context
   );
   _Assert( core_mutex_status == CORE_MUTEX_STATUS_SUCCESSFUL );

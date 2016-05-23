@@ -117,7 +117,6 @@ Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
 #define _CORE_semaphore_Destroy( \
   the_semaphore, \
   mp_callout, \
-  mp_id, \
   lock_context \
 ) \
   do { \
@@ -126,7 +125,6 @@ Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
       ( the_semaphore )->operations, \
       _CORE_semaphore_Was_deleted, \
       mp_callout, \
-      mp_id, \
       lock_context \
     ); \
     _Thread_queue_Destroy( &( the_semaphore )->Wait_queue ); \
@@ -136,7 +134,6 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
   CORE_semaphore_Control  *the_semaphore,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
 #endif
   ISR_lock_Context        *lock_context
 )
@@ -158,7 +155,6 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
       the_semaphore->operations,
       the_thread,
       mp_callout,
-      mp_id,
       lock_context
     );
   } else {
@@ -183,8 +179,6 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
  *  @param[in] the_semaphore is the semaphore to surrender
  *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param[in] mp_id is the Id of the API level Semaphore object associated
- *         with this instance of a SuperCore Semaphore
  *  @param[in] lock_context is a temporary variable used to contain the ISR
  *        disable level cookie
  *
@@ -194,20 +188,17 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
   #define _CORE_semaphore_Surrender( \
     the_semaphore, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_semaphore_Do_surrender( \
       the_semaphore, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
   #define _CORE_semaphore_Surrender( \
     the_semaphore, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_semaphore_Do_surrender( \
@@ -220,7 +211,6 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
 #define _CORE_semaphore_Flush( \
   the_semaphore, \
   mp_callout, \
-  mp_id, \
   lock_context \
 ) \
   do { \
@@ -229,7 +219,6 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Do_surrender(
       ( the_semaphore )->operations, \
       _CORE_semaphore_Unsatisfied_nowait, \
       mp_callout, \
-      mp_id, \
       lock_context \
     ); \
   } while ( 0 )

@@ -105,7 +105,6 @@ void _CORE_barrier_Do_seize(
   Watchdog_Interval        timeout,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
 #endif
   ISR_lock_Context        *lock_context
 );
@@ -125,7 +124,6 @@ void _CORE_barrier_Do_seize(
  *         to wait if @a wait is true.
  *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param[in] mp_id is the id of the object being waited upon
  *
  * @note Status is returned via the thread control block.
  */
@@ -136,7 +134,6 @@ void _CORE_barrier_Do_seize(
     wait, \
     timeout, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_seize( \
@@ -145,7 +142,6 @@ void _CORE_barrier_Do_seize(
       wait, \
       timeout, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
@@ -155,7 +151,6 @@ void _CORE_barrier_Do_seize(
     wait, \
     timeout, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_seize( \
@@ -172,7 +167,6 @@ uint32_t _CORE_barrier_Do_surrender(
   Thread_queue_Flush_filter  filter,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout    mp_callout,
-  Objects_Id                 mp_id,
 #endif
   ISR_lock_Context          *lock_context
 );
@@ -186,7 +180,6 @@ uint32_t _CORE_barrier_Do_surrender(
  *  @param[in] the_barrier is the barrier to surrender
  *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
- *  @param[in] mp_id is the id of the object for a remote unblock
  *
  *  @retval the number of unblocked threads
  */
@@ -194,21 +187,18 @@ uint32_t _CORE_barrier_Do_surrender(
   #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_surrender( \
       the_barrier, \
       _Thread_queue_Flush_default_filter, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
   #define _CORE_barrier_Surrender( \
     the_barrier, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_surrender( \
@@ -229,21 +219,18 @@ Thread_Control *_CORE_barrier_Was_deleted(
   #define _CORE_barrier_Flush( \
     the_barrier, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_surrender( \
       the_barrier, \
       _CORE_barrier_Was_deleted, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
   #define _CORE_barrier_Flush( \
     the_barrier, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_barrier_Do_surrender( \

@@ -101,7 +101,6 @@ void _CORE_message_queue_Seize(
         the_message_queue->operations,
         the_thread,
         NULL,
-        0,
         lock_context
       );
       return;

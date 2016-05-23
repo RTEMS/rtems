@@ -37,7 +37,6 @@ size_t _Thread_queue_Do_flush_critical(
   Thread_queue_Flush_filter      filter,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id,
 #endif
   ISR_lock_Context              *lock_context
 )
@@ -70,8 +69,7 @@ size_t _Thread_queue_Do_flush_critical(
       queue,
       operations,
       first,
-      mp_callout,
-      mp_id
+      mp_callout
     );
     if ( do_unblock ) {
       _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );

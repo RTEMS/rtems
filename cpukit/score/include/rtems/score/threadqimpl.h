@@ -201,8 +201,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
   const Thread_queue_Operations *operations
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id
+  Thread_queue_MP_callout        mp_callout
 #endif
 );
 
@@ -221,21 +220,18 @@ Thread_Control *_Thread_queue_Do_dequeue(
   #define _Thread_queue_Dequeue( \
     the_thread_queue, \
     operations, \
-    mp_callout, \
-    mp_id \
+    mp_callout \
   ) \
     _Thread_queue_Do_dequeue( \
       the_thread_queue, \
       operations, \
-      mp_callout, \
-      mp_id \
+      mp_callout \
     )
 #else
   #define _Thread_queue_Dequeue( \
     the_thread_queue, \
     operations, \
-    mp_callout, \
-    mp_id \
+    mp_callout \
   ) \
     _Thread_queue_Do_dequeue( \
       the_thread_queue, \
@@ -348,8 +344,7 @@ bool _Thread_queue_Do_extract_locked(
   Thread_Control                *the_thread
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id
+  Thread_queue_MP_callout        mp_callout
 #endif
 );
 
@@ -366,8 +361,6 @@ bool _Thread_queue_Do_extract_locked(
  * @param[in] mp_callout Callout to unblock the thread in case it is actually a
  *   thread proxy.  This parameter is only used on multiprocessing
  *   configurations.
- * @param[in] mp_id Object identifier of the object containing the thread
- *   queue.  This parameter is only used on multiprocessing configurations.
  *
  * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
  * True indicates, that this thread must be unblocked by the scheduler later in
@@ -382,23 +375,20 @@ bool _Thread_queue_Do_extract_locked(
     unblock, \
     queue, \
     the_thread, \
-    mp_callout, \
-    mp_id \
+    mp_callout \
   ) \
     _Thread_queue_Do_extract_locked( \
       unblock, \
       queue, \
       the_thread, \
-      mp_callout, \
-      mp_id \
+      mp_callout \
     )
 #else
   #define _Thread_queue_Extract_locked( \
     unblock, \
     queue, \
     the_thread, \
-    mp_callout, \
-    mp_id \
+    mp_callout \
   ) \
     _Thread_queue_Do_extract_locked( \
       unblock, \
@@ -434,7 +424,6 @@ void _Thread_queue_Do_extract_critical(
   Thread_Control                *the_thread,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id,
 #endif
   ISR_lock_Context              *lock_context
 );
@@ -487,8 +476,6 @@ void _Thread_queue_Do_extract_critical(
  * @param[in] mp_callout Callout to unblock the thread in case it is actually a
  *   thread proxy.  This parameter is only used on multiprocessing
  *   configurations.
- * @param[in] mp_id Object identifier of the object containing the thread
- *   queue.  This parameter is only used on multiprocessing configurations.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 #if defined(RTEMS_MULTIPROCESSING)
@@ -497,7 +484,6 @@ void _Thread_queue_Do_extract_critical(
     operations, \
     the_thread, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _Thread_queue_Do_extract_critical( \
@@ -505,7 +491,6 @@ void _Thread_queue_Do_extract_critical(
       operations, \
       the_thread, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
@@ -514,7 +499,6 @@ void _Thread_queue_Do_extract_critical(
     operations, \
     the_thread, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _Thread_queue_Do_extract_critical( \
@@ -644,7 +628,6 @@ size_t _Thread_queue_Do_flush_critical(
   Thread_queue_Flush_filter      filter,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id,
 #endif
   ISR_lock_Context              *lock_context
 );
@@ -666,8 +649,6 @@ size_t _Thread_queue_Do_flush_critical(
  *   operation should stop or continue.
  * @param mp_callout Callout to extract the proxy of a remote thread.  This
  *   parameter is only used on multiprocessing configurations.
- * @param mp_id Object identifier of the object containing the thread queue.
- *   This parameter is only used on multiprocessing configurations.
  *
  * @return The count of extracted threads.
  */
@@ -677,7 +658,6 @@ size_t _Thread_queue_Do_flush_critical(
     operations, \
     filter, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _Thread_queue_Do_flush_critical( \
@@ -685,7 +665,6 @@ size_t _Thread_queue_Do_flush_critical(
       operations, \
       filter, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
@@ -694,7 +673,6 @@ size_t _Thread_queue_Do_flush_critical(
     operations, \
     filter, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _Thread_queue_Do_flush_critical( \

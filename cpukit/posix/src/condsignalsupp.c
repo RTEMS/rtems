@@ -57,7 +57,6 @@ int _POSIX_Condition_variables_Signal_support(
         POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
         the_thread,
         NULL,
-        0,
         &lock_context
       );
     } else {

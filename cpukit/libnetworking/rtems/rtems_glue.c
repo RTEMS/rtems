@@ -413,7 +413,6 @@ rtems_bsdnet_semaphore_release (void)
 	status = _CORE_mutex_Surrender (
 		&the_networkSemaphore->Core_control.mutex,
 		NULL,
-		0,
                 &lock_context
 		);
 	if (status != CORE_MUTEX_STATUS_SUCCESSFUL)

@@ -99,8 +99,7 @@ bool _Thread_queue_Do_extract_locked(
   Thread_Control                *the_thread
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id
+  Thread_queue_MP_callout        mp_callout
 #endif
 )
 {
@@ -115,7 +114,6 @@ bool _Thread_queue_Do_extract_locked(
 
     the_proxy = (Thread_Proxy_control *) the_thread;
     the_proxy->thread_queue_callout = mp_callout;
-    the_proxy->thread_queue_id = mp_id;
   }
 #endif
 
@@ -172,7 +170,6 @@ void _Thread_queue_Do_extract_critical(
   Thread_Control                *the_thread,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id,
 #endif
   ISR_lock_Context              *lock_context
 )
@@ -183,8 +180,7 @@ void _Thread_queue_Do_extract_critical(
     queue,
     operations,
     the_thread,
-    mp_callout,
-    mp_id
+    mp_callout
   );
 
   _Thread_queue_Unblock_critical(
@@ -213,7 +209,6 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       the_thread->Wait.operations,
       the_thread,
       _Thread_queue_MP_callout_do_nothing,
-      0,
       &lock_context
     );
   } else {
@@ -226,8 +221,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
   const Thread_queue_Operations *operations
 #if defined(RTEMS_MULTIPROCESSING)
   ,
-  Thread_queue_MP_callout        mp_callout,
-  Objects_Id                     mp_id
+  Thread_queue_MP_callout        mp_callout
 #endif
 )
 {
@@ -246,7 +240,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
       operations,
       the_thread,
       mp_callout,
-      mp_id,
       &lock_context
     );
   } else {
@@ -262,13 +255,14 @@ void _Thread_queue_Unblock_proxy(
   Thread_Control     *the_thread
 )
 {
-  Thread_Proxy_control *the_proxy;
+  const Thread_queue_Object *the_queue_object;
+  Thread_Proxy_control      *the_proxy;
+  Thread_queue_MP_callout    mp_callout;
 
+  the_queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( queue );
   the_proxy = (Thread_Proxy_control *) the_thread;
-  ( *the_proxy->thread_queue_callout )(
-    the_thread,
-    the_proxy->thread_queue_id
-  );
+  mp_callout = the_proxy->thread_queue_callout;
+  ( *mp_callout )( the_thread, the_queue_object->Object.id );
 
   _Thread_MP_Free_proxy( the_thread );
 }

@@ -54,7 +54,6 @@ rtems_status_code rtems_message_queue_broadcast(
     buffer,
     size,
     _Message_queue_Core_message_queue_mp_support,
-    id,
     count,
     &lock_context
   );

@@ -404,12 +404,6 @@ typedef struct {
   Thread_queue_MP_callout  thread_queue_callout;
 
   /**
-   * @brief Thread queue object identifier for
-   * _Thread_queue_Enqueue_critical().
-   */
-  Objects_Id               thread_queue_id;
-
-  /**
    * @brief This field is used to manage the set of active proxies in the system.
    */
   RBTree_Node              Active;

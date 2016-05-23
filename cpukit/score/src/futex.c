@@ -151,7 +151,6 @@ int _Futex_Wake( struct _Futex_Control *_futex, int count )
     FUTEX_TQ_OPERATIONS,
     _Futex_Flush_filter,
     NULL,
-    0,
     &lock_context.Base
   );
 }

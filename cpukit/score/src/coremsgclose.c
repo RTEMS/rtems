@@ -36,7 +36,6 @@ void _CORE_message_queue_Do_close(
   CORE_message_queue_Control *the_message_queue,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout     mp_callout,
-  Objects_Id                  mp_id,
 #endif
   ISR_lock_Context           *lock_context
 )
@@ -52,7 +51,6 @@ void _CORE_message_queue_Do_close(
     the_message_queue->operations,
     _CORE_message_queue_Was_deleted,
     mp_callout,
-    mp_id,
     lock_context
   );
 

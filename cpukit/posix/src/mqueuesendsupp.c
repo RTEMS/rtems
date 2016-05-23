@@ -98,7 +98,6 @@ int _POSIX_Message_queue_Send_support(
     msg_ptr,
     msg_len,
     NULL,
-    0,
     _POSIX_Message_queue_Priority_to_core( msg_prio ),
     do_wait,
     timeout,

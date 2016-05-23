@@ -32,7 +32,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
   size_t                            size,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout           mp_callout,
-  Objects_Id                        mp_id,
 #endif
   CORE_message_queue_Submit_types   submit_type,
   bool                              wait,
@@ -57,7 +56,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
     buffer,
     size,
     mp_callout,
-    mp_id,
     submit_type,
     lock_context
   );

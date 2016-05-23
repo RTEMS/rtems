@@ -120,7 +120,6 @@ CORE_RWLock_Status _CORE_RWLock_Surrender(
     CORE_RWLOCK_TQ_OPERATIONS,
     _CORE_RWLock_Flush_filter,
     NULL,
-    0,
     lock_context
   );
   return CORE_RWLOCK_SUCCESSFUL;

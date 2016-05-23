@@ -28,7 +28,6 @@ void _CORE_barrier_Do_seize(
   Watchdog_Interval        timeout,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
 #endif
   ISR_lock_Context        *lock_context
 )
@@ -47,7 +46,7 @@ void _CORE_barrier_Do_seize(
       && number_of_waiting_threads == the_barrier->Attributes.maximum_count
   ) {
     executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
-    _CORE_barrier_Surrender( the_barrier, mp_callout, mp_id, lock_context );
+    _CORE_barrier_Surrender( the_barrier, mp_callout, lock_context );
   } else {
     the_barrier->number_of_waiting_threads = number_of_waiting_threads;
     _Thread_queue_Enqueue_critical(

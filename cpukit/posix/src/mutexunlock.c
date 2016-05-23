@@ -43,7 +43,6 @@ int pthread_mutex_unlock(
   status = _CORE_mutex_Surrender(
     &the_mutex->Mutex,
     NULL,
-    0,
     &lock_context
   );
   return _POSIX_Mutex_Translate_core_mutex_return_code( status );

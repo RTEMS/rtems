@@ -59,7 +59,6 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     mutex_status = _CORE_mutex_Surrender(
       &the_semaphore->Core_control.mutex,
       _Semaphore_Core_mutex_mp_support,
-      id,
       &lock_context
     );
     return _Semaphore_Translate_core_mutex_return_code( mutex_status );
@@ -67,7 +66,6 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     semaphore_status = _CORE_semaphore_Surrender(
       &the_semaphore->Core_control.semaphore,
       _Semaphore_Core_mutex_mp_support,
-      id,
       &lock_context
     );
     return _Semaphore_Translate_core_semaphore_return_code( semaphore_status );

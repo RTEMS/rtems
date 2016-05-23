@@ -267,7 +267,6 @@ static void _Condition_Wake( struct _Condition_Control *_condition, int count )
     CONDITION_TQ_OPERATIONS,
     _Condition_Flush_filter,
     NULL,
-    0,
     &lock_context.Base
   );
 }

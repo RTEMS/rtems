@@ -37,7 +37,7 @@ rtems_status_code rtems_barrier_delete(
 
   _CORE_barrier_Acquire_critical( &the_barrier->Barrier, &lock_context );
   _Objects_Close( &_Barrier_Information, &the_barrier->Object );
-  _CORE_barrier_Flush( &the_barrier->Barrier, NULL, 0, &lock_context );
+  _CORE_barrier_Flush( &the_barrier->Barrier, NULL, &lock_context );
   _Barrier_Free( the_barrier );
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;

@@ -374,7 +374,6 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
   CORE_mutex_Control      *the_mutex,
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
 #endif
   ISR_lock_Context        *lock_context
 );
@@ -383,20 +382,17 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
   #define _CORE_mutex_Surrender( \
     the_mutex, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_mutex_Do_surrender( \
       the_mutex, \
       mp_callout, \
-      mp_id, \
       lock_context \
     )
 #else
   #define _CORE_mutex_Surrender( \
     the_mutex, \
     mp_callout, \
-    mp_id, \
     lock_context \
   ) \
     _CORE_mutex_Do_surrender( \
@@ -422,7 +418,6 @@ Thread_Control *_CORE_mutex_Unsatisfied_nowait(
   the_mutex, \
   filter, \
   mp_callout, \
-  mp_id, \
   lock_context \
 ) \
   _Thread_queue_Flush_critical( \
@@ -430,7 +425,6 @@ Thread_Control *_CORE_mutex_Unsatisfied_nowait(
     ( the_mutex )->operations, \
     filter, \
     mp_callout, \
-    mp_id, \
     lock_context \
   )
 

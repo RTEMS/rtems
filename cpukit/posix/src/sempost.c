@@ -38,7 +38,6 @@ int sem_post(
   _CORE_semaphore_Surrender(
     &the_semaphore->Semaphore,
     NULL,
-    0,
     &lock_context
   );
   return 0;
