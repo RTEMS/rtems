@@ -54,7 +54,7 @@ rtems_device_driver console_control(
         break;
 
       case MW_UID_REGISTER_DEVICE:
-        printk( "SerialMouse: reg=%s\n", args->buffer );
+        printk( "SerialMouse: reg=%s\n", (const char*) args->buffer );
         register_kbd_msg_queue( args->buffer, 0 );
         break;
 

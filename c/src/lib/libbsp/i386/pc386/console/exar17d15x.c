@@ -166,7 +166,7 @@ rtems_device_driver exar17d15x_initialize(
       &conf[instance].base
     );
     printk(
-      "Found Exar 17D15x %d at 0x%08x IRQ %d with %d ports\n",
+      "Found Exar 17D15x %d at 0x%08lx IRQ %d with %d ports\n",
       instance,
       conf[instance].base,
       conf[instance].irq,

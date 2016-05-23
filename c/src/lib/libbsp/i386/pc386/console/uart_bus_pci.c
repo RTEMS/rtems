@@ -285,14 +285,14 @@ static uint8_t pci_ns16550_io_get_register(uint32_t addr, uint8_t i)
 {
   uint8_t val = rtems_inb(addr + i);
   if (UART_PCI_IO)
-    printk( "RD(%p -> 0x%02x) ", addr + i, val );
+    printk( "RD(%p -> 0x%02x) ", (void*) addr + i, val );
   return val;
 }
 
 static void pci_ns16550_io_set_register(uint32_t addr, uint8_t i, uint8_t val)
 {
   if (UART_PCI_IO)
-    printk( "WR(%p <- 0x%02x) ", addr + i, val );
+    printk( "WR(%p <- 0x%02x) ", (void*) addr + i, val );
   rtems_outb(addr + i, val);
 }
 
@@ -453,7 +453,7 @@ void pci_uart_probe(void)
 
 
         printk(
-          "%s:%d:%s,%s:0x%x%s%s,irq:%d,clk:%d\n", /*  */
+          "%s:%d:%s,%s:0x%lx%s%s,irq:%d,clk:%lu\n", /*  */
 	  name, b, conf[b].desc,
 	  io ? "io" : "mem", base, locatable, prefectable,
 	  conf[b].irq, conf[b].clock

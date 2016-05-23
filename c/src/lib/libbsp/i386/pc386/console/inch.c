@@ -206,9 +206,11 @@ _IBMPC_scankey(char *outChar)
 static bool
 _IBMPC_chrdy(char *c)
 {
+#if CCJ_REMOVED_NO_IDEA_ABOUT_THIS_CODE_OR_COMMENT
   /* FIX ME!!! It doesn't work without something like the following line.
      Find out why! */
   printk("");
+#endif
 
   /* Check buffer our ISR builds */
   if (kbd_first != kbd_last)

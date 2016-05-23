@@ -23,7 +23,10 @@
 | 01.14.03  creation                                         doe  |
 \*===============================================================*/
 
+#include <inttypes.h>
+
 #include <rtems.h>
+
 #include <bsp.h>
 #include <libchip/ide_ctrl.h>
 #include <libchip/ide_ctrl_cfg.h>
@@ -199,7 +202,7 @@ static void pc386_ide_initialize
   uint8_t  dev = 0;
 
   if (pc386_ide_show)
-    printk("IDE%d: port base: %04x\n", minor, port);
+    printk("IDE%d: port base: %04" PRIu32 "\n", minor, port);
 
   outport_byte(port+IDE_REGISTER_DEVICE_HEAD,
                (dev << IDE_REGISTER_DEVICE_HEAD_DEV_POS) | 0xE0);
@@ -303,7 +306,7 @@ static void pc386_ide_initialize
       uint16_t word;
 
       if (pc386_ide_show && ((byte % 16) == 0))
-        printk("\n %04x : ", byte);
+        printk("\n %04" PRIx32 " : ", byte);
 
       inport_word(port+IDE_REGISTER_DATA, word);
 
@@ -346,7 +349,7 @@ static void pc386_ide_initialize
     }
 
     if (pc386_ide_show)
-      printk("\nbytes read = %d\n", byte);
+      printk("\nbytes read = %" PRIu32 "\n", byte);
 
     if (p != &model_number[0])
     {
@@ -388,7 +391,7 @@ static void pc386_ide_initialize
         p--;
       }
 
-      printk("IDE%d:%s:%s, %u.%u%c (%u/%u/%u), max blk size:%d\n",
+      printk("IDE%d:%s:%s, %" PRIu32 ".%" PRIu32 "%c (%" PRIu32 "/%" PRIu32 "/%" PRIu32 "), max blk size:%d\n",
              minor, label, model_number, left, right, units,
              heads, cylinders, sectors, max_multiple_sectors * 512);
     }
@@ -541,7 +544,8 @@ static void pc386_ide_read_block
     if (!pc386_ide_status_data_ready (port, pc386_ide_timeout,
                                       &status_val, pc386_ide_tasking_sleep))
     {
-      printk ("pc386_ide_read_block: block=%u cbuf=%u status=%02x, cnt=%d bs=%d\n",
+      printk ("pc386_ide_read_block: block=%" PRIu32 \
+              " cbuf=%" PRIu32 " status=%02x, cnt=%" PRIu32 " bs=%" PRIu32 "\n",
               bufs[*cbuf].block, *cbuf, status_val, cnt, block_size);
       /* FIXME: add an error here. */
       return;
@@ -620,7 +624,7 @@ static void pc386_ide_write_block
     if (!pc386_ide_status_data_ready (port, pc386_ide_timeout,
                                       &status_val, pc386_ide_tasking_sleep))
     {
-      printk ("pc386_ide_write_block: block=%u status=%02x, cnt=%d bs=%d\n",
+      printk ("pc386_ide_write_block: block=%" PRIu32 " status=%02x, cnt=%" PRIu32 " bs=%" PRIu32 "\n",
               bufs[*cbuf].block, status_val, cnt, block_size);
       /* FIXME: add an error here. */
       return;

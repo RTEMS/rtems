@@ -1032,7 +1032,6 @@ handle_exception (int exceptionVector)
 	  if (*(ptr++) == ',')
 	    {
 	      bool insert = remcomInBuffer[0] == 'Z';
-	      printk("hbreak type\n", insert);
 	      if (hexToInt (&ptr, &addr))
 		{
 		  if (*(ptr++) == ',')

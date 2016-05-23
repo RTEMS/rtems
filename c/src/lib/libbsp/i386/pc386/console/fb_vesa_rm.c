@@ -42,6 +42,8 @@
  *   - RTEMS fb_cirrus.c - Alexandru-Sever Horin (alex.sever.h@gmail.com)
  */
 
+#include <inttypes.h>
+
 #include <bsp.h>
 
 #include <bsp/fb_default_mode.h>
@@ -785,7 +787,7 @@ void vesa_realmode_bootup_init(void)
     if ((vbe_ret_val&0xff)!=VBE_functionSupported ||
         (vbe_ret_val>>8)!=VBE_callSuccessful)
     {
-        printk(FB_VESA_NAME " Cannot get mode info anymore. ax=0x%x\n",
+        printk(FB_VESA_NAME " Cannot get mode info anymore. ax=0x%lx\n",
             vbe_ret_val);
     }
 
@@ -822,7 +824,7 @@ void vesa_realmode_bootup_init(void)
 
     if ((vbe_ret_val&0xff)!= (VBE_functionSupported | VBE_callSuccessful<<8))
         printk(FB_VESA_NAME " Call to function 2h (set VBE mode) failed. "
-            "ax=0x%x\n", vbe_ret_val);
+            "ax=0x%" PRIx32 "\n", vbe_ret_val);
 
     vib = (void *) 0;
     mib = (void *) 0;
@@ -968,9 +970,9 @@ frame_buffer_control(
 {
   rtems_libio_ioctl_args_t *args = arg;
 
-  printk( FB_VESA_NAME " ioctl called, cmd=%x\n", args->command  );
-    printk("fbxres %d, fbyres %d\n", fb_var.xres, fb_var.yres);
-    printk("fbbpp %d\n", fb_var.bits_per_pixel);
+  printk( FB_VESA_NAME " ioctl called, cmd=%" PRIx32 "\n", args->command  );
+    printk("fbxres %lu, fbyres %lu\n", fb_var.xres, fb_var.yres);
+    printk("fbbpp %lu\n", fb_var.bits_per_pixel);
 
   switch (args->command)
   {
