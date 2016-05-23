@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -71,6 +72,7 @@ rtems_status_code _Signal_MP_Send(
 )
 {
   Signal_MP_Packet *the_packet;
+  Status_Control    status;
 
   the_packet = _Signal_MP_Get_packet( id );
   if ( the_packet == NULL ) {
@@ -84,12 +86,12 @@ rtems_status_code _Signal_MP_Send(
   the_packet->Prefix.id         = id;
   the_packet->signal_set        = signal_set;
 
-  return (rtems_status_code) _MPCI_Send_request_packet(
+  status = _MPCI_Send_request_packet(
     _Objects_Get_node( id ),
     &the_packet->Prefix,
-    STATES_READY,
-    RTEMS_TIMEOUT
+    STATES_READY
   );
+  return _Status_Get( status );
 }
 
 static void _Signal_MP_Send_response_packet (

@@ -74,7 +74,7 @@ libposix_a_SOURCES +=  src/pthreadatfork.c
 libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
     src/barrierattrinit.c src/barrierattrsetpshared.c src/pbarrier.c \
     src/pbarrierdestroy.c src/pbarrierinit.c \
-    src/pbarriertranslatereturncode.c src/pbarrierwait.c
+    src/pbarrierwait.c
 
 ## CANCEL_C_FILES
 libposix_a_SOURCES += src/cancel.c \
@@ -99,7 +99,7 @@ libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
     src/mqueuenotify.c src/mqueueopen.c \
     src/mqueuereceive.c src/mqueuerecvsupp.c src/mqueuesend.c \
     src/mqueuesendsupp.c src/mqueuesetattr.c src/mqueuetimedreceive.c \
-    src/mqueuetimedsend.c src/mqueuetranslatereturncode.c \
+    src/mqueuetimedsend.c \
     src/mqueueunlink.c
 
 ## MUTEX_C_FILES
@@ -110,7 +110,7 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutexattrsettype.c src/mutex.c src/mutexdestroy.c src/mutexget.c \
     src/mutexgetprioceiling.c src/mutexinit.c src/mutexlock.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
-    src/mutextranslatereturncode.c src/mutextrylock.c src/mutexunlock.c
+    src/mutextrylock.c src/mutexunlock.c
 
 ## PTHREAD_C_FILES
 libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
@@ -175,20 +175,19 @@ libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
     src/prwlockrdlock.c src/prwlocktimedrdlock.c src/prwlocktimedwrlock.c \
     src/prwlocktryrdlock.c src/prwlocktrywrlock.c src/prwlockunlock.c \
     src/prwlockwrlock.c src/rwlockattrdestroy.c src/rwlockattrgetpshared.c \
-    src/rwlockattrinit.c src/rwlockattrsetpshared.c \
-    src/prwlocktranslatereturncode.c
+    src/rwlockattrinit.c src/rwlockattrsetpshared.c
 
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
     src/semaphoredeletesupp.c \
-    src/semaphoretranslatereturncode.c src/semaphorewaitsupp.c \
+    src/semaphorewaitsupp.c \
     src/semclose.c src/semdestroy.c src/semgetvalue.c src/seminit.c \
     src/semopen.c src/sempost.c src/semtimedwait.c src/semtrywait.c \
     src/semunlink.c src/semwait.c
 
 ## SPINLOCK_C_FILES
 libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
-    src/pspinlock.c src/pspinlocktranslatereturncode.c src/pspintrylock.c \
+    src/pspinlock.c src/pspintrylock.c \
     src/pspinunlock.c
 
 ## TIME_C_FILES

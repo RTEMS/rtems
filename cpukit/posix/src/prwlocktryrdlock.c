@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/posix/posixapi.h>
 
 int pthread_rwlock_tryrdlock(
   pthread_rwlock_t  *rwlock
@@ -26,7 +27,7 @@ int pthread_rwlock_tryrdlock(
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
+  Status_Control        status;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
@@ -34,15 +35,12 @@ int pthread_rwlock_tryrdlock(
     return EINVAL;
   }
 
-  executing = _Thread_Executing;
-  _CORE_RWLock_Seize_for_reading(
+  status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
-    executing,
+    _Thread_Executing,
     false,                  /* do not wait for the rwlock */
     0,
     &queue_context
   );
-  return _POSIX_RWLock_Translate_core_RWLock_return_code(
-    (CORE_RWLock_Status) executing->Wait.return_code
-  );
+  return _POSIX_Get_error( status );
 }

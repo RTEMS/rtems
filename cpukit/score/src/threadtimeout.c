@@ -20,10 +20,11 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/status.h>
 
 static void _Thread_Do_timeout( Thread_Control *the_thread )
 {
-  the_thread->Wait.return_code = the_thread->Wait.timeout_code;
+  the_thread->Wait.return_code = STATUS_TIMEOUT;
   ( *the_thread->Wait.operations->extract )(
     the_thread->Wait.queue,
     the_thread

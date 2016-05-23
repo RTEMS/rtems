@@ -21,6 +21,7 @@
 #include <semaphore.h>
 
 #include <rtems/posix/semaphoreimpl.h>
+#include <rtems/posix/posixapi.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_Semaphore_Control, Semaphore.Wait_queue );
 
@@ -31,8 +32,8 @@ int _POSIX_Semaphore_Wait_support(
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
-  Thread_Control          *executing;
   Thread_queue_Context     queue_context;
+  Status_Control           status;
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
@@ -40,23 +41,12 @@ int _POSIX_Semaphore_Wait_support(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  executing = _Thread_Executing;
-
-  _CORE_semaphore_Seize(
+  status = _CORE_semaphore_Seize(
     &the_semaphore->Semaphore,
-    executing,
+    _Thread_Executing,
     blocking,
     timeout,
     &queue_context
   );
-
-  if ( executing->Wait.return_code == CORE_SEMAPHORE_STATUS_SUCCESSFUL ) {
-    return 0;
-  }
-
-  rtems_set_errno_and_return_minus_one(
-    _POSIX_Semaphore_Translate_core_semaphore_return_code(
-      executing->Wait.return_code
-    )
-  );
+  return _POSIX_Zero_or_minus_one_plus_errno( status );
 }

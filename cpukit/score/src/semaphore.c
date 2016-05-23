@@ -101,8 +101,7 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
       SEMAPHORE_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE,
-      0,
-      0,
+      WATCHDOG_NO_TIMEOUT,
       &lock_context
     );
   }

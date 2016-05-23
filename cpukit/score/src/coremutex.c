@@ -23,7 +23,7 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
 
-CORE_mutex_Status _CORE_mutex_Initialize(
+Status_Control _CORE_mutex_Initialize(
   CORE_mutex_Control           *the_mutex,
   Thread_Control               *executing,
   const CORE_mutex_Attributes  *the_mutex_attributes,
@@ -64,7 +64,7 @@ CORE_mutex_Status _CORE_mutex_Initialize(
          * the object creation.
          */
         _Thread_Dispatch_enable( cpu_self );
-        return CORE_MUTEX_STATUS_CEILING_VIOLATED;
+        return STATUS_MUTEX_CEILING_VIOLATED;
       }
 
       executing->resource_count++;
@@ -88,27 +88,5 @@ CORE_mutex_Status _CORE_mutex_Initialize(
     the_mutex->operations = &_Thread_queue_Operations_priority;
   }
 
-  return CORE_MUTEX_STATUS_SUCCESSFUL;
-}
-
-Thread_Control *_CORE_mutex_Was_deleted(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-)
-{
-  the_thread->Wait.return_code = CORE_MUTEX_WAS_DELETED;
-
-  return the_thread;
-}
-
-Thread_Control *_CORE_mutex_Unsatisfied_nowait(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-)
-{
-  the_thread->Wait.return_code = CORE_MUTEX_STATUS_UNSATISFIED_NOWAIT;
-
-  return the_thread;
+  return STATUS_SUCCESSFUL;
 }

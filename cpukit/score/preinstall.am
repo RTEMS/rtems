@@ -316,6 +316,10 @@ $(PROJECT_INCLUDE)/rtems/score/statesimpl.h: include/rtems/score/statesimpl.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/statesimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/statesimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/status.h: include/rtems/score/status.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/status.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/status.h
+
 $(PROJECT_INCLUDE)/rtems/score/sysstate.h: include/rtems/score/sysstate.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/sysstate.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/sysstate.h

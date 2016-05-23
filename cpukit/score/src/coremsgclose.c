@@ -27,7 +27,7 @@ static Thread_Control *_CORE_message_queue_Was_deleted(
   Thread_queue_Context *queue_context
 )
 {
-  the_thread->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED;
+  the_thread->Wait.return_code = STATUS_MESSAGE_QUEUE_WAS_DELETED;
 
   return the_thread;
 }

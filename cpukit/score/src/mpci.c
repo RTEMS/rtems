@@ -225,11 +225,10 @@ void _MPCI_Send_process_packet (
   (*_MPCI_table->send_packet)( destination, the_packet );
 }
 
-uint32_t   _MPCI_Send_request_packet (
-  uint32_t            destination,
-  MP_packet_Prefix   *the_packet,
-  States_Control      extra_state,
-  uint32_t            timeout_code
+Status_Control _MPCI_Send_request_packet(
+  uint32_t          destination,
+  MP_packet_Prefix *the_packet,
+  States_Control    extra_state
 )
 {
   Per_CPU_Control *cpu_self;
@@ -260,13 +259,12 @@ uint32_t   _MPCI_Send_request_packet (
       &_Thread_queue_Operations_FIFO,
       executing,
       STATES_WAITING_FOR_RPC_REPLY | extra_state,
-      the_packet->timeout,
-      timeout_code
+      the_packet->timeout
     );
 
   _Thread_Dispatch_enable( cpu_self );
 
-  return executing->Wait.return_code;
+  return _Thread_Wait_get_status( executing );
 }
 
 void _MPCI_Send_response_packet (

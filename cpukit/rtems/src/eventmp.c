@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
 
@@ -61,6 +62,7 @@ rtems_status_code _Event_MP_Send(
 )
 {
   Event_MP_Packet *the_packet;
+  Status_Control   status;
 
   the_packet = _Event_MP_Get_packet( id );
   if ( the_packet == NULL ) {
@@ -74,12 +76,12 @@ rtems_status_code _Event_MP_Send(
   the_packet->Prefix.id         = id;
   the_packet->event_in          = event_in;
 
-  return (rtems_status_code) _MPCI_Send_request_packet(
+  status = _MPCI_Send_request_packet(
     _Objects_Get_node( id ),
     &the_packet->Prefix,
-    STATES_READY,
-    RTEMS_TIMEOUT
+    STATES_READY
   );
+  return _Status_Get( status );
 }
 
 static void _Event_MP_Send_response_packet (

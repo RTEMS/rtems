@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -101,18 +102,20 @@ static rtems_status_code _RTEMS_tasks_MP_Send_request_packet(
   RTEMS_tasks_MP_Remote_operations  operation
 )
 {
+  Status_Control status;
+
   the_packet->Prefix.the_class  = MP_PACKET_TASKS;
   the_packet->Prefix.length     = sizeof( *the_packet );
   the_packet->Prefix.to_convert = sizeof( *the_packet );
   the_packet->Prefix.id         = id;
   the_packet->operation         = operation;
 
-  return _MPCI_Send_request_packet(
+  status = _MPCI_Send_request_packet(
     _Objects_Get_node( id ),
     &the_packet->Prefix,
-    STATES_READY,    /* Not used */
-    RTEMS_TIMEOUT
+    STATES_READY /* Not used */
   );
+  return _Status_Get( status );
 }
 
 rtems_status_code _RTEMS_tasks_MP_Set_priority(

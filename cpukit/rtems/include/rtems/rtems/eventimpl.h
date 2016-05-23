@@ -44,7 +44,7 @@ extern "C" {
  */
 #define EVENT_SETS_NONE_PENDING 0
 
-void _Event_Seize(
+rtems_status_code _Event_Seize(
   rtems_event_set    event_in,
   rtems_option       option_set,
   rtems_interval     ticks,

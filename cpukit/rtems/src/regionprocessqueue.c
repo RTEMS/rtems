@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/regionimpl.h>
+#include <rtems/score/status.h>
 #include <rtems/score/threadqimpl.h>
 
 void _Region_Process_queue(
@@ -65,7 +66,7 @@ void _Region_Process_queue(
 
     *(void **)the_thread->Wait.return_argument = the_segment;
     _Thread_queue_Extract( the_thread );
-    the_thread->Wait.return_code = RTEMS_SUCCESSFUL;
+    the_thread->Wait.return_code = STATUS_SUCCESSFUL;
   }
 
   _Thread_Dispatch_enable( cpu_self );

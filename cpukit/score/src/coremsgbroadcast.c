@@ -21,7 +21,7 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/objectimpl.h>
 
-CORE_message_queue_Status _CORE_message_queue_Broadcast(
+Status_Control _CORE_message_queue_Broadcast(
   CORE_message_queue_Control *the_message_queue,
   const void                 *buffer,
   size_t                      size,
@@ -34,7 +34,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
 
   if ( size > the_message_queue->maximum_message_size ) {
     _ISR_lock_ISR_enable( &queue_context->Lock_context );
-    return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
+    return STATUS_MESSAGE_INVALID_SIZE;
   }
 
   number_broadcasted = 0;
@@ -60,5 +60,5 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
   _CORE_message_queue_Release( the_message_queue, queue_context );
 
   *count = number_broadcasted;
-  return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+  return STATUS_SUCCESSFUL;
 }

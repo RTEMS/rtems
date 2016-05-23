@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_STATUSIMPL_H
 
 #include <rtems/rtems/status.h>
+#include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +39,20 @@ extern "C" {
  *  codes to Classic API status codes.
  */
 extern const rtems_status_code _Status_Object_name_errors_to_status[];
+
+RTEMS_INLINE_ROUTINE rtems_status_code _Status_Get(
+  Status_Control status
+)
+{
+  return (rtems_status_code) STATUS_GET_CLASSIC( status );
+}
+
+RTEMS_INLINE_ROUTINE rtems_status_code _Status_Get_after_wait(
+  const Thread_Control *executing
+)
+{
+  return _Status_Get( _Thread_Wait_get_status( executing ) );
+}
 
 /**@}*/
 

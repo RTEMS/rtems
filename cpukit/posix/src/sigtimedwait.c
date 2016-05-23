@@ -18,14 +18,12 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
 #include <signal.h>
-#include <errno.h>
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/seterr.h>
 #include <rtems/score/isr.h>
 
 static int _POSIX_signals_Get_lowest(
@@ -78,6 +76,7 @@ int sigtimedwait(
   siginfo_t         *the_info;
   int                signo;
   ISR_lock_Context   lock_context;
+  int                error;
 
   /*
    *  Error check parameters before disabling interrupts.
@@ -150,7 +149,6 @@ int sigtimedwait(
 
   the_info->si_signo = -1;
 
-  executing->Wait.return_code     = EINTR;
   executing->Wait.option          = *set;
   executing->Wait.return_argument = the_info;
   _Thread_queue_Enqueue_critical(
@@ -159,7 +157,6 @@ int sigtimedwait(
     executing,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
     interval,
-    EAGAIN,
     &lock_context
   );
 
@@ -182,10 +179,17 @@ int sigtimedwait(
    * was not in our set.
    */
 
-  if ( (executing->Wait.return_code != EINTR)
-       || !(*set & signo_to_mask( the_info->si_signo )) ) {
-    errno = executing->Wait.return_code;
-    return -1;
+  error = _POSIX_Get_error_after_wait( executing );
+
+  if (
+    error != EINTR
+     || ( *set & signo_to_mask( the_info->si_signo ) ) == 0
+  ) {
+    if ( error == ETIMEDOUT ) {
+      error = EAGAIN;
+    }
+
+    rtems_set_errno_and_return_minus_one( error );
   }
 
   return the_info->si_signo;

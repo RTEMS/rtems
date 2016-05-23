@@ -98,7 +98,7 @@ static void _POSIX_signals_Action_handler(
 {
   POSIX_API_Control  *api;
   int                 signo;
-  int                 hold_errno;
+  uint32_t            hold_errno;
 
   (void) action;
   _Thread_State_release( executing, lock_context );
@@ -198,7 +198,7 @@ bool _POSIX_signals_Unblock_thread(
   if ( _States_Is_interruptible_signal( the_thread->current_state ) ) {
 
     if ( (the_thread->Wait.option & mask) || (api->signals_unblocked & mask) ) {
-      the_thread->Wait.return_code = EINTR;
+      the_thread->Wait.return_code = STATUS_INTERRUPTED;
 
       the_info = (siginfo_t *) the_thread->Wait.return_argument;
 
@@ -240,7 +240,7 @@ bool _POSIX_signals_Unblock_thread(
      */
 
     if ( _States_Is_interruptible_by_signal( the_thread->current_state ) ) {
-      the_thread->Wait.return_code = EINTR;
+      the_thread->Wait.return_code = STATUS_INTERRUPTED;
       _Thread_queue_Extract_with_proxy( the_thread );
     }
   }

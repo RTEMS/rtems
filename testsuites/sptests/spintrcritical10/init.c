@@ -60,7 +60,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     sc = rtems_event_send(thread->Object.id, GREEN);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -68,7 +68,7 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     sc = rtems_event_send(thread->Object.id, RED);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -76,14 +76,14 @@ static void any_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == GREEN
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     if (ctx->hit) {
       rtems_test_assert(
@@ -157,7 +157,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     sc = rtems_event_send(thread->Object.id, GREEN);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -165,7 +165,7 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     sc = rtems_event_send(thread->Object.id, RED);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -173,14 +173,14 @@ static void all_satisfy_before_timeout(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == EVENTS
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == EVENTS
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     if (ctx->hit) {
       rtems_test_assert(
@@ -249,14 +249,14 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_SUCCESSFUL);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_SUCCESSFUL);
 
     _Thread_Timeout(&thread->Timer.Watchdog);
 
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_TIMEOUT);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_TIMEOUT);
 
     sc = rtems_event_send(thread->Object.id, EVENTS);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -264,7 +264,7 @@ static void timeout_before_satisfied(rtems_id timer, void *arg)
     rtems_test_assert(
       *(rtems_event_set *) thread->Wait.return_argument == DEADBEEF
     );
-    rtems_test_assert(thread->Wait.return_code == RTEMS_TIMEOUT);
+    rtems_test_assert(_Thread_Wait_get_status(thread) == STATUS_TIMEOUT);
 
     if (ctx->hit) {
       rtems_test_assert(

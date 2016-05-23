@@ -73,7 +73,7 @@ static Thread_Control *_CORE_RWLock_Flush_filter(
   return the_thread;
 }
 
-CORE_RWLock_Status _CORE_RWLock_Surrender(
+Status_Control _CORE_RWLock_Surrender(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
 )
@@ -90,7 +90,7 @@ CORE_RWLock_Status _CORE_RWLock_Surrender(
   if ( the_rwlock->current_state == CORE_RWLOCK_UNLOCKED){
     /* This is an error at the caller site */
     _CORE_RWLock_Release( the_rwlock, queue_context );
-    return CORE_RWLOCK_SUCCESSFUL;
+    return STATUS_SUCCESSFUL;
   }
 
   if ( the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_READING ) {
@@ -99,7 +99,7 @@ CORE_RWLock_Status _CORE_RWLock_Surrender(
     if ( the_rwlock->number_of_readers != 0 ) {
       /* must be unlocked again */
       _CORE_RWLock_Release( the_rwlock, queue_context );
-      return CORE_RWLOCK_SUCCESSFUL;
+      return STATUS_SUCCESSFUL;
     }
   }
 
@@ -121,5 +121,5 @@ CORE_RWLock_Status _CORE_RWLock_Surrender(
     _CORE_RWLock_Flush_filter,
     queue_context
   );
-  return CORE_RWLOCK_SUCCESSFUL;
+  return STATUS_SUCCESSFUL;
 }

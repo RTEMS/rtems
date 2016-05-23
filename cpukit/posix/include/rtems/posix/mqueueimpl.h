@@ -149,14 +149,6 @@ RTEMS_INLINE_ROUTINE unsigned int _POSIX_Message_queue_Priority_from_core(
 }
 
 /**
- *  @brief POSIX Message Queue Translate Score Return Code
- *
- */
-int _POSIX_Message_queue_Translate_core_message_queue_return_code(
-  uint32_t   the_message_queue_status
-);
-
-/**
  *  @brief POSIX Message Queue Remove from Namespace
  */
 RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (

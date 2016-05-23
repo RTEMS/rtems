@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( Message_queue_Control, message_queue.Wait_queue );
 
@@ -34,6 +35,7 @@ rtems_status_code rtems_message_queue_receive(
   Message_queue_Control *the_message_queue;
   Thread_queue_Context   queue_context;
   Thread_Control        *executing;
+  Status_Control         status;
 
   if ( buffer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -59,7 +61,7 @@ rtems_status_code rtems_message_queue_receive(
   );
 
   executing = _Thread_Executing;
-  _CORE_message_queue_Seize(
+  status = _CORE_message_queue_Seize(
     &the_message_queue->message_queue,
     executing,
     buffer,
@@ -68,7 +70,5 @@ rtems_status_code rtems_message_queue_receive(
     timeout,
     &queue_context
   );
-  return _Message_queue_Translate_core_message_queue_return_code(
-    executing->Wait.return_code
-  );
+  return _Status_Get( status );
 }

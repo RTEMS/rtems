@@ -91,14 +91,12 @@ static Per_CPU_Control *_Condition_Do_wait(
   executing = _Condition_Queue_acquire_critical( condition, lock_context );
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
 
-  executing->Wait.return_code = 0;
   _Thread_queue_Enqueue_critical(
     &condition->Queue.Queue,
     CONDITION_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SYS_LOCK_CONDITION,
     timeout,
-    ETIMEDOUT,
     lock_context
   );
 
@@ -152,7 +150,7 @@ int _Condition_Wait_timed(
   _Mutex_Release( _mutex );
   executing = cpu_self->executing;
   _Thread_Dispatch_enable( cpu_self );
-  eno = (int) executing->Wait.return_code;
+  eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_Acquire( _mutex );
 
   return eno;
@@ -212,7 +210,7 @@ int _Condition_Wait_recursive_timed(
   _Mutex_recursive_Release( _mutex );
   executing = cpu_self->executing;
   _Thread_Dispatch_enable( cpu_self );
-  eno = (int) executing->Wait.return_code;
+  eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_recursive_Acquire( _mutex );
   _mutex->_nest_level = nest_level;
 

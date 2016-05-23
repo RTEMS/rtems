@@ -23,14 +23,14 @@
 
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_semaphore_release( rtems_id id )
 {
-  Semaphore_Control     *the_semaphore;
-  CORE_mutex_Status      mutex_status;
-  CORE_semaphore_Status  semaphore_status;
-  rtems_attribute        attribute_set;
-  Thread_queue_Context   queue_context;
+  Semaphore_Control    *the_semaphore;
+  Thread_queue_Context  queue_context;
+  rtems_attribute       attribute_set;
+  Status_Control        status;
 
   the_semaphore = _Semaphore_Get(
     id,
@@ -49,28 +49,25 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   attribute_set = the_semaphore->attribute_set;
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    MRSP_Status mrsp_status;
-
-    mrsp_status = _MRSP_Surrender(
+    status = _MRSP_Surrender(
       &the_semaphore->Core_control.mrsp,
       _Thread_Executing,
       &queue_context
     );
-    return _Semaphore_Translate_MRSP_status_code( mrsp_status );
   } else
 #endif
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    mutex_status = _CORE_mutex_Surrender(
+    status = _CORE_mutex_Surrender(
       &the_semaphore->Core_control.mutex,
       &queue_context
     );
-    return _Semaphore_Translate_core_mutex_return_code( mutex_status );
   } else {
-    semaphore_status = _CORE_semaphore_Surrender(
+    status = _CORE_semaphore_Surrender(
       &the_semaphore->Core_control.semaphore,
       UINT32_MAX,
       &queue_context
     );
-    return _Semaphore_Translate_core_semaphore_return_code( semaphore_status );
   }
+
+  return _Status_Get( status );
 }

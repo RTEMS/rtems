@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/muteximpl.h>
+#include <rtems/posix/posixapi.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_Mutex_Control, Mutex.Wait_queue );
 
@@ -30,7 +31,7 @@ int _POSIX_Mutex_Lock_support(
 {
   POSIX_Mutex_Control  *the_mutex;
   Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
+  Status_Control        status;
 
   the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
@@ -38,15 +39,12 @@ int _POSIX_Mutex_Lock_support(
     return EINVAL;
   }
 
-  executing = _Thread_Executing;
-  _CORE_mutex_Seize(
+  status = _CORE_mutex_Seize(
     &the_mutex->Mutex,
-    executing,
+    _Thread_Executing,
     blocking,
     timeout,
     &queue_context
   );
-  return _POSIX_Mutex_Translate_core_mutex_return_code(
-    (CORE_mutex_Status) executing->Wait.return_code
-  );
+  return _POSIX_Get_error( status );
 }

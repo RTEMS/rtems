@@ -29,6 +29,7 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/resourceimpl.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/status.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
@@ -1450,20 +1451,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default_operations(
 }
 
 /**
- * @brief Sets the thread wait timeout code.
- *
- * @param[in] the_thread The thread.
- * @param[in] timeout_code The new thread wait timeout code.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
-  Thread_Control *the_thread,
-  uint32_t        timeout_code
-)
-{
-  the_thread->Wait.timeout_code = timeout_code;
-}
-
-/**
  * @brief Returns the object identifier of the object containing the current
  * thread wait queue.
  *
@@ -1478,6 +1465,13 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
  *   queue.
  */
 Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread );
+
+RTEMS_INLINE_ROUTINE Status_Control _Thread_Wait_get_status(
+  const Thread_Control *the_thread
+)
+{
+  return (Status_Control) the_thread->Wait.return_code;
+}
 
 /**
  * @brief General purpose thread wait timeout.

@@ -25,6 +25,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
@@ -63,7 +64,7 @@ rtems_status_code rtems_semaphore_create(
   Semaphore_Control          *the_semaphore;
   CORE_mutex_Attributes       the_mutex_attr;
   CORE_semaphore_Disciplines  semaphore_discipline;
-  CORE_mutex_Status           mutex_status;
+  Status_Control              status;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -155,21 +156,15 @@ rtems_status_code rtems_semaphore_create(
       semaphore_discipline,
       count
     );
+    status = STATUS_SUCCESSFUL;
 #if defined(RTEMS_SMP)
   } else if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    MRSP_Status mrsp_status = _MRSP_Initialize(
+    status = _MRSP_Initialize(
       &the_semaphore->Core_control.mrsp,
       priority_ceiling,
       _Thread_Get_executing(),
       count != 1
     );
-
-    if ( mrsp_status != MRSP_SUCCESSFUL ) {
-      _Semaphore_Free( the_semaphore );
-      _Objects_Allocator_unlock();
-
-      return _Semaphore_Translate_MRSP_status_code( mrsp_status );
-    }
 #endif
   } else {
     /*
@@ -202,18 +197,18 @@ rtems_status_code rtems_semaphore_create(
       the_mutex_attr.only_owner_release = false;
     }
 
-    mutex_status = _CORE_mutex_Initialize(
+    status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.mutex,
       _Thread_Get_executing(),
       &the_mutex_attr,
       count != 1
     );
+  }
 
-    if ( mutex_status == CORE_MUTEX_STATUS_CEILING_VIOLATED ) {
-      _Semaphore_Free( the_semaphore );
-      _Objects_Allocator_unlock();
-      return RTEMS_INVALID_PRIORITY;
-    }
+  if ( status != STATUS_SUCCESSFUL ) {
+    _Semaphore_Free( the_semaphore );
+    _Objects_Allocator_unlock();
+    return _Status_Get( status );
   }
 
   /*

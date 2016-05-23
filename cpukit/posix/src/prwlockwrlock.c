@@ -20,10 +20,8 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/posix/posixapi.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_RWLock_Control, RWLock.Wait_queue );
 
@@ -33,7 +31,7 @@ int pthread_rwlock_wrlock(
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
+  Status_Control        status;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
@@ -41,15 +39,12 @@ int pthread_rwlock_wrlock(
     return EINVAL;
   }
 
-  executing = _Thread_Executing;
-  _CORE_RWLock_Seize_for_writing(
+  status = _CORE_RWLock_Seize_for_writing(
     &the_rwlock->RWLock,
-    executing,
+    _Thread_Executing,
     true,          /* do not timeout -- wait forever */
     0,
     &queue_context
   );
-  return _POSIX_RWLock_Translate_core_RWLock_return_code(
-    (CORE_RWLock_Status) executing->Wait.return_code
-  );
+  return _POSIX_Get_error( status );
 }

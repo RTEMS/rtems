@@ -87,6 +87,7 @@ include_rtems_score_HEADERS += include/rtems/score/stack.h
 include_rtems_score_HEADERS += include/rtems/score/stackimpl.h
 include_rtems_score_HEADERS += include/rtems/score/states.h
 include_rtems_score_HEADERS += include/rtems/score/statesimpl.h
+include_rtems_score_HEADERS += include/rtems/score/status.h
 include_rtems_score_HEADERS += include/rtems/score/sysstate.h
 include_rtems_score_HEADERS += include/rtems/score/thread.h
 include_rtems_score_HEADERS += include/rtems/score/threadimpl.h

@@ -22,10 +22,11 @@
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/wkspace.h>
 
-CORE_message_queue_Status _CORE_message_queue_Submit(
+Status_Control _CORE_message_queue_Submit(
   CORE_message_queue_Control       *the_message_queue,
   Thread_Control                   *executing,
   const void                       *buffer,
@@ -41,7 +42,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
 
   if ( size > the_message_queue->maximum_message_size ) {
     _CORE_message_queue_Release( the_message_queue, queue_context );
-    return CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE;
+    return STATUS_MESSAGE_INVALID_SIZE;
   }
 
   /*
@@ -56,7 +57,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     queue_context
   );
   if ( the_thread != NULL ) {
-    return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+    return STATUS_SUCCESSFUL;
   }
 
   /*
@@ -95,12 +96,12 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
     _CORE_message_queue_Release( the_message_queue, queue_context );
 #endif
 
-    return CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+    return STATUS_SUCCESSFUL;
   }
 
   #if !defined(RTEMS_SCORE_COREMSG_ENABLE_BLOCKING_SEND)
     _CORE_message_queue_Release( the_message_queue, queue_context );
-    return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
+    return STATUS_TOO_MANY;
   #else
     /*
      *  No message buffers were available so we may need to return an
@@ -109,7 +110,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      */
     if ( !wait ) {
       _CORE_message_queue_Release( the_message_queue, queue_context );
-      return CORE_MESSAGE_QUEUE_STATUS_TOO_MANY;
+      return STATUS_TOO_MANY;
     }
 
     /*
@@ -118,7 +119,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      */
     if ( _ISR_Is_in_progress() ) {
       _CORE_message_queue_Release( the_message_queue, queue_context );
-      return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED;
+      return STATUS_MESSAGE_QUEUE_WAIT_IN_ISR;
     }
 
     /*
@@ -127,7 +128,6 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
      *  it as a variable.  Doing this emphasizes how dangerous it
      *  would be to use this variable prior to here.
      */
-    executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
     executing->Wait.return_argument_second.immutable_object = buffer;
     executing->Wait.option = (uint32_t) size;
     executing->Wait.count = submit_type;
@@ -138,9 +138,8 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
       executing,
       STATES_WAITING_FOR_MESSAGE,
       timeout,
-      CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
       &queue_context->Lock_context
     );
-    return executing->Wait.return_code;
+    return _Thread_Wait_get_status( executing );
   #endif
 }

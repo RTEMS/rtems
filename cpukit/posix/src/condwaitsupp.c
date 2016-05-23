@@ -20,8 +20,10 @@
 
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/muteximpl.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/status.h>
 #include <rtems/score/threaddispatch.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_Condition_variables_Control, Wait_queue );
@@ -36,9 +38,9 @@ int _POSIX_Condition_variables_Wait_support(
   POSIX_Condition_variables_Control *the_cond;
   POSIX_Mutex_Control               *the_mutex;
   Thread_queue_Context               queue_context;
-  int                                status;
-  int                                mutex_status;
-  CORE_mutex_Status                  core_mutex_status;
+  int                                error;
+  int                                mutex_error;
+  Status_Control                     status;
   Per_CPU_Control                   *cpu_self;
   Thread_Control                    *executing;
 
@@ -84,28 +86,23 @@ int _POSIX_Condition_variables_Wait_support(
   }
 
   if ( !already_timedout ) {
-    executing->Wait.return_code = 0;
     _Thread_queue_Enqueue_critical(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_CONDITION_VARIABLE,
       timeout,
-      ETIMEDOUT,
       &queue_context.Lock_context
     );
   } else {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );
-    executing->Wait.return_code = ETIMEDOUT;
+    executing->Wait.return_code = STATUS_TIMEOUT;
   }
 
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  core_mutex_status = _CORE_mutex_Surrender(
-    &the_mutex->Mutex,
-    &queue_context
-  );
-  _Assert( core_mutex_status == CORE_MUTEX_STATUS_SUCCESSFUL );
-  (void) core_mutex_status;
+  status = _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
+  _Assert( status == STATUS_SUCCESSFUL );
+  (void) status;
 
   /*
    *  Switch ourself out because we blocked as a result of the
@@ -114,7 +111,7 @@ int _POSIX_Condition_variables_Wait_support(
 
   _Thread_Dispatch_enable( cpu_self );
 
-  status = (int) executing->Wait.return_code;
+  error = _POSIX_Get_error_after_wait( executing );
 
   /*
    *  If the thread is interrupted, while in the thread queue, by
@@ -124,18 +121,18 @@ int _POSIX_Condition_variables_Wait_support(
    *  woken up a pthread_cond_signal() or a pthread_cond_broadcast().
    */
 
-  if ( status == EINTR ) {
-    status = 0;
+  if ( error == EINTR ) {
+    error = 0;
   }
 
   /*
    *  When we get here the dispatch disable level is 0.
    */
 
-  mutex_status = pthread_mutex_lock( mutex );
-  if ( mutex_status != 0 ) {
+  mutex_error = pthread_mutex_lock( mutex );
+  if ( mutex_error != 0 ) {
     return EINVAL;
   }
 
-  return status;
+  return error;
 }

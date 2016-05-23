@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 RTEMS_STATIC_ASSERT(
   sizeof(Semaphore_MP_Packet) <= MP_PACKET_MINIMUM_PACKET_SIZE,
@@ -80,6 +81,7 @@ static rtems_status_code _Semaphore_MP_Send_request_packet(
 )
 {
   Semaphore_MP_Packet *the_packet;
+  Status_Control       status;
 
   switch ( operation ) {
 
@@ -97,13 +99,12 @@ static rtems_status_code _Semaphore_MP_Send_request_packet(
       the_packet->Prefix.id         = semaphore_id;
       the_packet->option_set        = option_set;
 
-      return _MPCI_Send_request_packet(
-          _Objects_Get_node( semaphore_id ),
-          &the_packet->Prefix,
-          STATES_WAITING_FOR_SEMAPHORE,
-          RTEMS_TIMEOUT
-        );
-      break;
+      status = _MPCI_Send_request_packet(
+        _Objects_Get_node( semaphore_id ),
+        &the_packet->Prefix,
+        STATES_WAITING_FOR_SEMAPHORE
+      );
+      return _Status_Get( status );
 
     case SEMAPHORE_MP_ANNOUNCE_CREATE:
     case SEMAPHORE_MP_ANNOUNCE_DELETE:

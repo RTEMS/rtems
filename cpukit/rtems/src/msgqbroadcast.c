@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_message_queue_broadcast(
   rtems_id    id,
@@ -27,9 +28,9 @@ rtems_status_code rtems_message_queue_broadcast(
   uint32_t   *count
 )
 {
-  Message_queue_Control     *the_message_queue;
-  Thread_queue_Context       queue_context;
-  CORE_message_queue_Status  status;
+  Message_queue_Control *the_message_queue;
+  Thread_queue_Context   queue_context;
+  Status_Control         status;
 
   if ( buffer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -60,5 +61,5 @@ rtems_status_code rtems_message_queue_broadcast(
     count,
     &queue_context
   );
-  return _Message_queue_Translate_core_message_queue_return_code( status );
+  return _Status_Get( status );
 }

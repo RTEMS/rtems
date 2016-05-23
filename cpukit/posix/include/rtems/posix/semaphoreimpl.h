@@ -34,12 +34,6 @@ extern "C" {
  */
 extern Objects_Information _POSIX_Semaphore_Information;
 
-/**
- *  This defines the mapping from Score status codes to POSIX return codes.
- */
-extern const int
-  _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1];
-
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )
 {
@@ -108,27 +102,6 @@ int _POSIX_Semaphore_Wait_support(
   bool                 blocking,
   Watchdog_Interval    timeout
 );
-
-/**
- *  @brief POSIX Semaphore Translate Score to POSIX Return Codes
- *
- *  A support routine which converts core semaphore status codes into the
- *  appropriate POSIX status values.
- */
-RTEMS_INLINE_ROUTINE int
-_POSIX_Semaphore_Translate_core_semaphore_return_code(
-  CORE_semaphore_Status  the_semaphore_status
-)
-{
-  /*
-   *  Internal consistency check for bad status from SuperCore
-   */
-  #if defined(RTEMS_DEBUG)
-    if ( the_semaphore_status > CORE_SEMAPHORE_STATUS_LAST )
-      return EINVAL;
-  #endif
-  return _POSIX_Semaphore_Return_codes[the_semaphore_status];
-}
  
 /**
  *  @brief POSIX Semaphore Namespace Remove

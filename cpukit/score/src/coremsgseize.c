@@ -22,10 +22,10 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
 
-void _CORE_message_queue_Seize(
+Status_Control _CORE_message_queue_Seize(
   CORE_message_queue_Control *the_message_queue,
   Thread_Control             *executing,
   void                       *buffer,
@@ -37,7 +37,6 @@ void _CORE_message_queue_Seize(
 {
   CORE_message_queue_Buffer_control *the_message;
 
-  executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
   the_message = _CORE_message_queue_Get_pending_message( the_message_queue );
   if ( the_message != NULL ) {
     the_message_queue->number_of_pending_messages -= 1;
@@ -58,7 +57,7 @@ void _CORE_message_queue_Seize(
        */
       _CORE_message_queue_Free_message_buffer(the_message_queue, the_message);
       _CORE_message_queue_Release( the_message_queue, queue_context );
-      return;
+      return STATUS_SUCCESSFUL;
     #else
     {
       Thread_Control   *the_thread;
@@ -80,7 +79,7 @@ void _CORE_message_queue_Seize(
           the_message
         );
         _CORE_message_queue_Release( the_message_queue, queue_context );
-        return;
+        return STATUS_SUCCESSFUL;
       }
 
       /*
@@ -101,15 +100,14 @@ void _CORE_message_queue_Seize(
         the_thread,
         queue_context
       );
-      return;
+      return STATUS_SUCCESSFUL;
     }
     #endif
   }
 
   if ( !wait ) {
     _CORE_message_queue_Release( the_message_queue, queue_context );
-    executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT;
-    return;
+    return STATUS_UNSATISFIED;
   }
 
   executing->Wait.return_argument_second.mutable_object = buffer;
@@ -122,7 +120,7 @@ void _CORE_message_queue_Seize(
     executing,
     STATES_WAITING_FOR_MESSAGE,
     timeout,
-    CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
     &queue_context->Lock_context
   );
+  return _Thread_Wait_get_status( executing );
 }

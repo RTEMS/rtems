@@ -43,7 +43,7 @@ rtems_status_code rtems_event_receive(
     event = &api->Event;
 
     if ( !_Event_sets_Is_empty( event_in ) ) {
-      _Event_Seize(
+      sc = _Event_Seize(
         event_in,
         option_set,
         ticks,
@@ -54,8 +54,6 @@ rtems_status_code rtems_event_receive(
         STATES_WAITING_FOR_EVENT,
         &lock_context
       );
-
-      sc = executing->Wait.return_code;
     } else {
       *event_out = event->pending_events;
       _Thread_Lock_release_default( executing, &lock_context );

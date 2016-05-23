@@ -45,7 +45,7 @@ int _POSIX_Message_queue_Send_support(
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;
-  CORE_message_queue_Status    msg_status;
+  Status_Control               status;
   bool                         do_wait;
   Thread_Control              *executing;
 
@@ -92,7 +92,7 @@ int _POSIX_Message_queue_Send_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
-  msg_status = _CORE_message_queue_Submit(
+  status = _CORE_message_queue_Submit(
     &the_mq->Message_queue,
     executing,
     msg_ptr,
@@ -102,14 +102,5 @@ int _POSIX_Message_queue_Send_support(
     timeout,
     &queue_context
   );
-
-  if ( msg_status != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
-    rtems_set_errno_and_return_minus_one(
-      _POSIX_Message_queue_Translate_core_message_queue_return_code(
-        msg_status
-      )
-    );
-  }
-
-  return 0;
+  return _POSIX_Zero_or_minus_one_plus_errno( status );
 }

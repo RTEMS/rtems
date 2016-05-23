@@ -443,17 +443,16 @@ static void _Thread_Finalize_life_change(
 }
 
 void _Thread_Join(
-  Thread_Control    *the_thread,
-  States_Control     waiting_for_join,
-  Thread_Control    *executing,
-  ISR_lock_Context  *lock_context
+  Thread_Control   *the_thread,
+  States_Control    waiting_for_join,
+  Thread_Control   *executing,
+  ISR_lock_Context *lock_context
 )
 {
   _Assert( the_thread != executing );
   _Assert( _Thread_State_is_owner( the_thread ) );
 
 #if defined(RTEMS_POSIX_API)
-  executing->Wait.return_code = 0;
   executing->Wait.return_argument = NULL;
 #endif
 
@@ -463,7 +462,6 @@ void _Thread_Join(
     executing,
     waiting_for_join,
     WATCHDOG_NO_TIMEOUT,
-    0,
     lock_context
   );
 }

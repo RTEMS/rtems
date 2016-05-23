@@ -20,8 +20,9 @@
 
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/threadimpl.h>
 
-void _CORE_barrier_Seize(
+Status_Control _CORE_barrier_Seize(
   CORE_barrier_Control *the_barrier,
   Thread_Control       *executing,
   bool                  wait,
@@ -30,8 +31,6 @@ void _CORE_barrier_Seize(
 )
 {
   uint32_t number_of_waiting_threads;
-
-  executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
 
   _CORE_barrier_Acquire_critical( the_barrier, queue_context );
 
@@ -42,8 +41,8 @@ void _CORE_barrier_Seize(
     _CORE_barrier_Is_automatic( &the_barrier->Attributes )
       && number_of_waiting_threads == the_barrier->Attributes.maximum_count
   ) {
-    executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
     _CORE_barrier_Surrender( the_barrier, queue_context );
+    return STATUS_BARRIER_AUTOMATICALLY_RELEASED;
   } else {
     the_barrier->number_of_waiting_threads = number_of_waiting_threads;
     _Thread_queue_Enqueue_critical(
@@ -52,8 +51,8 @@ void _CORE_barrier_Seize(
       executing,
       STATES_WAITING_FOR_BARRIER,
       timeout,
-      CORE_BARRIER_TIMEOUT,
       &queue_context->Lock_context
     );
+    return _Thread_Wait_get_status( executing );
   }
 }

@@ -58,7 +58,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
     );
     _CORE_mutex_Flush(
       &the_semaphore->Core_control.mutex,
-      _CORE_mutex_Unsatisfied_nowait,
+      _Thread_queue_Flush_status_unavailable,
       &queue_context
     );
   } else {

@@ -40,12 +40,6 @@ extern Objects_Information _POSIX_Mutex_Information;
 extern pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 /**
- *  This array contains a mapping from Score Mutex return codes to
- *  POSIX return codes.
- */
-extern const int _POSIX_Mutex_Return_codes[CORE_MUTEX_STATUS_LAST + 1];
-
-/**
  *  @brief POSIX Mutex Allocate
  *
  *  This function allocates a mutexes control block from
@@ -81,42 +75,6 @@ int _POSIX_Mutex_Lock_support(
   bool                       blocking,
   Watchdog_Interval          timeout
 );
-
-/**
- * @brief Convert Score mutex status codes into POSIX status values
- *
- * A support routine which converts core mutex status codes into the
- * appropriate POSIX status values.
- *
- * @param[in] the_mutex_status is the mutex status code to translate
- *
- * @retval 0 Mutex status code indicates the operation completed successfully.
- * @retval EBUSY Mutex status code indicates that the operation unable to 
- *         complete immediately because the resource was unavailable.
- * @retval EDEADLK Mutex status code indicates that an attempt was made to
- *         relock a mutex for which nesting is not configured.
- * @retval EPERM Mutex status code indicates that an attempt was made to 
- *         release a mutex by a thread other than the thread which locked it.
- * @retval EINVAL Mutex status code indicates that the thread was blocked
- *         waiting for an operation to complete and the mutex was deleted.
- * @retval ETIMEDOUT Mutex status code indicates that the calling task was
- *         willing to block but the operation was unable to complete
- *         within the time allotted because the resource never became
- *         available.
- */
-RTEMS_INLINE_ROUTINE int _POSIX_Mutex_Translate_core_mutex_return_code(
-  CORE_mutex_Status  the_mutex_status
-)
-{
-  /*
-   *  Internal consistency check for bad status from SuperCore
-   */
-  #if defined(RTEMS_DEBUG)
-    if ( the_mutex_status > CORE_MUTEX_STATUS_LAST )
-      return EINVAL;
-  #endif
-  return _POSIX_Mutex_Return_codes[the_mutex_status];
-}
 
 /**
  *  @brief POSIX Mutex Get (Interrupt Disable)

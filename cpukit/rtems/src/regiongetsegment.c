@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/statesimpl.h>
 
@@ -85,13 +86,12 @@ rtems_status_code rtems_region_get_segment(
         the_region->wait_operations,
         executing,
         STATES_WAITING_FOR_SEGMENT,
-        timeout,
-        RTEMS_TIMEOUT
+        timeout
       );
 
       _Thread_Dispatch_enable( cpu_self );
 
-      return (rtems_status_code) executing->Wait.return_code;
+      return _Status_Get_after_wait( executing );
     }
   }
 

@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/mqueueimpl.h>
+#include <rtems/posix/posixapi.h>
 
 #include <fcntl.h>
 
@@ -48,6 +49,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
   size_t                       length_out;
   bool                         do_wait;
   Thread_Control              *executing;
+  Status_Control               status;
 
   the_mq = _POSIX_Message_queue_Get( mqdes, &queue_context );
 
@@ -95,7 +97,7 @@ ssize_t _POSIX_Message_queue_Receive_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
-  _CORE_message_queue_Seize(
+  status = _CORE_message_queue_Seize(
     &the_mq->Message_queue,
     executing,
     msg_ptr,
@@ -111,12 +113,8 @@ ssize_t _POSIX_Message_queue_Receive_support(
     );
   }
 
-  if ( executing->Wait.return_code != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
-    rtems_set_errno_and_return_minus_one(
-      _POSIX_Message_queue_Translate_core_message_queue_return_code(
-        executing->Wait.return_code
-      )
-    );
+  if ( status != STATUS_SUCCESSFUL ) {
+    rtems_set_errno_and_return_minus_one( _POSIX_Get_error( status ) );
   }
 
   return length_out;

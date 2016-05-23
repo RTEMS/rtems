@@ -119,7 +119,6 @@ static void _Mutex_Acquire_slow(
     executing,
     STATES_WAITING_FOR_SYS_LOCK_MUTEX,
     timeout,
-    ETIMEDOUT,
     lock_context
   );
 }
@@ -262,10 +261,9 @@ int _Mutex_Acquire_timed(
         break;
     }
 
-    executing->Wait.return_code = 0;
     _Mutex_Acquire_slow( mutex, owner, executing, ticks, &lock_context );
 
-    return (int) executing->Wait.return_code;
+    return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }
 }
 
@@ -382,7 +380,6 @@ int _Mutex_recursive_Acquire_timed(
         break;
     }
 
-    executing->Wait.return_code = 0;
     _Mutex_Acquire_slow(
       &mutex->Mutex,
       owner,
@@ -391,7 +388,7 @@ int _Mutex_recursive_Acquire_timed(
       &lock_context
     );
 
-    return (int) executing->Wait.return_code;
+    return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }
 }
 

@@ -26,6 +26,7 @@
 #include <errno.h>
 
 #include <rtems/posix/threadsup.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/statesimpl.h>
 
@@ -72,8 +73,8 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
       &lock_context
     );
 
-    if ( executing->Wait.return_code != 0 ) {
-      _Assert( executing->Wait.return_code == EINTR );
+    if ( _POSIX_Get_error_after_wait( executing ) != 0 ) {
+      _Assert( _POSIX_Get_error_after_wait( executing ) == EINTR );
       return EINTR;
     }
 

@@ -38,20 +38,6 @@ extern "C" {
 extern Objects_Information _POSIX_Barrier_Information;
 
 /**
- * @brief POSIX translate barrier return code.
- * 
- * This routine translates SuperCore Barrier status codes into the
- * corresponding POSIX ones.
- *
- * @param[in] the_barrier_status is the SuperCore status.
- *
- * @return the corresponding POSIX status
- */
-int _POSIX_Barrier_Translate_core_barrier_return_code(
-  CORE_barrier_Status  the_barrier_status
-);
-
-/**
  * @brief Allocate a barrier control block.
  *
  * This function allocates a barrier control block from

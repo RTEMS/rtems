@@ -23,7 +23,7 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/thread.h>
 
-CORE_mutex_Status _CORE_mutex_Surrender(
+Status_Control _CORE_mutex_Surrender(
   CORE_mutex_Control   *the_mutex,
   Thread_queue_Context *queue_context
 )
@@ -44,7 +44,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   if ( the_mutex->Attributes.only_owner_release ) {
     if ( !_Thread_Is_executing( holder ) ) {
       _ISR_lock_ISR_enable( &queue_context->Lock_context );
-      return CORE_MUTEX_STATUS_NOT_OWNER_OF_RESOURCE;
+      return STATUS_NOT_OWNER;
     }
   }
 
@@ -54,7 +54,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 
   if ( !the_mutex->nest_count ) {
     _CORE_mutex_Release( the_mutex, queue_context );
-    return CORE_MUTEX_STATUS_SUCCESSFUL;
+    return STATUS_SUCCESSFUL;
   }
 
   the_mutex->nest_count--;
@@ -69,12 +69,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
       switch ( the_mutex->Attributes.lock_nesting_behavior ) {
         case CORE_MUTEX_NESTING_ACQUIRES:
           _CORE_mutex_Release( the_mutex, queue_context );
-          return CORE_MUTEX_STATUS_SUCCESSFUL;
+          return STATUS_SUCCESSFUL;
         #if defined(RTEMS_POSIX_API)
           case CORE_MUTEX_NESTING_IS_ERROR:
             /* should never occur */
             _CORE_mutex_Release( the_mutex, queue_context );
-            return CORE_MUTEX_STATUS_NESTING_NOT_ALLOWED;
+            return STATUS_NESTING_NOT_ALLOWED;
         #endif
         case CORE_MUTEX_NESTING_BLOCKS:
           /* Currently no API exercises this behavior. */
@@ -83,7 +83,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     #else
       _CORE_mutex_Release( the_mutex, queue_context );
       /* must be CORE_MUTEX_NESTING_ACQUIRES or we wouldn't be here */
-      return CORE_MUTEX_STATUS_SUCCESSFUL;
+      return STATUS_SUCCESSFUL;
     #endif
   }
 
@@ -179,5 +179,5 @@ CORE_mutex_Status _CORE_mutex_Surrender(
     }
   }
 
-  return CORE_MUTEX_STATUS_SUCCESSFUL;
+  return STATUS_SUCCESSFUL;
 }

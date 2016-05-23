@@ -372,22 +372,20 @@ rtems_bsdnet_semaphore_obtain (void)
 {
 #ifdef RTEMS_FAST_MUTEX
 	Thread_queue_Context queue_context;
-	Thread_Control *executing;
+	Status_Control status;
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	_Thread_queue_Context_initialize(&queue_context, NULL);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
-	executing = _Thread_Executing;
-	_CORE_mutex_Seize (
+	status = _CORE_mutex_Seize (
 		&the_networkSemaphore->Core_control.mutex,
-		executing,
+		_Thread_Executing,
 		1,		/* wait */
 		0,		/* forever */
 		&queue_context
 		);
-	if (executing->Wait.return_code)
-		rtems_panic ("rtems-net: can't obtain network sema: %d\n",
-                 executing->Wait.return_code);
+	if (status != STATUS_SUCCESSFUL)
+		rtems_panic ("rtems-net: can't obtain network sema: %d\n", status);
 #else
 	rtems_status_code sc;
 
@@ -406,7 +404,7 @@ rtems_bsdnet_semaphore_release (void)
 {
 #ifdef RTEMS_FAST_MUTEX
 	Thread_queue_Context queue_context;
-	CORE_mutex_Status status;
+	Status_Control status;
 
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
@@ -416,7 +414,7 @@ rtems_bsdnet_semaphore_release (void)
 		&the_networkSemaphore->Core_control.mutex,
 		&queue_context
 		);
-	if (status != CORE_MUTEX_STATUS_SUCCESSFUL)
+	if (status != STATUS_SUCCESSFUL)
 		rtems_panic ("rtems-net: can't release network sema: %i\n");
 #else
 	rtems_status_code sc;

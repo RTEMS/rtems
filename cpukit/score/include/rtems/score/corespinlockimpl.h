@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_CORESPINLOCKIMPL_H
 
 #include <rtems/score/corespinlock.h>
+#include <rtems/score/status.h>
 #include <rtems/score/watchdog.h>
 
 #include <string.h>
@@ -32,37 +33,6 @@ extern "C" {
  * @addtogroup ScoreSpinlock
  */
 /**@{**/
-
-/**
- *  Core Spinlock handler return statuses.
- */
-typedef enum {
-  /** This status indicates that the operation completed successfully. */
-  CORE_SPINLOCK_SUCCESSFUL,
-  /** This status indicates that the current thread already holds the spinlock.
-   *  An attempt to relock it will result in deadlock.
-   */
-  CORE_SPINLOCK_HOLDER_RELOCKING,
-  /** This status indicates that the current thread is attempting to unlock a
-   *  spinlock that is held by another thread.
-   */
-  CORE_SPINLOCK_NOT_HOLDER,
-  /** This status indicates that a thread reached the limit of time it
-   *  was willing to wait on the spin lock.
-   */
-  CORE_SPINLOCK_TIMEOUT,
-  /** This status indicates that a thread is currently waiting for this
-   *  spin lock.
-   */
-  CORE_SPINLOCK_IS_BUSY,
-  /** This status indicates that the spinlock is currently locked and thus
-   *  unavailable.
-   */
-  CORE_SPINLOCK_UNAVAILABLE
-}   CORE_spinlock_Status;
-
-/** This is a shorthand for the last status code. */
-#define CORE_SPINLOCK_STATUS_LAST CORE_SPINLOCK_UNAVAILABLE
 
 /** This indicates the lock is available. */
 #define CORE_SPINLOCK_UNLOCKED 0
@@ -115,7 +85,7 @@ RTEMS_INLINE_ROUTINE void _CORE_spinlock_Release(
  * @retval A status is returned which indicates the success or failure of
  *         this operation.
  */
-CORE_spinlock_Status _CORE_spinlock_Seize(
+Status_Control _CORE_spinlock_Seize(
   CORE_spinlock_Control *the_spinlock,
   bool                   wait,
   Watchdog_Interval      timeout,
@@ -130,7 +100,7 @@ CORE_spinlock_Status _CORE_spinlock_Seize(
  *
  *  @param[in] the_spinlock is the spinlock to surrender
  */
-CORE_spinlock_Status _CORE_spinlock_Surrender(
+Status_Control _CORE_spinlock_Surrender(
   CORE_spinlock_Control *the_spinlock,
   ISR_lock_Context      *lock_context
 );

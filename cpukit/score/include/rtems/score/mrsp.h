@@ -51,31 +51,6 @@ extern "C" {
  * @{
  */
 
-/**
- * @brief MrsP status code.
- *
- * The values are chosen to directly map to RTEMS status codes.  In case this
- * implementation is used for other APIs, then for example the errno values can
- * be added with a bit shift.
- */
-typedef enum {
-  MRSP_SUCCESSFUL = 0,
-  MRSP_TIMEOUT = 6,
-  MRSP_INVALID_NUMBER = 10,
-  MRSP_RESOUCE_IN_USE = 12,
-  MRSP_UNSATISFIED = 13,
-  MRSP_INCORRECT_STATE = 14,
-  MRSP_INVALID_PRIORITY = 19,
-  MRSP_NOT_OWNER_OF_RESOURCE = 23,
-  MRSP_NO_MEMORY = 26,
-
-  /**
-   * @brief Internal state used for MRSP_Rival::status to indicate that this
-   * rival waits for resource ownership.
-   */
-  MRSP_WAIT_FOR_OWNERSHIP = 255
-} MRSP_Status;
-
 typedef struct MRSP_Control MRSP_Control;
 
 /**
@@ -124,10 +99,10 @@ typedef struct {
    * @brief The rival status.
    *
    * Initially the status is set to MRSP_WAIT_FOR_OWNERSHIP.  The rival will
-   * busy wait until a status change happens.  This can be MRSP_SUCCESSFUL or
-   * MRSP_TIMEOUT.  State changes are protected by the MrsP control lock.
+   * busy wait until a status change happens.  This can be STATUS_SUCCESSFUL or
+   * STATUS_TIMEOUT.  State changes are protected by the MrsP control lock.
    */
-  volatile MRSP_Status status;
+  volatile int status;
 
   /**
    * @brief Watchdog for timeouts.

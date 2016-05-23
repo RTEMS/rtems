@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_semaphore_delete(
   rtems_id   id
@@ -52,20 +53,20 @@ rtems_status_code rtems_semaphore_delete(
 
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    MRSP_Status mrsp_status;
+    Status_Control status;
 
     _MRSP_Acquire_critical(
       &the_semaphore->Core_control.mrsp,
       &queue_context
     );
-    mrsp_status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
-    if ( mrsp_status != MRSP_SUCCESSFUL ) {
+    status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
+    if ( status != STATUS_SUCCESSFUL ) {
       _MRSP_Release(
         &the_semaphore->Core_control.mrsp,
         &queue_context
       );
       _Objects_Allocator_unlock();
-      return _Semaphore_Translate_MRSP_status_code( mrsp_status );
+      return _Status_Get( status );
     }
   } else
 #endif
@@ -103,7 +104,7 @@ rtems_status_code rtems_semaphore_delete(
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
     _CORE_mutex_Flush(
       &the_semaphore->Core_control.mutex,
-      _CORE_mutex_Was_deleted,
+      _Thread_queue_Flush_status_object_was_deleted,
       &queue_context
     );
     _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );

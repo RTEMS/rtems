@@ -19,11 +19,12 @@
 #endif
 
 #include <rtems/score/corerwlockimpl.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/watchdog.h>
 
-void _CORE_RWLock_Seize_for_reading(
+Status_Control _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control  *the_rwlock,
   Thread_Control       *executing,
   bool                  wait,
@@ -44,8 +45,7 @@ void _CORE_RWLock_Seize_for_reading(
       the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_READING;
       the_rwlock->number_of_readers += 1;
       _CORE_RWLock_Release( the_rwlock, queue_context );
-      executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
-      return;
+      return STATUS_SUCCESSFUL;
 
     case CORE_RWLOCK_LOCKED_FOR_READING: {
       Thread_Control *waiter;
@@ -56,8 +56,7 @@ void _CORE_RWLock_Seize_for_reading(
       if ( !waiter ) {
         the_rwlock->number_of_readers += 1;
         _CORE_RWLock_Release( the_rwlock, queue_context );
-        executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
-        return;
+        return STATUS_SUCCESSFUL;
       }
       break;
     }
@@ -71,16 +70,14 @@ void _CORE_RWLock_Seize_for_reading(
 
   if ( !wait ) {
     _CORE_RWLock_Release( the_rwlock, queue_context );
-    executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
-    return;
+    return STATUS_UNAVAILABLE;
   }
 
   /*
    *  We need to wait to enter this critical section
    */
 
-  executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
-  executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+  executing->Wait.option = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
 
   _Thread_queue_Enqueue_critical(
      &the_rwlock->Wait_queue.Queue,
@@ -88,7 +85,7 @@ void _CORE_RWLock_Seize_for_reading(
      executing,
      STATES_WAITING_FOR_RWLOCK,
      timeout,
-     CORE_RWLOCK_TIMEOUT,
      &queue_context->Lock_context
   );
+  return _Thread_Wait_get_status( executing );
 }

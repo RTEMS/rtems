@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/barrierimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( Barrier_Control, Barrier.Wait_queue );
 
@@ -29,7 +30,7 @@ rtems_status_code rtems_barrier_wait(
 {
   Barrier_Control      *the_barrier;
   Thread_queue_Context  queue_context;
-  Thread_Control       *executing;
+  Status_Control        status;
 
   the_barrier = _Barrier_Get( id, &queue_context );
 
@@ -37,15 +38,12 @@ rtems_status_code rtems_barrier_wait(
     return RTEMS_INVALID_ID;
   }
 
-  executing = _Thread_Executing;
-  _CORE_barrier_Seize(
+  status = _CORE_barrier_Seize(
     &the_barrier->Barrier,
-    executing,
+    _Thread_Executing,
     true,
     timeout,
     &queue_context
   );
-  return _Barrier_Translate_core_barrier_return_code(
-    executing->Wait.return_code
-  );
+  return _Status_Get( status );
 }

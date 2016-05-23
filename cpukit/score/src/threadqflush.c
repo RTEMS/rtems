@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/status.h>
 
 Thread_Control *_Thread_queue_Flush_default_filter(
   Thread_Control       *the_thread,
@@ -26,6 +27,32 @@ Thread_Control *_Thread_queue_Flush_default_filter(
   Thread_queue_Context *queue_context
 )
 {
+  (void) queue;
+  (void) queue_context;
+  return the_thread;
+}
+
+Thread_Control *_Thread_queue_Flush_status_object_was_deleted(
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
+)
+{
+  the_thread->Wait.return_code = STATUS_OBJECT_WAS_DELETED;
+
+  (void) queue;
+  (void) queue_context;
+  return the_thread;
+}
+
+Thread_Control *_Thread_queue_Flush_status_unavailable(
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
+)
+{
+  the_thread->Wait.return_code = STATUS_UNAVAILABLE;
+
   (void) queue;
   (void) queue_context;
   return the_thread;

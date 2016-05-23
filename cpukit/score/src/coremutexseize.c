@@ -24,7 +24,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
-void _CORE_mutex_Seize_interrupt_blocking(
+Status_Control _CORE_mutex_Seize_interrupt_blocking(
   CORE_mutex_Control  *the_mutex,
   Thread_Control      *executing,
   Watchdog_Interval    timeout,
@@ -67,12 +67,13 @@ void _CORE_mutex_Seize_interrupt_blocking(
     executing,
     STATES_WAITING_FOR_MUTEX,
     timeout,
-    CORE_MUTEX_TIMEOUT,
     lock_context
   );
 
 #if !defined(RTEMS_SMP)
   _Thread_Dispatch_enable( _Per_CPU_Get() );
 #endif
+
+  return _Thread_Wait_get_status( executing );
 }
 

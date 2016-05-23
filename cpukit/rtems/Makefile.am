@@ -129,7 +129,6 @@ librtems_a_SOURCES += src/barrier.c
 librtems_a_SOURCES += src/barriercreate.c
 librtems_a_SOURCES += src/barrierdelete.c
 librtems_a_SOURCES += src/barrierident.c
-librtems_a_SOURCES += src/barriertranslatereturncode.c
 librtems_a_SOURCES += src/barrierrelease.c
 librtems_a_SOURCES += src/barrierwait.c
 
@@ -170,7 +169,6 @@ librtems_a_SOURCES += src/msgqgetnumberpending.c
 librtems_a_SOURCES += src/msgqident.c
 librtems_a_SOURCES += src/msgqreceive.c
 librtems_a_SOURCES += src/msgqsend.c
-librtems_a_SOURCES += src/msgqtranslatereturncode.c
 librtems_a_SOURCES += src/msgqurgent.c
 
 ## SEMAPHORE_C_FILES
@@ -181,7 +179,6 @@ librtems_a_SOURCES += src/semident.c
 librtems_a_SOURCES += src/semobtain.c
 librtems_a_SOURCES += src/semrelease.c
 librtems_a_SOURCES += src/semflush.c
-librtems_a_SOURCES += src/semtranslatereturncode.c
 librtems_a_SOURCES += src/semsetpriority.c
 
 ## EVENT_C_FILES

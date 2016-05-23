@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_COREBARRIERIMPL_H
 
 #include <rtems/score/corebarrier.h>
+#include <rtems/score/status.h>
 #include <rtems/score/threadqimpl.h>
 
 #ifdef __cplusplus
@@ -30,35 +31,6 @@ extern "C" {
  * @addtogroup ScoreBarrier
  */
 /**@{**/
-
-/**
- *  Core Barrier handler return statuses.
- */
-typedef enum {
-  /** This status indicates that the operation completed successfully. */
-  CORE_BARRIER_STATUS_SUCCESSFUL,
-  /** This status indicates that the barrier is configured for automatic
-   *  release and the caller tripped the automatic release.  The caller
-   *  thus did not block.
-   */
-  CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED,
-  /** This status indicates that the thread was blocked waiting for an
-   *  operation to complete and the barrier was deleted.
-   */
-  CORE_BARRIER_WAS_DELETED,
-  /** This status indicates that the calling task was willing to block
-   *  but the operation was unable to complete within the time allotted
-   *  because the resource never became available.
-   */
-  CORE_BARRIER_TIMEOUT
-}   CORE_barrier_Status;
-
-/**
- *  @brief Core barrier last status value.
- *
- *  This is the last status value.
- */
-#define CORE_BARRIER_STATUS_LAST CORE_BARRIER_TIMEOUT
 
 #define CORE_BARRIER_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
@@ -120,9 +92,9 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
  *  @param[in] mp_callout is the routine to invoke if the
  *         thread unblocked is remote
  *
- * @note Status is returned via the thread control block.
+ * @return The method status.
  */
-void _CORE_barrier_Seize(
+Status_Control _CORE_barrier_Seize(
   CORE_barrier_Control *the_barrier,
   Thread_Control       *executing,
   bool                  wait,
@@ -160,12 +132,6 @@ RTEMS_INLINE_ROUTINE uint32_t _CORE_barrier_Surrender(
   );
 }
 
-Thread_Control *_CORE_barrier_Was_deleted(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-);
-
 RTEMS_INLINE_ROUTINE void _CORE_barrier_Flush(
   CORE_barrier_Control *the_barrier,
   Thread_queue_Context *queue_context
@@ -173,7 +139,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Flush(
 {
   _CORE_barrier_Do_flush(
     the_barrier,
-    _CORE_barrier_Was_deleted,
+    _Thread_queue_Flush_status_object_was_deleted,
     queue_context
   );
 }

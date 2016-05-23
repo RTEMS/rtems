@@ -341,7 +341,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @param[in] state The new state of the thread.
  * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
  * potentially forever.
- * @param[in] timeout_code The return code in case a timeout occurs.
  * @param[in] lock_context The lock context of the lock acquire.
  */
 void _Thread_queue_Enqueue_critical(
@@ -350,7 +349,6 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control                *the_thread,
   States_Control                 state,
   Watchdog_Interval              timeout,
-  uint32_t                       timeout_code,
   ISR_lock_Context              *lock_context
 );
 
@@ -363,8 +361,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   States_Control                 state,
-  Watchdog_Interval              timeout,
-  uint32_t                       timeout_code
+  Watchdog_Interval              timeout
 )
 {
   ISR_lock_Context lock_context;
@@ -376,7 +373,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
     the_thread,
     state,
     timeout,
-    timeout_code,
     &lock_context
   );
 }
@@ -622,6 +618,40 @@ typedef Thread_Control *( *Thread_queue_Flush_filter )(
  * @retval the_thread Extract this thread.
  */
 Thread_Control *_Thread_queue_Flush_default_filter(
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Status unavailable thread queue flush filter function.
+ *
+ * Sets the thread wait return code of the thread to STATUS_UNAVAILABLE.
+ *
+ * @param the_thread The thread to extract.
+ * @param queue Unused.
+ * @param queue_context Unused.
+ *
+ * @retval the_thread Extract this thread.
+ */
+Thread_Control *_Thread_queue_Flush_status_unavailable(
+  Thread_Control       *the_thread,
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Status object was deleted thread queue flush filter function.
+ *
+ * Sets the thread wait return code of the thread to STATUS_OBJECT_WAS_DELETED
+ *
+ * @param the_thread The thread to extract.
+ * @param queue Unused.
+ * @param queue_context Unused.
+ *
+ * @retval the_thread Extract this thread.
+ */
+Thread_Control *_Thread_queue_Flush_status_object_was_deleted(
   Thread_Control       *the_thread,
   Thread_queue_Queue   *queue,
   Thread_queue_Context *queue_context

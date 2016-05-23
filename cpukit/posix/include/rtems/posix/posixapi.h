@@ -23,6 +23,8 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/seterr.h>
 
 /**
  * @defgroup POSIXAPI RTEMS POSIX API
@@ -58,6 +60,29 @@ RTEMS_INLINE_ROUTINE int _POSIX_Get_by_name_error(
 {
   _Assert( (size_t) error < RTEMS_ARRAY_SIZE( _POSIX_Get_by_name_error_table ) );
   return _POSIX_Get_by_name_error_table[ error ];
+}
+
+RTEMS_INLINE_ROUTINE int _POSIX_Get_error( Status_Control status )
+{
+  return STATUS_GET_POSIX( status );
+}
+
+RTEMS_INLINE_ROUTINE int _POSIX_Get_error_after_wait(
+  const Thread_Control *executing
+)
+{
+  return _POSIX_Get_error( _Thread_Wait_get_status( executing ) );
+}
+
+RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
+  Status_Control status
+)
+{
+  if ( status == STATUS_SUCCESSFUL ) {
+    return 0;
+  }
+
+  rtems_set_errno_and_return_minus_one( _POSIX_Get_error( status ) );
 }
 
 /**

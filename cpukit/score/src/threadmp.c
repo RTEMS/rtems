@@ -146,7 +146,6 @@ Thread_Control *_Thread_MP_Allocate_proxy (
     the_proxy->Wait.return_argument_second  = executing->Wait.return_argument_second;
     the_proxy->Wait.option                  = executing->Wait.option;
     the_proxy->Wait.return_code             = executing->Wait.return_code;
-    the_proxy->Wait.timeout_code            = executing->Wait.timeout_code;
 
     the_proxy->thread_queue_callout = _Thread_queue_MP_callout_do_nothing;
 

@@ -21,6 +21,7 @@
 #endif
 
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/posix/posixapi.h>
 
 int pthread_rwlock_unlock(
   pthread_rwlock_t  *rwlock
@@ -28,7 +29,7 @@ int pthread_rwlock_unlock(
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
-  CORE_RWLock_Status    status;
+  Status_Control        status;
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
@@ -37,5 +38,5 @@ int pthread_rwlock_unlock(
   }
 
   status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, &queue_context );
-  return _POSIX_RWLock_Translate_core_RWLock_return_code( status );
+  return _POSIX_Get_error( status );
 }

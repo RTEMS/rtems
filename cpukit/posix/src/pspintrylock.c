@@ -19,14 +19,13 @@
 #endif
 
 #include <rtems/posix/spinlockimpl.h>
-
-#include <errno.h>
+#include <rtems/posix/posixapi.h>
 
 int pthread_spin_trylock( pthread_spinlock_t *spinlock )
 {
   POSIX_Spinlock_Control *the_spinlock;
   ISR_lock_Context        lock_context;
-  CORE_spinlock_Status    status;
+  Status_Control          status;
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock, &lock_context );
   if ( the_spinlock == NULL ) {
@@ -39,5 +38,5 @@ int pthread_spin_trylock( pthread_spinlock_t *spinlock )
     0,
     &lock_context
   );
-  return _POSIX_Spinlock_Translate_core_spinlock_return_code( status );
+  return _POSIX_Get_error( status );
 }

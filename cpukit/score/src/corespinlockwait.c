@@ -21,7 +21,7 @@
 #include <rtems/score/corespinlockimpl.h>
 #include <rtems/score/percpu.h>
 
-CORE_spinlock_Status _CORE_spinlock_Seize(
+Status_Control _CORE_spinlock_Seize(
   CORE_spinlock_Control *the_spinlock,
   bool                   wait,
   Watchdog_Interval      timeout,
@@ -40,7 +40,7 @@ CORE_spinlock_Status _CORE_spinlock_Seize(
     if ( the_spinlock->lock == CORE_SPINLOCK_LOCKED &&
          the_spinlock->holder == executing ) {
       _CORE_spinlock_Release( the_spinlock, lock_context );
-      return CORE_SPINLOCK_HOLDER_RELOCKING;
+      return STATUS_NESTING_NOT_ALLOWED;
     }
     the_spinlock->users += 1;
     for ( ;; ) {
@@ -48,7 +48,7 @@ CORE_spinlock_Status _CORE_spinlock_Seize(
         the_spinlock->lock = CORE_SPINLOCK_LOCKED;
         the_spinlock->holder = executing;
         _CORE_spinlock_Release( the_spinlock, lock_context );
-        return CORE_SPINLOCK_SUCCESSFUL;
+        return STATUS_SUCCESSFUL;
       }
 
       /*
@@ -57,7 +57,7 @@ CORE_spinlock_Status _CORE_spinlock_Seize(
       if ( !wait ) {
         the_spinlock->users -= 1;
         _CORE_spinlock_Release( the_spinlock, lock_context );
-        return CORE_SPINLOCK_UNAVAILABLE;
+        return STATUS_UNAVAILABLE;
       }
 
       #if defined(FUNCTIONALITY_NOT_CURRENTLY_USED_BY_ANY_API)
@@ -67,7 +67,7 @@ CORE_spinlock_Status _CORE_spinlock_Seize(
         if ( timeout && (limit <= _Watchdog_Ticks_since_boot) ) {
           the_spinlock->users -= 1;
           _CORE_spinlock_Release( the_spinlock, lock_context );
-          return CORE_SPINLOCK_TIMEOUT;
+          return STATUS_TIMEOUT;
         }
       #endif
 

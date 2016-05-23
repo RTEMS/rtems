@@ -22,6 +22,7 @@
 #include <rtems/score/assert.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/status.h>
 #include <rtems/score/watchdogimpl.h>
 
 #define THREAD_QUEUE_INTEND_TO_BLOCK \
@@ -39,7 +40,6 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control                *the_thread,
   States_Control                 state,
   Watchdog_Interval              timeout,
-  uint32_t                       timeout_code,
   ISR_lock_Context              *lock_context
 )
 {
@@ -54,6 +54,7 @@ void _Thread_queue_Enqueue_critical(
 
   _Thread_Lock_set( the_thread, &queue->Lock );
 
+  the_thread->Wait.return_code = STATUS_SUCCESSFUL;
   _Thread_Wait_set_queue( the_thread, queue );
   _Thread_Wait_set_operations( the_thread, operations );
 
@@ -72,7 +73,6 @@ void _Thread_queue_Enqueue_critical(
    *  If the thread wants to timeout, then schedule its timer.
    */
   if ( timeout != WATCHDOG_NO_TIMEOUT ) {
-    _Thread_Wait_set_timeout_code( the_thread, timeout_code );
     _Thread_Timer_insert_relative(
       the_thread,
       cpu_self,

@@ -22,8 +22,10 @@
 #include <rtems/score/coresem.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threaddispatch.h>
+#include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/statesimpl.h>
+#include <rtems/score/status.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,39 +35,6 @@ extern "C" {
  * @addtogroup ScoreSemaphore
  */
 /**@{**/
-
-/**
- *  Core Semaphore handler return statuses.
- */
-typedef enum {
-  /** This status indicates that the operation completed successfully. */
-  CORE_SEMAPHORE_STATUS_SUCCESSFUL,
-  /** This status indicates that the calling task did not want to block
-   *  and the operation was unable to complete immediately because the
-   *  resource was unavailable.
-   */
-  CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT,
-  /** This status indicates that the thread was blocked waiting for an
-   *  operation to complete and the semaphore was deleted.
-   */
-  CORE_SEMAPHORE_WAS_DELETED,
-  /** This status indicates that the calling task was willing to block
-   *  but the operation was unable to complete within the time allotted
-   *  because the resource never became available.
-   */
-  CORE_SEMAPHORE_TIMEOUT,
-  /** This status indicates that an attempt was made to unlock the semaphore
-   *  and this would have made its count greater than that allowed.
-   */
-  CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
-}   CORE_semaphore_Status;
-
-/**
- *  @brief Core semaphore last status value.
- *
- *  This is the last status value.
- */
-#define CORE_SEMAPHORE_STATUS_LAST CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED
 
 /**
  *  @brief Initialize the semaphore based on the parameters passed.
@@ -108,18 +77,6 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
   );
 }
 
-Thread_Control *_CORE_semaphore_Was_deleted(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-);
-
-Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-);
-
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
   CORE_semaphore_Control *the_semaphore,
   Thread_queue_Context   *queue_context
@@ -128,7 +85,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
   _Thread_queue_Flush_critical(
     &the_semaphore->Wait_queue.Queue,
     the_semaphore->operations,
-    _CORE_semaphore_Was_deleted,
+    _Thread_queue_Flush_status_object_was_deleted,
     queue_context
   );
   _Thread_queue_Destroy( &the_semaphore->Wait_queue );
@@ -147,16 +104,16 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
  *
  *  @retval an indication of whether the routine succeeded or failed
  */
-RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
+RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
   CORE_semaphore_Control  *the_semaphore,
   uint32_t                 maximum_count,
   Thread_queue_Context    *queue_context
 )
 {
   Thread_Control *the_thread;
-  CORE_semaphore_Status status;
+  Status_Control  status;
 
-  status = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
+  status = STATUS_SUCCESSFUL;
 
   _CORE_semaphore_Acquire_critical( the_semaphore, queue_context );
 
@@ -175,7 +132,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
     if ( the_semaphore->count < maximum_count )
       the_semaphore->count += 1;
     else
-      status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;
+      status = STATUS_MAXIMUM_COUNT_EXCEEDED;
 
     _CORE_semaphore_Release( the_semaphore, queue_context );
   }
@@ -191,7 +148,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Flush(
   _Thread_queue_Flush_critical(
     &the_semaphore->Wait_queue.Queue,
     the_semaphore->operations,
-    _CORE_semaphore_Unsatisfied_nowait,
+    _Thread_queue_Flush_status_unavailable,
     queue_context
   );
 }
@@ -225,7 +182,7 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  *
  * @note There is currently no MACRO version of this routine.
  */
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
+RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
   CORE_semaphore_Control *the_semaphore,
   Thread_Control         *executing,
   bool                    wait,
@@ -235,18 +192,16 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
 {
   /* disabled when you get here */
 
-  executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
   _CORE_semaphore_Acquire_critical( the_semaphore, queue_context );
   if ( the_semaphore->count != 0 ) {
     the_semaphore->count -= 1;
     _CORE_semaphore_Release( the_semaphore, queue_context );
-    return;
+    return STATUS_SUCCESSFUL;
   }
 
   if ( !wait ) {
     _CORE_semaphore_Release( the_semaphore, queue_context );
-    executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
-    return;
+    return STATUS_UNSATISFIED;
   }
 
   _Thread_queue_Enqueue_critical(
@@ -255,9 +210,9 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Seize(
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
     timeout,
-    CORE_SEMAPHORE_TIMEOUT,
     &queue_context->Lock_context
   );
+  return _Thread_Wait_get_status( executing );
 }
 
 /** @} */

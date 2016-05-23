@@ -74,20 +74,6 @@ rtems_status_code _Message_queue_Submit(
 );
 
 /**
- * @brief Message queue Translate Core Message Queue Return Code
- *
- * This function returns a RTEMS status code based on
- * @a the_message_queue_status.
- *
- * @param[in] the_message_queue_status is the status code to translate
- *
- * @retval translated RTEMS status code
- */
-rtems_status_code _Message_queue_Translate_core_message_queue_return_code (
-  uint32_t   the_message_queue_status
-);
-
-/**
  *  @brief Deallocates a message queue control block into
  *  the inactive chain of free message queue control blocks.
  *

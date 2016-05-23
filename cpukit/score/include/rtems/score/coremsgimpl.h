@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_COREMSGIMPL_H
 
 #include <rtems/score/coremsg.h>
+#include <rtems/score/status.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/threadqimpl.h>
@@ -63,40 +64,6 @@ extern "C" {
  *         priorities indicate higher priority messages.
  */
 typedef int CORE_message_queue_Submit_types;
-
-/**
- *  @brief The possible set of Core Message Queue handler return statuses.
- *
- *  This enumerated type defines the possible set of Core Message
- *  Queue handler return statuses.
- */
-typedef enum {
-  /** This value indicates the operation completed sucessfully. */
-  CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL,
-  /** This value indicates that the message was too large for this queue. */
-  CORE_MESSAGE_QUEUE_STATUS_INVALID_SIZE,
-  /** This value indicates that there are too many messages pending. */
-  CORE_MESSAGE_QUEUE_STATUS_TOO_MANY,
-  /** This value indicates that a receive was unsuccessful. */
-  CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED,
-  /** This value indicates that a blocking send was unsuccessful. */
-  CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT,
-  /** This value indicates that the message queue being blocked upon
-   *  was deleted while the thread was waiting.
-   */
-  CORE_MESSAGE_QUEUE_STATUS_WAS_DELETED,
-  /** This value indicates that the thread had to timeout while waiting
-   *  to receive a message because one did not become available.
-   */
-  CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
-}   CORE_message_queue_Status;
-
-/**
- *  @brief Core message queue last status value.
- *
- *  This is the last status value.
- */
-#define CORE_MESSAGE_QUEUE_STATUS_LAST CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
 
 /**
  *  @brief Initialize a message queue.
@@ -202,7 +169,7 @@ uint32_t   _CORE_message_queue_Flush(
  *  @retval @a *count will contain the number of messages sent
  *  @retval indication of the successful completion or reason for failure
  */
-CORE_message_queue_Status _CORE_message_queue_Broadcast(
+Status_Control _CORE_message_queue_Broadcast(
   CORE_message_queue_Control *the_message_queue,
   const void                 *buffer,
   size_t                      size,
@@ -233,7 +200,7 @@ CORE_message_queue_Status _CORE_message_queue_Broadcast(
  *    _CORE_message_queue_Acquire() or _CORE_message_queue_Acquire_critical().
  *  @retval indication of the successful completion or reason for failure
  */
-CORE_message_queue_Status _CORE_message_queue_Submit(
+Status_Control _CORE_message_queue_Submit(
   CORE_message_queue_Control       *the_message_queue,
   Thread_Control                   *executing,
   const void                       *buffer,
@@ -278,7 +245,7 @@ CORE_message_queue_Status _CORE_message_queue_Submit(
  *    + available
  *    + wait
  */
-void _CORE_message_queue_Seize(
+Status_Control _CORE_message_queue_Seize(
   CORE_message_queue_Control *the_message_queue,
   Thread_Control             *executing,
   void                       *buffer,
@@ -309,7 +276,7 @@ void _CORE_message_queue_Insert_message(
   CORE_message_queue_Submit_types    submit_type
 );
 
-RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
+RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
   CORE_message_queue_Control       *the_message_queue,
   const void                       *buffer,
   size_t                            size,
@@ -330,7 +297,7 @@ RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Send(
   );
 }
 
-RTEMS_INLINE_ROUTINE CORE_message_queue_Status _CORE_message_queue_Urgent(
+RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
   CORE_message_queue_Control       *the_message_queue,
   const void                       *buffer,
   size_t                            size,

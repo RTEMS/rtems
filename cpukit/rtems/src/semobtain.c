@@ -21,6 +21,7 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
@@ -43,6 +44,7 @@ rtems_status_code rtems_semaphore_obtain(
   Thread_Control       *executing;
   rtems_attribute       attribute_set;
   bool                  wait;
+  Status_Control        status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context, NULL );
 
@@ -59,40 +61,33 @@ rtems_status_code rtems_semaphore_obtain(
   wait = !_Options_Is_no_wait( option_set );
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    MRSP_Status mrsp_status;
-
-    mrsp_status = _MRSP_Seize(
+    status = _MRSP_Seize(
       &the_semaphore->Core_control.mrsp,
       executing,
       wait,
       timeout,
       &queue_context
     );
-    return _Semaphore_Translate_MRSP_status_code( mrsp_status );
   } else
 #endif
   if ( !_Attributes_Is_counting_semaphore( attribute_set ) ) {
-    _CORE_mutex_Seize(
+    status = _CORE_mutex_Seize(
       &the_semaphore->Core_control.mutex,
       executing,
       wait,
       timeout,
       &queue_context
     );
-    return _Semaphore_Translate_core_mutex_return_code(
-      executing->Wait.return_code
+  } else {
+    /* must be a counting semaphore */
+    status = _CORE_semaphore_Seize(
+      &the_semaphore->Core_control.semaphore,
+      executing,
+      wait,
+      timeout,
+      &queue_context
     );
   }
 
-  /* must be a counting semaphore */
-  _CORE_semaphore_Seize(
-    &the_semaphore->Core_control.semaphore,
-    executing,
-    wait,
-    timeout,
-    &queue_context
-  );
-  return _Semaphore_Translate_core_semaphore_return_code(
-    executing->Wait.return_code
-  );
+  return _Status_Get( status );
 }

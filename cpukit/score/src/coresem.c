@@ -36,25 +36,3 @@ void _CORE_semaphore_Initialize(
     the_semaphore->operations = &_Thread_queue_Operations_FIFO;
   }
 }
-
-Thread_Control *_CORE_semaphore_Was_deleted(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-)
-{
-  the_thread->Wait.return_code = CORE_SEMAPHORE_WAS_DELETED;
-
-  return the_thread;
-}
-
-Thread_Control *_CORE_semaphore_Unsatisfied_nowait(
-  Thread_Control       *the_thread,
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
-)
-{
-  the_thread->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
-
-  return the_thread;
-}

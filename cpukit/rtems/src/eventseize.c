@@ -21,17 +21,11 @@
 #include <rtems/sysinit.h>
 #include <rtems/rtems/eventimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-/*
- *  INTERRUPT LATENCY:
- *    available
- *    wait
- *    check sync
- */
-
-void _Event_Seize(
+rtems_status_code _Event_Seize(
   rtems_event_set    event_in,
   rtems_option       option_set,
   rtems_interval     ticks,
@@ -49,8 +43,6 @@ void _Event_Seize(
   Thread_Wait_flags  intend_to_block;
   Per_CPU_Control   *cpu_self;
 
-  executing->Wait.return_code = RTEMS_SUCCESSFUL;
-
   pending_events = event->pending_events;
   seized_events  = _Event_sets_Get( pending_events, event_in );
 
@@ -60,14 +52,13 @@ void _Event_Seize(
       _Event_sets_Clear( pending_events, seized_events );
     _Thread_Lock_release_default( executing, lock_context );
     *event_out = seized_events;
-    return;
+    return RTEMS_SUCCESSFUL;
   }
 
   if ( _Options_Is_no_wait( option_set ) ) {
     _Thread_Lock_release_default( executing, lock_context );
-    executing->Wait.return_code = RTEMS_UNSATISFIED;
     *event_out = seized_events;
-    return;
+    return RTEMS_UNSATISFIED;
   }
 
   intend_to_block = wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK;
@@ -80,6 +71,7 @@ void _Event_Seize(
    *  NOTE: Since interrupts are disabled, this isn't that much of an
    *        issue but better safe than sorry.
    */
+  executing->Wait.return_code     = STATUS_SUCCESSFUL;
   executing->Wait.option          = option_set;
   executing->Wait.count           = event_in;
   executing->Wait.return_argument = event_out;
@@ -89,7 +81,6 @@ void _Event_Seize(
   _Thread_Lock_release_default( executing, lock_context );
 
   if ( ticks ) {
-    _Thread_Wait_set_timeout_code( executing, RTEMS_TIMEOUT );
     _Thread_Timer_insert_relative(
       executing,
       cpu_self,
@@ -117,6 +108,7 @@ void _Event_Seize(
   }
 
   _Thread_Dispatch_enable( cpu_self );
+  return _Status_Get_after_wait( executing );
 }
 
 #if defined(RTEMS_MULTIPROCESSING)

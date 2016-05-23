@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/rwlockimpl.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/score/todimpl.h>
 
 int pthread_rwlock_timedrdlock(
@@ -30,8 +31,8 @@ int pthread_rwlock_timedrdlock(
   Thread_queue_Context                     queue_context;
   Watchdog_Interval                        ticks;
   bool                                     do_wait;
-  TOD_Absolute_timeout_conversion_results  status;
-  Thread_Control                          *executing;
+  TOD_Absolute_timeout_conversion_results  timeout_status;
+  Status_Control                           status;
 
   /*
    *  POSIX requires that blocking calls with timeouts that take
@@ -39,15 +40,15 @@ int pthread_rwlock_timedrdlock(
    *  time provided if the operation would otherwise succeed.
    *  So we check the abstime provided, and hold on to whether it
    *  is valid or not.  If it isn't correct and in the future,
-   *  then we do a polling operation and convert the UNSATISFIED
+   *  then we do a polling operation and convert the STATUS_UNAVAILABLE
    *  status into the appropriate error.
    *
-   *  If the status is TOD_ABSOLUTE_TIMEOUT_INVALID,
+   *  If the timeout status is TOD_ABSOLUTE_TIMEOUT_INVALID,
    *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */
-  status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
-  do_wait = ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE );
+  timeout_status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
+  do_wait = ( timeout_status == TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE );
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
 
@@ -55,32 +56,26 @@ int pthread_rwlock_timedrdlock(
     return EINVAL;
   }
 
-  executing = _Thread_Executing;
-  _CORE_RWLock_Seize_for_reading(
+  status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
-    executing,
+    _Thread_Executing,
     do_wait,
     ticks,
     &queue_context
   );
 
-  if (
-    !do_wait
-      && ( executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE )
-  ) {
-    if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID ) {
+  if ( !do_wait && status == STATUS_UNAVAILABLE ) {
+    if ( timeout_status == TOD_ABSOLUTE_TIMEOUT_INVALID ) {
       return EINVAL;
     }
 
     if (
-      status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST
-        || status == TOD_ABSOLUTE_TIMEOUT_IS_NOW
+      timeout_status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST
+        || timeout_status == TOD_ABSOLUTE_TIMEOUT_IS_NOW
     ) {
       return ETIMEDOUT;
     }
   }
 
-  return _POSIX_RWLock_Translate_core_RWLock_return_code(
-    (CORE_RWLock_Status) executing->Wait.return_code
-  );
+  return _POSIX_Get_error( status );
 }

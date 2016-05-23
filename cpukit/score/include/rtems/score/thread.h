@@ -288,11 +288,6 @@ typedef struct {
   uint32_t              return_code;
 
   /**
-   * @brief Code to set the timeout return code in _Thread_Timeout().
-   */
-  uint32_t timeout_code;
-
-  /**
    * @brief The current thread queue.
    *
    * In case this field is @c NULL, then the thread is not blocked on a thread

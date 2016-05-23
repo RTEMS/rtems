@@ -79,20 +79,6 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
     _Objects_Get( id, &queue_context->Lock_context, &_Barrier_Information );
 }
 
-/**
- * @brief Translate SuperCore Barrier Status Code to RTEMS Status Code
- *
- * This function returns a RTEMS status code based on the barrier
- * status code specified.
- *
- * @param[in] the_status is the SuperCore Barrier status to translate.
- *
- * @retval a status code indicating success or the reason for failure.
- */
-rtems_status_code _Barrier_Translate_core_barrier_return_code (
-  CORE_barrier_Status  the_status
-);
-
 /**@}*/
 
 #ifdef __cplusplus

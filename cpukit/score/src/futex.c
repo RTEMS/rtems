@@ -90,8 +90,7 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
       FUTEX_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_SYS_LOCK_FUTEX,
-      0,
-      0,
+      WATCHDOG_NO_TIMEOUT,
       &lock_context
     );
     eno = 0;

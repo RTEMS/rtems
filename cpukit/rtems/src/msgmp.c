@@ -20,6 +20,7 @@
 
 #include <rtems/rtems/messageimpl.h>
 #include <rtems/rtems/optionsimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
@@ -105,6 +106,7 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
 )
 {
   Message_queue_MP_Packet *the_packet;
+  Status_Control           status;
 
   if ( !_Message_queue_MP_Is_remote( message_queue_id ) ) {
     return RTEMS_INVALID_ID;
@@ -155,13 +157,12 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
           );
       }
 
-      return (rtems_status_code) _MPCI_Send_request_packet(
+      status = _MPCI_Send_request_packet(
         _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
-        STATES_WAITING_FOR_MESSAGE,
-        RTEMS_TIMEOUT
+        STATES_WAITING_FOR_MESSAGE
       );
-      break;
+      return _Status_Get( status );
 
     case MESSAGE_QUEUE_MP_RECEIVE_REQUEST:
 
@@ -181,13 +182,12 @@ static rtems_status_code _Message_queue_MP_Send_request_packet (
       _Thread_Executing->Wait.return_argument_second.immutable_object = buffer;
       _Thread_Executing->Wait.return_argument = size_p;
 
-      return (rtems_status_code) _MPCI_Send_request_packet(
+      status = _MPCI_Send_request_packet(
         _Objects_Get_node(message_queue_id),
         &the_packet->Prefix,
-        STATES_WAITING_FOR_MESSAGE,
-        RTEMS_TIMEOUT
+        STATES_WAITING_FOR_MESSAGE
       );
-      break;
+      return _Status_Get( status );
 
     case MESSAGE_QUEUE_MP_ANNOUNCE_CREATE:
     case MESSAGE_QUEUE_MP_ANNOUNCE_DELETE:

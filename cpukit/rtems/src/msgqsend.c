@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_message_queue_send(
   rtems_id    id,
@@ -26,9 +27,9 @@ rtems_status_code rtems_message_queue_send(
   size_t      size
 )
 {
-  Message_queue_Control     *the_message_queue;
-  Thread_queue_Context       queue_context;
-  CORE_message_queue_Status  status;
+  Message_queue_Control *the_message_queue;
+  Thread_queue_Context   queue_context;
+  Status_Control         status;
 
   if ( buffer == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -60,11 +61,5 @@ rtems_status_code rtems_message_queue_send(
     0,       /* no timeout */
     &queue_context
   );
-
-  /*
-   *  Since this API does not allow for blocking sends, we can directly
-   *  return the returned status.
-   */
-
-  return _Message_queue_Translate_core_message_queue_return_code( status );
+  return _Status_Get( status );
 }

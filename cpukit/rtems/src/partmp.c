@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/rtems/partimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -100,6 +101,7 @@ static rtems_status_code _Partition_MP_Send_request_packet (
 )
 {
   Partition_MP_Packet *the_packet;
+  Status_Control       status;
 
   if ( !_Partition_MP_Is_remote( partition_id ) ) {
     return RTEMS_INVALID_ID;
@@ -114,15 +116,12 @@ static rtems_status_code _Partition_MP_Send_request_packet (
       _Partition_MP_Initialize_packet( the_packet, partition_id, operation );
       the_packet->buffer = buffer;
 
-      return
-        _MPCI_Send_request_packet(
-          _Objects_Get_node( partition_id ),
-          &the_packet->Prefix,
-          STATES_READY,     /* Not used */
-          RTEMS_TIMEOUT
-        );
-
-      break;
+      status = _MPCI_Send_request_packet(
+        _Objects_Get_node( partition_id ),
+        &the_packet->Prefix,
+        STATES_READY /* Not used */
+      );
+      return _Status_Get( status );
 
     case PARTITION_MP_ANNOUNCE_CREATE:
     case PARTITION_MP_ANNOUNCE_DELETE:

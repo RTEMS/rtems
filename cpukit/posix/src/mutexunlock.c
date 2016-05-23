@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/muteximpl.h>
+#include <rtems/posix/posixapi.h>
 
 /*
  *  11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
@@ -31,8 +32,8 @@ int pthread_mutex_unlock(
 )
 {
   POSIX_Mutex_Control  *the_mutex;
-  CORE_mutex_Status     status;
   Thread_queue_Context  queue_context;
+  Status_Control        status;
 
   the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
@@ -41,5 +42,5 @@ int pthread_mutex_unlock(
   }
 
   status = _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
-  return _POSIX_Mutex_Translate_core_mutex_return_code( status );
+  return _POSIX_Get_error( status );
 }

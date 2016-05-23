@@ -19,18 +19,9 @@
 #endif
 
 #include <rtems/posix/barrierimpl.h>
+#include <rtems/posix/posixapi.h>
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_Barrier_Control, Barrier.Wait_queue );
-
-/**
- * This directive allows a thread to wait at a barrier.
- *
- * @param[in] barrier is the barrier id
- *
- * @retval 0 if successful
- * @retval PTHREAD_BARRIER_SERIAL_THREAD if successful
- * @retval error_code if unsuccessful
- */
 
 int pthread_barrier_wait(
   pthread_barrier_t *barrier
@@ -38,7 +29,7 @@ int pthread_barrier_wait(
 {
   POSIX_Barrier_Control *the_barrier;
   Thread_queue_Context   queue_context;
-  Thread_Control        *executing;
+  Status_Control         status;
 
   if ( barrier == NULL ) {
     return EINVAL;
@@ -50,15 +41,12 @@ int pthread_barrier_wait(
     return EINVAL;
   }
 
-  executing = _Thread_Executing;
-  _CORE_barrier_Seize(
+  status = _CORE_barrier_Seize(
     &the_barrier->Barrier,
-    executing,
+    _Thread_Executing,
     true,
-    0,
+    WATCHDOG_NO_TIMEOUT,
     &queue_context
   );
-  return _POSIX_Barrier_Translate_core_barrier_return_code(
-    executing->Wait.return_code
-  );
+  return _POSIX_Get_error( status );
 }
