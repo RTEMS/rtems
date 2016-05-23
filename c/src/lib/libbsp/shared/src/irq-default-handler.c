@@ -12,11 +12,13 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/bspIo.h>
+#include <inttypes.h>
+
+#include <rtems/print.h>
 
 #include <bsp/irq-generic.h>
 
 void bsp_interrupt_handler_default(rtems_vector_number vector)
 {
-  printk("spurious interrupt: %u\n", vector);
+  printk("spurious interrupt: %" PRIu32 "\n", vector);
 }
