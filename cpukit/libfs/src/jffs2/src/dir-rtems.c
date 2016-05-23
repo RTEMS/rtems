@@ -39,7 +39,7 @@ struct _inode *jffs2_lookup(struct _inode *dir_i, const unsigned char *name, siz
 
 	/* NB: The 2.2 backport will need to explicitly check for '.' and '..' here */
 	for (fd_list = dir_f->dents; fd_list && fd_list->nhash <= hash; fd_list = fd_list->next) {
-		if (fd_list->nhash == hash && 
+		if (fd_list->nhash == hash &&
 		    (!fd || fd_list->version > fd->version) &&
 		    strlen((char *)fd_list->name) == namelen &&
 		    !strncmp((char *)fd_list->name, (char *)name, namelen)) {
@@ -52,7 +52,7 @@ struct _inode *jffs2_lookup(struct _inode *dir_i, const unsigned char *name, siz
 	if (ino) {
 		inode = jffs2_iget(dir_i->i_sb, ino);
 		if (IS_ERR(inode)) {
-			printk("jffs2_iget() failed for ino #%u\n", ino);
+			printk("jffs2_iget() failed for ino #%lu\n", ino);
 			return inode;
 		} else {
 			inode->i_fd = fd;
@@ -81,7 +81,7 @@ int jffs2_create(struct _inode *dir_i, const char *d_name, size_t d_namelen, int
 	ri = jffs2_alloc_raw_inode();
 	if (!ri)
 		return -ENOMEM;
-	
+
 	c = JFFS2_SB_INFO(dir_i->i_sb);
 
 	D1(printk(KERN_DEBUG "jffs2_create()\n"));
@@ -146,8 +146,8 @@ int jffs2_link (struct _inode *old_d_inode, struct _inode *dir_i, const unsigned
 	uint8_t type = (old_d_inode->i_mode & S_IFMT) >> 12;
 	if (!type) type = DT_REG;
 
-	ret = jffs2_do_link(c, dir_f, f->inocache->ino, type, 
-                            (const char * )d_name, 
+	ret = jffs2_do_link(c, dir_f, f->inocache->ino, type,
+                            (const char * )d_name,
                             d_namelen, get_seconds());
 
 	if (!ret) {
@@ -339,10 +339,10 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 	uint8_t type;
 	uint32_t now;
 
-#if 0 /* FIXME -- this really doesn't belong in individual file systems. 
+#if 0 /* FIXME -- this really doesn't belong in individual file systems.
 	 The fileio code ought to do this for us, or at least part of it */
 	if (new_dentry->d_inode) {
-		if (S_ISDIR(d_inode->i_mode) && 
+		if (S_ISDIR(d_inode->i_mode) &&
 		    !S_ISDIR(new_dentry->d_inode->i_mode)) {
 			/* Cannot rename directory over non-directory */
 			return -EINVAL;
@@ -370,12 +370,12 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 #endif
 
 	/* XXX: We probably ought to alloc enough space for
-	   both nodes at the same time. Writing the new link, 
+	   both nodes at the same time. Writing the new link,
 	   then getting -ENOSPC, is quite bad :)
 	*/
 
 	/* Make a hard link */
-	
+
 	/* XXX: This is ugly */
 	type = (d_inode->i_mode & S_IFMT) >> 12;
 	if (!type) type = DT_REG;
@@ -417,4 +417,3 @@ int jffs2_rename (struct _inode *old_dir_i, struct _inode *d_inode, const unsign
 	}
 	return ret;
 }
-
