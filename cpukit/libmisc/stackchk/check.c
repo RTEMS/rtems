@@ -446,13 +446,13 @@ static void Stack_check_Dump_threads_usage(
     }
     #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
       else {
-        rtems_printf( printer, "0x%08" PRIx32 "  INTR", ~0 );
+        rtems_printf( printer, "0x%08x  INTR", ~0 );
       }
     #endif
 
   rtems_printf(
     printer,
-    " %010p - %010p %010p  %8" PRId32 "   ",
+    " %p - %p %p  %8" PRId32 "   ",
     stack->area,
     stack->area + stack->size - 1,
     current,
