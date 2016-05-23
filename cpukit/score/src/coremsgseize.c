@@ -29,7 +29,6 @@
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control *the_message_queue,
   Thread_Control             *executing,
-  Objects_Id                  id,
   void                       *buffer,
   size_t                     *size_p,
   bool                        wait,

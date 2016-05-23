@@ -394,8 +394,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
  *  otherwise an error will be given to the thread if no messages are available.
  *
  *  @param[in] the_message_queue points to the message queue
- *  @param[in] id is the RTEMS object Id associated with this message queue.
- *         It is used when unblocking a remote thread.
  *  @param[in] buffer is the starting address of the message buffer to
  *         to be filled in with a message
  *  @param[in] size_p is a pointer to the size of the @a buffer and
@@ -419,7 +417,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
 void _CORE_message_queue_Seize(
   CORE_message_queue_Control      *the_message_queue,
   Thread_Control                  *executing,
-  Objects_Id                       id,
   void                            *buffer,
   size_t                          *size_p,
   bool                             wait,

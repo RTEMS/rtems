@@ -66,7 +66,6 @@ rtems_status_code rtems_message_queue_receive(
   _CORE_message_queue_Seize(
     &the_message_queue->message_queue,
     executing,
-    the_message_queue->Object.id,
     buffer,
     size,
     !_Options_Is_no_wait( option_set ),

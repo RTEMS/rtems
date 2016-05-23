@@ -99,7 +99,6 @@ ssize_t _POSIX_Message_queue_Receive_support(
   _CORE_message_queue_Seize(
     &the_mq->Message_queue,
     executing,
-    mqdes,
     msg_ptr,
     &length_out,
     do_wait,
