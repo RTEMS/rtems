@@ -51,7 +51,7 @@ extern "C" {
  *  does not have it locked.
  */
 #if defined SMPTEST
- #define check_dispatch_disable_level( _expect ) 
+ #define check_dispatch_disable_level( _expect )
 #else
  #define check_dispatch_disable_level( _expect ) \
   do { \
@@ -60,8 +60,8 @@ extern "C" {
              || ((!_Thread_Dispatch_is_enabled()) && (_expect) == 0)) \
     ) { \
       printk( \
-        "\n_Thread_Dispatch_disable_level is (%" PRId32 \
-           ") not %d detected at %s:%d\n", \
+        "\n_Thread_Dispatch_disable_level is (%i)" \
+           " not %d detected at %s:%d\n", \
          !_Thread_Dispatch_is_enabled(), (_expect), __FILE__, __LINE__ ); \
       FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
