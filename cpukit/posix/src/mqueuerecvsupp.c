@@ -19,11 +19,10 @@
 #endif
 
 #include <rtems/posix/mqueueimpl.h>
-#include <rtems/score/threadimpl.h>
 
 #include <fcntl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+THREAD_QUEUE_OBJECT_ASSERT(
   POSIX_Message_queue_Control,
   Message_queue.Wait_queue
 );

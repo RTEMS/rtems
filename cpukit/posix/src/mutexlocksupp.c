@@ -20,7 +20,7 @@
 
 #include <rtems/posix/muteximpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT( POSIX_Mutex_Control, Mutex.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT( POSIX_Mutex_Control, Mutex.Wait_queue );
 
 int _POSIX_Mutex_Lock_support(
   pthread_mutex_t   *mutex,

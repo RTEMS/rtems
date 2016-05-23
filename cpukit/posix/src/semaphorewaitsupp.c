@@ -21,12 +21,8 @@
 #include <semaphore.h>
 
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/score/threadimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
-  POSIX_Semaphore_Control,
-  Semaphore.Wait_queue
-);
+THREAD_QUEUE_OBJECT_ASSERT( POSIX_Semaphore_Control, Semaphore.Wait_queue );
 
 int _POSIX_Semaphore_Wait_support(
   sem_t             *sem,

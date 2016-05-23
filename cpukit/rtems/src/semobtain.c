@@ -19,16 +19,15 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/score/threadimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
   Core_control.mutex.Wait_queue
 );
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
+THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
   Core_control.semaphore.Wait_queue
 );

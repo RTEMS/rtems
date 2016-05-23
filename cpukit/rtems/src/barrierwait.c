@@ -19,9 +19,8 @@
 #endif
 
 #include <rtems/rtems/barrierimpl.h>
-#include <rtems/score/threadimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT( Barrier_Control, Barrier.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT( Barrier_Control, Barrier.Wait_queue );
 
 rtems_status_code rtems_barrier_wait(
   rtems_id        id,

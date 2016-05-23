@@ -39,13 +39,9 @@ Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread )
 #endif
 
   if ( ( current_state & THREAD_WAIT_QUEUE_OBJECT_STATES ) != 0 ) {
-    const Thread_Wait_queue_object *queue_object;
+    const Thread_queue_Object *queue_object;
 
-    queue_object = RTEMS_CONTAINER_OF(
-      the_thread->Wait.queue,
-      Thread_Wait_queue_object,
-      Wait_queue.Queue
-    );
+    queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( the_thread->Wait.queue );
 
     return queue_object->Object.id;
   }

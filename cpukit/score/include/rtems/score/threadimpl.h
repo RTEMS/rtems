@@ -1464,26 +1464,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_set_timeout_code(
 }
 
 /**
- * @brief Helper structure to ensure that all objects containing a thread queue
- * have the right layout.
- *
- * @see _Thread_Wait_get_id() and THREAD_WAIT_QUEUE_OBJECT_ASSERT().
- */
-typedef struct {
-  Objects_Control      Object;
-  Thread_queue_Control Wait_queue;
-} Thread_Wait_queue_object;
-
-#define THREAD_WAIT_QUEUE_OBJECT_ASSERT( object_type, wait_queue_member ) \
-  RTEMS_STATIC_ASSERT( \
-    offsetof( object_type, wait_queue_member ) \
-      == offsetof( Thread_Wait_queue_object, Wait_queue ) \
-    && ( &( ( (object_type *) 0 )->wait_queue_member ) \
-      == ( &( (Thread_Wait_queue_object *) 0 )->Wait_queue ) ), \
-    object_type \
-  )
-
-/**
  * @brief Returns the object identifier of the object containing the current
  * thread wait queue.
  *

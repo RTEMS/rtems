@@ -22,12 +22,9 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/statesimpl.h>
-#include <rtems/score/threadimpl.h>
+#include <rtems/score/threaddispatch.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
-  POSIX_Condition_variables_Control,
-  Wait_queue
-);
+THREAD_QUEUE_OBJECT_ASSERT( POSIX_Condition_variables_Control, Wait_queue );
 
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,

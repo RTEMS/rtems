@@ -24,9 +24,8 @@
 #include <errno.h>
 
 #include <rtems/posix/rwlockimpl.h>
-#include <rtems/score/threadimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT( POSIX_RWLock_Control, RWLock.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT( POSIX_RWLock_Control, RWLock.Wait_queue );
 
 int pthread_rwlock_wrlock(
   pthread_rwlock_t  *rwlock

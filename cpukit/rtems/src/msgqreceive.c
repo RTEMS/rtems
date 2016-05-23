@@ -19,13 +19,9 @@
 #endif
 
 #include <rtems/rtems/messageimpl.h>
-#include <rtems/score/threadimpl.h>
 #include <rtems/rtems/optionsimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT(
-  Message_queue_Control,
-  message_queue.Wait_queue
-);
+THREAD_QUEUE_OBJECT_ASSERT( Message_queue_Control, message_queue.Wait_queue );
 
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

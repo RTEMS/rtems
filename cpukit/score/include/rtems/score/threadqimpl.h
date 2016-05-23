@@ -795,6 +795,33 @@ void _Thread_queue_Unblock_proxy(
 );
 #endif
 
+/**
+ * @brief Helper structure to ensure that all objects containing a thread queue
+ * have the right layout.
+ *
+ * @see _Thread_Wait_get_id() and THREAD_QUEUE_OBJECT_ASSERT().
+ */
+typedef struct {
+  Objects_Control      Object;
+  Thread_queue_Control Wait_queue;
+} Thread_queue_Object;
+
+#define THREAD_QUEUE_OBJECT_ASSERT( object_type, wait_queue_member ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( object_type, wait_queue_member ) \
+      == offsetof( Thread_queue_Object, Wait_queue ) \
+    && ( &( ( (object_type *) 0 )->wait_queue_member ) \
+      == ( &( (Thread_queue_Object *) 0 )->Wait_queue ) ), \
+    object_type \
+  )
+
+#define THREAD_QUEUE_QUEUE_TO_OBJECT( queue ) \
+  RTEMS_CONTAINER_OF( \
+    queue, \
+    Thread_queue_Object, \
+    Wait_queue.Queue \
+  )
+
 extern const Thread_queue_Operations _Thread_queue_Operations_default;
 
 extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;

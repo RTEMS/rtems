@@ -19,9 +19,8 @@
 #endif
 
 #include <rtems/posix/barrierimpl.h>
-#include <rtems/score/threadimpl.h>
 
-THREAD_WAIT_QUEUE_OBJECT_ASSERT( POSIX_Barrier_Control, Barrier.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT( POSIX_Barrier_Control, Barrier.Wait_queue );
 
 /**
  * This directive allows a thread to wait at a barrier.
