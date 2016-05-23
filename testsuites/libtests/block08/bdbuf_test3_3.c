@@ -1,7 +1,7 @@
 /*! @file
  * @brief Check how read/release work in case of only one buffer in ready list.
  *
- * The same as Test 3.2, but instead of calling rtems_bdbuf_get() in 
+ * The same as Test 3.2, but instead of calling rtems_bdbuf_get() in
  * threads #1 and #2, it calls rtems_bdbuf_read().
  *
  * Test sequence:
@@ -13,7 +13,7 @@
  * -# Call rtems_bdbuf_release(#N1) in thread #1.
  * -# Check that only one thread (thread #2 or thread #3) got a buffer.
  *    Another thread shall still be blocked.
- * -# Call rtems_bdbuf_release(#N2) in thread #2 and check that 
+ * -# Call rtems_bdbuf_release(#N2) in thread #2 and check that
  *    thread #3 got a buffer as the result.
  * .
  *
@@ -113,7 +113,7 @@ bdbuf_test3_3_main()
 
     CHECK_NO_DRV_MSG();
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -198,7 +198,7 @@ bdbuf_test3_3_thread3(rtems_task_argument arg)
     printk("Thread #3 DEBLOCK\n");
 
     CONTINUE_MAIN(3);
-    
+
     rc = rtems_bdbuf_release(bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -207,4 +207,3 @@ bdbuf_test3_3_thread3(rtems_task_argument arg)
 
     THREAD_END();
 }
-

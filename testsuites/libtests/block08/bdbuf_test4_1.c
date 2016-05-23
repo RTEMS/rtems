@@ -59,7 +59,7 @@ bdbuf_test4_1_main()
      * Call rtems_bdbuf_read(#N) in thread #2.
      */
     CONTINUE_THREAD(2);
-    
+
     /* Make sure that thread #2 blocks */
     CHECK_THREAD_BLOCKED(2);
     TEST_CHECK_RESULT("2");
@@ -70,7 +70,7 @@ bdbuf_test4_1_main()
      */
     CONTINUE_THREAD(1);
 
-    /* 
+    /*
      * Setp 4:
      * Wait for Write request to device driver.
      */
@@ -107,7 +107,7 @@ bdbuf_test4_1_main()
      */
     CONTINUE_THREAD(1);
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -127,7 +127,7 @@ bdbuf_test4_1_thread1(rtems_task_argument arg)
     }
 
     CONTINUE_MAIN(1);
-    
+
     /*
      * Step 3:
      * Call rtems_bdbuf_sync(#N)
@@ -174,5 +174,3 @@ bdbuf_test4_1_thread2(rtems_task_argument arg)
     }
     THREAD_END();
 }
-
-

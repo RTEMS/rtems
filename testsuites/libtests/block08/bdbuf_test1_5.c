@@ -3,7 +3,7 @@
  * for a buffer that is owned by an application.
  *
  * Test sequence:
- * -# Call rtems_bdbuf_read() function in thread #1 and 
+ * -# Call rtems_bdbuf_read() function in thread #1 and
  *    provide successful read complete notification for this operation.
  *    As the result rtems_bdbuf_read() returns RTEMS_SUCCESSFUL
  *    in thread #1.
@@ -13,7 +13,7 @@
  * -# Call rtems_bdbuf_release() function in thread #1 in order to give
  *    it back under control of bdbuf library.
  * -# Buffer now is ready to be returned for another application and
- *    as the result rtems_bdbuf_read() unblocks and returns 
+ *    as the result rtems_bdbuf_read() unblocks and returns
  *    RTEMS_SUCCESSFUL in thread #2.
  * -# Call rtems_bdbuf_release() function in thread #2.
  *
@@ -56,7 +56,7 @@ bdbuf_test1_5_main()
 
     WAIT_THREAD_SYNC(1);
     TEST_CHECK_RESULT("1");
-    
+
     /*
      * Step 2:
      * Thread #2 calls rtems_bdbuf_read() and blocks
@@ -85,8 +85,8 @@ bdbuf_test1_5_main()
      * Thread #2 release buffer.
      */
     CONTINUE_THREAD(2);
-    
-    TEST_END();
+
+    TEST_STOP();
 }
 
 static rtems_task
@@ -145,4 +145,3 @@ bdbuf_test1_5_thread2(rtems_task_argument arg)
     }
     THREAD_END();
 }
-

@@ -13,18 +13,18 @@
 #include "config.h"
 #endif
 
-#define TESTS_USE_PRINTK
-#include <tmacros.h>
-#include <rtems/print.h>
-
-const char rtems_test_name[] = "SPPRINTK";
-
 /*
  * Undefined the RTEMS_PRINTF_ATTRIBUTE and make it nothing. The test code
  * contained in the file is suppose to be wrong.
  */
 #undef RTEMS_PRINTF_ATTRIBUTE
 #define RTEMS_PRINTF_ATTRIBUTE(_a, _b)
+
+#define TESTS_USE_PRINTK
+#include <tmacros.h>
+#include <rtems/print.h>
+
+const char rtems_test_name[] = "SPPRINTK";
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

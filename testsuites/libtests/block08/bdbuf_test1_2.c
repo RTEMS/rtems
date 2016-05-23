@@ -4,7 +4,7 @@
  * driver reports failure in read complete notification.
  *
  * Test sequence:
- * -# Call rtems_bdbuf_read() function in thread #1 and block on 
+ * -# Call rtems_bdbuf_read() function in thread #1 and block on
  *    waiting for read complete notification.
  * -# Call rtems_bdbuf_read() function in thread #2 for the same
  *    block number. As the result it blocks on this read as well
@@ -58,7 +58,7 @@ bdbuf_test1_2_main()
 
     /*
      * Step 2:
-     * Thread #2 calls rtems_bdbuf_read() for the same 
+     * Thread #2 calls rtems_bdbuf_read() for the same
      * block number, as the result it shall block waiting
      * on buffer state change.
      */
@@ -86,7 +86,7 @@ bdbuf_test1_2_main()
      * As the result we will get read call to device driver.
      */
     WAIT_DRV_MSG(&msg);
-    
+
     /* Check that thread #2 is still blocked */
     CHECK_THREAD_BLOCKED(2);
     /*
@@ -102,7 +102,7 @@ bdbuf_test1_2_main()
     CONTINUE_THREAD(2);
     TEST_CHECK_RESULT("5");
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -160,4 +160,3 @@ bdbuf_test1_2_thread2(rtems_task_argument arg)
 
     THREAD_END();
 }
-

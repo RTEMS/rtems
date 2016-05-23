@@ -51,14 +51,14 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
                    r->req == RTEMS_BLKDEV_REQ_WRITE ? "W" : "?");
             for (i = 0, sg = r->bufs; i < r->bufnum; i++, sg++)
             {
-                printk("[%d] ", sg->block);
+                printk("[%" PRIu32 "] ", sg->block);
             }
             printk("\n");
             break;
         }
 
         default:
-            printk("%s() Unexpected request comes %u\n",
+            printk("%s() Unexpected request comes %" PRIu32 "\n",
                    __FUNCTION__, req);
             return -1;
     }
@@ -151,4 +151,3 @@ test_disk_initialize(
     printk("TEST DISK - OK\n");
     return RTEMS_SUCCESSFUL;
 }
-

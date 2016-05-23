@@ -1,6 +1,6 @@
 /*! @file
  * @brief Check how rtems_bdbuf_read() handles two readers waiting
- * for a buffer with the same block number in cases when disk device 
+ * for a buffer with the same block number in cases when disk device
  * driver reports failure in read complete notification.
  *
  * Test sequence:
@@ -16,7 +16,7 @@
  *    again so disk device ioctl() function is called again for this
  *    block number.
  * -# This time disk device reports success in read complete notification.
- *    As the result rtems_bdbuf_read() in thread #2 shall return 
+ *    As the result rtems_bdbuf_read() in thread #2 shall return
  *    RTEMS_SUCCESSFUL and provide buffer descriptor.
  * -# Call rtems_bdbuf_release() function in thread #2.
  * .
@@ -59,7 +59,7 @@ bdbuf_test1_3_main()
 
     /*
      * Step 2:
-     * Thread #2 calls rtems_bdbuf_read() for the same 
+     * Thread #2 calls rtems_bdbuf_read() for the same
      * block number, as the result it shall block waiting
      * on buffer state change.
      */
@@ -111,7 +111,7 @@ bdbuf_test1_3_main()
      */
     CONTINUE_THREAD(2);
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -176,4 +176,3 @@ bdbuf_test1_3_thread2(rtems_task_argument arg)
     }
     THREAD_END();
 }
-

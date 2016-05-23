@@ -3,7 +3,7 @@
  *
  * Test sequence:
  * -# In thread #1 call rtems_bdbuf_get(#N) to get an empty block #N.
- * -# In thread #1 call rtems_bdbuf_release_modified() for previously 
+ * -# In thread #1 call rtems_bdbuf_release_modified() for previously
  *    got buffer.
  * -# In thread #1 call rtems_bdbuf_read(#N) to get the same buffer
  *    (after this call a buffer is in AVL tree with ACCESS_MODIFIED state).
@@ -79,7 +79,7 @@ bdbuf_test3_1_main()
     WAIT_THREAD_SYNC(2);
     TEST_CHECK_RESULT("5");
 
-    /* 
+    /*
      * Release buffer in thread #2
      */
     CONTINUE_THREAD(2);
@@ -91,7 +91,7 @@ bdbuf_test3_1_main()
     WAIT_DRV_MSG_WR(&msg);
     SEND_DRV_MSG(0, 0, RTEMS_SUCCESSFUL, 0);
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -107,11 +107,11 @@ bdbuf_test3_1_thread1(rtems_task_argument arg)
      * it in AVL tree with ACCESS state.
      * Step 2:
      * Call release_modified(bd);
-     * [Now we have one entry in modified list and it is still 
+     * [Now we have one entry in modified list and it is still
      * in AVL tree with MODIFIED state]
-     * Step 3: 
+     * Step 3:
      * Call read(#N) to get the same buffer.
-     * [An entry is found in AVL tree, removed from modified list and 
+     * [An entry is found in AVL tree, removed from modified list and
      * returned with state ACCESS_MODIFIED]
      */
     rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_N, &bd);
@@ -119,7 +119,7 @@ bdbuf_test3_1_thread1(rtems_task_argument arg)
     {
         TEST_FAILED();
     }
-    
+
     rc = rtems_bdbuf_release_modified(bd);
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -136,7 +136,7 @@ bdbuf_test3_1_thread1(rtems_task_argument arg)
 
     /* Step 5:
      * Call rtems_bdbuf_release(#N).
-     * As the result buffer will be used by bdbuf to get 
+     * As the result buffer will be used by bdbuf to get
      * buffer #M for thread #2.
      */
     rc = rtems_bdbuf_release(bd);
@@ -161,7 +161,7 @@ bdbuf_test3_1_thread2(rtems_task_argument arg)
      * In thread #2 call read/get(#M)
      * [We ask for block number #M - there is no such entry in AVL,
      * and all the lists are empty (ready, lru, modified), as a result
-     * this thread blocks on 
+     * this thread blocks on
      * rtems_bdbuf_wait(pool, &pool->waiting, &pool->wait_waiters)]
      */
     rc = rtems_bdbuf_get(test_dd, TEST_BLK_NUM_M, &bd);
@@ -182,5 +182,3 @@ bdbuf_test3_1_thread2(rtems_task_argument arg)
     }
     THREAD_END();
 }
-
-

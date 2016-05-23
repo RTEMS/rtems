@@ -1,6 +1,6 @@
 /*! @file
  * @brief Check how rtems_bdbuf_read() handles two readers waiting
- * for a buffer with the same block number in cases when disk device 
+ * for a buffer with the same block number in cases when disk device
  * driver reports success in read complete notification.
  *
  * Test sequence:
@@ -13,7 +13,7 @@
  *    As the result rtems_bdbuf_read() function returns RTEMS_SUCCESSFUL
  *    in thread #1.
  * -# Thread #1 releases buffer with rtems_bdbuf_release() function.
- * -# rtems_bdbuf_read() function in thread #2 unlocks and 
+ * -# rtems_bdbuf_read() function in thread #2 unlocks and
  *    returns RTEMS_SUCCESSFUL.
  * -# Call rtems_bdbuf_release() function in thread #2.
  * .
@@ -57,7 +57,7 @@ bdbuf_test1_4_main()
 
     /*
      * Step 2:
-     * Thread #2 calls rtems_bdbuf_read() for the same 
+     * Thread #2 calls rtems_bdbuf_read() for the same
      * block number, as the result it shall block waiting
      * on buffer state change (waiting on TRANSFER state).
      */
@@ -79,7 +79,7 @@ bdbuf_test1_4_main()
     WAIT_THREAD_SYNC(1);
     TEST_CHECK_RESULT("3");
 
-    /* 
+    /*
      * Check that thread #2 is still blocked.
      */
     CHECK_THREAD_BLOCKED(2);
@@ -104,7 +104,7 @@ bdbuf_test1_4_main()
      */
     CONTINUE_THREAD(2);
 
-    TEST_END();
+    TEST_STOP();
 }
 
 static rtems_task
@@ -119,8 +119,8 @@ bdbuf_test1_4_thread1(rtems_task_argument arg)
      * We will block on this read and meanwhile
      * thread #2 will try to read the same block.
      * After blocking on read in thread #2, device
-     * driver will notify successful completion of 
-     * date transfer, and as the result this call 
+     * driver will notify successful completion of
+     * date transfer, and as the result this call
      * will return valid buffer.
      */
     rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
@@ -156,8 +156,8 @@ bdbuf_test1_4_thread2(rtems_task_argument arg)
      * on data transfer operation, so we will block here as well.
      *
      * Step 5:
-     * On step 4 thread #1 releases buffer and as the result 
-     * our read operation should finish with success. 
+     * On step 4 thread #1 releases buffer and as the result
+     * our read operation should finish with success.
      */
     rc = rtems_bdbuf_read(test_dd, TEST_BLK_NUM, &bd);
     if (rc != RTEMS_SUCCESSFUL)
@@ -177,5 +177,3 @@ bdbuf_test1_4_thread2(rtems_task_argument arg)
     }
     THREAD_END();
 }
-
-

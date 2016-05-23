@@ -1,19 +1,19 @@
 /*! @file
- * @brief Check the behaviour of rtems_bdbuf_read() function 
+ * @brief Check the behaviour of rtems_bdbuf_read() function
  * with different reports from disk device driver.
  *
  * Test sequence:
- * -# Call rtems_bdbuf_read() function and return 0 from disk device 
+ * -# Call rtems_bdbuf_read() function and return 0 from disk device
  *    driver ioctl() function, and the result of asynchronous read
  *    complete notification is successful.
  * -# Check that rtems_bdbuf_read() returns RTEMS_SUCCESSFUL and
  *    provides buffer descriptor.
  * -# Call rtems_bdbuf_read() function and return -1 from disk device
- *    driver ioctl() function (there will be no asynchronous read 
+ *    driver ioctl() function (there will be no asynchronous read
  *    complete notification).
  * -# Check that rtems_bdbuf_read() returns RTEMS_IO_ERROR.
  * -# Call rtems_bdbuf_read() function and return 0 from disk device
- *    driver ioctl() function, but the result of asynchronous read 
+ *    driver ioctl() function, but the result of asynchronous read
  *    complete notification is faulty (with some erroneous status).
  * -# Check that rtems_bdbuf_read() returns that status and does not
  *    return buffer descriptor.
@@ -47,7 +47,7 @@ bdbuf_test1_1_main()
      * Create working thread that will call rtems_bdbuf_read() function.
      */
     START_THREAD(1, bdbuf_test1_1_thread1);
-    
+
     /*
      * Step 1:
      * Check that rtems_bdbuf_read() returns RTEMS_SUCCESSFUL
@@ -91,7 +91,7 @@ bdbuf_test1_1_main()
 
     CONTINUE_THREAD(1);
 
-    TEST_END();
+    TEST_STOP();
 }
 
 
@@ -147,4 +147,3 @@ bdbuf_test1_1_thread1(rtems_task_argument arg)
 
     THREAD_END();
 }
-
