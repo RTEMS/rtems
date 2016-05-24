@@ -1320,7 +1320,7 @@ static void verify_blocking_mq_timedsend( void )
   fatal_posix_service_status_errno( status, ETIMEDOUT, "mq_timedsend");
 
   sc = rtems_task_resume( thread );
-  fatal_directive_status( sc, RTEMS_SUCCESSFUL, "rtems_task_restart" );
+  fatal_directive_status( sc, RTEMS_SUCCESSFUL, "rtems_task_resume" );
 
   status = clock_gettime( CLOCK_REALTIME, &timeout );
   fatal_posix_service_status( status, 0, "clock_gettime" );
