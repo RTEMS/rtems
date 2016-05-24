@@ -706,9 +706,8 @@ void validate_mq_receive_error_codes(void)
 
 void verify_open_functionality(void)
 {
-#if 0
   mqd_t           n_mq;
-#endif
+  int             status;
 
   Start_Test( "mq_open functionality" );
 
@@ -716,12 +715,11 @@ void verify_open_functionality(void)
    * Validate a second open returns the same message queue.
    */
 
-#if 0
   puts( "Init: mq_open - Open an existing mq ( same id )" );
   n_mq = mq_open( RD_NAME, 0 );
-  fatal_posix_service_status(
   rtems_test_assert( n_mq == Test_q[RD_QUEUE].mq );
-#endif
+  status = mq_close( n_mq );
+  fatal_posix_service_status( status, 0, "mq_close");
 }
 
 void verify_unlink_functionality(void)

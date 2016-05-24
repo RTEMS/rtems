@@ -52,6 +52,7 @@ Init: Init: mq_timedreceive - on queue Qnoblock Init: 0 sec 128 us
 Init: Init: mq_timedreceive - on queue Qblock Init: 1 sec -715 us
 Init: Init: mq_timedreceive - on queue Qdefault Init: 1 sec -1836 us
 _______________mq_open functionality
+Init: mq_open - Open an existing mq ( same id )
 _______________mq_notify
 Init: mq_notify - Unopened message queue (EBADF)
 _____mq_notify - notify when Qnoblock gets a message
