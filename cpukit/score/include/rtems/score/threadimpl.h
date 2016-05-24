@@ -1571,6 +1571,25 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_remove( Thread_Control *the_thread )
   _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue
+)
+{
+  _Thread_Timer_remove( the_thread );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  if ( _Objects_Is_local_id( the_thread->Object.id ) ) {
+    _Thread_Unblock( the_thread );
+  } else {
+    _Thread_queue_Unblock_proxy( queue, the_thread );
+  }
+#else
+  (void) queue;
+  _Thread_Unblock( the_thread );
+#endif
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
   Thread_Control  *the_thread,
   Per_CPU_Control *cpu

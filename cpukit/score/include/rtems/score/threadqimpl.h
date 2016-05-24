@@ -407,17 +407,6 @@ bool _Thread_queue_Do_extract_locked(
     )
 #endif
 
-void _Thread_queue_Do_unblock_critical(
-  bool                     unblock,
-  Thread_queue_Queue      *queue,
-  Thread_Control          *the_thread,
-#if defined(RTEMS_MULTIPROCESSING)
-  Thread_queue_MP_callout  mp_callout,
-  Objects_Id               mp_id,
-#endif
-  ISR_lock_Context        *lock_context
-);
-
 /**
  * @brief Unblocks the thread which was on the thread queue before.
  *
@@ -430,46 +419,14 @@ void _Thread_queue_Do_unblock_critical(
  * _Thread_queue_Extract_locked().
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to extract.
- * @param[in] mp_callout Callout to unblock the thread in case it is actually a
- *   thread proxy.  This parameter is only used on multiprocessing
- *   configurations.
- * @param[in] mp_id Object identifier of the object containing the thread
- *   queue.  This parameter is only used on multiprocessing configurations.
  * @param[in] lock_context The lock context of the lock acquire.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Unblock_critical( \
-    unblock, \
-    queue, \
-    the_thread, \
-    mp_callout, \
-    mp_id, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_unblock_critical( \
-      unblock, \
-      queue, \
-      the_thread, \
-      mp_callout, \
-      mp_id, \
-      lock_context \
-    )
-#else
-  #define _Thread_queue_Unblock_critical( \
-    unblock, \
-    queue, \
-    the_thread, \
-    mp_callout, \
-    mp_id, \
-    lock_context \
-  ) \
-    _Thread_queue_Do_unblock_critical( \
-      unblock, \
-      queue, \
-      the_thread, \
-      lock_context \
-    )
-#endif
+void _Thread_queue_Unblock_critical(
+  bool                unblock,
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread,
+  ISR_lock_Context   *lock_context
+);
 
 void _Thread_queue_Do_extract_critical(
   Thread_queue_Queue            *queue,
@@ -830,6 +787,11 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Boost_priority(
 void _Thread_queue_MP_callout_do_nothing(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
+);
+
+void _Thread_queue_Unblock_proxy(
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread
 );
 #endif
 

@@ -157,8 +157,6 @@ CORE_mutex_Status _CORE_mutex_Do_surrender(
       unblock,
       &the_mutex->Wait_queue.Queue,
       the_thread,
-      mp_callout,
-      mp_id,
       lock_context
     );
   } else {

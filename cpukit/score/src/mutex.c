@@ -154,8 +154,6 @@ static void _Mutex_Release_slow(
       unblock,
       &mutex->Queue.Queue,
       first,
-      NULL,
-      0,
       lock_context
     );
   } else {

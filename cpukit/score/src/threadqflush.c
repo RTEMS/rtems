@@ -95,8 +95,7 @@ size_t _Thread_queue_Do_flush_critical(
 
       next = _Chain_Next( node );
       the_thread = THREAD_CHAIN_NODE_TO_THREAD( node );
-      _Thread_Timer_remove( the_thread );
-      _Thread_Unblock( the_thread );
+      _Thread_Remove_timer_and_unblock( the_thread, queue );
 
       node = next;
     } while ( node != tail );
