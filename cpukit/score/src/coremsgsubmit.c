@@ -133,6 +133,7 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
      *  it as a variable.  Doing this emphasizes how dangerous it
      *  would be to use this variable prior to here.
      */
+    executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
     executing->Wait.return_argument_second.immutable_object = buffer;
     executing->Wait.option = (uint32_t) size;
     executing->Wait.count = submit_type;
@@ -146,6 +147,6 @@ CORE_message_queue_Status _CORE_message_queue_Do_submit(
       CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
       lock_context
     );
-    return CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT;
+    return executing->Wait.return_code;
   #endif
 }

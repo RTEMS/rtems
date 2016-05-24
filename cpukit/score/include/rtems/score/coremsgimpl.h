@@ -89,8 +89,6 @@ typedef enum {
    *  to receive a message because one did not become available.
    */
   CORE_MESSAGE_QUEUE_STATUS_TIMEOUT,
-  /** This value indicates that a blocking receive was unsuccessful. */
-  CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT
 }   CORE_message_queue_Status;
 
 /**
@@ -98,7 +96,7 @@ typedef enum {
  *
  *  This is the last status value.
  */
-#define CORE_MESSAGE_QUEUE_STATUS_LAST CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT
+#define CORE_MESSAGE_QUEUE_STATUS_LAST CORE_MESSAGE_QUEUE_STATUS_TIMEOUT
 
 /**
  *  @brief Initialize a message queue.

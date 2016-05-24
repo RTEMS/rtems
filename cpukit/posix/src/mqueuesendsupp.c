@@ -105,17 +105,6 @@ int _POSIX_Message_queue_Send_support(
     &lock_context
   );
 
-  /*
-   *  If we had to block, then this is where the task returns
-   *  after it wakes up.  The returned status is correct for
-   *  non-blocking operations but if we blocked, then we need
-   *  to look at the status in our TCB.
-   */
-
-  if ( msg_status == CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_WAIT ) {
-    msg_status = executing->Wait.return_code;
-  }
-
   if ( msg_status != CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL ) {
     rtems_set_errno_and_return_minus_one(
       _POSIX_Message_queue_Translate_core_message_queue_return_code(

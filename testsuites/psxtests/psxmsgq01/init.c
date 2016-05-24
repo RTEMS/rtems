@@ -1259,6 +1259,82 @@ void verify_mq_send(void)
   }
 }
 
+static void *receive_maxmsg_plus_one( void *arg )
+{
+  mqd_t                 mq;
+  const Test_Message_t *m;
+  int                   i;
+
+  mq = Test_q[ BLOCKING ].mq;
+  m = &Predefined_Msgs[ 0 ];
+
+  for ( i = 0; i < MAXMSG + 1; ++i ) {
+    Test_Message_t a;
+    unsigned       prio;
+    ssize_t        n;
+
+    n = mq_receive( mq, &a.msg[0], sizeof(a.msg), &prio);
+    rtems_test_assert( n == m->size );
+    rtems_test_assert( prio == m->priority );
+    rtems_test_assert( memcmp( &a.msg[0], &m->msg[0], (size_t) n ) == 0 );
+  }
+
+  return arg;
+}
+
+static void verify_blocking_mq_timedsend( void )
+{
+  mqd_t                 mq;
+  const Test_Message_t *m;
+  int                   status;
+  struct timespec       timeout;
+  pthread_t             thread;
+  void                 *exit_value;
+  rtems_status_code     sc;
+
+  Start_Test( "verify_blocking_mq_timedsend"  );
+
+  mq = Test_q[ BLOCKING ].mq;
+  m = &Predefined_Msgs[ 0 ];
+
+  /*
+   * Create and suspend the receive thread early so that we don't overwrite the
+   * ETIMEDOUT in executing->Wait.return_code.  This verifies the succesful
+   * mq_timedreceive() later.
+   */
+
+  status = pthread_create( &thread, NULL, receive_maxmsg_plus_one, &thread );
+  fatal_posix_service_status( status, 0, "pthread_create" );
+
+  sc = rtems_task_suspend( thread );
+  fatal_directive_status( sc, RTEMS_SUCCESSFUL, "rtems_task_suspend" );
+
+  do {
+    status = clock_gettime( CLOCK_REALTIME, &timeout );
+    fatal_posix_service_status( status, 0, "clock_gettime" );
+    ++timeout.tv_sec;
+
+    status = mq_timedsend( mq, m->msg, m->size , m->priority, &timeout );
+  } while ( status == 0 );
+
+  fatal_posix_service_status_errno( status, ETIMEDOUT, "mq_timedsend");
+
+  sc = rtems_task_resume( thread );
+  fatal_directive_status( sc, RTEMS_SUCCESSFUL, "rtems_task_restart" );
+
+  status = clock_gettime( CLOCK_REALTIME, &timeout );
+  fatal_posix_service_status( status, 0, "clock_gettime" );
+  ++timeout.tv_sec;
+
+  status = mq_timedsend( mq, m->msg, m->size , m->priority, &timeout );
+  fatal_posix_service_status( status, 0, "mq_timedsend" );
+
+  exit_value = NULL;
+  status = pthread_join( thread, &exit_value );
+  fatal_posix_service_status( status, 0, "pthread_join" );
+  rtems_test_assert( exit_value == &thread );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -1267,6 +1343,7 @@ void *POSIX_Init(
 
   validate_mq_open_error_codes( );
   open_test_queues();
+  verify_blocking_mq_timedsend();
   validate_mq_unlink_error_codes();
   validate_mq_close_error_codes();
   verify_unlink_functionality();
