@@ -1369,10 +1369,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
 
 /**
- * General helper to aligned a value up to a power of two boundary.
+ * General helper to align up a value.
  */
 #define _Configure_Align_up(_val, _align) \
-  (((_val) + (_align) - 1) & ~((_align) - 1))
+  (((_val) + (_align) - 1) - ((_val) + (_align) - 1) % (_align))
+
+#define CONFIGURE_HEAP_MIN_BLOCK_SIZE \
+  _Configure_Align_up(sizeof(Heap_Block), CPU_HEAP_ALIGNMENT)
 
 /**
  * This is a helper macro used in calculations in this file.  It is used
@@ -1381,8 +1384,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * may be applied.
  */
 #define _Configure_From_workspace(_size) \
-   (ssize_t) (_Configure_Zero_or_One(_size) * \
-     _Configure_Align_up((_size) + HEAP_BLOCK_HEADER_SIZE, CPU_HEAP_ALIGNMENT))
+  (ssize_t) (_Configure_Zero_or_One(_size) * \
+    _Configure_Align_up(_size + HEAP_BLOCK_HEADER_SIZE, \
+      CONFIGURE_HEAP_MIN_BLOCK_SIZE))
 
 /**
  * This is a helper macro used in stack space calculations in this file.  It
