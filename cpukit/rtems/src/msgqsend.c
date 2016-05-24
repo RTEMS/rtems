@@ -38,7 +38,7 @@ rtems_status_code rtems_message_queue_send(
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    _Message_queue_MP_Send( id, buffer, size );
+    return _Message_queue_MP_Send( id, buffer, size );
 #else
     return RTEMS_INVALID_ID;
 #endif

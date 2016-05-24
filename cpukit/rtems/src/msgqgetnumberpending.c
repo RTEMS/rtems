@@ -36,7 +36,7 @@ rtems_status_code rtems_message_queue_get_number_pending(
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    _Message_queue_MP_Get_number_pending( id, count );
+    return _Message_queue_MP_Get_number_pending( id, count );
 #else
     return RTEMS_INVALID_ID;
 #endif

@@ -51,7 +51,7 @@ rtems_status_code rtems_message_queue_receive(
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    _Message_queue_MP_Receive( id, buffer, size, option_set, timeout );
+    return _Message_queue_MP_Receive( id, buffer, size, option_set, timeout );
 #else
     return RTEMS_INVALID_ID;
 #endif

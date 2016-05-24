@@ -49,7 +49,7 @@ rtems_status_code rtems_semaphore_obtain(
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    _Semaphore_MP_Obtain( id, option_set, timeout );
+    return _Semaphore_MP_Obtain( id, option_set, timeout );
 #else
     return RTEMS_INVALID_ID;
 #endif

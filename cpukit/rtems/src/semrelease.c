@@ -36,7 +36,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
-    _Semaphore_MP_Release( id );
+    return _Semaphore_MP_Release( id );
 #else
     return RTEMS_INVALID_ID;
 #endif
