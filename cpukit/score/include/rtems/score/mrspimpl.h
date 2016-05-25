@@ -24,6 +24,7 @@
 #include <rtems/score/resourceimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/status.h>
+#include <rtems/score/threadqimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
@@ -65,7 +66,10 @@ RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
   Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Acquire( &mrsp->Lock, &queue_context->Lock_context );
+  _Thread_queue_Acquire_critical(
+    &mrsp->Wait_queue,
+    &queue_context->Lock_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Release(
@@ -73,7 +77,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
   Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_Release_and_ISR_enable( &mrsp->Lock, &queue_context->Lock_context );
+  _Thread_queue_Release( &mrsp->Wait_queue, &queue_context->Lock_context );
 }
 
 RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(
@@ -160,7 +164,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
 
   _Resource_Initialize( &mrsp->Resource );
   _Chain_Initialize_empty( &mrsp->Rivals );
-  _ISR_lock_Initialize( &mrsp->Lock, "MrsP" );
+  _Thread_queue_Initialize( &mrsp->Wait_queue );
 
   return STATUS_SUCCESSFUL;
 }
@@ -438,7 +442,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Destroy(
 )
 {
   _MRSP_Release( mrsp, queue_context );
-  _ISR_lock_Destroy( &mrsp->Lock );
+  _Thread_queue_Destroy( &mrsp->Wait_queue );
   _Workspace_Free( mrsp->ceiling_priorities );
 }
 

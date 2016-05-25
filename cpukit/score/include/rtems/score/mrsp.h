@@ -20,9 +20,9 @@
 #if defined(RTEMS_SMP)
 
 #include <rtems/score/chain.h>
-#include <rtems/score/isrlock.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,6 +115,14 @@ typedef struct {
  */
 struct MRSP_Control {
   /**
+   * @brief Lock to protect the resource dependency tree.
+   *
+   * This is a thread queue since this simplifies the Classic semaphore
+   * implementation.  Only the lock part of the thread queue is used.
+   */
+  Thread_queue_Control Wait_queue;
+
+  /**
    * @brief Basic resource control.
    */
   Resource_Control Resource;
@@ -125,11 +133,6 @@ struct MRSP_Control {
    * @see MRSP_Rival::Node.
    */
   Chain_Control Rivals;
-
-  /**
-   * @brief Lock to protect the resource dependency tree.
-   */
-  ISR_LOCK_MEMBER( Lock )
 
   /**
    * @brief The initial priority of the owner before it was elevated to the

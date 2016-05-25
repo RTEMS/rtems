@@ -33,6 +33,13 @@ THREAD_QUEUE_OBJECT_ASSERT(
   Core_control.semaphore.Wait_queue
 );
 
+#if defined(RTEMS_SMP)
+THREAD_QUEUE_OBJECT_ASSERT(
+  Semaphore_Control,
+  Core_control.mrsp.Wait_queue
+);
+#endif
+
 rtems_status_code rtems_semaphore_obtain(
   rtems_id        id,
   rtems_option    option_set,
