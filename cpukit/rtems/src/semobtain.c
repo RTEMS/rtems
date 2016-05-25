@@ -25,6 +25,11 @@
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
+  Core_control.Wait_queue
+);
+
+THREAD_QUEUE_OBJECT_ASSERT(
+  Semaphore_Control,
   Core_control.mutex.Wait_queue
 );
 

@@ -75,6 +75,11 @@ typedef struct {
    */
   union {
     /**
+     * @brief The thread queue present in all other variants.
+     */
+    Thread_queue_Control Wait_queue;
+
+    /**
      *  This is the SuperCore Mutex instance associated with this Classic
      *  API Semaphore instance.
      */
