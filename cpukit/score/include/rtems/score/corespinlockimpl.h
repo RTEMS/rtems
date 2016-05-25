@@ -58,15 +58,11 @@ typedef enum {
   /** This status indicates that the spinlock is currently locked and thus
    *  unavailable.
    */
-  CORE_SPINLOCK_UNAVAILABLE,
-  /** This status indicates that the spinlock is not currently locked and thus
-   *  should not be released.
-   */
-  CORE_SPINLOCK_NOT_LOCKED
+  CORE_SPINLOCK_UNAVAILABLE
 }   CORE_spinlock_Status;
 
 /** This is a shorthand for the last status code. */
-#define CORE_SPINLOCK_STATUS_LAST CORE_SPINLOCK_NOT_LOCKED
+#define CORE_SPINLOCK_STATUS_LAST CORE_SPINLOCK_UNAVAILABLE
 
 /** This indicates the lock is available. */
 #define CORE_SPINLOCK_UNLOCKED 0
