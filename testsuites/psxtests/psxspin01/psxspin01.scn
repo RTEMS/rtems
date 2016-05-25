@@ -1,4 +1,4 @@
-*** POSIX SPINLOCK TEST 01 ***
+*** BEGIN OF TEST PSXSPIN 1 ***
 pthread_spin_init( NULL, PTHREAD_PROCESS_PRIVATE ) -- EINVAL
 pthread_spin_init( NULL, PTHREAD_PROCESS_SHARED ) -- EINVAL
 pthread_spin_init( &spinlock, 0x1234 ) -- EINVAL
@@ -14,7 +14,7 @@ pthread_spin_lock( &spinlock ) -- EINVAL
 pthread_spin_trylock( &spinlock ) -- EINVAL
 pthread_spin_unlock( &spinlock ) -- EINVAL
 pthread_spin_destroy( &spinlock ) -- EINVAL
-pthread_spin_unlock( &Spinlock ) -- already unlocked OK
+pthread_spin_unlock( &Spinlock ) -- EPERM
 pthread_spin_lock( &Spinlock ) -- OK
 pthread_spin_lock( &Spinlock ) -- EDEADLK
 pthread_spin_trylock( &Spinlock ) -- EDEADLK
@@ -23,9 +23,10 @@ pthread_spin_trylock( &Spinlock ) -- OK
 pthread_spin_unlock( &Spinlock ) -- OK
 pthread_spin_lock( &Spinlock ) from Thread -- OK
 sleep to allow main thread to run
+pthread_spin_unlock( &Spinlock ) -- EPERM
 pthread_spin_lock( &Spinlock ) -- OK
 pthread_spin_unlock( &Spinlock ) from Thread -- OK
 pthread_spin_destroy( &Spinlock ) -- EBUSY
 pthread_spin_unlock( &Spinlock ) -- OK
 pthread_spin_destroy( &Spinlock ) -- OK
-*** END OF POSIX SPINLOCK TEST 01 ***
+*** END OF TEST PSXSPIN 1 ***

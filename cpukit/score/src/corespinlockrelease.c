@@ -32,17 +32,12 @@ CORE_spinlock_Status _CORE_spinlock_Release(
   _ISR_Disable( level );
 
     /*
-     *  It must locked before it can be unlocked.
-     */
-    if ( the_spinlock->lock == CORE_SPINLOCK_UNLOCKED ) {
-      _ISR_Enable( level );
-      return CORE_SPINLOCK_NOT_LOCKED;
-    }
-
-    /*
      *  It must locked by the current thread before it can be unlocked.
      */
-    if ( the_spinlock->holder != _Thread_Executing->Object.id ) {
+    if (
+      the_spinlock->lock != CORE_SPINLOCK_LOCKED
+        || the_spinlock->holder != _Thread_Executing
+    ) {
       _ISR_Enable( level );
       return CORE_SPINLOCK_NOT_HOLDER;
     }

@@ -31,8 +31,7 @@ static int _POSIX_Spinlock_Return_codes[CORE_SPINLOCK_STATUS_LAST + 1] = {
   EPERM,                    /* CORE_SPINLOCK_NOT_HOLDER */
   -1,                       /* CORE_SPINLOCK_TIMEOUT */
   EBUSY,                    /* CORE_SPINLOCK_IS_BUSY */
-  EBUSY,                    /* CORE_SPINLOCK_UNAVAILABLE */
-  0                         /* CORE_SPINLOCK_NOT_LOCKED */
+  EBUSY                     /* CORE_SPINLOCK_UNAVAILABLE */
 };
 
 

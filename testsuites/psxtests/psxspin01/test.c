@@ -146,9 +146,9 @@ int main(
   status = pthread_spin_destroy( &spinlock );
   rtems_test_assert( status == EINVAL );
 
-  puts( "pthread_spin_unlock( &Spinlock ) -- already unlocked OK" );
+  puts( "pthread_spin_unlock( &Spinlock ) -- EPERM" );
   status = pthread_spin_unlock( &Spinlock );
-  rtems_test_assert( status == 0 );
+  rtems_test_assert( status == EPERM );
 
   /* Now some basic locking and unlocking with a deadlock verification */
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
@@ -200,6 +200,11 @@ int main(
    */
 
   mainThreadSpinning = 1;
+
+  puts( "pthread_spin_unlock( &Spinlock ) -- EPERM" );
+  status = pthread_spin_unlock( &Spinlock );
+  rtems_test_assert( status == EPERM );
+
   puts( "pthread_spin_lock( &Spinlock ) -- OK" );
   status = pthread_spin_lock( &Spinlock );
   rtems_test_assert( status == 0 );
