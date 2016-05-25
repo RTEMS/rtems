@@ -19,6 +19,7 @@
 #endif
 
 #include <semaphore.h>
+#include <limits.h>
 
 #include <rtems/posix/semaphoreimpl.h>
 
@@ -28,6 +29,7 @@ int sem_post(
 {
   POSIX_Semaphore_Control *the_semaphore;
   Thread_queue_Context     queue_context;
+  CORE_semaphore_Status    status;
 
   the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
@@ -35,9 +37,17 @@ int sem_post(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _CORE_semaphore_Surrender(
+  status = _CORE_semaphore_Surrender(
     &the_semaphore->Semaphore,
+    SEM_VALUE_MAX,
     &queue_context
   );
-  return 0;
+
+  if ( status == CORE_SEMAPHORE_STATUS_SUCCESSFUL ) {
+    return 0;
+  }
+
+  rtems_set_errno_and_return_minus_one(
+    _POSIX_Semaphore_Translate_core_semaphore_return_code( status )
+  );
 }

@@ -15,6 +15,7 @@
 #include <semaphore.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <time.h>
 #include <tmacros.h>
 #include <pmacros.h>
@@ -74,6 +75,38 @@ static void test_sem_wait_during_delete(void)
 
   eno = pthread_join( th, NULL );
   rtems_test_assert( eno == 0 );
+}
+
+static void test_sem_post_overflow(void)
+{
+  sem_t sem;
+  int   rv;
+  int   val;
+
+  rv = sem_init( &sem, 0, SEM_VALUE_MAX );
+  rtems_test_assert( rv == 0 );
+
+  rv = sem_getvalue( &sem, &val );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( val == (int) SEM_VALUE_MAX );
+
+  errno = 0;
+  rv = sem_post( &sem );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EOVERFLOW );
+
+  rv = sem_getvalue( &sem, &val );
+  rtems_test_assert( rv == 0 );
+  rtems_test_assert( val == (int) SEM_VALUE_MAX );
+
+  rv = sem_wait( &sem );
+  rtems_test_assert( rv == 0 );
+
+  rv = sem_post( &sem );
+  rtems_test_assert( rv == 0 );
+
+  rv = sem_destroy( &sem );
+  rtems_test_assert( rv == 0 );
 }
 
 void *POSIX_Init(
@@ -345,6 +378,7 @@ void *POSIX_Init(
   rtems_test_assert( (status == -1) && (errno == ENOENT) );
 
   test_sem_wait_during_delete();
+  test_sem_post_overflow();
 
   /* Try adding in unlinking before closing... (can we still open?) */
 

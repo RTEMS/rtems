@@ -149,6 +149,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(
  */
 RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
   CORE_semaphore_Control  *the_semaphore,
+  uint32_t                 maximum_count,
   Thread_queue_Context    *queue_context
 )
 {
@@ -171,7 +172,7 @@ RTEMS_INLINE_ROUTINE CORE_semaphore_Status _CORE_semaphore_Surrender(
       queue_context
     );
   } else {
-    if ( the_semaphore->count < UINT32_MAX )
+    if ( the_semaphore->count < maximum_count )
       the_semaphore->count += 1;
     else
       status = CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED;

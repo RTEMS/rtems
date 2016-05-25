@@ -68,6 +68,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   } else {
     semaphore_status = _CORE_semaphore_Surrender(
       &the_semaphore->Core_control.semaphore,
+      UINT32_MAX,
       &queue_context
     );
     return _Semaphore_Translate_core_semaphore_return_code( semaphore_status );

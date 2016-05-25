@@ -30,6 +30,35 @@ rtems_task Init(
   Semaphore_name[ 2 ]  =  rtems_build_name( 'S', 'M', '2', ' ' );
   Semaphore_name[ 3 ]  =  rtems_build_name( 'S', 'M', '3', ' ' );
 
+  /* release overflow */
+  status = rtems_semaphore_create(
+    Semaphore_name[ 1 ],
+    UINT32_MAX,
+    RTEMS_COUNTING_SEMAPHORE,
+    0,
+    &Semaphore_id[ 1 ]
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_SUCCESSFUL,
+    "rtems_semaphore_create"
+  );
+  puts( "TA1 - rtems_semaphore_create - RTEMS_SUCCESSFUL" );
+  status = rtems_semaphore_release( Semaphore_id[ 1 ] );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_semaphore_release"
+  );
+  puts( "TA1 - rtems_semaphore_release - RTEMS_UNSATISFIED" );
+  status = rtems_semaphore_delete( Semaphore_id[ 1 ] );
+  fatal_directive_status(
+    status,
+    RTEMS_SUCCESSFUL,
+    "rtems_semaphore_delete"
+  );
+  puts( "TA1 - rtems_semaphore_delete - RTEMS_SUCCESSFUL" );
+
   /* invalid name */
   status = rtems_semaphore_create(
     0,

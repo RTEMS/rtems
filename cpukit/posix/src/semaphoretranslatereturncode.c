@@ -27,8 +27,5 @@ const int _POSIX_Semaphore_Return_codes[CORE_SEMAPHORE_STATUS_LAST + 1] = {
   EAGAIN,              /* CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT */
   EINVAL,              /* CORE_SEMAPHORE_WAS_DELETED */
   ETIMEDOUT,           /* CORE_SEMAPHORE_TIMEOUT */
-  /* The next error can not occur since we set the maximum
-   * count to the largest value the count can hold.
-   */
-  ENOSYS,              /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
+  EOVERFLOW            /* CORE_SEMAPHORE_MAXIMUM_COUNT_EXCEEDED */
 };

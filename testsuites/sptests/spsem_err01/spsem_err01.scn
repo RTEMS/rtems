@@ -1,4 +1,7 @@
-*** TEST SEMAPHORE ERROR 01 ***
+*** BEGIN OF TEST SP SEMAPHORE ERROR 01 ***
+TA1 - rtems_semaphore_create - RTEMS_SUCCESSFUL
+TA1 - rtems_semaphore_release - RTEMS_UNSATISFIED
+TA1 - rtems_semaphore_delete - RTEMS_SUCCESSFUL
 TA1 - rtems_semaphore_create - RTEMS_INVALID_NAME
 TA1 - rtems_semaphore_create - RTEMS_INVALID_ADDRESS
 TA1 - rtems_semaphore_create - 1 - RTEMS_SUCCESSFUL
@@ -16,4 +19,4 @@ TA1 - rtems_semaphore_ident - global RTEMS_INVALID_NAME
 TA1 - rtems_semaphore_ident - local RTEMS_INVALID_NAME
 TA1 - rtems_semaphore_release - RTEMS_INVALID_ID
 TA1 - rtems_semaphore_flush - RTEMS_INVALID_ID
-*** END TEST SEMAPHORE ERROR 01 ***
+*** END OF TEST SP SEMAPHORE ERROR 01 ***

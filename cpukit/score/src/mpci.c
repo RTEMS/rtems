@@ -374,7 +374,7 @@ void _MPCI_Announce ( void )
   Thread_queue_Context queue_context;
 
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, &queue_context );
+  (void) _CORE_semaphore_Surrender( &_MPCI_Semaphore, UINT32_MAX, &queue_context );
 }
 
 void _MPCI_Internal_packets_Send_process_packet (
