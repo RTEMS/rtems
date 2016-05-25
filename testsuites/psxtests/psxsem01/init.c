@@ -109,6 +109,17 @@ static void test_sem_post_overflow(void)
   rtems_test_assert( rv == 0 );
 }
 
+static void test_sem_init_too_large_inital_value(void)
+{
+  sem_t sem;
+  int   rv;
+
+  errno = 0;
+  rv = sem_init( &sem, 0, SEM_VALUE_MAX + 1 );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EINVAL );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -379,6 +390,7 @@ void *POSIX_Init(
 
   test_sem_wait_during_delete();
   test_sem_post_overflow();
+  test_sem_init_too_large_inital_value();
 
   /* Try adding in unlinking before closing... (can we still open?) */
 
