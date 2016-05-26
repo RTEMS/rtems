@@ -307,7 +307,7 @@ SHA512_Update(SHA512_CTX * ctx, const void *in, size_t len)
  * and clears the context state.
  */
 void
-SHA512_Final(unsigned char digest[SHA512_DIGEST_LENGTH], SHA512_CTX * ctx)
+SHA512_Final(unsigned char digest[static SHA512_DIGEST_LENGTH], SHA512_CTX *ctx)
 {
 
 	/* Add padding */
@@ -317,7 +317,7 @@ SHA512_Final(unsigned char digest[SHA512_DIGEST_LENGTH], SHA512_CTX * ctx)
 	be64enc_vect(digest, ctx->state, SHA512_DIGEST_LENGTH);
 
 	/* Clear the context state */
-	memset((void *)ctx, 0, sizeof(*ctx));
+	memset(ctx, 0, sizeof(*ctx));
 }
 
 /*** SHA-384: *********************************************************/
@@ -357,7 +357,7 @@ SHA384_Update(SHA384_CTX * ctx, const void *in, size_t len)
  * and clears the context state.
  */
 void
-SHA384_Final(unsigned char digest[SHA384_DIGEST_LENGTH], SHA384_CTX * ctx)
+SHA384_Final(unsigned char digest[static SHA384_DIGEST_LENGTH], SHA384_CTX *ctx)
 {
 
 	/* Add padding */
@@ -367,5 +367,5 @@ SHA384_Final(unsigned char digest[SHA384_DIGEST_LENGTH], SHA384_CTX * ctx)
 	be64enc_vect(digest, ctx->state, SHA384_DIGEST_LENGTH);
 
 	/* Clear the context state */
-	memset((void *)ctx, 0, sizeof(*ctx));
+	memset(ctx, 0, sizeof(*ctx));
 }
