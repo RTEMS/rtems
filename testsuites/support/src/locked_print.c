@@ -18,18 +18,10 @@ static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
 
 rtems_printer rtems_test_printer;
 
-static int locked_printf_plugin(void *context, const char *fmt, ...)
+static int locked_printf_plugin(void *context, const char *fmt, va_list ap)
 {
-  int rv;
-  va_list ap;
-
   (void) context;
-
-  va_start(ap, fmt);
-  rv = locked_vprintf(fmt, ap);
-  va_end(ap);
-
-  return rv;
+  return locked_vprintf(fmt, ap);
 }
 
 void locked_print_initialize(void)
@@ -59,7 +51,7 @@ void locked_print_initialize(void)
    * Set up the printer to use the locked printf printer.
    */
   rtems_test_printer.context = NULL;
-  rtems_test_printer.context = locked_printf_plugin;
+  rtems_test_printer.printer = locked_printf_plugin;
 }
 
 int locked_vprintf(const char *fmt, va_list ap)
