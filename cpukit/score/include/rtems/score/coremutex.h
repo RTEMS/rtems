@@ -87,13 +87,6 @@ typedef enum {
    */
   CORE_MUTEX_NESTING_IS_ERROR,
 #endif
-  /**
-   *    This sequence performs as indicated:
-   *        + lock(m)
-   *        + lock(m)   - deadlocks or timeouts
-   *        + unlock(m) - releases
-   */
-  CORE_MUTEX_NESTING_BLOCKS
 }  CORE_mutex_Nesting_behaviors;
 
 /**

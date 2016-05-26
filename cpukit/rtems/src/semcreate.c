@@ -143,14 +143,18 @@ rtems_status_code rtems_semaphore_create(
     the_semaphore->discipline = SEMAPHORE_DISCIPLINE_FIFO;
   }
 
-  /*
-   *  Initialize it as a counting semaphore.
-   */
   if ( _Attributes_Is_counting_semaphore( attribute_set ) ) {
     the_semaphore->variant = SEMAPHORE_VARIANT_COUNTING;
     _CORE_semaphore_Initialize(
       &the_semaphore->Core_control.semaphore,
       count
+    );
+    status = STATUS_SUCCESSFUL;
+  } else if ( _Attributes_Is_simple_binary_semaphore( attribute_set ) ) {
+    the_semaphore->variant = SEMAPHORE_VARIANT_SIMPLE_BINARY;
+    _CORE_semaphore_Initialize(
+      &the_semaphore->Core_control.semaphore,
+      count != 0
     );
     status = STATUS_SUCCESSFUL;
 #if defined(RTEMS_SMP)
@@ -166,6 +170,8 @@ rtems_status_code rtems_semaphore_create(
   } else {
     the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX;
 
+    _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
+
     /*
      *  It is either simple binary semaphore or a more powerful mutex
      *  style binary semaphore.  This is the mutex style.
@@ -175,25 +181,20 @@ rtems_status_code rtems_semaphore_create(
     else
       the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_FIFO;
 
-    if ( _Attributes_Is_binary_semaphore( attribute_set ) ) {
-      the_mutex_attr.priority_ceiling      = _RTEMS_tasks_Priority_to_Core(
-                                               priority_ceiling
-                                             );
-      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-      the_mutex_attr.only_owner_release    = false;
+    the_mutex_attr.priority_ceiling      = _RTEMS_tasks_Priority_to_Core(
+                                             priority_ceiling
+                                           );
+    the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
+    the_mutex_attr.only_owner_release    = false;
 
-      if ( the_mutex_attr.discipline == CORE_MUTEX_DISCIPLINES_PRIORITY ) {
-        if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
-          the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
-          the_mutex_attr.only_owner_release = true;
-        } else if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
-          the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
-          the_mutex_attr.only_owner_release = true;
-        }
+    if ( the_mutex_attr.discipline == CORE_MUTEX_DISCIPLINES_PRIORITY ) {
+      if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
+        the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
+        the_mutex_attr.only_owner_release = true;
+      } else if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
+        the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
+        the_mutex_attr.only_owner_release = true;
       }
-    } else /* must be simple binary semaphore */ {
-      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_BLOCKS;
-      the_mutex_attr.only_owner_release = false;
     }
 
     status = _CORE_mutex_Initialize(

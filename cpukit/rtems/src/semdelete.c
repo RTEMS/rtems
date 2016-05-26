@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_semaphore_delete(
@@ -28,7 +27,6 @@ rtems_status_code rtems_semaphore_delete(
 {
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
-  rtems_attribute       attribute_set;
   Status_Control        status;
 
   _Objects_Allocator_lock();
@@ -46,8 +44,6 @@ rtems_status_code rtems_semaphore_delete(
     return RTEMS_INVALID_ID;
   }
 
-  attribute_set = the_semaphore->attribute_set;
-
   _Thread_queue_Acquire_critical(
     &the_semaphore->Core_control.Wait_queue,
     &queue_context.Lock_context
@@ -55,10 +51,7 @@ rtems_status_code rtems_semaphore_delete(
 
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX:
-      if (
-        _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex )
-          && !_Attributes_Is_simple_binary_semaphore( attribute_set )
-      ) {
+      if ( _CORE_mutex_Is_locked( &the_semaphore->Core_control.mutex ) ) {
         status = STATUS_RESOURCE_IN_USE;
       } else {
         status = STATUS_SUCCESSFUL;
@@ -71,7 +64,10 @@ rtems_status_code rtems_semaphore_delete(
       break;
 #endif
     default:
-      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _Assert(
+        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+      );
       status = STATUS_SUCCESSFUL;
       break;
   }
@@ -102,7 +98,10 @@ rtems_status_code rtems_semaphore_delete(
       break;
 #endif
     default:
-      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _Assert(
+        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+      );
       _CORE_semaphore_Destroy(
         &the_semaphore->Core_control.semaphore,
         _Semaphore_Get_operations( the_semaphore ),

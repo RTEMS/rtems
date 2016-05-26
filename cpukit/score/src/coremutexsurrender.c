@@ -76,9 +76,6 @@ Status_Control _CORE_mutex_Surrender(
             _CORE_mutex_Release( the_mutex, queue_context );
             return STATUS_NESTING_NOT_ALLOWED;
         #endif
-        case CORE_MUTEX_NESTING_BLOCKS:
-          /* Currently no API exercises this behavior. */
-          break;
       }
     #else
       _CORE_mutex_Release( the_mutex, queue_context );

@@ -48,12 +48,13 @@ static void release_semaphore(rtems_id timer, void *arg)
   /* The arg is NULL */
   test_context *ctx = &ctx_instance;
   rtems_status_code sc;
-  CORE_mutex_Control *mtx = &ctx->semaphore_control->Core_control.mutex;
 
   if (
     _Thread_Wait_flags_get(ctx->main_task_control)
       == (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_INTEND_TO_BLOCK)
   ) {
+    CORE_semaphore_Control *sem;
+
     ctx->done = true;
 
     sc = rtems_semaphore_release(ctx->semaphore_id);
@@ -63,8 +64,8 @@ static void release_semaphore(rtems_id timer, void *arg)
       _Thread_Wait_flags_get(ctx->main_task_control)
         == (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
     );
-    rtems_test_assert(mtx->nest_count == 1);
-    rtems_test_assert(mtx->holder == ctx->main_task_control);
+    sem = &ctx->semaphore_control->Core_control.semaphore;
+    rtems_test_assert(sem->count == 0);
   } else {
     sc = rtems_semaphore_release(ctx->semaphore_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);

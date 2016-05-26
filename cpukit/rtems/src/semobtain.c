@@ -91,7 +91,10 @@ rtems_status_code rtems_semaphore_obtain(
       );
       break;
     default:
-      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _Assert(
+        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+      );
       status = _CORE_semaphore_Seize(
         &the_semaphore->Core_control.semaphore,
         _Semaphore_Get_operations( the_semaphore ),

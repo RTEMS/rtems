@@ -63,7 +63,10 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
       );
       break;
     default:
-      _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
+      _Assert(
+        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+      );
       _CORE_semaphore_Flush(
         &the_semaphore->Core_control.semaphore,
         _Semaphore_Get_operations( the_semaphore ),

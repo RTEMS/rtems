@@ -238,8 +238,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize_interrupt_trylock(
           _CORE_mutex_Release( the_mutex, queue_context );
           return STATUS_NESTING_NOT_ALLOWED;
       #endif
-      case CORE_MUTEX_NESTING_BLOCKS:
-        break;
     }
   }
 
