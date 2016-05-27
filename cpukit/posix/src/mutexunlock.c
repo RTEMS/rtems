@@ -33,6 +33,7 @@ int pthread_mutex_unlock(
 {
   POSIX_Mutex_Control  *the_mutex;
   Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
   Status_Control        status;
 
   the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
@@ -41,6 +42,24 @@ int pthread_mutex_unlock(
     return EINVAL;
   }
 
-  status = _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
+  executing = _Thread_Executing;
+
+  switch ( the_mutex->protocol ) {
+    case POSIX_MUTEX_NO_PROTOCOL:
+      status = _CORE_recursive_mutex_Surrender_no_protocol(
+        &the_mutex->Mutex.Recursive,
+        POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS,
+        executing,
+        &queue_context
+      );
+      break;
+    default:
+      status = _CORE_mutex_Surrender(
+        &the_mutex->Mutex.Recursive.Mutex,
+        &queue_context
+      );
+      break;
+  }
+
   return _POSIX_Get_error( status );
 }

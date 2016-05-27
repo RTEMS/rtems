@@ -22,7 +22,7 @@ rtems_monitor_sema_canonical(
 
     canonical_sema->attribute = rtems_sema->attribute_set;
     canonical_sema->priority_ceiling =
-      rtems_sema->Core_control.mutex.Attributes.priority_ceiling;
+      rtems_sema->Core_control.Mutex.priority_ceiling;
 
     canonical_sema->holder_id = 0;
 
@@ -33,8 +33,9 @@ rtems_monitor_sema_canonical(
     }
     else {
       /* we have a binary semaphore (mutex) */
-      Thread_Control *holder = rtems_sema->Core_control.mutex.holder;
+      Thread_Control *holder;
 
+      holder = rtems_sema->Core_control.Mutex.Recursive.Mutex.holder;
       if (holder != NULL) {
         canonical_sema->holder_id = holder->Object.id;
         canonical_sema->cur_count = 0;

@@ -26,8 +26,14 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Classic semaphore variants.
+ *
+ * Must be in synchronization with Semaphore_Control::variant.
+ */
 typedef enum {
   SEMAPHORE_VARIANT_MUTEX,
+  SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL,
   SEMAPHORE_VARIANT_SIMPLE_BINARY,
   SEMAPHORE_VARIANT_COUNTING
 #if defined(RTEMS_SMP)

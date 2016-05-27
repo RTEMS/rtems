@@ -34,18 +34,12 @@ Status_Control _CORE_mutex_Surrender(
   holder = the_mutex->holder;
 
   /*
-   *  The following code allows a thread (or ISR) other than the thread
-   *  which acquired the mutex to release that mutex.  This is only
-   *  allowed when the mutex in quetion is FIFO or simple Priority
-   *  discipline.  But Priority Ceiling or Priority Inheritance mutexes
-   *  must be released by the thread which acquired them.
+   *  Priority Ceiling or Priority Inheritance mutexes must be released by the
+   *  thread which acquired them.
    */
-
-  if ( the_mutex->Attributes.only_owner_release ) {
-    if ( !_Thread_Is_executing( holder ) ) {
-      _ISR_lock_ISR_enable( &queue_context->Lock_context );
-      return STATUS_NOT_OWNER;
-    }
+  if ( !_Thread_Is_executing( holder ) ) {
+    _ISR_lock_ISR_enable( &queue_context->Lock_context );
+    return STATUS_NOT_OWNER;
   }
 
   _CORE_mutex_Acquire_critical( the_mutex, queue_context );
@@ -88,10 +82,7 @@ Status_Control _CORE_mutex_Surrender(
    *  Formally release the mutex before possibly transferring it to a
    *  blocked thread.
    */
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
-    holder->resource_count--;
-  }
+   holder->resource_count--;
   the_mutex->holder = NULL;
 
   /*
@@ -101,7 +92,7 @@ Status_Control _CORE_mutex_Surrender(
   if (
     ( the_thread = _Thread_queue_First_locked(
         &the_mutex->Wait_queue,
-        the_mutex->operations
+        CORE_MUTEX_TQ_OPERATIONS
       )
     )
   ) {
@@ -118,7 +109,7 @@ Status_Control _CORE_mutex_Surrender(
      */
     unblock = _Thread_queue_Extract_locked(
       &the_mutex->Wait_queue.Queue,
-      the_mutex->operations,
+      CORE_MUTEX_TQ_OPERATIONS,
       the_thread,
       queue_context
     );
@@ -128,9 +119,6 @@ Status_Control _CORE_mutex_Surrender(
 #endif
     {
       switch ( the_mutex->Attributes.discipline ) {
-        case CORE_MUTEX_DISCIPLINES_FIFO:
-        case CORE_MUTEX_DISCIPLINES_PRIORITY:
-          break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
           the_thread->resource_count++;
           _Thread_queue_Boost_priority( &the_mutex->Wait_queue.Queue, the_thread );

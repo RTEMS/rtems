@@ -37,21 +37,23 @@ int pthread_mutex_destroy(
   the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
 
   if ( the_mutex != NULL ) {
-    _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &queue_context );
+    _POSIX_Mutex_Acquire_critical( the_mutex, &queue_context );
 
     /*
      * XXX: There is an error for the mutex being locked
      *  or being in use by a condition variable.
      */
 
-    if ( !_CORE_mutex_Is_locked( &the_mutex->Mutex ) ) {
+    if (
+      !_CORE_mutex_Is_locked( &the_mutex->Mutex.Recursive.Mutex )
+    ) {
       _Objects_Close( &_POSIX_Mutex_Information, &the_mutex->Object );
-      _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
-      _CORE_mutex_Destroy( &the_mutex->Mutex );
+      _POSIX_Mutex_Release( the_mutex, &queue_context );
+      _CORE_mutex_Destroy( &the_mutex->Mutex.Recursive.Mutex );
       _POSIX_Mutex_Free( the_mutex );
       eno = 0;
     } else {
-      _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
+      _POSIX_Mutex_Release( the_mutex, &queue_context );
       eno = EBUSY;
     }
   } else {

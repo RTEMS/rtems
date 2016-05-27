@@ -118,7 +118,7 @@ rtems_bsdnet_semaphore_release_recursive(void)
 
 	nest_count =
 		the_networkSemaphore ?
-		the_networkSemaphore->Core_control.mutex.nest_count : 0;
+		the_networkSemaphore->Core_control.Mutex.Recursive.Mutex.nest_count : 0;
 	for (i = 0; i < nest_count; ++i) {
 		rtems_bsdnet_semaphore_release();
 	}
@@ -378,7 +378,7 @@ rtems_bsdnet_semaphore_obtain (void)
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
 	status = _CORE_mutex_Seize (
-		&the_networkSemaphore->Core_control.mutex,
+		&the_networkSemaphore->Core_control.Mutex.Recursive.Mutex,
 		_Thread_Executing,
 		1,		/* wait */
 		0,		/* forever */
@@ -411,7 +411,7 @@ rtems_bsdnet_semaphore_release (void)
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
 	status = _CORE_mutex_Surrender (
-		&the_networkSemaphore->Core_control.mutex,
+		&the_networkSemaphore->Core_control.Mutex.Recursive.Mutex,
 		&queue_context
 		);
 	if (status != STATUS_SUCCESSFUL)

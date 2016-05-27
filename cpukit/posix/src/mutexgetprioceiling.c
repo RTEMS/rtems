@@ -43,13 +43,13 @@ int pthread_mutex_getprioceiling(
     return EINVAL;
   }
 
-  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, &queue_context );
+  _POSIX_Mutex_Acquire_critical( the_mutex, &queue_context );
 
   *prioceiling = _POSIX_Priority_From_core(
-    the_mutex->Mutex.Attributes.priority_ceiling
+    the_mutex->Mutex.Recursive.Mutex.Attributes.priority_ceiling
   );
 
-  _CORE_mutex_Release( &the_mutex->Mutex, &queue_context );
+  _POSIX_Mutex_Release( the_mutex, &queue_context );
 
   return 0;
 }

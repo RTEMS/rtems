@@ -68,7 +68,7 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
 
   _Thread_queue_Enqueue_critical(
     &the_mutex->Wait_queue.Queue,
-    the_mutex->operations,
+    CORE_MUTEX_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_MUTEX,
     timeout,
@@ -82,3 +82,28 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
   return _Thread_Wait_get_status( executing );
 }
 
+Status_Control _CORE_mutex_Seize_no_protocol_slow(
+  CORE_mutex_Control            *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Watchdog_Interval              timeout,
+  Thread_queue_Context          *queue_context
+)
+{
+  if ( wait ) {
+    _Thread_queue_Context_set_expected_level( queue_context, 1 );
+    _Thread_queue_Enqueue_critical(
+      &the_mutex->Wait_queue.Queue,
+      operations,
+      executing,
+      STATES_WAITING_FOR_MUTEX,
+      timeout,
+      queue_context
+    );
+    return _Thread_Wait_get_status( executing );
+  } else {
+    _CORE_mutex_Release( the_mutex, queue_context );
+    return STATUS_UNAVAILABLE;
+  }
+}

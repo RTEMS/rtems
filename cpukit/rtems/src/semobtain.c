@@ -29,7 +29,7 @@ THREAD_QUEUE_OBJECT_ASSERT(
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.mutex.Wait_queue
+  Core_control.Mutex.Recursive.Mutex.Wait_queue
 );
 
 THREAD_QUEUE_OBJECT_ASSERT(
@@ -83,10 +83,21 @@ rtems_status_code rtems_semaphore_obtain(
 #endif
     case SEMAPHORE_VARIANT_MUTEX:
       status = _CORE_mutex_Seize(
-        &the_semaphore->Core_control.mutex,
+        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
         executing,
         wait,
         timeout,
+        &queue_context
+      );
+      break;
+    case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
+      status = _CORE_recursive_mutex_Seize_no_protocol(
+        &the_semaphore->Core_control.Mutex.Recursive,
+        _Semaphore_Get_operations( the_semaphore ),
+        executing,
+        wait,
+        timeout,
+        _CORE_recursive_mutex_Seize_nested,
         &queue_context
       );
       break;

@@ -39,54 +39,47 @@ Status_Control _CORE_mutex_Initialize(
   the_mutex->Attributes    = *the_mutex_attributes;
 
   if ( initially_locked ) {
-    bool is_priority_ceiling =
-      _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes );
+    bool              is_priority_ceiling;
+    Priority_Control  ceiling;
+    Per_CPU_Control  *cpu_self;
 
     the_mutex->nest_count = 1;
     the_mutex->holder     = executing;
 
-    if (  is_priority_ceiling ||
-         _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
-      Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
-      Per_CPU_Control *cpu_self;
+    /* The mutex initialization is only protected by the allocator lock */
+    cpu_self = _Thread_Dispatch_disable();
 
-      /* The mutex initialization is only protected by the allocator lock */
-      cpu_self = _Thread_Dispatch_disable();
+    is_priority_ceiling =
+      _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes );
+    ceiling = the_mutex->Attributes.priority_ceiling;
 
+    /*
+     * The test to check for a ceiling violation is a bit arbitrary.  In case
+     * this thread is the owner of a priority inheritance mutex, then it may
+     * get a higher priority later or anytime on SMP configurations.
+     */
+    if ( is_priority_ceiling && executing->current_priority < ceiling ) {
       /*
-       * The test to check for a ceiling violation is a bit arbitrary.  In case
-       * this thread is the owner of a priority inheritance mutex, then it may
-       * get a higher priority later or anytime on SMP configurations.
+       * There is no need to undo the previous work since this error aborts
+       * the object creation.
        */
-      if ( is_priority_ceiling && executing->current_priority < ceiling ) {
-        /*
-         * There is no need to undo the previous work since this error aborts
-         * the object creation.
-         */
-        _Thread_Dispatch_enable( cpu_self );
-        return STATUS_MUTEX_CEILING_VIOLATED;
-      }
-
-      executing->resource_count++;
-
-      if ( is_priority_ceiling ) {
-        _Thread_Raise_priority( executing, ceiling );
-      }
-
       _Thread_Dispatch_enable( cpu_self );
+      return STATUS_MUTEX_CEILING_VIOLATED;
     }
+
+    executing->resource_count++;
+
+    if ( is_priority_ceiling ) {
+      _Thread_Raise_priority( executing, ceiling );
+    }
+
+    _Thread_Dispatch_enable( cpu_self );
   } else {
     the_mutex->nest_count = 0;
     the_mutex->holder     = NULL;
   }
 
   _Thread_queue_Initialize( &the_mutex->Wait_queue );
-
-  if ( _CORE_mutex_Is_fifo( the_mutex_attributes ) ) {
-    the_mutex->operations = &_Thread_queue_Operations_FIFO;
-  } else {
-    the_mutex->operations = &_Thread_queue_Operations_priority;
-  }
 
   return STATUS_SUCCESSFUL;
 }

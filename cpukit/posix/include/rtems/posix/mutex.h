@@ -35,14 +35,35 @@ extern "C" {
  */
 /**@{**/
 
-/*
- *  Data Structure used to manage a POSIX mutex
+/**
+ * @brief The POSIX mutex control.
  */
-
 typedef struct {
-   Objects_Control     Object;
-   CORE_mutex_Control  Mutex;
-}  POSIX_Mutex_Control;
+  /**
+   * @brief The object control.
+   */
+  Objects_Control Object;
+
+  /**
+   * The most general mutex variant supported by a POSIX mutex.
+   *
+   * The priority inheritance or no protocol variants will use only parts of
+   * this structure.
+   */
+  CORE_ceiling_mutex_Control Mutex;
+
+  /**
+   * @brief The protocol variant.
+   *
+   * @see POSIX_Mutex_Protocol.
+   */
+  unsigned int protocol : 2;
+
+  /**
+   * @brief Indicates if this is a non-recursive or recursive mutex.
+   */
+  unsigned int is_recursive : 1;
+} POSIX_Mutex_Control;
 
 /** @} */
 

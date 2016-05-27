@@ -33,6 +33,8 @@ extern "C" {
  */
 /**@{**/
 
+#define CORE_MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
+
 /**
  *  @brief Initializes the mutex based on the parameters passed.
  *
@@ -100,6 +102,13 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
   Thread_queue_Context *queue_context
 );
 
+RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(
+  const CORE_mutex_Control *the_mutex
+)
+{
+  return the_mutex->holder;
+}
+
 /**
  * @brief Is mutex locked.
  *
@@ -115,7 +124,7 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   const CORE_mutex_Control *the_mutex
 )
 {
-  return the_mutex->holder != NULL;
+  return _CORE_mutex_Get_owner( the_mutex ) != NULL;
 }
 
 /**
@@ -180,10 +189,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize_interrupt_trylock(
   if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
     the_mutex->holder     = executing;
     the_mutex->nest_count = 1;
-    if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
-      executing->resource_count++;
-    }
+    ++executing->resource_count;
 
     if ( !_CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
       _CORE_mutex_Release( the_mutex, queue_context );
@@ -309,35 +315,168 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize(
   );
 }
 
+Status_Control _CORE_mutex_Seize_no_protocol_slow(
+  CORE_mutex_Control            *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Watchdog_Interval              timeout,
+  Thread_queue_Context          *queue_context
+);
+
 Status_Control _CORE_mutex_Surrender(
   CORE_mutex_Control   *the_mutex,
   Thread_queue_Context *queue_context
 );
+
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Set_owner(
+  CORE_mutex_Control *the_mutex,
+  Thread_Control     *owner
+)
+{
+  the_mutex->holder = owner;
+}
 
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
   const CORE_mutex_Control *the_mutex,
   const Thread_Control     *the_thread
 )
 {
-  return the_mutex->holder == the_thread;
+  return _CORE_mutex_Get_owner( the_mutex ) == the_thread;
 }
 
-/**
- * @brief Does core mutex use FIFO blocking.
- *
- * This routine returns true if the mutex's wait discipline is FIFO and false
- * otherwise.
- *
- * @param[in] the_attribute is the attribute set of the mutex.
- *
- * @retval true The mutex is using FIFO blocking order.
- * @retval false The mutex is not using FIFO blocking order.
- */
-RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_fifo(
-  const CORE_mutex_Attributes *the_attribute
+RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Initialize(
+  CORE_recursive_mutex_Control *the_mutex
 )
 {
-  return the_attribute->discipline == CORE_MUTEX_DISCIPLINES_FIFO;
+  _Thread_queue_Initialize( &the_mutex->Mutex.Wait_queue );
+  the_mutex->Mutex.holder = NULL;
+  the_mutex->nest_level = 0;
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_nested(
+  CORE_recursive_mutex_Control *the_mutex
+)
+{
+  ++the_mutex->nest_level;
+  return STATUS_SUCCESSFUL;
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
+  CORE_recursive_mutex_Control  *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Watchdog_Interval              timeout,
+  Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
+  Thread_queue_Context          *queue_context
+)
+{
+  Thread_Control *owner;
+
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  owner = _CORE_mutex_Get_owner( &the_mutex->Mutex );
+
+  if ( owner == NULL ) {
+    _CORE_mutex_Set_owner( &the_mutex->Mutex, executing );
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_SUCCESSFUL;
+  }
+
+  if ( owner == executing ) {
+    Status_Control status;
+
+    status = ( *nested )( the_mutex );
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return status;
+  }
+
+  return _CORE_mutex_Seize_no_protocol_slow(
+    &the_mutex->Mutex,
+    operations,
+    executing,
+    wait,
+    timeout,
+    queue_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE void
+_CORE_recursive_mutex_Surrender_no_protocol_finalize(
+  CORE_recursive_mutex_Control  *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Context          *queue_context
+)
+{
+  unsigned int    nest_level;
+  Thread_Control *new_owner;
+
+  nest_level = the_mutex->nest_level;
+
+  if ( nest_level > 0 ) {
+    the_mutex->nest_level = nest_level - 1;
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return;
+  }
+
+  new_owner = _Thread_queue_First_locked(
+    &the_mutex->Mutex.Wait_queue,
+    operations
+  );
+  _CORE_mutex_Set_owner( &the_mutex->Mutex, new_owner );
+
+  if ( new_owner == NULL ) {
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return;
+  }
+
+  _Thread_queue_Extract_critical(
+    &the_mutex->Mutex.Wait_queue.Queue,
+    operations,
+    new_owner,
+    queue_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender_no_protocol(
+  CORE_recursive_mutex_Control  *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  Thread_queue_Context          *queue_context
+)
+{
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  if ( !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing ) ) {
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_NOT_OWNER;
+  }
+
+  _CORE_recursive_mutex_Surrender_no_protocol_finalize(
+    the_mutex,
+    operations,
+    queue_context
+  );
+  return STATUS_SUCCESSFUL;
+}
+
+/*
+ * The Classic no protocol recursive mutex has the nice property that everyone
+ * can release it.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Surrender_no_protocol_classic(
+  CORE_recursive_mutex_Control  *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Context          *queue_context
+)
+{
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+  _CORE_recursive_mutex_Surrender_no_protocol_finalize(
+    the_mutex,
+    operations,
+    queue_context
+  );
 }
 
 /** @} */

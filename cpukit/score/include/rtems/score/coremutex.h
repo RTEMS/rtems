@@ -47,10 +47,6 @@ extern "C" {
  *  This enumerated type defines the blocking disciplines for a mutex.
  */
 typedef enum {
-  /** This specifies that threads will wait for the mutex in FIFO order. */
-  CORE_MUTEX_DISCIPLINES_FIFO,
-  /** This specifies that threads will wait for the mutex in priority order.  */
-  CORE_MUTEX_DISCIPLINES_PRIORITY,
   /** This specifies that threads will wait for the mutex in priority order.
    *  Additionally, the Priority Inheritance Protocol will be in effect.
    */
@@ -100,10 +96,6 @@ typedef struct {
    *  be when attempting to acquire the mutex when it is already locked.
    */
   CORE_mutex_Nesting_behaviors lock_nesting_behavior;
-  /** When this field is true, then only the thread that locked the mutex
-   *  is allowed to unlock it.
-   */
-  bool                         only_owner_release;
   /** This field indicates whether threads waiting on the mutex block in
    *  FIFO or priority order.
    */
@@ -125,11 +117,6 @@ typedef struct {
    */
   Thread_queue_Control    Wait_queue;
 
-  /**
-   * @brief The thread queue operations according to the blocking discipline.
-   */
-  const Thread_queue_Operations *operations;
-
   /** This element is the set of attributes which define this instance's
    *  behavior.
    */
@@ -144,6 +131,36 @@ typedef struct {
    */
   Thread_Control         *holder;
 }   CORE_mutex_Control;
+
+/**
+ * @brief The recursive mutex control.
+ */
+typedef struct {
+  /**
+   * @brief The plain non-recursive mutex.
+   */
+  CORE_mutex_Control Mutex;
+
+  /**
+   * @brief The nest level in case of a recursive seize.
+   */
+  unsigned int nest_level;
+} CORE_recursive_mutex_Control;
+
+/**
+ * @brief The recursive mutex control with priority ceiling protocol support.
+ */
+typedef struct {
+  /**
+   * @brief The plain recursive mutex.
+   */
+  CORE_recursive_mutex_Control Recursive;
+
+  /**
+   * @brief The priority ceiling value for the mutex owner.
+   */
+  Priority_Control priority_ceiling;
+} CORE_ceiling_mutex_Control;
 
 /**@}*/
 

@@ -54,8 +54,9 @@ static rtems_status_code _Semaphore_Set_priority(
   } else
 #endif
   if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
-    CORE_mutex_Control *mutex = &the_semaphore->Core_control.mutex;
+    CORE_mutex_Control *mutex;
 
+    mutex = &the_semaphore->Core_control.Mutex.Recursive.Mutex;
     _CORE_mutex_Acquire_critical( mutex, queue_context );
 
     old_priority = mutex->Attributes.priority_ceiling;

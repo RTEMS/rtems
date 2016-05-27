@@ -57,9 +57,10 @@ int pthread_mutex_setprioceiling(
   _Assert( the_mutex != NULL );
 
   *old_ceiling = _POSIX_Priority_From_core(
-    the_mutex->Mutex.Attributes.priority_ceiling
+    the_mutex->Mutex.Recursive.Mutex.Attributes.priority_ceiling
   );
-  the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
+  the_mutex->Mutex.Recursive.Mutex.Attributes.priority_ceiling =
+    the_priority;
 
   error = pthread_mutex_unlock( mutex );
   _Assert( error == 0 );

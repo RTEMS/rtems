@@ -28,6 +28,19 @@
 extern "C" {
 #endif
 
+#define POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
+
+/**
+ * @brief Supported POSIX mutex protocols.
+ *
+ * Must be in synchronization with POSIX_Mutex_Control::protocol.
+ */
+typedef enum {
+  POSIX_MUTEX_NO_PROTOCOL,
+  POSIX_MUTEX_PRIORITY_INHERIT,
+  POSIX_MUTEX_PRIORITY_CEILING
+} POSIX_Mutex_Protocol;
+
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.
@@ -38,6 +51,28 @@ extern Objects_Information _POSIX_Mutex_Information;
  *  The default mutex attributes structure.
  */
 extern pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+
+RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Acquire_critical(
+  POSIX_Mutex_Control  *the_mutex,
+  Thread_queue_Context *queue_context
+)
+{
+  _CORE_mutex_Acquire_critical(
+    &the_mutex->Mutex.Recursive.Mutex,
+    queue_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Release(
+  POSIX_Mutex_Control  *the_mutex,
+  Thread_queue_Context *queue_context
+)
+{
+  _CORE_mutex_Release(
+    &the_mutex->Mutex.Recursive.Mutex,
+    queue_context
+  );
+}
 
 /**
  *  @brief POSIX Mutex Allocate

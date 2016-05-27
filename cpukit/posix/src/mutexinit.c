@@ -33,10 +33,9 @@ int pthread_mutex_init(
   const pthread_mutexattr_t *attr
 )
 {
-  POSIX_Mutex_Control          *the_mutex;
-  CORE_mutex_Attributes        *the_mutex_attr;
-  const pthread_mutexattr_t    *the_attr;
-  CORE_mutex_Disciplines        the_discipline;
+  POSIX_Mutex_Control       *the_mutex;
+  const pthread_mutexattr_t *the_attr;
+  POSIX_Mutex_Protocol       protocol;
 
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
@@ -75,13 +74,13 @@ int pthread_mutex_init(
    */
   switch ( the_attr->protocol ) {
     case PTHREAD_PRIO_NONE:
-      the_discipline = CORE_MUTEX_DISCIPLINES_FIFO;
+      protocol = POSIX_MUTEX_NO_PROTOCOL;
       break;
     case PTHREAD_PRIO_INHERIT:
-      the_discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
+      protocol = POSIX_MUTEX_PRIORITY_INHERIT;
       break;
     case PTHREAD_PRIO_PROTECT:
-      the_discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
+      protocol = POSIX_MUTEX_PRIORITY_CEILING;
       break;
     default:
       return EINVAL;
@@ -117,21 +116,41 @@ int pthread_mutex_init(
     return EAGAIN;
   }
 
-  the_mutex_attr = &the_mutex->Mutex.Attributes;
+  the_mutex->protocol = protocol;
+  the_mutex->is_recursive = ( the_attr->type == PTHREAD_MUTEX_RECURSIVE );
 
-  if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE )
-    the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-  else
-    the_mutex_attr->lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
-  the_mutex_attr->only_owner_release = true;
-  the_mutex_attr->priority_ceiling =
-    _POSIX_Priority_To_core( the_attr->prio_ceiling );
-  the_mutex_attr->discipline = the_discipline;
+  if ( protocol == POSIX_MUTEX_NO_PROTOCOL ) {
+    _CORE_recursive_mutex_Initialize(
+      &the_mutex->Mutex.Recursive
+    );
+  } else {
+    CORE_mutex_Attributes the_mutex_attr;
 
-  /*
-   *  Must be initialized to unlocked.
-   */
-  _CORE_mutex_Initialize( &the_mutex->Mutex, NULL, the_mutex_attr, false );
+    if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE ) {
+      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
+    } else {
+      the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
+    }
+
+    the_mutex_attr.priority_ceiling =
+      _POSIX_Priority_To_core( the_attr->prio_ceiling );
+
+    if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
+    } else {
+      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
+    }
+
+    /*
+     *  Must be initialized to unlocked.
+     */
+    _CORE_mutex_Initialize(
+      &the_mutex->Mutex.Recursive.Mutex,
+      NULL,
+      &the_mutex_attr,
+      false
+    );
+  }
 
   _Objects_Open_u32( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
 

@@ -83,7 +83,7 @@ typedef struct {
      *  This is the SuperCore Mutex instance associated with this Classic
      *  API Semaphore instance.
      */
-    CORE_mutex_Control     mutex;
+    CORE_ceiling_mutex_Control Mutex;
 
     /**
      *  This is the SuperCore Semaphore instance associated with this Classic
