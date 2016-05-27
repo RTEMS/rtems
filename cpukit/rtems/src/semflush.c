@@ -55,21 +55,16 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
       );
       return RTEMS_NOT_DEFINED;
 #endif
-    case SEMAPHORE_VARIANT_MUTEX:
-      _CORE_mutex_Flush(
-        &the_semaphore->Core_control.mutex,
-        _Thread_queue_Flush_status_unavailable,
-        &queue_context
-      );
-      break;
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+          || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
       );
-      _CORE_semaphore_Flush(
-        &the_semaphore->Core_control.semaphore,
+      _Thread_queue_Flush_critical(
+        &the_semaphore->Core_control.Wait_queue.Queue,
         _Semaphore_Get_operations( the_semaphore ),
+        _Thread_queue_Flush_status_unavailable,
         &queue_context
       );
       break;
