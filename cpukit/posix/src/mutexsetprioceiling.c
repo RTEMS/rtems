@@ -33,7 +33,7 @@ int pthread_mutex_setprioceiling(
 {
   register POSIX_Mutex_Control *the_mutex;
   Priority_Control              the_priority;
-  Thread_queue_Context          queue_context;
+  int                           error;
 
   if ( !old_ceiling )
     return EINVAL;
@@ -47,33 +47,22 @@ int pthread_mutex_setprioceiling(
    *  Must acquire the mutex before we can change it's ceiling.
    *  POSIX says block until we acquire it.
    */
-  (void) pthread_mutex_lock( mutex );
-
-  /*
-   *  Do not worry about the return code from this.  The Get operation
-   *  will also fail if it is a bad id or was deleted between the two
-   *  operations.
-   *
-   *  NOTE: This makes it easier to get 100% binary coverage since the
-   *        bad Id case is handled by the switch.
-   */
-  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
-
-  if ( the_mutex == NULL ) {
+  error = pthread_mutex_lock( mutex );
+  if ( error != 0 ) {
+    _Assert( error == EINVAL );
     return EINVAL;
   }
+
+  the_mutex = _POSIX_Mutex_Get_no_protection( mutex );
+  _Assert( the_mutex != NULL );
 
   *old_ceiling = _POSIX_Priority_From_core(
     the_mutex->Mutex.Attributes.priority_ceiling
   );
   the_mutex->Mutex.Attributes.priority_ceiling = the_priority;
 
-  /*
-   *  We are required to unlock the mutex before we return.
-   */
-  _CORE_mutex_Surrender(
-    &the_mutex->Mutex,
-    &queue_context
-  );
+  error = pthread_mutex_unlock( mutex );
+  _Assert( error == 0 );
+  (void) error;
   return 0;
 }
