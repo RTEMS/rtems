@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/statesimpl.h>
@@ -36,11 +35,9 @@ int _POSIX_Condition_variables_Wait_support(
 )
 {
   POSIX_Condition_variables_Control *the_cond;
-  POSIX_Mutex_Control               *the_mutex;
   Thread_queue_Context               queue_context;
   int                                error;
   int                                mutex_error;
-  Status_Control                     status;
   Per_CPU_Control                   *cpu_self;
   Thread_Control                    *executing;
 
@@ -69,22 +66,6 @@ int _POSIX_Condition_variables_Wait_support(
   cpu_self = _Thread_Dispatch_disable_critical( &queue_context.Lock_context );
   executing = _Per_CPU_Get_executing( cpu_self );
 
-  /*
-   *  Historically, we ignored the unlock status since the behavior
-   *  is undefined by POSIX. But GNU/Linux returns EPERM in this
-   *  case, so we follow their lead.
-   */
-
-  the_mutex = _POSIX_Mutex_Get_no_protection( mutex );
-  if (
-    the_mutex == NULL
-      || !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing )
-  ) {
-    _POSIX_Condition_variables_Release( the_cond, &queue_context );
-    _Thread_Dispatch_enable( cpu_self );
-    return EPERM;
-  }
-
   if ( !already_timedout ) {
     _Thread_queue_Context_set_expected_level( &queue_context, 2 );
     _Thread_queue_Enqueue_critical(
@@ -100,10 +81,18 @@ int _POSIX_Condition_variables_Wait_support(
     executing->Wait.return_code = STATUS_TIMEOUT;
   }
 
-  _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  status = _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
-  _Assert( status == STATUS_SUCCESSFUL );
-  (void) status;
+  mutex_error = pthread_mutex_unlock( mutex );
+  if ( mutex_error != 0 ) {
+    /*
+     *  Historically, we ignored the unlock status since the behavior
+     *  is undefined by POSIX. But GNU/Linux returns EPERM in this
+     *  case, so we follow their lead.
+     */
+    _Assert( mutex_error == EINVAL || mutex_error == EPERM );
+    _Thread_queue_Extract( executing );
+    _Thread_Dispatch_enable( cpu_self );
+    return EPERM;
+  }
 
   /*
    *  Switch ourself out because we blocked as a result of the
@@ -132,6 +121,7 @@ int _POSIX_Condition_variables_Wait_support(
 
   mutex_error = pthread_mutex_lock( mutex );
   if ( mutex_error != 0 ) {
+    _Assert( mutex_error == EINVAL );
     return EINVAL;
   }
 
