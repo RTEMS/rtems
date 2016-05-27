@@ -20,7 +20,6 @@
 #define _RTEMS_POSIX_MUTEX_H
 
 #include <rtems/score/coremutex.h>
-#include <pthread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +42,6 @@ extern "C" {
 typedef struct {
    Objects_Control     Object;
    CORE_mutex_Control  Mutex;
-   int                 process_shared;
 }  POSIX_Mutex_Control;
 
 /** @} */

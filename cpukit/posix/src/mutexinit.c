@@ -117,8 +117,6 @@ int pthread_mutex_init(
     return EAGAIN;
   }
 
-  the_mutex->process_shared = the_attr->process_shared;
-
   the_mutex_attr = &the_mutex->Mutex.Attributes;
 
   if ( the_attr->type == PTHREAD_MUTEX_RECURSIVE )
