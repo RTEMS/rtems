@@ -42,22 +42,6 @@ extern "C" {
 /**@{*/
 
 /**
- *  @brief The blocking disciplines for a mutex.
- *
- *  This enumerated type defines the blocking disciplines for a mutex.
- */
-typedef enum {
-  /** This specifies that threads will wait for the mutex in priority order.
-   *  Additionally, the Priority Inheritance Protocol will be in effect.
-   */
-  CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
-  /** This specifies that threads will wait for the mutex in priority order.
-   *  Additionally, the Priority Ceiling Protocol will be in effect.
-   */
-  CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING
-}   CORE_mutex_Disciplines;
-
-/**
  *  @brief The possible behaviors for lock nesting.
  *
  *  This enumerated type defines the possible behaviors for
@@ -96,14 +80,6 @@ typedef struct {
    *  be when attempting to acquire the mutex when it is already locked.
    */
   CORE_mutex_Nesting_behaviors lock_nesting_behavior;
-  /** This field indicates whether threads waiting on the mutex block in
-   *  FIFO or priority order.
-   */
-  CORE_mutex_Disciplines       discipline;
-  /** This field contains the ceiling priority to be used if that protocol
-   *  is selected.
-   */
-  Priority_Control             priority_ceiling;
 }   CORE_mutex_Attributes;
 
 /**

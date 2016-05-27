@@ -28,6 +28,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
 {
   Semaphore_Control    *the_semaphore;
   Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
   Status_Control        status;
 
   the_semaphore = _Semaphore_Get( id, &queue_context );
@@ -40,6 +41,8 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
 #endif
   }
 
+  executing = _Thread_Executing;
+
   _Thread_queue_Context_set_MP_callout(
     &queue_context,
     _Semaphore_Core_mutex_mp_support
@@ -50,7 +53,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     case SEMAPHORE_VARIANT_MRSP:
       status = _MRSP_Surrender(
         &the_semaphore->Core_control.mrsp,
-        _Thread_Executing,
+        executing,
         &queue_context
       );
       break;
@@ -58,6 +61,13 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     case SEMAPHORE_VARIANT_MUTEX:
       status = _CORE_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+        &queue_context
+      );
+      break;
+    case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
+      status = _CORE_ceiling_mutex_Surrender(
+        &the_semaphore->Core_control.Mutex,
+        executing,
         &queue_context
       );
       break;

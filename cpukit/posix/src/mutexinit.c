@@ -119,7 +119,12 @@ int pthread_mutex_init(
   the_mutex->protocol = protocol;
   the_mutex->is_recursive = ( the_attr->type == PTHREAD_MUTEX_RECURSIVE );
 
-  if ( protocol == POSIX_MUTEX_NO_PROTOCOL ) {
+  if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+    _CORE_ceiling_mutex_Initialize(
+      &the_mutex->Mutex,
+      _POSIX_Priority_To_core( the_attr->prio_ceiling )
+    );
+  } else if ( protocol == POSIX_MUTEX_NO_PROTOCOL ) {
     _CORE_recursive_mutex_Initialize(
       &the_mutex->Mutex.Recursive
     );
@@ -130,15 +135,6 @@ int pthread_mutex_init(
       the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
     } else {
       the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_IS_ERROR;
-    }
-
-    the_mutex_attr.priority_ceiling =
-      _POSIX_Priority_To_core( the_attr->prio_ceiling );
-
-    if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
-      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
-    } else {
-      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
     }
 
     /*

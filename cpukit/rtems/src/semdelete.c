@@ -51,6 +51,7 @@ rtems_status_code rtems_semaphore_delete(
 
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX:
+    case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
       if (
         _CORE_mutex_Is_locked(
@@ -97,6 +98,7 @@ rtems_status_code rtems_semaphore_delete(
     default:
       _Assert(
         the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING
           || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
           || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING

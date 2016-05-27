@@ -17,7 +17,6 @@
 #endif
 
 #include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
@@ -29,51 +28,62 @@ static rtems_status_code _Semaphore_Set_priority(
   Thread_queue_Context *queue_context
 )
 {
-  rtems_status_code   sc;
-  rtems_attribute     attribute_set = the_semaphore->attribute_set;
-  rtems_task_priority old_priority;
+  rtems_status_code    sc;
+  rtems_task_priority  old_priority;
+#if defined(RTEMS_SMP)
+  MRSP_Control        *mrsp;
+  uint32_t             scheduler_index;
+#endif
 
   new_priority = _RTEMS_tasks_Priority_to_Core( new_priority );
 
+  switch ( the_semaphore->variant ) {
+    case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
+      _CORE_mutex_Acquire_critical(
+        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+        queue_context
+      );
+
+      old_priority = the_semaphore->Core_control.Mutex.priority_ceiling;
+
+      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
+        the_semaphore->Core_control.Mutex.priority_ceiling = new_priority;
+      }
+
+      _CORE_mutex_Release(
+        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+        queue_context
+      );
+      sc = RTEMS_SUCCESSFUL;
+      break;
 #if defined(RTEMS_SMP)
-  if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
-    MRSP_Control *mrsp = &the_semaphore->Core_control.mrsp;
-    uint32_t scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
+    case SEMAPHORE_VARIANT_MRSP:
+      mrsp = &the_semaphore->Core_control.mrsp;
+      scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
 
-    _MRSP_Acquire_critical( mrsp, queue_context );
+      _MRSP_Acquire_critical( mrsp, queue_context );
 
-    old_priority = _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
+      old_priority = _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
 
-    if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-      _MRSP_Set_ceiling_priority( mrsp, scheduler_index, new_priority );
-    }
+      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
+        _MRSP_Set_ceiling_priority( mrsp, scheduler_index, new_priority );
+      }
 
-    _MRSP_Release( mrsp, queue_context );
-
-    sc = RTEMS_SUCCESSFUL;
-  } else
+      _MRSP_Release( mrsp, queue_context );
+      sc = RTEMS_SUCCESSFUL;
+      break;
 #endif
-  if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
-    CORE_mutex_Control *mutex;
-
-    mutex = &the_semaphore->Core_control.Mutex.Recursive.Mutex;
-    _CORE_mutex_Acquire_critical( mutex, queue_context );
-
-    old_priority = mutex->Attributes.priority_ceiling;
-
-    if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-      mutex->Attributes.priority_ceiling = new_priority;
-    }
-
-    _CORE_mutex_Release( mutex, queue_context );
-
-    sc = RTEMS_SUCCESSFUL;
-  } else {
-    _ISR_lock_ISR_enable( &queue_context->Lock_context );
-
-    old_priority = 0;
-
-    sc = RTEMS_NOT_DEFINED;
+    default:
+      _Assert(
+        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
+          || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+          || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
+      );
+      _ISR_lock_ISR_enable( &queue_context->Lock_context );
+      old_priority = 0;
+      sc = RTEMS_NOT_DEFINED;
+      break;
   }
 
   *old_priority_p = _RTEMS_tasks_Priority_from_Core( old_priority );

@@ -58,6 +58,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
     default:
       _Assert(
         the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+          || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING
           || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
           || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING

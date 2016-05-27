@@ -136,6 +136,7 @@ rtems_status_code rtems_semaphore_create(
   }
 #endif
 
+  priority_ceiling = _RTEMS_tasks_Priority_to_Core( priority_ceiling );
   the_semaphore->attribute_set = attribute_set;
   executing = _Thread_Get_executing();
 
@@ -169,10 +170,32 @@ rtems_status_code rtems_semaphore_create(
       count != 1
     );
 #endif
-  } else if (
-    !_Attributes_Is_inherit_priority( attribute_set )
-      && !_Attributes_Is_priority_ceiling( attribute_set )
-  ) {
+  } else if ( _Attributes_Is_priority_ceiling( attribute_set ) ) {
+    _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
+    the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING;
+    _CORE_ceiling_mutex_Initialize(
+      &the_semaphore->Core_control.Mutex,
+      priority_ceiling
+    );
+
+    if ( count == 0 ) {
+      Thread_queue_Context queue_context;
+
+      _Thread_queue_Context_initialize( &queue_context );
+      _ISR_lock_ISR_disable( &queue_context.Lock_context );
+      _CORE_mutex_Acquire_critical(
+        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+        &queue_context
+      );
+      status = _CORE_ceiling_mutex_Set_owner(
+        &the_semaphore->Core_control.Mutex,
+        executing,
+        &queue_context
+      );
+    } else {
+      status = STATUS_SUCCESSFUL;
+    }
+  } else if ( !_Attributes_Is_inherit_priority( attribute_set ) ) {
     _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
     the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL;
     _CORE_recursive_mutex_Initialize(
@@ -189,18 +212,10 @@ rtems_status_code rtems_semaphore_create(
     status = STATUS_SUCCESSFUL;
   } else {
     _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
+    _Assert( _Attributes_Is_inherit_priority( attribute_set ) );
     the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX;
 
-    the_mutex_attr.priority_ceiling =
-      _RTEMS_tasks_Priority_to_Core( priority_ceiling );
     the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-
-    if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
-      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT;
-    } else {
-      _Assert( _Attributes_Is_priority_ceiling( attribute_set ) );
-      the_mutex_attr.discipline = CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING;
-    }
 
     status = _CORE_mutex_Initialize(
       &the_semaphore->Core_control.Mutex.Recursive.Mutex,

@@ -48,9 +48,7 @@ void _API_Mutex_Allocate(
   API_Mutex_Control *mutex;
 
   CORE_mutex_Attributes attr =  {
-    CORE_MUTEX_NESTING_ACQUIRES,
-    CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT,
-    0
+    CORE_MUTEX_NESTING_ACQUIRES
   };
 
   mutex = (API_Mutex_Control *)

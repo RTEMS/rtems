@@ -118,19 +118,8 @@ Status_Control _CORE_mutex_Surrender(
     if ( _Objects_Is_local_id( the_thread->Object.id ) )
 #endif
     {
-      switch ( the_mutex->Attributes.discipline ) {
-        case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
-          the_thread->resource_count++;
-          _Thread_queue_Boost_priority( &the_mutex->Wait_queue.Queue, the_thread );
-          break;
-        case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
-          the_thread->resource_count++;
-          _Thread_Raise_priority(
-            the_thread,
-            the_mutex->Attributes.priority_ceiling
-          );
-          break;
-      }
+      the_thread->resource_count++;
+      _Thread_queue_Boost_priority( &the_mutex->Wait_queue.Queue, the_thread );
     }
 
     _Thread_queue_Unblock_critical(
@@ -164,5 +153,6 @@ Status_Control _CORE_mutex_Surrender(
     }
   }
 
+  _CORE_mutex_Restore_priority( holder );
   return STATUS_SUCCESSFUL;
 }

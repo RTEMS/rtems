@@ -29,6 +29,8 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
   Thread_queue_Context *queue_context
 )
 {
+  Thread_Control *holder;
+
 #if !defined(RTEMS_SMP)
   /*
    * We must disable thread dispatching here since we enable the interrupts for
@@ -37,32 +39,27 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
   _Thread_Dispatch_disable();
 #endif
 
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
-    Thread_Control *holder = the_mutex->holder;
+  holder = the_mutex->holder;
 
 #if !defined(RTEMS_SMP)
-    /*
-     * To enable interrupts here works only since exactly one executing thread
-     * exists and only threads are allowed to seize and surrender mutexes with
-     * the priority inheritance protocol.  On SMP configurations more than one
-     * executing thread may exist, so here we must not release the lock, since
-     * otherwise the current holder may be no longer the holder of the mutex
-     * once we released the lock.
-     */
-    _CORE_mutex_Release( the_mutex, queue_context );
+  /*
+   * To enable interrupts here works only since exactly one executing thread
+   * exists and only threads are allowed to seize and surrender mutexes with
+   * the priority inheritance protocol.  On SMP configurations more than one
+   * executing thread may exist, so here we must not release the lock, since
+   * otherwise the current holder may be no longer the holder of the mutex
+   * once we released the lock.
+   */
+  _CORE_mutex_Release( the_mutex, queue_context );
 #endif
 
-    _Thread_Inherit_priority( holder, executing );
-
-#if !defined(RTEMS_SMP)
-    _ISR_lock_ISR_disable( &queue_context->Lock_context );
-    _CORE_mutex_Acquire_critical( the_mutex, queue_context );
-#endif
-  }
+  _Thread_Inherit_priority( holder, executing );
 
 #if defined(RTEMS_SMP)
   _Thread_queue_Context_set_expected_level( queue_context, 1 );
 #else
+  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _CORE_mutex_Acquire_critical( the_mutex, queue_context );
   _Thread_queue_Context_set_expected_level( queue_context, 2 );
 #endif
 

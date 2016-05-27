@@ -90,6 +90,16 @@ rtems_status_code rtems_semaphore_obtain(
         &queue_context
       );
       break;
+    case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
+      status = _CORE_ceiling_mutex_Seize(
+        &the_semaphore->Core_control.Mutex,
+        executing,
+        wait,
+        timeout,
+        _CORE_recursive_mutex_Seize_nested,
+        &queue_context
+      );
+      break;
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
       status = _CORE_recursive_mutex_Seize_no_protocol(
         &the_semaphore->Core_control.Mutex.Recursive,

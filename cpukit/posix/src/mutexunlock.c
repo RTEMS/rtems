@@ -45,6 +45,13 @@ int pthread_mutex_unlock(
   executing = _Thread_Executing;
 
   switch ( the_mutex->protocol ) {
+    case POSIX_MUTEX_PRIORITY_CEILING:
+      status = _CORE_ceiling_mutex_Surrender(
+        &the_mutex->Mutex,
+        executing,
+        &queue_context
+      );
+      break;
     case POSIX_MUTEX_NO_PROTOCOL:
       status = _CORE_recursive_mutex_Surrender_no_protocol(
         &the_mutex->Mutex.Recursive,
@@ -54,6 +61,7 @@ int pthread_mutex_unlock(
       );
       break;
     default:
+      _Assert( the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT );
       status = _CORE_mutex_Surrender(
         &the_mutex->Mutex.Recursive.Mutex,
         &queue_context
