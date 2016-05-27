@@ -314,20 +314,6 @@ Status_Control _CORE_mutex_Surrender(
   Thread_queue_Context *queue_context
 );
 
-RTEMS_INLINE_ROUTINE void _CORE_mutex_Flush(
-  CORE_mutex_Control        *the_mutex,
-  Thread_queue_Flush_filter  filter,
-  Thread_queue_Context      *queue_context
-)
-{
-  _Thread_queue_Flush_critical(
-    &the_mutex->Wait_queue.Queue,
-    the_mutex->operations,
-    filter,
-    queue_context
-  );
-}
-
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
   const CORE_mutex_Control *the_mutex,
   const Thread_Control     *the_thread

@@ -141,20 +141,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Surrender(
   return status;
 }
 
-RTEMS_INLINE_ROUTINE void _CORE_semaphore_Flush(
-  CORE_semaphore_Control        *the_semaphore,
-  const Thread_queue_Operations *operations,
-  Thread_queue_Context          *queue_context
-)
-{
-  _Thread_queue_Flush_critical(
-    &the_semaphore->Wait_queue.Queue,
-    operations,
-    _Thread_queue_Flush_status_unavailable,
-    queue_context
-  );
-}
-
 /**
  * This routine returns the current count associated with the semaphore.
  *

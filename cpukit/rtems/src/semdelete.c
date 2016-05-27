@@ -84,14 +84,6 @@ rtems_status_code rtems_semaphore_delete(
   _Objects_Close( &_Semaphore_Information, &the_semaphore->Object );
 
   switch ( the_semaphore->variant ) {
-    case SEMAPHORE_VARIANT_MUTEX:
-      _CORE_mutex_Flush(
-        &the_semaphore->Core_control.mutex,
-        _Thread_queue_Flush_status_object_was_deleted,
-        &queue_context
-      );
-      _CORE_mutex_Destroy( &the_semaphore->Core_control.mutex );
-      break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
       _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &queue_context );
@@ -99,14 +91,17 @@ rtems_status_code rtems_semaphore_delete(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
+        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+          || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
       );
-      _CORE_semaphore_Destroy(
-        &the_semaphore->Core_control.semaphore,
+      _Thread_queue_Flush_critical(
+        &the_semaphore->Core_control.Wait_queue.Queue,
         _Semaphore_Get_operations( the_semaphore ),
+        _Thread_queue_Flush_status_object_was_deleted,
         &queue_context
       );
+      _Thread_queue_Destroy( &the_semaphore->Core_control.Wait_queue );
       break;
   }
 
