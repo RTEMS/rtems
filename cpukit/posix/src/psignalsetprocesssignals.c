@@ -36,9 +36,10 @@ void _POSIX_signals_Set_process_signals(
   sigset_t   mask
 )
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
-  _POSIX_signals_Acquire( &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _POSIX_signals_Acquire( &queue_context );
     _POSIX_signals_Pending |= mask;
-  _POSIX_signals_Release( &lock_context );
+  _POSIX_signals_Release( &queue_context );
 }

@@ -33,7 +33,7 @@ int sigaction(
   struct sigaction       *__restrict oact
 )
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
   if ( !sig )
     rtems_set_errno_and_return_minus_one( EINVAL );
@@ -51,7 +51,8 @@ int sigaction(
   if ( sig == SIGKILL )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  _POSIX_signals_Acquire( &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _POSIX_signals_Acquire( &queue_context );
 
   if ( oact )
     *oact = _POSIX_signals_Vectors[ sig ];
@@ -76,7 +77,7 @@ int sigaction(
     }
   }
 
-  _POSIX_signals_Release( &lock_context );
+  _POSIX_signals_Release( &queue_context );
 
   return 0;
 }

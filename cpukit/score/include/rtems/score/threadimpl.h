@@ -232,10 +232,10 @@ void _Thread_Exit(
 );
 
 void _Thread_Join(
-  Thread_Control    *the_thread,
-  States_Control     waiting_for_join,
-  Thread_Control    *executing,
-  ISR_lock_Context  *lock_context
+  Thread_Control       *the_thread,
+  States_Control        waiting_for_join,
+  Thread_Control       *executing,
+  Thread_queue_Context *queue_context
 );
 
 void _Thread_Cancel(

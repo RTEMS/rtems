@@ -70,6 +70,15 @@ typedef struct {
   ISR_lock_Context Lock_context;
 
   /**
+   * @brief The expected thread dispatch disable level for
+   * _Thread_queue_Enqueue_critical().
+   *
+   * In case the actual thread dispatch disable level is not equal to the
+   * expected level, then a fatal error occurs.
+   */
+  uint32_t expected_thread_dispatch_disable_level;
+
+  /**
    * @brief Callout to unblock the thread in case it is actually a thread
    * proxy.
    *

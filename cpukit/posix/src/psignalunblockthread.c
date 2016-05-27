@@ -96,9 +96,9 @@ static void _POSIX_signals_Action_handler(
   ISR_lock_Context *lock_context
 )
 {
-  POSIX_API_Control  *api;
-  int                 signo;
-  uint32_t            hold_errno;
+  POSIX_API_Control *api;
+  int                signo;
+  uint32_t           hold_errno;
 
   (void) action;
   _Thread_State_release( executing, lock_context );
@@ -135,13 +135,16 @@ static void _POSIX_signals_Action_handler(
    *  processed at all.  No point in doing this loop otherwise.
    */
   while (1) {
-    _POSIX_signals_Acquire( lock_context );
+    Thread_queue_Context queue_context;
+
+    _Thread_queue_Context_initialize( &queue_context );
+    _POSIX_signals_Acquire( &queue_context );
       if ( !(api->signals_unblocked &
             (api->signals_pending | _POSIX_signals_Pending)) ) {
-       _POSIX_signals_Release( lock_context );
+       _POSIX_signals_Release( &queue_context );
        break;
      }
-    _POSIX_signals_Release( lock_context );
+    _POSIX_signals_Release( &queue_context );
 
     for ( signo = SIGRTMIN ; signo <= SIGRTMAX ; signo++ ) {
       _POSIX_signals_Check_signal( api, signo, false );

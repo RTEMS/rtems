@@ -75,7 +75,7 @@ int _POSIX_signals_Send(
   siginfo_t                   *siginfo;
   POSIX_signals_Siginfo_node  *psiginfo;
   Thread_queue_Heads          *heads;
-  ISR_lock_Context             lock_context;
+  Thread_queue_Context         queue_context;
   Per_CPU_Control             *cpu_self;
 
   /*
@@ -334,14 +334,15 @@ post_process_signal:
    */
   _POSIX_signals_Set_process_signals( mask );
 
-  _POSIX_signals_Acquire( &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _POSIX_signals_Acquire( &queue_context );
 
   if ( _POSIX_signals_Vectors[ sig ].sa_flags == SA_SIGINFO ) {
 
     psiginfo = (POSIX_signals_Siginfo_node *)
       _Chain_Get_unprotected( &_POSIX_signals_Inactive_siginfo );
     if ( !psiginfo ) {
-      _POSIX_signals_Release( &lock_context );
+      _POSIX_signals_Release( &queue_context );
       _Thread_Dispatch_enable( cpu_self );
       rtems_set_errno_and_return_minus_one( EAGAIN );
     }
@@ -354,7 +355,7 @@ post_process_signal:
     );
   }
 
-  _POSIX_signals_Release( &lock_context );
+  _POSIX_signals_Release( &queue_context );
   DEBUG_STEP("\n");
   _Thread_Dispatch_enable( cpu_self );
   return 0;

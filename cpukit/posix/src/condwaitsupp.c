@@ -86,13 +86,14 @@ int _POSIX_Condition_variables_Wait_support(
   }
 
   if ( !already_timedout ) {
+    _Thread_queue_Context_set_expected_level( &queue_context, 2 );
     _Thread_queue_Enqueue_critical(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_CONDITION_VARIABLE,
       timeout,
-      &queue_context.Lock_context
+      &queue_context
     );
   } else {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );

@@ -86,7 +86,8 @@ rtems_status_code rtems_region_get_segment(
         the_region->wait_operations,
         executing,
         STATES_WAITING_FOR_SEGMENT,
-        timeout
+        timeout,
+        2
       );
 
       _Thread_Dispatch_enable( cpu_self );

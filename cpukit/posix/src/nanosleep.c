@@ -92,7 +92,8 @@ int nanosleep(
     &_Thread_queue_Operations_FIFO,
     executing,
     STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
-    ticks
+    ticks,
+    1
   );
 
   /*

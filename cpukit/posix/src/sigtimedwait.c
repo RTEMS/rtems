@@ -69,14 +69,14 @@ int sigtimedwait(
   const struct timespec  *__restrict timeout
 )
 {
-  Thread_Control    *executing;
-  POSIX_API_Control *api;
-  Watchdog_Interval  interval;
-  siginfo_t          signal_information;
-  siginfo_t         *the_info;
-  int                signo;
-  ISR_lock_Context   lock_context;
-  int                error;
+  Thread_Control       *executing;
+  POSIX_API_Control    *api;
+  Watchdog_Interval     interval;
+  siginfo_t             signal_information;
+  siginfo_t            *the_info;
+  int                   signo;
+  Thread_queue_Context  queue_context;
+  int                   error;
 
   /*
    *  Error check parameters before disabling interrupts.
@@ -115,7 +115,8 @@ int sigtimedwait(
 
   /* API signals pending? */
 
-  _POSIX_signals_Acquire( &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _POSIX_signals_Acquire( &queue_context );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
     the_info->si_signo = _POSIX_signals_Get_lowest( api->signals_pending );
@@ -127,7 +128,7 @@ int sigtimedwait(
       false,
       false
     );
-    _POSIX_signals_Release( &lock_context );
+    _POSIX_signals_Release( &queue_context );
 
     the_info->si_code = SI_USER;
     the_info->si_value.sival_int = 0;
@@ -139,7 +140,7 @@ int sigtimedwait(
   if ( *set & _POSIX_signals_Pending ) {
     signo = _POSIX_signals_Get_lowest( _POSIX_signals_Pending );
     _POSIX_signals_Clear_signals( api, signo, the_info, true, false, false );
-    _POSIX_signals_Release( &lock_context );
+    _POSIX_signals_Release( &queue_context );
 
     the_info->si_signo = signo;
     the_info->si_code = SI_USER;
@@ -151,13 +152,14 @@ int sigtimedwait(
 
   executing->Wait.option          = *set;
   executing->Wait.return_argument = the_info;
+  _Thread_queue_Context_set_expected_level( &queue_context, 1 );
   _Thread_queue_Enqueue_critical(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
     interval,
-    &lock_context
+    &queue_context
   );
 
   /*

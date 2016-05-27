@@ -72,47 +72,51 @@ static Mutex_Control *_Mutex_Get( struct _Mutex_Control *_mutex )
 }
 
 static Thread_Control *_Mutex_Queue_acquire(
-  Mutex_Control    *mutex,
-  ISR_lock_Context *lock_context
+  Mutex_Control        *mutex,
+  Thread_queue_Context *queue_context
 )
 {
   Thread_Control *executing;
 
-  _ISR_lock_ISR_disable( lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context );
   executing = _Thread_Executing;
   _Thread_queue_Queue_acquire_critical(
     &mutex->Queue.Queue,
     &executing->Potpourri_stats,
-    lock_context
+    &queue_context->Lock_context
   );
 
   return executing;
 }
 
 static void _Mutex_Queue_release(
-  Mutex_Control    *mutex,
-  ISR_lock_Context *lock_context
+  Mutex_Control        *mutex,
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Queue_release( &mutex->Queue.Queue, lock_context );
+  _Thread_queue_Queue_release(
+    &mutex->Queue.Queue,
+    &queue_context->Lock_context
+  );
 }
 
 static void _Mutex_Acquire_slow(
-  Mutex_Control     *mutex,
-  Thread_Control    *owner,
-  Thread_Control    *executing,
-  Watchdog_Interval  timeout,
-  ISR_lock_Context  *lock_context
+  Mutex_Control        *mutex,
+  Thread_Control       *owner,
+  Thread_Control       *executing,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
   _Thread_Inherit_priority( owner, executing );
+  _Thread_queue_Context_set_expected_level( queue_context, 1 );
   _Thread_queue_Enqueue_critical(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SYS_LOCK_MUTEX,
     timeout,
-    lock_context
+    queue_context
   );
 }
 
@@ -148,7 +152,7 @@ static void _Mutex_Release_slow(
       &queue_context->Lock_context
     );
   } else {
-    _Mutex_Queue_release( mutex, &queue_context->Lock_context );
+    _Mutex_Queue_release( mutex, queue_context );
   }
 
   if ( !keep_priority ) {
@@ -185,7 +189,7 @@ static void _Mutex_Release_critical(
     || !executing->priority_restore_hint;
 
   if ( __predict_true( heads == NULL && keep_priority ) ) {
-    _Mutex_Queue_release( mutex, &queue_context->Lock_context );
+    _Mutex_Queue_release( mutex, queue_context );
   } else {
     _Mutex_Release_slow(
       mutex,
@@ -199,22 +203,23 @@ static void _Mutex_Release_critical(
 
 void _Mutex_Acquire( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control    *mutex;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  Thread_Control   *owner;
+  Mutex_Control        *mutex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
+  Thread_Control       *owner;
 
   mutex = _Mutex_Get( _mutex );
-  executing = _Mutex_Queue_acquire( mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
     ++executing->resource_count;
-    _Mutex_Queue_release( mutex, &lock_context );
+    _Mutex_Queue_release( mutex, &queue_context );
   } else {
-    _Mutex_Acquire_slow( mutex, owner, executing, 0, &lock_context );
+    _Mutex_Acquire_slow( mutex, owner, executing, 0, &queue_context );
   }
 }
 
@@ -223,20 +228,21 @@ int _Mutex_Acquire_timed(
   const struct timespec *abstime
 )
 {
-  Mutex_Control    *mutex;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  Thread_Control   *owner;
+  Mutex_Control        *mutex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
+  Thread_Control       *owner;
 
   mutex = _Mutex_Get( _mutex );
-  executing = _Mutex_Queue_acquire( mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
     ++executing->resource_count;
-    _Mutex_Queue_release( mutex, &lock_context );
+    _Mutex_Queue_release( mutex, &queue_context );
 
     return 0;
   } else {
@@ -244,17 +250,17 @@ int _Mutex_Acquire_timed(
 
     switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
       case TOD_ABSOLUTE_TIMEOUT_INVALID:
-        _Mutex_Queue_release( mutex, &lock_context );
+        _Mutex_Queue_release( mutex, &queue_context );
         return EINVAL;
       case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
       case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-        _Mutex_Queue_release( mutex, &lock_context );
+        _Mutex_Queue_release( mutex, &queue_context );
         return ETIMEDOUT;
       default:
         break;
     }
 
-    _Mutex_Acquire_slow( mutex, owner, executing, ticks, &lock_context );
+    _Mutex_Acquire_slow( mutex, owner, executing, ticks, &queue_context );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }
@@ -262,14 +268,15 @@ int _Mutex_Acquire_timed(
 
 int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 {
-  Mutex_Control    *mutex;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  Thread_Control   *owner;
-  int               eno;
+  Mutex_Control        *mutex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
+  Thread_Control       *owner;
+  int                   eno;
 
   mutex = _Mutex_Get( _mutex );
-  executing = _Mutex_Queue_acquire( mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
 
@@ -281,7 +288,7 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
     eno = EBUSY;
   }
 
-  _Mutex_Queue_release( mutex, &lock_context );
+  _Mutex_Queue_release( mutex, &queue_context );
 
   return eno;
 }
@@ -294,7 +301,7 @@ void _Mutex_Release( struct _Mutex_Control *_mutex )
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  executing = _Mutex_Queue_acquire( mutex, &queue_context.Lock_context );
+  executing = _Mutex_Queue_acquire( mutex, &queue_context );
 
   _Assert( mutex->Queue.Queue.owner == executing );
 
@@ -311,24 +318,25 @@ static Mutex_recursive_Control *_Mutex_recursive_Get(
 void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
 {
   Mutex_recursive_Control *mutex;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   Thread_Control          *executing;
   Thread_Control          *owner;
 
   mutex = _Mutex_recursive_Get( _mutex );
-  executing = _Mutex_Queue_acquire( &mutex->Mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
     ++executing->resource_count;
-    _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context );
   } else if ( owner == executing ) {
     ++mutex->nest_level;
-    _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context );
   } else {
-    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, 0, &lock_context );
+    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, 0, &queue_context );
   }
 }
 
@@ -338,24 +346,25 @@ int _Mutex_recursive_Acquire_timed(
 )
 {
   Mutex_recursive_Control *mutex;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   Thread_Control          *executing;
   Thread_Control          *owner;
 
   mutex = _Mutex_recursive_Get( _mutex );
-  executing = _Mutex_Queue_acquire( &mutex->Mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
     ++executing->resource_count;
-    _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context );
 
     return 0;
   } else if ( owner == executing ) {
     ++mutex->nest_level;
-    _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context );
 
     return 0;
   } else {
@@ -363,11 +372,11 @@ int _Mutex_recursive_Acquire_timed(
 
     switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
       case TOD_ABSOLUTE_TIMEOUT_INVALID:
-        _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+        _Mutex_Queue_release( &mutex->Mutex, &queue_context );
         return EINVAL;
       case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
       case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-        _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+        _Mutex_Queue_release( &mutex->Mutex, &queue_context );
         return ETIMEDOUT;
       default:
         break;
@@ -378,7 +387,7 @@ int _Mutex_recursive_Acquire_timed(
       owner,
       executing,
       ticks,
-      &lock_context
+      &queue_context
     );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
@@ -388,13 +397,14 @@ int _Mutex_recursive_Acquire_timed(
 int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
 {
   Mutex_recursive_Control *mutex;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   Thread_Control          *executing;
   Thread_Control          *owner;
   int                      eno;
 
   mutex = _Mutex_recursive_Get( _mutex );
-  executing = _Mutex_Queue_acquire( &mutex->Mutex, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  executing = _Mutex_Queue_acquire( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
@@ -409,7 +419,7 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
     eno = EBUSY;
   }
 
-  _Mutex_Queue_release( &mutex->Mutex, &lock_context );
+  _Mutex_Queue_release( &mutex->Mutex, &queue_context );
 
   return eno;
 }
@@ -423,10 +433,7 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
 
   mutex = _Mutex_recursive_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  executing = _Mutex_Queue_acquire(
-    &mutex->Mutex,
-    &queue_context.Lock_context
-  );
+  executing = _Mutex_Queue_acquire( &mutex->Mutex, &queue_context );
 
   _Assert( mutex->Mutex.Queue.Queue.owner == executing );
 
@@ -437,7 +444,7 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
   } else {
     mutex->nest_level = nest_level - 1;
 
-    _Mutex_Queue_release( &mutex->Mutex, &queue_context.Lock_context );
+    _Mutex_Queue_release( &mutex->Mutex, &queue_context );
   }
 }
 

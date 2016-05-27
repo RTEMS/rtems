@@ -259,7 +259,8 @@ Status_Control _MPCI_Send_request_packet(
       &_Thread_queue_Operations_FIFO,
       executing,
       STATES_WAITING_FOR_RPC_REPLY | extra_state,
-      the_packet->timeout
+      the_packet->timeout,
+      2
     );
 
   _Thread_Dispatch_enable( cpu_self );

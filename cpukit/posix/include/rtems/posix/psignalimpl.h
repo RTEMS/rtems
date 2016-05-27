@@ -73,11 +73,25 @@ extern Chain_Control _POSIX_signals_Siginfo[ SIG_ARRAY_MAX ];
  *  Internal routines
  */
 
-#define _POSIX_signals_Acquire( lock_context ) \
-  _Thread_queue_Acquire( &_POSIX_signals_Wait_queue, lock_context )
+RTEMS_INLINE_ROUTINE void _POSIX_signals_Acquire(
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Acquire(
+    &_POSIX_signals_Wait_queue,
+    &queue_context->Lock_context
+  );
+}
 
-#define _POSIX_signals_Release( lock_context ) \
-  _Thread_queue_Release( &_POSIX_signals_Wait_queue, lock_context )
+RTEMS_INLINE_ROUTINE void _POSIX_signals_Release(
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Release(
+    &_POSIX_signals_Wait_queue,
+    &queue_context->Lock_context
+  );
+}
 
 /**
  * @brief Unlock POSIX signals thread.

@@ -16,7 +16,7 @@
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
 #define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       \
-          INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
+          INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_FROM_BAD_STATE
 
 void force_error(void)
 {
@@ -26,7 +26,7 @@ void force_error(void)
 
   status = rtems_semaphore_create(
     rtems_build_name( 'S','0',' ',' '),
-    1,
+    0,
     RTEMS_LOCAL|
     RTEMS_SIMPLE_BINARY_SEMAPHORE,
     0,
@@ -37,7 +37,7 @@ void force_error(void)
 
   printk("Obtain semaphore in dispatching critical section\n");
   _Thread_Dispatch_disable();
-  status = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
+  status = rtems_semaphore_obtain( mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
   rtems_test_assert( 0 );

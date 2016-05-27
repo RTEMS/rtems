@@ -40,7 +40,7 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control                *the_thread,
   States_Control                 state,
   Watchdog_Interval              timeout,
-  ISR_lock_Context              *lock_context
+  Thread_queue_Context          *queue_context
 )
 {
   Per_CPU_Control *cpu_self;
@@ -61,8 +61,19 @@ void _Thread_queue_Enqueue_critical(
   ( *operations->enqueue )( queue, the_thread );
 
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Thread_queue_Queue_release( queue, lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
+  _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
+
+  if (
+    cpu_self->thread_dispatch_disable_level
+      != queue_context->expected_thread_dispatch_disable_level
+  ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      false,
+      INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_FROM_BAD_STATE
+    );
+  }
 
   /*
    *  Set the blocking state for this thread queue in the thread.

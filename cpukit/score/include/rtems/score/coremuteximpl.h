@@ -21,7 +21,6 @@
 #include <rtems/score/coremutex.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/status.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 
@@ -95,25 +94,11 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
  *  @param[in] lock_context is the interrupt level
  */
 Status_Control _CORE_mutex_Seize_interrupt_blocking(
-  CORE_mutex_Control  *the_mutex,
-  Thread_Control      *executing,
-  Watchdog_Interval    timeout,
-  ISR_lock_Context    *lock_context
+  CORE_mutex_Control   *the_mutex,
+  Thread_Control       *executing,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 );
-
-/**
- *  @brief Verifies that a mutex blocking seize is performed safely.
- *
- *  This macro is to verify that a mutex blocking seize is
- *  performed from a safe system state.  For example, one
- *  cannot block inside an isr.
- *
- *  @retval this method returns true if dispatch is in an unsafe state.
- */
-#define _CORE_mutex_Check_dispatch_for_seize(_wait) \
-  (!_Thread_Dispatch_is_enabled() \
-    && (_wait) \
-    && (_System_state_Get() >= SYSTEM_STATE_UP))
 
 /**
  * @brief Is mutex locked.
@@ -301,14 +286,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize(
 {
   Status_Control status;
 
-  if ( _CORE_mutex_Check_dispatch_for_seize( wait ) ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      false,
-      INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE
-    );
-  }
-
   _CORE_mutex_Acquire_critical( the_mutex, queue_context );
 
   status = _CORE_mutex_Seize_interrupt_trylock(
@@ -330,7 +307,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize(
     the_mutex,
     executing,
     timeout,
-    &queue_context->Lock_context
+    queue_context
   );
 }
 

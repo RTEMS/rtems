@@ -18,17 +18,15 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
 Status_Control _CORE_mutex_Seize_interrupt_blocking(
-  CORE_mutex_Control  *the_mutex,
-  Thread_Control      *executing,
-  Watchdog_Interval    timeout,
-  ISR_lock_Context    *lock_context
+  CORE_mutex_Control   *the_mutex,
+  Thread_Control       *executing,
+  Watchdog_Interval     timeout,
+  Thread_queue_Context *queue_context
 )
 {
 #if !defined(RTEMS_SMP)
@@ -51,15 +49,22 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
      * otherwise the current holder may be no longer the holder of the mutex
      * once we released the lock.
      */
-    _Thread_queue_Release( &the_mutex->Wait_queue, lock_context );
+    _CORE_mutex_Release( the_mutex, queue_context );
 #endif
 
     _Thread_Inherit_priority( holder, executing );
 
 #if !defined(RTEMS_SMP)
-    _Thread_queue_Acquire( &the_mutex->Wait_queue, lock_context );
+    _ISR_lock_ISR_disable( &queue_context->Lock_context );
+    _CORE_mutex_Acquire_critical( the_mutex, queue_context );
 #endif
   }
+
+#if defined(RTEMS_SMP)
+  _Thread_queue_Context_set_expected_level( queue_context, 1 );
+#else
+  _Thread_queue_Context_set_expected_level( queue_context, 2 );
+#endif
 
   _Thread_queue_Enqueue_critical(
     &the_mutex->Wait_queue.Queue,
@@ -67,7 +72,7 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
     executing,
     STATES_WAITING_FOR_MUTEX,
     timeout,
-    lock_context
+    queue_context
   );
 
 #if !defined(RTEMS_SMP)

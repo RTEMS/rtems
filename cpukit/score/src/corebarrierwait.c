@@ -45,13 +45,14 @@ Status_Control _CORE_barrier_Seize(
     return STATUS_BARRIER_AUTOMATICALLY_RELEASED;
   } else {
     the_barrier->number_of_waiting_threads = number_of_waiting_threads;
+    _Thread_queue_Context_set_expected_level( queue_context, 1 );
     _Thread_queue_Enqueue_critical(
       &the_barrier->Wait_queue.Queue,
       CORE_BARRIER_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_BARRIER,
       timeout,
-      &queue_context->Lock_context
+      queue_context
     );
     return _Thread_Wait_get_status( executing );
   }

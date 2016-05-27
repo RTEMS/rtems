@@ -50,52 +50,56 @@ static Futex_Control *_Futex_Get( struct _Futex_Control *_futex )
 
 static Thread_Control *_Futex_Queue_acquire(
   Futex_Control    *futex,
-  ISR_lock_Context *lock_context
+  Thread_queue_Context *queue_context
 )
 {
   Thread_Control *executing;
 
-  _ISR_lock_ISR_disable( lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context );
   executing = _Thread_Executing;
   _Thread_queue_Queue_acquire_critical(
     &futex->Queue.Queue,
     &executing->Potpourri_stats,
-    lock_context
+    &queue_context->Lock_context
   );
 
   return executing;
 }
 
 static void _Futex_Queue_release(
-  Futex_Control    *futex,
-  ISR_lock_Context *lock_context
+  Futex_Control        *futex,
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Queue_release( &futex->Queue.Queue, lock_context );
+  _Thread_queue_Queue_release(
+    &futex->Queue.Queue,
+    &queue_context->Lock_context
+  );
 }
 
 int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
 {
-  Futex_Control    *futex;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  int               eno;
+  Futex_Control        *futex;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *executing;
+  int                   eno;
 
   futex = _Futex_Get( _futex );
-  executing = _Futex_Queue_acquire( futex, &lock_context );
+  executing = _Futex_Queue_acquire( futex, &queue_context );
 
   if ( *uaddr == val ) {
+    _Thread_queue_Context_set_expected_level( &queue_context, 1 );
     _Thread_queue_Enqueue_critical(
       &futex->Queue.Queue,
       FUTEX_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_SYS_LOCK_FUTEX,
       WATCHDOG_NO_TIMEOUT,
-      &lock_context
+      &queue_context
     );
     eno = 0;
   } else {
-    _Futex_Queue_release( futex, &lock_context );
+    _Futex_Queue_release( futex, &queue_context );
     eno = EWOULDBLOCK;
   }
 
@@ -128,11 +132,11 @@ static Thread_Control *_Futex_Flush_filter(
 
 int _Futex_Wake( struct _Futex_Control *_futex, int count )
 {
-  Futex_Control      *futex;
+  Futex_Control *futex;
   Futex_Context  context;
 
   futex = _Futex_Get( _futex );
-  _Futex_Queue_acquire( futex, &context.Base.Lock_context );
+  _Futex_Queue_acquire( futex, &context.Base );
 
   /*
    * For some synchronization objects like barriers the _Futex_Wake() must be
@@ -140,7 +144,7 @@ int _Futex_Wake( struct _Futex_Control *_futex, int count )
    * check this condition early.
    */
   if ( __predict_true( _Thread_queue_Is_empty( &futex->Queue.Queue ) ) ) {
-    _Futex_Queue_release( futex, &context.Base.Lock_context );
+    _Futex_Queue_release( futex, &context.Base );
     return 0;
   }
 

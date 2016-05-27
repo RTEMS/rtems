@@ -62,11 +62,32 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
   Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_MULTIPROCESSING) && defined(RTEMS_DEBUG)
+#if defined(RTEMS_DEBUG)
+  queue_context->expected_thread_dispatch_disable_level = 0xdeadbeef;
+#if defined(RTEMS_MULTIPROCESSING)
   queue_context->mp_callout = NULL;
+#endif
 #else
   (void) queue_context;
 #endif
+}
+
+/**
+ * @brief Sets the expected thread dispatch disable level in the thread queue
+ * context.
+ *
+ * @param queue_context The thread queue context.
+ * @param expected_level The expected thread dispatch disable level.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_expected_level(
+  Thread_queue_Context *queue_context,
+  uint32_t              expected_level
+)
+{
+  queue_context->expected_thread_dispatch_disable_level = expected_level;
 }
 
 /**
@@ -309,17 +330,19 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *
  * void _Mutex_Obtain( Mutex *mutex )
  * {
- *   ISR_lock_Context  lock_context;
- *   Thread_Control   *executing;
+ *   Thread_queue_Context  queue_context;
+ *   Thread_Control       *executing;
  *
- *   _Thread_queue_Acquire( &mutex->Queue, &lock_context );
+ *   _Thread_queue_Context_initialize( &queue_context );
+ *   _Thread_queue_Acquire( &mutex->Queue, &queue_context.Lock_context );
  *
  *   executing = _Thread_Executing;
  *
  *   if ( mutex->owner == NULL ) {
  *     mutex->owner = executing;
- *     _Thread_queue_Release( &mutex->Queue, &lock_context );
+ *     _Thread_queue_Release( &mutex->Queue, &queue_context.Lock_context );
  *   } else {
+ *     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
  *     _Thread_queue_Enqueue_critical(
  *       &mutex->Queue.Queue,
  *       MUTEX_TQ_OPERATIONS,
@@ -327,7 +350,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *       STATES_WAITING_FOR_MUTEX,
  *       WATCHDOG_NO_TIMEOUT,
  *       0,
- *       &lock_context
+ *       &queue_context
  *     );
  *   }
  * }
@@ -339,7 +362,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @param[in] state The new state of the thread.
  * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
  * potentially forever.
- * @param[in] lock_context The lock context of the lock acquire.
+ * @param[in] queue_context The thread queue context of the lock acquire.
  */
 void _Thread_queue_Enqueue_critical(
   Thread_queue_Queue            *queue,
@@ -347,7 +370,7 @@ void _Thread_queue_Enqueue_critical(
   Thread_Control                *the_thread,
   States_Control                 state,
   Watchdog_Interval              timeout,
-  ISR_lock_Context              *lock_context
+  Thread_queue_Context          *queue_context
 );
 
 /**
@@ -359,19 +382,22 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   States_Control                 state,
-  Watchdog_Interval              timeout
+  Watchdog_Interval              timeout,
+  uint32_t                       expected_level
 )
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
-  _Thread_queue_Acquire( the_thread_queue, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Acquire( the_thread_queue, &queue_context.Lock_context );
+  _Thread_queue_Context_set_expected_level( &queue_context, expected_level );
   _Thread_queue_Enqueue_critical(
     &the_thread_queue->Queue,
     operations,
     the_thread,
     state,
     timeout,
-    &lock_context
+    &queue_context
   );
 }
 

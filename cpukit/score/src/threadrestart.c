@@ -443,10 +443,10 @@ static void _Thread_Finalize_life_change(
 }
 
 void _Thread_Join(
-  Thread_Control   *the_thread,
-  States_Control    waiting_for_join,
-  Thread_Control   *executing,
-  ISR_lock_Context *lock_context
+  Thread_Control       *the_thread,
+  States_Control        waiting_for_join,
+  Thread_Control       *executing,
+  Thread_queue_Context *queue_context
 )
 {
   _Assert( the_thread != executing );
@@ -462,7 +462,7 @@ void _Thread_Join(
     executing,
     waiting_for_join,
     WATCHDOG_NO_TIMEOUT,
-    lock_context
+    queue_context
   );
 }
 
@@ -524,14 +524,16 @@ void _Thread_Cancel(
 
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 {
-  ISR_lock_Context lock_context;
+  Thread_queue_Context queue_context;
 
-  _Thread_State_acquire( the_thread, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_expected_level( &queue_context, 2 );
+  _Thread_State_acquire( the_thread, &queue_context.Lock_context );
   _Thread_Join(
     the_thread,
     STATES_WAITING_FOR_JOIN,
     executing,
-    &lock_context
+    &queue_context
   );
   _Thread_Cancel( the_thread, executing, NULL );
 }
