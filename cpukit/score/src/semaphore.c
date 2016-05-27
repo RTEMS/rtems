@@ -114,7 +114,7 @@ void _Semaphore_Post( struct _Semaphore_Control *_sem )
   Thread_queue_Heads   *heads;
 
   sem = _Semaphore_Get( _sem );
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
   _Semaphore_Queue_acquire( sem, &queue_context.Lock_context );
 
   heads = sem->Queue.Queue.heads;

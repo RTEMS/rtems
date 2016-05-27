@@ -195,10 +195,7 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   void                 *lock;
   Thread_queue_Queue   *queue;
 
-  _Thread_queue_Context_initialize(
-    &queue_context,
-    _Thread_queue_MP_callout_do_nothing
-  );
+  _Thread_queue_Context_initialize( &queue_context );
   lock = _Thread_Lock_acquire( the_thread, &queue_context.Lock_context );
 
   queue = the_thread->Wait.queue;
@@ -206,6 +203,10 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   if ( queue != NULL ) {
     _SMP_Assert( lock == &queue->Lock );
 
+    _Thread_queue_Context_set_MP_callout(
+      &queue_context,
+      _Thread_queue_MP_callout_do_nothing
+    );
     _Thread_queue_Extract_critical(
       queue,
       the_thread->Wait.operations,
@@ -229,7 +230,8 @@ Thread_Control *_Thread_queue_Do_dequeue(
   Thread_queue_Context  queue_context;
   Thread_Control       *the_thread;
 
-  _Thread_queue_Context_initialize( &queue_context, mp_callout );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_MP_callout( &queue_context, mp_callout );
   _Thread_queue_Acquire( the_thread_queue, &queue_context.Lock_context );
 
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );

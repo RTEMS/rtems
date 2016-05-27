@@ -29,11 +29,7 @@ rtems_status_code rtems_message_queue_delete(
   Thread_queue_Context   queue_context;
 
   _Objects_Allocator_lock();
-  the_message_queue = _Message_queue_Get(
-    id,
-    &queue_context,
-    _Message_queue_MP_Send_object_was_deleted
-  );
+  the_message_queue = _Message_queue_Get( id, &queue_context );
 
   if ( the_message_queue == NULL ) {
     _Objects_Allocator_unlock();
@@ -54,6 +50,10 @@ rtems_status_code rtems_message_queue_delete(
 
   _Objects_Close( &_Message_queue_Information, &the_message_queue->Object );
 
+  _Thread_queue_Context_set_MP_callout(
+    &queue_context,
+    _Message_queue_MP_Send_object_was_deleted
+  );
   _CORE_message_queue_Close(
     &the_message_queue->message_queue,
     &queue_context

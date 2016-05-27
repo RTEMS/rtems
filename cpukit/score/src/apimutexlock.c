@@ -31,7 +31,7 @@ void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
   previous_thread_life_state =
     _Thread_Set_life_protection( THREAD_LIFE_PROTECTED );
 
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
 
   _CORE_mutex_Seize(

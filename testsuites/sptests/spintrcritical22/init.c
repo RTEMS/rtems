@@ -36,7 +36,7 @@ static Semaphore_Control *get_semaphore_control(rtems_id id)
   Thread_queue_Context queue_context;
   Semaphore_Control *sem;
 
-  sem = _Semaphore_Get(id, &queue_context, NULL);
+  sem = _Semaphore_Get(id, &queue_context);
   rtems_test_assert(sem != NULL);
   _ISR_lock_ISR_enable(&queue_context.Lock_context);
 

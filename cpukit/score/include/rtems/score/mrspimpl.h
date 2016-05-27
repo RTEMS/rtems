@@ -189,7 +189,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
   Thread_Control *thread = rival->thread;
   Thread_queue_Context queue_context;
 
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
   _MRSP_Acquire_critical( mrsp, &queue_context );
 

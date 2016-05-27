@@ -118,7 +118,7 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
   join_context.exit_value = the_thread->Life.exit_value;
 #endif
 
-  _Thread_queue_Context_initialize( &join_context.Base, NULL );
+  _Thread_queue_Context_initialize( &join_context.Base );
   _Thread_queue_Acquire(
     &the_thread->Join_queue,
     &join_context.Base.Lock_context

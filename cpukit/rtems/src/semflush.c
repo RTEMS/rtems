@@ -27,11 +27,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
   Thread_queue_Context  queue_context;
   rtems_attribute       attribute_set;
 
-  the_semaphore = _Semaphore_Get(
-    id,
-    &queue_context,
-    _Semaphore_MP_Send_object_was_deleted
-  );
+  the_semaphore = _Semaphore_Get( id, &queue_context );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -44,6 +40,11 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
   }
 
   attribute_set = the_semaphore->attribute_set;
+
+  _Thread_queue_Context_set_MP_callout(
+    &queue_context,
+    _Semaphore_MP_Send_object_was_deleted
+  );
 
 #if defined(RTEMS_SMP)
   if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {

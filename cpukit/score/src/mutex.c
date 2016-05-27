@@ -293,7 +293,7 @@ void _Mutex_Release( struct _Mutex_Control *_mutex )
   Thread_Control       *executing;
 
   mutex = _Mutex_Get( _mutex );
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
   executing = _Mutex_Queue_acquire( mutex, &queue_context.Lock_context );
 
   _Assert( mutex->Queue.Queue.owner == executing );
@@ -422,7 +422,7 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
   unsigned int             nest_level;
 
   mutex = _Mutex_recursive_Get( _mutex );
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
   executing = _Mutex_Queue_acquire(
     &mutex->Mutex,
     &queue_context.Lock_context

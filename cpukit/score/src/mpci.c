@@ -325,7 +325,7 @@ void _MPCI_Receive_server(
   Thread_queue_Context   queue_context;
 
   executing = _Thread_Get_executing();
-  _Thread_queue_Context_initialize( &queue_context, NULL );
+  _Thread_queue_Context_initialize( &queue_context );
 
   for ( ; ; ) {
 

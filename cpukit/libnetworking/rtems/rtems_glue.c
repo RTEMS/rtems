@@ -375,7 +375,7 @@ rtems_bsdnet_semaphore_obtain (void)
 	Status_Control status;
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
-	_Thread_queue_Context_initialize(&queue_context, NULL);
+	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
 	status = _CORE_mutex_Seize (
 		&the_networkSemaphore->Core_control.mutex,
@@ -408,7 +408,7 @@ rtems_bsdnet_semaphore_release (void)
 
 	if (!the_networkSemaphore)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
-	_Thread_queue_Context_initialize(&queue_context, NULL);
+	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
 	status = _CORE_mutex_Surrender (
 		&the_networkSemaphore->Core_control.mutex,

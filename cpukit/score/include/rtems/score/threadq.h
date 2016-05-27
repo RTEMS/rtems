@@ -63,7 +63,22 @@ typedef void ( *Thread_queue_MP_callout )(
  * @see _Thread_queue_Context_initialize().
  */
 typedef struct {
+  /**
+   * @brief The lock context for the thread queue acquire and release
+   * operations.
+   */
   ISR_lock_Context Lock_context;
+
+  /**
+   * @brief Callout to unblock the thread in case it is actually a thread
+   * proxy.
+   *
+   * This field is only used on multiprocessing configurations.  Used by
+   * thread queue extract and unblock methods for objects with multiprocessing
+   * (MP) support.
+   *
+   * @see _Thread_queue_Context_set_MP_callout().
+   */
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout mp_callout;
 #endif

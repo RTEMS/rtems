@@ -31,11 +31,7 @@ rtems_status_code rtems_semaphore_delete(
   rtems_attribute       attribute_set;
 
   _Objects_Allocator_lock();
-  the_semaphore = _Semaphore_Get(
-    id,
-    &queue_context,
-    _Semaphore_MP_Send_object_was_deleted
-  );
+  the_semaphore = _Semaphore_Get( id, &queue_context );
 
   if ( the_semaphore == NULL ) {
     _Objects_Allocator_unlock();

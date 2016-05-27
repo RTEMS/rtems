@@ -53,47 +53,44 @@ typedef struct {
   Thread_queue_Queue Queue;
 } Thread_queue_Syslock_queue;
 
-RTEMS_INLINE_ROUTINE void _Thread_queue_Do_context_initialize(
-  Thread_queue_Context    *queue_context
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Thread_queue_MP_callout  mp_callout
-#endif
+/**
+ * @brief Initializes a thread queue context.
+ *
+ * @param queue_context The thread queue context to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
+  Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_MULTIPROCESSING)
-  queue_context->mp_callout = mp_callout;
+#if defined(RTEMS_MULTIPROCESSING) && defined(RTEMS_DEBUG)
+  queue_context->mp_callout = NULL;
 #else
   (void) queue_context;
 #endif
 }
 
 /**
- * @brief Initializes a thread queue context.
+ * @brief Sets the MP callout in the thread queue context.
  *
- * @param queue_context The thread queue context to initialize.
+ * @param queue_context The thread queue context.
  * @param mp_callout Callout to unblock the thread in case it is actually a
  *   thread proxy.  This parameter is only used on multiprocessing
  *   configurations.  Used by thread queue extract and unblock methods for
  *   objects with multiprocessing (MP) support.
  */
 #if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Context_initialize( \
-    queue_context, \
-    mp_callout \
-  ) \
-    _Thread_queue_Do_context_initialize( \
-      queue_context, \
-      mp_callout \
-    )
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_MP_callout(
+  Thread_queue_Context    *queue_context,
+  Thread_queue_MP_callout  mp_callout
+)
+{
+  queue_context->mp_callout = mp_callout;
+}
 #else
-  #define _Thread_queue_Context_initialize( \
-    queue_context, \
-    mp_callout \
-  ) \
-    _Thread_queue_Do_context_initialize( \
-      queue_context \
-    )
+#define _Thread_queue_Context_set_MP_callout( queue_context, mp_callout ) \
+  do { \
+    (void) queue_context; \
+  } while ( 0 )
 #endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(

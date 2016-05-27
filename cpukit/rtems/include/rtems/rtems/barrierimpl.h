@@ -74,7 +74,7 @@ RTEMS_INLINE_ROUTINE Barrier_Control *_Barrier_Get(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Context_initialize( queue_context, NULL );
+  _Thread_queue_Context_initialize( queue_context );
   return (Barrier_Control *)
     _Objects_Get( id, &queue_context->Lock_context, &_Barrier_Information );
 }

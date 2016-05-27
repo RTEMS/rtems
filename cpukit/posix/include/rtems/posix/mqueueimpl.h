@@ -111,7 +111,7 @@ RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *_POSIX_Message_queue_Get(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Context_initialize( queue_context, NULL );
+  _Thread_queue_Context_initialize( queue_context );
   return (POSIX_Message_queue_Control *) _Objects_Get(
     id,
     &queue_context->Lock_context,

@@ -32,11 +32,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   rtems_attribute       attribute_set;
   Status_Control        status;
 
-  the_semaphore = _Semaphore_Get(
-    id,
-    &queue_context,
-    _Semaphore_Core_mutex_mp_support
-  );
+  the_semaphore = _Semaphore_Get( id, &queue_context );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -45,6 +41,11 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     return RTEMS_INVALID_ID;
 #endif
   }
+
+  _Thread_queue_Context_set_MP_callout(
+    &queue_context,
+    _Semaphore_Core_mutex_mp_support
+  );
 
   attribute_set = the_semaphore->attribute_set;
 #if defined(RTEMS_SMP)

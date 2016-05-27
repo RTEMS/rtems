@@ -45,7 +45,7 @@ rtems_status_code rtems_message_queue_receive(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get( id, &queue_context, NULL );
+  the_message_queue = _Message_queue_Get( id, &queue_context );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

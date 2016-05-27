@@ -35,11 +35,7 @@ rtems_status_code rtems_message_queue_urgent(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_message_queue = _Message_queue_Get(
-    id,
-    &queue_context,
-    _Message_queue_Core_message_queue_mp_support
-  );
+  the_message_queue = _Message_queue_Get( id, &queue_context );
 
   if ( the_message_queue == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -52,6 +48,10 @@ rtems_status_code rtems_message_queue_urgent(
   _CORE_message_queue_Acquire_critical(
     &the_message_queue->message_queue,
     &queue_context
+  );
+  _Thread_queue_Context_set_MP_callout(
+    &queue_context,
+    _Message_queue_Core_message_queue_mp_support
   );
   status = _CORE_message_queue_Urgent(
     &the_message_queue->message_queue,

@@ -58,30 +58,18 @@ RTEMS_INLINE_ROUTINE void _Semaphore_Free (
   _Objects_Free( &_Semaphore_Information, &the_semaphore->Object );
 }
 
-RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Do_get(
-  Objects_Id               id,
-  Thread_queue_Context    *queue_context
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Thread_queue_MP_callout  mp_callout
-#endif
+RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get(
+  Objects_Id            id,
+  Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Context_initialize( queue_context, mp_callout );
+  _Thread_queue_Context_initialize( queue_context );
   return (Semaphore_Control *) _Objects_Get(
     id,
     &queue_context->Lock_context,
     &_Semaphore_Information
   );
 }
-
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Semaphore_Get( id, queue_context, mp_callout ) \
-    _Semaphore_Do_get( id, queue_context, mp_callout )
-#else
-  #define _Semaphore_Get( id, queue_context, mp_callout ) \
-    _Semaphore_Do_get( id, queue_context )
-#endif
 
 #ifdef __cplusplus
 }

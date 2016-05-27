@@ -103,7 +103,7 @@ rtems_status_code rtems_semaphore_set_priority(
     return RTEMS_INVALID_ID;
   }
 
-  the_semaphore = _Semaphore_Get( semaphore_id, &queue_context, NULL );
+  the_semaphore = _Semaphore_Get( semaphore_id, &queue_context );
 
   if ( the_semaphore == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)

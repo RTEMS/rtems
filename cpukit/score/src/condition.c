@@ -247,7 +247,7 @@ static void _Condition_Wake( struct _Condition_Control *_condition, int count )
   Condition_Context  context;
 
   condition = _Condition_Get( _condition );
-  _Thread_queue_Context_initialize( &context.Base, NULL );
+  _Thread_queue_Context_initialize( &context.Base );
   _ISR_lock_ISR_disable( &context.Base.Lock_context );
   _Condition_Queue_acquire_critical( condition, &context.Base.Lock_context );
 
