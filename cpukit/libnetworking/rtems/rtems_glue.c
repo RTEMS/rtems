@@ -118,7 +118,7 @@ rtems_bsdnet_semaphore_release_recursive(void)
 
 	nest_count =
 		the_networkSemaphore ?
-		the_networkSemaphore->Core_control.Mutex.Recursive.Mutex.nest_count : 0;
+		the_networkSemaphore->Core_control.Mutex.Recursive.nest_level + 1 : 0;
 	for (i = 0; i < nest_count; ++i) {
 		rtems_bsdnet_semaphore_release();
 	}
@@ -377,13 +377,14 @@ rtems_bsdnet_semaphore_obtain (void)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
-	status = _CORE_mutex_Seize (
-		&the_networkSemaphore->Core_control.Mutex.Recursive.Mutex,
+	status = _CORE_recursive_mutex_Seize (
+		&the_networkSemaphore->Core_control.Mutex.Recursive,
 		_Thread_Executing,
-		1,		/* wait */
-		0,		/* forever */
+		true,			/* wait */
+		WATCHDOG_NO_TIMEOUT,	/* forever */
+		_CORE_recursive_mutex_Seize_nested,
 		&queue_context
-		);
+	);
 	if (status != STATUS_SUCCESSFUL)
 		rtems_panic ("rtems-net: can't obtain network sema: %d\n", status);
 #else
@@ -410,10 +411,11 @@ rtems_bsdnet_semaphore_release (void)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
-	status = _CORE_mutex_Surrender (
-		&the_networkSemaphore->Core_control.Mutex.Recursive.Mutex,
+	status = _CORE_recursive_mutex_Surrender(
+		&the_networkSemaphore->Core_control.Mutex.Recursive,
+		_Thread_Executing,
 		&queue_context
-		);
+	);
 	if (status != STATUS_SUCCESSFUL)
 		rtems_panic ("rtems-net: can't release network sema: %i\n");
 #else

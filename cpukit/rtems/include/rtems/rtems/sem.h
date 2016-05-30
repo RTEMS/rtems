@@ -113,13 +113,6 @@ typedef struct {
 #if defined(RTEMS_MULTIPROCESSING)
   unsigned int is_global : 1;
 #endif
-
-  /**
-   *  This is the Classic API attribute provided to the create directive.
-   *  It is translated into behavioral attributes on the SuperCore Semaphore
-   *  or Mutex instance.
-   */
-  rtems_attribute          attribute_set;
 }   Semaphore_Control;
 
 /**

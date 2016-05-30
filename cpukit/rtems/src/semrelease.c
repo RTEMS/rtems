@@ -58,9 +58,10 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       );
       break;
 #endif
-    case SEMAPHORE_VARIANT_MUTEX:
-      status = _CORE_mutex_Surrender(
-        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+    case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
+      status = _CORE_recursive_mutex_Surrender(
+        &the_semaphore->Core_control.Mutex.Recursive,
+        executing,
         &queue_context
       );
       break;

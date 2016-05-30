@@ -42,47 +42,6 @@ extern "C" {
 /**@{*/
 
 /**
- *  @brief The possible behaviors for lock nesting.
- *
- *  This enumerated type defines the possible behaviors for
- *  lock nesting.
- */
-typedef enum {
-  /**
-   *    This sequence has no blocking or errors:
-   *
-   *         + lock(m)
-   *         + lock(m)
-   *         + unlock(m)
-   *         + unlock(m)
-   */
-  CORE_MUTEX_NESTING_ACQUIRES,
-#if defined(RTEMS_POSIX_API)
-  /**
-   *    This sequence returns an error at the indicated point:
-   *
-   *        + lock(m)
-   *        + lock(m)   - already locked error
-   *        + unlock(m)
-   */
-  CORE_MUTEX_NESTING_IS_ERROR,
-#endif
-}  CORE_mutex_Nesting_behaviors;
-
-/**
- *  @brief The control block used to manage attributes of each mutex.
- *
- *  The following defines the control block used to manage the
- *  attributes of each mutex.
- */
-typedef struct {
-  /** This field determines what the behavior of this mutex instance will
-   *  be when attempting to acquire the mutex when it is already locked.
-   */
-  CORE_mutex_Nesting_behaviors lock_nesting_behavior;
-}   CORE_mutex_Attributes;
-
-/**
  *  @brief Control block used to manage each mutex.
  *
  *  The following defines the control block used to manage each mutex.
@@ -93,14 +52,6 @@ typedef struct {
    */
   Thread_queue_Control    Wait_queue;
 
-  /** This element is the set of attributes which define this instance's
-   *  behavior.
-   */
-  CORE_mutex_Attributes   Attributes;
-  /** This element contains the number of times the mutex has been acquired
-   *  nested.  This must be zero (0) before the mutex is actually unlocked.
-   */
-  uint32_t                nest_count;
   /** This element points to the thread which is currently holding this mutex.
    *  The holder is the last thread to successfully lock the mutex and which
    *  has not unlocked it.  If the thread is not locked, there is no holder.

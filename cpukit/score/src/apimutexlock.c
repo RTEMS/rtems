@@ -34,15 +34,16 @@ void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
 
-  _CORE_mutex_Seize(
+  _CORE_recursive_mutex_Seize(
     &the_mutex->Mutex,
     _Thread_Executing,
     true,
-    0,
+    WATCHDOG_NO_TIMEOUT,
+    _CORE_recursive_mutex_Seize_nested,
     &queue_context
   );
 
-  if ( the_mutex->Mutex.nest_count == 1 ) {
+  if ( the_mutex->Mutex.nest_level == 0 ) {
     the_mutex->previous_thread_life_state = previous_thread_life_state;
   }
 }

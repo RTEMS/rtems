@@ -47,16 +47,12 @@ void _API_Mutex_Allocate(
 {
   API_Mutex_Control *mutex;
 
-  CORE_mutex_Attributes attr =  {
-    CORE_MUTEX_NESTING_ACQUIRES
-  };
-
   mutex = (API_Mutex_Control *)
     _Objects_Allocate_unprotected( &_API_Mutex_Information );
 
   _Assert( mutex != NULL );
 
-  _CORE_mutex_Initialize( &mutex->Mutex, NULL, &attr, false );
+  _CORE_recursive_mutex_Initialize( &mutex->Mutex );
 
   _Objects_Open_u32( &_API_Mutex_Information, &mutex->Object, 1 );
 

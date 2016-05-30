@@ -18,9 +18,13 @@
 #endif
 
 #include <rtems/score/apimutex.h>
+#include <rtems/score/coremuteximpl.h>
 #include <rtems/score/threadimpl.h>
 
 bool _API_Mutex_Is_owner( const API_Mutex_Control *the_mutex )
 {
-  return the_mutex->Mutex.holder == _Thread_Get_executing();
+  return _CORE_mutex_Is_owner(
+    &the_mutex->Mutex.Mutex,
+    _Thread_Get_executing()
+  );
 }

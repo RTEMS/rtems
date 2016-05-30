@@ -29,11 +29,15 @@ void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
   bool                 restore_thread_life_protection;
 
   previous_thread_life_state = the_mutex->previous_thread_life_state;
-  restore_thread_life_protection = the_mutex->Mutex.nest_count == 1;
+  restore_thread_life_protection = the_mutex->Mutex.nest_level == 0;
 
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  _CORE_mutex_Surrender( &the_mutex->Mutex, &queue_context );
+  _CORE_recursive_mutex_Surrender(
+    &the_mutex->Mutex,
+    _Thread_Executing,
+    &queue_context
+  );
 
   if ( restore_thread_life_protection ) {
     _Thread_Set_life_protection( previous_thread_life_state );

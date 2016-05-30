@@ -75,7 +75,7 @@ static rtems_status_code _Semaphore_Set_priority(
 #endif
     default:
       _Assert(
-        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX
+        the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY
           || the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL
           || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING

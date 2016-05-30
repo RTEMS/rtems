@@ -88,11 +88,12 @@ int _POSIX_Mutex_Lock_support(
       break;
     default:
       _Assert( the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT );
-      status = _CORE_mutex_Seize(
-        &the_mutex->Mutex.Recursive.Mutex,
+      status = _CORE_recursive_mutex_Seize(
+        &the_mutex->Mutex.Recursive,
         executing,
         wait,
         timeout,
+        _POSIX_Mutex_Lock_nested,
         &queue_context
       );
       break;

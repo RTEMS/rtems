@@ -35,26 +35,13 @@ extern "C" {
 
 #define CORE_MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
 
-/**
- *  @brief Initializes the mutex based on the parameters passed.
- *
- *  This routine initializes the mutex based on the parameters passed.
- *
- *  @param[in,out] the_mutex is the mutex to initalize
- *  @param[in,out] executing The currently executing thread.
- *  @param[in] the_mutex_attributes is the attributes associated with this
- *         mutex instance
- *  @param[in] initially_locked If true, then the mutex is initially locked by
- *  the executing thread.
- *
- *  @retval This method returns STATUS_SUCCESSFUL if successful.
- */
-Status_Control _CORE_mutex_Initialize(
-  CORE_mutex_Control           *the_mutex,
-  Thread_Control               *executing,
-  const CORE_mutex_Attributes  *the_mutex_attributes,
-  bool                          initially_locked
-);
+RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
+  CORE_mutex_Control *the_mutex
+)
+{
+  _Thread_queue_Initialize( &the_mutex->Wait_queue );
+  the_mutex->holder = NULL;
+}
 
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
 {
@@ -83,25 +70,6 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
   );
 }
 
-/**
- *  @brief Performs the blocking portion of a mutex obtain.
- *
- *  This routine performs the blocking portion of a mutex obtain.
- *  It is an actual subroutine and is not implemented as something
- *  that may be inlined.
- *
- *  @param[in,out] the_mutex is the mutex to attempt to lock
- *  @param[in,out] executing The currently executing thread.
- *  @param[in] timeout is the maximum number of ticks to block
- *  @param[in] lock_context is the interrupt level
- */
-Status_Control _CORE_mutex_Seize_interrupt_blocking(
-  CORE_mutex_Control   *the_mutex,
-  Thread_Control       *executing,
-  Watchdog_Interval     timeout,
-  Thread_queue_Context *queue_context
-);
-
 RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(
   const CORE_mutex_Control *the_mutex
 )
@@ -127,124 +95,14 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
   return _CORE_mutex_Get_owner( the_mutex ) != NULL;
 }
 
-/**
- *  @brief Attempt to receive a unit from the_mutex.
- *
- *  This routine attempts to receive a unit from the_mutex.
- *  If a unit is available or if the wait flag is false, then the routine
- *  returns.  Otherwise, the calling task is blocked until a unit becomes
- *  available.
- *
- *  @param[in,out] executing The currently executing thread.
- *  @param[in,out] the_mutex is the mutex to attempt to lock
- *  @param[in] queue_context is the interrupt level
- *
- *  @retval STATUS_UNAVAILABLE The mutex is already locked.
- *  @retval other Otherwise.
- */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize_interrupt_trylock(
+Status_Control _CORE_mutex_Seize_slow(
   CORE_mutex_Control   *the_mutex,
   Thread_Control       *executing,
-  Thread_queue_Context *queue_context
-)
-{
-  /* disabled when you get here */
-
-  if ( !_CORE_mutex_Is_locked( the_mutex ) ) {
-    the_mutex->holder     = executing;
-    the_mutex->nest_count = 1;
-    ++executing->resource_count;
-
-    _CORE_mutex_Release( the_mutex, queue_context );
-    return STATUS_SUCCESSFUL;
-  }
-
-  /*
-   *  At this point, we know the mutex was not available.  If this thread
-   *  is the thread that has locked the mutex, let's see if we are allowed
-   *  to nest access.
-   */
-  if ( _Thread_Is_executing( the_mutex->holder ) ) {
-    switch ( the_mutex->Attributes.lock_nesting_behavior ) {
-      case CORE_MUTEX_NESTING_ACQUIRES:
-        the_mutex->nest_count++;
-        _CORE_mutex_Release( the_mutex, queue_context );
-        return STATUS_SUCCESSFUL;
-      #if defined(RTEMS_POSIX_API)
-        case CORE_MUTEX_NESTING_IS_ERROR:
-          _CORE_mutex_Release( the_mutex, queue_context );
-          return STATUS_NESTING_NOT_ALLOWED;
-      #endif
-    }
-  }
-
-  /*
-   *  The mutex is not available and the caller must deal with the possibility
-   *  of blocking.
-   */
-  return STATUS_UNAVAILABLE;
-}
-
-/**
- *  @brief Attempt to obtain the mutex.
- *
- *  This routine attempts to obtain the mutex.  If the mutex is available,
- *  then it will return immediately.  Otherwise, it will invoke the
- *  support routine @a _Core_mutex_Seize_interrupt_blocking.
- *
- *  @param[in] the_mutex is the mutex to attempt to lock
- *  @param[in] wait is true if the thread is willing to wait
- *  @param[in] timeout is the maximum number of ticks to block
- *  @param[in] queue_context is a temporary variable used to contain the ISR
- *         disable level cookie
- *
- *  @note If the mutex is called from an interrupt service routine,
- *        with context switching disabled, or before multitasking,
- *        then a fatal error is generated.
- *
- *  The logic on this routine is as follows:
- *
- *  * If incorrect system state
- *      return an error
- *  * If mutex is available without any contention or blocking
- *      obtain it with interrupts disabled and returned
- *  * If the caller is willing to wait
- *      then they are blocked.
- */
-RTEMS_INLINE_ROUTINE Status_Control _CORE_mutex_Seize(
-  CORE_mutex_Control   *the_mutex,
-  Thread_Control       *executing,
+  Thread_Control       *owner,
   bool                  wait,
   Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
-)
-{
-  Status_Control status;
-
-  _CORE_mutex_Acquire_critical( the_mutex, queue_context );
-
-  status = _CORE_mutex_Seize_interrupt_trylock(
-    the_mutex,
-    executing,
-    queue_context
-  );
-
-  if ( status != STATUS_UNAVAILABLE ) {
-    return status;
-  }
-
-  if ( !wait ) {
-    _CORE_mutex_Release( the_mutex, queue_context );
-    return status;
-  }
-
-  return _CORE_mutex_Seize_interrupt_blocking(
-    the_mutex,
-    executing,
-    timeout,
-    queue_context
-  );
-}
+);
 
 Status_Control _CORE_mutex_Seize_no_protocol_slow(
   CORE_mutex_Control            *the_mutex,
@@ -255,8 +113,11 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
   Thread_queue_Context          *queue_context
 );
 
-Status_Control _CORE_mutex_Surrender(
+Status_Control _CORE_mutex_Surrender_slow(
   CORE_mutex_Control   *the_mutex,
+  Thread_Control       *executing,
+  Thread_queue_Heads   *heads,
+  bool                  keep_priority,
   Thread_queue_Context *queue_context
 );
 
@@ -306,8 +167,7 @@ RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Initialize(
   CORE_recursive_mutex_Control *the_mutex
 )
 {
-  _Thread_queue_Initialize( &the_mutex->Mutex.Wait_queue );
-  the_mutex->Mutex.holder = NULL;
+  _CORE_mutex_Initialize( &the_mutex->Mutex );
   the_mutex->nest_level = 0;
 }
 
@@ -317,6 +177,99 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_nested(
 {
   ++the_mutex->nest_level;
   return STATUS_SUCCESSFUL;
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
+  CORE_recursive_mutex_Control  *the_mutex,
+  Thread_Control                *executing,
+  bool                           wait,
+  Watchdog_Interval              timeout,
+  Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
+  Thread_queue_Context          *queue_context
+)
+{
+  Thread_Control *owner;
+
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  owner = _CORE_mutex_Get_owner( &the_mutex->Mutex );
+
+  if ( owner == NULL ) {
+    _CORE_mutex_Set_owner( &the_mutex->Mutex, executing );
+    ++executing->resource_count;
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_SUCCESSFUL;
+  }
+
+  if ( owner == executing ) {
+    Status_Control status;
+
+    status = ( *nested )( the_mutex );
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return status;
+  }
+
+  return _CORE_mutex_Seize_slow(
+    &the_mutex->Mutex,
+    executing,
+    owner,
+    wait,
+    timeout,
+    queue_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender(
+  CORE_recursive_mutex_Control *the_mutex,
+  Thread_Control               *executing,
+  Thread_queue_Context         *queue_context
+)
+{
+  unsigned int        nest_level;
+  Thread_queue_Heads *heads;
+  bool                keep_priority;
+
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  if ( !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing ) ) {
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_NOT_OWNER;
+  }
+
+  nest_level = the_mutex->nest_level;
+
+  if ( nest_level > 0 ) {
+    the_mutex->nest_level = nest_level - 1;
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_SUCCESSFUL;
+  }
+
+  --executing->resource_count;
+  _CORE_mutex_Set_owner( &the_mutex->Mutex, NULL );
+
+  /*
+   * Ensure that the owner resource count is visible to all other
+   * processors and that we read the latest priority restore
+   * hint.
+   */
+  _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+
+  heads = the_mutex->Mutex.Wait_queue.Queue.heads;
+  keep_priority = _Thread_Owns_resources( executing )
+    || !executing->priority_restore_hint;
+
+  if ( heads == NULL && keep_priority ) {
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_SUCCESSFUL;
+  }
+
+  return _CORE_mutex_Surrender_slow(
+    &the_mutex->Mutex,
+    executing,
+    heads,
+    keep_priority,
+    queue_context
+  );
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(

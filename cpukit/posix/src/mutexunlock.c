@@ -62,8 +62,9 @@ int pthread_mutex_unlock(
       break;
     default:
       _Assert( the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT );
-      status = _CORE_mutex_Surrender(
-        &the_mutex->Mutex.Recursive.Mutex,
+      status = _CORE_recursive_mutex_Surrender(
+        &the_mutex->Mutex.Recursive,
+        executing,
         &queue_context
       );
       break;

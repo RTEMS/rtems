@@ -81,12 +81,13 @@ rtems_status_code rtems_semaphore_obtain(
       );
       break;
 #endif
-    case SEMAPHORE_VARIANT_MUTEX:
-      status = _CORE_mutex_Seize(
-        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+    case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
+      status = _CORE_recursive_mutex_Seize(
+        &the_semaphore->Core_control.Mutex.Recursive,
         executing,
         wait,
         timeout,
+        _CORE_recursive_mutex_Seize_nested,
         &queue_context
       );
       break;

@@ -61,10 +61,9 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 )
 {
-  Semaphore_Control     *the_semaphore;
-  CORE_mutex_Attributes  the_mutex_attr;
-  Thread_Control        *executing;
-  Status_Control         status;
+  Semaphore_Control *the_semaphore;
+  Thread_Control    *executing;
+  Status_Control     status;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -137,7 +136,6 @@ rtems_status_code rtems_semaphore_create(
 #endif
 
   priority_ceiling = _RTEMS_tasks_Priority_to_Core( priority_ceiling );
-  the_semaphore->attribute_set = attribute_set;
   executing = _Thread_Get_executing();
 
   if ( _Attributes_Is_priority( attribute_set ) ) {
@@ -195,9 +193,15 @@ rtems_status_code rtems_semaphore_create(
     } else {
       status = STATUS_SUCCESSFUL;
     }
-  } else if ( !_Attributes_Is_inherit_priority( attribute_set ) ) {
+  } else {
     _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
-    the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL;
+
+    if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
+      the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY;
+    } else {
+      the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL;
+    }
+
     _CORE_recursive_mutex_Initialize(
       &the_semaphore->Core_control.Mutex.Recursive
     );
@@ -207,22 +211,13 @@ rtems_status_code rtems_semaphore_create(
         &the_semaphore->Core_control.Mutex.Recursive.Mutex,
         executing
       );
+
+      if ( _Attributes_Is_inherit_priority( attribute_set ) ) {
+        ++executing->resource_count;
+      }
     }
 
     status = STATUS_SUCCESSFUL;
-  } else {
-    _Assert( _Attributes_Is_binary_semaphore( attribute_set ) );
-    _Assert( _Attributes_Is_inherit_priority( attribute_set ) );
-    the_semaphore->variant = SEMAPHORE_VARIANT_MUTEX;
-
-    the_mutex_attr.lock_nesting_behavior = CORE_MUTEX_NESTING_ACQUIRES;
-
-    status = _CORE_mutex_Initialize(
-      &the_semaphore->Core_control.Mutex.Recursive.Mutex,
-      executing,
-      &the_mutex_attr,
-      count != 1
-    );
   }
 
   if ( status != STATUS_SUCCESSFUL ) {

@@ -22,14 +22,19 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
 
-Status_Control _CORE_mutex_Seize_interrupt_blocking(
+Status_Control _CORE_mutex_Seize_slow(
   CORE_mutex_Control   *the_mutex,
   Thread_Control       *executing,
+  Thread_Control       *owner,
+  bool                  wait,
   Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
-  Thread_Control *holder;
+  if ( !wait ) {
+    _CORE_mutex_Release( the_mutex, queue_context );
+    return STATUS_UNAVAILABLE;
+  }
 
 #if !defined(RTEMS_SMP)
   /*
@@ -37,23 +42,19 @@ Status_Control _CORE_mutex_Seize_interrupt_blocking(
    * priority inheritance mutexes.
    */
   _Thread_Dispatch_disable();
-#endif
 
-  holder = the_mutex->holder;
-
-#if !defined(RTEMS_SMP)
   /*
    * To enable interrupts here works only since exactly one executing thread
    * exists and only threads are allowed to seize and surrender mutexes with
    * the priority inheritance protocol.  On SMP configurations more than one
    * executing thread may exist, so here we must not release the lock, since
-   * otherwise the current holder may be no longer the holder of the mutex
+   * otherwise the current owner may be no longer the owner of the mutex
    * once we released the lock.
    */
   _CORE_mutex_Release( the_mutex, queue_context );
 #endif
 
-  _Thread_Inherit_priority( holder, executing );
+  _Thread_Inherit_priority( owner, executing );
 
 #if defined(RTEMS_SMP)
   _Thread_queue_Context_set_expected_level( queue_context, 1 );

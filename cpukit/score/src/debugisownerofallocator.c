@@ -27,7 +27,7 @@
     bool owner;
 
     if ( mutex != NULL ) {
-      owner = mutex->Mutex.holder == _Thread_Get_executing();
+      owner = _API_Mutex_Is_owner( mutex );
     } else {
       owner = false;
     }
