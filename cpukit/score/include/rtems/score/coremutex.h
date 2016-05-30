@@ -47,17 +47,13 @@ extern "C" {
  *  The following defines the control block used to manage each mutex.
  */
 typedef struct {
-  /** This field is the Waiting Queue used to manage the set of tasks
-   *  which are blocked waiting to lock the mutex.
+  /**
+   * @brief The thread queue of this mutex.
+   *
+   * The owner of the thread queue indicates the mutex owner.
    */
-  Thread_queue_Control    Wait_queue;
-
-  /** This element points to the thread which is currently holding this mutex.
-   *  The holder is the last thread to successfully lock the mutex and which
-   *  has not unlocked it.  If the thread is not locked, there is no holder.
-   */
-  Thread_Control         *holder;
-}   CORE_mutex_Control;
+  Thread_queue_Control Wait_queue;
+} CORE_mutex_Control;
 
 /**
  * @brief The recursive mutex control.

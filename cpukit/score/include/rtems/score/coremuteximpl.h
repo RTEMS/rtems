@@ -40,7 +40,6 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
 )
 {
   _Thread_queue_Initialize( &the_mutex->Wait_queue );
-  the_mutex->holder = NULL;
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )
@@ -74,7 +73,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(
   const CORE_mutex_Control *the_mutex
 )
 {
-  return the_mutex->holder;
+  return the_mutex->Wait_queue.Queue.owner;
 }
 
 /**
@@ -126,7 +125,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Set_owner(
   Thread_Control     *owner
 )
 {
-  the_mutex->holder = owner;
+  the_mutex->Wait_queue.Queue.owner = owner;
 }
 
 RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_owner(
