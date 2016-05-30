@@ -18,18 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/statusimpl.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/attrimpl.h>
-#include <rtems/score/isr.h>
-#include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/coresemimpl.h>
-#include <rtems/score/thread.h>
-
-#include <rtems/score/interr.h>
+#include <rtems/rtems/statusimpl.h>
 
 rtems_status_code rtems_semaphore_ident(
   rtems_name  name,
