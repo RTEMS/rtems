@@ -66,7 +66,7 @@ rtems_status_code rtems_semaphore_delete(
       break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      status = _MRSP_Can_destroy( &the_semaphore->Core_control.mrsp );
+      status = _MRSP_Can_destroy( &the_semaphore->Core_control.MRSP );
       break;
 #endif
     default:
@@ -92,7 +92,7 @@ rtems_status_code rtems_semaphore_delete(
   switch ( the_semaphore->variant ) {
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      _MRSP_Destroy( &the_semaphore->Core_control.mrsp, &queue_context );
+      _MRSP_Destroy( &the_semaphore->Core_control.MRSP, &queue_context );
       break;
 #endif
     default:

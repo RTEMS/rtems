@@ -162,7 +162,7 @@ rtems_status_code rtems_semaphore_create(
   } else if ( _Attributes_Is_multiprocessor_resource_sharing( attribute_set ) ) {
     the_semaphore->variant = SEMAPHORE_VARIANT_MRSP;
     status = _MRSP_Initialize(
-      &the_semaphore->Core_control.mrsp,
+      &the_semaphore->Core_control.MRSP,
       priority_ceiling,
       executing,
       count != 1

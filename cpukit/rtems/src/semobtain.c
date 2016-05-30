@@ -40,7 +40,7 @@ THREAD_QUEUE_OBJECT_ASSERT(
 #if defined(RTEMS_SMP)
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.mrsp.Wait_queue
+  Core_control.MRSP.Wait_queue
 );
 #endif
 
@@ -70,17 +70,6 @@ rtems_status_code rtems_semaphore_obtain(
   wait = !_Options_Is_no_wait( option_set );
 
   switch ( the_semaphore->variant ) {
-#if defined(RTEMS_SMP)
-    case SEMAPHORE_VARIANT_MRSP:
-      status = _MRSP_Seize(
-        &the_semaphore->Core_control.mrsp,
-        executing,
-        wait,
-        timeout,
-        &queue_context
-      );
-      break;
-#endif
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Seize(
         &the_semaphore->Core_control.Mutex.Recursive,
@@ -112,6 +101,17 @@ rtems_status_code rtems_semaphore_obtain(
         &queue_context
       );
       break;
+#if defined(RTEMS_SMP)
+    case SEMAPHORE_VARIANT_MRSP:
+      status = _MRSP_Seize(
+        &the_semaphore->Core_control.MRSP,
+        executing,
+        wait,
+        timeout,
+        &queue_context
+      );
+      break;
+#endif
     default:
       _Assert(
         the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY

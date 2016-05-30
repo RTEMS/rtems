@@ -58,7 +58,7 @@ static rtems_status_code _Semaphore_Set_priority(
       break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      mrsp = &the_semaphore->Core_control.mrsp;
+      mrsp = &the_semaphore->Core_control.MRSP;
       scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
 
       _MRSP_Acquire_critical( mrsp, queue_context );

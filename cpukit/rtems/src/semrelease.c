@@ -49,15 +49,6 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
   );
 
   switch ( the_semaphore->variant ) {
-#if defined(RTEMS_SMP)
-    case SEMAPHORE_VARIANT_MRSP:
-      status = _MRSP_Surrender(
-        &the_semaphore->Core_control.mrsp,
-        executing,
-        &queue_context
-      );
-      break;
-#endif
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive,
@@ -93,6 +84,15 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       );
       status = STATUS_SUCCESSFUL;
       break;
+#if defined(RTEMS_SMP)
+    case SEMAPHORE_VARIANT_MRSP:
+      status = _MRSP_Surrender(
+        &the_semaphore->Core_control.MRSP,
+        executing,
+        &queue_context
+      );
+      break;
+#endif
     default:
       _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
       status = _CORE_semaphore_Surrender(

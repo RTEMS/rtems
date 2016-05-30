@@ -92,7 +92,7 @@ typedef struct {
     CORE_semaphore_Control semaphore;
 
 #if defined(RTEMS_SMP)
-    MRSP_Control mrsp;
+    MRSP_Control MRSP;
 #endif
   } Core_control;
 
