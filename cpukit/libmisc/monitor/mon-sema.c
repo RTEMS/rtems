@@ -87,11 +87,11 @@ rtems_monitor_sema_canonical(
         break;
 #endif
       case SEMAPHORE_VARIANT_SIMPLE_BINARY:
-        canonical_sema->cur_count = rtems_sema->Core_control.semaphore.count;
+        canonical_sema->cur_count = rtems_sema->Core_control.Semaphore.count;
         canonical_sema->max_count = 1;
         break;
       case SEMAPHORE_VARIANT_COUNTING:
-        canonical_sema->cur_count = rtems_sema->Core_control.semaphore.count;
+        canonical_sema->cur_count = rtems_sema->Core_control.Semaphore.count;
         canonical_sema->max_count = UINT32_MAX;
         break;
     }

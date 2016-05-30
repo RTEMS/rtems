@@ -34,7 +34,7 @@ THREAD_QUEUE_OBJECT_ASSERT(
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.semaphore.Wait_queue
+  Core_control.Semaphore.Wait_queue
 );
 
 #if defined(RTEMS_SMP)
@@ -118,7 +118,7 @@ rtems_status_code rtems_semaphore_obtain(
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
       );
       status = _CORE_semaphore_Seize(
-        &the_semaphore->Core_control.semaphore,
+        &the_semaphore->Core_control.Semaphore,
         _Semaphore_Get_operations( the_semaphore ),
         executing,
         wait,

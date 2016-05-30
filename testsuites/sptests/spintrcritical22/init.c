@@ -64,7 +64,7 @@ static void release_semaphore(rtems_id timer, void *arg)
       _Thread_Wait_flags_get(ctx->main_task_control)
         == (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
     );
-    sem = &ctx->semaphore_control->Core_control.semaphore;
+    sem = &ctx->semaphore_control->Core_control.Semaphore;
     rtems_test_assert(sem->count == 0);
   } else {
     sc = rtems_semaphore_release(ctx->semaphore_id);

@@ -147,14 +147,14 @@ rtems_status_code rtems_semaphore_create(
   if ( _Attributes_Is_counting_semaphore( attribute_set ) ) {
     the_semaphore->variant = SEMAPHORE_VARIANT_COUNTING;
     _CORE_semaphore_Initialize(
-      &the_semaphore->Core_control.semaphore,
+      &the_semaphore->Core_control.Semaphore,
       count
     );
     status = STATUS_SUCCESSFUL;
   } else if ( _Attributes_Is_simple_binary_semaphore( attribute_set ) ) {
     the_semaphore->variant = SEMAPHORE_VARIANT_SIMPLE_BINARY;
     _CORE_semaphore_Initialize(
-      &the_semaphore->Core_control.semaphore,
+      &the_semaphore->Core_control.Semaphore,
       count != 0
     );
     status = STATUS_SUCCESSFUL;

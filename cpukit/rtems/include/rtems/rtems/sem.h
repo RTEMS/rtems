@@ -89,7 +89,7 @@ typedef struct {
      *  This is the SuperCore Semaphore instance associated with this Classic
      *  API Semaphore instance.
      */
-    CORE_semaphore_Control semaphore;
+    CORE_semaphore_Control Semaphore;
 
 #if defined(RTEMS_SMP)
     MRSP_Control MRSP;

@@ -73,7 +73,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       break;
     case SEMAPHORE_VARIANT_SIMPLE_BINARY:
       status = _CORE_semaphore_Surrender(
-        &the_semaphore->Core_control.semaphore,
+        &the_semaphore->Core_control.Semaphore,
         _Semaphore_Get_operations( the_semaphore ),
         1,
         &queue_context
@@ -96,7 +96,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     default:
       _Assert( the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING );
       status = _CORE_semaphore_Surrender(
-        &the_semaphore->Core_control.semaphore,
+        &the_semaphore->Core_control.Semaphore,
         _Semaphore_Get_operations( the_semaphore ),
         UINT32_MAX,
         &queue_context
