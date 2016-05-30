@@ -18,13 +18,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/attrimpl.h>
-#include <rtems/rtems/options.h>
 #include <rtems/rtems/semimpl.h>
 
 Objects_Information _Semaphore_Information;
