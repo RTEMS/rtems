@@ -97,10 +97,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/smc91111.h
 $(PROJECT_INCLUDE)/libchip/smc91111exp.h: network/smc91111exp.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/smc91111exp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/smc91111exp.h
-
-$(PROJECT_INCLUDE)/libchip/dwmac.h: network/dwmac.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/dwmac.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/dwmac.h
 endif
 $(PROJECT_INCLUDE)/libchip/rtc.h: rtc/rtc.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/rtc.h

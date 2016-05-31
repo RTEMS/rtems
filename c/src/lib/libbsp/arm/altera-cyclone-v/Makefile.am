@@ -182,9 +182,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += ../shared/arm-gic-irq.c
 
-# Network
-libbsp_a_SOURCES += network/network.c
-
 # Console
 libbsp_a_SOURCES += ../../shared/console-termios-init.c
 libbsp_a_SOURCES += ../../shared/console-termios.c

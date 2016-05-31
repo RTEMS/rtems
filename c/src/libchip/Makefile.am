@@ -44,20 +44,11 @@ libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
 libnetchip_a_SOURCES += network/greth.c
 include_libchip_HEADERS += network/smc91111.h network/smc91111exp.h
 libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
-include_libchip_HEADERS += network/dwmac.h
-libnetchip_a_SOURCES +=                 \
-  network/dwmac-1000-core.c             \
-  network/dwmac-1000-dma.c              \
-  network/dwmac-1000-ethernet-mac-ops.c \
-  network/dwmac-core.c                  \
-  network/dwmac-desc-com.c              \
-  network/dwmac-desc-enh.c              \
-  network/dwmac.c
 endif
 
 EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
     network/README.i82586 network/README.open_eth network/README.sonic \
-    network/cs8900.c.bsp network/README.tulipclone network/README.dwmac
+    network/cs8900.c.bsp network/README.tulipclone
 
 # rtc
 include_libchip_HEADERS += rtc/rtc.h rtc/icm7170.h rtc/m48t08.h \
