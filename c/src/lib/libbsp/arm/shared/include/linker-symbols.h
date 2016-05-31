@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2008-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -144,7 +144,13 @@ LINKER_SYMBOL(bsp_translation_table_end)
 
 #define BSP_NOCACHE_SECTION __attribute__((section(".bsp_nocache")))
 
+#define BSP_NOCACHE_SUBSECTION(subsection) \
+  __attribute__((section(".bsp_nocache." # subsection)))
+
 #define BSP_NOCACHENOLOAD_SECTION __attribute__((section(".bsp_noload_nocache")))
+
+#define BSP_NOCACHENOLOAD_SUBSECTION(subsection) \
+  __attribute__((section(".bsp_noload_nocache." # subsection)))
 
 LINKER_SYMBOL(bsp_processor_count)
 
