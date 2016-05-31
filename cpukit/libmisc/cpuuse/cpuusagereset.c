@@ -24,6 +24,8 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
+#include "cpuuseimpl.h"
+
 static void CPU_usage_Per_thread_handler(
   Thread_Control *the_thread
 )

@@ -40,6 +40,8 @@
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 
+#include "cpuuseimpl.h"
+
 /*
  * Use a struct for all data to allow more than one top and to support the
  * thread iterator.

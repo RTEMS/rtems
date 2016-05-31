@@ -25,8 +25,6 @@
 #include <rtems.h>
 #include <rtems/print.h>
 
-#include <rtems/score/timestamp.h>
-
 /**
  *  @defgroup libmisc_cpuuse CPU Usage
  *
@@ -36,8 +34,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-extern Timestamp_Control  CPU_usage_Uptime_at_last_reset;
 
 /*
  * rtems_cpu_usage_report_with_handler

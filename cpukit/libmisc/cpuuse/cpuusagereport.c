@@ -30,6 +30,8 @@
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
+#include "cpuuseimpl.h"
+
 /*
  *  rtems_cpu_usage_report
  */
