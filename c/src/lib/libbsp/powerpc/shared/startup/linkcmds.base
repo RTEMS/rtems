@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -335,7 +335,7 @@ SECTIONS {
 
 	.nocache : ALIGN_WITH_INPUT {
 		bsp_section_nocache_begin = .;
-		*(SORT(.bsp_nocache*))
+		*(SORT_BY_ALIGNMENT (SORT_BY_NAME (.bsp_nocache*)))
 		bsp_section_nocache_end = .;
 	} > REGION_NOCACHE AT > REGION_NOCACHE_LOAD
 	bsp_section_nocache_size = bsp_section_nocache_end - bsp_section_nocache_begin;
@@ -344,7 +344,7 @@ SECTIONS {
 
 	.nocachenoload (NOLOAD) : ALIGN_WITH_INPUT {
 		bsp_section_nocachenoload_begin = .;
-		*(SORT(.bsp_noload_nocache*))
+		*(SORT_BY_ALIGNMENT (SORT_BY_NAME (.bsp_noload_nocache*)))
 		bsp_section_nocacheheap_begin = .;
 		. += ORIGIN (REGION_NOCACHE) + LENGTH (REGION_NOCACHE) - ABSOLUTE (.);
 		bsp_section_nocacheheap_end = .;
@@ -355,7 +355,7 @@ SECTIONS {
 
 	.nvram (NOLOAD) : ALIGN_WITH_INPUT {
 		bsp_section_nvram_begin = .;
-		*(SORT(.bsp_nvram*))
+		*(SORT_BY_ALIGNMENT (SORT_BY_NAME (.bsp_nvram*)))
 		bsp_section_nvram_end = .;
 	} > REGION_NVRAM AT > REGION_NVRAM
 	bsp_section_nvram_size = bsp_section_nvram_end - bsp_section_nvram_begin;
