@@ -144,7 +144,7 @@ typedef int (*rtems_print_plugin_t)(void *, const char *format, va_list ap);
 /**
  * @brief Reporting Methods printk() Plugin
  *
- * @param[in] context points to a user defined context.
+ * @param[in] context Unused.
  * @param[in] fmt is a printf()-style format string
  *
  * @return The number of characters printed.
@@ -157,12 +157,25 @@ extern int printk_plugin(void *context, const char *fmt, va_list ap);
  * This is a standard plug-in to support using printf() for output
  * instead of printk().
  *
- * @param[in] context points to a user defined context.
+ * @param[in] context Unused.
  * @param[in] fmt is a printf()-style format string
  *
  * @return The number of characters printed.
  */
 extern int rtems_printf_plugin(void *context, const char *fmt, va_list ap);
+
+/**
+ * @brief Reporting Methods fprintf() Plugin
+ *
+ * This is a standard plug-in to support using fprintf() for output
+ * instead of printk().
+ *
+ * @param[in] context The file stream.
+ * @param[in] fmt is a printf()-style format string
+ *
+ * @return The number of characters printed.
+ */
+extern int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap);
 
 /**@}*/
 

@@ -22,8 +22,13 @@
 
 #include <stdio.h>
 
+int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap)
+{
+  return vfprintf(context, fmt, ap);
+}
+
 void rtems_print_printer_fprintf(rtems_printer *printer, FILE *file)
 {
   printer->context = file;
-  printer->printer = (rtems_print_plugin_t) fprintf;
+  printer->printer = rtems_fprintf_plugin;
 }
