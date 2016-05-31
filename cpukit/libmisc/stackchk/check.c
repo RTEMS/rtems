@@ -232,7 +232,7 @@ void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
   char           name[32];
 
   printk("BLOWN STACK!!!\n");
-  printk("task control block: 0x%08" PRIxPTR "\n", running);
+  printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) running);
   printk("task ID: 0x%08lx\n", (unsigned long) running->Object.id);
   printk(
     "task name: 0x%08" PRIx32 "\n",
@@ -245,15 +245,15 @@ void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
   printk(
     "task stack area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
     (unsigned long) stack->size,
-    stack->area,
-    ((char *) stack->area + stack->size)
+    (intptr_t) stack->area,
+    (intptr_t) ((char *) stack->area + stack->size)
   );
   if (!pattern_ok) {
     printk(
       "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
       (unsigned long) PATTERN_SIZE_BYTES,
-      pattern_area,
-      (pattern_area + PATTERN_SIZE_BYTES)
+      (intptr_t) pattern_area,
+      (intptr_t) (pattern_area + PATTERN_SIZE_BYTES)
     );
   }
 
@@ -261,7 +261,7 @@ void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
     if (rtems_configuration_get_user_multiprocessing_table()) {
       printk(
         "node: 0x%08" PRIxPTR "\n",
-          rtems_configuration_get_user_multiprocessing_table()->node
+          (intptr_t) rtems_configuration_get_user_multiprocessing_table()->node
       );
     }
   #endif
