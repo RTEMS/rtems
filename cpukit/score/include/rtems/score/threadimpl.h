@@ -1128,21 +1128,16 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
   SMP_ticket_lock_Control *lock;
 
   while ( true ) {
-    unsigned int my_generation;
-    bool         success;
-
     _ISR_lock_ISR_disable( lock_context );
 
     /*
-     * Ensure that we read our lock generation before we obtain our
-     * current lock.  See _Thread_Lock_set_unprotected().
+     * We assume that a normal load of pointer is identical to a relaxed atomic
+     * load.  Here, we may read an out-of-date lock.  However, only the owner
+     * of this out-of-date lock is allowed to set a new one.  Thus, we read at
+     * least this new lock ...
      */
-    my_generation = _Atomic_Load_uint(
-      &the_thread->Lock.generation,
-      ATOMIC_ORDER_ACQUIRE
-    );
-
     lock = the_thread->Lock.current;
+
     _SMP_ticket_lock_Acquire(
       lock,
       &_Thread_Executing->Lock.Stats,
@@ -1150,18 +1145,9 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
     );
 
     /*
-     * We must use a read-modify-write operation to observe the last value
-     * written.
+     * ... here, and so on.
      */
-    success = _Atomic_Compare_exchange_uint(
-      &the_thread->Lock.generation,
-      &my_generation,
-      my_generation,
-      ATOMIC_ORDER_RELAXED,
-      ATOMIC_ORDER_RELAXED
-    );
-
-    if ( success ) {
+    if ( lock == the_thread->Lock.current ) {
       return lock;
     }
 
@@ -1185,22 +1171,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
 )
 {
   the_thread->Lock.current = new_lock;
-
-  /*
-   * The generation release corresponds to the generation acquire in
-   * _Thread_Lock_acquire() and ensures that the new lock and other fields are
-   * visible to the next thread lock owner.  Otherwise someone would be able to
-   * read an up to date generation number and an old lock.  See
-   * _Thread_Wait_set_queue() and _Thread_Wait_restore_default_operations().
-   *
-   * Since we set a new lock right before, this increment is not protected by a
-   * lock and thus must be an atomic operation.
-   */
-  _Atomic_Fetch_add_uint(
-    &the_thread->Lock.generation,
-    1,
-    ATOMIC_ORDER_RELEASE
-  );
 }
 #endif
 

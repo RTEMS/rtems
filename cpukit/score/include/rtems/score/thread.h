@@ -691,11 +691,6 @@ typedef struct {
    */
   SMP_lock_Stats Stats;
 #endif
-
-  /**
-   * @brief Generation number to invalidate stale locks.
-   */
-  Atomic_Uint generation;
 } Thread_Lock_control;
 #endif
 
