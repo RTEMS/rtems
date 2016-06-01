@@ -1128,16 +1128,16 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
   SMP_ticket_lock_Control *lock;
 
   while ( true ) {
-    unsigned int first_generation;
-    unsigned int second_generation;
+    unsigned int my_generation;
+    bool         success;
 
     _ISR_lock_ISR_disable( lock_context );
 
     /*
-     * Ensure that we read our first lock generation before we obtain our
+     * Ensure that we read our lock generation before we obtain our
      * current lock.  See _Thread_Lock_set_unprotected().
      */
-    first_generation = _Atomic_Load_uint(
+    my_generation = _Atomic_Load_uint(
       &the_thread->Lock.generation,
       ATOMIC_ORDER_ACQUIRE
     );
@@ -1150,17 +1150,18 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
     );
 
     /*
-     * The C11 memory model doesn't guarantee that we read the latest
-     * generation here.  For this a read-modify-write operation would be
-     * necessary.  We read at least the new generation set up by the owner of
-     * our current thread lock, and so on.
+     * We must use a read-modify-write operation to observe the last value
+     * written.
      */
-    second_generation = _Atomic_Load_uint(
+    success = _Atomic_Compare_exchange_uint(
       &the_thread->Lock.generation,
-      ATOMIC_ORDER_ACQUIRE
+      &my_generation,
+      my_generation,
+      ATOMIC_ORDER_RELAXED,
+      ATOMIC_ORDER_RELAXED
     );
 
-    if ( first_generation == second_generation ) {
+    if ( success ) {
       return lock;
     }
 
