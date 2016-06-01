@@ -1,24 +1,184 @@
-*** TEST SMPATOMIC 1 ***
+*** BEGIN OF TEST SMPATOMIC 1 ***
 === atomic add test case ===
-worker 0 value: 16686
-worker 1 value: 36405
-atomic value: expected = 53091, actual = 53091
+worker 0 value: 68020
+worker 1 value: 355745
+worker 2 value: 341230
+worker 3 value: 395115
+worker 4 value: 341233
+worker 5 value: 352026
+worker 6 value: 381492
+worker 7 value: 357940
+worker 8 value: 422258
+worker 9 value: 244645
+worker 10 value: 246474
+worker 11 value: 197385
+worker 12 value: 256213
+worker 13 value: 233617
+worker 14 value: 234606
+worker 15 value: 260702
+worker 16 value: 214706
+worker 17 value: 86201
+worker 18 value: 104268
+worker 19 value: 67940
+worker 20 value: 68509
+worker 21 value: 98021
+worker 22 value: 66668
+worker 23 value: 87962
+atomic value: expected = 5482976, actual = 5482976
 === atomic flag test case ===
-worker 0 value: 5588
-worker 1 value: 16019
-atomic value: expected = 21607, actual = 21607
+worker 0 value: 90301
+worker 1 value: 90507
+worker 2 value: 91048
+worker 3 value: 90930
+worker 4 value: 91129
+worker 5 value: 90994
+worker 6 value: 91677
+worker 7 value: 91086
+worker 8 value: 90729
+worker 9 value: 90540
+worker 10 value: 91358
+worker 11 value: 90859
+worker 12 value: 90954
+worker 13 value: 90816
+worker 14 value: 91052
+worker 15 value: 90994
+worker 16 value: 90961
+worker 17 value: 89741
+worker 18 value: 90144
+worker 19 value: 90270
+worker 20 value: 90301
+worker 21 value: 90054
+worker 22 value: 89782
+worker 23 value: 90108
+atomic value: expected = 2176335, actual = 2176335
 === atomic sub test case ===
-worker 0 value: 4294950967
-worker 1 value: 4294930886
-atomic value: expected = 4294914557, actual = 4294914557
+worker 0 value: 4294821032
+worker 1 value: 4294618821
+worker 2 value: 4294631020
+worker 3 value: 4294597642
+worker 4 value: 4294626165
+worker 5 value: 4294629962
+worker 6 value: 4294601673
+worker 7 value: 4294668647
+worker 8 value: 4294687608
+worker 9 value: 4294691802
+worker 10 value: 4294770759
+worker 11 value: 4294700436
+worker 12 value: 4294715096
+worker 13 value: 4294716993
+worker 14 value: 4294708426
+worker 15 value: 4294725595
+worker 16 value: 4294732565
+worker 17 value: 4294893135
+worker 18 value: 4294857801
+worker 19 value: 4294892291
+worker 20 value: 4294874959
+worker 21 value: 4294839944
+worker 22 value: 4294874753
+worker 23 value: 4294875135
+atomic value: expected = 4289504452, actual = 4289504452
 === atomic compare exchange test case ===
-worker 0 value: 2950
-worker 1 value: 22456
-atomic value: expected = 25406, actual = 25406
+worker 0 value: 121131
+worker 1 value: 134839
+worker 2 value: 139422
+worker 3 value: 123158
+worker 4 value: 122908
+worker 5 value: 134536
+worker 6 value: 134554
+worker 7 value: 133142
+worker 8 value: 129816
+worker 9 value: 133474
+worker 10 value: 129722
+worker 11 value: 140019
+worker 12 value: 129180
+worker 13 value: 122164
+worker 14 value: 135158
+worker 15 value: 126391
+worker 16 value: 132336
+worker 17 value: 123469
+worker 18 value: 122731
+worker 19 value: 124443
+worker 20 value: 125119
+worker 21 value: 121813
+worker 22 value: 123291
+worker 23 value: 121235
+atomic value: expected = 3084051, actual = 3084051
 === atomic or/and test case ===
-worker 0 value: 1
+worker 0 value: 0
 worker 1 value: 0
-atomic value: expected = 1, actual = 1
+worker 2 value: 4
+worker 3 value: 8
+worker 4 value: 0
+worker 5 value: 32
+worker 6 value: 64
+worker 7 value: 0
+worker 8 value: 0
+worker 9 value: 512
+worker 10 value: 0
+worker 11 value: 0
+worker 12 value: 0
+worker 13 value: 8192
+worker 14 value: 16384
+worker 15 value: 0
+worker 16 value: 0
+worker 17 value: 131072
+worker 18 value: 0
+worker 19 value: 524288
+worker 20 value: 1048576
+worker 21 value: 2097152
+worker 22 value: 0
+worker 23 value: 8388608
+atomic value: expected = 12214892, actual = 12214892
 === atomic fence test case ===
-normal value = 10759507, second value = 10759507
+normal value = 10931635, second value = 10931635
+=== atomic store release and load acquire test case ===
+processor 0 delta 1040ns, load count 0
+processor 1 delta 1573ns, load count 59
+processor 2 delta 1840ns, load count 21
+processor 3 delta 1307ns, load count 71
+processor 4 delta 1440ns, load count 45
+processor 5 delta 1973ns, load count 0
+processor 6 delta 1173ns, load count 84
+processor 7 delta 1707ns, load count 34
+processor 8 delta 1867ns, load count 39
+processor 9 delta 1360ns, load count 84
+processor 10 delta 1227ns, load count 0
+processor 11 delta 1760ns, load count 51
+processor 12 delta 1493ns, load count 13
+processor 13 delta 2000ns, load count 64
+processor 14 delta 2133ns, load count 77
+processor 15 delta 1627ns, load count 26
+processor 16 delta 2240ns, load count 41
+processor 17 delta 1733ns, load count 0
+processor 18 delta 2000ns, load count 29
+processor 19 delta 1467ns, load count 74
+processor 20 delta 1600ns, load count 16
+processor 21 delta 1200ns, load count 66
+processor 22 delta 1867ns, load count 3
+processor 23 delta 1333ns, load count 53
+=== atomic read-modify-write test case ===
+processor 0 delta 1067ns, read-modify-write count 0
+processor 1 delta 3921ns, read-modify-write count 0
+processor 2 delta 3067ns, read-modify-write count 0
+processor 3 delta 1200ns, read-modify-write count 0
+processor 4 delta 3600ns, read-modify-write count 0
+processor 5 delta 3334ns, read-modify-write count 0
+processor 6 delta 1334ns, read-modify-write count 0
+processor 7 delta 2187ns, read-modify-write count 0
+processor 8 delta 1147ns, read-modify-write count 0
+processor 9 delta 3947ns, read-modify-write count 0
+processor 10 delta 2321ns, read-modify-write count 0
+processor 11 delta 3734ns, read-modify-write count 0
+processor 12 delta 2827ns, read-modify-write count 1
+processor 13 delta 2481ns, read-modify-write count 0
+processor 14 delta 1254ns, read-modify-write count 0
+processor 15 delta 2667ns, read-modify-write count 0
+processor 16 delta 3467ns, read-modify-write count 0
+processor 17 delta 2054ns, read-modify-write count 0
+processor 18 delta 1707ns, read-modify-write count 1
+processor 19 delta 1894ns, read-modify-write count 0
+processor 20 delta 2934ns, read-modify-write count 0
+processor 21 delta 1547ns, read-modify-write count 0
+processor 22 delta 1361ns, read-modify-write count 0
+processor 23 delta 3200ns, read-modify-write count 0
 *** END OF TEST SMPATOMIC 1 ***

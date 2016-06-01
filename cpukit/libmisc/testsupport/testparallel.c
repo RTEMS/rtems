@@ -68,7 +68,9 @@ static void run_tests(
       if (rtems_test_parallel_is_master_worker(worker_index)) {
         rtems_interval duration = (*job->init)(ctx, job->arg, active_worker);
 
-        start_worker_stop_timer(ctx, duration);
+        if (duration > 0) {
+          start_worker_stop_timer(ctx, duration);
+        }
       }
 
       _SMP_barrier_Wait(&ctx->barrier, &bs, ctx->worker_count);
