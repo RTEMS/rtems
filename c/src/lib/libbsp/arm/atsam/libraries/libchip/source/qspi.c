@@ -211,6 +211,35 @@ __STATIC_INLINE void QSPI_ScrambleData(Qspi *pQspi, uint32_t wKey,
 	pQspi->QSPI_SMR = (EnableFlag | (Random << 1));
 }
 
+static void do_copy(uint8_t *dst, const uint8_t *src, size_t n, bool aligned)
+{
+	if (aligned) {
+		while (n > 3) {
+			*(uint32_t *)dst = *(uint32_t *)src;
+			dst += 4;
+			src += 4;
+			n -= 4;
+		}
+	}
+
+	while (n > 0) {
+		*dst = *src;
+		++dst;
+		++src;
+		--n;
+	}
+}
+
+static void copy_to_io(void *dst, const void *src, size_t n)
+{
+	do_copy(dst, src, n, ((uintptr_t)dst) % 4 == 0);
+}
+
+static void copy_from_io(void *dst, const void *src, size_t n)
+{
+	do_copy(dst, src, n, ((uintptr_t)src) % 4 == 0);
+}
+
 /*----------------------------------------------------------------------------
  *        Exported functions
  *----------------------------------------------------------------------------*/
@@ -721,11 +750,11 @@ QspidStatus_t QSPI_ReadWriteMem(Qspid_t *pQspid, Access_t const ReadWrite)
 	assert(((ReadWrite > CmdAccess)
 			  && (ReadWrite <= WriteAccess)) ? true : false);
 
-	if (ReadWrite == WriteAccess)
-		memcpy(pQspiMem, pBuffer.pDataTx , pBuffer.TxDataSize);
-	else
-		memcpy(pBuffer.pDataRx, pQspiMem, pBuffer.RxDataSize);
-
+	if (ReadWrite == WriteAccess) {
+		copy_to_io(pQspiMem, pBuffer.pDataTx , pBuffer.TxDataSize);
+	} else {
+		copy_from_io(pBuffer.pDataRx, pQspiMem, pBuffer.RxDataSize);
+	}
 	memory_sync();
 	QSPI_EndTransfer(pQspid->pQspiHw);
 

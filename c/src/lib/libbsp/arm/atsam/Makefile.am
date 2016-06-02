@@ -18,6 +18,7 @@ project_lib_DATA += startup/linkcmds
 project_lib_DATA += startup/linkcmds.memory
 project_lib_DATA += startup/linkcmds.intsram
 project_lib_DATA += startup/linkcmds.sdram
+project_lib_DATA += startup/linkcmds.qspiflash
 
 ###############################################################################
 #                  Header                                                     #

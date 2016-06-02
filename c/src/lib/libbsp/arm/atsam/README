@@ -41,6 +41,9 @@ Use ATSAM_MEMORY_INTSRAM_SIZE=XYZ to set the size of internal SRAM in bytes
 Use ATSAM_MEMORY_SDRAM_SIZE=XYZ to set the size of external SDRAM in bytes
 (default 0x00200000).
 
+Use ATSAM_MEMORY_QSPIFLASH_SIZE=XYZ to set the size of QSPI flash in bytes
+(default 0x00200000).
+
 The pins may be configured by the application at link-time.  See
 <bsp/pin-config.h>.
 
