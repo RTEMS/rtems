@@ -322,6 +322,24 @@ extern rtems_status_code rtems_shell_wait_for_input(
   void *notification_arg
 );
 
+/**
+ * @brief Waits for explicit input.
+ *
+ * @param desired_input An explicit unsigned character to wait for or -1 to
+ *   accept any input.
+ *
+ * @retval RTEMS_SUCCESSFUL Input detected.
+ * @retval RTEMS_TIMEOUT Timeout expired.
+ * @retval RTEMS_UNSATISFIED Cannot change or restore termios attributes.
+ */
+extern rtems_status_code rtems_shell_wait_for_explicit_input(
+  int fd,
+  int timeout_in_seconds,
+  rtems_shell_wait_for_input_notification notification,
+  void *notification_arg,
+  int desired_input
+);
+
 extern int rtems_shell_main_monitor(int argc, char **argv);
 
 /*

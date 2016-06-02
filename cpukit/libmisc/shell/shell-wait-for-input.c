@@ -53,11 +53,12 @@ static rtems_status_code restore_serial_settings(int fd, struct termios *term)
   return rv == 0 ? RTEMS_SUCCESSFUL : RTEMS_UNSATISFIED;
 }
 
-rtems_status_code rtems_shell_wait_for_input(
+rtems_status_code rtems_shell_wait_for_explicit_input(
   int fd,
   int timeout_in_seconds,
   rtems_shell_wait_for_input_notification notification,
-  void *notification_arg
+  void *notification_arg,
+  int desired_input
 )
 {
   struct termios term;
@@ -68,11 +69,12 @@ rtems_status_code rtems_shell_wait_for_input(
     int i = 0;
 
     for (i = 0; i < timeout_in_seconds && !input_detected; ++i) {
-      char c;
+      unsigned char c;
 
       (*notification)(fd, timeout_in_seconds - i, notification_arg);
 
-      input_detected = read(fd, &c, sizeof(c)) > 0;
+      input_detected = read(fd, &c, sizeof(c)) > 0
+        && (desired_input == -1 || desired_input == c);
     }
 
     sc = restore_serial_settings(fd, &term);
@@ -82,4 +84,20 @@ rtems_status_code rtems_shell_wait_for_input(
   }
 
   return sc;
+}
+
+rtems_status_code rtems_shell_wait_for_input(
+  int fd,
+  int timeout_in_seconds,
+  rtems_shell_wait_for_input_notification notification,
+  void *notification_arg
+)
+{
+  return rtems_shell_wait_for_explicit_input(
+    fd,
+    timeout_in_seconds,
+    notification,
+    notification_arg,
+    -1
+  );
 }
