@@ -64,9 +64,10 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       );
       break;
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
-      _CORE_recursive_mutex_Surrender_no_protocol_classic(
+      _CORE_recursive_mutex_Surrender_no_protocol(
         &the_semaphore->Core_control.Mutex.Recursive,
         _Semaphore_Get_operations( the_semaphore ),
+        executing,
         &queue_context
       );
       status = STATUS_SUCCESSFUL;

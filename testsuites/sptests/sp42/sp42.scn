@@ -1,4 +1,4 @@
-*** START OF TEST 42 ***
+*** BEGIN OF TEST SP 42 ***
 Exercising blocking discipline w/extract in FIFO order 
 Exercising blocking discipline w/unblock in FIFO order
 TA00 - unblocked - OK
@@ -44,4 +44,4 @@ TA02 - unblocked - OK
 TA03 - unblocked - OK
 TA15 - unblocked - OK
 TA14 - unblocked - OK
-*** END OF TEST 42 ***
+*** END OF TEST SP 42 ***

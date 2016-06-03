@@ -311,22 +311,29 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
   );
 }
 
-RTEMS_INLINE_ROUTINE void
-_CORE_recursive_mutex_Surrender_no_protocol_finalize(
+RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender_no_protocol(
   CORE_recursive_mutex_Control  *the_mutex,
   const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
   Thread_queue_Context          *queue_context
 )
 {
   unsigned int    nest_level;
   Thread_Control *new_owner;
 
+  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
+
+  if ( !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing ) ) {
+    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
+    return STATUS_NOT_OWNER;
+  }
+
   nest_level = the_mutex->nest_level;
 
   if ( nest_level > 0 ) {
     the_mutex->nest_level = nest_level - 1;
     _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
-    return;
+    return STATUS_SUCCESSFUL;
   }
 
   new_owner = _Thread_queue_First_locked(
@@ -337,7 +344,7 @@ _CORE_recursive_mutex_Surrender_no_protocol_finalize(
 
   if ( new_owner == NULL ) {
     _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
-    return;
+    return STATUS_SUCCESSFUL;
   }
 
   _Thread_queue_Extract_critical(
@@ -346,46 +353,7 @@ _CORE_recursive_mutex_Surrender_no_protocol_finalize(
     new_owner,
     queue_context
   );
-}
-
-RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender_no_protocol(
-  CORE_recursive_mutex_Control  *the_mutex,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *executing,
-  Thread_queue_Context          *queue_context
-)
-{
-  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
-
-  if ( !_CORE_mutex_Is_owner( &the_mutex->Mutex, executing ) ) {
-    _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
-    return STATUS_NOT_OWNER;
-  }
-
-  _CORE_recursive_mutex_Surrender_no_protocol_finalize(
-    the_mutex,
-    operations,
-    queue_context
-  );
   return STATUS_SUCCESSFUL;
-}
-
-/*
- * The Classic no protocol recursive mutex has the nice property that everyone
- * can release it.
- */
-RTEMS_INLINE_ROUTINE void _CORE_recursive_mutex_Surrender_no_protocol_classic(
-  CORE_recursive_mutex_Control  *the_mutex,
-  const Thread_queue_Operations *operations,
-  Thread_queue_Context          *queue_context
-)
-{
-  _CORE_mutex_Acquire_critical( &the_mutex->Mutex, queue_context );
-  _CORE_recursive_mutex_Surrender_no_protocol_finalize(
-    the_mutex,
-    operations,
-    queue_context
-  );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Initialize(
