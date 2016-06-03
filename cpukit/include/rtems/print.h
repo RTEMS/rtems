@@ -39,10 +39,10 @@ extern "C" {
  * Type definition for the printer structure used to access the kernel print
  * support.
  */
-typedef struct {
+typedef struct rtems_printer {
   void                *context;
   rtems_print_plugin_t printer;
-}rtems_printer;
+} rtems_printer;
 
 /**
  * @brief check if the printer is valid.

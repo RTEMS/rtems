@@ -256,6 +256,10 @@ enum {
 // Works exactly like mg_write(), but allows to do message formatting.
 int mg_printf(struct mg_connection *,
               PRINTF_FORMAT_STRING(const char *fmt), ...) PRINTF_ARGS(2, 3);
+#ifdef __rtems__
+struct rtems_printer;
+void rtems_print_printer_mg_printf(struct rtems_printer *, struct mg_connection *);
+#endif /* __rtems__ */
 
 
 // Send contents of the entire file together with HTTP headers.

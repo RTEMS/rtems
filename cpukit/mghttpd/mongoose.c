@@ -5519,3 +5519,15 @@ struct mg_context *mg_start(const struct mg_callbacks *callbacks,
 
   return ctx;
 }
+#ifdef __rtems__
+#include <rtems/print.h>
+
+static int mg_printer_plugin(void *context, const char *fmt, va_list ap) {
+  return mg_vprintf(context, fmt, ap);
+}
+
+void rtems_print_printer_mg_printf(rtems_printer *printer, struct mg_connection *conn) {
+  printer->context = conn;
+  printer->printer = mg_printer_plugin;
+}
+#endif /* __rtems__ */
