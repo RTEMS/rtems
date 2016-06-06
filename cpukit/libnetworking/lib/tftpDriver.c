@@ -216,11 +216,9 @@ int rtems_tftpfs_initialize(
   sc = rtems_semaphore_create (
     rtems_build_name('T', 'F', 'T', 'P'),
     1,
-    RTEMS_FIFO |
     RTEMS_BINARY_SEMAPHORE |
-    RTEMS_NO_INHERIT_PRIORITY |
-    RTEMS_NO_PRIORITY_CEILING |
-    RTEMS_LOCAL,
+    RTEMS_PRIORITY |
+    RTEMS_INHERIT_PRIORITY,
     0,
     &fs->tftp_mutex
   );
