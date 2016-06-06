@@ -97,8 +97,8 @@ static int pipe_alloc(
     goto err_wbar;
   if (rtems_semaphore_create(
         rtems_build_name ('P', 'I', 's', c), 1,
-        RTEMS_BINARY_SEMAPHORE | RTEMS_FIFO,
-        RTEMS_NO_PRIORITY, &pipe->Semaphore) != RTEMS_SUCCESSFUL)
+        RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+        0, &pipe->Semaphore) != RTEMS_SUCCESSFUL)
     goto err_sem;
 
   *pipep = pipe;
