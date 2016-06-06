@@ -551,8 +551,7 @@ rtems_disk_io_initialize(void)
   sc = rtems_semaphore_create(
     rtems_build_name('D', 'D', 'E', 'V'),
     1,
-    RTEMS_FIFO | RTEMS_BINARY_SEMAPHORE | RTEMS_NO_INHERIT_PRIORITY
-      | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
     0,
     &diskdevs_mutex
   );
