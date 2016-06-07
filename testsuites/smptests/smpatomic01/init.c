@@ -575,6 +575,183 @@ static void test_atomic_store_load_rmw_fini(
   }
 }
 
+/*
+ * See also Hans-J. Boehm, HP Laboratories,
+ * "Can Seqlocks Get Along With Programming Language Memory Models?",
+ * http://www.hpl.hp.com/techreports/2012/HPL-2012-68.pdf
+ */
+
+static rtems_interval test_seqlock_init(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+
+  ctx->normal_value = 0;
+  ctx->second_value = 0;
+  _Atomic_Store_ulong(&ctx->atomic_value, 0, ATOMIC_ORDER_RELEASE);
+
+  return test_duration();
+}
+
+static unsigned long seqlock_read(smpatomic01_context *ctx)
+{
+  unsigned long counter = 0;
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    unsigned long seq0;
+    unsigned long seq1;
+    unsigned long a;
+    unsigned long b;
+
+    do {
+      seq0 = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_ACQUIRE);
+
+      a = ctx->normal_value;
+      b = ctx->second_value;
+
+      seq1 =
+        _Atomic_Fetch_add_ulong(&ctx->atomic_value, 0, ATOMIC_ORDER_RELEASE);
+    } while (seq0 != seq1 || seq0 % 2 != 0);
+
+    ++counter;
+    rtems_test_assert(a == b);
+  }
+
+  return counter;
+}
+
+static void test_single_writer_seqlock_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+  uint32_t cpu_self_index;
+  unsigned long counter;
+
+  /*
+   * Use the physical processor index, to observe timing differences introduced
+   * by the system topology.
+   */
+  cpu_self_index = rtems_get_current_processor();
+
+  if (cpu_self_index == 0) {
+    counter = 0;
+
+    while (!rtems_test_parallel_stop_job(&ctx->base)) {
+      unsigned long seq;
+
+      seq = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+      _Atomic_Store_ulong(&ctx->atomic_value, seq + 1, ATOMIC_ORDER_RELAXED);
+      _Atomic_Fence(ATOMIC_ORDER_ACQUIRE);
+
+      ++counter;
+      ctx->normal_value = counter;
+      ctx->second_value = counter;
+
+      _Atomic_Store_ulong(&ctx->atomic_value, seq + 2, ATOMIC_ORDER_RELEASE);
+    }
+  } else {
+    counter = seqlock_read(ctx);
+  }
+
+  ctx->per_worker_value[cpu_self_index] = counter;
+}
+
+static void test_single_writer_seqlock_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+  size_t i;
+
+  printf("=== single writer seqlock test case ===\n");
+
+  for (i = 0; i < active_workers; ++i) {
+    printf(
+      "processor %zu count %lu\n",
+      i,
+      ctx->per_worker_value[i]
+    );
+  }
+}
+
+static void test_multi_writer_seqlock_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+  uint32_t cpu_self_index;
+  unsigned long counter;
+
+  /*
+   * Use the physical processor index, to observe timing differences introduced
+   * by the system topology.
+   */
+  cpu_self_index = rtems_get_current_processor();
+
+  if (cpu_self_index % 2 == 0) {
+    counter = 0;
+
+    while (!rtems_test_parallel_stop_job(&ctx->base)) {
+      unsigned long seq;
+
+      do {
+        seq = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
+      } while (
+        seq % 2 != 0
+          || !_Atomic_Compare_exchange_ulong(
+              &ctx->atomic_value,
+              &seq,
+              seq + 1,
+              ATOMIC_ORDER_ACQ_REL,
+              ATOMIC_ORDER_RELAXED
+            )
+      );
+
+      ++counter;
+      ctx->normal_value = counter;
+      ctx->second_value = counter;
+
+      _Atomic_Store_ulong(&ctx->atomic_value, seq + 2, ATOMIC_ORDER_RELEASE);
+    }
+  } else {
+    counter = seqlock_read(ctx);
+  }
+
+  ctx->per_worker_value[cpu_self_index] = counter;
+}
+
+static void test_multi_writer_seqlock_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  smpatomic01_context *ctx = (smpatomic01_context *) base;
+  size_t i;
+
+  printf("=== multi writer seqlock test case ===\n");
+
+  for (i = 0; i < active_workers; ++i) {
+    printf(
+      "processor %zu count %lu\n",
+      i,
+      ctx->per_worker_value[i]
+    );
+  }
+}
+
 static const rtems_test_parallel_job test_jobs[] = {
   {
     .init = test_atomic_add_init,
@@ -604,6 +781,14 @@ static const rtems_test_parallel_job test_jobs[] = {
     .init = test_atomic_store_load_rmw_init,
     .body = test_atomic_store_load_rmw_body,
     .fini = test_atomic_store_load_rmw_fini
+  }, {
+    .init = test_seqlock_init,
+    .body = test_single_writer_seqlock_body,
+    .fini = test_single_writer_seqlock_fini
+  }, {
+    .init = test_seqlock_init,
+    .body = test_multi_writer_seqlock_body,
+    .fini = test_multi_writer_seqlock_fini
   }
 };
 

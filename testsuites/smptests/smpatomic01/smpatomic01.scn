@@ -181,4 +181,54 @@ processor 20 delta 2934ns, read-modify-write count 0
 processor 21 delta 1547ns, read-modify-write count 0
 processor 22 delta 1361ns, read-modify-write count 0
 processor 23 delta 3200ns, read-modify-write count 0
+=== single writer seqlock test case ===
+processor 0 count 2451021
+processor 1 count 1
+processor 2 count 8
+processor 3 count 31
+processor 4 count 52
+processor 5 count 23
+processor 6 count 23
+processor 7 count 49
+processor 8 count 703
+processor 9 count 750
+processor 10 count 684
+processor 11 count 770
+processor 12 count 710
+processor 13 count 691
+processor 14 count 687
+processor 15 count 695
+processor 16 count 774
+processor 17 count 828
+processor 18 count 732
+processor 19 count 719
+processor 20 count 728
+processor 21 count 761
+processor 22 count 685
+processor 23 count 764
+=== multi writer seqlock test case ===
+processor 0 count 124410
+processor 1 count 7865
+processor 2 count 123950
+processor 3 count 7797
+processor 4 count 124253
+processor 5 count 7773
+processor 6 count 124763
+processor 7 count 7817
+processor 8 count 124593
+processor 9 count 7781
+processor 10 count 124647
+processor 11 count 7753
+processor 12 count 124322
+processor 13 count 7692
+processor 14 count 124906
+processor 15 count 7715
+processor 16 count 124568
+processor 17 count 7605
+processor 18 count 125060
+processor 19 count 7908
+processor 20 count 124499
+processor 21 count 7804
+processor 22 count 124538
+processor 23 count 7874
 *** END OF TEST SMPATOMIC 1 ***
