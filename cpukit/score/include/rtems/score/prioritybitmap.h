@@ -32,10 +32,7 @@ extern "C" {
  */
 /**@{*/
 
-/*
- *  The definition of the Priority_bit_map_Word type is CPU dependent.
- *
- */
+typedef uint16_t Priority_bit_map_Word;
 
 typedef struct {
   /**

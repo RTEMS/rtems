@@ -53,7 +53,6 @@ extern "C" {
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
-typedef uint16_t Priority_bit_map_Word;
 typedef void epiphany_isr;
 typedef void ( *epiphany_isr_entry )( void );
 

@@ -20,7 +20,6 @@
 #define _RTEMS_SCORE_PRIORITYBITMAPIMPL_H
 
 #include <rtems/score/prioritybitmap.h>
-#include <rtems/score/priority.h>
 
 #include <string.h>
 
@@ -65,8 +64,8 @@ extern const unsigned char _Bitfield_Leading_zeros[256];
 #else
 #define _Bitfield_Find_first_bit( _value, _bit_number ) \
   { \
-    register uint32_t   __value = (uint32_t) (_value); \
-    register const unsigned char *__p = _Bitfield_Leading_zeros; \
+    unsigned int __value = (_value); \
+    const unsigned char *__p = _Bitfield_Leading_zeros; \
     \
     if ( __value < 0x100 ) \
       (_bit_number) = (Priority_bit_map_Word)( __p[ __value ] + 8 );  \
@@ -108,22 +107,18 @@ extern const unsigned char _Bitfield_Leading_zeros[256];
  * This function returns the major portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Major (
-  Priority_Control the_priority
-)
+RTEMS_INLINE_ROUTINE unsigned int _Priority_Major( unsigned int the_priority )
 {
-  return (Priority_bit_map_Word)( the_priority / 16 );
+  return the_priority / 16;
 }
 
 /**
  * This function returns the minor portion of the_priority.
  */
 
-RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Minor (
-  Priority_Control the_priority
-)
+RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
 {
-  return (Priority_bit_map_Word)( the_priority % 16 );
+  return the_priority % 16;
 }
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
@@ -134,21 +129,10 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Minor (
  */
 
 RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Mask (
-  uint32_t   bit_number
+  unsigned int bit_number
 )
 {
   return (Priority_bit_map_Word)(0x8000u >> bit_number);
-}
-
-/**
- * This function returns the mask bit inverted.
- */
-
-RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Mask_invert (
-  uint32_t   mask
-)
-{
-  return (Priority_bit_map_Word)(~mask);
 }
 
 /**
@@ -157,8 +141,8 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Mask_invert (
  * a major or minor component of a priority.
  */
 
-RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
-  uint32_t   bit_number
+RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
+  unsigned int bit_number
 )
 {
   return bit_number;
@@ -196,15 +180,15 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Remove (
     bit_map->major_bit_map &= bit_map_info->block_major;
 }
 
-RTEMS_INLINE_ROUTINE Priority_Control _Priority_bit_map_Get_highest(
+RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
   const Priority_bit_map_Control *bit_map
 )
 {
-  Priority_bit_map_Word minor;
-  Priority_bit_map_Word major;
+  unsigned int minor;
+  unsigned int major;
 
   /* Avoid problems with some inline ASM statements */
-  Priority_bit_map_Word tmp;
+  unsigned int tmp;
 
   tmp = bit_map->major_bit_map;
   _Bitfield_Find_first_bit( tmp, major );
@@ -226,11 +210,11 @@ RTEMS_INLINE_ROUTINE bool _Priority_bit_map_Is_empty(
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
   Priority_bit_map_Control     *bit_map,
   Priority_bit_map_Information *bit_map_info,
-  Priority_Control              new_priority
+  unsigned int                  new_priority
 )
 {
-  Priority_bit_map_Word major;
-  Priority_bit_map_Word minor;
+  unsigned int major;
+  unsigned int minor;
   Priority_bit_map_Word mask;
 
   major = _Priority_Major( new_priority );
@@ -240,13 +224,11 @@ RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize_information(
 
   mask = _Priority_Mask( major );
   bit_map_info->ready_major = mask;
-  /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
-  bit_map_info->block_major = (Priority_bit_map_Word)(~((uint32_t)mask));
+  bit_map_info->block_major = (Priority_bit_map_Word) ~mask;
 
   mask = _Priority_Mask( minor );
   bit_map_info->ready_minor = mask;
-  /* Add _Priority_Mask_invert to non-generic bitfield then change this code. */
-  bit_map_info->block_minor = (Priority_bit_map_Word)(~((uint32_t)mask));
+  bit_map_info->block_minor = (Priority_bit_map_Word) ~mask;
 }
 
 /** @} */

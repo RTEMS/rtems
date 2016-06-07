@@ -687,7 +687,6 @@ typedef struct {
 
 #ifndef ASM
 typedef uint32_t CPU_Counter_ticks;
-typedef uint16_t Priority_bit_map_Word;
 
 typedef struct {
   uint32_t r[32];

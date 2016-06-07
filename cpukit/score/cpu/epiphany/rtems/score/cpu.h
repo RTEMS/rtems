@@ -699,7 +699,6 @@ typedef struct {
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #ifndef ASM
-typedef uint16_t Priority_bit_map_Word;
 
 typedef struct {
   uint32_t r[62];

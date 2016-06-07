@@ -43,7 +43,6 @@ extern "C" {
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
-typedef uint16_t     Priority_bit_map_Word;
 typedef void mips_isr;
 typedef void ( *mips_isr_entry )( void );
 

@@ -31,15 +31,6 @@ extern "C" {
 typedef uintptr_t CPU_Uint32ptr;
 
 /**
- * @brief Priority bit map type.
- *
- * On the SPARC, there is no bitscan instruction and no penalty associated
- * for using 16-bit variables.  With no overriding architectural factors,
- * just using a uint16_t.
- */
-typedef uint16_t Priority_bit_map_Word;
-
-/**
  * @brief SPARC ISR handler return type.
  *
  * This is the type which SPARC ISR Handlers return.

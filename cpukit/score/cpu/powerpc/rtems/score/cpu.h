@@ -981,6 +981,7 @@ void _CPU_Context_Initialize(
   { \
     __asm__ volatile ("cntlzw %0, %1" : "=r" ((_output)), "=r" ((_value)) : \
 		  "1" ((_value))); \
+    (_output) = (_output) - 16; \
   }
 
 /* end of Bitfield handler macros */
@@ -992,7 +993,7 @@ void _CPU_Context_Initialize(
  */
 
 #define _CPU_Priority_Mask( _bit_number ) \
-  ( 0x80000000 >> (_bit_number) )
+  ( 0x8000u >> (_bit_number) )
 
 /*
  *  This routine translates the bit numbers returned by
