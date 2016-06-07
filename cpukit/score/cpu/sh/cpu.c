@@ -203,14 +203,6 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored )
 }
 #endif
 
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
-
-uint8_t   _bit_set_table[16] =
-  { 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 1,0};
-
-
-#endif
-
 void _CPU_Context_Initialize(
   Context_Control	*_the_context,
   void			*_stack_base,
