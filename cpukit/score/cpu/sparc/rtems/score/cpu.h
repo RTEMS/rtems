@@ -1113,12 +1113,6 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
    * CPU model does not have a scan instruction.
    */
   #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
-  /**
-   * The SPARC port uses the generic C algorithm for bitfield scan if the
-   * CPU model does not have a scan instruction.  Thus is needs the generic
-   * data table used by that algorithm.
-   */
-  #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 #else
   #error "scan instruction not currently supported by RTEMS!!"
 #endif

@@ -883,8 +883,6 @@ extern char _gp[];
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
 /* functions */
 
 /**

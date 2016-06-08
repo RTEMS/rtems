@@ -1012,16 +1012,6 @@ uint32_t   _CPU_ISR_Get_level( void );
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 /**
- * This definition is set to TRUE if the port uses the data tables provided
- * by the generic bitfield manipulation implementation.
- * This can occur when actually using the generic bitfield manipulation
- * implementation or when implementing the same algorithm in assembly
- * language for improved performance.  It is unlikely that a port will use
- * the data if it has a bitfield scan instruction.
- */
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
-/**
  * This routine sets @a _output to the bit number of the first bit
  * set in @a _value.  @a _value is of CPU dependent type
  * @a Priority_bit_map_Word.  This type may be either 16 or 32 bits

@@ -33,16 +33,12 @@ extern "C" {
  */
 /**@{**/
 
-#if ( CPU_USE_GENERIC_BITFIELD_DATA == TRUE )
-
 /**
  *  This table is used by the generic bitfield routines to perform
  *  a highly optimized bit scan without the use of special CPU
  *  instructions.
  */
-extern const unsigned char __log2table[256];
-
-#endif
+extern const unsigned char _Bitfield_Leading_zeros[256];
 
 /**
  *  @brief Gets the @a _bit_number of the first bit set in the specified value.
@@ -70,7 +66,7 @@ extern const unsigned char __log2table[256];
 #define _Bitfield_Find_first_bit( _value, _bit_number ) \
   { \
     register uint32_t   __value = (uint32_t) (_value); \
-    register const unsigned char *__p = __log2table; \
+    register const unsigned char *__p = _Bitfield_Leading_zeros; \
     \
     if ( __value < 0x100 ) \
       (_bit_number) = (Priority_bit_map_Word)( __p[ __value ] + 8 );  \

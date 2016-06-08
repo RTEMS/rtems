@@ -891,7 +891,6 @@ void _CPU_Context_Initialize(
 
 #if ( SPARC_HAS_BITSCAN == 0 )
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 #else
 #error "scan instruction not currently supported by RTEMS!!"
 #endif

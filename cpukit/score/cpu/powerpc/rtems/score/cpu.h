@@ -922,8 +922,6 @@ void _CPU_Context_Initialize(
 
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE
 
-#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
-
 /*
  *  This routine sets _output to the bit number of the first bit
  *  set in _value.  _value is of CPU dependent type Priority_bit_map_Word.

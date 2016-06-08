@@ -491,7 +491,6 @@ void *_CPU_Thread_Idle_body( uintptr_t ignored );
  */
 
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE
-#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
 #if ( M68K_HAS_BFFFO != 1 )
 /*

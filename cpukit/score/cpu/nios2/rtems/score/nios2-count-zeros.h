@@ -37,17 +37,17 @@ static inline unsigned _Nios2_Count_leading_zeros( uint32_t p )
 
   if ( p <= 0xffffu ) {
     if ( p < 0x100u ) {
-      bitIdx = __log2table[ p ] + 24u;
+      bitIdx = _Bitfield_Leading_zeros[ p ] + 24u;
     } else {
-      bitIdx = __log2table[ p >> 8u ] + 16u;
+      bitIdx = _Bitfield_Leading_zeros[ p >> 8u ] + 16u;
     }
   } else {
     p >>= 16u;
 
     if ( p < 0x100u ) {
-      bitIdx = __log2table[ p ] + 8u;
+      bitIdx = _Bitfield_Leading_zeros[ p ] + 8u;
     } else {
-      bitIdx = __log2table[ p >> 8u ];
+      bitIdx = _Bitfield_Leading_zeros[ p >> 8u ];
     }
   }
 

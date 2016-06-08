@@ -549,7 +549,6 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
  */
 
 #define CPU_USE_GENERIC_BITFIELD_CODE FALSE
-#define CPU_USE_GENERIC_BITFIELD_DATA FALSE
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \

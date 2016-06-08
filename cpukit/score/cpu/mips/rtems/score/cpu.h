@@ -884,8 +884,6 @@ extern void mips_break( int error );
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
 /* functions */
 
 /*

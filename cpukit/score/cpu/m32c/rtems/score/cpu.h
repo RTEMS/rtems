@@ -871,8 +871,6 @@ void _CPU_Context_Restart_self(
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
-#define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
 /* functions */
 
 /**
