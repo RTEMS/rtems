@@ -648,7 +648,9 @@ static void test_single_writer_seqlock_body(
 
       seq = _Atomic_Load_ulong(&ctx->atomic_value, ATOMIC_ORDER_RELAXED);
       _Atomic_Store_ulong(&ctx->atomic_value, seq + 1, ATOMIC_ORDER_RELAXED);
-      _Atomic_Fence(ATOMIC_ORDER_ACQUIRE);
+
+      /* There is no atomic store with acquire/release semantics */
+      _Atomic_Fence(ATOMIC_ORDER_ACQ_REL);
 
       ++counter;
       ctx->normal_value = counter;
