@@ -74,20 +74,24 @@ extern const unsigned char _Bitfield_Leading_zeros[256];
   }
 #endif
 
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
 /**
- *  This method returns the priority bit mask for the specified major
- *  or minor bit number.
+ * @brief Returns the priority bit mask for the specified major or minor bit
+ * number.
  *
- *  @param[in] _bit_number is the bit number for which we need a mask
+ * @param bit_number The bit number for which we need a mask.
  *
- *  @retval the priority bit mask
- *
- *  @note This may simply be a pass through to a CPU dependent implementation.
+ * @return The priority bit mask.
  */
-#define _Priority_Mask( _bit_number ) \
-  _CPU_Priority_Mask( _bit_number )
+RTEMS_INLINE_ROUTINE Priority_bit_map_Word _Priority_Mask(
+  unsigned int bit_number
+)
+{
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+  return _CPU_Priority_Mask( bit_number );
+#else
+  return (Priority_bit_map_Word) ( 0x8000u >> bit_number );
 #endif
+}
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
 /**
@@ -122,18 +126,6 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
 }
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
-
-/**
- * This function returns the mask associated with the major or minor
- * number passed to it.
- */
-
-RTEMS_INLINE_ROUTINE Priority_bit_map_Word   _Priority_Mask (
-  unsigned int bit_number
-)
-{
-  return (Priority_bit_map_Word)(0x8000u >> bit_number);
-}
 
 /**
  * This function translates the bit numbers returned by the bit scan
