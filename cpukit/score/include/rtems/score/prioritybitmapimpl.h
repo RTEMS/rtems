@@ -93,19 +93,24 @@ RTEMS_INLINE_ROUTINE Priority_bit_map_Word _Priority_Mask(
 #endif
 }
 
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
 /**
- *  This method returns the bit index position for the specified priority.
+ * @brief Returns the bit index position for the specified major or minor bit
+ * number.
  *
- *  @param[in] _priority is the priority for which we need the index.
+ * @param bit_number The bit number for which we need an index.
  *
- *  @retval This method returns the array index into the priority bit map.
- *
- *  @note This may simply be a pass through to a CPU dependent implementation.
+ * @return The corresponding array index into the priority bit map.
  */
-#define _Priority_Bits_index( _priority ) \
-  _CPU_Priority_bits_index( _priority )
+RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
+  unsigned int bit_number
+)
+{
+#if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
+  return _CPU_Priority_bits_index( bit_number );
+#else
+  return bit_number;
 #endif
+}
 
 /**
  * This function returns the major portion of the_priority.
@@ -124,23 +129,6 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_Minor( unsigned int the_priority )
 {
   return the_priority % 16;
 }
-
-#if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
-
-/**
- * This function translates the bit numbers returned by the bit scan
- * of a priority bit field into something suitable for use as
- * a major or minor component of a priority.
- */
-
-RTEMS_INLINE_ROUTINE unsigned int _Priority_Bits_index(
-  unsigned int bit_number
-)
-{
-  return bit_number;
-}
-
-#endif
 
 RTEMS_INLINE_ROUTINE void _Priority_bit_map_Initialize(
   Priority_bit_map_Control *bit_map
