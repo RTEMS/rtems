@@ -18,6 +18,7 @@
 
 #include <rtems/score/smplock.h>
 #include <rtems/score/smplockmcs.h>
+#include <rtems/score/smplockseq.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems/score/atomic.h>
 #include <rtems.h>
@@ -30,7 +31,7 @@ const char rtems_test_name[] = "SMPLOCK 1";
 
 #define CPU_COUNT 32
 
-#define TEST_COUNT 10
+#define TEST_COUNT 11
 
 typedef enum {
   INITIAL,
@@ -50,6 +51,11 @@ typedef struct {
   SMP_lock_Stats mcs_stats;
 #endif
   SMP_MCS_lock_Control mcs_lock;
+  SMP_sequence_lock_Control seq_lock;
+  char unused_space_for_cache_line_separation_0[128];
+  int a;
+  char unused_space_for_cache_line_separation_1[128];
+  int b;
 } global_context;
 
 static global_context context = {
@@ -59,7 +65,8 @@ static global_context context = {
 #if defined(RTEMS_PROFILING)
   .mcs_stats = SMP_LOCK_STATS_INITIALIZER("global MCS"),
 #endif
-  .mcs_lock = SMP_MCS_LOCK_INITIALIZER
+  .mcs_lock = SMP_MCS_LOCK_INITIALIZER,
+  .seq_lock = SMP_SEQUENCE_LOCK_INITIALIZER
 };
 
 static const char * const test_names[TEST_COUNT] = {
@@ -72,7 +79,8 @@ static const char * const test_names[TEST_COUNT] = {
   "local ticket lock with global counter",
   "local MCS lock with global counter",
   "global ticket lock with busy section",
-  "global MCS lock with busy section"
+  "global MCS lock with busy section",
+  "sequence lock"
 };
 
 static void stop_test_timer(rtems_id timer_id, void *arg)
@@ -355,6 +363,49 @@ static void test_9_body(
   ctx->test_counter[test][cpu_self] = counter;
 }
 
+static void test_10_body(
+  int test,
+  global_context *ctx,
+  SMP_barrier_State *bs,
+  unsigned int cpu_count,
+  unsigned int cpu_self
+)
+{
+  unsigned long counter = 0;
+  unsigned long seq;
+
+  if (cpu_self == 0) {
+    while (assert_state(ctx, START_TEST)) {
+      seq = _SMP_sequence_lock_Write_begin(&ctx->seq_lock);
+
+      ctx->a = counter;
+      ctx->b = counter;
+
+      _SMP_sequence_lock_Write_end(&ctx->seq_lock, seq);
+
+      ++counter;
+    }
+  } else {
+    while (assert_state(ctx, START_TEST)) {
+      unsigned long a;
+      unsigned long b;
+
+      do {
+        seq = _SMP_sequence_lock_Read_begin(&ctx->seq_lock);
+
+        a = ctx->a;
+        b = ctx->b;
+
+      } while (_SMP_sequence_lock_Read_retry(&ctx->seq_lock, seq));
+
+      ++counter;
+      rtems_test_assert(a == b);
+    }
+  }
+
+  ctx->test_counter[test][cpu_self] = counter;
+}
+
 static const test_body test_bodies[TEST_COUNT] = {
   test_0_body,
   test_1_body,
@@ -365,7 +416,8 @@ static const test_body test_bodies[TEST_COUNT] = {
   test_6_body,
   test_7_body,
   test_8_body,
-  test_9_body
+  test_9_body,
+  test_10_body
 };
 
 static void run_tests(
