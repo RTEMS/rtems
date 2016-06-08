@@ -410,16 +410,16 @@ struct _console_global_data {
 } console_global_data = {NULL, 0, 25, 80, 0, 24, 0, 0, 0, 0};
 
 typedef struct console_io {
-	void 	(*putc)	(const u_char);
-	int 	(*getc)	(void);
-	int 	(*tstc)	(void);
+	void 	(*console_io_putc)	(const u_char);
+	int 	(*console_io_getc)	(void);
+	int 	(*console_io_tstc)	(void);
 }console_io;
 
 extern console_io* curIo;
 
 void debug_putc(const u_char c)
 {
-  curIo->putc(c);
+  curIo->console_io_putc(c);
 }
 
 /* const char arg to be compatible with BSP_output_char decl. */
@@ -433,12 +433,12 @@ debug_putc_onlcr(const char c)
 
 int debug_getc(void)
 {
-  return curIo->getc();
+  return curIo->console_io_getc();
 }
 
 int debug_tstc(void)
 {
-  return curIo->tstc();
+  return curIo->console_io_tstc();
 }
 
 #define vidmem ((__io_ptr)(ptr_mem_map->isa_mem_base+0xb8000))
@@ -887,7 +887,7 @@ static int skip_atoi(const char **s)
  */
 int k_vsprintf(char *buf, const char *fmt, va_list args);
 
-void  printk(const char *fmt, ...) {
+int  printk(const char *fmt, ...) {
 	va_list args;
 	int i;
 	/* Should not be a problem with 8kB of stack */
@@ -895,9 +895,9 @@ void  printk(const char *fmt, ...) {
 
 	va_start(args, fmt);
 	i = k_vsprintf(buf, fmt, args);
-	(void) i; /* avoid set but not used warning */
 	va_end(args);
 	my_puts((u_char*)buf);
+	return i;
 }
 
 #endif
