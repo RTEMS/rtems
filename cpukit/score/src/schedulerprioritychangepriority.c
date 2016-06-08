@@ -21,16 +21,30 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
+Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_Context *context =
-    _Scheduler_priority_Get_context( scheduler );
-  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
+  Scheduler_priority_Context *context;
+  Scheduler_priority_Node    *node;
+  unsigned int                priority;
+  bool                        prepend_it;
+
+  if ( !_Thread_Is_ready( the_thread ) ) {
+    /* Nothing to do */
+    SCHEDULER_RETURN_VOID_OR_NULL;
+  }
+
+  node = _Scheduler_priority_Thread_get_node( the_thread );
+  priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+
+  if ( priority == node->Ready_queue.current_priority ) {
+    /* Nothing to do */
+    SCHEDULER_RETURN_VOID_OR_NULL;
+  }
+
+  context = _Scheduler_priority_Get_context( scheduler );
 
   _Scheduler_priority_Ready_queue_extract(
     &the_thread->Object.Node,
@@ -40,7 +54,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
 
   _Scheduler_priority_Ready_queue_update(
     &node->Ready_queue,
-    new_priority,
+    priority,
     &context->Bit_map,
     &context->Ready[ 0 ]
   );

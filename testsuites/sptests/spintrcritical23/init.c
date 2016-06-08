@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include <rtems.h>
-#include <rtems/score/schedulerpriority.h>
+#include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/threadimpl.h>
 
 const char rtems_test_name[] = "SPINTRCRITICAL 23";
@@ -30,36 +30,13 @@ const char rtems_test_name[] = "SPINTRCRITICAL 23";
 typedef struct {
   RTEMS_INTERRUPT_LOCK_MEMBER(lock)
   rtems_id task_id;
-  Thread_Control *tcb;
+  Scheduler_priority_Node *scheduler_node;
   rtems_task_priority priority_task;
   rtems_task_priority priority_interrupt;
-  uint32_t priority_generation;
-  Scheduler_priority_Node scheduler_node;
   bool done;
 } test_context;
 
 static test_context ctx_instance;
-
-static Thread_Control *get_tcb(rtems_id id)
-{
-  ISR_lock_Context lock_context;
-  Thread_Control *tcb;
-
-  tcb = _Thread_Get(id, &lock_context);
-  rtems_test_assert(tcb != NULL);
-  _ISR_lock_ISR_enable(&lock_context);
-
-  return tcb;
-}
-
-static bool scheduler_node_unchanged(const test_context *ctx)
-{
-   return memcmp(
-     &ctx->scheduler_node,
-     ctx->tcb->Scheduler.node,
-     sizeof(ctx->scheduler_node)
-   ) == 0;
-}
 
 static void change_priority(rtems_id timer, void *arg)
 {
@@ -69,8 +46,8 @@ static void change_priority(rtems_id timer, void *arg)
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
   if (
-    ctx->priority_generation != ctx->tcb->priority_generation
-      && scheduler_node_unchanged(ctx)
+    ctx->scheduler_node->Ready_queue.current_priority
+      != ctx->scheduler_node->Base.Priority.value
   ) {
     rtems_task_priority priority_interrupt;
     rtems_task_priority priority_task;
@@ -112,12 +89,6 @@ static bool test_body(void *arg)
   priority_interrupt = 1 + (priority_task + 1) % 3;
   ctx->priority_task = priority_task;
   ctx->priority_interrupt = priority_interrupt;
-  ctx->priority_generation = ctx->tcb->priority_generation;
-  memcpy(
-    &ctx->scheduler_node,
-    ctx->tcb->Scheduler.node,
-    sizeof(ctx->scheduler_node)
-  );
   rtems_interrupt_lock_release(&ctx->lock, &lock_context);
 
   sc = rtems_task_set_priority(
@@ -144,24 +115,14 @@ static bool test_body(void *arg)
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &ctx_instance;
-  rtems_status_code sc;
 
   TEST_BEGIN();
 
   rtems_interrupt_lock_initialize(&ctx->lock, "Test");
   ctx->priority_task = 1;
-
-  sc = rtems_task_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
-    ctx->priority_task,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &ctx->task_id
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  ctx->tcb = get_tcb(ctx->task_id);
+  ctx->task_id = rtems_task_self();
+  ctx->scheduler_node =
+    _Scheduler_priority_Thread_get_node(_Thread_Get_executing());
 
   interrupt_critical_section_test(test_body, ctx, change_priority);
   rtems_test_assert(ctx->done);
@@ -175,7 +136,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TASKS 1
 #define CONFIGURE_MAXIMUM_TIMERS 1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 

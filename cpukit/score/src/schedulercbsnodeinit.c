@@ -22,12 +22,13 @@
 
 void _Scheduler_CBS_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 )
 {
   Scheduler_CBS_Node *node;
 
-  _Scheduler_EDF_Node_initialize( scheduler, the_thread );
+  _Scheduler_EDF_Node_initialize( scheduler, the_thread, priority );
 
   node = _Scheduler_CBS_Thread_get_node( the_thread );
   node->cbs_server = NULL;

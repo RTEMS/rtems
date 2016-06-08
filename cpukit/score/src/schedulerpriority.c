@@ -32,3 +32,24 @@ void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler )
     scheduler->maximum_priority
   );
 }
+
+void _Scheduler_priority_Node_initialize(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Control         priority
+)
+{
+  Scheduler_priority_Context *context;
+  Scheduler_priority_Node    *node;
+
+  context = _Scheduler_priority_Get_context( scheduler );
+  node = _Scheduler_priority_Thread_get_node( the_thread );
+
+  _Scheduler_Node_do_initialize( &node->Base, the_thread, priority );
+  _Scheduler_priority_Ready_queue_update(
+    &node->Ready_queue,
+    priority,
+    &context->Bit_map,
+    &context->Ready[ 0 ]
+  );
+}

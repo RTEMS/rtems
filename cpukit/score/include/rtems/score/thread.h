@@ -363,14 +363,6 @@ typedef struct {
   Priority_Control         real_priority;
 
   /**
-   * @brief Generation of the current priority value.
-   *
-   * It is used in _Thread_Change_priority() to serialize the update of
-   * priority related data structures.
-   */
-  uint32_t                 priority_generation;
-
-  /**
    * @brief Hints if a priority restore is necessary once the resource count
    * changes from one to zero.
    *
@@ -742,14 +734,6 @@ struct _Thread_Control {
    * _Thread_Change_priority().
    */
   Priority_Control         real_priority;
-
-  /**
-   * @brief Generation of the current priority value.
-   *
-   * It is used in _Thread_Change_priority() to serialize the update of
-   * priority related data structures.
-   */
-  uint32_t                 priority_generation;
 
   /**
    * @brief Hints if a priority restore is necessary once the resource count

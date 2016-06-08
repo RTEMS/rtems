@@ -253,6 +253,11 @@ void _Thread_Cancel(
  */
 void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing );
 
+RTEMS_INLINE_ROUTINE bool _Thread_Is_ready( const Thread_Control *the_thread )
+{
+  return _States_Is_ready( the_thread->current_state );
+}
+
 States_Control _Thread_Clear_state_locked(
   Thread_Control *the_thread,
   States_Control  state

@@ -387,11 +387,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
 
 static inline void _Scheduler_SMP_Node_initialize(
   Scheduler_SMP_Node *node,
-  Thread_Control     *thread
+  Thread_Control     *thread,
+  Priority_Control    priority
 )
 {
-  _Scheduler_Node_do_initialize( &node->Base, thread );
+  _Scheduler_Node_do_initialize( &node->Base, thread, priority );
   node->state = SCHEDULER_SMP_NODE_BLOCKED;
+  node->priority = priority;
 }
 
 static inline void _Scheduler_SMP_Node_update_priority(
@@ -889,23 +891,38 @@ static inline void _Scheduler_SMP_Block(
 }
 
 static inline Thread_Control *_Scheduler_SMP_Unblock(
-  Scheduler_Context             *context,
-  Thread_Control                *thread,
-  Scheduler_SMP_Enqueue          enqueue_fifo
+  Scheduler_Context     *context,
+  Thread_Control        *thread,
+  Scheduler_SMP_Update   update,
+  Scheduler_SMP_Enqueue  enqueue_fifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
-  bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
-  bool unblock = _Scheduler_Unblock_node(
+  Scheduler_SMP_Node *node;
+  bool                is_scheduled;
+  bool                unblock;
+  Thread_Control     *needs_help;
+
+  node = _Scheduler_SMP_Thread_get_node( thread );
+  is_scheduled = ( node->state == SCHEDULER_SMP_NODE_SCHEDULED );
+  unblock = _Scheduler_Unblock_node(
     context,
     thread,
     &node->Base,
     is_scheduled,
     _Scheduler_SMP_Release_idle_thread
   );
-  Thread_Control *needs_help;
 
   if ( unblock ) {
+    Priority_Control new_priority;
+    bool             prepend_it;
+
+    new_priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+    (void) prepend_it;
+
+    if ( new_priority != node->priority ) {
+      ( *update )( context, &node->Base, new_priority );
+    }
+
     if ( node->state == SCHEDULER_SMP_NODE_BLOCKED ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
 
@@ -931,11 +948,9 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
   return needs_help;
 }
 
-static inline Thread_Control *_Scheduler_SMP_Change_priority(
+static inline Thread_Control *_Scheduler_SMP_Update_priority(
   Scheduler_Context               *context,
   Thread_Control                  *thread,
-  Priority_Control                 new_priority,
-  bool                             prepend_it,
   Scheduler_SMP_Extract            extract_from_ready,
   Scheduler_SMP_Update             update,
   Scheduler_SMP_Enqueue            enqueue_fifo,
@@ -944,8 +959,18 @@ static inline Thread_Control *_Scheduler_SMP_Change_priority(
   Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_lifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( thread );
-  Thread_Control *needs_help;
+  Scheduler_SMP_Node *node;
+  Thread_Control     *needs_help;
+  Priority_Control    new_priority;
+  bool                prepend_it;
+
+  node = _Scheduler_SMP_Thread_get_own_node( thread );
+  new_priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+
+  if ( new_priority == node->priority ) {
+    /* Nothing to do */
+    return NULL;
+  }
 
   if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( &node->Base );

@@ -200,10 +200,8 @@ bool _Thread_Initialize(
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
 
-  _Scheduler_Node_initialize( scheduler, the_thread );
+  _Scheduler_Node_initialize( scheduler, the_thread, priority );
   scheduler_node_initialized = true;
-
-  _Scheduler_Update_priority( the_thread, priority );
 
   /* POSIX Keys */
   _RBTree_Initialize_empty( &the_thread->Keys.Key_value_pairs );

@@ -173,24 +173,27 @@ void _Scheduler_strong_APA_Initialize( const Scheduler_Control *scheduler )
 
 void _Scheduler_strong_APA_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-)
-{
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( the_thread );
-
-  _Scheduler_SMP_Node_initialize( node, the_thread );
-}
-
-void _Scheduler_strong_APA_Update_priority(
-  const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  Priority_Control         new_priority
+  Priority_Control         priority
 )
 {
-  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  Scheduler_Node *node = _Scheduler_Thread_get_node( the_thread );
+  Scheduler_Context            *context;
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
 
-  _Scheduler_strong_APA_Do_update( context, node, new_priority );
+  context = _Scheduler_Get_context( scheduler );
+  self = _Scheduler_strong_APA_Get_self( context );
+  node = _Scheduler_strong_APA_Node_downcast(
+    _Scheduler_Thread_get_own_node( the_thread )
+  );
+
+  _Scheduler_SMP_Node_initialize( &node->Base, the_thread, priority );
+  _Scheduler_priority_Ready_queue_update(
+    &node->Ready_queue,
+    priority,
+    &self->Bit_map,
+    &self->Ready[ 0 ]
+  );
 }
 
 static Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
@@ -339,24 +342,21 @@ Thread_Control *_Scheduler_strong_APA_Unblock(
   return _Scheduler_SMP_Unblock(
     context,
     the_thread,
+    _Scheduler_strong_APA_Do_update,
     _Scheduler_strong_APA_Enqueue_fifo
   );
 }
 
-Thread_Control *_Scheduler_strong_APA_Change_priority(
+Thread_Control *_Scheduler_strong_APA_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  return _Scheduler_SMP_Change_priority(
+  return _Scheduler_SMP_Update_priority(
     context,
     the_thread,
-    new_priority,
-    prepend_it,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Do_update,
     _Scheduler_strong_APA_Enqueue_fifo,

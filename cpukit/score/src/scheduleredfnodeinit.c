@@ -22,14 +22,15 @@
 
 void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 )
 {
   Scheduler_EDF_Node *node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   (void) scheduler;
 
-  _Scheduler_Node_do_initialize( &node->Base, the_thread );
+  _Scheduler_Node_do_initialize( &node->Base, the_thread, priority );
 
   node->thread = the_thread;
 }

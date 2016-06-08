@@ -66,13 +66,12 @@ typedef struct {
     _Scheduler_simple_SMP_Yield, \
     _Scheduler_simple_SMP_Block, \
     _Scheduler_simple_SMP_Unblock, \
-    _Scheduler_simple_SMP_Change_priority, \
+    _Scheduler_simple_SMP_Update_priority, \
     _Scheduler_default_Map_priority, \
     _Scheduler_default_Unmap_priority, \
     _Scheduler_simple_SMP_Ask_for_help, \
     _Scheduler_simple_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
-    _Scheduler_simple_SMP_Update_priority, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
     _Scheduler_SMP_Start_idle \
@@ -83,7 +82,8 @@ void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler );
 
 void _Scheduler_simple_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 );
 
 void _Scheduler_simple_SMP_Block(
@@ -96,23 +96,15 @@ Thread_Control *_Scheduler_simple_SMP_Unblock(
   Thread_Control *thread
 );
 
-Thread_Control *_Scheduler_simple_SMP_Change_priority(
+Thread_Control *_Scheduler_simple_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 );
 
 Thread_Control *_Scheduler_simple_SMP_Ask_for_help(
   const Scheduler_Control *scheduler,
   Thread_Control          *offers_help,
   Thread_Control          *needs_help
-);
-
-void _Scheduler_simple_SMP_Update_priority(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *thread,
-  Priority_Control         new_priority
 );
 
 Thread_Control *_Scheduler_simple_SMP_Yield(

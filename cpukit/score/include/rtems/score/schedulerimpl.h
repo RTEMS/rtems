@@ -341,12 +341,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 /**
  * @brief Unblocks a thread with respect to the scheduler.
  *
- * This routine adds @a the_thread to the scheduling decision for
- * the scheduler.  The primary task is to add the thread to the
- * ready queue per the schedulering policy and update any appropriate
- * scheduling variables, for example the heir thread.
+ * This operation must fetch the latest thread priority value for this
+ * scheduler instance and update its internal state if necessary.
  *
  * @param[in] the_thread The thread.
+ *
+ * @see _Scheduler_Node_get_priority().
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
@@ -374,24 +374,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 /**
  * @brief Propagates a priority change of a thread to the scheduler.
  *
- * The caller must ensure that the thread is in the ready state.  The caller
- * must ensure that the priority value actually changed and is not equal to the
- * current priority value.
+ * On uni-processor configurations, this operation must evaluate the thread
+ * state.  In case the thread is not ready, then the priority update should be
+ * deferred to the next scheduler unblock operation.
  *
  * The operation must update the heir and thread dispatch necessary variables
  * in case the set of scheduled threads changes.
  *
  * @param[in] the_thread The thread changing its priority.
- * @param[in] new_priority The new thread priority.
- * @param[in] prepend_it In case this is true, then enqueue the thread as the
- * first of its priority group, otherwise enqueue the thread as the last of its
- * priority group.
+ *
+ * @see _Scheduler_Node_get_priority().
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
-)
+RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread )
 {
   const Scheduler_Control *own_scheduler;
   ISR_lock_Context         lock_context;
@@ -405,12 +399,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
 #if defined(RTEMS_SMP)
   needs_help =
 #endif
-  ( *own_scheduler->Operations.change_priority )(
-    own_scheduler,
-    the_thread,
-    new_priority,
-    prepend_it
-  );
+  ( *own_scheduler->Operations.update_priority )( own_scheduler, the_thread );
 
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );
@@ -466,13 +455,19 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Unmap_priority(
  *
  * @param[in] scheduler The scheduler instance.
  * @param[in] the_thread The thread containing the scheduler node.
+ * @param[in] priority The thread priority.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 )
 {
-  return ( *scheduler->Operations.node_initialize )( scheduler, the_thread );
+  ( *scheduler->Operations.node_initialize )(
+    scheduler,
+    the_thread,
+    priority
+  );
 }
 
 /**
@@ -490,32 +485,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
 )
 {
   ( *scheduler->Operations.node_destroy )( scheduler, the_thread );
-}
-
-/**
- * @brief Updates the scheduler about a priority change of a not ready thread.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority of the thread.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority
-)
-{
-  const Scheduler_Control *scheduler;
-  ISR_lock_Context         lock_context;
-
-  scheduler = _Scheduler_Get( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-
-  ( *scheduler->Operations.update_priority )(
-    scheduler,
-    the_thread,
-    new_priority
-  );
-
-  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -639,8 +608,11 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Set(
   _Scheduler_Node_destroy( current_scheduler, the_thread );
   the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
-  _Scheduler_Node_initialize( scheduler, the_thread );
-  _Scheduler_Update_priority( the_thread, the_thread->current_priority );
+  _Scheduler_Node_initialize(
+    scheduler,
+    the_thread,
+    the_thread->current_priority
+  );
 
   if ( _States_Is_ready( current_state ) ) {
     _Scheduler_Unblock( the_thread );
@@ -827,19 +799,70 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
-  Scheduler_Node *node,
-  Thread_Control *the_thread
+  Scheduler_Node   *node,
+  Thread_Control   *the_thread,
+  Priority_Control  priority
 )
 {
+  node->Priority.value = priority;
+  node->Priority.prepend_it = false;
+
 #if defined(RTEMS_SMP)
   node->user = the_thread;
   node->help_state = SCHEDULER_HELP_YOURSELF;
   node->owner = the_thread;
   node->idle = NULL;
   node->accepts_help = the_thread;
+  _SMP_sequence_lock_Initialize( &node->Priority.Lock );
 #else
-  (void) node;
   (void) the_thread;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
+  Scheduler_Node *node,
+  bool           *prepend_it_p
+)
+{
+  Priority_Control priority;
+  bool             prepend_it;
+
+#if defined(RTEMS_SMP)
+  unsigned int     seq;
+
+  do {
+    seq = _SMP_sequence_lock_Read_begin( &node->Priority.Lock );
+#endif
+
+    priority = node->Priority.value;
+    prepend_it = node->Priority.prepend_it;
+
+#if defined(RTEMS_SMP)
+  } while ( _SMP_sequence_lock_Read_retry( &node->Priority.Lock, seq ) );
+#endif
+
+  *prepend_it_p = prepend_it;
+
+  return priority;
+}
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
+  Scheduler_Node   *node,
+  Priority_Control  new_priority,
+  bool              prepend_it
+)
+{
+#if defined(RTEMS_SMP)
+  unsigned int seq;
+
+  seq = _SMP_sequence_lock_Write_begin( &node->Priority.Lock );
+#endif
+
+  node->Priority.value = new_priority;
+  node->Priority.prepend_it = prepend_it;
+
+#if defined(RTEMS_SMP)
+  _SMP_sequence_lock_Write_end( &node->Priority.Lock, seq );
 #endif
 }
 

@@ -47,13 +47,12 @@ extern "C" {
     _Scheduler_EDF_Yield,            /* yield entry point */ \
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_EDF_Unblock,          /* unblock entry point */ \
-    _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
+    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
     _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
     _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
     SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
-    _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
     _Scheduler_EDF_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
@@ -156,26 +155,12 @@ void _Scheduler_EDF_Schedule(
  *
  *  @param[in] scheduler The scheduler instance.
  *  @param[in] the_thread being initialized.
+ *  @param[in] priority The thread priority.
  */
 void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
-);
-
-/**
- *  @brief Updates position in the ready queue of @a the_thread.
- *
- *  This routine updates position in the ready queue of @a the_thread.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread will have its scheduler specific information
- *             structure updated.
- *  @param[in] new_priority is the desired new priority.
- */
-void _Scheduler_EDF_Update_priority(
-  const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  Priority_Control         new_priority
+  Priority_Control         priority
 );
 
 /**
@@ -193,11 +178,9 @@ Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
   Thread_Control          *the_thread
 );
 
-Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
+Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 );
 
 Priority_Control _Scheduler_EDF_Map_priority(

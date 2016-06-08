@@ -234,7 +234,6 @@ libscore_a_SOURCES += src/schedulerdefaultreleasejob.c
 libscore_a_SOURCES += src/schedulerdefaultschedule.c
 libscore_a_SOURCES += src/schedulerdefaultstartidle.c
 libscore_a_SOURCES += src/schedulerdefaulttick.c
-libscore_a_SOURCES += src/schedulerdefaultupdate.c
 
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
@@ -242,7 +241,6 @@ libscore_a_SOURCES += src/schedulerpriority.c \
     src/schedulerprioritychangepriority.c \
     src/schedulerpriorityschedule.c \
     src/schedulerpriorityunblock.c \
-    src/schedulerpriorityupdate.c \
     src/schedulerpriorityyield.c
 
 ## SCHEDULERSIMPLE_C_FILES
@@ -261,7 +259,6 @@ libscore_a_SOURCES += src/scheduleredf.c \
     src/scheduleredfreleasejob.c \
     src/scheduleredfschedule.c \
     src/scheduleredfunblock.c \
-    src/scheduleredfupdate.c \
     src/scheduleredfyield.c
 
 ## SCHEDULERCBS_C_FILES

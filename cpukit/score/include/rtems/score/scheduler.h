@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_SCHEDULER_H
 
 #include <rtems/score/priority.h>
+#include <rtems/score/smplockseq.h>
 #include <rtems/score/thread.h>
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
   #include <sys/cpuset.h>
@@ -83,12 +84,10 @@ typedef struct {
     Thread_Control *
   );
 
-  /** @see _Scheduler_Change_priority() */
-  Scheduler_Void_or_thread ( *change_priority )(
+  /** @see _Scheduler_Update_priority() */
+  Scheduler_Void_or_thread ( *update_priority )(
     const Scheduler_Control *,
-    Thread_Control *,
-    Priority_Control,
-    bool
+    Thread_Control *
   );
 
   /** @see _Scheduler_Map_priority() */
@@ -129,17 +128,14 @@ typedef struct {
 #endif
 
   /** @see _Scheduler_Node_initialize() */
-  void ( *node_initialize )( const Scheduler_Control *, Thread_Control * );
-
-  /** @see _Scheduler_Node_destroy() */
-  void ( *node_destroy )( const Scheduler_Control *, Thread_Control * );
-
-  /** @see _Scheduler_Update_priority() */
-  void ( *update_priority )(
+  void ( *node_initialize )(
     const Scheduler_Control *,
     Thread_Control *,
     Priority_Control
   );
+
+  /** @see _Scheduler_Node_destroy() */
+  void ( *node_destroy )( const Scheduler_Control *, Thread_Control * );
 
   /** @see _Scheduler_Release_job() */
   void ( *release_job ) (
@@ -338,6 +334,41 @@ struct Scheduler_Node {
    */
   Thread_Control *accepts_help;
 #endif
+
+  /**
+   * @brief The thread priority information used by the scheduler.
+   *
+   * The thread priority is manifest in two independent areas.  One area is the
+   * user visible thread priority along with a potential thread queue.  The
+   * other is the scheduler.  During a thread priority change, the user visible
+   * thread priority and the thread queue are first updated and the thread
+   * priority value here is changed.  Once this is done the scheduler is
+   * notified via the update priority operation, so that it can update its
+   * internal state and honour a new thread priority value.
+   */
+  struct {
+    /**
+     * @brief The thread priority value of this scheduler node.
+     *
+     * The producer of this value is _Thread_Change_priority().  The consumer
+     * is the scheduler via the unblock and update priority operations.
+     */
+    Priority_Control value;
+
+#if defined(RTEMS_SMP)
+    /**
+     * @brief Sequence lock to synchronize priority value updates.
+     */
+    SMP_sequence_lock_Control Lock;
+#endif
+
+    /**
+     * @brief In case a priority update is necessary and this is true, then
+     * enqueue the thread as the first of its priority group, otherwise enqueue
+     * the thread as the last of its priority group.
+     */
+    bool prepend_it;
+  } Priority;
 };
 
 /**
@@ -464,14 +495,16 @@ void _Scheduler_default_Schedule(
 );
 
 /**
- * @brief Does nothing.
+ * @brief Performs the scheduler base node initialization.
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
+ * @param[in] priority The thread priority.
  */
 void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 );
 
 /**
@@ -483,19 +516,6 @@ void _Scheduler_default_Node_initialize(
 void _Scheduler_default_Node_destroy(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
-);
-
-/**
- * @brief Does nothing.
- *
- * @param[in] scheduler Unused.
- * @param[in] the_thread Unused.
- * @param[in] new_priority Unused.
- */
-void _Scheduler_default_Update_priority(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority
 );
 
 /**

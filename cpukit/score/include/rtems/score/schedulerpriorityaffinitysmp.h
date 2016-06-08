@@ -54,13 +54,12 @@ extern "C" {
     _Scheduler_priority_SMP_Yield, \
     _Scheduler_priority_affinity_SMP_Block, \
     _Scheduler_priority_affinity_SMP_Unblock, \
-    _Scheduler_priority_affinity_SMP_Change_priority, \
+    _Scheduler_priority_affinity_SMP_Update_priority, \
     _Scheduler_default_Map_priority, \
     _Scheduler_default_Unmap_priority, \
     _Scheduler_priority_affinity_SMP_Ask_for_help, \
     _Scheduler_priority_affinity_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
-    _Scheduler_priority_SMP_Update_priority, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
     _Scheduler_SMP_Start_idle, \
@@ -76,10 +75,12 @@ extern "C" {
  *  @param[in] scheduler points to the scheduler specific information.
  *  @param[in] thread is the thread the scheduler is allocating
  *             management memory for.
+ *  @param[in] priority is the thread priority.
  */
 void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 );
 
 /**
@@ -127,18 +128,14 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
 );
 
 /**
- * @brief Change priority for the priority affinity SMP scheduler.
+ * @brief Update priority for the priority affinity SMP scheduler.
  *
  * @param[in] scheduler The scheduler of the thread.
  * @param[in] the_thread The associated thread.
- * @param[in] new_priority The new priority for the thread.
- * @param[in] prepend_it Append or prepend the thread to its priority FIFO.
  */
-Thread_Control *_Scheduler_priority_affinity_SMP_Change_priority(
+Thread_Control *_Scheduler_priority_affinity_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 );
 
 Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help(

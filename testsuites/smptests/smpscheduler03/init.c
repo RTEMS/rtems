@@ -187,7 +187,7 @@ static void test_change_priority(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static Thread_Control *change_priority_op(
+static Thread_Control *update_priority_op(
   Thread_Control *thread,
   Priority_Control new_priority,
   bool prepend_it
@@ -197,18 +197,17 @@ static Thread_Control *change_priority_op(
   ISR_lock_Context state_lock_context;
   ISR_lock_Context scheduler_lock_context;
   Thread_Control *needs_help;
+  Scheduler_Node *node;
+
+  thread->current_priority = new_priority;
+  node = _Scheduler_Thread_get_node(thread);
+  _Scheduler_Node_set_priority(node, new_priority, prepend_it);
 
   _Thread_State_acquire( thread, &state_lock_context );
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  thread->current_priority = new_priority;
-  needs_help = (*scheduler->Operations.change_priority)(
-    scheduler,
-    thread,
-    new_priority,
-    prepend_it
-  );
+  needs_help = (*scheduler->Operations.update_priority)( scheduler, thread);
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
@@ -216,7 +215,7 @@ static Thread_Control *change_priority_op(
   return needs_help;
 }
 
-static void test_case_change_priority_op(
+static void test_case_update_priority_op(
   Thread_Control *executing,
   Scheduler_SMP_Node *executing_node,
   Thread_Control *other,
@@ -244,7 +243,7 @@ static void test_case_change_priority_op(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  needs_help = change_priority_op(executing, prio, prepend_it);
+  needs_help = update_priority_op(executing, prio, prepend_it);
   rtems_test_assert(executing_node->state == new_state);
 
   if (start_state != new_state) {
@@ -269,7 +268,7 @@ static void test_case_change_priority_op(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-static void test_change_priority_op(void)
+static void test_update_priority_op(void)
 {
   rtems_status_code sc;
   rtems_id task_id;
@@ -289,7 +288,7 @@ static void test_change_priority_op(void)
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
       for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
-        test_case_change_priority_op(
+        test_case_update_priority_op(
           executing,
           executing_node,
           other,
@@ -555,7 +554,7 @@ static void test_unblock_op(void)
 static void tests(void)
 {
   test_change_priority();
-  test_change_priority_op();
+  test_update_priority_op();
   test_yield_op();
   test_unblock_op();
 }

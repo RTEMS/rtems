@@ -34,11 +34,13 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   Scheduler_CBS_Node    *node;
   Scheduler_CBS_Server  *serv_info;
   Priority_Control       priority;
+  bool                   prepend_it;
 
   context = _Scheduler_EDF_Get_context( scheduler );
   node = _Scheduler_CBS_Thread_get_node( the_thread );
   serv_info = node->cbs_server;
-  priority = node->Base.current_priority;
+  priority = _Scheduler_Node_get_priority( &node->Base.Base, &prepend_it );
+  (void) prepend_it;
 
   /*
    * Late unblock rule for deadline-driven tasks. The remaining time to

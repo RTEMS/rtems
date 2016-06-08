@@ -21,15 +21,23 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_simple_Change_priority(
+Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *the_thread
 )
 {
-  Scheduler_simple_Context *context =
-    _Scheduler_simple_Get_context( scheduler );
+  Scheduler_simple_Context *context;
+  Scheduler_Node           *node;
+  bool                      prepend_it;
+
+  if ( !_Thread_Is_ready( the_thread ) ) {
+    /* Nothing to do */
+    SCHEDULER_RETURN_VOID_OR_NULL;
+  }
+
+  context = _Scheduler_simple_Get_context( scheduler );
+  node = _Scheduler_Thread_get_node( the_thread );
+  _Scheduler_Node_get_priority( node, &prepend_it );
 
   _Scheduler_simple_Extract( scheduler, the_thread );
 

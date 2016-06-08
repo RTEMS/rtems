@@ -27,9 +27,24 @@ Scheduler_Void_or_thread _Scheduler_priority_Unblock (
   Thread_Control          *the_thread
 )
 {
-  Scheduler_priority_Context *context =
-    _Scheduler_priority_Get_context( scheduler );
-  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
+  Scheduler_priority_Context *context;
+  Scheduler_priority_Node    *node;
+  unsigned int                priority;
+  bool                        prepend_it;
+
+  context = _Scheduler_priority_Get_context( scheduler );
+  node = _Scheduler_priority_Thread_get_node( the_thread );
+  priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+  (void) prepend_it;
+
+  if ( priority != node->Ready_queue.current_priority ) {
+    _Scheduler_priority_Ready_queue_update(
+      &node->Ready_queue,
+      priority,
+      &context->Bit_map,
+      &context->Ready[ 0 ]
+    );
+  }
 
   _Scheduler_priority_Ready_queue_enqueue(
     &the_thread->Object.Node,
@@ -51,11 +66,8 @@ Scheduler_Void_or_thread _Scheduler_priority_Unblock (
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
-    _Scheduler_Update_heir(
-      the_thread,
-      the_thread->current_priority == PRIORITY_PSEUDO_ISR
-    );
+  if ( priority < _Thread_Heir->current_priority ) {
+    _Scheduler_Update_heir( the_thread, priority == PRIORITY_PSEUDO_ISR );
   }
 
   SCHEDULER_RETURN_VOID_OR_NULL;

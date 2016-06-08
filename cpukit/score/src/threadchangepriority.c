@@ -50,11 +50,12 @@ void _Thread_Change_priority(
    *  we are not REALLY changing priority.
    */
   if ( ( *filter )( the_thread, &new_priority, arg ) ) {
-    uint32_t my_generation;
+    Scheduler_Node *own_node;
 
-    my_generation = the_thread->priority_generation + 1;
+    own_node = _Scheduler_Thread_get_own_node( the_thread );
+    _Scheduler_Node_set_priority( own_node, new_priority, prepend_it );
+
     the_thread->current_priority = new_priority;
-    the_thread->priority_generation = my_generation;
 
     ( *the_thread->Wait.operations->priority_change )(
       the_thread,
@@ -65,19 +66,7 @@ void _Thread_Change_priority(
     _Thread_Lock_release( lock, &lock_context );
 
     _Thread_State_acquire( the_thread, &lock_context );
-
-    if ( the_thread->priority_generation == my_generation ) {
-      if ( _States_Is_ready( the_thread->current_state ) ) {
-        _Scheduler_Change_priority(
-          the_thread,
-          new_priority,
-          prepend_it
-        );
-      } else {
-        _Scheduler_Update_priority( the_thread, new_priority );
-      }
-    }
-
+    _Scheduler_Update_priority( the_thread );
     _Thread_State_release( the_thread, &lock_context );
   } else {
     _Thread_Lock_release( lock, &lock_context );

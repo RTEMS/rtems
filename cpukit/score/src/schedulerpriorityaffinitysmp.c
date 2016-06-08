@@ -96,15 +96,14 @@ _Scheduler_priority_affinity_SMP_Node_downcast(
  */
 void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread
+  Thread_Control          *the_thread,
+  Priority_Control         priority
 )
 {
   Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Thread_get_own_node( thread );
+    _Scheduler_priority_affinity_SMP_Thread_get_own_node( the_thread );
 
-  (void) scheduler;
-
-  _Scheduler_SMP_Node_initialize( &node->Base.Base, thread );
+  _Scheduler_priority_SMP_Node_initialize( scheduler, the_thread, priority );
 
   /*
    *  All we add is affinity information to the basic SMP node.
@@ -409,6 +408,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   needs_help = _Scheduler_SMP_Unblock(
     context,
     thread,
+    _Scheduler_priority_SMP_Do_update,
     _Scheduler_priority_affinity_SMP_Enqueue_fifo
   );
 
@@ -535,21 +535,17 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_scheduled_fifo(
 /*
  * This is the public scheduler specific Change Priority operation.
  */
-Thread_Control *_Scheduler_priority_affinity_SMP_Change_priority(
+Thread_Control *_Scheduler_priority_affinity_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread,
-  Priority_Control         new_priority,
-  bool                     prepend_it
+  Thread_Control          *thread
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
   Thread_Control    *displaced;
 
-  displaced = _Scheduler_SMP_Change_priority(
+  displaced = _Scheduler_SMP_Update_priority(
     context,
     thread,
-    new_priority,
-    prepend_it,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Do_update,
     _Scheduler_priority_affinity_SMP_Enqueue_fifo,
