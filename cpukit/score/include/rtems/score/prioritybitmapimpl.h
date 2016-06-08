@@ -40,39 +40,36 @@ extern "C" {
 extern const unsigned char _Bitfield_Leading_zeros[256];
 
 /**
- *  @brief Gets the @a _bit_number of the first bit set in the specified value.
+ * @brief Returns the bit number of the first bit set in the specified value.
  *
- *  This routine returns the @a _bit_number of the first bit set
- *  in the specified value.  The correspondence between @a _bit_number
- *  and actual bit position is processor dependent.  The search for
- *  the first bit set may run from most to least significant bit
- *  or vice-versa.
+ * The correspondence between the bit number and actual bit position is CPU
+ * architecture dependent.  The search for the first bit set may run from most
+ * to least significant bit or vice-versa.
  *
- *  @param[in] _value is the value to bit scan.
- *  @param[in] _bit_number is the position of the first bit set.
+ * @param value The value to bit scan.
  *
- *  @note This routine is used when the executing thread is removed
- *  from the ready state and, as a result, its performance has a
- *  significant impact on the performance of the executive as a whole.
+ * @return The bit number of the first bit set.
  *
- *  @note This routine must be a macro because if a CPU specific version
- *  is used it will most likely use inline assembly.
+ * @see _Priority_Bits_index() and _Priority_Mask().
  */
+RTEMS_INLINE_ROUTINE unsigned int _Bitfield_Find_first_bit(
+  unsigned int value
+)
+{
+  unsigned int bit_number;
+
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
-#define _Bitfield_Find_first_bit( _value, _bit_number ) \
-        _CPU_Bitfield_Find_first_bit( _value, _bit_number )
+  _CPU_Bitfield_Find_first_bit( value, bit_number );
 #else
-#define _Bitfield_Find_first_bit( _value, _bit_number ) \
-  { \
-    unsigned int __value = (_value); \
-    const unsigned char *__p = _Bitfield_Leading_zeros; \
-    \
-    if ( __value < 0x100 ) \
-      (_bit_number) = (Priority_bit_map_Word)( __p[ __value ] + 8 );  \
-    else \
-      (_bit_number) = (Priority_bit_map_Word)( __p[ __value >> 8 ] ); \
+  if ( value < 0x100 ) {
+    bit_number = _Bitfield_Leading_zeros[ value ] + 8;
+  } else { \
+    bit_number = _Bitfield_Leading_zeros[ value >> 8 ];
   }
 #endif
+
+  return bit_number;
+}
 
 /**
  * @brief Returns the priority bit mask for the specified major or minor bit
@@ -167,14 +164,8 @@ RTEMS_INLINE_ROUTINE unsigned int _Priority_bit_map_Get_highest(
   unsigned int minor;
   unsigned int major;
 
-  /* Avoid problems with some inline ASM statements */
-  unsigned int tmp;
-
-  tmp = bit_map->major_bit_map;
-  _Bitfield_Find_first_bit( tmp, major );
-
-  tmp = bit_map->bit_map[ major ];
-  _Bitfield_Find_first_bit( tmp, minor );
+  major = _Bitfield_Find_first_bit( bit_map->major_bit_map );
+  minor = _Bitfield_Find_first_bit( bit_map->bit_map[ major ] );
 
   return (_Priority_Bits_index( major ) << 4) +
           _Priority_Bits_index( minor );
