@@ -141,8 +141,8 @@ typedef struct {
 typedef struct {
 	uint32_t      TxDataSize;     /* Tx buffer size */
 	uint32_t      RxDataSize;     /* Rx buffer size */
-	uint32_t      *pDataTx;       /* Tx buffer */
-	uint32_t      *pDataRx;       /* Rx buffer */
+	const void    *pDataTx;       /* Tx buffer */
+	void          *pDataRx;       /* Rx buffer */
 } QspiBuffer_t;
 
 

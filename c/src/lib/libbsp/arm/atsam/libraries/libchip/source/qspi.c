@@ -744,7 +744,7 @@ QspidStatus_t QSPI_ReadWriteMem(Qspid_t *pQspid, Access_t const ReadWrite)
 {
 	QspidStatus_t Status = QSPI_UNKNOWN_ERROR;
 	QspiInstFrame_t *const pFrame = pQspid->pQspiFrame;
-	uint32_t *pQspiMem = (uint32_t *)(QSPIMEM_ADDR | pFrame->Addr);
+	void *pQspiMem = (void *)(QSPIMEM_ADDR | pFrame->Addr);
 	QspiBuffer_t    pBuffer     =  pQspid->qspiBuffer;
 
 	assert(((ReadWrite > CmdAccess)
