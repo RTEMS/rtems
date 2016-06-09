@@ -92,6 +92,15 @@ void _Thread_queue_Enqueue_critical(
     );
   }
 
+  /*
+   * At this point thread dispatching is disabled, however, we already released
+   * the thread queue lock.  Thus, interrupts or threads on other processors
+   * may already changed our state with respect to the thread queue object.
+   * The request could be satisfied or timed out.  This situation is indicated
+   * by the thread wait flags.  Other parties must not modify our thread state
+   * as long as we are in the THREAD_QUEUE_INTEND_TO_BLOCK thread wait state,
+   * thus we have to cancel the blocking operation ourself if necessary.
+   */
   success = _Thread_Wait_flags_try_change(
     the_thread,
     THREAD_QUEUE_INTEND_TO_BLOCK,
