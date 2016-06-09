@@ -402,44 +402,40 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     { RTEMS_FILESYSTEM_TYPE_DEVFS, devFS_initialize }
 #endif
 
-#ifdef RTEMS_NETWORKING
-  /**
-   * FTPFS
-   */
-  #if !defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS) && \
-      defined(CONFIGURE_FILESYSTEM_FTPFS)
-    #include <rtems/ftpfs.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS \
-      { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize }
-  #endif
+/**
+ * FTPFS
+ */
+#if !defined(CONFIGURE_FILESYSTEM_ENTRY_FTPFS) && \
+    defined(CONFIGURE_FILESYSTEM_FTPFS)
+  #include <rtems/ftpfs.h>
+  #define CONFIGURE_FILESYSTEM_ENTRY_FTPFS \
+    { RTEMS_FILESYSTEM_TYPE_FTPFS, rtems_ftpfs_initialize }
+#endif
 
-  /**
-   * TFTPFS
-   */
-  #if !defined(CONFIGURE_FILESYSTEM_ENTRY_TFTPFS) && \
-      defined(CONFIGURE_FILESYSTEM_TFTPFS)
-    #include <rtems/tftp.h>
-    #define CONFIGURE_FILESYSTEM_ENTRY_TFTPFS \
-      { RTEMS_FILESYSTEM_TYPE_TFTPFS, rtems_tftpfs_initialize }
-  #endif
+/**
+ * TFTPFS
+ */
+#if !defined(CONFIGURE_FILESYSTEM_ENTRY_TFTPFS) && \
+    defined(CONFIGURE_FILESYSTEM_TFTPFS)
+  #include <rtems/tftp.h>
+  #define CONFIGURE_FILESYSTEM_ENTRY_TFTPFS \
+    { RTEMS_FILESYSTEM_TYPE_TFTPFS, rtems_tftpfs_initialize }
+#endif
 
-  /**
-   * NFS
-   */
-  #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
-      defined(CONFIGURE_FILESYSTEM_NFS)
-    #include <librtemsNfs.h>
-    #if !defined(CONFIGURE_MAXIMUM_NFS_MOUNTS)
-      #define CONFIGURE_MAXIMUM_NFS_MOUNTS 1
-    #endif
-    #define CONFIGURE_FILESYSTEM_ENTRY_NFS \
-      { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfs_initialize }
-    #define CONFIGURE_SEMAPHORES_FOR_NFS ((CONFIGURE_MAXIMUM_NFS_MOUNTS * 2) + 1)
-  #else
-    #define CONFIGURE_SEMAPHORES_FOR_NFS 0
+/**
+ * NFS
+ */
+#if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
+    defined(CONFIGURE_FILESYSTEM_NFS)
+  #include <librtemsNfs.h>
+  #if !defined(CONFIGURE_MAXIMUM_NFS_MOUNTS)
+    #define CONFIGURE_MAXIMUM_NFS_MOUNTS 1
   #endif
+  #define CONFIGURE_FILESYSTEM_ENTRY_NFS \
+    { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfs_initialize }
+  #define CONFIGURE_SEMAPHORES_FOR_NFS ((CONFIGURE_MAXIMUM_NFS_MOUNTS * 2) + 1)
 #else
-    #define CONFIGURE_SEMAPHORES_FOR_NFS 0
+  #define CONFIGURE_SEMAPHORES_FOR_NFS 0
 #endif
 
 /**
