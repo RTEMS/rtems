@@ -91,6 +91,58 @@ _Thread_queue_Context_set_expected_level(
 }
 
 /**
+ * @brief Sets an indefinite timeout interval in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ * @param timeout The new timeout.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_no_timeout(
+  Thread_queue_Context *queue_context
+)
+{
+  queue_context->timeout_discipline = WATCHDOG_NO_TIMEOUT;
+}
+
+/**
+ * @brief Sets a relative timeout in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ * @param discipline The clock discipline to use for the timeout.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_relative_timeout(
+  Thread_queue_Context *queue_context,
+  Watchdog_Interval     timeout
+)
+{
+  queue_context->timeout_discipline = WATCHDOG_RELATIVE;
+  queue_context->timeout = timeout;
+}
+
+/**
+ * @brief Sets an absolute timeout in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ * @param discipline The clock discipline to use for the timeout.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_absolute_timeout(
+  Thread_queue_Context *queue_context,
+  uint64_t              timeout
+)
+{
+  queue_context->timeout_discipline = WATCHDOG_ABSOLUTE;
+  queue_context->timeout = timeout;
+}
+
+/**
  * @brief Sets the MP callout in the thread queue context.
  *
  * @param queue_context The thread queue context.
@@ -307,8 +359,8 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @brief Blocks the thread and places it on the thread queue.
  *
  * This enqueues the thread on the thread queue, blocks the thread, and
- * optionally starts the thread timer in case the timeout interval is not
- * WATCHDOG_NO_TIMEOUT.
+ * optionally starts the thread timer in case the timeout discipline is not
+ * WATCHDOG_NO_TIMEOUT. Timeout discipline and value are in the queue_context.
  *
  * The caller must be the owner of the thread queue lock.  This function will
  * release the thread queue lock and register it as the new thread lock.
@@ -350,7 +402,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *       MUTEX_TQ_OPERATIONS,
  *       executing,
  *       STATES_WAITING_FOR_MUTEX,
- *       WATCHDOG_NO_TIMEOUT,
  *       0,
  *       &queue_context
  *     );
@@ -362,8 +413,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to enqueue.
  * @param[in] state The new state of the thread.
- * @param[in] timeout Interval to wait.  Use WATCHDOG_NO_TIMEOUT to block
- * potentially forever.
  * @param[in] queue_context The thread queue context of the lock acquire.
  */
 void _Thread_queue_Enqueue_critical(
@@ -371,7 +420,6 @@ void _Thread_queue_Enqueue_critical(
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   States_Control                 state,
-  Watchdog_Interval              timeout,
   Thread_queue_Context          *queue_context
 );
 
@@ -385,6 +433,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   Thread_Control                *the_thread,
   States_Control                 state,
   Watchdog_Interval              timeout,
+  Watchdog_Discipline            discipline,
   uint32_t                       expected_level
 )
 {
@@ -393,12 +442,16 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Acquire( the_thread_queue, &queue_context.Lock_context );
   _Thread_queue_Context_set_expected_level( &queue_context, expected_level );
+  if ( discipline == WATCHDOG_ABSOLUTE ) {
+    _Thread_queue_Context_set_absolute_timeout( &queue_context, timeout );
+  } else {
+    _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+  }
   _Thread_queue_Enqueue_critical(
     &the_thread_queue->Queue,
     operations,
     the_thread,
     state,
-    timeout,
     &queue_context
   );
 }

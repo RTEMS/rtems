@@ -87,6 +87,7 @@ rtems_status_code rtems_region_get_segment(
         executing,
         STATES_WAITING_FOR_SEGMENT,
         timeout,
+        WATCHDOG_RELATIVE,
         2
       );
 

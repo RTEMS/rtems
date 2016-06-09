@@ -479,7 +479,6 @@ void _Thread_Join(
     THREAD_JOIN_TQ_OPERATIONS,
     executing,
     waiting_for_join,
-    WATCHDOG_NO_TIMEOUT,
     queue_context
   );
 }
@@ -546,6 +545,7 @@ void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_expected_level( &queue_context, 2 );
+  _Thread_queue_Context_set_no_timeout( &queue_context );
   _Thread_State_acquire( the_thread, &queue_context.Lock_context );
   _Thread_Join(
     the_thread,

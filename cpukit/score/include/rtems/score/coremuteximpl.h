@@ -100,7 +100,6 @@ Status_Control _CORE_mutex_Seize_slow(
   Thread_Control       *executing,
   Thread_Control       *owner,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 );
 
@@ -109,7 +108,6 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Thread_queue_Context          *queue_context
 );
 
@@ -183,7 +181,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
   CORE_recursive_mutex_Control  *the_mutex,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
   Thread_queue_Context          *queue_context
 )
@@ -214,7 +211,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
     executing,
     owner,
     wait,
-    timeout,
     queue_context
   );
 }
@@ -277,7 +273,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
   Thread_queue_Context          *queue_context
 )
@@ -307,7 +302,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
     operations,
     executing,
     wait,
-    timeout,
     queue_context
   );
 }
@@ -434,7 +428,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
   CORE_ceiling_mutex_Control    *the_mutex,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Status_Control              ( *nested )( CORE_recursive_mutex_Control * ),
   Thread_queue_Context          *queue_context
 )
@@ -476,7 +469,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
     CORE_MUTEX_TQ_OPERATIONS,
     executing,
     wait,
-    timeout,
     queue_context
   );
 }

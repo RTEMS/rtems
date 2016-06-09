@@ -165,7 +165,6 @@ RTEMS_INLINE_ROUTINE uint32_t  _CORE_semaphore_Get_count(
  * @param[in] operations The thread queue operations.
  * @param[in] executing The currently executing thread.
  * @param[in] wait is true if the thread is willing to wait
- * @param[in] timeout is the maximum number of ticks to block
  * @param[in] queue_context is a temporary variable used to contain the ISR
  *        disable level cookie
  */
@@ -174,7 +173,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Thread_queue_Context          *queue_context
 )
 {
@@ -198,7 +196,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
     operations,
     executing,
     STATES_WAITING_FOR_SEMAPHORE,
-    timeout,
     queue_context
   );
   return _Thread_Wait_get_status( executing );

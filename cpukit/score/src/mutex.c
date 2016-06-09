@@ -104,7 +104,6 @@ static void _Mutex_Acquire_slow(
   Mutex_Control        *mutex,
   Thread_Control       *owner,
   Thread_Control       *executing,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -115,7 +114,6 @@ static void _Mutex_Acquire_slow(
     MUTEX_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SYS_LOCK_MUTEX,
-    timeout,
     queue_context
   );
 }
@@ -219,7 +217,8 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
     ++executing->resource_count;
     _Mutex_Queue_release( mutex, &queue_context );
   } else {
-    _Mutex_Acquire_slow( mutex, owner, executing, 0, &queue_context );
+    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Mutex_Acquire_slow( mutex, owner, executing, &queue_context );
   }
 }
 
@@ -260,7 +259,8 @@ int _Mutex_Acquire_timed(
         break;
     }
 
-    _Mutex_Acquire_slow( mutex, owner, executing, ticks, &queue_context );
+    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+    _Mutex_Acquire_slow( mutex, owner, executing, &queue_context );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }
@@ -336,7 +336,8 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
     ++mutex->nest_level;
     _Mutex_Queue_release( &mutex->Mutex, &queue_context );
   } else {
-    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, 0, &queue_context );
+    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, &queue_context );
   }
 }
 
@@ -382,13 +383,8 @@ int _Mutex_recursive_Acquire_timed(
         break;
     }
 
-    _Mutex_Acquire_slow(
-      &mutex->Mutex,
-      owner,
-      executing,
-      ticks,
-      &queue_context
-    );
+    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+    _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, &queue_context );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   }

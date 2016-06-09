@@ -35,11 +35,11 @@ int pthread_rwlock_rdlock(
     return EINVAL;
   }
 
+  _Thread_queue_Context_set_no_timeout( &queue_context );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
     _Thread_Executing,
     true,                 /* we are willing to wait forever */
-    0,
     &queue_context
   );
   return _POSIX_Get_error( status );

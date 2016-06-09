@@ -68,12 +68,13 @@ int _POSIX_Condition_variables_Wait_support(
 
   if ( !already_timedout ) {
     _Thread_queue_Context_set_expected_level( &queue_context, 2 );
+    _Thread_queue_Context_set_timeout( &queue_context, timeout );
+    _Thread_queue_Context_set_discipline( &queue_context, WATCHDOG_RELATIVE );
     _Thread_queue_Enqueue_critical(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_CONDITION_VARIABLE,
-      timeout,
       &queue_context
     );
   } else {

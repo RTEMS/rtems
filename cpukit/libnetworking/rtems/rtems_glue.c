@@ -376,11 +376,11 @@ rtems_bsdnet_semaphore_obtain (void)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context);
+	_Thread_queue_Context_set_no_timeout( &queue_context );
 	status = _CORE_recursive_mutex_Seize (
 		&the_networkSemaphore->Core_control.Mutex.Recursive,
 		_Thread_Executing,
 		true,			/* wait */
-		WATCHDOG_NO_TIMEOUT,	/* forever */
 		_CORE_recursive_mutex_Seize_nested,
 		&queue_context
 	);

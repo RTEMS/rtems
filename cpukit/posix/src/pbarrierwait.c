@@ -41,11 +41,11 @@ int pthread_barrier_wait(
     return EINVAL;
   }
 
+  _Thread_queue_Context_set_no_timeout( &queue_context );
   status = _CORE_barrier_Seize(
     &the_barrier->Barrier,
     _Thread_Executing,
     true,
-    WATCHDOG_NO_TIMEOUT,
     &queue_context
   );
   return _POSIX_Get_error( status );

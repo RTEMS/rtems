@@ -41,12 +41,12 @@ int _POSIX_Semaphore_Wait_support(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_semaphore_Seize(
     &the_semaphore->Semaphore,
     POSIX_SEMAPHORE_TQ_OPERATIONS,
     _Thread_Executing,
     blocking,
-    timeout,
     &queue_context
   );
   return _POSIX_Zero_or_minus_one_plus_errno( status );

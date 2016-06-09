@@ -61,13 +61,13 @@ rtems_status_code rtems_message_queue_receive(
   );
 
   executing = _Thread_Executing;
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_message_queue_Seize(
     &the_message_queue->message_queue,
     executing,
     buffer,
     size,
     !_Options_Is_no_wait( option_set ),
-    timeout,
     &queue_context
   );
   return _Status_Get( status );

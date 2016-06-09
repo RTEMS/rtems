@@ -240,7 +240,6 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   Thread_Control       *executing,
   Priority_Control      initial_priority,
   Priority_Control      ceiling_priority,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -250,6 +249,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   Per_CPU_Control *cpu_self;
   ISR_lock_Context giant_lock_context;
   ISR_Level level;
+  Watchdog_Interval timeout = queue_context->timeout;
+  _Assert( queue_context->timeout_discipline == WATCHDOG_RELATIVE );
 
   rival.thread = executing;
   rival.resource = mrsp;
@@ -317,7 +318,6 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
   MRSP_Control         *mrsp,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -357,7 +357,6 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
       executing,
       initial_priority,
       ceiling_priority,
-      timeout,
       queue_context
     );
   } else {

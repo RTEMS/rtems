@@ -82,7 +82,6 @@ static void _Condition_Queue_release(
 
 static Per_CPU_Control *_Condition_Do_wait(
   struct _Condition_Control *_condition,
-  Watchdog_Interval          timeout,
   Thread_queue_Context      *queue_context
 )
 {
@@ -100,7 +99,6 @@ static Per_CPU_Control *_Condition_Do_wait(
     CONDITION_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SYS_LOCK_CONDITION,
-    timeout,
     queue_context
   );
 
@@ -117,7 +115,11 @@ void _Condition_Wait(
 
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  cpu_self = _Condition_Do_wait( _condition, 0, &queue_context );
+  _Thread_queue_Context_set_no_timeout( &queue_context );
+  cpu_self = _Condition_Do_wait(
+    _condition,
+    &queue_context
+  );
 
   _Mutex_Release( _mutex );
   _Thread_Dispatch_enable( cpu_self );
@@ -151,7 +153,8 @@ int _Condition_Wait_timed(
       break;
   }
 
-  cpu_self = _Condition_Do_wait( _condition, ticks, &queue_context );
+  _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+  cpu_self = _Condition_Do_wait( _condition, &queue_context );
 
   _Mutex_Release( _mutex );
   executing = cpu_self->executing;
@@ -173,7 +176,8 @@ void _Condition_Wait_recursive(
 
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-  cpu_self = _Condition_Do_wait( _condition, 0, &queue_context );
+  _Thread_queue_Context_set_no_timeout( &queue_context );
+  cpu_self = _Condition_Do_wait( _condition, &queue_context );
 
   nest_level = _mutex->_nest_level;
   _mutex->_nest_level = 0;
@@ -211,7 +215,8 @@ int _Condition_Wait_recursive_timed(
       break;
   }
 
-  cpu_self = _Condition_Do_wait( _condition, ticks, &queue_context );
+  _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+  cpu_self = _Condition_Do_wait( _condition, &queue_context );
 
   nest_level = _mutex->_nest_level;
   _mutex->_nest_level = 0;

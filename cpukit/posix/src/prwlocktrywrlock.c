@@ -39,7 +39,6 @@ int pthread_rwlock_trywrlock(
     &the_rwlock->RWLock,
     _Thread_Executing,
     false,                 /* we are not willing to wait */
-    0,
     &queue_context
   );
   return _POSIX_Get_error( status );

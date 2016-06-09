@@ -97,13 +97,13 @@ ssize_t _POSIX_Message_queue_Receive_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_message_queue_Seize(
     &the_mq->Message_queue,
     executing,
     msg_ptr,
     &length_out,
     do_wait,
-    timeout,
     &queue_context
   );
 

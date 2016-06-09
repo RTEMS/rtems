@@ -33,7 +33,6 @@ Status_Control _CORE_message_queue_Submit(
   size_t                            size,
   CORE_message_queue_Submit_types   submit_type,
   bool                              wait,
-  Watchdog_Interval                 timeout,
   Thread_queue_Context             *queue_context
 )
 {
@@ -138,7 +137,6 @@ Status_Control _CORE_message_queue_Submit(
       the_message_queue->operations,
       executing,
       STATES_WAITING_FOR_MESSAGE,
-      timeout,
       queue_context
     );
     return _Thread_Wait_get_status( executing );

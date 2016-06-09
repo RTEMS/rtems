@@ -21,13 +21,13 @@
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
 
 Status_Control _CORE_mutex_Seize_slow(
   CORE_mutex_Control   *the_mutex,
   Thread_Control       *executing,
   Thread_Control       *owner,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -69,7 +69,6 @@ Status_Control _CORE_mutex_Seize_slow(
     CORE_MUTEX_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_MUTEX,
-    timeout,
     queue_context
   );
 
@@ -85,7 +84,6 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
   bool                           wait,
-  Watchdog_Interval              timeout,
   Thread_queue_Context          *queue_context
 )
 {
@@ -96,7 +94,6 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
       operations,
       executing,
       STATES_WAITING_FOR_MUTEX,
-      timeout,
       queue_context
     );
     return _Thread_Wait_get_status( executing );

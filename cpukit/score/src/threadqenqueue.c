@@ -39,7 +39,6 @@ void _Thread_queue_Enqueue_critical(
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   States_Control                 state,
-  Watchdog_Interval              timeout,
   Thread_queue_Context          *queue_context
 )
 {
@@ -83,13 +82,28 @@ void _Thread_queue_Enqueue_critical(
   /*
    *  If the thread wants to timeout, then schedule its timer.
    */
-  if ( timeout != WATCHDOG_NO_TIMEOUT ) {
-    _Thread_Timer_insert_relative(
-      the_thread,
-      cpu_self,
-      _Thread_Timeout,
-      timeout
-    );
+  switch ( queue_context->timeout_discipline ) {
+    case WATCHDOG_RELATIVE:
+      /* A relative timeout of 0 is a special case indefinite (no) timeout */
+      if ( queue_context->timeout != 0 ) {
+        _Thread_Timer_insert_relative(
+           the_thread,
+           cpu_self,
+           _Thread_Timeout,
+           (Watchdog_Interval) queue_context->timeout
+        );
+      }
+      break;
+    case WATCHDOG_ABSOLUTE:
+      _Thread_Timer_insert_absolute(
+         the_thread,
+         cpu_self,
+         _Thread_Timeout,
+         queue_context->timeout
+       );
+      break;
+    default:
+      break;
   }
 
   /*

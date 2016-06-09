@@ -89,12 +89,12 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
 
   if ( *uaddr == val ) {
     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+    _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Enqueue_critical(
       &futex->Queue.Queue,
       FUTEX_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_SYS_LOCK_FUTEX,
-      WATCHDOG_NO_TIMEOUT,
       &queue_context
     );
     eno = 0;

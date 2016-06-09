@@ -101,12 +101,12 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
     _Semaphore_Queue_release( sem, &queue_context );
   } else {
     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+    _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Enqueue_critical(
       &sem->Queue.Queue,
       SEMAPHORE_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE,
-      WATCHDOG_NO_TIMEOUT,
       &queue_context
     );
   }

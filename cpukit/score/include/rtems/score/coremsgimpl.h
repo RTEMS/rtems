@@ -194,8 +194,6 @@ Status_Control _CORE_message_queue_Broadcast(
  *         appended, or enqueued in priority order.
  *  @param[in] wait indicates whether the calling thread is willing to block
  *         if the message queue is full.
- *  @param[in] timeout is the maximum number of clock ticks that the calling
- *         thread is willing to block if the message queue is full.
  *  @param[in] queue_context The thread queue context used for
  *    _CORE_message_queue_Acquire() or _CORE_message_queue_Acquire_critical().
  *  @retval indication of the successful completion or reason for failure
@@ -207,7 +205,6 @@ Status_Control _CORE_message_queue_Submit(
   size_t                            size,
   CORE_message_queue_Submit_types   submit_type,
   bool                              wait,
-  Watchdog_Interval                 timeout,
   Thread_queue_Context             *queue_context
 );
 
@@ -230,8 +227,6 @@ Status_Control _CORE_message_queue_Submit(
  *         indicates the maximum size message that the caller can receive.
  *  @param[in] wait indicates whether the calling thread is willing to block
  *         if the message queue is empty.
- *  @param[in] timeout is the maximum number of clock ticks that the calling
- *         thread is willing to block if the message queue is empty.
  *  @param[in] queue_context The thread queue context used for
  *    _CORE_message_queue_Acquire() or _CORE_message_queue_Acquire_critical().
  *
@@ -251,7 +246,6 @@ Status_Control _CORE_message_queue_Seize(
   void                       *buffer,
   size_t                     *size_p,
   bool                        wait,
-  Watchdog_Interval           timeout,
   Thread_queue_Context       *queue_context
 );
 
@@ -281,7 +275,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
   const void                       *buffer,
   size_t                            size,
   bool                              wait,
-  Watchdog_Interval                 timeout,
   Thread_queue_Context             *queue_context
 )
 {
@@ -292,7 +285,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Send(
     size,
     CORE_MESSAGE_QUEUE_SEND_REQUEST,
     wait,
-    timeout,
     queue_context
   );
 }
@@ -302,7 +294,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
   const void                       *buffer,
   size_t                            size,
   bool                              wait,
-  Watchdog_Interval                 timeout,
   Thread_queue_Context             *queue_context
 )
 {
@@ -313,7 +304,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_message_queue_Urgent(
     size,
     CORE_MESSAGE_QUEUE_URGENT_REQUEST,
     wait,
-    timeout,
     queue_context
   );
 }

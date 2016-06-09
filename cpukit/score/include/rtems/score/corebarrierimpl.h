@@ -87,10 +87,6 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
  *  @param[in] the_barrier is the barrier to wait for
  *  @param[in,out] executing The currently executing thread.
  *  @param[in] wait is true if the calling thread is willing to wait
- *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is true.
- *  @param[in] mp_callout is the routine to invoke if the
- *         thread unblocked is remote
  *
  * @return The method status.
  */
@@ -98,7 +94,6 @@ Status_Control _CORE_barrier_Seize(
   CORE_barrier_Control *the_barrier,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 );
 

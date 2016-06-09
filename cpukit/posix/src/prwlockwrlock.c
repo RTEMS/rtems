@@ -39,11 +39,11 @@ int pthread_rwlock_wrlock(
     return EINVAL;
   }
 
+  _Thread_queue_Context_set_no_timeout( &queue_context );
   status = _CORE_RWLock_Seize_for_writing(
     &the_rwlock->RWLock,
     _Thread_Executing,
     true,          /* do not timeout -- wait forever */
-    0,
     &queue_context
   );
   return _POSIX_Get_error( status );

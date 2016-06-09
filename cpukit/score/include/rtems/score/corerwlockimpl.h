@@ -95,15 +95,12 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
  *
  *  @param[in] the_rwlock is the RWLock to wait for
  *  @param[in] wait is true if the calling thread is willing to wait
- *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is true.
  */
 
 Status_Control _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control  *the_rwlock,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 );
 
@@ -114,14 +111,11 @@ Status_Control _CORE_RWLock_Seize_for_reading(
  *
  *  @param[in] the_rwlock is the RWLock to wait for
  *  @param[in] wait is true if the calling thread is willing to wait
- *  @param[in] timeout is the number of ticks the calling thread is willing
- *         to wait if @a wait is true.
  */
 Status_Control _CORE_RWLock_Seize_for_writing(
   CORE_RWLock_Control  *the_rwlock,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 );
 

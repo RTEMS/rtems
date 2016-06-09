@@ -33,12 +33,11 @@ void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
 
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
-
+  _Thread_queue_Context_set_no_timeout( &queue_context );
   _CORE_recursive_mutex_Seize(
     &the_mutex->Mutex,
     _Thread_Executing,
     true,
-    WATCHDOG_NO_TIMEOUT,
     _CORE_recursive_mutex_Seize_nested,
     &queue_context
   );

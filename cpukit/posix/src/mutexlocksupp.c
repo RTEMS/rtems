@@ -63,6 +63,7 @@ int _POSIX_Mutex_Lock_support(
   }
 
   executing = _Thread_Executing;
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
 
   switch ( the_mutex->protocol ) {
     case POSIX_MUTEX_PRIORITY_CEILING:
@@ -70,7 +71,6 @@ int _POSIX_Mutex_Lock_support(
         &the_mutex->Mutex,
         executing,
         wait,
-        timeout,
         _POSIX_Mutex_Lock_nested,
         &queue_context
       );
@@ -81,7 +81,6 @@ int _POSIX_Mutex_Lock_support(
         POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS,
         executing,
         wait,
-        timeout,
         _POSIX_Mutex_Lock_nested,
         &queue_context
       );
@@ -92,7 +91,6 @@ int _POSIX_Mutex_Lock_support(
         &the_mutex->Mutex.Recursive,
         executing,
         wait,
-        timeout,
         _POSIX_Mutex_Lock_nested,
         &queue_context
       );

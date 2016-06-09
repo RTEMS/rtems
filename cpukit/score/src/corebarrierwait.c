@@ -26,7 +26,6 @@ Status_Control _CORE_barrier_Seize(
   CORE_barrier_Control *the_barrier,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -51,7 +50,6 @@ Status_Control _CORE_barrier_Seize(
       CORE_BARRIER_TQ_OPERATIONS,
       executing,
       STATES_WAITING_FOR_BARRIER,
-      timeout,
       queue_context
     );
     return _Thread_Wait_get_status( executing );

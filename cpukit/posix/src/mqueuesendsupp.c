@@ -92,6 +92,7 @@ int _POSIX_Message_queue_Send_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_message_queue_Submit(
     &the_mq->Message_queue,
     executing,
@@ -99,7 +100,6 @@ int _POSIX_Message_queue_Send_support(
     msg_len,
     _POSIX_Message_queue_Priority_to_core( msg_prio ),
     do_wait,
-    timeout,
     &queue_context
   );
   return _POSIX_Zero_or_minus_one_plus_errno( status );

@@ -153,12 +153,12 @@ int sigtimedwait(
   executing->Wait.option          = *set;
   executing->Wait.return_argument = the_info;
   _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+  _Thread_queue_Context_set_relative_timeout( &queue_context, interval );
   _Thread_queue_Enqueue_critical(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL,
-    interval,
     &queue_context
   );
 

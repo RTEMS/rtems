@@ -261,6 +261,7 @@ Status_Control _MPCI_Send_request_packet(
       executing,
       STATES_WAITING_FOR_RPC_REPLY | extra_state,
       the_packet->timeout,
+      WATCHDOG_RELATIVE,
       2
     );
 
@@ -328,6 +329,7 @@ void _MPCI_Receive_server(
 
   executing = _Thread_Get_executing();
   _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_no_timeout( &queue_context );
 
   for ( ; ; ) {
 
@@ -339,7 +341,6 @@ void _MPCI_Receive_server(
       MPCI_SEMAPHORE_TQ_OPERATIONS,
       executing,
       true,
-      WATCHDOG_NO_TIMEOUT,
       &queue_context
     );
 

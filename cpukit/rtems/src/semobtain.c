@@ -69,13 +69,14 @@ rtems_status_code rtems_semaphore_obtain(
   executing = _Thread_Executing;
   wait = !_Options_Is_no_wait( option_set );
 
+  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Seize(
         &the_semaphore->Core_control.Mutex.Recursive,
         executing,
         wait,
-        timeout,
         _CORE_recursive_mutex_Seize_nested,
         &queue_context
       );
@@ -85,7 +86,6 @@ rtems_status_code rtems_semaphore_obtain(
         &the_semaphore->Core_control.Mutex,
         executing,
         wait,
-        timeout,
         _CORE_recursive_mutex_Seize_nested,
         &queue_context
       );
@@ -96,7 +96,6 @@ rtems_status_code rtems_semaphore_obtain(
         _Semaphore_Get_operations( the_semaphore ),
         executing,
         wait,
-        timeout,
         _CORE_recursive_mutex_Seize_nested,
         &queue_context
       );
@@ -107,7 +106,6 @@ rtems_status_code rtems_semaphore_obtain(
         &the_semaphore->Core_control.MRSP,
         executing,
         wait,
-        timeout,
         &queue_context
       );
       break;
@@ -122,7 +120,6 @@ rtems_status_code rtems_semaphore_obtain(
         _Semaphore_Get_operations( the_semaphore ),
         executing,
         wait,
-        timeout,
         &queue_context
       );
       break;

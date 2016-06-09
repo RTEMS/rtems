@@ -28,7 +28,6 @@ Status_Control _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control  *the_rwlock,
   Thread_Control       *executing,
   bool                  wait,
-  Watchdog_Interval     timeout,
   Thread_queue_Context *queue_context
 )
 {
@@ -85,7 +84,6 @@ Status_Control _CORE_RWLock_Seize_for_reading(
      CORE_RWLOCK_TQ_OPERATIONS,
      executing,
      STATES_WAITING_FOR_RWLOCK,
-     timeout,
      queue_context
   );
   return _Thread_Wait_get_status( executing );

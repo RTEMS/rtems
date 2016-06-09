@@ -58,7 +58,6 @@ rtems_status_code rtems_message_queue_send(
     buffer,
     size,
     false,   /* sender does not block */
-    0,       /* no timeout */
     &queue_context
   );
   return _Status_Get( status );

@@ -24,6 +24,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
+#include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -77,6 +78,17 @@ typedef struct {
    * expected level, then a fatal error occurs.
    */
   uint32_t expected_thread_dispatch_disable_level;
+
+  /**
+   * @brief The clock discipline for the interval timeout.
+   * Use WATCHDOG_NO_TIMEOUT to block indefinitely.
+   */
+  Watchdog_Discipline timeout_discipline;
+
+  /**
+   * @brief Interval to wait.
+   */
+  uint64_t timeout;
 
   /**
    * @brief Callout to unblock the thread in case it is actually a thread

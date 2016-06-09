@@ -56,11 +56,11 @@ int pthread_rwlock_timedrdlock(
     return EINVAL;
   }
 
+  _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
     _Thread_Executing,
     do_wait,
-    ticks,
     &queue_context
   );
 
