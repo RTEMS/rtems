@@ -18,9 +18,33 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/scheduleredf.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/watchdogimpl.h>
+#include <rtems/score/scheduleredfimpl.h>
+
+static bool _Scheduler_EDF_Priority_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority_p,
+  void             *arg
+)
+{
+  Scheduler_EDF_Node *node;
+  Priority_Control    current_priority;
+  Priority_Control    new_priority;
+
+  node = _Scheduler_EDF_Thread_get_node( the_thread );
+
+  current_priority = the_thread->current_priority;
+  new_priority = *new_priority_p;
+
+  if ( new_priority == 0 ) {
+    new_priority = node->background_priority;
+  }
+
+  node->current_priority = new_priority;
+  the_thread->real_priority = new_priority;
+
+  return _Thread_Priority_less_than( current_priority, new_priority )
+    || !_Thread_Owns_resources( the_thread );
+}
 
 void _Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
@@ -28,19 +52,11 @@ void _Scheduler_EDF_Release_job(
   uint64_t                 deadline
 )
 {
-  Priority_Control new_priority;
-  Priority_Control unused;
-
-  (void) scheduler;
-
-  if (deadline) {
-    /* Initializing or shifting deadline. */
-    new_priority = (uint32_t) deadline & ~SCHEDULER_EDF_PRIO_MSB;
-  }
-  else {
-    /* Switch back to background priority. */
-    new_priority = the_thread->Start.initial_priority;
-  }
-
-  _Thread_Set_priority( the_thread, new_priority, &unused, true );
+  _Thread_Change_priority(
+    the_thread,
+    (Priority_Control) deadline,
+    NULL,
+    _Scheduler_EDF_Priority_filter,
+    true
+  );
 }

@@ -25,13 +25,10 @@ void _Scheduler_CBS_Node_initialize(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_CBS_Node *node = _Scheduler_CBS_Thread_get_node( the_thread );
+  Scheduler_CBS_Node *node;
 
-  (void) scheduler;
+  _Scheduler_EDF_Node_initialize( scheduler, the_thread );
 
-  _Scheduler_Node_do_initialize( &node->Base.Base, the_thread );
-
-  node->Base.thread = the_thread;
-  node->Base.queue_state = SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN;
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
   node->cbs_server = NULL;
 }

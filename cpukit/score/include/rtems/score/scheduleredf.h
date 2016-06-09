@@ -35,7 +35,7 @@ extern "C" {
  */
 /**@{*/
 
-#define SCHEDULER_EDF_MAXIMUM_PRIORITY 255
+#define SCHEDULER_EDF_MAXIMUM_PRIORITY 0x7fffffff
 
 /**
  *  Entry points for the Earliest Deadline First Scheduler.
@@ -82,18 +82,6 @@ typedef struct {
 } Scheduler_EDF_Context;
 
 /**
- * @typedef Scheduler_EDF_Queue_state
- *
- * This enumeration distiguishes state of a thread with respect to the
- * ready queue.
- */
-typedef enum {
-  SCHEDULER_EDF_QUEUE_STATE_NOT_PRESENTLY,
-  SCHEDULER_EDF_QUEUE_STATE_YES,
-  SCHEDULER_EDF_QUEUE_STATE_NEVER_HAS_BEEN
-} Scheduler_EDF_Queue_state;
-
-/**
  * @brief Scheduler node specialization for EDF schedulers.
  */
 typedef struct {
@@ -110,10 +98,17 @@ typedef struct {
    * Rbtree node related to this thread.
    */
   RBTree_Node Node;
+
   /**
-   * State of the thread with respect to ready queue.
+   * @brief The thread priority used by this scheduler instance in case no job
+   * is released.
    */
-  Scheduler_EDF_Queue_state queue_state;
+  Priority_Control background_priority;
+
+  /**
+   * @brief The thread priority currently used by this scheduler instance.
+   */
+  Priority_Control current_priority;
 } Scheduler_EDF_Node;
 
 /**

@@ -29,7 +29,7 @@ void _Scheduler_EDF_Block(
   _Scheduler_Generic_block(
     scheduler,
     the_thread,
-    _Scheduler_EDF_Extract,
+    _Scheduler_EDF_Extract_body,
     _Scheduler_EDF_Schedule_body
   );
 }
