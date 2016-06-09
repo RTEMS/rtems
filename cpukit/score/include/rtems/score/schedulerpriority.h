@@ -49,7 +49,6 @@ extern "C" {
     _Scheduler_default_Node_initialize,   /* node initialize entry point */ \
     _Scheduler_default_Node_destroy,      /* node destroy entry point */ \
     _Scheduler_priority_Update_priority,  /* update priority entry point */ \
-    _Scheduler_priority_Priority_compare, /* compares two priorities */ \
     _Scheduler_default_Release_job,       /* new period of task */ \
     _Scheduler_default_Tick,              /* tick entry point */ \
     _Scheduler_default_Start_idle         /* start idle entry point */ \
@@ -187,18 +186,6 @@ Scheduler_Void_or_thread _Scheduler_priority_Change_priority(
 Scheduler_Void_or_thread _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
-);
-
-/**
- *  @brief Compare two priorities.
- *
- *  This routine compares two priorities.
- *
- * @retval >0 for p1 > p2; 0 for p1 == p2; <0 for p1 < p2.
- */
-int _Scheduler_priority_Priority_compare(
-  Priority_Control   p1,
-  Priority_Control   p2
 );
 
 /**@}*/

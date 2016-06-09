@@ -42,10 +42,12 @@ Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( _Scheduler_Is_priority_lower_than(
-         scheduler,
-         _Thread_Heir->current_priority,
-         the_thread->current_priority )) {
+  if (
+    _Scheduler_EDF_Priority_compare(
+      the_thread->current_priority,
+      _Thread_Heir->current_priority
+    ) == 1 
+  ) {
     _Scheduler_Update_heir(
       the_thread,
       the_thread->current_priority == PRIORITY_PSEUDO_ISR

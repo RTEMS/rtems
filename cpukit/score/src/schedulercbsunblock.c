@@ -79,11 +79,10 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
    *    a pseudo-ISR system task, we need to do a context switch.
    */
   if (
-    _Scheduler_Is_priority_higher_than(
-       scheduler,
-       the_thread->current_priority,
-       _Thread_Heir->current_priority
-    )
+    _Scheduler_EDF_Priority_compare(
+      the_thread->current_priority,
+      _Thread_Heir->current_priority
+    ) == 1 
   ) {
     _Scheduler_Update_heir(
       the_thread,

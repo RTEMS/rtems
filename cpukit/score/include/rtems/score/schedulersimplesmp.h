@@ -71,7 +71,6 @@ typedef struct {
     _Scheduler_simple_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_simple_SMP_Update_priority, \
-    _Scheduler_priority_Priority_compare, \
     _Scheduler_default_Release_job, \
     _Scheduler_default_Tick, \
     _Scheduler_SMP_Start_idle \

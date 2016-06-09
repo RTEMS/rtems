@@ -129,12 +129,6 @@ typedef struct {
     Priority_Control
   );
 
-  /** @see _Scheduler_Priority_compare() */
-  int ( *priority_compare )(
-    Priority_Control,
-    Priority_Control
-  );
-
   /** @see _Scheduler_Release_job() */
   void ( *release_job ) (
     const Scheduler_Control *,

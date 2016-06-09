@@ -482,31 +482,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
 }
 
 /**
- * @brief Compares two priority values.
- *
- * @param[in] scheduler The scheduler instance.
- * @param[in] p1 The first priority value.
- * @param[in] p2 The second priority value.
- *
- * @retval negative The value @a p1 encodes a lower priority than @a p2 in the
- * intuitive sense of priority.
- * @retval 0 The priorities @a p1 and @a p2 are equal.
- * @retval positive The value @a p1 encodes a higher priority than @a p2 in the
- * intuitive sense of priority.
- *
- * @see _Scheduler_Is_priority_lower_than() and
- * _Scheduler_Is_priority_higher_than().
- */
-RTEMS_INLINE_ROUTINE int _Scheduler_Priority_compare(
-  const Scheduler_Control *scheduler,
-  Priority_Control         p1,
-  Priority_Control         p2
-)
-{
-  return ( *scheduler->Operations.priority_compare )( p1, p2 );
-}
-
-/**
  * @brief Releases a job of a thread with respect to the scheduler.
  *
  * @param[in] the_thread The thread.
@@ -744,32 +719,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   if ( _Thread_Is_executing( the_thread ) || _Thread_Is_heir( the_thread ) ) {
     ( *schedule )( scheduler, the_thread, true );
   }
-}
-
-/**
- * @brief Returns true if @a p1 encodes a lower priority than @a p2 in the
- * intuitive sense of priority.
- */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_lower_than(
-  const Scheduler_Control *scheduler,
-  Priority_Control         p1,
-  Priority_Control         p2
-)
-{
-  return _Scheduler_Priority_compare( scheduler, p1,  p2 ) < 0;
-}
-
-/**
- * @brief Returns true if @a p1 encodes a higher priority than @a p2 in the
- * intuitive sense of priority.
- */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Is_priority_higher_than(
-  const Scheduler_Control *scheduler,
-  Priority_Control         p1,
-  Priority_Control         p2
-)
-{
-  return _Scheduler_Priority_compare( scheduler, p1,  p2 ) > 0;
 }
 
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(

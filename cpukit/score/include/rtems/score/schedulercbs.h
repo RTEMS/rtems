@@ -59,7 +59,6 @@ extern "C" {
     _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_EDF_Update_priority,  /* update priority entry point */ \
-    _Scheduler_EDF_Priority_compare, /* compares two priorities */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
