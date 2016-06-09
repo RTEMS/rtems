@@ -51,7 +51,6 @@
 #include <rtems.h>
 #include <rtems/ftpfs.h>
 #include <rtems/libio_.h>
-#include <rtems/rtems_bsdnet.h>
 #include <rtems/seterr.h>
 
 #ifdef DEBUG
