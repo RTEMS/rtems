@@ -1,0 +1,12 @@
+#  Copyright 2016. Gedare Bloom.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This test benchmarks the following operations:
+
++ Benchmark a call to clock_nanosleep() which yields
+
+

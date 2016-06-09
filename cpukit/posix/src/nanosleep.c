@@ -8,6 +8,8 @@
 /*
  *  COPYRIGHT (c) 1989-2015.
  *  On-Line Applications Research Corporation (OAR).
+ * 
+ *  Copyright (c) 2016. Gedare Bloom.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -30,12 +32,10 @@
 static Thread_queue_Control _Nanosleep_Pseudo_queue =
   THREAD_QUEUE_INITIALIZER( "Nanosleep" );
 
-/*
- *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
- */
-int nanosleep(
+static inline int nanosleep_helper(
   const struct timespec  *rqtp,
-  struct timespec        *rmtp
+  struct timespec        *rmtp,
+  Watchdog_Discipline     discipline
 )
 {
   /*
@@ -57,7 +57,7 @@ int nanosleep(
    *         FSU and GNU/Linux pthreads shares this behavior.
    */
   if ( !_Timespec_Is_valid( rqtp ) )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+    return EINVAL;
 
   /*
    * Convert the timespec delay into the appropriate number of clock ticks.
@@ -93,7 +93,7 @@ int nanosleep(
     executing,
     STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
     ticks,
-    WATCHDOG_RELATIVE,
+    discipline,
     1
   );
 
@@ -110,7 +110,7 @@ int nanosleep(
   /*
    * If the user wants the time remaining, do the conversion.
    */
-  if ( rmtp ) {
+  if ( rmtp && discipline == WATCHDOG_RELATIVE ) {
     _Timespec_From_ticks( ticks, rmtp );
   }
 
@@ -122,8 +122,45 @@ int nanosleep(
      *  If there is time remaining, then we were interrupted by a signal.
      */
     if ( ticks )
-      rtems_set_errno_and_return_minus_one( EINTR );
+      return EINTR;
   #endif
 
   return 0;
+}
+/*
+ *  14.2.5 High Resolution Sleep, P1003.1b-1993, p. 269
+ */
+int nanosleep(
+  const struct timespec  *rqtp,
+  struct timespec        *rmtp
+)
+{
+  int err = nanosleep_helper(rqtp, rmtp, WATCHDOG_RELATIVE);
+  if (err) {
+    rtems_set_errno_and_return_minus_one( err );
+  }
+  return 0;
+}
+
+/*
+ * High Resolution Sleep with Specifiable Clock, IEEE Std 1003.1, 2001
+ */
+int clock_nanosleep(
+  clockid_t               clock_id,
+  int                     flags,
+  const struct timespec  *rqtp,
+  struct timespec        *rmtp
+)
+{
+  int err = 0;
+  if ( clock_id == CLOCK_REALTIME || clock_id == CLOCK_MONOTONIC ) {
+    if ( flags & TIMER_ABSTIME ) {
+      err = nanosleep_helper(rqtp, rmtp, WATCHDOG_ABSOLUTE);
+    } else {
+      err = nanosleep_helper(rqtp, rmtp, WATCHDOG_RELATIVE);
+    }
+  } else {
+    err = ENOTSUP;
+  }
+  return err;
 }

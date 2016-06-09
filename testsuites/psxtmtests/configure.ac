@@ -81,6 +81,9 @@ psxtmbarrier01/Makefile
 psxtmbarrier02/Makefile
 psxtmbarrier03/Makefile
 psxtmbarrier04/Makefile
+psxtmclocknanosleep01/Makefile
+psxtmclocknanosleep02/Makefile
+psxtmclocknanosleep03/Makefile
 psxtmcond01/Makefile
 psxtmcond02/Makefile
 psxtmcond03/Makefile

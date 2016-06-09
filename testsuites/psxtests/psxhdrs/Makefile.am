@@ -95,6 +95,7 @@ lib_a_SOURCES += time/clock.c
 lib_a_SOURCES += time/clock_getcpuclockid.c
 lib_a_SOURCES += time/clock_getres.c
 lib_a_SOURCES += time/clock_gettime.c
+lib_a_SOURCES += time/clock_nanosleep.c
 lib_a_SOURCES += time/clock_settime.c
 lib_a_SOURCES += time/ctime.c
 lib_a_SOURCES += time/ctime_r.c
