@@ -55,6 +55,8 @@ extern "C" {
     _Scheduler_priority_affinity_SMP_Block, \
     _Scheduler_priority_affinity_SMP_Unblock, \
     _Scheduler_priority_affinity_SMP_Change_priority, \
+    _Scheduler_default_Map_priority, \
+    _Scheduler_default_Unmap_priority, \
     _Scheduler_priority_affinity_SMP_Ask_for_help, \
     _Scheduler_priority_affinity_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \

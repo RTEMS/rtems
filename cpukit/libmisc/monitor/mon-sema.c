@@ -61,8 +61,10 @@ rtems_monitor_sema_canonical(
 
     switch ( rtems_sema->variant ) {
       case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-        canonical_sema->priority_ceiling =
-          rtems_sema->Core_control.Mutex.priority_ceiling;
+        canonical_sema->priority_ceiling = _Scheduler_Unmap_priority(
+          _CORE_ceiling_mutex_Get_scheduler( &rtems_sema->Core_control.Mutex ),
+          _CORE_ceiling_mutex_Get_priority( &rtems_sema->Core_control.Mutex )
+        );
         /* Fall through */
       case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:

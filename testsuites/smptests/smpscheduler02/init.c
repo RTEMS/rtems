@@ -35,6 +35,8 @@ const char rtems_test_name[] = "SMPSCHEDULER 2";
 
 static rtems_id main_task_id;
 
+static rtems_id sema_id;
+
 static void task(rtems_task_argument arg)
 {
   rtems_status_code sc;
@@ -44,6 +46,9 @@ static void task(rtems_task_argument arg)
   rtems_test_assert(rtems_get_current_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
   rtems_test_assert(sched_get_priority_max(SCHED_RR) == 126);
+
+  sc = rtems_semaphore_obtain(sema_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_NOT_DEFINED);
 
   sc = rtems_event_transient_send(main_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -61,6 +66,7 @@ static void test(void)
   rtems_id scheduler_a_id;
   rtems_id scheduler_b_id;
   rtems_id scheduler_c_id;
+  rtems_task_priority prio;
   cpu_set_t cpuset;
   cpu_set_t first_cpu;
   cpu_set_t second_cpu;
@@ -94,6 +100,27 @@ static void test(void)
 
   sc = rtems_scheduler_ident(SCHED_C, &scheduler_c_id);
   rtems_test_assert(sc == RTEMS_UNSATISFIED);
+
+  sc = rtems_semaphore_create(
+    SCHED_A,
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
+    1,
+    &sema_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  prio = 2;
+  sc = rtems_semaphore_set_priority(sema_id, scheduler_a_id, prio, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(prio == 1);
+
+  if (cpu_count > 1) {
+    prio = 1;
+    sc = rtems_semaphore_set_priority(sema_id, scheduler_b_id, prio, &prio);
+    rtems_test_assert(sc == RTEMS_NOT_DEFINED);
+    rtems_test_assert(prio == 2);
+  }
 
   CPU_ZERO(&cpuset);
   sc = rtems_scheduler_get_processor_set(
@@ -182,6 +209,9 @@ static void test(void)
 
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(sema_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 #else /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
@@ -211,6 +241,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+
+#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_SMP_APPLICATION
 
@@ -268,8 +301,6 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(c);
   RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
   RTEMS_SCHEDULER_ASSIGN_NO_SCHEDULER, \
   RTEMS_SCHEDULER_ASSIGN(2, RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL)
-
-#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

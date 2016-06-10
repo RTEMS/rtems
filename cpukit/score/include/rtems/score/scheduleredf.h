@@ -48,6 +48,8 @@ extern "C" {
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_EDF_Unblock,          /* unblock entry point */ \
     _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
+    _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
+    _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
     SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_EDF_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
@@ -201,6 +203,16 @@ Scheduler_Void_or_thread _Scheduler_EDF_Change_priority(
   Thread_Control          *the_thread,
   Priority_Control         new_priority,
   bool                     prepend_it
+);
+
+Priority_Control _Scheduler_EDF_Map_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+);
+
+Priority_Control _Scheduler_EDF_Unmap_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
 );
 
 /**

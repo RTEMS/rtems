@@ -420,6 +420,43 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Change_priority(
 }
 
 /**
+ * @brief Maps a thread priority from the user domain to the scheduler domain.
+ *
+ * Let M be the maximum scheduler priority.  The mapping must be bijective in
+ * the closed interval [0, M], e.g. _Scheduler_Unmap_priority( scheduler,
+ * _Scheduler_Map_priority( scheduler, p ) ) == p for all p in [0, M].  For
+ * other values the mapping is undefined.
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] priority The user domain thread priority.
+ *
+ * @return The corresponding thread priority of the scheduler domain is returned.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Map_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+)
+{
+  return ( *scheduler->Operations.map_priority )( scheduler, priority );
+}
+
+/**
+ * @brief Unmaps a thread priority from the scheduler domain to the user domain.
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] priority The scheduler domain thread priority.
+ *
+ * @return The corresponding thread priority of the user domain is returned.
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Unmap_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+)
+{
+  return ( *scheduler->Operations.unmap_priority )( scheduler, priority );
+}
+
+/**
  * @brief Initializes a scheduler node.
  *
  * The scheduler node contains arbitrary data on function entry.  The caller

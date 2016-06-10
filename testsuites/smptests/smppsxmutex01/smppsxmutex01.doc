@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smppsxmutex01
+
+directives:
+
+  - pthread_mutex_lock()
+
+concepts:
+
+  - Ensure that priority ceiling mutexes work only in their dedicated scheduler
+    instance.

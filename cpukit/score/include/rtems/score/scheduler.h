@@ -91,6 +91,18 @@ typedef struct {
     bool
   );
 
+  /** @see _Scheduler_Map_priority() */
+  Priority_Control ( *map_priority )(
+    const Scheduler_Control *,
+    Priority_Control
+  );
+
+  /** @see _Scheduler_Unmap_priority() */
+  Priority_Control ( *unmap_priority )(
+    const Scheduler_Control *,
+    Priority_Control
+  );
+
 #if defined(RTEMS_SMP)
   /**
    * Ask for help operation.
@@ -402,6 +414,21 @@ extern const Scheduler_Control _Scheduler_Table[];
    */
   extern const Scheduler_Assignment _Scheduler_Assignments[];
 #endif
+
+/**
+ * @brief Returns the thread priority.
+ *
+ * @param[in] scheduler Unused.
+ * @param[in] priority The thread priority.
+ *
+ * @return priority The thread priority.
+ */
+Priority_Control _Scheduler_default_Map_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+);
+
+#define _Scheduler_default_Unmap_priority _Scheduler_default_Map_priority
 
 #if defined(RTEMS_SMP)
   /**

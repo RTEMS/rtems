@@ -227,6 +227,7 @@ libscore_a_SOURCES += src/log2table.c
 libscore_a_SOURCES += src/scheduler.c
 libscore_a_SOURCES += src/schedulergetaffinity.c
 libscore_a_SOURCES += src/schedulersetaffinity.c
+libscore_a_SOURCES += src/schedulerdefaultmappriority.c
 libscore_a_SOURCES += src/schedulerdefaultnodedestroy.c
 libscore_a_SOURCES += src/schedulerdefaultnodeinit.c
 libscore_a_SOURCES += src/schedulerdefaultreleasejob.c

@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/priorityimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler )
 {
@@ -44,5 +45,15 @@ Priority_Control _POSIX_Priority_To_core(
   *valid = ( posix_priority >= POSIX_SCHEDULER_MINIMUM_PRIORITY
     && core_posix_priority < scheduler->maximum_priority );
 
-  return core_priority;
+  return _Scheduler_Map_priority( scheduler, core_priority );
+}
+
+int _POSIX_Priority_From_core(
+  const Scheduler_Control *scheduler,
+  Priority_Control         core_priority
+)
+{
+  core_priority = _Scheduler_Unmap_priority( scheduler, core_priority );
+
+  return (int) ( scheduler->maximum_priority - core_priority );
 }

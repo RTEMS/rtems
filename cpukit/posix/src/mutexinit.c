@@ -135,19 +135,14 @@ int pthread_mutex_init(
 
   switch ( protocol ) {
     case POSIX_MUTEX_PRIORITY_CEILING:
-      _CORE_ceiling_mutex_Initialize(
-        &the_mutex->Mutex,
-        priority
-      );
+      _CORE_ceiling_mutex_Initialize( &the_mutex->Mutex, scheduler, priority );
       break;
     default:
       _Assert(
         the_mutex->protocol == POSIX_MUTEX_NO_PROTOCOL
           || the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT
       );
-      _CORE_recursive_mutex_Initialize(
-        &the_mutex->Mutex.Recursive
-      );
+      _CORE_recursive_mutex_Initialize( &the_mutex->Mutex.Recursive );
       break;
   }
 

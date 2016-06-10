@@ -31,15 +31,13 @@ int pthread_mutex_setprioceiling(
   int               *old_ceiling
 )
 {
-  POSIX_Mutex_Control     *the_mutex;
-  const Scheduler_Control *scheduler;
-  bool                     valid;
-  Priority_Control         priority;
-  int                      error;
-  int                      unlock_error;
+  POSIX_Mutex_Control *the_mutex;
+  int                  error;
+  int                  unlock_error;
 
-  if ( !old_ceiling )
+  if ( old_ceiling == NULL ) {
     return EINVAL;
+  }
 
   /*
    *  Must acquire the mutex before we can change it's ceiling.
@@ -54,19 +52,26 @@ int pthread_mutex_setprioceiling(
   the_mutex = _POSIX_Mutex_Get_no_protection( mutex );
   _Assert( the_mutex != NULL );
 
-  scheduler = &_Scheduler_Table[ 0 ];
+  if ( the_mutex->protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+    const Scheduler_Control *scheduler;
+    bool                     valid;
+    Priority_Control         new_priority;
+    Priority_Control         old_priority;
 
-  *old_ceiling = _POSIX_Priority_From_core(
-    scheduler,
-    the_mutex->Mutex.priority_ceiling
-  );
+    scheduler = _CORE_ceiling_mutex_Get_scheduler( &the_mutex->Mutex );
+    old_priority = _CORE_ceiling_mutex_Get_priority( &the_mutex->Mutex );
+    *old_ceiling = _POSIX_Priority_From_core( scheduler, old_priority );
 
-  priority = _POSIX_Priority_To_core( scheduler, prioceiling, &valid );
-  if ( valid ) {
-    the_mutex->Mutex.priority_ceiling = priority;
-    error = 0;
+    new_priority = _POSIX_Priority_To_core( scheduler, prioceiling, &valid );
+    if ( valid ) {
+      _CORE_ceiling_mutex_Set_priority( &the_mutex->Mutex, new_priority );
+      error = 0;
+    } else {
+      error = EINVAL;
+    }
   } else {
-    error = EINVAL;
+    *old_ceiling = 0;
+    error = 0;
   }
 
   unlock_error = pthread_mutex_unlock( mutex );

@@ -45,6 +45,8 @@ extern "C" {
     _Scheduler_simple_Block,              /* block entry point */ \
     _Scheduler_simple_Unblock,            /* unblock entry point */ \
     _Scheduler_simple_Change_priority,    /* change priority entry point */ \
+    _Scheduler_default_Map_priority,      /* map priority entry point */ \
+    _Scheduler_default_Unmap_priority,    /* unmap priority entry point */ \
     SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_default_Node_initialize,   /* node initialize entry point */ \
     _Scheduler_default_Node_destroy,      /* node destroy entry point */ \

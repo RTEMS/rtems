@@ -19,7 +19,7 @@
 
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/objectimpl.h>
-#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_Priority_To_core(
 {
   *valid = ( priority <= scheduler->maximum_priority );
 
-  return (Priority_Control) priority;
+  return _Scheduler_Map_priority( scheduler, (Priority_Control) priority );
 }
 
 /**
@@ -113,7 +113,8 @@ RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_Priority_From_core(
   Priority_Control         priority
 )
 {
-  return (rtems_task_priority) priority;
+  return (rtems_task_priority)
+    _Scheduler_Unmap_priority( scheduler, priority );
 }
 
 /**@}*/

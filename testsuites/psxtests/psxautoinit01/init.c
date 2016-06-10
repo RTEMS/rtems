@@ -54,12 +54,16 @@ void *POSIX_Init(
   mutex1 = PTHREAD_MUTEX_INITIALIZER;
   mutex2 = PTHREAD_MUTEX_INITIALIZER;
   puts( "Init - pthread_mutex_getprioceiling - auto initialize - OK" );
+  prioceiling = 1;
   sc = pthread_mutex_getprioceiling( &mutex1, &prioceiling );
   fatal_posix_service_status( sc, 0, "mutex getprioceiling OK" );
+  rtems_test_assert( prioceiling == 0 );
 
   puts( "Init - pthread_mutex_getprioceiling - auto initialize - EINVAL" );
+  prioceiling = 1;
   sc = pthread_mutex_getprioceiling( &mutex2, &prioceiling );
   fatal_posix_service_status( sc, EINVAL, "mutex getprioceiling EINVAL" );
+  rtems_test_assert( prioceiling == 1 );
 
   puts( "Init - pthread_mutex_destroy - OK" );
   sc = pthread_mutex_destroy( &mutex1 );

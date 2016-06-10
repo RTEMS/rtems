@@ -20,6 +20,7 @@
 
 #include <rtems/score/coremutex.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/status.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
@@ -358,11 +359,42 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender_no_protocol(
 
 RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Initialize(
   CORE_ceiling_mutex_Control *the_mutex,
+  const Scheduler_Control    *scheduler,
   Priority_Control            priority_ceiling
 )
 {
   _CORE_recursive_mutex_Initialize( &the_mutex->Recursive );
   the_mutex->priority_ceiling = priority_ceiling;
+#if defined(RTEMS_SMP)
+  the_mutex->scheduler = scheduler;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE const Scheduler_Control *
+_CORE_ceiling_mutex_Get_scheduler(
+  const CORE_ceiling_mutex_Control *the_mutex
+)
+{
+#if defined(RTEMS_SMP)
+  return the_mutex->scheduler;
+#else
+  return _Scheduler_Get_by_CPU_index( 0 );
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
+  CORE_ceiling_mutex_Control *the_mutex,
+  Priority_Control            priority_ceiling
+)
+{
+  the_mutex->priority_ceiling = priority_ceiling;
+}
+
+RTEMS_INLINE_ROUTINE Priority_Control _CORE_ceiling_mutex_Get_priority(
+  const CORE_ceiling_mutex_Control *the_mutex
+)
+{
+  return the_mutex->priority_ceiling;
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
@@ -414,6 +446,16 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
   owner = _CORE_mutex_Get_owner( &the_mutex->Recursive.Mutex );
 
   if ( owner == NULL ) {
+#if defined(RTEMS_SMP)
+    if (
+      _Scheduler_Get_own( executing )
+        != _CORE_ceiling_mutex_Get_scheduler( the_mutex )
+    ) {
+      _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
+      return STATUS_NOT_DEFINED;
+    }
+#endif
+
     return _CORE_ceiling_mutex_Set_owner(
       the_mutex,
       executing,

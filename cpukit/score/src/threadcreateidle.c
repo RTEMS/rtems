@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/sysstate.h>
@@ -47,6 +48,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
    *  _Workspace_Initialization.
    */
   idle = _Thread_Internal_allocate();
+  _Assert( idle != NULL );
 
   _Thread_Initialize(
     &_Thread_Internal_information,
@@ -55,7 +57,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
     NULL,        /* allocate the stack */
     _Stack_Ensure_minimum( rtems_configuration_get_idle_task_stack_size() ),
     CPU_IDLE_TASK_IS_FP,
-    scheduler->maximum_priority,
+    _Scheduler_Map_priority( scheduler, scheduler->maximum_priority ),
     true,        /* preemptable */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */

@@ -103,6 +103,7 @@ int pthread_create(
   #endif
 
   executing = _Thread_Get_executing();
+  scheduler = _Scheduler_Get_own( executing );
 
   /*
    *  P1003.1c/Draft 10, p. 121.
@@ -197,7 +198,7 @@ int pthread_create(
   status = _Thread_Initialize(
     &_POSIX_Threads_Information,
     the_thread,
-    _Scheduler_Get( executing ),
+    scheduler,
     the_attr->stackaddr,
     _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,

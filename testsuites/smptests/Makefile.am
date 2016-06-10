@@ -45,6 +45,7 @@ SUBDIRS += smpwakeafter01
 if HAS_POSIX
 SUBDIRS += smppsxaffinity01
 SUBDIRS += smppsxaffinity02
+SUBDIRS += smppsxmutex01
 SUBDIRS += smppsxsignal01
 endif
 endif

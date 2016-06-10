@@ -55,6 +55,8 @@ extern "C" {
     _Scheduler_EDF_Block,            /* block entry point */ \
     _Scheduler_CBS_Unblock,          /* unblock entry point */ \
     _Scheduler_EDF_Change_priority,  /* change priority entry point */ \
+    _Scheduler_EDF_Map_priority,     /* map priority entry point */ \
+    _Scheduler_EDF_Unmap_priority,   /* unmap priority entry point */ \
     SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \

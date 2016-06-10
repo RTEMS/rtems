@@ -88,13 +88,10 @@ Priority_Control _POSIX_Priority_To_core(
  *
  * @return The corresponding POSIX API priority.
  */
-RTEMS_INLINE_ROUTINE int _POSIX_Priority_From_core(
+int _POSIX_Priority_From_core(
   const Scheduler_Control *scheduler,
   Priority_Control         priority
-)
-{
-  return (int) ( scheduler->maximum_priority - priority );
-}
+);
 
 /** @} */
 

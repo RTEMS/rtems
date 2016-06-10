@@ -45,10 +45,14 @@ int pthread_mutex_getprioceiling(
 
   _POSIX_Mutex_Acquire_critical( the_mutex, &queue_context );
 
-  *prioceiling = _POSIX_Priority_From_core(
-    &_Scheduler_Table[ 0 ],
-    the_mutex->Mutex.priority_ceiling
-  );
+  if ( the_mutex->protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+    *prioceiling = _POSIX_Priority_From_core(
+      _CORE_ceiling_mutex_Get_scheduler( &the_mutex->Mutex ),
+      _CORE_ceiling_mutex_Get_priority( &the_mutex->Mutex )
+    );
+  } else {
+    *prioceiling = 0;
+  }
 
   _POSIX_Mutex_Release( the_mutex, &queue_context );
 

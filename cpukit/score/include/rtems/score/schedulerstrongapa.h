@@ -84,6 +84,8 @@ typedef struct {
     _Scheduler_strong_APA_Block, \
     _Scheduler_strong_APA_Unblock, \
     _Scheduler_strong_APA_Change_priority, \
+    _Scheduler_default_Map_priority, \
+    _Scheduler_default_Unmap_priority, \
     _Scheduler_strong_APA_Ask_for_help, \
     _Scheduler_strong_APA_Node_initialize, \
     _Scheduler_default_Node_destroy, \

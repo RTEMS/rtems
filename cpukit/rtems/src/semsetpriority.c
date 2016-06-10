@@ -20,6 +20,20 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
+static rtems_status_code _Semaphore_Is_scheduler_valid(
+  const CORE_ceiling_mutex_Control *the_mutex,
+  const Scheduler_Control          *scheduler
+)
+{
+#if defined(RTEMS_SMP)
+  if ( scheduler != _CORE_ceiling_mutex_Get_scheduler( the_mutex ) ) {
+    return RTEMS_NOT_DEFINED;
+  }
+#endif
+
+  return RTEMS_SUCCESSFUL;
+}
+
 static rtems_status_code _Semaphore_Set_priority(
   Semaphore_Control       *the_semaphore,
   const Scheduler_Control *scheduler,
@@ -32,49 +46,51 @@ static rtems_status_code _Semaphore_Set_priority(
   bool                 valid;
   Priority_Control     core_priority;
   Priority_Control     old_priority;
-#if defined(RTEMS_SMP)
-  MRSP_Control        *mrsp;
-  uint32_t             scheduler_index;
-#endif
 
   core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
   if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
     return RTEMS_INVALID_PRIORITY;
   }
 
+  _Thread_queue_Acquire_critical(
+    &the_semaphore->Core_control.Wait_queue,
+    &queue_context->Lock_context
+  );
+
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-      _CORE_mutex_Acquire_critical(
-        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
-        queue_context
+      sc = _Semaphore_Is_scheduler_valid(
+        &the_semaphore->Core_control.Mutex,
+        scheduler
       );
 
-      old_priority = the_semaphore->Core_control.Mutex.priority_ceiling;
+      old_priority = _CORE_ceiling_mutex_Get_priority(
+        &the_semaphore->Core_control.Mutex
+      );
 
-      if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        the_semaphore->Core_control.Mutex.priority_ceiling = core_priority;
+      if ( sc == RTEMS_SUCCESSFUL && new_priority != RTEMS_CURRENT_PRIORITY ) {
+        _CORE_ceiling_mutex_Set_priority(
+          &the_semaphore->Core_control.Mutex,
+          core_priority
+        );
       }
 
-      _CORE_mutex_Release(
-        &the_semaphore->Core_control.Mutex.Recursive.Mutex,
-        queue_context
-      );
-      sc = RTEMS_SUCCESSFUL;
       break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      mrsp = &the_semaphore->Core_control.MRSP;
-      scheduler_index = _Scheduler_Get_index( scheduler );
-
-      _MRSP_Acquire_critical( mrsp, queue_context );
-
-      old_priority = _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
+      old_priority = _MRSP_Get_priority(
+        &the_semaphore->Core_control.MRSP,
+        scheduler
+      );
 
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        _MRSP_Set_ceiling_priority( mrsp, scheduler_index, core_priority );
+        _MRSP_Set_priority(
+          &the_semaphore->Core_control.MRSP,
+          scheduler,
+          core_priority
+        );
       }
 
-      _MRSP_Release( mrsp, queue_context );
       sc = RTEMS_SUCCESSFUL;
       break;
 #endif
@@ -85,14 +101,17 @@ static rtems_status_code _Semaphore_Set_priority(
           || the_semaphore->variant == SEMAPHORE_VARIANT_SIMPLE_BINARY
           || the_semaphore->variant == SEMAPHORE_VARIANT_COUNTING
       );
-      _ISR_lock_ISR_enable( &queue_context->Lock_context );
       old_priority = 0;
       sc = RTEMS_NOT_DEFINED;
       break;
   }
 
-  *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );
+  _Thread_queue_Release(
+    &the_semaphore->Core_control.Wait_queue,
+    &queue_context->Lock_context
+  );
 
+  *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );
   return sc;
 }
 

@@ -163,6 +163,7 @@ rtems_status_code rtems_semaphore_create(
       if ( valid ) {
         _CORE_ceiling_mutex_Initialize(
           &the_semaphore->Core_control.Mutex,
+          scheduler,
           priority
         );
 
@@ -200,6 +201,7 @@ rtems_status_code rtems_semaphore_create(
       if ( valid ) {
         status = _MRSP_Initialize(
           &the_semaphore->Core_control.MRSP,
+          scheduler,
           priority,
           executing,
           count == 0

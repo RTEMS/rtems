@@ -138,10 +138,11 @@ RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
-  MRSP_Control     *mrsp,
-  Priority_Control  ceiling_priority,
-  Thread_Control   *executing,
-  bool              initially_locked
+  MRSP_Control            *mrsp,
+  const Scheduler_Control *scheduler,
+  Priority_Control         ceiling_priority,
+  Thread_Control          *executing,
+  bool                     initially_locked
 )
 {
   uint32_t scheduler_count = _Scheduler_Count;
@@ -159,7 +160,16 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   }
 
   for ( i = 0 ; i < scheduler_count ; ++i ) {
-    mrsp->ceiling_priorities[ i ] = ceiling_priority;
+    const Scheduler_Control *scheduler_of_cpu;
+
+    scheduler_of_cpu = _Scheduler_Get_by_CPU_index( i );
+
+    if ( scheduler != scheduler_of_cpu ) {
+      mrsp->ceiling_priorities[ i ] =
+        _Scheduler_Map_priority( scheduler_of_cpu, 0 );
+    } else {
+      mrsp->ceiling_priorities[ i ] = ceiling_priority;
+    }
   }
 
   _Resource_Initialize( &mrsp->Resource );
@@ -169,21 +179,27 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   return STATUS_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_ceiling_priority(
-  MRSP_Control *mrsp,
-  uint32_t      scheduler_index
+RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
+  const MRSP_Control      *mrsp,
+  const Scheduler_Control *scheduler
 )
 {
+  uint32_t scheduler_index;
+
+  scheduler_index = _Scheduler_Get_index( scheduler );
   return mrsp->ceiling_priorities[ scheduler_index ];
 }
 
-RTEMS_INLINE_ROUTINE void _MRSP_Set_ceiling_priority(
-  MRSP_Control      *mrsp,
-  uint32_t           scheduler_index,
-  Priority_Control   ceiling_priority
+RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
+  MRSP_Control            *mrsp,
+  const Scheduler_Control *scheduler,
+  Priority_Control         new_priority
 )
 {
-  mrsp->ceiling_priorities[ scheduler_index ] = ceiling_priority;
+  uint32_t scheduler_index;
+
+  scheduler_index = _Scheduler_Get_index( scheduler );
+  mrsp->ceiling_priorities[ scheduler_index ] = new_priority;
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
@@ -307,10 +323,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
 {
   Status_Control status;
   const Scheduler_Control *scheduler = _Scheduler_Get_own( executing );
-  uint32_t scheduler_index = _Scheduler_Get_index( scheduler );
   Priority_Control initial_priority = executing->current_priority;
-  Priority_Control ceiling_priority =
-    _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
+  Priority_Control ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
   bool priority_ok = !_Thread_Priority_less_than(
     ceiling_priority,
     initial_priority
