@@ -30,7 +30,7 @@ struct _inode *jffs2_lookup(struct _inode *dir_i, const unsigned char *name, siz
 	struct jffs2_inode_info *dir_f;
 	struct jffs2_full_dirent *fd = NULL, *fd_list;
 	uint32_t ino = 0;
-	uint32_t hash = full_name_hash(name, namelen);
+	uint32_t hash = full_name_hash(NULL, name, namelen);
 	struct _inode *inode = NULL;
 
 	D1(printk("jffs2_lookup()\n"));

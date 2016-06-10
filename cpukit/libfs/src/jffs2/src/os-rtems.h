@@ -41,9 +41,10 @@
 struct _inode;
 struct super_block;
 
-static inline unsigned int full_name_hash(const unsigned char * name, size_t len) {
+static inline unsigned int full_name_hash(const void *salt, const unsigned char * name, size_t len) {
 
 	uint32_t hash = 0;
+	(void)salt;
  	while (len--) {
 		hash = (hash << 4) | (hash >> 28);
 		hash ^= *(name++);
