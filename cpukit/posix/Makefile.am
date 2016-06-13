@@ -133,6 +133,7 @@ libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
     src/pthreadself.c \
     src/pthreadsetschedparam.c src/pthreadsigmask.c \
     src/psxpriorityisvalid.c src/psxtransschedparam.c
+libposix_a_SOURCES += src/pthreadsetschedprio.c
 
 ## RTEMS specific support methods
 libposix_a_SOURCES += src/pthreadattrcompare.c

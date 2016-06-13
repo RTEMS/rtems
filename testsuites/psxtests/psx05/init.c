@@ -200,6 +200,16 @@ static void test_set_priority( void )
 
   rtems_test_assert( counter == 1 );
 
+  status = pthread_setschedprio( pthread_self(), param.sched_priority + 1 );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( counter == 1 );
+
+  status = pthread_setschedprio( pthread_self(), param.sched_priority );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( counter == 1 );
+
   counter = -1;
   sched_yield();
 
@@ -207,6 +217,25 @@ static void test_set_priority( void )
   rtems_test_assert( status == 0 );
   rtems_test_assert( exit_code == &counter );
   rtems_test_assert( counter == -1 );
+}
+
+static void test_errors_pthread_setschedprio( void )
+{
+  int                status;
+  int                policy;
+  struct sched_param param;
+
+  status = pthread_getschedparam( pthread_self(), &policy, &param );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_setschedprio( pthread_self(), INT_MAX );
+  rtems_test_assert( status == EINVAL );
+
+  status = pthread_setschedprio( 0xdeadbeef, param.sched_priority );
+  rtems_test_assert( status == ESRCH );
+
+  status = pthread_setschedprio( pthread_self(), param.sched_priority );
+  rtems_test_assert( status == 0 );
 }
 
 void *POSIX_Init(
@@ -232,6 +261,7 @@ void *POSIX_Init(
 
   test_get_priority();
   test_set_priority();
+  test_errors_pthread_setschedprio();
 
   /* set the time of day, and print our buffer in multiple ways */
 
