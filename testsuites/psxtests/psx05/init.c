@@ -156,6 +156,59 @@ static void test_get_priority( void )
   rtems_test_assert( status == 0 );
 }
 
+static void *counter_task(void *arg)
+{
+  int *counter;
+
+  counter = arg;
+
+  while ( *counter >= 0 ) {
+    ++(*counter);
+
+    sched_yield();
+  }
+
+  return counter;
+}
+
+static void test_set_priority( void )
+{
+  int                 status;
+  int                 policy;
+  struct sched_param  param;
+  pthread_t           thread;
+  int                 counter;
+  void               *exit_code;
+
+  counter = 0;
+
+  status = pthread_getschedparam( pthread_self(), &policy, &param );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_create( &thread, NULL, counter_task, &counter);
+  rtems_test_assert( status == 0 );
+
+  ++param.sched_priority;
+  status = pthread_setschedparam( pthread_self(), policy, &param );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( counter == 0 );
+
+  --param.sched_priority;
+  status = pthread_setschedparam( pthread_self(), policy, &param );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( counter == 1 );
+
+  counter = -1;
+  sched_yield();
+
+  status = pthread_join( thread, &exit_code );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( exit_code == &counter );
+  rtems_test_assert( counter == -1 );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -178,6 +231,7 @@ void *POSIX_Init(
   TEST_BEGIN();
 
   test_get_priority();
+  test_set_priority();
 
   /* set the time of day, and print our buffer in multiple ways */
 

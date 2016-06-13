@@ -112,7 +112,7 @@ int pthread_setschedparam(
     case SCHED_OTHER:
     case SCHED_FIFO:
     case SCHED_RR:
-      _Thread_Set_priority( the_thread, new_priority, &unused, true );
+      _Thread_Set_priority( the_thread, new_priority, &unused, false );
       break;
 
     case SCHED_SPORADIC:
