@@ -82,31 +82,200 @@ static void bsp_interrupt_server_trigger(void *arg)
 }
 
 typedef struct {
-  bsp_interrupt_server_action *action;
-  bsp_interrupt_server_action **link;
+  bsp_interrupt_server_entry *entry;
+  rtems_option *options;
+} bsp_interrupt_server_iterate_entry;
+
+static void bsp_interrupt_server_per_handler_routine(
+  void *iterate_arg,
+  const char *info,
+  rtems_option options,
+  rtems_interrupt_handler handler,
+  void *handler_arg
+)
+{
+  if (handler == bsp_interrupt_server_trigger) {
+    bsp_interrupt_server_iterate_entry *ie = iterate_arg;
+
+    ie->entry = handler_arg;
+    *ie->options = options;
+  }
+}
+
+static bsp_interrupt_server_entry *bsp_interrupt_server_query_entry(
+  rtems_vector_number vector,
+  rtems_option *trigger_options
+)
+{
+  bsp_interrupt_server_iterate_entry ie = {
+    .entry = NULL,
+    .options = trigger_options
+  };
+
+  rtems_interrupt_handler_iterate(
+    vector,
+    bsp_interrupt_server_per_handler_routine,
+    &ie
+  );
+
+  return ie.entry;
+}
+
+typedef struct {
+  rtems_vector_number vector;
+  rtems_option options;
+  rtems_interrupt_handler handler;
+  void *arg;
   rtems_id task;
+  rtems_status_code sc;
 } bsp_interrupt_server_helper_data;
 
-static void bsp_interrupt_server_helper(void *arg)
+static void bsp_interrupt_server_install_helper(void *arg)
 {
   bsp_interrupt_server_helper_data *hd = arg;
+  rtems_status_code sc;
+  bsp_interrupt_server_entry *e;
+  bsp_interrupt_server_action *a;
+  rtems_option trigger_options;
 
-  *hd->link = hd->action;
+  a = calloc(1, sizeof(*a));
+  if (a == NULL) {
+    hd->sc = RTEMS_NO_MEMORY;
+    rtems_event_transient_send(hd->task);
+    return;
+  }
+
+  a->handler = hd->handler;
+  a->arg = hd->arg;
+
+  bsp_interrupt_lock();
+
+  e = bsp_interrupt_server_query_entry(hd->vector, &trigger_options);
+  if (e == NULL) {
+    e = calloc(1, sizeof(*e));
+    if (e != NULL) {
+      e->vector = hd->vector;
+      e->actions = a;
+
+      sc = rtems_interrupt_handler_install(
+        hd->vector,
+        "IRQS",
+        hd->options & RTEMS_INTERRUPT_UNIQUE,
+        bsp_interrupt_server_trigger,
+        e
+      );
+      if (sc != RTEMS_SUCCESSFUL) {
+        free(e);
+      }
+    } else {
+      sc = RTEMS_NO_MEMORY;
+    }
+  } else if (
+    RTEMS_INTERRUPT_IS_UNIQUE(hd->options)
+      || RTEMS_INTERRUPT_IS_UNIQUE(trigger_options)
+  ) {
+    sc = RTEMS_RESOURCE_IN_USE;
+  } else {
+    bsp_interrupt_server_action **link = &e->actions;
+    bsp_interrupt_server_action *c;
+
+    sc = RTEMS_SUCCESSFUL;
+
+    while ((c = *link) != NULL) {
+      if (c->handler == hd->handler && c->arg == hd->arg) {
+        sc = RTEMS_TOO_MANY;
+        break;
+      }
+
+      link = &c->next;
+    }
+
+    if (sc == RTEMS_SUCCESSFUL) {
+      *link = a;
+    }
+  }
+
+  bsp_interrupt_unlock();
+
+  if (sc != RTEMS_SUCCESSFUL) {
+    free(a);
+  }
+
+  hd->sc = sc;
   rtems_event_transient_send(hd->task);
 }
 
-static void bsp_interrupt_server_call_helper(
-  bsp_interrupt_server_action *action,
-  bsp_interrupt_server_action **link
+static void bsp_interrupt_server_remove_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+  rtems_status_code sc;
+  bsp_interrupt_server_entry *e;
+  rtems_option trigger_options;
+
+  bsp_interrupt_lock();
+
+  e = bsp_interrupt_server_query_entry(hd->vector, &trigger_options);
+  if (e != NULL) {
+    bsp_interrupt_server_action **link = &e->actions;
+    bsp_interrupt_server_action *c;
+
+    while ((c = *link) != NULL) {
+      if (c->handler == hd->handler && c->arg == hd->arg) {
+        break;
+      }
+
+      link = &c->next;
+    }
+
+    if (c != NULL) {
+      bool remove_last = e->actions->next == NULL;
+
+      if (remove_last) {
+        rtems_interrupt_handler_remove(
+          hd->vector,
+          bsp_interrupt_server_trigger,
+          e
+        );
+      }
+
+      *link = c->next;
+      free(c);
+
+      if (remove_last) {
+        free(e);
+      }
+
+      sc = RTEMS_SUCCESSFUL;
+    } else {
+      sc = RTEMS_UNSATISFIED;
+    }
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  bsp_interrupt_unlock();
+
+  hd->sc = sc;
+  rtems_event_transient_send(hd->task);
+}
+
+static rtems_status_code bsp_interrupt_server_call_helper(
+  rtems_vector_number vector,
+  rtems_option options,
+  rtems_interrupt_handler handler,
+  void *arg,
+  void (*helper)(void *)
 )
 {
   bsp_interrupt_server_helper_data hd = {
-    .action = action,
-    .link = link,
+    .vector = vector,
+    .options = options,
+    .handler = handler,
+    .arg = arg,
     .task = rtems_task_self()
   };
   bsp_interrupt_server_action a = {
-    .handler = bsp_interrupt_server_helper,
+    .handler = helper,
     .arg = &hd
   };
   bsp_interrupt_server_entry e = {
@@ -116,6 +285,8 @@ static void bsp_interrupt_server_call_helper(
 
   bsp_interrupt_server_trigger(&e);
   rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+
+  return hd.sc;
 }
 
 static bsp_interrupt_server_entry *bsp_interrupt_server_get_entry(void)
@@ -168,46 +339,6 @@ static void bsp_interrupt_server_task(rtems_task_argument arg)
   }
 }
 
-typedef struct {
-  bsp_interrupt_server_entry *entry;
-  rtems_option *options;
-} bsp_interrupt_server_iterate_entry;
-
-static void bsp_interrupt_server_per_handler_routine(
-  void *iterate_arg,
-  const char *info,
-  rtems_option options,
-  rtems_interrupt_handler handler,
-  void *handler_arg
-)
-{
-  if (handler == bsp_interrupt_server_trigger) {
-    bsp_interrupt_server_iterate_entry *ie = iterate_arg;
-
-    ie->entry = handler_arg;
-    *ie->options = options;
-  }
-}
-
-static bsp_interrupt_server_entry *bsp_interrupt_server_query_entry(
-  rtems_vector_number vector,
-  rtems_option *trigger_options
-)
-{
-  bsp_interrupt_server_iterate_entry ie = {
-    .entry = NULL,
-    .options = trigger_options
-  };
-
-  rtems_interrupt_handler_iterate(
-    vector,
-    bsp_interrupt_server_per_handler_routine,
-    &ie
-  );
-
-  return ie.entry;
-}
-
 rtems_status_code rtems_interrupt_server_handler_install(
   rtems_id server,
   rtems_vector_number vector,
@@ -218,9 +349,6 @@ rtems_status_code rtems_interrupt_server_handler_install(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_entry *e;
-  bsp_interrupt_server_action *a;
-  rtems_option trigger_options;
 
   sc = bsp_interrupt_server_is_initialized();
   if (sc != RTEMS_SUCCESSFUL) {
@@ -231,66 +359,13 @@ rtems_status_code rtems_interrupt_server_handler_install(
     return RTEMS_NOT_IMPLEMENTED;
   }
 
-  a = calloc(1, sizeof(*a));
-  if (a == NULL) {
-    return RTEMS_NO_MEMORY;
-  }
-
-  a->handler = handler;
-  a->arg = arg;
-
-  bsp_interrupt_lock();
-
-  e = bsp_interrupt_server_query_entry(vector, &trigger_options);
-  if (e == NULL) {
-    e = calloc(1, sizeof(*e));
-    if (e != NULL) {
-      e->vector = vector;
-      e->actions = a;
-
-      sc = rtems_interrupt_handler_install(
-        vector,
-        "IRQS",
-        options & RTEMS_INTERRUPT_UNIQUE,
-        bsp_interrupt_server_trigger,
-        e
-      );
-      if (sc != RTEMS_SUCCESSFUL) {
-        free(e);
-      }
-    } else {
-      sc = RTEMS_NO_MEMORY;
-    }
-  } else if (
-    RTEMS_INTERRUPT_IS_UNIQUE(options)
-      || RTEMS_INTERRUPT_IS_UNIQUE(trigger_options)
-  ) {
-    sc = RTEMS_RESOURCE_IN_USE;
-  } else {
-    bsp_interrupt_server_action **link = &e->actions;
-    bsp_interrupt_server_action *c;
-
-    while ((c = *link) != NULL) {
-      if (c->handler == handler && c->arg == arg) {
-        sc = RTEMS_TOO_MANY;
-        break;
-      }
-
-      link = &c->next;
-    }
-
-    if (sc == RTEMS_SUCCESSFUL) {
-      bsp_interrupt_server_call_helper(a, link);
-    }
-  }
-
-  bsp_interrupt_unlock();
-
-  if (sc != RTEMS_SUCCESSFUL) {
-    free(a);
-  }
-
-  return sc;
+  return bsp_interrupt_server_call_helper(
+    vector,
+    options,
+    handler,
+    arg,
+    bsp_interrupt_server_install_helper
+  );
 }
 
 rtems_status_code rtems_interrupt_server_handler_remove(
@@ -301,8 +376,6 @@ rtems_status_code rtems_interrupt_server_handler_remove(
 )
 {
   rtems_status_code sc;
-  bsp_interrupt_server_entry *e;
-  rtems_option trigger_options;
 
   sc = bsp_interrupt_server_is_initialized();
   if (sc != RTEMS_SUCCESSFUL) {
@@ -313,48 +386,13 @@ rtems_status_code rtems_interrupt_server_handler_remove(
     return RTEMS_NOT_IMPLEMENTED;
   }
 
-  bsp_interrupt_lock();
-
-  e = bsp_interrupt_server_query_entry(vector, &trigger_options);
-  if (e != NULL) {
-    bsp_interrupt_server_action **link = &e->actions;
-    bsp_interrupt_server_action *c;
-
-    while ((c = *link) != NULL) {
-      if (c->handler == handler && c->arg == arg) {
-        break;
-      }
-
-      link = &c->next;
-    }
-
-    if (c != NULL) {
-      bool remove_last = e->actions->next == NULL;
-
-      if (remove_last) {
-        rtems_interrupt_handler_remove(
-          vector,
-          bsp_interrupt_server_trigger,
-          e
-        );
-      }
-
-      bsp_interrupt_server_call_helper(c->next, link);
-      free(c);
-
-      if (remove_last) {
-        free(e);
-      }
-    } else {
-      sc = RTEMS_UNSATISFIED;
-    }
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
-
-  bsp_interrupt_unlock();
-
-  return sc;
+  return bsp_interrupt_server_call_helper(
+    vector,
+    0,
+    handler,
+    arg,
+    bsp_interrupt_server_remove_helper
+  );
 }
 
 rtems_status_code rtems_interrupt_server_initialize(
