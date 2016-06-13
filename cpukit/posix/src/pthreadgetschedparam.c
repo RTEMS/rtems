@@ -54,7 +54,7 @@ int pthread_getschedparam(
   *policy = api->schedpolicy;
   *param  = api->schedparam;
   param->sched_priority = _POSIX_Priority_From_core(
-    the_thread->current_priority
+    the_thread->real_priority
   );
 
   _Thread_State_release( the_thread, &lock_context );

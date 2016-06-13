@@ -112,6 +112,50 @@ void calculate_abstimeout(
 
 }
 
+static void test_get_priority( void )
+{
+  int                 status;
+  pthread_mutexattr_t attr;
+  pthread_mutex_t     mutex;
+  int                 policy;
+  struct sched_param  param;
+  int                 real_priority;
+
+  status = pthread_getschedparam( pthread_self(), &policy, &param );
+  rtems_test_assert( status == 0 );
+
+  real_priority = param.sched_priority;
+
+  status = pthread_mutexattr_init( &attr );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
+  rtems_test_assert( !status );
+
+  status = pthread_mutexattr_setprioceiling( &attr, real_priority + 1 );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_mutex_init( &mutex, &attr );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_mutexattr_destroy( &attr );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_mutex_lock( &mutex );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_getschedparam( pthread_self(), &policy, &param );
+  rtems_test_assert( status == 0 );
+
+  rtems_test_assert( real_priority == param.sched_priority );
+
+  status = pthread_mutex_unlock( &mutex );
+  rtems_test_assert( status == 0 );
+
+  status = pthread_mutex_destroy( &mutex );
+  rtems_test_assert( status == 0 );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -132,6 +176,8 @@ void *POSIX_Init(
   Mutex_bad_id = MUTEX_BAD_ID;
 
   TEST_BEGIN();
+
+  test_get_priority();
 
   /* set the time of day, and print our buffer in multiple ways */
 
