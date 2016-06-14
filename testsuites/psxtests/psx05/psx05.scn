@@ -1,4 +1,4 @@
-*** POSIX TEST 5 ***
+*** BEGIN OF TEST PSX 5 ***
 Init's ID is 0x0b010001
 Init: pthread_mutexattr_init - EINVAL (NULL attr)
 Init: pthread_mutexattr_init - SUCCESSFUL
@@ -26,12 +26,15 @@ Init: pthread_mutexattr_getprioceiling - EINVAL (NULL attr)
 Init: pthread_mutexattr_getprioceiling - EINVAL (NULL prioceiling)
 Init: pthread_mutexattr_getprioceiling - EINVAL (not initialized)
 Init: pthread_mutexattr_setprioceiling - EINVAL (NULL attr)
-Init: pthread_mutexattr_setprioceiling - EINVAL (invalid priority)
+Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MAX)
+Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MIN)
 Init: pthread_mutexattr_setprioceiling - EINVAL (not initialized)
 
 Init: pthread_mutex_init - EINVAL (NULL mutex_id)
 Init: pthread_mutex_init - EINVAL (not initialized attr)
 Init: pthread_mutex_init - EINVAL (bad protocol)
+Init: pthread_mutexattr_setprotocol - SUCCESSFUL
+Init: pthread_mutexattr_setprioceiling - SUCCESSFUL
 Init: pthread_mutex_init - EINVAL (bad priority ceiling)
 Init: Resetting mutex attributes
 Init: pthread_mutex_init - ENOSYS (process wide scope)
@@ -82,7 +85,7 @@ Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutex_trylock - SUCCESSFUL
 Init: pthread_setschedparam - Setting Task2 priority to highest
 Task 2: pthread_mutex_lock unavailable (inherit case)
-Init: pthread_getschedparam - priority = 254
+Init: pthread_getschedparam - priority = 2
 Init: pthread_mutex_unlock - SUCCESSFUL
 Task 2: mutex acquired
 Task 2: unlock Mutex 2
@@ -103,7 +106,7 @@ Init: pthread_mutex_setprioceiling - new ceiling = 200
 Init: pthread_mutex_setprioceiling - old ceiling = 254
 Init: pthread_getschedparam - priority = 2
 Init: pthread_mutex_trylock - SUCCESSFUL
-Init: pthread_getschedparam - priority = 200
+Init: pthread_getschedparam - priority = 2
 Init: pthread_setschedparam - set Task3 priority to highest
 Init: Sleep 1 second
 Task 3: pthread_mutex_lock unavailable (inherit case)
@@ -116,4 +119,4 @@ Init: pthread_mutex_getprioceiling- ceiling = 200
 Init: pthread_setschedparam - set Init priority to highest
 Init: pthread_mutex_lock - EINVAL (priority ceiling violation)
 Init: Recursive Mutex
-*** END OF POSIX TEST 5 ***
+*** END OF TEST PSX 5 ***

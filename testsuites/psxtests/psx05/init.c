@@ -16,6 +16,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <errno.h>
+#include <limits.h>
 
 #include <rtems/score/todimpl.h>
 
@@ -375,11 +376,13 @@ void *POSIX_Init(
   status = pthread_mutexattr_setprioceiling( NULL, 128 );
   rtems_test_assert( status == EINVAL );
 
-  puts( "Init: pthread_mutexattr_setprioceiling - EINVAL (invalid priority)" );
-  status = pthread_mutexattr_setprioceiling( &attr, 512 );
-  if ( status != EINVAL )
-    printf( "status = %d\n", status );
-  rtems_test_assert( status == EINVAL );
+  puts( "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MAX)" );
+  status = pthread_mutexattr_setprioceiling( &attr, INT_MAX );
+  rtems_test_assert( status == 0 );
+
+  puts( "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL (priority INT_MIN)" );
+  status = pthread_mutexattr_setprioceiling( &attr, INT_MIN );
+  rtems_test_assert( status == 0 );
 
   puts( "Init: pthread_mutexattr_setprioceiling - EINVAL (not initialized)" );
   status = pthread_mutexattr_setprioceiling( &destroyed_attr, -1 );
@@ -409,9 +412,13 @@ void *POSIX_Init(
   status = pthread_mutex_init( &Mutex_id, &attr );
   rtems_test_assert( status == EINVAL );
 
-  /* must get around error checks in attribute set routines */
-  attr.protocol = PTHREAD_PRIO_INHERIT;
-  attr.prio_ceiling = -1;
+  puts( "Init: pthread_mutexattr_setprotocol - SUCCESSFUL" );
+  status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_PROTECT );
+  rtems_test_assert( !status );
+
+  puts( "Init: pthread_mutexattr_setprioceiling - SUCCESSFUL" );
+  status = pthread_mutexattr_setprioceiling( &attr, -1 );
+  rtems_test_assert( !status );
 
   puts( "Init: pthread_mutex_init - EINVAL (bad priority ceiling)" );
   status = pthread_mutex_init( &Mutex_id, &attr );

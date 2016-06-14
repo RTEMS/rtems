@@ -36,6 +36,7 @@ int pthread_mutex_init(
   POSIX_Mutex_Control       *the_mutex;
   const pthread_mutexattr_t *the_attr;
   POSIX_Mutex_Protocol       protocol;
+  Priority_Control           priority;
 
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
@@ -86,12 +87,6 @@ int pthread_mutex_init(
       return EINVAL;
   }
 
-  /*
-   *  Validate the priority ceiling field -- should always be valid.
-   */
-  if ( !_POSIX_Priority_Is_valid( the_attr->prio_ceiling ) )
-    return EINVAL;
-
 #if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
   /*
    *  Validate the mutex type and set appropriate SuperCore mutex
@@ -109,6 +104,14 @@ int pthread_mutex_init(
   }
 #endif
 
+  if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+    if ( !_POSIX_Priority_Is_valid( the_attr->prio_ceiling ) ) {
+      return EINVAL;
+    }
+
+    priority = _POSIX_Priority_To_core( the_attr->prio_ceiling );
+  }
+
   the_mutex = _POSIX_Mutex_Allocate();
 
   if ( !the_mutex ) {
@@ -119,11 +122,11 @@ int pthread_mutex_init(
   the_mutex->protocol = protocol;
   the_mutex->is_recursive = ( the_attr->type == PTHREAD_MUTEX_RECURSIVE );
 
-  switch ( the_mutex->protocol ) {
+  switch ( protocol ) {
     case POSIX_MUTEX_PRIORITY_CEILING:
       _CORE_ceiling_mutex_Initialize(
         &the_mutex->Mutex,
-        _POSIX_Priority_To_core( the_attr->prio_ceiling )
+        priority
       );
       break;
     default:
