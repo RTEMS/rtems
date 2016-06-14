@@ -52,11 +52,6 @@ typedef struct {
   /** This is the thread's current set of scheduling parameters. */
   struct sched_param      schedparam;
   /**
-   * This is the high priority to execute at when using the sporadic
-   * scheduler.
-   */
-  int                     ss_high_priority;
-  /**
    * This is the timer which controls when the thread executes at
    * high and low priority when using the sporadic scheduler.
    */

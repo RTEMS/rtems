@@ -100,10 +100,6 @@ int pthread_setschedparam(
         rtems_configuration_get_ticks_per_timeslice();
       new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
       break;
-
-    case SCHED_SPORADIC:
-      api->ss_high_priority = api->schedparam.sched_priority;
-      break;
   }
 
   _Thread_State_release( the_thread, &lock_context );
