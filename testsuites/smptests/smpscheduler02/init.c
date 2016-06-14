@@ -43,6 +43,7 @@ static void task(rtems_task_argument arg)
 
   rtems_test_assert(rtems_get_current_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
+  rtems_test_assert(sched_get_priority_max(SCHED_RR) == 126);
 
   sc = rtems_event_transient_send(main_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -134,6 +135,7 @@ static void test(void)
   rtems_test_assert(CPU_EQUAL(&cpuset, &first_cpu));
 
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
+  rtems_test_assert(sched_get_priority_max(SCHED_RR) == 254);
 
   if (cpu_count > 1) {
     sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
@@ -215,16 +217,14 @@ static void Init(rtems_task_argument arg)
 /* Lets see when the first RTEMS system hits this limit */
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 64
 
-#define CONFIGURE_MAXIMUM_PRIORITY 255
-
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
 #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(a, CONFIGURE_MAXIMUM_PRIORITY + 1);
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(a, 256);
 
-RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(b, CONFIGURE_MAXIMUM_PRIORITY + 1);
+RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(b, 128);
 
 RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(c);
 
