@@ -20,6 +20,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
+include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
 
 if HAS_PTHREADS
 # include
@@ -37,7 +38,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
 include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/pthread.h

@@ -18,21 +18,25 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
 #include <limits.h>
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
+#include <rtems/score/objectimpl.h>
 
 Objects_Information _POSIX_Mutex_Information;
 
-pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+const pthread_mutexattr_t _POSIX_Mutex_Default_attributes = {
+#if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
+  .type           = PTHREAD_MUTEX_DEFAULT,
+#endif
+  .is_initialized = true,
+  .process_shared = PTHREAD_PROCESS_PRIVATE,
+  .prio_ceiling   = INT_MAX,
+  .protocol       = PTHREAD_PRIO_NONE,
+  .recursive      = false
+};
 
 /*
  *  _POSIX_Mutex_Manager_initialization
@@ -47,21 +51,6 @@ pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 static void _POSIX_Mutex_Manager_initialization(void)
 {
-  pthread_mutexattr_t *default_attr = &_POSIX_Mutex_Default_attributes;
-
-  /*
-   * Since the maximum priority is run-time configured, this
-   * structure cannot be initialized statically.
-   */
-  default_attr->is_initialized = true;
-  default_attr->process_shared = PTHREAD_PROCESS_PRIVATE;
-  default_attr->prio_ceiling   = POSIX_SCHEDULER_MAXIMUM_PRIORITY;
-  default_attr->protocol       = PTHREAD_PRIO_NONE;
-  default_attr->recursive      = false;
-  #if defined(_UNIX98_THREAD_MUTEX_ATTRIBUTES)
-    default_attr->type         = PTHREAD_MUTEX_DEFAULT;
-  #endif
-
   /*
    * Initialize the POSIX mutex object class information structure.
    */

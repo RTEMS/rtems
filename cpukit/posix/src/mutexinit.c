@@ -36,6 +36,7 @@ int pthread_mutex_init(
   POSIX_Mutex_Control       *the_mutex;
   const pthread_mutexattr_t *the_attr;
   POSIX_Mutex_Protocol       protocol;
+  const Scheduler_Control   *scheduler;
   Priority_Control           priority;
 
   if ( attr ) the_attr = attr;
@@ -105,11 +106,20 @@ int pthread_mutex_init(
 #endif
 
   if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
-    if ( !_POSIX_Priority_Is_valid( the_attr->prio_ceiling ) ) {
+    int prio_ceiling;
+
+    scheduler = _Scheduler_Get_own( _Thread_Get_executing() );
+    prio_ceiling = the_attr->prio_ceiling;
+
+    if ( prio_ceiling == INT_MAX ) {
+      prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
+    }
+
+    if ( !_POSIX_Priority_Is_valid( prio_ceiling ) ) {
       return EINVAL;
     }
 
-    priority = _POSIX_Priority_To_core( the_attr->prio_ceiling );
+    priority = _POSIX_Priority_To_core( prio_ceiling );
   }
 
   the_mutex = _POSIX_Mutex_Allocate();

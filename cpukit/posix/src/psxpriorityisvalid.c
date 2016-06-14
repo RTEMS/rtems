@@ -18,8 +18,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/posix/priorityimpl.h>
+
+int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler )
+{
+  if ( scheduler->maximum_priority < INT_MAX ) {
+    return (int) scheduler->maximum_priority - 1;
+  } else {
+    return INT_MAX;
+  }
+}
 
 bool _POSIX_Priority_Is_valid(
   int priority

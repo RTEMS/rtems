@@ -50,7 +50,7 @@ extern Objects_Information _POSIX_Mutex_Information;
 /**
  *  The default mutex attributes structure.
  */
-extern pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
+extern const pthread_mutexattr_t _POSIX_Mutex_Default_attributes;
 
 RTEMS_INLINE_ROUTINE void _POSIX_Mutex_Acquire_critical(
   POSIX_Mutex_Control  *the_mutex,

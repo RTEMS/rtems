@@ -43,6 +43,10 @@ $(PROJECT_INCLUDE)/rtems/posix/posixapi.h: include/rtems/posix/posixapi.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 
+$(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
+
 if HAS_PTHREADS
 $(PROJECT_INCLUDE)/aio.h: include/aio.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/aio.h
@@ -84,10 +88,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.h
 $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h: include/rtems/posix/muteximpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 
 $(PROJECT_INCLUDE)/rtems/posix/psignal.h: include/rtems/posix/psignal.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignal.h

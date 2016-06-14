@@ -60,6 +60,16 @@ extern "C" {
 #define POSIX_SCHEDULER_MINIMUM_PRIORITY (1)
 
 /**
+ * @brief Gets the maximum POSIX API priority for this scheduler instance.
+ *
+ * Such a priority is valid.  A scheduler instance may support priority values
+ * that are not representable as an integer.
+ *
+ * @return The maximum POSIX API priority for this scheduler instance.
+ */
+int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler );
+
+/**
  * @brief Check if POSIX priority is valid.
  * 
  * 1003.1b-1993,2.2.2.80 definition of priority, p. 19

@@ -21,10 +21,9 @@
 #endif
 
 #include <sched.h>
-#include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/seterr.h>
+#include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 int sched_get_priority_max(
@@ -45,10 +44,5 @@ int sched_get_priority_max(
   }
 
   scheduler = _Scheduler_Get_own( _Thread_Get_executing() );
-
-  if ( scheduler->maximum_priority > INT_MAX ) {
-    return INT_MAX;
-  }
-
-  return (int) scheduler->maximum_priority - 1;
+  return _POSIX_Priority_Get_maximum( scheduler );
 }
