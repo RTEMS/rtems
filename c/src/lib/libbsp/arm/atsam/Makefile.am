@@ -51,6 +51,8 @@ include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/armv7m/include/armv7m-irq.h
 include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/pin-config.h
+include_bsp_HEADERS += include/atsam-i2c.h
+include_bsp_HEADERS += include/i2c.h
 
 include_libchipdir = $(includedir)/libchip
 
@@ -425,6 +427,10 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv7m/include
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/if_atsam.c
 endif
+
+# i2c
+libbsp_a_SOURCES += i2c/atsam_i2c_bus.c
+libbsp_a_SOURCES += i2c/atsam_i2c_init.c
 
 # Includes
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/CMSIS/Include

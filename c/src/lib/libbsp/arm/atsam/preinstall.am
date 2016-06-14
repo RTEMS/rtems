@@ -133,6 +133,14 @@ $(PROJECT_INCLUDE)/bsp/pin-config.h: include/pin-config.h $(PROJECT_INCLUDE)/bsp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pin-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pin-config.h
 
+$(PROJECT_INCLUDE)/bsp/atsam-i2c.h: include/atsam-i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/atsam-i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/atsam-i2c.h
+
+$(PROJECT_INCLUDE)/bsp/i2c.h: include/i2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/i2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/i2c.h
+
 $(PROJECT_INCLUDE)/libchip/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/libchip
 	@: > $(PROJECT_INCLUDE)/libchip/$(dirstamp)
