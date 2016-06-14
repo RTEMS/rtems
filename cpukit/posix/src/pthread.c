@@ -37,8 +37,9 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/keyimpl.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/cpusetimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 Thread_Information _POSIX_Threads_Information;
 
@@ -182,6 +183,7 @@ static bool _POSIX_Threads_Create_extension(
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
   api->Attributes.schedparam.sched_priority = _POSIX_Priority_From_core(
+    _Scheduler_Get_own( created ),
     created->current_priority
   );
 

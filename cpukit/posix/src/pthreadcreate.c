@@ -70,6 +70,7 @@ int pthread_create(
   bool                                status;
   Thread_Control                     *the_thread;
   Thread_Control                     *executing;
+  const Scheduler_Control            *scheduler;
   POSIX_API_Control                  *api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
@@ -151,16 +152,18 @@ int pthread_create(
     high_prio = low_prio;
   }
 
-  if ( !_POSIX_Priority_Is_valid( low_prio ) ) {
+  scheduler = _Scheduler_Get_own( executing );
+
+  if ( !_POSIX_Priority_Is_valid( scheduler, low_prio ) ) {
     return EINVAL;
   }
 
-  if ( !_POSIX_Priority_Is_valid( high_prio ) ) {
+  if ( !_POSIX_Priority_Is_valid( scheduler, high_prio ) ) {
     return EINVAL;
   }
 
-  core_low_prio = _POSIX_Priority_To_core( low_prio );
-  core_high_prio = _POSIX_Priority_To_core( high_prio );
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio );
+  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio );
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__

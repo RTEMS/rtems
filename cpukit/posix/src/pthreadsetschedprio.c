@@ -16,6 +16,7 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 typedef struct {
   int prio;
@@ -30,19 +31,21 @@ static bool _POSIX_Set_sched_prio_filter(
 {
   POSIX_Set_sched_prio_context *context;
   int                           prio;
+  const Scheduler_Control      *scheduler;
   POSIX_API_Control            *api;
   Priority_Control              current_priority;
   Priority_Control              new_priority;
 
   context = arg;
   prio = context->prio;
+  scheduler = _Scheduler_Get_own( the_thread );
 
-  if ( !_POSIX_Priority_Is_valid( prio ) ) {
+  if ( !_POSIX_Priority_Is_valid( scheduler, prio ) ) {
     context->error = EINVAL;
     return false;
   }
 
-  new_priority = _POSIX_Priority_To_core( prio );
+  new_priority = _POSIX_Priority_To_core( scheduler, prio );
   *new_priority_p = new_priority;
 
   current_priority = the_thread->current_priority;

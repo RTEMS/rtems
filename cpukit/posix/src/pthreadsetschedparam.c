@@ -28,6 +28,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 typedef struct {
   int                                  policy;
@@ -45,6 +46,7 @@ static bool _POSIX_Set_sched_param_filter(
 {
   POSIX_Set_sched_param_context *context;
   const struct sched_param      *param;
+  const Scheduler_Control       *scheduler;
   POSIX_API_Control             *api;
   int                            low_prio;
   int                            high_prio;
@@ -54,6 +56,7 @@ static bool _POSIX_Set_sched_param_filter(
 
   context = arg;
   param = context->param;
+  scheduler = _Scheduler_Get_own( the_thread );
 
   if ( context->policy == SCHED_SPORADIC ) {
     low_prio = param->sched_ss_low_priority;
@@ -63,18 +66,18 @@ static bool _POSIX_Set_sched_param_filter(
     high_prio = low_prio;
   }
 
-  if ( !_POSIX_Priority_Is_valid( low_prio ) ) {
+  if ( !_POSIX_Priority_Is_valid( scheduler, low_prio ) ) {
     context->error = EINVAL;
     return false;
   }
 
-  if ( !_POSIX_Priority_Is_valid( high_prio ) ) {
+  if ( !_POSIX_Priority_Is_valid( scheduler, high_prio ) ) {
     context->error = EINVAL;
     return false;
   }
 
-  core_low_prio = _POSIX_Priority_To_core( low_prio );
-  core_high_prio = _POSIX_Priority_To_core( high_prio );
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio );
+  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio );
 
   *new_priority_p = core_high_prio;
 

@@ -30,11 +30,11 @@ int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler )
 }
 
 bool _POSIX_Priority_Is_valid(
-  int priority
+  const Scheduler_Control *scheduler,
+  int                      priority
 )
 {
-  return ((priority >= POSIX_SCHEDULER_MINIMUM_PRIORITY) &&
-          (priority <= POSIX_SCHEDULER_MAXIMUM_PRIORITY));
-
+  return priority >= POSIX_SCHEDULER_MINIMUM_PRIORITY
+    && (Priority_Control) priority < scheduler->maximum_priority;
 }
 

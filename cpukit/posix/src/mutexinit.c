@@ -20,6 +20,7 @@
 
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/priorityimpl.h>
+#include <rtems/score/schedulerimpl.h>
 
 /**
  * 11.3.2 Initializing and Destroying a Mutex, P1003.1c/Draft 10, p. 87
@@ -115,11 +116,11 @@ int pthread_mutex_init(
       prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
     }
 
-    if ( !_POSIX_Priority_Is_valid( prio_ceiling ) ) {
+    if ( !_POSIX_Priority_Is_valid( scheduler, prio_ceiling ) ) {
       return EINVAL;
     }
 
-    priority = _POSIX_Priority_To_core( prio_ceiling );
+    priority = _POSIX_Priority_To_core( scheduler, prio_ceiling );
   }
 
   the_mutex = _POSIX_Mutex_Allocate();

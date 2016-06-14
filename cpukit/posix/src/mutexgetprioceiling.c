@@ -46,6 +46,7 @@ int pthread_mutex_getprioceiling(
   _POSIX_Mutex_Acquire_critical( the_mutex, &queue_context );
 
   *prioceiling = _POSIX_Priority_From_core(
+    &_Scheduler_Table[ 0 ],
     the_mutex->Mutex.priority_ceiling
   );
 

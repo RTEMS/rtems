@@ -26,6 +26,7 @@
 
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 
 int pthread_getschedparam(
@@ -34,9 +35,11 @@ int pthread_getschedparam(
   struct sched_param *param
 )
 {
-  Thread_Control    *the_thread;
-  ISR_lock_Context   lock_context;
-  POSIX_API_Control *api;
+  Thread_Control          *the_thread;
+  ISR_lock_Context         lock_context;
+  POSIX_API_Control       *api;
+  const Scheduler_Control *scheduler;
+  Priority_Control         priority;
 
   if ( policy == NULL || param == NULL ) {
     return EINVAL;
@@ -54,10 +57,12 @@ int pthread_getschedparam(
 
   *policy = api->Attributes.schedpolicy;
   *param  = api->Attributes.schedparam;
-  param->sched_priority = _POSIX_Priority_From_core(
-    the_thread->real_priority
-  );
+
+  scheduler = _Scheduler_Get_own( the_thread );
+  priority = the_thread->real_priority;
 
   _Thread_Lock_release_default( the_thread, &lock_context );
+
+  param->sched_priority = _POSIX_Priority_From_core( scheduler, priority );
   return 0;
 }
