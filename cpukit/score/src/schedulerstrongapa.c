@@ -165,7 +165,10 @@ void _Scheduler_strong_APA_Initialize( const Scheduler_Control *scheduler )
 
   _Scheduler_SMP_Initialize( &self->Base );
   _Priority_bit_map_Initialize( &self->Bit_map );
-  _Scheduler_priority_Ready_queue_initialize( &self->Ready[ 0 ] );
+  _Scheduler_priority_Ready_queue_initialize(
+    &self->Ready[ 0 ],
+    scheduler->maximum_priority
+  );
 }
 
 void _Scheduler_strong_APA_Node_initialize(

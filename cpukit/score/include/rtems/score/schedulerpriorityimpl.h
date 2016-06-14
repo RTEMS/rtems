@@ -54,14 +54,15 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_nod
  * This routine initializes @a ready_queues for priority-based scheduling.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_initialize(
-  Chain_Control *ready_queues
+  Chain_Control    *ready_queues,
+  Priority_Control  maximum_priority
 )
 {
   size_t index;
 
-  /* initialize ready queue structures */
-  for( index=0; index <= PRIORITY_MAXIMUM; index++)
-    _Chain_Initialize_empty( &ready_queues[index] );
+  for ( index = 0 ; index <= (size_t) maximum_priority ; ++index ) {
+    _Chain_Initialize_empty( &ready_queues[ index ] );
+  }
 }
 
 /**
