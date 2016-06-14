@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -15,6 +15,8 @@
 #ifdef HAVE_CONFIG_H
   #include "config.h"
 #endif
+
+#include <sched.h>
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
@@ -40,6 +42,7 @@ static void task(rtems_task_argument arg)
   (void) arg;
 
   rtems_test_assert(rtems_get_current_processor() == 1);
+  rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
 
   sc = rtems_event_transient_send(main_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -129,6 +132,8 @@ static void test(void)
   sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(CPU_EQUAL(&cpuset, &first_cpu));
+
+  rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
 
   if (cpu_count > 1) {
     sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
