@@ -193,7 +193,6 @@ static bool _POSIX_Threads_Create_extension(
   /* XXX check all fields are touched */
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
-  api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
   api->schedparam.sched_priority =
      _POSIX_Priority_From_core( created->current_priority );
@@ -232,7 +231,7 @@ static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
 
   _Thread_State_acquire( executing, &lock_context );
 
-  if ( api->schedpolicy == SCHED_SPORADIC ) {
+  if ( api->Attributes.schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
   }
 

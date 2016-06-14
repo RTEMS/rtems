@@ -80,11 +80,10 @@ int pthread_setschedparam(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  if ( api->schedpolicy == SCHED_SPORADIC ) {
+  if ( api->Attributes.schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
   }
 
-  api->schedpolicy = policy;
   api->schedparam  = *param;
   api->Attributes.schedpolicy = policy;
   api->Attributes.schedparam  = *param;

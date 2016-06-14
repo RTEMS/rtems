@@ -47,8 +47,6 @@ typedef struct {
   Thread_Control         *thread;
   /** This is the POSIX threads attribute set. */
   pthread_attr_t          Attributes;
-  /** This is the thread's current scheduling policy. */
-  int                     schedpolicy;
   /** This is the thread's current set of scheduling parameters. */
   struct sched_param      schedparam;
   /**

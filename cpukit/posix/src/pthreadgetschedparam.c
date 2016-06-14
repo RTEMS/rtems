@@ -51,7 +51,7 @@ int pthread_getschedparam(
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-  *policy = api->schedpolicy;
+  *policy = api->Attributes.schedpolicy;
   *param  = api->schedparam;
   param->sched_priority = _POSIX_Priority_From_core(
     the_thread->real_priority

@@ -712,7 +712,6 @@ struct _Thread_Control {
    *
    * - POSIX_API_Control::Attributes,
    * - POSIX_API_Control::schedparam,
-   * - POSIX_API_Control::schedpolicy,
    * - RTEMS_API_Control::Signal,
    * - Thread_Control::budget_algorithm,
    * - Thread_Control::budget_callout,

@@ -110,7 +110,7 @@ int pthread_create(
   switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
       api = executing->API_Extensions[ THREAD_API_POSIX ];
-      schedpolicy = api->schedpolicy;
+      schedpolicy = api->Attributes.schedpolicy;
       schedparam  = api->schedparam;
       break;
 
@@ -226,7 +226,6 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
-  api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 
   if ( schedpolicy == SCHED_SPORADIC ) {
