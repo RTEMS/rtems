@@ -41,6 +41,11 @@ RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_FAST_IDLE],
 occurs while the IDLE thread is executing.  This can significantly reduce
 simulation times.])
 
+RTEMS_BSPOPTS_SET([CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR],[*qemu*],[1])
+RTEMS_BSPOPTS_HELP([CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR],
+[If defined, then do the clock tick processing on the boot processor on behalf
+of all other processors.])
+
 RTEMS_CHECK_SMP
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 

@@ -94,7 +94,7 @@ static void a9mpcore_clock_gt_init(
     | A9MPCORE_GT_CTRL_TMR_EN;
 }
 
-#ifdef RTEMS_SMP
+#if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
 typedef struct {
   uint64_t cmpval;
   uint32_t interval;
@@ -116,7 +116,7 @@ static void a9mpcore_clock_secondary_initialization(
   uint32_t interval
 )
 {
-#ifdef RTEMS_SMP
+#if defined(RTEMS_SMP) && !defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
   a9mpcore_clock_init_data init_data = {
     .cmpval = cmpval,
     .interval = interval

@@ -21,6 +21,7 @@
 #include <rtems/clockdrv.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 #ifdef Clock_driver_nanoseconds_since_last_tick
 #error "Update driver to use the timecounter instead of nanoseconds extension"
@@ -64,11 +65,29 @@
  * instead of the default.
  */
 #ifndef Clock_driver_timecounter_tick
-  #ifdef CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
-    #define Clock_driver_timecounter_tick() rtems_clock_tick()
-  #else
-    #define Clock_driver_timecounter_tick() rtems_timecounter_tick()
-  #endif
+static void Clock_driver_timecounter_tick( void )
+{
+#if defined(CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER)
+  rtems_clock_tick();
+#elif defined(RTEMS_SMP) && defined(CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR)
+  uint32_t cpu_count = _SMP_Get_processor_count();
+  uint32_t cpu_index;
+
+  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
+    Per_CPU_Control *cpu;
+
+    cpu = _Per_CPU_Get_by_index( cpu_index );
+
+    if ( _Per_CPU_Is_boot_processor( cpu ) ) {
+      rtems_timecounter_tick();
+    } else if ( _Processor_mask_Is_set( _SMP_Online_processors, cpu_index ) ) {
+      _Watchdog_Tick( cpu );
+    }
+  }
+#else
+  rtems_timecounter_tick();
+#endif
+}
 #endif
 
 /**
