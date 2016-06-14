@@ -43,7 +43,6 @@ int pthread_setschedprio( pthread_t thread, int prio )
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
 
   _Thread_State_acquire_critical( the_thread, &lock_context );
-  api->schedparam.sched_priority = prio;
   api->Attributes.schedparam.sched_priority = prio;
   _Thread_State_release( the_thread, &lock_context );
 

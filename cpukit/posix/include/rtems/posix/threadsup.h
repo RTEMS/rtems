@@ -45,10 +45,10 @@ extern "C" {
 typedef struct {
   /** Back pointer to thread of this POSIX API control. */
   Thread_Control         *thread;
+
   /** This is the POSIX threads attribute set. */
   pthread_attr_t          Attributes;
-  /** This is the thread's current set of scheduling parameters. */
-  struct sched_param      schedparam;
+
   /**
    * This is the timer which controls when the thread executes at
    * high and low priority when using the sporadic scheduler.

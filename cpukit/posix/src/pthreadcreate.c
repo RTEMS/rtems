@@ -111,7 +111,7 @@ int pthread_create(
     case PTHREAD_INHERIT_SCHED:
       api = executing->API_Extensions[ THREAD_API_POSIX ];
       schedpolicy = api->Attributes.schedpolicy;
-      schedparam  = api->schedparam;
+      schedparam  = api->Attributes.schedparam;
       break;
 
     case PTHREAD_EXPLICIT_SCHED:
@@ -226,7 +226,6 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
-  api->schedparam  = schedparam;
 
   if ( schedpolicy == SCHED_SPORADIC ) {
     _ISR_lock_ISR_disable( &lock_context );

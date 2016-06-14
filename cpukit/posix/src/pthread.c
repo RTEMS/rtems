@@ -116,7 +116,9 @@ void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
   _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
   _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
 
-  new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
+  new_priority = _POSIX_Priority_To_core(
+    api->Attributes.schedparam.sched_priority
+  );
 
   _Thread_State_release( the_thread, &lock_context );
 
@@ -167,7 +169,9 @@ void _POSIX_Threads_Sporadic_budget_callout(
 
   _Thread_Change_priority(
     the_thread,
-    _POSIX_Priority_To_core( api->schedparam.sched_ss_low_priority ),
+    _POSIX_Priority_To_core(
+      api->Attributes.schedparam.sched_ss_low_priority
+    ),
     NULL,
     _POSIX_Threads_Sporadic_budget_callout_filter,
     true
@@ -193,9 +197,9 @@ static bool _POSIX_Threads_Create_extension(
   /* XXX check all fields are touched */
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
-  api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
-  api->schedparam.sched_priority =
-     _POSIX_Priority_From_core( created->current_priority );
+  api->Attributes.schedparam.sched_priority = _POSIX_Priority_From_core(
+    created->current_priority
+  );
 
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked

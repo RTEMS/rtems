@@ -84,7 +84,6 @@ int pthread_setschedparam(
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
   }
 
-  api->schedparam  = *param;
   api->Attributes.schedpolicy = policy;
   api->Attributes.schedparam  = *param;
 
@@ -97,7 +96,9 @@ int pthread_setschedparam(
     case SCHED_RR:
       the_thread->cpu_time_budget =
         rtems_configuration_get_ticks_per_timeslice();
-      new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
+      new_priority = _POSIX_Priority_To_core(
+        api->Attributes.schedparam.sched_priority
+      );
       break;
   }
 
