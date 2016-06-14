@@ -25,11 +25,19 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/config.h>
 
-static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
+static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
 {
   Objects_Name             name;
   Thread_Control          *idle;
   const Scheduler_Control *scheduler;
+
+  scheduler = _Scheduler_Get_by_CPU( cpu );
+
+#if defined(RTEMS_SMP)
+  if (scheduler == NULL) {
+    return;
+  }
+#endif
 
   name.name_u32 = _Objects_Build_name( 'I', 'D', 'L', 'E' );
 
@@ -43,11 +51,11 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
   _Thread_Initialize(
     &_Thread_Internal_information,
     idle,
-    _Scheduler_Get_by_CPU( cpu ),
+    scheduler,
     NULL,        /* allocate the stack */
     _Stack_Ensure_minimum( rtems_configuration_get_idle_task_stack_size() ),
     CPU_IDLE_TASK_IS_FP,
-    PRIORITY_MAXIMUM,
+    scheduler->maximum_priority,
     true,        /* preemptable */
     THREAD_CPU_BUDGET_ALGORITHM_NONE,
     NULL,        /* no budget algorithm callout */
@@ -67,14 +75,6 @@ static void _Thread_Create_idle_for_cpu( Per_CPU_Control *cpu )
 
   _Thread_Load_environment( idle );
 
-  scheduler = _Scheduler_Get_by_CPU( cpu );
-
-#if defined(RTEMS_SMP)
-  if (scheduler == NULL) {
-    return;
-  }
-#endif
-
   idle->current_state = STATES_READY;
   _Scheduler_Start_idle( scheduler, idle, cpu );
   _User_extensions_Thread_start( idle );
@@ -91,7 +91,7 @@ void _Thread_Create_idle( void )
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( _Per_CPU_Is_processor_online( cpu ) ) {
-      _Thread_Create_idle_for_cpu( cpu );
+      _Thread_Create_idle_for_CPU( cpu );
     }
   }
 }
