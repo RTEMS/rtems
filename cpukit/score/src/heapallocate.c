@@ -43,9 +43,14 @@
       uintptr_t count = 0;
 
       for ( count = 0; count < blocks_to_free_count; ++count ) {
-        Heap_Block *next_block_to_free =
-          block_to_free->Protection_begin.next_delayed_free_block;
+        Heap_Block *next_block_to_free;
 
+        if ( !_Heap_Is_block_in_heap( heap, block_to_free ) ) {
+          _Heap_Protection_block_error( heap, block_to_free );
+        }
+
+        next_block_to_free =
+          block_to_free->Protection_begin.next_delayed_free_block;
         block_to_free->Protection_begin.next_delayed_free_block =
           HEAP_PROTECTION_OBOLUS;
 
