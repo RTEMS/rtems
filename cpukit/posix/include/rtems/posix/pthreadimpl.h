@@ -54,9 +54,13 @@ extern Thread_Information _POSIX_Threads_Information;
 extern pthread_attr_t _POSIX_Threads_Default_attributes;
 
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
+  Thread_Control    *the_thread,
   POSIX_API_Control *api
 )
 {
+  the_thread->cpu_time_budget =
+    _Timespec_To_ticks( &api->Attributes.schedparam.sched_ss_init_budget );
+
   _Watchdog_Per_CPU_insert_relative(
     &api->Sporadic_timer,
     _Per_CPU_Get(),

@@ -113,11 +113,8 @@ void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
 
   _Thread_State_acquire( the_thread, &lock_context );
 
-  the_thread->cpu_time_budget =
-    _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
-
   _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
-  _POSIX_Threads_Sporadic_timer_insert( api );
+  _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
 
   new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
 

@@ -11,15 +11,88 @@
 #include "config.h"
 #endif
 
-#include <sched.h>
+#include <sys/time.h>
 #include <errno.h>
+#include <inttypes.h>
+#include <sched.h>
+#include <stdint.h>
+#include <unistd.h>
 
 #include <pmacros.h>
 
 const char rtems_test_name[] = "PSX 12";
 
+#define SS_REPL_PERIOD_US 200000
+
+#define SS_INIT_BUDGET_US 100000
+
+#define SS_PRIO_LOW 1
+
+#define SS_PRIO_HIGH 2
+
+#define SS_SAMPLE_PERIODS 3
+
+typedef struct {
+  uint64_t start;
+  struct {
+    uint64_t high;
+    uint64_t low;
+  } samples[ SS_SAMPLE_PERIODS ];
+} test_context;
+
+static test_context test_instance;
+
+static void wait_for_prio( int prio )
+{
+  int                status;
+  int                policy;
+  struct sched_param param;
+
+  do {
+    status = pthread_getschedparam( pthread_self(), &policy, &param );
+    rtems_test_assert( status == 0 );
+  } while ( prio != param.sched_priority );
+}
+
+static uint64_t timeval_to_us( const struct timeval *tv )
+{
+  uint64_t t;
+
+  t = tv->tv_sec;
+  t *= 1000000;
+  t += tv->tv_usec;
+
+  return t;
+}
+
+static uint64_t now( void )
+{
+  struct timeval now;
+
+  gettimeofday( &now, NULL );
+
+  return timeval_to_us( &now );
+}
+
+static uint64_t delta( test_context *ctx )
+{
+  return now() - ctx->start;
+}
+
 static void *sporadic_server( void *argument )
 {
+  test_context *ctx;
+  size_t        i;
+
+  ctx = argument;
+
+  for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
+    wait_for_prio( SS_PRIO_LOW );
+    ctx->samples[ i ].high = delta( ctx );
+    wait_for_prio( SS_PRIO_HIGH );
+    ctx->samples[ i ].low = delta( ctx );
+  }
+
   puts( "Sporadic Server: exitting" );
 
   return NULL;
@@ -27,12 +100,16 @@ static void *sporadic_server( void *argument )
 
 static void *POSIX_Init( void *argument )
 {
+  test_context       *ctx;
   int                 status;
   pthread_attr_t      attr;
   pthread_t           thread;
   struct sched_param  schedparam;
+  size_t              i;
 
   TEST_BEGIN();
+
+  ctx = &test_instance;
 
   /* set the time of day, and print our buffer in multiple ways */
 
@@ -86,12 +163,12 @@ static void *POSIX_Init( void *argument )
 
   /* invalid sched_ss_low_priority error */
 
-  schedparam.sched_ss_repl_period.tv_sec = 2;
-  schedparam.sched_ss_repl_period.tv_nsec = 0;
-  schedparam.sched_ss_init_budget.tv_sec = 1;
-  schedparam.sched_ss_init_budget.tv_nsec = 0;
+  schedparam.sched_ss_repl_period.tv_sec = 0;
+  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_US * 1000;
+  schedparam.sched_ss_init_budget.tv_sec = 0;
+  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_US * 1000;
 
-  schedparam.sched_priority = 200;
+  schedparam.sched_priority = SS_PRIO_HIGH;
   schedparam.sched_ss_low_priority = -1;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
@@ -103,25 +180,35 @@ static void *POSIX_Init( void *argument )
 
   /* create a thread as a sporadic server */
 
-  schedparam.sched_ss_repl_period.tv_sec = 2;
-  schedparam.sched_ss_repl_period.tv_nsec = 0;
-  schedparam.sched_ss_init_budget.tv_sec = 1;
-  schedparam.sched_ss_init_budget.tv_nsec = 0;
+  schedparam.sched_ss_repl_period.tv_sec = 0;
+  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_US * 1000;
+  schedparam.sched_ss_init_budget.tv_sec = 0;
+  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_US * 1000;
 
-  schedparam.sched_priority = sched_get_priority_max( SCHED_FIFO );
-  schedparam.sched_ss_low_priority = sched_get_priority_max( SCHED_FIFO ) - 6;
+  schedparam.sched_priority = SS_PRIO_HIGH;
+  schedparam.sched_ss_low_priority = SS_PRIO_LOW;
 
   status = pthread_attr_setschedparam( &attr, &schedparam );
   rtems_test_assert( !status );
 
   puts( "Init: pthread_create - SUCCESSFUL" );
-  status = pthread_create( &thread, &attr, sporadic_server, NULL );
+
+  /* Align with clock tick */
+  usleep( 1 );
+
+  ctx->start = now();
+
+  status = pthread_create( &thread, &attr, sporadic_server, ctx );
   rtems_test_assert( !status );
 
   status = pthread_join( thread, NULL );
   rtems_test_assert( !status );
 
-    /* switch to Task_1 */
+  for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
+    printf( "[%zu] H %6" PRIu64 "us\n", i, ctx->samples[ i ].high );
+    printf( "[%zu] L %6" PRIu64 "us\n", i, ctx->samples[ i ].low );
+    rtems_test_assert( ctx->samples[ i ].low / SS_REPL_PERIOD_US == i + 1 );
+  }
 
   TEST_END();
   rtems_test_exit( 0 );

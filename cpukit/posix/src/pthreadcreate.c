@@ -229,6 +229,12 @@ int pthread_create(
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
 
+  if ( schedpolicy == SCHED_SPORADIC ) {
+    _ISR_lock_ISR_disable( &lock_context );
+    _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
+    _ISR_lock_ISR_enable( &lock_context );
+  }
+
   /*
    *  POSIX threads are allocated and started in one operation.
    */
@@ -248,12 +254,6 @@ int pthread_create(
       return EINVAL;
     }
   #endif
-
-  if ( schedpolicy == SCHED_SPORADIC ) {
-    _ISR_lock_ISR_disable( &lock_context );
-    _POSIX_Threads_Sporadic_timer_insert( api );
-    _ISR_lock_ISR_enable( &lock_context );
-  }
 
   /*
    *  Return the id and indicate we successfully created the thread

@@ -8,4 +8,10 @@ Init: pthread_create - EINVAL (replenish < budget)
 Init: pthread_create - EINVAL (invalid sched_ss_low_priority)
 Init: pthread_create - SUCCESSFUL
 Sporadic Server: exitting
+[0] H  99902us
+[0] L 200008us
+[1] H 289908us
+[1] L 400009us
+[2] H 489903us
+[2] L 600009us
 *** END OF TEST PSX 12 ***
