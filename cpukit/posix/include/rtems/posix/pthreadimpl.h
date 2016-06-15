@@ -22,9 +22,11 @@
 #include <rtems/posix/pthread.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
-#include <rtems/score/objectimpl.h>
-#include <rtems/score/threadimpl.h>
 #include <rtems/score/assert.h>
+#include <rtems/score/objectimpl.h>
+#include <rtems/score/timespec.h>
+#include <rtems/score/threadimpl.h>
+#include <rtems/score/watchdogimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +52,17 @@ extern Thread_Information _POSIX_Threads_Information;
  * This variable contains the default POSIX Thread attributes.
  */
 extern pthread_attr_t _POSIX_Threads_Default_attributes;
+
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
+  POSIX_API_Control *api
+)
+{
+  _Watchdog_Per_CPU_insert_relative(
+    &api->Sporadic_timer,
+    _Per_CPU_Get(),
+    _Timespec_To_ticks( &api->Attributes.schedparam.sched_ss_repl_period )
+  );
+}
 
 /**
  * @brief POSIX threads sporadic budget callout.

@@ -31,14 +31,12 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/userextimpl.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/config.h>
 #include <rtems/posix/keyimpl.h>
-#include <rtems/score/timespec.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/assert.h>
 
@@ -119,11 +117,7 @@ void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
     _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
 
   _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
-  _Watchdog_Per_CPU_insert_relative(
-    &api->Sporadic_timer,
-    _Per_CPU_Get(),
-    _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
-  );
+  _POSIX_Threads_Sporadic_timer_insert( api );
 
   new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
 

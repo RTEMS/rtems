@@ -31,9 +31,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/stackimpl.h>
-#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/schedulerimpl.h>
-
 
 static inline size_t _POSIX_Threads_Ensure_minimum_stack (
   size_t size
@@ -253,11 +251,7 @@ int pthread_create(
 
   if ( schedpolicy == SCHED_SPORADIC ) {
     _ISR_lock_ISR_disable( &lock_context );
-    _Watchdog_Per_CPU_insert_relative(
-      &api->Sporadic_timer,
-      _Per_CPU_Get(),
-      _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )
-    );
+    _POSIX_Threads_Sporadic_timer_insert( api );
     _ISR_lock_ISR_enable( &lock_context );
   }
 
