@@ -62,7 +62,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
     _Timespec_To_ticks( &api->Attributes.schedparam.sched_ss_init_budget );
 
   _Watchdog_Per_CPU_insert_relative(
-    &api->Sporadic_timer,
+    &api->Sporadic.Timer,
     _Per_CPU_Get(),
     _Timespec_To_ticks( &api->Attributes.schedparam.sched_ss_repl_period )
   );
@@ -79,21 +79,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
 void _POSIX_Threads_Sporadic_budget_callout(
   Thread_Control *the_thread
 );
-
-/**
- * This routine supports the sporadic scheduling algorithm.  It
- * is scheduled to be executed at the end of each replenishment
- * period.  In sporadic scheduling a thread will execute at a
- * high priority for a user specified amount of CPU time.  When
- * it exceeds that amount of CPU time, its priority is automatically
- * lowered. This TSR is executed when it is time to replenish
- * the thread's processor budget and raise its priority.
- *
- * @param[in] id is ignored
- * @param[in] argument is a pointer to the Thread_Control structure
- *            for the thread being replenished.
- */
-void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog );
 
 /**
  * @brief Translate sched_param into SuperCore terms.

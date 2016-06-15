@@ -21,9 +21,7 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 int _POSIX_Thread_Translate_sched_param(
   int                                  policy,
@@ -32,9 +30,6 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_CPU_budget_algorithm_callout *budget_callout
 )
 {
-  if ( !_POSIX_Priority_Is_valid( param->sched_priority ) )
-    return EINVAL;
-
   *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_NONE;
   *budget_callout = NULL;
 
@@ -64,9 +59,6 @@ int _POSIX_Thread_Translate_sched_param(
 
     if ( _Timespec_To_ticks( &param->sched_ss_repl_period ) <
 	 _Timespec_To_ticks( &param->sched_ss_init_budget ) )
-      return EINVAL;
-
-    if ( !_POSIX_Priority_Is_valid( param->sched_ss_low_priority ) )
       return EINVAL;
 
     *budget_algorithm  = THREAD_CPU_BUDGET_ALGORITHM_CALLOUT;

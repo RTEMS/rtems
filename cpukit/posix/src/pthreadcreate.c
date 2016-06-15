@@ -60,7 +60,10 @@ int pthread_create(
     }
   };
   const pthread_attr_t               *the_attr;
-  Priority_Control                    core_priority;
+  int                                 low_prio;
+  int                                 high_prio;
+  Priority_Control                    core_low_prio;
+  Priority_Control                    core_high_prio;
   Thread_CPU_budget_algorithms        budget_algorithm;
   Thread_CPU_budget_algorithm_callout budget_callout;
   bool                                is_fp;
@@ -71,7 +74,7 @@ int pthread_create(
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
   Objects_Name                        name;
-  int                                 rc;
+  int                                 error;
   ISR_lock_Context                    lock_context;
 
   if ( !start_routine )
@@ -130,25 +133,34 @@ int pthread_create(
   if ( the_attr->contentionscope != PTHREAD_SCOPE_PROCESS )
     return ENOTSUP;
 
-  /*
-   *  Interpret the scheduling parameters.
-   */
-  if ( !_POSIX_Priority_Is_valid( schedparam.sched_priority ) )
-    return EINVAL;
-
-  core_priority = _POSIX_Priority_To_core( schedparam.sched_priority );
-
-  /*
-   *  Set the core scheduling policy information.
-   */
-  rc = _POSIX_Thread_Translate_sched_param(
+  error = _POSIX_Thread_Translate_sched_param(
     schedpolicy,
     &schedparam,
     &budget_algorithm,
     &budget_callout
   );
-  if ( rc )
-    return rc;
+  if ( error != 0 ) {
+    return error;
+  }
+
+  if ( schedpolicy == SCHED_SPORADIC ) {
+    low_prio = schedparam.sched_ss_low_priority;
+    high_prio = schedparam.sched_priority;
+  } else {
+    low_prio = schedparam.sched_priority;
+    high_prio = low_prio;
+  }
+
+  if ( !_POSIX_Priority_Is_valid( low_prio ) ) {
+    return EINVAL;
+  }
+
+  if ( !_POSIX_Priority_Is_valid( high_prio ) ) {
+    return EINVAL;
+  }
+
+  core_low_prio = _POSIX_Priority_To_core( low_prio );
+  core_high_prio = _POSIX_Priority_To_core( high_prio );
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__
@@ -186,7 +198,7 @@ int pthread_create(
     the_attr->stackaddr,
     _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,
-    core_priority,
+    core_high_prio,
     true,                 /* preemptible */
     budget_algorithm,
     budget_callout,
@@ -226,6 +238,8 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
+  api->Sporadic.low_priority = core_low_prio;
+  api->Sporadic.high_priority = core_high_prio;
 
   if ( schedpolicy == SCHED_SPORADIC ) {
     _ISR_lock_ISR_disable( &lock_context );

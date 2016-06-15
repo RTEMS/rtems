@@ -657,6 +657,7 @@ typedef struct  {
  * provide their own lock.
  *
  * The thread lock protects the following thread variables
+ *  - POSIX_API_Control::Attributes,
  *  - Thread_Control::current_priority,
  *  - Thread_Control::Wait::queue, and
  *  - Thread_Control::Wait::operations.
@@ -710,7 +711,6 @@ struct _Thread_Control {
    * The lock of this thread queue is used for various purposes.  It protects
    * the following fields
    *
-   * - POSIX_API_Control::Attributes,
    * - RTEMS_API_Control::Signal,
    * - Thread_Control::budget_algorithm,
    * - Thread_Control::budget_callout,

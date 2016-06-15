@@ -17,20 +17,58 @@
 #include <rtems/posix/threadsup.h>
 #include <rtems/score/threadimpl.h>
 
-int pthread_setschedprio( pthread_t thread, int prio )
+typedef struct {
+  int prio;
+  int error;
+} POSIX_Set_sched_prio_context;
+
+static bool _POSIX_Set_sched_prio_filter(
+  Thread_Control   *the_thread,
+  Priority_Control *new_priority_p,
+  void             *arg
+)
 {
-  Thread_Control    *the_thread;
-  Per_CPU_Control   *cpu_self;
-  POSIX_API_Control *api;
-  Priority_Control   unused;
-  ISR_lock_Context   lock_context;
-  Priority_Control   new_priority;
+  POSIX_Set_sched_prio_context *context;
+  int                           prio;
+  POSIX_API_Control            *api;
+  Priority_Control              current_priority;
+  Priority_Control              new_priority;
+
+  context = arg;
+  prio = context->prio;
 
   if ( !_POSIX_Priority_Is_valid( prio ) ) {
-    return EINVAL;
+    context->error = EINVAL;
+    return false;
   }
 
   new_priority = _POSIX_Priority_To_core( prio );
+  *new_priority_p = new_priority;
+
+  current_priority = the_thread->current_priority;
+  the_thread->real_priority = new_priority;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  api->Sporadic.high_priority = new_priority;
+
+  if ( api->Sporadic.low_priority < new_priority ) {
+    api->Sporadic.low_priority  = new_priority;
+  }
+
+  context->error = 0;
+  return _Thread_Priority_less_than( current_priority, new_priority )
+    || !_Thread_Owns_resources( the_thread );
+}
+
+int pthread_setschedprio( pthread_t thread, int prio )
+{
+  Thread_Control               *the_thread;
+  Per_CPU_Control              *cpu_self;
+  POSIX_Set_sched_prio_context  context;
+  ISR_lock_Context              lock_context;
+
+  context.prio = prio;
 
   the_thread = _Thread_Get( thread, &lock_context );
 
@@ -38,16 +76,17 @@ int pthread_setschedprio( pthread_t thread, int prio )
     return ESRCH;
   }
 
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
+  _ISR_lock_ISR_enable( &lock_context );
 
-  _Thread_State_acquire_critical( the_thread, &lock_context );
-  api->Attributes.schedparam.sched_priority = prio;
-  _Thread_State_release( the_thread, &lock_context );
-
-  _Thread_Set_priority( the_thread, new_priority, &unused, true );
+  _Thread_Change_priority(
+    the_thread,
+    0,
+    &context,
+    _POSIX_Set_sched_prio_filter,
+    true
+  );
 
   _Thread_Dispatch_enable( cpu_self );
-  return 0;
+  return context.error;
 }

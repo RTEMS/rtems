@@ -48,15 +48,16 @@ int pthread_getschedparam(
     return ESRCH;
   }
 
-  _Thread_State_acquire_critical( the_thread, &lock_context );
-
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  _Thread_Lock_acquire_default_critical( the_thread, &lock_context );
+
   *policy = api->Attributes.schedpolicy;
   *param  = api->Attributes.schedparam;
   param->sched_priority = _POSIX_Priority_From_core(
     the_thread->real_priority
   );
 
-  _Thread_State_release( the_thread, &lock_context );
+  _Thread_Lock_release_default( the_thread, &lock_context );
   return 0;
 }

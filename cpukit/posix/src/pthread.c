@@ -81,83 +81,57 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
   #endif
 };
 
-static bool _POSIX_Threads_Sporadic_budget_TSR_filter(
+static bool _POSIX_Threads_Sporadic_timer_filter(
   Thread_Control   *the_thread,
-  Priority_Control *new_priority,
+  Priority_Control *new_priority_p,
   void             *arg
 )
 {
-  the_thread->real_priority = *new_priority;
+  POSIX_API_Control *api;
+  Priority_Control   current_priority;
+  Priority_Control   new_priority;
 
-  /*
-   * If holding a resource, then do not change it.
-   *
-   * If this would make them less important, then do not change it.
-   */
-  return !_Thread_Owns_resources( the_thread ) &&
-    _Thread_Priority_less_than( the_thread->current_priority, *new_priority );
-}
+  api = arg;
 
-/*
- *  _POSIX_Threads_Sporadic_budget_TSR
- */
-void _POSIX_Threads_Sporadic_budget_TSR( Watchdog_Control *watchdog )
-{
-  POSIX_API_Control  *api;
-  Thread_Control     *the_thread;
-  ISR_lock_Context    lock_context;
-  Priority_Control    new_priority;
+  new_priority = api->Sporadic.high_priority;
+  *new_priority_p = new_priority;
 
-  api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic_timer );
-  the_thread = api->thread;
+  current_priority = the_thread->current_priority;
+  the_thread->real_priority = new_priority;
 
-  _Thread_State_acquire( the_thread, &lock_context );
-
-  _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+  _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
   _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
 
-  new_priority = _POSIX_Priority_To_core(
-    api->Attributes.schedparam.sched_priority
-  );
+  return _Thread_Priority_less_than( current_priority, new_priority )
+    || !_Thread_Owns_resources( the_thread );
+}
 
-  _Thread_State_release( the_thread, &lock_context );
+static void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
+{
+  POSIX_API_Control *api;
+  Thread_Control    *the_thread;
+
+  api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic.Timer );
+  the_thread = api->thread;
 
   _Thread_Change_priority(
     the_thread,
-    new_priority,
-    NULL,
-    _POSIX_Threads_Sporadic_budget_TSR_filter,
+    0,
+    api,
+    _POSIX_Threads_Sporadic_timer_filter,
     true
   );
 }
 
 static bool _POSIX_Threads_Sporadic_budget_callout_filter(
   Thread_Control   *the_thread,
-  Priority_Control *new_priority,
+  Priority_Control *new_priority_p,
   void             *arg
 )
 {
-  the_thread->real_priority = *new_priority;
-
-  /*
-   * If holding a resource, then do not change it.
-   *
-   * Make sure we are actually lowering it. If they have lowered it
-   * to logically lower than sched_ss_low_priority, then we do not want to
-   * change it.
-   */
-  return !_Thread_Owns_resources( the_thread ) &&
-    _Thread_Priority_less_than( *new_priority, the_thread->current_priority );
-}
-
-/*
- *  _POSIX_Threads_Sporadic_budget_callout
- */
-void _POSIX_Threads_Sporadic_budget_callout(
-  Thread_Control *the_thread
-)
-{
   POSIX_API_Control *api;
+  Priority_Control   current_priority;
+  Priority_Control   new_priority;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
@@ -167,11 +141,21 @@ void _POSIX_Threads_Sporadic_budget_callout(
    */
   the_thread->cpu_time_budget = UINT32_MAX;
 
+  new_priority = api->Sporadic.low_priority;
+  *new_priority_p = new_priority;
+
+  current_priority = the_thread->current_priority;
+  the_thread->real_priority = new_priority;
+
+  return _Thread_Priority_less_than( current_priority, new_priority )
+    || !_Thread_Owns_resources( the_thread );
+}
+
+void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
+{
   _Thread_Change_priority(
     the_thread,
-    _POSIX_Priority_To_core(
-      api->Attributes.schedparam.sched_ss_low_priority
-    ),
+    0,
     NULL,
     _POSIX_Threads_Sporadic_budget_callout_filter,
     true
@@ -217,11 +201,8 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_unblocked = executing_api->signals_unblocked;
   }
 
-  _Watchdog_Preinitialize( &api->Sporadic_timer, _Per_CPU_Get_by_index( 0 ) );
-  _Watchdog_Initialize(
-    &api->Sporadic_timer,
-    _POSIX_Threads_Sporadic_budget_TSR
-  );
+  _Watchdog_Preinitialize( &api->Sporadic.Timer, _Per_CPU_Get_by_index( 0 ) );
+  _Watchdog_Initialize( &api->Sporadic.Timer, _POSIX_Threads_Sporadic_timer );
 
   return true;
 }
@@ -236,7 +217,7 @@ static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
   _Thread_State_acquire( executing, &lock_context );
 
   if ( api->Attributes.schedpolicy == SCHED_SPORADIC ) {
-    _Watchdog_Per_CPU_remove_relative( &api->Sporadic_timer );
+    _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
   }
 
   _Thread_State_release( executing, &lock_context );

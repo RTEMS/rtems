@@ -18,10 +18,7 @@
 #ifndef _RTEMS_POSIX_THREADSUP_H
 #define _RTEMS_POSIX_THREADSUP_H
 
-#include <rtems/score/coresem.h>
-#include <rtems/score/isrlock.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/threadq.h>
 #include <rtems/score/watchdog.h>
 
 #include <pthread.h>
@@ -50,10 +47,27 @@ typedef struct {
   pthread_attr_t          Attributes;
 
   /**
-   * This is the timer which controls when the thread executes at
-   * high and low priority when using the sporadic scheduler.
+   * @brief Control block for the sporadic server scheduling policy.
    */
-  Watchdog_Control        Sporadic_timer;
+  struct {
+    /**
+     * @brief This is the timer which controls when the thread executes at high
+     * and low priority when using the sporadic server scheduling policy.
+     */
+    Watchdog_Control Timer;
+
+    /**
+     * @brief The low priority when using the sporadic server scheduling
+     * policy.
+     */
+    Priority_Control low_priority;
+
+    /**
+     * @brief The high priority when using the sporadic server scheduling
+     * policy.
+     */
+    Priority_Control high_priority;
+  } Sporadic;
 
   /** This is the set of signals which are currently unblocked. */
   sigset_t                signals_unblocked;
