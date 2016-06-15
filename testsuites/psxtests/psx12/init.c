@@ -22,9 +22,11 @@
 
 const char rtems_test_name[] = "PSX 12";
 
-#define SS_REPL_PERIOD_US 200000
+#define SS_REPL_PERIOD_NS 200000000
 
-#define SS_INIT_BUDGET_US 100000
+#define SS_INIT_BUDGET_NS 100000000
+
+#define SS_REPL_PERIOD_MS ( SS_REPL_PERIOD_NS / 1000000 )
 
 #define SS_PRIO_LOW 1
 
@@ -35,8 +37,8 @@ const char rtems_test_name[] = "PSX 12";
 typedef struct {
   uint64_t start;
   struct {
-    uint64_t high;
-    uint64_t low;
+    uint32_t high;
+    uint32_t low;
   } samples[ SS_SAMPLE_PERIODS ];
 } test_context;
 
@@ -74,9 +76,12 @@ static uint64_t now( void )
   return timeval_to_us( &now );
 }
 
-static uint64_t delta( test_context *ctx )
+static uint32_t delta_in_ms( test_context *ctx )
 {
-  return now() - ctx->start;
+  uint32_t d;
+
+  d = (uint32_t) ( now() - ctx->start );
+  return ( d + 499 ) / 1000;
 }
 
 static void *sporadic_server( void *argument )
@@ -88,9 +93,9 @@ static void *sporadic_server( void *argument )
 
   for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
     wait_for_prio( SS_PRIO_LOW );
-    ctx->samples[ i ].high = delta( ctx );
+    ctx->samples[ i ].high = delta_in_ms( ctx );
     wait_for_prio( SS_PRIO_HIGH );
-    ctx->samples[ i ].low = delta( ctx );
+    ctx->samples[ i ].low = delta_in_ms( ctx );
   }
 
   puts( "Sporadic Server: exitting" );
@@ -164,9 +169,9 @@ static void *POSIX_Init( void *argument )
   /* invalid sched_ss_low_priority error */
 
   schedparam.sched_ss_repl_period.tv_sec = 0;
-  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_US * 1000;
+  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_NS;
   schedparam.sched_ss_init_budget.tv_sec = 0;
-  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_US * 1000;
+  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_NS;
 
   schedparam.sched_priority = SS_PRIO_HIGH;
   schedparam.sched_ss_low_priority = -1;
@@ -181,9 +186,9 @@ static void *POSIX_Init( void *argument )
   /* create a thread as a sporadic server */
 
   schedparam.sched_ss_repl_period.tv_sec = 0;
-  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_US * 1000;
+  schedparam.sched_ss_repl_period.tv_nsec = SS_REPL_PERIOD_NS;
   schedparam.sched_ss_init_budget.tv_sec = 0;
-  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_US * 1000;
+  schedparam.sched_ss_init_budget.tv_nsec = SS_INIT_BUDGET_NS;
 
   schedparam.sched_priority = SS_PRIO_HIGH;
   schedparam.sched_ss_low_priority = SS_PRIO_LOW;
@@ -205,9 +210,9 @@ static void *POSIX_Init( void *argument )
   rtems_test_assert( !status );
 
   for ( i = 0 ; i < SS_SAMPLE_PERIODS ; ++i ) {
-    printf( "[%zu] H %6" PRIu64 "us\n", i, ctx->samples[ i ].high );
-    printf( "[%zu] L %6" PRIu64 "us\n", i, ctx->samples[ i ].low );
-    rtems_test_assert( ctx->samples[ i ].low / SS_REPL_PERIOD_US == i + 1 );
+    printf( "[%zu] H %3" PRIu32 "ms\n", i, ctx->samples[ i ].high );
+    printf( "[%zu] L %3" PRIu32 "ms\n", i, ctx->samples[ i ].low );
+    rtems_test_assert( ctx->samples[ i ].low / SS_REPL_PERIOD_MS == i + 1 );
   }
 
   TEST_END();
