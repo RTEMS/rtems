@@ -50,6 +50,7 @@ static bool _POSIX_Set_sched_param_filter(
   POSIX_API_Control             *api;
   int                            low_prio;
   int                            high_prio;
+  bool                           valid;
   Priority_Control               core_low_prio;
   Priority_Control               core_high_prio;
   Priority_Control               current_priority;
@@ -66,18 +67,17 @@ static bool _POSIX_Set_sched_param_filter(
     high_prio = low_prio;
   }
 
-  if ( !_POSIX_Priority_Is_valid( scheduler, low_prio ) ) {
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
+  if ( !valid ) {
     context->error = EINVAL;
     return false;
   }
 
-  if ( !_POSIX_Priority_Is_valid( scheduler, high_prio ) ) {
+  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio, &valid );
+  if ( !valid ) {
     context->error = EINVAL;
     return false;
   }
-
-  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio );
-  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio );
 
   *new_priority_p = core_high_prio;
 

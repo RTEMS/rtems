@@ -51,7 +51,8 @@ extern "C" {
 int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler );
 
 /**
- * @brief Check if POSIX priority is valid.
+ * @brief Converts the POSIX API priority to the corresponding SuperCore
+ * priority and validates it.
  * 
  * According to POSIX, numerically higher values represent higher priorities.
  * Thus, SuperCore has priorities run in the opposite sense of the POSIX API.
@@ -65,14 +66,17 @@ int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler );
  * having N priorities.
  *
  * @param[in] scheduler The scheduler instance.
- * @param[in] priority The POSIX API priority to test.
+ * @param[in] priority The POSIX API priority to convert and validate.
+ * @param[out] valid Indicates if the POSIX API priority is valid and a
+ *   corresponding SuperCore priority in the specified scheduler instance
+ *   exists.
  *
- * @retval true The priority is valid.
- * @retval false Otherwise.
+ * @return The corresponding SuperCore priority.
  */
-bool _POSIX_Priority_Is_valid(
+Priority_Control _POSIX_Priority_To_core(
   const Scheduler_Control *scheduler,
-  int                      priority
+  int                      priority,
+  bool                    *valid
 );
 
 /**

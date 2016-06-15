@@ -33,6 +33,7 @@ static bool _POSIX_Set_sched_prio_filter(
   int                           prio;
   const Scheduler_Control      *scheduler;
   POSIX_API_Control            *api;
+  bool                          valid;
   Priority_Control              current_priority;
   Priority_Control              new_priority;
 
@@ -40,12 +41,12 @@ static bool _POSIX_Set_sched_prio_filter(
   prio = context->prio;
   scheduler = _Scheduler_Get_own( the_thread );
 
-  if ( !_POSIX_Priority_Is_valid( scheduler, prio ) ) {
+  new_priority = _POSIX_Priority_To_core( scheduler, prio, &valid );
+  if ( !valid ) {
     context->error = EINVAL;
     return false;
   }
 
-  new_priority = _POSIX_Priority_To_core( scheduler, prio );
   *new_priority_p = new_priority;
 
   current_priority = the_thread->current_priority;

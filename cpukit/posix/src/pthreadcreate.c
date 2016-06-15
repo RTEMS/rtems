@@ -62,6 +62,7 @@ int pthread_create(
   const pthread_attr_t               *the_attr;
   int                                 low_prio;
   int                                 high_prio;
+  bool                                valid;
   Priority_Control                    core_low_prio;
   Priority_Control                    core_high_prio;
   Thread_CPU_budget_algorithms        budget_algorithm;
@@ -154,16 +155,15 @@ int pthread_create(
 
   scheduler = _Scheduler_Get_own( executing );
 
-  if ( !_POSIX_Priority_Is_valid( scheduler, low_prio ) ) {
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
+  if ( !valid ) {
     return EINVAL;
   }
 
-  if ( !_POSIX_Priority_Is_valid( scheduler, high_prio ) ) {
+  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio, &valid );
+  if ( !valid ) {
     return EINVAL;
   }
-
-  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio );
-  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio );
 
 #if defined(RTEMS_SMP)
 #if __RTEMS_HAVE_SYS_CPUSET_H__

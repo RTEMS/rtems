@@ -33,6 +33,8 @@ int pthread_mutex_setprioceiling(
 {
   POSIX_Mutex_Control     *the_mutex;
   const Scheduler_Control *scheduler;
+  bool                     valid;
+  Priority_Control         priority;
   int                      error;
   int                      unlock_error;
 
@@ -59,12 +61,9 @@ int pthread_mutex_setprioceiling(
     the_mutex->Mutex.priority_ceiling
   );
 
-  if ( _POSIX_Priority_Is_valid( scheduler, prioceiling ) ) {
-    Priority_Control priority;
-
-    priority = _POSIX_Priority_To_core( scheduler, prioceiling );
+  priority = _POSIX_Priority_To_core( scheduler, prioceiling, &valid );
+  if ( valid ) {
     the_mutex->Mutex.priority_ceiling = priority;
-
     error = 0;
   } else {
     error = EINVAL;
