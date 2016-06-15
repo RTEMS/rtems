@@ -52,44 +52,6 @@ extern Thread_Information _POSIX_Threads_Information;
 extern pthread_attr_t _POSIX_Threads_Default_attributes;
 
 /**
- * @brief Copy POSIX Thread attribute structure.
- *
- * This routine copies the attr2 thread attribute structure
- * to the attr1 Thread Attribute structure.
- *
- * @param[in] dst_attr is a pointer to the thread attribute
- * structure to copy into.
- *
- * @param[out] src_attr is a pointer to the thread attribute
- * structure to copy from.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
-  pthread_attr_t        *dst_attr,
-  const pthread_attr_t  *src_attr
-);
-
-/**
- * @brief Free POSIX control block.
- *
- * This routine frees a pthread control block to the
- * inactive chain of free pthread control blocks.
- *
- * @param[in] the_pthread is a pointer to the thread to free.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free(
-  Thread_Control *the_pthread
-);
-
-/**
- * @brief POSIX threads initialize user threads body.
- *
- * This routine initializes the thread attributes structure.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
-  pthread_attr_t  *attr
-);
-
-/**
  * @brief POSIX threads sporadic budget callout.
  *
  * This routine handles the sporadic scheduling algorithm.
@@ -155,10 +117,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
     _Objects_Allocate_unprotected( &_POSIX_Threads_Information.Objects );
 }
 
-/*
- * _POSIX_Threads_Copy_attributes
- */
-
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
   pthread_attr_t        *dst_attr,
   const pthread_attr_t  *src_attr
@@ -173,20 +131,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
 #endif
 }
 
-/*
- *  _POSIX_Threads_Free
- */
-
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
   Thread_Control *the_pthread
 )
 {
   _Objects_Free( &_POSIX_Threads_Information.Objects, &the_pthread->Object );
 }
-
-/*
- * _POSIX_Threads_Initialize_attributes
- */
 
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
   pthread_attr_t  *attr
@@ -196,17 +146,6 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
     attr,
     &_POSIX_Threads_Default_attributes
   );
-}
-
-/*
- *  _POSIX_Threads_Is_null
- */
-
-RTEMS_INLINE_ROUTINE bool _POSIX_Threads_Is_null (
-  Thread_Control *the_pthread
-)
-{
-  return !the_pthread;
 }
 
 /** @} */
