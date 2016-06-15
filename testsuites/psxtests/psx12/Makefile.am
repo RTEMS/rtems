@@ -1,6 +1,6 @@
 
 rtems_tests_PROGRAMS = psx12
-psx12_SOURCES = init.c task.c system.h ../include/pmacros.h
+psx12_SOURCES = init.c ../include/pmacros.h
 
 dist_rtems_tests_DATA = psx12.scn
 

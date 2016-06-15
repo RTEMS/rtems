@@ -12,45 +12,24 @@
 #endif
 
 #include <sched.h>
-
-#define CONFIGURE_INIT
-#include "system.h"
 #include <errno.h>
-#include "pritime.h"
+
+#include <pmacros.h>
 
 const char rtems_test_name[] = "PSX 12";
 
-void print_schedparam(
-  char               *prefix,
-  struct sched_param *schedparam
-);
-
-void print_schedparam(
-  char               *prefix,
-  struct sched_param *schedparam
-)
+static void *sporadic_server( void *argument )
 {
-  printf( "%ssched priority      = %d\n", prefix, schedparam->sched_priority );
-#if defined(_POSIX_SPORADIC_SERVER)
-  printf( "%ssched_ss_low_priority     = %d\n",
-     prefix, schedparam->sched_ss_low_priority );
-  printf( "%ssched_ss_repl_period = (%" PRIdtime_t ", %ld)\n", prefix,
-     schedparam->sched_ss_repl_period.tv_sec,
-     schedparam->sched_ss_repl_period.tv_nsec );
-  printf( "%ssched_ss_init_budget = (%" PRIdtime_t ", %ld)\n", prefix,
-     schedparam->sched_ss_init_budget.tv_sec,
-     schedparam->sched_ss_init_budget.tv_nsec );
-#else
-  printf( "%s_POSIX_SPORADIC_SERVER is not defined\n", prefix );
-#endif
+  puts( "Sporadic Server: exitting" );
+
+  return NULL;
 }
 
-void *POSIX_Init(
-  void *argument
-)
+static void *POSIX_Init( void *argument )
 {
   int                 status;
   pthread_attr_t      attr;
+  pthread_t           thread;
   struct sched_param  schedparam;
 
   TEST_BEGIN();
@@ -61,8 +40,7 @@ void *POSIX_Init(
 
   /* get id of this thread */
 
-  Init_id = pthread_self();
-  printf( "Init's ID is 0x%08" PRIxpthread_t "\n", Init_id );
+  printf( "Init's ID is 0x%08" PRIxpthread_t "\n", pthread_self() );
 
   /* invalid scheduling policy error */
 
@@ -75,7 +53,7 @@ void *POSIX_Init(
   attr.schedpolicy = -1;
 
   puts( "Init: pthread_create - EINVAL (invalid scheduling policy)" );
-  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  status = pthread_create( &thread, &attr, sporadic_server, NULL );
   rtems_test_assert( status == EINVAL );
 
   /* replenish period < budget error */
@@ -103,7 +81,7 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   puts( "Init: pthread_create - EINVAL (replenish < budget)" );
-  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  status = pthread_create( &thread, &attr, sporadic_server, NULL );
   rtems_test_assert( status == EINVAL );
 
   /* invalid sched_ss_low_priority error */
@@ -120,7 +98,7 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   puts( "Init: pthread_create - EINVAL (invalid sched_ss_low_priority)" );
-  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  status = pthread_create( &thread, &attr, sporadic_server, NULL );
   rtems_test_assert( status == EINVAL );
 
   /* create a thread as a sporadic server */
@@ -137,11 +115,11 @@ void *POSIX_Init(
   rtems_test_assert( !status );
 
   puts( "Init: pthread_create - SUCCESSFUL" );
-  status = pthread_create( &Task_id, &attr, Task_1, NULL );
+  status = pthread_create( &thread, &attr, sporadic_server, NULL );
   rtems_test_assert( !status );
 
-  status = pthread_join( Task_id, NULL );
-  rtems_test_assert( status );
+  status = pthread_join( thread, NULL );
+  rtems_test_assert( !status );
 
     /* switch to Task_1 */
 
@@ -150,3 +128,16 @@ void *POSIX_Init(
 
   return NULL; /* just so the compiler thinks we returned something */
 }
+
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
+
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 2
+
+#define CONFIGURE_POSIX_INIT_THREAD_TABLE
+
+#define CONFIGURE_INIT
+
+#include <rtems/confdefs.h>
