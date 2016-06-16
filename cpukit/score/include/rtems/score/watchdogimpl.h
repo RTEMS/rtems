@@ -339,23 +339,27 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_insert_relative(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_relative(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
   uint32_t          ticks
 )
 {
   ISR_lock_Context lock_context;
+  uint64_t expire;
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  expire = cpu->Watchdog.ticks + ticks;
   _Watchdog_Insert(
     &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
     the_watchdog,
-    cpu->Watchdog.ticks + ticks
+    expire
   );
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+
+  return expire;
 }
 
 RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_insert_absolute(

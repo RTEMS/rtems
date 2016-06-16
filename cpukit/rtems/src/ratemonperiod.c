@@ -71,19 +71,20 @@ static void _Rate_monotonic_Release_job(
 )
 {
   Per_CPU_Control *cpu_self;
+  uint64_t deadline;
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( owner, lock_context );
 
-  _Scheduler_Release_job( owner, next_length );
-
   _ISR_lock_ISR_disable( lock_context );
-  _Watchdog_Per_CPU_insert_relative(
+  deadline = _Watchdog_Per_CPU_insert_relative(
     &the_period->Timer,
     cpu_self,
     next_length
   );
   _ISR_lock_ISR_enable( lock_context );
+
+  _Scheduler_Release_job( owner, deadline );
 
   _Thread_Dispatch_enable( cpu_self );
 }

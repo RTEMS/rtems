@@ -25,7 +25,7 @@
 void _Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint32_t                 deadline
+  uint64_t                 deadline
 )
 {
   Priority_Control new_priority;
@@ -35,8 +35,7 @@ void _Scheduler_EDF_Release_job(
 
   if (deadline) {
     /* Initializing or shifting deadline. */
-    new_priority = (_Watchdog_Ticks_since_boot + deadline)
-                   & ~SCHEDULER_EDF_PRIO_MSB;
+    new_priority = (uint32_t) deadline & ~SCHEDULER_EDF_PRIO_MSB;
   }
   else {
     /* Switch back to background priority. */

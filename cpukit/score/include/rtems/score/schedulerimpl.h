@@ -522,16 +522,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority(
  * @brief Releases a job of a thread with respect to the scheduler.
  *
  * @param[in] the_thread The thread.
- * @param[in] length The period length.
+ * @param[in] deadline The deadline in watchdog ticks since boot.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
   Thread_Control *the_thread,
-  uint32_t        length
+  uint64_t        deadline
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  ( *scheduler->Operations.release_job )( scheduler, the_thread, length );
+  ( *scheduler->Operations.release_job )( scheduler, the_thread, deadline );
 }
 
 /**

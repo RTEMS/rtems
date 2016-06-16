@@ -145,7 +145,7 @@ typedef struct {
   void ( *release_job ) (
     const Scheduler_Control *,
     Thread_Control *,
-    uint32_t
+    uint64_t
   );
 
   /** @see _Scheduler_Tick() */
@@ -508,7 +508,7 @@ void _Scheduler_default_Update_priority(
 void _Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint32_t                 deadline
+  uint64_t                 deadline
 );
 
 /**

@@ -179,7 +179,7 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
 void _Scheduler_CBS_Release_job (
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint32_t                 length
+  uint64_t                 length
 );
 
 /**
