@@ -135,11 +135,19 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
   );
 }
 
-static void _Thread_Make_zombie( Thread_Control *the_thread )
+static void _Thread_Add_to_zombie_chain( Thread_Control *the_thread )
 {
   ISR_lock_Context       lock_context;
   Thread_Zombie_control *zombies;
 
+  zombies = &_Thread_Zombies;
+  _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
+  _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
+  _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
+}
+
+static void _Thread_Make_zombie( Thread_Control *the_thread )
+{
   if ( _Thread_Owns_resources( the_thread ) ) {
     _Terminate(
       INTERNAL_ERROR_CORE,
@@ -153,15 +161,18 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
     &the_thread->Object
   );
 
-  _Thread_Wake_up_joining_threads( the_thread );
   _Thread_Set_state( the_thread, STATES_ZOMBIE );
   _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
 
-  zombies = &_Thread_Zombies;
-  _ISR_lock_ISR_disable_and_acquire( &zombies->Lock, &lock_context );
-  _Chain_Append_unprotected( &zombies->Chain, &the_thread->Object.Node );
-  _ISR_lock_Release_and_ISR_enable( &zombies->Lock, &lock_context );
+  /*
+   * Add the thread to the thread zombie chain before we wake up joining
+   * threads, so that they are able to clean up the thread immediately.  This
+   * matters for SMP configurations.
+   */
+  _Thread_Add_to_zombie_chain( the_thread );
+
+  _Thread_Wake_up_joining_threads( the_thread );
 }
 
 static void _Thread_Free( Thread_Control *the_thread )
