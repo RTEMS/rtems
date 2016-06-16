@@ -173,6 +173,10 @@ rtems_status_code rtems_semaphore_create(
           executing,
           &queue_context
         );
+
+        if ( status != STATUS_SUCCESSFUL ) {
+          _Thread_queue_Destroy( &the_semaphore->Core_control.Wait_queue );
+        }
       } else {
         status = STATUS_SUCCESSFUL;
       }
