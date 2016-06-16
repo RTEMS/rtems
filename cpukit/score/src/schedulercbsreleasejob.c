@@ -20,8 +20,6 @@
 #endif
 
 #include <rtems/score/schedulercbsimpl.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/watchdogimpl.h>
 
 void _Scheduler_CBS_Release_job(
   const Scheduler_Control *scheduler,
@@ -29,28 +27,16 @@ void _Scheduler_CBS_Release_job(
   uint32_t                 deadline
 )
 {
-  Scheduler_CBS_Node   *node = _Scheduler_CBS_Thread_get_node( the_thread );
-  Scheduler_CBS_Server *serv_info = node->cbs_server;
-  Priority_Control      new_priority;
-  Priority_Control      unused;
+  Scheduler_CBS_Node   *node;
+  Scheduler_CBS_Server *serv_info;
 
-  if (deadline) {
-    /* Initializing or shifting deadline. */
-    if (serv_info)
-      new_priority = (_Watchdog_Ticks_since_boot + serv_info->parameters.deadline)
-        & ~SCHEDULER_EDF_PRIO_MSB;
-    else
-      new_priority = (_Watchdog_Ticks_since_boot + deadline)
-        & ~SCHEDULER_EDF_PRIO_MSB;
-  }
-  else {
-    /* Switch back to background priority. */
-    new_priority = the_thread->Start.initial_priority;
-  }
+  _Scheduler_EDF_Release_job( scheduler, the_thread, deadline );
+
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
+  serv_info = node->cbs_server;
 
   /* Budget replenishment for the next job. */
-  if (serv_info)
+  if ( serv_info != NULL ) {
     the_thread->cpu_time_budget = serv_info->parameters.budget;
-
-  _Thread_Set_priority( the_thread, new_priority, &unused, true );
+  }
 }
