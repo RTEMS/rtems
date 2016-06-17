@@ -19,9 +19,9 @@
 #include "shm_driver.h"
 
 void MPCI_Fatal(
-  Internal_errors_Source  source,
-  bool                    is_internal,
-  uint32_t                error
+  rtems_fatal_source source,
+  bool               is_internal,
+  rtems_fatal_code   error
 )
 {
    /*   Eventually need to attempt to broadcast a K_FATAL message
