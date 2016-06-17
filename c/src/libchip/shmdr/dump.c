@@ -27,7 +27,7 @@ Shm_Print_statistics(void)
   uint32_t    ticks;
   uint32_t    ticks_per_second;
   uint32_t    seconds;
-  int         packets_per_second;
+  uint32_t    packets_per_second;
 
   ticks            = rtems_clock_get_ticks_since_boot();
   ticks_per_second = rtems_clock_get_ticks_per_second();
