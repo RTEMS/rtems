@@ -378,17 +378,27 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
 }
 
 /**
- * @copydoc _RBTree_Insert()
+ * @brief Inserts the node into the red-black tree.
+ *
+ * In case the node is already a node of a tree, then this function yields
+ * unpredictable results.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node The node to insert.
+ * @param[in] compare The node compare function.
+ * @param[in] is_unique If true, then reject nodes with a duplicate key, else
+ *   insert nodes in FIFO order in case the key value is equal to existing nodes.
+ *
+ * @retval NULL Successfully inserted.
+ * @retval existing_node This is a unique insert and there exists a node with
+ *   an equal key in the tree already.
  */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_insert(
-  rtems_rbtree_control *the_rbtree,
-  rtems_rbtree_node    *the_node,
-  rtems_rbtree_compare  compare,
-  bool                  is_unique
-)
-{
-  return _RBTree_Insert( the_rbtree, the_node, compare, is_unique );
-}
+rtems_rbtree_node *rtems_rbtree_insert(
+  RBTree_Control *the_rbtree,
+  RBTree_Node    *the_node,
+  RBTree_Compare  compare,
+  bool            is_unique
+);
 
 /** @} */
 

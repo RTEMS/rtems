@@ -117,29 +117,6 @@ RBTree_Node *_RBTree_Find(
 );
 
 /**
- * @brief Inserts the node into the red-black tree.
- *
- * In case the node is already a node of a tree, then this function yields
- * unpredictable results.
- *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node The node to insert.
- * @param[in] compare The node compare function.
- * @param[in] is_unique If true, then reject nodes with a duplicate key, else
- *   insert nodes in FIFO order in case the key value is equal to existing nodes.
- *
- * @retval NULL Successfully inserted.
- * @retval existing_node This is a unique insert and there exists a node with
- *   an equal key in the tree already.
- */
-RBTree_Node *_RBTree_Insert(
-  RBTree_Control *the_rbtree,
-  RBTree_Node    *the_node,
-  RBTree_Compare  compare,
-  bool            is_unique
-);
-
-/**
  * @brief Rebalances the red-black tree after insertion of the node.
  *
  * @param[in] the_rbtree The red-black tree control.
