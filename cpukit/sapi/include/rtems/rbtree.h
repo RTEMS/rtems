@@ -55,14 +55,31 @@ typedef RBTree_Node rtems_rbtree_node;
 typedef RBTree_Control rtems_rbtree_control;
 
 /**
- * @copydoc RBTree_Compare_result
+ * @brief Integer type for compare results.
+ *
+ * The type is large enough to represent pointers and 32-bit signed integers.
+ *
+ * @see rtems_rbtree_compare.
  */
-typedef RBTree_Compare_result rtems_rbtree_compare_result;
+typedef long rtems_rbtree_compare_result;
 
 /**
- * @copydoc RBTree_Compare
+ * @brief Compares two red-black tree nodes.
+ *
+ * @param[in] first The first node.
+ * @param[in] second The second node.
+ *
+ * @retval positive The key value of the first node is greater than the one of
+ *   the second node.
+ * @retval 0 The key value of the first node is equal to the one of the second
+ *   node.
+ * @retval negative The key value of the first node is less than the one of the
+ *   second node.
  */
-typedef RBTree_Compare rtems_rbtree_compare;
+typedef rtems_rbtree_compare_result ( *rtems_rbtree_compare )(
+  const RBTree_Node *first,
+  const RBTree_Node *second
+);
 
 /**
  * @brief RBTree initializer for an empty rbtree with designator @a name.
@@ -255,18 +272,47 @@ RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_root(
   return _RBTree_Is_root( the_node );
 }
 
-/**
- * @copydoc _RBTree_Find()
- */
-RTEMS_INLINE_ROUTINE rtems_rbtree_node* rtems_rbtree_find(
-  const rtems_rbtree_control *the_rbtree,
-  const rtems_rbtree_node    *the_node,
-  rtems_rbtree_compare        compare,
-  bool                        is_unique
+RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_equal(
+  rtems_rbtree_compare_result compare_result
 )
 {
-  return _RBTree_Find( the_rbtree, the_node, compare, is_unique );
+  return compare_result == 0;
 }
+
+RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_greater(
+  rtems_rbtree_compare_result compare_result
+)
+{
+  return compare_result > 0;
+}
+
+RTEMS_INLINE_ROUTINE bool rtems_rbtree_is_lesser(
+  rtems_rbtree_compare_result compare_result
+)
+{
+  return compare_result < 0;
+}
+
+/**
+ * @brief Tries to find a node for the specified key in the tree.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node A node specifying the key.
+ * @param[in] compare The node compare function.
+ * @param[in] is_unique If true, then return the first node with a key equal to
+ *   the one of the node specified if it exits, else return the last node if it
+ *   exists.
+ *
+ * @retval node A node corresponding to the key.  If the tree is not unique
+ * and contains duplicate keys, the set of duplicate keys acts as FIFO.
+ * @retval NULL No node exists in the tree for the key.
+ */
+rtems_rbtree_node* rtems_rbtree_find(
+  const rtems_rbtree_control *the_rbtree,
+  const rtems_rbtree_node    *the_node,
+  rtems_rbtree_compare              compare,
+  bool                        is_unique
+);
 
 /**
  * @copydoc _RBTree_Predecessor()
@@ -396,7 +442,7 @@ RTEMS_INLINE_ROUTINE rtems_rbtree_node *rtems_rbtree_peek_max(
 rtems_rbtree_node *rtems_rbtree_insert(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node,
-  RBTree_Compare  compare,
+  rtems_rbtree_compare  compare,
   bool            is_unique
 );
 

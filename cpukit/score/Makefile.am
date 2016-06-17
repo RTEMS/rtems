@@ -292,7 +292,7 @@ libscore_a_SOURCES += src/freechain.c
 
 ## RBTREE_C_FILES
 libscore_a_SOURCES += \
-    src/rbtreeextract.c src/rbtreefind.c \
+    src/rbtreeextract.c \
     src/rbtreeinsert.c src/rbtreeiterate.c src/rbtreenext.c
 libscore_a_SOURCES += src/rbtreereplace.c
 

@@ -57,33 +57,6 @@ typedef struct RBTree_Node {
 typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
 
 /**
- * @brief Integer type for compare results.
- *
- * The type is large enough to represent pointers and 32-bit signed integers.
- *
- * @see RBTree_Compare.
- */
-typedef long RBTree_Compare_result;
-
-/**
- * @brief Compares two red-black tree nodes.
- *
- * @param[in] first The first node.
- * @param[in] second The second node.
- *
- * @retval positive The key value of the first node is greater than the one of
- *   the second node.
- * @retval 0 The key value of the first node is equal to the one of the second
- *   node.
- * @retval negative The key value of the first node is less than the one of the
- *   second node.
- */
-typedef RBTree_Compare_result ( *RBTree_Compare )(
-  const RBTree_Node *first,
-  const RBTree_Node *second
-);
-
-/**
  * @brief Initializer for an empty red-black tree with designator @a name.
  */
 #define RBTREE_INITIALIZER_EMPTY( name ) \
@@ -94,27 +67,6 @@ typedef RBTree_Compare_result ( *RBTree_Compare )(
  */
 #define RBTREE_DEFINE_EMPTY( name ) \
   RBTree_Control name = RBTREE_INITIALIZER_EMPTY( name )
-
-/**
- * @brief Tries to find a node for the specified key in the tree.
- *
- * @param[in] the_rbtree The red-black tree control.
- * @param[in] the_node A node specifying the key.
- * @param[in] compare The node compare function.
- * @param[in] is_unique If true, then return the first node with a key equal to
- *   the one of the node specified if it exits, else return the last node if it
- *   exists.
- *
- * @retval node A node corresponding to the key.  If the tree is not unique
- * and contains duplicate keys, the set of duplicate keys acts as FIFO.
- * @retval NULL No node exists in the tree for the key.
- */
-RBTree_Node *_RBTree_Find(
-  const RBTree_Control *the_rbtree,
-  const RBTree_Node    *the_node,
-  RBTree_Compare        compare,
-  bool                  is_unique
-);
 
 /**
  * @brief Rebalances the red-black tree after insertion of the node.

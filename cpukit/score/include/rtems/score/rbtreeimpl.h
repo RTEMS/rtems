@@ -62,27 +62,6 @@ void _RBTree_Iterate(
   void *visitor_arg
 );
 
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_equal(
-  RBTree_Compare_result compare_result
-)
-{
-  return compare_result == 0;
-}
-
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_greater(
-  RBTree_Compare_result compare_result
-)
-{
-  return compare_result > 0;
-}
-
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_lesser(
-  RBTree_Compare_result compare_result
-)
-{
-  return compare_result < 0;
-}
-
 /** @} */
 
 #ifdef __cplusplus
