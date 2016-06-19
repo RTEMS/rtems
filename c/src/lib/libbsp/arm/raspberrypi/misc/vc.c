@@ -22,6 +22,7 @@
 #include <bsp/raspberrypi.h>
 #include <bsp/mailbox.h>
 #include <bsp/vc.h>
+#include <libcpu/arm-cp15.h>
 #include "vc_defines.h"
 
 #if (RPI_L2_CACHE_ENABLE == 1)
@@ -45,6 +46,26 @@ bcm2835_mailbox_send_read_buffer(void *buf)
   return 0;
 }
 
+/*
+ * When cache is enabled then content of buffer exchanged
+ * with VideoCore has to be propagated through ARM11/Cortex-A7
+ * caches
+ */
+static inline void
+bcm2835_mailbox_buffer_flush_and_invalidate(void *buf, size_t size)
+{
+  uint32_t sctlr_val;
+
+  sctlr_val = arm_cp15_get_control();
+
+  arm_cp15_drain_write_buffer();
+  if (sctlr_val & (ARM_CP15_CTRL_C | ARM_CP15_CTRL_M)) {
+    arm_cp15_drain_write_buffer();
+    rtems_cache_flush_multiple_data_lines(buf, size);
+    rtems_cache_invalidate_multiple_data_lines(buf, size);
+  }
+}
+
 #define BCM2835_MBOX_VAL_LENGTH_MASK(_val_len) \
   (_val_len&(~BCM2835_MBOX_TAG_VAL_LEN_RESPONSE))
 
@@ -55,10 +76,11 @@ bcm2835_mailbox_get_display_size(bcm2835_get_display_size_entries *_entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_display_size get_display_size;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_display_size,
     BCM2835_MAILBOX_TAG_GET_DISPLAY_SIZE);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->width = buffer.get_display_size.body.resp.width;
@@ -83,7 +105,7 @@ bcm2835_mailbox_init_frame_buffer(bcm2835_init_frame_buffer_entries* _entries)
     bcm2835_mbox_tag_allocate_buffer allocate_buffer;
     bcm2835_mbox_tag_get_pitch get_pitch;
     uint32_t end_tag;
-  } buffer __attribute__((aligned (16)));
+  } buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG(&buffer.set_display_size,
     BCM2835_MAILBOX_TAG_SET_DISPLAY_SIZE);
@@ -117,6 +139,7 @@ bcm2835_mailbox_init_frame_buffer(bcm2835_init_frame_buffer_entries* _entries)
   buffer.allocate_buffer.body.req.align = 0x100;
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_pitch,
     BCM2835_MAILBOX_TAG_GET_PITCH);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->xres = buffer.set_display_size.body.resp.width;
@@ -151,10 +174,11 @@ bcm2835_mailbox_get_pitch(bcm2835_get_pitch_entries* _entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_get_pitch get_pitch;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_pitch,
     BCM2835_MAILBOX_TAG_GET_PITCH);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->pitch = buffer.get_pitch.body.resp.pitch;
@@ -171,10 +195,11 @@ bcm2835_mailbox_get_cmdline(bcm2835_get_cmdline_entries* _entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_get_cmd_line get_cmd_line;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_cmd_line,
     BCM2835_MAILBOX_TAG_GET_CMD_LINE);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   for (i = 0;
@@ -196,12 +221,13 @@ bcm2835_mailbox_set_power_state(bcm2835_set_power_state_entries *_entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_power_state set_power_state;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG(&buffer.set_power_state,
     BCM2835_MAILBOX_TAG_SET_POWER_STATE);
   buffer.set_power_state.body.req.dev_id = _entries->dev_id;
   buffer.set_power_state.body.req.state = _entries->state;
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->dev_id = buffer.set_power_state.body.resp.dev_id;
@@ -218,10 +244,11 @@ bcm2835_mailbox_get_arm_memory(bcm2835_get_arm_memory_entries* _entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_get_arm_memory get_arm_memory;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_arm_memory,
     BCM2835_MAILBOX_TAG_GET_ARM_MEMORY);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->base = buffer.get_arm_memory.body.resp.base;
@@ -238,10 +265,11 @@ bcm2835_mailbox_get_vc_memory(bcm2835_get_vc_memory_entries* _entries)
     bcm2835_mbox_buf_hdr hdr;
     bcm2835_mbox_tag_get_vc_memory get_vc_memory;
     uint32_t end_tag;
-  }buffer __attribute__((aligned (16)));
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
   BCM2835_MBOX_INIT_BUF(&buffer);
   BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_vc_memory,
     BCM2835_MAILBOX_TAG_GET_VC_MEMORY);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
   if (bcm2835_mailbox_send_read_buffer(&buffer))
     return -1;
   _entries->base = buffer.get_vc_memory.body.resp.base;

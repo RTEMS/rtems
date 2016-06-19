@@ -115,6 +115,24 @@ typedef struct {
     (_t_)->tag_hdr.val_len = 0; \
   }
 
+/*
+ * Mailbox buffers has to be aligned to 16 bytes because
+ * 4 LSB bits of the BCM2835_MBOX_WRITE and BCM2835_MBOX_READ
+ * registers are used to pass channel number.
+ *
+ * But there is another requirement for buffer allocation
+ * as well when interface is called after cache is enabled.
+ * The buffer should not share cache line with another variable
+ * which can be updated during data exchange with VideoCore.
+ * If cache is filled to satisfy another variable update
+ * during VideoCore output is stored into main memory then
+ * part of received data can be lost.
+ *
+ * Cache line length is 64 bytes for RPi2 Cortex-A7 data cache
+ * so align buffers to this value.
+ */
+#define BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE __attribute__((aligned (64)))
+
 /* Video Core */
 #define BCM2835_MAILBOX_TAG_FIRMWARE_REVISION   0x00000001
 
@@ -243,6 +261,9 @@ typedef struct {
 #define BCM2835_MAILBOX_TAG_GET_MIN_CLOCK_RATE  0x00030007
 #define BCM2835_MAILBOX_TAG_GET_TRUBO           0x00030009
 #define BCM2835_MAILBOX_TAG_SET_TURBO           0x00038009
+
+#define BCM2835_MAILBOX_TAG_GET_DOMAIN_STATE    0x00030030
+#define BCM2835_MAILBOX_TAG_SET_DOMAIN_STATE    0x00038030
 
 /* Voltage */
 #define BCM2835_MAILBOX_VOLTAGE_RESERVED_UVID        0x000000000
