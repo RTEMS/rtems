@@ -38,6 +38,9 @@
 */
 #ifndef LIBBSP_ARM_TMS570
 #define LIBBSP_ARM_TMS570
+
+#include <bsp/tms570-pins.h>
+
 #include <bsp/ti_herc/reg_adc.h>
 #include <bsp/ti_herc/reg_ccmsr.h>
 #include <bsp/ti_herc/reg_crc.h>

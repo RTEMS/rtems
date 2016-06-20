@@ -31,85 +31,45 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define TMS570_PIN_NUM_SHIFT 0
-#define TMS570_PIN_NUM_MASK  0x0fff
+#define TMS570_PIN_NUM_SHIFT    0
+#define TMS570_PIN_NUM_MASK     0x000007ff
 
-#define TMS570_PIN_FNC_SHIFT 12
-#define TMS570_PIN_FNC_MASK  0xf000
+/*
+ * Request clear of interconnection in setup
+ * to ensure that previous peripheral to pin
+ * connection is not enabled in parallel to other one.
+ * Mask is ored with pin number in such list.
+ */
+#define TMS570_PIN_CLEAR_RQ_MASK 0x00000800
+
+#define TMS570_PIN_FNC_SHIFT    12
+#define TMS570_PIN_FNC_MASK     0x0000f000
+
+#define TMS570_PIN_NUM_FNC_MASK 0x0000ffff
+
+#define TMS570_PIN_IN_ALT_SHIFT 16
+#define TMS570_PIN_IN_ALT_MASK  0xffff0000
 
 #define TMS570_PIN_FNC_AUTO  (-1)
 
 #define TMS570_PIN_AND_FNC(pin, fnc) \
-  ((pin) | ((fnc)<<TMS570_PIN_FNC_SHIFT))
+  ((pin) | ((fnc) << TMS570_PIN_FNC_SHIFT))
+
+#define TMS570_PIN_WITH_IN_ALT(pin_num_and_fnc, pin_in_alt_num_and_fnc) \
+  ((pin_num_and_fnc) | ((pin_in_alt_num_and_fnc) << TMS570_PIN_IN_ALT_SHIFT))
 
 #define TMS570_BALL_WITH_MMR(mmrx, pos) \
-  ((pos) | ((mmrx)<<2))
-
-/* Definition for pins/balls which has to be set for Ethernet MII */
-
-#define TMS570_BALL_C3  TMS570_BALL_WITH_MMR(0, 2)
-#define TMS570_BALL_C3_MIBSPI3NCS_3 TMS570_PIN_AND_FNC(TMS570_BALL_C3, 0)
-#define TMS570_BALL_C3_I2C_SCL TMS570_PIN_AND_FNC(TMS570_BALL_C3, 1)
-
-#define TMS570_BALL_F3 TMS570_BALL_WITH_MMR(20, 2)
-#define TMS570_BALL_F3_MII_COL TMS570_PIN_AND_FNC(TMS570_BALL_F3, 2)
-
-#define TMS570_BALL_B4 TMS570_BALL_WITH_MMR(17, 2)
-#define TMS570_BALL_B4_MII_CRS TMS570_PIN_AND_FNC(TMS570_BALL_B4, 1)
-
-#define TMS570_BALL_B11 TMS570_BALL_WITH_MMR(19, 1)
-#define TMS570_BALL_B11_MII_RX_DV TMS570_PIN_AND_FNC(TMS570_BALL_B11, 1)
-
-#define TMS570_BALL_N19 TMS570_BALL_WITH_MMR(10, 0)
-#define TMS570_BALL_N19_MII_RX_ER TMS570_PIN_AND_FNC(TMS570_BALL_N19, 1)
-
-#define TMS570_BALL_K19 TMS570_BALL_WITH_MMR(14, 1)
-#define TMS570_BALL_K19_MII_RX_CLK TMS570_PIN_AND_FNC(TMS570_BALL_K19, 1)
-
-#define TMS570_BALL_P1 TMS570_BALL_WITH_MMR(11, 3)
-#define TMS570_BALL_P1_MII_RXD_0 TMS570_PIN_AND_FNC(TMS570_BALL_P1, 2)
-
-#define TMS570_BALL_A14 TMS570_BALL_WITH_MMR(12, 0)
-#define TMS570_BALL_A14_MII_RXD_1 TMS570_PIN_AND_FNC(TMS570_BALL_A14, 1)
-
-#define TMS570_BALL_G19 TMS570_BALL_WITH_MMR(12, 2)
-#define TMS570_BALL_G19_MII_RXD_2 TMS570_PIN_AND_FNC(TMS570_BALL_G19, 2)
-
-#define TMS570_BALL_H18 TMS570_BALL_WITH_MMR(12, 3)
-#define TMS570_BALL_H18_MII_RXD_3 TMS570_PIN_AND_FNC(TMS570_BALL_H18, 2)
-
-#define TMS570_BALL_D19 TMS570_BALL_WITH_MMR(17, 0)
-#define TMS570_BALL_D19_MII_TX_CLK TMS570_PIN_AND_FNC(TMS570_BALL_D19, 1)
-
-#define TMS570_BALL_J18 TMS570_BALL_WITH_MMR(13, 0)
-#define TMS570_BALL_J18_MII_TXD_0 TMS570_PIN_AND_FNC(TMS570_BALL_J18, 2)
-
-#define TMS570_BALL_J19 TMS570_BALL_WITH_MMR(13, 1)
-#define TMS570_BALL_J19_MII_TXD_1 TMS570_PIN_AND_FNC(TMS570_BALL_J19, 2)
-
-#define TMS570_BALL_R2 TMS570_BALL_WITH_MMR(13, 3)
-#define TMS570_BALL_R2_MII_TXD_2 TMS570_PIN_AND_FNC(TMS570_BALL_R2, 2)
-
-#define TMS570_BALL_E18 TMS570_BALL_WITH_MMR(14, 0)
-#define TMS570_BALL_E18_MII_TXD_3 TMS570_PIN_AND_FNC(TMS570_BALL_E18, 2)
-
-#define TMS570_BALL_H19 TMS570_BALL_WITH_MMR(13, 2)
-#define TMS570_BALL_H19_MII_TXEN TMS570_PIN_AND_FNC(TMS570_BALL_H19, 2)
-
-#define TMS570_BALL_V5 TMS570_BALL_WITH_MMR(7, 1)
-#define TMS570_BALL_V5_MDCLK TMS570_PIN_AND_FNC(TMS570_BALL_V5, 2)
-
-#define TMS570_BALL_G3 TMS570_BALL_WITH_MMR(8, 1)
-#define TMS570_BALL_G3_MDIO TMS570_PIN_AND_FNC(TMS570_BALL_G3, 2)
-
-#define TMS570_BALL_XX TMS570_BALL_WITH_MMR(29, 3)
-#define TMS570_BALL_XX_GMII_SEL TMS570_PIN_AND_FNC(TMS570_BALL_XX, 0)
+  ((pos) | ((mmrx) << 2))
 
 /* Generic functions select pin to peripheral connection */
 
 void tms570_bsp_pin_set_function(int pin_num, int pin_fnc);
 
 void tms570_bsp_pin_clear_function(int pin_num, int pin_fnc);
+
+void tms570_bsp_pin_config_one(uint32_t pin_num_and_fnc);
+
+void tms570_bsp_pinmmr_config(const uint32_t *pinmmr_values, int reg_start, int reg_count);
 
 static inline void
 tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, unsigned int *pin_shift,
@@ -119,6 +79,52 @@ tms570_bsp_pin_to_pinmmrx(volatile uint32_t **pinmmrx, unsigned int *pin_shift,
   *pinmmrx = &TMS570_IOMM.PINMUX.PINMMR0 + (pin_num >> 2);
   *pin_shift = (pin_num & 0x3)*8;
 }
+
+#define TMS570_PINMMR_REG_SINGLE_VAL_ACTION(reg, pin) \
+  (((((pin) & TMS570_PIN_NUM_MASK) >> 2 != (reg)) || ((pin) & TMS570_PIN_CLEAR_RQ_MASK))? 0: \
+   1 << ((((pin) & TMS570_PIN_FNC_MASK) >> TMS570_PIN_FNC_SHIFT) + \
+   ((pin) & 3) * 8) \
+  )
+
+#define TMS570_PINMMR_REG_VAL_ACTION(reg, pin) \
+  TMS570_PINMMR_REG_SINGLE_VAL_ACTION(reg, pin) | \
+  ((pin) & TMS570_PIN_IN_ALT_MASK? \
+  TMS570_PINMMR_REG_SINGLE_VAL_ACTION(reg, (pin) >> TMS570_PIN_IN_ALT_SHIFT ): \
+  0) |
+
+/**
+ * Macro which computes value for PINMMRx register from pin list
+ * which is defined as macro calling action macro for each pin
+ *
+ * @param reg      PINMMR register number (0 .. 30 for TMS570LS3137)
+ * @param pin_list declared as macro with parameters
+ *                 \c per_pin_action and \c common_arg which expands
+ *                 to list of \c per_pin_action(\c common_arg, \c TMS570_BALL_xx_function)
+ *
+ * @retval number which represents connections which should be enabled
+ *                in given PINMMR register. Pin setup for other registers than specified
+ *                are ignored
+ */
+#define TMS570_PINMMR_REG_VAL(reg, pin_list) \
+  pin_list(TMS570_PINMMR_REG_VAL_ACTION, reg) 0
+
+#define TMS570_PINMMR_COMA_LIST_ACTION(reg, pin) \
+  (pin),
+
+/**
+ * Macro which generates list of pin and function specification from
+ * from pin list which is defined as macro calling action macro for each pin
+ *
+ * @param pin_list declared as macro with parameters
+ *                 \c per_pin_action and \c common_arg which expands
+ *                 to list of \c per_pin_action(\c common_arg, \c TMS570_BALL_xx_function)
+ *
+ * @retval list of coma separated pin+function combined values which is terminated by coma
+ *              at the end
+ */
+#define TMS570_PINMMR_COMA_LIST(pin_list) \
+  pin_list(TMS570_PINMMR_COMA_LIST_ACTION, 0)
+
 
 #endif
 
