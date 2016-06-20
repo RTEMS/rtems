@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -15,69 +15,66 @@
 #include <leon.h>
 
 #include <rtems/counter.h>
+#include <rtems/sysinit.h>
 
-static CPU_Counter_ticks timestamp_counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
+static void leon3_counter_initialize(void)
 {
-  return second - first;
-}
-
-static CPU_Counter_ticks clock_counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
-{
-  CPU_Counter_ticks period = rtems_configuration_get_microseconds_per_tick();
-
-  return (first + period - second) % period;
-}
-
-static void gpt_counter_initialize(
-  volatile struct gptimer_regs *gpt,
-  size_t timer_index,
-  uint32_t frequency,
-  SPARC_Counter_difference counter_difference
-)
-{
-  _SPARC_Counter_initialize(
-    (volatile const uint32_t *) &gpt->timer[timer_index].value,
-    counter_difference
-  );
-
-  rtems_counter_initialize_converter(frequency);
-}
-
-void leon3_cpu_counter_initialize(void)
-{
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &LEON3_IrqCtrl_Regs->timestamp[0];
+  volatile struct irqmp_timestamp_regs *irqmp_ts;
+  volatile struct gptimer_regs *gpt;
   unsigned int freq;
 
-  if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+  irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
+  gpt = LEON3_Timer_Regs;
+
+  leon3_up_counter_enable();
+
+  if (leon3_up_counter_is_available()) {
+    /* Use the LEON4 up-counter if available */
+
+    _SPARC_Counter_initialize(
+      _SPARC_Counter_read_asr23,
+      _SPARC_Counter_difference_normal,
+      NULL
+    );
+
+    freq = leon3_up_counter_frequency();
+    rtems_counter_initialize_converter(freq);
+  } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
     /* Use the interrupt controller timestamp counter if available */
 
     /* Enable interrupt timestamping for an arbitrary interrupt line */
     irqmp_ts->control = 0x1;
 
     _SPARC_Counter_initialize(
-      (volatile const uint32_t *) &irqmp_ts->counter,
-      timestamp_counter_difference
+      _SPARC_Counter_read_address,
+      _SPARC_Counter_difference_normal,
+      (volatile const uint32_t *) &irqmp_ts->counter
     );
 
-    /* Get and set the frequency */
-    rtems_counter_initialize_converter(
-      ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev));
-  } else if (LEON3_Timer_Regs != NULL) {
-      /* Fall back to the first GPTIMER if available */
-      freq = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
+    freq = ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev);
+    rtems_counter_initialize_converter(freq);
+  } else if (gpt != NULL) {
+    /* Fall back to the first GPTIMER if available */
 
-      gpt_counter_initialize(
-        LEON3_Timer_Regs,
-        LEON3_CLOCK_INDEX,
-        freq / (LEON3_Timer_Regs->scaler_reload - 1),
-        clock_counter_difference
-      );
+    _SPARC_Counter_initialize(
+      _SPARC_Counter_read_address,
+      _SPARC_Counter_difference_clock_period,
+      (volatile const uint32_t *) &gpt->timer[LEON3_CLOCK_INDEX].value
+    );
+
+    freq = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
+    rtems_counter_initialize_converter(freq / (gpt->scaler_reload - 1));
   }
 }
+
+RTEMS_SYSINIT_ITEM(
+  leon3_counter_initialize,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_THIRD
+);
+
+SPARC_Counter _SPARC_Counter = {
+  .counter_read = _SPARC_Counter_read_address,
+  .counter_difference = _SPARC_Counter_difference_one,
+  .counter_address = (uint32_t *) &_SPARC_Counter
+};

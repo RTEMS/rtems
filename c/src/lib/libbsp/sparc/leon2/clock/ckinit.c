@@ -105,3 +105,9 @@ extern int CLOCK_SPEED;
 #define Clock_driver_timecounter_tick() leon2_tc_tick()
 
 #include "../../../shared/clockdrv_shell.h"
+
+SPARC_Counter _SPARC_Counter = {
+  .counter_read = _SPARC_Counter_read_address,
+  .counter_difference = _SPARC_Counter_difference_one,
+  .counter_address = (uint32_t *) &_SPARC_Counter
+};

@@ -451,10 +451,12 @@ dont_do_the_window:
         subcc    %l7, 1, %l7             ! outermost interrupt handler?
         bnz      dont_switch_stacks      ! No, then do not switch stacks
 
-#if defined( RTEMS_PROFILING )
-         sethi   %hi(SYM(_SPARC_Counter)), %o5
-        ld       [%o5 + %lo(SYM(_SPARC_Counter))], %l4
-        ld       [%l4], %o5
+#if defined(RTEMS_PROFILING)
+         sethi   %hi(_SPARC_Counter), %o5
+        ld       [%o5 + %lo(_SPARC_Counter)], %l4
+        call     %l4, 0
+         nop
+        mov      %o0, %o5
 #else
          nop
 #endif
@@ -536,13 +538,15 @@ pil_fixed:
                                         !   WAS LOADED WHEN ISF WAS SAVED!!!
         mov      %l3, %o0               ! o0 = 1st arg = vector number
         call     %g4, 0
-#if defined( RTEMS_PROFILING )
+#if defined(RTEMS_PROFILING)
          mov     %o5, %l3               ! save interrupt entry instant
         cmp      %l7, 0
         bne      profiling_not_outer_most_exit
          nop
         ta       SPARC_SWTRAP_IRQDIS    ! Call interrupt disable trap handler
-        ld       [%l4], %o2             ! o2 = 3rd arg = interrupt exit instant
+        call     %l4, 0                 ! Call _SPARC_Counter.counter_read
+         nop
+        mov      %o0, %o2               ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
         call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
          mov     %g6, %o0               ! o0 = 1st arg = per-CPU control

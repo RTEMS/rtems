@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,18 +17,32 @@
 #endif
 
 #include <rtems/score/cpu.h>
+#include <rtems/config.h>
 
-static CPU_Counter_ticks _SPARC_Counter_register_dummy;
+CPU_Counter_ticks _SPARC_Counter_difference_normal(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  return second - first;
+}
 
-CPU_Counter_ticks _SPARC_Counter_difference_default(
+CPU_Counter_ticks _SPARC_Counter_difference_clock_period(
+  CPU_Counter_ticks second,
+  CPU_Counter_ticks first
+)
+{
+  CPU_Counter_ticks period;
+
+  period = rtems_configuration_get_microseconds_per_tick();
+
+  return ( first + period - second ) % period;
+}
+
+CPU_Counter_ticks _SPARC_Counter_difference_one(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
 )
 {
   return 1;
 }
-
-SPARC_Counter _SPARC_Counter = {
-  .counter_register = &_SPARC_Counter_register_dummy,
-  .counter_difference = _SPARC_Counter_difference_default
-};

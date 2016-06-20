@@ -58,8 +58,6 @@ static inline int set_snooping(void)
 void bsp_start( void )
 {
   CPU_SPARC_HAS_SNOOPING = set_snooping();
-
-  leon3_cpu_counter_initialize();
 }
 
 static void leon3_cpu_index_init(void)

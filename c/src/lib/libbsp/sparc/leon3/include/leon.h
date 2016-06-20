@@ -387,8 +387,6 @@ extern int leon3_timer_core_index;
  */
 extern unsigned int leon3_timer_prescaler;
 
-void leon3_cpu_counter_initialize(void);
-
 /* GRLIB extended IRQ controller register */
 void leon3_ext_irq_init(void);
 
@@ -455,6 +453,51 @@ static inline bool leon3_irqmp_has_timestamp(
 )
 {
   return (irqmp_ts->control >> 27) > 0;
+}
+
+static inline uint32_t leon3_up_counter_low(void)
+{
+  uint32_t asr23;
+
+  __asm__ volatile (
+    "mov %%asr23, %0"
+    : "=&r" (asr23)
+  );
+
+  return asr23;
+}
+
+static inline uint32_t leon3_up_counter_high(void)
+{
+  uint32_t asr22;
+
+  __asm__ volatile (
+    "mov %%asr22, %0"
+    : "=&r" (asr22)
+  );
+
+  return asr22;
+}
+
+static inline void leon3_up_counter_enable(void)
+{
+  __asm__ volatile (
+    "mov %g0, %asr23"
+  );
+}
+
+static inline bool leon3_up_counter_is_available(void)
+{
+  return leon3_up_counter_low() != leon3_up_counter_low();
+}
+
+static inline uint32_t leon3_up_counter_frequency(void)
+{
+  /*
+   * For simplicity, assume that the interrupt controller uses the processor
+   * clock.  This is at least true on the GR740.
+   */
+  return ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev);
 }
 
 #endif /* !ASM */

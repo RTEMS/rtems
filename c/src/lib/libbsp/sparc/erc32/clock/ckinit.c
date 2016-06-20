@@ -83,14 +83,14 @@ static void erc32_tc_tick( void )
   );
 }
 
-static CPU_Counter_ticks erc32_counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
+static void erc32_counter_initialize( uint32_t frequency )
 {
-  CPU_Counter_ticks period = rtems_configuration_get_microseconds_per_tick();
-
-  return (first + period - second) % period;
+  _SPARC_Counter_initialize(
+    _SPARC_Counter_read_address,
+    _SPARC_Counter_difference_clock_period,
+    &ERC32_MEC.Real_Time_Clock_Counter
+  );
+  rtems_counter_initialize_converter( frequency );
 }
 
 #define Clock_driver_support_initialize_hardware() \
@@ -117,11 +117,7 @@ static CPU_Counter_ticks erc32_counter_difference(
         rtems_configuration_get_microseconds_per_tick(), \
         erc32_tc_get_timecount \
     ); \
-    _SPARC_Counter_initialize( \
-      &ERC32_MEC.Real_Time_Clock_Counter, \
-      erc32_counter_difference \
-    ); \
-    rtems_counter_initialize_converter( frequency ); \
+    erc32_counter_initialize( frequency ); \
   } while (0)
 
 #define Clock_driver_timecounter_tick() erc32_tc_tick()
@@ -137,3 +133,8 @@ static CPU_Counter_ticks erc32_counter_difference(
 
 #include "../../../shared/clockdrv_shell.h"
 
+SPARC_Counter _SPARC_Counter = {
+  .counter_read = _SPARC_Counter_read_address,
+  .counter_difference = _SPARC_Counter_difference_one,
+  .counter_address = (uint32_t *) &_SPARC_Counter
+};
