@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -29,6 +29,17 @@ const char rtems_test_name[] = "SPCPUCOUNTER 1";
 
 #define NS_PER_TICK 1000000
 
+#define N 10
+
+typedef struct {
+  rtems_counter_ticks delay_ns_t[N][2];
+  rtems_counter_ticks delay_ticks_t[N][2];
+  rtems_counter_ticks overhead_t[N][5];
+  rtems_counter_ticks overhead_delta;
+} test_context;
+
+static test_context test_instance;
+
 static rtems_interval sync_with_clock_tick(void)
 {
   rtems_interval start = rtems_clock_get_ticks_since_boot();
@@ -52,56 +63,160 @@ static void test_converter(void)
   rtems_test_assert(ns == 1000000000);
 }
 
-static void test_delay_nanoseconds(void)
+static void test_delay_nanoseconds(test_context *ctx)
 {
-  rtems_counter_ticks start;
-  rtems_counter_ticks end;
-  rtems_counter_ticks delta;
-  double ns_per_tick = NS_PER_TICK;
-  uint64_t ns_delta;
-  rtems_interval tick;
-  int n = 10;
   int i;
 
-  printf("test delay nanoseconds (%i times)\n", n);
+  for (i = 0; i < N; ++i) {
+    rtems_counter_ticks t0;
+    rtems_counter_ticks t1;
+    rtems_interval tick;
 
-  for (i = 0; i < n; ++i) {
     tick = sync_with_clock_tick();
 
-    start = rtems_counter_read();
+    t0 = rtems_counter_read();
     rtems_counter_delay_nanoseconds(NS_PER_TICK);
-    end = rtems_counter_read();
+    t1 = rtems_counter_read();
+
+    ctx->delay_ns_t[i][0] = t0;
+    ctx->delay_ns_t[i][1] = t1;
 
     rtems_test_assert(tick < rtems_clock_get_ticks_since_boot());
+  }
+}
 
-    delta = rtems_counter_difference(end, start);
-    ns_delta = rtems_counter_ticks_to_nanoseconds(delta);
+static void test_delay_ticks(test_context *ctx)
+{
+  rtems_counter_ticks ticks = rtems_counter_nanoseconds_to_ticks(NS_PER_TICK);
+  int i;
 
-    /* Special case for CPU counters using the clock driver counter */
-    if (ns_delta < rtems_configuration_get_nanoseconds_per_tick()) {
-      printf(
-        "warning: the RTEMS counter seems to be unable to\n"
-        "  measure intervals greater than the clock tick interval\n"
-      );
+  for (i = 0; i < N; ++i) {
+    rtems_counter_ticks t0;
+    rtems_counter_ticks t1;
+    rtems_interval tick;
 
-      ns_delta += rtems_configuration_get_nanoseconds_per_tick();
-    }
+    tick = sync_with_clock_tick();
+
+    t0 = rtems_counter_read();
+    rtems_counter_delay_ticks(ticks);
+    t1 = rtems_counter_read();
+
+    ctx->delay_ticks_t[i][0] = t0;
+    ctx->delay_ticks_t[i][1] = t1;
+
+    rtems_test_assert(tick < rtems_clock_get_ticks_since_boot());
+  }
+}
+
+static void test_overheads(test_context *ctx)
+{
+  int i;
+
+  for (i = 0; i < N; ++i) {
+    rtems_counter_ticks t0;
+    rtems_counter_ticks t1;
+    rtems_counter_ticks t2;
+    rtems_counter_ticks t3;
+    rtems_counter_ticks t4;
+    rtems_counter_ticks d;
+
+    t0 = rtems_counter_read();
+    t1 = rtems_counter_read();
+    d = rtems_counter_difference(t1, t0);
+    t2 = rtems_counter_read();
+    rtems_counter_delay_nanoseconds(0);
+    t3 = rtems_counter_read();
+    rtems_counter_delay_ticks(0);
+    t4 = rtems_counter_read();
+
+    ctx->overhead_t[i][0] = t0;
+    ctx->overhead_t[i][1] = t1;
+    ctx->overhead_t[i][2] = t2;
+    ctx->overhead_t[i][3] = t3;
+    ctx->overhead_t[i][4] = t4;
+    ctx->overhead_delta = d;
+  }
+}
+
+static void report_overhead(
+  const char *name,
+  rtems_counter_ticks t1,
+  rtems_counter_ticks t0
+)
+{
+  rtems_counter_ticks d;
+  uint64_t ns;
+
+  d = rtems_counter_difference(t1, t0);
+  ns = rtems_counter_ticks_to_nanoseconds(d);
+
+  printf(
+    "overhead %s: %" PRIu64 " ticks, %" PRIu64 "ns\n",
+    name,
+    (uint64_t) d,
+    ns
+  );
+}
+
+static void test_report(test_context *ctx)
+{
+  double ns_per_tick = NS_PER_TICK;
+  rtems_counter_ticks d;
+  uint64_t ns;
+  size_t i;
+
+  printf("test delay nanoseconds (%i times)\n", N);
+
+  for (i = 0; i < N; ++i) {
+    d = rtems_counter_difference(ctx->delay_ns_t[i][1], ctx->delay_ns_t[i][0]);
+    ns = rtems_counter_ticks_to_nanoseconds(d);
 
     printf(
-      "busy wait duration: %" PRIu64 "ns\n"
-      "busy wait relative to clock tick: %f\n",
-      ns_delta,
-      (ns_delta - ns_per_tick) / ns_per_tick
+      "ns busy wait duration: %" PRIu64 "ns\n"
+      "ns busy wait relative to clock tick: %f\n",
+      ns,
+      (ns - ns_per_tick) / ns_per_tick
     );
+  }
+
+  printf("test delay ticks (%i times)\n", N);
+
+  for (i = 0; i < N; ++i) {
+    d = rtems_counter_difference(
+      ctx->delay_ticks_t[i][1],
+      ctx->delay_ticks_t[i][0]
+    );
+    ns = rtems_counter_ticks_to_nanoseconds(d);
+
+    printf(
+      "ticks busy wait duration: %" PRIu64 "ns\n"
+      "ticks busy wait relative to clock tick: %f\n",
+      ns,
+      (ns - ns_per_tick) / ns_per_tick
+    );
+  }
+
+  printf("test overheads (%i times)\n", N);
+
+  for (i = 0; i < N; ++i) {
+    report_overhead("read", ctx->overhead_t[i][1], ctx->overhead_t[i][0]);
+    report_overhead("difference", ctx->overhead_t[i][2], ctx->overhead_t[i][1]);
+    report_overhead("delay ns", ctx->overhead_t[i][3], ctx->overhead_t[i][2]);
+    report_overhead("delay ticks", ctx->overhead_t[i][4], ctx->overhead_t[i][3]);
   }
 }
 
 static void Init(rtems_task_argument arg)
 {
+  test_context *ctx = &test_instance;
+
   TEST_BEGIN();
 
+  test_delay_nanoseconds(ctx);
+  test_delay_ticks(ctx);
+  test_overheads(ctx);
   test_converter();
-  test_delay_nanoseconds();
+  test_report(ctx);
 
   TEST_END();
 

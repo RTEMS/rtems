@@ -8,6 +8,8 @@ directives:
   - rtems_counter_difference()
   - rtems_counter_ticks_to_nanoseconds()
   - rtems_counter_nanoseconds_to_ticks()
+  - rtems_counter_delay_nanoseconds()
+  - rtems_counter_delay_ticks()
 
 concepts:
 

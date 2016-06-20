@@ -1,25 +1,87 @@
-*** TEST SPCPUCOUNTER 1 ***
-CPU counter frequency: 25000000Hz
+*** BEGIN OF TEST SPCPUCOUNTER 1 ***
+CPU counter frequency: 1500000000Hz
 nanoseconds for frequency count ticks: 1000000000
 test delay nanoseconds (10 times)
-busy wait duration: 1000840ns
-busy wait relative to clock tick: 0.000840
-busy wait duration: 1001200ns
-busy wait relative to clock tick: 0.001200
-busy wait duration: 1001480ns
-busy wait relative to clock tick: 0.001480
-busy wait duration: 1001200ns
-busy wait relative to clock tick: 0.001200
-busy wait duration: 1001120ns
-busy wait relative to clock tick: 0.001120
-busy wait duration: 1001280ns
-busy wait relative to clock tick: 0.001280
-busy wait duration: 1001120ns
-busy wait relative to clock tick: 0.001120
-busy wait duration: 1001240ns
-busy wait relative to clock tick: 0.001240
-busy wait duration: 1001120ns
-busy wait relative to clock tick: 0.001120
-busy wait duration: 1001280ns
-busy wait relative to clock tick: 0.001280
+ns busy wait duration: 1000062ns
+ns busy wait relative to clock tick: 0.000062
+ns busy wait duration: 1000017ns
+ns busy wait relative to clock tick: 0.000017
+ns busy wait duration: 1000025ns
+ns busy wait relative to clock tick: 0.000025
+ns busy wait duration: 1000017ns
+ns busy wait relative to clock tick: 0.000017
+ns busy wait duration: 1000043ns
+ns busy wait relative to clock tick: 0.000043
+ns busy wait duration: 1000040ns
+ns busy wait relative to clock tick: 0.000040
+ns busy wait duration: 1000043ns
+ns busy wait relative to clock tick: 0.000043
+ns busy wait duration: 1000022ns
+ns busy wait relative to clock tick: 0.000022
+ns busy wait duration: 1000028ns
+ns busy wait relative to clock tick: 0.000028
+ns busy wait duration: 1000023ns
+ns busy wait relative to clock tick: 0.000023
+test delay ticks (10 times)
+ticks busy wait duration: 1000038ns
+ticks busy wait relative to clock tick: 0.000038
+ticks busy wait duration: 1000028ns
+ticks busy wait relative to clock tick: 0.000028
+ticks busy wait duration: 1000010ns
+ticks busy wait relative to clock tick: 0.000010
+ticks busy wait duration: 1000036ns
+ticks busy wait relative to clock tick: 0.000036
+ticks busy wait duration: 1000031ns
+ticks busy wait relative to clock tick: 0.000031
+ticks busy wait duration: 1000062ns
+ticks busy wait relative to clock tick: 0.000062
+ticks busy wait duration: 1000026ns
+ticks busy wait relative to clock tick: 0.000026
+ticks busy wait duration: 1000031ns
+ticks busy wait relative to clock tick: 0.000031
+ticks busy wait duration: 1000016ns
+ticks busy wait relative to clock tick: 0.000016
+ticks busy wait duration: 1000033ns
+ticks busy wait relative to clock tick: 0.000033
+test overheads (10 times)
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 272 ticks, 181ns
+overhead delay ticks: 20 ticks, 13ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 20 ticks, 13ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 34 ticks, 22ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 34 ticks, 22ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 24 ticks, 16ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 23 ticks, 15ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 23 ticks, 15ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 23 ticks, 15ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 23 ticks, 15ns
+overhead delay ticks: 8 ticks, 5ns
+overhead read: 1 ticks, 0ns
+overhead difference: 1 ticks, 0ns
+overhead delay ns: 23 ticks, 15ns
+overhead delay ticks: 8 ticks, 5ns
 *** END OF TEST SPCPUCOUNTER 1 ***
