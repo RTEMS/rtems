@@ -18,7 +18,6 @@
 
 #include <bsp.h>
 #include <leon.h>
-#include <rtems/bspIo.h>
 #include <bsp/bootcard.h>
 
 #if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
@@ -67,7 +66,4 @@ void bsp_start( void )
   LEON3_Cpu_Index = _LEON3_Get_current_processor();
 
   leon3_cpu_counter_initialize();
-
-  /* find debug UART for printk() */
-  bsp_debug_uart_init();
 }

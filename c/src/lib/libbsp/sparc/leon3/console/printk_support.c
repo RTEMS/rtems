@@ -18,6 +18,7 @@
 #include <bsp.h>
 #include <leon.h>
 #include <rtems/libio.h>
+#include <rtems/sysinit.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -38,7 +39,7 @@ static int pre_printk_pos = 0;
 /* Initialize the BSP system debug console layer. It will scan AMBA Plu&Play
  * for a debug APBUART and enable RX/TX for that UART.
  */
-void bsp_debug_uart_init(void)
+static void bsp_debug_uart_init(void)
 {
   int i;
   struct ambapp_dev *adev;
@@ -75,6 +76,12 @@ void bsp_debug_uart_init(void)
     dbg_uart->status = 0;
   }
 }
+
+RTEMS_SYSINIT_ITEM(
+  bsp_debug_uart_init,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_THIRD
+);
 
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)

@@ -392,8 +392,6 @@ void leon3_cpu_counter_initialize(void);
 /* GRLIB extended IRQ controller register */
 void leon3_ext_irq_init(void);
 
-void bsp_debug_uart_init(void);
-
 void leon3_power_down_loop(void) RTEMS_NO_RETURN;
 
 static inline uint32_t leon3_get_cpu_count(
