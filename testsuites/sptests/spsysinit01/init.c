@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -175,7 +175,6 @@ static void next_step(init_step expected)
 
 FIRST(RTEMS_SYSINIT_BSP_WORK_AREAS)
 {
-  TEST_BEGIN();
   assert(_Workspace_Area.area_begin == 0);
   next_step(BSP_WORK_AREAS_PRE);
 }
@@ -197,6 +196,12 @@ FIRST(RTEMS_SYSINIT_BSP_START)
 
 LAST(RTEMS_SYSINIT_BSP_START)
 {
+  /*
+   * Some BSPs initialize the printk() support in bsp_start().  So, print begin
+   * of test after bsp_start().
+   */
+  TEST_BEGIN();
+
   next_step(BSP_START_POST);
 }
 
