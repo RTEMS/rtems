@@ -290,3 +290,63 @@ bcm2835_mailbox_get_vc_memory(bcm2835_get_vc_memory_entries* _entries)
     return -2;
   return 0;
 }
+
+int
+bcm2835_mailbox_get_firmware_revision(bcm2835_mailbox_get_fw_rev_entries* _entries)
+{
+  struct{
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_fw_rev get_fw_rev;
+    uint32_t end_tag;
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
+  BCM2835_MBOX_INIT_BUF(&buffer);
+  BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_fw_rev,
+    BCM2835_MAILBOX_TAG_FIRMWARE_REVISION);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
+  if (bcm2835_mailbox_send_read_buffer(&buffer))
+    return -1;
+  _entries->fw_rev = buffer.get_fw_rev.body.resp.rev;
+  if( !bcm2835_mailbox_buffer_suceeded(&buffer.hdr) )
+    return -2;
+  return 0;
+}
+
+int
+bcm2835_mailbox_get_board_model(bcm2835_get_board_spec_entries* _entries)
+{
+  struct{
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_board_spec get_board_model;
+    uint32_t end_tag;
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
+  BCM2835_MBOX_INIT_BUF(&buffer);
+  BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_board_model,
+    BCM2835_MAILBOX_TAG_GET_BOARD_MODEL);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
+  if (bcm2835_mailbox_send_read_buffer(&buffer))
+    return -1;
+  _entries->spec = buffer.get_board_model.body.resp.spec;
+  if( !bcm2835_mailbox_buffer_suceeded(&buffer.hdr) )
+    return -2;
+  return 0;
+}
+
+int
+bcm2835_mailbox_get_board_revision(bcm2835_get_board_spec_entries* _entries)
+{
+  struct{
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_board_spec get_board_revision;
+    uint32_t end_tag;
+  }buffer BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE;
+  BCM2835_MBOX_INIT_BUF(&buffer);
+  BCM2835_MBOX_INIT_TAG_NO_REQ(&buffer.get_board_revision,
+    BCM2835_MAILBOX_TAG_GET_BOARD_VERSION);
+  bcm2835_mailbox_buffer_flush_and_invalidate(&buffer, sizeof(&buffer));
+  if (bcm2835_mailbox_send_read_buffer(&buffer))
+    return -1;
+  _entries->spec = buffer.get_board_revision.body.resp.spec;
+  if( !bcm2835_mailbox_buffer_suceeded(&buffer.hdr) )
+    return -2;
+  return 0;
+}

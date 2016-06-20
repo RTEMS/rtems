@@ -135,6 +135,25 @@ typedef struct
 
 int
 bcm2835_mailbox_get_vc_memory(bcm2835_get_vc_memory_entries* _entries);
+
+typedef struct
+{
+  uint32_t fw_rev;
+} bcm2835_mailbox_get_fw_rev_entries;
+
+int
+bcm2835_mailbox_get_firmware_revision(bcm2835_mailbox_get_fw_rev_entries* _entries);
+
+typedef struct
+{
+  uint32_t spec;
+} bcm2835_get_board_spec_entries;
+
+int
+bcm2835_mailbox_get_board_model(bcm2835_get_board_spec_entries* _entries);
+
+int
+bcm2835_mailbox_get_board_revision(bcm2835_get_board_spec_entries* _entries);
 /** @} */
 
 #endif /* LIBBSP_ARM_RASPBERRYPI_VC_H */

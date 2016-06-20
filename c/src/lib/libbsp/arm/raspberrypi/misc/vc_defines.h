@@ -135,10 +135,30 @@ typedef struct {
 
 /* Video Core */
 #define BCM2835_MAILBOX_TAG_FIRMWARE_REVISION   0x00000001
+typedef struct {
+  bcm2835_mbox_tag_hdr tag_hdr;
+  union {
+    struct {
+    } req;
+    struct {
+      uint32_t rev;
+    } resp;
+  } body;
+} bcm2835_mbox_tag_get_fw_rev;
 
 /* Hardware */
 #define BCM2835_MAILBOX_TAG_GET_BOARD_MODEL     0x00010001
 #define BCM2835_MAILBOX_TAG_GET_BOARD_VERSION   0x00010002
+typedef struct {
+  bcm2835_mbox_tag_hdr tag_hdr;
+  union {
+    struct {
+    } req;
+    struct {
+      uint32_t spec;
+    } resp;
+  } body;
+} bcm2835_mbox_tag_get_board_spec;
 
 #if (BSP_IS_RPI2 == 1)
 #define BCM2836_MAILBOX_BOARD_V_2_B             0x4
