@@ -15,6 +15,7 @@
 #include <bsp/fatal.h>
 #include <leon.h>
 #include <ambapp.h>
+#include <rtems/sysinit.h>
 
 unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
 int leon3_timer_core_index __attribute__((weak)) = 0;
@@ -85,7 +86,7 @@ struct ambapp_dev *LEON3_Timer_Adev;
  *  amba_ahb_masters, amba_ahb_slaves and amba.
  */
 
-void amba_initialize(void)
+static void amba_initialize(void)
 {
   int icsel;
   struct ambapp_dev *adev;
@@ -157,3 +158,9 @@ void amba_initialize(void)
   ambapp_grlib_root_register(&grlib_bus_config);
 #endif
 }
+
+RTEMS_SYSINIT_ITEM(
+  amba_initialize,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_FIRST
+);

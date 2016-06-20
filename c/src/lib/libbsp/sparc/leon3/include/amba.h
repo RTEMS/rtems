@@ -41,8 +41,6 @@ extern "C" {
 /* The AMBA Plug&Play info of the bus that the LEON3 sits on */
 extern struct ambapp_bus ambapp_plb;
 
-void amba_initialize(void);
-
 #ifdef __cplusplus
 }
 #endif

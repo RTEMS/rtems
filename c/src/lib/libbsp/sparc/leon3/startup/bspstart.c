@@ -66,11 +66,6 @@ void bsp_start( void )
    */
   LEON3_Cpu_Index = _LEON3_Get_current_processor();
 
-  /* Scan AMBA Plug&Play and parse it into a RAM description (ambapp_plb),
-   * find GPTIMER for bus frequency, find IRQ Controller and initialize
-   * interrupt support
-   */
-  amba_initialize();
   leon3_cpu_counter_initialize();
 
   /* find debug UART for printk() */
