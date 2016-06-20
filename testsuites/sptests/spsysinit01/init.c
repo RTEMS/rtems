@@ -143,6 +143,18 @@ typedef enum {
 #endif /* RTEMS_POSIX_API */
   STD_FILE_DESCRIPTORS_PRE,
   STD_FILE_DESCRIPTORS_POST,
+  LAST_FIRST,
+  LAST_SECOND,
+  LAST_THIRD,
+  LAST_FOURTH,
+  LAST_FIFTH,
+  LAST_SIXTH,
+  LAST_SEVENTH,
+  LAST_EIGHTH,
+  LAST_NINETH,
+  LAST_TENTH,
+  LAST_MIDDLE,
+  LAST_LAST,
   INIT_TASK,
   DONE
 } init_step;
@@ -164,6 +176,17 @@ typedef enum {
     RTEMS_SYSINIT_ORDER_LAST \
   ); \
   static void x##_last(void)
+
+#define LAST_STEP(x) \
+  static void last_##x(void) \
+  { \
+    next_step(LAST_##x); \
+  } \
+  RTEMS_SYSINIT_ITEM( \
+    last_##x, \
+    RTEMS_SYSINIT_LAST, \
+    RTEMS_SYSINIT_ORDER_##x \
+  )
 
 static init_step step;
 
@@ -673,6 +696,19 @@ LAST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
   assert(rv == 0);
   next_step(STD_FILE_DESCRIPTORS_POST);
 }
+
+LAST_STEP(FIRST);
+LAST_STEP(SECOND);
+LAST_STEP(THIRD);
+LAST_STEP(FOURTH);
+LAST_STEP(FIFTH);
+LAST_STEP(SIXTH);
+LAST_STEP(SEVENTH);
+LAST_STEP(EIGHTH);
+LAST_STEP(NINETH);
+LAST_STEP(TENTH);
+LAST_STEP(MIDDLE);
+LAST_STEP(LAST);
 
 static void Init(rtems_task_argument arg)
 {

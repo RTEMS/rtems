@@ -72,15 +72,25 @@ extern "C" {
 #define RTEMS_SYSINIT_CLASSIC_USER_TASKS         000706
 #define RTEMS_SYSINIT_POSIX_USER_THREADS         000707
 #define RTEMS_SYSINIT_STD_FILE_DESCRIPTORS       000800
+#define RTEMS_SYSINIT_LAST                       ffffff
 
 /*
  * The value of each order define must consist of exactly two hexadecimal
  * digits without a 0x-prefix.  A 0x-prefix is concatenated with the module and
  * order values to form a proper integer literal.
  */
-#define RTEMS_SYSINIT_ORDER_FIRST  00
-#define RTEMS_SYSINIT_ORDER_MIDDLE 08
-#define RTEMS_SYSINIT_ORDER_LAST   0f
+#define RTEMS_SYSINIT_ORDER_FIRST   00
+#define RTEMS_SYSINIT_ORDER_SECOND  01
+#define RTEMS_SYSINIT_ORDER_THIRD   02
+#define RTEMS_SYSINIT_ORDER_FOURTH  03
+#define RTEMS_SYSINIT_ORDER_FIFTH   04
+#define RTEMS_SYSINIT_ORDER_SIXTH   05
+#define RTEMS_SYSINIT_ORDER_SEVENTH 06
+#define RTEMS_SYSINIT_ORDER_EIGHTH  07
+#define RTEMS_SYSINIT_ORDER_NINETH  08
+#define RTEMS_SYSINIT_ORDER_TENTH   09
+#define RTEMS_SYSINIT_ORDER_MIDDLE  80
+#define RTEMS_SYSINIT_ORDER_LAST    ff
 
 typedef void ( *rtems_sysinit_handler )( void );
 
