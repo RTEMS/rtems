@@ -18,18 +18,9 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
 #include <rtems/print.h>
 
-void rtems_print_printer_printk(
-  rtems_printer *printer
-)
-{
-  printer->context = NULL;
-  printer->printer = printk_plugin;
-}
-
-int printk_plugin(
+static int printk_plugin(
   void *ignored,
   const char *format,
   va_list ap
@@ -38,4 +29,12 @@ int printk_plugin(
   (void) ignored;
   vprintk( format, ap );
   return 0;
+}
+
+void rtems_print_printer_printk(
+  rtems_printer *printer
+)
+{
+  printer->context = NULL;
+  printer->printer = printk_plugin;
 }
