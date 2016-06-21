@@ -28,14 +28,40 @@
 
 const char rtems_test_name[] = "SP 20";
 
+rtems_printer rtems_test_printer;
+
+#define BUFFER_COUNT 20
+
+#define BUFFER_SIZE 100
+
+static rtems_printer_task_context printer_task;
+
+static long buffers[ BUFFER_COUNT ][ BUFFER_SIZE / sizeof(long) ];
+
+void end_of_test( void )
+{
+  rtems_test_printf( TEST_END_STRING );
+  rtems_printer_task_drain( &printer_task );
+  rtems_test_exit( 0 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
-  uint32_t    index;
+  int               error;
+  uint32_t          index;
   rtems_status_code status;
 
-  TEST_BEGIN();
+  rtems_printer_task_set_priority( &printer_task, 254 );
+  rtems_printer_task_set_file_descriptor( &printer_task, 1 );
+  rtems_printer_task_set_buffer_table( &printer_task, &buffers[ 0 ][ 0 ] );
+  rtems_printer_task_set_buffer_count( &printer_task, BUFFER_COUNT );
+  rtems_printer_task_set_buffer_size( &printer_task, BUFFER_SIZE );
+  error = rtems_print_printer_task( &rtems_test_printer, &printer_task );
+  rtems_test_assert( error == 0 );
+
+  rtems_test_printf( TEST_BEGIN_STRING );
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

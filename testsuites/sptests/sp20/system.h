@@ -38,7 +38,7 @@ void Get_all_counters( void );
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 100000
 
-#define CONFIGURE_MAXIMUM_TASKS               7
+#define CONFIGURE_MAXIMUM_TASKS               8
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
 #define CONFIGURE_INIT_TASK_PRIORITY          10
@@ -57,5 +57,7 @@ TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
 TEST_EXTERN struct counters Count;       /* iteration counters */
 TEST_EXTERN struct counters Temporary_count;
 extern rtems_task_priority Priorities[ 7 ];
+
+void end_of_test( void );
 
 /* end of include file */
