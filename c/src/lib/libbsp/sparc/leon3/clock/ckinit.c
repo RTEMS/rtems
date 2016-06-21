@@ -92,35 +92,50 @@ static uint32_t leon3_tc_get_timecount_second_timer(struct timecounter *tc)
 }
 #endif
 
+#ifdef RTEMS_PROFILING
+#define IRQMP_TIMESTAMP_S1_S2 ((1U << 25) | (1U << 26))
+
 static void leon3_tc_tick_irqmp_timestamp(void)
+{
+  volatile struct irqmp_timestamp_regs *irqmp_ts =
+    &LEON3_IrqCtrl_Regs->timestamp[0];
+  unsigned int first = irqmp_ts->assertion;
+  unsigned int second = irqmp_ts->counter;
+
+  irqmp_ts->control |= IRQMP_TIMESTAMP_S1_S2;
+
+  _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
+
+  rtems_timecounter_tick();
+}
+#endif
+
+static void leon3_tc_tick_irqmp_timestamp_init(void)
 {
 #ifdef RTEMS_PROFILING
   /*
-   * We need a small state machine to ignore the first clock interrupt, since
-   * it contains the sequential system initialization time.  Do the timestamp
-   * initialization on the fly.
+   * Ignore the first clock interrupt, since it contains the sequential system
+   * initialization time.  Do the timestamp initialization on the fly.
    */
-  static int state = 1;
+
+#ifdef RTEMS_SMP
+  static Atomic_Uint counter = ATOMIC_INITIALIZER_UINT(0);
+
+  bool done =
+    _Atomic_Fetch_add_uint(&counter, 1, ATOMIC_ORDER_RELAXED)
+      == rtems_get_processor_count() - 1;
+#else
+  bool done = true;
+#endif
 
   volatile struct irqmp_timestamp_regs *irqmp_ts =
     &LEON3_IrqCtrl_Regs->timestamp[0];
-  unsigned int s1_s2 = (1U << 25) | (1U << 26);
+  unsigned int ks = 1U << 5;
 
-  if (state == 0) {
-    unsigned int first = irqmp_ts->assertion;
-    unsigned int second = irqmp_ts->counter;
+  irqmp_ts->control = ks | IRQMP_TIMESTAMP_S1_S2 | (unsigned int) clkirq;
 
-    irqmp_ts->control |= s1_s2;
-
-    _Profiling_Update_max_interrupt_delay(_Per_CPU_Get(), second - first);
-  } else if (state == 1) {
-    unsigned int ks = 1U << 5;
-
-    state = 0;
-
-    irqmp_ts->control = ks | s1_s2 | (unsigned int) clkirq;
-  } else if (state == 1) {
-    state = 2;
+  if (done) {
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp;
   }
 #endif
 
@@ -201,7 +216,7 @@ static void leon3_clock_initialize(void)
     leon3_tc.tc.tc_counter_mask = 0xffffffff;
     leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
     leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp;
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
     rtems_timecounter_install(&leon3_tc.tc);
   } else {
 #ifdef RTEMS_SMP
