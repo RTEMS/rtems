@@ -34,7 +34,7 @@ int rtems_test_end(void)
   );
 }
 
-int rtems_test_print(
+int rtems_test_printf(
   const char* format,
   ...
 )
