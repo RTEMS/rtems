@@ -162,5 +162,5 @@ static void amba_initialize(void)
 RTEMS_SYSINIT_ITEM(
   amba_initialize,
   RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_FIRST
+  RTEMS_SYSINIT_ORDER_SECOND
 );

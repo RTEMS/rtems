@@ -80,7 +80,7 @@ static void bsp_debug_uart_init(void)
 RTEMS_SYSINIT_ITEM(
   bsp_debug_uart_init,
   RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_THIRD
+  RTEMS_SYSINIT_ORDER_FOURTH
 );
 
 /* putchar/getchar for printk */
