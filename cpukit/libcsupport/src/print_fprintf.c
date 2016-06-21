@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 
-int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap)
+static int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap)
 {
   return vfprintf(context, fmt, ap);
 }

@@ -141,19 +141,6 @@ extern void rtems_putc(char c);
  */
 typedef int (*rtems_print_plugin_t)(void *, const char *format, va_list ap);
 
-/**
- * @brief Reporting Methods fprintf() Plugin
- *
- * This is a standard plug-in to support using fprintf() for output
- * instead of printk().
- *
- * @param[in] context The file stream.
- * @param[in] fmt is a printf()-style format string
- *
- * @return The number of characters printed.
- */
-extern int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap);
-
 /**@}*/
 
 #ifdef __cplusplus
