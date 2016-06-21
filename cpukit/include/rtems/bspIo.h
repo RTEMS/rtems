@@ -122,18 +122,6 @@ extern int putk(const char *s);
  */
 extern void rtems_putc(char c);
 
-/**
- * Type definition for function which can be plugged in to
- * certain reporting routines to redirect the output.
- *
- * Use the RTEMS Print interface to call these functions. Do not
- * directly use them.
- *
- * If the user provides their own "printf plugin", then they may
- * redirect those reports as they see fit.
- */
-typedef int (*rtems_print_plugin_t)(void *, const char *format, va_list ap);
-
 /**@}*/
 
 #ifdef __cplusplus

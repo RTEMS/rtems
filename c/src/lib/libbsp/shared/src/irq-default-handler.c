@@ -14,7 +14,7 @@
 
 #include <inttypes.h>
 
-#include <rtems/print.h>
+#include <rtems/bspIo.h>
 
 #include <bsp/irq-generic.h>
 

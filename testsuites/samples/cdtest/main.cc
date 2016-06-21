@@ -23,6 +23,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/test.h>
 
 #include <cstdio>

@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>

@@ -51,6 +51,7 @@
 #include <unistd.h> /* write, read, close */
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/rtc.h>
 #include <rtems/score/sysstate.h>
 #include <libchip/rtc.h>

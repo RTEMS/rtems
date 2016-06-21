@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/print.h>
+#include <rtems/bspIo.h>
 
 static int printk_plugin(
   void *ignored,

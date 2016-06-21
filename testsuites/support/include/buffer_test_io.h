@@ -5,6 +5,7 @@
 #ifndef __BUFFER_TEST_IO_h
 #define __BUFFER_TEST_IO_h
 
+#include <rtems/bspIo.h>
 #include <rtems/test.h>
 
 #ifdef __cplusplus

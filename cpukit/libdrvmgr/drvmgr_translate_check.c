@@ -9,6 +9,8 @@
 
 #include <drvmgr/drvmgr.h>
 
+#include <rtems/bspIo.h>
+
 /* Calls drvmgr_translate() to translate an address range and check the result,
  * a printout is generated if the check fails. See paramters of
  * drvmgr_translate().

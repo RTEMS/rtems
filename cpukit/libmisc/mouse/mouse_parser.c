@@ -40,6 +40,7 @@
 #include <errno.h>
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/mouse_parser.h>
 #include <rtems/mw_uid.h>
 

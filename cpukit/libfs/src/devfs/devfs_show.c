@@ -17,6 +17,8 @@
 
 #include "devfs.h"
 
+#include <rtems/bspIo.h>
+
 void devFS_Show(void)
 {
   rtems_filesystem_location_info_t *rootloc = &rtems_filesystem_root->location;

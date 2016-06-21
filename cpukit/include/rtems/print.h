@@ -18,11 +18,10 @@
 #ifndef _RTEMS_PRINT_H
 #define _RTEMS_PRINT_H
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdio.h>
+#include <rtems/score/basedefs.h>
 
-#include <rtems/bspIo.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,12 +35,24 @@ extern "C" {
  */
 
 /**
+ * Type definition for function which can be plugged in to certain reporting
+ * routines to redirect the output.
+ *
+ * Use the RTEMS Print interface to call these functions. Do not directly use
+ * them.
+ *
+ * If the user provides their own printer, then they may redirect those reports
+ * as they see fit.
+ */
+typedef int (*rtems_print_printer)(void *, const char *format, va_list ap);
+
+/**
  * Type definition for the printer structure used to access the kernel print
  * support.
  */
 typedef struct rtems_printer {
   void                *context;
-  rtems_print_plugin_t printer;
+  rtems_print_printer  printer;
 } rtems_printer;
 
 /**

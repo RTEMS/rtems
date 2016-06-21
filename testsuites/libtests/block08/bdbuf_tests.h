@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <rtems/bspIo.h>
 #include <rtems/diskdevs.h>
 #include <rtems/bdbuf.h>
 

@@ -18,7 +18,7 @@
 #define __LINUX_RTEMS_IMPL_H__
 
 #include <rtems.h>
-#include <rtems/print.h>
+#include <rtems/bspIo.h>
 
 static inline char *do_kmemdup(const char *s, size_t n)
 {

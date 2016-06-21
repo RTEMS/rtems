@@ -24,7 +24,6 @@
 
 #define TESTS_USE_PRINTK
 #include <tmacros.h>
-#include <rtems/print.h>
 
 const char rtems_test_name[] = "SPPRINTK";
 
