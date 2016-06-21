@@ -35,7 +35,8 @@
 #include <rtems/rtems/status.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdog.h>
-#include <rtems/print.h>
+
+struct rtems_printer;
 
 #ifdef __cplusplus
 extern "C" {
@@ -362,7 +363,7 @@ void rtems_rate_monotonic_reset_all_statistics( void );
  *  the Manager but actually uses other services of the Manager.
  */
 void rtems_rate_monotonic_report_statistics_with_plugin(
-  const rtems_printer *printer
+  const struct rtems_printer *printer
 );
 
 /**
