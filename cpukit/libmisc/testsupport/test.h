@@ -86,7 +86,7 @@ int rtems_test_end(void);
  *
  * @returns As specified by printf().
  */
-int rtems_test_print(const char* format, ...) RTEMS_PRINTF_ATTRIBUTE(1, 2);
+int rtems_test_print(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 
 /**
  * @brief Internal context for parallel job execution.

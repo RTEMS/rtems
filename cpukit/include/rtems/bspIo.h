@@ -18,6 +18,10 @@
 #ifndef _RTEMS_BSPIO_H
 #define _RTEMS_BSPIO_H
 
+#include <rtems/score/basedefs.h>
+
+#include <stdarg.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,15 +39,6 @@ extern "C" {
  *  - BSP_output_char
  *  - BSP_poll_char
  */
-
-/**
- * Print format function attribute for warning checks. Can be defined if
- * checking needs to be disabled.
- */
-#ifndef RTEMS_PRINTF_ATTRIBUTE
-#define RTEMS_PRINTF_ATTRIBUTE(_format_pos, _ap_pos) \
-  __attribute__((format(__printf__, _format_pos, _ap_pos)))
-#endif
 
 /**
  * This type defines the prototype for the BSP provided method to
@@ -68,8 +63,6 @@ extern 	BSP_output_char_function_type 		BSP_output_char;
  * character for the purposes of debug input.
  */
 extern 	BSP_polling_getchar_function_type 	BSP_poll_char;
-
-#include <stdarg.h>
 
 /**
  * @brief Get Character (kernel I/O)
@@ -107,7 +100,7 @@ extern int vprintk(const char *fmt, va_list ap);
  *
  * @return The number of characters output.
  */
-extern int printk(const char *fmt, ...) RTEMS_PRINTF_ATTRIBUTE(1, 2);
+extern int printk(const char *fmt, ...) RTEMS_PRINTFLIKE(1, 2);
 
 /**
  * @brief Kernel Put String

@@ -210,6 +210,17 @@
   #define RTEMS_UNREACHABLE() _Assert_Unreachable()
 #endif
 
+/**
+ * @brief Tells the compiler that this function expects printf()-like
+ * arguments.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos ) \
+    __attribute__((__format__(__printf__, _format_pos, _ap_pos)))
+#else
+  #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos )
+#endif
+
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \
     static_assert(cond, # msg)

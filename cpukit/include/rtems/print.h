@@ -68,7 +68,7 @@ static inline bool rtems_print_printer_valid(const rtems_printer *printer)
  */
 extern int rtems_printf(const rtems_printer *printer,
                         const char          *format,
-                        ...) RTEMS_PRINTF_ATTRIBUTE(2, 3);
+                        ...) RTEMS_PRINTFLIKE(2, 3);
 
 /**
  * @brief Print to the kernel plugin handler. This has to be a macro because

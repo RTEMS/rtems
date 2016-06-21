@@ -13,12 +13,14 @@
 #include "config.h"
 #endif
 
+#include <rtems/score/basedefs.h>
+
 /*
- * Undefined the RTEMS_PRINTF_ATTRIBUTE and make it nothing. The test code
+ * Undefined the RTEMS_PRINTFLIKE and make it nothing. The test code
  * contained in the file is suppose to be wrong.
  */
-#undef RTEMS_PRINTF_ATTRIBUTE
-#define RTEMS_PRINTF_ATTRIBUTE(_a, _b)
+#undef RTEMS_PRINTFLIKE
+#define RTEMS_PRINTFLIKE(_a, _b)
 
 #define TESTS_USE_PRINTK
 #include <tmacros.h>
