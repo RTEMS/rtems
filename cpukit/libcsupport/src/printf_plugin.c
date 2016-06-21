@@ -27,14 +27,14 @@
 
 #include <stdio.h>
 
+static int rtems_printf_plugin(void *context, const char *format, va_list ap)
+{
+  (void) context;
+  return vprintf(format, ap);
+}
+
 void rtems_print_printer_printf(rtems_printer *printer)
 {
   printer->context = NULL;
   printer->printer = rtems_printf_plugin;
-}
-
-int rtems_printf_plugin(void *context, const char *format, va_list ap)
-{
-  (void) context;
-  return vprintf(format, ap);
 }
