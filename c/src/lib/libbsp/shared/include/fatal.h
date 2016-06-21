@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -55,6 +55,7 @@ typedef enum {
   LEON3_FATAL_CLOCK_INITIALIZATION,
   LEON3_FATAL_INVALID_CACHE_CONFIG_MAIN_PROCESSOR,
   LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR,
+  LEON3_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT,
 
   /* LPC24XX fatal codes */
   LPC24XX_FATAL_PL111_SET_UP = BSP_FATAL_CODE_BLOCK(3),

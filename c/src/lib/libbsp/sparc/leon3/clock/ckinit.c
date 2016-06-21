@@ -13,6 +13,8 @@
  *  COPYRIGHT (c) 2004.
  *  Gaisler Research.
  *
+ *  Copyright (c) 2014, 2016 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -79,6 +81,11 @@ static void leon3_tc_tick_simple(void)
   );
 }
 #endif
+
+static uint32_t leon3_tc_get_timecount_up_counter(struct timecounter *tc)
+{
+  return leon3_up_counter_low();
+}
 
 static uint32_t leon3_tc_get_timecount_irqmp(struct timecounter *tc)
 {
@@ -202,16 +209,37 @@ static void bsp_clock_handler_install(rtems_isr *new)
 
 static void leon3_clock_initialize(void)
 {
-  volatile struct irqmp_timestamp_regs *irqmp_ts =
-    &LEON3_IrqCtrl_Regs->timestamp[0];
+  volatile struct irqmp_timestamp_regs *irqmp_ts;
+  volatile struct gptimer_regs *gpt;
 
-  LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].reload =
+  irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
+  gpt = LEON3_Timer_Regs;
+
+  gpt->timer[LEON3_CLOCK_INDEX].reload =
     rtems_configuration_get_microseconds_per_tick() - 1;
-  LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl =
+  gpt->timer[LEON3_CLOCK_INDEX].ctrl =
     GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_RS |
       GPTIMER_TIMER_CTRL_LD | GPTIMER_TIMER_CTRL_IE;
 
-  if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+  leon3_up_counter_enable();
+
+  if (leon3_up_counter_is_available()) {
+    /* Use the LEON4 up-counter if available */
+    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_up_counter;
+    leon3_tc.tc.tc_counter_mask = 0xffffffff;
+    leon3_tc.tc.tc_frequency = leon3_up_counter_frequency();
+    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+
+#ifdef RTEMS_PROFILING
+    if (!leon3_irqmp_has_timestamp(irqmp_ts)) {
+      bsp_fatal(LEON3_FATAL_CLOCK_NO_IRQMP_TIMESTAMP_SUPPORT);
+    }
+#endif
+
+    leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
+    rtems_timecounter_install(&leon3_tc.tc);
+  } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
+    /* Use the interrupt controller timestamp counter if available */
     leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_irqmp;
     leon3_tc.tc.tc_counter_mask = 0xffffffff;
     leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
@@ -225,7 +253,7 @@ static void leon3_clock_initialize(void)
      * controller.  At least on SMP configurations we must use a second timer
      * in free running mode for the timecounter.
      */
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX + 1].ctrl =
+    gpt->timer[LEON3_CLOCK_INDEX + 1].ctrl =
       GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_IE;
     leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_second_timer;
     leon3_tc.tc.tc_counter_mask = 0xffffffff;
