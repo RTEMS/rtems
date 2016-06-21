@@ -20,7 +20,7 @@
 
 #include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/object.h>
-#include <rtems/print.h>
+#include <rtems/printer.h>
 
 #include <inttypes.h>
 

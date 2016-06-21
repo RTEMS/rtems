@@ -32,6 +32,7 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/printer.h>
 #include <rtems/malloc.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/protectedheap.h>

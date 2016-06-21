@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/blkdev.h>
+#include <rtems/printer.h>
 #include <rtems/shellconfig.h>
 
 #include <string.h>

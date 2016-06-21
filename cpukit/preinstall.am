@@ -228,6 +228,10 @@ $(PROJECT_INCLUDE)/rtems/print.h: include/rtems/print.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/print.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/print.h
 
+$(PROJECT_INCLUDE)/rtems/printer.h: include/rtems/printer.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/printer.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/printer.h
+
 $(PROJECT_INCLUDE)/rtems/userenv.h: include/rtems/userenv.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/userenv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/userenv.h

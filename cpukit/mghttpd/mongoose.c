@@ -5520,7 +5520,7 @@ struct mg_context *mg_start(const struct mg_callbacks *callbacks,
   return ctx;
 }
 #ifdef __rtems__
-#include <rtems/print.h>
+#include <rtems/printer.h>
 
 static int mg_printer_plugin(void *context, const char *fmt, va_list ap) {
   return mg_vprintf(context, fmt, ap);

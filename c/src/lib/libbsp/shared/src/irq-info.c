@@ -21,7 +21,7 @@
 
 #include <inttypes.h>
 
-#include <rtems/print.h>
+#include <rtems/printer.h>
 
 #include <bsp/irq-generic.h>
 #include <bsp/irq-info.h>

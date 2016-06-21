@@ -23,9 +23,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/print.h>
-
-#include <stdio.h>
+#include <rtems/printer.h>
 
 static int rtems_printf_plugin(void *context, const char *format, va_list ap)
 {

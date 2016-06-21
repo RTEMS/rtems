@@ -16,6 +16,7 @@
 #include <stdio.h>
 
 #include <rtems.h>
+#include <rtems/printer.h>
 #include <rtems/stackchk.h>
 #include <rtems/shell.h>
 #include "internal.h"

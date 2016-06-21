@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/print.h>
+#include <rtems/printer.h>
 #include <rtems/bspIo.h>
 
 static int printk_plugin(

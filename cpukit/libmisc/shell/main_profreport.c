@@ -19,6 +19,7 @@
 #include <stdio.h>
 
 #include <rtems/profiling.h>
+#include <rtems/printer.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
 

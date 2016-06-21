@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <inttypes.h>
-#include <rtems/print.h>
+#include <rtems/printer.h>
 #include <rtems/score/cpusetimpl.h>
 
 #ifdef __RTEMS_HAVE_SYS_CPUSET_H__
@@ -49,7 +49,7 @@
     int i;
     rtems_printf(printer ,"%s: ", description);
     for(i=0; i<_NCPUWORDS; i++)
-      rtems_printf(printer ,"%x", cpuset->__bits[i]);
+      rtems_printf(printer ,"%" PRIx32 "", cpuset->__bits[i]);
     rtems_printf(printer ,"\n");
   }
 

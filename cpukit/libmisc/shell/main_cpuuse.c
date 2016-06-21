@@ -18,6 +18,7 @@
 
 #include <rtems.h>
 #include <rtems/cpuuse.h>
+#include <rtems/printer.h>
 #include <rtems/shell.h>
 #include "internal.h"
 

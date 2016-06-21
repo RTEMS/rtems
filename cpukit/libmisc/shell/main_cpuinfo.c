@@ -19,6 +19,7 @@
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
 #include <rtems/cpuuse.h>
+#include <rtems/printer.h>
 
 static int rtems_shell_main_cpuinfo(int argc, char **argv)
 {

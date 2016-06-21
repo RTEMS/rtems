@@ -18,9 +18,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/print.h>
-
-#include <stdio.h>
+#include <rtems/printer.h>
 
 static int rtems_fprintf_plugin(void *context, const char *fmt, va_list ap)
 {

@@ -98,6 +98,7 @@ endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h
 include_rtems_HEADERS += include/rtems/print.h
+include_rtems_HEADERS += include/rtems/printer.h
 include_rtems_HEADERS += include/rtems/userenv.h
 include_rtems_HEADERS += include/rtems/fs.h
 if !LIBPCI

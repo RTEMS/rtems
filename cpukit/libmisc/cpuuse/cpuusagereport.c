@@ -25,6 +25,7 @@
 #include <inttypes.h>
 
 #include <rtems/cpuuse.h>
+#include <rtems/printer.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>

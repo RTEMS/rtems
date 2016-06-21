@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include <rtems/mw_uid.h>
+#include <rtems/printer.h>
 
 static const char *uid_buttons(
   unsigned short  btns,

@@ -40,6 +40,7 @@
 #include <stdlib.h>
 
 #include <rtems/bspIo.h>
+#include <rtems/printer.h>
 #include <rtems/stackchk.h>
 #include <rtems/score/percpu.h>
 #include "internal.h"

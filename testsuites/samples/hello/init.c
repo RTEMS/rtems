@@ -11,6 +11,7 @@
 #include "config.h"
 #endif
 
+#include <rtems/printer.h>
 #include <rtems/test.h>
 
 #include <bsp.h> /* for device driver prototypes */

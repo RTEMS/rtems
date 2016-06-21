@@ -18,9 +18,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/print.h>
-
-#include <stdio.h>
+#include <rtems/printer.h>
 
 int rtems_vprintf(
   const rtems_printer *printer,

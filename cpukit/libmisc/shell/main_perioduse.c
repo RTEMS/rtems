@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include <rtems.h>
+#include <rtems/printer.h>
 #include <rtems/shell.h>
 #include "internal.h"
 

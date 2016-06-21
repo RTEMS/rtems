@@ -16,7 +16,7 @@
 #define _RTEMS_TEST_H
 
 #include <rtems.h>
-#include <rtems/print.h>
+#include <rtems/printer.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
 

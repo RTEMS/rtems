@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 
+#include <rtems/printer.h>
 #include <rtems/shell.h>
 
 #include <bsp/irq-info.h>
