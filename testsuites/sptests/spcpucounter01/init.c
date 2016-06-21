@@ -158,6 +158,25 @@ static void report_overhead(
   );
 }
 
+static uint64_t large_delta_to_ns(rtems_counter_ticks d)
+{
+  uint64_t ns;
+
+  ns = rtems_counter_ticks_to_nanoseconds(d);
+
+  /* Special case for CPU counters using the clock driver counter */
+  if (ns < rtems_configuration_get_nanoseconds_per_tick()) {
+    printf(
+      "warning: the RTEMS counter seems to be unable to\n"
+      "  measure intervals greater than the clock tick interval\n"
+    );
+
+    ns += rtems_configuration_get_nanoseconds_per_tick();
+  }
+
+  return ns;
+}
+
 static void test_report(test_context *ctx)
 {
   double ns_per_tick = NS_PER_TICK;
@@ -169,7 +188,7 @@ static void test_report(test_context *ctx)
 
   for (i = 0; i < N; ++i) {
     d = rtems_counter_difference(ctx->delay_ns_t[i][1], ctx->delay_ns_t[i][0]);
-    ns = rtems_counter_ticks_to_nanoseconds(d);
+    ns = large_delta_to_ns(d);
 
     printf(
       "ns busy wait duration: %" PRIu64 "ns\n"
@@ -186,7 +205,7 @@ static void test_report(test_context *ctx)
       ctx->delay_ticks_t[i][1],
       ctx->delay_ticks_t[i][0]
     );
-    ns = rtems_counter_ticks_to_nanoseconds(d);
+    ns = large_delta_to_ns(d);
 
     printf(
       "ticks busy wait duration: %" PRIu64 "ns\n"
