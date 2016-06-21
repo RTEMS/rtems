@@ -365,16 +365,14 @@ void rtems_capture_initialize_task( rtems_tcb* tcb )
 
 void rtems_capture_record_task( rtems_tcb* tcb )
 {
-  rtems_capture_task_record_t rec;
-  void*                       ptr;
+  rtems_capture_task_record_t  rec;
+  void*                        ptr;
   rtems_interrupt_lock_context lock_context;
 
   rtems_object_get_classic_name( tcb->Object.id, &rec.name );
 
   rec.stack_size = tcb->Start.Initial_stack.size;
-  rec.start_priority = _RTEMS_tasks_Priority_from_Core(
-    tcb->Start.initial_priority
-  );
+  rec.start_priority = rtems_capture_task_start_priority (tcb);
 
   rtems_interrupt_lock_acquire (&capture_lock_global, &lock_context);
   tcb->Capture.flags |= RTEMS_CAPTURE_RECORD_TASK;

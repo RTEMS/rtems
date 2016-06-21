@@ -45,7 +45,20 @@ static void create_not_defined(rtems_attribute attr)
 
 static void test_mrsp_create_errors(void)
 {
+  rtems_status_code sc;
+  rtems_id id;
+
   puts("test MrsP create errors");
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'R', 'S', 'P'),
+    1,
+    RTEMS_MULTIPROCESSOR_RESOURCE_SHARING
+      | RTEMS_BINARY_SEMAPHORE,
+    UINT32_MAX,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
 
   create_not_defined(
     RTEMS_MULTIPROCESSOR_RESOURCE_SHARING

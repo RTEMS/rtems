@@ -1,6 +1,7 @@
-*** TEST 51 ***
+*** BEGIN OF TEST SP 51 ***
+Create semaphore - priority ceiling unlocked - invalid ceiling
 Create semaphore - priority ceiling locked - violate ceiling
 Create semaphore - priority ceiling unlocked
 Obtain semaphore -- violate ceiling
 Release semaphore we did not obtain
-*** END OF TEST 51 ***
+*** END OF TEST SP 51 ***

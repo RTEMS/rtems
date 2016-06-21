@@ -66,7 +66,7 @@ rtems_task Init(
   puts( "TA1 - rtems_timer_server_fire_when - RTEMS_INCORRECT_STATE" );
 
   /* invalid priority */
-  status = rtems_timer_initiate_server( 0, 0, 0 );
+  status = rtems_timer_initiate_server( UINT32_MAX - 1, 0, 0 );
   fatal_directive_status(
     status,
     RTEMS_INVALID_PRIORITY,

@@ -61,6 +61,16 @@ rtems_task Init(
 
   TEST_BEGIN();
 
+  puts( "Create semaphore - priority ceiling unlocked - invalid ceiling" );
+  sc = rtems_semaphore_create(
+    rtems_build_name( 'S', 'E', 'M', '1' ),
+    0,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING | RTEMS_PRIORITY,
+    UINT32_MAX,
+    &mutex
+  );
+  fatal_directive_status(sc, RTEMS_INVALID_PRIORITY, "rtems_semaphore_create");
+
   puts( "Create semaphore - priority ceiling locked - violate ceiling" );
   sc = rtems_semaphore_create(
     rtems_build_name( 'S', 'E', 'M', '1' ),

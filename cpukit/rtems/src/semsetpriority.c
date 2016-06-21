@@ -21,21 +21,26 @@
 #include <rtems/score/schedulerimpl.h>
 
 static rtems_status_code _Semaphore_Set_priority(
-  Semaphore_Control    *the_semaphore,
-  rtems_id              scheduler_id,
-  rtems_task_priority   new_priority,
-  rtems_task_priority  *old_priority_p,
-  Thread_queue_Context *queue_context
+  Semaphore_Control       *the_semaphore,
+  const Scheduler_Control *scheduler,
+  rtems_task_priority      new_priority,
+  rtems_task_priority     *old_priority_p,
+  Thread_queue_Context    *queue_context
 )
 {
   rtems_status_code    sc;
-  rtems_task_priority  old_priority;
+  bool                 valid;
+  Priority_Control     core_priority;
+  Priority_Control     old_priority;
 #if defined(RTEMS_SMP)
   MRSP_Control        *mrsp;
   uint32_t             scheduler_index;
 #endif
 
-  new_priority = _RTEMS_tasks_Priority_to_Core( new_priority );
+  core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
+  if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
+    return RTEMS_INVALID_PRIORITY;
+  }
 
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
@@ -47,7 +52,7 @@ static rtems_status_code _Semaphore_Set_priority(
       old_priority = the_semaphore->Core_control.Mutex.priority_ceiling;
 
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        the_semaphore->Core_control.Mutex.priority_ceiling = new_priority;
+        the_semaphore->Core_control.Mutex.priority_ceiling = core_priority;
       }
 
       _CORE_mutex_Release(
@@ -59,14 +64,14 @@ static rtems_status_code _Semaphore_Set_priority(
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
       mrsp = &the_semaphore->Core_control.MRSP;
-      scheduler_index = _Scheduler_Get_index_by_id( scheduler_id );
+      scheduler_index = _Scheduler_Get_index( scheduler );
 
       _MRSP_Acquire_critical( mrsp, queue_context );
 
       old_priority = _MRSP_Get_ceiling_priority( mrsp, scheduler_index );
 
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-        _MRSP_Set_ceiling_priority( mrsp, scheduler_index, new_priority );
+        _MRSP_Set_ceiling_priority( mrsp, scheduler_index, core_priority );
       }
 
       _MRSP_Release( mrsp, queue_context );
@@ -86,7 +91,7 @@ static rtems_status_code _Semaphore_Set_priority(
       break;
   }
 
-  *old_priority_p = _RTEMS_tasks_Priority_from_Core( old_priority );
+  *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );
 
   return sc;
 }
@@ -98,19 +103,15 @@ rtems_status_code rtems_semaphore_set_priority(
   rtems_task_priority *old_priority
 )
 {
-  Semaphore_Control    *the_semaphore;
-  Thread_queue_Context  queue_context;
-
-  if ( new_priority != RTEMS_CURRENT_PRIORITY &&
-       !_RTEMS_tasks_Priority_is_valid( new_priority ) ) {
-    return RTEMS_INVALID_PRIORITY;
-  }
+  const Scheduler_Control *scheduler;
+  Semaphore_Control       *the_semaphore;
+  Thread_queue_Context     queue_context;
 
   if ( old_priority == NULL ) {
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( !_Scheduler_Is_id_valid( scheduler_id ) ) {
+  if ( !_Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
     return RTEMS_INVALID_ID;
   }
 
@@ -128,7 +129,7 @@ rtems_status_code rtems_semaphore_set_priority(
 
   return _Semaphore_Set_priority(
     the_semaphore,
-    scheduler_id,
+    scheduler,
     new_priority,
     old_priority,
     &queue_context

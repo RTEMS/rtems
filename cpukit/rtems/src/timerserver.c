@@ -153,14 +153,7 @@ static rtems_status_code _Timer_server_Initiate(
     return RTEMS_INCORRECT_STATE;
   }
 
-  /*
-   *  Make sure the requested priority is valid.  The if is
-   *  structured so we check it is invalid before looking for
-   *  a specific invalid value as the default.
-   */
-  if ( !_RTEMS_tasks_Priority_is_valid( priority ) ) {
-    if ( priority != RTEMS_TIMER_SERVER_DEFAULT_PRIORITY )
-      return RTEMS_INVALID_PRIORITY;
+  if ( priority == RTEMS_TIMER_SERVER_DEFAULT_PRIORITY ) {
     priority = PRIORITY_PSEUDO_ISR;
   }
 

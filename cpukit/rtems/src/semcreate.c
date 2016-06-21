@@ -22,6 +22,7 @@
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/sysstate.h>
 
 #define SEMAPHORE_KIND_MASK ( RTEMS_SEMAPHORE_CLASS | RTEMS_INHERIT_PRIORITY \
@@ -35,12 +36,15 @@ rtems_status_code rtems_semaphore_create(
   rtems_id            *id
 )
 {
-  Semaphore_Control *the_semaphore;
-  Thread_Control    *executing;
-  Status_Control     status;
-  rtems_attribute    maybe_global;
-  rtems_attribute    mutex_with_protocol;
-  Semaphore_Variant  variant;
+  Semaphore_Control       *the_semaphore;
+  Thread_Control          *executing;
+  Status_Control           status;
+  rtems_attribute          maybe_global;
+  rtems_attribute          mutex_with_protocol;
+  Semaphore_Variant        variant;
+  const Scheduler_Control *scheduler;
+  bool                     valid;
+  Priority_Control         priority;
 
   if ( !rtems_is_name_valid( name ) )
     return RTEMS_INVALID_NAME;
@@ -122,7 +126,6 @@ rtems_status_code rtems_semaphore_create(
   }
 #endif
 
-  priority_ceiling = _RTEMS_tasks_Priority_to_Core( priority_ceiling );
   executing = _Thread_Get_executing();
 
   the_semaphore->variant = variant;
@@ -154,42 +157,57 @@ rtems_status_code rtems_semaphore_create(
       status = STATUS_SUCCESSFUL;
       break;
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-      _CORE_ceiling_mutex_Initialize(
-        &the_semaphore->Core_control.Mutex,
-        priority_ceiling
-      );
+      scheduler = _Scheduler_Get_own( executing );
+      priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
 
-      if ( count == 0 ) {
-        Thread_queue_Context queue_context;
-
-        _Thread_queue_Context_initialize( &queue_context );
-        _ISR_lock_ISR_disable( &queue_context.Lock_context );
-        _CORE_mutex_Acquire_critical(
-          &the_semaphore->Core_control.Mutex.Recursive.Mutex,
-          &queue_context
-        );
-        status = _CORE_ceiling_mutex_Set_owner(
+      if ( valid ) {
+        _CORE_ceiling_mutex_Initialize(
           &the_semaphore->Core_control.Mutex,
-          executing,
-          &queue_context
+          priority
         );
 
-        if ( status != STATUS_SUCCESSFUL ) {
-          _Thread_queue_Destroy( &the_semaphore->Core_control.Wait_queue );
+        if ( count == 0 ) {
+          Thread_queue_Context queue_context;
+
+          _Thread_queue_Context_initialize( &queue_context );
+          _ISR_lock_ISR_disable( &queue_context.Lock_context );
+          _CORE_mutex_Acquire_critical(
+            &the_semaphore->Core_control.Mutex.Recursive.Mutex,
+            &queue_context
+          );
+          status = _CORE_ceiling_mutex_Set_owner(
+            &the_semaphore->Core_control.Mutex,
+            executing,
+            &queue_context
+          );
+
+          if ( status != STATUS_SUCCESSFUL ) {
+            _Thread_queue_Destroy( &the_semaphore->Core_control.Wait_queue );
+          }
+        } else {
+          status = STATUS_SUCCESSFUL;
         }
       } else {
-        status = STATUS_SUCCESSFUL;
+        status = STATUS_INVALID_PRIORITY;
       }
 
       break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      status = _MRSP_Initialize(
-        &the_semaphore->Core_control.MRSP,
-        priority_ceiling,
-        executing,
-        count == 0
-      );
+      scheduler = _Scheduler_Get_own( executing );
+      priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
+
+      if ( valid ) {
+        status = _MRSP_Initialize(
+          &the_semaphore->Core_control.MRSP,
+          priority,
+          executing,
+          count == 0
+        );
+      } else {
+        status = STATUS_INVALID_PRIORITY;
+      }
+
       break;
 #endif
     default:

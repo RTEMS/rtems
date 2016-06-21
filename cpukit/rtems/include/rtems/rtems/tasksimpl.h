@@ -19,6 +19,7 @@
 
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/threadimpl.h>
 
 #ifdef __cplusplus
@@ -74,41 +75,45 @@ RTEMS_INLINE_ROUTINE void _RTEMS_tasks_Free (
 }
 
 /**
- *  @brief Converts an RTEMS API priority into a core priority.
+ * @brief Converts the RTEMS API priority to the corresponding SuperCore
+ * priority and validates it.
  *
- *  This function converts an RTEMS API priority into a core priority.
+ * The RTEMS API system priority is accepted as valid.
+ *
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] priority The RTEMS API priority to convert and validate.
+ * @param[out] valid Indicates if the RTEMS API priority is valid and a
+ *   corresponding SuperCore priority in the specified scheduler instance
+ *   exists.
+ *
+ * @return The corresponding SuperCore priority.
  */
-RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_tasks_Priority_to_Core(
-  rtems_task_priority   priority
+RTEMS_INLINE_ROUTINE Priority_Control _RTEMS_Priority_To_core(
+  const Scheduler_Control *scheduler,
+  rtems_task_priority      priority,
+  bool                    *valid
 )
 {
+  *valid = ( priority <= scheduler->maximum_priority );
+
   return (Priority_Control) priority;
 }
 
 /**
- *  @brief Converts a core priority into an RTEMS API priority.
+ * @brief Converts the SuperCore priority to the corresponding RTEMS API
+ * priority.
  *
- *  This function converts a core priority into an RTEMS API priority.
+ * @param[in] scheduler The scheduler instance.
+ * @param[in] priority The SuperCore priority to convert.
+ *
+ * @return The corresponding RTEMS API priority.
  */
-RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_tasks_Priority_from_Core (
-  Priority_Control priority
+RTEMS_INLINE_ROUTINE rtems_task_priority _RTEMS_Priority_From_core(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
 )
 {
   return (rtems_task_priority) priority;
-}
-
-/**
- *  @brief Checks whether the priority is a valid user task.
- *
- *  This function returns TRUE if the_priority is a valid user task priority
- *  and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _RTEMS_tasks_Priority_is_valid (
-  rtems_task_priority the_priority
-)
-{
-  return (  ( the_priority >= RTEMS_MINIMUM_PRIORITY ) &&
-            ( the_priority <= RTEMS_MAXIMUM_PRIORITY ) );
 }
 
 /**@}*/
