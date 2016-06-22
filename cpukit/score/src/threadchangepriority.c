@@ -22,7 +22,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
-void _Thread_Change_priority(
+static Thread_Control *_Thread_Apply_priority_locked(
   Thread_Control                *the_thread,
   Priority_Control               new_priority,
   void                          *arg,
@@ -30,11 +30,6 @@ void _Thread_Change_priority(
   bool                           prepend_it
 )
 {
-  ISR_lock_Context  lock_context;
-  ISR_lock_Control *lock;
-
-  lock = _Thread_Lock_acquire( the_thread, &lock_context );
-
   /*
    * For simplicity set the priority restore hint unconditionally since this is
    * an average case optimization.  Otherwise complicated atomic operations
@@ -62,15 +57,63 @@ void _Thread_Change_priority(
       new_priority,
       the_thread->Wait.queue
     );
+  } else {
+    the_thread = NULL;
+  }
 
-    _Thread_Lock_release( lock, &lock_context );
+  return the_thread;
+}
+
+Thread_Control *_Thread_Apply_priority(
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
+)
+{
+  ISR_lock_Context  lock_context;
+  ISR_lock_Control *lock;
+
+  lock = _Thread_Lock_acquire( the_thread, &lock_context );
+  the_thread = _Thread_Apply_priority_locked(
+    the_thread,
+    new_priority,
+    arg,
+    filter,
+    prepend_it
+  );
+  _Thread_Lock_release( lock, &lock_context );
+  return the_thread;
+}
+
+void _Thread_Update_priority( Thread_Control *the_thread )
+{
+  if ( the_thread != NULL ) {
+    ISR_lock_Context lock_context;
 
     _Thread_State_acquire( the_thread, &lock_context );
     _Scheduler_Update_priority( the_thread );
     _Thread_State_release( the_thread, &lock_context );
-  } else {
-    _Thread_Lock_release( lock, &lock_context );
   }
+}
+
+void _Thread_Change_priority(
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
+)
+{
+  the_thread = _Thread_Apply_priority(
+    the_thread,
+    new_priority,
+    arg,
+    filter,
+    prepend_it
+  );
+  _Thread_Update_priority( the_thread );
 }
 
 static bool _Thread_Raise_priority_filter(

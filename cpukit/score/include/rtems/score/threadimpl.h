@@ -460,6 +460,16 @@ typedef bool ( *Thread_Change_priority_filter )(
   void             *arg
 );
 
+Thread_Control *_Thread_Apply_priority(
+  Thread_Control                *the_thread,
+  Priority_Control               new_priority,
+  void                          *arg,
+  Thread_Change_priority_filter  filter,
+  bool                           prepend_it
+);
+
+void _Thread_Update_priority( Thread_Control *the_thread );
+
 /**
  * @brief Changes the priority of a thread if allowed by the filter function.
  *
