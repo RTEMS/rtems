@@ -1306,7 +1306,7 @@ typedef uint32_t CPU_Counter_ticks;
 
 typedef CPU_Counter_ticks ( *SPARC_Counter_read )( void );
 
-typedef CPU_Counter_ticks (*SPARC_Counter_difference)(
+typedef CPU_Counter_ticks ( *SPARC_Counter_difference )(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
 );
@@ -1324,42 +1324,7 @@ typedef struct {
   volatile const CPU_Counter_ticks *counter_address;
 } SPARC_Counter;
 
-extern SPARC_Counter _SPARC_Counter;
-
-CPU_Counter_ticks _SPARC_Counter_read_address( void );
-
-CPU_Counter_ticks _SPARC_Counter_read_asr23( void );
-
-CPU_Counter_ticks _SPARC_Counter_difference_normal(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-);
-
-CPU_Counter_ticks _SPARC_Counter_difference_clock_period(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-);
-
-/*
- * Returns always a value of one regardless of the parameters.  This prevents
- * an infinite loop in rtems_counter_delay_ticks().  Its only a reasonably safe
- * default.
- */
-CPU_Counter_ticks _SPARC_Counter_difference_one(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-);
-
-static inline void _SPARC_Counter_initialize(
-  SPARC_Counter_read                counter_read,
-  SPARC_Counter_difference          counter_difference,
-  volatile const CPU_Counter_ticks *counter_address
-)
-{
-  _SPARC_Counter.counter_read = counter_read;
-  _SPARC_Counter.counter_difference = counter_difference;
-  _SPARC_Counter.counter_address = counter_address;
-}
+extern const SPARC_Counter _SPARC_Counter;
 
 static inline CPU_Counter_ticks _CPU_Counter_read( void )
 {

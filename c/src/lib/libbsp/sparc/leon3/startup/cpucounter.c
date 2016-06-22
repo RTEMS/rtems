@@ -16,6 +16,7 @@
 
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
+#include <rtems/score/sparcimpl.h>
 
 static void leon3_counter_initialize(void)
 {
@@ -73,8 +74,4 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_THIRD
 );
 
-SPARC_Counter _SPARC_Counter = {
-  .counter_read = _SPARC_Counter_read_address,
-  .counter_difference = _SPARC_Counter_difference_one,
-  .counter_address = (uint32_t *) &_SPARC_Counter
-};
+SPARC_COUNTER_DEFINITION;

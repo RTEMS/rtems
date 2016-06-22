@@ -25,6 +25,7 @@
 #include <bsp.h>
 #include <bspopts.h>
 #include <rtems/timecounter.h>
+#include <rtems/score/sparcimpl.h>
 
 #if SIMSPARC_FAST_IDLE==1
 #define CLOCK_DRIVER_USE_FAST_IDLE 1
@@ -106,8 +107,4 @@ extern int CLOCK_SPEED;
 
 #include "../../../shared/clockdrv_shell.h"
 
-SPARC_Counter _SPARC_Counter = {
-  .counter_read = _SPARC_Counter_read_address,
-  .counter_difference = _SPARC_Counter_difference_one,
-  .counter_address = (uint32_t *) &_SPARC_Counter
-};
+SPARC_COUNTER_DEFINITION;

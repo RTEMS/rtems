@@ -16,7 +16,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/sparcimpl.h>
 #include <rtems/config.h>
 
 CPU_Counter_ticks _SPARC_Counter_difference_normal(
