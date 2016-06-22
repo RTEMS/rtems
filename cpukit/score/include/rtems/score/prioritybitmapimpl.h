@@ -61,7 +61,8 @@ RTEMS_INLINE_ROUTINE unsigned int _Bitfield_Find_first_bit(
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )
   _CPU_Bitfield_Find_first_bit( value, bit_number );
 #elif defined(__GNUC__)
-  bit_number = __builtin_clz( value ) - __SIZEOF_INT__ * __CHAR_BIT__ + 16;
+  bit_number = (unsigned int) __builtin_clz( value )
+    - __SIZEOF_INT__ * __CHAR_BIT__ + 16;
 #else
   if ( value < 0x100 ) {
     bit_number = _Bitfield_Leading_zeros[ value ] + 8;

@@ -749,7 +749,7 @@ RTEMS_INLINE_ROUTINE Objects_Id _Scheduler_Build_id( uint32_t scheduler_index )
     OBJECTS_FAKE_OBJECTS_API,
     OBJECTS_FAKE_OBJECTS_SCHEDULERS,
     _Objects_Local_node,
-    scheduler_index + 1
+    (uint16_t) ( scheduler_index + 1 )
   );
 }
 

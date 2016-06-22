@@ -318,7 +318,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
   _Assert( ts->tv_nsec < 1000000000 );
 
   ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
-  ticks |= ts->tv_nsec;
+  ticks |= (uint32_t) ts->tv_nsec;
 
   return ticks;
 }

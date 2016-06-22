@@ -282,7 +282,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
 
   bintime2timespec( _time, &_ts );
 
-  return _ts.tv_nsec;
+  return (uint32_t) _ts.tv_nsec;
 }
 
 /**
