@@ -68,6 +68,8 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   );
 }
 
+void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog );
+
 /**
  * @brief POSIX threads sporadic budget callout.
  *

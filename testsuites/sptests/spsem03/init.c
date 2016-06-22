@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -88,20 +88,7 @@ static void obtain_sema(rtems_id id)
 
 static void inversion_task(rtems_task_argument arg)
 {
-  test_context *ctx = &test_instance;
-
-  /*
-   * Here we see that the priority of the high priority task blocked on
-   * semaphore B doesn't propagate to the low priority task owning semaphore A
-   * on which the owner of semaphore B depends.
-   */
-  assert_prio(ctx->low, 3);
-  assert_prio(ctx->mid, 1);
-  assert_prio(ctx->high, 1);
-  assert_prio(ctx->inversion, 2);
-
-  TEST_END();
-  rtems_test_exit(0);
+  assert(0);
 }
 
 static void mid_task(rtems_task_argument arg)
@@ -137,6 +124,19 @@ static void Init(rtems_task_argument arg)
   obtain_sema(ctx->sem_a);
   start_task(ctx->mid, mid_task);
   start_task(ctx->high, high_task);
+
+  /*
+   * Here we see that the priority of the high priority task blocked on
+   * semaphore B propagated to the low priority task owning semaphore A
+   * on which the owner of semaphore B depends.
+   */
+  assert_prio(ctx->low, 1);
+  assert_prio(ctx->mid, 1);
+  assert_prio(ctx->high, 1);
+  assert_prio(ctx->inversion, 2);
+
+  TEST_END();
+  rtems_test_exit(0);
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

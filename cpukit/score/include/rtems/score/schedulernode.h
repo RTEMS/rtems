@@ -98,7 +98,7 @@ typedef enum {
 /**
  * @brief Scheduler node for per-thread data.
  */
-typedef struct {
+typedef struct Scheduler_Node {
 #if defined(RTEMS_SMP)
   /**
    * @brief Chain node for usage in various scheduler data structures.
@@ -144,24 +144,7 @@ typedef struct {
    * @brief Thread wait support block.
    */
   struct {
-    /**
-     * @brief Node for thread queues.
-     *
-     * Each scheduler node can be enqueued on a thread queue on behalf of the
-     * thread owning the scheduler node.  The scheduler node reflects the
-     * priority of the thread within the corresponding scheduler instance.
-     */
-    union {
-      /**
-       * @brief A node for chains.
-       */
-      Chain_Node Chain;
-
-      /**
-       * @brief A node for red-black trees.
-       */
-      RBTree_Node RBTree;
-    } Node;
+    Priority_Aggregation Priority;
   } Wait;
 
   /**

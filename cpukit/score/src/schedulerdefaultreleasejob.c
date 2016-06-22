@@ -21,26 +21,30 @@
 
 #include <rtems/score/scheduler.h>
 
-Thread_Control *_Scheduler_default_Release_job(
+void _Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint64_t                 deadline
+  Priority_Node           *priority_node,
+  uint64_t                 deadline,
+  Thread_queue_Context    *queue_context
 )
 {
   (void) scheduler;
   (void) the_thread;
+  (void) priority_node;
   (void) deadline;
-
-  return NULL;
+  (void) queue_context;
 }
 
-Thread_Control *_Scheduler_default_Cancel_job(
+void _Scheduler_default_Cancel_job(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Node           *priority_node,
+  Thread_queue_Context    *queue_context
 )
 {
   (void) scheduler;
   (void) the_thread;
-
-  return NULL;
+  (void) priority_node;
+  (void) queue_context;
 }

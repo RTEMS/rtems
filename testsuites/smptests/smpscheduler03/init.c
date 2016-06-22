@@ -40,28 +40,35 @@ typedef struct {
 
 static test_context test_instance;
 
-static bool change_priority_filter(
-  Thread_Control   *thread,
-  Priority_Control *new_priority,
-  void             *arg
+static void apply_priority(
+  Thread_Control *thread,
+  Priority_Control new_priority,
+  bool prepend_it,
+  Thread_queue_Context *queue_context
 )
 {
-  return _Thread_Get_priority( thread ) != *new_priority;
+  _Thread_queue_Context_clear_priority_updates(queue_context);
+  _Thread_Wait_acquire(thread, queue_context);
+  _Thread_Priority_change(
+    thread,
+    &thread->Real_priority,
+    new_priority,
+    prepend_it,
+    queue_context
+  );
+  _Thread_Wait_release(thread, queue_context);
 }
 
 static void change_priority(
-  Thread_Control   *thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
+  Thread_Control *thread,
+  Priority_Control new_priority,
+  bool prepend_it
 )
 {
-  _Thread_Change_priority(
-    thread,
-    new_priority,
-    NULL,
-    change_priority_filter,
-    prepend_it
-  );
+  Thread_queue_Context queue_context;
+
+  apply_priority(thread, new_priority, prepend_it, &queue_context);
+  _Thread_Priority_update(&queue_context);
 }
 
 static void barrier_wait(test_context *ctx)
@@ -197,11 +204,9 @@ static Thread_Control *update_priority_op(
   ISR_lock_Context state_lock_context;
   ISR_lock_Context scheduler_lock_context;
   Thread_Control *needs_help;
-  Scheduler_Node *node;
+  Thread_queue_Context queue_context;
 
-  thread->current_priority = new_priority;
-  node = _Scheduler_Thread_get_node(thread);
-  _Scheduler_Node_set_priority(node, new_priority, prepend_it);
+  apply_priority(thread, new_priority, prepend_it, &queue_context);
 
   _Thread_State_acquire( thread, &state_lock_context );
   scheduler = _Scheduler_Get( thread );

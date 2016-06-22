@@ -19,24 +19,28 @@
 #endif
 
 #include <rtems/score/schedulercbsimpl.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/wkspace.h>
 
 void _Scheduler_CBS_Budget_callout(
   Thread_Control *the_thread
 )
 {
-  Priority_Control          new_priority;
-  Priority_Control          unused;
-  Scheduler_CBS_Node       *node;
-  Scheduler_CBS_Server_id   server_id;
+  Scheduler_CBS_Node      *node;
+  Scheduler_CBS_Server_id  server_id;
+  Thread_queue_Context     queue_context;
+
+  node = _Scheduler_CBS_Thread_get_node( the_thread );
 
   /* Put violating task to background until the end of period. */
-  new_priority = the_thread->Start.initial_priority;
-  _Thread_Set_priority( the_thread, new_priority, &unused, true );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Scheduler_CBS_Cancel_job(
+    NULL,
+    the_thread,
+    node->deadline_node,
+    &queue_context
+  );
+  _Thread_Priority_update( &queue_context );
 
   /* Invoke callback function if any. */
-  node = _Scheduler_CBS_Thread_get_node( the_thread );
   if ( node->cbs_server->cbs_budget_overrun ) {
     _Scheduler_CBS_Get_server_id(
         node->cbs_server->task_id,

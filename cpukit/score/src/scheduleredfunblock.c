@@ -37,7 +37,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
   priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
   (void) prepend_it;
 
-  node->current_priority = priority;
+  node->priority = priority;
   _Scheduler_EDF_Enqueue( context, node, priority );
 
   /*

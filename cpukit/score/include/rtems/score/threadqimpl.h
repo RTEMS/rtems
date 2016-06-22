@@ -21,7 +21,7 @@
 
 #include <rtems/score/threadq.h>
 #include <rtems/score/chainimpl.h>
-#include <rtems/score/rbtreeimpl.h>
+#include <rtems/score/priorityimpl.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/smp.h>
 #include <rtems/score/thread.h>
@@ -39,38 +39,8 @@ extern "C" {
  */
 /**@{*/
 
-/**
- * @brief Representation of a thread queue path from a start thread queue to
- * the terminal thread queue.
- *
- * The start thread queue is determined by the object on which a thread intends
- * to block.  The terminal thread queue is the thread queue reachable via
- * thread queue links those owner is not blocked on a thread queue.  The thread
- * queue links are determined by the thread queue owner and thread wait queue
- * relationships.
- */
-struct Thread_queue_Path {
-#if defined(RTEMS_SMP)
-  /**
-   * @brief The chain of thread queue links defining the thread queue path.
-   */
-  Chain_Control Links;
-
-  /**
-   * @brief The start of a thread queue path.
-   */
-  Thread_queue_Link Start;
-#endif
-
-  /**
-   * @brief A potential thread to update the priority via
-   * _Thread_Update_priority().
-   *
-   * This thread is determined by thread queues which support priority
-   * inheritance.
-   */
-  Thread_Control *update_priority;
-};
+#define THREAD_QUEUE_LINK_OF_PATH_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_queue_Link, Path_node );
 
 /**
  * @brief Thread queue with a layout compatible to struct _Thread_queue_Queue
@@ -210,6 +180,42 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_deadlock_callout(
   queue_context->deadlock_callout = deadlock_callout;
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_clear_priority_updates(
+  Thread_queue_Context *queue_context
+)
+{
+  queue_context->Priority.update_count = 0;
+}
+
+RTEMS_INLINE_ROUTINE size_t _Thread_queue_Context_save_priority_updates(
+  Thread_queue_Context *queue_context
+)
+{
+  return queue_context->Priority.update_count;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_restore_priority_updates(
+  Thread_queue_Context *queue_context,
+  size_t                update_count
+)
+{
+  queue_context->Priority.update_count = update_count;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_add_priority_update(
+  Thread_queue_Context *queue_context,
+  Thread_Control       *the_thread
+)
+{
+  size_t n;
+
+  n = queue_context->Priority.update_count;
+  _Assert( n < RTEMS_ARRAY_SIZE( queue_context->Priority.update ) );
+
+  queue_context->Priority.update_count = n + 1;
+  queue_context->Priority.update[ n ] = the_thread;
+}
+
 /**
  * @brief Sets the MP callout in the thread queue context.
  *
@@ -274,9 +280,12 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
 #if defined(RTEMS_SMP)
   size_t i;
 
+  _Priority_Node_initialize( &heads->Boost_priority, 0 );
+  _Priority_Node_set_inactive( &heads->Boost_priority );
+
   for ( i = 0; i < _Scheduler_Count; ++i ) {
     _Chain_Initialize_node( &heads->Priority[ i ].Node );
-    _RBTree_Initialize_empty( &heads->Priority[ i ].Queue );
+    _Priority_Initialize_empty( &heads->Priority[ i ].Queue );
   }
 #endif
 
@@ -579,16 +588,6 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   );
 }
 
-bool _Thread_queue_Do_extract_locked(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  const Thread_queue_Context    *queue_context
-#endif
-);
-
 /**
  * @brief Extracts the thread from the thread queue, restores the default wait
  * operations and restores the default thread lock.
@@ -599,8 +598,7 @@ bool _Thread_queue_Do_extract_locked(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to extract.
- * @param[in] queue_context The thread queue context.  This parameter is only
- *   used on multiprocessing configurations.
+ * @param[in] queue_context The thread queue context.
  *
  * @return Returns the unblock indicator for _Thread_queue_Unblock_critical().
  * True indicates, that this thread must be unblocked by the scheduler later in
@@ -610,32 +608,12 @@ bool _Thread_queue_Do_extract_locked(
  * since this thread may already block on another resource in an SMP
  * configuration.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Thread_queue_Extract_locked( \
-    unblock, \
-    queue, \
-    the_thread, \
-    queue_context \
-  ) \
-    _Thread_queue_Do_extract_locked( \
-      unblock, \
-      queue, \
-      the_thread, \
-      queue_context \
-    )
-#else
-  #define _Thread_queue_Extract_locked( \
-    unblock, \
-    queue, \
-    the_thread, \
-    queue_context \
-  ) \
-    _Thread_queue_Do_extract_locked( \
-      unblock, \
-      queue, \
-      the_thread \
-    )
-#endif
+bool _Thread_queue_Extract_locked(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  Thread_queue_Context          *queue_context
+);
 
 /**
  * @brief Unblocks the thread which was on the thread queue before.
@@ -735,7 +713,7 @@ void _Thread_queue_Extract_with_proxy(
 
 /**
  * @brief Surrenders the thread queue previously owned by the thread to the
- * first enqueued thread if it exists.
+ * first enqueued thread.
  *
  * The owner of the thread queue must be set to NULL by the caller.
  *
@@ -743,21 +721,18 @@ void _Thread_queue_Extract_with_proxy(
  * thread dispatch if necessary.
  *
  * @param[in] queue The actual thread queue.
- * @param[in] operations The thread queue operations.
- * @param[in] heads The thread queue heads.
+ * @param[in] heads The thread queue heads.  It must not be NULL.
  * @param[in] previous_owner The previous owner thread surrendering the thread
  *   queue.
- * @param[in] keep_priority Indicates if the previous owner thread should keep
- *   its current priority.
  * @param[in] queue_context The thread queue context of the lock acquire.
+ * @param[in] operations The thread queue operations.
  */
 void _Thread_queue_Surrender(
   Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
   Thread_queue_Heads            *heads,
   Thread_Control                *previous_owner,
-  bool                           keep_priority,
-  Thread_queue_Context          *queue_context
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
 );
 
 RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
@@ -979,6 +954,16 @@ void _Thread_queue_Unblock_proxy(
   Thread_Control     *the_thread
 );
 #endif
+
+bool _Thread_queue_Path_acquire_critical(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+);
+
+void _Thread_queue_Path_release_critical(
+  Thread_queue_Context *queue_context
+);
 
 /**
  * @brief Helper structure to ensure that all objects containing a thread queue

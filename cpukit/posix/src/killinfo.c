@@ -153,7 +153,7 @@ int _POSIX_signals_Send(
           the_node = the_node->next ) {
       Scheduler_Node *scheduler_node;
 
-      scheduler_node = SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( the_node );
+      scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY_NODE( the_node );
       the_thread = _Scheduler_Node_get_owner( scheduler_node );
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 

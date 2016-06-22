@@ -59,7 +59,7 @@ int pthread_getschedparam(
   *param  = api->Attributes.schedparam;
 
   scheduler = _Scheduler_Get_own( the_thread );
-  priority = the_thread->real_priority;
+  priority = the_thread->Real_priority.priority;
 
   _Thread_Wait_release( the_thread, &queue_context );
 

@@ -77,53 +77,115 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
   _Thread_queue_Release( &mrsp->Wait_queue, queue_context );
 }
 
-RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(
-  Thread_Control   *thread,
-  Priority_Control *new_priority,
-  void             *arg
+RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
+  const MRSP_Control      *mrsp,
+  const Scheduler_Control *scheduler
 )
 {
-  *new_priority = _Thread_Priority_highest(
-    thread->real_priority,
-    *new_priority
-  );
+  uint32_t scheduler_index;
 
-  return *new_priority != _Thread_Get_priority( thread );
+  scheduler_index = _Scheduler_Get_index( scheduler );
+  return mrsp->ceiling_priorities[ scheduler_index ];
 }
 
-RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
-  Thread_Control   *thread,
-  Priority_Control  initial_priority
+RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
+  MRSP_Control            *mrsp,
+  const Scheduler_Control *scheduler,
+  Priority_Control         new_priority
 )
 {
-  /*
-   * The Thread_Control::resource_count is used by the normal priority ceiling
-   * or priority inheritance semaphores.
-   */
-  if ( thread->resource_count == 0 ) {
-    _Thread_Change_priority(
-      thread,
-      initial_priority,
-      NULL,
-      _MRSP_Restore_priority_filter,
-      true
-    );
-  }
+  uint32_t scheduler_index;
+
+  scheduler_index = _Scheduler_Get_index( scheduler );
+  mrsp->ceiling_priorities[ scheduler_index ] = new_priority;
 }
 
-RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
+RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
   MRSP_Control         *mrsp,
-  Thread_Control       *new_owner,
-  Priority_Control      initial_priority,
-  Priority_Control      ceiling_priority,
+  Thread_Control       *thread,
+  Priority_Node        *priority_node,
   Thread_queue_Context *queue_context
 )
 {
+  Status_Control           status;
+  ISR_lock_Context         lock_context;
+  const Scheduler_Control *scheduler;
+  Priority_Control         ceiling_priority;
+  Scheduler_Node          *own_node;
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_acquire_default_critical( thread, &lock_context );
+
+  scheduler = _Scheduler_Get_own( thread );
+  own_node = _Thread_Scheduler_get_own_node( thread );
+  ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
+
+  if ( ceiling_priority <= own_node->Wait.Priority.Node.priority ) {
+    _Priority_Node_initialize( priority_node, ceiling_priority );
+    _Thread_Priority_add( thread, priority_node, queue_context );
+    status = STATUS_SUCCESSFUL;
+  } else {
+    status = STATUS_MUTEX_CEILING_VIOLATED;
+  }
+
+  _Thread_Wait_release_default_critical( thread, &lock_context );
+  return status;
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
+  Thread_Control       *thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
+)
+{
+  ISR_lock_Context  lock_context;
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_acquire_default_critical( thread, &lock_context );
+  _Thread_Priority_remove( thread, priority_node, queue_context );
+  _Thread_Wait_release_default_critical( thread, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _MRSP_Replace_priority(
+  MRSP_Control   *mrsp,
+  Thread_Control *thread,
+  MRSP_Rival     *rival
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_Wait_acquire_default_critical( thread, &lock_context );
+  _Thread_Priority_replace( 
+    thread,
+    &rival->Ceiling_priority,
+    &mrsp->Ceiling_priority
+  );
+  _Thread_Wait_release_default_critical( thread, &lock_context );
+}
+
+RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
+  MRSP_Control         *mrsp,
+  Thread_Control       *new_owner,
+  Thread_queue_Context *queue_context
+)
+{
+  Status_Control   status;
   Per_CPU_Control *cpu_self;
+
+  status = _MRSP_Raise_priority(
+    mrsp,
+    new_owner,
+    &mrsp->Ceiling_priority,
+    queue_context
+  );
+
+  if ( status != STATUS_SUCCESSFUL ) {
+    _MRSP_Release( mrsp, queue_context );
+    return status;
+  }
 
   _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
   _Resource_Set_owner( &mrsp->Resource, &new_owner->Resource_node );
-  mrsp->initial_priority_of_owner = initial_priority;
   _Scheduler_Thread_change_help_state( new_owner, SCHEDULER_HELP_ACTIVE_OWNER );
 
   cpu_self = _Thread_Dispatch_disable_critical(
@@ -131,9 +193,10 @@ RTEMS_INLINE_ROUTINE void _MRSP_Claim_ownership(
   );
   _MRSP_Release( mrsp, queue_context );
 
-  _Thread_Raise_priority( new_owner, ceiling_priority );
+  _Thread_Priority_update( queue_context );
 
   _Thread_Dispatch_enable( cpu_self );
+  return STATUS_SUCCESSFUL;
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
@@ -178,35 +241,16 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   return STATUS_SUCCESSFUL;
 }
 
-RTEMS_INLINE_ROUTINE Priority_Control _MRSP_Get_priority(
-  const MRSP_Control      *mrsp,
-  const Scheduler_Control *scheduler
-)
-{
-  uint32_t scheduler_index;
-
-  scheduler_index = _Scheduler_Get_index( scheduler );
-  return mrsp->ceiling_priorities[ scheduler_index ];
-}
-
-RTEMS_INLINE_ROUTINE void _MRSP_Set_priority(
-  MRSP_Control            *mrsp,
-  const Scheduler_Control *scheduler,
-  Priority_Control         new_priority
-)
-{
-  uint32_t scheduler_index;
-
-  scheduler_index = _Scheduler_Get_index( scheduler );
-  mrsp->ceiling_priorities[ scheduler_index ] = new_priority;
-}
-
 RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
 {
-  MRSP_Rival *rival = RTEMS_CONTAINER_OF( watchdog, MRSP_Rival, Watchdog );
-  MRSP_Control *mrsp = rival->resource;
-  Thread_Control *thread = rival->thread;
-  Thread_queue_Context queue_context;
+  MRSP_Rival           *rival;
+  MRSP_Control         *mrsp;
+  Thread_Control       *thread;
+  Thread_queue_Context  queue_context;
+
+  rival = RTEMS_CONTAINER_OF( watchdog, MRSP_Rival, Watchdog );
+  mrsp = rival->resource;
+  thread = rival->thread;
 
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
@@ -214,6 +258,8 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
 
   if ( rival->status == MRSP_WAIT_FOR_OWNERSHIP ) {
     ISR_lock_Context giant_lock_context;
+
+    _MRSP_Remove_priority( thread, &rival->Ceiling_priority, &queue_context );
 
     _MRSP_Giant_acquire( &giant_lock_context );
 
@@ -228,6 +274,8 @@ RTEMS_INLINE_ROUTINE void _MRSP_Timeout( Watchdog_Control *watchdog )
     rival->status = STATUS_TIMEOUT;
 
     _MRSP_Release( mrsp, &queue_context );
+
+    _Thread_Priority_update( &queue_context );
   } else {
     _MRSP_Release( mrsp, &queue_context );
   }
@@ -237,23 +285,34 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   MRSP_Control         *mrsp,
   Resource_Node        *owner,
   Thread_Control       *executing,
-  Priority_Control      initial_priority,
-  Priority_Control      ceiling_priority,
   Thread_queue_Context *queue_context
 )
 {
-  Status_Control status;
-  MRSP_Rival rival;
-  Thread_Life_state life_state;
-  Per_CPU_Control *cpu_self;
-  ISR_lock_Context giant_lock_context;
-  ISR_Level level;
-  Watchdog_Interval timeout = queue_context->timeout;
+  Status_Control     status;
+  MRSP_Rival         rival;
+  Thread_Life_state  life_state;
+  Per_CPU_Control   *cpu_self;
+  ISR_lock_Context   giant_lock_context;
+  ISR_Level          level;
+  Watchdog_Interval  timeout;
+
   _Assert( queue_context->timeout_discipline == WATCHDOG_RELATIVE );
+
+  status = _MRSP_Raise_priority(
+    mrsp,
+    executing,
+    &rival.Ceiling_priority,
+    queue_context
+  );
+
+  if ( status != STATUS_SUCCESSFUL ) {
+    _MRSP_Release( mrsp, queue_context );
+    return status;
+  }
 
   rival.thread = executing;
   rival.resource = mrsp;
-  rival.initial_priority = initial_priority;
+  _Chain_Initialize_node( &rival.Node );
 
   _MRSP_Giant_acquire( &giant_lock_context );
 
@@ -277,7 +336,9 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
   );
   _MRSP_Release( mrsp, queue_context );
 
-  _Thread_Raise_priority( executing, ceiling_priority );
+  _Thread_Priority_update( queue_context );
+
+  timeout = (Watchdog_Interval) queue_context->timeout;
 
   if ( timeout > 0 ) {
     _Watchdog_Preinitialize( &rival.Watchdog, cpu_self );
@@ -307,10 +368,6 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
       &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ]
     );
     _ISR_Local_enable( level );
-
-    if ( status == STATUS_TIMEOUT ) {
-      _MRSP_Restore_priority( executing, initial_priority );
-    }
   }
 
   return status;
@@ -323,44 +380,20 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
   Thread_queue_Context *queue_context
 )
 {
-  Status_Control status;
-  const Scheduler_Control *scheduler = _Scheduler_Get_own( executing );
-  Priority_Control initial_priority = _Thread_Get_priority( executing );
-  Priority_Control ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
-  bool priority_ok = !_Thread_Priority_less_than(
-    ceiling_priority,
-    initial_priority
-  );
-  Resource_Node *owner;
-
-  if ( !priority_ok) {
-    _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
-    return STATUS_MUTEX_CEILING_VIOLATED;
-  }
+  Status_Control  status;
+  Resource_Node  *owner;
 
   _MRSP_Acquire_critical( mrsp, queue_context );
+
   owner = _Resource_Get_owner( &mrsp->Resource );
+
   if ( owner == NULL ) {
-    _MRSP_Claim_ownership(
-      mrsp,
-      executing,
-      initial_priority,
-      ceiling_priority,
-      queue_context
-    );
-    status = STATUS_SUCCESSFUL;
+    status = _MRSP_Claim_ownership( mrsp, executing, queue_context );
   } else if (
     wait
       && _Resource_Node_get_root( owner ) != &executing->Resource_node
   ) {
-    status = _MRSP_Wait_for_ownership(
-      mrsp,
-      owner,
-      executing,
-      initial_priority,
-      ceiling_priority,
-      queue_context
-    );
+    status = _MRSP_Wait_for_ownership( mrsp, owner, executing, queue_context );
   } else {
     _MRSP_Release( mrsp, queue_context );
     /* Not available, nested access or deadlock */
@@ -376,9 +409,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
   Thread_queue_Context *queue_context
 )
 {
-  Priority_Control initial_priority;
-  Per_CPU_Control *cpu_self;
-  ISR_lock_Context giant_lock_context;
+  ISR_lock_Context  giant_lock_context;
+  Per_CPU_Control  *cpu_self;
 
   if ( _Resource_Get_owner( &mrsp->Resource ) != &executing->Resource_node ) {
     _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
@@ -395,10 +427,8 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
     return STATUS_RELEASE_ORDER_VIOLATION;
   }
 
-  initial_priority = mrsp->initial_priority_of_owner;
-
   _MRSP_Acquire_critical( mrsp, queue_context );
-
+  _MRSP_Remove_priority( executing, &mrsp->Ceiling_priority, queue_context );
   _MRSP_Giant_acquire( &giant_lock_context );
 
   _Resource_Extract( &mrsp->Resource );
@@ -406,9 +436,10 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
   if ( _Chain_Is_empty( &mrsp->Rivals ) ) {
     _Resource_Set_owner( &mrsp->Resource, NULL );
   } else {
-    MRSP_Rival *rival = (MRSP_Rival *)
-      _Chain_Get_first_unprotected( &mrsp->Rivals );
+    MRSP_Rival     *rival;
     Thread_Control *new_owner;
+
+    rival = (MRSP_Rival *) _Chain_Get_first_unprotected( &mrsp->Rivals );
 
     /*
      * This must be inside the critical section since the status prevents a
@@ -417,7 +448,9 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
     rival->status = STATUS_SUCCESSFUL;
 
     new_owner = rival->thread;
-    mrsp->initial_priority_of_owner = rival->initial_priority;
+
+    _MRSP_Replace_priority( mrsp, new_owner, rival );
+
     _Resource_Node_extract( &new_owner->Resource_node );
     _Resource_Node_set_dependency( &new_owner->Resource_node, NULL );
     _Resource_Node_add_resource( &new_owner->Resource_node, &mrsp->Resource );
@@ -437,7 +470,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Surrender(
   );
   _MRSP_Release( mrsp, queue_context );
 
-  _MRSP_Restore_priority( executing, initial_priority );
+  _Thread_Priority_update( queue_context );
 
   _Thread_Dispatch_enable( cpu_self );
 

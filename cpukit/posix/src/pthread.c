@@ -82,59 +82,48 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
   #endif
 };
 
-static bool _POSIX_Threads_Sporadic_timer_filter(
-  Thread_Control   *the_thread,
-  Priority_Control *new_priority_p,
-  void             *arg
-)
+void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
 {
-  POSIX_API_Control *api;
-  Priority_Control   current_priority;
-  Priority_Control   new_priority;
-
-  api = arg;
-
-  new_priority = api->Sporadic.high_priority;
-  *new_priority_p = new_priority;
-
-  current_priority = _Thread_Get_priority( the_thread );
-  the_thread->real_priority = new_priority;
-
-  _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
-  _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
-
-  return _Thread_Priority_less_than( current_priority, new_priority )
-    || !_Thread_Owns_resources( the_thread );
-}
-
-static void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
-{
-  POSIX_API_Control *api;
-  Thread_Control    *the_thread;
+  POSIX_API_Control    *api;
+  Thread_Control       *the_thread;
+  Thread_queue_Context  queue_context;
 
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic.Timer );
   the_thread = api->thread;
 
-  _Thread_Change_priority(
-    the_thread,
-    0,
-    api,
-    _POSIX_Threads_Sporadic_timer_filter,
-    true
-  );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
+
+  if ( _Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
+    _Thread_Priority_add(
+      the_thread,
+      &the_thread->Real_priority,
+      &queue_context
+    );
+    _Thread_Priority_remove(
+      the_thread,
+      &api->Sporadic.Low_priority,
+      &queue_context
+    );
+    _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
+  }
+
+  _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
+  _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
+
+  _Thread_Wait_release( the_thread, &queue_context );
+  _Thread_Priority_update( &queue_context );
 }
 
-static bool _POSIX_Threads_Sporadic_budget_callout_filter(
-  Thread_Control   *the_thread,
-  Priority_Control *new_priority_p,
-  void             *arg
-)
+void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
 {
-  POSIX_API_Control *api;
-  Priority_Control   current_priority;
-  Priority_Control   new_priority;
+  POSIX_API_Control    *api;
+  Thread_queue_Context  queue_context;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
 
   /*
    *  This will prevent the thread from consuming its entire "budget"
@@ -142,25 +131,21 @@ static bool _POSIX_Threads_Sporadic_budget_callout_filter(
    */
   the_thread->cpu_time_budget = UINT32_MAX;
 
-  new_priority = api->Sporadic.low_priority;
-  *new_priority_p = new_priority;
+  if ( !_Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
+    _Thread_Priority_add(
+      the_thread,
+      &api->Sporadic.Low_priority,
+      &queue_context
+    );
+    _Thread_Priority_remove(
+      the_thread,
+      &the_thread->Real_priority,
+      &queue_context
+    );
+  }
 
-  current_priority = _Thread_Get_priority( the_thread );
-  the_thread->real_priority = new_priority;
-
-  return _Thread_Priority_less_than( current_priority, new_priority )
-    || !_Thread_Owns_resources( the_thread );
-}
-
-void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
-{
-  _Thread_Change_priority(
-    the_thread,
-    0,
-    NULL,
-    _POSIX_Threads_Sporadic_budget_callout_filter,
-    true
-  );
+  _Thread_Wait_release( the_thread, &queue_context );
+  _Thread_Priority_update( &queue_context );
 }
 
 /*

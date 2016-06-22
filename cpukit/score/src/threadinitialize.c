@@ -198,12 +198,15 @@ bool _Thread_Initialize(
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;
-  the_thread->current_priority        = priority;
-  the_thread->real_priority           = priority;
   the_thread->Start.initial_priority  = priority;
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
 
+  _Priority_Node_initialize( &the_thread->Real_priority, priority );
+  _Priority_Initialize_one(
+    &scheduler_node->Wait.Priority,
+    &the_thread->Real_priority
+  );
   _Scheduler_Node_initialize( scheduler, scheduler_node, the_thread, priority );
   scheduler_node_initialized = true;
 

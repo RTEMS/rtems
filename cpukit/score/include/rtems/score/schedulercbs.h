@@ -61,7 +61,7 @@ extern "C" {
     _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
-    _Scheduler_EDF_Cancel_job,       /* cancel period of task */ \
+    _Scheduler_CBS_Cancel_job,       /* cancel period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
     SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
@@ -135,6 +135,8 @@ typedef struct {
   Scheduler_EDF_Node            Base;
   /** CBS server specific data of a task. */
   Scheduler_CBS_Server         *cbs_server;
+
+  Priority_Node                *deadline_node;
 } Scheduler_CBS_Node;
 
 
@@ -163,10 +165,19 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   Thread_Control          *the_thread
 );
 
-Thread_Control *_Scheduler_CBS_Release_job(
+void _Scheduler_CBS_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint64_t                 length
+  Priority_Node           *priority_node,
+  uint64_t                 deadline,
+  Thread_queue_Context    *queue_context
+);
+
+void _Scheduler_CBS_Cancel_job(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Priority_Node           *priority_node,
+  Thread_queue_Context    *queue_context
 );
 
 /**

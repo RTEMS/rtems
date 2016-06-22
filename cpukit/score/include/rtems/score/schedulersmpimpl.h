@@ -375,7 +375,7 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_own_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_SMP_Node *) _Scheduler_Thread_get_own_node( thread );
+  return (Scheduler_SMP_Node *) _Thread_Scheduler_get_own_node( thread );
 }
 
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
@@ -386,12 +386,13 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
 }
 
 static inline void _Scheduler_SMP_Node_initialize(
-  Scheduler_SMP_Node *node,
-  Thread_Control     *thread,
-  Priority_Control    priority
+  const Scheduler_Control *scheduler,
+  Scheduler_SMP_Node      *node,
+  Thread_Control          *thread,
+  Priority_Control         priority
 )
 {
-  _Scheduler_Node_do_initialize( &node->Base, thread, priority );
+  _Scheduler_Node_do_initialize( scheduler, &node->Base, thread, priority );
   node->state = SCHEDULER_SMP_NODE_BLOCKED;
   node->priority = priority;
 }

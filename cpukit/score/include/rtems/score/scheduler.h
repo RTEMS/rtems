@@ -135,16 +135,20 @@ typedef struct {
   void ( *node_destroy )( const Scheduler_Control *, Scheduler_Node * );
 
   /** @see _Scheduler_Release_job() */
-  Thread_Control *( *release_job ) (
+  void ( *release_job ) (
     const Scheduler_Control *,
     Thread_Control *,
-    uint64_t
+    Priority_Node *,
+    uint64_t,
+    Thread_queue_Context *
   );
 
   /** @see _Scheduler_Cancel_job() */
-  Thread_Control *( *cancel_job ) (
+  void ( *cancel_job ) (
     const Scheduler_Control *,
-    Thread_Control *
+    Thread_Control *,
+    Priority_Node *,
+    Thread_queue_Context *
   );
 
   /** @see _Scheduler_Tick() */
@@ -373,14 +377,18 @@ void _Scheduler_default_Node_destroy(
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
+ * @param[in] priority_node Unused.
  * @param[in] deadline Unused.
+ * @param[in] queue_context Unused.
  *
  * @retval NULL Always.
  */
-Thread_Control *_Scheduler_default_Release_job(
+void _Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint64_t                 deadline
+  Priority_Node           *priority_node,
+  uint64_t                 deadline,
+  Thread_queue_Context    *queue_context
 );
 
 /**
@@ -388,12 +396,16 @@ Thread_Control *_Scheduler_default_Release_job(
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
+ * @param[in] priority_node Unused.
+ * @param[in] queue_context Unused.
  *
  * @retval NULL Always.
  */
-Thread_Control *_Scheduler_default_Cancel_job(
+void _Scheduler_default_Cancel_job(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Node           *priority_node,
+  Thread_queue_Context    *queue_context
 );
 
 /**

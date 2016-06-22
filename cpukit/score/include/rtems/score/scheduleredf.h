@@ -89,24 +89,14 @@ typedef struct {
   Scheduler_Node Base;
 
   /**
-   * Pointer to corresponding Thread Control Block.
-   */
-  Thread_Control *thread;
-  /**
    * Rbtree node related to this thread.
    */
   RBTree_Node Node;
 
   /**
-   * @brief The thread priority used by this scheduler instance in case no job
-   * is released.
+   * @brief The thread priority currently used for this scheduler instance.
    */
-  Priority_Control background_priority;
-
-  /**
-   * @brief The thread priority currently used by this scheduler instance.
-   */
-  Priority_Control current_priority;
+  Priority_Control priority;
 } Scheduler_EDF_Node;
 
 /**
@@ -215,15 +205,19 @@ Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   Thread_Control          *the_thread
 );
 
-Thread_Control *_Scheduler_EDF_Release_job(
+void _Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  uint64_t                 deadline
+  Priority_Node           *priority_node,
+  uint64_t                 deadline,
+  Thread_queue_Context    *queue_context
 );
 
-Thread_Control *_Scheduler_EDF_Cancel_job(
+void _Scheduler_EDF_Cancel_job(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Priority_Node           *priority_node,
+  Thread_queue_Context    *queue_context
 );
 
 #ifdef __cplusplus

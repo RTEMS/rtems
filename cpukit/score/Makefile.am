@@ -58,6 +58,7 @@ include_rtems_score_HEADERS += include/rtems/score/objectimpl.h
 include_rtems_score_HEADERS += include/rtems/score/onceimpl.h
 include_rtems_score_HEADERS += include/rtems/score/percpu.h
 include_rtems_score_HEADERS += include/rtems/score/priority.h
+include_rtems_score_HEADERS += include/rtems/score/priorityimpl.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
 include_rtems_score_HEADERS += include/rtems/score/prioritybitmapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/profiling.h
@@ -300,7 +301,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threaddispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
     src/threadloadenv.c \
-    src/threadrestart.c src/threadsetpriority.c \
+    src/threadrestart.c \
     src/threadsetstate.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/iterateoverthreads.c

@@ -42,16 +42,18 @@ static rtems_status_code _Semaphore_Set_priority(
   Thread_queue_Context    *queue_context
 )
 {
-  rtems_status_code    sc;
-  bool                 valid;
-  Priority_Control     core_priority;
-  Priority_Control     old_priority;
+  rtems_status_code  sc;
+  bool               valid;
+  Priority_Control   core_priority;
+  Priority_Control   old_priority;
+  Per_CPU_Control   *cpu_self;
 
   core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
   if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
     return RTEMS_INVALID_PRIORITY;
   }
 
+  _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_queue_Acquire_critical(
     &the_semaphore->Core_control.Wait_queue,
     queue_context
@@ -71,7 +73,8 @@ static rtems_status_code _Semaphore_Set_priority(
       if ( sc == RTEMS_SUCCESSFUL && new_priority != RTEMS_CURRENT_PRIORITY ) {
         _CORE_ceiling_mutex_Set_priority(
           &the_semaphore->Core_control.Mutex,
-          core_priority
+          core_priority,
+          queue_context
         );
       }
 
@@ -106,10 +109,15 @@ static rtems_status_code _Semaphore_Set_priority(
       break;
   }
 
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
+  );
   _Thread_queue_Release(
     &the_semaphore->Core_control.Wait_queue,
     queue_context
   );
+  _Thread_Priority_update( queue_context );
+  _Thread_Dispatch_enable( cpu_self );
 
   *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );
   return sc;

@@ -41,13 +41,14 @@ typedef enum {
   REQ_MTX_0_OBTAIN = RTEMS_EVENT_2,
   REQ_MTX_0_RELEASE = RTEMS_EVENT_3,
   REQ_MTX_1_OBTAIN = RTEMS_EVENT_4,
-  REQ_MTX_1_RELEASE = RTEMS_EVENT_5,
-  REQ_MTX_2_OBTAIN = RTEMS_EVENT_6,
-  REQ_MTX_2_RELEASE = RTEMS_EVENT_7,
-  REQ_MTX_C11_OBTAIN = RTEMS_EVENT_8,
-  REQ_MTX_C11_RELEASE = RTEMS_EVENT_9,
-  REQ_MTX_POSIX_OBTAIN = RTEMS_EVENT_10,
-  REQ_MTX_POSIX_RELEASE = RTEMS_EVENT_11
+  REQ_MTX_1_OBTAIN_TIMEOUT = RTEMS_EVENT_5,
+  REQ_MTX_1_RELEASE = RTEMS_EVENT_6,
+  REQ_MTX_2_OBTAIN = RTEMS_EVENT_7,
+  REQ_MTX_2_RELEASE = RTEMS_EVENT_8,
+  REQ_MTX_C11_OBTAIN = RTEMS_EVENT_9,
+  REQ_MTX_C11_RELEASE = RTEMS_EVENT_10,
+  REQ_MTX_POSIX_OBTAIN = RTEMS_EVENT_11,
+  REQ_MTX_POSIX_RELEASE = RTEMS_EVENT_12
 } request_id;
 
 typedef enum {
@@ -110,6 +111,14 @@ static void send_event(test_context *ctx, task_id id, rtems_event_set events)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void wait(void)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_wake_after(4);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static rtems_event_set wait_for_events(void)
 {
   rtems_event_set events;
@@ -139,6 +148,14 @@ static void request(test_context *ctx, task_id id, request_id req)
 {
   send_event(ctx, id, req);
   sync_with_helper(ctx);
+}
+
+static void obtain_timeout(test_context *ctx, mutex_id id)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mtx[id], RTEMS_WAIT, 2);
+  rtems_test_assert(sc == RTEMS_TIMEOUT);
 }
 
 static void obtain(test_context *ctx, mutex_id id)
@@ -249,6 +266,22 @@ static void assert_prio(
   rtems_test_assert(expected == actual);
 }
 
+static void change_prio(
+  test_context *ctx,
+  task_id id,
+  rtems_task_priority prio
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_set_priority(
+    ctx->tasks[id],
+    prio,
+    &prio
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void helper(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -280,6 +313,11 @@ static void worker(rtems_task_argument arg)
 
     if ((events & REQ_MTX_1_OBTAIN) != 0) {
       obtain(ctx, MTX_1);
+      ++ctx->generation[id];
+    }
+
+    if ((events & REQ_MTX_1_OBTAIN_TIMEOUT) != 0) {
+      obtain_timeout(ctx, MTX_1);
       ++ctx->generation[id];
     }
 
@@ -370,9 +408,18 @@ static void set_up(test_context *ctx)
 
 static void test_inherit(test_context *ctx)
 {
+  assert_prio(ctx, M, 3);
   obtain(ctx, MTX_0);
   request(ctx, A_1, REQ_MTX_0_OBTAIN);
   check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
+  change_prio(ctx, A_1, 2);
+  assert_prio(ctx, M, 2);
+  change_prio(ctx, A_1, 3);
+  assert_prio(ctx, M, 3);
+  change_prio(ctx, A_1, 4);
+  assert_prio(ctx, M, 3);
+  change_prio(ctx, A_1, 1);
   assert_prio(ctx, M, 1);
   release(ctx, MTX_0);
   check_generations(ctx, A_1, NONE);
@@ -383,6 +430,7 @@ static void test_inherit(test_context *ctx)
 
 static void test_inherit_fifo_for_equal_priority(test_context *ctx)
 {
+  assert_prio(ctx, M, 3);
   obtain(ctx, MTX_0);
   request(ctx, A_2_0, REQ_MTX_0_OBTAIN);
   request(ctx, A_1, REQ_MTX_0_OBTAIN);
@@ -399,6 +447,82 @@ static void test_inherit_fifo_for_equal_priority(test_context *ctx)
   check_generations(ctx, A_2_0, A_2_1);
   request(ctx, A_2_1, REQ_MTX_0_RELEASE);
   check_generations(ctx, A_2_1, NONE);
+}
+
+static void test_inherit_nested_vertical(test_context *ctx)
+{
+  assert_prio(ctx, M, 3);
+  obtain(ctx, MTX_0);
+  obtain(ctx, MTX_1);
+  request(ctx, A_1, REQ_MTX_1_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
+  release(ctx, MTX_1);
+  check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  request(ctx, A_1, REQ_MTX_1_RELEASE);
+  check_generations(ctx, A_1, NONE);
+  release(ctx, MTX_0);
+}
+
+static void test_inherit_nested_vertical_timeout(test_context *ctx)
+{
+  assert_prio(ctx, M, 3);
+  obtain(ctx, MTX_0);
+  obtain(ctx, MTX_1);
+  request(ctx, A_1, REQ_MTX_1_OBTAIN_TIMEOUT);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
+  wait();
+  check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  release(ctx, MTX_1);
+  release(ctx, MTX_0);
+}
+
+static void test_inherit_nested_horizontal(test_context *ctx)
+{
+  assert_prio(ctx, M, 3);
+  obtain(ctx, MTX_0);
+  request(ctx, A_2_0, REQ_MTX_1_OBTAIN);
+  check_generations(ctx, A_2_0, NONE);
+  request(ctx, A_2_0, REQ_MTX_0_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 2);
+  request(ctx, A_1, REQ_MTX_1_OBTAIN_TIMEOUT);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, A_2_0, 1);
+  assert_prio(ctx, M, 1);
+  wait();
+  check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, A_2_0, 2);
+  assert_prio(ctx, M, 2);
+  request(ctx, A_1, REQ_MTX_1_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, A_2_0, 1);
+  assert_prio(ctx, M, 1);
+  change_prio(ctx, A_1, 2);
+  assert_prio(ctx, M, 2);
+  change_prio(ctx, A_1, 3);
+  assert_prio(ctx, M, 2);
+  change_prio(ctx, A_2_0, 3);
+  assert_prio(ctx, M, 3);
+  change_prio(ctx, A_2_0, 2);
+  assert_prio(ctx, M, 2);
+  change_prio(ctx, A_1, 1);
+  assert_prio(ctx, M, 1);
+  release(ctx, MTX_0);
+  check_generations(ctx, A_2_0, NONE);
+  assert_prio(ctx, A_2_0, 1);
+  assert_prio(ctx, M, 3);
+  request(ctx, A_2_0, REQ_MTX_0_RELEASE);
+  check_generations(ctx, A_2_0, NONE);
+  assert_prio(ctx, A_2_0, 1);
+  request(ctx, A_2_0, REQ_MTX_1_RELEASE);
+  check_generations(ctx, A_1, A_2_0);
+  assert_prio(ctx, A_2_0, 2);
+  request(ctx, A_1, REQ_MTX_1_RELEASE);
+  check_generations(ctx, A_1, NONE);
 }
 
 static void test_deadlock_two_classic(test_context *ctx)
@@ -547,6 +671,9 @@ static void Init(rtems_task_argument arg)
   set_up(ctx);
   test_inherit(ctx);
   test_inherit_fifo_for_equal_priority(ctx);
+  test_inherit_nested_vertical(ctx);
+  test_inherit_nested_vertical_timeout(ctx);
+  test_inherit_nested_horizontal(ctx);
   test_deadlock_two_classic(ctx);
   test_deadlock_three_classic(ctx);
   test_deadlock_c11_and_classic(ctx);

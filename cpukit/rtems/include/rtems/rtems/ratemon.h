@@ -206,6 +206,12 @@ typedef struct {
   rtems_rate_monotonic_period_states      state;
 
   /**
+   * @brief A priority node for use by the scheduler job release and cancel
+   * operations.
+   */
+  Priority_Node                           Priority;
+
+  /**
    * This field contains the length of the next period to be
    * executed.
    */

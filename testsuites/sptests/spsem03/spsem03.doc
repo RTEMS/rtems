@@ -8,5 +8,5 @@ directives:
 
 concepts:
 
-  - Demonstrate that the priority inheritance protocol doesn't propagate to
-    indirectly referenced semaphore owners.
+  - Demonstrate that the priority inheritance protocol works with indirectly
+    referenced semaphore owners.

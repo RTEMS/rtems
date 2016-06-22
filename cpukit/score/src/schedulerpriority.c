@@ -43,7 +43,7 @@ void _Scheduler_priority_Node_initialize(
   Scheduler_priority_Context *context;
   Scheduler_priority_Node    *the_node;
 
-  _Scheduler_Node_do_initialize( node, the_thread, priority );
+  _Scheduler_Node_do_initialize( scheduler, node, the_thread, priority );
 
   context = _Scheduler_priority_Get_context( scheduler );
   the_node = _Scheduler_priority_Node_downcast( node );

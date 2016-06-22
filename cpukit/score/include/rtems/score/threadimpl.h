@@ -415,6 +415,163 @@ RTEMS_INLINE_ROUTINE bool _Thread_State_is_owner(
 #endif
 
 /**
+ * @brief Performs the priority actions specified by the thread queue context
+ * along the thread queue path.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param start_of_path The start thread of the thread queue path.
+ * @param queue_context The thread queue context specifying the thread queue
+ *   path and initial thread priority actions.
+ *
+ * @see _Thread_queue_Path_acquire_critical().
+ */
+void _Thread_Priority_perform_actions(
+  Thread_Control       *start_of_path,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Adds the specified thread priority node to the corresponding thread
+ * priority aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param priority_node The thread priority node to add.
+ * @param queue_context The thread queue context to return an updated set of
+ *   threads for _Thread_Priority_update().  The thread queue context must be
+ *   initialized via _Thread_queue_Context_clear_priority_updates() before a
+ *   call of this function.
+ *
+ * @see _Thread_Wait_acquire().
+ */
+void _Thread_Priority_add(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Removes the specified thread priority node from the corresponding
+ * thread priority aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param priority_node The thread priority node to remove.
+ * @param queue_context The thread queue context to return an updated set of
+ *   threads for _Thread_Priority_update().  The thread queue context must be
+ *   initialized via _Thread_queue_Context_clear_priority_updates() before a
+ *   call of this function.
+ *
+ * @see _Thread_Wait_acquire().
+ */
+void _Thread_Priority_remove(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Propagates a thread priority value change in the specified thread
+ * priority node to the corresponding thread priority aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param priority_node The thread priority node to change.
+ * @param prepend_it In case this is true, then the thread is prepended to
+ *   its priority group in its home scheduler instance, otherwise it is
+ *   appended.
+ * @param queue_context The thread queue context to return an updated set of
+ *   threads for _Thread_Priority_update().  The thread queue context must be
+ *   initialized via _Thread_queue_Context_clear_priority_updates() before a
+ *   call of this function.
+ *
+ * @see _Thread_Wait_acquire().
+ */
+void _Thread_Priority_changed(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  bool                  prepend_it,
+  Thread_queue_Context *queue_context
+);
+
+/**
+ * @brief Changes the thread priority value of the specified thread priority
+ * node in the corresponding thread priority aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param priority_node The thread priority node to change.
+ * @param new_priority The new thread priority value of the thread priority
+ *   node to change.
+ * @param prepend_it In case this is true, then the thread is prepended to
+ *   its priority group in its home scheduler instance, otherwise it is
+ *   appended.
+ * @param queue_context The thread queue context to return an updated set of
+ *   threads for _Thread_Priority_update().  The thread queue context must be
+ *   initialized via _Thread_queue_Context_clear_priority_updates() before a
+ *   call of this function.
+ *
+ * @see _Thread_Wait_acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Priority_change(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  Priority_Control      new_priority,
+  bool                  prepend_it,
+  Thread_queue_Context *queue_context
+)
+{
+  _Priority_Node_set_priority( priority_node, new_priority );
+  _Thread_Priority_changed(
+    the_thread,
+    priority_node,
+    prepend_it,
+    queue_context
+  );
+}
+
+/**
+ * @brief Replaces the victim priority node with the replacement priority node
+ * in the corresponding thread priority aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param victim_node The victim thread priority node.
+ * @param replacement_node The replacement thread priority node.
+ *
+ * @see _Thread_Wait_acquire().
+ */
+void _Thread_Priority_replace(
+  Thread_Control *the_thread,
+  Priority_Node  *victim_node,
+  Priority_Node  *replacement_node
+);
+
+/**
+ * @brief Adds a priority node to the corresponding thread priority
+ * aggregation.
+ *
+ * The caller must be the owner of the thread wait lock.
+ *
+ * @param the_thread The thread.
+ * @param priority_node The thread priority node to add.
+ * @param queue_context The thread queue context to return an updated set of
+ *   threads for _Thread_Priority_update().  The thread queue context must be
+ *   initialized via _Thread_queue_Context_clear_priority_updates() before a
+ *   call of this function.
+ *
+ * @see _Thread_Priority_add(), _Thread_Priority_change(),
+ *   _Thread_Priority_changed() and _Thread_Priority_remove().
+ */
+void _Thread_Priority_update( Thread_queue_Context *queue_context );
+
+/**
  * @brief Returns true if the left thread priority is less than the right
  * thread priority in the intuitive sense of priority and false otherwise.
  */
@@ -437,106 +594,6 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Priority_highest(
 {
   return _Thread_Priority_less_than( left, right ) ? right : left;
 }
-
-/**
- * @brief Filters a thread priority change.
- *
- * Called by _Thread_Change_priority() under the protection of the thread lock.
- *
- * @param[in] the_thread The thread.
- * @param[in, out] new_priority The new priority of the thread.  The filter may
- * alter this value.
- * @param[in] arg The argument passed to _Thread_Change_priority().
- *
- * @retval true Change the current priority.
- * @retval false Otherwise.
- */
-typedef bool ( *Thread_Change_priority_filter )(
-  Thread_Control   *the_thread,
-  Priority_Control *new_priority,
-  void             *arg
-);
-
-Thread_Control *_Thread_Apply_priority(
-  Thread_Control                *the_thread,
-  Priority_Control               new_priority,
-  void                          *arg,
-  Thread_Change_priority_filter  filter,
-  bool                           prepend_it
-);
-
-void _Thread_Update_priority( Thread_Control *the_thread );
-
-/**
- * @brief Changes the priority of a thread if allowed by the filter function.
- *
- * It changes current priority of the thread to the new priority in case the
- * filter function returns true.  In this case the scheduler is notified of the
- * priority change as well.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority of the thread.
- * @param[in] arg The argument for the filter function.
- * @param[in] filter The filter function to determine if a priority change is
- * allowed and optionally perform other actions under the protection of the
- * thread lock simultaneously with the update of the current priority.
- * @param[in] prepend_it In case this is true, then the thread is prepended to
- * its priority group in its scheduler instance, otherwise it is appended.
- */
-void _Thread_Change_priority(
-  Thread_Control                *the_thread,
-  Priority_Control               new_priority,
-  void                          *arg,
-  Thread_Change_priority_filter  filter,
-  bool                           prepend_it
-);
-
-/**
- * @brief Raises the priority of a thread.
- *
- * It changes the current priority of the thread to the new priority if the new
- * priority is higher than the current priority.  In this case the thread is
- * appended to its new priority group in its scheduler instance.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority of the thread.
- *
- * @see _Thread_Change_priority().
- */
-void _Thread_Raise_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority
-);
-
-/**
- * @brief Sets the current to the real priority of a thread.
- *
- * Sets the priority restore hint to false.
- */
-void _Thread_Restore_priority( Thread_Control *the_thread );
-
-/**
- * @brief Sets the priority of a thread.
- *
- * It sets the real priority of the thread.  In addition it changes the current
- * priority of the thread if the new priority is higher than the current
- * priority or the thread owns no resources.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_priority The new priority of the thread.
- * @param[out] old_priority The old real priority of the thread.  This pointer
- * must not be @c NULL.
- * @param[in] prepend_it In case this is true, then the thread is prepended to
- * its priority group in its scheduler instance, otherwise it is appended.
- *
- * @see _Thread_Change_priority().
- */
-void _Thread_Set_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  Priority_Control *old_priority,
-  bool              prepend_it
-);
 
 RTEMS_INLINE_ROUTINE Objects_Information *_Thread_Get_objects_information(
   Objects_Id id
@@ -929,6 +986,17 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   return owns_resources;
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_own_node(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->Scheduler.own_node;
+#else
+  return the_thread->Scheduler.node;
+#endif
+}
+
 /**
  * @brief Returns the priority of the thread.
  *
@@ -937,14 +1005,15 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
  * protocols, a job release or the POSIX sporadic server for example.
  *
  * @return The priority of the thread.
- *
- * @see _Scheduler_Node_get_priority().
  */
 RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
   const Thread_Control *the_thread
 )
 {
-  return the_thread->current_priority;
+  Scheduler_Node *scheduler_node;
+
+  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  return _Priority_Get_priority( &scheduler_node->Wait.Priority );
 }
 
 /**
@@ -1389,7 +1458,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
     _Assert( queue_context->Lock_context.Wait.queue == queue );
 #endif
 
-    ( *the_thread->Wait.operations->extract )( queue, the_thread );
+    ( *the_thread->Wait.operations->extract )(
+      queue,
+      the_thread,
+      queue_context
+    );
     _Thread_Wait_restore_default( the_thread );
 
 #if defined(RTEMS_SMP)

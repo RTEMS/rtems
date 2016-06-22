@@ -61,11 +61,11 @@ int pthread_create(
     }
   };
   const pthread_attr_t               *the_attr;
+  int                                 normal_prio;
   int                                 low_prio;
-  int                                 high_prio;
   bool                                valid;
+  Priority_Control                    core_normal_prio;
   Priority_Control                    core_low_prio;
-  Priority_Control                    core_high_prio;
   Thread_CPU_budget_algorithms        budget_algorithm;
   Thread_CPU_budget_algorithm_callout budget_callout;
   bool                                is_fp;
@@ -149,22 +149,22 @@ int pthread_create(
     return error;
   }
 
-  if ( schedpolicy == SCHED_SPORADIC ) {
-    low_prio = schedparam.sched_ss_low_priority;
-    high_prio = schedparam.sched_priority;
-  } else {
-    low_prio = schedparam.sched_priority;
-    high_prio = low_prio;
-  }
+  normal_prio = schedparam.sched_priority;
 
   scheduler = _Scheduler_Get_own( executing );
 
-  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
+  core_normal_prio = _POSIX_Priority_To_core( scheduler, normal_prio, &valid );
   if ( !valid ) {
     return EINVAL;
   }
 
-  core_high_prio = _POSIX_Priority_To_core( scheduler, high_prio, &valid );
+  if ( schedpolicy == SCHED_SPORADIC ) {
+    low_prio = schedparam.sched_ss_low_priority;
+  } else {
+    low_prio = normal_prio;
+  }
+
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
   if ( !valid ) {
     return EINVAL;
   }
@@ -205,7 +205,7 @@ int pthread_create(
     the_attr->stackaddr,
     _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
     is_fp,
-    core_high_prio,
+    core_normal_prio,
     true,                 /* preemptible */
     budget_algorithm,
     budget_callout,
@@ -245,13 +245,11 @@ int pthread_create(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
-  api->Sporadic.low_priority = core_low_prio;
-  api->Sporadic.high_priority = core_high_prio;
+  _Priority_Node_initialize( &api->Sporadic.Low_priority, core_low_prio );
+  _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
 
   if ( schedpolicy == SCHED_SPORADIC ) {
-    _ISR_lock_ISR_disable( &lock_context );
-    _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
-    _ISR_lock_ISR_enable( &lock_context );
+    _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer );
   }
 
   /*

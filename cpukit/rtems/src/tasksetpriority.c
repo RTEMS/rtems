@@ -22,50 +22,43 @@
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 
-typedef struct {
-  const Scheduler_Control *scheduler;
-  rtems_task_priority      new_priority;
-  Priority_Control         old_priority;
-  rtems_status_code        status;
-} RTEMS_tasks_Set_priority_context;
-
-static bool _RTEMS_tasks_Set_priority_filter(
-  Thread_Control   *the_thread,
-  Priority_Control *new_priority_p,
-  void             *arg
+static rtems_status_code _RTEMS_tasks_Set_priority(
+  Thread_Control          *the_thread,
+  const Scheduler_Control *scheduler,
+  Priority_Control         new_priority,
+  Thread_queue_Context    *queue_context
 )
 {
-  RTEMS_tasks_Set_priority_context *context;
-  const Scheduler_Control          *scheduler;
-  bool                              valid;
-  Priority_Control                  current_priority;
-  Priority_Control                  new_priority;
+  Priority_Control core_new_priority;
+  bool             valid;
+  Per_CPU_Control *cpu_self;
 
-  context = arg;
-  scheduler = _Scheduler_Get_own( the_thread );
-  current_priority = _Thread_Get_priority( the_thread );
-
-  context->scheduler = scheduler;
-  context->old_priority = current_priority;
-
-  new_priority = _RTEMS_Priority_To_core(
+  core_new_priority = _RTEMS_Priority_To_core(
     scheduler,
-    context->new_priority,
+    new_priority,
     &valid
   );
 
-  *new_priority_p = new_priority;
-
   if ( !valid ) {
-    context->status = RTEMS_INVALID_PRIORITY;
-    return false;
+    _Thread_Wait_release( the_thread, queue_context );
+    return RTEMS_INVALID_PRIORITY;
   }
 
-  the_thread->real_priority = new_priority;
-  context->status = STATUS_SUCCESSFUL;
-
-  return _Thread_Priority_less_than( current_priority, new_priority )
-    || !_Thread_Owns_resources( the_thread );
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Priority_change(
+    the_thread,
+    &the_thread->Real_priority,
+    core_new_priority,
+    false,
+    queue_context
+  );
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
+  );
+  _Thread_Wait_release( the_thread, queue_context );
+  _Thread_Priority_update( queue_context );
+  _Thread_Dispatch_enable( cpu_self );
+  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code rtems_task_set_priority(
@@ -75,7 +68,7 @@ rtems_status_code rtems_task_set_priority(
 )
 {
   Thread_Control          *the_thread;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   const Scheduler_Control *scheduler;
   Priority_Control         old_priority;
   rtems_status_code        status;
@@ -84,7 +77,8 @@ rtems_status_code rtems_task_set_priority(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  the_thread = _Thread_Get( id, &lock_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  the_thread = _Thread_Get( id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -94,31 +88,20 @@ rtems_status_code rtems_task_set_priority(
 #endif
   }
 
+  _Thread_Wait_acquire_critical( the_thread, &queue_context );
+
+  scheduler = _Scheduler_Get_own( the_thread );
+  old_priority = _Thread_Get_priority( the_thread );
+
   if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
-    RTEMS_tasks_Set_priority_context  context;
-    Per_CPU_Control                  *cpu_self;
-
-    cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-    _ISR_lock_ISR_enable( &lock_context );
-
-    context.new_priority = new_priority;
-    _Thread_Change_priority(
+    status = _RTEMS_tasks_Set_priority(
       the_thread,
-      0,
-      &context,
-      _RTEMS_tasks_Set_priority_filter,
-      false
+      scheduler,
+      new_priority,
+      &queue_context
     );
-
-    _Thread_Dispatch_enable( cpu_self );
-    scheduler = context.scheduler;
-    old_priority = context.old_priority;
-    status = context.status;
   } else {
-    _Thread_State_acquire_critical( the_thread, &lock_context );
-    scheduler = _Scheduler_Get_own( the_thread );
-    old_priority = _Thread_Get_priority( the_thread );
-    _Thread_State_release( the_thread, &lock_context );
+    _Thread_Wait_release( the_thread, &queue_context );
     status = RTEMS_SUCCESSFUL;
   }
 

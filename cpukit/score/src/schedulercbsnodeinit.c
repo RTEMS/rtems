@@ -33,4 +33,5 @@ void _Scheduler_CBS_Node_initialize(
 
   the_node = _Scheduler_CBS_Node_downcast( node );
   the_node->cbs_server = NULL;
+  the_node->deadline_node = NULL;
 }

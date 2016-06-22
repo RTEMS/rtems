@@ -99,8 +99,11 @@ size_t _Thread_queue_Flush_critical(
     if ( do_unblock ) {
       Scheduler_Node *scheduler_node;
 
-      scheduler_node = _Scheduler_Thread_get_own_node( first );
-      _Chain_Append_unprotected( &unblock, &scheduler_node->Wait.Node.Chain );
+      scheduler_node = _Thread_Scheduler_get_own_node( first );
+      _Chain_Append_unprotected(
+        &unblock,
+        &scheduler_node->Wait.Priority.Node.Node.Chain
+      );
     }
 
     ++flushed;
@@ -123,7 +126,7 @@ size_t _Thread_queue_Flush_critical(
       Chain_Node     *next;
 
       next = _Chain_Next( node );
-      scheduler_node = SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( node );
+      scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY_NODE( node );
       the_thread = _Scheduler_Node_get_owner( scheduler_node );
       _Thread_Remove_timer_and_unblock( the_thread, queue );
 

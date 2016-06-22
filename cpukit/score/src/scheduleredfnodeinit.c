@@ -29,11 +29,9 @@ void _Scheduler_EDF_Node_initialize(
 {
   Scheduler_EDF_Node *the_node;
 
-  (void) scheduler;
-
-  _Scheduler_Node_do_initialize( node, the_thread, priority );
+  _Scheduler_Node_do_initialize( scheduler, node, the_thread, priority );
 
   the_node = _Scheduler_EDF_Node_downcast( node );
-  the_node->thread = the_thread;
   _RBTree_Initialize_node( &the_node->Node );
+  the_node->priority = priority;
 }

@@ -200,6 +200,10 @@ $(PROJECT_INCLUDE)/rtems/score/priority.h: include/rtems/score/priority.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
 
+$(PROJECT_INCLUDE)/rtems/score/priorityimpl.h: include/rtems/score/priorityimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priorityimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priorityimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybitmap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h

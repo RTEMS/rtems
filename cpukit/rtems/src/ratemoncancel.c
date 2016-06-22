@@ -27,18 +27,22 @@ void _Rate_monotonic_Cancel(
   ISR_lock_Context       *lock_context
 )
 {
-  Per_CPU_Control *cpu_self;
-  Thread_Control  *update_priority;
+  Per_CPU_Control      *cpu_self;
+  Thread_queue_Context  queue_context;
 
   _Rate_monotonic_Acquire_critical( the_period, lock_context );
 
   _Watchdog_Per_CPU_remove_relative( &the_period->Timer );
   the_period->state = RATE_MONOTONIC_INACTIVE;
-  update_priority = _Scheduler_Cancel_job( the_period->owner );
+  _Scheduler_Cancel_job(
+    the_period->owner,
+    &the_period->Priority,
+    &queue_context
+  );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( the_period, lock_context );
-  _Thread_Update_priority( update_priority );
+  _Thread_Priority_update( &queue_context );
   _Thread_Dispatch_enable( cpu_self );
 }
 

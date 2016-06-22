@@ -57,7 +57,12 @@ void _Scheduler_priority_SMP_Node_initialize(
   Scheduler_priority_SMP_Node    *the_node;
 
   the_node = _Scheduler_priority_SMP_Node_downcast( node );
-  _Scheduler_SMP_Node_initialize( &the_node->Base, the_thread, priority );
+  _Scheduler_SMP_Node_initialize(
+    scheduler,
+    &the_node->Base,
+    the_thread,
+    priority
+  );
 
   context = _Scheduler_Get_context( scheduler );
   self = _Scheduler_priority_SMP_Get_self( context );

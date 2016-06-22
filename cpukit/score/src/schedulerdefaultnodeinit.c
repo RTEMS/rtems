@@ -28,7 +28,5 @@ void _Scheduler_default_Node_initialize(
   Priority_Control         priority
 )
 {
-  (void) scheduler;
-
-  _Scheduler_Node_do_initialize( node, the_thread, priority );
+  _Scheduler_Node_do_initialize( scheduler, node, the_thread, priority );
 }

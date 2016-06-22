@@ -22,6 +22,7 @@
 
 #include <rtems/score/scheduler.h>
 #include <rtems/score/cpusetimpl.h>
+#include <rtems/score/priorityimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/status.h>
 #include <rtems/score/threadimpl.h>
@@ -97,17 +98,6 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   uint32_t cpu_index = _Per_CPU_Get_index( cpu );
 
   return _Scheduler_Get_by_CPU_index( cpu_index );
-}
-
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_own_node(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.own_node;
-#else
-  return the_thread->Scheduler.node;
-#endif
 }
 
 ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
@@ -264,7 +254,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
     needs_help != NULL
       && _Resource_Node_owns_resources( &needs_help->Resource_node )
   ) {
-    Scheduler_Node *node = _Scheduler_Thread_get_own_node( needs_help );
+    Scheduler_Node *node = _Thread_Scheduler_get_own_node( needs_help );
 
     if (
       node->help_state != SCHEDULER_HELP_ACTIVE_RIVAL
@@ -486,21 +476,27 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
  * @brief Releases a job of a thread with respect to the scheduler.
  *
  * @param[in] the_thread The thread.
+ * @param[in] priority_node The priority node of the job.
  * @param[in] deadline The deadline in watchdog ticks since boot.
- *
- * @return The thread to hand over to _Thread_Update_priority().
+ * @param[in] queue_context The thread queue context to provide the set of
+ *   threads for _Thread_Priority_update().
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_job(
-  Thread_Control *the_thread,
-  uint64_t        deadline
+RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  uint64_t              deadline,
+  Thread_queue_Context *queue_context
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  return ( *scheduler->Operations.release_job )(
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  ( *scheduler->Operations.release_job )(
     scheduler,
     the_thread,
-    deadline
+    priority_node,
+    deadline,
+    queue_context
   );
 }
 
@@ -508,16 +504,25 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_job(
  * @brief Cancels a job of a thread with respect to the scheduler.
  *
  * @param[in] the_thread The thread.
- *
- * @return The thread to hand over to _Thread_Update_priority().
+ * @param[in] priority_node The priority node of the job.
+ * @param[in] queue_context The thread queue context to provide the set of
+ *   threads for _Thread_Priority_update().
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Cancel_job(
-  Thread_Control *the_thread
+RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
+  Thread_Control       *the_thread,
+  Priority_Node        *priority_node,
+  Thread_queue_Context *queue_context
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  return ( *scheduler->Operations.cancel_job )( scheduler, the_thread );
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  ( *scheduler->Operations.cancel_job )(
+    scheduler,
+    the_thread,
+    priority_node,
+    queue_context
+  );
 }
 
 /**
@@ -776,12 +781,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(
   bool              prepend_it
 )
 {
-  Scheduler_Node *own_node;
+  Scheduler_Node *scheduler_node;
 
-  own_node = _Scheduler_Thread_get_own_node( the_thread );
-  _Scheduler_Node_set_priority( own_node, new_priority, prepend_it );
-
-  the_thread->current_priority = new_priority;
+  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  _Scheduler_Node_set_priority( scheduler_node, new_priority, prepend_it );
 }
 
 #if defined(RTEMS_SMP)
@@ -857,7 +860,7 @@ RTEMS_INLINE_ROUTINE Scheduler_Help_state _Scheduler_Thread_change_help_state(
   Scheduler_Help_state  new_help_state
 )
 {
-  Scheduler_Node *node = _Scheduler_Thread_get_own_node( the_thread );
+  Scheduler_Node *node = _Thread_Scheduler_get_own_node( the_thread );
   Scheduler_Help_state previous_help_state = node->help_state;
 
   node->help_state = new_help_state;
@@ -1294,7 +1297,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Ask_scheduled_node_for_help(
     _Scheduler_Thread_change_state( old_user, THREAD_SCHEDULER_READY );
     _Scheduler_Thread_set_scheduler_and_node(
       old_user,
-      _Scheduler_Thread_get_own_node( old_user ),
+      _Thread_Scheduler_get_own_node( old_user ),
       old_user
     );
 
@@ -1383,11 +1386,24 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     return STATUS_RESOURCE_IN_USE;
   }
 
-  the_thread->current_priority = priority;
-  the_thread->real_priority = priority;
-  the_thread->Start.initial_priority = priority;
+  own_node = _Thread_Scheduler_get_own_node( the_thread );
+  _Priority_Plain_extract( &own_node->Wait.Priority, &the_thread->Real_priority );
 
-  own_node = _Scheduler_Thread_get_own_node( the_thread );
+  if ( !_Priority_Is_empty( &own_node->Wait.Priority ) ) {
+    _Priority_Plain_insert(
+      &own_node->Wait.Priority,
+      &the_thread->Real_priority,
+      the_thread->Real_priority.priority
+    );
+    return STATUS_RESOURCE_IN_USE;
+  }
+
+  the_thread->Start.initial_priority = priority;
+  _Priority_Node_set_priority( &the_thread->Real_priority, priority );
+  _Priority_Initialize_one(
+    &own_node->Wait.Priority,
+    &the_thread->Real_priority
+  );
 
 #if defined(RTEMS_SMP)
   {

@@ -30,6 +30,8 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
   bool                  unblock;
 
   the_thread = RTEMS_CONTAINER_OF( watchdog, Thread_Control, Timer.Watchdog );
+
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
@@ -66,6 +68,7 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
   }
 
   _Thread_Wait_release( the_thread, &queue_context );
+  _Thread_Priority_update( &queue_context );
 
   if ( unblock ) {
     _Thread_Wait_tranquilize( the_thread );

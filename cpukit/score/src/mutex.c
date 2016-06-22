@@ -128,33 +128,20 @@ static void _Mutex_Release_critical(
 )
 {
   Thread_queue_Heads *heads;
-  bool keep_priority;
-
-  mutex->Queue.Queue.owner = NULL;
-
-  --executing->resource_count;
-
-  /*
-   * Ensure that the owner resource count is visible to all other
-   * processors and that we read the latest priority restore
-   * hint.
-   */
-  _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
 
   heads = mutex->Queue.Queue.heads;
-  keep_priority = _Thread_Owns_resources( executing )
-    || !executing->priority_restore_hint;
+  mutex->Queue.Queue.owner = NULL;
+  --executing->resource_count;
 
-  if ( __predict_true( heads == NULL && keep_priority ) ) {
+  if ( __predict_true( heads == NULL ) ) {
     _Mutex_Queue_release( mutex, queue_context );
   } else {
     _Thread_queue_Surrender(
       &mutex->Queue.Queue,
-      MUTEX_TQ_OPERATIONS,
       heads,
       executing,
-      keep_priority,
-      queue_context
+      queue_context,
+      MUTEX_TQ_OPERATIONS
     );
   }
 }

@@ -50,40 +50,28 @@ static Thread_Zombie_control _Thread_Zombies = {
   .Lock = ISR_LOCK_INITIALIZER( "thread zombies" )
 };
 
-static bool _Thread_Raise_real_priority_filter(
-  Thread_Control   *the_thread,
-  Priority_Control *new_priority_ptr,
-  void             *arg
-)
-{
-  Priority_Control real_priority;
-  Priority_Control new_priority;
-  Priority_Control current_priority;
-
-  real_priority = the_thread->real_priority;
-  new_priority = *new_priority_ptr;
-  current_priority = _Thread_Get_priority( the_thread );
-
-  new_priority = _Thread_Priority_highest( real_priority, new_priority );
-  *new_priority_ptr = new_priority;
-
-  the_thread->real_priority = new_priority;
-
-  return _Thread_Priority_less_than( current_priority, new_priority );
-}
-
 static void _Thread_Raise_real_priority(
   Thread_Control   *the_thread,
   Priority_Control  priority
 )
 {
-  _Thread_Change_priority(
-    the_thread,
-    priority,
-    NULL,
-    _Thread_Raise_real_priority_filter,
-    false
-  );
+  Thread_queue_Context queue_context;
+
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
+
+  if ( priority < the_thread->Real_priority.priority ) {
+    _Thread_Priority_change(
+      the_thread,
+      &the_thread->Real_priority,
+      priority,
+      false,
+      &queue_context
+    );
+  }
+
+  _Thread_Wait_release( the_thread, &queue_context );
+  _Thread_Priority_update( &queue_context );
 }
 
 typedef struct {
@@ -182,7 +170,7 @@ static void _Thread_Free( Thread_Control *the_thread )
   _ISR_lock_Destroy( &the_thread->Keys.Lock );
   _Scheduler_Node_destroy(
     _Scheduler_Get( the_thread ),
-    _Scheduler_Thread_get_own_node( the_thread )
+    _Thread_Scheduler_get_own_node( the_thread )
   );
   _ISR_lock_Destroy( &the_thread->Timer.Lock );
 
@@ -622,8 +610,8 @@ void _Thread_Restart_self(
   ISR_lock_Context               *lock_context
 )
 {
-  Per_CPU_Control  *cpu_self;
-  Priority_Control  unused;
+  Per_CPU_Control      *cpu_self;
+  Thread_queue_Context  queue_context;
 
   _Assert(
     _Watchdog_Get_state( &executing->Timer.Watchdog ) == WATCHDOG_INACTIVE
@@ -646,13 +634,18 @@ void _Thread_Restart_self(
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_State_release( executing, lock_context );
 
-  _Thread_Set_priority(
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Thread_Wait_acquire_default( executing, lock_context );
+  _Thread_Priority_change(
     executing,
+    &executing->Real_priority,
     executing->Start.initial_priority,
-    &unused,
-    true
+    false,
+    &queue_context
   );
+  _Thread_Wait_release_default( executing, lock_context );
 
+  _Thread_Priority_update( &queue_context );
   _Thread_Dispatch_enable( cpu_self );
   RTEMS_UNREACHABLE();
 }

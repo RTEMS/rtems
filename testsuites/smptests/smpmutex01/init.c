@@ -315,10 +315,9 @@ static void test(void)
   request(ctx, B_5_0, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_0, A_2_1);
   assert_prio(ctx, B_5_0, 5);
-  assert_prio(ctx, A_2_1, 0);
+  assert_prio(ctx, A_2_1, 2);
   request(ctx, A_2_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_2_1, B_5_1);
-  assert_prio(ctx, A_2_1, 2);
   assert_prio(ctx, B_5_1, 5);
   request(ctx, B_5_1, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_1, NONE);

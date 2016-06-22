@@ -373,7 +373,7 @@ typedef struct {
    *
    * The thread wait lock mechanism protects the following thread variables
    *  - POSIX_API_Control::Attributes,
-   *  - Thread_Control::current_priority,
+   *  - Scheduler_Node::Wait,
    *  - Thread_Control::Wait::Lock::Pending_requests,
    *  - Thread_Control::Wait::queue, and
    *  - Thread_Control::Wait::operations.
@@ -461,32 +461,11 @@ typedef struct {
 
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
-  /**
-   * @brief This field is the current priority state of this thread.
-   *
-   * Writes to this field are only allowed in _Thread_Initialize() or via
-   * _Thread_Change_priority().
-   */
-  Priority_Control         current_priority;
 
   /**
-   * @brief This field is the base priority of this thread.
-   *
-   * Writes to this field are only allowed in _Thread_Initialize() or via
-   * _Thread_Change_priority().
+   * @brief The base priority of this thread in its home scheduler instance.
    */
-  Priority_Control         real_priority;
-
-  /**
-   * @brief Hints if a priority restore is necessary once the resource count
-   * changes from one to zero.
-   *
-   * This is an optimization to speed up the mutex surrender sequence in case
-   * no attempt to change the priority was made during the mutex ownership.  On
-   * SMP configurations atomic fences must synchronize writes to
-   * Thread_Control::priority_restore_hint and Thread_Control::resource_count.
-   */
-  bool                     priority_restore_hint;
+  Priority_Node            Real_priority;
 
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
@@ -708,31 +687,9 @@ struct _Thread_Control {
   States_Control           current_state;
 
   /**
-   * @brief This field is the current priority state of this thread.
-   *
-   * Writes to this field are only allowed in _Thread_Initialize() or via
-   * _Thread_Change_priority().
+   * @brief The base priority of this thread in its home scheduler instance.
    */
-  Priority_Control         current_priority;
-
-  /**
-   * @brief This field is the base priority of this thread.
-   *
-   * Writes to this field are only allowed in _Thread_Initialize() or via
-   * _Thread_Change_priority().
-   */
-  Priority_Control         real_priority;
-
-  /**
-   * @brief Hints if a priority restore is necessary once the resource count
-   * changes from one to zero.
-   *
-   * This is an optimization to speed up the mutex surrender sequence in case
-   * no attempt to change the priority was made during the mutex ownership.  On
-   * SMP configurations atomic fences must synchronize writes to
-   * Thread_Control::priority_restore_hint and Thread_Control::resource_count.
-   */
-  bool                     priority_restore_hint;
+  Priority_Node            Real_priority;
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;

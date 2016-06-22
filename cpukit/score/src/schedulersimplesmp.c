@@ -52,7 +52,7 @@ void _Scheduler_simple_SMP_Node_initialize(
   Scheduler_SMP_Node *the_node;
 
   the_node = _Scheduler_SMP_Node_downcast( node );
-  _Scheduler_SMP_Node_initialize( the_node, the_thread, priority );
+  _Scheduler_SMP_Node_initialize( scheduler, the_node, the_thread, priority );
 }
 
 static void _Scheduler_simple_SMP_Do_update(

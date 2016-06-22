@@ -33,7 +33,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   node = _Scheduler_EDF_Thread_get_node( the_thread );
 
   _Scheduler_EDF_Extract( context, node );
-  _Scheduler_EDF_Enqueue( context, node, node->current_priority );
+  _Scheduler_EDF_Enqueue( context, node, node->priority );
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, true );
 
   SCHEDULER_RETURN_VOID_OR_NULL;

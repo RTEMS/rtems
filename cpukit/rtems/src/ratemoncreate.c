@@ -63,6 +63,8 @@ rtems_status_code rtems_rate_monotonic_create(
   }
 
   _ISR_lock_Initialize( &the_period->Lock, "Rate Monotonic Period" );
+  _Priority_Node_initialize( &the_period->Priority, 0 );
+  _Priority_Node_set_inactive( &the_period->Priority );
 
   the_period->owner = _Thread_Get_executing();
   the_period->state = RATE_MONOTONIC_INACTIVE;

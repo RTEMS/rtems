@@ -64,7 +64,18 @@ int pthread_mutex_setprioceiling(
 
     new_priority = _POSIX_Priority_To_core( scheduler, prioceiling, &valid );
     if ( valid ) {
-      _CORE_ceiling_mutex_Set_priority( &the_mutex->Mutex, new_priority );
+      Thread_queue_Context  queue_context;
+      Per_CPU_Control      *cpu_self;
+
+      _Thread_queue_Context_clear_priority_updates( &queue_context );
+      _CORE_ceiling_mutex_Set_priority(
+        &the_mutex->Mutex,
+        new_priority,
+        &queue_context
+      );
+      cpu_self = _Thread_Dispatch_disable();
+      _Thread_Priority_update( &queue_context );
+      _Thread_Dispatch_enable( cpu_self );
       error = 0;
     } else {
       error = EINVAL;

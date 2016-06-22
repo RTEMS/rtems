@@ -54,16 +54,12 @@ Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
   node = _Scheduler_EDF_Thread_get_node( the_thread );
   priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
 
-  if ( priority == node->current_priority ) {
+  if ( priority == node->priority ) {
     /* Nothing to do */
     SCHEDULER_RETURN_VOID_OR_NULL;
   }
 
-  if ( ( priority & SCHEDULER_EDF_PRIO_MSB ) != 0 ) {
-    node->background_priority = priority;
-  }
-
-  node->current_priority = priority;
+  node->priority = priority;
   context = _Scheduler_EDF_Get_context( scheduler );
 
   _Scheduler_EDF_Extract( context, node );

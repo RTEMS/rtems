@@ -261,7 +261,7 @@ task_usage(Thread_Control* thread, void* arg)
               CPU_usage_Less_than(&usage, &data->usage[j]))
             continue;
         case RTEMS_TOP_SORT_REAL_PRI:
-          if (thread->real_priority > data->tasks[j]->real_priority)
+          if (thread->Real_priority.priority > data->tasks[j]->Real_priority.priority)
             continue;
         case RTEMS_TOP_SORT_CURRENT_PRI:
           if (
@@ -478,10 +478,10 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
         snprintf(name, sizeof(name) - 1, "(%p)", thread->Start.Entry.Kinds.Numeric.entry);
 
       rtems_printf(data->printer,
-                   " 0x%08" PRIx32 " | %-19s |  %3" PRId32 " |  %3" PRId32 "   | ",
+                   " 0x%08" PRIx32 " | %-19s |  %3" PRId64 " |  %3" PRId64 "   | ",
                    thread->Object.id,
                    name,
-                   thread->real_priority,
+                   thread->Real_priority.priority,
                    _Thread_Get_priority(thread));
 
       usage = data->usage[i];

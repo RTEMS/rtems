@@ -30,13 +30,11 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_EDF_Context *context;
-  Scheduler_CBS_Node    *node;
-  Scheduler_CBS_Server  *serv_info;
-  Priority_Control       priority;
-  bool                   prepend_it;
+  Scheduler_CBS_Node   *node;
+  Scheduler_CBS_Server *serv_info;
+  Priority_Control      priority;
+  bool                  prepend_it;
 
-  context = _Scheduler_EDF_Get_context( scheduler );
   node = _Scheduler_CBS_Thread_get_node( the_thread );
   serv_info = node->cbs_server;
   priority = _Scheduler_Node_get_priority( &node->Base.Base, &prepend_it );
@@ -55,40 +53,19 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
     Priority_Control budget_left = priority - _Watchdog_Ticks_since_boot;
 
     if ( deadline * budget_left > budget * deadline_left ) {
+      Thread_queue_Context queue_context;
+
       /* Put late unblocked task to background until the end of period. */
-
-      priority = node->Base.background_priority;
-      the_thread->real_priority = priority;
-
-      if (
-        _Thread_Priority_less_than(
-          _Thread_Get_priority( the_thread ),
-          priority
-        ) || !_Thread_Owns_resources( the_thread )
-      ) {
-        the_thread->current_priority = priority;
-      }
+      _Thread_queue_Context_clear_priority_updates( &queue_context );
+      _Scheduler_CBS_Cancel_job(
+        scheduler,
+        the_thread,
+        node->deadline_node,
+        &queue_context
+      );
     }
   }
 
-  node->Base.current_priority = priority;
-  _Scheduler_EDF_Enqueue( context, &node->Base, priority );
-
-  /*
-   *  If the thread that was unblocked is more important than the heir,
-   *  then we have a new heir.  This may or may not result in a
-   *  context switch.
-   *
-   *  Normal case:
-   *    If the current thread is preemptible, then we need to do
-   *    a context switch.
-   *  Pseudo-ISR case:
-   *    Even if the thread isn't preemptible, if the new heir is
-   *    a pseudo-ISR system task, we need to do a context switch.
-   */
-  if ( priority < _Thread_Get_priority( _Thread_Heir ) ) {
-    _Scheduler_Update_heir( the_thread, priority == PRIORITY_PSEUDO_ISR );
-  }
-
+  _Scheduler_EDF_Unblock( scheduler, the_thread );
   SCHEDULER_RETURN_VOID_OR_NULL;
 }

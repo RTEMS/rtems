@@ -80,12 +80,9 @@ typedef struct {
   Thread_Control *thread;
 
   /**
-   * @brief The initial priority of the thread at the begin of the resource
-   * obtain sequence.
-   *
-   * Used to restore the priority after a release of this resource or timeout.
+   * @brief The ceiling priority used by the rival thread.
    */
-  Priority_Control initial_priority;
+  Priority_Node Ceiling_priority;
 
   /**
    * @brief The initial help state of the thread at the begin of the resource
@@ -135,10 +132,9 @@ struct MRSP_Control {
   Chain_Control Rivals;
 
   /**
-   * @brief The initial priority of the owner before it was elevated to the
-   * ceiling priority.
+   * @brief The ceiling priority used by the owner thread.
    */
-  Priority_Control initial_priority_of_owner;
+  Priority_Node Ceiling_priority;
 
   /**
    * @brief One ceiling priority per scheduler instance.

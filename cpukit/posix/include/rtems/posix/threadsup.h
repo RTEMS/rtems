@@ -60,13 +60,7 @@ typedef struct {
      * @brief The low priority when using the sporadic server scheduling
      * policy.
      */
-    Priority_Control low_priority;
-
-    /**
-     * @brief The high priority when using the sporadic server scheduling
-     * policy.
-     */
-    Priority_Control high_priority;
+    Priority_Node Low_priority;
   } Sporadic;
 
   /** This is the set of signals which are currently unblocked. */

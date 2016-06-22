@@ -32,9 +32,7 @@
 THREAD_OFFSET_ASSERT( Object );
 THREAD_OFFSET_ASSERT( Join_queue );
 THREAD_OFFSET_ASSERT( current_state );
-THREAD_OFFSET_ASSERT( current_priority );
-THREAD_OFFSET_ASSERT( real_priority );
-THREAD_OFFSET_ASSERT( priority_restore_hint );
+THREAD_OFFSET_ASSERT( Real_priority );
 THREAD_OFFSET_ASSERT( resource_count );
 THREAD_OFFSET_ASSERT( Scheduler );
 THREAD_OFFSET_ASSERT( Wait );

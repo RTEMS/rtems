@@ -70,9 +70,9 @@ static void _Rate_monotonic_Release_job(
   ISR_lock_Context       *lock_context
 )
 {
-  Per_CPU_Control *cpu_self;
-  Thread_Control  *update_priority;
-  uint64_t         deadline;
+  Per_CPU_Control      *cpu_self;
+  Thread_queue_Context  queue_context;
+  uint64_t              deadline;
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
 
@@ -81,10 +81,15 @@ static void _Rate_monotonic_Release_job(
     cpu_self,
     next_length
   );
-  update_priority = _Scheduler_Release_job( owner, deadline );
+  _Scheduler_Release_job(
+    owner,
+    &the_period->Priority,
+    deadline,
+    &queue_context
+  );
 
   _Rate_monotonic_Release( the_period, lock_context );
-  _Thread_Update_priority( update_priority );
+  _Thread_Priority_update( &queue_context );
   _Thread_Dispatch_enable( cpu_self );
 }
 
