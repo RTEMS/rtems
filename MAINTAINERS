@@ -48,9 +48,12 @@ Write After Approval
 Daniel Hellstrom           daniel@gaisler.com
 Ben Gras                   beng@rtems.org
 Martin Galvan              martin.galvan@tallertechnologies.com
+Pavel Pisa                 ppisa@pikron.com
 
 Localized Write Permission
 ==========================
 sparc                      Daniel Hellstrom (daniel@gaisler.com)
 beagle                     Ben Gras (beng@rtems.org)
+tms570                     Pavel Pisa (pisa@cmp.felk.cvut.cz)
+raspberrypi                Pavel Pisa (pisa@cmp.felk.cvut.cz)
 
