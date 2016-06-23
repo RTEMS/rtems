@@ -177,12 +177,12 @@ static rtems_task Init(
 
   Master = rtems_task_self();
 
-  if (RTEMS_MAXIMUM_PRIORITY == 255)
+  if (RTEMS_MAXIMUM_PRIORITY >= 255)
     Priorities = Priorities_High;
-  else if (RTEMS_MAXIMUM_PRIORITY == 15)
+  else if (RTEMS_MAXIMUM_PRIORITY >= 15)
     Priorities = Priorities_Low;
   else {
-    puts( "Test only supports 256 or 16 configured priority levels" );
+    puts( "Test needs at least 16 configured priority levels" );
     rtems_test_exit( 0 );
   }
 
