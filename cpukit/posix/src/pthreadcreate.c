@@ -27,6 +27,7 @@
 
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
@@ -103,7 +104,6 @@ int pthread_create(
   #endif
 
   executing = _Thread_Get_executing();
-  scheduler = _Scheduler_Get_own( executing );
 
   /*
    *  P1003.1c/Draft 10, p. 121.
@@ -115,9 +115,12 @@ int pthread_create(
    */
   switch ( the_attr->inheritsched ) {
     case PTHREAD_INHERIT_SCHED:
-      api = executing->API_Extensions[ THREAD_API_POSIX ];
-      schedpolicy = api->Attributes.schedpolicy;
-      schedparam  = api->Attributes.schedparam;
+      error = pthread_getschedparam(
+        pthread_self(),
+        &schedpolicy,
+        &schedparam
+      );
+      _Assert( error == 0 );
       break;
 
     case PTHREAD_EXPLICIT_SCHED:
