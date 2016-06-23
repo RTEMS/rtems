@@ -30,8 +30,7 @@ THREAD_QUEUE_OBJECT_ASSERT( POSIX_Condition_variables_Control, Wait_queue );
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
-  Watchdog_Interval          timeout,
-  bool                       already_timedout
+  const struct timespec     *abstime
 )
 {
   POSIX_Condition_variables_Control *the_cond;
@@ -40,6 +39,9 @@ int _POSIX_Condition_variables_Wait_support(
   int                                mutex_error;
   Per_CPU_Control                   *cpu_self;
   Thread_Control                    *executing;
+  Watchdog_Interval                  timeout;
+  bool                               already_timedout;
+  TOD_Absolute_timeout_conversion_results  status;
 
   if ( mutex == NULL ) {
     return EINVAL;
@@ -49,6 +51,32 @@ int _POSIX_Condition_variables_Wait_support(
 
   if ( the_cond == NULL ) {
     return EINVAL;
+  }
+
+  already_timedout = false;
+
+  if ( abstime != NULL ) {
+    /*
+     *  POSIX requires that blocking calls with timeouts that take
+     *  an absolute timeout must ignore issues with the absolute
+     *  time provided if the operation would otherwise succeed.
+     *  So we check the abstime provided, and hold on to whether it
+     *  is valid or not.  If it isn't correct and in the future,
+     *  then we do a polling operation and convert the UNSATISFIED
+     *  status into the appropriate error.
+     */
+    status = _TOD_Absolute_timeout_to_ticks( abstime, &timeout );
+    if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
+      return EINVAL;
+
+    if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+        status == TOD_ABSOLUTE_TIMEOUT_IS_NOW ) {
+      already_timedout = true;
+    } else {
+      _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+    }
+  } else {
+    _Thread_queue_Context_set_no_timeout( &queue_context );
   }
 
   _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
@@ -68,8 +96,6 @@ int _POSIX_Condition_variables_Wait_support(
 
   if ( !already_timedout ) {
     _Thread_queue_Context_set_expected_level( &queue_context, 2 );
-    _Thread_queue_Context_set_timeout( &queue_context, timeout );
-    _Thread_queue_Context_set_discipline( &queue_context, WATCHDOG_RELATIVE );
     _Thread_queue_Enqueue_critical(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,

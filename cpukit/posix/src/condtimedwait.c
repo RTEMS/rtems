@@ -31,32 +31,9 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
-  Watchdog_Interval                            ticks;
-  bool                                         already_timedout;
-  TOD_Absolute_timeout_conversion_results  status;
-
-  /*
-   *  POSIX requires that blocking calls with timeouts that take
-   *  an absolute timeout must ignore issues with the absolute
-   *  time provided if the operation would otherwise succeed.
-   *  So we check the abstime provided, and hold on to whether it
-   *  is valid or not.  If it isn't correct and in the future,
-   *  then we do a polling operation and convert the UNSATISFIED
-   *  status into the appropriate error.
-   */
-  already_timedout = false;
-  status = _TOD_Absolute_timeout_to_ticks(abstime, &ticks);
-  if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
-    return EINVAL;
-
-  if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-       status == TOD_ABSOLUTE_TIMEOUT_IS_NOW )
-    already_timedout = true;
-
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,
-    ticks,
-    already_timedout
+    abstime
   );
 }

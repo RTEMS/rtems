@@ -134,8 +134,7 @@ int _POSIX_Condition_variables_Signal_support(
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
-  Watchdog_Interval          timeout,
-  bool                       already_timedout
+  const struct timespec     *abstime
 );
 
 #ifdef __cplusplus
