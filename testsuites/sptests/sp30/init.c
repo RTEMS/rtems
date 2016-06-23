@@ -46,7 +46,7 @@ rtems_task Init(
   /* initiate with bad priority */
   puts( "timer_initiate_server -- INVALID_PRIORITY" );
   status = rtems_timer_initiate_server(
-    1000,
+    UINT32_C(0x80000000),
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_ATTRIBUTES
   );

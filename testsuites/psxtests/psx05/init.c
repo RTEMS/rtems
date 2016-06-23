@@ -726,7 +726,7 @@ void *POSIX_Init(
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_setprioceiling - EINVAL (illegal priority)" );
-  status = pthread_mutex_setprioceiling( &Mutex2_id, 512, &old_ceiling );
+  status = pthread_mutex_setprioceiling( &Mutex2_id, INT_MAX, &old_ceiling );
   rtems_test_assert( status == EINVAL );
 
   puts( "Init: pthread_mutex_setprioceiling - EINVAL (NULL ceiling)" );

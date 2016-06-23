@@ -49,7 +49,7 @@ rtems_task Init(
   /* priority > 255 error */
   status = rtems_task_create(
      Task_name[1],
-     257,
+     UINT32_C(0x80000000),
      RTEMS_MINIMUM_STACK_SIZE,
      RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,

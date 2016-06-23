@@ -136,7 +136,11 @@ rtems_task Task_1(
   puts( "TA1 - rtems_task_set_priority - RTEMS_INVALID_ADDRESS" );
 
   /* bad priority */
-  status = rtems_task_set_priority( RTEMS_SELF, 512, &previous_priority );
+  status = rtems_task_set_priority(
+    RTEMS_SELF,
+    UINT32_C(0x80000000),
+    &previous_priority
+  );
   fatal_directive_status(
     status,
     RTEMS_INVALID_PRIORITY,
