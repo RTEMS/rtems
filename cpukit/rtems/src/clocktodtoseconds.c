@@ -42,7 +42,7 @@ const uint16_t   _TOD_Days_to_date[2][13] = {
 const uint16_t   _TOD_Days_since_last_leap_year[4] = { 0, 366, 731, 1096 };
 
 
-uint32_t   _TOD_To_seconds(
+Watchdog_Interval   _TOD_To_seconds(
   const rtems_time_of_day *the_tod
 )
 {
