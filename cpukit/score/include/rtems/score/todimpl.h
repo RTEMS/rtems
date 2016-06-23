@@ -363,6 +363,7 @@ typedef enum {
  * of corresponding clock ticks for use by the SuperCore.
  *
  * @param[in] abstime is a pointer to the timeout
+ * @param[in] clock is the time source to use for the timeout
  * @param[out] ticks_out will contain the number of ticks
  *
  * @return This method returns the number of ticks in @a ticks_out
@@ -372,6 +373,7 @@ typedef enum {
  */
 TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
   const struct timespec *abstime,
+  clockid_t              clock,
   Watchdog_Interval     *ticks_out
 );
 

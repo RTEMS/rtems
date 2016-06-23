@@ -247,7 +247,7 @@ int _Mutex_Acquire_timed(
   } else {
     Watchdog_Interval ticks;
 
-    switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
+    switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
       case TOD_ABSOLUTE_TIMEOUT_INVALID:
         _Mutex_Queue_release( mutex, &queue_context );
         return EINVAL;
@@ -371,7 +371,7 @@ int _Mutex_recursive_Acquire_timed(
   } else {
     Watchdog_Interval ticks;
 
-    switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
+    switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
       case TOD_ABSOLUTE_TIMEOUT_INVALID:
         _Mutex_Queue_release( &mutex->Mutex, &queue_context );
         return EINVAL;

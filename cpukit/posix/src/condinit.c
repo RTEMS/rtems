@@ -51,7 +51,7 @@ int pthread_cond_init(
     return ENOMEM;
   }
 
-  _POSIX_Condition_variables_Initialize( the_cond );
+  _POSIX_Condition_variables_Initialize( the_cond, the_attr );
 
   _Objects_Open_u32(
     &_POSIX_Condition_variables_Information,

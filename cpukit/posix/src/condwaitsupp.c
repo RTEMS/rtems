@@ -65,7 +65,8 @@ int _POSIX_Condition_variables_Wait_support(
      *  then we do a polling operation and convert the UNSATISFIED
      *  status into the appropriate error.
      */
-    status = _TOD_Absolute_timeout_to_ticks( abstime, &timeout );
+    _Assert( the_cond->clock );
+    status = _TOD_Absolute_timeout_to_ticks(abstime, the_cond->clock, &timeout);
     if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
       return EINVAL;
 

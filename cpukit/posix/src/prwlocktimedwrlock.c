@@ -49,7 +49,7 @@ int pthread_rwlock_timedwrlock(
    *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */
-  timeout_status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
+  timeout_status = _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks );
   do_wait = ( timeout_status == TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE );
 
   the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );

@@ -31,6 +31,9 @@ int pthread_cond_timedwait(
   const struct timespec *abstime
 )
 {
+  if ( abstime == NULL ) {
+    return EINVAL; /* not specified */
+  }
   return _POSIX_Condition_variables_Wait_support(
     cond,
     mutex,

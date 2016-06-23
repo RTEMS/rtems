@@ -76,7 +76,7 @@ ssize_t mq_timedreceive(
    *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
    *  then we should not wait.
    */
-  status = _TOD_Absolute_timeout_to_ticks( abstime, &ticks );
+  status = _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks );
   if ( status != TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
     do_wait = false;
 

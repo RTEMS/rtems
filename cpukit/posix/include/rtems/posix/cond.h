@@ -44,6 +44,7 @@ typedef struct {
    Objects_Control       Object;
    Thread_queue_Control  Wait_queue;
    pthread_mutex_t       mutex;
+   clockid_t             clock;
 }  POSIX_Condition_variables_Control;
 
 #ifdef __cplusplus

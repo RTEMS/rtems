@@ -25,12 +25,12 @@
  */
 TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
   const struct timespec *abstime,
+  clockid_t              clock,
   Watchdog_Interval     *ticks_out
 )
 {
   struct timespec current_time;
   struct timespec difference;
-
 
   /*
    *  Make sure there is always a value returned.
@@ -46,7 +46,12 @@ TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
   /*
    *  Is the absolute time in the past?
    */
-  _TOD_Get_as_timespec( &current_time );
+  if ( clock == CLOCK_REALTIME ) {
+    _TOD_Get_as_timespec( &current_time );
+  } else {
+    _Assert( clock == CLOCK_MONOTONIC );
+    _TOD_Get_zero_based_uptime_as_timespec( &current_time );
+  }
 
   if ( _Timespec_Less_than( abstime, &current_time ) )
     return TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST;

@@ -141,7 +141,7 @@ int _Condition_Wait_timed(
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
 
-  switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
+  switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
     case TOD_ABSOLUTE_TIMEOUT_INVALID:
       _ISR_lock_ISR_enable( &queue_context.Lock_context );
       return EINVAL;
@@ -203,7 +203,7 @@ int _Condition_Wait_recursive_timed(
   _Thread_queue_Context_initialize( &queue_context );
   _ISR_lock_ISR_disable( &queue_context.Lock_context );
 
-  switch ( _TOD_Absolute_timeout_to_ticks( abstime, &ticks ) ) {
+  switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
     case TOD_ABSOLUTE_TIMEOUT_INVALID:
       _ISR_lock_ISR_enable( &queue_context.Lock_context );
       return EINVAL;
