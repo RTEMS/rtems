@@ -53,6 +53,7 @@
 #include <string.h>
 #include <fcntl.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/counter.h>
 
 #include <bsp.h>

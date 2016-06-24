@@ -12,6 +12,7 @@
 #include <termios.h>
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <rtems/console.h>
 #include <rtems/termiostypes.h>

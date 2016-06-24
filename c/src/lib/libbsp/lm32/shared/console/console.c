@@ -17,6 +17,7 @@
 #define NO_BSP_INIT
 
 #include <bsp.h>
+#include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <rtems/console.h>
 

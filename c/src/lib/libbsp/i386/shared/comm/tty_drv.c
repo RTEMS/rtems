@@ -23,6 +23,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <rtems/bspIo.h>
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <termios.h>

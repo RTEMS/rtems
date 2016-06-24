@@ -24,6 +24,7 @@
 #include <bsp/console-generic.h>
 #include <bsp/fatal.h>
 
+#include <rtems/bspIo.h>
 #include <rtems/console.h>
 
 static const struct termios console_generic_termios = {

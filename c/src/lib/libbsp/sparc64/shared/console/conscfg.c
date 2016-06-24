@@ -10,6 +10,8 @@
 
 #include <libchip/serial.h>
 
+#include <rtems/bspIo.h>
+
 #include <boot/ofw.h>
 
 static int sun4v_console_device_first_open(int major, int minor, void *arg)

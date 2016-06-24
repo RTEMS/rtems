@@ -14,6 +14,8 @@
 
 #include <libchip/ns16550.h>
 
+#include <rtems/bspIo.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/alt_clock_manager.h>

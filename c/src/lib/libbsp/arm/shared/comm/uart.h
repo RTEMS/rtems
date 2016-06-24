@@ -23,6 +23,8 @@
 #ifndef _BSPUART_H
 #define _BSPUART_H
 
+#include <rtems/bspIo.h>
+
 void BSP_uart_init(int uart, int baud, int hwFlow);
 void BSP_uart_set_baud(int aurt, int baud);
 void BSP_uart_intr_ctrl(int uart, int cmd);

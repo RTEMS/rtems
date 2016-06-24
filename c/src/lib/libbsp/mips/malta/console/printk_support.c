@@ -14,6 +14,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>

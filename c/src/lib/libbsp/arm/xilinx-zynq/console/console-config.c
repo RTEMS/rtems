@@ -14,6 +14,8 @@
 
 #include <libchip/serial.h>
 
+#include <rtems/bspIo.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/zynq-uart.h>

@@ -14,6 +14,8 @@
 
 #include <libchip/serial.h>
 
+#include <rtems/bspIo.h>
+
 static void output_char(char c)
 {
   int minor = (int) Console_Port_Minor;
