@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/schedulercbs.h>
+#include <rtems/score/scheduleredfimpl.h>
 
 int _Scheduler_CBS_Create_server (
   Scheduler_CBS_Parameters     *params,

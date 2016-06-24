@@ -19,6 +19,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/score/scheduleredfimpl.h>
+
 const char rtems_test_name[] = "SPQRESLIB";
 
 rtems_id   Task_id;

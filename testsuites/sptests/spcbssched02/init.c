@@ -23,6 +23,8 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#include <rtems/score/scheduleredfimpl.h>
+
 const char rtems_test_name[] = "SPCBSSCHED 2";
 
 rtems_task Init(

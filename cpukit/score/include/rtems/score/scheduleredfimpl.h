@@ -31,6 +31,15 @@ extern "C" {
  * @{
  */
 
+/**
+ * This is just a most significant bit of Priority_Control type. It
+ * distinguishes threads which are deadline driven (priority
+ * represented by a lower number than @a SCHEDULER_EDF_PRIO_MSB) from those
+ * ones who do not have any deadlines and thus are considered background
+ * tasks.
+ */
+#define SCHEDULER_EDF_PRIO_MSB 0x80000000
+
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )
 {
