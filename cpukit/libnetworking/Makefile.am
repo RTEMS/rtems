@@ -165,7 +165,8 @@ libnetworking_a_SOURCES += rtems/sghostname.c \
 
 include_sysdir = $(includedir)/sys
 
-include_sys_HEADERS = sys/callout.h
+include_sys_HEADERS = sys/_sockaddr_storage.h
+include_sys_HEADERS += sys/callout.h
 include_sys_HEADERS += sys/conf.h
 include_sys_HEADERS += sys/domain.h
 include_sys_HEADERS += sys/kernel.h
