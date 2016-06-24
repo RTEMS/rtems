@@ -51,7 +51,8 @@ libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
 
 include_machinedir = $(includedir)/machine
 
-include_machine_HEADERS = machine/cpu.h
+include_machine_HEADERS = machine/_align.h
+include_machine_HEADERS += machine/cpu.h
 include_machine_HEADERS += machine/cpufunc.h
 include_machine_HEADERS += machine/in_cksum.h
 include_machine_HEADERS += machine/vmparam.h
