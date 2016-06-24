@@ -34,7 +34,8 @@ Scheduler_Void_or_thread _Scheduler_priority_Unblock (
 
   context = _Scheduler_priority_Get_context( scheduler );
   node = _Scheduler_priority_Thread_get_node( the_thread );
-  priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+  priority = (unsigned int )
+    _Scheduler_Node_get_priority( &node->Base, &prepend_it );
   (void) prepend_it;
 
   if ( priority != node->Ready_queue.current_priority ) {

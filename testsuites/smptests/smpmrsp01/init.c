@@ -204,7 +204,7 @@ static void print_switch_events(test_context *ctx)
     rtems_object_get_name(e->heir_node->Object.id, sizeof(hn), &hn[0]);
 
     printf(
-      "[%" PRIu32 "] %4s -> %4s (prio %3" PRIu32 ", node %4s)\n",
+      "[%" PRIu32 "] %4s -> %4s (prio %3" PRIu64 ", node %4s)\n",
       e->cpu_index,
       &ex[0],
       &hr[0],

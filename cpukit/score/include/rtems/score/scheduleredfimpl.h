@@ -38,7 +38,7 @@ extern "C" {
  * ones who do not have any deadlines and thus are considered background
  * tasks.
  */
-#define SCHEDULER_EDF_PRIO_MSB 0x80000000
+#define SCHEDULER_EDF_PRIO_MSB 0x8000000000000000
 
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Context *
   _Scheduler_EDF_Get_context( const Scheduler_Control *scheduler )

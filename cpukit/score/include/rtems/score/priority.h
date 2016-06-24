@@ -53,7 +53,7 @@ extern "C" {
  *
  *  @note Priority 0 is reserved for internal threads only.
  */
-typedef uint32_t   Priority_Control;
+typedef uint64_t Priority_Control;
 
 /** This defines the highest (most important) thread priority. */
 #define PRIORITY_MINIMUM      0

@@ -21,15 +21,6 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
-int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler )
-{
-  if ( scheduler->maximum_priority < INT_MAX ) {
-    return (int) scheduler->maximum_priority - 1;
-  } else {
-    return INT_MAX;
-  }
-}
-
 Priority_Control _POSIX_Priority_To_core(
   const Scheduler_Control *scheduler,
   int                      posix_priority,

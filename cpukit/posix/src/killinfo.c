@@ -190,7 +190,7 @@ int _POSIX_signals_Send(
    *    + rtems internal threads do not receive signals.
    */
   interested = NULL;
-  interested_priority = PRIORITY_MAXIMUM + 1;
+  interested_priority = UINT64_MAX;
 
   for (the_api = OBJECTS_CLASSIC_API; the_api <= OBJECTS_APIS_LAST; the_api++) {
 

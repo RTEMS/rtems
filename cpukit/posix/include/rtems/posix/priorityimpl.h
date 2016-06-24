@@ -20,6 +20,7 @@
 #define _RTEMS_POSIX_PRIORITYIMPL_H
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/assert.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,7 +49,13 @@ extern "C" {
  *
  * @return The maximum POSIX API priority for this scheduler instance.
  */
-int _POSIX_Priority_Get_maximum( const Scheduler_Control *scheduler );
+RTEMS_INLINE_ROUTINE int _POSIX_Priority_Get_maximum(
+  const Scheduler_Control *scheduler
+)
+{
+  _Assert( (int) scheduler->maximum_priority > 1 );
+  return (int) scheduler->maximum_priority - 1;
+}
 
 /**
  * @brief Converts the POSIX API priority to the corresponding SuperCore

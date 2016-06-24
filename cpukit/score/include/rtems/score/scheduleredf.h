@@ -24,6 +24,8 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/rbtree.h>
 
+#include <limits.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,7 +37,12 @@ extern "C" {
  */
 /**@{*/
 
-#define SCHEDULER_EDF_MAXIMUM_PRIORITY 0x7fffffff
+/*
+ * Actually the EDF scheduler supports a maximum priority of
+ * 0x7fffffffffffffff, but the user API is limited to uint32_t or int for
+ * thread priorities.  Ignore ILP64 targets for now.
+ */
+#define SCHEDULER_EDF_MAXIMUM_PRIORITY INT_MAX
 
 /**
  *  Entry points for the Earliest Deadline First Scheduler.

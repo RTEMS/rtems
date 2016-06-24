@@ -75,7 +75,7 @@ extern "C" {
 /**
  *  Define the type for an RTEMS API task priority.
  */
-typedef Priority_Control rtems_task_priority;
+typedef uint32_t rtems_task_priority;
 
 /**
  *  This is the constant used with the rtems_task_set_priority
