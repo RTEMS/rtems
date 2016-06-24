@@ -34,6 +34,7 @@
 static inline bool
 bcm2835_mailbox_buffer_suceeded(const bcm2835_mbox_buf_hdr *hdr)
 {
+  RTEMS_COMPILER_MEMORY_BARRIER();
   return (hdr->buf_code == BCM2835_MBOX_BUF_CODE_REQUEST_SUCCEED);
 }
 
@@ -58,11 +59,22 @@ bcm2835_mailbox_buffer_flush_and_invalidate(void *buf, size_t size)
 
   sctlr_val = arm_cp15_get_control();
 
+  RTEMS_COMPILER_MEMORY_BARRIER();
   arm_cp15_drain_write_buffer();
   if (sctlr_val & (ARM_CP15_CTRL_C | ARM_CP15_CTRL_M)) {
-    arm_cp15_drain_write_buffer();
+#if 0
+    /*
+    These architecture independent RTEMS API functions should be
+    used there but CPU_DATA_CACHE_ALIGNMENT is not defined
+    for ARM architecture version used on RPi and functions
+    are dummy for now and do not provide required synchronization
+    */
     rtems_cache_flush_multiple_data_lines(buf, size);
     rtems_cache_invalidate_multiple_data_lines(buf, size);
+#else
+    /* Flush complete data cache */
+    arm_cp15_data_cache_clean_and_invalidate();
+#endif
   }
 }
 
