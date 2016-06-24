@@ -57,6 +57,7 @@
 #include <net/if.h>
 #include <net/route.h>
 #include <netinet/in.h>
+#include <rtems/rtems_netinet_in.h>
 #include <netinet/in_systm.h>
 #include <netinet/in_var.h>
 
@@ -113,11 +114,9 @@ in_addroute(void *v_arg, void *n_arg, struct radix_node_head *head,
 		if (in_broadcast(sin->sin_addr, rt->rt_ifp)) {
 			rt->rt_flags |= RTF_BROADCAST;
 		} else {
-#define satosin(sa) ((struct sockaddr_in *)sa)
 			if (satosin(rt->rt_ifa->ifa_addr)->sin_addr.s_addr
 			    == sin->sin_addr.s_addr)
 				rt->rt_flags |= RTF_LOCAL;
-#undef satosin
 		}
 	}
 

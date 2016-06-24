@@ -54,6 +54,7 @@
 
 #define _IP_VHL
 #include <netinet/in.h>
+#include <rtems/rtems_netinet_in.h>
 #include <netinet/in_systm.h>
 #include <netinet/in_pcb.h>
 #include <netinet/in_var.h>

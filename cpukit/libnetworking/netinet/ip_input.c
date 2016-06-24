@@ -59,6 +59,7 @@
 #include <net/netisr.h>
 
 #include <netinet/in.h>
+#include <rtems/rtems_netinet_in.h>
 #include <netinet/in_systm.h>
 #include <netinet/in_var.h>
 #include <netinet/ip.h>

@@ -156,6 +156,7 @@ include_rtems_HEADERS += rtems/ftpfs.h
 include_rtems_HEADERS += rtems/mkrootfs.h
 include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
 include_rtems_HEADERS += rtems/rtems_netdb.h
+include_rtems_HEADERS += rtems/rtems_netinet_in.h
 
 libnetworking_a_SOURCES += rtems/sghostname.c \
     rtems/rtems_glue.c rtems/rtems_malloc_mbuf.c rtems/rtems_syscall.c \

@@ -323,6 +323,10 @@ $(PROJECT_INCLUDE)/rtems/rtems_netdb.h: rtems/rtems_netdb.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_netdb.h
 
+$(PROJECT_INCLUDE)/rtems/rtems_netinet_in.h: rtems/rtems_netinet_in.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems_netinet_in.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems_netinet_in.h
+
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
