@@ -140,6 +140,9 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TIMERS 1
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
+/* We use internal data structures of this scheduler in this test */
+#define CONFIGURE_SCHEDULER_PRIORITY
+
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
