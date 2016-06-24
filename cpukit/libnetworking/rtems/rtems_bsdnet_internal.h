@@ -31,6 +31,7 @@ typedef	__uintptr_t		vm_size_t;
 /* make sure we get the network versions of these */
 #include <machine/types.h>
 #include <machine/param.h>
+#include <machine/endian.h>
 #include <sys/cdefs.h>
 
 #include <sys/time.h>
@@ -105,7 +106,30 @@ typedef	int		boolean_t;
 #define	makedev(x,y)	((dev_t)(((x) << 8) | (y)))	/* create dev_t */
 #endif
 
-#include <rtems/endian.h>
+#ifndef _BYTEORDER_PROTOTYPED
+#define	_BYTEORDER_PROTOTYPED
+__BEGIN_DECLS
+__uint32_t	 htonl(__uint32_t);
+__uint16_t	 htons(__uint16_t);
+__uint32_t	 ntohl(__uint32_t);
+__uint16_t	 ntohs(__uint16_t);
+__END_DECLS
+#endif
+
+#ifndef _BYTEORDER_FUNC_DEFINED
+#define	_BYTEORDER_FUNC_DEFINED
+#define	htonl(x)	__htonl(x)
+#define	htons(x)	__htons(x)
+#define	ntohl(x)	__ntohl(x)
+#define	ntohs(x)	__ntohs(x)
+#endif /* !_BYTEORDER_FUNC_DEFINED */
+
+#define NTOHS(x) (x) = ntohs(x)
+#define HTONS(x) (x) = htons(x)
+#define NTOHL(x) (x) = ntohl(x)
+#define HTONL(x) (x) = htonl(x)
+
+in_addr_t	 inet_addr(const char *);
 
 typedef quad_t          rlim_t;         /* resource limit */
 typedef	u_int32_t	fixpt_t;	/* fixed point number */

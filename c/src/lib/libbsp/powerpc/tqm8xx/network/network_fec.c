@@ -67,7 +67,6 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 
 /*
  * Number of interfaces supported by this driver

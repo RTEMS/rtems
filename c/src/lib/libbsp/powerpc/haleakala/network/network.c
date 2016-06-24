@@ -34,7 +34,6 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 
 #include <ppc4xx/ppc405gp.h>
 #include <ppc4xx/ppc405ex.h>

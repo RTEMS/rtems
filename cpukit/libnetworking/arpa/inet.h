@@ -51,9 +51,9 @@
 
 /*%
  *	@(#)inet.h	8.1 (Berkeley) 6/2/93
- * $FreeBSD: src/include/arpa/inet.h,v 1.33 2010/07/06 03:48:46 maxim Exp $
+ *	$Id: inet.h,v 1.3 2005/04/27 04:56:16 sra Exp $
+ * $FreeBSD: head/include/arpa/inet.h 269867 2014-08-12 12:36:06Z ume $
  */
-
 
 #ifndef _ARPA_INET_H_
 #define	_ARPA_INET_H_
@@ -61,13 +61,23 @@
 /* External definitions for functions in inet(3). */
 
 #include <sys/cdefs.h>
-#include <rtems/bsdnet/_types.h>
+#include <sys/_types.h>
 
 /* Required for byteorder(3) functions. */
-#include <rtems/endian.h>
+#include <machine/endian.h>
 
 #define	INET_ADDRSTRLEN		16
 #define	INET6_ADDRSTRLEN	46
+
+#ifndef _UINT16_T_DECLARED
+typedef	__uint16_t	uint16_t;
+#define	_UINT16_T_DECLARED
+#endif
+
+#ifndef _UINT32_T_DECLARED
+typedef	__uint32_t	uint32_t;
+#define	_UINT32_T_DECLARED
+#endif
 
 #ifndef _IN_ADDR_T_DECLARED
 typedef	uint32_t	in_addr_t;
@@ -77,6 +87,13 @@ typedef	uint32_t	in_addr_t;
 #ifndef _IN_PORT_T_DECLARED
 typedef	uint16_t	in_port_t;
 #define	_IN_PORT_T_DECLARED
+#endif
+
+#if __BSD_VISIBLE
+#ifndef _SIZE_T_DECLARED
+typedef	__size_t	size_t;
+#define	_SIZE_T_DECLARED
+#endif
 #endif
 
 /*
@@ -95,32 +112,17 @@ struct in_addr {
 #define	_STRUCT_IN_ADDR_DECLARED
 #endif
 
-#if !defined(__rtems__)	/* RTEMS -- Why rename these? */
-/* XXX all new diversions!! argh!! */
-#if __BSD_VISIBLE
-#define	inet_addr		__inet_addr
-#define	inet_aton		__inet_aton
-#define	inet_lnaof		__inet_lnaof
-#define	inet_makeaddr		__inet_makeaddr
-#define	inet_neta		__inet_neta
-#define	inet_netof		__inet_netof
-#define	inet_network		__inet_network
-#define	inet_net_ntop		__inet_net_ntop
-#define	inet_net_pton		__inet_net_pton
-#define	inet_cidr_ntop		__inet_cidr_ntop
-#define	inet_cidr_pton		__inet_cidr_pton
-#define	inet_ntoa		__inet_ntoa
-#define	inet_ntoa_r		__inet_ntoa_r
-#define	inet_pton		__inet_pton
-#define	inet_ntop		__inet_ntop
-#define	inet_nsap_addr		__inet_nsap_addr
-#define	inet_nsap_ntoa		__inet_nsap_ntoa
-#endif /* __BSD_VISIBLE */
-#endif /* __rtems__ */
-
 __BEGIN_DECLS
+#ifndef _BYTEORDER_PROTOTYPED
+#define	_BYTEORDER_PROTOTYPED
+uint32_t	 htonl(uint32_t);
+uint16_t	 htons(uint16_t);
+uint32_t	 ntohl(uint32_t);
+uint16_t	 ntohs(uint16_t);
+#endif
+
 in_addr_t	 inet_addr(const char *);
-char		*inet_ntoa(struct in_addr);
+/*const*/ char	*inet_ntoa(struct in_addr);
 const char	*inet_ntop(int, const void * __restrict, char * __restrict,
 		    socklen_t);
 int		 inet_pton(int, const char * __restrict, void * __restrict);
@@ -134,9 +136,22 @@ in_addr_t	 inet_netof(struct in_addr);
 in_addr_t	 inet_network(const char *);
 char		*inet_net_ntop(int, const void *, int, char *, size_t);
 int		 inet_net_pton(int, const char *, void *, size_t);
+char		*inet_ntoa_r(struct in_addr, char *buf, socklen_t size);
+char		*inet_cidr_ntop(int, const void *, int, char *, size_t);
+int		 inet_cidr_pton(int, const char *, void *, int *);
 unsigned	 inet_nsap_addr(const char *, unsigned char *, int);
 char		*inet_nsap_ntoa(int, const unsigned char *, char *);
 #endif /* __BSD_VISIBLE */
 __END_DECLS
 
+#ifndef _BYTEORDER_FUNC_DEFINED
+#define	_BYTEORDER_FUNC_DEFINED
+#define	htonl(x)	__htonl(x)
+#define	htons(x)	__htons(x)
+#define	ntohl(x)	__ntohl(x)
+#define	ntohs(x)	__ntohs(x)
+#endif
+
 #endif /* !_ARPA_INET_H_ */
+
+/*! \file */

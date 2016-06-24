@@ -27,7 +27,6 @@
 
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
-#include <arpa/inet.h>
 
 #include <net/if_media.h>
 

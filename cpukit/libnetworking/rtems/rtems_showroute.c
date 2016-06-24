@@ -19,8 +19,6 @@
 
 #include <netinet/in.h>
 
-#include <arpa/inet.h>
-
 /*
  * We'll use the application versions of realloc and free.
  */

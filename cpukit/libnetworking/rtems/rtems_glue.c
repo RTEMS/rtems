@@ -30,7 +30,6 @@
 #include <net/route.h>
 #include <netinet/in.h>
 #include <vm/vm.h>
-#include <arpa/inet.h>
 
 #include <net/netisr.h>
 #include <net/route.h>
@@ -829,6 +828,8 @@ rtems_bsdnet_log (int priority, const char *fmt, ...)
 /*
  * IP header checksum routine for processors which don't have an inline version
  */
+
+struct ip;
 
 u_int in_cksum_hdr(const struct ip *);
 

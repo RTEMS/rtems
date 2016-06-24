@@ -36,10 +36,10 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 
 #include <rtems/mkrootfs.h>
 #include <rtems/libio.h>
+#include <rtems/endian.h>
 
 /*
  * A table a list of names and their modes.
