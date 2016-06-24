@@ -243,6 +243,15 @@ $(PROJECT_INCLUDE)/netinet/udp_var.h: netinet/udp_var.h $(PROJECT_INCLUDE)/netin
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/udp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/udp_var.h
 
+$(PROJECT_INCLUDE)/netinet6/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/netinet6
+	@: > $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
+
+$(PROJECT_INCLUDE)/netinet6/in6.h: netinet6/in6.h $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet6/in6.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet6/in6.h
+
 $(PROJECT_INCLUDE)/nfs/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/nfs
 	@: > $(PROJECT_INCLUDE)/nfs/$(dirstamp)

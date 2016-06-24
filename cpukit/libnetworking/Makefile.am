@@ -121,6 +121,12 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/udp_usrreq.c netinet/in_cksum_arm.h netinet/in_cksum_i386.h \
     netinet/in_cksum_m68k.h netinet/in_cksum_powerpc.h
 
+## netinet6
+
+include_netinet6dir = $(includedir)/netinet6
+
+include_netinet6_HEADERS = netinet6/in6.h
+
 ## nfs
 
 include_nfsdir = $(includedir)/nfs
