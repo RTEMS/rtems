@@ -38,7 +38,8 @@ convert_ascii_to_voidp (const char* arg)
 int
 shell_dlopen (int argc, char* argv[])
 {
-  int arg;
+  int   arg;
+  char *err;
   for (arg = 1; arg < argc; arg++)
   {
     void* handle = dlopen (argv[arg], RTLD_NOW | RTLD_GLOBAL);
@@ -53,7 +54,10 @@ shell_dlopen (int argc, char* argv[])
       printf ("handle: %p %s\n", handle, message);
     }
     else
-      printf ("error: %s\n", dlerror ());
+    {
+      err = dlerror ();
+      printf ("error: %s\n", err ? err : "");
+    }
   }
   return 0;
 }

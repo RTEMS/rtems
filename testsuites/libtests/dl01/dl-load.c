@@ -27,13 +27,15 @@ int dl_load_test(void)
   int    call_ret;
   int    unresolved;
   char*  message = "loaded";
+  char*  err;
 
   printf("load: /dl-o1.o\n");
 
   handle = dlopen ("/dl-o1.o", RTLD_NOW | RTLD_GLOBAL);
   if (!handle)
   {
-    printf("dlopen failed: %s\n", dlerror());
+    err = dlerror ();
+    printf ("dlopen failed: %s\n", err ? err : "");
     return 1;
   }
 
@@ -67,7 +69,8 @@ int dl_load_test(void)
 
   if (dlclose (handle) < 0)
   {
-    printf("dlclose failed: %s\n", dlerror());
+    err = dlerror ();
+    printf ("dlclose failed: %s\n", err ? err : "");
     return 1;
   }
 

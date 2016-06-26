@@ -21,13 +21,15 @@ static void* dl_load_obj(const char* name)
   void* handle;
   int   unresolved;
   char* message = "loaded";
+  char* err;
 
   printf("load: %s\n", name);
 
   handle = dlopen (name, RTLD_NOW | RTLD_GLOBAL);
   if (!handle)
   {
-    printf("dlopen failed: %s\n", dlerror());
+    err = dlerror ();
+    printf ("dlopen failed: %s\n", err ? err : "");
     return NULL;
   }
 
@@ -48,6 +50,7 @@ int dl_load_test(void)
   call_t call;
   int    call_ret;
   int    ret;
+  char*  err;
 
   o1 = dl_load_obj("/dl-o1.o");
   if (!o1)
@@ -83,7 +86,8 @@ int dl_load_test(void)
 
   if (dlclose (o1) < 0)
   {
-    printf("dlclose o1 failed: %s\n", dlerror());
+    err = dlerror ();
+    printf ("dlclose o1 failed: %s\n", err ? err : "");
     ret = 1;
   }
 
@@ -91,7 +95,8 @@ int dl_load_test(void)
 
   if (dlclose (o2) < 0)
   {
-    printf("dlclose o1 failed: %s\n", dlerror());
+    err = dlerror ();
+    printf ("dlclose o2 failed: %s\n", err ? err : "");
     ret = 1;
   }
 
