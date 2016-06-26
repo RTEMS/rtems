@@ -52,3 +52,15 @@ rtems_rtl_get_error (char* message, size_t max_message)
 
   return EIO;
 }
+
+void
+rtems_rtl_clear_error (void)
+{
+  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
+  if (rtl != NULL)
+  {
+    rtl->last_errno = 0;
+    rtl->last_error[0] = '\0';
+    rtems_rtl_unlock ();
+  }
+}

@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <dlfcn.h>
 #include <rtems/rtl/rtl.h>
+#include "rtl-error.h"
 
 static rtems_rtl_obj_t*
 dl_get_obj_from_handle (void* handle)
@@ -130,6 +131,7 @@ dlerror (void)
 {
   static char msg[64];
   rtems_rtl_get_error (msg, sizeof (msg));
+  rtems_rtl_clear_error ();
   return msg;
 }
 

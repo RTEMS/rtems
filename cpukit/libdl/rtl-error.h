@@ -37,6 +37,11 @@ extern "C" {
  */
 void rtems_rtl_set_error (int error, const char* format, ...) RTEMS_RTL_PRINTF_ATTR;
 
+/**
+ * Clears the error.
+ */
+void rtems_rtl_clear_error (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
