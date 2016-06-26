@@ -132,6 +132,8 @@ dlerror (void)
   static char msg[64];
   rtems_rtl_get_error (msg, sizeof (msg));
   rtems_rtl_clear_error ();
+  if (msg[0] == '\0')
+    return NULL;
   return msg;
 }
 
