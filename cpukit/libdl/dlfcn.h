@@ -56,7 +56,7 @@ int	dladdr(void * __restrict, Dl_info * __restrict);
 int	dlctl(void *, int, void *);
 #endif
 int	dlinfo(void *, int, void *);
-const char *dlerror(void);
+char *dlerror(void);
 __END_DECLS
 
 /* Values for dlopen `mode'. */

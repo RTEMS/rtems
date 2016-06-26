@@ -126,7 +126,7 @@ dlsym (void* handle, const char *symbol)
   return symval;
 }
 
-const char*
+char*
 dlerror (void)
 {
   static char msg[64];
