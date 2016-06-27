@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -318,16 +318,20 @@ void _Thread_queue_Boost_priority(
 {
   Thread_queue_Heads *heads = queue->heads;
 
-  if (
-    heads != NULL
-      && (
-        !_Chain_Has_only_one_node( &heads->Heads.Fifo )
-          || _RBTree_Is_empty(
-            &_Thread_queue_Priority_queue( heads, the_thread )->Queue
-          )
-      )
-  ) {
-    _Thread_Raise_priority( the_thread, PRIORITY_PSEUDO_ISR );
+  if ( !_Chain_Has_only_one_node( &heads->Heads.Fifo ) ) {
+    const Scheduler_Control *scheduler;
+    Scheduler_Node          *own_node;
+    Priority_Control         boost_priority;
+
+    the_thread->priority_restore_hint = true;
+    _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+
+    scheduler = _Scheduler_Get_own( the_thread );
+    own_node = _Scheduler_Thread_get_own_node( the_thread );
+    boost_priority = _Scheduler_Map_priority( scheduler, PRIORITY_PSEUDO_ISR );
+    _Scheduler_Node_set_priority( own_node, boost_priority, false );
+
+    the_thread->current_priority = boost_priority;
   }
 }
 #endif

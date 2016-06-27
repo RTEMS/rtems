@@ -136,13 +136,13 @@ static void _Mutex_Release_slow(
 
     mutex->Queue.Queue.owner = first;
     ++first->resource_count;
+    _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
     unblock = _Thread_queue_Extract_locked(
       &mutex->Queue.Queue,
       operations,
       first,
       queue_context
     );
-    _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
     _Thread_queue_Unblock_critical(
       unblock,
       &mutex->Queue.Queue,

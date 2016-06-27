@@ -38,13 +38,6 @@ Status_Control _CORE_mutex_Surrender_slow(
 
     _CORE_mutex_Set_owner( the_mutex, new_owner );
 
-    unblock = _Thread_queue_Extract_locked(
-      &the_mutex->Wait_queue.Queue,
-      operations,
-      new_owner,
-      queue_context
-    );
-
 #if defined(RTEMS_MULTIPROCESSING)
     if ( _Objects_Is_local_id( new_owner->Object.id ) )
 #endif
@@ -52,6 +45,13 @@ Status_Control _CORE_mutex_Surrender_slow(
       ++new_owner->resource_count;
       _Thread_queue_Boost_priority( &the_mutex->Wait_queue.Queue, new_owner );
     }
+
+    unblock = _Thread_queue_Extract_locked(
+      &the_mutex->Wait_queue.Queue,
+      operations,
+      new_owner,
+      queue_context
+    );
 
     _Thread_queue_Unblock_critical(
       unblock,
