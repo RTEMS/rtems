@@ -35,6 +35,7 @@
 #include <rtems/fb.h>
 #include <rtems/framebuffer.h>
 #include <rtems/score/atomic.h>
+#include <rtems/bspIo.h>
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768

@@ -255,8 +255,11 @@ typedef struct {
   } body;
 } bcm2835_mbox_tag_power_state;
 
+#ifndef BCM2835_MAILBOX_SET_POWER_STATE_REQ_ON
+/* Value is defined as a part of public VideoCore API */
 #define BCM2835_MAILBOX_SET_POWER_STATE_REQ_ON    (1 << 0)
 #define BCM2835_MAILBOX_SET_POWER_STATE_REQ_WAIT  (1 << 1)
+#endif
 
 /* Clocks */
 #define BCM2835_MAILBOX_UCID_CLOCK_RESERVED          0x000000000

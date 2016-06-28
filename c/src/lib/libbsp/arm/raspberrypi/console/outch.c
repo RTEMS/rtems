@@ -414,7 +414,7 @@ void rpi_video_init( void )
   bytes_per_pixel = fb_var_info.bits_per_pixel / 8;
   bytes_per_line = bytes_per_pixel * fb_var_info.xres;
   bytes_per_char_line = RPI_FONT_HEIGHT * bytes_per_line;
-  fb_mem = fb_fix_info.smem_start;
+  fb_mem = RTEMS_DEVOLATILE( void *, fb_fix_info.smem_start );
   column = 0;
   row = 0;
   nLines = 0;

@@ -22,6 +22,7 @@
 #include <bsp/irq.h>
 #include <bsp/usart.h>
 #include <bsp/raspberrypi.h>
+#include <rtems/bspIo.h>
 
 static void usart_delay(uint32_t n)
 {
