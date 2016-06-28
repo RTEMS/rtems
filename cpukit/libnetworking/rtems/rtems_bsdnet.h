@@ -316,6 +316,22 @@ void* rtems_bsdnet_malloc_mbuf(size_t size, int type);
 #define MBUF_MALLOC_MCLREFCNT   (1)
 #define MBUF_MALLOC_MBUF        (2)
 
+/*
+ * RTEMS-specific socket wake-up additions previously part of <sys/socket.h>.
+ *
+ * An alternative in the LibBSD network stack for this is KQUEUE(2).
+ */
+
+#define SO_SNDWAKEUP	0x1020		/* wakeup when ready to send */
+#define SO_RCVWAKEUP	0x1021		/* wakeup when ready to receive */
+
+struct socket;
+
+struct	sockwakeup {
+	void	(*sw_pfn)(struct socket *, void *);
+	void	*sw_arg;
+};
+
 #ifdef __cplusplus
 }
 #endif

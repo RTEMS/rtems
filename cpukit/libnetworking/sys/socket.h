@@ -102,26 +102,11 @@ typedef	__socklen_t	socklen_t;
 #define	SO_TYPE		0x1008		/* get socket type */
 
 /*
- * RTEMS addition: get and set wakeup functions.
- */
-#define SO_SNDWAKEUP	0x1020		/* wakeup when ready to send */
-#define SO_RCVWAKEUP	0x1021		/* wakeup when ready to receive */
-
-/*
  * Structure used for manipulating linger option.
  */
 struct	linger {
 	int	l_onoff;		/* option on/off */
 	int	l_linger;		/* linger time */
-};
-
-/*
- * RTEMS addition: structure used to get and set wakeup function.
- */
-struct socket;
-struct	sockwakeup {
-	void	(*sw_pfn)(struct socket *, void *);
-	void	*sw_arg;
 };
 
 /*

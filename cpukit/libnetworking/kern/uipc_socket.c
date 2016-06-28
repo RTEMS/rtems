@@ -51,6 +51,8 @@
  * Turn this feature into essentially dead code.
  */
 #define	SO_PRIVSTATE	0x1009		/* get/deny privileged state */
+
+#include <rtems/rtems_bsdnet.h>
 #endif /* __rtems__ */
 
 static int somaxconn = SOMAXCONN;
