@@ -168,6 +168,7 @@ void _SetupMemoryRegion(void)
 	    START_Addr:-  0x20440000UL
 	    END_Addr:-    0x2045FFFFUL
 	******************************************************/
+#ifndef __rtems__
 	/* SRAM memory region */
 	dwRegionBaseAddr =
 		SRAM_SECOND_START_ADDRESS |
@@ -181,6 +182,7 @@ void _SetupMemoryRegion(void)
 		MPU_REGION_ENABLE;
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+#endif /* __rtems__ */
 
 #ifdef MPU_HAS_NOCACHE_REGION
 	dwRegionBaseAddr =

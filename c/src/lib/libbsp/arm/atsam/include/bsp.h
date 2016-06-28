@@ -59,6 +59,34 @@ typedef struct {
   uint8_t phy_addr;
 } if_atsam_config;
 
+extern char atsam_memory_dtcm_begin[];
+extern char atsam_memory_dtcm_end[];
+extern char atsam_memory_dtcm_size[];
+
+extern char atsam_memory_intflash_begin[];
+extern char atsam_memory_intflash_end[];
+extern char atsam_memory_intflash_size[];
+
+extern char atsam_memory_intsram_begin[];
+extern char atsam_memory_intsram_end[];
+extern char atsam_memory_intsram_size[];
+
+extern char atsam_memory_itcm_begin[];
+extern char atsam_memory_itcm_end[];
+extern char atsam_memory_itcm_size[];
+
+extern char atsam_memory_nocache_begin[];
+extern char atsam_memory_nocache_end[];
+extern char atsam_memory_nocache_size[];
+
+extern char atsam_memory_qspiflash_begin[];
+extern char atsam_memory_qspiflash_end[];
+extern char atsam_memory_qspiflash_size[];
+
+extern char atsam_memory_sdram_begin[];
+extern char atsam_memory_sdram_end[];
+extern char atsam_memory_sdram_size[];
+
 /** @} */
 
 #ifdef __cplusplus

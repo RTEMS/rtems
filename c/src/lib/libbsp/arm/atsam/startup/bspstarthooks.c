@@ -20,8 +20,60 @@
 #include <include/board_lowlevel.h>
 #include <include/board_memories.h>
 
+#define SIZE_0K 0
+#define SIZE_32K (32 * 1024)
+#define SIZE_64K (64 * 1024)
+#define SIZE_128K (128 * 1024)
+
+#define ITCMCR_SZ_0K 0x0
+#define ITCMCR_SZ_32K 0x6
+#define ITCMCR_SZ_64K 0x7
+#define ITCMCR_SZ_128K 0x8
+
+static BSP_START_TEXT_SECTION void efc_send_command(uint32_t eefc)
+{
+  EFC->EEFC_FCR = eefc | EEFC_FCR_FKEY_PASSWD;
+}
+
+static BSP_START_TEXT_SECTION void tcm_enable(void)
+{
+  SCB->ITCMCR |= SCB_ITCMCR_EN_Msk;
+  SCB->DTCMCR |= SCB_DTCMCR_EN_Msk;
+}
+
+static BSP_START_TEXT_SECTION void tcm_disable(void)
+{
+  SCB->ITCMCR &= ~SCB_ITCMCR_EN_Msk;
+  SCB->DTCMCR &= ~SCB_DTCMCR_EN_Msk;
+}
+
+static BSP_START_TEXT_SECTION bool tcm_setup_and_check_if_do_efc_config(
+  uintptr_t tcm_size,
+  uint32_t itcmcr_sz
+)
+{
+  if (tcm_size == SIZE_0K && itcmcr_sz == ITCMCR_SZ_0K) {
+    tcm_disable();
+    return false;
+  } else if (tcm_size == SIZE_32K && itcmcr_sz == ITCMCR_SZ_32K) {
+    tcm_enable();
+    return false;
+  } else if (tcm_size == SIZE_64K && itcmcr_sz == ITCMCR_SZ_64K) {
+    tcm_enable();
+    return false;
+  } else if (tcm_size == SIZE_128K && itcmcr_sz == ITCMCR_SZ_128K) {
+    tcm_enable();
+    return false;
+  } else {
+    return true;
+  }
+}
+
 void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 {
+  uintptr_t tcm_size;
+  uint32_t itcmcr_sz;
+
   system_init_flash(BOARD_MCK);
   SystemInit();
 
@@ -41,6 +93,31 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
   }
 
   _SetupMemoryRegion();
+
+  /* Configure tightly coupled memory interfaces */
+
+  tcm_size = (uintptr_t) atsam_memory_itcm_size;
+  itcmcr_sz = (SCB->ITCMCR & SCB_ITCMCR_SZ_Msk) >> SCB_ITCMCR_SZ_Pos;
+
+  if (tcm_setup_and_check_if_do_efc_config(tcm_size, itcmcr_sz)) {
+    if (tcm_size == SIZE_128K) {
+      efc_send_command(EEFC_FCR_FCMD_SGPB | EEFC_FCR_FARG(7));
+      efc_send_command(EEFC_FCR_FCMD_SGPB | EEFC_FCR_FARG(8));
+      tcm_enable();
+    } else if (tcm_size == SIZE_64K) {
+      efc_send_command(EEFC_FCR_FCMD_CGPB | EEFC_FCR_FARG(7));
+      efc_send_command(EEFC_FCR_FCMD_SGPB | EEFC_FCR_FARG(8));
+      tcm_enable();
+    } else if (tcm_size == SIZE_32K) {
+      efc_send_command(EEFC_FCR_FCMD_SGPB | EEFC_FCR_FARG(7));
+      efc_send_command(EEFC_FCR_FCMD_CGPB | EEFC_FCR_FARG(8));
+      tcm_enable();
+    } else {
+      efc_send_command(EEFC_FCR_FCMD_CGPB | EEFC_FCR_FARG(7));
+      efc_send_command(EEFC_FCR_FCMD_CGPB | EEFC_FCR_FARG(8));
+      tcm_disable();
+    }
+  }
 }
 
 void BSP_START_TEXT_SECTION bsp_start_hook_1(void)

@@ -29,6 +29,9 @@
 
 #ifndef _MPU_H_
 #define _MPU_H_
+#ifdef __rtems__
+#include <bsp.h>
+#endif /* __rtems__ */
 
 /*----------------------------------------------------------------------------
  *        Definitions
@@ -125,17 +128,29 @@
 #endif
 
 /* Regions should be a 2^(N+1)  where 4 < N < 31 */
+#ifdef __rtems__
+#define SRAM_FIRST_START_ADDRESS            ((uintptr_t) atsam_memory_sdram_begin)
+#define SRAM_FIRST_END_ADDRESS              ((uintptr_t) atsam_memory_sdram_end - 1)
+#else /* __rtems__ */
 #define SRAM_FIRST_START_ADDRESS            (SRAM_START_ADDRESS)
 #define SRAM_FIRST_END_ADDRESS              (SRAM_FIRST_START_ADDRESS + 0x3FFFF)        // (2^18) 256 KB
+#endif /* __rtems__ */
 
 #if defined MPU_HAS_NOCACHE_REGION
+#ifdef __rtems__
+	#define SRAM_NOCACHE_START_ADDRESS          ((uintptr_t) atsam_memory_nocache_begin)
+	#define SRAM_NOCACHE_END_ADDRESS            ((uintptr_t) atsam_memory_nocache_end - 1)
+#else /* __rtems__ */
 	#define SRAM_SECOND_START_ADDRESS           (SRAM_FIRST_END_ADDRESS+1)
 	#define SRAM_SECOND_END_ADDRESS             (SRAM_END_ADDRESS - NOCACHE_SRAM_REGION_SIZE)              // (2^17) 128 - 0x1000 KB
 	#define SRAM_NOCACHE_START_ADDRESS          (SRAM_SECOND_END_ADDRESS + 1)
 	#define SRAM_NOCACHE_END_ADDRESS            (SRAM_END_ADDRESS)
+#endif /* __rtems__ */
 #else
+#ifndef __rtems__
 	#define SRAM_SECOND_START_ADDRESS           (SRAM_FIRST_END_ADDRESS + 1)
 	#define SRAM_SECOND_END_ADDRESS             (SRAM_END_ADDRESS)                          // (2^17) 128 KB
+#endif /* __rtems__ */
 #endif
 /************** Peripherals memory region macros ********/
 #define PERIPHERALS_START_ADDRESS            0x40000000UL
