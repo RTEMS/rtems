@@ -20,6 +20,7 @@
 
 #define M162_INIT
 
+#include <rtems/bspIo.h>
 #include <rtems/console.h>
 #include <rtems/libio.h>
 #include <rtems/ringbuf.h>
