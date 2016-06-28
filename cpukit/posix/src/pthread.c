@@ -97,7 +97,7 @@ static bool _POSIX_Threads_Sporadic_timer_filter(
   new_priority = api->Sporadic.high_priority;
   *new_priority_p = new_priority;
 
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
   the_thread->real_priority = new_priority;
 
   _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
@@ -145,7 +145,7 @@ static bool _POSIX_Threads_Sporadic_budget_callout_filter(
   new_priority = api->Sporadic.low_priority;
   *new_priority_p = new_priority;
 
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
   the_thread->real_priority = new_priority;
 
   return _Thread_Priority_less_than( current_priority, new_priority )
@@ -184,7 +184,7 @@ static bool _POSIX_Threads_Create_extension(
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
   api->Attributes.schedparam.sched_priority = _POSIX_Priority_From_core(
     _Scheduler_Get_own( created ),
-    created->current_priority
+    _Thread_Get_priority( created )
   );
 
   /*

@@ -46,7 +46,8 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
   const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
   const Thread_Control *thread_next = (const Thread_Control *) next;
 
-  return thread_to_insert->current_priority <= thread_next->current_priority;
+  return _Thread_Get_priority( thread_to_insert )
+    <= _Thread_Get_priority( thread_next );
 }
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_fifo_order(
@@ -57,7 +58,8 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_fifo_order(
   const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
   const Thread_Control *thread_next = (const Thread_Control *) next;
 
-  return thread_to_insert->current_priority < thread_next->current_priority;
+  return _Thread_Get_priority( thread_to_insert )
+    < _Thread_Get_priority( thread_next );
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_lifo(

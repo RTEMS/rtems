@@ -903,7 +903,7 @@ rtems_capture_task_real_priority (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_curr_priority (rtems_tcb* tcb)
 {
-  return tcb->current_priority;
+  return _Thread_Get_priority (tcb);
 }
 
 /**

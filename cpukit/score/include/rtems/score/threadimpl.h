@@ -930,6 +930,24 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 }
 
 /**
+ * @brief Returns the priority of the thread.
+ *
+ * Returns the user API and thread wait information relevant thread priority.
+ * This includes temporary thread priority adjustments due to locking
+ * protocols, a job release or the POSIX sporadic server for example.
+ *
+ * @return The priority of the thread.
+ *
+ * @see _Scheduler_Node_get_priority().
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
+  const Thread_Control *the_thread
+)
+{
+  return the_thread->current_priority;
+}
+
+/**
  * @brief Acquires the thread wait default lock inside a critical section
  * (interrupts disabled).
  *

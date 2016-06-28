@@ -230,7 +230,7 @@ static bool _Thread_queue_Priority_less(
   scheduler_node = SCHEDULER_NODE_OF_WAIT_RBTREE_NODE( right );
   the_right = _Scheduler_Node_get_owner( scheduler_node );
 
-  return *the_left < the_right->current_priority;
+  return *the_left < _Thread_Get_priority( the_right );
 }
 
 static void _Thread_queue_Priority_priority_change(
@@ -302,7 +302,7 @@ static void _Thread_queue_Priority_do_enqueue(
 #endif
 
   scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
 
   _RBTree_Initialize_node( &scheduler_node->Wait.Node.RBTree );
   _RBTree_Insert_inline(

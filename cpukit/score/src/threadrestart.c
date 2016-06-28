@@ -62,7 +62,7 @@ static bool _Thread_Raise_real_priority_filter(
 
   real_priority = the_thread->real_priority;
   new_priority = *new_priority_ptr;
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
 
   new_priority = _Thread_Priority_highest( real_priority, new_priority );
   *new_priority_ptr = new_priority;
@@ -507,7 +507,7 @@ void _Thread_Cancel(
   );
 
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-  priority = executing->current_priority;
+  priority = _Thread_Get_priority( executing );
 
   if ( _States_Is_dormant( the_thread->current_state ) ) {
     _Thread_State_release( the_thread, &lock_context );

@@ -88,7 +88,7 @@ RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(
     *new_priority
   );
 
-  return *new_priority != thread->current_priority;
+  return *new_priority != _Thread_Get_priority( thread );
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Restore_priority(
@@ -325,7 +325,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Seize(
 {
   Status_Control status;
   const Scheduler_Control *scheduler = _Scheduler_Get_own( executing );
-  Priority_Control initial_priority = executing->current_priority;
+  Priority_Control initial_priority = _Thread_Get_priority( executing );
   Priority_Control ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
   bool priority_ok = !_Thread_Priority_less_than(
     ceiling_priority,

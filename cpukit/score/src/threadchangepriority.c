@@ -120,7 +120,7 @@ static bool _Thread_Raise_priority_filter(
 )
 {
   return _Thread_Priority_less_than(
-    the_thread->current_priority,
+    _Thread_Get_priority( the_thread ),
     *new_priority
   );
 }
@@ -149,7 +149,7 @@ static bool _Thread_Restore_priority_filter(
 
   the_thread->priority_restore_hint = false;
 
-  return *new_priority != the_thread->current_priority;
+  return *new_priority != _Thread_Get_priority( the_thread );
 }
 
 void _Thread_Restore_priority( Thread_Control *the_thread )

@@ -393,7 +393,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
   Per_CPU_Control  *cpu_self;
 
   priority_ceiling = the_mutex->priority_ceiling;
-  current_priority = owner->current_priority;
+  current_priority = _Thread_Get_priority( owner );
 
   if ( current_priority < priority_ceiling ) {
     _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );

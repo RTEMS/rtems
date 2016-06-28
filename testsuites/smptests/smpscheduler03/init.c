@@ -46,7 +46,7 @@ static bool change_priority_filter(
   void             *arg
 )
 {
-  return thread->current_priority != *new_priority;
+  return _Thread_Get_priority( thread ) != *new_priority;
 }
 
 static void change_priority(

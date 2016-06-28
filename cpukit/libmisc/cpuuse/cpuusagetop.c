@@ -264,8 +264,12 @@ task_usage(Thread_Control* thread, void* arg)
           if (thread->real_priority > data->tasks[j]->real_priority)
             continue;
         case RTEMS_TOP_SORT_CURRENT_PRI:
-          if (thread->current_priority > data->tasks[j]->current_priority)
+          if (
+            _Thread_Get_priority( thread )
+              > _Thread_Get_priority( data->tasks[j] )
+          ) {
             continue;
+          }
         case RTEMS_TOP_SORT_ID:
           if (thread->Object.id < data->tasks[j]->Object.id)
             continue;
@@ -478,7 +482,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
                    thread->Object.id,
                    name,
                    thread->real_priority,
-                   thread->current_priority);
+                   _Thread_Get_priority(thread));
 
       usage = data->usage[i];
       current_usage = data->current_usage[i];

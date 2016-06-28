@@ -220,7 +220,7 @@ int _POSIX_signals_Send(
         printk("\n 0x%08x/0x%08x %d/%d 0x%08x 1",
           the_thread->Object.id,
           ((interested) ? interested->Object.id : 0),
-          the_thread->current_priority, interested_priority,
+          _Thread_Get_priority( the_thread ), interested_priority,
           the_thread->current_state
         );
       #endif
@@ -229,7 +229,7 @@ int _POSIX_signals_Send(
        *  If this thread is of lower priority than the interested thread,
        *  go on to the next thread.
        */
-      if ( the_thread->current_priority > interested_priority )
+      if ( _Thread_Get_priority( the_thread ) > interested_priority )
         continue;
       DEBUG_STEP("2");
 
@@ -256,9 +256,9 @@ int _POSIX_signals_Send(
        *        so we never have to worry about deferencing a NULL
        *        interested thread.
        */
-      if ( the_thread->current_priority < interested_priority ) {
+      if ( _Thread_Get_priority( the_thread ) < interested_priority ) {
         interested   = the_thread;
-        interested_priority = the_thread->current_priority;
+        interested_priority = _Thread_Get_priority( the_thread );
         continue;
       }
       DEBUG_STEP("4");
@@ -276,7 +276,7 @@ int _POSIX_signals_Send(
         DEBUG_STEP("5");
         if ( _States_Is_ready( the_thread->current_state ) ) {
           interested          = the_thread;
-          interested_priority = the_thread->current_priority;
+          interested_priority = _Thread_Get_priority( the_thread );
           continue;
         }
 
@@ -287,7 +287,7 @@ int _POSIX_signals_Send(
           if ( _States_Is_interruptible_by_signal(the_thread->current_state) ) {
             DEBUG_STEP("8");
             interested          = the_thread;
-            interested_priority = the_thread->current_priority;
+            interested_priority = _Thread_Get_priority( the_thread );
             continue;
           }
         }

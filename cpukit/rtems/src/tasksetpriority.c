@@ -43,7 +43,7 @@ static bool _RTEMS_tasks_Set_priority_filter(
 
   context = arg;
   scheduler = _Scheduler_Get_own( the_thread );
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
 
   context->scheduler = scheduler;
   context->old_priority = current_priority;
@@ -117,7 +117,7 @@ rtems_status_code rtems_task_set_priority(
   } else {
     _Thread_State_acquire_critical( the_thread, &lock_context );
     scheduler = _Scheduler_Get_own( the_thread );
-    old_priority = the_thread->current_priority;
+    old_priority = _Thread_Get_priority( the_thread );
     _Thread_State_release( the_thread, &lock_context );
     status = RTEMS_SUCCESSFUL;
   }

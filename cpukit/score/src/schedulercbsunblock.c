@@ -61,8 +61,10 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
       the_thread->real_priority = priority;
 
       if (
-        _Thread_Priority_less_than( the_thread->current_priority, priority )
-          || !_Thread_Owns_resources( the_thread )
+        _Thread_Priority_less_than(
+          _Thread_Get_priority( the_thread ),
+          priority
+        ) || !_Thread_Owns_resources( the_thread )
       ) {
         the_thread->current_priority = priority;
       }
@@ -84,7 +86,7 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( priority < _Thread_Heir->current_priority ) {
+  if ( priority < _Thread_Get_priority( _Thread_Heir ) ) {
     _Scheduler_Update_heir( the_thread, priority == PRIORITY_PSEUDO_ISR );
   }
 

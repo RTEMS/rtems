@@ -52,7 +52,7 @@ rtems_monitor_task_canonical(
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
     canonical_task->cpu = _Per_CPU_Get_index( _Thread_Get_CPU( rtems_thread ) );
-    canonical_task->priority = rtems_thread->current_priority;
+    canonical_task->priority = _Thread_Get_priority( rtems_thread );
     canonical_task->events = api->Event.pending_events;
     /*
      * FIXME: make this optionally cpu_time_executed

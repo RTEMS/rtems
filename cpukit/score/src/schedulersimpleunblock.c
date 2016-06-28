@@ -26,10 +26,12 @@ Scheduler_Void_or_thread _Scheduler_simple_Unblock(
   Thread_Control          *the_thread
 )
 {
-  Scheduler_simple_Context *context =
-    _Scheduler_simple_Get_context( scheduler );
+  Scheduler_simple_Context *context;
+  Priority_Control          priority;
 
+  context = _Scheduler_simple_Get_context( scheduler );
   _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
+  priority = _Thread_Get_priority( the_thread );
 
   /*
    *  If the thread that was unblocked is more important than the heir,
@@ -43,10 +45,10 @@ Scheduler_Void_or_thread _Scheduler_simple_Unblock(
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+  if ( priority < _Thread_Get_priority( _Thread_Heir ) ) {
     _Scheduler_Update_heir(
       the_thread,
-      the_thread->current_priority == PRIORITY_PSEUDO_ISR
+      priority == PRIORITY_PSEUDO_ISR
     );
   }
 

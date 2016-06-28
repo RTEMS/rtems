@@ -30,7 +30,7 @@ static bool _Thread_Set_priority_filter(
   Priority_Control  new_priority;
   Priority_Control *old_priority_ptr;
 
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
   new_priority = *new_priority_ptr;
 
   old_priority_ptr = arg;

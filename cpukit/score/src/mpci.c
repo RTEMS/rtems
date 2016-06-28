@@ -240,7 +240,7 @@ Status_Control _MPCI_Send_request_packet(
     executing = _Per_CPU_Get_executing( cpu_self );
 
     the_packet->source_tid      = executing->Object.id;
-    the_packet->source_priority = executing->current_priority;
+    the_packet->source_priority = _Thread_Get_priority( executing );
     the_packet->to_convert =
        ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 

@@ -49,7 +49,7 @@ static bool _POSIX_Set_sched_prio_filter(
 
   *new_priority_p = new_priority;
 
-  current_priority = the_thread->current_priority;
+  current_priority = _Thread_Get_priority( the_thread );
   the_thread->real_priority = new_priority;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
