@@ -388,6 +388,26 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_empty(
 }
 
 /**
+ * @brief Initializes this red-black tree to contain exactly the specified
+ * node.
+ *
+ * @param[in] the_rbtree The red-black tree control.
+ * @param[in] the_node The one and only node.
+ */
+RTEMS_INLINE_ROUTINE void _RBTree_Initialize_one(
+  RBTree_Control *the_rbtree,
+  RBTree_Node    *the_node
+)
+{
+  _Assert( _RBTree_Is_node_off_tree( the_node ) );
+  RB_ROOT( the_rbtree ) = the_node;
+  RB_PARENT( the_node, Node ) = NULL;
+  RB_LEFT( the_node, Node ) = NULL;
+  RB_RIGHT( the_node, Node ) = NULL;
+  RB_COLOR( the_node, Node ) = RB_BLACK;
+}
+
+/**
  * @brief Returns the minimum node of the red-black tree.
  *
  * @param[in] the_rbtree The red-black tree control.

@@ -30,6 +30,7 @@ INIT - Removing 100 nodes
 INIT - Verify rtems_rbtree_insert with 100 nodes value [99,0]
 INIT - Verify rtems_rbtree_find in a duplicate tree
 INIT - Removing 100 nodes
+INIT - Initialize one
 INIT - Verify min/max node updates
 INIT - Verify _RBTree_Insert_inline
 INIT - Random operations

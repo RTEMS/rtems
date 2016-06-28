@@ -19,6 +19,30 @@ const char rtems_test_name[] = "SPRBTREE 1";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
+static void test_rbtree_init_one(void)
+{
+  RBTree_Control tree;
+  RBTree_Node    node;
+
+  puts( "INIT - Initialize one" );
+
+  _RBTree_Initialize_node( &node );
+  _RBTree_Initialize_one( &tree, &node );
+  rtems_test_assert( !_RBTree_Is_empty( &tree ) );
+  rtems_test_assert( _RBTree_Is_root( &node ) );
+  rtems_test_assert( !_RBTree_Is_node_off_tree( &node ) );
+  rtems_test_assert( _RBTree_Left( &node ) == NULL );
+  rtems_test_assert( _RBTree_Right( &node ) == NULL );
+  rtems_test_assert( _RBTree_Parent( &node ) == NULL );
+  rtems_test_assert( _RBTree_Successor( &node ) == NULL );
+  rtems_test_assert( _RBTree_Predecessor( &node ) == NULL );
+  rtems_test_assert( _RBTree_Minimum( &tree ) == &node );
+  rtems_test_assert( _RBTree_Maximum( &tree ) == &node );
+
+  _RBTree_Extract( &tree, &node );
+  rtems_test_assert( _RBTree_Is_empty( &tree ) );
+}
+
 static const int numbers[20] = {
   52, 99, 0, 85, 43, 44, 10, 60, 50, 19, 8, 68, 48, 57, 17, 67, 90, 12, 77, 71
 };
@@ -2271,6 +2295,7 @@ rtems_task Init( rtems_task_argument ignored )
     rtems_test_exit(0);
   }
 
+  test_rbtree_init_one();
   test_rbtree_min_max();
   test_rbtree_insert_inline();
   test_rbtree_random_ops();
