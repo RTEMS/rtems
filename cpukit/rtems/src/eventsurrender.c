@@ -91,11 +91,8 @@ rtems_status_code _Event_Surrender(
 
     _Event_Satisfy( the_thread, event, pending_events, seized_events );
 
-    /* See _Event_Seize() */
-    _Atomic_Fence( ATOMIC_ORDER_RELEASE );
-
     ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
-    success = _Thread_Wait_flags_try_change_critical(
+    success = _Thread_Wait_flags_try_change_release(
       the_thread,
       wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
       ready_again

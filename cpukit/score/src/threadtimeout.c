@@ -54,15 +54,9 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
 
     _Thread_Do_timeout( the_thread );
 
-    /*
-     * This fence is only necessary for the events, see _Event_Seize().  The
-     * thread queues use the thread lock for synchronization.
-     */
-    _Atomic_Fence( ATOMIC_ORDER_RELEASE );
-
     wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
     ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
-    success = _Thread_Wait_flags_try_change_critical(
+    success = _Thread_Wait_flags_try_change_release(
       the_thread,
       wait_class | THREAD_WAIT_STATE_INTEND_TO_BLOCK,
       ready_again

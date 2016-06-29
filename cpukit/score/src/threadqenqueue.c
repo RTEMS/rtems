@@ -101,7 +101,7 @@ void _Thread_queue_Enqueue_critical(
    * as long as we are in the THREAD_QUEUE_INTEND_TO_BLOCK thread wait state,
    * thus we have to cancel the blocking operation ourself if necessary.
    */
-  success = _Thread_Wait_flags_try_change(
+  success = _Thread_Wait_flags_try_change_acquire(
     the_thread,
     THREAD_QUEUE_INTEND_TO_BLOCK,
     THREAD_QUEUE_BLOCKED
@@ -144,7 +144,7 @@ bool _Thread_queue_Do_extract_locked(
    * We must update the wait flags under protection of the current thread lock,
    * otherwise a _Thread_Timeout() running on another processor may interfere.
    */
-  success = _Thread_Wait_flags_try_change_critical(
+  success = _Thread_Wait_flags_try_change_release(
     the_thread,
     THREAD_QUEUE_INTEND_TO_BLOCK,
     THREAD_QUEUE_READY_AGAIN

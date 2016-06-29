@@ -221,7 +221,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
 
   _Thread_Set_state( executing, STATES_WAITING_FOR_PERIOD );
 
-  success = _Thread_Wait_flags_try_change(
+  success = _Thread_Wait_flags_try_change_acquire(
     executing,
     RATE_MONOTONIC_INTEND_TO_BLOCK,
     RATE_MONOTONIC_BLOCKED

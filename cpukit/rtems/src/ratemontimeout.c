@@ -43,7 +43,7 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
 
     owner->Wait.return_argument = NULL;
 
-    success = _Thread_Wait_flags_try_change_critical(
+    success = _Thread_Wait_flags_try_change_release(
       owner,
       RATE_MONOTONIC_INTEND_TO_BLOCK,
       RATE_MONOTONIC_READY_AGAIN

@@ -1311,8 +1311,10 @@ RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
 }
 
 /**
- * @brief Tries to change the thread wait flags inside a critical section
- * (interrupts disabled).
+ * @brief Tries to change the thread wait flags with release semantics in case
+ * of success.
+ *
+ * Must be called inside a critical section (interrupts disabled).
  *
  * In case the wait flags are equal to the expected wait flags, then the wait
  * flags are set to the desired wait flags.
@@ -1324,22 +1326,24 @@ RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
  * @retval true The wait flags were equal to the expected wait flags.
  * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_critical(
+RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_release(
   Thread_Control    *the_thread,
   Thread_Wait_flags  expected_flags,
   Thread_Wait_flags  desired_flags
 )
 {
+  _Assert( _ISR_Get_level() != 0 );
+
 #if defined(RTEMS_SMP)
   return _Atomic_Compare_exchange_uint(
     &the_thread->Wait.flags,
     &expected_flags,
     desired_flags,
-    ATOMIC_ORDER_RELAXED,
+    ATOMIC_ORDER_RELEASE,
     ATOMIC_ORDER_RELAXED
   );
 #else
-  bool success = the_thread->Wait.flags == expected_flags;
+  bool success = ( the_thread->Wait.flags == expected_flags );
 
   if ( success ) {
     the_thread->Wait.flags = desired_flags;
@@ -1350,30 +1354,44 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_critical(
 }
 
 /**
- * @brief Tries to change the thread wait flags.
+ * @brief Tries to change the thread wait flags with acquire semantics.
  *
- * @see _Thread_Wait_flags_try_change_critical().
+ * In case the wait flags are equal to the expected wait flags, then the wait
+ * flags are set to the desired wait flags.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] expected_flags The expected wait flags.
+ * @param[in] desired_flags The desired wait flags.
+ *
+ * @retval true The wait flags were equal to the expected wait flags.
+ * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change(
+RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
   Thread_Control    *the_thread,
   Thread_Wait_flags  expected_flags,
   Thread_Wait_flags  desired_flags
 )
 {
   bool success;
-#if !defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
+  return _Atomic_Compare_exchange_uint(
+    &the_thread->Wait.flags,
+    &expected_flags,
+    desired_flags,
+    ATOMIC_ORDER_ACQUIRE,
+    ATOMIC_ORDER_ACQUIRE
+  );
+#else
   ISR_Level level;
 
   _ISR_Local_disable( level );
-#endif
 
-  success = _Thread_Wait_flags_try_change_critical(
+  success = _Thread_Wait_flags_try_change_release(
     the_thread,
     expected_flags,
     desired_flags
   );
 
-#if !defined(RTEMS_SMP)
   _ISR_Local_enable( level );
 #endif
 

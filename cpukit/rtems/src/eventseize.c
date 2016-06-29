@@ -91,13 +91,7 @@ rtems_status_code _Event_Seize(
 
   _Thread_Set_state( executing, block_state );
 
-  /*
-   * See _Event_Surrender() and _Thread_Timeout(), corresponding atomic
-   * variable is Thread_Control::Wait::flags.
-   */
-  _Atomic_Fence( ATOMIC_ORDER_ACQUIRE );
-
-  success = _Thread_Wait_flags_try_change(
+  success = _Thread_Wait_flags_try_change_acquire(
     executing,
     intend_to_block,
     wait_class | THREAD_WAIT_STATE_BLOCKED
