@@ -167,7 +167,7 @@ void _SMP_Send_message( uint32_t cpu_index, unsigned long message )
 {
   Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-  _Atomic_Fetch_or_ulong( &cpu->message, message, ATOMIC_ORDER_RELAXED );
+  _Atomic_Fetch_or_ulong( &cpu->message, message, ATOMIC_ORDER_RELEASE );
 
   _CPU_SMP_Send_interrupt( cpu_index );
 }

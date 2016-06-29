@@ -226,6 +226,30 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_unnest( Per_CPU_Control *cpu_self )
   --cpu_self->thread_dispatch_disable_level;
 }
 
+/**
+ * @brief Requests a thread dispatch on the target processor.
+ *
+ * @param[in] cpu_self The current processor.
+ * @param[in] cpu_target The target processor to request a thread dispatch.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Dispatch_request(
+  Per_CPU_Control *cpu_self,
+  Per_CPU_Control *cpu_target
+)
+{
+#if defined( RTEMS_SMP )
+  if ( cpu_self == cpu_target ) {
+    cpu_self->dispatch_necessary = true;
+  } else {
+    _Atomic_Fetch_or_ulong( &cpu_target->message, 0, ATOMIC_ORDER_RELEASE );
+    _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu_target ) );
+  }
+#else
+ cpu_self->dispatch_necessary = true;
+ (void) cpu_target;
+#endif
+}
+
 /** @} */
 
 #ifdef __cplusplus

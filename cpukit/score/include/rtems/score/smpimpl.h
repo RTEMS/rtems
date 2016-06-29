@@ -167,8 +167,10 @@ void _SMP_Multicast_actions_process( void );
  */
 static inline long unsigned _SMP_Inter_processor_interrupt_handler( void )
 {
-  Per_CPU_Control *cpu_self = _Per_CPU_Get();
-  unsigned long message = 0;
+  Per_CPU_Control *cpu_self;
+  unsigned long    message;
+
+  cpu_self = _Per_CPU_Get();
 
   /*
    * In the common case the inter-processor interrupt is issued to carry out a
@@ -176,13 +178,13 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler( void )
    */
   cpu_self->dispatch_necessary = true;
 
-  if ( _Atomic_Load_ulong( &cpu_self->message, ATOMIC_ORDER_RELAXED ) != 0 ) {
-    message = _Atomic_Exchange_ulong(
-      &cpu_self->message,
-      0UL,
-      ATOMIC_ORDER_RELAXED
-    );
+  message = _Atomic_Exchange_ulong(
+    &cpu_self->message,
+    0,
+    ATOMIC_ORDER_ACQUIRE
+  );
 
+  if ( message != 0 ) {
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
       /* does not continue past here */

@@ -844,11 +844,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_update_heir(
 
   cpu_for_heir->heir = heir;
 
-  if ( cpu_for_heir == cpu_self ) {
-    cpu_self->dispatch_necessary = true;
-  } else {
-    _Per_CPU_Send_interrupt( cpu_for_heir );
-  }
+  _Thread_Dispatch_request( cpu_self, cpu_for_heir );
 }
 #endif
 
@@ -885,15 +881,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_post_switch_action(
 
   action->handler = handler;
 
-#if defined(RTEMS_SMP)
-  if ( _Per_CPU_Get() == cpu_of_thread ) {
-    cpu_of_thread->dispatch_necessary = true;
-  } else {
-    _Per_CPU_Send_interrupt( cpu_of_thread );
-  }
-#else
-  cpu_of_thread->dispatch_necessary = true;
-#endif
+  _Thread_Dispatch_request( _Per_CPU_Get(), cpu_of_thread );
 
   _Chain_Append_if_is_off_chain_unprotected(
     &the_thread->Post_switch_actions.Chain,

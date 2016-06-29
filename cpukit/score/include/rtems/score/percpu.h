@@ -619,11 +619,6 @@ static inline bool _Per_CPU_Is_boot_processor(
 
 #if defined( RTEMS_SMP )
 
-static inline void _Per_CPU_Send_interrupt( const Per_CPU_Control *cpu )
-{
-  _CPU_SMP_Send_interrupt( _Per_CPU_Get_index( cpu ) );
-}
-
 /**
  *  @brief Allocate and Initialize Per CPU Structures
  *
