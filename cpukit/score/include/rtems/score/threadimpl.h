@@ -1118,33 +1118,47 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
 )
 {
 #if defined(RTEMS_SMP)
-  SMP_ticket_lock_Control *lock;
+  SMP_ticket_lock_Control *lock_0;
 
   while ( true ) {
+    SMP_ticket_lock_Control *lock_1;
+
     _ISR_lock_ISR_disable( lock_context );
 
     /*
+     * We must use a load acquire here paired with the store release in
+     * _Thread_Lock_set_unprotected() to observe corresponding thread wait
+     * queue and thread wait operations.
+     *
      * We assume that a normal load of pointer is identical to a relaxed atomic
      * load.  Here, we may read an out-of-date lock.  However, only the owner
      * of this out-of-date lock is allowed to set a new one.  Thus, we read at
      * least this new lock ...
      */
-    lock = the_thread->Lock.current;
+    lock_0 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
+      &the_thread->Lock.current.atomic,
+      ATOMIC_ORDER_ACQUIRE
+    );
 
     _SMP_ticket_lock_Acquire(
-      lock,
+      lock_0,
       &_Thread_Executing->Lock.Stats,
       &lock_context->Lock_context.Stats_context
+    );
+
+    lock_1 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
+      &the_thread->Lock.current.atomic,
+      ATOMIC_ORDER_RELAXED
     );
 
     /*
      * ... here, and so on.
      */
-    if ( lock == the_thread->Lock.current ) {
-      return lock;
+    if ( lock_0 == lock_1 ) {
+      return lock_0;
     }
 
-    _Thread_Lock_release( lock, lock_context );
+    _Thread_Lock_release( lock_0, lock_context );
   }
 #else
   _ISR_Local_disable( lock_context->isr_level );
@@ -1163,7 +1177,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
   SMP_ticket_lock_Control *new_lock
 )
 {
-  the_thread->Lock.current = new_lock;
+  _Atomic_Store_uintptr(
+    &the_thread->Lock.current.atomic,
+    (uintptr_t) new_lock,
+    ATOMIC_ORDER_RELEASE
+  );
 }
 #endif
 
@@ -1185,7 +1203,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Lock_set(
   ISR_lock_Context lock_context;
 
   _Thread_Lock_acquire_default_critical( the_thread, &lock_context );
-  _Assert( the_thread->Lock.current == &the_thread->Lock.Default );
+  _Assert( the_thread->Lock.current.normal == &the_thread->Lock.Default );
   _Thread_Lock_set_unprotected( the_thread, new_lock );
   _Thread_Lock_release_default_critical( the_thread, &lock_context );
 }

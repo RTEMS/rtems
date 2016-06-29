@@ -666,7 +666,19 @@ typedef struct {
    * of the actual RTEMS build configuration, e.g. profiling enabled or
    * disabled.
    */
-  SMP_ticket_lock_Control *current;
+  union {
+    /**
+     * @brief The current thread lock as an atomic unsigned integer pointer value.
+     */
+    Atomic_Uintptr atomic;
+
+    /**
+     * @brief The current thread lock as a normal pointer.
+     *
+     * Only provided for debugging purposes.
+     */
+    SMP_ticket_lock_Control *normal;
+  } current;
 
   /**
    * @brief The default thread lock in case the thread is not blocked on a
@@ -680,7 +692,7 @@ typedef struct {
    *
    * These statistics are used by the executing thread in case it acquires a
    * thread lock.  Thus the statistics are an aggregation of acquire and
-   * release operations of diffent locks.
+   * release operations of different locks.
    */
   SMP_lock_Stats Stats;
 #endif

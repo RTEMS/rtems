@@ -179,7 +179,11 @@ bool _Thread_Initialize(
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = the_thread->Scheduler.node;
   _Resource_Node_initialize( &the_thread->Resource_node );
-  the_thread->Lock.current = &the_thread->Lock.Default;
+  _Atomic_Store_uintptr(
+    &the_thread->Lock.current.atomic,
+    (uintptr_t) &the_thread->Lock.Default,
+    ATOMIC_ORDER_RELAXED
+  );
   _SMP_ticket_lock_Initialize( &the_thread->Lock.Default );
   _SMP_lock_Stats_initialize( &the_thread->Lock.Stats, "Thread Lock" );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );

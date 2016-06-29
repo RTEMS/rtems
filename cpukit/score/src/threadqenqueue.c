@@ -257,7 +257,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
 
   if ( the_thread != NULL ) {
-    _SMP_Assert( the_thread->Lock.current == &the_thread_queue->Queue.Lock );
+    _SMP_Assert( the_thread->Lock.current.normal == &the_thread_queue->Queue.Lock );
 
     _Thread_queue_Extract_critical(
       &the_thread_queue->Queue,
