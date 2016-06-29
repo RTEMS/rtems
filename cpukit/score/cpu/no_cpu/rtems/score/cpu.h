@@ -1508,10 +1508,6 @@ register struct Per_CPU_Control *_CPU_Per_CPU_current asm( "rX" );
    * @brief Sends an inter-processor interrupt to the specified target
    * processor.
    *
-   * This interrupt send and the corresponding inter-processor interrupt must
-   * act as an release/acquire barrier so that all values written by the
-   * sending processor are visible to the target processor.
-   *
    * This operation is undefined for target processor indices out of range.
    *
    * @param[in] target_processor_index The target processor index.
