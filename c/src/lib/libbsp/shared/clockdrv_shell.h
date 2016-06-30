@@ -137,19 +137,21 @@ rtems_isr Clock_isr(
 
       Clock_driver_timecounter_tick();
 
-      while (
-        _Thread_Heir == _Thread_Executing
-          && _Thread_Executing->Start.Entry.Kinds.Idle.entry
-            == rtems_configuration_get_idle_task()
-      ) {
-        ISR_lock_Context lock_context;
+      if (!rtems_configuration_is_smp_enabled()) {
+        while (
+          _Thread_Heir == _Thread_Executing
+            && _Thread_Executing->Start.Entry.Kinds.Idle.entry
+              == rtems_configuration_get_idle_task()
+        ) {
+          ISR_lock_Context lock_context;
 
-        _Timecounter_Acquire(&lock_context);
-        _Timecounter_Tick_simple(
-          interval,
-          (*tc->tc_get_timecount)(tc),
-          &lock_context
-        );
+          _Timecounter_Acquire(&lock_context);
+          _Timecounter_Tick_simple(
+            interval,
+            (*tc->tc_get_timecount)(tc),
+            &lock_context
+          );
+        }
       }
 
       Clock_driver_support_at_tick();
