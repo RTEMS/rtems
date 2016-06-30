@@ -1324,6 +1324,36 @@ arm_cp15_set_vector_base_address(void *base)
   );
 }
 
+ARM_CP15_TEXT_SECTION static inline void
+*arm_cp15_get_hyp_vector_base_address(void)
+{
+  ARM_SWITCH_REGISTERS;
+  void *base;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 4, %[base], c12, c0, 0\n"
+    ARM_SWITCH_BACK
+    : [base] "=&r" (base) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return base;
+}
+
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_hyp_vector_base_address(void *base)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 4, %[base], c12, c0, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [base] "r" (base)
+  );
+}
+
 /**
  * @brief Sets the @a section_flags for the address range [@a begin, @a end).
  *
