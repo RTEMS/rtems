@@ -418,7 +418,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
-    4,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -426,7 +426,7 @@ static void test_mrsp_obtain_and_release(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1]);
+  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1], 4);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_start(ctx->worker_ids[0], obtain_and_release_worker, 0);
@@ -575,7 +575,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
-    3,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -583,7 +583,7 @@ static void test_mrsp_obtain_after_migration(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1]);
+  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1], 3);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Create a MrsP semaphore objects */
@@ -1152,7 +1152,7 @@ static void start_low_task(test_context *ctx, size_t i)
 
   sc = rtems_task_create(
     rtems_build_name('L', 'O', 'W', '0' + i),
-    5,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -1160,7 +1160,7 @@ static void start_low_task(test_context *ctx, size_t i)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->low_task_id[i], ctx->scheduler_ids[i]);
+  sc = rtems_task_set_scheduler(ctx->low_task_id[i], ctx->scheduler_ids[i], 5);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_start(
@@ -1202,7 +1202,7 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
 
   sc = rtems_task_create(
     rtems_build_name('H', 'I', 'G', '1'),
-    2,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -1210,12 +1210,12 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->high_task_id[1], ctx->scheduler_ids[1]);
+  sc = rtems_task_set_scheduler(ctx->high_task_id[1], ctx->scheduler_ids[1], 2);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
-    4,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -1223,7 +1223,7 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1]);
+  sc = rtems_task_set_scheduler(ctx->worker_ids[0], ctx->scheduler_ids[1], 4);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_start(ctx->worker_ids[0], ready_unlock_worker, 0);
@@ -1365,7 +1365,7 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
 
   sc = rtems_task_create(
     rtems_build_name('H', 'E', 'L', 'P'),
-    3,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -1375,7 +1375,8 @@ static void test_mrsp_obtain_and_release_with_help(test_context *ctx)
 
   sc = rtems_task_set_scheduler(
     help_task_id,
-    ctx->scheduler_ids[1]
+    ctx->scheduler_ids[1],
+    3
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -1549,7 +1550,7 @@ static void migration_task(rtems_task_argument arg)
   while (true) {
     uint32_t cpu_index = (v >> 5) % cpu_count;
 
-    sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->scheduler_ids[cpu_index]);
+    sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->scheduler_ids[cpu_index], 2);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     ++ctx->migration_counters[rtems_get_current_processor()];
@@ -1600,7 +1601,7 @@ static void test_mrsp_load(test_context *ctx)
 
     sc = rtems_task_create(
       'A' + a,
-      3 + MRSP_COUNT + a,
+      255,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -1610,7 +1611,8 @@ static void test_mrsp_load(test_context *ctx)
 
     sc = rtems_task_set_scheduler(
       ctx->worker_ids[a],
-      ctx->scheduler_ids[index]
+      ctx->scheduler_ids[index],
+      3 + MRSP_COUNT + a
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -1623,7 +1625,7 @@ static void test_mrsp_load(test_context *ctx)
 
     sc = rtems_task_create(
       'A' + b,
-      3 + MRSP_COUNT + b,
+      255,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -1633,7 +1635,8 @@ static void test_mrsp_load(test_context *ctx)
 
     sc = rtems_task_set_scheduler(
       ctx->worker_ids[b],
-      ctx->scheduler_ids[index]
+      ctx->scheduler_ids[index],
+      3 + MRSP_COUNT + b
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 

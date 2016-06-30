@@ -46,20 +46,32 @@ typedef struct {
 
 static test_context test_instance;
 
+static rtems_task_priority migration_task_prio(uint32_t task_index)
+{
+  return task_index > 0 ? PRIO_LOW : PRIO_HIGH;
+}
+
 static void migration_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
-  rtems_status_code sc;
+  uint32_t task_index = arg;
+  rtems_task_priority prio = migration_task_prio(task_index);
   uint32_t cpu_count = rtems_get_processor_count();
   uint32_t cpu_index = rtems_get_current_processor();
 
   while (true) {
+    rtems_status_code sc;
+
     cpu_index = (cpu_index + 1) % cpu_count;
 
-    sc = rtems_task_set_scheduler(RTEMS_SELF, ctx->scheduler_ids[cpu_index]);
+    sc = rtems_task_set_scheduler(
+      RTEMS_SELF,
+      ctx->scheduler_ids[cpu_index],
+      prio
+    );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    ++ctx->counters[arg].value;
+    ++ctx->counters[task_index].value;
 
     rtems_test_assert(cpu_index == rtems_get_current_processor());
   }
@@ -77,7 +89,7 @@ static void test_migrations(test_context *ctx)
 
     sc = rtems_task_create(
       rtems_build_name('T', 'A', 'S', 'K'),
-      task_index > 0 ? PRIO_LOW : PRIO_HIGH,
+      255,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -85,7 +97,11 @@ static void test_migrations(test_context *ctx)
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_set_scheduler(task_id, ctx->scheduler_ids[task_index % cpu_count]);
+    sc = rtems_task_set_scheduler(
+      task_id,
+      ctx->scheduler_ids[task_index % cpu_count],
+      migration_task_prio(task_index)
+    );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_task_start(task_id, migration_task, task_index);
@@ -163,7 +179,8 @@ static void test_double_migration(test_context *ctx)
 
     sc = rtems_task_set_scheduler(
       task_id,
-      ctx->scheduler_ids[cpu_other_index]
+      ctx->scheduler_ids[cpu_other_index],
+      2
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -189,7 +206,8 @@ static void test_double_migration(test_context *ctx)
 
     sc = rtems_task_set_scheduler(
       RTEMS_SELF,
-      ctx->scheduler_ids[cpu_other_index]
+      ctx->scheduler_ids[cpu_other_index],
+      1
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
@@ -207,7 +225,8 @@ static void test_double_migration(test_context *ctx)
 
     sc = rtems_task_set_scheduler(
       RTEMS_SELF,
-      ctx->scheduler_ids[cpu_self_index]
+      ctx->scheduler_ids[cpu_self_index],
+      1
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 

@@ -448,23 +448,32 @@ rtems_status_code rtems_task_get_scheduler(
 );
 
 /**
- * @brief Sets the scheduler of a task.
+ * @brief Sets the scheduler instance of a task.
  *
- * The scheduler of a task is initialized to the scheduler of the task that
- * created it.
+ * Initially, the scheduler instance of a task is set to the scheduler instance
+ * of the task that created it.  This directive allows to move a task from its
+ * current scheduler instance to another specified by the scheduler identifier.
  *
  * @param[in] task_id Identifier of the task.  Use @ref RTEMS_SELF to select
- * the executing task.
- * @param[in] scheduler_id Identifier of the scheduler.
+ *   the executing task.
+ * @param[in] scheduler_id Identifier of the scheduler instance.
+ * @param[in] priority The task priority with respect to the new scheduler
+ *   instance.  The real and initial priority of the task is set to this value.
+ *   The initial priority is used by rtems_task_restart() for example.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_ILLEGAL_ON_REMOTE_OBJECT Directive is illegal on remote tasks.
  * @retval RTEMS_INVALID_ID Invalid task or scheduler identifier.
+ * @retval RTEMS_INVALID_PRIORITY Invalid priority.
+ * @retval RTEMS_RESOURCE_IN_USE The task owns resources which deny a scheduler
+ *   change.
  *
  * @see rtems_scheduler_ident().
  */
 rtems_status_code rtems_task_set_scheduler(
-  rtems_id task_id,
-  rtems_id scheduler_id
+  rtems_id            task_id,
+  rtems_id            scheduler_id,
+  rtems_task_priority priority
 );
 
 /**

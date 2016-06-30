@@ -44,6 +44,7 @@ static void *thread_b(void *arg)
   test_context *ctx;
   rtems_id scheduler_b_id;
   rtems_status_code sc;
+  rtems_task_priority prio;
   int prio_ceiling;
   int eno;
 
@@ -54,7 +55,10 @@ static void *thread_b(void *arg)
   sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(pthread_self(), scheduler_b_id);
+  sc = rtems_task_set_priority(pthread_self(), RTEMS_CURRENT_PRIORITY, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(pthread_self(), scheduler_b_id, prio);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(rtems_get_current_processor() == 1);

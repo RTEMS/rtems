@@ -603,7 +603,7 @@ static void Init(rtems_task_argument arg)
 
     sc = rtems_task_create(
       rtems_build_name('T', 'A', 'S', 'K'),
-      1,
+      255,
       RTEMS_MINIMUM_STACK_SIZE,
       RTEMS_DEFAULT_MODES,
       RTEMS_DEFAULT_ATTRIBUTES,
@@ -614,7 +614,7 @@ static void Init(rtems_task_argument arg)
     sc = rtems_scheduler_ident(SCHED_NAME(cpu_index), &scheduler_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_set_scheduler(ctx->task_id[cpu_index], scheduler_id);
+    sc = rtems_task_set_scheduler(ctx->task_id[cpu_index], scheduler_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_task_start(ctx->task_id[cpu_index], test_task, cpu_index);

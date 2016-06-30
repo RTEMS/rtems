@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,6 +30,10 @@ const char rtems_test_name[] = "SPSCHEDULER 1";
 #define RED rtems_build_name('r', 'e', 'd', ' ')
 
 static const rtems_id invalid_id = 1;
+
+static rtems_id master_id;
+
+static rtems_id sema_id;
 
 static void test_task_get_set_affinity(void)
 {
@@ -119,9 +123,62 @@ static void test_task_get_set_affinity(void)
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
-static void task(rtems_task_argument arg)
+static rtems_task_priority set_prio(rtems_id id, rtems_task_priority prio)
+{
+  rtems_status_code sc;
+  rtems_task_priority old_prio;
+
+  old_prio = 0xffffffff;
+  sc = rtems_task_set_priority(id, prio, &old_prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  return old_prio;
+}
+
+static void forbidden_task(rtems_task_argument arg)
 {
   (void) arg;
+
+  rtems_test_assert(0);
+}
+
+static void restart_task(rtems_task_argument arg)
+{
+  rtems_status_code sc;
+
+  if (arg == 0) {
+    rtems_test_assert(set_prio(RTEMS_SELF, 3) == 2);
+
+    rtems_task_restart(RTEMS_SELF, 1);
+  } else if (arg == 1) {
+    rtems_id scheduler_id;
+
+    rtems_test_assert(set_prio(RTEMS_SELF, 3) == 2);
+
+    sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_set_scheduler(RTEMS_SELF, scheduler_id, 4);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(set_prio(RTEMS_SELF, 3) == 4);
+
+    rtems_task_restart(RTEMS_SELF, 2);
+  } else {
+    rtems_test_assert(set_prio(RTEMS_SELF, 3) == 4);
+
+    rtems_task_resume(master_id);
+  }
+
+  rtems_test_assert(0);
+}
+
+static void sema_task(rtems_task_argument arg)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(sema_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(0);
 }
@@ -134,6 +191,7 @@ static void test_task_get_set_scheduler(void)
   rtems_id scheduler_id;
   rtems_id scheduler_by_name;
   rtems_id task_id;
+  rtems_id mtx_id;
 
   sc = rtems_scheduler_ident(name, &scheduler_by_name);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -156,13 +214,46 @@ static void test_task_get_set_scheduler(void)
 
   rtems_test_assert(scheduler_id == scheduler_by_name);
 
-  sc = rtems_task_set_scheduler(invalid_id, scheduler_id);
+  sc = rtems_task_set_scheduler(invalid_id, scheduler_id, 1);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  sc = rtems_task_set_scheduler(self_id, invalid_id);
+  sc = rtems_task_set_scheduler(self_id, invalid_id, 1);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  sc = rtems_task_set_scheduler(self_id, scheduler_id);
+  sc = rtems_task_set_scheduler(self_id, scheduler_id, UINT32_C(0x80000000));
+  rtems_test_assert(sc == RTEMS_INVALID_PRIORITY);
+
+  sc = rtems_task_set_scheduler(self_id, scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', 'M', 'T', 'X'),
+    0,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    0,
+    &mtx_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(self_id, scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+
+  sc = rtems_semaphore_release(mtx_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(set_prio(self_id, RTEMS_CURRENT_PRIORITY) == 1);
+
+  sc = rtems_task_set_scheduler(self_id, scheduler_id, 2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(set_prio(self_id, RTEMS_CURRENT_PRIORITY) == 2);
+
+  sc = rtems_task_set_scheduler(self_id, scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(set_prio(self_id, RTEMS_CURRENT_PRIORITY) == 1);
+
+  sc = rtems_semaphore_delete(mtx_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_create(
@@ -181,13 +272,66 @@ static void test_task_get_set_scheduler(void)
 
   rtems_test_assert(scheduler_id == scheduler_by_name);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_id);
+  sc = rtems_task_set_scheduler(task_id, scheduler_id, 2);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_start(task_id, task, 0);
+  sc = rtems_task_start(task_id, forbidden_task, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_id);
+  sc = rtems_task_set_scheduler(task_id, scheduler_id, 2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(task_id, restart_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_suspend(self_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('S', 'E', 'M', 'A'),
+    0,
+    RTEMS_COUNTING_SEMAPHORE,
+    0,
+    &sema_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'A', 'S', 'K'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(task_id, sema_task, 0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_set_scheduler(task_id, scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+
+  sc = rtems_semaphore_delete(sema_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_delete(task_id);
@@ -275,6 +419,8 @@ static void Init(rtems_task_argument arg)
 
   rtems_resource_snapshot_take(&snapshot);
 
+  master_id = rtems_task_self();
+
   test_task_get_set_affinity();
   test_task_get_set_scheduler();
   test_scheduler_ident();
@@ -290,6 +436,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

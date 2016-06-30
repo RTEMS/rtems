@@ -93,7 +93,7 @@ static void test(void)
     for (j = 0; j < INTERVAL_COUNT; ++j) {
       sc = rtems_task_create(
         rtems_build_name('T', 'A', 'S', 'K'),
-        2,
+        255,
         RTEMS_MINIMUM_STACK_SIZE,
         RTEMS_DEFAULT_MODES,
         RTEMS_DEFAULT_ATTRIBUTES,
@@ -101,7 +101,7 @@ static void test(void)
       );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-      sc = rtems_task_set_scheduler(task_ids[i][j], scheduler_id);
+      sc = rtems_task_set_scheduler(task_ids[i][j], scheduler_id, 2);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
       sc = rtems_task_start(task_ids[i][j], task, make_arg(i, j));

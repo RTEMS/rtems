@@ -165,10 +165,10 @@ static void test(void)
   rtems_test_assert(sched_get_priority_max(SCHED_RR) == 254);
 
   if (cpu_count > 1) {
-    sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_set_scheduler(task_id, scheduler_b_id + 1);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id + 1, 1);
     rtems_test_assert(sc == RTEMS_INVALID_ID);
 
     sc = rtems_task_get_scheduler(task_id, &scheduler_id);
@@ -200,7 +200,7 @@ static void test(void)
     sc = rtems_task_start(task_id, task, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);

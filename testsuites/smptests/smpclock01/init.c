@@ -133,7 +133,7 @@ static void test(void)
 
   sc = rtems_task_create(
     SCHEDULER_B,
-    1,
+    255,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_DEFAULT_MODES,
     RTEMS_DEFAULT_ATTRIBUTES,
@@ -141,7 +141,7 @@ static void test(void)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(task_id, scheduler_b_id);
+  sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_start(task_id, timer_task, (rtems_task_argument) ctx);

@@ -16,12 +16,14 @@
   #include "config.h"
 #endif
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/rtems/statusimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_task_set_scheduler(
-  rtems_id task_id,
-  rtems_id scheduler_id
+  rtems_id            task_id,
+  rtems_id            scheduler_id,
+  rtems_task_priority priority
 )
 {
   const Scheduler_Control *scheduler;
@@ -30,10 +32,17 @@ rtems_status_code rtems_task_set_scheduler(
   ISR_lock_Context         state_lock_context;
   Per_CPU_Control         *cpu_self;
   void                    *lock;
-  bool                     ok;
+  bool                     valid;
+  Priority_Control         core_priority;
+  Status_Control           status;
 
   if ( !_Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
     return RTEMS_INVALID_ID;
+  }
+
+  core_priority = _RTEMS_Priority_To_core( scheduler, priority, &valid );
+  if ( !valid ) {
+    return RTEMS_INVALID_PRIORITY;
   }
 
   the_thread = _Thread_Get( task_id, &lock_context );
@@ -54,10 +63,10 @@ rtems_status_code rtems_task_set_scheduler(
   lock = _Thread_Lock_acquire( the_thread, &lock_context );
   _Thread_State_acquire_critical( the_thread, &state_lock_context );
 
-  ok = _Scheduler_Set( scheduler, the_thread );
+  status = _Scheduler_Set( scheduler, the_thread, core_priority );
 
   _Thread_State_release_critical( the_thread, &state_lock_context );
   _Thread_Lock_release( lock, &lock_context );
   _Thread_Dispatch_enable( cpu_self );
-  return ok ? RTEMS_SUCCESSFUL : RTEMS_INCORRECT_STATE;
+  return _Status_Get( status );
 }

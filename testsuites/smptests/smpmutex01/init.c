@@ -81,7 +81,7 @@ static void start_task(
   sc = rtems_scheduler_ident(scheduler, &scheduler_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_scheduler(ctx->tasks[id], scheduler_id);
+  sc = rtems_task_set_scheduler(ctx->tasks[id], scheduler_id, prio);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_start(ctx->tasks[id], entry, id);
