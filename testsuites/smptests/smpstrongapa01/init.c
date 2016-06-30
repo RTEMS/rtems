@@ -135,11 +135,7 @@ static void set_affinity(rtems_id id, uint32_t cpu_set_32)
   CPU_ZERO(&cpu_set);
 
   for (i = 0; i < CPU_COUNT; ++i) {
-    uint32_t one;
-
-    one = 1;
-
-    if ((cpu_set_32 & (one << i)) != 0) {
+    if ((cpu_set_32 & (UINT32_C(1) << i)) != 0) {
       CPU_SET(i, &cpu_set);
     }
   }
