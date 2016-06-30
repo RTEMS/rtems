@@ -82,6 +82,7 @@
 #define ARM_PSR_M_IRQ 0x12
 #define ARM_PSR_M_SVC 0x13
 #define ARM_PSR_M_ABT 0x17
+#define ARM_PSR_M_HYP 0x1a
 #define ARM_PSR_M_UND 0x1b
 #define ARM_PSR_M_SYS 0x1f
 
