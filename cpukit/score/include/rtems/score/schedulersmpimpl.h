@@ -487,6 +487,27 @@ static inline void _Scheduler_SMP_Allocate_processor_lazy(
   }
 }
 
+/*
+ * This method is slightly different from
+ * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
+ * do.  _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
+ * but does not take into account affinity.
+ */
+static inline void _Scheduler_SMP_Allocate_processor_exact(
+  Scheduler_Context *context,
+  Thread_Control    *scheduled_thread,
+  Thread_Control    *victim_thread
+)
+{
+  Per_CPU_Control *victim_cpu = _Thread_Get_CPU( victim_thread );
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+
+  (void) context;
+
+  _Thread_Set_CPU( scheduled_thread, victim_cpu );
+  _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
+}
+
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_Context                *context,
   Scheduler_Node                   *scheduled,

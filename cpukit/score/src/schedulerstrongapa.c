@@ -225,7 +225,7 @@ void _Scheduler_strong_APA_Block(
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_exact
   );
 }
 
@@ -247,7 +247,7 @@ static Thread_Control *_Scheduler_strong_APA_Enqueue_ordered(
     insert_scheduled,
     _Scheduler_strong_APA_Move_from_scheduled_to_ready,
     _Scheduler_SMP_Get_lowest_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_exact
   );
 }
 
@@ -300,7 +300,7 @@ static Thread_Control *_Scheduler_strong_APA_Enqueue_scheduled_ordered(
     insert_ready,
     insert_scheduled,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
-    _Scheduler_SMP_Allocate_processor_lazy
+    _Scheduler_SMP_Allocate_processor_exact
   );
 }
 

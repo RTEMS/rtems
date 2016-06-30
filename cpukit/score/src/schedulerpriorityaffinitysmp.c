@@ -113,27 +113,6 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
 }
 
 /*
- * This method is slightly different from
- * _Scheduler_SMP_Allocate_processor_lazy() in that it does what it is asked to
- * do. _Scheduler_SMP_Allocate_processor_lazy() attempts to prevent migrations
- * but does not take into account affinity.
- */
-static inline void _Scheduler_SMP_Allocate_processor_exact(
-  Scheduler_Context *context,
-  Thread_Control    *scheduled_thread,
-  Thread_Control    *victim_thread
-)
-{
-  Per_CPU_Control *victim_cpu = _Thread_Get_CPU( victim_thread );
-  Per_CPU_Control *cpu_self = _Per_CPU_Get();
-
-  (void) context;
-
-  _Thread_Set_CPU( scheduled_thread, victim_cpu );
-  _Thread_Dispatch_update_heir( cpu_self, victim_cpu, scheduled_thread );
-}
-
-/*
  * This method is unique to this scheduler because it takes into
  * account affinity as it determines the highest ready thread.
  * Since this is used to pick a new thread to replace the victim,
