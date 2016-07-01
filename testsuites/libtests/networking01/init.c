@@ -31,8 +31,8 @@ static rtems_task Init(rtems_task_argument argument);
 
 static void fill_sa(struct sockaddr *sa, sa_family_t family)
 {
-  memset(sa, 0, sizeof(struct sockaddr));
-  sa->sa_len = sizeof(struct sockaddr);
+  memset(sa, 0, sizeof(*sa));
+  sa->sa_len = sizeof(*sa);
   sa->sa_family = family;
 }
 
@@ -40,8 +40,8 @@ static void fill_sa_in(struct sockaddr_in *sa_in,
   in_addr_t addr, in_port_t port)
 {
   fill_sa((struct sockaddr *)sa_in, AF_INET);
-  sa_in->sin_port = port;
-  sa_in->sin_addr.s_addr = addr;
+  sa_in->sin_port = htons(port);
+  sa_in->sin_addr.s_addr = htonl(addr);
 }
 
 static void test_getnameinfo(
@@ -105,31 +105,31 @@ static void test(void)
   const char port2_string[] = "65534";
 
 
-  printk("Try AF_INET6\n");
+  puts("Try AF_INET6");
   fill_sa(&sa, AF_INET6);
   test_getnameinfo(&sa, 0, true, true, EAI_FAMILY, NULL, NULL);
 
-  printk("force node name\n");
+  puts("force node name");
   fill_sa_in(&sa_in, ip1_num, port1_num);
   test_getnameinfo(sa_in_p, NI_NAMEREQD, true, true, EAI_NONAME, NULL, NULL);
 
-  printk("force service name\n");
+  puts("force service name");
   fill_sa_in(&sa_in, ip1_num, port1_num);
   test_getnameinfo(sa_in_p, NI_NAMEREQD, true, true, EAI_NONAME, NULL, NULL);
 
-  printk("get node only\n");
+  puts("get node only");
   fill_sa_in(&sa_in, ip1_num, port1_num);
   test_getnameinfo(sa_in_p, 0, true, false, 0, ip1_string, NULL);
 
-  printk("get service only\n");
+  puts("get service only");
   fill_sa_in(&sa_in, ip1_num, port1_num);
   test_getnameinfo(sa_in_p, 0, false, true, 0, NULL, port1_string);
 
-  printk("get node and service\n");
+  puts("get node and service");
   fill_sa_in(&sa_in, ip1_num, port1_num);
   test_getnameinfo(sa_in_p, 0, true, true, 0, ip1_string, port1_string);
 
-  printk("get node and service with maximum number of characters for IP\n");
+  puts("get node and service with maximum number of characters for IP");
   fill_sa_in(&sa_in, ip2_num, port2_num);
   test_getnameinfo(sa_in_p, 0, true, true, 0, ip2_string, port2_string);
 }
