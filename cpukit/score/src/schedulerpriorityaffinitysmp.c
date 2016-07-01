@@ -306,10 +306,18 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
   Scheduler_Context *context
 )
 {
-  Scheduler_Node        *lowest_scheduled;
-  Scheduler_Node        *highest_ready;
+  Scheduler_priority_SMP_Context *self;
+  Scheduler_Node                 *lowest_scheduled;
+  Scheduler_Node                 *highest_ready;
+
+  self = _Scheduler_priority_SMP_Get_self( context );
 
   while (1) {
+    if ( _Priority_bit_map_Is_empty( &self->Bit_map ) ) {
+      /* Nothing to do */
+      break;
+    }
+
     highest_ready =
       _Scheduler_priority_affinity_SMP_Get_highest_ready( context, NULL );
 
