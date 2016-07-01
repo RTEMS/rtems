@@ -53,6 +53,13 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   return (Scheduler_EDF_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(
+  Scheduler_Node *node
+)
+{
+  return (Scheduler_EDF_Node *) node;
+}
+
 RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
   const void        *left,
   const RBTree_Node *right

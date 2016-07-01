@@ -345,6 +345,7 @@ void _Scheduler_CBS_Budget_callout(
  */
 void _Scheduler_CBS_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );

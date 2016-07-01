@@ -73,12 +73,14 @@ extern "C" {
  *  This routine allocates @a thread->scheduler.
  *
  *  @param[in] scheduler points to the scheduler specific information.
- *  @param[in] thread is the thread the scheduler is allocating
+ *  @param[in] node is the node the scheduler is allocating
  *             management memory for.
+ *  @param[in] the_thread the thread of the node.
  *  @param[in] priority is the thread priority.
  */
 void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );

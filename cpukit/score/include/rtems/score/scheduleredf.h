@@ -152,11 +152,13 @@ void _Scheduler_EDF_Schedule(
  *  @brief Initializes an EDF specific scheduler node of @a the_thread.
  *
  *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread being initialized.
+ *  @param[in] node being initialized.
+ *  @param[in] the_thread the thread of the node.
  *  @param[in] priority The thread priority.
  */
 void _Scheduler_EDF_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );

@@ -82,6 +82,7 @@ void _Scheduler_simple_SMP_Initialize( const Scheduler_Control *scheduler );
 
 void _Scheduler_simple_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );

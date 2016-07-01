@@ -52,6 +52,7 @@ bool _Thread_Initialize(
   #endif
   bool                     extension_status;
   size_t                   i;
+  Scheduler_Node          *scheduler_node;
   bool                     scheduler_node_initialized = false;
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
@@ -173,11 +174,13 @@ bool _Thread_Initialize(
     #endif
   }
 
+  scheduler_node = the_thread->Scheduler.node;
+
 #if defined(RTEMS_SMP)
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
   the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
-  the_thread->Scheduler.own_node = the_thread->Scheduler.node;
+  the_thread->Scheduler.own_node = scheduler_node;
   _Resource_Node_initialize( &the_thread->Resource_node );
   _Atomic_Store_uintptr(
     &the_thread->Lock.current.atomic,
@@ -204,7 +207,7 @@ bool _Thread_Initialize(
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
 
-  _Scheduler_Node_initialize( scheduler, the_thread, priority );
+  _Scheduler_Node_initialize( scheduler, scheduler_node, the_thread, priority );
   scheduler_node_initialized = true;
 
   /* POSIX Keys */
@@ -232,7 +235,7 @@ bool _Thread_Initialize(
 failed:
 
   if ( scheduler_node_initialized ) {
-    _Scheduler_Node_destroy( scheduler, the_thread );
+    _Scheduler_Node_destroy( scheduler, scheduler_node );
   }
 
   _Workspace_Free( the_thread->Start.tls_area );

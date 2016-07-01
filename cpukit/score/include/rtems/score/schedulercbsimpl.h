@@ -43,6 +43,13 @@ RTEMS_INLINE_ROUTINE Scheduler_CBS_Node *_Scheduler_CBS_Thread_get_node(
   return (Scheduler_CBS_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_CBS_Node *_Scheduler_CBS_Node_downcast(
+  Scheduler_Node *node
+)
+{
+  return (Scheduler_CBS_Node *) node;
+}
+
 /** @} */
 
 #ifdef __cplusplus

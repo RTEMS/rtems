@@ -47,23 +47,22 @@ void _Scheduler_priority_SMP_Initialize( const Scheduler_Control *scheduler )
 
 void _Scheduler_priority_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 )
 {
   Scheduler_Context              *context;
   Scheduler_priority_SMP_Context *self;
-  Scheduler_priority_SMP_Node    *node;
+  Scheduler_priority_SMP_Node    *the_node;
+
+  the_node = _Scheduler_priority_SMP_Node_downcast( node );
+  _Scheduler_SMP_Node_initialize( &the_node->Base, the_thread, priority );
 
   context = _Scheduler_Get_context( scheduler );
   self = _Scheduler_priority_SMP_Get_self( context );
-  node = _Scheduler_priority_SMP_Node_downcast(
-    _Scheduler_Thread_get_own_node( the_thread )
-  );
-
-  _Scheduler_SMP_Node_initialize( &node->Base, the_thread, priority );
   _Scheduler_priority_Ready_queue_update(
-    &node->Ready_queue,
+    &the_node->Ready_queue,
     priority,
     &self->Bit_map,
     &self->Ready[ 0 ]

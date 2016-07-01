@@ -60,15 +60,6 @@ static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
     && _Scheduler_SMP_Insert_priority_fifo_order( to_insert, next );
 }
 
-static Scheduler_priority_affinity_SMP_Node *
-_Scheduler_priority_affinity_SMP_Thread_get_own_node(
-  Thread_Control *thread
-)
-{
-  return (Scheduler_priority_affinity_SMP_Node *)
-    _Scheduler_Thread_get_own_node( thread );
-}
-
 /*
  * This method returns the scheduler node for the specified thread
  * as a scheduler specific type.
@@ -96,20 +87,21 @@ _Scheduler_priority_affinity_SMP_Node_downcast(
  */
 void _Scheduler_priority_affinity_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 )
 {
-  Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Thread_get_own_node( the_thread );
+  Scheduler_priority_affinity_SMP_Node *the_node;
 
-  _Scheduler_priority_SMP_Node_initialize( scheduler, the_thread, priority );
+  _Scheduler_priority_SMP_Node_initialize( scheduler, node, the_thread, priority );
 
   /*
    *  All we add is affinity information to the basic SMP node.
    */
-  node->Affinity     = *_CPU_set_Default();
-  node->Affinity.set = &node->Affinity.preallocated;
+  the_node = _Scheduler_priority_affinity_SMP_Node_downcast( node );
+  the_node->Affinity     = *_CPU_set_Default();
+  the_node->Affinity.set = &the_node->Affinity.preallocated;
 }
 
 /*

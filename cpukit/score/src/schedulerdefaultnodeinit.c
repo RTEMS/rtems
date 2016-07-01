@@ -23,12 +23,11 @@
 
 void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 )
 {
-  Scheduler_Node *node = _Scheduler_Thread_get_own_node( the_thread );
-
   (void) scheduler;
 
   _Scheduler_Node_do_initialize( node, the_thread, priority );

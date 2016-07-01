@@ -48,6 +48,13 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_nod
   return (Scheduler_priority_Node *) _Scheduler_Thread_get_node( the_thread );
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(
+  Scheduler_Node *node
+)
+{
+  return (Scheduler_priority_Node *) node;
+}
+
 /**
  * @brief Ready queue initialization.
  *

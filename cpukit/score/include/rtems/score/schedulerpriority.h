@@ -159,6 +159,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
 
 void _Scheduler_priority_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );

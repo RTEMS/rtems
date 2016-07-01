@@ -455,17 +455,20 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Unmap_priority(
  * destroyed.
  *
  * @param[in] scheduler The scheduler instance.
- * @param[in] the_thread The thread containing the scheduler node.
+ * @param[in] node The scheduler node to initialize.
+ * @param[in] the_thread The thread of the scheduler node to initialize.
  * @param[in] priority The thread priority.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 )
 {
   ( *scheduler->Operations.node_initialize )(
     scheduler,
+    node,
     the_thread,
     priority
   );
@@ -478,14 +481,14 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_initialize(
  * after a corresponding _Scheduler_Node_initialize().
  *
  * @param[in] scheduler The scheduler instance.
- * @param[in] the_thread The thread containing the scheduler node.
+ * @param[in] node The scheduler node to destroy.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Scheduler_Node          *node
 )
 {
-  ( *scheduler->Operations.node_destroy )( scheduler, the_thread );
+  ( *scheduler->Operations.node_destroy )( scheduler, node );
 }
 
 /**
@@ -1464,10 +1467,15 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
         _Scheduler_Block( the_thread );
       }
 
-      _Scheduler_Node_destroy( old_scheduler, the_thread );
+      _Scheduler_Node_destroy( old_scheduler, own_node );
       the_thread->Scheduler.own_control = new_scheduler;
       the_thread->Scheduler.control = new_scheduler;
-      _Scheduler_Node_initialize( new_scheduler, the_thread, priority );
+      _Scheduler_Node_initialize(
+        new_scheduler,
+        own_node,
+        the_thread,
+        priority
+      );
 
       if ( _States_Is_ready( current_state ) ) {
         _Scheduler_Unblock( the_thread );

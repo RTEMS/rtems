@@ -130,12 +130,13 @@ typedef struct {
   /** @see _Scheduler_Node_initialize() */
   void ( *node_initialize )(
     const Scheduler_Control *,
+    Scheduler_Node *,
     Thread_Control *,
     Priority_Control
   );
 
   /** @see _Scheduler_Node_destroy() */
-  void ( *node_destroy )( const Scheduler_Control *, Thread_Control * );
+  void ( *node_destroy )( const Scheduler_Control *, Scheduler_Node * );
 
   /** @see _Scheduler_Release_job() */
   void ( *release_job ) (
@@ -498,11 +499,13 @@ void _Scheduler_default_Schedule(
  * @brief Performs the scheduler base node initialization.
  *
  * @param[in] scheduler Unused.
+ * @param[in] node The node to initialize.
  * @param[in] the_thread Unused.
  * @param[in] priority The thread priority.
  */
 void _Scheduler_default_Node_initialize(
   const Scheduler_Control *scheduler,
+  Scheduler_Node          *node,
   Thread_Control          *the_thread,
   Priority_Control         priority
 );
@@ -511,11 +514,11 @@ void _Scheduler_default_Node_initialize(
  * @brief Does nothing.
  *
  * @param[in] scheduler Unused.
- * @param[in] the_thread Unused.
+ * @param[in] node Unused.
  */
 void _Scheduler_default_Node_destroy(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Scheduler_Node          *node
 );
 
 /**
