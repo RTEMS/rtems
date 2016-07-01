@@ -85,7 +85,7 @@ typedef struct {
   /** This field is the ID of the originating thread. */
   Objects_Id              source_tid;
   /** This field is the priority of the originating thread. */
-  Priority_Control        source_priority;
+  uint32_t                source_priority;
   /** This field is where the status of the operation will be returned. */
   uint32_t                return_code;
   /** This field is the length of the data following the prefix. */
