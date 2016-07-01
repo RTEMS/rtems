@@ -1126,10 +1126,6 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
     _ISR_lock_ISR_disable( lock_context );
 
     /*
-     * We must use a load acquire here paired with the store release in
-     * _Thread_Lock_set_unprotected() to observe corresponding thread wait
-     * queue and thread wait operations.
-     *
      * We assume that a normal load of pointer is identical to a relaxed atomic
      * load.  Here, we may read an out-of-date lock.  However, only the owner
      * of this out-of-date lock is allowed to set a new one.  Thus, we read at
@@ -1137,7 +1133,7 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
      */
     lock_0 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
       &the_thread->Lock.current.atomic,
-      ATOMIC_ORDER_ACQUIRE
+      ATOMIC_ORDER_RELAXED
     );
 
     _SMP_ticket_lock_Acquire(
@@ -1146,9 +1142,23 @@ RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
       &lock_context->Lock_context.Stats_context
     );
 
+    /*
+     * We must use a load acquire here paired with the store release in
+     * _Thread_Lock_set_unprotected() to observe corresponding thread wait
+     * queue and thread wait operations.  It is important to do this after the
+     * lock acquire, since we may have the following scenario.
+     *
+     * - We read the default lock and try to acquire it.
+     * - The thread lock changes to a thread queue lock.
+     * - The thread lock is restored to the default lock.
+     * - We acquire the default lock and read it here again.
+     * - Now, we must read the restored default thread wait queue and thread
+     *   wait operations and this is not synchronized via the default thread
+     *   lock.
+     */
     lock_1 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
       &the_thread->Lock.current.atomic,
-      ATOMIC_ORDER_RELAXED
+      ATOMIC_ORDER_ACQUIRE
     );
 
     /*
