@@ -357,6 +357,10 @@ void _Thread_Life_action_handler(
 
     _Thread_Make_zombie( executing );
 
+    /* FIXME: Workaround for https://devel.rtems.org/ticket/2751 */
+    cpu_self->dispatch_necessary = true;
+
+    _Assert( cpu_self->heir != executing );
     _Thread_Dispatch_enable( cpu_self );
     RTEMS_UNREACHABLE();
   }
