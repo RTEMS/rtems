@@ -53,6 +53,10 @@ extern "C" {
   #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
 #endif
 
+#if defined(__ARM_ARCH_7A__)
+  #define ARM_MULTILIB_CACHE_LINE_MAX_64
+#endif
+
 #if !defined(__SOFTFP__)
   #if defined(__ARM_NEON__)
     #define ARM_MULTILIB_VFP_D32
