@@ -145,8 +145,11 @@
 
 #define CPU_STACK_GROWS_UP FALSE
 
-/* FIXME: Is this the right value? */
-#define CPU_CACHE_LINE_BYTES 32
+#if defined(ARM_MULTILIB_CACHE_LINE_MAX_64)
+  #define CPU_CACHE_LINE_BYTES 32
+#else
+  #define CPU_CACHE_LINE_BYTES 64
+#endif
 
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
