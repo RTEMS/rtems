@@ -469,3 +469,45 @@ rtems_cache_disable_instruction( void )
   _CPU_cache_disable_instruction();
 #endif
 }
+
+/* Returns the maximal cache line size of all cache kinds in bytes. */
+size_t rtems_cache_get_maximal_line_size( void )
+{
+#if defined(CPU_MAXIMAL_CACHE_ALIGNMENT)
+  return CPU_MAXIMAL_CACHE_ALIGNMENT;
+#endif
+  size_t max_line_size = 0;
+#if defined(CPU_DATA_CACHE_ALIGNMENT)
+  {
+    size_t data_line_size = CPU_DATA_CACHE_ALIGNMENT;
+    if ( max_line_size < data_line_size )
+      max_line_size = data_line_size;
+  }
+#endif
+#if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
+  {
+    size_t instruction_line_size = CPU_INSTRUCTION_CACHE_ALIGNMENT;
+    if ( max_line_size < instruction_line_size )
+      max_line_size = instruction_line_size;
+  }
+#endif
+  return max_line_size;
+}
+
+/*
+ * Purpose is to synchronize caches after code has been loaded
+ * or self modified. Actual implementation is simple only
+ * but it can and should be repaced by optimized version
+ * which does not need flush and invalidate all cache levels
+ * when code is changed.
+ */
+void
+rtems_cache_instruction_sync_after_code_change( const void * code_addr, size_t n_bytes )
+{
+#if defined(CPU_CACHE_SUPPORT_PROVIDES_INSTRUCTION_SYNC_FUNCTION)
+  _CPU_cache_instruction_sync_after_code_change( code_addr, n_bytes );
+#else
+  rtems_cache_flush_multiple_data_lines( code_addr, n_bytes );
+  rtems_cache_invalidate_multiple_instruction_lines( code_addr, n_bytes );
+#endif
+}

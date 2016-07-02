@@ -15,7 +15,7 @@
 
 void *rtems_cache_aligned_malloc( size_t nbytes )
 {
-  size_t line_size = rtems_cache_get_data_line_size();
+  size_t line_size = rtems_cache_get_maximal_line_size();
 
   if ( line_size > 0 ) {
     /* Assume that the cache line size is a power of two */
