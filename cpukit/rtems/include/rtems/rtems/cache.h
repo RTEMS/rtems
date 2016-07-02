@@ -61,6 +61,17 @@ size_t rtems_cache_get_data_line_size( void );
 size_t rtems_cache_get_instruction_line_size( void );
 
 /**
+ * @brief Returns the maximal cache line size of all cache kinds in bytes.
+ *
+ * Returns computed or obtained maximal cache line size of all
+ * all caches in the system.
+ *
+ * @retval 0 No cache is present
+ * @retval positive The maximal cache line size in bytes.
+ */
+size_t rtems_cache_get_maximal_line_size( void );
+
+/**
  * @brief Returns the data cache size in bytes.
  *
  * @param[in] level The cache level of interest.  The cache level zero
@@ -123,6 +134,24 @@ void rtems_cache_invalidate_multiple_data_lines(
 void rtems_cache_invalidate_multiple_instruction_lines(
   const void *addr,
   size_t size
+);
+
+
+/**
+ * @brief Ensure necessary synchronization required after code changes
+ *
+ * When code is loaded or modified then many Harvard cache equipped
+ * systems require synchronization of main memory and or updated
+ * code in data cache to ensure visibility of change in all
+ * connected CPUs instruction memory view. This operation
+ * should be used by run time loader for example.
+ *
+ * @param[in] addr The start address of the area to invalidate.
+ * @param[in] size The size in bytes of the area to invalidate.
+ */
+void rtems_cache_instruction_sync_after_code_change(
+  const void * code_addr,
+  size_t n_bytes
 );
 
 /**
