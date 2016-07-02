@@ -73,9 +73,20 @@ static inline void bcm2835_mailbox_buffer_flush_and_invalidate(
      */
     rtems_cache_flush_multiple_data_lines( buf, size );
     rtems_cache_invalidate_multiple_data_lines( buf, size );
-#else
-    /* Flush complete data cache */
+#elif 0
+    /* Flush complete data cache, does not work on RPi2 for some reason */
     arm_cp15_data_cache_clean_and_invalidate();
+#else
+    /*
+     * This is temporal workaround for missing cache meanager
+     * which works on RPi2
+     */
+    size += (uintptr_t)buf & ~63;
+    size = (size + 63) & ~63;
+    while ( size ) {
+      size -= 32;
+      arm_cp15_data_cache_clean_and_invalidate_line(buf);
+    }
 #endif
   }
 }
