@@ -24,6 +24,10 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 RTEMS_BSPOPTS_SET([BSP_START_RESET_VECTOR],[*],[])
 RTEMS_BSPOPTS_HELP([BSP_START_RESET_VECTOR],[reset vector address for BSP start])
 
+RTEMS_BSPOPTS_SET([BSP_START_IN_HYP_SUPPORT],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_START_IN_HYP_SUPPORT], [Support start of BSP in ARM HYP mode])
+AM_CONDITIONAL(BSP_START_IN_HYP_SUPPORT,test "$BSP_START_IN_HYP_SUPPORT" = "1")
+
 RTEMS_BSPOPTS_SET([I2C_IO_MODE],[*],[1])
 RTEMS_BSPOPTS_HELP([I2C_IO_MODE],[Define to 1 to use interrupt-driven I/O with the Raspberry Pi I2C bus. If defined to other value the access will be polled-driven.])
 
