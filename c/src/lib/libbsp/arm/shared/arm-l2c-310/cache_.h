@@ -72,6 +72,10 @@ extern "C" {
 /* These two defines also ensure that the rtems_cache_* functions have bodies */
 #define CPU_DATA_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_DATA_ALIGNMENT
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
+#if defined(__ARM_ARCH_7A__)
+/* Some/many ARM Cortex-A cores have L1 data line lenght 64 bytes */
+#define CPU_MAXIMAL_CACHE_ALIGNMENT 64
+#endif
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS \
   ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 #define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
