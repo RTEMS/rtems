@@ -210,6 +210,18 @@ extern "C" {
 
 /** @} */
 
+/**
+ * @name CCSIDR, Cache Size ID Register Defines
+ *
+ * @{
+ */
+
+#define ARM_CP15_CACHE_CSS_ID_DATA 0
+#define ARM_CP15_CACHE_CSS_ID_INSTRUCTION 1
+#define ARM_CP15_CACHE_CSS_LEVEL(level) ((level) << 1)
+
+/** @} */
+
 ARM_CP15_TEXT_SECTION static inline uint32_t
 arm_cp15_get_id_code(void)
 {
@@ -819,6 +831,21 @@ arm_cp15_set_cache_size_selection(uint32_t val)
   );
 }
 
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_cache_size_id_for_level(uint32_t level_and_inst_dat)
+{
+  rtems_interrupt_level irq_level;
+  uint32_t ccsidr;
+
+  rtems_interrupt_local_disable(irq_level);
+  arm_cp15_set_cache_size_selection(level_and_inst_dat);
+  _ARM_Instruction_synchronization_barrier();
+  ccsidr = arm_cp15_get_cache_size_id();
+  rtems_interrupt_local_enable(irq_level);
+
+  return ccsidr;
+}
+
 ARM_CP15_TEXT_SECTION static inline void
 arm_cp15_cache_invalidate(void)
 {
@@ -1036,10 +1063,8 @@ arm_cp15_data_cache_invalidate_all_levels(void)
       uint32_t way;
       uint32_t way_shift;
 
-      arm_cp15_set_cache_size_selection(level << 1);
-      _ARM_Instruction_synchronization_barrier();
+      ccsidr = arm_cp15_get_cache_size_id_for_level(level << 1);
 
-      ccsidr = arm_cp15_get_cache_size_id();
       line_power = arm_ccsidr_get_line_power(ccsidr);
       associativity = arm_ccsidr_get_associativity(ccsidr);
       way_shift = __builtin_clz(associativity - 1);

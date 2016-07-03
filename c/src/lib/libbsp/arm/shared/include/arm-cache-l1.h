@@ -37,8 +37,10 @@ extern "C" {
 #define ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT 32
 #define ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
-#define ARM_CACHE_L1_CSS_ID_DATA 0
-#define ARM_CACHE_L1_CSS_ID_INSTRUCTION 1
+#define ARM_CACHE_L1_CSS_ID_DATA \
+          (ARM_CP15_CACHE_CSS_ID_DATA | ARM_CP15_CACHE_CSS_LEVEL(0))
+#define ARM_CACHE_L1_CSS_ID_INSTRUCTION \
+          (ARM_CP15_CACHE_CSS_ID_INSTRUCTION | ARM_CP15_CACHE_CSS_LEVEL(0))
 #define ARM_CACHE_L1_DATA_LINE_MASK ( ARM_CACHE_L1_CPU_DATA_ALIGNMENT - 1 )
 #define ARM_CACHE_L1_INSTRUCTION_LINE_MASK \
   ( ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT \
@@ -52,15 +54,6 @@ static void arm_cache_l1_errata_764369_handler( void )
 #endif
 }
 
-static void arm_cache_l1_select( const uint32_t selection )
-{
-  /* select current cache level in cssr */
-  arm_cp15_set_cache_size_selection( selection );
-
-  /* isb to sych the new cssr&csidr */
-  _ARM_Instruction_synchronization_barrier();
-}
-
 /*
  * @param l1LineSize      Number of bytes in cache line expressed as power of 
  *                        2 value
@@ -69,22 +62,23 @@ static void arm_cache_l1_select( const uint32_t selection )
  * qparam liNumSets       Number of sets in cache
  * */
 
-static inline void arm_cache_l1_properties( 
+static inline void arm_cache_l1_properties_for_level(
   uint32_t *l1LineSize,
   uint32_t *l1Associativity,
-  uint32_t *l1NumSets )
+  uint32_t *l1NumSets,
+  uint32_t level_and_inst_dat
+)
 {
-  uint32_t id;
+  uint32_t ccsidr;
 
-  _ARM_Instruction_synchronization_barrier();
-  id               = arm_cp15_get_cache_size_id();
+  ccsidr = arm_cp15_get_cache_size_id_for_level(level_and_inst_dat);
 
   /* Cache line size in words + 2 -> bytes) */
-  *l1LineSize      = ( id & 0x0007U ) + 2 + 2;
+  *l1LineSize      = arm_ccsidr_get_line_power(ccsidr);
   /* Number of Ways */
-  *l1Associativity = ( ( id >> 3 ) & 0x03ffU ) + 1; 
+  *l1Associativity = arm_ccsidr_get_associativity(ccsidr);
   /* Number of Sets */
-  *l1NumSets       = ( ( id >> 13 ) & 0x7fffU ) + 1;
+  *l1NumSets       = arm_ccsidr_get_num_sets(ccsidr);
 }
 
 /*
@@ -130,8 +124,9 @@ static inline void arm_cache_l1_flush_entire_data( void )
   _ARM_Data_memory_barrier();
 
   /* Get the L1 cache properties */
-  arm_cache_l1_properties( &l1LineSize, &l1Associativity,
-                                     &l1NumSets );
+  arm_cache_l1_properties_for_level( &l1LineSize,
+                    &l1Associativity, &l1NumSets,
+                    ARM_CACHE_L1_CSS_ID_DATA);
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -160,8 +155,9 @@ static inline void arm_cache_l1_invalidate_entire_data( void )
   _ARM_Data_memory_barrier();
 
   /* Get the L1 cache properties */
-  arm_cache_l1_properties( &l1LineSize, &l1Associativity,
-                                     &l1NumSets );
+  arm_cache_l1_properties_for_level( &l1LineSize,
+                    &l1Associativity, &l1NumSets,
+                    ARM_CACHE_L1_CSS_ID_DATA);
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -191,8 +187,9 @@ static inline void arm_cache_l1_clean_and_invalidate_entire_data( void )
 
 
   /* Get the L1 cache properties */
-  arm_cache_l1_properties( &l1LineSize, &l1Associativity,
-                                     &l1NumSets );
+  arm_cache_l1_properties_for_level( &l1LineSize,
+                    &l1Associativity, &l1NumSets,
+                    ARM_CACHE_L1_CSS_ID_DATA);
 
   for ( w = 0; w < l1Associativity; ++w ) {
     for ( s = 0; s < l1NumSets; ++s ) {
@@ -371,19 +368,14 @@ static inline void arm_cache_l1_disable_instruction( void )
 
 static inline size_t arm_cache_l1_get_data_cache_size( void )
 {
-  rtems_interrupt_level level;
   size_t   size;
   uint32_t line_size     = 0;
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
 
-  rtems_interrupt_local_disable(level);
-
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_DATA );
-  arm_cache_l1_properties( &line_size, &associativity,
-                           &num_sets );
-
-  rtems_interrupt_local_enable(level);
+  arm_cache_l1_properties_for_level( &line_size,
+                    &associativity, &num_sets,
+                    ARM_CACHE_L1_CSS_ID_DATA);
 
   size = (1 << line_size) * associativity * num_sets;
 
@@ -392,22 +384,17 @@ static inline size_t arm_cache_l1_get_data_cache_size( void )
 
 static inline size_t arm_cache_l1_get_instruction_cache_size( void )
 {
-  rtems_interrupt_level level;
   size_t   size;
   uint32_t line_size     = 0;
   uint32_t associativity = 0;
   uint32_t num_sets      = 0;
 
-  rtems_interrupt_local_disable(level);
-
-  arm_cache_l1_select( ARM_CACHE_L1_CSS_ID_INSTRUCTION );
-  arm_cache_l1_properties( &line_size, &associativity,
-                           &num_sets );
-
-  rtems_interrupt_local_enable(level);
+  arm_cache_l1_properties_for_level( &line_size,
+                    &associativity, &num_sets,
+                    ARM_CACHE_L1_CSS_ID_INSTRUCTION);
 
   size = (1 << line_size) * associativity * num_sets;
-  
+
   return size;
 }
 
