@@ -11,6 +11,7 @@ include_HEADERS += ../gp32/smc/smc.h
 include_HEADERS += ../../shared/include/tm27.h
 
 include_bsp_HEADERS =
+libbsp_a_CPPFLAGS =
 
 nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
@@ -57,8 +58,9 @@ libbsp_a_SOURCES += ../gp32/smc/smc.c ../gp32/smc/smc.h
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
+libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
+libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
     ../../../libcpu/@RTEMS_CPU@/s3c24xx/clock.rel \

@@ -45,8 +45,7 @@ include_bsp_HEADERS += include/mmu.h
 include_bsp_HEADERS += include/usart.h
 include_bsp_HEADERS += include/raspberrypi.h
 
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/cache_.h \
-    ../../../libcpu/arm/shared/include/arm-cp15.h
+include_libcpu_HEADERS =  ../../../libcpu/arm/shared/include/arm-cp15.h
 
 ###############################################################################
 # Data                                                       #
@@ -125,8 +124,9 @@ libbsp_a_SOURCES += misc/timer.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
+libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
+libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
+libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
