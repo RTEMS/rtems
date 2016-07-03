@@ -24,6 +24,7 @@
 #define LIBBSP_ARM_ARMV467AR_BASIC_CACHE_H
 
 #include <libcpu/arm-cp15.h>
+#include "../include/arm-cache-l1.h"
 
 #define CPU_DATA_CACHE_ALIGNMENT 32
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 32
@@ -32,14 +33,44 @@
 #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
 #endif
 
+#define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS \
+          ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+
+
 static inline void _CPU_cache_flush_1_data_line(const void *d_addr)
 {
-  arm_cp15_data_cache_clean_line(d_addr);
+  arm_cache_l1_flush_1_data_line(d_addr);
+}
+
+static inline void
+_CPU_cache_flush_data_range(
+  const void *d_addr,
+  size_t      n_bytes
+)
+{
+  _ARM_Data_synchronization_barrier();
+  arm_cp15_drain_write_buffer();
+  arm_cache_l1_flush_data_range(
+    d_addr,
+    n_bytes
+  );
 }
 
 static inline void _CPU_cache_invalidate_1_data_line(const void *d_addr)
 {
-  arm_cp15_data_cache_invalidate_line(d_addr);
+  arm_cache_l1_invalidate_1_data_line(d_addr);
+}
+
+static inline void
+_CPU_cache_invalidate_data_range(
+  const void *addr_first,
+  size_t     n_bytes
+)
+{
+  arm_cache_l1_invalidate_data_range(
+    addr_first,
+    n_bytes
+  );
 }
 
 static inline void _CPU_cache_freeze_data(void)
@@ -54,7 +85,13 @@ static inline void _CPU_cache_unfreeze_data(void)
 
 static inline void _CPU_cache_invalidate_1_instruction_line(const void *d_addr)
 {
-  arm_cp15_instruction_cache_invalidate_line(d_addr);
+  arm_cache_l1_invalidate_1_instruction_line(d_addr);
+}
+
+static inline void
+_CPU_cache_invalidate_instruction_range( const void *i_addr, size_t n_bytes)
+{
+  arm_cache_l1_invalidate_instruction_range( i_addr, n_bytes );
 }
 
 static inline void _CPU_cache_freeze_instruction(void)
