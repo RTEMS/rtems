@@ -618,6 +618,8 @@ rtems_rtl_obj_sections_loader (uint32_t                     mask,
       first = false;
     }
 
+    rtems_cache_instruction_sync_after_code_change(base, base_offset);
+
     node = rtems_chain_next (node);
   }
 
