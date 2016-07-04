@@ -119,11 +119,11 @@ static inline void _CPU_cache_enable_data(void)
   rtems_interrupt_level level;
   uint32_t ctrl;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   ctrl = arm_cp15_get_control();
   ctrl |= ARM_CP15_CTRL_C;
   arm_cp15_set_control(ctrl);
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 }
 
 static inline void _CPU_cache_disable_data(void)
@@ -131,12 +131,12 @@ static inline void _CPU_cache_disable_data(void)
   rtems_interrupt_level level;
   uint32_t ctrl;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   arm_cp15_data_cache_test_and_clean_and_invalidate();
   ctrl = arm_cp15_get_control();
   ctrl &= ~ARM_CP15_CTRL_C;
   arm_cp15_set_control(ctrl);
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 }
 
 static inline void _CPU_cache_invalidate_entire_instruction(void)
@@ -149,11 +149,11 @@ static inline void _CPU_cache_enable_instruction(void)
   rtems_interrupt_level level;
   uint32_t ctrl;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   ctrl = arm_cp15_get_control();
   ctrl |= ARM_CP15_CTRL_I;
   arm_cp15_set_control(ctrl);
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 }
 
 static inline void _CPU_cache_disable_instruction(void)
@@ -161,11 +161,11 @@ static inline void _CPU_cache_disable_instruction(void)
   rtems_interrupt_level level;
   uint32_t ctrl;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   ctrl = arm_cp15_get_control();
   ctrl &= ~ARM_CP15_CTRL_I;
   arm_cp15_set_control(ctrl);
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 }
 
 #endif /* LIBBSP_ARM_ARMV467AR_BASIC_CACHE_H */
