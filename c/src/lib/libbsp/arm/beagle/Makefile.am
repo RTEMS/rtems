@@ -41,6 +41,7 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/beagleboneblack.h
 include_bsp_HEADERS += include/bbb-gpio.h
+include_bsp_HEADERS += include/bbb-pwm.h
 
 include_libcpu_HEADERS =
 include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/arm-cp15.h
@@ -116,6 +117,9 @@ libbsp_a_SOURCES += misc/i2c.c
 
 # GPIO
 libbsp_a_SOURCES += gpio/bbb-gpio.c
+
+#pwm
+libbsp_a_SOURCES += pwm/pwm.c
 
 #RTC
 libbsp_a_SOURCES += rtc.c
