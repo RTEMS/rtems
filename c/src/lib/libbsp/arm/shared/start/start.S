@@ -54,6 +54,11 @@
 	.extern bsp_start_init_registers_vfp
 #endif
 
+#ifdef BSP_START_IN_HYP_SUPPORT
+	.extern	bsp_start_arm_drop_hyp_mode
+	.globl	bsp_start_hyp_vector_table_begin
+#endif
+
 	/* Global symbols */
 	.globl	_start
 	.globl	bsp_start_vector_table_begin
@@ -124,16 +129,56 @@ handler_addr_fiq:
 
 bsp_start_vector_table_end:
 
+#ifdef BSP_START_IN_HYP_SUPPORT
+bsp_start_hyp_vector_table_begin:
+	ldr	pc, handler_addr_hyp_reset
+	ldr	pc, handler_addr_hyp_undef
+	ldr	pc, handler_addr_hyp_swi
+	ldr	pc, handler_addr_hyp_prefetch
+	ldr	pc, handler_addr_hyp_abort
+	ldr	pc, handler_addr_hyp_hyp
+	ldr	pc, handler_addr_hyp_irq
+	ldr	pc, handler_addr_hyp_fiq
+
+handler_addr_hyp_reset:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_undef:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_swi:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_prefetch:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_abort:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_hyp:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_irq:
+	.word	_ARMV4_Exception_reserved_default
+
+handler_addr_hyp_fiq:
+	.word	_ARMV4_Exception_reserved_default
+
+bsp_start_hyp_vector_table_end:
+#endif
+
 /* Start entry */
 
 _start:
 
 	/*
 	 * We do not save the context since we do not return to the boot
-	 * loader.
+	 * loader but preserve r1 and r2 to allow access to bootloader parameters
 	 */
-
-#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
+#ifndef BSP_START_NEEDS_REGISTER_INITIALIZATION
+	mov	r5, r1		/* machine type number or ~0 for DT boot */
+	mov	r6, r2		/* physical address of ATAGs or DTB */
+#else /* BSP_START_NEEDS_REGISTER_INITIALIZATION */
 	bl bsp_start_init_registers_core
 #endif
 
@@ -147,6 +192,24 @@ _start:
 	mul	r1, r0
 #endif
 
+	mrs	r4, cpsr	/* save original procesor status value  */
+#ifdef BSP_START_IN_HYP_SUPPORT
+	orr	r0, r4, #(ARM_PSR_I | ARM_PSR_F)
+	msr	cpsr, r4
+
+	and	r0, r4, #ARM_PSR_M_MASK
+	cmp	r0, #ARM_PSR_M_HYP
+	bne	bsp_start_skip_hyp_svc_switch
+
+	/* Boot loader stats kernel in HYP mode, switch to SVC necessary */
+	ldr	sp, =bsp_stack_hyp_end
+#ifdef RTEMS_SMP
+	add	sp, r1
+#endif
+	bl	bsp_start_arm_drop_hyp_mode
+
+bsp_start_skip_hyp_svc_switch:
+#endif
 	/*
 	 * Set SVC mode, disable interrupts and enable ARM instructions.
 	 */
@@ -247,6 +310,10 @@ _start:
 
 	SWITCH_FROM_ARM_TO_THUMB	r0
 
+	mov	r0, r4		/* original cpsr value */
+	mov	r1, r5		/* machine type number or ~0 for DT boot */
+	mov	r2, r6		/* physical address of ATAGs or DTB */
+
 	b	bsp_start_hook_0
 
 bsp_start_hook_0_done:
@@ -257,6 +324,8 @@ bsp_start_hook_0_done:
 	 * Initialize the exception vectors.  This includes the exceptions
 	 * vectors and the pointers to the default exception handlers.
 	 */
+
+	stmdb	sp!, {r4, r5, r6}
 
 	ldr	r0, =bsp_vector_table_begin
 	adr	r1, bsp_start_vector_table_begin
@@ -269,7 +338,9 @@ bsp_start_hook_0_done:
 
 bsp_vector_table_copy_done:
 
-	SWITCH_FROM_ARM_TO_THUMB	r0
+	ldmia	sp!, {r0, r1, r2}
+
+	SWITCH_FROM_ARM_TO_THUMB	r3
 
 	/* Branch to start hook 1 */
 	bl	bsp_start_hook_1
