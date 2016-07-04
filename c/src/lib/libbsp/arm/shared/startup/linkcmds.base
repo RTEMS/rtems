@@ -53,10 +53,13 @@ bsp_stack_svc_size = ALIGN (bsp_stack_svc_size, bsp_stack_align);
 bsp_stack_und_size = DEFINED (bsp_stack_und_size) ? bsp_stack_und_size : 0;
 bsp_stack_und_size = ALIGN (bsp_stack_und_size, bsp_stack_align);
 
+bsp_stack_hyp_size = DEFINED (bsp_stack_hyp_size) ? bsp_stack_hyp_size : 0;
+bsp_stack_hyp_size = ALIGN (bsp_stack_hyp_size, bsp_stack_align);
+
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
-bsp_stack_all_size = bsp_stack_abt_size + bsp_stack_fiq_size + bsp_stack_irq_size + bsp_stack_svc_size + bsp_stack_und_size + bsp_stack_main_size;
+bsp_stack_all_size = bsp_stack_abt_size + bsp_stack_fiq_size + bsp_stack_irq_size + bsp_stack_svc_size + bsp_stack_und_size + bsp_stack_hyp_size + bsp_stack_main_size;
 
 bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 1;
 
@@ -311,6 +314,10 @@ SECTIONS {
 		bsp_stack_und_begin = .;
 		. = . + bsp_stack_und_size;
 		bsp_stack_und_end = .;
+
+		bsp_stack_hyp_begin = .;
+		. = . + bsp_stack_hyp_size;
+		bsp_stack_hyp_end = .;
 
 		bsp_stack_abt_begin = .;
 		. = . + bsp_stack_abt_size;
