@@ -107,8 +107,6 @@ const rtc_fns lpc176x_rtc_ops = {
 
 size_t RTC_Count = LPC176X_RTC_NUMBER;
 
-rtems_device_minor_number RTC_Minor = 0;
-
 /**
  * @brief Table to describes the rtc device.
  */

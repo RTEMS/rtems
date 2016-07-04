@@ -29,7 +29,6 @@
 #define dec(a) (((a / 10) << 4) | (a % 10))
 #define WRITE_WAIT_MAX_COUNT 10000
 
-rtems_device_minor_number RTC_Minor;
 size_t RTC_Count = 1;
 
 static void rtc_write_enable(void);

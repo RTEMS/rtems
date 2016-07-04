@@ -127,8 +127,6 @@ const rtc_fns lpc32xx_rtc_ops = {
 
 size_t RTC_Count = LPC32XX_RTC_COUNT;
 
-rtems_device_minor_number RTC_Minor = 0;
-
 rtc_tbl	RTC_Table [LPC32XX_RTC_COUNT] = {
   {
     .sDeviceName = "/dev/rtc",

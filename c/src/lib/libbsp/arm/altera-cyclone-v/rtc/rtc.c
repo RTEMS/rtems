@@ -808,8 +808,6 @@ const rtc_fns  altera_cyclone_v_m41st87_ops =
 
 
 size_t  RTC_Count = ALTERA_CYCLONE_V_RTC_NUMBER;
-rtems_device_minor_number  RTC_Minor = 0;
-
 
 rtc_tbl  RTC_Table[ALTERA_CYCLONE_V_RTC_NUMBER] =
 {

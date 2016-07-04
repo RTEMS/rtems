@@ -18,12 +18,12 @@
 /*
  *  Configuration Information
  */
-extern size_t                     RTC_Count;
-extern rtems_device_minor_number  RTC_Minor;
+static rtems_device_minor_number RTC_Minor = UINT32_MAX;
 
-int RTC_Present;
-
-extern void setRealTimeToRTEMS(void);
+static bool RTC_Is_present(void)
+{
+  return RTC_Minor != UINT32_MAX;
+}
 
 /*
  *  rtc_initialize
@@ -50,12 +50,11 @@ rtems_device_driver rtc_initialize(
        * Use this device as the primary RTC
        */
       RTC_Minor = minor;
-      RTC_Present = 1;
       break;
     }
   }
 
-  if ( !RTC_Present ) {
+  if ( !RTC_Is_present() ) {
     /*
      * Failed to find an RTC -- this is not a fatal error.
      */
@@ -116,7 +115,7 @@ rtems_device_driver rtc_read(
   rw->offset = 0;
   rw->bytes_moved = 0;
 
-  if (!RTC_Present) {
+  if (!RTC_Is_present()) {
     return RTEMS_NOT_CONFIGURED;
   }
 
@@ -150,7 +149,7 @@ rtems_device_driver rtc_write(
   rw->offset = 0;
   rw->bytes_moved = 0;
 
-  if (!RTC_Present) {
+  if (!RTC_Is_present()) {
     return RTEMS_NOT_CONFIGURED;
   }
 
@@ -205,7 +204,7 @@ void setRealTimeToRTEMS()
 {
   rtems_time_of_day rtc_tod;
 
-  if (!RTC_Present)
+  if (!RTC_Is_present())
     return;
 
   RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, &rtc_tod);
@@ -221,7 +220,7 @@ void setRealTimeFromRTEMS(void)
 {
   rtems_time_of_day rtems_tod;
 
-  if (!RTC_Present)
+  if (!RTC_Is_present())
     return;
 
   rtems_clock_get_tod( &rtems_tod );
@@ -237,7 +236,7 @@ void getRealTime(
   rtems_time_of_day *tod
 )
 {
-  if (!RTC_Present)
+  if (!RTC_Is_present())
     return;
 
   RTC_Table[RTC_Minor].pDeviceFns->deviceGetTime(RTC_Minor, tod);
@@ -252,7 +251,7 @@ int setRealTime(
   const rtems_time_of_day *tod
 )
 {
-  if (!RTC_Present)
+  if (!RTC_Is_present())
     return -1;
 
   if ( !_TOD_Validate(tod) )
@@ -275,7 +274,7 @@ int checkRealTime(void)
   uint32_t   rtems_time;
   uint32_t   rtc_time;
 
-  if (!RTC_Present)
+  if (!RTC_Is_present())
     return -1;
 
   rtems_clock_get_tod( &rtems_tod );

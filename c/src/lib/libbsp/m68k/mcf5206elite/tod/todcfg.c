@@ -41,8 +41,6 @@ rtc_tbl RTC_Table[] = {
 
 size_t RTC_Count = NUM_RTCS;
 
-rtems_device_minor_number RTC_Minor;
-
 /* mcf5206elite_ds1307_probe --
  *     RTC presence probe function. Return TRUE, if device is present.
  *     Device presence checked by probe access to RTC device over I2C bus.

@@ -52,8 +52,6 @@ const rtc_fns qoriq_rtc_ops = {
 
 size_t RTC_Count = RTC_COUNT;
 
-rtems_device_minor_number RTC_Minor = 0;
-
 rtc_tbl	RTC_Table [RTC_COUNT] = {
   {
     .sDeviceName = "/dev/rtc",
