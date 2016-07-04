@@ -428,9 +428,13 @@ if HAS_NETWORKING
 libbsp_a_SOURCES += network/if_atsam.c
 endif
 
-# i2c
+# I2C
 libbsp_a_SOURCES += i2c/atsam_i2c_bus.c
 libbsp_a_SOURCES += i2c/atsam_i2c_init.c
+
+# RTC
+libbsp_a_SOURCES += ../../shared/tod.c
+libbsp_a_SOURCES += rtc/rtc-config.c
 
 # Includes
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/CMSIS/Include
