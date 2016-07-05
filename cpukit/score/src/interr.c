@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/interr.h>
-#include <rtems/score/isrlevel.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/userextimpl.h>
@@ -34,11 +33,6 @@ void _Terminate(
   Internal_errors_t       the_error
 )
 {
-  ISR_Level level;
-
-  _ISR_Local_disable( level );
-  (void) level;
-
   _SMP_Request_shutdown();
 
   _User_extensions_Fatal( the_source, is_internal, the_error );
