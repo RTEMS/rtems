@@ -33,8 +33,6 @@ void _Terminate(
   Internal_errors_t       the_error
 )
 {
-  _SMP_Request_shutdown();
-
   _User_extensions_Fatal( the_source, is_internal, the_error );
 
   _Internal_errors_What_happened.the_source  = the_source;
@@ -42,6 +40,8 @@ void _Terminate(
   _Internal_errors_What_happened.the_error   = the_error;
 
   _System_state_Set( SYSTEM_STATE_TERMINATED );
+
+  _SMP_Request_shutdown();
 
   _CPU_Fatal_halt( the_source, the_error );
 

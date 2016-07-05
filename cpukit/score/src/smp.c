@@ -158,9 +158,12 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
 
 void _SMP_Request_shutdown( void )
 {
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
+  ISR_Level level;
 
-  _Per_CPU_State_change( self_cpu, PER_CPU_STATE_SHUTDOWN );
+  _ISR_Local_disable( level );
+  (void) level;
+
+  _Per_CPU_State_change( _Per_CPU_Get(), PER_CPU_STATE_SHUTDOWN );
 }
 
 void _SMP_Send_message( uint32_t cpu_index, unsigned long message )

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -47,33 +47,29 @@ static void fatal_extension(
 )
 {
   SMP_barrier_State barrier_state = SMP_BARRIER_STATE_INITIALIZER;
+  uint32_t self = rtems_get_current_processor();
 
-  if (
-    source == RTEMS_FATAL_SOURCE_APPLICATION
-      || source == RTEMS_FATAL_SOURCE_SMP
-  ) {
-    uint32_t self = rtems_get_current_processor();
+  assert(!is_internal);
 
-    assert(!is_internal);
+  if ( source == RTEMS_FATAL_SOURCE_APPLICATION ) {
+    uint32_t cpu;
 
-    if (self == main_cpu) {
-      uint32_t cpu;
+    assert(self == main_cpu);
+    assert(code == 0xdeadbeef);
 
-      assert(source == RTEMS_FATAL_SOURCE_APPLICATION);
-      assert(code == 0xdeadbeef);
+    _SMP_Request_shutdown();
 
-      for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
-        const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
-        Per_CPU_State state = per_cpu->state;
+    for (cpu = 0; cpu < MAX_CPUS; ++cpu) {
+      const Per_CPU_Control *per_cpu = _Per_CPU_Get_by_index( cpu );
+      Per_CPU_State state = per_cpu->state;
 
-        assert(state == PER_CPU_STATE_SHUTDOWN);
-      }
-
-      TEST_END();
-    } else {
-      assert(source == RTEMS_FATAL_SOURCE_SMP);
-      assert(code == SMP_FATAL_SHUTDOWN);
+      assert(state == PER_CPU_STATE_SHUTDOWN);
     }
+
+    TEST_END();
+  } else if ( source == RTEMS_FATAL_SOURCE_SMP ) {
+    assert(self != main_cpu);
+    assert(code == SMP_FATAL_SHUTDOWN);
   }
 
   _SMP_barrier_Wait(&barrier, &barrier_state, rtems_get_processor_count());
