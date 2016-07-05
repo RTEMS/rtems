@@ -74,7 +74,7 @@ rtems_device_driver console_initialize(
    */
   status = rtems_io_register_name( "/dev/console", major, 0 );
   if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(status);
+    rtems_fatal_error_occurred(BSP_FATAL_CONSOLE_REGISTER_DEV_0);
 
   return RTEMS_SUCCESSFUL;
 }
@@ -96,8 +96,8 @@ rtems_device_driver console_open(
     0                            /* outputUsesInterrupts */
   };
 
-  assert( minor <= 1 );
-  if ( minor > 1 )
+  assert( minor == 0 );
+  if ( minor != 0 )
     return RTEMS_INVALID_NUMBER;
 
   rtems_termios_open( major, minor, arg, &pollCallbacks );
