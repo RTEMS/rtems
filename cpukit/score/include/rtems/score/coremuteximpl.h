@@ -36,6 +36,9 @@ extern "C" {
 
 #define CORE_MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
 
+#define CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS \
+  &_Thread_queue_Operations_priority_inherit
+
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
   CORE_mutex_Control *the_mutex
 )

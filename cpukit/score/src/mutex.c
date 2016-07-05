@@ -26,7 +26,7 @@
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 
-#define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
+#define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
 
 typedef struct {
   Thread_queue_Syslock_queue Queue;
@@ -107,7 +107,6 @@ static void _Mutex_Acquire_slow(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_Inherit_priority( owner, executing );
   _Thread_queue_Context_set_expected_level( queue_context, 1 );
   _Thread_queue_Enqueue_critical(
     &mutex->Queue.Queue,

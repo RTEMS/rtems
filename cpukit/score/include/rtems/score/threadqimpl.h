@@ -36,6 +36,27 @@ extern "C" {
 /**@{*/
 
 /**
+ * @brief Representation of a thread queue path from a start thread queue to
+ * the terminal thread queue.
+ *
+ * The start thread queue is determined by the object on which a thread intends
+ * to block.  The terminal thread queue is the thread queue reachable via
+ * thread queue links those owner is not blocked on a thread queue.  The thread
+ * queue links are determined by the thread queue owner and thread wait queue
+ * relationships.
+ */
+struct Thread_queue_Path {
+  /**
+   * @brief A potential thread to update the priority via
+   * _Thread_Update_priority().
+   *
+   * This thread is determined by thread queues which support priority
+   * inheritance.
+   */
+  Thread_Control *update_priority;
+};
+
+/**
  * @brief Thread queue with a layout compatible to struct _Thread_queue_Queue
  * defined in Newlib <sys/lock.h>.
  */
@@ -887,6 +908,8 @@ extern const Thread_queue_Operations _Thread_queue_Operations_default;
 extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;
 
 extern const Thread_queue_Operations _Thread_queue_Operations_priority;
+
+extern const Thread_queue_Operations _Thread_queue_Operations_priority_inherit;
 
 /**@}*/
 

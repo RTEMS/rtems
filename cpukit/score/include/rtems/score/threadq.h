@@ -43,6 +43,8 @@ extern "C" {
 
 typedef struct _Thread_Control Thread_Control;
 
+typedef struct Thread_queue_Path Thread_queue_Path;
+
 #if defined(RTEMS_MULTIPROCESSING)
 /**
  * @brief Multiprocessing (MP) support callout for thread queue operations.
@@ -239,6 +241,10 @@ typedef void ( *Thread_queue_Priority_change_operation )(
 /**
  * @brief Thread queue enqueue operation.
  *
+ * A potential thread to update the priority due to priority inheritance is
+ * returned via the thread queue path.  This thread is handed over to
+ * _Thread_Update_priority().
+ *
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to enqueue on the queue.
  *
@@ -246,7 +252,8 @@ typedef void ( *Thread_queue_Priority_change_operation )(
  */
 typedef void ( *Thread_queue_Enqueue_operation )(
   Thread_queue_Queue *queue,
-  Thread_Control     *the_thread
+  Thread_Control     *the_thread,
+  Thread_queue_Path  *path
 );
 
 /**

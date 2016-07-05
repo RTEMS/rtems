@@ -54,8 +54,6 @@ Status_Control _CORE_mutex_Seize_slow(
   _CORE_mutex_Release( the_mutex, queue_context );
 #endif
 
-  _Thread_Inherit_priority( owner, executing );
-
 #if defined(RTEMS_SMP)
   _Thread_queue_Context_set_expected_level( queue_context, 1 );
 #else
@@ -66,7 +64,7 @@ Status_Control _CORE_mutex_Seize_slow(
 
   _Thread_queue_Enqueue_critical(
     &the_mutex->Wait_queue.Queue,
-    CORE_MUTEX_TQ_OPERATIONS,
+    CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
     executing,
     STATES_WAITING_FOR_MUTEX,
     queue_context

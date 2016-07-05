@@ -42,8 +42,9 @@ void _Thread_queue_Enqueue_critical(
   Thread_queue_Context          *queue_context
 )
 {
-  Per_CPU_Control *cpu_self;
-  bool             success;
+  Thread_queue_Path  path;
+  Per_CPU_Control   *cpu_self;
+  bool               success;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet ) {
@@ -57,7 +58,7 @@ void _Thread_queue_Enqueue_critical(
   _Thread_Wait_set_queue( the_thread, queue );
   _Thread_Wait_set_operations( the_thread, operations );
 
-  ( *operations->enqueue )( queue, the_thread );
+  ( *operations->enqueue )( queue, the_thread, &path );
 
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
   cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
@@ -124,6 +125,7 @@ void _Thread_queue_Enqueue_critical(
     _Thread_Remove_timer_and_unblock( the_thread, queue );
   }
 
+  _Thread_Update_priority( path.update_priority );
   _Thread_Dispatch_enable( cpu_self );
 }
 

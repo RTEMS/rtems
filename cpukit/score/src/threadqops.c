@@ -39,7 +39,7 @@ static void _Thread_queue_Do_nothing_extract(
   /* Do nothing */
 }
 
-static void _Thread_queue_Queue_enqueue(
+static Thread_queue_Heads *_Thread_queue_Queue_enqueue(
   Thread_queue_Queue *queue,
   Thread_Control     *the_thread,
   void             ( *initialize )( Thread_queue_Heads * ),
@@ -62,6 +62,8 @@ static void _Thread_queue_Queue_enqueue(
   _Chain_Prepend_unprotected( &heads->Free_chain, &spare_heads->Free_node );
 
   ( *enqueue )( heads, the_thread );
+
+  return heads;
 }
 
 static void _Thread_queue_Queue_extract(
@@ -116,9 +118,12 @@ static void _Thread_queue_FIFO_do_extract(
 
 static void _Thread_queue_FIFO_enqueue(
   Thread_queue_Queue *queue,
-  Thread_Control     *the_thread
+  Thread_Control     *the_thread,
+  Thread_queue_Path  *path
 )
 {
+  path->update_priority = NULL;
+
   _Thread_queue_Queue_enqueue(
     queue,
     the_thread,
@@ -266,9 +271,12 @@ static void _Thread_queue_Priority_do_extract(
 
 static void _Thread_queue_Priority_enqueue(
   Thread_queue_Queue *queue,
-  Thread_Control     *the_thread
+  Thread_Control     *the_thread,
+  Thread_queue_Path  *path
 )
 {
+  path->update_priority = NULL;
+
   _Thread_queue_Queue_enqueue(
     queue,
     the_thread,
@@ -308,6 +316,63 @@ static Thread_Control *_Thread_queue_Priority_first(
   first = _RBTree_Minimum( &priority_queue->Queue );
 
   return THREAD_RBTREE_NODE_TO_THREAD( first );
+}
+
+static void _Thread_queue_Priority_inherit_enqueue(
+  Thread_queue_Queue *queue,
+  Thread_Control     *the_thread,
+  Thread_queue_Path  *path
+)
+{
+  Thread_queue_Heads *heads;
+  Thread_Control     *owner;
+  Priority_Control    priority;
+
+  heads = _Thread_queue_Queue_enqueue(
+    queue,
+    the_thread,
+    _Thread_queue_Priority_do_initialize,
+    _Thread_queue_Priority_do_enqueue
+  );
+
+  owner = queue->owner;
+
+#if defined(RTEMS_SMP)
+  if ( _Chain_Has_only_one_node( &heads->Heads.Fifo ) ) {
+    priority = the_thread->current_priority;
+  } else {
+    priority = _Scheduler_Map_priority(
+      _Scheduler_Get_own( the_thread ),
+      PRIORITY_PSEUDO_ISR
+    );
+  }
+#else
+  (void) heads;
+
+  priority = the_thread->current_priority;
+#endif
+
+  if ( priority < owner->current_priority ) {
+    Scheduler_Node *own_node;
+
+    path->update_priority = owner;
+
+    owner->priority_restore_hint = true;
+    _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
+
+    own_node = _Scheduler_Thread_get_own_node( owner );
+    _Scheduler_Node_set_priority( own_node, priority, false );
+
+    owner->current_priority = priority;
+
+    ( *owner->Wait.operations->priority_change )(
+      owner,
+      priority,
+      owner->Wait.queue
+    );
+  } else {
+    path->update_priority = NULL;
+  }
 }
 
 #if defined(RTEMS_SMP)
@@ -356,6 +421,13 @@ const Thread_queue_Operations _Thread_queue_Operations_FIFO = {
 const Thread_queue_Operations _Thread_queue_Operations_priority = {
   .priority_change = _Thread_queue_Priority_priority_change,
   .enqueue = _Thread_queue_Priority_enqueue,
+  .extract = _Thread_queue_Priority_extract,
+  .first = _Thread_queue_Priority_first
+};
+
+const Thread_queue_Operations _Thread_queue_Operations_priority_inherit = {
+  .priority_change = _Thread_queue_Priority_priority_change,
+  .enqueue = _Thread_queue_Priority_inherit_enqueue,
   .extract = _Thread_queue_Priority_extract,
   .first = _Thread_queue_Priority_first
 };
