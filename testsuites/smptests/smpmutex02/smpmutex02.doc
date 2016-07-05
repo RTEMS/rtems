@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpmutex02
+
+directives:
+
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+
+concepts:
+
+  - Ensure that arbitrary mutex optain sequences carried out by multiple
+    threads on multiple processors work.
