@@ -59,13 +59,6 @@ void _Thread_Handler( void )
   _Thread_Restore_fp( executing );
 
   /*
-   * Take care that 'begin' extensions get to complete before
-   * 'switch' extensions can run.  This means must keep dispatch
-   * disabled until all 'begin' extensions complete.
-   */
-  _User_extensions_Thread_begin( executing );
-
-  /*
    * Do not use the level of the thread control block, since it has a
    * different format.
    */
@@ -84,6 +77,14 @@ void _Thread_Handler( void )
    * valid thread dispatch necessary indicator in this context.
    */
   _Thread_Do_dispatch( cpu_self, level );
+
+  /*
+   * Invoke the thread begin extensions in the context of the thread entry
+   * function with thread dispatching enabled.  This enables use of dynamic
+   * memory allocation, creation of POSIX keys and use of C++ thread local
+   * storage.  Blocking synchronization primitives are allowed also.
+   */
+  _User_extensions_Thread_begin( executing );
 
   /*
    *  RTEMS supports multiple APIs and each API can define a different
