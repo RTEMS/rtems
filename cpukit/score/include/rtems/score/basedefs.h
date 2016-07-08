@@ -99,7 +99,7 @@
  */
 #if defined(RTEMS_SCHEDSIM)
   #define RTEMS_NO_RETURN
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && !defined(RTEMS_DEBUG)
   #define RTEMS_NO_RETURN __attribute__((__noreturn__))
 #else
   #define RTEMS_NO_RETURN
