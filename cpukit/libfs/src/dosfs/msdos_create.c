@@ -190,7 +190,7 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
          */
         fat_fd->fat_file_size = 0;
         fat_fd->fat_file_type = FAT_DIRECTORY;
-        fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+        fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
         fat_file_set_ctime_mtime(fat_fd, now);
 
         /*

@@ -97,7 +97,7 @@ msdos_initialize_support(
 
     /* again: unfortunately "fat-file" is just almost fat file :( */
     fat_fd->fat_file_type = FAT_DIRECTORY;
-    fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+    fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
     fat_fd->cln = fs_info->fat.vol.rdir_cl;
 
     fat_fd->map.file_cln = 0;

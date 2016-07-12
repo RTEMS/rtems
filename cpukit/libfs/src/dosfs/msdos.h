@@ -236,7 +236,7 @@ typedef enum msdos_token_types_e
 #define DOTDOT_NODE_P(p)  ((char *)((p) + MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE))
 
 /* Size limits for files and directories */
-#define MSDOS_MAX_DIR_LENGHT               0x200000   /* 2,097,152 bytes */
+#define MSDOS_MAX_DIR_LENGTH               0x200000   /* 2,097,152 bytes */
 #define MSDOS_MAX_FILE_SIZE                0xFFFFFFFF /* 4 Gb */
 
 /*

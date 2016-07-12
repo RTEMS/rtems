@@ -388,7 +388,7 @@ msdos_find_name(
         if ((*MSDOS_DIR_ATTR(node_entry)) & MSDOS_ATTR_DIRECTORY)
         {
             fat_fd->fat_file_type = FAT_DIRECTORY;
-            fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+            fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
 
             rc = fat_file_size(&fs_info->fat, fat_fd);
             if (rc != RC_OK)
@@ -581,7 +581,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
 
     fat_fd->cln = cln;
     fat_fd->fat_file_type = FAT_DIRECTORY;
-    fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+    fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
 
     fat_fd->map.file_cln = 0;
     fat_fd->map.disk_cln = fat_fd->cln;
@@ -650,7 +650,7 @@ msdos_get_dotdot_dir_info_cluster_num_and_offset(
         fat_fd->cln = MSDOS_EXTRACT_CLUSTER_NUM(dotdot_node);
 
     fat_fd->fat_file_type = FAT_DIRECTORY;
-    fat_fd->size_limit = MSDOS_MAX_DIR_LENGHT;
+    fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
 
     fat_fd->map.file_cln = 0;
     fat_fd->map.disk_cln = fat_fd->cln;
