@@ -68,6 +68,7 @@ __rtems_entry_point:
 	mfmsr r0
 	oris  r0, r0, (1<<(31-16-6))
 	mtmsr r0
+	isync
 	/*
 	 * set vscr and vrsave to known values
 	 */
