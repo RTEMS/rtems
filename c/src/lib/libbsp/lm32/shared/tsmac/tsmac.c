@@ -249,7 +249,7 @@ static void tsmac_rxDaemon(void *arg)
 	  if (rxq == 0)
 	    break;
 
-	  /* Get lenght of frame */
+	  /* Get length of frame */
 	  len = tsmacread(LM32_TSMAC_RX_LEN_FIFO);
 #ifdef DEBUG
 	  printk(TSMAC_NAME ": Frames %d, len 0x%04x (%d)\n",

@@ -30,9 +30,9 @@
 #include <bsp/linker-symbols.h>
 
 /**
- * @brief Checks if the current interrupt vector lenght is valid or not.
+ * @brief Checks if the current interrupt vector length is valid or not.
  *
- * @param  vector The current interrupt vector lenght .
+ * @param  vector The current interrupt vector length.
  * @return  TRUE if valid.
  *          FALSE otherwise.
  */

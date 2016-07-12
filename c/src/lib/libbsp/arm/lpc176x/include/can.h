@@ -162,7 +162,7 @@ rtems_status_code can_register_isr(
  * @param msg The created message.
  * @param _id The can id for the message.
  * @param _data The data of the message.
- * @param _len The lenght of the message.
+ * @param _len The length of the message.
  * @return RTEMS_SUCCESFUL if created, RTEMS_INVALID_NUMBER otherwise.
  */
 rtems_status_code create_can_message(

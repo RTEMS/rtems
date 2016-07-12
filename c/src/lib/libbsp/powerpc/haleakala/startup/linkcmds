@@ -77,7 +77,7 @@ SECTIONS
     /* 
      *  C++ constructors and destructors for static objects.
      *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
-     *  constructor and destructor lists that begin with the list lenght
+     *  constructor and destructor lists that begin with the list length
      *  end terminate with a NULL entry.
      */
      

@@ -29,7 +29,7 @@
 #define CPU_DATA_CACHE_ALIGNMENT 32
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 32
 #if defined(__ARM_ARCH_7A__)
-/* Some/many ARM Cortex-A cores have L1 data line lenght 64 bytes */
+/* Some/many ARM Cortex-A cores have L1 data line length 64 bytes */
 #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
 #endif
 

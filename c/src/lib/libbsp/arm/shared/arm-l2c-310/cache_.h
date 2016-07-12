@@ -73,7 +73,7 @@ extern "C" {
 #define CPU_DATA_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_DATA_ALIGNMENT
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT
 #if defined(__ARM_ARCH_7A__)
-/* Some/many ARM Cortex-A cores have L1 data line lenght 64 bytes */
+/* Some/many ARM Cortex-A cores have L1 data line length 64 bytes */
 #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
 #endif
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS \

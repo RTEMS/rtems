@@ -249,7 +249,7 @@ typedef struct strbuf {
 
 /* Read 'readlink' results into a 'strbuf'.
  * This is convenient as it avoids
- * one extra step of copying / lenght
+ * one extra step of copying / length
  * checking.
  */
 typedef struct readlinkres_strbuf {
