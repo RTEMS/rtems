@@ -31,6 +31,7 @@ const char rtems_test_name[] = "TAR 1";
 rtems_task Init(rtems_task_argument argument);
 void test_untar_from_memory(void);
 void test_untar_from_file(void);
+void test_untar_chunks_from_memory(void);
 
 #define TARFILE_START initial_filesystem_tar
 #define TARFILE_SIZE  initial_filesystem_tar_size
@@ -106,6 +107,44 @@ void test_untar_from_file(void)
   test_cat( "/dest/symlink", 0, 0 );
 }
 
+void test_untar_chunks_from_memory(void)
+{
+  rtems_status_code sc;
+  rtems_printer     printer;
+  int rv;
+  Untar_ChunkContext ctx;
+  unsigned long counter = 0;
+  char *buffer = (char *)TARFILE_START;
+  size_t buflen = TARFILE_SIZE;
+
+  rtems_print_printer_printf(&printer);
+
+  /* make a directory to untar it into */
+  rv = mkdir( "/dest2", 0777 );
+  rtems_test_assert( rv == 0 );
+
+  rv = chdir( "/dest2" );
+  rtems_test_assert( rv == 0 );
+
+  printf( "Untaring chunks from memory - " );
+  Untar_ChunkContext_Init(&ctx);
+  do {
+    sc = Untar_FromChunk_Print(&ctx, &buffer[counter], (size_t)1 , &printer);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    counter ++;
+  } while (counter < buflen);
+  printf("successful\n");
+
+  /******************/
+  printf( "========= /dest2/home/test_file =========\n" );
+  test_cat( "/dest2/home/test_file", 0, 0 );
+
+  /******************/
+  printf( "========= /dest2/symlink =========\n" );
+  test_cat( "/dest2/symlink", 0, 0 );
+
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -115,6 +154,8 @@ rtems_task Init(
   test_untar_from_memory();
   puts( "" );
   test_untar_from_file();
+  puts( "" );
+  test_untar_chunks_from_memory();
 
   TEST_END();
   exit( 0 );

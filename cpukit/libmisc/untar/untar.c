@@ -37,7 +37,6 @@
 #include <rtems/untar.h>
 #include <rtems/bspIo.h>
 
-
 /*
  * TAR file format:
 
@@ -539,6 +538,110 @@ Untar_FromFile_Print(
   close(fd);
 
   return retval;
+}
+
+
+void Untar_ChunkContext_Init(Untar_ChunkContext *context)
+{
+  context->state = UNTAR_CHUNK_HEADER;
+  context->done_bytes = 0;
+  context->out_fd = -1;
+}
+
+int Untar_FromChunk_Print(
+  Untar_ChunkContext *context,
+  void *chunk,
+  size_t chunk_size,
+  const rtems_printer* printer
+)
+{
+  char *buf;
+  size_t done;
+  size_t todo;
+  size_t remaining;
+  size_t consume;
+  int retval;
+  unsigned char linkflag;
+
+  buf = chunk;
+  done = 0;
+  todo = chunk_size;
+
+  while (todo > 0) {
+    switch (context->state) {
+      case UNTAR_CHUNK_HEADER:
+        remaining = 512 - context->done_bytes;
+        consume = MIN(remaining, todo);
+        memcpy(&context->header[context->done_bytes], &buf[done], consume);
+        context->done_bytes += consume;
+
+        if (context->done_bytes == 512) {
+          retval = Untar_ProcessHeader(
+            &context->header[0],
+            &context->fname[0],
+            &context->todo_bytes,
+            &context->todo_blocks,
+            &linkflag,
+            printer
+          );
+
+          if (retval != UNTAR_SUCCESSFUL) {
+            context->state = UNTAR_CHUNK_ERROR;
+            return retval;
+          }
+
+          if (linkflag == REGTYPE) {
+            context->out_fd = creat(&context->fname[0], 0644);
+
+            if (context->out_fd >= 0) {
+              context->state = UNTAR_CHUNK_WRITE;
+              context->done_bytes = 0;
+            } else {
+              context->state = UNTAR_CHUNK_SKIP;
+              context->todo_bytes = 512 * context->todo_blocks;
+              context->done_bytes = 0;
+            }
+          } else {
+              context->done_bytes = 0;
+          }
+        }
+
+        break;
+      case UNTAR_CHUNK_SKIP:
+        remaining = context->todo_bytes - context->done_bytes;
+        consume = MIN(remaining, todo);
+        context->done_bytes += consume;
+
+        if (context->done_bytes == context->todo_bytes) {
+          context->state = UNTAR_CHUNK_HEADER;
+          context->done_bytes = 0;
+        }
+
+        break;
+      case UNTAR_CHUNK_WRITE:
+        remaining = context->todo_bytes - context->done_bytes;
+        consume = MIN(remaining, todo);
+        write(context->out_fd, &buf[done], consume);
+        context->done_bytes += consume;
+
+        if (context->done_bytes == context->todo_bytes) {
+          close(context->out_fd);
+          context->out_fd = -1;
+          context->state = UNTAR_CHUNK_SKIP;
+          context->todo_bytes = 512 * context->todo_blocks - context->todo_bytes;
+          context->done_bytes = 0;
+        }
+
+        break;
+      default:
+        return UNTAR_FAIL;
+    }
+
+    done += consume;
+    todo -= consume;
+  }
+
+  return UNTAR_SUCCESSFUL;
 }
 
 /*

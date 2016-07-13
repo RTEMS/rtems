@@ -14,6 +14,7 @@ directives:
 
   + Untar_FromMemory
   + Untar_FromFile
+  + Untar_ChunksFromMemory
 
 concepts:
 
