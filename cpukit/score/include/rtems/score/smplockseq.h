@@ -21,6 +21,7 @@
 
 #if defined(RTEMS_SMP)
 
+#include <rtems/score/assert.h>
 #include <rtems/score/atomic.h>
 
 #ifdef __cplusplus
@@ -102,6 +103,8 @@ static inline unsigned int _SMP_sequence_lock_Write_begin(
   unsigned int seq;
 
   seq = _Atomic_Load_uint( &lock->sequence, ATOMIC_ORDER_RELAXED );
+  _Assert( seq % 2 == 0 );
+
   _Atomic_Store_uint( &lock->sequence, seq + 1, ATOMIC_ORDER_RELAXED );
 
   /* There is no atomic store with acquire/release semantics */
