@@ -33,9 +33,9 @@ static Thread_queue_Control _Nanosleep_Pseudo_queue =
   THREAD_QUEUE_INITIALIZER( "Nanosleep" );
 
 static inline int nanosleep_helper(
-  const struct timespec  *rqtp,
-  struct timespec        *rmtp,
-  Watchdog_Discipline     discipline
+  uint64_t              ticks,
+  struct timespec      *rmtp,
+  Watchdog_Discipline   discipline
 )
 {
   /*
@@ -45,24 +45,8 @@ static inline int nanosleep_helper(
   Thread_Control  *executing;
   Per_CPU_Control *cpu_self;
 
-  Watchdog_Interval  ticks;
   Watchdog_Interval  start;
   Watchdog_Interval  elapsed;
-
-
-  /*
-   *  Return EINVAL if the delay interval is negative.
-   *
-   *  NOTE:  This behavior is beyond the POSIX specification.
-   *         FSU and GNU/Linux pthreads shares this behavior.
-   */
-  if ( !_Timespec_Is_valid( rqtp ) )
-    return EINVAL;
-
-  /*
-   * Convert the timespec delay into the appropriate number of clock ticks.
-   */
-  ticks = _Timespec_To_ticks( rqtp );
 
   executing = _Thread_Get_executing();
 
@@ -110,7 +94,7 @@ static inline int nanosleep_helper(
   /*
    * If the user wants the time remaining, do the conversion.
    */
-  if ( rmtp && discipline == WATCHDOG_RELATIVE ) {
+  if ( rmtp ) {
     _Timespec_From_ticks( ticks, rmtp );
   }
 
@@ -135,8 +119,30 @@ int nanosleep(
   struct timespec        *rmtp
 )
 {
-  int err = nanosleep_helper(rqtp, rmtp, WATCHDOG_RELATIVE);
-  if (err) {
+  int err;
+  struct timespec timeout;
+  uint64_t ticks;
+
+  /*
+   *  Return EINVAL if the delay interval is negative.
+   *
+   *  NOTE:  This behavior is beyond the POSIX specification.
+   *         FSU and GNU/Linux pthreads shares this behavior.
+   */
+  if ( !_Timespec_Is_valid( rqtp ) )
+    return EINVAL;
+
+ /* CLOCK_REALTIME can be adjusted during the timeout,
+  * so convert to an absolute timeout value and put the
+  * thread on the WATCHDOG_ABSOLUTE threadq. */
+  err = clock_gettime( CLOCK_REALTIME, &timeout );
+  if ( err != 0 )
+    return -1;
+
+  _Timespec_Add_to( &timeout, rqtp );
+  ticks = _Watchdog_Ticks_from_timespec( &timeout );
+  err = nanosleep_helper(ticks, rmtp, WATCHDOG_ABSOLUTE );
+  if ( err != 0 ) {
     rtems_set_errno_and_return_minus_one( err );
   }
   return 0;
@@ -153,12 +159,49 @@ int clock_nanosleep(
 )
 {
   int err = 0;
-  if ( clock_id == CLOCK_REALTIME || clock_id == CLOCK_MONOTONIC ) {
-    if ( flags & TIMER_ABSTIME ) {
-      err = nanosleep_helper(rqtp, rmtp, WATCHDOG_ABSOLUTE);
-    } else {
-      err = nanosleep_helper(rqtp, rmtp, WATCHDOG_RELATIVE);
+  struct timespec absolute_timeout;
+  uint64_t ticks;
+  Watchdog_Interval relative_ticks;
+  TOD_Absolute_timeout_conversion_results status;
+
+  /*
+   *  Return EINVAL if the delay interval is negative.
+   *
+   *  NOTE:  This behavior is beyond the POSIX specification.
+   *         FSU and GNU/Linux pthreads shares this behavior.
+   */
+  if ( !_Timespec_Is_valid( rqtp ) )
+    return EINVAL;
+
+  if ( flags & TIMER_ABSTIME ) {
+    /* See if absolute time already passed */
+    status = _TOD_Absolute_timeout_to_ticks(rqtp, clock_id, &relative_ticks);
+    if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
+      return EINVAL;
+    if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+        status == TOD_ABSOLUTE_TIMEOUT_IS_NOW ) {
+      return 0;
     }
+    rmtp = NULL; /* Do not touch rmtp when using absolute time */
+  } else {
+    relative_ticks = _Timespec_To_ticks(rqtp);
+  }
+
+  if ( clock_id == CLOCK_REALTIME ) {
+    if ( flags & TIMER_ABSTIME ) {
+      ticks = _Watchdog_Ticks_from_timespec(rqtp);
+    } else {
+      err = clock_gettime( CLOCK_REALTIME, &absolute_timeout );
+      if ( err != 0 ) {
+        return EINVAL;
+      }
+      _Timespec_Add_to( &absolute_timeout, rqtp );
+      ticks = _Watchdog_Ticks_from_timespec( &absolute_timeout );
+    }
+    err = nanosleep_helper( ticks, rmtp, WATCHDOG_ABSOLUTE );
+  } else if ( clock_id == CLOCK_MONOTONIC ) {
+    /* use the WATCHDOG_RELATIVE to ignore changes in wall time */
+    err = nanosleep_helper( relative_ticks, rmtp, WATCHDOG_RELATIVE );
   } else {
     err = ENOTSUP;
   }
