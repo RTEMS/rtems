@@ -560,6 +560,22 @@ arm_cp15_tlb_invalidate_entry(const void *mva)
 }
 
 ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_tlb_invalidate_entry_all_asids(const void *mva)
+{
+  ARM_SWITCH_REGISTERS;
+
+  mva = ARM_CP15_TLB_PREPARE_MVA(mva);
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[mva], c8, c7, 3\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [mva] "r" (mva)
+  );
+}
+
+ARM_CP15_TEXT_SECTION static inline void
 arm_cp15_tlb_instruction_invalidate(void)
 {
   ARM_SWITCH_REGISTERS;
