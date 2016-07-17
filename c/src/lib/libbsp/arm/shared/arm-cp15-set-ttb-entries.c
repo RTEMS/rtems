@@ -12,7 +12,22 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems.h>
 #include <libcpu/arm-cp15.h>
+
+/*
+ * Translation table modification requires to propagate
+ * information to memory and other cores.
+ *
+ * Algorithm follows example found in the section
+ *
+ * B3.10.1 General TLB maintenance requirements
+ * TLB maintenance operations and the memory order model
+ *
+ * of ARM Architecture Reference Manual
+ * ARMv7-A and ARMv7-R edition
+ * ARM DDI 0406C.b (ID072512)
+ */
 
 static uint32_t set_translation_table_entries(
   const void *begin,
@@ -20,27 +35,46 @@ static uint32_t set_translation_table_entries(
   uint32_t section_flags
 )
 {
-  uint32_t cl_size = arm_cp15_get_min_cache_line_size();
   uint32_t *ttb = arm_cp15_get_translation_table_base();
-  uint32_t i = ARM_MMU_SECT_GET_INDEX(begin);
+  uint32_t istart = ARM_MMU_SECT_GET_INDEX(begin);
   uint32_t iend = ARM_MMU_SECT_GET_INDEX(ARM_MMU_SECT_MVA_ALIGN_UP(end));
   uint32_t index_mask = (1U << (32 - ARM_MMU_SECT_BASE_SHIFT)) - 1U;
   uint32_t ctrl;
   uint32_t section_flags_of_first_entry;
+  uint32_t i;
+  void *first_ttb_addr;
+  void *last_ttb_end;
 
-  ctrl = arm_cp15_mmu_disable(cl_size);
-  arm_cp15_tlb_invalidate();
-  section_flags_of_first_entry = ttb [i];
+  ctrl = arm_cp15_get_control();
+  section_flags_of_first_entry = ttb [istart];
+  last_ttb_end = first_ttb_addr = ttb + istart;
 
-  while (i != iend) {
+  for ( i = istart; i != iend; i = (i + 1U) & index_mask ) {
     uint32_t addr = i << ARM_MMU_SECT_BASE_SHIFT;
 
     ttb [i] = addr | section_flags;
-
-    i = (i + 1U) & index_mask;
+    last_ttb_end = ttb + i + 1;
   }
 
-  arm_cp15_set_control(ctrl);
+  if ( ctrl & (ARM_CP15_CTRL_C | ARM_CP15_CTRL_M ) ) {
+    rtems_cache_flush_multiple_data_lines(first_ttb_addr,
+                last_ttb_end - first_ttb_addr);
+  }
+
+  _ARM_Data_synchronization_barrier();
+
+  for ( i = istart; i != iend; i = (i + 1U) & index_mask ) {
+    void *mva = (void *) (i << ARM_MMU_SECT_BASE_SHIFT);
+    #if defined(__ARM_ARCH_7A__)
+    arm_cp15_tlb_invalidate_entry_all_asids(mva);
+    #else
+    arm_cp15_tlb_instruction_invalidate_entry(mva);
+    arm_cp15_tlb_data_invalidate_entry(mva);
+    #endif
+  }
+
+  _ARM_Data_synchronization_barrier();
+  _ARM_Instruction_synchronization_barrier();
 
   return section_flags_of_first_entry;
 }
