@@ -49,11 +49,14 @@ _CPU_cache_flush_data_range(
 )
 {
   _ARM_Data_synchronization_barrier();
-  arm_cp15_drain_write_buffer();
   arm_cache_l1_flush_data_range(
     d_addr,
     n_bytes
   );
+  #if !defined(__ARM_ARCH_7A__)
+  arm_cp15_drain_write_buffer();
+  #endif
+ _ARM_Data_synchronization_barrier();
 }
 
 static inline void _CPU_cache_invalidate_1_data_line(const void *d_addr)
@@ -92,6 +95,7 @@ static inline void
 _CPU_cache_invalidate_instruction_range( const void *i_addr, size_t n_bytes)
 {
   arm_cache_l1_invalidate_instruction_range( i_addr, n_bytes );
+  _ARM_Instruction_synchronization_barrier();
 }
 
 static inline void _CPU_cache_freeze_instruction(void)
@@ -106,12 +110,23 @@ static inline void _CPU_cache_unfreeze_instruction(void)
 
 static inline void _CPU_cache_flush_entire_data(void)
 {
-  arm_cp15_data_cache_test_and_clean();
+  _ARM_Data_synchronization_barrier();
+  #if defined(__ARM_ARCH_7A__)
+  arm_cp15_data_cache_clean_all_levels();
+  #else
+  arm_cp15_data_cache_clean_and_invalidate();
+  arm_cp15_drain_write_buffer();
+  #endif
+  _ARM_Data_synchronization_barrier();
 }
 
 static inline void _CPU_cache_invalidate_entire_data(void)
 {
+  #if defined(__ARM_ARCH_7A__)
+  arm_cp15_data_cache_invalidate_all_levels();
+  #else
   arm_cp15_data_cache_invalidate();
+  #endif
 }
 
 static inline void _CPU_cache_enable_data(void)
@@ -141,7 +156,8 @@ static inline void _CPU_cache_disable_data(void)
 
 static inline void _CPU_cache_invalidate_entire_instruction(void)
 {
-  arm_cp15_instruction_cache_invalidate();
+  arm_cache_l1_invalidate_entire_instruction();
+  _ARM_Instruction_synchronization_barrier();
 }
 
 static inline void _CPU_cache_enable_instruction(void)

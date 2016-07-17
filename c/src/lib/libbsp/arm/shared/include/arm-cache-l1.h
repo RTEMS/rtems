@@ -329,9 +329,13 @@ static inline void arm_cache_l1_invalidate_entire_instruction( void )
   arm_cp15_instruction_cache_invalidate();
   #endif /* RTEMS_SMP */
 
-  if ( ( ctrl & ARM_CP15_CTRL_Z ) == 0 ) {
+  if ( ( ctrl & ARM_CP15_CTRL_Z ) != 0 ) {
+    #if defined(__ARM_ARCH_7A__)
     arm_cp15_branch_predictor_inner_shareable_invalidate_all();
+    #endif
+    #if defined(__ARM_ARCH_6KZ__) || defined(__ARM_ARCH_7A__)
     arm_cp15_branch_predictor_invalidate_all();
+    #endif
   }
 }
 
