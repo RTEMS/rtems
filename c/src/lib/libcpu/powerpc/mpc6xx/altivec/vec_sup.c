@@ -234,6 +234,12 @@ unsigned          pvr;
 	 * Therefore, we compute it here and store it in memory...
 	 */
 	_CPU_altivec_ctxt_off  = offsetof(ppc_context, altivec);
+
+	/*
+	 * See ppc_get_context() and PPC_CONTEXT_OFFSET_GPR1
+	 */
+	_CPU_altivec_ctxt_off += PPC_DEFAULT_CACHE_LINE_SIZE;
+
 	/* 
 	 * Add space possibly needed for alignment
 	 */
