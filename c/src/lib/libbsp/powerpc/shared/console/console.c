@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <stdlib.h>
+#include <inttypes.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
@@ -49,16 +49,12 @@ int BSPBaseBaud    = BSP_UART_BAUD_BASE;
  * we could even make it a link-time option (but that would require
  * small changes)...
  */
-#ifndef TERMIOS_OUTPUT_MODE
-  #if 1
-    #define TERMIOS_OUTPUT_MODE TERMIOS_IRQ_DRIVEN
-  #else
-    #define TERMIOS_OUTPUT_MODE TERMIOS_TASK_DRIVEN
-  #endif
-#endif
-
-#if ! defined(USE_POLLED_IO) && (TERMIOS_OUTPUT_MODE == TERMIOS_POLLED)
-  #define USE_POLLED_IO
+#if defined(USE_POLLED_IO)
+  #define TERMIOS_OUTPUT_MODE TERMIOS_POLLED
+#elif defined(USE_TASK_DRIVEN_IO)
+  #define TERMIOS_OUTPUT_MODE TERMIOS_TASK_DRIVEN
+#else
+  #define TERMIOS_OUTPUT_MODE TERMIOS_IRQ_DRIVEN
 #endif
 
 /*-------------------------------------------------------------------------+
@@ -132,7 +128,7 @@ rtems_device_driver console_initialize(
      */
     status = rtems_io_register_name ((nm=ttyS[minor].name), major, minor);
     if ( RTEMS_SUCCESSFUL==status && BSPConsolePort == minor) {
-      printk("Registering /dev/console as minor %d (==%s)\n",
+      printk("Registering /dev/console as minor %" PRIu32 " (==%s)\n",
               minor,
               ttyS[minor].name);
       /* also register an alias */
@@ -211,7 +207,7 @@ rtems_device_driver console_open(
   {
      console_first_open,                /* firstOpen */
      console_last_close,                /* lastClose */
-#if ( TERMIOS_OUTPUT_MODE == TERMIOS_TASK_DRIVEN )
+#ifdef USE_TASK_DRIVEN_IO
      BSP_uart_termios_read_com,         /* pollRead */
 #else
      NULL,                              /* pollRead */
