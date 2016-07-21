@@ -494,6 +494,13 @@ bool rtems_rtl_obj_relocate (rtems_rtl_obj_t*             obj,
                              void*                        data);
 
 /**
+ * Synchronize caches to make code visible to CPU(s)
+ *
+ * @param obj The object file's descriptor.
+ */
+void rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj);
+
+/**
  * Relocate an object file's unresolved reference.
  *
  * @param rec The unresolved relocation record.
