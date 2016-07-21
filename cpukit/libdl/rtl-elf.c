@@ -944,6 +944,8 @@ rtems_rtl_elf_file_load (rtems_rtl_obj_t* obj, int fd)
   if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocator, &ehdr))
     return false;
 
+  rtems_rtl_obj_synchronize_cache (obj);
+
   rtems_rtl_symbol_obj_erase_local (obj);
 
   if (!rtems_rtl_elf_load_details (obj))

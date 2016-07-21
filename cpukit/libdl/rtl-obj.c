@@ -558,6 +558,69 @@ rtems_rtl_obj_relocate (rtems_rtl_obj_t*             obj,
   return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
 }
 
+/**
+ * Cache synchronization after runtime object load (dlopen)
+ */
+typedef struct
+{
+  uint32_t mask;
+  void     *start_va;
+  void     *end_va;
+} rtems_rtl_obj_sect_sync_ctx_t;
+
+static bool
+rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
+{
+  rtems_rtl_obj_sect_t*   sect = (rtems_rtl_obj_sect_t*) node;
+  rtems_rtl_obj_sect_sync_ctx_t* sync_ctx = data;
+  uintptr_t old_end;
+  uintptr_t new_start;
+
+  if ( !(sect->flags & sync_ctx->mask) || !sect->size)
+    return true;
+
+  if (sync_ctx->end_va == sync_ctx->start_va) {
+    sync_ctx->start_va = sect->base;
+  } else {
+    old_end = (uintptr_t)sync_ctx->end_va & ~(CPU_CACHE_LINE_BYTES - 1);
+    new_start = (uintptr_t)sect->base & ~(CPU_CACHE_LINE_BYTES - 1);
+    if ( (sect->base <  sync_ctx->start_va) ||
+         (new_start - old_end > CPU_CACHE_LINE_BYTES) ) {
+      rtems_cache_instruction_sync_after_code_change(sync_ctx->start_va,
+                             sync_ctx->end_va - sync_ctx->start_va + 1);
+      sync_ctx->start_va = sect->base;
+    }
+  }
+
+  sync_ctx->end_va = sect->base + sect->size;
+
+  return true;
+}
+
+void
+rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj)
+{
+  rtems_rtl_obj_sect_sync_ctx_t sync_ctx;
+
+  if (rtems_cache_get_instruction_line_size() == 0)
+    return;
+
+  sync_ctx.mask = RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_CONST |
+                  RTEMS_RTL_OBJ_SECT_DATA | RTEMS_RTL_OBJ_SECT_BSS |
+                  RTEMS_RTL_OBJ_SECT_EXEC;
+
+  sync_ctx.start_va = 0;
+  sync_ctx.end_va = sync_ctx.start_va;
+  rtems_rtl_chain_iterate (&obj->sections,
+                           rtems_rtl_obj_sect_sync_handler,
+                           &sync_ctx);
+
+  if (sync_ctx.end_va != sync_ctx.start_va) {
+    rtems_cache_instruction_sync_after_code_change(sync_ctx.start_va,
+                              sync_ctx.end_va - sync_ctx.start_va);
+  }
+}
+
 bool
 rtems_rtl_obj_load_symbols (rtems_rtl_obj_t*             obj,
                             int                          fd,

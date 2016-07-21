@@ -970,6 +970,8 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
   if (!rtems_rtl_rap_relocate (&rap, obj))
     return false;
 
+  rtems_rtl_obj_synchronize_cache (obj);
+
   return true;
 }
 
