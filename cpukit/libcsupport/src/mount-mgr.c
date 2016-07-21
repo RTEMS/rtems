@@ -124,6 +124,7 @@ rtems_filesystem_register(
 
   rtems_libio_lock();
   if ( rtems_filesystem_get_mount_handler( type ) == NULL ) {
+    rtems_chain_initialize_node( &fsn->node );
     rtems_chain_append_unprotected( chain, &fsn->node );
   } else {
     rtems_libio_unlock();

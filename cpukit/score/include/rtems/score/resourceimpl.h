@@ -59,6 +59,7 @@ RTEMS_INLINE_ROUTINE void _Resource_Node_initialize( Resource_Node *node )
 {
   node->dependency = NULL;
   node->root = node;
+  _Chain_Initialize_node( &node->Node );
   _Chain_Initialize_empty( &node->Resources );
 }
 
@@ -106,6 +107,7 @@ RTEMS_INLINE_ROUTINE void _Resource_Node_extract( Resource_Node *node )
 RTEMS_INLINE_ROUTINE void _Resource_Initialize( Resource_Control *resource )
 {
   resource->owner = NULL;
+  _Chain_Initialize_node( &resource->Node );
   _Chain_Initialize_empty( &resource->Rivals );
 }
 

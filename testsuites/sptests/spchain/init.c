@@ -43,6 +43,9 @@ static void test_chain_iterator( void )
   rtems_test_assert( _Chain_Is_empty( &static_reg.Iterators ));
 
   _Chain_Initialize_empty( &chain );
+  _Chain_Initialize_node( &a );
+  _Chain_Initialize_node( &b );
+  _Chain_Initialize_node( &c );
   _Chain_Iterator_registry_initialize( &reg );
   _Chain_Iterator_initialize( &chain, &reg, &fit, CHAIN_ITERATOR_FORWARD );
   _Chain_Iterator_initialize( &chain, &reg, &bit, CHAIN_ITERATOR_BACKWARD );
@@ -225,6 +228,8 @@ static void test_chain_first_and_last(void)
   rtems_chain_node     *cnode;
 
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &node1 );
+  rtems_chain_initialize_node( &node2 );
   rtems_chain_append( &chain, &node1 );
   rtems_chain_insert( &node1, &node2 );
 
@@ -255,6 +260,7 @@ static void test_chain_with_notification(void)
 
   puts( "INIT - Verify rtems_chain_append_with_notification" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
   sc = rtems_chain_append_with_notification(
     &chain,
     &a,
@@ -267,6 +273,8 @@ static void test_chain_with_notification(void)
   rtems_test_assert( p == &a );
 
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
 
   rtems_chain_append( &chain, &b );
   sc = rtems_chain_append_with_notification(
@@ -280,6 +288,8 @@ static void test_chain_with_notification(void)
 
   puts( "INIT - Verify rtems_chain_prepend_with_notification" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
   sc = rtems_chain_prepend_with_notification(
     &chain,
     &a,
@@ -303,6 +313,8 @@ static void test_chain_with_notification(void)
 
   puts( "INIT - Verify rtems_chain_get_with_notification" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
 
   rtems_chain_append( &chain, &b );
   rtems_chain_append( &chain, &a );
@@ -329,27 +341,35 @@ static void test_chain_with_empty_check(void)
   rtems_chain_control chain;
   rtems_chain_node a;
   rtems_chain_node b;
+  rtems_chain_node c;
   rtems_chain_node *p;
   bool empty;
 
   puts( "INIT - Verify rtems_chain_append_with_empty_check" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
   empty = rtems_chain_append_with_empty_check( &chain, &a );
   rtems_test_assert( empty );
-  empty = rtems_chain_append_with_empty_check( &chain, &a );
+  empty = rtems_chain_append_with_empty_check( &chain, &b );
   rtems_test_assert( !empty );
 
   puts( "INIT - Verify rtems_chain_prepend_with_empty_check" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
+  rtems_chain_initialize_node( &c );
   empty = rtems_chain_prepend_with_empty_check( &chain, &a );
   rtems_test_assert( empty );
-  empty = rtems_chain_prepend_with_empty_check( &chain, &a );
-  rtems_test_assert( !empty );
   empty = rtems_chain_prepend_with_empty_check( &chain, &b );
+  rtems_test_assert( !empty );
+  empty = rtems_chain_prepend_with_empty_check( &chain, &c );
   rtems_test_assert( !empty );
 
   puts( "INIT - Verify rtems_chain_get_with_empty_check" );
   rtems_chain_initialize_empty( &chain );
+  rtems_chain_initialize_node( &a );
+  rtems_chain_initialize_node( &b );
   empty = rtems_chain_get_with_empty_check( &chain, &p );
   rtems_test_assert( empty );
 
@@ -377,6 +397,7 @@ static void test_chain_node_count(void)
   rtems_test_assert( count == 0 );
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( nodes ); ++i) {
+    rtems_chain_initialize_node( &nodes[ i ] );
     rtems_chain_append_unprotected( &chain, &nodes[i] );
     count = rtems_chain_node_count_unprotected( &chain );
     rtems_test_assert( count == i + 1 );
@@ -395,9 +416,13 @@ static void test_chain_insert_ordered( void )
   const Chain_Node *tail;
   const Chain_Node *node;
   size_t n = RTEMS_ARRAY_SIZE( nodes );
-  size_t i = 0;
+  size_t i;
 
   puts( "INIT - Verify _Chain_Insert_ordered_unprotected" );
+
+  for ( i = 0; i < n; ++i ) {
+    _Chain_Initialize_node( &nodes[ i ] );
+  }
 
   _Chain_Insert_ordered_unprotected( &chain, &nodes[4], test_order );
   _Chain_Insert_ordered_unprotected( &chain, &nodes[2], test_order );
@@ -407,6 +432,7 @@ static void test_chain_insert_ordered( void )
 
   tail = _Chain_Immutable_tail( &chain );
   node = _Chain_Immutable_first( &chain );
+  i = 0;
   while ( node != tail && i < n ) {
     rtems_test_assert( node == &nodes[ i ] );
     ++i;
@@ -429,6 +455,8 @@ rtems_task Init(
 
   puts( "Init - Initialize chain empty" );
   rtems_chain_initialize_empty( &chain1 );
+  rtems_chain_initialize_node( &node1.Node );
+  rtems_chain_initialize_node( &node2.Node );
 
   /* verify that the chain append and insert work */
   puts( "INIT - Verify rtems_chain_insert" );

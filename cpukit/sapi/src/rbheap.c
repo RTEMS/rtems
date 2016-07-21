@@ -76,6 +76,7 @@ static void add_to_chain(
   rtems_rbheap_chunk *chunk
 )
 {
+  rtems_chain_initialize_node(&chunk->chain_node);
   rtems_chain_prepend_unprotected(chain, &chunk->chain_node);
 }
 

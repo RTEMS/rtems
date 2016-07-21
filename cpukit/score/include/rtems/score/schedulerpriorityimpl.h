@@ -131,6 +131,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
 
   if ( _Chain_Has_only_one_node( ready_chain ) ) {
     _Chain_Initialize_empty( ready_chain );
+    _Chain_Initialize_node( node );
     _Priority_bit_map_Remove( bit_map, &ready_queue->Priority_map );
   } else {
     _Chain_Extract_unprotected( node );

@@ -188,6 +188,21 @@ RTEMS_INLINE_ROUTINE void rtems_chain_set_off_chain(
 }
 
 /**
+ * @brief Initializes a chain node.
+ *
+ * In debug configurations, the node is set off chain.  In all other
+ * configurations, this function does nothing.
+ *
+ * @param[in] the_node The chain node to initialize.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_initialize_node(
+  rtems_chain_node *node
+)
+{
+  _Chain_Initialize_node( node );
+}
+
+/**
  * @brief Is the node off chain.
  *
  * This function returns true if the @a node is not on a chain. A @a node is

@@ -104,6 +104,26 @@ RTEMS_INLINE_ROUTINE void _Chain_Set_off_chain(
 )
 {
   node->next = NULL;
+#if defined(RTEMS_DEBUG)
+  node->previous = NULL;
+#endif
+}
+
+/**
+ * @brief Initializes a chain node.
+ *
+ * In debug configurations, the node is set off chain.  In all other
+ * configurations, this function does nothing.
+ *
+ * @param[in] the_node The chain node to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Initialize_node( Chain_Node *the_node )
+{
+#if defined(RTEMS_DEBUG)
+  _Chain_Set_off_chain( the_node );
+#else
+  (void) the_node;
+#endif
 }
 
 /**
@@ -519,6 +539,10 @@ RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
   previous       = the_node->previous;
   next->previous = previous;
   previous->next = next;
+
+#if defined(RTEMS_DEBUG)
+  _Chain_Set_off_chain( the_node );
+#endif
 }
 
 /**
@@ -540,12 +564,22 @@ RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Get_first_unprotected(
   Chain_Control *the_chain
 )
 {
-  Chain_Node *head = _Chain_Head( the_chain );
-  Chain_Node *old_first = head->next;
-  Chain_Node *new_first = old_first->next;
+  Chain_Node *head;
+  Chain_Node *old_first;
+  Chain_Node *new_first;
+
+  _Assert( !_Chain_Is_empty( the_chain ) );
+
+  head = _Chain_Head( the_chain );
+  old_first = head->next;
+  new_first = old_first->next;
 
   head->next = new_first;
   new_first->previous = head;
+
+#if defined(RTEMS_DEBUG)
+  _Chain_Set_off_chain( old_first );
+#endif
 
   return old_first;
 }
@@ -594,6 +628,8 @@ RTEMS_INLINE_ROUTINE void _Chain_Insert_unprotected(
 {
   Chain_Node *before_node;
 
+  _Assert( _Chain_Is_node_off_chain( the_node ) );
+
   the_node->previous    = after_node;
   before_node           = after_node->next;
   after_node->next      = the_node;
@@ -617,8 +653,13 @@ RTEMS_INLINE_ROUTINE void _Chain_Append_unprotected(
   Chain_Node    *the_node
 )
 {
-  Chain_Node *tail = _Chain_Tail( the_chain );
-  Chain_Node *old_last = tail->previous;
+  Chain_Node *tail;
+  Chain_Node *old_last;
+
+  _Assert( _Chain_Is_node_off_chain( the_node ) );
+
+  tail = _Chain_Tail( the_chain );
+  old_last = tail->previous;
 
   the_node->next = tail;
   tail->previous = the_node;
@@ -978,6 +1019,7 @@ RTEMS_INLINE_ROUTINE void _Chain_Iterator_initialize(
   Chain_Iterator_direction  direction
 )
 {
+  _Chain_Initialize_node( &the_iterator->Registry_node );
   _Chain_Append_unprotected(
     &the_registry->Iterators,
     &the_iterator->Registry_node

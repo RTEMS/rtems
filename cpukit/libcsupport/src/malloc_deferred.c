@@ -127,9 +127,13 @@ void *rtems_heap_allocate_aligned_with_boundary(
 void _Malloc_Deferred_free( void *p )
 {
   rtems_interrupt_lock_context lock_context;
+  rtems_chain_node *node;
+
+  node = (rtems_chain_node *) p;
 
   rtems_interrupt_lock_acquire( &_Malloc_GC_lock, &lock_context );
-  rtems_chain_append_unprotected( &_Malloc_GC_list, (rtems_chain_node *) p );
+  rtems_chain_initialize_node( node );
+  rtems_chain_append_unprotected( &_Malloc_GC_list, node );
   rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
 }
 #endif

@@ -122,11 +122,13 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
   size_t i;
 
   for ( i = 0; i < _Scheduler_Count; ++i ) {
+    _Chain_Initialize_node( &heads->Priority[ i ].Node );
     _RBTree_Initialize_empty( &heads->Priority[ i ].Queue );
   }
 #endif
 
   _Chain_Initialize_empty( &heads->Free_chain );
+  _Chain_Initialize_node( &heads->Free_node );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(

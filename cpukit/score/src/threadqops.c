@@ -99,6 +99,7 @@ static void _Thread_queue_FIFO_do_enqueue(
   Thread_Control     *the_thread
 )
 {
+  _Chain_Initialize_node( &the_thread->Wait.Node.Chain );
   _Chain_Append_unprotected(
     &heads->Heads.Fifo,
     &the_thread->Wait.Node.Chain

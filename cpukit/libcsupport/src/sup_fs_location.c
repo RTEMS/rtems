@@ -48,6 +48,7 @@ rtems_filesystem_location_info_t *rtems_filesystem_location_copy(
   dst->node_access_2 = src->node_access_2;
   dst->handlers = src->handlers;
   dst->mt_entry = src->mt_entry;
+  rtems_chain_initialize_node(&dst->mt_entry_node);
   rtems_filesystem_location_add_to_mt_entry(dst);
 
   return dst;

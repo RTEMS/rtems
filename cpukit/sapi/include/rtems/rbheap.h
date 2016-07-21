@@ -210,6 +210,7 @@ static inline void rtems_rbheap_add_to_spare_descriptor_chain(
   rtems_chain_control *chain =
     rtems_rbheap_get_spare_descriptor_chain(control);
 
+  rtems_chain_initialize_node(&chunk->chain_node);
   rtems_chain_prepend_unprotected(chain, &chunk->chain_node);
 }
 

@@ -149,6 +149,7 @@ rtems_status_code rtems_termios_device_install(
     return RTEMS_NO_MEMORY;
   }
 
+  rtems_chain_initialize_node(&new_device_node->node);
   new_device_node->major = major;
   new_device_node->minor = minor;
   new_device_node->handler = handler;

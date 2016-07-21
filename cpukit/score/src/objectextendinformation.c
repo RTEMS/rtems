@@ -265,6 +265,7 @@ void _Objects_Extend_information(
       index
     );
 
+    _Chain_Initialize_node( &the_object->Node );
     _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
     the_object = (Objects_Control *)

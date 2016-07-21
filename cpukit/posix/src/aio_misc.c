@@ -116,6 +116,7 @@ rtems_aio_search_fd (rtems_chain_control *chain, int fildes, int create)
     else {
       r_chain = malloc (sizeof (rtems_aio_request_chain));
       rtems_chain_initialize_empty (&r_chain->perfd);
+      rtems_chain_initialize_node (&r_chain->next_fd);
 
       if (rtems_chain_is_empty (chain))
         rtems_chain_prepend (chain, &r_chain->next_fd);
@@ -222,9 +223,9 @@ void rtems_aio_remove_fd (rtems_aio_request_chain *r_chain)
   
   while (!rtems_chain_is_tail (chain, node))
     {
-      rtems_chain_extract (node);
       rtems_aio_request *req = (rtems_aio_request *) node;
       node = rtems_chain_next (node);
+      rtems_chain_extract (&req->next_prio);
       req->aiocbp->error_code = ECANCELED;
       req->aiocbp->return_value = -1;
       free (req);
@@ -311,6 +312,7 @@ rtems_aio_enqueue (rtems_aio_request *req)
      we can use aio_reqprio to lower the priority of the request */
   pthread_getschedparam (pthread_self(), &policy, &param);
 
+  rtems_chain_initialize_node (&req->next_prio);
   req->caller_thread = pthread_self ();
   req->priority = param.sched_priority - req->aiocbp->aio_reqprio;
   req->policy = policy;

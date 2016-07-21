@@ -194,6 +194,7 @@ void rtems_printer_task_drain( rtems_printer_task_context *ctx )
 {
   printer_task_buffer buffer;
 
+  rtems_chain_initialize_node( &buffer.node );
   buffer.action_kind = ACTION_DRAIN;
   buffer.action_data.task = rtems_task_self();
 
