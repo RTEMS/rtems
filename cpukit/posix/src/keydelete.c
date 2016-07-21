@@ -27,16 +27,13 @@ static void _POSIX_Keys_Destroy( POSIX_Keys_Control *the_key )
 {
   _Objects_Close( &_POSIX_Keys_Information, &the_key->Object );
 
-  while ( true ) {
+  while ( !_Chain_Is_empty( &the_key->Key_value_pairs ) ) {
     POSIX_Keys_Key_value_pair *key_value_pair;
     ISR_lock_Context           lock_context;
     Thread_Control            *the_thread;
 
     key_value_pair = (POSIX_Keys_Key_value_pair *)
-      _Chain_Get_unprotected( &the_key->Key_value_pairs );
-    if ( key_value_pair == NULL ) {
-      break;
-    }
+      _Chain_First( &the_key->Key_value_pairs );
 
     the_thread = key_value_pair->thread;
     _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
