@@ -336,6 +336,15 @@
 
 /** @} */
 
+/**
+* @name USB Registers
+*
+* @{
+*/
+
+#define BCM2835_USB_BASE	(RPI_PERIPHERAL_BASE + 0x980000) /* DTC_OTG USB controller */
+
+/** @} */
 
 /** @} */
 

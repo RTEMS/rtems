@@ -91,6 +91,11 @@ void bsp_interrupt_dispatch(void)
   {
       vector = BCM2835_IRQ_ID_SPI;
   }
+  /* USB */
+  else if ( BCM2835_REG(BCM2835_IRQ_PENDING1) & BCM2835_BIT(9) )
+  {
+      vector = BCM2835_IRQ_ID_USB;
+  }
 
   if ( vector < 255 )
   {
@@ -144,6 +149,11 @@ rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
   {
       BCM2835_REG(BCM2835_IRQ_ENABLE2) = BCM2835_BIT(22);
   }
+  /* USB */
+  else if ( vector == BCM2835_IRQ_ID_USB )
+  {
+      BCM2835_REG(BCM2835_IRQ_ENABLE1) = BCM2835_BIT(9);
+  }
   
   rtems_interrupt_enable(level);
 
@@ -193,6 +203,11 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
   else if ( vector == BCM2835_IRQ_ID_SPI )
   {
       BCM2835_REG(BCM2835_IRQ_DISABLE2) = BCM2835_BIT(22);
+  }
+  /* USB */
+  else if ( vector == BCM2835_IRQ_ID_USB )
+  {
+      BCM2835_REG(BCM2835_IRQ_DISABLE1) = BCM2835_BIT(9);
   }
 
   rtems_interrupt_enable(level);
