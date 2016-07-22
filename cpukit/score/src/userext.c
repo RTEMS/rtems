@@ -48,6 +48,7 @@ void _User_extensions_Handler_initialization(void)
 
       c = &initial_extension_switch_controls[ i ];
       c->thread_switch = callout;
+      _Chain_Initialize_node( &c->Node );
       _Chain_Append_unprotected( &_User_extensions_Switches_list, &c->Node );
     }
   }
