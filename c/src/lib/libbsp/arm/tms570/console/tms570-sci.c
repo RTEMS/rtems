@@ -247,8 +247,30 @@ static bool tms570_sci_set_attributes(
   rtems_interrupt_lock_context lock_context;
   int32_t bauddiv;
   int32_t baudrate;
+  uint32_t flr_tx_ready = TMS570_SCI_FLR_TX_EMPTY | TMS570_SCI_FLR_TX_EMPTY;
+
+  /* Baud rate */
+  baudrate = rtems_termios_baud_to_number(cfgetospeed(t));
 
   rtems_termios_device_lock_acquire(base, &lock_context);
+
+  while ( (ctx->regs->GCR1 & TMS570_SCI_GCR1_TXENA) &&
+          (ctx->regs->FLR & flr_tx_ready) != flr_tx_ready) {
+    /*
+     * There are pending characters in the hardware,
+     * change in the middle of the character Tx leads
+     * to disturb of the character and SCI engine
+     */
+    rtems_interval tw;
+
+    rtems_termios_device_lock_release(base, &lock_context);
+
+    tw = rtems_clock_get_ticks_per_second();
+    tw = tw * 5 / baudrate + 1;
+    rtems_task_wake_after( tw );
+
+    rtems_termios_device_lock_acquire(base, &lock_context);
+  }
 
   ctx->regs->GCR1 &= ~( TMS570_SCI_GCR1_SWnRST | TMS570_SCI_GCR1_TXENA |
                         TMS570_SCI_GCR1_RXENA );
@@ -276,8 +298,7 @@ static bool tms570_sci_set_attributes(
       ctx->regs->GCR1 &= ~TMS570_SCI_GCR1_PARITY_ENA;
   }
 
-  /* Baud rate */
-  baudrate = rtems_termios_baud_to_number(cfgetospeed(t));
+  /* Apply baudrate to the hardware */
   baudrate *= 2 * 16;
   bauddiv = (BSP_PLL_OUT_CLOCK + baudrate / 2) / baudrate;
   ctx->regs->BRS = bauddiv;
