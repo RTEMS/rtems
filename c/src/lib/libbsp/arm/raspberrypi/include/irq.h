@@ -50,7 +50,7 @@
 #define BCM2835_IRQ_ID_SPI           54
 #define BCM2835_IRQ_ID_PCM           55
 #define BCM2835_IRQ_ID_UART          57
-
+#define BCM2835_IRQ_ID_SD            62
 
 #define BCM2835_IRQ_ID_BASIC_BASE_ID 64
 #define BCM2835_IRQ_ID_TIMER_0       64
