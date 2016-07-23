@@ -62,9 +62,5 @@
 
 #define BSP_IRQ_COUNT               (BCM2835_INTC_TOTAL_IRQ)
 
-
-void raspberrypi_set_exception_handler(Arm_symbolic_exception_name exception,
-                                         void (*handler)(void));
-
 #endif /* ASM */
 #endif /* LIBBSP_ARM_RASPBERRYPI_IRQ_H */
