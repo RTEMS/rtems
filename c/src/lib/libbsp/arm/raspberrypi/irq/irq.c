@@ -32,22 +32,6 @@
 #include <rtems/bspIo.h>
 
 /*
-** This sets the main exception vectors
-*/
-void raspberrypi_set_exception_handler(
-                        Arm_symbolic_exception_name exception,
-                        void (*handler)(void)
-                                       )
-{
-    if ((unsigned) exception < MAX_EXCEPTIONS)
-    {
-        uint32_t *table = (uint32_t *) bsp_section_vector_begin + MAX_EXCEPTIONS;
-        table [exception] = (uint32_t) handler;
-
-    }
-}
-
-/*
 ** Determine the source of the interrupt and dispatch the correct handler.
 */
 void bsp_interrupt_dispatch(void)
@@ -222,7 +206,6 @@ void bsp_interrupt_handler_default(rtems_vector_number vector)
 
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
-   raspberrypi_set_exception_handler(ARM_EXCEPTION_IRQ, _ARMV4_Exception_interrupt);
    BCM2835_REG(BCM2835_IRQ_DISABLE1) = 0xffffffff;
    BCM2835_REG(BCM2835_IRQ_DISABLE2) = 0xffffffff;
    BCM2835_REG(BCM2835_IRQ_DISABLE_BASIC) = 0xffffffff;
