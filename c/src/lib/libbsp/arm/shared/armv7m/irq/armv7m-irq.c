@@ -50,6 +50,8 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     );
   }
 
+  _ARMV7M_SCB->icsr = ARMV7M_SCB_ICSR_PENDSVCLR | ARMV7M_SCB_ICSR_PENDSTCLR;
+
   for (i = BSP_INTERRUPT_VECTOR_MIN; i <= BSP_INTERRUPT_VECTOR_MAX; ++i) {
     vector_table [ARMV7M_VECTOR_IRQ(i)] = _ARMV7M_NVIC_Interrupt_dispatch;
     _ARMV7M_NVIC_Clear_enable(i);
