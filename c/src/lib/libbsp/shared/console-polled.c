@@ -19,6 +19,7 @@
 #include <assert.h>
 
 #include <bsp/console-polled.h>
+#include <bsp/fatal.h>
 #include <rtems/console.h>
 
 /*
@@ -74,7 +75,7 @@ rtems_device_driver console_initialize(
    */
   status = rtems_io_register_name( "/dev/console", major, 0 );
   if (status != RTEMS_SUCCESSFUL)
-    rtems_fatal_error_occurred(BSP_FATAL_CONSOLE_REGISTER_DEV_0);
+    rtems_fatal_error_occurred(BSP_FATAL_CONSOLE_REGISTER_DEV_2);
 
   return RTEMS_SUCCESSFUL;
 }
