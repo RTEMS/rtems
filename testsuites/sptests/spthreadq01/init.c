@@ -68,13 +68,12 @@ static void wake_up_master(test_context *ctx)
 
 static rtems_id get_wait_id(test_context *ctx)
 {
-  ISR_lock_Context lock_context;
-  void *lock;
+  Thread_queue_Context queue_context;
   rtems_id id;
 
-  lock = _Thread_Lock_acquire(ctx->master, &lock_context);
+  _Thread_Wait_acquire(ctx->master, &queue_context);
   id = _Thread_Wait_get_id(ctx->master);
-  _Thread_Lock_release(lock, &lock_context);
+  _Thread_Wait_release(ctx->master, &queue_context);
 
   return id;
 }

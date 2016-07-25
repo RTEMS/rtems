@@ -50,13 +50,13 @@ rtems_status_code _Event_Seize(
        (seized_events == event_in || _Options_Is_any( option_set )) ) {
     event->pending_events =
       _Event_sets_Clear( pending_events, seized_events );
-    _Thread_Lock_release_default( executing, lock_context );
+    _Thread_Wait_release_default( executing, lock_context );
     *event_out = seized_events;
     return RTEMS_SUCCESSFUL;
   }
 
   if ( _Options_Is_no_wait( option_set ) ) {
-    _Thread_Lock_release_default( executing, lock_context );
+    _Thread_Wait_release_default( executing, lock_context );
     *event_out = seized_events;
     return RTEMS_UNSATISFIED;
   }
@@ -78,7 +78,7 @@ rtems_status_code _Event_Seize(
   _Thread_Wait_flags_set( executing, intend_to_block );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Thread_Lock_release_default( executing, lock_context );
+  _Thread_Wait_release_default( executing, lock_context );
 
   if ( ticks ) {
     _Thread_Timer_insert_relative(

@@ -11,7 +11,7 @@
  *  COPYRIGHT (c) 1989-2014.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014 embedded brains GmbH.
+ *  Copyright (c) 2014, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -288,16 +288,6 @@ typedef struct {
   uint32_t              return_code;
 
   /**
-   * @brief The current thread queue.
-   *
-   * In case this field is @c NULL, then the thread is not blocked on a thread
-   * queue.  This field is protected by the thread lock.
-   *
-   * @see _Thread_Lock_set() and _Thread_Wait_set_queue().
-   */
-  Thread_queue_Queue *queue;
-
-  /**
    * @brief This field contains several flags used to control the wait class
    * and state of a thread in case fine-grained locking is used.
    */
@@ -307,12 +297,54 @@ typedef struct {
   Thread_Wait_flags     flags;
 #endif
 
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Thread wait lock control block.
+   *
+   * Parts of the thread wait information are protected by the thread wait
+   * default lock and additionally a thread queue lock in case the thread
+   * is enqueued on a thread queue.
+   *
+   * The thread wait lock mechanism protects the following thread variables
+   *  - POSIX_API_Control::Attributes,
+   *  - Thread_Control::current_priority,
+   *  - Thread_Control::Wait::Lock::Pending_requests,
+   *  - Thread_Control::Wait::queue, and
+   *  - Thread_Control::Wait::operations.
+   *
+   * @see _Thread_Wait_acquire(), _Thread_Wait_release(), _Thread_Wait_claim(),
+   *   _Thread_Wait_restore_default() and _Thread_Wait_tranquilize().
+   */
+  struct {
+    /**
+     * @brief Thread wait default lock.
+     */
+    ISR_lock_Control Default;
+
+    /**
+     * @brief The pending thread wait lock acquire or tranquilize requests in
+     * case the thread is enqueued on a thread queue.
+     */
+    Chain_Control Pending_requests;
+  } Lock;
+#endif
+
+  /**
+   * @brief The current thread queue.
+   *
+   * If this field is NULL the thread is not enqueued on a thread queue.  This
+   * field is protected by the thread wait default lock.
+   *
+   * @see _Thread_Wait_claim().
+   */
+  Thread_queue_Queue *queue;
+
   /**
    * @brief The current thread queue operations.
    *
-   * This field is protected by the thread lock.
+   * This field is protected by the thread lock wait default lock.
    *
-   * @see _Thread_Lock_set() and _Thread_Wait_set_operations().
+   * @see _Thread_Wait_claim().
    */
   const Thread_queue_Operations *operations;
 
@@ -639,66 +671,6 @@ typedef struct  {
   void *        control;
 }Thread_Capture_control;
 
-#if defined(RTEMS_SMP)
-/**
- * @brief Thread lock control.
- *
- * The thread lock is either the default lock or the lock of the resource on
- * which the thread is currently blocked.  The generation number takes care
- * that the up to date lock is used.  Only resources using fine grained locking
- * provide their own lock.
- *
- * The thread lock protects the following thread variables
- *  - POSIX_API_Control::Attributes,
- *  - Thread_Control::current_priority,
- *  - Thread_Control::Wait::queue, and
- *  - Thread_Control::Wait::operations.
- *
- * @see _Thread_Lock_acquire(), _Thread_Lock_release(), _Thread_Lock_set() and
- * _Thread_Lock_restore_default().
- */
-typedef struct {
-  /**
-   * @brief The current thread lock.
-   *
-   * This is a plain ticket lock without SMP lock statistics support.  This
-   * enables external libraries to use thread locks since they are independent
-   * of the actual RTEMS build configuration, e.g. profiling enabled or
-   * disabled.
-   */
-  union {
-    /**
-     * @brief The current thread lock as an atomic unsigned integer pointer value.
-     */
-    Atomic_Uintptr atomic;
-
-    /**
-     * @brief The current thread lock as a normal pointer.
-     *
-     * Only provided for debugging purposes.
-     */
-    SMP_ticket_lock_Control *normal;
-  } current;
-
-  /**
-   * @brief The default thread lock in case the thread is not blocked on a
-   * resource.
-   */
-  SMP_ticket_lock_Control Default;
-
-#if defined(RTEMS_PROFILING)
-  /**
-   * @brief The thread lock statistics.
-   *
-   * These statistics are used by the executing thread in case it acquires a
-   * thread lock.  Thus the statistics are an aggregation of acquire and
-   * release operations of different locks.
-   */
-  SMP_lock_Stats Stats;
-#endif
-} Thread_Lock_control;
-#endif
-
 /**
  *  This structure defines the Thread Control Block (TCB).
  *
@@ -769,13 +741,6 @@ struct _Thread_Control {
   MP_packet_Prefix        *receive_packet;
 #endif
      /*================= end of common block =================*/
-
-#if defined(RTEMS_SMP)
-  /**
-   * @brief Thread lock control.
-   */
-  Thread_Lock_control Lock;
-#endif
 
 #if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
   /**

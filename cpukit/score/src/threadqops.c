@@ -22,13 +22,16 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
-static void _Thread_queue_Do_nothing_priority_change(
+static void _Thread_queue_Default_priority_change(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
+  bool                prepend_it,
   Thread_queue_Queue *queue
 )
 {
-  /* Do nothing */
+  (void) queue;
+
+  _Scheduler_Thread_set_priority( the_thread, new_priority, prepend_it );
 }
 
 static void _Thread_queue_Do_nothing_extract(
@@ -38,6 +41,31 @@ static void _Thread_queue_Do_nothing_extract(
 {
   /* Do nothing */
 }
+
+#if defined(RTEMS_SMP)
+static void _Thread_queue_Stale_queue_priority_change(
+  Thread_Control     *the_thread,
+  Priority_Control    new_priority,
+  bool                prepend_it,
+  Thread_queue_Queue *queue
+)
+{
+  ISR_lock_Context lock_context;
+
+  (void) queue;
+
+  /*
+   * This operation is used to change the priority in case we have a thread
+   * queue context with a stale thread queue.  We own the thread queue lock of
+   * the former thread queue.  In addition, we need the thread wait default
+   * lock, see _Thread_Wait_restore_default().
+   */
+
+  _Thread_Wait_acquire_default_critical( the_thread, &lock_context );
+  _Scheduler_Thread_set_priority( the_thread, new_priority, prepend_it );
+  _Thread_Wait_release_default_critical( the_thread, &lock_context );
+}
+#endif
 
 static Thread_queue_Heads *_Thread_queue_Queue_enqueue(
   Thread_queue_Queue *queue,
@@ -190,6 +218,7 @@ static bool _Thread_queue_Priority_less(
 static void _Thread_queue_Priority_priority_change(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
+  bool                prepend_it,
   Thread_queue_Queue *queue
 )
 {
@@ -197,6 +226,8 @@ static void _Thread_queue_Priority_priority_change(
   Thread_queue_Priority_queue *priority_queue;
 
   _Assert( heads != NULL );
+
+  _Scheduler_Thread_set_priority( the_thread, new_priority, prepend_it );
 
   priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
 
@@ -353,22 +384,16 @@ static void _Thread_queue_Priority_inherit_enqueue(
 #endif
 
   if ( priority < owner->current_priority ) {
-    Scheduler_Node *own_node;
-
     path->update_priority = owner;
 
     owner->priority_restore_hint = true;
     _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
 
-    own_node = _Scheduler_Thread_get_own_node( owner );
-    _Scheduler_Node_set_priority( own_node, priority, false );
-
-    owner->current_priority = priority;
-
-    ( *owner->Wait.operations->priority_change )(
+    _Thread_queue_Context_priority_change(
+      &path->Start.Queue_context,
       owner,
       priority,
-      owner->Wait.queue
+      false
     );
   } else {
     path->update_priority = NULL;
@@ -385,24 +410,21 @@ void _Thread_queue_Boost_priority(
 
   if ( !_Chain_Has_only_one_node( &heads->Heads.Fifo ) ) {
     const Scheduler_Control *scheduler;
-    Scheduler_Node          *own_node;
     Priority_Control         boost_priority;
 
     the_thread->priority_restore_hint = true;
     _Atomic_Fence( ATOMIC_ORDER_ACQ_REL );
 
     scheduler = _Scheduler_Get_own( the_thread );
-    own_node = _Scheduler_Thread_get_own_node( the_thread );
     boost_priority = _Scheduler_Map_priority( scheduler, PRIORITY_PSEUDO_ISR );
-    _Scheduler_Node_set_priority( own_node, boost_priority, false );
 
-    the_thread->current_priority = boost_priority;
+    _Scheduler_Thread_set_priority( the_thread, boost_priority, false );
   }
 }
 #endif
 
 const Thread_queue_Operations _Thread_queue_Operations_default = {
-  .priority_change = _Thread_queue_Do_nothing_priority_change,
+  .priority_change = _Thread_queue_Default_priority_change,
   .extract = _Thread_queue_Do_nothing_extract
   /*
    * The default operations are only used in _Thread_Change_priority() and
@@ -412,7 +434,7 @@ const Thread_queue_Operations _Thread_queue_Operations_default = {
 };
 
 const Thread_queue_Operations _Thread_queue_Operations_FIFO = {
-  .priority_change = _Thread_queue_Do_nothing_priority_change,
+  .priority_change = _Thread_queue_Default_priority_change,
   .enqueue = _Thread_queue_FIFO_enqueue,
   .extract = _Thread_queue_FIFO_extract,
   .first = _Thread_queue_FIFO_first
@@ -431,3 +453,10 @@ const Thread_queue_Operations _Thread_queue_Operations_priority_inherit = {
   .extract = _Thread_queue_Priority_extract,
   .first = _Thread_queue_Priority_first
 };
+
+#if defined(RTEMS_SMP)
+const Thread_queue_Operations _Thread_queue_Operations_stale_queue = {
+  .priority_change = _Thread_queue_Stale_queue_priority_change,
+  .extract = _Thread_queue_Do_nothing_extract
+};
+#endif

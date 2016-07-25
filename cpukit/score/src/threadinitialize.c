@@ -182,13 +182,11 @@ bool _Thread_Initialize(
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = scheduler_node;
   _Resource_Node_initialize( &the_thread->Resource_node );
-  _Atomic_Store_uintptr(
-    &the_thread->Lock.current.atomic,
-    (uintptr_t) &the_thread->Lock.Default,
-    ATOMIC_ORDER_RELAXED
+  _ISR_lock_Initialize(
+    &the_thread->Wait.Lock.Default,
+    "Thread Wait Default Lock"
   );
-  _SMP_ticket_lock_Initialize( &the_thread->Lock.Default );
-  _SMP_lock_Stats_initialize( &the_thread->Lock.Stats, "Thread Lock" );
+  _Chain_Initialize_empty( &the_thread->Wait.Lock.Pending_requests );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
 #endif
 

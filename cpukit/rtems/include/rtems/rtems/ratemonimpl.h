@@ -73,7 +73,7 @@ RTEMS_INLINE_ROUTINE void _Rate_monotonic_Acquire_critical(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_Lock_acquire_default_critical( the_thread, lock_context );
+  _Thread_Wait_acquire_default_critical( the_thread, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _Rate_monotonic_Release(
@@ -81,7 +81,7 @@ RTEMS_INLINE_ROUTINE void _Rate_monotonic_Release(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_Lock_release_default( the_thread, lock_context );
+  _Thread_Wait_release_default( the_thread, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get(

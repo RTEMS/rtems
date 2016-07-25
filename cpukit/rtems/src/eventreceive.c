@@ -38,7 +38,7 @@ rtems_status_code rtems_event_receive(
     RTEMS_API_Control *api;
     Event_Control     *event;
 
-    executing = _Thread_Lock_acquire_default_for_executing( &lock_context );
+    executing = _Thread_Wait_acquire_default_for_executing( &lock_context );
     api = executing->API_Extensions[ THREAD_API_RTEMS ];
     event = &api->Event;
 
@@ -56,7 +56,7 @@ rtems_status_code rtems_event_receive(
       );
     } else {
       *event_out = event->pending_events;
-      _Thread_Lock_release_default( executing, &lock_context );
+      _Thread_Wait_release_default( executing, &lock_context );
       sc = RTEMS_SUCCESSFUL;
     }
   } else {

@@ -825,6 +825,20 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
 #endif
 }
 
+RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(
+  Thread_Control   *the_thread,
+  Priority_Control  new_priority,
+  bool              prepend_it
+)
+{
+  Scheduler_Node *own_node;
+
+  own_node = _Scheduler_Thread_get_own_node( the_thread );
+  _Scheduler_Node_set_priority( own_node, new_priority, prepend_it );
+
+  the_thread->current_priority = new_priority;
+}
+
 #if defined(RTEMS_SMP)
 /**
  * @brief Gets an idle thread from the scheduler instance.

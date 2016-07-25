@@ -11,7 +11,7 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014-2015 embedded brains GmbH.
+ *  Copyright (c) 2014, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -933,44 +933,35 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 }
 
 /**
- * @brief Acquires the default thread lock inside a critical section
+ * @brief Acquires the thread wait default lock inside a critical section
  * (interrupts disabled).
  *
  * @param[in] the_thread The thread.
  * @param[in] lock_context The lock context used for the corresponding lock
- * release.
+ *   release.
  *
- * @see _Thread_Lock_release_default().
+ * @see _Thread_Wait_release_default_critical().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default_critical(
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
 {
-  _Assert( _ISR_Get_level() != 0 );
-#if defined(RTEMS_SMP)
-  _SMP_ticket_lock_Acquire(
-    &the_thread->Lock.Default,
-    &_Thread_Executing->Lock.Stats,
-    &lock_context->Lock_context.Stats_context
-  );
-#else
-  (void) the_thread;
-  (void) lock_context;
-#endif
+  _ISR_lock_Acquire( &the_thread->Wait.Lock.Default, lock_context );
 }
 
 /**
- * @brief Acquires the default thread lock and returns the executing thread.
+ * @brief Acquires the thread wait default lock and returns the executing
+ * thread.
  *
  * @param[in] lock_context The lock context used for the corresponding lock
- * release.
+ *   release.
  *
  * @return The executing thread.
  *
- * @see _Thread_Lock_release_default().
+ * @see _Thread_Wait_release_default().
  */
-RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Lock_acquire_default_for_executing(
+RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Wait_acquire_default_for_executing(
   ISR_lock_Context *lock_context
 )
 {
@@ -978,247 +969,401 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Lock_acquire_default_for_executing(
 
   _ISR_lock_ISR_disable( lock_context );
   executing = _Thread_Executing;
-  _Thread_Lock_acquire_default_critical( executing, lock_context );
+  _Thread_Wait_acquire_default_critical( executing, lock_context );
 
   return executing;
 }
 
 /**
- * @brief Acquires the default thread lock.
+ * @brief Acquires the thread wait default lock and disables interrupts.
  *
  * @param[in] the_thread The thread.
  * @param[in] lock_context The lock context used for the corresponding lock
- * release.
+ *   release.
  *
- * @see _Thread_Lock_release_default().
+ * @see _Thread_Wait_release_default().
  */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_acquire_default(
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_default(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
 {
   _ISR_lock_ISR_disable( lock_context );
-  _Thread_Lock_acquire_default_critical( the_thread, lock_context );
+  _Thread_Wait_acquire_default_critical( the_thread, lock_context );
 }
 
 /**
- * @brief Releases the thread lock inside a critical section (interrupts
- * disabled).
- *
- * The previous interrupt status is not restored.
- *
- * @param[in] lock The lock.
- * @param[in] lock_context The lock context used for the corresponding lock
- * acquire.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_release_critical(
-  void             *lock,
-  ISR_lock_Context *lock_context
-)
-{
-#if defined(RTEMS_SMP)
-  _SMP_ticket_lock_Release(
-    (SMP_ticket_lock_Control *) lock,
-    &lock_context->Lock_context.Stats_context
-  );
-#else
-  (void) lock;
-  (void) lock_context;
-#endif
-}
-
-/**
- * @brief Releases the thread lock.
- *
- * @param[in] lock The lock returned by _Thread_Lock_acquire().
- * @param[in] lock_context The lock context used for _Thread_Lock_acquire().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_release(
-  void             *lock,
-  ISR_lock_Context *lock_context
-)
-{
-  _Thread_Lock_release_critical( lock, lock_context );
-  _ISR_lock_ISR_enable( lock_context );
-}
-
-/**
- * @brief Releases the default thread lock inside a critical section
+ * @brief Releases the thread wait default lock inside a critical section
  * (interrupts disabled).
  *
  * The previous interrupt status is not restored.
  *
  * @param[in] the_thread The thread.
  * @param[in] lock_context The lock context used for the corresponding lock
- * acquire.
+ *   acquire.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default_critical(
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_Lock_release_critical(
-#if defined(RTEMS_SMP)
-    &the_thread->Lock.Default,
-#else
-    NULL,
-#endif
-    lock_context
-  );
+  _ISR_lock_Release( &the_thread->Wait.Lock.Default, lock_context );
 }
 
 /**
- * @brief Releases the default thread lock.
+ * @brief Releases the thread wait default lock and restores the previous
+ * interrupt status.
  *
  * @param[in] the_thread The thread.
  * @param[in] lock_context The lock context used for the corresponding lock
- * acquire.
+ *   acquire.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_release_default(
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_Lock_release_default_critical( the_thread, lock_context );
+  _Thread_Wait_release_default_critical( the_thread, lock_context );
   _ISR_lock_ISR_enable( lock_context );
 }
 
-/**
- * @brief Acquires the thread lock.
- *
- * @param[in] the_thread The thread.
- * @param[in] lock_context The lock context for _Thread_Lock_release().
- *
- * @return The lock required by _Thread_Lock_release().
- */
-RTEMS_INLINE_ROUTINE void *_Thread_Lock_acquire(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
+#if defined(RTEMS_SMP)
+#define THREAD_QUEUE_CONTEXT_OF_REQUEST( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_queue_Context, Wait.Gate.Node )
+
+RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_SMP)
-  SMP_ticket_lock_Control *lock_0;
+  _Chain_Extract_unprotected( &queue_context->Wait.Gate.Node );
 
-  while ( true ) {
-    SMP_ticket_lock_Control *lock_1;
+  if ( !_Chain_Is_empty( &the_thread->Wait.Lock.Pending_requests ) ) {
+    Thread_queue_Context *first;
 
-    _ISR_lock_ISR_disable( lock_context );
-
-    /*
-     * We assume that a normal load of pointer is identical to a relaxed atomic
-     * load.  Here, we may read an out-of-date lock.  However, only the owner
-     * of this out-of-date lock is allowed to set a new one.  Thus, we read at
-     * least this new lock ...
-     */
-    lock_0 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
-      &the_thread->Lock.current.atomic,
-      ATOMIC_ORDER_RELAXED
+    first = THREAD_QUEUE_CONTEXT_OF_REQUEST(
+      _Chain_First( &the_thread->Wait.Lock.Pending_requests )
     );
 
-    _SMP_ticket_lock_Acquire(
-      lock_0,
-      &_Thread_Executing->Lock.Stats,
-      &lock_context->Lock_context.Stats_context
-    );
-
-    /*
-     * We must use a load acquire here paired with the store release in
-     * _Thread_Lock_set_unprotected() to observe corresponding thread wait
-     * queue and thread wait operations.  It is important to do this after the
-     * lock acquire, since we may have the following scenario.
-     *
-     * - We read the default lock and try to acquire it.
-     * - The thread lock changes to a thread queue lock.
-     * - The thread lock is restored to the default lock.
-     * - We acquire the default lock and read it here again.
-     * - Now, we must read the restored default thread wait queue and thread
-     *   wait operations and this is not synchronized via the default thread
-     *   lock.
-     */
-    lock_1 = (SMP_ticket_lock_Control *) _Atomic_Load_uintptr(
-      &the_thread->Lock.current.atomic,
-      ATOMIC_ORDER_ACQUIRE
-    );
-
-    /*
-     * ... here, and so on.
-     */
-    if ( lock_0 == lock_1 ) {
-      return lock_0;
-    }
-
-    _Thread_Lock_release( lock_0, lock_context );
+    _Thread_queue_Gate_open( &first->Wait.Gate );
   }
-#else
-  _ISR_Local_disable( lock_context->isr_level );
-
-  return NULL;
-#endif
 }
 
-#if defined(RTEMS_SMP)
-/*
- * Internal function, use _Thread_Lock_set() or _Thread_Lock_restore_default()
- * instead.
- */
-RTEMS_INLINE_ROUTINE void _Thread_Lock_set_unprotected(
-  Thread_Control          *the_thread,
-  SMP_ticket_lock_Control *new_lock
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
+  SMP_ticket_lock_Control *queue_lock,
+  Thread_queue_Context    *queue_context
 )
 {
-  _Atomic_Store_uintptr(
-    &the_thread->Lock.current.atomic,
-    (uintptr_t) new_lock,
-    ATOMIC_ORDER_RELEASE
+  _SMP_ticket_lock_Acquire(
+    queue_lock,
+    &_Thread_Executing->Potpourri_stats,
+    &queue_context->Lock_context.Lock_context.Stats_context
+  );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
+  SMP_ticket_lock_Control *queue_lock,
+  Thread_queue_Context    *queue_context
+)
+{
+  _SMP_ticket_lock_Release(
+    queue_lock,
+    &queue_context->Lock_context.Lock_context.Stats_context
   );
 }
 #endif
 
 /**
- * @brief Sets a new thread lock.
- *
- * The caller must not be the owner of the default thread lock.  The caller
- * must be the owner of the new lock.
+ * @brief Acquires the thread wait lock inside a critical section (interrupts
+ * disabled).
  *
  * @param[in] the_thread The thread.
- * @param[in] new_lock The new thread lock.
+ * @param[in] queue_context The thread queue context for the corresponding
+ *   _Thread_Wait_release_critical().
+ *
+ * @see _Thread_queue_Context_initialize().
  */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
 #if defined(RTEMS_SMP)
-RTEMS_INLINE_ROUTINE void _Thread_Lock_set(
-  Thread_Control          *the_thread,
-  SMP_ticket_lock_Control *new_lock
+  Thread_queue_Queue *queue;
+
+  _Thread_Wait_acquire_default_critical(
+    the_thread,
+    &queue_context->Lock_context
+  );
+
+  queue = the_thread->Wait.queue;
+  queue_context->Wait.queue = queue;
+  queue_context->Wait.operations = the_thread->Wait.operations;
+
+  if ( queue != NULL ) {
+    queue_context->Wait.queue_lock = &queue->Lock;
+    _Chain_Initialize_node( &queue_context->Wait.Gate.Node );
+    _Chain_Append_unprotected(
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context->Wait.Gate.Node
+    );
+    _Thread_Wait_release_default_critical(
+      the_thread,
+      &queue_context->Lock_context
+    );
+    _Thread_Wait_acquire_queue_critical( &queue->Lock, queue_context );
+  } else {
+    queue_context->Wait.queue_lock = NULL;
+  }
+#else
+  (void) the_thread;
+  (void) queue_context;
+#endif
+}
+
+/**
+ * @brief Acquires the thread wait default lock and disables interrupts.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] queue_context The thread queue context for the corresponding
+ *   _Thread_Wait_release().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Context_initialize( queue_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _Thread_Wait_acquire_critical( the_thread, queue_context );
+}
+
+/**
+ * @brief Releases the thread wait lock inside a critical section (interrupts
+ * disabled).
+ *
+ * The previous interrupt status is not restored.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] queue_context The thread queue context used for corresponding
+ *   _Thread_Wait_acquire_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release_critical(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+#if defined(RTEMS_SMP)
+  SMP_ticket_lock_Control *queue_lock;
+
+  queue_lock = queue_context->Wait.queue_lock;
+
+  if ( queue_lock != NULL ) {
+    _Thread_Wait_release_queue_critical( queue_lock, queue_context );
+    _Thread_Wait_acquire_default_critical(
+      the_thread,
+      &queue_context->Lock_context
+    );
+
+    _Thread_Wait_remove_request_locked( the_thread, queue_context );
+  }
+
+  _Thread_Wait_release_default_critical(
+    the_thread,
+    &queue_context->Lock_context
+  );
+#else
+  (void) the_thread;
+  (void) queue_context;
+#endif
+}
+
+/**
+ * @brief Releases the thread wait lock and restores the previous interrupt
+ * status.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] queue_context The thread queue context used for corresponding
+ *   _Thread_Wait_acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_release(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_Wait_release_critical( the_thread, queue_context );
+  _ISR_lock_ISR_enable( &queue_context->Lock_context );
+}
+
+/**
+ * @brief Claims the thread wait queue and operations.
+ *
+ * The caller must not be the owner of the default thread wait lock.  The
+ * caller must be the owner of the corresponding thread queue lock.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] queue The new thread queue.
+ * @param[in] operations The new thread operations.
+ *
+ * @see _Thread_Wait_restore_default().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
+  Thread_Control                *the_thread,
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations
 )
 {
   ISR_lock_Context lock_context;
 
-  _Thread_Lock_acquire_default_critical( the_thread, &lock_context );
-  _Assert( the_thread->Lock.current.normal == &the_thread->Lock.Default );
-  _Thread_Lock_set_unprotected( the_thread, new_lock );
-  _Thread_Lock_release_default_critical( the_thread, &lock_context );
+  _Thread_Wait_acquire_default_critical( the_thread, &lock_context );
+
+  _Assert( the_thread->Wait.queue == NULL );
+  the_thread->Wait.queue = queue;
+  the_thread->Wait.operations = operations;
+
+  _Thread_Wait_release_default_critical( the_thread, &lock_context );
 }
-#else
-#define _Thread_Lock_set( the_thread, new_lock ) \
-  do { } while ( 0 )
-#endif
 
 /**
- * @brief Restores the default thread lock.
+ * @brief Removes a thread wait lock request.
  *
- * The caller must be the owner of the current thread lock.
+ * On SMP configurations, removes a thread wait lock request.
+ *
+ * On other configurations, this function does nothing.
  *
  * @param[in] the_thread The thread.
+ * @param[in] queue_context The thread queue context used for corresponding
+ *   _Thread_Wait_acquire().
  */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
 #if defined(RTEMS_SMP)
-RTEMS_INLINE_ROUTINE void _Thread_Lock_restore_default(
+  ISR_lock_Context lock_context;
+
+  _Thread_Wait_acquire_default( the_thread, &lock_context );
+  _Thread_Wait_remove_request_locked( the_thread, queue_context );
+  _Thread_Wait_release_default( the_thread, &lock_context );
+#else
+  (void) the_thread;
+  (void) queue_context;
+#endif
+}
+
+/**
+ * @brief Restores the default thread wait queue and operations.
+ *
+ * The caller must be the owner of the current thread wait queue lock.
+ *
+ * On SMP configurations, the pending requests are updated to use the stale
+ * thread queue operations.
+ *
+ * @param[in] the_thread The thread.
+ *
+ * @see _Thread_Wait_claim().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
   Thread_Control *the_thread
 )
 {
-  _Thread_Lock_set_unprotected( the_thread, &the_thread->Lock.Default );
-}
-#else
-#define _Thread_Lock_restore_default( the_thread ) \
-  do { } while ( 0 )
+#if defined(RTEMS_SMP)
+  ISR_lock_Context  lock_context;
+  Chain_Node       *node;
+  const Chain_Node *tail;
+
+  _Thread_Wait_acquire_default_critical(
+    the_thread,
+    &lock_context
+  );
+
+  node = _Chain_First( &the_thread->Wait.Lock.Pending_requests );
+  tail = _Chain_Immutable_tail( &the_thread->Wait.Lock.Pending_requests );
+
+  while ( node != tail ) {
+    Thread_queue_Context *queue_context;
+
+    queue_context = THREAD_QUEUE_CONTEXT_OF_REQUEST( node );
+    queue_context->Wait.queue = NULL;
+    queue_context->Wait.operations = &_Thread_queue_Operations_stale_queue;
+
+    node = _Chain_Next( node );
+  }
 #endif
+
+  the_thread->Wait.queue = NULL;
+  the_thread->Wait.operations = &_Thread_queue_Operations_default;
+
+#if defined(RTEMS_SMP)
+  _Thread_Wait_release_default_critical(
+    the_thread,
+    &lock_context
+  );
+#endif
+}
+
+/**
+ * @brief Tranquilizes the thread after a wait a thread queue.
+ *
+ * After the violent blocking procedure this function makes the thread calm and
+ * peaceful again so that it can carry out its normal work.
+ *
+ * On SMP configurations, ensures that all pending thread wait lock requests
+ * completed before the thread is able to begin a new thread wait procedure.
+ *
+ * On other configurations, this function does nothing.
+ *
+ * @param[in] the_thread The thread.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_tranquilize(
+  Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  Thread_queue_Context queue_context;
+
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_Wait_acquire_default( the_thread, &queue_context.Lock_context );
+
+  if ( !_Chain_Is_empty( &the_thread->Wait.Lock.Pending_requests ) ) {
+    _Thread_queue_Gate_add(
+      &the_thread->Wait.Lock.Pending_requests,
+      &queue_context.Wait.Gate
+    );
+    _Thread_Wait_release_default( the_thread, &queue_context.Lock_context );
+    _Thread_queue_Gate_wait( &queue_context.Wait.Gate );
+    _Thread_Wait_remove_request( the_thread, &queue_context );
+  } else {
+    _Thread_Wait_release_default( the_thread, &queue_context.Lock_context );
+  }
+#else
+  (void) the_thread;
+#endif
+}
+
+/**
+ * @brief Cancels a thread wait on a thread queue.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] queue_context The thread queue context used for corresponding
+ *   _Thread_Wait_acquire().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Context_extract( queue_context, the_thread );
+
+#if defined(RTEMS_SMP)
+  if ( queue_context->Wait.queue != NULL ) {
+#endif
+    _Thread_Wait_restore_default( the_thread );
+#if defined(RTEMS_SMP)
+  }
+#endif
+}
 
 /**
  * @brief The initial thread wait flags value set by _Thread_Initialize().
@@ -1388,58 +1533,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
 }
 
 /**
- * @brief Sets the thread queue.
- *
- * The caller must be the owner of the thread lock.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_queue The new queue.
- *
- * @see _Thread_Lock_set().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_set_queue(
-  Thread_Control     *the_thread,
-  Thread_queue_Queue *new_queue
-)
-{
-  the_thread->Wait.queue = new_queue;
-}
-
-/**
- * @brief Sets the thread queue operations.
- *
- * The caller must be the owner of the thread lock.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_operations The new queue operations.
- *
- * @see _Thread_Lock_set() and _Thread_Wait_restore_default_operations().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_set_operations(
-  Thread_Control                *the_thread,
-  const Thread_queue_Operations *new_operations
-)
-{
-  the_thread->Wait.operations = new_operations;
-}
-
-/**
- * @brief Restores the default thread queue operations.
- *
- * The caller must be the owner of the thread lock.
- *
- * @param[in] the_thread The thread.
- *
- * @see _Thread_Wait_set_operations().
- */
-RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default_operations(
-  Thread_Control *the_thread
-)
-{
-  the_thread->Wait.operations = &_Thread_queue_Operations_default;
-}
-
-/**
  * @brief Returns the object identifier of the object containing the current
  * thread wait queue.
  *
@@ -1541,6 +1634,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
   Thread_queue_Queue *queue
 )
 {
+  _Thread_Wait_tranquilize( the_thread );
   _Thread_Timer_remove( the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)

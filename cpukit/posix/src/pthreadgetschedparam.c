@@ -36,7 +36,7 @@ int pthread_getschedparam(
 )
 {
   Thread_Control          *the_thread;
-  ISR_lock_Context         lock_context;
+  Thread_queue_Context     queue_context;
   POSIX_API_Control       *api;
   const Scheduler_Control *scheduler;
   Priority_Control         priority;
@@ -45,7 +45,7 @@ int pthread_getschedparam(
     return EINVAL;
   }
 
-  the_thread = _Thread_Get( thread, &lock_context );
+  the_thread = _Thread_Get( thread, &queue_context.Lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;
@@ -53,7 +53,7 @@ int pthread_getschedparam(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  _Thread_Lock_acquire_default_critical( the_thread, &lock_context );
+  _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
   *policy = api->Attributes.schedpolicy;
   *param  = api->Attributes.schedparam;
@@ -61,7 +61,7 @@ int pthread_getschedparam(
   scheduler = _Scheduler_Get_own( the_thread );
   priority = the_thread->real_priority;
 
-  _Thread_Lock_release_default( the_thread, &lock_context );
+  _Thread_Wait_release( the_thread, &queue_context );
 
   param->sched_priority = _POSIX_Priority_From_core( scheduler, priority );
   return 0;

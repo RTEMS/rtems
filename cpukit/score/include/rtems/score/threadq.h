@@ -43,6 +43,10 @@ extern "C" {
 
 typedef struct _Thread_Control Thread_Control;
 
+typedef struct Thread_queue_Queue Thread_queue_Queue;
+
+typedef struct Thread_queue_Operations Thread_queue_Operations;
+
 typedef struct Thread_queue_Path Thread_queue_Path;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -53,11 +57,31 @@ typedef struct Thread_queue_Path Thread_queue_Path;
  *   control is actually a thread proxy if and only if
  *   _Objects_Is_local_id( the_proxy->Object.id ) is false.
  * @param mp_id Object identifier of the object containing the thread queue.
+ *
+ * @see _Thread_queue_Context_set_MP_callout().
  */
 typedef void ( *Thread_queue_MP_callout )(
   Thread_Control *the_proxy,
   Objects_Id      mp_id
 );
+#endif
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief The thread queue gate is an SMP synchronization means.
+ *
+ * The gates are added to a list of requests.  A busy wait is performed to make
+ * sure that preceding requests are carried out.  Each predecessor notifies its
+ * successor about on request completion.
+ *
+ * @see _Thread_queue_Gate_add(), _Thread_queue_Gate_wait(), and
+ *   _Thread_queue_Gate_open().
+ */
+typedef struct {
+  Chain_Node Node;
+
+  Atomic_Uint go_ahead;
+} Thread_queue_Gate;
 #endif
 
 /**
@@ -105,7 +129,63 @@ typedef struct {
 #if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout mp_callout;
 #endif
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Data to support thread queue enqueue operations.
+   */
+  struct {
+    /**
+     * @brief Gate to synchronize thread wait lock requests.
+     *
+     * @see _Thread_Wait_acquire_critical() and _Thread_Wait_tranquilize().
+     */
+    Thread_queue_Gate Gate;
+
+    /**
+     * @brief The thread queue lock in case the thread is blocked on a thread
+     * queue at thread wait lock acquire time.
+     */
+    SMP_ticket_lock_Control *queue_lock;
+
+    /**
+     * @brief The thread queue after thread wait lock acquire.
+     *
+     * In case the thread queue is NULL and the thread queue lock is non-NULL
+     * in this context, then we have a stale thread queue.  This happens in
+     * case the thread wait default is restored while we wait on the thread
+     * queue lock, e.g. during a mutex ownership transfer.
+     *
+     * @see _Thread_Wait_restore_default().
+     */
+    Thread_queue_Queue *queue;
+
+    /**
+     * @brief The thread queue operations after thread wait lock acquire.
+     */
+    const Thread_queue_Operations *operations;
+  } Wait;
+#endif
 } Thread_queue_Context;
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief A thread queue link from one thread to another specified by the
+ * thread queue owner and thread wait queue relationships.
+ */
+typedef struct {
+  /**
+   * @brief The owner of this thread queue link.
+   */
+  Thread_Control *owner;
+
+  /**
+   * @brief The queue context used to acquire the thread wait lock of the
+   * owner.
+   */
+  Thread_queue_Context Queue_context;
+} Thread_queue_Link;
+#endif
 
 /**
  * @brief Thread priority queue.
@@ -191,7 +271,7 @@ typedef struct _Thread_queue_Heads {
     sizeof( Thread_queue_Heads )
 #endif
 
-typedef struct {
+struct Thread_queue_Queue {
   /**
    * @brief Lock to protect this thread queue.
    *
@@ -221,13 +301,15 @@ typedef struct {
    * @brief The thread queue owner.
    */
   Thread_Control *owner;
-} Thread_queue_Queue;
+};
 
 /**
  * @brief Thread queue priority change operation.
  *
  * @param[in] the_thread The thread.
  * @param[in] new_priority The new priority value.
+ * @param[in] prepend_it In case this is true, then the thread is prepended to
+ *   its priority group in its scheduler instance, otherwise it is appended.
  * @param[in] queue The actual thread queue.
  *
  * @see Thread_queue_Operations.
@@ -235,6 +317,7 @@ typedef struct {
 typedef void ( *Thread_queue_Priority_change_operation )(
   Thread_Control     *the_thread,
   Priority_Control    new_priority,
+  bool                prepend_it,
   Thread_queue_Queue *queue
 );
 
@@ -247,8 +330,6 @@ typedef void ( *Thread_queue_Priority_change_operation )(
  *
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to enqueue on the queue.
- *
- * @see _Thread_Wait_set_operations().
  */
 typedef void ( *Thread_queue_Enqueue_operation )(
   Thread_queue_Queue *queue,
@@ -261,8 +342,6 @@ typedef void ( *Thread_queue_Enqueue_operation )(
  *
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to extract from the thread queue.
- *
- * @see _Thread_Wait_set_operations().
  */
 typedef void ( *Thread_queue_Extract_operation )(
   Thread_queue_Queue *queue,
@@ -277,8 +356,6 @@ typedef void ( *Thread_queue_Extract_operation )(
  * @retval NULL No thread is present on the thread queue.
  * @retval first The first thread of the thread queue according to the insert
  * order.  This thread remains on the thread queue.
- *
- * @see _Thread_Wait_set_operations().
  */
 typedef Thread_Control *( *Thread_queue_First_operation )(
   Thread_queue_Heads *heads
@@ -289,7 +366,7 @@ typedef Thread_Control *( *Thread_queue_First_operation )(
  *
  * @see _Thread_wait_Set_operations().
  */
-typedef struct {
+struct Thread_queue_Operations {
   /**
    * @brief Thread queue priority change operation.
    *
@@ -320,7 +397,7 @@ typedef struct {
    * @brief Thread queue first operation.
    */
   Thread_queue_First_operation first;
-} Thread_queue_Operations;
+};
 
 /**
  *  This is the structure used to manage sets of tasks which are blocked

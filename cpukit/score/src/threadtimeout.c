@@ -22,28 +22,15 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/status.h>
 
-static void _Thread_Do_timeout( Thread_Control *the_thread )
-{
-  the_thread->Wait.return_code = STATUS_TIMEOUT;
-  ( *the_thread->Wait.operations->extract )(
-    the_thread->Wait.queue,
-    the_thread
-  );
-  _Thread_Wait_set_queue( the_thread, NULL );
-  _Thread_Wait_restore_default_operations( the_thread );
-  _Thread_Lock_restore_default( the_thread );
-}
-
 void _Thread_Timeout( Watchdog_Control *watchdog )
 {
-  Thread_Control    *the_thread;
-  void              *thread_lock;
-  ISR_lock_Context   lock_context;
-  Thread_Wait_flags  wait_flags;
-  bool               unblock;
+  Thread_Control       *the_thread;
+  Thread_queue_Context  queue_context;
+  Thread_Wait_flags     wait_flags;
+  bool                  unblock;
 
   the_thread = RTEMS_CONTAINER_OF( watchdog, Thread_Control, Timer.Watchdog );
-  thread_lock = _Thread_Lock_acquire( the_thread, &lock_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
 
   wait_flags = _Thread_Wait_flags_get( the_thread );
 
@@ -52,7 +39,9 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
     Thread_Wait_flags ready_again;
     bool              success;
 
-    _Thread_Do_timeout( the_thread );
+    _Thread_Wait_cancel( the_thread, &queue_context );
+
+    the_thread->Wait.return_code = STATUS_TIMEOUT;
 
     wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
     ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
@@ -76,9 +65,10 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
     unblock = false;
   }
 
-  _Thread_Lock_release( thread_lock, &lock_context );
+  _Thread_Wait_release( the_thread, &queue_context );
 
   if ( unblock ) {
+    _Thread_Wait_tranquilize( the_thread );
     _Thread_Unblock( the_thread );
 
 #if defined(RTEMS_MULTIPROCESSING)

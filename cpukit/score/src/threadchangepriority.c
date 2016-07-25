@@ -27,7 +27,8 @@ static Thread_Control *_Thread_Apply_priority_locked(
   Priority_Control               new_priority,
   void                          *arg,
   Thread_Change_priority_filter  filter,
-  bool                           prepend_it
+  bool                           prepend_it,
+  Thread_queue_Context          *queue_context
 )
 {
   /*
@@ -45,17 +46,11 @@ static Thread_Control *_Thread_Apply_priority_locked(
    *  we are not REALLY changing priority.
    */
   if ( ( *filter )( the_thread, &new_priority, arg ) ) {
-    Scheduler_Node *own_node;
-
-    own_node = _Scheduler_Thread_get_own_node( the_thread );
-    _Scheduler_Node_set_priority( own_node, new_priority, prepend_it );
-
-    the_thread->current_priority = new_priority;
-
-    ( *the_thread->Wait.operations->priority_change )(
+    _Thread_queue_Context_priority_change(
+      queue_context,
       the_thread,
       new_priority,
-      the_thread->Wait.queue
+      prepend_it
     );
   } else {
     the_thread = NULL;
@@ -72,19 +67,20 @@ Thread_Control *_Thread_Apply_priority(
   bool                           prepend_it
 )
 {
-  ISR_lock_Context  lock_context;
-  ISR_lock_Control *lock;
+  Thread_queue_Context  queue_context;
+  Thread_Control       *the_thread_to_update;
 
-  lock = _Thread_Lock_acquire( the_thread, &lock_context );
-  the_thread = _Thread_Apply_priority_locked(
+  _Thread_Wait_acquire( the_thread, &queue_context );
+  the_thread_to_update = _Thread_Apply_priority_locked(
     the_thread,
     new_priority,
     arg,
     filter,
-    prepend_it
+    prepend_it,
+    &queue_context
   );
-  _Thread_Lock_release( lock, &lock_context );
-  return the_thread;
+  _Thread_Wait_release( the_thread, &queue_context );
+  return the_thread_to_update;
 }
 
 void _Thread_Update_priority( Thread_Control *the_thread )

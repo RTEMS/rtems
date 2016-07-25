@@ -28,10 +28,9 @@ rtems_status_code rtems_task_set_scheduler(
 {
   const Scheduler_Control *scheduler;
   Thread_Control          *the_thread;
-  ISR_lock_Context         lock_context;
-  ISR_lock_Context         state_lock_context;
+  Thread_queue_Context     queue_context;
+  ISR_lock_Context         state_context;
   Per_CPU_Control         *cpu_self;
-  void                    *lock;
   bool                     valid;
   Priority_Control         core_priority;
   Status_Control           status;
@@ -45,7 +44,7 @@ rtems_status_code rtems_task_set_scheduler(
     return RTEMS_INVALID_PRIORITY;
   }
 
-  the_thread = _Thread_Get( task_id, &lock_context );
+  the_thread = _Thread_Get( task_id, &queue_context.Lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -57,16 +56,15 @@ rtems_status_code rtems_task_set_scheduler(
     return RTEMS_INVALID_ID;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-  _ISR_lock_ISR_enable( &lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical( &queue_context.Lock_context );
 
-  lock = _Thread_Lock_acquire( the_thread, &lock_context );
-  _Thread_State_acquire_critical( the_thread, &state_lock_context );
+  _Thread_Wait_acquire_critical( the_thread, &queue_context );
+  _Thread_State_acquire_critical( the_thread, &state_context );
 
   status = _Scheduler_Set( scheduler, the_thread, core_priority );
 
-  _Thread_State_release_critical( the_thread, &state_lock_context );
-  _Thread_Lock_release( lock, &lock_context );
+  _Thread_State_release_critical( the_thread, &state_context );
+  _Thread_Wait_release( the_thread, &queue_context );
   _Thread_Dispatch_enable( cpu_self );
   return _Status_Get( status );
 }

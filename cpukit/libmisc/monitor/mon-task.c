@@ -20,17 +20,16 @@ rtems_monitor_task_wait_info(
     Thread_Control       *rtems_thread
 )
 {
-    ISR_lock_Context  lock_context;
-    void             *lock;
+    Thread_queue_Context queue_context;
 
-    lock = _Thread_Lock_acquire( rtems_thread, &lock_context );
+    _Thread_Wait_acquire( rtems_thread, &queue_context );
 
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = _Thread_Wait_get_id( rtems_thread );
     canonical_task->wait_queue = rtems_thread->Wait.queue;
     canonical_task->wait_operations = rtems_thread->Wait.operations;
 
-    _Thread_Lock_release( lock, &lock_context );
+    _Thread_Wait_release( rtems_thread, &queue_context );
 }
 
 void

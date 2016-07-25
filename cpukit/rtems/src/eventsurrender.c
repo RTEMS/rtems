@@ -77,7 +77,7 @@ rtems_status_code _Event_Surrender(
   rtems_event_set seized_events;
   bool            unblock;
 
-  _Thread_Lock_acquire_default_critical( the_thread, lock_context );
+  _Thread_Wait_acquire_default_critical( the_thread, lock_context );
 
   _Event_sets_Post( event_in, &event->pending_events );
   pending_events = event->pending_events;
@@ -116,14 +116,14 @@ rtems_status_code _Event_Surrender(
     Per_CPU_Control *cpu_self;
 
     cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-    _Thread_Lock_release_default( the_thread, lock_context );
+    _Thread_Wait_release_default( the_thread, lock_context );
 
     _Thread_Timer_remove( the_thread );
     _Thread_Unblock( the_thread );
 
     _Thread_Dispatch_enable( cpu_self );
   } else {
-    _Thread_Lock_release_default( the_thread, lock_context );
+    _Thread_Wait_release_default( the_thread, lock_context );
   }
 
   return RTEMS_SUCCESSFUL;

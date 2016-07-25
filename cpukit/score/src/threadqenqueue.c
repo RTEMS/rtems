@@ -34,6 +34,51 @@
 #define THREAD_QUEUE_READY_AGAIN \
   (THREAD_WAIT_CLASS_OBJECT | THREAD_WAIT_STATE_READY_AGAIN)
 
+static void _Thread_queue_Path_release( Thread_queue_Path *path )
+{
+#if defined(RTEMS_SMP)
+  Thread_queue_Link *link;
+
+  link = &path->Start;
+
+  if ( link->owner != NULL ) {
+    _Thread_Wait_release_critical( link->owner, &link->Queue_context );
+  }
+#else
+  (void) path;
+#endif
+}
+
+static void _Thread_queue_Path_acquire(
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue,
+  Thread_queue_Path  *path
+)
+{
+#if defined(RTEMS_SMP)
+  Thread_Control     *owner;
+  Thread_queue_Link  *link;
+
+  owner = queue->owner;
+
+  if ( owner == NULL ) {
+    return;
+  }
+
+  link = &path->Start;
+  link->owner = owner;
+
+  _Thread_Wait_acquire_default_critical(
+    owner,
+    &link->Queue_context.Lock_context
+  );
+#else
+  (void) the_thread;
+  (void) queue;
+  (void) path;
+#endif
+}
+
 void _Thread_queue_Enqueue_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
@@ -52,14 +97,13 @@ void _Thread_queue_Enqueue_critical(
   }
 #endif
 
-  _Thread_Lock_set( the_thread, &queue->Lock );
+  _Thread_Wait_claim( the_thread, queue, operations );
+
+  _Thread_queue_Path_acquire( the_thread, queue, &path );
+  ( *operations->enqueue )( queue, the_thread, &path );
+  _Thread_queue_Path_release( &path );
 
   the_thread->Wait.return_code = STATUS_SUCCESSFUL;
-  _Thread_Wait_set_queue( the_thread, queue );
-  _Thread_Wait_set_operations( the_thread, operations );
-
-  ( *operations->enqueue )( queue, the_thread, &path );
-
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
   cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
@@ -173,9 +217,7 @@ bool _Thread_queue_Do_extract_locked(
     unblock = true;
   }
 
-  _Thread_Wait_set_queue( the_thread, NULL );
-  _Thread_Wait_restore_default_operations( the_thread );
-  _Thread_Lock_restore_default( the_thread );
+  _Thread_Wait_restore_default( the_thread );
 
   return unblock;
 }
@@ -227,30 +269,35 @@ void _Thread_queue_Extract_critical(
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
 {
-  Thread_queue_Context  queue_context;
-  void                 *lock;
-  Thread_queue_Queue   *queue;
+  Thread_queue_Context queue_context;
 
   _Thread_queue_Context_initialize( &queue_context );
-  lock = _Thread_Lock_acquire( the_thread, &queue_context.Lock_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
 
-  queue = the_thread->Wait.queue;
+  if (
+    _Thread_queue_Context_get_queue( &queue_context, the_thread ) != NULL
+  ) {
+    bool unblock;
 
-  if ( queue != NULL ) {
-    _SMP_Assert( lock == &queue->Lock );
-
+    _Thread_Wait_remove_request( the_thread, &queue_context );
     _Thread_queue_Context_set_MP_callout(
       &queue_context,
       _Thread_queue_MP_callout_do_nothing
     );
-    _Thread_queue_Extract_critical(
-      queue,
-      the_thread->Wait.operations,
+    unblock = _Thread_queue_Extract_locked(
+      _Thread_queue_Context_get_queue( &queue_context, the_thread ),
+      _Thread_queue_Context_get_operations( &queue_context, the_thread ),
       the_thread,
-      &queue_context
+      &queue_context.Lock_context
+    );
+    _Thread_queue_Unblock_critical(
+      unblock,
+      _Thread_queue_Context_get_queue( &queue_context, the_thread ),
+      the_thread,
+      &queue_context.Lock_context
     );
   } else {
-    _Thread_Lock_release( lock, &queue_context.Lock_context );
+    _Thread_Wait_release( the_thread, &queue_context );
   }
 }
 
@@ -273,8 +320,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
 
   if ( the_thread != NULL ) {
-    _SMP_Assert( the_thread->Lock.current.normal == &the_thread_queue->Queue.Lock );
-
     _Thread_queue_Extract_critical(
       &the_thread_queue->Queue,
       operations,
