@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <tar.h>
+#include <zlib.h>
 
 #include <rtems/print.h>
 
@@ -38,6 +39,8 @@ extern "C" {
 #define UNTAR_INVALID_CHECKSUM   2
 #define UNTAR_INVALID_HEADER     3
 
+#define UNTAR_GZ_INFLATE_FAILED 4
+#define UNTAR_GZ_INFLATE_END_FAILED 5
 
 int Untar_FromMemory(void *tar_buf, size_t size);
 int Untar_FromMemory_Print(void *tar_buf, size_t size, const rtems_printer* printer);
@@ -132,6 +135,36 @@ void Untar_ChunkContext_Init(Untar_ChunkContext *context);
 
 int Untar_FromChunk_Print(
   Untar_ChunkContext *context,
+  void *chunk,
+  size_t chunk_size,
+  const rtems_printer* printer
+);
+
+/**
+ * @brief Initializes the Untar_ChunkGzContext.
+ *
+ * @param Untar_ChunkGzContext *context [in] Pointer to a context structure.
+ * @param void *inflateBuffer [in] Pointer to a context structure.
+ * @param size_t inflateBufferSize [in] Size of inflateBuffer.
+ */
+int Untar_GzChunkContext_Init(
+  Untar_GzChunkContext *ctx,
+  void *inflateBuffer,
+  size_t inflateBufferSize
+);
+
+/*
+ * @brief Untars a GZ compressed POSIX TAR file.
+ *
+ * This is a subroutine used to rip links, directories, and
+ * files out of a tar.gz/tgz file.
+ *
+ * @param Untar_ChunkContext *context [in] Pointer to a context structure.
+ * @param ssize buflen [in] Size of valid bytes in input buffer.
+ * @param z_stream *strm [in] Pointer to the current zlib context.
+ */
+int Untar_FromGzChunk_Print(
+  Untar_GzChunkContext *ctx,
   void *chunk,
   size_t chunk_size,
   const rtems_printer* printer

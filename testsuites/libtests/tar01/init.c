@@ -24,6 +24,7 @@
 #include <unistd.h>
 
 #include "initial_filesystem_tar.h"
+#include "initial_filesystem_tar_gz.h"
 
 const char rtems_test_name[] = "TAR 1";
 
@@ -32,9 +33,12 @@ rtems_task Init(rtems_task_argument argument);
 void test_untar_from_memory(void);
 void test_untar_from_file(void);
 void test_untar_chunks_from_memory(void);
+void test_untar_unzip_tgz(void);
 
 #define TARFILE_START initial_filesystem_tar
 #define TARFILE_SIZE  initial_filesystem_tar_size
+#define TARFILE_GZ_START initial_filesystem_tar_gz
+#define TARFILE_GZ_SIZE  initial_filesystem_tar_gz_size
 
 void test_cat(
   char *file,
@@ -145,6 +149,45 @@ void test_untar_chunks_from_memory(void)
 
 }
 
+void test_untar_unzip_tgz(void)
+{
+  int status;
+  rtems_printer     printer;
+  int rv;
+  Untar_GzChunkContext ctx;
+  size_t i = 0;
+  char *buffer = (char *)TARFILE_GZ_START;
+  size_t buflen = TARFILE_GZ_SIZE;
+  char inflate_buffer;
+
+  rtems_print_printer_printf(&printer);
+
+  /* make a directory to untar it into */
+  rv = mkdir( "/dest3", 0777 );
+  rtems_test_assert( rv == 0 );
+
+  rv = chdir( "/dest3" );
+  rtems_test_assert( rv == 0 );
+
+  printf( "Untaring chunks from tgz - " );
+
+  status = Untar_GzChunkContext_Init(&ctx, &inflate_buffer, 1);
+  rtems_test_assert(status == UNTAR_SUCCESSFUL);
+  for(i = 0; i < buflen; i++) {
+    status = Untar_FromGzChunk_Print(&ctx, &buffer[i], 1, &printer);
+    rtems_test_assert(status == UNTAR_SUCCESSFUL);
+  }
+  printf( "successful\n" );
+
+  /******************/
+  printf( "========= /dest3/home/test_file =========\n" );
+  test_cat( "/dest3/home/test_file", 0, 0 );
+
+  /******************/
+  printf( "========= /dest3/symlink =========\n" );
+  test_cat( "/dest3/symlink", 0, 0 );
+}
+
 rtems_task Init(
   rtems_task_argument ignored
 )
@@ -156,6 +199,8 @@ rtems_task Init(
   test_untar_from_file();
   puts( "" );
   test_untar_chunks_from_memory();
+  puts( "" );
+  test_untar_unzip_tgz();
 
   TEST_END();
   exit( 0 );

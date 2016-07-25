@@ -31,4 +31,15 @@ initial tar image.
 (0)This is a test of loading an RTEMS filesystem from an
 initial tar image.
 
+
+Untaring chunks from tgz- untar: dir: home
+untar: file: home/test_file (73)
+successful
+========= /dest3/home/test_file =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
+
+========= /dest3/symlink =========
+(0)This is a test of loading an RTEMS filesystem from an
+initial tar image.
 *** END OF TAR01 TEST ***

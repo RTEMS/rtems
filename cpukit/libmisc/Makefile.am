@@ -155,7 +155,7 @@ EXTRA_DIST += stackchk/README
 
 ## libuntar
 noinst_LIBRARIES += libuntar.a
-libuntar_a_SOURCES = untar/untar.c untar/untar.h
+libuntar_a_SOURCES = untar/untar.c untar/untar_tgz.c untar/untar.h
 
 EXTRA_DIST += untar/README
 
