@@ -128,6 +128,7 @@ void _SMP_Multicast_action(
 
   _SMP_lock_ISR_disable_and_acquire( &_SMP_Multicast_action_context.Lock,
       &lock_context );
+  _Chain_Initialize_node( &node.Node );
   _Chain_Prepend_unprotected( &_SMP_Multicast_action_context.List, &node.Node );
   _SMP_lock_Release_and_ISR_enable( &_SMP_Multicast_action_context.Lock,
       &lock_context );
