@@ -35,6 +35,8 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/cpu.h>
 
+#include <inttypes.h>
+
 #ifdef ARM_MULTILIB_ARCH_V4
 
 static void _defaultExcHandler (CPU_Exception_frame *ctx)
@@ -42,8 +44,9 @@ static void _defaultExcHandler (CPU_Exception_frame *ctx)
     printk("\n\r");
     printk("----------------------------------------------------------\n\r");
 #if 1
-    printk("Exception 0x%x caught at PC 0x%x by thread %d\n",
-           ctx->vector, ctx->register_lr - 4,
+    printk("Exception 0x%x caught at PC 0x%" PRIxPTR
+           " by thread 0x%" PRIx32 "\n",
+           ctx->vector, (uintptr_t) ctx->register_lr - 4,
            _Thread_Executing->Object.id);
 #endif
     printk("----------------------------------------------------------\n\r");
