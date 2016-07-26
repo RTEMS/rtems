@@ -340,42 +340,40 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
 }
 
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_relative(
-  Watchdog_Control    *the_watchdog,
-  Per_CPU_Control     *cpu,
-  Watchdog_Interval    ticks
+  Watchdog_Control  *the_watchdog,
+  Per_CPU_Control   *cpu,
+  Watchdog_Interval  ticks
 )
 {
-  ISR_lock_Context lock_context;
-  Watchdog_Header *header;
-  uint64_t expire;
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
+  uint64_t          expire;
+
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
-
   expire = ticks + cpu->Watchdog.ticks;
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
-
   _Watchdog_Insert(header, the_watchdog, expire);
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
   return expire;
 }
 
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_absolute(
-  Watchdog_Control    *the_watchdog,
-  Per_CPU_Control     *cpu,
-  uint64_t             expire
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  uint64_t          expire
 )
 {
-  ISR_lock_Context lock_context;
-  Watchdog_Header *header;
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
+
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ];
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
-
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ];
-
   _Watchdog_Insert(header, the_watchdog, expire);
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
   return expire;
