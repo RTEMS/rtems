@@ -432,7 +432,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
   States_Control                 state,
-  Watchdog_Interval              timeout,
+  uint64_t                       timeout,
   Watchdog_Discipline            discipline,
   uint32_t                       expected_level
 )
