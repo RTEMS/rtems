@@ -48,7 +48,8 @@ static bool life_protected(void)
 
   executing = _Thread_Get_executing();
 
-  return (executing->Life.state & THREAD_LIFE_PROTECTED) != 0;
+  return executing == NULL
+    || (executing->Life.state & THREAD_LIFE_PROTECTED) != 0;
 }
 
 static void assert_normal_thread_context(void)
