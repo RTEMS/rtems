@@ -49,6 +49,17 @@ typedef struct Thread_queue_Operations Thread_queue_Operations;
 
 typedef struct Thread_queue_Path Thread_queue_Path;
 
+/**
+ * @brief Thread queue deadlock callout.
+ *
+ * @param the_thread The thread that detected the deadlock.
+ *
+ * @see _Thread_queue_Context_set_deadlock_callout().
+ */
+typedef void ( *Thread_queue_Deadlock_callout )(
+  Thread_Control *the_thread
+);
+
 #if defined(RTEMS_MULTIPROCESSING)
 /**
  * @brief Multiprocessing (MP) support callout for thread queue operations.
@@ -117,6 +128,17 @@ typedef struct {
   uint64_t timeout;
 
   /**
+   * @brief Invoked in case of a detected deadlock.
+   *
+   * Must be initialized for _Thread_queue_Enqueue_critical() in case the
+   * thread queue may have an owner, e.g. for mutex objects.
+   *
+   * @see _Thread_queue_Context_set_deadlock_callout().
+   */
+  Thread_queue_Deadlock_callout deadlock_callout;
+
+#if defined(RTEMS_MULTIPROCESSING)
+  /**
    * @brief Callout to unblock the thread in case it is actually a thread
    * proxy.
    *
@@ -126,7 +148,6 @@ typedef struct {
    *
    * @see _Thread_queue_Context_set_MP_callout().
    */
-#if defined(RTEMS_MULTIPROCESSING)
   Thread_queue_MP_callout mp_callout;
 #endif
 
@@ -174,6 +195,28 @@ typedef struct {
  * thread queue owner and thread wait queue relationships.
  */
 typedef struct {
+  /**
+   * @brief Node to register this link in the global thread queue links lookup
+   * tree.
+   */
+  RBTree_Node Registry_node;
+
+  /**
+   * @brief The source thread queue determined by the thread queue owner.
+   */
+  Thread_queue_Queue *source;
+
+  /**
+   * @brief The target thread queue determined by the thread wait queue of the
+   * source owner.
+   */
+  Thread_queue_Queue *target;
+
+  /**
+   * @brief Node to add this link to a thread queue path.
+   */
+  Chain_Node Path_node;
+
   /**
    * @brief The owner of this thread queue link.
    */

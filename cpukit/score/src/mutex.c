@@ -108,6 +108,10 @@ static void _Mutex_Acquire_slow(
 )
 {
   _Thread_queue_Context_set_expected_level( queue_context, 1 );
+  _Thread_queue_Context_set_deadlock_callout(
+    queue_context,
+    _Thread_queue_Deadlock_fatal
+  );
   _Thread_queue_Enqueue_critical(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,

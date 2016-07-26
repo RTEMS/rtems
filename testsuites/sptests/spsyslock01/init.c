@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,7 +21,7 @@
 #include <sys/lock.h>
 #include <errno.h>
 #include <limits.h>
-#include <pthread.h>
+#include <setjmp.h>
 #include <string.h>
 #include <time.h>
 
@@ -34,8 +34,6 @@ const char rtems_test_name[] = "SPSYSLOCK 1";
 #define EVENT_MTX_RELEASE RTEMS_EVENT_1
 
 #define EVENT_MTX_PRIO_INV RTEMS_EVENT_2
-
-#define EVENT_MTX_DEADLOCK RTEMS_EVENT_3
 
 #define EVENT_REC_MTX_ACQUIRE RTEMS_EVENT_4
 
@@ -56,7 +54,6 @@ typedef struct {
   rtems_id mid;
   rtems_id low;
   struct _Mutex_Control mtx;
-  struct _Mutex_Control deadlock_mtx;
   struct _Mutex_recursive_Control rec_mtx;
   struct _Condition_Control cond;
   struct _Semaphore_Control sem;
@@ -65,6 +62,7 @@ typedef struct {
   int eno[2];
   int generation[2];
   int current_generation[2];
+  jmp_buf deadlock_return_context;
 } test_context;
 
 static test_context test_instance;
@@ -298,6 +296,19 @@ static void test_mtx_timeout_recursive(test_context *ctx)
   send_event(ctx, idx, EVENT_REC_MTX_RELEASE);
 }
 
+static void test_mtx_deadlock(test_context *ctx)
+{
+  struct _Mutex_Control *mtx = &ctx->mtx;
+
+  _Mutex_Acquire(mtx);
+
+  if (setjmp(ctx->deadlock_return_context) == 0) {
+    _Mutex_Acquire(mtx);
+  }
+
+  _Mutex_Release(mtx);
+}
+
 static void test_condition(test_context *ctx)
 {
   struct _Condition_Control *cond = &ctx->cond;
@@ -493,21 +504,6 @@ static void mid_task(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
-#ifdef RTEMS_POSIX_API
-static void deadlock_cleanup(void *arg)
-{
-  struct _Mutex_Control *deadlock_mtx = arg;
-
-  /*
-   * The thread terminate procedure will dequeue us from the wait queue.  So,
-   * one release is sufficient.
-   */
-
-  _Mutex_Release(deadlock_mtx);
-  _Mutex_Destroy(deadlock_mtx);
-}
-#endif
-
 static void high_task(rtems_task_argument idx)
 {
   test_context *ctx = &test_instance;
@@ -551,22 +547,6 @@ static void high_task(rtems_task_argument idx)
 
       sc = rtems_task_suspend(ctx->mid);
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    }
-
-    if ((events & EVENT_MTX_DEADLOCK) != 0) {
-      struct _Mutex_Control *deadlock_mtx = &ctx->deadlock_mtx;
-
-#ifdef RTEMS_POSIX_API
-      pthread_cleanup_push(deadlock_cleanup, deadlock_mtx);
-#endif
-
-      _Mutex_Initialize(deadlock_mtx);
-      _Mutex_Acquire(deadlock_mtx);
-      _Mutex_Acquire(deadlock_mtx);
-
-#ifdef RTEMS_POSIX_API
-      pthread_cleanup_pop(0);
-#endif
     }
 
     if ((events & EVENT_REC_MTX_ACQUIRE) != 0) {
@@ -670,6 +650,7 @@ static void test(void)
   test_prio_inv_recursive(ctx);
   test_mtx_timeout_normal(ctx);
   test_mtx_timeout_recursive(ctx);
+  test_mtx_deadlock(ctx);
   test_condition(ctx);
   test_condition_timeout(ctx);
   test_sem(ctx);
@@ -677,15 +658,11 @@ static void test(void)
   test_futex(ctx);
   test_sched();
 
-  send_event(ctx, 0, EVENT_MTX_DEADLOCK);
-
   sc = rtems_task_delete(ctx->mid);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-#ifdef RTEMS_POSIX_API
   sc = rtems_task_delete(ctx->high[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-#endif
 
   sc = rtems_task_delete(ctx->high[1]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -707,6 +684,24 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
+static void fatal_extension(
+  rtems_fatal_source source,
+  bool is_internal,
+  rtems_fatal_code error
+)
+{
+
+  if (
+    source == INTERNAL_ERROR_CORE
+      && !is_internal
+      && error == INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK
+  ) {
+    test_context *ctx = &test_instance;
+
+    longjmp(ctx->deadlock_return_context, 1);
+  }
+}
+
 #define CONFIGURE_MICROSECONDS_PER_TICK US_PER_TICK
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -714,7 +709,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 4
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_PRIORITY 4
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES

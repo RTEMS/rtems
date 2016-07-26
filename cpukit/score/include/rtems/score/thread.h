@@ -327,6 +327,12 @@ typedef struct {
      */
     Chain_Control Pending_requests;
   } Lock;
+
+  /**
+   * @brief Thread queue link provided for use by the thread wait lock owner to
+   * build a thread queue path.
+   */
+  Thread_queue_Link Link;
 #endif
 
   /**

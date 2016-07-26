@@ -62,6 +62,11 @@ Status_Control _CORE_mutex_Seize_slow(
   _Thread_queue_Context_set_expected_level( queue_context, 2 );
 #endif
 
+  _Thread_queue_Context_set_deadlock_callout(
+    queue_context,
+    _Thread_queue_Deadlock_status
+  );
+
   _Thread_queue_Enqueue_critical(
     &the_mutex->Wait_queue.Queue,
     CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
@@ -87,6 +92,10 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
 {
   if ( wait ) {
     _Thread_queue_Context_set_expected_level( queue_context, 1 );
+    _Thread_queue_Context_set_deadlock_callout(
+      queue_context,
+      _Thread_queue_Deadlock_status
+    );
     _Thread_queue_Enqueue_critical(
       &the_mutex->Wait_queue.Queue,
       operations,

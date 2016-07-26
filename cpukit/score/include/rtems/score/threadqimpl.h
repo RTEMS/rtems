@@ -52,6 +52,11 @@ extern "C" {
 struct Thread_queue_Path {
 #if defined(RTEMS_SMP)
   /**
+   * @brief The chain of thread queue links defining the thread queue path.
+   */
+  Chain_Control Links;
+
+  /**
    * @brief The start of a thread queue path.
    */
   Thread_queue_Link Start;
@@ -86,6 +91,16 @@ typedef struct {
 } Thread_queue_Syslock_queue;
 
 /**
+ * @brief Sets the thread wait return code to STATUS_DEADLOCK.
+ */
+void _Thread_queue_Deadlock_status( Thread_Control *the_thread );
+
+/**
+ * @brief Results in an INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK fatal error.
+ */
+void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread );
+
+/**
  * @brief Initializes a thread queue context.
  *
  * @param queue_context The thread queue context to initialize.
@@ -97,6 +112,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 #if defined(RTEMS_DEBUG)
   memset( queue_context, 0, sizeof( *queue_context ) );
   queue_context->expected_thread_dispatch_disable_level = 0xdeadbeef;
+  queue_context->deadlock_callout = _Thread_queue_Deadlock_fatal;
 #else
   (void) queue_context;
 #endif
@@ -170,6 +186,28 @@ _Thread_queue_Context_set_absolute_timeout(
 {
   queue_context->timeout_discipline = WATCHDOG_ABSOLUTE;
   queue_context->timeout = timeout;
+}
+
+/**
+ * @brief Sets the deadlock callout in the thread queue
+ * context.
+ *
+ * A deadlock callout must be provided for _Thread_queue_Enqueue_critical()
+ * operations that operate on thread queues which may have an owner, e.g. mutex
+ * objects.  Available deadlock callouts are _Thread_queue_Deadlock_status()
+ * and _Thread_queue_Deadlock_fatal().
+ *
+ * @param queue_context The thread queue context.
+ * @param deadlock_callout The deadlock callout.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_deadlock_callout(
+  Thread_queue_Context          *queue_context,
+  Thread_queue_Deadlock_callout  deadlock_callout
+)
+{
+  queue_context->deadlock_callout = deadlock_callout;
 }
 
 /**
