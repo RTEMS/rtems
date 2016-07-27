@@ -60,7 +60,14 @@ _start:
 	bl	bsp_fdt_copy
 #endif /* U_BOOT_USE_FDT */
 
+#ifdef QORIQ_HAS_WRITE_BACK_L1_CACHE
+	LWI	r3, bsp_section_start_begin
+	LWI	r4, bsp_section_data_load_end
+	sub	r4, r4, r3
+	bl	rtems_cache_flush_multiple_data_lines
+#else
 	bl	qoriq_l1cache_invalidate
+#endif
 
 #ifdef QORIQ_CLUSTER_1_L2CSR0
 	LWI	r3, QORIQ_CLUSTER_1_L2CSR0
