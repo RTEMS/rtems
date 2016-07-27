@@ -136,8 +136,9 @@ int nanosleep(
    *  NOTE:  This behavior is beyond the POSIX specification.
    *         FSU and GNU/Linux pthreads shares this behavior.
    */
-  if ( !_Timespec_Is_valid( rqtp ) )
-    return EINVAL;
+  if ( !_Timespec_Is_valid( rqtp ) ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
 
   relative_interval = _Timespec_To_ticks( rqtp );
   if ( relative_interval == 0 )
