@@ -100,6 +100,7 @@ void _SMP_lock_Stats_iteration_start(
 
   _SMP_lock_ISR_disable_and_acquire( &control->Lock, &lock_context );
 
+  _Chain_Initialize_node( &iteration_context->Node );
   _Chain_Append_unprotected(
     &control->Iterator_chain,
     &iteration_context->Node
