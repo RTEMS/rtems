@@ -51,14 +51,7 @@
 
 _start:
 	bl	.Linitearly
-
-#ifdef HAS_UBOOT
-	bl	bsp_uboot_copy_board_info
-#endif /* HAS_UBOOT */
-
-#ifdef U_BOOT_USE_FDT
 	bl	bsp_fdt_copy
-#endif /* U_BOOT_USE_FDT */
 
 #ifdef QORIQ_HAS_WRITE_BACK_L1_CACHE
 	LWI	r3, bsp_section_start_begin
@@ -152,8 +145,12 @@ _start:
 	beqlr
 	b	memcpy
 
-	/* Do not use r3 here, since this could be the U-Boot board info */
 .Linitearly:
+	/*
+	 * Do not use r3 here, since it holds the FDT base pointer provided by
+	 * the boot loader.
+	 */
+
 	/* Disable decrementer */
 	mfspr	r0, BOOKE_TCR
 	LWI	r4, BOOKE_TCR_DIE

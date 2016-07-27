@@ -33,7 +33,6 @@
 
 #include <bsp.h>
 #include <bsp/tsec.h>
-#include <bsp/u-boot.h>
 #include <bsp/qoriq.h>
 
 #if QORIQ_CHIP_VARIANT == QORIQ_CHIP_P1020

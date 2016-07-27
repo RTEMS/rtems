@@ -39,7 +39,6 @@
 #include <bsp/linker-symbols.h>
 #include <bsp/mmu.h>
 #include <bsp/qoriq.h>
-#include <bsp/u-boot.h>
 #include <bsp/vectors.h>
 
 LINKER_SYMBOL(bsp_exc_vector_base);
@@ -81,6 +80,36 @@ void _BSP_Fatal_error(unsigned n)
   }
 }
 
+static void initialize_frequency_parameters(void)
+{
+  const void *fdt = bsp_fdt_get();
+  int node;
+  int len;
+  fdt32_t *val_fdt;
+
+  node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "cpu", 4);
+
+  val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "bus-frequency", &len);
+  if (val_fdt == NULL || len != 4) {
+    bsp_fatal(QORIQ_FATAL_FDT_NO_BUS_FREQUENCY);
+  }
+  BSP_bus_frequency = fdt32_to_cpu(*val_fdt) / QORIQ_BUS_CLOCK_DIVIDER;
+
+  val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "timebase-frequency", &len);
+  if (val_fdt == NULL || len != 4) {
+    bsp_fatal(QORIQ_FATAL_FDT_NO_BUS_FREQUENCY);
+  }
+  bsp_clicks_per_usec = fdt32_to_cpu(*val_fdt) / 1000000;
+
+  #ifdef __PPC_CPU_E6500__
+    val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);
+    if (val_fdt == NULL || len != 4) {
+      bsp_fatal(QORIQ_FATAL_FDT_NO_CLOCK_FREQUENCY);
+    }
+  #endif
+  rtems_counter_initialize_converter(fdt32_to_cpu(*val_fdt));
+}
+
 void bsp_start(void)
 {
   unsigned long i = 0;
@@ -92,48 +121,7 @@ void bsp_start(void)
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
 
-  /* Initialize some device driver parameters */
-  #if defined(HAS_UBOOT)
-    BSP_bus_frequency = bsp_uboot_board_info.bi_busfreq
-      / QORIQ_BUS_CLOCK_DIVIDER;
-    bsp_clicks_per_usec = BSP_bus_frequency / 8000000;
-    rtems_counter_initialize_converter(
-      #ifdef __PPC_CPU_E6500__
-        bsp_uboot_board_info.bi_intfreq
-      #else
-        BSP_bus_frequency / 8
-      #endif
-    );
-  #elif defined(U_BOOT_USE_FDT)
-    {
-      const void *fdt = bsp_fdt_get();
-      int node;
-      int len;
-      fdt32_t *val_fdt;
-
-      node = fdt_node_offset_by_prop_value(fdt, -1, "device_type", "cpu", 4);
-
-      val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "bus-frequency", &len);
-      if (val_fdt == NULL || len != 4) {
-        bsp_fatal(QORIQ_FATAL_FDT_NO_BUS_FREQUENCY);
-      }
-      BSP_bus_frequency = fdt32_to_cpu(*val_fdt) / QORIQ_BUS_CLOCK_DIVIDER;
-
-      val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "timebase-frequency", &len);
-      if (val_fdt == NULL || len != 4) {
-        bsp_fatal(QORIQ_FATAL_FDT_NO_BUS_FREQUENCY);
-      }
-      bsp_clicks_per_usec = fdt32_to_cpu(*val_fdt) / 1000000;
-
-      #ifdef __PPC_CPU_E6500__
-        val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);
-        if (val_fdt == NULL || len != 4) {
-          bsp_fatal(QORIQ_FATAL_FDT_NO_CLOCK_FREQUENCY);
-        }
-      #endif
-      rtems_counter_initialize_converter(fdt32_to_cpu(*val_fdt));
-    }
-  #endif
+  initialize_frequency_parameters();
 
   /* Initialize some console parameters */
   for (i = 0; i < console_device_count; ++i) {
@@ -149,12 +137,7 @@ void bsp_start(void)
       ns16550_context *ctx = (ns16550_context *) dev->context;
 
       ctx->clock = BSP_bus_frequency;
-
-      #if defined(HAS_UBOOT) && !defined(U_BOOT_GENERIC_BOARD_INFO)
-        ctx->initial_baud = bsp_uboot_board_info.bi_baudrate;
-      #else
-        ctx->initial_baud = 115200;
-      #endif
+      ctx->initial_baud = 115200;
     }
   }
 

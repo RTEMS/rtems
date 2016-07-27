@@ -44,16 +44,6 @@ void _start_secondary_processor(void);
 
 #define TLB_COUNT (TLB_END - TLB_BEGIN)
 
-#ifdef HAS_UBOOT
-  /*
-   * These values can be obtained with the debugger or a look into the U-Boot
-   * sources (arch/powerpc/cpu/mpc85xx/release.S).
-   */
-  #define BOOT_BEGIN U_BOOT_BOOT_PAGE_BEGIN
-  #define BOOT_LAST U_BOOT_BOOT_PAGE_LAST
-  #define SPIN_TABLE (BOOT_BEGIN + U_BOOT_BOOT_PAGE_SPIN_OFFSET)
-#endif
-
 #if QORIQ_THREAD_COUNT > 1
 static bool is_started_by_u_boot(uint32_t cpu_index)
 {
@@ -133,44 +123,27 @@ static void bsp_inter_processor_interrupt(void *arg)
 
 static uint32_t discover_processors(void)
 {
-#if defined(HAS_UBOOT)
-  return QORIQ_CPU_COUNT;
-#elif defined(U_BOOT_USE_FDT)
   const void *fdt = bsp_fdt_get();
   int cpus = fdt_path_offset(fdt, "/cpus");
   int node = fdt_first_subnode(fdt, cpus);
   uint32_t cpu = 0;
-  uintptr_t last = 0;
-  uintptr_t begin = last - 1;
 
-  while (node >= 0) {
+  while (node >= 0 && cpu < RTEMS_ARRAY_SIZE(qoriq_start_spin_table_addr)) {
     int len;
     fdt64_t *addr_fdt = (fdt64_t *)
       fdt_getprop(fdt, node, "cpu-release-addr", &len);
 
-    if (
-      addr_fdt != NULL
-        && cpu < RTEMS_ARRAY_SIZE(qoriq_start_spin_table_addr)
-    ) {
+    if (addr_fdt != NULL) {
       uintptr_t addr = (uintptr_t) fdt64_to_cpu(*addr_fdt);
 
-      if (addr < begin) {
-        begin = addr;
-      }
-
-      if (addr > last) {
-        last = addr;
-      }
-
       qoriq_start_spin_table_addr[cpu] = (qoriq_start_spin_table *) addr;
-      ++cpu;
     }
 
+    ++cpu;
     node = fdt_next_subnode(fdt, node);
   }
 
   return cpu * QORIQ_THREAD_COUNT;
-#endif
 }
 
 uint32_t _CPU_SMP_Initialize(void)
@@ -186,37 +159,33 @@ uint32_t _CPU_SMP_Initialize(void)
   return cpu_count;
 }
 
-static void release_processor(
+static bool release_processor(
   qoriq_start_spin_table *spin_table,
   uint32_t cpu_index
 )
 {
-  const Per_CPU_Control *cpu = _Per_CPU_Get_by_index(cpu_index);
+  bool spin_table_present = (spin_table != NULL);
 
-  spin_table->pir = cpu_index;
-  spin_table->r3_lower = (uint32_t) cpu->interrupt_stack_high;
-  spin_table->addr_upper = 0;
-  rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
-  ppc_synchronize_data();
-  spin_table->addr_lower = (uint32_t) _start_secondary_processor;
-  rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
+  if (spin_table_present) {
+    const Per_CPU_Control *cpu = _Per_CPU_Get_by_index(cpu_index);
+
+    spin_table->pir = cpu_index;
+    spin_table->r3_lower = (uint32_t) cpu->interrupt_stack_high;
+    spin_table->addr_upper = 0;
+    rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
+    ppc_synchronize_data();
+    spin_table->addr_lower = (uint32_t) _start_secondary_processor;
+    rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
+  }
+
+  return spin_table_present;
 }
 
 static qoriq_start_spin_table *get_spin_table(uint32_t cpu_index)
 {
   qoriq_start_spin_table *spin_table;
 
-#if defined(HAS_UBOOT)
-#if QORIQ_THREAD_COUNT > 1
-  spin_table = &((qoriq_start_spin_table *) SPIN_TABLE)[cpu_index / 2 - 1];
-  qoriq_start_spin_table_addr[cpu_index / 2 - 1] = spin_table;
-#else
-  spin_table = (qoriq_start_spin_table *) SPIN_TABLE;
-  qoriq_start_spin_table_addr[0] = spin_table;
-#endif
-#elif defined(U_BOOT_USE_FDT)
-  spin_table = qoriq_start_spin_table_addr[cpu_index / 2];
-#endif
+  spin_table = qoriq_start_spin_table_addr[cpu_index / QORIQ_THREAD_COUNT];
 
   return spin_table;
 }
@@ -227,18 +196,14 @@ bool _CPU_SMP_Start_processor(uint32_t cpu_index)
   if (is_started_by_u_boot(cpu_index)) {
     qoriq_start_spin_table *spin_table = get_spin_table(cpu_index);
 
-    release_processor(spin_table, cpu_index);
-
-    return true;
+    return release_processor(spin_table, cpu_index);
   } else {
     return _SMP_Should_start_processor(cpu_index - 1);
   }
 #else
   qoriq_start_spin_table *spin_table = get_spin_table(cpu_index);
 
-  release_processor(spin_table, cpu_index);
-
-  return true;
+  return release_processor(spin_table, cpu_index);
 #endif
 }
 

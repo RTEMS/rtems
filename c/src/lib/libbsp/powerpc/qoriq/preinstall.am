@@ -73,21 +73,9 @@ $(PROJECT_INCLUDE)/bsp/fdt.h: ../../shared/include/fdt.h $(PROJECT_INCLUDE)/bsp/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fdt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fdt.h
 
-$(PROJECT_INCLUDE)/bsp/u-boot.h: ../../shared/include/u-boot.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot.h
-
 $(PROJECT_INCLUDE)/bsp/utility.h: ../../shared/include/utility.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/utility.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/utility.h
-
-$(PROJECT_INCLUDE)/bsp/u-boot-board-info.h: ../shared/include/u-boot-board-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-board-info.h
-
-$(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h: ../shared/include/u-boot-generic-board-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-generic-board-info.h
 
 $(PROJECT_INCLUDE)/bsp/start.h: ../shared/include/start.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/start.h
@@ -104,10 +92,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 $(PROJECT_INCLUDE)/bsp/tsec-config.h: include/tsec-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tsec-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tsec-config.h
-
-$(PROJECT_INCLUDE)/bsp/u-boot-config.h: include/u-boot-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/u-boot-config.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/u-boot-config.h
 
 $(PROJECT_INCLUDE)/bsp/mmu.h: include/mmu.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mmu.h

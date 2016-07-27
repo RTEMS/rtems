@@ -23,15 +23,11 @@ include_bsp_HEADERS = include/irq.h \
 	../../shared/include/irq-info.h \
 	../../shared/include/bootcard.h \
 	../../shared/include/fdt.h \
-	../../shared/include/u-boot.h \
 	../../shared/include/utility.h \
-	../shared/include/u-boot-board-info.h \
-	../shared/include/u-boot-generic-board-info.h \
 	../shared/include/start.h \
 	../shared/include/tictac.h \
 	../shared/include/linker-symbols.h \
 	include/tsec-config.h \
-	include/u-boot-config.h \
 	include/mmu.h \
 	include/intercom.h \
 	include/uart-bridge.h \
@@ -63,13 +59,10 @@ libbsp_a_SOURCES += \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/src/bsp-fdt.c \
-	../../shared/src/bsp-uboot-board-info.c \
 	../shared/src/ppc-exc-handler-table.c \
 	../shared/src/tictac.c \
 	../shared/src/bsp-start-zero.S \
 	../shared/startup/bspidle.c \
-	../shared/uboot_getenv.c \
-	../shared/uboot_dump_bdinfo.c \
 	startup/l1cache.S \
 	startup/l2cache.S \
 	startup/mmu.c \
