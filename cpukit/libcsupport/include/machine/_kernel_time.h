@@ -73,7 +73,6 @@ void	resettodr(void);
 
 #define	time_second _Timecounter_Time_second
 #define	time_uptime _Timecounter_Time_uptime
-#define	boottimebin _Timecounter_Boottimebin
 extern struct timeval boottime;
 extern struct bintime tc_tick_bt;
 extern sbintime_t tc_tick_sbt;
@@ -140,6 +139,9 @@ getsbinuptime(void)
 #define	getbintime(_bt) _Timecounter_Getbintime(_bt)
 #define	getnanotime(_tsp) _Timecounter_Getnanotime(_tsp)
 #define	getmicrotime(_tvp) _Timecounter_Getmicrotime(_tvp)
+
+#define	getboottime(_tvp) _Timecounter_Getboottime(_tvp)
+#define	getboottimebin(_bt) _Timecounter_Getboottimebin(_bt)
 
 /* Other functions */
 int	itimerdecr(struct itimerval *itp, int usec);

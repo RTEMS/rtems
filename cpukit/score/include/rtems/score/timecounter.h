@@ -154,6 +154,20 @@ void _Timecounter_Getnanouptime( struct timespec *ts );
 void _Timecounter_Getmicrouptime( struct timeval *tv );
 
 /**
+ * @brief Returns the boot time in the timeval format.
+ *
+ * @param[out] tv Returns the boot time.
+ */
+void _Timecounter_Getboottime( struct timeval *tv );
+
+/**
+ * @brief Returns the boot time in the bintime format.
+ *
+ * @param[out] tv Returns the boot time.
+ */
+void _Timecounter_Getboottimebin( struct bintime *bt );
+
+/**
  * @brief Installs the timecounter.
  *
  * The timecounter structure must contain valid values in the fields
@@ -214,13 +228,6 @@ extern volatile time_t _Timecounter_Time_second;
  * second.
  */
 extern volatile time_t _Timecounter_Time_uptime;
-
-/**
- * @brief The binary boot time.
- *
- * The boot time changes via _Timecounter_Set_clock().
- */
-extern struct bintime _Timecounter_Boottimebin;
 
 /**
  * @brief The current timecounter.

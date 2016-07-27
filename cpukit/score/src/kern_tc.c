@@ -28,11 +28,12 @@
 #define	getbintime(_bt) _Timecounter_Getbintime(_bt)
 #define	getnanotime(_tsp) _Timecounter_Getnanotime(_tsp)
 #define	getmicrotime(_tvp) _Timecounter_Getmicrotime(_tvp)
+#define	getboottime(_tvp) _Timecounter_Getboottime(_tvp)
+#define	getboottimebin(_bt) _Timecounter_Getboottimebin(_bt)
 #define	tc_init _Timecounter_Install
 #define	timecounter _Timecounter
 #define	time_second _Timecounter_Time_second
 #define	time_uptime _Timecounter_Time_uptime
-#define	boottimebin _Timecounter_Boottimebin
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/atomic.h>
 #include <rtems/score/smp.h>
@@ -210,14 +211,14 @@ volatile time_t time_second = TOD_SECONDS_1970_THROUGH_1988;
 volatile time_t time_uptime = 1;
 
 #ifndef __rtems__
-struct bintime boottimebin;
+static struct bintime boottimebin_x;
 #else /* __rtems__ */
-struct bintime boottimebin = {
+static struct bintime boottimebin_x = {
   .sec = TOD_SECONDS_1970_THROUGH_1988 - 1
 };
 #endif /* __rtems__ */
 #ifndef __rtems__
-struct timeval boottime;
+static struct timeval boottime_x;
 static int sysctl_kern_boottime(SYSCTL_HANDLER_ARGS);
 SYSCTL_PROC(_kern, KERN_BOOTTIME, boottime, CTLTYPE_STRUCT|CTLFLAG_RD,
     NULL, 0, sysctl_kern_boottime, "S,timeval", "System boottime");
@@ -259,6 +260,10 @@ void dtrace_getnanotime(struct timespec *tsp);
 static int
 sysctl_kern_boottime(SYSCTL_HANDLER_ARGS)
 {
+	struct timeval boottime;
+
+	getboottime(&boottime);
+
 #ifndef __mips__
 #ifdef SCTL_MASK32
 	int tv[2];
@@ -266,11 +271,11 @@ sysctl_kern_boottime(SYSCTL_HANDLER_ARGS)
 	if (req->flags & SCTL_MASK32) {
 		tv[0] = boottime.tv_sec;
 		tv[1] = boottime.tv_usec;
-		return SYSCTL_OUT(req, tv, sizeof(tv));
-	} else
+		return (SYSCTL_OUT(req, tv, sizeof(tv)));
+	}
 #endif
 #endif
-		return SYSCTL_OUT(req, &boottime, sizeof(boottime));
+	return (SYSCTL_OUT(req, &boottime, sizeof(boottime)));
 }
 
 static int
@@ -353,7 +358,7 @@ fbclock_bintime(struct bintime *bt)
 {
 
 	fbclock_binuptime(bt);
-	bintime_add(bt, &boottimebin);
+	bintime_add(bt, &boottimebin_x);
 }
 
 void
@@ -428,7 +433,7 @@ fbclock_getbintime(struct bintime *bt)
 		*bt = th->th_offset;
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
-	bintime_add(bt, &boottimebin);
+	bintime_add(bt, &boottimebin_x);
 }
 
 void
@@ -516,7 +521,7 @@ bintime(struct bintime *bt)
 {
 
 	binuptime(bt);
-	bintime_add(bt, &boottimebin);
+	bintime_add(bt, &boottimebin_x);
 }
 
 void
@@ -591,7 +596,7 @@ getbintime(struct bintime *bt)
 		*bt = th->th_offset;
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
-	bintime_add(bt, &boottimebin);
+	bintime_add(bt, &boottimebin_x);
 }
 
 void
@@ -622,6 +627,20 @@ getmicrotime(struct timeval *tvp)
 	} while (gen == 0 || gen != th->th_generation);
 }
 #endif /* FFCLOCK */
+
+void
+getboottime(struct timeval *boottime)
+{
+
+	*boottime = boottime_x;
+}
+
+void
+getboottimebin(struct bintime *boottimebin)
+{
+
+	*boottimebin = boottimebin_x;
+}
 
 #ifdef FFCLOCK
 /*
@@ -1246,6 +1265,7 @@ int
 sysclock_snap2bintime(struct sysclock_snap *cs, struct bintime *bt,
     int whichclock, uint32_t flags)
 {
+	struct bintime boottimebin;
 #ifdef FFCLOCK
 	struct bintime bt2;
 	uint64_t period;
@@ -1259,8 +1279,10 @@ sysclock_snap2bintime(struct sysclock_snap *cs, struct bintime *bt,
 		if (cs->delta > 0)
 			bintime_addx(bt, cs->fb_info.th_scale * cs->delta);
 
-		if ((flags & FBCLOCK_UPTIME) == 0)
+		if ((flags & FBCLOCK_UPTIME) == 0) {
+			getboottimebin(&boottimebin);
 			bintime_add(bt, &boottimebin);
+		}
 		break;
 #ifdef FFCLOCK
 	case SYSCLOCK_FFWD:
@@ -1406,10 +1428,10 @@ _Timecounter_Set_clock(const struct bintime *_bt,
 #endif /* __rtems__ */
 	binuptime(&bt2);
 	bintime_sub(&bt, &bt2);
-	bintime_add(&bt2, &boottimebin);
-	boottimebin = bt;
+	bintime_add(&bt2, &boottimebin_x);
+	boottimebin_x = bt;
 #ifndef __rtems__
-	bintime2timeval(&bt, &boottime);
+	bintime2timeval(&bt, &boottime_x);
 
 	/* XXX fiddle all the little crinkly bits around the fiords... */
 	tc_windup();
@@ -1523,7 +1545,7 @@ _Timecounter_Windup(ISR_lock_Context *lock_context)
 	 * case we missed a leap second.
 	 */
 	bt = th->th_offset;
-	bintime_add(&bt, &boottimebin);
+	bintime_add(&bt, &boottimebin_x);
 	i = bt.sec - tho->th_microtime.tv_sec;
 	if (i > LARGE_STEP)
 		i = 2;
@@ -1531,7 +1553,7 @@ _Timecounter_Windup(ISR_lock_Context *lock_context)
 		t = bt.sec;
 		ntp_update_second(&th->th_adjustment, &bt.sec);
 		if (bt.sec != t)
-			boottimebin.sec += bt.sec - t;
+			boottimebin_x.sec += bt.sec - t;
 	}
 	/* Update the UTC timestamps used by the get*() functions. */
 	/* XXX shouldn't do this here.  Should force non-`get' versions. */
@@ -1968,7 +1990,7 @@ pps_event(struct pps_state *pps, int event)
 	tcount &= pps->capth->th_counter->tc_counter_mask;
 	bt = pps->capth->th_offset;
 	bintime_addx(&bt, pps->capth->th_scale * tcount);
-	bintime_add(&bt, &boottimebin);
+	bintime_add(&bt, &boottimebin_x);
 	bintime2timespec(&bt, &ts);
 
 	/* If the timecounter was wound up underneath us, bail out. */
@@ -2080,8 +2102,8 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
 	bintime_addx(&th->th_offset, th->th_scale * delta);
 
 	bt = th->th_offset;
-	bintime_add(&bt, &boottimebin);
-
+	th->th_bintime = bt;
+	bintime_add(&th->th_bintime, &th->th_boottime);
 	/* Update the UTC timestamps used by the get*() functions. */
 	/* XXX shouldn't do this here.  Should force non-`get' versions. */
 	bintime2timeval(&bt, &th->th_microtime);
@@ -2356,7 +2378,7 @@ tc_fill_vdso_timehands(struct vdso_timehands *vdso_th)
 	vdso_th->th_offset_count = th->th_offset_count;
 	vdso_th->th_counter_mask = th->th_counter->tc_counter_mask;
 	vdso_th->th_offset = th->th_offset;
-	vdso_th->th_boottime = boottimebin;
+	vdso_th->th_boottime = boottimebin_x;
 	enabled = cpu_fill_vdso_timehands(vdso_th, th->th_counter);
 	if (!vdso_th_enable)
 		enabled = 0;
@@ -2378,8 +2400,8 @@ tc_fill_vdso_timehands32(struct vdso_timehands32 *vdso_th32)
 	vdso_th32->th_counter_mask = th->th_counter->tc_counter_mask;
 	vdso_th32->th_offset.sec = th->th_offset.sec;
 	*(uint64_t *)&vdso_th32->th_offset.frac[0] = th->th_offset.frac;
-	vdso_th32->th_boottime.sec = boottimebin.sec;
-	*(uint64_t *)&vdso_th32->th_boottime.frac[0] = boottimebin.frac;
+	vdso_th32->th_boottime.sec = boottimebin_x.sec;
+	*(uint64_t *)&vdso_th32->th_boottime.frac[0] = boottimebin_x.frac;
 	enabled = cpu_fill_vdso_timehands32(vdso_th32, th->th_counter);
 	if (!vdso_th_enable)
 		enabled = 0;
