@@ -87,6 +87,8 @@ extern char atsam_memory_sdram_begin[];
 extern char atsam_memory_sdram_end[];
 extern char atsam_memory_sdram_size[];
 
+void atsam_rtc_get_time(rtems_time_of_day *tod);
+
 /** @} */
 
 #ifdef __cplusplus

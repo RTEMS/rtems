@@ -19,14 +19,7 @@
 
 #define ARBITRARY_DAY_OF_WEEK 1
 
-static void atsam_rtc_initialize(int minor)
-{
-  Rtc *rtc = RTC;
-
-  RTC_DisableIt(rtc, 0x1F);
-}
-
-static int atsam_rtc_get_time(int minor, rtems_time_of_day *tod)
+void atsam_rtc_get_time(rtems_time_of_day *tod)
 {
   Rtc *rtc = RTC;
   uint8_t hour;
@@ -47,11 +40,23 @@ static int atsam_rtc_get_time(int minor, rtems_time_of_day *tod)
   tod->day = day;
   tod->month = month;
   tod->year = year;
+}
+
+static void atsam_rtc_device_initialize(int minor)
+{
+  Rtc *rtc = RTC;
+
+  RTC_DisableIt(rtc, 0x1F);
+}
+
+static int atsam_rtc_device_get_time(int minor, rtems_time_of_day *tod)
+{
+  atsam_rtc_get_time(tod);
 
   return 0;
 }
 
-static int atsam_rtc_set_time(int minor, const rtems_time_of_day *tod)
+static int atsam_rtc_device_set_time(int minor, const rtems_time_of_day *tod)
 {
   Rtc *rtc = RTC;
   uint8_t hour;
@@ -76,23 +81,23 @@ static int atsam_rtc_set_time(int minor, const rtems_time_of_day *tod)
   return 0;
 }
 
-static bool atsam_rtc_probe(int minor)
+static bool atsam_rtc_device_probe(int minor)
 {
   return true;
 }
 
-const rtc_fns atsam_rtc_ops = {
-  .deviceInitialize = atsam_rtc_initialize,
-  .deviceGetTime = atsam_rtc_get_time,
-  .deviceSetTime = atsam_rtc_set_time
+const rtc_fns atsam_rtc_device_ops = {
+  .deviceInitialize = atsam_rtc_device_initialize,
+  .deviceGetTime = atsam_rtc_device_get_time,
+  .deviceSetTime = atsam_rtc_device_set_time
 };
 
 rtc_tbl RTC_Table[] = {
   {
     .sDeviceName = "/dev/rtc",
     .deviceType = RTC_CUSTOM,
-    .pDeviceFns = &atsam_rtc_ops,
-    .deviceProbe = atsam_rtc_probe
+    .pDeviceFns = &atsam_rtc_device_ops,
+    .deviceProbe = atsam_rtc_device_probe
   }
 };
 
