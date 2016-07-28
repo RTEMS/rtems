@@ -210,9 +210,13 @@ _start:
 	mtmsr	r0
 	isync
 
-	/* Initialize start stack */
-	subi	r1, START_STACK, PPC_MINIMUM_STACK_FRAME_SIZE
-	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
+	/*
+	 * Initialize start stack.  Make sure that we do not share a cache line
+	 * with the heap block management, since initial stacks for the
+	 * secondary processors are allocated from the workspace.
+	 */
+	subi	r1, START_STACK, 2 * PPC_DEFAULT_CACHE_LINE_SIZE
+	clrrwi	r1, r1, PPC_DEFAULT_CACHE_LINE_POWER
 	li	r0, 0
 	stw	r0, 0(r1)
 
