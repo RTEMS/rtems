@@ -53,6 +53,7 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/pin-config.h
 include_bsp_HEADERS += include/atsam-i2c.h
 include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/power.h
 
 include_libchipdir = $(includedir)/libchip
 
@@ -394,6 +395,9 @@ libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/pin-config.c
+libbsp_a_SOURCES += startup/power.c
+libbsp_a_SOURCES += startup/power-rtc.c
+libbsp_a_SOURCES += startup/power-clock.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
