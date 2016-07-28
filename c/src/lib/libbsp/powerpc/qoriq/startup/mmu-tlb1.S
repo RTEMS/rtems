@@ -48,8 +48,9 @@ qoriq_tlb1_write:
 	li	r0, 0
 	mtspr	FSL_EIS_MAS8, r0
 #endif
+	isync
+	msync
 	tlbwe
-	sync
 	isync
 	blr
 
@@ -65,8 +66,9 @@ qoriq_tlb1_invalidate:
 #ifdef QORIQ_HAS_HYPERVISOR_MODE
 	mtspr	FSL_EIS_MAS8, r0
 #endif
+	isync
+	msync
 	tlbwe
-	sync
 	isync
 	blr
 

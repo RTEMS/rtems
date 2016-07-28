@@ -317,7 +317,7 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 				mas3 &= ~(clear & mask);
 				mas3 |= set & mask;
 				PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS3, mas3);
-				asm volatile ("tlbwe; msync; isync" : : : "memory");
+				asm volatile ("isync; msync; tlbwe; isync" : : : "memory");
 			}
 		}
 	}
