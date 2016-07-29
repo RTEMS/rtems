@@ -31,7 +31,7 @@
 #include <sys/mman.h>
 
 int mprotect(
-  void *addr,
+  const void *addr,
   size_t len,
   int prot
 )

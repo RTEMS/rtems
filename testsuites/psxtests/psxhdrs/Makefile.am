@@ -141,6 +141,19 @@ lib_a_SOURCES += unistd/sync.c
 lib_a_SOURCES += unistd/ualarm.c
 lib_a_SOURCES += unistd/usleep.c
 
+# methods in <sys/mman.h>
+lib_a_SOURCES += sys/mman/mlockall.c
+lib_a_SOURCES += sys/mman/mlock.c
+lib_a_SOURCES += sys/mman/mmap.c
+lib_a_SOURCES += sys/mman/mprotect.c
+lib_a_SOURCES += sys/mman/msync.c
+lib_a_SOURCES += sys/mman/munlockall.c
+lib_a_SOURCES += sys/mman/munlock.c
+lib_a_SOURCES += sys/mman/munmap.c
+lib_a_SOURCES += sys/mman/posix_madvise.c
+lib_a_SOURCES += sys/mman/shm_open.c
+lib_a_SOURCES += sys/mman/shm_unlink.c
+
 if HAS_NETWORKING
 # methods in <sys/socket.h>
 lib_a_SOURCES += sys/socket/accept.c

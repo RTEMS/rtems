@@ -1,0 +1,29 @@
+/*
+ *  Copyright (c) 2016 Gedare Bloom.
+ *
+ *  The license and distribution terms for this file may be
+ *  found in the file LICENSE in this distribution or at
+ *  http://www.rtems.org/license/LICENSE.
+ */
+
+/*  This test file is used to verify that the header files associated with
+ *  invoking this function are correct.
+ */
+
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <sys/mman.h>
+
+int test( void );
+
+int test( void )
+{
+  char *name = "test";
+  int oflag = 0;
+  mode_t mode = 0;
+
+  return shm_open( name, oflag, mode );
+}
