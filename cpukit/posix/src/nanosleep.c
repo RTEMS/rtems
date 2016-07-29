@@ -201,8 +201,7 @@ int clock_nanosleep(
     err = clock_gettime( CLOCK_REALTIME, &now );
     if ( err != 0 )
       return EINVAL;
-    _Timespec_From_ticks( relative_interval, &relative_ts );
-    _Timespec_Add_to( &now, &relative_ts );
+    _Timespec_Add_to( &now, rqtp );
     ticks = _Watchdog_Ticks_from_timespec( &now );
     err = nanosleep_helper( ticks, relative_interval, rmtp, WATCHDOG_ABSOLUTE );
   } else if ( clock_id == CLOCK_MONOTONIC ) {
