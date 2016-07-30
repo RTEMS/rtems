@@ -151,6 +151,7 @@ struct timehands {
 	uint64_t		th_scale;
 	uint32_t	 	th_offset_count;
 	struct bintime		th_offset;
+	struct bintime		th_bintime;
 	struct timeval		th_microtime;
 	struct timespec		th_nanotime;
 	struct bintime		th_boottime;
@@ -175,6 +176,7 @@ static struct timehands th0 = {
 	.th_offset = { .sec = 1 },
 	.th_generation = 1,
 #ifdef __rtems__
+	.th_bintime = { .sec = TOD_SECONDS_1970_THROUGH_1988 },
 	.th_microtime = { TOD_SECONDS_1970_THROUGH_1988, 0 },
 	.th_nanotime = { TOD_SECONDS_1970_THROUGH_1988, 0 },
 	.th_boottime = { .sec = TOD_SECONDS_1970_THROUGH_1988 - 1 },
@@ -346,9 +348,8 @@ fbclock_bintime(struct bintime *bt)
 	do {
 		th = timehands;
 		gen = atomic_load_acq_int(&th->th_generation);
-		*bt = th->th_offset;
+		*bt = th->th_bintime;
 		bintime_addx(bt, th->th_scale * tc_delta(th));
-		bintime_add(bt, &th->th_boottime);
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
 }
@@ -422,8 +423,7 @@ fbclock_getbintime(struct bintime *bt)
 	do {
 		th = timehands;
 		gen = atomic_load_acq_int(&th->th_generation);
-		*bt = th->th_offset;
-		bintime_add(bt, &th->th_boottime);
+		*bt = th->th_bintime;
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
 }
@@ -517,9 +517,8 @@ bintime(struct bintime *bt)
 	do {
 		th = timehands;
 		gen = atomic_load_acq_int(&th->th_generation);
-		*bt = th->th_offset;
+		*bt = th->th_bintime;
 		bintime_addx(bt, th->th_scale * tc_delta(th));
-		bintime_add(bt, &th->th_boottime);
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
 }
@@ -593,8 +592,7 @@ getbintime(struct bintime *bt)
 	do {
 		th = timehands;
 		gen = atomic_load_acq_int(&th->th_generation);
-		*bt = th->th_offset;
-		bintime_add(bt, &th->th_boottime);
+		*bt = th->th_bintime;
 		atomic_thread_fence_acq();
 	} while (gen == 0 || gen != th->th_generation);
 }
@@ -1567,6 +1565,8 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 		if (bt.sec != t)
 			th->th_boottime.sec += bt.sec - t;
 	}
+	th->th_bintime = th->th_offset;
+	bintime_add(&th->th_bintime, &th->th_boottime);
 	/* Update the UTC timestamps used by the get*() functions. */
 	/* XXX shouldn't do this here.  Should force non-`get' versions. */
 	bintime2timeval(&bt, &th->th_microtime);
@@ -2000,9 +2000,8 @@ pps_event(struct pps_state *pps, int event)
 	/* Convert the count to a timespec. */
 	tcount = pps->capcount - pps->capth->th_offset_count;
 	tcount &= pps->capth->th_counter->tc_counter_mask;
-	bt = pps->capth->th_offset;
+	bt = pps->capth->th_bintime;
 	bintime_addx(&bt, pps->capth->th_scale * tcount);
-	bintime_add(&bt, &pps->capth->th_boottime);
 	bintime2timespec(&bt, &ts);
 
 	/* If the timecounter was wound up underneath us, bail out. */
@@ -2117,10 +2116,9 @@ _Timecounter_Tick_simple(uint32_t delta, uint32_t offset,
 	bintime_addx(&th->th_offset, th->th_scale * delta);
 
 	bt = th->th_offset;
-	th->th_bintime = bt;
-	bintime_add(&th->th_bintime, &th->th_boottime);
+	bintime_add(&bt, &th->th_boottime);
 	/* Update the UTC timestamps used by the get*() functions. */
-	/* XXX shouldn't do this here.  Should force non-`get' versions. */
+	th->th_bintime = bt;
 	bintime2timeval(&bt, &th->th_microtime);
 	bintime2timespec(&bt, &th->th_nanotime);
 
