@@ -319,8 +319,18 @@ rtems_device_driver frame_buffer_open(
 {
   if ( _Atomic_Flag_test_and_set( &driver_mutex,
          ATOMIC_ORDER_ACQUIRE ) != 0 ) {
-    printk( "FB_CIRRUS could not lock driver_mutex\n" );
+    printk( "RaspberryPi framebuffer could not lock driver_mutex\n" );
     return RTEMS_UNSATISFIED;
+  }
+
+  if ( fb_fix_info.smem_start == NULL ) {
+    int res;
+    res = rpi_fb_init();
+    if ( (res < RPI_FB_INIT_OK) || (fb_fix_info.smem_start == NULL) ) {
+      _Atomic_Flag_clear( &driver_mutex, ATOMIC_ORDER_RELEASE );
+      printk( "RaspberryPi framebuffer initialization failed\n" );
+      return RTEMS_UNSATISFIED;
+    }
   }
 
   memset( (void *) fb_fix_info.smem_start, 0, fb_fix_info.smem_len );
