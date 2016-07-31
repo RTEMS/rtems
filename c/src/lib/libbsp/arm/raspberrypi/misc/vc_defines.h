@@ -94,9 +94,12 @@ typedef struct {
   uint32_t val_len;
 } bcm2835_mbox_tag_hdr;
 
+#define BCM2835_MBOX_TAG_REPLY_IS_SET( _t_ ) \
+   ( ( _t_ )->tag_hdr.val_len & 0x80000000 )
+
 #define BCM2835_MBOX_INIT_BUF( _m_ ) { \
-    memset( ( _m_ ), 0, sizeof( *( _m_ ) ) ); \
-    ( _m_ )->hdr.buf_size = sizeof( *( _m_ ) ); \
+    memset( ( _m_ ), 0,  sizeof( *( _m_ ) ) ); \
+    ( _m_ )->hdr.buf_size = (void *)&(( _m_ )->end_tag) + 4 - (void *)( _m_ ); \
     ( _m_ )->hdr.buf_code = BCM2835_MBOX_BUF_CODE_PROCESS_REQUEST; \
     ( _m_ )->end_tag = 0; \
 }

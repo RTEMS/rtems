@@ -162,11 +162,15 @@ static int parse_mode_from_string(
 
 static int find_mode_from_vc( void )
 {
+  int res;
+  unsigned int width;
+  unsigned int height;
   bcm2835_get_display_size_entries entries;
 
-  bcm2835_mailbox_get_display_size( &entries );
-  unsigned int width = entries.width;
-  unsigned int height = entries.height;
+  res = bcm2835_mailbox_get_display_size( &entries );
+
+  width = entries.width;
+  height = entries.height;
 
   if ( width == 0 || height == 0 ) {
     fb_var_info.xres = SCREEN_WIDTH;
@@ -175,8 +179,9 @@ static int find_mode_from_vc( void )
     fb_var_info.xres = width;
     fb_var_info.yres = height;
   }
+  printk("find_mode_from_vc %u x %u, res %d\n", width, height, res);
 
-  return 0;
+  return res;
 }
 
 bool rpi_fb_hdmi_is_present( void )
@@ -199,6 +204,7 @@ bool rpi_fb_hdmi_is_present( void )
 
 int rpi_fb_init( void )
 {
+  int res;
   int                               mode_from_cmdline;
   bcm2835_init_frame_buffer_entries init_frame_buffer_entries;
 
@@ -243,7 +249,16 @@ int rpi_fb_init( void )
   init_frame_buffer_entries.overscan_right = 0;
   init_frame_buffer_entries.overscan_top = 0;
   init_frame_buffer_entries.overscan_bottom = 0;
-  bcm2835_mailbox_init_frame_buffer( &init_frame_buffer_entries );
+  printk("bcm2835_mailbox_init_frame_buffer ...\n");
+  res = bcm2835_mailbox_init_frame_buffer( &init_frame_buffer_entries );
+  printk("bcm2835_mailbox_init_frame_buffer returned %d\n", res);
+  if (res != 0) {
+    printk("bcm2835_mailbox_init_frame_buffer retry ...\n");
+    res = bcm2835_mailbox_init_frame_buffer( &init_frame_buffer_entries );
+    printk("bcm2835_mailbox_init_frame_buffer returned %d\n", res);
+    if (res != 0)
+      return RPI_FB_INIT_SETUP_FAILED;
+  }
 
   bcm2835_get_pitch_entries get_pitch_entries;
   bcm2835_mailbox_get_pitch( &get_pitch_entries );
@@ -257,6 +272,8 @@ int rpi_fb_init( void )
 
   if ( fb_fix_info.smem_start == NULL )
     return RPI_FB_INIT_START_ADDR_UNKNOWN;
+
+  printk("fb_fix_info.smem_start %p\n", fb_fix_info.smem_start);
 
   arm_cp15_set_translation_table_entries( (void *) fb_fix_info.smem_start,
     (void *) fb_fix_info.smem_start +

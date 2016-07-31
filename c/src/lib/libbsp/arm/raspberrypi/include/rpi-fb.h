@@ -41,7 +41,8 @@ enum rpi_fb_init_result {
   RPI_FB_INIT_CMDLINE_DONT_INIT = -4,
   RPI_FB_INIT_CMDLINE_NO_MODE_REQ = -5,
   RPI_FB_INIT_MODE_PROBE_ERROR = -6,
-  RPI_FB_INIT_START_ADDR_UNKNOWN = -7,
+  RPI_FB_INIT_SETUP_FAILED = -7,
+  RPI_FB_INIT_START_ADDR_UNKNOWN = -8,
 };
 
 int rpi_fb_init( void );

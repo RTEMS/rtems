@@ -70,8 +70,9 @@ void bsp_work_area_initialize(void)
   #endif
 
   memset( &vc_entry, 0, sizeof(vc_entry) );
-  bcm2835_mailbox_get_vc_memory( &vc_entry );
-  if (vc_entry.base != 0)
-    ram_end = ram_end > vc_entry.base? vc_entry.base: ram_end;
+  if (bcm2835_mailbox_get_vc_memory( &vc_entry ) >= 0) {
+    if (vc_entry.base > 10 * 1024 *1024)
+      ram_end = ram_end > vc_entry.base? vc_entry.base: ram_end;
+  }
   bsp_work_area_initialize_default( (void *) work_base, ram_end - work_base );
 }
