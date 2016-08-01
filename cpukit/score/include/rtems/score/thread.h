@@ -30,6 +30,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/resource.h>
+#include <rtems/score/schedulernode.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/threadq.h>
@@ -45,8 +46,6 @@ struct _pthread_cleanup_context;
 struct Per_CPU_Control;
 
 struct Scheduler_Control;
-
-struct Scheduler_Node;
 
 struct User_extensions_Iterator;
 
@@ -653,7 +652,7 @@ typedef struct {
    * This field is constant after initialization.  It is used by change
    * priority and ask for help operations.
    */
-  struct Scheduler_Node *own_node;
+  Scheduler_Node *own_node;
 #endif
 
   /**
@@ -665,7 +664,7 @@ typedef struct {
    * On SMP configurations the scheduler helping protocol may change this
    * field.
    */
-  struct Scheduler_Node *node;
+  Scheduler_Node *node;
 
 #if defined(RTEMS_SMP)
   /**
