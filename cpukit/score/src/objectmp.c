@@ -394,6 +394,7 @@ void _Objects_MP_Free_global_object( Objects_MP_Control *the_global_object )
 
   _Objects_MP_Global_acquire( &lock_context );
 
+  _Chain_Initialize_node( &the_global_object->Nodes.Inactive );
   _Chain_Append_unprotected(
     &_Objects_MP_Inactive_global_objects,
     &the_global_object->Nodes.Inactive
