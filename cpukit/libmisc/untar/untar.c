@@ -250,6 +250,7 @@ static int
 Untar_ProcessHeader(
   const char          *bufr,
   char                *fname,
+  unsigned long       *mode,
   unsigned long       *file_size,
   unsigned long       *nblocks,
   unsigned char       *linkflag,
@@ -286,6 +287,8 @@ Untar_ProcessHeader(
   strncpy(fname, bufr, MAX_NAME_FIELD_SIZE);
   fname[MAX_NAME_FIELD_SIZE] = '\0';
 
+  *mode = strtoul(&bufr[100], NULL, 8);
+
   *linkflag   = bufr[156];
   *file_size = _rtems_octal2ulong(&bufr[124], 12);
 
@@ -299,7 +302,8 @@ Untar_ProcessHeader(
     rtems_printf(printer, "untar: symlink: %s -> %s\n", linkname, fname);
     symlink(linkname, fname);
   } else if (*linkflag == REGTYPE) {
-    rtems_printf(printer, "untar: file: %s (%i)\n", fname, (int) *file_size);
+    rtems_printf(printer, "untar: file: %s (s:%i,m:%04o)\n",
+                 fname, (int) *file_size, (int) *mode);
     *nblocks = (((*file_size) + 511) & ~511) / 512;
     if (Make_Path(printer, fname, false) < 0) {
       retval  = UNTAR_FAIL;
@@ -318,7 +322,7 @@ Untar_ProcessHeader(
           if (!S_ISDIR(stat_buf.st_mode)) {
             r = unlink(fname);
             if (r == 0) {
-              r = mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO);
+              r = mkdir(fname, *mode);
             }
           }
         }
@@ -362,15 +366,16 @@ Untar_FromMemory_Print(
   const rtems_printer *printer
 )
 {
-  FILE           *fp;
+  int            fd;
   const char     *tar_ptr = (const char *)tar_buf;
   const char     *bufr;
   char           fname[100];
   int            retval = UNTAR_SUCCESSFUL;
   unsigned long  ptr;
-  unsigned long  nblocks;
-  unsigned long  file_size;
-  unsigned char  linkflag;
+  unsigned long  nblocks = 0;
+  unsigned long  file_size = 0;
+  unsigned long  mode = 0;
+  unsigned char  linkflag = 0;
 
   rtems_printf(printer, "untar: memory at %p (%zu)\n", tar_buf, size);
 
@@ -385,20 +390,21 @@ Untar_FromMemory_Print(
     bufr = &tar_ptr[ptr];
     ptr += 512;
 
-    retval = Untar_ProcessHeader(bufr, fname, &file_size, &nblocks, &linkflag, printer);
+    retval = Untar_ProcessHeader(bufr, fname, &mode, &file_size,
+                                 &nblocks, &linkflag, printer);
 
     if (retval != UNTAR_SUCCESSFUL)
       break;
 
     if (linkflag == REGTYPE) {
-      if ((fp = fopen(fname, "w")) == NULL) {
+      if ((fd = open(fname, O_TRUNC | O_CREAT | O_WRONLY, mode)) == -1) {
         Print_Error(printer, "open", fname);
         ptr += 512 * nblocks;
       } else {
         unsigned long sizeToGo = file_size;
-        size_t        len;
-        size_t        i;
-        size_t        n;
+        ssize_t       len;
+        ssize_t       i;
+        ssize_t       n;
 
         /*
          * Read out the data.  There are nblocks of data where nblocks is the
@@ -406,7 +412,7 @@ Untar_FromMemory_Print(
          */
         for (i = 0; i < nblocks; i++) {
           len = ((sizeToGo < 512L) ? (sizeToGo) : (512L));
-          n = fwrite(&tar_ptr[ptr], 1, len, fp);
+          n = write(fd, &tar_ptr[ptr], len);
           if (n != len) {
             Print_Error(printer, "write", fname);
             retval  = UNTAR_FAIL;
@@ -415,7 +421,7 @@ Untar_FromMemory_Print(
           ptr += 512;
           sizeToGo -= n;
         }
-        fclose(fp);
+        close(fd);
       }
 
     }
@@ -485,9 +491,10 @@ Untar_FromFile_Print(
   char           fname[100];
   int            retval;
   unsigned long  i;
-  unsigned long  nblocks;
-  unsigned long  file_size;
-  unsigned char  linkflag;
+  unsigned long  nblocks = 0;
+  unsigned long  file_size = 0;
+  unsigned long  mode = 0;
+  unsigned char  linkflag = 0;
 
   retval = UNTAR_SUCCESSFUL;
 
@@ -508,7 +515,8 @@ Untar_FromFile_Print(
       break;
     }
 
-    retval = Untar_ProcessHeader(bufr, fname, &file_size, &nblocks, &linkflag, printer);
+    retval = Untar_ProcessHeader(bufr, fname, &mode, &file_size,
+                                 &nblocks, &linkflag, printer);
 
     if (retval != UNTAR_SUCCESSFUL)
       break;
@@ -521,7 +529,7 @@ Untar_FromFile_Print(
        * is the size rounded to the nearest 512-byte boundary.
        */
 
-      if ((out_fd = creat(fname, 0644)) == -1) {
+      if ((out_fd = creat(fname, mode)) == -1) {
         (void) lseek(fd, SEEK_CUR, 512UL * nblocks);
       } else {
         for (i = 0; i < nblocks; i++) {
@@ -579,6 +587,7 @@ int Untar_FromChunk_Print(
           retval = Untar_ProcessHeader(
             &context->header[0],
             &context->fname[0],
+            &context->mode,
             &context->todo_bytes,
             &context->todo_blocks,
             &linkflag,
@@ -591,7 +600,7 @@ int Untar_FromChunk_Print(
           }
 
           if (linkflag == REGTYPE) {
-            context->out_fd = creat(&context->fname[0], 0644);
+            context->out_fd = creat(&context->fname[0], context->mode);
 
             if (context->out_fd >= 0) {
               context->state = UNTAR_CHUNK_WRITE;

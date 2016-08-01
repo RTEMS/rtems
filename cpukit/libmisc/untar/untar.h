@@ -74,9 +74,14 @@ typedef struct {
   size_t done_bytes;
 
   /**
+   * @brief Mode of the file.
+   */
+  unsigned long mode;
+
+  /**
    * @brief Overall amount of bytes to be processed.
    */
-  long unsigned todo_bytes;
+  unsigned long todo_bytes;
 
   /**
    * @brief Overall amount of blocks to be processed.

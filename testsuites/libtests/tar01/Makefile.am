@@ -9,7 +9,7 @@ tar01_SOURCES += initial_filesystem_tar_gz.c
 tar01_SOURCES += initial_filesystem_tar_gz.h
 
 tar01_LDADD = -lrtemscpu -lz
-  
+
 BUILT_SOURCES =
 BUILT_SOURCES += initial_filesystem_tar.c
 BUILT_SOURCES += initial_filesystem_tar.h
@@ -57,6 +57,9 @@ initial_filesystem.tar:
 	$(MKDIR_P) initial_fs/home
 	(echo "This is a test of loading an RTEMS filesystem from an" ; \
 	echo "initial tar image.") >initial_fs/home/test_file
+	(echo "#! joel" ; \
+	echo "ls -las /dev") >initial_fs/home/test_script
+	chmod +x initial_fs/home/test_script
 	(cd initial_fs; \
 	$(LN_S) home/test_file symlink; \
 	$(PAX) -w -f ../initial_filesystem.tar home symlink)

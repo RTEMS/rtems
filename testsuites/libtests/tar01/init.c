@@ -46,6 +46,16 @@ void test_cat(
   int   length
 );
 
+static void test_untar_check_mode(const char* file, int mode)
+{
+  struct stat sb;
+  int         fmode;
+  rtems_test_assert(stat(file, &sb) == 0);
+  fmode = sb.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO);
+  printf(" %s: mode: %04o want: %04o\n", file, fmode, mode);
+  rtems_test_assert(fmode == mode);
+}
+
 void test_untar_from_memory(void)
 {
   rtems_status_code sc;
@@ -64,6 +74,11 @@ void test_untar_from_memory(void)
   /******************/
   printf( "========= /home/test_file =========\n" );
   test_cat( "/home/test_file", 0, 0 );
+
+  /******************/
+  printf( "========= /home/test_script =========\n" );
+  test_cat( "/home/test_script", 0, 0 );
+  test_untar_check_mode("/home/test_script", 0755);
 
   /******************/
   printf( "========= /symlink =========\n" );
@@ -107,6 +122,11 @@ void test_untar_from_file(void)
   test_cat( "/dest/home/test_file", 0, 0 );
 
   /******************/
+  printf( "========= /dest/home/test_script =========\n" );
+  test_cat( "/dest/home/test_script", 0, 0 );
+  test_untar_check_mode("/dest/home/test_script", 0755);
+
+  /******************/
   printf( "========= /dest/symlink =========\n" );
   test_cat( "/dest/symlink", 0, 0 );
 }
@@ -142,6 +162,11 @@ void test_untar_chunks_from_memory(void)
   /******************/
   printf( "========= /dest2/home/test_file =========\n" );
   test_cat( "/dest2/home/test_file", 0, 0 );
+
+  /******************/
+  printf( "========= /dest2/home/test_script =========\n" );
+  test_cat( "/dest2/home/test_script", 0, 0 );
+  test_untar_check_mode("/dest2/home/test_script", 0755);
 
   /******************/
   printf( "========= /dest2/symlink =========\n" );
@@ -182,6 +207,11 @@ void test_untar_unzip_tgz(void)
   /******************/
   printf( "========= /dest3/home/test_file =========\n" );
   test_cat( "/dest3/home/test_file", 0, 0 );
+
+  /******************/
+  printf( "========= /dest3/home/test_script =========\n" );
+  test_cat( "/dest3/home/test_script", 0, 0 );
+  test_untar_check_mode("/dest3/home/test_script", 0755);
 
   /******************/
   printf( "========= /dest3/symlink =========\n" );
