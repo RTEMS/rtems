@@ -130,11 +130,35 @@ static void test(void)
   rtems_test_assert(&s2 == sb[2]);
 }
 
+static void test_content(void)
+{
+  void volatile *b_rw = RTEMS_LINKER_SET_BEGIN(test_content_rw);
+  void volatile *e_rw = RTEMS_LINKER_SET_END(test_content_rw);
+
+  void volatile const *b_ro = RTEMS_LINKER_SET_BEGIN(test_content_ro);
+  void volatile const *e_ro = RTEMS_LINKER_SET_END(test_content_ro);
+
+  rtems_test_assert(&content_rw_1 >= b_rw);
+  rtems_test_assert(&content_rw_2 >= b_rw);
+  rtems_test_assert(&content_rw_3 >= b_rw);
+  rtems_test_assert(&content_rw_1 <= e_rw);
+  rtems_test_assert(&content_rw_2 <= e_rw);
+  rtems_test_assert(&content_rw_3 <= e_rw);
+
+  rtems_test_assert(&content_ro_1 >= b_ro);
+  rtems_test_assert(&content_ro_2 >= b_ro);
+  rtems_test_assert(&content_ro_3 >= b_ro);
+  rtems_test_assert(&content_ro_1 <= e_ro);
+  rtems_test_assert(&content_ro_2 <= e_ro);
+  rtems_test_assert(&content_ro_3 <= e_ro);
+}
+
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
 
   test();
+  test_content();
 
   TEST_END();
   rtems_test_exit(0);

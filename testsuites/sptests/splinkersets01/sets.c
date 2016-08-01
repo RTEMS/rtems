@@ -21,3 +21,7 @@
 RTEMS_LINKER_RWSET(test_rw, const int *);
 
 RTEMS_LINKER_ROSET(test_ro, const int *);
+
+RTEMS_LINKER_RWSET(test_content_rw, char);
+
+RTEMS_LINKER_ROSET(test_content_ro, char);

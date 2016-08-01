@@ -57,6 +57,10 @@ extern "C" {
   type volatile const _Linker_set_##set##_##item \
   RTEMS_SECTION( ".rtemsroset." #set ".content.1" ) RTEMS_USED
 
+#define RTEMS_LINKER_ROSET_CONTENT( set, decl ) \
+  decl \
+  RTEMS_SECTION( ".rtemsroset." #set ".content" )
+
 #define RTEMS_LINKER_RWSET_DECLARE( set, type ) \
   extern type volatile RTEMS_LINKER_SET_BEGIN( set )[0]; \
   extern type volatile RTEMS_LINKER_SET_END( set )[0]
@@ -88,6 +92,10 @@ extern "C" {
 #define RTEMS_LINKER_RWSET_ITEM( set, type, item ) \
   type volatile _Linker_set_##set##_##item \
   RTEMS_SECTION( ".rtemsrwset." #set ".content.1" ) RTEMS_USED
+
+#define RTEMS_LINKER_RWSET_CONTENT( set, decl ) \
+  decl \
+  RTEMS_SECTION( ".rtemsrwset." #set ".content" )
 
 #ifdef __cplusplus
 }

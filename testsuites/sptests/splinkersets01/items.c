@@ -21,3 +21,11 @@
 RTEMS_LINKER_RWSET_ITEM_ORDERED(test_rw, const int *, a1, 1) = &a[1];
 
 RTEMS_LINKER_ROSET_ITEM_ORDERED(test_ro, const int *, ca2, OC) = &ca[2];
+
+int content_rw_1;
+char content_rw_2;
+char content_rw_3;
+
+const int content_ro_1;
+const char content_ro_2;
+const char content_ro_3;
