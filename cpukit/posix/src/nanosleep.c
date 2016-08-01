@@ -33,20 +33,18 @@ static Thread_queue_Control _Nanosleep_Pseudo_queue =
   THREAD_QUEUE_INITIALIZER( "Nanosleep" );
 
 static inline int nanosleep_helper(
+  clockid_t             clock_id,
   uint64_t              ticks,
-  Watchdog_Interval     relative_interval,
+  struct timespec      *timeout,
   struct timespec      *rmtp,
   Watchdog_Discipline   discipline
 )
 {
   Thread_Control  *executing;
-
-  Watchdog_Interval  start;
-  Watchdog_Interval  elapsed;
+  struct timespec stop;
+  int err = 0;
 
   executing = _Thread_Get_executing();
-
-  start = _Watchdog_Ticks_since_boot;
 
   /*
    *  Block for the desired amount of time
@@ -61,35 +59,24 @@ static inline int nanosleep_helper(
     1
   );
 
-  /*
-   * Calculate the time that passed while we were sleeping and how
-   * much remains from what we requested.
-   */
-  elapsed = _Watchdog_Ticks_since_boot - start;
-  if ( elapsed >= relative_interval )
-    relative_interval = 0;
-  else
-    relative_interval -= elapsed;
-
+  clock_gettime( clock_id, &stop );
   /*
    * If the user wants the time remaining, do the conversion.
    */
-  if ( rmtp ) {
-    _Timespec_From_ticks( relative_interval, rmtp );
-  }
-
-  /*
-   *  Only when POSIX is enabled, can a sleep be interrupted.
-   */
-  #if defined(RTEMS_POSIX_API)
+  if ( _Timespec_Less_than( &stop, timeout ) ) {
     /*
      *  If there is time remaining, then we were interrupted by a signal.
      */
-    if ( relative_interval )
-      return EINTR;
-  #endif
+    err = EINTR;
+    if ( rmtp != NULL ) {
+      _Timespec_Subtract( &stop, timeout, rmtp );
+    }
+  } else if ( rmtp != NULL ) {
+    /* no time remaining */
+    _Timespec_Set_to_zero( rmtp );
+  }
 
-  return 0;
+  return err;
 }
 
 /*
@@ -152,7 +139,12 @@ int nanosleep(
     return -1;
   _Timespec_Add_to( &now, rqtp );
   ticks = _Watchdog_Ticks_from_timespec( &now );
-  err = nanosleep_helper(ticks, relative_interval, rmtp, WATCHDOG_ABSOLUTE );
+  err = nanosleep_helper( CLOCK_REALTIME,
+      ticks,
+      &now,
+      rmtp,
+      WATCHDOG_ABSOLUTE
+  );
   if ( err != 0 ) {
     rtems_set_errno_and_return_minus_one( err );
   }
@@ -170,10 +162,9 @@ int clock_nanosleep(
 )
 {
   int err = 0;
-  struct timespec now;
+  struct timespec timeout;
   uint64_t ticks;
   Watchdog_Interval relative_interval;
-  struct timespec relative_ts;
   TOD_Absolute_timeout_conversion_results status;
 
   if ( !_Timespec_Is_valid( rqtp ) )
@@ -190,25 +181,34 @@ int clock_nanosleep(
     if ( status == TOD_ABSOLUTE_TIMEOUT_IS_NOW )
       return nanosleep_yield( NULL );
     rmtp = NULL; /* Do not touch rmtp when using absolute time */
+    timeout.tv_sec = 0;
+    timeout.tv_nsec = 0;
   } else {
+    /* prepare to convert relative ticks to absolute timeout */
+    err = clock_gettime( clock_id, &timeout );
+    if ( err != 0 )
+      return EINVAL;
     relative_interval = _Timespec_To_ticks( rqtp );
   }
   if ( relative_interval == 0 )
     return nanosleep_yield( rmtp );
 
+  _Timespec_Add_to( &timeout, rqtp );
   if ( clock_id == CLOCK_REALTIME ) {
-    /* convert relative ticks to absolute timeout */
-    err = clock_gettime( CLOCK_REALTIME, &now );
-    if ( err != 0 )
-      return EINVAL;
-    _Timespec_Add_to( &now, rqtp );
-    ticks = _Watchdog_Ticks_from_timespec( &now );
-    err = nanosleep_helper( ticks, relative_interval, rmtp, WATCHDOG_ABSOLUTE );
+    ticks = _Watchdog_Ticks_from_timespec( &timeout );
+    err = nanosleep_helper(
+        clock_id,
+        ticks,
+        &timeout,
+        rmtp,
+        WATCHDOG_ABSOLUTE
+    );
   } else if ( clock_id == CLOCK_MONOTONIC ) {
     /* use the WATCHDOG_RELATIVE to ignore changes in wall time */
     err = nanosleep_helper(
+        clock_id,
         relative_interval,
-        relative_interval,
+        &timeout,
         rmtp,
         WATCHDOG_RELATIVE
     );
