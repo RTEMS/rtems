@@ -785,19 +785,27 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   Priority_Control  priority
 )
 {
+  node->owner = the_thread;
+
   node->Priority.value = priority;
   node->Priority.prepend_it = false;
 
 #if defined(RTEMS_SMP)
   node->user = the_thread;
   node->help_state = SCHEDULER_HELP_YOURSELF;
-  node->owner = the_thread;
   node->idle = NULL;
   node->accepts_help = the_thread;
   _SMP_sequence_lock_Initialize( &node->Priority.Lock );
 #else
   (void) the_thread;
 #endif
+}
+
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
+  const Scheduler_Node *node
+)
+{
+  return node->owner;
 }
 
 RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
@@ -884,13 +892,6 @@ typedef void ( *Scheduler_Release_idle_thread )(
   Scheduler_Context *context,
   Thread_Control    *idle
 );
-
-RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
-  const Scheduler_Node *node
-)
-{
-  return node->owner;
-}
 
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_idle(
   const Scheduler_Node *node

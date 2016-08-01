@@ -77,12 +77,6 @@ extern Thread_Information _Thread_Internal_information;
 extern Thread_Control *_Thread_Allocated_fp;
 #endif
 
-#define THREAD_CHAIN_NODE_TO_THREAD( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.Chain )
-
-#define THREAD_RBTREE_NODE_TO_THREAD( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_Control, Wait.Node.RBTree )
-
 #if defined(RTEMS_SMP)
 #define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )

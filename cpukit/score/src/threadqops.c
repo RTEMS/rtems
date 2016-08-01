@@ -99,8 +99,15 @@ static void _Thread_queue_FIFO_do_initialize(
   Thread_Control     *the_thread
 )
 {
-  _Chain_Initialize_node( &the_thread->Wait.Node.Chain );
-  _Chain_Initialize_one( &heads->Heads.Fifo, &the_thread->Wait.Node.Chain );
+  Scheduler_Node *scheduler_node;
+
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
+
+  _Chain_Initialize_node( &scheduler_node->Wait.Node.Chain );
+  _Chain_Initialize_one(
+    &heads->Heads.Fifo,
+    &scheduler_node->Wait.Node.Chain
+  );
 }
 
 static void _Thread_queue_FIFO_do_enqueue(
@@ -108,10 +115,14 @@ static void _Thread_queue_FIFO_do_enqueue(
   Thread_Control     *the_thread
 )
 {
-  _Chain_Initialize_node( &the_thread->Wait.Node.Chain );
+  Scheduler_Node *scheduler_node;
+
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
+
+  _Chain_Initialize_node( &scheduler_node->Wait.Node.Chain );
   _Chain_Append_unprotected(
     &heads->Heads.Fifo,
-    &the_thread->Wait.Node.Chain
+    &scheduler_node->Wait.Node.Chain
   );
 }
 
@@ -120,7 +131,10 @@ static void _Thread_queue_FIFO_do_extract(
   Thread_Control     *the_thread
 )
 {
-  _Chain_Extract_unprotected( &the_thread->Wait.Node.Chain );
+  Scheduler_Node *scheduler_node;
+
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
+  _Chain_Extract_unprotected( &scheduler_node->Wait.Node.Chain );
 }
 
 static void _Thread_queue_FIFO_enqueue(
@@ -156,13 +170,16 @@ static Thread_Control *_Thread_queue_FIFO_first(
   Thread_queue_Heads *heads
 )
 {
-  Chain_Control *fifo = &heads->Heads.Fifo;
-  Chain_Node    *first;
+  Chain_Control  *fifo;
+  Chain_Node     *first;
+  Scheduler_Node *scheduler_node;
 
+  fifo = &heads->Heads.Fifo;
   _Assert( !_Chain_Is_empty( fifo ) );
   first = _Chain_First( fifo );
+  scheduler_node = SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( first );
 
-  return THREAD_CHAIN_NODE_TO_THREAD( first );
+  return _Scheduler_Node_get_owner( scheduler_node );
 }
 
 static Thread_Control *_Thread_queue_FIFO_surrender(
@@ -206,10 +223,12 @@ static bool _Thread_queue_Priority_less(
 )
 {
   const Priority_Control *the_left;
+  const Scheduler_Node   *scheduler_node;
   const Thread_Control   *the_right;
 
   the_left = left;
-  the_right = THREAD_RBTREE_NODE_TO_THREAD( right );
+  scheduler_node = SCHEDULER_NODE_OF_WAIT_RBTREE_NODE( right );
+  the_right = _Scheduler_Node_get_owner( scheduler_node );
 
   return *the_left < the_right->current_priority;
 }
@@ -220,20 +239,23 @@ static void _Thread_queue_Priority_priority_change(
   Priority_Control    new_priority
 )
 {
-  Thread_queue_Heads          *heads = queue->heads;
+  Thread_queue_Heads          *heads;
   Thread_queue_Priority_queue *priority_queue;
+  Scheduler_Node              *scheduler_node;
 
+  heads = queue->heads;
   _Assert( heads != NULL );
 
   priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
 
   _RBTree_Extract(
     &priority_queue->Queue,
-    &the_thread->Wait.Node.RBTree
+    &scheduler_node->Wait.Node.RBTree
   );
   _RBTree_Insert_inline(
     &priority_queue->Queue,
-    &the_thread->Wait.Node.RBTree,
+    &scheduler_node->Wait.Node.RBTree,
     &new_priority,
     _Thread_queue_Priority_less
   );
@@ -245,6 +267,7 @@ static void _Thread_queue_Priority_do_initialize(
 )
 {
   Thread_queue_Priority_queue *priority_queue;
+  Scheduler_Node              *scheduler_node;
 
   priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
 
@@ -252,10 +275,12 @@ static void _Thread_queue_Priority_do_initialize(
   _Chain_Initialize_one( &heads->Heads.Fifo, &priority_queue->Node );
 #endif
 
-  _RBTree_Initialize_node( &the_thread->Wait.Node.RBTree );
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
+
+  _RBTree_Initialize_node( &scheduler_node->Wait.Node.RBTree );
   _RBTree_Initialize_one(
     &priority_queue->Queue,
-    &the_thread->Wait.Node.RBTree
+    &scheduler_node->Wait.Node.RBTree
   );
 }
 
@@ -265,6 +290,7 @@ static void _Thread_queue_Priority_do_enqueue(
 )
 {
   Thread_queue_Priority_queue *priority_queue;
+  Scheduler_Node              *scheduler_node;
   Priority_Control             current_priority;
 
   priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
@@ -275,11 +301,13 @@ static void _Thread_queue_Priority_do_enqueue(
   }
 #endif
 
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
   current_priority = the_thread->current_priority;
-  _RBTree_Initialize_node( &the_thread->Wait.Node.RBTree );
+
+  _RBTree_Initialize_node( &scheduler_node->Wait.Node.RBTree );
   _RBTree_Insert_inline(
     &priority_queue->Queue,
-    &the_thread->Wait.Node.RBTree,
+    &scheduler_node->Wait.Node.RBTree,
     &current_priority,
     _Thread_queue_Priority_less
   );
@@ -290,12 +318,15 @@ static void _Thread_queue_Priority_do_extract(
   Thread_Control     *the_thread
 )
 {
-  Thread_queue_Priority_queue *priority_queue =
-    _Thread_queue_Priority_queue( heads, the_thread );
+  Thread_queue_Priority_queue *priority_queue;
+  Scheduler_Node              *scheduler_node;
+
+  priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
+  scheduler_node = _Scheduler_Thread_get_own_node( the_thread );
 
   _RBTree_Extract(
     &priority_queue->Queue,
-    &the_thread->Wait.Node.RBTree
+    &scheduler_node->Wait.Node.RBTree
   );
 
 #if defined(RTEMS_SMP)
@@ -342,6 +373,7 @@ static Thread_Control *_Thread_queue_Priority_first(
 {
   Thread_queue_Priority_queue *priority_queue;
   RBTree_Node                 *first;
+  Scheduler_Node              *scheduler_node;
 
 #if defined(RTEMS_SMP)
   _Assert( !_Chain_Is_empty( &heads->Heads.Fifo ) );
@@ -353,8 +385,9 @@ static Thread_Control *_Thread_queue_Priority_first(
 
   _Assert( !_RBTree_Is_empty( &priority_queue->Queue ) );
   first = _RBTree_Minimum( &priority_queue->Queue );
+  scheduler_node = SCHEDULER_NODE_OF_WAIT_RBTREE_NODE( first );
 
-  return THREAD_RBTREE_NODE_TO_THREAD( first );
+  return _Scheduler_Node_get_owner( scheduler_node );
 }
 
 static Thread_Control *_Thread_queue_Priority_surrender(

@@ -36,6 +36,7 @@ THREAD_OFFSET_ASSERT( current_priority );
 THREAD_OFFSET_ASSERT( real_priority );
 THREAD_OFFSET_ASSERT( priority_restore_hint );
 THREAD_OFFSET_ASSERT( resource_count );
+THREAD_OFFSET_ASSERT( Scheduler );
 THREAD_OFFSET_ASSERT( Wait );
 THREAD_OFFSET_ASSERT( Timer );
 #if defined(RTEMS_MULTIPROCESSING)

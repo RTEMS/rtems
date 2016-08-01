@@ -123,11 +123,6 @@ typedef struct {
   Scheduler_Help_state help_state;
 
   /**
-   * @brief The thread owning this node.
-   */
-  struct _Thread_Control *owner;
-
-  /**
    * @brief The idle thread claimed by this node in case the help state is
    * SCHEDULER_HELP_ACTIVE_OWNER.
    *
@@ -144,6 +139,35 @@ typedef struct {
    */
   struct _Thread_Control *accepts_help;
 #endif
+
+  /**
+   * @brief Thread wait support block.
+   */
+  struct {
+    /**
+     * @brief Node for thread queues.
+     *
+     * Each scheduler node can be enqueued on a thread queue on behalf of the
+     * thread owning the scheduler node.  The scheduler node reflects the
+     * priority of the thread within the corresponding scheduler instance.
+     */
+    union {
+      /**
+       * @brief A node for chains.
+       */
+      Chain_Node Chain;
+
+      /**
+       * @brief A node for red-black trees.
+       */
+      RBTree_Node RBTree;
+    } Node;
+  } Wait;
+
+  /**
+   * @brief The thread owning this node.
+   */
+  struct _Thread_Control *owner;
 
   /**
    * @brief The thread priority information used by the scheduler.
@@ -180,6 +204,12 @@ typedef struct {
     bool prepend_it;
   } Priority;
 } Scheduler_Node;
+
+#define SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Node.Chain )
+
+#define SCHEDULER_NODE_OF_WAIT_RBTREE_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Node.RBTree )
 
 #ifdef __cplusplus
 }

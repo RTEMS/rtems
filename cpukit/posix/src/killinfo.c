@@ -27,6 +27,7 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/seterr.h>
 
@@ -150,8 +151,10 @@ int _POSIX_signals_Send(
     for ( the_node = _Chain_First( the_chain );
           !_Chain_Is_tail( the_chain, the_node ) ;
           the_node = the_node->next ) {
+      Scheduler_Node *scheduler_node;
 
-      the_thread = THREAD_CHAIN_NODE_TO_THREAD( the_node );
+      scheduler_node = SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( the_node );
+      the_thread = _Scheduler_Node_get_owner( scheduler_node );
       api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
       #if defined(DEBUG_SIGNAL_PROCESSING)

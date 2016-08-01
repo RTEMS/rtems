@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/status.h>
 
 Thread_Control *_Thread_queue_Flush_default_filter(
@@ -96,7 +97,10 @@ size_t _Thread_queue_Flush_critical(
       queue_context
     );
     if ( do_unblock ) {
-      _Chain_Append_unprotected( &unblock, &first->Wait.Node.Chain );
+      Scheduler_Node *scheduler_node;
+
+      scheduler_node = _Scheduler_Thread_get_own_node( first );
+      _Chain_Append_unprotected( &unblock, &scheduler_node->Wait.Node.Chain );
     }
 
     ++flushed;
@@ -114,11 +118,13 @@ size_t _Thread_queue_Flush_critical(
     _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
     do {
+      Scheduler_Node *scheduler_node;
       Thread_Control *the_thread;
       Chain_Node     *next;
 
       next = _Chain_Next( node );
-      the_thread = THREAD_CHAIN_NODE_TO_THREAD( node );
+      scheduler_node = SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( node );
+      the_thread = _Scheduler_Node_get_owner( scheduler_node );
       _Thread_Remove_timer_and_unblock( the_thread, queue );
 
       node = next;

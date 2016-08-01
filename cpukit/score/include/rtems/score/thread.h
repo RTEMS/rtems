@@ -210,6 +210,88 @@ typedef struct {
   void                                *tls_area;
 } Thread_Start_information;
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief The thread state with respect to the scheduler.
+ */
+typedef enum {
+  /**
+   * @brief This thread is blocked with respect to the scheduler.
+   *
+   * This thread uses no scheduler nodes.
+   */
+  THREAD_SCHEDULER_BLOCKED,
+
+  /**
+   * @brief This thread is scheduled with respect to the scheduler.
+   *
+   * This thread executes using one of its scheduler nodes.  This could be its
+   * own scheduler node or in case it owns resources taking part in the
+   * scheduler helping protocol a scheduler node of another thread.
+   */
+  THREAD_SCHEDULER_SCHEDULED,
+
+  /**
+   * @brief This thread is ready with respect to the scheduler.
+   *
+   * None of the scheduler nodes of this thread is scheduled.
+   */
+  THREAD_SCHEDULER_READY
+} Thread_Scheduler_state;
+#endif
+
+/**
+ * @brief Thread scheduler control.
+ */
+typedef struct {
+#if defined(RTEMS_SMP)
+  /**
+   * @brief The current scheduler state of this thread.
+   */
+  Thread_Scheduler_state state;
+
+  /**
+   * @brief The own scheduler control of this thread.
+   *
+   * This field is constant after initialization.
+   */
+  const struct Scheduler_Control *own_control;
+
+  /**
+   * @brief The scheduler control of this thread.
+   *
+   * The scheduler helping protocol may change this field.
+   */
+  const struct Scheduler_Control *control;
+
+  /**
+   * @brief The own scheduler node of this thread.
+   *
+   * This field is constant after initialization.  It is used by change
+   * priority and ask for help operations.
+   */
+  Scheduler_Node *own_node;
+#endif
+
+  /**
+   * @brief The scheduler node of this thread.
+   *
+   * On uni-processor configurations this field is constant after
+   * initialization.
+   *
+   * On SMP configurations the scheduler helping protocol may change this
+   * field.
+   */
+  Scheduler_Node *node;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief The processor assigned by the current scheduler.
+   */
+  struct Per_CPU_Control *cpu;
+#endif
+} Thread_Scheduler_control;
+
 /**
  *  @brief Union type to hold a pointer to an immutable or a mutable object.
  *
@@ -248,21 +330,6 @@ typedef unsigned int Thread_Wait_flags;
  *  blocked and to return information to it.
  */
 typedef struct {
-  /**
-   * @brief Node for thread queues.
-   */
-  union {
-    /**
-     * @brief A node for chains.
-     */
-    Chain_Node Chain;
-
-    /**
-     * @brief A node for red-black trees.
-     */
-    RBTree_Node RBTree;
-  } Node;
-
 #if defined(RTEMS_MULTIPROCESSING)
   /*
    * @brief This field is the identifier of the remote object this thread is
@@ -424,6 +491,11 @@ typedef struct {
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
 
+  /**
+   * @brief Scheduler related control.
+   */
+  Thread_Scheduler_control Scheduler;
+
   /** This field is the blocking information for this proxy. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage proxy delays and timeouts. */
@@ -442,6 +514,12 @@ typedef struct {
    * @brief This field is used to manage the set of active proxies in the system.
    */
   RBTree_Node              Active;
+
+  /**
+   * @brief The scheduler node providing the thread wait nodes used to enqueue
+   * this thread proxy on a thread queue.
+   */
+  Scheduler_Node           Scheduler_node;
 
   /**
    * @brief Provide thread queue heads for this thread proxy.
@@ -592,88 +670,6 @@ typedef struct {
 #endif
 } Thread_Life_control;
 
-#if defined(RTEMS_SMP)
-/**
- * @brief The thread state with respect to the scheduler.
- */
-typedef enum {
-  /**
-   * @brief This thread is blocked with respect to the scheduler.
-   *
-   * This thread uses no scheduler nodes.
-   */
-  THREAD_SCHEDULER_BLOCKED,
-
-  /**
-   * @brief This thread is scheduled with respect to the scheduler.
-   *
-   * This thread executes using one of its scheduler nodes.  This could be its
-   * own scheduler node or in case it owns resources taking part in the
-   * scheduler helping protocol a scheduler node of another thread.
-   */
-  THREAD_SCHEDULER_SCHEDULED,
-
-  /**
-   * @brief This thread is ready with respect to the scheduler.
-   *
-   * None of the scheduler nodes of this thread is scheduled.
-   */
-  THREAD_SCHEDULER_READY
-} Thread_Scheduler_state;
-#endif
-
-/**
- * @brief Thread scheduler control.
- */
-typedef struct {
-#if defined(RTEMS_SMP)
-  /**
-   * @brief The current scheduler state of this thread.
-   */
-  Thread_Scheduler_state state;
-
-  /**
-   * @brief The own scheduler control of this thread.
-   *
-   * This field is constant after initialization.
-   */
-  const struct Scheduler_Control *own_control;
-
-  /**
-   * @brief The scheduler control of this thread.
-   *
-   * The scheduler helping protocol may change this field.
-   */
-  const struct Scheduler_Control *control;
-
-  /**
-   * @brief The own scheduler node of this thread.
-   *
-   * This field is constant after initialization.  It is used by change
-   * priority and ask for help operations.
-   */
-  Scheduler_Node *own_node;
-#endif
-
-  /**
-   * @brief The scheduler node of this thread.
-   *
-   * On uni-processor configurations this field is constant after
-   * initialization.
-   *
-   * On SMP configurations the scheduler helping protocol may change this
-   * field.
-   */
-  Scheduler_Node *node;
-
-#if defined(RTEMS_SMP)
-  /**
-   * @brief The processor assigned by the current scheduler.
-   */
-  struct Per_CPU_Control *cpu;
-#endif
-} Thread_Scheduler_control;
-
 typedef struct  {
   uint32_t      flags;
   void *        control;
@@ -740,6 +736,12 @@ struct _Thread_Control {
 
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
+
+  /**
+   * @brief Scheduler related control.
+   */
+  Thread_Scheduler_control Scheduler;
+
   /** This field is the blocking information for this thread. */
   Thread_Wait_information  Wait;
   /** This field is the Watchdog used to manage thread delays and timeouts. */
@@ -777,11 +779,6 @@ struct _Thread_Control {
   bool                                  is_preemptible;
   /** This field is true if the thread uses the floating point unit. */
   bool                                  is_fp;
-
-  /**
-   * @brief Scheduler related control.
-   */
-  Thread_Scheduler_control              Scheduler;
 
 #if __RTEMS_ADA__
   /** This field is the GNAT self context pointer. */

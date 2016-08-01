@@ -20,6 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/isrlock.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/wkspace.h>
 
 #include <string.h>
@@ -73,6 +74,16 @@ void _Thread_MP_Handler_initialization (
 
     _Thread_Timer_initialize( &proxy->Timer, _Per_CPU_Get_by_index( 0 ) );
     _RBTree_Initialize_node( &proxy->Active );
+
+#if defined(RTEMS_SMP)
+    proxy->Scheduler.own_node = &proxy->Scheduler_node;
+#endif
+    proxy->Scheduler.node = &proxy->Scheduler_node;
+    _Scheduler_Node_do_initialize(
+      &proxy->Scheduler_node,
+      (Thread_Control *) proxy,
+      0
+    );
 
     proxy->Wait.spare_heads = &proxy->Thread_queue_heads[ 0 ];
     _Thread_queue_Heads_initialize( proxy->Wait.spare_heads );
