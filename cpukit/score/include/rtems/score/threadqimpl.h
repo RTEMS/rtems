@@ -234,115 +234,19 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_MP_callout(
   } while ( 0 )
 #endif
 
-/**
- * @brief Gets the thread wait queue of the thread queue context.
- *
- * On SMP configurations, the value is stored in the thread queue context,
- * otherwise in the thread itself.
- *
- * @param queue_context The thread queue context.
- * @param the_thread The thread.
- */
 #if defined(RTEMS_SMP)
-#define _Thread_queue_Context_get_queue( queue_context, the_thread ) \
-  ( queue_context )->Wait.queue
-#else
-#define _Thread_queue_Context_get_queue( queue_context, the_thread ) \
-  ( the_thread )->Wait.queue
-#endif
+RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_close(
+  Thread_queue_Gate *gate
+)
+{
+  _Atomic_Store_uint( &gate->go_ahead, 0, ATOMIC_ORDER_RELAXED );
+}
 
-/**
- * @brief Gets the thread wait operations of the thread queue context.
- *
- * On SMP configurations, the value is stored in the thread queue context,
- * otherwise in the thread itself.
- *
- * @param queue_context The thread queue context.
- * @param the_thread The thread.
- */
-#if defined(RTEMS_SMP)
-#define _Thread_queue_Context_get_operations( queue_context, the_thread ) \
-  ( queue_context )->Wait.operations
-#else
-#define _Thread_queue_Context_get_operations( queue_context, the_thread ) \
-  ( the_thread )->Wait.operations
-#endif
-
-/**
- * @brief Thread priority change by means of the thread queue context.
- *
- * On SMP configurations, the used data is stored in the thread queue context,
- * otherwise in the thread itself.
- *
- * @param queue_context The thread queue context.
- * @param the_thread The thread.
- * @param new_priority The new thread priority.
- * @param prepend_it Prepend it to its priority group or not.
- */
-#if defined(RTEMS_SMP)
-#define _Thread_queue_Context_priority_change( \
-    queue_context, \
-    the_thread, \
-    new_priority, \
-    prepend_it \
-  ) \
-    ( *( queue_context )->Wait.operations->priority_change )( \
-      the_thread, \
-      new_priority, \
-      prepend_it, \
-      ( queue_context )->Wait.queue \
-    )
-#else
-#define _Thread_queue_Context_priority_change( \
-    queue_context, \
-    the_thread, \
-    new_priority, \
-    prepend_it \
-  ) \
-    ( *( the_thread )->Wait.operations->priority_change )( \
-      the_thread, \
-      new_priority, \
-      prepend_it, \
-      ( the_thread )->Wait.queue \
-    )
-#endif
-
-/**
- * @brief Thread queue extract by means of the thread queue context.
- *
- * On SMP configurations, the used data is stored in the thread queue context,
- * otherwise in the thread itself.
- *
- * @param queue_context The thread queue context.
- * @param the_thread The thread.
- */
-#if defined(RTEMS_SMP)
-#define _Thread_queue_Context_extract( \
-    queue_context, \
-    the_thread \
-  ) \
-    ( *( queue_context )->Wait.operations->extract )( \
-      ( queue_context )->Wait.queue, \
-      the_thread \
-    )
-#else
-#define _Thread_queue_Context_extract( \
-    queue_context, \
-    the_thread \
-  ) \
-    ( *( the_thread )->Wait.operations->extract )( \
-      ( the_thread )->Wait.queue, \
-      the_thread \
-    )
-#endif
-
-#if defined(RTEMS_SMP)
 RTEMS_INLINE_ROUTINE void _Thread_queue_Gate_add(
   Chain_Control     *chain,
   Thread_queue_Gate *gate
 )
 {
-  _Atomic_Store_uint( &gate->go_ahead, 0, ATOMIC_ORDER_RELAXED );
   _Chain_Append_unprotected( chain, &gate->Node );
 }
 
@@ -1086,10 +990,6 @@ extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;
 extern const Thread_queue_Operations _Thread_queue_Operations_priority;
 
 extern const Thread_queue_Operations _Thread_queue_Operations_priority_inherit;
-
-#if defined(RTEMS_SMP)
-extern const Thread_queue_Operations _Thread_queue_Operations_stale_queue;
-#endif
 
 /**@}*/
 

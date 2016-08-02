@@ -164,27 +164,9 @@ typedef struct {
     Thread_queue_Gate Gate;
 
     /**
-     * @brief The thread queue lock in case the thread is blocked on a thread
-     * queue at thread wait lock acquire time.
-     */
-    SMP_ticket_lock_Control *queue_lock;
-
-    /**
-     * @brief The thread queue after thread wait lock acquire.
-     *
-     * In case the thread queue is NULL and the thread queue lock is non-NULL
-     * in this context, then we have a stale thread queue.  This happens in
-     * case the thread wait default is restored while we wait on the thread
-     * queue lock, e.g. during a mutex ownership transfer.
-     *
-     * @see _Thread_Wait_restore_default().
+     * @brief The thread queue in case the thread is blocked on a thread queue.
      */
     Thread_queue_Queue *queue;
-
-    /**
-     * @brief The thread queue operations after thread wait lock acquire.
-     */
-    const Thread_queue_Operations *operations;
   } Wait;
 #endif
 } Thread_queue_Context;
@@ -349,19 +331,16 @@ struct Thread_queue_Queue {
 /**
  * @brief Thread queue priority change operation.
  *
+ * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread.
  * @param[in] new_priority The new priority value.
- * @param[in] prepend_it In case this is true, then the thread is prepended to
- *   its priority group in its scheduler instance, otherwise it is appended.
- * @param[in] queue The actual thread queue.
  *
  * @see Thread_queue_Operations.
  */
 typedef void ( *Thread_queue_Priority_change_operation )(
+  Thread_queue_Queue *queue,
   Thread_Control     *the_thread,
-  Priority_Control    new_priority,
-  bool                prepend_it,
-  Thread_queue_Queue *queue
+  Priority_Control    new_priority
 );
 
 /**

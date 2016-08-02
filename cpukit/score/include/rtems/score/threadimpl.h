@@ -1036,39 +1036,36 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
   Thread_queue_Context *queue_context
 )
 {
+  Chain_Node *first;
+
   _Chain_Extract_unprotected( &queue_context->Wait.Gate.Node );
+  first = _Chain_First( &the_thread->Wait.Lock.Pending_requests );
 
-  if ( !_Chain_Is_empty( &the_thread->Wait.Lock.Pending_requests ) ) {
-    Thread_queue_Context *first;
-
-    first = THREAD_QUEUE_CONTEXT_OF_REQUEST(
-      _Chain_First( &the_thread->Wait.Lock.Pending_requests )
-    );
-
-    _Thread_queue_Gate_open( &first->Wait.Gate );
+  if ( first != _Chain_Tail( &the_thread->Wait.Lock.Pending_requests ) ) {
+    _Thread_queue_Gate_open( (Thread_queue_Gate *) first );
   }
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
-  SMP_ticket_lock_Control *queue_lock,
-  Thread_queue_Context    *queue_context
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
-  _SMP_ticket_lock_Acquire(
-    queue_lock,
+  _Thread_queue_Queue_acquire_critical(
+    queue,
     &_Thread_Executing->Potpourri_stats,
-    &queue_context->Lock_context.Lock_context.Stats_context
+    &queue_context->Lock_context
   );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
-  SMP_ticket_lock_Control *queue_lock,
-  Thread_queue_Context    *queue_context
+  Thread_queue_Queue   *queue,
+  Thread_queue_Context *queue_context
 )
 {
-  _SMP_ticket_lock_Release(
-    queue_lock,
-    &queue_context->Lock_context.Lock_context.Stats_context
+  _Thread_queue_Queue_release_critical(
+    queue,
+    &queue_context->Lock_context
   );
 }
 #endif
@@ -1098,22 +1095,27 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
 
   queue = the_thread->Wait.queue;
   queue_context->Wait.queue = queue;
-  queue_context->Wait.operations = the_thread->Wait.operations;
 
   if ( queue != NULL ) {
-    queue_context->Wait.queue_lock = &queue->Lock;
-    _Chain_Initialize_node( &queue_context->Wait.Gate.Node );
-    _Chain_Append_unprotected(
+    _Thread_queue_Gate_add(
       &the_thread->Wait.Lock.Pending_requests,
-      &queue_context->Wait.Gate.Node
+      &queue_context->Wait.Gate
     );
     _Thread_Wait_release_default_critical(
       the_thread,
       &queue_context->Lock_context
     );
-    _Thread_Wait_acquire_queue_critical( &queue->Lock, queue_context );
-  } else {
-    queue_context->Wait.queue_lock = NULL;
+    _Thread_Wait_acquire_queue_critical( queue, queue_context );
+
+    if ( queue_context->Wait.queue == NULL ) {
+      _Thread_Wait_release_queue_critical( queue, queue_context );
+      _Thread_Wait_acquire_default_critical(
+        the_thread,
+        &queue_context->Lock_context
+      );
+      _Thread_Wait_remove_request_locked( the_thread, queue_context );
+      _Assert( the_thread->Wait.queue == NULL );
+    }
   }
 #else
   (void) the_thread;
@@ -1154,12 +1156,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_critical(
 )
 {
 #if defined(RTEMS_SMP)
-  SMP_ticket_lock_Control *queue_lock;
+  Thread_queue_Queue *queue;
 
-  queue_lock = queue_context->Wait.queue_lock;
+  queue = queue_context->Wait.queue;
 
-  if ( queue_lock != NULL ) {
-    _Thread_Wait_release_queue_critical( queue_lock, queue_context );
+  if ( queue != NULL ) {
+    _Thread_Wait_release_queue_critical( queue, queue_context );
     _Thread_Wait_acquire_default_critical(
       the_thread,
       &queue_context->Lock_context
@@ -1218,6 +1220,13 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
   _Thread_Wait_acquire_default_critical( the_thread, &lock_context );
 
   _Assert( the_thread->Wait.queue == NULL );
+
+#if defined(RTEMS_SMP)
+  _Chain_Initialize_empty( &the_thread->Wait.Lock.Pending_requests );
+  _Chain_Initialize_node( &the_thread->Wait.Lock.Tranquilizer.Node );
+  _Thread_queue_Gate_close( &the_thread->Wait.Lock.Tranquilizer );
+#endif
+
   the_thread->Wait.queue = queue;
   the_thread->Wait.operations = operations;
 
@@ -1273,22 +1282,27 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
   Chain_Node       *node;
   const Chain_Node *tail;
 
-  _Thread_Wait_acquire_default_critical(
-    the_thread,
-    &lock_context
-  );
+  _Thread_Wait_acquire_default_critical( the_thread, &lock_context );
 
   node = _Chain_First( &the_thread->Wait.Lock.Pending_requests );
   tail = _Chain_Immutable_tail( &the_thread->Wait.Lock.Pending_requests );
 
-  while ( node != tail ) {
-    Thread_queue_Context *queue_context;
+  if ( node != tail ) {
+    do {
+      Thread_queue_Context *queue_context;
 
-    queue_context = THREAD_QUEUE_CONTEXT_OF_REQUEST( node );
-    queue_context->Wait.queue = NULL;
-    queue_context->Wait.operations = &_Thread_queue_Operations_stale_queue;
+      queue_context = THREAD_QUEUE_CONTEXT_OF_REQUEST( node );
+      queue_context->Wait.queue = NULL;
 
-    node = _Chain_Next( node );
+      node = _Chain_Next( node );
+    } while ( node != tail );
+
+    _Thread_queue_Gate_add(
+      &the_thread->Wait.Lock.Pending_requests,
+      &the_thread->Wait.Lock.Tranquilizer
+    );
+  } else {
+    _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   }
 #endif
 
@@ -1296,15 +1310,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
   the_thread->Wait.operations = &_Thread_queue_Operations_default;
 
 #if defined(RTEMS_SMP)
-  _Thread_Wait_release_default_critical(
-    the_thread,
-    &lock_context
-  );
+  _Thread_Wait_release_default_critical( the_thread, &lock_context );
 #endif
 }
 
 /**
- * @brief Tranquilizes the thread after a wait a thread queue.
+ * @brief Tranquilizes the thread after a wait on a thread queue.
  *
  * After the violent blocking procedure this function makes the thread calm and
  * peaceful again so that it can carry out its normal work.
@@ -1314,6 +1325,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
  *
  * On other configurations, this function does nothing.
  *
+ * It must be called after a _Thread_Wait_claim() exactly once
+ *  - after the corresponding thread queue lock was released, and
+ *  - the default wait state is restored or some other processor is about to do
+ *    this.
+ *
  * @param[in] the_thread The thread.
  */
 RTEMS_INLINE_ROUTINE void _Thread_Wait_tranquilize(
@@ -1321,22 +1337,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_tranquilize(
 )
 {
 #if defined(RTEMS_SMP)
-  Thread_queue_Context queue_context;
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_Wait_acquire_default( the_thread, &queue_context.Lock_context );
-
-  if ( !_Chain_Is_empty( &the_thread->Wait.Lock.Pending_requests ) ) {
-    _Thread_queue_Gate_add(
-      &the_thread->Wait.Lock.Pending_requests,
-      &queue_context.Wait.Gate
-    );
-    _Thread_Wait_release_default( the_thread, &queue_context.Lock_context );
-    _Thread_queue_Gate_wait( &queue_context.Wait.Gate );
-    _Thread_Wait_remove_request( the_thread, &queue_context );
-  } else {
-    _Thread_Wait_release_default( the_thread, &queue_context.Lock_context );
-  }
+  _Thread_queue_Gate_wait( &the_thread->Wait.Lock.Tranquilizer );
 #else
   (void) the_thread;
 #endif
@@ -1354,13 +1355,21 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Context_extract( queue_context, the_thread );
+  Thread_queue_Queue *queue;
+
+  queue = the_thread->Wait.queue;
 
 #if defined(RTEMS_SMP)
-  if ( queue_context->Wait.queue != NULL ) {
+  if ( queue != NULL ) {
+    _Assert( queue_context->Wait.queue == queue );
 #endif
+
+    ( *the_thread->Wait.operations->extract )( queue, the_thread );
     _Thread_Wait_restore_default( the_thread );
+
 #if defined(RTEMS_SMP)
+    _Assert( queue_context->Wait.queue == NULL );
+    queue_context->Wait.queue = queue;
   }
 #endif
 }

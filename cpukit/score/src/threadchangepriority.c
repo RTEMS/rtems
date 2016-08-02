@@ -46,11 +46,12 @@ static Thread_Control *_Thread_Apply_priority_locked(
    *  we are not REALLY changing priority.
    */
   if ( ( *filter )( the_thread, &new_priority, arg ) ) {
-    _Thread_queue_Context_priority_change(
-      queue_context,
+    _Scheduler_Thread_set_priority( the_thread, new_priority, prepend_it );
+
+    ( *the_thread->Wait.operations->priority_change )(
+      the_thread->Wait.queue,
       the_thread,
-      new_priority,
-      prepend_it
+      new_priority
     );
   } else {
     the_thread = NULL;

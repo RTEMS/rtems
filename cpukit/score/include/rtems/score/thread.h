@@ -326,6 +326,17 @@ typedef struct {
      * case the thread is enqueued on a thread queue.
      */
     Chain_Control Pending_requests;
+
+    /**
+     * @brief Tranquilizer gate used by _Thread_Wait_tranquilize().
+     *
+     * This gate is closed by _Thread_Wait_claim().  In case there are no
+     * pending requests during a _Thread_Wait_restore_default(), then this gate
+     * is opened immediately, otherwise it is placed on the pending request
+     * chain and opened by _Thread_Wait_remove_request_locked() as the last
+     * gate on the chain to signal overall request completion.
+     */
+    Thread_queue_Gate Tranquilizer;
   } Lock;
 
   /**

@@ -176,7 +176,7 @@ static void _Thread_queue_Path_release( Thread_queue_Path *path )
 
     link = RTEMS_CONTAINER_OF( node, Thread_queue_Link, Path_node );
 
-    if ( link->Queue_context.Wait.queue_lock != NULL ) {
+    if ( link->Queue_context.Wait.queue != NULL ) {
       _Thread_queue_Link_remove( link );
     }
 
@@ -213,8 +213,6 @@ static bool _Thread_queue_Path_acquire(
    */
 
   _Chain_Initialize_empty( &path->Links );
-  _Chain_Initialize_node( &path->Start.Path_node );
-  _Thread_queue_Context_initialize( &path->Start.Queue_context );
 
   owner = queue->owner;
 
@@ -226,6 +224,8 @@ static bool _Thread_queue_Path_acquire(
     return false;
   }
 
+  _Chain_Initialize_node( &path->Start.Path_node );
+  _Thread_queue_Context_initialize( &path->Start.Queue_context );
   link = &path->Start;
 
   do {
@@ -239,34 +239,36 @@ static bool _Thread_queue_Path_acquire(
 
     target = owner->Wait.queue;
     link->Queue_context.Wait.queue = target;
-    link->Queue_context.Wait.operations = owner->Wait.operations;
 
     if ( target != NULL ) {
       if ( _Thread_queue_Link_add( link, queue, target ) ) {
-        link->Queue_context.Wait.queue_lock = &target->Lock;
-        _Chain_Append_unprotected(
+        _Thread_queue_Gate_add(
           &owner->Wait.Lock.Pending_requests,
-          &link->Queue_context.Wait.Gate.Node
+          &link->Queue_context.Wait.Gate
         );
         _Thread_Wait_release_default_critical(
           owner,
           &link->Queue_context.Lock_context
         );
-        _Thread_Wait_acquire_queue_critical(
-          &target->Lock,
-          &link->Queue_context
-        );
+        _Thread_Wait_acquire_queue_critical( target, &link->Queue_context );
 
         if ( link->Queue_context.Wait.queue == NULL ) {
+          _Thread_queue_Link_remove( link );
+          _Thread_Wait_release_queue_critical( target, &link->Queue_context );
+          _Thread_Wait_acquire_default_critical(
+            owner,
+            &link->Queue_context.Lock_context
+          );
+          _Thread_Wait_remove_request_locked( owner, &link->Queue_context );
+          _Assert( owner->Wait.queue == NULL );
           return true;
         }
       } else {
-        link->Queue_context.Wait.queue_lock = NULL;
+        link->Queue_context.Wait.queue = NULL;
         _Thread_queue_Path_release( path );
         return false;
       }
     } else {
-      link->Queue_context.Wait.queue_lock = NULL;
       return true;
     }
 
@@ -330,6 +332,7 @@ void _Thread_queue_Enqueue_critical(
   if ( !_Thread_queue_Path_acquire( the_thread, queue, &path ) ) {
     _Thread_Wait_restore_default( the_thread );
     _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
+    _Thread_Wait_tranquilize( the_thread );
     ( *queue_context->deadlock_callout )( the_thread );
     return;
   }
@@ -504,14 +507,15 @@ void _Thread_queue_Extract_critical(
 
 void _Thread_queue_Extract( Thread_Control *the_thread )
 {
-  Thread_queue_Context queue_context;
+  Thread_queue_Context  queue_context;
+  Thread_queue_Queue   *queue;
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
 
-  if (
-    _Thread_queue_Context_get_queue( &queue_context, the_thread ) != NULL
-  ) {
+  queue = the_thread->Wait.queue;
+
+  if ( queue != NULL ) {
     bool unblock;
 
     _Thread_Wait_remove_request( the_thread, &queue_context );
@@ -520,14 +524,14 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       _Thread_queue_MP_callout_do_nothing
     );
     unblock = _Thread_queue_Extract_locked(
-      _Thread_queue_Context_get_queue( &queue_context, the_thread ),
-      _Thread_queue_Context_get_operations( &queue_context, the_thread ),
+      queue,
+      the_thread->Wait.operations,
       the_thread,
       &queue_context.Lock_context
     );
     _Thread_queue_Unblock_critical(
       unblock,
-      _Thread_queue_Context_get_queue( &queue_context, the_thread ),
+      queue,
       the_thread,
       &queue_context.Lock_context
     );

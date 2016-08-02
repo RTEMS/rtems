@@ -186,7 +186,7 @@ bool _Thread_Initialize(
     &the_thread->Wait.Lock.Default,
     "Thread Wait Default Lock"
   );
-  _Chain_Initialize_empty( &the_thread->Wait.Lock.Pending_requests );
+  _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
 #endif
 
