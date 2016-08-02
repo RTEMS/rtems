@@ -28,6 +28,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/resourceimpl.h>
+#include <rtems/score/schedulernodeimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/status.h>
 #include <rtems/score/sysstate.h>

@@ -205,12 +205,6 @@ typedef struct {
   } Priority;
 } Scheduler_Node;
 
-#define SCHEDULER_NODE_OF_WAIT_CHAIN_NODE( node ) \
-  RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Node.Chain )
-
-#define SCHEDULER_NODE_OF_WAIT_RBTREE_NODE( node ) \
-  RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Node.RBTree )
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

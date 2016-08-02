@@ -260,6 +260,10 @@ $(PROJECT_INCLUDE)/rtems/score/schedulernode.h: include/rtems/score/schedulernod
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulernode.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulernode.h
 
+$(PROJECT_INCLUDE)/rtems/score/schedulernodeimpl.h: include/rtems/score/schedulernodeimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulernodeimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulernodeimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h

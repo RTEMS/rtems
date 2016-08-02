@@ -73,6 +73,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulercbsimpl.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
 include_rtems_score_HEADERS += include/rtems/score/scheduleredfimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulernode.h
+include_rtems_score_HEADERS += include/rtems/score/schedulernodeimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerprioritysmp.h
