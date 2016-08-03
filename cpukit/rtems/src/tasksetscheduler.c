@@ -44,6 +44,7 @@ rtems_status_code rtems_task_set_scheduler(
     return RTEMS_INVALID_PRIORITY;
   }
 
+  _Thread_queue_Context_initialize( &queue_context );
   the_thread = _Thread_Get( task_id, &queue_context.Lock_context );
 
   if ( the_thread == NULL ) {
