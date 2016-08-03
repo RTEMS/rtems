@@ -47,8 +47,14 @@ int pthread_equal(
 
   thread_1 = _Thread_Get( t1, &lock_context_1 );
   thread_2 = _Thread_Get( t2, &lock_context_2 );
-  _ISR_lock_ISR_enable( &lock_context_2 );
-  _ISR_lock_ISR_enable( &lock_context_1 );
+
+  if ( thread_2 != NULL ) {
+    _ISR_lock_ISR_enable( &lock_context_2 );
+  }
+
+  if ( thread_1 != NULL ) {
+    _ISR_lock_ISR_enable( &lock_context_1 );
+  }
 
   return thread_1 != NULL && thread_1 == thread_2;
 #endif
