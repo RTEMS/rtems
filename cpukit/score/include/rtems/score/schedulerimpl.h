@@ -508,6 +508,20 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
 }
 
 /**
+ * @brief Cancels a job of a thread with respect to the scheduler.
+ *
+ * @param[in] the_thread The thread.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
+  Thread_Control *the_thread
+)
+{
+  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+
+  ( *scheduler->Operations.cancel_job )( scheduler, the_thread );
+}
+
+/**
  * @brief Scheduler method invoked at each clock tick.
  *
  * This method is invoked at each clock tick to allow the scheduler

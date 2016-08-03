@@ -61,6 +61,7 @@ extern "C" {
     _Scheduler_CBS_Node_initialize,  /* node initialize entry point */ \
     _Scheduler_default_Node_destroy, /* node destroy entry point */ \
     _Scheduler_CBS_Release_job,      /* new period of task */ \
+    _Scheduler_EDF_Cancel_job,       /* cancel period of task */ \
     _Scheduler_default_Tick,         /* tick entry point */ \
     _Scheduler_default_Start_idle    /* start idle entry point */ \
     SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \

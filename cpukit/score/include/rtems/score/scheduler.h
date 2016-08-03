@@ -145,6 +145,12 @@ typedef struct {
     uint64_t
   );
 
+  /** @see _Scheduler_Cancel_job() */
+  void ( *cancel_job ) (
+    const Scheduler_Control *,
+    Thread_Control *
+  );
+
   /** @see _Scheduler_Tick() */
   void ( *tick )( const Scheduler_Control *, Thread_Control * );
 
@@ -532,6 +538,17 @@ void _Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
+);
+
+/**
+ * @brief Does nothing.
+ *
+ * @param[in] scheduler Unused.
+ * @param[in] the_thread Unused.
+ */
+void _Scheduler_default_Cancel_job(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
 );
 
 /**

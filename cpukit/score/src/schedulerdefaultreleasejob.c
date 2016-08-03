@@ -31,3 +31,12 @@ void _Scheduler_default_Release_job(
   (void) the_thread;
   (void) deadline;
 }
+
+void _Scheduler_default_Cancel_job(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread
+)
+{
+  (void) scheduler;
+  (void) the_thread;
+}

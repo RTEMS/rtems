@@ -90,6 +90,7 @@ typedef struct {
     _Scheduler_strong_APA_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
+    _Scheduler_default_Cancel_job, \
     _Scheduler_default_Tick, \
     _Scheduler_SMP_Start_idle \
     SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \

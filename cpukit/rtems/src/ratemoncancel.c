@@ -38,7 +38,7 @@ void _Rate_monotonic_Cancel(
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( owner, lock_context );
 
-  _Scheduler_Release_job( owner, 0 );
+  _Scheduler_Cancel_job( owner );
 
   _Thread_Dispatch_enable( cpu_self );
 }
