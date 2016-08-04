@@ -323,10 +323,14 @@ uint32_t _Rate_monotonic_Postponed_num(
   /* This is a helper function to return the number of postponed jobs in the given period. */
   Rate_monotonic_Control             *the_period;
   ISR_lock_Context                    lock_context;
+  Thread_Control                     *owner;
 
   the_period = _Rate_monotonic_Get( period_id, &lock_context );
   _Assert(the_period != NULL);
-  return the_period->postponed_jobs;
+  uint32_t jobs = the_period->postponed_instances;
+  owner = the_period->owner;
+  _Rate_monotonic_Release( owner, &lock_context );
+  return jobs;
 }
 
 rtems_status_code rtems_rate_monotonic_period(
