@@ -76,5 +76,6 @@ iostream/Makefile
 cdtest/Makefile
 pppd/Makefile
 capture/Makefile
+deadlinemiss/Makefile
 ])
 AC_OUTPUT
