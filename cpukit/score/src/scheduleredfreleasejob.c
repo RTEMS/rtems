@@ -69,7 +69,7 @@ static bool _Scheduler_EDF_Cancel_job_filter(
 
   node = _Scheduler_EDF_Thread_get_node( the_thread );
 
-  current_priority = _Thread_Get_priority( the_thread );
+  current_priority = the_thread->current_priority;
   new_priority = node->background_priority;
 
   node->current_priority = new_priority;
