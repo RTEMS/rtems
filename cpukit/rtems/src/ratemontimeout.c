@@ -31,7 +31,7 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
   owner = the_period->owner;
 
   _ISR_lock_ISR_disable( &lock_context );
-  _Rate_monotonic_Acquire_critical( owner, &lock_context );
+  _Rate_monotonic_Acquire_critical( the_period, &lock_context );
   wait_flags = _Thread_Wait_flags_get( owner );
 
   if (
@@ -63,6 +63,6 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
     }
   } else {
     the_period->state = RATE_MONOTONIC_EXPIRED;
-    _Rate_monotonic_Release( owner, &lock_context );
+    _Rate_monotonic_Release( the_period, &lock_context );
   }
 }

@@ -496,29 +496,37 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_destroy(
  *
  * @param[in] the_thread The thread.
  * @param[in] deadline The deadline in watchdog ticks since boot.
+ *
+ * @return The thread to hand over to _Thread_Update_priority().
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_job(
   Thread_Control *the_thread,
   uint64_t        deadline
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  ( *scheduler->Operations.release_job )( scheduler, the_thread, deadline );
+  return ( *scheduler->Operations.release_job )(
+    scheduler,
+    the_thread,
+    deadline
+  );
 }
 
 /**
  * @brief Cancels a job of a thread with respect to the scheduler.
  *
  * @param[in] the_thread The thread.
+ *
+ * @return The thread to hand over to _Thread_Update_priority().
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
+RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Cancel_job(
   Thread_Control *the_thread
 )
 {
   const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
 
-  ( *scheduler->Operations.cancel_job )( scheduler, the_thread );
+  return ( *scheduler->Operations.cancel_job )( scheduler, the_thread );
 }
 
 /**

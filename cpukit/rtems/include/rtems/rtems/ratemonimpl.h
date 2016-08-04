@@ -69,19 +69,19 @@ RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
 }
 
 RTEMS_INLINE_ROUTINE void _Rate_monotonic_Acquire_critical(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
+  Rate_monotonic_Control *the_period,
+  ISR_lock_Context       *lock_context
 )
 {
-  _Thread_Wait_acquire_default_critical( the_thread, lock_context );
+  _ISR_lock_Acquire( &the_period->Lock, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _Rate_monotonic_Release(
-  Thread_Control   *the_thread,
-  ISR_lock_Context *lock_context
+  Rate_monotonic_Control *the_period,
+  ISR_lock_Context       *lock_context
 )
 {
-  _Thread_Wait_release_default( the_thread, lock_context );
+  _ISR_lock_Release_and_ISR_enable( &the_period->Lock, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get(

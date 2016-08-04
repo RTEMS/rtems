@@ -62,6 +62,8 @@ rtems_status_code rtems_rate_monotonic_create(
     return RTEMS_TOO_MANY;
   }
 
+  _ISR_lock_Initialize( &the_period->Lock, "Rate Monotonic Period" );
+
   the_period->owner = _Thread_Get_executing();
   the_period->state = RATE_MONOTONIC_INACTIVE;
 

@@ -21,7 +21,7 @@
 
 #include <rtems/score/scheduler.h>
 
-void _Scheduler_default_Release_job(
+Thread_Control *_Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
@@ -30,13 +30,17 @@ void _Scheduler_default_Release_job(
   (void) scheduler;
   (void) the_thread;
   (void) deadline;
+
+  return NULL;
 }
 
-void _Scheduler_default_Cancel_job(
+Thread_Control *_Scheduler_default_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
   (void) scheduler;
   (void) the_thread;
+
+  return NULL;
 }

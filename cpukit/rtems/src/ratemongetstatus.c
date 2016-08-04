@@ -28,7 +28,6 @@ rtems_status_code rtems_rate_monotonic_get_status(
 {
   Rate_monotonic_Control *the_period;
   ISR_lock_Context        lock_context;
-  Thread_Control         *owner;
   rtems_status_code       status;
 
   if ( period_status == NULL ) {
@@ -40,10 +39,9 @@ rtems_status_code rtems_rate_monotonic_get_status(
     return RTEMS_INVALID_ID;
   }
 
-  owner = the_period->owner;
-  _Rate_monotonic_Acquire_critical( owner, &lock_context );
+  _Rate_monotonic_Acquire_critical( the_period, &lock_context );
 
-  period_status->owner = owner->Object.id;
+  period_status->owner = the_period->owner->Object.id;
   period_status->state = the_period->state;
 
   if ( the_period->state == RATE_MONOTONIC_INACTIVE ) {
@@ -81,6 +79,6 @@ rtems_status_code rtems_rate_monotonic_get_status(
     }
   }
 
-  _Rate_monotonic_Release( owner, &lock_context );
+  _Rate_monotonic_Release( the_period, &lock_context );
   return status;
 }

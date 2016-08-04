@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulercbsimpl.h>
 
-void _Scheduler_CBS_Release_job(
+Thread_Control *_Scheduler_CBS_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
@@ -30,8 +30,6 @@ void _Scheduler_CBS_Release_job(
   Scheduler_CBS_Node   *node;
   Scheduler_CBS_Server *serv_info;
 
-  _Scheduler_EDF_Release_job( scheduler, the_thread, deadline );
-
   node = _Scheduler_CBS_Thread_get_node( the_thread );
   serv_info = node->cbs_server;
 
@@ -39,4 +37,6 @@ void _Scheduler_CBS_Release_job(
   if ( serv_info != NULL ) {
     the_thread->cpu_time_budget = serv_info->parameters.budget;
   }
+
+  return _Scheduler_EDF_Release_job( scheduler, the_thread, deadline );
 }

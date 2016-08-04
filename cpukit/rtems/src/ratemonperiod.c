@@ -71,21 +71,20 @@ static void _Rate_monotonic_Release_job(
 )
 {
   Per_CPU_Control *cpu_self;
-  uint64_t deadline;
+  Thread_Control  *update_priority;
+  uint64_t         deadline;
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Rate_monotonic_Release( owner, lock_context );
 
-  _ISR_lock_ISR_disable( lock_context );
   deadline = _Watchdog_Per_CPU_insert_relative(
     &the_period->Timer,
     cpu_self,
     next_length
   );
-  _ISR_lock_ISR_enable( lock_context );
+  update_priority = _Scheduler_Release_job( owner, deadline );
 
-  _Scheduler_Release_job( owner, deadline );
-
+  _Rate_monotonic_Release( the_period, lock_context );
+  _Thread_Update_priority( update_priority );
   _Thread_Dispatch_enable( cpu_self );
 }
 
@@ -217,7 +216,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
   _Thread_Wait_flags_set( executing, RATE_MONOTONIC_INTEND_TO_BLOCK );
 
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Rate_monotonic_Release( executing, lock_context );
+  _Rate_monotonic_Release( the_period, lock_context );
 
   _Thread_Set_state( executing, STATES_WAITING_FOR_PERIOD );
 
@@ -278,13 +277,13 @@ rtems_status_code rtems_rate_monotonic_period(
     return RTEMS_NOT_OWNER_OF_RESOURCE;
   }
 
-  _Rate_monotonic_Acquire_critical( executing, &lock_context );
+  _Rate_monotonic_Acquire_critical( the_period, &lock_context );
 
   state = the_period->state;
 
   if ( length == RTEMS_PERIOD_STATUS ) {
     status = _Rate_monotonic_Get_status_for_state( state );
-    _Rate_monotonic_Release( executing, &lock_context );
+    _Rate_monotonic_Release( the_period, &lock_context );
   } else {
     switch ( state ) {
       case RATE_MONOTONIC_ACTIVE:

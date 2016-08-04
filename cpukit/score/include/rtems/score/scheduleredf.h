@@ -215,26 +215,13 @@ Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   Thread_Control          *the_thread
 );
 
-/**
- *  @brief Called when a new job of task is released.
- *
- *  This routine is called when a new job of task is released.
- *  It is called only from Rate Monotonic manager in the beginning
- *  of new period.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread is the owner of the job.
- *  @param[in] deadline of the new job from now. If equal to 0,
- *             the job was cancelled or deleted, thus a running task
- *             has to be suspended.
- */
-void _Scheduler_EDF_Release_job(
+Thread_Control *_Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
 );
 
-void _Scheduler_EDF_Cancel_job(
+Thread_Control *_Scheduler_EDF_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

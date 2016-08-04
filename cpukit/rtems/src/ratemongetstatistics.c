@@ -28,7 +28,6 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
 {
   Rate_monotonic_Control          *the_period;
   ISR_lock_Context                 lock_context;
-  Thread_Control                  *owner;
   const Rate_monotonic_Statistics *src;
 
   if ( dst == NULL ) {
@@ -40,8 +39,7 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
     return RTEMS_INVALID_ID;
   }
 
-  owner = the_period->owner;
-  _Rate_monotonic_Acquire_critical( owner, &lock_context );
+  _Rate_monotonic_Acquire_critical( the_period, &lock_context );
 
   src = &the_period->Statistics;
   dst->count        = src->count;
@@ -53,6 +51,6 @@ rtems_status_code rtems_rate_monotonic_get_statistics(
   _Timestamp_To_timespec( &src->max_wall_time,   &dst->max_wall_time );
   _Timestamp_To_timespec( &src->total_wall_time, &dst->total_wall_time );
 
-  _Rate_monotonic_Release( owner, &lock_context );
+  _Rate_monotonic_Release( the_period, &lock_context );
   return RTEMS_SUCCESSFUL;
 }

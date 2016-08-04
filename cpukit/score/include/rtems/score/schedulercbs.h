@@ -163,20 +163,7 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   Thread_Control          *the_thread
 );
 
-/**
- *  @brief Called when a new job of task is released.
- *
- *  This routine is called when a new job of task is released.
- *  It is called only from Rate Monotonic manager in the beginning
- *  of new period. Deadline has to be shifted and budget replenished.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread is the owner of the job.
- *  @param[in] length of the new job from now. If equal to 0,
- *             the job was cancelled or deleted.
- */
-
-void _Scheduler_CBS_Release_job (
+Thread_Control *_Scheduler_CBS_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 length

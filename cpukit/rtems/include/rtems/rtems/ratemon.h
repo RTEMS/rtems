@@ -194,6 +194,11 @@ typedef struct {
   /** This field is the object management portion of a Period instance. */
   Objects_Control                         Object;
 
+  /**
+   * @brief Protects the rate monotonic period state.
+   */
+  ISR_LOCK_MEMBER(                        Lock )
+
   /** This is the timer used to provide the unblocking mechanism. */
   Watchdog_Control                        Timer;
 

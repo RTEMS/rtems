@@ -139,14 +139,14 @@ typedef struct {
   void ( *node_destroy )( const Scheduler_Control *, Scheduler_Node * );
 
   /** @see _Scheduler_Release_job() */
-  void ( *release_job ) (
+  Thread_Control *( *release_job ) (
     const Scheduler_Control *,
     Thread_Control *,
     uint64_t
   );
 
   /** @see _Scheduler_Cancel_job() */
-  void ( *cancel_job ) (
+  Thread_Control *( *cancel_job ) (
     const Scheduler_Control *,
     Thread_Control *
   );
@@ -533,8 +533,10 @@ void _Scheduler_default_Node_destroy(
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
  * @param[in] deadline Unused.
+ *
+ * @retval NULL Always.
  */
-void _Scheduler_default_Release_job(
+Thread_Control *_Scheduler_default_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
@@ -545,8 +547,10 @@ void _Scheduler_default_Release_job(
  *
  * @param[in] scheduler Unused.
  * @param[in] the_thread Unused.
+ *
+ * @retval NULL Always.
  */
-void _Scheduler_default_Cancel_job(
+Thread_Control *_Scheduler_default_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 );

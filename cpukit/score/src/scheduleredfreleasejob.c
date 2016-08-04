@@ -42,13 +42,13 @@ static bool _Scheduler_EDF_Release_job_filter(
     || !_Thread_Owns_resources( the_thread );
 }
 
-void _Scheduler_EDF_Release_job(
+Thread_Control *_Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   uint64_t                 deadline
 )
 {
-  _Thread_Change_priority(
+  return _Thread_Apply_priority(
     the_thread,
     deadline,
     NULL,
@@ -79,12 +79,12 @@ static bool _Scheduler_EDF_Cancel_job_filter(
     || !_Thread_Owns_resources( the_thread );
 }
 
-void _Scheduler_EDF_Cancel_job(
+Thread_Control *_Scheduler_EDF_Cancel_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread
 )
 {
-  _Thread_Change_priority(
+  return _Thread_Apply_priority(
     the_thread,
     0,
     NULL,
