@@ -431,11 +431,6 @@ static void nopOn(const rtems_irq_connect_data* notUsed)
    */
 }
 
-static int fxpIsOn(const rtems_irq_connect_data* irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
-}
-
 int
 rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 {
@@ -1933,7 +1928,7 @@ rtems_task_wake_after(100);
 		sc->irqInfo.hdl = (rtems_irq_hdl)fxp_intr;
 		sc->irqInfo.on  = nopOn;
 		sc->irqInfo.off = nopOn;
-		sc->irqInfo.isOn = fxpIsOn;
+		sc->irqInfo.isOn = NULL;
 		rv = BSP_install_rtems_irq_handler (&sc->irqInfo);
 		if (rv != 1) {
 		  rtems_panic ("Can't attach fxp interrupt handler for irq %d\n",

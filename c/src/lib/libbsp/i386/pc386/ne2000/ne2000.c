@@ -428,14 +428,6 @@ ne_interrupt_off (const rtems_irq_connect_data *irq)
     outport_byte (sc->port + IMR, 0);
 }
 
-/* Return whether NE2000 interrupts are on.  */
-
-static int
-ne_interrupt_is_on (const rtems_irq_connect_data *irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
-}
-
 /* Initialize the NE2000 hardware.  */
 
 static void
@@ -526,7 +518,7 @@ ne_init_irq_handler(int irno)
   irq.handle = (rtems_irq_hdl) irno;
   irq.on = ne_interrupt_on;
   irq.off = ne_interrupt_off;
-  irq.isOn = ne_interrupt_is_on;
+  irq.isOn = NULL;
 
   if (!BSP_install_rtems_irq_handler (&irq))
     rtems_panic ("Can't attach NE interrupt handler for irq %d\n", irno);

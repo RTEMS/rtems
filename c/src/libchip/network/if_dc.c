@@ -1893,13 +1893,6 @@ nop(const rtems_irq_connect_data* unused)
 {
 }
 
-static int
-decISON(const rtems_irq_connect_data* irq)
-{
-	return (BSP_irq_enabled_at_i8259s(irq->name));
-}
-
-
 /*
  * Attach the interface. Allocate softc structures, do ifmedia
  * setup and ethernet/BPF attach.
@@ -2023,7 +2016,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	sc->irqInfo.handle = (void *)sc; /* new parameter */
 	sc->irqInfo.on = nop;
 	sc->irqInfo.off = nop;
-	sc->irqInfo.isOn = decISON;
+	sc->irqInfo.isOn = NULL;
 
 #ifdef BSP_SHARED_HANDLER_SUPPORT
 	rc = BSP_install_rtems_shared_irq_handler( &sc->irqInfo );

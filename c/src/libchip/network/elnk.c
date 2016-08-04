@@ -1875,16 +1875,6 @@ static void no_op(const rtems_irq_connect_data* irq)
 
 
 
-static int elnkIsOn(const rtems_irq_connect_data* irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
-}
-
-
-
-
-
-
 static void
 elnk_start_txchain( struct elnk_softc *sc, struct TXMD *chainhead )
 {
@@ -2214,7 +2204,7 @@ elnk_initialize_hardware (struct elnk_softc *sc)
    sc->irqInfo.hdl  = (rtems_irq_hdl)elnk_interrupt_handler_entry;
    sc->irqInfo.on   = no_op;
    sc->irqInfo.off  = no_op;
-   sc->irqInfo.isOn = elnkIsOn;
+   sc->irqInfo.isOn = NULL;
 
    if( sc->irqInfo.name != 255 )
    {

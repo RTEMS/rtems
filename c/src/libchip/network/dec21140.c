@@ -345,11 +345,6 @@ static void no_op(const rtems_irq_connect_data* irq)
    return;
 }
 
-static int dec21140IsOn(const rtems_irq_connect_data* irq)
-{
-  return BSP_irq_enabled_at_i8259s (irq->name);
-}
-
 /*
  * DEC21140 interrupt handler
  */
@@ -539,7 +534,7 @@ dec21140Enet_initialize_hardware (struct dec21140_softc *sc)
    sc->irqInfo.hdl  = (rtems_irq_hdl)dec21140Enet_interrupt_handler_entry;
    sc->irqInfo.on   = no_op;
    sc->irqInfo.off  = no_op;
-   sc->irqInfo.isOn = dec21140IsOn;
+   sc->irqInfo.isOn = NULL;
 
 #ifdef DEC_DEBUG
    printk( "dec2114x: Installing IRQ %d\n", sc->irqInfo.name );
