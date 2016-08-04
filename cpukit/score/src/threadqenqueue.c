@@ -177,19 +177,24 @@ static void _Thread_queue_Path_release( Thread_queue_Path *path )
   if ( head != node ) {
     Thread_queue_Link *link;
 
-    /* The terminal link has an owner which does not wait on a thread queue */
+    /*
+     * The terminal link may have an owner which does not wait on a thread
+     * queue.
+     */
+
     link = THREAD_QUEUE_LINK_OF_PATH_NODE( node );
-    _Assert( link->Queue_context.Wait.queue == NULL );
 
-    _Thread_Wait_release_default_critical(
-      link->owner,
-      &link->Queue_context.Lock_context
-    );
+    if ( link->Queue_context.Wait.queue == NULL ) {
+      _Thread_Wait_release_default_critical(
+        link->owner,
+        &link->Queue_context.Lock_context
+      );
 
-    node = _Chain_Previous( node );
+      node = _Chain_Previous( node );
 #if defined(RTEMS_DEBUG)
-    _Chain_Set_off_chain( &link->Path_node );
+      _Chain_Set_off_chain( &link->Path_node );
 #endif
+    }
 
     while ( head != node ) {
       /* The other links have an owner which waits on a thread queue */
