@@ -162,6 +162,9 @@ static void _Thread_queue_Link_remove( Thread_queue_Link *link )
 }
 #endif
 
+#define THREAD_QUEUE_LINK_OF_PATH_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_queue_Link, Path_node );
+
 static void _Thread_queue_Path_release( Thread_queue_Path *path )
 {
 #if defined(RTEMS_SMP)
@@ -171,21 +174,40 @@ static void _Thread_queue_Path_release( Thread_queue_Path *path )
   head = _Chain_Head( &path->Links );
   node = _Chain_Last( &path->Links );
 
-  while ( head != node ) {
+  if ( head != node ) {
     Thread_queue_Link *link;
 
-    link = RTEMS_CONTAINER_OF( node, Thread_queue_Link, Path_node );
+    /* The terminal link has an owner which does not wait on a thread queue */
+    link = THREAD_QUEUE_LINK_OF_PATH_NODE( node );
+    _Assert( link->Queue_context.Wait.queue == NULL );
 
-    if ( link->Queue_context.Wait.queue != NULL ) {
-      _Thread_queue_Link_remove( link );
-    }
-
-    _Thread_Wait_release_critical( link->owner, &link->Queue_context );
+    _Thread_Wait_release_default_critical(
+      link->owner,
+      &link->Queue_context.Lock_context
+    );
 
     node = _Chain_Previous( node );
 #if defined(RTEMS_DEBUG)
     _Chain_Set_off_chain( &link->Path_node );
 #endif
+
+    while ( head != node ) {
+      /* The other links have an owner which waits on a thread queue */
+      link = THREAD_QUEUE_LINK_OF_PATH_NODE( node );
+      _Assert( link->Queue_context.Wait.queue != NULL );
+
+      _Thread_queue_Link_remove( link );
+      _Thread_Wait_release_queue_critical(
+        link->Queue_context.Wait.queue,
+        &link->Queue_context
+      );
+      _Thread_Wait_remove_request( link->owner, &link->Queue_context );
+
+      node = _Chain_Previous( node );
+#if defined(RTEMS_DEBUG)
+      _Chain_Set_off_chain( &link->Path_node );
+#endif
+    }
   }
 #else
   (void) path;
