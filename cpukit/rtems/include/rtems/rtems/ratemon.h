@@ -229,6 +229,20 @@ typedef struct {
    * This field contains the statistics maintained for the period.
    */
   Rate_monotonic_Statistics               Statistics;
+
+  /** KHCHEN 01.08
+   * This field contains the number of postponed jobs. It is updated by
+   * the period watchdog, when the watchdog timeout, this variable will
+   * be increased immediately and the deadline of next period is renewed.
+   */
+  uint32_t                                postponed_jobs;
+
+  /** KHCHEN 02.08
+   *  This field contains the tick of the latest deadline decided by the period
+   *  watchdog. 
+   */
+  uint64_t                                latest_deadline;
+
 }   Rate_monotonic_Control;
 
 /**

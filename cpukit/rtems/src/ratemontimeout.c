@@ -62,7 +62,20 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
       _Thread_Unblock( owner );
     }
   } else {
+#if 0
     the_period->state = RATE_MONOTONIC_EXPIRED;
     _Rate_monotonic_Release( owner, &lock_context );
+#else
+    /* KHCHEN 02.08 - revise according to Gedare suggestion
+     * If the watchdog is timeout, it means there is an additional postponed
+     * job in the next period which is not available to release job:
+     * Either the current task is still executed, or it is preemptive by the
+     * other higher priority tasks.
+     */
+
+    the_period->postponed_jobs += 1;
+    the_period->state = RATE_MONOTONIC_EXPIRED;
+    _Rate_monotonic_Renew_deadline( the_period, owner, &lock_context );
+#endif
   }
 }

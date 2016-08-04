@@ -116,6 +116,28 @@ bool _Rate_monotonic_Get_status(
   Timestamp_Control            *cpu_since_last_period
 );
 
+/**
+ * Kuan-Hsun Chen, 03.08.2016
+ * This routine is prepared for the watchdog timeout to renew its deadline
+ * without releasing jobs. A postponed job induced by a deadline miss should be
+ * released by RMS manager.
+ */
+void _Rate_monotonic_Renew_deadline(
+  Rate_monotonic_Control *the_period,
+  Thread_Control         *owner,
+  ISR_lock_Context       *lock_context
+);
+
+/**
+ * Kuan-Hsun Chen, 04.08.2016
+ * This is a helper function to return the number of postponed jobs by this
+ * given period. This number is only increased by the corresponding watchdog,
+ * and is decreased by RMS manager with the postponed job releasing.
+ */
+uint32_t _Rate_monotonic_Postponed_num(
+  rtems_id                period_id
+);
+
 void _Rate_monotonic_Restart(
   Rate_monotonic_Control *the_period,
   Thread_Control         *owner,
