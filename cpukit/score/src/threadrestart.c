@@ -449,13 +449,7 @@ static void _Thread_Finalize_life_change(
 {
   _Thread_queue_Extract_with_proxy( the_thread );
   _Thread_Timer_remove( the_thread );
-  _Thread_Change_priority(
-    the_thread,
-    priority,
-    NULL,
-    _Thread_Raise_real_priority_filter,
-    false
-  );
+  _Thread_Raise_real_priority( the_thread, priority );
   _Thread_Remove_life_change_request( the_thread );
 }
 
