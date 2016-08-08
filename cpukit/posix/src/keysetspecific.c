@@ -57,6 +57,7 @@ static int _POSIX_Keys_Create_value(
       key_value_pair->thread = executing;
       key_value_pair->value = RTEMS_DECONST( void *, value );
 
+      _Chain_Initialize_node( &key_value_pair->Key_node );
       _Chain_Append_unprotected(
         &the_key->Key_value_pairs,
         &key_value_pair->Key_node
