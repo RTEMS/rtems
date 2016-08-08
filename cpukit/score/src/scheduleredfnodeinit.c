@@ -35,4 +35,5 @@ void _Scheduler_EDF_Node_initialize(
 
   the_node = _Scheduler_EDF_Node_downcast( node );
   the_node->thread = the_thread;
+  _RBTree_Initialize_node( &the_node->Node );
 }

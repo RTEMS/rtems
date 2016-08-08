@@ -60,6 +60,7 @@ void _Watchdog_Insert(
   }
 
   header->first = new_first;
+  _RBTree_Initialize_node( &the_watchdog->Node.RBTree );
   _RBTree_Add_child( &the_watchdog->Node.RBTree, parent, link );
   _RBTree_Insert_color( &header->Watchdogs, &the_watchdog->Node.RBTree );
 }

@@ -50,6 +50,7 @@ rtems_rbtree_node *rtems_rbtree_insert(
     }
   }
 
+  _RBTree_Initialize_node( the_node );
   _RBTree_Add_child( the_node, parent, which );
   _RBTree_Insert_color( the_rbtree, the_node );
 

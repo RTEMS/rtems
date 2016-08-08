@@ -72,6 +72,7 @@ void _Thread_MP_Handler_initialization (
     proxy = (Thread_Proxy_control *) ( proxies + i * proxy_size );
 
     _Thread_Timer_initialize( &proxy->Timer, _Per_CPU_Get_by_index( 0 ) );
+    _RBTree_Initialize_node( &proxy->Active );
 
     proxy->Wait.spare_heads = &proxy->Thread_queue_heads[ 0 ];
     _Thread_queue_Heads_initialize( proxy->Wait.spare_heads );

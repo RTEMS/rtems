@@ -20,6 +20,7 @@
 
 #include <sys/tree.h>
 #include <rtems/score/basedefs.h>
+#include <rtems/score/assert.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,6 +70,38 @@ typedef RB_HEAD(RBTree_Control, RBTree_Node) RBTree_Control;
   RBTree_Control name = RBTREE_INITIALIZER_EMPTY( name )
 
 /**
+ * @brief Sets a red-black tree node as off-tree.
+ *
+ * Do not use this function on nodes which are a part of a tree.
+ *
+ * @param[in] the_node The node to set off-tree.
+ *
+ * @see _RBTree_Is_node_off_tree().
+ */
+RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
+{
+  RB_COLOR( the_node, Node ) = -1;
+}
+
+/**
+ * @brief Returns true, if this red-black tree node is off-tree, and false
+ * otherwise.
+ *
+ * @param[in] the_node The node to test.
+ *
+ * @retval true The node is not a part of a tree (off-tree).
+ * @retval false Otherwise.
+ *
+ * @see _RBTree_Set_off_tree().
+ */
+RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
+  const RBTree_Node *the_node
+)
+{
+  return RB_COLOR( the_node, Node ) == -1;
+}
+
+/**
  * @brief Rebalances the red-black tree after insertion of the node.
  *
  * @param[in] the_rbtree The red-black tree control.
@@ -78,6 +111,21 @@ void _RBTree_Insert_color(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node
 );
+
+/**
+ * @brief Initializes a red-black tree node.
+ *
+ * In debug configurations, the node is set off tree.  In all other
+ * configurations, this function does nothing.
+ *
+ * @param[in] the_node The red-black tree node to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
+{
+#if defined(RTEMS_DEBUG)
+  _RBTree_Set_off_tree( the_node );
+#endif
+}
 
 /**
  * @brief Adds a child node to a parent node.
@@ -92,6 +140,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Add_child(
   RBTree_Node **link
 )
 {
+  _Assert( _RBTree_Is_node_off_tree( child ) );
   RB_SET( child, parent, Node );
   *link = child;
 }
@@ -173,38 +222,6 @@ void _RBTree_Extract(
   RBTree_Control *the_rbtree,
   RBTree_Node *the_node
 );
-
-/**
- * @brief Sets a red-black tree node as off-tree.
- *
- * Do not use this function on nodes which are a part of a tree.
- *
- * @param[in] the_node The node to set off-tree.
- *
- * @see _RBTree_Is_node_off_tree().
- */
-RTEMS_INLINE_ROUTINE void _RBTree_Set_off_tree( RBTree_Node *the_node )
-{
-  RB_COLOR( the_node, Node ) = -1;
-}
-
-/**
- * @brief Returns true, if this red-black tree node is off-tree, and false
- * otherwise.
- *
- * @param[in] the_node The node to test.
- *
- * @retval true The node is not a part of a tree (off-tree).
- * @retval false Otherwise.
- *
- * @see _RBTree_Set_off_tree().
- */
-RTEMS_INLINE_ROUTINE bool _RBTree_Is_node_off_tree(
-  const RBTree_Node *the_node
-)
-{
-  return RB_COLOR( the_node, Node ) == -1;
-}
 
 /**
  * @brief Returns a pointer to root node of the red-black tree.

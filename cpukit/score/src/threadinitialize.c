@@ -187,6 +187,7 @@ bool _Thread_Initialize(
     "Thread Wait Default Lock"
   );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
+  _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
 #endif
 

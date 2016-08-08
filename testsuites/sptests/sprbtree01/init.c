@@ -1801,7 +1801,6 @@ rtems_task Init( rtems_task_argument ignored )
     puts( "INIT - rtems_rbtree_extract failed");
     rtems_test_exit(0);
   }
-  rtems_test_assert( !rtems_rbtree_is_node_off_tree( p ) );
   rb_insert_unique(&rbtree1, p);
 
   for ( p = rtems_rbtree_get_min(&rbtree1), id = 1 ; p ;

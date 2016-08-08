@@ -242,6 +242,7 @@ static void _Thread_queue_Priority_do_enqueue(
 #endif
 
   current_priority = the_thread->current_priority;
+  _RBTree_Initialize_node( &the_thread->Wait.Node.RBTree );
   _RBTree_Insert_inline(
     &priority_queue->Queue,
     &the_thread->Wait.Node.RBTree,

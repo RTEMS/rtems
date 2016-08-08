@@ -251,6 +251,7 @@ static bool _Thread_queue_Path_acquire(
     return false;
   }
 
+  _RBTree_Initialize_node( &path->Start.Registry_node );
   _Chain_Initialize_node( &path->Start.Path_node );
   _Thread_queue_Context_initialize( &path->Start.Queue_context );
   link = &path->Start;

@@ -22,4 +22,7 @@ void _RBTree_Extract(
 )
 {
   RB_REMOVE( RBTree_Control, the_rbtree, the_node );
+#if defined(RTEMS_DEBUG)
+  _RBTree_Set_off_tree( the_node );
+#endif
 }

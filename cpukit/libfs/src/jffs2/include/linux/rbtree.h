@@ -117,6 +117,7 @@ static inline void rb_link_node(
   struct rb_node **link
 )
 {
+  _RBTree_Initialize_node( (RBTree_Node *) node );
   _RBTree_Add_child(
     (RBTree_Node *) node,
     (RBTree_Node *) parent,
