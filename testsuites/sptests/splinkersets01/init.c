@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -132,25 +132,25 @@ static void test(void)
 
 static void test_content(void)
 {
-  void volatile *b_rw = RTEMS_LINKER_SET_BEGIN(test_content_rw);
-  void volatile *e_rw = RTEMS_LINKER_SET_END(test_content_rw);
+  uintptr_t b_rw = (uintptr_t) RTEMS_LINKER_SET_BEGIN(test_content_rw);
+  uintptr_t e_rw = (uintptr_t) RTEMS_LINKER_SET_END(test_content_rw);
 
-  void volatile const *b_ro = RTEMS_LINKER_SET_BEGIN(test_content_ro);
-  void volatile const *e_ro = RTEMS_LINKER_SET_END(test_content_ro);
+  uintptr_t b_ro = (uintptr_t) RTEMS_LINKER_SET_BEGIN(test_content_ro);
+  uintptr_t e_ro = (uintptr_t) RTEMS_LINKER_SET_END(test_content_ro);
 
-  rtems_test_assert(&content_rw_1 >= b_rw);
-  rtems_test_assert(&content_rw_2 >= b_rw);
-  rtems_test_assert(&content_rw_3 >= b_rw);
-  rtems_test_assert(&content_rw_1 <= e_rw);
-  rtems_test_assert(&content_rw_2 <= e_rw);
-  rtems_test_assert(&content_rw_3 <= e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_1 >= b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_2 >= b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_3 >= b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_1 <= e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_2 <= e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_3 <= e_rw);
 
-  rtems_test_assert(&content_ro_1 >= b_ro);
-  rtems_test_assert(&content_ro_2 >= b_ro);
-  rtems_test_assert(&content_ro_3 >= b_ro);
-  rtems_test_assert(&content_ro_1 <= e_ro);
-  rtems_test_assert(&content_ro_2 <= e_ro);
-  rtems_test_assert(&content_ro_3 <= e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_1 >= b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_2 >= b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_3 >= b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_1 <= e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_2 <= e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_3 <= e_ro);
 }
 
 static void Init(rtems_task_argument arg)
