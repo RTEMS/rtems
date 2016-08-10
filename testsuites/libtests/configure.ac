@@ -139,7 +139,6 @@ monitor02/Makefile
 mouse01/Makefile
 uid01/Makefile
 putenvtest/Makefile
-rtems++/Makefile
 rtmonuse/Makefile
 stackchk/Makefile
 stackchk01/Makefile

@@ -140,12 +140,6 @@ AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
-
-AS_IF([test "$RTEMS_HAS_CPLUSPLUS" = "yes"],[
-  AC_CONFIG_SUBDIRS([librtems++])
-  BSP_SUBDIRS="$BSP_SUBDIRS librtems++"
-])
-
 BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS ada"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
