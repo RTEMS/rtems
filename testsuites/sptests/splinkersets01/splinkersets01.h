@@ -37,13 +37,13 @@ RTEMS_LINKER_RWSET_ITEM_DECLARE(test_rw, const int *, a1);
 
 RTEMS_LINKER_ROSET_ITEM_DECLARE(test_ro, const int *, ca2);
 
-extern int content_rw_1;
-extern char content_rw_2;
-extern char content_rw_3;
+RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern int content_rw_1);
+RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern char content_rw_2);
+RTEMS_LINKER_RWSET_CONTENT(test_content_rw, extern char content_rw_3);
 
-extern const int content_ro_1;
-extern const char content_ro_2;
-extern const char content_ro_3;
+RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const int content_ro_1);
+RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const char content_ro_2);
+RTEMS_LINKER_ROSET_CONTENT(test_content_ro, extern const char content_ro_3);
 
 #ifdef __cplusplus
 }
