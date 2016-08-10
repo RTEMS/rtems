@@ -16,6 +16,28 @@
 
 const char rtems_test_name[] = "SPCHAIN";
 
+static void test_chain_init_one(void)
+{
+  Chain_Control chain;
+  Chain_Node    node;
+
+  puts( "INIT - Verify _Chain_Initialize_one" );
+
+  _Chain_Initialize_node( &node );
+  _Chain_Initialize_one( &chain, &node );
+  rtems_test_assert( !_Chain_Is_empty( &chain ) );
+  rtems_test_assert( !_Chain_Is_node_off_chain( &node ) );
+  rtems_test_assert( _Chain_Is_first( &node ) );
+  rtems_test_assert( _Chain_Is_last( &node ) );
+  rtems_test_assert( _Chain_First( &chain ) == &node );
+  rtems_test_assert( _Chain_Last( &chain ) == &node );
+  rtems_test_assert( _Chain_Next( &node ) == _Chain_Tail( &chain ) );
+  rtems_test_assert( _Chain_Previous( &node ) == _Chain_Head( &chain ) );
+
+  _Chain_Extract_unprotected( &node );
+  rtems_test_assert( _Chain_Is_empty( &chain ) );
+}
+
 static void update_registry_and_extract(
   Chain_Iterator_registry *reg,
   Chain_Node *n
@@ -479,6 +501,7 @@ rtems_task Init(
      }
   }
 
+  test_chain_init_one();
   test_chain_first_and_last();
   test_chain_with_empty_check();
   test_chain_with_notification();

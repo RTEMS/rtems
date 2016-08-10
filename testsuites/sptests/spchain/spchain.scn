@@ -1,6 +1,7 @@
 *** BEGIN OF TEST SPCHAIN ***
 Init - Initialize chain empty
 INIT - Verify rtems_chain_insert
+INIT - Verify _Chain_Initialize_one
 INIT - Verify rtems_chain_is_first
 INIT - Verify rtems_chain_is_last
 INIT - Verify rtems_chain_append_with_empty_check

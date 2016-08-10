@@ -520,6 +520,33 @@ RTEMS_INLINE_ROUTINE void _Chain_Initialize_empty(
 }
 
 /**
+ * @brief Initializes this chain to contain exactly the specified node.
+ *
+ * @param[in] the_chain The chain control.
+ * @param[in] the_node The one and only node.
+ */
+RTEMS_INLINE_ROUTINE void _Chain_Initialize_one(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+)
+{
+  Chain_Node *head;
+  Chain_Node *tail;
+
+  _Assert( _Chain_Is_node_off_chain( the_node ) );
+
+  head = _Chain_Head( the_chain );
+  tail = _Chain_Tail( the_chain );
+
+  the_node->next = tail;
+  the_node->previous = head;
+
+  head->next = the_node;
+  head->previous = NULL;
+  tail->previous = the_node;
+}
+
+/**
  * @brief Extract this node (unprotected).
  *
  * This routine extracts the_node from the chain on which it resides.
