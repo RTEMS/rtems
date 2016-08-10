@@ -1,6 +1,6 @@
-dnl 
+dnl
 dnl Check for target g++
-dnl 
+dnl
 
 AC_DEFUN([RTEMS_PROG_CXX_FOR_TARGET],
 [
@@ -9,7 +9,7 @@ AC_REQUIRE([RTEMS_ENABLE_CXX])
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 
 # If CXXFLAGS is not set, default to CFLAGS
-if test x"$rtems_cv_RTEMS_SMP" = x"yes" ; then
+if test x"$rtems_cv_HAS_SMP" = x"yes" ; then
   CXXFLAGS=${CXXFLAGS-${CFLAGS} -std=gnu++11}
 else
   CXXFLAGS=${CXXFLAGS-${CFLAGS}}
@@ -18,21 +18,26 @@ fi
 RTEMS_CHECK_TOOL(CXX,g++)
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes";
 then
-dnl Only accept g++
-dnl NOTE: This might be too restrictive
-test -z "$CXX" \
-  && AC_MSG_ERROR([no acceptable c++ found in \$PATH])
-AC_PROG_CXX
-AC_PROG_CXXCPP
-
-  if test "$ac_cv_prog_cc_cross" != "$ac_cv_prog_cxx_cross"; then
-    AC_MSG_ERROR([***]
-     [Inconsistency in compiler configuration:]
-     [Target C compiler and target C++ compiler]
-     [must both either be cross compilers or native compilers])
+  dnl Only accept g++
+  dnl NOTE: This might be too restrictive
+  if test -z "$CXX";
+  then
+    RTEMS_HAS_CPLUSPLUS=no
+    HAS_CPLUSPLUS=no
+    ## Work-around to a bug in automake
+    AM_CONDITIONAL([am__fastdepCXX],[false])
+  else
+    AC_PROG_CXX
+    AC_PROG_CXXCPP
+    if test "$ac_cv_prog_cc_cross" != "$ac_cv_prog_cxx_cross"; then
+      AC_MSG_ERROR([***]
+       [Inconsistency in compiler configuration:]
+       [Target C compiler and target C++ compiler]
+       [must both either be cross compilers or native compilers])
+    fi
   fi
 else
-## Work-around to a bug in automake
-AM_CONDITIONAL([am__fastdepCXX],[false])
+  ## Work-around to a bug in automake
+  AM_CONDITIONAL([am__fastdepCXX],[false])
 fi
 ])
