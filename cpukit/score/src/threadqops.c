@@ -45,26 +45,29 @@ static void _Thread_queue_Do_nothing_extract(
 static Thread_queue_Heads *_Thread_queue_Queue_enqueue(
   Thread_queue_Queue *queue,
   Thread_Control     *the_thread,
-  void             ( *initialize )( Thread_queue_Heads * ),
+  void             ( *initialize )( Thread_queue_Heads *, Thread_Control * ),
   void             ( *enqueue )( Thread_queue_Heads *, Thread_Control * )
 )
 {
-  Thread_queue_Heads *heads = queue->heads;
-  Thread_queue_Heads *spare_heads = the_thread->Wait.spare_heads;
+  Thread_queue_Heads *heads;
+  Thread_queue_Heads *spare_heads;
 
+  heads = queue->heads;
+  spare_heads = the_thread->Wait.spare_heads;
   the_thread->Wait.spare_heads = NULL;
 
   if ( heads == NULL ) {
     _Assert( spare_heads != NULL );
     _Assert( _Chain_Is_empty( &spare_heads->Free_chain ) );
+
     heads = spare_heads;
     queue->heads = heads;
-    ( *initialize )( heads );
+    _Chain_Prepend_unprotected( &heads->Free_chain, &spare_heads->Free_node );
+    ( *initialize )( heads, the_thread );
+  } else {
+    _Chain_Prepend_unprotected( &heads->Free_chain, &spare_heads->Free_node );
+    ( *enqueue )( heads, the_thread );
   }
-
-  _Chain_Prepend_unprotected( &heads->Free_chain, &spare_heads->Free_node );
-
-  ( *enqueue )( heads, the_thread );
 
   return heads;
 }
@@ -92,10 +95,12 @@ static void _Thread_queue_Queue_extract(
 }
 
 static void _Thread_queue_FIFO_do_initialize(
-  Thread_queue_Heads *heads
+  Thread_queue_Heads *heads,
+  Thread_Control     *the_thread
 )
 {
-  _Chain_Initialize_empty( &heads->Heads.Fifo );
+  _Chain_Initialize_node( &the_thread->Wait.Node.Chain );
+  _Chain_Initialize_one( &heads->Heads.Fifo, &the_thread->Wait.Node.Chain );
 }
 
 static void _Thread_queue_FIFO_do_enqueue(
@@ -235,14 +240,23 @@ static void _Thread_queue_Priority_priority_change(
 }
 
 static void _Thread_queue_Priority_do_initialize(
-  Thread_queue_Heads *heads
+  Thread_queue_Heads *heads,
+  Thread_Control     *the_thread
 )
 {
+  Thread_queue_Priority_queue *priority_queue;
+
+  priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
+
 #if defined(RTEMS_SMP)
-  _Chain_Initialize_empty( &heads->Heads.Fifo );
-#else
-  _RBTree_Initialize_empty( &heads->Heads.Priority.Queue );
+  _Chain_Initialize_one( &heads->Heads.Fifo, &priority_queue->Node );
 #endif
+
+  _RBTree_Initialize_node( &the_thread->Wait.Node.RBTree );
+  _RBTree_Initialize_one(
+    &priority_queue->Queue,
+    &the_thread->Wait.Node.RBTree
+  );
 }
 
 static void _Thread_queue_Priority_do_enqueue(
@@ -250,9 +264,10 @@ static void _Thread_queue_Priority_do_enqueue(
   Thread_Control     *the_thread
 )
 {
-  Thread_queue_Priority_queue *priority_queue =
-    _Thread_queue_Priority_queue( heads, the_thread );
-  Priority_Control current_priority;
+  Thread_queue_Priority_queue *priority_queue;
+  Priority_Control             current_priority;
+
+  priority_queue = _Thread_queue_Priority_queue( heads, the_thread );
 
 #if defined(RTEMS_SMP)
   if ( _RBTree_Is_empty( &priority_queue->Queue ) ) {
