@@ -590,6 +590,7 @@ QspidStatus_t QSPI_SendCommand(Qspid_t *pQspid, uint8_t const KeepCfg)
 	QspiInstFrame_t  *const pFrame = pQspid->pQspiFrame;
 	QspiMemCmd_t  pCommand = pQspid->qspiCommand;
 	QspidStatus_t Status = QSPI_UNKNOWN_ERROR;
+	uint32_t timeout = 15000;
 
 	if (pFrame->InstFrame.bm.bAddrEn)
 		QSPI_SetInstAddr(pQspid->pQspiHw, pFrame->Addr);
@@ -600,7 +601,21 @@ QspidStatus_t QSPI_SendCommand(Qspid_t *pQspid, uint8_t const KeepCfg)
 
 	memory_sync();
 
-	while (!(pQspid->pQspiHw->QSPI_SR & QSPI_SR_INSTRE));
+	/*
+	 * FIXME: Timeout has been introduced due to a problem that was detected
+	 * when QSPI_SR_INSTRE was not detected and the function is stuck in an
+	 * endless loop. This is still an open issue.
+	 * peripheral clock: 50Mhz -> 20 ns period time.
+	 * timeout: set to 15000 loop cycles => 300000 ns.
+	 * with loop instructions, the delay increases to 1ms altogether.
+	 */
+	while (!(pQspid->pQspiHw->QSPI_SR & QSPI_SR_INSTRE) && timeout > 0) {
+		--timeout;
+	}
+
+	if (timeout == 0) {
+		Status = QSPI_WRITE_ERROR;
+	}
 
 	// poll CR reg to know status if instruction has end
 	if (!KeepCfg)
