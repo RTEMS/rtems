@@ -371,6 +371,23 @@ typedef void ( *Thread_queue_Extract_operation )(
 );
 
 /**
+ * @brief Thread queue surrender operation.
+ *
+ * This operation must dequeue and return the first thread on the queue.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] heads The thread queue heads.  It must not be NULL.
+ * @param[in] previous_owner The previous owner of the thread queue.
+ *
+ * @return The previous first thread on the queue.
+ */
+typedef Thread_Control *( *Thread_queue_Surrender_operation )(
+  Thread_queue_Queue *queue,
+  Thread_queue_Heads *heads,
+  Thread_Control     *previous_owner
+);
+
+/**
  * @brief Thread queue first operation.
  *
  * @param[in] heads The thread queue heads.
@@ -414,6 +431,11 @@ struct Thread_queue_Operations {
    * Called by object routines to extract a thread from a thread queue.
    */
   Thread_queue_Extract_operation extract;
+
+  /**
+   * @brief Thread queue surrender operation.
+   */
+  Thread_queue_Surrender_operation surrender;
 
   /**
    * @brief Thread queue first operation.

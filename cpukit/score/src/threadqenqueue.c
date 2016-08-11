@@ -596,7 +596,7 @@ void _Thread_queue_Surrender(
     Thread_Control *new_owner;
     bool            unblock;
 
-    new_owner = ( *operations->first )( heads );
+    new_owner = ( *operations->surrender )( queue, heads, previous_owner );
     queue->owner = new_owner;
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -604,10 +604,8 @@ void _Thread_queue_Surrender(
 #endif
     {
       ++new_owner->resource_count;
-      _Thread_queue_Boost_priority( queue, new_owner );
     }
 
-    ( *operations->extract )( queue, new_owner );
     unblock = _Thread_queue_Make_ready_again( new_owner );
 
     _Thread_queue_Unblock_critical(

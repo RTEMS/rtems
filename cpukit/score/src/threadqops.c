@@ -71,12 +71,11 @@ static Thread_queue_Heads *_Thread_queue_Queue_enqueue(
 
 static void _Thread_queue_Queue_extract(
   Thread_queue_Queue *queue,
+  Thread_queue_Heads *heads,
   Thread_Control     *the_thread,
   void             ( *extract )( Thread_queue_Heads *, Thread_Control * )
 )
 {
-  Thread_queue_Heads *heads = queue->heads;
-
   _Assert( heads != NULL );
 
   the_thread->Wait.spare_heads = RTEMS_CONTAINER_OF(
@@ -142,6 +141,7 @@ static void _Thread_queue_FIFO_extract(
 {
   _Thread_queue_Queue_extract(
     queue,
+    queue->heads,
     the_thread,
     _Thread_queue_FIFO_do_extract
   );
@@ -158,6 +158,25 @@ static Thread_Control *_Thread_queue_FIFO_first(
   first = _Chain_First( fifo );
 
   return THREAD_CHAIN_NODE_TO_THREAD( first );
+}
+
+static Thread_Control *_Thread_queue_FIFO_surrender(
+  Thread_queue_Queue *queue,
+  Thread_queue_Heads *heads,
+  Thread_Control     *previous_owner
+)
+{
+  Thread_Control *first;
+
+  first = _Thread_queue_FIFO_first( heads );
+  _Thread_queue_Queue_extract(
+    queue,
+    heads,
+    first,
+    _Thread_queue_FIFO_do_extract
+  );
+
+  return first;
 }
 
 static Thread_queue_Priority_queue *_Thread_queue_Priority_queue(
@@ -296,6 +315,7 @@ static void _Thread_queue_Priority_extract(
 {
   _Thread_queue_Queue_extract(
     queue,
+    queue->heads,
     the_thread,
     _Thread_queue_Priority_do_extract
   );
@@ -320,6 +340,25 @@ static Thread_Control *_Thread_queue_Priority_first(
   first = _RBTree_Minimum( &priority_queue->Queue );
 
   return THREAD_RBTREE_NODE_TO_THREAD( first );
+}
+
+static Thread_Control *_Thread_queue_Priority_surrender(
+  Thread_queue_Queue *queue,
+  Thread_queue_Heads *heads,
+  Thread_Control     *previous_owner
+)
+{
+  Thread_Control *first;
+
+  first = _Thread_queue_Priority_first( heads );
+  _Thread_queue_Queue_extract(
+    queue,
+    heads,
+    first,
+    _Thread_queue_Priority_do_extract
+  );
+
+  return first;
 }
 
 static void _Thread_queue_Priority_inherit_enqueue(
@@ -374,14 +413,12 @@ static void _Thread_queue_Priority_inherit_enqueue(
   }
 }
 
-#if defined(RTEMS_SMP)
-void _Thread_queue_Boost_priority(
-  Thread_queue_Queue *queue,
+static void _Thread_queue_Boost_priority(
+  Thread_queue_Heads *heads,
   Thread_Control     *the_thread
 )
 {
-  Thread_queue_Heads *heads = queue->heads;
-
+#if defined(RTEMS_SMP)
   if ( !_Chain_Has_only_one_node( &heads->Heads.Fifo ) ) {
     const Scheduler_Control *scheduler;
     Priority_Control         boost_priority;
@@ -394,8 +431,31 @@ void _Thread_queue_Boost_priority(
 
     _Scheduler_Thread_set_priority( the_thread, boost_priority, false );
   }
-}
+#else
+  (void) heads;
+  (void) the_thread;
 #endif
+}
+
+static Thread_Control *_Thread_queue_Priority_inherit_surrender(
+  Thread_queue_Queue *queue,
+  Thread_queue_Heads *heads,
+  Thread_Control     *previous_owner
+)
+{
+  Thread_Control *first;
+
+  first = _Thread_queue_Priority_first( heads );
+  _Thread_queue_Boost_priority( heads, first );
+  _Thread_queue_Queue_extract(
+    queue,
+    heads,
+    first,
+    _Thread_queue_Priority_do_extract
+  );
+
+  return first;
+}
 
 const Thread_queue_Operations _Thread_queue_Operations_default = {
   .priority_change = _Thread_queue_Do_nothing_priority_change,
@@ -411,6 +471,7 @@ const Thread_queue_Operations _Thread_queue_Operations_FIFO = {
   .priority_change = _Thread_queue_Do_nothing_priority_change,
   .enqueue = _Thread_queue_FIFO_enqueue,
   .extract = _Thread_queue_FIFO_extract,
+  .surrender = _Thread_queue_FIFO_surrender,
   .first = _Thread_queue_FIFO_first
 };
 
@@ -418,6 +479,7 @@ const Thread_queue_Operations _Thread_queue_Operations_priority = {
   .priority_change = _Thread_queue_Priority_priority_change,
   .enqueue = _Thread_queue_Priority_enqueue,
   .extract = _Thread_queue_Priority_extract,
+  .surrender = _Thread_queue_Priority_surrender,
   .first = _Thread_queue_Priority_first
 };
 
@@ -425,5 +487,6 @@ const Thread_queue_Operations _Thread_queue_Operations_priority_inherit = {
   .priority_change = _Thread_queue_Priority_priority_change,
   .enqueue = _Thread_queue_Priority_inherit_enqueue,
   .extract = _Thread_queue_Priority_extract,
+  .surrender = _Thread_queue_Priority_inherit_surrender,
   .first = _Thread_queue_Priority_first
 };
