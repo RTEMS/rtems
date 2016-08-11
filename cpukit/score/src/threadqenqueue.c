@@ -439,32 +439,31 @@ void _Thread_queue_Enqueue_critical(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-bool _Thread_queue_Do_extract_locked(
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread
 #if defined(RTEMS_MULTIPROCESSING)
-  ,
-  const Thread_queue_Context    *queue_context
-#endif
+static bool _Thread_queue_MP_set_callout(
+  Thread_Control             *the_thread,
+  const Thread_queue_Context *queue_context
 )
+{
+  Thread_Proxy_control    *the_proxy;
+  Thread_queue_MP_callout  mp_callout;
+
+  if ( _Objects_Is_local_id( the_thread->Object.id ) ) {
+    return false;
+  }
+
+  the_proxy = (Thread_Proxy_control *) the_thread;
+  mp_callout = queue_context->mp_callout;
+  _Assert( mp_callout != NULL );
+  the_proxy->thread_queue_callout = queue_context->mp_callout;
+  return true;
+}
+#endif
+
+static bool _Thread_queue_Make_ready_again( Thread_Control *the_thread )
 {
   bool success;
   bool unblock;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
-    Thread_Proxy_control    *the_proxy;
-    Thread_queue_MP_callout  mp_callout;
-
-    the_proxy = (Thread_Proxy_control *) the_thread;
-    mp_callout = queue_context->mp_callout;
-    _Assert( mp_callout != NULL );
-    the_proxy->thread_queue_callout = queue_context->mp_callout;
-  }
-#endif
-
-  ( *operations->extract )( queue, the_thread );
 
   /*
    * We must update the wait flags under protection of the current thread lock,
@@ -484,8 +483,24 @@ bool _Thread_queue_Do_extract_locked(
   }
 
   _Thread_Wait_restore_default( the_thread );
-
   return unblock;
+}
+
+bool _Thread_queue_Do_extract_locked(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread
+#if defined(RTEMS_MULTIPROCESSING)
+  ,
+  const Thread_queue_Context    *queue_context
+#endif
+)
+{
+#if defined(RTEMS_MULTIPROCESSING)
+  _Thread_queue_MP_set_callout( the_thread, queue_context );
+#endif
+  ( *operations->extract )( queue, the_thread );
+  return _Thread_queue_Make_ready_again( the_thread );
 }
 
 void _Thread_queue_Unblock_critical(
@@ -555,7 +570,7 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
       queue,
       the_thread->Wait.operations,
       the_thread,
-      &queue_context.Lock_context
+      &queue_context
     );
     _Thread_queue_Unblock_critical(
       unblock,
@@ -585,19 +600,15 @@ void _Thread_queue_Surrender(
     queue->owner = new_owner;
 
 #if defined(RTEMS_MULTIPROCESSING)
-    if ( _Objects_Is_local_id( new_owner->Object.id ) )
+    if ( !_Thread_queue_MP_set_callout( new_owner, queue_context ) )
 #endif
     {
       ++new_owner->resource_count;
       _Thread_queue_Boost_priority( queue, new_owner );
     }
 
-    unblock = _Thread_queue_Extract_locked(
-      queue,
-      operations,
-      new_owner,
-      queue_context
-    );
+    ( *operations->extract )( queue, new_owner );
+    unblock = _Thread_queue_Make_ready_again( new_owner );
 
     _Thread_queue_Unblock_critical(
       unblock,
