@@ -121,50 +121,6 @@ static void _Mutex_Acquire_slow(
   );
 }
 
-static void _Mutex_Release_slow(
-  Mutex_Control        *mutex,
-  Thread_Control       *executing,
-  Thread_queue_Heads   *heads,
-  bool                  keep_priority,
-  Thread_queue_Context *queue_context
-)
-{
-  if (heads != NULL) {
-    const Thread_queue_Operations *operations;
-    Thread_Control                *first;
-    bool                           unblock;
-
-    operations = MUTEX_TQ_OPERATIONS;
-    first = ( *operations->first )( heads );
-
-    mutex->Queue.Queue.owner = first;
-    ++first->resource_count;
-    _Thread_queue_Boost_priority( &mutex->Queue.Queue, first );
-    unblock = _Thread_queue_Extract_locked(
-      &mutex->Queue.Queue,
-      operations,
-      first,
-      queue_context
-    );
-    _Thread_queue_Unblock_critical(
-      unblock,
-      &mutex->Queue.Queue,
-      first,
-      &queue_context->Lock_context
-    );
-  } else {
-    _Mutex_Queue_release( mutex, queue_context );
-  }
-
-  if ( !keep_priority ) {
-    Per_CPU_Control *cpu_self;
-
-    cpu_self = _Thread_Dispatch_disable();
-    _Thread_Restore_priority( executing );
-    _Thread_Dispatch_enable( cpu_self );
-  }
-}
-
 static void _Mutex_Release_critical(
   Mutex_Control        *mutex,
   Thread_Control       *executing,
@@ -192,10 +148,11 @@ static void _Mutex_Release_critical(
   if ( __predict_true( heads == NULL && keep_priority ) ) {
     _Mutex_Queue_release( mutex, queue_context );
   } else {
-    _Mutex_Release_slow(
-      mutex,
-      executing,
+    _Thread_queue_Surrender(
+      &mutex->Queue.Queue,
+      MUTEX_TQ_OPERATIONS,
       heads,
+      executing,
       keep_priority,
       queue_context
     );

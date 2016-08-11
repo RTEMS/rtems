@@ -568,6 +568,56 @@ void _Thread_queue_Extract( Thread_Control *the_thread )
   }
 }
 
+void _Thread_queue_Surrender(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Heads            *heads,
+  Thread_Control                *previous_owner,
+  bool                           keep_priority,
+  Thread_queue_Context          *queue_context
+)
+{
+  if ( heads != NULL ) {
+    Thread_Control *new_owner;
+    bool            unblock;
+
+    new_owner = ( *operations->first )( heads );
+    queue->owner = new_owner;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    if ( _Objects_Is_local_id( new_owner->Object.id ) )
+#endif
+    {
+      ++new_owner->resource_count;
+      _Thread_queue_Boost_priority( queue, new_owner );
+    }
+
+    unblock = _Thread_queue_Extract_locked(
+      queue,
+      operations,
+      new_owner,
+      queue_context
+    );
+
+    _Thread_queue_Unblock_critical(
+      unblock,
+      queue,
+      new_owner,
+      &queue_context->Lock_context
+    );
+  } else {
+    _Thread_queue_Queue_release( queue, &queue_context->Lock_context );
+  }
+
+  if ( !keep_priority ) {
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Thread_Dispatch_disable();
+    _Thread_Restore_priority( previous_owner );
+    _Thread_Dispatch_enable( cpu_self );
+  }
+}
+
 Thread_Control *_Thread_queue_Do_dequeue(
   Thread_queue_Control          *the_thread_queue,
   const Thread_queue_Operations *operations

@@ -711,6 +711,33 @@ void _Thread_queue_Extract_with_proxy(
   Thread_Control       *the_thread
 );
 
+/**
+ * @brief Surrenders the thread queue previously owned by the thread to the
+ * first enqueued thread if it exists.
+ *
+ * The owner of the thread queue must be set to NULL by the caller.
+ *
+ * This function releases the thread queue lock.  In addition it performs a
+ * thread dispatch if necessary.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] operations The thread queue operations.
+ * @param[in] heads The thread queue heads.
+ * @param[in] previous_owner The previous owner thread surrendering the thread
+ *   queue.
+ * @param[in] keep_priority Indicates if the previous owner thread should keep
+ *   its current priority.
+ * @param[in] queue_context The thread queue context of the lock acquire.
+ */
+void _Thread_queue_Surrender(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_queue_Heads            *heads,
+  Thread_Control                *previous_owner,
+  bool                           keep_priority,
+  Thread_queue_Context          *queue_context
+);
+
 RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
   const Thread_queue_Queue *queue
 )

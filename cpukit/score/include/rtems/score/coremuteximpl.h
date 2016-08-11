@@ -114,14 +114,6 @@ Status_Control _CORE_mutex_Seize_no_protocol_slow(
   Thread_queue_Context          *queue_context
 );
 
-Status_Control _CORE_mutex_Surrender_slow(
-  CORE_mutex_Control   *the_mutex,
-  Thread_Control       *executing,
-  Thread_queue_Heads   *heads,
-  bool                  keep_priority,
-  Thread_queue_Context *queue_context
-);
-
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Set_owner(
   CORE_mutex_Control *the_mutex,
   Thread_Control     *owner
@@ -262,13 +254,15 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender(
     return STATUS_SUCCESSFUL;
   }
 
-  return _CORE_mutex_Surrender_slow(
-    &the_mutex->Mutex,
-    executing,
+  _Thread_queue_Surrender(
+    &the_mutex->Mutex.Wait_queue.Queue,
+    CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
     heads,
+    executing,
     keep_priority,
     queue_context
   );
+  return STATUS_SUCCESSFUL;
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
