@@ -644,6 +644,9 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
      */
     off = obj->ooffset + ehdr->e_shoff + (((uint32_t) section) * ehdr->e_shentsize);
 
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
+      printf ("rtl: section header: %2d: offset=%d\n", section, (int) off);
+
     if (!rtems_rtl_obj_cache_read_byval (sects, fd, off, &shdr, sizeof (shdr)))
       return false;
 
