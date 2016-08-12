@@ -55,6 +55,7 @@ static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
   { "Barrier",                 OBJECTS_POSIX_BARRIERS, 0},
   { "RWLock",                  OBJECTS_POSIX_RWLOCKS, 0},
+  { "Shared Memory",           OBJECTS_POSIX_SHMS, 0},
   { NULL,                      0, 0}
 };
 #endif

@@ -188,6 +188,8 @@ psxreaddir/Makefile
 psxrdwrv/Makefile
 psxrwlock01/Makefile
 psxsem01/Makefile
+psxshm01/Makefile
+psxshm02/Makefile
 psxsignal01/Makefile
 psxsignal02/Makefile
 psxsignal03/Makefile

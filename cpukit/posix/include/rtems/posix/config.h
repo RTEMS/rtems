@@ -111,6 +111,11 @@ typedef struct {
   uint32_t                            maximum_rwlocks;
 
   /**
+   * Maximum configured number of POSIX Shared memory objects.
+   */
+  uint32_t                            maximum_shms;
+
+  /**
    * This field contains the number of POSIX API Initialization
    * threads listed in @a User_initialization_thread_table.
    */

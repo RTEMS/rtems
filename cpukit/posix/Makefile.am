@@ -41,6 +41,8 @@ include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/pthread.h
 include_rtems_posix_HEADERS += include/rtems/posix/pthreadimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
+include_rtems_posix_HEADERS += include/rtems/posix/shm.h
+include_rtems_posix_HEADERS += include/rtems/posix/shmimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
@@ -98,8 +100,11 @@ libposix_a_SOURCES += src/munlockall.c
 libposix_a_SOURCES += src/munlock.c
 libposix_a_SOURCES += src/munmap.c
 libposix_a_SOURCES += src/posix_madvise.c
+libposix_a_SOURCES += src/shm.c
+libposix_a_SOURCES += src/shmheap.c
 libposix_a_SOURCES += src/shmopen.c
 libposix_a_SOURCES += src/shmunlink.c
+libposix_a_SOURCES += src/shmwkspace.c
 
 ## MESSAGE_QUEUE_C_FILES
 libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
