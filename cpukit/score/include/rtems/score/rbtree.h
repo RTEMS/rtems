@@ -451,8 +451,12 @@ void _RBTree_Replace_node(
  *   the key is stored in a local variable.
  * @param less Must return true if the specified key is less than the key of
  *   the node, otherwise false.
+ *
+ * @retval true The inserted node is the new minimum node according to the
+ *   specified less order function.
+ * @retval false Otherwise.
  */
-RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
+RTEMS_INLINE_ROUTINE bool _RBTree_Insert_inline(
   RBTree_Control *the_rbtree,
   RBTree_Node    *the_node,
   const void     *key,
@@ -461,9 +465,11 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
 {
   RBTree_Node **link;
   RBTree_Node  *parent;
+  bool          is_new_minimum;
 
   link = _RBTree_Root_reference( the_rbtree );
   parent = NULL;
+  is_new_minimum = true;
 
   while ( *link != NULL ) {
     parent = *link;
@@ -472,11 +478,13 @@ RTEMS_INLINE_ROUTINE void _RBTree_Insert_inline(
       link = _RBTree_Left_reference( parent );
     } else {
       link = _RBTree_Right_reference( parent );
+      is_new_minimum = false;
     }
   }
 
   _RBTree_Add_child( the_node, parent, link );
   _RBTree_Insert_color( the_rbtree, the_node );
+  return is_new_minimum;
 }
 
 /**

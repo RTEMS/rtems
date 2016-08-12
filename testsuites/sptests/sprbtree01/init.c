@@ -234,6 +234,68 @@ static void test_rbtree_min_max(void)
   rtems_test_assert( rtems_rbtree_is_empty( &tree ) );
 }
 
+static bool test_less(
+  const void        *left,
+  const RBTree_Node *right
+)
+{
+  const int       *the_left;
+  const test_node *the_right;
+
+  the_left = left;
+  the_right = RTEMS_CONTAINER_OF( right, test_node, Node );
+
+  return *the_left < the_right->key;
+}
+
+static void test_rbtree_insert_inline( void )
+{
+  RBTree_Control tree;
+  test_node      a;
+  test_node      b;
+  test_node      c;
+  int            key;
+  bool           is_new_minimum;
+
+  puts( "INIT - Verify _RBTree_Insert_inline" );
+
+  a.key = 1;
+  b.key = 2;
+  c.key = 3;
+
+  _RBTree_Initialize_empty( &tree );
+  _RBTree_Initialize_node( &a.Node );
+  _RBTree_Initialize_node( &b.Node );
+  _RBTree_Initialize_node( &c.Node );
+
+  key = b.key;
+  is_new_minimum = _RBTree_Insert_inline(
+    &tree,
+    &b.Node,
+    &key,
+    test_less
+  );
+  rtems_test_assert( is_new_minimum );
+
+  key = c.key;
+  is_new_minimum = _RBTree_Insert_inline(
+    &tree,
+    &c.Node,
+    &key,
+    test_less
+  );
+  rtems_test_assert( !is_new_minimum );
+
+  key = a.key;
+  is_new_minimum = _RBTree_Insert_inline(
+    &tree,
+    &a.Node,
+    &key,
+    test_less
+  );
+  rtems_test_assert( is_new_minimum );
+}
+
 #define TN( i ) &node_array[ i ].Node
 
 typedef struct {
@@ -2210,6 +2272,7 @@ rtems_task Init( rtems_task_argument ignored )
   }
 
   test_rbtree_min_max();
+  test_rbtree_insert_inline();
   test_rbtree_random_ops();
 
   TEST_END();
