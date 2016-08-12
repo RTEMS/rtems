@@ -19,7 +19,7 @@
 
 void *mmap(
   void   *addr,
-  size_t  lenhth,
+  size_t  length,
   int     prot,
   int     flags,
   int     fildes,
@@ -27,7 +27,7 @@ void *mmap(
 )
 {
   (void) addr;
-  (void) lenhth;
+  (void) length;
   (void) prot;
   (void) flags;
   (void) fildes;
