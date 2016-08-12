@@ -92,7 +92,7 @@ include_rtems_rtl_HEADERS += libdl/dlfcn-shell.h
 include_rtems_rtl_HEADERS += libdl/rtl.h libdl/rtl-allocator.h libdl/rtl-obj-fwd.h
 include_rtems_rtl_HEADERS += libdl/rtl-fwd.h libdl/rtl-obj.h libdl/rtl-obj-cache.h
 include_rtems_rtl_HEADERS += libdl/rtl-obj-comp.h libdl/rtl-unresolved.h
-include_rtems_rtl_HEADERS += libdl/rtl-indirect-ptr.h libdl/rtl-sym.h
+include_rtems_rtl_HEADERS += libdl/rtl-indirect-ptr.h libdl/rtl-sym.h libdl/rtl-trace.h
 include_rtems_rtl_HEADERS += libdl/rap.h libdl/rap-shell.h
 endif
 

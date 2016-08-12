@@ -1,0 +1,28 @@
+# Copyright (c) 2014 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl02
+
+directives:
+
+  dlopen
+  dlinfo
+  dlsym
+  dlclose
+
+concepts:
+
++ Load 2 interdependent ELF object files.
++ Check there are no unreolved externals. There should be unresolved
+  externals after the first lond and none after the second load.
++ Locate the rtems_main symbol in dl-o1.
++ Call the rtems_main sym and have that function call the second object.
+  Call the second download with a callback handler to a symbol in the first
+  object file.
++ Unload the ELF files.

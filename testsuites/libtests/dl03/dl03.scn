@@ -1,0 +1,67 @@
+*** BEGIN OF TEST libdl (RTL) 3 ***
+cache create with large size
+rtl: alloc: new: OBJECT addr=0x0 size=4294967295
+cache create
+rtl: alloc: new: OBJECT addr=0x112448 size=2048
+cache file open
+cache read:  in: offset=0 length=1024
+rtl: cache:  3: fd=-1 offset=0 length=1024 area=[0,1024] cache=[0,0] size=0
+rtl: cache:  3: seek: offset=0 buffer_offset=0 read=2048 cache=[0,2048] dist=0
+cache read: out: offset=0 length=1024
+cache:   buffer: 0000/0000 0001/0001 0002/0002 0003/0003
+cache read:  in: offset=0 length=2048
+rtl: cache:  3: fd=3 offset=0 length=2048 area=[0,2048] cache=[0,2048] size=8192
+cache read: out: offset=0 length=2048
+cache:   buffer: 0000/0000 0001/0001 0002/0002 0003/0003
+cache read:  in: offset=1024 length=1024
+rtl: cache:  3: fd=3 offset=1024 length=1024 area=[1024,2048] cache=[0,2048] size=8192
+cache read: out: offset=1024 length=1024
+cache:   buffer: 0200/0200 0201/0201 0202/0202 0203/0203
+cache read:  in: offset=6144 length=2048
+rtl: cache:  3: fd=3 offset=6144 length=2048 area=[6144,8192] cache=[0,2048] size=8192
+rtl: cache:  3: seek: offset=6144 buffer_offset=0 read=2048 cache=[6144,8192] dist=2048
+cache read: out: offset=0 length=2048
+cache:   buffer: 0c00/0c00 0c01/0c01 0c02/0c02 0c03/0c03
+cache read:  in: offset=7168 length=1024
+rtl: cache:  3: fd=3 offset=7168 length=1024 area=[7168,8192] cache=[6144,8192] size=8192
+cache read: out: offset=1024 length=1024
+cache:   buffer: 0e00/0e00 0e01/0e01 0e02/0e02 0e03/0e03
+cache read:  in: offset=0 length=512
+rtl: cache:  3: fd=3 offset=0 length=512 area=[0,512] cache=[6144,8192] size=8192
+rtl: cache:  3: seek: offset=0 buffer_offset=0 read=2048 cache=[0,2048] dist=8192
+cache read: out: offset=0 length=512
+cache:   buffer: 0000/0000 0001/0001 0002/0002 0003/0003
+cache read:  in: offset=0 length=256
+rtl: cache:  3: fd=3 offset=0 length=256 area=[0,256] cache=[0,2048] size=8192
+cache read: out: offset=0 length=256
+cache:   buffer: 0000/0000 0001/0001 0002/0002 0003/0003
+cache read:  in: offset=0 length=2048
+rtl: cache:  3: fd=3 offset=0 length=2048 area=[0,2048] cache=[0,2048] size=8192
+cache read: out: offset=0 length=2048
+cache:   buffer: 0000/0000 0001/0001 0002/0002 0003/0003
+cache read:  in: offset=8152 length=16
+rtl: cache:  3: fd=3 offset=8152 length=16 area=[8152,8168] cache=[0,2048] size=8192
+rtl: cache:  3: seek: offset=8152 buffer_offset=0 read=40 cache=[8152,8192] dist=40
+cache read: out: offset=0 length=16
+cache:   buffer: 0fec/0fec 0fed/0fed 0fee/0fee 0fef/0fef
+cache read: in: offset=8152 length=40
+rtl: cache:  3: fd=3 offset=8152 length=40 area=[8152,8192] cache=[8152,8192] size=8192
+cache read: out: offset=0 length=40
+cache:   buffer: 0fec/0fec 0fed/0fed 0fee/0fee 0fef/0fef
+cache read:  in: offset=8152 length=80
+rtl: cache:  3: fd=3 offset=8152 length=80 area=[8152,8232] cache=[8152,8192] size=8192
+rtl: cache:  3: truncate length=1082552
+cache read: out: offset=0 length=40
+cache:   buffer: 0fec/0fec 0fed/0fed 0fee/0fee 0fef/0fef
+cache read:  in: offset=6224 length=20
+rtl: cache:  3: fd=3 offset=6224 length=20 area=[6224,6244] cache=[8152,8192] size=8192
+rtl: cache:  3: seek: offset=6224 buffer_offset=0 read=1968 cache=[6224,8192] dist=1968
+cache read: out: offset=0 length=20
+cache:   buffer: 0c28/0c28 0c29/0c29 0c2a/0c2a 0c2b/0c2b
+cache read:  in: offset=8152 length=40
+rtl: cache:  3: fd=3 offset=8152 length=40 area=[8152,8192] cache=[6224,8192] size=8192
+cache read: out: offset=1928 length=40
+cache:   buffer: 0fec/0fec 0fed/0fed 0fee/0fee 0fef/0fef
+rtl: cache:  3: close
+rtl: alloc: del: OBJECT addr=0x112448
+*** END OF TEST libdl (RTL) 3 ***
