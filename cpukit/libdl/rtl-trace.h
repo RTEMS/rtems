@@ -36,18 +36,19 @@ typedef uint32_t rtems_rtl_trace_mask;
 /**
  * List of tracing bits for the various parts of the link editor.
  */
-#define RTEMS_RTL_TRACE_ALL                    (0xffffffffUL)
-#define RTEMS_RTL_TRACE_LOAD                   (1UL << 0)
-#define RTEMS_RTL_TRACE_UNLOAD                 (1UL << 1)
-#define RTEMS_RTL_TRACE_SECTION                (1UL << 2)
-#define RTEMS_RTL_TRACE_SYMBOL                 (1UL << 3)
-#define RTEMS_RTL_TRACE_RELOC                  (1UL << 4)
-#define RTEMS_RTL_TRACE_GLOBAL_SYM             (1UL << 5)
-#define RTEMS_RTL_TRACE_LOAD_SECT              (1UL << 6)
-#define RTEMS_RTL_TRACE_ALLOCATOR              (1UL << 7)
-#define RTEMS_RTL_TRACE_UNRESOLVED             (1UL << 8)
-#define RTEMS_RTL_TRACE_DETAIL                 (1UL << 9)
-#define RTEMS_RTL_TRACE_WARNING                (1UL << 10)
+#define RTEMS_RTL_TRACE_DETAIL                 (1UL << 0)
+#define RTEMS_RTL_TRACE_WARNING                (1UL << 1)
+#define RTEMS_RTL_TRACE_LOAD                   (1UL << 2)
+#define RTEMS_RTL_TRACE_UNLOAD                 (1UL << 3)
+#define RTEMS_RTL_TRACE_SECTION                (1UL << 4)
+#define RTEMS_RTL_TRACE_SYMBOL                 (1UL << 5)
+#define RTEMS_RTL_TRACE_RELOC                  (1UL << 6)
+#define RTEMS_RTL_TRACE_GLOBAL_SYM             (1UL << 7)
+#define RTEMS_RTL_TRACE_LOAD_SECT              (1UL << 8)
+#define RTEMS_RTL_TRACE_ALLOCATOR              (1UL << 9)
+#define RTEMS_RTL_TRACE_UNRESOLVED             (1UL << 10)
+#define RTEMS_RTL_TRACE_CACHE                  (1UL << 11)
+#define RTEMS_RTL_TRACE_ALL                    (0xffffffffUL & ~(RTEMS_RTL_TRACE_CACHE))
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RTL_TRACE is defined to
