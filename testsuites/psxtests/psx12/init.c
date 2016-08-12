@@ -44,16 +44,25 @@ typedef struct {
 
 static test_context test_instance;
 
+static int get_current_prio( pthread_t thread )
+{
+  rtems_status_code sc;
+  rtems_task_priority prio;
+  int max;
+
+  sc = rtems_task_set_priority( thread, RTEMS_CURRENT_PRIORITY, &prio );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  max = sched_get_priority_max( SCHED_FIFO );
+
+  return max + 1 - (int) prio;
+}
+
 static void wait_for_prio( int prio )
 {
-  int                status;
-  int                policy;
-  struct sched_param param;
-
-  do {
-    status = pthread_getschedparam( pthread_self(), &policy, &param );
-    rtems_test_assert( status == 0 );
-  } while ( prio != param.sched_priority );
+  while ( prio != get_current_prio( pthread_self() ) ) {
+    /* Wait */
+  }
 }
 
 static uint64_t timeval_to_us( const struct timeval *tv )

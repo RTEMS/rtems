@@ -1,22 +1,20 @@
-*** POSIX TEST 9 ***
+*** BEGIN OF TEST PSX 9 ***
 Init's ID is 0x0b010001
 Init: pthread_getschedparam - SUCCESSFUL
 Init: Fri May 24 11:05:00 1996 - current priority = 2
 Init: pthread_setschedparam - SUCCESSFUL (sporadic server)
-Init: Fri May 24 11:05:00 1996 - new priority = 254
 Init: Fri May 24 11:05:00 1996 - new priority = 252
-Init: Fri May 24 11:05:00 1996 - new priority = 254
 Init: Fri May 24 11:05:00 1996 - new priority = 252
-Init: Fri May 24 11:05:01 1996 - new priority = 254
+Init: Fri May 24 11:05:00 1996 - new priority = 253
+Init: Fri May 24 11:05:00 1996 - new priority = 252
+Init: Fri May 24 11:05:00 1996 - new priority = 253
 
 Init: pthread_setschedparam - SUCCESSFUL (sporadic server)
 Init: Initializing mutex attributes for priority ceiling
 Init: Creating a mutex
-Init: Fri May 24 11:05:01 1996 - new priority = 254
+Init: Fri May 24 11:05:00 1996 - new priority = 252
 Init: pthread_mutex_lock acquire the lock
-Init: Fri May 24 11:05:01 1996 - new priority = 254
-Init: Fri May 24 11:05:01 1996 - new priority = 254
 Init: unlock mutex
-Init: Fri May 24 11:05:01 1996 - new priority = 254
-Init: Fri May 24 11:05:01 1996 - new priority = 250
-*** END OF POSIX TEST 9 ***
+Init: Fri May 24 11:05:03 1996 - new priority = 253
+Init: Fri May 24 11:05:03 1996 - new priority = 252
+*** END OF TEST PSX 9 **
