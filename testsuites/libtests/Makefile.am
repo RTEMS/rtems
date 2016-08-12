@@ -47,6 +47,9 @@ endif
 
 if DLTESTS
 _SUBDIRS += dl01 dl02 dl03
+if HAS_CXX
+_SUBDIRS += dl04
+endif
 endif
 
 include $(top_srcdir)/../automake/test-subdirs.am

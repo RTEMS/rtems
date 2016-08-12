@@ -1,0 +1,1307 @@
+
+
+*** BEGIN OF TEST libdl (RTL) 4 ***
+rtl: alloc: new: SYMBOL addr=0x10fb58 size=384
+rtl: alloc: new: OBJECT addr=0x110128 size=2048
+rtl: alloc: new: OBJECT addr=0x110950 size=2048
+rtl: alloc: new: OBJECT addr=0x111178 size=2048
+rtl: alloc: new: OBJECT addr=0x1119a0 size=2048
+rtl: alloc: new: OBJECT addr=0x1121c8 size=136
+rtl: alloc: new: OBJECT addr=0x112278 size=13
+rtl: alloc: new: OBJECT addr=0x1122b0 size=2
+rtl: adding global symbols, table size 20896
+rtl: global symbol add: 812
+rtl: alloc: new: SYMBOL addr=0x1122e0 size=16240
+rtl: esyms: BSP_output_char -> 0x101510
+rtl: esyms: Clock_driver_ticks -> 0x102e10
+rtl: esyms: Clock_exit ->   0x1443
+rtl: esyms: Clock_initialize ->   0x144f
+rtl: esyms: Clock_isr ->   0x136f
+rtl: esyms: Configuration ->  0x2f6ec
+rtl: esyms: Configuration_POSIX_API -> 0x102788
+rtl: esyms: Configuration_RTEMS_API -> 0x101454
+rtl: esyms: Console_Configuration_Count -> 0x10150c
+rtl: esyms: Console_Configuration_Ports -> 0x101484
+rtl: esyms: Console_Port_Count -> 0x1027e8
+rtl: esyms: Console_Port_Data -> 0x1027f0
+rtl: esyms: Console_Port_Minor -> 0x1027f4
+rtl: esyms: Console_Port_Tbl -> 0x1027ec
+rtl: esyms: HeapSize ->      0x0
+rtl: esyms: IMFS_LIMITS_AND_OPTIONS ->  0x39a30
+rtl: esyms: IMFS_chown ->   0x30b5
+rtl: esyms: IMFS_create_node ->   0x31c9
+rtl: esyms: IMFS_eval_path ->   0x3c23
+rtl: esyms: IMFS_fchmod ->   0x3c65
+rtl: esyms: IMFS_initialize_node ->   0x3df5
+rtl: esyms: IMFS_initialize_support ->   0x3e87
+rtl: esyms: IMFS_link ->   0x4091
+rtl: esyms: IMFS_memfile_write ->   0x49e5
+rtl: esyms: IMFS_mknod ->   0x505d
+rtl: esyms: IMFS_mknod_control_device ->  0x39c8c
+rtl: esyms: IMFS_mknod_control_dir_default ->  0x39c34
+rtl: esyms: IMFS_mknod_control_enosys ->  0x39d38
+rtl: esyms: IMFS_mknod_control_memfile ->  0x39f38
+rtl: esyms: IMFS_mount ->   0x50ef
+rtl: esyms: IMFS_node_clone ->   0x3f3b
+rtl: esyms: IMFS_node_destroy ->   0x3f63
+rtl: esyms: IMFS_node_destroy_default ->   0x401f
+rtl: esyms: IMFS_node_free ->   0x3fa3
+rtl: esyms: IMFS_node_initialize_default ->   0x3ff1
+rtl: esyms: IMFS_node_initialize_directory ->   0x3395
+rtl: esyms: IMFS_node_remove_default ->   0x4009
+rtl: esyms: IMFS_node_remove_directory ->   0x33d9
+rtl: esyms: IMFS_readlink ->   0x5655
+rtl: esyms: IMFS_rename ->   0x52fd
+rtl: esyms: IMFS_rmnod ->   0x5469
+rtl: esyms: IMFS_stat ->   0x5547
+rtl: esyms: IMFS_stat_file ->   0x55bd
+rtl: esyms: IMFS_symlink ->   0x55fb
+rtl: esyms: IMFS_unmount ->   0x5737
+rtl: esyms: IMFS_utime ->   0x5799
+rtl: esyms: Initialization_tasks -> 0x101408
+rtl: esyms: RTEMS_Malloc_Area -> 0x102d68
+rtl: esyms: RTEMS_Malloc_Heap -> 0x101404
+rtl: esyms: RTEMS_Malloc_Initialize ->   0x6993
+rtl: esyms: RamBase ->      0x0
+rtl: esyms: RamSize -> 0xfefc000
+rtl: esyms: Untar_FromMemory ->  0x2648d
+rtl: esyms: Untar_FromMemory_Print ->  0x262f9
+rtl: esyms: WorkAreaBase -> 0x103610
+rtl: esyms: _API_Mutex_Allocate ->  0x178f7
+rtl: esyms: _API_Mutex_Initialization ->  0x178c9
+rtl: esyms: _API_Mutex_Is_owner ->  0x179b9
+rtl: esyms: _API_Mutex_Lock ->  0x17c53
+rtl: esyms: _API_Mutex_Unlock ->  0x17fb9
+rtl: esyms: _ARMV4_Exception_data_abort_default ->  0x25adc
+rtl: esyms: _ARMV4_Exception_fiq_default ->  0x25b0c
+rtl: esyms: _ARMV4_Exception_interrupt ->  0x259dc
+rtl: esyms: _ARMV4_Exception_irq_default ->  0x25afc
+rtl: esyms: _ARMV4_Exception_pref_abort_default ->  0x25acc
+rtl: esyms: _ARMV4_Exception_reserved_default ->  0x25aec
+rtl: esyms: _ARMV4_Exception_swi_default ->  0x25abc
+rtl: esyms: _ARMV4_Exception_undef_default ->  0x25aac
+rtl: esyms: _ARM_Exception_default ->  0x259c1
+rtl: esyms: _Balloc ->  0x28999
+rtl: esyms: _Bfree ->  0x289e5
+rtl: esyms: _CORE_mutex_Seize_no_protocol_slow ->  0x1840d
+rtl: esyms: _CORE_mutex_Seize_slow ->  0x1837d
+rtl: esyms: _CORE_semaphore_Initialize ->  0x18467
+rtl: esyms: _CPU_Context_Initialize ->  0x25cbb
+rtl: esyms: _CPU_Context_restore ->  0x25dc1
+rtl: esyms: _CPU_Context_restore_arm ->  0x25dc4
+rtl: esyms: _CPU_Context_switch ->  0x25d81
+rtl: esyms: _CPU_Context_switch_arm ->  0x25d84
+rtl: esyms: _CPU_ISR_Get_level ->  0x25d45
+rtl: esyms: _CPU_ISR_Set_level ->  0x25d0f
+rtl: esyms: _CPU_Initialize ->  0x25d71
+rtl: esyms: _CPU_Thread_Idle_body ->  0x25ba1
+rtl: esyms: _Chain_Initialize ->  0x18069
+rtl: esyms: _Debug_Is_owner_of_allocator ->  0x18487
+rtl: esyms: _Event_Seize ->  0x1447d
+rtl: esyms: _Event_Surrender ->  0x149e7
+rtl: esyms: _Freechain_Get ->  0x18703
+rtl: esyms: _Freechain_Initialize ->  0x186af
+rtl: esyms: _Freechain_Put ->  0x1878d
+rtl: esyms: _Heap_Allocate_aligned_with_boundary ->  0x1979d
+rtl: esyms: _Heap_Block_allocate ->  0x1915f
+rtl: esyms: _Heap_Extend ->  0x19cad
+rtl: esyms: _Heap_Free ->  0x1a217
+rtl: esyms: _Heap_Get_first_and_last_block ->  0x18bdd
+rtl: esyms: _Heap_Initialize ->  0x18c61
+rtl: esyms: _Heap_Resize_block ->  0x1a817
+rtl: esyms: _IO_All_drivers_initialized -> 0x1034cc
+rtl: esyms: _IO_Driver_address_table -> 0x101424
+rtl: esyms: _IO_Initialize_all_drivers ->  0x175c9
+rtl: esyms: _IO_Number_of_drivers ->  0x2f654
+rtl: esyms: _ISR_Handler_initialization ->  0x1a955
+rtl: esyms: _ISR_Is_in_progress ->  0x1a96f
+rtl: esyms: _Internal_errors_What_happened -> 0x1034d0
+rtl: esyms: _Linker_set__Sysinit__IO_Initialize_all_drivers ->  0x40660
+rtl: esyms: _Linker_set__Sysinit__POSIX_Keys_Manager_initialization ->  0x4064c
+rtl: esyms: _Linker_set__Sysinit__RTEMS_tasks_Initialize_user_tasks_body ->  0x40664
+rtl: esyms: _Linker_set__Sysinit__RTEMS_tasks_Manager_initialization ->  0x40644
+rtl: esyms: _Linker_set__Sysinit__Semaphore_Manager_initialization ->  0x40648
+rtl: esyms: _Linker_set__Sysinit__Thread_Create_idle ->  0x40650
+rtl: esyms: _Linker_set__Sysinit__User_extensions_Handler_initialization ->  0x4063c
+rtl: esyms: _Linker_set__Sysinit_begin ->  0x40634
+rtl: esyms: _Linker_set__Sysinit_bsp_predriver_hook ->  0x4065c
+rtl: esyms: _Linker_set__Sysinit_bsp_start ->  0x40638
+rtl: esyms: _Linker_set__Sysinit_bsp_work_area_initialize ->  0x40634
+rtl: esyms: _Linker_set__Sysinit_end ->  0x4066c
+rtl: esyms: _Linker_set__Sysinit_rtems_filesystem_initialize ->  0x40658
+rtl: esyms: _Linker_set__Sysinit_rtems_initialize_data_structures ->  0x40640
+rtl: esyms: _Linker_set__Sysinit_rtems_libio_init ->  0x40654
+rtl: esyms: _Linker_set__Sysinit_rtems_libio_post_driver ->  0x40668
+rtl: esyms: _Malloc_Deferred_free ->   0x695b
+rtl: esyms: _Malloc_Process_deferred_frees ->   0x688f
+rtl: esyms: _Malloc_System_state ->   0x6817
+rtl: esyms: _Mutex_recursive_Acquire ->  0x1b42b
+rtl: esyms: _Mutex_recursive_Release ->  0x1b4cd
+rtl: esyms: _Objects_API_maximum_class ->  0x1b813
+rtl: esyms: _Objects_Allocate ->  0x1b7f7
+rtl: esyms: _Objects_Allocate_unprotected ->  0x1b72b
+rtl: esyms: _Objects_Close ->  0x1b905
+rtl: esyms: _Objects_Do_initialize_information ->  0x1c235
+rtl: esyms: _Objects_Extend_information ->  0x1bb0b
+rtl: esyms: _Objects_Free ->  0x1bed1
+rtl: esyms: _Objects_Get ->  0x1c0b7
+rtl: esyms: _Objects_Get_information ->  0x1bf89
+rtl: esyms: _Objects_Get_information_id ->  0x1c04b
+rtl: esyms: _Objects_Get_no_protection ->  0x1c111
+rtl: esyms: _Objects_Information_table ->  0x3ccdc
+rtl: esyms: _Objects_Namespace_remove ->  0x1c31d
+rtl: esyms: _Objects_Shrink_information ->  0x1c415
+rtl: esyms: _Once_Mutex -> 0x1034c4
+rtl: esyms: _POSIX_Keys_Information -> 0x103404
+rtl: esyms: _POSIX_Keys_Keypool -> 0x10343c
+rtl: esyms: _Per_CPU_Information -> 0x1034e0
+rtl: esyms: _Protected_heap_Free ->  0x1c577
+rtl: esyms: _RBTree_Extract ->  0x1cafd
+rtl: esyms: _RBTree_Insert_color ->  0x1cd83
+rtl: esyms: _RBTree_Minimum ->  0x1cddf
+rtl: esyms: _RTEMS_Allocator_Mutex -> 0x1034c8
+rtl: esyms: _RTEMS_tasks_Information -> 0x103480
+rtl: esyms: _RTEMS_tasks_Initialize_user_tasks_body ->  0x16d79
+rtl: esyms: _RTEMS_tasks_User_extensions -> 0x101680
+rtl: esyms: _Scheduler_Handler_initialization ->  0x1cdfb
+rtl: esyms: _Scheduler_Table ->  0x2f600
+rtl: esyms: _Scheduler_default_Cancel_job ->  0x1ce8d
+rtl: esyms: _Scheduler_default_Map_priority ->  0x1ce3f
+rtl: esyms: _Scheduler_default_Node_destroy ->  0x1ce5b
+rtl: esyms: _Scheduler_default_Release_job ->  0x1ce71
+rtl: esyms: _Scheduler_default_Start_idle ->  0x1cf27
+rtl: esyms: _Scheduler_default_Tick ->  0x1cf61
+rtl: esyms: _Scheduler_priority_Block ->  0x1d959
+rtl: esyms: _Scheduler_priority_Initialize ->  0x1d279
+rtl: esyms: _Scheduler_priority_Node_initialize ->  0x1d2af
+rtl: esyms: _Scheduler_priority_Schedule ->  0x1e66b
+rtl: esyms: _Scheduler_priority_Unblock ->  0x1eb27
+rtl: esyms: _Scheduler_priority_Update_priority ->  0x1e21f
+rtl: esyms: _Scheduler_priority_Yield ->  0x1f0f1
+rtl: esyms: _Semaphore_Information -> 0x103448
+rtl: esyms: _System_state_Current -> 0x1034dc
+rtl: esyms: _TLS_Alignment ->      0x1
+rtl: esyms: _TLS_BSS_begin ->  0x40628
+rtl: esyms: _TLS_BSS_end ->  0x40628
+rtl: esyms: _TLS_BSS_size ->      0x0
+rtl: esyms: _TLS_Data_begin ->  0x40628
+rtl: esyms: _TLS_Data_size ->      0x0
+rtl: esyms: _TLS_Size ->      0x0
+rtl: esyms: _Terminate ->  0x1a8ff
+rtl: esyms: _Thread_Apply_priority ->  0x1f5e3
+rtl: esyms: _Thread_Cancel ->  0x235c3
+rtl: esyms: _Thread_Change_life ->  0x23873
+rtl: esyms: _Thread_Change_priority ->  0x1f665
+rtl: esyms: _Thread_Clear_state ->  0x1fa47
+rtl: esyms: _Thread_Clear_state_locked ->  0x1f9b3
+rtl: esyms: _Thread_Close ->  0x236bd
+rtl: esyms: _Thread_Control_add_on_count ->  0x2f6e8
+rtl: esyms: _Thread_Control_add_ons ->  0x2f6c8
+rtl: esyms: _Thread_Control_size ->  0x2f6c4
+rtl: esyms: _Thread_Create_idle ->  0x1fcdd
+rtl: esyms: _Thread_Dispatch ->  0x20259
+rtl: esyms: _Thread_Do_dispatch ->  0x2015d
+rtl: esyms: _Thread_Entry_adaptor_idle ->  0x2029f
+rtl: esyms: _Thread_Entry_adaptor_numeric ->  0x202bd
+rtl: esyms: _Thread_Exit ->  0x23715
+rtl: esyms: _Thread_Get ->  0x203ad
+rtl: esyms: _Thread_Global_construction ->  0x20425
+rtl: esyms: _Thread_Handler ->  0x204d1
+rtl: esyms: _Thread_Handler_initialization ->  0x1f1b1
+rtl: esyms: _Thread_Initialize ->  0x20955
+rtl: esyms: _Thread_Initialize_information ->  0x1f157
+rtl: esyms: _Thread_Internal_information -> 0x103520
+rtl: esyms: _Thread_Join ->  0x2351b
+rtl: esyms: _Thread_Kill_zombies ->  0x23129
+rtl: esyms: _Thread_Load_environment ->  0x20bed
+rtl: esyms: _Thread_Raise_priority ->  0x1f6c3
+rtl: esyms: _Thread_Restart_self ->  0x237b7
+rtl: esyms: _Thread_Restore_priority ->  0x1f735
+rtl: esyms: _Thread_Set_life_protection ->  0x238c9
+rtl: esyms: _Thread_Set_priority ->  0x239b1
+rtl: esyms: _Thread_Set_state ->  0x23cb7
+rtl: esyms: _Thread_Set_state_locked ->  0x23c2d
+rtl: esyms: _Thread_Stack_Allocate ->  0x23d2b
+rtl: esyms: _Thread_Stack_Free ->  0x23d71
+rtl: esyms: _Thread_Start ->  0x2400b
+rtl: esyms: _Thread_Start_multitasking ->  0x240c1
+rtl: esyms: _Thread_Timeout ->  0x242f1
+rtl: esyms: _Thread_Update_priority ->  0x1f631
+rtl: esyms: _Thread_Yield ->  0x245e9
+rtl: esyms: _Thread_queue_Deadlock_fatal ->  0x212dd
+rtl: esyms: _Thread_queue_Deadlock_status ->  0x212c1
+rtl: esyms: _Thread_queue_Do_extract_locked ->  0x2149f
+rtl: esyms: _Thread_queue_Enqueue_critical ->  0x212f7
+rtl: esyms: _Thread_queue_Extract ->  0x2153b
+rtl: esyms: _Thread_queue_Extract_critical ->  0x2150b
+rtl: esyms: _Thread_queue_Extract_with_proxy ->  0x21627
+rtl: esyms: _Thread_queue_Flush_critical ->  0x219d1
+rtl: esyms: _Thread_queue_Flush_status_object_was_deleted ->  0x219af
+rtl: esyms: _Thread_queue_Initialize ->  0x20c7d
+rtl: esyms: _Thread_queue_Operations_FIFO ->  0x3edd4
+rtl: esyms: _Thread_queue_Operations_default ->  0x3edc0
+rtl: esyms: _Thread_queue_Operations_priority ->  0x3ede8
+rtl: esyms: _Thread_queue_Operations_priority_inherit ->  0x3edfc
+rtl: esyms: _Thread_queue_Surrender ->  0x215ab
+rtl: esyms: _Thread_queue_Unblock_critical ->  0x214c5
+rtl: esyms: _Timecounter -> 0x101744
+rtl: esyms: _Timecounter_Bintime ->  0x1ac95
+rtl: esyms: _Timecounter_Binuptime ->  0x1ac21
+rtl: esyms: _Timecounter_Boottimebin -> 0x101758
+rtl: esyms: _Timecounter_Getnanotime ->  0x1acdf
+rtl: esyms: _Timecounter_Install ->  0x1ad25
+rtl: esyms: _Timecounter_Microtime ->  0x1acb9
+rtl: esyms: _Timecounter_Tick ->  0x1b07d
+rtl: esyms: _Timecounter_Tick_simple ->  0x1b0ab
+rtl: esyms: _Timecounter_Time_second -> 0x10174c
+rtl: esyms: _Timecounter_Time_uptime -> 0x101750
+rtl: esyms: _User_extensions_Add_set ->  0x248d7
+rtl: esyms: _User_extensions_Fatal_visitor ->  0x24d1b
+rtl: esyms: _User_extensions_Handler_initialization ->  0x246fb
+rtl: esyms: _User_extensions_Iterate ->  0x24d75
+rtl: esyms: _User_extensions_List -> 0x101780
+rtl: esyms: _User_extensions_Switches_list -> 0x101768
+rtl: esyms: _User_extensions_Thread_begin_visitor ->  0x24ccf
+rtl: esyms: _User_extensions_Thread_create_visitor ->  0x24c09
+rtl: esyms: _User_extensions_Thread_delete_visitor ->  0x24c57
+rtl: esyms: _User_extensions_Thread_exitted_visitor ->  0x24cf5
+rtl: esyms: _User_extensions_Thread_restart_visitor ->  0x24ca7
+rtl: esyms: _User_extensions_Thread_start_visitor ->  0x24c7f
+rtl: esyms: _User_extensions_Thread_terminate_visitor ->  0x24d4f
+rtl: esyms: _Watchdog_Do_tickle ->  0x25439
+rtl: esyms: _Watchdog_Insert ->  0x24fab
+rtl: esyms: _Watchdog_Remove ->  0x2515d
+rtl: esyms: _Watchdog_Tick ->  0x254b9
+rtl: esyms: _Watchdog_Ticks_since_boot -> 0x103564
+rtl: esyms: _Workspace_Allocate ->  0x2592b
+rtl: esyms: _Workspace_Allocate_aligned ->  0x2594d
+rtl: esyms: _Workspace_Allocate_or_fatal_error ->  0x2598f
+rtl: esyms: _Workspace_Area -> 0x103568
+rtl: esyms: _Workspace_Free ->  0x25971
+rtl: esyms: _Workspace_Handler_initialization ->  0x25781
+rtl: esyms: __TMC_END__ ->      0x0
+rtl: esyms: __aeabi_idiv ->    0xbf1
+rtl: esyms: __aeabi_idivmod ->    0xe85
+rtl: esyms: __aeabi_ldivmod ->    0xea5
+rtl: esyms: __aeabi_uidiv ->    0x979
+rtl: esyms: __aeabi_uidivmod ->    0xbd5
+rtl: esyms: __aeabi_uldivmod ->    0xf45
+rtl: esyms: __any_on ->  0x29231
+rtl: esyms: __ascii_wctomb ->  0x2f3f1
+rtl: esyms: __assert ->  0x266ed
+rtl: esyms: __assert_func ->   0x5861
+rtl: esyms: __atexit_lock -> 0x102c4c
+rtl: esyms: __b2d ->  0x28fe9
+rtl: esyms: __call_exitprocs ->  0x265cd
+rtl: esyms: __copybits ->  0x291e9
+rtl: esyms: __ctype_ptr__ -> 0x10179c
+rtl: esyms: __d2b ->  0x290ad
+rtl: esyms: __divsi3 ->    0xbf1
+rtl: esyms: __errno ->  0x2752d
+rtl: esyms: __exidx_end ->  0x40624
+rtl: esyms: __exidx_start ->  0x4061c
+rtl: esyms: __fp_lock_all ->  0x27a69
+rtl: esyms: __fp_unlock_all ->  0x27a89
+rtl: esyms: __fputwc ->  0x27b25
+rtl: esyms: __getreent ->    0x893
+rtl: esyms: __hi0bits ->  0x28b1d
+rtl: esyms: __i2b ->  0x28bb9
+rtl: esyms: __libc_fini_array ->  0x27aa9
+rtl: esyms: __libc_init_array ->  0x28009
+rtl: esyms: __lo0bits ->  0x28b5d
+rtl: esyms: __locale_charset ->  0x280b9
+rtl: esyms: __locale_cjk_lang ->  0x280d9
+rtl: esyms: __locale_mb_cur_max ->  0x280c5
+rtl: esyms: __locale_msgcharset ->  0x280d1
+rtl: esyms: __lshift ->  0x28da1
+rtl: esyms: __mb_cur_max -> 0x101aa0
+rtl: esyms: __mcmp ->  0x28e45
+rtl: esyms: __mdiff ->  0x28e7d
+rtl: esyms: __mprec_bigtens ->  0x3fe30
+rtl: esyms: __mprec_tens ->  0x3fd40
+rtl: esyms: __mprec_tinytens ->  0x3fe08
+rtl: esyms: __multadd ->  0x289f9
+rtl: esyms: __multiply ->  0x28bcd
+rtl: esyms: __pow5mult ->  0x28cfd
+rtl: esyms: __ratio ->  0x29169
+rtl: esyms: __register_exitproc ->  0x264fd
+rtl: esyms: __s2b ->  0x28a81
+rtl: esyms: __sclose ->  0x29545
+rtl: esyms: __seofread ->  0x294cd
+rtl: esyms: __sflush_r ->  0x2762d
+rtl: esyms: __sfmoreglue ->  0x278c5
+rtl: esyms: __sfp ->  0x27979
+rtl: esyms: __sfp_lock_acquire ->  0x27a39
+rtl: esyms: __sfp_lock_release ->  0x27a45
+rtl: esyms: __sfvwrite_r ->  0x27c55
+rtl: esyms: __sinit ->  0x27909
+rtl: esyms: __sinit_lock_acquire ->  0x27a51
+rtl: esyms: __sinit_lock_release ->  0x27a5d
+rtl: esyms: __smakebuf_r ->  0x2817d
+rtl: esyms: __sprint_r ->  0x2c949
+rtl: esyms: __sread ->  0x294a1
+rtl: esyms: __sseek ->  0x29515
+rtl: esyms: __ssprint_r ->  0x2a241
+rtl: esyms: __start_set_sysctl_set ->  0x40634
+rtl: esyms: __stop_set_sysctl_set ->  0x40634
+rtl: esyms: __swbuf ->  0x2f325
+rtl: esyms: __swbuf_r ->  0x2f279
+rtl: esyms: __swhatbuf_r ->  0x2810d
+rtl: esyms: __swrite ->  0x294d1
+rtl: esyms: __swsetup_r ->  0x2f439
+rtl: esyms: __udivmoddi4 ->    0xf79
+rtl: esyms: __udivsi3 ->    0x979
+rtl: esyms: __ulp ->  0x28f95
+rtl: esyms: __wctomb -> 0x101afc
+rtl: esyms: _calloc_r ->   0x5b01
+rtl: esyms: _cleanup ->  0x278f1
+rtl: esyms: _cleanup_r ->  0x2781d
+rtl: esyms: _close_r ->   0x5f37
+rtl: esyms: _ctype_ ->  0x3fc04
+rtl: esyms: _dtoa_r ->  0x26849
+rtl: esyms: _exit ->   0x72d1
+rtl: esyms: _fclose_r ->  0x27555
+rtl: esyms: _fflush_r ->  0x27799
+rtl: esyms: _fini ->  0x2f505
+rtl: esyms: _fiprintf_r ->  0x27add
+rtl: esyms: _fputwc_r ->  0x27bc5
+rtl: esyms: _free_r ->   0x5b1f
+rtl: esyms: _fstat_r ->   0x60d9
+rtl: esyms: _fwalk ->  0x27f71
+rtl: esyms: _fwalk_reent ->  0x27fb9
+rtl: esyms: _gettimeofday_r ->   0x5919
+rtl: esyms: _global_atexit -> 0x102c48
+rtl: esyms: _global_impure_ptr ->  0x3fd1c
+rtl: esyms: _impure_ptr -> 0x1017a0
+rtl: esyms: _init ->  0x2f4f9
+rtl: esyms: _isatty ->  0x266b1
+rtl: esyms: _isatty_r ->   0x61e1
+rtl: esyms: _localeconv_r ->  0x280dd
+rtl: esyms: _lseek_r ->   0x6483
+rtl: esyms: _malloc_r ->   0x5b37
+rtl: esyms: _mprec_log10 ->  0x291c1
+rtl: esyms: _printf_r ->  0x29291
+rtl: esyms: _puts_r ->  0x292d9
+rtl: esyms: _read_r ->   0x79c7
+rtl: esyms: _realloc_r ->   0x5b51
+rtl: esyms: _reclaim_reent ->  0x293b1
+rtl: esyms: _rtems_octal2ulong ->  0x25de7
+rtl: esyms: _rtems_tar_header_checksum ->  0x264ab
+rtl: esyms: _rtld_debug -> 0x1033f8
+rtl: esyms: _rtld_debug_state ->   0xc763
+rtl: esyms: _rtld_linkmap_add ->   0xc771
+rtl: esyms: _rtld_linkmap_delete ->   0xc849
+rtl: esyms: _setlocale_r ->  0x28065
+rtl: esyms: _start ->     0x40
+rtl: esyms: _strdup_r ->  0x299f5
+rtl: esyms: _strerror_r ->  0x29a1d
+rtl: esyms: _strtoul_r ->  0x2a0cd
+rtl: esyms: _svfiprintf_r ->  0x2a339
+rtl: esyms: _svfprintf_r ->  0x2aea1
+rtl: esyms: _user_strerror ->  0x2c8c5
+rtl: esyms: _vfiprintf_r ->  0x2c95d
+rtl: esyms: _vfprintf_r ->  0x2d749
+rtl: esyms: _vsnprintf_r ->  0x2f1ed
+rtl: esyms: _wcrtomb_r ->  0x2f33d
+rtl: esyms: _wctomb_r ->  0x2f409
+rtl: esyms: _write_r ->   0xbcdf
+rtl: esyms: arm_cp15_set_exception_handler ->   0x15a9
+rtl: esyms: arm_cpu_mode -> 0x101798
+rtl: esyms: atexit ->  0x266f9
+rtl: esyms: boot_card ->   0x18e9
+rtl: esyms: bsp_boot_cmdline -> 0x102e14
+rtl: esyms: bsp_console_select ->   0x21b7
+rtl: esyms: bsp_fatal_extension ->   0x190f
+rtl: esyms: bsp_interrupt_dispatch ->   0x177b
+rtl: esyms: bsp_interrupt_facility_initialize ->   0x1837
+rtl: esyms: bsp_interrupt_handler_default ->   0x21ed
+rtl: esyms: bsp_interrupt_handler_table -> 0x102e18
+rtl: esyms: bsp_interrupt_initialize ->   0x24a3
+rtl: esyms: bsp_interrupt_lock ->   0x2467
+rtl: esyms: bsp_interrupt_unlock ->   0x2485
+rtl: esyms: bsp_interrupt_vector_enable ->   0x17c7
+rtl: esyms: bsp_predriver_hook ->   0x1999
+rtl: esyms: bsp_processor_count ->      0x1
+rtl: esyms: bsp_reset ->   0x19a7
+rtl: esyms: bsp_section_bss_begin -> 0x101b00
+rtl: esyms: bsp_section_bss_end -> 0x103610
+rtl: esyms: bsp_section_bss_size ->   0x1b10
+rtl: esyms: bsp_section_data_begin -> 0x101400
+rtl: esyms: bsp_section_data_end -> 0x101b00
+rtl: esyms: bsp_section_data_load_begin -> 0x101400
+rtl: esyms: bsp_section_data_load_end -> 0x101b00
+rtl: esyms: bsp_section_data_size ->    0x700
+rtl: esyms: bsp_section_fast_data_begin -> 0x101400
+rtl: esyms: bsp_section_fast_data_end -> 0x101400
+rtl: esyms: bsp_section_fast_data_load_begin -> 0x101400
+rtl: esyms: bsp_section_fast_data_load_end -> 0x101400
+rtl: esyms: bsp_section_fast_data_size ->      0x0
+rtl: esyms: bsp_section_fast_text_begin -> 0x101400
+rtl: esyms: bsp_section_fast_text_end -> 0x101400
+rtl: esyms: bsp_section_fast_text_load_begin -> 0x101400
+rtl: esyms: bsp_section_fast_text_load_end -> 0x101400
+rtl: esyms: bsp_section_fast_text_size ->      0x0
+rtl: esyms: bsp_section_nocache_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocache_end -> 0xfefc000
+rtl: esyms: bsp_section_nocache_load_end -> 0xfefc000
+rtl: esyms: bsp_section_nocacheheap_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocacheheap_size -> 0x100000
+rtl: esyms: bsp_section_nocachenoload_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocachenoload_end -> 0xfffc000
+rtl: esyms: bsp_section_nocachenoload_size -> 0x100000
+rtl: esyms: bsp_section_robarrier_align ->      0x1
+rtl: esyms: bsp_section_rodata_begin ->  0x2f510
+rtl: esyms: bsp_section_rodata_end ->  0x4066c
+rtl: esyms: bsp_section_rodata_load_begin ->  0x2f510
+rtl: esyms: bsp_section_rodata_load_end ->  0x4066c
+rtl: esyms: bsp_section_rodata_size ->  0x1115c
+rtl: esyms: bsp_section_rwbarrier_align -> 0x100000
+rtl: esyms: bsp_section_stack_begin -> 0xfefc000
+rtl: esyms: bsp_section_stack_end -> 0xfefc000
+rtl: esyms: bsp_section_stack_size ->      0x0
+rtl: esyms: bsp_section_start_begin ->      0x0
+rtl: esyms: bsp_section_start_end ->    0x6ec
+rtl: esyms: bsp_section_start_size ->    0x6ec
+rtl: esyms: bsp_section_text_begin ->    0x700
+rtl: esyms: bsp_section_text_end ->  0x2f510
+rtl: esyms: bsp_section_text_load_begin ->    0x700
+rtl: esyms: bsp_section_text_load_end ->  0x2f510
+rtl: esyms: bsp_section_text_size ->  0x2ee10
+rtl: esyms: bsp_section_vector_begin -> 0x100000
+rtl: esyms: bsp_section_vector_end -> 0x101400
+rtl: esyms: bsp_section_vector_size ->   0x1400
+rtl: esyms: bsp_section_work_begin -> 0x103610
+rtl: esyms: bsp_section_work_end -> 0xfefc000
+rtl: esyms: bsp_section_work_size -> 0xfdf89f0
+rtl: esyms: bsp_section_xbarrier_align ->      0x1
+rtl: esyms: bsp_stack_abt_begin -> 0x101000
+rtl: esyms: bsp_stack_abt_end -> 0x101400
+rtl: esyms: bsp_stack_abt_size ->    0x400
+rtl: esyms: bsp_stack_align ->      0x8
+rtl: esyms: bsp_stack_all_size ->   0x1400
+rtl: esyms: bsp_stack_fiq_begin -> 0x101000
+rtl: esyms: bsp_stack_fiq_end -> 0x101000
+rtl: esyms: bsp_stack_fiq_size ->      0x0
+rtl: esyms: bsp_stack_hyp_begin -> 0x101000
+rtl: esyms: bsp_stack_hyp_end -> 0x101000
+rtl: esyms: bsp_stack_hyp_size ->      0x0
+rtl: esyms: bsp_stack_irq_begin -> 0x100000
+rtl: esyms: bsp_stack_irq_end -> 0x101000
+rtl: esyms: bsp_stack_irq_size ->   0x1000
+rtl: esyms: bsp_stack_main_begin -> 0x101400
+rtl: esyms: bsp_stack_main_end -> 0x101400
+rtl: esyms: bsp_stack_main_size ->      0x0
+rtl: esyms: bsp_stack_secondary_processors_begin -> 0x101400
+rtl: esyms: bsp_stack_secondary_processors_end -> 0x101400
+rtl: esyms: bsp_stack_svc_begin -> 0x101000
+rtl: esyms: bsp_stack_svc_end -> 0x101000
+rtl: esyms: bsp_stack_svc_size ->      0x0
+rtl: esyms: bsp_stack_und_begin -> 0x101000
+rtl: esyms: bsp_stack_und_end -> 0x101000
+rtl: esyms: bsp_stack_und_size ->      0x0
+rtl: esyms: bsp_start ->   0x19e3
+rtl: esyms: bsp_start_hook_0 ->    0x40d
+rtl: esyms: bsp_start_hook_1 ->    0x419
+rtl: esyms: bsp_start_memcpy ->    0x129
+rtl: esyms: bsp_start_memcpy_arm ->    0x12c
+rtl: esyms: bsp_start_vector_table_begin ->      0x0
+rtl: esyms: bsp_start_vector_table_end ->     0x40
+rtl: esyms: bsp_start_vector_table_size ->     0x40
+rtl: esyms: bsp_translation_table_base -> 0xfffc000
+rtl: esyms: bsp_translation_table_end -> 0x10000000
+rtl: esyms: bsp_vector_table_begin ->      0x0
+rtl: esyms: bsp_vector_table_end ->     0x40
+rtl: esyms: bsp_vector_table_in_start_section ->      0x1
+rtl: esyms: bsp_vector_table_size ->     0x40
+rtl: esyms: bsp_work_area_initialize ->   0x195f
+rtl: esyms: calloc ->   0x582b
+rtl: esyms: cleanup_glue ->  0x29395
+rtl: esyms: close ->   0x5ea1
+rtl: esyms: console_close ->   0x2013
+rtl: esyms: console_control ->   0x217f
+rtl: esyms: console_initialize ->   0x2095
+rtl: esyms: console_initialize_data ->   0x1de3
+rtl: esyms: console_open ->   0x1ebf
+rtl: esyms: console_read ->   0x219b
+rtl: esyms: console_write ->   0x21d1
+rtl: esyms: device_close ->   0x2fb3
+rtl: esyms: device_ftruncate ->   0x3079
+rtl: esyms: device_ioctl ->   0x3045
+rtl: esyms: device_open ->   0x2f7b
+rtl: esyms: device_read ->   0x2fdd
+rtl: esyms: device_write ->   0x3011
+rtl: esyms: dl_load_test ->    0x8a5
+rtl: esyms: dl_tar ->  0x2f7d8
+rtl: esyms: dl_tar_size ->  0x347d8
+rtl: esyms: dlclose ->   0xbd63
+rtl: esyms: dlerror ->   0xbdd7
+rtl: esyms: dlopen ->   0xbd01
+rtl: esyms: exit ->  0x27535
+rtl: esyms: fastlz_decompress ->   0xc29d
+rtl: esyms: fclose ->  0x27619
+rtl: esyms: fflush ->  0x277f1
+rtl: esyms: fiprintf ->  0x27afd
+rtl: esyms: fputwc ->  0x27c31
+rtl: esyms: free ->   0x5f51
+rtl: esyms: frexp ->  0x29421
+rtl: esyms: fstat ->   0x602f
+rtl: esyms: ftruncate ->   0x60f7
+rtl: esyms: getegid ->   0x61c1
+rtl: esyms: geteuid ->   0x61d1
+rtl: esyms: gettimeofday ->   0x58e9
+rtl: esyms: imfs_memfile_bytes_per_block -> 0x102808
+rtl: esyms: imfs_rq_memfile_bytes_per_block -> 0x101400
+rtl: esyms: isatty ->  0x28061
+rtl: esyms: libchip_serial_default_probe ->   0x2a5d
+rtl: esyms: localeconv ->  0x280fd
+rtl: esyms: lseek ->   0x63ed
+rtl: esyms: malloc ->   0x64ad
+rtl: esyms: memchr ->  0x28211
+rtl: esyms: memcmp ->  0x282b1
+rtl: esyms: memcpy ->  0x28340
+rtl: esyms: memfile_blocks_allocated -> 0x10280c
+rtl: esyms: memmove ->  0x28821
+rtl: esyms: memset ->  0x288f5
+rtl: esyms: mkdir ->   0x6a29
+rtl: esyms: mknod ->   0x6b13
+rtl: esyms: mount ->   0x71ef
+rtl: esyms: newlib_create_hook ->   0x72ed
+rtl: esyms: newlib_terminate_hook ->   0x73c9
+rtl: esyms: open ->   0x7707
+rtl: esyms: printf ->  0x292b1
+rtl: esyms: printk ->   0x7859
+rtl: esyms: pthread_getspecific ->  0x13e41
+rtl: esyms: pthread_key_create ->  0x13bef
+rtl: esyms: puts ->  0x29381
+rtl: esyms: read ->   0x7901
+rtl: esyms: realloc ->   0x7a5d
+rtl: esyms: rmdir ->   0x7b6d
+rtl: esyms: rtems_assoc_local_by_remote ->   0x5b6f
+rtl: esyms: rtems_assoc_local_by_remote_bitfield ->   0x5b99
+rtl: esyms: rtems_assoc_ptr_by_local ->   0x5bdd
+rtl: esyms: rtems_assoc_ptr_by_remote ->   0x5c3d
+rtl: esyms: rtems_assoc_remote_by_local ->   0x5c9d
+rtl: esyms: rtems_cache_coherent_add_area ->   0x5e03
+rtl: esyms: rtems_cache_flush_multiple_data_lines ->   0x1c7d
+rtl: esyms: rtems_cache_get_instruction_line_size ->   0x1cb1
+rtl: esyms: rtems_cache_instruction_sync_after_code_change ->   0x1cc1
+rtl: esyms: rtems_cache_invalidate_multiple_instruction_lines ->   0x1c97
+rtl: esyms: rtems_chain_append ->  0x173dd
+rtl: esyms: rtems_chain_extract ->  0x173b3
+rtl: esyms: rtems_clock_get_ticks_per_second ->  0x13e8d
+rtl: esyms: rtems_counter_initialize_converter ->  0x17411
+rtl: esyms: rtems_current_user_env_get ->   0x7881
+rtl: esyms: rtems_current_user_env_key -> 0x1033e8
+rtl: esyms: rtems_deviceio_close ->   0x7de7
+rtl: esyms: rtems_deviceio_control ->   0x7f17
+rtl: esyms: rtems_deviceio_open ->   0x7da7
+rtl: esyms: rtems_deviceio_read ->   0x7e23
+rtl: esyms: rtems_deviceio_write ->   0x7e9d
+rtl: esyms: rtems_event_receive ->  0x13f8d
+rtl: esyms: rtems_event_send ->  0x14599
+rtl: esyms: rtems_event_system_send ->  0x16789
+rtl: esyms: rtems_fatal ->  0x175ad
+rtl: esyms: rtems_fatal_error_occurred ->  0x17593
+rtl: esyms: rtems_filesystem_check_access ->   0x7ce7
+rtl: esyms: rtems_filesystem_default_are_nodes_equal ->   0x2a73
+rtl: esyms: rtems_filesystem_default_close ->   0x2a9b
+rtl: esyms: rtems_filesystem_default_eval_path ->   0x2ab1
+rtl: esyms: rtems_filesystem_default_fcntl ->   0x2ad1
+rtl: esyms: rtems_filesystem_default_freenode ->   0x2ae9
+rtl: esyms: rtems_filesystem_default_fstat ->   0x2afd
+rtl: esyms: rtems_filesystem_default_fsunmount ->   0x2b1d
+rtl: esyms: rtems_filesystem_default_fsync_or_fdatasync ->   0x2b31
+rtl: esyms: rtems_filesystem_default_fsync_or_fdatasync_success ->   0x2b4f
+rtl: esyms: rtems_filesystem_default_ftruncate ->   0x2b65
+rtl: esyms: rtems_filesystem_default_ftruncate_directory ->   0x2b87
+rtl: esyms: rtems_filesystem_default_ioctl ->   0x2ba9
+rtl: esyms: rtems_filesystem_default_kqfilter ->   0x2bcb
+rtl: esyms: rtems_filesystem_default_lock ->   0x2c17
+rtl: esyms: rtems_filesystem_default_lseek ->   0x2c3f
+rtl: esyms: rtems_filesystem_default_lseek_directory ->   0x2c67
+rtl: esyms: rtems_filesystem_default_lseek_file ->   0x2cb5
+rtl: esyms: rtems_filesystem_default_open ->   0x2dd7
+rtl: esyms: rtems_filesystem_default_pathconf ->  0x3a588
+rtl: esyms: rtems_filesystem_default_poll ->   0x2df3
+rtl: esyms: rtems_filesystem_default_read ->   0x2e0b
+rtl: esyms: rtems_filesystem_default_readv ->   0x2e2d
+rtl: esyms: rtems_filesystem_default_statvfs ->   0x2ea7
+rtl: esyms: rtems_filesystem_default_unlock ->   0x2c2b
+rtl: esyms: rtems_filesystem_default_write ->   0x2ec7
+rtl: esyms: rtems_filesystem_default_writev ->   0x2ee9
+rtl: esyms: rtems_filesystem_do_unmount ->   0x909f
+rtl: esyms: rtems_filesystem_eval_path_check_access ->   0x7d6b
+rtl: esyms: rtems_filesystem_eval_path_cleanup ->   0x856b
+rtl: esyms: rtems_filesystem_eval_path_cleanup_with_parent ->   0x85a3
+rtl: esyms: rtems_filesystem_eval_path_continue ->   0x8259
+rtl: esyms: rtems_filesystem_eval_path_eat_delimiter ->   0x912f
+rtl: esyms: rtems_filesystem_eval_path_error ->   0x84dd
+rtl: esyms: rtems_filesystem_eval_path_generic ->   0x87a9
+rtl: esyms: rtems_filesystem_eval_path_next_token ->   0x91ef
+rtl: esyms: rtems_filesystem_eval_path_recursive ->   0x843d
+rtl: esyms: rtems_filesystem_eval_path_restart ->   0x85c1
+rtl: esyms: rtems_filesystem_eval_path_start ->   0x8351
+rtl: esyms: rtems_filesystem_eval_path_start_with_parent ->   0x838d
+rtl: esyms: rtems_filesystem_eval_path_start_with_root_and_current ->   0x82ef
+rtl: esyms: rtems_filesystem_get_mount_handler ->   0x6d7d
+rtl: esyms: rtems_filesystem_global_location_assign ->   0x8e71
+rtl: esyms: rtems_filesystem_global_location_null -> 0x101554
+rtl: esyms: rtems_filesystem_global_location_obtain ->   0x8f7d
+rtl: esyms: rtems_filesystem_global_location_release ->   0x8fed
+rtl: esyms: rtems_filesystem_handlers_default ->  0x399f4
+rtl: esyms: rtems_filesystem_initialize ->   0x5cc7
+rtl: esyms: rtems_filesystem_iterate ->   0x6c8f
+rtl: esyms: rtems_filesystem_location_clone ->   0x5e61
+rtl: esyms: rtems_filesystem_location_copy ->   0x8d91
+rtl: esyms: rtems_filesystem_location_copy_and_detach ->   0x8def
+rtl: esyms: rtems_filesystem_location_detach ->   0x8dd3
+rtl: esyms: rtems_filesystem_location_free ->   0x6001
+rtl: esyms: rtems_filesystem_location_remove_from_mt_entry ->   0x9059
+rtl: esyms: rtems_filesystem_location_transform_to_global ->   0x8e15
+rtl: esyms: rtems_filesystem_mknod ->   0x6a81
+rtl: esyms: rtems_filesystem_mount_table -> 0x1015d8
+rtl: esyms: rtems_filesystem_null_handlers ->  0x3a2bc
+rtl: esyms: rtems_filesystem_null_mt_entry -> 0x101514
+rtl: esyms: rtems_filesystem_root_configuration ->  0x2f5e8
+rtl: esyms: rtems_filesystem_table ->  0x2f570
+rtl: esyms: rtems_global_user_env -> 0x101578
+rtl: esyms: rtems_heap_allocate_aligned_with_boundary ->   0x68b1
+rtl: esyms: rtems_heap_null_extend ->   0x7c1b
+rtl: esyms: rtems_initialize_executive ->  0x17537
+rtl: esyms: rtems_interrupt_handler_install ->   0x275b
+rtl: esyms: rtems_io_close ->  0x17609
+rtl: esyms: rtems_io_control ->  0x17661
+rtl: esyms: rtems_io_initialize ->  0x176b9
+rtl: esyms: rtems_io_open ->  0x1770f
+rtl: esyms: rtems_io_read ->  0x17767
+rtl: esyms: rtems_io_register_name ->   0x57ef
+rtl: esyms: rtems_io_write ->  0x177bf
+rtl: esyms: rtems_libio_allocate ->   0x627d
+rtl: esyms: rtems_libio_exit ->   0x6315
+rtl: esyms: rtems_libio_fcntl_flags ->   0x622f
+rtl: esyms: rtems_libio_free ->   0x62d3
+rtl: esyms: rtems_libio_free_user_env ->   0x78b3
+rtl: esyms: rtems_libio_iop_freelist -> 0x1033ec
+rtl: esyms: rtems_libio_iops -> 0x102c88
+rtl: esyms: rtems_libio_number_iops ->  0x2f56c
+rtl: esyms: rtems_libio_post_driver ->   0x7769
+rtl: esyms: rtems_libio_semaphore -> 0x1033f0
+rtl: esyms: rtems_malloc_dirty_helper -> 0x102784
+rtl: esyms: rtems_malloc_extend_handler ->  0x2f650
+rtl: esyms: rtems_minimum_stack_size -> 0x101480
+rtl: esyms: rtems_printf ->   0x7819
+rtl: esyms: rtems_putc ->   0x7c33
+rtl: esyms: rtems_rtl_alloc_del ->   0xc48f
+rtl: esyms: rtems_rtl_alloc_heap ->   0xc2ed
+rtl: esyms: rtems_rtl_alloc_initialise ->   0xc3c9
+rtl: esyms: rtems_rtl_alloc_module_del ->   0xc5d5
+rtl: esyms: rtems_rtl_alloc_module_new ->   0xc4f3
+rtl: esyms: rtems_rtl_alloc_new ->   0xc40d
+rtl: esyms: rtems_rtl_base_sym_global_add ->  0x1375f
+rtl: esyms: rtems_rtl_baseimage ->  0x137bd
+rtl: esyms: rtems_rtl_chain_iterate ->   0xc70b
+rtl: esyms: rtems_rtl_check_handle ->  0x13305
+rtl: esyms: rtems_rtl_elf_file_check ->   0xd8ed
+rtl: esyms: rtems_rtl_elf_file_load ->   0xdbb5
+rtl: esyms: rtems_rtl_elf_file_sig ->   0xdd7d
+rtl: esyms: rtems_rtl_elf_find_symbol ->   0xca07
+rtl: esyms: rtems_rtl_elf_load_details ->   0xd975
+rtl: esyms: rtems_rtl_elf_rel_resolve_sym ->   0xe01d
+rtl: esyms: rtems_rtl_elf_relocate_rel ->   0xe059
+rtl: esyms: rtems_rtl_elf_relocate_rela ->   0xe033
+rtl: esyms: rtems_rtl_find_file ->   0xde37
+rtl: esyms: rtems_rtl_find_obj ->  0x13369
+rtl: esyms: rtems_rtl_get_error ->   0xddd3
+rtl: esyms: rtems_rtl_global_symbols ->  0x130c9
+rtl: esyms: rtems_rtl_load_object ->  0x13459
+rtl: esyms: rtems_rtl_lock ->  0x13265
+rtl: esyms: rtems_rtl_match_name ->   0xf7b7
+rtl: esyms: rtems_rtl_obj_add_section ->   0xf8cd
+rtl: esyms: rtems_rtl_obj_alloc ->   0xf2df
+rtl: esyms: rtems_rtl_obj_bss_alignment ->   0xfaff
+rtl: esyms: rtems_rtl_obj_bss_size ->   0xfae5
+rtl: esyms: rtems_rtl_obj_cache_close ->   0xe8bf
+rtl: esyms: rtems_rtl_obj_cache_flush ->   0xe915
+rtl: esyms: rtems_rtl_obj_cache_open ->   0xe85d
+rtl: esyms: rtems_rtl_obj_cache_read ->   0xe963
+rtl: esyms: rtems_rtl_obj_cache_read_byval ->   0xed45
+rtl: esyms: rtems_rtl_obj_caches ->  0x13131
+rtl: esyms: rtems_rtl_obj_caches_flush ->  0x131c5
+rtl: esyms: rtems_rtl_obj_comp ->  0x13211
+rtl: esyms: rtems_rtl_obj_comp_close ->   0xee13
+rtl: esyms: rtems_rtl_obj_comp_open ->   0xeda5
+rtl: esyms: rtems_rtl_obj_comp_read ->   0xee9f
+rtl: esyms: rtems_rtl_obj_comp_set ->   0xee5f
+rtl: esyms: rtems_rtl_obj_const_alignment ->   0xfa97
+rtl: esyms: rtems_rtl_obj_const_size ->   0xfa7d
+rtl: esyms: rtems_rtl_obj_data_alignment ->   0xfacb
+rtl: esyms: rtems_rtl_obj_data_size ->   0xfab1
+rtl: esyms: rtems_rtl_obj_file_load ->  0x1049d
+rtl: esyms: rtems_rtl_obj_find_file ->   0xf843
+rtl: esyms: rtems_rtl_obj_find_section ->   0xf9af
+rtl: esyms: rtems_rtl_obj_find_section_by_index ->   0xfa17
+rtl: esyms: rtems_rtl_obj_free ->   0xf363
+rtl: esyms: rtems_rtl_obj_load ->  0x10515
+rtl: esyms: rtems_rtl_obj_load_sections ->   0xfd9b
+rtl: esyms: rtems_rtl_obj_load_symbols ->   0xfc45
+rtl: esyms: rtems_rtl_obj_relocate ->   0xfb19
+rtl: esyms: rtems_rtl_obj_relocate_unresolved ->   0xcea1
+rtl: esyms: rtems_rtl_obj_run_ctors ->   0xfff3
+rtl: esyms: rtems_rtl_obj_run_dtors ->  0x1000b
+rtl: esyms: rtems_rtl_obj_synchronize_cache ->   0xfbeb
+rtl: esyms: rtems_rtl_obj_text_alignment ->   0xfa63
+rtl: esyms: rtems_rtl_obj_text_size ->   0xfa49
+rtl: esyms: rtems_rtl_obj_unload ->  0x105e5
+rtl: esyms: rtems_rtl_parse_name ->   0xf40b
+rtl: esyms: rtems_rtl_path_append ->  0x13745
+rtl: esyms: rtems_rtl_rap_file_check ->  0x1124d
+rtl: esyms: rtems_rtl_rap_file_load ->  0x112e5
+rtl: esyms: rtems_rtl_rap_file_sig ->  0x118dd
+rtl: esyms: rtems_rtl_set_error ->   0xdd93
+rtl: esyms: rtems_rtl_strdup ->  0x118f3
+rtl: esyms: rtems_rtl_symbol_global_add ->  0x11bf9
+rtl: esyms: rtems_rtl_symbol_global_find ->  0x11e09
+rtl: esyms: rtems_rtl_symbol_obj_add ->  0x11f25
+rtl: esyms: rtems_rtl_symbol_obj_erase ->  0x11f9b
+rtl: esyms: rtems_rtl_symbol_obj_erase_local ->  0x11f65
+rtl: esyms: rtems_rtl_symbol_obj_find ->  0x11e8b
+rtl: esyms: rtems_rtl_symbol_table_close ->  0x11bdd
+rtl: esyms: rtems_rtl_symbol_table_open ->  0x11b55
+rtl: esyms: rtems_rtl_trace ->  0x12015
+rtl: esyms: rtems_rtl_trace_set_mask ->  0x12045
+rtl: esyms: rtems_rtl_unload_object ->  0x1353f
+rtl: esyms: rtems_rtl_unlock ->  0x132bf
+rtl: esyms: rtems_rtl_unresolved ->  0x130fd
+rtl: esyms: rtems_rtl_unresolved_add ->  0x12897
+rtl: esyms: rtems_rtl_unresolved_interate ->  0x1280d
+rtl: esyms: rtems_rtl_unresolved_resolve ->  0x12a49
+rtl: esyms: rtems_rtl_unresolved_table_close ->  0x127c5
+rtl: esyms: rtems_rtl_unresolved_table_open ->  0x12795
+rtl: esyms: rtems_semaphore_create ->  0x150c1
+rtl: esyms: rtems_semaphore_delete ->  0x1557b
+rtl: esyms: rtems_semaphore_obtain ->  0x15da3
+rtl: esyms: rtems_semaphore_release ->  0x165f9
+rtl: esyms: rtems_shutdown_executive ->  0x17579
+rtl: esyms: rtems_status_code_to_errno ->  0x16745
+rtl: esyms: rtems_task_create ->  0x16a11
+rtl: esyms: rtems_task_delete ->  0x16c91
+rtl: esyms: rtems_task_start ->  0x16f6b
+rtl: esyms: rtems_task_wake_after ->  0x171fb
+rtl: esyms: rtems_termios_baud_table ->  0x3a7e0
+rtl: esyms: rtems_termios_close ->   0x9db9
+rtl: esyms: rtems_termios_enqueue_raw_characters ->   0xb067
+rtl: esyms: rtems_termios_initialize ->   0xb659
+rtl: esyms: rtems_termios_ioctl ->   0xa015
+rtl: esyms: rtems_termios_linesw -> 0x1028c0
+rtl: esyms: rtems_termios_number_to_baud ->   0xb5e7
+rtl: esyms: rtems_termios_open ->   0x9bfd
+rtl: esyms: rtems_termios_puts ->   0xa3e7
+rtl: esyms: rtems_termios_read ->   0xaf1f
+rtl: esyms: rtems_termios_set_initial_baud ->   0xb613
+rtl: esyms: rtems_termios_ttyMutex -> 0x1033f4
+rtl: esyms: rtems_termios_write ->   0xa70d
+rtl: esyms: rtems_test_fatal_extension ->  0x25dcd
+rtl: esyms: rtems_test_name ->  0x2f510
+rtl: esyms: setlocale ->  0x280e5
+rtl: esyms: stat ->   0x7c55
+rtl: esyms: strchr ->  0x2954d
+rtl: esyms: strcmp ->  0x29649
+rtl: esyms: strcpy ->  0x2991d
+rtl: esyms: strdup ->  0x299e1
+rtl: esyms: strerror ->  0x29e8d
+rtl: esyms: strlen ->  0x29ec1
+rtl: esyms: strncmp ->  0x29f9d
+rtl: esyms: strncpy ->  0x2a039
+rtl: esyms: strrchr ->  0x2a0a9
+rtl: esyms: strtoul ->  0x2a225
+rtl: esyms: symlink ->   0x923b
+rtl: esyms: time ->  0x2c8a1
+rtl: esyms: unlink ->   0xb6cb
+rtl: esyms: vfiprintf ->  0x2d695
+rtl: esyms: vfprintf ->  0x2f13d
+rtl: esyms: vprintk ->   0xb751
+rtl: esyms: vsnprintf ->  0x2f259
+rtl: esyms: wcrtomb ->  0x2f399
+rtl: esyms: write ->   0xbc19
+rtl: esyms: zynq_uart_fns ->  0x399d0
+rtl: loading '/dl-o4.o'
+rtl: alloc: new: OBJECT addr=0x116278 size=9
+rtl: alloc: del: OBJECT addr=0x0
+rtl: alloc: new: OBJECT addr=0x1162a8 size=136
+rtl: alloc: new: OBJECT addr=0x116358 size=9
+rtl: alloc: new: OBJECT addr=0x116388 size=9
+rtl: section header:  0: offset=9748
+rtl: section header:  1: offset=9788
+rtl: unsupported section:  1: type=17 flags=00
+rtl: section header:  2: offset=9828
+rtl: unsupported section:  2: type=17 flags=00
+rtl: section header:  3: offset=9868
+rtl: unsupported section:  3: type=17 flags=00
+rtl: section header:  4: offset=9908
+rtl: unsupported section:  4: type=17 flags=00
+rtl: section header:  5: offset=9948
+rtl: unsupported section:  5: type=17 flags=00
+rtl: section header:  6: offset=9988
+rtl: unsupported section:  6: type=17 flags=00
+rtl: section header:  7: offset=10028
+rtl: unsupported section:  7: type=17 flags=00
+rtl: section header:  8: offset=10068
+rtl: unsupported section:  8: type=17 flags=00
+rtl: section header:  9: offset=10108
+rtl: unsupported section:  9: type=17 flags=00
+rtl: section header: 10: offset=10148
+rtl: unsupported section: 10: type=17 flags=00
+rtl: section header: 11: offset=10188
+rtl: unsupported section: 11: type=17 flags=00
+rtl: section header: 12: offset=10228
+rtl: unsupported section: 12: type=17 flags=00
+rtl: section header: 13: offset=10268
+rtl: unsupported section: 13: type=17 flags=00
+rtl: section header: 14: offset=10308
+rtl: unsupported section: 14: type=17 flags=00
+rtl: section header: 15: offset=10348
+rtl: unsupported section: 15: type=17 flags=00
+rtl: section header: 16: offset=10388
+rtl: unsupported section: 16: type=17 flags=00
+rtl: section header: 17: offset=10428
+rtl: unsupported section: 17: type=17 flags=00
+rtl: section header: 18: offset=10468
+rtl: alloc: new: OBJECT addr=0x1163b8 size=56
+rtl: alloc: new: OBJECT addr=0x116418 size=6
+rtl: sect: 18: .text
+rtl: section header: 19: offset=10508
+rtl: alloc: new: OBJECT addr=0x116448 size=56
+rtl: alloc: new: OBJECT addr=0x1164a8 size=6
+rtl: sect: 19: .data
+rtl: section header: 20: offset=10548
+rtl: alloc: new: OBJECT addr=0x1164d8 size=56
+rtl: alloc: new: OBJECT addr=0x116538 size=5
+rtl: sect: 20: .bss
+rtl: section header: 21: offset=10588
+rtl: alloc: new: OBJECT addr=0x116568 size=56
+rtl: alloc: new: OBJECT addr=0x1165c8 size=18
+rtl: sect: 21: .text._ZN3FooC2Ev
+rtl: section header: 22: offset=10628
+rtl: alloc: new: OBJECT addr=0x116600 size=56
+rtl: alloc: new: OBJECT addr=0x116660 size=22
+rtl: sect: 22: .rel.text._ZN3FooC2Ev
+rtl: section header: 23: offset=10668
+rtl: alloc: new: OBJECT addr=0x1166a0 size=56
+rtl: alloc: new: OBJECT addr=0x116700 size=28
+rtl: sect: 23: .ARM.extab.text._ZN3FooC2Ev
+rtl: section header: 24: offset=10708
+rtl: unsupported section: 24: type=1879048193 flags=282
+rtl: section header: 25: offset=10748
+rtl: alloc: new: OBJECT addr=0x116740 size=56
+rtl: alloc: new: OBJECT addr=0x1167a0 size=32
+rtl: sect: 25: .rel.ARM.exidx.text._ZN3FooC2Ev
+rtl: section header: 26: offset=10788
+rtl: alloc: new: OBJECT addr=0x1167e8 size=56
+rtl: alloc: new: OBJECT addr=0x116848 size=18
+rtl: sect: 26: .text._ZN3FooD2Ev
+rtl: section header: 27: offset=10828
+rtl: alloc: new: OBJECT addr=0x116880 size=56
+rtl: alloc: new: OBJECT addr=0x1168e0 size=22
+rtl: sect: 27: .rel.text._ZN3FooD2Ev
+rtl: section header: 28: offset=10868
+rtl: alloc: new: OBJECT addr=0x116920 size=56
+rtl: alloc: new: OBJECT addr=0x116980 size=28
+rtl: sect: 28: .ARM.extab.text._ZN3FooD2Ev
+rtl: section header: 29: offset=10908
+rtl: unsupported section: 29: type=1879048193 flags=282
+rtl: section header: 30: offset=10948
+rtl: alloc: new: OBJECT addr=0x1169c0 size=56
+rtl: alloc: new: OBJECT addr=0x116a20 size=32
+rtl: sect: 30: .rel.ARM.exidx.text._ZN3FooD2Ev
+rtl: section header: 31: offset=10988
+rtl: alloc: new: OBJECT addr=0x116a68 size=56
+rtl: alloc: new: OBJECT addr=0x116ac8 size=19
+rtl: sect: 31: .text._ZN3Foo2f1Ev
+rtl: section header: 32: offset=11028
+rtl: alloc: new: OBJECT addr=0x116b00 size=56
+rtl: alloc: new: OBJECT addr=0x116b60 size=29
+rtl: sect: 32: .ARM.extab.text._ZN3Foo2f1Ev
+rtl: section header: 33: offset=11068
+rtl: unsupported section: 33: type=1879048193 flags=282
+rtl: section header: 34: offset=11108
+rtl: alloc: new: OBJECT addr=0x116ba8 size=56
+rtl: alloc: new: OBJECT addr=0x116c08 size=33
+rtl: sect: 34: .rel.ARM.exidx.text._ZN3Foo2f1Ev
+rtl: section header: 35: offset=11148
+rtl: alloc: new: OBJECT addr=0x116c50 size=56
+rtl: alloc: new: OBJECT addr=0x116cb0 size=19
+rtl: sect: 35: .text._ZN3Foo2f2Ev
+rtl: section header: 36: offset=11188
+rtl: alloc: new: OBJECT addr=0x116ce8 size=56
+rtl: alloc: new: OBJECT addr=0x116d48 size=29
+rtl: sect: 36: .ARM.extab.text._ZN3Foo2f2Ev
+rtl: section header: 37: offset=11228
+rtl: unsupported section: 37: type=1879048193 flags=282
+rtl: section header: 38: offset=11268
+rtl: alloc: new: OBJECT addr=0x116d90 size=56
+rtl: alloc: new: OBJECT addr=0x116df0 size=33
+rtl: sect: 38: .rel.ARM.exidx.text._ZN3Foo2f2Ev
+rtl: section header: 39: offset=11308
+rtl: alloc: new: OBJECT addr=0x116e38 size=56
+rtl: alloc: new: OBJECT addr=0x116e98 size=19
+rtl: sect: 39: .text._ZN3Foo2f3Ev
+rtl: section header: 40: offset=11348
+rtl: alloc: new: OBJECT addr=0x116ed0 size=56
+rtl: alloc: new: OBJECT addr=0x116f30 size=29
+rtl: sect: 40: .ARM.extab.text._ZN3Foo2f3Ev
+rtl: section header: 41: offset=11388
+rtl: unsupported section: 41: type=1879048193 flags=282
+rtl: section header: 42: offset=11428
+rtl: alloc: new: OBJECT addr=0x116f78 size=56
+rtl: alloc: new: OBJECT addr=0x116fd8 size=33
+rtl: sect: 42: .rel.ARM.exidx.text._ZN3Foo2f3Ev
+rtl: section header: 43: offset=11468
+rtl: alloc: new: OBJECT addr=0x117020 size=56
+rtl: alloc: new: OBJECT addr=0x117080 size=19
+rtl: sect: 43: .text._ZN3Foo2f4Ev
+rtl: section header: 44: offset=11508
+rtl: alloc: new: OBJECT addr=0x1170b8 size=56
+rtl: alloc: new: OBJECT addr=0x117118 size=29
+rtl: sect: 44: .ARM.extab.text._ZN3Foo2f4Ev
+rtl: section header: 45: offset=11548
+rtl: unsupported section: 45: type=1879048193 flags=282
+rtl: section header: 46: offset=11588
+rtl: alloc: new: OBJECT addr=0x117160 size=56
+rtl: alloc: new: OBJECT addr=0x1171c0 size=33
+rtl: sect: 46: .rel.ARM.exidx.text._ZN3Foo2f4Ev
+rtl: section header: 47: offset=11628
+rtl: alloc: new: OBJECT addr=0x117208 size=56
+rtl: alloc: new: OBJECT addr=0x117268 size=19
+rtl: sect: 47: .text._ZN3Foo2f5Ev
+rtl: section header: 48: offset=11668
+rtl: alloc: new: OBJECT addr=0x1172a0 size=56
+rtl: alloc: new: OBJECT addr=0x117300 size=29
+rtl: sect: 48: .ARM.extab.text._ZN3Foo2f5Ev
+rtl: section header: 49: offset=11708
+rtl: unsupported section: 49: type=1879048193 flags=282
+rtl: section header: 50: offset=11748
+rtl: alloc: new: OBJECT addr=0x117348 size=56
+rtl: alloc: new: OBJECT addr=0x1173a8 size=33
+rtl: sect: 50: .rel.ARM.exidx.text._ZN3Foo2f5Ev
+rtl: section header: 51: offset=11788
+rtl: alloc: new: OBJECT addr=0x1173f0 size=56
+rtl: alloc: new: OBJECT addr=0x117450 size=19
+rtl: sect: 51: .text._ZN3Foo2f6Ev
+rtl: section header: 52: offset=11828
+rtl: alloc: new: OBJECT addr=0x117488 size=56
+rtl: alloc: new: OBJECT addr=0x1174e8 size=29
+rtl: sect: 52: .ARM.extab.text._ZN3Foo2f6Ev
+rtl: section header: 53: offset=11868
+rtl: unsupported section: 53: type=1879048193 flags=282
+rtl: section header: 54: offset=11908
+rtl: alloc: new: OBJECT addr=0x117530 size=56
+rtl: alloc: new: OBJECT addr=0x117590 size=33
+rtl: sect: 54: .rel.ARM.exidx.text._ZN3Foo2f6Ev
+rtl: section header: 55: offset=11948
+rtl: alloc: new: OBJECT addr=0x1175d8 size=56
+rtl: alloc: new: OBJECT addr=0x117638 size=19
+rtl: sect: 55: .text._ZN3Foo2f7Ev
+rtl: section header: 56: offset=11988
+rtl: alloc: new: OBJECT addr=0x117670 size=56
+rtl: alloc: new: OBJECT addr=0x1176d0 size=29
+rtl: sect: 56: .ARM.extab.text._ZN3Foo2f7Ev
+rtl: section header: 57: offset=12028
+rtl: unsupported section: 57: type=1879048193 flags=282
+rtl: section header: 58: offset=12068
+rtl: alloc: new: OBJECT addr=0x117718 size=56
+rtl: alloc: new: OBJECT addr=0x117778 size=33
+rtl: sect: 58: .rel.ARM.exidx.text._ZN3Foo2f7Ev
+rtl: section header: 59: offset=12108
+rtl: alloc: new: OBJECT addr=0x1177c0 size=56
+rtl: alloc: new: OBJECT addr=0x117820 size=18
+rtl: sect: 59: .text._ZN3BarC2Ev
+rtl: section header: 60: offset=12148
+rtl: alloc: new: OBJECT addr=0x117858 size=56
+rtl: alloc: new: OBJECT addr=0x1178b8 size=22
+rtl: sect: 60: .rel.text._ZN3BarC2Ev
+rtl: section header: 61: offset=12188
+rtl: alloc: new: OBJECT addr=0x1178f8 size=56
+rtl: alloc: new: OBJECT addr=0x117958 size=28
+rtl: sect: 61: .ARM.extab.text._ZN3BarC2Ev
+rtl: section header: 62: offset=12228
+rtl: unsupported section: 62: type=1879048193 flags=282
+rtl: section header: 63: offset=12268
+rtl: alloc: new: OBJECT addr=0x117998 size=56
+rtl: alloc: new: OBJECT addr=0x1179f8 size=32
+rtl: sect: 63: .rel.ARM.exidx.text._ZN3BarC2Ev
+rtl: section header: 64: offset=12308
+rtl: alloc: new: OBJECT addr=0x117a40 size=56
+rtl: alloc: new: OBJECT addr=0x117aa0 size=18
+rtl: sect: 64: .text._ZN3BarD2Ev
+rtl: section header: 65: offset=12348
+rtl: alloc: new: OBJECT addr=0x117ad8 size=56
+rtl: alloc: new: OBJECT addr=0x117b38 size=22
+rtl: sect: 65: .rel.text._ZN3BarD2Ev
+rtl: section header: 66: offset=12388
+rtl: alloc: new: OBJECT addr=0x117b78 size=56
+rtl: alloc: new: OBJECT addr=0x117bd8 size=28
+rtl: sect: 66: .ARM.extab.text._ZN3BarD2Ev
+rtl: section header: 67: offset=12428
+rtl: unsupported section: 67: type=1879048193 flags=282
+rtl: section header: 68: offset=12468
+rtl: alloc: new: OBJECT addr=0x117c18 size=56
+rtl: alloc: new: OBJECT addr=0x117c78 size=32
+rtl: sect: 68: .rel.ARM.exidx.text._ZN3BarD2Ev
+rtl: section header: 69: offset=12508
+rtl: alloc: new: OBJECT addr=0x117cc0 size=56
+rtl: alloc: new: OBJECT addr=0x117d20 size=14
+rtl: sect: 69: .text._Z3bazv
+rtl: section header: 70: offset=12548
+rtl: alloc: new: OBJECT addr=0x117d58 size=56
+rtl: alloc: new: OBJECT addr=0x117db8 size=18
+rtl: sect: 70: .rel.text._Z3bazv
+rtl: section header: 71: offset=12588
+rtl: alloc: new: OBJECT addr=0x117df0 size=56
+rtl: alloc: new: OBJECT addr=0x117e50 size=24
+rtl: sect: 71: .ARM.extab.text._Z3bazv
+rtl: section header: 72: offset=12628
+rtl: unsupported section: 72: type=1879048193 flags=82
+rtl: section header: 73: offset=12668
+rtl: alloc: new: OBJECT addr=0x117e90 size=56
+rtl: alloc: new: OBJECT addr=0x117ef0 size=28
+rtl: sect: 73: .rel.ARM.exidx.text._Z3bazv
+rtl: section header: 74: offset=12708
+rtl: alloc: new: OBJECT addr=0x117f30 size=56
+rtl: alloc: new: OBJECT addr=0x117f90 size=11
+rtl: sect: 74: .text.func
+rtl: section header: 75: offset=12748
+rtl: alloc: new: OBJECT addr=0x117fc0 size=56
+rtl: alloc: new: OBJECT addr=0x118020 size=15
+rtl: sect: 75: .rel.text.func
+rtl: section header: 76: offset=12788
+rtl: alloc: new: OBJECT addr=0x118058 size=56
+rtl: alloc: new: OBJECT addr=0x1180b8 size=21
+rtl: sect: 76: .ARM.extab.text.func
+rtl: section header: 77: offset=12828
+rtl: unsupported section: 77: type=1879048193 flags=82
+rtl: section header: 78: offset=12868
+rtl: alloc: new: OBJECT addr=0x1180f8 size=56
+rtl: alloc: new: OBJECT addr=0x118158 size=25
+rtl: sect: 78: .rel.ARM.exidx.text.func
+rtl: section header: 79: offset=12908
+rtl: alloc: new: OBJECT addr=0x118198 size=56
+rtl: alloc: new: OBJECT addr=0x1181f8 size=17
+rtl: sect: 79: .rodata._ZTV3Bar
+rtl: section header: 80: offset=12948
+rtl: alloc: new: OBJECT addr=0x118230 size=56
+rtl: alloc: new: OBJECT addr=0x118290 size=21
+rtl: sect: 80: .rel.rodata._ZTV3Bar
+rtl: section header: 81: offset=12988
+rtl: alloc: new: OBJECT addr=0x1182d0 size=56
+rtl: alloc: new: OBJECT addr=0x118330 size=17
+rtl: sect: 81: .rodata._ZTV3Foo
+rtl: section header: 82: offset=13028
+rtl: alloc: new: OBJECT addr=0x118368 size=56
+rtl: alloc: new: OBJECT addr=0x1183c8 size=21
+rtl: sect: 82: .rel.rodata._ZTV3Foo
+rtl: section header: 83: offset=13068
+rtl: alloc: new: OBJECT addr=0x118408 size=56
+rtl: alloc: new: OBJECT addr=0x118468 size=17
+rtl: sect: 83: .rodata._ZTI3Bar
+rtl: section header: 84: offset=13108
+rtl: alloc: new: OBJECT addr=0x1184a0 size=56
+rtl: alloc: new: OBJECT addr=0x118500 size=21
+rtl: sect: 84: .rel.rodata._ZTI3Bar
+rtl: section header: 85: offset=13148
+rtl: alloc: new: OBJECT addr=0x118540 size=56
+rtl: alloc: new: OBJECT addr=0x1185a0 size=17
+rtl: sect: 85: .rodata._ZTS3Bar
+rtl: section header: 86: offset=13188
+rtl: alloc: new: OBJECT addr=0x1185d8 size=56
+rtl: alloc: new: OBJECT addr=0x118638 size=17
+rtl: sect: 86: .rodata._ZTI3Foo
+rtl: section header: 87: offset=13228
+rtl: alloc: new: OBJECT addr=0x118670 size=56
+rtl: alloc: new: OBJECT addr=0x1186d0 size=21
+rtl: sect: 87: .rel.rodata._ZTI3Foo
+rtl: section header: 88: offset=13268
+rtl: alloc: new: OBJECT addr=0x118710 size=56
+rtl: alloc: new: OBJECT addr=0x118770 size=17
+rtl: sect: 88: .rodata._ZTS3Foo
+rtl: section header: 89: offset=13308
+rtl: section header: 90: offset=13348
+rtl: alloc: new: OBJECT addr=0x1187a8 size=56
+rtl: alloc: new: OBJECT addr=0x118808 size=16
+rtl: sect: 90: .rel.debug_info
+rtl: section header: 91: offset=13388
+rtl: section header: 92: offset=13428
+rtl: section header: 93: offset=13468
+rtl: alloc: new: OBJECT addr=0x118840 size=56
+rtl: alloc: new: OBJECT addr=0x1188a0 size=19
+rtl: sect: 93: .rel.debug_aranges
+rtl: section header: 94: offset=13508
+rtl: section header: 95: offset=13548
+rtl: alloc: new: OBJECT addr=0x1188d8 size=56
+rtl: alloc: new: OBJECT addr=0x118938 size=18
+rtl: sect: 95: .rel.debug_ranges
+rtl: section header: 96: offset=13588
+rtl: section header: 97: offset=13628
+rtl: alloc: new: OBJECT addr=0x118970 size=56
+rtl: alloc: new: OBJECT addr=0x1189d0 size=16
+rtl: sect: 97: .rel.debug_line
+rtl: section header: 98: offset=13668
+rtl: section header: 99: offset=13708
+rtl: section header: 100: offset=13748
+rtl: section header: 101: offset=13788
+rtl: alloc: new: OBJECT addr=0x118a08 size=56
+rtl: alloc: new: OBJECT addr=0x118a68 size=17
+rtl: sect: 101: .rel.debug_frame
+rtl: section header: 102: offset=13828
+rtl: unsupported section: 102: type=1879048195 flags=00
+rtl: section header: 103: offset=13868
+rtl: alloc: new: OBJECT addr=0x118aa0 size=56
+rtl: alloc: new: OBJECT addr=0x118b00 size=10
+rtl: sect: 103: .shstrtab
+rtl: section header: 104: offset=13908
+rtl: alloc: new: OBJECT addr=0x118b30 size=56
+rtl: alloc: new: OBJECT addr=0x118b90 size=8
+rtl: sect: 104: .symtab
+rtl: section header: 105: offset=13948
+rtl: alloc: new: OBJECT addr=0x118bc0 size=56
+rtl: alloc: new: OBJECT addr=0x118c20 size=8
+rtl: sect: 105: .strtab
+rtl: alloc: new: READ_EXEC addr=0x118c50 size=355
+rtl: alloc: new: READ addr=0x118dd8 size=122
+rtl: alloc: new: READ_WRITE addr=0x118e78 size=1
+rtl: load sect: text  - b:0x118c50 s:355 a:1
+rtl: load sect: const - b:0x118dd8 s:122 a:1
+rtl: load sect: data  - b:0x118e78 s:1 a:1
+rtl: load sect: bss   - b:0x0 s:0 a:1
+rtl: loading: .text._ZN3FooC2Ev -> 0x118c50 (32)
+rtl: loading: .text._ZN3FooD2Ev -> 0x118c74 (32)
+rtl: loading: .text._ZN3Foo2f1Ev -> 0x118c96 (20)
+rtl: loading: .text._ZN3Foo2f2Ev -> 0x118cac (20)
+rtl: loading: .text._ZN3Foo2f3Ev -> 0x118cc2 (20)
+rtl: loading: .text._ZN3Foo2f4Ev -> 0x118cd8 (20)
+rtl: loading: .text._ZN3Foo2f5Ev -> 0x118cee (20)
+rtl: loading: .text._ZN3Foo2f6Ev -> 0x118d04 (20)
+rtl: loading: .text._ZN3Foo2f7Ev -> 0x118d1a (20)
+rtl: loading: .text._ZN3BarC2Ev -> 0x118d30 (36)
+rtl: loading: .text._ZN3BarD2Ev -> 0x118d58 (36)
+rtl: loading: .text._Z3bazv -> 0x118d7e (38)
+rtl: loading: .text.func -> 0x118da6 (12)
+rtl: loading: .rodata._ZTV3Bar -> 0x118dd8 (36)
+rtl: loading: .rodata._ZTV3Foo -> 0x118e00 (36)
+rtl: loading: .rodata._ZTI3Bar -> 0x118e28 (12)
+rtl: loading: .rodata._ZTS3Bar -> 0x118e38 (5)
+rtl: loading: .rodata._ZTI3Foo -> 0x118e40 (8)
+rtl: loading: .rodata._ZTS3Foo -> 0x118e4c (5)
+rtl: alloc: new: SYMBOL addr=0x118ea8 size=529
+rtl: alloc: new: SYMBOL addr=0x1190e0 size=714
+rtl: sym:add:6  name:11:$t                   bind:0  type:0  val:0x118c50 sect:21 size:0
+rtl: sym:add:7  name:14:$d                   bind:0  type:0  val:0x118c6c sect:21 size:0
+rtl: sym:add:12 name:11:$t                   bind:0  type:0  val:0x118c74 sect:26 size:0
+rtl: sym:add:13 name:14:$d                   bind:0  type:0  val:0x118c90 sect:26 size:0
+rtl: sym:add:18 name:11:$t                   bind:0  type:0  val:0x118c96 sect:31 size:0
+rtl: sym:add:23 name:11:$t                   bind:0  type:0  val:0x118cac sect:35 size:0
+rtl: sym:add:28 name:11:$t                   bind:0  type:0  val:0x118cc2 sect:39 size:0
+rtl: sym:add:33 name:11:$t                   bind:0  type:0  val:0x118cd8 sect:43 size:0
+rtl: sym:add:38 name:11:$t                   bind:0  type:0  val:0x118cee sect:47 size:0
+rtl: sym:add:43 name:11:$t                   bind:0  type:0  val:0x118d04 sect:51 size:0
+rtl: sym:add:48 name:11:$t                   bind:0  type:0  val:0x118d1a sect:55 size:0
+rtl: sym:add:53 name:11:$t                   bind:0  type:0  val:0x118d30 sect:59 size:0
+rtl: sym:add:54 name:14:$d                   bind:0  type:0  val:0x118d50 sect:59 size:0
+rtl: sym:add:59 name:11:$t                   bind:0  type:0  val:0x118d58 sect:64 size:0
+rtl: sym:add:60 name:14:$d                   bind:0  type:0  val:0x118d78 sect:64 size:0
+rtl: sym:add:65 name:11:$t                   bind:0  type:0  val:0x118d7e sect:69 size:0
+rtl: sym:add:70 name:11:$t                   bind:0  type:0  val:0x118da6 sect:74 size:0
+rtl: sym:add:75 name:14:$d                   bind:0  type:0  val:0x118dd8 sect:79 size:0
+rtl: sym:add:77 name:14:$d                   bind:0  type:0  val:0x118e00 sect:81 size:0
+rtl: sym:add:79 name:14:$d                   bind:0  type:0  val:0x118e28 sect:83 size:0
+rtl: sym:add:81 name:14:$d                   bind:0  type:0  val:0x118e38 sect:85 size:0
+rtl: sym:add:83 name:14:$d                   bind:0  type:0  val:0x118e40 sect:86 size:0
+rtl: sym:add:85 name:14:$d                   bind:0  type:0  val:0x118e4c sect:88 size:0
+rtl: sym:add:117 name:65:_ZN3FooC2Ev          bind:2  type:2  val:0x118c51 sect:21 size:32
+rtl: sym:add:118 name:77:_ZTV3Foo             bind:2  type:1  val:0x118e00 sect:81 size:36
+rtl: sym:add:119 name:86:_ZN3FooC1Ev          bind:2  type:2  val:0x118c51 sect:21 size:32
+rtl: sym:add:120 name:98:_ZN3FooD2Ev          bind:2  type:2  val:0x118c75 sect:26 size:32
+rtl: sym:add:121 name:110:_ZN3FooD1Ev          bind:2  type:2  val:0x118c75 sect:26 size:32
+rtl: sym:add:122 name:122:_ZN3Foo2f1Ev         bind:2  type:2  val:0x118c97 sect:31 size:20
+rtl: sym:add:123 name:135:_ZN3Foo2f2Ev         bind:2  type:2  val:0x118cad sect:35 size:20
+rtl: sym:add:124 name:148:_ZN3Foo2f3Ev         bind:2  type:2  val:0x118cc3 sect:39 size:20
+rtl: sym:add:125 name:161:_ZN3Foo2f4Ev         bind:2  type:2  val:0x118cd9 sect:43 size:20
+rtl: sym:add:126 name:174:_ZN3Foo2f5Ev         bind:2  type:2  val:0x118cef sect:47 size:20
+rtl: sym:add:127 name:187:_ZN3Foo2f6Ev         bind:2  type:2  val:0x118d05 sect:51 size:20
+rtl: sym:add:128 name:200:_ZN3Foo2f7Ev         bind:2  type:2  val:0x118d1b sect:55 size:20
+rtl: sym:add:129 name:213:_ZN3BarC2Ev          bind:2  type:2  val:0x118d31 sect:59 size:36
+rtl: sym:add:130 name:225:_ZTV3Bar             bind:2  type:1  val:0x118dd8 sect:79 size:36
+rtl: sym:add:131 name:234:_ZN3BarC1Ev          bind:2  type:2  val:0x118d31 sect:59 size:36
+rtl: sym:add:132 name:246:_ZN3BarD2Ev          bind:2  type:2  val:0x118d59 sect:64 size:36
+rtl: sym:add:133 name:258:_ZN3BarD1Ev          bind:2  type:2  val:0x118d59 sect:64 size:36
+rtl: sym:add:134 name:270:_Z3bazv              bind:1  type:2  val:0x118d7f sect:69 size:38
+rtl: sym:add:135 name:278:func                 bind:1  type:2  val:0x118da7 sect:74 size:12
+rtl: sym:add:136 name:283:_ZTI3Bar             bind:2  type:1  val:0x118e28 sect:83 size:12
+rtl: sym:add:137 name:292:_ZTI3Foo             bind:2  type:1  val:0x118e40 sect:86 size:8
+rtl: sym:add:139 name:342:_ZTS3Bar             bind:2  type:1  val:0x118e38 sect:85 size:5
+rtl: sym:add:141 name:389:_ZTS3Foo             bind:2  type:1  val:0x118e4c sect:88 size:5
+rtl: relocation: .rel.text._ZN3FooC2Ev, syms:.symtab
+rtl: rel: sym:(null)(118)=00118e00 type:2  off:0000001c
+rtl: REL32/ABS32/GLOB_DAT 0x118e08 @ 0x118c6c in /dl-o4.ortl: relocation: .rel.text._ZN3FooD2Ev, syms:.symtab
+rtl: rel: sym:(null)(118)=00118e00 type:2  off:0000001c
+rtl: REL32/ABS32/GLOB_DAT 0x118e08 @ 0x118c90 in /dl-o4.ortl: relocation: .rel.text._ZN3BarC2Ev, syms:.symtab
+rtl: rel: sym:(null)(117)=00118c51 type:10 off:0000000c
+rtl: THM_CALL/JUMP24 0xff88f7ff @ 0x118d3c in /dl-o4.o
+rtl: rel: sym:(null)(130)=00118dd8 type:2  off:00000020
+rtl: REL32/ABS32/GLOB_DAT 0x118de0 @ 0x118d50 in /dl-o4.ortl: relocation: .rel.text._ZN3BarD2Ev, syms:.symtab
+rtl: rel: sym:(null)(120)=00118c75 type:10 off:00000012
+rtl: THM_CALL/JUMP24 0xff83f7ff @ 0x118d6a in /dl-o4.o
+rtl: rel: sym:(null)(130)=00118dd8 type:2  off:00000020
+rtl: REL32/ABS32/GLOB_DAT 0x118de0 @ 0x118d78 in /dl-o4.ortl: relocation: .rel.text._Z3bazv, syms:.symtab
+rtl: rel: sym:(null)(131)=00118d31 type:10 off:0000000a
+rtl: THM_CALL/JUMP24 0xffd2f7ff @ 0x118d88 in /dl-o4.o
+rtl: rel: sym:(null)(122)=00118c97 type:10 off:00000012
+rtl: THM_CALL/JUMP24 0xff81f7ff @ 0x118d90 in /dl-o4.o
+rtl: rel: sym:(null)(133)=00118d59 type:10 off:0000001a
+rtl: THM_CALL/JUMP24 0xffdef7ff @ 0x118d98 in /dl-o4.o
+rtl: relocation: .rel.text.func, syms:.symtab
+rtl: rel: sym:(null)(134)=00118d7f type:10 off:00000004
+rtl: THM_CALL/JUMP24 0xffe8f7ff @ 0x118daa in /dl-o4.o
+rtl: relocation: .rel.rodata._ZTV3Bar, syms:.symtab
+rtl: rel: sym:(null)(136)=00118e28 type:2  off:00000004
+rtl: REL32/ABS32/GLOB_DAT 0x118e28 @ 0x118ddc in /dl-o4.ortl: rel: sym:(null)(122)=00118c97 type:2  off:00000008
+rtl: REL32/ABS32/GLOB_DAT 0x118c97 @ 0x118de0 in /dl-o4.ortl: rel: sym:(null)(123)=00118cad type:2  off:0000000c
+rtl: REL32/ABS32/GLOB_DAT 0x118cad @ 0x118de4 in /dl-o4.ortl: rel: sym:(null)(124)=00118cc3 type:2  off:00000010
+rtl: REL32/ABS32/GLOB_DAT 0x118cc3 @ 0x118de8 in /dl-o4.ortl: rel: sym:(null)(125)=00118cd9 type:2  off:00000014
+rtl: REL32/ABS32/GLOB_DAT 0x118cd9 @ 0x118dec in /dl-o4.ortl: rel: sym:(null)(126)=00118cef type:2  off:00000018
+rtl: REL32/ABS32/GLOB_DAT 0x118cef @ 0x118df0 in /dl-o4.ortl: rel: sym:(null)(127)=00118d05 type:2  off:0000001c
+rtl: REL32/ABS32/GLOB_DAT 0x118d05 @ 0x118df4 in /dl-o4.ortl: rel: sym:(null)(128)=00118d1b type:2  off:00000020
+rtl: REL32/ABS32/GLOB_DAT 0x118d1b @ 0x118df8 in /dl-o4.ortl: relocation: .rel.rodata._ZTV3Foo, syms:.symtab
+rtl: rel: sym:(null)(137)=00118e40 type:2  off:00000004
+rtl: REL32/ABS32/GLOB_DAT 0x118e40 @ 0x118e04 in /dl-o4.ortl: rel: sym:(null)(122)=00118c97 type:2  off:00000008
+rtl: REL32/ABS32/GLOB_DAT 0x118c97 @ 0x118e08 in /dl-o4.ortl: rel: sym:(null)(123)=00118cad type:2  off:0000000c
+rtl: REL32/ABS32/GLOB_DAT 0x118cad @ 0x118e0c in /dl-o4.ortl: rel: sym:(null)(124)=00118cc3 type:2  off:00000010
+rtl: REL32/ABS32/GLOB_DAT 0x118cc3 @ 0x118e10 in /dl-o4.ortl: rel: sym:(null)(125)=00118cd9 type:2  off:00000014
+rtl: REL32/ABS32/GLOB_DAT 0x118cd9 @ 0x118e14 in /dl-o4.ortl: rel: sym:(null)(126)=00118cef type:2  off:00000018
+rtl: REL32/ABS32/GLOB_DAT 0x118cef @ 0x118e18 in /dl-o4.ortl: rel: sym:(null)(127)=00118d05 type:2  off:0000001c
+rtl: REL32/ABS32/GLOB_DAT 0x118d05 @ 0x118e1c in /dl-o4.ortl: rel: sym:(null)(128)=00118d1b type:2  off:00000020
+rtl: REL32/ABS32/GLOB_DAT 0x118d1b @ 0x118e20 in /dl-o4.ortl: relocation: .rel.rodata._ZTI3Bar, syms:.symtab
+rtl: unresolv: add: /dl-o4.o(s:83) -> _ZTVN10__cxxabiv120__si_class_type_infoE
+rtl: alloc: new: EXTERNAL addr=0x1193d0 size=1804
+rtl: rel: sym:(null)(139)=00118e38 type:2  off:00000004
+rtl: REL32/ABS32/GLOB_DAT 0x118e38 @ 0x118e2c in /dl-o4.ortl: rel: sym:(null)(137)=00118e40 type:2  off:00000008
+rtl: REL32/ABS32/GLOB_DAT 0x118e40 @ 0x118e30 in /dl-o4.ortl: relocation: .rel.rodata._ZTI3Foo, syms:.symtab
+rtl: unresolv: add: /dl-o4.o(s:86) -> _ZTVN10__cxxabiv117__class_type_infoE
+rtl: rel: sym:(null)(141)=00118e4c type:2  off:00000004
+rtl: REL32/ABS32/GLOB_DAT 0x118e4c @ 0x118e44 in /dl-o4.ortl: alloc: del: SYMBOL addr=0x118ea8
+rtl: alloc: new: OBJECT addr=0x119b00 size=356
+rtl: linkmap_add
+rtl: unresolv: global resolve
+rtl: unresolv: lookup: 1: _ZTVN10__cxxabiv120__si_class_type_infoE
+rtl: unresolv: lookup: 2: _ZTVN10__cxxabiv117__class_type_infoE
+dlopen: global symbol not found: _ZTVN10__cxxabiv117__class_type_infoE
+rtl: unloading '/dl-o4.o'
+rtl: alloc: del: SYMBOL addr=0x1190e0
+rtl: alloc: del: READ_WRITE addr=0x0
+rtl: alloc: del: READ_WRITE addr=0x118e78
+rtl: alloc: del: READ addr=0x118dd8
+rtl: alloc: del: READ_EXEC addr=0x118c50
+rtl: alloc: del: OBJECT addr=0x116358
+rtl: alloc: del: OBJECT addr=0x116388
+rtl: alloc: del: OBJECT addr=0x119b00
+rtl: alloc: del: OBJECT addr=0x1162a8
+*** END OF TEST libdl (RTL) 4 ***
