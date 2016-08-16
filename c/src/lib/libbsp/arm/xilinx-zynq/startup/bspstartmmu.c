@@ -22,6 +22,13 @@
 BSP_START_DATA_SECTION static const arm_cp15_start_section_config
 zynq_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
+#if defined(RTEMS_SMP)
+  {
+    .begin = 0xffff0000U,
+    .end = 0xffffffffU,
+    .flags = ARMV7_MMU_DEVICE
+  },
+#endif
   {
     .begin = 0xe0000000U,
     .end = 0xe0200000U,

@@ -14,8 +14,23 @@
 
 #include <rtems/score/smpimpl.h>
 
+extern void _start(void);
+
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
+  /*
+   * Enable the second CPU.
+   */
+  if (cpu_index != 0) {
+    volatile uint32_t* const kick_address = (uint32_t*) 0xfffffff0UL;
+    _ARM_Data_synchronization_barrier();
+    _ARM_Instruction_synchronization_barrier();
+    *kick_address = (uint32_t) _start;
+    _ARM_Data_synchronization_barrier();
+    _ARM_Instruction_synchronization_barrier();
+    _ARM_Send_event();
+  }
+
   /*
    * Wait for secondary processor to complete its basic initialization so that
    * we can enable the unified L2 cache.
