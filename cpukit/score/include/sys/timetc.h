@@ -30,8 +30,18 @@
  */
 
 struct timecounter;
+struct vdso_timehands;
+struct vdso_timehands32;
+#ifndef __rtems__
+typedef u_int timecounter_get_t(struct timecounter *);
+#else /* __rtems__ */
 typedef uint32_t timecounter_get_t(struct timecounter *);
+#endif /* __rtems__ */
 typedef void timecounter_pps_t(struct timecounter *);
+typedef uint32_t timecounter_fill_vdso_timehands_t(struct vdso_timehands *,
+    struct timecounter *);
+typedef uint32_t timecounter_fill_vdso_timehands32_t(struct vdso_timehands32 *,
+    struct timecounter *);
 
 struct timecounter {
 	timecounter_get_t	*tc_get_timecount;
@@ -70,6 +80,10 @@ struct timecounter {
 		/* Pointer to the timecounter's private parts. */
 	struct timecounter	*tc_next;
 		/* Pointer to the next timecounter. */
+#ifndef __rtems__
+	timecounter_fill_vdso_timehands_t *tc_fill_vdso_timehands;
+	timecounter_fill_vdso_timehands32_t *tc_fill_vdso_timehands32;
+#endif /* __rtems__ */
 };
 
 extern struct timecounter *timecounter;
