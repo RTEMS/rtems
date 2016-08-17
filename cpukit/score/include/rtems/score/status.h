@@ -53,7 +53,7 @@ typedef enum {
  */
 #if defined(RTEMS_POSIX_API)
   #define STATUS_BUILD( classic_status, posix_status ) \
-    ( ( ( posix_status ) << 8 ) | ( classic_status ) )
+    ( ( ( (unsigned int) ( posix_status ) ) << 8 ) | ( classic_status ) )
 #else
   #define STATUS_BUILD( classic_status, posix_status ) \
     ( classic_status )
