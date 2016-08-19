@@ -256,10 +256,10 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_tail(
  * @return This method returns the first node of the chain.
  */
 RTEMS_INLINE_ROUTINE Chain_Node *_Chain_First(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
-  return _Chain_Head( the_chain )->next;
+  return _Chain_Immutable_head( the_chain )->next;
 }
 
 /**
@@ -290,10 +290,10 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_first(
  * @return This method returns the last node of the chain.
  */
 RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Last(
-  Chain_Control *the_chain
+  const Chain_Control *the_chain
 )
 {
-  return _Chain_Tail( the_chain )->previous;
+  return _Chain_Immutable_tail( the_chain )->previous;
 }
 
 /**
@@ -323,7 +323,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_last(
  * @return This method returns the next node on the chain.
  */
 RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Next(
-  Chain_Node *the_node
+  const Chain_Node *the_node
 )
 {
   return the_node->next;
@@ -355,7 +355,7 @@ RTEMS_INLINE_ROUTINE const Chain_Node *_Chain_Immutable_next(
  * @return This method returns the previous node on the chain.
  */
 RTEMS_INLINE_ROUTINE Chain_Node *_Chain_Previous(
-  Chain_Node *the_node
+  const Chain_Node *the_node
 )
 {
   return the_node->previous;
