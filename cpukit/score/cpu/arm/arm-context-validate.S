@@ -46,7 +46,11 @@
 
 	.section	.text
 
+#ifdef __thumb__
 FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
+#else
+FUNCTION_ENTRY(_CPU_Context_validate)
+#endif
 
 	/* Save */
 
@@ -99,11 +103,10 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 #ifdef ARM_MULTILIB_VFP
 	/* R3 contains the FPSCR */
 	vmrs	r3, FPSCR
-	movs	r4, #0x001f
 #ifdef ARM_MULTILIB_ARCH_V7M
-	movt	r4, #0xf000
+	ldr	r4, =0xf000001f
 #else
-	movt	r4, #0xf800
+	ldr	r4, =0xf800001f
 #endif
 	bic	r3, r3, r4
 	and	r4, r4, r0
