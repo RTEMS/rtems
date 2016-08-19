@@ -398,6 +398,7 @@ libbsp_a_SOURCES += startup/pin-config.c
 libbsp_a_SOURCES += startup/power.c
 libbsp_a_SOURCES += startup/power-rtc.c
 libbsp_a_SOURCES += startup/power-clock.c
+libbsp_a_SOURCES += startup/sdram-config.c
 
 # IRQ
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c

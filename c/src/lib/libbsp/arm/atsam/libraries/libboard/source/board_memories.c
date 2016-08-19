@@ -167,6 +167,7 @@ void BOARD_ConfigureSdram(void)
 	/* 1. SDRAM features must be set in the configuration register:
 	asynchronous timings (TRC, TRAS, etc.), number of columns, rows,
 	CAS latency, and the data bus width. */
+#ifndef __rtems__
 	SDRAMC->SDRAMC_CR =
 		SDRAMC_CR_NC_COL8      // 8 column bits
 		| SDRAMC_CR_NR_ROW11     // 12 row bits (4K)
@@ -180,13 +181,20 @@ void BOARD_ConfigureSdram(void)
 			5)      // Active Command to read/Write Command delay time 21ns min
 		| SDRAMC_CR_TRAS(9)      // Command period (ACT to PRE)  42ns min
 		| SDRAMC_CR_TXSR(15U);   // Exit self-refresh to active time  70ns Min
+#else /* __rtems__ */
+	SDRAMC->SDRAMC_CR = BOARD_Sdram_Config.sdramc_cr;
+#endif /* __rtems__ */
 
 	/* 2. For mobile SDRAM, temperature-compensated self refresh (TCSR), drive
 	strength (DS) and partial array self refresh (PASR) must be set in the
 	Low Power Register. */
 
 	/* 3. The SDRAM memory type must be set in the Memory Device Register.*/
+#ifndef __rtems__
 	SDRAMC->SDRAMC_MDR = SDRAMC_MDR_MD_SDRAM;
+#else /* __rtems__ */
+	SDRAMC->SDRAMC_MDR = BOARD_Sdram_Config.sdramc_mdr;
+#endif /* __rtems__ */
 
 	/* 4. A minimum pause of 200 ¦Ìs is provided to precede any signal toggle.*/
 	for (i = 0; i < 100000; i++);
@@ -254,7 +262,12 @@ void BOARD_ConfigureSdram(void)
 	with the value 1562(15.625 ¦Ìs x 100 MHz) or 781(7.81 ¦Ìs x 100 MHz). */
 	// For IS42S16100E, 2048 refresh cycle every 32ms, every 15.625 ¦Ìs
 	/* ((32 x 10(^-3))/2048) x150 x (10^6) */
+#ifndef __rtems__
 	SDRAMC->SDRAMC_TR = 1562;
 	SDRAMC->SDRAMC_CFR1 |= SDRAMC_CFR1_UNAL;
+#else /* __rtems__ */
+	SDRAMC->SDRAMC_TR = BOARD_Sdram_Config.sdramc_tr;
+	SDRAMC->SDRAMC_CFR1 = BOARD_Sdram_Config.sdramc_cfr1;
+#endif /* __rtems__ */
 	/* After initialization, the SDRAM devices are fully functional. */
 }
