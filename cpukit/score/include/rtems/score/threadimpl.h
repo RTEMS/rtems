@@ -1031,16 +1031,16 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_default(
 
 #if defined(RTEMS_SMP)
 #define THREAD_QUEUE_CONTEXT_OF_REQUEST( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_queue_Context, Wait.Gate.Node )
+  RTEMS_CONTAINER_OF( node, Thread_queue_Context, Lock_context.Wait.Gate.Node )
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
+  Thread_Control            *the_thread,
+  Thread_queue_Lock_context *queue_lock_context
 )
 {
   Chain_Node *first;
 
-  _Chain_Extract_unprotected( &queue_context->Wait.Gate.Node );
+  _Chain_Extract_unprotected( &queue_lock_context->Wait.Gate.Node );
   first = _Chain_First( &the_thread->Wait.Lock.Pending_requests );
 
   if ( first != _Chain_Tail( &the_thread->Wait.Lock.Pending_requests ) ) {
@@ -1049,25 +1049,25 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request_locked(
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_queue_critical(
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
 )
 {
   _Thread_queue_Queue_acquire_critical(
     queue,
     &_Thread_Executing->Potpourri_stats,
-    &queue_context->Lock_context
+    &queue_lock_context->Lock_context
   );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
-  Thread_queue_Queue   *queue,
-  Thread_queue_Context *queue_context
+  Thread_queue_Queue        *queue,
+  Thread_queue_Lock_context *queue_lock_context
 )
 {
   _Thread_queue_Queue_release_critical(
     queue,
-    &queue_context->Lock_context
+    &queue_lock_context->Lock_context
   );
 }
 #endif
@@ -1092,30 +1092,36 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
 
   _Thread_Wait_acquire_default_critical(
     the_thread,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 
   queue = the_thread->Wait.queue;
-  queue_context->Wait.queue = queue;
+  queue_context->Lock_context.Wait.queue = queue;
 
   if ( queue != NULL ) {
     _Thread_queue_Gate_add(
       &the_thread->Wait.Lock.Pending_requests,
-      &queue_context->Wait.Gate
+      &queue_context->Lock_context.Wait.Gate
     );
     _Thread_Wait_release_default_critical(
       the_thread,
-      &queue_context->Lock_context
+      &queue_context->Lock_context.Lock_context
     );
-    _Thread_Wait_acquire_queue_critical( queue, queue_context );
+    _Thread_Wait_acquire_queue_critical( queue, &queue_context->Lock_context );
 
-    if ( queue_context->Wait.queue == NULL ) {
-      _Thread_Wait_release_queue_critical( queue, queue_context );
+    if ( queue_context->Lock_context.Wait.queue == NULL ) {
+      _Thread_Wait_release_queue_critical(
+        queue,
+        &queue_context->Lock_context
+      );
       _Thread_Wait_acquire_default_critical(
+        the_thread,
+        &queue_context->Lock_context.Lock_context
+      );
+      _Thread_Wait_remove_request_locked(
         the_thread,
         &queue_context->Lock_context
       );
-      _Thread_Wait_remove_request_locked( the_thread, queue_context );
       _Assert( the_thread->Wait.queue == NULL );
     }
   }
@@ -1138,7 +1144,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire(
 )
 {
   _Thread_queue_Context_initialize( queue_context );
-  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   _Thread_Wait_acquire_critical( the_thread, queue_context );
 }
 
@@ -1160,21 +1166,25 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_critical(
 #if defined(RTEMS_SMP)
   Thread_queue_Queue *queue;
 
-  queue = queue_context->Wait.queue;
+  queue = queue_context->Lock_context.Wait.queue;
 
   if ( queue != NULL ) {
-    _Thread_Wait_release_queue_critical( queue, queue_context );
+    _Thread_Wait_release_queue_critical(
+      queue, &queue_context->Lock_context
+    );
     _Thread_Wait_acquire_default_critical(
+      the_thread,
+      &queue_context->Lock_context.Lock_context
+    );
+    _Thread_Wait_remove_request_locked(
       the_thread,
       &queue_context->Lock_context
     );
-
-    _Thread_Wait_remove_request_locked( the_thread, queue_context );
   }
 
   _Thread_Wait_release_default_critical(
     the_thread,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 #else
   (void) the_thread;
@@ -1196,7 +1206,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release(
 )
 {
   _Thread_Wait_release_critical( the_thread, queue_context );
-  _ISR_lock_ISR_enable( &queue_context->Lock_context );
+  _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
 }
 
 /**
@@ -1243,23 +1253,23 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
  * On other configurations, this function does nothing.
  *
  * @param[in] the_thread The thread.
- * @param[in] queue_context The thread queue context used for corresponding
- *   _Thread_Wait_acquire().
+ * @param[in] queue_lock_context The thread queue lock context used for
+ *   corresponding _Thread_Wait_acquire().
  */
 RTEMS_INLINE_ROUTINE void _Thread_Wait_remove_request(
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
+  Thread_Control            *the_thread,
+  Thread_queue_Lock_context *queue_lock_context
 )
 {
 #if defined(RTEMS_SMP)
   ISR_lock_Context lock_context;
 
   _Thread_Wait_acquire_default( the_thread, &lock_context );
-  _Thread_Wait_remove_request_locked( the_thread, queue_context );
+  _Thread_Wait_remove_request_locked( the_thread, queue_lock_context );
   _Thread_Wait_release_default( the_thread, &lock_context );
 #else
   (void) the_thread;
-  (void) queue_context;
+  (void) queue_lock_context;
 #endif
 }
 
@@ -1294,7 +1304,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_restore_default(
       Thread_queue_Context *queue_context;
 
       queue_context = THREAD_QUEUE_CONTEXT_OF_REQUEST( node );
-      queue_context->Wait.queue = NULL;
+      queue_context->Lock_context.Wait.queue = NULL;
 
       node = _Chain_Next( node );
     } while ( node != tail );
@@ -1363,15 +1373,15 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_cancel(
 
 #if defined(RTEMS_SMP)
   if ( queue != NULL ) {
-    _Assert( queue_context->Wait.queue == queue );
+    _Assert( queue_context->Lock_context.Wait.queue == queue );
 #endif
 
     ( *the_thread->Wait.operations->extract )( queue, the_thread );
     _Thread_Wait_restore_default( the_thread );
 
 #if defined(RTEMS_SMP)
-    _Assert( queue_context->Wait.queue == NULL );
-    queue_context->Wait.queue = queue;
+    _Assert( queue_context->Lock_context.Wait.queue == NULL );
+    queue_context->Lock_context.Wait.queue = queue;
   }
 #endif
 }

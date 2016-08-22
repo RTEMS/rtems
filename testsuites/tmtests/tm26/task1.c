@@ -515,7 +515,7 @@ void complete_test( void )
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
       (void) _Semaphore_Get( Semaphore_id, &queue_context );
-      _ISR_lock_ISR_enable( &queue_context.Lock_context );
+      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     }
   semaphore_get_time = benchmark_timer_read();
 

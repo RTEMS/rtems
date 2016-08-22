@@ -92,7 +92,9 @@ int _POSIX_Condition_variables_Wait_support(
 
   the_cond->mutex = *mutex;
 
-  cpu_self = _Thread_Dispatch_disable_critical( &queue_context.Lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context.Lock_context.Lock_context
+  );
   executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( !already_timedout ) {

@@ -372,7 +372,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
 {
   _Thread_queue_Do_acquire_critical(
     the_thread_queue,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 }
 
@@ -381,7 +381,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
   Thread_queue_Context *queue_context
 )
 {
-  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   _Thread_queue_Acquire_critical( the_thread_queue, queue_context );
 }
 
@@ -422,7 +422,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release_critical(
 {
   _Thread_queue_Do_release_critical(
     the_thread_queue,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 }
 
@@ -432,7 +432,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
 )
 {
   _Thread_queue_Release_critical( the_thread_queue, queue_context );
-  _ISR_lock_ISR_enable( &queue_context->Lock_context );
+  _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
 }
 
 Thread_Control *_Thread_queue_Do_dequeue(
@@ -511,13 +511,13 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *   Thread_Control       *executing;
  *
  *   _Thread_queue_Context_initialize( &queue_context );
- *   _Thread_queue_Acquire( &mutex->Queue, &queue_context.Lock_context );
+ *   _Thread_queue_Acquire( &mutex->Queue, queue_context );
  *
  *   executing = _Thread_Executing;
  *
  *   if ( mutex->owner == NULL ) {
  *     mutex->owner = executing;
- *     _Thread_queue_Release( &mutex->Queue, &queue_context.Lock_context );
+ *     _Thread_queue_Release( &mutex->Queue, queue_context );
  *   } else {
  *     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
  *     _Thread_queue_Enqueue_critical(

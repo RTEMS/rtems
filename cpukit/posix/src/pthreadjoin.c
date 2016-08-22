@@ -41,7 +41,7 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_expected_level( &queue_context, 1 );
   _Thread_queue_Context_set_no_timeout( &queue_context );
-  the_thread = _Thread_Get( thread, &queue_context.Lock_context );
+  the_thread = _Thread_Get( thread, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;
@@ -51,22 +51,28 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
   executing = _Per_CPU_Get_executing( cpu_self );
 
   if ( executing == the_thread ) {
-    _ISR_lock_ISR_enable( &queue_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     return EDEADLK;
   }
 
-  _Thread_State_acquire_critical( the_thread, &queue_context.Lock_context );
+  _Thread_State_acquire_critical(
+    the_thread,
+    &queue_context.Lock_context.Lock_context
+  );
 
   if ( !_Thread_Is_joinable( the_thread ) ) {
-    _Thread_State_release( the_thread, &queue_context.Lock_context );
+    _Thread_State_release( the_thread, &queue_context.Lock_context.Lock_context );
     return EINVAL;
   }
 
   if ( _States_Is_waiting_for_join_at_exit( the_thread->current_state ) ) {
     value = the_thread->Life.exit_value;
     _Thread_Clear_state_locked( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
-    _Thread_Dispatch_disable_with_CPU( cpu_self, &queue_context.Lock_context );
-    _Thread_State_release( the_thread, &queue_context.Lock_context );
+    _Thread_Dispatch_disable_with_CPU(
+      cpu_self,
+      &queue_context.Lock_context.Lock_context
+    );
+    _Thread_State_release( the_thread, &queue_context.Lock_context.Lock_context );
     _Thread_Dispatch_enable( cpu_self );
   } else {
     _Thread_Join(

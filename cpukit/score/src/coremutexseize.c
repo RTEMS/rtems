@@ -57,7 +57,7 @@ Status_Control _CORE_mutex_Seize_slow(
 #if defined(RTEMS_SMP)
   _Thread_queue_Context_set_expected_level( queue_context, 1 );
 #else
-  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   _CORE_mutex_Acquire_critical( the_mutex, queue_context );
   _Thread_queue_Context_set_expected_level( queue_context, 2 );
 #endif

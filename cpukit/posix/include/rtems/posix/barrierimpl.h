@@ -71,7 +71,7 @@ RTEMS_INLINE_ROUTINE POSIX_Barrier_Control *_POSIX_Barrier_Get(
   _Thread_queue_Context_initialize( queue_context );
   return (POSIX_Barrier_Control *) _Objects_Get(
     (Objects_Id) *barrier,
-    &queue_context->Lock_context,
+    &queue_context->Lock_context.Lock_context,
     &_POSIX_Barrier_Information
   );
 }

@@ -32,7 +32,7 @@ void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
   restore_thread_life_protection = the_mutex->Mutex.nest_level == 0;
 
   _Thread_queue_Context_initialize( &queue_context );
-  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
   _CORE_recursive_mutex_Surrender(
     &the_mutex->Mutex,
     _Thread_Executing,

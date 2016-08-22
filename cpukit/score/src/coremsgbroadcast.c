@@ -33,7 +33,7 @@ Status_Control _CORE_message_queue_Broadcast(
   uint32_t                    number_broadcasted;
 
   if ( size > the_message_queue->maximum_message_size ) {
-    _ISR_lock_ISR_enable( &queue_context->Lock_context );
+    _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
     return STATUS_MESSAGE_INVALID_SIZE;
   }
 

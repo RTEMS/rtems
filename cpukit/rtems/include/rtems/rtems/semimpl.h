@@ -99,7 +99,7 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get(
   _Thread_queue_Context_initialize( queue_context );
   return (Semaphore_Control *) _Objects_Get(
     id,
-    &queue_context->Lock_context,
+    &queue_context->Lock_context.Lock_context,
     &_Semaphore_Information
   );
 }

@@ -58,12 +58,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
   }
 
   if ( ( the_mq->oflag & O_ACCMODE ) == O_WRONLY ) {
-    _ISR_lock_ISR_enable( &queue_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
   if ( msg_len < the_mq->Message_queue.maximum_message_size ) {
-    _ISR_lock_ISR_enable( &queue_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     rtems_set_errno_and_return_minus_one( EMSGSIZE );
   }
 

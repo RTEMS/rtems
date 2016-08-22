@@ -95,6 +95,74 @@ typedef struct {
 } Thread_queue_Gate;
 #endif
 
+typedef struct {
+  /**
+   * @brief The lock context for the thread queue acquire and release
+   * operations.
+   */
+  ISR_lock_Context Lock_context;
+
+#if defined(RTEMS_SMP)
+  /**
+   * @brief Data to support thread queue enqueue operations.
+   */
+  struct {
+    /**
+     * @brief Gate to synchronize thread wait lock requests.
+     *
+     * @see _Thread_Wait_acquire_critical() and _Thread_Wait_tranquilize().
+     */
+    Thread_queue_Gate Gate;
+
+    /**
+     * @brief The thread queue in case the thread is blocked on a thread queue.
+     */
+    Thread_queue_Queue *queue;
+  } Wait;
+#endif
+} Thread_queue_Lock_context;
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief A thread queue link from one thread to another specified by the
+ * thread queue owner and thread wait queue relationships.
+ */
+typedef struct {
+  /**
+   * @brief Node to register this link in the global thread queue links lookup
+   * tree.
+   */
+  RBTree_Node Registry_node;
+
+  /**
+   * @brief The source thread queue determined by the thread queue owner.
+   */
+  Thread_queue_Queue *source;
+
+  /**
+   * @brief The target thread queue determined by the thread wait queue of the
+   * source owner.
+   */
+  Thread_queue_Queue *target;
+
+  /**
+   * @brief Node to add this link to a thread queue path.
+   */
+  Chain_Node Path_node;
+
+  /**
+   * @brief The owner of this thread queue link.
+   */
+  Thread_Control *owner;
+
+  /**
+   * @brief The queue lock context used to acquire the thread wait lock of the
+   * owner.
+   */
+  Thread_queue_Lock_context Lock_context;
+} Thread_queue_Link;
+#endif
+
 /**
  * @brief Thread queue context for the thread queue methods.
  *
@@ -105,7 +173,7 @@ typedef struct {
    * @brief The lock context for the thread queue acquire and release
    * operations.
    */
-  ISR_lock_Context Lock_context;
+  Thread_queue_Lock_context Lock_context;
 
   /**
    * @brief The expected thread dispatch disable level for
@@ -150,67 +218,7 @@ typedef struct {
    */
   Thread_queue_MP_callout mp_callout;
 #endif
-
-#if defined(RTEMS_SMP)
-  /**
-   * @brief Data to support thread queue enqueue operations.
-   */
-  struct {
-    /**
-     * @brief Gate to synchronize thread wait lock requests.
-     *
-     * @see _Thread_Wait_acquire_critical() and _Thread_Wait_tranquilize().
-     */
-    Thread_queue_Gate Gate;
-
-    /**
-     * @brief The thread queue in case the thread is blocked on a thread queue.
-     */
-    Thread_queue_Queue *queue;
-  } Wait;
-#endif
 } Thread_queue_Context;
-
-#if defined(RTEMS_SMP)
-/**
- * @brief A thread queue link from one thread to another specified by the
- * thread queue owner and thread wait queue relationships.
- */
-typedef struct {
-  /**
-   * @brief Node to register this link in the global thread queue links lookup
-   * tree.
-   */
-  RBTree_Node Registry_node;
-
-  /**
-   * @brief The source thread queue determined by the thread queue owner.
-   */
-  Thread_queue_Queue *source;
-
-  /**
-   * @brief The target thread queue determined by the thread wait queue of the
-   * source owner.
-   */
-  Thread_queue_Queue *target;
-
-  /**
-   * @brief Node to add this link to a thread queue path.
-   */
-  Chain_Node Path_node;
-
-  /**
-   * @brief The owner of this thread queue link.
-   */
-  Thread_Control *owner;
-
-  /**
-   * @brief The queue context used to acquire the thread wait lock of the
-   * owner.
-   */
-  Thread_queue_Context Queue_context;
-} Thread_queue_Link;
-#endif
 
 /**
  * @brief Thread priority queue.

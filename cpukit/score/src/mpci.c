@@ -335,7 +335,7 @@ void _MPCI_Receive_server(
 
     executing->receive_packet = NULL;
 
-    _ISR_lock_ISR_disable( &queue_context.Lock_context );
+    _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
     _CORE_semaphore_Seize(
       &_MPCI_Semaphore,
       MPCI_SEMAPHORE_TQ_OPERATIONS,
@@ -375,7 +375,7 @@ void _MPCI_Announce ( void )
 {
   Thread_queue_Context queue_context;
 
-  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
   (void) _CORE_semaphore_Surrender(
     &_MPCI_Semaphore,
     MPCI_SEMAPHORE_TQ_OPERATIONS,

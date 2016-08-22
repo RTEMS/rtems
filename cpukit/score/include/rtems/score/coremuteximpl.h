@@ -408,7 +408,9 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
     return STATUS_SUCCESSFUL;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &queue_context->Lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
+  );
   _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );
   _Thread_Raise_priority( owner, priority_ceiling );
   _Thread_Dispatch_enable( cpu_self );
@@ -524,7 +526,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
       unblock,
       &the_mutex->Recursive.Mutex.Wait_queue.Queue,
       new_owner,
-      &queue_context->Lock_context
+      &queue_context->Lock_context.Lock_context
     );
   } else {
     _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );

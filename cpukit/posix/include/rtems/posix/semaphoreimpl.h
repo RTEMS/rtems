@@ -64,7 +64,7 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
   _Thread_queue_Context_initialize( queue_context );
   return (POSIX_Semaphore_Control *) _Objects_Get(
     (Objects_Id) *id,
-    &queue_context->Lock_context,
+    &queue_context->Lock_context.Lock_context,
     &_POSIX_Semaphore_Information
   );
 }

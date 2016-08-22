@@ -45,7 +45,7 @@ int pthread_getschedparam(
     return EINVAL;
   }
 
-  the_thread = _Thread_Get( thread, &queue_context.Lock_context );
+  the_thread = _Thread_Get( thread, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
     return ESRCH;

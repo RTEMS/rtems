@@ -95,7 +95,7 @@ RTEMS_INLINE_ROUTINE Message_queue_Control *_Message_queue_Get(
   _Thread_queue_Context_initialize( queue_context );
   return (Message_queue_Control *) _Objects_Get(
     id,
-    &queue_context->Lock_context,
+    &queue_context->Lock_context.Lock_context,
     &_Message_queue_Information
   );
 }

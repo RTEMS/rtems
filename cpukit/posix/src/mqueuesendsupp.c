@@ -65,7 +65,7 @@ int _POSIX_Message_queue_Send_support(
   }
 
   if ( ( the_mq->oflag & O_ACCMODE ) == O_RDONLY ) {
-    _ISR_lock_ISR_enable( &queue_context.Lock_context );
+    _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 

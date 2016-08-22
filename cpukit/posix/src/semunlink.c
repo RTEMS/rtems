@@ -40,7 +40,7 @@ int sem_unlink(
 
   _POSIX_Semaphore_Namespace_remove( the_semaphore );
 
-  _ISR_lock_ISR_disable( &queue_context.Lock_context );
+  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
   _CORE_semaphore_Acquire_critical( &the_semaphore->Semaphore, &queue_context );
   the_semaphore->linked = false;
   _POSIX_Semaphore_Delete( the_semaphore, &queue_context );

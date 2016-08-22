@@ -45,7 +45,7 @@ rtems_status_code rtems_task_set_scheduler(
   }
 
   _Thread_queue_Context_initialize( &queue_context );
-  the_thread = _Thread_Get( task_id, &queue_context.Lock_context );
+  the_thread = _Thread_Get( task_id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -57,7 +57,9 @@ rtems_status_code rtems_task_set_scheduler(
     return RTEMS_INVALID_ID;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &queue_context.Lock_context );
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context.Lock_context.Lock_context
+  );
 
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
   _Thread_State_acquire_critical( the_thread, &state_context );

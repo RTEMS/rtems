@@ -62,12 +62,12 @@ static Thread_Control *_Semaphore_Queue_acquire(
 {
   Thread_Control *executing;
 
-  _ISR_lock_ISR_disable( &queue_context->Lock_context );
+  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   executing = _Thread_Executing;
   _Thread_queue_Queue_acquire_critical(
     &sem->Queue.Queue,
     &executing->Potpourri_stats,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 
   return executing;
@@ -80,7 +80,7 @@ static void _Semaphore_Queue_release(
 {
   _Thread_queue_Queue_release(
     &sem->Queue.Queue,
-    &queue_context->Lock_context
+    &queue_context->Lock_context.Lock_context
   );
 }
 
