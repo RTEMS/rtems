@@ -25,12 +25,12 @@ Thread_Control *_Thread_queue_First(
   const Thread_queue_Operations *operations
 )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
+  Thread_Control       *the_thread;
+  Thread_queue_Context  queue_context;
 
-  _Thread_queue_Acquire( the_thread_queue, &lock_context );
+  _Thread_queue_Acquire( the_thread_queue, &queue_context );
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
-  _Thread_queue_Release( the_thread_queue, &lock_context );
+  _Thread_queue_Release( the_thread_queue, &queue_context );
 
   return the_thread;
 }

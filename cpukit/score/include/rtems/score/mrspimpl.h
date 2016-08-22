@@ -66,10 +66,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &mrsp->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &mrsp->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Release(
@@ -77,7 +74,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release( &mrsp->Wait_queue, &queue_context->Lock_context );
+  _Thread_queue_Release( &mrsp->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE bool _MRSP_Restore_priority_filter(

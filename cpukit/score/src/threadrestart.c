@@ -119,10 +119,7 @@ static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
 #endif
 
   _Thread_queue_Context_initialize( &join_context.Base );
-  _Thread_queue_Acquire(
-    &the_thread->Join_queue,
-    &join_context.Base.Lock_context
-  );
+  _Thread_queue_Acquire( &the_thread->Join_queue, &join_context.Base );
   _Thread_queue_Flush_critical(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,

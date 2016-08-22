@@ -641,7 +641,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_MP_callout( &queue_context, mp_callout );
-  _Thread_queue_Acquire( the_thread_queue, &queue_context.Lock_context );
+  _Thread_queue_Acquire( the_thread_queue, &queue_context );
 
   the_thread = _Thread_queue_First_locked( the_thread_queue, operations );
 
@@ -653,7 +653,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
       &queue_context
     );
   } else {
-    _Thread_queue_Release( the_thread_queue, &queue_context.Lock_context );
+    _Thread_queue_Release( the_thread_queue, &queue_context );
   }
 
   return the_thread;

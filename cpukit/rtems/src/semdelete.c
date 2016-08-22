@@ -46,7 +46,7 @@ rtems_status_code rtems_semaphore_delete(
 
   _Thread_queue_Acquire_critical(
     &the_semaphore->Core_control.Wait_queue,
-    &queue_context.Lock_context
+    &queue_context
   );
 
   switch ( the_semaphore->variant ) {
@@ -81,7 +81,7 @@ rtems_status_code rtems_semaphore_delete(
   if ( status != STATUS_SUCCESSFUL ) {
     _Thread_queue_Release(
       &the_semaphore->Core_control.Wait_queue,
-      &queue_context.Lock_context
+      &queue_context
     );
     _Objects_Allocator_unlock();
     return _Status_Get( status );

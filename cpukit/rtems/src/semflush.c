@@ -39,7 +39,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
 
   _Thread_queue_Acquire_critical(
     &the_semaphore->Core_control.Wait_queue,
-    &queue_context.Lock_context
+    &queue_context
   );
   _Thread_queue_Context_set_MP_callout(
     &queue_context,
@@ -51,7 +51,7 @@ rtems_status_code rtems_semaphore_flush( rtems_id id )
     case SEMAPHORE_VARIANT_MRSP:
       _Thread_queue_Release(
         &the_semaphore->Core_control.Wait_queue,
-        &queue_context.Lock_context
+        &queue_context
       );
       return RTEMS_NOT_DEFINED;
 #endif

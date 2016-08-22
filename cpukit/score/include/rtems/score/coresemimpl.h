@@ -58,10 +58,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Acquire_critical(
   Thread_queue_Context   *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &the_semaphore->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &the_semaphore->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
@@ -69,10 +66,7 @@ RTEMS_INLINE_ROUTINE void _CORE_semaphore_Release(
   Thread_queue_Context   *queue_context
 )
 {
-  _Thread_queue_Release(
-    &the_semaphore->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Release( &the_semaphore->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_semaphore_Destroy(

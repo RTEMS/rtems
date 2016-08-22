@@ -68,10 +68,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Acquire_critical(
   Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &the_cond->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &the_cond->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
@@ -79,7 +76,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
   Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Release( &the_cond->Wait_queue, &queue_context->Lock_context );
+  _Thread_queue_Release( &the_cond->Wait_queue, queue_context );
 }
 
 /**

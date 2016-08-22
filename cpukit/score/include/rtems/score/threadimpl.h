@@ -368,7 +368,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_thread->Join_queue, lock_context );
+  _Thread_queue_Do_acquire_critical( &the_thread->Join_queue, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_State_acquire(
@@ -376,7 +376,8 @@ RTEMS_INLINE_ROUTINE void _Thread_State_acquire(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_queue_Acquire( &the_thread->Join_queue, lock_context );
+  _ISR_lock_ISR_disable( lock_context );
+  _Thread_State_acquire_critical( the_thread, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_State_acquire_for_executing(
@@ -397,7 +398,7 @@ RTEMS_INLINE_ROUTINE void _Thread_State_release_critical(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_queue_Release_critical( &the_thread->Join_queue, lock_context );
+  _Thread_queue_Do_release_critical( &the_thread->Join_queue, lock_context );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_State_release(
@@ -405,7 +406,8 @@ RTEMS_INLINE_ROUTINE void _Thread_State_release(
   ISR_lock_Context *lock_context
 )
 {
-  _Thread_queue_Release( &the_thread->Join_queue, lock_context );
+  _Thread_State_release_critical( the_thread, lock_context );
+  _ISR_lock_ISR_enable( lock_context );
 }
 
 #if defined(RTEMS_DEBUG)

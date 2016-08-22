@@ -54,7 +54,7 @@ static rtems_status_code _Semaphore_Set_priority(
 
   _Thread_queue_Acquire_critical(
     &the_semaphore->Core_control.Wait_queue,
-    &queue_context->Lock_context
+    queue_context
   );
 
   switch ( the_semaphore->variant ) {
@@ -108,7 +108,7 @@ static rtems_status_code _Semaphore_Set_priority(
 
   _Thread_queue_Release(
     &the_semaphore->Core_control.Wait_queue,
-    &queue_context->Lock_context
+    queue_context
   );
 
   *old_priority_p = _RTEMS_Priority_From_core( scheduler, old_priority );

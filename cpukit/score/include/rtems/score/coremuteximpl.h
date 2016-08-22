@@ -56,10 +56,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Acquire_critical(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &the_mutex->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &the_mutex->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
@@ -67,10 +64,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Release(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release(
-    &the_mutex->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Release( &the_mutex->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE Thread_Control *_CORE_mutex_Get_owner(

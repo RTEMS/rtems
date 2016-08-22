@@ -59,10 +59,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Acquire_critical(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &the_barrier->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &the_barrier->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
@@ -70,10 +67,7 @@ RTEMS_INLINE_ROUTINE void _CORE_barrier_Release(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release(
-    &the_barrier->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Release( &the_barrier->Wait_queue, queue_context );
 }
 
 /**

@@ -313,10 +313,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire(
   Thread_queue_Context       *queue_context
 )
 {
-  _Thread_queue_Acquire(
-    &the_message_queue->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire( &the_message_queue->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire_critical(
@@ -324,10 +321,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Acquire_critical(
   Thread_queue_Context       *queue_context
 )
 {
-  _Thread_queue_Acquire_critical(
-    &the_message_queue->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Acquire_critical( &the_message_queue->Wait_queue, queue_context );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_message_queue_Release(
@@ -335,10 +329,7 @@ RTEMS_INLINE_ROUTINE void _CORE_message_queue_Release(
   Thread_queue_Context       *queue_context
 )
 {
-  _Thread_queue_Release(
-    &the_message_queue->Wait_queue,
-    &queue_context->Lock_context
-  );
+  _Thread_queue_Release( &the_message_queue->Wait_queue, queue_context );
 }
 
 /**
