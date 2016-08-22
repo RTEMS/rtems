@@ -10,6 +10,10 @@ sams70q19, sams70q20, sams70q21, samv71j19, samv71j20, samv71j21, samv71n19,
 samv71n20, samv71n21, samv71q19, samv71q20 and samv71q21.  By default the BSP
 uses the ATSAMV71Q21 chip.  Not all variants are tested.
 
+Use --enable-sdram=XYZ to select the SDRAM variant where XYZ is one of
+is42s16100e-7bli and is42s16320f-7bl. Not all variants are tested with all
+controller and speed combinations.
+
 Use BOARD_MAINOSC=XYZ to set the main oscillator frequency in Hz (default
 12MHz).
 

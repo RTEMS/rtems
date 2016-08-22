@@ -50,6 +50,16 @@ AC_ARG_ENABLE(
 esac],
 [AC_DEFINE([__SAMV71Q21__],[1],[chip variant]) INTFLASH=0x00200000 ; INTSRAM=0x00060000])
 
+AC_ARG_ENABLE(
+[sdram],
+[AS_HELP_STRING([--enable-sdram],[select a SDRAM variant (default is42s16100e-7bli)])],
+[case "${enableval}" in
+  is42s16100e-7bli) AC_DEFINE([ATSAM_SDRAM_IS42S16100E_7BLI],[1],[SDRAM variant]) EXTSDRAM=0x00200000 ;;
+  is42s16320f-7bl) AC_DEFINE([ATSAM_SDRAM_IS42S16320F_7BL],[1],[SDRAM variant]) EXTSDRAM=0x04000000 ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for SDRAM variant]) ;;
+esac],
+[AC_DEFINE([ATSAM_SDRAM_IS42S16100E_7BLI],[1],[SDRAM variant]) EXTSDRAM=0x00200000])
+
 RTEMS_BSPOPTS_SET([BOARD_MAINOSC],[*],[12000000])
 RTEMS_BSPOPTS_HELP([BOARD_MAINOSC],[Main oscillator frequency in Hz (default 12MHz)])
 
@@ -76,7 +86,7 @@ AC_ARG_VAR([$1],[$2])dnl
 ATSAM_LINKCMD([ATSAM_MEMORY_TCM_SIZE],[size of tightly coupled memories (TCM) in bytes],[0x00000000])
 ATSAM_LINKCMD([ATSAM_MEMORY_INTFLASH_SIZE],[size of internal flash in bytes],[${INTFLASH}])
 ATSAM_LINKCMD([ATSAM_MEMORY_INTSRAM_SIZE],[size of internal SRAM in bytes],[${INTSRAM}])
-ATSAM_LINKCMD([ATSAM_MEMORY_SDRAM_SIZE],[size of external SDRAM in bytes],[0x00200000])
+ATSAM_LINKCMD([ATSAM_MEMORY_SDRAM_SIZE],[size of external SDRAM in bytes],[${EXTSDRAM}])
 ATSAM_LINKCMD([ATSAM_MEMORY_QSPIFLASH_SIZE],[size of QSPI flash in bytes],[0x00200000])
 
 AC_CONFIG_FILES([
