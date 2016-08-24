@@ -1169,6 +1169,7 @@ if_atsam_ioctl(struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 	case SIOCADDMULTI:
 	case SIOCDELMULTI:
 		if_atsam_multicast_control(command == SIOCADDMULTI, ifr, sc);
+		break;
 	case SIO_RTEMS_SHOW_STATS:
 		if_atsam_stats(sc);
 		break;
