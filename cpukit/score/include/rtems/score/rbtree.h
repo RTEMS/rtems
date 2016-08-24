@@ -39,6 +39,8 @@ extern "C" {
  */
 /**@{*/
 
+struct RBTree_Control;
+
 /**
  * @brief Red-black tree node.
  *
@@ -47,6 +49,9 @@ extern "C" {
  */
 typedef struct RBTree_Node {
   RB_ENTRY(RBTree_Node) Node;
+#if defined(RTEMS_DEBUG)
+  const struct RBTree_Control *tree;
+#endif
 } RBTree_Node;
 
 /**
@@ -124,6 +129,7 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
 {
 #if defined(RTEMS_DEBUG)
   _RBTree_Set_off_tree( the_node );
+  the_node->tree = NULL;
 #endif
 }
 
@@ -400,6 +406,10 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_one(
 )
 {
   _Assert( _RBTree_Is_node_off_tree( the_node ) );
+#if defined(RTEMS_DEBUG)
+  _Assert( the_node->tree == NULL );
+  the_node->tree = the_rbtree;
+#endif
   RB_ROOT( the_rbtree ) = the_node;
   RB_PARENT( the_node, Node ) = NULL;
   RB_LEFT( the_node, Node ) = NULL;

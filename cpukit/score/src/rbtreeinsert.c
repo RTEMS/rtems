@@ -19,5 +19,9 @@ void _RBTree_Insert_color(
   RBTree_Node    *the_node
 )
 {
+#if defined(RTEMS_DEBUG)
+  _Assert( the_node->tree == NULL );
+  the_node->tree = the_rbtree;
+#endif
   RBTree_Control_RB_INSERT_COLOR( the_rbtree, the_node );
 }

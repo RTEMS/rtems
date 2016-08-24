@@ -21,8 +21,7 @@ void _RBTree_Extract(
   RBTree_Node    *the_node
 )
 {
+  _Assert( the_node->tree == the_rbtree );
   RB_REMOVE( RBTree_Control, the_rbtree, the_node );
-#if defined(RTEMS_DEBUG)
-  _RBTree_Set_off_tree( the_node );
-#endif
+  _RBTree_Initialize_node( the_node );
 }
