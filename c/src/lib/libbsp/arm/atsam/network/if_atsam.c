@@ -648,10 +648,14 @@ static bool if_atsam_send_packet(if_atsam_softc *sc, struct mbuf *m)
 		 */
 		cur = &sc->tx_bd_base[sc->tx_ring.tx_bd_used];
 		/* Set the transfer data */
-		rtems_cache_flush_multiple_data_lines(mtod(m, const void *),
-		    (size_t)m->m_len);
 		if (m->m_len) {
-			cur->addr = (uint32_t)(mtod(m, void *));
+			uintptr_t cache_adjustment = mtod(m, uintptr_t) % 32;
+
+			rtems_cache_flush_multiple_data_lines(
+			  mtod(m, const char *) - cache_adjustment,
+			  (size_t)(m->m_len + cache_adjustment));
+
+			cur->addr = mtod(m, uint32_t);
 			tmp_val = (uint32_t)m->m_len | GMAC_TX_SET_USED;
 			if (sc->tx_ring.tx_bd_used == (sc->tx_ring.length - 1)) {
 				tmp_val |= GMAC_TX_SET_WRAP;
