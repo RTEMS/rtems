@@ -106,6 +106,8 @@ typedef struct {
 #define BCM2835_MAILBOX_POWER_STATE_NODEV ( 1 << 1 )
 int bcm2835_mailbox_set_power_state( bcm2835_set_power_state_entries *_entries );
 
+int bcm2835_mailbox_get_power_state( bcm2835_set_power_state_entries *_entries );
+
 typedef struct {
   uint32_t base;
   size_t size;
@@ -135,6 +137,21 @@ int bcm2835_mailbox_get_board_model( bcm2835_get_board_spec_entries *_entries );
 
 int bcm2835_mailbox_get_board_revision(
   bcm2835_get_board_spec_entries *_entries );
+
+typedef struct {
+  uint64_t board_serial;
+} bcm2835_get_board_serial_entries;
+
+int bcm2835_mailbox_get_board_serial(
+  bcm2835_get_board_serial_entries *_entries );
+
+typedef struct {
+  uint32_t clock_id;
+  uint32_t clock_rate;
+} bcm2835_get_clock_rate_entries;
+
+int bcm2835_mailbox_get_clock_rate(
+  bcm2835_get_clock_rate_entries *_entries );
 /** @} */
 
 #endif /* LIBBSP_ARM_RASPBERRYPI_VC_H */

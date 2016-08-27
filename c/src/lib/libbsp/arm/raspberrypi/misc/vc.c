@@ -242,6 +242,32 @@ int bcm2835_mailbox_get_cmdline( bcm2835_get_cmdline_entries *_entries )
   return 0;
 }
 
+int bcm2835_mailbox_get_power_state( bcm2835_set_power_state_entries *_entries )
+{
+  struct BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE {
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_power_state get_power_state;
+    uint32_t end_tag;
+    uint32_t padding_reserve[16];
+  } buffer;
+  BCM2835_MBOX_INIT_BUF( &buffer );
+  BCM2835_MBOX_INIT_TAG( &buffer.get_power_state,
+    BCM2835_MAILBOX_TAG_GET_POWER_STATE );
+  buffer.get_power_state.body.req.dev_id = _entries->dev_id;
+  bcm2835_mailbox_buffer_flush_and_invalidate( &buffer, sizeof( &buffer ) );
+
+  if ( bcm2835_mailbox_send_read_buffer( &buffer ) )
+    return -1;
+
+  _entries->dev_id = buffer.get_power_state.body.resp.dev_id;
+  _entries->state = buffer.get_power_state.body.resp.state;
+
+  if ( !bcm2835_mailbox_buffer_suceeded( &buffer.hdr ) )
+    return -2;
+
+  return 0;
+}
+
 int bcm2835_mailbox_set_power_state( bcm2835_set_power_state_entries *_entries )
 {
   struct BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE {
@@ -404,6 +430,58 @@ int bcm2835_mailbox_get_board_revision(
 
   if ( !BCM2835_MBOX_TAG_REPLY_IS_SET( &buffer.get_board_revision ) )
     return -3;
+
+  return 0;
+}
+
+int bcm2835_mailbox_get_board_serial(
+  bcm2835_get_board_serial_entries *_entries )
+{
+  struct BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE {
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_board_serial get_board_serial;
+    uint32_t end_tag;
+    uint32_t padding_reserve[16];
+  } buffer;
+  BCM2835_MBOX_INIT_BUF( &buffer );
+  BCM2835_MBOX_INIT_TAG_NO_REQ( &buffer.get_board_serial,
+    BCM2835_MAILBOX_TAG_GET_BOARD_SERIAL );
+  bcm2835_mailbox_buffer_flush_and_invalidate( &buffer, sizeof( &buffer ) );
+
+  if ( bcm2835_mailbox_send_read_buffer( &buffer ) )
+    return -1;
+
+  _entries->board_serial = buffer.get_board_serial.body.resp.board_serial;
+
+  if ( !bcm2835_mailbox_buffer_suceeded( &buffer.hdr ) )
+    return -2;
+
+  return 0;
+}
+
+int bcm2835_mailbox_get_clock_rate(
+  bcm2835_get_clock_rate_entries *_entries )
+{
+  struct BCM2835_MBOX_BUF_ALIGN_ATTRIBUTE {
+    bcm2835_mbox_buf_hdr hdr;
+    bcm2835_mbox_tag_get_clock_rate get_clock_rate;
+    uint32_t end_tag;
+    uint32_t padding_reserve[16];
+  } buffer;
+  BCM2835_MBOX_INIT_BUF( &buffer );
+  BCM2835_MBOX_INIT_TAG_NO_REQ( &buffer.get_clock_rate,
+    BCM2835_MAILBOX_TAG_GET_CLOCK_RATE );
+  buffer.get_clock_rate.body.req.clock_id = _entries->clock_id;
+  bcm2835_mailbox_buffer_flush_and_invalidate( &buffer, sizeof( &buffer ) );
+
+  if ( bcm2835_mailbox_send_read_buffer( &buffer ) )
+    return -1;
+
+  _entries->clock_id = buffer.get_clock_rate.body.resp.clock_id;
+  _entries->clock_rate = buffer.get_clock_rate.body.resp.clock_rate;
+
+  if ( !bcm2835_mailbox_buffer_suceeded( &buffer.hdr ) )
+    return -2;
 
   return 0;
 }

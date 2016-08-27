@@ -182,6 +182,17 @@ typedef struct {
 
 #define BCM2835_MAILBOX_TAG_GET_BOARD_MAC       0x00010003
 #define BCM2835_MAILBOX_TAG_GET_BOARD_SERIAL    0x00010004
+typedef struct {
+  bcm2835_mbox_tag_hdr tag_hdr;
+  union {
+    struct {
+    } req;
+    struct {
+      uint64_t board_serial;
+    } resp;
+  } body;
+} bcm2835_mbox_tag_get_board_serial;
+
 #define BCM2835_MAILBOX_TAG_GET_ARM_MEMORY      0x00010005
 typedef struct {
   bcm2835_mbox_tag_hdr tag_hdr;
@@ -209,6 +220,18 @@ typedef struct {
 } bcm2835_mbox_tag_get_vc_memory;
 
 #define BCM2835_MAILBOX_TAG_GET_CLOCKS          0x00010007
+typedef struct {
+  bcm2835_mbox_tag_hdr tag_hdr;
+  union {
+    struct {
+      uint32_t clock_id;
+    } req;
+    struct {
+      uint32_t clock_id;
+      uint32_t clock_rate;
+    } resp;
+  } body;
+} bcm2835_mbox_tag_get_clock_rate;
 
 /* Config */
 #define BCM2835_MAILBOX_TAG_GET_CMD_LINE        0x00050001
@@ -238,6 +261,18 @@ typedef struct {
 #define BCM2835_MAILBOX_POWER_UDID_CCP2TX            0x00000008
 
 #define BCM2835_MAILBOX_TAG_GET_POWER_STATE     0x00020001
+typedef struct {
+  bcm2835_mbox_tag_hdr tag_hdr;
+  union {
+    struct {
+      uint32_t dev_id;
+    } req;
+    struct {
+      uint32_t dev_id;
+      uint32_t state;
+    } resp;
+  } body;
+} bcm2835_mbox_tag_get_power_state;
 
 #define BCM2835_MAILBOX_POWER_STATE_RESP_ON       (1 << 0)
 #define BCM2835_MAILBOX_POWER_STATE_RESP_NODEV    (1 << 1)
