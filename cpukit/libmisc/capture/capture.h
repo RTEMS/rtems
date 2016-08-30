@@ -11,9 +11,8 @@
 /*
   ------------------------------------------------------------------------
 
-  Copyright Objective Design Systems Pty Ltd, 2002
-  All rights reserved Objective Design Systems Pty Ltd, 2002
-  Chris Johns (ccj@acm.org)
+  Copyright 2002, 2016 Chris Johns <chrisj@rtems.org>.
+  All rights reserved.
 
   COPYRIGHT (c) 1989-2014
   On-Line Applications Research Corporation (OAR).
@@ -33,6 +32,10 @@
 #ifndef __CAPTURE_H_
 #define __CAPTURE_H_
 
+#include <rtems.h>
+#include <rtems/rtems/tasksimpl.h>
+#include <rtems/score/schedulerimpl.h>
+
 /**
  *  @defgroup libmisc_capture RTEMS Capture Engine
  *
@@ -45,9 +48,22 @@
 extern "C" {
 #endif
 
-#include <rtems.h>
-#include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/schedulerimpl.h>
+/*
+ * Global capture flags.
+ */
+#define RTEMS_CAPTURE_INIT           (1u << 0)
+#define RTEMS_CAPTURE_ON             (1U << 1)
+#define RTEMS_CAPTURE_NO_MEMORY      (1U << 2)
+#define RTEMS_CAPTURE_TRIGGERED      (1U << 3)
+#define RTEMS_CAPTURE_GLOBAL_WATCH   (1U << 4)
+#define RTEMS_CAPTURE_ONLY_MONITOR   (1U << 5)
+
+/*
+ * Per-CPU capture flags.
+ */
+#define RTEMS_CAPTURE_OVERFLOW       (1U << 0)
+#define RTEMS_CAPTURE_READER_ACTIVE  (1U << 1)
+#define RTEMS_CAPTURE_READER_WAITING (1U << 2)
 
 /**
  * The number of tasks in a trigger group.
@@ -154,11 +170,11 @@ typedef struct rtems_capture_control_s
  */
 typedef struct rtems_capture_record_s
 {
-  rtems_capture_time_t  time;
   size_t                size;
   uint32_t              events;
+  rtems_capture_time_t  time;
   rtems_id              task_id;
-} rtems_capture_record_t;
+} RTEMS_PACKED rtems_capture_record_t;
 
 /*
  * @brief Capture task record.
@@ -169,11 +185,10 @@ typedef struct rtems_capture_record_s
  */
 typedef struct rtems_capture_task_record_s
 {
-  rtems_capture_record_t rec;
-  rtems_name             name;
-  rtems_task_priority    start_priority;
-  uint32_t               stack_size;
-} rtems_capture_task_record_t;
+  rtems_name          name;
+  rtems_task_priority start_priority;
+  uint32_t            stack_size;
+} RTEMS_PACKED rtems_capture_task_record_t;
 
 /**
  * The capture record event flags.
@@ -239,6 +254,24 @@ typedef enum rtems_capture_trigger_e
 typedef void (*rtems_capture_timestamp)(rtems_capture_time_t* time);
 
 /**
+ * @brief Capture record lock context.
+ *
+ * This structure is used to lock a per CPU buffer when opeining recording. The
+ * per CPU buffer is held locked until the record close is called. Locking
+ * masks interrupts so use this lock only when needed and do not hold it for
+ * long.
+ *
+ * The lock first masks the CPU interrupt before taking the interrupt
+ * lock. This stops a thread context taking the lock and then an interrupt on
+ * the same CPU attempting to take the lock so creating a deadlock.
+ *
+ */
+typedef struct {
+  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock*        lock;
+} rtems_capture_record_lock_context;
+
+/**
  * @brief Capture open
  *
  * This function initialises the realtime trace manager allocating the
@@ -254,9 +287,8 @@ typedef void (*rtems_capture_timestamp)(rtems_capture_time_t* time);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_open (uint32_t                size,
-                    rtems_capture_timestamp timestamp);
+rtems_status_code rtems_capture_open (uint32_t                size,
+                                      rtems_capture_timestamp timestamp);
 
 /**
  * @brief Capture close
@@ -268,8 +300,7 @@ rtems_capture_open (uint32_t                size,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_close (void);
+rtems_status_code rtems_capture_close (void);
 
 /**
  * @brief Capture control trace enable/disable.
@@ -282,8 +313,7 @@ rtems_capture_close (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_control (bool enable);
+rtems_status_code rtems_capture_control (bool enable);
 
 /**
  * @brief Capture monitor enable/disable.
@@ -298,8 +328,7 @@ rtems_capture_control (bool enable);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_monitor (bool enable);
+rtems_status_code rtems_capture_monitor (bool enable);
 
 /*
  * @brief Capture flush trace buffer.
@@ -313,8 +342,7 @@ rtems_capture_monitor (bool enable);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_flush (bool prime);
+rtems_status_code rtems_capture_flush (bool prime);
 
 /**
  * @brief Capture add watch
@@ -331,8 +359,7 @@ rtems_capture_flush (bool prime);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_add (rtems_name name, rtems_id id);
+rtems_status_code rtems_capture_watch_add (rtems_name name, rtems_id id);
 
 /**
  * @brief Capture delete watch.
@@ -348,8 +375,7 @@ rtems_capture_watch_add (rtems_name name, rtems_id id);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_del (rtems_name name, rtems_id id);
+rtems_status_code rtems_capture_watch_del (rtems_name name, rtems_id id);
 
 /**
  * @brief Capture enable/disable watch.
@@ -365,10 +391,9 @@ rtems_capture_watch_del (rtems_name name, rtems_id id);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_ctrl (rtems_name    name,
-                          rtems_id      id,
-                          bool enable);
+rtems_status_code rtems_capture_watch_ctrl (rtems_name name,
+                                            rtems_id   id,
+                                            bool       enable);
 
 /**
  * @brief Capture enable/disable global watch.
@@ -383,8 +408,7 @@ rtems_capture_watch_ctrl (rtems_name    name,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_global (bool enable);
+rtems_status_code rtems_capture_watch_global (bool enable);
 
 /**
  * @brief Get global watch state
@@ -394,8 +418,7 @@ rtems_capture_watch_global (bool enable);
  * @retval This method returns true  if the global watch
  *         is on.  Otherwise, it returns false.
  */
-bool
-rtems_capture_watch_global_on (void);
+bool rtems_capture_watch_global_on (void);
 
 /**
  * @brief Set watch ceiling.
@@ -412,8 +435,7 @@ rtems_capture_watch_global_on (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_ceiling (rtems_task_priority ceiling);
+rtems_status_code rtems_capture_watch_ceiling (rtems_task_priority ceiling);
 
 /**
  * @brief Get watch ceiling.
@@ -423,8 +445,7 @@ rtems_capture_watch_ceiling (rtems_task_priority ceiling);
  * @retval The priority level immediately above that at which events
  *         from tasks are not captured.
  */
-rtems_task_priority
-rtems_capture_watch_get_ceiling (void);
+rtems_task_priority rtems_capture_watch_get_ceiling (void);
 
 /**
  * @brief Capture set watch floor.
@@ -441,8 +462,7 @@ rtems_capture_watch_get_ceiling (void);
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_watch_floor (rtems_task_priority floor);
+rtems_status_code rtems_capture_watch_floor (rtems_task_priority floor);
 
 /**
  * @brief Capture set watch floor
@@ -452,8 +472,7 @@ rtems_capture_watch_floor (rtems_task_priority floor);
  * @retval The priority level immediately below
  *     that at which events from tasks are not captured.
  */
-rtems_task_priority
-rtems_capture_watch_get_floor (void);
+rtems_task_priority rtems_capture_watch_get_floor (void);
 
 /**
  * @brief Capture set trigger
@@ -541,10 +560,9 @@ rtems_capture_clear_trigger (rtems_name                   from_name,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_read (uint32_t                 cpu,
-                    uint32_t*                read,
-                    rtems_capture_record_t** recs);
+rtems_status_code rtems_capture_read (uint32_t     cpu,
+                                      size_t*      read,
+                                      const void** recs);
 
 /**
  * @brief Capture release records.
@@ -558,8 +576,7 @@ rtems_capture_read (uint32_t                 cpu,
  *         error. Otherwise, a status code is returned indicating the
  *         source of the error.
  */
-rtems_status_code
-rtems_capture_release (uint32_t cpu, uint32_t count);
+rtems_status_code rtems_capture_release (uint32_t cpu, uint32_t count);
 
 /*
  * @brief Capture nano-second time period.
@@ -568,8 +585,34 @@ rtems_capture_release (uint32_t cpu, uint32_t count);
  *
  * @param[out] uptime The nano-second time period.
  */
-void
-rtems_capture_time (rtems_capture_time_t* uptime);
+void rtems_capture_time (rtems_capture_time_t* uptime);
+
+/**
+ * @brief Capture filter
+ *
+ * This function this function specifies if the given task and events should be
+ * logged.
+ *
+ * @param[in] task specifies the capture task control block
+ * @param[in] events specifies the events
+ *
+ * @retval This method returns true if this data should be filtered from the
+ *         log. It returns false if this data should be logged.
+ */
+bool rtems_capture_filter (rtems_tcb* task, uint32_t events);
+
+/**
+ * @brief Capture returns the current time.
+ *
+ * This function returns the current time. If a handler is provided
+ * by the user the time is gotten from that.
+ *
+ * @param[in] time specifies the capture time
+ *
+ * @retval This method returns a nano-second time if no user handler
+ * is provided.  Otherwise, it returns a resolution defined by the handler.
+ */
+void rtems_capture_get_time (rtems_capture_time_t* time);
 
 /**
  * @brief Capture get event text.
@@ -582,8 +625,7 @@ rtems_capture_time (rtems_capture_time_t* uptime);
  *
  * @retval This method returns a string description of the given event.
  */
-const char*
-rtems_capture_event_text (int event);
+const char* rtems_capture_event_text (int event);
 
 /**
  * @brief Capture initialize task
@@ -602,6 +644,92 @@ void rtems_capture_initialize_task( rtems_tcb* tcb );
  * @param[in] tcb is the task control block for the task
  */
 void rtems_capture_record_task( rtems_tcb* tcb );
+
+/**
+ * @brief Capture record lock.
+ *
+ * This does a lock acquire which will remain in effect until
+ * rtems_capture_record_unlock is called.
+ *
+ * @param[out] context specifies the record context
+ */
+void rtems_capture_record_lock (rtems_capture_record_lock_context* context);
+
+/**
+ * @brief Capture record unlock.
+ *
+ * This unlocks the record lock.
+ *
+ * @param[in] context specifies the record context
+ */
+void rtems_capture_record_unlock (rtems_capture_record_lock_context* context);
+
+/**
+ * @brief Capture record open.
+ *
+ * This function allocates a record and fills in the header information. It
+ * does a lock acquire which will remain in effect until
+ * rtems_capture_record_close is called. The size is the amount of user data
+ * being recorded. The record header is internally managed.
+ *
+ * @param[in] task specifies the caputre task block
+ * @param[in] events specifies the events
+ * @param[in] size specifies the user's capture data size
+ * @param[out] context specifies the record context
+ *
+ * @retval This method returns a pointer to the next location in
+ * the capture record to store data.
+ */
+void* rtems_capture_record_open (rtems_tcb*                         task,
+                                 uint32_t                           events,
+                                 size_t                             size,
+                                 rtems_capture_record_lock_context* context);
+
+/**
+ * @brief Capture record close.
+ *
+ * This function closes writing to capure record and releases the lock that was
+ * held on the per CPU buffer.
+ *
+ * @param[out] context specifies the record context
+ */
+void rtems_capture_record_close (rtems_capture_record_lock_context* context);
+
+/**
+ * @brief Capture append to record to the per CPU buffer.
+ *
+ * This function appends data of a specifed size into a capture buffer.
+ *
+ * @param[in] rec specifies the next write point in the capture record
+ * @param[in] data specifies the data to write
+ * @param[in] size specifies the size of the data
+ *
+ * @retval This method returns the next write point in the capture record.
+ */
+static inline void*
+rtems_capture_record_append (void* rec, const void* data, size_t size)
+{
+  memcpy (rec, data, size);
+  return ((uint8_t*) rec) + size;
+}
+
+/**
+ * @brief Capture read a record from the per CPU buffer.
+ *
+ * This function reads data of a  specifed size from a capture buffer.
+ *
+ * @param[in] rec specifies the next read point in the capture record
+ * @param[in] data specifies where to write the data
+ * @param[in] size specifies the size of the data
+ *
+ * @retval This method returns the next write point in the capture record.
+ */
+static inline void*
+rtems_capture_record_extract (const void* rec, void* data, size_t size)
+{
+  memcpy (data, rec, size);
+  return ((uint8_t*) rec) + size;
+}
 
 /**
  * @brief Capture task recorded
@@ -640,6 +768,21 @@ static inline rtems_id
 rtems_capture_task_id (rtems_tcb* tcb)
 {
   return tcb->Object.id;
+}
+
+/**
+ * @brief Capture get task API.
+ *
+ * This function returns the task API as an int.
+ *
+ * @param[in] task The capture task.
+ *
+ * @retval This function returns the task API as an int.
+ */
+static inline int
+rtems_capture_task_api (rtems_id id)
+{
+  return _Objects_Get_API (id);
 }
 
 /**
@@ -738,10 +881,8 @@ rtems_capture_task_control_flags (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_start_priority (rtems_tcb* tcb)
 {
-  return _RTEMS_Priority_From_core(
-    _Scheduler_Get_own( tcb ),
-    tcb->Start.initial_priority
-  );
+  return _RTEMS_Priority_From_core (_Scheduler_Get_own( tcb ),
+                                    tcb->Start.initial_priority);
 }
 
 /**

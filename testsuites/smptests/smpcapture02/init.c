@@ -15,6 +15,8 @@
  *
  */
 
+/* #define VERBOSE 1 */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -50,43 +52,42 @@ static rtems_id finished_sem;
 static task_data_t task_data[ TASKS_PER_CPU * TASKS_PER_CPU ];
 static rtems_interrupt_handler org_clock_handler;
 
-enum cap_rec_types {
+typedef enum {
   enter_add_number,
   exit_add_number,
   clock_tick
-};
+} cap_rec_type;
 
 /*
  * These records define the data stored in the capture trace.
- * The records must be 64-bit aligned to make sure that the time
- * attribute in rtems_capture_record_t is correctly aligned.
+ * The records must be packed so alignment issues are not a factor.
  */
 typedef struct {
-  enum cap_rec_types id;
   uint32_t a;
   uint32_t b;
-} __attribute__ ((aligned (8))) enter_add_number_record_t;
+} RTEMS_PACKED enter_add_number_record_t;
 
 typedef struct {
-  enum cap_rec_types id;
   uint32_t res;
-} __attribute__ ((aligned (8))) exit_add_number_record_t;
+} RTEMS_PACKED exit_add_number_record_t;
 
 typedef struct {
-  enum cap_rec_types id;
   void *arg;
-} __attribute__ ((aligned (8))) clock_tick_record_t;
+} RTEMS_PACKED clock_tick_record_t;
 
-typedef struct {
-  enum cap_rec_types id;
-} empty_record_t ;
+/*
+ * Create a printable set of char's from a name.
+ */
+#define PNAME(n) \
+  (char) (n >> 24) & 0xff, (char) (n >> 16) & 0xff, \
+  (char) (n >> 8) & 0xff, (char) (n >> 0) & 0xff
 
 /*
  * The function that we want to trace
  */
 static uint32_t add_number(uint32_t a, uint32_t b)
 {
-  return a+b;
+  return a + b;
 }
 
 /*
@@ -95,31 +96,43 @@ static uint32_t add_number(uint32_t a, uint32_t b)
  */
 static uint32_t add_number_wrapper(uint32_t a, uint32_t b)
 {
+  rtems_capture_record_lock_context lock;
   enter_add_number_record_t enter_rec;
   exit_add_number_record_t exit_rec;
+  cap_rec_type id;
   uint32_t res;
   void* rec;
 
-  enter_rec.id = enter_add_number;
+  id = enter_add_number;
   enter_rec.a = a;
   enter_rec.b = b;
 
-  rtems_capture_begin_add_record(_Thread_Get_executing(),
-      RTEMS_CAPTURE_TIMESTAMP, sizeof(rtems_capture_record_t)+
-      sizeof(enter_add_number_record_t), &rec);
-  rec = rtems_capture_append_to_record(rec, &enter_rec, sizeof(enter_rec));
-  rtems_capture_end_add_record(rec);
+  rec = rtems_capture_record_open(_Thread_Get_executing(),
+                                  RTEMS_CAPTURE_TIMESTAMP,
+                                  sizeof(id) + sizeof(enter_rec),
+                                  &lock);
+  rtems_test_assert(rec != NULL);
+  rec = rtems_capture_record_append(rec, &id, sizeof(id));
+  rtems_test_assert(rec != NULL);
+  rec = rtems_capture_record_append(rec, &enter_rec, sizeof(enter_rec));
+  rtems_test_assert(rec != NULL);
+  rtems_capture_record_close(&lock);
 
   res = add_number(a, b);
 
-  exit_rec.id = exit_add_number;
+  id = exit_add_number;
   exit_rec.res = res;
 
-  rtems_capture_begin_add_record(_Thread_Get_executing(),
-      RTEMS_CAPTURE_TIMESTAMP, sizeof(rtems_capture_record_t)+
-      sizeof(exit_add_number_record_t), &rec);
-  rec = rtems_capture_append_to_record(rec, &exit_rec, sizeof(exit_rec));
-  rtems_capture_end_add_record(rec);
+  rec = rtems_capture_record_open(_Thread_Get_executing(),
+                                  RTEMS_CAPTURE_TIMESTAMP,
+                                  sizeof(id) + sizeof(exit_rec),
+                                  &lock);
+  rtems_test_assert(rec != NULL);
+  rec = rtems_capture_record_append(rec, &id, sizeof(id));
+  rtems_test_assert(rec != NULL);
+  rec = rtems_capture_record_append(rec, &exit_rec, sizeof(exit_rec));
+  rtems_test_assert(rec != NULL);
+  rtems_capture_record_close(&lock);
 
   return res;
 }
@@ -228,15 +241,19 @@ static void test(uint32_t cpu_count)
 /* Writes an entry in the capture trace for every clock tick */
 static void clock_tick_wrapper(void *arg)
 {
-  void* rec;
-  clock_tick_record_t clock_tick_record = {.id = clock_tick};
+  rtems_capture_record_lock_context lock;
+  cap_rec_type id  = clock_tick;
   Thread_Control* tcb = _Thread_Get_executing();
+  void* rec;
 
-  rtems_capture_begin_add_record(tcb, RTEMS_CAPTURE_TIMESTAMP,
-      sizeof(rtems_capture_record_t) + sizeof(clock_tick_record_t), &rec);
-  rec = rtems_capture_append_to_record(rec, &clock_tick_record,
-      sizeof(clock_tick_record));
-  rtems_capture_end_add_record(rec);
+  rec = rtems_capture_record_open(tcb,
+                                  RTEMS_CAPTURE_TIMESTAMP,
+                                  sizeof(id),
+                                  &lock);
+  rtems_test_assert(rec != NULL);
+  rec = rtems_capture_record_append(rec, &id, sizeof(id));
+  rtems_test_assert(rec != NULL);
+  rtems_capture_record_close(&lock);
 
   org_clock_handler(arg);
 }
@@ -263,19 +280,23 @@ static void Init(rtems_task_argument arg)
   uint32_t i;
   uint32_t cpu;
   uint32_t cpu_count;
-  uint32_t read;
   uint32_t enter_count;
   uint32_t exit_count;
   uint32_t clock_tick_count;
   uint32_t res_should_be;
-  rtems_name name;
-  rtems_capture_record_t *recs;
-  rtems_capture_record_t *prev_rec;
-  empty_record_t *record;
-  enter_add_number_record_t *enter_add_number_rec;
-  exit_add_number_record_t *exit_add_number_rec;
   rtems_vector_number vec;
+  size_t read;
+  const void *recs;
+  cap_rec_type id;
+  rtems_capture_record_t rec;
+  rtems_capture_record_t prev_rec;
+  enter_add_number_record_t enter_rec;
+  exit_add_number_record_t exit_rec;
   clock_interrupt_handler cih = {.found = 0};
+
+#ifdef VERBOSE
+  rtems_name name;
+#endif
 
   TEST_BEGIN();
 
@@ -325,63 +346,64 @@ static void Init(rtems_task_argument arg)
   for ( cpu = 0; cpu < cpu_count; cpu++ ) {
     sc = rtems_capture_read(cpu, &read, &recs);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+    rtems_test_assert(recs != NULL);
 
-    prev_rec = recs;
+    memset(&rec, 0, sizeof(rec));
+    prev_rec = rec;
     enter_count = 0;
     exit_count = 0;
     res_should_be = 0;
 
     for ( i = 0; i < read; i++ ) {
 
+      recs = rtems_capture_record_extract(recs, &rec, sizeof(rec));
+      rtems_test_assert(recs != NULL);
+
       /* Verify that time goes forward */
-      rtems_test_assert(recs->time>=prev_rec->time);
+      rtems_test_assert(rec.time >= prev_rec.time);
 
-      if ( recs->events & RTEMS_CAPTURE_TIMESTAMP ) {
-        record = (empty_record_t*)((char*) recs +
-            sizeof(rtems_capture_record_t));
+      if ((rec.events & RTEMS_CAPTURE_TIMESTAMP) != 0) {
+        recs = rtems_capture_record_extract(recs, &id, sizeof(id));
+        rtems_test_assert(recs != NULL);
 
-        switch ( record->id ) {
+        switch (id) {
         case enter_add_number:
-          rtems_test_assert(enter_count==exit_count);
+          rtems_test_assert(enter_count == exit_count);
           enter_count++;
-          enter_add_number_rec = (enter_add_number_record_t*)record;
-          res_should_be = add_number(enter_add_number_rec->a,
-              enter_add_number_rec->b);
-          rtems_object_get_classic_name(recs->task_id, &name);
-
+          recs = rtems_capture_record_extract(recs,
+                                              &enter_rec,
+                                              sizeof(enter_rec));
+          rtems_test_assert(recs != NULL);
+          res_should_be = add_number(enter_rec.a, enter_rec.b);
 #ifdef VERBOSE
           /* Print record */
-          printf("Time: %"PRIu64"us Task: %4s => Add %"PRIu32" and"
-              " %"PRIu32"\n",
-              recs->time/1000,
-              (char*)&name,
-              enter_add_number_rec->a,
-              enter_add_number_rec->b);
+          rtems_object_get_classic_name(rec.task_id, &name);
+          printf("Time: %"PRIu64"us Task: %c%c%c%c => Add %"PRIu32" and %"PRIu32" is %"PRIu32"\n",
+                 rec.time / 1000, PNAME(name), enter_rec.a, enter_rec.b, res_should_be);
 #endif
           break;
         case exit_add_number:
-          rtems_test_assert(enter_count==exit_count+1);
+          rtems_test_assert(enter_count == exit_count+1);
           exit_count++;
-          exit_add_number_rec = (exit_add_number_record_t*)record;
-          /* Verify that the result matches the expected result */
-          rtems_test_assert(res_should_be == exit_add_number_rec->res);
-
+          recs = rtems_capture_record_extract(recs,
+                                              &exit_rec,
+                                              sizeof(exit_rec));
+          rtems_test_assert(recs != NULL);
 #ifdef VERBOSE
           /* Print record */
-          rtems_object_get_classic_name(recs->task_id, &name);
-          printf("Time: %"PRIu64"us Task: %4s => Result is %"PRIu32"\n",
-              recs->time/1000,
-              (char*)&name,
-              exit_add_number_rec->res);
+          rtems_object_get_classic_name(rec.task_id, &name);
+          printf("Time: %"PRIu64"us Task: %c%c%c%c => Result is %"PRIu32"\n",
+                 rec.time / 1000, PNAME(name), exit_rec.res);
 #endif
+          /* Verify that the result matches the expected result */
+          rtems_test_assert(res_should_be == exit_rec.res);
           break;
         case clock_tick:
           clock_tick_count++;
 #ifdef VERBOSE
-          rtems_object_get_classic_name(recs->task_id, &name);
-          printf("Time: %"PRIu64"us Task: %4s => Clock tick\n",
-              recs->time/1000,
-              (char*)&name);
+          rtems_object_get_classic_name(rec.task_id, &name);
+          printf("Time: %"PRIu64"us Task: %c%c%c%c => Clock tick\n",
+                 rec.time/1000, PNAME(name));
 #endif
           break;
         default:
@@ -389,8 +411,7 @@ static void Init(rtems_task_argument arg)
         }
       }
 
-      prev_rec = recs;
-      recs = (rtems_capture_record_t*) ((char*) recs + recs->size);
+      prev_rec = rec;
     }
 
     rtems_test_assert(enter_count == exit_count);
@@ -398,9 +419,6 @@ static void Init(rtems_task_argument arg)
 
     rtems_capture_release(cpu, read);
   }
-
-  if( cih.found )
-    rtems_test_assert(clock_tick_count == cpu_count * CLOCK_TICKS);
 
   TEST_END();
   rtems_test_exit(0);

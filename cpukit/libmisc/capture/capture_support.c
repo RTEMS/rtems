@@ -39,12 +39,126 @@
  * Structure used during printing of the capture records.
  */
 
-typedef struct {
-  rtems_capture_record_t* rec;
-  uint32_t                read;
-  uint32_t                last_t;
-  uint32_t                printed;
+typedef struct
+{
+  const void*            recs;      /**< Next record to be read. */
+  size_t                 read;      /**< Number of records read. */
+  size_t                 printed;   /**< Records been printed. */
+  bool                   rec_valid; /**< The record is valid. */
+  rtems_capture_record_t rec;       /**< The record, copied out. */
 } ctrace_per_cpu_t;
+
+/*
+ * Task block size.
+ */
+#define CTRACE_TASK_BLOCK_SIZE (64)
+
+/**
+ * Task details from the task records used to print task names.
+ */
+typedef struct
+{
+  rtems_name name;
+  rtems_id   id;
+} ctrace_task_name;
+
+/**
+ * Structure to hold the tasks variables.
+ */
+typedef struct
+{
+  ctrace_task_name* tasks;
+  size_t            size;
+  size_t            count;
+} ctrace_tasks;
+
+/*
+ * Global so the records can span more than one trace.
+ */
+static ctrace_tasks tasks;
+
+/*
+ * Add a name.
+ */
+static void
+ctrace_task_name_add (rtems_id id, const rtems_name* name)
+{
+  if (tasks.tasks == NULL)
+  {
+    tasks.size = CTRACE_TASK_BLOCK_SIZE;
+    tasks.tasks = calloc (tasks.size, sizeof (ctrace_task_name));
+  }
+  if (tasks.tasks != NULL)
+  {
+    if (rtems_object_id_get_api(id) != OBJECTS_POSIX_API)
+    {
+      size_t t;
+      for (t = 0; t < tasks.count; ++t)
+      {
+        if (tasks.tasks[t].id == id)
+        {
+          tasks.tasks[t].name = *name;
+          break;
+        }
+      }
+      if (t == tasks.count)
+      {
+        if (tasks.count >= tasks.size)
+        {
+          tasks.size += CTRACE_TASK_BLOCK_SIZE;
+          tasks.tasks = realloc (tasks.tasks,
+                                 tasks.size * sizeof (ctrace_task_name));
+        }
+        if (tasks.tasks != NULL)
+        {
+          tasks.tasks[tasks.count].name = *name;
+          tasks.tasks[tasks.count].id = id;
+          ++tasks.count;
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Remove a task name.
+ */
+static void
+ctrace_task_name_remove (rtems_id id)
+{
+  size_t t;
+  for (t = 0; t < tasks.count; ++t)
+  {
+    if (tasks.tasks[t].id == id)
+    {
+      size_t count = tasks.count - t - 1;
+      if (count != 0)
+        memmove (&tasks.tasks[t],
+                 &tasks.tasks[t + 1],
+                 sizeof (ctrace_task_name) * count);
+      --tasks.count;
+      break;
+    }
+  }
+}
+
+/*
+ * Find a name.
+ */
+static void
+ctrace_task_name_find (rtems_id id, const rtems_name** name)
+{
+  size_t t;
+  *name = NULL;
+  for (t = 0; t < tasks.count; ++t)
+  {
+    if (tasks.tasks[t].id == id)
+    {
+      *name = &tasks.tasks[t].name;
+      break;
+    }
+  }
+}
 
 /*
  * rtems_catpure_print_uptime
@@ -72,11 +186,11 @@ rtems_capture_print_timestamp (uint64_t uptime)
 }
 
 void
-rtems_capture_print_record_task( uint32_t cpu, rtems_capture_record_t* rec)
+rtems_capture_print_record_task (int                                cpu,
+                                 const rtems_capture_record_t*      rec,
+                                 const rtems_capture_task_record_t* task_rec)
 {
-  rtems_capture_task_record_t* task_rec = (rtems_capture_task_record_t*) rec;
-
-  fprintf(stdout,"%2" PRId32 " ", cpu);
+  fprintf(stdout,"%2i ", cpu);
   rtems_capture_print_timestamp (rec->time);
   fprintf (stdout, "              ");
   rtems_monitor_dump_id (rec->task_id);
@@ -101,24 +215,36 @@ rtems_capture_print_record_task( uint32_t cpu, rtems_capture_record_t* rec)
 }
 
 void
-rtems_capture_print_record_capture(
-  uint32_t                cpu,
-  rtems_capture_record_t* rec,
-  uint64_t                diff
-){
-  uint32_t                     event;
-  int                          e;
+rtems_capture_print_record_capture(int                           cpu,
+                                   const rtems_capture_record_t* rec,
+                                   uint64_t                      diff,
+                                   const rtems_name*             name)
+{
+  uint32_t event;
+  int      e;
 
   event = rec->events >> RTEMS_CAPTURE_EVENT_START;
   for (e = RTEMS_CAPTURE_EVENT_START; e < RTEMS_CAPTURE_EVENT_END; e++)
   {
     if (event & 1)
     {
-      fprintf(stdout,"%2" PRId32 " ", cpu);
+      fprintf(stdout,"%2i ", cpu);
       rtems_capture_print_timestamp (rec->time);
       fprintf (stdout, " %12" PRId32 " ", (uint32_t) diff);
       rtems_monitor_dump_id (rec->task_id);
-      fprintf(stdout, "      %3" PRId32 " %3" PRId32 "             %s\n",
+      if (name != NULL)
+      {
+        fprintf (stdout, " %c%c%c%c",
+                 (char) (*name >> 24) & 0xff,
+                 (char) (*name >> 16) & 0xff,
+                 (char) (*name >> 8) & 0xff,
+                 (char) (*name >> 0) & 0xff);
+      }
+      else
+      {
+        fprintf(stdout, "     ");
+      }
+      fprintf(stdout, " %3" PRId32 " %3" PRId32 "             %s\n",
              (rec->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
              (rec->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
              rtems_capture_event_text (e));
@@ -134,46 +260,65 @@ rtems_capture_print_record_capture(
  */
 
 void
-rtems_capture_print_trace_records ( int total, bool csv )
+rtems_capture_print_trace_records (int total, bool csv)
 {
-  rtems_status_code       sc;
-  int                     count;
-  ctrace_per_cpu_t*       per_cpu;
-  uint8_t*                ptr;
-  uint32_t                i;
-  uint32_t                cpu = 0;
-  rtems_capture_record_t* rec_out;
+  ctrace_per_cpu_t*    per_cpu;
+  ctrace_per_cpu_t*    cpu;
+  int                  cpus;
+  rtems_capture_time_t last_time = 0;
+  int                  i;
 
-  count = rtems_get_processor_count();
-  per_cpu = calloc( count, sizeof(*per_cpu) );
+  cpus = rtems_get_processor_count ();
+
+  per_cpu = calloc (cpus, sizeof(*per_cpu));
+  if (per_cpu == NULL)
+  {
+    fprintf(stdout, "error: no memory\n");
+    return;
+  }
 
   while (total)
   {
+    const rtems_capture_record_t* rec_out = NULL;
+    int                           cpu_out = -1;
+    rtems_capture_time_t          this_time = 0;
+
     /* Prime the per_cpu data */
-    for (i=0; i< count; i++) {
-      if ( per_cpu[i].read == 0 ) {
-        sc = rtems_capture_read (i, &per_cpu[i].read, &per_cpu[i].rec);
+    for (i = 0; i < cpus; i++) {
+      cpu = &per_cpu[i];
+
+      if (cpu->read == 0)
+      {
+        rtems_status_code sc;
+        sc = rtems_capture_read (i, &cpu->read, &cpu->recs);
         if (sc != RTEMS_SUCCESSFUL)
         {
-          fprintf (stdout, "error: trace read failed: %s\n", rtems_status_text (sc));
+          fprintf (stdout,
+                   "error: trace read failed: %s\n", rtems_status_text (sc));
           rtems_capture_flush (0);
-          free( per_cpu );
+          free (per_cpu);
           return;
         }
         /* Release the buffer if there are no records to read */
-        if (per_cpu[i].read == 0)
+        if (cpu->read == 0)
           rtems_capture_release (i, 0);
       }
-    }
 
-    /* Find the next record to print */
-    rec_out = NULL;
-    for (i=0; i< count; i++) {
+      /* Read the record out from the capture buffer */
+      if (!cpu->rec_valid && (cpu->read != 0))
+      {
+        cpu->recs = rtems_capture_record_extract (cpu->recs,
+                                                  &cpu->rec,
+                                                  sizeof (cpu->rec));
+        cpu->rec_valid = true;
+      }
 
-      if ((rec_out == NULL) ||
-          ((per_cpu[i].read != 0) && (rec_out->time > per_cpu[i].rec->time))) {
-        rec_out = per_cpu[i].rec;
-        cpu = i;
+      /* Find the next record to print, the earliest recond on any core */
+      if ((cpu->rec_valid) && ((this_time == 0) || (cpu->rec.time < this_time)))
+      {
+        rec_out = &cpu->rec;
+        cpu_out = i;
+        this_time = rec_out->time;
       }
     }
 
@@ -181,65 +326,81 @@ rtems_capture_print_trace_records ( int total, bool csv )
     if (rec_out == NULL)
       break;
 
+    cpu = &per_cpu[cpu_out];
+
     /* Print the record */
-    if (csv) {
-      fprintf(
-        stdout,
-        "%03" PRIu32 ",%08" PRIu32 ",%03" PRIu32
-           ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
-        cpu,
-        (uint32_t) rec_out->task_id,
-        (rec_out->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
-        (rec_out->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
-        (rec_out->events >> RTEMS_CAPTURE_EVENT_START),
-        (uint64_t) rec_out->time
-      );
-    } else {
+    if (csv)
+    {
+      fprintf(stdout,
+              "%03i,%08" PRIu32 ",%03" PRIu32
+              ",%03" PRIu32 ",%04" PRIx32 ",%" PRId64 "\n",
+              cpu_out,
+              (uint32_t) rec_out->task_id,
+              (rec_out->events >> RTEMS_CAPTURE_REAL_PRIORITY_EVENT) & 0xff,
+              (rec_out->events >> RTEMS_CAPTURE_CURR_PRIORITY_EVENT) & 0xff,
+              (rec_out->events >> RTEMS_CAPTURE_EVENT_START),
+              (uint64_t) rec_out->time);
+    }
+    else
+    {
       if ((rec_out->events >> RTEMS_CAPTURE_EVENT_START) == 0)
-          rtems_capture_print_record_task(cpu, rec_out );
-      else {
-        uint64_t diff;
-        if (per_cpu[cpu].last_t != 0)
-          diff = rec_out->time - per_cpu[cpu].last_t;
+      {
+        rtems_capture_task_record_t task_rec;
+        cpu->recs = rtems_capture_record_extract (cpu->recs,
+                                                  &task_rec,
+                                                  sizeof (task_rec));
+        ctrace_task_name_add (rec_out->task_id, &task_rec.name);
+        rtems_capture_print_record_task (cpu_out, rec_out, &task_rec);
+      }
+      else
+      {
+        rtems_capture_time_t diff;
+        const rtems_name*    name = NULL;
+        if (last_time != 0)
+          diff = rec_out->time - last_time;
         else
           diff = 0;
-        per_cpu[cpu].last_t = rec_out->time;
-
-        rtems_capture_print_record_capture( cpu, rec_out, diff );
+        last_time = rec_out->time;
+        ctrace_task_name_find (rec_out->task_id, &name);
+        rtems_capture_print_record_capture (cpu_out, rec_out, diff, name);
+        if ((rec_out->events &
+             (RTEMS_CAPTURE_DELETED_BY_EVENT | RTEMS_CAPTURE_DELETED_EVENT)) != 0)
+          ctrace_task_name_remove (rec_out->task_id);
       }
     }
 
     /*
-     * If we have not printed all the records read
-     * increment to the next record.  If we have
-     * printed all records release the records printed.
+     * If we have not printed all the records read increment to the next
+     * record. If we have printed all records release the records printed.
      */
-    per_cpu[cpu].printed++;
-    if (per_cpu[cpu].printed != per_cpu[cpu].read) {
-      ptr =  (uint8_t *)per_cpu[cpu].rec;
-      ptr += per_cpu[cpu].rec->size;
-      per_cpu[cpu].rec = (rtems_capture_record_t *)ptr;
-    } else {
-      rtems_capture_release (cpu, per_cpu[cpu].printed);
-      per_cpu[cpu].read = 0;
-      per_cpu[cpu].printed = 0;
+    cpu->rec_valid = false;
+    ++cpu->printed;
+    if (cpu->printed == cpu->read)
+    {
+      rtems_capture_release (cpu_out, cpu->printed);
+      cpu->recs = NULL;
+      cpu->read = 0;
+      cpu->printed = 0;
     }
 
-    total --;
+    --total;
   }
 
   /* Finished so release all the records that were printed. */
-  for (i=0; i< count; i++) {
-    if ( per_cpu[i].read != 0 )  {
-      rtems_capture_release( i, per_cpu[i].printed );
+  for (i = 0; i < cpus; i++)
+  {
+    cpu = &per_cpu[i];
+    if (cpu->read != 0)
+    {
+      rtems_capture_release (i, cpu->printed);
     }
   }
 
-  free( per_cpu );
+  free(per_cpu);
 }
 
 void
-rtems_capture_print_watch_list ()
+rtems_capture_print_watch_list (void)
 {
   rtems_capture_control_t* control = rtems_capture_get_control_list ();
   rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();

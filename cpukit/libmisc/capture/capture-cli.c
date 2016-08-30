@@ -204,14 +204,22 @@ rtems_capture_cli_print_task (rtems_tcb *tcb)
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
   rtems_task_priority   priority;
   int                   length;
+  uint32_t              flags = rtems_capture_task_control_flags (tcb);
 
   priority = rtems_capture_task_real_priority (tcb);
 
   fprintf (stdout, " ");
   rtems_monitor_dump_id (rtems_capture_task_id (tcb));
   fprintf (stdout, " ");
-  rtems_monitor_dump_name (rtems_capture_task_id (tcb));
-  fprintf (stdout, " ");
+  if (rtems_capture_task_api (rtems_capture_task_id (tcb)) != OBJECTS_POSIX_API)
+  {
+    rtems_monitor_dump_name (rtems_capture_task_id (tcb));
+    fprintf (stdout, " ");
+  }
+  else
+  {
+    fprintf (stdout, "     ");
+  }
   rtems_monitor_dump_priority (rtems_capture_task_start_priority (tcb));
   fprintf (stdout, " ");
   rtems_monitor_dump_priority (rtems_capture_task_real_priority (tcb));
@@ -222,13 +230,12 @@ rtems_capture_cli_print_task (rtems_tcb *tcb)
   fprintf (stdout, "%*c", 14 - length, ' ');
   fprintf (stdout, " %c%c",
            'a',
-           rtems_capture_task_flags (tcb) & RTEMS_CAPTURE_TRACED ? 't' : '-');
+           flags & RTEMS_CAPTURE_TRACED ? 't' : '-');
 
   if ((floor > ceiling) && (ceiling > priority))
     fprintf (stdout, "--");
   else
   {
-    uint32_t flags = rtems_capture_task_control_flags (tcb);
     fprintf (stdout, "%c%c",
              rtems_capture_task_control (tcb) ?
              (flags & RTEMS_CAPTURE_WATCH ? 'w' : '+') : '-',
@@ -795,7 +802,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
           continue;
       }
 
-      if (strcmp (arg[argv], "from") == 0)
+      if (strcmp (argv[arg], "from") == 0)
       {
         if (from_valid_name || from_valid_id)
           fprintf (stdout, "warning: extra 'from' ignored\n");
@@ -804,7 +811,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         continue;
       }
 
-      if (strcmp (arg[argv], "to") == 0)
+      if (strcmp (argv[arg], "to") == 0)
       {
         if (to_valid_name || from_valid_id)
           fprintf (stdout, "warning: extra 'to' ignored\n");
@@ -1040,7 +1047,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
 {
   {
     "copen",
-    "usage: copen [-i] size\n",
+    "usage: copen [-i] size",
     0,
     rtems_capture_cli_open,
     { 0 },
@@ -1048,7 +1055,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cclose",
-    "usage: cclose\n",
+    "usage: cclose",
     0,
     rtems_capture_cli_close,
     { 0 },
@@ -1056,7 +1063,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cenable",
-    "usage: cenable\n",
+    "usage: cenable",
     0,
     rtems_capture_cli_enable,
     { 0 },
@@ -1064,7 +1071,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cdisable",
-    "usage: cdisable\n",
+    "usage: cdisable",
     0,
     rtems_capture_cli_disable,
     { 0 },
@@ -1072,7 +1079,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "ctlist",
-    "usage: ctlist \n",
+    "usage: ctlist",
     0,
      rtems_capture_cli_task_list,
     { 0 },
@@ -1080,7 +1087,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwlist",
-    "usage: cwlist\n",
+    "usage: cwlist",
     0,
     rtems_capture_cli_watch_list,
     { 0 },
@@ -1088,7 +1095,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwadd",
-    "usage: cwadd [task name] [id]\n",
+    "usage: cwadd [task name] [id]",
     0,
     rtems_capture_cli_watch_add,
     { 0 },
@@ -1096,7 +1103,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwdel",
-    "usage: cwdel [task name] [id]\n",
+    "usage: cwdel [task name] [id]",
     0,
     rtems_capture_cli_watch_del,
     { 0 },
@@ -1104,7 +1111,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwctl",
-    "usage: cwctl [task name] [id] on/off\n",
+    "usage: cwctl [task name] [id] on/off",
     0,
     rtems_capture_cli_watch_control,
     { 0 },
@@ -1112,7 +1119,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwglob",
-    "usage: cwglob on/off\n",
+    "usage: cwglob on/off",
     0,
     rtems_capture_cli_watch_global,
     { 0 },
@@ -1120,7 +1127,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwceil",
-    "usage: cwceil priority\n",
+    "usage: cwceil priority",
     0,
     rtems_capture_cli_watch_ceiling,
     { 0 },
@@ -1128,7 +1135,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cwfloor",
-    "usage: cwfloor priority\n",
+    "usage: cwfloor priority",
     0,
     rtems_capture_cli_watch_floor,
     { 0 },
@@ -1136,7 +1143,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "ctrace",
-    "usage: ctrace [-c] [-r records]\n",
+    "usage: ctrace [-c] [-r records]",
     0,
     rtems_capture_cli_trace_records,
     { 0 },
@@ -1144,7 +1151,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "ctset",
-    "usage: ctset -h\n",
+    "usage: ctset -h",
     0,
     rtems_capture_cli_trigger_set,
     { 0 },
@@ -1152,7 +1159,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "ctclear",
-    "usage: ctclear -?\n",
+    "usage: ctclear -?",
     0,
     rtems_capture_cli_trigger_clear,
     { 0 },
@@ -1160,7 +1167,7 @@ static rtems_monitor_command_entry_t rtems_capture_cli_cmds[] =
   },
   {
     "cflush",
-    "usage: cflush [-n]\n",
+    "usage: cflush [-n]",
     0,
     rtems_capture_cli_flush,
     { 0 },

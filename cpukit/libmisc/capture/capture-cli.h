@@ -8,9 +8,8 @@
 /*
   ------------------------------------------------------------------------
 
-  Copyright Objective Design Systems Pty Ltd, 2002
-  All rights reserved Objective Design Systems Pty Ltd, 2002
-  Chris Johns (ccj@acm.org)
+  Copyright 2002, 2016 Chris Johns <chrisj@rtems.org>.
+ All rights reserved.
 
   COPYRIGHT (c) 1989-2014.
   On-Line Applications Research Corporation (OAR).

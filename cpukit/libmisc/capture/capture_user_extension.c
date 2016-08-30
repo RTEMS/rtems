@@ -1,9 +1,7 @@
 /*
   ------------------------------------------------------------------------
 
-  Copyright Objective Design Systems Pty Ltd, 2002
-  All rights reserved Objective Design Systems Pty Ltd, 2002
-  Chris Johns (ccj@acm.org)
+  Copyright 2002, 2016 Chris Johns <chrisj@rtems.org>. All rights reserved.
 
   COPYRIGHT (c) 1989-2014.
   On-Line Applications Research Corporation (OAR).
@@ -37,7 +35,7 @@
 /*
  * RTEMS Capture User Extension Data.
  */
-static rtems_id                 capture_id;
+static rtems_id capture_id;
 
 static bool
 rtems_capture_create_task (rtems_tcb* current_task,
@@ -80,23 +78,18 @@ static const rtems_extensions_table capture_extensions = {
   .thread_terminate = rtems_capture_terminated_task
 };
 
-static inline void rtems_capture_record (
-  rtems_tcb*    tcb,
-  uint32_t      events
-)
+static inline void rtems_capture_record (rtems_tcb* tcb, uint32_t events)
 {
-  rtems_capture_record_t*  rec;
-  void*                    ptr;
-  size_t                   size = sizeof(*rec);
+  rtems_capture_record_lock_context rec_context;
 
-  if (rtems_capture_filter( tcb, events) )
+  if (rtems_capture_filter (tcb, events))
     return;
 
   if (!rtems_capture_task_recorded (tcb))
     rtems_capture_record_task (tcb);
 
-  rtems_capture_begin_add_record (tcb, events, size, &ptr);
-  rtems_capture_end_add_record ( ptr );
+  rtems_capture_record_open (tcb, events, 0, &rec_context);
+  rtems_capture_record_close (&rec_context);
 }
 
 
@@ -115,7 +108,7 @@ rtems_status_code rtems_capture_user_extension_open(void)
     capture_id = 0;
   else {
     index = rtems_object_id_get_index (capture_id);
-    rtems_capture_set_extension_index( index );
+    rtems_capture_set_extension_index (index);
   }
 
   return sc;
