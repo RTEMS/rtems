@@ -78,12 +78,12 @@ rtems_task Init(
 
   rtems_capture_print_watch_list();
 
-  sc = rtems_capture_control (true);
+  sc = rtems_capture_set_control (true);
   ASSERT_SC(sc);
 
   capture_test_1();
 
-  sc = rtems_capture_control (false);
+  sc = rtems_capture_set_control (false);
   ASSERT_SC(sc);
 
   rtems_capture_print_trace_records ( 22, false );

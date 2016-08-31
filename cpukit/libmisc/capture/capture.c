@@ -56,21 +56,21 @@
 #endif
 
 typedef struct {
-  rtems_capture_buffer_t   records;
-  uint32_t                 count;
-  rtems_id                 reader;
-  rtems_interrupt_lock     lock;
-  uint32_t                 flags;
+  rtems_capture_buffer records;
+  uint32_t             count;
+  rtems_id             reader;
+  rtems_interrupt_lock lock;
+  uint32_t             flags;
 } rtems_capture_per_cpu_data;
 
 typedef struct {
-  uint32_t                 flags;
-  rtems_capture_control_t* controls;
-  int                      extension_index;
-  rtems_capture_timestamp  timestamp;
-  rtems_task_priority      ceiling;
-  rtems_task_priority      floor;
-  rtems_interrupt_lock     lock;
+  uint32_t                flags;
+  rtems_capture_control*  controls;
+  int                     extension_index;
+  rtems_capture_timestamp timestamp;
+  rtems_task_priority     ceiling;
+  rtems_task_priority     floor;
+  rtems_interrupt_lock    lock;
 } rtems_capture_global_data;
 
 static rtems_capture_per_cpu_data  *capture_per_cpu = NULL;
@@ -145,7 +145,7 @@ void rtems_capture_set_flags(uint32_t mask)
  * by the user get the time from that.
  */
 void
-rtems_capture_get_time (rtems_capture_time_t* time)
+rtems_capture_get_time (rtems_capture_time* time)
 {
   if (capture_timestamp)
     capture_timestamp (time);
@@ -221,9 +221,9 @@ rtems_capture_dup_name (rtems_name* dst, rtems_name src)
  * tasks is the number of bits in uint32_t.
  */
 static inline bool
-rtems_capture_by_in_to (uint32_t                 events,
-                        rtems_tcb*               by,
-                        rtems_capture_control_t* to)
+rtems_capture_by_in_to (uint32_t               events,
+                        rtems_tcb*             by,
+                        rtems_capture_control* to)
 {
   uint32_t valid_mask = RTEMS_CAPTURE_CONTROL_FROM_MASK (0);
   uint32_t valid_remainder = 0xffffffff;
@@ -265,10 +265,10 @@ rtems_capture_by_in_to (uint32_t                 events,
 /*
  * This function searches for a trigger given a name.
  */
-static inline rtems_capture_control_t*
+static inline rtems_capture_control*
 rtems_capture_find_control (rtems_name name, rtems_id id)
 {
-  rtems_capture_control_t* control;
+  rtems_capture_control* control;
   for (control = capture_controls; control != NULL; control = control->next)
     if (rtems_capture_match_name_id (name, id, control->name, control->id))
       break;
@@ -284,9 +284,9 @@ rtems_capture_initialize_control (rtems_tcb *tcb)
 {
   if (tcb->Capture.control == NULL)
   {
-    rtems_name               name = rtems_build_name(0, 0, 0, 0);
-    rtems_id                 id;
-    rtems_capture_control_t* control;
+    rtems_name             name = rtems_build_name(0, 0, 0, 0);
+    rtems_id               id;
+    rtems_capture_control* control;
 
     /*
      * We need to scan the default control list to initialise
@@ -307,11 +307,11 @@ rtems_capture_initialize_control (rtems_tcb *tcb)
   }
 }
 
-static rtems_capture_control_t*
+static rtems_capture_control*
 rtems_capture_create_control (rtems_name name, rtems_id id)
 {
   rtems_interrupt_lock_context lock_context;
-  rtems_capture_control_t*     control;
+  rtems_capture_control*       control;
 
   if ((name == 0) && (id == 0))
     return NULL;
@@ -375,7 +375,7 @@ rtems_capture_record_open (rtems_tcb*                         tcb,
   rtems_capture_per_cpu_data* cpu;
   uint8_t*                    ptr;
 
-  size += sizeof (rtems_capture_record_t);
+  size += sizeof (rtems_capture_record);
 
   cpu = capture_per_cpu_get (rtems_get_current_processor ());
 
@@ -384,7 +384,7 @@ rtems_capture_record_open (rtems_tcb*                         tcb,
   ptr = rtems_capture_buffer_allocate (&cpu->records, size);
   if (ptr != NULL)
   {
-    rtems_capture_record_t in;
+    rtems_capture_record in;
 
     ++cpu->count;
 
@@ -419,7 +419,7 @@ rtems_capture_record_close (rtems_capture_record_lock_context* context)
 void
 rtems_capture_initialize_task( rtems_tcb* tcb )
 {
-  rtems_capture_control_t*     control;
+  rtems_capture_control*       control;
   rtems_name                   name = rtems_build_name(0, 0, 0, 0);
   rtems_id                     id = rtems_capture_task_id (tcb);
   rtems_interrupt_lock_context lock_context;
@@ -449,7 +449,7 @@ void rtems_capture_record_task (rtems_tcb* tcb)
 {
   rtems_name                        name = rtems_build_name (0, 0, 0, 0);
   rtems_id                          id = rtems_capture_task_id (tcb);
-  rtems_capture_task_record_t       rec;
+  rtems_capture_task_record         rec;
   void*                             ptr;
   rtems_interrupt_lock_context      lock_context;
   rtems_capture_record_lock_context rec_context;
@@ -486,7 +486,7 @@ bool rtems_capture_filter (rtems_tcb*  tcb, uint32_t events)
         (RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_ONLY_MONITOR)) ==
        RTEMS_CAPTURE_TRIGGERED))
   {
-    rtems_capture_control_t* control;
+    rtems_capture_control* control;
 
     control = tcb->Capture.control;
 
@@ -513,18 +513,18 @@ bool rtems_capture_filter (rtems_tcb*  tcb, uint32_t events)
  * cause of a trigger.
  */
 bool
-rtems_capture_trigger (rtems_tcb* ft, rtems_tcb* tt, uint32_t events)
+rtems_capture_trigger_fired (rtems_tcb* ft, rtems_tcb* tt, uint32_t events)
 {
   /*
    * If we have not triggered then see if this is a trigger condition.
    */
   if (!(capture_flags_global & RTEMS_CAPTURE_TRIGGERED))
   {
-    rtems_capture_control_t* fc = NULL;
-    rtems_capture_control_t* tc = NULL;
-    uint32_t                 from_events = 0;
-    uint32_t                 to_events = 0;
-    uint32_t                 from_to_events = 0;
+    rtems_capture_control* fc = NULL;
+    rtems_capture_control* tc = NULL;
+    uint32_t               from_events = 0;
+    uint32_t               to_events = 0;
+    uint32_t               from_to_events = 0;
 
     if (ft)
     {
@@ -582,10 +582,10 @@ rtems_capture_trigger (rtems_tcb* ft, rtems_tcb* tt, uint32_t events)
 rtems_status_code
 rtems_capture_open (uint32_t   size, rtems_capture_timestamp timestamp RTEMS_UNUSED)
 {
-  rtems_status_code       sc = RTEMS_SUCCESSFUL;
-  size_t                  count;
-  uint32_t                i;
-  rtems_capture_buffer_t* buff;
+  rtems_status_code     sc = RTEMS_SUCCESSFUL;
+  size_t                count;
+  uint32_t              i;
+  rtems_capture_buffer* buff;
 
   /*
    * See if the capture engine is already open.
@@ -639,7 +639,7 @@ rtems_status_code
 rtems_capture_close (void)
 {
   rtems_interrupt_lock_context lock_context;
-  rtems_capture_control_t*     control;
+  rtems_capture_control*       control;
   rtems_status_code            sc;
   uint32_t                     cpu;
 
@@ -676,7 +676,7 @@ rtems_capture_close (void)
 
   while (control)
   {
-    rtems_capture_control_t* delete = control;
+    rtems_capture_control* delete = control;
     control = control->next;
     free (delete);
   }
@@ -696,7 +696,7 @@ rtems_capture_close (void)
 }
 
 rtems_status_code
-rtems_capture_control (bool enable)
+rtems_capture_set_control (bool enable)
 {
   rtems_interrupt_lock_context lock_context;
 
@@ -724,7 +724,7 @@ rtems_capture_control (bool enable)
  * to profile the load on a system.
  */
 rtems_status_code
-rtems_capture_monitor (bool enable)
+rtems_capture_set_monitor (bool enable)
 {
   rtems_interrupt_lock_context lock_context;
 
@@ -811,7 +811,7 @@ rtems_capture_flush (bool prime)
 rtems_status_code
 rtems_capture_watch_add (rtems_name name, rtems_id id)
 {
-  rtems_capture_control_t* control;
+  rtems_capture_control* control;
 
   if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
     return RTEMS_UNSATISFIED;
@@ -843,8 +843,8 @@ rtems_status_code
 rtems_capture_watch_del (rtems_name name, rtems_id id)
 {
   rtems_interrupt_lock_context lock_context;
-  rtems_capture_control_t*     control;
-  rtems_capture_control_t**    prev_control;
+  rtems_capture_control*       control;
+  rtems_capture_control**      prev_control;
   bool                         found = false;
 
   if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
@@ -892,7 +892,7 @@ rtems_status_code
 rtems_capture_watch_ctrl (rtems_name name, rtems_id id, bool enable)
 {
   rtems_interrupt_lock_context lock_context;
-  rtems_capture_control_t*     control;
+  rtems_capture_control*       control;
   bool                         found = false;
 
   if ( (capture_flags_global & RTEMS_CAPTURE_ON) != 0 )
@@ -1008,7 +1008,7 @@ rtems_capture_watch_get_floor (void)
  * Map the trigger to a bit mask.
  */
 static uint32_t
-rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
+rtems_capture_map_trigger (rtems_capture_trigger trigger)
 {
   /*
    * Transform the mode and trigger to a bit map.
@@ -1049,15 +1049,15 @@ rtems_capture_map_trigger (rtems_capture_trigger_t trigger)
  * linked to single control.
  */
 rtems_status_code
-rtems_capture_set_trigger (rtems_name                   from_name,
-                           rtems_id                     from_id,
-                           rtems_name                   to_name,
-                           rtems_id                     to_id,
-                           rtems_capture_trigger_mode_t mode,
-                           rtems_capture_trigger_t      trigger)
+rtems_capture_set_trigger (rtems_name                 from_name,
+                           rtems_id                   from_id,
+                           rtems_name                 to_name,
+                           rtems_id                   to_id,
+                           rtems_capture_trigger_mode mode,
+                           rtems_capture_trigger      trigger)
 {
-  rtems_capture_control_t* control;
-  uint32_t                 flags;
+  rtems_capture_control* control;
+  uint32_t               flags;
 
   flags = rtems_capture_map_trigger (trigger);
 
@@ -1127,15 +1127,15 @@ rtems_capture_set_trigger (rtems_name                   from_name,
  * This function clear a trigger.
  */
 rtems_status_code
-rtems_capture_clear_trigger (rtems_name                   from_name,
-                             rtems_id                     from_id,
-                             rtems_name                   to_name,
-                             rtems_id                     to_id,
-                             rtems_capture_trigger_mode_t mode,
-                             rtems_capture_trigger_t      trigger)
+rtems_capture_clear_trigger (rtems_name                 from_name,
+                             rtems_id                   from_id,
+                             rtems_name                 to_name,
+                             rtems_id                   to_id,
+                             rtems_capture_trigger_mode mode,
+                             rtems_capture_trigger      trigger)
 {
-  rtems_capture_control_t* control;
-  uint32_t                 flags;
+  rtems_capture_control* control;
+  uint32_t               flags;
 
   flags = rtems_capture_map_trigger (trigger);
 
@@ -1202,7 +1202,7 @@ rtems_capture_count_records (const void* records, size_t size)
 
   while (bytes < size)
   {
-    const rtems_capture_record_t* rec = (const rtems_capture_record_t*) ptr;
+    const rtems_capture_record* rec = (const rtems_capture_record*) ptr;
     recs++;
     ptr += rec->size;
     bytes += rec->size;
@@ -1234,7 +1234,7 @@ rtems_capture_read (uint32_t cpu, size_t* read, const void** recs)
     RTEMS_INTERRUPT_LOCK_REFERENCE (lock, &(capture_lock_on_cpu (cpu)))
     rtems_interrupt_lock_context lock_context;
     size_t                       recs_size = 0;
-    rtems_capture_buffer_t*      records;
+    rtems_capture_buffer*        records;
     uint32_t*                    flags;
 
     *read = 0;
@@ -1287,12 +1287,12 @@ rtems_capture_release (uint32_t cpu, uint32_t count)
   {
     rtems_interrupt_lock_context lock_context;
     uint8_t*                     ptr;
-    rtems_capture_record_t*      rec;
+    rtems_capture_record*        rec;
     uint32_t                     counted;
     size_t                       ptr_size = 0;
     size_t                       rel_size = 0;
     RTEMS_INTERRUPT_LOCK_REFERENCE( lock, &(capture_lock_on_cpu( cpu )) )
-    rtems_capture_buffer_t*      records = &(capture_records_on_cpu( cpu ));
+    rtems_capture_buffer*        records = &(capture_records_on_cpu( cpu ));
     uint32_t*                    flags = &(capture_flags_on_cpu( cpu ));
     uint32_t*                    total = &(capture_count_on_cpu( cpu ));
 
@@ -1316,7 +1316,7 @@ rtems_capture_release (uint32_t cpu, uint32_t count)
 
     rel_size = 0;
     while (counted--) {
-      rec = (rtems_capture_record_t*) ptr;
+      rec = (rtems_capture_record*) ptr;
       rel_size += rec->size;
       _Assert( rel_size <= ptr_size );
       ptr += rec->size;
@@ -1342,16 +1342,6 @@ rtems_capture_release (uint32_t cpu, uint32_t count)
 }
 
 /*
- * This function returns the current time. If a handler is provided
- * by the user get the time from that.
- */
-void
-rtems_capture_time (rtems_capture_time_t* uptime)
-{
-  rtems_capture_get_time(uptime);
-}
-
-/*
  * This function returns a string for an event based on the bit in the
  * event. The functions takes the bit offset as a number not the bit
  * set in a bit map.
@@ -1368,7 +1358,7 @@ rtems_capture_event_text (int event)
  * This function returns the head of the list of control in the
  * capture engine.
  */
-rtems_capture_control_t*
+rtems_capture_control*
 rtems_capture_get_control_list (void)
 {
   return capture_controls;

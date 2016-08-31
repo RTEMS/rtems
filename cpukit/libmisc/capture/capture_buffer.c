@@ -27,7 +27,7 @@
 #include "capture_buffer.h"
 
 void*
-rtems_capture_buffer_allocate (rtems_capture_buffer_t* buffer, size_t size)
+rtems_capture_buffer_allocate (rtems_capture_buffer* buffer, size_t size)
 {
   void* ptr = NULL;
 
@@ -95,11 +95,11 @@ rtems_capture_buffer_allocate (rtems_capture_buffer_t* buffer, size_t size)
 }
 
 void*
-rtems_capture_buffer_free (rtems_capture_buffer_t* buffer, size_t size)
+rtems_capture_buffer_free (rtems_capture_buffer* buffer, size_t size)
 {
-  void   *ptr;
-  size_t  next;
-  size_t  buff_size;
+  void*  ptr;
+  size_t next;
+  size_t buff_size;
 
   if (size == 0)
     return NULL;

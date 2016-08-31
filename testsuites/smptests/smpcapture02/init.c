@@ -38,7 +38,7 @@ typedef struct  {
   rtems_id id;
   rtems_id task_sem;
   rtems_id prev_sem;
-} task_data_t;
+} per_cpu_task_data;
 
 typedef struct {
   bool found;
@@ -49,7 +49,7 @@ typedef struct {
 } clock_interrupt_handler;
 
 static rtems_id finished_sem;
-static task_data_t task_data[ TASKS_PER_CPU * TASKS_PER_CPU ];
+static per_cpu_task_data task_data[ TASKS_PER_CPU * TASKS_PER_CPU ];
 static rtems_interrupt_handler org_clock_handler;
 
 typedef enum {
@@ -65,15 +65,15 @@ typedef enum {
 typedef struct {
   uint32_t a;
   uint32_t b;
-} RTEMS_PACKED enter_add_number_record_t;
+} RTEMS_PACKED enter_add_number_record;
 
 typedef struct {
   uint32_t res;
-} RTEMS_PACKED exit_add_number_record_t;
+} RTEMS_PACKED exit_add_number_record;
 
 typedef struct {
   void *arg;
-} RTEMS_PACKED clock_tick_record_t;
+} RTEMS_PACKED clock_tick_record;
 
 /*
  * Create a printable set of char's from a name.
@@ -97,8 +97,8 @@ static uint32_t add_number(uint32_t a, uint32_t b)
 static uint32_t add_number_wrapper(uint32_t a, uint32_t b)
 {
   rtems_capture_record_lock_context lock;
-  enter_add_number_record_t enter_rec;
-  exit_add_number_record_t exit_rec;
+  enter_add_number_record enter_rec;
+  exit_add_number_record exit_rec;
   cap_rec_type id;
   uint32_t res;
   void* rec;
@@ -288,10 +288,10 @@ static void Init(rtems_task_argument arg)
   size_t read;
   const void *recs;
   cap_rec_type id;
-  rtems_capture_record_t rec;
-  rtems_capture_record_t prev_rec;
-  enter_add_number_record_t enter_rec;
-  exit_add_number_record_t exit_rec;
+  rtems_capture_record rec;
+  rtems_capture_record prev_rec;
+  enter_add_number_record enter_rec;
+  exit_add_number_record exit_rec;
   clock_interrupt_handler cih = {.found = 0};
 
 #ifdef VERBOSE
@@ -309,7 +309,7 @@ static void Init(rtems_task_argument arg)
   sc = rtems_capture_watch_global(true);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_capture_control(true);
+  sc = rtems_capture_set_control(true);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /* Run main test */
@@ -337,7 +337,7 @@ static void Init(rtems_task_argument arg)
   }
 
   /* Disable capturing */
-  sc = rtems_capture_control(false);
+  sc = rtems_capture_set_control(false);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   clock_tick_count = 0;

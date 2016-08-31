@@ -111,7 +111,7 @@ rtems_capture_cli_open (int                                argc,
   if (!enable)
     return;
 
-  sc = rtems_capture_control (enable);
+  sc = rtems_capture_set_control (enable);
 
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -161,7 +161,7 @@ rtems_capture_cli_enable (int                                argc RC_UNUSED,
 {
   rtems_status_code sc;
 
-  sc = rtems_capture_control (true);
+  sc = rtems_capture_set_control (true);
 
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -186,7 +186,7 @@ rtems_capture_cli_disable (int                                argc RC_UNUSED,
 {
   rtems_status_code sc;
 
-  sc = rtems_capture_control (false);
+  sc = rtems_capture_set_control (false);
 
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -270,9 +270,9 @@ rtems_capture_cli_task_list (int                                argc RC_UNUSED,
                              const rtems_monitor_command_arg_t* command_arg RC_UNUSED,
                              bool                               verbose RC_UNUSED)
 {
-  rtems_capture_time_t  uptime;
+  rtems_capture_time uptime;
 
-  rtems_capture_time (&uptime);
+  rtems_capture_get_time (&uptime);
 
   rtems_capture_cli_task_count = 0;
   rtems_iterate_over_all_threads (rtems_capture_cli_count_tasks);
@@ -710,14 +710,14 @@ static char const *trigger_set_types =
 /*
  * Structure to handle the parsing of the trigger command line.
  */
-typedef struct rtems_capture_cli_triggers_s
+typedef struct rtems_capture_cli_triggers
 {
-  char const *            name;
-  rtems_capture_trigger_t type;
-  int                     to_only;
-} rtems_capture_cli_triggers_t;
+  char const *          name;
+  rtems_capture_trigger type;
+  int                   to_only;
+} rtems_capture_cli_triggers;
 
-static rtems_capture_cli_triggers_t rtems_capture_cli_triggers[] =
+static const rtems_capture_cli_triggers rtems_capture_cli_trigger[] =
 {
   { "switch",  rtems_capture_switch,  0 }, /* must be first */
   { "create",  rtems_capture_create,  0 },
@@ -728,39 +728,39 @@ static rtems_capture_cli_triggers_t rtems_capture_cli_triggers[] =
   { "exitted", rtems_capture_exitted, 1 }
 };
 
-typedef enum rtems_capture_cli_trig_state_e
+typedef enum rtems_capture_cli_trig_state
 {
   trig_type,
   trig_to,
   trig_from_from,
   trig_from
-} rtems_capture_cli_trig_state_t;
+} rtems_capture_cli_trig_state;
 
 #define RTEMS_CAPTURE_CLI_TRIGGERS_NUM \
-  (sizeof (rtems_capture_cli_triggers) / sizeof (rtems_capture_cli_triggers_t))
+  (sizeof (rtems_capture_cli_trigger) / sizeof (rtems_capture_cli_triggers))
 
 static void
 rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
 {
-  rtems_status_code            sc;
-  int                          arg;
-  int                          trigger = 0; /* switch */
-  rtems_capture_trigger_mode_t trigger_mode = rtems_capture_from_any;
-  bool                         trigger_set = false;
-  bool                         is_from = false;
-  bool                         is_to = false;
-  rtems_name                   name = 0;
-  rtems_id                     id = 0;
-  bool                         valid_name = false;
-  bool                         valid_id = false;
-  rtems_name                   from_name = 0;
-  rtems_id                     from_id = 0;
-  bool                         from_valid_name = false;
-  bool                         from_valid_id = false;
-  rtems_name                   to_name = 0;
-  rtems_id                     to_id = 0;
-  bool                         to_valid_name = false;
-  bool                         to_valid_id = false;
+  rtems_status_code          sc;
+  int                        arg;
+  int                        trigger = 0; /* switch */
+  rtems_capture_trigger_mode trigger_mode = rtems_capture_from_any;
+  bool                       trigger_set = false;
+  bool                       is_from = false;
+  bool                       is_to = false;
+  rtems_name                 name = 0;
+  rtems_id                   id = 0;
+  bool                       valid_name = false;
+  bool                       valid_id = false;
+  rtems_name                 from_name = 0;
+  rtems_id                   from_id = 0;
+  bool                       from_valid_name = false;
+  bool                       from_valid_id = false;
+  rtems_name                 to_name = 0;
+  rtems_id                   to_id = 0;
+  bool                       to_valid_name = false;
+  bool                       to_valid_id = false;
 
   for (arg = 1; arg < argc; arg++)
   {
@@ -785,7 +785,7 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
         int  t;
 
         for (t = 0; t < RTEMS_CAPTURE_CLI_TRIGGERS_NUM; t++)
-          if (strcmp (argv[arg], rtems_capture_cli_triggers[t].name) == 0)
+          if (strcmp (argv[arg], rtems_capture_cli_trigger[t].name) == 0)
           {
             trigger = t;
             found = true;
@@ -874,10 +874,10 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
     }
   }
 
-  if (is_from && rtems_capture_cli_triggers[trigger].to_only)
+  if (is_from && rtems_capture_cli_trigger[trigger].to_only)
   {
     fprintf (stdout, "error: a %s trigger can be a TO trigger\n",
-             rtems_capture_cli_triggers[trigger].name);
+             rtems_capture_cli_trigger[trigger].name);
     return;
   }
 
@@ -890,14 +890,14 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
   if (!is_from && !to_valid_name && !to_valid_id)
   {
     fprintf (stdout, "error: a %s trigger needs a TO name or id\n",
-             rtems_capture_cli_triggers[trigger].name);
+             rtems_capture_cli_trigger[trigger].name);
     return;
   }
 
   if (is_from && !from_valid_name && !from_valid_id)
   {
     fprintf (stdout, "error: a %s trigger needs a FROM name or id\n",
-             rtems_capture_cli_triggers[trigger].name);
+             rtems_capture_cli_trigger[trigger].name);
     return;
   }
 
@@ -911,11 +911,11 @@ rtems_capture_cli_trigger_worker (int set, int argc, char** argv)
   if (set)
     sc = rtems_capture_set_trigger (from_name, from_id, to_name, to_id,
                                     trigger_mode,
-                                    rtems_capture_cli_triggers[trigger].type);
+                                    rtems_capture_cli_trigger[trigger].type);
   else
     sc = rtems_capture_clear_trigger (from_name, from_id, to_name, to_id,
                                       trigger_mode,
-                                      rtems_capture_cli_triggers[trigger].type);
+                                      rtems_capture_cli_trigger[trigger].type);
 
   if (sc != RTEMS_SUCCESSFUL)
   {
@@ -1192,7 +1192,7 @@ rtems_capture_cli_init (rtems_capture_timestamp timestamp)
   for (cmd = 0;
        cmd < sizeof (rtems_capture_cli_cmds) / sizeof (rtems_monitor_command_entry_t);
        cmd++)
-      rtems_monitor_insert_cmd (&rtems_capture_cli_cmds[cmd]);
+    rtems_monitor_insert_cmd (&rtems_capture_cli_cmds[cmd]);
 
   return RTEMS_SUCCESSFUL;
 }

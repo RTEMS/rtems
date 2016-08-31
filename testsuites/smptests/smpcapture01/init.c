@@ -232,12 +232,12 @@ static void Init(rtems_task_argument arg)
     );
   }
 
-  sc = rtems_capture_control (true);
+  sc = rtems_capture_set_control (true);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   test();
 
-  sc = rtems_capture_control (false);
+  sc = rtems_capture_set_control (false);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_capture_print_trace_records ( 22, false );

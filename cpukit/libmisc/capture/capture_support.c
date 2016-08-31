@@ -41,12 +41,12 @@
 
 typedef struct
 {
-  const void*            recs;      /**< Next record to be read. */
-  size_t                 read;      /**< Number of records read. */
-  size_t                 printed;   /**< Records been printed. */
-  bool                   rec_valid; /**< The record is valid. */
-  rtems_capture_record_t rec;       /**< The record, copied out. */
-} ctrace_per_cpu_t;
+  const void*          recs;      /**< Next record to be read. */
+  size_t               read;      /**< Number of records read. */
+  size_t               printed;   /**< Records been printed. */
+  bool                 rec_valid; /**< The record is valid. */
+  rtems_capture_record rec;       /**< The record, copied out. */
+} ctrace_per_cpu;
 
 /*
  * Task block size.
@@ -186,9 +186,9 @@ rtems_capture_print_timestamp (uint64_t uptime)
 }
 
 void
-rtems_capture_print_record_task (int                                cpu,
-                                 const rtems_capture_record_t*      rec,
-                                 const rtems_capture_task_record_t* task_rec)
+rtems_capture_print_record_task (int                              cpu,
+                                 const rtems_capture_record*      rec,
+                                 const rtems_capture_task_record* task_rec)
 {
   fprintf(stdout,"%2i ", cpu);
   rtems_capture_print_timestamp (rec->time);
@@ -215,10 +215,10 @@ rtems_capture_print_record_task (int                                cpu,
 }
 
 void
-rtems_capture_print_record_capture(int                           cpu,
-                                   const rtems_capture_record_t* rec,
-                                   uint64_t                      diff,
-                                   const rtems_name*             name)
+rtems_capture_print_record_capture(int                         cpu,
+                                   const rtems_capture_record* rec,
+                                   uint64_t                    diff,
+                                   const rtems_name*           name)
 {
   uint32_t event;
   int      e;
@@ -262,11 +262,11 @@ rtems_capture_print_record_capture(int                           cpu,
 void
 rtems_capture_print_trace_records (int total, bool csv)
 {
-  ctrace_per_cpu_t*    per_cpu;
-  ctrace_per_cpu_t*    cpu;
-  int                  cpus;
-  rtems_capture_time_t last_time = 0;
-  int                  i;
+  ctrace_per_cpu*    per_cpu;
+  ctrace_per_cpu*    cpu;
+  int                cpus;
+  rtems_capture_time last_time = 0;
+  int                i;
 
   cpus = rtems_get_processor_count ();
 
@@ -279,9 +279,9 @@ rtems_capture_print_trace_records (int total, bool csv)
 
   while (total)
   {
-    const rtems_capture_record_t* rec_out = NULL;
-    int                           cpu_out = -1;
-    rtems_capture_time_t          this_time = 0;
+    const rtems_capture_record* rec_out = NULL;
+    int                         cpu_out = -1;
+    rtems_capture_time          this_time = 0;
 
     /* Prime the per_cpu data */
     for (i = 0; i < cpus; i++) {
@@ -345,7 +345,7 @@ rtems_capture_print_trace_records (int total, bool csv)
     {
       if ((rec_out->events >> RTEMS_CAPTURE_EVENT_START) == 0)
       {
-        rtems_capture_task_record_t task_rec;
+        rtems_capture_task_record task_rec;
         cpu->recs = rtems_capture_record_extract (cpu->recs,
                                                   &task_rec,
                                                   sizeof (task_rec));
@@ -354,8 +354,8 @@ rtems_capture_print_trace_records (int total, bool csv)
       }
       else
       {
-        rtems_capture_time_t diff;
-        const rtems_name*    name = NULL;
+        rtems_capture_time diff;
+        const rtems_name*  name = NULL;
         if (last_time != 0)
           diff = rec_out->time - last_time;
         else
@@ -402,9 +402,9 @@ rtems_capture_print_trace_records (int total, bool csv)
 void
 rtems_capture_print_watch_list (void)
 {
-  rtems_capture_control_t* control = rtems_capture_get_control_list ();
-  rtems_task_priority      ceiling = rtems_capture_watch_get_ceiling ();
-  rtems_task_priority      floor = rtems_capture_watch_get_floor ();
+  rtems_capture_control* control = rtems_capture_get_control_list ();
+  rtems_task_priority    ceiling = rtems_capture_watch_get_ceiling ();
+  rtems_task_priority    floor = rtems_capture_watch_get_floor ();
 
   fprintf (stdout, "watch priority ceiling is %" PRId32 "\n", ceiling);
   fprintf (stdout, "watch priority floor is %" PRId32 "\n", floor);
