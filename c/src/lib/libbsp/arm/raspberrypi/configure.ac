@@ -41,7 +41,8 @@ RTEMS_BSPOPTS_HELP([BSP_IS_RPI2],[Set if the BSP variant is Raspberry Pi 2.])
 AM_CONDITIONAL(RTEMS_RPI2,[test "$BSP_IS_RPI2" = "1"])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
-RTEMS_BSP_LINKCMDS
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([
+Makefile
+startup/linkcmds])
 AC_OUTPUT

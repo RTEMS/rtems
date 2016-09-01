@@ -70,8 +70,6 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 project_lib_DATA += ../shared/startup/linkcmds.base
 
-EXTRA_DIST = startup/linkcmds
-
 ###############################################################################
 # LibBSP                                                     #
 ###############################################################################
