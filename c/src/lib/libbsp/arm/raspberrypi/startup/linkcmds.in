@@ -41,6 +41,8 @@ MEMORY {
         RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 32k
 }
 
+bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : @RASPBERRYPI_CPUS@;
+
 REGION_ALIAS ("REGION_START", RAM);
 REGION_ALIAS ("REGION_VECTOR", VECTOR_RAM);
 REGION_ALIAS ("REGION_TEXT", RAM);
