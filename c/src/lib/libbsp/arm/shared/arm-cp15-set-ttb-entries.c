@@ -85,13 +85,5 @@ uint32_t arm_cp15_set_translation_table_entries(
   uint32_t section_flags
 )
 {
-  rtems_interrupt_level level;
-  uint32_t section_flags_of_first_entry;
-
-  rtems_interrupt_disable(level);
-  section_flags_of_first_entry =
-    set_translation_table_entries(begin, end, section_flags);
-  rtems_interrupt_enable(level);
-
-  return section_flags_of_first_entry;
+  return set_translation_table_entries(begin, end, section_flags);
 }
