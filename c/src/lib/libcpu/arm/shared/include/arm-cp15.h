@@ -1083,6 +1083,35 @@ arm_cp15_data_cache_invalidate_line_by_set_and_way(uint32_t set_and_way)
 }
 
 ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_cache_invalidate_level(uint32_t level, uint32_t inst_data_fl)
+{
+  uint32_t ccsidr;
+  uint32_t line_power;
+  uint32_t associativity;
+  uint32_t way;
+  uint32_t way_shift;
+
+  ccsidr = arm_cp15_get_cache_size_id_for_level((level << 1) | inst_data_fl);
+
+  line_power = arm_ccsidr_get_line_power(ccsidr);
+  associativity = arm_ccsidr_get_associativity(ccsidr);
+  way_shift = __builtin_clz(associativity - 1);
+
+  for (way = 0; way < associativity; ++way) {
+    uint32_t num_sets = arm_ccsidr_get_num_sets(ccsidr);
+    uint32_t set;
+
+    for (set = 0; set < num_sets; ++set) {
+      uint32_t set_way = (way << way_shift)
+        | (set << line_power)
+        | (level << 1);
+
+      arm_cp15_data_cache_invalidate_line_by_set_and_way(set_way);
+    }
+  }
+}
+
+ARM_CP15_TEXT_SECTION static inline void
 arm_cp15_data_cache_invalidate_all_levels(void)
 {
   uint32_t clidr = arm_cp15_get_cache_level_id();
@@ -1094,30 +1123,7 @@ arm_cp15_data_cache_invalidate_all_levels(void)
 
     /* Check if this level has a data cache or unified cache */
     if (((ctype & (0x6)) == 2) || (ctype == 4)) {
-      uint32_t ccsidr;
-      uint32_t line_power;
-      uint32_t associativity;
-      uint32_t way;
-      uint32_t way_shift;
-
-      ccsidr = arm_cp15_get_cache_size_id_for_level(level << 1);
-
-      line_power = arm_ccsidr_get_line_power(ccsidr);
-      associativity = arm_ccsidr_get_associativity(ccsidr);
-      way_shift = __builtin_clz(associativity - 1);
-
-      for (way = 0; way < associativity; ++way) {
-        uint32_t num_sets = arm_ccsidr_get_num_sets(ccsidr);
-        uint32_t set;
-
-        for (set = 0; set < num_sets; ++set) {
-          uint32_t set_way = (way << way_shift)
-            | (set << line_power)
-            | (level << 1);
-
-          arm_cp15_data_cache_invalidate_line_by_set_and_way(set_way);
-        }
-      }
+      arm_cp15_cache_invalidate_level(level, 0);
     }
   }
 }
@@ -1155,6 +1161,35 @@ arm_cp15_data_cache_clean_line_by_set_and_way(uint32_t set_and_way)
 }
 
 ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_data_cache_clean_level(uint32_t level)
+{
+  uint32_t ccsidr;
+  uint32_t line_power;
+  uint32_t associativity;
+  uint32_t way;
+  uint32_t way_shift;
+
+  ccsidr = arm_cp15_get_cache_size_id_for_level(level << 1);
+
+  line_power = arm_ccsidr_get_line_power(ccsidr);
+  associativity = arm_ccsidr_get_associativity(ccsidr);
+  way_shift = __builtin_clz(associativity - 1);
+
+  for (way = 0; way < associativity; ++way) {
+    uint32_t num_sets = arm_ccsidr_get_num_sets(ccsidr);
+    uint32_t set;
+
+    for (set = 0; set < num_sets; ++set) {
+      uint32_t set_way = (way << way_shift)
+        | (set << line_power)
+        | (level << 1);
+
+      arm_cp15_data_cache_clean_line_by_set_and_way(set_way);
+    }
+  }
+}
+
+ARM_CP15_TEXT_SECTION static inline void
 arm_cp15_data_cache_clean_all_levels(void)
 {
   uint32_t clidr = arm_cp15_get_cache_level_id();
@@ -1166,30 +1201,7 @@ arm_cp15_data_cache_clean_all_levels(void)
 
     /* Check if this level has a data cache or unified cache */
     if (((ctype & (0x6)) == 2) || (ctype == 4)) {
-      uint32_t ccsidr;
-      uint32_t line_power;
-      uint32_t associativity;
-      uint32_t way;
-      uint32_t way_shift;
-
-      ccsidr = arm_cp15_get_cache_size_id_for_level(level << 1);
-
-      line_power = arm_ccsidr_get_line_power(ccsidr);
-      associativity = arm_ccsidr_get_associativity(ccsidr);
-      way_shift = __builtin_clz(associativity - 1);
-
-      for (way = 0; way < associativity; ++way) {
-        uint32_t num_sets = arm_ccsidr_get_num_sets(ccsidr);
-        uint32_t set;
-
-        for (set = 0; set < num_sets; ++set) {
-          uint32_t set_way = (way << way_shift)
-            | (set << line_power)
-            | (level << 1);
-
-          arm_cp15_data_cache_clean_line_by_set_and_way(set_way);
-        }
-      }
+      arm_cp15_data_cache_clean_level(level);
     }
   }
 }
