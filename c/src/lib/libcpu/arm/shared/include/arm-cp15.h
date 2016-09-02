@@ -211,6 +211,20 @@ extern "C" {
 /** @} */
 
 /**
+ * @name CTR, Cache Type Register Defines
+ *
+ * The format can be obtained from CP15 by call
+ * arm_cp15_cache_type_get_format(arm_cp15_get_cache_type());
+ *
+ * @{
+ */
+
+#define ARM_CP15_CACHE_TYPE_FORMAT_ARMV6 0
+#define ARM_CP15_CACHE_TYPE_FORMAT_ARMV7 4
+
+/** @} */
+
+/**
  * @name CCSIDR, Cache Size ID Register Defines
  *
  * @{
@@ -685,18 +699,25 @@ arm_cp15_get_cache_type(void)
   return val;
 }
 
+/* Extract format version from cache type CTR */
+ARM_CP15_TEXT_SECTION static inline int
+arm_cp15_cache_type_get_format(uint32_t ct)
+{
+  return (ct >> 29) & 0x7U;
+}
+
 /* Read size of smallest cache line of all instruction/data caches controlled by the processor */
 ARM_CP15_TEXT_SECTION static inline uint32_t
 arm_cp15_get_min_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
-  uint32_t format = (ct >> 29) & 0x7U;
+  uint32_t format = arm_cp15_cache_type_get_format(ct);
 
-  if (format == 0x4) {
+  if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV7) {
     /* ARMv7 format */
     mcls = (1U << (ct & 0xf)) * 4;
-  } else if (format == 0x0) {
+  } else if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV6) {
     /* ARMv6 format */
     uint32_t mask = (1U << 12) - 1;
     uint32_t dcls = (ct >> 12) & mask;
@@ -714,12 +735,12 @@ arm_cp15_get_data_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
-  uint32_t format = (ct >> 29) & 0x7U;
+  uint32_t format = arm_cp15_cache_type_get_format(ct);
 
-  if (format == 0x4) {
+  if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV7) {
     /* ARMv7 format */
     mcls = (1U << ((ct & 0xf0000) >> 16)) * 4;
-  } else if (format == 0x0) {
+  } else if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV6) {
     /* ARMv6 format */
     uint32_t mask = (1U << 12) - 1;
     mcls = (ct >> 12) & mask;
@@ -734,12 +755,12 @@ arm_cp15_get_instruction_cache_line_size(void)
 {
   uint32_t mcls = 0;
   uint32_t ct = arm_cp15_get_cache_type();
-  uint32_t format = (ct >> 29) & 0x7U;
+  uint32_t format = arm_cp15_cache_type_get_format(ct);
 
-  if (format == 0x4) {
+  if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV7) {
     /* ARMv7 format */
     mcls = (1U << (ct & 0x0000f)) * 4;
-  } else if (format == 0x0) {
+  } else if (format == ARM_CP15_CACHE_TYPE_FORMAT_ARMV6) {
     /* ARMv6 format */
     uint32_t mask = (1U << 12) - 1;
     mcls = ct & mask;;
