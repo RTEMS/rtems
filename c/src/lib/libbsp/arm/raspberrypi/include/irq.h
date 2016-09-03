@@ -36,6 +36,11 @@
 #define BCM2835_INTC_TOTAL_IRQ       64 + 8
 
 
+#define BCM2835_IRQ_ID_GPU_TIMER_M0  0
+#define BCM2835_IRQ_ID_GPU_TIMER_M1  1
+#define BCM2835_IRQ_ID_GPU_TIMER_M2  2
+#define BCM2835_IRQ_ID_GPU_TIMER_M3  3
+
 #define BCM2835_IRQ_ID_USB           9
 #define BCM2835_IRQ_ID_AUX           29
 #define BCM2835_IRQ_ID_SPI_SLAVE     43
