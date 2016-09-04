@@ -29,7 +29,7 @@ done
 max_bsp_len=$(expr ${max_bsp_len} + 2)
 last_arch=""
 
-echo "RTEMS 4.12"
+echo "RTEMS 4.10"
 echo " Architectures: ${arch_count}"
 echo " BSP Count: ${bsp_count}"
 for bsp_path in ${cfg_list};
