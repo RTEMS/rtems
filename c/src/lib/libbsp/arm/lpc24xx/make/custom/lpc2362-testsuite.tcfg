@@ -1,0 +1,10 @@
+#
+# The LPC2362 does not have enough memory for some tests to link.
+#
+
+cdtest
+fileio
+flashdisk01
+psx07
+rtems++
+sp09

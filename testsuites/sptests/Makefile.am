@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../aclocal
 
 ## Test names are spaced to indicate gaps in numbering from tests being
 ## deleted over the years.
-SUBDIRS = \
+_SUBDIRS = \
          sp01 sp02 sp03 sp04 sp05 sp06 sp07 sp08 sp09 \
     sp10 sp11 sp12 sp13 sp14 sp15 sp16 sp17 sp18 sp19 \
     sp20 sp21 sp22 sp23 sp24 sp25 sp26 sp27 sp27a sp28 sp29 \
@@ -24,8 +24,8 @@ SUBDIRS = \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17
  
-DIST_SUBDIRS = $(SUBDIRS) spfatal_support spintrcritical_support
+DIST_SUBDIRS = $(_SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h
 
-include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/test-subdirs.am
 include $(top_srcdir)/../automake/local.am

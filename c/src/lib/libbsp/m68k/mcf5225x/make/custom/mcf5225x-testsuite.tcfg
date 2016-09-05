@@ -1,0 +1,5 @@
+#
+# tests to avoid for the mcf5225x BSP
+#
+
+flashdisk01

@@ -1,0 +1,8 @@
+#
+#  Tests to skip for h8sxsim BSP
+#
+
+include: testdata/require-tick-isr.tcfg
+include: testdata/disable-intrcritical-tests.tcfg
+
+flashdisk01

@@ -1,0 +1,35 @@
+## Borrowed from automake/subdir.am which borrowed automake-1.4 and adapted to RTEMS
+
+## NOTE: This is a temporary work-around until automake is removed from RTEMS.
+##   It is a hack within many hacks and is designed to keep the source as clean
+##   as possible.
+
+all-local:
+	@set fnord $(MAKEFLAGS); amf=$$2; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	if test "$$target" = "all-local-am"; then \
+	  target="all-am"; \
+	fi; \
+	if test "$$target" = "all-local"; then \
+	  target="all"; \
+	fi; \
+	tdata="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
+	if test -f "$$tdata"; then \
+	  vtdata="$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.cfg"; \
+	 else \
+	  vtdata="all tests"; \
+	fi; \
+	echo "BSP Testsuite Data: $$vtdata"; \
+	list=`$(top_srcdir)/../../tools/build/rtems-test-check \
+		 $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $(_SUBDIRS)`; \
+	for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" != "."; then \
+	    local_target="$$target"; \
+	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	     || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
+	  fi; \
+	done; test -z "$$fail"
+
+include $(top_srcdir)/../automake/subdirs.am

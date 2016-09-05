@@ -1,0 +1,10 @@
+#
+# The GDB SH Simulator does not have a tick interrupt
+# and the simsh2e configuration has limited memory.
+#
+
+include: testdata/require-tick-isr.tcfg
+include: testdata/disable-intrcritical-tests.tcfg
+
+fileio
+iostream
