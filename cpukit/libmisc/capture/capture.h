@@ -172,8 +172,8 @@ typedef struct rtems_capture_record
 {
   size_t             size;
   uint32_t           events;
-  rtems_capture_time time;
   rtems_id           task_id;
+  rtems_capture_time time;
 } RTEMS_PACKED rtems_capture_record;
 
 /*
