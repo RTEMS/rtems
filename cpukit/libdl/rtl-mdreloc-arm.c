@@ -52,6 +52,15 @@ isThumb(Elf_Word symvalue)
   else return false;
 }
 
+static inline Elf_SOff
+sign_extend31(Elf_Addr val)
+{
+  if (0x40000000 & val)
+    return ~((Elf_Addr)0x7fffffff) | (0x7fffffff & val);
+  else
+    return 0x7fffffff & val;
+}
+
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
@@ -165,12 +174,16 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
     case R_TYPE(REL32):     /* word32 (S + A) | T - P */
     case R_TYPE(ABS32):     /* word32 (S + A) | T */
     case R_TYPE(GLOB_DAT):  /* word32 (S + A) | T */
+    case R_TYPE(PREL31):    /* word32 (S + A) | T - P */
+    case R_TYPE(TARGET2):   /* Equivalent to ABS32 */
       if (__predict_true(RELOC_ALIGNED_P(where))) {
         tmp = *where + symvalue;
         if (isThumb(symvalue))
           tmp |= 1;
         if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32))
           tmp -= (Elf_Addr)where;
+        else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31))
+          tmp -= sign_extend31((Elf_Addr)where);
         *where = tmp;
       } else {
         tmp = load_ptr(where) + symvalue;
@@ -178,11 +191,13 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
           tmp |= 1;
         if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32))
           tmp -= (Elf_Addr)where;
+        else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31))
+          tmp -= sign_extend31((Elf_Addr)where);
         store_ptr(where, tmp);
       }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: REL32/ABS32/GLOB_DAT %p @ %p in %s",
+        printf ("rtl: REL32/ABS32/GLOB_DAT/PREL31/TARGET2 %p @ %p in %s",
                 (void *)tmp, where, rtems_rtl_obj_oname (obj));
       break;
 
