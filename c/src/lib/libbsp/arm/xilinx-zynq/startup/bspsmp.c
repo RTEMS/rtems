@@ -14,7 +14,7 @@
 
 #include <rtems/score/smpimpl.h>
 
-extern void _start(void);
+#include <bsp/start.h>
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {
