@@ -37,12 +37,8 @@ void _Thread_Handler( void )
    */
   _Context_Initialization_at_thread_begin();
 
-  #if defined(RTEMS_SMP)
-    /* On SMP we enter _Thread_Handler() with interrupts disabled */
-    _Assert( _ISR_Get_level() != 0 );
-
-    _Thread_Debug_set_real_processor( executing, _Per_CPU_Get() );
-  #endif
+  /* On SMP we enter _Thread_Handler() with interrupts disabled */
+  _SMP_Assert( _ISR_Get_level() != 0 );
 
   /*
    * have to put level into a register for those cpu's that use

@@ -119,8 +119,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
      */
     cpu_self = _Per_CPU_Get();
 
-    _Thread_Debug_set_real_processor( executing, cpu_self );
-
 #if !defined( RTEMS_SMP )
     _ISR_Local_disable( level );
 #endif

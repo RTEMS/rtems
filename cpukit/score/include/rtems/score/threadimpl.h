@@ -1658,19 +1658,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _Thread_Debug_set_real_processor(
-  Thread_Control  *the_thread,
-  Per_CPU_Control *cpu
-)
-{
-#if defined(RTEMS_SMP) && defined(RTEMS_DEBUG)
-  the_thread->Scheduler.debug_real_cpu = cpu;
-#else
-  (void) the_thread;
-  (void) cpu;
-#endif
-}
-
 /** @}*/
 
 #ifdef __cplusplus

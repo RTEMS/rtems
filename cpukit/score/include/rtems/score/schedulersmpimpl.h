@@ -472,9 +472,6 @@ static inline void _Scheduler_SMP_Allocate_processor_lazy(
       );
     } else {
       /* We have to force a migration to our processor set */
-      _Assert(
-        scheduled_thread->Scheduler.debug_real_cpu->heir != scheduled_thread
-      );
       heir = scheduled_thread;
     }
   } else {

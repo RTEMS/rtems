@@ -672,14 +672,6 @@ typedef struct {
    * @brief The processor assigned by the current scheduler.
    */
   struct Per_CPU_Control *cpu;
-
-#if defined(RTEMS_DEBUG)
-  /**
-   * @brief The processor on which this thread executed the last time or is
-   * executing.
-   */
-  struct Per_CPU_Control *debug_real_cpu;
-#endif
 #endif
 } Thread_Scheduler_control;
 

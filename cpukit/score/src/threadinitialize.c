@@ -191,8 +191,6 @@ bool _Thread_Initialize(
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
 #endif
 
-  _Thread_Debug_set_real_processor( the_thread, cpu );
-
   /* Initialize the CPU for the non-SMP schedulers */
   _Thread_Set_CPU( the_thread, cpu );
 
