@@ -97,19 +97,6 @@ bool rtems_stack_checker_create_extension(
 );
 
 /**
- * @brief Stack Checker Task Begin Extension
- *
- * This method is the task begin extension for the stack checker.
- *
- * @param[in] the_thread points to task starting to execute
- *
- * @note This is called from the internal method _Thread_Handler.
- */
-void rtems_stack_checker_begin_extension(
-  Thread_Control *the_thread
-);
-
-/**
  * @brief Stack Checker Task Context Switch Extension
  *
  * This method is the task context switch extension for the stack checker.
@@ -138,7 +125,7 @@ void rtems_stack_checker_switch_extension(
   0,                                           /* rtems_task_restart */ \
   0,                                           /* rtems_task_delete  */ \
   rtems_stack_checker_switch_extension,        /* task_switch  */ \
-  rtems_stack_checker_begin_extension,         /* task_begin   */ \
+  0,                                           /* task_begin   */ \
   0,                                           /* task_exitted */ \
   0 /* rtems_stack_checker_fatal_extension */, /* fatal        */ \
 }

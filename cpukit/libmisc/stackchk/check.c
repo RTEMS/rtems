@@ -202,28 +202,15 @@ bool rtems_stack_checker_create_extension(
 )
 {
   Stack_check_Initialize();
-
-  if (the_thread)
-    Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
-
-  return true;
-}
-
-/*
- *  rtems_stack_checker_Begin_extension
- */
-void rtems_stack_checker_begin_extension(
-  Thread_Control *the_thread
-)
-{
-  if ( the_thread->Object.id == 0 )        /* skip system tasks */
-    return;
+  Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
 
   memcpy(
     Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
     Stack_check_Pattern,
     PATTERN_SIZE_BYTES
   );
+
+  return true;
 }
 
 /*
