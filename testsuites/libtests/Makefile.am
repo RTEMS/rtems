@@ -48,7 +48,7 @@ endif
 if DLTESTS
 _SUBDIRS += dl01 dl02 dl03
 if HAS_CXX
-_SUBDIRS += dl04
+_SUBDIRS += dl04 dl05
 endif
 endif
 

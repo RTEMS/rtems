@@ -1,0 +1,1281 @@
+
+
+*** BEGIN OF TEST libdl (RTL) 5 ***
+rtl: alloc: new: SYMBOL addr=0x118cf8 size=384
+rtl: alloc: new: OBJECT addr=0x1192c8 size=2048
+rtl: alloc: new: OBJECT addr=0x119af0 size=2048
+rtl: alloc: new: OBJECT addr=0x11a318 size=2048
+rtl: alloc: new: OBJECT addr=0x11ab40 size=2048
+rtl: alloc: new: OBJECT addr=0x11b368 size=136
+rtl: alloc: new: OBJECT addr=0x11b418 size=13
+rtl: alloc: new: OBJECT addr=0x11b450 size=2
+rtl: adding global symbols, table size 29680
+rtl: global symbol add: 1070
+rtl: alloc: new: SYMBOL addr=0x11b480 size=21400
+rtl: esyms: BSP_output_char -> 0x101524
+rtl: esyms: Clock_driver_ticks -> 0x102f20
+rtl: esyms: Clock_exit ->   0xa74f
+rtl: esyms: Clock_initialize ->   0xa75b
+rtl: esyms: Clock_isr ->   0xa67b
+rtl: esyms: Configuration ->  0x3b72c
+rtl: esyms: Configuration_POSIX_API -> 0x1027a8
+rtl: esyms: Configuration_RTEMS_API -> 0x101458
+rtl: esyms: Console_Configuration_Count -> 0x101520
+rtl: esyms: Console_Configuration_Ports -> 0x101498
+rtl: esyms: Console_Port_Count -> 0x1028f0
+rtl: esyms: Console_Port_Data -> 0x1028f8
+rtl: esyms: Console_Port_Minor -> 0x1028fc
+rtl: esyms: Console_Port_Tbl -> 0x1028f4
+rtl: esyms: HeapSize ->      0x0
+rtl: esyms: IMFS_LIMITS_AND_OPTIONS ->  0x4b8c4
+rtl: esyms: IMFS_chown ->   0xc423
+rtl: esyms: IMFS_create_node ->   0xc537
+rtl: esyms: IMFS_eval_path ->   0xcf91
+rtl: esyms: IMFS_fchmod ->   0xcfd3
+rtl: esyms: IMFS_initialize_node ->   0xd163
+rtl: esyms: IMFS_initialize_support ->   0xd1f5
+rtl: esyms: IMFS_link ->   0xd3ff
+rtl: esyms: IMFS_memfile_write ->   0xdd53
+rtl: esyms: IMFS_mknod ->   0xe3cb
+rtl: esyms: IMFS_mknod_control_device ->  0x4bb20
+rtl: esyms: IMFS_mknod_control_dir_default ->  0x4bac8
+rtl: esyms: IMFS_mknod_control_enosys ->  0x4bbcc
+rtl: esyms: IMFS_mknod_control_memfile ->  0x4bdcc
+rtl: esyms: IMFS_mount ->   0xe45d
+rtl: esyms: IMFS_node_clone ->   0xd2a9
+rtl: esyms: IMFS_node_destroy ->   0xd2d1
+rtl: esyms: IMFS_node_destroy_default ->   0xd38d
+rtl: esyms: IMFS_node_free ->   0xd311
+rtl: esyms: IMFS_node_initialize_default ->   0xd35f
+rtl: esyms: IMFS_node_initialize_directory ->   0xc703
+rtl: esyms: IMFS_node_remove_default ->   0xd377
+rtl: esyms: IMFS_node_remove_directory ->   0xc747
+rtl: esyms: IMFS_readlink ->   0xe9c3
+rtl: esyms: IMFS_rename ->   0xe66b
+rtl: esyms: IMFS_rmnod ->   0xe7d7
+rtl: esyms: IMFS_stat ->   0xe8b5
+rtl: esyms: IMFS_stat_file ->   0xe92b
+rtl: esyms: IMFS_symlink ->   0xe969
+rtl: esyms: IMFS_unmount ->   0xeaa5
+rtl: esyms: IMFS_utime ->   0xeb07
+rtl: esyms: Initialization_tasks -> 0x10140c
+rtl: esyms: RTEMS_Malloc_Area -> 0x102e78
+rtl: esyms: RTEMS_Malloc_Heap -> 0x101408
+rtl: esyms: RTEMS_Malloc_Initialize ->   0xfd27
+rtl: esyms: RamBase ->      0x0
+rtl: esyms: RamSize -> 0xfefc000
+rtl: esyms: Untar_FromMemory ->  0x32141
+rtl: esyms: Untar_FromMemory_Print ->  0x31fad
+rtl: esyms: WorkAreaBase -> 0x103a30
+rtl: esyms: _API_Mutex_Allocate ->  0x2345f
+rtl: esyms: _API_Mutex_Initialization ->  0x23431
+rtl: esyms: _API_Mutex_Is_owner ->  0x23521
+rtl: esyms: _API_Mutex_Lock ->  0x237cf
+rtl: esyms: _API_Mutex_Unlock ->  0x23b51
+rtl: esyms: _ARMV4_Exception_data_abort_default ->  0x31790
+rtl: esyms: _ARMV4_Exception_fiq_default ->  0x317c0
+rtl: esyms: _ARMV4_Exception_interrupt ->  0x31690
+rtl: esyms: _ARMV4_Exception_irq_default ->  0x317b0
+rtl: esyms: _ARMV4_Exception_pref_abort_default ->  0x31780
+rtl: esyms: _ARMV4_Exception_reserved_default ->  0x317a0
+rtl: esyms: _ARMV4_Exception_swi_default ->  0x31770
+rtl: esyms: _ARMV4_Exception_undef_default ->  0x31760
+rtl: esyms: _ARM_Exception_default ->  0x31675
+rtl: esyms: _Balloc ->  0x34899
+rtl: esyms: _Bfree ->  0x348e5
+rtl: esyms: _CORE_mutex_Seize_no_protocol_slow ->  0x23fb1
+rtl: esyms: _CORE_mutex_Seize_slow ->  0x23f19
+rtl: esyms: _CORE_semaphore_Initialize ->  0x24013
+rtl: esyms: _CPU_Context_Initialize ->  0x3196f
+rtl: esyms: _CPU_Context_restore ->  0x31a75
+rtl: esyms: _CPU_Context_restore_arm ->  0x31a78
+rtl: esyms: _CPU_Context_switch ->  0x31a35
+rtl: esyms: _CPU_Context_switch_arm ->  0x31a38
+rtl: esyms: _CPU_ISR_Get_level ->  0x319f9
+rtl: esyms: _CPU_ISR_Set_level ->  0x319c3
+rtl: esyms: _CPU_Initialize ->  0x31a25
+rtl: esyms: _CPU_Thread_Idle_body ->  0x31855
+rtl: esyms: _Chain_Initialize ->  0x23c01
+rtl: esyms: _Debug_Is_owner_of_allocator ->  0x24033
+rtl: esyms: _Event_Seize ->  0x1feb9
+rtl: esyms: _Event_Surrender ->  0x20423
+rtl: esyms: _Freechain_Get ->  0x242af
+rtl: esyms: _Freechain_Initialize ->  0x2425b
+rtl: esyms: _Freechain_Put ->  0x24339
+rtl: esyms: _Heap_Allocate_aligned_with_boundary ->  0x25349
+rtl: esyms: _Heap_Block_allocate ->  0x24d0b
+rtl: esyms: _Heap_Extend ->  0x25859
+rtl: esyms: _Heap_Free ->  0x25dc3
+rtl: esyms: _Heap_Get_first_and_last_block ->  0x24789
+rtl: esyms: _Heap_Initialize ->  0x2480d
+rtl: esyms: _Heap_Resize_block ->  0x263c3
+rtl: esyms: _IO_All_drivers_initialized -> 0x1038ec
+rtl: esyms: _IO_Driver_address_table -> 0x101428
+rtl: esyms: _IO_Initialize_all_drivers ->  0x23131
+rtl: esyms: _IO_Number_of_drivers ->  0x3b694
+rtl: esyms: _ISR_Handler_initialization ->  0x26501
+rtl: esyms: _ISR_Is_in_progress ->  0x2651b
+rtl: esyms: _Internal_errors_What_happened -> 0x1038f0
+rtl: esyms: _Linker_set__Sysinit__IO_Initialize_all_drivers ->  0x5341c
+rtl: esyms: _Linker_set__Sysinit__POSIX_Keys_Manager_initialization ->  0x53408
+rtl: esyms: _Linker_set__Sysinit__POSIX_signals_Manager_Initialization ->  0x53404
+rtl: esyms: _Linker_set__Sysinit__RTEMS_tasks_Initialize_user_tasks_body ->  0x53420
+rtl: esyms: _Linker_set__Sysinit__RTEMS_tasks_Manager_initialization ->  0x533fc
+rtl: esyms: _Linker_set__Sysinit__Semaphore_Manager_initialization ->  0x53400
+rtl: esyms: _Linker_set__Sysinit__Thread_Create_idle ->  0x5340c
+rtl: esyms: _Linker_set__Sysinit__User_extensions_Handler_initialization ->  0x533f4
+rtl: esyms: _Linker_set__Sysinit_begin ->  0x533ec
+rtl: esyms: _Linker_set__Sysinit_bsp_predriver_hook ->  0x53418
+rtl: esyms: _Linker_set__Sysinit_bsp_start ->  0x533f0
+rtl: esyms: _Linker_set__Sysinit_bsp_work_area_initialize ->  0x533ec
+rtl: esyms: _Linker_set__Sysinit_end ->  0x53428
+rtl: esyms: _Linker_set__Sysinit_rtems_filesystem_initialize ->  0x53414
+rtl: esyms: _Linker_set__Sysinit_rtems_initialize_data_structures ->  0x533f8
+rtl: esyms: _Linker_set__Sysinit_rtems_libio_init ->  0x53410
+rtl: esyms: _Linker_set__Sysinit_rtems_libio_post_driver ->  0x53424
+rtl: esyms: _Malloc_Deferred_free ->   0xfcef
+rtl: esyms: _Malloc_Process_deferred_frees ->   0xfc23
+rtl: esyms: _Malloc_System_state ->   0xfbab
+rtl: esyms: _Mutex_Acquire ->  0x26fd7
+rtl: esyms: _Mutex_Release ->  0x27053
+rtl: esyms: _Mutex_recursive_Acquire ->  0x270d1
+rtl: esyms: _Mutex_recursive_Release ->  0x27173
+rtl: esyms: _Objects_API_maximum_class ->  0x274b9
+rtl: esyms: _Objects_Allocate ->  0x2749d
+rtl: esyms: _Objects_Allocate_unprotected ->  0x273d1
+rtl: esyms: _Objects_Close ->  0x275ab
+rtl: esyms: _Objects_Do_initialize_information ->  0x27edb
+rtl: esyms: _Objects_Extend_information ->  0x277b1
+rtl: esyms: _Objects_Free ->  0x27b77
+rtl: esyms: _Objects_Get ->  0x27d5d
+rtl: esyms: _Objects_Get_information ->  0x27c2f
+rtl: esyms: _Objects_Get_information_id ->  0x27cf1
+rtl: esyms: _Objects_Get_no_protection ->  0x27db7
+rtl: esyms: _Objects_Information_table ->  0x4f5f8
+rtl: esyms: _Objects_Namespace_remove ->  0x27fc3
+rtl: esyms: _Objects_Shrink_information ->  0x280bb
+rtl: esyms: _Once_Mutex -> 0x1038e8
+rtl: esyms: _POSIX_Keys_Information -> 0x103520
+rtl: esyms: _POSIX_Keys_Key_value_allocate ->  0x1ce6b
+rtl: esyms: _POSIX_Keys_Keypool -> 0x103514
+rtl: esyms: _POSIX_signals_Abnormal_termination_handler ->  0x1e67f
+rtl: esyms: _POSIX_signals_Clear_process_signals ->  0x1e7c3
+rtl: esyms: _POSIX_signals_Clear_signals ->  0x1ec11
+rtl: esyms: _POSIX_signals_Default_vectors ->  0x4e268
+rtl: esyms: _POSIX_signals_Inactive_siginfo -> 0x103558
+rtl: esyms: _POSIX_signals_Pending -> 0x103864
+rtl: esyms: _POSIX_signals_Send ->  0x1e25d
+rtl: esyms: _POSIX_signals_Set_process_signals ->  0x1eee7
+rtl: esyms: _POSIX_signals_Siginfo -> 0x103564
+rtl: esyms: _POSIX_signals_Unblock_thread ->  0x1f575
+rtl: esyms: _POSIX_signals_Vectors -> 0x1036e4
+rtl: esyms: _POSIX_signals_Wait_queue -> 0x102b18
+rtl: esyms: _Per_CPU_Information -> 0x103900
+rtl: esyms: _Protected_heap_Free ->  0x2821d
+rtl: esyms: _RBTree_Extract ->  0x287a3
+rtl: esyms: _RBTree_Insert_color ->  0x28a29
+rtl: esyms: _RBTree_Minimum ->  0x28a85
+rtl: esyms: _RTEMS_Allocator_Mutex -> 0x1038e4
+rtl: esyms: _RTEMS_tasks_Information -> 0x1038a0
+rtl: esyms: _RTEMS_tasks_Initialize_user_tasks_body ->  0x228e1
+rtl: esyms: _RTEMS_tasks_User_extensions -> 0x101694
+rtl: esyms: _Scheduler_Handler_initialization ->  0x28aa1
+rtl: esyms: _Scheduler_Table ->  0x3b640
+rtl: esyms: _Scheduler_default_Cancel_job ->  0x28b33
+rtl: esyms: _Scheduler_default_Map_priority ->  0x28ae5
+rtl: esyms: _Scheduler_default_Node_destroy ->  0x28b01
+rtl: esyms: _Scheduler_default_Release_job ->  0x28b17
+rtl: esyms: _Scheduler_default_Start_idle ->  0x28bcd
+rtl: esyms: _Scheduler_default_Tick ->  0x28c09
+rtl: esyms: _Scheduler_priority_Block ->  0x29601
+rtl: esyms: _Scheduler_priority_Initialize ->  0x28f21
+rtl: esyms: _Scheduler_priority_Node_initialize ->  0x28f57
+rtl: esyms: _Scheduler_priority_Schedule ->  0x2a313
+rtl: esyms: _Scheduler_priority_Unblock ->  0x2a7cf
+rtl: esyms: _Scheduler_priority_Update_priority ->  0x29ec7
+rtl: esyms: _Scheduler_priority_Yield ->  0x2ad99
+rtl: esyms: _Semaphore_Information -> 0x103868
+rtl: esyms: _System_state_Current -> 0x1038fc
+rtl: esyms: _TLS_Alignment ->      0x1
+rtl: esyms: _TLS_BSS_begin ->  0x533c4
+rtl: esyms: _TLS_BSS_end ->  0x533c4
+rtl: esyms: _TLS_BSS_size ->      0x0
+rtl: esyms: _TLS_Data_begin ->  0x533c4
+rtl: esyms: _TLS_Data_size ->      0x0
+rtl: esyms: _TLS_Size ->      0x0
+rtl: esyms: _Terminate ->  0x264ab
+rtl: esyms: _Thread_Apply_priority ->  0x2b28b
+rtl: esyms: _Thread_Cancel ->  0x2f275
+rtl: esyms: _Thread_Change_life ->  0x2f525
+rtl: esyms: _Thread_Change_priority ->  0x2b30d
+rtl: esyms: _Thread_Clear_state ->  0x2b6ef
+rtl: esyms: _Thread_Clear_state_locked ->  0x2b65b
+rtl: esyms: _Thread_Close ->  0x2f36f
+rtl: esyms: _Thread_Control_add_on_count ->  0x3b728
+rtl: esyms: _Thread_Control_add_ons ->  0x3b708
+rtl: esyms: _Thread_Control_size ->  0x3b704
+rtl: esyms: _Thread_Create_idle ->  0x2b985
+rtl: esyms: _Thread_Dispatch ->  0x2bf01
+rtl: esyms: _Thread_Do_dispatch ->  0x2be05
+rtl: esyms: _Thread_Entry_adaptor_idle ->  0x2bf47
+rtl: esyms: _Thread_Entry_adaptor_numeric ->  0x2bf65
+rtl: esyms: _Thread_Exit ->  0x2f3c7
+rtl: esyms: _Thread_Get ->  0x2c055
+rtl: esyms: _Thread_Global_construction ->  0x2c0cd
+rtl: esyms: _Thread_Handler ->  0x2c179
+rtl: esyms: _Thread_Handler_initialization ->  0x2ae59
+rtl: esyms: _Thread_Initialize ->  0x2c5fd
+rtl: esyms: _Thread_Initialize_information ->  0x2adff
+rtl: esyms: _Thread_Internal_information -> 0x103940
+rtl: esyms: _Thread_Join ->  0x2f1cd
+rtl: esyms: _Thread_Kill_zombies ->  0x2eddb
+rtl: esyms: _Thread_Load_environment ->  0x2c895
+rtl: esyms: _Thread_Raise_priority ->  0x2b36b
+rtl: esyms: _Thread_Restart_self ->  0x2f469
+rtl: esyms: _Thread_Restore_priority ->  0x2b3dd
+rtl: esyms: _Thread_Set_life_protection ->  0x2f57b
+rtl: esyms: _Thread_Set_priority ->  0x2f663
+rtl: esyms: _Thread_Set_state ->  0x2f969
+rtl: esyms: _Thread_Set_state_locked ->  0x2f8df
+rtl: esyms: _Thread_Stack_Allocate ->  0x2f9dd
+rtl: esyms: _Thread_Stack_Free ->  0x2fa23
+rtl: esyms: _Thread_Start ->  0x2fcbd
+rtl: esyms: _Thread_Start_multitasking ->  0x2fd73
+rtl: esyms: _Thread_Timeout ->  0x2ffa3
+rtl: esyms: _Thread_Update_priority ->  0x2b2d9
+rtl: esyms: _Thread_Yield ->  0x3029b
+rtl: esyms: _Thread_queue_Deadlock_fatal ->  0x2cf85
+rtl: esyms: _Thread_queue_Deadlock_status ->  0x2cf69
+rtl: esyms: _Thread_queue_Do_extract_locked ->  0x2d147
+rtl: esyms: _Thread_queue_Enqueue_critical ->  0x2cf9f
+rtl: esyms: _Thread_queue_Extract ->  0x2d1e3
+rtl: esyms: _Thread_queue_Extract_critical ->  0x2d1b3
+rtl: esyms: _Thread_queue_Extract_with_proxy ->  0x2d2cf
+rtl: esyms: _Thread_queue_Flush_critical ->  0x2d679
+rtl: esyms: _Thread_queue_Flush_status_object_was_deleted ->  0x2d657
+rtl: esyms: _Thread_queue_Initialize ->  0x2c925
+rtl: esyms: _Thread_queue_Operations_FIFO ->  0x51700
+rtl: esyms: _Thread_queue_Operations_default ->  0x516ec
+rtl: esyms: _Thread_queue_Operations_priority ->  0x51714
+rtl: esyms: _Thread_queue_Operations_priority_inherit ->  0x51728
+rtl: esyms: _Thread_queue_Surrender ->  0x2d253
+rtl: esyms: _Thread_queue_Unblock_critical ->  0x2d16d
+rtl: esyms: _Timecounter -> 0x10175c
+rtl: esyms: _Timecounter_Bintime ->  0x26841
+rtl: esyms: _Timecounter_Binuptime ->  0x267cd
+rtl: esyms: _Timecounter_Boottimebin -> 0x101770
+rtl: esyms: _Timecounter_Getnanotime ->  0x2688b
+rtl: esyms: _Timecounter_Install ->  0x268d1
+rtl: esyms: _Timecounter_Microtime ->  0x26865
+rtl: esyms: _Timecounter_Tick ->  0x26c29
+rtl: esyms: _Timecounter_Tick_simple ->  0x26c57
+rtl: esyms: _Timecounter_Time_second -> 0x101764
+rtl: esyms: _Timecounter_Time_uptime -> 0x101768
+rtl: esyms: _Unwind_Backtrace ->   0x9fc1
+rtl: esyms: _Unwind_Complete ->   0x9755
+rtl: esyms: _Unwind_DeleteException ->   0x9759
+rtl: esyms: _Unwind_ForcedUnwind ->   0x9f9d
+rtl: esyms: _Unwind_GetCFA ->   0x9685
+rtl: esyms: _Unwind_GetDataRelBase ->   0xa365
+rtl: esyms: _Unwind_GetLanguageSpecificData ->   0xa349
+rtl: esyms: _Unwind_GetRegionStart ->   0xa33d
+rtl: esyms: _Unwind_GetTextRelBase ->   0xa35d
+rtl: esyms: _Unwind_RaiseException ->   0x9f31
+rtl: esyms: _Unwind_Resume ->   0x9f55
+rtl: esyms: _Unwind_Resume_or_Rethrow ->   0x9f79
+rtl: esyms: _Unwind_VRS_Get ->   0x9765
+rtl: esyms: _Unwind_VRS_Pop ->   0x9bad
+rtl: esyms: _Unwind_VRS_Set ->   0x97b9
+rtl: esyms: _User_extensions_Add_set ->  0x30589
+rtl: esyms: _User_extensions_Fatal_visitor ->  0x309cd
+rtl: esyms: _User_extensions_Handler_initialization ->  0x303ad
+rtl: esyms: _User_extensions_Iterate ->  0x30a29
+rtl: esyms: _User_extensions_List -> 0x101798
+rtl: esyms: _User_extensions_Switches_list -> 0x101780
+rtl: esyms: _User_extensions_Thread_begin_visitor ->  0x30981
+rtl: esyms: _User_extensions_Thread_create_visitor ->  0x308bb
+rtl: esyms: _User_extensions_Thread_delete_visitor ->  0x30909
+rtl: esyms: _User_extensions_Thread_exitted_visitor ->  0x309a7
+rtl: esyms: _User_extensions_Thread_restart_visitor ->  0x30959
+rtl: esyms: _User_extensions_Thread_start_visitor ->  0x30931
+rtl: esyms: _User_extensions_Thread_terminate_visitor ->  0x30a01
+rtl: esyms: _Watchdog_Do_tickle ->  0x310ed
+rtl: esyms: _Watchdog_Insert ->  0x30c5f
+rtl: esyms: _Watchdog_Remove ->  0x30e11
+rtl: esyms: _Watchdog_Tick ->  0x3116d
+rtl: esyms: _Watchdog_Ticks_since_boot -> 0x103984
+rtl: esyms: _Workspace_Allocate ->  0x315df
+rtl: esyms: _Workspace_Allocate_aligned ->  0x31601
+rtl: esyms: _Workspace_Allocate_or_fatal_error ->  0x31643
+rtl: esyms: _Workspace_Area -> 0x103988
+rtl: esyms: _Workspace_Free ->  0x31625
+rtl: esyms: _Workspace_Handler_initialization ->  0x31435
+rtl: esyms: _ZGTtNKSt13bad_exception4whatEv ->   0x14bd
+rtl: esyms: _ZN10__cxxabiv111__terminateEPFvvE ->   0x1c09
+rtl: esyms: _ZN10__cxxabiv112__unexpectedEPFvvE ->   0x1c45
+rtl: esyms: _ZN10__cxxabiv117__class_type_infoD0Ev ->    0xe69
+rtl: esyms: _ZN10__cxxabiv117__class_type_infoD1Ev ->    0xe55
+rtl: esyms: _ZN10__cxxabiv117__class_type_infoD2Ev ->    0xe55
+rtl: esyms: _ZN10__cxxabiv119__terminate_handlerE -> 0x101488
+rtl: esyms: _ZN10__cxxabiv120__si_class_type_infoD0Ev ->   0x1e35
+rtl: esyms: _ZN10__cxxabiv120__si_class_type_infoD1Ev ->   0x1e21
+rtl: esyms: _ZN10__cxxabiv120__si_class_type_infoD2Ev ->   0x1e21
+rtl: esyms: _ZN10__cxxabiv120__unexpected_handlerE -> 0x10148c
+rtl: esyms: _ZN9__gnu_cxx27__verbose_terminate_handlerEv ->   0x1f8d
+rtl: esyms: _ZNK10__cxxabiv117__class_type_info10__do_catchEPKSt9type_infoPPvj ->    0xe9d
+rtl: esyms: _ZNK10__cxxabiv117__class_type_info11__do_upcastEPKS0_PKvRNS0_15__upcast_resultE ->    0xe85
+rtl: esyms: _ZNK10__cxxabiv117__class_type_info11__do_upcastEPKS0_PPv ->    0xe11
+rtl: esyms: _ZNK10__cxxabiv117__class_type_info12__do_dyncastEiNS0_10__sub_kindEPKS0_PKvS3_S5_RNS0_16__dyncast_resultE ->    0xec9
+rtl: esyms: _ZNK10__cxxabiv117__class_type_info20__do_find_public_srcEiPKvPKS0_S2_ ->    0xe49
+rtl: esyms: _ZNK10__cxxabiv120__si_class_type_info11__do_upcastEPKNS_17__class_type_infoEPKvRNS1_15__upcast_resultE ->   0x1f2d
+rtl: esyms: _ZNK10__cxxabiv120__si_class_type_info12__do_dyncastEiNS_17__class_type_info10__sub_kindEPKS1_PKvS4_S6_RNS1_16__dyncast_resultE ->   0x1e8d
+rtl: esyms: _ZNK10__cxxabiv120__si_class_type_info20__do_find_public_srcEiPKvPKNS_17__class_type_infoES2_ ->   0x1e51
+rtl: esyms: _ZNKSt11logic_error4whatEv ->   0x8465
+rtl: esyms: _ZNKSt13bad_exception4whatEv ->   0x14bd
+rtl: esyms: _ZNKSt13runtime_error4whatEv ->   0x8469
+rtl: esyms: _ZNKSt3_V214error_category10_M_messageB5cxx11Ei ->   0x86a5
+rtl: esyms: _ZNKSt3_V214error_category10equivalentERKSt10error_codei ->   0x866d
+rtl: esyms: _ZNKSt3_V214error_category10equivalentEiRKSt15error_condition ->   0x8771
+rtl: esyms: _ZNKSt3_V214error_category23default_error_conditionEi ->   0x8665
+rtl: esyms: _ZNKSt9bad_alloc4whatEv ->    0xdd5
+rtl: esyms: _ZNKSt9type_info14__is_pointer_pEv ->   0x1f5d
+rtl: esyms: _ZNKSt9type_info15__is_function_pEv ->   0x1f5d
+rtl: esyms: _ZNKSt9type_infoeqERKS_ ->   0x1f61
+rtl: esyms: _ZNSt11logic_errorC1EPKc ->   0x856d
+rtl: esyms: _ZNSt11logic_errorC2EPKc ->   0x856d
+rtl: esyms: _ZNSt11logic_errorD0Ev ->   0x84c1
+rtl: esyms: _ZNSt11logic_errorD1Ev ->   0x846d
+rtl: esyms: _ZNSt11logic_errorD2Ev ->   0x846d
+rtl: esyms: _ZNSt12__cow_stringC1EPKcj ->   0x85d1
+rtl: esyms: _ZNSt12__cow_stringC2EPKcj ->   0x85d1
+rtl: esyms: _ZNSt12length_errorC1EPKc ->   0x8595
+rtl: esyms: _ZNSt12length_errorC2EPKc ->   0x8595
+rtl: esyms: _ZNSt12length_errorD0Ev ->   0x84e9
+rtl: esyms: _ZNSt12length_errorD1Ev ->   0x84d5
+rtl: esyms: _ZNSt12length_errorD2Ev ->   0x84d5
+rtl: esyms: _ZNSt13bad_exceptionD0Ev ->   0x14c9
+rtl: esyms: _ZNSt13bad_exceptionD1Ev ->   0x14b9
+rtl: esyms: _ZNSt13bad_exceptionD2Ev ->   0x14b9
+rtl: esyms: _ZNSt13runtime_errorC1EPKc ->   0x85a9
+rtl: esyms: _ZNSt13runtime_errorC2EPKc ->   0x85a9
+rtl: esyms: _ZNSt13runtime_errorD0Ev ->   0x8559
+rtl: esyms: _ZNSt13runtime_errorD1Ev ->   0x8505
+rtl: esyms: _ZNSt13runtime_errorD2Ev ->   0x8505
+rtl: esyms: _ZNSt9bad_allocD0Ev ->    0xdf5
+rtl: esyms: _ZNSt9bad_allocD1Ev ->    0xde1
+rtl: esyms: _ZNSt9bad_allocD2Ev ->    0xde1
+rtl: esyms: _ZNSt9exceptionD1Ev ->   0x14b5
+rtl: esyms: _ZNSt9exceptionD2Ev ->   0x14b5
+rtl: esyms: _ZNSt9type_infoD1Ev ->   0x1f59
+rtl: esyms: _ZNSt9type_infoD2Ev ->   0x1f59
+rtl: esyms: _ZSt10unexpectedv ->   0x1c4d
+rtl: esyms: _ZSt13get_terminatev ->   0x1c61
+rtl: esyms: _ZSt14get_unexpectedv ->   0x1c71
+rtl: esyms: _ZSt15get_new_handlerv ->   0x1dd1
+rtl: esyms: _ZSt19__throw_logic_errorPKc ->   0x85e5
+rtl: esyms: _ZSt20__throw_length_errorPKc ->   0x8619
+rtl: esyms: _ZSt9terminatev ->   0x1c31
+rtl: esyms: _ZTIN10__cxxabiv115__forced_unwindE ->  0x4a524
+rtl: esyms: _ZTIN10__cxxabiv117__class_type_infoE ->  0x4a4b4
+rtl: esyms: _ZTIN10__cxxabiv119__foreign_exceptionE ->  0x4a52c
+rtl: esyms: _ZTIN10__cxxabiv120__si_class_type_infoE ->  0x4a5c4
+rtl: esyms: _ZTINSt3_V214error_categoryE ->  0x4b6f0
+rtl: esyms: _ZTISt11logic_error ->  0x4b604
+rtl: esyms: _ZTISt12length_error ->  0x4b610
+rtl: esyms: _ZTISt13bad_exception ->  0x4a534
+rtl: esyms: _ZTISt13runtime_error ->  0x4b61c
+rtl: esyms: _ZTISt9bad_alloc ->  0x4a484
+rtl: esyms: _ZTISt9exception ->  0x4a540
+rtl: esyms: _ZTISt9type_info ->  0x4a624
+rtl: esyms: _ZTSN10__cxxabiv115__forced_unwindE ->  0x4a548
+rtl: esyms: _ZTSN10__cxxabiv117__class_type_infoE ->  0x4a4c0
+rtl: esyms: _ZTSN10__cxxabiv119__foreign_exceptionE ->  0x4a568
+rtl: esyms: _ZTSN10__cxxabiv120__si_class_type_infoE ->  0x4a5d0
+rtl: esyms: _ZTSNSt3_V214error_categoryE ->  0x4b750
+rtl: esyms: _ZTSSt11logic_error ->  0x4b628
+rtl: esyms: _ZTSSt12length_error ->  0x4b638
+rtl: esyms: _ZTSSt13bad_exception ->  0x4a58c
+rtl: esyms: _ZTSSt13runtime_error ->  0x4b64c
+rtl: esyms: _ZTSSt9bad_alloc ->  0x4a490
+rtl: esyms: _ZTSSt9exception ->  0x4a5a0
+rtl: esyms: _ZTSSt9type_info ->  0x4a62c
+rtl: esyms: _ZTVN10__cxxabiv117__class_type_infoE ->  0x4a4e4
+rtl: esyms: _ZTVN10__cxxabiv120__si_class_type_infoE ->  0x4a5f8
+rtl: esyms: _ZTVSt11logic_error ->  0x4b660
+rtl: esyms: _ZTVSt12length_error ->  0x4b674
+rtl: esyms: _ZTVSt13bad_exception ->  0x4a5b0
+rtl: esyms: _ZTVSt13runtime_error ->  0x4b688
+rtl: esyms: _ZTVSt9bad_alloc ->  0x4a4a0
+rtl: esyms: _ZdlPv ->    0xf09
+rtl: esyms: _ZdlPvj ->    0xf0d
+rtl: esyms: _Znwj ->   0x1de1
+rtl: esyms: __TMC_END__ ->      0x0
+rtl: esyms: ___Unwind_Backtrace ->   0x9fc1
+rtl: esyms: ___Unwind_ForcedUnwind ->   0x9f9d
+rtl: esyms: ___Unwind_RaiseException ->   0x9f31
+rtl: esyms: ___Unwind_Resume ->   0x9f55
+rtl: esyms: ___Unwind_Resume_or_Rethrow ->   0x9f79
+rtl: esyms: __aeabi_atexit ->    0xdc9
+rtl: esyms: __aeabi_idiv ->   0x8f31
+rtl: esyms: __aeabi_idivmod ->   0x91c5
+rtl: esyms: __aeabi_ldivmod ->   0x91e5
+rtl: esyms: __aeabi_uidiv ->   0x8cb9
+rtl: esyms: __aeabi_uidivmod ->   0x8f15
+rtl: esyms: __aeabi_uldivmod ->   0x9285
+rtl: esyms: __aeabi_unwind_cpp_pr0 ->   0x9ba1
+rtl: esyms: __any_on ->  0x35131
+rtl: esyms: __ascii_wctomb ->  0x3b431
+rtl: esyms: __assert ->  0x323b1
+rtl: esyms: __assert_func ->   0xebcf
+rtl: esyms: __atexit_lock -> 0x102d5c
+rtl: esyms: __b2d ->  0x34ee9
+rtl: esyms: __call_exitprocs ->  0x32281
+rtl: esyms: __copybits ->  0x350e9
+rtl: esyms: __ctype_ptr__ -> 0x1017b4
+rtl: esyms: __cxa_allocate_exception ->   0x1031
+rtl: esyms: __cxa_atexit ->  0x323c9
+rtl: esyms: __cxa_begin_catch ->   0x13a5
+rtl: esyms: __cxa_begin_cleanup ->   0x1185
+rtl: esyms: __cxa_call_terminate ->   0x1295
+rtl: esyms: __cxa_call_unexpected ->   0x12b5
+rtl: esyms: __cxa_current_exception_type ->   0x1db5
+rtl: esyms: __cxa_demangle ->   0x8379
+rtl: esyms: __cxa_end_catch ->   0x1429
+rtl: esyms: __cxa_end_cleanup ->   0x10b5
+rtl: esyms: __cxa_free_exception ->   0x1061
+rtl: esyms: __cxa_get_globals ->   0x152d
+rtl: esyms: __cxa_get_globals_fast ->   0x1511
+rtl: esyms: __cxa_rethrow ->   0x1d45
+rtl: esyms: __cxa_throw ->   0x1cc5
+rtl: esyms: __cxa_type_match ->   0x10c1
+rtl: esyms: __d2b ->  0x34fad
+rtl: esyms: __divsi3 ->   0x8f31
+rtl: esyms: __dso_handle -> 0x101400
+rtl: esyms: __errno ->  0x331fd
+rtl: esyms: __exidx_end ->  0x533c0
+rtl: esyms: __exidx_start ->  0x53140
+rtl: esyms: __fp_lock_all ->  0x33739
+rtl: esyms: __fp_unlock_all ->  0x33759
+rtl: esyms: __fputwc ->  0x3394d
+rtl: esyms: __gcclibcxx_demangle_callback ->   0x8445
+rtl: esyms: __getreent ->    0xc13
+rtl: esyms: __gnu_Unwind_Backtrace ->   0x9811
+rtl: esyms: __gnu_Unwind_ForcedUnwind ->   0x96e9
+rtl: esyms: __gnu_Unwind_RaiseException ->   0x9689
+rtl: esyms: __gnu_Unwind_Restore_VFP ->   0x9e51
+rtl: esyms: __gnu_Unwind_Restore_VFP_D ->   0x9e61
+rtl: esyms: __gnu_Unwind_Restore_VFP_D_16_to_31 ->   0x9e71
+rtl: esyms: __gnu_Unwind_Restore_WMMXC ->   0x9f09
+rtl: esyms: __gnu_Unwind_Restore_WMMXD ->   0x9e81
+rtl: esyms: __gnu_Unwind_Resume ->   0x96fd
+rtl: esyms: __gnu_Unwind_Resume_or_Rethrow ->   0x9741
+rtl: esyms: __gnu_Unwind_Save_VFP ->   0x9e59
+rtl: esyms: __gnu_Unwind_Save_VFP_D ->   0x9e69
+rtl: esyms: __gnu_Unwind_Save_VFP_D_16_to_31 ->   0x9e79
+rtl: esyms: __gnu_Unwind_Save_WMMXC ->   0x9f1d
+rtl: esyms: __gnu_Unwind_Save_WMMXD ->   0x9ec5
+rtl: esyms: __gnu_end_cleanup ->   0x11e9
+rtl: esyms: __gnu_unwind_execute ->   0xa041
+rtl: esyms: __gnu_unwind_frame ->   0xa311
+rtl: esyms: __gxx_personality_v0 ->   0x1745
+rtl: esyms: __hi0bits ->  0x34a1d
+rtl: esyms: __i2b ->  0x34ab9
+rtl: esyms: __libc_fini_array ->  0x33779
+rtl: esyms: __libc_init_array ->  0x33f05
+rtl: esyms: __lo0bits ->  0x34a5d
+rtl: esyms: __locale_charset ->  0x33fb5
+rtl: esyms: __locale_cjk_lang ->  0x33fd5
+rtl: esyms: __locale_mb_cur_max ->  0x33fc1
+rtl: esyms: __locale_msgcharset ->  0x33fcd
+rtl: esyms: __lshift ->  0x34ca1
+rtl: esyms: __mb_cur_max -> 0x101ab8
+rtl: esyms: __mcmp ->  0x34d45
+rtl: esyms: __mdiff ->  0x34d7d
+rtl: esyms: __mprec_bigtens ->  0x52758
+rtl: esyms: __mprec_tens ->  0x52668
+rtl: esyms: __mprec_tinytens ->  0x52730
+rtl: esyms: __multadd ->  0x348f9
+rtl: esyms: __multiply ->  0x34acd
+rtl: esyms: __pow5mult ->  0x34bfd
+rtl: esyms: __ratio ->  0x35069
+rtl: esyms: __register_exitproc ->  0x321b1
+rtl: esyms: __restore_core_regs ->   0x9e39
+rtl: esyms: __s2b ->  0x34981
+rtl: esyms: __sclose ->  0x35571
+rtl: esyms: __seofread ->  0x354f9
+rtl: esyms: __sflush_r ->  0x332fd
+rtl: esyms: __sfmoreglue ->  0x33595
+rtl: esyms: __sfp ->  0x33649
+rtl: esyms: __sfp_lock_acquire ->  0x33709
+rtl: esyms: __sfp_lock_release ->  0x33715
+rtl: esyms: __sfvwrite_r ->  0x33a7d
+rtl: esyms: __sinit ->  0x335d9
+rtl: esyms: __sinit_lock_acquire ->  0x33721
+rtl: esyms: __sinit_lock_release ->  0x3372d
+rtl: esyms: __smakebuf_r ->  0x34079
+rtl: esyms: __sprint_r ->  0x38989
+rtl: esyms: __sread ->  0x354cd
+rtl: esyms: __sseek ->  0x35541
+rtl: esyms: __ssprint_r ->  0x36281
+rtl: esyms: __start_set_sysctl_set ->  0x533ec
+rtl: esyms: __stop_set_sysctl_set ->  0x533ec
+rtl: esyms: __swbuf ->  0x3b365
+rtl: esyms: __swbuf_r ->  0x3b2b9
+rtl: esyms: __swhatbuf_r ->  0x34009
+rtl: esyms: __swrite ->  0x354fd
+rtl: esyms: __swsetup_r ->  0x3b479
+rtl: esyms: __udivmoddi4 ->   0x92b9
+rtl: esyms: __udivsi3 ->   0x8cb9
+rtl: esyms: __ulp ->  0x34e95
+rtl: esyms: __wctomb -> 0x101b14
+rtl: esyms: _calloc_r ->   0xee6f
+rtl: esyms: _cleanup ->  0x335c1
+rtl: esyms: _cleanup_r ->  0x334ed
+rtl: esyms: _close_r ->   0xf2a5
+rtl: esyms: _ctype_ ->  0x52530
+rtl: esyms: _dtoa_r ->  0x32519
+rtl: esyms: _exit ->  0x10665
+rtl: esyms: _fclose_r ->  0x33225
+rtl: esyms: _fflush_r ->  0x33469
+rtl: esyms: _fini ->  0x3b545
+rtl: esyms: _fiprintf_r ->  0x337ad
+rtl: esyms: _fputc_r ->  0x337f5
+rtl: esyms: _fputs_r ->  0x338a9
+rtl: esyms: _fputwc_r ->  0x339ed
+rtl: esyms: _free_r ->   0xee8d
+rtl: esyms: _fstat_r ->   0xf447
+rtl: esyms: _fwalk ->  0x33d99
+rtl: esyms: _fwalk_reent ->  0x33de1
+rtl: esyms: _fwrite_r ->  0x33e31
+rtl: esyms: _getpid_r ->   0xf55f
+rtl: esyms: _gettimeofday_r ->   0xec87
+rtl: esyms: _global_atexit -> 0x102d58
+rtl: esyms: _global_impure_ptr ->  0x52648
+rtl: esyms: _impure_ptr -> 0x1017b8
+rtl: esyms: _init ->  0x3b539
+rtl: esyms: _isatty ->  0x32365
+rtl: esyms: _isatty_r ->   0xf575
+rtl: esyms: _kill_r ->  0x1dce9
+rtl: esyms: _localeconv_r ->  0x33fd9
+rtl: esyms: _lseek_r ->   0xf817
+rtl: esyms: _malloc_r ->   0xeea5
+rtl: esyms: _mprec_log10 ->  0x350c1
+rtl: esyms: _printf_r ->  0x35191
+rtl: esyms: _putc_r ->  0x351d9
+rtl: esyms: _puts_r ->  0x352c5
+rtl: esyms: _raise_r ->  0x3539d
+rtl: esyms: _read_r ->  0x10d5b
+rtl: esyms: _realloc_r ->   0xeebf
+rtl: esyms: _reclaim_reent ->  0x353d1
+rtl: esyms: _rtems_octal2ulong ->  0x31a9b
+rtl: esyms: _rtems_tar_header_checksum ->  0x3215f
+rtl: esyms: _rtld_debug -> 0x103508
+rtl: esyms: _rtld_debug_state ->  0x15b8d
+rtl: esyms: _rtld_linkmap_add ->  0x15b9b
+rtl: esyms: _rtld_linkmap_delete ->  0x15c73
+rtl: esyms: _setlocale_r ->  0x33f61
+rtl: esyms: _sprintf_r ->  0x35441
+rtl: esyms: _start ->     0x40
+rtl: esyms: _strdup_r ->  0x35a15
+rtl: esyms: _strerror_r ->  0x35a3d
+rtl: esyms: _strtoul_r ->  0x3610d
+rtl: esyms: _svfiprintf_r ->  0x36379
+rtl: esyms: _svfprintf_r ->  0x36ee1
+rtl: esyms: _user_strerror ->  0x38905
+rtl: esyms: _vfiprintf_r ->  0x3899d
+rtl: esyms: _vfprintf_r ->  0x39789
+rtl: esyms: _vsnprintf_r ->  0x3b22d
+rtl: esyms: _wcrtomb_r ->  0x3b37d
+rtl: esyms: _wctomb_r ->  0x3b449
+rtl: esyms: _write_r ->  0x15073
+rtl: esyms: abort ->  0x323a1
+rtl: esyms: arm_cp15_set_exception_handler ->   0xa8b5
+rtl: esyms: arm_cpu_mode -> 0x1017b0
+rtl: esyms: atexit ->  0x323bd
+rtl: esyms: boot_card ->   0xabf5
+rtl: esyms: bsp_boot_cmdline -> 0x102f24
+rtl: esyms: bsp_console_select ->   0xb525
+rtl: esyms: bsp_fatal_extension ->   0xac1b
+rtl: esyms: bsp_interrupt_dispatch ->   0xaa87
+rtl: esyms: bsp_interrupt_facility_initialize ->   0xab43
+rtl: esyms: bsp_interrupt_handler_default ->   0xb55b
+rtl: esyms: bsp_interrupt_handler_table -> 0x102f28
+rtl: esyms: bsp_interrupt_initialize ->   0xb811
+rtl: esyms: bsp_interrupt_lock ->   0xb7d5
+rtl: esyms: bsp_interrupt_unlock ->   0xb7f3
+rtl: esyms: bsp_interrupt_vector_enable ->   0xaad3
+rtl: esyms: bsp_predriver_hook ->   0xaca5
+rtl: esyms: bsp_processor_count ->      0x1
+rtl: esyms: bsp_reset ->   0xacb3
+rtl: esyms: bsp_section_bss_begin -> 0x101b20
+rtl: esyms: bsp_section_bss_end -> 0x103a30
+rtl: esyms: bsp_section_bss_size ->   0x1f10
+rtl: esyms: bsp_section_data_begin -> 0x101400
+rtl: esyms: bsp_section_data_end -> 0x101b18
+rtl: esyms: bsp_section_data_load_begin -> 0x101400
+rtl: esyms: bsp_section_data_load_end -> 0x101b18
+rtl: esyms: bsp_section_data_size ->    0x718
+rtl: esyms: bsp_section_fast_data_begin -> 0x101400
+rtl: esyms: bsp_section_fast_data_end -> 0x101400
+rtl: esyms: bsp_section_fast_data_load_begin -> 0x101400
+rtl: esyms: bsp_section_fast_data_load_end -> 0x101400
+rtl: esyms: bsp_section_fast_data_size ->      0x0
+rtl: esyms: bsp_section_fast_text_begin -> 0x101400
+rtl: esyms: bsp_section_fast_text_end -> 0x101400
+rtl: esyms: bsp_section_fast_text_load_begin -> 0x101400
+rtl: esyms: bsp_section_fast_text_load_end -> 0x101400
+rtl: esyms: bsp_section_fast_text_size ->      0x0
+rtl: esyms: bsp_section_nocache_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocache_end -> 0xfefc000
+rtl: esyms: bsp_section_nocache_load_end -> 0xfefc000
+rtl: esyms: bsp_section_nocacheheap_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocacheheap_size -> 0x100000
+rtl: esyms: bsp_section_nocachenoload_begin -> 0xfefc000
+rtl: esyms: bsp_section_nocachenoload_end -> 0xfffc000
+rtl: esyms: bsp_section_nocachenoload_size -> 0x100000
+rtl: esyms: bsp_section_robarrier_align ->      0x1
+rtl: esyms: bsp_section_rodata_begin ->  0x3b550
+rtl: esyms: bsp_section_rodata_end ->  0x53428
+rtl: esyms: bsp_section_rodata_load_begin ->  0x3b550
+rtl: esyms: bsp_section_rodata_load_end ->  0x53428
+rtl: esyms: bsp_section_rodata_size ->  0x17ed8
+rtl: esyms: bsp_section_rwbarrier_align -> 0x100000
+rtl: esyms: bsp_section_stack_begin -> 0xfefc000
+rtl: esyms: bsp_section_stack_end -> 0xfefc000
+rtl: esyms: bsp_section_stack_size ->      0x0
+rtl: esyms: bsp_section_start_begin ->      0x0
+rtl: esyms: bsp_section_start_end ->    0xa70
+rtl: esyms: bsp_section_start_size ->    0xa70
+rtl: esyms: bsp_section_text_begin ->    0xa80
+rtl: esyms: bsp_section_text_end ->  0x3b550
+rtl: esyms: bsp_section_text_load_begin ->    0xa80
+rtl: esyms: bsp_section_text_load_end ->  0x3b550
+rtl: esyms: bsp_section_text_size ->  0x3aad0
+rtl: esyms: bsp_section_vector_begin -> 0x100000
+rtl: esyms: bsp_section_vector_end -> 0x101400
+rtl: esyms: bsp_section_vector_size ->   0x1400
+rtl: esyms: bsp_section_work_begin -> 0x103a30
+rtl: esyms: bsp_section_work_end -> 0xfefc000
+rtl: esyms: bsp_section_work_size -> 0xfdf85d0
+rtl: esyms: bsp_section_xbarrier_align ->      0x1
+rtl: esyms: bsp_stack_abt_begin -> 0x101000
+rtl: esyms: bsp_stack_abt_end -> 0x101400
+rtl: esyms: bsp_stack_abt_size ->    0x400
+rtl: esyms: bsp_stack_align ->      0x8
+rtl: esyms: bsp_stack_all_size ->   0x1400
+rtl: esyms: bsp_stack_fiq_begin -> 0x101000
+rtl: esyms: bsp_stack_fiq_end -> 0x101000
+rtl: esyms: bsp_stack_fiq_size ->      0x0
+rtl: esyms: bsp_stack_hyp_begin -> 0x101000
+rtl: esyms: bsp_stack_hyp_end -> 0x101000
+rtl: esyms: bsp_stack_hyp_size ->      0x0
+rtl: esyms: bsp_stack_irq_begin -> 0x100000
+rtl: esyms: bsp_stack_irq_end -> 0x101000
+rtl: esyms: bsp_stack_irq_size ->   0x1000
+rtl: esyms: bsp_stack_main_begin -> 0x101400
+rtl: esyms: bsp_stack_main_end -> 0x101400
+rtl: esyms: bsp_stack_main_size ->      0x0
+rtl: esyms: bsp_stack_secondary_processors_begin -> 0x101400
+rtl: esyms: bsp_stack_secondary_processors_end -> 0x101400
+rtl: esyms: bsp_stack_svc_begin -> 0x101000
+rtl: esyms: bsp_stack_svc_end -> 0x101000
+rtl: esyms: bsp_stack_svc_size ->      0x0
+rtl: esyms: bsp_stack_und_begin -> 0x101000
+rtl: esyms: bsp_stack_und_end -> 0x101000
+rtl: esyms: bsp_stack_und_size ->      0x0
+rtl: esyms: bsp_start ->   0xacef
+rtl: esyms: bsp_start_hook_0 ->    0x735
+rtl: esyms: bsp_start_hook_1 ->    0x791
+rtl: esyms: bsp_start_memcpy ->    0x129
+rtl: esyms: bsp_start_memcpy_arm ->    0x12c
+rtl: esyms: bsp_start_vector_table_begin ->      0x0
+rtl: esyms: bsp_start_vector_table_end ->     0x40
+rtl: esyms: bsp_start_vector_table_size ->     0x40
+rtl: esyms: bsp_translation_table_base -> 0xfffc000
+rtl: esyms: bsp_translation_table_end -> 0x10000000
+rtl: esyms: bsp_vector_table_begin ->      0x0
+rtl: esyms: bsp_vector_table_end ->     0x40
+rtl: esyms: bsp_vector_table_in_start_section ->      0x1
+rtl: esyms: bsp_vector_table_size ->     0x40
+rtl: esyms: bsp_work_area_initialize ->   0xac6b
+rtl: esyms: calloc ->   0xeb99
+rtl: esyms: cleanup_glue ->  0x353b5
+rtl: esyms: close ->   0xf20f
+rtl: esyms: console_close ->   0xb381
+rtl: esyms: console_control ->   0xb4ed
+rtl: esyms: console_initialize ->   0xb403
+rtl: esyms: console_initialize_data ->   0xb151
+rtl: esyms: console_open ->   0xb22d
+rtl: esyms: console_read ->   0xb509
+rtl: esyms: console_write ->   0xb53f
+rtl: esyms: device_close ->   0xc321
+rtl: esyms: device_ftruncate ->   0xc3e7
+rtl: esyms: device_ioctl ->   0xc3b3
+rtl: esyms: device_open ->   0xc2e9
+rtl: esyms: device_read ->   0xc34b
+rtl: esyms: device_write ->   0xc37f
+rtl: esyms: dl_load_test ->    0xc25
+rtl: esyms: dl_tar ->  0x3b87c
+rtl: esyms: dl_tar_size ->  0x4307c
+rtl: esyms: dlclose ->  0x15129
+rtl: esyms: dlerror ->  0x15201
+rtl: esyms: dlopen ->  0x150c7
+rtl: esyms: dlsym ->  0x1519d
+rtl: esyms: exception_base ->    0xd55
+rtl: esyms: exit ->  0x33205
+rtl: esyms: fastlz_decompress ->  0x156c7
+rtl: esyms: fclose ->  0x332e9
+rtl: esyms: fflush ->  0x334c1
+rtl: esyms: fiprintf ->  0x337cd
+rtl: esyms: fputc ->  0x33851
+rtl: esyms: fputs ->  0x33935
+rtl: esyms: fputwc ->  0x33a59
+rtl: esyms: free ->   0xf2bf
+rtl: esyms: frexp ->   0x8c39
+rtl: esyms: fstat ->   0xf39d
+rtl: esyms: ftruncate ->   0xf465
+rtl: esyms: fwrite ->  0x33ee5
+rtl: esyms: getegid ->   0xf52f
+rtl: esyms: geteuid ->   0xf53f
+rtl: esyms: getpid ->   0xf54f
+rtl: esyms: gettimeofday ->   0xec57
+rtl: esyms: imfs_memfile_bytes_per_block -> 0x102910
+rtl: esyms: imfs_rq_memfile_bytes_per_block -> 0x101404
+rtl: esyms: isatty ->  0x33f5d
+rtl: esyms: libchip_serial_default_probe ->   0xbdcb
+rtl: esyms: localeconv ->  0x33ff9
+rtl: esyms: lseek ->   0xf781
+rtl: esyms: malloc ->   0xf841
+rtl: esyms: memchr ->  0x34111
+rtl: esyms: memcmp ->  0x341b1
+rtl: esyms: memcpy ->  0x34240
+rtl: esyms: memfile_blocks_allocated -> 0x102914
+rtl: esyms: memmove ->  0x34721
+rtl: esyms: memset ->  0x347f5
+rtl: esyms: mkdir ->   0xfdbd
+rtl: esyms: mknod ->   0xfea7
+rtl: esyms: mount ->  0x10583
+rtl: esyms: newlib_create_hook ->  0x10681
+rtl: esyms: newlib_terminate_hook ->  0x1075d
+rtl: esyms: open ->  0x10a9b
+rtl: esyms: printf ->  0x351b1
+rtl: esyms: printk ->  0x10bed
+rtl: esyms: pthread_getspecific ->  0x1d5f5
+rtl: esyms: pthread_key_create ->  0x1d0ed
+rtl: esyms: pthread_key_delete ->  0x1d3c1
+rtl: esyms: pthread_kill ->  0x1f7b5
+rtl: esyms: pthread_self ->  0x1f883
+rtl: esyms: pthread_setspecific ->  0x1dc71
+rtl: esyms: putc ->  0x3524d
+rtl: esyms: puts ->  0x3536d
+rtl: esyms: raise ->  0x35381
+rtl: esyms: read ->  0x10c95
+rtl: esyms: realloc ->  0x10df1
+rtl: esyms: restore_core_regs ->   0x9e39
+rtl: esyms: rmdir ->  0x10f01
+rtl: esyms: rtems_assoc_local_by_remote ->   0xeedd
+rtl: esyms: rtems_assoc_local_by_remote_bitfield ->   0xef07
+rtl: esyms: rtems_assoc_ptr_by_local ->   0xef4b
+rtl: esyms: rtems_assoc_ptr_by_remote ->   0xefab
+rtl: esyms: rtems_assoc_remote_by_local ->   0xf00b
+rtl: esyms: rtems_cache_coherent_add_area ->   0xf171
+rtl: esyms: rtems_cache_flush_multiple_data_lines ->   0xafeb
+rtl: esyms: rtems_cache_get_instruction_line_size ->   0xb01f
+rtl: esyms: rtems_cache_instruction_sync_after_code_change ->   0xb02f
+rtl: esyms: rtems_cache_invalidate_multiple_instruction_lines ->   0xb005
+rtl: esyms: rtems_chain_append ->  0x22f45
+rtl: esyms: rtems_chain_extract ->  0x22f1b
+rtl: esyms: rtems_clock_get_ticks_per_second ->  0x1f8c1
+rtl: esyms: rtems_counter_initialize_converter ->  0x22f79
+rtl: esyms: rtems_current_user_env_get ->  0x10c15
+rtl: esyms: rtems_current_user_env_key -> 0x1034f8
+rtl: esyms: rtems_deviceio_close ->  0x1117b
+rtl: esyms: rtems_deviceio_control ->  0x112ab
+rtl: esyms: rtems_deviceio_open ->  0x1113b
+rtl: esyms: rtems_deviceio_read ->  0x111b7
+rtl: esyms: rtems_deviceio_write ->  0x11231
+rtl: esyms: rtems_event_receive ->  0x1f9c1
+rtl: esyms: rtems_event_send ->  0x1ffd5
+rtl: esyms: rtems_event_system_send ->  0x222f1
+rtl: esyms: rtems_fatal ->  0x23115
+rtl: esyms: rtems_fatal_error_occurred ->  0x230fb
+rtl: esyms: rtems_filesystem_check_access ->  0x1107b
+rtl: esyms: rtems_filesystem_default_are_nodes_equal ->   0xbde1
+rtl: esyms: rtems_filesystem_default_close ->   0xbe09
+rtl: esyms: rtems_filesystem_default_eval_path ->   0xbe1f
+rtl: esyms: rtems_filesystem_default_fcntl ->   0xbe3f
+rtl: esyms: rtems_filesystem_default_freenode ->   0xbe57
+rtl: esyms: rtems_filesystem_default_fstat ->   0xbe6b
+rtl: esyms: rtems_filesystem_default_fsunmount ->   0xbe8b
+rtl: esyms: rtems_filesystem_default_fsync_or_fdatasync ->   0xbe9f
+rtl: esyms: rtems_filesystem_default_fsync_or_fdatasync_success ->   0xbebd
+rtl: esyms: rtems_filesystem_default_ftruncate ->   0xbed3
+rtl: esyms: rtems_filesystem_default_ftruncate_directory ->   0xbef5
+rtl: esyms: rtems_filesystem_default_ioctl ->   0xbf17
+rtl: esyms: rtems_filesystem_default_kqfilter ->   0xbf39
+rtl: esyms: rtems_filesystem_default_lock ->   0xbf85
+rtl: esyms: rtems_filesystem_default_lseek ->   0xbfad
+rtl: esyms: rtems_filesystem_default_lseek_directory ->   0xbfd5
+rtl: esyms: rtems_filesystem_default_lseek_file ->   0xc023
+rtl: esyms: rtems_filesystem_default_open ->   0xc145
+rtl: esyms: rtems_filesystem_default_pathconf ->  0x4c41c
+rtl: esyms: rtems_filesystem_default_poll ->   0xc161
+rtl: esyms: rtems_filesystem_default_read ->   0xc179
+rtl: esyms: rtems_filesystem_default_readv ->   0xc19b
+rtl: esyms: rtems_filesystem_default_statvfs ->   0xc215
+rtl: esyms: rtems_filesystem_default_unlock ->   0xbf99
+rtl: esyms: rtems_filesystem_default_write ->   0xc235
+rtl: esyms: rtems_filesystem_default_writev ->   0xc257
+rtl: esyms: rtems_filesystem_do_unmount ->  0x12433
+rtl: esyms: rtems_filesystem_eval_path_check_access ->  0x110ff
+rtl: esyms: rtems_filesystem_eval_path_cleanup ->  0x118ff
+rtl: esyms: rtems_filesystem_eval_path_cleanup_with_parent ->  0x11937
+rtl: esyms: rtems_filesystem_eval_path_continue ->  0x115ed
+rtl: esyms: rtems_filesystem_eval_path_eat_delimiter ->  0x124c3
+rtl: esyms: rtems_filesystem_eval_path_error ->  0x11871
+rtl: esyms: rtems_filesystem_eval_path_generic ->  0x11b3d
+rtl: esyms: rtems_filesystem_eval_path_next_token ->  0x12583
+rtl: esyms: rtems_filesystem_eval_path_recursive ->  0x117d1
+rtl: esyms: rtems_filesystem_eval_path_restart ->  0x11955
+rtl: esyms: rtems_filesystem_eval_path_start ->  0x116e5
+rtl: esyms: rtems_filesystem_eval_path_start_with_parent ->  0x11721
+rtl: esyms: rtems_filesystem_eval_path_start_with_root_and_current ->  0x11683
+rtl: esyms: rtems_filesystem_get_mount_handler ->  0x10111
+rtl: esyms: rtems_filesystem_global_location_assign ->  0x12205
+rtl: esyms: rtems_filesystem_global_location_null -> 0x101568
+rtl: esyms: rtems_filesystem_global_location_obtain ->  0x12311
+rtl: esyms: rtems_filesystem_global_location_release ->  0x12381
+rtl: esyms: rtems_filesystem_handlers_default ->  0x4b888
+rtl: esyms: rtems_filesystem_initialize ->   0xf035
+rtl: esyms: rtems_filesystem_iterate ->  0x10023
+rtl: esyms: rtems_filesystem_location_clone ->   0xf1cf
+rtl: esyms: rtems_filesystem_location_copy ->  0x12125
+rtl: esyms: rtems_filesystem_location_copy_and_detach ->  0x12183
+rtl: esyms: rtems_filesystem_location_detach ->  0x12167
+rtl: esyms: rtems_filesystem_location_free ->   0xf36f
+rtl: esyms: rtems_filesystem_location_remove_from_mt_entry ->  0x123ed
+rtl: esyms: rtems_filesystem_location_transform_to_global ->  0x121a9
+rtl: esyms: rtems_filesystem_mknod ->   0xfe15
+rtl: esyms: rtems_filesystem_mount_table -> 0x1015ec
+rtl: esyms: rtems_filesystem_null_handlers ->  0x4c150
+rtl: esyms: rtems_filesystem_null_mt_entry -> 0x101528
+rtl: esyms: rtems_filesystem_root_configuration ->  0x3b628
+rtl: esyms: rtems_filesystem_table ->  0x3b5b0
+rtl: esyms: rtems_global_user_env -> 0x10158c
+rtl: esyms: rtems_heap_allocate_aligned_with_boundary ->   0xfc45
+rtl: esyms: rtems_heap_null_extend ->  0x10faf
+rtl: esyms: rtems_initialize_executive ->  0x2309f
+rtl: esyms: rtems_interrupt_handler_install ->   0xbac9
+rtl: esyms: rtems_io_close ->  0x23171
+rtl: esyms: rtems_io_control ->  0x231c9
+rtl: esyms: rtems_io_initialize ->  0x23221
+rtl: esyms: rtems_io_open ->  0x23277
+rtl: esyms: rtems_io_read ->  0x232cf
+rtl: esyms: rtems_io_register_name ->   0xeb5d
+rtl: esyms: rtems_io_write ->  0x23327
+rtl: esyms: rtems_libio_allocate ->   0xf611
+rtl: esyms: rtems_libio_exit ->   0xf6a9
+rtl: esyms: rtems_libio_fcntl_flags ->   0xf5c3
+rtl: esyms: rtems_libio_free ->   0xf667
+rtl: esyms: rtems_libio_free_user_env ->  0x10c47
+rtl: esyms: rtems_libio_iop_freelist -> 0x1034fc
+rtl: esyms: rtems_libio_iops -> 0x102d98
+rtl: esyms: rtems_libio_number_iops ->  0x3b5ac
+rtl: esyms: rtems_libio_post_driver ->  0x10afd
+rtl: esyms: rtems_libio_semaphore -> 0x103500
+rtl: esyms: rtems_malloc_dirty_helper -> 0x1027a4
+rtl: esyms: rtems_malloc_extend_handler ->  0x3b690
+rtl: esyms: rtems_minimum_stack_size -> 0x101484
+rtl: esyms: rtems_printf ->  0x10bad
+rtl: esyms: rtems_putc ->  0x10fc7
+rtl: esyms: rtems_rtl_alloc_del ->  0x158b9
+rtl: esyms: rtems_rtl_alloc_heap ->  0x15717
+rtl: esyms: rtems_rtl_alloc_initialise ->  0x157f3
+rtl: esyms: rtems_rtl_alloc_module_del ->  0x159ff
+rtl: esyms: rtems_rtl_alloc_module_new ->  0x1591d
+rtl: esyms: rtems_rtl_alloc_new ->  0x15837
+rtl: esyms: rtems_rtl_base_sym_global_add ->  0x1cbef
+rtl: esyms: rtems_rtl_baseimage ->  0x1cc4d
+rtl: esyms: rtems_rtl_chain_iterate ->  0x15b35
+rtl: esyms: rtems_rtl_check_handle ->  0x1c795
+rtl: esyms: rtems_rtl_elf_file_check ->  0x16d15
+rtl: esyms: rtems_rtl_elf_file_load ->  0x16fdd
+rtl: esyms: rtems_rtl_elf_file_sig ->  0x171a5
+rtl: esyms: rtems_rtl_elf_find_symbol ->  0x15e31
+rtl: esyms: rtems_rtl_elf_load_details ->  0x16d9d
+rtl: esyms: rtems_rtl_elf_rel_resolve_sym ->  0x17471
+rtl: esyms: rtems_rtl_elf_relocate_rel ->  0x174ad
+rtl: esyms: rtems_rtl_elf_relocate_rela ->  0x17487
+rtl: esyms: rtems_rtl_find_file ->  0x1725f
+rtl: esyms: rtems_rtl_find_obj ->  0x1c7f9
+rtl: esyms: rtems_rtl_get_error ->  0x171fb
+rtl: esyms: rtems_rtl_global_symbols ->  0x1c559
+rtl: esyms: rtems_rtl_load_object ->  0x1c8e9
+rtl: esyms: rtems_rtl_lock ->  0x1c6f5
+rtl: esyms: rtems_rtl_match_name ->  0x18c49
+rtl: esyms: rtems_rtl_obj_add_section ->  0x18d5f
+rtl: esyms: rtems_rtl_obj_alloc ->  0x18771
+rtl: esyms: rtems_rtl_obj_bss_alignment ->  0x18f91
+rtl: esyms: rtems_rtl_obj_bss_size ->  0x18f77
+rtl: esyms: rtems_rtl_obj_cache_close ->  0x17d4f
+rtl: esyms: rtems_rtl_obj_cache_flush ->  0x17da5
+rtl: esyms: rtems_rtl_obj_cache_open ->  0x17ced
+rtl: esyms: rtems_rtl_obj_cache_read ->  0x17df3
+rtl: esyms: rtems_rtl_obj_cache_read_byval ->  0x181d7
+rtl: esyms: rtems_rtl_obj_caches ->  0x1c5c1
+rtl: esyms: rtems_rtl_obj_caches_flush ->  0x1c655
+rtl: esyms: rtems_rtl_obj_comp ->  0x1c6a1
+rtl: esyms: rtems_rtl_obj_comp_close ->  0x182a5
+rtl: esyms: rtems_rtl_obj_comp_open ->  0x18237
+rtl: esyms: rtems_rtl_obj_comp_read ->  0x18331
+rtl: esyms: rtems_rtl_obj_comp_set ->  0x182f1
+rtl: esyms: rtems_rtl_obj_const_alignment ->  0x18f29
+rtl: esyms: rtems_rtl_obj_const_size ->  0x18f0f
+rtl: esyms: rtems_rtl_obj_data_alignment ->  0x18f5d
+rtl: esyms: rtems_rtl_obj_data_size ->  0x18f43
+rtl: esyms: rtems_rtl_obj_file_load ->  0x1992d
+rtl: esyms: rtems_rtl_obj_find_file ->  0x18cd5
+rtl: esyms: rtems_rtl_obj_find_section ->  0x18e41
+rtl: esyms: rtems_rtl_obj_find_section_by_index ->  0x18ea9
+rtl: esyms: rtems_rtl_obj_free ->  0x187f5
+rtl: esyms: rtems_rtl_obj_load ->  0x199a5
+rtl: esyms: rtems_rtl_obj_load_sections ->  0x1922d
+rtl: esyms: rtems_rtl_obj_load_symbols ->  0x190d7
+rtl: esyms: rtems_rtl_obj_relocate ->  0x18fab
+rtl: esyms: rtems_rtl_obj_relocate_unresolved ->  0x162cb
+rtl: esyms: rtems_rtl_obj_run_ctors ->  0x19485
+rtl: esyms: rtems_rtl_obj_run_dtors ->  0x1949d
+rtl: esyms: rtems_rtl_obj_synchronize_cache ->  0x1907d
+rtl: esyms: rtems_rtl_obj_text_alignment ->  0x18ef5
+rtl: esyms: rtems_rtl_obj_text_size ->  0x18edb
+rtl: esyms: rtems_rtl_obj_unload ->  0x19a75
+rtl: esyms: rtems_rtl_parse_name ->  0x1889d
+rtl: esyms: rtems_rtl_path_append ->  0x1cbd5
+rtl: esyms: rtems_rtl_rap_file_check ->  0x1a6dd
+rtl: esyms: rtems_rtl_rap_file_load ->  0x1a775
+rtl: esyms: rtems_rtl_rap_file_sig ->  0x1ad6d
+rtl: esyms: rtems_rtl_set_error ->  0x171bb
+rtl: esyms: rtems_rtl_strdup ->  0x1ad83
+rtl: esyms: rtems_rtl_symbol_global_add ->  0x1b089
+rtl: esyms: rtems_rtl_symbol_global_find ->  0x1b299
+rtl: esyms: rtems_rtl_symbol_obj_add ->  0x1b3b5
+rtl: esyms: rtems_rtl_symbol_obj_erase ->  0x1b42b
+rtl: esyms: rtems_rtl_symbol_obj_erase_local ->  0x1b3f5
+rtl: esyms: rtems_rtl_symbol_obj_find ->  0x1b31b
+rtl: esyms: rtems_rtl_symbol_table_close ->  0x1b06d
+rtl: esyms: rtems_rtl_symbol_table_open ->  0x1afe5
+rtl: esyms: rtems_rtl_trace ->  0x1b4a5
+rtl: esyms: rtems_rtl_trace_set_mask ->  0x1b4d5
+rtl: esyms: rtems_rtl_unload_object ->  0x1c9cf
+rtl: esyms: rtems_rtl_unlock ->  0x1c74f
+rtl: esyms: rtems_rtl_unresolved ->  0x1c58d
+rtl: esyms: rtems_rtl_unresolved_add ->  0x1bd27
+rtl: esyms: rtems_rtl_unresolved_interate ->  0x1bc9d
+rtl: esyms: rtems_rtl_unresolved_resolve ->  0x1bed9
+rtl: esyms: rtems_rtl_unresolved_table_close ->  0x1bc55
+rtl: esyms: rtems_rtl_unresolved_table_open ->  0x1bc25
+rtl: esyms: rtems_semaphore_create ->  0x20b1b
+rtl: esyms: rtems_semaphore_delete ->  0x20fef
+rtl: esyms: rtems_semaphore_obtain ->  0x2188f
+rtl: esyms: rtems_semaphore_release ->  0x22145
+rtl: esyms: rtems_shutdown_executive ->  0x230e1
+rtl: esyms: rtems_status_code_to_errno ->  0x222ad
+rtl: esyms: rtems_task_create ->  0x22579
+rtl: esyms: rtems_task_delete ->  0x227f9
+rtl: esyms: rtems_task_start ->  0x22ad3
+rtl: esyms: rtems_task_wake_after ->  0x22d63
+rtl: esyms: rtems_termios_baud_table ->  0x4c674
+rtl: esyms: rtems_termios_close ->  0x1314d
+rtl: esyms: rtems_termios_enqueue_raw_characters ->  0x143fb
+rtl: esyms: rtems_termios_initialize ->  0x149ed
+rtl: esyms: rtems_termios_ioctl ->  0x133a9
+rtl: esyms: rtems_termios_linesw -> 0x1029c8
+rtl: esyms: rtems_termios_number_to_baud ->  0x1497b
+rtl: esyms: rtems_termios_open ->  0x12f91
+rtl: esyms: rtems_termios_puts ->  0x1377b
+rtl: esyms: rtems_termios_read ->  0x142b3
+rtl: esyms: rtems_termios_set_initial_baud ->  0x149a7
+rtl: esyms: rtems_termios_ttyMutex -> 0x103504
+rtl: esyms: rtems_termios_write ->  0x13aa1
+rtl: esyms: rtems_test_fatal_extension ->  0x31a81
+rtl: esyms: rtems_test_name ->  0x3b550
+rtl: esyms: setlocale ->  0x33fe1
+rtl: esyms: sigemptyset ->  0x1f893
+rtl: esyms: sprintf ->  0x35485
+rtl: esyms: stat ->  0x10fe9
+rtl: esyms: strchr ->  0x35579
+rtl: esyms: strcmp ->  0x35669
+rtl: esyms: strcpy ->  0x3593d
+rtl: esyms: strdup ->  0x35a01
+rtl: esyms: strerror ->  0x35ead
+rtl: esyms: strlen ->  0x35f01
+rtl: esyms: strncmp ->  0x35fdd
+rtl: esyms: strncpy ->  0x36079
+rtl: esyms: strrchr ->  0x360e9
+rtl: esyms: strtoul ->  0x36265
+rtl: esyms: symlink ->  0x125cf
+rtl: esyms: time ->  0x388e1
+rtl: esyms: unlink ->  0x14a5f
+rtl: esyms: vfiprintf ->  0x396d5
+rtl: esyms: vfprintf ->  0x3b17d
+rtl: esyms: vprintk ->  0x14ae5
+rtl: esyms: vsnprintf ->  0x3b299
+rtl: esyms: wcrtomb ->  0x3b3d9
+rtl: esyms: write ->  0x14fad
+rtl: esyms: zynq_uart_fns ->  0x4b864
+rtl: esyms: _ZGVNSt10moneypunctIcLb0EE2idE -> 0x10288c
+rtl: esyms: _ZGVNSt10moneypunctIcLb1EE2idE -> 0x102888
+rtl: esyms: _ZGVNSt10moneypunctIwLb0EE2idE -> 0x1028bc
+rtl: esyms: _ZGVNSt10moneypunctIwLb1EE2idE -> 0x1028b8
+rtl: esyms: _ZGVNSt11__timepunctIcE2idE -> 0x102870
+rtl: esyms: _ZGVNSt11__timepunctIwE2idE -> 0x1028a0
+rtl: esyms: _ZGVNSt7__cxx1110moneypunctIcLb0EE2idE -> 0x10283c
+rtl: esyms: _ZGVNSt7__cxx1110moneypunctIcLb1EE2idE -> 0x102838
+rtl: esyms: _ZGVNSt7__cxx1110moneypunctIwLb0EE2idE -> 0x10285c
+rtl: esyms: _ZGVNSt7__cxx1110moneypunctIwLb1EE2idE -> 0x102858
+rtl: esyms: _ZGVNSt7__cxx117collateIcE2idE -> 0x102820
+rtl: esyms: _ZGVNSt7__cxx117collateIwE2idE -> 0x102840
+rtl: esyms: _ZGVNSt7__cxx118messagesIcE2idE -> 0x102824
+rtl: esyms: _ZGVNSt7__cxx118messagesIwE2idE -> 0x102844
+rtl: esyms: _ZGVNSt7__cxx118numpunctIcE2idE -> 0x10282c
+rtl: esyms: _ZGVNSt7__cxx118numpunctIwE2idE -> 0x10284c
+rtl: esyms: _ZGVNSt7__cxx118time_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102828
+rtl: esyms: _ZGVNSt7__cxx118time_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x102848
+rtl: esyms: _ZGVNSt7__cxx119money_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102834
+rtl: esyms: _ZGVNSt7__cxx119money_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x102854
+rtl: esyms: _ZGVNSt7__cxx119money_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102830
+rtl: esyms: _ZGVNSt7__cxx119money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x102850
+rtl: esyms: _ZGVNSt7collateIcE2idE -> 0x102860
+rtl: esyms: _ZGVNSt7collateIwE2idE -> 0x102890
+rtl: esyms: _ZGVNSt7num_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102878
+rtl: esyms: _ZGVNSt7num_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x1028a8
+rtl: esyms: _ZGVNSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102874
+rtl: esyms: _ZGVNSt7num_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x1028a4
+rtl: esyms: _ZGVNSt8messagesIcE2idE -> 0x102864
+rtl: esyms: _ZGVNSt8messagesIwE2idE -> 0x102894
+rtl: esyms: _ZGVNSt8numpunctIcE2idE -> 0x10287c
+rtl: esyms: _ZGVNSt8numpunctIwE2idE -> 0x1028ac
+rtl: esyms: _ZGVNSt8time_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102868
+rtl: esyms: _ZGVNSt8time_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x102898
+rtl: esyms: _ZGVNSt8time_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x10286c
+rtl: esyms: _ZGVNSt8time_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x10289c
+rtl: esyms: _ZGVNSt9money_getIcSt19istreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102884
+rtl: esyms: _ZGVNSt9money_getIwSt19istreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x1028b4
+rtl: esyms: _ZGVNSt9money_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE2idE -> 0x102880
+rtl: esyms: _ZGVNSt9money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE2idE -> 0x1028b0
+rtl: esyms: _ZN17__eh_globals_initD1Ev ->   0x14d9
+rtl: esyms: _ZN17__eh_globals_initD2Ev ->   0x14d9
+rtl: esyms: _ZNSs12_S_constructIPKcEEPcT_S3_RKSaIcESt20forward_iterator_tag ->   0x8899
+rtl: esyms: _ZNSs4_Rep10_M_destroyERKSaIcE ->   0x8895
+rtl: esyms: _ZNSs4_Rep20_S_empty_rep_storageE -> 0x102810
+rtl: esyms: _ZNSs4_Rep9_S_createEjjRKSaIcE ->   0x87e9
+rtl: esyms: _ZNSsC1EPKcRKSaIcE ->   0x88e9
+rtl: esyms: _ZNSsC1EPKcjRKSaIcE ->   0x88cd
+rtl: esyms: _ZNSsC2EPKcRKSaIcE ->   0x88e9
+rtl: esyms: _ZNSsC2EPKcjRKSaIcE ->   0x88cd
+rtl: esyms: _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERjj ->   0x8b19
+rtl: esyms: __aeabi_idiv0 ->   0x91e1
+rtl: esyms: __aeabi_ldiv0 ->   0x91e1
+rtl: esyms: __aeabi_unwind_cpp_pr1 ->   0x9ba5
+rtl: esyms: __aeabi_unwind_cpp_pr2 ->   0x9ba9
+rtl: esyms: a9mpcore_clock_periphclk ->   0xa3cf
+rtl: esyms: rtems_rtl_base_global_syms_init ->    0xdb1
+rtl: esyms: zynq_setup_mmu_and_cache ->    0x7a9
+rtl: esyms: zynq_uart_input_clock ->   0xbb41
+rtl: loading '/dl-o5.o'
+rtl: alloc: new: OBJECT addr=0x120840 size=9
+rtl: alloc: del: OBJECT addr=0x0
+rtl: alloc: new: OBJECT addr=0x120870 size=136
+rtl: alloc: new: OBJECT addr=0x120920 size=9
+rtl: alloc: new: OBJECT addr=0x120950 size=9
+rtl: section header:  0: offset=24576
+rtl: section header:  1: offset=24616
+rtl: alloc: new: OBJECT addr=0x120980 size=56
+rtl: alloc: new: OBJECT addr=0x1209e0 size=6
+rtl: sect: 1 : .text
+rtl: section header:  2: offset=24656
+rtl: alloc: new: OBJECT addr=0x120a10 size=56
+rtl: alloc: new: OBJECT addr=0x120a70 size=6
+rtl: sect: 2 : .data
+rtl: section header:  3: offset=24696
+rtl: alloc: new: OBJECT addr=0x120aa0 size=56
+rtl: alloc: new: OBJECT addr=0x120b00 size=5
+rtl: sect: 3 : .bss
+rtl: section header:  4: offset=24736
+rtl: alloc: new: OBJECT addr=0x120b30 size=56
+rtl: alloc: new: OBJECT addr=0x120b90 size=35
+rtl: sect: 4 : .rodata._ZStL19piecewise_construct
+rtl: section header:  5: offset=24776
+rtl: alloc: new: OBJECT addr=0x120bd8 size=56
+rtl: alloc: new: OBJECT addr=0x120c38 size=8
+rtl: sect: 5 : .rodata
+rtl: section header:  6: offset=24816
+rtl: alloc: new: OBJECT addr=0x120c68 size=56
+rtl: alloc: new: OBJECT addr=0x120cc8 size=19
+rtl: sect: 6 : .text.exception_dl
+rtl: section header:  7: offset=24856
+rtl: alloc: new: OBJECT addr=0x120d00 size=56
+rtl: alloc: new: OBJECT addr=0x120d60 size=23
+rtl: sect: 7 : .rel.text.exception_dl
+rtl: section header:  8: offset=24896
+rtl: alloc: new: OBJECT addr=0x120da0 size=56
+rtl: alloc: new: OBJECT addr=0x120e00 size=29
+rtl: sect: 8 : .ARM.extab.text.exception_dl
+rtl: section header:  9: offset=24936
+rtl: alloc: new: OBJECT addr=0x120e48 size=56
+rtl: alloc: new: OBJECT addr=0x120ea8 size=33
+rtl: sect: 9 : .rel.ARM.extab.text.exception_dl
+rtl: section header: 10: offset=24976
+rtl: unsupported section: 10: type=1879048193 flags=82
+rtl: section header: 11: offset=25016
+rtl: alloc: new: OBJECT addr=0x120ef0 size=56
+rtl: alloc: new: OBJECT addr=0x120f50 size=33
+rtl: sect: 11: .rel.ARM.exidx.text.exception_dl
+rtl: section header: 12: offset=25056
+rtl: alloc: new: OBJECT addr=0x120f98 size=56
+rtl: alloc: new: OBJECT addr=0x120ff8 size=36
+rtl: sect: 12: .rodata._ZZ12exception_dlE8__func__
+rtl: section header: 13: offset=25096
+rtl: section header: 14: offset=25136
+rtl: alloc: new: OBJECT addr=0x121040 size=56
+rtl: alloc: new: OBJECT addr=0x1210a0 size=16
+rtl: sect: 14: .rel.debug_info
+rtl: section header: 15: offset=25176
+rtl: section header: 16: offset=25216
+rtl: section header: 17: offset=25256
+rtl: alloc: new: OBJECT addr=0x1210d8 size=56
+rtl: alloc: new: OBJECT addr=0x121138 size=19
+rtl: sect: 17: .rel.debug_aranges
+rtl: section header: 18: offset=25296
+rtl: section header: 19: offset=25336
+rtl: alloc: new: OBJECT addr=0x121170 size=56
+rtl: alloc: new: OBJECT addr=0x1211d0 size=18
+rtl: sect: 19: .rel.debug_ranges
+rtl: section header: 20: offset=25376
+rtl: section header: 21: offset=25416
+rtl: alloc: new: OBJECT addr=0x121208 size=56
+rtl: alloc: new: OBJECT addr=0x121268 size=16
+rtl: sect: 21: .rel.debug_line
+rtl: section header: 22: offset=25456
+rtl: section header: 23: offset=25496
+rtl: section header: 24: offset=25536
+rtl: section header: 25: offset=25576
+rtl: alloc: new: OBJECT addr=0x1212a0 size=56
+rtl: alloc: new: OBJECT addr=0x121300 size=17
+rtl: sect: 25: .rel.debug_frame
+rtl: section header: 26: offset=25616
+rtl: unsupported section: 26: type=1879048195 flags=00
+rtl: section header: 27: offset=25656
+rtl: alloc: new: OBJECT addr=0x121338 size=56
+rtl: alloc: new: OBJECT addr=0x121398 size=10
+rtl: sect: 27: .shstrtab
+rtl: section header: 28: offset=25696
+rtl: alloc: new: OBJECT addr=0x1213c8 size=56
+rtl: alloc: new: OBJECT addr=0x121428 size=8
+rtl: sect: 28: .symtab
+rtl: section header: 29: offset=25736
+rtl: alloc: new: OBJECT addr=0x121458 size=56
+rtl: alloc: new: OBJECT addr=0x1214b8 size=8
+rtl: sect: 29: .strtab
+rtl: alloc: new: READ_EXEC addr=0x1214e8 size=202
+rtl: alloc: new: READ addr=0x1215d8 size=170
+rtl: alloc: new: READ_WRITE addr=0x1216a8 size=1
+rtl: load sect: text  - b:0x1214e8 s:202 a:1
+rtl: load sect: const - b:0x1215d8 s:170 a:4
+rtl: load sect: data  - b:0x1216a8 s:1 a:1
+rtl: load sect: bss   - b:0x0 s:0 a:1
+rtl: loading: .text.exception_dl -> 0x1214e8 (198)
+rtl: loading: .rodata._ZStL19piecewise_construct -> 0x1215d8 (1)
+rtl: loading: .rodata -> 0x1215dc (81)
+rtl: loading: .ARM.extab.text.exception_dl -> 0x121630 (64)
+rtl: loading: .rodata._ZZ12exception_dlE8__func__ -> 0x121674 (13)
+rtl: alloc: new: SYMBOL addr=0x1216d8 size=310
+rtl: alloc: new: SYMBOL addr=0x121838 size=33
+rtl: sym:add:6  name:11:$d                   bind:0  type:0  val:0x1215d8 sect:4 size:0
+rtl: sym:add:7  name:14:_ZStL19piecewise_construct bind:0  type:1  val:0x1215d8 sect:4 size:1
+rtl: sym:add:9  name:11:$d                   bind:0  type:0  val:0x1215dc sect:5 size:0
+rtl: sym:add:10 name:41:.LC0                 bind:0  type:0  val:0x1215dc sect:5 size:0
+rtl: sym:add:11 name:46:.LC1                 bind:0  type:0  val:0x1215f4 sect:5 size:0
+rtl: sym:add:12 name:51:.LC2                 bind:0  type:0  val:0x121608 sect:5 size:0
+rtl: sym:add:13 name:56:.LC3                 bind:0  type:0  val:0x121618 sect:5 size:0
+rtl: sym:add:15 name:61:$t                   bind:0  type:0  val:0x1214e8 sect:6 size:0
+rtl: sym:add:16 name:64:_ZZ12exception_dlE8__func__ bind:0  type:1  val:0x121674 sect:12 size:13
+rtl: sym:add:18 name:11:$d                   bind:0  type:0  val:0x121630 sect:8 size:0
+rtl: sym:add:22 name:11:$d                   bind:0  type:0  val:0x121674 sect:12 size:0
+rtl: sym:add:33 name:92:exception_dl         bind:1  type:2  val:0x1214e9 sect:6 size:198
+rtl: relocation: .rel.text.exception_dl, syms:.symtab
+rtl: rel: sym:.LC0(10)=001215dc type:47 off:00000006
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x50dcf241 @ 0x1214ee in /dl-o5.o
+rtl: rel: sym:.LC0(10)=001215dc type:48 off:0000000a
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x12f2c0 @ 0x1214f2 in /dl-o5.o
+rtl: rel: sym:puts(35)=0003536d type:10 off:0000000e
+rtl: THM_CALL/JUMP24 0xff39f713 @ 0x1214f6 in /dl-o5.o
+rtl: rel: sym:__cxa_allocate_exception(36)=00001031 type:10 off:00000014
+rtl: THM_CALL/JUMP24 0xfd98f6df @ 0x1214fc in /dl-o5.o
+rtl: rel: sym:.LC1(11)=001215f4 type:47 off:0000001c
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x51f4f241 @ 0x121504 in /dl-o5.o
+rtl: rel: sym:.LC1(11)=001215f4 type:48 off:00000020
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x112f2c0 @ 0x121508 in /dl-o5.o
+rtl: rel: sym:_ZNSt13runtime_errorC1EPKc(37)=000085a9 type:10 off:00000026
+rtl: THM_CALL/JUMP24 0xf84bf6e7 @ 0x12150e in /dl-o5.o
+rtl: rel: sym:_ZNSt13runtime_errorD1Ev(38)=00008505 type:47 off:0000002a
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x5205f248 @ 0x121512 in /dl-o5.o
+rtl: rel: sym:_ZNSt13runtime_errorD1Ev(38)=00008505 type:48 off:0000002e
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x200f2c0 @ 0x121516 in /dl-o5.o
+rtl: rel: sym:_ZTISt13runtime_error(39)=0004b61c type:47 off:00000032
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x611cf24b @ 0x12151a in /dl-o5.o
+rtl: rel: sym:_ZTISt13runtime_error(39)=0004b61c type:48 off:00000036
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x104f2c0 @ 0x12151e in /dl-o5.o
+rtl: rel: sym:__cxa_throw(40)=00001cc5 type:10 off:0000003c
+rtl: THM_CALL/JUMP24 0xfbcef6e0 @ 0x121524 in /dl-o5.o
+rtl: rel: sym:__cxa_free_exception(41)=00001061 type:10 off:00000046
+rtl: THM_CALL/JUMP24 0xfd97f6df @ 0x12152e in /dl-o5.o
+rtl: rel: sym:__cxa_begin_catch(42)=000013a5 type:10 off:0000005c
+rtl: THM_CALL/JUMP24 0xff2ef6df @ 0x121544 in /dl-o5.o
+rtl: rel: sym:(null)(16)=00121674 type:47 off:00000074
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x6174f241 @ 0x12155c in /dl-o5.o
+rtl: rel: sym:(null)(16)=00121674 type:48 off:00000078
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x112f2c0 @ 0x121560 in /dl-o5.o
+rtl: rel: sym:.LC2(12)=00121608 type:47 off:0000007c
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x6008f241 @ 0x121564 in /dl-o5.o
+rtl: rel: sym:.LC2(12)=00121608 type:48 off:00000080
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x12f2c0 @ 0x121568 in /dl-o5.o
+rtl: rel: sym:printf(43)=000351b1 type:10 off:00000084
+rtl: THM_CALL/JUMP24 0xfe20f713 @ 0x12156c in /dl-o5.o
+rtl: rel: sym:__cxa_end_catch(44)=00001429 type:10 off:00000088
+rtl: THM_CALL/JUMP24 0xff5af6df @ 0x121570 in /dl-o5.o
+rtl: rel: sym:__cxa_begin_catch(42)=000013a5 type:10 off:00000092
+rtl: THM_CALL/JUMP24 0xff13f6df @ 0x12157a in /dl-o5.o
+rtl: rel: sym:(null)(16)=00121674 type:47 off:00000096
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x6174f241 @ 0x12157e in /dl-o5.o
+rtl: rel: sym:(null)(16)=00121674 type:48 off:0000009a
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x112f2c0 @ 0x121582 in /dl-o5.o
+rtl: rel: sym:.LC3(13)=00121618 type:47 off:0000009e
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x6018f241 @ 0x121586 in /dl-o5.o
+rtl: rel: sym:.LC3(13)=00121618 type:48 off:000000a2
+rtl: THM_MOVT_ABS/THM_MOVW_ABS_NC 0x12f2c0 @ 0x12158a in /dl-o5.o
+rtl: rel: sym:printf(43)=000351b1 type:10 off:000000a6
+rtl: THM_CALL/JUMP24 0xfe0ff713 @ 0x12158e in /dl-o5.o
+rtl: rel: sym:__cxa_end_catch(44)=00001429 type:10 off:000000aa
+rtl: THM_CALL/JUMP24 0xff49f6df @ 0x121592 in /dl-o5.o
+rtl: rel: sym:__cxa_end_catch(44)=00001429 type:10 off:000000b0
+rtl: THM_CALL/JUMP24 0xff46f6df @ 0x121598 in /dl-o5.o
+rtl: rel: sym:__cxa_end_cleanup(45)=000010b5 type:10 off:000000b4
+rtl: THM_CALL/JUMP24 0xfd8af6df @ 0x12159c in /dl-o5.o
+rtl: rel: sym:__cxa_end_catch(44)=00001429 type:10 off:000000b8
+rtl: THM_CALL/JUMP24 0xff42f6df @ 0x1215a0 in /dl-o5.o
+rtl: rel: sym:__cxa_end_cleanup(45)=000010b5 type:10 off:000000bc
+rtl: THM_CALL/JUMP24 0xfd86f6df @ 0x1215a4 in /dl-o5.o
+rtl: relocation: .rel.ARM.extab.text.exception_dl, syms:.symtab
+rtl: rel: sym:__gxx_personality_v0(34)=00001745 type:42 off:00000000
+rtl: REL32/ABS32/GLOB_DAT/PREL31/TARGET2 0xffee0115 @ 0x121630 in /dl-o5.ortl: rel: sym:_ZTISt9exception(46)=0004a540 type:41 off:0000003c
+rtl: REL32/ABS32/GLOB_DAT/PREL31/TARGET2 0x4a540 @ 0x12166c in /dl-o5.ortl: alloc: del: SYMBOL addr=0x1216d8
+rtl: alloc: new: OBJECT addr=0x121880 size=132
+rtl: linkmap_add
+rtl: unresolv: global resolve
+dlopen: 
+dlsym: 
+exception_base called
+exception_dl: throwing
+terminate called after throwing an instance of 'std::runtime_error'
+  what():  exception_dl throw
