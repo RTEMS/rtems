@@ -50,13 +50,13 @@
  *  pattern area must be a multiple of 4 words.
  */
 
-#ifdef CPU_STACK_CHECK_SIZE
-#define PATTERN_SIZE_WORDS      (((CPU_STACK_CHECK_SIZE / 4) + 3) & ~0x3)
-#else
-#define PATTERN_SIZE_WORDS      (4)
+#if !defined(CPU_STACK_CHECK_PATTERN_INITIALIZER)
+#define CPU_STACK_CHECK_PATTERN_INITIALIZER \
+  { \
+    0xFEEDF00D, 0x0BAD0D06, /* FEED FOOD to  BAD DOG */ \
+    0xDEADF00D, 0x600D0D06  /* DEAD FOOD but GOOD DOG */ \
+  }
 #endif
-
-#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(uint32_t))
 
 /*
  *  The pattern used to fill the entire stack.
@@ -64,10 +64,6 @@
 
 #define BYTE_PATTERN 0xA5
 #define U32_PATTERN 0xA5A5A5A5
-
-typedef struct {
-   uint32_t    pattern[ PATTERN_SIZE_WORDS ];
-} Stack_check_Control;
 
 /*
  *  Variable to indicate when the stack checker has been initialized.
@@ -77,7 +73,12 @@ static int   Stack_check_Initialized = 0;
 /*
  *  The "magic pattern" used to mark the end of the stack.
  */
-Stack_check_Control Stack_check_Pattern;
+static const uint32_t Stack_check_Pattern[] =
+  CPU_STACK_CHECK_PATTERN_INITIALIZER;
+
+#define PATTERN_SIZE_BYTES sizeof(Stack_check_Pattern)
+
+#define PATTERN_SIZE_WORDS RTEMS_ARRAY_SIZE(Stack_check_Pattern)
 
 /*
  * Helper function to report if the actual stack pointer is in range.
@@ -85,11 +86,12 @@ Stack_check_Control Stack_check_Pattern;
  * NOTE: This uses a GCC specific method.
  */
 static inline bool Stack_check_Frame_pointer_in_range(
-  Stack_Control *the_stack
+  const Thread_Control *the_thread
 )
 {
   #if defined(__GNUC__)
     void *sp = __builtin_frame_address(0);
+    const Stack_Control *the_stack = &the_thread->Start.Initial_stack;
 
     if ( sp < the_stack->area ) {
       return false;
@@ -110,7 +112,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #if (CPU_STACK_GROWS_UP == TRUE)
   #define Stack_check_Get_pattern( _the_stack ) \
     ((char *)(_the_stack)->area + \
-         (_the_stack)->size - sizeof( Stack_check_Control ) )
+         (_the_stack)->size - PATTERN_SIZE_BYTES )
 
   #define Stack_check_Calculate_used( _low, _size, _high_water ) \
       ((char *)(_high_water) - (char *)(_low))
@@ -132,22 +134,16 @@ static inline bool Stack_check_Frame_pointer_in_range(
       ( ((char *)(_low) + (_size)) - (char *)(_high_water) )
 
   #define Stack_check_usable_stack_start(_the_stack) \
-      ((char *)(_the_stack)->area + sizeof(Stack_check_Control))
+      ((char *)(_the_stack)->area + PATTERN_SIZE_BYTES)
 
 #endif
-
-/*
- *  Obtain a properly typed pointer to the area to check.
- */
-#define Stack_check_Get_pattern_area( _the_stack ) \
-  (Stack_check_Control *) Stack_check_Get_pattern( _the_stack )
 
 /*
  *  The assumption is that if the pattern gets overwritten, the task
  *  is too close.  This defines the usable stack memory.
  */
 #define Stack_check_usable_stack_size(_the_stack) \
-    ((_the_stack)->size - sizeof(Stack_check_Control))
+    ((_the_stack)->size - PATTERN_SIZE_BYTES)
 
 #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
   /*
@@ -169,23 +165,8 @@ static inline bool Stack_check_Frame_pointer_in_range(
  */
 static void Stack_check_Initialize( void )
 {
-  int       i;
-  uint32_t *p;
-  static    uint32_t pattern[ 4 ] = {
-    0xFEEDF00D, 0x0BAD0D06,  /* FEED FOOD to  BAD DOG */
-    0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
-  };
-
   if ( Stack_check_Initialized )
     return;
-
-  /*
-   * Dope the pattern and fill areas
-   */
-  p = Stack_check_Pattern.pattern;
-  for ( i = 0; i < PATTERN_SIZE_WORDS; i++ ) {
-      p[i] = pattern[ i%4 ];
-  }
 
   /*
    * If appropriate, setup the interrupt stack for high water testing
@@ -201,6 +182,15 @@ static void Stack_check_Initialize( void )
   #endif
 
   Stack_check_Initialized = 1;
+}
+
+static bool Stack_check_Is_pattern_valid(const Thread_Control *the_thread)
+{
+  return memcmp(
+    Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
+    Stack_check_Pattern,
+    PATTERN_SIZE_BYTES
+  ) == 0;
 }
 
 /*
@@ -226,14 +216,14 @@ void rtems_stack_checker_begin_extension(
   Thread_Control *the_thread
 )
 {
-  Stack_check_Control  *the_pattern;
-
   if ( the_thread->Object.id == 0 )        /* skip system tasks */
     return;
 
-  the_pattern = Stack_check_Get_pattern_area(&the_thread->Start.Initial_stack);
-
-  *the_pattern = Stack_check_Pattern;
+  memcpy(
+    Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
+    Stack_check_Pattern,
+    PATTERN_SIZE_BYTES
+  );
 }
 
 /*
@@ -245,16 +235,14 @@ void rtems_stack_checker_begin_extension(
  *  NOTE: The system is in a questionable state... we may not get
  *        the following message out.
  */
-void Stack_check_report_blown_task(
-  Thread_Control *running,
+static void Stack_check_report_blown_task(
+  const Thread_Control *running,
   bool pattern_ok
-) RTEMS_NO_RETURN;
-
-void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
+)
 {
-  Stack_Control *stack = &running->Start.Initial_stack;
-  void          *pattern_area = Stack_check_Get_pattern(stack);
-  char           name[32];
+  const Stack_Control *stack = &running->Start.Initial_stack;
+  void                *pattern_area = Stack_check_Get_pattern(stack);
+  char                 name[32];
 
   printk("BLOWN STACK!!!\n");
   printk("task control block: 0x%08" PRIxPTR "\n", (intptr_t) running);
@@ -305,20 +293,15 @@ void rtems_stack_checker_switch_extension(
   Thread_Control *heir RTEMS_UNUSED
 )
 {
-  Stack_Control *the_stack = &running->Start.Initial_stack;
-  void          *pattern;
-  bool           sp_ok;
-  bool           pattern_ok = true;
-
-  pattern = Stack_check_Get_pattern_area(the_stack);
+  bool sp_ok;
+  bool pattern_ok;
 
   /*
    *  Check for an out of bounds stack pointer or an overwrite
    */
-  sp_ok = Stack_check_Frame_pointer_in_range( the_stack );
+  sp_ok = Stack_check_Frame_pointer_in_range( running );
 
-  pattern_ok = (!memcmp( pattern,
-            (void *) Stack_check_Pattern.pattern, PATTERN_SIZE_BYTES));
+  pattern_ok = Stack_check_Is_pattern_valid( running );
 
   if ( !sp_ok || !pattern_ok ) {
     Stack_check_report_blown_task( running, pattern_ok );
@@ -330,37 +313,7 @@ void rtems_stack_checker_switch_extension(
  */
 bool rtems_stack_checker_is_blown( void )
 {
-  Thread_Control *executing = _Thread_Get_executing();
-  Stack_Control  *the_stack = &executing->Start.Initial_stack;
-  bool            sp_ok;
-  bool            pattern_ok = true;
-
-  /*
-   *  Check for an out of bounds stack pointer
-   */
-
-  sp_ok = Stack_check_Frame_pointer_in_range( the_stack );
-
-  /*
-   * The stack checker must be initialized before the pattern is there
-   * to check.
-   */
-  if ( Stack_check_Initialized ) {
-    pattern_ok = (!memcmp(
-      Stack_check_Get_pattern(the_stack),
-      (void *) Stack_check_Pattern.pattern,
-      PATTERN_SIZE_BYTES
-    ));
-  }
-
-
-  /*
-   * Let's report as much as we can.
-   */
-  if ( !sp_ok || !pattern_ok ) {
-    Stack_check_report_blown_task( executing, pattern_ok );
-    /* DOES NOT RETURN */
-  }
+  rtems_stack_checker_switch_extension( _Thread_Get_executing(), NULL );
 
   /*
    * The Stack Pointer and the Pattern Area are OK so return false.
