@@ -29,10 +29,16 @@
 #include <libcpu/arm-cp15.h>
 #include <bsp.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/smp.h>
+#endif
 
 void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 {
   uint32_t sctlr_val;
+#ifdef RTEMS_SMP
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
+#endif /* RTEMS_SMP */
 
   sctlr_val = arm_cp15_get_control();
 
@@ -48,14 +54,29 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
        * If the data cache is on then ensure that it is clean
        * before switching off to be extra carefull.
        */
-      rtems_cache_flush_entire_data();
-      rtems_cache_invalidate_entire_data();
+#ifdef RTEMS_SMP
+      if (cpu_index_self != 0) {
+        arm_cp15_data_cache_clean_level(0);
+        arm_cp15_cache_invalidate_level(0, 0);
+      } else
+#endif /* RTEMS_SMP */
+      {
+        rtems_cache_flush_entire_data();
+        rtems_cache_invalidate_entire_data();
+      }
     }
     arm_cp15_flush_prefetch_buffer();
     sctlr_val &= ~(ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M | ARM_CP15_CTRL_A);
     arm_cp15_set_control(sctlr_val);
   }
-  rtems_cache_invalidate_entire_data();
+#ifdef RTEMS_SMP
+  if (cpu_index_self != 0) {
+    arm_cp15_cache_invalidate_level(0, 0);
+  } else
+#endif /* RTEMS_SMP */
+  {
+    rtems_cache_invalidate_entire_data();
+  }
   rtems_cache_invalidate_entire_instruction();
   arm_cp15_branch_predictor_invalidate_all();
   arm_cp15_tlb_invalidate();
@@ -66,6 +87,14 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
 
   /* Clear Secure or Non-secure Vector Base Address Register */
   arm_cp15_set_vector_base_address(0);
+
+#ifdef RTEMS_SMP
+  if (cpu_index_self == 0) {
+    rpi_ipi_initialize();
+  } else {
+    rpi_start_rtems_on_secondary_processor();
+  }
+#endif
 }
 
 void BSP_START_TEXT_SECTION bsp_start_hook_1(void)

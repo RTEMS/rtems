@@ -32,6 +32,11 @@
 #include <rtems/bspIo.h>
 #include <strings.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/smp.h>
+#include <rtems/score/smpimpl.h>
+#endif
+
 typedef struct {
   unsigned long enable_reg_addr;
   unsigned long disable_reg_addr;
@@ -96,6 +101,19 @@ void bsp_interrupt_dispatch(void)
   unsigned int pend_bit;
 
   rtems_vector_number vector = 255;
+
+#ifdef RTEMS_SMP
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  uint32_t local_source = BCM2835_REG(BCM2836_IRQ_SOURCE_REG(cpu_index_self));
+
+  if ( local_source & BCM2836_IRQ_SOURCE_MBOX3 ) {
+    /* reset mailbox 3 contents to zero */
+    BCM2835_REG(BCM2836_MAILBOX_3_READ_CLEAR_BASE + 0x10 * cpu_index_self) = 0xffffffff;
+    _SMP_Inter_processor_interrupt_handler();
+  }
+  if ( cpu_index_self != 0 )
+    return;
+#endif /* RTEMS_SMP */
 
   pend = BCM2835_REG(BCM2835_IRQ_BASIC);
   if ( pend & BCM2835_IRQ_BASIC_SPEEDUP_USED_BITS ) {

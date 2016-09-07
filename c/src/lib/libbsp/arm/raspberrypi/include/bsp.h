@@ -50,6 +50,9 @@ void  rpi_video_init(void);
 void  rpi_fb_outch  (char);
 int rpi_video_is_initialized(void);
 
+void rpi_ipi_initialize(void);
+void rpi_start_rtems_on_secondary_processor(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

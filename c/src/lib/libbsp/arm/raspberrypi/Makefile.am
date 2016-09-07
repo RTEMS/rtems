@@ -100,6 +100,10 @@ libbsp_a_SOURCES += ../../shared/bspreset_loop.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/cmdline.c
 libbsp_a_SOURCES += startup/bspgetworkarea.c
+if HAS_SMP
+libbsp_a_SOURCES += startup/bspsmp_api.c
+libbsp_a_SOURCES += startup/bspsmp_init.c
+endif
 
 # IRQ
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c

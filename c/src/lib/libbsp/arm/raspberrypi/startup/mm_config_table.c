@@ -82,6 +82,14 @@ const arm_cp15_start_section_config arm_cp15_start_mmu_config_table[] = {
     .end =   RPI_PERIPHERAL_BASE + RPI_PERIPHERAL_SIZE,
     .flags = ARMV7_MMU_DEVICE
   }
+#if (BSP_IS_RPI2 == 1)
+  /* Core local peripherals area - timer, mailboxes */
+  , {
+    .begin = BCM2836_CORE_LOCAL_PERIPH_BASE,
+    .end =   BCM2836_CORE_LOCAL_PERIPH_BASE + BCM2836_CORE_LOCAL_PERIPH_SIZE,
+    .flags = ARMV7_MMU_DEVICE
+  }
+#endif
 };
 
 const size_t arm_cp15_start_mmu_config_table_size =

@@ -61,7 +61,7 @@ REGION_ALIAS ("REGION_STACK", RAM);
 REGION_ALIAS ("REGION_NOCACHE", RAM);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
+bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 3008;
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;
