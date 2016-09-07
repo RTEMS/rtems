@@ -148,7 +148,7 @@ EXTRA_DIST += serdbg/README
 
 ## stackchk
 noinst_LIBRARIES += libstackchk.a
-libstackchk_a_SOURCES = stackchk/check.c stackchk/internal.h \
+libstackchk_a_SOURCES = stackchk/check.c \
     stackchk/stackchk.h
 
 EXTRA_DIST += stackchk/README

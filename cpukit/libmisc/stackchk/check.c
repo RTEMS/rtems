@@ -43,7 +43,31 @@
 #include <rtems/printer.h>
 #include <rtems/stackchk.h>
 #include <rtems/score/percpu.h>
-#include "internal.h"
+
+/*
+ *  This structure is used to fill in and compare the "end of stack"
+ *  marker pattern.
+ *  pattern area must be a multiple of 4 words.
+ */
+
+#ifdef CPU_STACK_CHECK_SIZE
+#define PATTERN_SIZE_WORDS      (((CPU_STACK_CHECK_SIZE / 4) + 3) & ~0x3)
+#else
+#define PATTERN_SIZE_WORDS      (4)
+#endif
+
+#define PATTERN_SIZE_BYTES      (PATTERN_SIZE_WORDS * sizeof(uint32_t))
+
+/*
+ *  The pattern used to fill the entire stack.
+ */
+
+#define BYTE_PATTERN 0xA5
+#define U32_PATTERN 0xA5A5A5A5
+
+typedef struct {
+   uint32_t    pattern[ PATTERN_SIZE_WORDS ];
+} Stack_check_Control;
 
 /*
  *  Variable to indicate when the stack checker has been initialized.
