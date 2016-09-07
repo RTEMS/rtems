@@ -3224,38 +3224,44 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   )
 
 #ifdef CONFIGURE_INIT
+  typedef union {
+    Scheduler_Node Base;
+    #ifdef CONFIGURE_SCHEDULER_CBS
+      Scheduler_CBS_Node CBS;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_EDF
+      Scheduler_EDF_Node EDF;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_PRIORITY
+      Scheduler_priority_Node Priority;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
+      Scheduler_SMP_Node Simple_SMP;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
+      Scheduler_priority_SMP_Node Priority_SMP;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
+      Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_STRONG_APA
+      Scheduler_strong_APA_Node Strong_APA;
+    #endif
+    #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
+      CONFIGURE_SCHEDULER_USER_PER_THREAD User;
+    #endif
+  } Configuration_Scheduler_node;
+
+  #ifdef RTEMS_SMP
+    const size_t _Scheduler_Node_size = sizeof( Configuration_Scheduler_node );
+  #endif
+
   typedef struct {
     Thread_Control Control;
     #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
       void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
     #endif
-    union {
-      Scheduler_Node Base;
-      #ifdef CONFIGURE_SCHEDULER_CBS
-        Scheduler_CBS_Node CBS;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_EDF
-        Scheduler_EDF_Node EDF;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_PRIORITY
-        Scheduler_priority_Node Priority;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
-        Scheduler_SMP_Node Simple_SMP;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
-        Scheduler_priority_SMP_Node Priority_SMP;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
-        Scheduler_priority_affinity_SMP_Node Priority_affinity_SMP;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_STRONG_APA
-        Scheduler_strong_APA_Node Strong_APA;
-      #endif
-      #ifdef CONFIGURE_SCHEDULER_USER_PER_THREAD
-        CONFIGURE_SCHEDULER_USER_PER_THREAD User;
-      #endif
-    } Scheduler;
+    Configuration_Scheduler_node Scheduler_nodes[ CONFIGURE_SCHEDULER_COUNT ];
     RTEMS_API_Control API_RTEMS;
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;
@@ -3273,8 +3279,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   const Thread_Control_add_on _Thread_Control_add_ons[] = {
     {
-      offsetof( Configuration_Thread_control, Control.Scheduler.node ),
-      offsetof( Configuration_Thread_control, Scheduler )
+      offsetof( Configuration_Thread_control, Control.Scheduler.nodes ),
+      offsetof( Configuration_Thread_control, Scheduler_nodes )
     }, {
       offsetof(
         Configuration_Thread_control,

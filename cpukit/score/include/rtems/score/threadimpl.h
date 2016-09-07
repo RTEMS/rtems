@@ -993,7 +993,23 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_own_node(
 #if defined(RTEMS_SMP)
   return the_thread->Scheduler.own_node;
 #else
-  return the_thread->Scheduler.node;
+  return the_thread->Scheduler.nodes;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
+  const Thread_Control *the_thread,
+  size_t                scheduler_index
+)
+{
+#if defined(RTEMS_SMP)
+  return (Scheduler_Node *)
+    ( (uintptr_t) the_thread->Scheduler.nodes
+      + scheduler_index * _Scheduler_Node_size );
+#else
+  _Assert( scheduler_index == 0 );
+  (void) scheduler_index;
+  return the_thread->Scheduler.nodes;
 #endif
 }
 

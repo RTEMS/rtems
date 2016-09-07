@@ -188,6 +188,15 @@ typedef struct Scheduler_Node {
   } Priority;
 } Scheduler_Node;
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief The size of a scheduler node.
+ *
+ * This value is provided via <rtems/confdefs.h>.
+ */
+extern const size_t _Scheduler_Node_size;
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

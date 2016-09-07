@@ -53,7 +53,11 @@ bool _Thread_Initialize(
   bool                     extension_status;
   size_t                   i;
   Scheduler_Node          *scheduler_node;
-  bool                     scheduler_node_initialized = false;
+#if defined(RTEMS_SMP)
+  Scheduler_Node          *scheduler_node_for_index;
+  const Scheduler_Control *scheduler_for_index;
+#endif
+  size_t                   scheduler_index;
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
 #if defined( RTEMS_SMP )
@@ -104,6 +108,8 @@ bool _Thread_Initialize(
      stack,
      actual_stack_size
   );
+
+  scheduler_index = 0;
 
   /* Thread-local storage (TLS) area allocation */
   if ( tls_size > 0 ) {
@@ -174,13 +180,54 @@ bool _Thread_Initialize(
     #endif
   }
 
-  scheduler_node = the_thread->Scheduler.node;
+#if defined(RTEMS_SMP)
+  scheduler_node_for_index = the_thread->Scheduler.nodes;
+  scheduler_for_index = &_Scheduler_Table[ 0 ];
+
+  while ( scheduler_index < _Scheduler_Count ) {
+    Priority_Control priority_for_index;
+
+    if ( scheduler_for_index == scheduler ) {
+      priority_for_index = priority;
+      scheduler_node = scheduler_node_for_index;
+    } else {
+      priority_for_index = 0;
+    }
+
+    _Scheduler_Node_initialize(
+      scheduler_for_index,
+      scheduler_node_for_index,
+      the_thread,
+      priority_for_index
+    );
+    scheduler_node_for_index = (Scheduler_Node *)
+      ( (uintptr_t) scheduler_node_for_index + _Scheduler_Node_size );
+    ++scheduler_for_index;
+    ++scheduler_index;
+  }
+#else
+  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  _Scheduler_Node_initialize(
+    scheduler,
+    scheduler_node,
+    the_thread,
+    priority
+  );
+  scheduler_index = 1;
+#endif
+
+  _Priority_Node_initialize( &the_thread->Real_priority, priority );
+  _Priority_Initialize_one(
+    &scheduler_node->Wait.Priority,
+    &the_thread->Real_priority
+  );
 
 #if defined(RTEMS_SMP)
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
   the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = scheduler_node;
+  the_thread->Scheduler.node = scheduler_node;
   _Resource_Node_initialize( &the_thread->Resource_node );
   _ISR_lock_Initialize(
     &the_thread->Wait.Lock.Default,
@@ -201,14 +248,6 @@ bool _Thread_Initialize(
   the_thread->Start.initial_priority  = priority;
 
   RTEMS_STATIC_ASSERT( THREAD_WAIT_FLAGS_INITIAL == 0, Wait_flags );
-
-  _Priority_Node_initialize( &the_thread->Real_priority, priority );
-  _Priority_Initialize_one(
-    &scheduler_node->Wait.Priority,
-    &the_thread->Real_priority
-  );
-  _Scheduler_Node_initialize( scheduler, scheduler_node, the_thread, priority );
-  scheduler_node_initialized = true;
 
   /* POSIX Keys */
   _RBTree_Initialize_empty( &the_thread->Keys.Key_value_pairs );
@@ -234,9 +273,19 @@ bool _Thread_Initialize(
 
 failed:
 
-  if ( scheduler_node_initialized ) {
+#if defined(RTEMS_SMP)
+  while ( scheduler_index > 0 ) {
+    scheduler_node_for_index = (Scheduler_Node *)
+      ( (uintptr_t) scheduler_node_for_index - _Scheduler_Node_size );
+    --scheduler_for_index;
+    --scheduler_index;
+    _Scheduler_Node_destroy( scheduler_for_index, scheduler_node_for_index );
+  }
+#else
+  if ( scheduler_index > 0 ) {
     _Scheduler_Node_destroy( scheduler, scheduler_node );
   }
+#endif
 
   _Workspace_Free( the_thread->Start.tls_area );
 

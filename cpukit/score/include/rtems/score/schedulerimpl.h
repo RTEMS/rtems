@@ -772,7 +772,11 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
   const Thread_Control *the_thread
 )
 {
+#if defined(RTEMS_SMP)
   return the_thread->Scheduler.node;
+#else
+  return the_thread->Scheduler.nodes;
+#endif
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(
@@ -1377,7 +1381,8 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   Priority_Control         priority
 )
 {
-  Scheduler_Node *own_node;
+  Scheduler_Node *new_scheduler_node;
+  Scheduler_Node *old_scheduler_node;
 
   if (
     _Thread_Owns_resources( the_thread )
@@ -1386,22 +1391,34 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     return STATUS_RESOURCE_IN_USE;
   }
 
-  own_node = _Thread_Scheduler_get_own_node( the_thread );
-  _Priority_Plain_extract( &own_node->Wait.Priority, &the_thread->Real_priority );
+  old_scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  _Priority_Plain_extract(
+    &old_scheduler_node->Wait.Priority,
+    &the_thread->Real_priority
+  );
 
-  if ( !_Priority_Is_empty( &own_node->Wait.Priority ) ) {
+  if ( !_Priority_Is_empty( &old_scheduler_node->Wait.Priority ) ) {
     _Priority_Plain_insert(
-      &own_node->Wait.Priority,
+      &old_scheduler_node->Wait.Priority,
       &the_thread->Real_priority,
       the_thread->Real_priority.priority
     );
     return STATUS_RESOURCE_IN_USE;
   }
 
+#if defined(RTEMS_SMP)
+  new_scheduler_node = _Thread_Scheduler_get_node_by_index(
+    the_thread,
+    _Scheduler_Get_index( new_scheduler )
+  );
+#else
+  new_scheduler_node = old_scheduler_node;
+#endif
+
   the_thread->Start.initial_priority = priority;
   _Priority_Node_set_priority( &the_thread->Real_priority, priority );
   _Priority_Initialize_one(
-    &own_node->Wait.Priority,
+    &new_scheduler_node->Wait.Priority,
     &the_thread->Real_priority
   );
 
@@ -1420,15 +1437,11 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
         _Scheduler_Block( the_thread );
       }
 
-      _Scheduler_Node_destroy( old_scheduler, own_node );
       the_thread->Scheduler.own_control = new_scheduler;
       the_thread->Scheduler.control = new_scheduler;
-      _Scheduler_Node_initialize(
-        new_scheduler,
-        own_node,
-        the_thread,
-        priority
-      );
+      the_thread->Scheduler.own_node = new_scheduler_node;
+      the_thread->Scheduler.node = new_scheduler_node;
+      _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
 
       if ( _States_Is_ready( current_state ) ) {
         _Scheduler_Unblock( the_thread );
@@ -1439,7 +1452,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 #endif
 
-  _Scheduler_Node_set_priority( own_node, priority, false );
+  _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
   _Scheduler_Update_priority( the_thread );
   return STATUS_SUCCESSFUL;
 }

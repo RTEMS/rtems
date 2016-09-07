@@ -271,7 +271,6 @@ typedef struct {
    * priority and ask for help operations.
    */
   Scheduler_Node *own_node;
-#endif
 
   /**
    * @brief The scheduler node of this thread.
@@ -284,12 +283,18 @@ typedef struct {
    */
   Scheduler_Node *node;
 
-#if defined(RTEMS_SMP)
   /**
    * @brief The processor assigned by the current scheduler.
    */
   struct Per_CPU_Control *cpu;
 #endif
+
+  /**
+   * @brief The scheduler nodes of this thread.
+   *
+   * Each thread has a scheduler node for each scheduler instance.
+   */
+  Scheduler_Node *nodes;
 } Thread_Scheduler_control;
 
 /**
