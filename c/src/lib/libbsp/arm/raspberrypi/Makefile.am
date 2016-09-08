@@ -96,7 +96,6 @@ libbsp_a_SOURCES += ../shared/startup/bsp-start-in-hyp-support.S
 endif
 
 # Startup
-libbsp_a_SOURCES += ../../shared/bspreset_loop.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/cmdline.c
 libbsp_a_SOURCES += startup/bspgetworkarea.c
@@ -104,6 +103,9 @@ if HAS_SMP
 libbsp_a_SOURCES += startup/bspsmp.c
 libbsp_a_SOURCES += startup/bspsmp_init.c
 endif
+
+# Restart
+libbsp_a_SOURCES += startup/bspreset.c
 
 # IRQ
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
