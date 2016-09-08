@@ -57,6 +57,21 @@ typedef struct {
 
 static test_context test_instance;
 
+static void test_task_get_priority_not_defined(test_context *ctx)
+{
+  rtems_status_code sc;
+  rtems_id scheduler_id;
+  rtems_task_priority priority;
+
+  sc = rtems_scheduler_ident(SCHED_B, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  priority = 0;
+  sc = rtems_task_get_priority(RTEMS_SELF, scheduler_id, &priority);
+  rtems_test_assert(sc == RTEMS_NOT_DEFINED);
+  rtems_test_assert(priority == 0);
+}
+
 static void start_task(
   test_context *ctx,
   task_id id,
@@ -340,6 +355,7 @@ static void test(void)
   test_context *ctx = &test_instance;
 
   test_init(ctx);
+  test_task_get_priority_not_defined(ctx);
   test_simple_inheritance(ctx);
   test_dequeue_order_one_scheduler_instance(ctx);
   test_simple_boosting(ctx);

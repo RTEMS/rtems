@@ -411,6 +411,44 @@ static void test_scheduler_get_processors(void)
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
+static void test_task_get_priority(void)
+{
+  rtems_status_code sc;
+  rtems_id scheduler_id;
+  rtems_task_priority priority;
+  rtems_task_priority priority_2;
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_get_priority(RTEMS_SELF, scheduler_id, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  priority = 0;
+
+  sc = rtems_task_get_priority(RTEMS_SELF, invalid_id, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+  rtems_test_assert(priority == 0);
+
+  sc = rtems_task_get_priority(invalid_id, scheduler_id, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+  rtems_test_assert(priority == 0);
+
+  sc = rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority != 0);
+
+  priority_2 = 0;
+  sc = rtems_task_get_priority(RTEMS_SELF, scheduler_id, &priority_2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority_2 == priority);
+
+  priority_2 = 0;
+  sc = rtems_task_get_priority(rtems_task_self(), scheduler_id, &priority_2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority_2 == priority);
+}
+
 static void Init(rtems_task_argument arg)
 {
   rtems_resource_snapshot snapshot;
@@ -425,6 +463,7 @@ static void Init(rtems_task_argument arg)
   test_task_get_set_scheduler();
   test_scheduler_ident();
   test_scheduler_get_processors();
+  test_task_get_priority();
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 

@@ -320,6 +320,35 @@ rtems_status_code rtems_task_set_priority(
 );
 
 /**
+ * @brief Gets the current priority of the specified task with respect to the
+ * specified scheduler instance.
+ *
+ * The current priority reflects temporary priority adjustments due to locking
+ * protocols, the rate-monotonic period objects on some schedulers and other
+ * mechanisms.
+ *
+ * @param[in] task_id Identifier of the task.  Use @ref RTEMS_SELF to select
+ *   the executing task.
+ * @param[in] scheduler_id Identifier of the scheduler instance.
+ * @param[out] priority Returns the current priority of the specified task with
+ *   respect to the specified scheduler instance.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_ILLEGAL_ON_REMOTE_OBJECT Directive is illegal on remote tasks.
+ * @retval RTEMS_INVALID_ADDRESS The priority parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid task or scheduler identifier.
+ * @retval RTEMS_NOT_DEFINED The task has no priority within the specified
+ *   scheduler instance.  This error is only possible on SMP configurations.
+ *
+ * @see rtems_scheduler_ident().
+ */
+rtems_status_code rtems_task_get_priority(
+  rtems_id             task_id,
+  rtems_id             scheduler_id,
+  rtems_task_priority *priority
+);
+
+/**
  *  @brief RTEMS Start Task
  *
  *  RTEMS Task Manager
