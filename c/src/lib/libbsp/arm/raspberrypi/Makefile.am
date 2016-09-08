@@ -101,7 +101,7 @@ libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/cmdline.c
 libbsp_a_SOURCES += startup/bspgetworkarea.c
 if HAS_SMP
-libbsp_a_SOURCES += startup/bspsmp_api.c
+libbsp_a_SOURCES += startup/bspsmp.c
 libbsp_a_SOURCES += startup/bspsmp_init.c
 endif
 
