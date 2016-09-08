@@ -262,6 +262,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Wait_for_ownership(
     _Scheduler_Thread_change_help_state( executing, SCHEDULER_HELP_ACTIVE_RIVAL );
   rival.status = MRSP_WAIT_FOR_OWNERSHIP;
 
+  _Chain_Initialize_node( &rival.Node );
   _Chain_Append_unprotected( &mrsp->Rivals, &rival.Node );
   _Resource_Add_rival( &mrsp->Resource, &executing->Resource_node );
   _Resource_Node_set_dependency( &executing->Resource_node, &mrsp->Resource );
