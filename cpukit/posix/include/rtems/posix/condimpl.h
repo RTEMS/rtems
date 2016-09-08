@@ -48,7 +48,7 @@ extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
   POSIX_Condition_variables_Control *the_cond,
-  pthread_condattr_t *the_attr
+  const pthread_condattr_t          *the_attr
 )
 {
   _Thread_queue_Initialize( &the_cond->Wait_queue );
