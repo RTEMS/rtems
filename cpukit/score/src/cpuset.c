@@ -31,7 +31,7 @@ static CPU_set_Control cpuset_default;
 /*
  * _CPU_set_Handler_initialization
  */
-static void _CPU_set_Handler_initialization()
+static void _CPU_set_Handler_initialization(void)
 {
   uint32_t cpu_count;
   uint32_t cpu_index;
