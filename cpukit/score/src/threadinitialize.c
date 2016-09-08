@@ -205,6 +205,11 @@ bool _Thread_Initialize(
     ++scheduler_for_index;
     ++scheduler_index;
   }
+
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Wait_nodes,
+    &scheduler_node->Thread.Wait_node
+  );
 #else
   scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
   _Scheduler_Node_initialize(

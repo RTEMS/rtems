@@ -138,6 +138,18 @@ typedef struct Scheduler_Node {
    * not SCHEDULER_HELP_YOURSELF.
    */
   struct _Thread_Control *accepts_help;
+
+  /**
+   * @brief Block to register and manage this scheduler node in the thread
+   * control block of the owner of this scheduler node.
+   */
+  struct {
+    /**
+     * @brief Node to add this scheduler node to
+     * Thread_Control::Scheduler::Wait_nodes.
+     */
+    Chain_Node Wait_node;
+  } Thread;
 #endif
 
   /**

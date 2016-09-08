@@ -287,6 +287,14 @@ typedef struct {
    * @brief The processor assigned by the current scheduler.
    */
   struct Per_CPU_Control *cpu;
+
+  /**
+   * @brief Scheduler nodes immediately available to the thread by its home
+   * scheduler instance and due to thread queue ownerships.
+   *
+   * This chain is protected by the thread wait lock.
+   */
+  Chain_Control Wait_nodes;
 #endif
 
   /**

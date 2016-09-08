@@ -1423,6 +1423,13 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   );
 
 #if defined(RTEMS_SMP)
+  _Chain_Extract_unprotected( &old_scheduler_node->Thread.Wait_node );
+  _Assert( _Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Wait_nodes,
+    &new_scheduler_node->Thread.Wait_node
+  );
+
   {
     const Scheduler_Control *old_scheduler;
 
