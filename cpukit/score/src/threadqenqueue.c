@@ -114,6 +114,9 @@ static bool _Thread_queue_Link_add(
   Thread_queue_Queue *recursive_target;
   ISR_lock_Context    lock_context;
 
+  link->source = source;
+  link->target = target;
+
   links = &_Thread_queue_Links;
   recursive_target = target;
 
@@ -136,8 +139,6 @@ static bool _Thread_queue_Link_add(
     }
   }
 
-  link->source = source;
-  link->target = target;
   _RBTree_Insert_inline(
     &links->Links,
     &link->Registry_node,
@@ -162,6 +163,9 @@ static void _Thread_queue_Link_remove( Thread_queue_Link *link )
 }
 #endif
 
+#if !defined(RTEMS_SMP)
+static
+#endif
 void _Thread_queue_Path_release_critical(
   Thread_queue_Context *queue_context
 )
@@ -173,51 +177,80 @@ void _Thread_queue_Path_release_critical(
   head = _Chain_Head( &queue_context->Path.Links );
   node = _Chain_Last( &queue_context->Path.Links );
 
-  if ( head != node ) {
+  while ( head != node ) {
     Thread_queue_Link *link;
-
-    /*
-     * The terminal link may have an owner which does not wait on a thread
-     * queue.
-     */
 
     link = THREAD_QUEUE_LINK_OF_PATH_NODE( node );
 
-    if ( link->Lock_context.Wait.queue == NULL ) {
-      _Thread_Wait_release_default_critical(
-        link->owner,
-        &link->Lock_context.Lock_context
-      );
-
-      node = _Chain_Previous( node );
-#if defined(RTEMS_DEBUG)
-      _Chain_Set_off_chain( &link->Path_node );
-#endif
-    }
-
-    while ( head != node ) {
-      /* The other links have an owner which waits on a thread queue */
-      link = THREAD_QUEUE_LINK_OF_PATH_NODE( node );
-      _Assert( link->Lock_context.Wait.queue != NULL );
-
+    if ( link->Lock_context.Wait.queue != NULL ) {
       _Thread_queue_Link_remove( link );
       _Thread_Wait_release_queue_critical(
         link->Lock_context.Wait.queue,
         &link->Lock_context
       );
       _Thread_Wait_remove_request( link->owner, &link->Lock_context );
-
-      node = _Chain_Previous( node );
-#if defined(RTEMS_DEBUG)
-      _Chain_Set_off_chain( &link->Path_node );
-#endif
+    } else {
+      _Thread_Wait_release_default_critical(
+        link->owner,
+        &link->Lock_context.Lock_context
+      );
     }
+
+    node = _Chain_Previous( node );
+#if defined(RTEMS_DEBUG)
+    _Chain_Set_off_chain( &link->Path_node );
+#endif
   }
 #else
   (void) queue_context;
 #endif
 }
 
+#if defined(RTEMS_SMP)
+static void _Thread_queue_Path_append_deadlock_thread(
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Thread_Control *deadlock;
+
+  /*
+   * In case of a deadlock, we must obtain the thread wait default lock for the
+   * first thread on the path that tries to enqueue on a thread queue.  This
+   * thread can be identified by the thread wait operations.  This lock acquire
+   * is necessary for the timeout and explicit thread priority changes, see
+   * _Thread_Priority_perform_actions().
+   */
+
+  deadlock = NULL;
+
+  while ( the_thread->Wait.operations != &_Thread_queue_Operations_default ) {
+    the_thread = the_thread->Wait.queue->owner;
+    deadlock = the_thread;
+  }
+
+  if ( deadlock != NULL ) {
+    Thread_queue_Link *link;
+
+    link = &queue_context->Path.Deadlock;
+    _Chain_Initialize_node( &link->Path_node );
+    _Chain_Append_unprotected(
+      &queue_context->Path.Links,
+      &link->Path_node
+    );
+    link->owner = deadlock;
+    link->Lock_context.Wait.queue = NULL;
+    _Thread_Wait_acquire_default_critical(
+      deadlock,
+      &link->Lock_context.Lock_context
+    );
+  }
+}
+#endif
+
+#if !defined(RTEMS_SMP)
+static
+#endif
 bool _Thread_queue_Path_acquire_critical(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
@@ -249,12 +282,12 @@ bool _Thread_queue_Path_acquire_critical(
     return false;
   }
 
-  _RBTree_Initialize_node( &queue_context->Path.Start.Registry_node );
-  _Chain_Initialize_node( &queue_context->Path.Start.Path_node );
   _Chain_Initialize_node(
     &queue_context->Path.Start.Lock_context.Wait.Gate.Node
   );
   link = &queue_context->Path.Start;
+  _RBTree_Initialize_node( &link->Registry_node );
+  _Chain_Initialize_node( &link->Path_node );
 
   do {
     _Chain_Append_unprotected( &queue_context->Path.Links, &link->Path_node );
@@ -293,6 +326,7 @@ bool _Thread_queue_Path_acquire_critical(
         }
       } else {
         link->Lock_context.Wait.queue = NULL;
+        _Thread_queue_Path_append_deadlock_thread( owner, queue_context );
         return false;
       }
     } else {
@@ -353,7 +387,7 @@ void _Thread_queue_Enqueue_critical(
   }
 #endif
 
-  _Thread_Wait_claim( the_thread, queue, operations );
+  _Thread_Wait_claim( the_thread, queue );
 
   if ( !_Thread_queue_Path_acquire_critical( queue, the_thread, queue_context ) ) {
     _Thread_queue_Path_release_critical( queue_context );
@@ -365,6 +399,7 @@ void _Thread_queue_Enqueue_critical(
   }
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_claim_finalize( the_thread, operations );
   ( *operations->enqueue )( queue, the_thread, queue_context );
 
   _Thread_queue_Path_release_critical( queue_context );

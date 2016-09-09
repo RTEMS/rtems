@@ -280,12 +280,10 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
 #if defined(RTEMS_SMP)
   size_t i;
 
-  _Priority_Node_initialize( &heads->Boost_priority, 0 );
-  _Priority_Node_set_inactive( &heads->Boost_priority );
-
   for ( i = 0; i < _Scheduler_Count; ++i ) {
     _Chain_Initialize_node( &heads->Priority[ i ].Node );
     _Priority_Initialize_empty( &heads->Priority[ i ].Queue );
+    heads->Priority[ i ].Queue.scheduler = &_Scheduler_Table[ i ];
   }
 #endif
 
@@ -955,6 +953,7 @@ void _Thread_queue_Unblock_proxy(
 );
 #endif
 
+#if defined(RTEMS_SMP)
 bool _Thread_queue_Path_acquire_critical(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
@@ -964,6 +963,7 @@ bool _Thread_queue_Path_acquire_critical(
 void _Thread_queue_Path_release_critical(
   Thread_queue_Context *queue_context
 );
+#endif
 
 /**
  * @brief Helper structure to ensure that all objects containing a thread queue

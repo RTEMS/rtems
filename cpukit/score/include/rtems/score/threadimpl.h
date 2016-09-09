@@ -997,6 +997,20 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_own_node(
 #endif
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_home_node(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  _Assert( !_Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
+  return SCHEDULER_NODE_OF_THREAD_WAIT_NODE(
+    _Chain_First( &the_thread->Scheduler.Wait_nodes )
+  );
+#else
+  return the_thread->Scheduler.nodes;
+#endif
+}
+
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
   const Thread_Control *the_thread,
   size_t                scheduler_index
@@ -1308,21 +1322,22 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release(
 }
 
 /**
- * @brief Claims the thread wait queue and operations.
+ * @brief Claims the thread wait queue.
  *
  * The caller must not be the owner of the default thread wait lock.  The
- * caller must be the owner of the corresponding thread queue lock.
+ * caller must be the owner of the corresponding thread queue lock.  The
+ * registration of the corresponding thread queue operations is deferred and
+ * done after the deadlock detection.  This is crucial to support timeouts on
+ * SMP configurations.
  *
  * @param[in] the_thread The thread.
  * @param[in] queue The new thread queue.
- * @param[in] operations The new thread operations.
  *
- * @see _Thread_Wait_restore_default().
+ * @see _Thread_Wait_claim_finalize() and _Thread_Wait_restore_default().
  */
 RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
-  Thread_Control                *the_thread,
-  Thread_queue_Queue            *queue,
-  const Thread_queue_Operations *operations
+  Thread_Control     *the_thread,
+  Thread_queue_Queue *queue
 )
 {
   ISR_lock_Context lock_context;
@@ -1338,9 +1353,23 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_claim(
 #endif
 
   the_thread->Wait.queue = queue;
-  the_thread->Wait.operations = operations;
 
   _Thread_Wait_release_default_critical( the_thread, &lock_context );
+}
+
+/**
+ * @brief Finalizes the thread wait queue claim via registration of the
+ * corresponding thread queue operations.
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] operations The corresponding thread queue operations.
+ */
+RTEMS_INLINE_ROUTINE void _Thread_Wait_claim_finalize(
+  Thread_Control                *the_thread,
+  const Thread_queue_Operations *operations
+)
+{
+  the_thread->Wait.operations = operations;
 }
 
 /**

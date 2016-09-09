@@ -209,6 +209,11 @@ typedef struct Scheduler_Node {
 extern const size_t _Scheduler_Node_size;
 #endif
 
+#if defined(RTEMS_SMP)
+#define SCHEDULER_NODE_OF_THREAD_WAIT_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Scheduler_Node, Thread.Wait_node )
+#endif
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -216,6 +216,12 @@ typedef struct {
      * @brief The start of a thread queue path.
      */
     Thread_queue_Link Start;
+
+    /**
+     * @brief In case of a deadlock, a link for the first thread on the path
+     * that tries to enqueue on a thread queue.
+     */
+    Thread_queue_Link Deadlock;
   } Path;
 #endif
 
@@ -344,11 +350,6 @@ typedef struct _Thread_queue_Heads {
   Chain_Node Free_node;
 
 #if defined(RTEMS_SMP)
-  /**
-   * @brief Boost priority.
-   */
-  Priority_Node Boost_priority;
-
   /**
    * @brief One priority queue per scheduler instance.
    */

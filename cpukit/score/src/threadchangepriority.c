@@ -44,6 +44,16 @@ static void _Thread_Priority_action_add(
   void                 *arg
 )
 {
+  Scheduler_Node *scheduler_node;
+  Thread_Control *the_thread;
+
+  scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
+  the_thread = arg;
+
+  _Chain_Append_unprotected(
+    &the_thread->Scheduler.Wait_nodes,
+    &scheduler_node->Thread.Wait_node
+  );
   _Thread_Set_scheduler_node_priority( priority_aggregation, false );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_ADD );
   _Priority_Actions_add( priority_actions, priority_aggregation );
@@ -55,6 +65,11 @@ static void _Thread_Priority_action_remove(
   void                 *arg
 )
 {
+  Scheduler_Node *scheduler_node;
+
+  scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
+
+  _Chain_Extract_unprotected( &scheduler_node->Thread.Wait_node );
   _Thread_Set_scheduler_node_priority( priority_aggregation, true );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_REMOVE );
   _Priority_Actions_add( priority_actions, priority_aggregation );
@@ -107,7 +122,7 @@ static void _Thread_Priority_do_perform_actions(
           &queue_context->Priority.Actions,
           _Thread_Priority_action_add,
           _Thread_Priority_action_change,
-          NULL
+          the_thread
         );
 #else
         _Priority_Non_empty_insert(
@@ -157,6 +172,7 @@ static void _Thread_Priority_do_perform_actions(
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
     _Thread_queue_Context_add_priority_update( queue_context, the_thread );
+
     ( *operations->priority_actions )(
       queue,
       &queue_context->Priority.Actions
@@ -169,29 +185,27 @@ void _Thread_Priority_perform_actions(
   Thread_queue_Context *queue_context
 )
 {
-#if defined(RTEMS_SMP)
-  Thread_queue_Link *link;
-#endif
-  Thread_Control    *the_thread;
-  size_t             update_count;
+  Thread_Control *the_thread;
+  size_t          update_count;
 
   _Assert( start_of_path != NULL );
 
-#if defined(RTEMS_SMP)
-  link = &queue_context->Path.Start;
-#endif
+  /*
+   * This function is tricky on SMP configurations.  Please note that we do not
+   * use the thread queue path available via the thread queue context.  Instead
+   * we directly use the thread wait information to traverse the thread queue
+   * path.  Thus, we do not necessarily acquire all thread queue locks on our
+   * own.  In case of a deadlock, we use locks acquired by other processors
+   * along the path.
+   */
+
   the_thread = start_of_path;
   update_count = _Thread_queue_Context_save_priority_updates( queue_context );
 
   while ( true ) {
     Thread_queue_Queue *queue;
 
-#if defined(RTEMS_SMP)
-    _Assert( link->owner == the_thread );
-    queue = link->Lock_context.Wait.queue;
-#else
     queue = the_thread->Wait.queue;
-#endif
 
     _Thread_Priority_do_perform_actions(
       the_thread,
@@ -208,10 +222,6 @@ void _Thread_Priority_perform_actions(
     _Assert( queue != NULL );
     the_thread = queue->owner;
     _Assert( the_thread != NULL );
-
-#if defined(RTEMS_SMP)
-    link = THREAD_QUEUE_LINK_OF_PATH_NODE( _Chain_Next( &link->Path_node ) );
-#endif
 
     /*
      * In case the priority action list is non-empty, then the current thread
@@ -255,9 +265,13 @@ static void _Thread_Priority_apply(
   );
 
   if ( !_Priority_Actions_is_empty( &queue_context->Priority.Actions ) ) {
+#if defined(RTEMS_SMP)
     _Thread_queue_Path_acquire_critical( queue, the_thread, queue_context );
+#endif
     _Thread_Priority_perform_actions( queue->owner, queue_context );
+#if defined(RTEMS_SMP)
     _Thread_queue_Path_release_critical( queue_context );
+#endif
   }
 }
 

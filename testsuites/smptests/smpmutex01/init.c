@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -28,11 +28,21 @@ const char rtems_test_name[] = "SMPMUTEX 1";
 
 #define TASK_COUNT 9
 
+#define PRIO_NONE 0
+
+/* Value choosen for Qemu, 2 would be sufficient for real targets */
+#define TIMEOUT_IN_TICKS 10
+
 typedef enum {
   REQ_WAKE_UP_MASTER = RTEMS_EVENT_0,
   REQ_WAKE_UP_HELPER = RTEMS_EVENT_1,
   REQ_MTX_OBTAIN = RTEMS_EVENT_2,
-  REQ_MTX_RELEASE = RTEMS_EVENT_3
+  REQ_MTX_OBTAIN_TIMEOUT = RTEMS_EVENT_3,
+  REQ_MTX_RELEASE = RTEMS_EVENT_4,
+  REQ_MTX_2_OBTAIN = RTEMS_EVENT_5,
+  REQ_MTX_2_RELEASE = RTEMS_EVENT_6,
+  REQ_SEM_OBTAIN_RELEASE = RTEMS_EVENT_7,
+  REQ_SEM_RELEASE = RTEMS_EVENT_8
 } request_id;
 
 typedef enum {
@@ -50,6 +60,8 @@ typedef enum {
 
 typedef struct {
   rtems_id mtx;
+  rtems_id mtx_2;
+  rtems_id sem;
   rtems_id tasks[TASK_COUNT];
   int generation[TASK_COUNT];
   int expected_generation[TASK_COUNT];
@@ -156,11 +168,59 @@ static void obtain(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void obtain_timeout(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mtx, RTEMS_WAIT, TIMEOUT_IN_TICKS);
+  rtems_test_assert(sc == RTEMS_TIMEOUT);
+}
+
 static void release(test_context *ctx)
 {
   rtems_status_code sc;
 
   sc = rtems_semaphore_release(ctx->mtx);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void obtain_2(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mtx_2, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void release_2(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_release(ctx->mtx_2);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void sem_obtain(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void sem_release(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_release(ctx->sem);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void wait(void)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_wake_after(TIMEOUT_IN_TICKS + 1);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
@@ -199,14 +259,50 @@ static void assert_prio(
   rtems_test_assert(expected == actual);
 }
 
+static void assert_prio_by_scheduler(
+  test_context *ctx,
+  task_id id,
+  rtems_name scheduler,
+  rtems_task_priority expected
+)
+{
+  rtems_task_priority actual;
+  rtems_status_code sc;
+  rtems_id scheduler_id;
+
+  sc = rtems_scheduler_ident(scheduler, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  actual = PRIO_NONE;
+  sc = rtems_task_get_priority(
+    ctx->tasks[id],
+    scheduler_id,
+    &actual
+  );
+
+  if (expected == PRIO_NONE) {
+    rtems_test_assert(sc == RTEMS_NOT_DEFINED);
+  } else {
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
+  rtems_test_assert(actual == expected);
+}
+
 static void helper(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
 
   while (true) {
     rtems_event_set events = wait_for_events();
-    rtems_test_assert(events == REQ_WAKE_UP_HELPER);
-    send_event(ctx, M, REQ_WAKE_UP_MASTER);
+
+    if ((events & REQ_WAKE_UP_HELPER) != 0) {
+      send_event(ctx, M, REQ_WAKE_UP_MASTER);
+    }
+
+    if ((events & REQ_SEM_RELEASE) != 0) {
+      sem_release(ctx);
+    }
   }
 }
 
@@ -223,9 +319,30 @@ static void worker(rtems_task_argument arg)
       ++ctx->generation[id];
     }
 
+    if ((events & REQ_MTX_OBTAIN_TIMEOUT) != 0) {
+      obtain_timeout(ctx);
+      ++ctx->generation[id];
+    }
+
     if ((events & REQ_MTX_RELEASE) != 0) {
       release(ctx);
       ++ctx->generation[id];
+    }
+
+    if ((events & REQ_MTX_2_OBTAIN) != 0) {
+      obtain_2(ctx);
+      ++ctx->generation[id];
+    }
+
+    if ((events & REQ_MTX_2_RELEASE) != 0) {
+      release_2(ctx);
+      ++ctx->generation[id];
+    }
+
+    if ((events & REQ_SEM_OBTAIN_RELEASE) != 0) {
+      sem_obtain(ctx);
+      ++ctx->generation[id];
+      sem_release(ctx);
     }
   }
 }
@@ -245,11 +362,29 @@ static void test_init(test_context *ctx)
   start_task(ctx, H_B, helper, 6, SCHED_B);
 
   sc = rtems_semaphore_create(
-    rtems_build_name(' ', 'M', 'T', 'X'),
+    rtems_build_name('M', 'T', 'X', '1'),
     1,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
     0,
     &ctx->mtx
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('M', 'T', 'X', '2'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    0,
+    &ctx->mtx_2
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', 'S', 'E', 'M'),
+    0,
+    RTEMS_COUNTING_SEMAPHORE | RTEMS_PRIORITY,
+    0,
+    &ctx->sem
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
@@ -287,67 +422,254 @@ static void test_dequeue_order_one_scheduler_instance(test_context *ctx)
   check_generations(ctx, A_2_1, NONE);
 }
 
-static void test_simple_boosting(test_context *ctx)
+static void test_mixed_queue_two_scheduler_instances(test_context *ctx)
 {
   obtain(ctx);
-  request(ctx, B_5_0, REQ_MTX_OBTAIN);
-  request(ctx, B_4, REQ_MTX_OBTAIN);
-  request(ctx, B_5_1, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN_TIMEOUT);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
   check_generations(ctx, NONE, NONE);
-  assert_prio(ctx, M, 0);
-  release(ctx);
-  sync_with_helper(ctx);
-  assert_prio(ctx, M, 3);
+  wait();
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
   check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+  check_generations(ctx, NONE, NONE);
+
+  request(ctx, B_5_0, REQ_SEM_OBTAIN_RELEASE);
+  send_event(ctx, H_A, REQ_SEM_RELEASE);
+  check_generations(ctx, NONE, NONE);
+
+  /*
+   * We are in scheduler instance A.  Task B_5_0 of scheduler instance B issued
+   * the counting semaphore obtain before us.  However, we inherited the
+   * priority of B_4, so we get the semaphore before B_5_0 (priority order
+   * within scheduler instance B).
+   */
+  sem_obtain(ctx);
+  check_generations(ctx, NONE, NONE);
+
+  release(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_4, REQ_MTX_RELEASE);
+  check_generations(ctx, B_4, NONE);
+
+  sem_release(ctx);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_5_0, NONE);
+
+  sem_obtain(ctx);
+}
+
+static void test_mixed_queue_two_scheduler_instances_sem_only(test_context *ctx)
+{
+  request(ctx, B_5_0, REQ_SEM_OBTAIN_RELEASE);
+  send_event(ctx, H_A, REQ_SEM_RELEASE);
+  check_generations(ctx, NONE, NONE);
+
+  /*
+   * We are in scheduler instance A.  Task B_5_0 of scheduler instance B issued
+   * the counting semaphore obtain before us.  No priority inheritance is
+   * involved, so task B_5_0 gets the counting semaphore first.
+   */
+  sem_obtain(ctx);
+  check_generations(ctx, B_5_0, NONE);
+
+  sem_release(ctx);
+}
+
+static void test_simple_inheritance_two_scheduler_instances(test_context *ctx)
+{
+  obtain(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  request(ctx, B_5_0, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+
+  request(ctx, B_5_1, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+  check_generations(ctx, NONE, NONE);
+
+  release(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_4, NONE);
+
   request(ctx, B_4, REQ_MTX_RELEASE);
   check_generations(ctx, B_4, B_5_0);
+
   request(ctx, B_5_0, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_0, B_5_1);
+
   request(ctx, B_5_1, REQ_MTX_RELEASE);
+  check_generations(ctx, B_5_1, NONE);
+}
+
+static void test_nested_inheritance_two_scheduler_instances(test_context *ctx)
+{
+  obtain_2(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  request(ctx, B_5_0, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  check_generations(ctx, B_5_0, NONE);
+
+  request(ctx, B_5_0, REQ_MTX_2_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN_TIMEOUT);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 4);
+  wait();
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 4);
+
+  request(ctx, B_5_1, REQ_MTX_2_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 4);
+  check_generations(ctx, NONE, NONE);
+
+  release_2(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 4);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_5_0, NONE);
+
+  request(ctx, B_5_0, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  check_generations(ctx, B_4, B_5_0);
+
+  request(ctx, B_4, REQ_MTX_RELEASE);
+  check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_5_0, REQ_MTX_2_RELEASE);
+  check_generations(ctx, B_5_0, B_5_1);
+
+  request(ctx, B_5_1, REQ_MTX_2_RELEASE);
   check_generations(ctx, B_5_1, NONE);
 }
 
 static void test_dequeue_order_two_scheduler_instances(test_context *ctx)
 {
   obtain(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
   request(ctx, A_2_0, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
   check_generations(ctx, NONE, NONE);
-  assert_prio(ctx, M, 2);
+
   request(ctx, B_5_0, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
   check_generations(ctx, NONE, NONE);
-  assert_prio(ctx, M, 0);
+
   request(ctx, B_5_1, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+
   request(ctx, B_4, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+
   request(ctx, A_2_1, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
+
   request(ctx, A_1, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 1);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 4);
   check_generations(ctx, NONE, NONE);
+
   release(ctx);
   sync_with_helper(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, A_1, SCHED_A, 1);
+  assert_prio_by_scheduler(ctx, A_1, SCHED_B, 4);
   check_generations(ctx, A_1, NONE);
-  assert_prio(ctx, M, 3);
-  assert_prio(ctx, A_1, 0);
+
   request(ctx, A_1, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, A_1, SCHED_A, 1);
+  assert_prio_by_scheduler(ctx, A_1, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
   check_generations(ctx, A_1, B_4);
-  assert_prio(ctx, A_1, 1);
-  assert_prio(ctx, B_4, 0);
+
   request(ctx, B_4, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+  assert_prio_by_scheduler(ctx, A_2_0, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, A_2_0, SCHED_B, 5);
   check_generations(ctx, B_4, A_2_0);
-  assert_prio(ctx, B_4, 4);
-  assert_prio(ctx, A_2_0, 0);
+
   request(ctx, A_2_0, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, A_2_0, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, A_2_0, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
   check_generations(ctx, A_2_0, B_5_0);
-  assert_prio(ctx, A_2_0, 2);
-  assert_prio(ctx, B_5_0, 0);
+
   request(ctx, B_5_0, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  assert_prio_by_scheduler(ctx, A_2_1, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, A_2_1, SCHED_B, 5);
   check_generations(ctx, B_5_0, A_2_1);
-  assert_prio(ctx, B_5_0, 5);
-  assert_prio(ctx, A_2_1, 2);
+
   request(ctx, A_2_1, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, A_2_1, SCHED_A, 2);
+  assert_prio_by_scheduler(ctx, A_2_1, SCHED_B, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_1, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_1, SCHED_B, 5);
   check_generations(ctx, A_2_1, B_5_1);
-  assert_prio(ctx, B_5_1, 5);
+
   request(ctx, B_5_1, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_5_1, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_1, SCHED_B, 5);
   check_generations(ctx, B_5_1, NONE);
-  assert_prio(ctx, B_5_1, 5);
 }
 
 static void test(void)
@@ -358,7 +680,10 @@ static void test(void)
   test_task_get_priority_not_defined(ctx);
   test_simple_inheritance(ctx);
   test_dequeue_order_one_scheduler_instance(ctx);
-  test_simple_boosting(ctx);
+  test_mixed_queue_two_scheduler_instances(ctx);
+  test_mixed_queue_two_scheduler_instances_sem_only(ctx);
+  test_simple_inheritance_two_scheduler_instances(ctx);
+  test_nested_inheritance_two_scheduler_instances(ctx);
   test_dequeue_order_two_scheduler_instances(ctx);
 }
 
@@ -399,7 +724,7 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(b);
 
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 3
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
