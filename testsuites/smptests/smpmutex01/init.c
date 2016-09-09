@@ -215,9 +215,8 @@ static void worker(rtems_task_argument arg)
   }
 }
 
-static void test(void)
+static void test_init(test_context *ctx)
 {
-  test_context *ctx = &test_instance;
   rtems_status_code sc;
 
   ctx->tasks[M] = rtems_task_self();
@@ -238,7 +237,10 @@ static void test(void)
     &ctx->mtx
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
 
+static void test_simple_inheritance(test_context *ctx)
+{
   obtain(ctx);
   request(ctx, A_1, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
@@ -248,7 +250,10 @@ static void test(void)
   assert_prio(ctx, M, 3);
   request(ctx, A_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_1, NONE);
+}
 
+static void test_dequeue_order_one_scheduler_instance(test_context *ctx)
+{
   obtain(ctx);
   request(ctx, A_2_0, REQ_MTX_OBTAIN);
   request(ctx, A_1, REQ_MTX_OBTAIN);
@@ -265,7 +270,10 @@ static void test(void)
   check_generations(ctx, A_2_0, A_2_1);
   request(ctx, A_2_1, REQ_MTX_RELEASE);
   check_generations(ctx, A_2_1, NONE);
+}
 
+static void test_simple_boosting(test_context *ctx)
+{
   obtain(ctx);
   request(ctx, B_5_0, REQ_MTX_OBTAIN);
   request(ctx, B_4, REQ_MTX_OBTAIN);
@@ -282,7 +290,10 @@ static void test(void)
   check_generations(ctx, B_5_0, B_5_1);
   request(ctx, B_5_1, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_1, NONE);
+}
 
+static void test_dequeue_order_two_scheduler_instances(test_context *ctx)
+{
   obtain(ctx);
   request(ctx, A_2_0, REQ_MTX_OBTAIN);
   check_generations(ctx, NONE, NONE);
@@ -322,6 +333,17 @@ static void test(void)
   request(ctx, B_5_1, REQ_MTX_RELEASE);
   check_generations(ctx, B_5_1, NONE);
   assert_prio(ctx, B_5_1, 5);
+}
+
+static void test(void)
+{
+  test_context *ctx = &test_instance;
+
+  test_init(ctx);
+  test_simple_inheritance(ctx);
+  test_dequeue_order_one_scheduler_instance(ctx);
+  test_simple_boosting(ctx);
+  test_dequeue_order_two_scheduler_instances(ctx);
 }
 
 static void Init(rtems_task_argument arg)
