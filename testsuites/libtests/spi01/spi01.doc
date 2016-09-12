@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spi01
+
+directives:
+
+  TBD
+
+concepts:
+
+  - Ensure that the SPI driver framework works.

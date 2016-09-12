@@ -89,6 +89,7 @@ pwdgrp01/Makefile
 crypt01/Makefile
 sha/Makefile
 i2c01/Makefile
+spi01/Makefile
 newlib01/Makefile
 block17/Makefile
 exit02/Makefile
