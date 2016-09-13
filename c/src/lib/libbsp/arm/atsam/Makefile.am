@@ -53,6 +53,8 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/pin-config.h
 include_bsp_HEADERS += include/atsam-i2c.h
 include_bsp_HEADERS += include/i2c.h
+include_bsp_HEADERS += include/atsam-spi.h
+include_bsp_HEADERS += include/spi.h
 include_bsp_HEADERS += include/power.h
 
 include_libchipdir = $(includedir)/libchip
@@ -436,6 +438,10 @@ endif
 # I2C
 libbsp_a_SOURCES += i2c/atsam_i2c_bus.c
 libbsp_a_SOURCES += i2c/atsam_i2c_init.c
+
+# SPI
+libbsp_a_SOURCES += spi/atsam_spi_bus.c
+libbsp_a_SOURCES += spi/atsam_spi_init.c
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c
