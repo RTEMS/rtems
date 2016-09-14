@@ -258,7 +258,7 @@ void _SetupMemoryRegion(void)
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
 
 	/****************************************************
-	    QSPI memory region --- Strongly ordered
+	    QSPI memory region --- Normal
 	    START_Addr:-  0x80000000UL
 	    END_Addr:-    0x9FFFFFFFUL
 	******************************************************/
@@ -269,7 +269,7 @@ void _SetupMemoryRegion(void)
 
 	dwRegionAttr =
 		MPU_AP_FULL_ACCESS |
-		STRONGLY_ORDERED_SHAREABLE_TYPE |
+		INNER_NORMAL_WB_NWA_TYPE(SHAREABLE) |
 		MPU_CalMPURegionSize(QSPI_END_ADDRESS - QSPI_START_ADDRESS) |
 		MPU_REGION_ENABLE;
 
