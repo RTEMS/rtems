@@ -781,8 +781,11 @@ rtems_termios_ioctl (void *arg)
   default:
     if (rtems_termios_linesw[tty->t_line].l_ioctl != NULL) {
       sc = rtems_termios_linesw[tty->t_line].l_ioctl(tty,args);
-    }
-    else {
+    } else if (tty->handler.ioctl) {
+      args->ioctl_return = (*tty->handler.ioctl) (tty->device_context,
+        args->command, args->buffer);
+      sc = RTEMS_SUCCESSFUL;
+    } else {
       sc = RTEMS_INVALID_NUMBER;
     }
     break;

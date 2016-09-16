@@ -184,6 +184,21 @@ typedef struct {
   );
 
   /**
+   * @brief IO control handler.
+   *
+   * Invoked in case the Termios layer cannot deal with the IO request.
+   *
+   * @param[in] context The Termios device context.
+   * @param[in] request The IO control request.
+   * @param[in] buffer The IO control buffer.
+   */
+  int (*ioctl)(
+    rtems_termios_device_context *context,
+    ioctl_command_t               request,
+    void                         *buffer
+  );
+
+  /**
    * @brief Termios device mode.
    */
   rtems_termios_device_mode mode;
