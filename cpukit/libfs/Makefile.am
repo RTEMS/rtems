@@ -59,6 +59,7 @@ libimfs_a_SOURCES += src/imfs/deviceio.c \
     src/imfs/imfs_stat.c src/imfs/imfs_stat_file.c src/imfs/imfs_symlink.c \
     src/imfs/imfs_unmount.c src/imfs/imfs_utime.c src/imfs/ioman.c \
     src/imfs/imfs_memfile.c src/imfs/imfs.h
+libimfs_a_SOURCES += src/imfs/imfs_node.c
 
 # POSIX FIFO/pipe
 libimfs_a_SOURCES += src/pipe/fifo.c src/pipe/pipe.c src/pipe/pipe.h
