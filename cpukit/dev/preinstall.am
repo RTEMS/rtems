@@ -48,6 +48,15 @@ $(PROJECT_INCLUDE)/dev/spi/spi.h: include/dev/spi/spi.h $(PROJECT_INCLUDE)/dev/s
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/spi/spi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/spi/spi.h
 
+$(PROJECT_INCLUDE)/dev/serial/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/dev/serial
+	@: > $(PROJECT_INCLUDE)/dev/serial/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/dev/serial/$(dirstamp)
+
+$(PROJECT_INCLUDE)/dev/serial/sc16is752.h: include/dev/serial/sc16is752.h $(PROJECT_INCLUDE)/dev/serial/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/serial/sc16is752.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/serial/sc16is752.h
+
 $(PROJECT_INCLUDE)/linux/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/linux
 	@: > $(PROJECT_INCLUDE)/linux/$(dirstamp)
