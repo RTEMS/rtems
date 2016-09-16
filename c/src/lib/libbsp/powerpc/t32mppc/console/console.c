@@ -115,8 +115,6 @@ rtems_device_driver console_initialize(
   rtems_termios_device_context_initialize(&ctx->base, "T32 Console");
   rtems_termios_device_install(
     CONSOLE_DEVICE_NAME,
-    major,
-    0,
     &t32_console_handler,
     NULL,
     &ctx->base

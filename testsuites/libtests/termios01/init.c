@@ -18,7 +18,9 @@
 #include <rtems/termiostypes.h>
 #include <fcntl.h>
 #include <limits.h>
+#include <unistd.h>
 #include <sys/errno.h>
+#include <sys/stat.h>
 
 const char rtems_test_name[] = "TERMIOS 1";
 
@@ -522,22 +524,32 @@ typedef struct {
   bool done;
 } device_context;
 
-static rtems_status_code test_early_device_install_remove(
+static rtems_status_code test_early_device_install(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void *arg
 )
 {
+  static const rtems_termios_device_handler handler;
+  static const char dev[] = "/foobar";
+
   rtems_resource_snapshot snapshot;
   rtems_status_code sc;
+  int fd;
+  int rv;
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install( "/", 0, 0, NULL, NULL, NULL );
-  rtems_test_assert( sc == RTEMS_INCORRECT_STATE );
+  sc = rtems_termios_device_install( &dev[0], &handler, NULL, NULL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_termios_device_remove( "/", 0, 0 );
-  rtems_test_assert( sc == RTEMS_INCORRECT_STATE );
+  errno = 0;
+  fd = open( &dev[0], O_RDWR );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == ENXIO );
+
+  rv = unlink( &dev[0] );
+  rtems_test_assert( rv == 0 );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
@@ -547,88 +559,34 @@ static rtems_status_code test_early_device_install_remove(
 static void test_device_install_remove(void)
 {
   static const rtems_termios_device_handler handler;
-  static const rtems_device_major_number major = 123456789;
-  static const rtems_device_minor_number minor = 0xdeadbeef;
   static const char dev[] = "/foobar";
 
   rtems_resource_snapshot snapshot;
   rtems_status_code sc;
   void *greedy;
-  rtems_libio_t iop;
-  rtems_libio_open_close_args_t args;
-
-  memset( &iop, 0, sizeof( iop ) );
-  memset( &args, 0, sizeof( args ) );
-  args.iop = &iop;
+  int rv;
 
   rtems_resource_snapshot_take( &snapshot );
 
   greedy = rtems_heap_greedy_allocate( NULL, 0 );
 
-  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL, NULL );
+  sc = rtems_termios_device_install( "/", &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_NO_MEMORY );
 
   rtems_heap_greedy_free( greedy );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
-  sc = rtems_termios_device_install(
-    NULL,
-    major,
-    minor,
-    &handler,
-    NULL,
-    NULL
-  );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  sc = rtems_termios_device_install(
-    NULL,
-    major,
-    minor,
-    &handler,
-    NULL,
-    NULL
-  );
-  rtems_test_assert( sc == RTEMS_RESOURCE_IN_USE );
-
-  sc = rtems_termios_device_remove( NULL, major, minor );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
-
-  sc = rtems_termios_device_install( "/", major, minor, &handler, NULL, NULL );
+  sc = rtems_termios_device_install( "/", &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_UNSATISFIED );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 
-  sc = rtems_termios_device_remove( NULL, major, minor );
-  rtems_test_assert( sc == RTEMS_INVALID_ID );
-
-  sc = rtems_termios_device_install(
-    &dev[0],
-    major,
-    minor,
-    &handler,
-    NULL,
-    NULL
-  );
+  sc = rtems_termios_device_install( &dev[0], &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_termios_device_remove( "/barfoo", major, minor );
-  rtems_test_assert( sc == RTEMS_UNSATISFIED );
-
-  sc = rtems_termios_device_open( major, minor, &args );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  sc = rtems_termios_device_remove( &dev[0], major, minor );
-  rtems_test_assert( sc == RTEMS_RESOURCE_IN_USE );
-
-  sc = rtems_termios_device_close( &args );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  sc = rtems_termios_device_remove( &dev[0], major, minor );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rv = unlink( &dev[0] );
+  rtems_test_assert( rv == 0 );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
@@ -656,14 +614,12 @@ static void test_first_open_error(void)
   static const rtems_termios_device_handler handler = {
     .first_open = first_open_error
   };
-  static const rtems_device_major_number major = 123456789;
-  static const rtems_device_minor_number minor = 0xdeadbeef;
   static const char dev[] = "/foobar";
 
   rtems_resource_snapshot snapshot;
   rtems_status_code sc;
-  rtems_libio_t iop;
-  rtems_libio_open_close_args_t args;
+  int fd;
+  int rv;
   device_context ctx = {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "abc" ),
     .done = false
@@ -671,27 +627,18 @@ static void test_first_open_error(void)
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install(
-    &dev[0],
-    major,
-    minor,
-    &handler,
-    NULL,
-    &ctx.base
-  );
+  sc = rtems_termios_device_install( &dev[0], &handler, NULL, &ctx.base );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  memset( &iop, 0, sizeof( iop ) );
-  memset( &args, 0, sizeof( args ) );
-  args.iop = &iop;
 
   rtems_test_assert( !ctx.done );
-  sc = rtems_termios_device_open( major, minor, &args );
-  rtems_test_assert( sc == RTEMS_NO_MEMORY );
+  errno = 0;
+  fd = open( &dev[0], O_RDWR );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == ENOMEM );
   rtems_test_assert( ctx.done );
 
-  sc = rtems_termios_device_remove( &dev[0], major, minor );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rv = unlink( &dev[0] );
+  rtems_test_assert( rv == 0 );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
@@ -715,55 +662,38 @@ static void test_set_attributes_error(void)
   static const rtems_termios_device_handler handler = {
     .set_attributes = set_attributes_error
   };
-  static const rtems_device_major_number major = 123456789;
-  static const rtems_device_minor_number minor = 0xdeadbeef;
   static const char dev[] = "/foobar";
 
   rtems_resource_snapshot snapshot;
   rtems_status_code sc;
-  rtems_libio_t iop;
-  rtems_libio_open_close_args_t oc_args;
-  rtems_libio_ioctl_args_t io_args;
   struct termios term;
   device_context ctx = {
     .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "abc" ),
     .done = false
   };
+  int fd;
+  int rv;
 
   rtems_resource_snapshot_take( &snapshot );
 
-  sc = rtems_termios_device_install(
-    &dev[0],
-    major,
-    minor,
-    &handler,
-    NULL,
-    &ctx.base
-  );
+  sc = rtems_termios_device_install( &dev[0], &handler, NULL, &ctx.base );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  memset( &iop, 0, sizeof( iop ) );
-  memset( &oc_args, 0, sizeof( oc_args ) );
-  oc_args.iop = &iop;
-
-  sc = rtems_termios_device_open( major, minor, &oc_args );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  memset( &io_args, 0, sizeof( io_args ) );
-  io_args.iop = &iop;
-  io_args.command = RTEMS_IO_SET_ATTRIBUTES;
-  io_args.buffer = &term;
+  fd = open( &dev[0], O_RDWR );
+  rtems_test_assert( fd >= 0 );
 
   rtems_test_assert( !ctx.done );
-  sc = rtems_termios_ioctl( &io_args );
-  rtems_test_assert( sc == RTEMS_IO_ERROR );
+  errno = 0;
+  rv = ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, &term );
+  rtems_test_assert( rv == -1 );
+  rtems_test_assert( errno == EIO );
   rtems_test_assert( ctx.done );
 
-  sc = rtems_termios_device_close( &oc_args );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rv = close( fd );
+  rtems_test_assert( rv == 0 );
 
-  sc = rtems_termios_device_remove( &dev[0], major, minor );
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rv = unlink( &dev[0] );
+  rtems_test_assert( rv == 0 );
 
   rtems_test_assert( rtems_resource_snapshot_check( &snapshot ) );
 }
@@ -982,7 +912,7 @@ static rtems_task Init(
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS \
-  { .initialization_entry = test_early_device_install_remove }
+  { .initialization_entry = test_early_device_install }
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

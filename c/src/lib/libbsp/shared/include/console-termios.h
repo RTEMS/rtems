@@ -87,25 +87,6 @@ typedef struct {
 } console_device;
 
 /**
- * @brief Installs a console device after console driver initialization.
- *
- * @param[in] device_file The device file path.
- * @param[in] handler The Termios device handler.  It must be persistent
- *   throughout the installed time of the device.
- * @param[in] flow The Termios device flow control handler.  The device flow
- *   control handler are optional and may be @c NULL.  If present must be
- *   persistent throughout the installed time of the device.
- * @param[in] context The Termios device context.  It must be persistent
- *   throughout the installed time of the device.
- */
-rtems_status_code console_device_install(
-  const char                         *device_file,
-  const rtems_termios_device_handler *handler,
-  const rtems_termios_device_flow    *flow,
-  rtems_termios_device_context       *context
-);
-
-/**
  * @brief Returns true and does nothing else.
  */
 bool console_device_probe_default(rtems_termios_device_context *context);

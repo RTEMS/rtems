@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,7 +21,11 @@ rtems_device_driver console_open(
   void                      *arg
 )
 {
-  return rtems_termios_device_open( major, minor, arg );
+  (void) major;
+  (void) minor;
+  (void) arg;
+
+  return RTEMS_INTERNAL_ERROR;
 }
 
 rtems_device_driver console_close(
@@ -32,8 +36,9 @@ rtems_device_driver console_close(
 {
   (void) major;
   (void) minor;
+  (void) arg;
 
-  return rtems_termios_device_close( arg );
+  return RTEMS_INTERNAL_ERROR;
 }
 
 rtems_device_driver console_read(
@@ -44,8 +49,9 @@ rtems_device_driver console_read(
 {
   (void) major;
   (void) minor;
+  (void) arg;
 
-  return rtems_termios_read( arg );
+  return RTEMS_INTERNAL_ERROR;
 }
 
 rtems_device_driver console_write(
@@ -56,8 +62,9 @@ rtems_device_driver console_write(
 {
   (void) major;
   (void) minor;
+  (void) arg;
 
-  return rtems_termios_write( arg );
+  return RTEMS_INTERNAL_ERROR;
 }
 
 rtems_device_driver console_control(
@@ -68,6 +75,7 @@ rtems_device_driver console_control(
 {
   (void) major;
   (void) minor;
+  (void) arg;
 
-  return rtems_termios_ioctl( arg );
+  return RTEMS_INTERNAL_ERROR;
 }

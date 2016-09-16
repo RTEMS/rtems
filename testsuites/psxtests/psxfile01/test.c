@@ -624,8 +624,9 @@ since new path is not valid");
   rtems_test_assert( ctime1 != ctime2);
 
   /* try to truncate the console and see what happens */
+  errno = 0;
   status = truncate( "/dev/console", 40 );
-  rtems_test_assert( status == 0 );
+  rtems_test_assert( status == 0 || ( status == -1 && errno == EINVAL ) );
 
   puts( "truncate /tmp/j to length of 0" );
   status = truncate( "/tmp/j", 0 );

@@ -138,8 +138,6 @@ rtems_device_driver console_initialize(
      */
     sc = rtems_termios_device_install(
         ctx->device_name,
-        major,
-        minor,
         handler,
         NULL,
         &ctx->base

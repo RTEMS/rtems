@@ -344,10 +344,9 @@ typedef struct rtems_termios_tty {
 /**
  * @brief Installs a Termios device.
  *
- * @param[in] device_file If not @c NULL, then a device file for the specified
- *   major and minor number will be created.
- * @param[in] major The device major number of the corresponding device driver.
- * @param[in] minor The device minor number of the corresponding device driver.
+ * The installed Termios device may be removed via unlink().
+ *
+ * @param[in] device_file The device file path.
  * @param[in] handler The device handler.  It must be persistent throughout the
  *   installed time of the device.
  * @param[in] flow The device flow control handler.  The device flow control
@@ -359,63 +358,16 @@ typedef struct rtems_termios_tty {
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_NO_MEMORY Not enough memory to create a device node.
  * @retval RTEMS_UNSATISFIED Creation of the device file failed.
- * @retval RTEMS_RESOURCE_IN_USE There exists a device node for this major and
- *   minor number pair.
  * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
  *
- * @see rtems_termios_device_remove(), rtems_termios_device_open(),
- *   rtems_termios_device_close() and rtems_termios_get_device_context().
+ * @see rtems_termios_get_device_context().
  */
 rtems_status_code rtems_termios_device_install(
   const char                         *device_file,
-  rtems_device_major_number           major,
-  rtems_device_minor_number           minor,
   const rtems_termios_device_handler *handler,
   const rtems_termios_device_flow    *flow,
   rtems_termios_device_context       *context
 );
-
-/**
- * @brief Removes a Termios device.
- *
- * @param[in] device_file If not @c NULL, then the device file to remove.
- * @param[in] major The device major number of the corresponding device driver.
- * @param[in] minor The device minor number of the corresponding device driver.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_INVALID_ID There is no device installed with this major and
- * minor number pair.
- * @retval RTEMS_RESOURCE_IN_USE This device is currently in use.
- * @retval RTEMS_UNSATISFIED Removal of the device file failed.
- * @retval RTEMS_INCORRECT_STATE Termios is not initialized.
- *
- * @see rtems_termios_device_install().
- */
-rtems_status_code rtems_termios_device_remove(
-  const char                *device_file,
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor
-);
-
-/**
- * @brief Opens an installed Termios device.
- *
- * @see rtems_termios_device_install().
- */
-rtems_status_code rtems_termios_device_open(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg
-);
-
-/**
- * @brief Closes an installed Termios device.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- *
- * @see rtems_termios_device_install().
- */
-rtems_status_code rtems_termios_device_close(void *arg);
 
 /**
  * @brief Returns the device context of an installed Termios device.
