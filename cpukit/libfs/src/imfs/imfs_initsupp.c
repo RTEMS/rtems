@@ -25,11 +25,6 @@
 #include <string.h>
 #include <unistd.h>
 
-/*
- *  IMFS_determine_bytes_per_block
- */
-int imfs_memfile_bytes_per_block = 0;
-
 static int IMFS_determine_bytes_per_block(
   int *dest_bytes_per_block,
   int requested_bytes_per_block,
