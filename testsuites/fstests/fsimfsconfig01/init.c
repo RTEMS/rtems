@@ -16,6 +16,7 @@
   #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 #include <sys/stat.h>
@@ -143,7 +144,6 @@ static void Init(rtems_task_argument arg)
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
