@@ -65,6 +65,7 @@
 	.globl	bsp_start_vector_table_end
 	.globl	bsp_start_vector_table_size
 	.globl	bsp_vector_table_size
+	.globl	bsp_start_hook_0_done
 
 	.section	".bsp_start_text", "ax"
 
