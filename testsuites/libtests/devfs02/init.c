@@ -16,6 +16,7 @@
 
 #include "test_support.h"
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
 #include <errno.h>
 #include <unistd.h>
@@ -89,7 +90,6 @@ rtems_task Init(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
@@ -97,7 +97,7 @@ rtems_task Init(
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 2
 
 /* Make sure that we have enough devices for all BSPs */
 #define CONFIGURE_MAXIMUM_DEVICES 64

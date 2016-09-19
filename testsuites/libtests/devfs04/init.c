@@ -11,6 +11,7 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
 #include "test_support.h"
 #include <rtems/devfs.h>
@@ -78,14 +79,13 @@ rtems_task Init(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS TEST_DRIVER_TABLE_ENTRY
 
 /* include an extra slot for registering the termios one dynamically */
 #define CONFIGURE_MAXIMUM_DRIVERS 3
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 2
 
 #define CONFIGURE_MAXIMUM_TASKS             1
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION

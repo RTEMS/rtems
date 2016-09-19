@@ -11,6 +11,7 @@
 #include "config.h"
 #endif
 
+#define TESTS_USE_PRINTK
 #include <tmacros.h>
 #include "test_support.h"
 #include <rtems/devfs.h>
@@ -37,7 +38,6 @@ rtems_task Init(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1
