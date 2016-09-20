@@ -76,6 +76,7 @@
 #include <sys/systm.h>
 #include <bsp.h>
 #include <bsp/irq.h>
+#include <bsp/irq-generic.h>
 #include <rtems/pci.h>
 
 #ifdef NS
@@ -221,7 +222,7 @@ int	fxp_output (struct ifnet *,
 	   struct mbuf *, struct sockaddr *, struct rtentry *);
 
 
-static rtems_isr        fxp_intr(rtems_vector_number v);
+static void		fxp_intr(void *arg);
 static void 		fxp_init(void *xsc);
 static void 		fxp_tick(void *xsc);
 static void 		fxp_start(struct ifnet *ifp);
@@ -285,7 +286,7 @@ static __inline u_int8_t fxp_csr_read_1(struct fxp_softc *sc,int  reg) {
     inport_byte(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int8_t*)(sc->pci_regs_base+reg);
+    val = *(volatile u_int8_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -295,7 +296,7 @@ static __inline u_int32_t fxp_csr_read_2(struct fxp_softc *sc,int  reg) {
     inport_word(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int16_t*)(sc->pci_regs_base+reg);
+    val = *(volatile u_int16_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -305,7 +306,7 @@ static __inline u_int32_t fxp_csr_read_4(struct fxp_softc *sc,int  reg) {
     inport_long(sc->pci_regs_base + reg,val);
   }
   else {
-    val = *(u_int32_t*)(sc->pci_regs_base+reg);
+    val = *(volatile u_int32_t*)(sc->pci_regs_base+reg);
   }
   return val;
 }
@@ -322,7 +323,8 @@ fxp_scb_wait(struct fxp_softc *sc)
 	while (CSR_READ_1(sc, FXP_CSR_SCB_COMMAND) && --i)
 		DELAY(2);
 	if (i == 0)
-		device_printf(sc->dev, "SCB timeout: 0x%x 0x%x 0x%x 0x%x\n",
+		device_printf(sc->dev, "SCB timeout: 0x%d 0x%d"
+                                        "0x%d" PRIx32 "0x%" PRIx32 "\n",
 		    CSR_READ_1(sc, FXP_CSR_SCB_COMMAND),
 		    CSR_READ_1(sc, FXP_CSR_SCB_STATACK),
 		    CSR_READ_1(sc, FXP_CSR_SCB_RUSCUS),
@@ -351,84 +353,59 @@ fxp_dma_wait(volatile u_int16_t *status, struct fxp_softc *sc)
 		device_printf(sc->dev, "DMA timeout\n");
 }
 
-/*
- * These macros and instantiations define PCI Configuration Space accessors
- * which use the legacy API based on the PCI BIOS only used by pc386.
- * This was the only device driver using these.
- *
- * TBD: It may be worth it to fix this driver to use the current PCI API rather
- *      than this legacy PC386 API.
- */
-#define PCIB_DEVSIG_BUS(x) (((x)>>8) &0xff)
-#define PCIB_DEVSIG_DEV(x) (((x)>>3) & 0x1f)
-#define PCIB_DEVSIG_FUNC(x) ((x) & 0x7)
-#define PCIB_DEVSIG_MAKE(b,d,f) ((b<<8)|(d<<3)|(f))
 
-#define PCI_CONF_ACCESSOR(_confop, _baseop, _type) \
-  /* prototype before body */ \
-  static inline int _confop ( \
-    int signature, \
-    int offset, \
-    _type data ); \
+#define FXP_PCI_CONF_ACCESSOR(_confop, _baseop, _type) \
   \
   static inline int _confop ( \
-    int signature, \
+    struct fxp_softc *sc, \
     int offset, \
     _type data ) \
   { \
     _baseop( \
-        PCIB_DEVSIG_BUS(signature), \
-        PCIB_DEVSIG_DEV(signature), \
-        PCIB_DEVSIG_FUNC(signature), \
+        sc->pci_bus, \
+        sc->pci_dev, \
+        sc->pci_fun, \
         offset, \
         data \
     ); \
    return PCIB_ERR_SUCCESS; \
   }
 
-PCI_CONF_ACCESSOR( pcib_conf_read8,   pci_read_config_byte,   uint8_t * );
-PCI_CONF_ACCESSOR( pcib_conf_read16,  pci_read_config_word,   uint16_t * );
-PCI_CONF_ACCESSOR( pcib_conf_read32,  pci_read_config_dword,  uint32_t * );
-PCI_CONF_ACCESSOR( pcib_conf_write8,  pci_write_config_byte,  uint8_t );
-PCI_CONF_ACCESSOR( pcib_conf_write16, pci_write_config_word,  uint16_t );
-PCI_CONF_ACCESSOR( pcib_conf_write32, pci_write_config_dword, uint32_t );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_read8,   pci_read_config_byte,   uint8_t * );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_read16,  pci_read_config_word,   uint16_t * );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_read32,  pci_read_config_dword,  uint32_t * );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_write8,  pci_write_config_byte,  uint8_t );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_write16, pci_write_config_word,  uint16_t );
+FXP_PCI_CONF_ACCESSOR( fxp_pci_conf_write32, pci_write_config_dword, uint32_t );
 
-static __inline unsigned int pci_get_vendor(struct fxp_softc *sc) {
+static __inline unsigned int fxp_pci_get_vendor(struct fxp_softc *sc) {
   u_int16_t vendor;
-  pcib_conf_read16(sc->pci_signature,0,&vendor);
+  fxp_pci_conf_read16(sc, PCI_VENDOR_ID, &vendor);
   return vendor;
 }
 
-static __inline unsigned int pci_get_device(struct fxp_softc *sc) {
+static __inline unsigned int fxp_pci_get_device(struct fxp_softc *sc) {
   u_int16_t device;
-  pcib_conf_read16(sc->pci_signature,2,&device);
+  fxp_pci_conf_read16(sc, PCI_DEVICE_ID, &device);
   return device;
 }
 
-static __inline unsigned int pci_get_subvendor(struct fxp_softc *sc) {
+static __inline unsigned int fxp_pci_get_subvendor(struct fxp_softc *sc) {
   u_int16_t subvendor;
-  pcib_conf_read16(sc->pci_signature,0x2c,&subvendor);
+  fxp_pci_conf_read16(sc, PCI_SUBSYSTEM_VENDOR_ID, &subvendor);
   return subvendor;
 }
 
-static __inline unsigned int pci_get_subdevice(struct fxp_softc *sc) {
+static __inline unsigned int fxp_pci_get_subdevice(struct fxp_softc *sc) {
   u_int16_t subdevice;
-  pcib_conf_read16(sc->pci_signature,0x2e,&subdevice);
+  fxp_pci_conf_read16(sc, PCI_SUBSYSTEM_ID, &subdevice);
   return subdevice;
 }
 
-static __inline unsigned int pci_get_revid(struct fxp_softc *sc) {
+static __inline unsigned int fxp_pci_get_revid(struct fxp_softc *sc) {
   u_int8_t revid;
-  pcib_conf_read8(sc->pci_signature,0x08,&revid);
+  fxp_pci_conf_read8(sc, PCI_REVISION_ID, &revid);
   return revid;
-}
-
-static void nopOn(const rtems_irq_connect_data* notUsed)
-{
-  /*
-   * code should be moved from fxp_Enet_initialize_hardware
-   * to this location
-   */
 }
 
 int
@@ -485,25 +462,27 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * find device on pci bus
 	 */
-    { int j; int pbus, pdev, pfun;
+	{ int j; int pbus, pdev, pfun;
 
-      for (j=0; fxp_ident_table[j].devid; j++ ) {
-		    i = pci_find_device( 0x8086, fxp_ident_table[j].devid,
-			       unitNumber-1, &pbus, &pdev, &pfun );
- 		    sc->pci_signature =  PCIB_DEVSIG_MAKE( pbus, pdev, pfun );
-		    DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d "
-		      "and pci signature 0x%x\n",
-		      i,sc->pci_signature);
-      	if (PCIB_ERR_SUCCESS == i) {
-		    if ( UNTESTED == fxp_ident_table[j].warn ) {
-		  	  device_printf(dev,
+		for (j=0; fxp_ident_table[j].devid; j++ ) {
+			i = pci_find_device( 0x8086, fxp_ident_table[j].devid,
+				unitNumber-1, &pbus, &pdev, &pfun );
+			sc->pci_bus = pbus;
+			sc->pci_dev = pdev;
+			sc->pci_fun = pfun;
+			DBGLVL_PRINTK(2,"fxp_attach: find_devid returned %d ,"
+					"pci bus %d dev %d fun %d \n",
+					i, sc->pci_bus, sc->pci_dev, sc->pci_fun);
+			if (PCIB_ERR_SUCCESS == i) {
+				if ( UNTESTED == fxp_ident_table[j].warn ) {
+					device_printf(dev,
 "WARNING: this chip version has NOT been reported to work under RTEMS yet.\n");
-			    device_printf(dev,
+					device_printf(dev,
 "         If it works OK, report it as tested in 'c/src/libchip/network/if_fxp.c'\n");
-			  }
-  			break;
-		  }
-	  }
+				}
+				break;
+			}
+		}
 	}
 
 	/*
@@ -519,11 +498,11 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	 * Enable bus mastering. Enable memory space too, in case
 	 * BIOS/Prom forgot about it.
 	 */
-	pcib_conf_read16(sc->pci_signature, PCI_COMMAND,&val16);
+	fxp_pci_conf_read16(sc, PCI_COMMAND,&val16);
 	val16 |= (PCI_COMMAND_MEMORY|PCI_COMMAND_MASTER);
-	pcib_conf_write16(sc->pci_signature, PCI_COMMAND, val16);
+	fxp_pci_conf_write16(sc, PCI_COMMAND, val16);
 	DBGLVL_PRINTK(3,"fxp_attach: PCI_COMMAND_write = 0x%x\n",val16);
-	pcib_conf_read16(sc->pci_signature, PCI_COMMAND,&val16);
+	fxp_pci_conf_read16(sc, PCI_COMMAND,&val16);
 	DBGLVL_PRINTK(4,"fxp_attach: PCI_COMMAND_read  = 0x%x\n",val16);
 
 	/*
@@ -594,20 +573,16 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * get mapping and base address of registers
 	 */
-	pcib_conf_read16(sc->pci_signature, PCI_COMMAND,&val16);
+	fxp_pci_conf_read16(sc, PCI_COMMAND,&val16);
 	DBGLVL_PRINTK(4,"fxp_attach: PCI_COMMAND_read  = 0x%x\n",val16);
 	if((val16 & PCI_COMMAND_IO) != 0) {
 	  sc->pci_regs_are_io = true;
-	  pcib_conf_read32(sc->pci_signature,
-			   PCI_BASE_ADDRESS_1,
-			   &val32);
+	  fxp_pci_conf_read32(sc, PCI_BASE_ADDRESS_1, &val32);
 	  sc->pci_regs_base = val32 & PCI_BASE_ADDRESS_IO_MASK;
 	}
 	else {
 	  sc->pci_regs_are_io = false;
-	  pcib_conf_read32(sc->pci_signature,
-			   PCI_BASE_ADDRESS_0,
-			   &val32);
+	  fxp_pci_conf_read32(sc, PCI_BASE_ADDRESS_0, &val32);
 	  sc->pci_regs_base = val32 & PCI_BASE_ADDRESS_MEM_MASK;
 	}
 	DBGLVL_PRINTK(3,"fxp_attach: CSR registers are mapped in %s space"
@@ -618,9 +593,9 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	/*
 	 * get interrupt level to be used
 	 */
-	pcib_conf_read8(sc->pci_signature, 60, &interrupt);
+	fxp_pci_conf_read8(sc, PCI_INTERRUPT_LINE, &interrupt);
 	DBGLVL_PRINTK(3,"fxp_attach: interrupt = 0x%x\n",interrupt);
-	sc->irqInfo.name = (rtems_irq_number)interrupt;
+	sc->irq_num = interrupt;
 	/*
 	 * Reset to a stable state.
 	CSR_WRITE_4(sc, FXP_CSR_PORT, FXP_PORT_SELECTIVE_RESET);
@@ -693,9 +668,9 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	 * See Intel 82801BA/82801BAM Specification Update, Errata #30.
 	 */
 #ifdef NOTUSED
-	i = pci_get_device(dev);
+	i = fxp_pci_get_device(dev);
 #else
-	pcib_conf_read16(sc->pci_signature,2,&dev_id);
+	fxp_pci_conf_read16(sc, PCI_DEVICE_ID, &dev_id);
 	DBGLVL_PRINTK(3,"fxp_attach: device id = 0x%x\n",dev_id);
 #endif
 	if (dev_id == 0x2449 || (dev_id > 0x1030 && dev_id < 0x1039)) {
@@ -751,8 +726,7 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		 * is a valid cacheline size (8 or 16 dwords), then tell
 		 * the board to turn on MWI.
 		 */
-	        pcib_conf_read8(sc->pci_signature,
-				PCI_CACHE_LINE_SIZE,&tmp_val);
+	        fxp_pci_conf_read8(sc, PCI_CACHE_LINE_SIZE, &tmp_val);
 		DBGLVL_PRINTK(3,"fxp_attach: CACHE_LINE_SIZE = %d\n",tmp_val);
 		if (val16 & PCI_COMMAND_MEMORY &&
 		    tmp_val != 0)
@@ -781,9 +755,9 @@ rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
     	    ((u_int8_t*)sc->arpcom.ac_enaddr)[5],
     	    sc->flags & FXP_FLAG_SERIAL_MEDIA ? ", 10Mbps" : "");
 		device_printf(dev, "PCI IDs: 0x%x 0x%x 0x%x 0x%x 0x%x\n",
-		    pci_get_vendor(sc), pci_get_device(sc),
-		    pci_get_subvendor(sc), pci_get_subdevice(sc),
-		    pci_get_revid(sc));
+		    fxp_pci_get_vendor(sc), fxp_pci_get_device(sc),
+		    fxp_pci_get_subvendor(sc), fxp_pci_get_subdevice(sc),
+		    fxp_pci_get_revid(sc));
 		device_printf(dev, "Chip Type: %d\n", sc->chip);
 	}
 
@@ -1156,6 +1130,7 @@ fxp_start(struct ifnet *ifp)
 {
 	struct fxp_softc *sc = ifp->if_softc;
 	struct fxp_cb_tx *txp;
+	rtems_interrupt_level level;
 
 	DBGLVL_PRINTK(3,"fxp_start called\n");
 
@@ -1165,6 +1140,7 @@ fxp_start(struct ifnet *ifp)
 	 * of the command chain).
 	 */
 	if (sc->need_mcsetup) {
+		DBGLVL_PRINTK(3,"fxp_start need_mcsetup\n");
 		return;
 	}
 
@@ -1299,17 +1275,25 @@ tbdinit:
 		fxp_scb_wait(sc);
 		fxp_scb_cmd(sc, FXP_SCB_COMMAND_CU_RESUME);
 	}
+
+	/*
+	 * reenable interrupts
+	 */
+	rtems_interrupt_disable (level);
+	CSR_WRITE_1(sc, FXP_CSR_SCB_INTRCNTL,0);
+	bsp_interrupt_vector_enable(sc->irq_num);
+	rtems_interrupt_enable (level);
 }
 
 /*
  * Process interface interrupts.
  */
-static rtems_isr fxp_intr(rtems_vector_number v)
+static void fxp_intr(void *arg)
 {
   /*
-   * FIXME: currently only works with one interface...
+   * Obtain device state
    */
-  struct fxp_softc *sc = &(fxp_softc[0]);
+  struct fxp_softc *sc = (struct fxp_softc *)arg;
 
   /*
    * disable interrupts
@@ -1336,7 +1320,8 @@ static void fxp_daemon(void *xsc)
 #endif
 	for (;;) {
 
-	DBGLVL_PRINTK(4,"fxp_daemon waiting for event\n");
+	DBGLVL_PRINTK(4,"fxp_daemon waiting for event, INTRCNTL 0x%02x\n",
+                      CSR_READ_1(sc,  FXP_CSR_SCB_INTRCNTL));
 	  /*
 	   * wait for event to receive from interrupt function
 	   */
@@ -1475,6 +1460,7 @@ rcvloop:
 	   */
 	  rtems_interrupt_disable (level);
 	  CSR_WRITE_1(sc, FXP_CSR_SCB_INTRCNTL,0);
+	  bsp_interrupt_vector_enable(sc->irq_num);
 	  rtems_interrupt_enable (level);
 	}
 }
@@ -1697,6 +1683,7 @@ fxp_init(void *xsc)
 	struct fxp_cb_ias *cb_ias;
 	struct fxp_cb_tx *txp;
 	int i, prm, s, rv;
+	rtems_status_code statcode;
 
 rtems_task_wake_after(100);
 	DBGLVL_PRINTK(2,"fxp_init called\n");
@@ -1925,14 +1912,17 @@ rtems_task_wake_after(100);
 		/*
 		 * Set up interrupts
 		 */
-		sc->irqInfo.hdl = (rtems_irq_hdl)fxp_intr;
-		sc->irqInfo.on  = nopOn;
-		sc->irqInfo.off = nopOn;
-		sc->irqInfo.isOn = NULL;
-		rv = BSP_install_rtems_irq_handler (&sc->irqInfo);
-		if (rv != 1) {
+		statcode = rtems_interrupt_handler_install(
+			sc->irq_num,
+			"fxp_intr",
+			RTEMS_INTERRUPT_SHARED,
+			fxp_intr,
+			sc
+		);
+
+		if ( statcode != RTEMS_SUCCESSFUL ) {
 		  rtems_panic ("Can't attach fxp interrupt handler for irq %d\n",
-			       sc->irqInfo.name);
+			       sc->irq_num);
 		}
 	}
 

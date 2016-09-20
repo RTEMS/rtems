@@ -104,11 +104,13 @@ struct fxp_softc {
 	bus_space_tag_t sc_st;		/* bus space tag */
 	bus_space_handle_t sc_sh;	/* bus space handle */
 #else
-        int pci_signature;              /* RTEMS i386 PCI signature */
-        bool pci_regs_are_io;           /* RTEMS dev regs are I/O mapped */
-        u_int32_t pci_regs_base;        /* RTEMS i386 register base */
-        rtems_id daemonTid;             /* Task ID of deamon        */
-        rtems_irq_connect_data	irqInfo;
+	unsigned char pci_bus;		/* RTEMS PCI bus number */
+	unsigned char pci_dev;		/* RTEMS PCI slot/device number */
+	unsigned char pci_fun;		/* RTEMS PCI function number */
+	bool pci_regs_are_io;           /* RTEMS dev regs are I/O mapped */
+	u_int32_t pci_regs_base;        /* RTEMS i386 register base */
+	rtems_id daemonTid;             /* Task ID of deamon        */
+	rtems_vector_number irq_num;
 
 #endif
 	struct mbuf *rfa_headm;		/* first mbuf in receive frame area */
@@ -175,7 +177,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_byte((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int8_t*)((sc)->pci_regs_base)+(reg)) = val;                \
+       *((volatile u_int8_t*)((sc)->pci_regs_base)+(reg)) = val;                \
   }while (0)
 
 #define	CSR_WRITE_2(sc, reg, val)					\
@@ -183,7 +185,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_word((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int16_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
+       *((volatile u_int16_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
   }while (0)
 
 #define	CSR_WRITE_4(sc, reg, val)					\
@@ -191,7 +193,7 @@ struct fxp_softc {
      if ((sc)->pci_regs_are_io)                                         \
        outport_long((sc)->pci_regs_base+(reg),val);                     \
      else                                                               \
-       *((u_int32_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
+       *((volatile u_int32_t*)((u_int8_t*)((sc)->pci_regs_base)+(reg))) = val; \
   }while (0)
 
 #endif
