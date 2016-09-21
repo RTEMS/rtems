@@ -38,7 +38,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Set_root_visitor(
 
   _Resource_Node_set_root( resource_node, &root->Resource_node );
 
-  needs_help_too = ( *scheduler->Operations.ask_for_help )(
+  needs_help_too = ( *scheduler->Operations.ask_for_help_X )(
     scheduler,
     offers_help,
     needs_help
@@ -75,6 +75,6 @@ void _Scheduler_Thread_change_resource_root(
   _Resource_Iterate( &top->Resource_node, _Scheduler_Set_root_visitor, &ctx );
 
   if ( ctx.needs_help != NULL ) {
-    _Scheduler_Ask_for_help( ctx.needs_help );
+    _Scheduler_Ask_for_help_X( ctx.needs_help );
   }
 }

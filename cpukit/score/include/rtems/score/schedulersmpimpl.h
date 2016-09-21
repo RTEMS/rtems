@@ -1013,7 +1013,7 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
   return needs_help;
 }
 
-static inline Thread_Control *_Scheduler_SMP_Ask_for_help(
+static inline Thread_Control *_Scheduler_SMP_Ask_for_help_X(
   Scheduler_Context                  *context,
   Thread_Control                     *offers_help,
   Thread_Control                     *needs_help,

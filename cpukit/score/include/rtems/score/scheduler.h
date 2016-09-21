@@ -114,9 +114,9 @@ typedef struct {
    * @retval NULL It was possible to schedule the thread needing help, and no
    *   other thread needs help as a result.
    *
-   * @see _Scheduler_Ask_for_help().
+   * @see _Scheduler_Ask_for_help_X().
    */
-  Thread_Control *( *ask_for_help )(
+  Thread_Control *( *ask_for_help_X )(
     const Scheduler_Control *scheduler,
     Thread_Control          *offers_help,
     Thread_Control          *needs_help
@@ -323,14 +323,14 @@ Priority_Control _Scheduler_default_Map_priority(
    *
    * @retval NULL Always.
    */
-  Thread_Control *_Scheduler_default_Ask_for_help(
+  Thread_Control *_Scheduler_default_Ask_for_help_X(
     const Scheduler_Control *scheduler,
     Thread_Control          *offers_help,
     Thread_Control          *needs_help
   );
 
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
-    _Scheduler_default_Ask_for_help,
+    _Scheduler_default_Ask_for_help_X,
 #else
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP
 #endif

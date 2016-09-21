@@ -311,7 +311,7 @@ Thread_Control *_Scheduler_simple_SMP_Update_priority(
   );
 }
 
-Thread_Control *_Scheduler_simple_SMP_Ask_for_help(
+Thread_Control *_Scheduler_simple_SMP_Ask_for_help_X(
   const Scheduler_Control *scheduler,
   Thread_Control          *offers_help,
   Thread_Control          *needs_help
@@ -319,7 +319,7 @@ Thread_Control *_Scheduler_simple_SMP_Ask_for_help(
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  return _Scheduler_SMP_Ask_for_help(
+  return _Scheduler_SMP_Ask_for_help_X(
     context,
     offers_help,
     needs_help,

@@ -12,7 +12,7 @@
 
 #include <rtems/score/scheduler.h>
 
-Thread_Control *_Scheduler_default_Ask_for_help(
+Thread_Control *_Scheduler_default_Ask_for_help_X(
   const Scheduler_Control *scheduler,
   Thread_Control          *offers_help,
   Thread_Control          *needs_help

@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_for_help_visitor(
     THREAD_RESOURCE_NODE_TO_THREAD( resource_node );
   const Scheduler_Control *scheduler = _Scheduler_Get_own( offers_help );
 
-  next_needs_help = ( *scheduler->Operations.ask_for_help )(
+  next_needs_help = ( *scheduler->Operations.ask_for_help_X )(
     scheduler,
     offers_help,
     previous_needs_help
@@ -219,14 +219,14 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_for_help_visitor(
  *
  * @param[in] needs_help The thread needing help.
  */
-RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help(
+RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_X(
   Thread_Control *needs_help
 )
 {
   do {
     const Scheduler_Control *scheduler = _Scheduler_Get_own( needs_help );
 
-    needs_help = ( *scheduler->Operations.ask_for_help )(
+    needs_help = ( *scheduler->Operations.ask_for_help_X )(
       scheduler,
       needs_help,
       needs_help
@@ -260,7 +260,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
       node->help_state != SCHEDULER_HELP_ACTIVE_RIVAL
         || _Scheduler_Node_get_user( node ) != needs_help
     ) {
-      _Scheduler_Ask_for_help( needs_help );
+      _Scheduler_Ask_for_help_X( needs_help );
     }
   }
 }

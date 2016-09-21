@@ -86,7 +86,7 @@ typedef struct {
     _Scheduler_priority_SMP_Update_priority, \
     _Scheduler_default_Map_priority, \
     _Scheduler_default_Unmap_priority, \
-    _Scheduler_priority_SMP_Ask_for_help, \
+    _Scheduler_priority_SMP_Ask_for_help_X, \
     _Scheduler_priority_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
@@ -120,7 +120,7 @@ Thread_Control *_Scheduler_priority_SMP_Update_priority(
   Thread_Control          *the_thread
 );
 
-Thread_Control *_Scheduler_priority_SMP_Ask_for_help(
+Thread_Control *_Scheduler_priority_SMP_Ask_for_help_X(
   const Scheduler_Control *scheduler,
   Thread_Control          *needs_help,
   Thread_Control          *offers_help
