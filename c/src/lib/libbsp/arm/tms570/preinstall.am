@@ -282,3 +282,16 @@ $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 TMPINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 
+if TMS570_USE_HWINIT_STARTUP
+$(PROJECT_INCLUDE)/bsp/tms570_selftest_parity.h: hwinit/tms570_selftest_parity.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570_selftest_parity.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570_selftest_parity.h
+
+$(PROJECT_INCLUDE)/bsp/tms570_hwinit.h: hwinit/tms570_hwinit.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570_hwinit.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570_hwinit.h
+
+$(PROJECT_INCLUDE)/bsp/tms570_selftest.h: hwinit/tms570_selftest.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570_selftest.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570_selftest.h
+endif
