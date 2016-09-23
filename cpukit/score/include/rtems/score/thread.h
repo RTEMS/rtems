@@ -246,6 +246,11 @@ typedef enum {
 typedef struct {
 #if defined(RTEMS_SMP)
   /**
+   * @brief Lock to protect the scheduler node change requests.
+   */
+  ISR_lock_Control Lock;
+
+  /**
    * @brief The current scheduler state of this thread.
    */
   Thread_Scheduler_state state;

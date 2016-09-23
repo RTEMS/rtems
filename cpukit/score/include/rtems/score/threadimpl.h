@@ -1035,6 +1035,22 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
 }
 
 #if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_acquire_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Acquire( &the_thread->Scheduler.Lock, lock_context );
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
+  Thread_Control   *the_thread,
+  ISR_lock_Context *lock_context
+)
+{
+  _ISR_lock_Release( &the_thread->Scheduler.Lock, lock_context );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
   Thread_Control *the_thread,
   Scheduler_Node *scheduler_node
