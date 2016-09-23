@@ -16,12 +16,10 @@
  *  May 1996
  */
 
-RamSize = DEFINED(RamSize) ? RamSize : 4M;
-
 MEMORY
 {
     bootrom_reserved : ORIGIN = 0x00000000, LENGTH = 0x5000
-    ram	             : ORIGIN = 0x00005000, LENGTH = RamSize - 0x5000
+    ram	             : ORIGIN = 0x00005000, LENGTH = 4M - 0x5000
 }
 
 REGION_ALIAS ("REGION_TEXT", ram);
