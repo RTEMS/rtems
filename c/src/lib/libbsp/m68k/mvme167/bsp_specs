@@ -5,7 +5,7 @@
 
 *lib:
 %{!qrtems: %(old_lib)} \
-%{!nostdlib: %{qrtems: --start-group -lrtemsbsp -lrtemscpu \
+%{!nostdlib: %{qrtems: --start-group -lrtemsbsp -lrtemscpu -latomic \
 %{qjava: -lffi -lgcjgc -lzgcj -lgcj} %{qc++: -lstdc++} -lc -lgcc --end-group \
 %{!qnolinkcmds: -T linkcmds%s}}}
 
