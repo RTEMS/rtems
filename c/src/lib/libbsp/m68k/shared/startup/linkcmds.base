@@ -27,7 +27,7 @@ MEMORY {
 SECTIONS {
 	.vector0 : ALIGN_WITH_INPUT {
 		bsp_vector0_begin = .;
-		*(.vectors*)
+		KEEP (*(.vectors*))
 		bsp_vector0_end = .;
 	} > REGION_TEXT AT > REGION_TEXT
 	bsp_vector0_size = bsp_vector0_end - bsp_vector0_begin;
