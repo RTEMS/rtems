@@ -131,8 +131,11 @@ RTEMS_SYSINIT_ITEM(
 
 void rtems_initialize_executive(void)
 {
-  const volatile rtems_sysinit_item *cur = RTEMS_LINKER_SET_BEGIN(_Sysinit );
-  const volatile rtems_sysinit_item *end = RTEMS_LINKER_SET_END( _Sysinit );
+  const rtems_sysinit_item *cur;
+  const rtems_sysinit_item *end;
+
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(_Sysinit, cur );
+  RTEMS_LINKER_SET_ASSIGN_END( _Sysinit, end );
 
   /* Invoke the registered system initialization handlers */
   while ( cur != end ) {

@@ -85,17 +85,28 @@ ITEM(s0, SAFE_ORDER_A);
 
 static void test(void)
 {
-  const int * volatile *b = RTEMS_LINKER_SET_BEGIN(test_rw);
-  const int * volatile *e = RTEMS_LINKER_SET_END(test_rw);
-  const int * volatile const *cb = RTEMS_LINKER_SET_BEGIN(test_ro);
-  const int * volatile const *ce = RTEMS_LINKER_SET_END(test_ro);
-  const int * volatile *bi = RTEMS_LINKER_SET_BEGIN(test_rw_i);
-  const int * volatile *ei = RTEMS_LINKER_SET_END(test_rw_i);
-  const int * volatile const *cbi = RTEMS_LINKER_SET_BEGIN(test_ro_i);
-  const int * volatile const *cei = RTEMS_LINKER_SET_END(test_ro_i);
-  const int * volatile const *sb = RTEMS_LINKER_SET_BEGIN(test_ro_s);
-  const int * volatile const *se = RTEMS_LINKER_SET_END(test_ro_s);
+  const int **b;
+  const int **e;
+  const int * const *cb;
+  const int * const *ce;
+  const int **bi;
+  const int **ei;
+  const int * const *cbi;
+  const int * const *cei;
+  const int * const *sb;
+  const int * const *se;
   size_t i;
+
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_rw, b);
+  RTEMS_LINKER_SET_ASSIGN_END(test_rw, e);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro, cb);
+  RTEMS_LINKER_SET_ASSIGN_END(test_ro, ce);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_rw_i, bi);
+  RTEMS_LINKER_SET_ASSIGN_END(test_rw_i, ei);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro_i, cbi);
+  RTEMS_LINKER_SET_ASSIGN_END(test_ro_i, cei);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro_s, sb);
+  RTEMS_LINKER_SET_ASSIGN_END(test_ro_s, se);
 
   rtems_test_assert((size_t) (e - b) == RTEMS_ARRAY_SIZE(a));
   rtems_test_assert((size_t) (ce - cb) == RTEMS_ARRAY_SIZE(ca));
@@ -132,25 +143,29 @@ static void test(void)
 
 static void test_content(void)
 {
-  uintptr_t b_rw = (uintptr_t) RTEMS_LINKER_SET_BEGIN(test_content_rw);
-  uintptr_t e_rw = (uintptr_t) RTEMS_LINKER_SET_END(test_content_rw);
+  const char *b_rw;
+  const char *e_rw;
+  const char *b_ro;
+  const char *e_ro;
 
-  uintptr_t b_ro = (uintptr_t) RTEMS_LINKER_SET_BEGIN(test_content_ro);
-  uintptr_t e_ro = (uintptr_t) RTEMS_LINKER_SET_END(test_content_ro);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_content_rw, b_rw);
+  RTEMS_LINKER_SET_ASSIGN_END(test_content_rw, e_rw);
+  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_content_ro, b_ro);
+  RTEMS_LINKER_SET_ASSIGN_END(test_content_ro, e_ro);
 
-  rtems_test_assert((uintptr_t) &content_rw_1 >= b_rw);
-  rtems_test_assert((uintptr_t) &content_rw_2 >= b_rw);
-  rtems_test_assert((uintptr_t) &content_rw_3 >= b_rw);
-  rtems_test_assert((uintptr_t) &content_rw_1 <= e_rw);
-  rtems_test_assert((uintptr_t) &content_rw_2 <= e_rw);
-  rtems_test_assert((uintptr_t) &content_rw_3 <= e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_1 >= (uintptr_t) b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_2 >= (uintptr_t) b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_3 >= (uintptr_t) b_rw);
+  rtems_test_assert((uintptr_t) &content_rw_1 <= (uintptr_t) e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_2 <= (uintptr_t) e_rw);
+  rtems_test_assert((uintptr_t) &content_rw_3 <= (uintptr_t) e_rw);
 
-  rtems_test_assert((uintptr_t) &content_ro_1 >= b_ro);
-  rtems_test_assert((uintptr_t) &content_ro_2 >= b_ro);
-  rtems_test_assert((uintptr_t) &content_ro_3 >= b_ro);
-  rtems_test_assert((uintptr_t) &content_ro_1 <= e_ro);
-  rtems_test_assert((uintptr_t) &content_ro_2 <= e_ro);
-  rtems_test_assert((uintptr_t) &content_ro_3 <= e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_1 >= (uintptr_t) b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_2 >= (uintptr_t) b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_3 >= (uintptr_t) b_ro);
+  rtems_test_assert((uintptr_t) &content_ro_1 <= (uintptr_t) e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_2 <= (uintptr_t) e_ro);
+  rtems_test_assert((uintptr_t) &content_ro_3 <= (uintptr_t) e_ro);
 }
 
 static void Init(rtems_task_argument arg)
