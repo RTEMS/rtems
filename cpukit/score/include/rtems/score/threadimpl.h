@@ -1045,6 +1045,15 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
     &scheduler_node->Thread.Wait_node
   );
 }
+
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_remove_wait_node(
+  Thread_Control *the_thread,
+  Scheduler_Node *scheduler_node
+)
+{
+  (void) the_thread;
+  _Chain_Extract_unprotected( &scheduler_node->Thread.Wait_node );
+}
 #endif
 
 /**

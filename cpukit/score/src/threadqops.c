@@ -1222,11 +1222,13 @@ static void _Thread_queue_Priority_inherit_do_surrender_remove(
 )
 {
   Scheduler_Node *scheduler_node;
+  Thread_Control *the_thread;
 
   scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
+  the_thread = arg;
 
+  _Thread_Scheduler_remove_wait_node( the_thread, scheduler_node );
   _Priority_Actions_add( priority_actions, priority_aggregation );
-  _Chain_Extract_unprotected( &scheduler_node->Thread.Wait_node );
 }
 #endif
 
@@ -1313,7 +1315,7 @@ static void _Thread_queue_Priority_inherit_do_surrender(
       &queue_context->Priority.Actions,
       _Thread_queue_Priority_inherit_do_surrender_remove,
       _Thread_queue_Priority_inherit_do_surrender_change,
-      NULL
+      previous_owner
     );
 
     fifo_node = _Chain_Previous( fifo_node );

@@ -63,10 +63,12 @@ static void _Thread_Priority_action_remove(
 )
 {
   Scheduler_Node *scheduler_node;
+  Thread_Control *the_thread;
 
   scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
+  the_thread = arg;
 
-  _Chain_Extract_unprotected( &scheduler_node->Thread.Wait_node );
+  _Thread_Scheduler_remove_wait_node( the_thread, scheduler_node );
   _Thread_Set_scheduler_node_priority( priority_aggregation, true );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_REMOVE );
   _Priority_Actions_add( priority_actions, priority_aggregation );
@@ -139,7 +141,7 @@ static void _Thread_Priority_do_perform_actions(
           &queue_context->Priority.Actions,
           _Thread_Priority_action_remove,
           _Thread_Priority_action_change,
-          NULL
+          the_thread
         );
 #else
         _Priority_Extract_non_empty(
