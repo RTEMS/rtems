@@ -93,14 +93,6 @@ RTEMS_INLINE_ROUTINE bool _CORE_mutex_Is_locked(
 }
 
 Status_Control _CORE_mutex_Seize_slow(
-  CORE_mutex_Control   *the_mutex,
-  Thread_Control       *executing,
-  Thread_Control       *owner,
-  bool                  wait,
-  Thread_queue_Context *queue_context
-);
-
-Status_Control _CORE_mutex_Seize_no_protocol_slow(
   CORE_mutex_Control            *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
@@ -171,8 +163,8 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
 
   return _CORE_mutex_Seize_slow(
     &the_mutex->Mutex,
+    CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
     executing,
-    owner,
     wait,
     queue_context
   );
@@ -251,7 +243,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize_no_protocol(
     return status;
   }
 
-  return _CORE_mutex_Seize_no_protocol_slow(
+  return _CORE_mutex_Seize_slow(
     &the_mutex->Mutex,
     operations,
     executing,
@@ -444,7 +436,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
     return status;
   }
 
-  return _CORE_mutex_Seize_no_protocol_slow(
+  return _CORE_mutex_Seize_slow(
     &the_mutex->Recursive.Mutex,
     CORE_MUTEX_TQ_OPERATIONS,
     executing,
