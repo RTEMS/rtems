@@ -1207,10 +1207,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_add(
   scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
   the_thread = arg;
 
-  _Chain_Append_unprotected(
-    &the_thread->Scheduler.Wait_nodes,
-    &scheduler_node->Thread.Wait_node
-  );
+  _Thread_Scheduler_add_wait_node( the_thread, scheduler_node );
   _Scheduler_Node_set_priority(
     scheduler_node,
     _Priority_Get_priority( priority_aggregation ),

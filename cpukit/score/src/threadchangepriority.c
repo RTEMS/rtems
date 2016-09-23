@@ -50,10 +50,7 @@ static void _Thread_Priority_action_add(
   scheduler_node = SCHEDULER_NODE_OF_WAIT_PRIORITY( priority_aggregation );
   the_thread = arg;
 
-  _Chain_Append_unprotected(
-    &the_thread->Scheduler.Wait_nodes,
-    &scheduler_node->Thread.Wait_node
-  );
+  _Thread_Scheduler_add_wait_node( the_thread, scheduler_node );
   _Thread_Set_scheduler_node_priority( priority_aggregation, false );
   _Priority_Set_action_type( priority_aggregation, PRIORITY_ACTION_ADD );
   _Priority_Actions_add( priority_actions, priority_aggregation );

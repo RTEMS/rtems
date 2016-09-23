@@ -1034,6 +1034,19 @@ RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_node_by_index(
 #endif
 }
 
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
+  Thread_Control *the_thread,
+  Scheduler_Node *scheduler_node
+)
+{
+  _Chain_Append_unprotected(
+    &the_thread->Scheduler.Wait_nodes,
+    &scheduler_node->Thread.Wait_node
+  );
+}
+#endif
+
 /**
  * @brief Returns the priority of the thread.
  *
