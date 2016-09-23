@@ -88,7 +88,7 @@ static void obtain_sema(rtems_id id)
 
 static void inversion_task(rtems_task_argument arg)
 {
-  assert(0);
+  rtems_test_assert(0);
 }
 
 static void mid_task(rtems_task_argument arg)
