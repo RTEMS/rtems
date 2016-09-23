@@ -1471,6 +1471,14 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     &the_thread->Scheduler.Wait_nodes,
     &new_scheduler_node->Thread.Wait_node
   );
+  _Chain_Extract_unprotected(
+    &old_scheduler_node->Thread.Scheduler_node.Chain
+  );
+  _Assert( _Chain_Is_empty( &the_thread->Scheduler.Scheduler_nodes ) );
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Scheduler_nodes,
+    &new_scheduler_node->Thread.Scheduler_node.Chain
+  );
 
   {
     const Scheduler_Control *old_scheduler;

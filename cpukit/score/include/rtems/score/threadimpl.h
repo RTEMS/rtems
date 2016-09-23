@@ -1051,6 +1051,42 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
   _ISR_lock_Release( &the_thread->Scheduler.Lock, lock_context );
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_request(
+  Thread_Control         *the_thread,
+  Scheduler_Node         *scheduler_node,
+  Scheduler_Node_request  request
+)
+{
+  ISR_lock_Context       lock_context;
+  Scheduler_Node_request current_request;
+
+  _Thread_Scheduler_acquire_critical( the_thread, &lock_context );
+
+  current_request = scheduler_node->Thread.request;
+
+  if ( current_request == SCHEDULER_NODE_REQUEST_NOT_PENDING ) {
+    _Assert(
+      request == SCHEDULER_NODE_REQUEST_ADD
+        || request == SCHEDULER_NODE_REQUEST_REMOVE
+    );
+    _Assert( scheduler_node->Thread.next_request == NULL );
+    scheduler_node->Thread.next_request = the_thread->Scheduler.requests;
+    the_thread->Scheduler.requests = scheduler_node;
+  } else if ( current_request != SCHEDULER_NODE_REQUEST_NOTHING ) {
+    _Assert(
+      ( current_request == SCHEDULER_NODE_REQUEST_ADD
+        && request == SCHEDULER_NODE_REQUEST_REMOVE )
+      || ( current_request == SCHEDULER_NODE_REQUEST_REMOVE
+        && request == SCHEDULER_NODE_REQUEST_ADD )
+    );
+    request = SCHEDULER_NODE_REQUEST_NOTHING;
+  }
+
+  scheduler_node->Thread.request = request;
+
+  _Thread_Scheduler_release_critical( the_thread, &lock_context );
+}
+
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
   Thread_Control *the_thread,
   Scheduler_Node *scheduler_node
@@ -1060,6 +1096,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_wait_node(
     &the_thread->Scheduler.Wait_nodes,
     &scheduler_node->Thread.Wait_node
   );
+  _Thread_Scheduler_add_request(
+    the_thread,
+    scheduler_node,
+    SCHEDULER_NODE_REQUEST_ADD
+  );
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_remove_wait_node(
@@ -1067,8 +1108,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_remove_wait_node(
   Scheduler_Node *scheduler_node
 )
 {
-  (void) the_thread;
   _Chain_Extract_unprotected( &scheduler_node->Thread.Wait_node );
+  _Thread_Scheduler_add_request(
+    the_thread,
+    scheduler_node,
+    SCHEDULER_NODE_REQUEST_REMOVE
+  );
 }
 #endif
 

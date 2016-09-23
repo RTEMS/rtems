@@ -300,6 +300,21 @@ typedef struct {
    * This chain is protected by the thread wait lock.
    */
   Chain_Control Wait_nodes;
+
+  /**
+   * @brief Scheduler nodes immediately available to the schedulers for this
+   * thread.
+   *
+   * This chain is protected by the thread state lock.
+   */
+  Chain_Control Scheduler_nodes;
+
+  /**
+   * @brief List of pending scheduler node requests.
+   *
+   * This list is protected by the thread scheduler lock.
+   */
+  Scheduler_Node *requests;
 #endif
 
   /**

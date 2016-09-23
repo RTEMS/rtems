@@ -95,10 +95,43 @@ typedef enum {
 } Scheduler_Help_state;
 #endif
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief The scheduler node requests.
+ */
+typedef enum {
+  /**
+   * @brief The scheduler node is not on the list of pending requests.
+   */
+  SCHEDULER_NODE_REQUEST_NOT_PENDING,
+
+  /**
+   * @brief There is a pending scheduler node request to add this scheduler
+   * node to the Thread_Control::Scheduler::Scheduler_nodes chain.
+   */
+  SCHEDULER_NODE_REQUEST_ADD,
+
+  /**
+   * @brief There is a pending scheduler node request to remove this scheduler
+   * node from the Thread_Control::Scheduler::Scheduler_nodes chain.
+   */
+  SCHEDULER_NODE_REQUEST_REMOVE,
+
+  /**
+   * @brief The scheduler node is on the list of pending requests, but nothing
+   * should change.
+   */
+  SCHEDULER_NODE_REQUEST_NOTHING,
+
+} Scheduler_Node_request;
+#endif
+
+typedef struct Scheduler_Node Scheduler_Node;
+
 /**
  * @brief Scheduler node for per-thread data.
  */
-typedef struct Scheduler_Node {
+struct Scheduler_Node {
 #if defined(RTEMS_SMP)
   /**
    * @brief Chain node for usage in various scheduler data structures.
@@ -149,6 +182,28 @@ typedef struct Scheduler_Node {
      * Thread_Control::Scheduler::Wait_nodes.
      */
     Chain_Node Wait_node;
+
+    /**
+     * @brief Node to add this scheduler node to
+     * Thread_Control::Scheduler::Scheduler_nodes.
+     */
+    union {
+      /**
+       * @brief The node for Thread_Control::Scheduler::Scheduler_nodes.
+       */
+      Chain_Node Chain;
+    } Scheduler_node;
+
+    /**
+     * @brief Link to the next scheduler node in the
+     * Thread_Control::Scheduler::requests list.
+     */
+    Scheduler_Node *next_request;
+
+    /**
+     * @brief The current scheduler node request.
+     */
+    Scheduler_Node_request request;
   } Thread;
 #endif
 
@@ -198,7 +253,7 @@ typedef struct Scheduler_Node {
      */
     bool prepend_it;
   } Priority;
-} Scheduler_Node;
+};
 
 #if defined(RTEMS_SMP)
 /**
@@ -212,6 +267,9 @@ extern const size_t _Scheduler_Node_size;
 #if defined(RTEMS_SMP)
 #define SCHEDULER_NODE_OF_THREAD_WAIT_NODE( node ) \
   RTEMS_CONTAINER_OF( node, Scheduler_Node, Thread.Wait_node )
+
+#define SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Scheduler_Node, Thread.Scheduler_node.Chain )
 #endif
 
 #ifdef __cplusplus

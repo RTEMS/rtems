@@ -210,6 +210,10 @@ bool _Thread_Initialize(
     &the_thread->Scheduler.Wait_nodes,
     &scheduler_node->Thread.Wait_node
   );
+  _Chain_Initialize_one(
+    &the_thread->Scheduler.Scheduler_nodes,
+    &scheduler_node->Thread.Scheduler_node.Chain
+  );
 #else
   scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
   _Scheduler_Node_initialize(
