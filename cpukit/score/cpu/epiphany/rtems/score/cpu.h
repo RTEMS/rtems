@@ -680,9 +680,6 @@ void _CPU_Context_Initialize(
 
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
-typedef struct {
-/* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
 #endif /* ASM */
 
 /**

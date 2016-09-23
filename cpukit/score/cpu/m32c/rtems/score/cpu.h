@@ -383,10 +383,6 @@ extern "C" {
 
 /* may need to put some structures here.  */
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /**
  * @defgroup CPUContext Processor Dependent Context Management
  *

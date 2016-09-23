@@ -129,10 +129,6 @@ extern "C" {
 
 /* structures */
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /*
  *  Basic integer context for the m68k family.
  */

@@ -221,10 +221,6 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
-typedef struct {
   uint64_t    l0;
   uint64_t    l1;
   uint64_t    l2;

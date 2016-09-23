@@ -411,7 +411,11 @@ extern "C" {
  * @brief The CPU specific per-CPU control.
  *
  * The CPU port can place here all state information that must be available and
- * maintained for each CPU in the system.
+ * maintained for each processor in the system.  This structure must contain at
+ * least one field for C/C++ compatibility.  In GNU C empty structures have a
+ * size of zero.  In C++ structures have a non-zero size.  In case
+ * CPU_PER_CPU_CONTROL_SIZE is defined to zero, then this structure is not
+ * used.
  */
 typedef struct {
   /* CPU specific per-CPU state */

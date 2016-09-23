@@ -350,10 +350,6 @@ extern "C" {
 
 #define CPU_MAXIMUM_PROCESSORS 32
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /**
  * @defgroup CPUContext Processor Dependent Context Management
  *

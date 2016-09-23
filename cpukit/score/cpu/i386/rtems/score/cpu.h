@@ -141,10 +141,6 @@ extern "C" {
 
 #ifndef ASM
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /*
  *  Basic integer context for the i386 family.
  */
