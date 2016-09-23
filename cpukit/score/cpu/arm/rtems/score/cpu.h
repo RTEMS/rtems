@@ -242,10 +242,6 @@ extern "C" {
 /**@{**/
 
 typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
-typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t register_cpsr;
   uint32_t register_r4;

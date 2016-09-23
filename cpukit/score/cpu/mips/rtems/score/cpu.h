@@ -383,10 +383,6 @@ extern "C" {
 
 #ifndef ASM
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)
 #define __MIPS_REGISTER_TYPE     uint32_t

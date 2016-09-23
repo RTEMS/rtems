@@ -838,9 +838,6 @@ void _CPU_Context_Initialize(
 #define CPU_TIMESTAMP_USE_INT64 TRUE
 #define CPU_TIMESTAMP_USE_INT64_INLINE FALSE
 
-typedef struct {
-/* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
 #endif /* ASM */
 
 /**

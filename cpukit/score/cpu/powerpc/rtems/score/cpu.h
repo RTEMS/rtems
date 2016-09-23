@@ -247,10 +247,6 @@ extern "C" {
 
 #ifndef ASM
 
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
-
 /*
  * Non-volatile context according to E500ABIUG, EABI and 32-bit TLS (according
  * to "Power Architecture 32-bit Application Binary Interface Supplement 1.0 -

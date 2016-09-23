@@ -231,10 +231,12 @@ typedef struct {
  *  This structure is used to hold per core state information.
  */
 typedef struct Per_CPU_Control {
-  /**
-   * @brief CPU port specific control.
-   */
-  CPU_Per_CPU_control cpu_per_cpu;
+  #if CPU_PER_CPU_CONTROL_SIZE > 0
+    /**
+     * @brief CPU port specific control.
+     */
+    CPU_Per_CPU_control cpu_per_cpu;
+  #endif
 
   #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
       (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
