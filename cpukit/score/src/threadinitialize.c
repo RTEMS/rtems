@@ -234,10 +234,7 @@ bool _Thread_Initialize(
   the_thread->Scheduler.own_node = scheduler_node;
   the_thread->Scheduler.node = scheduler_node;
   _Resource_Node_initialize( &the_thread->Resource_node );
-  _ISR_lock_Initialize(
-    &the_thread->Wait.Lock.Default,
-    "Thread Wait Default Lock"
-  );
+  _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
