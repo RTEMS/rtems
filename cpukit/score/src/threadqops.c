@@ -1255,6 +1255,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_change(
   );
 }
 
+#if defined(RTEMS_SMP)
 static void _Thread_queue_Priority_inherit_do_surrender_change_2(
   Priority_Aggregation *priority_aggregation,
   bool                  prepend_it,
@@ -1268,6 +1269,7 @@ static void _Thread_queue_Priority_inherit_do_surrender_change_2(
     prepend_it
   );
 }
+#endif
 
 static void _Thread_queue_Priority_inherit_do_surrender(
   Thread_queue_Queue   *queue,
