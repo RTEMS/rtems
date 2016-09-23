@@ -1051,6 +1051,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
   _ISR_lock_Release( &the_thread->Scheduler.Lock, lock_context );
 }
 
+void _Thread_Scheduler_process_requests( Thread_Control *the_thread );
+
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_request(
   Thread_Control         *the_thread,
   Scheduler_Node         *scheduler_node,

@@ -185,13 +185,20 @@ struct Scheduler_Node {
 
     /**
      * @brief Node to add this scheduler node to
-     * Thread_Control::Scheduler::Scheduler_nodes.
+     * Thread_Control::Scheduler::Scheduler_nodes or a temporary remove list.
      */
     union {
       /**
        * @brief The node for Thread_Control::Scheduler::Scheduler_nodes.
        */
       Chain_Node Chain;
+
+      /**
+       * @brief The next pointer for a temporary remove list.
+       *
+       * @see _Thread_Scheduler_process_requests().
+       */
+      Scheduler_Node *next;
     } Scheduler_node;
 
     /**

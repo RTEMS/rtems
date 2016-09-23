@@ -358,6 +358,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
   Thread_Control          *needs_help;
 #endif
 
+#if defined(RTEMS_SMP)
+  _Thread_Scheduler_process_requests( the_thread );
+#endif
+
   scheduler = _Scheduler_Get( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
@@ -397,6 +401,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
   ISR_lock_Context         lock_context;
 #if defined(RTEMS_SMP)
   Thread_Control          *needs_help;
+#endif
+
+#if defined(RTEMS_SMP)
+  _Thread_Scheduler_process_requests( the_thread );
 #endif
 
   own_scheduler = _Scheduler_Get_own( the_thread );
@@ -1449,6 +1457,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 
 #if defined(RTEMS_SMP)
+  _Thread_Scheduler_process_requests( the_thread );
   new_scheduler_node = _Thread_Scheduler_get_node_by_index(
     the_thread,
     _Scheduler_Get_index( new_scheduler )
