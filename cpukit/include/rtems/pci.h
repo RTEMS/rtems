@@ -46,6 +46,7 @@ extern "C" {
 #define PCI_COMMAND_WAIT        0x0080  /* Enable address/data stepping */
 #define PCI_COMMAND_SERR        0x0100  /* Enable SERR */
 #define PCI_COMMAND_FAST_BACK   0x0200  /* Enable back-to-back writes */
+#define PCI_COMMAND_INTX_DISABLE 0x0400 /* Disable INTx emulation */
 
 #define PCI_STATUS                  0x06   /* 16 bits */
 #define PCI_STATUS_66MHZ            0x0020 /* Support 66 Mhz PCI 2.1 bus */
