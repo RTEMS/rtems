@@ -16,6 +16,7 @@
 #define _RTEMS_SCORE_SCHEDULERNODEIMPL_H
 
 #include <rtems/score/schedulernode.h>
+#include <rtems/score/priorityimpl.h>
 
 struct Scheduler_Control;
 
@@ -53,6 +54,13 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   (void) scheduler;
   (void) the_thread;
 #endif
+}
+
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Node_get_scheduler(
+  const Scheduler_Node *node
+)
+{
+  return _Priority_Get_scheduler( &node->Wait.Priority );
 }
 
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(

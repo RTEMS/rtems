@@ -263,7 +263,7 @@ static size_t _Thread_queue_Scheduler_index(
 #if defined(RTEMS_SMP)
   const Scheduler_Control *scheduler;
 
-  scheduler = _Priority_Get_scheduler( &scheduler_node->Wait.Priority );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
   return _Scheduler_Get_index( scheduler );
 #else
   (void) scheduler_node;
