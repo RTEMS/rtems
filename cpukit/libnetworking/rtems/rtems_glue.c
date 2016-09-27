@@ -379,6 +379,7 @@ rtems_bsdnet_semaphore_obtain (void)
 	_Thread_queue_Context_set_no_timeout( &queue_context );
 	status = _CORE_recursive_mutex_Seize (
 		&the_networkSemaphore->Core_control.Mutex.Recursive,
+		CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
 		_Thread_Executing,
 		true,			/* wait */
 		_CORE_recursive_mutex_Seize_nested,
@@ -412,6 +413,7 @@ rtems_bsdnet_semaphore_release (void)
 	_ISR_lock_ISR_disable(&queue_context.Lock_context.Lock_context);
 	status = _CORE_recursive_mutex_Surrender(
 		&the_networkSemaphore->Core_control.Mutex.Recursive,
+		CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
 		_Thread_Executing,
 		&queue_context
 	);

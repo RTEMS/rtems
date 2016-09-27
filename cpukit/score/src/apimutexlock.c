@@ -36,6 +36,7 @@ void _API_Mutex_Lock( API_Mutex_Control *the_mutex )
   _Thread_queue_Context_set_no_timeout( &queue_context );
   _CORE_recursive_mutex_Seize(
     &the_mutex->Mutex,
+    CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
     _Thread_Executing,
     true,
     _CORE_recursive_mutex_Seize_nested,

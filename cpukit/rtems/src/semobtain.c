@@ -75,6 +75,7 @@ rtems_status_code rtems_semaphore_obtain(
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Seize(
         &the_semaphore->Core_control.Mutex.Recursive,
+        CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
         executing,
         wait,
         _CORE_recursive_mutex_Seize_nested,
@@ -91,7 +92,7 @@ rtems_status_code rtems_semaphore_obtain(
       );
       break;
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
-      status = _CORE_recursive_mutex_Seize_no_protocol(
+      status = _CORE_recursive_mutex_Seize(
         &the_semaphore->Core_control.Mutex.Recursive,
         _Semaphore_Get_operations( the_semaphore ),
         executing,

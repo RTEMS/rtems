@@ -76,7 +76,7 @@ int _POSIX_Mutex_Lock_support(
       );
       break;
     case POSIX_MUTEX_NO_PROTOCOL:
-      status = _CORE_recursive_mutex_Seize_no_protocol(
+      status = _CORE_recursive_mutex_Seize(
         &the_mutex->Mutex.Recursive,
         POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS,
         executing,
@@ -89,6 +89,7 @@ int _POSIX_Mutex_Lock_support(
       _Assert( the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT );
       status = _CORE_recursive_mutex_Seize(
         &the_mutex->Mutex.Recursive,
+        CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
         executing,
         wait,
         _POSIX_Mutex_Lock_nested,

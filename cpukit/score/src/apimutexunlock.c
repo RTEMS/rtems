@@ -35,6 +35,7 @@ void _API_Mutex_Unlock( API_Mutex_Control *the_mutex )
   _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
   _CORE_recursive_mutex_Surrender(
     &the_mutex->Mutex,
+    CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
     _Thread_Executing,
     &queue_context
   );

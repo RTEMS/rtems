@@ -52,6 +52,7 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:
       status = _CORE_recursive_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive,
+        CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
         executing,
         &queue_context
       );
@@ -64,13 +65,12 @@ rtems_status_code rtems_semaphore_release( rtems_id id )
       );
       break;
     case SEMAPHORE_VARIANT_MUTEX_NO_PROTOCOL:
-      _CORE_recursive_mutex_Surrender_no_protocol(
+      status = _CORE_recursive_mutex_Surrender(
         &the_semaphore->Core_control.Mutex.Recursive,
         _Semaphore_Get_operations( the_semaphore ),
         executing,
         &queue_context
       );
-      status = STATUS_SUCCESSFUL;
       break;
     case SEMAPHORE_VARIANT_SIMPLE_BINARY:
       status = _CORE_semaphore_Surrender(
