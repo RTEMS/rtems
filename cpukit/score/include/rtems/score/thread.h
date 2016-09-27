@@ -310,6 +310,21 @@ typedef struct {
   Chain_Control Scheduler_nodes;
 
   /**
+   * @brief Node for the Per_CPU_Control::Threads_in_need_for_help chain.
+   *
+   * This chain is protected by the Per_CPU_Control::Lock lock of the assigned
+   * processor.
+   */
+  Chain_Node Help_node;
+
+  /**
+   * @brief Count of nodes scheduler nodes minus one.
+   *
+   * This chain is protected by the thread state lock.
+   */
+  size_t helping_nodes;
+
+  /**
    * @brief List of pending scheduler node requests.
    *
    * This list is protected by the thread scheduler lock.

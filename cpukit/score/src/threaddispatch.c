@@ -23,6 +23,7 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/isr.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/userextimpl.h>
@@ -39,6 +40,77 @@ Thread_Control *_Thread_Allocated_fp;
 
 CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );
 
+#if defined(RTEMS_SMP)
+static bool _Thread_Can_ask_for_help( const Thread_Control *executing )
+{
+  return executing->Scheduler.helping_nodes > 0
+    && _Thread_Is_ready( executing );
+}
+#endif
+
+static void _Thread_Preemption_intervention( Per_CPU_Control *cpu_self )
+{
+#if defined(RTEMS_SMP)
+  _Per_CPU_Acquire( cpu_self );
+
+  while ( !_Chain_Is_empty( &cpu_self->Threads_in_need_for_help ) ) {
+    Chain_Node       *node;
+    Thread_Control   *the_thread;
+    ISR_lock_Context  lock_context;
+
+    node = _Chain_Get_first_unprotected( &cpu_self->Threads_in_need_for_help );
+    _Chain_Set_off_chain( node );
+    the_thread = THREAD_OF_SCHEDULER_HELP_NODE( node );
+
+    _Per_CPU_Release( cpu_self );
+    _Thread_State_acquire( the_thread, &lock_context );
+    _Thread_Scheduler_ask_for_help( the_thread );
+    _Thread_State_release( the_thread, &lock_context );
+    _Per_CPU_Acquire( cpu_self );
+  }
+
+  _Per_CPU_Release( cpu_self );
+#else
+  (void) cpu_self;
+#endif
+}
+
+static void _Thread_Post_switch_cleanup( Thread_Control *executing )
+{
+#if defined(RTEMS_SMP)
+  Chain_Node       *node;
+  const Chain_Node *tail;
+
+  if ( !_Thread_Can_ask_for_help( executing ) ) {
+    return;
+  }
+
+  node = _Chain_First( &executing->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &executing->Scheduler.Scheduler_nodes );
+
+  do {
+    Scheduler_Node          *scheduler_node;
+    const Scheduler_Control *scheduler;
+    ISR_lock_Context         lock_context;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    ( *scheduler->Operations.reconsider_help_request )(
+      scheduler,
+      executing,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    node = _Chain_Next( node );
+  } while ( node != tail );
+#else
+  (void) executing;
+#endif
+}
+
 static Thread_Action *_Thread_Get_post_switch_action(
   Thread_Control *executing
 )
@@ -54,6 +126,7 @@ static void _Thread_Run_post_switch_actions( Thread_Control *executing )
   Thread_Action    *action;
 
   _Thread_State_acquire( executing, &lock_context );
+  _Thread_Post_switch_cleanup( executing );
   action = _Thread_Get_post_switch_action( executing );
 
   while ( action != NULL ) {
@@ -77,7 +150,10 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
   executing = cpu_self->executing;
 
   do {
-    Thread_Control *heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
+    Thread_Control *heir;
+
+    _Thread_Preemption_intervention( cpu_self );
+    heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
     /*
      *  When the heir and executing are the same, then we are being

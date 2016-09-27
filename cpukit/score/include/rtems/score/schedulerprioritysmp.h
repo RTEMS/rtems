@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -86,6 +86,9 @@ typedef struct {
     _Scheduler_priority_SMP_Update_priority, \
     _Scheduler_default_Map_priority, \
     _Scheduler_default_Unmap_priority, \
+    _Scheduler_priority_SMP_Ask_for_help, \
+    _Scheduler_priority_SMP_Reconsider_help_request, \
+    _Scheduler_priority_SMP_Withdraw_node, \
     _Scheduler_priority_SMP_Ask_for_help_X, \
     _Scheduler_priority_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
@@ -121,6 +124,25 @@ Thread_Control *_Scheduler_priority_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
+);
+
+bool _Scheduler_priority_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+void _Scheduler_priority_SMP_Reconsider_help_request(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+void _Scheduler_priority_SMP_Withdraw_node(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  Thread_Scheduler_state   next_state
 );
 
 Thread_Control *_Scheduler_priority_SMP_Ask_for_help_X(

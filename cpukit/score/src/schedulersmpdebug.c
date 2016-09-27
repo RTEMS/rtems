@@ -35,8 +35,8 @@
  */
 const bool _Scheduler_Thread_state_valid_state_changes[ 3 ][ 3 ] = {
   /* FROM / TO       BLOCKED SCHEDULED READY */
-  /* BLOCKED    */ { false,  true,     true },
-  /* SCHEDULED  */ { true,   false,    true },
+  /* BLOCKED    */ { true,   true,     true },
+  /* SCHEDULED  */ { true,   true,     true },
   /* READY      */ { true,   true,     true }
 };
 
@@ -46,7 +46,7 @@ const bool _Scheduler_Thread_state_valid_state_changes[ 3 ][ 3 ] = {
  */
 const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ] = {
   /* FROM / TO       BLOCKED SCHEDULED READY */
-  /* BLOCKED    */ { false,  true,     true },
+  /* BLOCKED    */ { true,   true,     true },
   /* SCHEDULED  */ { true,   false,    true },
   /* READY      */ { true,   true,     false }
 };

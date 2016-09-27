@@ -42,7 +42,11 @@ typedef enum {
   REQ_MTX_2_OBTAIN = RTEMS_EVENT_5,
   REQ_MTX_2_RELEASE = RTEMS_EVENT_6,
   REQ_SEM_OBTAIN_RELEASE = RTEMS_EVENT_7,
-  REQ_SEM_RELEASE = RTEMS_EVENT_8
+  REQ_SEM_RELEASE = RTEMS_EVENT_8,
+  REQ_SET_DONE = RTEMS_EVENT_9,
+  REQ_WAIT_FOR_DONE = RTEMS_EVENT_10,
+  REQ_SEND_EVENT_2 = RTEMS_EVENT_11,
+  REQ_SEND_EVENT_3 = RTEMS_EVENT_12
 } request_id;
 
 typedef enum {
@@ -63,11 +67,21 @@ typedef struct {
   rtems_id mtx_2;
   rtems_id sem;
   rtems_id tasks[TASK_COUNT];
+  Atomic_Uint done;
+  task_id id_2;
+  rtems_event_set events_2;
+  task_id id_3;
+  rtems_event_set events_3;
   int generation[TASK_COUNT];
   int expected_generation[TASK_COUNT];
 } test_context;
 
 static test_context test_instance;
+
+static void assert_cpu(uint32_t expected_cpu)
+{
+  rtems_test_assert(rtems_get_current_processor() == expected_cpu);
+}
 
 static void test_task_get_priority_not_defined(test_context *ctx)
 {
@@ -123,6 +137,55 @@ static void send_event(test_context *ctx, task_id id, rtems_event_set events)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void set_event_2(
+  test_context *ctx,
+  task_id id_2,
+  rtems_event_set events_2
+)
+{
+  ctx->id_2 = id_2;
+  ctx->events_2 = events_2;
+}
+
+static void set_event_3(
+  test_context *ctx,
+  task_id id_3,
+  rtems_event_set events_3
+)
+{
+  ctx->id_3 = id_3;
+  ctx->events_3 = events_3;
+}
+
+static void clear_done(test_context *ctx)
+{
+  _Atomic_Store_uint(&ctx->done, 0, ATOMIC_ORDER_RELAXED);
+}
+
+static void set_done(test_context *ctx)
+{
+  _Atomic_Store_uint(&ctx->done, 1, ATOMIC_ORDER_RELEASE);
+}
+
+static bool is_done(test_context *ctx)
+{
+  return _Atomic_Load_uint(&ctx->done, ATOMIC_ORDER_ACQUIRE) != 0;
+}
+
+static void wait_for_done(test_context *ctx)
+{
+  while (!is_done(ctx)) {
+    /* Wait */
+  }
+}
+
+static void request_pre_emption(test_context *ctx, task_id id)
+{
+  clear_done(ctx);
+  send_event(ctx, id, REQ_SET_DONE);
+  wait_for_done(ctx);
+}
+
 static rtems_event_set wait_for_events(void)
 {
   rtems_event_set events;
@@ -157,7 +220,16 @@ static void sync_with_helper(test_context *ctx)
 static void request(test_context *ctx, task_id id, request_id req)
 {
   send_event(ctx, id, req);
-  sync_with_helper(ctx);
+  clear_done(ctx);
+
+  if (rtems_get_current_processor() == 0) {
+    id = H_B;
+  } else {
+    id = H_A;
+  }
+
+  send_event(ctx, id, REQ_SET_DONE);
+  wait_for_done(ctx);
 }
 
 static void obtain(test_context *ctx)
@@ -241,6 +313,14 @@ static void check_generations(test_context *ctx, task_id a, task_id b)
   }
 }
 
+static void set_prio(test_context *ctx, task_id id, rtems_task_priority prio)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_set_priority(ctx->tasks[id], prio, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void assert_prio(
   test_context *ctx,
   task_id id,
@@ -303,6 +383,10 @@ static void helper(rtems_task_argument arg)
     if ((events & REQ_SEM_RELEASE) != 0) {
       sem_release(ctx);
     }
+
+    if ((events & REQ_SET_DONE) != 0) {
+      set_done(ctx);
+    }
   }
 }
 
@@ -343,6 +427,22 @@ static void worker(rtems_task_argument arg)
       sem_obtain(ctx);
       ++ctx->generation[id];
       sem_release(ctx);
+    }
+
+    if ((events & REQ_SEND_EVENT_2) != 0) {
+      send_event(ctx, ctx->id_2, ctx->events_2);
+    }
+
+    if ((events & REQ_SEND_EVENT_3) != 0) {
+      send_event(ctx, ctx->id_3, ctx->events_3);
+    }
+
+    if ((events & REQ_SET_DONE) != 0) {
+      set_done(ctx);
+    }
+
+    if ((events & REQ_WAIT_FOR_DONE) != 0) {
+      wait_for_done(ctx);
     }
   }
 }
@@ -672,6 +772,92 @@ static void test_dequeue_order_two_scheduler_instances(test_context *ctx)
   check_generations(ctx, B_5_1, NONE);
 }
 
+static void test_omip_pre_emption(test_context *ctx)
+{
+  assert_cpu(0);
+  obtain(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  request(ctx, B_5_0, REQ_MTX_OBTAIN);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+  check_generations(ctx, NONE, NONE);
+
+  request_pre_emption(ctx, A_1);
+  assert_cpu(1);
+
+  request_pre_emption(ctx, B_4);
+  assert_cpu(0);
+
+  request_pre_emption(ctx, A_1);
+  assert_cpu(1);
+
+  release(ctx);
+  assert_cpu(0);
+  sync_with_helper(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  check_generations(ctx, B_5_0, NONE);
+
+  request(ctx, B_5_0, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  check_generations(ctx, B_5_0, NONE);
+}
+
+static void test_omip_rescue(test_context *ctx)
+{
+  assert_cpu(0);
+  obtain(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  clear_done(ctx);
+  set_event_3(ctx, H_B, REQ_SET_DONE);
+  set_event_2(ctx, B_5_0, REQ_SEND_EVENT_3 | REQ_MTX_OBTAIN);
+  send_event(ctx, A_1, REQ_SEND_EVENT_2 | REQ_WAIT_FOR_DONE);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+  assert_cpu(1);
+
+  release(ctx);
+  assert_cpu(0);
+  sync_with_helper(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  check_generations(ctx, B_5_0, NONE);
+
+  request(ctx, B_5_0, REQ_MTX_RELEASE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_5_0, SCHED_B, 5);
+  check_generations(ctx, B_5_0, NONE);
+}
+
+static void test_omip_timeout(test_context *ctx)
+{
+  assert_cpu(0);
+  obtain(ctx);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+
+  clear_done(ctx);
+  set_event_3(ctx, H_B, REQ_SET_DONE);
+  set_event_2(ctx, B_5_0, REQ_SEND_EVENT_3 | REQ_MTX_OBTAIN_TIMEOUT);
+  send_event(ctx, A_1, REQ_SEND_EVENT_2 | REQ_WAIT_FOR_DONE);
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, 5);
+  assert_cpu(1);
+
+  wait();
+  assert_prio_by_scheduler(ctx, M, SCHED_A, 3);
+  assert_prio_by_scheduler(ctx, M, SCHED_B, PRIO_NONE);
+  check_generations(ctx, B_5_0, NONE);
+  assert_cpu(0);
+
+  release(ctx);
+}
+
 static void test(void)
 {
   test_context *ctx = &test_instance;
@@ -685,6 +871,9 @@ static void test(void)
   test_simple_inheritance_two_scheduler_instances(ctx);
   test_nested_inheritance_two_scheduler_instances(ctx);
   test_dequeue_order_two_scheduler_instances(ctx);
+  test_omip_pre_emption(ctx);
+  test_omip_rescue(ctx);
+  test_omip_timeout(ctx);
 }
 
 static void Init(rtems_task_argument arg)

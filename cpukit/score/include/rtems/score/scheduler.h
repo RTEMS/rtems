@@ -104,6 +104,52 @@ typedef struct {
 
 #if defined(RTEMS_SMP)
   /**
+   * @brief Ask for help operation.
+   *
+   * @param[in] scheduler The scheduler instance to ask for help.
+   * @param[in] the_thread The thread needing help.
+   * @param[in] node The scheduler node.
+   *
+   * @retval true Ask for help was successful.
+   * @retval false Otherwise.
+   */
+  bool ( *ask_for_help )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Reconsider help operation.
+   *
+   * @param[in] scheduler The scheduler instance to reconsider the help
+   *   request.
+   * @param[in] the_thread The thread reconsidering a help request.
+   * @param[in] node The scheduler node.
+   */
+  void ( *reconsider_help_request )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Withdraw node operation.
+   *
+   * @param[in] scheduler The scheduler instance to withdraw the node.
+   * @param[in] the_thread The thread using the node.
+   * @param[in] node The scheduler node to withdraw.
+   * @param[in] next_state The next thread scheduler state in case the node is
+   *   scheduled.
+   */
+  void ( *withdraw_node )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    Thread_Scheduler_state   next_state
+  );
+
+  /**
    * Ask for help operation.
    *
    * @param[in] scheduler The scheduler of the thread offering help.
@@ -322,6 +368,49 @@ Priority_Control _Scheduler_default_Map_priority(
    * @brief Does nothing.
    *
    * @param[in] scheduler Unused.
+   * @param[in] the_thread Unused.
+   * @param[in] node Unused.
+   *
+   * @retval false Always.
+   */
+  bool _Scheduler_default_Ask_for_help(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Does nothing.
+   *
+   * @param[in] scheduler Unused.
+   * @param[in] the_thread Unused.
+   * @param[in] node Unused.
+   */
+  void _Scheduler_default_Reconsider_help_request(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node
+  );
+
+  /**
+   * @brief Does nothing.
+   *
+   * @param[in] scheduler Unused.
+   * @param[in] the_thread Unused.
+   * @param[in] node Unused.
+   * @param[in] next_state Unused.
+   */
+  void _Scheduler_default_Withdraw_node(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    Thread_Scheduler_state   next_state
+  );
+
+  /**
+   * @brief Does nothing.
+   *
+   * @param[in] scheduler Unused.
    * @param[in] offers_help Unused.
    * @param[in] needs_help Unused.
    *
@@ -334,6 +423,9 @@ Priority_Control _Scheduler_default_Map_priority(
   );
 
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
+    _Scheduler_default_Ask_for_help, \
+    _Scheduler_default_Reconsider_help_request, \
+    _Scheduler_default_Withdraw_node, \
     _Scheduler_default_Ask_for_help_X,
 #else
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP

@@ -9,7 +9,7 @@
 /*
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2013 embedded brains GmbH.
+ *  Copyright (c) 2013, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -69,6 +69,9 @@ typedef struct {
     _Scheduler_simple_SMP_Update_priority, \
     _Scheduler_default_Map_priority, \
     _Scheduler_default_Unmap_priority, \
+    _Scheduler_simple_SMP_Ask_for_help, \
+    _Scheduler_simple_SMP_Reconsider_help_request, \
+    _Scheduler_simple_SMP_Withdraw_node, \
     _Scheduler_simple_SMP_Ask_for_help_X, \
     _Scheduler_simple_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
@@ -104,6 +107,25 @@ Thread_Control *_Scheduler_simple_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
+);
+
+bool _Scheduler_simple_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+void _Scheduler_simple_SMP_Reconsider_help_request(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+);
+
+void _Scheduler_simple_SMP_Withdraw_node(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  Thread_Scheduler_state   next_state
 );
 
 Thread_Control *_Scheduler_simple_SMP_Ask_for_help_X(

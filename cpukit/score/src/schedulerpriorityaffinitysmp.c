@@ -499,6 +499,25 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_scheduled_fifo(
   );
 }
 
+static bool _Scheduler_priority_affinity_SMP_Do_ask_for_help(
+  Scheduler_Context *context,
+  Thread_Control    *the_thread,
+  Scheduler_Node    *node
+)
+{
+  return _Scheduler_SMP_Ask_for_help(
+    context,
+    the_thread,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
+    _Scheduler_priority_SMP_Insert_ready_lifo,
+    _Scheduler_SMP_Insert_scheduled_lifo,
+    _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
+    _Scheduler_SMP_Get_lowest_scheduled,
+    _Scheduler_SMP_Allocate_processor_lazy
+  );
+}
+
 /*
  * This is the public scheduler specific Change Priority operation.
  */
@@ -520,7 +539,8 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Update_priority(
     _Scheduler_priority_affinity_SMP_Enqueue_fifo,
     _Scheduler_priority_affinity_SMP_Enqueue_lifo,
     _Scheduler_priority_affinity_SMP_Enqueue_scheduled_fifo,
-    _Scheduler_priority_affinity_SMP_Enqueue_scheduled_lifo
+    _Scheduler_priority_affinity_SMP_Enqueue_scheduled_lifo,
+    _Scheduler_priority_affinity_SMP_Do_ask_for_help
   );
 
   /*
@@ -529,6 +549,54 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Update_priority(
   _Scheduler_priority_affinity_SMP_Check_for_migrations( context );
 
   return displaced;
+}
+
+bool _Scheduler_priority_affinity_SMP_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Scheduler_priority_affinity_SMP_Do_ask_for_help( context, the_thread, node );
+}
+
+void _Scheduler_priority_affinity_SMP_Reconsider_help_request(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Reconsider_help_request(
+    context,
+    the_thread,
+    node,
+    _Scheduler_priority_SMP_Extract_from_ready
+  );
+}
+
+void _Scheduler_priority_affinity_SMP_Withdraw_node(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  Thread_Scheduler_state   next_state
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Withdraw_node(
+    context,
+    the_thread,
+    node,
+    next_state,
+    _Scheduler_priority_SMP_Extract_from_ready,
+    _Scheduler_priority_affinity_SMP_Get_highest_ready,
+    _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor_lazy
+  );
 }
 
 Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help_X(

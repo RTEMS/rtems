@@ -89,6 +89,7 @@ void _SMP_Handler_initialize( void )
     _ISR_lock_Initialize( &cpu->Watchdog.Lock, "Watchdog" );
     _SMP_ticket_lock_Initialize( &cpu->Lock );
     _SMP_lock_Stats_initialize( &cpu->Lock_stats, "Per-CPU" );
+    _Chain_Initialize_empty( &cpu->Threads_in_need_for_help );
   }
 
   /*

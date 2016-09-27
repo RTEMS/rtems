@@ -20,6 +20,39 @@
 #include <rtems/score/schedulerimpl.h>
 
 #if defined(RTEMS_SMP)
+void _Thread_Scheduler_ask_for_help( Thread_Control *the_thread )
+{
+  Chain_Node       *node;
+  const Chain_Node *tail;
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+
+  do {
+    Scheduler_Node          *scheduler_node;
+    const Scheduler_Control *scheduler;
+    ISR_lock_Context         lock_context;
+    bool                     success;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    success = ( *scheduler->Operations.ask_for_help )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    if ( success ) {
+      break;
+    }
+
+    node = _Chain_Next( node );
+  } while ( node != tail );
+}
+
 void _Thread_Scheduler_process_requests( Thread_Control *the_thread )
 {
   ISR_lock_Context  lock_context;
@@ -48,11 +81,13 @@ void _Thread_Scheduler_process_requests( Thread_Control *the_thread )
 #endif
 
       if ( request == SCHEDULER_NODE_REQUEST_ADD ) {
+        ++the_thread->Scheduler.helping_nodes;
         _Chain_Append_unprotected(
           &the_thread->Scheduler.Scheduler_nodes,
           &scheduler_node->Thread.Scheduler_node.Chain
         );
       } else if ( request == SCHEDULER_NODE_REQUEST_REMOVE ) {
+        --the_thread->Scheduler.helping_nodes;
         _Chain_Extract_unprotected(
           &scheduler_node->Thread.Scheduler_node.Chain
         );
@@ -70,10 +105,24 @@ void _Thread_Scheduler_process_requests( Thread_Control *the_thread )
     scheduler_node = remove;
 
     while ( scheduler_node != NULL ) {
+      const Scheduler_Control *scheduler;
+      ISR_lock_Context         lock_context;
+
       next = scheduler_node->Thread.Scheduler_node.next;
 #if defined(RTEMS_DEBUG)
       scheduler_node->Thread.Scheduler_node.next = NULL;
 #endif
+
+      scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+      _Scheduler_Acquire_critical( scheduler, &lock_context );
+      ( *scheduler->Operations.withdraw_node )(
+        scheduler,
+        the_thread,
+        scheduler_node,
+        THREAD_SCHEDULER_READY
+      );
+      _Scheduler_Release_critical( scheduler, &lock_context );
 
       scheduler_node = next;
     }

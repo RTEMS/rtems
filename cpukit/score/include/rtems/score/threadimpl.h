@@ -81,6 +81,9 @@ extern Thread_Control *_Thread_Allocated_fp;
 #if defined(RTEMS_SMP)
 #define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )
+
+#define THREAD_OF_SCHEDULER_HELP_NODE( node ) \
+  RTEMS_CONTAINER_OF( node, Thread_Control, Scheduler.Help_node )
 #endif
 
 typedef bool ( *Thread_Visitor )( Thread_Control *the_thread, void *arg );
@@ -993,6 +996,23 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   return owns_resources;
 }
 
+#if defined(RTEMS_SMP)
+RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(
+  Thread_Control  *the_thread,
+  Per_CPU_Control *cpu
+)
+{
+  _Per_CPU_Acquire( cpu );
+
+  if ( !_Chain_Is_node_off_chain( &the_thread->Scheduler.Help_node ) ) {
+    _Chain_Extract_unprotected( &the_thread->Scheduler.Help_node );
+    _Chain_Set_off_chain( &the_thread->Scheduler.Help_node );
+  }
+
+  _Per_CPU_Release( cpu );
+}
+#endif
+
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_own_node(
   const Thread_Control *the_thread
 )
@@ -1051,7 +1071,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
   _ISR_lock_Release( &the_thread->Scheduler.Lock, lock_context );
 }
 
+#if defined(RTEMS_SMP)
+void _Thread_Scheduler_ask_for_help( Thread_Control *the_thread );
+
 void _Thread_Scheduler_process_requests( Thread_Control *the_thread );
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_add_request(
   Thread_Control         *the_thread,

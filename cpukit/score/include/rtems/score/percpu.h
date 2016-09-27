@@ -23,6 +23,7 @@
   #include <rtems/asm.h>
 #else
   #include <rtems/score/assert.h>
+  #include <rtems/score/chain.h>
   #include <rtems/score/isrlock.h>
   #include <rtems/score/smp.h>
   #include <rtems/score/smplock.h>
@@ -393,6 +394,13 @@ typedef struct Per_CPU_Control {
        */
       SMP_lock_Stats_context Lock_stats_context;
     #endif
+
+    /**
+     * @brief Chain of threads in need for help.
+     *
+     * This field is protected by the Per_CPU_Control::Lock lock.
+     */
+    Chain_Control Threads_in_need_for_help;
 
     /**
      * @brief Bit field for SMP messages.

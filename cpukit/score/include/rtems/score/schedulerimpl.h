@@ -325,19 +325,54 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 {
+#if defined(RTEMS_SMP)
+  Chain_Node              *node;
+  const Chain_Node        *tail;
+  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
 
-  scheduler = _Scheduler_Get( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
 
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+  ( *scheduler->Operations.block )(
+    scheduler,
+    the_thread,
+    scheduler_node
+  );
+  _Scheduler_Release_critical( scheduler, &lock_context );
+
+  node = _Chain_Next( node );
+
+  while ( node != tail ) {
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    ( *scheduler->Operations.withdraw_node )(
+      scheduler,
+      the_thread,
+      scheduler_node,
+      THREAD_SCHEDULER_BLOCKED
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    node = _Chain_Next( node );
+  }
+#else
+  const Scheduler_Control *scheduler;
+
+  scheduler = _Scheduler_Get( the_thread );
   ( *scheduler->Operations.block )(
     scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-
-  _Scheduler_Release_critical( scheduler, &lock_context );
+#endif
 }
 
 /**
@@ -352,33 +387,65 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
+#if defined(RTEMS_SMP)
+  Chain_Node              *node;
+  const Chain_Node        *tail;
+  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-#if defined(RTEMS_SMP)
   Thread_Control          *needs_help;
-#endif
 
-#if defined(RTEMS_SMP)
-  _Thread_Scheduler_process_requests( the_thread );
-#endif
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+  needs_help = ( *scheduler->Operations.unblock )(
+    scheduler,
+    the_thread,
+    scheduler_node
+  );
+  _Scheduler_Ask_for_help_if_necessary( needs_help );
+  _Scheduler_Release_critical( scheduler, &lock_context );
+
+  if ( needs_help != the_thread ) {
+    return;
+  }
+
+  node = _Chain_Next( node );
+
+  while ( node != tail ) {
+    bool success;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    success = ( *scheduler->Operations.ask_for_help )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    if ( success ) {
+      break;
+    }
+
+    node = _Chain_Next( node );
+  }
+#else
+  const Scheduler_Control *scheduler;
 
   scheduler = _Scheduler_Get( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-
-#if defined(RTEMS_SMP)
-  needs_help =
-#endif
   ( *scheduler->Operations.unblock )(
     scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-
-#if defined(RTEMS_SMP)
-  _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
-
-  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -397,33 +464,45 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread )
 {
-  const Scheduler_Control *own_scheduler;
-  ISR_lock_Context         lock_context;
 #if defined(RTEMS_SMP)
-  Thread_Control          *needs_help;
-#endif
+  Chain_Node       *node;
+  const Chain_Node *tail;
 
-#if defined(RTEMS_SMP)
   _Thread_Scheduler_process_requests( the_thread );
-#endif
 
-  own_scheduler = _Scheduler_Get_own( the_thread );
-  _Scheduler_Acquire_critical( own_scheduler, &lock_context );
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
 
-#if defined(RTEMS_SMP)
-  needs_help =
-#endif
-  ( *own_scheduler->Operations.update_priority )(
-    own_scheduler,
+  do {
+    Scheduler_Node          *scheduler_node;
+    const Scheduler_Control *scheduler;
+    ISR_lock_Context         lock_context;
+    Thread_Control          *needs_help;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    needs_help = ( *scheduler->Operations.update_priority )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Ask_for_help_if_necessary( needs_help );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    node = _Chain_Next( node );
+  } while ( node != tail );
+#else
+  const Scheduler_Control *scheduler;
+
+  scheduler = _Scheduler_Get( the_thread );
+  ( *scheduler->Operations.update_priority )(
+    scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-
-#if defined(RTEMS_SMP)
-  _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
-
-  _Scheduler_Release_critical( own_scheduler, &lock_context );
 }
 
 /**
@@ -1008,7 +1087,13 @@ _Scheduler_Try_to_schedule_node(
   _Thread_Scheduler_acquire_critical( user, &lock_context );
 
   if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
-    _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+    if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
+      _Thread_Scheduler_cancel_need_for_help( user, _Thread_Get_CPU( user ) );
+      _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+    } else {
+      action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
+    }
+
     _Thread_Scheduler_release_critical( user, &lock_context );
     return action;
   }
@@ -1129,6 +1214,7 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
   thread_cpu = _Thread_Get_CPU( thread );
+  _Thread_Scheduler_cancel_need_for_help( thread, thread_cpu );
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
   _Thread_Scheduler_release_critical( thread, &lock_context );
 

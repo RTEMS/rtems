@@ -355,6 +355,25 @@ Thread_Control *_Scheduler_strong_APA_Unblock(
   );
 }
 
+static bool _Scheduler_strong_APA_Do_ask_for_help(
+  Scheduler_Context *context,
+  Thread_Control    *the_thread,
+  Scheduler_Node    *node
+)
+{
+  return _Scheduler_SMP_Ask_for_help(
+    context,
+    the_thread,
+    node,
+    _Scheduler_SMP_Insert_priority_lifo_order,
+    _Scheduler_strong_APA_Insert_ready_lifo,
+    _Scheduler_SMP_Insert_scheduled_lifo,
+    _Scheduler_strong_APA_Move_from_scheduled_to_ready,
+    _Scheduler_SMP_Get_lowest_scheduled,
+    _Scheduler_SMP_Allocate_processor_lazy
+  );
+}
+
 Thread_Control *_Scheduler_strong_APA_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
@@ -372,7 +391,56 @@ Thread_Control *_Scheduler_strong_APA_Update_priority(
     _Scheduler_strong_APA_Enqueue_fifo,
     _Scheduler_strong_APA_Enqueue_lifo,
     _Scheduler_strong_APA_Enqueue_scheduled_fifo,
-    _Scheduler_strong_APA_Enqueue_scheduled_lifo
+    _Scheduler_strong_APA_Enqueue_scheduled_lifo,
+    _Scheduler_strong_APA_Do_ask_for_help
+  );
+}
+
+bool _Scheduler_strong_APA_Ask_for_help(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Scheduler_strong_APA_Do_ask_for_help( context, the_thread, node );
+}
+
+void _Scheduler_strong_APA_Reconsider_help_request(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Reconsider_help_request(
+    context,
+    the_thread,
+    node,
+    _Scheduler_strong_APA_Extract_from_ready
+  );
+}
+
+void _Scheduler_strong_APA_Withdraw_node(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  Thread_Scheduler_state   next_state
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Withdraw_node(
+    context,
+    the_thread,
+    node,
+    next_state,
+    _Scheduler_strong_APA_Extract_from_ready,
+    _Scheduler_strong_APA_Get_highest_ready,
+    _Scheduler_strong_APA_Move_from_ready_to_scheduled,
+    _Scheduler_SMP_Allocate_processor_lazy
   );
 }
 
