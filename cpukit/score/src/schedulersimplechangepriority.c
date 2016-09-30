@@ -23,11 +23,11 @@
 
 Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_simple_Context *context;
-  Scheduler_Node           *node;
   bool                      prepend_it;
 
   if ( !_Thread_Is_ready( the_thread ) ) {
@@ -36,7 +36,6 @@ Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
   }
 
   context = _Scheduler_simple_Get_context( scheduler );
-  node = _Scheduler_Thread_get_node( the_thread );
   _Scheduler_Node_get_priority( node, &prepend_it );
 
   _Scheduler_simple_Extract( scheduler, the_thread );

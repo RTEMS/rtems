@@ -100,7 +100,8 @@ Thread_Control *_Scheduler_simple_SMP_Unblock(
 
 Thread_Control *_Scheduler_simple_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 Thread_Control *_Scheduler_simple_SMP_Ask_for_help_X(

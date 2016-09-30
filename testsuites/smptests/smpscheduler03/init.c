@@ -40,6 +40,11 @@ typedef struct {
 
 static test_context test_instance;
 
+static Scheduler_SMP_Node *get_scheduler_node(Thread_Control *thread)
+{
+  return _Scheduler_SMP_Node_downcast(_Thread_Scheduler_get_home_node(thread));
+}
+
 static void apply_priority(
   Thread_Control *thread,
   Priority_Control new_priority,
@@ -119,7 +124,7 @@ static Thread_Control *get_thread_by_id(rtems_id task_id)
 
 static void test_case_change_priority(
   Thread_Control *executing,
-  Scheduler_SMP_Node *node,
+  Scheduler_SMP_Node *executing_node,
   Scheduler_SMP_Node_state start_state,
   Priority_Control prio,
   bool prepend_it,
@@ -141,13 +146,13 @@ static void test_case_change_priority(
       rtems_test_assert(0);
       break;
   }
-  rtems_test_assert(node->state == start_state);
+  rtems_test_assert(executing_node->state == start_state);
 
   change_priority(executing, prio, prepend_it);
-  rtems_test_assert(node->state == new_state);
+  rtems_test_assert(executing_node->state == new_state);
 
   change_priority(executing, 1, true);
-  rtems_test_assert(node->state == SCHEDULER_SMP_NODE_SCHEDULED);
+  rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_SCHEDULED);
 
   _Thread_Dispatch_enable( cpu_self );
 }
@@ -166,21 +171,21 @@ static void test_change_priority(void)
   rtems_status_code sc;
   rtems_id task_id;
   Thread_Control *executing;
-  Scheduler_SMP_Node *node;
+  Scheduler_SMP_Node *executing_node;
   size_t i;
   size_t j;
   size_t k;
 
   task_id = start_task(3);
   executing = _Thread_Get_executing();
-  node = _Scheduler_SMP_Thread_get_node(executing);
+  executing_node = get_scheduler_node(executing);
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(states); ++i) {
     for (j = 0; j < RTEMS_ARRAY_SIZE(priorities); ++j) {
       for (k = 0; k < RTEMS_ARRAY_SIZE(prepend_it); ++k) {
         test_case_change_priority(
           executing,
-          node,
+          executing_node,
           states[i],
           priorities[j],
           prepend_it[k],
@@ -196,6 +201,7 @@ static void test_change_priority(void)
 
 static Thread_Control *update_priority_op(
   Thread_Control *thread,
+  Scheduler_SMP_Node *scheduler_node,
   Priority_Control new_priority,
   bool prepend_it
 )
@@ -212,7 +218,11 @@ static Thread_Control *update_priority_op(
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  needs_help = (*scheduler->Operations.update_priority)( scheduler, thread);
+  needs_help = (*scheduler->Operations.update_priority)(
+    scheduler,
+    thread,
+    &scheduler_node->Base
+  );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
@@ -248,7 +258,7 @@ static void test_case_update_priority_op(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  needs_help = update_priority_op(executing, prio, prepend_it);
+  needs_help = update_priority_op(executing, executing_node, prio, prepend_it);
   rtems_test_assert(executing_node->state == new_state);
 
   if (start_state != new_state) {
@@ -286,7 +296,7 @@ static void test_update_priority_op(void)
 
   task_id = start_task(3);
   executing = _Thread_Get_executing();
-  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+  executing_node = get_scheduler_node(executing);
 
   other = get_thread_by_id(task_id);
 
@@ -418,7 +428,7 @@ static void test_yield_op(void)
 
   task_id = start_task(2);
   executing = _Thread_Get_executing();
-  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+  executing_node = get_scheduler_node(executing);
 
   other = get_thread_by_id(task_id);
 
@@ -539,7 +549,7 @@ static void test_unblock_op(void)
 
   task_id = start_task(3);
   executing = _Thread_Get_executing();
-  executing_node = _Scheduler_SMP_Thread_get_node(executing);
+  executing_node = get_scheduler_node(executing);
 
   other = get_thread_by_id(task_id);
 

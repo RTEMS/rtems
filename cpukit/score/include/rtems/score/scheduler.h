@@ -83,7 +83,8 @@ typedef struct {
   /** @see _Scheduler_Update_priority() */
   Scheduler_Void_or_thread ( *update_priority )(
     const Scheduler_Control *,
-    Thread_Control *
+    Thread_Control *,
+    Scheduler_Node *
   );
 
   /** @see _Scheduler_Map_priority() */

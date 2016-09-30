@@ -136,6 +136,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
   _ISR_lock_Release( &_Scheduler_Lock, lock_context );
 }
 
+RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->Scheduler.node;
+#else
+  return the_thread->Scheduler.nodes;
+#endif
+}
+
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.
@@ -381,7 +392,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
 #if defined(RTEMS_SMP)
   needs_help =
 #endif
-  ( *own_scheduler->Operations.update_priority )( own_scheduler, the_thread );
+  ( *own_scheduler->Operations.update_priority )(
+    own_scheduler,
+    the_thread,
+    _Thread_Scheduler_get_home_node( the_thread )
+  );
 
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );
@@ -766,17 +781,6 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
 )
 {
   return (uint32_t) (scheduler - &_Scheduler_Table[ 0 ]);
-}
-
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.node;
-#else
-  return the_thread->Scheduler.nodes;
-#endif
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(

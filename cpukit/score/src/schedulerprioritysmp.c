@@ -227,7 +227,8 @@ Thread_Control *_Scheduler_priority_SMP_Unblock(
 
 Thread_Control *_Scheduler_priority_SMP_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -235,6 +236,7 @@ Thread_Control *_Scheduler_priority_SMP_Update_priority(
   return _Scheduler_SMP_Update_priority(
     context,
     thread,
+    node,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Do_update,
     _Scheduler_priority_SMP_Enqueue_fifo,

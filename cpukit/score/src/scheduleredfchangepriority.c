@@ -38,11 +38,12 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
 
 Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_EDF_Context *context;
-  Scheduler_EDF_Node    *node;
+  Scheduler_EDF_Node    *the_node;
   Priority_Control       priority;
   bool                   prepend_it;
 
@@ -51,23 +52,23 @@ Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
     SCHEDULER_RETURN_VOID_OR_NULL;
   }
 
-  node = _Scheduler_EDF_Thread_get_node( the_thread );
-  priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+  the_node = _Scheduler_EDF_Node_downcast( node );
+  priority = _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
 
-  if ( priority == node->priority ) {
+  if ( priority == the_node->priority ) {
     /* Nothing to do */
     SCHEDULER_RETURN_VOID_OR_NULL;
   }
 
-  node->priority = priority;
+  the_node->priority = priority;
   context = _Scheduler_EDF_Get_context( scheduler );
 
-  _Scheduler_EDF_Extract( context, node );
+  _Scheduler_EDF_Extract( context, the_node );
 
   if ( prepend_it ) {
-    _Scheduler_EDF_Enqueue_first( context, node, priority );
+    _Scheduler_EDF_Enqueue_first( context, the_node, priority );
   } else {
-    _Scheduler_EDF_Enqueue( context, node, priority );
+    _Scheduler_EDF_Enqueue( context, the_node, priority );
   }
 
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );

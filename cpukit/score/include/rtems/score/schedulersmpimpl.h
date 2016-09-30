@@ -385,6 +385,20 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(
   return (Scheduler_SMP_Node *) node;
 }
 
+static inline Scheduler_SMP_Node_state _Scheduler_SMP_Node_state(
+  const Scheduler_Node *node
+)
+{
+  return ( (const Scheduler_SMP_Node *) node )->state;
+}
+
+static inline Priority_Control _Scheduler_SMP_Node_priority(
+  const Scheduler_Node *node
+)
+{
+  return ( (const Scheduler_SMP_Node *) node )->priority;
+}
+
 static inline void _Scheduler_SMP_Node_initialize(
   const Scheduler_Control *scheduler,
   Scheduler_SMP_Node      *node,
@@ -963,6 +977,7 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
 static inline Thread_Control *_Scheduler_SMP_Update_priority(
   Scheduler_Context               *context,
   Thread_Control                  *thread,
+  Scheduler_Node                  *node,
   Scheduler_SMP_Extract            extract_from_ready,
   Scheduler_SMP_Update             update,
   Scheduler_SMP_Enqueue            enqueue_fifo,
@@ -971,41 +986,42 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
   Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_lifo
 )
 {
-  Scheduler_SMP_Node *node;
-  Thread_Control     *needs_help;
-  Priority_Control    new_priority;
-  bool                prepend_it;
+  Thread_Control          *needs_help;
+  Priority_Control         new_priority;
+  bool                     prepend_it;
+  Scheduler_SMP_Node_state node_state;
 
-  node = _Scheduler_SMP_Thread_get_own_node( thread );
-  new_priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+  new_priority = _Scheduler_Node_get_priority( node, &prepend_it );
 
-  if ( new_priority == node->priority ) {
+  if ( new_priority == _Scheduler_SMP_Node_priority( node ) ) {
     /* Nothing to do */
     return NULL;
   }
 
-  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( &node->Base );
+  node_state = _Scheduler_SMP_Node_state( node );
 
-    ( *update )( context, &node->Base, new_priority );
+  if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    _Scheduler_SMP_Extract_from_scheduled( node );
+
+    ( *update )( context, node, new_priority );
 
     if ( prepend_it ) {
-      needs_help = ( *enqueue_scheduled_lifo )( context, &node->Base );
+      needs_help = ( *enqueue_scheduled_lifo )( context, node );
     } else {
-      needs_help = ( *enqueue_scheduled_fifo )( context, &node->Base );
+      needs_help = ( *enqueue_scheduled_fifo )( context, node );
     }
-  } else if ( node->state == SCHEDULER_SMP_NODE_READY ) {
-    ( *extract_from_ready )( context, &node->Base );
+  } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
+    ( *extract_from_ready )( context, node );
 
-    ( *update )( context, &node->Base, new_priority );
+    ( *update )( context, node, new_priority );
 
     if ( prepend_it ) {
-      needs_help = ( *enqueue_lifo )( context, &node->Base, NULL );
+      needs_help = ( *enqueue_lifo )( context, node, NULL );
     } else {
-      needs_help = ( *enqueue_fifo )( context, &node->Base, NULL );
+      needs_help = ( *enqueue_fifo )( context, node, NULL );
     }
   } else {
-    ( *update )( context, &node->Base, new_priority );
+    ( *update )( context, node, new_priority );
 
     needs_help = NULL;
   }

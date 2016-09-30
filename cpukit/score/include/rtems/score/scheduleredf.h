@@ -171,7 +171,8 @@ Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
 
 Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 Priority_Control _Scheduler_EDF_Map_priority(
