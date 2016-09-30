@@ -117,6 +117,8 @@ rtems_monitor_task_dump(
         length += fprintf(stdout, " [FIFO]");
     } else if (monitor_task->wait_operations == &_Thread_queue_Operations_priority) {
         length += fprintf(stdout, " [PRIO]");
+    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_priority_inherit) {
+        length += fprintf(stdout, " [PINH]");
     } else {
         length += fprintf(stdout, " [?]");
     }
