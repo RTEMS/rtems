@@ -714,10 +714,11 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
-  Thread_Control *needs_help;
+  while ( true ) {
+    Scheduler_Node                   *highest_ready;
+    Scheduler_Try_to_schedule_action  action;
 
-  do {
-    Scheduler_Node *highest_ready = ( *get_highest_ready )( context, node );
+    highest_ready = ( *get_highest_ready )( context, node );
 
     /*
      * The node has been extracted from the scheduled chain.  We have to place
@@ -725,84 +726,77 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
      */
     if ( ( *order )( &node->Node, &highest_ready->Node ) ) {
       ( *insert_scheduled )( context, node );
+      return NULL;
+    }
 
-      needs_help = NULL;
-    } else {
-      Scheduler_Try_to_schedule_action action;
+    action = _Scheduler_Try_to_schedule_node(
+      context,
+      highest_ready,
+      _Scheduler_Node_get_idle( node ),
+      _Scheduler_SMP_Get_idle_thread
+    );
 
-      action = _Scheduler_Try_to_schedule_node(
+    if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
+      Thread_Control *user = _Scheduler_Node_get_user( node );
+      Thread_Control *idle;
+
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( node ),
+        SCHEDULER_SMP_NODE_READY
+      );
+      _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_READY );
+
+      _Scheduler_SMP_Allocate_processor(
         context,
         highest_ready,
-        _Scheduler_Node_get_idle( node ),
-        _Scheduler_SMP_Get_idle_thread
+        node,
+        allocate_processor
       );
 
-      if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-        Thread_Control *user = _Scheduler_Node_get_user( node );
-        Thread_Control *idle;
+      ( *insert_ready )( context, node );
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
 
-        _Scheduler_SMP_Node_change_state(
-          _Scheduler_SMP_Node_downcast( node ),
-          SCHEDULER_SMP_NODE_READY
-        );
-        _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_READY );
+      idle = _Scheduler_Release_idle_thread(
+        context,
+        node,
+        _Scheduler_SMP_Release_idle_thread
+      );
 
-        _Scheduler_SMP_Allocate_processor(
-          context,
-          highest_ready,
-          node,
-          allocate_processor
-        );
-
-        ( *insert_ready )( context, node );
-        ( *move_from_ready_to_scheduled )( context, highest_ready );
-
-        idle = _Scheduler_Release_idle_thread(
-          context,
-          node,
-          _Scheduler_SMP_Release_idle_thread
-        );
-        if ( idle == NULL ) {
-          needs_help = user;
-        } else {
-          needs_help = NULL;
-        }
-      } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
-        _Scheduler_SMP_Node_change_state(
-          _Scheduler_SMP_Node_downcast( node ),
-          SCHEDULER_SMP_NODE_READY
-        );
-        _Scheduler_SMP_Node_change_state(
-          _Scheduler_SMP_Node_downcast( highest_ready ),
-          SCHEDULER_SMP_NODE_SCHEDULED
-        );
-
-        ( *insert_ready )( context, node );
-        ( *move_from_ready_to_scheduled )( context, highest_ready );
-
-        _Scheduler_Exchange_idle_thread(
-          highest_ready,
-          node,
-          _Scheduler_Node_get_idle( node )
-        );
-
-        needs_help = NULL;
+      if ( idle == NULL ) {
+        return user;
       } else {
-        _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
-
-        _Scheduler_SMP_Node_change_state(
-          _Scheduler_SMP_Node_downcast( highest_ready ),
-          SCHEDULER_SMP_NODE_BLOCKED
-        );
-
-        ( *extract_from_ready )( context, highest_ready );
-
-        continue;
+        return NULL;
       }
-    }
-  } while ( false );
+    } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( node ),
+        SCHEDULER_SMP_NODE_READY
+      );
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( highest_ready ),
+        SCHEDULER_SMP_NODE_SCHEDULED
+      );
 
-  return needs_help;
+      ( *insert_ready )( context, node );
+      ( *move_from_ready_to_scheduled )( context, highest_ready );
+
+      _Scheduler_Exchange_idle_thread(
+        highest_ready,
+        node,
+        _Scheduler_Node_get_idle( node )
+      );
+      return NULL;
+    } else {
+      _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
+
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( highest_ready ),
+        SCHEDULER_SMP_NODE_BLOCKED
+      );
+
+      ( *extract_from_ready )( context, highest_ready );
+    }
+  }
 }
 
 static inline void _Scheduler_SMP_Extract_from_scheduled(
@@ -821,9 +815,10 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
+  Scheduler_Try_to_schedule_action action;
+
   do {
     Scheduler_Node *highest_ready = ( *get_highest_ready )( context, victim );
-    Scheduler_Try_to_schedule_action action;
 
     action = _Scheduler_Try_to_schedule_node(
       context,
@@ -850,10 +845,8 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       );
 
       ( *extract_from_ready )( context, highest_ready );
-
-      continue;
     }
-  } while ( false );
+  } while ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 }
 
 /**
