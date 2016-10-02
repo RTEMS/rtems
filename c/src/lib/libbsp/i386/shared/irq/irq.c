@@ -14,6 +14,7 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
+#include <rtems/score/cpu.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,7 +52,22 @@ static enum intr_trigger irq_trigger[BSP_IRQ_LINES_NUMBER];
  * while upper bits are interrupt on the slave PIC.
  * This cache is initialized in ldseg.s
  */
-static rtems_i8259_masks i8259a_cache = 0xFFFB;
+static rtems_i8259_masks i8259a_imr_cache = 0xFFFB;
+static rtems_i8259_masks i8259a_in_progress = 0;
+
+static inline
+void BSP_i8259a_irq_update_master_imr( void )
+{
+  rtems_i8259_masks mask = i8259a_in_progress | i8259a_imr_cache;
+  outport_byte( PIC_MASTER_IMR_IO_PORT, mask & 0xff );
+}
+
+static inline
+void BSP_i8259a_irq_update_slave_imr( void )
+{
+  rtems_i8259_masks mask = i8259a_in_progress | i8259a_imr_cache;
+  outport_byte( PIC_SLAVE_IMR_IO_PORT, ( mask >> 8 ) & 0xff );
+}
 
 /*
  * Print the stats.
@@ -107,7 +123,7 @@ static inline uint8_t BSP_i8259a_irq_in_service_reg(uint32_t ioport)
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_disable_at_i8259a
 |      Description: Mask IRQ line in appropriate PIC chip.
-| Global Variables: i8259a_cache
+| Global Variables: i8259a_imr_cache, i8259a_in_progress
 |        Arguments: vector_offset - number of IRQ line to mask.
 |          Returns: 0 is OK.
 +--------------------------------------------------------------------------*/
@@ -119,15 +135,15 @@ static int BSP_irq_disable_at_i8259a(const rtems_irq_number irqLine)
   rtems_interrupt_disable(level);
 
   mask = 1 << irqLine;
-  i8259a_cache |= mask;
+  i8259a_imr_cache |= mask;
 
   if (irqLine < 8)
   {
-    outport_byte(PIC_MASTER_IMR_IO_PORT, i8259a_cache & 0xff);
+    BSP_i8259a_irq_update_master_imr();
   }
   else
   {
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, (i8259a_cache >> 8) & 0xff);
+    BSP_i8259a_irq_update_slave_imr();
   }
 
   rtems_interrupt_enable(level);
@@ -138,7 +154,7 @@ static int BSP_irq_disable_at_i8259a(const rtems_irq_number irqLine)
 /*-------------------------------------------------------------------------+
 |         Function:  BSP_irq_enable_at_i8259a
 |      Description: Unmask IRQ line in appropriate PIC chip.
-| Global Variables: i8259a_cache
+| Global Variables: i8259a_imr_cache, i8259a_in_progress
 |        Arguments: irqLine - number of IRQ line to mask.
 |          Returns: Nothing.
 +--------------------------------------------------------------------------*/
@@ -152,19 +168,19 @@ static int BSP_irq_enable_at_i8259a(const rtems_irq_number irqLine)
   rtems_interrupt_disable(level);
 
   mask = 1 << irqLine;
-  i8259a_cache &= ~mask;
+  i8259a_imr_cache &= ~mask;
 
   if (irqLine < 8)
   {
     isr = BSP_i8259a_irq_in_service_reg(PIC_MASTER_COMMAND_IO_PORT);
     irr = BSP_i8259a_irq_int_request_reg(PIC_MASTER_COMMAND_IO_PORT);
-    outport_byte(PIC_MASTER_IMR_IO_PORT, i8259a_cache & 0xff);
+    BSP_i8259a_irq_update_master_imr();
   }
   else
   {
     isr = BSP_i8259a_irq_in_service_reg(PIC_SLAVE_COMMAND_IO_PORT);
     irr = BSP_i8259a_irq_int_request_reg(PIC_SLAVE_COMMAND_IO_PORT);
-    outport_byte(PIC_SLAVE_IMR_IO_PORT, (i8259a_cache >> 8) & 0xff);
+    BSP_i8259a_irq_update_slave_imr();
   }
 
   if (((isr ^ irr) & mask) != 0)
@@ -298,7 +314,7 @@ void BSP_dispatch_isr(int vector);
 
 void BSP_dispatch_isr(int vector)
 {
-  uint16_t old_imr = 0;
+  rtems_i8259_masks in_progress_save = 0;
 
   if (vector < BSP_IRQ_VECTOR_NUMBER) {
     /*
@@ -329,10 +345,10 @@ void BSP_dispatch_isr(int vector)
        * vector clear.
        */
       if (vector <= BSP_IRQ_MAX_ON_i8259A) {
-        old_imr = i8259a_cache;
-        i8259a_cache |= irq_mask_or_tbl[vector];
-        outport_byte(PIC_MASTER_IMR_IO_PORT, i8259a_cache & 0xff);
-        outport_byte(PIC_SLAVE_IMR_IO_PORT, (i8259a_cache >> 8) & 0xff);
+        in_progress_save = i8259a_in_progress;
+        i8259a_in_progress |= irq_mask_or_tbl[vector];
+        BSP_i8259a_irq_update_master_imr();
+        BSP_i8259a_irq_update_slave_imr();
       }
 
       /*
@@ -346,6 +362,7 @@ void BSP_dispatch_isr(int vector)
      */
     irq_count[vector]++;
 
+    RTEMS_COMPILER_MEMORY_BARRIER();
     /*
      * Allow nesting.
      */
@@ -358,6 +375,8 @@ void BSP_dispatch_isr(int vector)
      */
     __asm__ __volatile__("cli");
 
+    RTEMS_COMPILER_MEMORY_BARRIER();
+
     if (vector <= BSP_IRQ_MAX_ON_i8259A) {
       /*
        * Put the mask back but keep this vector masked if the trigger type is
@@ -365,11 +384,9 @@ void BSP_dispatch_isr(int vector)
        * again.
        */
       if (vector <= BSP_IRQ_MAX_ON_i8259A) {
-        if (irq_trigger[vector] == INTR_TRIGGER_LEVEL)
-          old_imr |= 1 << vector;
-        i8259a_cache = old_imr;
-        outport_byte(PIC_MASTER_IMR_IO_PORT, i8259a_cache & 0xff);
-        outport_byte(PIC_SLAVE_IMR_IO_PORT, (i8259a_cache >> 8) & 0xff);
+        i8259a_in_progress = in_progress_save;
+        BSP_i8259a_irq_update_master_imr();
+        BSP_i8259a_irq_update_slave_imr();
       }
     }
   }
