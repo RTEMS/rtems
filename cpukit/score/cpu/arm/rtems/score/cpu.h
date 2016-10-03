@@ -146,12 +146,10 @@
 #define CPU_STACK_GROWS_UP FALSE
 
 #if defined(ARM_MULTILIB_CACHE_LINE_MAX_64)
-  #define CPU_CACHE_LINE_BYTES 32
+  #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned ( 64 )))
 #else
-  #define CPU_CACHE_LINE_BYTES 64
+  #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned ( 32 )))
 #endif
-
-#define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (CPU_CACHE_LINE_BYTES )))
 
 #define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC TRUE
 
