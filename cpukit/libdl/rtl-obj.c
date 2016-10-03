@@ -566,6 +566,7 @@ typedef struct
   uint32_t mask;
   void     *start_va;
   void     *end_va;
+  size_t   cache_line_size;
 } rtems_rtl_obj_sect_sync_ctx_t;
 
 static bool
@@ -582,10 +583,10 @@ rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
   if (sync_ctx->end_va == sync_ctx->start_va) {
     sync_ctx->start_va = sect->base;
   } else {
-    old_end = (uintptr_t)sync_ctx->end_va & ~(CPU_CACHE_LINE_BYTES - 1);
-    new_start = (uintptr_t)sect->base & ~(CPU_CACHE_LINE_BYTES - 1);
+    old_end = (uintptr_t)sync_ctx->end_va & ~(sync_ctx->cache_line_size - 1);
+    new_start = (uintptr_t)sect->base & ~(sync_ctx->cache_line_size - 1);
     if ( (sect->base <  sync_ctx->start_va) ||
-         (new_start - old_end > CPU_CACHE_LINE_BYTES) ) {
+         (new_start - old_end > sync_ctx->cache_line_size) ) {
       rtems_cache_instruction_sync_after_code_change(sync_ctx->start_va,
                              sync_ctx->end_va - sync_ctx->start_va + 1);
       sync_ctx->start_va = sect->base;
@@ -604,6 +605,8 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj)
 
   if (rtems_cache_get_instruction_line_size() == 0)
     return;
+
+  sync_ctx.cache_line_size = rtems_cache_get_maximal_line_size();
 
   sync_ctx.mask = RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_CONST |
                   RTEMS_RTL_OBJ_SECT_DATA | RTEMS_RTL_OBJ_SECT_BSS |
