@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+dl05
 fileio
 fsdosfsname01
 iostream
