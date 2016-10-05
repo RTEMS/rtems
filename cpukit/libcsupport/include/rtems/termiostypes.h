@@ -70,7 +70,23 @@ struct rtems_termios_tty;
  * rtems_termios_device_install().
  */
 typedef struct rtems_termios_device_context {
-  rtems_interrupt_lock interrupt_lock;
+  union {
+    /* Used for TERMIOS_POLLED and TERMIOS_IRQ_DRIVEN */
+    rtems_interrupt_lock interrupt;
+
+    /* Used for TERMIOS_TASK_DRIVEN */
+    rtems_id mutex;
+  } lock;
+
+  void ( *lock_acquire )(
+    struct rtems_termios_device_context *,
+    rtems_interrupt_lock_context *
+  );
+
+  void ( *lock_release )(
+    struct rtems_termios_device_context *,
+    rtems_interrupt_lock_context *
+  );
 } rtems_termios_device_context;
 
 /**
@@ -86,7 +102,7 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
   const char                   *name
 )
 {
-  rtems_interrupt_lock_initialize( &context->interrupt_lock, name );
+  rtems_interrupt_lock_initialize( &context->lock.interrupt, name );
 }
 
 /**
@@ -96,7 +112,7 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
  *   is only used if profiling is enabled.
  */
 #define RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( name ) \
-  { RTEMS_INTERRUPT_LOCK_INITIALIZER( name ) }
+  { { RTEMS_INTERRUPT_LOCK_INITIALIZER( name ) } }
 
 /**
  * @brief Termios device handler.
@@ -408,7 +424,7 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_acquire(
   rtems_interrupt_lock_context *lock_context
 )
 {
-  rtems_interrupt_lock_acquire( &context->interrupt_lock, lock_context );
+  ( *context->lock_acquire )( context, lock_context );
 }
 
 /**
@@ -423,7 +439,7 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_lock_release(
   rtems_interrupt_lock_context *lock_context
 )
 {
-  rtems_interrupt_lock_release( &context->interrupt_lock, lock_context );
+  ( *context->lock_release )( context, lock_context );
 }
 
 /**

@@ -272,6 +272,12 @@ drainOutput (struct rtems_termios_tty *tty)
   }
 }
 
+static bool
+needDeviceMutex (rtems_termios_tty *tty)
+{
+  return tty->handler.mode == TERMIOS_TASK_DRIVEN;
+}
+
 static void
 rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
 {
@@ -318,13 +324,60 @@ rtems_termios_destroy_tty (rtems_termios_tty *tty, void *arg, bool last_close)
       (tty->handler.mode == TERMIOS_TASK_DRIVEN))
     rtems_semaphore_delete (tty->rawInBuf.Semaphore);
 
-  if (tty->device_context == &tty->legacy_device_context)
-    rtems_interrupt_lock_destroy (&tty->legacy_device_context.interrupt_lock);
+  if (needDeviceMutex (tty)) {
+    rtems_semaphore_delete (tty->device_context->lock.mutex);
+  } else if (tty->device_context == &tty->legacy_device_context) {
+    rtems_interrupt_lock_destroy (&tty->legacy_device_context.lock.interrupt);
+  }
 
   free (tty->rawInBuf.theBuf);
   free (tty->rawOutBuf.theBuf);
   free (tty->cbuf);
   free (tty);
+}
+
+static void
+deviceAcquireMutex(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain (ctx->lock.mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  _Assert (sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+}
+
+static void
+deviceReleaseMutex(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_release (ctx->lock.mutex);
+  _Assert (sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+}
+
+static void
+deviceAcquireInterrupt(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_interrupt_lock_acquire (&ctx->lock.interrupt, lock_context);
+}
+
+static void
+deviceReleaseInterrupt(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_interrupt_lock_release (&ctx->lock.interrupt, lock_context);
 }
 
 static rtems_termios_tty *
@@ -341,6 +394,7 @@ rtems_termios_open_tty(
 
   if (tty == NULL) {
     static char c = 'a';
+    rtems_termios_device_context *ctx;
 
     /*
      * Create a new device
@@ -457,6 +511,26 @@ rtems_termios_open_tty(
     if (tty->device_context == NULL) {
       tty->device_context = &tty->legacy_device_context;
       rtems_termios_device_context_initialize (tty->device_context, "Termios");
+    }
+
+    ctx = tty->device_context;
+
+    if (needDeviceMutex (tty)) {
+      sc = rtems_semaphore_create (
+        rtems_build_name ('T', 'l', 'k', c),
+        1,
+        RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+        0,
+        &ctx->lock.mutex);
+      if (sc != RTEMS_SUCCESSFUL) {
+        rtems_fatal_error_occurred (sc);
+      }
+
+      ctx->lock_acquire = deviceAcquireMutex;
+      ctx->lock_release = deviceReleaseMutex;
+    } else {
+      ctx->lock_acquire = deviceAcquireInterrupt;
+      ctx->lock_release = deviceReleaseInterrupt;
     }
 
     /*
