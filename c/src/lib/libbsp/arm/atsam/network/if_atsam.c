@@ -1212,8 +1212,17 @@ static int if_atsam_driver_attach(struct rtems_bsdnet_ifconfig *config)
 	sc->mdio.mdio_w = if_atsam_mdio_write;
 	sc->mdio.has_gmii = 1;
 
-	sc->amount_rx_buf = config->rbuf_count;
-	sc->amount_tx_buf = config->xbuf_count;
+	if (config->rbuf_count > 0) {
+		sc->amount_rx_buf = config->rbuf_count;
+	} else {
+		sc->amount_rx_buf = 8;
+	}
+
+	if (config->xbuf_count > 0) {
+		sc->amount_tx_buf = config->xbuf_count;
+	} else {
+		sc->amount_tx_buf = 64;
+	}
 
 	sc->tx_ring.tx_bd_used = 0;
 	sc->tx_ring.tx_bd_free = 0;
