@@ -248,38 +248,33 @@ if_atsam_read_phy(Gmac *pHw,
 static void atsamv7_find_valid_phy(if_atsam_gmac *gmac_inst)
 {
 	Gmac *pHw = gmac_inst->gGmacd.pHw;
-
-	uint32_t retry_max;
 	uint32_t value = 0;
-	uint8_t rc;
 	uint8_t phy_address;
+	int i;
 
-	phy_address = gmac_inst->phy_address;
-	retry_max = gmac_inst->retries;
-
-	if (phy_address != 0xFF) {
+	if (gmac_inst->phy_address != 0xFF) {
 		return;
 	}
 
 	/* Find another one */
-	rc = 0xFF;
+	phy_address = 0xFF;
 
-	for (phy_address = 0; phy_address < 32; ++phy_address) {
+	for (i = 31; i >= 0; --i) {
 		int rv;
 
-		rv = if_atsam_read_phy(pHw, phy_address, MII_PHYIDR1,
-		    &value, retry_max);
-		if (rv == 0 && value != 0 && value >= 0xffff) {
-			rc = phy_address;
+		rv = if_atsam_read_phy(pHw, (uint8_t)i, MII_PHYIDR1,
+		    &value, gmac_inst->retries);
+		if (rv == 0 && value != 0 && value < 0xffff) {
+			phy_address = (uint8_t)i;
 			break;
 		}
 	}
 
-	if (rc != 0xFF) {
+	if (phy_address != 0xFF) {
 		if_atsam_read_phy(pHw, phy_address, MII_PHYIDR1, &value,
-		    retry_max);
+		    gmac_inst->retries);
 		if_atsam_read_phy(pHw, phy_address, MII_PHYIDR2, &value,
-		    retry_max);
+		    gmac_inst->retries);
 		gmac_inst->phy_address = phy_address;
 	}
 }
