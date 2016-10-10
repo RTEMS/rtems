@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -18,6 +18,7 @@
 
 #include "tmacros.h"
 
+#include <sys/lock.h>
 #include <stdio.h>
 #include <inttypes.h>
 
@@ -44,6 +45,7 @@ typedef struct {
   uint32_t many_mutex_ops[CPU_COUNT][CPU_COUNT];
   uint32_t self_msg_ops[CPU_COUNT][CPU_COUNT];
   uint32_t many_to_one_msg_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_sys_lock_mutex_ops[CPU_COUNT][CPU_COUNT];
 } test_context;
 
 static test_context test_instance;
@@ -368,6 +370,44 @@ static void test_many_to_one_msg_fini(
   );
 }
 
+static void test_many_sys_lock_mutex_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  struct _Mutex_Control mtx;
+  uint32_t counter = 0;
+
+  _Mutex_Initialize(&mtx);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    ++counter;
+
+    _Mutex_Acquire(&mtx);
+    _Mutex_Release(&mtx);
+  }
+
+  ctx->many_sys_lock_mutex_ops[active_workers - 1][worker_index] = counter;
+}
+
+static void test_many_sys_lock_mutex_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManySysLockMutex",
+    &ctx->many_sys_lock_mutex_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
 static const rtems_test_parallel_job test_jobs[] = {
   {
     .init = test_init,
@@ -398,6 +438,11 @@ static const rtems_test_parallel_job test_jobs[] = {
     .init = test_init,
     .body = test_many_to_one_msg_body,
     .fini = test_many_to_one_msg_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_sys_lock_mutex_body,
+    .fini = test_many_sys_lock_mutex_fini,
     .cascade = true
   }
 };
