@@ -363,7 +363,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 #if defined(RTEMS_SMP)
   needs_help =
 #endif
-  ( *scheduler->Operations.unblock )( scheduler, the_thread );
+  ( *scheduler->Operations.unblock )(
+    scheduler,
+    the_thread,
+    _Thread_Scheduler_get_home_node( the_thread )
+  );
 
 #if defined(RTEMS_SMP)
   _Scheduler_Ask_for_help_if_necessary( needs_help );

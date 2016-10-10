@@ -104,19 +104,10 @@ void _Scheduler_simple_Block(
   Scheduler_Node          *node
 );
 
-/**
- *  @brief Unblock a simple-priority-based thread.
- *
- *  This routine adds @a the_thread to the scheduling decision,
- *  that is, adds it to the ready queue and
- *  updates any appropriate scheduling variables, for example the heir thread.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread is the thread that is to be unblocked
- */
 Scheduler_Void_or_thread _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 Scheduler_Void_or_thread _Scheduler_simple_Update_priority(

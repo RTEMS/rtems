@@ -340,7 +340,8 @@ static Thread_Control *_Scheduler_strong_APA_Enqueue_scheduled_fifo(
 
 Thread_Control *_Scheduler_strong_APA_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -348,6 +349,7 @@ Thread_Control *_Scheduler_strong_APA_Unblock(
   return _Scheduler_SMP_Unblock(
     context,
     the_thread,
+    node,
     _Scheduler_strong_APA_Do_update,
     _Scheduler_strong_APA_Enqueue_fifo
   );

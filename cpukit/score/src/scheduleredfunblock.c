@@ -24,21 +24,22 @@
 
 Scheduler_Void_or_thread _Scheduler_EDF_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_EDF_Context *context;
-  Scheduler_EDF_Node    *node;
+  Scheduler_EDF_Node    *the_node;
   Priority_Control       priority;
   bool                   prepend_it;
 
   context = _Scheduler_EDF_Get_context( scheduler );
-  node = _Scheduler_EDF_Thread_get_node( the_thread );
-  priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+  the_node = _Scheduler_EDF_Node_downcast( node );
+  priority = _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
   (void) prepend_it;
 
-  node->priority = priority;
-  _Scheduler_EDF_Enqueue( context, node, priority );
+  the_node->priority = priority;
+  _Scheduler_EDF_Enqueue( context, the_node, priority );
 
   /*
    *  If the thread that was unblocked is more important than the heir,

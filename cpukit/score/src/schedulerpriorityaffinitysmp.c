@@ -364,7 +364,8 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
  */
 Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -373,6 +374,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   needs_help = _Scheduler_SMP_Unblock(
     context,
     thread,
+    node,
     _Scheduler_priority_SMP_Do_update,
     _Scheduler_priority_affinity_SMP_Enqueue_fifo
   );
@@ -610,7 +612,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     /*
      * FIXME: Do not ignore threads in need for help.
      */
-    (void) _Scheduler_priority_affinity_SMP_Unblock( scheduler, thread );
+    (void) _Scheduler_priority_affinity_SMP_Unblock( scheduler, thread, &node->Base.Base.Base );
   }
 
   return true;

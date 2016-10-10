@@ -479,7 +479,10 @@ static void block_op(
   _Thread_State_release( thread, &state_lock_context );
 }
 
-static Thread_Control *unblock_op(Thread_Control *thread)
+static Thread_Control *unblock_op(
+  Thread_Control *thread,
+  Scheduler_SMP_Node *scheduler_node
+)
 {
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
@@ -490,7 +493,11 @@ static Thread_Control *unblock_op(Thread_Control *thread)
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  needs_help = (*scheduler->Operations.unblock)(scheduler, thread);
+  needs_help = (*scheduler->Operations.unblock)(
+    scheduler,
+    thread,
+    &scheduler_node->Base
+  );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
@@ -527,7 +534,7 @@ static void test_case_unblock_op(
   block_op(executing, executing_node);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_BLOCKED);
 
-  needs_help = unblock_op(executing);
+  needs_help = unblock_op(executing, executing_node);
   rtems_test_assert(executing_node->state == new_state);
 
   switch (new_state) {

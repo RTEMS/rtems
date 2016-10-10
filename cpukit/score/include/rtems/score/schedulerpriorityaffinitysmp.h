@@ -92,17 +92,10 @@ void _Scheduler_priority_affinity_SMP_Block(
   Scheduler_Node          *node
 );
 
-/**
- * @brief SMP Priority Affinity Scheduler Unblock Operation
- *
- * This method is the unblock operation for this scheduler.
- *
- * @param[in] scheduler is the scheduler instance information
- * @param[in] thread is the thread to unblock
- */
 Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 );
 
 /**

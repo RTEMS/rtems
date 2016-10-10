@@ -27,17 +27,18 @@
 
 Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
-  Scheduler_CBS_Node   *node;
+  Scheduler_CBS_Node   *the_node;
   Scheduler_CBS_Server *serv_info;
   Priority_Control      priority;
   bool                  prepend_it;
 
-  node = _Scheduler_CBS_Thread_get_node( the_thread );
-  serv_info = node->cbs_server;
-  priority = _Scheduler_Node_get_priority( &node->Base.Base, &prepend_it );
+  the_node = _Scheduler_CBS_Node_downcast( node );
+  serv_info = the_node->cbs_server;
+  priority = _Scheduler_Node_get_priority( &the_node->Base.Base, &prepend_it );
   (void) prepend_it;
 
   /*
@@ -60,12 +61,12 @@ Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
       _Scheduler_CBS_Cancel_job(
         scheduler,
         the_thread,
-        node->deadline_node,
+        the_node->deadline_node,
         &queue_context
       );
     }
   }
 
-  _Scheduler_EDF_Unblock( scheduler, the_thread );
+  _Scheduler_EDF_Unblock( scheduler, the_thread, &the_node->Base.Base );
   SCHEDULER_RETURN_VOID_OR_NULL;
 }

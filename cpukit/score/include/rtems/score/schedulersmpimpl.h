@@ -924,22 +924,21 @@ static inline void _Scheduler_SMP_Block(
 static inline Thread_Control *_Scheduler_SMP_Unblock(
   Scheduler_Context     *context,
   Thread_Control        *thread,
+  Scheduler_Node        *node,
   Scheduler_SMP_Update   update,
   Scheduler_SMP_Enqueue  enqueue_fifo
 )
 {
-  Scheduler_SMP_Node *node;
-  bool                is_scheduled;
-  bool                unblock;
-  Thread_Control     *needs_help;
+  Scheduler_SMP_Node_state  node_state;
+  bool                      unblock;
+  Thread_Control           *needs_help;
 
-  node = _Scheduler_SMP_Thread_get_node( thread );
-  is_scheduled = ( node->state == SCHEDULER_SMP_NODE_SCHEDULED );
+  node_state = _Scheduler_SMP_Node_state( node );
   unblock = _Scheduler_Unblock_node(
     context,
     thread,
-    &node->Base,
-    is_scheduled,
+    node,
+    node_state == SCHEDULER_SMP_NODE_SCHEDULED,
     _Scheduler_SMP_Release_idle_thread
   );
 
@@ -947,26 +946,29 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
     Priority_Control new_priority;
     bool             prepend_it;
 
-    new_priority = _Scheduler_Node_get_priority( &node->Base, &prepend_it );
+    new_priority = _Scheduler_Node_get_priority( node, &prepend_it );
     (void) prepend_it;
 
-    if ( new_priority != node->priority ) {
-      ( *update )( context, &node->Base, new_priority );
+    if ( new_priority != _Scheduler_SMP_Node_priority( node ) ) {
+      ( *update )( context, node, new_priority );
     }
 
-    if ( node->state == SCHEDULER_SMP_NODE_BLOCKED ) {
-      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
-
-      needs_help = ( *enqueue_fifo )( context, &node->Base, thread );
-    } else {
-      _Assert( node->state == SCHEDULER_SMP_NODE_READY );
-      _Assert(
-        node->Base.help_state == SCHEDULER_HELP_ACTIVE_OWNER
-          || node->Base.help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+    if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
+      _Scheduler_SMP_Node_change_state(
+        _Scheduler_SMP_Node_downcast( node ),
+        SCHEDULER_SMP_NODE_READY
       );
-      _Assert( node->Base.idle == NULL );
 
-      if ( node->Base.accepts_help == thread ) {
+      needs_help = ( *enqueue_fifo )( context, node, thread );
+    } else {
+      _Assert( node_state == SCHEDULER_SMP_NODE_READY );
+      _Assert(
+        node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
+          || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
+      );
+      _Assert( node->idle == NULL );
+
+      if ( node->accepts_help == thread ) {
         needs_help = thread;
       } else {
         needs_help = NULL;

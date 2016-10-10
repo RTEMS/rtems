@@ -146,23 +146,10 @@ typedef struct {
  */
 extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
 
-/**
- *  @brief Unblocks a thread from the queue.
- *
- *  This routine adds @a the_thread to the scheduling decision, that is,
- *  adds it to the ready queue and updates any appropriate scheduling
- *  variables, for example the heir thread. It is checked whether the
- *  remaining budget is sufficient. If not, the thread continues as a
- *  new job in order to protect concurrent threads.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread will be unblocked.
- *
- *  @note This has to be asessed as missed deadline of the current job.
- */
 Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 void _Scheduler_CBS_Release_job(

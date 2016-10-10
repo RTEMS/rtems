@@ -128,19 +128,10 @@ void _Scheduler_priority_Schedule(
   Thread_Control          *the_thread
 );
 
-/**
- *  @brief Add @a the_thread to the scheduling decision.
- *
- *  This routine adds @a the_thread to the scheduling decision,
- *  that is, adds it to the ready queue and
- *  updates any appropriate scheduling variables, for example the heir thread.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread will be unblocked
- */
 Scheduler_Void_or_thread _Scheduler_priority_Unblock(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
