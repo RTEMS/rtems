@@ -159,7 +159,8 @@ static void _Scheduler_simple_SMP_Extract_from_ready(
 
 void _Scheduler_simple_SMP_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -167,6 +168,7 @@ void _Scheduler_simple_SMP_Block(
   _Scheduler_SMP_Block(
     context,
     thread,
+    node,
     _Scheduler_simple_SMP_Extract_from_ready,
     _Scheduler_simple_SMP_Get_highest_ready,
     _Scheduler_simple_SMP_Move_from_ready_to_scheduled,

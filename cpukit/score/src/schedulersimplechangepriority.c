@@ -38,7 +38,7 @@ Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
   context = _Scheduler_simple_Get_context( scheduler );
   _Scheduler_Node_get_priority( node, &prepend_it );
 
-  _Scheduler_simple_Extract( scheduler, the_thread );
+  _Scheduler_simple_Extract( scheduler, the_thread, node );
 
   if ( prepend_it ) {
     _Scheduler_simple_Insert_priority_lifo( &context->Ready, the_thread );

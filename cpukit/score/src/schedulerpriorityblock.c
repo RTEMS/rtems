@@ -24,12 +24,14 @@
 
 void _Scheduler_priority_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   _Scheduler_Generic_block(
     scheduler,
     the_thread,
+    node,
     _Scheduler_priority_Extract_body,
     _Scheduler_priority_Schedule_body
   );

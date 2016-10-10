@@ -86,17 +86,10 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
   Priority_Control         priority
 );
 
-/**
- * @brief SMP Priority Affinity Scheduler Block Operation
- *
- * This method is the block operation for this scheduler.
- *
- * @param[in] scheduler is the scheduler instance information
- * @param[in] thread is the thread to block
- */
 void _Scheduler_priority_affinity_SMP_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 );
 
 /**

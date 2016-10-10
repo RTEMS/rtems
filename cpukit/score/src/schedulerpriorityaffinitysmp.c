@@ -190,7 +190,8 @@ static Scheduler_Node *_Scheduler_priority_affinity_SMP_Get_highest_ready(
  */
 void _Scheduler_priority_affinity_SMP_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -198,6 +199,7 @@ void _Scheduler_priority_affinity_SMP_Block(
   _Scheduler_SMP_Block(
     context,
     thread,
+    node,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_affinity_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,
@@ -599,7 +601,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   current_state = thread->current_state;
 
   if ( _States_Is_ready( current_state ) ) {
-    _Scheduler_priority_affinity_SMP_Block( scheduler, thread );
+    _Scheduler_priority_affinity_SMP_Block( scheduler, thread, &node->Base.Base.Base );
   }
 
   CPU_COPY( node->Affinity.set, cpuset );

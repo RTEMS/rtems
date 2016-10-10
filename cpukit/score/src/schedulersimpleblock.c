@@ -23,12 +23,14 @@
 
 void _Scheduler_simple_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   _Scheduler_Generic_block(
     scheduler,
     the_thread,
+    node,
     _Scheduler_simple_Extract,
     _Scheduler_simple_Schedule_body
   );

@@ -88,10 +88,12 @@ RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Extract(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   (void) scheduler;
+  (void) node;
 
   _Chain_Extract_unprotected( &the_thread->Object.Node );
 }

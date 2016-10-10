@@ -330,7 +330,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
   scheduler = _Scheduler_Get( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
-  ( *scheduler->Operations.block )( scheduler, the_thread );
+  ( *scheduler->Operations.block )(
+    scheduler,
+    the_thread,
+    _Thread_Scheduler_get_home_node( the_thread )
+  );
 
   _Scheduler_Release_critical( scheduler, &lock_context );
 }
@@ -708,16 +712,20 @@ bool _Scheduler_Set_affinity(
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
+  Scheduler_Node          *node,
   void                  ( *extract )(
                              const Scheduler_Control *,
-                             Thread_Control * ),
+                             Thread_Control *,
+                             Scheduler_Node *
+                        ),
   void                  ( *schedule )(
                              const Scheduler_Control *,
                              Thread_Control *,
-                             bool )
+                             bool
+                        )
 )
 {
-  ( *extract )( scheduler, the_thread );
+  ( *extract )( scheduler, the_thread, node );
 
   /* TODO: flash critical section? */
 

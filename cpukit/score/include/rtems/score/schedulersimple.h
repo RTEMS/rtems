@@ -98,20 +98,10 @@ Scheduler_Void_or_thread _Scheduler_simple_Yield(
   Scheduler_Node          *node
 );
 
-/**
- *  @brief Remove a simple-priority-based thread from the queue.
- *
- *  This routine removes @a the_thread from the scheduling decision,
- *  that is, removes it from the ready queue.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread is the thread that is to be blocked
- */
 void _Scheduler_simple_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**

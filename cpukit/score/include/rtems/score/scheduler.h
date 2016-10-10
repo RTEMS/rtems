@@ -72,7 +72,8 @@ typedef struct {
   /** @see _Scheduler_Block() */
   void ( *block )(
     const Scheduler_Control *,
-    Thread_Control *
+    Thread_Control *,
+    Scheduler_Node *
   );
 
   /** @see _Scheduler_Unblock() */

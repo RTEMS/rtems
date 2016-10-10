@@ -868,6 +868,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
  *
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread of the scheduling operation.
+ * @param[in] node The scheduler node of the thread to block.
  * @param[in] extract_from_ready Function to extract a node from the set of
  *   ready nodes.
  * @param[in] get_highest_ready Function to get the highest ready node.
@@ -877,41 +878,45 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
 static inline void _Scheduler_SMP_Block(
   Scheduler_Context                *context,
   Thread_Control                   *thread,
+  Scheduler_Node                   *node,
   Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
-  bool is_scheduled = node->state == SCHEDULER_SMP_NODE_SCHEDULED;
-  bool block;
+  Scheduler_SMP_Node_state node_state;
+  bool                     block;
 
-  _Assert( is_scheduled || node->state == SCHEDULER_SMP_NODE_READY );
+  node_state = _Scheduler_SMP_Node_state( node );
+  _Assert( node_state != SCHEDULER_SMP_NODE_BLOCKED );
 
   block = _Scheduler_Block_node(
     context,
     thread,
-    &node->Base,
-    is_scheduled,
+    node,
+    node_state == SCHEDULER_SMP_NODE_SCHEDULED,
     _Scheduler_SMP_Get_idle_thread
   );
   if ( block ) {
-    _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
+    _Scheduler_SMP_Node_change_state(
+      _Scheduler_SMP_Node_downcast( node ),
+      SCHEDULER_SMP_NODE_BLOCKED
+    );
 
-    if ( is_scheduled ) {
-      _Scheduler_SMP_Extract_from_scheduled( &node->Base );
+    if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
+      _Scheduler_SMP_Extract_from_scheduled( node );
 
       _Scheduler_SMP_Schedule_highest_ready(
         context,
-        &node->Base,
+        node,
         extract_from_ready,
         get_highest_ready,
         move_from_ready_to_scheduled,
         allocate_processor
       );
     } else {
-      ( *extract_from_ready )( context, &node->Base );
+      ( *extract_from_ready )( context, node );
     }
   }
 }

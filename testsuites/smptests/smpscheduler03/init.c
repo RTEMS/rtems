@@ -460,7 +460,10 @@ static void test_yield_op(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void block_op(Thread_Control *thread)
+static void block_op(
+  Thread_Control *thread,
+  Scheduler_SMP_Node *scheduler_node
+)
 {
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
@@ -470,7 +473,7 @@ static void block_op(Thread_Control *thread)
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  (*scheduler->Operations.block)(scheduler, thread);
+  (*scheduler->Operations.block)(scheduler, thread, &scheduler_node->Base);
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
@@ -521,7 +524,7 @@ static void test_case_unblock_op(
       break;
   }
 
-  block_op(executing);
+  block_op(executing, executing_node);
   rtems_test_assert(executing_node->state == SCHEDULER_SMP_NODE_BLOCKED);
 
   needs_help = unblock_op(executing);

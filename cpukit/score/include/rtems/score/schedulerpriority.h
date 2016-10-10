@@ -111,20 +111,10 @@ typedef struct {
  */
 void _Scheduler_priority_Initialize( const Scheduler_Control *scheduler );
 
-/**
- *  @brief Removes @a the_thread from the scheduling decision.
- *
- *  This routine removes @a the_thread from the scheduling decision,
- *  that is, removes it from the ready queue.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in] the_thread is the thread to be blocked
- */
 void _Scheduler_priority_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**

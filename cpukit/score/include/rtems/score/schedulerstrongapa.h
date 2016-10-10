@@ -107,7 +107,8 @@ void _Scheduler_strong_APA_Node_initialize(
 
 void _Scheduler_strong_APA_Block(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 Thread_Control *_Scheduler_strong_APA_Unblock(

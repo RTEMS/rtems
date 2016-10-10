@@ -140,16 +140,19 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_extract(
 
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Extract_body(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
-  Scheduler_priority_Context *context =
-    _Scheduler_priority_Get_context( scheduler );
-  Scheduler_priority_Node *node = _Scheduler_priority_Thread_get_node( the_thread );
+  Scheduler_priority_Context *context;
+  Scheduler_priority_Node    *the_node;
+
+  context = _Scheduler_priority_Get_context( scheduler );
+  the_node = _Scheduler_priority_Node_downcast( node );
 
   _Scheduler_priority_Ready_queue_extract(
     &the_thread->Object.Node,
-    &node->Ready_queue,
+    &the_node->Ready_queue,
     &context->Bit_map
   );
 }
