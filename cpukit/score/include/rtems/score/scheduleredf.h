@@ -185,25 +185,10 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
   Priority_Control         priority
 );
 
-/**
- *  @brief invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread
- *  with equal deadline.
- *
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread in the queue with
- *  equal deadline. This does not have to happen very often.
- *
- *  This routine will remove the specified THREAD from the ready queue
- *  and place it back. The rbtree ready queue is responsible for FIFO ordering
- *  in such a case.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in,out] the_thread The yielding thread.
- */
 Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 void _Scheduler_EDF_Release_job(

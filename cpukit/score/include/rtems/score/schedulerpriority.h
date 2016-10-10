@@ -166,29 +166,10 @@ void _Scheduler_priority_Node_initialize(
   Priority_Control         priority
 );
 
-/**
- *  @brief The specified THREAD yields.
- *
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread in the queue.
- *
- *  This routine will remove the specified THREAD from the ready queue
- *  and place it immediately at the rear of this chain.  Reset timeslice
- *  and yield the processor functions both use this routine, therefore if
- *  reset is true and this is the only thread on the queue then the
- *  timeslice counter is reset.  The heir THREAD will be updated if the
- *  running is also the currently the heir.
- *
- *  - INTERRUPT LATENCY:
- *    + ready chain
- *    + select heir
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in,out] the_thread The yielding thread.
- */
 Scheduler_Void_or_thread _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**@}*/

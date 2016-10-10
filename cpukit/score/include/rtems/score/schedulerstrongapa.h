@@ -129,7 +129,8 @@ Thread_Control *_Scheduler_strong_APA_Ask_for_help_X(
 
 Thread_Control *_Scheduler_strong_APA_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /** @} */

@@ -390,7 +390,8 @@ Thread_Control *_Scheduler_strong_APA_Ask_for_help_X(
 
 Thread_Control *_Scheduler_strong_APA_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
@@ -398,6 +399,7 @@ Thread_Control *_Scheduler_strong_APA_Yield(
   return _Scheduler_SMP_Yield(
     context,
     the_thread,
+    node,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Enqueue_fifo,
     _Scheduler_strong_APA_Enqueue_scheduled_fifo

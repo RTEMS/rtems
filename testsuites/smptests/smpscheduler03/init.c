@@ -320,7 +320,10 @@ static void test_update_priority_op(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static Thread_Control *yield_op(Thread_Control *thread)
+static Thread_Control *yield_op(
+  Thread_Control *thread,
+  Scheduler_SMP_Node *scheduler_node
+)
 {
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
@@ -331,7 +334,11 @@ static Thread_Control *yield_op(Thread_Control *thread)
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  needs_help = (*scheduler->Operations.yield)(scheduler, thread);
+  needs_help = (*scheduler->Operations.yield)(
+    scheduler,
+    thread,
+    &scheduler_node->Base
+  );
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
@@ -391,7 +398,7 @@ static void test_case_yield_op(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  needs_help = yield_op(executing);
+  needs_help = yield_op(executing, executing_node);
   rtems_test_assert(executing_node->state == new_state);
 
   if (start_state != new_state) {

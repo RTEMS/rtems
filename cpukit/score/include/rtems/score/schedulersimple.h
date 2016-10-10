@@ -92,26 +92,10 @@ void _Scheduler_simple_Schedule(
   Thread_Control          *the_thread
 );
 
-/**
- *  @brief Invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread in the queue.
- *
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread in the queue.
- *  It will remove the specified THREAD from the scheduler.informaiton
- *  (where the ready queue is stored) and place it immediately at the
- *  between the last entry of its priority and the next priority thread.
- *  Reset timeslice and yield the processor functions both use this routine,
- *  therefore if reset is true and this is the only thread on the queue then
- *  the timeslice counter is reset.  The heir THREAD will be updated if the
- *  running is also the currently the heir.
- *
- *  @param[in] scheduler The scheduler instance.
- *  @param[in,out] the_thread The yielding thread.
- */
 Scheduler_Void_or_thread _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 );
 
 /**

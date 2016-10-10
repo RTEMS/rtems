@@ -112,7 +112,8 @@ Thread_Control *_Scheduler_simple_SMP_Ask_for_help_X(
 
 Thread_Control *_Scheduler_simple_SMP_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread
+  Thread_Control          *thread,
+  Scheduler_Node          *node
 );
 
 /** @} */

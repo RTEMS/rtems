@@ -1084,22 +1084,22 @@ static inline Thread_Control *_Scheduler_SMP_Ask_for_help_X(
 static inline Thread_Control *_Scheduler_SMP_Yield(
   Scheduler_Context               *context,
   Thread_Control                  *thread,
+  Scheduler_Node                  *node,
   Scheduler_SMP_Extract            extract_from_ready,
   Scheduler_SMP_Enqueue            enqueue_fifo,
   Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_fifo
 )
 {
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
   Thread_Control *needs_help;
 
-  if ( node->state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( &node->Base );
+  if ( _Scheduler_SMP_Node_state( node ) == SCHEDULER_SMP_NODE_SCHEDULED ) {
+    _Scheduler_SMP_Extract_from_scheduled( node );
 
-    needs_help = ( *enqueue_scheduled_fifo )( context, &node->Base );
+    needs_help = ( *enqueue_scheduled_fifo )( context, node );
   } else {
-    ( *extract_from_ready )( context, &node->Base );
+    ( *extract_from_ready )( context, node );
 
-    needs_help = ( *enqueue_fifo )( context, &node->Base, NULL );
+    needs_help = ( *enqueue_fifo )( context, node, NULL );
   }
 
   return needs_help;

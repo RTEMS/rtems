@@ -23,17 +23,18 @@
 
 Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node
 )
 {
   Scheduler_EDF_Context *context;
-  Scheduler_EDF_Node    *node;
+  Scheduler_EDF_Node    *the_node;
 
   context = _Scheduler_EDF_Get_context( scheduler );
-  node = _Scheduler_EDF_Thread_get_node( the_thread );
+  the_node = _Scheduler_EDF_Node_downcast( node );
 
-  _Scheduler_EDF_Extract( context, node );
-  _Scheduler_EDF_Enqueue( context, node, node->priority );
+  _Scheduler_EDF_Extract( context, the_node );
+  _Scheduler_EDF_Enqueue( context, the_node, the_node->priority );
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, true );
 
   SCHEDULER_RETURN_VOID_OR_NULL;

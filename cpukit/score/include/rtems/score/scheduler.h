@@ -65,7 +65,8 @@ typedef struct {
   /** @see _Scheduler_Yield() */
   Scheduler_Void_or_thread ( *yield )(
     const Scheduler_Control *,
-    Thread_Control *
+    Thread_Control *,
+    Scheduler_Node *
   );
 
   /** @see _Scheduler_Block() */
