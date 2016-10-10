@@ -1138,16 +1138,21 @@ static inline Thread_Control *_Scheduler_SMP_Yield(
   Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_fifo
 )
 {
-  Thread_Control *needs_help;
+  Thread_Control           *needs_help;
+  Scheduler_SMP_Node_state  node_state;
 
-  if ( _Scheduler_SMP_Node_state( node ) == SCHEDULER_SMP_NODE_SCHEDULED ) {
+  node_state = _Scheduler_SMP_Node_state( node );
+
+  if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( node );
 
     needs_help = ( *enqueue_scheduled_fifo )( context, node );
-  } else {
+  } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, node );
 
     needs_help = ( *enqueue_fifo )( context, node, NULL );
+  } else {
+    needs_help = thread;
   }
 
   return needs_help;

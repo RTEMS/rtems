@@ -288,29 +288,65 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
+#if defined(RTEMS_SMP)
+  Chain_Node              *node;
+  const Chain_Node        *tail;
+  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-#if defined(RTEMS_SMP)
   Thread_Control          *needs_help;
-#endif
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+  needs_help = ( *scheduler->Operations.yield )(
+    scheduler,
+    the_thread,
+    _Thread_Scheduler_get_home_node( the_thread )
+  );
+  _Scheduler_Ask_for_help_if_necessary( needs_help );
+  _Scheduler_Release_critical( scheduler, &lock_context );
+
+  if ( needs_help != the_thread ) {
+    return;
+  }
+
+  node = _Chain_Next( node );
+
+  while ( node != tail ) {
+    bool success;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    success = ( *scheduler->Operations.ask_for_help )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    if ( success ) {
+      break;
+    }
+
+    node = _Chain_Next( node );
+  }
+#else
+  const Scheduler_Control *scheduler;
 
   scheduler = _Scheduler_Get( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-
-#if defined(RTEMS_SMP)
-  needs_help =
-#endif
   ( *scheduler->Operations.yield )(
     scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-
-#if defined(RTEMS_SMP)
-  _Scheduler_Ask_for_help_if_necessary( needs_help );
 #endif
-
-  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
