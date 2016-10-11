@@ -104,6 +104,28 @@ struct grgpio_regs {
   volatile unsigned int ipol;        /* 0x10 Interrupt polarity register */
   volatile unsigned int iedge;       /* 0x14 Interrupt edge register */
   volatile unsigned int bypass;      /* 0x18 Bypass register */
+  volatile unsigned int cap;         /* 0x1C Capability register */
+  volatile unsigned int irqmap[4];   /* 0x20 - 0x2C Interrupt map registers */
+  volatile unsigned int res_30;      /* 0x30 Reserved */
+  volatile unsigned int res_34;      /* 0x34 Reserved */
+  volatile unsigned int res_38;      /* 0x38 Reserved */
+  volatile unsigned int res_3C;      /* 0x3C Reserved */
+  volatile unsigned int iavail;      /* 0x40 Interrupt available register */
+  volatile unsigned int iflag;       /* 0x44 Interrupt flag register */
+  volatile unsigned int res_48;      /* 0x48 Reserved */
+  volatile unsigned int pulse;       /* 0x4C Pulse register */
+  volatile unsigned int res_50;      /* 0x50 Reserved */
+  volatile unsigned int output_or;   /* 0x54 I/O port output register, logical-OR */
+  volatile unsigned int dir_or;      /* 0x58 I/O port direction register, logical-OR */
+  volatile unsigned int imask_or;    /* 0x5C Interrupt mask register, logical-OR */
+  volatile unsigned int res_60;      /* 0x60 Reserved */
+  volatile unsigned int output_and;  /* 0x64 I/O port output register, logical-AND */
+  volatile unsigned int dir_and;     /* 0x68 I/O port direction register, logical-AND */
+  volatile unsigned int imask_and;   /* 0x6C Interrupt mask register, logical-AND */
+  volatile unsigned int res_70;      /* 0x70 Reserved */
+  volatile unsigned int output_xor;  /* 0x74 I/O port output register, logical-XOR */
+  volatile unsigned int dir_xor;     /* 0x78 I/O port direction register, logical-XOR */
+  volatile unsigned int imask_xor;   /* 0x7C Interrupt mask register, logical-XOR */
 };
 
 /* L2C - Level 2 Cache Controller registers */
