@@ -1,0 +1,9 @@
+XZ Emebdded
+
+Chris Johns <chrisj@rtems.org> 2016
+
+The code is take from the git repo:
+
+ http://git.tukaani.org/xz-embedded.git
+
+The source has been pulled out of the Linux structure held in the repo.

@@ -155,7 +155,8 @@ EXTRA_DIST += stackchk/README
 
 ## libuntar
 noinst_LIBRARIES += libuntar.a
-libuntar_a_SOURCES = untar/untar.c untar/untar_tgz.c untar/untar.h
+libuntar_a_SOURCES = untar/untar.c untar/untar_txz.c untar/untar_tgz.c \
+	untar/untar.h
 
 EXTRA_DIST += untar/README
 
@@ -191,6 +192,13 @@ noinst_LIBRARIES += libuuid.a
 libuuid_a_SOURCES = uuid/clear.c uuid/compare.c uuid/copy.c uuid/gen_uuid.c \
 	uuid/isnull.c uuid/pack.c uuid/parse.c uuid/unpack.c uuid/unparse.c \
 	uuid/uuid_time.c uuid/uuidd.h uuid/uuidP.h
+
+## xz-embedded
+noinst_LIBRARIES += libxz.a
+libxz_a_SOURCES = xz/xz/h xz/xz_crc32.c xz/xz_crc64.c \
+	xz/xz_dec_lzma2.c xz/xz_dec_stream.c
+
+EXTRA_DIST += xz/README xz/COPING
 
 ## ---
 include $(srcdir)/preinstall.am

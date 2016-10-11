@@ -21,6 +21,7 @@
 #include <stddef.h>
 #include <tar.h>
 #include <zlib.h>
+#include <xz.h>
 
 #include <rtems/print.h>
 
@@ -117,6 +118,34 @@ typedef struct {
 
 } Untar_GzChunkContext;
 
+typedef struct {
+  /**
+   * @brief Instance of Chunk Context needed for tar decompression.
+   */
+  Untar_ChunkContext base;
+
+  /**
+   * @brief Xz context.
+   */
+  struct xz_dec* strm;
+
+  /**
+   * @brief Xz buffer.
+   */
+  struct xz_buf buf;
+
+  /**
+   * @brief Buffer that contains the inflated data.
+   */
+  void *inflateBuffer;
+
+  /**
+   * @brief Size of buffer that contains the inflated data.
+   */
+  size_t inflateBufferSize;
+
+} Untar_XzChunkContext;
+
 /**
  * @brief Initializes the Untar_ChunkContext files out of a part of a block of
  * memory.
@@ -170,6 +199,40 @@ int Untar_GzChunkContext_Init(
  */
 int Untar_FromGzChunk_Print(
   Untar_GzChunkContext *ctx,
+  void *chunk,
+  size_t chunk_size,
+  const rtems_printer* printer
+);
+
+/**
+ * @brief Initializes the Untar_ChunkXzContext.
+ *
+ * @param Untar_ChunkXzContext *context [in] Pointer to a context structure.
+ * @param enum xz_mode mode [in] Dictionary mode.
+ * @param uint32_t dict_max [in] Maximum size of dictionary.
+ * @param void *inflateBuffer [in] Pointer to a context structure.
+ * @param size_t inflateBufferSize [in] Size of inflateBuffer.
+ */
+int Untar_XzChunkContext_Init(
+  Untar_XzChunkContext *ctx,
+  enum xz_mode mode,
+  uint32_t dict_max,
+  void *inflateBuffer,
+  size_t inflateBufferSize
+);
+
+/*
+ * @brief Untars a XZ compressed POSIX TAR file.
+ *
+ * This is a subroutine used to rip links, directories, and
+ * files out of a tar.gz/tgz file.
+ *
+ * @param Untar_ChunkContext *context [in] Pointer to a context structure.
+ * @param ssize buflen [in] Size of valid bytes in input buffer.
+ * @param z_stream *strm [in] Pointer to the current zlib context.
+ */
+int Untar_FromXzChunk_Print(
+  Untar_XzChunkContext *ctx,
   void *chunk,
   size_t chunk_size,
   const rtems_printer* printer

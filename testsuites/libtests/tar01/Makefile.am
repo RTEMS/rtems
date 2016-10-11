@@ -16,6 +16,14 @@ BUILT_SOURCES += initial_filesystem_tar.h
 BUILT_SOURCES += initial_filesystem_tar_gz.c
 BUILT_SOURCES += initial_filesystem_tar_gz.h
 
+if TARTEST_XZ
+tar01_SOURCES += initial_filesystem_tar_xz.c
+tar01_SOURCES += initial_filesystem_tar_xz.h
+
+BUILT_SOURCES += initial_filesystem_tar_xz.c
+BUILT_SOURCES += initial_filesystem_tar_xz.h
+endif TARTEST_XZ
+
 dist_rtems_tests_DATA = tar01.scn
 dist_rtems_tests_DATA += tar01.doc
 endif TARTESTS
@@ -28,6 +36,10 @@ if TARTESTS
 AM_CPPFLAGS += -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 AM_CPPFLAGS += -I$(top_srcdir)/../psxtests/include
+
+if TARTEST_XZ
+AM_CFLAGS += -DHAVE_XZ=1
+endif TARTEST_XZ
 
 LINK_OBJS = $(tar01_OBJECTS) $(tar01_LDADD)
 LINK_LIBS = $(tar01_LDLIBS)
@@ -46,11 +58,19 @@ CLEANFILES += initial_filesystem_tar.h
 
 initial_filesystem_tar_gz.c: initial_filesystem.tar.gz
 	$(BIN2C) -C initial_filesystem.tar.gz initial_filesystem_tar_gz
-CLEANFILES += initial_filesystem_tar_gz.h
+CLEANFILES += initial_filesystem_tar_gz.c
 
 initial_filesystem_tar_gz.h: initial_filesystem.tar.gz
 	$(BIN2C) -H initial_filesystem.tar.gz initial_filesystem_tar_gz
 CLEANFILES += initial_filesystem_tar_gz.h
+
+initial_filesystem_tar_xz.c: initial_filesystem.tar.xz
+	$(BIN2C) -C initial_filesystem.tar.xz initial_filesystem_tar_xz
+CLEANFILES += initial_filesystem_tar_xz.c
+
+initial_filesystem_tar_xz.h: initial_filesystem.tar.xz
+	$(BIN2C) -H initial_filesystem.tar.xz initial_filesystem_tar_xz
+CLEANFILES += initial_filesystem_tar_xz.h
 
 initial_filesystem.tar:
 	rm -rf initial_fs
@@ -68,6 +88,10 @@ CLEANFILES += initial_filesystem.tar
 initial_filesystem.tar.gz: initial_filesystem.tar
 	$(GZIP) < initial_filesystem.tar > initial_filesystem.tar.gz
 CLEANFILES += initial_filesystem.tar.gz
+
+initial_filesystem.tar.xz: initial_filesystem.tar
+	$(XZ) --lzma2=dict=8192 < initial_filesystem.tar > initial_filesystem.tar.xz
+CLEANFILES += initial_filesystem.tar.xz
 
 endif TARTESTS
 
