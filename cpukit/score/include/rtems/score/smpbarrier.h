@@ -106,8 +106,11 @@ static inline void _SMP_barrier_State_initialize(
  * @param[in, out] control The SMP barrier control.
  * @param[in, out] state The SMP barrier per-thread state.
  * @param[in] count The thread count bound to rendezvous.
+ *
+ * @retval true This processor performed the barrier release.
+ * @retval false Otherwise.
  */
-void _SMP_barrier_Wait(
+bool _SMP_barrier_Wait(
   SMP_barrier_Control *control,
   SMP_barrier_State *state,
   unsigned int count

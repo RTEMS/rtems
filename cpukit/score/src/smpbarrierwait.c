@@ -18,7 +18,7 @@
 
 #include <rtems/score/smpbarrier.h>
 
-void _SMP_barrier_Wait(
+bool _SMP_barrier_Wait(
   SMP_barrier_Control *control,
   SMP_barrier_State *state,
   unsigned int count
@@ -26,6 +26,7 @@ void _SMP_barrier_Wait(
 {
   unsigned int sense = ~state->sense;
   unsigned int previous_value;
+  bool performed_release;
 
   state->sense = sense;
 
@@ -38,11 +39,16 @@ void _SMP_barrier_Wait(
   if ( previous_value + 1U == count ) {
     _Atomic_Store_uint( &control->value, 0U, ATOMIC_ORDER_RELAXED );
     _Atomic_Store_uint( &control->sense, sense, ATOMIC_ORDER_RELEASE );
+    performed_release = true;
   } else {
     while (
       _Atomic_Load_uint( &control->sense, ATOMIC_ORDER_ACQUIRE ) != sense
     ) {
       /* Wait */
     }
+
+    performed_release = false;
   }
+
+  return performed_release;
 }
