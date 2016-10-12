@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010-2015 embedded brains GmbH.
+ *  Copyright (c) 2010, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -219,6 +219,16 @@
     __attribute__((__format__(__printf__, _format_pos, _ap_pos)))
 #else
   #define RTEMS_PRINTFLIKE( _format_pos, _ap_pos )
+#endif
+
+/**
+ * @brief Obfuscates the pointer so that the compiler cannot perform
+ * optimizations based on the pointer value.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_OBFUSCATE_POINTER( _ptr ) __asm__("" : "+r" (_ptr))
+#else
+  #define RTEMS_OBFUSCATE_POINTER( _ptr ) (void) (_ptr)
 #endif
 
 #if __cplusplus >= 201103L
