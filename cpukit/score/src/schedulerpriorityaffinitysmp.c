@@ -345,30 +345,14 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
      * in the ready set, then we need to swap them out.
      */
 
-    _Scheduler_SMP_Node_change_state(
-      _Scheduler_SMP_Node_downcast( lowest_scheduled ),
-      SCHEDULER_SMP_NODE_READY
-    );
-    _Scheduler_Thread_change_state(
-      _Scheduler_Node_get_user( lowest_scheduled ),
-      THREAD_SCHEDULER_READY
-    );
-
-    _Scheduler_SMP_Allocate_processor(
+    _Scheduler_priority_SMP_Extract_from_ready( context, highest_ready );
+    _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       highest_ready,
       lowest_scheduled,
+      _Scheduler_SMP_Insert_scheduled_fifo,
+      _Scheduler_priority_SMP_Move_from_scheduled_to_ready,
       _Scheduler_SMP_Allocate_processor_exact
-    );
-
-    _Scheduler_priority_SMP_Move_from_ready_to_scheduled(
-      context,
-      highest_ready
-    );
-
-    _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
-      context,
-      lowest_scheduled
     );
   }
 }
