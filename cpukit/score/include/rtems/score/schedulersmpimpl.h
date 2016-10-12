@@ -526,20 +526,42 @@ static inline void _Scheduler_SMP_Allocate_processor_exact(
 static inline void _Scheduler_SMP_Allocate_processor(
   Scheduler_Context                *context,
   Scheduler_Node                   *scheduled,
-  Scheduler_Node                   *victim,
+  Thread_Control                   *victim_thread,
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
   Thread_Control *scheduled_thread = _Scheduler_Node_get_user( scheduled );
-  Thread_Control *victim_thread = _Scheduler_Node_get_user( victim );
 
   _Scheduler_SMP_Node_change_state( scheduled, SCHEDULER_SMP_NODE_SCHEDULED );
-  _Scheduler_Thread_change_state(
-    scheduled_thread,
-    THREAD_SCHEDULER_SCHEDULED
-  );
 
   ( *allocate_processor )( context, scheduled_thread, victim_thread );
+}
+
+static inline Thread_Control *_Scheduler_SMP_Preempt(
+  Scheduler_Context                *context,
+  Scheduler_Node                   *scheduled,
+  Scheduler_Node                   *victim,
+  Scheduler_SMP_Allocate_processor  allocate_processor
+)
+{
+  Thread_Control   *victim_thread;
+  ISR_lock_Context  lock_context;
+
+  victim_thread = _Scheduler_Node_get_user( victim );
+  _Scheduler_SMP_Node_change_state( victim, SCHEDULER_SMP_NODE_READY );
+
+  _Thread_Scheduler_acquire_critical( victim_thread, &lock_context );
+  _Scheduler_Thread_change_state( victim_thread, THREAD_SCHEDULER_READY );
+  _Thread_Scheduler_release_critical( victim_thread, &lock_context );
+
+  _Scheduler_SMP_Allocate_processor(
+    context,
+    scheduled,
+    victim_thread,
+    allocate_processor
+  );
+
+  return victim_thread;
 }
 
 static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
@@ -581,20 +603,10 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
   );
 
   if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-    Thread_Control *lowest_scheduled_user =
-      _Scheduler_Node_get_user( lowest_scheduled );
+    Thread_Control *lowest_scheduled_user;
     Thread_Control *idle;
 
-    _Scheduler_SMP_Node_change_state(
-      lowest_scheduled,
-      SCHEDULER_SMP_NODE_READY
-    );
-    _Scheduler_Thread_change_state(
-      lowest_scheduled_user,
-      THREAD_SCHEDULER_READY
-    );
-
-    _Scheduler_SMP_Allocate_processor(
+    lowest_scheduled_user = _Scheduler_SMP_Preempt(
       context,
       node,
       lowest_scheduled,
@@ -748,13 +760,10 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
     );
 
     if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-      Thread_Control *user = _Scheduler_Node_get_user( node );
+      Thread_Control *user;
       Thread_Control *idle;
 
-      _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
-      _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_READY );
-
-      _Scheduler_SMP_Allocate_processor(
+      user = _Scheduler_SMP_Preempt(
         context,
         highest_ready,
         node,
@@ -836,7 +845,7 @@ static inline void _Scheduler_SMP_Schedule_highest_ready(
       _Scheduler_SMP_Allocate_processor(
         context,
         highest_ready,
-        victim,
+        _Scheduler_Node_get_user( victim ),
         allocate_processor
       );
 

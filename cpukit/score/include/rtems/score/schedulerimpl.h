@@ -21,6 +21,7 @@
 #define _RTEMS_SCORE_SCHEDULERIMPL_H
 
 #include <rtems/score/scheduler.h>
+#include <rtems/score/assert.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/priorityimpl.h>
 #include <rtems/score/smpimpl.h>
@@ -867,6 +868,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
     _Scheduler_Thread_state_valid_state_changes
       [ the_thread->Scheduler.state ][ new_state ]
   );
+  _Assert(
+    _ISR_lock_Is_owner( &the_thread->Scheduler.Lock )
+      || the_thread->Scheduler.state == THREAD_SCHEDULER_BLOCKED
+      || !_System_state_Is_up( _System_state_Get() )
+  );
 
   the_thread->Scheduler.state = new_state;
 }
@@ -983,18 +989,23 @@ _Scheduler_Try_to_schedule_node(
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
-  Scheduler_Try_to_schedule_action action;
-  Thread_Control *owner;
-  Thread_Control *user;
+  ISR_lock_Context                  lock_context;
+  Scheduler_Try_to_schedule_action  action;
+  Thread_Control                   *owner;
+  Thread_Control                   *user;
 
   action = SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE;
+  user = _Scheduler_Node_get_user( node );
+
+  _Thread_Scheduler_acquire_critical( user, &lock_context );
 
   if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
+    _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+    _Thread_Scheduler_release_critical( user, &lock_context );
     return action;
   }
 
   owner = _Scheduler_Node_get_owner( node );
-  user = _Scheduler_Node_get_user( node );
 
   if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL) {
     if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
@@ -1026,6 +1037,11 @@ _Scheduler_Try_to_schedule_node(
     }
   }
 
+  if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
+    _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+  }
+
+  _Thread_Scheduler_release_critical( user, &lock_context );
   return action;
 }
 
@@ -1097,10 +1113,13 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
-  Thread_Control *old_user;
-  Thread_Control *new_user;
+  ISR_lock_Context  lock_context;
+  Thread_Control   *old_user;
+  Thread_Control   *new_user;
 
+  _Thread_Scheduler_acquire_critical( thread, &lock_context );
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
+  _Thread_Scheduler_release_critical( thread, &lock_context );
 
   if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
     _Assert( thread == _Scheduler_Node_get_user( node ) );
