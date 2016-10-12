@@ -1130,7 +1130,6 @@ fxp_start(struct ifnet *ifp)
 {
 	struct fxp_softc *sc = ifp->if_softc;
 	struct fxp_cb_tx *txp;
-	rtems_interrupt_level level;
 
 	DBGLVL_PRINTK(3,"fxp_start called\n");
 
@@ -1279,10 +1278,10 @@ tbdinit:
 	/*
 	 * reenable interrupts
 	 */
-	rtems_interrupt_disable (level);
+	RTEMS_COMPILER_MEMORY_BARRIER();
 	CSR_WRITE_1(sc, FXP_CSR_SCB_INTRCNTL,0);
 	bsp_interrupt_vector_enable(sc->irq_num);
-	rtems_interrupt_enable (level);
+	RTEMS_COMPILER_MEMORY_BARRIER();
 }
 
 /*
@@ -1311,7 +1310,6 @@ static void fxp_daemon(void *xsc)
 	struct ifnet *ifp = &sc->sc_if;
 	u_int8_t statack;
 	rtems_event_set events;
-	rtems_interrupt_level level;
 
 #ifdef NOTUSED
 	if (sc->suspended) {
@@ -1458,10 +1456,9 @@ rcvloop:
 	  /*
 	   * reenable interrupts
 	   */
-	  rtems_interrupt_disable (level);
+	  RTEMS_COMPILER_MEMORY_BARRIER();
 	  CSR_WRITE_1(sc, FXP_CSR_SCB_INTRCNTL,0);
-	  bsp_interrupt_vector_enable(sc->irq_num);
-	  rtems_interrupt_enable (level);
+	  RTEMS_COMPILER_MEMORY_BARRIER();
 	}
 }
 
