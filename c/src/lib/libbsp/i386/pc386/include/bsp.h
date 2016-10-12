@@ -146,6 +146,11 @@ extern int rtems_3c509_driver_attach(struct rtems_bsdnet_ifconfig *config);
 
 #define	TIMER_TICK     1193182  /* The internal tick rate in ticks per second */
 
+#if defined( RTEMS_SMP )
+  extern ISR_lock_Control rtems_i386_i8254_access_lock;
+#endif
+
+
 /*-------------------------------------------------------------------------+
 | Console Defines
 |      WARNING: These Values MUST match the order in

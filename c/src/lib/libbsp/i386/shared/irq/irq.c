@@ -23,6 +23,8 @@
 
 #include "elcr.h"
 
+RTEMS_INTERRUPT_LOCK_DEFINE( static, rtems_i8259_access_lock, "rtems_i8259_access_lock" );
+
 /*
  * pointer to the mask representing the additionnal irq vectors
  * that must be disabled when a particular entry is activated.
@@ -130,9 +132,9 @@ static inline uint8_t BSP_i8259a_irq_in_service_reg(uint32_t ioport)
 static int BSP_irq_disable_at_i8259a(const rtems_irq_number irqLine)
 {
   unsigned short        mask;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&rtems_i8259_access_lock, &lock_context);
 
   mask = 1 << irqLine;
   i8259a_imr_cache |= mask;
@@ -146,7 +148,7 @@ static int BSP_irq_disable_at_i8259a(const rtems_irq_number irqLine)
     BSP_i8259a_irq_update_slave_imr();
   }
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
 
   return 0;
 }
@@ -161,11 +163,11 @@ static int BSP_irq_disable_at_i8259a(const rtems_irq_number irqLine)
 static int BSP_irq_enable_at_i8259a(const rtems_irq_number irqLine)
 {
   unsigned short        mask;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
   uint8_t               isr;
   uint8_t               irr;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&rtems_i8259_access_lock, &lock_context);
 
   mask = 1 << irqLine;
   i8259a_imr_cache &= ~mask;
@@ -186,7 +188,7 @@ static int BSP_irq_enable_at_i8259a(const rtems_irq_number irqLine)
   if (((isr ^ irr) & mask) != 0)
     printk("i386: isr=%x irr=%x\n", isr, irr);
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
 
   return 0;
 } /* mask_irq */
@@ -239,11 +241,11 @@ static rtems_irq_prio irqPrioTable[BSP_IRQ_LINES_NUMBER]={
 
 static void compute_i8259_masks_from_prio (void)
 {
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
   unsigned int i;
   unsigned int j;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&rtems_i8259_access_lock, &lock_context);
 
   /*
    * Always mask at least current interrupt to prevent re-entrance
@@ -260,7 +262,7 @@ static void compute_i8259_masks_from_prio (void)
     }
   }
 
-  rtems_interrupt_enable(level);
+  rtems_interrupt_lock_release(&rtems_i8259_access_lock, &lock_context);
 }
 
 static inline bool bsp_interrupt_vector_is_valid(rtems_vector_number vector)
@@ -314,6 +316,7 @@ void BSP_dispatch_isr(int vector);
 
 void BSP_dispatch_isr(int vector)
 {
+  rtems_interrupt_lock_context lock_context;
   rtems_i8259_masks in_progress_save = 0;
 
   if (vector < BSP_IRQ_VECTOR_NUMBER) {
@@ -321,6 +324,9 @@ void BSP_dispatch_isr(int vector)
      * Hardware?
      */
     if (vector <= BSP_IRQ_MAX_ON_i8259A) {
+
+      rtems_interrupt_lock_acquire_isr(&rtems_i8259_access_lock, &lock_context);
+
       /*
        * See if this is a spurious interrupt.
        */
@@ -335,6 +341,7 @@ void BSP_dispatch_isr(int vector)
           uint8_t isr = BSP_i8259a_irq_in_service_reg(PIC_MASTER_COMMAND_IO_PORT);
           if ((isr & (1 << 7)) == 0) {
             ++spurious_count;
+            rtems_interrupt_lock_release_isr(&rtems_i8259_access_lock, &lock_context);
             return;
           }
         }
@@ -355,6 +362,8 @@ void BSP_dispatch_isr(int vector)
        * Do not use auto-EOI as some slave PIC do not work correctly.
        */
       BSP_irq_ack_at_i8259a(vector);
+
+      rtems_interrupt_lock_release_isr(&rtems_i8259_access_lock, &lock_context);
     }
 
     /*
@@ -378,6 +387,9 @@ void BSP_dispatch_isr(int vector)
     RTEMS_COMPILER_MEMORY_BARRIER();
 
     if (vector <= BSP_IRQ_MAX_ON_i8259A) {
+
+      rtems_interrupt_lock_acquire_isr(&rtems_i8259_access_lock, &lock_context);
+
       /*
        * Put the mask back but keep this vector masked if the trigger type is
        * level. The driver or a thread level interrupt server needs to enable it
@@ -388,6 +400,8 @@ void BSP_dispatch_isr(int vector)
         BSP_i8259a_irq_update_master_imr();
         BSP_i8259a_irq_update_slave_imr();
       }
+
+      rtems_interrupt_lock_release_isr(&rtems_i8259_access_lock, &lock_context);
     }
   }
 }

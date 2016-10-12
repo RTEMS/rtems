@@ -9,6 +9,7 @@
 #include <rtems/kd.h>
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <stdatomic.h>
 
 #define SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
@@ -28,59 +29,53 @@
 #define KBD_DEFLOCK 0
 #endif
 
-static int set_bit(int nr, unsigned long * addr)
+static int kbd_test_and_set_bit(int nr, atomic_uint_least32_t * addr)
 {
-  int                   mask;
+  uint_least32_t        mask;
   int                   retval;
-  rtems_interrupt_level level;
 
   addr += nr >> 5;
-  mask = 1 << (nr & 0x1f);
-  rtems_interrupt_disable(level);
-    retval = (mask & *addr) != 0;
-    *addr |= mask;
-  rtems_interrupt_enable(level);
+  mask = 1UL << (nr & 0x1f);
+
+  retval = (atomic_fetch_or(addr, mask) & mask) != 0;
+
   return retval;
 }
 
-static int clear_bit(int nr, unsigned long * addr)
+static int kbd_test_and_clear_bit(int nr, atomic_uint_least32_t * addr)
 {
-  int                   mask;
+  uint_least32_t        mask;
   int                   retval;
-  rtems_interrupt_level level;
 
   addr += nr >> 5;
-  mask = 1 << (nr & 0x1f);
-  rtems_interrupt_disable(level);
-    retval = (mask & *addr) != 0;
-    *addr &= ~mask;
-  rtems_interrupt_enable(level);
+  mask = 1UL << (nr & 0x1f);
+
+  retval = (atomic_fetch_and(addr, ~mask) & mask) != 0;
+
   return retval;
 }
 
-static int test_bit(int nr, unsigned long * addr)
+static int kbd_test_bit(int nr, atomic_uint_least32_t * addr)
 {
-  int  mask;
+  unsigned long  mask;
 
   addr += nr >> 5;
   mask = 1 << (nr & 0x1f);
-  return ((mask & *addr) != 0);
+  return ((mask & atomic_load(addr)) != 0);
 }
-
-#define  test_and_set_bit(x,y)      set_bit(x,y)
-#define  test_and_clear_bit(x,y)    clear_bit(x,y)
 
 /*
  * global state includes the following, and various static variables
  * in this module: prev_scancode, shift_state, diacr, npadch, dead_key_next.
  * (last_console is now a global variable)
  */
-#define  BITS_PER_LONG (sizeof(long)*CHAR_BIT)
+#define  KBD_BITS_PER_ELEMENT (sizeof(atomic_uint_least32_t)*CHAR_BIT)
 
 /* shift state counters.. */
 static unsigned char k_down[NR_SHIFT] = {0, };
 /* keyboard key bitmap */
-static unsigned long key_down[256/BITS_PER_LONG] = { 0, };
+static atomic_uint_least32_t
+  key_down[(256 + KBD_BITS_PER_ELEMENT - 1) / KBD_BITS_PER_ELEMENT] = { 0, };
 
 static int dead_key_next = 0;
 /*
@@ -243,10 +238,10 @@ void handle_scancode(unsigned char scancode, int down)
 
   if (up_flag) {
     rep = 0;
-    if(!test_and_clear_bit(keycode, key_down))
+    if(!kbd_test_and_clear_bit(keycode, key_down))
         up_flag = kbd_unexpected_up(keycode);
   } else
-    rep = test_and_set_bit(keycode, key_down);
+    rep = kbd_test_and_set_bit(keycode, key_down);
 
 #ifdef CONFIG_MAGIC_SYSRQ    /* Handle the SysRq Hack */
   if (keycode == SYSRQ_KEY) {
@@ -695,10 +690,10 @@ void compute_shiftstate(void)
     k_down[i] = 0;
 
   for(i=0; i < SIZE(key_down); i++)
-    if(key_down[i]) {  /* skip this word if not a single bit on */
-      k = i*BITS_PER_LONG;
-      for(j=0; j<BITS_PER_LONG; j++,k++)
-        if(test_bit(k, key_down)) {
+    if(atomic_load(key_down + i)) {  /* skip this word if not a single bit on */
+      k = i*KBD_BITS_PER_ELEMENT;
+      for(j=0; j<KBD_BITS_PER_ELEMENT; j++,k++)
+        if(kbd_test_bit(k, key_down)) {
     sym = U(plain_map[k]);
     if(KTYP(sym) == KT_SHIFT) {
       val = KVAL(sym);

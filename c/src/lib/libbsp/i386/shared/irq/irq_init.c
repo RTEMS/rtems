@@ -124,7 +124,12 @@ void  rtems_irq_mngt_init(void)
        while(1);
     }
 
-    rtems_interrupt_disable(level);
+    /*
+     * The interrupt management can be initialized only once
+     * during system bootup and that should happen on boot
+     * CPU so there is no need to synchronize with others CPUs.
+     */
+    rtems_interrupt_local_disable(level);
 
     /*
      * Init the complete IDT vector table with defaultRawIrq value

@@ -260,13 +260,17 @@ int BSP_wait_polled_input(void)
 int rtems_kbpoll( void )
 {
   int                    rc;
-  rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
+  /*
+   * The locking or disable of interrupts does not help
+   * there because if interrupts are enabled after leave of this
+   * function the state can change without notice anyway.
+   */
+  RTEMS_COMPILER_MEMORY_BARRIER();
 
   rc = ( kbd_first != kbd_last ) ? TRUE : FALSE;
 
-  rtems_interrupt_enable(level);
+  RTEMS_COMPILER_MEMORY_BARRIER();
 
   return rc;
 }

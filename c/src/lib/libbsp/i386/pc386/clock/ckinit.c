@@ -84,15 +84,18 @@ static uint32_t pc386_get_timecount_i8254(struct timecounter *tc)
 {
   uint32_t                 irqs;
   uint8_t                  lsb, msb;
-  rtems_interrupt_level    level;
+  rtems_interrupt_lock_context lock_context;
 
   /*
    * Fetch all the data in an interrupt critical section.
    */
-  rtems_interrupt_disable(level);
+
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
+
     READ_8254(lsb, msb);
     irqs = Clock_driver_ticks;
-  rtems_interrupt_enable(level);
+
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 
   return (irqs + 1) * pc386_microseconds_per_isr - ((msb << 8) | lsb);
 }
@@ -141,6 +144,7 @@ static void calibrate_tsc(void)
 
 static void clockOn(void)
 {
+  rtems_interrupt_lock_context lock_context;
   pc386_isrs_per_tick        = 1;
   pc386_microseconds_per_isr = rtems_configuration_get_microseconds_per_tick();
 
@@ -150,8 +154,6 @@ static void clockOn(void)
   }
   pc386_clock_click_count = US_TO_TICK(pc386_microseconds_per_isr);
 
-  bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
-
   #if 0
     printk( "configured usecs per tick=%d \n",
       rtems_configuration_get_microseconds_per_tick() );
@@ -160,9 +162,13 @@ static void clockOn(void)
     printk( "final timer counts=%d\n", pc386_clock_click_count );
   #endif
 
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
   outport_byte(TIMER_CNTR0, pc386_clock_click_count >> 0 & 0xff);
   outport_byte(TIMER_CNTR0, pc386_clock_click_count >> 8 & 0xff);
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
+
+  bsp_interrupt_vector_enable( BSP_PERIODIC_TIMER - BSP_IRQ_VECTOR_BASE );
 
   /*
    * Now calibrate cycles per tick. Do this every time we
@@ -174,10 +180,13 @@ static void clockOn(void)
 
 static void clockOff(void)
 {
+  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
   /* reset timer mode to standard (BIOS) value */
   outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_RATEGEN);
   outport_byte(TIMER_CNTR0, 0);
   outport_byte(TIMER_CNTR0, 0);
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 } /* Clock_exit */
 
 bool Clock_isr_enabled = false;

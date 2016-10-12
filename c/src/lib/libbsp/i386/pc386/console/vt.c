@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <errno.h>
 
+#include <bsp.h>
 #include <i386_io.h>
 #include <rtems.h>
 #include <rtems/kd.h>
@@ -69,21 +70,21 @@ static void
 _kd_mksound(unsigned int hz, unsigned int ticks)
 {
   unsigned int          count = 0;
-  rtems_interrupt_level level;
+  rtems_interrupt_lock_context lock_context;
 
   if (hz > 20 && hz < 32767)
     count = 1193180 / hz;
 
-   rtems_interrupt_disable(level);
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
 /*  del_timer(&sound_timer);  */
   if (count) {
     /* enable counter 2 */
     outb_p(inb_p(0x61)|3, 0x61);
     /* set command for counter 2, 2 byte write */
-    outb_p(0xB6, 0x43);
+    outb_p(0xB6, TIMER_MODE);
     /* select desired HZ */
-    outb_p(count & 0xff, 0x42);
-    outb((count >> 8) & 0xff, 0x42);
+    outb_p(count & 0xff, TIMER_CNTR2);
+    outb((count >> 8) & 0xff, TIMER_CNTR2);
 
 /*
     if (ticks) {
@@ -94,7 +95,7 @@ _kd_mksound(unsigned int hz, unsigned int ticks)
   } else
     kd_nosound(0);
 
-   rtems_interrupt_enable(level);
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
   return;
 }
 

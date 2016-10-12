@@ -44,6 +44,9 @@
 
 #define CMD_READ_BACK_STATUS 0xE2   /* command read back status */
 
+RTEMS_INTERRUPT_LOCK_DEFINE( /* visible global variable */ ,
+   rtems_i386_i8254_access_lock, "rtems_i386_i8254_access_lock" );
+
 /*
  * Global Variables
  */
@@ -115,22 +118,34 @@ static uint32_t tsc_read_timer(void)
  */
 static void timerOff(const rtems_raw_irq_connect_data* used)
 {
+  rtems_interrupt_lock_context lock_context;
   /*
    * disable interrrupt at i8259 level
    */
-   bsp_interrupt_vector_disable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+  bsp_interrupt_vector_disable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
+
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
+
    /* reset timer mode to standard (DOS) value */
-   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
-   outport_byte(TIMER_CNTR0, 0);
-   outport_byte(TIMER_CNTR0, 0);
+  outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
+  outport_byte(TIMER_CNTR0, 0);
+  outport_byte(TIMER_CNTR0, 0);
+
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 }
 
 static void timerOn(const rtems_raw_irq_connect_data* used)
 {
+  rtems_interrupt_lock_context lock_context;
+
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
+
   /* load timer for US_PER_ISR microsecond period */
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_RATEGEN);
   outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 0 & 0xff);
   outport_byte(TIMER_CNTR0, US_TO_TICK(US_PER_ISR) >> 8 & 0xff);
+
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 
   /*
    * enable interrrupt at i8259 level
@@ -199,10 +214,14 @@ static uint32_t i386_read_timer(void)
 {
   register uint32_t         total, clicks;
   register uint8_t          lsb, msb;
+  rtems_interrupt_lock_context lock_context;
 
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_LATCH);
   inport_byte(TIMER_CNTR0, lsb);
   inport_byte(TIMER_CNTR0, msb);
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
+
   clicks = (msb << 8) | lsb;
   total  = (Ttimer_val * US_PER_ISR) + (US_PER_ISR - TICK_TO_US(clicks));
 
@@ -273,10 +292,13 @@ static unsigned short lastLoadedValue;
  */
 static void loadTimerValue( unsigned short loadedValue )
 {
+  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
   lastLoadedValue = loadedValue;
   outport_byte(TIMER_MODE, TIMER_SEL0|TIMER_16BIT|TIMER_SQWAVE);
   outport_byte(TIMER_CNTR0, loadedValue & 0xff);
   outport_byte(TIMER_CNTR0, (loadedValue >> 8) & 0xff);
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
 }
 
 /*
@@ -290,6 +312,8 @@ static unsigned int readTimer0(void)
   unsigned short lsb, msb;
   unsigned char  status;
   unsigned int  count;
+  rtems_interrupt_lock_context lock_context;
+  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
 
   outport_byte(
     TIMER_MODE,
@@ -298,6 +322,9 @@ static unsigned int readTimer0(void)
   inport_byte(TIMER_CNTR0, status);
   inport_byte(TIMER_CNTR0, lsb);
   inport_byte(TIMER_CNTR0, msb);
+
+  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
+
   count = ( msb << 8 ) | lsb ;
   if (status & RB_OUTPUT )
     count += lastLoadedValue;
@@ -337,7 +364,13 @@ Calibrate_loop_1ms(void)
   rtems_interrupt_level  level;
   int retries = 0;
 
-  rtems_interrupt_disable(level);
+  /*
+   * This code is designed to run before interrupt management
+   * is enabled and running it on multiple CPUs and or after
+   * secondary CPUs are bring up seems really broken.
+   * Disabling of local interrupts is enough.
+   */
+  rtems_interrupt_local_disable(level);
 
 retry:
   if ( ++retries >= 5 ) {
@@ -506,7 +539,7 @@ retry:
 #ifdef DEBUG_CALIBRATE
   printk("slowLoop1ms = %u, fastLoop1ms = %u\n", slowLoop1ms, fastLoop1ms);
 #endif
-  rtems_interrupt_enable(level);
+  rtems_interrupt_local_enable(level);
 
 }
 
