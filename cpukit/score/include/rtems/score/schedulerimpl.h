@@ -101,8 +101,6 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   return _Scheduler_Get_by_CPU_index( cpu_index );
 }
 
-ISR_LOCK_DECLARE( extern, _Scheduler_Lock )
-
 /**
  * @brief Acquires the scheduler instance inside a critical section (interrupts
  * disabled).
@@ -116,8 +114,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Acquire_critical(
   ISR_lock_Context        *lock_context
 )
 {
+#if defined(RTEMS_SMP)
+  Scheduler_Context *context;
+
+  context = _Scheduler_Get_context( scheduler );
+  _ISR_lock_Acquire( &context->Lock, lock_context );
+#else
   (void) scheduler;
-  _ISR_lock_Acquire( &_Scheduler_Lock, lock_context );
+  (void) lock_context;
+#endif
 }
 
 /**
@@ -133,8 +138,15 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
   ISR_lock_Context        *lock_context
 )
 {
+#if defined(RTEMS_SMP)
+  Scheduler_Context *context;
+
+  context = _Scheduler_Get_context( scheduler );
+  _ISR_lock_Release( &context->Lock, lock_context );
+#else
   (void) scheduler;
-  _ISR_lock_Release( &_Scheduler_Lock, lock_context );
+  (void) lock_context;
+#endif
 }
 
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(

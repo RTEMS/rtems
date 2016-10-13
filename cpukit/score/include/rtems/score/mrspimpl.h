@@ -53,12 +53,12 @@ extern "C" {
 
 RTEMS_INLINE_ROUTINE void _MRSP_Giant_acquire( ISR_lock_Context *lock_context )
 {
-  _ISR_lock_Acquire( &_Scheduler_Lock, lock_context );
+  /* FIXME: MrsP protocol implementation will be reworked soon */
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Giant_release( ISR_lock_Context *lock_context )
 {
-  _ISR_lock_Release( &_Scheduler_Lock, lock_context );
+  /* FIXME: MrsP protocol implementation will be reworked soon */
 }
 
 RTEMS_INLINE_ROUTINE void _MRSP_Acquire_critical(
