@@ -222,13 +222,15 @@
 #endif
 
 /**
- * @brief Obfuscates the pointer so that the compiler cannot perform
- * optimizations based on the pointer value.
+ * @brief Obfuscates the variable so that the compiler cannot perform
+ * optimizations based on the variable value.
+ *
+ * The variable must be simple enough to fit into a register.
  */
 #if defined(__GNUC__)
-  #define RTEMS_OBFUSCATE_POINTER( _ptr ) __asm__("" : "+r" (_ptr))
+  #define RTEMS_OBFUSCATE_VARIABLE( _var ) __asm__("" : "+r" (_var))
 #else
-  #define RTEMS_OBFUSCATE_POINTER( _ptr ) (void) (_ptr)
+  #define RTEMS_OBFUSCATE_VARIABLE( _var ) (void) (_var)
 #endif
 
 #if __cplusplus >= 201103L

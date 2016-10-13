@@ -30,13 +30,13 @@ extern "C" {
 #define RTEMS_LINKER_SET_ASSIGN_BEGIN( set, item ) \
   do { \
     item = _LINKER_SET_BEGIN( set ); \
-    RTEMS_OBFUSCATE_POINTER( item ); \
+    RTEMS_OBFUSCATE_VARIABLE( item ); \
   } while ( 0 )
 
 #define RTEMS_LINKER_SET_ASSIGN_END( set, item ) \
   do { \
     item = _LINKER_SET_END( set ); \
-    RTEMS_OBFUSCATE_POINTER( item ); \
+    RTEMS_OBFUSCATE_VARIABLE( item ); \
   } while ( 0 )
 
 #define RTEMS_LINKER_SET_SIZE( set ) \
