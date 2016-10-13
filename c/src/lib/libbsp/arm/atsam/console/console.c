@@ -517,7 +517,7 @@ rtems_status_code console_initialize(
 #if ATSAM_CONSOLE_DEVICE_TYPE == 1
     if (i == ATSAM_CONSOLE_DEVICE_INDEX) {
       atsam_uart_instances[i].console = true;
-      link(&usart[0], CONSOLE_DEVICE_NAME);
+      link(&uart[0], CONSOLE_DEVICE_NAME);
     }
 #endif
   }
