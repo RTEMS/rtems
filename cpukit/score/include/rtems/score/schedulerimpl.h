@@ -1102,10 +1102,11 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Exchange_idle_thread(
  * @param[in] is_scheduled This node is scheduled.
  * @param[in] get_idle_thread Function to get an idle thread.
  *
- * @retval true Continue with the blocking operation.
- * @retval false Otherwise.
+ * @retval thread_cpu The processor of the thread.  Indicates to continue with
+ *   the blocking operation.
+ * @retval NULL Otherwise.
  */
-RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
   Scheduler_Context         *context,
   Thread_Control            *thread,
   Scheduler_Node            *node,
@@ -1116,15 +1117,17 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
   ISR_lock_Context  lock_context;
   Thread_Control   *old_user;
   Thread_Control   *new_user;
+  Per_CPU_Control  *thread_cpu;
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
+  thread_cpu = _Thread_Get_CPU( thread );
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
   _Thread_Scheduler_release_critical( thread, &lock_context );
 
   if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
     _Assert( thread == _Scheduler_Node_get_user( node ) );
 
-    return true;
+    return thread_cpu;
   }
 
   new_user = NULL;
@@ -1166,7 +1169,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Block_node(
     _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, new_user );
   }
 
-  return false;
+  return NULL;
 }
 
 /**
