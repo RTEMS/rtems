@@ -97,7 +97,6 @@ static void atsam_interrupt_handler(void *arg)
       } else {
         /* Block end interrupt for LLI dma mode */
         if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
-          atsam_finish_command(spid);
         }
       }
 
@@ -110,7 +109,6 @@ static void atsam_interrupt_handler(void *arg)
       }
 
       if (bus->rx_transfer_done && bus->tx_transfer_done) {
-        atsam_finish_command(spid);
         sc = rtems_event_transient_send(bus->task_id);
         assert(sc == RTEMS_SUCCESSFUL);
       }
@@ -149,6 +147,7 @@ static void atsam_set_phase_and_polarity(uint32_t mode, uint32_t *csr)
       *csr |= SPI_CSR_CPOL;
       break;
   }
+  *csr |= SPI_CSR_CSAAT;
 }
 
 static void atsam_configure_spi(atsam_spi_bus *bus)
@@ -370,14 +369,18 @@ static uint32_t atsam_send_command(
     return SPID_ERROR_LOCK;
   }
 
-  /* Enable the SPI Peripheral */
-  PMC_EnablePeripheral(spid->spiId);
+  if(!bus->spi_switched_on){
+    /* Enable the SPI Peripheral */
+    PMC_EnablePeripheral(spid->spiId);
 
-  /* SPI chip select */
-  SPI_ChipSelect(pSpiHw, 1 << msg->cs);
+    /* SPI chip select */
+    SPI_ChipSelect(pSpiHw, 1 << msg->cs);
 
-  /* Enables the SPI to transfer and receive data. */
-  SPI_Enable (pSpiHw);
+    /* Enables the SPI to transfer and receive data. */
+    SPI_Enable (pSpiHw);
+  }
+
+  bus->spi_switched_on = true;
 
   /* Start DMA 0(RX) && 1(TX) */
   if (XDMAD_StartTransfer(spid->pXdmad, bus->dma_rx_channel)) {
@@ -453,6 +456,8 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
     bus->tx_transfer_done = false;
     if (msgs[i].cs_change > 0) {
       SPI_ReleaseCS(bus->SpiDma.pSpiHw);
+      atsam_finish_command(&bus->SpiDma);
+      bus->spi_switched_on = false;
     }
   }
   return rv;
