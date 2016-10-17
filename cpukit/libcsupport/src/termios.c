@@ -275,7 +275,8 @@ drainOutput (struct rtems_termios_tty *tty)
 static bool
 needDeviceMutex (rtems_termios_tty *tty)
 {
-  return tty->handler.mode == TERMIOS_TASK_DRIVEN;
+  return tty->handler.mode == TERMIOS_IRQ_SERVER_DRIVEN
+    || tty->handler.mode == TERMIOS_TASK_DRIVEN;
 }
 
 static void

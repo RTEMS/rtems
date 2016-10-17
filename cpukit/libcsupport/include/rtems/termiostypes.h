@@ -57,7 +57,8 @@ struct rtems_termios_rawbuf {
 typedef enum {
   TERMIOS_POLLED,
   TERMIOS_IRQ_DRIVEN,
-  TERMIOS_TASK_DRIVEN
+  TERMIOS_TASK_DRIVEN,
+  TERMIOS_IRQ_SERVER_DRIVEN
 } rtems_termios_device_mode;
 
 struct rtems_termios_tty;
@@ -74,7 +75,7 @@ typedef struct rtems_termios_device_context {
     /* Used for TERMIOS_POLLED and TERMIOS_IRQ_DRIVEN */
     rtems_interrupt_lock interrupt;
 
-    /* Used for TERMIOS_TASK_DRIVEN */
+    /* Used for TERMIOS_IRQ_SERVER_DRIVEN or TERMIOS_TASK_DRIVEN */
     rtems_id mutex;
   } lock;
 
@@ -161,8 +162,9 @@ typedef struct {
   /**
    * @brief Polled read.
    *
-   * In case mode is TERMIOS_IRQ_DRIVEN or TERMIOS_TASK_DRIVEN, then data is
-   * received via rtems_termios_enqueue_raw_characters().
+   * In case mode is TERMIOS_IRQ_DRIVEN, TERMIOS_IRQ_SERVER_DRIVEN or
+   * TERMIOS_TASK_DRIVEN, then data is received via
+   * rtems_termios_enqueue_raw_characters().
    *
    * @param[in] context The Termios device context.
    *
