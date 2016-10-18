@@ -66,8 +66,11 @@ struct irqmp_regs {
   volatile unsigned int intid[16];   /* 0xc0 */
   volatile struct irqmp_timestamp_regs timestamp[16]; /* 0x100 */
   volatile unsigned int resetaddr[4]; /* 0x200 */
-  /* 0x210, align to 4Kb boundary */
-  volatile unsigned int resv1[(0x1000-0x210)/4];
+  volatile unsigned int resv0[12];    /* 0x210 - 0x23C */
+  volatile unsigned int pboot;        /* 0x240 */
+  volatile unsigned int resv1[47];    /* 0x244 - 0x2FC */
+  volatile unsigned int irqmap[8];    /* 0x300 - 0x31C */
+  volatile unsigned int resv2[824];   /* 0x320 - 0x1000 */
 };
 
 /* GPTIMER Timer instance */
