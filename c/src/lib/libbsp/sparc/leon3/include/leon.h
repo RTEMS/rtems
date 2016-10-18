@@ -186,12 +186,12 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 
 #define LEON_Clear_interrupt( _source ) \
   do { \
-    LEON3_IrqCtrl_Regs->iclear = (1 << (_source)); \
+    LEON3_IrqCtrl_Regs->iclear = (1U << (_source)); \
   } while (0)
 
 #define LEON_Force_interrupt( _source ) \
   do { \
-    LEON3_IrqCtrl_Regs->iforce = (1 << (_source)); \
+    LEON3_IrqCtrl_Regs->iforce = (1U << (_source)); \
   } while (0)
 
 #define LEON_Enable_interrupt_broadcast( _source ) \
@@ -213,16 +213,16 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
   } while (0)
 
 #define LEON_Is_interrupt_pending( _source ) \
-  (LEON3_IrqCtrl_Regs->ipend & (1 << (_source)))
+  (LEON3_IrqCtrl_Regs->ipend & (1U << (_source)))
 
 #define LEON_Cpu_Is_interrupt_masked( _source, _cpu ) \
-     (!(LEON3_IrqCtrl_Regs->mask[_cpu] & (1 << (_source))))
+     (!(LEON3_IrqCtrl_Regs->mask[_cpu] & (1U << (_source))))
 
 #define LEON_Cpu_Mask_interrupt( _source, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-     LEON3_IrqCtrl_Regs->mask[_cpu]  &= ~(1 << (_source)); \
+     LEON3_IrqCtrl_Regs->mask[_cpu]  &= ~(1U << (_source)); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
@@ -230,14 +230,14 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
   do { \
     rtems_interrupt_lock_context _lock_context; \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
-    LEON3_IrqCtrl_Regs->mask[_cpu]  |= (1 << (_source)); \
+    LEON3_IrqCtrl_Regs->mask[_cpu]  |= (1U << (_source)); \
     LEON3_IRQCTRL_RELEASE( &_lock_context ); \
   } while (0)
 
 #define LEON_Cpu_Disable_interrupt( _source, _previous, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
-    uint32_t _mask = 1 << (_source); \
+    uint32_t _mask = 1U << (_source); \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
      (_previous) = LEON3_IrqCtrl_Regs->mask[_cpu]; \
      LEON3_IrqCtrl_Regs->mask[_cpu] = _previous & ~_mask; \
@@ -248,7 +248,7 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
 #define LEON_Cpu_Restore_interrupt( _source, _previous, _cpu ) \
   do { \
     rtems_interrupt_lock_context _lock_context; \
-    uint32_t _mask = 1 << (_source); \
+    uint32_t _mask = 1U << (_source); \
     LEON3_IRQCTRL_ACQUIRE( &_lock_context ); \
       LEON3_IrqCtrl_Regs->mask[_cpu] = \
         (LEON3_IrqCtrl_Regs->mask[_cpu] & ~_mask) | (_previous); \
