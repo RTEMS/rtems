@@ -1068,48 +1068,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
   the_thread->Scheduler.state = new_state;
 }
 
-/**
- * @brief Changes the scheduler help state of a thread.
- *
- * @param[in] the_thread The thread.
- * @param[in] new_help_state The new help state.
- *
- * @return The previous help state.
- */
-RTEMS_INLINE_ROUTINE Scheduler_Help_state _Scheduler_Thread_change_help_state(
-  Thread_Control       *the_thread,
-  Scheduler_Help_state  new_help_state
-)
-{
-  Scheduler_Node *node = _Thread_Scheduler_get_own_node( the_thread );
-  Scheduler_Help_state previous_help_state = node->help_state;
-
-  node->help_state = new_help_state;
-
-  return previous_help_state;
-}
-
-/**
- * @brief Changes the resource tree root of a thread.
- *
- * For each node of the resource sub-tree specified by the top thread the
- * scheduler asks for help.  So the root thread gains access to all scheduler
- * nodes corresponding to the resource sub-tree.  In case a thread previously
- * granted help is displaced by this operation, then the scheduler asks for
- * help using its remaining resource tree.
- *
- * The run-time of this function depends on the size of the resource sub-tree
- * and other resource trees in case threads in need for help are produced
- * during this operation.
- *
- * @param[in] top The thread specifying the resource sub-tree top.
- * @param[in] root The thread specifying the new resource sub-tree root.
- */
-void _Scheduler_Thread_change_resource_root(
-  Thread_Control *top,
-  Thread_Control *root
-);
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
   Scheduler_Node *node,
   Thread_Control *idle
