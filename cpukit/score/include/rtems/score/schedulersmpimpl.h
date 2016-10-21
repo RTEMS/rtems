@@ -1011,7 +1011,7 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
   return needs_help;
 }
 
-static inline Thread_Control *_Scheduler_SMP_Update_priority(
+static inline void _Scheduler_SMP_Update_priority(
   Scheduler_Context               *context,
   Thread_Control                  *thread,
   Scheduler_Node                  *node,
@@ -1024,7 +1024,6 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
   Scheduler_SMP_Ask_for_help       ask_for_help
 )
 {
-  Thread_Control          *needs_help;
   Priority_Control         new_priority;
   bool                     prepend_it;
   Scheduler_SMP_Node_state node_state;
@@ -1036,7 +1035,7 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
       ( *ask_for_help )( context, thread, node );
     }
 
-    return NULL;
+    return;
   }
 
   node_state = _Scheduler_SMP_Node_state( node );
@@ -1047,9 +1046,9 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
     ( *update )( context, node, new_priority );
 
     if ( prepend_it ) {
-      needs_help = ( *enqueue_scheduled_lifo )( context, node );
+      ( *enqueue_scheduled_lifo )( context, node );
     } else {
-      needs_help = ( *enqueue_scheduled_fifo )( context, node );
+      ( *enqueue_scheduled_fifo )( context, node );
     }
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, node );
@@ -1057,9 +1056,9 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
     ( *update )( context, node, new_priority );
 
     if ( prepend_it ) {
-      needs_help = ( *enqueue_lifo )( context, node, NULL );
+      ( *enqueue_lifo )( context, node, NULL );
     } else {
-      needs_help = ( *enqueue_fifo )( context, node, NULL );
+      ( *enqueue_fifo )( context, node, NULL );
     }
   } else {
     ( *update )( context, node, new_priority );
@@ -1067,11 +1066,7 @@ static inline Thread_Control *_Scheduler_SMP_Update_priority(
     if ( _Thread_Is_ready( thread ) ) {
       ( *ask_for_help )( context, thread, node );
     }
-
-    needs_help = NULL;
   }
-
-  return needs_help;
 }
 
 static inline Thread_Control *_Scheduler_SMP_Ask_for_help_X(

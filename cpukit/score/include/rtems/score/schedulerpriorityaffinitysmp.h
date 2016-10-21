@@ -119,13 +119,7 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
   cpu_set_t               *cpuset
 );
 
-/**
- * @brief Update priority for the priority affinity SMP scheduler.
- *
- * @param[in] scheduler The scheduler of the thread.
- * @param[in] the_thread The associated thread.
- */
-Thread_Control *_Scheduler_priority_affinity_SMP_Update_priority(
+void _Scheduler_priority_affinity_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

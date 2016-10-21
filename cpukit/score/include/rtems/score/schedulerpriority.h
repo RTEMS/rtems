@@ -134,7 +134,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Unblock(
   Scheduler_Node          *node
 );
 
-Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
+void _Scheduler_priority_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *base_node

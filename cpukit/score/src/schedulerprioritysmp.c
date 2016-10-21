@@ -248,7 +248,7 @@ static bool _Scheduler_priority_SMP_Do_ask_for_help(
   );
 }
 
-Thread_Control *_Scheduler_priority_SMP_Update_priority(
+void _Scheduler_priority_SMP_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
@@ -256,7 +256,7 @@ Thread_Control *_Scheduler_priority_SMP_Update_priority(
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
 
-  return _Scheduler_SMP_Update_priority(
+  _Scheduler_SMP_Update_priority(
     context,
     thread,
     node,

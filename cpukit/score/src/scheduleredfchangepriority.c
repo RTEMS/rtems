@@ -36,7 +36,7 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
   return priority & ~SCHEDULER_EDF_PRIO_MSB;
 }
 
-Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
+void _Scheduler_EDF_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -49,7 +49,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
 
   if ( !_Thread_Is_ready( the_thread ) ) {
     /* Nothing to do */
-    SCHEDULER_RETURN_VOID_OR_NULL;
+    return;
   }
 
   the_node = _Scheduler_EDF_Node_downcast( node );
@@ -57,7 +57,7 @@ Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
 
   if ( priority == the_node->priority ) {
     /* Nothing to do */
-    SCHEDULER_RETURN_VOID_OR_NULL;
+    return;
   }
 
   the_node->priority = priority;
@@ -72,6 +72,4 @@ Scheduler_Void_or_thread _Scheduler_EDF_Update_priority(
   }
 
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
-
-  SCHEDULER_RETURN_VOID_OR_NULL;
 }

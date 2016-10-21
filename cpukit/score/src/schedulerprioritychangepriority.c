@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
+void _Scheduler_priority_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -34,7 +34,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
 
   if ( !_Thread_Is_ready( the_thread ) ) {
     /* Nothing to do */
-    SCHEDULER_RETURN_VOID_OR_NULL;
+    return;
   }
 
   the_node = _Scheduler_priority_Node_downcast( node );
@@ -43,7 +43,7 @@ Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
 
   if ( priority == the_node->Ready_queue.current_priority ) {
     /* Nothing to do */
-    SCHEDULER_RETURN_VOID_OR_NULL;
+    return;
   }
 
   context = _Scheduler_priority_Get_context( scheduler );
@@ -76,6 +76,4 @@ Scheduler_Void_or_thread _Scheduler_priority_Update_priority(
   }
 
   _Scheduler_priority_Schedule_body( scheduler, the_thread, false );
-
-  SCHEDULER_RETURN_VOID_OR_NULL;
 }

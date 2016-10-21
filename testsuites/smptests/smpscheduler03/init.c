@@ -199,7 +199,7 @@ static void test_change_priority(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static Thread_Control *update_priority_op(
+static void update_priority_op(
   Thread_Control *thread,
   Scheduler_SMP_Node *scheduler_node,
   Priority_Control new_priority,
@@ -209,7 +209,6 @@ static Thread_Control *update_priority_op(
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
   ISR_lock_Context scheduler_lock_context;
-  Thread_Control *needs_help;
   Thread_queue_Context queue_context;
 
   apply_priority(thread, new_priority, prepend_it, &queue_context);
@@ -218,7 +217,7 @@ static Thread_Control *update_priority_op(
   scheduler = _Scheduler_Get( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  needs_help = (*scheduler->Operations.update_priority)(
+  (*scheduler->Operations.update_priority)(
     scheduler,
     thread,
     &scheduler_node->Base
@@ -226,8 +225,6 @@ static Thread_Control *update_priority_op(
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( thread, &state_lock_context );
-
-  return needs_help;
 }
 
 static void test_case_update_priority_op(
@@ -240,7 +237,6 @@ static void test_case_update_priority_op(
   Scheduler_SMP_Node_state new_state
 )
 {
-  Thread_Control *needs_help;
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
@@ -258,23 +254,21 @@ static void test_case_update_priority_op(
   }
   rtems_test_assert(executing_node->state == start_state);
 
-  needs_help = update_priority_op(executing, executing_node, prio, prepend_it);
+  update_priority_op(executing, executing_node, prio, prepend_it);
   rtems_test_assert(executing_node->state == new_state);
 
   if (start_state != new_state) {
     switch (start_state) {
       case SCHEDULER_SMP_NODE_SCHEDULED:
-        rtems_test_assert(needs_help == executing);
+        rtems_test_assert(cpu_self->heir == other);
         break;
       case SCHEDULER_SMP_NODE_READY:
-        rtems_test_assert(needs_help == other);
+        rtems_test_assert(cpu_self->heir == executing);
         break;
       default:
         rtems_test_assert(0);
         break;
     }
-  } else {
-    rtems_test_assert(needs_help == NULL);
   }
 
   change_priority(executing, 1, true);

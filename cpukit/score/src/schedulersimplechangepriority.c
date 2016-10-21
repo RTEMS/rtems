@@ -21,7 +21,7 @@
 
 #include <rtems/score/schedulersimpleimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
+void _Scheduler_simple_Update_priority(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -32,7 +32,7 @@ Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
 
   if ( !_Thread_Is_ready( the_thread ) ) {
     /* Nothing to do */
-    SCHEDULER_RETURN_VOID_OR_NULL;
+    return;
   }
 
   context = _Scheduler_simple_Get_context( scheduler );
@@ -47,6 +47,4 @@ Scheduler_Void_or_thread _Scheduler_simple_Update_priority(
   }
 
   _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
-
-  SCHEDULER_RETURN_VOID_OR_NULL;
 }
