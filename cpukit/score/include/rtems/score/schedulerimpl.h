@@ -553,6 +553,62 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
 #endif
 }
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Changes the sticky level of the home scheduler node and propagates a
+ * priority change of a thread to the scheduler.
+ *
+ * @param[in] the_thread The thread changing its priority or sticky level.
+ *
+ * @see _Scheduler_Update_priority().
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Priority_and_sticky_update(
+  Thread_Control *the_thread,
+  int             sticky_level_change
+)
+{
+  Chain_Node              *node;
+  const Chain_Node        *tail;
+  Scheduler_Node          *scheduler_node;
+  const Scheduler_Control *scheduler;
+  ISR_lock_Context         lock_context;
+
+  _Thread_Scheduler_process_requests( the_thread );
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+
+  ( *scheduler->Operations.update_priority )(
+    scheduler,
+    the_thread,
+    scheduler_node
+  );
+
+  _Scheduler_Release_critical( scheduler, &lock_context );
+
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+  node = _Chain_Next( node );
+
+  while ( node != tail ) {
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    ( *scheduler->Operations.update_priority )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    node = _Chain_Next( node );
+  }
+}
+#endif
+
 /**
  * @brief Maps a thread priority from the user domain to the scheduler domain.
  *

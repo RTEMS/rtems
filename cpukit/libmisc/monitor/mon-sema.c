@@ -84,7 +84,7 @@ rtems_monitor_sema_canonical(
 #if defined(RTEMS_SMP)
       case SEMAPHORE_VARIANT_MRSP:
         canonical_sema->cur_count =
-          rtems_sema->Core_control.MRSP.Resource.owner == NULL;
+          _MRSP_Get_owner( &rtems_sema->Core_control.MRSP ) == NULL;
         canonical_sema->max_count = 1;
         break;
 #endif

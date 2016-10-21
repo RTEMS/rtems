@@ -353,3 +353,20 @@ void _Thread_Priority_update( Thread_queue_Context *queue_context )
     _Thread_State_release( the_thread, &lock_context );
   }
 }
+
+#if defined(RTEMS_SMP)
+void _Thread_Priority_and_sticky_update(
+  Thread_Control *the_thread,
+  int             sticky_level_change
+)
+{
+  ISR_lock_Context lock_context;
+
+  _Thread_State_acquire( the_thread, &lock_context );
+  _Scheduler_Priority_and_sticky_update(
+    the_thread,
+    sticky_level_change
+  );
+  _Thread_State_release( the_thread, &lock_context );
+}
+#endif

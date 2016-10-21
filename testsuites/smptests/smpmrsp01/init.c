@@ -214,6 +214,37 @@ static void print_switch_events(test_context *ctx)
   }
 }
 
+static void create_timer(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_timer_create(
+    rtems_build_name('T', 'I', 'M', 'R'),
+    &ctx->timer_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void delete_timer(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_timer_delete(ctx->timer_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void fire_timer(
+  test_context *ctx,
+  rtems_interval interval,
+  rtems_timer_service_routine_entry routine
+)
+{
+  rtems_status_code sc;
+
+  sc = rtems_timer_fire_after(ctx->timer_id, interval, routine, ctx);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void create_mrsp_sema(
   test_context *ctx,
   rtems_id *id,
@@ -744,37 +775,11 @@ static void test_mrsp_nested_obtain_error(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void test_mrsp_unlock_order_error(test_context *ctx)
+static void deadlock_timer(rtems_id timer_id, void *arg)
 {
-  rtems_status_code sc;
-  rtems_id id_a;
-  rtems_id id_b;
+  test_context *ctx = arg;
 
-  puts("test MrsP unlock order error");
-
-  create_mrsp_sema(ctx, &id_a, 1);
-  create_mrsp_sema(ctx, &id_b, 1);
-
-  sc = rtems_semaphore_obtain(id_a, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_semaphore_obtain(id_b, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_semaphore_release(id_a);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
-
-  sc = rtems_semaphore_release(id_b);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_semaphore_release(id_a);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_semaphore_delete(id_a);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_semaphore_delete(id_b);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  change_prio(ctx->main_task_id, 1);
 }
 
 static void deadlock_worker(rtems_task_argument arg)
@@ -784,6 +789,8 @@ static void deadlock_worker(rtems_task_argument arg)
 
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  fire_timer(ctx, 2, deadlock_timer);
 
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[0], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -810,6 +817,7 @@ static void test_mrsp_deadlock_error(test_context *ctx)
 
   change_prio(RTEMS_SELF, prio);
 
+  create_timer(ctx);
   create_mrsp_sema(ctx, &ctx->mrsp_ids[0], prio);
   create_mrsp_sema(ctx, &ctx->mrsp_ids[1], prio);
 
@@ -832,8 +840,26 @@ static void test_mrsp_deadlock_error(test_context *ctx)
   sc = rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+  prio = 1;
+  sc = rtems_semaphore_set_priority(
+    ctx->mrsp_ids[1],
+    ctx->scheduler_ids[0],
+    prio,
+    &prio
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(prio == 2);
+
   sc = rtems_semaphore_obtain(ctx->mrsp_ids[1], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+
+  sc = rtems_semaphore_set_priority(
+    ctx->mrsp_ids[1],
+    ctx->scheduler_ids[0],
+    prio,
+    &prio
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_release(ctx->mrsp_ids[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -849,6 +875,8 @@ static void test_mrsp_deadlock_error(test_context *ctx)
 
   sc = rtems_semaphore_delete(ctx->mrsp_ids[1]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  delete_timer(ctx);
 }
 
 static void test_mrsp_multiple_obtain(test_context *ctx)
@@ -1006,8 +1034,7 @@ static void unblock_ready_owner(test_context *ctx)
 
   assert_prio(RTEMS_SELF, 3);
 
-  sc = rtems_timer_fire_after(ctx->timer_id, 2, unblock_ready_timer, ctx);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  fire_timer(ctx, 2, unblock_ready_timer);
 
   sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -1103,13 +1130,7 @@ static void various_block_unblock(test_context *ctx)
    * user.
    */
 
-  sc = rtems_timer_fire_after(
-    ctx->timer_id,
-    2,
-    unblock_owner_before_rival_timer,
-    ctx
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  fire_timer(ctx, 2, unblock_owner_before_rival_timer);
 
   /* This will take the processor away from us, the timer will help later */
   sc = rtems_task_resume(ctx->high_task_id[1]);
@@ -1123,13 +1144,7 @@ static void various_block_unblock(test_context *ctx)
   sc = rtems_task_resume(ctx->high_task_id[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_timer_fire_after(
-    ctx->timer_id,
-    2,
-    unblock_owner_after_rival_timer,
-    ctx
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  fire_timer(ctx, 2, unblock_owner_after_rival_timer);
 
   /* This will take the processor away from us, the timer will help later */
   sc = rtems_task_resume(ctx->high_task_id[1]);
@@ -1229,11 +1244,7 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
   sc = rtems_task_start(ctx->worker_ids[0], ready_unlock_worker, 0);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_timer_create(
-    rtems_build_name('T', 'I', 'M', 'R'),
-    &ctx->timer_id
-  );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  create_timer(ctx);
 
   /* In case these tasks run, then we have a MrsP protocol violation */
   start_low_task(ctx, 0);
@@ -1246,9 +1257,7 @@ static void test_mrsp_various_block_and_unblock(test_context *ctx)
   rtems_test_assert(!ctx->low_run[1]);
 
   print_switch_events(ctx);
-
-  sc = rtems_timer_delete(ctx->timer_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  delete_timer(ctx);
 
   sc = rtems_task_delete(ctx->high_task_id[0]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -1749,7 +1758,6 @@ static void Init(rtems_task_argument arg)
   test_mrsp_flush_error(ctx);
   test_mrsp_initially_locked_error();
   test_mrsp_nested_obtain_error(ctx);
-  test_mrsp_unlock_order_error(ctx);
   test_mrsp_deadlock_error(ctx);
   test_mrsp_multiple_obtain(ctx);
 

@@ -1712,6 +1712,17 @@ RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get(
 #endif
 }
 
+RTEMS_INLINE_ROUTINE Thread_Wait_flags _Thread_Wait_flags_get_acquire(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return _Atomic_Load_uint( &the_thread->Wait.flags, ATOMIC_ORDER_ACQUIRE );
+#else
+  return the_thread->Wait.flags;
+#endif
+}
+
 /**
  * @brief Tries to change the thread wait flags with release semantics in case
  * of success.

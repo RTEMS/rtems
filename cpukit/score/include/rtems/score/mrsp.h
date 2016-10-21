@@ -19,9 +19,6 @@
 
 #if defined(RTEMS_SMP)
 
-#include <rtems/score/chain.h>
-#include <rtems/score/scheduler.h>
-#include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
@@ -51,85 +48,14 @@ extern "C" {
  * @{
  */
 
-typedef struct MRSP_Control MRSP_Control;
-
-/**
- * @brief MrsP rival.
- *
- * The rivals are used by threads waiting for resource ownership.  They are
- * registered in the MrsP control block.
- */
-typedef struct {
-  /**
-   * @brief The node for registration in the MrsP rival chain.
-   *
-   * The chain operations are protected by the MrsP control lock.
-   *
-   * @see MRSP_Control::Rivals.
-   */
-  Chain_Node Node;
-
-  /**
-   * @brief The corresponding MrsP control block.
-   */
-  MRSP_Control *resource;
-
-  /**
-   * @brief Identification of the rival thread.
-   */
-  Thread_Control *thread;
-
-  /**
-   * @brief The ceiling priority used by the rival thread.
-   */
-  Priority_Node Ceiling_priority;
-
-  /**
-   * @brief The initial help state of the thread at the begin of the resource
-   * obtain sequence.
-   *
-   * Used to restore this state after a timeout.
-   */
-  Scheduler_Help_state initial_help_state;
-
-  /**
-   * @brief The rival status.
-   *
-   * Initially the status is set to MRSP_WAIT_FOR_OWNERSHIP.  The rival will
-   * busy wait until a status change happens.  This can be STATUS_SUCCESSFUL or
-   * STATUS_TIMEOUT.  State changes are protected by the MrsP control lock.
-   */
-  volatile int status;
-
-  /**
-   * @brief Watchdog for timeouts.
-   */
-  Watchdog_Control Watchdog;
-} MRSP_Rival;
-
 /**
  * @brief MrsP control block.
  */
-struct MRSP_Control {
+typedef struct {
   /**
-   * @brief Lock to protect the resource dependency tree.
-   *
-   * This is a thread queue since this simplifies the Classic semaphore
-   * implementation.  Only the lock part of the thread queue is used.
+   * @brief The thread queue to manage ownership and waiting threads.
    */
   Thread_queue_Control Wait_queue;
-
-  /**
-   * @brief Basic resource control.
-   */
-  Resource_Control Resource;
-
-  /**
-   * @brief A chain of MrsP rivals waiting for resource ownership.
-   *
-   * @see MRSP_Rival::Node.
-   */
-  Chain_Control Rivals;
 
   /**
    * @brief The ceiling priority used by the owner thread.
@@ -140,7 +66,7 @@ struct MRSP_Control {
    * @brief One ceiling priority per scheduler instance.
    */
   Priority_Control *ceiling_priorities;
-};
+} MRSP_Control;
 
 /** @} */
 

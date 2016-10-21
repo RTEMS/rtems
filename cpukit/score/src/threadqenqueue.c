@@ -370,6 +370,37 @@ void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread )
   );
 }
 
+static void _Thread_queue_Timeout(
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  switch ( queue_context->timeout_discipline ) {
+    case WATCHDOG_RELATIVE:
+      /* A relative timeout of 0 is a special case indefinite (no) timeout */
+      if ( queue_context->timeout != 0 ) {
+        _Thread_Timer_insert_relative(
+          the_thread,
+          cpu_self,
+          _Thread_Timeout,
+          (Watchdog_Interval) queue_context->timeout
+        );
+      }
+      break;
+    case WATCHDOG_ABSOLUTE:
+      _Thread_Timer_insert_absolute(
+        the_thread,
+        cpu_self,
+        _Thread_Timeout,
+        queue_context->timeout
+      );
+      break;
+    default:
+      break;
+  }
+}
+
 void _Thread_queue_Enqueue_critical(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
@@ -430,29 +461,7 @@ void _Thread_queue_Enqueue_critical(
   /*
    *  If the thread wants to timeout, then schedule its timer.
    */
-  switch ( queue_context->timeout_discipline ) {
-    case WATCHDOG_RELATIVE:
-      /* A relative timeout of 0 is a special case indefinite (no) timeout */
-      if ( queue_context->timeout != 0 ) {
-        _Thread_Timer_insert_relative(
-          the_thread,
-          cpu_self,
-          _Thread_Timeout,
-          (Watchdog_Interval) queue_context->timeout
-        );
-      }
-      break;
-    case WATCHDOG_ABSOLUTE:
-      _Thread_Timer_insert_absolute(
-        the_thread,
-        cpu_self,
-        _Thread_Timeout,
-        queue_context->timeout
-      );
-      break;
-    default:
-      break;
-  }
+  _Thread_queue_Timeout( the_thread, cpu_self, queue_context );
 
   /*
    * At this point thread dispatching is disabled, however, we already released
@@ -475,6 +484,65 @@ void _Thread_queue_Enqueue_critical(
   _Thread_Priority_update( queue_context );
   _Thread_Dispatch_enable( cpu_self );
 }
+
+#if defined(RTEMS_SMP)
+Status_Control _Thread_queue_Enqueue_sticky(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  Thread_queue_Context          *queue_context
+)
+{
+  Per_CPU_Control *cpu_self;
+
+  _Thread_Wait_claim( the_thread, queue );
+
+  if ( !_Thread_queue_Path_acquire_critical( queue, the_thread, queue_context ) ) {
+    _Thread_queue_Path_release_critical( queue_context );
+    _Thread_Wait_restore_default( the_thread );
+    _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+    _Thread_Wait_tranquilize( the_thread );
+    ( *queue_context->deadlock_callout )( the_thread );
+    return _Thread_Wait_get_status( the_thread );
+  }
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  _Thread_Wait_claim_finalize( the_thread, operations );
+  ( *operations->enqueue )( queue, the_thread, queue_context );
+
+  _Thread_queue_Path_release_critical( queue_context );
+
+  the_thread->Wait.return_code = STATUS_SUCCESSFUL;
+  _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
+  );
+  _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
+
+  if ( cpu_self->thread_dispatch_disable_level != 1 ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      false,
+      INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
+    );
+  }
+
+  _Thread_queue_Timeout( the_thread, cpu_self, queue_context );
+  _Thread_Priority_update( queue_context );
+  _Thread_Priority_and_sticky_update( the_thread, 1 );
+  _Thread_Dispatch_enable( cpu_self );
+
+  while (
+    _Thread_Wait_flags_get_acquire( the_thread ) == THREAD_QUEUE_INTEND_TO_BLOCK
+  ) {
+    /* Wait */
+  }
+
+  _Thread_Wait_tranquilize( the_thread );
+  _Thread_Timer_remove( the_thread );
+  return _Thread_Wait_get_status( the_thread );
+}
+#endif
 
 #if defined(RTEMS_MULTIPROCESSING)
 static bool _Thread_queue_MP_set_callout(
@@ -665,6 +733,43 @@ void _Thread_queue_Surrender(
 
   _Thread_Dispatch_enable( cpu_self );
 }
+
+#if defined(RTEMS_SMP)
+void _Thread_queue_Surrender_sticky(
+  Thread_queue_Queue            *queue,
+  Thread_queue_Heads            *heads,
+  Thread_Control                *previous_owner,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+)
+{
+  Thread_Control  *new_owner;
+  Per_CPU_Control *cpu_self;
+
+  _Assert( heads != NULL );
+
+  _Thread_queue_Context_clear_priority_updates( queue_context );
+  new_owner = ( *operations->surrender )(
+    queue,
+    heads,
+    previous_owner,
+    queue_context
+  );
+  queue->owner = new_owner;
+  _Thread_queue_Make_ready_again( new_owner );
+
+  cpu_self = _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
+  );
+  _Thread_queue_Queue_release(
+    queue,
+    &queue_context->Lock_context.Lock_context
+  );
+  _Thread_Priority_and_sticky_update( previous_owner, -1 );
+  _Thread_Priority_and_sticky_update( new_owner, 0 );
+  _Thread_Dispatch_enable( cpu_self );
+}
+#endif
 
 Thread_Control *_Thread_queue_Do_dequeue(
   Thread_queue_Control          *the_thread_queue,

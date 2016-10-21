@@ -24,6 +24,7 @@
 #include <rtems/score/priorityimpl.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/smp.h>
+#include <rtems/score/status.h>
 #include <rtems/score/thread.h>
 
 #if defined(RTEMS_DEBUG)
@@ -553,6 +554,37 @@ void _Thread_queue_Enqueue_critical(
   Thread_queue_Context          *queue_context
 );
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Enqueues the thread on the thread queue and busy waits for dequeue.
+ *
+ * Optionally starts the thread timer in case the timeout discipline is not
+ * WATCHDOG_NO_TIMEOUT. Timeout discipline and value are in the queue_context.
+ *
+ * The caller must be the owner of the thread queue lock.  This function will
+ * release the thread queue lock and register it as the new thread lock.
+ *
+ * The thread priorities of the owner and the are updated with respect to the
+ * scheduler.  The sticky level of the thread is incremented.  A thread
+ * dispatch is performed if necessary.
+ *
+ * Afterwards, the thread busy waits on the thread wait flags until a timeout
+ * occurs or the thread queue is surrendered to this thread.  So, it sticks to
+ * the processor instead of blocking with respect to the scheduler.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] operations The thread queue operations.
+ * @param[in] the_thread The thread to enqueue.
+ * @param[in] queue_context The thread queue context of the lock acquire.
+ */
+Status_Control _Thread_queue_Enqueue_sticky(
+  Thread_queue_Queue            *queue,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *the_thread,
+  Thread_queue_Context          *queue_context
+);
+#endif
+
 /**
  * @brief Acquires the thread queue lock and calls
  * _Thread_queue_Enqueue_critical().
@@ -732,6 +764,36 @@ void _Thread_queue_Surrender(
   Thread_queue_Context          *queue_context,
   const Thread_queue_Operations *operations
 );
+
+#if defined(RTEMS_SMP)
+/**
+ * @brief Surrenders the thread queue previously owned by the thread to the
+ * first enqueued thread.
+ *
+ * The owner of the thread queue must be set to NULL by the caller.
+ *
+ * The caller must be the owner of the thread queue lock.  This function will
+ * release the thread queue.
+ *
+ * The thread priorities of the previous owner and the new owner are updated.  The
+ * sticky level of the previous owner is decremented.  A thread dispatch is
+ * performed if necessary.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] heads The thread queue heads.  It must not be NULL.
+ * @param[in] previous_owner The previous owner thread surrendering the thread
+ *   queue.
+ * @param[in] queue_context The thread queue context of the lock acquire.
+ * @param[in] operations The thread queue operations.
+ */
+void _Thread_queue_Surrender_sticky(
+  Thread_queue_Queue            *queue,
+  Thread_queue_Heads            *heads,
+  Thread_Control                *previous_owner,
+  Thread_queue_Context          *queue_context,
+  const Thread_queue_Operations *operations
+);
+#endif
 
 RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_empty(
   const Thread_queue_Queue *queue

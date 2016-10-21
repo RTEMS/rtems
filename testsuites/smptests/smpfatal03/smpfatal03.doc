@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal03
+
+directives:
+
+  - _Thread_queue_Enqueue_sticky()
+
+concepts:
+
+  - Trigger the INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE fatal
+    error.
