@@ -196,100 +196,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
   _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
-#if defined(RTEMS_SMP)
-typedef struct {
-  Thread_Control *needs_help;
-  Thread_Control *next_needs_help;
-} Scheduler_Ask_for_help_context ;
-
-RTEMS_INLINE_ROUTINE bool _Scheduler_Ask_for_help_visitor(
-  Resource_Node *resource_node,
-  void          *arg
-)
-{
-  bool done;
-  Scheduler_Ask_for_help_context *help_context = arg;
-  Thread_Control *previous_needs_help = help_context->needs_help;
-  Thread_Control *next_needs_help;
-  Thread_Control *offers_help =
-    THREAD_RESOURCE_NODE_TO_THREAD( resource_node );
-  const Scheduler_Control *scheduler = _Scheduler_Get_own( offers_help );
-
-  next_needs_help = ( *scheduler->Operations.ask_for_help_X )(
-    scheduler,
-    offers_help,
-    previous_needs_help
-  );
-
-  done = next_needs_help != previous_needs_help;
-
-  if ( done ) {
-    help_context->next_needs_help = next_needs_help;
-  }
-
-  return done;
-}
-
-/**
- * @brief Ask threads depending on resources owned by the thread for help.
- *
- * A thread is in need for help if it lost its assigned processor due to
- * pre-emption by a higher priority thread or it was not possible to assign it
- * a processor since its priority is to low on its current scheduler instance.
- *
- * The run-time of this function depends on the size of the resource tree of
- * the thread needing help and other resource trees in case threads in need for
- * help are produced during this operation.
- *
- * @param[in] needs_help The thread needing help.
- */
-RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_X(
-  Thread_Control *needs_help
-)
-{
-  do {
-    const Scheduler_Control *scheduler = _Scheduler_Get_own( needs_help );
-
-    needs_help = ( *scheduler->Operations.ask_for_help_X )(
-      scheduler,
-      needs_help,
-      needs_help
-    );
-
-    if ( needs_help != NULL ) {
-      Scheduler_Ask_for_help_context help_context = { needs_help, NULL };
-
-      _Resource_Iterate(
-        &needs_help->Resource_node,
-        _Scheduler_Ask_for_help_visitor,
-        &help_context
-      );
-
-      needs_help = help_context.next_needs_help;
-    }
-  } while ( needs_help != NULL );
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help_if_necessary(
-  Thread_Control *needs_help
-)
-{
-  if (
-    needs_help != NULL
-      && _Resource_Node_owns_resources( &needs_help->Resource_node )
-  ) {
-    Scheduler_Node *node = _Thread_Scheduler_get_own_node( needs_help );
-
-    if (
-      node->help_state != SCHEDULER_HELP_ACTIVE_RIVAL
-        || _Scheduler_Node_get_user( node ) != needs_help
-    ) {
-      _Scheduler_Ask_for_help_X( needs_help );
-    }
-  }
-}
-#endif
-
 /**
  * @brief Scheduler yield with a particular thread.
  *
@@ -320,7 +226,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-  _Scheduler_Ask_for_help_if_necessary( needs_help );
   _Scheduler_Release_critical( scheduler, &lock_context );
 
   if ( needs_help != the_thread ) {
@@ -455,7 +360,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
     the_thread,
     scheduler_node
   );
-  _Scheduler_Ask_for_help_if_necessary( needs_help );
   _Scheduler_Release_critical( scheduler, &lock_context );
 
   if ( needs_help != the_thread ) {
@@ -525,18 +429,16 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
     Scheduler_Node          *scheduler_node;
     const Scheduler_Control *scheduler;
     ISR_lock_Context         lock_context;
-    Thread_Control          *needs_help;
 
     scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
     scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
 
     _Scheduler_Acquire_critical( scheduler, &lock_context );
-    needs_help = ( *scheduler->Operations.update_priority )(
+    ( *scheduler->Operations.update_priority )(
       scheduler,
       the_thread,
       scheduler_node
     );
-    _Scheduler_Ask_for_help_if_necessary( needs_help );
     _Scheduler_Release_critical( scheduler, &lock_context );
 
     node = _Chain_Next( node );

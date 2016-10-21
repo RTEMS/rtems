@@ -29,7 +29,6 @@
 #include <rtems/score/isrlock.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/resource.h>
 #include <rtems/score/schedulernode.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
@@ -769,13 +768,6 @@ struct _Thread_Control {
   SMP_lock_Stats Potpourri_stats;
 #endif
 
-#if defined(RTEMS_SMP)
-  /**
-   * @brief Resource node to build a dependency tree in case this thread owns
-   * resources or depends on a resource.
-   */
-  Resource_Node            Resource_node;
-#endif
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is true if the thread is offered globally */
   bool                                  is_global;

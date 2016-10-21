@@ -27,7 +27,6 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/objectimpl.h>
-#include <rtems/score/resourceimpl.h>
 #include <rtems/score/schedulernodeimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/status.h>
@@ -79,9 +78,6 @@ extern Thread_Control *_Thread_Allocated_fp;
 #endif
 
 #if defined(RTEMS_SMP)
-#define THREAD_RESOURCE_NODE_TO_THREAD( node ) \
-  RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )
-
 #define THREAD_OF_SCHEDULER_HELP_NODE( node ) \
   RTEMS_CONTAINER_OF( node, Thread_Control, Scheduler.Help_node )
 #endif
@@ -974,11 +970,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_joinable(
  * @brief Returns true if the thread owns resources, and false otherwise.
  *
  * Resources are accounted with the Thread_Control::resource_count resource
- * counter.  This counter is used by semaphore objects for example.
- *
- * In addition to the resource counter there is a resource dependency tree
- * available on SMP configurations.  In case this tree is non-empty, then the
- * thread owns resources.
+ * counter.  This counter is used by mutex objects for example.
  *
  * @param[in] the_thread The thread.
  */
@@ -986,14 +978,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
   const Thread_Control *the_thread
 )
 {
-  bool owns_resources = the_thread->resource_count != 0;
-
-#if defined(RTEMS_SMP)
-  owns_resources = owns_resources
-    || _Resource_Node_owns_resources( &the_thread->Resource_node );
-#endif
-
-  return owns_resources;
+  return the_thread->resource_count != 0;
 }
 
 #if defined(RTEMS_SMP)

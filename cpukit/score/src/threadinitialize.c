@@ -19,7 +19,6 @@
 #endif
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/resourceimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/stackimpl.h>
 #include <rtems/score/tls.h>
@@ -237,7 +236,6 @@ bool _Thread_Initialize(
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = scheduler_node;
   the_thread->Scheduler.node = scheduler_node;
-  _Resource_Node_initialize( &the_thread->Resource_node );
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
   _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
