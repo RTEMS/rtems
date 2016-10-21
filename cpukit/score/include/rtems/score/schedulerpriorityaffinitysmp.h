@@ -60,7 +60,6 @@ extern "C" {
     _Scheduler_priority_affinity_SMP_Ask_for_help, \
     _Scheduler_priority_affinity_SMP_Reconsider_help_request, \
     _Scheduler_priority_affinity_SMP_Withdraw_node, \
-    _Scheduler_priority_affinity_SMP_Ask_for_help_X, \
     _Scheduler_priority_affinity_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
@@ -142,12 +141,6 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
-);
-
-Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help_X(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *offers_help,
-  Thread_Control          *needs_help
 );
 
 /** 

@@ -1069,61 +1069,6 @@ static inline void _Scheduler_SMP_Update_priority(
   }
 }
 
-static inline Thread_Control *_Scheduler_SMP_Ask_for_help_X(
-  Scheduler_Context                  *context,
-  Thread_Control                     *offers_help,
-  Thread_Control                     *needs_help,
-  Scheduler_SMP_Enqueue               enqueue_fifo
-)
-{
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_own_node( offers_help );
-  Thread_Control *next_needs_help = NULL;
-  Thread_Control *previous_accepts_help;
-
-  previous_accepts_help = node->Base.accepts_help;
-  node->Base.accepts_help = needs_help;
-
-  switch ( node->state ) {
-    case SCHEDULER_SMP_NODE_READY:
-      next_needs_help =
-        _Scheduler_Ask_ready_node_for_help( &node->Base, needs_help );
-      break;
-    case SCHEDULER_SMP_NODE_SCHEDULED:
-      next_needs_help = _Scheduler_Ask_scheduled_node_for_help(
-        context,
-        &node->Base,
-        offers_help,
-        needs_help,
-        previous_accepts_help,
-        _Scheduler_SMP_Release_idle_thread
-      );
-      break;
-    case SCHEDULER_SMP_NODE_BLOCKED:
-      if (
-        _Scheduler_Ask_blocked_node_for_help(
-          context,
-          &node->Base,
-          offers_help,
-          needs_help
-        )
-      ) {
-        _Scheduler_SMP_Node_change_state(
-          &node->Base,
-          SCHEDULER_SMP_NODE_READY
-        );
-
-        next_needs_help = ( *enqueue_fifo )(
-          context,
-          &node->Base,
-          needs_help
-        );
-      }
-      break;
-  }
-
-  return next_needs_help;
-}
-
 static inline Thread_Control *_Scheduler_SMP_Yield(
   Scheduler_Context               *context,
   Thread_Control                  *thread,

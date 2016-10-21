@@ -593,26 +593,6 @@ void _Scheduler_priority_affinity_SMP_Withdraw_node(
   );
 }
 
-Thread_Control *_Scheduler_priority_affinity_SMP_Ask_for_help_X(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *offers_help,
-  Thread_Control          *needs_help
-)
-{
-  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-
-  needs_help = _Scheduler_SMP_Ask_for_help_X(
-    context,
-    offers_help,
-    needs_help,
-    _Scheduler_priority_affinity_SMP_Enqueue_fifo
-  );
-
-  _Scheduler_priority_affinity_SMP_Check_for_migrations( context );
-
-  return needs_help;
-}
-
 /*
  * This is the public scheduler specific Change Priority operation.
  */

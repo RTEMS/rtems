@@ -48,16 +48,3 @@ void _Scheduler_default_Withdraw_node(
   (void) node;
   (void) next_state;
 }
-
-Thread_Control *_Scheduler_default_Ask_for_help_X(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *offers_help,
-  Thread_Control          *needs_help
-)
-{
-  (void) scheduler;
-  (void) offers_help;
-  (void) needs_help;
-
-  return NULL;
-}
