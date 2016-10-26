@@ -27,20 +27,16 @@
  * SUCH DAMAGE.
  *
  *	@(#)uio.h	8.5 (Berkeley) 2/22/94
- * $FreeBSD$
+ * $FreeBSD: head/sys/sys/uio.h 291716 2015-12-03 20:54:55Z ken $
  */
 
-#ifndef _SYS_UIO_HH_
-#define	_SYS_UIO_HH_
+#ifndef _SYS_UIO_H_
+#define	_SYS_UIO_H_
 
 #include <sys/cdefs.h>
-#ifdef __rtems__
-#include <sys/types.h>
-#endif /* __rtems__ */
 #include <sys/_types.h>
 #include <sys/_iovec.h>
 
-#ifndef __rtems__
 #ifndef _SSIZE_T_DECLARED
 typedef	__ssize_t	ssize_t;
 #define	_SSIZE_T_DECLARED
@@ -50,7 +46,6 @@ typedef	__ssize_t	ssize_t;
 typedef	__off_t	off_t;
 #define	_OFF_T_DECLARED
 #endif
-#endif /* !__rtems__ */
 
 #if __BSD_VISIBLE
 enum	uio_rw { UIO_READ, UIO_WRITE };
@@ -90,23 +85,34 @@ struct uio {
 
 struct vm_object;
 struct vm_page;
+struct bus_dma_segment;
 
 struct uio *cloneuio(struct uio *uiop);
 int	copyinfrom(const void * __restrict src, void * __restrict dst,
 	    size_t len, int seg);
-int	copyiniov(struct iovec *iovp, u_int iovcnt, struct iovec **iov,
+int	copyiniov(const struct iovec *iovp, u_int iovcnt, struct iovec **iov,
 	    int error);
 int	copyinstrfrom(const void * __restrict src, void * __restrict dst,
 	    size_t len, size_t * __restrict copied, int seg);
-int	copyinuio(struct iovec *iovp, u_int iovcnt, struct uio **uiop);
-void	uio_yield(void);
+int	copyinuio(const struct iovec *iovp, u_int iovcnt, struct uio **uiop);
+int	copyout_map(struct thread *td, vm_offset_t *addr, size_t sz);
+int	copyout_unmap(struct thread *td, vm_offset_t addr, size_t sz);
+#ifndef __rtems__
+int	physcopyin(void *src, vm_paddr_t dst, size_t len);
+int	physcopyout(vm_paddr_t src, void *dst, size_t len);
+int	physcopyin_vlist(struct bus_dma_segment *src, off_t offset,
+	    vm_paddr_t dst, size_t len);
+int	physcopyout_vlist(vm_paddr_t src, struct bus_dma_segment *dst,
+	    off_t offset, size_t len);
+#endif /* __rtems__ */
 int	uiomove(void *cp, int n, struct uio *uio);
 int	uiomove_frombuf(void *buf, int buflen, struct uio *uio);
 #ifndef __rtems__
 int	uiomove_fromphys(struct vm_page *ma[], vm_offset_t offset, int n,
 	    struct uio *uio);
-#endif /* !__rtems__ */
-int	uiomoveco(void *cp, int n, struct uio *uio, int disposable);
+#endif /* __rtems__ */
+int	uiomove_nofault(void *cp, int n, struct uio *uio);
+int	uiomove_object(struct vm_object *obj, off_t obj_size, struct uio *uio);
 
 #else /* !_KERNEL */
 
@@ -121,4 +127,4 @@ __END_DECLS
 
 #endif /* _KERNEL */
 
-#endif /* !_SYS_UIO_HH_ */
+#endif /* !_SYS_UIO_H_ */
