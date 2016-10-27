@@ -14,6 +14,7 @@
  */
 
 #ifdef __rtems__
+#include <sys/lock.h>
 #define	_KERNEL
 #define	binuptime(_bt) _Timecounter_Binuptime(_bt)
 #define	nanouptime(_tsp) _Timecounter_Nanouptime(_tsp)

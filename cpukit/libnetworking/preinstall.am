@@ -73,6 +73,10 @@ $(PROJECT_INCLUDE)/machine/in_cksum.h: machine/in_cksum.h $(PROJECT_INCLUDE)/mac
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/in_cksum.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/in_cksum.h
 
+$(PROJECT_INCLUDE)/machine/_kernel_lock.h: machine/_kernel_lock.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_lock.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_lock.h
+
 $(PROJECT_INCLUDE)/machine/vmparam.h: machine/vmparam.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/vmparam.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/vmparam.h

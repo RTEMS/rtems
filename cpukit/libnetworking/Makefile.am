@@ -55,6 +55,7 @@ include_machine_HEADERS = machine/_align.h
 include_machine_HEADERS += machine/cpu.h
 include_machine_HEADERS += machine/cpufunc.h
 include_machine_HEADERS += machine/in_cksum.h
+include_machine_HEADERS += machine/_kernel_lock.h
 include_machine_HEADERS += machine/vmparam.h
 
 libnetworking_a_SOURCES += machine/limits.h

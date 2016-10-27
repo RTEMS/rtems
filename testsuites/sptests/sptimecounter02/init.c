@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#include <sys/lock.h>
+
 #define _KERNEL
 
 #include <sys/time.h>

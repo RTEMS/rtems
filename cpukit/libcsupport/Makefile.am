@@ -23,6 +23,11 @@ include_rtems_HEADERS += include/rtems/malloc.h
 include_rtems_HEADERS += include/rtems/termiostypes.h
 include_rtems_HEADERS += include/rtems/gxx_wrappers.h
 
+include_machinedir = $(includedir)/machine
+include_machine_HEADERS =
+include_machine_HEADERS += include/machine/_kernel_time.h
+include_machine_HEADERS += include/machine/_kernel_types.h
+
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c
 

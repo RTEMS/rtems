@@ -74,3 +74,16 @@ $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h: include/rtems/gxx_wrappers.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/gxx_wrappers.h
 
+$(PROJECT_INCLUDE)/machine/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/machine
+	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/machine/$(dirstamp)
+
+$(PROJECT_INCLUDE)/machine/_kernel_time.h: include/machine/_kernel_time.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_time.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_time.h
+
+$(PROJECT_INCLUDE)/machine/_kernel_types.h: include/machine/_kernel_types.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_types.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_types.h
+
