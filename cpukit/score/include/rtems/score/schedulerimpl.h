@@ -483,6 +483,9 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Priority_and_sticky_update(
 
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
+  scheduler_node->sticky_level += sticky_level_change;
+  _Assert( scheduler_node->sticky_level >= 0 );
+
   ( *scheduler->Operations.update_priority )(
     scheduler,
     the_thread,
@@ -929,27 +932,6 @@ typedef void ( *Scheduler_Release_idle_thread )(
   Thread_Control    *idle
 );
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_node(
-  Thread_Control *the_thread,
-  Scheduler_Node *node
-)
-{
-  the_thread->Scheduler.node = node;
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_scheduler_and_node(
-  Thread_Control       *the_thread,
-  Scheduler_Node       *node,
-  const Thread_Control *previous_user_of_node
-)
-{
-  const Scheduler_Control *scheduler =
-    _Scheduler_Get_own( previous_user_of_node );
-
-  the_thread->Scheduler.control = scheduler;
-  _Scheduler_Thread_set_node( the_thread, node );
-}
-
 extern const bool _Scheduler_Thread_state_valid_state_changes[ 3 ][ 3 ];
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
@@ -975,16 +957,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
   Thread_Control *idle
 )
 {
-  _Assert(
-    node->help_state == SCHEDULER_HELP_ACTIVE_OWNER
-      || node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL
-  );
   _Assert( _Scheduler_Node_get_idle( node ) == NULL );
   _Assert(
     _Scheduler_Node_get_owner( node ) == _Scheduler_Node_get_user( node )
   );
-
-  _Scheduler_Thread_set_node( idle, node );
 
   _Scheduler_Node_set_user( node, idle );
   node->idle = idle;
@@ -993,25 +969,27 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Set_idle_thread(
 /**
  * @brief Use an idle thread for this scheduler node.
  *
- * A thread in the SCHEDULER_HELP_ACTIVE_OWNER or SCHEDULER_HELP_ACTIVE_RIVAL
- * helping state may use an idle thread for the scheduler node owned by itself
- * in case it executes currently using another scheduler node or in case it is
- * in a blocking state.
+ * A thread those home scheduler node has a sticky level greater than zero may
+ * use an idle thread in the home scheduler instance in case it executes
+ * currently in another scheduler instance or in case it is in a blocking
+ * state.
  *
  * @param[in] context The scheduler instance context.
  * @param[in] node The node which wants to use the idle thread.
+ * @param[in] cpu The processor for the idle thread.
  * @param[in] get_idle_thread Function to get an idle thread.
  */
 RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Use_idle_thread(
   Scheduler_Context         *context,
   Scheduler_Node            *node,
+  Per_CPU_Control           *cpu,
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
   Thread_Control *idle = ( *get_idle_thread )( context );
 
   _Scheduler_Set_idle_thread( node, idle );
-
+  _Thread_Set_CPU( idle, cpu );
   return idle;
 }
 
@@ -1042,7 +1020,6 @@ _Scheduler_Try_to_schedule_node(
 {
   ISR_lock_Context                  lock_context;
   Scheduler_Try_to_schedule_action  action;
-  Thread_Control                   *owner;
   Thread_Control                   *user;
 
   action = SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE;
@@ -1050,52 +1027,23 @@ _Scheduler_Try_to_schedule_node(
 
   _Thread_Scheduler_acquire_critical( user, &lock_context );
 
-  if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
-    if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
-      _Thread_Scheduler_cancel_need_for_help( user, _Thread_Get_CPU( user ) );
-      _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
-    } else {
-      action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
-    }
-
-    _Thread_Scheduler_release_critical( user, &lock_context );
-    return action;
-  }
-
-  owner = _Scheduler_Node_get_owner( node );
-
-  if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL) {
-    if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
-      _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
-    } else if ( owner->Scheduler.state == THREAD_SCHEDULER_BLOCKED ) {
-      if ( idle != NULL ) {
-        action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
-      } else {
-        _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-      }
-    } else {
-      _Scheduler_Node_set_user( node, owner );
-    }
-  } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
-    if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
-      _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
-    } else if ( idle != NULL ) {
-      action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
-    } else {
-      _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-    }
-  } else {
-    _Assert( node->help_state == SCHEDULER_HELP_PASSIVE );
-
-    if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
-      _Scheduler_Thread_set_scheduler_and_node( user, node, owner );
-    } else {
-      action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
-    }
-  }
-
-  if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
+  if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
+    _Thread_Scheduler_cancel_need_for_help( user, _Thread_Get_CPU( user ) );
     _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+  } else if (
+    user->Scheduler.state == THREAD_SCHEDULER_SCHEDULED
+      || node->sticky_level == 0
+  ) {
+    action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
+  } else if ( idle != NULL ) {
+    action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
+  } else {
+    _Scheduler_Use_idle_thread(
+      context,
+      node,
+      _Thread_Get_CPU( user ),
+      get_idle_thread
+    );
   }
 
   _Thread_Scheduler_release_critical( user, &lock_context );
@@ -1125,9 +1073,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Release_idle_thread(
 
     node->idle = NULL;
     _Scheduler_Node_set_user( node, owner );
-    _Scheduler_Thread_change_state( idle, THREAD_SCHEDULER_READY );
-    _Scheduler_Thread_set_node( idle, idle->Scheduler.own_node );
-
     ( *release_idle_thread )( context, idle );
   }
 
@@ -1171,10 +1116,14 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
   Scheduler_Get_idle_thread  get_idle_thread
 )
 {
+  int               sticky_level;
   ISR_lock_Context  lock_context;
-  Thread_Control   *old_user;
-  Thread_Control   *new_user;
   Per_CPU_Control  *thread_cpu;
+
+  sticky_level = node->sticky_level;
+  --sticky_level;
+  node->sticky_level = sticky_level;
+  _Assert( sticky_level >= 0 );
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
   thread_cpu = _Thread_Get_CPU( thread );
@@ -1182,52 +1131,48 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Scheduler_Block_node(
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_BLOCKED );
   _Thread_Scheduler_release_critical( thread, &lock_context );
 
-  if ( node->help_state == SCHEDULER_HELP_YOURSELF ) {
-    _Assert( thread == _Scheduler_Node_get_user( node ) );
+  if ( sticky_level > 0 ) {
+    if ( is_scheduled && _Scheduler_Node_get_idle( node ) == NULL ) {
+      Thread_Control *idle;
 
-    return thread_cpu;
-  }
-
-  new_user = NULL;
-
-  if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
-    if ( is_scheduled ) {
-      _Assert( thread == _Scheduler_Node_get_user( node ) );
-      old_user = thread;
-      new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
+      idle = _Scheduler_Use_idle_thread(
+        context,
+        node,
+        thread_cpu,
+        get_idle_thread
+      );
+      _Thread_Dispatch_update_heir( _Per_CPU_Get(), thread_cpu, idle );
     }
-  } else if ( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL ) {
-    if ( is_scheduled ) {
-      old_user = _Scheduler_Node_get_user( node );
 
-      if ( thread == old_user ) {
-        Thread_Control *owner = _Scheduler_Node_get_owner( node );
-
-        if (
-          thread != owner
-            && owner->Scheduler.state == THREAD_SCHEDULER_READY
-        ) {
-          new_user = owner;
-          _Scheduler_Node_set_user( node, new_user );
-        } else {
-          new_user = _Scheduler_Use_idle_thread( context, node, get_idle_thread );
-        }
-      }
-    }
-  } else {
-    /* Not implemented, this is part of the OMIP support path. */
-    _Assert(0);
+    return NULL;
   }
 
-  if ( new_user != NULL ) {
-    Per_CPU_Control *cpu = _Thread_Get_CPU( old_user );
+  _Assert( thread == _Scheduler_Node_get_user( node ) );
+  return thread_cpu;
+}
 
-    _Scheduler_Thread_change_state( new_user, THREAD_SCHEDULER_SCHEDULED );
-    _Thread_Set_CPU( new_user, cpu );
-    _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, new_user );
-  }
+RTEMS_INLINE_ROUTINE void _Scheduler_Discard_idle_thread(
+  Scheduler_Context             *context,
+  Thread_Control                *the_thread,
+  Scheduler_Node                *node,
+  Scheduler_Release_idle_thread  release_idle_thread
+)
+{
+  Thread_Control  *idle;
+  Thread_Control  *owner;
+  Per_CPU_Control *cpu;
 
-  return NULL;
+  idle = _Scheduler_Node_get_idle( node );
+  owner = _Scheduler_Node_get_owner( node );
+
+  node->idle = NULL;
+  _Assert( _Scheduler_Node_get_user( node ) == idle );
+  _Scheduler_Node_set_user( node, owner );
+  ( *release_idle_thread )( context, idle );
+
+  cpu = _Thread_Get_CPU( idle );
+  _Thread_Set_CPU( the_thread, cpu );
+  _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, the_thread );
 }
 
 /**
@@ -1252,46 +1197,20 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Unblock_node(
 {
   bool unblock;
 
+  ++node->sticky_level;
+  _Assert( node->sticky_level > 0 );
+
   if ( is_scheduled ) {
-    Thread_Control *old_user = _Scheduler_Node_get_user( node );
-    Per_CPU_Control *cpu = _Thread_Get_CPU( old_user );
-    Thread_Control *idle = _Scheduler_Release_idle_thread(
+    _Scheduler_Discard_idle_thread(
       context,
+      the_thread,
       node,
       release_idle_thread
     );
-    Thread_Control *owner = _Scheduler_Node_get_owner( node );
-    Thread_Control *new_user;
-
-    if ( node->help_state == SCHEDULER_HELP_ACTIVE_OWNER ) {
-      _Assert( idle != NULL );
-      new_user = the_thread;
-    } else if ( idle != NULL ) {
-      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
-      new_user = the_thread;
-    } else if ( the_thread != owner ) {
-      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
-      _Assert( old_user != the_thread );
-      _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_READY );
-      new_user = the_thread;
-      _Scheduler_Node_set_user( node, new_user );
-    } else {
-      _Assert( node->help_state == SCHEDULER_HELP_ACTIVE_RIVAL );
-      _Assert( old_user != the_thread );
-      _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_READY );
-      new_user = NULL;
-    }
-
-    if ( new_user != NULL ) {
-      _Scheduler_Thread_change_state( new_user, THREAD_SCHEDULER_SCHEDULED );
-      _Thread_Set_CPU( new_user, cpu );
-      _Thread_Dispatch_update_heir( _Per_CPU_Get(), cpu, new_user );
-    }
-
+    _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_SCHEDULED );
     unblock = false;
   } else {
     _Scheduler_Thread_change_state( the_thread, THREAD_SCHEDULER_READY );
-
     unblock = true;
   }
 
@@ -1372,21 +1291,6 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   );
 
 #if defined(RTEMS_SMP)
-  _Chain_Extract_unprotected( &old_scheduler_node->Thread.Wait_node );
-  _Assert( _Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
-  _Chain_Initialize_one(
-    &the_thread->Scheduler.Wait_nodes,
-    &new_scheduler_node->Thread.Wait_node
-  );
-  _Chain_Extract_unprotected(
-    &old_scheduler_node->Thread.Scheduler_node.Chain
-  );
-  _Assert( _Chain_Is_empty( &the_thread->Scheduler.Scheduler_nodes ) );
-  _Chain_Initialize_one(
-    &the_thread->Scheduler.Scheduler_nodes,
-    &new_scheduler_node->Thread.Scheduler_node.Chain
-  );
-
   {
     const Scheduler_Control *old_scheduler;
 
@@ -1400,6 +1304,24 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
       if ( _States_Is_ready( current_state ) ) {
         _Scheduler_Block( the_thread );
       }
+
+      _Assert( old_scheduler_node->sticky_level == 0 );
+      _Assert( new_scheduler_node->sticky_level == 0 );
+
+      _Chain_Extract_unprotected( &old_scheduler_node->Thread.Wait_node );
+      _Assert( _Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
+      _Chain_Initialize_one(
+        &the_thread->Scheduler.Wait_nodes,
+        &new_scheduler_node->Thread.Wait_node
+      );
+      _Chain_Extract_unprotected(
+        &old_scheduler_node->Thread.Scheduler_node.Chain
+      );
+      _Assert( _Chain_Is_empty( &the_thread->Scheduler.Scheduler_nodes ) );
+      _Chain_Initialize_one(
+        &the_thread->Scheduler.Scheduler_nodes,
+        &new_scheduler_node->Thread.Scheduler_node.Chain
+      );
 
       the_thread->Scheduler.own_control = new_scheduler;
       the_thread->Scheduler.control = new_scheduler;

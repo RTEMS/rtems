@@ -577,6 +577,13 @@ void _Thread_Priority_replace(
  */
 void _Thread_Priority_update( Thread_queue_Context *queue_context );
 
+#if defined(RTEMS_SMP)
+void _Thread_Priority_and_sticky_update(
+  Thread_Control *the_thread,
+  int             sticky_level_change
+);
+#endif
+
 /**
  * @brief Returns true if the left thread priority is less than the right
  * thread priority in the intuitive sense of priority and false otherwise.

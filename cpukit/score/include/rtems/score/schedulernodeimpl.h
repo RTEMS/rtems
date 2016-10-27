@@ -46,7 +46,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   _Chain_Initialize_node( &node->Thread.Wait_node );
   node->Wait.Priority.scheduler = scheduler;
   node->user = the_thread;
-  node->help_state = SCHEDULER_HELP_YOURSELF;
   node->idle = NULL;
   node->accepts_help = the_thread;
   _SMP_sequence_lock_Initialize( &node->Priority.Lock );
