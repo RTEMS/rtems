@@ -23,7 +23,7 @@
 
 #include <rtems/asm.h>
 
-        .seg    "text"
+        .section    ".text"
         /*
          *  Window overflow trap handler.
          *

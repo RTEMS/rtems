@@ -19,7 +19,7 @@
 #include <rtems/asm.h>
 #include "syscall.h"
 
-	.seg    "text"
+	.section    ".text"
 	/*
 	 *  system call - halt
 	 *

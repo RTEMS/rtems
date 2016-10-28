@@ -24,7 +24,7 @@
 #include <rtems/asm.h>
 
 	.align 4
-	.seg "text"
+	.section ".text"
 	PUBLIC(_ld8)
 	PUBLIC(_ld16)
 	PUBLIC(_ld32)
@@ -61,12 +61,12 @@ SYM(_ld64):
 
 SYM(_st8):
 	retl
-	 stub %o1, [%o0]
+	 stb %o1, [%o0]
 
 SYM(_st_be16):
 SYM(_st16):
 	retl
-	 stuh %o1, [%o0]
+	 sth %o1, [%o0]
 
 SYM(_st_be32):
 SYM(_st32):

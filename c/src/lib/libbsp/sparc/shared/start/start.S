@@ -74,7 +74,7 @@
 
 #define SOFT_TRAP BAD_TRAP
 
-  .seg    "text"
+  .section    ".text"
   PUBLIC(start)
   .global start, __bsp_mem_init
 
@@ -352,7 +352,7 @@ zerobss:
         bleu,a zerobss
         nop
 
-        mov     %0, %o0                 ! command line
+        mov     %g0, %o0                ! command line
         call    SYM(boot_card)          ! does not return
          sub     %sp, 0x60, %sp         ! room for boot_card to save args
 

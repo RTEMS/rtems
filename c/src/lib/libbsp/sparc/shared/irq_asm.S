@@ -459,7 +459,7 @@ dont_do_the_window:
 #if defined(RTEMS_PROFILING)
          sethi   %hi(_SPARC_Counter), %o5
         ld       [%o5 + %lo(_SPARC_Counter)], %l4
-        call     %l4, 0
+        call     %l4
          nop
         mov      %o0, %o5
 #else
@@ -542,7 +542,7 @@ pil_fixed:
                                         ! o1 = 2nd arg = address of the ISF
                                         !   WAS LOADED WHEN ISF WAS SAVED!!!
         mov      %l3, %o0               ! o0 = 1st arg = vector number
-        call     %g4, 0
+        call     %g4
 #if defined(RTEMS_PROFILING)
          mov     %o5, %l3               ! save interrupt entry instant
 #else
@@ -560,11 +560,11 @@ pil_fixed:
         cmp      %l7, 0
         bne      profiling_not_outer_most_exit
          nop
-        call     %l4, 0                 ! Call _SPARC_Counter.counter_read
+        call     %l4                    ! Call _SPARC_Counter.counter_read
          mov     %g1, %l4               ! Save previous interrupt status
         mov      %o0, %o2               ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
-        call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
+        call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit)
          mov     %g6, %o0               ! o0 = 1st arg = per-CPU control
 profiling_not_outer_most_exit:
 #endif
@@ -647,7 +647,7 @@ isr_dispatch:
         std     %f28, [%sp + FP_FRAME_OFFSET_F28_F29]
         std     %f30, [%sp + FP_FRAME_OFFSET_F3O_F31]
         st      %fsr, [%sp + FP_FRAME_OFFSET_FSR]
-        call    SYM(_Thread_Do_dispatch), 0
+        call    SYM(_Thread_Do_dispatch)
          mov    %g6, %o0
 
         /*
@@ -677,7 +677,7 @@ isr_dispatch:
 non_fp_thread_dispatch:
 #endif
 
-        call    SYM(_Thread_Do_dispatch), 0
+        call    SYM(_Thread_Do_dispatch)
          mov    %g6, %o0
 
 #if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
