@@ -83,6 +83,13 @@ extern Thread_Control *_Thread_Allocated_fp;
   RTEMS_CONTAINER_OF( node, Thread_Control, Resource_node )
 #endif
 
+typedef bool ( *Thread_Visitor )( Thread_Control *the_thread, void *arg );
+
+void _Thread_Iterate(
+  Thread_Visitor  visitor,
+  void           *arg
+);
+
 void _Thread_Initialize_information(
   Thread_Information  *information,
   Objects_APIs         the_api,

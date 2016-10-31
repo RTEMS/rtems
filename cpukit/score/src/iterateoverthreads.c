@@ -18,37 +18,28 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/thread.h>
-#include <rtems/score/objectimpl.h>
+#include <rtems/score/threadimpl.h>
 
-void rtems_iterate_over_all_threads(rtems_per_thread_routine routine)
+typedef struct {
+  rtems_per_thread_routine routine;
+} routine_arg;
+
+static bool routine_adaptor( rtems_tcb *tcb, void *arg )
 {
-  uint32_t             i;
-  uint32_t             api_index;
-  Thread_Control      *the_thread;
-  Objects_Information *information;
+  routine_arg *ra;
 
-  if ( !routine )
-    return;
+  ra = arg;
+  ( *ra->routine )( tcb );
+  return false;
+}
 
-  for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-    #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
-      if ( !_Objects_Information_table[ api_index ] )
-        continue;
-    #endif
+void rtems_iterate_over_all_threads( rtems_per_thread_routine routine )
+{
+  routine_arg arg = {
+    .routine = routine
+  };
 
-    information = _Objects_Information_table[ api_index ][ 1 ];
-    if ( !information )
-      continue;
-
-    for ( i=1 ; i <= information->maximum ; i++ ) {
-      the_thread = (Thread_Control *)information->local_table[ i ];
-
-      if ( !the_thread )
-	continue;
-
-      (*routine)(the_thread);
-    }
+  if ( routine != NULL ) {
+    _Thread_Iterate( routine_adaptor, &arg );
   }
-
 }

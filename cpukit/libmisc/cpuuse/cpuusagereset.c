@@ -26,8 +26,9 @@
 
 #include "cpuuseimpl.h"
 
-static void CPU_usage_Per_thread_handler(
-  Thread_Control *the_thread
+static bool CPU_usage_Per_thread_handler(
+  Thread_Control *the_thread,
+  void           *arg
 )
 {
   const Scheduler_Control *scheduler;
@@ -42,6 +43,7 @@ static void CPU_usage_Per_thread_handler(
 
   _Scheduler_Release_critical( scheduler, &scheduler_lock_context );
   _Thread_State_release( the_thread, &state_lock_context );
+  return false;
 }
 
 /*
@@ -61,5 +63,5 @@ void rtems_cpu_usage_reset( void )
     cpu->cpu_usage_timestamp = CPU_usage_Uptime_at_last_reset;
   }
 
-  rtems_iterate_over_all_threads(CPU_usage_Per_thread_handler);
+  rtems_task_iterate(CPU_usage_Per_thread_handler, NULL);
 }

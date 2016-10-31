@@ -42,11 +42,6 @@
 #define RTEMS_CAPTURE_CLI_MAX_LOAD_TASKS (20)
 
 /*
- * Counter used to count the number of active tasks.
- */
-static int rtems_capture_cli_task_count = 0;
-
-/*
  * The user capture timestamper.
  */
 static rtems_capture_timestamp capture_timestamp;
@@ -197,8 +192,8 @@ rtems_capture_cli_disable (int                                argc RC_UNUSED,
   fprintf (stdout, "capture engine disabled.\n");
 }
 
-static void
-rtems_capture_cli_print_task (rtems_tcb *tcb)
+static bool
+rtems_capture_cli_print_task (rtems_tcb *tcb, void *arg)
 {
   rtems_task_priority   ceiling = rtems_capture_watch_get_ceiling ();
   rtems_task_priority   floor = rtems_capture_watch_get_floor ();
@@ -242,6 +237,7 @@ rtems_capture_cli_print_task (rtems_tcb *tcb)
              rtems_capture_watch_global_on () ? 'g' : '-');
   }
   fprintf (stdout, "\n");
+  return false;
 }
 
 /*
@@ -251,10 +247,12 @@ rtems_capture_cli_print_task (rtems_tcb *tcb)
  * number of tasks.
  */
 
-static void
-rtems_capture_cli_count_tasks (rtems_tcb *tcb)
+static bool
+rtems_capture_cli_count_tasks (rtems_tcb *tcb, void *arg)
 {
-  rtems_capture_cli_task_count++;
+  uint32_t *task_count = arg;
+  ++(*task_count);
+  return false;
 }
 
 
@@ -271,16 +269,17 @@ rtems_capture_cli_task_list (int                                argc RC_UNUSED,
                              bool                               verbose RC_UNUSED)
 {
   rtems_capture_time uptime;
+  uint32_t           task_count;
 
   rtems_capture_get_time (&uptime);
 
-  rtems_capture_cli_task_count = 0;
-  rtems_iterate_over_all_threads (rtems_capture_cli_count_tasks);
+  task_count = 0;
+  rtems_task_iterate (rtems_capture_cli_count_tasks, &task_count);
 
   fprintf (stdout, "uptime: ");
   rtems_capture_print_timestamp (uptime);
-  fprintf (stdout, "\ntotal %i\n", rtems_capture_cli_task_count);
-  rtems_iterate_over_all_threads (rtems_capture_cli_print_task);
+  fprintf (stdout, "\ntotal %" PRIu32 "\n", task_count);
+  rtems_task_iterate (rtems_capture_cli_print_task, NULL);
 }
 
 /*

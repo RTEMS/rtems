@@ -11,27 +11,31 @@
 #include "config.h"
 #endif
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #include <tmacros.h>
 
 #include <rtems/score/objectimpl.h>
 
 const char rtems_test_name[] = "SP 41";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void iterator(Thread_Control *thread);
+static bool visitor( Thread_Control *thread, void *arg )
+{
+  int *counter = arg;
+  ++( *counter );
+  return false;
+}
 
-void iterator(
-  Thread_Control *thread
-)
+static void iterator( Thread_Control *thread )
 {
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {
   void *tmp;
+  int   counter;
 
   TEST_BEGIN();
 
@@ -39,9 +43,22 @@ rtems_task Init(
   tmp = _Objects_Information_table[ OBJECTS_CLASSIC_API ][ 1 ];
   _Objects_Information_table[ OBJECTS_CLASSIC_API ][ 1 ] = NULL;
 
-  puts( "Init - rtems_iterate_over_all_threads" );
-  rtems_iterate_over_all_threads(iterator);
+  puts( "Init - rtems_task_iterate - NULL table" );
+  counter = 0;
+  rtems_task_iterate( visitor, &counter );
   _Objects_Information_table[ OBJECTS_CLASSIC_API ][ 1 ] = tmp;
+  rtems_test_assert( counter == 1 );
+
+  puts( "Init - rtems_task_iterate - normal" );
+  counter = 0;
+  rtems_task_iterate( visitor, &counter );
+  rtems_test_assert( counter == 2 );
+
+  puts( "Init - rtems_iterate_over_all_threads - NULL" );
+  rtems_iterate_over_all_threads( NULL );
+
+  puts( "Init - rtems_iterate_over_all_threads - iterator" );
+  rtems_iterate_over_all_threads( iterator );
 
   TEST_END();
   rtems_test_exit(0);

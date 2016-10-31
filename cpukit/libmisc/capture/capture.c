@@ -279,8 +279,8 @@ rtems_capture_find_control (rtems_name name, rtems_id id)
  * This function checks if a new control structure matches
  * the given task and sets the control if it does.
  */
-static void
-rtems_capture_initialize_control (rtems_tcb *tcb)
+static bool
+rtems_capture_initialize_control (rtems_tcb *tcb, void *arg)
 {
   if (tcb->Capture.control == NULL)
   {
@@ -305,6 +305,8 @@ rtems_capture_initialize_control (rtems_tcb *tcb)
       }
     }
   }
+
+  return false;
 }
 
 static rtems_capture_control*
@@ -342,7 +344,7 @@ rtems_capture_create_control (rtems_name name, rtems_id id)
     control->next    = capture_controls;
     capture_controls = control;
 
-    rtems_iterate_over_all_threads (rtems_capture_initialize_control);
+    _Thread_Iterate (rtems_capture_initialize_control, NULL);
 
     rtems_interrupt_lock_release (&capture_lock_global, &lock_context);
   }
@@ -749,10 +751,11 @@ rtems_capture_set_monitor (bool enable)
 /*
  * This function clears the capture trace flag in the tcb.
  */
-static void
-rtems_capture_flush_tcb (rtems_tcb *tcb)
+static bool
+rtems_capture_flush_tcb (rtems_tcb *tcb, void *arg)
 {
   tcb->Capture.flags &= ~RTEMS_CAPTURE_TRACED;
+  return false;
 }
 
 /*
@@ -776,7 +779,7 @@ rtems_capture_flush (bool prime)
       return RTEMS_UNSATISFIED;
     }
 
-    rtems_iterate_over_all_threads (rtems_capture_flush_tcb);
+    _Thread_Iterate (rtems_capture_flush_tcb, NULL);
 
     if (prime)
       capture_flags_global &= ~(RTEMS_CAPTURE_TRIGGERED | RTEMS_CAPTURE_OVERFLOW);

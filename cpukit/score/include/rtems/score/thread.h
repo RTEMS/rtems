@@ -834,18 +834,12 @@ void *_Thread_Idle_body(
 );
 #endif
 
-/**  This defines the type for a method which operates on a single thread.
- */
 typedef void (*rtems_per_thread_routine)( Thread_Control * );
 
-/**
- *  @brief Iterates over all threads.
- *  This routine iterates over all threads regardless of API and
- *  invokes the specified routine.
- */
+/* Use rtems_task_iterate() instead */
 void rtems_iterate_over_all_threads(
   rtems_per_thread_routine routine
-);
+) RTEMS_DEPRECATED;
 
 /**
  * @brief Thread control add-on.

@@ -1,4 +1,7 @@
-*** TEST 41 ***
+*** BEGIN OF TEST SP 41 ***
 Init - overwrite internal value to trip case
-Init - rtems_iterate_over_all_threads
-*** END OF TEST 41 ***
+Init - rtems_task_iterate - NULL table
+Init - rtems_task_iterate - normal
+Init - rtems_iterate_over_all_threads - NULL
+Init - rtems_iterate_over_all_threads - iterator
+*** END OF TEST SP 41 ***

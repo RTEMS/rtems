@@ -352,23 +352,20 @@ static inline void *Stack_check_find_high_water_mark(
  *
  *  Try to print out how much stack was actually used by the task.
  */
-static const rtems_printer* printer;
-
-static void Stack_check_Dump_threads_usage(
-  Thread_Control *the_thread
+static bool Stack_check_Dump_threads_usage(
+  Thread_Control *the_thread,
+  void           *arg
 )
 {
-  uint32_t        size, used;
-  void           *low;
-  void           *high_water_mark;
-  void           *current;
-  Stack_Control  *stack;
-  char            name[5];
+  uint32_t             size, used;
+  void                *low;
+  void                *high_water_mark;
+  void                *current;
+  Stack_Control       *stack;
+  char                 name[5];
+  const rtems_printer *printer;
 
-  /*
-   *  The pointer passed in for the_thread is guaranteed to be non-NULL from
-   *  rtems_iterate_over_all_threads() so no need to check it here.
-   */
+  printer = arg;
 
   /*
    *  Obtain interrupt stack information
@@ -376,7 +373,7 @@ static void Stack_check_Dump_threads_usage(
   #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
     if (the_thread == (Thread_Control *) -1) {
       if (!Stack_check_Interrupt_stack.area)
-        return;
+        return false;
       stack = &Stack_check_Interrupt_stack;
       the_thread = 0;
       current = 0;
@@ -430,7 +427,7 @@ static void Stack_check_Dump_threads_usage(
     rtems_printf( printer, "%8" PRId32 "\n", used );
   }
 
-
+  return false;
 }
 
 /*
@@ -453,25 +450,26 @@ static void Stack_check_Dump_threads_usage(
  */
 
 void rtems_stack_checker_report_usage_with_plugin(
-  const rtems_printer* printer_
+  const rtems_printer* printer
 )
 {
-  if ( printer != NULL || ! rtems_print_printer_valid ( printer_ ) )
-    return;
-
-  printer = printer_;
-
   rtems_printf( printer, "Stack usage by thread\n");
   rtems_printf( printer,
 "    ID      NAME    LOW          HIGH     CURRENT     AVAILABLE     USED\n"
   );
 
   /* iterate over all threads and dump the usage */
-  rtems_iterate_over_all_threads( Stack_check_Dump_threads_usage );
+  rtems_task_iterate(
+    Stack_check_Dump_threads_usage,
+    RTEMS_DECONST( rtems_printer *, printer )
+  );
 
   #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
     /* dump interrupt stack info if any */
-    Stack_check_Dump_threads_usage((Thread_Control *) -1);
+    Stack_check_Dump_threads_usage(
+      (Thread_Control *) -1,
+      RTEMS_DECONST( rtems_printer *, printer )
+    );
   #endif
 
   printer = NULL;

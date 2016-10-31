@@ -93,6 +93,7 @@ librtems_a_SOURCES += src/taskgetscheduler.c
 librtems_a_SOURCES += src/taskident.c
 librtems_a_SOURCES += src/taskinitusers.c
 librtems_a_SOURCES += src/taskissuspended.c
+librtems_a_SOURCES += src/taskiterate.c
 librtems_a_SOURCES += src/taskmode.c
 librtems_a_SOURCES += src/taskrestart.c
 librtems_a_SOURCES += src/taskresume.c

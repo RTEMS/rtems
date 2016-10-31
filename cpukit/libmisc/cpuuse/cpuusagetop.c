@@ -85,43 +85,6 @@ typedef struct
 #define RTEMS_TOP_SORT_CURRENT       (4)
 #define RTEMS_TOP_SORT_MAX           (4)
 
-/*
- * Private version of the iterator with an arg. This will be moved
- * to the public version in 5.0.
- */
-
-typedef void (*rtems_per_thread_routine_2)( Thread_Control *, void* );
-
-void rtems_iterate_over_all_threads_2(rtems_per_thread_routine_2 routine,
-                                      void*                      arg);
-
-void rtems_iterate_over_all_threads_2(rtems_per_thread_routine_2 routine,
-                                      void*                      arg)
-{
-  uint32_t             i;
-  uint32_t             api_index;
-  Thread_Control      *the_thread;
-  Objects_Information *information;
-
-  if ( !routine )
-    return;
-
-  for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-    #if !defined(RTEMS_POSIX_API) || defined(RTEMS_DEBUG)
-      if ( !_Objects_Information_table[ api_index ] )
-        continue;
-    #endif
-    information = _Objects_Information_table[ api_index ][ 1 ];
-    if ( information ) {
-      for ( i=1 ; i <= information->maximum ; i++ ) {
-        the_thread = (Thread_Control *)information->local_table[ i ];
-        if ( the_thread )
-          (*routine)(the_thread, arg);
-      }
-    }
-  }
-}
-
 static inline bool equal_to_uint32_t( uint32_t * lhs, uint32_t * rhs )
 {
    if ( *lhs == *rhs )
@@ -190,17 +153,19 @@ print_time(rtems_cpu_usage_data*    data,
 /*
  * Count the number of tasks.
  */
-static void
+static bool
 task_counter(Thread_Control *thrad, void* arg)
 {
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
   ++data->task_count;
+
+  return false;
 }
 
 /*
  * Create the sorted table with the current and total usage.
  */
-static void
+static bool
 task_usage(Thread_Control* thread, void* arg)
 {
   rtems_cpu_usage_data* data = (rtems_cpu_usage_data*) arg;
@@ -287,6 +252,8 @@ task_usage(Thread_Control* thread, void* arg)
     data->current_usage[j] = current;
     break;
   }
+
+  return false;
 }
 
 /*
@@ -322,7 +289,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
     Timestamp_Control load;
 
     data->task_count = 0;
-    rtems_iterate_over_all_threads_2(task_counter, data);
+    _Thread_Iterate(task_counter, data);
 
     tasks_size = sizeof(Thread_Control*) * (data->task_count + 1);
     usage_size = sizeof(Timestamp_Control) * (data->task_count + 1);
@@ -353,7 +320,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
     _Timestamp_Subtract(&data->last_uptime, &data->uptime, &data->period);
     data->last_uptime = data->uptime;
 
-    rtems_iterate_over_all_threads_2(task_usage, data);
+    _Thread_Iterate(task_usage, data);
 
     if (data->task_count > data->task_size)
     {

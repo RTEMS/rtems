@@ -513,6 +513,38 @@ rtems_status_code rtems_task_set_scheduler(
 rtems_id rtems_task_self(void);
 
 /**
+ * @brief Task visitor.
+ *
+ * @param[in] tcb The task control block.
+ * @param[in] arg The visitor argument.
+ *
+ * @retval true Stop the iteration.
+ * @retval false Otherwise.
+ *
+ * @see rtems_task_iterate().
+ */
+typedef bool ( *rtems_task_visitor )( rtems_tcb *tcb, void *arg );
+
+/**
+ * @brief Iterates over all tasks in the system.
+ *
+ * This operation covers all tasks of all APIs.
+ *
+ * Must be called from task context.  This operation obtains and releases the
+ * objects allocator lock.  The task visitor is called while owning the objects
+ * allocator lock.  It is possible to perform blocking operations in the task
+ * visitor, however, take care that no deadlocks via the object allocator lock
+ * can occur.
+ *
+ * @param[in] visitor The task visitor.
+ * @param[in] arg The visitor argument.
+ */
+void rtems_task_iterate(
+  rtems_task_visitor  visitor,
+  void               *arg
+);
+
+/**
  * @brief Identifies a scheduler by its name.
  *
  * The scheduler name is determined by the scheduler configuration.
