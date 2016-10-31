@@ -62,7 +62,6 @@ spatomic01/Makefile
 spglobalcon01/Makefile
 spintrcritical22/Makefile
 spsem03/Makefile
-spresource01/Makefile
 spmrsp01/Makefile
 spscheduler01/Makefile
 spfatal28/Makefile
