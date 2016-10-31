@@ -977,16 +977,25 @@ RTEMS_INLINE_ROUTINE void _Thread_Resource_count_increment(
   Thread_Control *the_thread
 )
 {
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   ++the_thread->resource_count;
+#else
+  (void) the_thread;
+#endif
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_Resource_count_decrement(
   Thread_Control *the_thread
 )
 {
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   --the_thread->resource_count;
+#else
+  (void) the_thread;
+#endif
 }
 
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
 /**
  * @brief Returns true if the thread owns resources, and false otherwise.
  *
@@ -1001,6 +1010,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Owns_resources(
 {
   return the_thread->resource_count != 0;
 }
+#endif
 
 #if defined(RTEMS_SMP)
 RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(

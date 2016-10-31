@@ -22,6 +22,7 @@
 
 void force_error()
 {
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   rtems_status_code sc;
   rtems_id id;
 
@@ -36,4 +37,7 @@ void force_error()
 
   sc = rtems_task_delete(RTEMS_SELF);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+#else
+  _Terminate( INTERNAL_ERROR_CORE, false, INTERNAL_ERROR_RESOURCE_IN_USE );
+#endif
 }

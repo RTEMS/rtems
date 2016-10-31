@@ -83,6 +83,10 @@ extern "C" {
   #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
 #endif
 
+#if defined(RTEMS_DEBUG)
+#define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
+#endif
+
 /*
  * Only provided for backward compatiblity to not break application
  * configurations.
@@ -492,8 +496,10 @@ typedef struct {
    */
   Priority_Node            Real_priority;
 
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
+#endif
 
   /**
    * @brief Scheduler related control.
@@ -716,8 +722,10 @@ struct _Thread_Control {
    */
   Priority_Node            Real_priority;
 
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
+#endif
 
   /**
    * @brief Scheduler related control.

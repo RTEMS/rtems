@@ -133,6 +133,7 @@ static void _Thread_Add_to_zombie_chain( Thread_Control *the_thread )
 
 static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   if ( _Thread_Owns_resources( the_thread ) ) {
     _Terminate(
       INTERNAL_ERROR_CORE,
@@ -140,6 +141,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
       INTERNAL_ERROR_RESOURCE_IN_USE
     );
   }
+#endif
 
   _Objects_Close(
     _Objects_Get_information_id( the_thread->Object.id ),
