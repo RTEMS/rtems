@@ -131,7 +131,7 @@ static void _Mutex_Release_critical(
 
   heads = mutex->Queue.Queue.heads;
   mutex->Queue.Queue.owner = NULL;
-  --executing->resource_count;
+  _Thread_Resource_count_decrement( executing );
 
   if ( __predict_true( heads == NULL ) ) {
     _Mutex_Queue_release( mutex, queue_context );
@@ -161,7 +161,7 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( mutex, &queue_context );
   } else {
     _Thread_queue_Context_set_no_timeout( &queue_context );
@@ -187,7 +187,7 @@ int _Mutex_Acquire_timed(
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( mutex, &queue_context );
 
     return 0;
@@ -229,7 +229,7 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     eno = 0;
   } else {
     eno = EBUSY;
@@ -277,7 +277,7 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( &mutex->Mutex, &queue_context );
   } else if ( owner == executing ) {
     ++mutex->nest_level;
@@ -306,7 +306,7 @@ int _Mutex_recursive_Acquire_timed(
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( &mutex->Mutex, &queue_context );
 
     return 0;
@@ -353,7 +353,7 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
 
   if ( __predict_true( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     eno = 0;
   } else if ( owner == executing ) {
     ++mutex->nest_level;

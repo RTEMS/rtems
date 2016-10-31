@@ -712,7 +712,7 @@ void _Thread_queue_Surrender(
   if ( !_Thread_queue_MP_set_callout( new_owner, queue_context ) )
 #endif
   {
-    ++new_owner->resource_count;
+    _Thread_Resource_count_increment( new_owner );
   }
 
   unblock = _Thread_queue_Make_ready_again( new_owner );

@@ -148,7 +148,7 @@ rtems_status_code rtems_semaphore_create(
           &the_semaphore->Core_control.Mutex.Recursive.Mutex,
           executing
         );
-        ++executing->resource_count;
+        _Thread_Resource_count_increment( executing );
       }
 
       status = STATUS_SUCCESSFUL;

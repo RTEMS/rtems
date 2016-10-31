@@ -973,6 +973,20 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_joinable(
   return ( the_thread->Life.state & THREAD_LIFE_DETACHED ) == 0;
 }
 
+RTEMS_INLINE_ROUTINE void _Thread_Resource_count_increment(
+  Thread_Control *the_thread
+)
+{
+  ++the_thread->resource_count;
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Resource_count_decrement(
+  Thread_Control *the_thread
+)
+{
+  --the_thread->resource_count;
+}
+
 /**
  * @brief Returns true if the thread owns resources, and false otherwise.
  *

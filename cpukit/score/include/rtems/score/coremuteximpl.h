@@ -149,7 +149,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Seize(
 
   if ( owner == NULL ) {
     _CORE_mutex_Set_owner( &the_mutex->Mutex, executing );
-    ++executing->resource_count;
+    _Thread_Resource_count_increment( executing );
     _CORE_mutex_Release( &the_mutex->Mutex, queue_context );
     return STATUS_SUCCESSFUL;
   }
@@ -196,7 +196,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_recursive_mutex_Surrender(
     return STATUS_SUCCESSFUL;
   }
 
-  --executing->resource_count;
+  _Thread_Resource_count_decrement( executing );
   _CORE_mutex_Set_owner( &the_mutex->Mutex, NULL );
 
   heads = the_mutex->Mutex.Wait_queue.Queue.heads;
@@ -298,7 +298,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
   }
 
   _CORE_mutex_Set_owner( &the_mutex->Recursive.Mutex, owner );
-  ++owner->resource_count;
+  _Thread_Resource_count_increment( owner );
   _Thread_Priority_add(
     owner,
     &the_mutex->Priority_ceiling,
@@ -390,7 +390,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
     return STATUS_SUCCESSFUL;
   }
 
-  --executing->resource_count;
+  _Thread_Resource_count_decrement( executing );
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Wait_acquire_default_critical( executing, &lock_context );
@@ -416,7 +416,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Surrender(
     if ( _Objects_Is_local_id( new_owner->Object.id ) )
 #endif
     {
-      ++new_owner->resource_count;
+      _Thread_Resource_count_increment( new_owner );
       _Thread_Priority_add(
         new_owner,
         &the_mutex->Priority_ceiling,
