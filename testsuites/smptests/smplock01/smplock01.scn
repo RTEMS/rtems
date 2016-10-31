@@ -1,288 +1,1784 @@
 *** BEGIN OF TEST SMPLOCK 1 ***
-global ticket lock with local counter
-        processor 0, local counter 830091
-        processor 1, local counter 830090
-        processor 2, local counter 830091
-        processor 3, local counter 830091
-        processor 4, local counter 830091
-        processor 5, local counter 830091
-        processor 6, local counter 830091
-        processor 7, local counter 830091
-        processor 8, local counter 830089
-        processor 9, local counter 830088
-        processor 10, local counter 830090
-        processor 11, local counter 830090
-        processor 12, local counter 830090
-        processor 13, local counter 830092
-        processor 14, local counter 830093
-        processor 15, local counter 830092
-        processor 16, local counter 830092
-        processor 17, local counter 830092
-        processor 18, local counter 830089
-        processor 19, local counter 830092
-        processor 20, local counter 830090
-        processor 21, local counter 830090
-        processor 22, local counter 830090
-        processor 23, local counter 830092
-        global counter 0, sum of local counter 19922178
-global MCS lock with local counter
-        processor 0, local counter 1579723
-        processor 1, local counter 1580054
-        processor 2, local counter 1579890
-        processor 3, local counter 1579777
-        processor 4, local counter 1579884
-        processor 5, local counter 1580005
-        processor 6, local counter 1578632
-        processor 7, local counter 1578637
-        processor 8, local counter 1578774
-        processor 9, local counter 1578759
-        processor 10, local counter 1580282
-        processor 11, local counter 1579885
-        processor 12, local counter 1580378
-        processor 13, local counter 1580043
-        processor 14, local counter 1580115
-        processor 15, local counter 1580113
-        processor 16, local counter 1579911
-        processor 17, local counter 1579993
-        processor 18, local counter 1580032
-        processor 19, local counter 1579588
-        processor 20, local counter 1580049
-        processor 21, local counter 1580048
-        processor 22, local counter 1578484
-        processor 23, local counter 1580013
-        global counter 0, sum of local counter 37913069
-global ticket lock with global counter
-        processor 0, local counter 784729
-        processor 1, local counter 784730
-        processor 2, local counter 784730
-        processor 3, local counter 784730
-        processor 4, local counter 784731
-        processor 5, local counter 784730
-        processor 6, local counter 784731
-        processor 7, local counter 784730
-        processor 8, local counter 784731
-        processor 9, local counter 784729
-        processor 10, local counter 784729
-        processor 11, local counter 784730
-        processor 12, local counter 784731
-        processor 13, local counter 784729
-        processor 14, local counter 784728
-        processor 15, local counter 784730
-        processor 16, local counter 784729
-        processor 17, local counter 784730
-        processor 18, local counter 784730
-        processor 19, local counter 784729
-        processor 20, local counter 784729
-        processor 21, local counter 784729
-        processor 22, local counter 784729
-        processor 23, local counter 784731
-        global counter 18833514, sum of local counter 18833514
-global MCS lock with global counter
-        processor 0, local counter 947856
-        processor 1, local counter 947857
-        processor 2, local counter 947857
-        processor 3, local counter 947855
-        processor 4, local counter 947858
-        processor 5, local counter 947857
-        processor 6, local counter 947856
-        processor 7, local counter 947856
-        processor 8, local counter 947856
-        processor 9, local counter 947856
-        processor 10, local counter 947857
-        processor 11, local counter 947856
-        processor 12, local counter 947855
-        processor 13, local counter 947857
-        processor 14, local counter 947857
-        processor 15, local counter 947855
-        processor 16, local counter 947856
-        processor 17, local counter 947855
-        processor 18, local counter 947858
-        processor 19, local counter 947857
-        processor 20, local counter 947858
-        processor 21, local counter 947857
-        processor 22, local counter 947857
-        processor 23, local counter 947857
-        global counter 22748556, sum of local counter 22748556
-local ticket lock with local counter
-        processor 0, local counter 77155869
-        processor 1, local counter 77158831
-        processor 2, local counter 77081105
-        processor 3, local counter 77082737
-        processor 4, local counter 77075777
-        processor 5, local counter 77076154
-        processor 6, local counter 77065268
-        processor 7, local counter 77066500
-        processor 8, local counter 77106686
-        processor 9, local counter 77107321
-        processor 10, local counter 77060207
-        processor 11, local counter 77062079
-        processor 12, local counter 77059638
-        processor 13, local counter 77059931
-        processor 14, local counter 77056750
-        processor 15, local counter 77057813
-        processor 16, local counter 76659137
-        processor 17, local counter 76659205
-        processor 18, local counter 76669140
-        processor 19, local counter 76670415
-        processor 20, local counter 76674221
-        processor 21, local counter 76674630
-        processor 22, local counter 76434805
-        processor 23, local counter 76434361
-        global counter 0, sum of local counter 1846208580
-local MCS lock with local counter
-        processor 0, local counter 44963740
-        processor 1, local counter 45045357
-        processor 2, local counter 45023035
-        processor 3, local counter 45021994
-        processor 4, local counter 44912701
-        processor 5, local counter 44951749
-        processor 6, local counter 45090697
-        processor 7, local counter 45089463
-        processor 8, local counter 45015619
-        processor 9, local counter 45088716
-        processor 10, local counter 45064955
-        processor 11, local counter 45063568
-        processor 12, local counter 44966963
-        processor 13, local counter 45002743
-        processor 14, local counter 45127830
-        processor 15, local counter 45126512
-        processor 16, local counter 44947194
-        processor 17, local counter 44992882
-        processor 18, local counter 45006760
-        processor 19, local counter 45005553
-        processor 20, local counter 44880447
-        processor 21, local counter 44889042
-        processor 22, local counter 45036454
-        processor 23, local counter 45036288
-        global counter 0, sum of local counter 1080350262
-local ticket lock with global counter
-        processor 0, local counter 3962116
-        processor 1, local counter 3963441
-        processor 2, local counter 3963482
-        processor 3, local counter 3963367
-        processor 4, local counter 3962978
-        processor 5, local counter 3963102
-        processor 6, local counter 3962979
-        processor 7, local counter 3962911
-        processor 8, local counter 3962974
-        processor 9, local counter 3963125
-        processor 10, local counter 3963056
-        processor 11, local counter 3963093
-        processor 12, local counter 3962996
-        processor 13, local counter 3963100
-        processor 14, local counter 3963096
-        processor 15, local counter 3963028
-        processor 16, local counter 3967076
-        processor 17, local counter 3967251
-        processor 18, local counter 3967222
-        processor 19, local counter 3967093
-        processor 20, local counter 3972862
-        processor 21, local counter 3972917
-        processor 22, local counter 3967217
-        processor 23, local counter 3967220
-        global counter 7095791, sum of local counter 95157702
-local MCS lock with global counter
-        processor 0, local counter 3849478
-        processor 1, local counter 3860113
-        processor 2, local counter 3966891
-        processor 3, local counter 3966750
-        processor 4, local counter 3973618
-        processor 5, local counter 4014013
-        processor 6, local counter 3914674
-        processor 7, local counter 3914601
-        processor 8, local counter 3910536
-        processor 9, local counter 3924908
-        processor 10, local counter 3995362
-        processor 11, local counter 3995130
-        processor 12, local counter 3909912
-        processor 13, local counter 3923977
-        processor 14, local counter 3995941
-        processor 15, local counter 3995667
-        processor 16, local counter 3842753
-        processor 17, local counter 3852728
-        processor 18, local counter 3956029
-        processor 19, local counter 3955977
-        processor 20, local counter 3961870
-        processor 21, local counter 4001067
-        processor 22, local counter 3911767
-        processor 23, local counter 3911724
-        global counter 8503087, sum of local counter 94505486
-global ticket lock with busy section
-        processor 0, local counter 614377
-        processor 1, local counter 614376
-        processor 2, local counter 614377
-        processor 3, local counter 614377
-        processor 4, local counter 614377
-        processor 5, local counter 614378
-        processor 6, local counter 614377
-        processor 7, local counter 614377
-        processor 8, local counter 614377
-        processor 9, local counter 614376
-        processor 10, local counter 614378
-        processor 11, local counter 614377
-        processor 12, local counter 614377
-        processor 13, local counter 614377
-        processor 14, local counter 614377
-        processor 15, local counter 614376
-        processor 16, local counter 614377
-        processor 17, local counter 614377
-        processor 18, local counter 614377
-        processor 19, local counter 614378
-        processor 20, local counter 614378
-        processor 21, local counter 614377
-        processor 22, local counter 614377
-        processor 23, local counter 614377
-        global counter 0, sum of local counter 14745049
-global MCS lock with busy section
-        processor 0, local counter 552660
-        processor 1, local counter 552661
-        processor 2, local counter 552659
-        processor 3, local counter 552659
-        processor 4, local counter 552660
-        processor 5, local counter 552659
-        processor 6, local counter 552659
-        processor 7, local counter 552660
-        processor 8, local counter 552660
-        processor 9, local counter 552660
-        processor 10, local counter 552660
-        processor 11, local counter 552659
-        processor 12, local counter 552660
-        processor 13, local counter 552659
-        processor 14, local counter 552660
-        processor 15, local counter 552661
-        processor 16, local counter 552660
-        processor 17, local counter 552659
-        processor 18, local counter 552660
-        processor 19, local counter 552661
-        processor 20, local counter 552660
-        processor 21, local counter 552661
-        processor 22, local counter 552660
-        processor 23, local counter 552661
-        global counter 0, sum of local counter 13263838
-sequence lock
-        processor 0, local counter 12138641
-        processor 1, local counter 8
-        processor 2, local counter 64
-        processor 3, local counter 89
-        processor 4, local counter 208
-        processor 5, local counter 227
-        processor 6, local counter 69
-        processor 7, local counter 82
-        processor 8, local counter 2019
-        processor 9, local counter 2017
-        processor 10, local counter 1914
-        processor 11, local counter 2008
-        processor 12, local counter 1890
-        processor 13, local counter 1902
-        processor 14, local counter 1734
-        processor 15, local counter 1701
-        processor 16, local counter 2198
-        processor 17, local counter 2176
-        processor 18, local counter 2011
-        processor 19, local counter 2047
-        processor 20, local counter 2072
-        processor 21, local counter 2084
-        processor 22, local counter 1866
-        processor 23, local counter 1849
-        global counter 0, sum of local counter 12170876
+<SMPLock01>
+  <GlobalTicketLockWithLocalCounter activeWorker="1">
+    <LocalCounter worker="0">18398214</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>18398214</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="2">
+    <LocalCounter worker="0">3818444</LocalCounter>
+    <LocalCounter worker="1">3818595</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7637039</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="3">
+    <LocalCounter worker="0">1919976</LocalCounter>
+    <LocalCounter worker="1">1919985</LocalCounter>
+    <LocalCounter worker="2">1919953</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5759914</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="4">
+    <LocalCounter worker="0">1487437</LocalCounter>
+    <LocalCounter worker="1">1487431</LocalCounter>
+    <LocalCounter worker="2">1487432</LocalCounter>
+    <LocalCounter worker="3">1487421</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5949721</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="5">
+    <LocalCounter worker="0">1148919</LocalCounter>
+    <LocalCounter worker="1">1148898</LocalCounter>
+    <LocalCounter worker="2">1148900</LocalCounter>
+    <LocalCounter worker="3">1148852</LocalCounter>
+    <LocalCounter worker="4">1148909</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5744478</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="6">
+    <LocalCounter worker="0">930242</LocalCounter>
+    <LocalCounter worker="1">930202</LocalCounter>
+    <LocalCounter worker="2">930199</LocalCounter>
+    <LocalCounter worker="3">930184</LocalCounter>
+    <LocalCounter worker="4">930181</LocalCounter>
+    <LocalCounter worker="5">930230</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5581238</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="7">
+    <LocalCounter worker="0">779079</LocalCounter>
+    <LocalCounter worker="1">778991</LocalCounter>
+    <LocalCounter worker="2">778995</LocalCounter>
+    <LocalCounter worker="3">778990</LocalCounter>
+    <LocalCounter worker="4">778981</LocalCounter>
+    <LocalCounter worker="5">778985</LocalCounter>
+    <LocalCounter worker="6">778987</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5453008</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="8">
+    <LocalCounter worker="0">654604</LocalCounter>
+    <LocalCounter worker="1">651632</LocalCounter>
+    <LocalCounter worker="2">651569</LocalCounter>
+    <LocalCounter worker="3">651546</LocalCounter>
+    <LocalCounter worker="4">651563</LocalCounter>
+    <LocalCounter worker="5">651567</LocalCounter>
+    <LocalCounter worker="6">651596</LocalCounter>
+    <LocalCounter worker="7">653615</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5217692</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="9">
+    <LocalCounter worker="0">534418</LocalCounter>
+    <LocalCounter worker="1">534312</LocalCounter>
+    <LocalCounter worker="2">534314</LocalCounter>
+    <LocalCounter worker="3">534304</LocalCounter>
+    <LocalCounter worker="4">534309</LocalCounter>
+    <LocalCounter worker="5">534304</LocalCounter>
+    <LocalCounter worker="6">534311</LocalCounter>
+    <LocalCounter worker="7">534303</LocalCounter>
+    <LocalCounter worker="8">534309</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4808884</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="10">
+    <LocalCounter worker="0">472000</LocalCounter>
+    <LocalCounter worker="1">470376</LocalCounter>
+    <LocalCounter worker="2">470345</LocalCounter>
+    <LocalCounter worker="3">470334</LocalCounter>
+    <LocalCounter worker="4">470373</LocalCounter>
+    <LocalCounter worker="5">470401</LocalCounter>
+    <LocalCounter worker="6">470374</LocalCounter>
+    <LocalCounter worker="7">470391</LocalCounter>
+    <LocalCounter worker="8">470370</LocalCounter>
+    <LocalCounter worker="9">472016</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4706980</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="11">
+    <LocalCounter worker="0">429615</LocalCounter>
+    <LocalCounter worker="1">428935</LocalCounter>
+    <LocalCounter worker="2">428953</LocalCounter>
+    <LocalCounter worker="3">428926</LocalCounter>
+    <LocalCounter worker="4">428906</LocalCounter>
+    <LocalCounter worker="5">428880</LocalCounter>
+    <LocalCounter worker="6">428914</LocalCounter>
+    <LocalCounter worker="7">428898</LocalCounter>
+    <LocalCounter worker="8">428907</LocalCounter>
+    <LocalCounter worker="9">429584</LocalCounter>
+    <LocalCounter worker="10">429584</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4720102</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="12">
+    <LocalCounter worker="0">386115</LocalCounter>
+    <LocalCounter worker="1">385629</LocalCounter>
+    <LocalCounter worker="2">385643</LocalCounter>
+    <LocalCounter worker="3">385644</LocalCounter>
+    <LocalCounter worker="4">385621</LocalCounter>
+    <LocalCounter worker="5">385630</LocalCounter>
+    <LocalCounter worker="6">385638</LocalCounter>
+    <LocalCounter worker="7">385615</LocalCounter>
+    <LocalCounter worker="8">385627</LocalCounter>
+    <LocalCounter worker="9">386087</LocalCounter>
+    <LocalCounter worker="10">386088</LocalCounter>
+    <LocalCounter worker="11">386095</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4629432</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="13">
+    <LocalCounter worker="0">352696</LocalCounter>
+    <LocalCounter worker="1">352413</LocalCounter>
+    <LocalCounter worker="2">352429</LocalCounter>
+    <LocalCounter worker="3">352421</LocalCounter>
+    <LocalCounter worker="4">352419</LocalCounter>
+    <LocalCounter worker="5">352411</LocalCounter>
+    <LocalCounter worker="6">352423</LocalCounter>
+    <LocalCounter worker="7">352409</LocalCounter>
+    <LocalCounter worker="8">352415</LocalCounter>
+    <LocalCounter worker="9">352661</LocalCounter>
+    <LocalCounter worker="10">352666</LocalCounter>
+    <LocalCounter worker="11">352666</LocalCounter>
+    <LocalCounter worker="12">352660</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4582689</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="14">
+    <LocalCounter worker="0">324515</LocalCounter>
+    <LocalCounter worker="1">324378</LocalCounter>
+    <LocalCounter worker="2">324389</LocalCounter>
+    <LocalCounter worker="3">324381</LocalCounter>
+    <LocalCounter worker="4">324382</LocalCounter>
+    <LocalCounter worker="5">324372</LocalCounter>
+    <LocalCounter worker="6">324380</LocalCounter>
+    <LocalCounter worker="7">324380</LocalCounter>
+    <LocalCounter worker="8">324370</LocalCounter>
+    <LocalCounter worker="9">324483</LocalCounter>
+    <LocalCounter worker="10">324482</LocalCounter>
+    <LocalCounter worker="11">324482</LocalCounter>
+    <LocalCounter worker="12">324479</LocalCounter>
+    <LocalCounter worker="13">324509</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4541982</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="15">
+    <LocalCounter worker="0">301306</LocalCounter>
+    <LocalCounter worker="1">301217</LocalCounter>
+    <LocalCounter worker="2">301212</LocalCounter>
+    <LocalCounter worker="3">301217</LocalCounter>
+    <LocalCounter worker="4">301219</LocalCounter>
+    <LocalCounter worker="5">301218</LocalCounter>
+    <LocalCounter worker="6">301213</LocalCounter>
+    <LocalCounter worker="7">301212</LocalCounter>
+    <LocalCounter worker="8">301215</LocalCounter>
+    <LocalCounter worker="9">301273</LocalCounter>
+    <LocalCounter worker="10">301271</LocalCounter>
+    <LocalCounter worker="11">301274</LocalCounter>
+    <LocalCounter worker="12">301273</LocalCounter>
+    <LocalCounter worker="13">301270</LocalCounter>
+    <LocalCounter worker="14">301270</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4518660</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="16">
+    <LocalCounter worker="0">282744</LocalCounter>
+    <LocalCounter worker="1">282629</LocalCounter>
+    <LocalCounter worker="2">282622</LocalCounter>
+    <LocalCounter worker="3">282627</LocalCounter>
+    <LocalCounter worker="4">282620</LocalCounter>
+    <LocalCounter worker="5">282617</LocalCounter>
+    <LocalCounter worker="6">282616</LocalCounter>
+    <LocalCounter worker="7">282618</LocalCounter>
+    <LocalCounter worker="8">282624</LocalCounter>
+    <LocalCounter worker="9">282662</LocalCounter>
+    <LocalCounter worker="10">282664</LocalCounter>
+    <LocalCounter worker="11">282663</LocalCounter>
+    <LocalCounter worker="12">282662</LocalCounter>
+    <LocalCounter worker="13">282658</LocalCounter>
+    <LocalCounter worker="14">282662</LocalCounter>
+    <LocalCounter worker="15">282693</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4522381</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="17">
+    <LocalCounter worker="0">259579</LocalCounter>
+    <LocalCounter worker="1">259524</LocalCounter>
+    <LocalCounter worker="2">259529</LocalCounter>
+    <LocalCounter worker="3">259530</LocalCounter>
+    <LocalCounter worker="4">259529</LocalCounter>
+    <LocalCounter worker="5">259532</LocalCounter>
+    <LocalCounter worker="6">259530</LocalCounter>
+    <LocalCounter worker="7">259536</LocalCounter>
+    <LocalCounter worker="8">259529</LocalCounter>
+    <LocalCounter worker="9">259533</LocalCounter>
+    <LocalCounter worker="10">259527</LocalCounter>
+    <LocalCounter worker="11">259529</LocalCounter>
+    <LocalCounter worker="12">259533</LocalCounter>
+    <LocalCounter worker="13">259527</LocalCounter>
+    <LocalCounter worker="14">259528</LocalCounter>
+    <LocalCounter worker="15">259524</LocalCounter>
+    <LocalCounter worker="16">259536</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4412055</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="18">
+    <LocalCounter worker="0">239835</LocalCounter>
+    <LocalCounter worker="1">239813</LocalCounter>
+    <LocalCounter worker="2">239814</LocalCounter>
+    <LocalCounter worker="3">239810</LocalCounter>
+    <LocalCounter worker="4">239811</LocalCounter>
+    <LocalCounter worker="5">239817</LocalCounter>
+    <LocalCounter worker="6">239813</LocalCounter>
+    <LocalCounter worker="7">239814</LocalCounter>
+    <LocalCounter worker="8">239815</LocalCounter>
+    <LocalCounter worker="9">239816</LocalCounter>
+    <LocalCounter worker="10">239815</LocalCounter>
+    <LocalCounter worker="11">239813</LocalCounter>
+    <LocalCounter worker="12">239813</LocalCounter>
+    <LocalCounter worker="13">239817</LocalCounter>
+    <LocalCounter worker="14">239813</LocalCounter>
+    <LocalCounter worker="15">239812</LocalCounter>
+    <LocalCounter worker="16">239811</LocalCounter>
+    <LocalCounter worker="17">239834</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4316686</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="19">
+    <LocalCounter worker="0">223254</LocalCounter>
+    <LocalCounter worker="1">223225</LocalCounter>
+    <LocalCounter worker="2">223227</LocalCounter>
+    <LocalCounter worker="3">223222</LocalCounter>
+    <LocalCounter worker="4">223224</LocalCounter>
+    <LocalCounter worker="5">223223</LocalCounter>
+    <LocalCounter worker="6">223220</LocalCounter>
+    <LocalCounter worker="7">223216</LocalCounter>
+    <LocalCounter worker="8">223217</LocalCounter>
+    <LocalCounter worker="9">223222</LocalCounter>
+    <LocalCounter worker="10">223219</LocalCounter>
+    <LocalCounter worker="11">223221</LocalCounter>
+    <LocalCounter worker="12">223223</LocalCounter>
+    <LocalCounter worker="13">223225</LocalCounter>
+    <LocalCounter worker="14">223219</LocalCounter>
+    <LocalCounter worker="15">223222</LocalCounter>
+    <LocalCounter worker="16">223223</LocalCounter>
+    <LocalCounter worker="17">223249</LocalCounter>
+    <LocalCounter worker="18">223251</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4241302</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="20">
+    <LocalCounter worker="0">213739</LocalCounter>
+    <LocalCounter worker="1">213709</LocalCounter>
+    <LocalCounter worker="2">213708</LocalCounter>
+    <LocalCounter worker="3">213708</LocalCounter>
+    <LocalCounter worker="4">213707</LocalCounter>
+    <LocalCounter worker="5">213710</LocalCounter>
+    <LocalCounter worker="6">213708</LocalCounter>
+    <LocalCounter worker="7">213710</LocalCounter>
+    <LocalCounter worker="8">213708</LocalCounter>
+    <LocalCounter worker="9">213710</LocalCounter>
+    <LocalCounter worker="10">213710</LocalCounter>
+    <LocalCounter worker="11">213710</LocalCounter>
+    <LocalCounter worker="12">213711</LocalCounter>
+    <LocalCounter worker="13">213714</LocalCounter>
+    <LocalCounter worker="14">213714</LocalCounter>
+    <LocalCounter worker="15">213708</LocalCounter>
+    <LocalCounter worker="16">213710</LocalCounter>
+    <LocalCounter worker="17">213732</LocalCounter>
+    <LocalCounter worker="18">213734</LocalCounter>
+    <LocalCounter worker="19">213735</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4274295</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="21">
+    <LocalCounter worker="0">198998</LocalCounter>
+    <LocalCounter worker="1">198980</LocalCounter>
+    <LocalCounter worker="2">198986</LocalCounter>
+    <LocalCounter worker="3">198983</LocalCounter>
+    <LocalCounter worker="4">198981</LocalCounter>
+    <LocalCounter worker="5">198983</LocalCounter>
+    <LocalCounter worker="6">198983</LocalCounter>
+    <LocalCounter worker="7">198981</LocalCounter>
+    <LocalCounter worker="8">198981</LocalCounter>
+    <LocalCounter worker="9">198983</LocalCounter>
+    <LocalCounter worker="10">198982</LocalCounter>
+    <LocalCounter worker="11">198981</LocalCounter>
+    <LocalCounter worker="12">198982</LocalCounter>
+    <LocalCounter worker="13">198983</LocalCounter>
+    <LocalCounter worker="14">198984</LocalCounter>
+    <LocalCounter worker="15">198984</LocalCounter>
+    <LocalCounter worker="16">198982</LocalCounter>
+    <LocalCounter worker="17">198992</LocalCounter>
+    <LocalCounter worker="18">198994</LocalCounter>
+    <LocalCounter worker="19">198993</LocalCounter>
+    <LocalCounter worker="20">198995</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4178691</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="22">
+    <LocalCounter worker="0">192361</LocalCounter>
+    <LocalCounter worker="1">192346</LocalCounter>
+    <LocalCounter worker="2">192349</LocalCounter>
+    <LocalCounter worker="3">192348</LocalCounter>
+    <LocalCounter worker="4">192348</LocalCounter>
+    <LocalCounter worker="5">192350</LocalCounter>
+    <LocalCounter worker="6">192346</LocalCounter>
+    <LocalCounter worker="7">192349</LocalCounter>
+    <LocalCounter worker="8">192348</LocalCounter>
+    <LocalCounter worker="9">192346</LocalCounter>
+    <LocalCounter worker="10">192346</LocalCounter>
+    <LocalCounter worker="11">192345</LocalCounter>
+    <LocalCounter worker="12">192346</LocalCounter>
+    <LocalCounter worker="13">192348</LocalCounter>
+    <LocalCounter worker="14">192346</LocalCounter>
+    <LocalCounter worker="15">192347</LocalCounter>
+    <LocalCounter worker="16">192350</LocalCounter>
+    <LocalCounter worker="17">192356</LocalCounter>
+    <LocalCounter worker="18">192355</LocalCounter>
+    <LocalCounter worker="19">192357</LocalCounter>
+    <LocalCounter worker="20">192356</LocalCounter>
+    <LocalCounter worker="21">192358</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4231701</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="23">
+    <LocalCounter worker="0">176769</LocalCounter>
+    <LocalCounter worker="1">176761</LocalCounter>
+    <LocalCounter worker="2">176760</LocalCounter>
+    <LocalCounter worker="3">176759</LocalCounter>
+    <LocalCounter worker="4">176760</LocalCounter>
+    <LocalCounter worker="5">176757</LocalCounter>
+    <LocalCounter worker="6">176759</LocalCounter>
+    <LocalCounter worker="7">176758</LocalCounter>
+    <LocalCounter worker="8">176759</LocalCounter>
+    <LocalCounter worker="9">176759</LocalCounter>
+    <LocalCounter worker="10">176759</LocalCounter>
+    <LocalCounter worker="11">176760</LocalCounter>
+    <LocalCounter worker="12">176758</LocalCounter>
+    <LocalCounter worker="13">176758</LocalCounter>
+    <LocalCounter worker="14">176760</LocalCounter>
+    <LocalCounter worker="15">176759</LocalCounter>
+    <LocalCounter worker="16">176757</LocalCounter>
+    <LocalCounter worker="17">176761</LocalCounter>
+    <LocalCounter worker="18">176763</LocalCounter>
+    <LocalCounter worker="19">176760</LocalCounter>
+    <LocalCounter worker="20">176762</LocalCounter>
+    <LocalCounter worker="21">176763</LocalCounter>
+    <LocalCounter worker="22">176762</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>4065483</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalTicketLockWithLocalCounter activeWorker="24">
+    <LocalCounter worker="0">164847</LocalCounter>
+    <LocalCounter worker="1">164844</LocalCounter>
+    <LocalCounter worker="2">164845</LocalCounter>
+    <LocalCounter worker="3">164845</LocalCounter>
+    <LocalCounter worker="4">164846</LocalCounter>
+    <LocalCounter worker="5">164844</LocalCounter>
+    <LocalCounter worker="6">164846</LocalCounter>
+    <LocalCounter worker="7">164845</LocalCounter>
+    <LocalCounter worker="8">164845</LocalCounter>
+    <LocalCounter worker="9">164845</LocalCounter>
+    <LocalCounter worker="10">164846</LocalCounter>
+    <LocalCounter worker="11">164844</LocalCounter>
+    <LocalCounter worker="12">164846</LocalCounter>
+    <LocalCounter worker="13">164846</LocalCounter>
+    <LocalCounter worker="14">164846</LocalCounter>
+    <LocalCounter worker="15">164845</LocalCounter>
+    <LocalCounter worker="16">164846</LocalCounter>
+    <LocalCounter worker="17">164846</LocalCounter>
+    <LocalCounter worker="18">164847</LocalCounter>
+    <LocalCounter worker="19">164845</LocalCounter>
+    <LocalCounter worker="20">164845</LocalCounter>
+    <LocalCounter worker="21">164845</LocalCounter>
+    <LocalCounter worker="22">164846</LocalCounter>
+    <LocalCounter worker="23">164846</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>3956291</SumOfLocalCounter>
+  </GlobalTicketLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="1">
+    <LocalCounter worker="0">13057243</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>13057243</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="2">
+    <LocalCounter worker="0">1266595</LocalCounter>
+    <LocalCounter worker="1">1266587</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>2533182</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="3">
+    <LocalCounter worker="0">1806557</LocalCounter>
+    <LocalCounter worker="1">1806541</LocalCounter>
+    <LocalCounter worker="2">1806556</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>5419654</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="4">
+    <LocalCounter worker="0">1799359</LocalCounter>
+    <LocalCounter worker="1">1799355</LocalCounter>
+    <LocalCounter worker="2">1799361</LocalCounter>
+    <LocalCounter worker="3">1799358</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7197433</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="5">
+    <LocalCounter worker="0">1809548</LocalCounter>
+    <LocalCounter worker="1">1809543</LocalCounter>
+    <LocalCounter worker="2">1809545</LocalCounter>
+    <LocalCounter worker="3">1809547</LocalCounter>
+    <LocalCounter worker="4">1809545</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>9047728</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="6">
+    <LocalCounter worker="0">1572945</LocalCounter>
+    <LocalCounter worker="1">1572938</LocalCounter>
+    <LocalCounter worker="2">1572941</LocalCounter>
+    <LocalCounter worker="3">1572942</LocalCounter>
+    <LocalCounter worker="4">1572941</LocalCounter>
+    <LocalCounter worker="5">1572939</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>9437646</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="7">
+    <LocalCounter worker="0">1488244</LocalCounter>
+    <LocalCounter worker="1">1488238</LocalCounter>
+    <LocalCounter worker="2">1488242</LocalCounter>
+    <LocalCounter worker="3">1488243</LocalCounter>
+    <LocalCounter worker="4">1488241</LocalCounter>
+    <LocalCounter worker="5">1488240</LocalCounter>
+    <LocalCounter worker="6">1488242</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>10417690</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="8">
+    <LocalCounter worker="0">1326735</LocalCounter>
+    <LocalCounter worker="1">1326731</LocalCounter>
+    <LocalCounter worker="2">1326732</LocalCounter>
+    <LocalCounter worker="3">1326732</LocalCounter>
+    <LocalCounter worker="4">1326730</LocalCounter>
+    <LocalCounter worker="5">1326731</LocalCounter>
+    <LocalCounter worker="6">1326733</LocalCounter>
+    <LocalCounter worker="7">1326732</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>10613856</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="9">
+    <LocalCounter worker="0">1227563</LocalCounter>
+    <LocalCounter worker="1">1227561</LocalCounter>
+    <LocalCounter worker="2">1227561</LocalCounter>
+    <LocalCounter worker="3">1227562</LocalCounter>
+    <LocalCounter worker="4">1227558</LocalCounter>
+    <LocalCounter worker="5">1227561</LocalCounter>
+    <LocalCounter worker="6">1227561</LocalCounter>
+    <LocalCounter worker="7">1227562</LocalCounter>
+    <LocalCounter worker="8">1227559</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>11048048</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="10">
+    <LocalCounter worker="0">894577</LocalCounter>
+    <LocalCounter worker="1">894574</LocalCounter>
+    <LocalCounter worker="2">894575</LocalCounter>
+    <LocalCounter worker="3">894576</LocalCounter>
+    <LocalCounter worker="4">894575</LocalCounter>
+    <LocalCounter worker="5">894575</LocalCounter>
+    <LocalCounter worker="6">894576</LocalCounter>
+    <LocalCounter worker="7">894575</LocalCounter>
+    <LocalCounter worker="8">894575</LocalCounter>
+    <LocalCounter worker="9">894575</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>8945753</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="11">
+    <LocalCounter worker="0">791584</LocalCounter>
+    <LocalCounter worker="1">791584</LocalCounter>
+    <LocalCounter worker="2">791583</LocalCounter>
+    <LocalCounter worker="3">791582</LocalCounter>
+    <LocalCounter worker="4">791584</LocalCounter>
+    <LocalCounter worker="5">791582</LocalCounter>
+    <LocalCounter worker="6">791584</LocalCounter>
+    <LocalCounter worker="7">791582</LocalCounter>
+    <LocalCounter worker="8">791583</LocalCounter>
+    <LocalCounter worker="9">791583</LocalCounter>
+    <LocalCounter worker="10">791584</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>8707415</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="12">
+    <LocalCounter worker="0">700121</LocalCounter>
+    <LocalCounter worker="1">700119</LocalCounter>
+    <LocalCounter worker="2">700118</LocalCounter>
+    <LocalCounter worker="3">700118</LocalCounter>
+    <LocalCounter worker="4">700117</LocalCounter>
+    <LocalCounter worker="5">700117</LocalCounter>
+    <LocalCounter worker="6">700119</LocalCounter>
+    <LocalCounter worker="7">700119</LocalCounter>
+    <LocalCounter worker="8">700118</LocalCounter>
+    <LocalCounter worker="9">700118</LocalCounter>
+    <LocalCounter worker="10">700119</LocalCounter>
+    <LocalCounter worker="11">700118</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>8401421</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="13">
+    <LocalCounter worker="0">612928</LocalCounter>
+    <LocalCounter worker="1">612926</LocalCounter>
+    <LocalCounter worker="2">612925</LocalCounter>
+    <LocalCounter worker="3">612927</LocalCounter>
+    <LocalCounter worker="4">612925</LocalCounter>
+    <LocalCounter worker="5">612925</LocalCounter>
+    <LocalCounter worker="6">612925</LocalCounter>
+    <LocalCounter worker="7">612925</LocalCounter>
+    <LocalCounter worker="8">612924</LocalCounter>
+    <LocalCounter worker="9">612925</LocalCounter>
+    <LocalCounter worker="10">612926</LocalCounter>
+    <LocalCounter worker="11">612926</LocalCounter>
+    <LocalCounter worker="12">612925</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7968032</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="14">
+    <LocalCounter worker="0">615640</LocalCounter>
+    <LocalCounter worker="1">615637</LocalCounter>
+    <LocalCounter worker="2">615638</LocalCounter>
+    <LocalCounter worker="3">615638</LocalCounter>
+    <LocalCounter worker="4">615637</LocalCounter>
+    <LocalCounter worker="5">615636</LocalCounter>
+    <LocalCounter worker="6">615637</LocalCounter>
+    <LocalCounter worker="7">615636</LocalCounter>
+    <LocalCounter worker="8">615633</LocalCounter>
+    <LocalCounter worker="9">615638</LocalCounter>
+    <LocalCounter worker="10">615638</LocalCounter>
+    <LocalCounter worker="11">615637</LocalCounter>
+    <LocalCounter worker="12">615637</LocalCounter>
+    <LocalCounter worker="13">615635</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>8618917</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="15">
+    <LocalCounter worker="0">494010</LocalCounter>
+    <LocalCounter worker="1">494005</LocalCounter>
+    <LocalCounter worker="2">494007</LocalCounter>
+    <LocalCounter worker="3">494003</LocalCounter>
+    <LocalCounter worker="4">494006</LocalCounter>
+    <LocalCounter worker="5">494003</LocalCounter>
+    <LocalCounter worker="6">494003</LocalCounter>
+    <LocalCounter worker="7">494003</LocalCounter>
+    <LocalCounter worker="8">494005</LocalCounter>
+    <LocalCounter worker="9">494002</LocalCounter>
+    <LocalCounter worker="10">494006</LocalCounter>
+    <LocalCounter worker="11">494005</LocalCounter>
+    <LocalCounter worker="12">494004</LocalCounter>
+    <LocalCounter worker="13">494002</LocalCounter>
+    <LocalCounter worker="14">494003</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7410067</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="16">
+    <LocalCounter worker="0">452311</LocalCounter>
+    <LocalCounter worker="1">452308</LocalCounter>
+    <LocalCounter worker="2">452307</LocalCounter>
+    <LocalCounter worker="3">452304</LocalCounter>
+    <LocalCounter worker="4">452306</LocalCounter>
+    <LocalCounter worker="5">452306</LocalCounter>
+    <LocalCounter worker="6">452306</LocalCounter>
+    <LocalCounter worker="7">452305</LocalCounter>
+    <LocalCounter worker="8">452306</LocalCounter>
+    <LocalCounter worker="9">452305</LocalCounter>
+    <LocalCounter worker="10">452308</LocalCounter>
+    <LocalCounter worker="11">452302</LocalCounter>
+    <LocalCounter worker="12">452304</LocalCounter>
+    <LocalCounter worker="13">452307</LocalCounter>
+    <LocalCounter worker="14">452305</LocalCounter>
+    <LocalCounter worker="15">452307</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7236897</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="17">
+    <LocalCounter worker="0">411836</LocalCounter>
+    <LocalCounter worker="1">411832</LocalCounter>
+    <LocalCounter worker="2">411832</LocalCounter>
+    <LocalCounter worker="3">411831</LocalCounter>
+    <LocalCounter worker="4">411830</LocalCounter>
+    <LocalCounter worker="5">411830</LocalCounter>
+    <LocalCounter worker="6">411835</LocalCounter>
+    <LocalCounter worker="7">411833</LocalCounter>
+    <LocalCounter worker="8">411830</LocalCounter>
+    <LocalCounter worker="9">411832</LocalCounter>
+    <LocalCounter worker="10">411833</LocalCounter>
+    <LocalCounter worker="11">411829</LocalCounter>
+    <LocalCounter worker="12">411833</LocalCounter>
+    <LocalCounter worker="13">411833</LocalCounter>
+    <LocalCounter worker="14">411831</LocalCounter>
+    <LocalCounter worker="15">411833</LocalCounter>
+    <LocalCounter worker="16">411828</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7001141</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="18">
+    <LocalCounter worker="0">467016</LocalCounter>
+    <LocalCounter worker="1">466996</LocalCounter>
+    <LocalCounter worker="2">467001</LocalCounter>
+    <LocalCounter worker="3">466994</LocalCounter>
+    <LocalCounter worker="4">466989</LocalCounter>
+    <LocalCounter worker="5">466986</LocalCounter>
+    <LocalCounter worker="6">466991</LocalCounter>
+    <LocalCounter worker="7">466994</LocalCounter>
+    <LocalCounter worker="8">466973</LocalCounter>
+    <LocalCounter worker="9">466976</LocalCounter>
+    <LocalCounter worker="10">466993</LocalCounter>
+    <LocalCounter worker="11">466996</LocalCounter>
+    <LocalCounter worker="12">467008</LocalCounter>
+    <LocalCounter worker="13">467005</LocalCounter>
+    <LocalCounter worker="14">466998</LocalCounter>
+    <LocalCounter worker="15">467002</LocalCounter>
+    <LocalCounter worker="16">466990</LocalCounter>
+    <LocalCounter worker="17">467009</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>8405917</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="19">
+    <LocalCounter worker="0">370400</LocalCounter>
+    <LocalCounter worker="1">370402</LocalCounter>
+    <LocalCounter worker="2">370401</LocalCounter>
+    <LocalCounter worker="3">370408</LocalCounter>
+    <LocalCounter worker="4">370401</LocalCounter>
+    <LocalCounter worker="5">370404</LocalCounter>
+    <LocalCounter worker="6">370404</LocalCounter>
+    <LocalCounter worker="7">370410</LocalCounter>
+    <LocalCounter worker="8">370410</LocalCounter>
+    <LocalCounter worker="9">370403</LocalCounter>
+    <LocalCounter worker="10">370399</LocalCounter>
+    <LocalCounter worker="11">370408</LocalCounter>
+    <LocalCounter worker="12">370401</LocalCounter>
+    <LocalCounter worker="13">370399</LocalCounter>
+    <LocalCounter worker="14">370401</LocalCounter>
+    <LocalCounter worker="15">370398</LocalCounter>
+    <LocalCounter worker="16">370401</LocalCounter>
+    <LocalCounter worker="17">370396</LocalCounter>
+    <LocalCounter worker="18">370396</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7037642</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="20">
+    <LocalCounter worker="0">391059</LocalCounter>
+    <LocalCounter worker="1">392308</LocalCounter>
+    <LocalCounter worker="2">392294</LocalCounter>
+    <LocalCounter worker="3">392312</LocalCounter>
+    <LocalCounter worker="4">392291</LocalCounter>
+    <LocalCounter worker="5">392348</LocalCounter>
+    <LocalCounter worker="6">392321</LocalCounter>
+    <LocalCounter worker="7">392268</LocalCounter>
+    <LocalCounter worker="8">392312</LocalCounter>
+    <LocalCounter worker="9">392486</LocalCounter>
+    <LocalCounter worker="10">392486</LocalCounter>
+    <LocalCounter worker="11">392471</LocalCounter>
+    <LocalCounter worker="12">392499</LocalCounter>
+    <LocalCounter worker="13">392452</LocalCounter>
+    <LocalCounter worker="14">392467</LocalCounter>
+    <LocalCounter worker="15">392478</LocalCounter>
+    <LocalCounter worker="16">392436</LocalCounter>
+    <LocalCounter worker="17">390882</LocalCounter>
+    <LocalCounter worker="18">390899</LocalCounter>
+    <LocalCounter worker="19">390972</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7842041</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="21">
+    <LocalCounter worker="0">318394</LocalCounter>
+    <LocalCounter worker="1">332823</LocalCounter>
+    <LocalCounter worker="2">332655</LocalCounter>
+    <LocalCounter worker="3">332725</LocalCounter>
+    <LocalCounter worker="4">332890</LocalCounter>
+    <LocalCounter worker="5">333114</LocalCounter>
+    <LocalCounter worker="6">332973</LocalCounter>
+    <LocalCounter worker="7">332994</LocalCounter>
+    <LocalCounter worker="8">332878</LocalCounter>
+    <LocalCounter worker="9">334457</LocalCounter>
+    <LocalCounter worker="10">334487</LocalCounter>
+    <LocalCounter worker="11">334425</LocalCounter>
+    <LocalCounter worker="12">334507</LocalCounter>
+    <LocalCounter worker="13">334550</LocalCounter>
+    <LocalCounter worker="14">334514</LocalCounter>
+    <LocalCounter worker="15">334366</LocalCounter>
+    <LocalCounter worker="16">334029</LocalCounter>
+    <LocalCounter worker="17">317461</LocalCounter>
+    <LocalCounter worker="18">317374</LocalCounter>
+    <LocalCounter worker="19">317671</LocalCounter>
+    <LocalCounter worker="20">318126</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>6927413</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="22">
+    <LocalCounter worker="0">331955</LocalCounter>
+    <LocalCounter worker="1">341916</LocalCounter>
+    <LocalCounter worker="2">341888</LocalCounter>
+    <LocalCounter worker="3">342280</LocalCounter>
+    <LocalCounter worker="4">343635</LocalCounter>
+    <LocalCounter worker="5">343767</LocalCounter>
+    <LocalCounter worker="6">343948</LocalCounter>
+    <LocalCounter worker="7">343914</LocalCounter>
+    <LocalCounter worker="8">343375</LocalCounter>
+    <LocalCounter worker="9">343501</LocalCounter>
+    <LocalCounter worker="10">343454</LocalCounter>
+    <LocalCounter worker="11">343316</LocalCounter>
+    <LocalCounter worker="12">343271</LocalCounter>
+    <LocalCounter worker="13">343456</LocalCounter>
+    <LocalCounter worker="14">343351</LocalCounter>
+    <LocalCounter worker="15">343245</LocalCounter>
+    <LocalCounter worker="16">341111</LocalCounter>
+    <LocalCounter worker="17">329097</LocalCounter>
+    <LocalCounter worker="18">329162</LocalCounter>
+    <LocalCounter worker="19">329303</LocalCounter>
+    <LocalCounter worker="20">331236</LocalCounter>
+    <LocalCounter worker="21">332000</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7472181</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="23">
+    <LocalCounter worker="0">308389</LocalCounter>
+    <LocalCounter worker="1">309721</LocalCounter>
+    <LocalCounter worker="2">309624</LocalCounter>
+    <LocalCounter worker="3">309655</LocalCounter>
+    <LocalCounter worker="4">310504</LocalCounter>
+    <LocalCounter worker="5">310414</LocalCounter>
+    <LocalCounter worker="6">310534</LocalCounter>
+    <LocalCounter worker="7">310443</LocalCounter>
+    <LocalCounter worker="8">310415</LocalCounter>
+    <LocalCounter worker="9">310215</LocalCounter>
+    <LocalCounter worker="10">310278</LocalCounter>
+    <LocalCounter worker="11">310266</LocalCounter>
+    <LocalCounter worker="12">310079</LocalCounter>
+    <LocalCounter worker="13">310083</LocalCounter>
+    <LocalCounter worker="14">309887</LocalCounter>
+    <LocalCounter worker="15">310072</LocalCounter>
+    <LocalCounter worker="16">309153</LocalCounter>
+    <LocalCounter worker="17">307219</LocalCounter>
+    <LocalCounter worker="18">307158</LocalCounter>
+    <LocalCounter worker="19">307167</LocalCounter>
+    <LocalCounter worker="20">307747</LocalCounter>
+    <LocalCounter worker="21">307966</LocalCounter>
+    <LocalCounter worker="22">307630</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7114619</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalMCSLockWithLocalCounter activeWorker="24">
+    <LocalCounter worker="0">294282</LocalCounter>
+    <LocalCounter worker="1">294274</LocalCounter>
+    <LocalCounter worker="2">294265</LocalCounter>
+    <LocalCounter worker="3">294275</LocalCounter>
+    <LocalCounter worker="4">294278</LocalCounter>
+    <LocalCounter worker="5">294265</LocalCounter>
+    <LocalCounter worker="6">294278</LocalCounter>
+    <LocalCounter worker="7">294277</LocalCounter>
+    <LocalCounter worker="8">294265</LocalCounter>
+    <LocalCounter worker="9">294270</LocalCounter>
+    <LocalCounter worker="10">294267</LocalCounter>
+    <LocalCounter worker="11">294273</LocalCounter>
+    <LocalCounter worker="12">294257</LocalCounter>
+    <LocalCounter worker="13">294271</LocalCounter>
+    <LocalCounter worker="14">294274</LocalCounter>
+    <LocalCounter worker="15">294277</LocalCounter>
+    <LocalCounter worker="16">294270</LocalCounter>
+    <LocalCounter worker="17">294269</LocalCounter>
+    <LocalCounter worker="18">294271</LocalCounter>
+    <LocalCounter worker="19">294268</LocalCounter>
+    <LocalCounter worker="20">294267</LocalCounter>
+    <LocalCounter worker="21">294276</LocalCounter>
+    <LocalCounter worker="22">294276</LocalCounter>
+    <LocalCounter worker="23">294269</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>7062514</SumOfLocalCounter>
+  </GlobalMCSLockWithLocalCounter>
+  <GlobalTicketLockWithGlobalCounter activeWorker="24">
+    <LocalCounter worker="0">149135</LocalCounter>
+    <LocalCounter worker="1">149134</LocalCounter>
+    <LocalCounter worker="2">149134</LocalCounter>
+    <LocalCounter worker="3">149134</LocalCounter>
+    <LocalCounter worker="4">149135</LocalCounter>
+    <LocalCounter worker="5">149134</LocalCounter>
+    <LocalCounter worker="6">149134</LocalCounter>
+    <LocalCounter worker="7">149135</LocalCounter>
+    <LocalCounter worker="8">149134</LocalCounter>
+    <LocalCounter worker="9">149134</LocalCounter>
+    <LocalCounter worker="10">149134</LocalCounter>
+    <LocalCounter worker="11">149135</LocalCounter>
+    <LocalCounter worker="12">149134</LocalCounter>
+    <LocalCounter worker="13">149135</LocalCounter>
+    <LocalCounter worker="14">149135</LocalCounter>
+    <LocalCounter worker="15">149134</LocalCounter>
+    <LocalCounter worker="16">149134</LocalCounter>
+    <LocalCounter worker="17">149136</LocalCounter>
+    <LocalCounter worker="18">149135</LocalCounter>
+    <LocalCounter worker="19">149134</LocalCounter>
+    <LocalCounter worker="20">149135</LocalCounter>
+    <LocalCounter worker="21">149134</LocalCounter>
+    <LocalCounter worker="22">149134</LocalCounter>
+    <LocalCounter worker="23">149134</LocalCounter>
+    <GlobalCounter>3579226</GlobalCounter>
+    <SumOfLocalCounter>3579226</SumOfLocalCounter>
+  </GlobalTicketLockWithGlobalCounter>
+  <GlobalMCSLockWithGlobalCounter activeWorker="24">
+    <LocalCounter worker="0">172181</LocalCounter>
+    <LocalCounter worker="1">172178</LocalCounter>
+    <LocalCounter worker="2">172178</LocalCounter>
+    <LocalCounter worker="3">172178</LocalCounter>
+    <LocalCounter worker="4">172180</LocalCounter>
+    <LocalCounter worker="5">172180</LocalCounter>
+    <LocalCounter worker="6">172179</LocalCounter>
+    <LocalCounter worker="7">172179</LocalCounter>
+    <LocalCounter worker="8">172180</LocalCounter>
+    <LocalCounter worker="9">172179</LocalCounter>
+    <LocalCounter worker="10">172179</LocalCounter>
+    <LocalCounter worker="11">172180</LocalCounter>
+    <LocalCounter worker="12">172180</LocalCounter>
+    <LocalCounter worker="13">172178</LocalCounter>
+    <LocalCounter worker="14">172179</LocalCounter>
+    <LocalCounter worker="15">172179</LocalCounter>
+    <LocalCounter worker="16">172179</LocalCounter>
+    <LocalCounter worker="17">172178</LocalCounter>
+    <LocalCounter worker="18">172179</LocalCounter>
+    <LocalCounter worker="19">172180</LocalCounter>
+    <LocalCounter worker="20">172178</LocalCounter>
+    <LocalCounter worker="21">172180</LocalCounter>
+    <LocalCounter worker="22">172179</LocalCounter>
+    <LocalCounter worker="23">172178</LocalCounter>
+    <GlobalCounter>4132298</GlobalCounter>
+    <SumOfLocalCounter>4132298</SumOfLocalCounter>
+  </GlobalMCSLockWithGlobalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="1">
+    <LocalCounter worker="0">18652007</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>18652007</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="2">
+    <LocalCounter worker="0">18740564</LocalCounter>
+    <LocalCounter worker="1">18739964</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>37480528</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="3">
+    <LocalCounter worker="0">18653030</LocalCounter>
+    <LocalCounter worker="1">18122134</LocalCounter>
+    <LocalCounter worker="2">18122915</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>54898079</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="4">
+    <LocalCounter worker="0">18565582</LocalCounter>
+    <LocalCounter worker="1">17190377</LocalCounter>
+    <LocalCounter worker="2">17191117</LocalCounter>
+    <LocalCounter worker="3">17190756</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>70137832</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="5">
+    <LocalCounter worker="0">18665586</LocalCounter>
+    <LocalCounter worker="1">16212891</LocalCounter>
+    <LocalCounter worker="2">16213673</LocalCounter>
+    <LocalCounter worker="3">16081746</LocalCounter>
+    <LocalCounter worker="4">16081213</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>83255109</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="6">
+    <LocalCounter worker="0">18578108</LocalCounter>
+    <LocalCounter worker="1">16296115</LocalCounter>
+    <LocalCounter worker="2">16296806</LocalCounter>
+    <LocalCounter worker="3">15747768</LocalCounter>
+    <LocalCounter worker="4">15747301</LocalCounter>
+    <LocalCounter worker="5">16956328</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>99622426</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="7">
+    <LocalCounter worker="0">18678200</LocalCounter>
+    <LocalCounter worker="1">15992304</LocalCounter>
+    <LocalCounter worker="2">15993081</LocalCounter>
+    <LocalCounter worker="3">15841718</LocalCounter>
+    <LocalCounter worker="4">15841348</LocalCounter>
+    <LocalCounter worker="5">15959344</LocalCounter>
+    <LocalCounter worker="6">15960072</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>114266067</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="8">
+    <LocalCounter worker="0">18589106</LocalCounter>
+    <LocalCounter worker="1">15875999</LocalCounter>
+    <LocalCounter worker="2">15876649</LocalCounter>
+    <LocalCounter worker="3">15818065</LocalCounter>
+    <LocalCounter worker="4">15815412</LocalCounter>
+    <LocalCounter worker="5">15846763</LocalCounter>
+    <LocalCounter worker="6">15847293</LocalCounter>
+    <LocalCounter worker="7">15916120</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>129585407</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="9">
+    <LocalCounter worker="0">18689087</LocalCounter>
+    <LocalCounter worker="1">15546911</LocalCounter>
+    <LocalCounter worker="2">15547569</LocalCounter>
+    <LocalCounter worker="3">15455961</LocalCounter>
+    <LocalCounter worker="4">15455418</LocalCounter>
+    <LocalCounter worker="5">15496903</LocalCounter>
+    <LocalCounter worker="6">15497497</LocalCounter>
+    <LocalCounter worker="7">15447033</LocalCounter>
+    <LocalCounter worker="8">15446640</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>142583019</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="10">
+    <LocalCounter worker="0">18601625</LocalCounter>
+    <LocalCounter worker="1">15394303</LocalCounter>
+    <LocalCounter worker="2">15394892</LocalCounter>
+    <LocalCounter worker="3">15291311</LocalCounter>
+    <LocalCounter worker="4">15290941</LocalCounter>
+    <LocalCounter worker="5">15381054</LocalCounter>
+    <LocalCounter worker="6">15381638</LocalCounter>
+    <LocalCounter worker="7">15323738</LocalCounter>
+    <LocalCounter worker="8">15323464</LocalCounter>
+    <LocalCounter worker="9">18600921</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>159983887</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="11">
+    <LocalCounter worker="0">18700020</LocalCounter>
+    <LocalCounter worker="1">15533741</LocalCounter>
+    <LocalCounter worker="2">15534221</LocalCounter>
+    <LocalCounter worker="3">15404627</LocalCounter>
+    <LocalCounter worker="4">15404204</LocalCounter>
+    <LocalCounter worker="5">15487953</LocalCounter>
+    <LocalCounter worker="6">15488572</LocalCounter>
+    <LocalCounter worker="7">15400441</LocalCounter>
+    <LocalCounter worker="8">15399985</LocalCounter>
+    <LocalCounter worker="9">18154320</LocalCounter>
+    <LocalCounter worker="10">18155089</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>178663173</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="12">
+    <LocalCounter worker="0">18610943</LocalCounter>
+    <LocalCounter worker="1">15473224</LocalCounter>
+    <LocalCounter worker="2">15473800</LocalCounter>
+    <LocalCounter worker="3">15368894</LocalCounter>
+    <LocalCounter worker="4">15368360</LocalCounter>
+    <LocalCounter worker="5">15480650</LocalCounter>
+    <LocalCounter worker="6">15481411</LocalCounter>
+    <LocalCounter worker="7">15336787</LocalCounter>
+    <LocalCounter worker="8">15336385</LocalCounter>
+    <LocalCounter worker="9">17196268</LocalCounter>
+    <LocalCounter worker="10">17197013</LocalCounter>
+    <LocalCounter worker="11">17196671</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>193520406</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="13">
+    <LocalCounter worker="0">18709295</LocalCounter>
+    <LocalCounter worker="1">15557477</LocalCounter>
+    <LocalCounter worker="2">15558120</LocalCounter>
+    <LocalCounter worker="3">15469686</LocalCounter>
+    <LocalCounter worker="4">15469124</LocalCounter>
+    <LocalCounter worker="5">15504119</LocalCounter>
+    <LocalCounter worker="6">15504781</LocalCounter>
+    <LocalCounter worker="7">15472427</LocalCounter>
+    <LocalCounter worker="8">15472039</LocalCounter>
+    <LocalCounter worker="9">16307092</LocalCounter>
+    <LocalCounter worker="10">16307904</LocalCounter>
+    <LocalCounter worker="11">16131731</LocalCounter>
+    <LocalCounter worker="12">16131316</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>207595111</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="14">
+    <LocalCounter worker="0">18620298</LocalCounter>
+    <LocalCounter worker="1">15450048</LocalCounter>
+    <LocalCounter worker="2">15450641</LocalCounter>
+    <LocalCounter worker="3">15348671</LocalCounter>
+    <LocalCounter worker="4">15348185</LocalCounter>
+    <LocalCounter worker="5">15447477</LocalCounter>
+    <LocalCounter worker="6">15448127</LocalCounter>
+    <LocalCounter worker="7">15373177</LocalCounter>
+    <LocalCounter worker="8">15372740</LocalCounter>
+    <LocalCounter worker="9">16256377</LocalCounter>
+    <LocalCounter worker="10">16257208</LocalCounter>
+    <LocalCounter worker="11">15596231</LocalCounter>
+    <LocalCounter worker="12">15595801</LocalCounter>
+    <LocalCounter worker="13">17067834</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>222632815</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="15">
+    <LocalCounter worker="0">18718604</LocalCounter>
+    <LocalCounter worker="1">15566735</LocalCounter>
+    <LocalCounter worker="2">15567272</LocalCounter>
+    <LocalCounter worker="3">15480329</LocalCounter>
+    <LocalCounter worker="4">15479757</LocalCounter>
+    <LocalCounter worker="5">15546455</LocalCounter>
+    <LocalCounter worker="6">15547082</LocalCounter>
+    <LocalCounter worker="7">15465925</LocalCounter>
+    <LocalCounter worker="8">15465579</LocalCounter>
+    <LocalCounter worker="9">16056473</LocalCounter>
+    <LocalCounter worker="10">16057260</LocalCounter>
+    <LocalCounter worker="11">15873190</LocalCounter>
+    <LocalCounter worker="12">15872808</LocalCounter>
+    <LocalCounter worker="13">16031509</LocalCounter>
+    <LocalCounter worker="14">16032179</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>238761157</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="16">
+    <LocalCounter worker="0">18629493</LocalCounter>
+    <LocalCounter worker="1">15433606</LocalCounter>
+    <LocalCounter worker="2">15434095</LocalCounter>
+    <LocalCounter worker="3">15364110</LocalCounter>
+    <LocalCounter worker="4">15363692</LocalCounter>
+    <LocalCounter worker="5">15423461</LocalCounter>
+    <LocalCounter worker="6">15424149</LocalCounter>
+    <LocalCounter worker="7">15354320</LocalCounter>
+    <LocalCounter worker="8">15353874</LocalCounter>
+    <LocalCounter worker="9">15878044</LocalCounter>
+    <LocalCounter worker="10">15878765</LocalCounter>
+    <LocalCounter worker="11">15833258</LocalCounter>
+    <LocalCounter worker="12">15832744</LocalCounter>
+    <LocalCounter worker="13">15862126</LocalCounter>
+    <LocalCounter worker="14">15862781</LocalCounter>
+    <LocalCounter worker="15">15931680</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>252860198</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="17">
+    <LocalCounter worker="0">18727849</LocalCounter>
+    <LocalCounter worker="1">15496672</LocalCounter>
+    <LocalCounter worker="2">15497263</LocalCounter>
+    <LocalCounter worker="3">15410632</LocalCounter>
+    <LocalCounter worker="4">15410094</LocalCounter>
+    <LocalCounter worker="5">15474278</LocalCounter>
+    <LocalCounter worker="6">15474890</LocalCounter>
+    <LocalCounter worker="7">15414881</LocalCounter>
+    <LocalCounter worker="8">15414414</LocalCounter>
+    <LocalCounter worker="9">15540994</LocalCounter>
+    <LocalCounter worker="10">15541641</LocalCounter>
+    <LocalCounter worker="11">15473973</LocalCounter>
+    <LocalCounter worker="12">15473463</LocalCounter>
+    <LocalCounter worker="13">15532322</LocalCounter>
+    <LocalCounter worker="14">15532896</LocalCounter>
+    <LocalCounter worker="15">15445168</LocalCounter>
+    <LocalCounter worker="16">15444816</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>266306246</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="18">
+    <LocalCounter worker="0">17928143</LocalCounter>
+    <LocalCounter worker="1">15385654</LocalCounter>
+    <LocalCounter worker="2">15386165</LocalCounter>
+    <LocalCounter worker="3">15317188</LocalCounter>
+    <LocalCounter worker="4">15316670</LocalCounter>
+    <LocalCounter worker="5">15362234</LocalCounter>
+    <LocalCounter worker="6">15362933</LocalCounter>
+    <LocalCounter worker="7">15274058</LocalCounter>
+    <LocalCounter worker="8">15273688</LocalCounter>
+    <LocalCounter worker="9">15520890</LocalCounter>
+    <LocalCounter worker="10">15521466</LocalCounter>
+    <LocalCounter worker="11">15415491</LocalCounter>
+    <LocalCounter worker="12">15414935</LocalCounter>
+    <LocalCounter worker="13">15485859</LocalCounter>
+    <LocalCounter worker="14">15486443</LocalCounter>
+    <LocalCounter worker="15">15398657</LocalCounter>
+    <LocalCounter worker="16">15398314</LocalCounter>
+    <LocalCounter worker="17">17927656</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>282176444</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="19">
+    <LocalCounter worker="0">17613429</LocalCounter>
+    <LocalCounter worker="1">15606024</LocalCounter>
+    <LocalCounter worker="2">15606469</LocalCounter>
+    <LocalCounter worker="3">15506465</LocalCounter>
+    <LocalCounter worker="4">15505964</LocalCounter>
+    <LocalCounter worker="5">15570703</LocalCounter>
+    <LocalCounter worker="6">15571382</LocalCounter>
+    <LocalCounter worker="7">15514428</LocalCounter>
+    <LocalCounter worker="8">15514060</LocalCounter>
+    <LocalCounter worker="9">15578430</LocalCounter>
+    <LocalCounter worker="10">15578956</LocalCounter>
+    <LocalCounter worker="11">15476117</LocalCounter>
+    <LocalCounter worker="12">15475709</LocalCounter>
+    <LocalCounter worker="13">15518932</LocalCounter>
+    <LocalCounter worker="14">15519675</LocalCounter>
+    <LocalCounter worker="15">15469292</LocalCounter>
+    <LocalCounter worker="16">15468941</LocalCounter>
+    <LocalCounter worker="17">17612809</LocalCounter>
+    <LocalCounter worker="18">17613528</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>301321313</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="20">
+    <LocalCounter worker="0">17132843</LocalCounter>
+    <LocalCounter worker="1">15467671</LocalCounter>
+    <LocalCounter worker="2">15468243</LocalCounter>
+    <LocalCounter worker="3">15355941</LocalCounter>
+    <LocalCounter worker="4">15355528</LocalCounter>
+    <LocalCounter worker="5">15430531</LocalCounter>
+    <LocalCounter worker="6">15431151</LocalCounter>
+    <LocalCounter worker="7">15388106</LocalCounter>
+    <LocalCounter worker="8">15387790</LocalCounter>
+    <LocalCounter worker="9">15532317</LocalCounter>
+    <LocalCounter worker="10">15532901</LocalCounter>
+    <LocalCounter worker="11">15419252</LocalCounter>
+    <LocalCounter worker="12">15418798</LocalCounter>
+    <LocalCounter worker="13">15488804</LocalCounter>
+    <LocalCounter worker="14">15489381</LocalCounter>
+    <LocalCounter worker="15">15448508</LocalCounter>
+    <LocalCounter worker="16">15448083</LocalCounter>
+    <LocalCounter worker="17">17110297</LocalCounter>
+    <LocalCounter worker="18">17110974</LocalCounter>
+    <LocalCounter worker="19">17132347</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>315549466</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="21">
+    <LocalCounter worker="0">16916206</LocalCounter>
+    <LocalCounter worker="1">15348829</LocalCounter>
+    <LocalCounter worker="2">15349378</LocalCounter>
+    <LocalCounter worker="3">15301237</LocalCounter>
+    <LocalCounter worker="4">15300660</LocalCounter>
+    <LocalCounter worker="5">15352077</LocalCounter>
+    <LocalCounter worker="6">15352792</LocalCounter>
+    <LocalCounter worker="7">15295586</LocalCounter>
+    <LocalCounter worker="8">15295234</LocalCounter>
+    <LocalCounter worker="9">15406432</LocalCounter>
+    <LocalCounter worker="10">15407215</LocalCounter>
+    <LocalCounter worker="11">15288387</LocalCounter>
+    <LocalCounter worker="12">15287834</LocalCounter>
+    <LocalCounter worker="13">15387376</LocalCounter>
+    <LocalCounter worker="14">15388065</LocalCounter>
+    <LocalCounter worker="15">15288287</LocalCounter>
+    <LocalCounter worker="16">15287963</LocalCounter>
+    <LocalCounter worker="17">16326915</LocalCounter>
+    <LocalCounter worker="18">16327566</LocalCounter>
+    <LocalCounter worker="19">16106693</LocalCounter>
+    <LocalCounter worker="20">16106335</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>327121067</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="22">
+    <LocalCounter worker="0">16836742</LocalCounter>
+    <LocalCounter worker="1">15449539</LocalCounter>
+    <LocalCounter worker="2">15450118</LocalCounter>
+    <LocalCounter worker="3">15316318</LocalCounter>
+    <LocalCounter worker="4">15315967</LocalCounter>
+    <LocalCounter worker="5">15414143</LocalCounter>
+    <LocalCounter worker="6">15414873</LocalCounter>
+    <LocalCounter worker="7">15315456</LocalCounter>
+    <LocalCounter worker="8">15315048</LocalCounter>
+    <LocalCounter worker="9">15419186</LocalCounter>
+    <LocalCounter worker="10">15419737</LocalCounter>
+    <LocalCounter worker="11">15374010</LocalCounter>
+    <LocalCounter worker="12">15373492</LocalCounter>
+    <LocalCounter worker="13">15396609</LocalCounter>
+    <LocalCounter worker="14">15397385</LocalCounter>
+    <LocalCounter worker="15">15336581</LocalCounter>
+    <LocalCounter worker="16">15336218</LocalCounter>
+    <LocalCounter worker="17">16132164</LocalCounter>
+    <LocalCounter worker="18">16132817</LocalCounter>
+    <LocalCounter worker="19">15836470</LocalCounter>
+    <LocalCounter worker="20">15835949</LocalCounter>
+    <LocalCounter worker="21">16836521</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>343655343</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="23">
+    <LocalCounter worker="0">16291232</LocalCounter>
+    <LocalCounter worker="1">15428041</LocalCounter>
+    <LocalCounter worker="2">15428655</LocalCounter>
+    <LocalCounter worker="3">15361817</LocalCounter>
+    <LocalCounter worker="4">15361312</LocalCounter>
+    <LocalCounter worker="5">15423987</LocalCounter>
+    <LocalCounter worker="6">15424704</LocalCounter>
+    <LocalCounter worker="7">15320451</LocalCounter>
+    <LocalCounter worker="8">15320015</LocalCounter>
+    <LocalCounter worker="9">15335989</LocalCounter>
+    <LocalCounter worker="10">15336602</LocalCounter>
+    <LocalCounter worker="11">15238353</LocalCounter>
+    <LocalCounter worker="12">15237888</LocalCounter>
+    <LocalCounter worker="13">15288964</LocalCounter>
+    <LocalCounter worker="14">15289713</LocalCounter>
+    <LocalCounter worker="15">15247179</LocalCounter>
+    <LocalCounter worker="16">15246800</LocalCounter>
+    <LocalCounter worker="17">15845200</LocalCounter>
+    <LocalCounter worker="18">15845834</LocalCounter>
+    <LocalCounter worker="19">15532883</LocalCounter>
+    <LocalCounter worker="20">15532415</LocalCounter>
+    <LocalCounter worker="21">15837390</LocalCounter>
+    <LocalCounter worker="22">15838022</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>356013446</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalTicketLockWithLocalCounter activeWorker="24">
+    <LocalCounter worker="0">15397914</LocalCounter>
+    <LocalCounter worker="1">15566890</LocalCounter>
+    <LocalCounter worker="2">15567438</LocalCounter>
+    <LocalCounter worker="3">15477547</LocalCounter>
+    <LocalCounter worker="4">15477033</LocalCounter>
+    <LocalCounter worker="5">15534538</LocalCounter>
+    <LocalCounter worker="6">15535180</LocalCounter>
+    <LocalCounter worker="7">15491695</LocalCounter>
+    <LocalCounter worker="8">15491372</LocalCounter>
+    <LocalCounter worker="9">15542761</LocalCounter>
+    <LocalCounter worker="10">15543394</LocalCounter>
+    <LocalCounter worker="11">15406366</LocalCounter>
+    <LocalCounter worker="12">15405826</LocalCounter>
+    <LocalCounter worker="13">15490798</LocalCounter>
+    <LocalCounter worker="14">15491494</LocalCounter>
+    <LocalCounter worker="15">15357829</LocalCounter>
+    <LocalCounter worker="16">15357479</LocalCounter>
+    <LocalCounter worker="17">15492383</LocalCounter>
+    <LocalCounter worker="18">15493044</LocalCounter>
+    <LocalCounter worker="19">15370471</LocalCounter>
+    <LocalCounter worker="20">15369857</LocalCounter>
+    <LocalCounter worker="21">15493139</LocalCounter>
+    <LocalCounter worker="22">15493629</LocalCounter>
+    <LocalCounter worker="23">15396639</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>371244716</SumOfLocalCounter>
+  </LocalTicketLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="1">
+    <LocalCounter worker="0">12082959</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>12082959</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="2">
+    <LocalCounter worker="0">12073288</LocalCounter>
+    <LocalCounter worker="1">12072981</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>24146269</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="3">
+    <LocalCounter worker="0">12138406</LocalCounter>
+    <LocalCounter worker="1">11387467</LocalCounter>
+    <LocalCounter worker="2">11387966</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>34913839</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="4">
+    <LocalCounter worker="0">12081451</LocalCounter>
+    <LocalCounter worker="1">10664115</LocalCounter>
+    <LocalCounter worker="2">10664607</LocalCounter>
+    <LocalCounter worker="3">12243261</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>45653434</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="5">
+    <LocalCounter worker="0">12146609</LocalCounter>
+    <LocalCounter worker="1">10837665</LocalCounter>
+    <LocalCounter worker="2">10838107</LocalCounter>
+    <LocalCounter worker="3">11075941</LocalCounter>
+    <LocalCounter worker="4">10837795</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>55736117</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="6">
+    <LocalCounter worker="0">12089675</LocalCounter>
+    <LocalCounter worker="1">10559924</LocalCounter>
+    <LocalCounter worker="2">10560425</LocalCounter>
+    <LocalCounter worker="3">10776034</LocalCounter>
+    <LocalCounter worker="4">10525391</LocalCounter>
+    <LocalCounter worker="5">10774845</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>65286294</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="7">
+    <LocalCounter worker="0">12154687</LocalCounter>
+    <LocalCounter worker="1">10116784</LocalCounter>
+    <LocalCounter worker="2">10117227</LocalCounter>
+    <LocalCounter worker="3">10572633</LocalCounter>
+    <LocalCounter worker="4">10106234</LocalCounter>
+    <LocalCounter worker="5">10107965</LocalCounter>
+    <LocalCounter worker="6">10108427</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>73283957</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="8">
+    <LocalCounter worker="0">12097857</LocalCounter>
+    <LocalCounter worker="1">9685901</LocalCounter>
+    <LocalCounter worker="2">9686270</LocalCounter>
+    <LocalCounter worker="3">10157156</LocalCounter>
+    <LocalCounter worker="4">9521302</LocalCounter>
+    <LocalCounter worker="5">9656650</LocalCounter>
+    <LocalCounter worker="6">9657039</LocalCounter>
+    <LocalCounter worker="7">11582770</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>82044945</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="9">
+    <LocalCounter worker="0">12168151</LocalCounter>
+    <LocalCounter worker="1">9531826</LocalCounter>
+    <LocalCounter worker="2">9532173</LocalCounter>
+    <LocalCounter worker="3">9548152</LocalCounter>
+    <LocalCounter worker="4">9528324</LocalCounter>
+    <LocalCounter worker="5">9524184</LocalCounter>
+    <LocalCounter worker="6">9524626</LocalCounter>
+    <LocalCounter worker="7">9552042</LocalCounter>
+    <LocalCounter worker="8">9531793</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>88441271</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="10">
+    <LocalCounter worker="0">12114395</LocalCounter>
+    <LocalCounter worker="1">9496439</LocalCounter>
+    <LocalCounter worker="2">9496720</LocalCounter>
+    <LocalCounter worker="3">9518493</LocalCounter>
+    <LocalCounter worker="4">9502427</LocalCounter>
+    <LocalCounter worker="5">9494644</LocalCounter>
+    <LocalCounter worker="6">9495062</LocalCounter>
+    <LocalCounter worker="7">9519993</LocalCounter>
+    <LocalCounter worker="8">9499030</LocalCounter>
+    <LocalCounter worker="9">12114111</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>100251314</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="11">
+    <LocalCounter worker="0">12177360</LocalCounter>
+    <LocalCounter worker="1">9564657</LocalCounter>
+    <LocalCounter worker="2">9564923</LocalCounter>
+    <LocalCounter worker="3">9581460</LocalCounter>
+    <LocalCounter worker="4">9566647</LocalCounter>
+    <LocalCounter worker="5">9562022</LocalCounter>
+    <LocalCounter worker="6">9562428</LocalCounter>
+    <LocalCounter worker="7">9582352</LocalCounter>
+    <LocalCounter worker="8">9568441</LocalCounter>
+    <LocalCounter worker="9">11402504</LocalCounter>
+    <LocalCounter worker="10">11402957</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>111535751</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="12">
+    <LocalCounter worker="0">12119476</LocalCounter>
+    <LocalCounter worker="1">9491442</LocalCounter>
+    <LocalCounter worker="2">9491786</LocalCounter>
+    <LocalCounter worker="3">9531107</LocalCounter>
+    <LocalCounter worker="4">9493390</LocalCounter>
+    <LocalCounter worker="5">9489365</LocalCounter>
+    <LocalCounter worker="6">9489758</LocalCounter>
+    <LocalCounter worker="7">9534422</LocalCounter>
+    <LocalCounter worker="8">9499933</LocalCounter>
+    <LocalCounter worker="9">10732309</LocalCounter>
+    <LocalCounter worker="10">10732783</LocalCounter>
+    <LocalCounter worker="11">12318345</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>121924116</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="13">
+    <LocalCounter worker="0">12183361</LocalCounter>
+    <LocalCounter worker="1">9565165</LocalCounter>
+    <LocalCounter worker="2">9565455</LocalCounter>
+    <LocalCounter worker="3">9582604</LocalCounter>
+    <LocalCounter worker="4">9568538</LocalCounter>
+    <LocalCounter worker="5">9567760</LocalCounter>
+    <LocalCounter worker="6">9568161</LocalCounter>
+    <LocalCounter worker="7">9591184</LocalCounter>
+    <LocalCounter worker="8">9569765</LocalCounter>
+    <LocalCounter worker="9">10815689</LocalCounter>
+    <LocalCounter worker="10">10816130</LocalCounter>
+    <LocalCounter worker="11">11127405</LocalCounter>
+    <LocalCounter worker="12">10815691</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>132336908</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="14">
+    <LocalCounter worker="0">12125462</LocalCounter>
+    <LocalCounter worker="1">9524915</LocalCounter>
+    <LocalCounter worker="2">9525201</LocalCounter>
+    <LocalCounter worker="3">9553382</LocalCounter>
+    <LocalCounter worker="4">9529788</LocalCounter>
+    <LocalCounter worker="5">9528364</LocalCounter>
+    <LocalCounter worker="6">9528814</LocalCounter>
+    <LocalCounter worker="7">9565861</LocalCounter>
+    <LocalCounter worker="8">9534294</LocalCounter>
+    <LocalCounter worker="9">10579374</LocalCounter>
+    <LocalCounter worker="10">10579805</LocalCounter>
+    <LocalCounter worker="11">10804186</LocalCounter>
+    <LocalCounter worker="12">10559267</LocalCounter>
+    <LocalCounter worker="13">10803938</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>141742651</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="15">
+    <LocalCounter worker="0">12189465</LocalCounter>
+    <LocalCounter worker="1">9573943</LocalCounter>
+    <LocalCounter worker="2">9574374</LocalCounter>
+    <LocalCounter worker="3">9587321</LocalCounter>
+    <LocalCounter worker="4">9575449</LocalCounter>
+    <LocalCounter worker="5">9574838</LocalCounter>
+    <LocalCounter worker="6">9575216</LocalCounter>
+    <LocalCounter worker="7">9592097</LocalCounter>
+    <LocalCounter worker="8">9576771</LocalCounter>
+    <LocalCounter worker="9">10155658</LocalCounter>
+    <LocalCounter worker="10">10156093</LocalCounter>
+    <LocalCounter worker="11">10485978</LocalCounter>
+    <LocalCounter worker="12">10147342</LocalCounter>
+    <LocalCounter worker="13">10152197</LocalCounter>
+    <LocalCounter worker="14">10152655</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>150069397</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="16">
+    <LocalCounter worker="0">12131505</LocalCounter>
+    <LocalCounter worker="1">9528313</LocalCounter>
+    <LocalCounter worker="2">9528627</LocalCounter>
+    <LocalCounter worker="3">9555655</LocalCounter>
+    <LocalCounter worker="4">9533873</LocalCounter>
+    <LocalCounter worker="5">9528420</LocalCounter>
+    <LocalCounter worker="6">9528806</LocalCounter>
+    <LocalCounter worker="7">9562116</LocalCounter>
+    <LocalCounter worker="8">9535204</LocalCounter>
+    <LocalCounter worker="9">9703506</LocalCounter>
+    <LocalCounter worker="10">9703941</LocalCounter>
+    <LocalCounter worker="11">10182457</LocalCounter>
+    <LocalCounter worker="12">9558198</LocalCounter>
+    <LocalCounter worker="13">9675351</LocalCounter>
+    <LocalCounter worker="14">9675784</LocalCounter>
+    <LocalCounter worker="15">11641089</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>158572845</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="17">
+    <LocalCounter worker="0">12078841</LocalCounter>
+    <LocalCounter worker="1">9483353</LocalCounter>
+    <LocalCounter worker="2">9483735</LocalCounter>
+    <LocalCounter worker="3">9515396</LocalCounter>
+    <LocalCounter worker="4">9490017</LocalCounter>
+    <LocalCounter worker="5">9484411</LocalCounter>
+    <LocalCounter worker="6">9484807</LocalCounter>
+    <LocalCounter worker="7">9529365</LocalCounter>
+    <LocalCounter worker="8">9491485</LocalCounter>
+    <LocalCounter worker="9">9450709</LocalCounter>
+    <LocalCounter worker="10">9451029</LocalCounter>
+    <LocalCounter worker="11">9486607</LocalCounter>
+    <LocalCounter worker="12">9462696</LocalCounter>
+    <LocalCounter worker="13">9452474</LocalCounter>
+    <LocalCounter worker="14">9452839</LocalCounter>
+    <LocalCounter worker="15">9492193</LocalCounter>
+    <LocalCounter worker="16">9462094</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>163752051</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="18">
+    <LocalCounter worker="0">11636388</LocalCounter>
+    <LocalCounter worker="1">9519555</LocalCounter>
+    <LocalCounter worker="2">9519856</LocalCounter>
+    <LocalCounter worker="3">9543401</LocalCounter>
+    <LocalCounter worker="4">9522497</LocalCounter>
+    <LocalCounter worker="5">9518968</LocalCounter>
+    <LocalCounter worker="6">9519332</LocalCounter>
+    <LocalCounter worker="7">9549730</LocalCounter>
+    <LocalCounter worker="8">9523584</LocalCounter>
+    <LocalCounter worker="9">9486041</LocalCounter>
+    <LocalCounter worker="10">9486390</LocalCounter>
+    <LocalCounter worker="11">9516448</LocalCounter>
+    <LocalCounter worker="12">9489905</LocalCounter>
+    <LocalCounter worker="13">9486483</LocalCounter>
+    <LocalCounter worker="14">9486864</LocalCounter>
+    <LocalCounter worker="15">9521185</LocalCounter>
+    <LocalCounter worker="16">9495104</LocalCounter>
+    <LocalCounter worker="17">11636084</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>175457815</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="19">
+    <LocalCounter worker="0">11238520</LocalCounter>
+    <LocalCounter worker="1">9474877</LocalCounter>
+    <LocalCounter worker="2">9475285</LocalCounter>
+    <LocalCounter worker="3">9490895</LocalCounter>
+    <LocalCounter worker="4">9476567</LocalCounter>
+    <LocalCounter worker="5">9473480</LocalCounter>
+    <LocalCounter worker="6">9473849</LocalCounter>
+    <LocalCounter worker="7">9492630</LocalCounter>
+    <LocalCounter worker="8">9477676</LocalCounter>
+    <LocalCounter worker="9">9473855</LocalCounter>
+    <LocalCounter worker="10">9474244</LocalCounter>
+    <LocalCounter worker="11">9495034</LocalCounter>
+    <LocalCounter worker="12">9474186</LocalCounter>
+    <LocalCounter worker="13">9467731</LocalCounter>
+    <LocalCounter worker="14">9468228</LocalCounter>
+    <LocalCounter worker="15">9497539</LocalCounter>
+    <LocalCounter worker="16">9479597</LocalCounter>
+    <LocalCounter worker="17">11238069</LocalCounter>
+    <LocalCounter worker="18">11238469</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>185380731</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="20">
+    <LocalCounter worker="0">11107013</LocalCounter>
+    <LocalCounter worker="1">9521584</LocalCounter>
+    <LocalCounter worker="2">9521960</LocalCounter>
+    <LocalCounter worker="3">9564977</LocalCounter>
+    <LocalCounter worker="4">9532128</LocalCounter>
+    <LocalCounter worker="5">9522954</LocalCounter>
+    <LocalCounter worker="6">9523296</LocalCounter>
+    <LocalCounter worker="7">9575090</LocalCounter>
+    <LocalCounter worker="8">9536475</LocalCounter>
+    <LocalCounter worker="9">9516989</LocalCounter>
+    <LocalCounter worker="10">9517312</LocalCounter>
+    <LocalCounter worker="11">9561659</LocalCounter>
+    <LocalCounter worker="12">9523097</LocalCounter>
+    <LocalCounter worker="13">9520017</LocalCounter>
+    <LocalCounter worker="14">9520401</LocalCounter>
+    <LocalCounter worker="15">9572744</LocalCounter>
+    <LocalCounter worker="16">9526636</LocalCounter>
+    <LocalCounter worker="17">10512248</LocalCounter>
+    <LocalCounter worker="18">10512713</LocalCounter>
+    <LocalCounter worker="19">12209345</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>196898638</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="21">
+    <LocalCounter worker="0">10752935</LocalCounter>
+    <LocalCounter worker="1">9493202</LocalCounter>
+    <LocalCounter worker="2">9493496</LocalCounter>
+    <LocalCounter worker="3">9530851</LocalCounter>
+    <LocalCounter worker="4">9496285</LocalCounter>
+    <LocalCounter worker="5">9492053</LocalCounter>
+    <LocalCounter worker="6">9492366</LocalCounter>
+    <LocalCounter worker="7">9540724</LocalCounter>
+    <LocalCounter worker="8">9502382</LocalCounter>
+    <LocalCounter worker="9">9500543</LocalCounter>
+    <LocalCounter worker="10">9500935</LocalCounter>
+    <LocalCounter worker="11">9530543</LocalCounter>
+    <LocalCounter worker="12">9499016</LocalCounter>
+    <LocalCounter worker="13">9491779</LocalCounter>
+    <LocalCounter worker="14">9492142</LocalCounter>
+    <LocalCounter worker="15">9534216</LocalCounter>
+    <LocalCounter worker="16">9503606</LocalCounter>
+    <LocalCounter worker="17">10658376</LocalCounter>
+    <LocalCounter worker="18">10658781</LocalCounter>
+    <LocalCounter worker="19">10767856</LocalCounter>
+    <LocalCounter worker="20">10647666</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>205579753</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="22">
+    <LocalCounter worker="0">10562721</LocalCounter>
+    <LocalCounter worker="1">9513544</LocalCounter>
+    <LocalCounter worker="2">9513904</LocalCounter>
+    <LocalCounter worker="3">9546975</LocalCounter>
+    <LocalCounter worker="4">9519487</LocalCounter>
+    <LocalCounter worker="5">9513233</LocalCounter>
+    <LocalCounter worker="6">9513599</LocalCounter>
+    <LocalCounter worker="7">9552592</LocalCounter>
+    <LocalCounter worker="8">9521671</LocalCounter>
+    <LocalCounter worker="9">9521235</LocalCounter>
+    <LocalCounter worker="10">9521661</LocalCounter>
+    <LocalCounter worker="11">9586145</LocalCounter>
+    <LocalCounter worker="12">9516100</LocalCounter>
+    <LocalCounter worker="13">9497783</LocalCounter>
+    <LocalCounter worker="14">9498107</LocalCounter>
+    <LocalCounter worker="15">9600924</LocalCounter>
+    <LocalCounter worker="16">9524532</LocalCounter>
+    <LocalCounter worker="17">10418128</LocalCounter>
+    <LocalCounter worker="18">10418533</LocalCounter>
+    <LocalCounter worker="19">10557157</LocalCounter>
+    <LocalCounter worker="20">10398032</LocalCounter>
+    <LocalCounter worker="21">10562124</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>215378187</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="23">
+    <LocalCounter worker="0">10020531</LocalCounter>
+    <LocalCounter worker="1">9499389</LocalCounter>
+    <LocalCounter worker="2">9499749</LocalCounter>
+    <LocalCounter worker="3">9539918</LocalCounter>
+    <LocalCounter worker="4">9501002</LocalCounter>
+    <LocalCounter worker="5">9499387</LocalCounter>
+    <LocalCounter worker="6">9499718</LocalCounter>
+    <LocalCounter worker="7">9549295</LocalCounter>
+    <LocalCounter worker="8">9505903</LocalCounter>
+    <LocalCounter worker="9">9469095</LocalCounter>
+    <LocalCounter worker="10">9469462</LocalCounter>
+    <LocalCounter worker="11">9526032</LocalCounter>
+    <LocalCounter worker="12">9488043</LocalCounter>
+    <LocalCounter worker="13">9482123</LocalCounter>
+    <LocalCounter worker="14">9482578</LocalCounter>
+    <LocalCounter worker="15">9551048</LocalCounter>
+    <LocalCounter worker="16">9492329</LocalCounter>
+    <LocalCounter worker="17">9974833</LocalCounter>
+    <LocalCounter worker="18">9975234</LocalCounter>
+    <LocalCounter worker="19">10011108</LocalCounter>
+    <LocalCounter worker="20">9968749</LocalCounter>
+    <LocalCounter worker="21">9967105</LocalCounter>
+    <LocalCounter worker="22">9967536</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>221940167</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalMCSLockWithLocalCounter activeWorker="24">
+    <LocalCounter worker="0">9565647</LocalCounter>
+    <LocalCounter worker="1">9559731</LocalCounter>
+    <LocalCounter worker="2">9560104</LocalCounter>
+    <LocalCounter worker="3">9570849</LocalCounter>
+    <LocalCounter worker="4">9561554</LocalCounter>
+    <LocalCounter worker="5">9558504</LocalCounter>
+    <LocalCounter worker="6">9558927</LocalCounter>
+    <LocalCounter worker="7">9572162</LocalCounter>
+    <LocalCounter worker="8">9562182</LocalCounter>
+    <LocalCounter worker="9">9552179</LocalCounter>
+    <LocalCounter worker="10">9552550</LocalCounter>
+    <LocalCounter worker="11">9564991</LocalCounter>
+    <LocalCounter worker="12">9553751</LocalCounter>
+    <LocalCounter worker="13">9550482</LocalCounter>
+    <LocalCounter worker="14">9550928</LocalCounter>
+    <LocalCounter worker="15">9570603</LocalCounter>
+    <LocalCounter worker="16">9554636</LocalCounter>
+    <LocalCounter worker="17">9557198</LocalCounter>
+    <LocalCounter worker="18">9557558</LocalCounter>
+    <LocalCounter worker="19">9582834</LocalCounter>
+    <LocalCounter worker="20">9559094</LocalCounter>
+    <LocalCounter worker="21">9550291</LocalCounter>
+    <LocalCounter worker="22">9550671</LocalCounter>
+    <LocalCounter worker="23">9584758</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>229462184</SumOfLocalCounter>
+  </LocalMCSLockWithLocalCounter>
+  <LocalTicketLockWithGlobalCounter activeWorker="24">
+    <LocalCounter worker="0">919628</LocalCounter>
+    <LocalCounter worker="1">915976</LocalCounter>
+    <LocalCounter worker="2">916014</LocalCounter>
+    <LocalCounter worker="3">915977</LocalCounter>
+    <LocalCounter worker="4">915974</LocalCounter>
+    <LocalCounter worker="5">915968</LocalCounter>
+    <LocalCounter worker="6">916000</LocalCounter>
+    <LocalCounter worker="7">915967</LocalCounter>
+    <LocalCounter worker="8">915980</LocalCounter>
+    <LocalCounter worker="9">919377</LocalCounter>
+    <LocalCounter worker="10">919362</LocalCounter>
+    <LocalCounter worker="11">919368</LocalCounter>
+    <LocalCounter worker="12">919387</LocalCounter>
+    <LocalCounter worker="13">919349</LocalCounter>
+    <LocalCounter worker="14">919362</LocalCounter>
+    <LocalCounter worker="15">919383</LocalCounter>
+    <LocalCounter worker="16">919360</LocalCounter>
+    <LocalCounter worker="17">919503</LocalCounter>
+    <LocalCounter worker="18">919547</LocalCounter>
+    <LocalCounter worker="19">919538</LocalCounter>
+    <LocalCounter worker="20">919531</LocalCounter>
+    <LocalCounter worker="21">919522</LocalCounter>
+    <LocalCounter worker="22">919527</LocalCounter>
+    <LocalCounter worker="23">919283</LocalCounter>
+    <GlobalCounter>2095665</GlobalCounter>
+    <SumOfLocalCounter>22038883</SumOfLocalCounter>
+  </LocalTicketLockWithGlobalCounter>
+  <LocalMCSLockWithGlobalCounter activeWorker="24">
+    <LocalCounter worker="0">862472</LocalCounter>
+    <LocalCounter worker="1">883424</LocalCounter>
+    <LocalCounter worker="2">883458</LocalCounter>
+    <LocalCounter worker="3">963897</LocalCounter>
+    <LocalCounter worker="4">862708</LocalCounter>
+    <LocalCounter worker="5">883272</LocalCounter>
+    <LocalCounter worker="6">883301</LocalCounter>
+    <LocalCounter worker="7">963959</LocalCounter>
+    <LocalCounter worker="8">862582</LocalCounter>
+    <LocalCounter worker="9">892427</LocalCounter>
+    <LocalCounter worker="10">892442</LocalCounter>
+    <LocalCounter worker="11">967350</LocalCounter>
+    <LocalCounter worker="12">865089</LocalCounter>
+    <LocalCounter worker="13">886256</LocalCounter>
+    <LocalCounter worker="14">886273</LocalCounter>
+    <LocalCounter worker="15">970013</LocalCounter>
+    <LocalCounter worker="16">867177</LocalCounter>
+    <LocalCounter worker="17">883852</LocalCounter>
+    <LocalCounter worker="18">883865</LocalCounter>
+    <LocalCounter worker="19">963960</LocalCounter>
+    <LocalCounter worker="20">862399</LocalCounter>
+    <LocalCounter worker="21">883581</LocalCounter>
+    <LocalCounter worker="22">883619</LocalCounter>
+    <LocalCounter worker="23">963271</LocalCounter>
+    <GlobalCounter>1751273</GlobalCounter>
+    <SumOfLocalCounter>21600647</SumOfLocalCounter>
+  </LocalMCSLockWithGlobalCounter>
+  <GlobalTicketLockWithBusySection activeWorker="24">
+    <LocalCounter worker="0">122982</LocalCounter>
+    <LocalCounter worker="1">122980</LocalCounter>
+    <LocalCounter worker="2">122980</LocalCounter>
+    <LocalCounter worker="3">122981</LocalCounter>
+    <LocalCounter worker="4">122980</LocalCounter>
+    <LocalCounter worker="5">122981</LocalCounter>
+    <LocalCounter worker="6">122980</LocalCounter>
+    <LocalCounter worker="7">122981</LocalCounter>
+    <LocalCounter worker="8">122982</LocalCounter>
+    <LocalCounter worker="9">122980</LocalCounter>
+    <LocalCounter worker="10">122981</LocalCounter>
+    <LocalCounter worker="11">122980</LocalCounter>
+    <LocalCounter worker="12">122980</LocalCounter>
+    <LocalCounter worker="13">122980</LocalCounter>
+    <LocalCounter worker="14">122980</LocalCounter>
+    <LocalCounter worker="15">122981</LocalCounter>
+    <LocalCounter worker="16">122980</LocalCounter>
+    <LocalCounter worker="17">122980</LocalCounter>
+    <LocalCounter worker="18">122980</LocalCounter>
+    <LocalCounter worker="19">122981</LocalCounter>
+    <LocalCounter worker="20">122980</LocalCounter>
+    <LocalCounter worker="21">122980</LocalCounter>
+    <LocalCounter worker="22">122980</LocalCounter>
+    <LocalCounter worker="23">122980</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>2951530</SumOfLocalCounter>
+  </GlobalTicketLockWithBusySection>
+  <GlobalMCSLockWithBusySection activeWorker="24">
+    <LocalCounter worker="0">111505</LocalCounter>
+    <LocalCounter worker="1">111504</LocalCounter>
+    <LocalCounter worker="2">111504</LocalCounter>
+    <LocalCounter worker="3">111504</LocalCounter>
+    <LocalCounter worker="4">111504</LocalCounter>
+    <LocalCounter worker="5">111504</LocalCounter>
+    <LocalCounter worker="6">111505</LocalCounter>
+    <LocalCounter worker="7">111504</LocalCounter>
+    <LocalCounter worker="8">111505</LocalCounter>
+    <LocalCounter worker="9">111503</LocalCounter>
+    <LocalCounter worker="10">111505</LocalCounter>
+    <LocalCounter worker="11">111504</LocalCounter>
+    <LocalCounter worker="12">111505</LocalCounter>
+    <LocalCounter worker="13">111504</LocalCounter>
+    <LocalCounter worker="14">111505</LocalCounter>
+    <LocalCounter worker="15">111504</LocalCounter>
+    <LocalCounter worker="16">111504</LocalCounter>
+    <LocalCounter worker="17">111505</LocalCounter>
+    <LocalCounter worker="18">111505</LocalCounter>
+    <LocalCounter worker="19">111504</LocalCounter>
+    <LocalCounter worker="20">111504</LocalCounter>
+    <LocalCounter worker="21">111504</LocalCounter>
+    <LocalCounter worker="22">111504</LocalCounter>
+    <LocalCounter worker="23">111505</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>2676104</SumOfLocalCounter>
+  </GlobalMCSLockWithBusySection>
+  <SequenceLock activeWorker="24">
+    <LocalCounter worker="0">2440262</LocalCounter>
+    <LocalCounter worker="1">707</LocalCounter>
+    <LocalCounter worker="2">735</LocalCounter>
+    <LocalCounter worker="3">740</LocalCounter>
+    <LocalCounter worker="4">792</LocalCounter>
+    <LocalCounter worker="5">772</LocalCounter>
+    <LocalCounter worker="6">772</LocalCounter>
+    <LocalCounter worker="7">800</LocalCounter>
+    <LocalCounter worker="8">752</LocalCounter>
+    <LocalCounter worker="9">692</LocalCounter>
+    <LocalCounter worker="10">684</LocalCounter>
+    <LocalCounter worker="11">678</LocalCounter>
+    <LocalCounter worker="12">695</LocalCounter>
+    <LocalCounter worker="13">690</LocalCounter>
+    <LocalCounter worker="14">692</LocalCounter>
+    <LocalCounter worker="15">750</LocalCounter>
+    <LocalCounter worker="16">734</LocalCounter>
+    <LocalCounter worker="17">38</LocalCounter>
+    <LocalCounter worker="18">12</LocalCounter>
+    <LocalCounter worker="19">3</LocalCounter>
+    <LocalCounter worker="20">12</LocalCounter>
+    <LocalCounter worker="21">21</LocalCounter>
+    <LocalCounter worker="22">4</LocalCounter>
+    <LocalCounter worker="23">1</LocalCounter>
+    <GlobalCounter>0</GlobalCounter>
+    <SumOfLocalCounter>2452038</SumOfLocalCounter>
+  </SequenceLock>
+</SMPLock01>
 *** END OF TEST SMPLOCK 1 ***
