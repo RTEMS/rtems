@@ -35,8 +35,6 @@ static void _POSIX_Timer_Insert(
   Watchdog_Interval    ticks
 )
 {
-  ptimer->ticks = ticks;
-
   /* The state really did not change but just to be safe */
   ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
 
