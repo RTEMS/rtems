@@ -79,7 +79,9 @@
   .global start, __bsp_mem_init
 
 SYM(start):
+#if SYM(start) != start
 start:
+#endif 
 
 /*
  *  The trap table has to be the first code in a boot PROM.  But because
