@@ -108,12 +108,6 @@ struct Scheduler_Node {
 
 #if defined(RTEMS_SMP)
   /**
-   * @brief The thread accepting help by this node in case the help state is
-   * not SCHEDULER_HELP_YOURSELF.
-   */
-  struct _Thread_Control *accepts_help;
-
-  /**
    * @brief Block to register and manage this scheduler node in the thread
    * control block of the owner of this scheduler node.
    */

@@ -1022,12 +1022,7 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
       _Assert( node_state == SCHEDULER_SMP_NODE_READY );
       _Assert( node->sticky_level > 0 );
       _Assert( node->idle == NULL );
-
-      if ( node->accepts_help == thread ) {
-        needs_help = thread;
-      } else {
-        needs_help = NULL;
-      }
+      needs_help = thread;
     }
   } else {
     needs_help = NULL;
