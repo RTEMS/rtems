@@ -280,16 +280,16 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
 )
 {
   ISR_lock_Context  lock_context;
-  Scheduler_Node   *own_node;
+  Scheduler_Node   *scheduler_node;
   Per_CPU_Control  *cpu_self;
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Wait_acquire_default_critical( owner, &lock_context );
 
-  own_node = _Thread_Scheduler_get_own_node( owner );
+  scheduler_node = _Thread_Scheduler_get_home_node( owner );
 
   if (
-    own_node->Wait.Priority.Node.priority
+    _Priority_Get_priority( &scheduler_node->Wait.Priority )
       < the_mutex->Priority_ceiling.priority
   ) {
     _Thread_Wait_release_default_critical( owner, &lock_context );

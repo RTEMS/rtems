@@ -142,7 +142,7 @@ static void _Thread_queue_FIFO_do_initialize(
 {
   Scheduler_Node *scheduler_node;
 
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
 
   _Chain_Initialize_node( &scheduler_node->Wait.Priority.Node.Node.Chain );
   _Chain_Initialize_one(
@@ -160,7 +160,7 @@ static void _Thread_queue_FIFO_do_enqueue(
 {
   Scheduler_Node *scheduler_node;
 
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
 
   _Chain_Initialize_node( &scheduler_node->Wait.Priority.Node.Node.Chain );
   _Chain_Append_unprotected(
@@ -182,7 +182,7 @@ static void _Thread_queue_FIFO_do_extract(
   (void) current_or_previous_owner;
   (void) queue_context;
 
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
 
   _Chain_Extract_unprotected( &scheduler_node->Wait.Priority.Node.Node.Chain );
 }
@@ -891,7 +891,7 @@ static void _Thread_queue_Priority_inherit_do_enqueue_change(
 
   queue = arg;
   owner = queue->owner;
-  scheduler_node_of_owner = _Thread_Scheduler_get_own_node( owner );
+  scheduler_node_of_owner = _Thread_Scheduler_get_home_node( owner );
   queue_context = THREAD_QUEUE_CONTEXT_OF_PRIORITY_ACTIONS( priority_actions );
 
   _Priority_Actions_initialize_one(
@@ -1385,7 +1385,7 @@ static void _Thread_queue_Priority_inherit_do_surrender(
     fifo_node = _Chain_Next( fifo_node );
   }
 #else
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   priority_queue = _Thread_queue_Priority_queue( heads, scheduler_node );
   scheduler_node_of_owner = priority_queue->scheduler_node;
 

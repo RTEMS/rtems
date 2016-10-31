@@ -383,7 +383,7 @@ static inline Scheduler_SMP_Node *_Scheduler_SMP_Thread_get_own_node(
   Thread_Control *thread
 )
 {
-  return (Scheduler_SMP_Node *) _Thread_Scheduler_get_own_node( thread );
+  return (Scheduler_SMP_Node *) _Thread_Scheduler_get_home_node( thread );
 }
 
 static inline Scheduler_SMP_Node *_Scheduler_SMP_Node_downcast(

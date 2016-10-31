@@ -99,7 +99,7 @@ size_t _Thread_queue_Flush_critical(
     if ( do_unblock ) {
       Scheduler_Node *scheduler_node;
 
-      scheduler_node = _Thread_Scheduler_get_own_node( first );
+      scheduler_node = _Thread_Scheduler_get_home_node( first );
       _Chain_Append_unprotected(
         &unblock,
         &scheduler_node->Wait.Priority.Node.Node.Chain

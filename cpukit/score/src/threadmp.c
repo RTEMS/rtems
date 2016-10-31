@@ -75,9 +75,6 @@ void _Thread_MP_Handler_initialization (
     _Thread_Timer_initialize( &proxy->Timer, _Per_CPU_Get_by_index( 0 ) );
     _RBTree_Initialize_node( &proxy->Active );
 
-#if defined(RTEMS_SMP)
-    proxy->Scheduler.own_node = &proxy->Scheduler_node;
-#endif
     proxy->Scheduler.nodes = &proxy->Scheduler_node;
     _Scheduler_Node_do_initialize(
       _Scheduler_Get_by_CPU_index( 0 ),

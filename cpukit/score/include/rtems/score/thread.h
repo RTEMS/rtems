@@ -269,14 +269,6 @@ typedef struct {
   const struct Scheduler_Control *control;
 
   /**
-   * @brief The own scheduler node of this thread.
-   *
-   * This field is constant after initialization.  It is used by change
-   * priority and ask for help operations.
-   */
-  Scheduler_Node *own_node;
-
-  /**
    * @brief The processor assigned by the current scheduler.
    */
   struct Per_CPU_Control *cpu;

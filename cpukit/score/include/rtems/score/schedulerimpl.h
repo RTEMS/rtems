@@ -893,7 +893,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(
 {
   Scheduler_Node *scheduler_node;
 
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   _Scheduler_Node_set_priority( scheduler_node, new_priority, prepend_it );
 }
 
@@ -1247,7 +1247,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     return STATUS_RESOURCE_IN_USE;
   }
 
-  old_scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  old_scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   _Priority_Plain_extract(
     &old_scheduler_node->Wait.Priority,
     &the_thread->Real_priority
@@ -1314,7 +1314,6 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
 
       the_thread->Scheduler.own_control = new_scheduler;
       the_thread->Scheduler.control = new_scheduler;
-      the_thread->Scheduler.own_node = new_scheduler_node;
       _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
 
       if ( _States_Is_ready( current_state ) ) {

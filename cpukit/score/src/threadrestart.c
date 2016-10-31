@@ -170,7 +170,7 @@ static void _Thread_Free( Thread_Control *the_thread )
   _ISR_lock_Destroy( &the_thread->Keys.Lock );
   _Scheduler_Node_destroy(
     _Scheduler_Get( the_thread ),
-    _Thread_Scheduler_get_own_node( the_thread )
+    _Thread_Scheduler_get_home_node( the_thread )
   );
   _ISR_lock_Destroy( &the_thread->Timer.Lock );
 

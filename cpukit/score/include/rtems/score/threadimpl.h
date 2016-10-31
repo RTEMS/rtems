@@ -1005,17 +1005,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(
 }
 #endif
 
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_own_node(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.own_node;
-#else
-  return the_thread->Scheduler.nodes;
-#endif
-}
-
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_home_node(
   const Thread_Control *the_thread
 )
@@ -1150,7 +1139,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Thread_Get_priority(
 {
   Scheduler_Node *scheduler_node;
 
-  scheduler_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   return _Priority_Get_priority( &scheduler_node->Wait.Priority );
 }
 

@@ -244,13 +244,13 @@ static void _Thread_Priority_apply(
   Priority_Action_type  priority_action_type
 )
 {
-  Scheduler_Node     *own_node;
+  Scheduler_Node     *scheduler_node;
   Thread_queue_Queue *queue;
 
-  own_node = _Thread_Scheduler_get_own_node( the_thread );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
   _Priority_Actions_initialize_one(
     &queue_context->Priority.Actions,
-    &own_node->Wait.Priority,
+    &scheduler_node->Wait.Priority,
     priority_action_node,
     priority_action_type
   );
@@ -326,10 +326,14 @@ void _Thread_Priority_replace(
   Priority_Node  *replacement_node
 )
 {
-  Scheduler_Node *own_node;
+  Scheduler_Node *scheduler_node;
 
-  own_node = _Thread_Scheduler_get_own_node( the_thread );
-  _Priority_Replace( &own_node->Wait.Priority, victim_node, replacement_node );
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
+  _Priority_Replace(
+    &scheduler_node->Wait.Priority,
+    victim_node,
+    replacement_node
+  );
 }
 
 void _Thread_Priority_update( Thread_queue_Context *queue_context )
