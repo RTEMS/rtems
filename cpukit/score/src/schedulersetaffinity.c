@@ -34,7 +34,7 @@ bool _Scheduler_Set_affinity(
     return false;
   }
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
 #if defined(RTEMS_SMP)

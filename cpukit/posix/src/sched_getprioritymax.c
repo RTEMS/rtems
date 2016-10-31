@@ -43,6 +43,6 @@ int sched_get_priority_max(
       rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  scheduler = _Scheduler_Get_own( _Thread_Get_executing() );
+  scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
   return _POSIX_Priority_Get_maximum( scheduler );
 }

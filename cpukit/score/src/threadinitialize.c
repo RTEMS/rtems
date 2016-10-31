@@ -232,8 +232,7 @@ bool _Thread_Initialize(
 
 #if defined(RTEMS_SMP)
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
-  the_thread->Scheduler.own_control = scheduler;
-  the_thread->Scheduler.control = scheduler;
+  the_thread->Scheduler.home = scheduler;
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
   _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );

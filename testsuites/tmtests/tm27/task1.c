@@ -107,7 +107,7 @@ rtems_task Task_1(
 )
 {
   Scheduler_priority_Context *scheduler_context =
-    _Scheduler_priority_Get_context( _Scheduler_Get( _Thread_Get_executing() ) );
+    _Scheduler_priority_Get_context( _Thread_Scheduler_get_home( _Thread_Get_executing() ) );
 #if defined(RTEMS_SMP)
   rtems_interrupt_level level;
 #endif
@@ -231,7 +231,7 @@ rtems_task Task_2(
   ISR_lock_Context scheduler_lock_context;
 
   _Thread_State_acquire( executing, &state_lock_context );
-  scheduler = _Scheduler_Get( executing );
+  scheduler = _Thread_Scheduler_get_home( executing );
   scheduler_context = _Scheduler_priority_Get_context( scheduler );
   _Thread_State_release( executing, &state_lock_context );
 

@@ -151,7 +151,7 @@ int pthread_create(
 
   normal_prio = schedparam.sched_priority;
 
-  scheduler = _Scheduler_Get_own( executing );
+  scheduler = _Thread_Scheduler_get_home( executing );
 
   core_normal_prio = _POSIX_Priority_To_core( scheduler, normal_prio, &valid );
   if ( !valid ) {

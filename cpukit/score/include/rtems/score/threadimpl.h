@@ -1005,6 +1005,18 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_cancel_need_for_help(
 }
 #endif
 
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Thread_Scheduler_get_home(
+  const Thread_Control *the_thread
+)
+{
+#if defined(RTEMS_SMP)
+  return the_thread->Scheduler.home;
+#else
+  (void) the_thread;
+  return &_Scheduler_Table[ 0 ];
+#endif
+}
+
 RTEMS_INLINE_ROUTINE Scheduler_Node *_Thread_Scheduler_get_home_node(
   const Thread_Control *the_thread
 )

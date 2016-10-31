@@ -53,32 +53,6 @@ RTEMS_INLINE_ROUTINE Scheduler_Context *_Scheduler_Get_context(
   return scheduler->context;
 }
 
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.control;
-#else
-  (void) the_thread;
-
-  return &_Scheduler_Table[ 0 ];
-#endif
-}
-
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_own(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.own_control;
-#else
-  (void) the_thread;
-
-  return &_Scheduler_Table[ 0 ];
-#endif
-}
-
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU_index(
   uint32_t cpu_index
 )
@@ -177,7 +151,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
   ( *scheduler->Operations.schedule )( scheduler, the_thread );
@@ -246,7 +220,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 #else
   const Scheduler_Control *scheduler;
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   ( *scheduler->Operations.yield )(
     scheduler,
     the_thread,
@@ -308,7 +282,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
 #else
   const Scheduler_Control *scheduler;
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   ( *scheduler->Operations.block )(
     scheduler,
     the_thread,
@@ -380,7 +354,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 #else
   const Scheduler_Control *scheduler;
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   ( *scheduler->Operations.unblock )(
     scheduler,
     the_thread,
@@ -435,7 +409,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Update_priority( Thread_Control *the_thread
 #else
   const Scheduler_Control *scheduler;
 
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   ( *scheduler->Operations.update_priority )(
     scheduler,
     the_thread,
@@ -601,7 +575,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_job(
   Thread_queue_Context *queue_context
 )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home( the_thread );
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   ( *scheduler->Operations.release_job )(
@@ -627,7 +601,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Cancel_job(
   Thread_queue_Context *queue_context
 )
 {
-  const Scheduler_Control *scheduler = _Scheduler_Get( the_thread );
+  const Scheduler_Control *scheduler = _Thread_Scheduler_get_home( the_thread );
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   ( *scheduler->Operations.cancel_job )(
@@ -1283,7 +1257,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   {
     const Scheduler_Control *old_scheduler;
 
-    old_scheduler = _Scheduler_Get( the_thread );
+    old_scheduler = _Thread_Scheduler_get_home( the_thread );
 
     if ( old_scheduler != new_scheduler ) {
       States_Control current_state;
@@ -1312,8 +1286,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
         &new_scheduler_node->Thread.Scheduler_node.Chain
       );
 
-      the_thread->Scheduler.own_control = new_scheduler;
-      the_thread->Scheduler.control = new_scheduler;
+      the_thread->Scheduler.home = new_scheduler;
       _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
 
       if ( _States_Is_ready( current_state ) ) {

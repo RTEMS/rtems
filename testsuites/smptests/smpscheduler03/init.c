@@ -214,7 +214,7 @@ static void update_priority_op(
   apply_priority(thread, new_priority, prepend_it, &queue_context);
 
   _Thread_State_acquire( thread, &state_lock_context );
-  scheduler = _Scheduler_Get( thread );
+  scheduler = _Thread_Scheduler_get_home( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   (*scheduler->Operations.update_priority)(
@@ -325,7 +325,7 @@ static Thread_Control *yield_op(
   Thread_Control *needs_help;
 
   _Thread_State_acquire( thread, &state_lock_context );
-  scheduler = _Scheduler_Get( thread );
+  scheduler = _Thread_Scheduler_get_home( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   needs_help = (*scheduler->Operations.yield)(
@@ -464,7 +464,7 @@ static void block_op(
   ISR_lock_Context scheduler_lock_context;
 
   _Thread_State_acquire( thread, &state_lock_context );
-  scheduler = _Scheduler_Get( thread );
+  scheduler = _Thread_Scheduler_get_home( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   (*scheduler->Operations.block)(scheduler, thread, &scheduler_node->Base);
@@ -484,7 +484,7 @@ static Thread_Control *unblock_op(
   Thread_Control *needs_help;
 
   _Thread_State_acquire( thread, &state_lock_context );
-  scheduler = _Scheduler_Get( thread );
+  scheduler = _Thread_Scheduler_get_home( thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   needs_help = (*scheduler->Operations.unblock)(

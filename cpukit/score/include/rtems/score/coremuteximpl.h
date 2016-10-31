@@ -332,7 +332,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
   if ( owner == NULL ) {
 #if defined(RTEMS_SMP)
     if (
-      _Scheduler_Get_own( executing )
+      _Thread_Scheduler_get_home( executing )
         != _CORE_ceiling_mutex_Get_scheduler( the_mutex )
     ) {
       _CORE_mutex_Release( &the_mutex->Recursive.Mutex, queue_context );

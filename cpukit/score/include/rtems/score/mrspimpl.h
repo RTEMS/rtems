@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Raise_priority(
   _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Wait_acquire_default_critical( thread, &lock_context );
 
-  scheduler = _Scheduler_Get_own( thread );
+  scheduler = _Thread_Scheduler_get_home( thread );
   scheduler_node = _Thread_Scheduler_get_home_node( thread );
   ceiling_priority = _MRSP_Get_priority( mrsp, scheduler );
 

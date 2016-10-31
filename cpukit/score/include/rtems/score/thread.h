@@ -255,18 +255,9 @@ typedef struct {
   Thread_Scheduler_state state;
 
   /**
-   * @brief The own scheduler control of this thread.
-   *
-   * This field is constant after initialization.
+   * @brief The home scheduler control of this thread.
    */
-  const struct Scheduler_Control *own_control;
-
-  /**
-   * @brief The scheduler control of this thread.
-   *
-   * The scheduler helping protocol may change this field.
-   */
-  const struct Scheduler_Control *control;
+  const struct Scheduler_Control *home;
 
   /**
    * @brief The processor assigned by the current scheduler.

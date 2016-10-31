@@ -36,7 +36,7 @@ int pthread_setschedprio( pthread_t thread, int prio )
   _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
-  scheduler = _Scheduler_Get_own( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
 
   new_priority = _POSIX_Priority_To_core( scheduler, prio, &valid );
   if ( !valid ) {

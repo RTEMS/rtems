@@ -90,7 +90,7 @@ rtems_status_code rtems_task_set_priority(
 
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
-  scheduler = _Scheduler_Get_own( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   old_priority = _Thread_Get_priority( the_thread );
 
   if ( new_priority != RTEMS_CURRENT_PRIORITY ) {

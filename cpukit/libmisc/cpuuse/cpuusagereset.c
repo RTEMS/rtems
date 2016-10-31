@@ -36,7 +36,7 @@ static bool CPU_usage_Per_thread_handler(
   ISR_lock_Context         scheduler_lock_context;
 
   _Thread_State_acquire( the_thread, &state_lock_context );
-  scheduler = _Scheduler_Get( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
   _Timestamp_Set_to_zero( &the_thread->cpu_time_used );

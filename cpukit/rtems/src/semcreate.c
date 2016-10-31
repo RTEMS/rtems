@@ -157,7 +157,7 @@ rtems_status_code rtems_semaphore_create(
       status = STATUS_SUCCESSFUL;
       break;
     case SEMAPHORE_VARIANT_MUTEX_PRIORITY_CEILING:
-      scheduler = _Scheduler_Get_own( executing );
+      scheduler = _Thread_Scheduler_get_home( executing );
       priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
 
       if ( valid ) {
@@ -195,7 +195,7 @@ rtems_status_code rtems_semaphore_create(
       break;
 #if defined(RTEMS_SMP)
     case SEMAPHORE_VARIANT_MRSP:
-      scheduler = _Scheduler_Get_own( executing );
+      scheduler = _Thread_Scheduler_get_home( executing );
       priority = _RTEMS_Priority_To_core( scheduler, priority_ceiling, &valid );
 
       if ( valid ) {

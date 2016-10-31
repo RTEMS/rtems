@@ -55,7 +55,7 @@ static int _POSIX_Set_sched_param(
     high_prio = low_prio;
   }
 
-  scheduler = _Scheduler_Get_own( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
 
   core_normal_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
   if ( !valid ) {

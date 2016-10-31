@@ -110,7 +110,7 @@ int pthread_mutex_init(
     int  prio_ceiling;
     bool valid;
 
-    scheduler = _Scheduler_Get_own( _Thread_Get_executing() );
+    scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
     prio_ceiling = the_attr->prio_ceiling;
 
     if ( prio_ceiling == INT_MAX ) {

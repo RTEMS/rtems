@@ -31,7 +31,7 @@ int _Sched_Index( void )
 {
   Thread_Control *executing = _Thread_Get_executing();
 
-  return (int) _Scheduler_Get_index( _Scheduler_Get( executing ) );
+  return (int) _Scheduler_Get_index( _Thread_Scheduler_get_home( executing ) );
 }
 
 int _Sched_Name_to_index( const char *name, size_t len )

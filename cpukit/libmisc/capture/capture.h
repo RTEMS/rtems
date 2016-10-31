@@ -872,7 +872,7 @@ rtems_capture_task_control_flags (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_start_priority (rtems_tcb* tcb)
 {
-  return _RTEMS_Priority_From_core (_Scheduler_Get_own( tcb ),
+  return _RTEMS_Priority_From_core (_Thread_Scheduler_get_home( tcb ),
                                     tcb->Start.initial_priority);
 }
 

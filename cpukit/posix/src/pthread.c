@@ -168,7 +168,7 @@ static bool _POSIX_Threads_Create_extension(
   api->thread = created;
   _POSIX_Threads_Initialize_attributes( &api->Attributes );
   api->Attributes.schedparam.sched_priority = _POSIX_Priority_From_core(
-    _Scheduler_Get_own( created ),
+    _Thread_Scheduler_get_home( created ),
     _Thread_Get_priority( created )
   );
 
