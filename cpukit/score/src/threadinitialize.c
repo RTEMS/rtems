@@ -235,7 +235,6 @@ bool _Thread_Initialize(
   the_thread->Scheduler.own_control = scheduler;
   the_thread->Scheduler.control = scheduler;
   the_thread->Scheduler.own_node = scheduler_node;
-  the_thread->Scheduler.node = scheduler_node;
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
   _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );

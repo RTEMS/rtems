@@ -149,17 +149,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE Scheduler_Node *_Scheduler_Thread_get_node(
-  const Thread_Control *the_thread
-)
-{
-#if defined(RTEMS_SMP)
-  return the_thread->Scheduler.node;
-#else
-  return the_thread->Scheduler.nodes;
-#endif
-}
-
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.
@@ -1326,7 +1315,6 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
       the_thread->Scheduler.own_control = new_scheduler;
       the_thread->Scheduler.control = new_scheduler;
       the_thread->Scheduler.own_node = new_scheduler_node;
-      the_thread->Scheduler.node = new_scheduler_node;
       _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
 
       if ( _States_Is_ready( current_state ) ) {

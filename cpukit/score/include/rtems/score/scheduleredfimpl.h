@@ -50,7 +50,7 @@ RTEMS_INLINE_ROUTINE Scheduler_EDF_Node *_Scheduler_EDF_Thread_get_node(
   Thread_Control *the_thread
 )
 {
-  return (Scheduler_EDF_Node *) _Scheduler_Thread_get_node( the_thread );
+  return (Scheduler_EDF_Node *) _Thread_Scheduler_get_home_node( the_thread );
 }
 
 RTEMS_INLINE_ROUTINE Scheduler_EDF_Node * _Scheduler_EDF_Node_downcast(

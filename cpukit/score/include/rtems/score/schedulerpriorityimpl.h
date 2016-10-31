@@ -45,7 +45,7 @@ RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Thread_get_nod
   Thread_Control *the_thread
 )
 {
-  return (Scheduler_priority_Node *) _Scheduler_Thread_get_node( the_thread );
+  return (Scheduler_priority_Node *) _Thread_Scheduler_get_home_node( the_thread );
 }
 
 RTEMS_INLINE_ROUTINE Scheduler_priority_Node *_Scheduler_priority_Node_downcast(

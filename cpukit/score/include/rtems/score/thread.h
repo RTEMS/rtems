@@ -277,17 +277,6 @@ typedef struct {
   Scheduler_Node *own_node;
 
   /**
-   * @brief The scheduler node of this thread.
-   *
-   * On uni-processor configurations this field is constant after
-   * initialization.
-   *
-   * On SMP configurations the scheduler helping protocol may change this
-   * field.
-   */
-  Scheduler_Node *node;
-
-  /**
    * @brief The processor assigned by the current scheduler.
    */
   struct Per_CPU_Control *cpu;
@@ -297,6 +286,9 @@ typedef struct {
    * scheduler instance and due to thread queue ownerships.
    *
    * This chain is protected by the thread wait lock.
+   *
+   * This chain is never empty.  The first scheduler node on the chain is the
+   * scheduler node of the home scheduler instance.
    */
   Chain_Control Wait_nodes;
 
@@ -305,6 +297,9 @@ typedef struct {
    * thread.
    *
    * This chain is protected by the thread state lock.
+   *
+   * This chain is never empty.  The first scheduler node on the chain is the
+   * scheduler node of the home scheduler instance.
    */
   Chain_Control Scheduler_nodes;
 

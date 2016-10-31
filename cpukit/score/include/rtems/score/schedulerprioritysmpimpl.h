@@ -48,7 +48,7 @@ static inline Scheduler_priority_SMP_Node *_Scheduler_priority_SMP_Thread_get_no
   Thread_Control *thread
 )
 {
-  return (Scheduler_priority_SMP_Node *) _Scheduler_Thread_get_node( thread );
+  return (Scheduler_priority_SMP_Node *) _Thread_Scheduler_get_home_node( thread );
 }
 
 static inline Scheduler_priority_SMP_Node *

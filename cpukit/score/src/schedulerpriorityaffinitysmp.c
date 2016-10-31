@@ -70,7 +70,7 @@ _Scheduler_priority_affinity_SMP_Thread_get_node(
 )
 {
   return (Scheduler_priority_affinity_SMP_Node *)
-    _Scheduler_Thread_get_node( thread );
+    _Thread_Scheduler_get_home_node( thread );
 }
 
 static Scheduler_priority_affinity_SMP_Node *
