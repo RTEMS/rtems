@@ -71,7 +71,6 @@ int sigtimedwait(
 {
   Thread_Control       *executing;
   POSIX_API_Control    *api;
-  Watchdog_Interval     interval;
   siginfo_t             signal_information;
   siginfo_t            *the_info;
   int                   signo;
@@ -84,12 +83,14 @@ int sigtimedwait(
   if ( !set )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
+  _Thread_queue_Context_initialize( &queue_context );
+
   /*  NOTE: This is very specifically a RELATIVE not ABSOLUTE time
    *        in the Open Group specification.
    */
 
-  interval = 0;
   if ( timeout ) {
+    Watchdog_Interval interval;
 
     if ( !_Timespec_Is_valid( timeout ) )
       rtems_set_errno_and_return_minus_one( EINVAL );
@@ -98,6 +99,10 @@ int sigtimedwait(
 
     if ( !interval )
       rtems_set_errno_and_return_minus_one( EINVAL );
+
+    _Thread_queue_Context_set_relative_timeout( &queue_context, interval );
+  } else {
+    _Thread_queue_Context_set_no_timeout( &queue_context );
   }
 
   /*
@@ -115,7 +120,6 @@ int sigtimedwait(
 
   /* API signals pending? */
 
-  _Thread_queue_Context_initialize( &queue_context );
   _POSIX_signals_Acquire( &queue_context );
   if ( *set & api->signals_pending ) {
     /* XXX real info later */
@@ -153,7 +157,6 @@ int sigtimedwait(
   executing->Wait.option          = *set;
   executing->Wait.return_argument = the_info;
   _Thread_queue_Context_set_expected_level( &queue_context, 1 );
-  _Thread_queue_Context_set_relative_timeout( &queue_context, interval );
   _Thread_queue_Enqueue_critical(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,
