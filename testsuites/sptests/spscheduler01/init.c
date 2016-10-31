@@ -411,6 +411,33 @@ static void test_scheduler_get_processors(void)
 #endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
+static void test_scheduler_add_remove_processors(void)
+{
+  rtems_status_code sc;
+  rtems_id scheduler_id;
+
+  sc = rtems_scheduler_ident(BLUE, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_add_processor(invalid_id, 0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  sc = rtems_scheduler_remove_processor(invalid_id, 0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  sc = rtems_scheduler_add_processor(scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_NOT_CONFIGURED);
+
+  sc = rtems_scheduler_remove_processor(scheduler_id, 1);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+  sc = rtems_scheduler_add_processor(scheduler_id, 0);
+  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+
+  sc = rtems_scheduler_remove_processor(scheduler_id, 0);
+  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+}
+
 static void test_task_get_priority(void)
 {
   rtems_status_code sc;
@@ -463,6 +490,7 @@ static void Init(rtems_task_argument arg)
   test_task_get_set_scheduler();
   test_scheduler_ident();
   test_scheduler_get_processors();
+  test_scheduler_add_remove_processors();
   test_task_get_priority();
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));

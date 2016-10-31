@@ -200,6 +200,14 @@ void _Scheduler_strong_APA_Node_initialize(
   );
 }
 
+static bool _Scheduler_strong_APA_Has_ready( Scheduler_Context *context )
+{
+  Scheduler_strong_APA_Context *self =
+    _Scheduler_strong_APA_Get_self( context );
+
+  return !_Priority_bit_map_Is_empty( &self->Bit_map );
+}
+
 static Scheduler_Node *_Scheduler_strong_APA_Get_highest_ready(
   Scheduler_Context *context,
   Scheduler_Node    *node
@@ -435,6 +443,36 @@ void _Scheduler_strong_APA_Withdraw_node(
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,
     _Scheduler_SMP_Allocate_processor_lazy
+  );
+}
+
+void _Scheduler_strong_APA_Add_processor(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *idle
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Add_processor(
+    context,
+    idle,
+    _Scheduler_strong_APA_Has_ready,
+    _Scheduler_strong_APA_Enqueue_scheduled_fifo
+  );
+}
+
+Thread_Control *_Scheduler_strong_APA_Remove_processor(
+  const Scheduler_Control *scheduler,
+  Per_CPU_Control         *cpu
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Scheduler_SMP_Remove_processor(
+    context,
+    cpu,
+    _Scheduler_strong_APA_Extract_from_ready,
+    _Scheduler_strong_APA_Enqueue_fifo
   );
 }
 

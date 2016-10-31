@@ -72,6 +72,8 @@ typedef struct {
     _Scheduler_simple_SMP_Ask_for_help, \
     _Scheduler_simple_SMP_Reconsider_help_request, \
     _Scheduler_simple_SMP_Withdraw_node, \
+    _Scheduler_simple_SMP_Add_processor, \
+    _Scheduler_simple_SMP_Remove_processor, \
     _Scheduler_simple_SMP_Node_initialize, \
     _Scheduler_default_Node_destroy, \
     _Scheduler_default_Release_job, \
@@ -125,6 +127,16 @@ void _Scheduler_simple_SMP_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
+);
+
+void _Scheduler_simple_SMP_Add_processor(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *idle
+);
+
+Thread_Control *_Scheduler_simple_SMP_Remove_processor(
+  const Scheduler_Control *scheduler,
+  struct Per_CPU_Control  *cpu
 );
 
 bool _Scheduler_simple_SMP_Yield(

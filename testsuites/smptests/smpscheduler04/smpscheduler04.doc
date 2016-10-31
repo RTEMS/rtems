@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpscheduler04
+
+directives:
+
+  - rtems_task_set_scheduler()
+  - rtems_scheduler_add_processor()
+  - rtems_scheduler_remove_processor()
+
+concepts:
+
+  - Ensure that adding/removing a processor works with concurrent task
+    scheduler changes.

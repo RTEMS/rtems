@@ -465,7 +465,7 @@ rtems_status_code rtems_task_set_affinity(
  *
  * @param[in] task_id Identifier of the task.  Use @ref RTEMS_SELF to select
  * the executing task.
- * @param[out] scheduler_id Identifier of the scheduler.
+ * @param[out] scheduler_id Identifier of the scheduler instance.
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The @a scheduler_id parameter is @c NULL.
@@ -563,9 +563,9 @@ rtems_status_code rtems_scheduler_ident(
 
 #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 /**
- * @brief Gets the set of processors owned by the scheduler.
+ * @brief Gets the set of processors owned by the specified scheduler instance.
  *
- * @param[in] scheduler_id Identifier of the scheduler.
+ * @param[in] scheduler_id Identifier of the scheduler instance.
  * @param[in] cpusetsize Size of the specified processor set buffer in
  * bytes.  This value must be positive.
  * @param[out] cpuset The processor set owned by the scheduler.  A set bit in
@@ -574,7 +574,7 @@ rtems_status_code rtems_scheduler_ident(
  *
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The @a cpuset parameter is @c NULL.
- * @retval RTEMS_INVALID_ID Invalid scheduler identifier.
+ * @retval RTEMS_INVALID_ID Invalid scheduler instance identifier.
  * @retval RTEMS_INVALID_NUMBER The processor set buffer is too small for the
  * set of processors owned by the scheduler.
  */
@@ -584,6 +584,55 @@ rtems_status_code rtems_scheduler_get_processor_set(
   cpu_set_t *cpuset
 );
 #endif
+
+/**
+ * @brief Adds a processor to the set of processors owned by the specified
+ * scheduler instance.
+ *
+ * Must be called from task context.  This operation obtains and releases the
+ * objects allocator lock.
+ *
+ * @param[in] scheduler_id Identifier of the scheduler instance.
+ * @param[in] cpu_index Index of the processor to add.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid scheduler instance identifier.
+ * @retval RTEMS_NOT_CONFIGURED The processor is not configured to be used by
+ *   the application.
+ * @retval RTEMS_INCORRECT_STATE The processor is configured to be used by
+ *   the application, however, it is not online.
+ * @retval RTEMS_RESOURCE_IN_USE The processor is already assigned to a
+ *   scheduler instance.
+ */
+rtems_status_code rtems_scheduler_add_processor(
+  rtems_id scheduler_id,
+  uint32_t cpu_index
+);
+
+/**
+ * @brief Removes a processor from set of processors owned by the specified
+ * scheduler instance.
+ *
+ * Must be called from task context.  This operation obtains and releases the
+ * objects allocator lock.  Removing a processor from a scheduler is a complex
+ * operation that involves all tasks of the system.
+ *
+ * @param[in] scheduler_id Identifier of the scheduler instance.
+ * @param[in] cpu_index Index of the processor to add.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID Invalid scheduler instance identifier.
+ * @retval RTEMS_INVALID_NUMBER The processor is not owned by the specified
+ *   scheduler instance.
+ * @retval RTEMS_RESOURCE_IN_USE The set of processors owned by the specified
+ *   scheduler instance would be empty after the processor removal and there
+ *   exists a non-idle task that uses this scheduler instance as its home
+ *   scheduler instance.
+ */
+rtems_status_code rtems_scheduler_remove_processor(
+  rtems_id scheduler_id,
+  uint32_t cpu_index
+);
 
 /**@}*/
 

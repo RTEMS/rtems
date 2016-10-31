@@ -312,6 +312,36 @@ void _Scheduler_priority_SMP_Withdraw_node(
   );
 }
 
+void _Scheduler_priority_SMP_Add_processor(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *idle
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  _Scheduler_SMP_Add_processor(
+    context,
+    idle,
+    _Scheduler_priority_SMP_Has_ready,
+    _Scheduler_priority_SMP_Enqueue_scheduled_fifo
+  );
+}
+
+Thread_Control *_Scheduler_priority_SMP_Remove_processor(
+  const Scheduler_Control *scheduler,
+  Per_CPU_Control         *cpu
+)
+{
+  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Scheduler_SMP_Remove_processor(
+    context,
+    cpu,
+    _Scheduler_priority_SMP_Extract_from_ready,
+    _Scheduler_priority_SMP_Enqueue_fifo
+  );
+}
+
 bool _Scheduler_priority_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,

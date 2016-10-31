@@ -148,6 +148,30 @@ typedef struct {
     Scheduler_Node          *node,
     Thread_Scheduler_state   next_state
   );
+
+  /**
+   * @brief Add processor operation.
+   *
+   * @param[in] scheduler The scheduler instance to add the processor.
+   * @param[in] idle The idle thread of the processor to add.
+   */
+  void ( *add_processor )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *idle
+  );
+
+  /**
+   * @brief Remove processor operation.
+   *
+   * @param[in] scheduler The scheduler instance to remove the processor.
+   * @param[in] cpu The processor to remove.
+   *
+   * @return The idle thread of the removed processor.
+   */
+  Thread_Control *( *remove_processor )(
+    const Scheduler_Control *scheduler,
+    struct Per_CPU_Control  *cpu
+  );
 #endif
 
   /** @see _Scheduler_Node_initialize() */
@@ -392,7 +416,9 @@ Priority_Control _Scheduler_default_Map_priority(
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_default_Ask_for_help, \
     _Scheduler_default_Reconsider_help_request, \
-    _Scheduler_default_Withdraw_node,
+    _Scheduler_default_Withdraw_node, \
+    NULL, \
+    NULL,
 #else
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP
 #endif

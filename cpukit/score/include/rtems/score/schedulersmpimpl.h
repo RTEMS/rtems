@@ -275,6 +275,10 @@ extern "C" {
  * @{
  */
 
+typedef bool ( *Scheduler_SMP_Has_ready )(
+  Scheduler_Context *context
+);
+
 typedef Scheduler_Node *( *Scheduler_SMP_Get_highest_ready )(
   Scheduler_Context *context,
   Scheduler_Node    *node
@@ -467,6 +471,13 @@ static inline void _Scheduler_SMP_Release_idle_thread(
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
 
   _Chain_Prepend_unprotected( &self->Idle_threads, &idle->Object.Node );
+}
+
+static inline void _Scheduler_SMP_Exctract_idle_thread(
+  Thread_Control *idle
+)
+{
+  _Chain_Extract_unprotected( &idle->Object.Node );
 }
 
 static inline void _Scheduler_SMP_Allocate_processor_lazy(
@@ -1269,6 +1280,87 @@ static inline void _Scheduler_SMP_Withdraw_node(
     _Assert( node_state == SCHEDULER_SMP_NODE_BLOCKED );
     _Thread_Scheduler_release_critical( thread, &lock_context );
   }
+}
+
+static inline void _Scheduler_SMP_Add_processor(
+  Scheduler_Context       *context,
+  Thread_Control          *idle,
+  Scheduler_SMP_Has_ready  has_ready,
+  Scheduler_SMP_Enqueue    enqueue_scheduled_fifo
+)
+{
+  Scheduler_SMP_Context *self;
+  Scheduler_Node        *node;
+
+  self = _Scheduler_SMP_Get_self( context );
+  idle->Scheduler.state = THREAD_SCHEDULER_SCHEDULED;
+  _Scheduler_SMP_Release_idle_thread( &self->Base, idle );
+  node = _Thread_Scheduler_get_home_node( idle );
+  _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_SCHEDULED );
+
+  if ( ( *has_ready )( &self->Base ) ) {
+    ( *enqueue_scheduled_fifo )( &self->Base, node );
+  } else {
+    _Chain_Append_unprotected( &self->Scheduled, &node->Node );
+  }
+}
+
+static inline Thread_Control *_Scheduler_SMP_Remove_processor(
+  Scheduler_Context     *context,
+  Per_CPU_Control       *cpu,
+  Scheduler_SMP_Extract  extract_from_ready,
+  Scheduler_SMP_Enqueue  enqueue_fifo
+)
+{
+  Scheduler_SMP_Context *self;
+  Chain_Node            *chain_node;
+  Scheduler_Node        *victim_node;
+  Thread_Control        *victim_user;
+  Thread_Control        *victim_owner;
+  Thread_Control        *idle;
+
+  self = _Scheduler_SMP_Get_self( context );
+  chain_node = _Chain_First( &self->Scheduled );
+
+  do {
+    _Assert( chain_node != _Chain_Immutable_tail( &self->Scheduled ) );
+    victim_node = (Scheduler_Node *) chain_node;
+    victim_user = _Scheduler_Node_get_user( victim_node );
+    chain_node = _Chain_Next( chain_node );
+  } while ( _Thread_Get_CPU( victim_user ) != cpu );
+
+  _Scheduler_SMP_Extract_from_scheduled( victim_node );
+  victim_owner = _Scheduler_Node_get_owner( victim_node );
+
+  if ( !victim_owner->is_idle ) {
+    Scheduler_Node *idle_node;
+
+    _Scheduler_Release_idle_thread(
+      &self->Base,
+      victim_node,
+      _Scheduler_SMP_Release_idle_thread
+    );
+    idle = _Scheduler_SMP_Get_idle_thread( &self->Base );
+    idle_node = _Thread_Scheduler_get_home_node( idle );
+    ( *extract_from_ready )( &self->Base, idle_node );
+    _Scheduler_SMP_Preempt(
+      &self->Base,
+      idle_node,
+      victim_node,
+      _Scheduler_SMP_Allocate_processor_exact
+    );
+
+    if ( !_Chain_Is_empty( &self->Scheduled ) ) {
+      ( *enqueue_fifo )( context, victim_node );
+    }
+  } else {
+    _Assert( victim_owner == victim_user );
+    _Assert( _Scheduler_Node_get_idle( victim_node ) == NULL );
+    idle = victim_owner;
+    _Scheduler_SMP_Exctract_idle_thread( idle );
+  }
+
+  return idle;
 }
 
 /** @} */

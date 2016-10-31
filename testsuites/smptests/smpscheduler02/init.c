@@ -37,6 +37,8 @@ static rtems_id cmtx_id;
 
 static rtems_id imtx_id;
 
+static volatile bool ready;
+
 static void task(rtems_task_argument arg)
 {
   rtems_status_code sc;
@@ -64,6 +66,131 @@ static void task(rtems_task_argument arg)
 
   while (1) {
     /* Do nothing */
+  }
+}
+
+static void sticky_task(rtems_task_argument arg)
+{
+  rtems_status_code sc;
+  rtems_id mtx_id;
+
+  (void) arg;
+
+  rtems_test_assert(rtems_get_current_processor() == 0);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name(' ', 'M', 'T', 'X'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+    2,
+    &mtx_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(mtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  ready = true;
+
+  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(mtx_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(mtx_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_transient_send(main_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  while (1) {
+    /* Do nothing */
+  }
+}
+
+static void test_scheduler_add_remove_processors(void)
+{
+  rtems_status_code sc;
+  rtems_id scheduler_a_id;
+  rtems_id scheduler_c_id;
+
+  sc = rtems_scheduler_ident(SCHED_A, &scheduler_a_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_ident(SCHED_C, &scheduler_c_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_add_processor(scheduler_c_id, 62);
+  rtems_test_assert(sc == RTEMS_NOT_CONFIGURED);
+
+  sc = rtems_scheduler_add_processor(scheduler_c_id, 63);
+  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
+
+  sc = rtems_scheduler_remove_processor(scheduler_c_id, 62);
+  rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+  sc = rtems_scheduler_remove_processor(scheduler_a_id, 0);
+  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+
+  if (rtems_get_processor_count() > 1) {
+    rtems_id scheduler_b_id;
+    rtems_id task_id;
+
+    sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_scheduler_remove_processor(scheduler_b_id, 1);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_scheduler_add_processor(scheduler_a_id, 1);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(rtems_get_current_processor() == 0);
+
+    sc = rtems_scheduler_remove_processor(scheduler_a_id, 0);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(rtems_get_current_processor() == 1);
+
+    sc = rtems_scheduler_add_processor(scheduler_a_id, 0);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(rtems_get_current_processor() == 1);
+
+    sc = rtems_task_create(
+      rtems_build_name('T', 'A', 'S', 'K'),
+      2,
+      RTEMS_MINIMUM_STACK_SIZE,
+      RTEMS_DEFAULT_MODES,
+      RTEMS_DEFAULT_ATTRIBUTES,
+      &task_id
+    );
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_start(task_id, sticky_task, 0);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    while (!ready) {
+      /* Wait */
+    }
+
+    sc = rtems_scheduler_remove_processor(scheduler_a_id, 1);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    rtems_test_assert(rtems_get_current_processor() == 0);
+
+    sc = rtems_event_transient_send(task_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_delete(task_id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_scheduler_add_processor(scheduler_b_id, 1);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 }
 
@@ -248,6 +375,8 @@ static void test(void)
 
   sc = rtems_semaphore_delete(imtx_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  test_scheduler_add_remove_processors();
 }
 
 static void Init(rtems_task_argument arg)
@@ -271,6 +400,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
+#define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES 1
 
 #define CONFIGURE_SMP_APPLICATION
 

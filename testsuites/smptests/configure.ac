@@ -97,6 +97,7 @@ smpschedaffinity05/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile
 smpscheduler03/Makefile
+smpscheduler04/Makefile
 smpschedsem01/Makefile
 smpsignal01/Makefile
 smpswitchextension01/Makefile

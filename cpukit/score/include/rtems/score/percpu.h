@@ -426,6 +426,12 @@ typedef struct Per_CPU_Control {
        * scheduler instance.
        */
       const struct Scheduler_Context *context;
+
+      /**
+       * @brief The idle thread for this processor in case it is online and
+       * currently not used by a scheduler instance.
+       */
+      struct _Thread_Control *idle_if_online_and_unused;
     } Scheduler;
 
     /**

@@ -26,7 +26,7 @@ void _Scheduler_SMP_Start_idle(
   self = _Scheduler_SMP_Get_self( context );
   node = _Scheduler_SMP_Thread_get_node( idle );
 
-  _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_SCHEDULED );
+  _Scheduler_Thread_change_state( idle, THREAD_SCHEDULER_SCHEDULED );
   node->state = SCHEDULER_SMP_NODE_SCHEDULED;
 
   _Thread_Set_CPU( idle, cpu );

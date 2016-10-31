@@ -190,7 +190,14 @@ bool _Thread_Initialize(
       priority_for_index = priority;
       scheduler_node = scheduler_node_for_index;
     } else {
-      priority_for_index = 0;
+      /*
+       * Use the idle thread priority for the non-home scheduler instances by
+       * default.
+       */
+      priority_for_index = _Scheduler_Map_priority(
+        scheduler_for_index,
+        scheduler_for_index->maximum_priority
+      );
     }
 
     _Scheduler_Node_initialize(

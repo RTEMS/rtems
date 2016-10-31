@@ -57,6 +57,14 @@ _Scheduler_priority_SMP_Node_downcast( Scheduler_Node *node )
   return (Scheduler_priority_SMP_Node *) node;
 }
 
+static inline bool _Scheduler_priority_SMP_Has_ready( Scheduler_Context *context )
+{
+  Scheduler_priority_SMP_Context *self =
+    _Scheduler_priority_SMP_Get_self( context );
+
+  return !_Priority_bit_map_Is_empty( &self->Bit_map );
+}
+
 static inline void _Scheduler_priority_SMP_Move_from_scheduled_to_ready(
   Scheduler_Context *context,
   Scheduler_Node    *scheduled_to_ready
