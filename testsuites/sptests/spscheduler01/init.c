@@ -236,7 +236,7 @@ static void test_task_get_set_scheduler(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_scheduler(self_id, scheduler_id, 1);
-  rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_semaphore_release(mtx_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);

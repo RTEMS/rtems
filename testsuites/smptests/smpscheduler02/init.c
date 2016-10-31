@@ -25,8 +25,6 @@
 
 const char rtems_test_name[] = "SMPSCHEDULER 2";
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 #define SCHED_A rtems_build_name(' ', ' ', ' ', 'A')
 
 #define SCHED_B rtems_build_name(' ', ' ', ' ', 'B')
@@ -35,7 +33,9 @@ const char rtems_test_name[] = "SMPSCHEDULER 2";
 
 static rtems_id main_task_id;
 
-static rtems_id sema_id;
+static rtems_id cmtx_id;
+
+static rtems_id imtx_id;
 
 static void task(rtems_task_argument arg)
 {
@@ -47,8 +47,17 @@ static void task(rtems_task_argument arg)
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
   rtems_test_assert(sched_get_priority_max(SCHED_RR) == 126);
 
-  sc = rtems_semaphore_obtain(sema_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  sc = rtems_semaphore_obtain(cmtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_NOT_DEFINED);
+
+  sc = rtems_event_transient_send(main_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_obtain(imtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_release(imtx_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_event_transient_send(main_task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -102,22 +111,31 @@ static void test(void)
   rtems_test_assert(sc == RTEMS_UNSATISFIED);
 
   sc = rtems_semaphore_create(
-    SCHED_A,
+    rtems_build_name('C', 'M', 'T', 'X'),
     1,
     RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
     1,
-    &sema_id
+    &cmtx_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('I', 'M', 'T', 'X'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY,
+    1,
+    &imtx_id
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   prio = 2;
-  sc = rtems_semaphore_set_priority(sema_id, scheduler_a_id, prio, &prio);
+  sc = rtems_semaphore_set_priority(cmtx_id, scheduler_a_id, prio, &prio);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   rtems_test_assert(prio == 1);
 
   if (cpu_count > 1) {
     prio = 1;
-    sc = rtems_semaphore_set_priority(sema_id, scheduler_b_id, prio, &prio);
+    sc = rtems_semaphore_set_priority(cmtx_id, scheduler_b_id, prio, &prio);
     rtems_test_assert(sc == RTEMS_NOT_DEFINED);
     rtems_test_assert(prio == 2);
   }
@@ -197,10 +215,22 @@ static void test(void)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     rtems_test_assert(scheduler_id == scheduler_b_id);
 
+    sc = rtems_semaphore_obtain(imtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
     sc = rtems_task_start(task_id, task, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_set_scheduler(RTEMS_SELF, scheduler_b_id, 1);
+    rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
+
+    sc = rtems_semaphore_release(imtx_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -210,18 +240,12 @@ static void test(void)
   sc = rtems_task_delete(task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_semaphore_delete(sema_id);
+  sc = rtems_semaphore_delete(cmtx_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(imtx_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
-
-#else /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
-
-static void test(void)
-{
-  /* Nothing to do */
-}
-
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 
 static void Init(rtems_task_argument arg)
 {
@@ -243,7 +267,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 2
-#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+#define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
 #define CONFIGURE_SMP_APPLICATION
 

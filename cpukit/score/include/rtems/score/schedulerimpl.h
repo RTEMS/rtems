@@ -1214,10 +1214,7 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   Scheduler_Node *new_scheduler_node;
   Scheduler_Node *old_scheduler_node;
 
-  if (
-    _Thread_Owns_resources( the_thread )
-      || the_thread->Wait.queue != NULL
-  ) {
+  if ( the_thread->Wait.queue != NULL ) {
     return STATUS_RESOURCE_IN_USE;
   }
 
@@ -1237,6 +1234,10 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 
 #if defined(RTEMS_SMP)
+  if ( !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes ) ) {
+    return STATUS_RESOURCE_IN_USE;
+  }
+
   _Thread_Scheduler_process_requests( the_thread );
   new_scheduler_node = _Thread_Scheduler_get_node_by_index(
     the_thread,
