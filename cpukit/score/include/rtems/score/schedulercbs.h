@@ -146,7 +146,7 @@ typedef struct {
  */
 extern Scheduler_CBS_Server _Scheduler_CBS_Server_list[];
 
-Scheduler_Void_or_thread _Scheduler_CBS_Unblock(
+Scheduler_Void_or_bool _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

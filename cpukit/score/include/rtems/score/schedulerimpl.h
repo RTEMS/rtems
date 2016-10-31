@@ -175,7 +175,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
   Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-  Thread_Control          *needs_help;
+  bool                     needs_help;
 
   node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
   tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
@@ -191,7 +191,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
   );
   _Scheduler_Release_critical( scheduler, &lock_context );
 
-  if ( needs_help != the_thread ) {
+  if ( !needs_help ) {
     return;
   }
 
@@ -309,7 +309,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
   Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-  Thread_Control          *needs_help;
+  bool                     needs_help;
 
   node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
   tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
@@ -325,7 +325,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
   );
   _Scheduler_Release_critical( scheduler, &lock_context );
 
-  if ( needs_help != the_thread ) {
+  if ( !needs_help ) {
     return;
   }
 

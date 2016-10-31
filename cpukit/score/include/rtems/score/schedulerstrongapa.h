@@ -113,7 +113,7 @@ void _Scheduler_strong_APA_Block(
   Scheduler_Node          *node
 );
 
-Thread_Control *_Scheduler_strong_APA_Unblock(
+bool _Scheduler_strong_APA_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -144,7 +144,7 @@ void _Scheduler_strong_APA_Withdraw_node(
   Thread_Scheduler_state   next_state
 );
 
-Thread_Control *_Scheduler_strong_APA_Yield(
+bool _Scheduler_strong_APA_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

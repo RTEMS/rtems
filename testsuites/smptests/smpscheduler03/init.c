@@ -314,7 +314,7 @@ static void test_update_priority_op(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static Thread_Control *yield_op(
+static bool yield_op(
   Thread_Control *thread,
   Scheduler_SMP_Node *scheduler_node
 )
@@ -322,7 +322,7 @@ static Thread_Control *yield_op(
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
   ISR_lock_Context scheduler_lock_context;
-  Thread_Control *needs_help;
+  bool needs_help;
 
   _Thread_State_acquire( thread, &state_lock_context );
   scheduler = _Thread_Scheduler_get_home( thread );
@@ -348,7 +348,7 @@ static void test_case_yield_op(
   Scheduler_SMP_Node_state new_state
 )
 {
-  Thread_Control *needs_help;
+  bool needs_help;
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
@@ -395,20 +395,16 @@ static void test_case_yield_op(
   needs_help = yield_op(executing, executing_node);
   rtems_test_assert(executing_node->state == new_state);
 
-  if (start_state != new_state) {
-    switch (start_state) {
-      case SCHEDULER_SMP_NODE_SCHEDULED:
-        rtems_test_assert(needs_help == executing);
-        break;
-      case SCHEDULER_SMP_NODE_READY:
-        rtems_test_assert(needs_help == other);
-        break;
-      default:
-        rtems_test_assert(0);
-        break;
-    }
-  } else {
-    rtems_test_assert(needs_help == NULL);
+  switch (new_state) {
+    case SCHEDULER_SMP_NODE_SCHEDULED:
+      rtems_test_assert(!needs_help);
+      break;
+    case SCHEDULER_SMP_NODE_READY:
+      rtems_test_assert(needs_help);
+      break;
+    default:
+      rtems_test_assert(0);
+      break;
   }
 
   change_priority(executing, 1, true);
@@ -473,7 +469,7 @@ static void block_op(
   _Thread_State_release( thread, &state_lock_context );
 }
 
-static Thread_Control *unblock_op(
+static bool unblock_op(
   Thread_Control *thread,
   Scheduler_SMP_Node *scheduler_node
 )
@@ -481,7 +477,7 @@ static Thread_Control *unblock_op(
   const Scheduler_Control *scheduler;
   ISR_lock_Context state_lock_context;
   ISR_lock_Context scheduler_lock_context;
-  Thread_Control *needs_help;
+  bool needs_help;
 
   _Thread_State_acquire( thread, &state_lock_context );
   scheduler = _Thread_Scheduler_get_home( thread );
@@ -506,7 +502,7 @@ static void test_case_unblock_op(
   Scheduler_SMP_Node_state new_state
 )
 {
-  Thread_Control *needs_help;
+  bool needs_help;
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
@@ -533,10 +529,10 @@ static void test_case_unblock_op(
 
   switch (new_state) {
     case SCHEDULER_SMP_NODE_SCHEDULED:
-      rtems_test_assert(needs_help == other);
+      rtems_test_assert(!needs_help);
       break;
     case SCHEDULER_SMP_NODE_READY:
-      rtems_test_assert(needs_help == executing);
+      rtems_test_assert(needs_help);
       break;
     default:
       rtems_test_assert(0);

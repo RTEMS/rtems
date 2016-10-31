@@ -22,7 +22,7 @@
 
 #include <rtems/score/schedulerpriorityimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_priority_Unblock (
+Scheduler_Void_or_bool _Scheduler_priority_Unblock (
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -72,5 +72,5 @@ Scheduler_Void_or_thread _Scheduler_priority_Unblock (
     _Scheduler_Update_heir( the_thread, priority == PRIORITY_PSEUDO_ISR );
   }
 
-  SCHEDULER_RETURN_VOID_OR_NULL;
+  SCHEDULER_RETURN_VOID_OR_BOOL;
 }

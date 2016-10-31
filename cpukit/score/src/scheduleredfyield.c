@@ -21,7 +21,7 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
-Scheduler_Void_or_thread _Scheduler_EDF_Yield(
+Scheduler_Void_or_bool _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -37,5 +37,5 @@ Scheduler_Void_or_thread _Scheduler_EDF_Yield(
   _Scheduler_EDF_Enqueue( context, the_node, the_node->priority );
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, true );
 
-  SCHEDULER_RETURN_VOID_OR_NULL;
+  SCHEDULER_RETURN_VOID_OR_BOOL;
 }

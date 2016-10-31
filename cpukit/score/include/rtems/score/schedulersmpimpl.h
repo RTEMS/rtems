@@ -313,13 +313,7 @@ typedef void ( *Scheduler_SMP_Update )(
   Priority_Control   new_priority
 );
 
-typedef Thread_Control *( *Scheduler_SMP_Enqueue )(
-  Scheduler_Context *context,
-  Scheduler_Node    *node_to_enqueue,
-  Thread_Control    *needs_help
-);
-
-typedef Thread_Control *( *Scheduler_SMP_Enqueue_scheduled )(
+typedef bool ( *Scheduler_SMP_Enqueue )(
   Scheduler_Context *context,
   Scheduler_Node    *node_to_enqueue
 );
@@ -617,7 +611,7 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   return lowest_scheduled;
 }
 
-static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
+static inline void _Scheduler_SMP_Enqueue_to_scheduled(
   Scheduler_Context                *context,
   Scheduler_Node                   *node,
   Scheduler_Node                   *lowest_scheduled,
@@ -626,7 +620,6 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
   Scheduler_SMP_Allocate_processor  allocate_processor
 )
 {
-  Thread_Control *needs_help;
   Scheduler_Try_to_schedule_action action;
 
   action = _Scheduler_Try_to_schedule_node(
@@ -637,10 +630,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
   );
 
   if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-    Thread_Control *lowest_scheduled_user;
-    Thread_Control *idle;
-
-    lowest_scheduled_user = _Scheduler_SMP_Preempt(
+    _Scheduler_SMP_Preempt(
       context,
       node,
       lowest_scheduled,
@@ -650,16 +640,11 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
     ( *insert_scheduled )( context, node );
     ( *move_from_scheduled_to_ready )( context, lowest_scheduled );
 
-    idle = _Scheduler_Release_idle_thread(
+    _Scheduler_Release_idle_thread(
       context,
       lowest_scheduled,
       _Scheduler_SMP_Release_idle_thread
     );
-    if ( idle == NULL ) {
-      needs_help = lowest_scheduled_user;
-    } else {
-      needs_help = NULL;
-    }
   } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
     _Scheduler_SMP_Node_change_state(
       lowest_scheduled,
@@ -675,15 +660,10 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
       lowest_scheduled,
       _Scheduler_Node_get_idle( lowest_scheduled )
     );
-
-    needs_help = NULL;
   } else {
     _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
-    needs_help = NULL;
   }
-
-  return needs_help;
 }
 
 /**
@@ -693,8 +673,6 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
  *
  * @param[in] context The scheduler instance context.
  * @param[in] node The node to enqueue.
- * @param[in] needs_help The thread needing help in case the node cannot be
- *   scheduled.
  * @param[in] order The order function.
  * @param[in] insert_ready Function to insert a node into the set of ready
  *   nodes.
@@ -709,10 +687,9 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_to_scheduled(
  * @param[in] allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
  */
-static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
+static inline bool _Scheduler_SMP_Enqueue_ordered(
   Scheduler_Context                  *context,
   Scheduler_Node                     *node,
-  Thread_Control                     *needs_help,
   Chain_Node_order                    order,
   Scheduler_SMP_Insert                insert_ready,
   Scheduler_SMP_Insert                insert_scheduled,
@@ -721,11 +698,13 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Allocate_processor    allocate_processor
 )
 {
-  Scheduler_Node *lowest_scheduled =
-    ( *get_lowest_scheduled )( context, node, order );
+  bool            needs_help;
+  Scheduler_Node *lowest_scheduled;
+
+  lowest_scheduled = ( *get_lowest_scheduled )( context, node, order );
 
   if ( ( *order )( &node->Node, &lowest_scheduled->Node ) ) {
-    needs_help = _Scheduler_SMP_Enqueue_to_scheduled(
+    _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       node,
       lowest_scheduled,
@@ -733,8 +712,10 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
       move_from_scheduled_to_ready,
       allocate_processor
     );
+    needs_help = false;
   } else {
     ( *insert_ready )( context, node );
+    needs_help = true;
   }
 
   return needs_help;
@@ -759,7 +740,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_ordered(
  * @param[in] allocate_processor Function to allocate a processor to a node
  *   based on the rules of the scheduler.
  */
-static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
+static inline bool _Scheduler_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context                *context,
   Scheduler_Node                   *node,
   Chain_Node_order                  order,
@@ -811,7 +792,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
         _Thread_Scheduler_release_critical( owner, &lock_context );
       }
 
-      return NULL;
+      return false;
     }
 
     action = _Scheduler_Try_to_schedule_node(
@@ -822,10 +803,9 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
     );
 
     if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE ) {
-      Thread_Control *user;
       Thread_Control *idle;
 
-      user = _Scheduler_SMP_Preempt(
+      _Scheduler_SMP_Preempt(
         context,
         highest_ready,
         node,
@@ -840,12 +820,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
         node,
         _Scheduler_SMP_Release_idle_thread
       );
-
-      if ( idle == NULL ) {
-        return user;
-      } else {
-        return NULL;
-      }
+      return ( idle == NULL );
     } else if ( action == SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
       _Scheduler_SMP_Node_change_state(
@@ -861,7 +836,7 @@ static inline Thread_Control *_Scheduler_SMP_Enqueue_scheduled_ordered(
         node,
         _Scheduler_Node_get_idle( node )
       );
-      return NULL;
+      return false;
     } else {
       _Assert( action == SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK );
 
@@ -982,7 +957,7 @@ static inline void _Scheduler_SMP_Block(
   }
 }
 
-static inline Thread_Control *_Scheduler_SMP_Unblock(
+static inline bool _Scheduler_SMP_Unblock(
   Scheduler_Context     *context,
   Thread_Control        *thread,
   Scheduler_Node        *node,
@@ -992,7 +967,7 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
 {
   Scheduler_SMP_Node_state  node_state;
   bool                      unblock;
-  Thread_Control           *needs_help;
+  bool                      needs_help;
 
   node_state = _Scheduler_SMP_Node_state( node );
   unblock = _Scheduler_Unblock_node(
@@ -1017,31 +992,31 @@ static inline Thread_Control *_Scheduler_SMP_Unblock(
     if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
       _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_READY );
 
-      needs_help = ( *enqueue_fifo )( context, node, thread );
+      needs_help = ( *enqueue_fifo )( context, node );
     } else {
       _Assert( node_state == SCHEDULER_SMP_NODE_READY );
       _Assert( node->sticky_level > 0 );
       _Assert( node->idle == NULL );
-      needs_help = thread;
+      needs_help = true;
     }
   } else {
-    needs_help = NULL;
+    needs_help = false;
   }
 
   return needs_help;
 }
 
 static inline void _Scheduler_SMP_Update_priority(
-  Scheduler_Context               *context,
-  Thread_Control                  *thread,
-  Scheduler_Node                  *node,
-  Scheduler_SMP_Extract            extract_from_ready,
-  Scheduler_SMP_Update             update,
-  Scheduler_SMP_Enqueue            enqueue_fifo,
-  Scheduler_SMP_Enqueue            enqueue_lifo,
-  Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_fifo,
-  Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_lifo,
-  Scheduler_SMP_Ask_for_help       ask_for_help
+  Scheduler_Context          *context,
+  Thread_Control             *thread,
+  Scheduler_Node             *node,
+  Scheduler_SMP_Extract       extract_from_ready,
+  Scheduler_SMP_Update        update,
+  Scheduler_SMP_Enqueue       enqueue_fifo,
+  Scheduler_SMP_Enqueue       enqueue_lifo,
+  Scheduler_SMP_Enqueue       enqueue_scheduled_fifo,
+  Scheduler_SMP_Enqueue       enqueue_scheduled_lifo,
+  Scheduler_SMP_Ask_for_help  ask_for_help
 )
 {
   Priority_Control         new_priority;
@@ -1076,9 +1051,9 @@ static inline void _Scheduler_SMP_Update_priority(
     ( *update )( context, node, new_priority );
 
     if ( prepend_it ) {
-      ( *enqueue_lifo )( context, node, NULL );
+      ( *enqueue_lifo )( context, node );
     } else {
-      ( *enqueue_fifo )( context, node, NULL );
+      ( *enqueue_fifo )( context, node );
     }
   } else {
     ( *update )( context, node, new_priority );
@@ -1089,17 +1064,17 @@ static inline void _Scheduler_SMP_Update_priority(
   }
 }
 
-static inline Thread_Control *_Scheduler_SMP_Yield(
-  Scheduler_Context               *context,
-  Thread_Control                  *thread,
-  Scheduler_Node                  *node,
-  Scheduler_SMP_Extract            extract_from_ready,
-  Scheduler_SMP_Enqueue            enqueue_fifo,
-  Scheduler_SMP_Enqueue_scheduled  enqueue_scheduled_fifo
+static inline bool _Scheduler_SMP_Yield(
+  Scheduler_Context     *context,
+  Thread_Control        *thread,
+  Scheduler_Node        *node,
+  Scheduler_SMP_Extract  extract_from_ready,
+  Scheduler_SMP_Enqueue  enqueue_fifo,
+  Scheduler_SMP_Enqueue  enqueue_scheduled_fifo
 )
 {
-  Thread_Control           *needs_help;
-  Scheduler_SMP_Node_state  node_state;
+  bool                     needs_help;
+  Scheduler_SMP_Node_state node_state;
 
   node_state = _Scheduler_SMP_Node_state( node );
 
@@ -1110,9 +1085,9 @@ static inline Thread_Control *_Scheduler_SMP_Yield(
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, node );
 
-    needs_help = ( *enqueue_fifo )( context, node, NULL );
+    needs_help = ( *enqueue_fifo )( context, node );
   } else {
-    needs_help = thread;
+    needs_help = true;
   }
 
   return needs_help;

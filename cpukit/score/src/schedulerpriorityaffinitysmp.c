@@ -270,16 +270,14 @@ static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
  * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled into
  * _Scheduler_SMP_Enqueue_ordered.
  */
-static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_fifo(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_fifo(
   Scheduler_Context *context,
-  Scheduler_Node    *node,
-  Thread_Control    *needs_help
+  Scheduler_Node    *node
 )
 {
   return _Scheduler_SMP_Enqueue_ordered(
     context,
     node,
-    needs_help,
     _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order,
     _Scheduler_priority_SMP_Insert_ready_fifo,
     _Scheduler_SMP_Insert_scheduled_fifo,
@@ -354,14 +352,14 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
 /*
  * This is the public scheduler specific Unblock operation.
  */
-Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
+bool _Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  Thread_Control    *needs_help;
+  bool               needs_help;
 
   needs_help = _Scheduler_SMP_Unblock(
     context,
@@ -383,10 +381,9 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Unblock(
  *  This is unique to this scheduler because it passes scheduler specific
  *  get_lowest_scheduled helper to _Scheduler_SMP_Enqueue_ordered.
  */
-static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_ordered(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_ordered(
   Scheduler_Context     *context,
   Scheduler_Node        *node,
-  Thread_Control        *needs_help,
   Chain_Node_order       order,
   Scheduler_SMP_Insert   insert_ready,
   Scheduler_SMP_Insert   insert_scheduled
@@ -395,7 +392,6 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_ordered(
   return _Scheduler_SMP_Enqueue_ordered(
     context,
     node,
-    needs_help,
     order,
     insert_ready,
     insert_scheduled,
@@ -410,16 +406,14 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_ordered(
  *  to _Scheduler_priority_affinity_SMP_Enqueue_ordered() which
  *  invokes a scheduler unique get_lowest_scheduled helper.
  */
-static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_lifo(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_lifo(
   Scheduler_Context *context,
-  Scheduler_Node    *node,
-  Thread_Control    *needs_help
+  Scheduler_Node    *node
 )
 {
   return _Scheduler_priority_affinity_SMP_Enqueue_ordered(
     context,
     node,
-    needs_help,
     _Scheduler_priority_affinity_SMP_Insert_priority_lifo_order,
     _Scheduler_priority_SMP_Insert_ready_lifo,
     _Scheduler_SMP_Insert_scheduled_lifo
@@ -431,8 +425,7 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_lifo(
  * invoke _Scheduler_SMP_Enqueue_scheduled_ordered() with
  * this scheduler's get_highest_ready() helper.
  */
-static Thread_Control *
-_Scheduler_priority_affinity_SMP_Enqueue_scheduled_ordered(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_scheduled_ordered(
   Scheduler_Context    *context,
   Scheduler_Node       *node,
   Chain_Node_order      order,
@@ -458,7 +451,7 @@ _Scheduler_priority_affinity_SMP_Enqueue_scheduled_ordered(
  *  to _Scheduler_priority_affinity_SMP_Enqueue_scheduled__ordered() which
  *  invokes a scheduler unique get_lowest_scheduled helper.
  */
-static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_scheduled_lifo(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_scheduled_lifo(
   Scheduler_Context *context,
   Scheduler_Node    *node
 )
@@ -477,7 +470,7 @@ static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_scheduled_lifo(
  *  to _Scheduler_priority_affinity_SMP_Enqueue_scheduled__ordered() which
  *  invokes a scheduler unique get_lowest_scheduled helper.
  */
-static Thread_Control *_Scheduler_priority_affinity_SMP_Enqueue_scheduled_fifo(
+static bool _Scheduler_priority_affinity_SMP_Enqueue_scheduled_fifo(
   Scheduler_Context *context,
   Scheduler_Node    *node
 )

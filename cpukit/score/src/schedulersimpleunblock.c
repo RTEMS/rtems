@@ -21,7 +21,7 @@
 #include <rtems/score/schedulersimpleimpl.h>
 #include <rtems/score/thread.h>
 
-Scheduler_Void_or_thread _Scheduler_simple_Unblock(
+Scheduler_Void_or_bool _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -55,5 +55,5 @@ Scheduler_Void_or_thread _Scheduler_simple_Unblock(
     );
   }
 
-  SCHEDULER_RETURN_VOID_OR_NULL;
+  SCHEDULER_RETURN_VOID_OR_BOOL;
 }
