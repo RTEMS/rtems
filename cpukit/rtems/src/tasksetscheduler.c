@@ -35,7 +35,8 @@ rtems_status_code rtems_task_set_scheduler(
   Priority_Control         core_priority;
   Status_Control           status;
 
-  if ( !_Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
+  scheduler = _Scheduler_Get_by_id( scheduler_id );
+  if ( scheduler == NULL ) {
     return RTEMS_INVALID_ID;
   }
 

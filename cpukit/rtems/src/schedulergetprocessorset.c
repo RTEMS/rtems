@@ -34,7 +34,8 @@ rtems_status_code rtems_scheduler_get_processor_set(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( !_Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
+  scheduler = _Scheduler_Get_by_id( scheduler_id );
+  if ( scheduler == NULL ) {
     return RTEMS_INVALID_ID;
   }
 

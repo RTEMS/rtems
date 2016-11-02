@@ -828,18 +828,19 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index_by_id( Objects_Id id )
   return id - minimum_id;
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_Get_by_id(
-  Objects_Id                id,
-  const Scheduler_Control **scheduler_p
+RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_id(
+  Objects_Id id
 )
 {
-  uint32_t index = _Scheduler_Get_index_by_id( id );
-  const Scheduler_Control *scheduler = &_Scheduler_Table[ index ];
+  uint32_t index;
 
-  *scheduler_p = scheduler;
+  index = _Scheduler_Get_index_by_id( id );
 
-  return index < _Scheduler_Count
-    && _Scheduler_Get_processor_count( scheduler ) > 0;
+  if ( index >= _Scheduler_Count ) {
+    return NULL;
+  }
+
+  return &_Scheduler_Table[ index ];
 }
 
 RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
@@ -1205,8 +1206,13 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   Priority_Control         priority
 )
 {
-  Scheduler_Node *new_scheduler_node;
-  Scheduler_Node *old_scheduler_node;
+  Scheduler_Node          *new_scheduler_node;
+  Scheduler_Node          *old_scheduler_node;
+#if defined(RTEMS_SMP)
+  ISR_lock_Context         lock_context;
+  const Scheduler_Control *old_scheduler;
+
+#endif
 
   if ( the_thread->Wait.queue != NULL ) {
     return STATUS_RESOURCE_IN_USE;
@@ -1229,8 +1235,31 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
 
 #if defined(RTEMS_SMP)
   if ( !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes ) ) {
+    _Priority_Plain_insert(
+      &old_scheduler_node->Wait.Priority,
+      &the_thread->Real_priority,
+      the_thread->Real_priority.priority
+    );
     return STATUS_RESOURCE_IN_USE;
   }
+
+  old_scheduler = _Thread_Scheduler_get_home( the_thread );
+
+  _Scheduler_Acquire_critical( new_scheduler, &lock_context );
+
+  if ( _Scheduler_Get_processor_count( new_scheduler ) == 0 ) {
+    _Scheduler_Release_critical( new_scheduler, &lock_context );
+    _Priority_Plain_insert(
+      &old_scheduler_node->Wait.Priority,
+      &the_thread->Real_priority,
+      the_thread->Real_priority.priority
+    );
+    return STATUS_UNSATISFIED;
+  }
+
+  the_thread->Scheduler.home = new_scheduler;
+
+  _Scheduler_Release_critical( new_scheduler, &lock_context );
 
   _Thread_Scheduler_process_requests( the_thread );
   new_scheduler_node = _Thread_Scheduler_get_node_by_index(
@@ -1249,47 +1278,40 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   );
 
 #if defined(RTEMS_SMP)
-  {
-    const Scheduler_Control *old_scheduler;
+  if ( old_scheduler != new_scheduler ) {
+    States_Control current_state;
 
-    old_scheduler = _Thread_Scheduler_get_home( the_thread );
+    current_state = the_thread->current_state;
 
-    if ( old_scheduler != new_scheduler ) {
-      States_Control current_state;
-
-      current_state = the_thread->current_state;
-
-      if ( _States_Is_ready( current_state ) ) {
-        _Scheduler_Block( the_thread );
-      }
-
-      _Assert( old_scheduler_node->sticky_level == 0 );
-      _Assert( new_scheduler_node->sticky_level == 0 );
-
-      _Chain_Extract_unprotected( &old_scheduler_node->Thread.Wait_node );
-      _Assert( _Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
-      _Chain_Initialize_one(
-        &the_thread->Scheduler.Wait_nodes,
-        &new_scheduler_node->Thread.Wait_node
-      );
-      _Chain_Extract_unprotected(
-        &old_scheduler_node->Thread.Scheduler_node.Chain
-      );
-      _Assert( _Chain_Is_empty( &the_thread->Scheduler.Scheduler_nodes ) );
-      _Chain_Initialize_one(
-        &the_thread->Scheduler.Scheduler_nodes,
-        &new_scheduler_node->Thread.Scheduler_node.Chain
-      );
-
-      the_thread->Scheduler.home = new_scheduler;
-      _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
-
-      if ( _States_Is_ready( current_state ) ) {
-        _Scheduler_Unblock( the_thread );
-      }
-
-      return STATUS_SUCCESSFUL;
+    if ( _States_Is_ready( current_state ) ) {
+      _Scheduler_Block( the_thread );
     }
+
+    _Assert( old_scheduler_node->sticky_level == 0 );
+    _Assert( new_scheduler_node->sticky_level == 0 );
+
+    _Chain_Extract_unprotected( &old_scheduler_node->Thread.Wait_node );
+    _Assert( _Chain_Is_empty( &the_thread->Scheduler.Wait_nodes ) );
+    _Chain_Initialize_one(
+      &the_thread->Scheduler.Wait_nodes,
+      &new_scheduler_node->Thread.Wait_node
+    );
+    _Chain_Extract_unprotected(
+      &old_scheduler_node->Thread.Scheduler_node.Chain
+    );
+    _Assert( _Chain_Is_empty( &the_thread->Scheduler.Scheduler_nodes ) );
+    _Chain_Initialize_one(
+      &the_thread->Scheduler.Scheduler_nodes,
+      &new_scheduler_node->Thread.Scheduler_node.Chain
+    );
+
+    _Scheduler_Node_set_priority( new_scheduler_node, priority, false );
+
+    if ( _States_Is_ready( current_state ) ) {
+      _Scheduler_Unblock( the_thread );
+    }
+
+    return STATUS_SUCCESSFUL;
   }
 #endif
 

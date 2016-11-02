@@ -36,12 +36,8 @@ rtems_status_code rtems_scheduler_ident(
       const Scheduler_Control *scheduler = &_Scheduler_Table[ i ];
 
       if ( scheduler->name == name ) {
-        if ( _Scheduler_Get_processor_count( scheduler ) > 0 ) {
-          *id = _Scheduler_Build_id( i );
-          sc = RTEMS_SUCCESSFUL;
-        } else {
-          sc = RTEMS_UNSATISFIED;
-        }
+        *id = _Scheduler_Build_id( i );
+        sc = RTEMS_SUCCESSFUL;
       }
     }
   } else {

@@ -138,7 +138,8 @@ rtems_status_code rtems_semaphore_set_priority(
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if ( !_Scheduler_Get_by_id( scheduler_id, &scheduler ) ) {
+  scheduler = _Scheduler_Get_by_id( scheduler_id );
+  if ( scheduler == NULL ) {
     return RTEMS_INVALID_ID;
   }
 
