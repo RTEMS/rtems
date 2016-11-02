@@ -162,6 +162,7 @@ SECTIONS
     edata = .;
     _edata = .;
   } > ram
+  _data_load_start = LOADADDR (.data);
   .rtemsrwset : {
     KEEP (*(SORT(.rtemsrwset.*)))
   } >ram

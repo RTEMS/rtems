@@ -359,19 +359,19 @@ cpu0:
         /*
          *  Copy the initialized data to RAM
          *
-         *  FROM:   _endtext
+         *  FROM:   _data_load_start
          *  TO:     _data_start
          *  LENGTH: (__bss_start - _data_start) bytes
          */
 
-        sethi %hi(_endtext),%g1
-        or    %g1,%lo(_endtext),%g1     ! g1 = start of initialized data in ROM
+        sethi %hi(_data_load_start),%g1 ! g1 = start of initialized data in ROM
+        or    %g1,%lo(_data_load_start),%g1
 
-        sethi %hi(_data_start),%g3
-        or    %g3,%lo(_data_start),%g3  ! g3 = start of initialized data in RAM
+        sethi %hi(_data_start),%g3      ! g3 = start of initialized data in RAM
+        or    %g3,%lo(_data_start),%g3
 
-        sethi %hi(__bss_start), %g2
-        or    %g2,%lo(__bss_start),%g2  ! g2 = end of initialized data in RAM
+        sethi %hi(__bss_start), %g2     ! g2 = end of initialized data in RAM
+        or    %g2,%lo(__bss_start),%g2
 
 	cmp   %g1, %g3
 	be    1f
