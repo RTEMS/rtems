@@ -281,6 +281,38 @@ typedef struct {
     (void) _context;
 #endif
 
+/**
+ * @brief Acquires an ISR lock inside an ISR disabled section (inline).
+ *
+ * @see _ISR_lock_Acquire().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Acquire_inline( _lock, _context ) \
+    _SMP_lock_Acquire_inline( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
+#else
+  #define _ISR_lock_Acquire_inline( _lock, _context ) \
+    (void) _context;
+#endif
+
+/**
+ * @brief Releases an ISR lock inside an ISR disabled section (inline).
+ *
+ * @see _ISR_lock_Release().
+ */
+#if defined( RTEMS_SMP )
+  #define _ISR_lock_Release_inline( _lock, _context ) \
+    _SMP_lock_Release_inline( \
+      &( _lock )->Lock, \
+      &( _context )->Lock_context \
+    )
+#else
+  #define _ISR_lock_Release_inline( _lock, _context ) \
+    (void) _context;
+#endif
+
 #if defined( RTEMS_DEBUG )
   /**
    * @brief Returns true, if the ISR lock is owned by the current processor,
