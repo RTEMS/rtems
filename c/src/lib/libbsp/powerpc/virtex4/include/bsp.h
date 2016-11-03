@@ -48,7 +48,7 @@
  *  confdefs.h overrides for this BSP:
  *   - Interrupt stack space is not minimum if defined.
  */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
+#define BSP_INTERRUPT_STACK_SIZE  (16 * 1024)
 
 #ifdef ASM
 /* Definition of where to store registers in alignment handler */
