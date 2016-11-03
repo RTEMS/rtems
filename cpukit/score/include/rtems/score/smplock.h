@@ -28,8 +28,9 @@
 #include <rtems/score/smplockticket.h>
 #include <rtems/score/isrlevel.h>
 
-#if defined(RTEMS_PROFILING) || defined(RTEMS_DEBUG)
-#define RTEMS_SMP_LOCK_DO_NOT_INLINE
+#if defined(RTEMS_DEBUG)
+#include <rtems/score/assert.h>
+#include <rtems/score/smp.h>
 #endif
 
 #ifdef __cplusplus
@@ -116,27 +117,9 @@ typedef struct {
   #define SMP_LOCK_INITIALIZER( name ) { SMP_TICKET_LOCK_INITIALIZER }
 #endif
 
-/**
- * @brief Initializes an SMP lock.
- *
- * Concurrent initialization leads to unpredictable results.
- *
- * @param[in] lock The SMP lock control.
- * @param[in] name The name for the SMP lock statistics.  This name must be
- * persistent throughout the life time of this statistics block.
- */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
-void _SMP_lock_Initialize(
+static inline void _SMP_lock_Initialize_inline(
   SMP_lock_Control *lock,
-  const char *name
-);
-
-static inline void _SMP_lock_Initialize_body(
-#else
-static inline void _SMP_lock_Initialize(
-#endif
-  SMP_lock_Control *lock,
-  const char *name
+  const char       *name
 )
 {
   _SMP_ticket_lock_Initialize( &lock->Ticket_lock );
@@ -151,6 +134,36 @@ static inline void _SMP_lock_Initialize(
 }
 
 /**
+ * @brief Initializes an SMP lock.
+ *
+ * Concurrent initialization leads to unpredictable results.
+ *
+ * @param[in] lock The SMP lock control.
+ * @param[in] name The name for the SMP lock statistics.  This name must be
+ * persistent throughout the life time of this statistics block.
+ */
+#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
+void _SMP_lock_Initialize(
+  SMP_lock_Control *lock,
+  const char *      name
+);
+#else
+static inline void _SMP_lock_Initialize(
+  SMP_lock_Control *lock,
+  const char       *name
+)
+{
+  _SMP_lock_Initialize_inline( lock, name );
+}
+#endif
+
+static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
+{
+  _SMP_ticket_lock_Destroy( &lock->Ticket_lock );
+  _SMP_lock_Stats_destroy( &lock->Stats );
+}
+
+/**
  * @brief Destroys an SMP lock.
  *
  * Concurrent destruction leads to unpredictable results.
@@ -159,14 +172,31 @@ static inline void _SMP_lock_Initialize(
  */
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Destroy( SMP_lock_Control *lock );
-
-static inline void _SMP_lock_Destroy_body( SMP_lock_Control *lock )
 #else
 static inline void _SMP_lock_Destroy( SMP_lock_Control *lock )
-#endif
 {
-  _SMP_ticket_lock_Destroy( &lock->Ticket_lock );
-  _SMP_lock_Stats_destroy( &lock->Stats );
+  _SMP_lock_Destroy_inline( lock );
+}
+#endif
+
+static inline void _SMP_lock_Acquire_inline(
+  SMP_lock_Control *lock,
+  SMP_lock_Context *context
+)
+{
+#if defined(RTEMS_DEBUG)
+  context->lock_used_for_acquire = lock;
+#else
+  (void) context;
+#endif
+  _SMP_ticket_lock_Acquire(
+    &lock->Ticket_lock,
+    &lock->Stats,
+    &context->Stats_context
+  );
+#if defined(RTEMS_DEBUG)
+  lock->owner = _SMP_Get_current_processor();
+#endif
 }
 
 /**
@@ -180,24 +210,26 @@ static inline void _SMP_lock_Destroy( SMP_lock_Control *lock )
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Acquire(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
 
-static inline void _SMP_lock_Acquire_body(
-#else
-static inline void _SMP_lock_Acquire(
-#endif
+static inline void _SMP_lock_Release_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 )
 {
+#if defined(RTEMS_DEBUG)
+  _Assert( context->lock_used_for_acquire == lock );
+  context->lock_used_for_acquire = NULL;
+  _Assert( lock->owner == _SMP_Get_current_processor() );
+  lock->owner = SMP_LOCK_NO_OWNER;
+#else
   (void) context;
-  _SMP_ticket_lock_Acquire(
+#endif
+  _SMP_ticket_lock_Release(
     &lock->Ticket_lock,
-    &lock->Stats,
     &context->Stats_context
   );
 }
@@ -209,25 +241,18 @@ static inline void _SMP_lock_Acquire(
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
 
-static inline void _SMP_lock_Release_body(
-#else
-static inline void _SMP_lock_Release(
-#endif
+static inline void _SMP_lock_ISR_disable_and_acquire_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 )
 {
-  (void) context;
-  _SMP_ticket_lock_Release(
-    &lock->Ticket_lock,
-    &context->Stats_context
-  );
+  _ISR_Local_disable( context->isr_level );
+  _SMP_lock_Acquire_inline( lock, context );
 }
 
 /**
@@ -237,22 +262,18 @@ static inline void _SMP_lock_Release(
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_ISR_disable_and_acquire(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
 
-static inline void _SMP_lock_ISR_disable_and_acquire_body(
-#else
-static inline void _SMP_lock_ISR_disable_and_acquire(
-#endif
+static inline void _SMP_lock_Release_and_ISR_enable_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 )
 {
-  _ISR_Local_disable( context->isr_level );
-  _SMP_lock_Acquire( lock, context );
+  _SMP_lock_Release_inline( lock, context );
+  _ISR_Local_enable( context->isr_level );
 }
 
 /**
@@ -262,21 +283,10 @@ static inline void _SMP_lock_ISR_disable_and_acquire(
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
-#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
-#else
-static inline void _SMP_lock_Release_and_ISR_enable(
-  SMP_lock_Control *lock,
-  SMP_lock_Context *context
-)
-{
-  _SMP_lock_Release( lock, context );
-  _ISR_Local_enable( context->isr_level );
-}
-#endif
 
 #if defined(RTEMS_DEBUG)
 /**
