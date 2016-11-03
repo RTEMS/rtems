@@ -25,6 +25,7 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/rbtreeimpl.h>
 
+#include <sys/types.h>
 #include <sys/timespec.h>
 
 #ifdef __cplusplus
@@ -319,6 +320,17 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
 
   ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
   ticks |= (uint32_t) ts->tv_nsec;
+
+  return ticks;
+}
+
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime(
+  sbintime_t sbt
+)
+{
+  uint64_t ticks = ( sbt >> 32 ) << WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
+
+  ticks |= ( (uint64_t) 1000000000 * (uint32_t) sbt ) >> 32;
 
   return ticks;
 }
