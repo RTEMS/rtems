@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -88,6 +88,10 @@ int rtems_test_end(void);
  */
 int rtems_test_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 
+#define RTEMS_TEST_PARALLEL_PROCESSOR_MAX 32
+
+typedef struct rtems_test_parallel_job rtems_test_parallel_job;
+
 /**
  * @brief Internal context for parallel job execution.
  */
@@ -95,8 +99,10 @@ typedef struct {
   Atomic_Ulong stop;
   SMP_barrier_Control barrier;
   size_t worker_count;
-  rtems_id worker_ids[32];
+  rtems_id worker_ids[RTEMS_TEST_PARALLEL_PROCESSOR_MAX];
   rtems_id stop_worker_timer_id;
+  const struct rtems_test_parallel_job *jobs;
+  size_t job_count;
 } rtems_test_parallel_context;
 
 /**
@@ -118,7 +124,7 @@ typedef void (*rtems_test_parallel_worker_setup)(
 /**
  * @brief Basic parallel job description.
  */
-typedef struct {
+struct rtems_test_parallel_job {
   /**
    * @brief Job initialization handler.
    *
@@ -186,7 +192,7 @@ typedef struct {
    * afterwards and incremented step by step until all processors are used).
    */
   bool cascade;
-} rtems_test_parallel_job;
+};
 
 /**
  * @brief Indicates if a job body should stop its work loop.
