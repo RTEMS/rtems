@@ -148,10 +148,7 @@ rtems_status_code rtems_semaphore_create(
           &the_semaphore->Core_control.Mutex.Recursive.Mutex,
           executing
         );
-
-        if ( variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY ) {
-          ++executing->resource_count;
-        }
+        ++executing->resource_count;
       }
 
       status = STATUS_SUCCESSFUL;

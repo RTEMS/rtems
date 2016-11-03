@@ -70,8 +70,8 @@ rtems_task Init(
 
   test_init();
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete" );
+  status = rtems_task_suspend( RTEMS_SELF );
+  directive_failed( status, "rtems_task_suspend" );
 }
 
 void test_init(void)
