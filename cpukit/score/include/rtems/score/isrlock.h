@@ -151,6 +151,24 @@ typedef struct {
 #endif
 
 /**
+ * @brief Sets the ISR level in the ISR lock context.
+ *
+ * @param[in] context The ISR lock context.
+ * @param[in] level The ISR level.
+ */
+RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
+  ISR_lock_Context *context,
+  ISR_Level         level
+)
+{
+#if defined( RTEMS_SMP )
+  context->Lock_context.isr_level = level;
+#else
+  context->isr_level = level;
+#endif
+}
+
+/**
  * @brief Initializes an ISR lock.
  *
  * Concurrent initialization leads to unpredictable results.
