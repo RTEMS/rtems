@@ -973,20 +973,24 @@ _Scheduler_Try_to_schedule_node(
 {
   ISR_lock_Context                  lock_context;
   Scheduler_Try_to_schedule_action  action;
-  Thread_Control                   *user;
+  Thread_Control                   *owner;
 
   action = SCHEDULER_TRY_TO_SCHEDULE_DO_SCHEDULE;
-  user = _Scheduler_Node_get_user( node );
+  owner = _Scheduler_Node_get_owner( node );
+  _Assert( _Scheduler_Node_get_user( node ) == owner );
+  _Assert( _Scheduler_Node_get_idle( node ) == NULL );
 
-  _Thread_Scheduler_acquire_critical( user, &lock_context );
+  _Thread_Scheduler_acquire_critical( owner, &lock_context );
 
-  if ( user->Scheduler.state == THREAD_SCHEDULER_READY ) {
-    _Thread_Scheduler_cancel_need_for_help( user, _Thread_Get_CPU( user ) );
-    _Scheduler_Thread_change_state( user, THREAD_SCHEDULER_SCHEDULED );
+  if ( owner->Scheduler.state == THREAD_SCHEDULER_READY ) {
+    _Thread_Scheduler_cancel_need_for_help( owner, _Thread_Get_CPU( owner ) );
+    _Scheduler_Thread_change_state( owner, THREAD_SCHEDULER_SCHEDULED );
   } else if (
-    user->Scheduler.state == THREAD_SCHEDULER_SCHEDULED
-      || node->sticky_level == 0
+    owner->Scheduler.state == THREAD_SCHEDULER_SCHEDULED
+      && node->sticky_level <= 1
   ) {
+    action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
+  } else if ( node->sticky_level == 0 ) {
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_BLOCK;
   } else if ( idle != NULL ) {
     action = SCHEDULER_TRY_TO_SCHEDULE_DO_IDLE_EXCHANGE;
@@ -994,12 +998,12 @@ _Scheduler_Try_to_schedule_node(
     _Scheduler_Use_idle_thread(
       context,
       node,
-      _Thread_Get_CPU( user ),
+      _Thread_Get_CPU( owner ),
       get_idle_thread
     );
   }
 
-  _Thread_Scheduler_release_critical( user, &lock_context );
+  _Thread_Scheduler_release_critical( owner, &lock_context );
   return action;
 }
 
