@@ -209,13 +209,13 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
   }
 
   for ( i = 0 ; i < scheduler_count ; ++i ) {
-    const Scheduler_Control *scheduler_of_cpu;
+    const Scheduler_Control *scheduler_of_index;
 
-    scheduler_of_cpu = _Scheduler_Get_by_CPU_index( i );
+    scheduler_of_index = &_Scheduler_Table[ i ];
 
-    if ( scheduler != scheduler_of_cpu ) {
+    if ( scheduler != scheduler_of_index ) {
       mrsp->ceiling_priorities[ i ] =
-        _Scheduler_Map_priority( scheduler_of_cpu, 0 );
+        _Scheduler_Map_priority( scheduler_of_index, 0 );
     } else {
       mrsp->ceiling_priorities[ i ] = ceiling_priority;
     }
