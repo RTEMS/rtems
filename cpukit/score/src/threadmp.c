@@ -77,7 +77,7 @@ void _Thread_MP_Handler_initialization (
 
     proxy->Scheduler.nodes = &proxy->Scheduler_node;
     _Scheduler_Node_do_initialize(
-      _Scheduler_Get_by_CPU_index( 0 ),
+      &_Scheduler_Table[ 0 ],
       &proxy->Scheduler_node,
       (Thread_Control *) proxy,
       0

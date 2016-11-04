@@ -152,7 +152,7 @@ static void _MPCI_Create_server( void )
   _Thread_Initialize(
     &_Thread_Internal_information,
     _MPCI_Receive_server_tcb,
-    _Scheduler_Get_by_CPU_index( _SMP_Get_current_processor() ),
+    &_Scheduler_Table[ 0 ],
     NULL,        /* allocate the stack */
     _Stack_Minimum() +
       CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK +
