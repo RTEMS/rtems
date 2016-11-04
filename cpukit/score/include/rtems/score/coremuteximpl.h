@@ -237,7 +237,7 @@ _CORE_ceiling_mutex_Get_scheduler(
 #if defined(RTEMS_SMP)
   return the_mutex->scheduler;
 #else
-  return _Scheduler_Get_by_CPU_index( 0 );
+  return &_Scheduler_Table[ 0 ];
 #endif
 }
 
