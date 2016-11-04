@@ -10,6 +10,7 @@ include_rtems_bfin_HEADERS += rtems/bfin/bf52x.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += rtems/score/bfin.h
 include_rtems_score_HEADERS += rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += rtems/score/types.h

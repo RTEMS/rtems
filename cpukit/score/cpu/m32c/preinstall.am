@@ -40,6 +40,10 @@ $(PROJECT_INCLUDE)/rtems/score/cpu.h: rtems/score/cpu.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpu.h
 
+$(PROJECT_INCLUDE)/rtems/score/cpuimpl.h: rtems/score/cpuimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/m32c.h: rtems/score/m32c.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/m32c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/m32c.h

@@ -11,6 +11,7 @@ include_rtems_scoredir = $(includedir)/rtems/score
 
 include_rtems_score_HEADERS =
 include_rtems_score_HEADERS += rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += rtems/score/nios2.h
 include_rtems_score_HEADERS += rtems/score/nios2-utility.h
 include_rtems_score_HEADERS += rtems/score/nios2-count-zeros.h

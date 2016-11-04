@@ -14,6 +14,7 @@ include_rtems_m68k_HEADERS += rtems/m68k/sim.h
 
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += rtems/score/m68k.h
 include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/cpuatomic.h

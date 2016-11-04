@@ -6,6 +6,7 @@ include_rtems_HEADERS = rtems/asm.h
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/powerpc.h
 include_rtems_score_HEADERS += rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
