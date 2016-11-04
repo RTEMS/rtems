@@ -5,6 +5,8 @@
  */
 
 /*
+ * Copyright (c) 2016 embedded brains GmbH.
+ *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
@@ -20,6 +22,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define _CPU_Get_thread_executing() ( _SPARC_Per_CPU_current->executing )
 
 #ifdef __cplusplus
 }
