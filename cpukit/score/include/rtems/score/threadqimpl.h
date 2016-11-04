@@ -358,20 +358,21 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
   _ISR_lock_ISR_enable( lock_context );
 }
 
+#if defined(RTEMS_SMP)
+void _Thread_queue_Do_acquire_critical(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+);
+#else
 RTEMS_INLINE_ROUTINE void _Thread_queue_Do_acquire_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
 {
-  _Thread_queue_Queue_acquire_critical(
-    &the_thread_queue->Queue,
-    &the_thread_queue->Lock_stats,
-    lock_context
-  );
-#if defined(RTEMS_DEBUG) && defined(RTEMS_SMP)
-  the_thread_queue->owner = _SMP_Get_current_processor();
-#endif
+  (void) the_thread_queue;
+  (void) lock_context;
 }
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
   Thread_queue_Control *the_thread_queue,
@@ -384,14 +385,21 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire_critical(
   );
 }
 
+#if defined(RTEMS_SMP)
+void _Thread_queue_Acquire(
+  Thread_queue_Control *the_thread_queue,
+  Thread_queue_Context *queue_context
+);
+#else
 RTEMS_INLINE_ROUTINE void _Thread_queue_Acquire(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
 {
+  (void) the_thread_queue;
   _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
-  _Thread_queue_Acquire_critical( the_thread_queue, queue_context );
 }
+#endif
 
 #if defined(RTEMS_DEBUG)
 RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
@@ -406,22 +414,22 @@ RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
 }
 #endif
 
+#if defined(RTEMS_SMP)
+void _Thread_queue_Do_release_critical(
+  Thread_queue_Control *the_thread_queue,
+  ISR_lock_Context     *lock_context
+);
+#else
 RTEMS_INLINE_ROUTINE void _Thread_queue_Do_release_critical(
   Thread_queue_Control *the_thread_queue,
   ISR_lock_Context     *lock_context
 )
 {
-#if defined(RTEMS_DEBUG)
+  (void) the_thread_queue;
+  (void) lock_context;
   _Assert( _Thread_queue_Is_lock_owner( the_thread_queue ) );
-#if defined(RTEMS_SMP)
-  the_thread_queue->owner = SMP_LOCK_NO_OWNER;
-#endif
-#endif
-  _Thread_queue_Queue_release_critical(
-    &the_thread_queue->Queue,
-    lock_context
-  );
 }
+#endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Release_critical(
   Thread_queue_Control *the_thread_queue,
@@ -434,14 +442,22 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Release_critical(
   );
 }
 
+#if defined(RTEMS_SMP)
+void _Thread_queue_Release(
+  Thread_queue_Control *the_thread_queue,
+  Thread_queue_Context *queue_context
+);
+#else
 RTEMS_INLINE_ROUTINE void _Thread_queue_Release(
   Thread_queue_Control *the_thread_queue,
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release_critical( the_thread_queue, queue_context );
+  (void) the_thread_queue;
+  _Assert( _Thread_queue_Is_lock_owner( the_thread_queue ) );
   _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
 }
+#endif
 
 Thread_Control *_Thread_queue_Do_dequeue(
   Thread_queue_Control          *the_thread_queue,
