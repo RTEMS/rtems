@@ -26,7 +26,7 @@
 
 void _Thread_Handler( void )
 {
-  Thread_Control  *executing = _Thread_Executing;
+  Thread_Control  *executing;
   ISR_Level        level;
   Per_CPU_Control *cpu_self;
 
@@ -36,6 +36,7 @@ void _Thread_Handler( void )
    * hook point where the port gets a shot at doing whatever it requires.
    */
   _Context_Initialization_at_thread_begin();
+  executing = _Thread_Executing;
 
   /* On SMP we enter _Thread_Handler() with interrupts disabled */
   _SMP_Assert( _ISR_Get_level() != 0 );

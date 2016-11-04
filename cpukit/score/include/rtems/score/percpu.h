@@ -17,7 +17,7 @@
 #ifndef _RTEMS_PERCPU_H
 #define _RTEMS_PERCPU_H
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 
 #if defined( ASM )
   #include <rtems/asm.h>
@@ -681,8 +681,15 @@ bool _Per_CPU_State_wait_for_non_initial_state(
   _Per_CPU_Get()->thread_dispatch_disable_level
 #define _Thread_Heir \
   _Per_CPU_Get()->heir
+
+#if defined(_CPU_Get_thread_executing)
+#define _Thread_Executing \
+  _CPU_Get_thread_executing()
+#else
 #define _Thread_Executing \
   _Per_CPU_Get_executing( _Per_CPU_Get() )
+#endif
+
 #define _ISR_Nest_level \
   _Per_CPU_Get()->isr_nest_level
 #define _CPU_Interrupt_stack_low \
@@ -695,9 +702,10 @@ bool _Per_CPU_State_wait_for_non_initial_state(
 /**
  * @brief Returns the thread control block of the executing thread.
  *
- * This function can be called in any context.  On SMP configurations
+ * This function can be called in any thread context.  On SMP configurations,
  * interrupts are disabled to ensure that the processor index is used
- * consistently.
+ * consistently if no CPU port specific method is available to get the
+ * executing thread.
  *
  * @return The thread control block of the executing thread.
  */
@@ -705,7 +713,7 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
 {
   struct _Thread_Control *executing;
 
-  #if defined( RTEMS_SMP )
+  #if defined(RTEMS_SMP) && !defined(_CPU_Get_thread_executing)
     ISR_Level level;
 
     _ISR_Local_disable( level );
@@ -713,7 +721,7 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
 
   executing = _Thread_Executing;
 
-  #if defined( RTEMS_SMP )
+  #if defined(RTEMS_SMP) && !defined(_CPU_Get_thread_executing)
     _ISR_Local_enable( level );
   #endif
 
