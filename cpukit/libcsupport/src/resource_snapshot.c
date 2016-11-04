@@ -53,29 +53,32 @@
   #include <rtems/posix/timerimpl.h>
 #endif
 
-static const Objects_Information *const objects_info_table[] = {
-  &_POSIX_Keys_Information,
-  &_Barrier_Information,
-  &_Extension_Information,
-  &_Message_queue_Information,
-  &_Partition_Information,
-  &_Rate_monotonic_Information,
-  &_Dual_ported_memory_Information,
-  &_Region_Information,
-  &_Semaphore_Information,
-  &_RTEMS_tasks_Information.Objects,
-  &_Timer_Information
+static const struct {
+  Objects_APIs api;
+  uint16_t cls;
+} objects_info_table[] = {
+  { OBJECTS_POSIX_API, OBJECTS_POSIX_KEYS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_EXTENSIONS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_MESSAGE_QUEUES },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PARTITIONS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PERIODS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PORTS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_REGIONS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_SEMAPHORES },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS },
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS }
   #ifdef RTEMS_POSIX_API
     ,
-    &_POSIX_Barrier_Information,
-    &_POSIX_Condition_variables_Information,
-    &_POSIX_Message_queue_Information,
-    &_POSIX_Mutex_Information,
-    &_POSIX_RWLock_Information,
-    &_POSIX_Semaphore_Information,
-    &_POSIX_Spinlock_Information,
-    &_POSIX_Threads_Information.Objects,
-    &_POSIX_Timer_Information
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_BARRIERS },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_CONDITION_VARIABLES },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_MUTEXES },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_RWLOCKS },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_SPINLOCKS },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS },
+    { OBJECTS_POSIX_API, OBJECTS_POSIX_TIMERS }
   #endif
 };
 
@@ -126,7 +129,7 @@ static uint32_t get_active_posix_key_value_pairs(void)
 
 void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
 {
-  uint32_t *active = &snapshot->active_posix_keys;
+  uint32_t *active;
   size_t i;
 
   memset(snapshot, 0, sizeof(*snapshot));
@@ -138,8 +141,19 @@ void rtems_resource_snapshot_take(rtems_resource_snapshot *snapshot)
   get_heap_info(RTEMS_Malloc_Heap, &snapshot->heap_info);
   get_heap_info(&_Workspace_Area, &snapshot->workspace_info);
 
+  active = &snapshot->active_posix_keys;
+
   for (i = 0; i < RTEMS_ARRAY_SIZE(objects_info_table); ++i) {
-    active [i] = _Objects_Active_count(objects_info_table[i]);
+    const Objects_Information *information;
+
+    information = _Objects_Get_information(
+      objects_info_table[i].api,
+      objects_info_table[i].cls
+    );
+
+    if (information != NULL) {
+      active[i] = _Objects_Active_count(information);
+    }
   }
 
   _RTEMS_Unlock_allocator();
