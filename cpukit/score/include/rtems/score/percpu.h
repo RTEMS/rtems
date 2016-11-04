@@ -682,7 +682,7 @@ bool _Per_CPU_State_wait_for_non_initial_state(
 #define _Thread_Heir \
   _Per_CPU_Get()->heir
 #define _Thread_Executing \
-  _Per_CPU_Get()->executing
+  _Per_CPU_Get_executing( _Per_CPU_Get() )
 #define _ISR_Nest_level \
   _Per_CPU_Get()->isr_nest_level
 #define _CPU_Interrupt_stack_low \

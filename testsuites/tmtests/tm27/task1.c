@@ -46,6 +46,11 @@ rtems_isr Isr_handler(
   rtems_vector_number vector
 );
 
+static void set_thread_executing( Thread_Control *thread )
+{
+  _Per_CPU_Get_snapshot()->executing = thread;
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -191,8 +196,9 @@ rtems_task Task_1(
   _ISR_Local_disable(level);
 #endif
 
-  _Thread_Executing =
-        (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY]);
+  set_thread_executing(
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
+  );
 
   _Thread_Dispatch_necessary = 1;
 
@@ -265,8 +271,9 @@ rtems_task Task_2(
   _Thread_State_acquire( executing, &state_lock_context );
   _Scheduler_Acquire_critical( scheduler, &scheduler_lock_context );
 
-  _Thread_Executing =
-        (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY]);
+  set_thread_executing(
+    (Thread_Control *) _Chain_First(&scheduler_context->Ready[LOW_PRIORITY])
+  );
 
   _Thread_Dispatch_necessary = 1;
 
