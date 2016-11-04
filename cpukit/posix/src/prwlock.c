@@ -31,7 +31,7 @@ static void _POSIX_RWLock_Manager_initialization(void)
   _Objects_Initialize_information(
     &_POSIX_RWLock_Information,     /* object information table */
     OBJECTS_POSIX_API,              /* object API */
-    OBJECTS_POSIX_SPINLOCKS,        /* object class */
+    OBJECTS_POSIX_RWLOCKS,          /* object class */
     Configuration_POSIX_API.maximum_rwlocks,
                                     /* maximum objects of this class */
     sizeof( POSIX_RWLock_Control ), /* size of this object's control block */
