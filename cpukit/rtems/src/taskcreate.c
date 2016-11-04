@@ -90,7 +90,7 @@ rtems_status_code rtems_task_create(
     }
   }
 
-  scheduler = _Scheduler_Get_by_CPU_index( _SMP_Get_current_processor() );
+  scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
 
   priority = _RTEMS_Priority_To_core( scheduler, initial_priority, &valid );
   if ( !valid ) {
