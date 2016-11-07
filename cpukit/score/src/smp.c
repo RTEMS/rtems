@@ -32,16 +32,41 @@ Processor_mask _SMP_Online_processors;
 
 uint32_t _SMP_Processor_count;
 
+static const Scheduler_Assignment *_Scheduler_Get_initial_assignment(
+  uint32_t cpu_index
+)
+{
+  return &_Scheduler_Initial_assignments[ cpu_index ];
+}
+
+static bool _Scheduler_Is_mandatory_processor(
+  const Scheduler_Assignment *assignment
+)
+{
+  return (assignment->attributes & SCHEDULER_ASSIGN_PROCESSOR_MANDATORY) != 0;
+}
+
+static bool _Scheduler_Should_start_processor(
+  const Scheduler_Assignment *assignment
+)
+{
+  return assignment->scheduler != NULL;
+}
+
 static void _SMP_Start_processors( uint32_t cpu_count )
 {
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
+  uint32_t cpu_index_self;
   uint32_t cpu_index;
 
+  cpu_index_self = _SMP_Get_current_processor();
+
   for ( cpu_index = 0 ; cpu_index < cpu_count; ++cpu_index ) {
-    const Scheduler_Assignment *assignment =
-      _Scheduler_Get_assignment( cpu_index );
-    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
-    bool started;
+    const Scheduler_Assignment *assignment;
+    Per_CPU_Control            *cpu;
+    bool                        started;
+
+    assignment = _Scheduler_Get_initial_assignment( cpu_index );
+    cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( cpu_index != cpu_index_self ) {
       if ( _Scheduler_Should_start_processor( assignment ) ) {
@@ -105,8 +130,9 @@ void _SMP_Handler_initialize( void )
   _SMP_Processor_count = cpu_count;
 
   for ( cpu_index = cpu_count ; cpu_index < cpu_max; ++cpu_index ) {
-    const Scheduler_Assignment *assignment =
-      _Scheduler_Get_assignment( cpu_index );
+    const Scheduler_Assignment *assignment;
+
+    assignment = _Scheduler_Get_initial_assignment( cpu_index );
 
     if ( _Scheduler_Is_mandatory_processor( assignment ) ) {
       _SMP_Fatal( SMP_FATAL_MANDATORY_PROCESSOR_NOT_PRESENT );
@@ -137,9 +163,9 @@ void _SMP_Request_start_multitasking( void )
 
 bool _SMP_Should_start_processor( uint32_t cpu_index )
 {
-  const Scheduler_Assignment *assignment =
-    _Scheduler_Get_assignment( cpu_index );
+  const Scheduler_Assignment *assignment;
 
+  assignment = _Scheduler_Get_initial_assignment( cpu_index );
   return _Scheduler_Should_start_processor( assignment );
 }
 

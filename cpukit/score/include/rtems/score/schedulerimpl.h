@@ -638,29 +638,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Start_idle(
   ( *scheduler->Operations.start_idle )( scheduler, the_thread, cpu );
 }
 
-#if defined(RTEMS_SMP)
-RTEMS_INLINE_ROUTINE const Scheduler_Assignment *_Scheduler_Get_assignment(
-  uint32_t cpu_index
-)
-{
-  return &_Scheduler_Assignments[ cpu_index ];
-}
-
-RTEMS_INLINE_ROUTINE bool _Scheduler_Is_mandatory_processor(
-  const Scheduler_Assignment *assignment
-)
-{
-  return (assignment->attributes & SCHEDULER_ASSIGN_PROCESSOR_MANDATORY) != 0;
-}
-
-RTEMS_INLINE_ROUTINE bool _Scheduler_Should_start_processor(
-  const Scheduler_Assignment *assignment
-)
-{
-  return assignment->scheduler != NULL;
-}
-#endif /* defined(RTEMS_SMP) */
-
 RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
   const Scheduler_Control *scheduler,
   uint32_t                 cpu_index

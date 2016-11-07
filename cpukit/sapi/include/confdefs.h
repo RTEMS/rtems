@@ -1019,7 +1019,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if defined(RTEMS_SMP)
     const size_t _Scheduler_Count = CONFIGURE_SCHEDULER_COUNT;
 
-    const Scheduler_Assignment _Scheduler_Assignments[] = {
+    const Scheduler_Assignment _Scheduler_Initial_assignments[] = {
       #if defined(CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS)
         CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
       #else
@@ -1128,8 +1128,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
     RTEMS_STATIC_ASSERT(
       CONFIGURE_SMP_MAXIMUM_PROCESSORS
-        == RTEMS_ARRAY_SIZE( _Scheduler_Assignments ),
-      _Scheduler_Assignments
+        == RTEMS_ARRAY_SIZE( _Scheduler_Initial_assignments ),
+      _Scheduler_Initial_assignments
     );
   #endif
 #endif

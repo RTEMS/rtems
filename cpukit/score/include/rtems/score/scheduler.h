@@ -327,7 +327,7 @@ extern const Scheduler_Control _Scheduler_Table[];
    *
    * @see _Scheduler_Table and rtems_configuration_get_maximum_processors().
    */
-  extern const Scheduler_Assignment _Scheduler_Assignments[];
+  extern const Scheduler_Assignment _Scheduler_Initial_assignments[];
 #endif
 
 /**
