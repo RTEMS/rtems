@@ -410,10 +410,23 @@ typedef struct Per_CPU_Control {
      */
     Atomic_Ulong message;
 
-    /**
-     * @brief The scheduler context of the scheduler owning this processor.
-     */
-    const struct Scheduler_Context *scheduler_context;
+    struct {
+      /**
+       * @brief The scheduler control of the scheduler owning this processor.
+       *
+       * This pointer is NULL in case this processor is currently not used by a
+       * scheduler instance.
+       */
+      const struct Scheduler_Control *control;
+
+      /**
+       * @brief The scheduler context of the scheduler owning this processor.
+       *
+       * This pointer is NULL in case this processor is currently not used by a
+       * scheduler instance.
+       */
+      const struct Scheduler_Context *context;
+    } Scheduler;
 
     /**
      * @brief Indicates the current state of the CPU.

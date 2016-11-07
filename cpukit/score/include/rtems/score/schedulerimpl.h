@@ -53,26 +53,16 @@ RTEMS_INLINE_ROUTINE Scheduler_Context *_Scheduler_Get_context(
   return scheduler->context;
 }
 
-RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU_index(
-  uint32_t cpu_index
-)
-{
-#if defined(RTEMS_SMP)
-  return _Scheduler_Assignments[ cpu_index ].scheduler;
-#else
-  (void) cpu_index;
-
-  return &_Scheduler_Table[ 0 ];
-#endif
-}
-
 RTEMS_INLINE_ROUTINE const Scheduler_Control *_Scheduler_Get_by_CPU(
   const Per_CPU_Control *cpu
 )
 {
-  uint32_t cpu_index = _Per_CPU_Get_index( cpu );
-
-  return _Scheduler_Get_by_CPU_index( cpu_index );
+#if defined(RTEMS_SMP)
+  return cpu->Scheduler.control;
+#else
+  (void) cpu;
+  return &_Scheduler_Table[ 0 ];
+#endif
 }
 
 /**
@@ -673,14 +663,17 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Should_start_processor(
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
   const Scheduler_Control *scheduler,
-  uint32_t cpu_index
+  uint32_t                 cpu_index
 )
 {
 #if defined(RTEMS_SMP)
-  const Scheduler_Assignment *assignment =
-    _Scheduler_Get_assignment( cpu_index );
+  const Per_CPU_Control   *cpu;
+  const Scheduler_Control *scheduler_of_cpu;
 
-  return assignment->scheduler == scheduler;
+  cpu = _Per_CPU_Get_by_index( cpu_index );
+  scheduler_of_cpu = _Scheduler_Get_by_CPU( cpu );
+
+  return scheduler_of_cpu == scheduler;
 #else
   (void) scheduler;
   (void) cpu_index;
@@ -748,8 +741,11 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
 #if defined(RTEMS_SMP)
-    const Scheduler_Control *scheduler_of_cpu =
-      _Scheduler_Get_by_CPU_index( cpu_index );
+    const Per_CPU_Control   *cpu;
+    const Scheduler_Control *scheduler_of_cpu;
+
+    cpu = _Per_CPU_Get_by_index( cpu_index );
+    scheduler_of_cpu = _Scheduler_Get_by_CPU( cpu );
 
     ok = ok
       && ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )

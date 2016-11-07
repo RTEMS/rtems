@@ -443,7 +443,7 @@ static inline bool _Scheduler_SMP_Is_processor_owned_by_us(
   const Per_CPU_Control   *cpu
 )
 {
-  return cpu->scheduler_context == context;
+  return cpu->Scheduler.context == context;
 }
 
 static inline Thread_Control *_Scheduler_SMP_Get_idle_thread(

@@ -66,11 +66,15 @@ static void _SMP_Start_processors( uint32_t cpu_count )
     cpu->online = started;
 
     if ( started ) {
-      Scheduler_Context *context =
-        _Scheduler_Get_context( assignment->scheduler );
+      const Scheduler_Control *scheduler;
+      Scheduler_Context       *context;
+
+      scheduler = assignment->scheduler;
+      context = _Scheduler_Get_context( scheduler );
 
       ++context->processor_count;
-      cpu->scheduler_context = context;
+      cpu->Scheduler.control = scheduler;
+      cpu->Scheduler.context = context;
 
       _Processor_mask_Set( _SMP_Online_processors, cpu_index );
     }
