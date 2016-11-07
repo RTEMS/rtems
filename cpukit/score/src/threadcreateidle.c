@@ -72,6 +72,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   cpu->heir      =
   cpu->executing = idle;
 
+  idle->is_idle = true;
   idle->Start.Entry.adaptor = _Thread_Entry_adaptor_idle;
   idle->Start.Entry.Kinds.Idle.entry = rtems_configuration_get_idle_task();
 

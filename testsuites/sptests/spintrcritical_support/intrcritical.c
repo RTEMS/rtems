@@ -173,18 +173,12 @@ bool interrupt_critical_section_test_support_delay(void)
   return interrupt_critical_busy_wait();
 }
 
-static bool is_idle( const Thread_Control *thread )
-{
-  return thread->Start.Entry.Kinds.Idle.entry
-    == rtems_configuration_get_idle_task();
-}
-
 static void thread_switch( Thread_Control *executing, Thread_Control *heir )
 {
   (void) executing;
   (void) heir;
 
-  if ( interrupt_critical.t1 == 0 && is_idle( heir ) ) {
+  if ( interrupt_critical.t1 == 0 && heir->is_idle ) {
     interrupt_critical.t1 = rtems_clock_get_uptime_nanoseconds();
   }
 }

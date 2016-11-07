@@ -754,6 +754,8 @@ struct _Thread_Control {
   SMP_lock_Stats Potpourri_stats;
 #endif
 
+  /** This field is true if the thread is an idle thread. */
+  bool                                  is_idle;
 #if defined(RTEMS_MULTIPROCESSING)
   /** This field is true if the thread is offered globally */
   bool                                  is_global;

@@ -139,9 +139,7 @@ rtems_isr Clock_isr(
 
       if (!rtems_configuration_is_smp_enabled()) {
         while (
-          _Thread_Heir == _Thread_Executing
-            && _Thread_Executing->Start.Entry.Kinds.Idle.entry
-              == rtems_configuration_get_idle_task()
+          _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle
         ) {
           ISR_lock_Context lock_context;
 

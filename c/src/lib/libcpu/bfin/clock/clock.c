@@ -37,11 +37,7 @@ static rtems_isr clockISR(rtems_vector_number vector) {
 #if CLOCK_DRIVER_USE_FAST_IDLE
   do {
     rtems_clock_tick();
-  } while (
-    _Thread_Heir == _Thread_Executing
-      && _Thread_Executing->Start.Entry.Kinds.Idle.entry
-        == rtems_configuration_get_idle_task()
-  );
+  } while ( _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle );
 #else
   rtems_clock_tick();
 #endif

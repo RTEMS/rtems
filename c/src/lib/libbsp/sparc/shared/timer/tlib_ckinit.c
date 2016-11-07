@@ -132,8 +132,7 @@ void Clock_isr(void *arg_unused)
 #ifdef CLOCK_DRIVER_USE_FAST_IDLE
   do {
     tlib_tc_tick();
-  } while ( _Thread_Executing == _Thread_Idle &&
-          _Thread_Heir == _Thread_Executing);
+  } while ( _Thread_Heir == _Thread_Executing && _Thread_Executing->is_idle );
 
   return;
 
