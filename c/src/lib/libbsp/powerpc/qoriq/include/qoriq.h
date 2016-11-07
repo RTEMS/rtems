@@ -404,9 +404,6 @@ typedef struct {
 } qoriq_pci_express;
 
 typedef struct {
-} qoriq_gpio;
-
-typedef struct {
 } qoriq_tdm;
 
 typedef struct {
@@ -472,7 +469,6 @@ typedef struct {
   QORIQ_FILL(0x0c000, 0x0d000, qoriq_dma);
   QORIQ_RESERVE(0x0d000, 0x0f000);
   qoriq_gpio gpio;
-  QORIQ_FILL(0x0f000, 0x10000, qoriq_gpio);
   QORIQ_RESERVE(0x10000, 0x16000);
   qoriq_tdm tdm;
   QORIQ_FILL(0x16000, 0x17000, qoriq_tdm);
