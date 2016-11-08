@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH
+ * Copyright (c) 2013, 2016 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -14,18 +14,22 @@
 
 void _Scheduler_SMP_Start_idle(
   const Scheduler_Control *scheduler,
-  Thread_Control *thread,
-  Per_CPU_Control *cpu
+  Thread_Control          *idle,
+  Per_CPU_Control         *cpu
 )
 {
-  Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
-  Scheduler_SMP_Node *node = _Scheduler_SMP_Thread_get_node( thread );
+  Scheduler_Context     *context;
+  Scheduler_SMP_Context *self;
+  Scheduler_SMP_Node    *node;
+
+  context = _Scheduler_Get_context( scheduler );
+  self = _Scheduler_SMP_Get_self( context );
+  node = _Scheduler_SMP_Thread_get_node( idle );
 
   _Scheduler_Thread_change_state( thread, THREAD_SCHEDULER_SCHEDULED );
   node->state = SCHEDULER_SMP_NODE_SCHEDULED;
 
-  _Thread_Set_CPU( thread, cpu );
+  _Thread_Set_CPU( idle, cpu );
   _Chain_Append_unprotected( &self->Scheduled, &node->Base.Node );
-  _Chain_Prepend_unprotected( &self->Idle_threads, &thread->Object.Node );
+  _Scheduler_SMP_Release_idle_thread( &self->Base, idle );
 }
