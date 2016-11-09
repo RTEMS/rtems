@@ -41,6 +41,7 @@ void _SMP_lock_Acquire(
   _SMP_lock_Acquire_inline( lock, context );
 }
 
+#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -48,6 +49,7 @@ void _SMP_lock_Release(
 {
   _SMP_lock_Release_inline( lock, context );
 }
+#endif
 
 void _SMP_lock_ISR_disable_and_acquire(
   SMP_lock_Control *lock,
@@ -57,6 +59,7 @@ void _SMP_lock_ISR_disable_and_acquire(
   _SMP_lock_ISR_disable_and_acquire_inline( lock, context );
 }
 
+#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -64,6 +67,7 @@ void _SMP_lock_Release_and_ISR_enable(
 {
   _SMP_lock_Release_and_ISR_enable_inline( lock, context );
 }
+#endif
 
 #if defined(RTEMS_DEBUG)
 bool _SMP_lock_Is_owner( const SMP_lock_Control *lock )

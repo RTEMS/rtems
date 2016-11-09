@@ -1,578 +1,578 @@
 *** BEGIN OF TEST SMPMUTEX 2 ***
 worker[0][0]
-        obtain counter   = 70927
-        deadlock counter = 2361
-        timeout counter  = 8899
-        release counter  = 70927
-        max nest level   = 18
+        obtain counter   = 52012
+        deadlock counter = 707
+        timeout counter  = 9084
+        release counter  = 52012
+        max nest level   = 16
 worker[0][1]
-        obtain counter   = 53520
-        deadlock counter = 1883
-        timeout counter  = 9008
-        release counter  = 53520
-        max nest level   = 15
+        obtain counter   = 41400
+        deadlock counter = 579
+        timeout counter  = 8992
+        release counter  = 41400
+        max nest level   = 14
 worker[0][2]
-        obtain counter   = 43356
-        deadlock counter = 1713
-        timeout counter  = 8980
-        release counter  = 43356
-        max nest level   = 17
+        obtain counter   = 33840
+        deadlock counter = 539
+        timeout counter  = 8775
+        release counter  = 33840
+        max nest level   = 14
 worker[0][3]
-        obtain counter   = 37021
-        deadlock counter = 1720
-        timeout counter  = 8872
-        release counter  = 37021
-        max nest level   = 15
+        obtain counter   = 29097
+        deadlock counter = 501
+        timeout counter  = 8468
+        release counter  = 29097
+        max nest level   = 17
 worker[1][0]
-        obtain counter   = 71848
-        deadlock counter = 2333
-        timeout counter  = 8955
-        release counter  = 71848
-        max nest level   = 26
-worker[1][1]
-        obtain counter   = 56056
-        deadlock counter = 2054
-        timeout counter  = 8947
-        release counter  = 56056
-        max nest level   = 21
-worker[1][2]
-        obtain counter   = 44337
-        deadlock counter = 1742
-        timeout counter  = 8989
-        release counter  = 44337
-        max nest level   = 17
-worker[1][3]
-        obtain counter   = 36720
-        deadlock counter = 1669
-        timeout counter  = 8977
-        release counter  = 36720
-        max nest level   = 15
-worker[2][0]
-        obtain counter   = 71989
-        deadlock counter = 2354
-        timeout counter  = 8907
-        release counter  = 71989
-        max nest level   = 20
-worker[2][1]
-        obtain counter   = 56226
-        deadlock counter = 1983
+        obtain counter   = 52403
+        deadlock counter = 777
         timeout counter  = 9041
-        release counter  = 56226
-        max nest level   = 17
-worker[2][2]
-        obtain counter   = 44707
-        deadlock counter = 1802
-        timeout counter  = 9002
-        release counter  = 44707
-        max nest level   = 19
-worker[2][3]
-        obtain counter   = 37093
-        deadlock counter = 1725
-        timeout counter  = 8929
-        release counter  = 37093
+        release counter  = 52403
+        max nest level   = 22
+worker[1][1]
+        obtain counter   = 41654
+        deadlock counter = 543
+        timeout counter  = 9021
+        release counter  = 41654
+        max nest level   = 15
+worker[1][2]
+        obtain counter   = 34761
+        deadlock counter = 513
+        timeout counter  = 8817
+        release counter  = 34761
         max nest level   = 18
+worker[1][3]
+        obtain counter   = 28701
+        deadlock counter = 514
+        timeout counter  = 8557
+        release counter  = 28701
+        max nest level   = 14
+worker[2][0]
+        obtain counter   = 51660
+        deadlock counter = 764
+        timeout counter  = 9073
+        release counter  = 51660
+        max nest level   = 23
+worker[2][1]
+        obtain counter   = 41622
+        deadlock counter = 618
+        timeout counter  = 9015
+        release counter  = 41622
+        max nest level   = 19
+worker[2][2]
+        obtain counter   = 33706
+        deadlock counter = 517
+        timeout counter  = 8883
+        release counter  = 33706
+        max nest level   = 16
+worker[2][3]
+        obtain counter   = 29318
+        deadlock counter = 508
+        timeout counter  = 8588
+        release counter  = 29318
+        max nest level   = 16
 worker[3][0]
-        obtain counter   = 72282
-        deadlock counter = 2441
-        timeout counter  = 8904
-        release counter  = 72282
-        max nest level   = 15
+        obtain counter   = 53674
+        deadlock counter = 757
+        timeout counter  = 9029
+        release counter  = 53674
+        max nest level   = 16
 worker[3][1]
-        obtain counter   = 56242
-        deadlock counter = 2015
-        timeout counter  = 8932
-        release counter  = 56242
-        max nest level   = 20
+        obtain counter   = 42011
+        deadlock counter = 578
+        timeout counter  = 9029
+        release counter  = 42011
+        max nest level   = 16
 worker[3][2]
-        obtain counter   = 44578
-        deadlock counter = 1709
-        timeout counter  = 9000
-        release counter  = 44578
-        max nest level   = 15
+        obtain counter   = 34837
+        deadlock counter = 524
+        timeout counter  = 8838
+        release counter  = 34837
+        max nest level   = 14
 worker[3][3]
-        obtain counter   = 37890
-        deadlock counter = 1617
-        timeout counter  = 8941
-        release counter  = 37890
-        max nest level   = 17
+        obtain counter   = 29110
+        deadlock counter = 500
+        timeout counter  = 8535
+        release counter  = 29110
+        max nest level   = 15
 worker[4][0]
-        obtain counter   = 71584
-        deadlock counter = 2340
-        timeout counter  = 8953
-        release counter  = 71584
+        obtain counter   = 52521
+        deadlock counter = 738
+        timeout counter  = 9033
+        release counter  = 52521
         max nest level   = 17
 worker[4][1]
-        obtain counter   = 56388
-        deadlock counter = 1986
-        timeout counter  = 9005
-        release counter  = 56388
+        obtain counter   = 41552
+        deadlock counter = 621
+        timeout counter  = 8998
+        release counter  = 41552
         max nest level   = 20
 worker[4][2]
-        obtain counter   = 44549
-        deadlock counter = 1664
-        timeout counter  = 9005
-        release counter  = 44549
-        max nest level   = 14
+        obtain counter   = 34202
+        deadlock counter = 533
+        timeout counter  = 8860
+        release counter  = 34202
+        max nest level   = 13
 worker[4][3]
-        obtain counter   = 36954
-        deadlock counter = 1586
-        timeout counter  = 8906
-        release counter  = 36954
-        max nest level   = 15
+        obtain counter   = 28761
+        deadlock counter = 494
+        timeout counter  = 8558
+        release counter  = 28761
+        max nest level   = 13
 worker[5][0]
-        obtain counter   = 71175
-        deadlock counter = 2290
-        timeout counter  = 8872
-        release counter  = 71175
-        max nest level   = 18
-worker[5][1]
-        obtain counter   = 55984
-        deadlock counter = 1904
-        timeout counter  = 8948
-        release counter  = 55984
+        obtain counter   = 52740
+        deadlock counter = 790
+        timeout counter  = 9036
+        release counter  = 52740
         max nest level   = 17
+worker[5][1]
+        obtain counter   = 41021
+        deadlock counter = 589
+        timeout counter  = 9006
+        release counter  = 41021
+        max nest level   = 14
 worker[5][2]
-        obtain counter   = 43837
-        deadlock counter = 1712
-        timeout counter  = 9011
-        release counter  = 43837
+        obtain counter   = 34671
+        deadlock counter = 525
+        timeout counter  = 8840
+        release counter  = 34671
         max nest level   = 18
 worker[5][3]
-        obtain counter   = 37015
-        deadlock counter = 1613
-        timeout counter  = 9001
-        release counter  = 37015
-        max nest level   = 16
+        obtain counter   = 29735
+        deadlock counter = 471
+        timeout counter  = 8592
+        release counter  = 29735
+        max nest level   = 17
 worker[6][0]
-        obtain counter   = 72469
-        deadlock counter = 2494
-        timeout counter  = 8888
-        release counter  = 72469
-        max nest level   = 17
+        obtain counter   = 52698
+        deadlock counter = 790
+        timeout counter  = 8985
+        release counter  = 52698
+        max nest level   = 14
 worker[6][1]
-        obtain counter   = 56906
-        deadlock counter = 2038
-        timeout counter  = 8995
-        release counter  = 56906
-        max nest level   = 18
-worker[6][2]
-        obtain counter   = 45295
-        deadlock counter = 1825
-        timeout counter  = 8997
-        release counter  = 45295
-        max nest level   = 17
-worker[6][3]
-        obtain counter   = 37125
-        deadlock counter = 1685
-        timeout counter  = 8924
-        release counter  = 37125
+        obtain counter   = 41207
+        deadlock counter = 595
+        timeout counter  = 9023
+        release counter  = 41207
         max nest level   = 20
-worker[7][0]
-        obtain counter   = 72568
-        deadlock counter = 2401
-        timeout counter  = 8908
-        release counter  = 72568
-        max nest level   = 18
-worker[7][1]
-        obtain counter   = 56386
-        deadlock counter = 2031
-        timeout counter  = 8941
-        release counter  = 56386
-        max nest level   = 16
-worker[7][2]
-        obtain counter   = 44724
-        deadlock counter = 1758
-        timeout counter  = 8964
-        release counter  = 44724
+worker[6][2]
+        obtain counter   = 34777
+        deadlock counter = 496
+        timeout counter  = 8870
+        release counter  = 34777
         max nest level   = 15
+worker[6][3]
+        obtain counter   = 28892
+        deadlock counter = 457
+        timeout counter  = 8584
+        release counter  = 28892
+        max nest level   = 15
+worker[7][0]
+        obtain counter   = 52927
+        deadlock counter = 786
+        timeout counter  = 9039
+        release counter  = 52927
+        max nest level   = 16
+worker[7][1]
+        obtain counter   = 41843
+        deadlock counter = 594
+        timeout counter  = 9001
+        release counter  = 41843
+        max nest level   = 15
+worker[7][2]
+        obtain counter   = 34615
+        deadlock counter = 522
+        timeout counter  = 8834
+        release counter  = 34615
+        max nest level   = 14
 worker[7][3]
-        obtain counter   = 36921
-        deadlock counter = 1593
-        timeout counter  = 9012
-        release counter  = 36921
-        max nest level   = 17
+        obtain counter   = 28750
+        deadlock counter = 490
+        timeout counter  = 8558
+        release counter  = 28750
+        max nest level   = 14
 worker[8][0]
-        obtain counter   = 72557
-        deadlock counter = 2417
-        timeout counter  = 8913
-        release counter  = 72557
+        obtain counter   = 52749
+        deadlock counter = 786
+        timeout counter  = 9085
+        release counter  = 52749
         max nest level   = 18
 worker[8][1]
-        obtain counter   = 55802
-        deadlock counter = 1923
-        timeout counter  = 8996
-        release counter  = 55802
-        max nest level   = 15
+        obtain counter   = 41770
+        deadlock counter = 576
+        timeout counter  = 9070
+        release counter  = 41770
+        max nest level   = 17
 worker[8][2]
-        obtain counter   = 45056
-        deadlock counter = 1739
-        timeout counter  = 8987
-        release counter  = 45056
-        max nest level   = 19
+        obtain counter   = 34463
+        deadlock counter = 522
+        timeout counter  = 8866
+        release counter  = 34463
+        max nest level   = 17
 worker[8][3]
-        obtain counter   = 36447
-        deadlock counter = 1504
-        timeout counter  = 8953
-        release counter  = 36447
-        max nest level   = 14
+        obtain counter   = 28445
+        deadlock counter = 464
+        timeout counter  = 8624
+        release counter  = 28445
+        max nest level   = 15
 worker[9][0]
-        obtain counter   = 71687
-        deadlock counter = 2440
-        timeout counter  = 8928
-        release counter  = 71687
-        max nest level   = 21
+        obtain counter   = 52852
+        deadlock counter = 727
+        timeout counter  = 9070
+        release counter  = 52852
+        max nest level   = 18
 worker[9][1]
-        obtain counter   = 55724
-        deadlock counter = 1993
-        timeout counter  = 8990
-        release counter  = 55724
+        obtain counter   = 41832
+        deadlock counter = 579
+        timeout counter  = 8983
+        release counter  = 41832
         max nest level   = 15
 worker[9][2]
-        obtain counter   = 45466
-        deadlock counter = 1759
-        timeout counter  = 8978
-        release counter  = 45466
-        max nest level   = 18
+        obtain counter   = 34401
+        deadlock counter = 525
+        timeout counter  = 8821
+        release counter  = 34401
+        max nest level   = 15
 worker[9][3]
-        obtain counter   = 36047
-        deadlock counter = 1653
-        timeout counter  = 9020
-        release counter  = 36047
-        max nest level   = 16
+        obtain counter   = 29322
+        deadlock counter = 464
+        timeout counter  = 8490
+        release counter  = 29322
+        max nest level   = 17
 worker[10][0]
-        obtain counter   = 71471
-        deadlock counter = 2469
-        timeout counter  = 8967
-        release counter  = 71471
+        obtain counter   = 53199
+        deadlock counter = 752
+        timeout counter  = 9032
+        release counter  = 53199
         max nest level   = 17
 worker[10][1]
-        obtain counter   = 55790
-        deadlock counter = 1935
-        timeout counter  = 8983
-        release counter  = 55790
-        max nest level   = 18
-worker[10][2]
-        obtain counter   = 44360
-        deadlock counter = 1730
-        timeout counter  = 8997
-        release counter  = 44360
+        obtain counter   = 42025
+        deadlock counter = 615
+        timeout counter  = 8970
+        release counter  = 42025
         max nest level   = 17
+worker[10][2]
+        obtain counter   = 34478
+        deadlock counter = 532
+        timeout counter  = 8875
+        release counter  = 34478
+        max nest level   = 15
 worker[10][3]
-        obtain counter   = 37076
-        deadlock counter = 1685
-        timeout counter  = 8940
-        release counter  = 37076
+        obtain counter   = 28603
+        deadlock counter = 473
+        timeout counter  = 8575
+        release counter  = 28603
         max nest level   = 14
 worker[11][0]
-        obtain counter   = 72227
-        deadlock counter = 2461
-        timeout counter  = 8892
-        release counter  = 72227
-        max nest level   = 19
-worker[11][1]
-        obtain counter   = 55759
-        deadlock counter = 2005
-        timeout counter  = 8984
-        release counter  = 55759
-        max nest level   = 19
-worker[11][2]
-        obtain counter   = 44028
-        deadlock counter = 1715
-        timeout counter  = 9034
-        release counter  = 44028
-        max nest level   = 16
-worker[11][3]
-        obtain counter   = 37660
-        deadlock counter = 1668
-        timeout counter  = 8902
-        release counter  = 37660
-        max nest level   = 16
-worker[12][0]
-        obtain counter   = 71641
-        deadlock counter = 2401
-        timeout counter  = 8916
-        release counter  = 71641
-        max nest level   = 21
-worker[12][1]
-        obtain counter   = 55895
-        deadlock counter = 2018
-        timeout counter  = 9036
-        release counter  = 55895
+        obtain counter   = 52878
+        deadlock counter = 780
+        timeout counter  = 9032
+        release counter  = 52878
         max nest level   = 18
+worker[11][1]
+        obtain counter   = 42278
+        deadlock counter = 562
+        timeout counter  = 9004
+        release counter  = 42278
+        max nest level   = 20
+worker[11][2]
+        obtain counter   = 34180
+        deadlock counter = 513
+        timeout counter  = 8863
+        release counter  = 34180
+        max nest level   = 14
+worker[11][3]
+        obtain counter   = 28634
+        deadlock counter = 484
+        timeout counter  = 8532
+        release counter  = 28634
+        max nest level   = 15
+worker[12][0]
+        obtain counter   = 52774
+        deadlock counter = 720
+        timeout counter  = 9066
+        release counter  = 52774
+        max nest level   = 17
+worker[12][1]
+        obtain counter   = 41509
+        deadlock counter = 591
+        timeout counter  = 9013
+        release counter  = 41509
+        max nest level   = 17
 worker[12][2]
-        obtain counter   = 43912
-        deadlock counter = 1704
-        timeout counter  = 9063
-        release counter  = 43912
+        obtain counter   = 34521
+        deadlock counter = 539
+        timeout counter  = 8882
+        release counter  = 34521
         max nest level   = 16
 worker[12][3]
-        obtain counter   = 36770
-        deadlock counter = 1584
-        timeout counter  = 8978
-        release counter  = 36770
-        max nest level   = 15
+        obtain counter   = 28497
+        deadlock counter = 497
+        timeout counter  = 8621
+        release counter  = 28497
+        max nest level   = 14
 worker[13][0]
-        obtain counter   = 72814
-        deadlock counter = 2438
-        timeout counter  = 8870
-        release counter  = 72814
-        max nest level   = 23
-worker[13][1]
-        obtain counter   = 55358
-        deadlock counter = 1935
-        timeout counter  = 8993
-        release counter  = 55358
-        max nest level   = 16
-worker[13][2]
-        obtain counter   = 44325
-        deadlock counter = 1745
-        timeout counter  = 9051
-        release counter  = 44325
-        max nest level   = 16
-worker[13][3]
-        obtain counter   = 36667
-        deadlock counter = 1673
-        timeout counter  = 8967
-        release counter  = 36667
-        max nest level   = 19
-worker[14][0]
-        obtain counter   = 72571
-        deadlock counter = 2355
-        timeout counter  = 8915
-        release counter  = 72571
-        max nest level   = 19
-worker[14][1]
-        obtain counter   = 56524
-        deadlock counter = 2072
-        timeout counter  = 8974
-        release counter  = 56524
-        max nest level   = 18
-worker[14][2]
-        obtain counter   = 44640
-        deadlock counter = 1714
-        timeout counter  = 9031
-        release counter  = 44640
+        obtain counter   = 52713
+        deadlock counter = 747
+        timeout counter  = 9067
+        release counter  = 52713
         max nest level   = 17
+worker[13][1]
+        obtain counter   = 41733
+        deadlock counter = 646
+        timeout counter  = 9014
+        release counter  = 41733
+        max nest level   = 15
+worker[13][2]
+        obtain counter   = 34269
+        deadlock counter = 488
+        timeout counter  = 8867
+        release counter  = 34269
+        max nest level   = 14
+worker[13][3]
+        obtain counter   = 28715
+        deadlock counter = 502
+        timeout counter  = 8563
+        release counter  = 28715
+        max nest level   = 15
+worker[14][0]
+        obtain counter   = 53258
+        deadlock counter = 791
+        timeout counter  = 9040
+        release counter  = 53258
+        max nest level   = 16
+worker[14][1]
+        obtain counter   = 41725
+        deadlock counter = 561
+        timeout counter  = 8972
+        release counter  = 41725
+        max nest level   = 16
+worker[14][2]
+        obtain counter   = 34359
+        deadlock counter = 482
+        timeout counter  = 8828
+        release counter  = 34359
+        max nest level   = 18
 worker[14][3]
-        obtain counter   = 36801
-        deadlock counter = 1678
-        timeout counter  = 8939
-        release counter  = 36801
+        obtain counter   = 28956
+        deadlock counter = 461
+        timeout counter  = 8498
+        release counter  = 28956
         max nest level   = 15
 worker[15][0]
-        obtain counter   = 72194
-        deadlock counter = 2457
-        timeout counter  = 8894
-        release counter  = 72194
-        max nest level   = 17
+        obtain counter   = 52969
+        deadlock counter = 735
+        timeout counter  = 9010
+        release counter  = 52969
+        max nest level   = 15
 worker[15][1]
-        obtain counter   = 56464
-        deadlock counter = 2082
-        timeout counter  = 8926
-        release counter  = 56464
+        obtain counter   = 42056
+        deadlock counter = 576
+        timeout counter  = 8985
+        release counter  = 42056
         max nest level   = 17
 worker[15][2]
-        obtain counter   = 44914
-        deadlock counter = 1751
-        timeout counter  = 8995
-        release counter  = 44914
-        max nest level   = 16
-worker[15][3]
-        obtain counter   = 36738
-        deadlock counter = 1642
-        timeout counter  = 8927
-        release counter  = 36738
-        max nest level   = 14
-worker[16][0]
-        obtain counter   = 72411
-        deadlock counter = 2441
-        timeout counter  = 8942
-        release counter  = 72411
-        max nest level   = 17
-worker[16][1]
-        obtain counter   = 56534
-        deadlock counter = 1984
-        timeout counter  = 9003
-        release counter  = 56534
-        max nest level   = 21
-worker[16][2]
-        obtain counter   = 44506
-        deadlock counter = 1796
-        timeout counter  = 9024
-        release counter  = 44506
-        max nest level   = 20
-worker[16][3]
-        obtain counter   = 36265
-        deadlock counter = 1612
-        timeout counter  = 8951
-        release counter  = 36265
-        max nest level   = 14
-worker[17][0]
-        obtain counter   = 72031
-        deadlock counter = 2436
-        timeout counter  = 8883
-        release counter  = 72031
-        max nest level   = 18
-worker[17][1]
-        obtain counter   = 55833
-        deadlock counter = 2020
-        timeout counter  = 8932
-        release counter  = 55833
-        max nest level   = 19
-worker[17][2]
-        obtain counter   = 44293
-        deadlock counter = 1749
-        timeout counter  = 8991
-        release counter  = 44293
+        obtain counter   = 34521
+        deadlock counter = 513
+        timeout counter  = 8875
+        release counter  = 34521
         max nest level   = 15
-worker[17][3]
-        obtain counter   = 36570
-        deadlock counter = 1629
-        timeout counter  = 8961
-        release counter  = 36570
+worker[15][3]
+        obtain counter   = 28874
+        deadlock counter = 498
+        timeout counter  = 8550
+        release counter  = 28874
         max nest level   = 17
+worker[16][0]
+        obtain counter   = 53228
+        deadlock counter = 733
+        timeout counter  = 9014
+        release counter  = 53228
+        max nest level   = 20
+worker[16][1]
+        obtain counter   = 41300
+        deadlock counter = 591
+        timeout counter  = 8957
+        release counter  = 41300
+        max nest level   = 15
+worker[16][2]
+        obtain counter   = 33747
+        deadlock counter = 521
+        timeout counter  = 8830
+        release counter  = 33747
+        max nest level   = 16
+worker[16][3]
+        obtain counter   = 29045
+        deadlock counter = 537
+        timeout counter  = 8558
+        release counter  = 29045
+        max nest level   = 17
+worker[17][0]
+        obtain counter   = 52550
+        deadlock counter = 741
+        timeout counter  = 9038
+        release counter  = 52550
+        max nest level   = 15
+worker[17][1]
+        obtain counter   = 41725
+        deadlock counter = 582
+        timeout counter  = 9004
+        release counter  = 41725
+        max nest level   = 15
+worker[17][2]
+        obtain counter   = 34466
+        deadlock counter = 517
+        timeout counter  = 8855
+        release counter  = 34466
+        max nest level   = 13
+worker[17][3]
+        obtain counter   = 29332
+        deadlock counter = 467
+        timeout counter  = 8491
+        release counter  = 29332
+        max nest level   = 16
 worker[18][0]
-        obtain counter   = 72279
-        deadlock counter = 2382
-        timeout counter  = 8943
-        release counter  = 72279
+        obtain counter   = 52270
+        deadlock counter = 759
+        timeout counter  = 9033
+        release counter  = 52270
         max nest level   = 21
 worker[18][1]
-        obtain counter   = 56824
-        deadlock counter = 1896
-        timeout counter  = 8969
-        release counter  = 56824
-        max nest level   = 17
+        obtain counter   = 41874
+        deadlock counter = 552
+        timeout counter  = 8971
+        release counter  = 41874
+        max nest level   = 14
 worker[18][2]
-        obtain counter   = 44426
-        deadlock counter = 1799
-        timeout counter  = 8995
-        release counter  = 44426
-        max nest level   = 15
+        obtain counter   = 34508
+        deadlock counter = 487
+        timeout counter  = 8868
+        release counter  = 34508
+        max nest level   = 17
 worker[18][3]
-        obtain counter   = 36913
-        deadlock counter = 1652
-        timeout counter  = 8965
-        release counter  = 36913
-        max nest level   = 15
+        obtain counter   = 29519
+        deadlock counter = 514
+        timeout counter  = 8514
+        release counter  = 29519
+        max nest level   = 16
 worker[19][0]
-        obtain counter   = 72256
-        deadlock counter = 2384
-        timeout counter  = 8871
-        release counter  = 72256
-        max nest level   = 20
-worker[19][1]
-        obtain counter   = 55654
-        deadlock counter = 1955
-        timeout counter  = 9031
-        release counter  = 55654
+        obtain counter   = 53153
+        deadlock counter = 738
+        timeout counter  = 9091
+        release counter  = 53153
         max nest level   = 18
+worker[19][1]
+        obtain counter   = 41766
+        deadlock counter = 537
+        timeout counter  = 9023
+        release counter  = 41766
+        max nest level   = 17
 worker[19][2]
-        obtain counter   = 44389
-        deadlock counter = 1771
-        timeout counter  = 8924
-        release counter  = 44389
-        max nest level   = 15
+        obtain counter   = 34275
+        deadlock counter = 479
+        timeout counter  = 8853
+        release counter  = 34275
+        max nest level   = 14
 worker[19][3]
-        obtain counter   = 36989
-        deadlock counter = 1598
-        timeout counter  = 8986
-        release counter  = 36989
-        max nest level   = 25
+        obtain counter   = 28853
+        deadlock counter = 498
+        timeout counter  = 8520
+        release counter  = 28853
+        max nest level   = 15
 worker[20][0]
-        obtain counter   = 72483
-        deadlock counter = 2442
-        timeout counter  = 8919
-        release counter  = 72483
-        max nest level   = 24
+        obtain counter   = 52192
+        deadlock counter = 769
+        timeout counter  = 9078
+        release counter  = 52192
+        max nest level   = 14
 worker[20][1]
-        obtain counter   = 56443
-        deadlock counter = 2022
-        timeout counter  = 8961
-        release counter  = 56443
+        obtain counter   = 41687
+        deadlock counter = 563
+        timeout counter  = 8936
+        release counter  = 41687
         max nest level   = 16
 worker[20][2]
-        obtain counter   = 44808
-        deadlock counter = 1657
-        timeout counter  = 9014
-        release counter  = 44808
-        max nest level   = 21
+        obtain counter   = 34011
+        deadlock counter = 501
+        timeout counter  = 8874
+        release counter  = 34011
+        max nest level   = 15
 worker[20][3]
-        obtain counter   = 37291
-        deadlock counter = 1677
-        timeout counter  = 8951
-        release counter  = 37291
-        max nest level   = 16
+        obtain counter   = 28810
+        deadlock counter = 478
+        timeout counter  = 8529
+        release counter  = 28810
+        max nest level   = 19
 worker[21][0]
-        obtain counter   = 71273
-        deadlock counter = 2411
-        timeout counter  = 8993
-        release counter  = 71273
-        max nest level   = 19
+        obtain counter   = 52557
+        deadlock counter = 764
+        timeout counter  = 9042
+        release counter  = 52557
+        max nest level   = 15
 worker[21][1]
-        obtain counter   = 54909
-        deadlock counter = 1890
-        timeout counter  = 8962
-        release counter  = 54909
-        max nest level   = 19
-worker[21][2]
-        obtain counter   = 44204
-        deadlock counter = 1679
-        timeout counter  = 9020
-        release counter  = 44204
-        max nest level   = 14
-worker[21][3]
-        obtain counter   = 36518
-        deadlock counter = 1552
-        timeout counter  = 8979
-        release counter  = 36518
-        max nest level   = 16
-worker[22][0]
-        obtain counter   = 72498
-        deadlock counter = 2344
-        timeout counter  = 8896
-        release counter  = 72498
-        max nest level   = 19
-worker[22][1]
-        obtain counter   = 55781
-        deadlock counter = 1906
-        timeout counter  = 8982
-        release counter  = 55781
-        max nest level   = 18
-worker[22][2]
-        obtain counter   = 44470
-        deadlock counter = 1690
-        timeout counter  = 9105
-        release counter  = 44470
-        max nest level   = 16
-worker[22][3]
-        obtain counter   = 36557
-        deadlock counter = 1576
-        timeout counter  = 9007
-        release counter  = 36557
-        max nest level   = 14
-worker[23][0]
-        obtain counter   = 71527
-        deadlock counter = 2297
-        timeout counter  = 8942
-        release counter  = 71527
+        obtain counter   = 41621
+        deadlock counter = 599
+        timeout counter  = 8917
+        release counter  = 41621
         max nest level   = 17
+worker[21][2]
+        obtain counter   = 34395
+        deadlock counter = 536
+        timeout counter  = 8890
+        release counter  = 34395
+        max nest level   = 15
+worker[21][3]
+        obtain counter   = 28981
+        deadlock counter = 500
+        timeout counter  = 8596
+        release counter  = 28981
+        max nest level   = 13
+worker[22][0]
+        obtain counter   = 52748
+        deadlock counter = 784
+        timeout counter  = 8988
+        release counter  = 52748
+        max nest level   = 17
+worker[22][1]
+        obtain counter   = 41974
+        deadlock counter = 549
+        timeout counter  = 8973
+        release counter  = 41974
+        max nest level   = 14
+worker[22][2]
+        obtain counter   = 34064
+        deadlock counter = 497
+        timeout counter  = 8843
+        release counter  = 34064
+        max nest level   = 20
+worker[22][3]
+        obtain counter   = 28869
+        deadlock counter = 464
+        timeout counter  = 8605
+        release counter  = 28869
+        max nest level   = 15
+worker[23][0]
+        obtain counter   = 52483
+        deadlock counter = 736
+        timeout counter  = 9063
+        release counter  = 52483
+        max nest level   = 13
 worker[23][1]
-        obtain counter   = 55507
-        deadlock counter = 1993
-        timeout counter  = 8984
-        release counter  = 55507
-        max nest level   = 18
+        obtain counter   = 41611
+        deadlock counter = 617
+        timeout counter  = 8980
+        release counter  = 41611
+        max nest level   = 15
 worker[23][2]
-        obtain counter   = 44780
-        deadlock counter = 1795
-        timeout counter  = 8999
-        release counter  = 44780
-        max nest level   = 15
+        obtain counter   = 34251
+        deadlock counter = 466
+        timeout counter  = 8852
+        release counter  = 34251
+        max nest level   = 14
 worker[23][3]
-        obtain counter   = 36690
-        deadlock counter = 1639
-        timeout counter  = 8977
-        release counter  = 36690
-        max nest level   = 15
+        obtain counter   = 29386
+        deadlock counter = 503
+        timeout counter  = 8495
+        release counter  = 29386
+        max nest level   = 13
 *** END OF TEST SMPMUTEX 2 ***

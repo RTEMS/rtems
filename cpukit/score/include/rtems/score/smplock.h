@@ -55,6 +55,10 @@ extern "C" {
  * @{
  */
 
+#if defined(RTEMS_DEBUG) || defined(RTEMS_PROFILING)
+#define RTEMS_SMP_LOCK_DO_NOT_INLINE
+#endif
+
 /**
  * @brief SMP lock control.
  */
@@ -148,13 +152,8 @@ void _SMP_lock_Initialize(
   const char *      name
 );
 #else
-static inline void _SMP_lock_Initialize(
-  SMP_lock_Control *lock,
-  const char       *name
-)
-{
-  _SMP_lock_Initialize_inline( lock, name );
-}
+#define _SMP_lock_Initialize( lock, name ) \
+  _SMP_lock_Initialize_inline( lock, name )
 #endif
 
 static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
@@ -173,10 +172,8 @@ static inline void _SMP_lock_Destroy_inline( SMP_lock_Control *lock )
 #if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Destroy( SMP_lock_Control *lock );
 #else
-static inline void _SMP_lock_Destroy( SMP_lock_Control *lock )
-{
-  _SMP_lock_Destroy_inline( lock );
-}
+#define _SMP_lock_Destroy( lock ) \
+  _SMP_lock_Destroy_inline( lock )
 #endif
 
 static inline void _SMP_lock_Acquire_inline(
@@ -241,10 +238,15 @@ static inline void _SMP_lock_Release_inline(
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
+#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
+#else
+#define _SMP_lock_Release( lock, context ) \
+  _SMP_lock_Release_inline( lock, context )
+#endif
 
 static inline void _SMP_lock_ISR_disable_and_acquire_inline(
   SMP_lock_Control *lock,
@@ -283,10 +285,15 @@ static inline void _SMP_lock_Release_and_ISR_enable_inline(
  * @param[in] context The local SMP lock context for an acquire and release
  * pair.
  */
+#if defined(RTEMS_SMP_LOCK_DO_NOT_INLINE)
 void _SMP_lock_Release_and_ISR_enable(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
 );
+#else
+#define _SMP_lock_Release_and_ISR_enable( lock, context ) \
+  _SMP_lock_Release_and_ISR_enable_inline( lock, context )
+#endif
 
 #if defined(RTEMS_DEBUG)
 /**
