@@ -31,8 +31,8 @@ void _pthread_cleanup_push(
   void                              *arg
 )
 {
-  Per_CPU_Control *cpu_self;
-  Thread_Control  *executing;
+  ISR_Level       level;
+  Thread_Control *executing;
 
   context->_routine = routine;
   context->_arg = arg;
@@ -40,13 +40,13 @@ void _pthread_cleanup_push(
   /* This value is unused, just provide a deterministic value */
   context->_canceltype = -1;
 
-  cpu_self = _Thread_Dispatch_disable();
+  _ISR_Local_disable( level );
 
-  executing = _Per_CPU_Get_executing( cpu_self );
+  executing = _Thread_Executing;
   context->_previous = executing->last_cleanup_context;
   executing->last_cleanup_context = context;
 
-  _Thread_Dispatch_enable( cpu_self );
+  _ISR_Local_enable( level );
 }
 
 void _pthread_cleanup_pop(
@@ -54,19 +54,19 @@ void _pthread_cleanup_pop(
   int                              execute
 )
 {
-  Per_CPU_Control *cpu_self;
-  Thread_Control  *executing;
+  ISR_Level       level;
+  Thread_Control *executing;
 
   if ( execute != 0 ) {
     ( *context->_routine )( context->_arg );
   }
 
-  cpu_self = _Thread_Dispatch_disable();
+  _ISR_Local_disable( level );
 
-  executing = _Per_CPU_Get_executing( cpu_self );
+  executing = _Thread_Executing;
   executing->last_cleanup_context = context->_previous;
 
-  _Thread_Dispatch_enable( cpu_self );
+  _ISR_Local_enable( level );
 }
 
 static void _POSIX_Cleanup_terminate_extension( Thread_Control *the_thread )
