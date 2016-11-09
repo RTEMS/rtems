@@ -1185,14 +1185,6 @@ void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_NO_RETURN;
 
-/**
- * @brief The pointer to the current per-CPU control is available via register
- * g6.
- */
-register struct Per_CPU_Control *_SPARC_Per_CPU_current __asm__( "g6" );
-
-#define _CPU_Get_current_per_CPU_control() _SPARC_Per_CPU_current
-
 #if defined(RTEMS_SMP)
   uint32_t _CPU_SMP_Initialize( void );
 
