@@ -936,13 +936,20 @@ void ShowBATS(void);
 	mtmsr	\level
 .endm
 
-.macro GET_SELF_CPU_CONTROL reg
 #if defined(RTEMS_SMP)
+.macro SET_SELF_CPU_CONTROL reg
 	/* Use Book E Processor ID Register (PIR) */
 	mfspr	\reg, 286
 	slwi	\reg, \reg, PER_CPU_CONTROL_SIZE_LOG2
 	addis	\reg, \reg, _Per_CPU_Information@ha
 	addi	\reg, \reg, _Per_CPU_Information@l
+	mtspr	PPC_PER_CPU_CONTROL_REGISTER, \reg
+.endm
+#endif
+
+.macro GET_SELF_CPU_CONTROL reg
+#if defined(RTEMS_SMP)
+	mfspr	\reg, PPC_PER_CPU_CONTROL_REGISTER
 #else
 	lis	\reg, _Per_CPU_Information@h
 	ori	\reg, \reg, _Per_CPU_Information@l
