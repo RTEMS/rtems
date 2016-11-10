@@ -105,6 +105,18 @@ typedef uint32_t   ISR_Level;
   } while (0)
 
 /**
+ * @brief Returns true if interrupts are enabled in the specified interrupt
+ * level, otherwise returns false.
+ *
+ * @param[in] _level The ISR level.
+ *
+ * @retval true Interrupts are enabled in the interrupt level.
+ * @retval false Otherwise.
+ */
+#define _ISR_Is_enabled( _level ) \
+  _CPU_ISR_Is_enabled( _level )
+
+/**
  *  @brief Return current interrupt level.
  *
  *  This routine returns the current interrupt level.

@@ -350,8 +350,6 @@ static inline uint32_t arm_interrupt_disable( void )
     : [level] "=&r" (level)
     : [basepri] "r" (basepri)
   );
-#else
-  level = 0;
 #endif
 
   return level;
@@ -415,6 +413,15 @@ static inline void arm_interrupt_flash( uint32_t level )
 
 #define _CPU_ISR_Flash( _isr_cookie ) \
   arm_interrupt_flash( _isr_cookie )
+
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+#if defined(ARM_MULTILIB_ARCH_V4)
+  return ( level & 0x80 ) == 0;
+#elif defined(ARM_MULTILIB_ARCH_V7M)
+  return level > 0x80;
+#endif
+}
 
 void _CPU_ISR_Set_level( uint32_t level );
 

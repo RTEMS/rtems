@@ -791,6 +791,20 @@ extern Context_Control_fp _CPU_Null_fp_context;
   }
 
 /**
+ * @brief Returns true if interrupts are enabled in the specified ISR level,
+ * otherwise returns false.
+ *
+ * @param[in] level The ISR level.
+ *
+ * @retval true Interrupts are enabled in the ISR level.
+ * @retval false Otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return false;
+}
+
+/**
  * @ingroup CPUInterrupt
  *
  * This routine and @ref _CPU_ISR_Get_level

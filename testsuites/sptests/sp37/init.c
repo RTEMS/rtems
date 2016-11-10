@@ -339,10 +339,12 @@ void test_interrupt_inline(void)
   rtems_interrupt_local_disable( level );
   isr_level_1 = _ISR_Get_level();
   rtems_test_assert( isr_level_1 != isr_level_0 );
+  rtems_test_assert( _ISR_Is_enabled( level ) );
 
   rtems_interrupt_local_disable( level_1 );
   isr_level_2 = _ISR_Get_level();
   rtems_test_assert( isr_level_2 == isr_level_1 );
+  rtems_test_assert( !_ISR_Is_enabled( level_1 ) );
 
   rtems_interrupt_local_enable( level_1 );
   rtems_test_assert( _ISR_Get_level() == isr_level_1 );

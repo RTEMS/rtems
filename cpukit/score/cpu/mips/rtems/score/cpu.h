@@ -699,6 +699,11 @@ uint32_t mips_interrupt_mask( void );
     _xlevel = _scratch2; \
   } while(0)
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & SR_INTERRUPT_ENABLE_BITS ) != 0;
+}
+
 /*
  *  Map interrupt level in task mode onto the hardware that the CPU
  *  actually provides.  Currently, interrupt levels which do not

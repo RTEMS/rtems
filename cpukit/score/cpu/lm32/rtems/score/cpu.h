@@ -679,6 +679,11 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define _CPU_ISR_Flash( _isr_cookie ) \
   lm32_flash_interrupts( _isr_cookie );
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & 0x0001 ) != 0;
+}
+
 /**
  * This routine and @ref _CPU_ISR_Get_level
  * Map the interrupt level in task mode onto the hardware that the CPU

@@ -19,6 +19,18 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/nios2-utility.h>
 
+bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  switch ( _Nios2_ISR_Get_status_mask() ) {
+    case NIOS2_ISR_STATUS_MASK_EIC_IL:
+      return ((status & NIOS2_STATUS_IL_MASK) >> NIOS2_STATUS_IL_OFFSET) == 0;
+    case NIOS2_ISR_STATUS_MASK_EIC_RSIE:
+      return (status & NIOS2_STATUS_RSIE) != 0;
+    default:
+      return (status & NIOS2_STATUS_PIE) != 0;
+  }
+}
+
 uint32_t _CPU_ISR_Get_level( void )
 {
   uint32_t status = _Nios2_Get_ctlreg_status();

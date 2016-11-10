@@ -669,6 +669,11 @@ typedef struct {
     __asm__ volatile( "fclr I" ); \
   } while(0)
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & 0x40 ) != 0;
+}
+
 /**
  * @ingroup CPUInterrupt
  *

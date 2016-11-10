@@ -403,6 +403,11 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define _CPU_ISR_Set_level( _new_level ) i386_set_interrupt_level(_new_level)
 #endif
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & EFLAGS_INTR_ENABLE ) != 0;
+}
+
 uint32_t   _CPU_ISR_Get_level( void );
 
 /*  Make sure interrupt stack has space for ISR

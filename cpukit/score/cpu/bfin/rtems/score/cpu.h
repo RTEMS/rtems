@@ -667,6 +667,11 @@ typedef struct {
                           : : "d"(_level) : "R0" ); \
   }
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return level != 0;
+}
+
 /**
  * This routine and @ref _CPU_ISR_Get_level
  * Map the interrupt level in task mode onto the hardware that the CPU

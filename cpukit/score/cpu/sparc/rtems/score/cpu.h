@@ -889,6 +889,14 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 #define _CPU_ISR_Flash( _level ) \
   sparc_flash_interrupts( _level )
 
+#define _CPU_ISR_Is_enabled( _isr_cookie ) \
+  sparc_interrupt_is_enabled( _isr_cookie )
+
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & SPARC_PSR_PIL_MASK ) == 0;
+}
+
 /**
  * Map interrupt level in task mode onto the hardware that the CPU
  * actually provides.  Currently, interrupt levels which do not

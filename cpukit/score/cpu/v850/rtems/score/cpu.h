@@ -627,6 +627,12 @@ typedef struct {
     __asm__ __volatile__( "di" ); \
   } while (0)
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & V850_PSW_INTERRUPT_DISABLE_MASK )
+    != V850_PSW_INTERRUPT_DISABLE;
+}
+
 /**
  * This routine and @ref _CPU_ISR_Get_level
  * Map the interrupt level in task mode onto the hardware that the CPU

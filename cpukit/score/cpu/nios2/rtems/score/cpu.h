@@ -241,6 +241,8 @@ typedef struct {
     __builtin_wrctl( 0, _status ); \
   } while ( 0 )
 
+bool _CPU_ISR_Is_enabled( uint32_t level );
+
 /**
  * @brief Sets the interrupt level for the executing thread.
  *

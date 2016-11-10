@@ -399,6 +399,11 @@ extern void*                     _VBR;
 #define _CPU_ISR_Flash( _level ) \
   m68k_flash_interrupts( _level )
 
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+{
+  return ( level & 0x0700 ) == 0;
+}
+
 #define _CPU_ISR_Set_level( _newlevel ) \
    m68k_set_interrupt_level( _newlevel )
 
