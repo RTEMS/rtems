@@ -147,6 +147,21 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
 
   _Assert( cpu_self->thread_dispatch_disable_level == 1 );
 
+#if defined(RTEMS_SCORE_ROBUST_THREAD_DISPATCH)
+  if (
+    !_ISR_Is_enabled( level )
+#if defined(RTEMS_SMP)
+      && rtems_configuration_is_smp_enabled()
+#endif
+  ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      false,
+      INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
+    );
+  }
+#endif
+
   executing = cpu_self->executing;
 
   do {

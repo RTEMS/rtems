@@ -249,6 +249,18 @@ extern "C" {
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 
 /**
+ * @brief Enables a robust thread dispatch if set to TRUE.
+ *
+ * In general, it is an application bug to call blocking operating system
+ * services with interrupts disabled.  In most situations this only increases
+ * the interrupt latency.  However, on SMP configurations or on some CPU port
+ * like ARM Cortex-M it leads to undefined system behaviour.  It order to ease
+ * the application development, this error condition is checked at run-time in
+ * case this CPU port option is defined to TRUE.
+ */
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
+
+/**
  * Does this port provide a CPU dependent IDLE task implementation?
  *
  * If TRUE, then the routine @ref _CPU_Thread_Idle_body

@@ -92,6 +92,8 @@ extern "C" {
 #endif
 #endif /* __SSE__ */
 
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
+
 #define CPU_STACK_GROWS_UP               FALSE
 
 /* FIXME: The Pentium 4 used 128 bytes, it this processor still relevant? */

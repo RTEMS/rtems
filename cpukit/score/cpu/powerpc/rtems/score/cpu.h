@@ -555,6 +555,8 @@ typedef struct {
 /* conservative setting (FALSE); probably doesn't affect performance too much */
 #define CPU_USE_DEFERRED_FP_SWITCH       FALSE
 
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
+
 /*
  *  Processor defined structures required for cpukit/score.
  */

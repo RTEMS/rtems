@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
+    error - 3 == INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
   );
 }
 

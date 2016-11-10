@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal06
+
+directives:
+
+  - _Thread_Do_dispatch()
+
+concepts:
+
+  - Ensure that the fatal error INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
+    occurs in case a blocking operating system service is called with
+    interrupts disabled.

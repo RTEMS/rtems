@@ -205,6 +205,8 @@ extern "C" {
 
 #define CPU_USE_DEFERRED_FP_SWITCH       FALSE
 
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
+
 /*
  *  Does this port provide a CPU dependent IDLE task implementation?
  *

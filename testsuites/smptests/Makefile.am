@@ -20,6 +20,7 @@ SUBDIRS += smpfatal02
 SUBDIRS += smpfatal03
 SUBDIRS += smpfatal04
 SUBDIRS += smpfatal05
+SUBDIRS += smpfatal06
 SUBDIRS += smpfatal08
 SUBDIRS += smpipi01
 SUBDIRS += smpload01

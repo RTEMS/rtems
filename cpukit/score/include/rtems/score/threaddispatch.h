@@ -28,6 +28,18 @@ extern "C" {
  * @{
  */
 
+#if defined(RTEMS_SMP) || ( CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE )
+/**
+ * @brief Enables a robust thread dispatch.
+ *
+ * On each change of the thread dispatch disable level from one to zero the
+ * interrupt status is checked.  In case interrupts are disabled and SMP is
+ * enabled or the CPU port needs it, then the system terminates with the fatal
+ * internal error INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT.
+ */
+#define RTEMS_SCORE_ROBUST_THREAD_DISPATCH
+#endif
+
 /**
  * @brief Indicates if the executing thread is inside a thread dispatch
  * critical section.
@@ -206,7 +218,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
 
     _ISR_Local_disable( level );
 
-    if ( cpu_self->dispatch_necessary ) {
+    if (
+      cpu_self->dispatch_necessary
+#if defined(RTEMS_SCORE_ROBUST_THREAD_DISPATCH)
+        || !_ISR_Is_enabled( level )
+#endif
+    ) {
       _Thread_Do_dispatch( cpu_self, level );
     } else {
       cpu_self->thread_dispatch_disable_level = 0;

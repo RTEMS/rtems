@@ -94,6 +94,7 @@ extern "C" {
 #define CPU_ALL_TASKS_ARE_FP             FALSE
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 #define CPU_STACK_GROWS_UP               FALSE

@@ -78,6 +78,7 @@ smpfatal02/Makefile
 smpfatal03/Makefile
 smpfatal04/Makefile
 smpfatal05/Makefile
+smpfatal06/Makefile
 smpfatal08/Makefile
 smpipi01/Makefile
 smpload01/Makefile
