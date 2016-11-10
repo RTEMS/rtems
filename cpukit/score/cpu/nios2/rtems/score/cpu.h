@@ -27,11 +27,6 @@ extern "C" {
 #include <rtems/score/types.h>
 #include <rtems/score/nios2.h>
 
-/*
- * TODO: Run the timing tests and figure out what is better.
- */
-#define CPU_INLINE_ENABLE_DISPATCH FALSE
-
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
 
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE

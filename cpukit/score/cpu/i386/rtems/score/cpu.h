@@ -32,8 +32,6 @@ extern "C" {
 
 /* conditional compilation parameters */
 
-#define CPU_INLINE_ENABLE_DISPATCH       TRUE
-
 /*
  *  Does the CPU follow the simple vectored interrupt model?
  *

@@ -54,16 +54,6 @@ extern "C" {
 #endif
 
 /**
- * Should the calls to _Thread_Enable_dispatch be inlined?
- *
- * - If TRUE, then they are inlined.
- * - If FALSE, then a subroutine call is made.
- *
- * On this port, it is faster to inline _Thread_Enable_dispatch.
- */
-#define CPU_INLINE_ENABLE_DISPATCH       TRUE
-
-/**
  * Does the executive manage a dedicated interrupt stack in software?
  *
  * If TRUE, then a stack is allocated in _ISR_Handler_initialization.

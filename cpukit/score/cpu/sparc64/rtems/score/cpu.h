@@ -34,15 +34,6 @@ extern "C" {
 /* conditional compilation parameters */
 
 /*
- *  Should the calls to _Thread_Enable_dispatch be inlined?
- *
- *  If TRUE, then they are inlined.
- *  If FALSE, then a subroutine call is made.
- */
-
-#define CPU_INLINE_ENABLE_DISPATCH       TRUE
-
-/*
  *  Does the executive manage a dedicated interrupt stack in software?
  *
  *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.

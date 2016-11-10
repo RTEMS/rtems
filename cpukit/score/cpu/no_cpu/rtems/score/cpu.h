@@ -46,29 +46,6 @@ extern "C" {
 /* conditional compilation parameters */
 
 /**
- * Should the calls to @ref _Thread_Enable_dispatch be inlined?
- *
- * If TRUE, then they are inlined.
- * If FALSE, then a subroutine call is made.
- *
- * This conditional is an example of the classic trade-off of size
- * versus speed.  Inlining the call (TRUE) typically increases the
- * size of RTEMS while speeding up the enabling of dispatching.
- *
- * NOTE: In general, the @ref _Thread_Dispatch_disable_level will
- * only be 0 or 1 unless you are in an interrupt handler and that
- * interrupt handler invokes the executive.]  When not inlined
- * something calls @ref _Thread_Enable_dispatch which in turns calls
- * @ref _Thread_Dispatch.  If the enable dispatch is inlined, then
- * one subroutine call is avoided entirely.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_INLINE_ENABLE_DISPATCH       FALSE
-
-/**
  * Does RTEMS manage a dedicated interrupt stack in software?
  *
  * If TRUE, then a stack is allocated in @ref _ISR_Handler_initialization.

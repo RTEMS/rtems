@@ -97,13 +97,6 @@
  */
 /**@{**/
 
-/* If someone uses THUMB we assume she wants minimal code size */
-#ifdef __thumb__
-  #define CPU_INLINE_ENABLE_DISPATCH FALSE
-#else
-  #define CPU_INLINE_ENABLE_DISPATCH TRUE
-#endif
-
 #if defined(__ARMEL__)
   #define CPU_BIG_ENDIAN FALSE
   #define CPU_LITTLE_ENDIAN TRUE
