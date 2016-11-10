@@ -60,8 +60,14 @@ bool _Thread_Initialize(
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
 #if defined( RTEMS_SMP )
-  if ( rtems_configuration_is_smp_enabled() && !is_preemptible ) {
-    return false;
+  if ( rtems_configuration_is_smp_enabled() ) {
+    if ( !is_preemptible ) {
+      return false;
+    }
+
+    if ( isr_level != 0 ) {
+      return false;
+    }
   }
 #endif
 
