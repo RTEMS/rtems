@@ -197,7 +197,7 @@ PUBLIC(_ISR_Handler)
    *  enable traps again.
    */
 
-  sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+  sub      %sp, SPARC64_MINIMUM_STACK_FRAME_SIZE, %sp
 
   dont_switch_stacks:
   /*

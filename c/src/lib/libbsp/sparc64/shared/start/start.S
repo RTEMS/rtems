@@ -140,10 +140,10 @@ halted:	nop
 
 .section BOOTSTRAP
   .align CPU_ALIGNMENT
-  .space 32768 - CPU_MINIMUM_STACK_FRAME_SIZE ! 32K boot stack grows down
+  .space 32768 - SPARC64_MINIMUM_STACK_FRAME_SIZE ! 32K boot stack grows down
   .global StackStart
   StackStart:
-    .space CPU_MINIMUM_STACK_FRAME_SIZE ! initial stack frame
+    .space SPARC64_MINIMUM_STACK_FRAME_SIZE ! initial stack frame
 
 .section BOOTSTRAP
   .align CPU_ALIGNMENT

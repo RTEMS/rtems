@@ -90,7 +90,7 @@ void _CPU_Context_Initialize(
      */
 
     the_context->o7    = ((uint64_t) entry_point) - 8;
-    the_context->o6_sp = stack_high - CPU_MINIMUM_STACK_FRAME_SIZE - STACK_BIAS;
+    the_context->o6_sp = stack_high - SPARC64_MINIMUM_STACK_FRAME_SIZE - STACK_BIAS;
     the_context->i6_fp = 0;
 
     /* ABI uses g4 as segment register, make sure it is zeroed */

@@ -39,7 +39,7 @@
   .align 4
 PUBLIC(_CPU_Context_save_fp)
   SYM(_CPU_Context_save_fp):
-    save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+    save    %sp, -SPARC64_MINIMUM_STACK_FRAME_SIZE, %sp
 
     /*
      *  The following enables the floating point unit.
@@ -105,7 +105,7 @@ PUBLIC(_CPU_Context_save_fp)
   .align 4
 PUBLIC(_CPU_Context_restore_fp)
   SYM(_CPU_Context_restore_fp):
-    save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE , %sp
+    save    %sp, -SPARC64_MINIMUM_STACK_FRAME_SIZE , %sp
 
     /*
      *  The following enables the floating point unit.
@@ -300,7 +300,7 @@ PUBLIC(_CPU_Context_restore_heir)
   .align 4
 PUBLIC(_CPU_Context_restore)
   SYM(_CPU_Context_restore):
-    save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+    save    %sp, -SPARC64_MINIMUM_STACK_FRAME_SIZE, %sp
 !    rdpr    %pstate, %o2
     ba      SYM(_CPU_Context_restore_heir)
     mov     %i0, %o1                      ! in the delay slot
