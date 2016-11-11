@@ -61,7 +61,7 @@ extern "C" {
  *  number (0)?
  */
 
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 /*
  *  Some family members have no FP, some have an FPU such as the

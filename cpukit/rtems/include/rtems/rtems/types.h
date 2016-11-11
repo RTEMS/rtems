@@ -98,13 +98,18 @@ typedef Context_Control            rtems_context;
 typedef Context_Control_fp         rtems_context_fp;
 #endif
 
+#if (CPU_ISR_PASSES_FRAME_POINTER == TRUE)
 /**
  * @brief Defines the format of the interrupt stack frame as it appears to a
  * user ISR.
  *
- * This data structure may not be defined on all ports
+ * This data structure is only provided if the interrupt stack frame is passed
+ * to the ISR handler.
+ *
+ * @see rtems_interrupt_catch().
  */
 typedef CPU_Interrupt_frame        rtems_interrupt_frame;
+#endif
 
 /**
  * @brief Information structure returned by the Heap Handler via the Region

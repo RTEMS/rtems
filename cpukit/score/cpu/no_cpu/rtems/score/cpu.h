@@ -130,7 +130,7 @@ extern "C" {
  *
  * XXX document implementation including references if appropriate
  */
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 /**
  * @def CPU_HARDWARE_FP

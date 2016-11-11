@@ -117,7 +117,7 @@ extern "C" {
  *
  */
 
-#define CPU_ISR_PASSES_FRAME_POINTER 1
+#define CPU_ISR_PASSES_FRAME_POINTER TRUE
 
 /*
  *  Does the CPU have hardware floating point?

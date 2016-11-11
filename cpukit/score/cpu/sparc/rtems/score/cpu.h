@@ -107,7 +107,7 @@ extern "C" {
  * The SPARC port does not pass an Interrupt Stack Frame pointer to
  * interrupt handlers.
  */
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 /**
  * Does the CPU have hardware floating point?

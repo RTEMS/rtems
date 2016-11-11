@@ -544,7 +544,7 @@ typedef struct CPU_Interrupt_frame {
  *  number (0)?
  */
 
-#define CPU_ISR_PASSES_FRAME_POINTER 0
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 /*
  *  Should the saving of the floating point registers be deferred

@@ -58,7 +58,7 @@ typedef void * ISR_Handler_entry;
 /**
  *  Pointer to an ISR Handler
  */
-#if (CPU_ISR_PASSES_FRAME_POINTER == 1)
+#if (CPU_ISR_PASSES_FRAME_POINTER == TRUE)
 typedef ISR_Handler ( *ISR_Handler_entry )(
                  ISR_Vector_number,
                  CPU_Interrupt_frame *
