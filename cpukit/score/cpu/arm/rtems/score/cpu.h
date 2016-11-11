@@ -687,8 +687,6 @@ typedef struct {
   uint32_t reserved_for_stack_alignment;
 } CPU_Exception_frame;
 
-typedef CPU_Exception_frame CPU_Interrupt_frame;
-
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 void _ARM_Exception_default( CPU_Exception_frame *frame );
