@@ -161,6 +161,39 @@ int CPU_irq_level_from_symbolic_name(const rtems_irq_number name);
 
 extern void CPU_rtems_irq_mng_init(unsigned cpuId);
 
+typedef struct CPU_Interrupt_frame {
+    uint32_t   stacklink;	/* Ensure this is a real frame (also reg1 save) */
+    uint32_t   calleeLr;	/* link register used by callees: SVR4/EABI */
+
+    /* This is what is left out of the primary contexts */
+    uint32_t   gpr0;
+    uint32_t   gpr2;		/* play safe */
+    uint32_t   gpr3;
+    uint32_t   gpr4;
+    uint32_t   gpr5;
+    uint32_t   gpr6;
+    uint32_t   gpr7;
+    uint32_t   gpr8;
+    uint32_t   gpr9;
+    uint32_t   gpr10;
+    uint32_t   gpr11;
+    uint32_t   gpr12;
+    uint32_t   gpr13;   /* Play safe */
+    uint32_t   gpr28;   /* For internal use by the IRQ handler */
+    uint32_t   gpr29;   /* For internal use by the IRQ handler */
+    uint32_t   gpr30;   /* For internal use by the IRQ handler */
+    uint32_t   gpr31;   /* For internal use by the IRQ handler */
+    uint32_t   cr;	/* Bits of this are volatile, so no-one may save */
+    uint32_t   ctr;
+    uint32_t   xer;
+    uint32_t   lr;
+    uint32_t   pc;
+    uint32_t   msr;
+    uint32_t   pad[3];
+} CPU_Interrupt_frame;
+
+void C_dispatch_irq_handler(CPU_Interrupt_frame *frame, unsigned int excNum);
+
 #endif
 
 #endif

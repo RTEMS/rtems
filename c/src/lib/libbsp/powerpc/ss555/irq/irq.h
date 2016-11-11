@@ -44,7 +44,6 @@ int CPU_get_current_rtems_irq_handler(rtems_irq_connect_data* irq);
 int CPU_remove_rtems_irq_handler(const rtems_irq_connect_data* irq);
 int CPU_rtems_irq_mngt_set(rtems_irq_global_settings* config);
 int CPU_rtems_irq_mngt_get(rtems_irq_global_settings** config);
-void C_dispatch_irq_handler(CPU_Interrupt_frame *frame, unsigned int excNum);
 void C_default_exception_handler(CPU_Exception_frame* excPtr);
 
 /*
