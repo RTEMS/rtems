@@ -84,6 +84,12 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, isr_dispatch_disable)
+    == PER_CPU_ISR_DISPATCH_DISABLE,
+  PER_CPU_ISR_DISPATCH_DISABLE
+);
+
+RTEMS_STATIC_ASSERT(
   offsetof(Per_CPU_Control, thread_dispatch_disable_level)
     == PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL,
   PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL

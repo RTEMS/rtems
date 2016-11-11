@@ -290,6 +290,16 @@ typedef struct Per_CPU_Control {
   uint32_t isr_nest_level;
 
   /**
+   * @brief Indicetes if an ISR thread dispatch is disabled.
+   *
+   * This flag is context switched with each thread.  It indicates that this
+   * thread has an interrupt stack frame on its stack.  By using this flag, we
+   * can avoid nesting more interrupt dispatching attempts on a previously
+   * interrupted thread's stack.
+   */
+  uint32_t isr_dispatch_disable;
+
+  /**
    * @brief The thread dispatch critical section nesting counter which is used
    * to prevent context switches at inopportune moments.
    */
@@ -780,8 +790,10 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
  */
 #define PER_CPU_ISR_NEST_LEVEL \
   PER_CPU_END_STACK
-#define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
+#define PER_CPU_ISR_DISPATCH_DISABLE \
   PER_CPU_ISR_NEST_LEVEL + 4
+#define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
+  PER_CPU_ISR_DISPATCH_DISABLE + 4
 #define PER_CPU_OFFSET_EXECUTING \
   PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
 #define PER_CPU_OFFSET_HEIR \
