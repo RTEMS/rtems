@@ -178,17 +178,22 @@ done_flushing:
         mov     %g4, %wim
 
 #if defined(RTEMS_SMP)
-        ! The executing context no longer executes on this processor
+        /*
+         * The executing thread no longer executes on this processor.  Switch
+         * the stack to the temporary interrupt stack of this processor.  Mark
+         * the context of the executing thread as not executing.
+         */
+        add     %g6, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE, %sp
         st      %g0, [%o0 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 
         ! Try to update the is executing indicator of the heir context
         mov     1, %g1
 
-try_update_is_executing:
+.Ltry_update_is_executing:
 
         swap    [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
         cmp     %g1, 0
-        bne     check_is_executing
+        bne     .Lcheck_is_executing
 
         ! The next load is in a delay slot, which is all right
 #endif
@@ -225,12 +230,12 @@ try_update_is_executing:
         nop                                   ! delay slot
 
 #if defined(RTEMS_SMP)
-check_is_executing:
+.Lcheck_is_executing:
 
         ! Check the is executing indicator of the heir context
         ld      [%o1 + SPARC_CONTEXT_CONTROL_IS_EXECUTING_OFFSET], %g1
         cmp     %g1, 0
-        beq     try_update_is_executing
+        beq     .Ltry_update_is_executing
          mov    1, %g1
 
         ! We may have a new heir
@@ -242,7 +247,7 @@ check_is_executing:
         ! Update the executing only if necessary to avoid cache line
         ! monopolization.
         cmp     %g2, %g4
-        beq     try_update_is_executing
+        beq     .Ltry_update_is_executing
          mov    1, %g1
 
         ! Calculate the heir context pointer
@@ -252,7 +257,7 @@ check_is_executing:
         ! Update the executing
         st      %g4, [%g6 + PER_CPU_OFFSET_EXECUTING]
 
-        ba      try_update_is_executing
+        ba      .Ltry_update_is_executing
          mov    1, %g1
 #endif
 

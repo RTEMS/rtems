@@ -174,14 +174,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
       heir->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
 
-    /*
-     * On SMP the complete context switch must be atomic with respect to one
-     * processor.  See also _Thread_Handler() since _Context_switch() may branch
-     * to this function.
-     */
-#if !defined( RTEMS_SMP )
     _ISR_Local_enable( level );
-#endif
 
     _User_extensions_Thread_switch( executing, heir );
     _Thread_Save_fp( executing );
@@ -195,16 +188,8 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
      */
     cpu_self = _Per_CPU_Get();
 
-#if !defined( RTEMS_SMP )
     _ISR_Local_disable( level );
-#endif
-  } while (
-#if defined( RTEMS_SMP )
-    false
-#else
-    cpu_self->dispatch_necessary
-#endif
-  );
+  } while ( cpu_self->dispatch_necessary );
 
 post_switch:
   _Assert( cpu_self->thread_dispatch_disable_level == 1 );

@@ -402,23 +402,30 @@ PROC (_CPU_Context_switch):
 #endif
 
 #ifdef RTEMS_SMP
-	/* The executing context no longer executes on this processor */
+	/*
+	 * The executing thread no longer executes on this processor.  Switch
+	 * the stack to the temporary interrupt stack of this processor.  Mark
+	 * the context of the executing thread as not executing.
+	 */
 	msync
+
+	GET_SELF_CPU_CONTROL	r12
+	addi	r1, r12, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
 	li	r6, 0
 	stw	r6, PPC_CONTEXT_OFFSET_IS_EXECUTING(r3)
 
-check_is_executing:
+.Lcheck_is_executing:
 
 	/* Check the is executing indicator of the heir context */
 	addi	r6, r5, PPC_CONTEXT_OFFSET_IS_EXECUTING
 	lwarx	r7, r0, r6
 	cmpwi	r7, 0
-	bne	get_potential_new_heir
+	bne	.Lget_potential_new_heir
 
 	/* Try to update the is executing indicator of the heir context */
 	li	r7, 1
 	stwcx.	r7, r0, r6
-	bne	get_potential_new_heir
+	bne	.Lget_potential_new_heir
 	isync
 #endif
 
@@ -537,22 +544,20 @@ PROC (_CPU_Context_restore):
 	b	restore_context
 
 #ifdef RTEMS_SMP
-get_potential_new_heir:
-
-	GET_SELF_CPU_CONTROL	r6
+.Lget_potential_new_heir:
 
 	/* We may have a new heir */
 
 	/* Read the executing and heir */
-	lwz	r7, PER_CPU_OFFSET_EXECUTING(r6)
-	lwz	r8, PER_CPU_OFFSET_HEIR(r6)
+	lwz	r7, PER_CPU_OFFSET_EXECUTING(r12)
+	lwz	r8, PER_CPU_OFFSET_HEIR(r12)
 
 	/*
 	 * Update the executing only if necessary to avoid cache line
 	 * monopolization.
 	 */
 	cmpw	r7, r8
-	beq	check_is_executing
+	beq	.Lcheck_is_executing
 
 	/* Calculate the heir context pointer */
 	sub	r7, r4, r7
@@ -560,7 +565,7 @@ get_potential_new_heir:
 	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	/* Update the executing */
-	stw	r8, PER_CPU_OFFSET_EXECUTING(r6)
+	stw	r8, PER_CPU_OFFSET_EXECUTING(r12)
 
-	b	check_is_executing
+	b	.Lcheck_is_executing
 #endif

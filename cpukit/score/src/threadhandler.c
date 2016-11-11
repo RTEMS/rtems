@@ -38,9 +38,6 @@ void _Thread_Handler( void )
   _Context_Initialization_at_thread_begin();
   executing = _Thread_Executing;
 
-  /* On SMP we enter _Thread_Handler() with interrupts disabled */
-  _SMP_Assert( _ISR_Get_level() != 0 );
-
   /*
    * have to put level into a register for those cpu's that use
    * inline asm here

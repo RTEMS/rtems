@@ -69,8 +69,14 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 #endif
 
 #ifdef RTEMS_SMP
-	/* The executing context no longer executes on this processor */
+	/*
+	 * The executing thread no longer executes on this processor.  Switch
+	 * the stack to the temporary interrupt stack of this processor.  Mark
+	 * the context of the executing thread as not executing.
+	 */
 	dmb
+	GET_SELF_CPU_CONTROL	r2
+	add	sp, r2, #(PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE)
 	mov	r3, #0
 	strb	r3, [r0, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
 
@@ -127,8 +133,6 @@ DEFINE_FUNCTION_ARM(_CPU_Context_restore)
 
 #ifdef RTEMS_SMP
 .L_get_potential_new_heir:
-
-	GET_SELF_CPU_CONTROL	r2
 
 	/* We may have a new heir */
 
