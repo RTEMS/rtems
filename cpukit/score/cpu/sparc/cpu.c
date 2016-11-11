@@ -110,11 +110,6 @@ RTEMS_STATIC_ASSERT(
   SPARC_MINIMUM_STACK_FRAME_SIZE
 );
 
-RTEMS_STATIC_ASSERT(
-  sizeof(CPU_Interrupt_frame) == CPU_INTERRUPT_FRAME_SIZE,
-  CPU_Interrupt_frame_size
-);
-
 /* https://devel.rtems.org/ticket/2352 */
 RTEMS_STATIC_ASSERT(
   sizeof(CPU_Interrupt_frame) % CPU_ALIGNMENT == 0,

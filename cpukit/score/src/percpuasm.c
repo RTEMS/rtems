@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -109,6 +109,18 @@ RTEMS_STATIC_ASSERT(
   offsetof(Per_CPU_Control, dispatch_necessary) == PER_CPU_DISPATCH_NEEDED,
   PER_CPU_DISPATCH_NEEDED
 );
+
+#if defined(RTEMS_SMP)
+RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, Interrupt_frame) == PER_CPU_INTERRUPT_FRAME_AREA,
+  PER_CPU_INTERRUPT_FRAME_AREA
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( CPU_Interrupt_frame ) == CPU_INTERRUPT_FRAME_SIZE,
+  CPU_INTERRUPT_FRAME_SIZE
+);
+#endif
 
 #if CPU_ALLOCATE_INTERRUPT_STACK == TRUE \
   || CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE

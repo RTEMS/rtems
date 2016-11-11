@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2012, 2016 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -35,16 +37,28 @@
 extern "C" {
 #endif
 
-#if defined( RTEMS_SMP )
+#if defined(RTEMS_SMP)
+  #if defined(RTEMS_PROFILING)
+    #define PER_CPU_CONTROL_SIZE_APPROX ( 512 + CPU_INTERRUPT_FRAME_SIZE )
+  #elif defined(RTEMS_DEBUG)
+    #define PER_CPU_CONTROL_SIZE_APPROX ( 256 + CPU_INTERRUPT_FRAME_SIZE )
+  #else
+    #define PER_CPU_CONTROL_SIZE_APPROX ( 128 + CPU_INTERRUPT_FRAME_SIZE )
+  #endif
+
   /*
    * This ensures that on SMP configurations the individual per-CPU controls
    * are on different cache lines to prevent false sharing.  This define can be
    * used in assembler code to easily get the per-CPU control for a particular
    * processor.
    */
-  #if defined( RTEMS_PROFILING )
+  #if PER_CPU_CONTROL_SIZE_APPROX > 1024
+    #define PER_CPU_CONTROL_SIZE_LOG2 11
+  #elif PER_CPU_CONTROL_SIZE_APPROX > 512
+    #define PER_CPU_CONTROL_SIZE_LOG2 10
+  #elif PER_CPU_CONTROL_SIZE_APPROX > 256
     #define PER_CPU_CONTROL_SIZE_LOG2 9
-  #elif defined( RTEMS_DEBUG )
+  #elif PER_CPU_CONTROL_SIZE_APPROX > 128
     #define PER_CPU_CONTROL_SIZE_LOG2 8
   #else
     #define PER_CPU_CONTROL_SIZE_LOG2 7
@@ -347,6 +361,10 @@ typedef struct Per_CPU_Control {
    * @see _Thread_Get_heir_and_make_it_executing().
    */
   volatile bool dispatch_necessary;
+
+#if defined(RTEMS_SMP)
+  CPU_Interrupt_frame Interrupt_frame;
+#endif
 
   /**
    * @brief The CPU usage timestamp contains the time point of the last heir
@@ -800,6 +818,10 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
   PER_CPU_OFFSET_EXECUTING + CPU_SIZEOF_POINTER
 #define PER_CPU_DISPATCH_NEEDED \
   PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
+#if defined(RTEMS_SMP)
+#define PER_CPU_INTERRUPT_FRAME_AREA \
+  PER_CPU_DISPATCH_NEEDED + 4
+#endif
 
 #define THREAD_DISPATCH_DISABLE_LEVEL \
   (SYM(_Per_CPU_Information) + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)
