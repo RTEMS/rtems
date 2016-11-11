@@ -18,8 +18,7 @@
 #include <bsp/irq.h>
 #include <rtems/bspIo.h>  /* for printk */
 #include <bsp/irq-generic.h>
-
-void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
+#include <libcpu/isr_entries.h>
 
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
 {

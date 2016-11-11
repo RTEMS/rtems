@@ -15,6 +15,8 @@
 #ifndef _ISR_ENTRIES_H
 #define _ISR_ENTRIES_H 1
 
+#include <rtems/score/cpuimpl.h>
+
 extern void mips_install_isr_entries( void );
 extern void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 

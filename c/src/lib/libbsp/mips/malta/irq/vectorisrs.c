@@ -18,9 +18,9 @@
 #include <bsp/pci.h>
 #include <bsp/i8259.h>
 #include <bsp.h>
+#include <libcpu/isr_entries.h>
 
 void mips_default_isr( int vector );
-void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 
 #include <rtems/bspIo.h>  /* for printk */
 

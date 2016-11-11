@@ -16,11 +16,11 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <libcpu/au1x00.h>
+#include <libcpu/isr_entries.h>
 #include <rtems/irq.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 
-void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 static void call_vectored_isr(CPU_Interrupt_frame *, uint32_t , void *);
 
 #include <rtems/bspIo.h>  /* for printk */

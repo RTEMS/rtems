@@ -15,12 +15,12 @@
 
 #include <rtems.h>
 #include <stdlib.h>
+#include <libcpu/isr_entries.h>
 #include <libcpu/tx4938.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <rtems/bspIo.h>  /* for printk */
 
-void mips_vector_isr_handlers( CPU_Interrupt_frame *frame );
 void mips_default_isr( int vector );
 
 void mips_vector_isr_handlers( CPU_Interrupt_frame *frame )
