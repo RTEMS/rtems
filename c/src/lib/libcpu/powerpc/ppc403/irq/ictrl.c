@@ -158,10 +158,10 @@ disable_ext_irq( uint32_t   mask)
  */
 void
 ictrl_spurious_handler(uint32_t   spurious_mask,
-		       CPU_Interrupt_frame *cpu_frame)
+		       void *cpu_frame)
 {
   int v;
-  extern void (*bsp_spurious_handler)(uint32_t   vector, CPU_Interrupt_frame *);
+  extern void (*bsp_spurious_handler)(uint32_t vector, void *);
 
   for (v=0; v < PPC_IRQ_EXT_MAX; v++) {
     if (VEC_TO_EXMSK(v) & spurious_mask) {
@@ -184,7 +184,7 @@ ictrl_spurious_handler(uint32_t   spurious_mask,
  */
 
 void
-ictrl_isr(rtems_vector_number vector,CPU_Interrupt_frame *cpu_frame)
+ictrl_isr(rtems_vector_number vector, void *cpu_frame)
 {
   uint32_t          istat,
                     mask,
