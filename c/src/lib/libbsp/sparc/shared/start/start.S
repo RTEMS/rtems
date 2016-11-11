@@ -289,7 +289,7 @@ SYM(hard_reset):
 	mov	%sp, %fp		! set frame pointer
 
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
-	 sub	%sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+	 sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 cpu0:
 #endif
 

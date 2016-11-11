@@ -19,7 +19,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 
-#define SCRATCH_0 (CPU_MINIMUM_STACK_FRAME_SIZE)
+#define SCRATCH_0 (SPARC_MINIMUM_STACK_FRAME_SIZE)
 #define SCRATCH_1 (SCRATCH_0 + 0x04)
 #define FRAME_END (SCRATCH_1 + 0x04)
 #define FRAME_SIZE \

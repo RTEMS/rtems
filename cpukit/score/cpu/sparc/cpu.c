@@ -343,7 +343,7 @@ void _CPU_Context_Initialize(
      */
 
     the_context->o7    = ((uint32_t) entry_point) - 8;
-    the_context->o6_sp = stack_high - CPU_MINIMUM_STACK_FRAME_SIZE;
+    the_context->o6_sp = stack_high - SPARC_MINIMUM_STACK_FRAME_SIZE;
     the_context->i6_fp = 0;
 
     /*

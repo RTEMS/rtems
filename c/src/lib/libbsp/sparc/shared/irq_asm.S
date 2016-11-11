@@ -26,7 +26,7 @@
 #include <bspopts.h>
 
 #if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
-  #define FP_FRAME_OFFSET_FO_F1 (CPU_MINIMUM_STACK_FRAME_SIZE + 0)
+  #define FP_FRAME_OFFSET_FO_F1 (SPARC_MINIMUM_STACK_FRAME_SIZE + 0)
   #define FP_FRAME_OFFSET_F2_F3 (FP_FRAME_OFFSET_FO_F1 + 8)
   #define FP_FRAME_OFFSET_F4_F5 (FP_FRAME_OFFSET_F2_F3 + 8)
   #define FP_FRAME_OFFSET_F6_F7 (FP_FRAME_OFFSET_F4_F5 + 8)
@@ -268,7 +268,7 @@ check_is_executing:
         .align 4
         PUBLIC(_CPU_Context_restore)
 SYM(_CPU_Context_restore):
-        save    %sp, -CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+        save    %sp, -SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
         rd      %psr, %o2
 #if defined(RTEMS_SMP)
         ! On SPARC the restore path needs also a valid executing context on SMP
@@ -486,7 +486,7 @@ dont_switch_stacks:
          *  enable traps again.
          */
 
-        sub      %sp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+        sub      %sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 
         /*
          *  Check if we have an external interrupt (trap 0x11 - 0x1f). If so,
@@ -621,7 +621,7 @@ profiling_not_outer_most_exit:
          *  of the task and subsequent interrupts can operate normally.
          */
 
-        sub      %fp, CPU_MINIMUM_STACK_FRAME_SIZE, %sp
+        sub      %fp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 
         or      %l0, SPARC_PSR_ET_MASK, %l7    ! l7 = PSR with ET=1
         mov     %l7, %psr                      !  **** ENABLE TRAPS ****
