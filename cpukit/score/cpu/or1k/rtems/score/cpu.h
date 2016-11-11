@@ -658,7 +658,6 @@ void _CPU_Context_Initialize(
 #endif /* ASM */
 
 #define CPU_SIZEOF_POINTER 4
-#define CPU_PER_CPU_CONTROL_SIZE 0
 
 #define CPU_MAXIMUM_PROCESSORS 32
 

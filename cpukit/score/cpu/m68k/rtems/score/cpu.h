@@ -111,8 +111,6 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           TRUE
 #define CPU_LITTLE_ENDIAN                        FALSE
 
-#define CPU_PER_CPU_CONTROL_SIZE 0
-
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #if ( CPU_HARDWARE_FP == TRUE ) && !defined( __mcoldfire__ )

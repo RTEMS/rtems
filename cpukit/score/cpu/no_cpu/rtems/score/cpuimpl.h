@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH
+ * Copyright (c) 2013, 2016 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -17,11 +17,33 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @brief The size of the CPU specific per-CPU control.
+ *
+ * This define must be visible to assember files since it is used to derive
+ * structure offsets.
+ */
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
 #ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @brief The CPU specific per-CPU control.
+ *
+ * The CPU port can place here all state information that must be available and
+ * maintained for each processor in the system.  This structure must contain at
+ * least one field for C/C++ compatibility.  In GNU C empty structures have a
+ * size of zero.  In C++ structures have a non-zero size.  In case
+ * CPU_PER_CPU_CONTROL_SIZE is defined to zero, then this structure is not
+ * used.
+ */
+typedef struct {
+  /* CPU specific per-CPU state */
+} CPU_Per_CPU_control;
 
 /**
  * @brief Special register pointing to the per-CPU control of the current

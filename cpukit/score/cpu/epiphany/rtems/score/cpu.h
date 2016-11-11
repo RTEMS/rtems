@@ -671,7 +671,6 @@ void _CPU_Context_Initialize(
  */
 #define CPU_SIZEOF_POINTER 4
 #define CPU_EXCEPTION_FRAME_SIZE 260
-#define CPU_PER_CPU_CONTROL_SIZE 0
 
 #define CPU_MAXIMUM_PROCESSORS 32
 

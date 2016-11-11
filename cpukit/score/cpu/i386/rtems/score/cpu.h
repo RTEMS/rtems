@@ -120,8 +120,6 @@ extern "C" {
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
 
-#define CPU_PER_CPU_CONTROL_SIZE 0
-
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #define I386_CONTEXT_CONTROL_EFLAGS_OFFSET 0
