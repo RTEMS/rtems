@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -114,10 +114,10 @@ _ARMV4_Exception_interrupt:
 
 #ifdef RTEMS_PROFILING
 	cmp	r2, #1
-	bne	profiling_entry_done
+	bne	.Lprofiling_entry_done
 	bl	_CPU_Counter_read
 	push	{r0, r1}
-profiling_entry_done:
+.Lprofiling_entry_done:
 #endif
 
 	/* Call BSP dependent interrupt dispatcher */
@@ -133,14 +133,14 @@ profiling_entry_done:
 
 #ifdef RTEMS_PROFILING
 	cmp	r2, #0
-	bne	profiling_exit_done
+	bne	.Lprofiling_exit_done
 	bl	_CPU_Counter_read
 	pop	{r1, r3}
 	mov	r2, r0
 	mov	r0, SELF_CPU_CONTROL
 	bl	_Profiling_Outer_most_interrupt_entry_and_exit
 	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-profiling_exit_done:
+.Lprofiling_exit_done:
 #endif
 
 	/* Restore stack pointer */
@@ -148,14 +148,14 @@ profiling_exit_done:
 
 	/* Check thread dispatch disable level */
 	cmp	r3, #0
-	bne	thread_dispatch_done
+	bne	.Lthread_dispatch_done
 
 	/* Check context switch necessary */
 	ldrb	r1, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
 	cmp	r1, #0
-	beq	thread_dispatch_done
+	beq	.Lthread_dispatch_done
 
-        /* This aligns thread_dispatch_done on a 4 byte boundary */
+        /* This aligns .Lthread_dispatch_done on a 4 byte boundary */
 #ifdef __thumb__
 	nop
 #endif /* __thumb__ */
@@ -163,7 +163,7 @@ profiling_exit_done:
 	/* Thread dispatch */
 	bl	_Thread_Dispatch
 
-thread_dispatch_done:
+.Lthread_dispatch_done:
 
 	/* Switch to ARM instructions if necessary */
 	SWITCH_FROM_THUMB_TO_ARM
