@@ -86,7 +86,7 @@ _ARMV4_Exception_interrupt:
 #endif /* ARM_MULTILIB_VFP */
 
 	/* Get per-CPU control of current processor */
-	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL, r1
+	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL
 
 	/* Remember INT stack pointer */
 	mov	r1, EXCHANGE_INT_SP

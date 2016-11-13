@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2008-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -20,7 +20,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/system.h>	
-#include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 	
 #include <bspopts.h>
 #include <bsp/irq.h>
@@ -184,11 +184,19 @@ _start:
 #endif
 
 #ifdef RTEMS_SMP
-	/* Read MPIDR */
+	/* Read MPIDR and get current processor index */
 	mrc	p15, 0, r0, c0, c0, 5
+	and	r0, #0xff
+
+        /*
+         * Get current per-CPU control and store it in PL1 only Thread ID
+         * Register (TPIDRPRW).
+         */
+	ldr	r1, =_Per_CPU_Information
+	add	r1, r1, r0, asl #PER_CPU_CONTROL_SIZE_LOG2
+	mcr	p15, 0, r1, c13, c0, 4
 
 	/* Calculate stack offset */
-	and	r0, #0xff
 	ldr	r1, =bsp_stack_all_size
 	mul	r1, r0
 #endif

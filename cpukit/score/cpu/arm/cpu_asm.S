@@ -128,7 +128,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_restore)
 #ifdef RTEMS_SMP
 .L_get_potential_new_heir:
 
-	GET_SELF_CPU_CONTROL	r2, r3
+	GET_SELF_CPU_CONTROL	r2
 
 	/* We may have a new heir */
 
