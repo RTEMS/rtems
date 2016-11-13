@@ -112,16 +112,23 @@ _ARMV4_Exception_interrupt:
 	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
+	/* Call BSP dependent interrupt dispatcher */
 #ifdef RTEMS_PROFILING
 	cmp	r2, #1
-	bne	.Lprofiling_entry_done
+	bne	.Lskip_profiling
 	bl	_CPU_Counter_read
-	push	{r0, r1}
-.Lprofiling_entry_done:
-#endif
-
-	/* Call BSP dependent interrupt dispatcher */
+	mov	SELF_CPU_CONTROL, r0
 	bl	bsp_interrupt_dispatch
+	bl	_CPU_Counter_read
+	mov	r2, r0
+	mov	r1, SELF_CPU_CONTROL
+	GET_SELF_CPU_CONTROL	r0
+	mov	SELF_CPU_CONTROL, r0
+	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+.Lprofiling_done:
+#else
+	bl	bsp_interrupt_dispatch
+#endif
 
 	/* Decrement interrupt nest and thread dispatch disable level */
 	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
@@ -130,18 +137,6 @@ _ARMV4_Exception_interrupt:
 	sub	r3, #1
 	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-
-#ifdef RTEMS_PROFILING
-	cmp	r2, #0
-	bne	.Lprofiling_exit_done
-	bl	_CPU_Counter_read
-	pop	{r1, r3}
-	mov	r2, r0
-	mov	r0, SELF_CPU_CONTROL
-	bl	_Profiling_Outer_most_interrupt_entry_and_exit
-	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-.Lprofiling_exit_done:
-#endif
 
 	/* Restore stack pointer */
 	mov	sp, SP_OF_INTERRUPTED_CONTEXT
@@ -238,5 +233,14 @@ _ARMV4_Exception_interrupt:
 
 	/* Return from interrupt */
 	subs	pc, lr, #4
+
+#ifdef RTEMS_PROFILING
+#ifdef __thumb__
+.thumb
+#endif
+.Lskip_profiling:
+	bl	bsp_interrupt_dispatch
+	b	.Lprofiling_done
+#endif
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
