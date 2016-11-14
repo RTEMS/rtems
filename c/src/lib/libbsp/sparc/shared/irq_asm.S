@@ -74,7 +74,7 @@ SYM(_CPU_Context_switch):
         std     %o6, [%o0 + O6_SP_OFFSET]    ! save the output registers
 
         ! load the ISR stack nesting prevention flag
-        ld      [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %o4
+        ld      [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %o4
         ! save it a bit later so we do not waste a couple of cycles
 
         rd      %psr, %o2
@@ -217,7 +217,7 @@ done_flushing:
         ldd     [%o1 + L6_OFFSET], %l6
 
         ! Now restore thread specific ISR dispatch prevention flag
-        st      %o2, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st      %o2, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
 
         ldd     [%o1 + I0_OFFSET], %i0        ! restore the input registers
         ldd     [%o1 + I2_OFFSET], %i2
@@ -594,7 +594,7 @@ profiling_not_outer_most_exit:
         nop
 
         ! Are we dispatching from a previous ISR in the interrupted thread?
-        ld       [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE], %l7
+        ld       [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %l7
         orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
         bnz      simple_return   ! Yes, then do a "simple" exit
         nop
@@ -617,7 +617,7 @@ profiling_not_outer_most_exit:
 
         ! Set ISR dispatch nesting prevention flag
         mov      1,%l6
-        st       %l6, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st       %l6, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The following subtract should get us back on the interrupted
@@ -726,7 +726,7 @@ thread_dispatch_done:
         ! No, then clear out and return
 
         ! Zero out ISR stack nesting prevention flag
-        st       %g0, [%g6 + SPARC_PER_CPU_ISR_DISPATCH_DISABLE]
+        st       %g0, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*
          *  The CWP in place at this point may be different from

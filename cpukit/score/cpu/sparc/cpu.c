@@ -23,12 +23,6 @@
 #include <rtems/score/tls.h>
 #include <rtems/rtems/cache.h>
 
-RTEMS_STATIC_ASSERT(
-  offsetof( Per_CPU_Control, cpu_per_cpu.isr_dispatch_disable)
-    == SPARC_PER_CPU_ISR_DISPATCH_DISABLE,
-  SPARC_PER_CPU_ISR_DISPATCH_DISABLE
-);
-
 #if SPARC_HAS_FPU == 1
   RTEMS_STATIC_ASSERT(
     offsetof( Per_CPU_Control, cpu_per_cpu.fsr)
