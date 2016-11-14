@@ -25,7 +25,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010-2013 embedded brains GmbH.
+ *  Copyright (c) 2010, 2016 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -236,8 +236,8 @@ typedef struct {
   PPC_GPR_TYPE gpr30;
   PPC_GPR_TYPE gpr31;
   uint32_t gpr2;
+  uint32_t isr_dispatch_disable;
   #if defined(PPC_MULTILIB_ALTIVEC)
-    uint32_t reserved_for_alignment;
     uint8_t v20[16];
     uint8_t v21[16];
     uint8_t v22[16];
@@ -361,6 +361,8 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #define PPC_CONTEXT_OFFSET_GPR30 PPC_CONTEXT_GPR_OFFSET( 30 )
 #define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
 #define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_GPR_OFFSET( 32 )
+#define PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE \
+  ( PPC_CONTEXT_GPR_OFFSET( 32 ) + 4 )
 
 #ifdef PPC_MULTILIB_ALTIVEC
   #define PPC_CONTEXT_OFFSET_V( v ) \

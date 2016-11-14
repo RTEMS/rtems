@@ -265,9 +265,11 @@ PROC (_CPU_Context_switch):
 
 	/* Save context to r3 */
 
+	GET_SELF_CPU_CONTROL	r12
 	mfmsr	r6
 	mflr	r7
 	mfcr	r8
+	lwz	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
 	/*
 	 * We have to clear the reservation of the executing thread.  See also
@@ -335,6 +337,7 @@ PROC (_CPU_Context_switch):
 	PPC_GPR_STORE	r31, PPC_CONTEXT_OFFSET_GPR31(r3)
 
 	stw	r2, PPC_CONTEXT_OFFSET_GPR2(r3)
+	stw	r11, PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r3)
 
 #ifdef PPC_MULTILIB_ALTIVEC
 	li	r9, PPC_CONTEXT_OFFSET_V20
@@ -409,7 +412,6 @@ PROC (_CPU_Context_switch):
 	 */
 	msync
 
-	GET_SELF_CPU_CONTROL	r12
 	addi	r1, r12, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
 	li	r6, 0
 	stw	r6, PPC_CONTEXT_OFFSET_IS_EXECUTING(r3)
@@ -471,6 +473,7 @@ restore_context:
 	PPC_GPR_LOAD	r31, PPC_CONTEXT_OFFSET_GPR31(r5)
 
 	lwz	r2, PPC_CONTEXT_OFFSET_GPR2(r5)
+	lwz	r11, PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r5)
 
 #ifdef PPC_MULTILIB_ALTIVEC
 	li	r9, PPC_CONTEXT_OFFSET_V20
@@ -525,6 +528,7 @@ restore_context:
 	mtcr	r8
 	mtlr	r7
 	mtmsr	r6
+	stw	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
 #ifdef BSP_USE_SYNC_IN_CONTEXT_SWITCH
 	isync
@@ -536,6 +540,8 @@ restore_context:
 PROC (_CPU_Context_restore):
 	/* Align to a cache line */
 	clrrwi	r5, r3, PPC_DEFAULT_CACHE_LINE_POWER
+
+	GET_SELF_CPU_CONTROL	r12
 
 #if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
 	li	r3, 0

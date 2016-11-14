@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -283,10 +283,12 @@ ppc_exc_wrap_async_normal:
 	bl	bsp_interrupt_dispatch
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
-	/* Load ISR nest level and thread dispatch disable level */
+	/* Load some per-CPU variables */
 	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
+	lbz	SCRATCH_0_REGISTER, PER_CPU_DISPATCH_NEEDED(SELF_CPU_REGISTER)
+	lwz	SCRATCH_1_REGISTER, PER_CPU_ISR_DISPATCH_DISABLE(SELF_CPU_REGISTER)
+	lwz	SCRATCH_2_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
 	lwz	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
-	lwz	DISPATCH_LEVEL_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
 
 	/*
 	 * Switch back to original stack (FRAME_REGISTER == r1 if we are still
@@ -295,36 +297,74 @@ ppc_exc_wrap_async_normal:
 	mr	r1, FRAME_REGISTER
 	lwz	FRAME_REGISTER, FRAME_OFFSET(r1)
 
-	/* Decrement ISR nest level and thread dispatch disable level */
+	/* Decrement levels and determine thread dispatch state */
+	xori	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, 1
+	or	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, SCRATCH_1_REGISTER
+	subi	DISPATCH_LEVEL_REGISTER, SCRATCH_2_REGISTER, 1
+	or.	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, DISPATCH_LEVEL_REGISTER
 #ifdef RTEMS_PROFILING
+	cmpwi	cr2, SCRATCH_0_REGISTER, 0
 	subic.	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
-	subi	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
-	cmpwi	cr2, DISPATCH_LEVEL_REGISTER, 0
-#else /* RTEMS_PROFILING */
+#else
 	subi	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
-	subic.	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
-#endif /* RTEMS_PROFILING */
-	stw	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
+#endif
+
+	/* Store thread dispatch disable and ISR nest levels */
 	stw	DISPATCH_LEVEL_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
+	stw	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
 
 #ifdef RTEMS_PROFILING
 	/* Store profiling data if necessary */
-	bne	profiling_done
+	bne	.Lprofiling_done
 	mr	r3, SELF_CPU_REGISTER
 	mr	r4, ENTRY_INSTANT_REGISTER
 	GET_TIME_BASE	r5
 	bl	_Profiling_Outer_most_interrupt_entry_and_exit
-profiling_done:
+	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
+.Lprofiling_done:
 #endif /* RTEMS_PROFILING */
 
-	/* Call thread dispatcher if necessary */
+	/*
+	 * Check thread dispatch necessary, ISR dispatch disable and thread
+	 * dispatch disable level.
+	 */
 #ifdef RTEMS_PROFILING
-	bne	cr2, thread_dispatching_done
-#else /* RTEMS_PROFILING */
-	bne	thread_dispatching_done
-#endif /* RTEMS_PROFILING */
-	bl	_Thread_Dispatch
-thread_dispatching_done:
+	bne	cr2, .Lthread_dispatch_done
+#else
+	bne	.Lthread_dispatch_done
+#endif
+
+	/* Thread dispatch */
+.Ldo_thread_dispatch:
+
+	/* Set ISR dispatch disable and thread dispatch disable level to one */
+	li	SCRATCH_0_REGISTER, 1
+	stw	SCRATCH_0_REGISTER, PER_CPU_ISR_DISPATCH_DISABLE(SELF_CPU_REGISTER)
+	stw	SCRATCH_0_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
+
+	/* Call _Thread_Do_dispatch(), this function will enable interrupts */
+	mr	r3, SELF_CPU_REGISTER
+	mfmsr	r4
+	ori	r4, r4, MSR_EE
+	bl	_Thread_Do_dispatch
+
+	/* Disable interrupts */
+	wrteei	0
+
+#ifdef RTEMS_SMP
+	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
+#endif
+
+	/* Check if we have to do the thread dispatch again */
+	lbz	SCRATCH_0_REGISTER, PER_CPU_DISPATCH_NEEDED(SELF_CPU_REGISTER)
+	cmpwi	SCRATCH_0_REGISTER, 0
+	bne	.Ldo_thread_dispatch
+
+	/* We are done with thread dispatching */
+	li	SCRATCH_0_REGISTER, 0
+	stw	SCRATCH_0_REGISTER, PER_CPU_ISR_DISPATCH_DISABLE(SELF_CPU_REGISTER)
+
+.Lthread_dispatch_done:
 
 #ifdef PPC_MULTILIB_ALTIVEC
 	/* Restore volatile AltiVec context */
