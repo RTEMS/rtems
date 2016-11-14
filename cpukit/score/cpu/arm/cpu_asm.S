@@ -19,7 +19,7 @@
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
  *
- *  Copyright (c) 2013-2015 embedded brains GmbH
+ *  Copyright (c) 2013, 2016 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -58,6 +58,9 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	mrs	r2, CPSR
 	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 
+	GET_SELF_CPU_CONTROL	r2
+	ldr	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
+
 #ifdef ARM_MULTILIB_VFP
 	add	r3, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
 	vstm	r3, {d8-d15}
@@ -68,6 +71,8 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	str	r3, [r0, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
 #endif
 
+	str	r4, [r0, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
+
 #ifdef RTEMS_SMP
 	/*
 	 * The executing thread no longer executes on this processor.  Switch
@@ -75,7 +80,6 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	 * the context of the executing thread as not executing.
 	 */
 	dmb
-	GET_SELF_CPU_CONTROL	r2
 	add	sp, r2, #(PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE)
 	mov	r3, #0
 	strb	r3, [r0, #ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET]
@@ -102,6 +106,8 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	clrex
 #endif
 
+	ldr	r4, [r1, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
+
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
 	ldr	r3, [r1, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
 	mcr	p15, 0, r3, c13, c0, 3
@@ -111,6 +117,8 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	add	r3, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET
 	vldm	r3, {d8-d15}
 #endif
+
+	str	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 	ldmia	r1,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 	msr	CPSR_fsxc, r2
@@ -129,6 +137,7 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
  */
 DEFINE_FUNCTION_ARM(_CPU_Context_restore)
         mov     r1, r0
+	GET_SELF_CPU_CONTROL	r2
         b       .L_restore
 
 #ifdef RTEMS_SMP

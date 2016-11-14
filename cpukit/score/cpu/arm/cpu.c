@@ -15,7 +15,7 @@
  *
  *  Copyright (c) 2007 Ray xu <rayx.cn@gmail.com>
  *
- *  Copyright (c) 2009-2011 embedded brains GmbH
+ *  Copyright (c) 2009, 2016 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -47,6 +47,14 @@
     offsetof( Context_Control, thread_id )
       == ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET,
     ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET
+  );
+#endif
+
+#ifdef ARM_MULTILIB_ARCH_V4
+  RTEMS_STATIC_ASSERT(
+    offsetof( Context_Control, isr_dispatch_disable )
+      == ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE,
+    ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE
   );
 #endif
 

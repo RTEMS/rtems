@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009-2015 embedded brains GmbH.
+ *  Copyright (c) 2009, 2016 embedded brains GmbH
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -209,11 +209,19 @@
   #define ARM_CONTEXT_CONTROL_D8_OFFSET 48
 #endif
 
+#ifdef ARM_MULTILIB_ARCH_V4
+  #ifdef ARM_MULTILIB_VFP
+    #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 112
+  #else
+    #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 48
+  #endif
+#endif
+
 #ifdef RTEMS_SMP
   #ifdef ARM_MULTILIB_VFP
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 112
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 116
   #else
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 52
   #endif
 #endif
 
@@ -276,6 +284,9 @@ typedef struct {
   uint64_t register_d13;
   uint64_t register_d14;
   uint64_t register_d15;
+#endif
+#ifdef ARM_MULTILIB_ARCH_V4
+  uint32_t isr_dispatch_disable;
 #endif
 #ifdef RTEMS_SMP
   volatile bool is_executing;

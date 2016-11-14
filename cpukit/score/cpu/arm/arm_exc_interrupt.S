@@ -43,7 +43,7 @@
 #define EXCHANGE_SIZE 16
 
 #define SELF_CPU_CONTROL r7
-#define SP_OF_INTERRUPTED_CONTEXT r9
+#define NON_VOLATILE_SCRATCH r9
 
 #define CONTEXT_LIST {r0, r1, r2, r3, EXCHANGE_LR, EXCHANGE_SPSR, SELF_CPU_CONTROL, r12}
 #define CONTEXT_SIZE 32
@@ -73,7 +73,7 @@ _ARMV4_Exception_interrupt:
 	 * interrupted context.
 	 */
 	stmdb	sp!, CONTEXT_LIST
-	stmdb	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}
+	stmdb	sp!, {NON_VOLATILE_SCRATCH, lr}
 
 #ifdef ARM_MULTILIB_VFP
 	/* Save VFP context */
@@ -98,7 +98,7 @@ _ARMV4_Exception_interrupt:
 	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Switch stack if necessary and save original stack pointer */
-	mov	SP_OF_INTERRUPTED_CONTEXT, sp
+	mov	NON_VOLATILE_SCRATCH, sp
 	cmp	r2, #0
 	moveq	sp, r1
 
@@ -130,33 +130,68 @@ _ARMV4_Exception_interrupt:
 	bl	bsp_interrupt_dispatch
 #endif
 
-	/* Decrement interrupt nest and thread dispatch disable level */
-	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
-	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
-	sub	r2, #1
-	sub	r3, #1
-	str	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
-	str	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	/* Load some per-CPU variables */
+	ldr	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	ldrb	r1, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
+	ldr	r2, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
+	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
 
 	/* Restore stack pointer */
-	mov	sp, SP_OF_INTERRUPTED_CONTEXT
+	mov	sp, NON_VOLATILE_SCRATCH
 
-	/* Check thread dispatch disable level */
-	cmp	r3, #0
+	/* Save CPSR in non-volatile register */
+	mrs	NON_VOLATILE_SCRATCH, CPSR
+
+	/* Decrement levels and determine thread dispatch state */
+	eor	r1, r0
+	sub	r0, #1
+	orr	r1, r0
+	orr	r1, r2
+	sub	r3, #1
+
+	/* Store thread dispatch disable and ISR nest levels */
+	str	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+	str	r3, [SELF_CPU_CONTROL, #PER_CPU_ISR_NEST_LEVEL]
+
+	/*
+	 * Check thread dispatch necessary, ISR dispatch disable and thread
+	 * dispatch disable level.
+	 */
+	cmp	r0, #0
 	bne	.Lthread_dispatch_done
 
-	/* Check context switch necessary */
-	ldrb	r1, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
-	cmp	r1, #0
-	beq	.Lthread_dispatch_done
-
-        /* This aligns .Lthread_dispatch_done on a 4 byte boundary */
-#ifdef __thumb__
-	nop
-#endif /* __thumb__ */
-
 	/* Thread dispatch */
-	bl	_Thread_Dispatch
+	mrs	NON_VOLATILE_SCRATCH, CPSR
+
+.Ldo_thread_dispatch:
+
+	/* Set ISR dispatch disable and thread dispatch disable level to one */
+	mov	r0, #1
+	str	r0, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
+	str	r0, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
+
+	/* Call _Thread_Do_dispatch(), this function will enable interrupts */
+	mov	r0, SELF_CPU_CONTROL
+	mov	r1, NON_VOLATILE_SCRATCH
+	mov	r2, #0x80
+	bic	r1, r2
+	bl	_Thread_Do_dispatch
+
+	/* Disable interrupts */
+	msr	CPSR, NON_VOLATILE_SCRATCH
+
+#ifdef RTEMS_SMP
+	GET_SELF_CPU_CONTROL	SELF_CPU_CONTROL
+#endif
+
+	/* Check if we have to do the thread dispatch again */
+	ldrb	r0, [SELF_CPU_CONTROL, #PER_CPU_DISPATCH_NEEDED]
+	cmp	r0, #0
+	bne	.Ldo_thread_dispatch
+
+	/* We are done with thread dispatching */
+	mov	r0, #0
+	str	r0, [SELF_CPU_CONTROL, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 .Lthread_dispatch_done:
 
@@ -173,8 +208,8 @@ _ARMV4_Exception_interrupt:
 	vmsr	FPSCR, r0
 #endif /* ARM_MULTILIB_VFP */
 
-	/* Restore SP_OF_INTERRUPTED_CONTEXT register and link register */
-	ldmia	sp!, {SP_OF_INTERRUPTED_CONTEXT, lr}
+	/* Restore NON_VOLATILE_SCRATCH register and link register */
+	ldmia	sp!, {NON_VOLATILE_SCRATCH, lr}
 
 	/*
 	 * XXX: Remember and restore stack pointer.  The data on the stack is
