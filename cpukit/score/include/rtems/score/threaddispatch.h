@@ -95,6 +95,20 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_initialization( void )
 void _Thread_Dispatch( void );
 
 /**
+ * @brief Directly do a thread dispatch.
+ *
+ * Must be called with a thread dispatch disable level of one, otherwise the
+ * INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL will occur.  This function
+ * is useful for operations which synchronously block, e.g. self restart, self
+ * deletion, yield, sleep.
+ *
+ * @param[in] cpu_self The current processor.
+ *
+ * @see _Thread_Dispatch().
+ */
+void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self );
+
+/**
  * @brief Performs a thread dispatch on the current processor.
  *
  * On entry the thread dispatch disable level must be equal to one and

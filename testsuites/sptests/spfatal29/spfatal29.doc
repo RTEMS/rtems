@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal29
+
+directives:
+
+  - _Thread_Dispatch_force()
+
+concepts:
+
+  - Provoke the INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL fatal error.

@@ -1,0 +1,3 @@
+*** BEGIN OF TEST SPFATAL 29 ***
+Fatal error (yield in interrupt context) hit
+*** END OF TEST SPFATAL 29 ***

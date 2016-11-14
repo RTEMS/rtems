@@ -344,14 +344,8 @@ void _Thread_Life_action_handler(
 
   if ( _Thread_Is_life_terminating( previous_life_state ) ) {
     cpu_self = _Thread_Wait_for_join( executing, cpu_self );
-
     _Thread_Make_zombie( executing );
-
-    /* FIXME: Workaround for https://devel.rtems.org/ticket/2751 */
-    cpu_self->dispatch_necessary = true;
-
-    _Assert( cpu_self->heir != executing );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct( cpu_self );
     RTEMS_UNREACHABLE();
   }
 

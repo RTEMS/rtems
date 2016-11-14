@@ -233,3 +233,19 @@ void _Thread_Dispatch( void )
     _ISR_Local_enable( level );
   }
 }
+
+void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )
+{
+  ISR_Level level;
+
+  if ( cpu_self->thread_dispatch_disable_level != 1 ) {
+    _Terminate(
+      INTERNAL_ERROR_CORE,
+      0,
+      INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
+    );
+  }
+
+  _ISR_Local_disable( level );
+  _Thread_Do_dispatch( cpu_self, level );
+}

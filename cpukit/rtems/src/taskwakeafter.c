@@ -48,6 +48,6 @@ rtems_status_code rtems_task_wake_after(
         ticks
       );
     }
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   return RTEMS_SUCCESSFUL;
 }

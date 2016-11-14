@@ -96,7 +96,7 @@ static inline int nanosleep_yield( struct timespec *rmtp )
   executing = _Thread_Get_executing();
   cpu_self = _Thread_Dispatch_disable();
   _Thread_Yield( executing );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   if ( rmtp ) {
     rmtp->tv_sec = 0;
     rmtp->tv_nsec = 0;
