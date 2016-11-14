@@ -48,7 +48,7 @@
 
 #ifdef RTEMS_PROFILING
 /*
- * The PPC_EXC_MINIMAL_FRAME_SIZE is enough to store this additional register.
+ * The CPU_INTERRUPT_FRAME_SIZE is enough to store this additional register.
  */
 #define ENTRY_INSTANT_REGISTER r15
 #define ENTRY_INSTANT_OFFSET GPR13_OFFSET
@@ -71,7 +71,7 @@
 
 ppc_exc_min_prolog_async_tmpl_normal:
 
-	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
 
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	VECTOR_REGISTER, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
@@ -468,7 +468,7 @@ thread_dispatching_done:
 #endif /* RTEMS_PROFILING */
 
 	/* Pop stack */
-	addi	r1, r1, PPC_EXC_MINIMAL_FRAME_SIZE
+	addi	r1, r1, CPU_INTERRUPT_FRAME_SIZE
 
 	/* Return */
 	rfi

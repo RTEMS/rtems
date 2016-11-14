@@ -344,7 +344,7 @@ bsp_exc_vector_base:
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 4
 	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32763
@@ -375,7 +375,7 @@ system_call:
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 24
 	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32752
@@ -385,7 +385,7 @@ system_call:
 	nop
 	nop
 #endif
-	stwu	r1, -PPC_EXC_MINIMAL_FRAME_SIZE(r1)
+	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32749
