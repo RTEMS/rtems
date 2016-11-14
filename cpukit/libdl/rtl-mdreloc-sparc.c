@@ -144,6 +144,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
 {
   Elf_Addr *where;
   Elf_Word type, value, mask;
+  Elf_Addr tmp = 0;
 
   where = (Elf_Addr *) (sect->base + rela->r_offset);
 
@@ -220,7 +221,6 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
 
   if (RELOC_UNALIGNED(type)) {
     /* Handle unaligned relocations. */
-    Elf_Addr tmp = 0;
     char *ptr = (char *)where;
     int i, size = RELOC_TARGET_SIZE (type) / 8;
 
@@ -238,11 +238,12 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
   } else {
     *where &= ~mask;
     *where |= value;
+    tmp = *where;
   }
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
     printf ("rtl: %s %p @ %p in %s\n",
-            reloc_names[type], (void *)*where, where, rtems_rtl_obj_oname (obj));
+            reloc_names[type], (void *)tmp, where, rtems_rtl_obj_oname (obj));
 
 
   return true;
