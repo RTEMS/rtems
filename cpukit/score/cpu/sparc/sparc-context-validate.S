@@ -17,7 +17,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 
 #define FRAME_OFFSET_BUFFER_0 (SPARC_MINIMUM_STACK_FRAME_SIZE)
 #define FRAME_OFFSET_BUFFER_1 (FRAME_OFFSET_BUFFER_0 + 0x04)

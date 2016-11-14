@@ -17,7 +17,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 
 #define SCRATCH_0 (SPARC_MINIMUM_STACK_FRAME_SIZE)
 #define SCRATCH_1 (SCRATCH_0 + 0x04)

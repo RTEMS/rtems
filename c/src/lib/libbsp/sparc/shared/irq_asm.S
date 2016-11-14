@@ -393,7 +393,7 @@ dont_do_the_window:
          *  REGISTERS SAME AS AT _ISR_Handler
          */
 
-        sub     %fp, CONTEXT_CONTROL_INTERRUPT_FRAME_SIZE, %sp
+        sub     %fp, CPU_INTERRUPT_FRAME_SIZE, %sp
                                                ! make space for ISF
 
         std     %l0, [%sp + ISF_PSR_OFFSET]    ! save psr, PC

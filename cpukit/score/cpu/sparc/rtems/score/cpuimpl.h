@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2007 On-Line Applications Research Corporation (OAR)
+ * Copyright (c) 1989, 2007 On-Line Applications Research Corporation (OAR)
  * Copyright (c) 2013, 2016 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
@@ -17,6 +17,55 @@
 #define _RTEMS_SCORE_CPUIMPL_H
 
 #include <rtems/score/cpu.h>
+
+/** This defines the size of the minimum stack frame. */
+#define SPARC_MINIMUM_STACK_FRAME_SIZE 0x60
+
+/*
+ *  Offsets of fields with CPU_Interrupt_frame for assembly routines.
+ */
+
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_PSR_OFFSET         SPARC_MINIMUM_STACK_FRAME_SIZE + 0x00
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_PC_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x04
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_NPC_OFFSET         SPARC_MINIMUM_STACK_FRAME_SIZE + 0x08
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G1_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x0c
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G2_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x10
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G3_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x14
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G4_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x18
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G5_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x1c
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_G7_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x24
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I0_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x28
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I1_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x2c
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I2_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x30
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I3_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x34
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I4_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x38
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I5_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x3c
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I6_FP_OFFSET       SPARC_MINIMUM_STACK_FRAME_SIZE + 0x40
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_I7_OFFSET          SPARC_MINIMUM_STACK_FRAME_SIZE + 0x44
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_Y_OFFSET           SPARC_MINIMUM_STACK_FRAME_SIZE + 0x48
+/** This macro defines an offset into the ISF for use in assembly. */
+#define ISF_TPC_OFFSET         SPARC_MINIMUM_STACK_FRAME_SIZE + 0x4c
+
+/** This defines the size of the ISF area for use in assembly. */
+#define CPU_INTERRUPT_FRAME_SIZE SPARC_MINIMUM_STACK_FRAME_SIZE + 0x50
 
 #if ( SPARC_HAS_FPU == 1 )
   #define CPU_PER_CPU_CONTROL_SIZE 8
