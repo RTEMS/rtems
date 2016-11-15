@@ -52,15 +52,9 @@ void benchmark_timer_initialize(void)
 
 }
 
-#if ENABLE_SIS_QUIRKS
-#define AVG_OVERHEAD      8  /* It typically takes 3.0 microseconds */
-                             /*     to start/stop the timer. */
-#define LEAST_VALID       9  /* Don't trust a value lower than this */
-#else
 #define AVG_OVERHEAD     12  /* It typically takes 3.0 microseconds */
                              /*     to start/stop the timer. */
 #define LEAST_VALID      13  /* Don't trust a value lower than this */
-#endif
 
 benchmark_timer_t benchmark_timer_read(void)
 {

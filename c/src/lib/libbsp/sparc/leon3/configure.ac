@@ -27,12 +27,6 @@ RTEMS_BSPOPTS_HELP([CONSOLE_USE_INTERRUPTS],
 Under the simulator (especially when FAST_UART is defined), polled seems
 to operate better.])
 
-RTEMS_BSPOPTS_SET([SIMSPARC_FAST_IDLE],[*],[])
-RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
-[If defined, speed up the clock ticks while the idle task is running so
- time spent in the idle task is minimized.  This significantly reduces
- the wall time required to execute the RTEMS test suites.])
-
 RTEMS_BSPOPTS_SET([BSP_LEON3_SMP],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_LEON3_SMP],
 [Always defined when on a LEON3 to enable the LEON3 support for

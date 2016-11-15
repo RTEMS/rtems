@@ -30,12 +30,6 @@ of test message) and then exit.  In this case, the program returns control
 to the simulator command line before the program has even queued the output
 to the uart.  Thus sis has no chance of getting the data out.])
 
-RTEMS_BSPOPTS_SET([SIMSPARC_FAST_IDLE],[*],[])
-RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
-[If defined, speed up the clock ticks while the idle task is running so
- time spent in the idle task is minimized.  This significantly reduces
- the wall time required to execute the RTEMS test suites.])
-
 RTEMS_BSPOPTS_SET([BSP_POWER_DOWN_AT_FATAL_HALT],[*],[])
 RTEMS_BSPOPTS_HELP([BSP_POWER_DOWN_AT_FATAL_HALT],
 [If defined, CPU is spinning on fatal exit. Otherwise generate system

@@ -36,10 +36,6 @@
  */
 #ifndef RTEMS_DRVMGR_STARTUP
 
-#if SIMSPARC_FAST_IDLE==1
-#define CLOCK_DRIVER_USE_FAST_IDLE 1
-#endif
-
 /* LEON3 Timer system interrupt number */
 static int clkirq;
 

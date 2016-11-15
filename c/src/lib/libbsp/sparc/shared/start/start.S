@@ -305,62 +305,6 @@ cpu0:
         mov     %sp, %fp                ! Set frame pointer
         nop
 
-#if ENABLE_SIS_QUIRKS==1
-
-#include <erc32.h>
-
-/* Check if MEC is initialised. If not, this means that we are
-   running on the simulator. Initiate some of the parameters
-   that are done by the boot-prom otherwise.
-*/
-
-        set     SYM(ERC32_MEC), %g3  ! g3 = base address of peripherals
-	ld	[%g3], %g2
-	set	0xfe080000, %g1
-	andcc	%g1, %g2, %g0
- 	bne	2f
-
- /* Set the correct memory size in MEC memory config register */
-
- 	set	SYM(PROM_SIZE), %l0
- 	set	0, %l1
- 	srl	%l0, 18, %l0
-1:
- 	tst	%l0
- 	srl	%l0, 1, %l0
- 	bne,a	1b
- 	inc	%l1
- 	sll	%l1, 8, %l1
-
- 	set	SYM(RAM_SIZE), %l0
- 	srl	%l0, 19, %l0
-1:
- 	tst	%l0
- 	srl	%l0, 1, %l0
- 	bne,a	1b
- 	inc	%l1
- 	sll	%l1, 10, %l1
-
-	! set the Memory Configuration
-        st     %l1, [ %g3 + ERC32_MEC_MEMORY_CONFIGURATION_OFFSET ]
-	!DISABLE THE HARDWARE WATCHDOG
-        st     %g0, [ %g3 + ERC32_MEC_WATCHDOG_TRAP_DOOR_SET_OFFSET ]
-	!Reduce the number of wait states to 0 for all memory areas.
-        st     %g0, [ %g3 + ERC32_MEC_WAIT_STATE_CONFIGURATION_OFFSET ]
-
- 	set	SYM(RAM_START), %l1  ! Cannot use RAM_END due to bug in linker
- 	set	SYM(RAM_SIZE), %l2
- 	add	%l1, %l2, %sp
- 	st	%sp, [%g5]
-
-
-	set	SYM(CLOCK_SPEED), %g5	! Use 14 MHz in simulator
-	set	14, %g1
-	st	%g1, [%g5]
-
-2:
-#endif
-
         /*
          *  Copy the initialized data to RAM
          *
