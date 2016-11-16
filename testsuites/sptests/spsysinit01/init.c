@@ -43,7 +43,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/posix/spinlockimpl.h>
 #include <rtems/posix/timerimpl.h>
 #endif /* RTEMS_POSIX_API */
 #include <rtems/posix/keyimpl.h>
@@ -118,8 +117,6 @@ typedef enum {
   POSIX_BARRIER_POST,
   POSIX_RWLOCK_PRE,
   POSIX_RWLOCK_POST,
-  POSIX_SPINLOCK_PRE,
-  POSIX_SPINLOCK_POST,
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
 #endif /* RTEMS_POSIX_API */
@@ -527,18 +524,6 @@ LAST(RTEMS_SYSINIT_POSIX_RWLOCK)
   next_step(POSIX_RWLOCK_POST);
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_SPINLOCK)
-{
-  assert(_POSIX_Spinlock_Information.maximum == 0);
-  next_step(POSIX_SPINLOCK_PRE);
-}
-
-LAST(RTEMS_SYSINIT_POSIX_SPINLOCK)
-{
-  assert(_POSIX_Spinlock_Information.maximum != 0);
-  next_step(POSIX_SPINLOCK_POST);
-}
-
 static size_t user_extensions_pre_posix_cleanup;
 
 FIRST(RTEMS_SYSINIT_POSIX_CLEANUP)
@@ -766,8 +751,6 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
-
-#define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 1
 
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS 1
 

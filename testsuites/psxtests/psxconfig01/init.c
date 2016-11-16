@@ -67,7 +67,6 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 7
 #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 31
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 41
-#define CONFIGURE_MAXIMUM_POSIX_SPINLOCKS 17
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 3
@@ -512,18 +511,6 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
     snapshot.posix_api.active_semaphores == CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-  );
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-  for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_SPINLOCKS; ++i) {
-    pthread_spinlock_t spinlock;
-    eno = pthread_spin_init(&spinlock, 0);
-    rtems_test_assert(eno == 0);
-  }
-  rtems_resource_snapshot_take(&snapshot);
-  rtems_test_assert(
-    snapshot.posix_api.active_spinlocks == CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
   );
 #endif
 

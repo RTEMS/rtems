@@ -111,12 +111,6 @@ typedef struct {
   uint32_t                            maximum_rwlocks;
 
   /**
-   * This field contains the maximum number of POSIX API
-   * spinlocks which are configured for this application.
-   */
-  uint32_t                            maximum_spinlocks;
-
-  /**
    * This field contains the number of POSIX API Initialization
    * threads listed in @a User_initialization_thread_table.
    */

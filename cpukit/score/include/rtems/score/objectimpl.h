@@ -92,8 +92,7 @@ typedef enum {
   OBJECTS_POSIX_CONDITION_VARIABLES = 8,
   OBJECTS_POSIX_TIMERS              = 9,
   OBJECTS_POSIX_BARRIERS            = 10,
-  OBJECTS_POSIX_SPINLOCKS           = 11,
-  OBJECTS_POSIX_RWLOCKS             = 12
+  OBJECTS_POSIX_RWLOCKS             = 11
 } Objects_POSIX_API;
 
 /** This macro is used to generically specify the last API index. */

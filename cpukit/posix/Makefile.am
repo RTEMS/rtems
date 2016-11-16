@@ -21,6 +21,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
 
 if HAS_PTHREADS
 # include
@@ -52,8 +53,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/barrier.h
 include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/spinlock.h
-include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
 
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
@@ -168,6 +167,12 @@ libposix_a_SOURCES += src/sigaddset.c src/sigdelset.c src/sigfillset.c \
 
 libposix_a_SOURCES += src/sigprocmask.c
 
+## SPINLOCK_C_FILES
+libposix_a_SOURCES += src/pspindestroy.c
+libposix_a_SOURCES += src/pspininit.c
+libposix_a_SOURCES += src/pspinlock.c
+libposix_a_SOURCES += src/pspinunlock.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES += src/sigpending.c \
     src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
@@ -187,11 +192,6 @@ libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
     src/semclose.c src/semdestroy.c src/semgetvalue.c src/seminit.c \
     src/semopen.c src/sempost.c src/semtimedwait.c src/semtrywait.c \
     src/semunlink.c src/semwait.c
-
-## SPINLOCK_C_FILES
-libposix_a_SOURCES += src/pspin.c src/pspindestroy.c src/pspininit.c \
-    src/pspinlock.c src/pspintrylock.c \
-    src/pspinunlock.c
 
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/clockgetcpuclockid.c

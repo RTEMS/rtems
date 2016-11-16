@@ -409,14 +409,6 @@ $(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJ
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 
 if HAS_PTHREADS
-$(PROJECT_INCLUDE)/rtems/score/corespinlock.h: include/rtems/score/corespinlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlock.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corespinlock.h
-
-$(PROJECT_INCLUDE)/rtems/score/corespinlockimpl.h: include/rtems/score/corespinlockimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corespinlockimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corespinlockimpl.h
-
 $(PROJECT_INCLUDE)/rtems/score/corerwlock.h: include/rtems/score/corerwlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.h

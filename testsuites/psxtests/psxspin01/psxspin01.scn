@@ -1,32 +1,18 @@
 *** BEGIN OF TEST PSXSPIN 1 ***
-pthread_spin_init( NULL, PTHREAD_PROCESS_PRIVATE ) -- EINVAL
-pthread_spin_init( NULL, PTHREAD_PROCESS_SHARED ) -- EINVAL
-pthread_spin_init( &spinlock, 0x1234 ) -- EINVAL
-pthread_spin_init( &spinlock, PTHREAD_PROCESS_SHARED ) -- EINVAL
-pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK
-pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE ) -- EAGAIN
-pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE ) -- EAGAIN
-pthread_spin_lock( NULL ) -- EINVAL
-pthread_spin_trylock( NULL ) -- EINVAL
-pthread_spin_unlock( NULL ) -- EINVAL
-pthread_spin_destroy( NULL ) -- EINVAL
-pthread_spin_lock( &spinlock ) -- EINVAL
-pthread_spin_trylock( &spinlock ) -- EINVAL
-pthread_spin_unlock( &spinlock ) -- EINVAL
-pthread_spin_destroy( &spinlock ) -- EINVAL
-pthread_spin_unlock( &Spinlock ) -- EPERM
-pthread_spin_lock( &Spinlock ) -- OK
-pthread_spin_lock( &Spinlock ) -- EDEADLK
-pthread_spin_trylock( &Spinlock ) -- EDEADLK
-pthread_spin_unlock( &Spinlock ) -- OK
-pthread_spin_trylock( &Spinlock ) -- OK
-pthread_spin_unlock( &Spinlock ) -- OK
-pthread_spin_lock( &Spinlock ) from Thread -- OK
-sleep to allow main thread to run
-pthread_spin_unlock( &Spinlock ) -- EPERM
-pthread_spin_lock( &Spinlock ) -- OK
-pthread_spin_unlock( &Spinlock ) from Thread -- OK
-pthread_spin_destroy( &Spinlock ) -- EBUSY
-pthread_spin_unlock( &Spinlock ) -- OK
-pthread_spin_destroy( &Spinlock ) -- OK
+pthread_spin_init( &spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK
+pthread_spin_destroy( &spinlock ) -- OK
+pthread_spin_init( &spinlock, PTHREAD_PROCESS_SHARED ) -- OK
+pthread_spin_destroy( &spinlock ) -- OK
+pthread_spin_init( &spinlock, 0x1234 ) -- OK
+pthread_spin_init( &spinlock2, 0 ) -- OK
+pthread_spin_lock( &spinlock ) -- OK
+pthread_spin_lock( &spinlock2 ) -- OK
+pthread_spin_unlock( &spinlock2 ) -- OK
+pthread_spin_unlock( &spinlock ) -- OK
+pthread_spin_trylock( &spinlock ) -- OK
+pthread_spin_trylock( &spinlock2 ) -- OK
+pthread_spin_unlock( &spinlock2 ) -- OK
+pthread_spin_unlock( &spinlock ) -- OK
+pthread_spin_destroy( &spinlock2 ) -- OK
+pthread_spin_destroy( &spinlock ) -- OK
 *** END OF TEST PSXSPIN 1 ***

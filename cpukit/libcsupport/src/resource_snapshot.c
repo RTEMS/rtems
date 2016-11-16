@@ -49,7 +49,6 @@
   #include <rtems/posix/pthreadimpl.h>
   #include <rtems/posix/rwlockimpl.h>
   #include <rtems/posix/semaphoreimpl.h>
-  #include <rtems/posix/spinlockimpl.h>
   #include <rtems/posix/timerimpl.h>
 #endif
 
@@ -76,7 +75,6 @@ static const struct {
     { OBJECTS_POSIX_API, OBJECTS_POSIX_MUTEXES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_RWLOCKS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_SPINLOCKS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_TIMERS }
   #endif

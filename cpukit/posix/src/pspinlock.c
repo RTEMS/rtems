@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2016 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -19,24 +21,92 @@
 #endif
 
 #include <rtems/posix/spinlockimpl.h>
-#include <rtems/posix/posixapi.h>
+
+#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
+RTEMS_STATIC_ASSERT(
+#if defined(RTEMS_SMP)
+  offsetof( POSIX_Spinlock_Control, Lock.next_ticket )
+#else
+  offsetof( POSIX_Spinlock_Control, reserved[ 0 ] )
+#endif
+    == offsetof( pthread_spinlock_t, _Lock._next_ticket ),
+  POSIX_SPINLOCK_T_LOCK_NEXT_TICKET
+);
+
+RTEMS_STATIC_ASSERT(
+#if defined(RTEMS_SMP)
+  offsetof( POSIX_Spinlock_Control, Lock.now_serving )
+#else
+  offsetof( POSIX_Spinlock_Control, reserved[ 1 ] )
+#endif
+    == offsetof( pthread_spinlock_t, _Lock._now_serving ),
+  POSIX_SPINLOCK_T_LOCK_NOW_SERVING
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Spinlock_Control, interrupt_state )
+    == offsetof( pthread_spinlock_t, _interrupt_state ),
+  POSIX_SPINLOCK_T_INTERRUPT_STATE
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( POSIX_Spinlock_Control ) == sizeof( pthread_spinlock_t ),
+  POSIX_SPINLOCK_T_SIZE
+);
+#else
+#if defined(RTEMS_SMP)
+POSIX_Spinlock_Control _POSIX_Spinlock_Global;
+
+uint32_t _POSIX_Spinlock_Owner = 0xffffffff;
+#endif
+
+int _POSIX_Spinlock_Nest_level;
+#endif
 
 int pthread_spin_lock( pthread_spinlock_t *spinlock )
 {
   POSIX_Spinlock_Control *the_spinlock;
-  ISR_lock_Context        lock_context;
-  Status_Control          status;
+  ISR_Level               level;
+#if defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
+  Per_CPU_Control        *cpu_self;
+#endif
 
-  the_spinlock = _POSIX_Spinlock_Get( spinlock, &lock_context );
-  if ( the_spinlock == NULL ) {
-    return EINVAL;
+  the_spinlock = _POSIX_Spinlock_Get( spinlock );
+  _ISR_Local_disable( level );
+#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
+#if defined(RTEMS_SMP)
+#if defined(RTEMS_PROFILING)
+  /* The lock statistics are incorrect in case of nested pthread spinlocks */
+  cpu_self = _Per_CPU_Get();
+#endif
+  _SMP_ticket_lock_Acquire(
+    &the_spinlock->Lock,
+    &cpu_self->Lock_stats,
+    &cpu_self->Lock_stats_context
+  );
+#endif
+  the_spinlock->interrupt_state = level;
+#else
+#if defined(RTEMS_SMP)
+  if ( _POSIX_Spinlock_Owner != _SMP_Get_current_processor() ) {
+#if defined(RTEMS_PROFILING)
+    cpu_self = _Per_CPU_Get();
+#endif
+    _SMP_ticket_lock_Acquire(
+      &the_spinlock->Lock,
+      &cpu_self->Lock_stats,
+      &cpu_self->Lock_stats_context
+    );
+    _POSIX_Spinlock_Owner = _SMP_Get_current_processor();
+#endif
   }
 
-  status = _CORE_spinlock_Seize(
-    &the_spinlock->Spinlock,
-    true,
-    0,
-    &lock_context
-  );
-  return _POSIX_Get_error( status );
+  if ( ++_POSIX_Spinlock_Nest_level == 1) {
+    the_spinlock->interrupt_state = level;
+  }
+#endif
+  return 0;
 }
+
+int pthread_spin_trylock( pthread_spinlock_t *spinlock )
+  RTEMS_ALIAS( pthread_spin_lock );

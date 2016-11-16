@@ -1,8 +1,0 @@
-*** POSIX SPINLOCK TEST 02 ***
-pthread_spin_init( &Spinlock, PTHREAD_PROCESS_PRIVATE ) -- OK
-pthread_spin_lock( &Spinlock ) -- OK
-pthread_spin_trylock( &Spinlock ) -- EBUSY
-pthread_spin_unlock( &Spinlock ) -- EPERM
-pthread_spin_unlock( &Spinlock ) -- OK
-pthread_spin_destroy( &Spinlock ) -- OK
-*** END OF POSIX SPINLOCK TEST 02 ***

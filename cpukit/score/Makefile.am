@@ -112,8 +112,6 @@ include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 
 if HAS_PTHREADS
-include_rtems_score_HEADERS += include/rtems/score/corespinlock.h
-include_rtems_score_HEADERS += include/rtems/score/corespinlockimpl.h
 include_rtems_score_HEADERS += include/rtems/score/corerwlock.h
 include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
 endif
@@ -195,12 +193,6 @@ endif
 
 ## CORE_SEMAPHORE_C_FILES
 libscore_a_SOURCES += src/coresem.c
-
-## CORE_SPINLOCK_C_FILES
-if HAS_PTHREADS
-libscore_a_SOURCES += src/corespinlockrelease.c \
-    src/corespinlockwait.c
-endif
 
 ## HEAP_C_FILES
 libscore_a_SOURCES += src/heap.c src/heapallocate.c src/heapextend.c \

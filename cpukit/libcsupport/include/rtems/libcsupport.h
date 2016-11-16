@@ -117,7 +117,6 @@ typedef struct {
   uint32_t active_mutexes;
   uint32_t active_rwlocks;
   uint32_t active_semaphores;
-  uint32_t active_spinlocks;
   uint32_t active_threads;
   uint32_t active_timers;
 } rtems_resource_posix_api;

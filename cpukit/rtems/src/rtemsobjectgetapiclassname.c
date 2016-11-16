@@ -54,7 +54,6 @@ static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Condition Variable",      OBJECTS_POSIX_CONDITION_VARIABLES, 0},
   { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
   { "Barrier",                 OBJECTS_POSIX_BARRIERS, 0},
-  { "Spinlock",                OBJECTS_POSIX_SPINLOCKS, 0},
   { "RWLock",                  OBJECTS_POSIX_RWLOCKS, 0},
   { NULL,                      0, 0}
 };
