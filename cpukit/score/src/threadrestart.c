@@ -514,21 +514,40 @@ void _Thread_Cancel(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing )
+static void _Thread_Close_enqueue_callout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
 {
-  Thread_queue_Context queue_context;
+  Thread_Close_context *context;
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_set_expected_level( &queue_context, 2 );
-  _Thread_queue_Context_set_no_timeout( &queue_context );
-  _Thread_State_acquire( the_thread, &queue_context.Lock_context.Lock_context );
+  context = (Thread_Close_context *) queue_context;
+  _Thread_Cancel( context->cancel, the_thread, NULL );
+}
+
+void _Thread_Close(
+  Thread_Control       *the_thread,
+  Thread_Control       *executing,
+  Thread_Close_context *context
+)
+{
+  context->cancel = the_thread;
+  _Thread_queue_Context_set_enqueue_callout(
+    &context->Base,
+    _Thread_Close_enqueue_callout
+  );
+  _Thread_queue_Context_set_no_timeout( &context->Base );
+  _Thread_State_acquire_critical(
+    the_thread,
+    &context->Base.Lock_context.Lock_context
+  );
   _Thread_Join(
     the_thread,
     STATES_WAITING_FOR_JOIN,
     executing,
-    &queue_context
+    &context->Base
   );
-  _Thread_Cancel( the_thread, executing, NULL );
 }
 
 void _Thread_Exit(

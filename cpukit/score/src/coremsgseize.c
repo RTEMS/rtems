@@ -113,7 +113,7 @@ Status_Control _CORE_message_queue_Seize(
   executing->Wait.return_argument = size_p;
   /* Wait.count will be filled in with the message priority */
 
-  _Thread_queue_Context_set_expected_level( queue_context, 1 );
+  _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue_critical(
     &the_message_queue->Wait_queue.Queue,
     the_message_queue->operations,

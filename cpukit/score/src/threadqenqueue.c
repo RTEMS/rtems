@@ -356,6 +356,15 @@ bool _Thread_queue_Path_acquire_critical(
   return true;
 }
 
+void _Thread_queue_Enqueue_do_nothing(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  /* Do nothing */
+}
+
 void _Thread_queue_Deadlock_status( Thread_Control *the_thread )
 {
   the_thread->Wait.return_code = STATUS_DEADLOCK;
@@ -442,16 +451,7 @@ void _Thread_queue_Enqueue_critical(
   );
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
-  if (
-    cpu_self->thread_dispatch_disable_level
-      != queue_context->expected_thread_dispatch_disable_level
-  ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      false,
-      INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_FROM_BAD_STATE
-    );
-  }
+  ( *queue_context->enqueue_callout )( queue, the_thread, queue_context );
 
   /*
    *  Set the blocking state for this thread queue in the thread.
@@ -482,7 +482,7 @@ void _Thread_queue_Enqueue_critical(
   }
 
   _Thread_Priority_update( queue_context );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
 }
 
 #if defined(RTEMS_SMP)

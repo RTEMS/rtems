@@ -103,7 +103,7 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
     sem->count = count - 1;
     _Semaphore_Queue_release( sem, level, &queue_context );
   } else {
-    _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+    _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue_critical(

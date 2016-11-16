@@ -45,9 +45,26 @@ struct Scheduler_Node;
 
 typedef struct _Thread_Control Thread_Control;
 
+typedef struct Thread_queue_Context Thread_queue_Context;
+
 typedef struct Thread_queue_Queue Thread_queue_Queue;
 
 typedef struct Thread_queue_Operations Thread_queue_Operations;
+
+/**
+ * @brief Thread queue enqueue callout.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] the_thread The thread to enqueue.
+ * @param[in] queue_context The thread queue context of the lock acquire.
+ *
+ * @see _Thread_queue_Context_set_enqueue_callout().
+ */
+typedef void ( *Thread_queue_Enqueue_callout )(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+);
 
 /**
  * @brief Thread queue deadlock callout.
@@ -168,7 +185,7 @@ typedef struct {
  *
  * @see _Thread_queue_Context_initialize().
  */
-typedef struct {
+struct Thread_queue_Context {
   /**
    * @brief The lock context for the thread queue acquire and release
    * operations.
@@ -176,13 +193,14 @@ typedef struct {
   Thread_queue_Lock_context Lock_context;
 
   /**
-   * @brief The expected thread dispatch disable level for
-   * _Thread_queue_Enqueue_critical().
+   * @brief The enqueue callout for _Thread_queue_Enqueue_critical().
    *
-   * In case the actual thread dispatch disable level is not equal to the
-   * expected level, then a fatal error occurs.
+   * The callout is invoked after the release of the thread queue lock with
+   * thread dispatching disabled.  Afterwards the thread is blocked.
+   *
+   * @see _Thread_queue_Enqueue_do_nothing().
    */
-  uint32_t expected_thread_dispatch_disable_level;
+  Thread_queue_Enqueue_callout enqueue_callout;
 
   /**
    * @brief The clock discipline for the interval timeout.
@@ -274,7 +292,7 @@ typedef struct {
    */
   Thread_queue_MP_callout mp_callout;
 #endif
-} Thread_queue_Context;
+};
 
 /**
  * @brief Thread priority queue.

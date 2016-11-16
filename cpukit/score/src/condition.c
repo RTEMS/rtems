@@ -80,31 +80,48 @@ static void _Condition_Queue_release(
   );
 }
 
-static Per_CPU_Control *_Condition_Do_wait(
+typedef struct {
+  Thread_queue_Context   Base;
+  struct _Mutex_Control *mutex;
+} Condition_Enqueue_context;
+
+static void _Condition_Enqueue_callout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  Condition_Enqueue_context *context;
+
+  context = (Condition_Enqueue_context *) queue_context;
+  _Mutex_Release( context->mutex );
+}
+
+static Thread_Control *_Condition_Do_wait(
   struct _Condition_Control *_condition,
-  Thread_queue_Context      *queue_context
+  struct _Mutex_Control     *_mutex,
+  Condition_Enqueue_context *context
 )
 {
   Condition_Control *condition;
   Thread_Control    *executing;
-  Per_CPU_Control   *cpu_self;
 
+  context->mutex = _mutex;
   condition = _Condition_Get( _condition );
-  executing = _Condition_Queue_acquire_critical( condition, queue_context );
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
+  executing = _Condition_Queue_acquire_critical( condition, &context->Base );
+  _Thread_queue_Context_set_enqueue_callout(
+    &context->Base,
+    _Condition_Enqueue_callout
   );
-
-  _Thread_queue_Context_set_expected_level( queue_context, 2 );
   _Thread_queue_Enqueue_critical(
     &condition->Queue.Queue,
     CONDITION_TQ_OPERATIONS,
     executing,
     STATES_WAITING_FOR_SYS_LOCK_CONDITION,
-    queue_context
+    &context->Base
   );
 
-  return cpu_self;
+  return executing;
 }
 
 void _Condition_Wait(
@@ -112,19 +129,12 @@ void _Condition_Wait(
   struct _Mutex_Control     *_mutex
 )
 {
-  Thread_queue_Context  queue_context;
-  Per_CPU_Control      *cpu_self;
+  Condition_Enqueue_context context;
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
-  _Thread_queue_Context_set_no_timeout( &queue_context );
-  cpu_self = _Condition_Do_wait(
-    _condition,
-    &queue_context
-  );
-
-  _Mutex_Release( _mutex );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_queue_Context_initialize( &context.Base );
+  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
+  _Thread_queue_Context_set_no_timeout( &context.Base );
+  _Condition_Do_wait( _condition, _mutex, &context );
   _Mutex_Acquire( _mutex );
 }
 
@@ -134,37 +144,44 @@ int _Condition_Wait_timed(
   const struct timespec     *abstime
 )
 {
-  Thread_queue_Context  queue_context;
-  Per_CPU_Control      *cpu_self;
-  Thread_Control       *executing;
-  int                   eno;
-  Watchdog_Interval     ticks;
+  Condition_Enqueue_context  context;
+  Thread_Control            *executing;
+  int                        eno;
+  Watchdog_Interval          ticks;
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
+  _Thread_queue_Context_initialize( &context.Base );
+  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
 
   switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
     case TOD_ABSOLUTE_TIMEOUT_INVALID:
-      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
       return EINVAL;
     case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
     case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
       return ETIMEDOUT;
     default:
       break;
   }
 
-  _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
-  cpu_self = _Condition_Do_wait( _condition, &queue_context );
-
-  _Mutex_Release( _mutex );
-  executing = cpu_self->executing;
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_queue_Context_set_relative_timeout( &context.Base, ticks );
+  executing = _Condition_Do_wait( _condition, _mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_Acquire( _mutex );
 
   return eno;
+}
+
+static unsigned int _Condition_Unnest_mutex(
+  struct _Mutex_recursive_Control *_mutex
+)
+{
+  unsigned int nest_level;
+
+  nest_level = _mutex->_nest_level;
+  _mutex->_nest_level = 0;
+
+  return nest_level;
 }
 
 void _Condition_Wait_recursive(
@@ -172,19 +189,14 @@ void _Condition_Wait_recursive(
   struct _Mutex_recursive_Control *_mutex
 )
 {
-  Thread_queue_Context  queue_context;
-  Per_CPU_Control      *cpu_self;
-  unsigned int          nest_level;
+  Condition_Enqueue_context context;
+  unsigned int              nest_level;
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
-  _Thread_queue_Context_set_no_timeout( &queue_context );
-  cpu_self = _Condition_Do_wait( _condition, &queue_context );
-
-  nest_level = _mutex->_nest_level;
-  _mutex->_nest_level = 0;
-  _Mutex_recursive_Release( _mutex );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_queue_Context_initialize( &context.Base );
+  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
+  _Thread_queue_Context_set_no_timeout( &context.Base );
+  nest_level = _Condition_Unnest_mutex( _mutex );
+  _Condition_Do_wait( _condition, &_mutex->_Mutex, &context );
   _Mutex_recursive_Acquire( _mutex );
   _mutex->_nest_level = nest_level;
 }
@@ -195,36 +207,29 @@ int _Condition_Wait_recursive_timed(
   const struct timespec           *abstime
 )
 {
-  Thread_queue_Context   queue_context;
-  Per_CPU_Control       *cpu_self;
-  Thread_Control        *executing;
-  int                    eno;
-  unsigned int           nest_level;
-  Watchdog_Interval      ticks;
+  Condition_Enqueue_context  context;
+  Thread_Control            *executing;
+  int                        eno;
+  unsigned int               nest_level;
+  Watchdog_Interval          ticks;
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
+  _Thread_queue_Context_initialize( &context.Base );
+  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
 
   switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
     case TOD_ABSOLUTE_TIMEOUT_INVALID:
-      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
       return EINVAL;
     case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
     case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-      _ISR_lock_ISR_enable( &queue_context.Lock_context.Lock_context );
+      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
       return ETIMEDOUT;
     default:
       break;
   }
-
-  _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
-  cpu_self = _Condition_Do_wait( _condition, &queue_context );
-
-  nest_level = _mutex->_nest_level;
-  _mutex->_nest_level = 0;
-  _Mutex_recursive_Release( _mutex );
-  executing = cpu_self->executing;
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_queue_Context_set_relative_timeout( &context.Base, ticks );
+  nest_level = _Condition_Unnest_mutex( _mutex );
+  executing = _Condition_Do_wait( _condition, &_mutex->_Mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_recursive_Acquire( _mutex );
   _mutex->_nest_level = nest_level;
@@ -235,7 +240,7 @@ int _Condition_Wait_recursive_timed(
 typedef struct {
   Thread_queue_Context Base;
   int                  count;
-} Condition_Context;
+} Condition_Flush_context;
 
 static Thread_Control *_Condition_Flush_filter(
   Thread_Control       *the_thread,
@@ -243,9 +248,9 @@ static Thread_Control *_Condition_Flush_filter(
   Thread_queue_Context *queue_context
 )
 {
-  Condition_Context *context;
+  Condition_Flush_context *context;
 
-  context = (Condition_Context *) queue_context;
+  context = (Condition_Flush_context *) queue_context;
 
   if ( context->count <= 0 ) {
     return NULL;
@@ -258,8 +263,8 @@ static Thread_Control *_Condition_Flush_filter(
 
 static void _Condition_Wake( struct _Condition_Control *_condition, int count )
 {
-  Condition_Control *condition;
-  Condition_Context  context;
+  Condition_Control       *condition;
+  Condition_Flush_context  context;
 
   condition = _Condition_Get( _condition );
   _Thread_queue_Context_initialize( &context.Base );

@@ -156,7 +156,7 @@ int sigtimedwait(
 
   executing->Wait.option          = *set;
   executing->Wait.return_argument = the_info;
-  _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+  _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
   _Thread_queue_Enqueue_critical(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,

@@ -184,7 +184,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
     return STATUS_UNSATISFIED;
   }
 
-  _Thread_queue_Context_set_expected_level( queue_context, 1 );
+  _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue_critical(
     &the_semaphore->Wait_queue.Queue,
     operations,

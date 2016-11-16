@@ -27,6 +27,30 @@
 
 THREAD_QUEUE_OBJECT_ASSERT( POSIX_Condition_variables_Control, Wait_queue );
 
+static void _POSIX_Condition_variables_Enqueue_callout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+)
+{
+  POSIX_Condition_variables_Control *the_cond;
+  int                                mutex_error;
+
+  the_cond = POSIX_CONDITION_VARIABLE_OF_THREAD_QUEUE_QUEUE( queue );
+
+  mutex_error = pthread_mutex_unlock( &the_cond->mutex );
+  if ( mutex_error != 0 ) {
+    /*
+     *  Historically, we ignored the unlock status since the behavior
+     *  is undefined by POSIX. But GNU/Linux returns EPERM in this
+     *  case, so we follow their lead.
+     */
+    _Assert( mutex_error == EINVAL || mutex_error == EPERM );
+    _Thread_queue_Extract( the_thread );
+    the_thread->Wait.return_code= STATUS_NOT_OWNER;
+  }
+}
+
 int _POSIX_Condition_variables_Wait_support(
   pthread_cond_t            *cond,
   pthread_mutex_t           *mutex,
@@ -37,7 +61,6 @@ int _POSIX_Condition_variables_Wait_support(
   Thread_queue_Context               queue_context;
   int                                error;
   int                                mutex_error;
-  Per_CPU_Control                   *cpu_self;
   Thread_Control                    *executing;
   Watchdog_Interval                  timeout;
   bool                               already_timedout;
@@ -91,14 +114,13 @@ int _POSIX_Condition_variables_Wait_support(
   }
 
   the_cond->mutex = *mutex;
-
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context.Lock_context.Lock_context
-  );
-  executing = _Per_CPU_Get_executing( cpu_self );
+  executing = _Thread_Executing;
 
   if ( !already_timedout ) {
-    _Thread_queue_Context_set_expected_level( &queue_context, 2 );
+    _Thread_queue_Context_set_enqueue_callout(
+      &queue_context,
+      _POSIX_Condition_variables_Enqueue_callout
+    );
     _Thread_queue_Enqueue_critical(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
@@ -106,32 +128,17 @@ int _POSIX_Condition_variables_Wait_support(
       STATES_WAITING_FOR_CONDITION_VARIABLE,
       &queue_context
     );
+    error = _POSIX_Get_error_after_wait( executing );
   } else {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );
-    executing->Wait.return_code = STATUS_TIMEOUT;
+
+    mutex_error = pthread_mutex_unlock( &the_cond->mutex );
+    if ( mutex_error != 0 ) {
+      error = EPERM;
+    } else {
+      error = ETIMEDOUT;
+    }
   }
-
-  mutex_error = pthread_mutex_unlock( mutex );
-  if ( mutex_error != 0 ) {
-    /*
-     *  Historically, we ignored the unlock status since the behavior
-     *  is undefined by POSIX. But GNU/Linux returns EPERM in this
-     *  case, so we follow their lead.
-     */
-    _Assert( mutex_error == EINVAL || mutex_error == EPERM );
-    _Thread_queue_Extract( executing );
-    _Thread_Dispatch_enable( cpu_self );
-    return EPERM;
-  }
-
-  /*
-   *  Switch ourself out because we blocked as a result of the
-   *  _Thread_queue_Enqueue_critical().
-   */
-
-  _Thread_Dispatch_enable( cpu_self );
-
-  error = _POSIX_Get_error_after_wait( executing );
 
   /*
    *  If the thread is interrupted, while in the thread queue, by
@@ -149,10 +156,12 @@ int _POSIX_Condition_variables_Wait_support(
    *  When we get here the dispatch disable level is 0.
    */
 
-  mutex_error = pthread_mutex_lock( mutex );
-  if ( mutex_error != 0 ) {
-    _Assert( mutex_error == EINVAL );
-    return EINVAL;
+  if ( error != EPERM ) {
+    mutex_error = pthread_mutex_lock( mutex );
+    if ( mutex_error != 0 ) {
+      _Assert( mutex_error == EINVAL );
+      error = EINVAL;
+    }
   }
 
   return error;

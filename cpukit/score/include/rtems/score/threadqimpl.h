@@ -61,6 +61,12 @@ typedef struct {
   Thread_queue_Queue Queue;
 } Thread_queue_Syslock_queue;
 
+void _Thread_queue_Enqueue_do_nothing(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Thread_queue_Context *queue_context
+);
+
 /**
  * @brief Sets the thread wait return code to STATUS_DEADLOCK.
  */
@@ -82,7 +88,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 {
 #if defined(RTEMS_DEBUG)
   memset( queue_context, 0, sizeof( *queue_context ) );
-  queue_context->expected_thread_dispatch_disable_level = 0xdeadbeef;
+  queue_context->enqueue_callout = _Thread_queue_Enqueue_do_nothing;
   queue_context->deadlock_callout = _Thread_queue_Deadlock_fatal;
 #else
   (void) queue_context;
@@ -90,21 +96,35 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 }
 
 /**
- * @brief Sets the expected thread dispatch disable level in the thread queue
- * context.
+ * @brief Sets the enqueue callout in the thread queue context.
  *
  * @param queue_context The thread queue context.
- * @param expected_level The expected thread dispatch disable level.
+ * @param enqueue_callout The enqueue callout.
  *
  * @see _Thread_queue_Enqueue_critical().
  */
 RTEMS_INLINE_ROUTINE void
-_Thread_queue_Context_set_expected_level(
-  Thread_queue_Context *queue_context,
-  uint32_t              expected_level
+_Thread_queue_Context_set_enqueue_callout(
+  Thread_queue_Context         *queue_context,
+  Thread_queue_Enqueue_callout  enqueue_callout
 )
 {
-  queue_context->expected_thread_dispatch_disable_level = expected_level;
+  queue_context->enqueue_callout = enqueue_callout;
+}
+
+/**
+ * @brief Sets the do nothing enqueue callout in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ *
+ * @see _Thread_queue_Enqueue_critical().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_do_nothing_enqueue_callout(
+  Thread_queue_Context *queue_context
+)
+{
+  queue_context->enqueue_callout = _Thread_queue_Enqueue_do_nothing;
 }
 
 /**
@@ -562,7 +582,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *     mutex->owner = executing;
  *     _Thread_queue_Release( &mutex->Queue, queue_context );
  *   } else {
- *     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
+ *     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
  *     _Thread_queue_Enqueue_critical(
  *       &mutex->Queue.Queue,
  *       MUTEX_TQ_OPERATIONS,
@@ -638,12 +658,17 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Acquire( the_thread_queue, &queue_context );
-  _Thread_queue_Context_set_expected_level( &queue_context, expected_level );
+  _Thread_queue_Context_set_enqueue_callout(
+    &queue_context,
+    _Thread_queue_Enqueue_do_nothing
+  );
+
   if ( discipline == WATCHDOG_ABSOLUTE ) {
     _Thread_queue_Context_set_absolute_timeout( &queue_context, timeout );
   } else {
     _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   }
+
   _Thread_queue_Enqueue_critical(
     &the_thread_queue->Queue,
     operations,

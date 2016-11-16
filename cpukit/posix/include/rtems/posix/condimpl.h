@@ -35,6 +35,10 @@ extern "C" {
 
 #define POSIX_CONDITION_VARIABLES_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
+#define POSIX_CONDITION_VARIABLE_OF_THREAD_QUEUE_QUEUE( queue ) \
+  RTEMS_CONTAINER_OF( \
+    queue, POSIX_Condition_variables_Control, Wait_queue.Queue )
+
 /**
  *  The following defines the information control block used to manage
  *  this class of objects.

@@ -32,7 +32,7 @@ Status_Control _CORE_mutex_Seize_slow(
 )
 {
   if ( wait ) {
-    _Thread_queue_Context_set_expected_level( queue_context, 1 );
+    _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
     _Thread_queue_Context_set_deadlock_callout(
       queue_context,
       _Thread_queue_Deadlock_status

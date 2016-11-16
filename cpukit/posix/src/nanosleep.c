@@ -40,23 +40,34 @@ static inline int nanosleep_helper(
   Watchdog_Discipline   discipline
 )
 {
-  Thread_Control  *executing;
-  struct timespec stop;
-  int err = 0;
+  Thread_queue_Context queue_context;
+  struct timespec      stop;
+  int                  err;
 
-  executing = _Thread_Get_executing();
+  err = 0;
+
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_enqueue_callout(
+    &queue_context,
+    _Thread_queue_Enqueue_do_nothing
+  );
+
+  if ( discipline == WATCHDOG_ABSOLUTE ) {
+    _Thread_queue_Context_set_absolute_timeout( &queue_context, ticks );
+  } else {
+    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+  }
 
   /*
    *  Block for the desired amount of time
    */
-  _Thread_queue_Enqueue(
-    &_Nanosleep_Pseudo_queue,
+  _Thread_queue_Acquire( &_Nanosleep_Pseudo_queue, &queue_context );
+  _Thread_queue_Enqueue_critical(
+    &_Nanosleep_Pseudo_queue.Queue,
     &_Thread_queue_Operations_FIFO,
-    executing,
+    _Thread_Executing,
     STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
-    ticks,
-    discipline,
-    1
+    &queue_context
   );
 
   clock_gettime( clock_id, &stop );

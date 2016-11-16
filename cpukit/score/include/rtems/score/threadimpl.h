@@ -245,6 +245,11 @@ void _Thread_Cancel(
   void           *exit_value
 );
 
+typedef struct {
+  Thread_queue_Context  Base;
+  Thread_Control       *cancel;
+} Thread_Close_context;
+
 /**
  * @brief Closes the thread.
  *
@@ -252,7 +257,11 @@ void _Thread_Cancel(
  * case the executing thread is not terminated, then this function waits until
  * the terminating thread reached the zombie state.
  */
-void _Thread_Close( Thread_Control *the_thread, Thread_Control *executing );
+void _Thread_Close(
+  Thread_Control       *the_thread,
+  Thread_Control       *executing,
+  Thread_Close_context *context
+);
 
 RTEMS_INLINE_ROUTINE bool _Thread_Is_ready( const Thread_Control *the_thread )
 {

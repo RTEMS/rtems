@@ -25,12 +25,12 @@ rtems_status_code rtems_task_delete(
   rtems_id id
 )
 {
-  Thread_Control   *the_thread;
-  ISR_lock_Context  lock_context;
-  Thread_Control   *executing;
-  Per_CPU_Control  *cpu_self;
+  Thread_Control       *the_thread;
+  Thread_Close_context  context;
+  Thread_Control       *executing;
 
-  the_thread = _Thread_Get( id, &lock_context );
+  _Thread_queue_Context_initialize( &context.Base );
+  the_thread = _Thread_Get( id, &context.Base.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -42,12 +42,16 @@ rtems_status_code rtems_task_delete(
     return RTEMS_INVALID_ID;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
-  _ISR_lock_ISR_enable( &lock_context );
-
-  executing = _Per_CPU_Get_executing( cpu_self );
+  executing = _Thread_Executing;
 
   if ( the_thread == executing ) {
+    Per_CPU_Control *cpu_self;
+
+    cpu_self = _Thread_Dispatch_disable_critical(
+      &context.Base.Lock_context.Lock_context
+    );
+    _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
+
     /*
      * The Classic tasks are neither detached nor joinable.  In case of
      * self deletion, they are detached, otherwise joinable by default.
@@ -57,10 +61,10 @@ rtems_status_code rtems_task_delete(
       THREAD_LIFE_TERMINATING | THREAD_LIFE_DETACHED,
       NULL
     );
+    _Thread_Dispatch_enable( cpu_self );
   } else {
-    _Thread_Close( the_thread, executing );
+    _Thread_Close( the_thread, executing, &context );
   }
 
-  _Thread_Dispatch_enable( cpu_self );
   return RTEMS_SUCCESSFUL;
 }
