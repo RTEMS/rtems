@@ -88,6 +88,7 @@ ATSAM_LINKCMD([ATSAM_MEMORY_INTFLASH_SIZE],[size of internal flash in bytes],[${
 ATSAM_LINKCMD([ATSAM_MEMORY_INTSRAM_SIZE],[size of internal SRAM in bytes],[${INTSRAM}])
 ATSAM_LINKCMD([ATSAM_MEMORY_SDRAM_SIZE],[size of external SDRAM in bytes],[${EXTSDRAM}])
 ATSAM_LINKCMD([ATSAM_MEMORY_QSPIFLASH_SIZE],[size of QSPI flash in bytes],[0x00200000])
+ATSAM_LINKCMD([ATSAM_MEMORY_NOCACHE_SIZE],[size of NOCACHE section in bytes],[0x00001000])
 
 AC_CONFIG_FILES([
 Makefile
