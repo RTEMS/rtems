@@ -53,7 +53,9 @@ RTEMS_INLINE_ROUTINE void _MRSP_Release(
   _Thread_queue_Release( &mrsp->Wait_queue, queue_context );
 }
 
-RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner( MRSP_Control *mrsp )
+RTEMS_INLINE_ROUTINE Thread_Control *_MRSP_Get_owner(
+  const MRSP_Control *mrsp
+)
 {
   return mrsp->Wait_queue.Queue.owner;
 }
