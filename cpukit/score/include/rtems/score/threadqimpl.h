@@ -217,6 +217,25 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_add_priority_update(
   queue_context->Priority.update[ n ] = the_thread;
 }
 
+#define _Thread_queue_Context_ISR_disable( queue_context, level ) \
+  do { \
+    _ISR_Local_disable( level ); \
+    _ISR_lock_ISR_disable_profile( \
+      &( queue_context )->Lock_context.Lock_context \
+    ) \
+  } while ( 0 )
+
+RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_ISR_level(
+  Thread_queue_Context *queue_context,
+  ISR_Level             level
+)
+{
+  _ISR_lock_Context_set_level(
+    &queue_context->Lock_context.Lock_context,
+    level
+  );
+}
+
 /**
  * @brief Sets the MP callout in the thread queue context.
  *

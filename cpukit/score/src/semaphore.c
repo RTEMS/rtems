@@ -55,14 +55,13 @@ static Semaphore_Control *_Semaphore_Get(
   return (Semaphore_Control *) _sem;
 }
 
-static Thread_Control *_Semaphore_Queue_acquire(
+static Thread_Control *_Semaphore_Queue_acquire_critical(
   Semaphore_Control    *sem,
   Thread_queue_Context *queue_context
 )
 {
   Thread_Control *executing;
 
-  _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   executing = _Thread_Executing;
   _Thread_queue_Queue_acquire_critical(
     &sem->Queue.Queue,
@@ -75,33 +74,38 @@ static Thread_Control *_Semaphore_Queue_acquire(
 
 static void _Semaphore_Queue_release(
   Semaphore_Control    *sem,
+  ISR_Level             level,
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Queue_release(
+  _Thread_queue_Queue_release_critical(
     &sem->Queue.Queue,
     &queue_context->Lock_context.Lock_context
   );
+  _ISR_Local_enable( level );
 }
 
 void _Semaphore_Wait( struct _Semaphore_Control *_sem )
 {
   Semaphore_Control    *sem ;
+  ISR_Level             level;
   Thread_queue_Context  queue_context;
   Thread_Control       *executing;
   unsigned int          count;
 
   sem = _Semaphore_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
-  executing = _Semaphore_Queue_acquire( sem, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  executing = _Semaphore_Queue_acquire_critical( sem, &queue_context );
 
   count = sem->count;
-  if ( count > 0 ) {
+  if ( __predict_true( count > 0 ) ) {
     sem->count = count - 1;
-    _Semaphore_Queue_release( sem, &queue_context );
+    _Semaphore_Queue_release( sem, level, &queue_context );
   } else {
     _Thread_queue_Context_set_expected_level( &queue_context, 1 );
     _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue_critical(
       &sem->Queue.Queue,
       SEMAPHORE_TQ_OPERATIONS,
@@ -115,22 +119,25 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
 void _Semaphore_Post( struct _Semaphore_Control *_sem )
 {
   Semaphore_Control    *sem;
+  ISR_Level             level;
   Thread_queue_Context  queue_context;
   Thread_queue_Heads   *heads;
 
   sem = _Semaphore_Get( _sem );
   _Thread_queue_Context_initialize( &queue_context );
-  _Semaphore_Queue_acquire( sem, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  _Semaphore_Queue_acquire_critical( sem, &queue_context );
 
   heads = sem->Queue.Queue.heads;
-  if ( heads == NULL ) {
+  if ( __predict_true( heads == NULL ) ) {
     _Assert( sem->count < UINT_MAX );
     ++sem->count;
-    _Semaphore_Queue_release( sem, &queue_context );
+    _Semaphore_Queue_release( sem, level, &queue_context );
   } else {
     const Thread_queue_Operations *operations;
     Thread_Control *first;
 
+    _Thread_queue_Context_set_ISR_level( &queue_context, level );
     operations = SEMAPHORE_TQ_OPERATIONS;
     first = ( *operations->first )( heads );
 

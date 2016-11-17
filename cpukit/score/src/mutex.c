@@ -71,14 +71,6 @@ static Mutex_Control *_Mutex_Get( struct _Mutex_Control *_mutex )
   return (Mutex_Control *) _mutex;
 }
 
-#define _Mutex_ISR_disable( level, queue_context ) \
-  do { \
-    _ISR_Local_disable( level ); \
-    _ISR_lock_ISR_disable_profile( \
-      &( queue_context )->Lock_context.Lock_context \
-    ) \
-  } while ( 0 )
-
 static Thread_Control *_Mutex_Queue_acquire_critical(
   Mutex_Control        *mutex,
   Thread_queue_Context *queue_context
@@ -122,10 +114,7 @@ static void _Mutex_Acquire_slow(
     queue_context,
     _Thread_queue_Deadlock_fatal
   );
-  _ISR_lock_Context_set_level(
-    &queue_context->Lock_context.Lock_context,
-    level
-  );
+  _Thread_queue_Context_set_ISR_level( queue_context, level );
   _Thread_queue_Enqueue_critical(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,
@@ -151,10 +140,7 @@ static void _Mutex_Release_critical(
   if ( __predict_true( heads == NULL ) ) {
     _Mutex_Queue_release( mutex, level, queue_context );
   } else {
-    _ISR_lock_Context_set_level(
-      &queue_context->Lock_context.Lock_context,
-      level
-    );
+    _Thread_queue_Context_set_ISR_level( queue_context, level );
     _Thread_queue_Surrender(
       &mutex->Queue.Queue,
       heads,
@@ -175,7 +161,7 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
@@ -203,7 +189,7 @@ int _Mutex_Acquire_timed(
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
@@ -247,7 +233,7 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( mutex, &queue_context );
 
   owner = mutex->Queue.Queue.owner;
@@ -274,7 +260,7 @@ void _Mutex_Release( struct _Mutex_Control *_mutex )
 
   mutex = _Mutex_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( mutex, &queue_context );
 
   _Assert( mutex->Queue.Queue.owner == executing );
@@ -299,7 +285,7 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
 
   mutex = _Mutex_recursive_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
@@ -330,7 +316,7 @@ int _Mutex_recursive_Acquire_timed(
 
   mutex = _Mutex_recursive_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
@@ -379,7 +365,7 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
 
   mutex = _Mutex_recursive_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( &mutex->Mutex, &queue_context );
 
   owner = mutex->Mutex.Queue.Queue.owner;
@@ -410,7 +396,7 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
 
   mutex = _Mutex_recursive_Get( _mutex );
   _Thread_queue_Context_initialize( &queue_context );
-  _Mutex_ISR_disable( level, &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
   executing = _Mutex_Queue_acquire_critical( &mutex->Mutex, &queue_context );
 
   _Assert( mutex->Mutex.Queue.Queue.owner == executing );
