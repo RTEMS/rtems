@@ -189,7 +189,7 @@ Make_Path(const rtems_printer *printer, const char* filename, bool end_is_dir)
         if (!path_end) {
           r = mkdir(path, S_IRWXU | S_IRWXG | S_IRWXO);
           if (r < 0) {
-            Print_Error(printer, "mkdir", path);
+            Print_Error(printer, "mkdir (unlink)", path);
             free(copy);
             return -1;
           }
@@ -310,7 +310,7 @@ Untar_ProcessHeader(
     }
   } else if (*linkflag == DIRTYPE) {
     int r;
-    rtems_printf(printer, "untar: dir: %s\n", fname);
+    rtems_printf(printer, "untar:  dir: %s\n", fname);
     if (Make_Path(printer, fname, true) < 0) {
       retval  = UNTAR_FAIL;
     }
@@ -319,7 +319,9 @@ Untar_ProcessHeader(
       if (errno == EEXIST) {
         struct stat stat_buf;
         if (stat(fname, &stat_buf) == 0) {
-          if (!S_ISDIR(stat_buf.st_mode)) {
+          if (S_ISDIR(stat_buf.st_mode)) {
+            r = 0;
+          } else {
             r = unlink(fname);
             if (r == 0) {
               r = mkdir(fname, *mode);
