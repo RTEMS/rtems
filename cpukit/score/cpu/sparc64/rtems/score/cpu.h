@@ -756,7 +756,7 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
 
 RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
 {
-  return ( psr & SPARC_PSTATE_IE_MASK ) != 0;
+  return ( level & SPARC_PSTATE_IE_MASK ) != 0;
 }
 
 /*
