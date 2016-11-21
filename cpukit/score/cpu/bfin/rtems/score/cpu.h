@@ -601,6 +601,8 @@ typedef struct {
  */
 #define CPU_STACK_ALIGNMENT        8
 
+#ifndef ASM
+
 /*
  *  ISR handler macros
  */
@@ -691,8 +693,6 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
   { \
     __asm__ __volatile__ ( "sti %0; csync" : : "d"(_new_level ? 0 : 0xffff) ); \
   }
-
-#ifndef ASM
 
 /**
  * Return the current interrupt disable level for this task in
