@@ -161,7 +161,7 @@ int CPU_irq_level_from_symbolic_name(const rtems_irq_number name);
 
 extern void CPU_rtems_irq_mng_init(unsigned cpuId);
 
-typedef struct CPU_Interrupt_frame {
+typedef struct MPC5XX_Interrupt_frame {
     uint32_t   stacklink;	/* Ensure this is a real frame (also reg1 save) */
     uint32_t   calleeLr;	/* link register used by callees: SVR4/EABI */
 
@@ -190,9 +190,9 @@ typedef struct CPU_Interrupt_frame {
     uint32_t   pc;
     uint32_t   msr;
     uint32_t   pad[3];
-} CPU_Interrupt_frame;
+} MPC5XX_Interrupt_frame;
 
-void C_dispatch_irq_handler(CPU_Interrupt_frame *frame, unsigned int excNum);
+void C_dispatch_irq_handler(MPC5XX_Interrupt_frame *frame, unsigned int excNum);
 
 #endif
 

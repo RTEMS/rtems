@@ -388,7 +388,7 @@ int CPU_rtems_irq_mngt_get(rtems_irq_global_settings** config)
 /*
  * High level IRQ handler called from shared_raw_irq_code_entry
  */
-void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
+void C_dispatch_irq_handler (MPC5XX_Interrupt_frame *frame, unsigned int excNum)
 {
   register unsigned int irq;
   register unsigned uimbIntr;                 /* boolean */
