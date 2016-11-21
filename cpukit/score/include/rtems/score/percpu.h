@@ -320,6 +320,21 @@ typedef struct Per_CPU_Control {
   volatile uint32_t thread_dispatch_disable_level;
 
   /**
+   * @brief This is set to true when this processor needs to run the thread
+   * dispatcher.
+   *
+   * It is volatile since interrupts may alter this flag.
+   *
+   * This field is not protected by a lock and must be accessed only by this
+   * processor.  Code (e.g. scheduler and post-switch action requests) running
+   * on another processors must use an inter-processor interrupt to set the
+   * thread dispatch necessary indicator to true.
+   *
+   * @see _Thread_Get_heir_and_make_it_executing().
+   */
+  volatile bool dispatch_necessary;
+
+  /**
    * @brief This is the thread executing on this processor.
    *
    * This field is not protected by a lock.  The only writer is this processor.
@@ -346,21 +361,6 @@ typedef struct Per_CPU_Control {
    * @see _Thread_Get_heir_and_make_it_executing().
    */
   struct _Thread_Control *heir;
-
-  /**
-   * @brief This is set to true when this processor needs to run the thread
-   * dispatcher.
-   *
-   * It is volatile since interrupts may alter this flag.
-   *
-   * This field is not protected by a lock and must be accessed only by this
-   * processor.  Code (e.g. scheduler and post-switch action requests) running
-   * on another processors must use an inter-processor interrupt to set the
-   * thread dispatch necessary indicator to true.
-   *
-   * @see _Thread_Get_heir_and_make_it_executing().
-   */
-  volatile bool dispatch_necessary;
 
 #if defined(RTEMS_SMP)
   CPU_Interrupt_frame Interrupt_frame;
@@ -812,15 +812,15 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
   PER_CPU_ISR_NEST_LEVEL + 4
 #define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \
   PER_CPU_ISR_DISPATCH_DISABLE + 4
-#define PER_CPU_OFFSET_EXECUTING \
+#define PER_CPU_DISPATCH_NEEDED \
   PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL + 4
+#define PER_CPU_OFFSET_EXECUTING \
+  PER_CPU_DISPATCH_NEEDED + 4
 #define PER_CPU_OFFSET_HEIR \
   PER_CPU_OFFSET_EXECUTING + CPU_SIZEOF_POINTER
-#define PER_CPU_DISPATCH_NEEDED \
-  PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
 #if defined(RTEMS_SMP)
 #define PER_CPU_INTERRUPT_FRAME_AREA \
-  PER_CPU_DISPATCH_NEEDED + 4
+  PER_CPU_OFFSET_HEIR + CPU_SIZEOF_POINTER
 #endif
 
 #define THREAD_DISPATCH_DISABLE_LEVEL \
