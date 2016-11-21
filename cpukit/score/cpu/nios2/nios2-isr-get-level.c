@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH
+ * Copyright (c) 2011, 2016 embedded brains GmbH
  *
  * Copyright (c) 2006 Kolja Waschk (rtemsdev/ixo.de)
  *
@@ -23,11 +23,11 @@ bool _CPU_ISR_Is_enabled( uint32_t level )
 {
   switch ( _Nios2_ISR_Get_status_mask() ) {
     case NIOS2_ISR_STATUS_MASK_EIC_IL:
-      return ((status & NIOS2_STATUS_IL_MASK) >> NIOS2_STATUS_IL_OFFSET) == 0;
+      return ((level & NIOS2_STATUS_IL_MASK) >> NIOS2_STATUS_IL_OFFSET) == 0;
     case NIOS2_ISR_STATUS_MASK_EIC_RSIE:
-      return (status & NIOS2_STATUS_RSIE) != 0;
+      return (level & NIOS2_STATUS_RSIE) != 0;
     default:
-      return (status & NIOS2_STATUS_PIE) != 0;
+      return (level & NIOS2_STATUS_PIE) != 0;
   }
 }
 
