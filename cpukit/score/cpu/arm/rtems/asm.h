@@ -187,6 +187,36 @@
 #endif /* __thumb__ */
 .endm
 
+.macro SWITCH_FROM_THUMB_2_TO_ARM
+#ifdef __thumb2__
+.align 2
+	bx	pc
+.arm
+#endif /* __thumb__ */
+.endm
+
+.macro SWITCH_FROM_ARM_TO_THUMB_2 REG
+#ifdef __thumb2__
+	add	\REG, pc, #1
+	bx	\REG
+.thumb
+#endif /* __thumb__ */
+.endm
+
+.macro BLX_TO_THUMB_1 TARGET
+#if defined(__thumb__) && !defined(__thumb2__)
+	add	lr, pc, #1
+	bx	lr
+.thumb
+	bl	\TARGET
+.align 2
+	bx	pc
+.arm
+#else
+	bl	\TARGET
+#endif
+.endm
+
 .macro GET_SELF_CPU_CONTROL REG
 #ifdef RTEMS_SMP
 	/* Use PL1 only Thread ID Register (TPIDRPRW) */

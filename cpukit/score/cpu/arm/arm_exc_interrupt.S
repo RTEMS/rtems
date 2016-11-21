@@ -102,8 +102,8 @@ _ARMV4_Exception_interrupt:
 	cmp	r2, #0
 	moveq	sp, r1
 
-	/* Switch to THUMB instructions if necessary */
-	SWITCH_FROM_ARM_TO_THUMB	r1
+	/* Switch to Thumb-2 instructions if necessary */
+	SWITCH_FROM_ARM_TO_THUMB_2	r1
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	ldr	r3, [SELF_CPU_CONTROL, #PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
@@ -116,18 +116,18 @@ _ARMV4_Exception_interrupt:
 #ifdef RTEMS_PROFILING
 	cmp	r2, #1
 	bne	.Lskip_profiling
-	bl	_CPU_Counter_read
+	BLX_TO_THUMB_1	_CPU_Counter_read
 	mov	SELF_CPU_CONTROL, r0
-	bl	bsp_interrupt_dispatch
-	bl	_CPU_Counter_read
+	BLX_TO_THUMB_1	bsp_interrupt_dispatch
+	BLX_TO_THUMB_1	_CPU_Counter_read
 	mov	r2, r0
 	mov	r1, SELF_CPU_CONTROL
 	GET_SELF_CPU_CONTROL	r0
 	mov	SELF_CPU_CONTROL, r0
-	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+	BLX_TO_THUMB_1	_Profiling_Outer_most_interrupt_entry_and_exit
 .Lprofiling_done:
 #else
-	bl	bsp_interrupt_dispatch
+	BLX_TO_THUMB_1	bsp_interrupt_dispatch
 #endif
 
 	/* Load some per-CPU variables */
@@ -175,7 +175,7 @@ _ARMV4_Exception_interrupt:
 	mov	r1, NON_VOLATILE_SCRATCH
 	mov	r2, #0x80
 	bic	r1, r2
-	bl	_Thread_Do_dispatch
+	BLX_TO_THUMB_1	_Thread_Do_dispatch
 
 	/* Disable interrupts */
 	msr	CPSR, NON_VOLATILE_SCRATCH
@@ -196,7 +196,7 @@ _ARMV4_Exception_interrupt:
 .Lthread_dispatch_done:
 
 	/* Switch to ARM instructions if necessary */
-	SWITCH_FROM_THUMB_TO_ARM
+	SWITCH_FROM_THUMB_2_TO_ARM
 
 #ifdef ARM_MULTILIB_VFP
 	/* Restore VFP context */
@@ -274,7 +274,7 @@ _ARMV4_Exception_interrupt:
 .thumb
 #endif
 .Lskip_profiling:
-	bl	bsp_interrupt_dispatch
+	BLX_TO_THUMB_1	bsp_interrupt_dispatch
 	b	.Lprofiling_done
 #endif
 
