@@ -23,10 +23,16 @@ plt.ylabel('Operation Count')
 
 y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTicketLockWithLocalCounter/SumOfLocalCounter'))
 x = range(1, len(y) + 1)
-plt.plot(x, y, label = 'Global Ticket Lock', marker = 'o')
+plt.plot(x, y, label = 'Ticket Lock', marker = 'o')
 
 y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalMCSLockWithLocalCounter/SumOfLocalCounter'))
-plt.plot(x, y, label = 'Global MCS Lock', marker = 'o')
+plt.plot(x, y, label = 'MCS Lock', marker = 'o')
+
+y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTASLockWithLocalCounter/SumOfLocalCounter'))
+plt.plot(x, y, label = 'TAS Lock', marker = 'o')
+
+y = map(xmlNode.getContent, ctx.xpathEval('/SMPLock01/GlobalTTASLockWithLocalCounter/SumOfLocalCounter'))
+plt.plot(x, y, label = 'TTAS Lock', marker = 'o')
 
 plt.legend(loc = 'best')
 plt.show()

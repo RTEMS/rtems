@@ -31,27 +31,29 @@ const char rtems_test_name[] = "SMPLOCK 1";
 
 #define CPU_COUNT 32
 
-#define TEST_COUNT 11
+#define TEST_COUNT 13
 
 typedef struct {
   rtems_test_parallel_context base;
   unsigned long counter[TEST_COUNT];
   unsigned long local_counter[CPU_COUNT][TEST_COUNT][CPU_COUNT];
-  SMP_lock_Control lock;
+  SMP_lock_Control lock RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
+  Atomic_Uint flag RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
+  SMP_MCS_lock_Control mcs_lock RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
 #if defined(RTEMS_PROFILING)
   SMP_lock_Stats mcs_stats;
 #endif
-  SMP_MCS_lock_Control mcs_lock;
-  SMP_sequence_lock_Control seq_lock;
+  SMP_sequence_lock_Control seq_lock RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
   int a RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
   int b RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
-} test_context RTEMS_ALIGNED(CPU_CACHE_LINE_BYTES);
+} test_context;
 
 static test_context test_instance = {
   .lock = SMP_LOCK_INITIALIZER("global ticket"),
 #if defined(RTEMS_PROFILING)
   .mcs_stats = SMP_LOCK_STATS_INITIALIZER("global MCS"),
 #endif
+  .flag = ATOMIC_INITIALIZER_UINT(0),
   .mcs_lock = SMP_MCS_LOCK_INITIALIZER,
   .seq_lock = SMP_SEQUENCE_LOCK_INITIALIZER
 };
@@ -587,6 +589,86 @@ static void test_10_fini(
   );
 }
 
+static void test_11_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  size_t test = 11;
+  unsigned long counter = 0;
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    while (_Atomic_Exchange_uint(&ctx->flag, 1, ATOMIC_ORDER_ACQUIRE) != 0) {
+      /* Wait */
+    }
+
+    _Atomic_Store_uint(&ctx->flag, 0, ATOMIC_ORDER_RELEASE);
+    ++counter;
+  }
+
+  ctx->local_counter[active_workers - 1][test][worker_index] = counter;
+}
+
+static void test_11_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    ctx,
+    "GlobalTASLockWithLocalCounter",
+    11,
+    active_workers
+  );
+}
+
+static void test_12_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  size_t test = 12;
+  unsigned long counter = 0;
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    while (_Atomic_Exchange_uint(&ctx->flag, 1, ATOMIC_ORDER_ACQUIRE) != 0) {
+      while (_Atomic_Load_uint(&ctx->flag, ATOMIC_ORDER_RELAXED) != 0) {
+        /* Wait */
+      }
+    }
+
+    _Atomic_Store_uint(&ctx->flag, 0, ATOMIC_ORDER_RELEASE);
+    ++counter;
+  }
+
+  ctx->local_counter[active_workers - 1][test][worker_index] = counter;
+}
+
+static void test_12_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    ctx,
+    "GlobalTTASLockWithLocalCounter",
+    12,
+    active_workers
+  );
+}
+
 static const rtems_test_parallel_job test_jobs[TEST_COUNT] = {
   {
     .init = test_init,
@@ -643,6 +725,16 @@ static const rtems_test_parallel_job test_jobs[TEST_COUNT] = {
     .body = test_10_body,
     .fini = test_10_fini,
     .cascade = false
+  }, {
+    .init = test_init,
+    .body = test_11_body,
+    .fini = test_11_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_12_body,
+    .fini = test_12_fini,
+    .cascade = true
   }
 };
 
