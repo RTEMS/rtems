@@ -7,7 +7,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014-2015 embedded brains GmbH
+ *  Copyright (c) 2014, 2016 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -545,95 +545,77 @@ pil_fixed:
         call     %g4, 0
 #if defined(RTEMS_PROFILING)
          mov     %o5, %l3               ! save interrupt entry instant
+#else
+         nop                            ! delay slot
+#endif
+
+#if SPARC_HAS_FPU == 1
+        mov      %l0, %g1               ! PSR[EF] value of interrupted context
+        ta       SPARC_SWTRAP_IRQDIS_FP ! **** DISABLE INTERRUPTS ****
+#else
+        ta       SPARC_SWTRAP_IRQDIS    ! **** DISABLE INTERRUPTS ****
+#endif
+
+#if defined(RTEMS_PROFILING)
         cmp      %l7, 0
         bne      profiling_not_outer_most_exit
          nop
-        ta       SPARC_SWTRAP_IRQDIS    ! Call interrupt disable trap handler
         call     %l4, 0                 ! Call _SPARC_Counter.counter_read
-         nop
+         mov     %g1, %l4               ! Save previous interrupt status
         mov      %o0, %o2               ! o2 = 3rd arg = interrupt exit instant
         mov      %l3, %o1               ! o1 = 2nd arg = interrupt entry instant
         call     SYM(_Profiling_Outer_most_interrupt_entry_and_exit), 0
          mov     %g6, %o0               ! o0 = 1st arg = per-CPU control
 profiling_not_outer_most_exit:
-#else
-         nop                            ! delay slot
 #endif
-
-        /*
-         *  Redisable traps so we can finish up the interrupt processing.
-         *  This is a VERY conservative place to do this.
-         *
-         *  NOTE: %l0 has the PSR which was in place when we took the trap.
-         */
-
-        mov      %l0, %psr             ! **** DISABLE TRAPS ****
-        nop; nop; nop
 
         /*
          *  Decrement ISR nest level and Thread dispatch disable level.
          *
          *  Register usage for this section:
          *
-         *    l6 = _Thread_Dispatch_disable_level value
-         *    l7 = _ISR_Nest_level value
+         *    o2 = g6->dispatch_necessary value
+         *    o3 = g6->isr_dispatch_disable value
+         *    l6 = g6->thread_dispatch_disable_level value
+         *    l7 = g6->isr_nest_level value
          */
 
+        ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %o2
+        ld       [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %o3
         st       %l7, [%g6 + PER_CPU_ISR_NEST_LEVEL]
-
         sub      %l6, 1, %l6
         st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
         /*
-         *  If dispatching is disabled (includes nested interrupt case),
-         *  then do a "simple" exit.
+         * Thread dispatching is necessary and allowed if and only if
+         *   g6->dispatch_necessary == 1 and
+         *   g6->isr_dispatch_disable == 0 and
+         *   g6->thread_dispatch_disable_level == 0.
+         *
+         * Otherwise, continue with the simple return.
          */
-
-        orcc     %l6, %g0, %g0   ! Is dispatching disabled?
-        bnz      simple_return   ! Yes, then do a "simple" exit
-        nop
-
-        ! Are we dispatching from a previous ISR in the interrupted thread?
-        ld       [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %l7
-        orcc     %l7, %g0, %g0   ! Is this thread already doing an ISR?
-        bnz      simple_return   ! Yes, then do a "simple" exit
-        nop
-
+        xor      %o2, 1, %o2
+        or       %o2, %l6, %o2
+        orcc     %o2, %o3, %o2
+        bnz      simple_return
 
         /*
-         *  If a context switch is necessary, then do fudge stack to
-         *  return to the interrupt dispatcher.
+         * Switch back on the interrupted tasks stack and add enough room to
+         * invoke the dispatcher.  Doing this in the delay slot causes no harm,
+         * since the stack pointer (%sp) is not used in the simple return path.
          */
+         sub     %fp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 
-        ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %l6
+isr_dispatch:
 
-        orcc     %l6, %g0, %g0   ! Is thread switch necessary?
-        bz       simple_return   ! no, then do a simple return
-        nop
-
-        /*
-         *  Invoke interrupt dispatcher.
-         */
-
-        ! Set ISR dispatch nesting prevention flag
-        mov      1,%l6
+        /* Set ISR dispatch disable and thread dispatch disable level to one */
+        mov      1, %l6
+        st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
         st       %l6, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
 
-        /*
-         *  The following subtract should get us back on the interrupted
-         *  tasks stack and add enough room to invoke the dispatcher.
-         *  When we enable traps, we are mostly back in the context
-         *  of the task and subsequent interrupts can operate normally.
-         */
+        /* Call _Thread_Do_dispatch(), this function will enable interrupts */
 
-        sub      %fp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
-
-        or      %l0, SPARC_PSR_ET_MASK, %l7    ! l7 = PSR with ET=1
-        mov     %l7, %psr                      !  **** ENABLE TRAPS ****
-        nop
-        nop
-        nop
-isr_dispatch:
+        mov      0, %o1                 ! ISR level for _Thread_Do_dispatch()
 
 #if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
         /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
@@ -664,8 +646,9 @@ isr_dispatch:
         std     %f26, [%sp + FP_FRAME_OFFSET_F26_F27]
         std     %f28, [%sp + FP_FRAME_OFFSET_F28_F29]
         std     %f30, [%sp + FP_FRAME_OFFSET_F3O_F31]
-        call    SYM(_Thread_Dispatch), 0
-         st     %fsr, [%sp + FP_FRAME_OFFSET_FSR]
+        st      %fsr, [%sp + FP_FRAME_OFFSET_FSR]
+        call    SYM(_Thread_Do_dispatch), 0
+         mov    %g6, %o0
 
         /*
          * Restore the floating point context from stack frame and release the
@@ -694,38 +677,30 @@ isr_dispatch:
 non_fp_thread_dispatch:
 #endif
 
-        call    SYM(_Thread_Dispatch), 0
-         nop
+        call    SYM(_Thread_Do_dispatch), 0
+         mov    %g6, %o0
 
 #if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
 thread_dispatch_done:
 #endif
 
-        /*
-         *  We invoked _Thread_Dispatch in a state similar to the interrupted
-         *  task.  In order to safely be able to tinker with the register
-         *  windows and get the task back to its pre-interrupt state,
-         *  we need to disable interrupts disabled so we can safely tinker
-         *  with the register windowing.  In particular, the CWP in the PSR
-         *  is fragile during this period. (See PR578.)
-         */
-        ta      SPARC_SWTRAP_IRQDIS  ! syscall (disable interrupts)
+        ta       SPARC_SWTRAP_IRQDIS ! **** DISABLE INTERRUPTS ****
 
         /*
          *  While we had ISR dispatching disabled in this thread,
-         *  did we miss anything.  If so, then we need to do another
-         *  _Thread_Dispatch before leaving this ISR Dispatch context.
+         *  did we miss anything?  If so, then we need to do another
+         *  _Thread_Do_dispatch() before leaving this ISR dispatch context.
          */
         ldub    [%g6 + PER_CPU_DISPATCH_NEEDED], %l7
 
-        orcc    %l7, %g0, %g0        ! Is thread switch necesary?
-        bne,a   isr_dispatch         ! Yes, then invoke the dispatcher.
-                                     ! g1 = Old PSR PIL returned from IRQDis
-        ta      SPARC_SWTRAP_IRQEN   ! syscall (enable interrupts to same level)
+        orcc    %l7, %g0, %g0        ! Is a thread dispatch necessary?
+        bne     isr_dispatch         ! Yes, then invoke the dispatcher again.
+         mov    0, %o1               ! ISR level for _Thread_Do_dispatch()
 
-        ! No, then clear out and return
-
-        ! Zero out ISR stack nesting prevention flag
+        /*
+         * No, then set the ISR dispatch disable flag to zero and continue with
+         * the simple return.
+         */
         st       %g0, [%g6 + PER_CPU_ISR_DISPATCH_DISABLE]
 
         /*

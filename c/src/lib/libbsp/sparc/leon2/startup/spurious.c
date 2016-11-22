@@ -151,6 +151,9 @@ void bsp_spurious_initialize()
         (( trap >= 0x11 ) && ( trap <= 0x1f )) ||
         (( trap >= 0x70 ) && ( trap <= 0x83 )) ||
         ( trap == 0x80 + SPARC_SWTRAP_IRQDIS ) ||
+#if SPARC_HAS_FPU == 1
+        ( trap == 0x80 + SPARC_SWTRAP_IRQDIS_FP ) ||
+#endif
         ( trap == 0x80 + SPARC_SWTRAP_IRQEN ))
       continue;
 

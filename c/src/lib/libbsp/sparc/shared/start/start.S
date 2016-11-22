@@ -207,9 +207,14 @@ SYM(CLOCK_SPEED):
    */
   IRQDIS_TRAP(SYM(syscall_irqdis));             ! 89 IRQ Disable syscall trap
   IRQEN_TRAP(SYM(syscall_irqen));               ! 8A IRQ Enable syscall trap
-
+#if SPARC_HAS_FPU == 1
+  IRQDIS_TRAP(SYM(syscall_irqdis_fp));          ! 8B IRQ disable
+                                                ! and set PSR[EF] syscall trap
+#else
   SOFT_TRAP;                                    ! 8B
+#endif
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 8C - 8F
+
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 90 - 93
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 94 - 97
   SOFT_TRAP; SOFT_TRAP; SOFT_TRAP; SOFT_TRAP;   ! 98 - 9B

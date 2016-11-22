@@ -95,6 +95,43 @@ SYM(syscall_irqen):
 	jmp	%l2				! Return to after TA 10.
 	 rett	%l2 + 4
 
+#if SPARC_HAS_FPU == 1
+	/*
+	 *  system call - Interrupt disable and set PSR[EF] according to caller
+	 *                specified %g1
+	 *
+	 *  On entry:
+	 *
+	 *    g1 = the desired PSR[EF] value (from caller)
+	 *    l0 = psr (from trap table)
+	 *    l1 = pc
+	 *    l2 = npc
+	 *    l3 = psr | SPARC_PSR_PIL_MASK
+	 *
+	 *  On exit:
+	 *    g1 = old psr (to user)
+	 */
+
+.align 32				! Align to 32-byte cache-line
+	PUBLIC(syscall_irqdis_fp)
+
+SYM(syscall_irqdis_fp):
+	/*
+	 * We cannot use an intermediate value for operations with the PSR[EF]
+	 * bit since they use a 13-bit sign extension and PSR[EF] is bit 12.
+	 */
+	sethi	%hi(SPARC_PSR_EF_MASK), %l4
+
+	andn	%l3, %l4, %l3			! Clear PSR[EF]
+	and	%g1, %l4, %g1			! Select PSR[EF] only from %g1
+	or	%l3, %g1, %l3			! Set PSR[EF] according to %g1
+	mov	%l3, %psr			! Set PSR. Write delay 3 instr
+	or	%l0, SPARC_PSR_ET_MASK, %g1	! return old PSR with ET=1
+	nop					! PSR write delay
+	jmp	%l2				! Return to after TA 9.
+	 rett	%l2 + 4
+#endif
+
 #if defined(RTEMS_PARAVIRT)
 
         PUBLIC(_SPARC_Get_PSR)

@@ -153,6 +153,9 @@ extern "C" {
 #define SPARC_SWTRAP_SYSCALL 0
 #define SPARC_SWTRAP_IRQDIS 9
 #define SPARC_SWTRAP_IRQEN 10
+#if SPARC_HAS_FPU == 1
+#define SPARC_SWTRAP_IRQDIS_FP 11
+#endif
 
 #ifndef ASM
 
