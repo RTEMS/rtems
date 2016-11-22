@@ -49,8 +49,8 @@ void Task_switch(
       Run_count[ index ] += 1;
 
       status = rtems_clock_get_tod( &time );
-      fatal_directive_status_with_level( status, RTEMS_SUCCESSFUL,
-                                         "rtems_clock_get_tod", 1 );
+      fatal_directive_check_status_only( status, RTEMS_SUCCESSFUL,
+                                         "rtems_clock_get_tod" );
 
       if (taskSwitchLogIndex <
           (sizeof taskSwitchLog / sizeof taskSwitchLog[0])) {
