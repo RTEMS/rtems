@@ -132,7 +132,7 @@ Status_Control _CORE_message_queue_Submit(
     executing->Wait.count = submit_type;
 
     _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
-    _Thread_queue_Enqueue_critical(
+    _Thread_queue_Enqueue(
       &the_message_queue->Wait_queue.Queue,
       the_message_queue->operations,
       executing,

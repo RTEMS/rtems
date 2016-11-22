@@ -121,7 +121,7 @@ int _POSIX_Condition_variables_Wait_support(
       &queue_context,
       _POSIX_Condition_variables_Enqueue_callout
     );
-    _Thread_queue_Enqueue_critical(
+    _Thread_queue_Enqueue(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,

@@ -516,7 +516,7 @@ typedef struct {
      /****************** end of common block ********************/
 
   /**
-   * @brief Thread queue callout for _Thread_queue_Enqueue_critical().
+   * @brief Thread queue callout for _Thread_queue_Enqueue().
    */
   Thread_queue_MP_callout  thread_queue_callout;
 

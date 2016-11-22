@@ -115,7 +115,7 @@ static void _Mutex_Acquire_slow(
     _Thread_queue_Deadlock_fatal
   );
   _Thread_queue_Context_set_ISR_level( queue_context, level );
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,
     executing,

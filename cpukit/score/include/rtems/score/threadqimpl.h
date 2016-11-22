@@ -101,7 +101,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
  * @param queue_context The thread queue context.
  * @param enqueue_callout The enqueue callout.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_enqueue_callout(
@@ -117,7 +117,7 @@ _Thread_queue_Context_set_enqueue_callout(
  *
  * @param queue_context The thread queue context.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_do_nothing_enqueue_callout(
@@ -133,7 +133,7 @@ _Thread_queue_Context_set_do_nothing_enqueue_callout(
  * @param queue_context The thread queue context.
  * @param timeout The new timeout.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_no_timeout(
@@ -149,7 +149,7 @@ _Thread_queue_Context_set_no_timeout(
  * @param queue_context The thread queue context.
  * @param discipline The clock discipline to use for the timeout.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_relative_timeout(
@@ -167,7 +167,7 @@ _Thread_queue_Context_set_relative_timeout(
  * @param queue_context The thread queue context.
  * @param discipline The clock discipline to use for the timeout.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
 _Thread_queue_Context_set_absolute_timeout(
@@ -183,7 +183,7 @@ _Thread_queue_Context_set_absolute_timeout(
  * @brief Sets the deadlock callout in the thread queue
  * context.
  *
- * A deadlock callout must be provided for _Thread_queue_Enqueue_critical()
+ * A deadlock callout must be provided for _Thread_queue_Enqueue()
  * operations that operate on thread queues which may have an owner, e.g. mutex
  * objects.  Available deadlock callouts are _Thread_queue_Deadlock_status()
  * and _Thread_queue_Deadlock_fatal().
@@ -191,7 +191,7 @@ _Thread_queue_Context_set_absolute_timeout(
  * @param queue_context The thread queue context.
  * @param deadlock_callout The deadlock callout.
  *
- * @see _Thread_queue_Enqueue_critical().
+ * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_deadlock_callout(
   Thread_queue_Context          *queue_context,
@@ -555,7 +555,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * complete.  The operation to enqueue the thread on the queue is protected by
  * the thread queue lock.  This makes it possible to use the thread queue lock
  * to protect the state of objects embedding the thread queue and directly
- * enter _Thread_queue_Enqueue_critical() in case the thread must block.
+ * enter _Thread_queue_Enqueue() in case the thread must block.
  *
  * @code
  * #include <rtems/score/threadqimpl.h>
@@ -583,7 +583,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *     _Thread_queue_Release( &mutex->Queue, queue_context );
  *   } else {
  *     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
- *     _Thread_queue_Enqueue_critical(
+ *     _Thread_queue_Enqueue(
  *       &mutex->Queue.Queue,
  *       MUTEX_TQ_OPERATIONS,
  *       executing,
@@ -601,7 +601,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @param[in] state The new state of the thread.
  * @param[in] queue_context The thread queue context of the lock acquire.
  */
-void _Thread_queue_Enqueue_critical(
+void _Thread_queue_Enqueue(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
@@ -639,44 +639,6 @@ Status_Control _Thread_queue_Enqueue_sticky(
   Thread_queue_Context          *queue_context
 );
 #endif
-
-/**
- * @brief Acquires the thread queue lock and calls
- * _Thread_queue_Enqueue_critical().
- */
-RTEMS_INLINE_ROUTINE void _Thread_queue_Enqueue(
-  Thread_queue_Control          *the_thread_queue,
-  const Thread_queue_Operations *operations,
-  Thread_Control                *the_thread,
-  States_Control                 state,
-  uint64_t                       timeout,
-  Watchdog_Discipline            discipline,
-  uint32_t                       expected_level
-)
-{
-  Thread_queue_Context queue_context;
-
-  _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Acquire( the_thread_queue, &queue_context );
-  _Thread_queue_Context_set_enqueue_callout(
-    &queue_context,
-    _Thread_queue_Enqueue_do_nothing
-  );
-
-  if ( discipline == WATCHDOG_ABSOLUTE ) {
-    _Thread_queue_Context_set_absolute_timeout( &queue_context, timeout );
-  } else {
-    _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
-  }
-
-  _Thread_queue_Enqueue_critical(
-    &the_thread_queue->Queue,
-    operations,
-    the_thread,
-    state,
-    &queue_context
-  );
-}
 
 /**
  * @brief Extracts the thread from the thread queue, restores the default wait

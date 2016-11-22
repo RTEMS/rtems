@@ -193,7 +193,7 @@ struct Thread_queue_Context {
   Thread_queue_Lock_context Lock_context;
 
   /**
-   * @brief The enqueue callout for _Thread_queue_Enqueue_critical().
+   * @brief The enqueue callout for _Thread_queue_Enqueue().
    *
    * The callout is invoked after the release of the thread queue lock with
    * thread dispatching disabled.  Afterwards the thread is blocked.
@@ -272,7 +272,7 @@ struct Thread_queue_Context {
   /**
    * @brief Invoked in case of a detected deadlock.
    *
-   * Must be initialized for _Thread_queue_Enqueue_critical() in case the
+   * Must be initialized for _Thread_queue_Enqueue() in case the
    * thread queue may have an owner, e.g. for mutex objects.
    *
    * @see _Thread_queue_Context_set_deadlock_callout().

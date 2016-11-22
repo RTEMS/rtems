@@ -79,7 +79,7 @@ Status_Control _CORE_RWLock_Seize_for_reading(
   executing->Wait.option = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
 
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
      &the_rwlock->Wait_queue.Queue,
      CORE_RWLOCK_TQ_OPERATIONS,
      executing,

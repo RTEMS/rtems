@@ -272,7 +272,7 @@ Status_Control _MPCI_Send_request_packet(
   (*_MPCI_table->send_packet)( destination, the_packet );
 
   _Thread_queue_Acquire( &_MPCI_Remote_blocked_threads, &queue_context );
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
     &_MPCI_Remote_blocked_threads.Queue,
     &_Thread_queue_Operations_FIFO,
     executing,

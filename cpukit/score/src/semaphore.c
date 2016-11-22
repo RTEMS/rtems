@@ -106,7 +106,7 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
-    _Thread_queue_Enqueue_critical(
+    _Thread_queue_Enqueue(
       &sem->Queue.Queue,
       SEMAPHORE_TQ_OPERATIONS,
       executing,

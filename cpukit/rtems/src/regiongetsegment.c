@@ -92,7 +92,7 @@ rtems_status_code rtems_region_get_segment(
         _Region_Enqueue_callout
       );
       _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
-      _Thread_queue_Enqueue_critical(
+      _Thread_queue_Enqueue(
         &the_region->Wait_queue.Queue,
         the_region->wait_operations,
         executing,

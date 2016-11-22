@@ -449,7 +449,7 @@ void _Thread_Join(
   executing->Wait.return_argument = NULL;
 #endif
 
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
     executing,

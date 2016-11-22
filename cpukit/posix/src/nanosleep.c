@@ -62,7 +62,7 @@ static inline int nanosleep_helper(
    *  Block for the desired amount of time
    */
   _Thread_queue_Acquire( &_Nanosleep_Pseudo_queue, &queue_context );
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
     &_Nanosleep_Pseudo_queue.Queue,
     &_Thread_queue_Operations_FIFO,
     _Thread_Executing,

@@ -410,7 +410,7 @@ static void _Thread_queue_Timeout(
   }
 }
 
-void _Thread_queue_Enqueue_critical(
+void _Thread_queue_Enqueue(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,

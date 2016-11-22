@@ -113,7 +113,7 @@ static Thread_Control *_Condition_Do_wait(
     &context->Base,
     _Condition_Enqueue_callout
   );
-  _Thread_queue_Enqueue_critical(
+  _Thread_queue_Enqueue(
     &condition->Queue.Queue,
     CONDITION_TQ_OPERATIONS,
     executing,

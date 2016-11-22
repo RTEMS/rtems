@@ -37,7 +37,7 @@ Status_Control _CORE_mutex_Seize_slow(
       queue_context,
       _Thread_queue_Deadlock_status
     );
-    _Thread_queue_Enqueue_critical(
+    _Thread_queue_Enqueue(
       &the_mutex->Wait_queue.Queue,
       operations,
       executing,
