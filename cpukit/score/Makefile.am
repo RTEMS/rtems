@@ -155,7 +155,6 @@ libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c
 libscore_a_SOURCES += src/schedulerstrongapa.c
-libscore_a_SOURCES += src/schedulersmpdebug.c
 libscore_a_SOURCES += src/smp.c
 libscore_a_SOURCES += src/smplock.c
 libscore_a_SOURCES += src/smpmulticastaction.c

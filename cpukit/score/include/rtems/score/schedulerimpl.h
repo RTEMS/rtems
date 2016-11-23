@@ -859,17 +859,11 @@ typedef void ( *Scheduler_Release_idle_thread )(
   Thread_Control    *idle
 );
 
-extern const bool _Scheduler_Thread_state_valid_state_changes[ 3 ][ 3 ];
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Thread_change_state(
   Thread_Control         *the_thread,
   Thread_Scheduler_state  new_state
 )
 {
-  _Assert(
-    _Scheduler_Thread_state_valid_state_changes
-      [ the_thread->Scheduler.state ][ new_state ]
-  );
   _Assert(
     _ISR_lock_Is_owner( &the_thread->Scheduler.Lock )
       || the_thread->Scheduler.state == THREAD_SCHEDULER_BLOCKED

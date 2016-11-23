@@ -425,8 +425,6 @@ static inline void _Scheduler_SMP_Node_update_priority(
   node->priority = new_priority;
 }
 
-extern const bool _Scheduler_SMP_Node_valid_state_changes[ 3 ][ 3 ];
-
 static inline void _Scheduler_SMP_Node_change_state(
   Scheduler_Node           *node,
   Scheduler_SMP_Node_state  new_state
@@ -435,10 +433,6 @@ static inline void _Scheduler_SMP_Node_change_state(
   Scheduler_SMP_Node *the_node;
 
   the_node = _Scheduler_SMP_Node_downcast( node );
-  _Assert(
-    _Scheduler_SMP_Node_valid_state_changes[ the_node->state ][ new_state ]
-  );
-
   the_node->state = new_state;
 }
 
