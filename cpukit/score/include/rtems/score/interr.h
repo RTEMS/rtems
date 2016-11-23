@@ -48,38 +48,38 @@ typedef enum {
    *
    * @see Internal_errors_Core_list.
    */
-  INTERNAL_ERROR_CORE,
+  INTERNAL_ERROR_CORE = 0,
 
   /**
    * @brief Errors of the RTEMS API.
    */
-  INTERNAL_ERROR_RTEMS_API,
+  INTERNAL_ERROR_RTEMS_API = 1,
 
   /**
    * @brief Errors of the POSIX API.
    */
-  INTERNAL_ERROR_POSIX_API,
+  INTERNAL_ERROR_POSIX_API = 2,
 
   /**
    * @brief Fatal source for the block device cache.
    *
    * @see rtems_bdbuf_fatal_code.
    */
-  RTEMS_FATAL_SOURCE_BDBUF,
+  RTEMS_FATAL_SOURCE_BDBUF = 3,
 
   /**
    * @brief Fatal source for application specific errors.
    *
    * The fatal code is application specific.
    */
-  RTEMS_FATAL_SOURCE_APPLICATION,
+  RTEMS_FATAL_SOURCE_APPLICATION = 4,
 
   /**
    * @brief Fatal source of exit().
    *
    * The fatal code is the exit() status code.
    */
-  RTEMS_FATAL_SOURCE_EXIT,
+  RTEMS_FATAL_SOURCE_EXIT = 5,
 
   /**
    * @brief Fatal source for BSP errors.
@@ -89,7 +89,7 @@ typedef enum {
    *
    * @see bsp_fatal_code and bsp_fatal().
    */
-  RTEMS_FATAL_SOURCE_BSP,
+  RTEMS_FATAL_SOURCE_BSP = 6,
 
   /**
    * @brief Fatal source of assert().
@@ -98,14 +98,14 @@ typedef enum {
    *
    * @see rtems_assert_context.
    */
-  RTEMS_FATAL_SOURCE_ASSERT,
+  RTEMS_FATAL_SOURCE_ASSERT = 7,
 
   /**
    * @brief Fatal source of the stack checker.
    *
    * The fatal code is the object name of the executing task.
    */
-  RTEMS_FATAL_SOURCE_STACK_CHECKER,
+  RTEMS_FATAL_SOURCE_STACK_CHECKER = 8,
 
   /**
    * @brief Fatal source of the exceptions.
@@ -114,14 +114,14 @@ typedef enum {
    *
    * @see rtems_exception_frame and rtems_exception_frame_print().
    */
-  RTEMS_FATAL_SOURCE_EXCEPTION,
+  RTEMS_FATAL_SOURCE_EXCEPTION = 9,
 
   /**
    * @brief Fatal source of SMP domain.
    *
    * @see SMP_Fatal_code.
    */
-  RTEMS_FATAL_SOURCE_SMP,
+  RTEMS_FATAL_SOURCE_SMP = 10,
 
   /**
    * @brief The last available fatal source.
