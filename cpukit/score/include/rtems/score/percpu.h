@@ -334,6 +334,13 @@ typedef struct Per_CPU_Control {
    */
   volatile bool dispatch_necessary;
 
+  /*
+   * Ensure that the executing member is at least 4-byte aligned, see
+   * PER_CPU_OFFSET_EXECUTING.  This is necessary on CPU ports with relaxed
+   * alignment restrictions, e.g. type alignment is less than the type size.
+   */
+  bool reserved_for_executing_alignment[ 3 ];
+
   /**
    * @brief This is the thread executing on this processor.
    *
