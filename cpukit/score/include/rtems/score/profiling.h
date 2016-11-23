@@ -119,6 +119,12 @@ static inline void _Profiling_Update_max_interrupt_delay(
 #endif
 }
 
+/**
+ * @brief Updates the interrupt profiling statistics.
+ *
+ * Must be called with the interrupt stack and before the thread dispatch
+ * disable level is decremented.
+ */
 void _Profiling_Outer_most_interrupt_entry_and_exit(
   Per_CPU_Control *cpu,
   CPU_Counter_ticks interrupt_entry_instant,

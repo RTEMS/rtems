@@ -260,6 +260,9 @@ ppc_exc_wrap_async_normal:
 
 	/* Increment ISR nest level and thread dispatch disable level */
 	cmpwi	ISR_NEST_REGISTER, 0
+#ifdef RTEMS_PROFILING
+	cmpwi	cr2, ISR_NEST_REGISTER, 0
+#endif
 	addi	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
 	addi	DISPATCH_LEVEL_REGISTER, DISPATCH_LEVEL_REGISTER, 1
 	stw	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
@@ -285,6 +288,16 @@ ppc_exc_wrap_async_normal:
 	bl	bsp_interrupt_dispatch
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
+#ifdef RTEMS_PROFILING
+	/* Update profiling data if necessary */
+	bne	cr2, .Lprofiling_done
+	GET_SELF_CPU_CONTROL	r3
+	mr	r4, ENTRY_INSTANT_REGISTER
+	GET_TIME_BASE	r5
+	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+.Lprofiling_done:
+#endif /* RTEMS_PROFILING */
+
 	/* Load some per-CPU variables */
 	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
 	lbz	SCRATCH_0_REGISTER, PER_CPU_DISPATCH_NEEDED(SELF_CPU_REGISTER)
@@ -304,37 +317,17 @@ ppc_exc_wrap_async_normal:
 	or	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, SCRATCH_1_REGISTER
 	subi	DISPATCH_LEVEL_REGISTER, SCRATCH_2_REGISTER, 1
 	or.	SCRATCH_0_REGISTER, SCRATCH_0_REGISTER, DISPATCH_LEVEL_REGISTER
-#ifdef RTEMS_PROFILING
-	cmpwi	cr2, SCRATCH_0_REGISTER, 0
-	subic.	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
-#else
 	subi	ISR_NEST_REGISTER, ISR_NEST_REGISTER, 1
-#endif
 
 	/* Store thread dispatch disable and ISR nest levels */
 	stw	DISPATCH_LEVEL_REGISTER, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(SELF_CPU_REGISTER)
 	stw	ISR_NEST_REGISTER, PER_CPU_ISR_NEST_LEVEL(SELF_CPU_REGISTER)
 
-#ifdef RTEMS_PROFILING
-	/* Store profiling data if necessary */
-	bne	.Lprofiling_done
-	mr	r3, SELF_CPU_REGISTER
-	mr	r4, ENTRY_INSTANT_REGISTER
-	GET_TIME_BASE	r5
-	bl	_Profiling_Outer_most_interrupt_entry_and_exit
-	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
-.Lprofiling_done:
-#endif /* RTEMS_PROFILING */
-
 	/*
 	 * Check thread dispatch necessary, ISR dispatch disable and thread
 	 * dispatch disable level.
 	 */
-#ifdef RTEMS_PROFILING
-	bne	cr2, .Lthread_dispatch_done
-#else
 	bne	.Lthread_dispatch_done
-#endif
 
 	/* Thread dispatch */
 .Ldo_thread_dispatch:

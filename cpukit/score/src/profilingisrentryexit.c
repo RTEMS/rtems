@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/score/profiling.h>
+#include <rtems/score/assert.h>
 
 void _Profiling_Outer_most_interrupt_entry_and_exit(
   Per_CPU_Control *cpu,
@@ -24,18 +25,26 @@ void _Profiling_Outer_most_interrupt_entry_and_exit(
   CPU_Counter_ticks interrupt_exit_instant
 )
 {
-#if defined( RTEMS_PROFILING )
-  Per_CPU_Stats *stats = &cpu->Stats;
-  CPU_Counter_ticks delta = _CPU_Counter_difference(
+#if defined(RTEMS_PROFILING)
+  Per_CPU_Stats     *stats;
+  CPU_Counter_ticks  delta;
+
+  _Assert( cpu->isr_nest_level == 1 );
+
+  stats = &cpu->Stats;
+  delta = _CPU_Counter_difference(
     interrupt_exit_instant,
     interrupt_entry_instant
   );
-
   ++stats->interrupt_count;
   stats->total_interrupt_time += delta;
 
   if ( stats->max_interrupt_time < delta ) {
     stats->max_interrupt_time = delta;
+  }
+
+  if ( cpu->thread_dispatch_disable_level == 1 ) {
+    stats->thread_dispatch_disabled_instant = interrupt_entry_instant;
   }
 #else
   (void) cpu;
