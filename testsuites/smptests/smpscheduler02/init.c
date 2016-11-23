@@ -348,10 +348,10 @@ static void test(void)
     sc = rtems_semaphore_obtain(imtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_start(task_id, task, 0);
+    sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    sc = rtems_task_set_scheduler(task_id, scheduler_b_id, 1);
+    sc = rtems_task_start(task_id, task, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
