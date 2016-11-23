@@ -157,7 +157,7 @@ _ARMV4_Exception_interrupt:
 	 * Check thread dispatch necessary, ISR dispatch disable and thread
 	 * dispatch disable level.
 	 */
-	cmp	r0, #0
+	cmp	r1, #0
 	bne	.Lthread_dispatch_done
 
 	/* Thread dispatch */
