@@ -1,16 +1,12 @@
-sparc-rtems4.11-run is /home/joel/rtems-4.11-work/tools/bin/sparc-rtems4.11-run
-
-
-*** TEST KEY 08 ***
+*** BEGIN OF TEST PSXKEY 8 ***
 Init - Semaphore 1 create - OK
 Init - Semaphore 2 create - OK
 Init - pthread Key create - OK
-Init - 720 tasks have been created - OK
-Init - 720 tasks have been setted key data - OK
-Init - flush semaphore 2 - OK
-Init - sleep to yield processor - OK
-Init - 720 Tasks have been got key data - OK
+Init - 9 tasks have been created - OK
+Init - 9 tasks have been setted key data - OK
+Init - release semaphore 2 - OK
+Init - 9 Tasks have been got key data - OK
 Init - pthread Key delete - OK
 Init - semaphore 1 delete - OK
 Init - semaphore 2 delete - OK
-*** END OF TEST KEY 08***
+*** END OF TEST PSXKEY 8 ***

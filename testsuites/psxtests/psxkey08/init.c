@@ -20,33 +20,34 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <rtems/libcsupport.h>
+
 const char rtems_test_name[] = "PSXKEY 8";
 
-pthread_key_t Key;
-int created_task_count, setted_task_count, got_task_count;
-int all_thread_created;
-rtems_id sema1, sema2;
-rtems_name name1, name2;
+static pthread_key_t Key;
+static int created_task_count, setted_task_count, got_task_count;
+static int all_thread_created;
+static rtems_id sema1, sema2;
+static rtems_name name1, name2;
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument arg);
-rtems_task test_task(rtems_task_argument arg);
-
-rtems_task test_task(rtems_task_argument arg)
+static rtems_task test_task(rtems_task_argument arg)
 {
-  int sc;
-  int *value_p, *value_p2;
+  rtems_status_code sc;
+  const void *value_p;
+  const void *value_p2;
 
-  value_p = malloc( sizeof( int ) );
+  value_p = &sc;
   sc = pthread_setspecific( Key, value_p );
   rtems_test_assert( !sc );
   ++setted_task_count;
   sc = rtems_semaphore_release( sema1 );
 
-  /**
-   * blocked untill all tasks have been created.
-   */
-  rtems_semaphore_obtain( sema2 , RTEMS_WAIT, 0 );
+  /* Blocked until all tasks have been created */
+  sc = rtems_semaphore_obtain( sema2 , RTEMS_WAIT, 0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_semaphore_release( sema2 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   value_p2 = pthread_getspecific( Key );
   rtems_test_assert( value_p == value_p2 );
@@ -55,16 +56,18 @@ rtems_task test_task(rtems_task_argument arg)
   rtems_task_delete( RTEMS_SELF );
 }
 
-rtems_task Init(rtems_task_argument arg)
+static rtems_task Init(rtems_task_argument arg)
 {
-  rtems_status_code  status;
-  int                sc;
-  uintptr_t          max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
-  void              *greedy;
+  rtems_status_code        sc;
+  int                      eno;
+  rtems_resource_snapshot  snapshot;
+  uintptr_t                max_free_size = 13 * RTEMS_MINIMUM_STACK_SIZE;
+  void                    *greedy;
 
   all_thread_created = 0;
 
   TEST_BEGIN();
+  rtems_resource_snapshot_take(&snapshot);
 
   puts( "Init - Semaphore 1 create - OK" );
   name1 = rtems_build_name('S', 'E', 'M', '1');
@@ -88,8 +91,8 @@ rtems_task Init(rtems_task_argument arg)
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - pthread Key create - OK" );
-  sc = pthread_key_create( &Key, NULL );
-  rtems_test_assert( !sc );
+  eno = pthread_key_create( &Key, NULL );
+  rtems_test_assert( eno == 0 );
 
   /* Reduce workspace size if necessary to shorten test time */
   greedy = rtems_workspace_greedy_allocate( &max_free_size, 1 );
@@ -137,29 +140,26 @@ rtems_task Init(rtems_task_argument arg)
   );
   rtems_test_assert( created_task_count == setted_task_count );
 
-  /* unblock all created tasks to let them set key data.*/
-  puts( "Init - flush semaphore 2 - OK" );
-  sc = rtems_semaphore_flush( sema2 );
+  /* Ready all created tasks one by one to let them check the key data.*/
+  puts( "Init - release semaphore 2 - OK" );
+  sc = rtems_semaphore_release( sema2 );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
-  puts( "Init - sleep to yield processor - OK" );
-  status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
-  directive_failed( status, "rtems_task_wake_after" );
 
   printf( "Init - %d Tasks have been got key data - OK\n", got_task_count );
   rtems_test_assert( created_task_count == got_task_count );
   puts( "Init - pthread Key delete - OK" );
-  sc = pthread_key_delete( Key );
-  rtems_test_assert( sc == 0 );
+  eno = pthread_key_delete( Key );
+  rtems_test_assert( eno == 0 );
 
   puts( "Init - semaphore 1 delete - OK" );
   sc = rtems_semaphore_delete( sema1 );
-  rtems_test_assert( !sc );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   puts( "Init - semaphore 2 delete - OK" );
   sc = rtems_semaphore_delete( sema2 );
-  rtems_test_assert( !sc );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
+  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
   TEST_END();
   exit(0);
 }
@@ -168,7 +168,7 @@ rtems_task Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS rtems_resource_unlimited(5)
+#define CONFIGURE_MAXIMUM_TASKS 14
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 
@@ -179,8 +179,6 @@ rtems_task Init(rtems_task_argument arg)
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#define CONFIGURE_UNIFIED_WORK_AREAS
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
