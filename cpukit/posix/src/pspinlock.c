@@ -98,8 +98,8 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
       &cpu_self->Lock_stats_context
     );
     _POSIX_Spinlock_Owner = _SMP_Get_current_processor();
-#endif
   }
+#endif
 
   if ( ++_POSIX_Spinlock_Nest_level == 1) {
     the_spinlock->interrupt_state = level;
