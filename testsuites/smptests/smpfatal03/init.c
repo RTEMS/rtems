@@ -21,27 +21,21 @@
 
 const char rtems_test_name[] = "SMPFATAL 3";
 
-static void task(rtems_task_argument arg)
+static void bad( rtems_id timer_id, void *arg )
 {
-  rtems_status_code sc;
   rtems_id *sem_id;
 
-  sem_id = (rtems_id *) arg;
+  sem_id = arg;
 
-  sc = rtems_semaphore_obtain(*sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(0);
+  rtems_semaphore_obtain( *sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_test_assert( 0 );
 }
 
-static void Init(rtems_task_argument arg)
+static void Init( rtems_task_argument arg )
 {
   rtems_status_code sc;
-  rtems_id task_id;
-  rtems_id sem_id;
+  rtems_id          timer_id;
+  rtems_id          sem_id;
 
   TEST_BEGIN();
 
@@ -53,27 +47,22 @@ static void Init(rtems_task_argument arg)
     1,
     &sem_id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_create(
-    rtems_build_name('T', 'A', 'S', 'K'),
-    1,
-    RTEMS_MINIMUM_STACK_SIZE,
-    RTEMS_DEFAULT_MODES,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    &task_id
+  sc = rtems_timer_create(
+    rtems_build_name( 'E', 'V', 'I', 'L' ),
+    &timer_id
   );
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_start(task_id, task, (rtems_task_argument) &sem_id);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_semaphore_obtain( sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  sc = rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  sc = rtems_timer_fire_after( timer_id, 1, bad, &sem_id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  _Thread_Dispatch_disable();
-  rtems_semaphore_obtain(sem_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(0);
+  rtems_task_wake_after( 2 );
+  rtems_test_assert( 0 );
 }
 
 static void fatal_extension(
@@ -91,14 +80,15 @@ static void fatal_extension(
   }
 }
 
-#define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = fatal_extension }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_MAXIMUM_TASKS 2
+#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TIMERS 1
 #define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
