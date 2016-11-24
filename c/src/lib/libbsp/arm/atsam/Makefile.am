@@ -334,7 +334,6 @@ libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/bspclean.c
 libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
@@ -394,6 +393,7 @@ libbsp_a_SOURCES += libraries/libboard/source/dbg_console.c
 # Startup
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
+libbsp_a_SOURCES += ../shared/armv7m/startup/armv7m-cpucounter.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/pin-config.c
