@@ -35,6 +35,11 @@ extern "C" {
 
 extern const console_fns zynq_uart_fns;
 
+/**
+  * Flush TX FIFO and wait until it is empty. Used in bsp_reset.
+  */
+void zynq_uart_reset_tx_flush(int minor);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

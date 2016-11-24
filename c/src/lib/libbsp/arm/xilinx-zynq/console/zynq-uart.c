@@ -226,3 +226,16 @@ const console_fns zynq_uart_fns = {
   .deviceSetAttributes = zynq_uart_set_attribues,
   .deviceOutputUsesInterrupts = false
 };
+
+void zynq_uart_reset_tx_flush(int minor)
+{
+  volatile zynq_uart *regs = zynq_uart_get_regs(minor);
+  int                 c = 4;
+
+  while (c-- > 0)
+    zynq_uart_write_polled(minor, '\r');
+
+  while ((regs->channel_sts & ZYNQ_UART_CHANNEL_STS_TEMPTY) == 0) {
+    /* Wait */
+  }
+}

@@ -12,12 +12,18 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp.h>
 #include <bsp/bootcard.h>
+#include <bsp/zynq-uart.h>
 
 void bsp_reset(void)
 {
   volatile uint32_t *slcr_unlock = (volatile uint32_t *) 0xf8000008;
   volatile uint32_t *pss_rst_ctrl = (volatile uint32_t *) 0xf8000200;
+
+  if (Console_Port_Tbl != NULL) {
+    zynq_uart_reset_tx_flush((int) Console_Port_Minor);
+  }
 
   while (true) {
     *slcr_unlock = 0xdf0d;
