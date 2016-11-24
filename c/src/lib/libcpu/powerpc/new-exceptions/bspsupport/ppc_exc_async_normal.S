@@ -54,7 +54,9 @@
 #define ENTRY_INSTANT_OFFSET GPR13_OFFSET
 
 .macro GET_TIME_BASE REG
-#ifdef ppc8540
+#if defined(__PPC_CPU_E6500__)
+	mfspr \REG, FSL_EIS_ATBL
+#elif defined(ppc8540)
 	mfspr	\REG, TBRL
 #else /* ppc8540 */
 	mftb	\REG
