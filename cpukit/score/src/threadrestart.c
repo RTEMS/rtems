@@ -449,11 +449,11 @@ void _Thread_Join(
   executing->Wait.return_argument = NULL;
 #endif
 
+  _Thread_queue_Context_set_thread_state( queue_context, waiting_for_join );
   _Thread_queue_Enqueue(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
     executing,
-    waiting_for_join,
     queue_context
   );
 }

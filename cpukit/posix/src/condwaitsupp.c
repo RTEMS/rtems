@@ -117,6 +117,10 @@ int _POSIX_Condition_variables_Wait_support(
   executing = _Thread_Executing;
 
   if ( !already_timedout ) {
+    _Thread_queue_Context_set_thread_state(
+      &queue_context,
+      STATES_WAITING_FOR_CONDITION_VARIABLE
+    );
     _Thread_queue_Context_set_enqueue_callout(
       &queue_context,
       _POSIX_Condition_variables_Enqueue_callout
@@ -125,7 +129,6 @@ int _POSIX_Condition_variables_Wait_support(
       &the_cond->Wait_queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,
-      STATES_WAITING_FOR_CONDITION_VARIABLE,
       &queue_context
     );
     error = _POSIX_Get_error_after_wait( executing );

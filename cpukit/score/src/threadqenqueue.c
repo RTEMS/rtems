@@ -414,7 +414,6 @@ void _Thread_queue_Enqueue(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
-  States_Control                 state,
   Thread_queue_Context          *queue_context
 )
 {
@@ -423,7 +422,7 @@ void _Thread_queue_Enqueue(
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet ) {
-    the_thread = _Thread_MP_Allocate_proxy( state );
+    the_thread = _Thread_MP_Allocate_proxy( queue_context->thread_state );
   }
 #endif
 
@@ -456,7 +455,7 @@ void _Thread_queue_Enqueue(
   /*
    *  Set the blocking state for this thread queue in the thread.
    */
-  _Thread_Set_state( the_thread, state );
+  _Thread_Set_state( the_thread, queue_context->thread_state );
 
   /*
    *  If the thread wants to timeout, then schedule its timer.

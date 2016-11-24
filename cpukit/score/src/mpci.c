@@ -253,6 +253,10 @@ Status_Control _MPCI_Send_request_packet(
       the_packet->timeout = _MPCI_table->default_timeout;
 
   _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_thread_state(
+    &queue_context,
+    STATES_WAITING_FOR_RPC_REPLY | extra_state
+  );
   _Thread_queue_Context_set_enqueue_callout(
     &queue_context,
     _MPCI_Enqueue_callout
@@ -276,7 +280,6 @@ Status_Control _MPCI_Send_request_packet(
     &_MPCI_Remote_blocked_threads.Queue,
     &_Thread_queue_Operations_FIFO,
     executing,
-    STATES_WAITING_FOR_RPC_REPLY | extra_state,
     &queue_context
   );
   return _Thread_Wait_get_status( executing );

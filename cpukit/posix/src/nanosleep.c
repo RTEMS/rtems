@@ -47,6 +47,10 @@ static inline int nanosleep_helper(
   err = 0;
 
   _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_set_thread_state(
+    &queue_context,
+    STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL
+  );
   _Thread_queue_Context_set_enqueue_callout(
     &queue_context,
     _Thread_queue_Enqueue_do_nothing
@@ -66,7 +70,6 @@ static inline int nanosleep_helper(
     &_Nanosleep_Pseudo_queue.Queue,
     &_Thread_queue_Operations_FIFO,
     _Thread_Executing,
-    STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL,
     &queue_context
   );
 

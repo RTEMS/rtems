@@ -32,6 +32,10 @@ Status_Control _CORE_mutex_Seize_slow(
 )
 {
   if ( wait ) {
+    _Thread_queue_Context_set_thread_state(
+      queue_context,
+      STATES_WAITING_FOR_MUTEX
+    );
     _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
     _Thread_queue_Context_set_deadlock_callout(
       queue_context,
@@ -41,7 +45,6 @@ Status_Control _CORE_mutex_Seize_slow(
       &the_mutex->Wait_queue.Queue,
       operations,
       executing,
-      STATES_WAITING_FOR_MUTEX,
       queue_context
     );
     return _Thread_Wait_get_status( executing );

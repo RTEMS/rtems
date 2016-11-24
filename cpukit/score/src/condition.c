@@ -109,6 +109,10 @@ static Thread_Control *_Condition_Do_wait(
   context->mutex = _mutex;
   condition = _Condition_Get( _condition );
   executing = _Condition_Queue_acquire_critical( condition, &context->Base );
+  _Thread_queue_Context_set_thread_state(
+    &context->Base,
+    STATES_WAITING_FOR_SYS_LOCK_CONDITION
+  );
   _Thread_queue_Context_set_enqueue_callout(
     &context->Base,
     _Condition_Enqueue_callout
@@ -117,7 +121,6 @@ static Thread_Control *_Condition_Do_wait(
     &condition->Queue.Queue,
     CONDITION_TQ_OPERATIONS,
     executing,
-    STATES_WAITING_FOR_SYS_LOCK_CONDITION,
     &context->Base
   );
 

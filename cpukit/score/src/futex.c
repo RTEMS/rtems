@@ -92,6 +92,10 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
   executing = _Futex_Queue_acquire_critical( futex, &queue_context );
 
   if ( *uaddr == val ) {
+    _Thread_queue_Context_set_thread_state(
+      &queue_context,
+      STATES_WAITING_FOR_SYS_LOCK_FUTEX
+    );
     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
@@ -99,7 +103,6 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
       &futex->Queue.Queue,
       FUTEX_TQ_OPERATIONS,
       executing,
-      STATES_WAITING_FOR_SYS_LOCK_FUTEX,
       &queue_context
     );
     eno = 0;

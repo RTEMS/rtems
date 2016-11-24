@@ -87,6 +87,10 @@ rtems_status_code rtems_region_get_segment(
       executing->Wait.return_argument = segment;
 
       /* FIXME: This is a home grown condition variable */
+      _Thread_queue_Context_set_thread_state(
+        &queue_context,
+        STATES_WAITING_FOR_SEGMENT
+      );
       _Thread_queue_Context_set_enqueue_callout(
         &queue_context,
         _Region_Enqueue_callout
@@ -96,7 +100,6 @@ rtems_status_code rtems_region_get_segment(
         &the_region->Wait_queue.Queue,
         the_region->wait_operations,
         executing,
-        STATES_WAITING_FOR_SEGMENT,
         &queue_context
       );
       return _Status_Get_after_wait( executing );

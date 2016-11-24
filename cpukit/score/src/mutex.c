@@ -109,6 +109,10 @@ static void _Mutex_Acquire_slow(
   Thread_queue_Context *queue_context
 )
 {
+  _Thread_queue_Context_set_thread_state(
+    queue_context,
+    STATES_WAITING_FOR_SYS_LOCK_MUTEX
+  );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Context_set_deadlock_callout(
     queue_context,
@@ -119,7 +123,6 @@ static void _Mutex_Acquire_slow(
     &mutex->Queue.Queue,
     MUTEX_TQ_OPERATIONS,
     executing,
-    STATES_WAITING_FOR_SYS_LOCK_MUTEX,
     queue_context
   );
 }

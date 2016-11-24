@@ -24,6 +24,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
+#include <rtems/score/states.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
@@ -191,6 +192,11 @@ struct Thread_queue_Context {
    * operations.
    */
   Thread_queue_Lock_context Lock_context;
+
+  /**
+   * @brief The thread state for _Thread_queue_Enqueue().
+   */
+  States_Control thread_state;
 
   /**
    * @brief The enqueue callout for _Thread_queue_Enqueue().

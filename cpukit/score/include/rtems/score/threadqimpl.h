@@ -96,6 +96,24 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 }
 
 /**
+ * @brief Sets the thread state for the thread to enqueue in the thread queue
+ * context.
+ *
+ * @param queue_context The thread queue context.
+ * @param state The thread state.
+ *
+ * @see _Thread_queue_Enqueue().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_thread_state(
+  Thread_queue_Context *queue_context,
+  States_Control        thread_state
+)
+{
+  queue_context->thread_state = thread_state;
+}
+
+/**
  * @brief Sets the enqueue callout in the thread queue context.
  *
  * @param queue_context The thread queue context.
@@ -557,6 +575,20 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * to protect the state of objects embedding the thread queue and directly
  * enter _Thread_queue_Enqueue() in case the thread must block.
  *
+ * The thread queue context must be set up with the following functions,
+ * otherwise the behaviour is unpredictable
+ *
+ * - _Thread_queue_Context_set_thread_state(),
+ *
+ * - _Thread_queue_Context_set_enqueue_callout() or
+ *   _Thread_queue_Context_set_do_nothing_enqueue_callout(),
+ *
+ * - _Thread_queue_Context_set_no_timeout() or
+ *   _Thread_queue_Context_set_relative_timeout() or
+ *   _Thread_queue_Context_set_absolute_timeout(), and
+ *
+ * - _Thread_queue_Context_set_deadlock_callout().
+ *
  * @code
  * #include <rtems/score/threadqimpl.h>
  * #include <rtems/score/statesimpl.h>
@@ -564,8 +596,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * #define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority
  *
  * typedef struct {
- *   Thread_queue_Control  Queue;
- *   Thread_Control       *owner;
+ *   Thread_queue_Control Queue;
  * } Mutex;
  *
  * void _Mutex_Obtain( Mutex *mutex )
@@ -578,17 +609,24 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *
  *   executing = _Thread_Executing;
  *
- *   if ( mutex->owner == NULL ) {
- *     mutex->owner = executing;
+ *   if ( mutex->Queue.owner == NULL ) {
+ *     mutex->Queue.owner = executing;
  *     _Thread_queue_Release( &mutex->Queue, queue_context );
  *   } else {
+ *     _Thread_queue_Context_set_thread_state(
+ *       &queue_context,
+ *       STATES_WAITING_FOR_MUTEX
+ *     );
  *     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+ *     _Thread_queue_Context_set_no_timeout( &queue_context );
+ *     _Thread_queue_Context_set_deadlock_callout(
+ *       queue_context,
+ *       _Thread_queue_Deadlock_fatal
+ *     );
  *     _Thread_queue_Enqueue(
  *       &mutex->Queue.Queue,
  *       MUTEX_TQ_OPERATIONS,
  *       executing,
- *       STATES_WAITING_FOR_MUTEX,
- *       0,
  *       &queue_context
  *     );
  *   }
@@ -598,14 +636,12 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * @param[in] queue The actual thread queue.
  * @param[in] operations The thread queue operations.
  * @param[in] the_thread The thread to enqueue.
- * @param[in] state The new state of the thread.
  * @param[in] queue_context The thread queue context of the lock acquire.
  */
 void _Thread_queue_Enqueue(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
   Thread_Control                *the_thread,
-  States_Control                 state,
   Thread_queue_Context          *queue_context
 );
 

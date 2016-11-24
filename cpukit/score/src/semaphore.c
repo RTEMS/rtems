@@ -103,6 +103,10 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
     sem->count = count - 1;
     _Semaphore_Queue_release( sem, level, &queue_context );
   } else {
+    _Thread_queue_Context_set_thread_state(
+      &queue_context,
+      STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE
+    );
     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
@@ -110,7 +114,6 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
       &sem->Queue.Queue,
       SEMAPHORE_TQ_OPERATIONS,
       executing,
-      STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE,
       &queue_context
     );
   }
