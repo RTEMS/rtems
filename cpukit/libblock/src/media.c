@@ -120,6 +120,7 @@ rtems_status_code rtems_media_listener_add(
       if (item != NULL) {
         item->listener = listener;
         item->listener_arg = listener_arg;
+        rtems_chain_initialize_node(&item->node);
         rtems_chain_append_unprotected(&listener_item_chain, &item->node);
       } else {
         sc = RTEMS_NO_MEMORY;
@@ -249,6 +250,7 @@ static void create_item(
     item->parent = parent;
     item->disk_path = (char *) item + sizeof(*item);
     memcpy(item->disk_path, disk_path, disk_path_size);
+    rtems_chain_initialize_node(&item->node);
     rtems_chain_append(&media_item_chain, &item->node);
   }
 }
