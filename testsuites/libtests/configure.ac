@@ -80,6 +80,17 @@ AS_IF([test x"$TEST_LIBDL" = x"yes"],[
 
 AM_CONDITIONAL(DLTESTS,[test x"$TEST_LIBDL" = x"yes"])
 
+# Must match the list in cpukit.
+AC_MSG_CHECKING([whether CPU supports libdebugger])
+case $RTEMS_CPU in
+  arm | i386)
+   TEST_LIBDEBUGGER=yes ;;
+  *)
+   TEST_LIBDEBUGGER=no ;;
+esac
+AC_MSG_RESULT([$TEST_LIBDEBUGGER])
+AM_CONDITIONAL(DEBUGGERTESTS,[test x"$TEST_LIBDEBUGGER" = x"yes"])
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 networking01/Makefile
@@ -169,5 +180,6 @@ math/Makefile
 mathf/Makefile
 mathl/Makefile
 complex/Makefile
+debugger01/Makefile
 ])
 AC_OUTPUT

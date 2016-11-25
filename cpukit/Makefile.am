@@ -18,6 +18,7 @@ SUBDIRS += libmd
 SUBDIRS += libgnat
 SUBDIRS += libdl
 SUBDIRS += libstdthreads
+SUBDIRS += libdebugger
 SUBDIRS += wrapup
 
 SUBDIRS += zlib
@@ -97,6 +98,14 @@ include_rtems_rtl_HEADERS += libdl/rtl-fwd.h libdl/rtl-obj.h libdl/rtl-obj-cache
 include_rtems_rtl_HEADERS += libdl/rtl-obj-comp.h libdl/rtl-unresolved.h
 include_rtems_rtl_HEADERS += libdl/rtl-indirect-ptr.h libdl/rtl-sym.h libdl/rtl-trace.h
 include_rtems_rtl_HEADERS += libdl/rap.h libdl/rap-shell.h
+endif
+
+if LIBDEBUGGER
+include_rtems_HEADERS += libdebugger/rtems-debugger.h
+include_rtems_debuggerdir = $(includedir)/rtems/debugger
+include_rtems_debugger_HEADERS  =
+include_rtems_debugger_HEADERS += libdebugger/rtems-debugger-server.h
+include_rtems_debugger_HEADERS +=  libdebugger/rtems-debugger-remote.h
 endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h

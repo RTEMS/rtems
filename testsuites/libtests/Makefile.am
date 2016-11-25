@@ -53,5 +53,9 @@ _SUBDIRS += dl04 dl05
 endif
 endif
 
+if DEBUGGERTESTS
+_SUBDIRS += debugger01
+endif
+
 include $(top_srcdir)/../automake/test-subdirs.am
 include $(top_srcdir)/../automake/local.am

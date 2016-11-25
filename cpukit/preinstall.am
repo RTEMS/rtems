@@ -233,6 +233,24 @@ $(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h: libdl/rap-shell.h $(PROJECT_INCLUDE)/r
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rap-shell.h
 endif
+if LIBDEBUGGER
+$(PROJECT_INCLUDE)/rtems/rtems-debugger.h: libdebugger/rtems-debugger.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-debugger.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-debugger.h
+
+$(PROJECT_INCLUDE)/rtems/debugger/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/debugger
+	@: > $(PROJECT_INCLUDE)/rtems/debugger/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/debugger/$(dirstamp)
+
+$(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-server.h: libdebugger/rtems-debugger-server.h $(PROJECT_INCLUDE)/rtems/debugger/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-server.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-server.h
+
+$(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-remote.h: libdebugger/rtems-debugger-remote.h $(PROJECT_INCLUDE)/rtems/debugger/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-remote.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/debugger/rtems-debugger-remote.h
+endif
 $(PROJECT_INCLUDE)/rtems/bspIo.h: include/rtems/bspIo.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/bspIo.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/bspIo.h

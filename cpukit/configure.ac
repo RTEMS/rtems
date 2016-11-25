@@ -396,6 +396,17 @@ esac
 AM_CONDITIONAL(LIBDL,[test x"$HAVE_LIBDL" = x"yes"])
 AC_MSG_RESULT([$HAVE_LIBDL])
 
+# Filter debugger to only build for architectures that have a target backend
+AC_MSG_CHECKING([whether CPU supports libdebugger])
+case $RTEMS_CPU in
+  arm | i386)
+   HAVE_LIBDEBUGGER=yes ;;
+  *)
+   HAVE_LIBDEBUGGER=no ;;
+esac
+AM_CONDITIONAL(LIBDEBUGGER,[test x"$HAVE_LIBDEBUGGER" = x"yes"])
+AC_MSG_RESULT([$HAVE_LIBDEBUGGER])
+
 AC_MSG_CHECKING([whether CPU supports SHA])
 case $RTEMS_CPU in
   m32c)
@@ -474,6 +485,7 @@ libi2c/Makefile
 libmd/Makefile
 libdl/Makefile
 libstdthreads/Makefile
+libdebugger/Makefile
 zlib/Makefile
 ftpd/Makefile
 telnetd/Makefile

@@ -95,6 +95,10 @@ if LIBDL
 TMP_LIBS += ../libdl/libdl.a
 endif
 
+if LIBDEBUGGER
+TMP_LIBS += ../libdebugger/libdebugger.a
+endif
+
 librtemscpu.a: $(TMP_LIBS)
 	rm -f $@
 	$(MKDIR_P) $(ARCH)

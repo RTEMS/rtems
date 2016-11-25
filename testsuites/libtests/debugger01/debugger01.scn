@@ -1,0 +1,188 @@
+
+*** BEGIN OF TEST DEBUGGER01 ***
+error: rtems-db: remote not found: test
+error: rtems-db: test remote: begin
+rtems-db: remote-debug is on
+rtems-db: remote running
+rtems-db: test remote: isconnected: not-connected
+error: rtems-db: test remote: connect
+rtems-db: remote running
+rtems-db: arm debug: (v3.0) ARMv7 [v7, all CP14 registers] breakpoints:5
+watchpoints:3
+rtems-db: sys:    : suspending
+rtems-db: sys: thd: 0a010001: signal: 0
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=0 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK?]]
+ remote: rx: message=1 length=5
+ remote: rx: xxxxx
+ remote: rx: message=2 length=5
+ remote: rx: $x#aa
+rtems-db: get:   5: xxxxx [[junk dropped]]
+rtems-db: get:   : $x#aa [[invalid checksum]]
+rtems-db: put:   1: -
+ remote: tx: message=0 length=1
+ remote: tx: -
+ remote: rx: message=3 length=141
+ remote: rx: $qSupported:multiprocess+;swbreak+;hwbreak+;qRelocInsn+;fork-events+;vfork-events+;exec-events+;vContSupported+;QThreadEvents+;no-resumed+#df
+rtems-db: get: 141:  [[junk dropped]]
+rtems-db: get:   : $qSupported:multiprocess+;swbreak+;hwbreak+;qRelocInsn+;fork-events+;vfork-events+;exec-events+;vContSupported+;QThreadEvents+;no-resumed+#df
+rtems-db: put:   1: +
+ remote: tx: message=1 length=1
+ remote: tx: +
+rtems-db: put: 167: $qSupported:PacketSize=4096;QNonStop-;multiprocess+;swbreak+;hwbreak-;qRelocInsn-;fork-events-;vfork-events-;exec-events-;vContSupported+;QThreadEvents-;no-resumed+#b3
+ remote: tx: message=2 length=167
+ remote: tx: $qSupported:PacketSize=4096;QNonStop-;multiprocess+;swbreak+;hwbreak-;qRelocInsn-;fork-events-;vfork-events-;exec-events-;vContSupported+;QThreadEvents-;no-resumed+#b3
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=4 length=19
+ remote: rx: $vMustReplyEmpty#3a
+rtems-db: get:  19: $vMustReplyEmpty#3a
+rtems-db: put:   1: +
+ remote: tx: message=3 length=1
+ remote: tx: +
+rtems-db: put:   4: $#00
+ remote: tx: message=4 length=4
+ remote: tx: $#00
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=5 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=6 length=10
+ remote: rx: $Hgp0.0#ad
+rtems-db: get:  10: $Hgp0.0#ad
+rtems-db: put:   1: +
+ remote: tx: message=5 length=1
+ remote: tx: +
+rtems-db: put:   6: $OK#9a
+ remote: tx: message=6 length=6
+ remote: tx: $OK#9a
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=7 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=8 length=12
+ remote: rx: $qTStatus#49
+rtems-db: get:  12: $qTStatus#49
+rtems-db: put:   1: +
+ remote: tx: message=7 length=1
+ remote: tx: +
+rtems-db: put:   4: $#00
+ remote: tx: message=8 length=4
+ remote: tx: $#00
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=9 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=10 length=5
+ remote: rx: $?#3f
+rtems-db: get:   5: $?#3f
+rtems-db: put:   1: +
+ remote: tx: message=9 length=1
+ remote: tx: +
+rtems-db: put:  26: $T00thread:p1.0a010001;#23
+ remote: tx: message=10 length=26
+ remote: tx: $T00thread:p1.0a010001;#23
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=11 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=12 length=16
+ remote: rx: $qfThreadInfo#bb
+rtems-db: get:  16: $qfThreadInfo#bb
+rtems-db: put:   1: +
+ remote: tx: message=11 length=1
+ remote: tx: +
+rtems-db: put:  16: $mp1.0a010001#ef
+ remote: tx: message=12 length=2
+ remote: tx: $mp1.0a010001#ef
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=13 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=14 length=16
+ remote: rx: $qsThreadInfo#c8
+rtems-db: get:  16: $qsThreadInfo#c8
+rtems-db: put:   1: +
+ remote: tx: message=13 length=1
+ remote: tx: +
+rtems-db: put:   5: $l#6c
+ remote: tx: message=14 length=5
+ remote: tx: $l#6c
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=15 length=1
+ remote: rx: -
+rtems-db: get:   1: - [[NACK]]
+rtems-db: put:   5: $l#6c
+ remote: tx: message=15 length=5
+ remote: tx: $l#6c
+ remote: rx: message=16 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=17 length=15
+ remote: rx: $qAttached:1#fa
+rtems-db: get:  15: $qAttached:1#fa
+rtems-db: put:   1: +
+ remote: tx: message=16 length=1
+ remote: tx: +
+rtems-db: put:   5: $1#31
+ remote: tx: message=17 length=5
+ remote: tx: $1#31
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=18 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=19 length=8
+ remote: rx: $Hc-1#09
+rtems-db: get:   8: $Hc-1#09
+rtems-db: put:   1: +
+ remote: tx: message=18 length=1
+ remote: tx: +
+rtems-db: put:   6: $OK#9a
+ remote: tx: message=19 length=6
+ remote: tx: $OK#9a
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=20 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=21 length=12
+ remote: rx: $qOffsets#4b
+rtems-db: get:  12: $qOffsets#4b
+rtems-db: put:   1: +
+ remote: tx: message=20 length=1
+ remote: tx: +
+rtems-db: put:   4: $#00
+ remote: tx: message=21 length=4
+ remote: tx: $#00
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=22 length=1
+ remote: rx: +
+rtems-db: get:   1: + [[ACK]]
+ remote: rx: message=23 length=6
+ remote: rx: $g#67+
+rtems-db: get:   6: $g#67
+rtems-db: put:   1: +
+ remote: tx: message=22 length=1
+ remote: tx: +
++ [[extra data: 0x2b]]rtems-db: put: 212: $cc381200cc381200cc381200cc3812004c162000a83f2000704520004c16200040362000481620000000000020ee1100cc38120028a2200089dc100089dc1000cc381200cc381200cc381200cc381200cc381200cc381200cc381200cc381200cc381200cc381200#95
+ remote: tx: message=23 length=2
+ remote: tx: $cc381200cc381200cc381200cc3812004c162000a83f2000704520004c16200040362000481620000000000020ee1100cc38120028a2200089dc100089dc1000cc381200cc381200cc381200cc381200cc381200cc381200cc381200cc381200cc3812g00cc381200#95
+rtems-db: test remote: isconnected: connected
+ remote: rx: message=24 length=7
+ remote: rx: $D;1#b0
+rtems-db: get:   7: $D;1#b0
+rtems-db: put:   1: +
+ remote: tx: message=24 length=1
+ remote: tx: +
+rtems-db: put:   6: $OK#9a
+ remote: tx: message=25 length=6
+ remote: tx: $OK#9a
+rtems-db: test remote: isconnected: connected
+rtems-db: test remote: disconnect host
+rtems-db: test remote: isconnected: not-connected
+rtems-db: events running
+rtems-db: events finishing
+rtems-db: sys:    : resuming
+rtems-db: test remote: isconnected: not-connected
+rtems-db: test remote: isconnected: not-connected
+*** END OF TEST DEBUGGER01 ***
