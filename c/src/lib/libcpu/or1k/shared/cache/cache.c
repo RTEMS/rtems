@@ -1,4 +1,8 @@
 /*
+ * COPYRIGHT (c) 2014 ÅAC Microtec AB <www.aacmicrotec.com>
+ * Contributor(s):
+ *  Karol Gugala <kgugala@antmicro.com>
+ *
  * COPYRIGHT (c) 2014 Hesham ALMatary <heshamelmatary@gmail.com>
  *
  * COPYRIGHT (c) 1989-2006
@@ -14,6 +18,7 @@
 #include <rtems/score/or1k-utility.h>
 #include <rtems/score/percpu.h>
 #include <libcpu/cache.h>
+#include <cache_.h>
 
 static inline void _CPU_OR1K_Cache_enable_data(void)
 {
@@ -206,17 +211,51 @@ void _CPU_cache_unfreeze_instruction(void)
 
 void _CPU_cache_flush_entire_data(void)
 {
+  int addr;
 
+  /* We have only 0 level cache so we do not need to invalidate others */
+  for (
+      addr = _CPU_cache_get_data_cache_size(0);
+      addr > 0;
+      addr -= CPU_DATA_CACHE_ALIGNMENT
+  ) {
+    _CPU_OR1K_Cache_data_block_flush((uintptr_t) addr);
+  }
 }
 
 void _CPU_cache_invalidate_entire_data(void)
 {
+  int addr;
 
+  /* We have only 0 level cache so we do not need to invalidate others */
+  for (
+      addr = _CPU_cache_get_data_cache_size(0);
+      addr > 0;
+      addr -= CPU_DATA_CACHE_ALIGNMENT
+  ) {
+    _CPU_cache_invalidate_1_data_line((uintptr_t) addr);
+  }
 }
 
 void _CPU_cache_invalidate_entire_instruction(void)
 {
+  int addr;
 
+  /* We have only 0 level cache so we do not need to invalidate others */
+  for (
+      addr = _CPU_cache_get_instruction_cache_size(0);
+      addr > 0;
+      addr -= CPU_INSTRUCTION_CACHE_ALIGNMENT
+  ) {
+    _CPU_cache_invalidate_1_instruction_line((uintptr_t) addr);
+  }
+
+  /* Flush instructions out of instruction buffer */
+  __asm__ volatile("l.nop");
+  __asm__ volatile("l.nop");
+  __asm__ volatile("l.nop");
+  __asm__ volatile("l.nop");
+  __asm__ volatile("l.nop");
 }
 
 void _CPU_cache_enable_data(void)
