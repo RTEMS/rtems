@@ -21,58 +21,6 @@
 #include <libcpu/cache.h>
 #include <cache_.h>
 
-static inline void _CPU_OR1K_Cache_enable_data(void)
-{
-  uint32_t sr;
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr | CPU_OR1K_SPR_SR_DCE);
-
-  _ISR_Local_enable(level);
-}
-
-static inline void _CPU_OR1K_Cache_disable_data(void)
-{
-  uint32_t sr;
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_DCE));
-
-  _ISR_Local_enable(level);
-}
-
-static inline void _CPU_OR1K_Cache_enable_instruction(void)
-{
-  uint32_t sr;
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr | CPU_OR1K_SPR_SR_ICE);
-
-  _ISR_Local_enable(level);
-}
-
-static inline void _CPU_OR1K_Cache_disable_instruction(void)
-{
-  uint32_t sr;
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_ICE));
-
-  _ISR_Local_enable(level);
-}
-
 static inline void _CPU_OR1K_Cache_data_block_prefetch(const void *d_addr)
 {
   ISR_Level level;
@@ -344,22 +292,52 @@ void _CPU_cache_invalidate_instruction_range(const void *i_addr, size_t n_bytes)
 
 void _CPU_cache_enable_data(void)
 {
-  _CPU_OR1K_Cache_enable_data();
+  uint32_t sr;
+  ISR_Level level;
+
+  _ISR_Local_disable (level);
+
+  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr | CPU_OR1K_SPR_SR_DCE);
+
+  _ISR_Local_enable(level);
 }
 
 void _CPU_cache_disable_data(void)
 {
-  _CPU_OR1K_Cache_disable_data();
+  uint32_t sr;
+  ISR_Level level;
 
+  _ISR_Local_disable (level);
+
+  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_DCE));
+
+  _ISR_Local_enable(level);
 }
 
 void _CPU_cache_enable_instruction(void)
 {
+  uint32_t sr;
+  ISR_Level level;
 
-  _CPU_OR1K_Cache_enable_instruction();
+  _ISR_Local_disable (level);
+
+  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, sr | CPU_OR1K_SPR_SR_ICE);
+
+  _ISR_Local_enable(level);
 }
 
 void _CPU_cache_disable_instruction(void)
 {
-  _CPU_OR1K_Cache_disable_instruction();
+  uint32_t sr;
+  ISR_Level level;
+
+  _ISR_Local_disable (level);
+
+  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
+  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_ICE));
+
+  _ISR_Local_enable(level);
 }
