@@ -224,6 +224,15 @@ void _CPU_cache_flush_data_range(const void *d_addr, size_t n_bytes)
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
 
+  if( final_address - d_addr > _CPU_cache_get_data_cache_size(0) ) {
+    /*
+     * Avoid iterating over the whole cache multiple times if the range is
+     * larger than the cache size.
+     */
+    _CPU_cache_flush_entire_data();
+    return;
+  }
+
   _ISR_Local_disable (level);
 
   while( d_addr <= final_address )  {
@@ -252,6 +261,15 @@ void _CPU_cache_invalidate_data_range(const void *d_addr, size_t n_bytes)
   final_address = (void *)((size_t)d_addr + n_bytes - 1);
   d_addr = (void *)((size_t)d_addr & ~(CPU_DATA_CACHE_ALIGNMENT - 1));
 
+  if( final_address - d_addr > _CPU_cache_get_data_cache_size(0) ) {
+    /*
+     * Avoid iterating over the whole cache multiple times if the range is
+     * larger than the cache size.
+     */
+    _CPU_cache_invalidate_entire_data();
+    return;
+  }
+
   _ISR_Local_disable (level);
 
   while( d_addr <= final_address )  {
@@ -279,6 +297,15 @@ void _CPU_cache_invalidate_instruction_range(const void *i_addr, size_t n_bytes)
 
   final_address = (void *)((size_t)i_addr + n_bytes - 1);
   i_addr = (void *)((size_t)i_addr & ~(CPU_INSTRUCTION_CACHE_ALIGNMENT - 1));
+
+  if( final_address - i_addr > _CPU_cache_get_data_cache_size(0) ) {
+    /*
+     * Avoid iterating over the whole cache multiple times if the range is
+     * larger than the cache size.
+     */
+    _CPU_cache_invalidate_entire_instruction();
+    return;
+  }
 
   _ISR_Local_disable (level);
 
