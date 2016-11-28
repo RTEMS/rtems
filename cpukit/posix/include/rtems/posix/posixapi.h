@@ -89,7 +89,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
  * @brief Macro to generate a function body to get a POSIX object by
  * identifier.
  *
- * Generates a function body to get the object for the specified indentifier.
+ * Generates a function body to get the object for the specified identifier.
  * Performs automatic initialization if requested and necessary.  This is an
  * ugly macro, since C lacks support for templates.
  */
@@ -105,6 +105,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
   if ( id == NULL ) { \
     return NULL; \
   } \
+  _Thread_queue_Initialize( queue_context ); \
   the_object = _Objects_Get( \
     (Objects_Id) *id, \
     &queue_context->Lock_context.Lock_context, \

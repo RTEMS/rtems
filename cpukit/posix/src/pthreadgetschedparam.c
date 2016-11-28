@@ -53,6 +53,7 @@ int pthread_getschedparam(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
+  _Thread_queue_Context_initialize( &queue_context );
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
   *policy = api->Attributes.schedpolicy;

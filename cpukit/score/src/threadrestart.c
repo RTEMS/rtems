@@ -57,8 +57,8 @@ static void _Thread_Raise_real_priority(
 {
   Thread_queue_Context queue_context;
 
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
 
   if ( priority < the_thread->Real_priority.priority ) {
     _Thread_Priority_change(

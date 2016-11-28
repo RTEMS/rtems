@@ -87,9 +87,10 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 )
 {
 #if defined(RTEMS_DEBUG)
-  memset( queue_context, 0, sizeof( *queue_context ) );
-  queue_context->enqueue_callout = _Thread_queue_Enqueue_do_nothing;
-  queue_context->deadlock_callout = _Thread_queue_Deadlock_fatal;
+  memset( queue_context, 0x7f, sizeof( *queue_context ) );
+#if defined(RTEMS_SMP)
+  _Chain_Initialize_node( &queue_context->Lock_context.Wait.Gate.Node );
+#endif
 #else
   (void) queue_context;
 #endif

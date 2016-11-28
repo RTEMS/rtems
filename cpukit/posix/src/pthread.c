@@ -91,8 +91,8 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic.Timer );
   the_thread = api->thread;
 
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
 
   if ( _Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
     _Thread_Priority_add(
@@ -122,8 +122,8 @@ void _POSIX_Threads_Sporadic_budget_callout( Thread_Control *the_thread )
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
 
   /*
    *  This will prevent the thread from consuming its entire "budget"

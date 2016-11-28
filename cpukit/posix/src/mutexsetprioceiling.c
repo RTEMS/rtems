@@ -67,7 +67,6 @@ int pthread_mutex_setprioceiling(
       Thread_queue_Context  queue_context;
       Per_CPU_Control      *cpu_self;
 
-      _Thread_queue_Context_clear_priority_updates( &queue_context );
       _CORE_ceiling_mutex_Set_priority(
         &the_mutex->Mutex,
         new_priority,

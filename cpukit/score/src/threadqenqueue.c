@@ -420,6 +420,9 @@ void _Thread_queue_Enqueue(
   Per_CPU_Control *cpu_self;
   bool             success;
 
+  _Assert( (uint8_t) (uintptr_t) queue_context->enqueue_callout != 0x7f );
+  _Assert( (uint8_t) queue_context->timeout_discipline != 0x7f );
+
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet ) {
     the_thread = _Thread_MP_Allocate_proxy( queue_context->thread_state );
@@ -433,6 +436,7 @@ void _Thread_queue_Enqueue(
     _Thread_Wait_restore_default( the_thread );
     _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
     _Thread_Wait_tranquilize( the_thread );
+    _Assert( (uint8_t) (uintptr_t) queue_context->deadlock_callout != 0x7f );
     ( *queue_context->deadlock_callout )( the_thread );
     return;
   }
@@ -597,6 +601,7 @@ bool _Thread_queue_Extract_locked(
   Thread_queue_Context          *queue_context
 )
 {
+  _Thread_queue_Context_clear_priority_updates( queue_context );
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_queue_MP_set_callout( the_thread, queue_context );
 #endif

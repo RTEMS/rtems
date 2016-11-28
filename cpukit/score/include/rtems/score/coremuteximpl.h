@@ -253,6 +253,7 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
 
   if ( owner != NULL ) {
     _Thread_Wait_acquire( owner, queue_context );
+    _Thread_queue_Context_clear_priority_updates( queue_context );
     _Thread_Priority_change(
       owner,
       &the_mutex->Priority_ceiling,
