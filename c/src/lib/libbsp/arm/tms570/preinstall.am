@@ -33,6 +33,11 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
 $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/bsp/ti_herc
 	@: > $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
@@ -125,6 +130,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570-pins.h
 $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h: include/tms570ls3137zwt-pins.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h
+
+$(PROJECT_INCLUDE)/libcpu/arm-cp15.h: ../../../libcpu/arm/shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 
 $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h: include/ti_herc/reg_adc.h $(PROJECT_INCLUDE)/bsp/ti_herc/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_adc.h

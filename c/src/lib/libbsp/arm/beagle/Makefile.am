@@ -88,6 +88,7 @@ libbsp_a_SOURCES += ../../shared/timerstub.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
+libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
 libbsp_a_SOURCES += startup/bspreset.c

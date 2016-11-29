@@ -36,7 +36,6 @@
 #include <rtems.h>
 #include <rtems/score/threadimpl.h>
 
-#include <libcpu/arm-cp15.h>
 #include <bsp/linker-symbols.h>
 
 #include "rtems-debugger-target.h"
@@ -44,6 +43,60 @@
 
 #if TARGET_DEBUG
 #include <rtems/bspIo.h>
+#endif
+
+/*
+ * ARM Variant controls.
+ */
+#if defined(__ARM_ARCH_7A__) || \
+    defined(__ARM_ARCH_7R__)
+  #define ARM_CP15 1
+#endif
+
+#if (defined(__ARM_ARCH_7M__) || \
+     defined(__ARM_ARCH_7EM__))
+  #define ARM_THUMB_ONLY 1
+#else
+  #define ARM_THUMB_ONLY 0
+#endif
+
+#if defined(ARM_MULTILIB_ARCH_V4)
+ #define ARM_PSR_HAS_INT_MASK 1
+ #define ARM_PSR_HAS_THUMB    1
+#else
+ #define ARM_PSR_HAS_INT_MASK 0
+ #define ARM_PSR_HAS_THUMB    0
+#endif
+
+#if ARM_CP15
+#include <libcpu/arm-cp15.h>
+#endif
+
+/**
+ * If thumb build of code switch the asm to thumb as required.
+ *
+ * If the variant only supports thumb insturctions disable the support.
+ */
+#define ARM_SWITCH_REG     uint32_t arm_switch_reg
+#define ARM_SWITCH_REG_ASM [arm_switch_reg] "=&r" (arm_switch_reg)
+#if !ARM_THUMB_ONLY && defined(__thumb__)
+  #define ASM_ARM_MODE   ".align 2\nbx pc\n.arm\n"
+  #define ASM_THUMB_MODE "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
+#else
+  #define ASM_ARM_MODE
+  #define ASM_THUMB_MODE
+#endif
+
+/*
+ * Hack to work around ARMv7-M not having a the T and I bits in the PSR.
+ *
+ * This needs to be fixed when real support for this ARM variant is added.
+ */
+#if !defined(ARM_PSR_I)
+  #define ARM_PSR_I 0
+#endif
+#if !defined(ARM_PSR_T)
+  #define ARM_PSR_T 0
 #endif
 
 /*
@@ -112,18 +165,13 @@
 #ifdef __thumb__
  static const uint8_t breakpoint[2] = { 0x55, 0xbe };
 #else
- static const uint8_t breakpoint[4] = { 0x75, 0xe0a, 0x20, 0xe1 };
+ static const uint8_t breakpoint[4] = { 0x75, 0xe0, 0x20, 0xe1 };
 #endif
 
 /**
  * Target lock.
  */
 RTEMS_INTERRUPT_LOCK_DEFINE(static, target_lock, "target_lock")
-
-/**
- * The init value for the text section.
- */
-static uint32_t text_section_flags;
 
 /**
  * Is a session active?
@@ -225,22 +273,24 @@ mode_label(int mode)
 
 #define ARM_CP14_WRITE(_val, _CRn, _CRm, _opc2)            \
   do {                                                     \
-    ARM_SWITCH_REGISTERS;                                  \
+    ARM_SWITCH_REG;                                        \
     asm volatile(                                          \
-      ARM_SWITCH_TO_ARM                                    \
+      ASM_ARM_MODE                                         \
       ARM_CP14_INSTR(mcr, val, _CRn, _CRm, _opc2)          \
-      ARM_SWITCH_BACK                                      \
-      :  ARM_SWITCH_OUTPUT : [val] "r" (_val));            \
+      ASM_THUMB_MODE                                       \
+      : ARM_SWITCH_REG_ASM                                 \
+      : [val] "r" (_val));                                 \
   } while (0)
 
 #define ARM_CP14_READ(_val, _CRn, _CRm, _opc2)             \
   do {                                                     \
-    ARM_SWITCH_REGISTERS;                                  \
+    ARM_SWITCH_REG;                                        \
     asm volatile(                                          \
-      ARM_SWITCH_TO_ARM                                    \
+      ASM_ARM_MODE                                         \
       ARM_CP14_INSTR(mrc, val, _CRn, _CRm, _opc2)          \
-      ARM_SWITCH_BACK                                      \
-      : [val] "=&r" (_val) ARM_SWITCH_ADDITIONAL_OUTPUT);  \
+      ASM_THUMB_MODE                                       \
+      : ARM_SWITCH_REG_ASM,                                \
+        [val] "=&r" (_val));                               \
   } while (0)
 
 static int
@@ -557,19 +607,6 @@ target_exception(CPU_Exception_frame* frame)
 }
 
 /**
- * If thumb build of code switch the asm to thumb as required.
- */
-#ifdef __thumb__
-  #define ASM_ARM_MODE   ".align 2\nbx pc\n.arm\n"
-  #define ASM_THUMB_MODE "add %[arm_switch_reg], pc, #1\nbx %[arm_switch_reg]\n.thumb\n"
-  #define ARM_SWITCH_REG uint32_t arm_switch_reg
-#else
-  #define ASM_ARM_MODE
-  #define ASM_THUMB_MODE
-  #define ARM_SWITCH_REG
-#endif
-
-/**
  * Exception stack frame size.
  *
  * The size is the exception stack frame plus the CPSR from the exception. We
@@ -607,7 +644,7 @@ target_exception(CPU_Exception_frame* frame)
     "sub  sp, #4\n"                                                     \
     "str  lr, [sp]\n"                           /* save the link reg */ \
     ASM_THUMB_MODE                                                      \
-    : [arm_switch_reg] "=&r" (arm_switch_reg)                           \
+    : ARM_SWITCH_REG_ASM                                                \
     : [frame_size] "i" (EXCEPTION_FRAME_SIZE)                           \
     : "memory")
 
@@ -682,7 +719,7 @@ target_exception(CPU_Exception_frame* frame)
     EXCEPTION_ENTRY_FPU(frame_fpu_size)                                 \
     "msr  cpsr, r1\n"                        /* restore the irq mask */ \
     ASM_THUMB_MODE                                                      \
-    : [arm_switch_reg] "=&r" (arm_switch_reg),                          \
+    : ARM_SWITCH_REG_ASM,                                               \
       [o_frame] "=r" (_frame)                                           \
     : [psr_t] "i" (ARM_PSR_T),                                          \
       [psr_i] "i" (ARM_PSR_I),                                          \
@@ -755,7 +792,7 @@ target_exception(CPU_Exception_frame* frame)
     "mov  lr, r5\n"                                    /* get the PC */ \
     "str  lr, [sp]\n"                           /* save the link reg */ \
     ASM_THUMB_MODE                                                      \
-    : [arm_switch_reg] "=&r" (arm_switch_reg)                           \
+    : ARM_SWITCH_REG_ASM                                                \
     : [psr_i] "i" (ARM_PSR_I),                                          \
       [r0_r12_size] "i" (13 * sizeof(uint32_t)),                        \
       [frame_cpsr] "i" (EXCEPTION_FRAME_SIZE - sizeof(uint32_t)),       \
@@ -821,10 +858,14 @@ target_exception_prefetch_abort(void)
   EXCEPTION_ENTRY_EXC();
   arm_debug_break_unload();
   EXCEPTION_ENTRY_THREAD(frame);
+#if ARM_CP15
   if ((arm_cp15_get_instruction_fault_status() & 0x1f) == 0x02)
     frame->vector = 2;
   else
     frame->vector = 3;
+#else
+  frame->vector = 3;
+#endif
   target_exception(frame);
   EXCEPTION_EXIT_THREAD(frame);
   arm_debug_break_load();
@@ -846,18 +887,19 @@ target_exception_data_abort(void)
   EXCEPTION_EXIT_EXC();
 }
 
-int
-rtems_debugger_target_enable(void)
+#if ARM_CP15
+/**
+ * The init value for the text section.
+ */
+static uint32_t text_section_flags;
+
+static void
+rtems_debugger_target_set_vectors(void)
 {
-  rtems_interrupt_lock_context lock_context;
-  void*                        text_begin;
-  void*                        text_end;
-  debug_session_active = true;
+  void* text_begin;
+  void* text_end;
   text_begin = &bsp_section_text_begin[0];
   text_end = &bsp_section_text_end[0];
-  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
-  arm_debug_break_unload();
-  arm_debug_break_clear();
   text_section_flags =
     arm_cp15_set_translation_table_entries(text_begin,
                                            text_end,
@@ -870,6 +912,34 @@ rtems_debugger_target_enable(void)
                                  target_exception_prefetch_abort);
   arm_cp15_set_exception_handler(ARM_EXCEPTION_DATA_ABORT,
                                  target_exception_data_abort);
+}
+#else
+static void
+rtems_debugger_target_set_vectors(void)
+{
+  /*
+   * Dummy, please add support for your ARM variant.
+   */
+  void* ui = target_exception_undefined_instruction;
+  void* sc = target_exception_supervisor_call;
+  void* pa = target_exception_prefetch_abort;
+  void* da = target_exception_data_abort;
+  (void) ui;
+  (void) sc;
+  (void) pa;
+  (void) da;
+}
+#endif
+
+int
+rtems_debugger_target_enable(void)
+{
+  rtems_interrupt_lock_context lock_context;
+  debug_session_active = true;
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  arm_debug_break_unload();
+  arm_debug_break_clear();
+  rtems_debugger_target_set_vectors();
   rtems_interrupt_lock_release(&target_lock, &lock_context);
   return 0;
 }
@@ -1121,6 +1191,7 @@ rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
         /*
          * Save the interrupt state before stepping if set.
          */
+#if ARM_PSR_HAS_INT_MASK
         if ((FRAME_SR & CPSR_INTS_MASK) != 0) {
           uint32_t int_state;
           int_state =
@@ -1131,6 +1202,7 @@ rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
          * Mask the interrupt when stepping.
          */
         FRAME_SR |= CPSR_INTS_MASK;
+#endif
         break;
       }
     }
@@ -1142,6 +1214,7 @@ int
 rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
 {
   int sig = RTEMS_DEBUGGER_SIGNAL_HUP;
+#if defined(ARM_EXCEPTION_RESET)
   switch (frame->vector) {
   case ARM_EXCEPTION_RESET:
   case ARM_EXCEPTION_SWI:
@@ -1164,6 +1237,7 @@ rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
   default:
     break;
   }
+#endif
   return sig;
 }
 

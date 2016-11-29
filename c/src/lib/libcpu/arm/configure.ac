@@ -19,7 +19,8 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "at91rm9200" || \
+AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "arm1136" || \
+		       test "$RTEMS_CPU_MODEL" = "at91rm9200" || \
 		       test "$RTEMS_CPU_MODEL" = "mc9328mxl" || \
 		       test "$RTEMS_CPU_MODEL" = "s3c2410" || \
 		       test "$RTEMS_CPU_MODEL" = "s3c2400" || \

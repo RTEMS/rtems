@@ -69,5 +69,11 @@ libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
 #    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
 #    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
 
+# Shared
+if shared
+libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
+libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

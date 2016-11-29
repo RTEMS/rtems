@@ -15,6 +15,8 @@ RTEMS_PROG_CCAS
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
 
+AM_CONDITIONAL(shared, test "$RTEMS_BSP" = "armcortexa9")
+
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

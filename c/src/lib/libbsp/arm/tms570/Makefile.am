@@ -10,6 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
+include_libcpudir = $(includedir)/libcpu
 
 include_bsp_ti_herculesdir = $(includedir)/bsp/ti_herc
 
@@ -45,6 +46,8 @@ include_bsp_HEADERS += include/tms570-pinmux.h
 
 include_bsp_HEADERS += include/tms570-pins.h
 include_bsp_HEADERS += include/tms570ls3137zwt-pins.h
+
+include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
 include_bsp_ti_hercules_HEADERS = include/ti_herc/reg_adc.h
 include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_ccmsr.h
@@ -121,6 +124,8 @@ libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += ../../shared/src/stackalloc.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
+libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
 libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
