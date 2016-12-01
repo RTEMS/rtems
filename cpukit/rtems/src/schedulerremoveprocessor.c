@@ -41,6 +41,7 @@ static bool _Scheduler_Check_processor_removal(
 
   iter_context = arg;
 
+  _Thread_queue_Context_initialize( &queue_context );
   _Thread_Wait_acquire( the_thread, &queue_context );
   _Thread_State_acquire_critical( the_thread, &state_context );
 

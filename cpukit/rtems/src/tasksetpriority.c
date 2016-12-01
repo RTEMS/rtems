@@ -44,7 +44,6 @@ static rtems_status_code _RTEMS_tasks_Set_priority(
     return RTEMS_INVALID_PRIORITY;
   }
 
-  _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Priority_change(
     the_thread,
     &the_thread->Real_priority,
@@ -78,6 +77,7 @@ rtems_status_code rtems_task_set_priority(
   }
 
   _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
   the_thread = _Thread_Get( id, &queue_context.Lock_context.Lock_context );
 
   if ( the_thread == NULL ) {

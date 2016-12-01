@@ -1333,8 +1333,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_release_queue_critical(
  * @param[in] the_thread The thread.
  * @param[in] queue_context The thread queue context for the corresponding
  *   _Thread_Wait_release_critical().
- *
- * @see _Thread_queue_Context_initialize().
  */
 RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire_critical(
   Thread_Control       *the_thread,
@@ -1397,7 +1395,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Wait_acquire(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Context_initialize( queue_context );
   _ISR_lock_ISR_disable( &queue_context->Lock_context.Lock_context );
   _Thread_Wait_acquire_critical( the_thread, queue_context );
 }

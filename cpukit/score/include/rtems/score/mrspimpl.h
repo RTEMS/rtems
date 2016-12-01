@@ -132,7 +132,7 @@ RTEMS_INLINE_ROUTINE void _MRSP_Remove_priority(
   Thread_queue_Context *queue_context
 )
 {
-  ISR_lock_Context  lock_context;
+  ISR_lock_Context lock_context;
 
   _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Wait_acquire_default_critical( thread, &lock_context );

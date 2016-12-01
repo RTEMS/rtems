@@ -253,7 +253,6 @@ RTEMS_INLINE_ROUTINE void _CORE_ceiling_mutex_Set_priority(
 
   if ( owner != NULL ) {
     _Thread_Wait_acquire( owner, queue_context );
-    _Thread_queue_Context_clear_priority_updates( queue_context );
     _Thread_Priority_change(
       owner,
       &the_mutex->Priority_ceiling,
@@ -284,7 +283,6 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Set_owner(
   Scheduler_Node   *scheduler_node;
   Per_CPU_Control  *cpu_self;
 
-  _Thread_queue_Context_clear_priority_updates( queue_context );
   _Thread_Wait_acquire_default_critical( owner, &lock_context );
 
   scheduler_node = _Thread_Scheduler_get_home_node( owner );
@@ -341,6 +339,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_ceiling_mutex_Seize(
     }
 #endif
 
+    _Thread_queue_Context_clear_priority_updates( queue_context );
     return _CORE_ceiling_mutex_Set_owner(
       the_mutex,
       executing,

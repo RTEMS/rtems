@@ -57,8 +57,9 @@ static void _Thread_Raise_real_priority(
 {
   Thread_queue_Context queue_context;
 
-  _Thread_Wait_acquire( the_thread, &queue_context );
+  _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_clear_priority_updates( &queue_context );
+  _Thread_Wait_acquire( the_thread, &queue_context );
 
   if ( priority < the_thread->Real_priority.priority ) {
     _Thread_Priority_change(
@@ -637,6 +638,8 @@ void _Thread_Restart_self(
       || executing->current_state == STATES_SUSPENDED
   );
 
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_State_acquire_critical( executing, lock_context );
 
   executing->Start.Entry = *entry;
@@ -650,7 +653,6 @@ void _Thread_Restart_self(
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Thread_State_release( executing, lock_context );
 
-  _Thread_queue_Context_clear_priority_updates( &queue_context );
   _Thread_Wait_acquire_default( executing, lock_context );
   _Thread_Priority_change(
     executing,

@@ -22,6 +22,7 @@ rtems_monitor_task_wait_info(
 {
     Thread_queue_Context queue_context;
 
+    _Thread_queue_Context_initialize( &queue_context );
     _Thread_Wait_acquire( rtems_thread, &queue_context );
 
     canonical_task->state = rtems_thread->current_state;

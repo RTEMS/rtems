@@ -168,6 +168,7 @@ rtems_status_code rtems_semaphore_create(
           Thread_queue_Context queue_context;
 
           _Thread_queue_Context_initialize( &queue_context );
+          _Thread_queue_Context_clear_priority_updates( &queue_context );
           _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
           _CORE_mutex_Acquire_critical(
             &the_semaphore->Core_control.Mutex.Recursive.Mutex,

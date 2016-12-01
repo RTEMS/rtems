@@ -71,6 +71,7 @@ static rtems_id get_wait_id(test_context *ctx)
   Thread_queue_Context queue_context;
   rtems_id id;
 
+  _Thread_queue_Context_initialize(&queue_context);
   _Thread_Wait_acquire(ctx->master, &queue_context);
   id = _Thread_Wait_get_id(ctx->master);
   _Thread_Wait_release(ctx->master, &queue_context);
