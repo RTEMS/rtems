@@ -420,7 +420,7 @@ void _Thread_queue_Enqueue(
   Per_CPU_Control *cpu_self;
   bool             success;
 
-  _Assert( (uint8_t) (uintptr_t) queue_context->enqueue_callout != 0x7f );
+  _Assert( queue_context->enqueue_callout != NULL );
   _Assert( (uint8_t) queue_context->timeout_discipline != 0x7f );
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -436,7 +436,7 @@ void _Thread_queue_Enqueue(
     _Thread_Wait_restore_default( the_thread );
     _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
     _Thread_Wait_tranquilize( the_thread );
-    _Assert( (uint8_t) (uintptr_t) queue_context->deadlock_callout != 0x7f );
+    _Assert( queue_context->deadlock_callout != NULL );
     ( *queue_context->deadlock_callout )( the_thread );
     return;
   }

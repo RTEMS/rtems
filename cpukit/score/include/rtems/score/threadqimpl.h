@@ -91,6 +91,8 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_initialize(
 #if defined(RTEMS_SMP)
   _Chain_Initialize_node( &queue_context->Lock_context.Wait.Gate.Node );
 #endif
+  queue_context->enqueue_callout = NULL;
+  queue_context->deadlock_callout = NULL;
 #else
   (void) queue_context;
 #endif
