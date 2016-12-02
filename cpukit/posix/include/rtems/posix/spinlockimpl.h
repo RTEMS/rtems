@@ -48,13 +48,13 @@ typedef struct {
 } POSIX_Spinlock_Control;
 
 #if !defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
-#if defined(RTEMS_SMP)
 extern POSIX_Spinlock_Control _POSIX_Spinlock_Global;
 
+extern int _POSIX_Spinlock_Nest_level;
+
+#if defined(RTEMS_SMP)
 extern uint32_t _POSIX_Spinlock_Owner;
 #endif
-
-extern int _POSIX_Spinlock_Nest_level;
 #endif
 
 RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
@@ -63,12 +63,9 @@ RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
 {
 #if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
   return (POSIX_Spinlock_Control *) lock;
-#elif defined(RTEMS_SMP)
-  (void) lock;
-  return &_POSIX_Spinlock_Global;
 #else
   (void) lock;
-  return NULL;
+  return &_POSIX_Spinlock_Global;
 #endif
 }
 

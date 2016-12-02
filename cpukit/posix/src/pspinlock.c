@@ -54,13 +54,13 @@ RTEMS_STATIC_ASSERT(
   POSIX_SPINLOCK_T_SIZE
 );
 #else
-#if defined(RTEMS_SMP)
 POSIX_Spinlock_Control _POSIX_Spinlock_Global;
 
+int _POSIX_Spinlock_Nest_level;
+
+#if defined(RTEMS_SMP)
 uint32_t _POSIX_Spinlock_Owner = 0xffffffff;
 #endif
-
-int _POSIX_Spinlock_Nest_level;
 #endif
 
 int pthread_spin_lock( pthread_spinlock_t *spinlock )
