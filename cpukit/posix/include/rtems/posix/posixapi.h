@@ -105,7 +105,7 @@ RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
   if ( id == NULL ) { \
     return NULL; \
   } \
-  _Thread_queue_Initialize( queue_context ); \
+  _Thread_queue_Context_initialize( queue_context ); \
   the_object = _Objects_Get( \
     (Objects_Id) *id, \
     &queue_context->Lock_context.Lock_context, \
