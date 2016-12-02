@@ -62,7 +62,6 @@ rtems_status_code rtems_scheduler_add_processor(
     Thread_Control          *idle;
     Scheduler_Node          *scheduler_node;
     ISR_lock_Context         lock_context;
-    Thread_queue_Context     queue_context;
     Per_CPU_Control         *cpu_self;
 
     scheduler = &_Scheduler_Table[ scheduler_index ];
@@ -100,9 +99,7 @@ rtems_status_code rtems_scheduler_add_processor(
     cpu->Scheduler.control = scheduler;
     cpu->Scheduler.context = scheduler_context;
     ( *scheduler->Operations.add_processor )( scheduler, idle );
-    cpu_self = _Thread_Dispatch_disable_critical(
-      &queue_context.Lock_context.Lock_context
-    );
+    cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
     _Scheduler_Release_critical( scheduler, &lock_context );
     _ISR_lock_ISR_enable( &lock_context );
     _Thread_Dispatch_enable( cpu_self );
