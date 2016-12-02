@@ -109,6 +109,7 @@ void _CPU_Context_Initialize(
   the_context->register_lr = (uint32_t) entry_point;
   the_context->register_cpsr = ( ( new_level != 0 ) ? ARM_PSR_I : 0 )
     | arm_cpu_mode;
+  the_context->isr_dispatch_disable = 0;
 
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   the_context->thread_id = (uint32_t) tls_area;

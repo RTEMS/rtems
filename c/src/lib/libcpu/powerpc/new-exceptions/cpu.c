@@ -118,6 +118,7 @@ void _CPU_Context_Initialize(
   the_ppc_context->gpr1 = sp;
   the_ppc_context->msr = msr_value;
   the_ppc_context->lr = (uint32_t) entry_point;
+  the_ppc_context->isr_dispatch_disable = 0;
 
 #if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
   _CPU_Context_initialize_altivec( the_ppc_context );

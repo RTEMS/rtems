@@ -872,6 +872,10 @@ uint32_t   _CPU_ISR_Get_level( void );
  * in the context.  The state of the "general data" registers is
  * undefined at task start time.
  *
+ * The ISR dispatch disable field of the context must be cleared to zero if it
+ * is used by the CPU port.  Otherwise, a thread restart results in
+ * unpredictable behaviour.
+ *
  * @param[in] _the_context is the context structure to be initialized
  * @param[in] _stack_base is the lowest physical address of this task's stack
  * @param[in] _size is the size of this task's stack
