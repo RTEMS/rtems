@@ -102,7 +102,7 @@ rtems_status_code rtems_scheduler_add_processor(
     cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
     _Scheduler_Release_critical( scheduler, &lock_context );
     _ISR_lock_ISR_enable( &lock_context );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct( cpu_self );
     status = RTEMS_SUCCESSFUL;
   } else {
     status = RTEMS_RESOURCE_IN_USE;

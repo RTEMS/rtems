@@ -136,7 +136,7 @@ rtems_status_code rtems_scheduler_remove_processor(
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );
   _Scheduler_Release_critical( scheduler, &lock_context );
   _ISR_lock_ISR_enable( &lock_context );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   _Objects_Allocator_unlock();
   return iter_context.status;
 #else
