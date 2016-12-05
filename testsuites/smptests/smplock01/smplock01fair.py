@@ -48,7 +48,7 @@ try:
 except:
 	pass
 
-x = range(1, len(ticket) + 1)
+x = range(2, len(ticket) + 2)
 plt.yscale('log')
 plt.plot(x, ticket, label = 'Ticket Lock', marker = 'o')
 plt.plot(x, mcs, label = 'MCS Lock', marker = 'o')
