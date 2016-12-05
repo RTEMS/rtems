@@ -1,18 +1,21 @@
 #! /bin/sh
 #
-# Copyright 2014 Chris Johns <chrisj@rtems.org>
+# Copyright 2014, 2016 Chris Johns <chrisj@rtems.org>
 # All rights reserved
 #
 
 #
-# usage: rtems-test-check <bsp-test-database> <includes> <bsp> <tests..>
+# usage: rtems-test-check <mode> <bsp-test-database> <includes> <bsp> <tests..>
 #
 
-if test $# -lt 3; then
+if test $# -lt 4; then
   echo "error: invalid command line" >&2
+  echo "INVALID-TEST-DATA"
   exit 2
 fi
 
+mode="$1"
+shift
 testdata="$1"
 shift
 includepath="$1"
@@ -20,14 +23,39 @@ shift
 bsp="$1"
 shift
 tests="$*"
-bsp_tests=${tests}
+
+test_count=0
+for t in ${tests};
+do
+ test_count=$(expr ${test_count} + 1)
+done
+
+case ${mode} in
+ exclude)
+   output=${tests}
+   ;;
+ flags)
+   if [ $test_count != 1 ]; then
+     echo "error: test count not 1 for ${mode}" 1>&2
+     exit 1
+   fi
+   output=""
+   ;;
+ *)
+   echo "error: invalid mode" 1>&2
+   echo "INVALID-TEST-DATA"
+   exit 1
+   ;;
+esac
 
 #
-# If there is no testdata all tests are valid.
+# If there is no testdata all tests are valid and must pass.
 #
 
 if test -f $testdata; then
-  disabled_tests=""
+  excluded_tests=""
+  expected_fails=""
+  indeterminates=""
   while [ ! -z "$testdata" ];
   do
     for td in $testdata;
@@ -39,38 +67,84 @@ if test -f $testdata; then
       do
         line=$(echo $line | sed -e 's/#.*$//' -e '/^$/d')
         if [ ! -z "$line" ]; then
-          include=$(echo $line | sed -e "s/include:.*/yes/g")
-          if [ "$include" = "yes" ]; then
-            inf=$(echo $line | sed -e "s/include://g" -e 's/^[ \t]//;s/[ \t]$//')
-	    if test -f $includepath/$inf; then
-              ntd="$includepath/$inf $ntd"
-            fi
-          else
-            disabled_tests="${disabled_tests} $line"
-          fi
+          state=$(echo $line | sed -e "s/:.*//g")
+          case $state in
+            include)
+              inf=$(echo $line | sed -e "s/include://g" -e 's/^[ \t]//;s/[ \t]$//')
+              if test -f $includepath/$inf; then
+                ntd="$includepath/$inf $ntd"
+              fi
+              ;;
+            exclude)
+              line=$(echo $line | sed -e "s/exclude://g" -e 's/^[ \t]//;s/[ \t]$//')
+              excluded_tests="${excluded_tests} $line"
+              ;;
+            expected-fail)
+              line=$(echo $line | sed -e "s/expected-fail://g" -e 's/^[ \t]//;s/[ \t]$//')
+              expected_fails="${expected_fails} $line"
+              ;;
+            indeterminate)
+              line=$(echo $line | sed -e "s/indeterminate://g" -e 's/^[ \t]//;s/[ \t]$//')
+              indeterminates="${indeterminates} $line"
+              ;;
+            *)
+              echo "error: invalid test state: $state in $td" 1>&2
+              echo "INVALID-TEST-DATA"
+              exit 1
+              ;;
+          esac
         fi
       done
     done
     testdata=$ntd
   done
 
-  bsp_tests=""
   for t in ${tests};
   do
-    allow="yes"
-    for dt in ${disabled_tests};
-    do
-      if test ${t} = ${dt}; then
+    case ${mode} in
+      exclude)
+        allow="yes"
+        for dt in ${excluded_tests};
+        do
+          if test ${t} = ${dt}; then
+            allow="no"
+          fi
+        done
+        if test ${allow} = yes; then
+          output="${output} ${t}"
+        fi
+        ;;
+      flags)
         allow="no"
-      fi
-    done
-    if test ${allow} = yes; then
-      bsp_tests="${bsp_tests} ${t}"
-    fi
+        for et in ${expected_fails};
+        do
+          if test ${t} = ${et}; then
+            allow="yes"
+          fi
+        done
+        if test ${allow} = yes; then
+          output="-DTEST_STATE_EXPECTED_FAIL=1"
+        fi
+        allow="no"
+        for it in ${indeterminates};
+        do
+          if test ${t} = ${it}; then
+            allow="yes"
+          fi
+        done
+        if test ${allow} = yes; then
+          output="${output} -DTEST_STATE_INDETERMINATE=1"
+        fi
+        ;;
+      *)
+        echo "error: invalid mode" 1>&2
+        echo "INVALID-TEST-DATA"
+        exit 1
+        ;;
+    esac
   done
 fi
 
-echo ${bsp_tests}
+echo ${output}
 
 exit 0
-

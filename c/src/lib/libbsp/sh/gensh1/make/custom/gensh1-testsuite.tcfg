@@ -4,7 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-fileio
-fsdosfsname01
-iostream
-utf8proc01
+exclude: fileio
+exclude: fsdosfsname01
+exclude: iostream
+exclude: utf8proc01

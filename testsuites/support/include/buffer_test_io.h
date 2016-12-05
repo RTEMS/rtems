@@ -21,6 +21,20 @@ extern "C" {
 /* #define TESTS_USE_PRINTK */
 
 /*
+ * Test states. No state string is an expected pass.
+ */
+#if TEST_STATE_EXPECTED_FAIL && \
+    TEST_INDETERMINATE_FAIL
+  #error Test states must be unique
+#endif
+
+#if TEST_STATE_EXPECTED_FAIL
+  #define TEST_STATE_STRING "*** TEST STATE: EXPECTED-FAIL\n"
+#elif TEST_INDETERMINATE_FAIL
+  #define TEST_STATE_STRING "*** TEST STATE: INDETERMINATE\n"
+#endif
+
+/*
  *  USE PRINTK TO MINIMIZE SIZE
  */
 #if defined(TESTS_USE_PRINTK)
@@ -55,7 +69,11 @@ extern "C" {
     do { \
     } while (0)
 
-  #define TEST_BEGIN() printk(TEST_BEGIN_STRING)
+  #if defined(TEST_STATE_STRING)
+    #define TEST_BEGIN() printk(TEST_BEGIN_STRING); printk(TEST_STATE_STRING);
+  #else
+    #define TEST_BEGIN() printk(TEST_BEGIN_STRING)
+  #endif
 
   #define TEST_END() printk(TEST_END_STRING)
 
@@ -157,7 +175,11 @@ extern "C" {
       fflush(stdout); \
     } while (0)
 
-  #define TEST_BEGIN() printf(TEST_BEGIN_STRING)
+  #if defined(TEST_STATE_STRING)
+    #define TEST_BEGIN() printf(TEST_BEGIN_STRING); printf(TEST_STATE_STRING)
+  #else
+    #define TEST_BEGIN() printf(TEST_BEGIN_STRING)
+  #endif
 
   #define TEST_END() printf(TEST_END_STRING)
 
@@ -206,7 +228,11 @@ extern "C" {
       fflush(stdout); \
     } while (0)
 
-  #define TEST_BEGIN() fiprintf( stderr, TEST_BEGIN_STRING)
+  #if defined(TEST_STATE_STRING)
+    #define TEST_BEGIN() fiprintf(stderr, TEST_BEGIN_STRING); fiprintf(stderr, TEST_STATE_STRING)
+  #else
+    #define TEST_BEGIN() fiprintf(stderr, TEST_BEGIN_STRING)
+  #endif
 
   #define TEST_END()  fiprintf( stderr, TEST_END_STRING)
 

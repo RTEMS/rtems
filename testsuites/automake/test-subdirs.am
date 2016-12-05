@@ -22,12 +22,19 @@ all-local:
 	fi; \
 	echo "BSP Testsuite Data: $$vtdata"; \
 	list=`$(top_srcdir)/../../tools/build/rtems-test-check \
-		 $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $(_SUBDIRS)`; \
+		 exclude $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $(_SUBDIRS)`; \
 	for subdir in $$list; do \
 	  echo "Making $$target in $$subdir"; \
 	  if test "$$subdir" != "."; then \
+            test_FLAGS=`$(top_srcdir)/../../tools/build/rtems-test-check \
+			 flags $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $$subdir`; \
 	    local_target="$$target"; \
-	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	    if test -z "$$test_FLAGS"; then \
+		echo "BSP Testsuite Flags: $$subdir: PASS"; \
+	    else \
+		echo "BSP Testsuite Flags: $$subdir: $$test_FLAGS"; \
+	    fi; \
+	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$test_FLAGS" $$local_target) \
 	     || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
 	  fi; \
 	done; test -z "$$fail"

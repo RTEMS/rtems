@@ -4,5 +4,5 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-fsdosfsname01
-dl05
+exclude: fsdosfsname01
+exclude: dl05

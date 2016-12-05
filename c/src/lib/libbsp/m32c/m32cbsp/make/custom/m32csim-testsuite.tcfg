@@ -6,16 +6,16 @@ include: testdata/require-tick-isr.tcfg
 include: testdata/disable-jffs2-tests.tcfg
 include: testdata/disable-mrfs-tests.tcfg
 
-crypt01
-fileio
-flashdisk01
-fsbdpart01
-fsdosfsformat01
-fsdosfswrite01
-fsdosfsname01
-fsrfsbitmap01
-sha
-spstkalloc02
-sptls01
-tmcontext01
-utf8proc01
+exclude: crypt01
+exclude: fileio
+exclude: flashdisk01
+exclude: fsbdpart01
+exclude: fsdosfsformat01
+exclude: fsdosfswrite01
+exclude: fsdosfsname01
+exclude: fsrfsbitmap01
+exclude: sha
+exclude: spstkalloc02
+exclude: sptls01
+exclude: tmcontext01
+exclude: utf8proc01

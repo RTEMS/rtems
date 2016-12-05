@@ -7,7 +7,7 @@
 include: testdata/require-tick-isr.tcfg
 include: testdata/disable-intrcritical-tests.tcfg
 
-fileio
-fsdosfsname01
-iostream
-utf8proc01
+exclude: fileio
+exclude: fsdosfsname01
+exclude: iostream
+exclude: utf8proc01

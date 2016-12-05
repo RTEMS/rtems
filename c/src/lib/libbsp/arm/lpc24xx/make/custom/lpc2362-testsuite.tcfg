@@ -4,48 +4,48 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-capture
-cdtest
-dl01
-dl02
-dl04
-dl05
-fileio
-flashdisk01
-fsdosfsname01
-fsdosfsformat01
-fsrfsbitmap01
-ftp01
-iostream
-jffs2_fserror
-jffs2_fslink
-jffs2_fspatheval
-jffs2_fspermission
-jffs2_fsrdwr
-jffs2_fsscandir01
-jffs2_fssymlink
-jffs2_fstime
-loopback
-math
-mdosfs_fserror
-mghttpd01
-monitor02
-mrfs_fserror
-mrfs_fsfpathconf
-mrfs_fslink
-mrfs_fspatheval
-mrfs_fspermission
-mrfs_fsrdwr
-mrfs_fsscandir01
-mrfs_fssymlink
-mrfs_fstime
-mdosfs_fsrdwr
-paranoia
-pppd
-rtems++
-shell01
-spstkalloc02
-sptls02
-syscall01
-tmfine01
-utf8proc01
+exclude: capture
+exclude: cdtest
+exclude: dl01
+exclude: dl02
+exclude: dl04
+exclude: dl05
+exclude: fileio
+exclude: flashdisk01
+exclude: fsdosfsname01
+exclude: fsdosfsformat01
+exclude: fsrfsbitmap01
+exclude: ftp01
+exclude: iostream
+exclude: jffs2_fserror
+exclude: jffs2_fslink
+exclude: jffs2_fspatheval
+exclude: jffs2_fspermission
+exclude: jffs2_fsrdwr
+exclude: jffs2_fsscandir01
+exclude: jffs2_fssymlink
+exclude: jffs2_fstime
+exclude: loopback
+exclude: math
+exclude: mdosfs_fserror
+exclude: mghttpd01
+exclude: monitor02
+exclude: mrfs_fserror
+exclude: mrfs_fsfpathconf
+exclude: mrfs_fslink
+exclude: mrfs_fspatheval
+exclude: mrfs_fspermission
+exclude: mrfs_fsrdwr
+exclude: mrfs_fsscandir01
+exclude: mrfs_fssymlink
+exclude: mrfs_fstime
+exclude: mdosfs_fsrdwr
+exclude: paranoia
+exclude: pppd
+exclude: rtems++
+exclude: shell01
+exclude: spstkalloc02
+exclude: sptls02
+exclude: syscall01
+exclude: tmfine01
+exclude: utf8proc01

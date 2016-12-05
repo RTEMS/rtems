@@ -6,4 +6,4 @@ include: testdata/disable-intrcritical-tests.tcfg
 
 # The simulator catches the data access fault and exits before the
 # simulated MIPS handler can run.
-spfatal26
+exclude: spfatal26

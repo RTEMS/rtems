@@ -4,10 +4,10 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-dl05
-fileio
-fsdosfsname01
-iostream
-sptls01
-sptls02
-utf8proc01
+exclude: dl05
+exclude: fileio
+exclude: fsdosfsname01
+exclude: iostream
+exclude: sptls01
+exclude: sptls02
+exclude: utf8proc01

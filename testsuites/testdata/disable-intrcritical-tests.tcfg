@@ -4,27 +4,27 @@
 # to be reliable.
 #
 
-psxintrcritical01
-spintrcritical01
-spintrcritical02
-spintrcritical03
-spintrcritical04
-spintrcritical05
-spintrcritical06
-spintrcritical07
-spintrcritical08
-spintrcritical09
-spintrcritical10
-spintrcritical11
-spintrcritical12
-spintrcritical13
-spintrcritical14
-spintrcritical15
-spintrcritical16
-spintrcritical17
-spintrcritical18
-spintrcritical20
-spintrcritical21
-spintrcritical22
-spintrcritical23
+exclude: psxintrcritical01
+exclude: spintrcritical01
+exclude: spintrcritical02
+exclude: spintrcritical03
+exclude: spintrcritical04
+exclude: spintrcritical05
+exclude: spintrcritical06
+exclude: spintrcritical07
+exclude: spintrcritical08
+exclude: spintrcritical09
+exclude: spintrcritical10
+exclude: spintrcritical11
+exclude: spintrcritical12
+exclude: spintrcritical13
+exclude: spintrcritical14
+exclude: spintrcritical15
+exclude: spintrcritical16
+exclude: spintrcritical17
+exclude: spintrcritical18
+exclude: spintrcritical20
+exclude: spintrcritical21
+exclude: spintrcritical22
+exclude: spintrcritical23
 
