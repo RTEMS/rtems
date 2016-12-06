@@ -147,6 +147,7 @@ psxconcurrency01/Makefile
 psxcond01/Makefile
 psxcond02/Makefile
 psxconfig01/Makefile
+psxdevctl01/Makefile
 psxeintr_join/Makefile
 psxenosys/Makefile
 psxfatal01/Makefile

@@ -27,6 +27,9 @@ _SUBDIRS += psxfile01 psxfile02 psxfilelock01 psxgetrusage01 psxid01 \
     psximfs01 psximfs02 psxreaddir psxstat psxmount psx13 psxchroot01 \
     psxpasswd01 psxpasswd02 psxpipe01 psxtimes01 psxfchx01
 
+## POSIX Devctl tests
+_SUBDIRS += psxdevctl01
+
 ## POSIX Keys are always available
 _SUBDIRS += psxkey01 psxkey02 psxkey03 psxkey04 \
     psxkey05 psxkey06 psxkey08 psxkey09 psxkey10

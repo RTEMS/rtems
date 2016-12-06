@@ -138,7 +138,8 @@ libcsupport_a_SOURCES += src/printertask.c
 libcsupport_a_SOURCES += $(LIBC_GLUE_C_FILES) $(PASSWORD_GROUP_C_FILES) \
     $(TERMINAL_IDENTIFICATION_C_FILES) $(SYSTEM_CALL_C_FILES) \
     $(DIRECTORY_SCAN_C_FILES) $(ID_C_FILES) src/envlock.c \
-    $(TERMIOS_C_FILES) src/getpagesize.c src/getrusage.c
+    $(TERMIOS_C_FILES) src/getpagesize.c src/getrusage.c src/posix_devctl.c
+
 
 libcsupport_a_SOURCES += src/flockfile.c src/funlockfile.c src/ftrylockfile.c
 

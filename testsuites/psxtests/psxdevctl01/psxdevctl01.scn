@@ -1,0 +1,4 @@
+*** BEGIN OF TEST PSXDEVCTL 1 ***
+posix_devctl() FIONBIO on stdin return dev_info -- EBADF
+posix_devctl() FIONBIO on stdin return dev_info -- EBADF
+*** END OF TEST PSXDEVCTL 1 ***

@@ -1,0 +1,23 @@
+#  COPYRIGHT (c) 2016.
+#  On-Line Applications Research Corporation (OAR).
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  psxdevctl01
+
+directives:
+
+  posix_devctl
+
+concepts:
+
++ Ensure that proper error values result when passing different combinations of
+  arguments to posix_devctl().
+
++ Ensure that a requestn is passed through the underlying ioctl() operation
+  to the console device driver and flagged as an error.

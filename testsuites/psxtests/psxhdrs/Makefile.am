@@ -1,6 +1,9 @@
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES =
 
+# methods in <devctl.h>
+lib_a_SOURCES += devctl/posix_devctl.c
+
 # methods in <pthread.h>
 lib_a_SOURCES += pthread/pthread_attr_destroy.c
 lib_a_SOURCES += pthread/pthread_attr_getdetachstate.c
