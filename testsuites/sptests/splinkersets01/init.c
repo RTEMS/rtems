@@ -83,6 +83,10 @@ ITEM(s2, SAFE_ORDER_C);
 ITEM(s1, SAFE_ORDER_B);
 ITEM(s0, SAFE_ORDER_A);
 
+RTEMS_LINKER_RWSET(test_rw_empty, const int *);
+
+RTEMS_LINKER_ROSET(test_ro_empty, const int *);
+
 static void test(void)
 {
   const int **b;
@@ -96,29 +100,65 @@ static void test(void)
   const int * const *sb;
   const int * const *se;
   size_t i;
+  const int **item;
 
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_rw, b);
-  RTEMS_LINKER_SET_ASSIGN_END(test_rw, e);
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro, cb);
-  RTEMS_LINKER_SET_ASSIGN_END(test_ro, ce);
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_rw_i, bi);
-  RTEMS_LINKER_SET_ASSIGN_END(test_rw_i, ei);
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro_i, cbi);
-  RTEMS_LINKER_SET_ASSIGN_END(test_ro_i, cei);
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_ro_s, sb);
-  RTEMS_LINKER_SET_ASSIGN_END(test_ro_s, se);
+  b = RTEMS_LINKER_SET_BEGIN(test_rw);
+  e = RTEMS_LINKER_SET_END(test_rw);
+  cb = RTEMS_LINKER_SET_BEGIN(test_ro);
+  ce = RTEMS_LINKER_SET_END(test_ro);
+  bi = RTEMS_LINKER_SET_BEGIN(test_rw_i);
+  ei = RTEMS_LINKER_SET_END(test_rw_i);
+  cbi = RTEMS_LINKER_SET_BEGIN(test_ro_i);
+  cei = RTEMS_LINKER_SET_END(test_ro_i);
+  sb = RTEMS_LINKER_SET_BEGIN(test_ro_s);
+  se = RTEMS_LINKER_SET_END(test_ro_s);
+  RTEMS_OBFUSCATE_VARIABLE(b);
+  RTEMS_OBFUSCATE_VARIABLE(e);
+  RTEMS_OBFUSCATE_VARIABLE(cb);
+  RTEMS_OBFUSCATE_VARIABLE(ce);
+  RTEMS_OBFUSCATE_VARIABLE(bi);
+  RTEMS_OBFUSCATE_VARIABLE(ei);
+  RTEMS_OBFUSCATE_VARIABLE(cbi);
+  RTEMS_OBFUSCATE_VARIABLE(cei);
+  RTEMS_OBFUSCATE_VARIABLE(sb);
+  RTEMS_OBFUSCATE_VARIABLE(se);
 
   rtems_test_assert((size_t) (e - b) == RTEMS_ARRAY_SIZE(a));
   rtems_test_assert((size_t) (ce - cb) == RTEMS_ARRAY_SIZE(ca));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw) == RTEMS_ARRAY_SIZE(a));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro) == RTEMS_ARRAY_SIZE(ca));
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw) == sizeof(a));
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro) == sizeof(ca));
+  rtems_test_assert(
+    RTEMS_LINKER_SET_ITEM_COUNT(test_rw) == RTEMS_ARRAY_SIZE(a)
+  );
+  rtems_test_assert(
+    RTEMS_LINKER_SET_ITEM_COUNT(test_ro) == RTEMS_ARRAY_SIZE(ca)
+  );
+  rtems_test_assert(!RTEMS_LINKER_SET_IS_EMPTY(test_rw));
+  rtems_test_assert(!RTEMS_LINKER_SET_IS_EMPTY(test_ro));
 
   rtems_test_assert((size_t) (ei - bi) == RTEMS_ARRAY_SIZE(a));
   rtems_test_assert((size_t) (cei - cbi) == RTEMS_ARRAY_SIZE(ca));
   rtems_test_assert((size_t) (se - sb) == 3);
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw_i) == RTEMS_ARRAY_SIZE(a));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_i) == RTEMS_ARRAY_SIZE(ca));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_s) == 3);
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw_i) == sizeof(a));
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_i) == sizeof(ca));
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_s) == 3 * sizeof(int *));
+  rtems_test_assert(
+    RTEMS_LINKER_SET_ITEM_COUNT(test_rw_i) == RTEMS_ARRAY_SIZE(a)
+  );
+  rtems_test_assert(
+    RTEMS_LINKER_SET_ITEM_COUNT(test_ro_i) == RTEMS_ARRAY_SIZE(ca)
+  );
+  rtems_test_assert(RTEMS_LINKER_SET_ITEM_COUNT(test_ro_s) == 3);
+  rtems_test_assert(!RTEMS_LINKER_SET_IS_EMPTY(test_rw_i));
+  rtems_test_assert(!RTEMS_LINKER_SET_IS_EMPTY(test_ro_i));
+  rtems_test_assert(!RTEMS_LINKER_SET_IS_EMPTY(test_ro_s));
+
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw_empty) == 0);
+  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_empty) == 0);
+  rtems_test_assert(RTEMS_LINKER_SET_ITEM_COUNT(test_rw_empty) == 0);
+  rtems_test_assert(RTEMS_LINKER_SET_ITEM_COUNT(test_ro_empty) == 0);
+  rtems_test_assert(RTEMS_LINKER_SET_IS_EMPTY(test_rw_empty));
+  rtems_test_assert(RTEMS_LINKER_SET_IS_EMPTY(test_ro_empty));
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(a); ++i) {
     rtems_test_assert(&a[i] == b[i]);
@@ -136,9 +176,49 @@ static void test(void)
     rtems_test_assert(&ca[i] == cbi[i]);
   }
 
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_rw, item) {
+    rtems_test_assert(&a[i] == *item);
+    ++i;
+  }
+  rtems_test_assert(i == RTEMS_ARRAY_SIZE(a));
+
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_ro, item) {
+    rtems_test_assert(&ca[i] == *item);
+    ++i;
+  }
+  rtems_test_assert(i == RTEMS_ARRAY_SIZE(ca));
+
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_rw_i, item) {
+    rtems_test_assert(&a[i] == *item);
+    ++i;
+  }
+  rtems_test_assert(i == RTEMS_ARRAY_SIZE(a));
+
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_ro_i, item) {
+    rtems_test_assert(&ca[i] == *item);
+    ++i;
+  }
+  rtems_test_assert(i == RTEMS_ARRAY_SIZE(ca));
+
   rtems_test_assert(&s0 == sb[0]);
   rtems_test_assert(&s1 == sb[1]);
   rtems_test_assert(&s2 == sb[2]);
+
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_rw_empty, item) {
+    ++i;
+  }
+  rtems_test_assert(i == 0);
+
+  i = 0;
+  RTEMS_LINKER_SET_FOREACH(test_ro_empty, item) {
+    ++i;
+  }
+  rtems_test_assert(i == 0);
 }
 
 static void test_content(void)
@@ -148,10 +228,14 @@ static void test_content(void)
   const char *b_ro;
   const char *e_ro;
 
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_content_rw, b_rw);
-  RTEMS_LINKER_SET_ASSIGN_END(test_content_rw, e_rw);
-  RTEMS_LINKER_SET_ASSIGN_BEGIN(test_content_ro, b_ro);
-  RTEMS_LINKER_SET_ASSIGN_END(test_content_ro, e_ro);
+  b_rw = RTEMS_LINKER_SET_BEGIN(test_content_rw);
+  e_rw = RTEMS_LINKER_SET_END(test_content_rw);
+  b_ro = RTEMS_LINKER_SET_BEGIN(test_content_ro);
+  e_ro = RTEMS_LINKER_SET_END(test_content_ro);
+  RTEMS_OBFUSCATE_VARIABLE(b_rw);
+  RTEMS_OBFUSCATE_VARIABLE(e_rw);
+  RTEMS_OBFUSCATE_VARIABLE(b_ro);
+  RTEMS_OBFUSCATE_VARIABLE(e_ro);
 
   rtems_test_assert((uintptr_t) &content_rw_1 >= (uintptr_t) b_rw);
   rtems_test_assert((uintptr_t) &content_rw_2 >= (uintptr_t) b_rw);

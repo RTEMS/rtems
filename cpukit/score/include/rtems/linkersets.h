@@ -21,35 +21,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define _LINKER_SET_BEGIN( set ) \
+#define RTEMS_LINKER_SET_BEGIN( set ) \
   _Linker_set_##set##_begin
 
-#define _LINKER_SET_END( set ) \
+#define RTEMS_LINKER_SET_END( set ) \
   _Linker_set_##set##_end
 
-#define RTEMS_LINKER_SET_ASSIGN_BEGIN( set, item ) \
-  do { \
-    item = _LINKER_SET_BEGIN( set ); \
-    RTEMS_OBFUSCATE_VARIABLE( item ); \
-  } while ( 0 )
-
-#define RTEMS_LINKER_SET_ASSIGN_END( set, item ) \
-  do { \
-    item = _LINKER_SET_END( set ); \
-    RTEMS_OBFUSCATE_VARIABLE( item ); \
-  } while ( 0 )
-
-#define RTEMS_LINKER_SET_SIZE( set ) \
-  ( (size_t) ( _Linker_set_##set##_end - _Linker_set_##set##_begin ) )
-
 #define RTEMS_LINKER_ROSET_DECLARE( set, type ) \
-  extern type const _LINKER_SET_BEGIN( set )[0]; \
-  extern type const _LINKER_SET_END( set )[0]
+  extern type const RTEMS_LINKER_SET_BEGIN( set )[0]; \
+  extern type const RTEMS_LINKER_SET_END( set )[0]
 
 #define RTEMS_LINKER_ROSET( set, type ) \
-  type const _LINKER_SET_BEGIN( set )[0] \
+  type const RTEMS_LINKER_SET_BEGIN( set )[0] \
   RTEMS_SECTION( ".rtemsroset." #set ".begin" ) RTEMS_USED; \
-  type const _LINKER_SET_END( set )[0] \
+  type const RTEMS_LINKER_SET_END( set )[0] \
   RTEMS_SECTION( ".rtemsroset." #set ".end" ) RTEMS_USED
 
 #define RTEMS_LINKER_ROSET_ITEM_DECLARE( set, type, item ) \
@@ -74,13 +59,13 @@ extern "C" {
   RTEMS_SECTION( ".rtemsroset." #set ".content" )
 
 #define RTEMS_LINKER_RWSET_DECLARE( set, type ) \
-  extern type _LINKER_SET_BEGIN( set )[0]; \
-  extern type _LINKER_SET_END( set )[0]
+  extern type RTEMS_LINKER_SET_BEGIN( set )[0]; \
+  extern type RTEMS_LINKER_SET_END( set )[0]
 
 #define RTEMS_LINKER_RWSET( set, type ) \
-  type _LINKER_SET_BEGIN( set )[0] \
+  type RTEMS_LINKER_SET_BEGIN( set )[0] \
   RTEMS_SECTION( ".rtemsrwset." #set ".begin" ) RTEMS_USED; \
-  type _LINKER_SET_END( set )[0] \
+  type RTEMS_LINKER_SET_END( set )[0] \
   RTEMS_SECTION( ".rtemsrwset." #set ".end" ) RTEMS_USED
 
 #define RTEMS_LINKER_RWSET_ITEM_DECLARE( set, type, item ) \
@@ -108,6 +93,34 @@ extern "C" {
 #define RTEMS_LINKER_RWSET_CONTENT( set, decl ) \
   decl \
   RTEMS_SECTION( ".rtemsrwset." #set ".content" )
+
+RTEMS_INLINE_ROUTINE uintptr_t _Linker_set_Obfuscate( const void *ptr )
+{
+  uintptr_t addr;
+
+  addr = (uintptr_t) ptr;
+  RTEMS_OBFUSCATE_VARIABLE( addr );
+
+  return addr;
+}
+
+#define RTEMS_LINKER_SET_SIZE( set ) \
+  ( _Linker_set_Obfuscate( RTEMS_LINKER_SET_END( set ) ) \
+    - _Linker_set_Obfuscate( RTEMS_LINKER_SET_BEGIN( set ) ) )
+
+#define RTEMS_LINKER_SET_ITEM_COUNT( set ) \
+  ( RTEMS_LINKER_SET_SIZE( set ) \
+    / sizeof( RTEMS_LINKER_SET_BEGIN( set )[ 0 ] ) )
+
+#define RTEMS_LINKER_SET_IS_EMPTY( set ) \
+  ( RTEMS_LINKER_SET_SIZE( set ) == 0 )
+
+#define RTEMS_LINKER_SET_FOREACH( set, item ) \
+  for ( \
+    item = (void *) _Linker_set_Obfuscate( RTEMS_LINKER_SET_BEGIN( set ) ) ; \
+    item != RTEMS_LINKER_SET_END( set ) ; \
+    ++item \
+  )
 
 #ifdef __cplusplus
 }
