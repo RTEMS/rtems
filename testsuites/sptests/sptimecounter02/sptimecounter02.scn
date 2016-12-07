@@ -1,46 +1,1000 @@
-*** BEGIN OF TEST SPTIMECOUNTER_2 ***
+*** BEGIN OF TEST SPTIMECOUNTER 2 ***
 <SPTimecounter01>
   <BinuptimeTest activeWorker="1">
-    <Counter worker="1">591457</Counter>
-    <Duration worker="1" unit="sbintime">4294787862</Duration>
+    <Counter worker="1">5433429</Counter>
+    <Duration worker="1" unit="sbintime">4291225979</Duration>
+  </BinuptimeTest>
   <BinuptimeTest activeWorker="2">
-    <Counter worker="1">587737</Counter>
-    <Duration worker="1" unit="sbintime">4294603178</Duration>
-    <Counter worker="2">587754</Counter>
-    <Duration worker="2" unit="sbintime">4294596307</Duration>
+    <Counter worker="1">3832225</Counter>
+    <Duration worker="1" unit="sbintime">4290792130</Duration>
+    <Counter worker="2">3834316</Counter>
+    <Duration worker="2" unit="sbintime">4290790869</Duration>
+  </BinuptimeTest>
   <BinuptimeTest activeWorker="3">
-    <Counter worker="1">583602</Counter>
-    <Duration worker="1" unit="sbintime">4293605982</Duration>
-    <Counter worker="2">583643</Counter>
-    <Duration worker="2" unit="sbintime">4293602260</Duration>
-    <Counter worker="3">583659</Counter>
-    <Duration worker="3" unit="sbintime">4293604551</Duration>
+    <Counter worker="1">2557440</Counter>
+    <Duration worker="1" unit="sbintime">4294943244</Duration>
+    <Counter worker="2">2559261</Counter>
+    <Duration worker="2" unit="sbintime">4294946681</Duration>
+    <Counter worker="3">2559529</Counter>
+    <Duration worker="3" unit="sbintime">4294943817</Duration>
+  </BinuptimeTest>
   <BinuptimeTest activeWorker="4">
-    <Counter worker="1">583086</Counter>
-    <Duration worker="1" unit="sbintime">4291246232</Duration>
-    <Counter worker="2">583124</Counter>
-    <Duration worker="2" unit="sbintime">4291243178</Duration>
-    <Counter worker="3">583139</Counter>
-    <Duration worker="3" unit="sbintime">4291242796</Duration>
-    <Counter worker="4">565417</Counter>
-    <Duration worker="4" unit="sbintime">4291304930</Duration>
+    <Counter worker="1">1916358</Counter>
+    <Duration worker="1" unit="sbintime">4291303174</Duration>
+    <Counter worker="2">1918101</Counter>
+    <Duration worker="2" unit="sbintime">4291303746</Duration>
+    <Counter worker="3">1918236</Counter>
+    <Duration worker="3" unit="sbintime">4291301112</Duration>
+    <Counter worker="4">1918182</Counter>
+    <Duration worker="4" unit="sbintime">4291303861</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="5">
+    <Counter worker="1">1437861</Counter>
+    <Duration worker="1" unit="sbintime">4292771136</Duration>
+    <Counter worker="2">1439416</Counter>
+    <Duration worker="2" unit="sbintime">4292769991</Duration>
+    <Counter worker="3">1439361</Counter>
+    <Duration worker="3" unit="sbintime">4292774000</Duration>
+    <Counter worker="4">1439373</Counter>
+    <Duration worker="4" unit="sbintime">4292773427</Duration>
+    <Counter worker="5">1919046</Counter>
+    <Duration worker="5" unit="sbintime">4292771480</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="6">
+    <Counter worker="1">1278255</Counter>
+    <Duration worker="1" unit="sbintime">4292980616</Duration>
+    <Counter worker="2">1279690</Counter>
+    <Duration worker="2" unit="sbintime">4292981762</Duration>
+    <Counter worker="3">1279546</Counter>
+    <Duration worker="3" unit="sbintime">4292978440</Duration>
+    <Counter worker="4">1279558</Counter>
+    <Duration worker="4" unit="sbintime">4292978096</Duration>
+    <Counter worker="5">1279611</Counter>
+    <Duration worker="5" unit="sbintime">4292980043</Duration>
+    <Counter worker="6">1279619</Counter>
+    <Duration worker="6" unit="sbintime">4292976150</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="7">
+    <Counter worker="1">1022765</Counter>
+    <Duration worker="1" unit="sbintime">4294000413</Duration>
+    <Counter worker="2">1024240</Counter>
+    <Duration worker="2" unit="sbintime">4294002246</Duration>
+    <Counter worker="3">1024022</Counter>
+    <Duration worker="3" unit="sbintime">4293998007</Duration>
+    <Counter worker="4">1024036</Counter>
+    <Duration worker="4" unit="sbintime">4293998924</Duration>
+    <Counter worker="5">1024020</Counter>
+    <Duration worker="5" unit="sbintime">4293998809</Duration>
+    <Counter worker="6">1024010</Counter>
+    <Duration worker="6" unit="sbintime">4293999382</Duration>
+    <Counter worker="7">1535866</Counter>
+    <Duration worker="7" unit="sbintime">4293999955</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="8">
+    <Counter worker="1">958721</Counter>
+    <Duration worker="1" unit="sbintime">4293767683</Duration>
+    <Counter worker="2">960000</Counter>
+    <Duration worker="2" unit="sbintime">4293768599</Duration>
+    <Counter worker="3">960007</Counter>
+    <Duration worker="3" unit="sbintime">4293764018</Duration>
+    <Counter worker="4">960007</Counter>
+    <Duration worker="4" unit="sbintime">4293764132</Duration>
+    <Counter worker="5">960030</Counter>
+    <Duration worker="5" unit="sbintime">4293764705</Duration>
+    <Counter worker="6">960042</Counter>
+    <Duration worker="6" unit="sbintime">4293764590</Duration>
+    <Counter worker="7">960019</Counter>
+    <Duration worker="7" unit="sbintime">4293768026</Duration>
+    <Counter worker="8">959998</Counter>
+    <Duration worker="8" unit="sbintime">4293763446</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="9">
+    <Counter worker="1">942346</Counter>
+    <Duration worker="1" unit="sbintime">4292128953</Duration>
+    <Counter worker="2">943991</Counter>
+    <Duration worker="2" unit="sbintime">4292136282</Duration>
+    <Counter worker="3">940622</Counter>
+    <Duration worker="3" unit="sbintime">4292123913</Duration>
+    <Counter worker="4">940597</Counter>
+    <Duration worker="4" unit="sbintime">4292128494</Duration>
+    <Counter worker="5">941505</Counter>
+    <Duration worker="5" unit="sbintime">4292126203</Duration>
+    <Counter worker="6">941481</Counter>
+    <Duration worker="6" unit="sbintime">4292126204</Duration>
+    <Counter worker="7">944352</Counter>
+    <Duration worker="7" unit="sbintime">4292126089</Duration>
+    <Counter worker="8">944344</Counter>
+    <Duration worker="8" unit="sbintime">4292126204</Duration>
+    <Counter worker="9">5373049</Counter>
+    <Duration worker="9" unit="sbintime">4292132044</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="10">
+    <Counter worker="1">958924</Counter>
+    <Duration worker="1" unit="sbintime">4292784422</Duration>
+    <Counter worker="2">960306</Counter>
+    <Duration worker="2" unit="sbintime">4292785452</Duration>
+    <Counter worker="3">958656</Counter>
+    <Duration worker="3" unit="sbintime">4292782704</Duration>
+    <Counter worker="4">958632</Counter>
+    <Duration worker="4" unit="sbintime">4292782704</Duration>
+    <Counter worker="5">960299</Counter>
+    <Duration worker="5" unit="sbintime">4292781444</Duration>
+    <Counter worker="6">960321</Counter>
+    <Duration worker="6" unit="sbintime">4292786026</Duration>
+    <Counter worker="7">959742</Counter>
+    <Duration worker="7" unit="sbintime">4292778810</Duration>
+    <Counter worker="8">959726</Counter>
+    <Duration worker="8" unit="sbintime">4292783162</Duration>
+    <Counter worker="9">3835189</Counter>
+    <Duration worker="9" unit="sbintime">4292783734</Duration>
+    <Counter worker="10">3835159</Counter>
+    <Duration worker="10" unit="sbintime">4292782475</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="11">
+    <Counter worker="1">958317</Counter>
+    <Duration worker="1" unit="sbintime">4292020376</Duration>
+    <Counter worker="2">959720</Counter>
+    <Duration worker="2" unit="sbintime">4292020490</Duration>
+    <Counter worker="3">959141</Counter>
+    <Duration worker="3" unit="sbintime">4292016024</Duration>
+    <Counter worker="4">959171</Counter>
+    <Duration worker="4" unit="sbintime">4292020376</Duration>
+    <Counter worker="5">959183</Counter>
+    <Duration worker="5" unit="sbintime">4292018199</Duration>
+    <Counter worker="6">959176</Counter>
+    <Duration worker="6" unit="sbintime">4292022666</Duration>
+    <Counter worker="7">960245</Counter>
+    <Duration worker="7" unit="sbintime">4292020376</Duration>
+    <Counter worker="8">960256</Counter>
+    <Duration worker="8" unit="sbintime">4292024041</Duration>
+    <Counter worker="9">2556834</Counter>
+    <Duration worker="9" unit="sbintime">4292019460</Duration>
+    <Counter worker="10">2556892</Counter>
+    <Duration worker="10" unit="sbintime">4292018314</Duration>
+    <Counter worker="11">2556777</Counter>
+    <Duration worker="11" unit="sbintime">4292018543</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="12">
+    <Counter worker="1">958527</Counter>
+    <Duration worker="1" unit="sbintime">4291119807</Duration>
+    <Counter worker="2">959937</Counter>
+    <Duration worker="2" unit="sbintime">4291119807</Duration>
+    <Counter worker="3">959932</Counter>
+    <Duration worker="3" unit="sbintime">4291120379</Duration>
+    <Counter worker="4">959924</Counter>
+    <Duration worker="4" unit="sbintime">4291120380</Duration>
+    <Counter worker="5">959389</Counter>
+    <Duration worker="5" unit="sbintime">4291120838</Duration>
+    <Counter worker="6">959393</Counter>
+    <Duration worker="6" unit="sbintime">4291123701</Duration>
+    <Counter worker="7">958279</Counter>
+    <Duration worker="7" unit="sbintime">4291118204</Duration>
+    <Counter worker="8">958288</Counter>
+    <Duration worker="8" unit="sbintime">4291118089</Duration>
+    <Counter worker="9">1917514</Counter>
+    <Duration worker="9" unit="sbintime">4291120609</Duration>
+    <Counter worker="10">1917516</Counter>
+    <Duration worker="10" unit="sbintime">4291118318</Duration>
+    <Counter worker="11">1917496</Counter>
+    <Duration worker="11" unit="sbintime">4291119463</Duration>
+    <Counter worker="12">1917477</Counter>
+    <Duration worker="12" unit="sbintime">4291116829</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="13">
+    <Counter worker="1">957469</Counter>
+    <Duration worker="1" unit="sbintime">4291772986</Duration>
+    <Counter worker="2">958901</Counter>
+    <Duration worker="2" unit="sbintime">4291772184</Duration>
+    <Counter worker="3">959855</Counter>
+    <Duration worker="3" unit="sbintime">4291766114</Duration>
+    <Counter worker="4">959906</Counter>
+    <Duration worker="4" unit="sbintime">4291770695</Duration>
+    <Counter worker="5">959953</Counter>
+    <Duration worker="5" unit="sbintime">4291779743</Duration>
+    <Counter worker="6">959977</Counter>
+    <Duration worker="6" unit="sbintime">4291769092</Duration>
+    <Counter worker="7">959389</Counter>
+    <Duration worker="7" unit="sbintime">4291770810</Duration>
+    <Counter worker="8">959385</Counter>
+    <Duration worker="8" unit="sbintime">4291766228</Duration>
+    <Counter worker="9">1438521</Counter>
+    <Duration worker="9" unit="sbintime">4291768748</Duration>
+    <Counter worker="10">1438502</Counter>
+    <Duration worker="10" unit="sbintime">4291768977</Duration>
+    <Counter worker="11">1438548</Counter>
+    <Duration worker="11" unit="sbintime">4291766687</Duration>
+    <Counter worker="12">1438497</Counter>
+    <Duration worker="12" unit="sbintime">4291770237</Duration>
+    <Counter worker="13">1917953</Counter>
+    <Duration worker="13" unit="sbintime">4291765999</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="14">
+    <Counter worker="1">958554</Counter>
+    <Duration worker="1" unit="sbintime">4293977506</Duration>
+    <Counter worker="2">959986</Counter>
+    <Duration worker="2" unit="sbintime">4293974643</Duration>
+    <Counter worker="3">959942</Counter>
+    <Duration worker="3" unit="sbintime">4293976246</Duration>
+    <Counter worker="4">959946</Counter>
+    <Duration worker="4" unit="sbintime">4293971894</Duration>
+    <Counter worker="5">959422</Counter>
+    <Duration worker="5" unit="sbintime">4293972467</Duration>
+    <Counter worker="6">959466</Counter>
+    <Duration worker="6" unit="sbintime">4293976819</Duration>
+    <Counter worker="7">960436</Counter>
+    <Duration worker="7" unit="sbintime">4293975216</Duration>
+    <Counter worker="8">960437</Counter>
+    <Duration worker="8" unit="sbintime">4293975216</Duration>
+    <Counter worker="9">1280753</Counter>
+    <Duration worker="9" unit="sbintime">4293970749</Duration>
+    <Counter worker="10">1280760</Counter>
+    <Duration worker="10" unit="sbintime">4293974529</Duration>
+    <Counter worker="11">1278618</Counter>
+    <Duration worker="11" unit="sbintime">4293975445</Duration>
+    <Counter worker="12">1278603</Counter>
+    <Duration worker="12" unit="sbintime">4293971665</Duration>
+    <Counter worker="13">1278806</Counter>
+    <Duration worker="13" unit="sbintime">4293971894</Duration>
+    <Counter worker="14">1278798</Counter>
+    <Duration worker="14" unit="sbintime">4293975673</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="15">
+    <Counter worker="1">958175</Counter>
+    <Duration worker="1" unit="sbintime">4291365823</Duration>
+    <Counter worker="2">959788</Counter>
+    <Duration worker="2" unit="sbintime">4291366969</Duration>
+    <Counter worker="3">959270</Counter>
+    <Duration worker="3" unit="sbintime">4291360783</Duration>
+    <Counter worker="4">959251</Counter>
+    <Duration worker="4" unit="sbintime">4291365250</Duration>
+    <Counter worker="5">958544</Counter>
+    <Duration worker="5" unit="sbintime">4291366854</Duration>
+    <Counter worker="6">958536</Counter>
+    <Duration worker="6" unit="sbintime">4291362502</Duration>
+    <Counter worker="7">959264</Counter>
+    <Duration worker="7" unit="sbintime">4291364105</Duration>
+    <Counter worker="8">959249</Counter>
+    <Duration worker="8" unit="sbintime">4291368571</Duration>
+    <Counter worker="9">1021329</Counter>
+    <Duration worker="9" unit="sbintime">4291362960</Duration>
+    <Counter worker="10">1021315</Counter>
+    <Duration worker="10" unit="sbintime">4291366854</Duration>
+    <Counter worker="11">1022881</Counter>
+    <Duration worker="11" unit="sbintime">4291367426</Duration>
+    <Counter worker="12">1022857</Counter>
+    <Duration worker="12" unit="sbintime">4291365135</Duration>
+    <Counter worker="13">1022969</Counter>
+    <Duration worker="13" unit="sbintime">4291365135</Duration>
+    <Counter worker="14">1022963</Counter>
+    <Duration worker="14" unit="sbintime">4291364677</Duration>
+    <Counter worker="15">1536939</Counter>
+    <Duration worker="15" unit="sbintime">4291362960</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="16">
+    <Counter worker="1">958710</Counter>
+    <Duration worker="1" unit="sbintime">4294622324</Duration>
+    <Counter worker="2">960272</Counter>
+    <Duration worker="2" unit="sbintime">4294611444</Duration>
+    <Counter worker="3">960318</Counter>
+    <Duration worker="3" unit="sbintime">4294610413</Duration>
+    <Counter worker="4">960325</Counter>
+    <Duration worker="4" unit="sbintime">4294610298</Duration>
+    <Counter worker="5">957982</Counter>
+    <Duration worker="5" unit="sbintime">4294606977</Duration>
+    <Counter worker="6">958010</Counter>
+    <Duration worker="6" unit="sbintime">4294611558</Duration>
+    <Counter worker="7">960811</Counter>
+    <Duration worker="7" unit="sbintime">4294608122</Duration>
+    <Counter worker="8">960866</Counter>
+    <Duration worker="8" unit="sbintime">4294608123</Duration>
+    <Counter worker="9">956789</Counter>
+    <Duration worker="9" unit="sbintime">4294606175</Duration>
+    <Counter worker="10">956816</Counter>
+    <Duration worker="10" unit="sbintime">4294610757</Duration>
+    <Counter worker="11">961812</Counter>
+    <Duration worker="11" unit="sbintime">4294611787</Duration>
+    <Counter worker="12">961815</Counter>
+    <Duration worker="12" unit="sbintime">4294610069</Duration>
+    <Counter worker="13">959509</Counter>
+    <Duration worker="13" unit="sbintime">4294610183</Duration>
+    <Counter worker="14">959511</Counter>
+    <Duration worker="14" unit="sbintime">4294610070</Duration>
+    <Counter worker="15">960164</Counter>
+    <Duration worker="15" unit="sbintime">4294612474</Duration>
+    <Counter worker="16">960191</Counter>
+    <Duration worker="16" unit="sbintime">4294607893</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="17">
+    <Counter worker="1">944571</Counter>
+    <Duration worker="1" unit="sbintime">4290823168</Duration>
+    <Counter worker="2">946274</Counter>
+    <Duration worker="2" unit="sbintime">4290823855</Duration>
+    <Counter worker="3">945546</Counter>
+    <Duration worker="3" unit="sbintime">4290821565</Duration>
+    <Counter worker="4">945535</Counter>
+    <Duration worker="4" unit="sbintime">4290821564</Duration>
+    <Counter worker="5">943940</Counter>
+    <Duration worker="5" unit="sbintime">4290819274</Duration>
+    <Counter worker="6">943961</Counter>
+    <Duration worker="6" unit="sbintime">4290823741</Duration>
+    <Counter worker="7">945996</Counter>
+    <Duration worker="7" unit="sbintime">4290821565</Duration>
+    <Counter worker="8">945999</Counter>
+    <Duration worker="8" unit="sbintime">4290821564</Duration>
+    <Counter worker="9">944038</Counter>
+    <Duration worker="9" unit="sbintime">4290823969</Duration>
+    <Counter worker="10">944031</Counter>
+    <Duration worker="10" unit="sbintime">4290819503</Duration>
+    <Counter worker="11">944055</Counter>
+    <Duration worker="11" unit="sbintime">4290824543</Duration>
+    <Counter worker="12">944036</Counter>
+    <Duration worker="12" unit="sbintime">4290820076</Duration>
+    <Counter worker="13">945985</Counter>
+    <Duration worker="13" unit="sbintime">4290821221</Duration>
+    <Counter worker="14">945985</Counter>
+    <Duration worker="14" unit="sbintime">4290821221</Duration>
+    <Counter worker="15">946541</Counter>
+    <Duration worker="15" unit="sbintime">4290819503</Duration>
+    <Counter worker="16">946539</Counter>
+    <Duration worker="16" unit="sbintime">4290819388</Duration>
+    <Counter worker="17">5319165</Counter>
+    <Duration worker="17" unit="sbintime">4290821221</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="18">
+    <Counter worker="1">957435</Counter>
+    <Duration worker="1" unit="sbintime">4292140979</Duration>
+    <Counter worker="2">959052</Counter>
+    <Duration worker="2" unit="sbintime">4292138230</Duration>
+    <Counter worker="3">959020</Counter>
+    <Duration worker="3" unit="sbintime">4292138115</Duration>
+    <Counter worker="4">959034</Counter>
+    <Duration worker="4" unit="sbintime">4292138230</Duration>
+    <Counter worker="5">959057</Counter>
+    <Duration worker="5" unit="sbintime">4292137199</Duration>
+    <Counter worker="6">959078</Counter>
+    <Duration worker="6" unit="sbintime">4292136969</Duration>
+    <Counter worker="7">959758</Counter>
+    <Duration worker="7" unit="sbintime">4292139375</Duration>
+    <Counter worker="8">959770</Counter>
+    <Duration worker="8" unit="sbintime">4292139261</Duration>
+    <Counter worker="9">959102</Counter>
+    <Duration worker="9" unit="sbintime">4292136855</Duration>
+    <Counter worker="10">959101</Counter>
+    <Duration worker="10" unit="sbintime">4292141322</Duration>
+    <Counter worker="11">957493</Counter>
+    <Duration worker="11" unit="sbintime">4292141322</Duration>
+    <Counter worker="12">957490</Counter>
+    <Duration worker="12" unit="sbintime">4292136741</Duration>
+    <Counter worker="13">960923</Counter>
+    <Duration worker="13" unit="sbintime">4292141895</Duration>
+    <Counter worker="14">960933</Counter>
+    <Duration worker="14" unit="sbintime">4292139146</Duration>
+    <Counter worker="15">958227</Counter>
+    <Duration worker="15" unit="sbintime">4292139032</Duration>
+    <Counter worker="16">958201</Counter>
+    <Duration worker="16" unit="sbintime">4292134565</Duration>
+    <Counter worker="17">3833107</Counter>
+    <Duration worker="17" unit="sbintime">4292138229</Duration>
+    <Counter worker="18">3833100</Counter>
+    <Duration worker="18" unit="sbintime">4292137085</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="19">
+    <Counter worker="1">959131</Counter>
+    <Duration worker="1" unit="sbintime">4295003603</Duration>
+    <Counter worker="2">960752</Counter>
+    <Duration worker="2" unit="sbintime">4295005321</Duration>
+    <Counter worker="3">958958</Counter>
+    <Duration worker="3" unit="sbintime">4295009444</Duration>
+    <Counter worker="4">958960</Counter>
+    <Duration worker="4" unit="sbintime">4295001312</Duration>
+    <Counter worker="5">960052</Counter>
+    <Duration worker="5" unit="sbintime">4295001771</Duration>
+    <Counter worker="6">960086</Counter>
+    <Duration worker="6" unit="sbintime">4295001885</Duration>
+    <Counter worker="7">960031</Counter>
+    <Duration worker="7" unit="sbintime">4295003603</Duration>
+    <Counter worker="8">960043</Counter>
+    <Duration worker="8" unit="sbintime">4294999021</Duration>
+    <Counter worker="9">961650</Counter>
+    <Duration worker="9" unit="sbintime">4295005435</Duration>
+    <Counter worker="10">961687</Counter>
+    <Duration worker="10" unit="sbintime">4295001885</Duration>
+    <Counter worker="11">960613</Counter>
+    <Duration worker="11" unit="sbintime">4295011276</Duration>
+    <Counter worker="12">960593</Counter>
+    <Duration worker="12" unit="sbintime">4295000854</Duration>
+    <Counter worker="13">959538</Counter>
+    <Duration worker="13" unit="sbintime">4295001427</Duration>
+    <Counter worker="14">959574</Counter>
+    <Duration worker="14" unit="sbintime">4295001427</Duration>
+    <Counter worker="15">956810</Counter>
+    <Duration worker="15" unit="sbintime">4295003717</Duration>
+    <Counter worker="16">956818</Counter>
+    <Duration worker="16" unit="sbintime">4295003603</Duration>
+    <Counter worker="17">2557866</Counter>
+    <Duration worker="17" unit="sbintime">4295002687</Duration>
+    <Counter worker="18">2557901</Counter>
+    <Duration worker="18" unit="sbintime">4295000969</Duration>
+    <Counter worker="19">2557791</Counter>
+    <Duration worker="19" unit="sbintime">4295000968</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="20">
+    <Counter worker="1">956818</Counter>
+    <Duration worker="1" unit="sbintime">4290849167</Duration>
+    <Counter worker="2">958477</Counter>
+    <Duration worker="2" unit="sbintime">4290849052</Duration>
+    <Counter worker="3">959502</Counter>
+    <Duration worker="3" unit="sbintime">4290848594</Duration>
+    <Counter worker="4">959493</Counter>
+    <Duration worker="4" unit="sbintime">4290848594</Duration>
+    <Counter worker="5">959067</Counter>
+    <Duration worker="5" unit="sbintime">4290848021</Duration>
+    <Counter worker="6">959118</Counter>
+    <Duration worker="6" unit="sbintime">4290848021</Duration>
+    <Counter worker="7">958349</Counter>
+    <Duration worker="7" unit="sbintime">4290853175</Duration>
+    <Counter worker="8">958323</Counter>
+    <Duration worker="8" unit="sbintime">4290846303</Duration>
+    <Counter worker="9">957048</Counter>
+    <Duration worker="9" unit="sbintime">4290847563</Duration>
+    <Counter worker="10">957074</Counter>
+    <Duration worker="10" unit="sbintime">4290847678</Duration>
+    <Counter worker="11">960084</Counter>
+    <Duration worker="11" unit="sbintime">4290846418</Duration>
+    <Counter worker="12">960074</Counter>
+    <Duration worker="12" unit="sbintime">4290846418</Duration>
+    <Counter worker="13">959020</Counter>
+    <Duration worker="13" unit="sbintime">4290845846</Duration>
+    <Counter worker="14">959039</Counter>
+    <Duration worker="14" unit="sbintime">4290850426</Duration>
+    <Counter worker="15">958126</Counter>
+    <Duration worker="15" unit="sbintime">4290845960</Duration>
+    <Counter worker="16">958095</Counter>
+    <Duration worker="16" unit="sbintime">4290845845</Duration>
+    <Counter worker="17">1916573</Counter>
+    <Duration worker="17" unit="sbintime">4290848136</Duration>
+    <Counter worker="18">1916534</Counter>
+    <Duration worker="18" unit="sbintime">4290845845</Duration>
+    <Counter worker="19">1916572</Counter>
+    <Duration worker="19" unit="sbintime">4290848136</Duration>
+    <Counter worker="20">1916533</Counter>
+    <Duration worker="20" unit="sbintime">4290845845</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="21">
+    <Counter worker="1">958421</Counter>
+    <Duration worker="1" unit="sbintime">4294761939</Duration>
+    <Counter worker="2">960077</Counter>
+    <Duration worker="2" unit="sbintime">4294760221</Duration>
+    <Counter worker="3">959148</Counter>
+    <Duration worker="3" unit="sbintime">4294754953</Duration>
+    <Counter worker="4">959141</Counter>
+    <Duration worker="4" unit="sbintime">4294759649</Duration>
+    <Counter worker="5">959688</Counter>
+    <Duration worker="5" unit="sbintime">4294754494</Duration>
+    <Counter worker="6">959736</Counter>
+    <Duration worker="6" unit="sbintime">4294759076</Duration>
+    <Counter worker="7">960425</Counter>
+    <Duration worker="7" unit="sbintime">4294760221</Duration>
+    <Counter worker="8">960396</Counter>
+    <Duration worker="8" unit="sbintime">4294755755</Duration>
+    <Counter worker="9">958447</Counter>
+    <Duration worker="9" unit="sbintime">4294756213</Duration>
+    <Counter worker="10">958469</Counter>
+    <Duration worker="10" unit="sbintime">4294756327</Duration>
+    <Counter worker="11">960168</Counter>
+    <Duration worker="11" unit="sbintime">4294759076</Duration>
+    <Counter worker="12">960140</Counter>
+    <Duration worker="12" unit="sbintime">4294754495</Duration>
+    <Counter worker="13">961301</Counter>
+    <Duration worker="13" unit="sbintime">4294767323</Duration>
+    <Counter worker="14">961331</Counter>
+    <Duration worker="14" unit="sbintime">4294756785</Duration>
+    <Counter worker="15">958210</Counter>
+    <Duration worker="15" unit="sbintime">4294757358</Duration>
+    <Counter worker="16">958203</Counter>
+    <Duration worker="16" unit="sbintime">4294757358</Duration>
+    <Counter worker="17">1439060</Counter>
+    <Duration worker="17" unit="sbintime">4294757931</Duration>
+    <Counter worker="18">1439023</Counter>
+    <Duration worker="18" unit="sbintime">4294758159</Duration>
+    <Counter worker="19">1439103</Counter>
+    <Duration worker="19" unit="sbintime">4294758045</Duration>
+    <Counter worker="20">1439064</Counter>
+    <Duration worker="20" unit="sbintime">4294757930</Duration>
+    <Counter worker="21">1918367</Counter>
+    <Duration worker="21" unit="sbintime">4294758045</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="22">
+    <Counter worker="1">958582</Counter>
+    <Duration worker="1" unit="sbintime">4291633485</Duration>
+    <Counter worker="2">960264</Counter>
+    <Duration worker="2" unit="sbintime">4291633599</Duration>
+    <Counter worker="3">958919</Counter>
+    <Duration worker="3" unit="sbintime">4291636921</Duration>
+    <Counter worker="4">958961</Counter>
+    <Duration worker="4" unit="sbintime">4291632912</Duration>
+    <Counter worker="5">958913</Counter>
+    <Duration worker="5" unit="sbintime">4291634631</Duration>
+    <Counter worker="6">958982</Counter>
+    <Duration worker="6" unit="sbintime">4291634630</Duration>
+    <Counter worker="7">957838</Counter>
+    <Duration worker="7" unit="sbintime">4291633027</Duration>
+    <Counter worker="8">957849</Counter>
+    <Duration worker="8" unit="sbintime">4291632912</Duration>
+    <Counter worker="9">958935</Counter>
+    <Duration worker="9" unit="sbintime">4291632340</Duration>
+    <Counter worker="10">958978</Counter>
+    <Duration worker="10" unit="sbintime">4291632455</Duration>
+    <Counter worker="11">958040</Counter>
+    <Duration worker="11" unit="sbintime">4291631194</Duration>
+    <Counter worker="12">958060</Counter>
+    <Duration worker="12" unit="sbintime">4291635203</Duration>
+    <Counter worker="13">958031</Counter>
+    <Duration worker="13" unit="sbintime">4291634745</Duration>
+    <Counter worker="14">958035</Counter>
+    <Duration worker="14" unit="sbintime">4291630163</Duration>
+    <Counter worker="15">959809</Counter>
+    <Duration worker="15" unit="sbintime">4291635776</Duration>
+    <Counter worker="16">959833</Counter>
+    <Duration worker="16" unit="sbintime">4291631309</Duration>
+    <Counter worker="17">1278240</Counter>
+    <Duration worker="17" unit="sbintime">4291631194</Duration>
+    <Counter worker="18">1278239</Counter>
+    <Duration worker="18" unit="sbintime">4291634745</Duration>
+    <Counter worker="19">1278855</Counter>
+    <Duration worker="19" unit="sbintime">4291629591</Duration>
+    <Counter worker="20">1278855</Counter>
+    <Duration worker="20" unit="sbintime">4291632913</Duration>
+    <Counter worker="21">1277332</Counter>
+    <Duration worker="21" unit="sbintime">4291632912</Duration>
+    <Counter worker="22">1277327</Counter>
+    <Duration worker="22" unit="sbintime">4291635891</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="23">
+    <Counter worker="1">958870</Counter>
+    <Duration worker="1" unit="sbintime">4294362908</Duration>
+    <Counter worker="2">960652</Counter>
+    <Duration worker="2" unit="sbintime">4294358327</Duration>
+    <Counter worker="3">957192</Counter>
+    <Duration worker="3" unit="sbintime">4294358327</Duration>
+    <Counter worker="4">957194</Counter>
+    <Duration worker="4" unit="sbintime">4294362793</Duration>
+    <Counter worker="5">960437</Counter>
+    <Duration worker="5" unit="sbintime">4294358900</Duration>
+    <Counter worker="6">960480</Counter>
+    <Duration worker="6" unit="sbintime">4294359014</Duration>
+    <Counter worker="7">958820</Counter>
+    <Duration worker="7" unit="sbintime">4294362908</Duration>
+    <Counter worker="8">958835</Counter>
+    <Duration worker="8" unit="sbintime">4294360045</Duration>
+    <Counter worker="9">956488</Counter>
+    <Duration worker="9" unit="sbintime">4294360617</Duration>
+    <Counter worker="10">956549</Counter>
+    <Duration worker="10" unit="sbintime">4294356151</Duration>
+    <Counter worker="11">961870</Counter>
+    <Duration worker="11" unit="sbintime">4294356151</Duration>
+    <Counter worker="12">961835</Counter>
+    <Duration worker="12" unit="sbintime">4294360732</Duration>
+    <Counter worker="13">961302</Counter>
+    <Duration worker="13" unit="sbintime">4294361191</Duration>
+    <Counter worker="14">961345</Counter>
+    <Duration worker="14" unit="sbintime">4294356724</Duration>
+    <Counter worker="15">956489</Counter>
+    <Duration worker="15" unit="sbintime">4294360045</Duration>
+    <Counter worker="16">956506</Counter>
+    <Duration worker="16" unit="sbintime">4294360160</Duration>
+    <Counter worker="17">1021387</Counter>
+    <Duration worker="17" unit="sbintime">4294356952</Duration>
+    <Counter worker="18">1021417</Counter>
+    <Duration worker="18" unit="sbintime">4294360961</Duration>
+    <Counter worker="19">1021929</Counter>
+    <Duration worker="19" unit="sbintime">4294359243</Duration>
+    <Counter worker="20">1021926</Counter>
+    <Duration worker="20" unit="sbintime">4294359930</Duration>
+    <Counter worker="21">1024098</Counter>
+    <Duration worker="21" unit="sbintime">4294358327</Duration>
+    <Counter worker="22">1024083</Counter>
+    <Duration worker="22" unit="sbintime">4294358098</Duration>
+    <Counter worker="23">1537525</Counter>
+    <Duration worker="23" unit="sbintime">4294361076</Duration>
+  </BinuptimeTest>
+  <BinuptimeTest activeWorker="24">
+    <Counter worker="1">958462</Counter>
+    <Duration worker="1" unit="sbintime">4294344239</Duration>
+    <Counter worker="2">960113</Counter>
+    <Duration worker="2" unit="sbintime">4294339773</Duration>
+    <Counter worker="3">959461</Counter>
+    <Duration worker="3" unit="sbintime">4294341949</Duration>
+    <Counter worker="4">959473</Counter>
+    <Duration worker="4" unit="sbintime">4294344812</Duration>
+    <Counter worker="5">958912</Counter>
+    <Duration worker="5" unit="sbintime">4294341490</Duration>
+    <Counter worker="6">958938</Counter>
+    <Duration worker="6" unit="sbintime">4294341376</Duration>
+    <Counter worker="7">958935</Counter>
+    <Duration worker="7" unit="sbintime">4294340230</Duration>
+    <Counter worker="8">958921</Counter>
+    <Duration worker="8" unit="sbintime">4294340345</Duration>
+    <Counter worker="9">959876</Counter>
+    <Duration worker="9" unit="sbintime">4294341491</Duration>
+    <Counter worker="10">959892</Counter>
+    <Duration worker="10" unit="sbintime">4294337138</Duration>
+    <Counter worker="11">959045</Counter>
+    <Duration worker="11" unit="sbintime">4294338284</Duration>
+    <Counter worker="12">959020</Counter>
+    <Duration worker="12" unit="sbintime">4294342636</Duration>
+    <Counter worker="13">961635</Counter>
+    <Duration worker="13" unit="sbintime">4294341033</Duration>
+    <Counter worker="14">961646</Counter>
+    <Duration worker="14" unit="sbintime">4294343782</Duration>
+    <Counter worker="15">956010</Counter>
+    <Duration worker="15" unit="sbintime">4294338856</Duration>
+    <Counter worker="16">956016</Counter>
+    <Duration worker="16" unit="sbintime">4294343208</Duration>
+    <Counter worker="17">960207</Counter>
+    <Duration worker="17" unit="sbintime">4294339887</Duration>
+    <Counter worker="18">960171</Counter>
+    <Duration worker="18" unit="sbintime">4294339772</Duration>
+    <Counter worker="19">960089</Counter>
+    <Duration worker="19" unit="sbintime">4294340346</Duration>
+    <Counter worker="20">960077</Counter>
+    <Duration worker="20" unit="sbintime">4294340346</Duration>
+    <Counter worker="21">957194</Counter>
+    <Duration worker="21" unit="sbintime">4294339315</Duration>
+    <Counter worker="22">957184</Counter>
+    <Duration worker="22" unit="sbintime">4294339200</Duration>
+    <Counter worker="23">959119</Counter>
+    <Duration worker="23" unit="sbintime">4294344812</Duration>
+    <Counter worker="24">959094</Counter>
+    <Duration worker="24" unit="sbintime">4294341948</Duration>
+  </BinuptimeTest>
   <BinuptimeNullTest activeWorker="1">
-    <Counter worker="1">615571</Counter>
+    <Counter worker="1">19386783</Counter>
   </BinuptimeNullTest>
   <BinuptimeNullTest activeWorker="2">
-    <Counter worker="1">615857</Counter>
-    <Counter worker="2">615856</Counter>
+    <Counter worker="1">18966996</Counter>
+    <Counter worker="2">18976413</Counter>
   </BinuptimeNullTest>
   <BinuptimeNullTest activeWorker="3">
-    <Counter worker="1">615316</Counter>
-    <Counter worker="2">615328</Counter>
-    <Counter worker="3">615337</Counter>
+    <Counter worker="1">18974430</Counter>
+    <Counter worker="2">18983328</Counter>
+    <Counter worker="3">19416623</Counter>
   </BinuptimeNullTest>
   <BinuptimeNullTest activeWorker="4">
-    <Counter worker="1">615495</Counter>
-    <Counter worker="2">615502</Counter>
-    <Counter worker="3">615509</Counter>
-    <Counter worker="4">597117</Counter>
+    <Counter worker="1">19008674</Counter>
+    <Counter worker="2">19018198</Counter>
+    <Counter worker="3">19008964</Counter>
+    <Counter worker="4">19008692</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="5">
+    <Counter worker="1">19020812</Counter>
+    <Counter worker="2">19030365</Counter>
+    <Counter worker="3">19005570</Counter>
+    <Counter worker="4">19005064</Counter>
+    <Counter worker="5">19403356</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="6">
+    <Counter worker="1">19022252</Counter>
+    <Counter worker="2">19032184</Counter>
+    <Counter worker="3">18989113</Counter>
+    <Counter worker="4">18988868</Counter>
+    <Counter worker="5">19032006</Counter>
+    <Counter worker="6">19033563</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="7">
+    <Counter worker="1">19030040</Counter>
+    <Counter worker="2">19040103</Counter>
+    <Counter worker="3">19027768</Counter>
+    <Counter worker="4">19027395</Counter>
+    <Counter worker="5">19032442</Counter>
+    <Counter worker="6">19034065</Counter>
+    <Counter worker="7">19412449</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="8">
+    <Counter worker="1">19025699</Counter>
+    <Counter worker="2">19035838</Counter>
+    <Counter worker="3">19004615</Counter>
+    <Counter worker="4">19004706</Counter>
+    <Counter worker="5">19030244</Counter>
+    <Counter worker="6">19032199</Counter>
+    <Counter worker="7">19024756</Counter>
+    <Counter worker="8">19023713</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="9">
+    <Counter worker="1">19013669</Counter>
+    <Counter worker="2">19023620</Counter>
+    <Counter worker="3">19002201</Counter>
+    <Counter worker="4">19002347</Counter>
+    <Counter worker="5">19045897</Counter>
+    <Counter worker="6">19048005</Counter>
+    <Counter worker="7">19008510</Counter>
+    <Counter worker="8">19007710</Counter>
+    <Counter worker="9">19395234</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="10">
+    <Counter worker="1">19027122</Counter>
+    <Counter worker="2">19037161</Counter>
+    <Counter worker="3">19009823</Counter>
+    <Counter worker="4">19010172</Counter>
+    <Counter worker="5">19038718</Counter>
+    <Counter worker="6">19040747</Counter>
+    <Counter worker="7">19031970</Counter>
+    <Counter worker="8">19031243</Counter>
+    <Counter worker="9">19073032</Counter>
+    <Counter worker="10">19074455</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="11">
+    <Counter worker="1">19028856</Counter>
+    <Counter worker="2">19038950</Counter>
+    <Counter worker="3">19011087</Counter>
+    <Counter worker="4">19010918</Counter>
+    <Counter worker="5">19042804</Counter>
+    <Counter worker="6">19044814</Counter>
+    <Counter worker="7">19009000</Counter>
+    <Counter worker="8">19008045</Counter>
+    <Counter worker="9">19062056</Counter>
+    <Counter worker="10">19063324</Counter>
+    <Counter worker="11">19425237</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="12">
+    <Counter worker="1">19000686</Counter>
+    <Counter worker="2">19010524</Counter>
+    <Counter worker="3">19011200</Counter>
+    <Counter worker="4">19011161</Counter>
+    <Counter worker="5">19040651</Counter>
+    <Counter worker="6">19042336</Counter>
+    <Counter worker="7">19008991</Counter>
+    <Counter worker="8">19008322</Counter>
+    <Counter worker="9">19057966</Counter>
+    <Counter worker="10">19059942</Counter>
+    <Counter worker="11">19025294</Counter>
+    <Counter worker="12">19024237</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="13">
+    <Counter worker="1">19035788</Counter>
+    <Counter worker="2">19045670</Counter>
+    <Counter worker="3">19019672</Counter>
+    <Counter worker="4">19019535</Counter>
+    <Counter worker="5">19057435</Counter>
+    <Counter worker="6">19059507</Counter>
+    <Counter worker="7">19015462</Counter>
+    <Counter worker="8">19015005</Counter>
+    <Counter worker="9">19075133</Counter>
+    <Counter worker="10">19076837</Counter>
+    <Counter worker="11">19015711</Counter>
+    <Counter worker="12">19014041</Counter>
+    <Counter worker="13">19397278</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="14">
+    <Counter worker="1">19042430</Counter>
+    <Counter worker="2">19052163</Counter>
+    <Counter worker="3">18991353</Counter>
+    <Counter worker="4">18991104</Counter>
+    <Counter worker="5">19055723</Counter>
+    <Counter worker="6">19057975</Counter>
+    <Counter worker="7">19037925</Counter>
+    <Counter worker="8">19037320</Counter>
+    <Counter worker="9">19093382</Counter>
+    <Counter worker="10">19095573</Counter>
+    <Counter worker="11">19013959</Counter>
+    <Counter worker="12">19012664</Counter>
+    <Counter worker="13">19047902</Counter>
+    <Counter worker="14">19049501</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="15">
+    <Counter worker="1">19031341</Counter>
+    <Counter worker="2">19041295</Counter>
+    <Counter worker="3">19021603</Counter>
+    <Counter worker="4">19021349</Counter>
+    <Counter worker="5">19070154</Counter>
+    <Counter worker="6">19072132</Counter>
+    <Counter worker="7">19012455</Counter>
+    <Counter worker="8">19011763</Counter>
+    <Counter worker="9">19078313</Counter>
+    <Counter worker="10">19081070</Counter>
+    <Counter worker="11">19007359</Counter>
+    <Counter worker="12">19006010</Counter>
+    <Counter worker="13">19079061</Counter>
+    <Counter worker="14">19080701</Counter>
+    <Counter worker="15">19419748</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="16">
+    <Counter worker="1">19026392</Counter>
+    <Counter worker="2">19036011</Counter>
+    <Counter worker="3">19020535</Counter>
+    <Counter worker="4">19020505</Counter>
+    <Counter worker="5">19027761</Counter>
+    <Counter worker="6">19029769</Counter>
+    <Counter worker="7">19007387</Counter>
+    <Counter worker="8">19006701</Counter>
+    <Counter worker="9">19079449</Counter>
+    <Counter worker="10">19081866</Counter>
+    <Counter worker="11">19016942</Counter>
+    <Counter worker="12">19015669</Counter>
+    <Counter worker="13">19053837</Counter>
+    <Counter worker="14">19056122</Counter>
+    <Counter worker="15">19017232</Counter>
+    <Counter worker="16">19015864</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="17">
+    <Counter worker="1">19024720</Counter>
+    <Counter worker="2">19034397</Counter>
+    <Counter worker="3">19010358</Counter>
+    <Counter worker="4">19009952</Counter>
+    <Counter worker="5">19045360</Counter>
+    <Counter worker="6">19047250</Counter>
+    <Counter worker="7">19015505</Counter>
+    <Counter worker="8">19014894</Counter>
+    <Counter worker="9">19067467</Counter>
+    <Counter worker="10">19069766</Counter>
+    <Counter worker="11">19001455</Counter>
+    <Counter worker="12">19000148</Counter>
+    <Counter worker="13">19062397</Counter>
+    <Counter worker="14">19064161</Counter>
+    <Counter worker="15">18988213</Counter>
+    <Counter worker="16">18986839</Counter>
+    <Counter worker="17">19392710</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="18">
+    <Counter worker="1">19014459</Counter>
+    <Counter worker="2">19024385</Counter>
+    <Counter worker="3">19004536</Counter>
+    <Counter worker="4">19004360</Counter>
+    <Counter worker="5">19059651</Counter>
+    <Counter worker="6">19061446</Counter>
+    <Counter worker="7">18995175</Counter>
+    <Counter worker="8">18994526</Counter>
+    <Counter worker="9">19069645</Counter>
+    <Counter worker="10">19072049</Counter>
+    <Counter worker="11">19020094</Counter>
+    <Counter worker="12">19018465</Counter>
+    <Counter worker="13">19084049</Counter>
+    <Counter worker="14">19085700</Counter>
+    <Counter worker="15">19010799</Counter>
+    <Counter worker="16">19009469</Counter>
+    <Counter worker="17">19062621</Counter>
+    <Counter worker="18">19062665</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="19">
+    <Counter worker="1">19027369</Counter>
+    <Counter worker="2">19037193</Counter>
+    <Counter worker="3">19017667</Counter>
+    <Counter worker="4">19017624</Counter>
+    <Counter worker="5">19025425</Counter>
+    <Counter worker="6">19027799</Counter>
+    <Counter worker="7">19017922</Counter>
+    <Counter worker="8">19017381</Counter>
+    <Counter worker="9">19029266</Counter>
+    <Counter worker="10">19031825</Counter>
+    <Counter worker="11">19025025</Counter>
+    <Counter worker="12">19023564</Counter>
+    <Counter worker="13">19057381</Counter>
+    <Counter worker="14">19059412</Counter>
+    <Counter worker="15">19025461</Counter>
+    <Counter worker="16">19023734</Counter>
+    <Counter worker="17">19049991</Counter>
+    <Counter worker="18">19051542</Counter>
+    <Counter worker="19">19418712</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="20">
+    <Counter worker="1">19042934</Counter>
+    <Counter worker="2">19052696</Counter>
+    <Counter worker="3">19038771</Counter>
+    <Counter worker="4">19038516</Counter>
+    <Counter worker="5">19033526</Counter>
+    <Counter worker="6">19035338</Counter>
+    <Counter worker="7">19043236</Counter>
+    <Counter worker="8">19042713</Counter>
+    <Counter worker="9">19086859</Counter>
+    <Counter worker="10">19089153</Counter>
+    <Counter worker="11">19022766</Counter>
+    <Counter worker="12">19021740</Counter>
+    <Counter worker="13">19061402</Counter>
+    <Counter worker="14">19063648</Counter>
+    <Counter worker="15">19019723</Counter>
+    <Counter worker="16">19018344</Counter>
+    <Counter worker="17">19049944</Counter>
+    <Counter worker="18">19051860</Counter>
+    <Counter worker="19">19024515</Counter>
+    <Counter worker="20">19024160</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="21">
+    <Counter worker="1">19024204</Counter>
+    <Counter worker="2">19034080</Counter>
+    <Counter worker="3">19000776</Counter>
+    <Counter worker="4">19000755</Counter>
+    <Counter worker="5">19051386</Counter>
+    <Counter worker="6">19053223</Counter>
+    <Counter worker="7">18986331</Counter>
+    <Counter worker="8">18985787</Counter>
+    <Counter worker="9">19090476</Counter>
+    <Counter worker="10">19093070</Counter>
+    <Counter worker="11">19014901</Counter>
+    <Counter worker="12">19013812</Counter>
+    <Counter worker="13">19076062</Counter>
+    <Counter worker="14">19077825</Counter>
+    <Counter worker="15">19009098</Counter>
+    <Counter worker="16">19007749</Counter>
+    <Counter worker="17">19068241</Counter>
+    <Counter worker="18">19070586</Counter>
+    <Counter worker="19">18985454</Counter>
+    <Counter worker="20">18984893</Counter>
+    <Counter worker="21">19400999</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="22">
+    <Counter worker="1">19031656</Counter>
+    <Counter worker="2">19041556</Counter>
+    <Counter worker="3">19002695</Counter>
+    <Counter worker="4">19002754</Counter>
+    <Counter worker="5">19077008</Counter>
+    <Counter worker="6">19078695</Counter>
+    <Counter worker="7">18989542</Counter>
+    <Counter worker="8">18988653</Counter>
+    <Counter worker="9">19044533</Counter>
+    <Counter worker="10">19046959</Counter>
+    <Counter worker="11">19004288</Counter>
+    <Counter worker="12">19003156</Counter>
+    <Counter worker="13">19062162</Counter>
+    <Counter worker="14">19064009</Counter>
+    <Counter worker="15">19034105</Counter>
+    <Counter worker="16">19032889</Counter>
+    <Counter worker="17">19067368</Counter>
+    <Counter worker="18">19070169</Counter>
+    <Counter worker="19">19008530</Counter>
+    <Counter worker="20">19008397</Counter>
+    <Counter worker="21">19037841</Counter>
+    <Counter worker="22">19040158</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="23">
+    <Counter worker="1">19019317</Counter>
+    <Counter worker="2">19029201</Counter>
+    <Counter worker="3">19010298</Counter>
+    <Counter worker="4">19010487</Counter>
+    <Counter worker="5">19030794</Counter>
+    <Counter worker="6">19032697</Counter>
+    <Counter worker="7">19001815</Counter>
+    <Counter worker="8">19001431</Counter>
+    <Counter worker="9">19067361</Counter>
+    <Counter worker="10">19069729</Counter>
+    <Counter worker="11">19001399</Counter>
+    <Counter worker="12">19000051</Counter>
+    <Counter worker="13">19070247</Counter>
+    <Counter worker="14">19072221</Counter>
+    <Counter worker="15">19020770</Counter>
+    <Counter worker="16">19019396</Counter>
+    <Counter worker="17">19085756</Counter>
+    <Counter worker="18">19088597</Counter>
+    <Counter worker="19">19014748</Counter>
+    <Counter worker="20">19014660</Counter>
+    <Counter worker="21">19044229</Counter>
+    <Counter worker="22">19046314</Counter>
+    <Counter worker="23">19421247</Counter>
+  </BinuptimeNullTest>
+  <BinuptimeNullTest activeWorker="24">
+    <Counter worker="1">19016838</Counter>
+    <Counter worker="2">19026664</Counter>
+    <Counter worker="3">18978854</Counter>
+    <Counter worker="4">18978559</Counter>
+    <Counter worker="5">19034822</Counter>
+    <Counter worker="6">19036646</Counter>
+    <Counter worker="7">19006174</Counter>
+    <Counter worker="8">19005608</Counter>
+    <Counter worker="9">19042579</Counter>
+    <Counter worker="10">19044966</Counter>
+    <Counter worker="11">19007697</Counter>
+    <Counter worker="12">19006331</Counter>
+    <Counter worker="13">19053232</Counter>
+    <Counter worker="14">19054892</Counter>
+    <Counter worker="15">18999211</Counter>
+    <Counter worker="16">18997906</Counter>
+    <Counter worker="17">19065292</Counter>
+    <Counter worker="18">19067828</Counter>
+    <Counter worker="19">19014259</Counter>
+    <Counter worker="20">19013886</Counter>
+    <Counter worker="21">19047296</Counter>
+    <Counter worker="22">19048410</Counter>
+    <Counter worker="23">19017171</Counter>
+    <Counter worker="24">19016766</Counter>
   </BinuptimeNullTest>
 </SPTimecounter01>
-*** END OF TEST SPTIMECOUNTER_2 ***
+*** END OF TEST SPTIMECOUNTER 2 ***
