@@ -36,7 +36,7 @@ def normedCoefficientOfVariation(name, i):
 	y = map(m, ctx.xpathEval('/SMPLock01/' + name + '[@activeWorker=' + str(i) + ']/LocalCounter'))
 	if len(y) == 0:
 		raise
-	return (statistics.stdev(y) / statistics.mean(y)) / math.sqrt(len(y) - 1)
+	return (statistics.stdev(y) / statistics.mean(y)) / math.sqrt(len(y))
 
 try:
 	while True:
@@ -49,7 +49,8 @@ except:
 	pass
 
 x = range(2, len(ticket) + 2)
-plt.yscale('log')
+plt.xticks(x)
+plt.yscale('symlog', linthreshy = 1e-6)
 plt.plot(x, ticket, label = 'Ticket Lock', marker = 'o')
 plt.plot(x, mcs, label = 'MCS Lock', marker = 'o')
 plt.plot(x, tas, label = 'TAS Lock', marker = 'o')
