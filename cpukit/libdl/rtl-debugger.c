@@ -45,10 +45,10 @@ _rtld_debug_state (void)
 int
 _rtld_linkmap_add (rtems_rtl_obj_t* obj)
 {
-  struct link_map* l = (struct link_map*)obj->detail;
+  struct link_map* l = obj->linkmap;
   struct link_map* prev;
-  uint32_t obj_num = obj->obj_num;
-  int i;
+  uint32_t         obj_num = obj->obj_num;
+  int              i;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     printf ("rtl: linkmap_add\n");
@@ -78,8 +78,10 @@ _rtld_linkmap_add (rtems_rtl_obj_t* obj)
 void
 _rtld_linkmap_delete (rtems_rtl_obj_t* obj)
 {
-  struct link_map* l = (struct link_map*)obj->detail;
-  /* link_maps are allocated together if not 1 */
+  struct link_map* l = obj->linkmap;
+  /*
+   *  link_maps are allocated together if not 1
+   */
   struct link_map* e = l + obj->obj_num - 1;
 
   while (e && e->l_next) e = e->l_next;
@@ -90,7 +92,7 @@ _rtld_linkmap_delete (rtems_rtl_obj_t* obj)
       e->l_next->l_prev = NULL;
     return;
   }
+
   if ((l->l_prev->l_next = e->l_next) != NULL)
     e->l_next->l_prev = l->l_prev;
-  return;
 }

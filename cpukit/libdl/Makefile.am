@@ -25,6 +25,7 @@ libdl_a_SOURCES = \
   rtl-string.c \
   rtl-sym.c \
   rtl-trace.c \
+  rtl-unwind-dw2.c \
   rtl-unresolved.c
 
 libdl_a_SOURCES += rtl-mdreloc-@RTEMS_CPU@.c

@@ -15,6 +15,8 @@
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include "rtl-trace.h"
+#include "rtl-unwind.h"
+#include "rtl-unwind-dw2.h"
 
 static inline int overflow_8_check(int value)
 {
@@ -28,6 +30,13 @@ static inline int overflow_16_check(int value)
   if ((value & 0xffff0000) && (~value & 0xffff8000))
     return true;
   return false;
+}
+
+uint32_t
+rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
+                             const Elf_Shdr*        shdr)
+{
+  return 0;
 }
 
 bool
@@ -145,4 +154,24 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
 {
   rtems_rtl_set_error (EINVAL, "rel type record not supported");
   return false;
+}
+
+bool
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
+                            const char*            name,
+                            uint32_t               flags)
+{
+  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+}
+
+bool
+rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_register (obj);
+}
+
+bool
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_deregister (obj);
 }

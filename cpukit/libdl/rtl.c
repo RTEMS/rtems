@@ -62,6 +62,7 @@
  * Static RTL data is returned to the user when the linker is locked.
  */
 static rtems_rtl_data_t* rtl;
+static bool              rtl_data_init;
 
 /**
  * Define a default base global symbol loader function that is weak
@@ -95,11 +96,25 @@ rtems_rtl_data_init (void)
       rtems_id          lock;
 
       /*
+       * We cannot set an error in this code because there is no RTL data to
+       * hold it.
+       */
+
+      if (rtl_data_init)
+      {
+        rtems_libio_unlock ();
+        return false;
+      }
+
+      rtl_data_init = true;
+
+      /*
        * Always in the heap.
        */
       rtl = malloc (sizeof (rtems_rtl_data_t));
       if (!rtl)
       {
+        rtems_libio_unlock ();
         errno = ENOMEM;
         return false;
       }
@@ -120,6 +135,7 @@ rtems_rtl_data_init (void)
       if (sc != RTEMS_SUCCESSFUL)
       {
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -128,6 +144,7 @@ rtems_rtl_data_init (void)
       {
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -143,6 +160,7 @@ rtems_rtl_data_init (void)
       {
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -152,6 +170,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_symbol_table_close (&rtl->globals);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -162,6 +181,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_unresolved_table_close (&rtl->unresolved);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -173,6 +193,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_symbol_table_close (&rtl->globals);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -185,6 +206,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_symbol_table_close (&rtl->globals);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -198,6 +220,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_symbol_table_close (&rtl->globals);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -212,6 +235,7 @@ rtems_rtl_data_init (void)
         rtems_rtl_symbol_table_close (&rtl->globals);
         rtems_semaphore_delete (lock);
         free (rtl);
+        rtems_libio_unlock ();
         return false;
       }
 
@@ -288,7 +312,7 @@ rtems_rtl_obj_caches (rtems_rtl_obj_cache_t** symbols,
 }
 
 void
-rtems_rtl_obj_caches_flush ()
+rtems_rtl_obj_caches_flush (void)
 {
   if (rtl)
   {
@@ -438,6 +462,7 @@ rtems_rtl_load_object (const char* name, int mode)
     if (!rtems_rtl_obj_find_file (obj, name))
     {
       rtems_rtl_obj_free (obj);
+      rtems_rtl_obj_caches_flush ();
       return NULL;
     }
 
@@ -446,8 +471,11 @@ rtems_rtl_load_object (const char* name, int mode)
     if (!rtems_rtl_obj_load (obj))
     {
       rtems_rtl_obj_free (obj);
+      rtems_rtl_obj_caches_flush ();
       return NULL;
     }
+
+    rtems_rtl_obj_caches_flush ();
 
     rtems_rtl_unresolved_resolve ();
   }
@@ -514,6 +542,9 @@ rtems_rtl_unload_object (rtems_rtl_obj_t* obj)
     obj->flags &= ~RTEMS_RTL_OBJ_LOCKED;
 
     ok = rtems_rtl_obj_unload (obj);
+
+    rtems_rtl_obj_free (obj);
+    rtems_rtl_obj_caches_flush ();
   }
 
   return ok;

@@ -73,6 +73,8 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_EXTRA_TASK_STACKS (8 * 1024)
 
+#define CONFIGURE_MAXIMUM_SEMAPHORES 1
+
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -80,4 +82,3 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>
-
