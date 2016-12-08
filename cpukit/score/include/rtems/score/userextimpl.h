@@ -166,7 +166,6 @@ void _User_extensions_Thread_exitted_visitor(
 
 typedef struct {
   Internal_errors_Source source;
-  bool                   is_internal;
   Internal_errors_t      error;
 } User_extensions_Fatal_context;
 
@@ -300,11 +299,10 @@ static inline void _User_extensions_Thread_exitted( Thread_Control *executing )
 
 static inline void _User_extensions_Fatal(
   Internal_errors_Source source,
-  bool                   is_internal,
   Internal_errors_t      error
 )
 {
-  User_extensions_Fatal_context ctx = { source, is_internal, error };
+  User_extensions_Fatal_context ctx = { source, error };
 
   _User_extensions_Iterate(
     &ctx,

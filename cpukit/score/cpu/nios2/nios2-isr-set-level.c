@@ -48,7 +48,7 @@ uint32_t _Nios2_ISR_Set_level( uint32_t new_level, uint32_t status )
       break;
     default:
       /* FIXME */
-      _Terminate( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
+      _Terminate( INTERNAL_ERROR_CORE, 0xdeadbeef );
       break;
   }
 

@@ -134,11 +134,7 @@ void _Workspace_Handler_initialization(
   }
 
   if ( remaining > 0 ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_TOO_LITTLE_WORKSPACE );
   }
 
   _Heap_Protection_set_delayed_free_fraction( &_Workspace_Area, 1 );
@@ -204,11 +200,7 @@ void *_Workspace_Allocate_or_fatal_error(
   #endif
 
   if ( memory == NULL )
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_WORKSPACE_ALLOCATION
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_WORKSPACE_ALLOCATION );
 
   return memory;
 }

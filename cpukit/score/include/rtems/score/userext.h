@@ -195,8 +195,8 @@ typedef void( *User_extensions_thread_exitted_extension )(
  *
  * @param[in] source The fatal source indicating the subsystem the fatal
  * condition originated in.
- * @param[in] is_internal Indicates if the fatal condition was generated
- * internally to the executive.
+ * @param[in] is_internal This parameter is always false and provide only for
+ * backward compatibility reasons.
  * @param[in] code The fatal error code.  This value must be interpreted with
  * respect to the source.
  */

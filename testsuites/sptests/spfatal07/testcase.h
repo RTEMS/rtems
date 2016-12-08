@@ -33,7 +33,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_DESCRIPTION \
         "Core Configuration Invalid ISR stack size"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       \
           INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
 

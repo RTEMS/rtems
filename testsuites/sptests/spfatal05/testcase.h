@@ -34,7 +34,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_TEST_NAME            "5"
 #define FATAL_ERROR_DESCRIPTION          "Core fall out of a task"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_THREAD_EXITTED
 
 rtems_task EmptyTask( rtems_task_argument unused );

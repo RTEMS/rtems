@@ -95,11 +95,7 @@ static void _MPCI_Handler_initialization( void )
   users_mpci_table = _Configuration_MP_table->User_mpci_table;
 
   if ( _System_state_Is_multiprocessing && !users_mpci_table )
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_NO_MPCI
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_NO_MPCI );
 
   _MPCI_table = users_mpci_table;
 
@@ -191,11 +187,7 @@ MP_packet_Prefix *_MPCI_Get_packet ( void )
   (*_MPCI_table->get_packet)( &the_packet );
 
   if ( the_packet == NULL )
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_OUT_OF_PACKETS
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_OUT_OF_PACKETS );
 
   /*
    *  Put in a default timeout that will be used for
@@ -375,11 +367,7 @@ void _MPCI_Receive_server(
       the_function = _MPCI_Packet_processors[ the_packet->the_class ];
 
       if ( !the_function )
-        _Terminate(
-          INTERNAL_ERROR_CORE,
-          true,
-          INTERNAL_ERROR_BAD_PACKET
-        );
+        _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_BAD_PACKET );
 
        (*the_function)( the_packet );
     }
@@ -463,7 +451,6 @@ void _MPCI_Internal_packets_Process_packet (
 
         _Terminate(
           INTERNAL_ERROR_CORE,
-          true,
           INTERNAL_ERROR_INCONSISTENT_MP_INFORMATION
         );
       }

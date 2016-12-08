@@ -76,7 +76,6 @@ void _Objects_Do_initialize_information(
   if ( information->auto_extend && maximum_per_allocation == 0) {
     _Terminate(
       INTERNAL_ERROR_CORE,
-      true,
       INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0
     );
   }

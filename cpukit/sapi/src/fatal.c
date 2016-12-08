@@ -30,7 +30,7 @@ void rtems_fatal_error_occurred(
   uint32_t   the_error
 )
 {
-  _Terminate( INTERNAL_ERROR_RTEMS_API, FALSE, the_error );
+  _Terminate( INTERNAL_ERROR_RTEMS_API, the_error );
 
 /* will not return from this routine */
 }

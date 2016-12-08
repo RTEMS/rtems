@@ -33,7 +33,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_DESCRIPTION \
         "Core initialize with invalid stack hook"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_BAD_STACK_HOOK
 
 void *New_stack_allocate_hook(size_t unused);

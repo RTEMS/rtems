@@ -136,11 +136,7 @@ static void _Thread_Make_zombie( Thread_Control *the_thread )
 {
 #if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
   if ( _Thread_Owns_resources( the_thread ) ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      false,
-      INTERNAL_ERROR_RESOURCE_IN_USE
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_RESOURCE_IN_USE );
   }
 #endif
 

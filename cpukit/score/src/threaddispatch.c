@@ -156,7 +156,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
   ) {
     _Terminate(
       INTERNAL_ERROR_CORE,
-      false,
       INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
     );
   }
@@ -241,7 +240,6 @@ void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )
   if ( cpu_self->thread_dispatch_disable_level != 1 ) {
     _Terminate(
       INTERNAL_ERROR_CORE,
-      0,
       INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
     );
   }

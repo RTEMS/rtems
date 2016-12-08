@@ -23,7 +23,6 @@ void BSP_panic(char *s)
 }
 
 #define THESRC _Internal_errors_What_happened.the_source
-#define ISITNL _Internal_errors_What_happened.is_internal
 #define THEERR _Internal_errors_What_happened.the_error
 
 void _BSP_Fatal_error(unsigned int v)
@@ -36,7 +35,6 @@ void _BSP_Fatal_error(unsigned int v)
 
   printk("%s\n",_RTEMS_version);
   printk("FATAL ERROR:\n");
-  printk("Internal error: %s\n", ISITNL? "Yes":"No");
   printk("Environment:");
   switch (THESRC) {
     case INTERNAL_ERROR_CORE:

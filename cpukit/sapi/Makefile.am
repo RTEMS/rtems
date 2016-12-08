@@ -34,7 +34,7 @@ libsapi_a_SOURCES = src/extension.c src/extensioncreate.c \
     src/getversionstring.c \
     src/chainappendnotify.c src/chaingetnotify.c src/chaingetwait.c \
     src/chainprependnotify.c src/rbheap.c src/interrtext.c \
-    src/fatal2.c src/fatalsrctext.c
+    src/fatalsrctext.c
 libsapi_a_SOURCES += src/chainprotected.c
 libsapi_a_SOURCES += src/cpucounterconverter.c
 libsapi_a_SOURCES += src/delayticks.c

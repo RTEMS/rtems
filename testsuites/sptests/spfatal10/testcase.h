@@ -14,7 +14,6 @@
 #define FATAL_ERROR_TEST_NAME            "10"
 #define FATAL_ERROR_DESCRIPTION          "asserting with non-NULL strings..."
 #define FATAL_ERROR_EXPECTED_SOURCE      RTEMS_FATAL_SOURCE_ASSERT
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR_CHECK spfatal10_is_expected_error
 
 #define ASSERT_FILE "testcase.h"

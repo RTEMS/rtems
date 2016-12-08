@@ -173,11 +173,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
   _Thread_MP_Proxies_release( &lock_context );
 
-  _Terminate(
-    INTERNAL_ERROR_CORE,
-    true,
-    INTERNAL_ERROR_OUT_OF_PROXIES
-  );
+  _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_OUT_OF_PROXIES );
 
   /*
    *  NOTE: The following return ensures that the compiler will

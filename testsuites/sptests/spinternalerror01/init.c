@@ -26,13 +26,11 @@ const char rtems_test_name[] = "SPINTERNALERROR 1";
 
 #define FATAL_SOURCE 0xdeadbeef
 
-#define FATAL_IS_INTERNAL false
-
 #define FATAL_ERROR 0x600df00d
 
 void boot_card( const char *cmdline )
 {
-  _Terminate( FATAL_SOURCE, FATAL_IS_INTERNAL, FATAL_ERROR );
+  _Terminate( FATAL_SOURCE, FATAL_ERROR );
 }
 
 static void fatal_extension(
@@ -43,11 +41,7 @@ static void fatal_extension(
 {
   TEST_BEGIN();
 
-  if (
-    source == FATAL_SOURCE
-      && is_internal == FATAL_IS_INTERNAL
-      && error == FATAL_ERROR
-  ) {
+  if ( source == FATAL_SOURCE && !is_internal && error == FATAL_ERROR ) {
     TEST_END();
   }
 }

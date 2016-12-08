@@ -15,7 +15,6 @@
 #define FATAL_ERROR_TEST_NAME            "28"
 #define FATAL_ERROR_DESCRIPTION          "delete a task with a semaphore in use"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_RESOURCE_IN_USE
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
@@ -38,6 +37,6 @@ void force_error()
   sc = rtems_task_delete(RTEMS_SELF);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 #else
-  _Terminate( INTERNAL_ERROR_CORE, false, INTERNAL_ERROR_RESOURCE_IN_USE );
+  _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_RESOURCE_IN_USE );
 #endif
 }

@@ -26,7 +26,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_DESCRIPTION \
         "Classic API call rtems_fatal_error_occurred"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_RTEMS_API
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR       0xdead
 
 void force_error()

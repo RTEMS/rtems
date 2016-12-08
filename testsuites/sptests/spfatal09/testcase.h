@@ -15,7 +15,6 @@
 #define FATAL_ERROR_TEST_NAME            "9"
 #define FATAL_ERROR_DESCRIPTION          "Bad heap address to malloc"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_NO_MEMORY_FOR_HEAP
 
 void force_error()

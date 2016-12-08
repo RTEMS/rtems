@@ -96,9 +96,5 @@ void _Thread_Handler( void )
 
   _User_extensions_Thread_exitted( executing );
 
-  _Terminate(
-    INTERNAL_ERROR_CORE,
-    true,
-    INTERNAL_ERROR_THREAD_EXITTED
-  );
+  _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_THREAD_EXITTED );
 }

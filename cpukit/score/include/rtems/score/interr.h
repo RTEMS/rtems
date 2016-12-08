@@ -182,8 +182,6 @@ typedef CPU_Uint32ptr Internal_errors_t;
 typedef struct {
   /** This is the source of the error. */
   Internal_errors_Source  the_source;
-  /** This indicates if the error is internal of external. */
-  bool                    is_internal;
   /** This is the error code. */
   Internal_errors_t       the_error;
 } Internal_errors_Information;
@@ -225,16 +223,13 @@ extern Internal_errors_Information _Internal_errors_What_happened;
  *
  * @param[in] the_source The fatal source indicating the subsystem the fatal
  * condition originated in.
- * @param[in] is_internal Indicates if the fatal condition was generated
- * internally to the executive.
  * @param[in] the_error The fatal error code.  This value must be interpreted
  * with respect to the source.
  *
- * @see rtems_fatal_error_occurred() and rtems_fatal().
+ * @see rtems_fatal() and _Internal_error().
  */
 void _Terminate(
   Internal_errors_Source  the_source,
-  bool                    is_internal,
   Internal_errors_t       the_error
 ) RTEMS_NO_RETURN;
 

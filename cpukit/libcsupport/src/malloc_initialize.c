@@ -50,11 +50,7 @@ void RTEMS_Malloc_Initialize(
     }
 
     if ( init_or_extend == _Heap_Initialize ) {
-      _Terminate(
-        INTERNAL_ERROR_CORE,
-        true,
-        INTERNAL_ERROR_NO_MEMORY_FOR_HEAP
-      );
+      _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_NO_MEMORY_FOR_HEAP );
     }
   }
 }

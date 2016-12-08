@@ -25,7 +25,6 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_TEST_NAME            "2"
 #define FATAL_ERROR_DESCRIPTION          "Classic API Init task start failure"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL FALSE
 #define FATAL_ERROR_EXPECTED_ERROR \
   INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL
 

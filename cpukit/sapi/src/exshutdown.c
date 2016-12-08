@@ -18,7 +18,7 @@
 
 void rtems_shutdown_executive( uint32_t result )
 {
-  _Terminate( RTEMS_FATAL_SOURCE_EXIT, false, result );
+  _Terminate( RTEMS_FATAL_SOURCE_EXIT, result );
 
   /***************************************************************
    ***************************************************************

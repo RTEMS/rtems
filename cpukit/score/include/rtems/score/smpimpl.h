@@ -84,7 +84,7 @@ typedef enum {
 
 static inline void _SMP_Fatal( SMP_Fatal_code code )
 {
-  _Terminate( RTEMS_FATAL_SOURCE_SMP, false, code );
+  _Terminate( RTEMS_FATAL_SOURCE_SMP, code );
 }
 
 /**

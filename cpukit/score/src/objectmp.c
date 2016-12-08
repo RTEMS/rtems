@@ -165,11 +165,7 @@ void _Objects_MP_Handler_early_initialization(void)
   maximum_nodes          = _Configuration_MP_table->maximum_nodes;
 
   if ( node < 1 || node > maximum_nodes )
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_INVALID_NODE
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_INVALID_NODE );
 
   _Objects_Local_node    = node;
   _Objects_Maximum_nodes = maximum_nodes;
@@ -246,12 +242,7 @@ bool _Objects_MP_Allocate_and_open (
     if ( is_fatal_error == false )
       return false;
 
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS
-    );
-
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_OUT_OF_GLOBAL_OBJECTS );
   }
 
   _Objects_MP_Open( information, the_global_object, the_name, the_id );
@@ -291,11 +282,7 @@ void _Objects_MP_Close (
   } else {
     _Objects_MP_Global_release( &lock_context );
 
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      true,
-      INTERNAL_ERROR_INVALID_GLOBAL_ID
-    );
+    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_INVALID_GLOBAL_ID );
   }
 }
 

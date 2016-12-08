@@ -80,17 +80,10 @@ void Fatal_extension(
     printk( ")\n" );
   }
 
-  if ( is_internal !=  FATAL_ERROR_EXPECTED_IS_INTERNAL )
-  {
-    if ( is_internal == TRUE )
-      printk(
-        "ERROR==> Fatal Extension is internal set to TRUE expected FALSE\n"
-      );
-    else
-      printk(
-        "ERROR==> Fatal Extension is internal set to FALSE expected TRUE\n"
-      );
-  }
+  if ( is_internal )
+    printk(
+      "ERROR==> Fatal Extension is internal set to true expected false\n"
+    );
 
 #ifdef FATAL_ERROR_EXPECTED_ERROR
   if ( error !=  FATAL_ERROR_EXPECTED_ERROR ) {
@@ -104,7 +97,7 @@ void Fatal_extension(
 
   if (
     source == FATAL_ERROR_EXPECTED_SOURCE
-      && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
+      && !is_internal
       && is_expected_error( error )
   ) {
     TEST_END();

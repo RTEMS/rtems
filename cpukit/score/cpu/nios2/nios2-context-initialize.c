@@ -62,7 +62,7 @@ void _CPU_Context_Initialize(
 
     if ( !ok ) {
       /* The task stack allocator must ensure that the stack area is valid */
-      _Terminate( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
+      _Terminate( INTERNAL_ERROR_CORE, 0xdeadbeef );
     }
   }
 }

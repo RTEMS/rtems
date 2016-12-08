@@ -48,7 +48,7 @@ uint32_t _CPU_ISR_Get_level( void )
       break;
     default:
       /* FIXME */
-      _Terminate( INTERNAL_ERROR_CORE, false, 0xdeadbeef );
+      _Terminate( INTERNAL_ERROR_CORE, 0xdeadbeef );
       break;
   }
 

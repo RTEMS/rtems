@@ -73,17 +73,20 @@ void rtems_fatal_error_occurred(
 ) RTEMS_NO_RETURN;
 
 /**
- * @brief Invokes the internal error handler with is internal set to false.
+ * @brief Terminates the system.
  *
- * @param[in] source is the fatal source.
- * @param[in] error is the fatal code.
+ * @param[in] fatal_source The fatal source.
+ * @param[in] error_code The error code.
  *
  * @see _Terminate().
  */
-void rtems_fatal(
-  rtems_fatal_source source,
-  rtems_fatal_code error
-) RTEMS_NO_RETURN;
+RTEMS_INLINE_ROUTINE void rtems_fatal(
+  rtems_fatal_source fatal_source,
+  rtems_fatal_code   error_code
+)
+{
+  _Terminate( fatal_source, error_code );
+}
 
 /**
  * @brief Returns a text for a fatal source.

@@ -14,7 +14,6 @@
 #define FATAL_ERROR_DESCRIPTION  \
         "_Heap_Initialize fails during RTEMS initialization"
 #define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
-#define FATAL_ERROR_EXPECTED_IS_INTERNAL TRUE
 #define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_TOO_LITTLE_WORKSPACE
 
 void force_error()

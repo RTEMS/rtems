@@ -129,7 +129,7 @@ void _User_extensions_Fatal_visitor(
   if ( callout != NULL ) {
     const User_extensions_Fatal_context *ctx = arg;
 
-    (*callout)( ctx->source, ctx->is_internal, ctx->error );
+    (*callout)( ctx->source, false, ctx->error );
   }
 }
 

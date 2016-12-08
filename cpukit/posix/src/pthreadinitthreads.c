@@ -87,7 +87,6 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     if ( thread_entry == NULL ) {
       _Terminate(
         INTERNAL_ERROR_CORE,
-        false,
         INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL
       );
     }
