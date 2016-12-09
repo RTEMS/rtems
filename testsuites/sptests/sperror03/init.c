@@ -22,13 +22,13 @@ rtems_task Init(rtems_task_argument argument);
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code error
 )
 {
   if (
     source == RTEMS_FATAL_SOURCE_EXIT
-      && !is_internal
+      && !always_set_to_false
       && error == 0
   ) {
     TEST_END();

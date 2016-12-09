@@ -37,7 +37,7 @@ static rtems_isr bsp_return_to_monitor_trap(
 
 void bsp_fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code error
 )
 {

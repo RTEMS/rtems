@@ -47,7 +47,7 @@ extern rtems_printer rtems_test_printer;
  */
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 );
 

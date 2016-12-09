@@ -36,13 +36,13 @@ static void Init(rtems_task_argument arg)
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
   if (
     source == INTERNAL_ERROR_CORE
-      && !is_internal
+      && !always_set_to_false
       && code == INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
   ) {
     TEST_END();

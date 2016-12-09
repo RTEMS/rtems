@@ -27,7 +27,7 @@ RTEMS_INTERRUPT_LOCK_DEFINE( static, report_lock, "test report" )
 
 void rtems_test_fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
@@ -68,6 +68,6 @@ void rtems_test_fatal_extension(
 #endif
 
   (void) source;
-  (void) is_internal;
+  (void) always_set_to_false;
   (void) code;
 }

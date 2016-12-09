@@ -65,7 +65,7 @@ static bool is_expected_error( rtems_fatal_code error )
 
 void Fatal_extension(
   rtems_fatal_source source,
-  bool               is_internal,
+  bool               always_set_to_false,
   rtems_fatal_code   error
 )
 {
@@ -80,7 +80,7 @@ void Fatal_extension(
     printk( ")\n" );
   }
 
-  if ( is_internal )
+  if ( always_set_to_false )
     printk(
       "ERROR==> Fatal Extension is internal set to true expected false\n"
     );
@@ -97,7 +97,7 @@ void Fatal_extension(
 
   if (
     source == FATAL_ERROR_EXPECTED_SOURCE
-      && !is_internal
+      && !always_set_to_false
       && is_expected_error( error )
   ) {
     TEST_END();

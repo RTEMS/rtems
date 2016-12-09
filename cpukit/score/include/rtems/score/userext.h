@@ -195,14 +195,14 @@ typedef void( *User_extensions_thread_exitted_extension )(
  *
  * @param[in] source The fatal source indicating the subsystem the fatal
  * condition originated in.
- * @param[in] is_internal This parameter is always false and provide only for
- * backward compatibility reasons.
+ * @param[in] always_set_to_false This parameter is always set to false and
+ * provided only for backward compatibility reasons.
  * @param[in] code The fatal error code.  This value must be interpreted with
  * respect to the source.
  */
 typedef void( *User_extensions_fatal_extension )(
   Internal_errors_Source source,
-  bool                   is_internal,
+  bool                   always_set_to_false,
   Internal_errors_t      code
 );
 

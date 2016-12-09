@@ -61,12 +61,12 @@ static void Init( rtems_task_argument arg )
 
 static void fatal_extension(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
   rtems_test_assert( source == RTEMS_FATAL_SOURCE_EXCEPTION );
-  rtems_test_assert( !is_internal );
+  rtems_test_assert( !always_set_to_false );
 
   rtems_exception_frame_print( (const rtems_exception_frame *) code );
 

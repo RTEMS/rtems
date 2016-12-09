@@ -436,7 +436,7 @@ static bool Stack_check_Dump_threads_usage(
 #ifndef DONT_USE_FATAL_EXTENSION
   void rtems_stack_checker_fatal_extension(
     Internal_errors_Source  source,
-    bool                    is_internal,
+    bool                    always_set_to_false,
     uint32_t                status
   )
   {

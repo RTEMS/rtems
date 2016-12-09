@@ -35,13 +35,17 @@ void boot_card( const char *cmdline )
 
 static void fatal_extension(
   Internal_errors_Source source,
-  bool is_internal,
+  bool always_set_to_false,
   Internal_errors_t error
 )
 {
   TEST_BEGIN();
 
-  if ( source == FATAL_SOURCE && !is_internal && error == FATAL_ERROR ) {
+  if (
+    source == FATAL_SOURCE
+      && !always_set_to_false
+      && error == FATAL_ERROR
+  ) {
     TEST_END();
   }
 }

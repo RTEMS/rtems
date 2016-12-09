@@ -142,7 +142,7 @@ static void zero_thread_exitted(rtems_tcb *a)
 
 static void zero_fatal(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
@@ -201,7 +201,7 @@ static void one_thread_exitted(rtems_tcb *a)
 
 static void one_fatal(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
@@ -260,7 +260,7 @@ static void two_thread_exitted(rtems_tcb *a)
 
 static void two_fatal(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
@@ -321,7 +321,7 @@ static void three_thread_exitted(rtems_tcb *a)
 
 static void three_fatal(
   rtems_fatal_source source,
-  bool is_internal,
+  bool always_set_to_false,
   rtems_fatal_code code
 )
 {
