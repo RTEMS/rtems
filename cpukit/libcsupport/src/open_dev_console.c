@@ -39,7 +39,7 @@ void rtems_libio_post_driver(void)
    *  or something is REALLY wrong.
    */
   if (open("/dev/console", O_WRONLY, 0) != STDOUT_FILENO) {
-    rtems_fatal_error_occurred( 0x55544431 );
+    _Internal_error( INTERNAL_ERROR_LIBIO_STDOUT_FD_OPEN_FAILED );
   }
 
   if (open("/dev/console", O_WRONLY, 0) != STDERR_FILENO) {
