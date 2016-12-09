@@ -64,7 +64,7 @@ static void rtems_libio_init( void )
     rtems_libio_free_user_env
   );
   if (eno != 0) {
-    rtems_fatal_error_occurred( RTEMS_UNSATISFIED );
+    _Internal_error( INTERNAL_ERROR_LIBIO_USER_ENV_KEY_CREATE_FAILED );
   }
 
   /*
