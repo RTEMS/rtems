@@ -28,6 +28,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <stdexcept>
 
 #ifdef RTEMS_TEST_IO_STREAM
 #include <iostream>
@@ -35,7 +36,7 @@
 
 const char rtems_test_name[] = "CONSTRUCTOR/DESTRUCTOR";
 
-extern "C" 
+extern "C"
 {
 #include <tmacros.h>
 extern rtems_task main_task(rtems_task_argument);
@@ -81,7 +82,7 @@ protected:
 
 class BClass : public AClass {
 public:
-  BClass(const char *p = "LOCAL" ) : AClass( p ) 
+  BClass(const char *p = "LOCAL" ) : AClass( p )
     {
         num_inst++;
         printf(
@@ -112,21 +113,21 @@ public:
 };
 
 
-class RtemsException 
+class RtemsException
 {
 public:
-    
+
     RtemsException( const char *module, int ln, int err = 0 )
     : error( err ), line( ln ), file( module )
     {
       printf( "RtemsException raised=File:%s, Line:%d, Error=%X\n",
-               file, line, error ); 
+               file, line, error );
     }
 
     void show()
     {
       printf( "RtemsException ---> File:%s, Line:%d, Error=%X\n",
-               file, line, error ); 
+               file, line, error );
     }
 
 private:
@@ -165,19 +166,19 @@ cdtest(void)
 
 static void foo_function()
 {
-    try 
+    try
     {
-      throw "foo_function() throw this exception";  
+      throw "foo_function() throw this exception";
     }
     catch( const char *e )
     {
      printf( "foo_function() catch block called:\n   < %s  >\n", e );
-     throw "foo_function() re-throwing execption...";  
+     throw "foo_function() re-throwing execption...";
     }
 }
 
 rtems_task main_task(
-  rtems_task_argument 
+  rtems_task_argument
 )
 {
     TEST_BEGIN();
@@ -188,7 +189,7 @@ rtems_task main_task(
 
     printf( "*** TESTING C++ EXCEPTIONS ***\n\n" );
 
-    try 
+    try
     {
       foo_function();
     }
@@ -196,17 +197,27 @@ rtems_task main_task(
     {
        printf( "Success catching a char * exception\n%s\n", e );
     }
-    try 
+
+    try
+    {
+      throw std::runtime_error("thrown std::runtime object");
+    }
+    catch (std::exception const& e)
+    {
+       printf("throw std::runtime: caught: %s\n", e.what());
+    }
+
+    try
     {
       printf( "throw an instance based exception\n" );
-		throw RtemsException( __FILE__, __LINE__, 0x55 ); 
+		throw RtemsException( __FILE__, __LINE__, 0x55 );
     }
-    catch( RtemsException & ex ) 
+    catch( RtemsException & ex )
     {
        printf( "Success catching RtemsException...\n" );
        ex.show();
     }
-    catch(...) 
+    catch(...)
     {
       printf( "Caught another exception.\n" );
     }
