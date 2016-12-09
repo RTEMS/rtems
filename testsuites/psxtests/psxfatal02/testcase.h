@@ -32,8 +32,8 @@ posix_initialization_threads_table POSIX_Initialization_threads[] = {
 #define FATAL_ERROR_TEST_NAME            "2"
 #define FATAL_ERROR_DESCRIPTION \
         "POSIX API Init thread create failure -- no memory for stack"
-#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_POSIX_API
-#define FATAL_ERROR_EXPECTED_ERROR       ((POSIX_FD_PTHREAD << 8) | EAGAIN)
+#define FATAL_ERROR_EXPECTED_SOURCE      INTERNAL_ERROR_CORE
+#define FATAL_ERROR_EXPECTED_ERROR       INTERNAL_ERROR_POSIX_INIT_THREAD_CREATE_FAILED
 
 void force_error(void)
 {
