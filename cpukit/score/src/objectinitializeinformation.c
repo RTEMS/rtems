@@ -74,10 +74,7 @@ void _Objects_Do_initialize_information(
    *  Unlimited and maximum of zero is illogical.
    */
   if ( information->auto_extend && maximum_per_allocation == 0) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0
-    );
+    _Internal_error( INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0 );
   }
 
   /*

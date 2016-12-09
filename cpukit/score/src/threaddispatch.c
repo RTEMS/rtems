@@ -154,10 +154,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
       && rtems_configuration_is_smp_enabled()
 #endif
   ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT
-    );
+    _Internal_error( INTERNAL_ERROR_BAD_THREAD_DISPATCH_ENVIRONMENT );
   }
 #endif
 
@@ -238,10 +235,7 @@ void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )
   ISR_Level level;
 
   if ( cpu_self->thread_dispatch_disable_level != 1 ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
-      INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL
-    );
+    _Internal_error( INTERNAL_ERROR_BAD_THREAD_DISPATCH_DISABLE_LEVEL );
   }
 
   _ISR_Local_disable( level );

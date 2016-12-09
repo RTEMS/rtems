@@ -46,3 +46,8 @@ void _Terminate(
   /* will not return from this routine */
   while (true);
 }
+
+void _Internal_error( Internal_errors_Core_list core_error )
+{
+  _Terminate( INTERNAL_ERROR_CORE, core_error );
+}

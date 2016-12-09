@@ -372,7 +372,7 @@ void _Thread_queue_Deadlock_status( Thread_Control *the_thread )
 
 void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread )
 {
-  _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
+  _Internal_error( INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
 }
 
 static void _Thread_queue_Timeout(
@@ -519,8 +519,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
   if ( cpu_self->thread_dispatch_disable_level != 1 ) {
-    _Terminate(
-      INTERNAL_ERROR_CORE,
+    _Internal_error(
       INTERNAL_ERROR_THREAD_QUEUE_ENQUEUE_STICKY_FROM_BAD_STATE
     );
   }

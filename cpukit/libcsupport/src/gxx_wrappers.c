@@ -137,7 +137,7 @@ int rtems_gxx_setspecific(__gthread_key_t key, const void *ptr)
   #endif
 
   if ( eno != 0 ) {
-    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_GXX_KEY_ADD_FAILED );
+    _Internal_error( INTERNAL_ERROR_GXX_KEY_ADD_FAILED );
   }
 
   return 0;
@@ -171,7 +171,7 @@ void rtems_gxx_mutex_init (__gthread_mutex_t *mutex)
         status
       );
     #endif
-    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED );
+    _Internal_error( INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED );
   }
   #ifdef DEBUG_GXX_WRAPPERS
     printk( "gxx_wrappers: mutex init complete =%X\n", *mutex );

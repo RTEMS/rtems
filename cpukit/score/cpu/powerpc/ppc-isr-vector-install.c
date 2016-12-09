@@ -31,5 +31,5 @@ void _CPU_ISR_install_vector(
   proc_ptr *old_handler
 )
 {
-  _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
+  _Internal_error( INTERNAL_ERROR_CPU_ISR_INSTALL_VECTOR );
 }

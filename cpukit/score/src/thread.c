@@ -84,7 +84,7 @@ void _Thread_Handler_initialization(void)
 
   if ( rtems_configuration_get_stack_allocate_hook() == NULL ||
        rtems_configuration_get_stack_free_hook() == NULL)
-    _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_BAD_STACK_HOOK );
+    _Internal_error( INTERNAL_ERROR_BAD_STACK_HOOK );
 
   if ( stack_allocate_init_hook != NULL )
     (*stack_allocate_init_hook)( rtems_configuration_get_stack_space_size() );

@@ -235,6 +235,16 @@ void _Terminate(
   Internal_errors_t       the_error
 ) RTEMS_NO_RETURN;
 
+/**
+ * @brief Terminates the system with an INTERNAL_ERROR_CORE fatal source and
+ * the specified core error code.
+ *
+ * @param[in] core_error The core error code.
+ *
+ * @see _Terminate().
+ */
+void _Internal_error( Internal_errors_Core_list core_error ) RTEMS_NO_RETURN;
+
 #ifdef __cplusplus
 }
 #endif

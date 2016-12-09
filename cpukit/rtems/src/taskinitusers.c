@@ -89,18 +89,12 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       &id
     );
     if ( !rtems_is_status_successful( return_value ) ) {
-      _Terminate(
-        INTERNAL_ERROR_CORE,
-        INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED
-      );
+      _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED );
     }
 
     entry_point = user_tasks[ index ].entry_point;
     if ( entry_point == NULL ) {
-      _Terminate(
-        INTERNAL_ERROR_CORE,
-        INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL
-      );
+      _Internal_error( INTERNAL_ERROR_RTEMS_INIT_TASK_ENTRY_IS_NULL );
     }
 
     if ( register_global_construction ) {
