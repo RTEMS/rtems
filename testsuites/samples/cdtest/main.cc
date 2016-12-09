@@ -44,10 +44,25 @@ extern rtems_task main_task(rtems_task_argument);
 
 static int num_inst = 0;
 
+static void check_begin_of_test(void)
+{
+  if ( num_inst == 0 ) {
+    printf(TEST_BEGIN_STRING);
+  }
+}
+
+static void check_end_of_test(void)
+{
+  if ( num_inst == 0 ) {
+    printk(TEST_END_STRING);
+  }
+}
+
 class AClass {
 public:
   AClass(const char *p = "LOCAL" ) : ptr( p )
     {
+        check_begin_of_test();
         num_inst++;
         printf(
           "%s: Hey I'm in base class constructor number %d for %p.\n",
@@ -71,6 +86,7 @@ public:
         );
         printk("Derived class - %s\n", string);
         num_inst--;
+        check_end_of_test();
     };
 
     virtual void print()  { printf("%s\n", string); };
@@ -84,6 +100,7 @@ class BClass : public AClass {
 public:
   BClass(const char *p = "LOCAL" ) : AClass( p )
     {
+        check_begin_of_test();
         num_inst++;
         printf(
           "%s: Hey I'm in derived class constructor number %d for %p.\n",
@@ -107,6 +124,7 @@ public:
         );
         printk("Derived class - %s\n", string);
         num_inst--;
+        check_end_of_test();
     };
 
     void print()  { printf("Derived class - %s\n", string); }
@@ -184,8 +202,6 @@ rtems_task main_task(
     TEST_BEGIN();
 
     cdtest();
-
-    TEST_END();
 
     printf( "*** TESTING C++ EXCEPTIONS ***\n\n" );
 

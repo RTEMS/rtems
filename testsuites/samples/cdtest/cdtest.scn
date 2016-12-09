@@ -1,31 +1,43 @@
-Hey I'm in base class constructor number 1 for 0x400010cc.
-Hey I'm in base class constructor number 2 for 0x400010d4.
-Hey I'm in derived class constructor number 3 for 0x400010d4.
+*** BEGIN OF TEST CONSTRUCTOR/DESTRUCTOR ***
+GLOBAL: Hey I'm in base class constructor number 1 for 0x2052154.
+GLOBAL: Hey I'm in base class constructor number 2 for 0x2052148.
+GLOBAL: Hey I'm in derived class constructor number 3 for 0x2052148.
 
 
-*** CONSTRUCTOR/DESTRUCTOR TEST ***
-Hey I'm in base class constructor number 4 for 0x4009ee08.
-Hey I'm in base class constructor number 5 for 0x4009ee10.
-Hey I'm in base class constructor number 6 for 0x4009ee18.
-Hey I'm in base class constructor number 7 for 0x4009ee20.
-Hey I'm in derived class constructor number 8 for 0x4009ee20.
-Testing a C++ I/O stream
-Hey I'm in derived class destructor number 8 for 0x4009ee20.
+*** BEGIN OF TEST CONSTRUCTOR/DESTRUCTOR ***
+LOCAL: Hey I'm in base class constructor number 4 for 0x2057978.
+LOCAL: Hey I'm in base class constructor number 5 for 0x2057984.
+LOCAL: Hey I'm in base class constructor number 6 for 0x2057990.
+LOCAL: Hey I'm in base class constructor number 7 for 0x205799c.
+LOCAL: Hey I'm in derived class constructor number 8 for 0x205799c.
+IO Stream not tested
+LOCAL: Hey I'm in derived class destructor number 8 for 205799C.
 Derived class - Instantiation order 8
-Hey I'm in base class destructor number 7 for 0x4009ee20.
-Instantiation order 8
-Hey I'm in base class destructor number 6 for 0x4009ee18.
-Instantiation order 6
-Hey I'm in base class destructor number 5 for 0x4009ee10.
-Instantiation order 5
-Hey I'm in base class destructor number 4 for 0x4009ee08.
-Instantiation order 5
-*** END OF CONSTRUCTOR/DESTRUCTOR TEST ***
+LOCAL: Hey I'm in base class destructor number 7 for 205799C.
+Derived class - Instantiation order 8
+LOCAL: Hey I'm in base class destructor number 6 for 2057990.
+Derived class - Instantiation order 6
+LOCAL: Hey I'm in base class destructor number 5 for 2057984.
+Derived class - Instantiation order 5
+LOCAL: Hey I'm in base class destructor number 4 for 2057978.
+Derived class - Instantiation order 5
+*** TESTING C++ EXCEPTIONS ***
 
-
-Hey I'm in derived class destructor number 3 for 0x400010d4.
+foo_function() catch block called:
+   < foo_function() throw this exception  >
+Success catching a char * exception
+foo_function() re-throwing execption...
+throw std::runtime: caught: thrown std::runtime object
+throw an instance based exception
+RtemsException raised=File:../../../../../../../rtems/c/src/../../testsuites/samples/cdtest/main.cc, Line:229, Error=55
+Success catching RtemsException...
+RtemsException ---> File:../../../../../../../rtems/c/src/../../testsuites/samples/cdtest/main.cc, Line:229, Error=55
+Exceptions are working properly.
+Global Dtors should be called after this line....
+GLOBAL: Hey I'm in derived class destructor number 3 for 2052148.
 Derived class - Instantiation order 3
-Hey I'm in base class destructor number 2 for 0x400010d4.
-Instantiation order 3
-Hey I'm in base class destructor number 1 for 0x400010cc.
-Instantiation order 1
+GLOBAL: Hey I'm in base class destructor number 2 for 2052148.
+Derived class - Instantiation order 3
+GLOBAL: Hey I'm in base class destructor number 1 for 2052154.
+Derived class - Instantiation order 1
+*** END OF TEST CONSTRUCTOR/DESTRUCTOR ***
