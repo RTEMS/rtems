@@ -88,8 +88,12 @@ void _RTEMS_tasks_Initialize_user_tasks_body( void )
       user_tasks[ index ].attribute_set,
       &id
     );
-    if ( !rtems_is_status_successful( return_value ) )
-      _Terminate( INTERNAL_ERROR_RTEMS_API, return_value );
+    if ( !rtems_is_status_successful( return_value ) ) {
+      _Terminate(
+        INTERNAL_ERROR_CORE,
+        INTERNAL_ERROR_RTEMS_INIT_TASK_CREATE_FAILED
+      );
+    }
 
     entry_point = user_tasks[ index ].entry_point;
     if ( entry_point == NULL ) {
