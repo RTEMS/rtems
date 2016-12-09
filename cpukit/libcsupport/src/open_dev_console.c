@@ -43,7 +43,7 @@ void rtems_libio_post_driver(void)
   }
 
   if (open("/dev/console", O_WRONLY, 0) != STDERR_FILENO) {
-    rtems_fatal_error_occurred( 0x55544432 );
+    _Internal_error( INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED );
   }
 
   atexit(rtems_libio_exit);

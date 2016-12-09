@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_LIBIO_STDOUT_FD_OPEN_FAILED
+    error - 3 == INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED
   );
 }
 
