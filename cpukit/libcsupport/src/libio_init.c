@@ -79,8 +79,9 @@ static void rtems_libio_init( void )
     RTEMS_NO_PRIORITY,
     &rtems_libio_semaphore
   );
-  if ( rc != RTEMS_SUCCESSFUL )
-    rtems_fatal_error_occurred( rc );
+  if ( rc != RTEMS_SUCCESSFUL ) {
+    _Internal_error( INTERNAL_ERROR_LIBIO_SEM_CREATE_FAILED );
+  }
 }
 
 RTEMS_SYSINIT_ITEM(
