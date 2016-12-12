@@ -134,6 +134,7 @@ rtems_status_code rtems_media_server_post_event(
     msg->src = s;
     msg->worker = worker;
     msg->worker_arg = worker_arg;
+    rtems_chain_initialize_node(&msg->node);
 
     sc = rtems_chain_append_with_notification(
       &message_chain,
