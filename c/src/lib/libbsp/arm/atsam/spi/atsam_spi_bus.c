@@ -394,34 +394,33 @@ static uint32_t atsam_send_command(
   return 0;
 }
 
-static int atsam_message_checks(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
+static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
 {
-  int status = 0;
-
-  if (msg->bits_per_word < 8 || msg->bits_per_word > 16) {
-    status = -EINVAL;
-  } else if (msg->mode > 3) {
-    status = -EINVAL;
-  } else if (msg->speed_hz > bus->base.max_speed_hz) {
-    status = -EINVAL;
-  } else {
-    if (msg->mode != bus->base.mode ||
-        msg->speed_hz != bus->base.speed_hz ||
-        msg->bits_per_word != bus->base.bits_per_word ||
-        msg->cs != bus->base.cs ||
-        msg->delay_usecs != bus->base.delay_usecs
+  if (
+    msg->mode != bus->base.mode
+      || msg->speed_hz != bus->base.speed_hz
+      || msg->bits_per_word != bus->base.bits_per_word
+      || msg->cs != bus->base.cs
+      || msg->delay_usecs != bus->base.delay_usecs
+  ) {
+    if (
+      msg->bits_per_word < 8
+        || msg->bits_per_word > 16
+        || msg->mode > 3
+        || msg->speed_hz > bus->base.max_speed_hz
     ) {
-      bus->base.mode = msg->mode;
-      bus->base.speed_hz = msg->speed_hz;
-      bus->base.bits_per_word = msg->bits_per_word;
-      bus->base.cs = msg->cs;
-      bus->base.delay_usecs = msg->delay_usecs;
-      atsam_configure_spi(bus);
-      status = 1;
+      return -EINVAL;
     }
+
+    bus->base.mode = msg->mode;
+    bus->base.speed_hz = msg->speed_hz;
+    bus->base.bits_per_word = msg->bits_per_word;
+    bus->base.cs = msg->cs;
+    bus->base.delay_usecs = msg->delay_usecs;
+    atsam_configure_spi(bus);
   }
 
-  return status;
+  return 0;
 }
 
 static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
@@ -430,33 +429,32 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
   uint32_t msg_todo = bus->msg_todo;
   uint32_t i;
   uint32_t rv_command;
-  int rv = 0;
+  int error;
 
-  for (i=0; i<msg_todo; i++) {
-    rv = atsam_message_checks(bus, &msgs[i]);
-    if (rv < 0) {
-      break;
-    } else if (rv == 1) {
-      atsam_configure_spi(bus);
-      rv = 0;
+  for (i = 0; i < msg_todo; ++i) {
+    error = atsam_check_configure_spi(bus, &msgs[i]);
+    if (error < 0) {
+      return error;
     }
+
     rv_command = atsam_send_command(bus, &msgs[i]);
     if (rv_command != 0) {
-      rv = -1;
-      break;
+      return -EIO;
     }
 
     rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 
     bus->rx_transfer_done = false;
     bus->tx_transfer_done = false;
+
     if (msgs[i].cs_change > 0) {
       SPI_ReleaseCS(bus->SpiDma.pSpiHw);
       atsam_finish_command(&bus->SpiDma);
       bus->spi_switched_on = false;
     }
   }
-  return rv;
+
+  return 0;
 }
 
 static int atsam_spi_transfer(
