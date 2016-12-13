@@ -431,7 +431,6 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
   uint32_t i;
   uint32_t rv_command;
   int rv = 0;
-  rtems_status_code sc;
 
   for (i=0; i<msg_todo; i++) {
     rv = atsam_message_checks(bus, &msgs[i]);
@@ -446,12 +445,9 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
       rv = -1;
       break;
     }
-    sc = rtems_event_transient_receive(RTEMS_WAIT, 10000);
-    if (sc != RTEMS_SUCCESSFUL) {
-      rtems_event_transient_clear();
-      rv = -ETIMEDOUT;
-      break;
-    }
+
+    rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+
     bus->rx_transfer_done = false;
     bus->tx_transfer_done = false;
     if (msgs[i].cs_change > 0) {
