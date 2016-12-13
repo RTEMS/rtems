@@ -354,8 +354,8 @@ static uint32_t atsam_send_command(
 )
 {
   Spid *spid = &bus->SpiDma;
-
   Spi *pSpiHw = spid->pSpiHw;
+  Xdmac *pXdmac = bus->SpiDma.pXdmad->pXdmacs;
 
   if (
     atsam_configure_link_list(
@@ -382,14 +382,9 @@ static uint32_t atsam_send_command(
 
   bus->spi_switched_on = true;
 
-  /* Start DMA 0(RX) && 1(TX) */
-  if (XDMAD_StartTransfer(spid->pXdmad, bus->dma_rx_channel)) {
-    return SPID_ERROR_LOCK;
-  }
-
-  if (XDMAD_StartTransfer(spid->pXdmad, bus->dma_tx_channel)) {
-    return SPID_ERROR_LOCK;
-  }
+  /* Start DMA */
+  XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
+  XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
 
   return 0;
 }

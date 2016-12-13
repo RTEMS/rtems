@@ -122,6 +122,12 @@
 extern "C" {
 #endif
 
+static inline void XDMAC_StartTransfer(Xdmac *pXdmac, uint8_t iChannel)
+{
+	pXdmac->XDMAC_GE = (XDMAC_GE_EN0 << iChannel);
+	pXdmac->XDMAC_GIE = (XDMAC_GIE_IE0 << iChannel);
+}
+
 extern uint32_t XDMAC_GetType(Xdmac *pXdmac);
 extern uint32_t XDMAC_GetConfig(Xdmac *pXdmac);
 extern uint32_t XDMAC_GetArbiter(Xdmac *pXdmac);
