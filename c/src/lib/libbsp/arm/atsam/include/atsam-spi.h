@@ -44,7 +44,7 @@ typedef struct {
 	uint32_t dma_rx_channel;
 	bool rx_transfer_done;
 	bool tx_transfer_done;
-	bool spi_switched_on;
+	bool chip_select_active;
 } atsam_spi_bus;
 
 int spi_bus_register_atsam(

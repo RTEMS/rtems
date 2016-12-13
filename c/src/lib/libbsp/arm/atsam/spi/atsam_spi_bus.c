@@ -34,15 +34,6 @@
 
 #define MAX_SPI_FREQUENCY 50000000
 
-static void atsam_finish_command(Spid *SpiDma)
-{
-  Spi *pSpiHw = SpiDma->pSpiHw;
-
-  SPI_Disable(pSpiHw);
-
-  PMC_DisablePeripheral(SpiDma->spiId);
-}
-
 static void atsam_interrupt_handler(void *arg)
 {
   atsam_spi_bus *bus = (atsam_spi_bus *)arg;
@@ -369,18 +360,12 @@ static uint32_t atsam_send_command(
     return SPID_ERROR_LOCK;
   }
 
-  if(!bus->spi_switched_on){
-    /* Enable the SPI Peripheral */
-    PMC_EnablePeripheral(spid->spiId);
+  if (!bus->chip_select_active){
+    bus->chip_select_active = true;
 
-    /* SPI chip select */
     SPI_ChipSelect(pSpiHw, 1 << msg->cs);
-
-    /* Enables the SPI to transfer and receive data. */
-    SPI_Enable (pSpiHw);
+    SPI_Enable(pSpiHw);
   }
-
-  bus->spi_switched_on = true;
 
   /* Start DMA */
   XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
@@ -443,9 +428,9 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
     bus->tx_transfer_done = false;
 
     if (msgs[i].cs_change > 0) {
+      bus->chip_select_active = false;
       SPI_ReleaseCS(bus->SpiDma.pSpiHw);
-      atsam_finish_command(&bus->SpiDma);
-      bus->spi_switched_on = false;
+      SPI_Disable(bus->SpiDma.pSpiHw);
     }
   }
 
@@ -487,6 +472,9 @@ static void atsam_spi_destroy(spi_bus *base)
   sc = rtems_interrupt_handler_remove(bus->irq, atsam_spi_interrupt, bus);
   assert(sc == RTEMS_SUCCESSFUL);
 
+  SPI_Disable(bus->SpiDma.pSpiHw);
+  PMC_DisablePeripheral(bus->SpiDma.spiId);
+
   spi_bus_destroy_and_free(&bus->base);
 }
 
@@ -521,7 +509,6 @@ static void atsam_spi_init(
   bus->base.cs = 1;
 
   atsam_configure_spi(bus);
-
   atsam_set_dmac(bus);
 }
 
