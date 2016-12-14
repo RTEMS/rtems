@@ -38,7 +38,6 @@
 
 typedef struct {
   spi_bus base;
-  Spi *regs;
   rtems_vector_number irq;
   uint32_t msg_todo;
   const spi_ioc_transfer *msgs;
@@ -168,7 +167,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
   SPID_Configure(
     &bus->SpiDma,
-    bus->regs,
+    bus->SpiDma.pSpiHw,
     bus->SpiDma.spiId,
     (SPI_MR_DLYBCS(delay_cs) |
       SPI_MR_MSTR |
@@ -185,7 +184,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
   atsam_set_phase_and_polarity(bus->base.mode, &csr);
 
-  SPI_ConfigureNPCS(bus->regs, bus->base.cs, csr);
+  SPI_ConfigureNPCS(bus->SpiDma.pSpiHw, bus->base.cs, csr);
 }
 
 static uint8_t atsam_configure_dma_channels(
@@ -531,9 +530,9 @@ int spi_bus_register_atsam(
   bus->base.speed_hz = bus->base.max_speed_hz;
   bus->base.delay_usecs = 1;
   bus->base.cs = 1;
-  bus->regs = spi_regs;
   bus->irq = ID_XDMAC;
   bus->SpiDma.spiId = spi_peripheral_id;
+  bus->SpiDma.pSpiHw = spi_regs;
 
   PIO_Configure(pins, pin_count);
   PMC_EnablePeripheral(spi_peripheral_id);
