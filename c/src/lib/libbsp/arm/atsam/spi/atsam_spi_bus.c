@@ -41,7 +41,7 @@ typedef struct {
   uint32_t msg_todo;
   const spi_ioc_transfer *msgs;
   rtems_id task_id;
-  sXdmad Dma;
+  sXdmad xdma;
   Spid SpiDma;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
@@ -53,7 +53,7 @@ typedef struct {
 static void atsam_spi_interrupt(void *arg)
 {
   atsam_spi_bus *bus = (atsam_spi_bus *)arg;
-  sXdmad *Dma = &bus->Dma;
+  sXdmad *xdma = &bus->xdma;
   Spid *spid = &bus->SpiDma;
   Xdmac *xdmac;
   sXdmadChannel *ch;
@@ -61,20 +61,20 @@ static void atsam_spi_interrupt(void *arg)
   uint8_t channel;
   uint8_t bExec = 0;
   rtems_status_code sc;
-  assert(Dma != NULL);
+  assert(xdma != NULL);
 
-  xdmac = Dma->pXdmacs;
+  xdmac = xdma->pXdmacs;
   xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac);
 
   if ((xdmaGlobaIntStatus & 0xFFFFFF) != 0) {
     xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
 
-    for (channel = 0; channel < Dma->numChannels; channel ++) {
+    for (channel = 0; channel < xdma->numChannels; channel ++) {
       if (!(xdmaGlobaIntStatus & (1 << channel))) {
         continue;
       }
 
-      ch = &Dma->XdmaChannels[channel];
+      ch = &xdma->XdmaChannels[channel];
 
       if (ch->state == XDMAD_STATE_FREE) {
         return;
@@ -166,7 +166,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
       SPI_MR_MSTR |
       SPI_MR_MODFDIS |
       SPI_PCS(bus->base.cs)),
-    &bus->Dma
+    &bus->xdma
   );
 
   csr =
@@ -180,62 +180,29 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
   SPI_ConfigureNPCS(bus->SpiDma.pSpiHw, bus->base.cs, csr);
 }
 
-static uint8_t atsam_configure_dma_channels(
-  Spid *pSpid,
-  uint32_t *dma_tx_channel,
-  uint32_t *dma_rx_channel
-)
+static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 {
-  /* Driver initialize */
-  XDMAD_Initialize(pSpid->pXdmad, 0);
+  eXdmadRC rc;
 
-  /* Allocate a DMA channel for SPI0/1 TX. */
-  *dma_tx_channel = XDMAD_AllocateChannel(
-    pSpid->pXdmad,
+  bus->dma_tx_channel = XDMAD_AllocateChannel(
+    &bus->xdma,
     XDMAD_TRANSFER_MEMORY,
-    pSpid->spiId
+    bus->SpiDma.spiId
   );
+  assert(bus->dma_tx_channel != XDMAD_ALLOC_FAILED);
 
-  if (*dma_tx_channel == XDMAD_ALLOC_FAILED) {
-    return SPID_ERROR;
-  }
-
-  /* Allocate a DMA channel for SPI0/1 RX. */
-  *dma_rx_channel = XDMAD_AllocateChannel(
-    pSpid->pXdmad,
-    pSpid->spiId,
+  bus->dma_rx_channel = XDMAD_AllocateChannel(
+    &bus->xdma,
+    bus->SpiDma.spiId,
     XDMAD_TRANSFER_MEMORY
   );
+  assert(bus->dma_rx_channel != XDMAD_ALLOC_FAILED);
 
-  if (*dma_rx_channel == XDMAD_ALLOC_FAILED) {
-    return SPID_ERROR;
-  }
+  rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_rx_channel);
+  assert(rc == XDMAD_OK);
 
-  if (XDMAD_PrepareChannel(pSpid->pXdmad, *dma_rx_channel))
-    return SPID_ERROR;
-
-  if (XDMAD_PrepareChannel(pSpid->pXdmad, *dma_tx_channel))
-    return SPID_ERROR;
-
-  return 0;
-}
-
-static uint32_t atsam_set_dmac(atsam_spi_bus *bus)
-{
-  Spid *spid = &bus->SpiDma;
-
-  /* Initialize DMA controller using channel 0 for RX, 1 for TX. */
-  if (
-    atsam_configure_dma_channels(
-      spid,
-      &bus->dma_tx_channel,
-      &bus->dma_rx_channel
-    )
-  ) {
-    return SPID_ERROR_LOCK;
-  }
-
-  return 0;
+  rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_tx_channel);
+  assert(rc == XDMAD_OK);
 }
 
 static uint8_t atsam_configure_link_list(
@@ -528,9 +495,9 @@ int spi_bus_register_atsam(
 
   PIO_Configure(pins, pin_count);
   PMC_EnablePeripheral(spi_peripheral_id);
-  XDMAD_Initialize(&bus->Dma, 0);
+  XDMAD_Initialize(&bus->xdma, 0);
   atsam_configure_spi(bus);
-  atsam_set_dmac(bus);
+  atsam_spi_init_xdma(bus);
 
   sc = rtems_interrupt_handler_install(
     ID_XDMAC,
