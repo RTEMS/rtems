@@ -38,9 +38,11 @@
 
 typedef struct {
   spi_bus base;
+  bool msg_cs_change;
+  const spi_ioc_transfer *msg_current;
   uint32_t msg_todo;
-  const spi_ioc_transfer *msgs;
-  rtems_id task_id;
+  int msg_error;
+  rtems_id msg_task;
   sXdmad xdma;
   Spid SpiDma;
   uint32_t dma_tx_channel;
@@ -50,77 +52,12 @@ typedef struct {
   bool chip_select_active;
 } atsam_spi_bus;
 
-static void atsam_spi_interrupt(void *arg)
+static void atsam_spi_wakeup_task(atsam_spi_bus *bus)
 {
-  atsam_spi_bus *bus = (atsam_spi_bus *)arg;
-  sXdmad *xdma = &bus->xdma;
-  Spid *spid = &bus->SpiDma;
-  Xdmac *xdmac;
-  sXdmadChannel *ch;
-  uint32_t xdmaChannelIntStatus, xdmaGlobaIntStatus, xdmaGlobalChStatus;
-  uint8_t channel;
-  uint8_t bExec = 0;
   rtems_status_code sc;
-  assert(xdma != NULL);
 
-  xdmac = xdma->pXdmacs;
-  xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac);
-
-  if ((xdmaGlobaIntStatus & 0xFFFFFF) != 0) {
-    xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
-
-    for (channel = 0; channel < xdma->numChannels; channel ++) {
-      if (!(xdmaGlobaIntStatus & (1 << channel))) {
-        continue;
-      }
-
-      ch = &xdma->XdmaChannels[channel];
-
-      if (ch->state == XDMAD_STATE_FREE) {
-        return;
-      }
-
-      if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << channel)) == 0) {
-        bExec = 0;
-        xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(xdmac, channel);
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
-          if ((XDMAC_GetChannelItMask(xdmac, channel) & XDMAC_CIM_LIM) == 0) {
-            ch->state = XDMAD_STATE_DONE;
-            bExec = 1;
-          }
-        }
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_LIS) {
-          ch->state = XDMAD_STATE_DONE;
-          bExec = 1;
-        }
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_DIS) {
-          ch->state = XDMAD_STATE_DONE;
-          bExec = 1;
-        }
-
-      } else {
-        /* Block end interrupt for LLI dma mode */
-        if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
-        }
-      }
-
-      if (bExec == 1 && (channel == bus->dma_rx_channel)) {
-        bus->rx_transfer_done = true;
-        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
-      } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
-        bus->tx_transfer_done = true;
-        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
-      }
-
-      if (bus->rx_transfer_done && bus->tx_transfer_done) {
-        sc = rtems_event_transient_send(bus->task_id);
-        assert(sc == RTEMS_SUCCESSFUL);
-      }
-    }
-  }
+  sc = rtems_event_transient_send(bus->msg_task);
+  assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static uint8_t atsam_calculate_dlybcs(uint16_t delay_in_us)
@@ -328,33 +265,108 @@ static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer 
   return 0;
 }
 
-static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
+static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 {
-  const spi_ioc_transfer *msgs = bus->msgs;
   uint32_t msg_todo = bus->msg_todo;
-  uint32_t i;
-  int error;
 
-  for (i = 0; i < msg_todo; ++i) {
-    error = atsam_check_configure_spi(bus, &msgs[i]);
-    if (error < 0) {
-      return error;
-    }
+  bus->rx_transfer_done = false;
+  bus->tx_transfer_done = false;
 
-    atsam_spi_do_transfer(bus, &msgs[i]);
-    rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-
-    bus->rx_transfer_done = false;
-    bus->tx_transfer_done = false;
-
-    if (msgs[i].cs_change > 0) {
-      bus->chip_select_active = false;
-      SPI_ReleaseCS(bus->SpiDma.pSpiHw);
-      SPI_Disable(bus->SpiDma.pSpiHw);
-    }
+  if (bus->msg_cs_change) {
+    bus->chip_select_active = false;
+    SPI_ReleaseCS(bus->SpiDma.pSpiHw);
+    SPI_Disable(bus->SpiDma.pSpiHw);
   }
 
-  return 0;
+  if (msg_todo > 0) {
+    const spi_ioc_transfer *msg = bus->msg_current;
+    int error;
+
+    bus->msg_cs_change = msg->cs_change;
+    bus->msg_current = msg + 1;
+    bus->msg_todo = msg_todo - 1;
+
+    error = atsam_check_configure_spi(bus, msg);
+    if (error == 0) {
+      atsam_spi_do_transfer(bus, msg);
+    } else {
+      bus->msg_error = error;
+      atsam_spi_wakeup_task(bus);
+    }
+  } else {
+    atsam_spi_wakeup_task(bus);
+  }
+}
+
+static void atsam_spi_interrupt(void *arg)
+{
+  atsam_spi_bus *bus = (atsam_spi_bus *)arg;
+  sXdmad *xdma = &bus->xdma;
+  Spid *spid = &bus->SpiDma;
+  Xdmac *xdmac;
+  sXdmadChannel *ch;
+  uint32_t xdmaChannelIntStatus, xdmaGlobaIntStatus, xdmaGlobalChStatus;
+  uint8_t channel;
+  uint8_t bExec = 0;
+  assert(xdma != NULL);
+
+  xdmac = xdma->pXdmacs;
+  xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac);
+
+  if ((xdmaGlobaIntStatus & 0xFFFFFF) != 0) {
+    xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
+
+    for (channel = 0; channel < xdma->numChannels; channel ++) {
+      if (!(xdmaGlobaIntStatus & (1 << channel))) {
+        continue;
+      }
+
+      ch = &xdma->XdmaChannels[channel];
+
+      if (ch->state == XDMAD_STATE_FREE) {
+        return;
+      }
+
+      if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << channel)) == 0) {
+        bExec = 0;
+        xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(xdmac, channel);
+
+        if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
+          if ((XDMAC_GetChannelItMask(xdmac, channel) & XDMAC_CIM_LIM) == 0) {
+            ch->state = XDMAD_STATE_DONE;
+            bExec = 1;
+          }
+        }
+
+        if (xdmaChannelIntStatus & XDMAC_CIS_LIS) {
+          ch->state = XDMAD_STATE_DONE;
+          bExec = 1;
+        }
+
+        if (xdmaChannelIntStatus & XDMAC_CIS_DIS) {
+          ch->state = XDMAD_STATE_DONE;
+          bExec = 1;
+        }
+
+      } else {
+        /* Block end interrupt for LLI dma mode */
+        if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
+        }
+      }
+
+      if (bExec == 1 && (channel == bus->dma_rx_channel)) {
+        bus->rx_transfer_done = true;
+        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
+      } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
+        bus->tx_transfer_done = true;
+        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
+      }
+
+      if (bus->rx_transfer_done && bus->tx_transfer_done) {
+        atsam_spi_setup_transfer(bus);
+      }
+    }
+  }
 }
 
 static int atsam_spi_transfer(
@@ -363,20 +375,16 @@ static int atsam_spi_transfer(
   uint32_t msg_count
 )
 {
-  int rv;
   atsam_spi_bus *bus = (atsam_spi_bus *)base;
 
-  if (msg_count == 0) {
-    return 0;
-  }
-
-  bus->msgs = &msgs[0];
+  bus->msg_cs_change = false;
+  bus->msg_current = &msgs[0];
   bus->msg_todo = msg_count;
-  bus->task_id = rtems_task_self();
-
-  rv = atsam_spi_setup_transfer(bus);
-
-  return rv;
+  bus->msg_error = 0;
+  bus->msg_task = rtems_task_self();
+  atsam_spi_setup_transfer(bus);
+  rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  return bus->msg_error;
 }
 
 
