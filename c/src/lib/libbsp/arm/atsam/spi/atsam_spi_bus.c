@@ -313,60 +313,56 @@ static void atsam_spi_interrupt(void *arg)
   assert(xdma != NULL);
 
   xdmac = xdma->pXdmacs;
-  xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac);
+  xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac) & 0xFFFFFF;
+  xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
 
-  if ((xdmaGlobaIntStatus & 0xFFFFFF) != 0) {
-    xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
+  while (xdmaGlobaIntStatus != 0) {
+    channel = 31 - __builtin_clz(xdmaGlobaIntStatus);
+    xdmaGlobaIntStatus &= ~(UINT32_C(1) << channel);
 
-    for (channel = 0; channel < xdma->numChannels; channel ++) {
-      if (!(xdmaGlobaIntStatus & (1 << channel))) {
-        continue;
-      }
+    ch = &xdma->XdmaChannels[channel];
 
-      ch = &xdma->XdmaChannels[channel];
+    if (ch->state == XDMAD_STATE_FREE) {
+      continue;
+    }
 
-      if (ch->state == XDMAD_STATE_FREE) {
-        return;
-      }
+    if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << channel)) == 0) {
+      bExec = 0;
+      xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(xdmac, channel);
 
-      if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << channel)) == 0) {
-        bExec = 0;
-        xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(xdmac, channel);
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
-          if ((XDMAC_GetChannelItMask(xdmac, channel) & XDMAC_CIM_LIM) == 0) {
-            ch->state = XDMAD_STATE_DONE;
-            bExec = 1;
-          }
-        }
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_LIS) {
+      if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
+        if ((XDMAC_GetChannelItMask(xdmac, channel) & XDMAC_CIM_LIM) == 0) {
           ch->state = XDMAD_STATE_DONE;
           bExec = 1;
         }
-
-        if (xdmaChannelIntStatus & XDMAC_CIS_DIS) {
-          ch->state = XDMAD_STATE_DONE;
-          bExec = 1;
-        }
-
-      } else {
-        /* Block end interrupt for LLI dma mode */
-        if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
-        }
       }
 
-      if (bExec == 1 && (channel == bus->dma_rx_channel)) {
-        bus->transfer_status &= ~RX_IN_PROGRESS;
-        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
-      } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
-        bus->transfer_status &= ~TX_IN_PROGRESS;
-        XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
+      if (xdmaChannelIntStatus & XDMAC_CIS_LIS) {
+        ch->state = XDMAD_STATE_DONE;
+        bExec = 1;
       }
 
-      if (bus->transfer_status == 0) {
-        atsam_spi_setup_transfer(bus);
+      if (xdmaChannelIntStatus & XDMAC_CIS_DIS) {
+        ch->state = XDMAD_STATE_DONE;
+        bExec = 1;
       }
+
+    } else {
+      /* Block end interrupt for LLI dma mode */
+      if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
+      }
+    }
+
+    if (bExec == 1 && (channel == bus->dma_rx_channel)) {
+      bus->transfer_status &= ~RX_IN_PROGRESS;
+      XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
+    } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
+      bus->transfer_status &= ~TX_IN_PROGRESS;
+      XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
+    }
+
+    if (bus->transfer_status == 0) {
+      atsam_spi_setup_transfer(bus);
     }
   }
 }
