@@ -36,6 +36,10 @@
 
 #define MAX_SPI_FREQUENCY 50000000
 
+#define TX_IN_PROGRESS 0x1
+
+#define RX_IN_PROGRESS 0x2
+
 typedef struct {
   spi_bus base;
   bool msg_cs_change;
@@ -47,8 +51,7 @@ typedef struct {
   Spid SpiDma;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
-  bool rx_transfer_done;
-  bool tx_transfer_done;
+  int transfer_status;
   bool chip_select_active;
 } atsam_spi_bus;
 
@@ -269,8 +272,7 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 {
   uint32_t msg_todo = bus->msg_todo;
 
-  bus->rx_transfer_done = false;
-  bus->tx_transfer_done = false;
+  bus->transfer_status = RX_IN_PROGRESS | TX_IN_PROGRESS;
 
   if (bus->msg_cs_change) {
     bus->chip_select_active = false;
@@ -355,14 +357,14 @@ static void atsam_spi_interrupt(void *arg)
       }
 
       if (bExec == 1 && (channel == bus->dma_rx_channel)) {
-        bus->rx_transfer_done = true;
+        bus->transfer_status &= ~RX_IN_PROGRESS;
         XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
       } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
-        bus->tx_transfer_done = true;
+        bus->transfer_status &= ~TX_IN_PROGRESS;
         XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
       }
 
-      if (bus->rx_transfer_done && bus->tx_transfer_done) {
+      if (bus->transfer_status == 0) {
         atsam_spi_setup_transfer(bus);
       }
     }
