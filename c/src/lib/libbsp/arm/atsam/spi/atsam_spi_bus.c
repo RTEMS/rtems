@@ -38,7 +38,6 @@
 
 typedef struct {
   spi_bus base;
-  rtems_vector_number irq;
   uint32_t msg_todo;
   const spi_ioc_transfer *msgs;
   rtems_id task_id;
@@ -486,7 +485,7 @@ static void atsam_spi_destroy(spi_bus *base)
   XDMAD_FreeChannel(bus->SpiDma.pXdmad, 0);
   XDMAD_FreeChannel(bus->SpiDma.pXdmad, 1);
 
-  sc = rtems_interrupt_handler_remove(bus->irq, atsam_spi_interrupt, bus);
+  sc = rtems_interrupt_handler_remove(ID_XDMAC, atsam_spi_interrupt, bus);
   assert(sc == RTEMS_SUCCESSFUL);
 
   SPI_Disable(bus->SpiDma.pSpiHw);
@@ -530,7 +529,6 @@ int spi_bus_register_atsam(
   bus->base.speed_hz = bus->base.max_speed_hz;
   bus->base.delay_usecs = 1;
   bus->base.cs = 1;
-  bus->irq = ID_XDMAC;
   bus->SpiDma.spiId = spi_peripheral_id;
   bus->SpiDma.pSpiHw = spi_regs;
 
@@ -541,11 +539,11 @@ int spi_bus_register_atsam(
   atsam_set_dmac(bus);
 
   sc = rtems_interrupt_handler_install(
-      bus->irq,
-      "SPI",
-      RTEMS_INTERRUPT_UNIQUE,
-      atsam_spi_interrupt,
-      bus
+    ID_XDMAC,
+    "SPI",
+    RTEMS_INTERRUPT_UNIQUE,
+    atsam_spi_interrupt,
+    bus
   );
   if (sc != RTEMS_SUCCESSFUL) {
     (*bus->base.destroy)(&bus->base);
