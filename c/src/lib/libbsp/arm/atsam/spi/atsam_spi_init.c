@@ -55,29 +55,46 @@
 
 int atsam_register_spi_0(void)
 {
-	static const Pin pins[] = {PIN_SPI0_MISO, PIN_SPI0_MOSI, PIN_SPI0_NPCS0,
-	    PIN_SPI0_NPCS1_1, PIN_SPI0_NPCS1_2, PIN_SPI0_NPCS2, PIN_SPI0_NPCS3,
-	    PIN_SPI0_CLOCK};
+  static const Pin pins[] = {
+    PIN_SPI0_MISO,
+    PIN_SPI0_MOSI,
+    PIN_SPI0_NPCS0,
+    PIN_SPI0_NPCS1_1,
+    PIN_SPI0_NPCS1_2,
+    PIN_SPI0_NPCS2,
+    PIN_SPI0_NPCS3,
+    PIN_SPI0_CLOCK
+  };
 
-	return spi_bus_register_atsam(
-	    ATSAM_SPI_0_BUS_PATH,
-	    SPI0,
-	    ID_SPI0,
-	    8,
-	    pins);
+  return spi_bus_register_atsam(
+    ATSAM_SPI_0_BUS_PATH,
+    SPI0,
+    ID_SPI0,
+    pins,
+    RTEMS_ARRAY_SIZE(pins)
+  );
 }
 
 int atsam_register_spi_1(void)
 {
-	static const Pin pins[] = {PIN_SPI1_MISO, PIN_SPI1_MOSI, PIN_SPI1_NPCS0,
-	    PIN_SPI1_NPCS1_1, PIN_SPI1_NPCS1_2, PIN_SPI1_NPCS2_1,
-	    PIN_SPI1_NPCS2_2, PIN_SPI1_NPCS3_1, PIN_SPI1_NPCS3_2,
-	    PIN_SPI1_CLOCK};
+  static const Pin pins[] = {
+    PIN_SPI1_MISO,
+    PIN_SPI1_MOSI,
+    PIN_SPI1_NPCS0,
+    PIN_SPI1_NPCS1_1,
+    PIN_SPI1_NPCS1_2,
+    PIN_SPI1_NPCS2_1,
+    PIN_SPI1_NPCS2_2,
+    PIN_SPI1_NPCS3_1,
+    PIN_SPI1_NPCS3_2,
+    PIN_SPI1_CLOCK
+  };
 
-	return spi_bus_register_atsam(
-	    ATSAM_SPI_1_BUS_PATH,
-	    SPI1,
-	    ID_SPI1,
-	    10,
-	    pins);
+  return spi_bus_register_atsam(
+    ATSAM_SPI_1_BUS_PATH,
+    SPI1,
+    ID_SPI1,
+    pins,
+    RTEMS_ARRAY_SIZE(pins)
+  );
 }

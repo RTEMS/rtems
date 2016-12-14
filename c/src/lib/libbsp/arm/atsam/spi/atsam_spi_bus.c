@@ -495,11 +495,11 @@ static int atsam_spi_setup(spi_bus *base)
 
 static void atsam_spi_init(
   atsam_spi_bus *bus,
-  size_t pin_amount,
-  const Pin *pins
+  const Pin *pins,
+  size_t pin_count
 )
 {
-  PIO_Configure(pins, pin_amount);
+  PIO_Configure(pins, pin_count);
   ENABLE_PERIPHERAL(bus->board_id);
   XDMAD_Initialize(&bus->Dma, 0);
   bus->base.mode = 0;
@@ -516,8 +516,8 @@ int spi_bus_register_atsam(
     const char *bus_path,
     Spi *register_base,
     rtems_vector_number irq,
-    size_t pin_amount,
-    const Pin *pins
+    const Pin *pins,
+    size_t pin_count
 )
 {
   atsam_spi_bus *bus;
@@ -533,7 +533,7 @@ int spi_bus_register_atsam(
   bus->board_id = board_id;
   bus->irq = ID_XDMAC;
 
-  atsam_spi_init(bus, pin_amount, pins);
+  atsam_spi_init(bus, pins, pin_count);
 
   sc = rtems_interrupt_handler_install(
       bus->irq,
