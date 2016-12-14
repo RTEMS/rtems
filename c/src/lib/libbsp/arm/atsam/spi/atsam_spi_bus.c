@@ -182,6 +182,9 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
 static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 {
+  sXdmadCfg cfg;
+  uint32_t xdmaInt;
+  uint8_t channel;
   eXdmadRC rc;
 
   bus->dma_tx_channel = XDMAD_AllocateChannel(
@@ -203,76 +206,6 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 
   rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_tx_channel);
   assert(rc == XDMAD_OK);
-}
-
-static void atsam_spi_start_dma_transfer(
-  atsam_spi_bus *bus,
-  const spi_ioc_transfer *msg
-)
-{
-  sXdmadCfg xdmadRxCfg, xdmadTxCfg;
-  uint32_t xdmaInt;
-  uint8_t rx_channel;
-  uint8_t tx_channel;
-  eXdmadRC rc;
-
-  /* Setup TX  */
-
-  xdmadTxCfg.mbr_sa = (uint32_t)msg->tx_buf;
-
-  xdmadTxCfg.mbr_da = (uint32_t)&bus->SpiDma.pSpiHw->SPI_TDR;
-
-  xdmadTxCfg.mbr_ubc =
-    XDMA_UBC_NVIEW_NDV0 |
-    XDMA_UBC_NDE_FETCH_DIS |
-    XDMA_UBC_NSEN_UPDATED |
-    msg->len;
-
-  tx_channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_TX);
-  xdmadTxCfg.mbr_cfg =
-    XDMAC_CC_TYPE_PER_TRAN |
-    XDMAC_CC_MBSIZE_SINGLE |
-    XDMAC_CC_DSYNC_MEM2PER |
-    XDMAC_CC_CSIZE_CHK_1 |
-    XDMAC_CC_DWIDTH_BYTE |
-    XDMAC_CC_SIF_AHB_IF1 |
-    XDMAC_CC_DIF_AHB_IF1 |
-    XDMAC_CC_SAM_INCREMENTED_AM |
-    XDMAC_CC_DAM_FIXED_AM |
-    XDMAC_CC_PERID(tx_channel);
-
-  xdmadTxCfg.mbr_bc = 0;
-  xdmadTxCfg.mbr_sus = 0;
-  xdmadTxCfg.mbr_dus = 0;
-
-  /* Setup RX Link List */
-
-  xdmadRxCfg.mbr_ubc =
-    XDMA_UBC_NVIEW_NDV0 |
-    XDMA_UBC_NDE_FETCH_DIS |
-    XDMA_UBC_NDEN_UPDATED |
-    msg->len;
-
-  xdmadRxCfg.mbr_da = (uint32_t)msg->rx_buf;
-
-  xdmadRxCfg.mbr_sa = (uint32_t)&bus->SpiDma.pSpiHw->SPI_RDR;
-
-  rx_channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_RX);
-  xdmadRxCfg.mbr_cfg =
-    XDMAC_CC_TYPE_PER_TRAN |
-    XDMAC_CC_MBSIZE_SINGLE |
-    XDMAC_CC_DSYNC_PER2MEM |
-    XDMAC_CC_CSIZE_CHK_1 |
-    XDMAC_CC_DWIDTH_BYTE |
-    XDMAC_CC_SIF_AHB_IF1 |
-    XDMAC_CC_DIF_AHB_IF1 |
-    XDMAC_CC_SAM_FIXED_AM |
-    XDMAC_CC_DAM_INCREMENTED_AM |
-    XDMAC_CC_PERID(rx_channel);
-
-  xdmadRxCfg.mbr_bc = 0;
-  xdmadRxCfg.mbr_sus = 0;
-  xdmadRxCfg.mbr_dus = 0;
 
   /* Put all interrupts on for non LLI list setup of DMA */
   xdmaInt =  (
@@ -283,28 +216,70 @@ static void atsam_spi_start_dma_transfer(
     XDMAC_CIE_WBIE |
     XDMAC_CIE_ROIE);
 
+  /* Setup RX */
+  memset(&cfg, 0, sizeof(cfg));
+  channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_RX);
+  cfg.mbr_sa = (uint32_t)&bus->SpiDma.pSpiHw->SPI_RDR;
+  cfg.mbr_cfg =
+    XDMAC_CC_TYPE_PER_TRAN |
+    XDMAC_CC_MBSIZE_SINGLE |
+    XDMAC_CC_DSYNC_PER2MEM |
+    XDMAC_CC_CSIZE_CHK_1 |
+    XDMAC_CC_DWIDTH_BYTE |
+    XDMAC_CC_SIF_AHB_IF1 |
+    XDMAC_CC_DIF_AHB_IF1 |
+    XDMAC_CC_SAM_FIXED_AM |
+    XDMAC_CC_DAM_INCREMENTED_AM |
+    XDMAC_CC_PERID(channel);
   rc = XDMAD_ConfigureTransfer(
     &bus->xdma,
     bus->dma_rx_channel,
-    &xdmadRxCfg,
+    &cfg,
     0,
     0,
     xdmaInt
   );
   assert(rc == XDMAD_OK);
 
+  /* Setup TX  */
+  memset(&cfg, 0, sizeof(cfg));
+  channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_TX);
+  cfg.mbr_da = (uint32_t)&bus->SpiDma.pSpiHw->SPI_TDR;
+  cfg.mbr_cfg =
+    XDMAC_CC_TYPE_PER_TRAN |
+    XDMAC_CC_MBSIZE_SINGLE |
+    XDMAC_CC_DSYNC_MEM2PER |
+    XDMAC_CC_CSIZE_CHK_1 |
+    XDMAC_CC_DWIDTH_BYTE |
+    XDMAC_CC_SIF_AHB_IF1 |
+    XDMAC_CC_DIF_AHB_IF1 |
+    XDMAC_CC_SAM_INCREMENTED_AM |
+    XDMAC_CC_DAM_FIXED_AM |
+    XDMAC_CC_PERID(channel);
   rc = XDMAD_ConfigureTransfer(
     &bus->xdma,
     bus->dma_tx_channel,
-    &xdmadTxCfg,
+    &cfg,
     0,
     0,
     xdmaInt
   );
   assert(rc == XDMAD_OK);
+}
 
-  XDMAC_StartTransfer(bus->xdma.pXdmacs, bus->dma_rx_channel);
-  XDMAC_StartTransfer(bus->xdma.pXdmacs, bus->dma_tx_channel);
+static void atsam_spi_start_dma_transfer(
+  atsam_spi_bus *bus,
+  const spi_ioc_transfer *msg
+)
+{
+  Xdmac *pXdmac = bus->xdma.pXdmacs;
+
+  XDMAC_SetDestinationAddr(pXdmac, bus->dma_rx_channel, (uint32_t)msg->rx_buf);
+  XDMAC_SetSourceAddr(pXdmac, bus->dma_tx_channel, (uint32_t)msg->tx_buf);
+  XDMAC_SetMicroblockControl(pXdmac, bus->dma_rx_channel, msg->len);
+  XDMAC_SetMicroblockControl(pXdmac, bus->dma_tx_channel, msg->len);
+  XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
+  XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
 }
 
 static void atsam_spi_do_transfer(
