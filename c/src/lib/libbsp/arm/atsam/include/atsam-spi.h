@@ -23,10 +23,10 @@ extern "C" {
 
 int spi_bus_register_atsam(
   const char *bus_path,
-  Spi *register_base,
-  rtems_vector_number irq,
-  const Pin *pins,
-  size_t pin_count
+  uint8_t     spi_peripheral_id,
+  Spi        *spi_regs,
+  const Pin  *pins,
+  size_t      pin_count
 );
 
 #ifdef __cplusplus

@@ -68,8 +68,8 @@ int atsam_register_spi_0(void)
 
   return spi_bus_register_atsam(
     ATSAM_SPI_0_BUS_PATH,
-    SPI0,
     ID_SPI0,
+    SPI0,
     pins,
     RTEMS_ARRAY_SIZE(pins)
   );
@@ -92,8 +92,8 @@ int atsam_register_spi_1(void)
 
   return spi_bus_register_atsam(
     ATSAM_SPI_1_BUS_PATH,
-    SPI1,
     ID_SPI1,
+    SPI1,
     pins,
     RTEMS_ARRAY_SIZE(pins)
   );

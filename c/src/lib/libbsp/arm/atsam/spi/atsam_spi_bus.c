@@ -40,7 +40,6 @@ typedef struct {
   spi_bus base;
   Spi *regs;
   rtems_vector_number irq;
-  uint32_t board_id;
   uint32_t msg_todo;
   const spi_ioc_transfer *msgs;
   rtems_id task_id;
@@ -170,7 +169,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
   SPID_Configure(
     &bus->SpiDma,
     bus->regs,
-    bus->board_id,
+    bus->SpiDma.spiId,
     (SPI_MR_DLYBCS(delay_cs) |
       SPI_MR_MSTR |
       SPI_MR_MODFDIS |
@@ -512,47 +511,35 @@ static int atsam_spi_setup(spi_bus *base)
   return 0;
 }
 
-static void atsam_spi_init(
-  atsam_spi_bus *bus,
-  const Pin *pins,
-  size_t pin_count
-)
-{
-  PIO_Configure(pins, pin_count);
-  ENABLE_PERIPHERAL(bus->board_id);
-  XDMAD_Initialize(&bus->Dma, 0);
-  bus->base.mode = 0;
-  bus->base.bits_per_word = 8;
-  bus->base.speed_hz = bus->base.max_speed_hz;
-  bus->base.delay_usecs = 1;
-  bus->base.cs = 1;
-
-  atsam_configure_spi(bus);
-  atsam_set_dmac(bus);
-}
-
 int spi_bus_register_atsam(
-    const char *bus_path,
-    Spi *register_base,
-    rtems_vector_number irq,
-    const Pin *pins,
-    size_t pin_count
+  const char *bus_path,
+  uint8_t     spi_peripheral_id,
+  Spi        *spi_regs,
+  const Pin  *pins,
+  size_t      pin_count
 )
 {
   atsam_spi_bus *bus;
   rtems_status_code sc;
-  uint32_t board_id = (uint32_t) irq;
 
   bus = (atsam_spi_bus *) spi_bus_alloc_and_init(sizeof(*bus));
   if (bus == NULL) {
     return -1;
   }
 
-  bus->regs = register_base;
-  bus->board_id = board_id;
+  bus->base.bits_per_word = 8;
+  bus->base.speed_hz = bus->base.max_speed_hz;
+  bus->base.delay_usecs = 1;
+  bus->base.cs = 1;
+  bus->regs = spi_regs;
   bus->irq = ID_XDMAC;
+  bus->SpiDma.spiId = spi_peripheral_id;
 
-  atsam_spi_init(bus, pins, pin_count);
+  PIO_Configure(pins, pin_count);
+  PMC_EnablePeripheral(spi_peripheral_id);
+  XDMAD_Initialize(&bus->Dma, 0);
+  atsam_configure_spi(bus);
+  atsam_set_dmac(bus);
 
   sc = rtems_interrupt_handler_install(
       bus->irq,
