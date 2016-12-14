@@ -205,27 +205,22 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
   assert(rc == XDMAD_OK);
 }
 
-static uint8_t atsam_configure_link_list(
-  Spi *pSpiHw,
-  void *pXdmad,
-  uint32_t dma_tx_channel,
-  uint32_t dma_rx_channel,
+static void atsam_spi_start_dma_transfer(
+  atsam_spi_bus *bus,
   const spi_ioc_transfer *msg
 )
 {
   sXdmadCfg xdmadRxCfg, xdmadTxCfg;
-  uint32_t xdmaCndc, xdmaInt;
-  uint32_t spiId;
-
-  if ((unsigned int)pSpiHw == (unsigned int)SPI0) spiId = ID_SPI0;
-
-  if ((unsigned int)pSpiHw == (unsigned int)SPI1) spiId = ID_SPI1;
+  uint32_t xdmaInt;
+  uint8_t rx_channel;
+  uint8_t tx_channel;
+  eXdmadRC rc;
 
   /* Setup TX  */
 
   xdmadTxCfg.mbr_sa = (uint32_t)msg->tx_buf;
 
-  xdmadTxCfg.mbr_da = (uint32_t)&pSpiHw->SPI_TDR;
+  xdmadTxCfg.mbr_da = (uint32_t)&bus->SpiDma.pSpiHw->SPI_TDR;
 
   xdmadTxCfg.mbr_ubc =
     XDMA_UBC_NVIEW_NDV0 |
@@ -233,6 +228,7 @@ static uint8_t atsam_configure_link_list(
     XDMA_UBC_NSEN_UPDATED |
     msg->len;
 
+  tx_channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_TX);
   xdmadTxCfg.mbr_cfg =
     XDMAC_CC_TYPE_PER_TRAN |
     XDMAC_CC_MBSIZE_SINGLE |
@@ -243,7 +239,7 @@ static uint8_t atsam_configure_link_list(
     XDMAC_CC_DIF_AHB_IF1 |
     XDMAC_CC_SAM_INCREMENTED_AM |
     XDMAC_CC_DAM_FIXED_AM |
-    XDMAC_CC_PERID(XDMAIF_Get_ChannelNumber(spiId, XDMAD_TRANSFER_TX));
+    XDMAC_CC_PERID(tx_channel);
 
   xdmadTxCfg.mbr_bc = 0;
   xdmadTxCfg.mbr_sus = 0;
@@ -259,7 +255,9 @@ static uint8_t atsam_configure_link_list(
 
   xdmadRxCfg.mbr_da = (uint32_t)msg->rx_buf;
 
-  xdmadRxCfg.mbr_sa = (uint32_t)&pSpiHw->SPI_RDR;
+  xdmadRxCfg.mbr_sa = (uint32_t)&bus->SpiDma.pSpiHw->SPI_RDR;
+
+  rx_channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_RX);
   xdmadRxCfg.mbr_cfg =
     XDMAC_CC_TYPE_PER_TRAN |
     XDMAC_CC_MBSIZE_SINGLE |
@@ -270,13 +268,11 @@ static uint8_t atsam_configure_link_list(
     XDMAC_CC_DIF_AHB_IF1 |
     XDMAC_CC_SAM_FIXED_AM |
     XDMAC_CC_DAM_INCREMENTED_AM |
-    XDMAC_CC_PERID(XDMAIF_Get_ChannelNumber(spiId, XDMAD_TRANSFER_RX));
+    XDMAC_CC_PERID(rx_channel);
 
   xdmadRxCfg.mbr_bc = 0;
   xdmadRxCfg.mbr_sus = 0;
   xdmadRxCfg.mbr_dus = 0;
-
-  xdmaCndc = 0;
 
   /* Put all interrupts on for non LLI list setup of DMA */
   xdmaInt =  (
@@ -287,68 +283,45 @@ static uint8_t atsam_configure_link_list(
     XDMAC_CIE_WBIE |
     XDMAC_CIE_ROIE);
 
-  if (
-    XDMAD_ConfigureTransfer(
-      pXdmad,
-      dma_rx_channel,
-      &xdmadRxCfg,
-      xdmaCndc,
-      0,
-      xdmaInt
-    )
-  ) {
-    return SPID_ERROR;
-  }
+  rc = XDMAD_ConfigureTransfer(
+    &bus->xdma,
+    bus->dma_rx_channel,
+    &xdmadRxCfg,
+    0,
+    0,
+    xdmaInt
+  );
+  assert(rc == XDMAD_OK);
 
-  if (
-    XDMAD_ConfigureTransfer(
-      pXdmad,
-      dma_tx_channel,
-      &xdmadTxCfg,
-      xdmaCndc,
-      0,
-      xdmaInt
-    )
-  ) {
-    return SPID_ERROR;
-  }
+  rc = XDMAD_ConfigureTransfer(
+    &bus->xdma,
+    bus->dma_tx_channel,
+    &xdmadTxCfg,
+    0,
+    0,
+    xdmaInt
+  );
+  assert(rc == XDMAD_OK);
 
-  return 0;
+  XDMAC_StartTransfer(bus->xdma.pXdmacs, bus->dma_rx_channel);
+  XDMAC_StartTransfer(bus->xdma.pXdmacs, bus->dma_tx_channel);
 }
 
-static uint32_t atsam_send_command(
+static void atsam_spi_do_transfer(
   atsam_spi_bus *bus,
   const spi_ioc_transfer *msg
 )
 {
-  Spid *spid = &bus->SpiDma;
-  Spi *pSpiHw = spid->pSpiHw;
-  Xdmac *pXdmac = bus->SpiDma.pXdmad->pXdmacs;
-
-  if (
-    atsam_configure_link_list(
-      pSpiHw,
-      spid->pXdmad,
-      bus->dma_tx_channel,
-      bus->dma_rx_channel,
-      msg
-    )
-  ) {
-    return SPID_ERROR_LOCK;
-  }
-
   if (!bus->chip_select_active){
+    Spi *pSpiHw = bus->SpiDma.pSpiHw;
+
     bus->chip_select_active = true;
 
     SPI_ChipSelect(pSpiHw, 1 << msg->cs);
     SPI_Enable(pSpiHw);
   }
 
-  /* Start DMA */
-  XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
-  XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
-
-  return 0;
+  atsam_spi_start_dma_transfer(bus, msg);
 }
 
 static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
@@ -385,7 +358,6 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
   const spi_ioc_transfer *msgs = bus->msgs;
   uint32_t msg_todo = bus->msg_todo;
   uint32_t i;
-  uint32_t rv_command;
   int error;
 
   for (i = 0; i < msg_todo; ++i) {
@@ -394,11 +366,7 @@ static int atsam_spi_setup_transfer(atsam_spi_bus *bus)
       return error;
     }
 
-    rv_command = atsam_send_command(bus, &msgs[i]);
-    if (rv_command != 0) {
-      return -EIO;
-    }
-
+    atsam_spi_do_transfer(bus, &msgs[i]);
     rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 
     bus->rx_transfer_done = false;
