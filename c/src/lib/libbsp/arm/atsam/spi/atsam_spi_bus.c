@@ -32,7 +32,26 @@
 
 #include <rtems/irq-extension.h>
 
+#include <dev/spi/spi.h>
+
 #define MAX_SPI_FREQUENCY 50000000
+
+typedef struct {
+  spi_bus base;
+  Spi *regs;
+  rtems_vector_number irq;
+  uint32_t board_id;
+  uint32_t msg_todo;
+  const spi_ioc_transfer *msgs;
+  rtems_id task_id;
+  sXdmad Dma;
+  Spid SpiDma;
+  uint32_t dma_tx_channel;
+  uint32_t dma_rx_channel;
+  bool rx_transfer_done;
+  bool tx_transfer_done;
+  bool chip_select_active;
+} atsam_spi_bus;
 
 static void atsam_interrupt_handler(void *arg)
 {
