@@ -50,7 +50,7 @@ typedef struct {
   bool chip_select_active;
 } atsam_spi_bus;
 
-static void atsam_interrupt_handler(void *arg)
+static void atsam_spi_interrupt(void *arg)
 {
   atsam_spi_bus *bus = (atsam_spi_bus *)arg;
   sXdmad *Dma = &bus->Dma;
@@ -121,12 +121,6 @@ static void atsam_interrupt_handler(void *arg)
       }
     }
   }
-}
-
-static void atsam_spi_interrupt(void *arg)
-{
-  sXdmad *Dma = (sXdmad *)arg;
-  atsam_interrupt_handler(Dma);
 }
 
 static uint8_t atsam_calculate_dlybcs(uint16_t delay_in_us)
