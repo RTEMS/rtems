@@ -77,11 +77,31 @@ extern "C" {
 
 extern void PIO_InitializeInterrupts(uint32_t dwPriority);
 
-extern void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *));
+extern void PIO_ConfigureIt(const Pin *pPin,
+    void (*handler)(const Pin *, void *arg), void *arg);
 
-extern void PIO_EnableIt(const Pin *pPin);
 
-extern void PIO_DisableIt(const Pin *pPin);
+/**
+ * Enables the given interrupt source if it has been configured. The status
+ * register of the corresponding PIO controller is cleared prior to enabling
+ * the interrupt.
+ * \param pPin  Interrupt source to enable.
+ */
+static inline void PIO_EnableIt(const Pin *pPin)
+{
+	pPin->pio->PIO_ISR;
+	pPin->pio->PIO_IER = pPin->mask;
+}
+
+/**
+ * Disables a given interrupt source, with no added side effects.
+ *
+ * \param pPin  Interrupt source to disable.
+ */
+static inline void PIO_DisableIt(const Pin *pPin)
+{
+	pPin->pio->PIO_IDR = pPin->mask;
+}
 
 extern void PIO_IT_InterruptHandler(void);
 
