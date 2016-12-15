@@ -65,10 +65,10 @@
 #ifdef __rtems__
 #include "../../../utils/utility.h"
 #include <rtems/irq-extension.h>
+#include <rtems/sysinit.h>
 #include <bsp/fatal.h>
 #endif /* __rtems__ */
 #include <assert.h>
-static uint8_t xDmad_Initialized = 0;
 
 /*----------------------------------------------------------------------------
  *        Local functions
@@ -140,29 +140,17 @@ void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg)
  *        Exported functions
  *----------------------------------------------------------------------------*/
 
-/**
- * \brief Initialize xDMA driver instance.
- * \param pXdmad Pointer to xDMA driver instance.
- * \param bPollingMode Polling DMA transfer:
- *                     1. Via XDMAD_IsTransferDone(); or
- *                     2. Via XDMAD_Handler().
- */
-void XDMAD_Initialize(sXdmad *pXdmad, uint8_t bPollingMode)
+sXdmad XDMAD_Instance;
+
+static void XDMAD_SysInitialize(void)
 {
+	sXdmad *pXdmad;
 	uint32_t j;
-	uint32_t volatile timer = 0x7FF;
 	rtems_status_code sc;
 
-	assert(pXdmad);
-	LockMutex(pXdmad->xdmaMutex, timer);
-
-	if (xDmad_Initialized) {
-		ReleaseMutex(pXdmad->xdmaMutex);
-		return;
-	}
+	pXdmad = &XDMAD_Instance;
 
 	pXdmad->pXdmacs = XDMAC;
-	pXdmad->pollingMode = bPollingMode;
 	pXdmad->numControllers = XDMAC_CONTROLLER_NUM;
 	pXdmad->numChannels    = (XDMAC_GTYPE_NB_CH(XDMAC_GetType(XDMAC)) + 1);
 
@@ -180,10 +168,10 @@ void XDMAD_Initialize(sXdmad *pXdmad, uint8_t bPollingMode)
 	if (sc != RTEMS_SUCCESSFUL) {
 		bsp_fatal(ATSAM_FATAL_XDMA_IRQ_INSTALL);
 	}
-
-	xDmad_Initialized = 1;
-	ReleaseMutex(pXdmad->xdmaMutex);
 }
+
+RTEMS_SYSINIT_ITEM(XDMAD_SysInitialize, RTEMS_SYSINIT_BSP_START,
+    RTEMS_SYSINIT_ORDER_LAST);
 
 
 /**
@@ -383,35 +371,6 @@ void XDMAD_Handler(void *arg)
 	}
 }
 
-/**
- * \brief Check if DMA transfer is finished.
- *        In polling mode XDMAD_Handler() is polled.
- * \param pDmad     Pointer to DMA driver instance.
- * \param dwChannel ControllerNumber << 8 | ChannelNumber.
- */
-eXdmadRC XDMAD_IsTransferDone(sXdmad *pXdmad, uint32_t dwChannel)
-{
-	uint8_t iChannel = (dwChannel) & 0xFF;
-	uint8_t state;
-	assert(pXdmad != NULL);
-
-	if (iChannel >= pXdmad->numChannels)
-		return XDMAD_ERROR;
-
-	state = pXdmad->XdmaChannels[iChannel].state;
-
-	if (state == XDMAD_STATE_ALLOCATED) return XDMAD_OK;
-
-	if (state == XDMAD_STATE_FREE) return XDMAD_ERROR;
-	else if (state != XDMAD_STATE_DONE) {
-		if (pXdmad->pollingMode)  XDMAD_Handler(pXdmad);
-
-		return XDMAD_BUSY;
-	}
-
-	return XDMAD_OK;
-}
-
 
 /**
  * \brief Configure DMA for a single transfer.
@@ -500,9 +459,7 @@ eXdmadRC XDMAD_StartTransfer(sXdmad *pXdmad, uint32_t dwChannel)
 	/* Change state to transferring */
 	pXdmad->XdmaChannels[iChannel].state = XDMAD_STATE_START;
 	XDMAC_EnableChannel(pXdmac, iChannel);
-
-	if (pXdmad->pollingMode == 0)
-		XDMAC_EnableGIt(pXdmac, iChannel);
+	XDMAC_EnableGIt(pXdmac, iChannel);
 
 	return XDMAD_OK;
 }

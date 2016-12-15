@@ -129,8 +129,6 @@ typedef struct _Xdmad {
 	sXdmadChannel XdmaChannels[XDMACCHID_NUMBER];
 	uint8_t  numControllers;
 	uint8_t  numChannels;
-	uint8_t  pollingMode;
-	uint8_t  pollingTimeout;
 	uint8_t  xdmaMutex;
 } sXdmad;
 
@@ -216,6 +214,8 @@ typedef struct _LinkedListDescriporView3 {
 } LinkedListDescriporView3;
 
 /**     @}*/
+
+extern sXdmad XDMAD_Instance;
 
 /*----------------------------------------------------------------------------
  *        Exported functions

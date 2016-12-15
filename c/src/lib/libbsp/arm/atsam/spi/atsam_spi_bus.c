@@ -41,8 +41,7 @@ typedef struct {
   uint32_t msg_todo;
   int msg_error;
   rtems_id msg_task;
-  sXdmad xdma;
-  Spid SpiDma;
+  Spid spi;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
   int transfer_in_progress;
@@ -93,14 +92,14 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
   delay_cs = atsam_calculate_dlybcs(bus->base.delay_usecs);
 
   SPID_Configure(
-    &bus->SpiDma,
-    bus->SpiDma.pSpiHw,
-    bus->SpiDma.spiId,
+    &bus->spi,
+    bus->spi.pSpiHw,
+    bus->spi.spiId,
     (SPI_MR_DLYBCS(delay_cs) |
       SPI_MR_MSTR |
       SPI_MR_MODFDIS |
       SPI_PCS(bus->base.cs)),
-    &bus->xdma
+    &XDMAD_Instance
   );
 
   csr =
@@ -111,7 +110,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
   atsam_set_phase_and_polarity(bus->base.mode, &csr);
 
-  SPI_ConfigureNPCS(bus->SpiDma.pSpiHw, bus->base.cs, csr);
+  SPI_ConfigureNPCS(bus->spi.pSpiHw, bus->base.cs, csr);
 }
 
 static void atsam_spi_start_dma_transfer(
@@ -119,7 +118,7 @@ static void atsam_spi_start_dma_transfer(
   const spi_ioc_transfer *msg
 )
 {
-  Xdmac *pXdmac = bus->xdma.pXdmacs;
+  Xdmac *pXdmac = XDMAC;
 
   XDMAC_SetDestinationAddr(pXdmac, bus->dma_rx_channel, (uint32_t)msg->rx_buf);
   XDMAC_SetSourceAddr(pXdmac, bus->dma_tx_channel, (uint32_t)msg->tx_buf);
@@ -135,7 +134,7 @@ static void atsam_spi_do_transfer(
 )
 {
   if (!bus->chip_select_active){
-    Spi *pSpiHw = bus->SpiDma.pSpiHw;
+    Spi *pSpiHw = bus->spi.pSpiHw;
 
     bus->chip_select_active = true;
 
@@ -183,8 +182,8 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 
   if (bus->msg_cs_change) {
     bus->chip_select_active = false;
-    SPI_ReleaseCS(bus->SpiDma.pSpiHw);
-    SPI_Disable(bus->SpiDma.pSpiHw);
+    SPI_ReleaseCS(bus->spi.pSpiHw);
+    SPI_Disable(bus->spi.pSpiHw);
   }
 
   if (msg_todo > 0) {
@@ -243,7 +242,7 @@ static void atsam_spi_destroy(spi_bus *base)
   eXdmadRC rc;
 
   rc = XDMAD_SetCallback(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_rx_channel,
     XDMAD_DoNothingCallback,
     NULL
@@ -251,18 +250,18 @@ static void atsam_spi_destroy(spi_bus *base)
   assert(rc == XDMAD_OK);
 
   rc = XDMAD_SetCallback(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_tx_channel,
     XDMAD_DoNothingCallback,
     NULL
   );
   assert(rc == XDMAD_OK);
 
-  XDMAD_FreeChannel(bus->SpiDma.pXdmad, bus->dma_rx_channel);
-  XDMAD_FreeChannel(bus->SpiDma.pXdmad, bus->dma_tx_channel);
+  XDMAD_FreeChannel(bus->spi.pXdmad, bus->dma_rx_channel);
+  XDMAD_FreeChannel(bus->spi.pXdmad, bus->dma_tx_channel);
 
-  SPI_Disable(bus->SpiDma.pSpiHw);
-  PMC_DisablePeripheral(bus->SpiDma.spiId);
+  SPI_Disable(bus->spi.pSpiHw);
+  PMC_DisablePeripheral(bus->spi.spiId);
 
   spi_bus_destroy_and_free(&bus->base);
 }
@@ -290,21 +289,21 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
   eXdmadRC rc;
 
   bus->dma_tx_channel = XDMAD_AllocateChannel(
-    &bus->xdma,
+    bus->spi.pXdmad,
     XDMAD_TRANSFER_MEMORY,
-    bus->SpiDma.spiId
+    bus->spi.spiId
   );
   assert(bus->dma_tx_channel != XDMAD_ALLOC_FAILED);
 
   bus->dma_rx_channel = XDMAD_AllocateChannel(
-    &bus->xdma,
-    bus->SpiDma.spiId,
+    bus->spi.pXdmad,
+    bus->spi.spiId,
     XDMAD_TRANSFER_MEMORY
   );
   assert(bus->dma_rx_channel != XDMAD_ALLOC_FAILED);
 
   rc = XDMAD_SetCallback(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_rx_channel,
     atsam_spi_dma_callback,
     bus
@@ -312,17 +311,17 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
   assert(rc == XDMAD_OK);
 
   rc = XDMAD_SetCallback(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_tx_channel,
     atsam_spi_dma_callback,
     bus
   );
   assert(rc == XDMAD_OK);
 
-  rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_rx_channel);
+  rc = XDMAD_PrepareChannel(bus->spi.pXdmad, bus->dma_rx_channel);
   assert(rc == XDMAD_OK);
 
-  rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_tx_channel);
+  rc = XDMAD_PrepareChannel(bus->spi.pXdmad, bus->dma_tx_channel);
   assert(rc == XDMAD_OK);
 
   /* Put all interrupts on for non LLI list setup of DMA */
@@ -336,8 +335,8 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 
   /* Setup RX */
   memset(&cfg, 0, sizeof(cfg));
-  channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_RX);
-  cfg.mbr_sa = (uint32_t)&bus->SpiDma.pSpiHw->SPI_RDR;
+  channel = XDMAIF_Get_ChannelNumber(bus->spi.spiId, XDMAD_TRANSFER_RX);
+  cfg.mbr_sa = (uint32_t)&bus->spi.pSpiHw->SPI_RDR;
   cfg.mbr_cfg =
     XDMAC_CC_TYPE_PER_TRAN |
     XDMAC_CC_MBSIZE_SINGLE |
@@ -350,7 +349,7 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
     XDMAC_CC_DAM_INCREMENTED_AM |
     XDMAC_CC_PERID(channel);
   rc = XDMAD_ConfigureTransfer(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_rx_channel,
     &cfg,
     0,
@@ -361,8 +360,8 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 
   /* Setup TX  */
   memset(&cfg, 0, sizeof(cfg));
-  channel = XDMAIF_Get_ChannelNumber(bus->SpiDma.spiId, XDMAD_TRANSFER_TX);
-  cfg.mbr_da = (uint32_t)&bus->SpiDma.pSpiHw->SPI_TDR;
+  channel = XDMAIF_Get_ChannelNumber(bus->spi.spiId, XDMAD_TRANSFER_TX);
+  cfg.mbr_da = (uint32_t)&bus->spi.pSpiHw->SPI_TDR;
   cfg.mbr_cfg =
     XDMAC_CC_TYPE_PER_TRAN |
     XDMAC_CC_MBSIZE_SINGLE |
@@ -375,7 +374,7 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
     XDMAC_CC_DAM_FIXED_AM |
     XDMAC_CC_PERID(channel);
   rc = XDMAD_ConfigureTransfer(
-    &bus->xdma,
+    bus->spi.pXdmad,
     bus->dma_tx_channel,
     &cfg,
     0,
@@ -408,12 +407,11 @@ int spi_bus_register_atsam(
   bus->base.speed_hz = bus->base.max_speed_hz;
   bus->base.delay_usecs = 1;
   bus->base.cs = 1;
-  bus->SpiDma.spiId = spi_peripheral_id;
-  bus->SpiDma.pSpiHw = spi_regs;
+  bus->spi.spiId = spi_peripheral_id;
+  bus->spi.pSpiHw = spi_regs;
 
   PIO_Configure(pins, pin_count);
   PMC_EnablePeripheral(spi_peripheral_id);
-  XDMAD_Initialize(&bus->xdma, 0);
   atsam_configure_spi(bus);
   atsam_spi_init_xdma(bus);
 
