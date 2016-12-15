@@ -55,6 +55,7 @@ include_bsp_HEADERS += include/atsam-i2c.h
 include_bsp_HEADERS += include/i2c.h
 include_bsp_HEADERS += include/atsam-spi.h
 include_bsp_HEADERS += include/spi.h
+include_bsp_HEADERS += include/sc16is752.h
 include_bsp_HEADERS += include/power.h
 
 include_libchipdir = $(includedir)/libchip
@@ -441,6 +442,7 @@ libbsp_a_SOURCES += i2c/atsam_i2c_init.c
 # SPI
 libbsp_a_SOURCES += spi/atsam_spi_bus.c
 libbsp_a_SOURCES += spi/atsam_spi_init.c
+libbsp_a_SOURCES += spi/sc16is752.c
 
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c

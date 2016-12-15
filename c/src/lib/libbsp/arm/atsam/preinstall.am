@@ -149,6 +149,10 @@ $(PROJECT_INCLUDE)/bsp/spi.h: include/spi.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/spi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/spi.h
 
+$(PROJECT_INCLUDE)/bsp/sc16is752.h: include/sc16is752.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/sc16is752.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/sc16is752.h
+
 $(PROJECT_INCLUDE)/bsp/power.h: include/power.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/power.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/power.h
