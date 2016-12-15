@@ -30,15 +30,9 @@
 
 #include <bsp/atsam-spi.h>
 
-#include <rtems/irq-extension.h>
-
 #include <dev/spi/spi.h>
 
 #define MAX_SPI_FREQUENCY 50000000
-
-#define TX_IN_PROGRESS 0x1
-
-#define RX_IN_PROGRESS 0x2
 
 typedef struct {
   spi_bus base;
@@ -51,7 +45,7 @@ typedef struct {
   Spid SpiDma;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
-  int transfer_status;
+  int transfer_in_progress;
   bool chip_select_active;
 } atsam_spi_bus;
 
@@ -120,6 +114,174 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
   SPI_ConfigureNPCS(bus->SpiDma.pSpiHw, bus->base.cs, csr);
 }
 
+static void atsam_spi_start_dma_transfer(
+  atsam_spi_bus *bus,
+  const spi_ioc_transfer *msg
+)
+{
+  Xdmac *pXdmac = bus->xdma.pXdmacs;
+
+  XDMAC_SetDestinationAddr(pXdmac, bus->dma_rx_channel, (uint32_t)msg->rx_buf);
+  XDMAC_SetSourceAddr(pXdmac, bus->dma_tx_channel, (uint32_t)msg->tx_buf);
+  XDMAC_SetMicroblockControl(pXdmac, bus->dma_rx_channel, msg->len);
+  XDMAC_SetMicroblockControl(pXdmac, bus->dma_tx_channel, msg->len);
+  XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
+  XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
+}
+
+static void atsam_spi_do_transfer(
+  atsam_spi_bus *bus,
+  const spi_ioc_transfer *msg
+)
+{
+  if (!bus->chip_select_active){
+    Spi *pSpiHw = bus->SpiDma.pSpiHw;
+
+    bus->chip_select_active = true;
+
+    SPI_ChipSelect(pSpiHw, 1 << msg->cs);
+    SPI_Enable(pSpiHw);
+  }
+
+  atsam_spi_start_dma_transfer(bus, msg);
+}
+
+static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
+{
+  if (
+    msg->mode != bus->base.mode
+      || msg->speed_hz != bus->base.speed_hz
+      || msg->bits_per_word != bus->base.bits_per_word
+      || msg->cs != bus->base.cs
+      || msg->delay_usecs != bus->base.delay_usecs
+  ) {
+    if (
+      msg->bits_per_word < 8
+        || msg->bits_per_word > 16
+        || msg->mode > 3
+        || msg->speed_hz > bus->base.max_speed_hz
+    ) {
+      return -EINVAL;
+    }
+
+    bus->base.mode = msg->mode;
+    bus->base.speed_hz = msg->speed_hz;
+    bus->base.bits_per_word = msg->bits_per_word;
+    bus->base.cs = msg->cs;
+    bus->base.delay_usecs = msg->delay_usecs;
+    atsam_configure_spi(bus);
+  }
+
+  return 0;
+}
+
+static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
+{
+  uint32_t msg_todo = bus->msg_todo;
+
+  bus->transfer_in_progress = 2;
+
+  if (bus->msg_cs_change) {
+    bus->chip_select_active = false;
+    SPI_ReleaseCS(bus->SpiDma.pSpiHw);
+    SPI_Disable(bus->SpiDma.pSpiHw);
+  }
+
+  if (msg_todo > 0) {
+    const spi_ioc_transfer *msg = bus->msg_current;
+    int error;
+
+    bus->msg_cs_change = msg->cs_change;
+    bus->msg_current = msg + 1;
+    bus->msg_todo = msg_todo - 1;
+
+    error = atsam_check_configure_spi(bus, msg);
+    if (error == 0) {
+      atsam_spi_do_transfer(bus, msg);
+    } else {
+      bus->msg_error = error;
+      atsam_spi_wakeup_task(bus);
+    }
+  } else {
+    atsam_spi_wakeup_task(bus);
+  }
+}
+
+static void atsam_spi_dma_callback(uint32_t channel, void *arg)
+{
+  atsam_spi_bus *bus = (atsam_spi_bus *)arg;
+
+  --bus->transfer_in_progress;
+
+  if (bus->transfer_in_progress == 0) {
+    atsam_spi_setup_transfer(bus);
+  }
+}
+
+static int atsam_spi_transfer(
+  spi_bus *base,
+  const spi_ioc_transfer *msgs,
+  uint32_t msg_count
+)
+{
+  atsam_spi_bus *bus = (atsam_spi_bus *)base;
+
+  bus->msg_cs_change = false;
+  bus->msg_current = &msgs[0];
+  bus->msg_todo = msg_count;
+  bus->msg_error = 0;
+  bus->msg_task = rtems_task_self();
+  atsam_spi_setup_transfer(bus);
+  rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  return bus->msg_error;
+}
+
+
+static void atsam_spi_destroy(spi_bus *base)
+{
+  atsam_spi_bus *bus = (atsam_spi_bus *)base;
+  eXdmadRC rc;
+
+  rc = XDMAD_SetCallback(
+    &bus->xdma,
+    bus->dma_rx_channel,
+    XDMAD_DoNothingCallback,
+    NULL
+  );
+  assert(rc == XDMAD_OK);
+
+  rc = XDMAD_SetCallback(
+    &bus->xdma,
+    bus->dma_tx_channel,
+    XDMAD_DoNothingCallback,
+    NULL
+  );
+  assert(rc == XDMAD_OK);
+
+  XDMAD_FreeChannel(bus->SpiDma.pXdmad, bus->dma_rx_channel);
+  XDMAD_FreeChannel(bus->SpiDma.pXdmad, bus->dma_tx_channel);
+
+  SPI_Disable(bus->SpiDma.pSpiHw);
+  PMC_DisablePeripheral(bus->SpiDma.spiId);
+
+  spi_bus_destroy_and_free(&bus->base);
+}
+
+static int atsam_spi_setup(spi_bus *base)
+{
+  atsam_spi_bus *bus = (atsam_spi_bus *)base;
+
+  if (
+    bus->base.speed_hz > MAX_SPI_FREQUENCY ||
+    bus->base.bits_per_word < 8 ||
+    bus->base.bits_per_word > 16
+  ) {
+      return -EINVAL;
+  }
+  atsam_configure_spi(bus);
+  return 0;
+}
+
 static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 {
   sXdmadCfg cfg;
@@ -140,6 +302,22 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
     XDMAD_TRANSFER_MEMORY
   );
   assert(bus->dma_rx_channel != XDMAD_ALLOC_FAILED);
+
+  rc = XDMAD_SetCallback(
+    &bus->xdma,
+    bus->dma_rx_channel,
+    atsam_spi_dma_callback,
+    bus
+  );
+  assert(rc == XDMAD_OK);
+
+  rc = XDMAD_SetCallback(
+    &bus->xdma,
+    bus->dma_tx_channel,
+    atsam_spi_dma_callback,
+    bus
+  );
+  assert(rc == XDMAD_OK);
 
   rc = XDMAD_PrepareChannel(&bus->xdma, bus->dma_rx_channel);
   assert(rc == XDMAD_OK);
@@ -207,218 +385,6 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
   assert(rc == XDMAD_OK);
 }
 
-static void atsam_spi_start_dma_transfer(
-  atsam_spi_bus *bus,
-  const spi_ioc_transfer *msg
-)
-{
-  Xdmac *pXdmac = bus->xdma.pXdmacs;
-
-  XDMAC_SetDestinationAddr(pXdmac, bus->dma_rx_channel, (uint32_t)msg->rx_buf);
-  XDMAC_SetSourceAddr(pXdmac, bus->dma_tx_channel, (uint32_t)msg->tx_buf);
-  XDMAC_SetMicroblockControl(pXdmac, bus->dma_rx_channel, msg->len);
-  XDMAC_SetMicroblockControl(pXdmac, bus->dma_tx_channel, msg->len);
-  XDMAC_StartTransfer(pXdmac, bus->dma_rx_channel);
-  XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
-}
-
-static void atsam_spi_do_transfer(
-  atsam_spi_bus *bus,
-  const spi_ioc_transfer *msg
-)
-{
-  if (!bus->chip_select_active){
-    Spi *pSpiHw = bus->SpiDma.pSpiHw;
-
-    bus->chip_select_active = true;
-
-    SPI_ChipSelect(pSpiHw, 1 << msg->cs);
-    SPI_Enable(pSpiHw);
-  }
-
-  atsam_spi_start_dma_transfer(bus, msg);
-}
-
-static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
-{
-  if (
-    msg->mode != bus->base.mode
-      || msg->speed_hz != bus->base.speed_hz
-      || msg->bits_per_word != bus->base.bits_per_word
-      || msg->cs != bus->base.cs
-      || msg->delay_usecs != bus->base.delay_usecs
-  ) {
-    if (
-      msg->bits_per_word < 8
-        || msg->bits_per_word > 16
-        || msg->mode > 3
-        || msg->speed_hz > bus->base.max_speed_hz
-    ) {
-      return -EINVAL;
-    }
-
-    bus->base.mode = msg->mode;
-    bus->base.speed_hz = msg->speed_hz;
-    bus->base.bits_per_word = msg->bits_per_word;
-    bus->base.cs = msg->cs;
-    bus->base.delay_usecs = msg->delay_usecs;
-    atsam_configure_spi(bus);
-  }
-
-  return 0;
-}
-
-static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
-{
-  uint32_t msg_todo = bus->msg_todo;
-
-  bus->transfer_status = RX_IN_PROGRESS | TX_IN_PROGRESS;
-
-  if (bus->msg_cs_change) {
-    bus->chip_select_active = false;
-    SPI_ReleaseCS(bus->SpiDma.pSpiHw);
-    SPI_Disable(bus->SpiDma.pSpiHw);
-  }
-
-  if (msg_todo > 0) {
-    const spi_ioc_transfer *msg = bus->msg_current;
-    int error;
-
-    bus->msg_cs_change = msg->cs_change;
-    bus->msg_current = msg + 1;
-    bus->msg_todo = msg_todo - 1;
-
-    error = atsam_check_configure_spi(bus, msg);
-    if (error == 0) {
-      atsam_spi_do_transfer(bus, msg);
-    } else {
-      bus->msg_error = error;
-      atsam_spi_wakeup_task(bus);
-    }
-  } else {
-    atsam_spi_wakeup_task(bus);
-  }
-}
-
-static void atsam_spi_interrupt(void *arg)
-{
-  atsam_spi_bus *bus = (atsam_spi_bus *)arg;
-  sXdmad *xdma = &bus->xdma;
-  Spid *spid = &bus->SpiDma;
-  Xdmac *xdmac;
-  sXdmadChannel *ch;
-  uint32_t xdmaChannelIntStatus, xdmaGlobaIntStatus, xdmaGlobalChStatus;
-  uint8_t channel;
-  uint8_t bExec = 0;
-  assert(xdma != NULL);
-
-  xdmac = xdma->pXdmacs;
-  xdmaGlobaIntStatus = XDMAC_GetGIsr(xdmac) & 0xFFFFFF;
-  xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(xdmac);
-
-  while (xdmaGlobaIntStatus != 0) {
-    channel = 31 - __builtin_clz(xdmaGlobaIntStatus);
-    xdmaGlobaIntStatus &= ~(UINT32_C(1) << channel);
-
-    ch = &xdma->XdmaChannels[channel];
-
-    if (ch->state == XDMAD_STATE_FREE) {
-      continue;
-    }
-
-    if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << channel)) == 0) {
-      bExec = 0;
-      xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(xdmac, channel);
-
-      if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
-        if ((XDMAC_GetChannelItMask(xdmac, channel) & XDMAC_CIM_LIM) == 0) {
-          ch->state = XDMAD_STATE_DONE;
-          bExec = 1;
-        }
-      }
-
-      if (xdmaChannelIntStatus & XDMAC_CIS_LIS) {
-        ch->state = XDMAD_STATE_DONE;
-        bExec = 1;
-      }
-
-      if (xdmaChannelIntStatus & XDMAC_CIS_DIS) {
-        ch->state = XDMAD_STATE_DONE;
-        bExec = 1;
-      }
-
-    } else {
-      /* Block end interrupt for LLI dma mode */
-      if (XDMAC_GetChannelIsr(xdmac, channel) & XDMAC_CIS_BIS) {
-      }
-    }
-
-    if (bExec == 1 && (channel == bus->dma_rx_channel)) {
-      bus->transfer_status &= ~RX_IN_PROGRESS;
-      XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_rx_channel);
-    } else if (bExec == 1 && (channel == bus->dma_tx_channel)) {
-      bus->transfer_status &= ~TX_IN_PROGRESS;
-      XDMAC_DisableGIt(spid->pXdmad->pXdmacs, bus->dma_tx_channel);
-    }
-
-    if (bus->transfer_status == 0) {
-      atsam_spi_setup_transfer(bus);
-    }
-  }
-}
-
-static int atsam_spi_transfer(
-  spi_bus *base,
-  const spi_ioc_transfer *msgs,
-  uint32_t msg_count
-)
-{
-  atsam_spi_bus *bus = (atsam_spi_bus *)base;
-
-  bus->msg_cs_change = false;
-  bus->msg_current = &msgs[0];
-  bus->msg_todo = msg_count;
-  bus->msg_error = 0;
-  bus->msg_task = rtems_task_self();
-  atsam_spi_setup_transfer(bus);
-  rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  return bus->msg_error;
-}
-
-
-static void atsam_spi_destroy(spi_bus *base)
-{
-  atsam_spi_bus *bus = (atsam_spi_bus *)base;
-  rtems_status_code sc;
-
-  /* Free XDMAD Channels */
-  XDMAD_FreeChannel(bus->SpiDma.pXdmad, 0);
-  XDMAD_FreeChannel(bus->SpiDma.pXdmad, 1);
-
-  sc = rtems_interrupt_handler_remove(ID_XDMAC, atsam_spi_interrupt, bus);
-  assert(sc == RTEMS_SUCCESSFUL);
-
-  SPI_Disable(bus->SpiDma.pSpiHw);
-  PMC_DisablePeripheral(bus->SpiDma.spiId);
-
-  spi_bus_destroy_and_free(&bus->base);
-}
-
-static int atsam_spi_setup(spi_bus *base)
-{
-  atsam_spi_bus *bus = (atsam_spi_bus *)base;
-
-  if (
-    bus->base.speed_hz > MAX_SPI_FREQUENCY ||
-    bus->base.bits_per_word < 8 ||
-    bus->base.bits_per_word > 16
-  ) {
-      return -EINVAL;
-  }
-  atsam_configure_spi(bus);
-  return 0;
-}
-
 int spi_bus_register_atsam(
   const char *bus_path,
   uint8_t     spi_peripheral_id,
@@ -428,13 +394,16 @@ int spi_bus_register_atsam(
 )
 {
   atsam_spi_bus *bus;
-  rtems_status_code sc;
 
   bus = (atsam_spi_bus *) spi_bus_alloc_and_init(sizeof(*bus));
   if (bus == NULL) {
     return -1;
   }
 
+  bus->base.transfer = atsam_spi_transfer;
+  bus->base.destroy = atsam_spi_destroy;
+  bus->base.setup = atsam_spi_setup;
+  bus->base.max_speed_hz = MAX_SPI_FREQUENCY;
   bus->base.bits_per_word = 8;
   bus->base.speed_hz = bus->base.max_speed_hz;
   bus->base.delay_usecs = 1;
@@ -447,24 +416,6 @@ int spi_bus_register_atsam(
   XDMAD_Initialize(&bus->xdma, 0);
   atsam_configure_spi(bus);
   atsam_spi_init_xdma(bus);
-
-  sc = rtems_interrupt_handler_install(
-    ID_XDMAC,
-    "SPI",
-    RTEMS_INTERRUPT_UNIQUE,
-    atsam_spi_interrupt,
-    bus
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    (*bus->base.destroy)(&bus->base);
-
-    rtems_set_errno_and_return_minus_one(EIO);
-  }
-
-  bus->base.transfer = atsam_spi_transfer;
-  bus->base.destroy = atsam_spi_destroy;
-  bus->base.setup = atsam_spi_setup;
-  bus->base.max_speed_hz = MAX_SPI_FREQUENCY;
 
   return spi_bus_register(&bus->base, bus_path);
 }

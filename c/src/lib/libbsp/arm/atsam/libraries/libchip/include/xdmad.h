@@ -225,7 +225,7 @@ typedef struct _LinkedListDescriporView3 {
 extern void XDMAD_Initialize(sXdmad *pXdmad,
 							  uint8_t bPollingMode);
 
-extern void XDMAD_Handler(sXdmad *pDmad);
+extern void XDMAD_Handler(void *arg);
 
 extern uint32_t XDMAD_AllocateChannel(sXdmad *pXdmad,
 									   uint8_t bSrcID, uint8_t bDstID);
@@ -243,6 +243,8 @@ extern eXdmadRC XDMAD_PrepareChannel(sXdmad *pXdmad, uint32_t dwChannel);
 extern eXdmadRC XDMAD_IsTransferDone(sXdmad *pXdmad, uint32_t dwChannel);
 
 extern eXdmadRC XDMAD_StartTransfer(sXdmad *pXdmad, uint32_t dwChannel);
+
+extern void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg);
 
 extern eXdmadRC XDMAD_SetCallback(sXdmad *pXdmad,
 								   uint32_t dwChannel,
