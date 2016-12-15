@@ -257,13 +257,10 @@ RTEMS_SYSINIT_ITEM(PIO_SysInitializeInterrupts, RTEMS_SYSINIT_BSP_START,
 void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *, void *arg),
     void *arg)
 {
-	Pio *pio;
 	InterruptSource *pSource;
 	rtems_interrupt_level level;
 
 	TRACE_DEBUG("PIO_ConfigureIt()\n\r");
-
-	pio = pPin->pio;
 
 	rtems_interrupt_disable(level);
 
@@ -280,26 +277,4 @@ void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *, void *arg),
 
 	/* Define new source */
 	TRACE_DEBUG("PIO_ConfigureIt: Defining new source #%d.\n\r", _dwNumSources);
-
-	/* PIO3 with additional interrupt support
-	 * Configure additional interrupt mode registers */
-	if (pPin->attribute & PIO_IT_AIME) {
-		// enable additional interrupt mode
-		pio->PIO_AIMER  = pPin->mask;
-
-		// if bit field of selected pin is 1, set as Rising Edge/High level detection event
-		if (pPin->attribute & PIO_IT_RE_OR_HL)
-			pio->PIO_REHLSR    = pPin->mask;
-		else
-			pio->PIO_FELLSR     = pPin->mask;
-
-		/* if bit field of selected pin is 1, set as edge detection source */
-		if (pPin->attribute & PIO_IT_EDGE)
-			pio->PIO_ESR     = pPin->mask;
-		else
-			pio->PIO_LSR     = pPin->mask;
-	} else {
-		/* disable additional interrupt mode */
-		pio->PIO_AIMDR       = pPin->mask;
-	}
 }

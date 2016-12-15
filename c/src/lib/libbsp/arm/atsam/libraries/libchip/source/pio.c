@@ -205,6 +205,27 @@ static void PIO_SetInput(
 			pio->PIO_IFSCER = mask;
 	}
 
+	/* Configure additional interrupt mode registers */
+	if (attribute & PIO_IT_AIME) {
+		// enable additional interrupt mode
+		pio->PIO_AIMER  = mask;
+
+		// if bit field of selected pin is 1, set as Rising Edge/High level detection event
+		if (attribute & PIO_IT_RE_OR_HL)
+			pio->PIO_REHLSR = mask;
+		else
+			pio->PIO_FELLSR = mask;
+
+		/* if bit field of selected pin is 1, set as edge detection source */
+		if (attribute & PIO_IT_EDGE)
+			pio->PIO_ESR = mask;
+		else
+			pio->PIO_LSR = mask;
+	} else {
+		/* disable additional interrupt mode */
+		pio->PIO_AIMDR = mask;
+	}
+
 	/* Configure pin as input */
 	pio->PIO_ODR = mask;
 	pio->PIO_PER = mask;
