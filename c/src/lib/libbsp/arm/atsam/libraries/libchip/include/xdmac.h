@@ -78,7 +78,7 @@
 #include <../../../../utils/utility.h>
 #endif /* __rtems__ */
 #include <stdint.h>
-#include <assert.h>
+#include <rtems/score/assert.h>
 
 /*------------------------------------------------------------------------------
  *         Definitions
@@ -130,7 +130,7 @@ extern "C" {
  */
 static inline uint32_t XDMAC_GetType(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return pXdmac->XDMAC_GTYPE;
 }
 
@@ -141,7 +141,7 @@ static inline uint32_t XDMAC_GetType(Xdmac *pXdmac)
  */
 static inline uint32_t XDMAC_GetConfig(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return pXdmac->XDMAC_GCFG;
 }
 
@@ -152,7 +152,7 @@ static inline uint32_t XDMAC_GetConfig(Xdmac *pXdmac)
  */
 static inline uint32_t XDMAC_GetArbiter(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return pXdmac->XDMAC_GWAC;
 }
 
@@ -164,7 +164,7 @@ static inline uint32_t XDMAC_GetArbiter(Xdmac *pXdmac)
  */
 static inline void XDMAC_EnableGIt (Xdmac *pXdmac, uint8_t dwInteruptMask)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	pXdmac->XDMAC_GIE = (XDMAC_GIE_IE0 << dwInteruptMask);
 }
 
@@ -176,7 +176,7 @@ static inline void XDMAC_EnableGIt (Xdmac *pXdmac, uint8_t dwInteruptMask)
  */
 static inline void XDMAC_DisableGIt (Xdmac *pXdmac, uint8_t dwInteruptMask)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	pXdmac->XDMAC_GID = (XDMAC_GID_ID0 << dwInteruptMask);
 }
 
@@ -187,7 +187,7 @@ static inline void XDMAC_DisableGIt (Xdmac *pXdmac, uint8_t dwInteruptMask)
  */
 static inline uint32_t XDMAC_GetGItMask(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return (pXdmac->XDMAC_GIM);
 }
 
@@ -198,7 +198,7 @@ static inline uint32_t XDMAC_GetGItMask(Xdmac *pXdmac)
  */
 static inline uint32_t XDMAC_GetGIsr(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return (pXdmac->XDMAC_GIS);
 }
 
@@ -210,7 +210,7 @@ static inline uint32_t XDMAC_GetGIsr(Xdmac *pXdmac)
 static inline uint32_t XDMAC_GetMaskedGIsr(Xdmac *pXdmac)
 {
 	uint32_t _dwStatus;
-	assert(pXdmac);
+	_Assert(pXdmac);
 	_dwStatus = pXdmac->XDMAC_GIS;
 	_dwStatus &= pXdmac->XDMAC_GIM;
 	return _dwStatus;
@@ -224,8 +224,8 @@ static inline uint32_t XDMAC_GetMaskedGIsr(Xdmac *pXdmac)
  */
 static inline void XDMAC_EnableChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GE = (XDMAC_GE_EN0 << channel);
 }
 
@@ -237,7 +237,7 @@ static inline void XDMAC_EnableChannel(Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_EnableChannels(Xdmac *pXdmac, uint32_t bmChannels)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	pXdmac->XDMAC_GE = bmChannels;
 }
 
@@ -249,8 +249,8 @@ static inline void XDMAC_EnableChannels(Xdmac *pXdmac, uint32_t bmChannels)
  */
 static inline void XDMAC_DisableChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GD = (XDMAC_GD_DI0 << channel);
 }
 
@@ -262,7 +262,7 @@ static inline void XDMAC_DisableChannel(Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_DisableChannels(Xdmac *pXdmac, uint32_t bmChannels)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	pXdmac->XDMAC_GD = bmChannels;
 }
 
@@ -276,7 +276,7 @@ static inline void XDMAC_DisableChannels(Xdmac *pXdmac, uint32_t bmChannels)
  */
 static inline uint32_t XDMAC_GetGlobalChStatus(Xdmac *pXdmac)
 {
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return pXdmac->XDMAC_GS;
 }
 
@@ -288,8 +288,8 @@ static inline uint32_t XDMAC_GetGlobalChStatus(Xdmac *pXdmac)
  */
 static inline void XDMAC_SuspendReadChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GRS |= XDMAC_GRS_RS0 << channel;
 }
 
@@ -301,8 +301,8 @@ static inline void XDMAC_SuspendReadChannel(Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_SuspendWriteChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GWS |= XDMAC_GWS_WS0 << channel;
 }
 
@@ -314,8 +314,8 @@ static inline void XDMAC_SuspendWriteChannel(Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_SuspendReadWriteChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GRWS = (XDMAC_GRWS_RWS0 << channel);
 }
 
@@ -327,8 +327,8 @@ static inline void XDMAC_SuspendReadWriteChannel(Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_ResumeReadWriteChannel(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GRWR = (XDMAC_GRWR_RWR0 << channel);
 }
 
@@ -341,8 +341,8 @@ static inline void XDMAC_ResumeReadWriteChannel(Xdmac *pXdmac, uint8_t channel)
 static inline void XDMAC_SoftwareTransferReq(Xdmac *pXdmac, uint8_t channel)
 {
 
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GSWR = (XDMAC_GSWR_SWREQ0 << channel);
 }
 
@@ -354,7 +354,7 @@ static inline void XDMAC_SoftwareTransferReq(Xdmac *pXdmac, uint8_t channel)
 static inline uint32_t XDMAC_GetSoftwareTransferStatus(Xdmac *pXdmac)
 {
 
-	assert(pXdmac);
+	_Assert(pXdmac);
 	return pXdmac->XDMAC_GSWS;
 }
 
@@ -366,8 +366,8 @@ static inline uint32_t XDMAC_GetSoftwareTransferStatus(Xdmac *pXdmac)
  */
 static inline uint32_t XDMAC_GetChannelIsr (Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	return pXdmac->XDMAC_CHID[channel].XDMAC_CIS;
 }
 
@@ -380,8 +380,8 @@ static inline uint32_t XDMAC_GetChannelIsr (Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_SoftwareFlushReq(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GSWF = (XDMAC_GSWF_SWF0 << channel);
 
 	while (!(XDMAC_GetChannelIsr(pXdmac, channel) & XDMAC_CIS_FIS));
@@ -397,8 +397,8 @@ static inline void XDMAC_SoftwareFlushReq(Xdmac *pXdmac, uint8_t channel)
 static inline void XDMAC_EnableChannelIt (Xdmac *pXdmac, uint8_t channel,
 							uint8_t dwInteruptMask)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CIE = dwInteruptMask;
 }
 
@@ -412,8 +412,8 @@ static inline void XDMAC_EnableChannelIt (Xdmac *pXdmac, uint8_t channel,
 static inline void XDMAC_DisableChannelIt (Xdmac *pXdmac, uint8_t channel,
 							 uint8_t dwInteruptMask)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CID = dwInteruptMask;
 }
 
@@ -425,8 +425,8 @@ static inline void XDMAC_DisableChannelIt (Xdmac *pXdmac, uint8_t channel,
  */
 static inline uint32_t XDMAC_GetChannelItMask (Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	return pXdmac->XDMAC_CHID[channel].XDMAC_CIM;
 }
 
@@ -439,8 +439,8 @@ static inline uint32_t XDMAC_GetChannelItMask (Xdmac *pXdmac, uint8_t channel)
 static inline uint32_t XDMAC_GetMaskChannelIsr (Xdmac *pXdmac, uint8_t channel)
 {
 	uint32_t status;
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	status = pXdmac->XDMAC_CHID[channel].XDMAC_CIS;
 	status &= pXdmac->XDMAC_CHID[channel].XDMAC_CIM;
 
@@ -456,8 +456,8 @@ static inline uint32_t XDMAC_GetMaskChannelIsr (Xdmac *pXdmac, uint8_t channel)
  */
 static inline void XDMAC_SetSourceAddr(Xdmac *pXdmac, uint8_t channel, uint32_t addr)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CSA = addr;
 }
 
@@ -470,8 +470,8 @@ static inline void XDMAC_SetSourceAddr(Xdmac *pXdmac, uint8_t channel, uint32_t 
  */
 static inline void XDMAC_SetDestinationAddr(Xdmac *pXdmac, uint8_t channel, uint32_t addr)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CDA = addr;
 }
 
@@ -487,9 +487,9 @@ static inline void XDMAC_SetDestinationAddr(Xdmac *pXdmac, uint8_t channel, uint
 static inline void XDMAC_SetDescriptorAddr(Xdmac *pXdmac, uint8_t channel,
 							 uint32_t addr, uint8_t ndaif)
 {
-	assert(pXdmac);
-	assert(ndaif < 2);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(ndaif < 2);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CNDA =  (addr & 0xFFFFFFFC) | ndaif;
 }
 
@@ -503,8 +503,8 @@ static inline void XDMAC_SetDescriptorAddr(Xdmac *pXdmac, uint8_t channel,
  */
 static inline void XDMAC_SetDescriptorControl(Xdmac *pXdmac, uint8_t channel, uint8_t config)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CNDC = config;
 }
 
@@ -517,8 +517,8 @@ static inline void XDMAC_SetDescriptorControl(Xdmac *pXdmac, uint8_t channel, ui
  */
 static inline void XDMAC_SetMicroblockControl(Xdmac *pXdmac, uint8_t channel, uint32_t ublen)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CUBC = XDMAC_CUBC_UBLEN(ublen);
 }
 
@@ -531,8 +531,8 @@ static inline void XDMAC_SetMicroblockControl(Xdmac *pXdmac, uint8_t channel, ui
  */
 static inline void XDMAC_SetBlockControl(Xdmac *pXdmac, uint8_t channel, uint16_t blen)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CBC = XDMAC_CBC_BLEN(blen);
 }
 
@@ -545,8 +545,8 @@ static inline void XDMAC_SetBlockControl(Xdmac *pXdmac, uint8_t channel, uint16_
  */
 static inline void XDMAC_SetChannelConfig(Xdmac *pXdmac, uint8_t channel, uint32_t config)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CC = config;
 }
 
@@ -558,8 +558,8 @@ static inline void XDMAC_SetChannelConfig(Xdmac *pXdmac, uint8_t channel, uint32
  */
 static inline uint32_t XDMAC_GetChannelConfig(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	return pXdmac->XDMAC_CHID[channel].XDMAC_CC;
 }
 
@@ -574,8 +574,8 @@ static inline void XDMAC_SetDataStride_MemPattern(Xdmac *pXdmac, uint8_t channel
 									uint32_t dds_msp)
 {
 
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CDS_MSP = dds_msp;
 }
 
@@ -589,8 +589,8 @@ static inline void XDMAC_SetDataStride_MemPattern(Xdmac *pXdmac, uint8_t channel
 static inline void XDMAC_SetSourceMicroBlockStride(Xdmac *pXdmac, uint8_t channel,
 									 uint32_t subs)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CSUS = XDMAC_CSUS_SUBS(subs);
 }
 
@@ -604,8 +604,8 @@ static inline void XDMAC_SetSourceMicroBlockStride(Xdmac *pXdmac, uint8_t channe
 static inline void XDMAC_SetDestinationMicroBlockStride(Xdmac *pXdmac, uint8_t channel,
 		uint32_t dubs)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_CHID[channel].XDMAC_CDUS = XDMAC_CDUS_DUBS(dubs);
 }
 
@@ -617,15 +617,15 @@ static inline void XDMAC_SetDestinationMicroBlockStride(Xdmac *pXdmac, uint8_t c
  */
 static inline uint32_t XDMAC_GetChDestinationAddr(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	return pXdmac->XDMAC_CHID[channel].XDMAC_CDA;
 }
 
 static inline void XDMAC_StartTransfer(Xdmac *pXdmac, uint8_t channel)
 {
-	assert(pXdmac);
-	assert(channel < XDMAC_CHANNEL_NUM);
+	_Assert(pXdmac);
+	_Assert(channel < XDMAC_CHANNEL_NUM);
 	pXdmac->XDMAC_GE = (XDMAC_GE_EN0 << channel);
 	pXdmac->XDMAC_GIE = (XDMAC_GIE_IE0 << channel);
 }
