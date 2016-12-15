@@ -380,7 +380,6 @@ libbsp_a_SOURCES += libraries/libchip/source/uart_dma.c
 libbsp_a_SOURCES += libraries/libchip/source/usart.c
 libbsp_a_SOURCES += libraries/libchip/source/usart_dma.c
 libbsp_a_SOURCES += libraries/libchip/source/wdt.c
-libbsp_a_SOURCES += libraries/libchip/source/xdmac.c
 libbsp_a_SOURCES += libraries/libchip/source/xdmad.c
 libbsp_a_SOURCES += libraries/libchip/source/xdma_hardware_interface.c
 
