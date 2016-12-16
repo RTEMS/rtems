@@ -294,16 +294,8 @@ uint32_t QSPID_Configure(QspiDma_t *pQspidma, QspiMode_t Mode,
 	pQspidma->RxChNum = QSPID_CH_NOT_ENABLED;
 	pQspidma->TxChNum = QSPID_CH_NOT_ENABLED;
 
+	assert(pXdmad == &XDMAD_Instance);
 	pQspidma->pXdmad = pXdmad;
-
-	/* XDMA Driver initialize */
-	XDMAD_Initialize(pQspidma->pXdmad, 0);
-
-	/* Configure and enable interrupt  */
-	NVIC_ClearPendingIRQ(XDMAC_IRQn);
-	NVIC_SetPriority(XDMAC_IRQn , 1);
-	NVIC_EnableIRQ(XDMAC_IRQn);
-
 
 	return QSPI_SUCCESS;
 }
