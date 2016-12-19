@@ -109,6 +109,38 @@ static const rtems_jffs2_info info_some_files_removed = {
   .bad_blocks = 0
 };
 
+static const rtems_jffs2_info info_after_first_gc = {
+  .flash_size = 131072,
+  .flash_blocks = 8,
+  .flash_block_size = 16384,
+  .used_size = 23540,
+  .dirty_size = 30988,
+  .wasted_size = 7368,
+  .free_size = 69176,
+  .bad_size = 0,
+  .clean_blocks = 0,
+  .dirty_blocks = 3,
+  .erasable_blocks = 0,
+  .free_blocks = 5,
+  .bad_blocks = 0
+};
+
+static const rtems_jffs2_info info_after_excessive_gc = {
+  .flash_size = 131072,
+  .flash_blocks = 8,
+  .flash_block_size = 16384,
+  .used_size = 7224,
+  .dirty_size = 0,
+  .wasted_size = 12,
+  .free_size = 123836,
+  .bad_size = 0,
+  .clean_blocks = 0,
+  .dirty_blocks = 0,
+  .erasable_blocks = 0,
+  .free_blocks = 8,
+  .bad_blocks = 0
+};
+
 static char big[] = "big";
 
 static const char * const more[] = {
@@ -225,6 +257,7 @@ void test(void)
 {
   int fd;
   int rv;
+  int counter;
   rtems_jffs2_info info;
 
   init_keg();
@@ -245,6 +278,30 @@ void test(void)
 
   remove_some_files();
   ASSERT_INFO(&info, &info_some_files_removed);
+
+  rv = ioctl(fd, RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION);
+  rtems_test_assert(rv == 0);
+  ASSERT_INFO(&info, &info_after_first_gc);
+
+  counter = 0;
+
+  while (true) {
+    errno = ENXIO;
+    rv = ioctl(fd, RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION);
+    if (rv == -1) {
+      rtems_test_assert(errno == EIO);
+      break;
+    }
+
+    ++counter;
+    rtems_test_assert(rv == 0);
+  }
+
+  rtems_test_assert(counter == 19);
+
+  rv = ioctl(fd, RTEMS_JFFS2_GET_INFO, &info);
+  rtems_test_assert(rv == 0);
+  ASSERT_INFO(&info, &info_after_excessive_gc);
 
   rv = close(fd);
   rtems_test_assert(rv == 0);

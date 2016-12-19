@@ -568,6 +568,9 @@ static int rtems_jffs2_ioctl(
 			rtems_jffs2_get_info(&inode->i_sb->jffs2_sb, buffer);
 			eno = 0;
 			break;
+		case RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION:
+			eno = -jffs2_garbage_collect_pass(&inode->i_sb->jffs2_sb);
+			break;
 		default:
 			eno = EINVAL;
 			break;

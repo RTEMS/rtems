@@ -555,6 +555,14 @@ typedef struct {
  */
 #define RTEMS_JFFS2_GET_INFO _IOR('F', 1, rtems_jffs2_info)
 
+/**
+ * @brief IO control to force a garbage collection in a JFFS2 filesystem
+ * instance.
+ *
+ * Use this operation with care since it may wear out your flash.
+ */
+#define RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION _IO('F', 3)
+
 /** @} */
 
 #ifdef __cplusplus
