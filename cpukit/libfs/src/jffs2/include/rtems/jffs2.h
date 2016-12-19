@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,6 +17,7 @@
 
 #include <rtems/fs.h>
 #include <sys/param.h>
+#include <sys/ioccom.h>
 #include <zlib.h>
 
 #ifdef __cplusplus
@@ -454,6 +455,105 @@ int rtems_jffs2_initialize(
   rtems_filesystem_mount_table_entry_t *mt_entry,
   const void *data
 );
+
+/**
+ * @brief JFFS2 filesystem instance information.
+ *
+ * @see RTEMS_JFFS2_GET_INFO.
+ */
+typedef struct {
+  /**
+   * @brief Flash size in bytes.
+   */
+  uint32_t flash_size;
+
+  /**
+   * @brief Count of flash blocks (eraseable units).
+   */
+  uint32_t flash_blocks;
+
+  /**
+   * @brief Size of a flash block in bytes.
+   */
+  uint32_t flash_block_size;
+
+  /**
+   * @brief Used size in bytes.
+   *
+   * Used areas contain valid data.
+   */
+  uint32_t used_size;
+
+  /**
+   * @brief Dirty size in bytes.
+   *
+   * Used areas contain no longer used data.
+   */
+  uint32_t dirty_size;
+
+  /**
+   * @brief Wasted size in bytes.
+   *
+   * Wasted areas are unusable.
+   */
+  uint32_t wasted_size;
+
+  /**
+   * @brief Free size in bytes.
+   *
+   * Free areas may be used to store new data.
+   */
+  uint32_t free_size;
+
+  /**
+   * @brief Bad size in bytes.
+   *
+   * Bad areas indicate damaged flash blocks.
+   */
+  uint32_t bad_size;
+
+  /**
+   * @brief Count of clean blocks.
+   *
+   * Clean blocks contain only used areas.
+   */
+  uint32_t clean_blocks;
+
+  /**
+   * @brief Count of dirty blocks.
+   *
+   * Dirty blocks contain dirty and used areas.
+   */
+  uint32_t dirty_blocks;
+
+  /**
+   * @brief Count of erasable blocks.
+   *
+   * Erase blocks contain only dirty or wasted areas.
+   */
+  uint32_t erasable_blocks;
+
+  /**
+   * @brief Count of free blocks.
+   *
+   * Free blocks contain a free area.
+   */
+  uint32_t free_blocks;
+
+  /**
+   * @brief Count of bad blocks.
+   *
+   * Bad blocks are damaged.
+   */
+  uint32_t bad_blocks;
+} rtems_jffs2_info;
+
+/**
+ * @brief IO control to get the JFFS2 filesystem instance information.
+ *
+ * @see rtems_jffs2_info.
+ */
+#define RTEMS_JFFS2_GET_INFO _IOR('F', 1, rtems_jffs2_info)
 
 /** @} */
 

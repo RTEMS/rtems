@@ -77,6 +77,7 @@ AC_CHECK_SIZEOF([blkcnt_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+fsjffs2gc01/Makefile
 fsimfsconfig03/Makefile
 fsimfsconfig02/Makefile
 fsimfsconfig01/Makefile

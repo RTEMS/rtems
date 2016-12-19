@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS =
+_SUBDIRS += fsjffs2gc01
 _SUBDIRS += fsimfsconfig03
 _SUBDIRS += fsimfsconfig02
 _SUBDIRS += fsimfsconfig01

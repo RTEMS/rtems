@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsjffs2gc01
+
+directives:
+
+  - JFFS2 implementation
+
+concepts:
+
+  - Ensure that RTEMS_JFFS2_GET_INFO returns the expected information.
