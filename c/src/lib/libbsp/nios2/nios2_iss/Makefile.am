@@ -18,7 +18,7 @@ include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = times
 noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = start/crtnn.s
+libbspstart_a_SOURCES = start/crtnn.S
 libbspstart_a_SOURCES += start/start.S
 project_lib_DATA = start.$(OBJEXT) crtnn.$(OBJEXT)
 
