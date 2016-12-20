@@ -508,16 +508,7 @@ void TWID_DmaInitialize(TwihsDma *pTwidma, Twihs *pTwi, uint8_t bPolling)
 	pTwidma->pTwid->pTwi = pTwi;
 	pTwidma->pTwid->pTransfer = 0;
 
-	if (!bPolling) {
-		/* Enable XDMA interrupt and give it priority over any other peripheral
-		interrupt */
-		NVIC_ClearPendingIRQ(XDMAC_IRQn);
-		NVIC_SetPriority(XDMAC_IRQn, 1);
-		NVIC_EnableIRQ(XDMAC_IRQn);
-	}
-
-	/* Initialize XDMA driver instance with polling mode */
-	XDMAD_Initialize(pTwidma->pTwiDma, bPolling);
+	assert(!bPolling);
 }
 
 /**

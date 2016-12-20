@@ -390,9 +390,6 @@ uint32_t UARTD_Configure(UartDma *pUartd ,
 	    Configure UART in Master Mode*/
 	UART_Configure (pUartd->pUartHw, uartMode, baud, clk);
 
-	/* Driver initialize */
-	XDMAD_Initialize(pUartd->pXdmad, 0);
-
 	/* Check if DMA IRQ is enable; if not clear pending IRQs in init it */
 	if (!(NVIC_GetActive(XDMAC_IRQn)))
 		NVIC_ClearPendingIRQ(XDMAC_IRQn);

@@ -73,6 +73,7 @@
 /*----------------------------------------------------------------------------
  *        Local functions
  *----------------------------------------------------------------------------*/
+static void XDMAD_Handler(void *arg);
 /**
  * \brief Try to allocate a DMA channel for on given controller.
  * \param pDmad  Pointer to DMA driver instance.
@@ -302,7 +303,7 @@ eXdmadRC XDMAD_PrepareChannel(sXdmad *pXdmad, uint32_t dwChannel)
  * \brief xDMA interrupt handler
  * \param arg Pointer to DMA driver instance.
  */
-void XDMAD_Handler(void *arg)
+static void XDMAD_Handler(void *arg)
 {
 	sXdmad *pDmad;
 	Xdmac *pXdmac;

@@ -369,13 +369,9 @@ uint32_t USARTD_Configure(UsartDma *pUsartd ,
 		pUsartd->pUsartHw = USART2;
 
 
-	pUsartd->pXdmad->pXdmacs = XDMAC;
 	/* Enable the USART Peripheral ,Execute a software reset of the USART,
 	    Configure USART in Master Mode*/
 	USART_Configure (pUsartd->pUsartHw, UsartMode, BaudRate, UsartClk);
-
-	/* Driver initialize */
-	XDMAD_Initialize(pUsartd->pXdmad, 0);
 
 	/* Check if DMA IRQ is enable; if not clear pending IRQs in init it */
 	if (!(NVIC_GetActive(XDMAC_IRQn)))

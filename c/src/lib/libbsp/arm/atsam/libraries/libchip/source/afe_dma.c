@@ -103,8 +103,6 @@ static uint8_t _AfeConfigureDmaChannels(AfeDma *pAfed)
 {
 
 	/* Driver initialize */
-	XDMAD_Initialize(pAfed->pXdmad, 0);
-
 	XDMAD_FreeChannel(pAfed->pXdmad, afeDmaRxChannel);
 
 	/* Allocate a DMA channel for AFE0/1 RX. */
@@ -207,7 +205,7 @@ uint32_t Afe_ConfigureDma(AfeDma *pAfed ,
 	pAfed->afeId  = AfeId;
 	pAfed->semaphore = 1;
 	pAfed->pCurrentCommand = 0;
-	pAfed->pXdmad = pXdmad;
+	assert(pXdmad == &XDMAD_Instance);
 	return 0;
 }
 

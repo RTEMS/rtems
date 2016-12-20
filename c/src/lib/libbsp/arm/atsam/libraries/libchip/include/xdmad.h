@@ -222,11 +222,6 @@ extern sXdmad XDMAD_Instance;
  *----------------------------------------------------------------------------*/
 /** \addtogroup dmad_functions DMA Driver Functions
         @{*/
-extern void XDMAD_Initialize(sXdmad *pXdmad,
-							  uint8_t bPollingMode);
-
-extern void XDMAD_Handler(void *arg);
-
 extern uint32_t XDMAD_AllocateChannel(sXdmad *pXdmad,
 									   uint8_t bSrcID, uint8_t bDstID);
 extern eXdmadRC XDMAD_FreeChannel(sXdmad *pXdmad, uint32_t dwChannel);
