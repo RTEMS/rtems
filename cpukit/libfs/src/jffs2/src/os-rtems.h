@@ -120,7 +120,12 @@ static inline bool jffs2_is_readonly(struct jffs2_sb_info *c)
 
 static inline void jffs2_garbage_collect_trigger(struct jffs2_sb_info *c)
 {
-       /* We don't have a GC thread in RTEMS (yet) */
+	const struct super_block *sb = OFNI_BS_2SFFJ(c);
+	rtems_jffs2_flash_control *fc = sb->s_flash_control;
+
+	if (fc->trigger_garbage_collection != NULL) {
+		(*fc->trigger_garbage_collection)(fc);
+	}
 }
 
 /* fs-rtems.c */

@@ -552,6 +552,15 @@ static void rtems_jffs2_get_info(
 	info->bad_blocks = rtems_jffs2_count_blocks(&c->bad_list);
 }
 
+static int rtems_jffs2_on_demand_garbage_collection(struct jffs2_sb_info *c)
+{
+	if (jffs2_thread_should_wake(c)) {
+		return -jffs2_garbage_collect_pass(c);
+	} else {
+		return 0;
+	}
+}
+
 static int rtems_jffs2_ioctl(
 	rtems_libio_t   *iop,
 	ioctl_command_t  request,
@@ -567,6 +576,9 @@ static int rtems_jffs2_ioctl(
 		case RTEMS_JFFS2_GET_INFO:
 			rtems_jffs2_get_info(&inode->i_sb->jffs2_sb, buffer);
 			eno = 0;
+			break;
+		case RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION:
+			eno = rtems_jffs2_on_demand_garbage_collection(&inode->i_sb->jffs2_sb);
 			break;
 		case RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION:
 			eno = -jffs2_garbage_collect_pass(&inode->i_sb->jffs2_sb);

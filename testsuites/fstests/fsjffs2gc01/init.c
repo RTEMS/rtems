@@ -279,7 +279,11 @@ void test(void)
   remove_some_files();
   ASSERT_INFO(&info, &info_some_files_removed);
 
-  rv = ioctl(fd, RTEMS_JFFS2_FORCE_GARBAGE_COLLECTION);
+  rv = ioctl(fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION);
+  rtems_test_assert(rv == 0);
+  ASSERT_INFO(&info, &info_after_first_gc);
+
+  rv = ioctl(fd, RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION);
   rtems_test_assert(rv == 0);
   ASSERT_INFO(&info, &info_after_first_gc);
 

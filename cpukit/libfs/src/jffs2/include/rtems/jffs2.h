@@ -230,6 +230,20 @@ typedef void (*rtems_jffs2_flash_destroy)(
 );
 
 /**
+ * @brief Trigger garbage collection operation.
+ *
+ * An optional garbage collection thread may perform now a garbage collection
+ * using the RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION IO control.
+ *
+ * The garbage collection must not run in the executing context.
+ *
+ * @param[in] self The flash control.
+ */
+typedef void (*rtems_jffs2_trigger_garbage_collection)(
+  rtems_jffs2_flash_control *self
+);
+
+/**
  * @brief JFFS2 flash device control.
  */
 struct rtems_jffs2_flash_control {
@@ -275,6 +289,15 @@ struct rtems_jffs2_flash_control {
    * file system node in the system.
    */
   dev_t device_identifier;
+
+  /**
+   * @brief Trigger garbage collection operation.
+   *
+   * This operation is optional and may be NULL.  This operation should wake up
+   * a garbage collection thread.  The garbage collection thread should use the
+   * RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION IO control to carry out the work.
+   */
+  rtems_jffs2_trigger_garbage_collection trigger_garbage_collection;
 };
 
 typedef struct rtems_jffs2_compressor_control rtems_jffs2_compressor_control;
@@ -554,6 +577,15 @@ typedef struct {
  * @see rtems_jffs2_info.
  */
 #define RTEMS_JFFS2_GET_INFO _IOR('F', 1, rtems_jffs2_info)
+
+/**
+ * @brief IO control to perform an on demand garbage collection in a JFFS2
+ * filesystem instance.
+ *
+ * This operation is intended to be used by an optional garbage collection
+ * thread.  See rtems_jffs2_flash_control::trigger_garbage_collection.
+ */
+#define RTEMS_JFFS2_ON_DEMAND_GARBAGE_COLLECTION _IO('F', 2)
 
 /**
  * @brief IO control to force a garbage collection in a JFFS2 filesystem
