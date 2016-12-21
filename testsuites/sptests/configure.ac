@@ -245,5 +245,6 @@ sptimer_err02/Makefile
 spcpuset01/Makefile
 spregion_err01/Makefile
 sppartition_err01/Makefile
+sprmsched01/Makefile
 ])
 AC_OUTPUT

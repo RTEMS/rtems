@@ -1,0 +1,50 @@
+
+
+*** BEGIN OF TEST Rate Monotonic 01 - Overrun Test ***
+
+Ticks per second in your system: 1000
+Job 1 Task 1 starts at tick 13.
+                                        Job 1 Task 1 ends at tick 6021.
+Job 1 Task 2 starts at tick 6022.
+                                        Job 1 Task 2 ends at tick 7024.
+Job 2 Task 2 starts at tick 8022.
+                                        Job 2 Task 2 ends at tick 9023.
+Job 2 Task 1 starts at tick 10013.
+                                        Job 2 Task 1 ends at tick 16021.
+Job 3 Task 2 starts at tick 16023.
+                                        Job 3 Task 2 ends at tick 17024.
+RTEMS_TIMEOUT
+Job 4 Task 2 starts at tick 17025.
+                                        Job 4 Task 2 ends at tick 18026.
+Job 5 Task 2 starts at tick 18026.
+                                        Job 5 Task 2 ends at tick 19027.
+Job 6 Task 2 starts at tick 19028.
+                                        Job 6 Task 2 ends at tick 20029.
+Job 7 Task 2 starts at tick 20029.
+                                        Job 7 Task 2 ends at tick 21031.
+Job 8 Task 2 starts at tick 21031.
+                                        Job 8 Task 2 ends at tick 22033.
+Job 9 Task 2 starts at tick 22033.
+                                        Job 9 Task 2 ends at tick 23035.
+RTEMS_SUCCESSFUL
+Job 10 Task 2 starts at tick 24022.
+                                        Job 10 Task 2 ends at tick 25023.
+Job 11 Task 2 starts at tick 26022.
+                                        Job 11 Task 2 ends at tick 27024.
+Job 12 Task 2 starts at tick 28022.
+                                        Job 12 Task 2 ends at tick 29024.
+Job 13 Task 2 starts at tick 30022.
+                                        Job 13 Task 2 ends at tick 31023.
+Job 14 Task 2 starts at tick 32022.
+                                        Job 14 Task 2 ends at tick 33023.
+Job 15 Task 2 starts at tick 34022.
+                                        Job 15 Task 2 ends at tick 35023.
+Job 16 Task 2 starts at tick 36022.
+                                        Job 16 Task 2 ends at tick 37023.
+Period information by period
+--- CPU times are in seconds ---
+--- Wall times are in seconds ---
+   ID     OWNER COUNT MISSED          CPU TIME                  WALL TIME
+                                    MIN/MAX/AVG                MIN/MAX/AVG
+0x42010002 TA2     15      6 1.001686/7.012146/2.404131 1.001698/13.013378/5.204723
+*** END OF TEST Rate Monotonic 01 ***

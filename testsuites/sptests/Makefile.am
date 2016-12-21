@@ -37,6 +37,7 @@ _SUBDIRS += spfatal29
 _SUBDIRS += spmutex01
 _SUBDIRS += spextensions01
 _SUBDIRS += spsysinit01
+_SUBDIRS += sprmsched01
 if HAS_SMP
 else
 _SUBDIRS += sp29
