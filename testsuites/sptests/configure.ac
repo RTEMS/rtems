@@ -156,6 +156,7 @@ spcoverage/Makefile
 spedfsched01/Makefile
 spedfsched02/Makefile
 spedfsched03/Makefile
+spedfsched04/Makefile
 sperror01/Makefile
 sperror02/Makefile
 sperror03/Makefile

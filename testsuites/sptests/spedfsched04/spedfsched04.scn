@@ -1,0 +1,24 @@
+
+
+*** BEGIN OF TEST SPEDFSCHED 4 ***
+
+Ticks per second in your system: 1000
+Job 1 Task 1 starts at tick 14.
+                                        Job 1 Task 1 ends at tick 4023.
+Job 1 Task 2 starts at tick 4025.
+Job 2 Task 1 starts at tick 5013.
+                                        Job 2 Task 1 ends at tick 9023.
+                                        Job 1 Task 2 ends at tick 12045.
+System TIMEOUT
+Job 2 Task 2 starts at tick 12045.
+                                        Job 2 Task 2 ends at tick 16054.
+Job 3 Task 2 starts at tick 16054.
+                                        Job 3 Task 2 ends at tick 20061.
+System SUCCESSFUL
+Job 4 Task 2 starts at tick 22025.
+                                        Job 4 Task 2 ends at tick 26033.
+Job 5 Task 2 starts at tick 28025.
+                                        Job 5 Task 2 ends at tick 32033.
+Job 6 Task 2 starts at tick 34025.
+                                        Job 6 Task 2 ends at tick 38033.
+*** END OF TEST SPEDFSCHED 4 ***
