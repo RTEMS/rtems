@@ -119,13 +119,14 @@ typedef bool rtems_timecounter_simple_is_pending(
  * @brief Initializes and installs a simple timecounter.
  *
  * A simple timecounter can be used if the hardware provides no free running
- * counter or only the module used for the clock tick is available.  The period
- * of the simple timecounter equals the clock tick interval.  The interval is
+ * counter.  A periodic hardware counter must be provided.  The counter period
+ * must be synchronous to the clock tick.  The counter ticks per clock tick is
  * scaled up to the next power of two.
  *
  * @param[in] tc Zero initialized simple timecounter.
- * @param[in] frequency_in_hz The timecounter frequency in Hz.
- * @param[in] timecounter_ticks_per_clock_tick The timecounter ticks per clock tick.
+ * @param[in] counter_frequency_in_hz The hardware counter frequency in Hz.
+ * @param[in] counter_ticks_per_clock_tick The hardware counter ticks per clock
+ *   tick.
  * @param[in] get_timecount The method to get the current time count.
  *
  * @code
@@ -157,17 +158,24 @@ typedef bool rtems_timecounter_simple_is_pending(
  *   rtems_timecounter_simple_downcounter_tick( &some_tc, some_tc_get );
  * }
  *
- * void install( void )
+ * void some_tc_init( void )
  * {
- *   uint32_t frequency = 123456;
- *   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
- *   uint32_t timecounter_ticks_per_clock_tick =
- *     ( frequency * us_per_tick ) / 1000000;
+ *   uint64_t us_per_tick;
+ *   uint32_t counter_frequency_in_hz;
+ *   uint32_t counter_ticks_per_clock_tick;
+ *
+ *   us_per_tick = rtems_configuration_get_microseconds_per_tick();
+ *   counter_frequency_in_hz = some_tc_get_frequency();
+ *   counter_ticks_per_clock_tick =
+ *     (uint32_t) ( counter_frequency_in_hz * us_per_tick ) / 1000000;
+ *
+ *   some_tc_init_hardware( counter_ticks_per_clock_tick );
+ *   some_tc_init_clock_tick_interrupt( some_tc_tick );
  *
  *   rtems_timecounter_simple_install(
  *     &some_tc,
- *     frequency,
- *     timecounter_ticks_per_clock_tick,
+ *     counter_frequency_in_hz,
+ *     counter_ticks_per_clock_tick,
  *     some_tc_get_timecount
  *   );
  * }
@@ -180,8 +188,8 @@ typedef bool rtems_timecounter_simple_is_pending(
  */
 void rtems_timecounter_simple_install(
   rtems_timecounter_simple *tc,
-  uint32_t                  frequency_in_hz,
-  uint32_t                  timecounter_ticks_per_clock_tick,
+  uint32_t                  counter_frequency_in_hz,
+  uint32_t                  counter_ticks_per_clock_tick,
   timecounter_get_t        *get_timecount
 );
 
