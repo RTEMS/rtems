@@ -9,6 +9,7 @@
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright (c) 2016 embedded brains GmbH.
+ *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -114,6 +115,18 @@ bool _Rate_monotonic_Get_status(
   const Rate_monotonic_Control *the_period,
   Timestamp_Control            *wall_since_last_period,
   Timestamp_Control            *cpu_since_last_period
+);
+
+/**
+ * @brief Renew the watchdog deadline
+ *
+ * This routine is prepared for the watchdog timeout to renew its deadline
+ * without releasing jobs.
+ */
+void _Rate_monotonic_Renew_deadline(
+  Rate_monotonic_Control *the_period,
+  Thread_Control         *owner,
+  ISR_lock_Context       *lock_context
 );
 
 void _Rate_monotonic_Restart(

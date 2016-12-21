@@ -9,6 +9,8 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -62,7 +64,14 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
       _Thread_Unblock( owner );
     }
   } else {
+    /*
+     * If the watchdog is timeout, it means there is an additional postponed
+     * job in the next period but it is not available to release now:
+     * Either the current task is still executed, or it is preemptive by the
+     * other higher priority tasks.
+     */
+    the_period->postponed_jobs += 1;
     the_period->state = RATE_MONOTONIC_EXPIRED;
-    _Rate_monotonic_Release( the_period, &lock_context );
+    _Rate_monotonic_Renew_deadline( the_period, owner, &lock_context );
   }
 }

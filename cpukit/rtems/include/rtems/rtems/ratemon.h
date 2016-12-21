@@ -18,10 +18,12 @@
  * - delete a rate monotonic timer
  * - conclude current and start the next period
  * - obtain status information on a period
+ * - obtain the number of postponed jobs
  */
 
 /* COPYRIGHT (c) 1989-2009, 2016.
  * On-Line Applications Research Corporation (OAR).
+ * COPYRIGHT (c) 2016 Kuan-Hsun Chen.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -240,6 +242,18 @@ typedef struct {
    * This field contains the statistics maintained for the period.
    */
   Rate_monotonic_Statistics               Statistics;
+
+  /**
+   * This field contains the number of postponed jobs.
+   * When the watchdog timeout, this variable will be increased immediately.
+   */
+  uint32_t                                postponed_jobs;
+
+  /**
+   *  This field contains the tick of the latest deadline decided by the period
+   *  watchdog.
+  */
+  uint64_t                                latest_deadline;
 }   Rate_monotonic_Control;
 
 /**
@@ -402,6 +416,25 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_id        id,
   rtems_interval  length
 );
+
+/**
+ * @brief RTEMS Return the number of postponed jobs
+ *
+ * This is a helper function for runtime monitoring to return
+ * the number of postponed jobs in this given period. This number
+ * is only increased by the corresponding watchdog,
+ * and is decreased by RMS manager with the postponed job releasing.
+ *
+ * @param[in] id is the period id
+ *
+ * @retval This helper function returns the number of postponed
+ * jobs with a given period_id.
+ *
+ */
+uint32_t rtems_rate_monotonic_postponed_num(
+  rtems_id        period_id
+);
+
 
 /**@}*/
 
