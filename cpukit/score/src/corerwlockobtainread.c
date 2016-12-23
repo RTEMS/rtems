@@ -80,7 +80,7 @@ Status_Control _CORE_RWLock_Seize_for_reading(
 
   _Thread_queue_Context_set_thread_state(
     queue_context,
-   STATES_WAITING_FOR_RWLOCK
+   STATES_THREAD_QUEUE_WITH_IDENTIFIER | STATES_WAITING_FOR_RWLOCK
   );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue(

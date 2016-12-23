@@ -186,7 +186,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
 
   _Thread_queue_Context_set_thread_state(
     queue_context,
-    STATES_WAITING_FOR_SEMAPHORE
+    STATES_THREAD_QUEUE_WITH_IDENTIFIER | STATES_WAITING_FOR_SEMAPHORE
   );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue(

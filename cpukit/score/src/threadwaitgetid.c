@@ -18,14 +18,6 @@
 
 #include <rtems/score/threadimpl.h>
 
-#define THREAD_WAIT_QUEUE_OBJECT_STATES \
-  ( STATES_WAITING_FOR_BARRIER \
-    | STATES_WAITING_FOR_CONDITION_VARIABLE \
-    | STATES_WAITING_FOR_MESSAGE \
-    | STATES_WAITING_FOR_MUTEX \
-    | STATES_WAITING_FOR_RWLOCK \
-    | STATES_WAITING_FOR_SEMAPHORE )
-
 Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread )
 {
   States_Control current_state;
@@ -38,7 +30,7 @@ Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread )
   }
 #endif
 
-  if ( ( current_state & THREAD_WAIT_QUEUE_OBJECT_STATES ) != 0 ) {
+  if ( ( current_state & STATES_THREAD_QUEUE_WITH_IDENTIFIER ) != 0 ) {
     const Thread_queue_Object *queue_object;
 
     queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( the_thread->Wait.queue );

@@ -105,7 +105,7 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
   } else {
     _Thread_queue_Context_set_thread_state(
       &queue_context,
-      STATES_WAITING_FOR_SYS_LOCK_SEMAPHORE
+      STATES_WAITING_FOR_SEMAPHORE
     );
     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );

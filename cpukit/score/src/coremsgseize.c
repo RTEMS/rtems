@@ -115,7 +115,7 @@ Status_Control _CORE_message_queue_Seize(
 
   _Thread_queue_Context_set_thread_state(
     queue_context,
-    STATES_WAITING_FOR_MESSAGE
+    STATES_THREAD_QUEUE_WITH_IDENTIFIER | STATES_WAITING_FOR_MESSAGE
   );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue(
