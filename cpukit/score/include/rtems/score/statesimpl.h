@@ -46,8 +46,6 @@ extern "C" {
 #define STATES_DELAYING                        0x00000008
 /** This macro corresponds to a task waiting until a specific TOD. */
 #define STATES_WAITING_FOR_TIME                0x00000010
-/** This macro corresponds to a task waiting for a variable length buffer. */
-#define STATES_WAITING_FOR_BUFFER              0x00000020
 /** This macro corresponds to a task waiting for a fixed size segment. */
 #define STATES_WAITING_FOR_SEGMENT             0x00000040
 /** This macro corresponds to a task waiting for a message. */
@@ -99,8 +97,7 @@ extern "C" {
 #define STATES_WAITING_FOR_SYS_LOCK_CONDITION  0x20000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
-#define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_BUFFER             | \
-                                 STATES_WAITING_FOR_SEGMENT            | \
+#define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_SEGMENT            | \
                                  STATES_WAITING_FOR_MESSAGE            | \
                                  STATES_WAITING_FOR_SEMAPHORE          | \
                                  STATES_WAITING_FOR_MUTEX              | \
@@ -235,21 +232,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
 )
 {
    return (the_states & STATES_DELAYING);
-}
-
-/**
- * This function returns true if the WAITING_FOR_BUFFER state is set in
- * the_states, and false otherwise.
- *
- * @param[in] the_states is the task state set to test
- *
- * @return This method returns true if the desired state condition is set.
- */
-RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_buffer (
-  States_Control the_states
-)
-{
-   return (the_states & STATES_WAITING_FOR_BUFFER);
 }
 
 /**
