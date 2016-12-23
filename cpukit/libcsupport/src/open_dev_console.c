@@ -15,6 +15,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/console.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -27,7 +28,7 @@ void rtems_libio_post_driver(void)
   /*
    * Attempt to open /dev/console.
    */
-  if (open("/dev/console", O_RDONLY, 0) != STDIN_FILENO) {
+  if ( open( CONSOLE_DEVICE_NAME, O_RDONLY, 0 ) != STDIN_FILENO ) {
     /*
      * There may not be a console driver so this is OK.
      */
@@ -38,11 +39,11 @@ void rtems_libio_post_driver(void)
    *  But if we find /dev/console once, we better find it twice more
    *  or something is REALLY wrong.
    */
-  if (open("/dev/console", O_WRONLY, 0) != STDOUT_FILENO) {
+  if ( open( CONSOLE_DEVICE_NAME, O_WRONLY, 0 ) != STDOUT_FILENO ) {
     _Internal_error( INTERNAL_ERROR_LIBIO_STDOUT_FD_OPEN_FAILED );
   }
 
-  if (open("/dev/console", O_WRONLY, 0) != STDERR_FILENO) {
+  if ( open( CONSOLE_DEVICE_NAME, O_WRONLY, 0 ) != STDERR_FILENO ) {
     _Internal_error( INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED );
   }
 
