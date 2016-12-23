@@ -39,7 +39,7 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-  sizeof( Futex_Control ) == sizeof( struct _Futex_Control ),
+  sizeof( Futex_Control ) <= sizeof( struct _Futex_Control ),
   FUTEX_CONTROL_SIZE
 );
 

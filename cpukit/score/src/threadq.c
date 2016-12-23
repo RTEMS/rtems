@@ -58,7 +58,7 @@ RTEMS_STATIC_ASSERT(
 
 RTEMS_STATIC_ASSERT(
   sizeof( Thread_queue_Syslock_queue )
-    == sizeof( struct _Thread_queue_Queue ),
+    <= sizeof( struct _Thread_queue_Queue ),
   THREAD_QUEUE_SYSLOCK_QUEUE_SIZE
 );
 

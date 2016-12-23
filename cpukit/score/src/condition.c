@@ -41,7 +41,7 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-  sizeof( Condition_Control ) == sizeof( struct _Condition_Control ),
+  sizeof( Condition_Control ) <= sizeof( struct _Condition_Control ),
   CONDITION_CONTROL_SIZE
 );
 

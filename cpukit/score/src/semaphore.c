@@ -39,12 +39,12 @@ RTEMS_STATIC_ASSERT(
 
 RTEMS_STATIC_ASSERT(
   offsetof( Semaphore_Control, count )
-    == offsetof( struct _Semaphore_Control, _count ),
+    <= offsetof( struct _Semaphore_Control, _count ),
   SEMAPHORE_CONTROL_COUNT
 );
 
 RTEMS_STATIC_ASSERT(
-  sizeof( Semaphore_Control ) == sizeof( struct _Semaphore_Control ),
+  sizeof( Semaphore_Control ) <= sizeof( struct _Semaphore_Control ),
   SEMAPHORE_CONTROL_SIZE
 );
 
