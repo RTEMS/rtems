@@ -33,62 +33,13 @@ extern "C" {
 
 /*
  *  The following constants define the individual states which may be
- *  be used to compose and manipulate a thread's state.
+ *  be used to compose and manipulate a thread's state.  More frequently used
+ *  states should use lower value bits to ease the use of immediate values on
+ *  RISC architectures.
  */
 
 /** This macro corresponds to a task being ready. */
 #define STATES_READY                           0x00000000
-/** This macro corresponds to a task being created but not yet started. */
-#define STATES_DORMANT                         0x00000001
-/** This macro corresponds to a task being suspended. */
-#define STATES_SUSPENDED                       0x00000002
-/** This macro corresponds to a task which is waiting for a timeout. */
-#define STATES_DELAYING                        0x00000008
-/** This macro corresponds to a task waiting until a specific TOD. */
-#define STATES_WAITING_FOR_TIME                0x00000010
-/** This macro corresponds to a task waiting for a fixed size segment. */
-#define STATES_WAITING_FOR_SEGMENT             0x00000040
-/** This macro corresponds to a task waiting for a message. */
-#define STATES_WAITING_FOR_MESSAGE             0x00000080
-/** This macro corresponds to a task waiting for an event. */
-#define STATES_WAITING_FOR_EVENT               0x00000100
-/** This macro corresponds to a task waiting for a semaphore. */
-#define STATES_WAITING_FOR_SEMAPHORE           0x00000200
-/** This macro corresponds to a task waiting for a mutex. */
-#define STATES_WAITING_FOR_MUTEX               0x00000400
-/** This macro corresponds to a task waiting for a condition variable. */
-#define STATES_WAITING_FOR_CONDITION_VARIABLE  0x00000800
-/** This macro corresponds to a task waiting for a join while exiting. */
-#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x00001000
-/** This macro corresponds to a task waiting for a reply to an MPCI request. */
-#define STATES_WAITING_FOR_RPC_REPLY           0x00002000
-/** This macro corresponds to a task waiting for a period. */
-#define STATES_WAITING_FOR_PERIOD              0x00004000
-/** This macro corresponds to a task waiting for a signal. */
-#define STATES_WAITING_FOR_SIGNAL              0x00008000
-/** This macro corresponds to a task waiting for a barrier. */
-#define STATES_WAITING_FOR_BARRIER             0x00010000
-/** This macro corresponds to a task waiting for a RWLock. */
-#define STATES_WAITING_FOR_RWLOCK              0x00020000
-/** This macro corresponds to a task waiting for a system event. */
-#define STATES_WAITING_FOR_SYSTEM_EVENT        0x00040000
-/** This macro corresponds to a task waiting for BSD wakeup. */
-#define STATES_WAITING_FOR_BSD_WAKEUP          0x00080000
-/** This macro corresponds to a task being held by the debugger. */
-#define STATES_DEBUGGER                        0x00100000
-/** This macro corresponds to a task being a zombie. */
-#define STATES_ZOMBIE                          0x00200000
-/** This macro corresponds to a task those life is changing. */
-#define STATES_LIFE_IS_CHANGING                0x00800000
-/** This macro corresponds to a task waiting for a join. */
-#define STATES_WAITING_FOR_JOIN                0x01000000
-/** This macro corresponds to a task waiting for a futex. */
-#define STATES_WAITING_FOR_FUTEX               0x08000000
-
-/** This macro corresponds to a task which is in an interruptible
- *  blocking state.
- */
-#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000000
 
 /**
  * @brief This macro corresponds to a task which is blocked on a thread queue
@@ -97,7 +48,81 @@ extern "C" {
  * This thread state bit is intended to ease debugging and improve system
  * diagnostics, see _Thread_Wait_get_id().
  */
-#define STATES_THREAD_QUEUE_WITH_IDENTIFIER    0x80000000
+#define STATES_THREAD_QUEUE_WITH_IDENTIFIER    0x00000001
+
+/** This macro corresponds to a task waiting for a mutex. */
+#define STATES_WAITING_FOR_MUTEX               0x00000002
+
+/** This macro corresponds to a task waiting for a semaphore. */
+#define STATES_WAITING_FOR_SEMAPHORE           0x00000004
+
+/** This macro corresponds to a task waiting for an event. */
+#define STATES_WAITING_FOR_EVENT               0x00000008
+
+/** This macro corresponds to a task waiting for a system event. */
+#define STATES_WAITING_FOR_SYSTEM_EVENT        0x00000010
+
+/** This macro corresponds to a task waiting for a message. */
+#define STATES_WAITING_FOR_MESSAGE             0x00000020
+
+/** This macro corresponds to a task waiting for a condition variable. */
+#define STATES_WAITING_FOR_CONDITION_VARIABLE  0x00000040
+
+/** This macro corresponds to a task waiting for a futex. */
+#define STATES_WAITING_FOR_FUTEX               0x00000080
+
+/** This macro corresponds to a task waiting for BSD wakeup. */
+#define STATES_WAITING_FOR_BSD_WAKEUP          0x00000100
+
+/** This macro corresponds to a task which is waiting for a timeout. */
+#define STATES_DELAYING                        0x00000200
+
+/** This macro corresponds to a task waiting for a period. */
+#define STATES_WAITING_FOR_PERIOD              0x00000400
+
+/** This macro corresponds to a task waiting for a signal. */
+#define STATES_WAITING_FOR_SIGNAL              0x00000800
+
+/** This macro corresponds to a task waiting for a barrier. */
+#define STATES_WAITING_FOR_BARRIER             0x00001000
+
+/** This macro corresponds to a task waiting for a RWLock. */
+#define STATES_WAITING_FOR_RWLOCK              0x00002000
+
+/** This macro corresponds to a task waiting for a join while exiting. */
+#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x00004000
+
+/** This macro corresponds to a task waiting for a join. */
+#define STATES_WAITING_FOR_JOIN                0x00008000
+
+/** This macro corresponds to a task being suspended. */
+#define STATES_SUSPENDED                       0x00010000
+
+/** This macro corresponds to a task waiting for a fixed size segment. */
+#define STATES_WAITING_FOR_SEGMENT             0x00020000
+
+/** This macro corresponds to a task those life is changing. */
+#define STATES_LIFE_IS_CHANGING                0x00040000
+
+/** This macro corresponds to a task waiting until a specific TOD. */
+#define STATES_WAITING_FOR_TIME                0x00080000
+
+/** This macro corresponds to a task being held by the debugger. */
+#define STATES_DEBUGGER                        0x08000000
+
+/** This macro corresponds to a task which is in an interruptible
+ *  blocking state.
+ */
+#define STATES_INTERRUPTIBLE_BY_SIGNAL         0x10000000
+
+/** This macro corresponds to a task waiting for a reply to an MPCI request. */
+#define STATES_WAITING_FOR_RPC_REPLY           0x20000000
+
+/** This macro corresponds to a task being a zombie. */
+#define STATES_ZOMBIE                          0x40000000
+
+/** This macro corresponds to a task being created but not yet started. */
+#define STATES_DORMANT                         0x80000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
 #define STATES_LOCALLY_BLOCKED ( STATES_THREAD_QUEUE_WITH_IDENTIFIER   | \
