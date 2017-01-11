@@ -36,7 +36,7 @@
 #include "rtems-debugger-target.h"
 #include "rtems-debugger-threads.h"
 
-static const char const* excludes_defaults[] =
+static const char * const excludes_defaults[] =
 {
   "TIME",
   "_BSD",
