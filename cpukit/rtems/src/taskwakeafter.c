@@ -39,7 +39,7 @@ rtems_status_code rtems_task_wake_after(
     if ( ticks == 0 ) {
       _Thread_Yield( executing );
     } else {
-      _Thread_Set_state( executing, STATES_DELAYING );
+      _Thread_Set_state( executing, STATES_WAITING_FOR_TIME );
       _Thread_Wait_flags_set( executing, THREAD_WAIT_STATE_BLOCKED );
       _Thread_Timer_insert_relative(
         executing,

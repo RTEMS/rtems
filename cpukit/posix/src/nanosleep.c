@@ -49,7 +49,7 @@ static inline int nanosleep_helper(
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_thread_state(
     &queue_context,
-    STATES_DELAYING | STATES_INTERRUPTIBLE_BY_SIGNAL
+    STATES_WAITING_FOR_TIME | STATES_INTERRUPTIBLE_BY_SIGNAL
   );
   _Thread_queue_Context_set_enqueue_callout(
     &queue_context,

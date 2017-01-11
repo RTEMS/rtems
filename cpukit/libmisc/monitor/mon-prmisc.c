@@ -115,7 +115,6 @@ rtems_monitor_dump_priority(rtems_task_priority priority)
 #define WITH_ID(state) (STATES_THREAD_QUEUE_WITH_IDENTIFIER | state)
 
 static const rtems_assoc_t rtems_monitor_state_assoc[] = {
-    { "DELAY",  STATES_DELAYING, 0 },
     { "DORM",   STATES_DORMANT, 0 },
     { "LIFE",   STATES_LIFE_IS_CHANGING, 0 },
     { "SUSP",   STATES_SUSPENDED, 0 },

@@ -514,7 +514,6 @@ rtems_debugger_thread_state_str(rtems_debugger_thread* thread,
     DB_UINT           mask;
   };
   const struct mapper map[] = {
-    { "DELAY",  STATES_DELAYING },
     { "DORM",   STATES_DORMANT },
     { "LIFE",   STATES_LIFE_IS_CHANGING },
     { "SUSP",   STATES_SUSPENDED },

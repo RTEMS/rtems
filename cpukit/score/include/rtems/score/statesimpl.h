@@ -74,8 +74,11 @@ extern "C" {
 /** This macro corresponds to a task waiting for BSD wakeup. */
 #define STATES_WAITING_FOR_BSD_WAKEUP          0x00000100
 
-/** This macro corresponds to a task which is waiting for a timeout. */
-#define STATES_DELAYING                        0x00000200
+/**
+ * @brief This macro corresponds to a task which is waiting for a relative or
+ * absolute timeout.
+ */
+#define STATES_WAITING_FOR_TIME                0x00000200
 
 /** This macro corresponds to a task waiting for a period. */
 #define STATES_WAITING_FOR_PERIOD              0x00000400
@@ -103,9 +106,6 @@ extern "C" {
 
 /** This macro corresponds to a task those life is changing. */
 #define STATES_LIFE_IS_CHANGING                0x00040000
-
-/** This macro corresponds to a task waiting until a specific TOD. */
-#define STATES_WAITING_FOR_TIME                0x00080000
 
 /** This macro corresponds to a task being held by the debugger. */
 #define STATES_DEBUGGER                        0x08000000
@@ -139,8 +139,7 @@ extern "C" {
                                  STATES_WAITING_FOR_RWLOCK             )
 
 /** This macro corresponds to a task waiting which is blocked. */
-#define STATES_BLOCKED         ( STATES_DELAYING                | \
-                                 STATES_LOCALLY_BLOCKED         | \
+#define STATES_BLOCKED         ( STATES_LOCALLY_BLOCKED         | \
                                  STATES_WAITING_FOR_TIME        | \
                                  STATES_WAITING_FOR_PERIOD      | \
                                  STATES_WAITING_FOR_EVENT       | \
@@ -246,21 +245,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_suspended (
 }
 
 /**
- * This function returns true if the DELAYING state is set in
- * the_states, and false otherwise.
- *
- * @param[in] the_states is the task state set to test
- *
- * @return This method returns true if the desired state condition is set.
- */
-RTEMS_INLINE_ROUTINE bool _States_Is_delaying (
-  States_Control the_states
-)
-{
-   return (the_states & STATES_DELAYING);
-}
-
-/**
  * This function returns true if the WAITING_FOR_SEGMENT state is set in
  * the_states, and false otherwise.
  *
@@ -348,21 +332,6 @@ RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_semaphore (
 )
 {
    return (the_states & STATES_WAITING_FOR_SEMAPHORE);
-}
-
-/**
- * This function returns true if the WAITING_FOR_TIME state is set in
- * the_states, and false otherwise.
- *
- * @param[in] the_states is the task state set to test
- *
- * @return This method returns true if the desired state condition is set.
- */
-RTEMS_INLINE_ROUTINE bool _States_Is_waiting_for_time (
-  States_Control the_states
-)
-{
-   return (the_states & STATES_WAITING_FOR_TIME);
 }
 
 /**
