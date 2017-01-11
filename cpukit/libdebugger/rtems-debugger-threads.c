@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 #include <rtems.h>
-#include <rtems/score/statesimpl.h>
+#include <rtems/assoc.h>
 #include <rtems/score/threadimpl.h>
 
 #include <rtems/debugger/rtems-debugger-server.h>
@@ -506,57 +506,10 @@ rtems_debugger_thread_state(rtems_debugger_thread* thread)
 
 int
 rtems_debugger_thread_state_str(rtems_debugger_thread* thread,
-                                char*                  buffer,
+                                char*                  buf,
                                 size_t                 size)
 {
-  struct mapper {
-    const char const* label;
-    DB_UINT           mask;
-  };
-  const struct mapper map[] = {
-    { "DORM",   STATES_DORMANT },
-    { "LIFE",   STATES_LIFE_IS_CHANGING },
-    { "SUSP",   STATES_SUSPENDED },
-    { "Wbar",   STATES_WAITING_FOR_BARRIER },
-    { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE },
-    { "Wevnt",  STATES_WAITING_FOR_EVENT },
-    { "ISIG" ,  STATES_INTERRUPTIBLE_BY_SIGNAL },
-    { "Wjatx",  STATES_WAITING_FOR_JOIN_AT_EXIT },
-    { "Wjoin",  STATES_WAITING_FOR_JOIN },
-    { "Wmsg" ,  STATES_WAITING_FOR_MESSAGE },
-    { "Wmutex", STATES_WAITING_FOR_MUTEX },
-    { "WRATE",  STATES_WAITING_FOR_PERIOD },
-    { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY },
-    { "Wrwlk",  STATES_WAITING_FOR_RWLOCK },
-    { "Wseg",   STATES_WAITING_FOR_SEGMENT },
-    { "Wsem",   STATES_WAITING_FOR_SEMAPHORE },
-    { "Wsig",   STATES_WAITING_FOR_SIGNAL },
-    { "Wfutex", STATES_WAITING_FOR_FUTEX },
-    { "TQID",   STATES_THREAD_QUEUE_WITH_IDENTIFIER },
-    { "Wsysev", STATES_WAITING_FOR_SYSTEM_EVENT },
-    { "Wtime",  STATES_WAITING_FOR_TIME },
-    { "Wwkup",  STATES_WAITING_FOR_BSD_WAKEUP },
-    { "ZOMBI",  STATES_ZOMBIE },
-  };
-  DB_UINT state = thread->tcb->current_state;
-  if (state == STATES_READY) {
-    strcpy(buffer, "READY");
-  }
-  else {
-    char*  start = buffer;
-    size_t i;
-    buffer[0] = '\0';
-    buffer[size - 1] = '\0';
-    for (i = 0; size > 0 && i < RTEMS_DEBUGGER_NUMOF(map); ++i) {
-      if ((map[i].mask & state) != 0) {
-        size_t l = snprintf(buffer, size - 1, "%s ", map[i].label);
-        buffer += l;
-        size -= l;
-      }
-    }
-    if (buffer != start)
-      *(buffer - 1) = '\0';
-  }
+  rtems_assoc_thread_states_to_string(thread->tcb->current_state, buf, size);
   return 0;
 }
 

@@ -12,7 +12,6 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 #include <rtems/assoc.h>
-#include <rtems/score/statesimpl.h>
 
 #include <stdio.h>
 #include <ctype.h>
@@ -112,49 +111,13 @@ rtems_monitor_dump_priority(rtems_task_priority priority)
     return fprintf(stdout,"%3" PRId32, priority);
 }
 
-#define WITH_ID(state) (STATES_THREAD_QUEUE_WITH_IDENTIFIER | state)
-
-static const rtems_assoc_t rtems_monitor_state_assoc[] = {
-    { "DORM",   STATES_DORMANT, 0 },
-    { "LIFE",   STATES_LIFE_IS_CHANGING, 0 },
-    { "SUSP",   STATES_SUSPENDED, 0 },
-    { "Wbar",   WITH_ID(STATES_WAITING_FOR_BARRIER), 0 },
-    { "Wcvar",  WITH_ID(STATES_WAITING_FOR_CONDITION_VARIABLE), 0 },
-    { "Wevnt",  STATES_WAITING_FOR_EVENT, 0 },
-    { "Wisig",  STATES_INTERRUPTIBLE_BY_SIGNAL, 0 },
-    { "Wjatx",  STATES_WAITING_FOR_JOIN_AT_EXIT, 0 },
-    { "Wjoin",  STATES_WAITING_FOR_JOIN, 0 },
-    { "Wmsg" ,  WITH_ID(STATES_WAITING_FOR_MESSAGE), 0 },
-    { "Wmutex", WITH_ID(STATES_WAITING_FOR_MUTEX), 0 },
-    { "WRATE",  STATES_WAITING_FOR_PERIOD, 0 },
-    { "Wrpc",   STATES_WAITING_FOR_RPC_REPLY, 0 },
-    { "Wrwlk",  WITH_ID(STATES_WAITING_FOR_RWLOCK), 0 },
-    { "Wseg",   STATES_WAITING_FOR_SEGMENT, 0 },
-    { "Wsem",   WITH_ID(STATES_WAITING_FOR_SEMAPHORE), 0 },
-    { "Wsig",   STATES_WAITING_FOR_SIGNAL, 0 },
-    { "Wcvar",  STATES_WAITING_FOR_CONDITION_VARIABLE, 0 },
-    { "Wfutex", STATES_WAITING_FOR_FUTEX, 0 },
-    { "Wmutex", STATES_WAITING_FOR_MUTEX, 0 },
-    { "Wsem",   STATES_WAITING_FOR_SEMAPHORE, 0 },
-    { "Wsysev", STATES_WAITING_FOR_SYSTEM_EVENT, 0 },
-    { "Wtime",  STATES_WAITING_FOR_TIME, 0 },
-    { "Wwkup",  STATES_WAITING_FOR_BSD_WAKEUP, 0 },
-    { "ZOMBI",  STATES_ZOMBIE, 0 },
-    { 0, 0, 0 },
-};
-
 int
 rtems_monitor_dump_state(States_Control state)
 {
-    int   length = 0;
+    char buf[16];
 
-    if (state == STATES_READY)  /* assoc doesn't deal with this as it is 0 */
-        length += fprintf(stdout,"READY");
-
-    length += rtems_monitor_dump_assoc_bitfield(rtems_monitor_state_assoc,
-                                                ":",
-                                                state);
-    return length;
+    rtems_assoc_thread_states_to_string(state, buf, sizeof(buf));
+    return fprintf(stdout, "%s", buf);
 }
 
 static const rtems_assoc_t rtems_monitor_attribute_assoc[] = {

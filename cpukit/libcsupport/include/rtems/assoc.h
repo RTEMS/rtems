@@ -181,6 +181,22 @@ size_t rtems_assoc_32_to_string(
   const char                *fallback
 );
 
+/**
+ * @brief Converts the specified thread states into a text representation.
+ *
+ * @param[in] states The thread states to convert.
+ * @param[in] buffer The buffer for the text representation.
+ * @param[in] buffer_size The buffer size in characters.
+ *
+ * @retval The length of the text representation.  May be greater than the
+ * buffer size if truncation occurred.
+ */
+size_t rtems_assoc_thread_states_to_string(
+  uint32_t  states,
+  char     *buffer,
+  size_t    buffer_size
+);
+
 #ifdef __cplusplus
 }
 #endif
