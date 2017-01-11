@@ -61,6 +61,65 @@ static void reset_name( void )
   memset( name, 0, 40 );
 }
 
+static void test_assoc_32_to_string( void )
+{
+  static const rtems_assoc_32_pair pairs[] = {
+    { 1, "A" },
+    { 2, "LOOOOONG" },
+    { 4, "C" }
+  };
+  char buf[4];
+  size_t len;
+
+  len = rtems_assoc_32_to_string(
+    0,
+    buf,
+    sizeof( buf ),
+    pairs,
+    RTEMS_ARRAY_SIZE( pairs ),
+    ":",
+    "D"
+  );
+  rtems_test_assert( len == 1 );
+  rtems_test_assert( strcmp( buf, "D" ) == 0 );
+
+  len = rtems_assoc_32_to_string(
+    1,
+    buf,
+    sizeof( buf ),
+    pairs,
+    RTEMS_ARRAY_SIZE( pairs ),
+    ":",
+    "D"
+  );
+  rtems_test_assert( len == 1 );
+  rtems_test_assert( strcmp( buf, "A" ) == 0 );
+
+  len = rtems_assoc_32_to_string(
+    5,
+    buf,
+    sizeof( buf ),
+    pairs,
+    RTEMS_ARRAY_SIZE( pairs ),
+    ":",
+    "D"
+  );
+  rtems_test_assert( len == 3 );
+  rtems_test_assert( strcmp( buf, "A:C" ) == 0 );
+
+  len = rtems_assoc_32_to_string(
+    7,
+    buf,
+    sizeof( buf ),
+    pairs,
+    RTEMS_ARRAY_SIZE( pairs ),
+    ":",
+    "D"
+  );
+  rtems_test_assert( len == 12 );
+  rtems_test_assert( strcmp( buf, "A:L" ) == 0 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -216,6 +275,8 @@ rtems_task Init(
   rtems_test_assert( assoc_item == 0 );
 
   free( name );
+
+  test_assoc_32_to_string();
 
   TEST_END();
 

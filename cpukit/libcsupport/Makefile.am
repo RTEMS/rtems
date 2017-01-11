@@ -38,6 +38,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
     src/assocnamebyremote.c src/assocptrbylocal.c src/assocptrbyname.c \
     src/assocptrbyremote.c src/assocremotebylocalbitfield.c \
     src/assocremotebylocal.c src/assocremotebyname.c
+ASSOCIATION_C_FILES += src/assoc32tostring.c
 
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/mount-mktgt.c src/libio_init.c \

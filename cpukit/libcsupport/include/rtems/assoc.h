@@ -16,7 +16,8 @@
  */
 /**@{*/
 
-#include <stdint.h> /* uint32_t */
+#include <stddef.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -149,6 +150,36 @@ const char *rtems_assoc_name_bad(
   uint32_t   bad_value
 );
 #endif
+
+typedef struct {
+  uint32_t    bits;
+  const char *name;
+} rtems_assoc_32_pair;
+
+/**
+ * @brief Converts the specified value into a text representation.
+ *
+ * @param[in] value The value to convert.
+ * @param[in] buffer The buffer for the text representation.
+ * @param[in] buffer_size The buffer size in characters.
+ * @param[in] pairs Names for particular bits.
+ * @param[in] pair_count Count of pairs.
+ * @param[in] separator Separator between individual names.
+ * @param[in] fallback Fallback value in case no bits contained in the pairs
+ *   are set in the value.
+ *
+ * @retval The length of the text representation.  May be greater than the
+ * buffer size if truncation occurred.
+ */
+size_t rtems_assoc_32_to_string(
+  uint32_t                   value,
+  char                      *buffer,
+  size_t                     buffer_size,
+  const rtems_assoc_32_pair *pairs,
+  size_t                     pair_count,
+  const char                *separator,
+  const char                *fallback
+);
 
 #ifdef __cplusplus
 }
