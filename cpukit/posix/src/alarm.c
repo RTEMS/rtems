@@ -83,8 +83,6 @@ unsigned int alarm(
   );
 
   if ( ticks != 0 ) {
-    cpu = _Per_CPU_Get();
-    _Watchdog_Set_CPU( the_watchdog, cpu );
     _Watchdog_Insert(
       &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
       the_watchdog,
