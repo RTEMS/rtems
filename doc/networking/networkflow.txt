@@ -1,2 +1,0 @@
-Figure: Network Task Structure and Data Flow
-       (Not available in ASCII version of this document.)

@@ -223,7 +223,6 @@ clean)
       needles="$needles install-sh"
       needles="$needles missing"
       needles="$needles mdate-sh"
-      needles="$needles texinfo.tex"
     fi
     for j in $needles; do
       files=`find . -name "$j" -print`

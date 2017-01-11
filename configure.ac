@@ -30,10 +30,6 @@ RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_PARAVIRT
 RTEMS_ENABLE_DRVMGR
 
-AC_ARG_ENABLE([docs],
-  [AS_HELP_STRING([--enable-docs],[enable building documentation
-    (default:disabled)])])
-
 ## NOTES:
 ## * tools/build are host-native tools to be installed on the host.
 ## * tools/cpu are host-native or host-cross-target-tools
@@ -51,9 +47,6 @@ esac
 AS_IF([test $host != $build],[
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
 ])
-
-AS_IF([test x"${enable_docs}" = x"yes"],
-  [RTEMS_BUILD_CONFIG_SUBDIRS([doc])])
 
 AS_IF([test x"$enable_multilib" = x"yes"],[
   RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])

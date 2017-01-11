@@ -1,2 +1,0 @@
-Figure: PCI Device's Configuration Header Space Format
-       (Not available in ASCII version of this document.)

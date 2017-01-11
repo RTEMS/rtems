@@ -1,6 +1,0 @@
-@set RTEMSUSERS			users@@rtems.org
-@set RTEMSDEVEL			devel@@rtems.org
-@set RTEMSHTTPURL		http://www.rtems.org
-@set RTEMSPREFIX		@RTEMSPREFIX@
-@set RTEMSAPI			@RTEMSAPI@
-@set RTEMSRPMPREFIX		@RTEMSRPMPREFIX@
