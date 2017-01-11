@@ -17,8 +17,6 @@
 
 const char rtems_test_name[] = "SMPAFFINITY 1";
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 rtems_id           Init_id;
 rtems_id           Med_id[NUM_CPUS-1];
 rtems_id           Low_id[NUM_CPUS];
@@ -226,16 +224,6 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
-#else
-static void Init(rtems_task_argument arg)
-{
-  TEST_BEGIN();
-  puts( " Affinity NOT Supported");
-  TEST_END();
-  rtems_test_exit(0);
-}
-
-#endif
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 

@@ -18,8 +18,6 @@
 
 #include <rtems/score/schedulerimpl.h>
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 bool _Scheduler_Set_affinity(
   Thread_Control  *the_thread,
   size_t           cpusetsize,
@@ -56,5 +54,3 @@ bool _Scheduler_Set_affinity(
   _Scheduler_Release_critical( scheduler, &lock_context );
   return ok;
 }
-
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */

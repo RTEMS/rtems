@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#ifdef __RTEMS_HAVE_SYS_CPUSET_H__
 #include <sys/cpuset.h>
 #include <rtems/sysinit.h>
 #include <rtems/score/cpusetimpl.h>
@@ -96,6 +95,3 @@ const CPU_set_Control *_CPU_set_Default()
 {
   return &cpuset_default;
 }
-#endif
-
-

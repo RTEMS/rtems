@@ -67,24 +67,22 @@ int rtems_pthread_attribute_compare(
   if ( attr1->detachstate != attr2->detachstate )
     return 1;
 
-  #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-    if ( attr1->affinitysetsize != attr2->affinitysetsize )
-      return 1;
+  if ( attr1->affinitysetsize != attr2->affinitysetsize )
+    return 1;
 
-    if (!CPU_EQUAL_S(
-      attr1->affinitysetsize,
-      attr1->affinityset,
-      attr2->affinityset
-    ))
-      return 1;
+  if (!CPU_EQUAL_S(
+    attr1->affinitysetsize,
+    attr1->affinityset,
+    attr2->affinityset
+  ))
+    return 1;
 
-    if (!CPU_EQUAL_S(
-      attr1->affinitysetsize,
-      &attr1->affinitysetpreallocated,
-      &attr2->affinitysetpreallocated
-    ))
-      return 1;
-  #endif
+  if (!CPU_EQUAL_S(
+    attr1->affinitysetsize,
+    &attr1->affinitysetpreallocated,
+    &attr2->affinitysetpreallocated
+  ))
+    return 1;
 
   return 0;
 }

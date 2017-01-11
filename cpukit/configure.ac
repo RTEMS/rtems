@@ -119,7 +119,6 @@ RTEMS_CHECK_FUNC([pthread_getaffinity_np],[
 RTEMS_CHECK_FUNC([pthread_getattr_np],[
   #define _GNU_SOURCE
   #include <pthread.h>])
-AC_CHECK_HEADERS([sys/cpuset.h])
 
 # This was added to newlib in August 2014 to improve conformance.
 # Disable use of internal definition if it is present.
@@ -250,12 +249,6 @@ RTEMS_CPUOPT([RTEMS_VERSION],
   [true],
   ["]_RTEMS_VERSION["],
   [RTEMS version string])
-
-## Header file differences that need to be known in .h after install
-RTEMS_CPUOPT([__RTEMS_HAVE_SYS_CPUSET_H__],
-  [test x"${ac_cv_header_sys_cpuset_h}" = x"yes"],
-  [1],
-  [indicate if <sys/cpuset.h> is present in toolset])
 
 ## Header file differences that need to be known in .h after install
 RTEMS_CPUOPT([__RTEMS_HAVE_DECL_SIGALTSTACK__],

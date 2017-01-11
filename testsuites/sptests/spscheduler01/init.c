@@ -37,7 +37,6 @@ static rtems_id sema_id;
 
 static void test_task_get_set_affinity(void)
 {
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
   rtems_id self_id = rtems_task_self();
   rtems_id task_id;
   rtems_status_code sc;
@@ -120,7 +119,6 @@ static void test_task_get_set_affinity(void)
 
   CPU_FREE(cpusetbig);
   CPU_FREE(cpusetbigone);
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
 static rtems_task_priority set_prio(rtems_id id, rtems_task_priority prio)
@@ -361,7 +359,6 @@ static void test_scheduler_ident(void)
 
 static void test_scheduler_get_processors(void)
 {
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
   rtems_status_code sc;
   rtems_name name = BLUE;
   rtems_id scheduler_id;
@@ -408,7 +405,6 @@ static void test_scheduler_get_processors(void)
 
   CPU_FREE(cpusetbig);
   CPU_FREE(cpusetbigone);
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 }
 
 static void test_scheduler_add_remove_processors(void)

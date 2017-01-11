@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/schedulerimpl.h>
@@ -47,5 +45,3 @@ rtems_status_code rtems_scheduler_get_processor_set(
 
   return RTEMS_SUCCESSFUL;
 }
-
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */

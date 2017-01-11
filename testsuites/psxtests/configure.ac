@@ -81,9 +81,6 @@ AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
   #define _GNU_SOURCE
   #include <pthread.h>]])
 
-# Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_HEADERS([cpuset.h])
-
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 

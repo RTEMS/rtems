@@ -659,8 +659,6 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-
 RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
   const Scheduler_Control *scheduler,
   size_t                   cpusetsize,
@@ -743,8 +741,6 @@ bool _Scheduler_Set_affinity(
   size_t           cpusetsize,
   const cpu_set_t *cpuset
 );
-
-#endif /* defined(__RTEMS_HAVE_SYS_CPUSET_H__) */
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Generic_block(
   const Scheduler_Control *scheduler,

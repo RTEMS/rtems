@@ -170,11 +170,9 @@ int pthread_create(
   }
 
 #if defined(RTEMS_SMP)
-#if __RTEMS_HAVE_SYS_CPUSET_H__
-  status = _CPU_set_Is_valid( the_attr->affinityset, the_attr->affinitysetsize );
+  status = _CPU_set_Is_valid(the_attr->affinityset, the_attr->affinitysetsize);
   if ( !status )
     return EINVAL;
-#endif
 #endif
 
   /*
@@ -224,7 +222,7 @@ int pthread_create(
 
   the_thread->Life.state |= THREAD_LIFE_CHANGE_DEFERRED;
 
-#if defined(RTEMS_SMP) && __RTEMS_HAVE_SYS_CPUSET_H__
+#if defined(RTEMS_SMP)
   _ISR_lock_ISR_disable( &lock_context );
    status = _Scheduler_Set_affinity(
      the_thread,

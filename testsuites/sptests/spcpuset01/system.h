@@ -10,14 +10,12 @@
 #include "tmacros.h"
 #include "test_support.h"
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 #include <sys/cpuset.h>
 
 /* global variables */
 extern cpu_set_t set1;
 extern cpu_set_t set2;
 extern cpu_set_t set3;
-#endif
 
 /* enable/disable verbose output */
 #ifndef DPRINT

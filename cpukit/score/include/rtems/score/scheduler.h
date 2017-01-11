@@ -20,7 +20,7 @@
 #define _RTEMS_SCORE_SCHEDULER_H
 
 #include <rtems/score/thread.h>
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
   #include <sys/cpuset.h>
 #endif
 
@@ -212,7 +212,7 @@ typedef struct {
     struct Per_CPU_Control *
   );
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
   /** @see _Scheduler_Get_affinity() */
   bool ( *get_affinity )(
     const Scheduler_Control *,
@@ -523,7 +523,7 @@ void _Scheduler_default_Start_idle(
   struct Per_CPU_Control  *cpu
 );
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__) && defined(RTEMS_SMP)
+#if defined(RTEMS_SMP)
   /**
    * @brief Get affinity for the default scheduler.
    *

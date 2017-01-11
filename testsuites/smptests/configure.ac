@@ -51,10 +51,6 @@ AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
   #define _GNU_SOURCE
   #include <pthread.h>]])
 
-# Added to newlib pthreads for RTEMS SMP (np), may not be present
-AC_CHECK_HEADERS([sys/cpuset.h])
-AM_CONDITIONAL(HAS_CPUSET,test x"${ac_cv_header_sys_cpuset_h}" = x"yes")
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 smpmutex02/Makefile

@@ -11,7 +11,6 @@
 #include <assert.h>
 #include "system.h"
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 void test_cpu_and_case_1(size_t cpu1, size_t cpu2);
 void test_cpu_nand_case_1(size_t cpu1, size_t cpu2);
 void test_cpu_or_case_1(size_t cpu1, size_t cpu2);
@@ -124,4 +123,3 @@ void cpuset_logic_test()
     }
   }
 }
-#endif

@@ -75,11 +75,9 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
     .cputime_clock_allowed = 1,                        /* cputime_clock_allowed */
   #endif
   .detachstate             = PTHREAD_CREATE_JOINABLE,    /* detachstate */
-  #if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
-    .affinitysetsize         = 0,
-    .affinityset             = NULL,
-    .affinitysetpreallocated = {{0x0}}
-  #endif
+  .affinitysetsize         = 0,
+  .affinityset             = NULL,
+  .affinitysetpreallocated = {{0x0}}
 };
 
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
@@ -244,7 +242,7 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
 static void _POSIX_Threads_Manager_initialization(void)
 {
-  #if defined(RTEMS_SMP) && defined(__RTEMS_HAVE_SYS_CPUSET_H__)
+  #if defined(RTEMS_SMP)
     const CPU_set_Control *affinity;
     pthread_attr_t *attr;
 

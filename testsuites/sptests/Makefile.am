@@ -81,10 +81,7 @@ _SUBDIRS += spinternalerror02
 _SUBDIRS += sptimer_err01 sptimer_err02
 _SUBDIRS += sptimerserver01
 _SUBDIRS += spclock_err02
-
-if HAS_CPUSET
 _SUBDIRS += spcpuset01
-endif
 
 include $(top_srcdir)/../automake/test-subdirs.am
 include $(top_srcdir)/../automake/local.am

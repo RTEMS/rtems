@@ -28,8 +28,6 @@
 extern "C" {
 #endif
 
-#ifdef __RTEMS_HAVE_SYS_CPUSET_H__
-
 /**
  * @brief Determine If the CPU Set if Valid
  *
@@ -121,7 +119,6 @@ static inline void _CPU_set_Set(
   set->setsize = setsize;
   CPU_COPY( set->set, cpuset );
 }
-#endif
 
 /**@}*/
 

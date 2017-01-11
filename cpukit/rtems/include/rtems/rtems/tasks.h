@@ -402,7 +402,6 @@ rtems_status_code rtems_task_is_suspended(
   rtems_id   id
 );
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 /**
  * @brief Gets the processor affinity set of a task.
  *
@@ -458,7 +457,6 @@ rtems_status_code rtems_task_set_affinity(
   size_t           cpusetsize,
   const cpu_set_t *cpuset
 );
-#endif
 
 /**
  * @brief Gets the scheduler of a task.
@@ -561,7 +559,6 @@ rtems_status_code rtems_scheduler_ident(
   rtems_id   *id
 );
 
-#if defined(__RTEMS_HAVE_SYS_CPUSET_H__)
 /**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
@@ -583,7 +580,6 @@ rtems_status_code rtems_scheduler_get_processor_set(
   size_t     cpusetsize,
   cpu_set_t *cpuset
 );
-#endif
 
 /**
  * @brief Adds a processor to the set of processors owned by the specified
