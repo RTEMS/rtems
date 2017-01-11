@@ -76,7 +76,7 @@ void _Thread_queue_Do_acquire_critical(
     lock_context
   );
 #if defined(RTEMS_DEBUG)
-  the_thread_queue->owner = _SMP_Get_current_processor();
+  the_thread_queue->owner = _SMP_lock_Who_am_I();
 #endif
 }
 
@@ -92,7 +92,7 @@ void _Thread_queue_Acquire(
     &queue_context->Lock_context.Lock_context
   );
 #if defined(RTEMS_DEBUG)
-  the_thread_queue->owner = _SMP_Get_current_processor();
+  the_thread_queue->owner = _SMP_lock_Who_am_I();
 #endif
 }
 

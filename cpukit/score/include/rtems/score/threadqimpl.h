@@ -467,7 +467,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_lock_owner(
 )
 {
 #if defined(RTEMS_SMP)
-  return the_thread_queue->owner == _SMP_Get_current_processor();
+  return the_thread_queue->owner == _SMP_lock_Who_am_I();
 #else
   return _ISR_Get_level() != 0;
 #endif

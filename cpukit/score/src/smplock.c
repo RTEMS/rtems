@@ -72,6 +72,6 @@ void _SMP_lock_Release_and_ISR_enable(
 #if defined(RTEMS_DEBUG)
 bool _SMP_lock_Is_owner( const SMP_lock_Control *lock )
 {
-  return lock->owner == _SMP_Get_current_processor();
+  return lock->owner == _SMP_lock_Who_am_I();
 }
 #endif

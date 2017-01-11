@@ -98,7 +98,7 @@ typedef struct {
 } SMP_lock_Context;
 
 #if defined(RTEMS_DEBUG)
-#define SMP_LOCK_NO_OWNER 0xffffffff
+#define SMP_LOCK_NO_OWNER 0
 #endif
 
 /**
@@ -176,6 +176,17 @@ void _SMP_lock_Destroy( SMP_lock_Control *lock );
   _SMP_lock_Destroy_inline( lock )
 #endif
 
+#if defined(RTEMS_DEBUG)
+static inline uint32_t _SMP_lock_Who_am_I( void )
+{
+  /*
+   * The CPU index starts with zero.  Increment it by one, to allow global SMP
+   * locks to reside in the BSS section.
+   */
+  return _SMP_Get_current_processor() + 1;
+}
+#endif
+
 static inline void _SMP_lock_Acquire_inline(
   SMP_lock_Control *lock,
   SMP_lock_Context *context
@@ -192,7 +203,7 @@ static inline void _SMP_lock_Acquire_inline(
     &context->Stats_context
   );
 #if defined(RTEMS_DEBUG)
-  lock->owner = _SMP_Get_current_processor();
+  lock->owner = _SMP_lock_Who_am_I();
 #endif
 }
 
@@ -220,7 +231,7 @@ static inline void _SMP_lock_Release_inline(
 #if defined(RTEMS_DEBUG)
   _Assert( context->lock_used_for_acquire == lock );
   context->lock_used_for_acquire = NULL;
-  _Assert( lock->owner == _SMP_Get_current_processor() );
+  _Assert( lock->owner == _SMP_lock_Who_am_I() );
   lock->owner = SMP_LOCK_NO_OWNER;
 #else
   (void) context;
