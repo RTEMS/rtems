@@ -11,7 +11,7 @@
  *  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014, 2016 embedded brains GmbH.
+ *  Copyright (c) 2014, 2017 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -1950,6 +1950,12 @@ RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
   _Thread_Unblock( the_thread );
 #endif
 }
+
+size_t _Thread_Get_name(
+  const Thread_Control *the_thread,
+  char                 *buffer,
+  size_t                buffer_size
+);
 
 /** @}*/
 

@@ -47,6 +47,12 @@ rtems_monitor_task_canonical(
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];
 
+    _Thread_Get_name(
+      rtems_thread,
+      canonical_task->name_string,
+      sizeof( canonical_task->name_string )
+    );
+
     rtems_monitor_task_wait_info( canonical_task, rtems_thread );
 
     canonical_task->entry = rtems_thread->Start.Entry;
@@ -97,7 +103,7 @@ rtems_monitor_task_dump(
 
     length += rtems_monitor_dump_id(monitor_task->id);
     length += rtems_monitor_pad(11, length);
-    length += rtems_monitor_dump_name(monitor_task->id);
+    length += fprintf(stdout, "%s", monitor_task->name_string);
     length += rtems_monitor_pad(21, length);
     length += rtems_monitor_dump_decimal(monitor_task->cpu);
     length += rtems_monitor_pad(26, length);

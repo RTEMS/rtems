@@ -95,6 +95,7 @@ typedef struct {
     rtems_id                   id;
     rtems_name                 name;
   /* end of common portion */
+    char                       name_string[10];
     Thread_Entry_information   entry;
     void                      *stack;
     uint32_t                   stack_size;

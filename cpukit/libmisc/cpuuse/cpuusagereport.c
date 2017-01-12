@@ -40,7 +40,7 @@ typedef struct {
 static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
 {
   cpu_usage_context *ctx;
-  char               name[ 13 ];
+  char               name[ 38 ];
   uint32_t           ival;
   uint32_t           fval;
   Timestamp_Control  uptime;
@@ -49,7 +49,7 @@ static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
   uint32_t           nanoseconds;
 
   ctx = arg;
-  rtems_object_get_name( the_thread->Object.id, sizeof( name ), name );
+  _Thread_Get_name( the_thread, name, sizeof( name ) );
 
   _Thread_Get_CPU_time_used( the_thread, &used );
   _TOD_Get_uptime( &uptime );
