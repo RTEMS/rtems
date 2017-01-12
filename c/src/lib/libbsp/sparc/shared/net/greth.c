@@ -246,7 +246,7 @@ static void greth_interrupt (void *arg)
         
         /* Send the event(s) */
         if ( events )
-            rtems_event_send (greth->daemonTid, events);
+            rtems_bsdnet_event_send(greth->daemonTid, events);
 }
 
 static uint32_t read_mii(struct greth_softc *sc, uint32_t phy_addr, uint32_t reg_addr)
