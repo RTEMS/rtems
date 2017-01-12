@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS = psxclock
+_SUBDIRS += psxthreadname01
 if HAS_POSIX
 _SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psx10 psx11 psx12 psx13 psx14 psx15 psx16 \

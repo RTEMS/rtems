@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxthreadname01
+
+directives:
+
+  - pthread_setname_np()
+  - pthread_getname_np()
+
+concepts:
+
+  - Ensure that set/get of thread names works as expected.

@@ -65,6 +65,8 @@ endif
 libposix_a_SOURCES += src/fork.c src/vfork.c
 
 libposix_a_SOURCES += src/wait.c src/waitpid.c
+libposix_a_SOURCES += src/pthreadgetnamenp.c
+libposix_a_SOURCES += src/pthreadsetnamenp.c
 
 if HAS_PTHREADS
 libposix_a_SOURCES +=  src/pthreadatfork.c

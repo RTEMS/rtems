@@ -203,6 +203,7 @@ psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
 psxtimes01/Makefile
+psxthreadname01/Makefile
 psxualarm/Makefile
 psxusleep/Makefile
 ])
