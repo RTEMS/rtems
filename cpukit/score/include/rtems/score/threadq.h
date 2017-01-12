@@ -420,6 +420,11 @@ struct Thread_queue_Queue {
    * @brief The thread queue owner.
    */
   Thread_Control *owner;
+
+  /**
+   * @brief The thread queue name.
+   */
+  const char *name;
 };
 
 /**

@@ -1014,44 +1014,58 @@ size_t _Thread_queue_Flush_critical(
 void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
 
 #if defined(RTEMS_SMP) && defined(RTEMS_DEBUG) && defined(RTEMS_PROFILING)
-  #define THREAD_QUEUE_INITIALIZER( name ) \
+  #define THREAD_QUEUE_INITIALIZER( _name ) \
     { \
-      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( _name ), \
       .owner = SMP_LOCK_NO_OWNER, \
       .Queue = { \
-        .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+        .heads = NULL, \
+        .owner = NULL, \
+        .name = _name \
       } \
     }
 #elif defined(RTEMS_SMP) && defined(RTEMS_DEBUG)
-  #define THREAD_QUEUE_INITIALIZER( name ) \
+  #define THREAD_QUEUE_INITIALIZER( _name ) \
     { \
       .owner = SMP_LOCK_NO_OWNER, \
       .Queue = { \
-        .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+        .heads = NULL, \
+        .owner = NULL, \
+        .name = _name \
       } \
     }
 #elif defined(RTEMS_SMP) && defined(RTEMS_PROFILING)
-  #define THREAD_QUEUE_INITIALIZER( name ) \
+  #define THREAD_QUEUE_INITIALIZER( _name ) \
     { \
-      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( name ), \
+      .Lock_stats = SMP_LOCK_STATS_INITIALIZER( _name ), \
       .Queue = { \
-        .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+        .heads = NULL, \
+        .owner = NULL, \
+        .name = _name \
       } \
     }
 #elif defined(RTEMS_SMP)
-  #define THREAD_QUEUE_INITIALIZER( name ) \
+  #define THREAD_QUEUE_INITIALIZER( _name ) \
     { \
       .Queue = { \
-        .heads = NULL, \
         .Lock = SMP_TICKET_LOCK_INITIALIZER, \
+        .heads = NULL, \
+        .owner = NULL, \
+        .name = _name \
       } \
     }
 #else
-  #define THREAD_QUEUE_INITIALIZER( name ) \
-    { .Queue = { .heads = NULL } }
+  #define THREAD_QUEUE_INITIALIZER( _name ) \
+    { \
+      .Queue = { \
+        .heads = NULL, \
+        .owner = NULL, \
+        .name = _name \
+      } \
+    }
 #endif
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Destroy(

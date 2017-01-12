@@ -39,7 +39,7 @@ RTEMS_STATIC_ASSERT(
 );
 
 RTEMS_STATIC_ASSERT(
-  sizeof( Mutex_Control ) <= sizeof( struct _Mutex_Control ),
+  sizeof( Mutex_Control ) == sizeof( struct _Mutex_Control ),
   MUTEX_CONTROL_SIZE
 );
 
@@ -50,19 +50,19 @@ typedef struct {
 
 RTEMS_STATIC_ASSERT(
   offsetof( Mutex_recursive_Control, Mutex )
-    <= offsetof( struct _Mutex_recursive_Control, _Mutex ),
+    == offsetof( struct _Mutex_recursive_Control, _Mutex ),
   MUTEX_RECURSIVE_CONTROL_MUTEX
 );
 
 RTEMS_STATIC_ASSERT(
   offsetof( Mutex_recursive_Control, nest_level )
-    <= offsetof( struct _Mutex_recursive_Control, _nest_level ),
+    == offsetof( struct _Mutex_recursive_Control, _nest_level ),
   MUTEX_RECURSIVE_CONTROL_NEST_LEVEL
 );
 
 RTEMS_STATIC_ASSERT(
   sizeof( Mutex_recursive_Control )
-    <= sizeof( struct _Mutex_recursive_Control ),
+    == sizeof( struct _Mutex_recursive_Control ),
   MUTEX_RECURSIVE_CONTROL_SIZE
 );
 
