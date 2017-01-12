@@ -23,6 +23,8 @@ RTEMS_ENABLE_DRVMGR
 RTEMS_ENV_RTEMSCPU
 RTEMS_CHECK_RTEMS_DEBUG
 
+AC_DEFUN([RTEMS_TOOL_CHAIN_ERROR],AC_MSG_ERROR([please update your tool chain via the RSB <https://docs.rtems.org/branches/master/rsb/quick-start.html>]))
+
 # Is this a supported CPU?
 AC_MSG_CHECKING([if cpu $RTEMS_CPU is supported])
 if test -d "$srcdir/score/cpu/$RTEMS_CPU"; then
@@ -57,9 +59,7 @@ AC_CHECK_FUNCS([creat \
   sleep \
   telldir \
   usleep],,
-  [rtems_missing_func="$ac_func";break])
-AS_IF([test -n "$rtems_missing_func"],
-  AC_MSG_ERROR([Missing function $rtems_missing_func in libc])])
+  [RTEMS_TOOL_CHAIN_ERROR])
 AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
@@ -75,10 +75,11 @@ AC_CHECK_DECLS([__env_lock],,,[#include <envlock.h>])
 AC_CHECK_DECLS([__env_unlock],,,[#include <envlock.h>])
 AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
 AC_CHECK_SIZEOF([pthread_spinlock_t],[],[],[#include <pthread.h>])
+AC_CHECK_MEMBER([struct _Thread_queue_Queue._name],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/lock.h>])
 
 # Mandated by POSIX, older newlibs bogusly provided CLOCK_PROCESS_CPUTIME+CLOCK_THREAD_CPUTIME
-AC_CHECK_DECL([CLOCK_PROCESS_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_PROCESS_CPUTIME_ID])],[#include <time.h>])
-AC_CHECK_DECL([CLOCK_THREAD_CPUTIME_ID],[],[AC_MSG_ERROR([missing define CLOCK_THREAD_CPUTIME_ID])],[#include <time.h>])
+AC_CHECK_DECL([CLOCK_PROCESS_CPUTIME_ID],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <time.h>])
+AC_CHECK_DECL([CLOCK_THREAD_CPUTIME_ID],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <time.h>])
 
 # Mandated by POSIX, decls not present in some versions of newlib,
 # some versions stubbed in newlib's rtems crt0
@@ -136,9 +137,7 @@ AC_CHECK_FUNCS([ttyname getcwd])
 # Check if the installed toolchain provides these headers
 # and error out if not.
 AC_CHECK_HEADERS([tar.h errno.h sched.h sys/cdefs.h sys/queue.h],,
-  [rtems_missing_header="$ac_header";break])
-AS_IF([test -n "$rtems_missing_header"],
-  AC_MSG_ERROR([Missing required header $rtems_missing_header])])
+  [RTEMS_TOOL_CHAIN_ERROR])
 
 AC_CHECK_HEADERS([semaphore.h])
 AM_CONDITIONAL([HAVE_SEMAPHORE_H],[test x"$ac_cv_header_semaphore_h" = x"yes"])
@@ -148,15 +147,15 @@ AM_CONDITIONAL([HAVE_THREADS_H],[test x"$ac_cv_header_threads_h" = x"yes"])
 
 ## error out if libc doesn't provide stdint.h
 AS_IF([test x"${ac_cv_header_stdint_h}" != xyes],
-[AC_MSG_ERROR([Required header stdint.h not found])])
+[RTEMS_TOOL_CHAIN_ERROR])
 
 ## error out if libc doesn't provide inttypes.h
 AS_IF([test x"${ac_cv_header_inttypes_h}" != xyes],
-[AC_MSG_ERROR([Required header inttypes.h not found])])
+[RTEMS_TOOL_CHAIN_ERROR])
 
 AC_HEADER_STDBOOL
 AS_IF([test x"${ac_cv_header_stdbool_h}" != xyes],
-[AC_MSG_ERROR([No sufficient stdbool.h found])])
+[RTEMS_TOOL_CHAIN_ERROR])
 
 AC_CHECK_TYPES([ uint8_t,  int8_t])
 AC_CHECK_TYPES([uint16_t, int16_t])
@@ -175,7 +174,7 @@ AC_CHECK_HEADER([pthread.h],[
   AC_CHECK_TYPES([pthread_rwlock_t])
   AC_CHECK_TYPES([pthread_barrier_t])
   AC_CHECK_TYPES([pthread_spinlock_t])
-  AC_CHECK_TYPES([struct _pthread_cleanup_context],[],[AC_MSG_ERROR([struct _pthread_cleanup_context in <pthread.h> is mandatory])],[#include <pthread.h>])
+  AC_CHECK_TYPES([struct _pthread_cleanup_context],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <pthread.h>])
 ])
 
 AC_CHECK_HEADER([signal.h],[
@@ -183,7 +182,7 @@ AC_CHECK_HEADER([signal.h],[
 ])
 
 if test x"$RTEMS_USE_NEWLIB" = xyes ; then
-  AC_CHECK_DECLS([__getreent],[],[AC_MSG_ERROR([__getreent() in <sys/reent.h> is mandatory])],[#include <sys/reent.h>])
+  AC_CHECK_DECLS([__getreent],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/reent.h>])
 fi
 
 RTEMS_CHECK_MULTIPROCESSING
@@ -191,7 +190,7 @@ RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_NETWORKING
 RTEMS_CHECK_SMP
 if test "${RTEMS_HAS_SMP}" = "yes"; then
-  AC_CHECK_HEADERS([stdatomic.h],[],[AC_MSG_ERROR([<stdatomic.h> is required for SMP support])])
+  AC_CHECK_HEADERS([stdatomic.h],[],[RTEMS_TOOL_CHAIN_ERROR])
 fi
 
 rtems_major=`echo _RTEMS_VERSION | sed "s/\..*//"`
