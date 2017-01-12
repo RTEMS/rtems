@@ -227,6 +227,8 @@ SECTIONS {
 		*(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
 		*(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
 		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+		*(.rela.rtemsroset*)
+		*(.rela.rtemsrwset*)
 		PROVIDE_HIDDEN (__rel_iplt_start = .);
 		PROVIDE_HIDDEN (__rel_iplt_end = .);
 		PROVIDE_HIDDEN (__rela_iplt_start = .);
