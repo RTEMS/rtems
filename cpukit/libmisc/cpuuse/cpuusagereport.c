@@ -51,27 +51,20 @@ static bool cpu_usage_visitor( Thread_Control *the_thread, void *arg )
   ctx = arg;
   rtems_object_get_name( the_thread->Object.id, sizeof( name ), name );
 
-  rtems_printf(
-    ctx->printer,
-    " 0x%08" PRIx32 " | %-38s |",
-    the_thread->Object.id,
-    name
-  );
-
   _Thread_Get_CPU_time_used( the_thread, &used );
   _TOD_Get_uptime( &uptime );
   _Timestamp_Subtract( &ctx->uptime_at_last_reset, &uptime, &ctx->total );
   _Timestamp_Divide( &used, &ctx->total, &ival, &fval );
-
-  /*
-   * Print the information
-   */
-
   seconds = _Timestamp_Get_seconds( &used );
   nanoseconds = _Timestamp_Get_nanoseconds( &used ) /
     TOD_NANOSECONDS_PER_MICROSECOND;
-  rtems_printf( ctx->printer,
-    "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
+
+  rtems_printf(
+    ctx->printer,
+    " 0x%08" PRIx32 " | %-38s |"
+      "%7" PRIu32 ".%06" PRIu32 " |%4" PRIu32 ".%03" PRIu32 "\n",
+    the_thread->Object.id,
+    name,
     seconds, nanoseconds,
     ival, fval
   );
