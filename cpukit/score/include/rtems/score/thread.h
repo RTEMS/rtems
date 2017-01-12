@@ -907,6 +907,14 @@ extern const size_t _Thread_Control_add_on_count;
  */
 extern const size_t _Thread_Control_size;
 
+/**
+ * @brief Maximum size of a thread name in characters (including the
+ * terminating '\0' character).
+ *
+ * This value is provided via <rtems/confdefs.h>.
+ */
+extern const size_t _Thread_Maximum_name_size;
+
 /**@}*/
 
 #ifdef __cplusplus

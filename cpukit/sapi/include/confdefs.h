@@ -3199,6 +3199,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     CONFIGURE_HEAP_HANDLER_OVERHEAD \
   )
 
+#ifndef CONFIGURE_MAXIMUM_THREAD_NAME_SIZE
+  #define CONFIGURE_MAXIMUM_THREAD_NAME_SIZE 16
+#endif
+
 #ifdef CONFIGURE_INIT
   typedef union {
     Scheduler_Node Base;
@@ -3232,6 +3236,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     const size_t _Scheduler_Node_size = sizeof( Configuration_Scheduler_node );
   #endif
 
+  const size_t _Thread_Maximum_name_size = CONFIGURE_MAXIMUM_THREAD_NAME_SIZE;
+
   typedef struct {
     Thread_Control Control;
     #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
@@ -3241,6 +3247,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     RTEMS_API_Control API_RTEMS;
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;
+    #endif
+    #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
+      char name[ CONFIGURE_MAXIMUM_THREAD_NAME_SIZE ];
     #endif
     #if !defined(RTEMS_SCHEDSIM) \
       && defined(RTEMS_NEWLIB) \
@@ -3270,6 +3279,15 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       ),
       offsetof( Configuration_Thread_control, Newlib )
     }
+    #if CONFIGURE_MAXIMUM_THREAD_NAME_SIZE > 1
+      , {
+        offsetof(
+          Configuration_Thread_control,
+          Control.Join_queue.Queue.name
+        ),
+        offsetof( Configuration_Thread_control, name )
+      }
+    #endif
     #ifdef RTEMS_POSIX_API
       , {
         offsetof(

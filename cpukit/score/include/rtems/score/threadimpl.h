@@ -1951,6 +1951,11 @@ RTEMS_INLINE_ROUTINE void _Thread_Remove_timer_and_unblock(
 #endif
 }
 
+Status_Control _Thread_Set_name(
+  Thread_Control *the_thread,
+  const char     *name
+);
+
 size_t _Thread_Get_name(
   const Thread_Control *the_thread,
   char                 *buffer,
