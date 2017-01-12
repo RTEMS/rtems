@@ -168,8 +168,8 @@ typedef struct {
  * @param[in] fallback Fallback value in case no bits contained in the pairs
  *   are set in the value.
  *
- * @retval The length of the text representation.  May be greater than the
- * buffer size if truncation occurred.
+ * @retval The length of the text representation.  May be greater than or equal
+ * to the buffer size if truncation occurred.
  */
 size_t rtems_assoc_32_to_string(
   uint32_t                   value,
@@ -188,8 +188,8 @@ size_t rtems_assoc_32_to_string(
  * @param[in] buffer The buffer for the text representation.
  * @param[in] buffer_size The buffer size in characters.
  *
- * @retval The length of the text representation.  May be greater than the
- * buffer size if truncation occurred.
+ * @retval The length of the text representation.  May be greater than or equal
+ * to the buffer size if truncation occurred.
  */
 size_t rtems_assoc_thread_states_to_string(
   uint32_t  states,
