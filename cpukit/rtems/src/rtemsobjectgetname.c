@@ -18,17 +18,8 @@
 #include "config.h"
 #endif
 
+#include <rtems/rtems/object.h>
 #include <rtems/score/objectimpl.h>
-
-/*
- * This is implemented as a macro. This body is provided to support
- * bindings from non-C based languages.
- */
-char *rtems_object_get_name(
-  Objects_Id     id,
-  size_t         length,
-  char          *name
-);
 
 char *rtems_object_get_name(
   Objects_Id     id,
