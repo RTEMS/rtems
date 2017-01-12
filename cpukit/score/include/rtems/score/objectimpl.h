@@ -655,6 +655,27 @@ char *_Objects_Get_name_as_string(
 );
 
 /**
+ * @brief Converts the specified object name to a text representation.
+ *
+ * Non-printable characters according to isprint() are converted to '*'.
+ *
+ * @param[in] name The object name.
+ * @param[in] is_string Indicates if the object name is a string or a four
+ *   character array (32-bit unsigned integer).
+ * @param[in] buffer The string buffer for the text representation.
+ * @param[in] buffer_size The buffer size in characters.
+ *
+ * @retval The length of the text representation.  May be greater than or equal
+ * to the buffer size if truncation occurred.
+ */
+size_t _Objects_Name_to_string(
+  Objects_Name  name,
+  bool          is_string,
+  char         *buffer,
+  size_t        buffer_size
+);
+
+/**
  *  @brief Set objects name.
  *
  *  This method sets the object name to either a copy of a string
