@@ -116,12 +116,6 @@ RTEMS_CHECK_FUNC([pthread_getattr_np],[
   #define _GNU_SOURCE
   #include <pthread.h>])
 
-# This was added to newlib in August 2014 to improve conformance.
-# Disable use of internal definition if it is present.
-RTEMS_CHECK_FUNC([sigaltstack],[
-  #define _GNU_SOURCE
-  #include <signal.h>])
-
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 
@@ -239,10 +233,6 @@ RTEMS_CPUOPT([RTEMS_VERSION],
   [RTEMS version string])
 
 ## Header file differences that need to be known in .h after install
-RTEMS_CPUOPT([__RTEMS_HAVE_DECL_SIGALTSTACK__],
-  [test x"${ac_cv_have_decl_sigaltstack}" = x"yes"],
-  [1],
-  [indicate if <signal.h> in toolset has sigaltstack()])
 
 ## This improves both the size and coverage analysis.
 RTEMS_CPUOPT([__RTEMS_DO_NOT_INLINE_THREAD_ENABLE_DISPATCH__],
