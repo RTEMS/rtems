@@ -14,10 +14,10 @@ directives:
 
   - rtems_rate_monotonic_report_statistics()
   - rtems_rate_monotonic_period()
-  - rtems_rate_monotonic_Postponed_num()
+  - rtems_rate_monotonic_postponed_job_count()
   - _Rate_monotonic_Timeout()
   - _Rate_monotonic_Renew_deadline()
-  - _Rate_monotonic_Release_postponedjob()
+  - _Rate_monotonic_Release_postponed_job()
   - _Rate_monotonic_Block_while_expired()
 
 
@@ -26,7 +26,7 @@ concepts:
   - Verify that watchdog deadline is renewed on time without shift via
     _Rate_monotonic_Renew_deadline().
   - Verify that postponed jobs are released with a correct number via
-    _Rate_monotonic_Release_postponedjob().
+    _Rate_monotonic_Release_postponed_job().
   - Verify that rtems_rate_monotonic_report_statistics() reports correct number
     of deadline misses.
   - Verify that rtems_rate_monotonic_period() and

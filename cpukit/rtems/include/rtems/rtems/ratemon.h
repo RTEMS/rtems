@@ -418,7 +418,7 @@ rtems_status_code rtems_rate_monotonic_period(
 );
 
 /**
- * @brief RTEMS Return the number of postponed jobs
+ * @brief Return the number of postponed jobs
  *
  * This is a helper function for runtime monitoring to return
  * the number of postponed jobs in this given period. This number
@@ -431,7 +431,7 @@ rtems_status_code rtems_rate_monotonic_period(
  * jobs with a given period_id.
  *
  */
-uint32_t rtems_rate_monotonic_postponed_num(
+uint32_t rtems_rate_monotonic_postponed_job_count(
   rtems_id        period_id
 );
 

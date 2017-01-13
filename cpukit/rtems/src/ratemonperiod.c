@@ -64,7 +64,7 @@ bool _Rate_monotonic_Get_status(
   return true;
 }
 
-static void _Rate_monotonic_Release_postponedjob(
+static void _Rate_monotonic_Release_postponed_job(
   Rate_monotonic_Control *the_period,
   Thread_Control         *owner,
   rtems_interval          next_length,
@@ -319,14 +319,19 @@ static rtems_status_code _Rate_monotonic_Block_while_expired(
   the_period->state = RATE_MONOTONIC_ACTIVE;
   the_period->next_length = length;
 
-  _Rate_monotonic_Release_postponedjob( the_period, executing, length, lock_context );
+  _Rate_monotonic_Release_postponed_job(
+      the_period,
+      executing,
+      length,
+      lock_context
+  );
   return RTEMS_TIMEOUT;
 }
 
 /*
  * This helper function is prepared for run-time monitoring.
  */
-uint32_t rtems_rate_monotonic_postponed_num(
+uint32_t rtems_rate_monotonic_postponed_job_count(
     rtems_id   period_id
 )
 {
@@ -381,8 +386,8 @@ rtems_status_code rtems_rate_monotonic_period(
            * previous postponed instance is finished without exceeding
            * the current period deadline.
            *
-           * Do nothing on the watchdog deadline assignment but release the next
-           * remaining postponed job.
+           * Do nothing on the watchdog deadline assignment but release the
+           * next remaining postponed job.
            */
           status = _Rate_monotonic_Block_while_expired(
             the_period,
@@ -392,8 +397,8 @@ rtems_status_code rtems_rate_monotonic_period(
           );
         }else{
           /*
-           * Normal case that no postponed jobs and no expiration, so wait for the period
-           * and update the deadline of watchdog accordingly.
+           * Normal case that no postponed jobs and no expiration, so wait for
+           * the period and update the deadline of watchdog accordingly.
            */
           status = _Rate_monotonic_Block_while_active(
             the_period,
