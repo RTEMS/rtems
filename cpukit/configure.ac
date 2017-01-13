@@ -70,9 +70,6 @@ AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h
 AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
 
 # Newlib proprietary
-AC_CHECK_HEADERS([envlock.h])
-AC_CHECK_DECLS([__env_lock],,,[#include <envlock.h>])
-AC_CHECK_DECLS([__env_unlock],,,[#include <envlock.h>])
 AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
 AC_CHECK_MEMBER([struct _Thread_queue_Queue._name],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/lock.h>])
 
