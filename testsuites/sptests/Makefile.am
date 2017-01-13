@@ -44,9 +44,7 @@ endif
 if HAS__THREAD_QUEUE_QUEUE
 _SUBDIRS += spsyslock01
 endif
-if HAS_THREADS_H
 _SUBDIRS += spstdthreads01
-endif
 _SUBDIRS += splinkersets01
 _SUBDIRS += sptasknopreempt01
 _SUBDIRS += spintrcritical23

@@ -33,9 +33,6 @@ AC_CHECK_SIZEOF([time_t])
 AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
 AM_CONDITIONAL(HAS__THREAD_QUEUE_QUEUE,test x"${ac_cv_type_struct__Thread_queue_Queue}" = x"yes")
 
-AC_CHECK_HEADERS([threads.h])
-AM_CONDITIONAL([HAS_THREADS_H],[test x"$ac_cv_header_threads_h" = x"yes"])
-
 # Some tests should not be built/run in SMP configurations
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
