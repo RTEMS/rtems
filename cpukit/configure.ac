@@ -74,7 +74,6 @@ AC_CHECK_HEADERS([envlock.h])
 AC_CHECK_DECLS([__env_lock],,,[#include <envlock.h>])
 AC_CHECK_DECLS([__env_unlock],,,[#include <envlock.h>])
 AC_CHECK_TYPES([struct _Thread_queue_Queue],[],[],[#include <sys/lock.h>])
-AC_CHECK_SIZEOF([pthread_spinlock_t],[],[],[#include <pthread.h>])
 AC_CHECK_MEMBER([struct _Thread_queue_Queue._name],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/lock.h>])
 
 # Mandated by POSIX, older newlibs bogusly provided CLOCK_PROCESS_CPUTIME+CLOCK_THREAD_CPUTIME

@@ -31,7 +31,6 @@ int pthread_spin_unlock( pthread_spinlock_t *lock )
 
   the_spinlock = _POSIX_Spinlock_Get( lock );
   level = the_spinlock->interrupt_state;
-#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
 #if defined(RTEMS_SMP)
   _SMP_ticket_lock_Release(
     &the_spinlock->Lock,
@@ -39,17 +38,5 @@ int pthread_spin_unlock( pthread_spinlock_t *lock )
   );
 #endif
   _ISR_Local_enable( level );
-#else
-  if ( --_POSIX_Spinlock_Nest_level == 0 ) {
-#if defined(RTEMS_SMP)
-    _POSIX_Spinlock_Owner = 0xffffffff;
-    _SMP_ticket_lock_Release(
-      &the_spinlock->Lock,
-      &_Per_CPU_Get()->Lock_stats_context
-    );
-#endif
-    _ISR_Local_enable( level );
-  }
-#endif
   return 0;
 }

@@ -24,7 +24,7 @@
 
 int pthread_spin_destroy( pthread_spinlock_t *spinlock )
 {
-#if defined(RTEMS_SMP) && defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
+#if defined(RTEMS_SMP)
   POSIX_Spinlock_Control *the_spinlock;
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );

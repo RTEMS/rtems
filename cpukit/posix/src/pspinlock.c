@@ -22,7 +22,6 @@
 
 #include <rtems/posix/spinlockimpl.h>
 
-#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
 RTEMS_STATIC_ASSERT(
 #if defined(RTEMS_SMP)
   offsetof( POSIX_Spinlock_Control, Lock.next_ticket )
@@ -53,15 +52,6 @@ RTEMS_STATIC_ASSERT(
   sizeof( POSIX_Spinlock_Control ) == sizeof( pthread_spinlock_t ),
   POSIX_SPINLOCK_T_SIZE
 );
-#else
-POSIX_Spinlock_Control _POSIX_Spinlock_Global;
-
-int _POSIX_Spinlock_Nest_level;
-
-#if defined(RTEMS_SMP)
-uint32_t _POSIX_Spinlock_Owner = 0xffffffff;
-#endif
-#endif
 
 int pthread_spin_lock( pthread_spinlock_t *spinlock )
 {
@@ -73,7 +63,6 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
 
   the_spinlock = _POSIX_Spinlock_Get( spinlock );
   _ISR_Local_disable( level );
-#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
 #if defined(RTEMS_SMP)
 #if defined(RTEMS_PROFILING)
   /* The lock statistics are incorrect in case of nested pthread spinlocks */
@@ -86,25 +75,6 @@ int pthread_spin_lock( pthread_spinlock_t *spinlock )
   );
 #endif
   the_spinlock->interrupt_state = level;
-#else
-#if defined(RTEMS_SMP)
-  if ( _POSIX_Spinlock_Owner != _SMP_Get_current_processor() ) {
-#if defined(RTEMS_PROFILING)
-    cpu_self = _Per_CPU_Get();
-#endif
-    _SMP_ticket_lock_Acquire(
-      &the_spinlock->Lock,
-      &cpu_self->Lock_stats,
-      &cpu_self->Lock_stats_context
-    );
-    _POSIX_Spinlock_Owner = _SMP_Get_current_processor();
-  }
-#endif
-
-  if ( ++_POSIX_Spinlock_Nest_level == 1) {
-    the_spinlock->interrupt_state = level;
-  }
-#endif
   return 0;
 }
 

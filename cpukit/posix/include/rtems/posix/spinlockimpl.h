@@ -34,10 +34,6 @@
 extern "C" {
 #endif
 
-#if SIZEOF_PTHREAD_SPINLOCK_T > 4
-#define POSIX_SPINLOCKS_ARE_SELF_CONTAINED
-#endif
-
 typedef struct {
 #if defined(RTEMS_SMP)
   SMP_ticket_lock_Control Lock;
@@ -47,26 +43,11 @@ typedef struct {
   ISR_Level interrupt_state;
 } POSIX_Spinlock_Control;
 
-#if !defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
-extern POSIX_Spinlock_Control _POSIX_Spinlock_Global;
-
-extern int _POSIX_Spinlock_Nest_level;
-
-#if defined(RTEMS_SMP)
-extern uint32_t _POSIX_Spinlock_Owner;
-#endif
-#endif
-
 RTEMS_INLINE_ROUTINE POSIX_Spinlock_Control *_POSIX_Spinlock_Get(
   pthread_spinlock_t *lock
 )
 {
-#if defined(POSIX_SPINLOCKS_ARE_SELF_CONTAINED)
   return (POSIX_Spinlock_Control *) lock;
-#else
-  (void) lock;
-  return &_POSIX_Spinlock_Global;
-#endif
 }
 
 #ifdef __cplusplus
