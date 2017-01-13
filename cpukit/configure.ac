@@ -136,11 +136,8 @@ AC_CHECK_FUNCS([ttyname getcwd])
 
 # Check if the installed toolchain provides these headers
 # and error out if not.
-AC_CHECK_HEADERS([tar.h errno.h sched.h sys/cdefs.h sys/queue.h],,
+AC_CHECK_HEADERS([tar.h errno.h sched.h semaphore.h sys/cdefs.h sys/queue.h],,
   [RTEMS_TOOL_CHAIN_ERROR])
-
-AC_CHECK_HEADERS([semaphore.h])
-AM_CONDITIONAL([HAVE_SEMAPHORE_H],[test x"$ac_cv_header_semaphore_h" = x"yes"])
 
 AC_CHECK_HEADERS([threads.h])
 AM_CONDITIONAL([HAVE_THREADS_H],[test x"$ac_cv_header_threads_h" = x"yes"])

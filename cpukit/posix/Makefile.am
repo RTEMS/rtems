@@ -27,9 +27,6 @@ if HAS_PTHREADS
 # include
 include_HEADERS = include/aio.h
 include_HEADERS += include/mqueue.h
-if !HAVE_SEMAPHORE_H
-include_HEADERS += include/semaphore.h
-endif
 
 # include/rtems/posix
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
