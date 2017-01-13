@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 #include <sys/lock.h>
 #include <errno.h>
 
@@ -301,5 +299,3 @@ void _Condition_Broadcast( struct _Condition_Control *_condition )
 {
   _Condition_Wake( _condition, INT_MAX );
 }
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */

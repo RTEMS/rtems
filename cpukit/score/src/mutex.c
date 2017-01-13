@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 #include <sys/lock.h>
 #include <errno.h>
 
@@ -414,5 +412,3 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
     _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
   }
 }
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */

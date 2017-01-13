@@ -41,9 +41,7 @@ if HAS_SMP
 else
 _SUBDIRS += sp29
 endif
-if HAS__THREAD_QUEUE_QUEUE
 _SUBDIRS += spsyslock01
-endif
 _SUBDIRS += spstdthreads01
 _SUBDIRS += splinkersets01
 _SUBDIRS += sptasknopreempt01

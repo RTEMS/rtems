@@ -22,8 +22,6 @@
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 RTEMS_STATIC_ASSERT(
 #if defined(RTEMS_SMP)
   offsetof( Thread_queue_Syslock_queue, Queue.Lock.next_ticket )
@@ -67,8 +65,6 @@ RTEMS_STATIC_ASSERT(
     == sizeof( struct _Thread_queue_Queue ),
   THREAD_QUEUE_SYSLOCK_QUEUE_SIZE
 );
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */
 
 #if defined(RTEMS_SMP)
 void _Thread_queue_Do_acquire_critical(

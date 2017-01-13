@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 #include <sys/lock.h>
 #include <errno.h>
 
@@ -168,5 +166,3 @@ int _Futex_Wake( struct _Futex_Control *_futex, int count )
     &context.Base
   );
 }
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */

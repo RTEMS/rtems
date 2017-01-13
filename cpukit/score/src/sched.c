@@ -20,8 +20,6 @@
 
 #include <rtems/score/schedulerimpl.h>
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 int _Sched_Count( void )
 {
   return (int) _Scheduler_Count;
@@ -66,5 +64,3 @@ int _Sched_Processor_count( int index )
     return 0;
   }
 }
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */

@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#if HAVE_STRUCT__THREAD_QUEUE_QUEUE
-
 #include <sys/lock.h>
 
 #include <rtems/score/assert.h>
@@ -152,5 +150,3 @@ void _Semaphore_Post( struct _Semaphore_Control *_sem )
     );
   }
 }
-
-#endif /* HAVE_STRUCT__THREAD_QUEUE_QUEUE */
