@@ -32,7 +32,11 @@ done
 
 case ${mode} in
  exclude)
-   output=${tests}
+   if test -f $testdata; then
+     output=""
+   else
+     output="${tests}"
+   fi
    ;;
  flags)
    if [ $test_count != 1 ]; then
