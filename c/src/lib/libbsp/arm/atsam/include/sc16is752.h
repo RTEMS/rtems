@@ -42,7 +42,8 @@ typedef struct {
  * @param[in] input_frequency The input frequency in Hertz of the SC16IS752
  *   chip.  See XTAL1 and XTAL2 pins.
  * @param[in] spi_path The SPI bus device path.
- * @param[in] spi_chip_select The SPI chip select (starts with 1, not 0).
+ * @param[in] spi_chip_select The SPI chip select (starts with 0, the SPI
+ *   driver uses SPI_ChipSelect(1 << spi_chip_select)).
  * @param[in] spi_speed_hz The SPI bus speed in Hertz.
  * @param[in] irq_pin The interrupt pin, e.g. { PIO_PD28, PIOD, ID_PIOD,
  *   PIO_INPUT, PIO_IT_LOW_LEVEL }.
