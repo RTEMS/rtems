@@ -17,6 +17,7 @@ exclude: flashdisk01
 exclude: fsdosfsformat01
 exclude: fsdosfsname01
 exclude: fsdosfswrite01
+exclude: fsjffs2gc01
 exclude: fsrfsbitmap01
 exclude: ftp01
 exclude: iostream
