@@ -7,6 +7,7 @@
 exclude: fileio
 exclude: ftp01
 exclude: fsdosfsname01
+exclude: fsjffs2gc01
 exclude: iostream
 exclude: jffs2_fserror
 exclude: jffs2_fslink
