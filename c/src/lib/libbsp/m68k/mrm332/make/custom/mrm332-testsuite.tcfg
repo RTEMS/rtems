@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+exclude: cdtest
 exclude: dl05
 exclude: fileio
 exclude: fsdosfsname01
