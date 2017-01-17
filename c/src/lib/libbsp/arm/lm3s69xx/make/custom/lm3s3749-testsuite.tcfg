@@ -16,6 +16,7 @@ exclude: fileio
 exclude: flashdisk01
 exclude: fsdosfsname01
 exclude: fsdosfsformat01
+exclude: fsjffs2gc01
 exclude: fsrfsbitmap01
 exclude: jffs2_fserror
 exclude: jffs2_fslink
