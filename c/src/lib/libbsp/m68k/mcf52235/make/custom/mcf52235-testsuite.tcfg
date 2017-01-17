@@ -5,6 +5,7 @@
 #
 
 exclude: capture
+exclude: cdtest
 exclude: dl05
 exclude: fileio
 exclude: flashdisk01
