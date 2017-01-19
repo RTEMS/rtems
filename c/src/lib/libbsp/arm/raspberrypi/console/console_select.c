@@ -95,7 +95,7 @@ void bsp_console_select( void )
   opt = rpi_cmdline_get_arg( "--console=" );
 
   if ( opt ) {
-    if ( strncmp( opt, "fbcons", sizeof( "fbcons" - 1 ) ) == 0 ) {
+    if ( strncmp( opt, "fbcons", sizeof( "fbcons" ) - 1 ) == 0 ) {
       if ( rpi_video_is_initialized() > 0 ) {
         Console_Port_Minor = BSP_CONSOLE_FB;
         BSPPrintkPort = BSP_CONSOLE_FB;
