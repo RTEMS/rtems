@@ -239,7 +239,7 @@ static void i2c_handler(void *arg)
 static int rpi_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 {
   rpi_i2c_bus *bus = (rpi_i2c_bus *) base;
-  uint32_t rv = 0;
+  int rv = 0;
   uint32_t i;
 
   /* Perform an initial parse through the messages for the I2C_M_RECV_LEN flag,
