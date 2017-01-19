@@ -491,7 +491,7 @@ typedef struct {
   uint32_t flash_size;
 
   /**
-   * @brief Count of flash blocks (eraseable units).
+   * @brief Count of flash blocks (erasable units).
    */
   uint32_t flash_blocks;
 
