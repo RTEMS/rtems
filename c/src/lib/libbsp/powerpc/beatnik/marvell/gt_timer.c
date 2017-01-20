@@ -90,7 +90,7 @@ static inline uint32_t gt_timer_bitmod(uint32_t off, uint32_t clr, uint32_t set)
 }
 
 #define GT_TIMER_MAX      3
-#define TIMER_ARGCHECK(t)  do { if ((t)<0 || (t)>GT_TIMER_MAX) return -1; } while (0)
+#define TIMER_ARGCHECK(t)  do { if ((t)>GT_TIMER_MAX) return -1; } while (0)
 
 static struct {
   void (*isr)(void *);
