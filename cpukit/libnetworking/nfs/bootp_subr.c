@@ -284,7 +284,9 @@ int
 bootpc_call(
      struct bootp_packet *call,
      struct bootp_packet *reply,	/* output */
-     struct proc *procp)
+     struct proc *procp,
+     const void *exp_vend,
+     size_t exp_vend_len)
 {
 	struct socket *so;
 	struct sockaddr_in *sin;
@@ -448,6 +450,9 @@ bootpc_call(
 			  continue;
 
 			if (bcmp(reply->chaddr,call->chaddr,call->hlen))
+			  continue;
+
+			if (exp_vend_len > 0 && bcmp(exp_vend, reply->vend, exp_vend_len))
 			  continue;
 
 			goto gotreply;	/* break two levels */
@@ -1051,7 +1056,7 @@ bootpc_init(bool update_files, bool forever)
     call.secs = 0;
     call.flags = htons(0x8000); /* We need an broadcast answer */
   
-    error = bootpc_call(&call,&reply,procp);
+    error = bootpc_call(&call,&reply,procp, NULL, 0);
   
     if (!error)
       break;
