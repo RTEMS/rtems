@@ -730,6 +730,14 @@ void grspw_addr_ctrl(void *d, struct grspw_addr_config *cfg)
 	}
 }
 
+/* Return Current DMA CTRL/Status Register */
+unsigned int grspw_dma_ctrlsts(void *c)
+{
+	struct grspw_dma_priv *dma = c;
+
+	return REG_READ(&dma->regs->ctrl);
+}
+
 /* Return Current Status Register */
 unsigned int grspw_link_status(void *d)
 {
@@ -1822,6 +1830,52 @@ int grspw_dma_close(void *c)
 	return 0;
 }
 
+unsigned int grspw_dma_enable_int(void *c, int rxtx, int force)
+{
+	struct grspw_dma_priv *dma = c;
+	int rc = 0;
+	unsigned int ctrl, ctrl_old;
+	IRQFLAGS_TYPE irqflags;
+
+	SPIN_LOCK_IRQ(&dma->core->devlock, irqflags);
+	if (dma->started == 0) {
+		rc = 1; /* DMA stopped */
+		goto out;
+	}
+	ctrl = REG_READ(&dma->regs->ctrl);
+	ctrl_old = ctrl;
+
+	/* Read/Write DMA error ? */
+	if (ctrl & GRSPW_DMA_STATUS_ERROR) {
+		rc = 2; /* DMA error */
+		goto out;
+	}
+
+	/* DMA has finished a TX/RX packet and user wants work-task to
+	 * take care of DMA table processing.
+	 */
+	ctrl &= ~GRSPW_DMACTRL_AT;
+
+	if ((rxtx & 1) == 0)
+		ctrl &= ~GRSPW_DMACTRL_PR;
+	else if (force || ((dma->cfg.rx_irq_en_cnt != 0) ||
+		 (dma->cfg.flags & DMAFLAG2_RXIE)))
+		ctrl |= GRSPW_DMACTRL_RI;
+
+	if ((rxtx & 2) == 0)
+		ctrl &= ~GRSPW_DMACTRL_PS;
+	else if (force || ((dma->cfg.tx_irq_en_cnt != 0) ||
+		 (dma->cfg.flags & DMAFLAG2_TXIE)))
+		ctrl |= GRSPW_DMACTRL_TI;
+
+	REG_WRITE(&dma->regs->ctrl, ctrl);
+	/* Re-enabled interrupts previously enabled */
+	rc = ctrl_old & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS);
+out:
+	SPIN_UNLOCK_IRQ(&dma->core->devlock, irqflags);
+	return rc;
+}
+
 /* Schedule List of packets for transmission at some point in
  * future.
  *
@@ -2542,99 +2596,82 @@ static void grspw_work_shutdown_func(struct grspw_priv *priv)
 /* Do DMA work on one channel, invoked indirectly from ISR */
 static void grspw_work_dma_func(struct grspw_dma_priv *dma, unsigned int msg)
 {
-	int tx_cond_true, rx_cond_true;
-	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	int tx_cond_true, rx_cond_true, rxtx;
 
 	/* If DMA channel is closed we should not access the semaphore */
 	if (dma->open == 0)
 		return;
 
-	rx_cond_true = 0;
-	tx_cond_true = 0;
 	dma->stats.irq_cnt++;
 
 	/* Look at cause we were woken up and clear source */
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
-	if (dma->started == 0) {
-		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	rxtx = 0;
+	if (msg & WORK_DMA_RX_MASK)
+		rxtx |= 1;
+	if (msg & WORK_DMA_TX_MASK)
+		rxtx |= 2;
+	switch (grspw_dma_enable_int(dma, rxtx, 0)) {
+	case 1:
+		/* DMA stopped */
 		return;
-	}
-	ctrl = REG_READ(&dma->regs->ctrl);
-
-	/* Read/Write DMA error ? */
-	if (ctrl & GRSPW_DMA_STATUS_ERROR) {
+	case 2:
 		/* DMA error -> Stop DMA channel (both RX and TX) */
-		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 		if (msg & WORK_DMA_ER_MASK) {
 			/* DMA error and user wants work-task to handle error */
 			grspw_dma_stop(dma);
 			grspw_work_event(WORKTASK_EV_DMA_STOP, msg);
 		}
-	} else if (((msg & WORK_DMA_RX_MASK) && (ctrl & GRSPW_DMACTRL_PR)) ||
-		   ((msg & WORK_DMA_TX_MASK) && (ctrl & GRSPW_DMACTRL_PS))) {
-		/* DMA has finished a TX/RX packet and user wants work-task to
-		 * take care of DMA table processing.
-		 */
-		ctrl &= ~GRSPW_DMACTRL_AT;
+		return;
+	default:
+		break;
+	}
 
-		if ((msg & WORK_DMA_RX_MASK) == 0)
-			ctrl &= ~GRSPW_DMACTRL_PR;
-		else if (dma->cfg.rx_irq_en_cnt != 0 ||
-			 (dma->cfg.flags & DMAFLAG2_RXIE))
-			ctrl |= GRSPW_DMACTRL_RI;
-		if ((msg & WORK_DMA_TX_MASK) == 0)
-			ctrl &= ~GRSPW_DMACTRL_PS;
-		else if ((dma->cfg.tx_irq_en_cnt != 0 ||
-			 (dma->cfg.flags & DMAFLAG2_TXIE)))
-			ctrl |= GRSPW_DMACTRL_TI;
+	rx_cond_true = 0;
+	tx_cond_true = 0;
 
-		REG_WRITE(&dma->regs->ctrl, ctrl);
-		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-		if ((msg & WORK_DMA_RX_MASK) && (ctrl & GRSPW_DMACTRL_PR)) {
-			/* Do RX Work */
+	if (msg & WORK_DMA_RX_MASK) {
+		/* Do RX Work */
 
-			/* Take DMA channel RX lock */
-			if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
-			    != RTEMS_SUCCESSFUL)
-				return;
+		/* Take DMA channel RX lock */
+		if (rtems_semaphore_obtain(dma->sem_rxdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+		    != RTEMS_SUCCESSFUL)
+			return;
 
-			dma->stats.rx_work_cnt++;
-			grspw_rx_process_scheduled(dma);
-			if (dma->started) {
-				dma->stats.rx_work_enabled +=
-					grspw_rx_schedule_ready(dma);
-				/* Check to see if condition for waking blocked
-			 	 * USER task is fullfilled.
-				 */
-				if (dma->rx_wait.waiting)
-					rx_cond_true = grspw_rx_wait_eval(dma);
-			}
-			rtems_semaphore_release(dma->sem_rxdma);
+		dma->stats.rx_work_cnt++;
+		grspw_rx_process_scheduled(dma);
+		if (dma->started) {
+			dma->stats.rx_work_enabled +=
+				grspw_rx_schedule_ready(dma);
+			/* Check to see if condition for waking blocked
+		 	 * USER task is fullfilled.
+			 */
+			if (dma->rx_wait.waiting)
+				rx_cond_true = grspw_rx_wait_eval(dma);
 		}
-		if ((msg & WORK_DMA_TX_MASK) && (ctrl & GRSPW_DMACTRL_PS)) {
-			/* Do TX Work */
+		rtems_semaphore_release(dma->sem_rxdma);
+	}
 
-			/* Take DMA channel TX lock */
-			if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
-			    != RTEMS_SUCCESSFUL)
-				return;
+	if (msg & WORK_DMA_TX_MASK) {
+		/* Do TX Work */
 
-			dma->stats.tx_work_cnt++;
-			grspw_tx_process_scheduled(dma);
-			if (dma->started) {
-				dma->stats.tx_work_enabled +=
-					grspw_tx_schedule_send(dma);
-				/* Check to see if condition for waking blocked
-			 	 * USER task is fullfilled.
-				 */
-				if (dma->tx_wait.waiting)
-					tx_cond_true = grspw_tx_wait_eval(dma);
-			}
-			rtems_semaphore_release(dma->sem_txdma);
+		/* Take DMA channel TX lock */
+		if (rtems_semaphore_obtain(dma->sem_txdma, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+		    != RTEMS_SUCCESSFUL)
+			return;
+
+		dma->stats.tx_work_cnt++;
+		grspw_tx_process_scheduled(dma);
+		if (dma->started) {
+			dma->stats.tx_work_enabled += 
+				grspw_tx_schedule_send(dma);
+			/* Check to see if condition for waking blocked
+		 	 * USER task is fullfilled.
+			 */
+			if (dma->tx_wait.waiting)
+				tx_cond_true = grspw_tx_wait_eval(dma);
 		}
-	} else
-		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+		rtems_semaphore_release(dma->sem_txdma);
+	}
 
 	if (rx_cond_true)
 		rtems_semaphore_release(dma->rx_wait.sem_wait);

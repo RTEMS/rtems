@@ -535,6 +535,12 @@ extern int grspw_dma_close(void *c);
 extern int grspw_dma_start(void *c);
 extern void grspw_dma_stop(void *c);
 
+/* Enable interrupt manually */
+extern unsigned int grspw_dma_enable_int(void *c, int rxtx, int force);
+
+/* Return Current DMA Control & Status Register */
+extern unsigned int grspw_dma_ctrlsts(void *c);
+
 /* Schedule List of packets for transmission at some point in
  * future.
  *
