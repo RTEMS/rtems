@@ -3160,6 +3160,7 @@ rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax)
 {
 	rtems_id tid;
 	int created_msgq = 0;
+	static char work_name = 'A';
 
 	if (pMsgQ == NULL)
 		return OBJECTS_ID_NONE;
@@ -3169,7 +3170,7 @@ rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax)
 			msgMax = 32;
 
 		if (rtems_message_queue_create(
-			rtems_build_name('S', 'G', 'L', 'Q'),
+			rtems_build_name('S', 'G', 'Q', work_name),
 			msgMax, 4, RTEMS_FIFO, pMsgQ) !=
 			RTEMS_SUCCESSFUL)
 			return OBJECTS_ID_NONE;
@@ -3181,7 +3182,7 @@ rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax)
 	if (stack < 0x800)
 		stack = RTEMS_MINIMUM_STACK_SIZE; /* default stack size */
 
-	if (rtems_task_create(rtems_build_name('S', 'G', 'L', 'T'),
+	if (rtems_task_create(rtems_build_name('S', 'G', 'T', work_name),
 		prio, stack, RTEMS_PREEMPT | RTEMS_NO_ASR,
 		RTEMS_NO_FLOATING_POINT, &tid) != RTEMS_SUCCESSFUL)
 		tid = OBJECTS_ID_NONE;
@@ -3194,6 +3195,9 @@ rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax)
 	if (tid == OBJECTS_ID_NONE && created_msgq) {
 		rtems_message_queue_delete(*pMsgQ);
 		*pMsgQ = OBJECTS_ID_NONE;
+	} else {
+		if (++work_name > 'Z')
+			work_name = 'A';
 	}
 	return tid;
 }
