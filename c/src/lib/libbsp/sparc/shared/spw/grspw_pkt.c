@@ -2819,7 +2819,8 @@ STATIC void grspw_isr(void *data)
 		if (stat & GRSPW_STS_WE)
 			priv->stats.err_wsync++;
 
-		if ((priv->dis_link_on_err >> 16) & stat) {
+		if (((priv->dis_link_on_err >> 16) & stat) &&
+		    (REG_READ(&priv->regs->ctrl) & GRSPW_CTRL_IE)) {
 			/* Disable the link, no more transfers are expected
 			 * on any DMA channel.
 			 */
