@@ -2625,9 +2625,20 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma, unsigned int msg)
 	default:
 		break;
 	}
+	if (msg == 0)
+		return;
 
 	rx_cond_true = 0;
 	tx_cond_true = 0;
+
+	if ((dma->cfg.flags & DMAFLAG2_IRQD_MASK) == DMAFLAG2_IRQD_BOTH) {
+		/* In case both interrupt sources are disabled simultaneously
+		 * by the ISR the re-enabling of the interrupt source must also
+		 * do so to avoid missing interrupts. Both RX and TX process
+		 * will be forced.
+		 */
+		msg |= WORK_DMA_RX_MASK | WORK_DMA_TX_MASK;
+	}
 
 	if (msg & WORK_DMA_RX_MASK) {
 		/* Do RX Work */
@@ -2726,7 +2737,7 @@ STATIC void grspw_isr(void *data)
 	unsigned int dma_stat, stat, stat_clrmsk, ctrl, icctrl, timecode, irqs;
 	unsigned int rxirq, rxack, intto;
 	int i, handled = 0, call_user_int_isr;
-	unsigned int message = WORK_NONE;
+	unsigned int message = WORK_NONE, dma_en;
 #ifdef RTEMS_HAS_SMP
 	IRQFLAGS_TYPE irqflags;
 #endif
@@ -2839,26 +2850,41 @@ STATIC void grspw_isr(void *data)
 		if (!irqs)
 			continue;
 
-		/* Disable Further IRQs (until enabled again)
-		 * from this DMA channel. Let the status
-		 * bit remain so that they can be handled by
-		 * work function.
-		 */
-		REG_WRITE(&priv->regs->dma[i].ctrl, dma_stat & 
-			~(GRSPW_DMACTRL_RI|GRSPW_DMACTRL_TI|
-			GRSPW_DMACTRL_PR|GRSPW_DMACTRL_PS|
-			GRSPW_DMACTRL_RA|GRSPW_DMACTRL_TA|
-			GRSPW_DMACTRL_AT));
 		handled = 1;
 
 		/* DMA error has priority, if error happens it is assumed that
 		 * the common work-queue stops the DMA operation for that
 		 * channel and makes the DMA tasks exit from their waiting
 		 * functions (both RX and TX tasks).
+		 * 
+		 * Disable Further IRQs (until enabled again)
+		 * from this DMA channel. Let the status
+		 * bit remain so that they can be handled by
+		 * work function.
 		 */
 		if (irqs & GRSPW_DMA_STATUS_ERROR) {
+			REG_WRITE(&priv->regs->dma[i].ctrl, dma_stat & 
+				~(GRSPW_DMACTRL_RI | GRSPW_DMACTRL_TI |
+				  GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS |
+				  GRSPW_DMACTRL_RA | GRSPW_DMACTRL_TA |
+				  GRSPW_DMACTRL_AT));
 			message |= WORK_DMA_ER(i);
 		} else {
+			/* determine if RX/TX interrupt source(s) shall remain
+			 * enabled.
+			 */
+			if (priv->dma[i].cfg.flags & DMAFLAG2_IRQD_SRC) {
+				dma_en = ~irqs >> 3;
+			} else {
+				dma_en = priv->dma[i].cfg.flags >>
+				 (DMAFLAG2_IRQD_BIT - GRSPW_DMACTRL_TI_BIT);
+			}
+			dma_en &= (GRSPW_DMACTRL_RI | GRSPW_DMACTRL_TI);
+			REG_WRITE(&priv->regs->dma[i].ctrl, dma_stat &
+				(~(GRSPW_DMACTRL_RI | GRSPW_DMACTRL_TI |
+				   GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS |
+				   GRSPW_DMACTRL_RA | GRSPW_DMACTRL_TA |
+				   GRSPW_DMACTRL_AT) | dma_en));
 			message |= WORK_DMA(i, irqs >> GRSPW_DMACTRL_PS_BIT);
 		}
 	}

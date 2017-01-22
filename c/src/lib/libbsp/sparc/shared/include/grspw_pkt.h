@@ -270,7 +270,20 @@ struct grspw_core_stats {
 					 * Used to enable RX DMA interrupt
 					 * when rx_irq_en_cnt=0.
 					 */
-#define DMAFLAG2_MASK	(DMAFLAG2_TXIE | DMAFLAG2_RXIE)
+/* Defines how the ISR will disable RX/TX DMA interrupt source when a DMA RX/TX
+ * interrupt has happended. DMA Error Interrupt always disables both RX/TX DMA
+ * interrupt. By default both RX/TX IRQs are disabled when either a RX, TX or
+ * both RX/TX DMA interrupt has been requested. The work-task, custom
+ * application handler or custom ISR handler is responsible to re-enable
+ * DMA interrupts.
+ */
+#define DMAFLAG2_IRQD_SRC  0x01000000	/* Disable triggering RX/TX source */
+#define DMAFLAG2_IRQD_NONE 0x00c00000	/* Never disable RX/TX IRQ in ISR */
+#define DMAFLAG2_IRQD_BOTH 0x00000000	/* Always disable both RX/TX sources */
+#define DMAFLAG2_IRQD_MASK 0x01c00000	/* Mask of options */
+#define DMAFLAG2_IRQD_BIT  22
+
+#define DMAFLAG2_MASK	(DMAFLAG2_TXIE | DMAFLAG2_RXIE | DMAFLAG2_IRQD_MASK)
 
 struct grspw_dma_config {
 	int flags;		/* DMA config flags, see DMAFLAG1&2_* options */
