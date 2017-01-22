@@ -478,13 +478,15 @@ struct grspw_priv {
 	/* Bit mask for link status bits to clear by ISR */
 	unsigned int stscfg;
 
+	/*** Message Queue Handling ***/
+	struct grspw_work_config wc;
+
 	/* "Core Global" Statistics gathered, not dependent on DMA channel */
 	struct grspw_core_stats stats;
 };
 
 int grspw_initialized = 0;
 int grspw_count = 0;
-struct workqueue_struct *grspw_workq = NULL;
 rtems_id grspw_sem;
 static struct grspw_priv *priv_tab[GRSPW_MAX];
 
@@ -492,20 +494,22 @@ static struct grspw_priv *priv_tab[GRSPW_MAX];
 void *(*grspw_dev_add)(int) = NULL;
 void (*grspw_dev_del)(int,void*) = NULL;
 
+/* Defaults to do nothing - user can override this function.
+ * Called from work-task.
+ */
+void __attribute__((weak)) grspw_work_event(
+	enum grspw_worktask_ev ev,
+	unsigned int msg)
+{
+
+}
+
 /* USER OVERRIDABLE - The work task priority. Set to -1 to disable creating
  * the work-task and work-queue to save space.
  */
 int grspw_work_task_priority __attribute__((weak)) = 100;
-int grspw_task_stop = 0;
 rtems_id grspw_work_task;
-rtems_id grspw_work_queue = 0;
-#define WORK_NONE         0
-#define WORK_SHUTDOWN     0x100
-#define WORK_DMA(channel) (0x1 << (channel))
-#define WORK_DMA_MASK     0xf /* max 4 channels */
-#define WORK_CORE_BIT     16
-#define WORK_CORE_MASK    0xffff
-#define WORK_CORE(device) ((device) << WORK_CORE_BIT)
+static struct grspw_work_config grspw_wc_def;
 
 STATIC void grspw_hw_stop(struct grspw_priv *priv);
 STATIC void grspw_hw_dma_stop(struct grspw_dma_priv *dma);
@@ -545,6 +549,11 @@ void *grspw_open(int dev_no)
 	priv->icisr = NULL;
 	priv->icisr_arg = NULL;
 	priv->stscfg = LINKSTS_MASK;
+
+	/* Default to common work queue and message queue, if not created
+	 * during initialization then its disabled.
+	 */
+	grspw_work_cfg(priv, &grspw_wc_def);
 
 	grspw_stats_clr(priv);
 
@@ -2531,7 +2540,7 @@ static void grspw_work_shutdown_func(struct grspw_priv *priv)
 }
 
 /* Do DMA work on one channel, invoked indirectly from ISR */
-static void grspw_work_dma_func(struct grspw_dma_priv *dma)
+static void grspw_work_dma_func(struct grspw_dma_priv *dma, unsigned int msg)
 {
 	int tx_cond_true, rx_cond_true;
 	unsigned int ctrl;
@@ -2557,19 +2566,32 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 	if (ctrl & GRSPW_DMA_STATUS_ERROR) {
 		/* DMA error -> Stop DMA channel (both RX and TX) */
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-		grspw_dma_stop(dma);
-	} else if (ctrl & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS)) {
-		/* DMA has finished a TX/RX packet */
+		if (msg & WORK_DMA_ER_MASK) {
+			/* DMA error and user wants work-task to handle error */
+			grspw_dma_stop(dma);
+			grspw_work_event(WORKTASK_EV_DMA_STOP, msg);
+		}
+	} else if (((msg & WORK_DMA_RX_MASK) && (ctrl & GRSPW_DMACTRL_PR)) ||
+		   ((msg & WORK_DMA_TX_MASK) && (ctrl & GRSPW_DMACTRL_PS))) {
+		/* DMA has finished a TX/RX packet and user wants work-task to
+		 * take care of DMA table processing.
+		 */
 		ctrl &= ~GRSPW_DMACTRL_AT;
-		if (dma->cfg.rx_irq_en_cnt != 0 ||
-		    (dma->cfg.flags & DMAFLAG2_RXIE))
+
+		if ((msg & WORK_DMA_RX_MASK) == 0)
+			ctrl &= ~GRSPW_DMACTRL_PR;
+		else if (dma->cfg.rx_irq_en_cnt != 0 ||
+			 (dma->cfg.flags & DMAFLAG2_RXIE))
 			ctrl |= GRSPW_DMACTRL_RI;
-		if (dma->cfg.tx_irq_en_cnt != 0 ||
-		    (dma->cfg.flags & DMAFLAG2_TXIE))
+		if ((msg & WORK_DMA_TX_MASK) == 0)
+			ctrl &= ~GRSPW_DMACTRL_PS;
+		else if ((dma->cfg.tx_irq_en_cnt != 0 ||
+			 (dma->cfg.flags & DMAFLAG2_TXIE)))
 			ctrl |= GRSPW_DMACTRL_TI;
+
 		REG_WRITE(&dma->regs->ctrl, ctrl);
 		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
-		if (ctrl & GRSPW_DMACTRL_PR) {
+		if ((msg & WORK_DMA_RX_MASK) && (ctrl & GRSPW_DMACTRL_PR)) {
 			/* Do RX Work */
 
 			/* Take DMA channel RX lock */
@@ -2590,7 +2612,7 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 			}
 			rtems_semaphore_release(dma->sem_rxdma);
 		}
-		if (ctrl & GRSPW_DMACTRL_PS) {
+		if ((msg & WORK_DMA_TX_MASK) && (ctrl & GRSPW_DMACTRL_PS)) {
 			/* Do TX Work */
 
 			/* Take DMA channel TX lock */
@@ -2624,42 +2646,50 @@ static void grspw_work_dma_func(struct grspw_dma_priv *dma)
 /* Work task is receiving work for the work message queue posted from
  * the ISR.
  */
-static void grspw_work_func(rtems_task_argument unused)
+void grspw_work_func(rtems_id msgQ)
 {
-	rtems_status_code status;
-	unsigned int message;
+	unsigned int message = 0, msg;
 	size_t size;
 	struct grspw_priv *priv;
 	int i;
 
-	while (grspw_task_stop == 0) {
-		/* Wait for ISR to schedule work */
-		status = rtems_message_queue_receive(
-			grspw_work_queue, &message,
-			&size, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-		if (status != RTEMS_SUCCESSFUL)
+	/* Wait for ISR to schedule work */
+	while (rtems_message_queue_receive(msgQ, &message, &size,
+	       RTEMS_WAIT, RTEMS_NO_TIMEOUT) == RTEMS_SUCCESSFUL) {
+		if (message & WORK_QUIT_TASK)
 			break;
 
 		/* Handle work */
 		priv = priv_tab[message >> WORK_CORE_BIT];
-		if (message & WORK_SHUTDOWN)
+		if (message & WORK_SHUTDOWN) {
 			grspw_work_shutdown_func(priv);
-		else if (message & WORK_DMA_MASK) {
-			for (i = 0; i < 4; i++) {
-				if (message & WORK_DMA(i))
-					grspw_work_dma_func(&priv->dma[i]);
+				
+			grspw_work_event(WORKTASK_EV_SHUTDOWN, message);
+		} else if (message & WORK_DMA_MASK) {
+			for (i = 0; i < priv->hwsup.ndma_chans; i++) {
+				msg = message &
+				      (WORK_CORE_MASK | WORK_DMA_CHAN_MASK(i));
+				if (msg)
+					grspw_work_dma_func(&priv->dma[i], msg);
 			}
 		}
+		message = 0;
 	}
+
+	if (message & WORK_FREE_MSGQ)
+		rtems_message_queue_delete(msgQ);
+
+	grspw_work_event(WORKTASK_EV_QUIT, message);
 	rtems_task_delete(RTEMS_SELF);
 }
 
 STATIC void grspw_isr(void *data)
 {
 	struct grspw_priv *priv = data;
-	unsigned int dma_stat, stat, stat_clrmsk, ctrl, icctrl, timecode;
+	unsigned int dma_stat, stat, stat_clrmsk, ctrl, icctrl, timecode, irqs;
 	unsigned int rxirq, rxack, intto;
-	int i, handled = 0, message = WORK_NONE, call_user_int_isr;
+	int i, handled = 0, call_user_int_isr;
+	unsigned int message = WORK_NONE;
 #ifdef RTEMS_HAS_SMP
 	IRQFLAGS_TYPE irqflags;
 #endif
@@ -2767,24 +2797,32 @@ STATIC void grspw_isr(void *data)
 		/* Check for Errors and if Packets been sent or received if
 		 * respective IRQ are enabled
 		 */
-#ifdef HW_WITH_GI
-		if ( dma_stat & (GRSPW_DMA_STATUS_ERROR | GRSPW_DMACTRL_GI) ) {
-#else
-		if ( (((dma_stat << 3) & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS))
-		     | GRSPW_DMA_STATUS_ERROR) & dma_stat ) {
-#endif
-			/* Disable Further IRQs (until enabled again)
-			 * from this DMA channel. Let the status
-			 * bit remain so that they can be handled by
-			 * work function.
-			 */
-			REG_WRITE(&priv->regs->dma[i].ctrl, dma_stat & 
-				~(GRSPW_DMACTRL_RI|GRSPW_DMACTRL_TI|
-				GRSPW_DMACTRL_PR|GRSPW_DMACTRL_PS|
-				GRSPW_DMACTRL_RA|GRSPW_DMACTRL_TA|
-				GRSPW_DMACTRL_AT));
-			message |= WORK_DMA(i);
-			handled = 1;
+		irqs = (((dma_stat << 3) & (GRSPW_DMACTRL_PR | GRSPW_DMACTRL_PS))
+			| GRSPW_DMA_STATUS_ERROR) & dma_stat;
+		if (!irqs)
+			continue;
+
+		/* Disable Further IRQs (until enabled again)
+		 * from this DMA channel. Let the status
+		 * bit remain so that they can be handled by
+		 * work function.
+		 */
+		REG_WRITE(&priv->regs->dma[i].ctrl, dma_stat & 
+			~(GRSPW_DMACTRL_RI|GRSPW_DMACTRL_TI|
+			GRSPW_DMACTRL_PR|GRSPW_DMACTRL_PS|
+			GRSPW_DMACTRL_RA|GRSPW_DMACTRL_TA|
+			GRSPW_DMACTRL_AT));
+		handled = 1;
+
+		/* DMA error has priority, if error happens it is assumed that
+		 * the common work-queue stops the DMA operation for that
+		 * channel and makes the DMA tasks exit from their waiting
+		 * functions (both RX and TX tasks).
+		 */
+		if (irqs & GRSPW_DMA_STATUS_ERROR) {
+			message |= WORK_DMA_ER(i);
+		} else {
+			message |= WORK_DMA(i, irqs >> GRSPW_DMACTRL_PS_BIT);
 		}
 	}
 	SPIN_UNLOCK(&priv->devlock, irqflags);
@@ -2793,12 +2831,19 @@ STATIC void grspw_isr(void *data)
 		priv->stats.irq_cnt++;
 
 	/* Schedule work by sending message to work thread */
-	if ((message != WORK_NONE) && grspw_work_queue) {
+	if (message != WORK_NONE && priv->wc.msgisr) {
+		int status;
 		message |= WORK_CORE(priv->index);
-		stat = rtems_message_queue_send(grspw_work_queue, &message, 4);
-		if (stat != RTEMS_SUCCESSFUL)
+		/* func interface compatible with msgQSend() on purpose, but
+		 * at the same time the user can assign a custom function to
+		 * handle DMA RX/TX operations as indicated by the "message"
+		 * and clear the handled bits before given to msgQSend().
+		 */
+		status = priv->wc.msgisr(priv->wc.msgisr_arg, &message, 4);
+		if (status != RTEMS_SUCCESSFUL) {
 			printk("grspw_isr(%d): message fail %d (0x%x)\n",
-				priv->index, stat, message);
+				priv->index, status, message);
+		}
 	}
 }
 
@@ -3070,6 +3115,72 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 }
 
 /******************* Driver Implementation ***********************/
+/* Creates a MsgQ (optional) and spawns a worker task associated with the
+ * message Q. The task can also be associated with a custom msgQ if *msgQ.
+ * is non-zero.
+ */
+rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax)
+{
+	rtems_id tid;
+	int created_msgq = 0;
+
+	if (pMsgQ == NULL)
+		return OBJECTS_ID_NONE;
+
+	if (*pMsgQ == OBJECTS_ID_NONE) {
+		if (msgMax <= 0)
+			msgMax = 32;
+
+		if (rtems_message_queue_create(
+			rtems_build_name('S', 'G', 'L', 'Q'),
+			msgMax, 4, RTEMS_FIFO, pMsgQ) !=
+			RTEMS_SUCCESSFUL)
+			return OBJECTS_ID_NONE;
+		created_msgq = 1;
+	}
+
+	if (prio < 0)
+		prio = grspw_work_task_priority; /* default prio */
+	if (stack < 0x800)
+		stack = RTEMS_MINIMUM_STACK_SIZE; /* default stack size */
+
+	if (rtems_task_create(rtems_build_name('S', 'G', 'L', 'T'),
+		prio, stack, RTEMS_PREEMPT | RTEMS_NO_ASR,
+		RTEMS_NO_FLOATING_POINT, &tid) != RTEMS_SUCCESSFUL)
+		tid = OBJECTS_ID_NONE;
+	else if (rtems_task_start(tid, (rtems_task_entry)grspw_work_func, *pMsgQ) !=
+		    RTEMS_SUCCESSFUL) {
+		rtems_task_delete(tid);
+		tid = OBJECTS_ID_NONE;
+	}
+
+	if (tid == OBJECTS_ID_NONE && created_msgq) {
+		rtems_message_queue_delete(*pMsgQ);
+		*pMsgQ = OBJECTS_ID_NONE;
+	}
+	return tid;
+}
+
+/* Free task associated with message queue and optionally also the message
+ * queue itself. The message queue is deleted by the work task and is therefore
+ * delayed until it the work task resumes its execution.
+ */
+rtems_status_code grspw_work_free(rtems_id msgQ, int freeMsgQ)
+{
+	int msg = WORK_QUIT_TASK;
+	if (freeMsgQ)
+		msg |= WORK_FREE_MSGQ;
+	return rtems_message_queue_send(msgQ, &msg, 4);
+}
+
+void grspw_work_cfg(void *d, struct grspw_work_config *wc)
+{
+	struct grspw_priv *priv = (struct grspw_priv *)d;
+
+	if (wc == NULL)
+		wc = &grspw_wc_def; /* use default config */
+	priv->wc = *wc;
+}
 
 static int grspw_common_init(void)
 {
@@ -3090,21 +3201,16 @@ static int grspw_common_init(void)
 	 * user can disable it when interrupt is not used to save resources
 	 */
 	if (grspw_work_task_priority != -1) {
-		if (rtems_message_queue_create(
-		    rtems_build_name('S', 'G', 'L', 'Q'), 32, 4, RTEMS_FIFO,
-		    &grspw_work_queue) != RTEMS_SUCCESSFUL)
-			return -1;
-
-		if (rtems_task_create(rtems_build_name('S', 'G', 'L', 'T'),
-		    grspw_work_task_priority, RTEMS_MINIMUM_STACK_SIZE,
-		    RTEMS_PREEMPT | RTEMS_NO_ASR, RTEMS_NO_FLOATING_POINT,
-		    &grspw_work_task) != RTEMS_SUCCESSFUL)
-			return -1;
-
-		if (rtems_task_start(grspw_work_task, grspw_work_func, 0) !=
-		    RTEMS_SUCCESSFUL)
-			return -1;
-}
+		grspw_work_task = grspw_work_spawn(-1, 0,
+			(rtems_id *)&grspw_wc_def.msgisr_arg, 0);
+		if (grspw_work_task == OBJECTS_ID_NONE)
+			return -2;
+		grspw_wc_def.msgisr =
+			(grspw_msgqisr_t) rtems_message_queue_send;
+	} else {
+		grspw_wc_def.msgisr = NULL;
+		grspw_wc_def.msgisr_arg = NULL;
+	}
 
 	grspw_initialized = 1;
 	return 0;

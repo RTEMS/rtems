@@ -311,6 +311,50 @@ struct grspw_dma_stats {
 	int rx_work_enabled;	/* No. RX BDs enabled by work thread */
 };
 
+/* ISR message sending call back. Compatible with rtems_message_queue_send().
+ * The 'buf' parameter has a pointer to a WORK-TASK message defined by the
+ * WORK_* macros below. The message indicates what GRSPW device operations
+ * are pending, thus what caused the interrupt.
+ *
+ * \param data   defined by grspw_work_config.msgisr_arg, default a rtems_id.
+ * \param buf    Pointer to a 32-bit message word
+ * \param n      Always 4 (byte size of buf).
+ */
+typedef int (*grspw_msgqisr_t)(void *data, unsigned int *buf, unsigned int n);
+
+/* Work message definitions, the int sent to *buf
+ * Bits 31..24: reserved.
+ * Bits 23..16: GRSPW device number message is associated with.
+ * Bit  15:     reserved.
+ * Bit  14:     work-task shall delete message queue on exit.
+ * Bit  13:     work-task shall exit and delete itself.
+ * Bit  12:     link error - shut down all DMA operations (stop DMA channels).
+ * Bit  11..8:  Indicats DMA error on DMA channel 3..0.
+ * Bit  7..0:   Indicats RX and/or TX packets completed on channel 3..0.
+ */
+#define WORK_NONE         0
+#define WORK_SHUTDOWN     0x1000 /* Signal shut down */
+#define WORK_QUIT_TASK    0x2000 /* Work task shall exit (delete itself) */
+#define WORK_FREE_MSGQ    0x4000 /* Delete MsgQ (valid when WORK_QUIT_TASK) */
+#define WORK_DMA(chan, rxtx) (((rxtx) & 0x3) << ((chan) * 2))
+#define WORK_DMA_TX(chan) WORK_DMA(chan, 1)
+#define WORK_DMA_RX(chan) WORK_DMA(chan, 2)
+#define WORK_DMA_ER(chan) (0x1 << ((chan) + 8))
+#define WORK_DMA_MASK     0xfff /* max 4 channels all work */
+#define WORK_DMA_TX_MASK  0x055 /* max 4 channels TX work */
+#define WORK_DMA_RX_MASK  0x0aa /* max 4 channels RX work */
+#define WORK_DMA_ER_MASK  0xf00 /* max 4 channels Error work */
+#define WORK_DMA_CHAN_MASK(chan) (WORK_DMA_ER(chan) | WORK_DMA(chan, 0x3))
+#define WORK_CORE_BIT     16
+#define WORK_CORE_MASK    0x00ff0000
+#define WORK_CORE(device) ((device) << WORK_CORE_BIT)
+
+/* Message Q used to send messages to work task */
+struct grspw_work_config {
+	grspw_msgqisr_t msgisr;
+	void *msgisr_arg; /* example: rtems_id to Msg Q */
+};
+
 extern void grspw_initialize_user(
 	/* Callback every time a GRSPW device is found. Args: DeviceIndex */
 	void *(*devfound)(int),
@@ -320,6 +364,60 @@ extern void grspw_initialize_user(
 	 */
 	void (*devremove)(int,void*)
 	);
+
+/* Creates a MsgQ (optional) and spawns a worker task associated with the
+ * message Q. The task can also be associated with a custom msgQ if *msgQ.
+ * is non-zero.
+ *
+ * \param prio     Task priority, set to -1 for default.
+ * \param stack    Task stack size, set to 0 for default.
+ * \param msgQ     pMsgQ=NULL: illegal,
+ *                 pMsqQ==0: create new MsgQ with task and place in *pMsgQ,
+ *                 *pmsqQ!=0: pointer to MsgQ used for task.
+ * \param msgMax   Maximum number of messages, set to 0 for default.
+ * \return         0 on failure, task id on success.
+ */
+extern rtems_id grspw_work_spawn(int prio, int stack, rtems_id *pMsgQ, int msgMax);
+
+/* Free task associated with message queue and optionally also the message
+ * queue itself. The message queue is deleted by the work task and is therefore
+ * delayed until it the work task resumes its execution.
+ */
+extern rtems_status_code grspw_work_free(rtems_id msgQ, int freeMsgQ);
+
+/* Configure a GRSPW device Work task and Message Q set up.
+ * This affects messages to:
+ *  - DMA AHB error interrupt handling (mandatory)
+ *  - Link status interrupt handling (optional)
+ *  - RX DMA, defaults to common msgQ (configured per DMA channel) 
+ */
+extern void grspw_work_cfg(void *d, struct grspw_work_config *wc);
+
+/* Work-task function, called only from the work task. The function is provided
+ * as a way for the user to create its own work tasks.
+ * The argument determines which message queue the task shall read its
+ * work jobs from.
+ *
+ * The messages are always 32-bit words and follows the format defined by the
+ * WORK_* macros above.
+ */
+extern void grspw_work_func(rtems_id msgQ);
+
+enum grspw_worktask_ev {
+	WORKTASK_EV_NONE = 0,
+	WORKTASK_EV_QUIT = 1,
+	WORKTASK_EV_SHUTDOWN = 2,
+	WORKTASK_EV_DMA_STOP = 3,
+};
+
+/* Weak function to let user override. Function called every time one of the
+ * events above is handled by the work-task. The message 'msg' is the current
+ * message being processed by the work-task.
+ * The user can for example add custom code to invoke on a DMA error, link
+ * error or monitor when the work-task exits after a call to grspw_work_free().
+ */
+extern void grspw_work_event(enum grspw_worktask_ev ev, unsigned int msg);
+
 extern int grspw_dev_count(void);
 extern void *grspw_open(int dev_no);
 extern int grspw_close(void *d);
