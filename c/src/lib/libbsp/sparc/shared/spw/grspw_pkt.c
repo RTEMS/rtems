@@ -3010,6 +3010,20 @@ void grspw_initialize_user(void *(*devfound)(int), void (*devremove)(int,void*))
 	}
 }
 
+/* Get a value at least 6.4us in number of clock cycles */
+static unsigned int grspw1_calc_timer64(int freq_khz)
+{
+	unsigned int timer64 = (freq_khz * 64 + 9999) / 10000;
+	return timer64 & 0xfff;
+}
+
+/* Get a value at least 850ns in number of clock cycles - 3 */
+static unsigned int grspw1_calc_discon(int freq_khz)
+{
+	unsigned int discon = ((freq_khz * 85 + 99999) / 100000) - 3;
+	return discon & 0x3ff;
+}
+
 /******************* Driver manager interface ***********************/
 
 /* Driver prototypes */
@@ -3111,9 +3125,18 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 		priv->hwsup.strip_adr = 1; /* All GRSPW2 can strip Address */
 		priv->hwsup.strip_pid = 1; /* All GRSPW2 can strip PID */
 	} else {
+		unsigned int apb_hz, apb_khz;
+
 		/* Autodetect GRSPW1 features? */
 		priv->hwsup.strip_adr = 0;
 		priv->hwsup.strip_pid = 0;
+
+		drvmgr_freq_get(dev, DEV_APB_SLV, &apb_hz);
+		apb_khz = apb_hz / 1000;
+
+		REG_WRITE(&priv->regs->timer,
+			((grspw1_calc_discon(apb_khz) & 0x3FF) << 12) |
+			(grspw1_calc_timer64(apb_khz) & 0xFFF));
 	}
 
 	/* Probe width of SpaceWire Interrupt ISR timers. All have the same
