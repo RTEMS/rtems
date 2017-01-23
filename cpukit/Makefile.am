@@ -36,6 +36,7 @@ preinstall-stamp:
 CLEANFILES = preinstall-stamp
 
 include_HEADERS =
+include_HEADERS += include/endian.h
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
