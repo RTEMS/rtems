@@ -23,7 +23,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD$
+ * $FreeBSD: head/sys/sys/endian.h 208331 2010-05-20 06:16:13Z phk $
  */
 
 #ifndef _SYS_ENDIAN_H_
