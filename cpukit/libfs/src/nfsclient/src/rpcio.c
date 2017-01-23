@@ -521,7 +521,8 @@ struct pmap		pmaparg;
 		return RPC_UNKNOWNHOST;
 	}
 
-	if ( (len = getgroups(NGROUPS, gids) < 0 ) ) {
+	len = getgroups(NGROUPS, gids);
+	if (len < 0 ) {
 		fprintf(stderr,
 				"RPCIO - error: I unable to get group ids (%s)\n",
 				strerror(errno));
