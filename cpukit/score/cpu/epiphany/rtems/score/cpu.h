@@ -261,8 +261,6 @@ extern "C" {
  */
 
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-#define CPU_BIG_ENDIAN                           FALSE
-#define CPU_LITTLE_ENDIAN                        TRUE
 
 /*
  *  The following defines the number of bits actually used in the

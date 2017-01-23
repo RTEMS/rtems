@@ -87,19 +87,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /*
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
- */
-
-#if defined(__BIG_ENDIAN__) || defined(_BIG_ENDIAN)
-#define CPU_BIG_ENDIAN                           TRUE
-#define CPU_LITTLE_ENDIAN                        FALSE
-#else
-#define CPU_BIG_ENDIAN                           FALSE
-#define CPU_LITTLE_ENDIAN                        TRUE
-#endif
-
-/*
  *  Does the CPU have hardware floating point?
  *
  *  If TRUE, then the RTEMS_FLOATING_POINT task attribute is supported.

@@ -269,22 +269,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /*
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
- */
-
-/* __MIPSEB__ or __MIPSEL__ is defined by GCC based on -EB or -EL command line options */
-#if defined(__MIPSEB__)
-#define CPU_BIG_ENDIAN                           TRUE
-#define CPU_LITTLE_ENDIAN                        FALSE
-#elif defined(__MIPSEL__)
-#define CPU_BIG_ENDIAN                           FALSE
-#define CPU_LITTLE_ENDIAN                        TRUE
-#else
-#error "Unknown endianness"
-#endif
-
-/*
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().

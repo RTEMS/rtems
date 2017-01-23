@@ -273,46 +273,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT
 
 /**
- * @defgroup CPUEndian Processor Dependent Endianness Support
- *
- * This group assists in issues related to processor endianness.
- *
- */
-/**@{**/
-
-/**
- * Define what is required to specify how the network to host conversion
- * routines are handled.
- *
- * @note @a CPU_BIG_ENDIAN and @a CPU_LITTLE_ENDIAN should NOT have the
- * same values.
- *
- * @see CPU_LITTLE_ENDIAN
- *
- * Port Specific Information:
- *
- * The v850 is little endian.
- */
-#define CPU_BIG_ENDIAN  FALSE
-
-/**
- * Define what is required to specify how the network to host conversion
- * routines are handled.
- *
- * @note @ref CPU_BIG_ENDIAN and @ref CPU_LITTLE_ENDIAN should NOT have the
- * same values.
- *
- * @see CPU_BIG_ENDIAN
- *
- * Port Specific Information:
- *
- * The v850 is little endian.
- */
-#define CPU_LITTLE_ENDIAN TRUE
-
-/** @} */
-
-/**
  * @ingroup CPUInterrupt
  * The following defines the number of bits actually used in the
  * interrupt field of the task mode.  How those bits map to the

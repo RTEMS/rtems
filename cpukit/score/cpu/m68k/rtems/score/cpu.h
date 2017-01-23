@@ -104,14 +104,6 @@ extern "C" {
 
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
-/*
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
- */
-
-#define CPU_BIG_ENDIAN                           TRUE
-#define CPU_LITTLE_ENDIAN                        FALSE
-
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #if ( CPU_HARDWARE_FP == TRUE ) && !defined( __mcoldfire__ )

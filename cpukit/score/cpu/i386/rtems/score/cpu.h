@@ -114,14 +114,6 @@ extern "C" {
 
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 
-/*
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
- */
-
-#define CPU_BIG_ENDIAN                           FALSE
-#define CPU_LITTLE_ENDIAN                        TRUE
-
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #define I386_CONTEXT_CONTROL_EFLAGS_OFFSET 0

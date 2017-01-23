@@ -97,16 +97,6 @@
  */
 /**@{**/
 
-#if defined(__ARMEL__)
-  #define CPU_BIG_ENDIAN FALSE
-  #define CPU_LITTLE_ENDIAN TRUE
-#elif defined(__ARMEB__)
-  #define CPU_BIG_ENDIAN TRUE
-  #define CPU_LITTLE_ENDIAN FALSE
-#else
-  #error "unknown endianness"
-#endif
-
 /*
  *  The ARM uses the PIC interrupt model.
  */

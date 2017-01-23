@@ -320,46 +320,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /**
- * @defgroup CPUEndian Processor Dependent Endianness Support
- *
- * This group assists in issues related to processor endianness.
- * 
- */
-/**@{**/
-
-/**
- * Define what is required to specify how the network to host conversion
- * routines are handled.
- *
- * NOTE: @a CPU_BIG_ENDIAN and @a CPU_LITTLE_ENDIAN should NOT have the
- * same values.
- *
- * @see CPU_LITTLE_ENDIAN
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_BIG_ENDIAN                           TRUE
-
-/**
- * Define what is required to specify how the network to host conversion
- * routines are handled.
- *
- * NOTE: @ref CPU_BIG_ENDIAN and @ref CPU_LITTLE_ENDIAN should NOT have the
- * same values.
- *
- * @see CPU_BIG_ENDIAN
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_LITTLE_ENDIAN                        FALSE
-
-/** @} */
-
-/**
  * @ingroup CPUInterrupt
  * 
  * The following defines the number of bits actually used in the
