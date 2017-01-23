@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
+#include <sys/endian.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -57,19 +58,10 @@
 /*
  * Conversion from and to little-endian byte order. (no-op on i386/i486)
  */
-
-#if (CPU_BIG_ENDIAN == TRUE)
-#   define LE_TO_CPU_U16(v) CPU_swap_u16(v)
-#   define LE_TO_CPU_U32(v) CPU_swap_u32(v)
-#   define CPU_TO_LE_U16(v) CPU_swap_u16(v)
-#   define CPU_TO_LE_U32(v) CPU_swap_u32(v)
-#else
-#   define LE_TO_CPU_U16(v) (v)
-#   define LE_TO_CPU_U32(v) (v)
-#   define CPU_TO_LE_U16(v) (v)
-#   define CPU_TO_LE_U32(v) (v)
-#endif
-
+#define LE_TO_CPU_U16(v) le16toh(v)
+#define LE_TO_CPU_U32(v) le32toh(v)
+#define CPU_TO_LE_U16(v) htole16(v)
+#define CPU_TO_LE_U32(v) htole32(v)
 
 /*
  * sector_data_t --

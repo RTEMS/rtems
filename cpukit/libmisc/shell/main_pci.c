@@ -19,7 +19,7 @@
 #include <pci.h>
 #include <pci/cfg.h>
 #include <pci/access.h>
-#include <rtems/endian.h>
+#include <sys/endian.h>
 #include <bsp.h> /* For PCI endianness config */
 
 #include <rtems.h>
@@ -416,7 +416,7 @@ static int pci_summary(void)
 	printf(" CFG LIBRARY:       %s\n", cfglib_strs[pci_config_lib_type]);
 	printf(" NO. PCI BUSES:     %d buses\n", pci_bus_count());
 	printf(" PCI ENDIAN:        %s\n", pci_endian ? "Big" : "Little");
-#if (CPU_LITTLE_ENDIAN == TRUE)
+#if BYTE_ORDER == LITTLE_ENDIAN
 	puts(" MACHINE ENDIAN:    Little");
 #else
 	puts(" MACHINE ENDIAN:    Big");

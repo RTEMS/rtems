@@ -16,6 +16,7 @@
 #define __ATA_INTERNAL_H__
 
 #include <sys/param.h>
+#include <sys/endian.h>
 #include <rtems.h>
 #include <sys/types.h>
 #include <rtems/libio.h>
@@ -34,17 +35,10 @@ extern "C" {
  * Naming: Ca_b_c, where a: F = from, T = to, b: LE = little-endian,
  * BE = big-endian, c: W = word (16 bits), L = longword (32 bits)
  */
-#if (CPU_BIG_ENDIAN == TRUE)
-#    define CF_LE_W(v) CPU_swap_u16(v)
-#    define CF_LE_L(v) CPU_swap_u32(v)
-#    define CT_LE_W(v) CPU_swap_u16(v)
-#    define CT_LE_L(v) CPU_swap_u32(v)
-#else
-#    define CF_LE_W(v) (v)
-#    define CF_LE_L(v) (v)
-#    define CT_LE_W(v) (v)
-#    define CT_LE_L(v) (v)
-#endif
+#define CF_LE_W(v) le16toh(v)
+#define CF_LE_L(v) le32toh(v)
+#define CT_LE_W(v) htole16(v)
+#define CT_LE_L(v) htole32(v)
 
 #define ATA_UNDEFINED_VALUE   (-1)
 
