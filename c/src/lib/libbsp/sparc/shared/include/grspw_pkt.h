@@ -431,6 +431,13 @@ enum grspw_worktask_ev {
  */
 extern void grspw_work_event(enum grspw_worktask_ev ev, unsigned int msg);
 
+#ifdef RTEMS_SMP
+/* Set ISR interrupt affinity. The LEON IRQCtrl requires that the cpumask shall
+ * always have one bit set.
+ */
+extern int grspw_isr_affinity(void *d, const cpu_set_t *cpus);
+#endif
+
 extern int grspw_dev_count(void);
 extern void *grspw_open(int dev_no);
 extern int grspw_close(void *d);

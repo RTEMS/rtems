@@ -28,33 +28,38 @@
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grspw_pkt.h>
 
-/* This driver has been prepared for SMP operation however never tested 
- * on a SMP system - use on your own risk.
+/* Use interrupt lock privmitives compatible with SMP defined in
+ * RTEMS 4.11.99 and higher.
  */
-#ifdef RTEMS_HAS_SMP
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
 
-#include <rtems/score/smplock.h> /* spin-lock */
+#include <rtems/score/isrlock.h> /* spin-lock */
 
-/* SPIN_LOCK() and SPIN_UNLOCK() NOT_IMPLEMENTED_BY_RTEMS. Use _IRQ version
- * to implement.
- */
-#define SPIN_DECLARE(name) SMP_lock_spinlock_simple_Control name
-#define SPIN_INIT(lock) _SMP_lock_spinlock_simple_Initialize(lock)
-#define SPIN_LOCK(lock, level) SPIN_LOCK_IRQ(lock, level)
-#define SPIN_LOCK_IRQ(lock, level) (level) = _SMP_lock_spinlock_simple_Obtain(lock)
-#define SPIN_UNLOCK(lock, level) SPIN_UNLOCK_IRQ(lock, level)
-#define SPIN_UNLOCK_IRQ(lock, level) _SMP_lock_spinlock_simple_Release(lock, level)
-#define IRQFLAGS_TYPE ISR_Level
+/* map via ISR lock: */
+#define SPIN_DECLARE(lock) ISR_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) _ISR_lock_Initialize(lock, name)
+#define SPIN_LOCK(lock, level) _ISR_lock_Acquire_inline(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) _ISR_lock_ISR_disable_and_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) _ISR_lock_Release_inline(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) _ISR_lock_Release_and_ISR_enable(lock, &level)
+#define SPIN_IRQFLAGS(k) ISR_lock_Context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 #else
 
+/* maintain single-core compatibility with older versions of RTEMS: */
 #define SPIN_DECLARE(name)
-#define SPIN_INIT(lock)
+#define SPIN_INIT(lock, name)
 #define SPIN_LOCK(lock, level)
 #define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
 #define SPIN_UNLOCK(lock, level)
 #define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
-#define IRQFLAGS_TYPE rtems_interrupt_level
+#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
+#define SPIN_ISR_IRQFLAGS(k)
+
+#ifdef RTEMS_SMP
+#error SMP mode not compatible with these interrupt lock primitives
+#endif
 
 #endif
 
@@ -542,7 +547,7 @@ void *grspw_open(int dev_no)
 	/* Initialize Spin-lock for GRSPW Device. This is to protect
 	 * CTRL and DMACTRL registers from ISR.
 	 */
-	SPIN_INIT(&priv->devlock);
+	SPIN_INIT(&priv->devlock, priv->devname);
 
 	priv->tcisr = NULL;
 	priv->tcisr_arg = NULL;
@@ -684,7 +689,7 @@ void grspw_addr_ctrl(void *d, struct grspw_addr_config *cfg)
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl, nodeaddr;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 	int i;
 
 	if (!priv || !cfg)
@@ -786,7 +791,7 @@ void grspw_link_ctrl(void *d, int *options, int *stscfg, int *clkdiv)
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	/* Write? */
 	if (clkdiv) {
@@ -831,7 +836,7 @@ void grspw_tc_tx(void *d)
 {
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	REG_WRITE(&regs->ctrl, REG_READ(&regs->ctrl) | GRSPW_CTRL_TI);
@@ -843,7 +848,7 @@ void grspw_tc_ctrl(void *d, int *options)
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (options == NULL)
 		return;
@@ -902,7 +907,7 @@ int grspw_ic_tickin(void *d, int ic)
 {
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 	unsigned int icctrl, mask;
 
 	/* Prepare before turning off IRQ */
@@ -940,7 +945,7 @@ void grspw_ic_ctrl(void *d, unsigned int *options)
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl;
 	unsigned int icctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (options == NULL)
 		return;
@@ -1042,7 +1047,7 @@ int grspw_rmap_ctrl(void *d, int *options, int *dstkey)
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (dstkey) {
 		if (*dstkey != -1)
@@ -1089,7 +1094,7 @@ int grspw_port_ctrl(void *d, int *port)
 	struct grspw_priv *priv = d;
 	struct grspw_regs *regs = priv->regs;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (port == NULL)
 		return -1;
@@ -1226,7 +1231,7 @@ STATIC int grspw_rx_schedule_ready(struct grspw_dma_priv *dma)
 	struct grspw_rxring *curr_bd;
 	struct grspw_pkt *curr_pkt, *last_pkt;
 	struct grspw_list lst;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	/* Is Ready Q empty? */
 	if (grspw_list_is_empty(&dma->ready))
@@ -1440,7 +1445,7 @@ STATIC int grspw_tx_schedule_send(struct grspw_dma_priv *dma)
 	struct grspw_txring *curr_bd;
 	struct grspw_pkt *curr_pkt, *last_pkt;
 	struct grspw_list lst;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	/* Is Ready Q empty? */
 	if (grspw_list_is_empty(&dma->send))
@@ -1844,7 +1849,7 @@ unsigned int grspw_dma_enable_int(void *c, int rxtx, int force)
 	struct grspw_dma_priv *dma = c;
 	int rc = 0;
 	unsigned int ctrl, ctrl_old;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	SPIN_LOCK_IRQ(&dma->core->devlock, irqflags);
 	if (dma->started == 0) {
@@ -2438,7 +2443,7 @@ int grspw_dma_start(void *c)
 	struct grspw_dma_priv *dma = c;
 	struct grspw_dma_regs *dregs = dma->regs;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (dma->started)
 		return 0;
@@ -2506,15 +2511,15 @@ int grspw_dma_start(void *c)
 
 STATIC void grspw_dma_stop_locked(struct grspw_dma_priv *dma)
 {
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	if (dma->started == 0)
 		return;
 	dma->started = 0;
 
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_LOCK_IRQ(&dma->core->devlock, irqflags);
 	grspw_hw_dma_stop(dma);
-	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_UNLOCK_IRQ(&dma->core->devlock, irqflags);
 
 	/* From here no more packets will be sent, however
 	 * there may still exist scheduled packets that has been
@@ -2747,9 +2752,7 @@ STATIC void grspw_isr(void *data)
 	unsigned int rxirq, rxack, intto;
 	int i, handled = 0, call_user_int_isr;
 	unsigned int message = WORK_NONE, dma_en;
-#ifdef RTEMS_HAS_SMP
-	IRQFLAGS_TYPE irqflags;
-#endif
+	SPIN_ISR_IRQFLAGS(irqflags);
 
 	/* Get Status from Hardware */
 	stat = REG_READ(&priv->regs->status);
@@ -2959,7 +2962,7 @@ STATIC void grspw_hw_stop(struct grspw_priv *priv)
 {
 	int i;
 	unsigned int ctrl;
-	IRQFLAGS_TYPE irqflags;
+	SPIN_IRQFLAGS(irqflags);
 
 	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
@@ -3281,6 +3284,13 @@ void grspw_work_cfg(void *d, struct grspw_work_config *wc)
 		wc = &grspw_wc_def; /* use default config */
 	priv->wc = *wc;
 }
+
+#ifdef RTEMS_SMP
+int grspw_isr_affinity(void *d, const cpu_set_t *cpus)
+{
+	return -1; /* BSP support only static configured IRQ affinity */
+}
+#endif
 
 static int grspw_common_init(void)
 {
