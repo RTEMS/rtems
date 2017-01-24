@@ -1,6 +1,6 @@
 
 rtems_tests_PROGRAMS = sprmsched01
-sprmsched01_SOURCES = init.c tasks.c system.h
+sprmsched01_SOURCES = init.c
 	
 dist_rtems_tests_DATA = sprmsched01.scn
 dist_rtems_tests_DATA += sprmsched01.doc
