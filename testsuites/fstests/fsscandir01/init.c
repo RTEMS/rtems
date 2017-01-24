@@ -43,6 +43,8 @@ static void test_scandir(void)
     }
     free(namelist);
   }
+
+  rtems_test_assert(MAXNAMLEN == NAME_MAX);
 }
 
 
