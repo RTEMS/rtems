@@ -156,34 +156,121 @@ typedef struct {
 #define GRCAN_STAT_RXERRCNT  0xff00
 #define GRCAN_STAT_TXERRCNT  0xff0000
 
-/* IOCTL Commands controlling operational
+/*
+ * Return number of GRCAN devices available to driver
+ */
+extern int grcan_dev_count(void);
+
+/*
+ * Open a GRCAN device
+ *
+ * dev_no:	Device number to open
+ * return:	Device handle to use with all other grcan_ API functions. The
+ *		function returns NULL if device can not be opened.
+ */
+extern void *grcan_open(int dev_no);
+
+/*
+ * Close a GRCAN device
+ *
+ * return: This function always returns 0 (success)
+ */
+extern int grcan_close(void *d);
+
+/*
+ * Receive CAN messages
+ *
+ * Multiple CAN messages can be received in one call.
+ *
+ * d: Device handle
+ * msg: Pointer to receive messages
+ * count: Number of CAN messages to receive
+ *
+ * return:
+ *   >=0:	Number of CAN messages received. This can be less than the
+ *		count parameter.
+ *   -1:	count parameter less than size of struct grcan_msg or NULL msg.
+ *   -2:	Device not in started mode
+ *   -3:	Timeout in non-blocking mode
+ *   -4:	A blocking read was interrupted by a Bus-off error. Device has
+ *		left started mode.
+ */
+extern int grcan_read(
+	void *d,
+	CANMsg *msg,
+	size_t count
+);
+
+/*
+ * Transmit CAN messages
+ *
+ * Multiple CAN messages can be transmit in one call.
+ *
+ * d: Device handle
+ * msg: Pointer to messages to transmit
+ * count: Number of CAN messages to transmit
+ *
+ * return:
+ *   >=0:	Number of CAN messages transmitted. This can be less than the
+ *		count parameter.
+ *   -1:	count parameter less than size of struct grcan_msg
+ *   -2:	Device not in started mode
+ *   -3:	Timeout in non-blocking mode
+ *   -4:	Bus-off error. Device has left started mode
+ */
+extern int grcan_write(
+	void *d,
+	CANMsg *msg,
+	size_t count
+);
+
+/* The remaining functions return 0 on success and non-zero on failure. */
+
+/* Functions controlling operational
  * mode
  */
-#define GRCAN_IOC_START          1   /* Bring the link up after open or bus-off */
-#define GRCAN_IOC_STOP           2   /* stop to change baud rate/config or closing down */
-#define GRCAN_IOC_ISSTARTED      3   /* return RTEMS_SUCCESSFUL when started, othervise EBUSY */
-#define GRCAN_IOC_FLUSH          4   /* Waits until all TX messages has been sent */
+/* Bring the link up after open or bus-off */
+extern int grcan_start(void *d);
+/* stop to change baud rate/config or closing down */
+extern int grcan_stop(void *d);
+/* return 1 when started, othervise 0 */
+extern int grcan_isstarted(void *d);
+/* Wait until all TX messages have been sent */
+extern int grcan_flush(void *d);
 
-/* IOCTL Commands that require connection
+/* Functions that require connection
  * to be stopped
  */
-#define GRCAN_IOC_SET_SILENT     16  /* enable silent mode read only state */
-#define GRCAN_IOC_SET_ABORT      17  /* enable/disable stopping link on AHB Error */
-#define GRCAN_IOC_SET_SELECTION  18  /* Set Enable0,Enable1,Selection */
-#define GRCAN_IOC_SET_SPEED      19  /* Set baudrate by using driver's baud rate timing calculation routines */
-#define GRCAN_IOC_SET_BTRS       20  /* Set baudrate by specifying the timing registers manually */
+/* enable silent mode read only state */
+extern int grcan_set_silent(void *d, int silent);
+/* enable/disable stopping link on AHB Error */
+extern int grcan_set_abort(void *d, int abort);
+/* Set Enable0,Enable1,Selection */
+extern int grcan_set_selection(void *d, const struct grcan_selection *selection);
+/* Set baudrate by using driver's baud rate timing calculation routines */
+extern int grcan_set_speed(void *d, unsigned int hz);
+/* Set baudrate by specifying the timing registers manually */
+extern int grcan_set_btrs(void *d, const struct grcan_timing *timing);
 
-/* IOCTL Commands can be called whenever */
-#define GRCAN_IOC_SET_RXBLOCK    32  /* Enable/disable Blocking on reception (until at least one message has been received) */
-#define GRCAN_IOC_SET_TXBLOCK    33  /* Enable/disable Blocking on transmission (until at least one message has been transmitted) */
-#define GRCAN_IOC_SET_TXCOMPLETE 34  /* Enable/disable Blocking until all requested messages has been sent */
-#define GRCAN_IOC_SET_RXCOMPLETE 35  /* Enable/disable Blocking until all requested has been received */
-#define GRCAN_IOC_GET_STATS      36  /* Get Statistics */
-#define GRCAN_IOC_CLR_STATS      37  /* Clear Statistics */
-#define GRCAN_IOC_SET_AFILTER    38  /* Set Acceptance filters, provide pointer to "struct grcan_filter" or NULL to disable filtering (let all messages pass) */
-#define GRCAN_IOC_SET_SFILTER    40  /* Set Sync Messages RX/TX filters, NULL disables the IRQ completely */
-#define GRCAN_IOC_GET_STATUS     41  /* Get status register of GRCAN core */
-
+/* Functions can be called whenever */
+/* Enable/disable Blocking on reception (until at least one message has been received) */
+int grcan_set_rxblock(void* d, int block);
+/* Enable/disable Blocking on transmission (until at least one message has been transmitted) */
+int grcan_set_txblock(void* d, int block);
+/* Enable/disable Blocking until all requested messages has been sent */
+int grcan_set_txcomplete(void* d, int complete);
+/* Enable/disable Blocking until all requested has been received */
+int grcan_set_rxcomplete(void* d, int complete);
+/* Get statistics */
+extern int grcan_get_stats(void *d, struct grcan_stats *stats);
+/* Clear statistics */
+extern int grcan_clr_stats(void *d);
+/* Set Acceptance filters, provide pointer to "struct grcan_filter" or NULL to disable filtering (let all messages pass) */
+extern int grcan_set_afilter(void *d, const struct grcan_filter *filter);
+/* Set Sync Messages RX/TX filters, NULL disables the IRQ completely */
+extern int grcan_set_sfilter(void *d, const struct grcan_filter *filter);
+/* Get status register of GRCAN core */
+extern int grcan_get_status(void *d, unsigned int *status);
 
 void grcan_register_drv(void);
 
