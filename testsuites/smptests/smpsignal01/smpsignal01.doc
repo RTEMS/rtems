@@ -9,4 +9,5 @@ directives:
 
 concepts:
 
+  - Ensure that signal handlers are called with interrupts enabled.
   - Ensure that Classic Signals work on SMP.

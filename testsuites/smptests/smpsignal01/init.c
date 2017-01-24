@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -38,6 +38,8 @@ typedef struct {
   rtems_id producer;
   uint32_t consumer_processor;
   uint32_t producer_processor;
+  rtems_id timer;
+  volatile bool done;
 } test_context;
 
 static void change_state(test_context *ctx, test_state new_state)
@@ -60,6 +62,8 @@ static test_context ctx_instance = {
 static void signal_handler(rtems_signal_set signal)
 {
   test_context *ctx = &ctx_instance;
+
+  rtems_test_assert(_ISR_Get_level() == 0);
 
   switch (ctx->state) {
     case SIG_0_ENABLE:
@@ -119,14 +123,10 @@ static void producer(rtems_task_argument arg)
   rtems_test_assert(0);
 }
 
-static void test(void)
+static void test_two_processors(test_context *ctx)
 {
-  test_context *ctx = &ctx_instance;
   rtems_status_code sc;
   rtems_mode mode;
-
-  ctx->consumer = rtems_task_self();
-  ctx->consumer_processor = rtems_get_current_processor();
 
   sc = rtems_signal_catch(signal_handler, RTEMS_DEFAULT_MODES);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -151,6 +151,7 @@ static void test(void)
 
   sc = rtems_task_mode(RTEMS_ASR, RTEMS_ASR_MASK, &mode);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(mode == RTEMS_NO_ASR);
 
   wait_for_state(ctx, SIG_0_PROCESSED);
 
@@ -162,12 +163,69 @@ static void test(void)
   check_consumer_processor(ctx);
 }
 
+static void isr_level_timer(rtems_id timer, void *arg)
+{
+  test_context *ctx = arg;
+  rtems_status_code sc;
+
+  sc = rtems_signal_send(ctx->consumer, TEST_SIGNAL);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void isr_level_handler(rtems_signal_set signal)
+{
+  test_context *ctx = &ctx_instance;
+
+  rtems_test_assert(_ISR_Get_level() == 0);
+
+  ctx->done = true;
+}
+
+static void test_isr_level(test_context *ctx)
+{
+  rtems_status_code sc;
+  rtems_mode mode;
+
+  sc = rtems_task_mode(RTEMS_ASR, RTEMS_ASR_MASK, &mode);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(mode == RTEMS_NO_ASR);
+
+  sc = rtems_timer_create(rtems_build_name('T', 'I', 'M', 'R'), &ctx->timer);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(!ctx->done);
+
+  sc = rtems_signal_catch(isr_level_handler, RTEMS_DEFAULT_MODES);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_timer_fire_after(ctx->timer, 1, isr_level_timer, ctx);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  while (!ctx->done) {
+    /* Wait for timer */
+  }
+
+  sc = rtems_timer_delete(ctx->timer);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_mode(RTEMS_NO_ASR, RTEMS_ASR_MASK, &mode);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(mode == RTEMS_ASR);
+}
+
 static void Init(rtems_task_argument arg)
 {
+  test_context *ctx = &ctx_instance;
+
   TEST_BEGIN();
 
+  ctx->consumer = rtems_task_self();
+  ctx->consumer_processor = rtems_get_current_processor();
+
+  test_isr_level(ctx);
+
   if (rtems_get_processor_count() >= 2) {
-    test();
+    test_two_processors(ctx);
   }
 
   TEST_END();
@@ -182,6 +240,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 2
 
 #define CONFIGURE_MAXIMUM_TASKS 2
+
+#define CONFIGURE_MAXIMUM_TIMERS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
