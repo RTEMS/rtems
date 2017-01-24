@@ -71,13 +71,10 @@ static void _Rate_monotonic_Release_postponed_job(
   ISR_lock_Context       *lock_context
 )
 {
-  /* This function only releases the postponed jobs. */
-  Per_CPU_Control *cpu_self;
+  Per_CPU_Control      *cpu_self;
   Thread_queue_Context  queue_context;
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Rate_monotonic_Release( owner, lock_context );
 
-  the_period->postponed_jobs -=1;
+  --the_period->postponed_jobs;
   _Scheduler_Release_job(
     owner,
     &the_period->Priority,
@@ -85,6 +82,7 @@ static void _Rate_monotonic_Release_postponed_job(
     &queue_context
   );
 
+  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( the_period, lock_context );
   _Thread_Priority_update( &queue_context );
   _Thread_Dispatch_enable( cpu_self );
