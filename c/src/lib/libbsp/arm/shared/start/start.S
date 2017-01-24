@@ -274,6 +274,7 @@ bsp_start_skip_hyp_svc_switch:
 	/* Stay in SVC mode */
 
 #ifdef ARM_MULTILIB_VFP
+#ifdef ARM_MULTILIB_HAS_CPACR
 	/* Read CPACR */
 	mrc p15, 0, r0, c1, c0, 2
 
@@ -289,6 +290,7 @@ bsp_start_skip_hyp_svc_switch:
 	/* Write CPACR */
 	mcr p15, 0, r0, c1, c0, 2
 	isb
+#endif
 
 	/* Enable FPU */
 	mov r0, #(1 << 30)
@@ -408,6 +410,7 @@ _start:
 #endif
 
 #ifdef ARM_MULTILIB_VFP
+#ifdef ARM_MULTILIB_HAS_CPACR
 	/*
 	 * Enable CP10 and CP11 coprocessors for privileged and user mode in
 	 * CPACR (bits 20-23).  Ensure that write to register completes.
@@ -418,6 +421,7 @@ _start:
 	str	r1, [r0]
 	dsb
 	isb
+#endif
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
 	bl bsp_start_init_registers_vfp
