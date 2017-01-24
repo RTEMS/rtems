@@ -22,6 +22,27 @@
 
 #include <rtems/rtems/ratemonimpl.h>
 
+static void _Rate_monotonic_Renew_deadline(
+  Rate_monotonic_Control *the_period,
+  Thread_Control         *owner,
+  ISR_lock_Context       *lock_context
+)
+{
+  uint64_t deadline;
+
+  ++the_period->postponed_jobs;
+  the_period->state = RATE_MONOTONIC_EXPIRED;
+
+  deadline = _Watchdog_Per_CPU_insert_relative(
+    &the_period->Timer,
+    _Per_CPU_Get(),
+    the_period->next_length
+  );
+  the_period->latest_deadline = deadline;
+
+  _Rate_monotonic_Release( the_period, lock_context );
+}
+
 void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
 {
   Rate_monotonic_Control *the_period;
@@ -64,14 +85,6 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
       _Thread_Unblock( owner );
     }
   } else {
-    /*
-     * If the watchdog is timeout, it means there is an additional postponed
-     * job in the next period but it is not available to release now:
-     * Either the current task is still executed, or it is preemptive by the
-     * other higher priority tasks.
-     */
-    the_period->postponed_jobs += 1;
-    the_period->state = RATE_MONOTONIC_EXPIRED;
     _Rate_monotonic_Renew_deadline( the_period, owner, &lock_context );
   }
 }

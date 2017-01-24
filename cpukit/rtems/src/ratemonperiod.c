@@ -120,30 +120,6 @@ static void _Rate_monotonic_Release_job(
   _Thread_Dispatch_enable( cpu_self );
 }
 
-void _Rate_monotonic_Renew_deadline(
-  Rate_monotonic_Control *the_period,
-  Thread_Control         *owner,
-  ISR_lock_Context       *lock_context
-)
-{
-  Per_CPU_Control *cpu_self;
-  uint64_t deadline;
-
-  cpu_self = _Thread_Dispatch_disable_critical( lock_context );
-  _Rate_monotonic_Release( owner, lock_context );
-
-  _ISR_lock_ISR_disable( lock_context );
-  deadline = _Watchdog_Per_CPU_insert_relative(
-    &the_period->Timer,
-    cpu_self,
-    the_period->next_length
-  );
-  the_period->latest_deadline = deadline;
-  _ISR_lock_ISR_enable( lock_context );
-  _Thread_Dispatch_enable( cpu_self );
-
-}
-
 void _Rate_monotonic_Restart(
   Rate_monotonic_Control *the_period,
   Thread_Control         *owner,
