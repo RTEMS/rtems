@@ -142,28 +142,28 @@ struct grcan_priv {
 static void __inline__ grcan_hw_reset(struct grcan_regs *regs);
 
 static unsigned int grcan_hw_read_try(
-  struct grcan_priv *pDev,
-  struct grcan_regs *regs,
-  CANMsg *buffer,
-  int max);
+	struct grcan_priv *pDev,
+	struct grcan_regs *regs,
+	CANMsg *buffer,
+	int max);
 
 static unsigned int grcan_hw_write_try(
-  struct grcan_priv *pDev,
-  struct grcan_regs *regs,
-  CANMsg *buffer,
-  int count);
+	struct grcan_priv *pDev,
+	struct grcan_regs *regs,
+	CANMsg *buffer,
+	int count);
 
 static void grcan_hw_config(
-  struct grcan_regs *regs,
-  struct grcan_config *conf);
+	struct grcan_regs *regs,
+	struct grcan_config *conf);
 
 static void grcan_hw_accept(
-  struct grcan_regs *regs,
-  struct grcan_filter *afilter);
+	struct grcan_regs *regs,
+	struct grcan_filter *afilter);
 
 static void grcan_hw_sync(
-  struct grcan_regs *regs,
-  struct grcan_filter *sfilter);
+	struct grcan_regs *regs,
+	struct grcan_filter *sfilter);
 
 static void grcan_interrupt(void *arg);
 
@@ -378,227 +378,221 @@ static void __inline__ grcan_hw_reset(struct grcan_regs *regs)
 
 static rtems_device_driver grcan_hw_start(struct grcan_priv *pDev)
 {
-  /*
-   * tmp is set but never used. GCC gives a warning for this
-   * and we need to tell GCC not to complain.
-   */
-  unsigned int tmp RTEMS_UNUSED;
+	/*
+	 * tmp is set but never used. GCC gives a warning for this
+	 * and we need to tell GCC not to complain.
+	 */
+	unsigned int tmp RTEMS_UNUSED;
 
-  IRQ_GLOBAL_PREPARE(oldLevel);
+	IRQ_GLOBAL_PREPARE(oldLevel);
 
-  FUNCDBG();
+	FUNCDBG();
 
-  /* Check that memory has been allocated successfully */
-  if ( !pDev->tx || !pDev->rx )
-    return RTEMS_NO_MEMORY;
+	/* Check that memory has been allocated successfully */
+	if (!pDev->tx || !pDev->rx)
+		return RTEMS_NO_MEMORY;
 
-  /* Configure FIFO configuration register
-   * and Setup timing
-   */
-  if ( pDev->config_changed ){
-    grcan_hw_config(pDev->regs,&pDev->config);
-    pDev->config_changed = 0;
-  }
+	/* Configure FIFO configuration register
+	 * and Setup timing
+	 */
+	if (pDev->config_changed) {
+		grcan_hw_config(pDev->regs, &pDev->config);
+		pDev->config_changed = 0;
+	}
 
-  /* Setup receiver */
-  pDev->regs->rx0addr = (unsigned int)pDev->_rx_hw;
-  pDev->regs->rx0size = pDev->rxbuf_size;
+	/* Setup receiver */
+	pDev->regs->rx0addr = (unsigned int)pDev->_rx_hw;
+	pDev->regs->rx0size = pDev->rxbuf_size;
 
-  /* Setup Transmitter */
-  pDev->regs->tx0addr = (unsigned int)pDev->_tx_hw;
-  pDev->regs->tx0size = pDev->txbuf_size;
+	/* Setup Transmitter */
+	pDev->regs->tx0addr = (unsigned int)pDev->_tx_hw;
+	pDev->regs->tx0size = pDev->txbuf_size;
 
-  /* Setup acceptance filters */
-  grcan_hw_accept(pDev->regs,&pDev->afilter);
+	/* Setup acceptance filters */
+	grcan_hw_accept(pDev->regs, &pDev->afilter);
 
-  /* Sync filters */
-  grcan_hw_sync(pDev->regs,&pDev->sfilter);
+	/* Sync filters */
+	grcan_hw_sync(pDev->regs, &pDev->sfilter);
 
-  /* Clear status bits */
-  tmp = READ_REG(&pDev->regs->stat);
-  pDev->regs->stat = 0;
+	/* Clear status bits */
+	tmp = READ_REG(&pDev->regs->stat);
+	pDev->regs->stat = 0;
 
-  /* Setup IRQ handling */
+	/* Setup IRQ handling */
 
-  /* Clear all IRQs */
-  tmp = READ_REG(&pDev->regs->pir);
-  pDev->regs->picr = 0x1ffff;
+	/* Clear all IRQs */
+	tmp = READ_REG(&pDev->regs->pir);
+	pDev->regs->picr = 0x1ffff;
 
-  /* unmask TxLoss|TxErrCntr|RxErrCntr|TxAHBErr|RxAHBErr|OR|OFF|PASS */
-  pDev->regs->imr = 0x1601f;
+	/* unmask TxLoss|TxErrCntr|RxErrCntr|TxAHBErr|RxAHBErr|OR|OFF|PASS */
+	pDev->regs->imr = 0x1601f;
 
-  /* Enable routing of the IRQs */
-  IRQ_GLOBAL_DISABLE(oldLevel);
-  IRQ_UNMASK(pDev->irq+GRCAN_IRQ_TXSYNC);
-  IRQ_UNMASK(pDev->irq+GRCAN_IRQ_RXSYNC);
-  IRQ_UNMASK(pDev->irq+GRCAN_IRQ_IRQ);
-  IRQ_GLOBAL_ENABLE(oldLevel);
+	/* Enable routing of the IRQs */
+	IRQ_GLOBAL_DISABLE(oldLevel);
+	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_TXSYNC);
+	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_RXSYNC);
+	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_IRQ);
+	IRQ_GLOBAL_ENABLE(oldLevel);
 
-  /* Reset some software data */
-  /*pDev->txerror = 0;
-  pDev->rxerror = 0;*/
+	/* Reset some software data */
+	/*pDev->txerror = 0;
+	   pDev->rxerror = 0; */
 
-  /* Enable receiver/transmitter */
-  pDev->regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
-  pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
+	/* Enable receiver/transmitter */
+	pDev->regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
+	pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 
-  /* Enable HurriCANe core */
-  pDev->regs->ctrl = GRCAN_CTRL_ENABLE;
+	/* Enable HurriCANe core */
+	pDev->regs->ctrl = GRCAN_CTRL_ENABLE;
 
-  /* Leave transmitter disabled, it is enabled when
-   * trying to send something.
-   */
-  return RTEMS_SUCCESSFUL;
+	/* Leave transmitter disabled, it is enabled when
+	 * trying to send something.
+	 */
+	return RTEMS_SUCCESSFUL;
 }
 
 static void grcan_hw_stop(struct grcan_priv *pDev)
 {
-  FUNCDBG();
+	FUNCDBG();
 
-  /* Mask all IRQs */
-  pDev->regs->imr = 0;
-  IRQ_MASK(pDev->irq+GRCAN_IRQ_TXSYNC);
-  IRQ_MASK(pDev->irq+GRCAN_IRQ_RXSYNC);
-  IRQ_MASK(pDev->irq+GRCAN_IRQ_IRQ);
+	/* Mask all IRQs */
+	pDev->regs->imr = 0;
+	IRQ_MASK(pDev->irq + GRCAN_IRQ_TXSYNC);
+	IRQ_MASK(pDev->irq + GRCAN_IRQ_RXSYNC);
+	IRQ_MASK(pDev->irq + GRCAN_IRQ_IRQ);
 
-  /* Disable receiver & transmitter */
-  pDev->regs->rx0ctrl = 0;
-  pDev->regs->tx0ctrl = 0;
+	/* Disable receiver & transmitter */
+	pDev->regs->rx0ctrl = 0;
+	pDev->regs->tx0ctrl = 0;
 
-  /* Reset semaphores to the initial state and wakeing
-   * all threads waiting for an IRQ. The threads that
-   * get woken up must check for RTEMS_UNSATISFIED in
-   * order to determine that they should return to
-   * user space with error status.
-   */
-  rtems_semaphore_flush(pDev->rx_sem);
-  rtems_semaphore_flush(pDev->tx_sem);
-  rtems_semaphore_flush(pDev->txempty_sem);
+	/* Reset semaphores to the initial state and wakeing
+	 * all threads waiting for an IRQ. The threads that
+	 * get woken up must check for RTEMS_UNSATISFIED in
+	 * order to determine that they should return to
+	 * user space with error status.
+	 */
+	rtems_semaphore_flush(pDev->rx_sem);
+	rtems_semaphore_flush(pDev->tx_sem);
+	rtems_semaphore_flush(pDev->txempty_sem);
 }
 
-static void grcan_hw_config(
-  struct grcan_regs *regs,
-  struct grcan_config *conf
-  )
+static void grcan_hw_config(struct grcan_regs *regs, struct grcan_config *conf)
 {
-  unsigned int config=0;
+	unsigned int config = 0;
 
-  /* Reset HurriCANe Core */
-  regs->ctrl = 0;
+	/* Reset HurriCANe Core */
+	regs->ctrl = 0;
 
-  if ( conf->silent )
-    config |= GRCAN_CFG_SILENT;
+	if (conf->silent)
+		config |= GRCAN_CFG_SILENT;
 
-  if ( conf->abort )
-    config |= GRCAN_CFG_ABORT;
+	if (conf->abort)
+		config |= GRCAN_CFG_ABORT;
 
-  if ( conf->selection.selection )
-    config |= GRCAN_CFG_SELECTION;
+	if (conf->selection.selection)
+		config |= GRCAN_CFG_SELECTION;
 
-  if ( conf->selection.enable0 )
-    config |= GRCAN_CFG_ENABLE0;
+	if (conf->selection.enable0)
+		config |= GRCAN_CFG_ENABLE0;
 
-  if ( conf->selection.enable1 )
-    config |= GRCAN_CFG_ENABLE1;
+	if (conf->selection.enable1)
+		config |= GRCAN_CFG_ENABLE1;
 
-  /* Timing */
-  config |= (conf->timing.bpr<<GRCAN_CFG_BPR_BIT) & GRCAN_CFG_BPR;
-  config |= (conf->timing.rsj<<GRCAN_CFG_RSJ_BIT) & GRCAN_CFG_RSJ;
-  config |= (conf->timing.ps1<<GRCAN_CFG_PS1_BIT) & GRCAN_CFG_PS1;
-  config |= (conf->timing.ps2<<GRCAN_CFG_PS2_BIT) & GRCAN_CFG_PS2;
-  config |= (conf->timing.scaler<<GRCAN_CFG_SCALER_BIT) & GRCAN_CFG_SCALER;
+	/* Timing */
+	config |= (conf->timing.bpr << GRCAN_CFG_BPR_BIT) & GRCAN_CFG_BPR;
+	config |= (conf->timing.rsj << GRCAN_CFG_RSJ_BIT) & GRCAN_CFG_RSJ;
+	config |= (conf->timing.ps1 << GRCAN_CFG_PS1_BIT) & GRCAN_CFG_PS1;
+	config |= (conf->timing.ps2 << GRCAN_CFG_PS2_BIT) & GRCAN_CFG_PS2;
+	config |=
+	    (conf->timing.scaler << GRCAN_CFG_SCALER_BIT) & GRCAN_CFG_SCALER;
 
-  /* Write configuration */
-  regs->conf = config;
+	/* Write configuration */
+	regs->conf = config;
 
-  /* Enable HurriCANe Core */
-  regs->ctrl = GRCAN_CTRL_ENABLE;
+	/* Enable HurriCANe Core */
+	regs->ctrl = GRCAN_CTRL_ENABLE;
 }
 
 static void grcan_hw_accept(
-  struct grcan_regs *regs,
-  struct grcan_filter *afilter
-  )
+	struct grcan_regs *regs,
+	struct grcan_filter *afilter
+)
 {
-  /* Disable Sync mask totaly (if we change scode or smask
-   * in an unfortunate way we may trigger a sync match)
-   */
-  regs->rx0mask = 0xffffffff;
+	/* Disable Sync mask totaly (if we change scode or smask
+	 * in an unfortunate way we may trigger a sync match)
+	 */
+	regs->rx0mask = 0xffffffff;
 
-  /* Set Sync Filter in a controlled way */
-  regs->rx0code = afilter->code;
-  regs->rx0mask = afilter->mask;
+	/* Set Sync Filter in a controlled way */
+	regs->rx0code = afilter->code;
+	regs->rx0mask = afilter->mask;
 }
 
-static void grcan_hw_sync(
-  struct grcan_regs *regs,
-  struct grcan_filter *sfilter
-  )
+static void grcan_hw_sync(struct grcan_regs *regs, struct grcan_filter *sfilter)
 {
-  /* Disable Sync mask totaly (if we change scode or smask
-   * in an unfortunate way we may trigger a sync match)
-   */
-  regs->smask = 0xffffffff;
+	/* Disable Sync mask totaly (if we change scode or smask
+	 * in an unfortunate way we may trigger a sync match)
+	 */
+	regs->smask = 0xffffffff;
 
-  /* Set Sync Filter in a controlled way */
-  regs->scode = sfilter->code;
-  regs->smask = sfilter->mask;
+	/* Set Sync Filter in a controlled way */
+	regs->scode = sfilter->code;
+	regs->smask = sfilter->mask;
 }
 
 static unsigned int grcan_hw_rxavail(
-  unsigned int rp,
-  unsigned int wp,
-  unsigned int size
-  )
+	unsigned int rp,
+	unsigned int wp, unsigned int size
+)
 {
-  if ( rp == wp ) {
-    /* read pointer and write pointer is equal only
-     * when RX buffer is empty.
-     */
-    return 0;
-  }
+	if (rp == wp) {
+		/* read pointer and write pointer is equal only
+		 * when RX buffer is empty.
+		 */
+		return 0;
+	}
 
-  if ( wp > rp ) {
-    return (wp-rp)/GRCAN_MSG_SIZE;
-  }else{
-    return (size-(rp-wp))/GRCAN_MSG_SIZE;
-  }
+	if (wp > rp) {
+		return (wp - rp) / GRCAN_MSG_SIZE;
+	} else {
+		return (size - (rp - wp)) / GRCAN_MSG_SIZE;
+	}
 }
 
 static unsigned int grcan_hw_txspace(
-  unsigned int rp,
-  unsigned int wp,
-  unsigned int size
-  )
+	unsigned int rp,
+	unsigned int wp,
+	unsigned int size
+)
 {
-  unsigned int left;
+	unsigned int left;
 
-  if ( rp == wp ) {
-    /* read pointer and write pointer is equal only
-     * when TX buffer is empty.
-     */
-    return size/GRCAN_MSG_SIZE-WRAP_AROUND_TX_MSGS;
-  }
+	if (rp == wp) {
+		/* read pointer and write pointer is equal only
+		 * when TX buffer is empty.
+		 */
+		return size / GRCAN_MSG_SIZE - WRAP_AROUND_TX_MSGS;
+	}
 
-  /* size - 4 - abs(read-write) */
-  if ( wp > rp ) {
-    left = size-(wp-rp);
-  }else{
-    left = rp-wp;
-  }
+	/* size - 4 - abs(read-write) */
+	if (wp > rp) {
+		left = size - (wp - rp);
+	} else {
+		left = rp - wp;
+	}
 
-  return left/GRCAN_MSG_SIZE-WRAP_AROUND_TX_MSGS;
+	return left / GRCAN_MSG_SIZE - WRAP_AROUND_TX_MSGS;
 }
 
 static int grcan_hw_rx_ongoing(struct grcan_regs *regs)
 {
-  return READ_REG(&regs->rx0ctrl) & GRCAN_RXCTRL_ONGOING;
-};
+	return READ_REG(&regs->rx0ctrl) & GRCAN_RXCTRL_ONGOING;
+}
 
 static int grcan_hw_tx_ongoing(struct grcan_regs *regs)
 {
-  return READ_REG(&regs->tx0ctrl) & GRCAN_TXCTRL_ONGOING;
-};
+	return READ_REG(&regs->tx0ctrl) & GRCAN_TXCTRL_ONGOING;
+}
 
 
 #define MIN_TSEG1 1
@@ -607,31 +601,31 @@ static int grcan_hw_tx_ongoing(struct grcan_regs *regs)
 #define MAX_TSEG2 8
 
 static int grcan_calc_timing(
-  unsigned int baud,          /* The requested BAUD to calculate timing for */
-  unsigned int core_hz,       /* Frequency in Hz of GRCAN Core */
-  unsigned int sampl_pt,
-  struct grcan_timing *timing /* result is placed here */
-  )
+	unsigned int baud,	/* The requested BAUD to calculate timing for */
+	unsigned int core_hz,	/* Frequency in Hz of GRCAN Core */
+	unsigned int sampl_pt,
+	struct grcan_timing *timing	/* result is placed here */
+)
 {
 	int best_error = 1000000000;
 	int error;
-	int best_tseg=0, best_brp=0, brp=0;
-	int tseg=0, tseg1=0, tseg2=0;
+	int best_tseg = 0, best_brp = 0, brp = 0;
+	int tseg = 0, tseg1 = 0, tseg2 = 0;
 	int sjw = 1;
 
-  /* Default to 90% */
-  if ( (sampl_pt < 50) || (sampl_pt>99) ){
-    sampl_pt = GRCAN_SAMPLING_POINT;
-  }
+	/* Default to 90% */
+	if ((sampl_pt < 50) || (sampl_pt > 99)) {
+		sampl_pt = GRCAN_SAMPLING_POINT;
+	}
 
-	if ( (baud<5000) || (baud>1000000) ){
+	if ((baud < 5000) || (baud > 1000000)) {
 		/* invalid speed mode */
 		return -1;
 	}
 
 	/* find best match, return -2 if no good reg
 	 * combination is available for this frequency
-   */
+	 */
 
 	/* some heuristic specials */
 	if (baud > ((1000000 + 500000) / 2))
@@ -641,292 +635,295 @@ static int grcan_calc_timing(
 		sampl_pt = 75;
 
 	/* tseg even = round down, odd = round up */
-	for (tseg = (MIN_TSEG1 + MIN_TSEG2 + 2) * 2;
-	     tseg <= (MAX_TSEG2 + MAX_TSEG1 + 2) * 2 + 1;
-	     tseg++)
-	{
+	for (
+		tseg = (MIN_TSEG1 + MIN_TSEG2 + 2) * 2;
+		tseg <= (MAX_TSEG2 + MAX_TSEG1 + 2) * 2 + 1;
+		tseg++
+	) {
 		brp = core_hz / ((1 + tseg / 2) * baud) + tseg % 2;
-		if ((brp <= 0) ||
-        ( (brp > 256*1) && (brp <= 256*2) && (brp&0x1) ) ||
-        ( (brp > 256*2) && (brp <= 256*4) && (brp&0x3) ) ||
-        ( (brp > 256*4) && (brp <= 256*8) && (brp&0x7) ) ||
-        (brp > 256*8)
-        )
+		if (
+			(brp <= 0) ||
+			((brp > 256 * 1) && (brp <= 256 * 2) && (brp & 0x1)) ||
+			((brp > 256 * 2) && (brp <= 256 * 4) && (brp & 0x3)) ||
+			((brp > 256 * 4) && (brp <= 256 * 8) && (brp & 0x7)) ||
+			(brp > 256 * 8)
+		)
 			continue;
 
 		error = baud - core_hz / (brp * (1 + tseg / 2));
-		if (error < 0)
-		{
+		if (error < 0) {
 			error = -error;
 		}
 
-		if (error <= best_error)
-		{
+		if (error <= best_error) {
 			best_error = error;
-			best_tseg = tseg/2;
-			best_brp = brp-1;
+			best_tseg = tseg / 2;
+			best_brp = brp - 1;
 		}
 	}
 
-	if (best_error && (baud / best_error < 10))
-	{
+	if (best_error && (baud / best_error < 10)) {
 		return -2;
-	}else if ( !timing )
-		return 0; /* nothing to store result in, but a valid bitrate can be calculated */
+	} else if (!timing)
+		return 0;	/* nothing to store result in, but a valid bitrate can be calculated */
 
 	tseg2 = best_tseg - (sampl_pt * (best_tseg + 1)) / 100;
 
-	if (tseg2 < MIN_TSEG2)
-	{
+	if (tseg2 < MIN_TSEG2) {
 		tseg2 = MIN_TSEG2;
 	}
 
-	if (tseg2 > MAX_TSEG2)
-	{
+	if (tseg2 > MAX_TSEG2) {
 		tseg2 = MAX_TSEG2;
 	}
 
 	tseg1 = best_tseg - tseg2 - 2;
 
-	if (tseg1 > MAX_TSEG1)
-	{
+	if (tseg1 > MAX_TSEG1) {
 		tseg1 = MAX_TSEG1;
 		tseg2 = best_tseg - tseg1 - 2;
 	}
 
-  /* Get scaler and BRP from pseudo BRP */
-  if ( best_brp <= 256 ){
-    timing->scaler = best_brp;
-    timing->bpr = 0;
-  }else if ( best_brp <= 256*2 ){
-    timing->scaler = ((best_brp+1)>>1) -1;
-    timing->bpr = 1;
-  }else if ( best_brp <= 256*4 ){
-    timing->scaler = ((best_brp+1)>>2) -1;
-    timing->bpr = 2;
-  }else{
-    timing->scaler = ((best_brp+1)>>3) -1;
-    timing->bpr = 3;
-  }
+	/* Get scaler and BRP from pseudo BRP */
+	if (best_brp <= 256) {
+		timing->scaler = best_brp;
+		timing->bpr = 0;
+	} else if (best_brp <= 256 * 2) {
+		timing->scaler = ((best_brp + 1) >> 1) - 1;
+		timing->bpr = 1;
+	} else if (best_brp <= 256 * 4) {
+		timing->scaler = ((best_brp + 1) >> 2) - 1;
+		timing->bpr = 2;
+	} else {
+		timing->scaler = ((best_brp + 1) >> 3) - 1;
+		timing->bpr = 3;
+	}
 
-	timing->ps1    = tseg1+1;
-	timing->ps2    = tseg2;
-	timing->rsj    = sjw;
+	timing->ps1 = tseg1 + 1;
+	timing->ps2 = tseg2;
+	timing->rsj = sjw;
 
 	return 0;
 }
 
 static unsigned int grcan_hw_read_try(
-  struct grcan_priv *pDev,
-  struct grcan_regs *regs,
-  CANMsg *buffer,
-  int max
-  )
+	struct grcan_priv *pDev,
+	struct grcan_regs *regs,
+	CANMsg * buffer,
+	int max
+)
 {
-  int i,j;
-  CANMsg *dest;
-  struct grcan_msg *source,tmp;
-  unsigned int wp,rp,size,rxmax,addr,trunk_msg_cnt;
+	int i, j;
+	CANMsg *dest;
+	struct grcan_msg *source, tmp;
+	unsigned int wp, rp, size, rxmax, addr, trunk_msg_cnt;
 
-  FUNCDBG();
+	FUNCDBG();
 
-  wp = READ_REG(&regs->rx0wr);
-  rp = READ_REG(&regs->rx0rd);
+	wp = READ_REG(&regs->rx0wr);
+	rp = READ_REG(&regs->rx0rd);
 
-  /*
-   * Due to hardware wrap around simplification write pointer will
-   * never reach the read pointer, at least a gap of 8 bytes.
-   * The only time they are equal is when the read pointer has
-   * reached the write pointer (empty buffer)
-   *
-   */
-  if ( wp != rp ){
-    /* Not empty, we have received chars...
-     * Read as much as possible from DMA buffer
-     */
-    size = READ_REG(&regs->rx0size);
+	/*
+	 * Due to hardware wrap around simplification write pointer will
+	 * never reach the read pointer, at least a gap of 8 bytes.
+	 * The only time they are equal is when the read pointer has
+	 * reached the write pointer (empty buffer)
+	 *
+	 */
+	if (wp != rp) {
+		/* Not empty, we have received chars...
+		 * Read as much as possible from DMA buffer
+		 */
+		size = READ_REG(&regs->rx0size);
 
-    /* Get number of bytes available in RX buffer */
-    trunk_msg_cnt = grcan_hw_rxavail(rp,wp,size);
+		/* Get number of bytes available in RX buffer */
+		trunk_msg_cnt = grcan_hw_rxavail(rp, wp, size);
 
-    /* truncate size if user space buffer hasn't room for
-     * all received chars.
-     */
-    if ( trunk_msg_cnt > max )
-      trunk_msg_cnt = max;
+		/* truncate size if user space buffer hasn't room for
+		 * all received chars.
+		 */
+		if (trunk_msg_cnt > max)
+			trunk_msg_cnt = max;
 
-    /* Read until i is 0 */
-    i=trunk_msg_cnt;
+		/* Read until i is 0 */
+		i = trunk_msg_cnt;
 
-    addr = (unsigned int)pDev->rx;
-    source = (struct grcan_msg *)(addr + rp);
-    dest = buffer;
-    rxmax = addr + (size-GRCAN_MSG_SIZE);
+		addr = (unsigned int)pDev->rx;
+		source = (struct grcan_msg *)(addr + rp);
+		dest = buffer;
+		rxmax = addr + (size - GRCAN_MSG_SIZE);
 
-    /* Read as many can messages as possible */
-    while(i>0){
-      /* Read CAN message from DMA buffer */
-      tmp.head[0] = READ_DMA_WORD(&source->head[0]);
-      tmp.head[1] = READ_DMA_WORD(&source->head[1]);
-      /* Convert one grcan CAN message to one "software" CAN message */
-      dest->extended = tmp.head[0]>>31;
-      dest->rtr = (tmp.head[0] >>30) & 0x1;
-      if ( dest->extended ){
-        dest->id = tmp.head[0] & 0x3fffffff;
-      }else{
-        dest->id = (tmp.head[0] >>18) & 0xfff;
-      }
-      dest->len = tmp.head[1] >> 28;
-      for(j=0; j<dest->len; j++)
-        dest->data[j] = READ_DMA_BYTE(&source->data[j]);
+		/* Read as many can messages as possible */
+		while (i > 0) {
+			/* Read CAN message from DMA buffer */
+			tmp.head[0] = READ_DMA_WORD(&source->head[0]);
+			tmp.head[1] = READ_DMA_WORD(&source->head[1]);
+			/* Convert one grcan CAN message to one "software" CAN message */
+			dest->extended = tmp.head[0] >> 31;
+			dest->rtr = (tmp.head[0] >> 30) & 0x1;
+			if (dest->extended) {
+				dest->id = tmp.head[0] & 0x3fffffff;
+			} else {
+				dest->id = (tmp.head[0] >> 18) & 0xfff;
+			}
+			dest->len = tmp.head[1] >> 28;
+			for (j = 0; j < dest->len; j++)
+				dest->data[j] = READ_DMA_BYTE(&source->data[j]);
 
-      /* wrap around if neccessary */
-      source = ( (unsigned int)source >= rxmax ) ? (struct grcan_msg *)addr : source+1;
-      dest++; /* straight user buffer */
-      i--;
-    }
-    /* Increment Hardware READ pointer (mark read byte as read)
-     * ! wait for registers to be safely re-configurable
-     */
-    regs->rx0ctrl = 0; /* DISABLE RX CHANNEL */
-    i=0;
-    while( grcan_hw_rx_ongoing(regs) && (i<1000) ){
-      i++;
-    }
-    regs->rx0rd = (unsigned int)source-addr;
-    regs->rx0ctrl = GRCAN_RXCTRL_ENABLE; /* ENABLE_RX_CHANNEL */
-    return trunk_msg_cnt;
-  }
-  return 0;
+			/* wrap around if neccessary */
+			source =
+			    ((unsigned int)source >= rxmax) ?
+			    (struct grcan_msg *)addr : source + 1;
+			dest++;	/* straight user buffer */
+			i--;
+		}
+		/* Increment Hardware READ pointer (mark read byte as read)
+		 * ! wait for registers to be safely re-configurable
+		 */
+		regs->rx0ctrl = 0;	/* DISABLE RX CHANNEL */
+		i = 0;
+		while (grcan_hw_rx_ongoing(regs) && (i < 1000)) {
+			i++;
+		}
+		regs->rx0rd = (unsigned int)source - addr;
+		regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;	/* ENABLE_RX_CHANNEL */
+		return trunk_msg_cnt;
+	}
+	return 0;
 }
 
 static unsigned int grcan_hw_write_try(
-  struct grcan_priv *pDev,
-  struct grcan_regs *regs,
-  CANMsg *buffer,
-  int count
-  )
+	struct grcan_priv *pDev,
+	struct grcan_regs *regs,
+	CANMsg * buffer,
+	int count
+)
 {
-  unsigned int rp, wp, size, txmax, addr, ret;
-  struct grcan_msg *dest;
-  CANMsg *source;
-  int space_left;
-  unsigned int tmp;
-  int i;
+	unsigned int rp, wp, size, txmax, addr, ret;
+	struct grcan_msg *dest;
+	CANMsg *source;
+	int space_left;
+	unsigned int tmp;
+	int i;
 
-  DBGC(DBG_TX,"\n");
-  /*FUNCDBG();*/
+	DBGC(DBG_TX, "\n");
+	/*FUNCDBG(); */
 
-  rp = READ_REG(&regs->tx0rd);
-  wp = READ_REG(&regs->tx0wr);
-  size = READ_REG(&regs->tx0size);
+	rp = READ_REG(&regs->tx0rd);
+	wp = READ_REG(&regs->tx0wr);
+	size = READ_REG(&regs->tx0size);
 
-  space_left = grcan_hw_txspace(rp,wp,size);
+	space_left = grcan_hw_txspace(rp, wp, size);
 
-  /* is circular fifo full? */
-  if ( space_left < 1 )
-    return 0;
+	/* is circular fifo full? */
+	if (space_left < 1)
+		return 0;
 
-  /* Truncate size */
-  if ( space_left > count )
-    space_left = count;
-  ret = space_left;
+	/* Truncate size */
+	if (space_left > count)
+		space_left = count;
+	ret = space_left;
 
-  addr = (unsigned int)pDev->tx;
+	addr = (unsigned int)pDev->tx;
 
-  dest = (struct grcan_msg *)(addr + wp);
-  source = (CANMsg *)buffer;
-  txmax = addr + (size-GRCAN_MSG_SIZE);
+	dest = (struct grcan_msg *)(addr + wp);
+	source = (CANMsg *) buffer;
+	txmax = addr + (size - GRCAN_MSG_SIZE);
 
-  while ( space_left>0 ) {
-    /* Convert and write CAN message to DMA buffer */
-    if ( source->extended ){
-      tmp = (1<<31) | (source->id & 0x3fffffff);
-    }else{
-      tmp = (source->id&0xfff)<<18;
-    }
-    if ( source->rtr )
-      tmp|=(1<<30);
-    dest->head[0] = tmp;
-    dest->head[1] = source->len<<28;
-    for ( i=0; i<source->len; i++)
-      dest->data[i] = source->data[i];
-    source++; /* straight user buffer */
-    dest = ((unsigned int)dest >= txmax) ? (struct grcan_msg *)addr : dest+1;
-    space_left--;
-  }
+	while (space_left > 0) {
+		/* Convert and write CAN message to DMA buffer */
+		if (source->extended) {
+			tmp = (1 << 31) | (source->id & 0x3fffffff);
+		} else {
+			tmp = (source->id & 0xfff) << 18;
+		}
+		if (source->rtr)
+			tmp |= (1 << 30);
+		dest->head[0] = tmp;
+		dest->head[1] = source->len << 28;
+		for (i = 0; i < source->len; i++)
+			dest->data[i] = source->data[i];
+		source++;	/* straight user buffer */
+		dest =
+		    ((unsigned int)dest >= txmax) ?
+		    (struct grcan_msg *)addr : dest + 1;
+		space_left--;
+	}
 
-  /* Update write pointer
-   * ! wait for registers to be safely re-configurable
-   */
-  regs->tx0ctrl = 0; /* DISABLE TX CHANNEL */
-  i=0;
-  while( (grcan_hw_tx_ongoing(regs)) && i<1000 ){
-    i++;
-  }
-  regs->tx0wr = (unsigned int)dest - addr; /* Update write pointer */
-  regs->tx0ctrl = GRCAN_TXCTRL_ENABLE; /* ENABLE_TX_CHANNEL */
-  return ret;
+	/* Update write pointer
+	 * ! wait for registers to be safely re-configurable
+	 */
+	regs->tx0ctrl = 0;	/* DISABLE TX CHANNEL */
+	i = 0;
+	while ((grcan_hw_tx_ongoing(regs)) && i < 1000) {
+		i++;
+	}
+	regs->tx0wr = (unsigned int)dest - addr;	/* Update write pointer */
+	regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;	/* ENABLE_TX_CHANNEL */
+	return ret;
 }
 
-static int grcan_wait_rxdata(
-  struct grcan_priv *pDev,
-  int min
-  )
+static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 {
-  unsigned int wp, rp, size, irq;
-  unsigned int irq_trunk, dataavail;
-  int wait;
-  IRQ_GLOBAL_PREPARE(oldLevel);
+	unsigned int wp, rp, size, irq;
+	unsigned int irq_trunk, dataavail;
+	int wait;
+	IRQ_GLOBAL_PREPARE(oldLevel);
 
-  FUNCDBG();
+	FUNCDBG();
 
-  /*** block until receive IRQ received
-   * Set up a valid IRQ point so that an IRQ is received
-   * when one or more messages are received
-   */
-  IRQ_GLOBAL_DISABLE(oldLevel);
+	/*** block until receive IRQ received
+	 * Set up a valid IRQ point so that an IRQ is received
+	 * when one or more messages are received
+	 */
+	IRQ_GLOBAL_DISABLE(oldLevel);
 
-  size = READ_REG(&pDev->regs->rx0size);
-  rp = READ_REG(&pDev->regs->rx0rd);
-  wp = READ_REG(&pDev->regs->rx0wr);
+	size = READ_REG(&pDev->regs->rx0size);
+	rp = READ_REG(&pDev->regs->rx0rd);
+	wp = READ_REG(&pDev->regs->rx0wr);
 
-  /**** Calculate IRQ Pointer ****/
-  irq = wp + min*GRCAN_MSG_SIZE;
-  /* wrap irq around */
-  if ( irq >= size ){
-    irq_trunk = irq-size;
-  }else
-    irq_trunk = irq;
+	/**** Calculate IRQ Pointer ****/
+	irq = wp + min * GRCAN_MSG_SIZE;
+	/* wrap irq around */
+	if (irq >= size) {
+		irq_trunk = irq - size;
+	} else
+		irq_trunk = irq;
 
-  /* init IRQ HW */
-  pDev->regs->rx0irq = irq_trunk;
+	/* init IRQ HW */
+	pDev->regs->rx0irq = irq_trunk;
 
-  /* Clear pending Rx IRQ */
-  pDev->regs->picr = GRCAN_RXIRQ_IRQ;
+	/* Clear pending Rx IRQ */
+	pDev->regs->picr = GRCAN_RXIRQ_IRQ;
 
-  wp = READ_REG(&pDev->regs->rx0wr);
+	wp = READ_REG(&pDev->regs->rx0wr);
 
-  /* Calculate messages available */
-  dataavail = grcan_hw_rxavail(rp,wp,size);
+	/* Calculate messages available */
+	dataavail = grcan_hw_rxavail(rp, wp, size);
 
-  if ( dataavail < min ){
-    /* Still empty, proceed with sleep - Turn on IRQ (unmask irq) */
-    pDev->regs->imr = READ_REG(&pDev->regs->imr) | GRCAN_RXIRQ_IRQ;
-    wait=1;
-  }else{
-    /* enough message has been received, abort sleep - don't unmask interrupt */
-    wait=0;
-  }
-  IRQ_GLOBAL_ENABLE(oldLevel);
+	if (dataavail < min) {
+		/* Still empty, proceed with sleep - Turn on IRQ (unmask irq) */
+		pDev->regs->imr = READ_REG(&pDev->regs->imr) | GRCAN_RXIRQ_IRQ;
+		wait = 1;
+	} else {
+		/* enough message has been received, abort sleep - don't unmask interrupt */
+		wait = 0;
+	}
+	IRQ_GLOBAL_ENABLE(oldLevel);
 
-    /* Wait for IRQ to fire only if has been triggered */
-  if ( wait ){
-    if ( rtems_semaphore_obtain(pDev->rx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT) == RTEMS_UNSATISFIED )
-      return -1; /* Device driver has been closed or stopped, return with error status */
-  }
+	/* Wait for IRQ to fire only if has been triggered */
+	if (wait) {
+		if (
+			rtems_semaphore_obtain(
+				pDev->rx_sem,
+				RTEMS_WAIT,
+				RTEMS_NO_TIMEOUT
+			) == RTEMS_UNSATISFIED
+		)
+			return -1;	/* Device driver has been closed or stopped, return with error status */
+	}
 
-  return 0;
+	return 0;
 }
 
 /* Wait until min bytes available in TX circular buffer.
@@ -936,114 +933,116 @@ static int grcan_wait_rxdata(
  * than max buffer for this algo to work.
  *
  */
-static int grcan_wait_txspace(
-  struct grcan_priv *pDev,
-  int min
-  )
+static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 {
-  int wait;
-  unsigned int irq, rp, wp, size, space_left;
-  unsigned int irq_trunk;
-  IRQ_GLOBAL_PREPARE(oldLevel);
+	int wait;
+	unsigned int irq, rp, wp, size, space_left;
+	unsigned int irq_trunk;
+	IRQ_GLOBAL_PREPARE(oldLevel);
 
-  DBGC(DBG_TX,"\n");
-  /*FUNCDBG();*/
+	DBGC(DBG_TX, "\n");
+	/*FUNCDBG(); */
 
-  IRQ_GLOBAL_DISABLE(oldLevel);
+	IRQ_GLOBAL_DISABLE(oldLevel);
 
-  pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
+	pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 
-  size = READ_REG(&pDev->regs->tx0size);
-  wp = READ_REG(&pDev->regs->tx0wr);
+	size = READ_REG(&pDev->regs->tx0size);
+	wp = READ_REG(&pDev->regs->tx0wr);
 
-  rp = READ_REG(&pDev->regs->tx0rd);
+	rp = READ_REG(&pDev->regs->tx0rd);
 
-  /**** Calculate IRQ Pointer ****/
-  irq = rp + min*GRCAN_MSG_SIZE;
-  /* wrap irq around */
-  if ( irq >= size ){
-    irq_trunk = irq - size;
-  }else
-    irq_trunk = irq;
+	/**** Calculate IRQ Pointer ****/
+	irq = rp + min * GRCAN_MSG_SIZE;
+	/* wrap irq around */
+	if (irq >= size) {
+		irq_trunk = irq - size;
+	} else
+		irq_trunk = irq;
 
-  /* trigger HW to do a IRQ when enough room in buffer */
-  pDev->regs->tx0irq = irq_trunk;
+	/* trigger HW to do a IRQ when enough room in buffer */
+	pDev->regs->tx0irq = irq_trunk;
 
-  /* Clear pending Tx IRQ */
-  pDev->regs->picr = GRCAN_TXIRQ_IRQ;
+	/* Clear pending Tx IRQ */
+	pDev->regs->picr = GRCAN_TXIRQ_IRQ;
 
-  /* One problem, if HW already gone past IRQ place the IRQ will
-   * never be received resulting in a thread hang. We check if so
-   * before proceeding.
-   *
-   * has the HW already gone past the IRQ generation place?
-   *  == does min fit info tx buffer?
-   */
-  rp = READ_REG(&pDev->regs->tx0rd);
+	/* One problem, if HW already gone past IRQ place the IRQ will
+	 * never be received resulting in a thread hang. We check if so
+	 * before proceeding.
+	 *
+	 * has the HW already gone past the IRQ generation place?
+	 *  == does min fit info tx buffer?
+	 */
+	rp = READ_REG(&pDev->regs->tx0rd);
 
-  space_left = grcan_hw_txspace(rp,wp,size);
+	space_left = grcan_hw_txspace(rp, wp, size);
 
-  if ( space_left < min ){
-    /* Still too full, proceed with sleep - Turn on IRQ (unmask irq) */
-    pDev->regs->imr = READ_REG(&pDev->regs->imr) | GRCAN_TXIRQ_IRQ;
-    wait=1;
-  }else{
-    /* There are enough room in buffer, abort wait - don't unmask interrupt */
-    wait=0;
-  }
-  IRQ_GLOBAL_ENABLE(oldLevel);
+	if (space_left < min) {
+		/* Still too full, proceed with sleep - Turn on IRQ (unmask irq) */
+		pDev->regs->imr = READ_REG(&pDev->regs->imr) | GRCAN_TXIRQ_IRQ;
+		wait = 1;
+	} else {
+		/* There are enough room in buffer, abort wait - don't unmask interrupt */
+		wait = 0;
+	}
+	IRQ_GLOBAL_ENABLE(oldLevel);
 
-  /* Wait for IRQ to fire only if it has been triggered */
-  if ( wait ){
-    if ( rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, 100) ==
-         RTEMS_UNSATISFIED ){
-      /* Device driver has flushed us, this may be due to another thread has
-       * closed the device, this is to avoid deadlock */
-      return -1;
-    }
-  }
+	/* Wait for IRQ to fire only if it has been triggered */
+	if (wait) {
+		if (rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, 100) ==
+		    RTEMS_UNSATISFIED) {
+			/* Device driver has flushed us, this may be due to another thread has
+			 * closed the device, this is to avoid deadlock */
+			return -1;
+		}
+	}
 
-  /* At this point the TxIRQ has been masked, we ned not to mask it */
-  return 0;
+	/* At this point the TxIRQ has been masked, we ned not to mask it */
+	return 0;
 }
 
 static int grcan_tx_flush(struct grcan_priv *pDev)
 {
-  int wait;
-  unsigned int rp, wp;
-  IRQ_GLOBAL_PREPARE(oldLevel);
-  FUNCDBG();
+	int wait;
+	unsigned int rp, wp;
+	IRQ_GLOBAL_PREPARE(oldLevel);
+	FUNCDBG();
 
-  /* loop until all data in circular buffer has been read by hw.
-   * (write pointer != read pointer )
-   *
-   * Hardware doesn't update write pointer - we do
-   */
-  while ( (wp=READ_REG(&pDev->regs->tx0wr)) != (rp=READ_REG(&pDev->regs->tx0rd)) ) {
-    /* Wait for TX empty IRQ */
-    IRQ_GLOBAL_DISABLE(oldLevel);
-    /* Clear pending TXEmpty IRQ */
-    pDev->regs->picr = GRCAN_TXEMPTY_IRQ;
+	/* loop until all data in circular buffer has been read by hw.
+	 * (write pointer != read pointer )
+	 *
+	 * Hardware doesn't update write pointer - we do
+	 */
+	while (
+		(wp = READ_REG(&pDev->regs->tx0wr)) !=
+		(rp = READ_REG(&pDev->regs->tx0rd))
+	) {
+		/* Wait for TX empty IRQ */
+		IRQ_GLOBAL_DISABLE(oldLevel);
+		/* Clear pending TXEmpty IRQ */
+		pDev->regs->picr = GRCAN_TXEMPTY_IRQ;
 
-    if ( wp != READ_REG(&pDev->regs->tx0rd) ) {
-      /* Still not empty, proceed with sleep - Turn on IRQ (unmask irq) */
-      pDev->regs->imr = READ_REG(&pDev->regs->imr) | GRCAN_TXEMPTY_IRQ;
-      wait = 1;
-    }else{
-      /* TX fifo is empty */
-      wait = 0;
-    }
-    IRQ_GLOBAL_ENABLE(oldLevel);
-    if ( !wait )
-      break;
+		if (wp != READ_REG(&pDev->regs->tx0rd)) {
+			/* Still not empty, proceed with sleep - Turn on IRQ (unmask irq) */
+			pDev->regs->imr =
+			    READ_REG(&pDev->regs->imr) | GRCAN_TXEMPTY_IRQ;
+			wait = 1;
+		} else {
+			/* TX fifo is empty */
+			wait = 0;
+		}
+		IRQ_GLOBAL_ENABLE(oldLevel);
+		if (!wait)
+			break;
 
-    /* Wait for IRQ to wake us */
-    if ( rtems_semaphore_obtain(pDev->txempty_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT) ==
-         RTEMS_UNSATISFIED ) {
-      return -1;
-    }
-  }
-  return 0;
+		/* Wait for IRQ to wake us */
+		if (rtems_semaphore_obtain
+		    (pDev->txempty_sem, RTEMS_WAIT,
+		     RTEMS_NO_TIMEOUT) == RTEMS_UNSATISFIED) {
+			return -1;
+		}
+	}
+	return 0;
 }
 
 static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
@@ -1143,19 +1142,19 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 
 static void grcan_free_buffers(struct grcan_priv *pDev, int rx, int tx)
 {
-  FUNCDBG();
+	FUNCDBG();
 
-  if ( tx && pDev->_tx ){
-    free(pDev->_tx);
-    pDev->_tx = NULL;
-    pDev->tx = NULL;
-  }
+	if (tx && pDev->_tx) {
+		free(pDev->_tx);
+		pDev->_tx = NULL;
+		pDev->tx = NULL;
+	}
 
-  if ( rx && pDev->_rx ){
-    free(pDev->_rx);
-    pDev->_rx = NULL;
-    pDev->rx = NULL;
-  }
+	if (rx && pDev->_rx) {
+		free(pDev->_rx);
+		pDev->_rx = NULL;
+		pDev->rx = NULL;
+	}
 }
 
 int grcan_dev_count(void)
@@ -1306,37 +1305,36 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 		}
 	}
 
-	while(count == 0 || (pDev->rxcomplete && (count!=req_cnt)) ){
+	while (count == 0 || (pDev->rxcomplete && (count!=req_cnt))) {
+		if (!pDev->rxcomplete) {
+			left = 1; /* return as soon as there is one message available */
+		} else {
+			left = req_cnt - count;     /* return as soon as all data are available */
 
-	if ( !pDev->rxcomplete ){
-		left = 1; /* return as soon as there is one message available */
-	}else{
-		left = req_cnt - count;     /* return as soon as all data are available */
-
-		/* never wait for more than the half the maximum size of the receive buffer 
-		 * Why? We need some time to copy buffer before to catch up with hw,
-		 * otherwise we would have to copy everything when the data has been
-		 * received.
-		 */
-		if ( left > ((pDev->rxbuf_size/GRCAN_MSG_SIZE)/2) ){
-			left = (pDev->rxbuf_size/GRCAN_MSG_SIZE)/2;
+			/* never wait for more than the half the maximum size of the receive buffer 
+			 * Why? We need some time to copy buffer before to catch up with hw,
+			 * otherwise we would have to copy everything when the data has been
+			 * received.
+			 */
+			if (left > ((pDev->rxbuf_size/GRCAN_MSG_SIZE) / 2)){
+				left = (pDev->rxbuf_size/GRCAN_MSG_SIZE) / 2;
+			}
 		}
-	}
 
-	if ( grcan_wait_rxdata(pDev,left) ) {
-		/* The wait has been aborted, probably due to 
-		 * the device driver has been closed by another
-		 * thread.
-		 */
-		return count;
-	}
+		if (grcan_wait_rxdata(pDev, left)) {
+			/* The wait has been aborted, probably due to 
+			 * the device driver has been closed by another
+			 * thread.
+			 */
+			return count;
+		}
 
-	/* Try read bytes from circular buffer */
-	count += grcan_hw_read_try(
-			pDev,
-			pDev->regs,
-			dest+count,
-			req_cnt-count);
+		/* Try read bytes from circular buffer */
+		count += grcan_hw_read_try(
+				pDev,
+				pDev->regs,
+				dest+count,
+				req_cnt-count);
 	}
 	/* no need to unmask IRQ as IRQ Handler do that for us. */
 	return count;

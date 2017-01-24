@@ -23,41 +23,41 @@ extern "C" {
 #endif
 
 struct grcan_regs {
-    volatile unsigned int conf;          /* 0x00 */
-    volatile unsigned int stat;          /* 0x04 */
-    volatile unsigned int ctrl;          /* 0x08 */
-    volatile unsigned int dummy0[3];     /* 0x0C-0x014 */
-    volatile unsigned int smask;         /* 0x18 */
-    volatile unsigned int scode;         /* 0x1C */
+	volatile unsigned int conf;          /* 0x00 */
+	volatile unsigned int stat;          /* 0x04 */
+	volatile unsigned int ctrl;          /* 0x08 */
+	volatile unsigned int dummy0[3];     /* 0x0C-0x014 */
+	volatile unsigned int smask;         /* 0x18 */
+	volatile unsigned int scode;         /* 0x1C */
 
-    volatile unsigned int dummy1[56];    /* 0x20-0xFC */
+	volatile unsigned int dummy1[56];    /* 0x20-0xFC */
 
-    volatile unsigned int pimsr;         /* 0x100 */
-    volatile unsigned int pimr;          /* 0x104 */
-    volatile unsigned int pisr;          /* 0x108 */
-    volatile unsigned int pir;           /* 0x10C */
-    volatile unsigned int imr;           /* 0x110 */
-    volatile unsigned int picr;          /* 0x114 */
+	volatile unsigned int pimsr;         /* 0x100 */
+	volatile unsigned int pimr;          /* 0x104 */
+	volatile unsigned int pisr;          /* 0x108 */
+	volatile unsigned int pir;           /* 0x10C */
+	volatile unsigned int imr;           /* 0x110 */
+	volatile unsigned int picr;          /* 0x114 */
 
-    volatile unsigned int dummy2[58];    /* 0x118-0x1FC */
+	volatile unsigned int dummy2[58];    /* 0x118-0x1FC */
 
-    volatile unsigned int tx0ctrl;       /* 0x200 */
-    volatile unsigned int tx0addr;       /* 0x204 */
-    volatile unsigned int tx0size;       /* 0x208 */
-    volatile unsigned int tx0wr;         /* 0x20C */
-    volatile unsigned int tx0rd;         /* 0x210 */
-    volatile unsigned int tx0irq;        /* 0x214 */
+	volatile unsigned int tx0ctrl;       /* 0x200 */
+	volatile unsigned int tx0addr;       /* 0x204 */
+	volatile unsigned int tx0size;       /* 0x208 */
+	volatile unsigned int tx0wr;         /* 0x20C */
+	volatile unsigned int tx0rd;         /* 0x210 */
+	volatile unsigned int tx0irq;        /* 0x214 */
 
-    volatile unsigned int dummy3[58];    /* 0x218-0x2FC */
+	volatile unsigned int dummy3[58];    /* 0x218-0x2FC */
 
-    volatile unsigned int rx0ctrl;       /* 0x300 */
-    volatile unsigned int rx0addr;       /* 0x304 */
-    volatile unsigned int rx0size;       /* 0x308 */
-    volatile unsigned int rx0wr;         /* 0x30C */
-    volatile unsigned int rx0rd;         /* 0x310 */
-    volatile unsigned int rx0irq;        /* 0x314 */
-    volatile unsigned int rx0mask;       /* 0x318 */
-    volatile unsigned int rx0code;       /* 0x31C */
+	volatile unsigned int rx0ctrl;       /* 0x300 */
+	volatile unsigned int rx0addr;       /* 0x304 */
+	volatile unsigned int rx0size;       /* 0x308 */
+	volatile unsigned int rx0wr;         /* 0x30C */
+	volatile unsigned int rx0rd;         /* 0x310 */
+	volatile unsigned int rx0irq;        /* 0x314 */
+	volatile unsigned int rx0mask;       /* 0x318 */
+	volatile unsigned int rx0code;       /* 0x31C */
 };
 
 struct grcan_stats {
@@ -65,9 +65,9 @@ struct grcan_stats {
 	unsigned int overrun_cnt;
 	unsigned int rxsync_cnt;
 	unsigned int txsync_cnt;
-  unsigned int txloss_cnt;
-  unsigned int ahberr_cnt;
-  unsigned int ints;
+	unsigned int txloss_cnt;
+	unsigned int ahberr_cnt;
+	unsigned int ints;
 };
 
 struct grcan_timing {
