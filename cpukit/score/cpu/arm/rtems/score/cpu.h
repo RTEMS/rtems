@@ -458,9 +458,6 @@ void _CPU_Context_Initialize(
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );
 
-#define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
 #define _CPU_Context_Initialize_fp( _destination ) \
   do { \
     *(*(_destination)) = _CPU_Null_fp_context; \

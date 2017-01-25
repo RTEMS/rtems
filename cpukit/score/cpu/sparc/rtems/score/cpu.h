@@ -956,13 +956,6 @@ void _CPU_Context_Initialize(
    _CPU_Context_restore( (_the_context) );
 
 /**
- * The FP context area for the SPARC is a simple structure and nothing
- * special is required to find the "starting load point"
- */
-#define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
-/**
  * This routine initializes the FP context area passed to it to.
  *
  * The SPARC allows us to use the simple initialization model

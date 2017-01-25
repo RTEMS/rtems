@@ -137,7 +137,6 @@ bool _Thread_Initialize(
       fp_area = _Workspace_Allocate( CONTEXT_FP_SIZE );
       if ( !fp_area )
         goto failed;
-      fp_area = _Context_Fp_start( fp_area, 0 );
     }
     the_thread->fp_context       = fp_area;
     the_thread->Start.fp_context = fp_area;

@@ -740,32 +740,6 @@ void _CPU_Context_Restart_self(
 ) RTEMS_NO_RETURN;
 
 /**
- * @ingroup CPUContext
- * 
- * The purpose of this macro is to allow the initial pointer into
- * a floating point context area (used to save the floating point
- * context) to be at an arbitrary place in the floating point
- * context area.
- *
- * This is necessary because some FP units are designed to have
- * their context saved as a stack which grows into lower addresses.
- * Other FP units can be saved by simply moving registers into offsets
- * from the base of the context area.  Finally some FP units provide
- * a "dump context" instruction which could fill in from high to low
- * or low to high based on the whim of the CPU designers.
- *
- * @param[in] _base is the lowest physical address of the floating point
- *        context area
- * @param[in] _offset is the offset into the floating point area
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
-/**
  * This routine initializes the FP context area passed to it to.
  * There are a few standard ways in which to initialize the
  * floating point context.  The code included for this macro assumes

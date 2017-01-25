@@ -172,12 +172,6 @@ typedef struct {
     } _operand2;
   } Context_Control_fp;
 
-  /*
-   *  This software FP implementation is only for GCC.
-   */
-  #define _CPU_Context_Fp_start( _base, _offset ) \
-     ((void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
   #define _CPU_Context_Initialize_fp( _fp_area ) \
      { \
        Context_Control_fp *_fp; \
@@ -234,9 +228,6 @@ typedef struct {
       #endif
     } Context_Control_fp;
 
-    #define _CPU_Context_Fp_start( _base, _offset ) \
-      ((void *) _Addresses_Add_offset( (_base), (_offset) ))
-
     /*
      * The reset value for all context relevant registers except the FP data
      * registers is zero.  The reset value of the FP data register is NAN.  The
@@ -260,17 +251,15 @@ typedef struct {
       uint8_t fp_save_area [M68K_FP_STATE_SIZE + 112];
     } Context_Control_fp;
 
-    #define _CPU_Context_Fp_start( _base, _offset ) \
-       ( \
-         (void *) _Addresses_Add_offset( \
-            (_base), \
-            (_offset) + CPU_CONTEXT_FP_SIZE - 4 \
-         ) \
-       )
-
+    /*
+     * The floating-point context is saved/restored via FSAVE/FRESTORE which
+     * use a growing down stack.  Initialize the stack and adjust the FP area
+     * pointer accordingly.
+     */
     #define _CPU_Context_Initialize_fp( _fp_area ) \
        { \
-         uint32_t   *_fp_context = (uint32_t *)*(_fp_area); \
+         uint32_t *_fp_context = _Addresses_Add_offset( \
+           *(_fp_area), CPU_CONTEXT_FP_SIZE - 4); \
          *(--(_fp_context)) = 0; \
          *(_fp_area) = (void *)(_fp_context); \
        }

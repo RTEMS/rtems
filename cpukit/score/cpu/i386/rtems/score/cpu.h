@@ -508,9 +508,6 @@ uint32_t   _CPU_ISR_Get_level( void );
   }
 #endif
 
-#define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
 #define _CPU_Context_Initialize_fp( _fp_area ) \
   { \
     memcpy( *_fp_area, &_CPU_Null_fp_context, CPU_CONTEXT_FP_SIZE ); \
