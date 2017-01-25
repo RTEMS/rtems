@@ -159,10 +159,18 @@ rtems_task Init(
         statistics.missed_count
       );
     }
-   
+
     rtems_test_assert( statistics.missed_count == i );
   }
-  
+
+  /* Check the status */
+  status = rtems_rate_monotonic_get_status( period_id, &period_status );
+  directive_failed( status, "rate_monotonic_get_status" );
+  puts(
+    "rtems_rate_monotonic_get_status - verify value of a postponed jobs count"
+  );
+  rtems_test_assert( period_status.postponed_jobs_count == 3 );
+
   TEST_END();
 
   rtems_test_exit(0);

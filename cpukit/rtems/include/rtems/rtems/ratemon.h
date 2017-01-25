@@ -23,7 +23,7 @@
 
 /* COPYRIGHT (c) 1989-2009, 2016.
  * On-Line Applications Research Corporation (OAR).
- * COPYRIGHT (c) 2016 Kuan-Hsun Chen.
+ * COPYRIGHT (c) 2016-2017 Kuan-Hsun Chen.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -182,6 +182,9 @@ typedef struct {
    *  then this field has no meaning.
    */
   rtems_thread_cpu_usage_t             executed_since_last_period;
+
+  /** This is the count of postponed jobs of this period. */
+  uint32_t                             postponed_jobs_count;
 }  rtems_rate_monotonic_period_status;
 
 /**
@@ -416,25 +419,6 @@ rtems_status_code rtems_rate_monotonic_period(
   rtems_id        id,
   rtems_interval  length
 );
-
-/**
- * @brief Return the number of postponed jobs
- *
- * This is a helper function for runtime monitoring to return
- * the number of postponed jobs in this given period. This number
- * is only increased by the corresponding watchdog,
- * and is decreased by RMS manager with the postponed job releasing.
- *
- * @param[in] id is the period id
- *
- * @retval This helper function returns the number of postponed
- * jobs with a given period_id.
- *
- */
-uint32_t rtems_rate_monotonic_postponed_job_count(
-  rtems_id        period_id
-);
-
 
 /**@}*/
 

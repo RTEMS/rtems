@@ -2,8 +2,9 @@
 rtems_rate_monotonic_get_status - verify values of an inactive period
 rtems_rate_monotonic_get_status - check RTEMS_NOT_DEFINED
 rtems_rate_monotonic_get_status - verify values of an active period
-wall time should be ~600000000 is 609216000
-cpu time should be ~100000000 is 109217000
+wall time should be ~600000000 is 609402399
+cpu time should be ~100000000 is 109612659
 rtems_rate_monotonic_cancel -  OK
 Testing statistics on missed periods
+rtems_rate_monotonic_get_status - verify value of a postponed jobs count
 *** END OF TEST 69 ***

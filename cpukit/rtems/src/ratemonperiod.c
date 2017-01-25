@@ -302,20 +302,6 @@ static rtems_status_code _Rate_monotonic_Block_while_expired(
   return RTEMS_TIMEOUT;
 }
 
-uint32_t rtems_rate_monotonic_postponed_job_count( rtems_id period_id )
-{
-  Rate_monotonic_Control *the_period;
-  ISR_lock_Context        lock_context;
-  uint32_t                jobs;
-
-  the_period = _Rate_monotonic_Get( period_id, &lock_context );
-  _Assert( the_period != NULL );
-
-  jobs = the_period->postponed_jobs;
-  _Rate_monotonic_Release( the_period, &lock_context );
-  return jobs;
-}
-
 rtems_status_code rtems_rate_monotonic_period(
   rtems_id       id,
   rtems_interval length

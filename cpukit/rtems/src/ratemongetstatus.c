@@ -9,6 +9,7 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *  Copyright (c) 2016 embedded brains GmbH.
+ *  Copyright (c) 2017 Kuan-Hsun Chen.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -43,6 +44,7 @@ rtems_status_code rtems_rate_monotonic_get_status(
 
   period_status->owner = the_period->owner->Object.id;
   period_status->state = the_period->state;
+  period_status->postponed_jobs_count = the_period->postponed_jobs;
 
   if ( the_period->state == RATE_MONOTONIC_INACTIVE ) {
     /*

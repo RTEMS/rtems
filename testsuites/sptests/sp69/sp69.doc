@@ -1,5 +1,6 @@
 #  COPYRIGHT (c) 1989-2009.
 #  On-Line Applications Research Corporation (OAR).
+#  COPYRIGHT (c) 2017 Kuan-Hsun Chen.
 #
 #  The license and distribution terms for this file may be
 #  found in the file LICENSE in this distribution or at
@@ -21,3 +22,4 @@ concepts:
   a period is initiated.
 + Verify the correctness of the status values returned on an active period.
 + Ensure the missed period count is properly maintained.
++ Verify the correctness of the postponed job count.
