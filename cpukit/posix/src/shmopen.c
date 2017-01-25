@@ -100,6 +100,8 @@ static int shm_close( rtems_libio_t *iop )
   ISR_lock_Context       lock_ctx;
   int err;
 
+  err = 0;
+
   _Objects_Allocator_lock();
 
   --shm->reference_count;
