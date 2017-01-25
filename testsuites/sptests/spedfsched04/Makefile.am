@@ -1,6 +1,6 @@
 
 rtems_tests_PROGRAMS = spedfsched04
-spedfsched04_SOURCES = init.c tasks.c system.h
+spedfsched04_SOURCES = init.c
 	
 dist_rtems_tests_DATA = spedfsched04.scn
 dist_rtems_tests_DATA += spedfsched04.doc
