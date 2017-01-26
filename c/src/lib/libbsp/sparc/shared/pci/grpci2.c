@@ -102,8 +102,8 @@ struct grpci2_regs {
 
 #define CTRL_SI (1<<27)
 #define CTRL_PE (1<<26)
-#define CTRL_EI (1<<25)
-#define CTRL_ER (1<<24)
+#define CTRL_ER (1<<25)
+#define CTRL_EI (1<<24)
 #define CTRL_BUS (0xff<<CTRL_BUS_BIT)
 #define CTRL_HOSTINT 0xf
 
