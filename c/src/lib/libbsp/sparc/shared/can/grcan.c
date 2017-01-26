@@ -1275,8 +1275,12 @@ int grcan_close(void *d)
 
 	FUNCDBG();
 
-	if ( pDev->started )
+	if ( pDev->started ) {
+		/* Disable interrupts */
+		drvmgr_interrupt_unregister(pDev->dev, 0, grcan_interrupt, pDev);
 		grcan_hw_stop(pDev);
+		pDev->started = 0;
+	}
 
 	grcan_hw_reset(pDev->regs);
 
