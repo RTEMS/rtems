@@ -1712,6 +1712,7 @@ int grcan_set_afilter(void *d, const struct grcan_filter *filter)
 int grcan_set_sfilter(void *d, const struct grcan_filter *filter)
 {
 	struct grcan_priv *pDev = d;
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
@@ -1721,13 +1722,17 @@ int grcan_set_sfilter(void *d, const struct grcan_filter *filter)
 		pDev->sfilter.mask = 0;
 
 		 /* disable Sync interrupt */
+		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~(GRCAN_RXSYNC_IRQ|GRCAN_TXSYNC_IRQ);
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 	}else{
 		/* Save filter */
 		pDev->sfilter = *filter;
 
 		/* Enable Sync interrupt */
+		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 		pDev->regs->imr = READ_REG(&pDev->regs->imr) | (GRCAN_RXSYNC_IRQ|GRCAN_TXSYNC_IRQ);
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 	}
 	/* Set Sync RX/TX filter */
 	grcan_hw_sync(pDev->regs,&pDev->sfilter);
@@ -1756,6 +1761,7 @@ static void grcan_interrupt(void *arg)
 	struct grcan_priv *pDev = arg;
 	unsigned int status = READ_REG(&pDev->regs->pimsr);
 	unsigned int canstat = READ_REG(&pDev->regs->stat);
+	SPIN_ISR_IRQFLAGS(irqflags);
 
 	/* Spurious IRQ call? */
 	if ( !status && !canstat )
@@ -1777,8 +1783,10 @@ static void grcan_interrupt(void *arg)
 		 * that is blocked in read/write calls and stop futher calls
 		 * to read/write until user has called ioctl(fd,START,0).
 		 */
+		SPIN_LOCK(&pDev->devlock, irqflags);
 		pDev->started = 0;
 		grcan_hw_stop(pDev); /* this mask all IRQ sources */
+		SPIN_UNLOCK(&pDev->devlock, irqflags);
 		status=0x1ffff; /* clear all interrupts */
 		goto out;
 	}
@@ -1803,13 +1811,17 @@ static void grcan_interrupt(void *arg)
 	if ( status & GRCAN_RXIRQ_IRQ ){
 		/* RX IRQ pointer interrupt */
 		/*printk("RxIrq 0x%x\n",status);*/
+		SPIN_LOCK(&pDev->devlock, irqflags);
 		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_RXIRQ_IRQ;
+		SPIN_UNLOCK(&pDev->devlock, irqflags);
 		rtems_semaphore_release(pDev->rx_sem);
 	}
 
 	if ( status & GRCAN_TXIRQ_IRQ ){
 		/* TX IRQ pointer interrupt */
+		SPIN_LOCK(&pDev->devlock, irqflags);
 		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_TXIRQ_IRQ;
+		SPIN_UNLOCK(&pDev->devlock, irqflags);
 		rtems_semaphore_release(pDev->tx_sem);
 	}
 
@@ -1824,7 +1836,9 @@ static void grcan_interrupt(void *arg)
 	}
 
 	if ( status & GRCAN_TXEMPTY_IRQ ){
+		SPIN_LOCK(&pDev->devlock, irqflags);
 		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_TXEMPTY_IRQ;
+		SPIN_UNLOCK(&pDev->devlock, irqflags);
 		rtems_semaphore_release(pDev->txempty_sem);
 	}
 
