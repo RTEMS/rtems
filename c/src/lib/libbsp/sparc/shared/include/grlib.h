@@ -133,27 +133,28 @@ struct grgpio_regs {
 
 /* L2C - Level 2 Cache Controller registers */
 struct l2c_regs {
-  volatile unsigned int control;
-  volatile unsigned int status;
-  volatile unsigned int flush_mem_addr;
-  volatile unsigned int flush_set_index;
-  volatile unsigned int access_counter;
-  volatile unsigned int hit_counter;
-  volatile unsigned int bus_cycle_counter;
-  volatile unsigned int bus_usage_counter;
-  volatile unsigned int error_status_control;
-  volatile unsigned int error_addr;
-  volatile unsigned int tag_check_bit;
-  volatile unsigned int data_check_bit;
-  volatile unsigned int scrub_control_status;
-  volatile unsigned int scrub_delay;
-  volatile unsigned int error_injection;
-  volatile unsigned int reserved_3c[17];
-  volatile unsigned int mtrr;
-  volatile unsigned int reserved_84[131039];
-  volatile unsigned int diag_iface_tag[16384];
-  volatile unsigned int reserved_90000[376832];
-  volatile unsigned int diag_iface_data[524288];
+  volatile unsigned int control;                /* 0x00 Control register */
+  volatile unsigned int status;                 /* 0x04 Status register */
+  volatile unsigned int flush_mem_addr;         /* 0x08 Flush (Memory address) */
+  volatile unsigned int flush_set_index;        /* 0x0c Flush (set, index) */
+  volatile unsigned int access_counter;         /* 0x10 */
+  volatile unsigned int hit_counter;            /* 0x14 */
+  volatile unsigned int bus_cycle_counter;      /* 0x18 */
+  volatile unsigned int bus_usage_counter;      /* 0x1c */
+  volatile unsigned int error_status_control;   /* 0x20 Error status/control */
+  volatile unsigned int error_addr;             /* 0x24 Error address */
+  volatile unsigned int tag_check_bit;          /* 0x28 TAG-check-bit */
+  volatile unsigned int data_check_bit;         /* 0x2c Data-check-bit */
+  volatile unsigned int scrub_control_status;   /* 0x30 Scrub Control/Status */
+  volatile unsigned int scrub_delay;            /* 0x34 Scrub Delay */
+  volatile unsigned int error_injection;        /* 0x38 Error injection */
+  volatile unsigned int access_control;         /* 0x3c Access control */
+  volatile unsigned int reserved_40[16];        /* 0x40 Reserved */
+  volatile unsigned int mtrr[32];               /* 0x80 - 0xFC MTRR registers */
+  volatile unsigned int reserved_100[131008];   /* 0x100 Reserved */
+  volatile unsigned int diag_iface_tag[16384];  /* 0x80000 - 0x8FFFC Diagnostic interface (Tag) */
+  volatile unsigned int reserved_90000[376832]; /* 0x90000 Reserved */
+  volatile unsigned int diag_iface_data[524288];/* 0x200000 - 0x3FFFFC Diagnostic interface (Data) */
 };
 
 #ifdef __cplusplus
