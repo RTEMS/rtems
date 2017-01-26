@@ -22,6 +22,32 @@
 #include <drvmgr/ambapp_bus.h>
 #include <ambapp.h>
 
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
+
+/* Spin locks mapped via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+
+#else
+
+/* maintain compatibility with older versions of RTEMS: */
+#define SPIN_DECLARE(name)
+#define SPIN_INIT(lock, name)
+#define SPIN_LOCK(lock, level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
+#define SPIN_UNLOCK(lock, level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
+#define SPIN_ISR_IRQFLAGS(k)
+
+#endif
+
 /* Maximum number of GRCAN devices supported by driver */
 #define GRCAN_COUNT_MAX 8
 
@@ -41,18 +67,6 @@
 /* Make receiver buffers bigger than transmitt */
 #ifndef RX_BUF_SIZE
  #define RX_BUF_SIZE ((3*BLOCK_SIZE)*16)
-#endif
-
-#ifndef IRQ_GLOBAL_PREPARE
- #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
-#endif
-
-#ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
-#endif
-
-#ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
 #endif
 
 #ifndef IRQ_CLEAR_PENDING
@@ -137,6 +151,7 @@ struct grcan_priv {
 	struct grcan_stats stats;
 
 	rtems_id rx_sem, tx_sem, txempty_sem, dev_sem;
+	SPIN_DECLARE(devlock);
 };
 
 static void __inline__ grcan_hw_reset(struct grcan_regs *regs);
@@ -384,7 +399,7 @@ static rtems_device_driver grcan_hw_start(struct grcan_priv *pDev)
 	 */
 	unsigned int tmp RTEMS_UNUSED;
 
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
@@ -428,11 +443,11 @@ static rtems_device_driver grcan_hw_start(struct grcan_priv *pDev)
 	pDev->regs->imr = 0x1601f;
 
 	/* Enable routing of the IRQs */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_TXSYNC);
 	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_RXSYNC);
 	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_IRQ);
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	/* Reset some software data */
 	/*pDev->txerror = 0;
@@ -868,7 +883,7 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 	unsigned int wp, rp, size, irq;
 	unsigned int irq_trunk, dataavail;
 	int wait;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
@@ -876,7 +891,7 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 	 * Set up a valid IRQ point so that an IRQ is received
 	 * when one or more messages are received
 	 */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 
 	size = READ_REG(&pDev->regs->rx0size);
 	rp = READ_REG(&pDev->regs->rx0rd);
@@ -909,7 +924,7 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 		/* enough message has been received, abort sleep - don't unmask interrupt */
 		wait = 0;
 	}
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	/* Wait for IRQ to fire only if has been triggered */
 	if (wait) {
@@ -938,12 +953,12 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 	int wait;
 	unsigned int irq, rp, wp, size, space_left;
 	unsigned int irq_trunk;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(oldLevel);
 
 	DBGC(DBG_TX, "\n");
 	/*FUNCDBG(); */
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 
 	pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 
@@ -985,7 +1000,7 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 		/* There are enough room in buffer, abort wait - don't unmask interrupt */
 		wait = 0;
 	}
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	/* Wait for IRQ to fire only if it has been triggered */
 	if (wait) {
@@ -1005,7 +1020,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 {
 	int wait;
 	unsigned int rp, wp;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(oldLevel);
 	FUNCDBG();
 
 	/* loop until all data in circular buffer has been read by hw.
@@ -1018,7 +1033,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 		(rp = READ_REG(&pDev->regs->tx0rd))
 	) {
 		/* Wait for TX empty IRQ */
-		IRQ_GLOBAL_DISABLE(oldLevel);
+		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 		/* Clear pending TXEmpty IRQ */
 		pDev->regs->picr = GRCAN_TXEMPTY_IRQ;
 
@@ -1031,7 +1046,7 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 			/* TX fifo is empty */
 			wait = 0;
 		}
-		IRQ_GLOBAL_ENABLE(oldLevel);
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 		if (!wait)
 			break;
 
@@ -1187,6 +1202,8 @@ void *grcan_open(int dev_no)
 		ret = NULL;
 		goto out;
 	}
+
+	SPIN_INIT(&pDev->devlock, pDev->devName);
 
 	/* Mark device taken */
 	pDev->open = 1;
@@ -1609,13 +1626,13 @@ int grcan_get_stats(void *d, struct grcan_stats *stats)
 int grcan_clr_stats(void *d)
 {
 	struct grcan_priv *pDev = d;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 	memset(&pDev->stats,0,sizeof(struct grcan_stats));
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	return 0;
 }
