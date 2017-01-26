@@ -152,10 +152,12 @@ struct grpci2_bd_chan {
 	volatile unsigned int res;	/* 0x0C Reserved */
 };
 
-#define BD_CHAN_EN		0x80000000
-#define BD_CHAN_TYPE		0x00300000
-#define BD_CHAN_BDCNT		0x0000ffff
+#define BD_CHAN_EN		(1<<BD_CHAN_EN_BIT)
+#define BD_CHAN_ID		(0x3<<BD_CHAN_ID_BIT)
+#define BD_CHAN_TYPE		(0x3<<BD_CHAN_TYPE_BIT)
+#define BD_CHAN_BDCNT		(0xffff<<BD_CHAN_BDCNT_BIT)
 #define BD_CHAN_EN_BIT		31
+#define BD_CHAN_ID_BIT		22
 #define BD_CHAN_TYPE_BIT	20
 #define BD_CHAN_BDCNT_BIT	0
 
@@ -166,15 +168,17 @@ struct grpci2_bd_data {
 	volatile unsigned int next;	/* 0x0C Next Data Descriptor in channel */
 };
 
-#define BD_DATA_EN		0x80000000
-#define BD_DATA_IE		0x40000000
-#define BD_DATA_DR		0x20000000
-#define BD_DATA_TYPE		0x00300000
-#define BD_DATA_ER		0x00080000
-#define BD_DATA_LEN		0x0000ffff
+#define BD_DATA_EN		(0x1<<BD_DATA_EN_BIT)
+#define BD_DATA_IE		(0x1<<BD_DATA_IE_BIT)
+#define BD_DATA_DR		(0x1<<BD_DATA_DR_BIT)
+#define BD_DATA_BE		(0x1<<BD_DATA_BE_BIT)
+#define BD_DATA_TYPE		(0x3<<BD_DATA_TYPE_BIT)
+#define BD_DATA_ER		(0x1<<BD_DATA_ER_BIT)
+#define BD_DATA_LEN		(0xffff<<BD_DATA_LEN_BIT)
 #define BD_DATA_EN_BIT		31
 #define BD_DATA_IE_BIT		30
 #define BD_DATA_DR_BIT		29
+#define BD_DATA_BE_BIT		28
 #define BD_DATA_TYPE_BIT	20
 #define BD_DATA_ER_BIT		19
 #define BD_DATA_LEN_BIT		0
