@@ -132,11 +132,12 @@ struct grpci2_regs {
 #define STS_TRACE	(1<<STS_TRACE_BIT)
 #define STS_CFGERRVALID	(1<<STS_CFGERRVALID_BIT)
 #define STS_CFGERR	(1<<STS_CFGERR_BIT)
-#define STS_INTTYPE	(0x3f<<STS_INTTYPE_BIT)
+#define STS_INTTYPE	(0x7f<<STS_INTTYPE_BIT)
 #define STS_INTSTS	(0xf<<STS_INTSTS_BIT)
 #define STS_FDEPTH	(0x7<<STS_FDEPTH_BIT)
 #define STS_FNUM	(0x3<<STS_FNUM_BIT)
 
+#define STS_ITIMEOUT	(1<<18)
 #define STS_ISYSERR	(1<<17)
 #define STS_IDMA	(1<<16)
 #define STS_IDMAERR	(1<<15)
@@ -607,7 +608,7 @@ void grpci2_err_isr(void *arg)
 	struct grpci2_priv *priv = arg;
 	unsigned int sts = priv->regs->sts_cap;
 
-	if (sts & (STS_IMSTABRT | STS_ITGTABRT | STS_IPARERR | STS_ISYSERR)) {
+	if (sts & (STS_IMSTABRT | STS_ITGTABRT | STS_IPARERR | STS_ISYSERR | STS_ITIMEOUT)) {
 		/* A PCI error IRQ ... Error handler unimplemented
 		 * add your code here...
 		 */
@@ -622,6 +623,9 @@ void grpci2_err_isr(void *arg)
 		}
 		if (sts & STS_ISYSERR) {
 			printk("GRPCI2: unhandled System Error IRQ\n");
+		}
+		if (sts & STS_ITIMEOUT) {
+			printk("GRPCI2: unhandled PCI target access timeout IRQ\n");
 		}
 	}
 }
