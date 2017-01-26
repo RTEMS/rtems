@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -154,8 +154,9 @@ void _User_extensions_Iterate(
 )
 {
   Thread_Control              *executing;
-  const User_extensions_Table *callouts_current;
-  const User_extensions_Table *callouts_end;
+  const User_extensions_Table *initial_current;
+  const User_extensions_Table *initial_begin;
+  const User_extensions_Table *initial_end;
   const Chain_Node            *end;
   Chain_Node                  *node;
   User_extensions_Iterator     iter;
@@ -163,17 +164,18 @@ void _User_extensions_Iterate(
 
   executing = _Thread_Get_executing();
 
-  callouts_current = rtems_configuration_get_user_extension_table();
-  callouts_end = callouts_current
-    + rtems_configuration_get_number_of_initial_extensions();
-
-  while ( callouts_current != callouts_end ) {
-    (*visitor)( executing, arg, callouts_current );
-
-    ++callouts_current;
-  }
+  initial_begin = rtems_configuration_get_user_extension_table();
+  initial_end =
+    initial_begin + rtems_configuration_get_number_of_initial_extensions();
 
   if ( direction == CHAIN_ITERATOR_FORWARD ) {
+    initial_current = initial_begin;
+
+    while ( initial_current != initial_end ) {
+      (*visitor)( executing, arg, initial_current );
+      ++initial_current;
+    }
+
     end = _Chain_Immutable_tail( &_User_extensions_List.Active );
   } else {
     end = _Chain_Immutable_head( &_User_extensions_List.Active );
@@ -213,4 +215,13 @@ void _User_extensions_Iterate(
   _Chain_Iterator_destroy( &iter.Iterator );
 
   _User_extensions_Release( &lock_context );
+
+  if ( direction == CHAIN_ITERATOR_BACKWARD ) {
+    initial_current = initial_end;
+
+    while ( initial_current != initial_begin ) {
+      --initial_current;
+      (*visitor)( executing, arg, initial_current );
+    }
+  }
 }

@@ -307,7 +307,7 @@ static inline void _User_extensions_Fatal(
   _User_extensions_Iterate(
     &ctx,
     _User_extensions_Fatal_visitor,
-    CHAIN_ITERATOR_BACKWARD
+    CHAIN_ITERATOR_FORWARD
   );
 }
 
@@ -318,7 +318,7 @@ static inline void _User_extensions_Thread_terminate(
   _User_extensions_Iterate(
     executing,
     _User_extensions_Thread_terminate_visitor,
-    CHAIN_ITERATOR_FORWARD
+    CHAIN_ITERATOR_BACKWARD
   );
 }
 

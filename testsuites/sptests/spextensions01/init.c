@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -80,12 +80,6 @@ static void assert_thread_dispatch_disabled_context(void)
   assert(!life_protected());
 }
 
-static void assert_static_order(int index)
-{
-  assert((counter % active_extensions) == index);
-  ++counter;
-}
-
 static void assert_forward_order(int index)
 {
   assert((counter % active_extensions) == index);
@@ -94,49 +88,49 @@ static void assert_forward_order(int index)
 
 static void assert_reverse_order(int index)
 {
-  assert((counter % active_extensions) == (5 - index));
+  assert((counter % active_extensions) == (active_extensions - 1 - index));
   ++counter;
 }
 
 static bool zero_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
   assert_allocator_protected_thread_context();
   return true;
 }
 
 static void zero_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
   assert_thread_dispatch_disabled_context();
 }
 
 static void zero_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
   assert_life_protected_thread_context();
 }
 
 static void zero_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(0);
+  assert_reverse_order(0);
   assert_allocator_protected_thread_context();
 }
 
 static void zero_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
 }
 
 static void zero_thread_begin(rtems_tcb *a)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
   assert_normal_thread_context();
 }
 
 static void zero_thread_exitted(rtems_tcb *a)
 {
-  assert_static_order(0);
+  assert_forward_order(0);
   assert_normal_thread_context();
 }
 
@@ -147,55 +141,55 @@ static void zero_fatal(
 )
 {
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
-    assert_static_order(0);
+    assert_forward_order(0);
   }
 }
 
 static void zero_thread_terminate(rtems_tcb *a)
 {
-  assert_static_order(0);
+  assert_reverse_order(0);
   assert_life_protected_thread_context();
 }
 
 static bool one_thread_create(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
   assert_allocator_protected_thread_context();
   return true;
 }
 
 static void one_thread_start(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
   assert_thread_dispatch_disabled_context();
 }
 
 static void one_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
   assert_life_protected_thread_context();
 }
 
 static void one_thread_delete(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(1);
+  assert_reverse_order(1);
   assert_allocator_protected_thread_context();
 }
 
 static void one_thread_switch(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
 }
 
 static void one_thread_begin(rtems_tcb *a)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
   assert_normal_thread_context();
 }
 
 static void one_thread_exitted(rtems_tcb *a)
 {
-  assert_static_order(1);
+  assert_forward_order(1);
   assert_normal_thread_context();
 }
 
@@ -206,13 +200,13 @@ static void one_fatal(
 )
 {
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
-    assert_static_order(1);
+    assert_forward_order(1);
   }
 }
 
 static void one_thread_terminate(rtems_tcb *a)
 {
-  assert_static_order(1);
+  assert_reverse_order(1);
   assert_life_protected_thread_context();
 }
 
@@ -231,7 +225,7 @@ static void two_thread_start(rtems_tcb *a, rtems_tcb *b)
 
 static void two_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(2);
+  assert_forward_order(2);
   assert_life_protected_thread_context();
 }
 
@@ -265,15 +259,13 @@ static void two_fatal(
 )
 {
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
-    assert_reverse_order(2);
-    assert(counter == 72);
-    TEST_END();
+    assert_forward_order(2);
   }
 }
 
 static void two_thread_terminate(rtems_tcb *a)
 {
-  assert_forward_order(2);
+  assert_reverse_order(2);
   assert_life_protected_thread_context();
 }
 
@@ -292,7 +284,7 @@ static void three_thread_start(rtems_tcb *a, rtems_tcb *b)
 
 static void three_thread_restart(rtems_tcb *a, rtems_tcb *b)
 {
-  assert_static_order(3);
+  assert_forward_order(3);
   assert_life_protected_thread_context();
 }
 
@@ -326,13 +318,15 @@ static void three_fatal(
 )
 {
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
-    assert_reverse_order(3);
+    assert_forward_order(3);
+    assert(counter == 72);
+    TEST_END();
   }
 }
 
 static void three_thread_terminate(rtems_tcb *a)
 {
-  assert_forward_order(3);
+  assert_reverse_order(3);
   assert_life_protected_thread_context();
 }
 
