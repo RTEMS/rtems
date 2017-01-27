@@ -413,11 +413,12 @@ typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
  * @brief Extends the memory available for the heap @a heap using the memory
  * area starting at @a area_begin of size @a area_size bytes.
  *
- * There are no alignment requirements.  The memory area must be big enough to
- * contain some maintenance blocks.  It must not overlap parts of the current
- * heap areas.  Disconnected subordinate heap areas will lead to used blocks
- * which cover the gaps.  Extending with an inappropriate memory area will
- * corrupt the heap.
+ * There are no alignment requirements for the memory area.  The memory area
+ * must be big enough to contain some maintenance blocks.  It must not overlap
+ * parts of the current heap memory areas.  Disconnected memory areas added to
+ * the heap will lead to used blocks which cover the gaps.  Extending with an
+ * inappropriate memory area will corrupt the heap resulting in undefined
+ * behaviour.
  *
  * The unused fourth parameter is provided to have the same signature as
  * _Heap_Initialize().
