@@ -1,0 +1,9 @@
+*** BEGIN OF TEST SPRMSCHED 2 ***
+Testing overflow condition
+Modify the count of postponed_job manually
+Init Postponed jobs = 4294967295, and expected 4294967295
+Task misses its deadline.
+Count = 4294967295, and expected 4294967295
+Task misses its deadline.
+Count = 4294967295, and expected 4294967295
+*** END OF TEST SPRMSCHED 2 ***

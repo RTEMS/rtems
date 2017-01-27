@@ -9,7 +9,7 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
+ *  COPYRIGHT (c) 2016-2017 Kuan-Hsun Chen.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -24,13 +24,16 @@
 
 static void _Rate_monotonic_Renew_deadline(
   Rate_monotonic_Control *the_period,
-  Thread_Control         *owner,
   ISR_lock_Context       *lock_context
 )
 {
   uint64_t deadline;
 
-  ++the_period->postponed_jobs;
+  /* stay at 0xffffffff if postponed_jobs is going to overflow */
+  if ( the_period->postponed_jobs != UINT32_MAX ) {
+    ++the_period->postponed_jobs;
+  }
+
   the_period->state = RATE_MONOTONIC_EXPIRED;
 
   deadline = _Watchdog_Per_CPU_insert_relative(
@@ -85,6 +88,6 @@ void _Rate_monotonic_Timeout( Watchdog_Control *the_watchdog )
       _Thread_Unblock( owner );
     }
   } else {
-    _Rate_monotonic_Renew_deadline( the_period, owner, &lock_context );
+    _Rate_monotonic_Renew_deadline( the_period, &lock_context );
   }
 }

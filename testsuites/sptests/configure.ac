@@ -144,6 +144,7 @@ sp74/Makefile
 sp75/Makefile
 sp76/Makefile
 sp77/Makefile
+sprmsched02/Makefile
 sp2038/Makefile
 spassoc01/Makefile
 spcbssched01/Makefile

@@ -1,0 +1,18 @@
+#  COPYRIGHT (c) 2017 Kuan-Hsun Chen.
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  sprmsched02
+
+directives:
+
+  rtems_rate_monotonic_get_status
+
+concepts:
+
++ Test the overflow condition for postponed_jobs.
