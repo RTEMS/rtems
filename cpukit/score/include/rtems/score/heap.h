@@ -414,7 +414,7 @@ typedef uintptr_t (*Heap_Initialization_or_extend_handler)(
  * area starting at @a area_begin of size @a area_size bytes.
  *
  * There are no alignment requirements.  The memory area must be big enough to
- * contain some maintainance blocks.  It must not overlap parts of the current
+ * contain some maintenance blocks.  It must not overlap parts of the current
  * heap areas.  Disconnected subordinate heap areas will lead to used blocks
  * which cover the gaps.  Extending with an inappropriate memory area will
  * corrupt the heap.
