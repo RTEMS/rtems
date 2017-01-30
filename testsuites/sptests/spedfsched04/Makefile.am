@@ -1,6 +1,6 @@
 
 rtems_tests_PROGRAMS = spedfsched04
-spedfsched04_SOURCES = init.c
+spedfsched04_SOURCES = init.c ../../support/src/spin.c
 	
 dist_rtems_tests_DATA = spedfsched04.scn
 dist_rtems_tests_DATA += spedfsched04.doc

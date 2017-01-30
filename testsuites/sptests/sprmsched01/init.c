@@ -1,5 +1,5 @@
 /**
- * @brief A heuristic example to demonstrate how the postponed jobs are handled.
+ * @brief A heuristic example to demonstrate how the postponed jobs are handled in RMS.
  *
  * Given two tasks with implicit deadline under fixed-priority scheudling.
  * Task 1 has (6, 10) and task 2 has (1, 2), where (execution time, deadline/period).
@@ -20,7 +20,7 @@
  */
 
 /*
- *  COPYRIGHT (c) 2016 Kuan-Hsun Chen.
+ *  COPYRIGHT (c) 2016-2017 Kuan-Hsun Chen.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -32,23 +32,19 @@
 #endif
 
 #include <rtems/cpuuse.h>
-#include <rtems/counter.h>
-
-#include <stdio.h>
-#include <inttypes.h>
-
-#include "tmacros.h"
+#include <tmacros.h>
+#include "test_support.h"
 
 const char rtems_test_name[] = "SPRMSCHED 1";
 
-static const uint32_t Periods[] = { 10000, 2000 };
-static const uint32_t Iterations[] = { 6000, 1000 };
+static const uint32_t Periods[] = { 1000, 200 };
+static const uint32_t Iterations[] = { 600, 100 };
 static const rtems_name Task_name[] = {
   rtems_build_name( 'T', 'A', '1', ' ' ),
   rtems_build_name( 'T', 'A', '2', ' ' )
 };
 static const rtems_task_priority Prio[3] = { 2, 5 };
-static const uint32_t testnumber = 11; /* stop condition */
+static const uint32_t testnumber = 9; /* stop condition */
 
 static uint32_t tsk_counter[] = { 0, 0 };
 static rtems_id   Task_id[ 2 ];
@@ -60,39 +56,41 @@ static rtems_task Task(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-  rtems_id    RM_period;
-  rtems_id    selfid=rtems_task_self();
-  uint32_t    start, end, flag=0, index;
-  rtems_counter_ticks t0;
+  rtems_status_code                          status;
+  rtems_id                                   RM_period;
+  rtems_id                                   selfid=rtems_task_self();
+  rtems_rate_monotonic_period_status         period_status;
+  uint32_t                                   flag=0;
 
-  t0 = rtems_counter_nanoseconds_to_ticks( 1000000 ); //1ms ticks counter
   /*create period*/
   status = rtems_rate_monotonic_create( Task_name[ argument ], &RM_period );
   directive_failed( status, "rtems_rate_monotonic_create" );
 
   while ( FOREVER ) {
     status = rtems_rate_monotonic_period( RM_period, Periods[ argument ] );
-    //directive_failed( status, "rtems_rate_monotonic_period" ); let TIMEOUT pass
-    if( argument == 1 && flag == 0 && status == RTEMS_TIMEOUT ){
-      flag = 1;
-      printf( "RTEMS_TIMEOUT\n" );
-    } else if ( flag == 1 && status == RTEMS_SUCCESSFUL ) {
-      flag = 0;
-      printf( "RTEMS_SUCCESSFUL\n" );
-    }
 
-    start = rtems_clock_get_ticks_since_boot();
-    if ( argument == 1 )
-      printf( "Job %" PRIu32 " Task %" PRIuPTR " starts at tick %" PRIu32 ".\n", tsk_counter[ argument ]+1, argument, start );
-    else
-      printf( "Task %" PRIuPTR " starts at tick %" PRIu32 ".\n", argument, start );
-    for( index = 0; index < Iterations[ argument ]; index++ ){
-      rtems_counter_delay_ticks( t0 );
-    }
-    end = rtems_clock_get_ticks_since_boot();
-    printf( "					Job %" PRIu32" Task %" PRIuPTR " ends at tick %" PRIu32".\n", tsk_counter[ argument ]+1, argument, end );
+    /* Do some work */
+    rtems_test_spin_for_ticks( Iterations[ argument ] );
+
     if( argument == 1 ){
+      if( status == RTEMS_TIMEOUT ){
+        if( flag == 0 ){
+          puts( "First time RTEMS_TIMEOUT" );
+          puts( "Task 2 should have 3 postponed jobs due to preemption." );
+          rtems_test_assert( period_status.postponed_jobs_count == 3 );
+          flag = 1;
+        }
+      } else if ( flag == 1 && status == RTEMS_SUCCESSFUL ) {
+        puts( "RTEMS_SUCCESSFUL" );
+        puts( "Overrun handling is finished, now Task 2 becomes normal." );
+        rtems_test_assert( period_status.postponed_jobs_count == 0 );
+        flag = 0;
+      }
+
+      /* Check the status */
+      status = rtems_rate_monotonic_get_status( RM_period, &period_status );
+      directive_failed( status, "rate_monotonic_get_status" );
+
       if( tsk_counter[ argument ] == testnumber ){
         TEST_END();
         status = rtems_rate_monotonic_delete( RM_period );
@@ -104,6 +102,7 @@ static rtems_task Task(
     tsk_counter[ argument ]+=1;
     if ( argument == 0 ){
       if( tsk_counter[ argument ] == 2 ){
+        puts( "Task 1 has released two jobs" );
         status = rtems_rate_monotonic_delete( RM_period );
         directive_failed( status, "rtems_rate_monotonic_delete" );
         status = rtems_task_delete( selfid );
@@ -121,8 +120,6 @@ static rtems_task Init(
   rtems_status_code status;
 
   TEST_BEGIN();
-
-  printf( "\nTicks per second in your system: %" PRIu32 "\n", rtems_clock_get_ticks_per_second() );
 
   /* Create two tasks */
   for ( index = 0; index < RTEMS_ARRAY_SIZE(Task_name); ++index ){

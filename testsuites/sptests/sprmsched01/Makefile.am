@@ -1,7 +1,7 @@
 
 rtems_tests_PROGRAMS = sprmsched01
-sprmsched01_SOURCES = init.c
-	
+sprmsched01_SOURCES = init.c ../../support/src/spin.c
+
 dist_rtems_tests_DATA = sprmsched01.scn
 dist_rtems_tests_DATA += sprmsched01.doc
 
