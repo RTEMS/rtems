@@ -28,12 +28,11 @@ CPU_Counter_ticks _CPU_Counter_read(void)
 
 static void armv7m_cpu_counter_initialize(void)
 {
-  volatile ARMV7M_DWT *dwt = _ARMV7M_DWT;
-  uint32_t dwt_ctrl;
+  bool cyccnt_enabled;
 
-  dwt_ctrl = dwt->ctrl;
+  cyccnt_enabled = _ARMV7M_DWT_Enable_CYCCNT();
 
-  if ((dwt_ctrl & ARMV7M_DWT_CTRL_NOCYCCNT) == 0) {
+  if (cyccnt_enabled) {
     #ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
       uint64_t freq = BSP_ARMV7M_SYSTICK_FREQUENCY;
     #else
@@ -41,7 +40,6 @@ static void armv7m_cpu_counter_initialize(void)
       uint64_t freq = ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100ULL;
     #endif
 
-    dwt->ctrl = dwt_ctrl | ARMV7M_DWT_CTRL_CYCCNTENA;
     rtems_counter_initialize_converter(freq);
   } else {
     bsp_fatal(BSP_ARM_ARMV7M_CPU_COUNTER_INIT);

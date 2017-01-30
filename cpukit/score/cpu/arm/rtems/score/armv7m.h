@@ -93,7 +93,7 @@ typedef struct {
   uint32_t foldcnt;
   uint32_t pcsr;
   ARMV7M_DWT_comparator comparator[249];
-  uint32_t reserved_e0001fb0[1];
+#define ARMV7M_DWT_LAR_UNLOCK_MAGIC 0xc5acce55U
   uint32_t lar;
   uint32_t lsr;
 } ARMV7M_DWT;
@@ -347,6 +347,26 @@ typedef struct {
     0 \
   }
 
+typedef struct {
+  uint32_t dhcsr;
+  uint32_t dcrsr;
+  uint32_t dcrdr;
+#define ARMV7M_DEBUG_DEMCR_VC_CORERESET (1U << 0)
+#define ARMV7M_DEBUG_DEMCR_VC_MMERR (1U << 4)
+#define ARMV7M_DEBUG_DEMCR_VC_NOCPERR (1U << 5)
+#define ARMV7M_DEBUG_DEMCR_VC_CHKERR (1U << 6)
+#define ARMV7M_DEBUG_DEMCR_VC_STATERR (1U << 7)
+#define ARMV7M_DEBUG_DEMCR_VC_BUSERR (1U << 8)
+#define ARMV7M_DEBUG_DEMCR_VC_INTERR (1U << 9)
+#define ARMV7M_DEBUG_DEMCR_VC_HARDERR (1U << 10)
+#define ARMV7M_DEBUG_DEMCR_MON_EN (1U << 16)
+#define ARMV7M_DEBUG_DEMCR_MON_PEND (1U << 17)
+#define ARMV7M_DEBUG_DEMCR_MON_STEP (1U << 18)
+#define ARMV7M_DEBUG_DEMCR_MON_REQ (1U << 19)
+#define ARMV7M_DEBUG_DEMCR_TRCENA (1U << 24)
+  uint32_t demcr;
+} ARMV7M_DEBUG;
+
 #define ARMV7M_DWT_BASE 0xe0001000
 #define ARMV7M_SCS_BASE 0xe000e000
 #define ARMV7M_ICTAC_BASE (ARMV7M_SCS_BASE + 0x0)
@@ -354,6 +374,7 @@ typedef struct {
 #define ARMV7M_NVIC_BASE (ARMV7M_SCS_BASE + 0x100)
 #define ARMV7M_SCB_BASE (ARMV7M_SCS_BASE + 0xd00)
 #define ARMV7M_MPU_BASE (ARMV7M_SCS_BASE + 0xd90)
+#define ARMV7M_DEBUG_BASE (ARMV7M_SCS_BASE + 0xdf0)
 
 #define _ARMV7M_DWT \
   ((volatile ARMV7M_DWT *) ARMV7M_DWT_BASE)
@@ -367,6 +388,8 @@ typedef struct {
   ((volatile ARMV7M_NVIC *) ARMV7M_NVIC_BASE)
 #define _ARMV7M_MPU \
   ((volatile ARMV7M_MPU *) ARMV7M_MPU_BASE)
+#define _ARMV7M_DEBUG \
+  ((volatile ARMV7M_DEBUG *) ARMV7M_DEBUG_BASE)
 
 #define ARMV7M_VECTOR_MSP 0
 #define ARMV7M_VECTOR_RESET 1
@@ -533,6 +556,27 @@ static inline void _ARMV7M_NVIC_Set_priority( int irq, int priority )
 static inline int _ARMV7M_NVIC_Get_priority( int irq )
 {
   return _ARMV7M_NVIC->ipr [irq];
+}
+
+static inline bool _ARMV7M_DWT_Enable_CYCCNT( void )
+{
+  uint32_t demcr;
+  uint32_t dwt_ctrl;
+
+  demcr = _ARMV7M_DEBUG->demcr;
+  _ARMV7M_DEBUG->demcr = demcr | ARMV7M_DEBUG_DEMCR_TRCENA;
+  _ARM_Data_synchronization_barrier();
+
+  dwt_ctrl = _ARMV7M_DWT->ctrl;
+  if ((dwt_ctrl & ARMV7M_DWT_CTRL_NOCYCCNT) == 0) {
+    _ARMV7M_DWT->lar = ARMV7M_DWT_LAR_UNLOCK_MAGIC;
+    _ARM_Data_synchronization_barrier();
+    _ARMV7M_DWT->ctrl = dwt_ctrl | ARMV7M_DWT_CTRL_CYCCNTENA;
+    return true;
+  } else {
+    _ARMV7M_DEBUG->demcr = demcr;
+    return false;
+  }
 }
 
 int _ARMV7M_Get_exception_priority( int vector );

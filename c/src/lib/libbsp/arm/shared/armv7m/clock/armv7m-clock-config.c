@@ -123,7 +123,6 @@ static void _ARMV7M_Systick_handler_install(void)
 
 static void _ARMV7M_Systick_initialize(void)
 {
-  volatile ARMV7M_DWT *dwt = _ARMV7M_DWT;
   volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
   #ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
     uint64_t freq = BSP_ARMV7M_SYSTICK_FREQUENCY;
@@ -132,7 +131,7 @@ static void _ARMV7M_Systick_initialize(void)
   #endif
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint64_t interval = (freq * us_per_tick) / 1000000ULL;
-  uint32_t dwt_ctrl;
+  bool cyccnt_enabled;
 
   systick->rvr = (uint32_t) interval;
   systick->cvr = 0;
@@ -140,9 +139,8 @@ static void _ARMV7M_Systick_initialize(void)
     | ARMV7M_SYSTICK_CSR_TICKINT
     | ARMV7M_SYSTICK_CSR_CLKSOURCE;
 
-  dwt_ctrl = dwt->ctrl;
-  if ((dwt_ctrl & ARMV7M_DWT_CTRL_NOCYCCNT) == 0) {
-    dwt->ctrl = dwt_ctrl | ARMV7M_DWT_CTRL_CYCCNTENA;
+  cyccnt_enabled = _ARMV7M_DWT_Enable_CYCCNT();
+  if (cyccnt_enabled) {
     _ARMV7M_TC.base.tc.tc_get_timecount = _ARMV7M_TC_dwt_get_timecount;
     _ARMV7M_TC.base.tc.tc_counter_mask = 0xffffffff;
     _ARMV7M_TC.base.tc.tc_frequency = freq;
