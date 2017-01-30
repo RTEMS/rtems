@@ -130,6 +130,8 @@ RTEMS_INLINE_ROUTINE void _RBTree_Initialize_node( RBTree_Node *the_node )
 #if defined(RTEMS_DEBUG)
   _RBTree_Set_off_tree( the_node );
   the_node->tree = NULL;
+#else
+  (void) the_node;
 #endif
 }
 
