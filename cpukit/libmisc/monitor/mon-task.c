@@ -20,15 +20,25 @@ rtems_monitor_task_wait_info(
     Thread_Control       *rtems_thread
 )
 {
-    Thread_queue_Context queue_context;
+    Thread_queue_Context      queue_context;
+    const Thread_queue_Queue *queue;
 
     _Thread_queue_Context_initialize( &queue_context );
     _Thread_Wait_acquire( rtems_thread, &queue_context );
 
-    canonical_task->state = rtems_thread->current_state;
-    canonical_task->wait_id = _Thread_Wait_get_id( rtems_thread );
-    canonical_task->wait_queue = rtems_thread->Wait.queue;
-    canonical_task->wait_operations = rtems_thread->Wait.operations;
+    queue = rtems_thread->Wait.queue;
+
+    if ( queue != NULL ) {
+      _Thread_queue_Queue_get_name_and_id(
+        queue,
+        canonical_task->wait_name,
+        sizeof(canonical_task->wait_name),
+        &canonical_task->wait_id
+      );
+    } else {
+      canonical_task->wait_id = 0;
+      canonical_task->wait_name[0] = '\0';
+    }
 
     _Thread_Wait_release( rtems_thread, &queue_context );
 }
@@ -55,6 +65,7 @@ rtems_monitor_task_canonical(
 
     rtems_monitor_task_wait_info( canonical_task, rtems_thread );
 
+    canonical_task->state = rtems_thread->current_state;
     canonical_task->entry = rtems_thread->Start.Entry;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
@@ -117,18 +128,7 @@ rtems_monitor_task_dump(
     length += rtems_monitor_pad(53, length);
     length += rtems_monitor_dump_id(monitor_task->wait_id);
     length += rtems_monitor_pad(62, length);
-    length += rtems_monitor_dump_addr(monitor_task->wait_queue);
-    if (monitor_task->wait_operations == &_Thread_queue_Operations_default) {
-        length += fprintf(stdout, " [DFLT]");
-    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_FIFO) {
-        length += fprintf(stdout, " [FIFO]");
-    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_priority) {
-        length += fprintf(stdout, " [PRIO]");
-    } else if (monitor_task->wait_operations == &_Thread_queue_Operations_priority_inherit) {
-        length += fprintf(stdout, " [PINH]");
-    } else {
-        length += fprintf(stdout, " [?]");
-    }
+    length += fprintf(stdout, "%s", monitor_task->wait_name);
 
     fprintf(stdout,"\n");
 }

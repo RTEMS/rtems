@@ -223,7 +223,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Initialize(
     }
   }
 
-  _Thread_queue_Initialize( &mrsp->Wait_queue );
+  _Thread_queue_Object_initialize( &mrsp->Wait_queue );
   return STATUS_SUCCESSFUL;
 }
 

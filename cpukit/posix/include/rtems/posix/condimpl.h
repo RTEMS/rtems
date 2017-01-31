@@ -55,7 +55,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
   const pthread_condattr_t          *the_attr
 )
 {
-  _Thread_queue_Initialize( &the_cond->Wait_queue );
+  _Thread_queue_Object_initialize( &the_cond->Wait_queue );
   the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
   the_cond->clock = the_attr->clock;
 }

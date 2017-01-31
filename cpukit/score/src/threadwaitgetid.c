@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -20,21 +20,20 @@
 
 Objects_Id _Thread_Wait_get_id( const Thread_Control *the_thread )
 {
-  States_Control current_state;
-
-  current_state = the_thread->current_state;
+  const Thread_queue_Queue *queue;
 
 #if defined(RTEMS_MULTIPROCESSING)
-  if ( ( current_state & STATES_WAITING_FOR_RPC_REPLY ) != 0 ) {
+  if ( _States_Is_waiting_for_rpc_reply( the_thread->current_state ) ) {
     return the_thread->Wait.remote_id;
   }
 #endif
 
-  if ( ( current_state & STATES_THREAD_QUEUE_WITH_IDENTIFIER ) != 0 ) {
+  queue = the_thread->Wait.queue;
+
+  if ( queue != NULL && queue->name == _Thread_queue_Object_name ) {
     const Thread_queue_Object *queue_object;
 
-    queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( the_thread->Wait.queue );
-
+    queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( queue );
     return queue_object->Object.id;
   }
 

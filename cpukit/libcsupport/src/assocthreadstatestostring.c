@@ -14,7 +14,6 @@
 #include <rtems/score/statesimpl.h>
 
 static const rtems_assoc_32_pair state_pairs[] = {
-  { STATES_THREAD_QUEUE_WITH_IDENTIFIER,   "ID" },
   { STATES_WAITING_FOR_MUTEX,              "MTX" },
   { STATES_WAITING_FOR_SEMAPHORE,          "SEM" },
   { STATES_WAITING_FOR_EVENT,              "EV" },

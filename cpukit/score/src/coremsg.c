@@ -104,7 +104,7 @@ bool _CORE_message_queue_Initialize(
 
   _Chain_Initialize_empty( &the_message_queue->Pending_messages );
 
-  _Thread_queue_Initialize( &the_message_queue->Wait_queue );
+  _Thread_queue_Object_initialize( &the_message_queue->Wait_queue );
 
   if ( discipline == CORE_MESSAGE_QUEUE_DISCIPLINES_PRIORITY ) {
     the_message_queue->operations = &_Thread_queue_Operations_priority;

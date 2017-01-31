@@ -250,12 +250,11 @@ bool _Thread_Initialize(
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );
   _SMP_lock_Stats_initialize( &the_thread->Potpourri_stats, "Thread Potpourri" );
+  _SMP_lock_Stats_initialize( &the_thread->Join_queue.Lock_stats, "Thread State" );
 #endif
 
   /* Initialize the CPU for the non-SMP schedulers */
   _Thread_Set_CPU( the_thread, cpu );
-
-  _Thread_queue_Initialize( &the_thread->Join_queue );
 
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.operations         = &_Thread_queue_Operations_default;

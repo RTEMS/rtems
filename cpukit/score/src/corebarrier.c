@@ -29,5 +29,5 @@ void _CORE_barrier_Initialize(
   the_barrier->Attributes                = *the_barrier_attributes;
   the_barrier->number_of_waiting_threads = 0;
 
-  _Thread_queue_Initialize( &the_barrier->Wait_queue );
+  _Thread_queue_Object_initialize( &the_barrier->Wait_queue );
 }

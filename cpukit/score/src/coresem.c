@@ -27,5 +27,5 @@ void _CORE_semaphore_Initialize(
 {
   the_semaphore->count = initial_value;
 
-  _Thread_queue_Initialize( &the_semaphore->Wait_queue );
+  _Thread_queue_Object_initialize( &the_semaphore->Wait_queue );
 }

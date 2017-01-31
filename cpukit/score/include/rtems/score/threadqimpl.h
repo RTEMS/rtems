@@ -353,7 +353,8 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Heads_initialize(
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
-  Thread_queue_Queue *queue
+  Thread_queue_Queue *queue,
+  const char         *name
 )
 {
 #if defined(RTEMS_SMP)
@@ -361,6 +362,7 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_initialize(
 #endif
   queue->heads = NULL;
   queue->owner = NULL;
+  queue->name = name;
 }
 
 RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_do_acquire_critical(
@@ -417,6 +419,25 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Queue_release(
   _Thread_queue_Queue_release_critical( queue, lock_context );
   _ISR_lock_ISR_enable( lock_context );
 }
+
+/**
+ * @brief Copies the thread queue name to the specified buffer.
+ *
+ * @param[in] queue The actual thread queue.
+ * @param[in] buffer The buffer for the thread queue name copy.
+ * @param[in] buffer_size The buffer size in characters.
+ * @param[in] id The object identifier in case the thread queue is embedded in
+ *   an object with identifier, otherwise it is set to 0.
+ *
+ * @retval The length of the thread queue name.  May be greater than or equal
+ *   to the buffer size if truncation occurred.
+ */
+size_t _Thread_queue_Queue_get_name_and_id(
+  const Thread_queue_Queue *queue,
+  char                     *buffer,
+  size_t                    buffer_size,
+  Objects_Id               *id
+);
 
 #if defined(RTEMS_SMP)
 void _Thread_queue_Do_acquire_critical(
@@ -1011,7 +1032,10 @@ size_t _Thread_queue_Flush_critical(
   Thread_queue_Context          *queue_context
 );
 
-void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue );
+void _Thread_queue_Initialize(
+  Thread_queue_Control *the_thread_queue,
+  const char           *name
+);
 
 #if defined(RTEMS_SMP) && defined(RTEMS_DEBUG) && defined(RTEMS_PROFILING)
   #define THREAD_QUEUE_INITIALIZER( _name ) \
@@ -1136,6 +1160,26 @@ extern const Thread_queue_Operations _Thread_queue_Operations_FIFO;
 extern const Thread_queue_Operations _Thread_queue_Operations_priority;
 
 extern const Thread_queue_Operations _Thread_queue_Operations_priority_inherit;
+
+/**
+ * @brief The special thread queue name to indicated that the thread queue is
+ * embedded in an object with identifier.
+ *
+ * @see _Thread_queue_Object_initialize().
+ */
+extern const char _Thread_queue_Object_name[];
+
+/**
+ * @brief Initializes a thread queue embedded in an object with identifier.
+ *
+ * The object must have the layout specified by Thread_queue_Object.  It should
+ * be ensured with the THREAD_QUEUE_OBJECT_ASSERT() static assertion.
+ *
+ * @param[in] the_thread_queue The thread queue.
+ */
+void _Thread_queue_Object_initialize(
+  Thread_queue_Control *the_thread_queue
+);
 
 /**@}*/
 

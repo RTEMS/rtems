@@ -119,8 +119,7 @@ int _POSIX_Condition_variables_Wait_support(
   if ( !already_timedout ) {
     _Thread_queue_Context_set_thread_state(
       &queue_context,
-      STATES_THREAD_QUEUE_WITH_IDENTIFIER
-        | STATES_WAITING_FOR_CONDITION_VARIABLE
+      STATES_WAITING_FOR_CONDITION_VARIABLE
     );
     _Thread_queue_Context_set_enqueue_callout(
       &queue_context,

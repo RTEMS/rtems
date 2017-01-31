@@ -43,7 +43,7 @@ RTEMS_INLINE_ROUTINE void _CORE_mutex_Initialize(
   CORE_mutex_Control *the_mutex
 )
 {
-  _Thread_queue_Initialize( &the_mutex->Wait_queue );
+  _Thread_queue_Object_initialize( &the_mutex->Wait_queue );
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_mutex_Destroy( CORE_mutex_Control *the_mutex )

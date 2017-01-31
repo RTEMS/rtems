@@ -41,71 +41,62 @@ extern "C" {
 /** This macro corresponds to a task being ready. */
 #define STATES_READY                           0x00000000
 
-/**
- * @brief This macro corresponds to a task which is blocked on a thread queue
- * embedded in an object with an identifier.
- *
- * This thread state bit is intended to ease debugging and improve system
- * diagnostics, see _Thread_Wait_get_id().
- */
-#define STATES_THREAD_QUEUE_WITH_IDENTIFIER    0x00000001
-
 /** This macro corresponds to a task waiting for a mutex. */
-#define STATES_WAITING_FOR_MUTEX               0x00000002
+#define STATES_WAITING_FOR_MUTEX               0x00000001
 
 /** This macro corresponds to a task waiting for a semaphore. */
-#define STATES_WAITING_FOR_SEMAPHORE           0x00000004
+#define STATES_WAITING_FOR_SEMAPHORE           0x00000002
 
 /** This macro corresponds to a task waiting for an event. */
-#define STATES_WAITING_FOR_EVENT               0x00000008
+#define STATES_WAITING_FOR_EVENT               0x00000004
 
 /** This macro corresponds to a task waiting for a system event. */
-#define STATES_WAITING_FOR_SYSTEM_EVENT        0x00000010
+#define STATES_WAITING_FOR_SYSTEM_EVENT        0x00000008
 
 /** This macro corresponds to a task waiting for a message. */
-#define STATES_WAITING_FOR_MESSAGE             0x00000020
+#define STATES_WAITING_FOR_MESSAGE             0x00000010
 
 /** This macro corresponds to a task waiting for a condition variable. */
-#define STATES_WAITING_FOR_CONDITION_VARIABLE  0x00000040
+#define STATES_WAITING_FOR_CONDITION_VARIABLE  0x00000020
 
 /** This macro corresponds to a task waiting for a futex. */
-#define STATES_WAITING_FOR_FUTEX               0x00000080
+#define STATES_WAITING_FOR_FUTEX               0x00000040
 
 /** This macro corresponds to a task waiting for BSD wakeup. */
-#define STATES_WAITING_FOR_BSD_WAKEUP          0x00000100
+#define STATES_WAITING_FOR_BSD_WAKEUP          0x00000080
 
 /**
  * @brief This macro corresponds to a task which is waiting for a relative or
  * absolute timeout.
  */
-#define STATES_WAITING_FOR_TIME                0x00000200
+#define STATES_WAITING_FOR_TIME                0x00000100
 
 /** This macro corresponds to a task waiting for a period. */
-#define STATES_WAITING_FOR_PERIOD              0x00000400
+#define STATES_WAITING_FOR_PERIOD              0x00000200
 
 /** This macro corresponds to a task waiting for a signal. */
-#define STATES_WAITING_FOR_SIGNAL              0x00000800
+#define STATES_WAITING_FOR_SIGNAL              0x00000400
 
 /** This macro corresponds to a task waiting for a barrier. */
-#define STATES_WAITING_FOR_BARRIER             0x00001000
+#define STATES_WAITING_FOR_BARRIER             0x00000800
 
 /** This macro corresponds to a task waiting for a RWLock. */
-#define STATES_WAITING_FOR_RWLOCK              0x00002000
+#define STATES_WAITING_FOR_RWLOCK              0x00001000
 
 /** This macro corresponds to a task waiting for a join while exiting. */
-#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x00004000
+#define STATES_WAITING_FOR_JOIN_AT_EXIT        0x00002000
 
 /** This macro corresponds to a task waiting for a join. */
-#define STATES_WAITING_FOR_JOIN                0x00008000
+#define STATES_WAITING_FOR_JOIN                0x00004000
 
 /** This macro corresponds to a task being suspended. */
-#define STATES_SUSPENDED                       0x00010000
+#define STATES_SUSPENDED                       0x00008000
 
 /** This macro corresponds to a task waiting for a fixed size segment. */
-#define STATES_WAITING_FOR_SEGMENT             0x00020000
+#define STATES_WAITING_FOR_SEGMENT             0x00010000
 
 /** This macro corresponds to a task those life is changing. */
-#define STATES_LIFE_IS_CHANGING                0x00040000
+#define STATES_LIFE_IS_CHANGING                0x00020000
 
 /** This macro corresponds to a task being held by the debugger. */
 #define STATES_DEBUGGER                        0x08000000
@@ -125,8 +116,7 @@ extern "C" {
 #define STATES_DORMANT                         0x80000000
 
 /** This macro corresponds to a task waiting for a local object operation. */
-#define STATES_LOCALLY_BLOCKED ( STATES_THREAD_QUEUE_WITH_IDENTIFIER   | \
-                                 STATES_WAITING_FOR_SEGMENT            | \
+#define STATES_LOCALLY_BLOCKED ( STATES_WAITING_FOR_SEGMENT            | \
                                  STATES_WAITING_FOR_MESSAGE            | \
                                  STATES_WAITING_FOR_SEMAPHORE          | \
                                  STATES_WAITING_FOR_MUTEX              | \

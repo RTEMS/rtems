@@ -130,12 +130,22 @@ void _Thread_queue_Release(
 }
 #endif
 
-void _Thread_queue_Initialize( Thread_queue_Control *the_thread_queue )
+const char _Thread_queue_Object_name[] = { '\0' };
+
+void _Thread_queue_Initialize(
+  Thread_queue_Control *the_thread_queue,
+  const char           *name
+)
 {
-  _Thread_queue_Queue_initialize( &the_thread_queue->Queue );
+  _Thread_queue_Queue_initialize( &the_thread_queue->Queue, name );
 #if defined(RTEMS_SMP)
   _SMP_lock_Stats_initialize( &the_thread_queue->Lock_stats, "Thread Queue" );
 #endif
+}
+
+void _Thread_queue_Object_initialize( Thread_queue_Control *the_thread_queue )
+{
+  _Thread_queue_Initialize( the_thread_queue, _Thread_queue_Object_name );
 }
 
 #if defined(RTEMS_MULTIPROCESSING)
@@ -147,3 +157,35 @@ void _Thread_queue_MP_callout_do_nothing(
   /* Do nothing */
 }
 #endif
+
+size_t _Thread_queue_Queue_get_name_and_id(
+  const Thread_queue_Queue *queue,
+  char                     *buffer,
+  size_t                    buffer_size,
+  Objects_Id               *id
+)
+{
+  const char *name;
+
+  name = queue->name;
+
+  if ( name == _Thread_queue_Object_name ) {
+    const Thread_queue_Object *queue_object;
+
+    queue_object = THREAD_QUEUE_QUEUE_TO_OBJECT( queue );
+    *id = queue_object->Object.id;
+    return _Objects_Name_to_string(
+      queue_object->Object.name,
+      false,
+      buffer,
+      buffer_size
+    );
+  } else {
+    if ( name == NULL ) {
+      name = _Thread_queue_Object_name;
+    }
+
+    *id = 0;
+    return strlcpy( buffer, name, buffer_size );
+  }
+}
