@@ -242,7 +242,7 @@ void gr_cpci_leon4_n2x_isr(void *arg)
 	if ( tmp ) 
 		drvmgr_interrupt_clear(priv->dev, 0);
 
-	DBG("RASTA-SPW_ROUTER-IRQ: 0x%x\n", tmp);
+	DBG("GR-CPCI-LEON4-N2X-IRQ: 0x%x\n", tmp);
 }
 
 static int gr_cpci_leon4_n2x_hw_init1(struct gr_cpci_leon4_n2x_priv *priv)
