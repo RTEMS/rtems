@@ -23,6 +23,9 @@ rtems_monitor_task_wait_info(
     Thread_queue_Context      queue_context;
     const Thread_queue_Queue *queue;
 
+    canonical_task->wait_id = 0;
+    canonical_task->wait_name[0] = '\0';
+
     _Thread_queue_Context_initialize( &queue_context );
     _Thread_Wait_acquire( rtems_thread, &queue_context );
 
@@ -35,9 +38,20 @@ rtems_monitor_task_wait_info(
         sizeof(canonical_task->wait_name),
         &canonical_task->wait_id
       );
-    } else {
-      canonical_task->wait_id = 0;
-      canonical_task->wait_name[0] = '\0';
+    } else if (
+      (rtems_thread->current_state & STATES_WAITING_FOR_BSD_WAKEUP) != 0
+    ) {
+      const char *wmesg;
+
+      wmesg = rtems_thread->Wait.return_argument_second.immutable_object;
+
+      if (wmesg != NULL) {
+        strlcpy(
+          canonical_task->wait_name,
+          wmesg,
+          sizeof(canonical_task->wait_name)
+        );
+      }
     }
 
     _Thread_Wait_release( rtems_thread, &queue_context );
