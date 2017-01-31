@@ -72,6 +72,7 @@ extern void gr701_register_drv(void);
 extern void gr_tmtc_1553_register_drv(void);
 extern void gr_rasta_spw_router_register_drv(void);
 extern void gr_cpci_leon4_n2x_register_drv(void);
+extern void gr_cpci_gr740_register_drv(void);
 
 
 /* CONFIGURE DRIVER MANAGER */
@@ -191,6 +192,9 @@ drvmgr_drv_reg_func drvmgr_drivers[] = {
 #endif
 #ifdef CONFIGURE_DRIVER_PCI_GR_LEON4_N2X
 	gr_cpci_leon4_n2x_register_drv,
+#endif
+#ifdef CONFIGURE_DRIVER_PCI_GR_CPCI_GR740
+	gr_cpci_gr740_register_drv,
 #endif
 
 

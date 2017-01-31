@@ -161,6 +161,10 @@ $(PROJECT_INCLUDE)/bsp/gr_leon4_n2x.h: ../../sparc/shared/include/gr_leon4_n2x.h
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gr_leon4_n2x.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gr_leon4_n2x.h
 
+$(PROJECT_INCLUDE)/bsp/gr_cpci_gr740.h: ../../sparc/shared/include/gr_cpci_gr740.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gr_cpci_gr740.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/gr_cpci_gr740.h
+
 $(PROJECT_INCLUDE)/bsp/b1553brm.h: ../../sparc/shared/include/b1553brm.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/b1553brm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/b1553brm.h

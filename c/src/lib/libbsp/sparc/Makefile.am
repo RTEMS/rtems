@@ -57,6 +57,7 @@ EXTRA_DIST += shared/include/gr_rasta_spw_router.h
 EXTRA_DIST += shared/include/gr_rasta_tmtc.h
 EXTRA_DIST += shared/include/gr_tmtc_1553.h
 EXTRA_DIST += shared/include/gr_leon4_n2x.h
+EXTRA_DIST += shared/include/gr_cpci_gr740.h
 EXTRA_DIST += shared/pci/gr_701.c
 EXTRA_DIST += shared/pci/gr_rasta_adcdac.c
 EXTRA_DIST += shared/pci/gr_rasta_io.c
@@ -64,6 +65,7 @@ EXTRA_DIST += shared/pci/gr_rasta_spw_router.c
 EXTRA_DIST += shared/pci/gr_rasta_tmtc.c
 EXTRA_DIST += shared/pci/gr_tmtc_1553.c
 EXTRA_DIST += shared/pci/gr_leon4_n2x.c
+EXTRA_DIST += shared/pci/gr_cpci_gr740.c
 
 # DEBUG
 EXTRA_DIST += shared/include/debug_defs.h
