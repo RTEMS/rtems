@@ -690,6 +690,9 @@ typedef struct  {
  *
  *  Uses a leading underscore in the structure name to allow forward
  *  declarations in standard header files provided by Newlib and GCC.
+ *
+ *  In case the second member changes (currently Join_queue), then the memset()
+ *  in _Thread_Initialize() must be adjusted.
  */
 struct _Thread_Control {
   /** This field is the object management structure for each thread. */

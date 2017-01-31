@@ -72,9 +72,9 @@ bool _Thread_Initialize(
 #endif
 
   memset(
-    &the_thread->current_state,
+    &the_thread->Join_queue,
     0,
-    information->Objects.size - offsetof( Thread_Control, current_state )
+    information->Objects.size - offsetof( Thread_Control, Join_queue )
   );
 
   for ( i = 0 ; i < _Thread_Control_add_on_count ; ++i ) {
