@@ -138,7 +138,7 @@ static rtems_task Init(rtems_task_argument argument)
 #include <rtems/confdefs.h>
 
 static char task_stack_space
-  [CONFIGURE_TASK_STACK_FROM_ALLOCATOR(CONFIGURE_STACK_SPACE_SIZE)];
+  [CONFIGURE_TASK_STACK_FROM_ALLOCATOR(_CONFIGURE_STACK_SPACE_SIZE)];
 
 static void task_stack_init(size_t stack_space_size)
 {
@@ -149,7 +149,7 @@ static void task_stack_init(size_t stack_space_size)
     STACK_HEAP_PAGE_SIZE
   );
 
-  rtems_test_assert(stack_space_size == CONFIGURE_STACK_SPACE_SIZE);
+  rtems_test_assert(stack_space_size == _CONFIGURE_STACK_SPACE_SIZE);
   rtems_test_assert(ok);
 }
 

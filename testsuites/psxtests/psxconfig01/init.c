@@ -300,7 +300,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert(eno == EAGAIN);
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
-    snapshot.active_posix_keys == CONFIGURE_POSIX_KEYS
+    snapshot.active_posix_keys == _CONFIGURE_POSIX_KEYS
   );
   rtems_test_assert(
     snapshot.active_posix_key_value_pairs == CONFIGURE_MAXIMUM_POSIX_KEYS
