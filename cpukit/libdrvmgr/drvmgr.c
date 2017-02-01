@@ -66,6 +66,13 @@ static int do_dev_init(
 
 /* DRIVER MANAGER */
 
+void bsp_driver_level_hook(int level) __attribute__((weak));
+
+/* default hook does nothing, BSP may override. */
+void bsp_driver_level_hook(int level)
+{
+}
+
 void _DRV_Manager_init_level(int level)
 {
 	struct drvmgr *mgr = &drvmgr;
@@ -78,6 +85,8 @@ void _DRV_Manager_init_level(int level)
 
 	/* Initialize buses and devices into this new level */
 	drvmgr_init_update();
+
+	bsp_driver_level_hook(level);
 }
 
 /* Initialize Data structures of the driver manager and call driver
