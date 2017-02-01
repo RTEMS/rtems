@@ -1771,8 +1771,6 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
-#define CONFIGURE_SMP_APPLICATION
-
 #define CONFIGURE_MICROSECONDS_PER_TICK 1000
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

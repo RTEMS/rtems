@@ -56,8 +56,6 @@ static void fatal_extension(
   { .fatal = fatal_extension }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_SMP_APPLICATION
-
 /* Lets see when the first RTEMS system hits this limit */
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 64
 

@@ -206,19 +206,20 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   extern int rtems_telnetd_maximum_ptys;
 #endif
 
-#if defined(RTEMS_SMP)
-  /*
-   *  If configured for SMP, then we need to know the maximum CPU cores.
-   */
-  #if !defined(CONFIGURE_SMP_APPLICATION)
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
-      #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
-    #endif
-  #else
-    #if !defined(CONFIGURE_SMP_MAXIMUM_PROCESSORS)
-      #error "CONFIGURE_SMP_MAXIMUM_PROCESSORS not specified for SMP Application"
-    #endif
-  #endif
+#ifndef CONFIGURE_SMP_MAXIMUM_PROCESSORS
+  #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
+#endif
+
+/*
+ * An internal define to indicate that this is an SMP application
+ * configuration.
+ */
+#if CONFIGURE_SMP_MAXIMUM_PROCESSORS > 1
+  #define _CONFIGURE_SMP_APPLICATION
+#endif
+
+#ifdef CONFIGURE_SMP_APPLICATION
+  #warning "CONFIGURE_SMP_APPLICATION is obsolete since RTEMS 4.12"
 #endif
 
 /*
@@ -797,7 +798,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
-  #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
+  #ifdef _CONFIGURE_SMP_APPLICATION
     /**
      * If no scheduler is specified in an SMP configuration, the
      * priority scheduler is default.
@@ -1499,7 +1500,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * used to specify the initial execution mode of the single Classic API task.
  */
 #ifndef CONFIGURE_INIT_TASK_INITIAL_MODES
-  #if defined(RTEMS_SMP) && defined(CONFIGURE_SMP_APPLICATION)
+  #ifdef _CONFIGURE_SMP_APPLICATION
     #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
   #else
     #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_NO_PREEMPT
@@ -3415,13 +3416,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       true,
     #else
       false,
-    #endif
-    #ifdef RTEMS_SMP
-      #ifdef CONFIGURE_SMP_APPLICATION
-        true,
-      #else
-        false,
-      #endif
     #endif
     CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
     CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */

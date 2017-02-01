@@ -512,8 +512,6 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_SMP_APPLICATION
-
 #define CONFIGURE_SMP_MAXIMUM_PROCESSORS CPU_COUNT
 
 #define CONFIGURE_INIT

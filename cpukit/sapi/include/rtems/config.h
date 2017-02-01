@@ -237,10 +237,6 @@ typedef struct {
    */
   bool                           stack_allocator_avoids_work_space;
 
-  #ifdef RTEMS_SMP
-    bool                         smp_enabled;
-  #endif
-
   uint32_t                       number_of_initial_extensions;
   const rtems_extensions_table  *User_extension_table;
   #if defined(RTEMS_MULTIPROCESSING)
@@ -356,7 +352,7 @@ extern const rtems_configuration_table Configuration;
  * @brief Returns true if the SMP mode of operation is enabled, and false
  * otherwise.
  *
- * On single-processor configurations this is a compile time constant which
+ * In uni-processor configurations this is a compile-time constant which
  * evaluates to false.
  *
  * @retval true SMP mode of operation is enabled.
@@ -364,7 +360,7 @@ extern const rtems_configuration_table Configuration;
  */
 #ifdef RTEMS_SMP
   #define rtems_configuration_is_smp_enabled() \
-        (Configuration.smp_enabled)
+        (rtems_configuration_get_maximum_processors() > 1)
 #else
   #define rtems_configuration_is_smp_enabled() \
         false
