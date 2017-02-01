@@ -101,7 +101,7 @@ typedef uint32_t rtems_task_priority;
  *        want to ensure that a task does not executes during
  *        certain operations such as a system mode change.
  */
-#define RTEMS_MAXIMUM_PRIORITY      PRIORITY_MAXIMUM
+#define RTEMS_MAXIMUM_PRIORITY      ((rtems_task_priority) PRIORITY_MAXIMUM)
 
 /**
  *  The following constant is passed to rtems_task_set_priority when the
