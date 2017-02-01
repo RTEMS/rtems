@@ -56,7 +56,7 @@ static void fatal_extension(
   { .fatal = fatal_extension }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_SMP_MAXIMUM_PROCESSORS 2
+#define CONFIGURE_MAXIMUM_PROCESSORS 2
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

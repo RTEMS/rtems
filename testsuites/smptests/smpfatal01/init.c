@@ -126,7 +126,7 @@ static rtems_status_code test_driver_init(
   { .fatal = fatal_extension }, \
   RTEMS_TEST_INITIAL_EXTENSION
 
-#define CONFIGURE_SMP_MAXIMUM_PROCESSORS MAX_CPUS
+#define CONFIGURE_MAXIMUM_PROCESSORS MAX_CPUS
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 

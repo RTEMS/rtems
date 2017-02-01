@@ -211,15 +211,20 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   extern int rtems_telnetd_maximum_ptys;
 #endif
 
-#ifndef CONFIGURE_SMP_MAXIMUM_PROCESSORS
-  #define CONFIGURE_SMP_MAXIMUM_PROCESSORS 1
+#ifdef CONFIGURE_SMP_MAXIMUM_PROCESSORS
+  #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 4.12"
+  #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_PROCESSORS
+  #define CONFIGURE_MAXIMUM_PROCESSORS 1
 #endif
 
 /*
  * An internal define to indicate that this is an SMP application
  * configuration.
  */
-#if defined(RTEMS_SMP) && CONFIGURE_SMP_MAXIMUM_PROCESSORS > 1
+#if defined(RTEMS_SMP) && CONFIGURE_MAXIMUM_PROCESSORS > 1
   #define _CONFIGURE_SMP_APPLICATION
 #endif
 
@@ -1029,97 +1034,97 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
             RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL \
           )
         _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 2
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 2
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 3
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 3
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 4
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 4
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 5
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 5
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 6
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 6
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 7
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 7
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 8
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 8
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 9
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 9
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 10
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 10
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 11
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 11
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 12
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 12
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 13
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 13
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 14
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 14
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 15
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 15
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 16
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 16
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 17
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 17
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 18
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 18
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 19
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 19
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 20
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 20
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 21
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 21
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 22
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 22
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 23
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 23
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 24
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 24
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 25
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 25
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 26
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 26
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 27
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 27
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 28
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 28
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 29
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 29
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 30
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 30
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 31
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 31
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
-        #if CONFIGURE_SMP_MAXIMUM_PROCESSORS >= 32
+        #if CONFIGURE_MAXIMUM_PROCESSORS >= 32
           , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
         #endif
         #undef _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
@@ -1127,7 +1132,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     };
 
     RTEMS_STATIC_ASSERT(
-      CONFIGURE_SMP_MAXIMUM_PROCESSORS
+      CONFIGURE_MAXIMUM_PROCESSORS
         == RTEMS_ARRAY_SIZE( _Scheduler_Initial_assignments ),
       _Scheduler_Initial_assignments
     );
@@ -2909,11 +2914,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This calculates the amount of memory reserved for the IDLE tasks.
  * In an SMP system, each CPU core has its own idle task.
  */
-#if defined(RTEMS_SMP)
-  #define _CONFIGURE_IDLE_TASKS_COUNT CONFIGURE_SMP_MAXIMUM_PROCESSORS
-#else
-  #define _CONFIGURE_IDLE_TASKS_COUNT 1
-#endif
+#define _CONFIGURE_IDLE_TASKS_COUNT CONFIGURE_MAXIMUM_PROCESSORS
 
 /**
  * This defines the formula used to compute the amount of memory
@@ -2975,7 +2976,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #if defined(RTEMS_SMP)
   #define _CONFIGURE_MEMORY_FOR_SMP \
-     (CONFIGURE_SMP_MAXIMUM_PROCESSORS * \
+     (CONFIGURE_MAXIMUM_PROCESSORS * \
       _Configure_From_workspace( CONFIGURE_INTERRUPT_STACK_SIZE ) \
      )
 #else
@@ -3320,7 +3321,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
     #ifdef RTEMS_SMP
-      CONFIGURE_SMP_MAXIMUM_PROCESSORS,
+      CONFIGURE_MAXIMUM_PROCESSORS,
     #endif
   };
 #endif
@@ -3332,7 +3333,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   * Instantiate the Per CPU information based upon the user configuration.
   */
  #if defined(CONFIGURE_INIT)
-   Per_CPU_Control_envelope _Per_CPU_Information[CONFIGURE_SMP_MAXIMUM_PROCESSORS];
+   Per_CPU_Control_envelope _Per_CPU_Information[CONFIGURE_MAXIMUM_PROCESSORS];
  #endif
 
 #endif

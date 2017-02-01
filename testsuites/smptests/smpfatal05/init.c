@@ -57,7 +57,7 @@ static void fatal_extension(
   RTEMS_TEST_INITIAL_EXTENSION
 
 /* Lets see when the first RTEMS system hits this limit */
-#define CONFIGURE_SMP_MAXIMUM_PROCESSORS 64
+#define CONFIGURE_MAXIMUM_PROCESSORS 64
 
 #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
