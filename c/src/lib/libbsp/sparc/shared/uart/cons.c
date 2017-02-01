@@ -14,9 +14,8 @@
 
 #include <bsp.h>
 #include <stdlib.h>
-#include <rtems/libio.h>
-#include <rtems/bspIo.h>
 #include <bsp/cons.h>
+#include <rtems/console.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
 
@@ -26,25 +25,26 @@
  * handle interrupts.
  */
 
-int console_initialized = 0;
-rtems_device_major_number console_major = 0;
+static int console_initialized = 0;
 
 #define FLAG_SYSCON 0x01
 struct console_priv {
-	unsigned char flags; /* 0x1=SystemConsole */
-	unsigned char minor;
+	int flags; /* 0x1=SystemConsole */
+	int minor;
 	struct console_dev *dev;
 };
 
 #define CONSOLE_MAX BSP_NUMBER_OF_TERMIOS_PORTS
 struct console_priv cons[CONSOLE_MAX] = {{0,0},};
 
-/* Register Console to TERMIOS layer and initialize it */
-static void console_dev_init(struct console_priv *con, int minor)
+/* Install Console in TERMIOS layer */
+static void console_dev_init(struct console_priv *con)
 {
 	char name[16], *fsname;
 	rtems_status_code status;
+	int minor;
 
+	minor = con->minor;
 	if (!con->dev->fsname) {
 		strcpy(name, "/dev/console_a");
 		/* Special console name and MINOR for SYSTEM CONSOLE */
@@ -55,11 +55,18 @@ static void console_dev_init(struct console_priv *con, int minor)
 	} else {
 		fsname = con->dev->fsname;
 	}
-	status = rtems_io_register_name(fsname, console_major, minor);
-	if ((minor == 0) && (status != RTEMS_SUCCESSFUL))
+	status = rtems_termios_device_install(
+		fsname,
+		con->dev->handler,
+		NULL,
+		&con->dev->base
+	);
+	if (status != RTEMS_SUCCESSFUL) {
 		rtems_fatal_error_occurred(status);
+	}
 }
 
+/* Called by device driver to register itself to the cons interface. */
 void console_dev_register(struct console_dev *dev)
 {
 	int i, minor = 0;
@@ -87,11 +94,12 @@ void console_dev_register(struct console_dev *dev)
 	con->dev = dev;
 	con->minor = minor;
 
-	/* Console layer is already initialized, that means that we can
-	 * register termios interface directly.
-	 */
-	if (console_initialized)
-		console_dev_init(con, minor);
+	if (console_initialized) {
+		/* Console layer is already initialized, that means that we can
+		 * register termios interface directly.
+		 */
+		console_dev_init(con);
+	}
 }
 
 #if 0
@@ -108,82 +116,17 @@ rtems_device_driver console_initialize(
 {
 	int i;
 
-	console_major = major;
-
 	rtems_termios_initialize();
 
 	/* Register all Console a file system device node */
 	for (i=0; i<CONSOLE_MAX; i++) {
 		if (cons[i].dev)
-			console_dev_init(&cons[i], i);
+			console_dev_init(&cons[i]);
 	}
 
 	console_initialized = 1;
 
 	return RTEMS_SUCCESSFUL;
-}
-
-rtems_device_driver console_open(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
-{
-	rtems_status_code status;
-	struct termios term;
-
-	if ((minor >= CONSOLE_MAX) || !cons[minor].dev)
-		return RTEMS_INVALID_NUMBER;
-
-	status = rtems_termios_open(
-			major,
-			(int)cons[minor].dev,
-			arg,
-			cons[minor].dev->callbacks);
-
-	/* Inherit UART hardware parameters from bootloader on system console */
-	if ((status == RTEMS_SUCCESSFUL) && (cons[minor].flags & FLAG_SYSCON) &&
-	    (cons[minor].dev->ops.get_uart_attrs != NULL)) {
-		if (tcgetattr(STDIN_FILENO, &term) >= 0) {
-			cons[minor].dev->ops.get_uart_attrs(cons[minor].dev,
-								&term);
-			term.c_oflag |= ONLCR;
-			tcsetattr(STDIN_FILENO, TCSANOW, &term);
-		}
-	}
-
-	return status;
-}
-
-rtems_device_driver console_close(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
-{
-	return rtems_termios_close(arg);
-}
-
-rtems_device_driver console_read(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
-{
-	return rtems_termios_read(arg);
-}
-
-rtems_device_driver console_write(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
-{
-	return rtems_termios_write(arg);
-}
-
-rtems_device_driver console_control(
-	rtems_device_major_number	major,
-	rtems_device_minor_number	minor,
-	void				*arg)
-{
-	return rtems_termios_ioctl(arg);
 }
 
 #endif

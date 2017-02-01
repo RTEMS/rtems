@@ -16,22 +16,20 @@
 #ifndef __CONS_H__
 #define __CONS_H__
 
+#include <rtems/termiostypes.h>
+
 struct console_dev;
 
 #define CONSOLE_FLAG_SYSCON      0x01
 
-struct console_cons_ops {
-	void (*get_uart_attrs)(struct console_dev *, struct termios *t);
-};
-
 struct console_dev {
-	/* Set to non-zero if this UART should be system console and/or
+	rtems_termios_device_context base;
+	/* Set to CONSOLE_FLAG_SYSCON if this UART should be system console and/or
 	 * debug console.
 	 */
 	int flags;
 	char *fsname; /* File system prefix */
-	const struct rtems_termios_callbacks *callbacks; /* TERMIOS Callbacks */
-	struct console_cons_ops ops;
+	const rtems_termios_device_handler *handler;
 };
 
 extern void console_dev_register(struct console_dev *dev);
