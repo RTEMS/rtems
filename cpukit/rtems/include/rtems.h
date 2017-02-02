@@ -166,7 +166,7 @@ const char *rtems_get_version_string(void);
  *
  * This is actually an illegal interval value.
  */
-#define RTEMS_NO_TIMEOUT  WATCHDOG_NO_TIMEOUT
+#define RTEMS_NO_TIMEOUT  ((rtems_interval) WATCHDOG_NO_TIMEOUT)
 
 /**
  * @brief An MPCI must support packets of at least this size.
