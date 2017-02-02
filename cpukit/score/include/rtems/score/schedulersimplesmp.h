@@ -98,7 +98,7 @@ void _Scheduler_simple_SMP_Block(
   Scheduler_Node          *node
 );
 
-bool _Scheduler_simple_SMP_Unblock(
+void _Scheduler_simple_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
@@ -139,7 +139,7 @@ Thread_Control *_Scheduler_simple_SMP_Remove_processor(
   struct Per_CPU_Control  *cpu
 );
 
-bool _Scheduler_simple_SMP_Yield(
+void _Scheduler_simple_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node

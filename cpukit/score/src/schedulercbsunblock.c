@@ -25,7 +25,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/watchdogimpl.h>
 
-Scheduler_Void_or_bool _Scheduler_CBS_Unblock(
+void _Scheduler_CBS_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -68,5 +68,4 @@ Scheduler_Void_or_bool _Scheduler_CBS_Unblock(
   }
 
   _Scheduler_EDF_Unblock( scheduler, the_thread, &the_node->Base.Base );
-  SCHEDULER_RETURN_VOID_OR_BOOL;
 }

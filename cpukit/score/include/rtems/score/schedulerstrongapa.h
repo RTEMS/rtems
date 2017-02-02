@@ -115,7 +115,7 @@ void _Scheduler_strong_APA_Block(
   Scheduler_Node          *node
 );
 
-bool _Scheduler_strong_APA_Unblock(
+void _Scheduler_strong_APA_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -156,7 +156,7 @@ Thread_Control *_Scheduler_strong_APA_Remove_processor(
   struct Per_CPU_Control  *cpu
 );
 
-bool _Scheduler_strong_APA_Yield(
+void _Scheduler_strong_APA_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

@@ -96,7 +96,7 @@ void _Scheduler_priority_affinity_SMP_Block(
   Scheduler_Node          *node
 );
 
-bool _Scheduler_priority_affinity_SMP_Unblock(
+void _Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node

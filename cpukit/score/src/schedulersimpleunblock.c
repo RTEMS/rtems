@@ -21,7 +21,7 @@
 #include <rtems/score/schedulersimpleimpl.h>
 #include <rtems/score/thread.h>
 
-Scheduler_Void_or_bool _Scheduler_simple_Unblock(
+void _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -54,6 +54,4 @@ Scheduler_Void_or_bool _Scheduler_simple_Unblock(
       priority == PRIORITY_PSEUDO_ISR
     );
   }
-
-  SCHEDULER_RETURN_VOID_OR_BOOL;
 }

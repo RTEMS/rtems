@@ -21,7 +21,7 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/threadimpl.h>
 
-Scheduler_Void_or_bool _Scheduler_priority_Yield(
+void _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -39,6 +39,4 @@ Scheduler_Void_or_bool _Scheduler_priority_Yield(
   }
 
   _Scheduler_priority_Schedule_body( scheduler, the_thread, true );
-
-  SCHEDULER_RETURN_VOID_OR_BOOL;
 }

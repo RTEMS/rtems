@@ -128,7 +128,7 @@ void _Scheduler_priority_Schedule(
   Thread_Control          *the_thread
 );
 
-Scheduler_Void_or_bool _Scheduler_priority_Unblock(
+void _Scheduler_priority_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -147,7 +147,7 @@ void _Scheduler_priority_Node_initialize(
   Priority_Control         priority
 );
 
-Scheduler_Void_or_bool _Scheduler_priority_Yield(
+void _Scheduler_priority_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

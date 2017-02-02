@@ -144,7 +144,7 @@ void _Scheduler_EDF_Node_initialize(
   Priority_Control         priority
 );
 
-Scheduler_Void_or_bool _Scheduler_EDF_Unblock(
+void _Scheduler_EDF_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -166,7 +166,7 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
   Priority_Control         priority
 );
 
-Scheduler_Void_or_bool _Scheduler_EDF_Yield(
+void _Scheduler_EDF_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

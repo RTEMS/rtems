@@ -113,6 +113,43 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
 #endif
 }
 
+#if defined(RTEMS_SMP)
+/**
+ * @brief Registers an ask for help request.
+ *
+ * The actual ask for help operation is carried out during
+ * _Thread_Do_dispatch() on a processor related to the thread.  This yields a
+ * better separation of scheduler instances.  A thread of one scheduler
+ * instance should not be forced to carry out too much work for threads on
+ * other scheduler instances.
+ *
+ * @param[in] the_thread The thread in need for help.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help( Thread_Control *the_thread )
+{
+  _Assert( _Thread_State_is_owner( the_thread ) );
+
+  if ( the_thread->Scheduler.helping_nodes > 0 ) {
+    ISR_lock_Context  lock_context;
+    Per_CPU_Control  *cpu;
+
+    _Thread_Scheduler_acquire_critical( the_thread, &lock_context );
+    cpu = _Thread_Get_CPU( the_thread );
+    _Per_CPU_Acquire( cpu );
+
+    _Chain_Append_unprotected(
+      &cpu->Threads_in_need_for_help,
+      &the_thread->Scheduler.Help_node
+    );
+
+    _Per_CPU_Release( cpu );
+    _Thread_Scheduler_release_critical( the_thread, &lock_context );
+
+    _Thread_Dispatch_request( _Per_CPU_Get(), cpu );
+  }
+}
+#endif
+
 /**
  * The preferred method to add a new scheduler is to define the jump table
  * entries and add a case to the _Scheduler_Initialize routine.
@@ -159,64 +196,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Yield( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
-  Chain_Node              *node;
-  const Chain_Node        *tail;
-  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-  bool                     needs_help;
-
-  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
-  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
-
-  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
-  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
-
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-  needs_help = ( *scheduler->Operations.yield )(
-    scheduler,
-    the_thread,
-    _Thread_Scheduler_get_home_node( the_thread )
-  );
-  _Scheduler_Release_critical( scheduler, &lock_context );
-
-  if ( !needs_help ) {
-    return;
-  }
-
-  node = _Chain_Next( node );
-
-  while ( node != tail ) {
-    bool success;
-
-    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
-    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
-
-    _Scheduler_Acquire_critical( scheduler, &lock_context );
-    success = ( *scheduler->Operations.ask_for_help )(
-      scheduler,
-      the_thread,
-      scheduler_node
-    );
-    _Scheduler_Release_critical( scheduler, &lock_context );
-
-    if ( success ) {
-      break;
-    }
-
-    node = _Chain_Next( node );
-  }
-#else
-  const Scheduler_Control *scheduler;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
   ( *scheduler->Operations.yield )(
     scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-#endif
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**
@@ -293,64 +283,17 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
-#if defined(RTEMS_SMP)
-  Chain_Node              *node;
-  const Chain_Node        *tail;
-  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
-  bool                     needs_help;
-
-  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
-  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
-
-  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
-  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
-
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-  needs_help = ( *scheduler->Operations.unblock )(
-    scheduler,
-    the_thread,
-    scheduler_node
-  );
-  _Scheduler_Release_critical( scheduler, &lock_context );
-
-  if ( !needs_help ) {
-    return;
-  }
-
-  node = _Chain_Next( node );
-
-  while ( node != tail ) {
-    bool success;
-
-    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
-    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
-
-    _Scheduler_Acquire_critical( scheduler, &lock_context );
-    success = ( *scheduler->Operations.ask_for_help )(
-      scheduler,
-      the_thread,
-      scheduler_node
-    );
-    _Scheduler_Release_critical( scheduler, &lock_context );
-
-    if ( success ) {
-      break;
-    }
-
-    node = _Chain_Next( node );
-  }
-#else
-  const Scheduler_Control *scheduler;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
   ( *scheduler->Operations.unblock )(
     scheduler,
     the_thread,
     _Thread_Scheduler_get_home_node( the_thread )
   );
-#endif
+  _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
 /**

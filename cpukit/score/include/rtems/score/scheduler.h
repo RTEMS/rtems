@@ -42,16 +42,6 @@ struct Per_CPU_Control;
 
 typedef struct Scheduler_Control Scheduler_Control;
 
-#if defined(RTEMS_SMP)
-  typedef bool Scheduler_Void_or_bool;
-
-  #define SCHEDULER_RETURN_VOID_OR_BOOL return false
-#else
-  typedef void Scheduler_Void_or_bool;
-
-  #define SCHEDULER_RETURN_VOID_OR_BOOL return
-#endif
-
 /**
  * @brief The scheduler operations.
  */
@@ -63,7 +53,7 @@ typedef struct {
   void ( *schedule )( const Scheduler_Control *, Thread_Control *);
 
   /** @see _Scheduler_Yield() */
-  Scheduler_Void_or_bool ( *yield )(
+  void ( *yield )(
     const Scheduler_Control *,
     Thread_Control *,
     Scheduler_Node *
@@ -77,7 +67,7 @@ typedef struct {
   );
 
   /** @see _Scheduler_Unblock() */
-  Scheduler_Void_or_bool ( *unblock )(
+  void ( *unblock )(
     const Scheduler_Control *,
     Thread_Control *,
     Scheduler_Node *

@@ -962,7 +962,7 @@ static inline void _Scheduler_SMP_Block(
   }
 }
 
-static inline bool _Scheduler_SMP_Unblock(
+static inline void _Scheduler_SMP_Unblock(
   Scheduler_Context     *context,
   Thread_Control        *thread,
   Scheduler_Node        *node,
@@ -972,7 +972,6 @@ static inline bool _Scheduler_SMP_Unblock(
 {
   Scheduler_SMP_Node_state  node_state;
   bool                      unblock;
-  bool                      needs_help;
 
   node_state = _Scheduler_SMP_Node_state( node );
   unblock = _Scheduler_Unblock_node(
@@ -986,6 +985,7 @@ static inline bool _Scheduler_SMP_Unblock(
   if ( unblock ) {
     Priority_Control new_priority;
     bool             prepend_it;
+    bool             needs_help;
 
     new_priority = _Scheduler_Node_get_priority( node, &prepend_it );
     (void) prepend_it;
@@ -1004,11 +1004,11 @@ static inline bool _Scheduler_SMP_Unblock(
       _Assert( node->idle == NULL );
       needs_help = true;
     }
-  } else {
-    needs_help = false;
-  }
 
-  return needs_help;
+    if ( needs_help ) {
+      _Scheduler_Ask_for_help( thread );
+    }
+  }
 }
 
 static inline void _Scheduler_SMP_Update_priority(
@@ -1069,7 +1069,7 @@ static inline void _Scheduler_SMP_Update_priority(
   }
 }
 
-static inline bool _Scheduler_SMP_Yield(
+static inline void _Scheduler_SMP_Yield(
   Scheduler_Context     *context,
   Thread_Control        *thread,
   Scheduler_Node        *node,
@@ -1095,7 +1095,9 @@ static inline bool _Scheduler_SMP_Yield(
     needs_help = true;
   }
 
-  return needs_help;
+  if ( needs_help ) {
+    _Scheduler_Ask_for_help( thread );
+  }
 }
 
 static inline void _Scheduler_SMP_Insert_scheduled_lifo(

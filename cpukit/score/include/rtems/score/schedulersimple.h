@@ -92,7 +92,7 @@ void _Scheduler_simple_Schedule(
   Thread_Control          *the_thread
 );
 
-Scheduler_Void_or_bool _Scheduler_simple_Yield(
+void _Scheduler_simple_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node
@@ -104,7 +104,7 @@ void _Scheduler_simple_Block(
   Scheduler_Node          *node
 );
 
-Scheduler_Void_or_bool _Scheduler_simple_Unblock(
+void _Scheduler_simple_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
   Scheduler_Node          *node

@@ -352,16 +352,15 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
 /*
  * This is the public scheduler specific Unblock operation.
  */
-bool _Scheduler_priority_affinity_SMP_Unblock(
+void _Scheduler_priority_affinity_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
 )
 {
   Scheduler_Context *context = _Scheduler_Get_context( scheduler );
-  bool               needs_help;
 
-  needs_help = _Scheduler_SMP_Unblock(
+  _Scheduler_SMP_Unblock(
     context,
     thread,
     node,
@@ -373,8 +372,6 @@ bool _Scheduler_priority_affinity_SMP_Unblock(
    * Perform any thread migrations that are needed due to these changes.
    */
   _Scheduler_priority_affinity_SMP_Check_for_migrations( context );
-
-  return needs_help;
 }
 
 /*

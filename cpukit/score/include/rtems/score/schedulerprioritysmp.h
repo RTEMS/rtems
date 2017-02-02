@@ -115,7 +115,7 @@ void _Scheduler_priority_SMP_Block(
   Scheduler_Node          *node
 );
 
-bool _Scheduler_priority_SMP_Unblock(
+void _Scheduler_priority_SMP_Unblock(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
@@ -156,7 +156,7 @@ Thread_Control *_Scheduler_priority_SMP_Remove_processor(
   struct Per_CPU_Control  *cpu
 );
 
-bool _Scheduler_priority_SMP_Yield(
+void _Scheduler_priority_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
