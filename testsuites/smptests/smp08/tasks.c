@@ -21,7 +21,6 @@ rtems_task Test_task(
   rtems_time_of_day time;
   uint32_t    task_index;
   rtems_status_code status;
-  uint32_t          cpu_num;
   char              name[5];
   char             *p;
 
@@ -30,13 +29,11 @@ rtems_task Test_task(
   rtems_test_assert( p != NULL );
 
   status = rtems_task_ident( RTEMS_SELF, RTEMS_SEARCH_ALL_NODES, &tid );
+  rtems_test_assert( status == RTEMS_SUCCESSFUL );
   task_index = task_number( tid );
   for ( ; ; ) {
-
-    /* Get the CPU Number */
-    cpu_num = rtems_get_current_processor();
-
     status = rtems_clock_get_tod( &time );
+    rtems_test_assert( status == RTEMS_SUCCESSFUL );
     if ( time.second >= 35 ) {
       TEST_END();
       rtems_test_exit( 0 );
@@ -45,5 +42,6 @@ rtems_task Test_task(
     PrintTaskInfo( p, &time );
     status = rtems_task_wake_after(
       task_index * 5 * rtems_clock_get_ticks_per_second() );
+    rtems_test_assert( status == RTEMS_SUCCESSFUL );
   }
 }

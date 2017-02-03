@@ -16,7 +16,7 @@
  * with affinity are at priority 4, so the affinity task
  * on the core init is running on will preempt it.
  *
- * Test tasks run and delete themselves. 
+ * Test tasks run and delete themselves.
  * Init task never blocks.
  */
 
@@ -25,6 +25,7 @@
 #endif
 
 #include <rtems.h>
+#include <inttypes.h>
 
 #include "tmacros.h"
 
@@ -52,7 +53,7 @@ static struct task_data_t task_data[TASK_COUNT] = {
 };
 
 rtems_id           task_sem;
- 
+
 static void verify_tasks(void);
 
 /*
@@ -60,7 +61,7 @@ static void verify_tasks(void);
  * processor.
  */
 static void test_delay(int ticks)
-{ 
+{
   rtems_interval start, stop;
   start = rtems_clock_get_ticks_since_boot();
   do {
@@ -86,9 +87,9 @@ static void verify_tasks(void)
   int i;
 
   printf("Verify Tasks Ran\n");
- 
+
   while( rtems_semaphore_obtain (task_sem, RTEMS_NO_WAIT, 0) != RTEMS_SUCCESSFUL );
- 
+
   /* Set Init task data */
   task_data[0].ran = true;
   task_data[0].actual_cpu = rtems_get_current_processor();
@@ -96,15 +97,15 @@ static void verify_tasks(void)
   /* Verify all tasks */
   for (i = 0; i < NUM_CPUS; i++) {
     if (i==0)
-      printf("Init(%d): ran=%d expected=%d actual=%d\n", 
+      printf("Init(%" PRIu32 "): ran=%d expected=%d actual=%d\n",
         task_data[i].priority,
         task_data[i].ran,
         task_data[i].expected_cpu,
         task_data[i].actual_cpu
       );
     else
-      printf( "TA0%d(%d): ran=%d expected=%d actual=%d\n", 
-        i, 
+      printf( "TA0%d(%" PRIu32 "): ran=%d expected=%d actual=%d\n",
+        i,
         task_data[i].priority,
         task_data[i].ran,
         task_data[i].expected_cpu,
@@ -142,11 +143,11 @@ static void test(void)
   task_data[0].id = rtems_task_self();
   printf("Create Semaphore\n");
 
-  sc = rtems_semaphore_create(  
+  sc = rtems_semaphore_create(
     rtems_build_name('S', 'E', 'M', '0'),
     1,                                               /* initial count = 1 */
     RTEMS_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY | 
+    RTEMS_PRIORITY |
     RTEMS_PRIORITY_CEILING,
     0,
     &task_sem
@@ -166,18 +167,18 @@ static void test(void)
         &task_data[ i ].id
       );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  
-      sc = rtems_task_set_affinity( 
-        task_data[ i ].id, 
-        size, 
+
+      sc = rtems_task_set_affinity(
+        task_data[ i ].id,
+        size,
         &task_data[i].cpuset
       );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-      
+
       printf(
-        "Start TA%d at priority %d on cpu %d\n", 
-         i, 
-         task_data[i].priority, 
+        "Start TA%d at priority %" PRIu32 " on cpu %d\n",
+         i,
+         task_data[i].priority,
          task_data[i].expected_cpu
       );
       sc = rtems_task_start( task_data[ i ].id, task, i );
@@ -186,12 +187,12 @@ static void test(void)
 
   /* spin for 100 ticks */
   test_delay(100);
- 
+
   verify_tasks();
 
   i = TASK_COUNT - 1;
   task_data[ i ].priority = 4;
-  printf("Set TA%d priority %d\n", i,task_data[i].priority );
+  printf("Set TA%d priority %" PRIu32 "\n", i,task_data[i].priority );
   sc = rtems_task_set_priority(
     task_data[ i ].id,
     task_data[ i ].priority,

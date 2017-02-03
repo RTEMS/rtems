@@ -20,7 +20,7 @@ rtems_task Test_task(
   char              task_name[5];
 
   /* Show that this task is running on cpu X */
-  sprintf( task_name, "TA%" PRIu32, task_index );
+  sprintf( task_name, "TA%" PRIuPTR, task_index );
   PrintTaskInfo( task_name );
 
   TaskRan[task_index] = true;
