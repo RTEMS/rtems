@@ -1188,7 +1188,7 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 	struct grtm_priv *pDev;
 	struct drvmgr_dev *dev;
 	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *)arg;
-	unsigned int *data = ioarg->buffer;
+	unsigned int *data;
 	int status;
 	struct grtm_ioc_config *cfg;
 	struct grtm_ioc_hw_status *hwregs;
@@ -1209,6 +1209,7 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 	if (!ioarg)
 		return RTEMS_INVALID_NAME;
 
+	data = ioarg->buffer;
 	ioarg->ioctl_return = 0;
 	switch(ioarg->command) {
 		case GRTM_IOC_START:
