@@ -153,4 +153,4 @@ restore_check:
 clobber_return:
 
 	jmp	%o7 + 8
-	 add	%sp, FRAME_SIZE, %sp
+	 nop
