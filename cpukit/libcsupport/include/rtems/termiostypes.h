@@ -90,6 +90,16 @@ typedef struct rtems_termios_device_context {
   );
 } rtems_termios_device_context;
 
+void rtems_termios_device_lock_acquire_default(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+);
+
+void rtems_termios_device_lock_release_default(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+);
+
 /**
  * @brief Initializes a device context.
  *
@@ -104,6 +114,8 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
 )
 {
   rtems_interrupt_lock_initialize( &context->lock.interrupt, name );
+  context->lock_acquire = rtems_termios_device_lock_acquire_default;
+  context->lock_release = rtems_termios_device_lock_release_default;
 }
 
 /**
@@ -113,7 +125,11 @@ RTEMS_INLINE_ROUTINE void rtems_termios_device_context_initialize(
  *   is only used if profiling is enabled.
  */
 #define RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( name ) \
-  { { RTEMS_INTERRUPT_LOCK_INITIALIZER( name ) } }
+  { \
+    { RTEMS_INTERRUPT_LOCK_INITIALIZER( name ) }, \
+    rtems_termios_device_lock_acquire_default, \
+    rtems_termios_device_lock_release_default \
+  }
 
 /**
  * @brief Termios device handler.

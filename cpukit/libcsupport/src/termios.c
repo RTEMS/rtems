@@ -363,8 +363,8 @@ deviceReleaseMutex(
   (void) sc;
 }
 
-static void
-deviceAcquireInterrupt(
+void
+rtems_termios_device_lock_acquire_default(
   rtems_termios_device_context *ctx,
   rtems_interrupt_lock_context *lock_context
 )
@@ -372,8 +372,8 @@ deviceAcquireInterrupt(
   rtems_interrupt_lock_acquire (&ctx->lock.interrupt, lock_context);
 }
 
-static void
-deviceReleaseInterrupt(
+void
+rtems_termios_device_lock_release_default(
   rtems_termios_device_context *ctx,
   rtems_interrupt_lock_context *lock_context
 )
@@ -530,8 +530,8 @@ rtems_termios_open_tty(
       ctx->lock_acquire = deviceAcquireMutex;
       ctx->lock_release = deviceReleaseMutex;
     } else {
-      ctx->lock_acquire = deviceAcquireInterrupt;
-      ctx->lock_release = deviceReleaseInterrupt;
+      ctx->lock_acquire = rtems_termios_device_lock_acquire_default;
+      ctx->lock_release = rtems_termios_device_lock_release_default;
     }
 
     /*
