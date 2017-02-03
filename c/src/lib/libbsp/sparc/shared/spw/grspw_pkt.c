@@ -3093,7 +3093,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	GRSPW_DBG("GRSPW[%d] on bus %s\n", dev->minor_drv,
 		dev->parent->dev->name);
 
-	if (grspw_count > GRSPW_MAX)
+	if (grspw_count >= GRSPW_MAX)
 		return DRVMGR_ENORES;
 
 	priv = dev->priv;
