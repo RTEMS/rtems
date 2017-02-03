@@ -1098,8 +1098,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Scheduler_release_critical(
 }
 
 #if defined(RTEMS_SMP)
-void _Thread_Scheduler_ask_for_help( Thread_Control *the_thread );
-
 void _Thread_Scheduler_process_requests( Thread_Control *the_thread );
 #endif
 

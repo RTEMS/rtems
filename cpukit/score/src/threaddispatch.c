@@ -41,6 +41,39 @@ Thread_Control *_Thread_Allocated_fp;
 CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );
 
 #if defined(RTEMS_SMP)
+static void _Thread_Ask_for_help( Thread_Control *the_thread )
+{
+  Chain_Node       *node;
+  const Chain_Node *tail;
+
+  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
+  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
+
+  do {
+    Scheduler_Node          *scheduler_node;
+    const Scheduler_Control *scheduler;
+    ISR_lock_Context         lock_context;
+    bool                     success;
+
+    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
+    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+
+    _Scheduler_Acquire_critical( scheduler, &lock_context );
+    success = ( *scheduler->Operations.ask_for_help )(
+      scheduler,
+      the_thread,
+      scheduler_node
+    );
+    _Scheduler_Release_critical( scheduler, &lock_context );
+
+    if ( success ) {
+      break;
+    }
+
+    node = _Chain_Next( node );
+  } while ( node != tail );
+}
+
 static bool _Thread_Can_ask_for_help( const Thread_Control *executing )
 {
   return executing->Scheduler.helping_nodes > 0
@@ -64,7 +97,7 @@ static void _Thread_Preemption_intervention( Per_CPU_Control *cpu_self )
 
     _Per_CPU_Release( cpu_self );
     _Thread_State_acquire( the_thread, &lock_context );
-    _Thread_Scheduler_ask_for_help( the_thread );
+    _Thread_Ask_for_help( the_thread );
     _Thread_State_release( the_thread, &lock_context );
     _Per_CPU_Acquire( cpu_self );
   }

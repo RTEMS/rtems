@@ -20,39 +20,6 @@
 #include <rtems/score/schedulerimpl.h>
 
 #if defined(RTEMS_SMP)
-void _Thread_Scheduler_ask_for_help( Thread_Control *the_thread )
-{
-  Chain_Node       *node;
-  const Chain_Node *tail;
-
-  node = _Chain_First( &the_thread->Scheduler.Scheduler_nodes );
-  tail = _Chain_Immutable_tail( &the_thread->Scheduler.Scheduler_nodes );
-
-  do {
-    Scheduler_Node          *scheduler_node;
-    const Scheduler_Control *scheduler;
-    ISR_lock_Context         lock_context;
-    bool                     success;
-
-    scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE( node );
-    scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
-
-    _Scheduler_Acquire_critical( scheduler, &lock_context );
-    success = ( *scheduler->Operations.ask_for_help )(
-      scheduler,
-      the_thread,
-      scheduler_node
-    );
-    _Scheduler_Release_critical( scheduler, &lock_context );
-
-    if ( success ) {
-      break;
-    }
-
-    node = _Chain_Next( node );
-  } while ( node != tail );
-}
-
 void _Thread_Scheduler_process_requests( Thread_Control *the_thread )
 {
   ISR_lock_Context  lock_context;
