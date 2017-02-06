@@ -226,7 +226,7 @@ drvmgr_drv_reg_func drvmgr_drivers[] = {
 #endif
 
 	/* End array with NULL */
-	{NULL}
+	NULL
 };
 
 #endif /* CONFIGURE_INIT */
