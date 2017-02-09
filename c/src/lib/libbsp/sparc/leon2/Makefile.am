@@ -96,9 +96,11 @@ libbsp_a_SOURCES += ../../sparc/shared/timer/tlib.c
 # PCI
 include_bsp_HEADERS += ../../sparc/shared/include/grpci.h
 include_bsp_HEADERS += ../../sparc/shared/include/grpci2.h
+include_bsp_HEADERS += ../../sparc/shared/include/grpci2dma.h
 include_bsp_HEADERS += ../../sparc/shared/include/pcif.h
 include_bsp_HEADERS += include/at697_pci.h
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2.c
+libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2dma.c
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
 libbsp_a_SOURCES += ../../sparc/shared/pci/pcif.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_le.c

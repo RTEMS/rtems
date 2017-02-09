@@ -109,9 +109,11 @@ libbsp_a_SOURCES += \
 # PCI
 include_bsp_HEADERS += ../../sparc/shared/include/grpci.h
 include_bsp_HEADERS += ../../sparc/shared/include/grpci2.h
+include_bsp_HEADERS += ../../sparc/shared/include/grpci2dma.h
 include_bsp_HEADERS += ../../sparc/shared/include/pcif.h
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
 libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2.c
+libbsp_a_SOURCES += ../../sparc/shared/pci/grpci2dma.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pcif.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_le.c
 libbsp_a_SOURCES +=  ../../sparc/shared/pci/pci_memreg_sparc_be.c

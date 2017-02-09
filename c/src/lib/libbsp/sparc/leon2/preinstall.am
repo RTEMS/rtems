@@ -129,6 +129,10 @@ $(PROJECT_INCLUDE)/bsp/grpci2.h: ../../sparc/shared/include/grpci2.h $(PROJECT_I
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grpci2.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grpci2.h
 
+$(PROJECT_INCLUDE)/bsp/grpci2dma.h: ../../sparc/shared/include/grpci2dma.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grpci2dma.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grpci2dma.h
+
 $(PROJECT_INCLUDE)/bsp/pcif.h: ../../sparc/shared/include/pcif.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/pcif.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/pcif.h
