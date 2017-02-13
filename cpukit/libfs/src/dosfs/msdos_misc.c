@@ -1539,7 +1539,7 @@ msdos_find_file_in_directory (
 
                         if (lfn_entry || (lfn_checksum != cs))
                             entry_matched = false;
-                        else {
+                        else if (filename_size_remaining == 0) {
                             filename_matched = true;
                             rc = msdos_on_entry_found (
                                 fs_info,
