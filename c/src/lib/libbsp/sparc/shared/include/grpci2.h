@@ -36,6 +36,10 @@ extern void grpci2_register_drv(void);
  * ============================
  * Name="byteTwisting", Type=INT, Enable/Disable Bytetwisting by hardware
  *
+ * PCI Latency timer
+ * ============================
+ * Name="latencyTimer", Type=INT, Set the latency timer
+ *
  * PCI Host's Target BARs setup
  * ============================
  * The Host's BARs are not configured by the configuration routines, by default

@@ -57,6 +57,9 @@
 /* If defined to 1 - byte twisting is enabled by default */
 #define DEFAULT_BT_ENABLED 0
 
+/* If defined to 64 - Latency timer is 64 by default */
+#define DEFAULT_LATENCY_TIMER 64
+
 /* Interrupt assignment. Set to other value than 0xff in order to 
  * override defaults and plug&play information
  */
@@ -237,6 +240,7 @@ struct grpci2_priv {
 	char				irq_mode; /* IRQ Mode from CAPSTS REG */
 	char				bt_enabled;
 	unsigned int			irq_mask;
+	unsigned int			latency_timer;
 
 	struct grpci2_pcibar_cfg	*barcfg;
 
@@ -696,6 +700,12 @@ static int grpci2_hw_init(struct grpci2_priv *priv)
 	data |= (PCIM_CMD_MEMEN | PCIM_CMD_BUSMASTEREN);
 	grpci2_cfg_w32(host, PCIR_COMMAND, data);
 
+	/* set latency timer */
+	grpci2_cfg_r32(host, PCIR_CACHELNSZ, &data);
+	data &= ~0xff00;
+	data |= ((priv->latency_timer & 0xff) << 8);
+	grpci2_cfg_w32(host, PCIR_CACHELNSZ, data);
+
 	/* Enable Error respone (CPU-TRAP) on illegal memory access */
 	regs->ctrl = CTRL_ER | CTRL_PE;
 
@@ -733,6 +743,7 @@ static int grpci2_init(struct grpci2_priv *priv)
 	priv->regs = (struct grpci2_regs *)apb->start;
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 	priv->irq_mode = (priv->regs->sts_cap & STS_IRQMODE) >> STS_IRQMODE_BIT;
+	priv->latency_timer = DEFAULT_LATENCY_TIMER;
 
 	/* Calculate the PCI windows 
 	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
@@ -790,6 +801,11 @@ static int grpci2_init(struct grpci2_priv *priv)
 		priv->barcfg = value->ptr;
 	else
 		priv->barcfg = grpci2_default_bar_mapping;
+
+	/* User may override DEFAULT_LATENCY_TIMER */
+	value = drvmgr_dev_key_get(priv->dev, "latencyTimer", DRVMGR_KT_INT);
+	if (value)
+		priv->latency_timer = value->i;
 
 	/* This driver only support HOST systems, we check that it can act as a 
 	 * PCI Master and that it is in the Host slot. */
