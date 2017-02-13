@@ -1071,6 +1071,22 @@ static void test_compatibility( void )
   rtems_test_assert( rc == 0 );
 }
 
+static void test_end_of_string_matches( void )
+{
+  int rc;
+
+  rc = mkdir( MOUNT_DIR "/lib.beam", S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rc == 0 );
+
+  errno = 0;
+  rc = unlink( MOUNT_DIR "/proc_lib.beam" );
+  rtems_test_assert( rc == -1 );
+  rtems_test_assert( errno == ENOENT );
+
+  rc = unlink( MOUNT_DIR "/lib.beam" );
+  rtems_test_assert( rc == 0 );
+}
+
 /*
  * Main test method
  */
@@ -1128,6 +1144,8 @@ static void test( void )
     MOUNT_DIR,
     "/dev/rdb",
     NULL);
+
+  test_end_of_string_matches();
 
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );
@@ -1197,6 +1215,8 @@ static void test( void )
     "/dev/rdb",
     &mount_opts[1]);
 
+  test_end_of_string_matches();
+
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );
 
@@ -1259,6 +1279,8 @@ static void test( void )
     MOUNT_DIR,
     "/dev/rdc",
     &mount_opts[1]);
+
+  test_end_of_string_matches();
 
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );
