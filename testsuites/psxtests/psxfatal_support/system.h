@@ -25,10 +25,7 @@ void force_error(void);
 
 void Put_Source( rtems_fatal_source source );
 
-void Put_Error(
-  uint32_t source,
-  uint32_t error
-);
+void Put_Error( rtems_fatal_source source, rtems_fatal_code error );
 
 void *POSIX_Init(
   void *argument

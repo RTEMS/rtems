@@ -39,19 +39,21 @@ void *POSIX_Init(
   rtems_test_exit(0);
 }
 
-void Put_Error( uint32_t source, uint32_t error )
+void Put_Error( rtems_fatal_source source, rtems_fatal_code error )
 {
   if ( source == INTERNAL_ERROR_CORE ) {
     printk( rtems_internal_error_text( error ) );
   }
   else if (source == INTERNAL_ERROR_RTEMS_API ){
-    if (error >  RTEMS_NOT_IMPLEMENTED )
-      printk("Unknown Internal Rtems Error (%d)", error);
-    else
-      printk( "%s", rtems_status_text( error ) );
+    printk( "%s", rtems_status_text( error ) );
   }
   else if (source == INTERNAL_ERROR_POSIX_API ) {
-      printk( "SOURCE=%d ERROR=%d %s", source, error, strerror( error ) );
+    printk(
+      "SOURCE=%d ERROR=%" PRIuMAX " %s",
+      source,
+      (uintmax_t) error,
+      strerror( (int) error )
+    );
   }
 }
 
