@@ -13,6 +13,7 @@
 #include <tmacros.h>
 #include <rtems.h>
 #include <limits.h>
+#include <unistd.h>
 #include <sys/param.h>
 
 const char rtems_test_name[] = "SPPAGESIZE";
