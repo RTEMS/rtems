@@ -115,7 +115,7 @@ static void test_sem_init_too_large_inital_value(void)
   int   rv;
 
   errno = 0;
-  rv = sem_init( &sem, 0, SEM_VALUE_MAX + 1 );
+  rv = sem_init( &sem, 0, (unsigned int) SEM_VALUE_MAX + 1 );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EINVAL );
 }
