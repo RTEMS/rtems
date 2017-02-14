@@ -11,6 +11,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
 
@@ -23,8 +24,7 @@ rtems_monitor_task_wait_info(
     Thread_queue_Context      queue_context;
     const Thread_queue_Queue *queue;
 
-    canonical_task->wait_id = 0;
-    canonical_task->wait_name[0] = '\0';
+    canonical_task->wait[0] = '\0';
 
     _Thread_queue_Context_initialize( &queue_context );
     _Thread_Wait_acquire( rtems_thread, &queue_context );
@@ -32,12 +32,23 @@ rtems_monitor_task_wait_info(
     queue = rtems_thread->Wait.queue;
 
     if ( queue != NULL ) {
+      Objects_Id id;
+
       _Thread_queue_Queue_get_name_and_id(
         queue,
-        canonical_task->wait_name,
-        sizeof(canonical_task->wait_name),
-        &canonical_task->wait_id
+        canonical_task->wait,
+        sizeof(canonical_task->wait),
+        &id
       );
+
+      if (id != 0) {
+        snprintf(
+          canonical_task->wait,
+          sizeof(canonical_task->wait),
+          "%08" PRIx32,
+          id
+        );
+      }
     } else if (
       (rtems_thread->current_state & STATES_WAITING_FOR_BSD_WAKEUP) != 0
     ) {
@@ -47,9 +58,9 @@ rtems_monitor_task_wait_info(
 
       if (wmesg != NULL) {
         strlcpy(
-          canonical_task->wait_name,
+          canonical_task->wait,
           wmesg,
-          sizeof(canonical_task->wait_name)
+          sizeof(canonical_task->wait)
         );
       }
     }
@@ -71,10 +82,17 @@ rtems_monitor_task_canonical(
 
     api = rtems_thread->API_Extensions[ THREAD_API_RTEMS ];
 
+    _Objects_Name_to_string(
+      rtems_thread->Object.name,
+      false,
+      canonical_task->short_name,
+      sizeof( canonical_task->short_name )
+    );
+
     _Thread_Get_name(
       rtems_thread,
-      canonical_task->name_string,
-      sizeof( canonical_task->name_string )
+      canonical_task->long_name,
+      sizeof( canonical_task->long_name )
     );
 
     rtems_monitor_task_wait_info( canonical_task, rtems_thread );
@@ -109,8 +127,8 @@ rtems_monitor_task_dump_header(
 )
 {
     fprintf(stdout,"\
-ID         NAME       CPU PRI STATE  MODES    EVENTS WAITID   WAITQUEUE\n"); /*
-0a010004   SHLL         0 100 READY  P:T:nA     NONE 00000000 00000000 [DFLT] */
+ID       NAME                 CPU PRI STATE  MODES    EVENTS WAITINFO\n"); /*
+0a010004 SHLL                   0 100 READY  P:T:nA   NONE   00000000 */
 
     rtems_monitor_separator();
 }
@@ -127,22 +145,31 @@ rtems_monitor_task_dump(
     int length = 0;
 
     length += rtems_monitor_dump_id(monitor_task->id);
-    length += rtems_monitor_pad(11, length);
-    length += fprintf(stdout, "%s", monitor_task->name_string);
-    length += rtems_monitor_pad(21, length);
-    length += rtems_monitor_dump_decimal(monitor_task->cpu);
-    length += rtems_monitor_pad(26, length);
-    length += rtems_monitor_dump_priority(monitor_task->priority);
+    length += rtems_monitor_pad(9, length);
+
+    if (strcmp(monitor_task->short_name, monitor_task->long_name) == 0) {
+        length += fprintf(stdout, "%s", monitor_task->short_name);
+    } else {
+        length += fprintf(
+          stdout,
+          "%s %s",
+          monitor_task->short_name,
+          monitor_task->long_name
+        );
+    }
+
     length += rtems_monitor_pad(30, length);
+    length += fprintf(stdout, "%3" PRId32, monitor_task->cpu);
+    length += rtems_monitor_pad(34, length);
+    length += rtems_monitor_dump_priority(monitor_task->priority);
+    length += rtems_monitor_pad(38, length);
     length += rtems_monitor_dump_state(monitor_task->state);
-    length += rtems_monitor_pad(37, length);
+    length += rtems_monitor_pad(45, length);
     length += rtems_monitor_dump_modes(monitor_task->modes);
-    length += rtems_monitor_pad(44, length);
+    length += rtems_monitor_pad(52, length);
     length += rtems_monitor_dump_events(monitor_task->events);
-    length += rtems_monitor_pad(53, length);
-    length += rtems_monitor_dump_id(monitor_task->wait_id);
-    length += rtems_monitor_pad(62, length);
-    length += fprintf(stdout, "%s", monitor_task->wait_name);
+    length += rtems_monitor_pad(61, length);
+    length += fprintf(stdout, "%s", monitor_task->wait);
 
     fprintf(stdout,"\n");
 }
