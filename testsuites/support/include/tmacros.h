@@ -317,11 +317,11 @@ extern "C" {
 #endif
 
 /* c.f. cpukit/score/include/rtems/score/priority.h */
-#define PRIdPriority_Control PRId32
-#define PRIxPriority_Control PRIx32
+#define PRIdPriority_Control PRIu64
+#define PRIxPriority_Control PRIx64
 /* rtems_task_priority is a typedef to Priority_Control */
-#define PRIdrtems_task_priority PRIdPriority_Control
-#define PRIxrtems_task_priority PRIxPriority_Control
+#define PRIdrtems_task_priority PRIu32
+#define PRIxrtems_task_priority PRIx32
 
 /* c.f. cpukit/score/include/rtems/score/watchdog.h */
 #define PRIdWatchdog_Interval PRIu32
