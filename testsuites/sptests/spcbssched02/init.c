@@ -34,7 +34,7 @@ rtems_task Init(
   rtems_status_code status;
   rtems_cbs_server_id server_id, server_id2;
   time_t approved_budget, exec_time, abs_time, remaining_budget;
-  rtems_cbs_parameters params, params1, params2, params3, params4;
+  rtems_cbs_parameters params, params1, params3;
 
   Priority = 30;
   Period    = 30;
@@ -44,11 +44,9 @@ rtems_task Init(
   params.deadline = 1;
   params.budget = 1;
 
-  params1 = params2 = params3 = params4 = params;
+  params1 = params3 = params;
   params1.budget = -1;
-  params2.budget = SCHEDULER_EDF_PRIO_MSB + 1;
   params3.deadline = -1;
-  params4.deadline = SCHEDULER_EDF_PRIO_MSB + 1;
 
   TEST_BEGIN();
 
@@ -92,13 +90,7 @@ rtems_task Init(
   if ( rtems_cbs_create_server( &params1, NULL, &server_id ) !=
        SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
     printf( "ERROR: CREATE SERVER PASSED UNEXPECTEDLY\n" );
-  if ( rtems_cbs_create_server( &params2, NULL, &server_id ) !=
-       SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
-    printf( "ERROR: CREATE SERVER PASSED UNEXPECTEDLY\n" );
   if ( rtems_cbs_create_server( &params3, NULL, &server_id ) !=
-       SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
-    printf( "ERROR: CREATE SERVER PASSED UNEXPECTEDLY\n" );
-  if ( rtems_cbs_create_server( &params4, NULL, &server_id ) !=
        SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
     printf( "ERROR: CREATE SERVER PASSED UNEXPECTEDLY\n" );
   if ( rtems_cbs_create_server( &params, NULL, &server_id2 ) )
@@ -176,13 +168,7 @@ rtems_task Init(
   if ( rtems_cbs_set_parameters( server_id, &params1 ) !=
        SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
     printf( "ERROR: SET PARAMETERS PASSED UNEXPECTEDLY\n" );
-  if ( rtems_cbs_set_parameters( server_id, &params2 ) !=
-       SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
-    printf( "ERROR: SET PARAMETERS PASSED UNEXPECTEDLY\n" );
   if ( rtems_cbs_set_parameters( server_id, &params3 ) !=
-       SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
-    printf( "ERROR: SET PARAMETERS PASSED UNEXPECTEDLY\n" );
-  if ( rtems_cbs_set_parameters( server_id, &params4 ) !=
        SCHEDULER_CBS_ERROR_INVALID_PARAMETER )
     printf( "ERROR: SET PARAMETERS PASSED UNEXPECTEDLY\n" );
 
