@@ -233,8 +233,6 @@ static void usage(void) __dead2;
 #endif
 
 #if __rtems__
-#define _ALIGNBYTES     CPU_ALIGNMENT
-#define _ALIGN(p)       (((uintptr_t)(p) + _ALIGNBYTES) & ~_ALIGNBYTES)
 #define CMSG_SPACE(l)   (_ALIGN(sizeof(struct cmsghdr)) + _ALIGN(l))
 #define CMSG_LEN(l)     (_ALIGN(sizeof(struct cmsghdr)) + (l))
 typedef struct
