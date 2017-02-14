@@ -22,7 +22,7 @@ Status_Control _Thread_Set_name(
   size_t length;
 
   length = strlcpy(
-    the_thread->Join_queue.Queue.name,
+    RTEMS_DECONST( char *, the_thread->Join_queue.Queue.name ),
     name,
     _Thread_Maximum_name_size
   );
