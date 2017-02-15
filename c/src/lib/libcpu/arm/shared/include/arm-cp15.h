@@ -386,7 +386,7 @@ arm_cp15_set_translation_table_base(uint32_t *base)
 
 /* Translation Table Base Control Register - DDI0301H arm1176jzfs TRM 3.2.15 */
 ARM_CP15_TEXT_SECTION static inline uint32_t
-*arm_cp15_get_translation_table_base_control_register(void)
+arm_cp15_get_translation_table_base_control_register(void)
 {
   ARM_SWITCH_REGISTERS;
   uint32_t ttb_cr;
