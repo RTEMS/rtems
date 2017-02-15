@@ -91,7 +91,6 @@ static void lpc24xx_ssp_handler(void *arg)
 
   if ((mis & SSP_MIS_RORRIS) != 0) {
     /* TODO */
-    printk("%s: Receiver overrun!\n", __func__);
     icr |= SSP_ICR_RORRIS;
   }
 
