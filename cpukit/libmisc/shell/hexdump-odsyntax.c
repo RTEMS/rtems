@@ -39,13 +39,14 @@
 #if 0
 static char sccsid[] = "@(#)odsyntax.c	8.2 (Berkeley) 5/4/95";
 #endif /* not lint */
+#ifdef __rtems__
+/* For asprintf() visibility */
+#define _GNU_SOURCE
+#endif /* __rtems__ */
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD: src/usr.bin/hexdump/odsyntax.c,v 1.17 2004/07/22 13:14:42 johan Exp $");
 #endif
 
-#ifdef __rtems__
-#define _GNU_SOURCE
-#endif
 #include <sys/types.h>
 
 #include <ctype.h>
