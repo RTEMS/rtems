@@ -15,6 +15,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <inttypes.h>
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
@@ -26,7 +27,11 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
   isf = frame->isf;
 
-  printk( "Unexpected trap (%2d) at address 0x%08x\n", real_trap, isf->tpc);
+  printk(
+    "Unexpected trap (%2" PRId32 ") at address 0x%08" PRIx32 "\n",
+    real_trap,
+    isf->tpc
+  );
 
   switch (real_trap) {
 
@@ -56,7 +61,7 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
       printk( "fp exception\n" );
       break;
     case 0x09:
-      printk("data access exception at 0x%08x\n",
+      printk("data access exception at 0x%08" PRIx32 "\n",
         ERC32_MEC.First_Failing_Address );
       break;
     case 0x0A:

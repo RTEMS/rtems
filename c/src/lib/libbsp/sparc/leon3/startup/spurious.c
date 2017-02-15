@@ -20,6 +20,7 @@
 #include <bsp.h>
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
+#include <inttypes.h>
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
@@ -31,7 +32,11 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
   real_trap = SPARC_REAL_TRAP_NUMBER(trap);
   isf = frame->isf;
 
-  printk( "Unexpected trap (0x%02x) at address 0x%08x\n", real_trap, isf->tpc);
+  printk(
+    "Unexpected trap (%2" PRId32 ") at address 0x%08" PRIx32 "\n",
+    real_trap,
+    isf->tpc
+  );
 
   switch (real_trap) {
 
@@ -59,12 +64,6 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
       break;
     case 0x08:
       printk( "fp exception\n" );
-      break;
-    case 0x09:
-      printk( "Unexpected trap (0x%2d) at address XXX\n",
-        real_trap
-        /* XXX FIXME isf->tpc */
-      );
       break;
     case 0x0A:
       printk( "tag overflow\n" );
