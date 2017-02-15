@@ -40,8 +40,6 @@
 
 static const uint8_t mpc83xx_gmt_interrupt_vector_table [MPC83XX_GTM_NUMBER] = { 90, 78, 84, 72, 91, 79, 85, 73 };
 
-static const uint8_t mpc83xx_gmt_interrupt_priority_table [MPC83XX_GTM_NUMBER] = { 113, 77, 95, 59, 116, 80, 98, 62 };
-
 rtems_status_code mpc83xx_gtm_initialize( int timer, int clock)
 {
 	rtems_status_code sc = RTEMS_SUCCESSFUL;
