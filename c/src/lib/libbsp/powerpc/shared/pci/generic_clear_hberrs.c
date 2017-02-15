@@ -47,7 +47,7 @@ int             count;
     } while ( ! PCI_STATUS_OK(pcistat) && count-- );
 
     if ( !PCI_STATUS_OK(rval) && !quiet) {
-        printk("Cleared PCI errors: pci_stat was 0x%04x\n", rval);
+        printk("Cleared PCI errors: pci_stat was 0x%04lx\n", rval);
     }
     if ( !PCI_STATUS_OK(pcistat) ) {
         printk("Unable to clear PCI errors: still 0x%04x after 10 attempts\n", pcistat);

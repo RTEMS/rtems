@@ -100,7 +100,7 @@ dump_dev_cb(
 	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_LINE, &il);
 	pci_read_config_byte (bus, dev, fun, PCI_INTERRUPT_PIN,  &ip);
 
-    printk("%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08x 0x%08x       %d -> %3d (=0x%02x)\n",
+    printk("%3d:0x%02x:%d    0x%04x-0x%04x:  0x%04x 0x%04x 0x%08" PRIx32 " 0x%08" PRIx32 "       %d -> %3d (=0x%02x)\n",
 		bus, dev, fun, vi, di, cd, st, b1, b2, ip, il, il);
 	return 0;
 }

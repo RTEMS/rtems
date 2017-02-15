@@ -18,6 +18,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #include <rtems.h>
 #include <bsp.h>
@@ -271,7 +272,7 @@ VpdBufRec          vpdData [] = {
 
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Additionnal boot options are %s\n", BSP_commandline_string);
-  printk("Initial system stack at %x\n",      stack);
+  printk("Initial system stack at %" PRIxPTR "\n", (uintptr_t) stack);
   printk("Software IRQ stack starts at %x with size %u\n", intrStackStart, intrStackSize);
 #endif
 
