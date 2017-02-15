@@ -185,6 +185,7 @@ bool _Thread_Initialize(
   }
 
 #if defined(RTEMS_SMP)
+  scheduler_node = NULL;
   scheduler_node_for_index = the_thread->Scheduler.nodes;
   scheduler_for_index = &_Scheduler_Table[ 0 ];
 
@@ -217,6 +218,7 @@ bool _Thread_Initialize(
     ++scheduler_index;
   }
 
+  _Assert( scheduler_node != NULL );
   _Chain_Initialize_one(
     &the_thread->Scheduler.Wait_nodes,
     &scheduler_node->Thread.Wait_node
