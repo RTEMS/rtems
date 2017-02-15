@@ -80,7 +80,7 @@ void rtems_fatal_error_occurred(
  *
  * @see _Terminate().
  */
-RTEMS_INLINE_ROUTINE void rtems_fatal(
+RTEMS_NO_RETURN RTEMS_INLINE_ROUTINE void rtems_fatal(
   rtems_fatal_source fatal_source,
   rtems_fatal_code   error_code
 )
