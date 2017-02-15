@@ -169,44 +169,6 @@ struct grpci2_regs {
 #define STS_ITGTABRT	(1<<13)
 #define STS_IPARERR	(1<<12)
 
-struct grpci2_bd_chan {
-	volatile unsigned int ctrl;	/* 0x00 DMA Control */
-	volatile unsigned int nchan;	/* 0x04 Next DMA Channel Address */
-	volatile unsigned int nbd;	/* 0x08 Next Data Descriptor in channel */
-	volatile unsigned int res;	/* 0x0C Reserved */
-};
-
-#define BD_CHAN_EN		(1<<BD_CHAN_EN_BIT)
-#define BD_CHAN_ID		(0x3<<BD_CHAN_ID_BIT)
-#define BD_CHAN_TYPE		(0x3<<BD_CHAN_TYPE_BIT)
-#define BD_CHAN_BDCNT		(0xffff<<BD_CHAN_BDCNT_BIT)
-#define BD_CHAN_EN_BIT		31
-#define BD_CHAN_ID_BIT		22
-#define BD_CHAN_TYPE_BIT	20
-#define BD_CHAN_BDCNT_BIT	0
-
-struct grpci2_bd_data {
-	volatile unsigned int ctrl;	/* 0x00 DMA Data Control */
-	volatile unsigned int pci_adr;	/* 0x04 PCI Start Address */
-	volatile unsigned int ahb_adr;	/* 0x08 AHB Start address */
-	volatile unsigned int next;	/* 0x0C Next Data Descriptor in channel */
-};
-
-#define BD_DATA_EN		(0x1<<BD_DATA_EN_BIT)
-#define BD_DATA_IE		(0x1<<BD_DATA_IE_BIT)
-#define BD_DATA_DR		(0x1<<BD_DATA_DR_BIT)
-#define BD_DATA_BE		(0x1<<BD_DATA_BE_BIT)
-#define BD_DATA_TYPE		(0x3<<BD_DATA_TYPE_BIT)
-#define BD_DATA_ER		(0x1<<BD_DATA_ER_BIT)
-#define BD_DATA_LEN		(0xffff<<BD_DATA_LEN_BIT)
-#define BD_DATA_EN_BIT		31
-#define BD_DATA_IE_BIT		30
-#define BD_DATA_DR_BIT		29
-#define BD_DATA_BE_BIT		28
-#define BD_DATA_TYPE_BIT	20
-#define BD_DATA_ER_BIT		19
-#define BD_DATA_LEN_BIT		0
-
 /* GRPCI2 Capability */
 struct grpci2_cap_first {
 	unsigned int ctrl;
@@ -259,6 +221,7 @@ struct grpci2_priv {
 	unsigned char			ver;
 	char				irq;
 	char				irq_mode; /* IRQ Mode from CAPSTS REG */
+	char				irq_dma; /* IRQ Index for DMA */
 	char				bt_enabled;
 	unsigned int			irq_mask;
 	unsigned int			latency_timer;
@@ -277,12 +240,17 @@ struct grpci2_priv {
 	struct drvmgr_map_entry		maps_down[2];
 	struct pcibus_config		config;
 
+	/* DMA interrupts */
+	void (*dma_isr)(void *data);
+	void *dma_isr_arg;
+
 	SPIN_DECLARE(devlock)
 };
 
 int grpci2_init1(struct drvmgr_dev *dev);
 int grpci2_init3(struct drvmgr_dev *dev);
 void grpci2_err_isr(void *arg);
+void grpci2_dma_isr(void *arg);
 
 /* GRPCI2 DRIVER */
 
@@ -315,6 +283,19 @@ struct amba_drv_info grpci2_info =
 	},
 	&grpci2_ids[0]
 };
+
+/* Defaults to do nothing - user can override this function
+ * by including the DMA DRIVER.
+ */
+int __attribute__((weak)) grpci2dma_init(void * regs, void isr_register( void (*isr)(void *), void * arg));
+
+int grpci2dma_init(void * regs, void isr_register( void (*isr)(void *), void * arg))
+{
+	return 0;
+}
+
+/* Prototype of grpci2_dma_isr_register function */
+static void grpci2_dma_isr_register( void (*isr)(void *), void * arg);
 
 void grpci2_register_drv(void)
 {
@@ -661,6 +642,24 @@ void grpci2_err_isr(void *arg)
 	}
 }
 
+/* PCI DMA Interrupt handler, called when there may be a PCI DMA interrupt.
+ */
+void grpci2_dma_isr(void *arg)
+{
+	struct grpci2_priv *priv = arg;
+	unsigned int sts = (priv->regs->sts_cap & (STS_IDMAERR | STS_IDMA));
+
+	/* Clear Interrupt if taken*/
+	if (sts != 0){
+		/* Clear IDMAERR and IDMA bits */
+		priv->regs->sts_cap = (STS_IDMAERR | STS_IDMA);
+		/* Clear DRVMGR interrupt */
+		drvmgr_interrupt_clear(priv->dev, priv->irq_dma);
+		/* Call DMA driver ISR */
+		(priv->dma_isr)(priv->dma_isr_arg);
+	}
+}
+
 static int grpci2_hw_init(struct grpci2_priv *priv)
 {
 	struct grpci2_regs *regs = priv->regs;
@@ -956,6 +955,11 @@ int grpci2_init3(struct drvmgr_dev *dev)
 	/* Install and Enable PCI Error interrupt handler */
 	drvmgr_interrupt_register(dev, 0, "grpci2", grpci2_err_isr, priv);
 
+	/* Initialize DMA driver (if supported) */
+	if (priv->regs->sts_cap & STS_DMA){
+		grpci2dma_init((void *) &(priv->regs->dma_ctrl), grpci2_dma_isr_register);
+	}
+
 	/* Unmask Error IRQ and all PCI interrupts at PCI Core. For this to be
 	 * safe every PCI board have to be resetted (no IRQ generation) before
 	 * Global IRQs are enabled (Init is reached or similar)
@@ -963,4 +967,34 @@ int grpci2_init3(struct drvmgr_dev *dev)
 	priv->regs->ctrl |= (CTRL_EI | priv->irq_mask);
 
 	return DRVMGR_OK;
+}
+
+static void grpci2_dma_isr_register( void (*isr)(void *), void * arg)
+{
+	struct grpci2_priv *priv = grpci2priv;
+
+	/* Handle unregistration */
+	if (priv->dma_isr != NULL) {
+		drvmgr_interrupt_unregister(priv->dev, priv->irq_dma, grpci2_dma_isr, priv);
+		/* Uninstall user ISR */
+		priv->dma_isr = NULL;
+		priv->dma_isr_arg = NULL;
+	}
+
+	if (isr == NULL)
+		return;
+
+	/* Install user ISR */
+	priv->dma_isr_arg = arg;
+	priv->dma_isr = isr;
+
+	/* Install and Enable PCI DMA interrupt handler */
+	if (priv->irq_mode == 1) {
+		priv->irq_dma = 1;
+	} else if (priv->irq_mode == 3) {
+		priv->irq_dma = 4;
+	} else {
+		priv->irq_dma = 0;
+	}
+	drvmgr_interrupt_register(priv->dev, priv->irq_dma, "grpci2dma", grpci2_dma_isr, priv);
 }
