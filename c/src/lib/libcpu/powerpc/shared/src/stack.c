@@ -1,6 +1,7 @@
 #include "stackTrace.h"
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>
+#include <inttypes.h>
 
 SPR_RO(PPC_LR)
 
@@ -36,7 +37,7 @@ void CPU_print_stack(void)
         for (i=0; stck[i]; i++) {
                 if (i%5) printk("--> ");
                 else     printk("\n");
-                printk("0x%08x",stck[i]);
+                printk("0x%08" PRIuPTR, (uintptr_t)stck[i]);
 	}
 	printk("\n");
 }

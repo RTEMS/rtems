@@ -107,16 +107,16 @@ struct ifsim_softc theIfSims[IFSIM_SLOTS] = {{{{0}}} };
 
 rtems_id           ifsim_tid = 0;
 
-__inline__ uint32_t
+static __inline__ uint32_t
 ifsim_in(struct ifsim_softc *sc, unsigned regno)
 {
-	return in_be32( sc->pvt.base + regno );
+	return in_be32((volatile uint32_t *) (sc->pvt.base + regno));
 }
 
-__inline__ void
+static __inline__ void
 ifsim_out(struct ifsim_softc *sc, unsigned regno, uint32_t v)
 {
-	out_be32(sc->pvt.base + regno, v);
+	out_be32((volatile uint32_t *) (sc->pvt.base + regno), v);
 }
 
 static void *
@@ -378,7 +378,7 @@ rtems_event_set    evs;
 							if ( crc_len
 								 && (memcpy(&crc_net, (char*)eh + len, crc_len),
 							        (crc = (ether_crc32_le((uint8_t *)eh, len) ^ 0xffffffff)) != crc_net) ) {
-								printk("CSUM: me 0x%08X, them 0x%08x\n", crc, crc_net);
+								printk("CSUM: me 0x%08" PRIx32 ", them 0x%08" PRIx32 "\n", crc, crc_net);
 								sc->pvt.rx_cserrs++;
 							} else {
 

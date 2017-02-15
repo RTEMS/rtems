@@ -335,29 +335,29 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
   ubat bat;
 
   if (check_bat_index (bat_index)) {
-    printk ("Invalid BAT index\n", bat_index);
+    printk ("Invalid BAT index %d\n", bat_index);
     return -1;
   }
 
   if ((int) (bl = check_bat_size (size)) < 0) {
-    printk ("Invalid BAT size\n", size);
+    printk ("Invalid BAT size %u\n", size);
     return -1;
   }
 
   if (virt & (size - 1)) {
-    printk ("BAT effective address 0x%08x misaligned (size is 0x%08x)\n",
+    printk ("BAT effective address 0x%08lx misaligned (size is 0x%08x)\n",
             virt, size);
     return -1;
   }
 
   if (phys & (size - 1)) {
-    printk ("BAT physical address 0x%08x misaligned (size is 0x%08x)\n", phys,
+    printk ("BAT physical address 0x%08lx misaligned (size is 0x%08x)\n", phys,
             size);
     return -1;
   }
 
   if (virt + size - 1 < virt) {
-    printk ("BAT range invalid: wraps around zero 0x%08x..0x%08x\n", virt,
+    printk ("BAT range invalid: wraps around zero 0x%08lx..0x%08lx\n", virt,
             virt + size - 1);
     return -1;
   }
@@ -383,7 +383,7 @@ setbat (int typ, int bat_index, unsigned long virt, unsigned long phys,
   err = check_overlap (typ, virt, size);
   if ((size >= (1 << 17)) && (err >= 0) && (err != bat_index)) {
     rtems_interrupt_enable (level);
-    printk ("BATs must not overlap; area 0x%08x..0x%08x hits %cBAT %i\n",
+    printk ("BATs must not overlap; area 0x%08lx..0x%08lx hits %cBAT %i\n",
             virt, virt + size, (TYP_I == typ ? 'I' : 'D'), err);
     return -1;
   }
@@ -495,13 +495,13 @@ getbat (int typ, int idx, unsigned long *pu, unsigned long *pl)
     ubat b;
     b.words.u = u;
     b.words.l = l;
-    printk ("Raw %cBAT %i contents; UPPER: (0x%08x)", (TYP_I == typ ? 'I' : 'D'), idx, u);
+    printk ("Raw %cBAT %i contents; UPPER: (0x%08lx)", (TYP_I == typ ? 'I' : 'D'), idx, u);
     printk (" BEPI: 0x%08x", b.bat.batu.bepi);
-    printk (" BL: 0x%08x", (u >> 2) & ((1 << 15) - 1));
+    printk (" BL: 0x%08lx", (u >> 2) & ((1 << 15) - 1));
     printk (" VS: 0b%i", b.bat.batu.vs);
     printk (" VP: 0b%i", b.bat.batu.vp);
     printk ("\n");
-    printk ("                     LOWER: (0x%08x)", l);
+    printk ("                     LOWER: (0x%08lx)", l);
     printk ("  RPN: 0x%08x", b.bat.batl.brpn);
     printk (" wimg:   0b%1i%1i%1i%1i", b.bat.batl.w, b.bat.batl.i,
             b.bat.batl.m, b.bat.batl.g);
@@ -509,7 +509,7 @@ getbat (int typ, int idx, unsigned long *pu, unsigned long *pl)
     printk ("\n");
     printk ("Covering EA Range: ");
     if (bat_in_use[typ] & (1 << idx))
-      printk ("0x%08x .. 0x%08x\n", bat_addrs[typ][idx].start,
+      printk ("0x%08lx .. 0x%08lx\n", bat_addrs[typ][idx].start,
               bat_addrs[typ][idx].limit);
     else
       printk ("<none> (BAT off)\n");

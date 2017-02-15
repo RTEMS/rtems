@@ -25,6 +25,7 @@
 #include <libcpu/io.h>
 #include <libcpu/byteorder.h>
 #include <rtems/bspIo.h>
+#include <inttypes.h>
 
 #ifndef NULL
 #define NULL 0
@@ -72,9 +73,9 @@ static          int openpic_src_offst = 0;
 	printk("openpic.c:%d: illegal priority %d\n", __LINE__, pri);
 #define check_arg_irq(irq) \
     if (irq < 0 || irq >= NumSources) \
-	printk("openpic.c:%d: illegal irq %d from 0x%08x,[0x%08x],[[0x%08x]]\n", \
-	       __LINE__, irq, __builtin_return_address(0), \
-	       __builtin_return_address(1), __builtin_return_address(2) \
+	printk("openpic.c:%d: illegal irq %d from 0x%08" PRIxPTR ",[0x%08" PRIxPTR "],[[0x%08" PRIxPTR "]]\n", \
+	       __LINE__, irq, (uintptr_t) __builtin_return_address(0), \
+	       (uintptr_t) __builtin_return_address(1), (uintptr_t) __builtin_return_address(2) \
 	       );
 #define check_arg_cpu(cpu) \
     if (cpu < 0 || cpu >= NumProcessors) \
@@ -234,8 +235,8 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
 		break;
 	}
     }
-    printk("OpenPIC Version %s (%d CPUs and %d IRQ sources) at 0x%08x\n", version,
-	   NumProcessors, NumSources, OpenPIC);
+    printk("OpenPIC Version %s (%d CPUs and %d IRQ sources) at 0x%08" PRIuPTR "\n", version,
+	   NumProcessors, NumSources, (uintptr_t) OpenPIC);
 
     printk("OpenPIC Vendor %d (%s), Device %d (%s), Stepping %d\n", vendorid,
 	   vendor, devid, device, stepping);

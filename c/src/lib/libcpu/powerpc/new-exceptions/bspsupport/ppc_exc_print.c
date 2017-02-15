@@ -21,6 +21,8 @@
 
 #include <rtems/score/threaddispatch.h>
 
+#include <inttypes.h>
+
 #ifndef __SPE__
   #define GET_GPR(gpr) (gpr)
 #else
@@ -65,7 +67,7 @@ void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
 
   printk("Stack Trace: \n  ");
   if (excPtr) {
-    printk("IP: 0x%08x, ", excPtr->EXC_SRR0);
+    printk("IP: 0x%08" PRIu32 ", ", excPtr->EXC_SRR0);
     sp = (LRFrame) GET_GPR(excPtr->GPR1);
     lr = (void *) excPtr->EXC_LR;
   } else {
@@ -73,9 +75,9 @@ void BSP_printStackTrace(const BSP_Exception_frame *excPtr)
     __asm__ __volatile__("mr %0, 1":"=r"(sp));
     lr = (LRFrame) ppc_link_register();
   }
-  printk("LR: 0x%08x\n", lr);
+  printk("LR: 0x%08" PRIuPTR "\n", (uintptr_t) lr);
   for (f = (LRFrame) sp, i = 0; f->frameLink && i < STACK_CLAMP; f = f->frameLink) {
-    printk("--^ 0x%08x", (long) (f->frameLink->lr));
+    printk("--^ 0x%08" PRIuPTR "", (uintptr_t) (f->frameLink->lr));
     if (!(++i % 5))
       printk("\n");
   }
@@ -94,67 +96,67 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
   unsigned n = excPtr->_EXC_number & 0x7fff;
 
   printk("exception vector %d (0x%x)\n", n, n);
-  printk("  next PC or address of fault = 0x%08x\n", excPtr->EXC_SRR0);
-  printk("  saved MSR = 0x%08x\n", excPtr->EXC_SRR1);
+  printk("  next PC or address of fault = 0x%08" PRIu32 "\n", excPtr->EXC_SRR0);
+  printk("  saved MSR = 0x%08" PRIu32 "\n", excPtr->EXC_SRR1);
 
   /* Try to find out more about the context where this happened */
   printk(
-    "  context = %s, ISR nest level = %u\n",
+    "  context = %s, ISR nest level = %" PRIu32 "\n",
     _ISR_Nest_level == 0 ? "task" : "interrupt",
     _ISR_Nest_level
   );
   printk(
-    "  thread dispatch disable level = %u\n",
+    "  thread dispatch disable level = %" PRIu32 "\n",
     _Thread_Dispatch_disable_level
   );
 
   /* Dump registers */
 
-  printk("  R0  = 0x%08x", GET_GPR(excPtr->GPR0));
+  printk("  R0  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR0));
   if (synch) {
-    printk(" R1  = 0x%08x", GET_GPR(excPtr->GPR1));
-    printk(" R2  = 0x%08x", GET_GPR(excPtr->GPR2));
+    printk(" R1  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR1));
+    printk(" R2  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR2));
   } else {
     printk("               ");
     printk("               ");
   }
-  printk(" R3  = 0x%08x\n", GET_GPR(excPtr->GPR3));
-  printk("  R4  = 0x%08x", GET_GPR(excPtr->GPR4));
-  printk(" R5  = 0x%08x", GET_GPR(excPtr->GPR5));
-  printk(" R6  = 0x%08x", GET_GPR(excPtr->GPR6));
-  printk(" R7  = 0x%08x\n", GET_GPR(excPtr->GPR7));
-  printk("  R8  = 0x%08x", GET_GPR(excPtr->GPR8));
-  printk(" R9  = 0x%08x", GET_GPR(excPtr->GPR9));
-  printk(" R10 = 0x%08x", GET_GPR(excPtr->GPR10));
-  printk(" R11 = 0x%08x\n", GET_GPR(excPtr->GPR11));
-  printk("  R12 = 0x%08x", GET_GPR(excPtr->GPR12));
+  printk(" R3  = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR3));
+  printk("  R4  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR4));
+  printk(" R5  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR5));
+  printk(" R6  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR6));
+  printk(" R7  = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR7));
+  printk("  R8  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR8));
+  printk(" R9  = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR9));
+  printk(" R10 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR10));
+  printk(" R11 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR11));
+  printk("  R12 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR12));
   if (synch) {
-    printk(" R13 = 0x%08x", GET_GPR(excPtr->GPR13));
-    printk(" R14 = 0x%08x", GET_GPR(excPtr->GPR14));
-    printk(" R15 = 0x%08x\n", GET_GPR(excPtr->GPR15));
-    printk("  R16 = 0x%08x", GET_GPR(excPtr->GPR16));
-    printk(" R17 = 0x%08x", GET_GPR(excPtr->GPR17));
-    printk(" R18 = 0x%08x", GET_GPR(excPtr->GPR18));
-    printk(" R19 = 0x%08x\n", GET_GPR(excPtr->GPR19));
-    printk("  R20 = 0x%08x", GET_GPR(excPtr->GPR20));
-    printk(" R21 = 0x%08x", GET_GPR(excPtr->GPR21));
-    printk(" R22 = 0x%08x", GET_GPR(excPtr->GPR22));
-    printk(" R23 = 0x%08x\n", GET_GPR(excPtr->GPR23));
-    printk("  R24 = 0x%08x", GET_GPR(excPtr->GPR24));
-    printk(" R25 = 0x%08x", GET_GPR(excPtr->GPR25));
-    printk(" R26 = 0x%08x", GET_GPR(excPtr->GPR26));
-    printk(" R27 = 0x%08x\n", GET_GPR(excPtr->GPR27));
-    printk("  R28 = 0x%08x", GET_GPR(excPtr->GPR28));
-    printk(" R29 = 0x%08x", GET_GPR(excPtr->GPR29));
-    printk(" R30 = 0x%08x", GET_GPR(excPtr->GPR30));
-    printk(" R31 = 0x%08x\n", GET_GPR(excPtr->GPR31));
+    printk(" R13 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR13));
+    printk(" R14 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR14));
+    printk(" R15 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR15));
+    printk("  R16 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR16));
+    printk(" R17 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR17));
+    printk(" R18 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR18));
+    printk(" R19 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR19));
+    printk("  R20 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR20));
+    printk(" R21 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR21));
+    printk(" R22 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR22));
+    printk(" R23 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR23));
+    printk("  R24 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR24));
+    printk(" R25 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR25));
+    printk(" R26 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR26));
+    printk(" R27 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR27));
+    printk("  R28 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR28));
+    printk(" R29 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR29));
+    printk(" R30 = 0x%08" PRIu32 "", GET_GPR(excPtr->GPR30));
+    printk(" R31 = 0x%08" PRIu32 "\n", GET_GPR(excPtr->GPR31));
   } else {
     printk("\n");
   }
-  printk("  CR  = 0x%08x\n", excPtr->EXC_CR);
-  printk("  CTR = 0x%08x\n", excPtr->EXC_CTR);
-  printk("  XER = 0x%08x\n", excPtr->EXC_XER);
-  printk("  LR  = 0x%08x\n", excPtr->EXC_LR);
+  printk("  CR  = 0x%08" PRIu32 "\n", excPtr->EXC_CR);
+  printk("  CTR = 0x%08" PRIu32 "\n", excPtr->EXC_CTR);
+  printk("  XER = 0x%08" PRIu32 "\n", excPtr->EXC_XER);
+  printk("  LR  = 0x%08" PRIu32 "\n", excPtr->EXC_LR);
 
   /* Would be great to print DAR but unfortunately,
    * that is not portable across different CPUs.
@@ -164,7 +166,7 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
    */
   if (ppc_exc_get_DAR != NULL) {
     char* reg = ppc_cpu_is_60x() ? " DAR" : "DEAR";
-    printk(" %s = 0x%08x\n", reg, ppc_exc_get_DAR());
+    printk(" %s = 0x%08" PRIu32 "\n", reg, ppc_exc_get_DAR());
   }
   if (ppc_cpu_is_bookE()) {
     unsigned esr, mcsr;
@@ -219,7 +221,7 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
     const char *name = (const char *) &executing->Object.name;
 
     printk(
-      "  executing thread ID = 0x%08x, name = %c%c%c%c\n",
+      "  executing thread ID = 0x%08" PRIx32 ", name = %c%c%c%c\n",
       executing->Object.id,
       name [0],
       name [1],
