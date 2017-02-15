@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #define PCI_DEBUG 0
 
@@ -41,7 +42,7 @@ unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
                         &pcidata);
 
     if (!quiet)
-    printk("Before _BSP_clear_hostbridge_errors(): 0x%x, cause 0x%x\n",
+    printk("Before _BSP_clear_hostbridge_errors(): 0x%" PRIx32 ", cause 0x%lx\n",
 	   pcidata, inl(0x1d58));
 
     outl(0,0x1d58);
@@ -62,7 +63,7 @@ unsigned long _BSP_clear_hostbridge_errors(int enableMCP, int quiet)
 			  PCI_COMMAND,
                           &pcidata1);
 
-    if (!quiet) printk("After _BSP_clear_hostbridge_errors(): sts 0x%x\n",
+    if (!quiet) printk("After _BSP_clear_hostbridge_errors(): sts 0x%" PRIx32 "\n",
                         pcidata1);
     if (pcidata1 & HOSTBRIDGET_ERROR) printk("BSP_clear_hostbridge_errors(): unable to clear pending hostbridge errors\n");
     busNumber += BSP_MAX_PCI_BUS_ON_PCI0;

@@ -54,6 +54,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/percpu.h>
 #include <threads.h>
+#include <inttypes.h>
 
 #include <bsp/bspException.h>
 
@@ -74,7 +75,6 @@ volatile BSP_ExceptionExtension	test;
 void
 BSP_exceptionHandler(BSP_Exception_frame* excPtr)
 {
-uint32_t	note;
 BSP_ExceptionExtension	ext=0;
 rtems_id		id=0;
 int			recoverable = 0;
@@ -96,7 +96,7 @@ int			quiet=0;
 	   if (ext)
 	       quiet=ext->quiet;
 	   if (!quiet) {
-	      printk("Task (Id 0x%08x) got ",id);
+	      printk("Task (Id 0x%08" PRIx32 ") got ",id);
 	   }
 	   fmt="exception %d\n";
 	}
@@ -112,44 +112,44 @@ int			quiet=0;
        /* message about exception */
        printk(fmt, excPtr->_EXC_number);
        /* register dump */
-       printk("\t Next PC or Address of fault = %x, ", excPtr->EXC_SRR0);
-       printk("Mvme5500 Saved MSR = %x\n", excPtr->EXC_SRR1);
-       printk("\t R0  = %08x", excPtr->GPR0);
-       printk(" R1  = %08x", excPtr->GPR1);
-       printk(" R2  = %08x", excPtr->GPR2);
-       printk(" R3  = %08x\n", excPtr->GPR3);
-       printk("\t R4  = %08x", excPtr->GPR4);
-       printk(" R5  = %08x", excPtr->GPR5);
-       printk(" R6  = %08x", excPtr->GPR6);
-       printk(" R7  = %08x\n", excPtr->GPR7);
-       printk("\t R8  = %08x", excPtr->GPR8);
-       printk(" R9  = %08x", excPtr->GPR9);
-       printk(" R10 = %08x", excPtr->GPR10);
-       printk(" R11 = %08x\n", excPtr->GPR11);
-       printk("\t R12 = %08x", excPtr->GPR12);
-       printk(" R13 = %08x", excPtr->GPR13);
-       printk(" R14 = %08x", excPtr->GPR14);
-       printk(" R15 = %08x\n", excPtr->GPR15);
-       printk("\t R16 = %08x", excPtr->GPR16);
-       printk(" R17 = %08x", excPtr->GPR17);
-       printk(" R18 = %08x", excPtr->GPR18);
-       printk(" R19 = %08x\n", excPtr->GPR19);
-       printk("\t R20 = %08x", excPtr->GPR20);
-       printk(" R21 = %08x", excPtr->GPR21);
-       printk(" R22 = %08x", excPtr->GPR22);
-       printk(" R23 = %08x\n", excPtr->GPR23);
-       printk("\t R24 = %08x", excPtr->GPR24);
-       printk(" R25 = %08x", excPtr->GPR25);
-       printk(" R26 = %08x", excPtr->GPR26);
-       printk(" R27 = %08x\n", excPtr->GPR27);
-       printk("\t R28 = %08x", excPtr->GPR28);
-       printk(" R29 = %08x", excPtr->GPR29);
-       printk(" R30 = %08x", excPtr->GPR30);
-       printk(" R31 = %08x\n", excPtr->GPR31);
-       printk("\t CR  = %08x\n", excPtr->EXC_CR);
-       printk("\t CTR = %08x\n", excPtr->EXC_CTR);
-       printk("\t XER = %08x\n", excPtr->EXC_XER);
-       printk("\t LR  = %08x\n", excPtr->EXC_LR);
+       printk("\t Next PC or Address of fault = %" PRIx32 ", ", excPtr->EXC_SRR0);
+       printk("Mvme5500 Saved MSR = %" PRIx32 "\n", excPtr->EXC_SRR1);
+       printk("\t R0  = %08" PRIx32, excPtr->GPR0);
+       printk(" R1  = %08" PRIx32, excPtr->GPR1);
+       printk(" R2  = %08" PRIx32, excPtr->GPR2);
+       printk(" R3  = %08" PRIx32 "\n", excPtr->GPR3);
+       printk("\t R4  = %08" PRIx32, excPtr->GPR4);
+       printk(" R5  = %08" PRIx32, excPtr->GPR5);
+       printk(" R6  = %08" PRIx32, excPtr->GPR6);
+       printk(" R7  = %08" PRIx32 "\n", excPtr->GPR7);
+       printk("\t R8  = %08" PRIx32, excPtr->GPR8);
+       printk(" R9  = %08" PRIx32, excPtr->GPR9);
+       printk(" R10 = %08" PRIx32, excPtr->GPR10);
+       printk(" R11 = %08" PRIx32 "\n", excPtr->GPR11);
+       printk("\t R12 = %08" PRIx32, excPtr->GPR12);
+       printk(" R13 = %08" PRIx32, excPtr->GPR13);
+       printk(" R14 = %08" PRIx32, excPtr->GPR14);
+       printk(" R15 = %08" PRIx32 "\n", excPtr->GPR15);
+       printk("\t R16 = %08" PRIx32, excPtr->GPR16);
+       printk(" R17 = %08" PRIx32, excPtr->GPR17);
+       printk(" R18 = %08" PRIx32, excPtr->GPR18);
+       printk(" R19 = %08" PRIx32 "\n", excPtr->GPR19);
+       printk("\t R20 = %08" PRIx32, excPtr->GPR20);
+       printk(" R21 = %08" PRIx32, excPtr->GPR21);
+       printk(" R22 = %08" PRIx32, excPtr->GPR22);
+       printk(" R23 = %08" PRIx32 "\n", excPtr->GPR23);
+       printk("\t R24 = %08" PRIx32, excPtr->GPR24);
+       printk(" R25 = %08" PRIx32, excPtr->GPR25);
+       printk(" R26 = %08" PRIx32, excPtr->GPR26);
+       printk(" R27 = %08" PRIx32 "\n", excPtr->GPR27);
+       printk("\t R28 = %08" PRIx32, excPtr->GPR28);
+       printk(" R29 = %08" PRIx32, excPtr->GPR29);
+       printk(" R30 = %08" PRIx32, excPtr->GPR30);
+       printk(" R31 = %08" PRIx32 "\n", excPtr->GPR31);
+       printk("\t CR  = %08" PRIx32 "\n", excPtr->EXC_CR);
+       printk("\t CTR = %08" PRIx32 "\n", excPtr->EXC_CTR);
+       printk("\t XER = %08" PRIx32 "\n", excPtr->EXC_XER);
+       printk("\t LR  = %08" PRIx32 "\n", excPtr->EXC_LR);
 
        BSP_printStackTrace(excPtr);
     }
@@ -211,7 +211,7 @@ int			quiet=0;
 				_write_MSR( _read_MSR() | MSR_FP );
 				__asm__ __volatile__("isync");
 			}
-			printk("unrecoverable exception!!! task %08x suspended\n",id);
+			printk("unrecoverable exception!!! task %08" PRIx32 " suspended\n",id);
 			rtems_task_suspend(id);
 		} else {
 			printk("PANIC, rebooting...\n");

@@ -1959,7 +1959,7 @@ unsigned long 		linten;
 #else
 			vmeUniverseIntDisable(lvl);
 #endif
-			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08x -- DISABLING\n", lvl, status);
+			printk("vmeUniverse ISR: error read from STATID register; (level: %i) STATID: 0x%08" PRIx32 " -- DISABLING\n", lvl, status);
 		} else if (!(ip=universeHdlTbl[status & UNIV_VIRQ_STATID_MASK])) {
 #ifdef BSP_PIC_DO_EOI
 			linten &= ~msk;
@@ -1967,7 +1967,7 @@ unsigned long 		linten;
 			vmeUniverseIntDisable(lvl);
 #endif
 				/* TODO: log error message - RTEMS has no logger :-( */
-			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08x -- DISABLING\n", lvl, status);
+			printk("vmeUniverse ISR: no handler installed for this vector; (level: %i) STATID: 0x%08" PRIx32 " -- DISABLING\n", lvl, status);
 		} else {
 				/* dispatch handler, it must clear the IRQ at the device */
 				ip->isr(ip->usrData, status&UNIV_VIRQ_STATID_MASK);
