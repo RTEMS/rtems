@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <rtems.h>
 #include <rtems/bspIo.h>
 #include <libcpu/byteorder.h>
 #include <libcpu/access.h>
@@ -42,16 +43,36 @@
 #include <drvmgr/pci_bus.h>
 #include <bsp/grpci2.h>
 
-#ifndef IRQ_GLOBAL_PREPARE
- #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
-#endif
+/* Use interrupt lock privmitives compatible with SMP defined in
+ * RTEMS 4.11.99 and higher.
+ */
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
 
-#ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
-#endif
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
-#ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
+#else
+
+/* maintain single-core compatibility with older versions of RTEMS: */
+#define SPIN_DECLARE(name)
+#define SPIN_INIT(lock, name)
+#define SPIN_LOCK(lock, level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
+#define SPIN_UNLOCK(lock, level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
+#define SPIN_ISR_IRQFLAGS(k)
+
+#ifdef RTEMS_SMP
+#error SMP mode not compatible with these interrupt lock primitives
+#endif
 #endif
 
 /* If defined to 1 - byte twisting is enabled by default */
@@ -233,7 +254,7 @@ struct grpci2_pcibar_cfg grpci2_default_bar_mapping[6] = {
 
 /* Driver private data struture */
 struct grpci2_priv {
-	struct drvmgr_dev	*dev;
+	struct drvmgr_dev		*dev;
 	struct grpci2_regs		*regs;
 	unsigned char			ver;
 	char				irq;
@@ -255,6 +276,8 @@ struct grpci2_priv {
 	struct drvmgr_map_entry		maps_up[7];
 	struct drvmgr_map_entry		maps_down[2];
 	struct pcibus_config		config;
+
+	SPIN_DECLARE(devlock)
 };
 
 int grpci2_init1(struct drvmgr_dev *dev);
@@ -304,8 +327,8 @@ static int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 	struct grpci2_priv *priv = grpci2priv;
 	volatile uint32_t *pci_conf;
 	unsigned int tmp, devfn;
-	IRQ_GLOBAL_PREPARE(oldLevel);
 	int retval, bus = PCI_DEV_BUS(dev);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ((unsigned int)ofs & 0xffffff03) {
 		retval = PCISTS_EINVAL;
@@ -329,7 +352,7 @@ static int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 
 	pci_conf = (volatile uint32_t *) (priv->pci_conf | (devfn << 8) | ofs);
 
-	IRQ_GLOBAL_DISABLE(oldLevel); /* protect regs */
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Select bus */
 	priv->regs->ctrl = (priv->regs->ctrl & ~(0xff<<16)) | (bus<<16);
@@ -352,7 +375,7 @@ static int grpci2_cfg_r32(pci_dev_t dev, int ofs, uint32_t *val)
 		retval = PCISTS_OK;
 	}
 
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 out:
 	if (retval != PCISTS_OK)
@@ -397,7 +420,7 @@ static int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	volatile uint32_t *pci_conf;
 	uint32_t value, devfn;
 	int retval, bus = PCI_DEV_BUS(dev);
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ((unsigned int)ofs & 0xffffff03)
 		return PCISTS_EINVAL;
@@ -419,7 +442,7 @@ static int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 
 	pci_conf = (volatile uint32_t *) (priv->pci_conf | (devfn << 8) | ofs);
 
-	IRQ_GLOBAL_DISABLE(oldLevel); /* protect regs */
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Select bus */
 	priv->regs->ctrl = (priv->regs->ctrl & ~(0xff<<16)) | (bus<<16);
@@ -439,7 +462,7 @@ static int grpci2_cfg_w32(pci_dev_t dev, int ofs, uint32_t val)
 	else
 		retval = PCISTS_OK;
 
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	DBG("pci_write - [%x:%x:%x] reg: 0x%x => addr: 0x%x, val: 0x%x  (%d)\n",
 		PCI_DEV_EXPAND(dev), ofs, pci_conf, value, retval);
@@ -744,6 +767,9 @@ static int grpci2_init(struct grpci2_priv *priv)
 	priv->bt_enabled = DEFAULT_BT_ENABLED;
 	priv->irq_mode = (priv->regs->sts_cap & STS_IRQMODE) >> STS_IRQMODE_BIT;
 	priv->latency_timer = DEFAULT_LATENCY_TIMER;
+
+	/* Initialize Spin-lock for GRPCI2 Device. */
+	SPIN_INIT(&priv->devlock, "grpci2");
 
 	/* Calculate the PCI windows 
 	 *  AMBA->PCI Window:                       AHB SLAVE AREA0
