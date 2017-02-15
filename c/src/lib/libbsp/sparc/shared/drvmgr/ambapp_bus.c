@@ -597,6 +597,27 @@ static void ambapp_core_register(
 		drvmgr_dev_register(newdev); /* Register New Device */
 }
 
+/* Fix device registration.
+ * Function returns:
+ *  0  Register device as normal
+ *  1  Fixup function handles registration
+ */
+static int ambapp_dev_register_fixup(struct ambapp_dev *dev, struct ambapp_dev_reg_struct *p)
+{
+	/* GR740 GRPCI2 speciality:
+	 * - In the GR740 the APB_SLV is detected before the AHB_SLV
+	 *   which makes the registration incorrect. We deal with it in 
+	 *   this function. */
+	if (    (dev->dev_type == DEV_APB_SLV) &&
+		    (dev->device == GAISLER_GRPCI2) &&
+		    (dev->vendor == VENDOR_GAISLER) &&
+		    (p->ahb_slv == NULL) ) {
+		DBG("GRPCI2 APB_SLV detected before AHB_SLV. Skipping APB_SLV registration.\n");
+		return 1;
+	}
+	return 0;
+}
+
 /* Register one AMBA device */
 static int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
 {
@@ -614,6 +635,11 @@ static int ambapp_dev_register(struct ambapp_dev *dev, int index, void *arg)
 	
 	DBG("Found [%d:%x:%x], %s\n", index, dev->vendor, dev->device, type);
 #endif
+
+	/* Fixup for device registration */
+	if (ambapp_dev_register_fixup(dev, p)){
+		return 0;
+	}
 
 	if ( dev->dev_type == DEV_AHB_MST ) {
 		if ( p->ahb_mst ) {
