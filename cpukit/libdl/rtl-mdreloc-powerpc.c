@@ -178,7 +178,8 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
       *((Elf32_Half*) where) = tmp;
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
         printf ("rtl: SDAREL16 %p @ %p in %s\n",
-                (void *) *((Elf32_Half*) where), where, rtems_rtl_obj_oname (obj));
+                (void *) (uintptr_t) *((Elf32_Half*) where),
+                where, rtems_rtl_obj_oname (obj));
       break;
 
     default:
