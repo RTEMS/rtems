@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,9 +21,7 @@ void bsp_reset(void)
   volatile uint32_t *slcr_unlock = (volatile uint32_t *) 0xf8000008;
   volatile uint32_t *pss_rst_ctrl = (volatile uint32_t *) 0xf8000200;
 
-  if (Console_Port_Tbl != NULL) {
-    zynq_uart_reset_tx_flush((int) Console_Port_Minor);
-  }
+  zynq_uart_reset_tx_flush(&zynq_uart_instances[BSP_CONSOLE_MINOR]);
 
   while (true) {
     *slcr_unlock = 0xdf0d;

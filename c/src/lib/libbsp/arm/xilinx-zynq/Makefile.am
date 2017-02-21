@@ -106,12 +106,9 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += ../shared/arm-gic-irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += ../../shared/console_control.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_select_simple.c
-libbsp_a_SOURCES += ../../shared/console_write.c
+libbsp_a_SOURCES += ../../shared/console-termios.c
 libbsp_a_SOURCES += console/console-config.c
+libbsp_a_SOURCES += console/debug-console.c
 libbsp_a_SOURCES += console/zynq-uart.c
 
 # Clock

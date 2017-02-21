@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -12,89 +12,51 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <libchip/serial.h>
-
+#include <rtems/console.h>
 #include <rtems/bspIo.h>
 
-#include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/zynq-uart.h>
 
-console_tbl Console_Configuration_Ports[] = {
+#include <bspopts.h>
+
+zynq_uart_context zynq_uart_instances[2] = {
   {
-    .sDeviceName = "/dev/ttyS0",
-    .deviceType = SERIAL_CUSTOM,
-    .pDeviceFns = &zynq_uart_fns,
-    .deviceProbe = NULL,
-    .pDeviceFlow = NULL,
-    .ulMargin = 0,
-    .ulHysteresis = 0,
-    .pDeviceParams = (void *) 115200,
-    .ulCtrlPort1 = 0xe0000000,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = 0,
-    .getRegister = NULL,
-    .setRegister = NULL,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = 0,
-    .ulIntVector = ZYNQ_IRQ_UART_0
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 0" ),
+    .regs = (volatile struct zynq_uart *) 0xe0000000,
+    .irq = ZYNQ_IRQ_UART_0
   }, {
-    .sDeviceName = "/dev/ttyS1",
-    .deviceType = SERIAL_CUSTOM,
-    .pDeviceFns = &zynq_uart_fns,
-    .deviceProbe = NULL,
-    .pDeviceFlow = NULL,
-    .ulMargin = 0,
-    .ulHysteresis = 0,
-    .pDeviceParams = (void *) 115200,
-    .ulCtrlPort1 = 0xe0001000,
-    .ulCtrlPort2 = 0,
-    .ulDataPort = 0,
-    .getRegister = NULL,
-    .setRegister = NULL,
-    .getData = NULL,
-    .setData = NULL,
-    .ulClock = 0,
-    .ulIntVector = ZYNQ_IRQ_UART_1
+    .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER( "Zynq UART 1" ),
+    .regs = (volatile struct zynq_uart *) 0xe0001000,
+    .irq = ZYNQ_IRQ_UART_1
   }
 };
 
-unsigned long Console_Configuration_Count =
-  RTEMS_ARRAY_SIZE(Console_Configuration_Ports);
-
-static void output_char(char c)
+rtems_status_code console_initialize(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void *arg
+)
 {
-  int minor = (int) Console_Port_Minor;
-  const console_tbl *ct = Console_Port_Tbl != NULL ?
-    Console_Port_Tbl[minor] : &Console_Configuration_Ports[minor];
-  const console_fns *cf = ct->pDeviceFns;
+  size_t i;
 
-  if (c == '\n') {
-    (*cf->deviceWritePolled)(minor, '\r');
+  rtems_termios_initialize();
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(zynq_uart_instances); ++i) {
+    char uart[] = "/dev/ttySX";
+
+    uart[sizeof(uart) - 2] = (char) ('0' + i);
+    rtems_termios_device_install(
+      &uart[0],
+      &zynq_uart_handler,
+      NULL,
+      &zynq_uart_instances[i].base
+    );
+
+    if (i == BSP_CONSOLE_MINOR) {
+      link(&uart[0], CONSOLE_DEVICE_NAME);
+    }
   }
 
-  (*cf->deviceWritePolled)(minor, c);
+  return RTEMS_SUCCESSFUL;
 }
-
-static void output_char_init(char c)
-{
-  if (Console_Port_Tbl == NULL) {
-    int minor;
-    const console_fns *cf;
-
-    bsp_console_select();
-
-    minor = (int) Console_Port_Minor;
-    cf = Console_Configuration_Ports[minor].pDeviceFns;
-
-    (*cf->deviceInitialize)(minor);
-  }
-
-  BSP_output_char = output_char;
-  output_char(c);
-}
-
-BSP_output_char_function_type BSP_output_char = output_char_init;
-
-BSP_polling_getchar_function_type BSP_poll_char = NULL;

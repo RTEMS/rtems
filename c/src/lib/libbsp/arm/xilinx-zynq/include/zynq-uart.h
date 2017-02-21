@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,7 +21,7 @@
 #ifndef LIBBSP_ARM_XILINX_ZYNQ_UART_H
 #define LIBBSP_ARM_XILINX_ZYNQ_UART_H
 
-#include <libchip/serial.h>
+#include <rtems/termiostypes.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,12 +33,31 @@ extern "C" {
  * @brief UART Support
  */
 
-extern const console_fns zynq_uart_fns;
+typedef struct {
+  rtems_termios_device_context base;
+  volatile struct zynq_uart *regs;
+  rtems_vector_number irq;
+} zynq_uart_context;
+
+const rtems_termios_device_handler zynq_uart_handler;
+
+extern zynq_uart_context zynq_uart_instances[2];
+
+#define ZYNQ_UART_DEFAULT_BAUD 115200
+
+void zynq_uart_initialize(rtems_termios_device_context *base);
+
+int zynq_uart_read_polled(rtems_termios_device_context *base);
+
+void zynq_uart_write_polled(
+  rtems_termios_device_context *base,
+  char c
+);
 
 /**
   * Flush TX FIFO and wait until it is empty. Used in bsp_reset.
   */
-void zynq_uart_reset_tx_flush(int minor);
+void zynq_uart_reset_tx_flush(zynq_uart_context *ctx);
 
 #ifdef __cplusplus
 }
