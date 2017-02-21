@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -26,13 +26,15 @@
 
 #include <rtems/libio_.h>
 
-#include <sys/types.h>
-#include <sys/event.h>
-
 int rtems_filesystem_default_kqfilter(
   rtems_libio_t *iop,
-  struct knote *kn
+  struct knote  *kn
 )
 {
   return EINVAL;
 }
+
+int rtems_termios_kqfilter(
+  rtems_libio_t *iop,
+  struct knote  *kn
+) RTEMS_WEAK_ALIAS( rtems_filesystem_default_kqfilter );

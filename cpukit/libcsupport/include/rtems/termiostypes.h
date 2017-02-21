@@ -555,6 +555,26 @@ int rtems_termios_set_initial_baud(
   rtems_termios_baud_t baud
 );
 
+/**
+ * @brief Termios kqueue() filter filesystem node handler
+ *
+ * Real implementation is provided by libbsd.
+ */
+int rtems_termios_kqfilter(
+  rtems_libio_t *iop,
+  struct knote  *kn
+);
+
+/**
+ * @brief Termios poll() filesystem node handler.
+ *
+ * Real implementation is provided by libbsd.
+ */
+int rtems_termios_poll(
+  rtems_libio_t *iop,
+  int            events
+);
+
 #ifdef __cplusplus
 }
 #endif

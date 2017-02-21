@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,8 +30,13 @@
 
 int rtems_filesystem_default_poll(
   rtems_libio_t *iop,
-  int events
+  int            events
 )
 {
   return POLLERR;
 }
+
+int rtems_termios_poll(
+  rtems_libio_t *iop,
+  int            events
+) RTEMS_WEAK_ALIAS( rtems_filesystem_default_poll );
