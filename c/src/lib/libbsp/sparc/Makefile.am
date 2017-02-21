@@ -95,6 +95,10 @@ EXTRA_DIST += shared/include/grcan.h
 # MEM
 EXTRA_DIST += shared/mem/mctrl.c
 
+# L2CACHE
+EXTRA_DIST += shared/l2c/l2c.c
+EXTRA_DIST += shared/include/l2c.h
+
 # MIL-STD-B1553 (Core1553BRM)
 EXTRA_DIST += shared/1553/b1553brm.c
 EXTRA_DIST += shared/1553/b1553rt.c

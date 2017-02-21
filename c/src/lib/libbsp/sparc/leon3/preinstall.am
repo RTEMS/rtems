@@ -281,6 +281,10 @@ $(PROJECT_INCLUDE)/bsp/mctrl.h: ../../sparc/shared/include/mctrl.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mctrl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mctrl.h
 
+$(PROJECT_INCLUDE)/bsp/l2c.h: ../../sparc/shared/include/l2c.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/l2c.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/l2c.h
+
 $(PROJECT_INCLUDE)/bsp/watchdog.h: include/watchdog.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/watchdog.h

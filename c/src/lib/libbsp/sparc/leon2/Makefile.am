@@ -188,6 +188,10 @@ libbsp_a_SOURCES += ../../sparc/shared/analog/gradcdac.c
 libbsp_a_SOURCES += ../../sparc/shared/mem/mctrl.c
 include_bsp_HEADERS += ../../sparc/shared/include/mctrl.h
 
+# l2cache
+libbsp_a_SOURCES += ../../sparc/shared/l2c/l2c.c
+include_bsp_HEADERS += ../../sparc/shared/include/l2c.h
+
 # timer
 libbsp_a_SOURCES += timer/timer.c
 
