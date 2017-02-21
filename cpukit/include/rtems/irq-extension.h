@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2016 embedded brains GmbH.
+ * Copyright (c) 2008, 2017 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -26,6 +26,7 @@
 #define RTEMS_IRQ_EXTENSION_H
 
 #include <rtems.h>
+#include <rtems/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -203,6 +204,52 @@ rtems_status_code rtems_interrupt_handler_iterate(
 );
 
 /**
+ * @brief An interrupt server action.
+ *
+ * This structure must be treated as an opaque data type.  Members must not be
+ * accessed directly.
+ *
+ * @see rtems_interrupt_server_action_prepend().
+ */
+typedef struct rtems_interrupt_server_action {
+  struct rtems_interrupt_server_action *next;
+  rtems_interrupt_handler               handler;
+  void                                 *arg;
+} rtems_interrupt_server_action;
+
+/**
+ * @brief An interrupt server entry.
+ *
+ * This structure must be treated as an opaque data type.  Members must not be
+ * accessed directly.
+ *
+ * @see rtems_interrupt_server_entry_initialize(),
+ *   rtems_interrupt_server_action_prepend(),
+ *   rtems_interrupt_server_entry_submit(), and
+ *   rtems_interrupt_server_entry_destroy().
+ */
+typedef struct {
+  rtems_chain_node               node;
+  rtems_vector_number            vector;
+  rtems_interrupt_server_action *actions;
+} rtems_interrupt_server_entry;
+
+/**
+ * @brief An interrupt server request.
+ *
+ * This structure must be treated as an opaque data type.  Members must not be
+ * accessed directly.
+ *
+ * @see rtems_interrupt_server_request_initialize(),
+ *   rtems_interrupt_server_request_submit(), and
+ *   rtems_interrupt_server_request_destroy().
+ */
+typedef struct {
+  rtems_interrupt_server_entry  entry;
+  rtems_interrupt_server_action action;
+} rtems_interrupt_server_request;
+
+/**
  * @brief Initializes an interrupt server task.
  *
  * The task will have the priority @a priority, the stack size @a stack_size,
@@ -284,6 +331,139 @@ rtems_status_code rtems_interrupt_server_handler_remove(
   rtems_interrupt_handler handler,
   void *arg
 );
+
+/**
+ * @brief Initializes the specified interrupt server entry.
+ *
+ * @param[in] entry The interrupt server entry to initialize.
+ *
+ * @see rtems_interrupt_server_action_prepend().
+ */
+void rtems_interrupt_server_entry_initialize(
+  rtems_interrupt_server_entry *entry
+);
+
+/**
+ * @brief Prepends the specified interrupt server action to the list of actions
+ * of the specified interrupt server entry.
+ *
+ * No error checking is performed.
+ *
+ * @param[in] entry The interrupt server entry to prepend the interrupt server
+ *   action.  It must have been initialized via
+ *   rtems_interrupt_server_entry_initialize().
+ * @param[in] action The interrupt server action to prepend the list of actions
+ *   of the entry.
+ * @param[in] handler The interrupt handler for the action.
+ * @param[in] arg The interrupt handler argument for the action.
+ */
+void rtems_interrupt_server_action_prepend(
+  rtems_interrupt_server_entry  *entry,
+  rtems_interrupt_server_action *action,
+  rtems_interrupt_handler        handler,
+  void                          *arg
+);
+
+/**
+ * @brief Submits the specified interrupt server entry so that its interrupt
+ * server actions can be invoked by the specified interrupt server.
+ *
+ * This function may be used to do a two-step interrupt processing.  The first
+ * step is done in interrupt context which calls this function.  The second
+ * step is then done in the context of the interrupt server.
+ *
+ * This function may be called from thread or interrupt context.  It does not
+ * block.  No error checking is performed.
+ *
+ * @param[in] server The server identifier.  Use @c RTEMS_ID_NONE to specify
+ *   the default server.
+ * @param[in] entry The interrupt server entry must be initialized before the
+ *   first call to this function via rtems_interrupt_server_entry_initialize()
+ *   and rtems_interrupt_server_action_prepend().  The entry and its actions
+ *   must not be modified between calls to this function.  Use
+ *   rtems_interrupt_server_entry_destroy() to destroy an entry in use.
+ */
+void rtems_interrupt_server_entry_submit(
+  rtems_id                      server,
+  rtems_interrupt_server_entry *entry
+);
+
+/**
+ * @brief Destroys the specified interrupt server entry.
+ *
+ * This function must be called from thread context.  It may block.  No error
+ * checking is performed.
+ *
+ * @param[in] server The server identifier.  Use @c RTEMS_ID_NONE to specify
+ *   the default server.
+ * @param[in] entry The interrupt server entry to destroy.  It must have been
+ *   initialized via rtems_interrupt_server_entry_initialize().
+ */
+void rtems_interrupt_server_entry_destroy(
+  rtems_id                      server,
+  rtems_interrupt_server_entry *entry
+);
+
+/**
+ * @brief Initializes the specified interrupt server request.
+ *
+ * No error checking is performed.
+ *
+ * @param[in] request The interrupt server request to initialize.
+ * @param[in] handler The interrupt handler for the request action.
+ * @param[in] arg The interrupt handler argument for the request action.
+ */
+void rtems_interrupt_server_request_initialize(
+  rtems_interrupt_server_request *request,
+  rtems_interrupt_handler         handler,
+  void                           *arg
+);
+
+/**
+ * @brief Submits the specified interrupt server request so that its interrupt
+ * server action can be invoked by the specified interrupt server.
+ *
+ * This function may be used to do a two-step interrupt processing.  The first
+ * step is done in interrupt context which calls this function.  The second
+ * step is then done in the context of the interrupt server.
+ *
+ * This function may be called from thread or interrupt context.  It does not
+ * block.  No error checking is performed.
+ *
+ * @param[in] server The server identifier.  Use @c RTEMS_ID_NONE to specify
+ *   the default server.
+ * @param[in] request The interrupt server request must be initialized before the
+ *   first call to this function via
+ *   rtems_interrupt_server_request_initialize().  The request must not be
+ *   modified between calls to this function.  Use
+ *   rtems_interrupt_server_request_destroy() to destroy a request in use.
+ */
+RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_submit(
+  rtems_id                        server,
+  rtems_interrupt_server_request *request
+)
+{
+  rtems_interrupt_server_entry_submit( server, &request->entry );
+}
+
+/**
+ * @brief Destroys the specified interrupt server request.
+ *
+ * This function must be called from thread context.  It may block.  No error
+ * checking is performed.
+ *
+ * @param[in] server The server identifier.  Use @c RTEMS_ID_NONE to specify
+ *   the default server.
+ * @param[in] request The interrupt server request to destroy.  It must have
+ *   been initialized via rtems_interrupt_server_request_initialize().
+ */
+RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_destroy(
+  rtems_id                        server,
+  rtems_interrupt_server_request *request
+)
+{
+  rtems_interrupt_server_entry_destroy( server, &request->entry );
+}
 
 /** @} */
 
