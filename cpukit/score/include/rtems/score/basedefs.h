@@ -190,6 +190,16 @@
 #endif
 
 /**
+ * @brief Instructs the compiler to generate a weak alias to the specified
+ * target function.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_WEAK_ALIAS( _target ) __attribute__((__weak__, __alias__(#_target)))
+#else
+  #define RTEMS_WEAK_ALIAS( _target )
+#endif
+
+/**
  * @brief Instructs the compiler to enforce the specified alignment.
  */
 #if defined(__GNUC__)
