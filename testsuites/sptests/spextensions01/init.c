@@ -422,23 +422,6 @@ static void test(void)
 
   master_task = rtems_task_self();
 
-#ifdef BSP_INITIAL_EXTENSION
-  sc = rtems_extension_create(
-    rtems_build_name(' ', 'B', 'S', 'P'),
-    &initial_bsp,
-    &id
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-#undef BSP_INITIAL_EXTENSION
-#endif
-
-  sc = rtems_extension_create(
-    rtems_build_name('T', 'E', 'S', 'T'),
-    &initial_test,
-    &id
-  );
-  assert(sc == RTEMS_SUCCESSFUL);
-
   sc = rtems_extension_create(
     rtems_build_name('2', ' ', ' ', ' '),
     &two,
@@ -452,6 +435,23 @@ static void test(void)
     &id
   );
   assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_extension_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    &initial_test,
+    &id
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+#ifdef BSP_INITIAL_EXTENSION
+  sc = rtems_extension_create(
+    rtems_build_name(' ', 'B', 'S', 'P'),
+    &initial_bsp,
+    &id
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+#undef BSP_INITIAL_EXTENSION
+#endif
 
   active_extensions = 4;
   assert(counter == 14);
