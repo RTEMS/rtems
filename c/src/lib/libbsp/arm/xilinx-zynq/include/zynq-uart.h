@@ -36,6 +36,7 @@ extern "C" {
 typedef struct {
   rtems_termios_device_context base;
   volatile struct zynq_uart *regs;
+  bool transmitting;
   rtems_vector_number irq;
 } zynq_uart_context;
 

@@ -59,6 +59,9 @@ simulation times.])
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_MINOR],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_MINOR],[minor number of console device])
 
+RTEMS_BSPOPTS_SET([ZYNQ_CONSOLE_USE_INTERRUPTS],[*],[1])
+RTEMS_BSPOPTS_HELP([ZYNQ_CONSOLE_USE_INTERRUPTS],[use interrupt driven mode for console devices (used by default)])
+
 ZYNQ_CPUS="1"
 RTEMS_CHECK_SMP
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
