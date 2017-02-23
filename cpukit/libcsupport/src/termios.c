@@ -1098,55 +1098,72 @@ rtems_termios_puts (
 static void
 oproc (unsigned char c, struct rtems_termios_tty *tty)
 {
-  int  i;
+  char buf[8];
+  size_t len;
+
+  buf[0] = c;
+  len = 1;
 
   if (tty->termios.c_oflag & OPOST) {
+    int oldColumn = tty->column;
+    int columnAdj = 0;
+
     switch (c) {
     case '\n':
       if (tty->termios.c_oflag & ONLRET)
-        tty->column = 0;
+        columnAdj = -oldColumn;
       if (tty->termios.c_oflag & ONLCR) {
-        rtems_termios_puts ("\r", 1, tty);
-        tty->column = 0;
+        columnAdj = -oldColumn;
+        buf[0] = '\r';
+        buf[1] = c;
+        len = 2;
       }
       break;
 
     case '\r':
-      if ((tty->termios.c_oflag & ONOCR) && (tty->column == 0))
+      if ((tty->termios.c_oflag & ONOCR) && (oldColumn == 0))
         return;
       if (tty->termios.c_oflag & OCRNL) {
-        c = '\n';
+        buf[0] = '\n';
         if (tty->termios.c_oflag & ONLRET)
-          tty->column = 0;
-        break;
+          columnAdj = -oldColumn;
+      } else {
+        columnAdj = -oldColumn;
       }
-      tty->column = 0;
       break;
 
     case '\t':
-      i = 8 - (tty->column & 7);
+      columnAdj = 8 - (oldColumn & 7);
       if ((tty->termios.c_oflag & TABDLY) == XTABS) {
-        tty->column += i;
-        rtems_termios_puts ( "        ",  i, tty);
-        return;
+        int i;
+
+        len = (size_t) columnAdj;
+
+        for (i = 0; i < columnAdj; ++i) {
+          buf[i] = ' ';
+        }
       }
-      tty->column += i;
       break;
 
     case '\b':
-      if (tty->column > 0)
-        tty->column--;
+      if (oldColumn > 0)
+        columnAdj = -1;
       break;
 
     default:
-      if (tty->termios.c_oflag & OLCUC)
+      if (tty->termios.c_oflag & OLCUC) {
         c = toupper(c);
+        buf[0] = c;
+      }
       if (!iscntrl(c))
-        tty->column++;
+        columnAdj = 1;
       break;
     }
+
+    tty->column = oldColumn + columnAdj;
   }
-  rtems_termios_puts (&c, 1, tty);
+
+  rtems_termios_puts (buf, len, tty);
 }
 
 static uint32_t

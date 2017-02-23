@@ -575,10 +575,11 @@ static void flush_output(test_context *ctx, size_t i)
 {
   if (i == INTERRUPT) {
     device_context *dev = &ctx->devices[i];
+    int left;
 
-    while (dev->output_pending != 0) {
-      rtems_termios_dequeue_characters(dev->tty, dev->output_pending);
-    }
+    do {
+      left = rtems_termios_dequeue_characters(dev->tty, dev->output_pending);
+    } while (left > 0);
   }
 }
 
@@ -586,7 +587,7 @@ static void clear_output(test_context *ctx, size_t i)
 {
   device_context *dev = &ctx->devices[i];
 
-  dev->output_pending = 0;
+  flush_output(ctx, i);
   dev->output_count = 0;
   memset(&dev->output_buf, 0, OUTPUT_BUFFER_SIZE);
 }
