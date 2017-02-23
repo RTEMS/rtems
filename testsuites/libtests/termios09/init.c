@@ -55,6 +55,8 @@ typedef struct {
   device_context devices[DEVICE_COUNT];
   int fds[DEVICE_COUNT];
   struct termios term[DEVICE_COUNT];
+  int context_switch_counter;
+  rtems_id flush_task_id;
 } test_context;
 
 static test_context test_instance = {
@@ -910,6 +912,128 @@ static void test_olcuc(test_context *ctx)
   }
 }
 
+static void
+set_self_prio(rtems_task_priority prio)
+{
+  rtems_status_code sc;
+
+  sc = rtems_task_set_priority(RTEMS_SELF, prio, &prio);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void flush_task(rtems_task_argument arg)
+{
+  test_context *ctx = (test_context *) arg;
+
+  while (true) {
+    set_self_prio(1);
+    flush_output(ctx, INTERRUPT);
+    set_self_prio(2);
+  }
+}
+
+static void test_write(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | ONLCR | XTABS;
+  rtems_status_code sc;
+  size_t i = INTERRUPT;
+  device_context *dev = &ctx->devices[i];
+  char buf[OUTPUT_BUFFER_SIZE];
+  ssize_t n;
+
+  ctx->context_switch_counter = 0;
+
+  sc = rtems_task_create(
+    rtems_build_name('F', 'L', 'S', 'H'),
+    2,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &ctx->flush_task_id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start(
+    ctx->flush_task_id,
+    flush_task,
+    (rtems_task_argument) ctx
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  clear_output(ctx, i);
+  memset(buf, 'a', OUTPUT_BUFFER_SIZE);
+
+  n = write(ctx->fds[i], &buf[0], OUTPUT_BUFFER_SIZE);
+  rtems_test_assert(n == OUTPUT_BUFFER_SIZE - 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 0);
+
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 1], 1);
+  rtems_test_assert(n == 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 2);
+  rtems_test_assert(dev->output_count == OUTPUT_BUFFER_SIZE);
+  rtems_test_assert(memcmp(dev->output_buf, buf, OUTPUT_BUFFER_SIZE) == 0);
+
+  clear_set_oflag(ctx, i, 0, oflags);
+
+  /* Ensure that ONLCR output expansion is taken into account */
+
+  dev->tty->column = 0;
+  clear_output(ctx, i);
+  memset(buf, 'b', OUTPUT_BUFFER_SIZE - 1);
+  buf[OUTPUT_BUFFER_SIZE - 2] = '\n';
+
+  n = write(ctx->fds[i], &buf[0], OUTPUT_BUFFER_SIZE - 3);
+  rtems_test_assert(n == OUTPUT_BUFFER_SIZE - 3);
+
+  rtems_test_assert(ctx->context_switch_counter == 2);
+
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 3], 2);
+  rtems_test_assert(n == 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 2);
+
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 2], 1);
+  rtems_test_assert(n == 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 4);
+  rtems_test_assert(dev->output_count == OUTPUT_BUFFER_SIZE);
+  buf[OUTPUT_BUFFER_SIZE - 2] = '\r';
+  buf[OUTPUT_BUFFER_SIZE - 1] = '\n';
+  rtems_test_assert(memcmp(dev->output_buf, buf, OUTPUT_BUFFER_SIZE) == 0);
+
+  /* Ensure that XTABS output expansion is taken into account */
+
+  dev->tty->column = 0;
+  clear_output(ctx, i);
+  memset(buf, 'c', OUTPUT_BUFFER_SIZE - 8);
+  buf[OUTPUT_BUFFER_SIZE - 8] = '\t';
+
+  n = write(ctx->fds[i], &buf[0], OUTPUT_BUFFER_SIZE - 9);
+  rtems_test_assert(n == OUTPUT_BUFFER_SIZE - 9);
+
+  rtems_test_assert(ctx->context_switch_counter == 4);
+
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 9], 2);
+  rtems_test_assert(n == 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 4);
+
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 8], 1);
+  rtems_test_assert(n == 1);
+
+  rtems_test_assert(ctx->context_switch_counter == 6);
+  rtems_test_assert(dev->output_count == OUTPUT_BUFFER_SIZE);
+  memset(&buf[OUTPUT_BUFFER_SIZE - 8], ' ', 8);
+  rtems_test_assert(memcmp(dev->output_buf, buf, OUTPUT_BUFFER_SIZE) == 0);
+
+  clear_set_oflag(ctx, i, oflags, 0);
+
+  sc = rtems_task_delete(ctx->flush_task_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -932,9 +1056,17 @@ static void Init(rtems_task_argument arg)
   test_opost(ctx);
   test_xtabs(ctx);
   test_olcuc(ctx);
+  test_write(ctx);
 
   TEST_END();
   rtems_test_exit(0);
+}
+
+static void switch_extension(Thread_Control *executing, Thread_Control *heir)
+{
+  test_context *ctx = &test_instance;
+
+  ++ctx->context_switch_counter;
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -942,11 +1074,13 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 7
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .thread_switch = switch_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

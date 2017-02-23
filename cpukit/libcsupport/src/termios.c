@@ -1020,20 +1020,24 @@ startXmit (
 /*
  * Send characters to device-specific code
  */
-static void
-doTransmit (const char *buf, size_t len, rtems_termios_tty *tty)
+static size_t
+doTransmit (const char *buf, size_t len, rtems_termios_tty *tty,
+            bool wait, bool nextWait)
 {
   unsigned int newHead;
   rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
   rtems_status_code sc;
+  size_t todo;
 
   if (tty->handler.mode == TERMIOS_POLLED) {
     (*tty->handler.write)(ctx, buf, len);
-    return;
+    return len;
   }
 
-  while (len) {
+  todo = len;
+
+  while (todo > 0) {
     size_t nToCopy;
     size_t nAvail;
 
@@ -1043,18 +1047,25 @@ doTransmit (const char *buf, size_t len, rtems_termios_tty *tty)
       newHead -= tty->rawOutBuf.Size;
 
     rtems_termios_device_lock_acquire (ctx, &lock_context);
-    while (newHead == tty->rawOutBuf.Tail) {
-      tty->rawOutBufState = rob_wait;
-      rtems_termios_device_lock_release (ctx, &lock_context);
-      sc = rtems_semaphore_obtain(
-        tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred (sc);
-      rtems_termios_device_lock_acquire (ctx, &lock_context);
+    if (newHead == tty->rawOutBuf.Tail) {
+      if (wait) {
+        do {
+          tty->rawOutBufState = rob_wait;
+          rtems_termios_device_lock_release (ctx, &lock_context);
+          sc = rtems_semaphore_obtain(
+            tty->rawOutBuf.Semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+          if (sc != RTEMS_SUCCESSFUL)
+            rtems_fatal_error_occurred (sc);
+          rtems_termios_device_lock_acquire (ctx, &lock_context);
+        } while (newHead == tty->rawOutBuf.Tail);
+      } else {
+        rtems_termios_device_lock_release (ctx, &lock_context);
+        return len - todo;
+      }
     }
 
     /* Determine free space up to current tail or end of ring buffer */
-    nToCopy = len;
+    nToCopy = todo;
     if (tty->rawOutBuf.Tail > tty->rawOutBuf.Head) {
       /* Available space is contiguous from Head to Tail */
       nAvail = tty->rawOutBuf.Tail - tty->rawOutBuf.Head - 1;
@@ -1086,22 +1097,44 @@ doTransmit (const char *buf, size_t len, rtems_termios_tty *tty)
     rtems_termios_device_lock_release (ctx, &lock_context);
 
     buf += nToCopy;
-    len -= nToCopy;
+    todo -= nToCopy;
+    wait = nextWait;
   }
+
+  return len;
 }
 
 void
 rtems_termios_puts (
   const void *_buf, size_t len, struct rtems_termios_tty *tty)
 {
-  doTransmit (_buf, len, tty);
+  doTransmit (_buf, len, tty, true, true);
+}
+
+static bool
+canTransmit (rtems_termios_tty *tty, bool wait, size_t len)
+{
+  rtems_termios_device_context *ctx;
+  rtems_interrupt_lock_context lock_context;
+  unsigned int capacity;
+
+  if (wait || tty->handler.mode == TERMIOS_POLLED) {
+    return true;
+  }
+
+  ctx = tty->device_context;
+  rtems_termios_device_lock_acquire (ctx, &lock_context);
+  capacity = (tty->rawOutBuf.Tail - tty->rawOutBuf.Head - 1) %
+    tty->rawOutBuf.Size;
+  rtems_termios_device_lock_release (ctx, &lock_context);
+  return capacity >= len;
 }
 
 /*
  * Handle output processing
  */
-static void
-oproc (unsigned char c, struct rtems_termios_tty *tty)
+static bool
+oproc (unsigned char c, rtems_termios_tty *tty, bool wait)
 {
   char buf[8];
   size_t len;
@@ -1118,16 +1151,21 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
       if (tty->termios.c_oflag & ONLRET)
         columnAdj = -oldColumn;
       if (tty->termios.c_oflag & ONLCR) {
+        len = 2;
+
+        if (!canTransmit (tty, wait, len)) {
+          return false;
+        }
+
         columnAdj = -oldColumn;
         buf[0] = '\r';
         buf[1] = c;
-        len = 2;
       }
       break;
 
     case '\r':
       if ((tty->termios.c_oflag & ONOCR) && (oldColumn == 0))
-        return;
+        return true;
       if (tty->termios.c_oflag & OCRNL) {
         buf[0] = '\n';
         if (tty->termios.c_oflag & ONLRET)
@@ -1143,6 +1181,10 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
         int i;
 
         len = (size_t) columnAdj;
+
+        if (!canTransmit (tty, wait, len)) {
+          return false;
+        }
 
         for (i = 0; i < columnAdj; ++i) {
           buf[i] = ' ';
@@ -1168,26 +1210,31 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
     tty->column = oldColumn + columnAdj;
   }
 
-  doTransmit (buf, len, tty);
+  return doTransmit (buf, len, tty, wait, true) > 0;
 }
 
 static uint32_t
-rtems_termios_write_tty (struct rtems_termios_tty *tty, const char *buffer,
-  uint32_t initial_count)
+rtems_termios_write_tty (rtems_termios_tty *tty, const char *buf, uint32_t len)
 {
+  bool wait = true;
 
   if (tty->termios.c_oflag & OPOST) {
-    uint32_t count;
+    uint32_t todo = len;
 
-    count = initial_count;
+    while (todo > 0) {
+      if (!oproc (*buf, tty, wait)) {
+        break;
+      }
 
-    while (count--)
-      oproc (*buffer++, tty);
+      ++buf;
+      --todo;
+      wait = false;
+    }
+
+    return len - todo;
   } else {
-    doTransmit (buffer, initial_count, tty);
+    return doTransmit (buf, len, tty, wait, false);
   }
-
-  return initial_count;
 }
 
 rtems_status_code
@@ -1222,10 +1269,10 @@ echo (unsigned char c, struct rtems_termios_tty *tty)
 
     echobuf[0] = '^';
     echobuf[1] = c ^ 0x40;
-    doTransmit (echobuf, 2, tty);
+    doTransmit (echobuf, 2, tty, true, true);
     tty->column += 2;
   } else {
-    oproc (c, tty);
+    oproc (c, tty, true);
   }
 }
 
@@ -1282,18 +1329,18 @@ erase (struct rtems_termios_tty *tty, int lineFlag)
          * Back up over the tab
          */
         while (tty->column > col) {
-          doTransmit ("\b", 1, tty);
+          doTransmit ("\b", 1, tty, true, true);
           tty->column--;
         }
       }
       else {
         if (iscntrl (c) && (tty->termios.c_lflag & ECHOCTL)) {
-          doTransmit ("\b \b", 3, tty);
+          doTransmit ("\b \b", 3, tty, true, true);
           if (tty->column)
             tty->column--;
         }
         if (!iscntrl (c) || (tty->termios.c_lflag & ECHOCTL)) {
-          doTransmit ("\b \b", 3, tty);
+          doTransmit ("\b \b", 3, tty, true, true);
           if (tty->column)
             tty->column--;
         }
