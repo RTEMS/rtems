@@ -440,7 +440,7 @@ rtems_termios_open_tty(
     tty->tty_snd.sw_arg = NULL;
     tty->tty_rcv.sw_pfn = NULL;
     tty->tty_rcv.sw_arg = NULL;
-    tty->tty_rcvwakeup  = 0;
+    tty->tty_rcvwakeup  = false;
 
     tty->minor = minor;
     tty->major = major;
@@ -1528,7 +1528,7 @@ rtems_termios_read_tty (struct rtems_termios_tty *tty, char *buffer,
     *buffer++ = tty->cbuf[tty->cindex++];
     count--;
   }
-  tty->tty_rcvwakeup = 0;
+  tty->tty_rcvwakeup = false;
   return initial_count - count;
 }
 
@@ -1545,7 +1545,7 @@ rtems_termios_read (void *arg)
 
   if (rtems_termios_linesw[tty->t_line].l_read != NULL) {
     sc = rtems_termios_linesw[tty->t_line].l_read(tty,args);
-    tty->tty_rcvwakeup = 0;
+    tty->tty_rcvwakeup = false;
     rtems_semaphore_release (tty->isem);
     return sc;
   }
@@ -1593,10 +1593,10 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
     /*
      * check to see if rcv wakeup callback was set
      */
-    if (( !tty->tty_rcvwakeup ) && ( tty->tty_rcv.sw_pfn != NULL )) {
+    if (tty->tty_rcv.sw_pfn != NULL && !tty->tty_rcvwakeup) {
+      tty->tty_rcvwakeup = true;
       (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
-      tty->tty_rcvwakeup = 1;
-        }
+    }
     return 0;
   }
 
@@ -1689,9 +1689,9 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         /*
          * check to see if rcv wakeup callback was set
          */
-        if (( !tty->tty_rcvwakeup ) && ( tty->tty_rcv.sw_pfn != NULL )) {
+        if (tty->tty_rcv.sw_pfn != NULL && !tty->tty_rcvwakeup) {
+          tty->tty_rcvwakeup = true;
           (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
-          tty->tty_rcvwakeup = 1;
         }
       } else {
         ++dropped;
@@ -2007,7 +2007,7 @@ rtems_termios_imfs_read (rtems_libio_t *iop, void *buffer, size_t count)
     args.flags = iop->flags;
 
     sc = rtems_termios_linesw[tty->t_line].l_read (tty, &args);
-    tty->tty_rcvwakeup = 0;
+    tty->tty_rcvwakeup = false;
     rtems_semaphore_release (tty->isem);
 
     if (sc != RTEMS_SUCCESSFUL) {

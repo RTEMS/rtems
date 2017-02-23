@@ -377,7 +377,7 @@ typedef struct rtems_termios_tty {
    */
   struct ttywakeup tty_snd;
   struct ttywakeup tty_rcv;
-  int              tty_rcvwakeup;
+  bool             tty_rcvwakeup;
 
   /**
    * @brief Corresponding device node.
