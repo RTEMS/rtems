@@ -84,7 +84,7 @@ int  rtems_termios_nlinesw =
 extern rtems_id rtems_termios_ttyMutex;
 
 static size_t rtems_termios_cbufsize = 256;
-static size_t rtems_termios_raw_input_size = 128;
+static size_t rtems_termios_raw_input_size = 256;
 static size_t rtems_termios_raw_output_size = 64;
 
 static const IMFS_node_control rtems_termios_imfs_node_control;
@@ -1282,11 +1282,8 @@ erase (struct rtems_termios_tty *tty, int lineFlag)
   }
 }
 
-/*
- * Process a single input character
- */
-static int
-iproc (unsigned char c, struct rtems_termios_tty *tty)
+static unsigned char
+iprocEarly (unsigned char c, rtems_termios_tty *tty)
 {
   if (tty->termios.c_iflag & ISTRIP)
     c &= 0x7f;
@@ -1302,6 +1299,15 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
       c = '\r';
   }
 
+  return c;
+}
+
+/*
+ * Process a single input character
+ */
+static int
+iproc (unsigned char c, struct rtems_termios_tty *tty)
+{
   if ((c != '\0') && (tty->termios.c_lflag & ICANON)) {
     if (c == tty->termios.c_cc[VERASE]) {
       erase (tty, 0);
@@ -1372,6 +1378,7 @@ siprocPoll (unsigned char c, rtems_termios_tty *tty)
     return 0;
   }
 
+  c = iprocEarly (c, tty);
   return siproc (c, tty);
 }
 
@@ -1568,6 +1575,20 @@ void rtems_termios_rxirq_occured(struct rtems_termios_tty *tty)
   rtems_event_send(tty->rxTaskId,TERMIOS_RX_PROC_EVENT);
 }
 
+static bool
+mustCallReceiveCallback (const rtems_termios_tty *tty, unsigned char c,
+                         unsigned int newTail, unsigned int head)
+{
+  if ((tty->termios.c_lflag & ICANON) != 0) {
+    return c == '\n' || c == tty->termios.c_cc[VEOF] ||
+      c == tty->termios.c_cc[VEOL] || c == tty->termios.c_cc[VEOL2];
+  } else {
+    unsigned int rawContentSize = (newTail - head) % tty->rawInBuf.Size;
+
+    return rawContentSize >= tty->termios.c_cc[VMIN];
+  }
+}
+
 /*
  * Place characters on raw queue.
  * NOTE: This routine runs in the context of the
@@ -1645,10 +1666,13 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
       unsigned int head;
       unsigned int oldTail;
       unsigned int newTail;
+      bool callReciveCallback;
 
       if (c == '\r' && (tty->termios.c_iflag & IGNCR) != 0) {
         continue;
       }
+
+      c = iprocEarly (c, tty);
 
       rtems_termios_device_lock_acquire (ctx, &lock_context);
 
@@ -1680,22 +1704,34 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         }
       }
 
+      callReciveCallback = false;
+
       if (newTail != head) {
         tty->rawInBuf.theBuf[newTail] = c;
         tty->rawInBuf.Tail = newTail;
-
-        rtems_termios_device_lock_release (ctx, &lock_context);
 
         /*
          * check to see if rcv wakeup callback was set
          */
         if (tty->tty_rcv.sw_pfn != NULL && !tty->tty_rcvwakeup) {
-          tty->tty_rcvwakeup = true;
-          (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
+          if (mustCallReceiveCallback (tty, c, newTail, head)) {
+            tty->tty_rcvwakeup = true;
+            callReciveCallback = true;
+          }
         }
       } else {
         ++dropped;
-        rtems_termios_device_lock_release (ctx, &lock_context);
+
+        if (tty->tty_rcv.sw_pfn != NULL && !tty->tty_rcvwakeup) {
+          tty->tty_rcvwakeup = true;
+          callReciveCallback = true;
+        }
+      }
+
+      rtems_termios_device_lock_release (ctx, &lock_context);
+
+      if (callReciveCallback) {
+        (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
       }
     }
   }

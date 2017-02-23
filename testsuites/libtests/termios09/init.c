@@ -48,6 +48,7 @@ typedef struct {
   size_t output_count;
   char output_buf[OUTPUT_BUFFER_SIZE];
   int input_char;
+  int callback_counter;
 } device_context;
 
 typedef struct {
@@ -146,7 +147,8 @@ static void init_term(test_context *ctx, size_t i)
 
   ctx->term[i].c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
     | INLCR | IGNCR | ICRNL | IXON);
-  ctx->term[i].c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+  ctx->term[i].c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT
+    | ECHOCTL | ECHOKE | ICANON | ISIG | IEXTEN);
   ctx->term[i].c_cflag &= ~(CSIZE | PARENB);
   ctx->term[i].c_cflag |= CS8;
   ctx->term[i].c_oflag &= ~(OPOST | ONLRET | ONLCR | OCRNL | ONLRET
@@ -207,6 +209,42 @@ static void clear_set_iflag(
   set_term(ctx, i);
 }
 
+static void clear_set_lflag(
+  test_context *ctx,
+  size_t i,
+  tcflag_t clear,
+  tcflag_t set
+)
+{
+  ctx->term[i].c_lflag &= ~clear;
+  ctx->term[i].c_lflag |= set;
+  set_term(ctx, i);
+}
+
+static void set_vmin_vtime(
+  test_context *ctx,
+  size_t i,
+  cc_t vmin,
+  cc_t vtime
+)
+{
+  ctx->term[i].c_cc[VMIN] = vmin;
+  ctx->term[i].c_cc[VTIME] = vtime;
+  set_term(ctx, i);
+}
+
+static void set_veol_veol2(
+  test_context *ctx,
+  size_t i,
+  cc_t veol,
+  cc_t veol2
+)
+{
+  ctx->term[i].c_cc[VEOL] = veol;
+  ctx->term[i].c_cc[VEOL2] = veol2;
+  set_term(ctx, i);
+}
+
 static void test_igncr(test_context *ctx)
 {
   size_t i;
@@ -238,6 +276,286 @@ static void test_igncr(test_context *ctx)
   }
 }
 
+static void test_istrip(test_context *ctx)
+{
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    ssize_t n;
+    char c;
+
+    c = 'x';
+
+    clear_set_iflag(ctx, i, 0, ISTRIP);
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 0);
+    rtems_test_assert(c == 'x');
+
+    input(ctx, i, '\376');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '~');
+
+    clear_set_iflag(ctx, i, ISTRIP, 0);
+    input(ctx, i, '\376');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '\376');
+  }
+}
+
+static void test_iuclc(test_context *ctx)
+{
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    ssize_t n;
+    char c;
+
+    c = 'x';
+
+    clear_set_iflag(ctx, i, 0, IUCLC);
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 0);
+    rtems_test_assert(c == 'x');
+
+    input(ctx, i, 'A');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == 'a');
+
+    clear_set_iflag(ctx, i, IUCLC, 0);
+    input(ctx, i, 'A');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == 'A');
+  }
+}
+
+static void test_icrnl(test_context *ctx)
+{
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    ssize_t n;
+    char c;
+
+    c = 'x';
+
+    clear_set_iflag(ctx, i, 0, ICRNL);
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 0);
+    rtems_test_assert(c == 'x');
+
+    input(ctx, i, '\r');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '\n');
+
+    clear_set_iflag(ctx, i, ICRNL, 0);
+    input(ctx, i, '\r');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '\r');
+  }
+}
+
+static void test_inlcr(test_context *ctx)
+{
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    ssize_t n;
+    char c;
+
+    c = 'x';
+
+    clear_set_iflag(ctx, i, 0, INLCR);
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 0);
+    rtems_test_assert(c == 'x');
+
+    input(ctx, i, '\n');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '\r');
+
+    clear_set_iflag(ctx, i, INLCR, 0);
+    input(ctx, i, '\n');
+
+    n = read(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(c == '\n');
+  }
+}
+
+static void callback(struct termios *tty, void *arg)
+{
+  device_context *ctx = arg;
+
+  ++ctx->callback_counter;
+}
+
+static void test_rx_callback(test_context *ctx)
+{
+  size_t i = INTERRUPT;
+  device_context *dev = &ctx->devices[i];
+  ssize_t n;
+  char buf[3];
+
+  buf[0] = 'x';
+
+  dev->callback_counter = 0;
+  dev->tty->tty_rcv.sw_pfn = callback;
+  dev->tty->tty_rcv.sw_arg = dev;
+  clear_set_lflag(ctx, i, ICANON, 0);
+
+  set_vmin_vtime(ctx, i, 0, 0);
+
+  n = read(ctx->fds[i], buf, 1);
+  rtems_test_assert(n == 0);
+  rtems_test_assert(buf[0] == 'x');
+
+  input(ctx, i, 'a');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  input(ctx, i, 'b');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  n = read(ctx->fds[i], buf, 2);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'a');
+  rtems_test_assert(buf[1] == 'b');
+
+  set_vmin_vtime(ctx, i, 2, 0);
+
+  input(ctx, i, 'd');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  input(ctx, i, 'e');
+  rtems_test_assert(dev->callback_counter == 2);
+
+  input(ctx, i, 'f');
+  rtems_test_assert(dev->callback_counter == 2);
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 3);
+  rtems_test_assert(buf[0] == 'd');
+  rtems_test_assert(buf[1] == 'e');
+  rtems_test_assert(buf[2] == 'f');
+
+  dev->tty->tty_rcv.sw_pfn = NULL;
+  dev->tty->tty_rcv.sw_arg = NULL;
+}
+
+static void test_rx_callback_icanon(test_context *ctx)
+{
+  size_t i = INTERRUPT;
+  device_context *dev = &ctx->devices[i];
+  ssize_t n;
+  char buf[255];
+  size_t j;
+
+  buf[0] = 'x';
+
+  dev->callback_counter = 0;
+  dev->tty->tty_rcv.sw_pfn = callback;
+  dev->tty->tty_rcv.sw_arg = dev;
+
+  set_vmin_vtime(ctx, i, 0, 0);
+
+  n = read(ctx->fds[i], buf, 1);
+  rtems_test_assert(n == 0);
+  rtems_test_assert(buf[0] == 'x');
+
+  clear_set_lflag(ctx, i, 0, ICANON);
+  set_veol_veol2(ctx, i, '1', '2');
+
+  input(ctx, i, '\n');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  input(ctx, i, 'a');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  input(ctx, i, '\n');
+  rtems_test_assert(dev->callback_counter == 1);
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 3);
+  rtems_test_assert(buf[0] == '\n');
+  rtems_test_assert(buf[1] == 'a');
+  rtems_test_assert(buf[2] == '\n');
+
+  input(ctx, i, '\4');
+  rtems_test_assert(dev->callback_counter == 2);
+
+  input(ctx, i, 'b');
+  rtems_test_assert(dev->callback_counter == 2);
+
+  input(ctx, i, '\n');
+  rtems_test_assert(dev->callback_counter == 2);
+
+  n = read(ctx->fds[i], buf, 2);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'b');
+  rtems_test_assert(buf[1] == '\n');
+
+  input(ctx, i, '1');
+  rtems_test_assert(dev->callback_counter == 3);
+
+  input(ctx, i, 'c');
+  rtems_test_assert(dev->callback_counter == 3);
+
+  input(ctx, i, '\n');
+  rtems_test_assert(dev->callback_counter == 3);
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 3);
+  rtems_test_assert(buf[0] == '1');
+  rtems_test_assert(buf[1] == 'c');
+  rtems_test_assert(buf[2] == '\n');
+
+  input(ctx, i, '2');
+  rtems_test_assert(dev->callback_counter == 4);
+
+  input(ctx, i, 'd');
+  rtems_test_assert(dev->callback_counter == 4);
+
+  input(ctx, i, '\n');
+  rtems_test_assert(dev->callback_counter == 4);
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 3);
+  rtems_test_assert(buf[0] == '2');
+  rtems_test_assert(buf[1] == 'd');
+  rtems_test_assert(buf[2] == '\n');
+
+  for (j = 0; j < 255; ++j) {
+    input(ctx, i, 'e');
+    rtems_test_assert(dev->callback_counter == 4);
+  }
+
+  /* Raw input buffer overflow */
+  input(ctx, i, 'e');
+  rtems_test_assert(dev->callback_counter == 5);
+
+  dev->tty->tty_rcv.sw_pfn = NULL;
+  dev->tty->tty_rcv.sw_arg = NULL;
+  set_veol_veol2(ctx, i, '\0', '\0');
+  clear_set_lflag(ctx, i, ICANON, 0);
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -246,6 +564,12 @@ static void Init(rtems_task_argument arg)
 
   setup(ctx);
   test_igncr(ctx);
+  test_istrip(ctx);
+  test_iuclc(ctx);
+  test_icrnl(ctx);
+  test_inlcr(ctx);
+  test_rx_callback(ctx);
+  test_rx_callback_icanon(ctx);
 
   TEST_END();
   rtems_test_exit(0);
