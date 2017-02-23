@@ -48,6 +48,11 @@
 #include <stdio.h>
 #endif
 
+#ifdef RTEMS_SMP
+#include <rtems/score/processormask.h>
+#include <rtems/score/smpimpl.h>
+#endif
+
 /* GPTIMER Core Configuration Register (READ-ONLY) */
 #define GPTIMER_CFG_TIMERS_BIT	0
 #define GPTIMER_CFG_IRQ_BIT	3
@@ -416,7 +421,7 @@ static int gptimer_tlib_set_freq(struct tlib_dev *hand, unsigned int tickrate)
 		return 0;
 }
 
-static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data)
+static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *data, int flags)
 {
 	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
 	struct gptimer_priv *priv = priv_from_timer(timer);
@@ -436,6 +441,13 @@ static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *d
 		}
 		priv->isr_installed++;
 	}
+
+#if RTEMS_SMP
+	if (flags & TLIB_FLAGS_BROADCAST) {
+		drvmgr_interrupt_set_affinity(priv->dev, timer->tindex,
+					      _SMP_Online_processors);
+	}
+#endif
 
 	timer->tregs->ctrl |= GPTIMER_CTRL_IE;
 }
