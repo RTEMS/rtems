@@ -1424,14 +1424,19 @@ fillBufferPoll (struct rtems_termios_tty *tty)
 static void
 fillBufferQueue (struct rtems_termios_tty *tty)
 {
+  rtems_termios_device_context *ctx = tty->device_context;
   rtems_interval timeout = tty->rawInBufSemaphoreFirstTimeout;
-  rtems_status_code sc;
-  int               wait = 1;
+  bool wait = true;
 
   while ( wait ) {
+    rtems_interrupt_lock_context lock_context;
+
     /*
      * Process characters read from raw queue
      */
+
+    rtems_termios_device_lock_acquire (ctx, &lock_context);
+
     while ((tty->rawInBuf.Head != tty->rawInBuf.Tail) &&
                        (tty->ccount < (CBUFSIZE-1))) {
       unsigned char c;
@@ -1440,6 +1445,7 @@ fillBufferQueue (struct rtems_termios_tty *tty)
       newHead = (tty->rawInBuf.Head + 1) % tty->rawInBuf.Size;
       c = tty->rawInBuf.theBuf[newHead];
       tty->rawInBuf.Head = newHead;
+
       if(((tty->rawInBuf.Tail-newHead+tty->rawInBuf.Size)
           % tty->rawInBuf.Size)
          < tty->lowwater) {
@@ -1461,22 +1467,30 @@ fillBufferQueue (struct rtems_termios_tty *tty)
         }
       }
 
+      rtems_termios_device_lock_release (ctx, &lock_context);
+
       /* continue processing new character */
       if (tty->termios.c_lflag & ICANON) {
         if (siproc (c, tty))
-          wait = 0;
+          wait = false;
       } else {
         siproc (c, tty);
         if (tty->ccount >= tty->termios.c_cc[VMIN])
-          wait = 0;
+          wait = false;
       }
       timeout = tty->rawInBufSemaphoreTimeout;
+
+      rtems_termios_device_lock_acquire (ctx, &lock_context);
     }
+
+    rtems_termios_device_lock_release (ctx, &lock_context);
 
     /*
      * Wait for characters
      */
     if ( wait ) {
+      rtems_status_code sc;
+
       sc = rtems_semaphore_obtain(
         tty->rawInBuf.Semaphore, tty->rawInBufSemaphoreOptions, timeout);
       if (sc != RTEMS_SUCCESSFUL)
@@ -1555,7 +1569,6 @@ int
 rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
 {
   struct rtems_termios_tty *tty = ttyp;
-  unsigned int newTail;
   char c;
   int dropped = 0;
   bool flow_rcv = false; /* true, if flow control char received */
@@ -1620,12 +1633,19 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         rtems_termios_device_lock_release (ctx, &lock_context);
       }
     } else {
-      newTail = (tty->rawInBuf.Tail + 1) % tty->rawInBuf.Size;
-      /* if chars_in_buffer > highwater                */
+      unsigned int head;
+      unsigned int oldTail;
+      unsigned int newTail;
+
       rtems_termios_device_lock_acquire (ctx, &lock_context);
-      if ((((newTail - tty->rawInBuf.Head + tty->rawInBuf.Size)
-            % tty->rawInBuf.Size) > tty->highwater) &&
-          !(tty->flow_ctrl & FL_IREQXOF)) {
+
+      head = tty->rawInBuf.Head;
+      oldTail = tty->rawInBuf.Tail;
+      newTail = (oldTail + 1) % tty->rawInBuf.Size;
+
+      /* if chars_in_buffer > highwater                */
+      if ((tty->flow_ctrl & FL_IREQXOF) != 0 && (((newTail - head
+          + tty->rawInBuf.Size) % tty->rawInBuf.Size) > tty->highwater)) {
         /* incoming data stream should be stopped */
         tty->flow_ctrl |= FL_IREQXOF;
         if ((tty->flow_ctrl & (FL_MDXOF | FL_ISNTXOF))
@@ -1647,14 +1667,11 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
         }
       }
 
-      /* reenable interrupts */
-      rtems_termios_device_lock_release (ctx, &lock_context);
-
-      if (newTail == tty->rawInBuf.Head) {
-        dropped++;
-      } else {
+      if (newTail != head) {
         tty->rawInBuf.theBuf[newTail] = c;
         tty->rawInBuf.Tail = newTail;
+
+        rtems_termios_device_lock_release (ctx, &lock_context);
 
         /*
          * check to see if rcv wakeup callback was set
@@ -1663,6 +1680,9 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
           (*tty->tty_rcv.sw_pfn)(&tty->termios, tty->tty_rcv.sw_arg);
           tty->tty_rcvwakeup = 1;
         }
+      } else {
+        ++dropped;
+        rtems_termios_device_lock_release (ctx, &lock_context);
       }
     }
   }
