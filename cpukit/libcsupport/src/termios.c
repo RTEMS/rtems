@@ -1402,7 +1402,7 @@ siproc (unsigned char c, struct rtems_termios_tty *tty)
 /*
  * Fill the input buffer by polling the device
  */
-static rtems_status_code
+static void
 fillBufferPoll (struct rtems_termios_tty *tty)
 {
   int n;
@@ -1449,13 +1449,12 @@ fillBufferPoll (struct rtems_termios_tty *tty)
       }
     }
   }
-  return RTEMS_SUCCESSFUL;
 }
 
 /*
  * Fill the input buffer from the raw input queue
  */
-static rtems_status_code
+static void
 fillBufferQueue (struct rtems_termios_tty *tty)
 {
   rtems_interval timeout = tty->rawInBufSemaphoreFirstTimeout;
@@ -1517,7 +1516,6 @@ fillBufferQueue (struct rtems_termios_tty *tty)
         break;
     }
   }
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code
@@ -1544,12 +1542,9 @@ rtems_termios_read (void *arg)
     tty->cindex = tty->ccount = 0;
     tty->read_start_column = tty->column;
     if (tty->handler.poll_read != NULL && tty->handler.mode == TERMIOS_POLLED)
-      sc = fillBufferPoll (tty);
+      fillBufferPoll (tty);
     else
-      sc = fillBufferQueue (tty);
-
-    if (sc != RTEMS_SUCCESSFUL)
-      tty->cindex = tty->ccount = 0;
+      fillBufferQueue (tty);
   }
   while (count && (tty->cindex < tty->ccount)) {
     *buffer++ = tty->cbuf[tty->cindex++];
