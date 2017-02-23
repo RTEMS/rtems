@@ -1020,11 +1020,9 @@ startXmit (
 /*
  * Send characters to device-specific code
  */
-void
-rtems_termios_puts (
-  const void *_buf, size_t len, struct rtems_termios_tty *tty)
+static void
+doTransmit (const char *buf, size_t len, rtems_termios_tty *tty)
 {
-  const char *buf = _buf;
   unsigned int newHead;
   rtems_termios_device_context *ctx = tty->device_context;
   rtems_interrupt_lock_context lock_context;
@@ -1090,6 +1088,13 @@ rtems_termios_puts (
     buf += nToCopy;
     len -= nToCopy;
   }
+}
+
+void
+rtems_termios_puts (
+  const void *_buf, size_t len, struct rtems_termios_tty *tty)
+{
+  doTransmit (_buf, len, tty);
 }
 
 /*
@@ -1163,7 +1168,7 @@ oproc (unsigned char c, struct rtems_termios_tty *tty)
     tty->column = oldColumn + columnAdj;
   }
 
-  rtems_termios_puts (buf, len, tty);
+  doTransmit (buf, len, tty);
 }
 
 static uint32_t
@@ -1179,7 +1184,7 @@ rtems_termios_write_tty (struct rtems_termios_tty *tty, const char *buffer,
     while (count--)
       oproc (*buffer++, tty);
   } else {
-    rtems_termios_puts (buffer, initial_count, tty);
+    doTransmit (buffer, initial_count, tty);
   }
 
   return initial_count;
@@ -1217,7 +1222,7 @@ echo (unsigned char c, struct rtems_termios_tty *tty)
 
     echobuf[0] = '^';
     echobuf[1] = c ^ 0x40;
-    rtems_termios_puts (echobuf, 2, tty);
+    doTransmit (echobuf, 2, tty);
     tty->column += 2;
   } else {
     oproc (c, tty);
@@ -1277,18 +1282,18 @@ erase (struct rtems_termios_tty *tty, int lineFlag)
          * Back up over the tab
          */
         while (tty->column > col) {
-          rtems_termios_puts ("\b", 1, tty);
+          doTransmit ("\b", 1, tty);
           tty->column--;
         }
       }
       else {
         if (iscntrl (c) && (tty->termios.c_lflag & ECHOCTL)) {
-          rtems_termios_puts ("\b \b", 3, tty);
+          doTransmit ("\b \b", 3, tty);
           if (tty->column)
             tty->column--;
         }
         if (!iscntrl (c) || (tty->termios.c_lflag & ECHOCTL)) {
-          rtems_termios_puts ("\b \b", 3, tty);
+          doTransmit ("\b \b", 3, tty);
           if (tty->column)
             tty->column--;
         }
