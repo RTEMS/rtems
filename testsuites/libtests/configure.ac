@@ -172,6 +172,7 @@ termios05/Makefile
 termios06/Makefile
 termios07/Makefile
 termios08/Makefile
+termios09/Makefile
 top/Makefile
 tztest/Makefile
 capture01/Makefile

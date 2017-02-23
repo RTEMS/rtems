@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 _SUBDIRS = POSIX
+_SUBDIRS += termios09
 _SUBDIRS += libfdt01
 _SUBDIRS += defaultconfig01
 _SUBDIRS += pwdgrp02

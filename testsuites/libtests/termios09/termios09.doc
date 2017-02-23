@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: termios09
+
+directives:
+
+  - Termios
+
+concepts:
+
+  - Ensure that carriage return characters are ignored if desired (IGNCR).

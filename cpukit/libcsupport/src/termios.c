@@ -1295,12 +1295,11 @@ iproc (unsigned char c, struct rtems_termios_tty *tty)
     c = tolower (c);
 
   if (c == '\r') {
-    if (tty->termios.c_iflag & IGNCR)
-      return 0;
     if (tty->termios.c_iflag & ICRNL)
       c = '\n';
-  } else if ((c == '\n') && (tty->termios.c_iflag & INLCR)) {
-    c = '\r';
+  } else if (c == '\n') {
+    if (tty->termios.c_iflag & INLCR)
+      c = '\r';
   }
 
   if ((c != '\0') && (tty->termios.c_lflag & ICANON)) {
@@ -1366,6 +1365,16 @@ siproc (unsigned char c, struct rtems_termios_tty *tty)
   return i;
 }
 
+static int
+siprocPoll (unsigned char c, rtems_termios_tty *tty)
+{
+  if (c == '\r' && (tty->termios.c_iflag & IGNCR) != 0) {
+    return 0;
+  }
+
+  return siproc (c, tty);
+}
+
 /*
  * Fill the input buffer by polling the device
  */
@@ -1380,7 +1389,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
       if (n < 0) {
         rtems_task_wake_after (1);
       } else {
-        if  (siproc (n, tty))
+        if  (siprocPoll (n, tty))
           break;
       }
     }
@@ -1408,7 +1417,7 @@ fillBufferPoll (struct rtems_termios_tty *tty)
         }
         rtems_task_wake_after (1);
       } else {
-        siproc (n, tty);
+        siprocPoll (n, tty);
         if (tty->ccount >= tty->termios.c_cc[VMIN])
           break;
         if (tty->termios.c_cc[VMIN] && tty->termios.c_cc[VTIME])
@@ -1636,6 +1645,10 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
       unsigned int head;
       unsigned int oldTail;
       unsigned int newTail;
+
+      if (c == '\r' && (tty->termios.c_iflag & IGNCR) != 0) {
+        continue;
+      }
 
       rtems_termios_device_lock_acquire (ctx, &lock_context);
 
