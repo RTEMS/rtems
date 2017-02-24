@@ -657,6 +657,9 @@ int grspw_close(void *d)
 	}
 	grspw_hw_stop(priv);
 
+	/* Uninstall Interrupt handler */
+	drvmgr_interrupt_unregister(priv->dev, 0, grspw_isr, priv);
+
 	/* Free descriptor table memory if allocated using malloc() */
 	if (priv->bd_mem_alloced) {
 		free((void *)priv->bd_mem_alloced);
