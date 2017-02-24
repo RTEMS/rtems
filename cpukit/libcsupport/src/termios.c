@@ -1214,9 +1214,10 @@ oproc (unsigned char c, rtems_termios_tty *tty, bool wait)
 }
 
 static uint32_t
-rtems_termios_write_tty (rtems_termios_tty *tty, const char *buf, uint32_t len)
+rtems_termios_write_tty (rtems_libio_t *iop, rtems_termios_tty *tty,
+                         const char *buf, uint32_t len)
 {
-  bool wait = true;
+  bool wait = ((iop->flags & LIBIO_FLAGS_NO_DELAY) == 0);
 
   if (tty->termios.c_oflag & OPOST) {
     uint32_t todo = len;
@@ -1252,7 +1253,8 @@ rtems_termios_write (void *arg)
     rtems_semaphore_release (tty->osem);
     return sc;
   }
-  args->bytes_moved = rtems_termios_write_tty (tty, args->buffer, args->count);
+  args->bytes_moved = rtems_termios_write_tty (args->iop, tty,
+                                               args->buffer, args->count);
   rtems_semaphore_release (tty->osem);
   return sc;
 }
@@ -2162,7 +2164,7 @@ rtems_termios_imfs_write (rtems_libio_t *iop, const void *buffer, size_t count)
     return (ssize_t) args.bytes_moved;
   }
 
-  bytes_moved = rtems_termios_write_tty (tty, buffer, count);
+  bytes_moved = rtems_termios_write_tty (iop, tty, buffer, count);
   rtems_semaphore_release (tty->osem);
   return (ssize_t) bytes_moved;
 }

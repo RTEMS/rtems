@@ -199,6 +199,24 @@ static void input(test_context *ctx, size_t i, char c)
   }
 }
 
+static void enable_non_blocking(test_context *ctx, size_t i, bool enable)
+{
+  int flags;
+  int rv;
+
+  flags = fcntl(ctx->fds[i], F_GETFL, 0);
+  rtems_test_assert(flags >= 0);
+
+  if (enable) {
+    flags |= O_NONBLOCK;
+  } else {
+    flags &= ~O_NONBLOCK;
+  }
+
+  rv = fcntl(ctx->fds[i], F_SETFL, flags);
+  rtems_test_assert(rv == 0);
+}
+
 static void clear_set_iflag(
   test_context *ctx,
   size_t i,
@@ -968,6 +986,11 @@ static void test_write(test_context *ctx)
 
   rtems_test_assert(ctx->context_switch_counter == 0);
 
+  enable_non_blocking(ctx, i, true);
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 1], 1);
+  rtems_test_assert(n == 0);
+
+  enable_non_blocking(ctx, i, false);
   n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 1], 1);
   rtems_test_assert(n == 1);
 
@@ -994,6 +1017,11 @@ static void test_write(test_context *ctx)
 
   rtems_test_assert(ctx->context_switch_counter == 2);
 
+  enable_non_blocking(ctx, i, true);
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 2], 1);
+  rtems_test_assert(n == 0);
+
+  enable_non_blocking(ctx, i, false);
   n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 2], 1);
   rtems_test_assert(n == 1);
 
@@ -1020,6 +1048,11 @@ static void test_write(test_context *ctx)
 
   rtems_test_assert(ctx->context_switch_counter == 4);
 
+  enable_non_blocking(ctx, i, true);
+  n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 8], 1);
+  rtems_test_assert(n == 0);
+
+  enable_non_blocking(ctx, i, false);
   n = write(ctx->fds[i], &buf[OUTPUT_BUFFER_SIZE - 8], 1);
   rtems_test_assert(n == 1);
 
