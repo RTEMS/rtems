@@ -657,6 +657,12 @@ int grspw_close(void *d)
 	}
 	grspw_hw_stop(priv);
 
+	/* Free descriptor table memory if allocated using malloc() */
+	if (priv->bd_mem_alloced) {
+		free((void *)priv->bd_mem_alloced);
+		priv->bd_mem_alloced = 0;
+	}
+
 	/* Mark not open */
 	priv->open = 0;
 	rtems_semaphore_release(grspw_sem);
