@@ -221,6 +221,18 @@ static void clear_set_lflag(
   set_term(ctx, i);
 }
 
+static void clear_set_oflag(
+  test_context *ctx,
+  size_t i,
+  tcflag_t clear,
+  tcflag_t set
+)
+{
+  ctx->term[i].c_oflag &= ~clear;
+  ctx->term[i].c_oflag |= set;
+  set_term(ctx, i);
+}
+
 static void set_vmin_vtime(
   test_context *ctx,
   size_t i,
@@ -559,6 +571,344 @@ static void test_rx_callback_icanon(test_context *ctx)
   clear_set_lflag(ctx, i, ICANON, 0);
 }
 
+static void flush_output(test_context *ctx, size_t i)
+{
+  if (i == INTERRUPT) {
+    device_context *dev = &ctx->devices[i];
+
+    while (dev->output_pending != 0) {
+      rtems_termios_dequeue_characters(dev->tty, dev->output_pending);
+    }
+  }
+}
+
+static void clear_output(test_context *ctx, size_t i)
+{
+  device_context *dev = &ctx->devices[i];
+
+  dev->output_pending = 0;
+  dev->output_count = 0;
+  memset(&dev->output_buf, 0, OUTPUT_BUFFER_SIZE);
+}
+
+static void test_onlret(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | ONLRET;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\n';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 2);
+    rtems_test_assert(dev->output_buf[1] == '\n');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_onlcr(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | ONLCR;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\n';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 3);
+    rtems_test_assert(dev->output_buf[1] == '\r');
+    rtems_test_assert(dev->output_buf[2] == '\n');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_onocr(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | ONOCR;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = '\r';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 0);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\r';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 2);
+    rtems_test_assert(dev->output_buf[1] == '\r');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_ocrnl(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | OCRNL;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = '\r';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == '\n');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_ocrnl_onlret(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | OCRNL | ONLRET;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\r';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 2);
+    rtems_test_assert(dev->output_buf[1] == '\n');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_opost(test_context *ctx)
+{
+  tcflag_t oflags = OPOST;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\33';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 2);
+    rtems_test_assert(dev->output_buf[1] == '\33');
+
+    c = '\t';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 8);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 3);
+    rtems_test_assert(dev->output_buf[2] == '\t');
+
+    c = '\b';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 7);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 4);
+    rtems_test_assert(dev->output_buf[3] == '\b');
+
+    c = '\r';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 0);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 5);
+    rtems_test_assert(dev->output_buf[4] == '\r');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_xtabs(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | XTABS;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'a');
+
+    c = '\t';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 8);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 8);
+    rtems_test_assert(dev->output_buf[1] == ' ');
+    rtems_test_assert(dev->output_buf[2] == ' ');
+    rtems_test_assert(dev->output_buf[3] == ' ');
+    rtems_test_assert(dev->output_buf[4] == ' ');
+    rtems_test_assert(dev->output_buf[5] == ' ');
+    rtems_test_assert(dev->output_buf[6] == ' ');
+    rtems_test_assert(dev->output_buf[7] == ' ');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
+static void test_olcuc(test_context *ctx)
+{
+  tcflag_t oflags = OPOST | OLCUC;
+  size_t i;
+
+  for (i = 0; i < DEVICE_COUNT; ++i) {
+    device_context *dev = &ctx->devices[i];
+    char c;
+    ssize_t n;
+
+    dev->tty->column = 0;
+    clear_output(ctx, i);
+
+    clear_set_oflag(ctx, i, 0, oflags);
+
+    c = 'a';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 1);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 1);
+    rtems_test_assert(dev->output_buf[0] == 'A');
+
+    c = 'B';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 2);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 2);
+    rtems_test_assert(dev->output_buf[1] == 'B');
+
+    c = '9';
+    n = write(ctx->fds[i], &c, sizeof(c));
+    rtems_test_assert(n == 1);
+    rtems_test_assert(dev->tty->column == 3);
+    flush_output(ctx, i);
+    rtems_test_assert(dev->output_count == 3);
+    rtems_test_assert(dev->output_buf[2] == '9');
+
+    clear_set_oflag(ctx, i, oflags, 0);
+  }
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -573,6 +923,14 @@ static void Init(rtems_task_argument arg)
   test_inlcr(ctx);
   test_rx_callback(ctx);
   test_rx_callback_icanon(ctx);
+  test_onlret(ctx);
+  test_onlcr(ctx);
+  test_onocr(ctx);
+  test_ocrnl(ctx);
+  test_ocrnl_onlret(ctx);
+  test_opost(ctx);
+  test_xtabs(ctx);
+  test_olcuc(ctx);
 
   TEST_END();
   rtems_test_exit(0);
