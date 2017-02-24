@@ -550,6 +550,9 @@ static void test_rx_callback_icanon(test_context *ctx)
   input(ctx, i, 'e');
   rtems_test_assert(dev->callback_counter == 5);
 
+  n = read(ctx->fds[i], buf, 255);
+  rtems_test_assert(n == 255);
+
   dev->tty->tty_rcv.sw_pfn = NULL;
   dev->tty->tty_rcv.sw_arg = NULL;
   set_veol_veol2(ctx, i, '\0', '\0');

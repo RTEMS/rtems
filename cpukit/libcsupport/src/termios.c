@@ -1504,13 +1504,17 @@ fillBufferQueue (struct rtems_termios_tty *tty)
     /*
      * Wait for characters
      */
-    if ( wait ) {
-      rtems_status_code sc;
+    if (wait) {
+      if (tty->ccount < CBUFSIZE - 1) {
+        rtems_status_code sc;
 
-      sc = rtems_semaphore_obtain(
-        tty->rawInBuf.Semaphore, tty->rawInBufSemaphoreOptions, timeout);
-      if (sc != RTEMS_SUCCESSFUL)
+        sc = rtems_semaphore_obtain(
+          tty->rawInBuf.Semaphore, tty->rawInBufSemaphoreOptions, timeout);
+        if (sc != RTEMS_SUCCESSFUL)
+          break;
+      } else {
         break;
+      }
     }
   }
 }
