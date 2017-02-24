@@ -1067,6 +1067,31 @@ static void test_write(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void test_tx_callback(test_context *ctx)
+{
+  size_t i = INTERRUPT;
+  device_context *dev = &ctx->devices[i];
+  char c;
+  ssize_t n;
+
+  clear_output(ctx, i);
+  dev->callback_counter = 0;
+  dev->tty->tty_snd.sw_pfn = callback;
+  dev->tty->tty_snd.sw_arg = dev;
+
+  c = 'a';
+  n = write(ctx->fds[i], &c, sizeof(c));
+  rtems_test_assert(n == 1);
+  rtems_test_assert(dev->callback_counter == 0);
+  flush_output(ctx, i);
+  rtems_test_assert(dev->callback_counter == 1);
+  rtems_test_assert(dev->output_count == 1);
+  rtems_test_assert(dev->output_buf[0] == 'a');
+
+  dev->tty->tty_snd.sw_pfn = NULL;
+  dev->tty->tty_snd.sw_arg = NULL;
+}
+
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
@@ -1090,6 +1115,7 @@ static void Init(rtems_task_argument arg)
   test_xtabs(ctx);
   test_olcuc(ctx);
   test_write(ctx);
+  test_tx_callback(ctx);
 
   TEST_END();
   rtems_test_exit(0);
