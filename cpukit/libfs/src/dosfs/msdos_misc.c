@@ -820,7 +820,12 @@ fat_file_write_file_size(
     sec += (fat_fd->dir_pos.sname.ofs >> fs_info->vol.sec_log2);
     byte = (fat_fd->dir_pos.sname.ofs & (fs_info->vol.bps - 1));
 
-    le_new_length = CT_LE_L((fat_fd->fat_file_size));
+    if (fat_fd->fat_file_type == FAT_DIRECTORY) {
+      le_new_length = CT_LE_L(0);
+    } else {
+      le_new_length = CT_LE_L(fat_fd->fat_file_size);
+    }
+
     ret = fat_sector_write(fs_info, sec, byte + MSDOS_FILE_SIZE_OFFSET, 4,
                            (char *)(&le_new_length));
     if ( ret < 0 )
