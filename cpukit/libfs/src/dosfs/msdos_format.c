@@ -1204,8 +1204,8 @@ int msdos_format
     case FAT_FAT32:
       /* FAT entry 0: 0xffffff00|media_type */
       FAT_SET_VAL32(tmp_sec,0,0xffffff00|fmt_params.media_code);
-      /* FAT entry 1: EOC */
-      FAT_SET_VAL32(tmp_sec,4,FAT_FAT32_EOC);
+      /* FAT entry 1: Not dirty, no IO error, EOC */
+      FAT_SET_VAL32(tmp_sec,4,0xc0000000|FAT_FAT32_EOC);
       break;
 
     default:
