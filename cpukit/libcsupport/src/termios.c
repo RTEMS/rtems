@@ -1533,8 +1533,7 @@ fillBufferQueue (struct rtems_termios_tty *tty)
       c = tty->rawInBuf.theBuf[newHead];
       tty->rawInBuf.Head = newHead;
 
-      if(((tty->rawInBuf.Tail-newHead+tty->rawInBuf.Size)
-          % tty->rawInBuf.Size)
+      if(((tty->rawInBuf.Tail - newHead) % tty->rawInBuf.Size)
          < tty->lowwater) {
         tty->flow_ctrl &= ~FL_IREQXOF;
         /* if tx stopped and XON should be sent... */
@@ -1756,8 +1755,8 @@ rtems_termios_enqueue_raw_characters (void *ttyp, const char *buf, int len)
       newTail = (oldTail + 1) % tty->rawInBuf.Size;
 
       /* if chars_in_buffer > highwater                */
-      if ((tty->flow_ctrl & FL_IREQXOF) != 0 && (((newTail - head
-          + tty->rawInBuf.Size) % tty->rawInBuf.Size) > tty->highwater)) {
+      if ((tty->flow_ctrl & FL_IREQXOF) != 0 && (((newTail - head) %
+          tty->rawInBuf.Size) > tty->highwater)) {
         /* incoming data stream should be stopped */
         tty->flow_ctrl |= FL_IREQXOF;
         if ((tty->flow_ctrl & (FL_MDXOF | FL_ISNTXOF))
