@@ -73,6 +73,8 @@
 /*                                                                     */
 /***********************************************************************/
 
+#include <inttypes.h>
+
 #include <rtems.h>
 
 #include <libcpu/powerpc-utility.h>
@@ -717,6 +719,6 @@ rtems_status_code bsp_interrupt_facility_initialize( void)
 void bsp_interrupt_handler_default( rtems_vector_number vector)
 {
   if (vector != BSP_DECREMENTER) {
-    printk( "Spurious interrupt: 0x%08x\n", vector);
+    printk( "Spurious interrupt: 0x%08" PRIx32 "\n", vector);
   }
 }

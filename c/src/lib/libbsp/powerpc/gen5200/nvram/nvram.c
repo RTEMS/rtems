@@ -579,12 +579,12 @@ rtems_device_driver nvram_driver_write(rtems_device_major_number major, rtems_de
     return RTEMS_UNSATISFIED;
 
     }
-  else
-    count = args->count;
 
-    m93cxx_enable_write();
+  count = args->count;
 
-    WAIT(1);
+  m93cxx_enable_write();
+
+  WAIT(1);
 
   for(i = 0; i < count; i++)
     {

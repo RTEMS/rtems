@@ -7,6 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <inttypes.h>
 
 #include <bsp.h>
 
@@ -31,12 +32,12 @@ void dumpUBootBDInfo(
 
   printk(
     "*** U-Boot Information ***\n"
-    "Start/Size of DRAM memory  = %p for %lx\n"
-    "Start/Size of Flash memory = %p for %lx\n"
+    "Start/Size of DRAM memory  = %lu for %llx\n"
+    "Start/Size of Flash memory = %lu for %lx\n"
     "Reserved area for startup monitor = %ld\n"
-    "Start/Size of SRAM memory  = %p for %ld\n"
+    "Start/Size of SRAM memory  = %lu for %ld\n"
     "Boot/Reboot flag = %ld\n"
-    "IP Address = %d:%d:%d:%d\n"
+    "IP Address = %ld:%ld:%ld:%ld\n"
     "Ethernet address = %02x:%02x:%02x:%02x:%02x:%02x\n"
     "Ethernet speed in Mbps = %d\n"
     "Internal Freq, in MHz = %ld\n"
@@ -45,12 +46,12 @@ void dumpUBootBDInfo(
       "Console Baud Rate = %ld\n"
     #endif
     #if defined(CONFIG_MPC5xxx)
-      "MBAR                       = %p\n"
+      "MBAR                       = %lx\n"
       "IPB Bus Freq, in MHz       = %ld\n"
       "PCI Bus Freq, in MHz       = %ld\n"
     #endif
     ,
-    u->bi_memstart,   u->bi_memsize,
+    u->bi_memstart, (unsigned long long) u->bi_memsize,
     u->bi_flashstart, u->bi_flashsize,
     u->bi_flashoffset,
     u->bi_sramstart, u->bi_sramsize,
