@@ -137,7 +137,6 @@ void bsp_start(void)
       ns16550_context *ctx = (ns16550_context *) dev->context;
 
       ctx->clock = BSP_bus_frequency;
-      ctx->initial_baud = 115200;
     }
   }
 
