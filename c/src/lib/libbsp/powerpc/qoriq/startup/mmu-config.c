@@ -177,7 +177,7 @@ static void TEXT config_fdt_adjust(void)
 			size = 0;
 		}
 
-		size = MAX(size, 0x80000000U);
+		size = MIN(size, 0x80000000U);
 
 		if (begin == 0 && size > (uintptr_t) bsp_section_work_end) {
 			config[WORKSPACE_ENTRY_INDEX].size += (uintptr_t) size
