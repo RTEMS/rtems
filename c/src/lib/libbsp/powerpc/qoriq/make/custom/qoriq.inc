@@ -13,3 +13,6 @@ CPU_CFLAGS = -mcpu=8540 -meabi -msdata=sysv -fno-common -mstrict-align \
 	-D__ppc_generic
 
 CFLAGS_OPTIMIZE_V = -Os -g
+CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
+
+LDFLAGS = -Wl,--gc-sections
