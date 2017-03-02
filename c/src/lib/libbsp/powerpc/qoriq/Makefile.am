@@ -57,7 +57,6 @@ libbsp_a_SOURCES += \
 	../../shared/sbrk.c \
 	../../shared/gnatinstallhandler.c \
 	../../shared/bspclean.c \
-	../../shared/bspgetworkarea.c \
 	../../shared/src/bsp-fdt.c \
 	../shared/src/ppc-exc-handler-table.c \
 	../shared/src/tictac.c \
