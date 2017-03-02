@@ -346,9 +346,8 @@ ppc_exc_wrap_async_normal:
 	/* Disable interrupts */
 	wrteei	0
 
-#ifdef RTEMS_SMP
+	/* SELF_CPU_REGISTER is volatile, we must set it again */
 	GET_SELF_CPU_CONTROL	SELF_CPU_REGISTER
-#endif
 
 	/* Check if we have to do the thread dispatch again */
 	lbz	SCRATCH_0_REGISTER, PER_CPU_DISPATCH_NEEDED(SELF_CPU_REGISTER)
