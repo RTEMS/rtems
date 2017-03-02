@@ -26,7 +26,7 @@
 #ifndef __SPE__
   #define GET_GPR(gpr) (gpr)
 #else
-  #define GET_GPR(gpr) ((int) ((gpr) >> 32))
+  #define GET_GPR(gpr) ((uint32_t) ((gpr) >> 32))
 #endif
 
 /* T. Straumann: provide a stack trace
