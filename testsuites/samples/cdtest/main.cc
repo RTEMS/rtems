@@ -199,8 +199,6 @@ rtems_task main_task(
   rtems_task_argument
 )
 {
-    TEST_BEGIN();
-
     cdtest();
 
     printf( "*** TESTING C++ EXCEPTIONS ***\n\n" );
