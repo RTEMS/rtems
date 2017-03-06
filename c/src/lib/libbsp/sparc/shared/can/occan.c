@@ -8,6 +8,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -69,6 +70,16 @@ rtems_assoc_t errno_assoc[] = {
 #else
 	#define DBG(fmt, vargs...)
 #endif
+
+/* Spin locks mapped via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 /* fifo interface */
 typedef struct {
@@ -203,6 +214,7 @@ typedef struct {
 typedef struct {
 	struct drvmgr_dev *dev;
 	char devName[32];
+	SPIN_DECLARE(devlock);
 
 	/* hardware shortcuts */
 	pelican_regs *regs;
@@ -1165,7 +1177,8 @@ static rtems_device_driver occan_initialize(rtems_device_major_number major, rte
 	return RTEMS_SUCCESSFUL;
 }
 
-static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
+static rtems_device_driver occan_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+{
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 
@@ -1179,13 +1192,15 @@ static rtems_device_driver occan_open(rtems_device_major_number major, rtems_dev
 	can = (occan_priv *)dev->priv;
 
 	/* already opened? */
-	rtems_semaphore_obtain(can->devsem,RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	rtems_semaphore_obtain(can->devsem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
 	if ( can->open ){
 		rtems_semaphore_release(can->devsem);
 		return RTEMS_RESOURCE_IN_USE; /* EBUSY */
 	}
 	can->open = 1;
 	rtems_semaphore_release(can->devsem);
+
+	SPIN_INIT(&can->devlock, can->devName);
 
 	/* allocate fifos */
 	can->rxfifo = occan_fifo_create(DEFAULT_RX_FIFO_LEN);
@@ -1253,12 +1268,13 @@ static rtems_device_driver occan_close(rtems_device_major_number major, rtems_de
 	return RTEMS_SUCCESSFUL;
 }
 
-static rtems_device_driver occan_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
+static rtems_device_driver occan_read(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+{
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *dstmsg, *srcmsg;
-	rtems_interrupt_level oldLevel;
+	SPIN_IRQFLAGS(oldLevel);
 	int left;
 
 	if ( drvmgr_get_dev(&occan_drv_info.general, minor, &dev) ) {
@@ -1288,11 +1304,11 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 	while (left >= sizeof(CANMsg) ){
 
 		/* turn off interrupts */
-		rtems_interrupt_disable(oldLevel);
+		SPIN_LOCK_IRQ(&can->devlock, oldLevel);
 
 		/* A bus off interrupt may have occured after checking can->started */
 		if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
-			rtems_interrupt_enable(oldLevel);
+			SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 			DBG("OCCAN: read is cancelled due to a BUS OFF error\n\r");
 			rw_args->bytes_moved = rw_args->count-left;
 			return RTEMS_IO_ERROR; /* EIO */
@@ -1307,12 +1323,12 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 			 */
 			if ( !can->rxblk || (left != rw_args->count) ){
 				/* turn on interrupts again */
-				rtems_interrupt_enable(oldLevel);
+				SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 				break;
 			}
 
 			/* turn on interrupts again */
-			rtems_interrupt_enable(oldLevel);
+			SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 
 			DBG("OCCAN: Waiting for RX int\n\r");
 
@@ -1339,7 +1355,7 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 		occan_fifo_get(can->rxfifo);
 
 		/* turn on interrupts again */
-		rtems_interrupt_enable(oldLevel);
+		SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 
 		/* increase pointers */
 		left -= sizeof(CANMsg);
@@ -1355,12 +1371,13 @@ static rtems_device_driver occan_read(rtems_device_major_number major, rtems_dev
 	return RTEMS_SUCCESSFUL;
 }
 
-static rtems_device_driver occan_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
+static rtems_device_driver occan_write(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+{
 	occan_priv *can;
 	struct drvmgr_dev *dev;
 	rtems_libio_rw_args_t *rw_args=(rtems_libio_rw_args_t *) arg;
 	CANMsg *msg,*fifo_msg;
-	rtems_interrupt_level oldLevel;
+	SPIN_IRQFLAGS(oldLevel);
 	int left;
 
 	DBG("OCCAN: Writing %d bytes from 0x%lx (%d)\n\r",rw_args->count,rw_args->buffer,sizeof(CANMsg));
@@ -1389,11 +1406,11 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 #endif
 
 	/* turn off interrupts */
-	rtems_interrupt_disable(oldLevel);
+	SPIN_LOCK_IRQ(&can->devlock, oldLevel);
 
 	/* A bus off interrupt may have occured after checking can->started */
 	if ( can->status & (OCCAN_STATUS_ERR_BUSOFF|OCCAN_STATUS_RESET) ){
-		rtems_interrupt_enable(oldLevel);
+		SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 		rw_args->bytes_moved = 0;
 		return RTEMS_IO_ERROR; /* EIO */
 	}
@@ -1445,7 +1462,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 				INT_OFF;
 				CHECK_IF_FIFO_EMPTY ==> SEND DIRECT VIA HW;
 			*/
-			rtems_interrupt_enable(oldLevel);
+			SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 
 			DBG("OCCAN: Waiting for tx int\n\r");
 
@@ -1459,7 +1476,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 				return RTEMS_IO_ERROR; /* EIO */
 			}
 
-			rtems_interrupt_disable(oldLevel);
+			SPIN_LOCK_IRQ(&can->devlock, oldLevel);
 
 			if ( occan_fifo_empty(can->txfifo) ){
 				if ( !pelican_send(can,msg) ) {
@@ -1496,7 +1513,7 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 		left-=sizeof(CANMsg);
 	}
 
-	rtems_interrupt_enable(oldLevel);
+	SPIN_UNLOCK_IRQ(&can->devlock, oldLevel);
 
 	rw_args->bytes_moved = rw_args->count-left;
 	DBG("OCCAN: Sent %d\n\r",rw_args->bytes_moved);
@@ -1506,7 +1523,8 @@ static rtems_device_driver occan_write(rtems_device_major_number major, rtems_de
 	return RTEMS_SUCCESSFUL;
 }
 
-static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg){
+static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+{
 	int ret;
 	occan_speed_regs timing;
 	occan_priv *can;
@@ -1704,10 +1722,12 @@ void occan_interrupt(void *arg)
 	int signal_rx=0, signal_tx=0;
 	unsigned char tmp, errcode, arbcode;
 	int tx_error_cnt,rx_error_cnt;
+	SPIN_ISR_IRQFLAGS(irqflags);
 
 	if ( !can->started )
 		return; /* Spurious Interrupt, do nothing */
 
+	SPIN_LOCK(&can->devlock, irqflags);
 	while (1) {
 
 		iflags = READ_REG(can, &can->regs->intflags);
@@ -1942,6 +1962,7 @@ void occan_interrupt(void *arg)
 			can->stats.err_bus++;
 		}
 	}
+	SPIN_UNLOCK(&can->devlock, irqflags);
 
 	/* signal Binary semaphore, messages available! */
 	if ( signal_rx ){
