@@ -366,7 +366,6 @@ extern unsigned net_driver_ticks_per_sec;
 		rtems_interrupt_enable(_xtre_irq_flags); \
 	} while (0)
 
-typedef struct _netdev_t *device_t;
 typedef void (driver_intr_t)(void *);
 
 #define if_xname if_name

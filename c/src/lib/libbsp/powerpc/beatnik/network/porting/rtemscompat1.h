@@ -12,7 +12,7 @@
  * License:   see LICENSE file.
  */
 
-typedef struct _netdev_t {
+typedef struct device {
 	struct NET_SOFTC d_softc;	/* MUST BE FIRST FIELD */
 	char			 *d_name;
 	char			 *d_desc;
