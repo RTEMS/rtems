@@ -400,7 +400,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #elif defined(PPC_MULTILIB_ALTIVEC)
   #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_OFFSET_VRSAVE + 4)
 #else
-  #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 4)
+  #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8)
 #endif
 
 #ifdef RTEMS_SMP
