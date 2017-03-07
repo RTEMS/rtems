@@ -55,12 +55,6 @@ static void bsp_start_default( void )
   MC9328MXL_AITC_NIMASK = 0x1f;
 
   /*
-   * Init rtems exceptions management
-   */
-  /* FIXME: Use shared start.S */
-  rtems_exception_init_mngt();
-
-  /*
    * Init rtems interrupt management
    */
   bsp_interrupt_initialize();

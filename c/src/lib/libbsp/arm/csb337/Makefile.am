@@ -75,8 +75,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 if ENABLE_LCD
 libbsp_a_SOURCES += console/sed1356.c console/fbcons.c
 endif
-# abort
-libbsp_a_SOURCES += ../shared/abort/abort.c
 # umon
 if ENABLE_UMON
 libbsp_a_SOURCES += ../../shared/umon/umonrtemsglue.c  \

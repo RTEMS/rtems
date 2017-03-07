@@ -18,9 +18,6 @@ EXTRA_DIST =
 EXTRA_DIST += shared/comm/uart.h
 EXTRA_DIST += shared/comm/uart.c
 
-# abort
-EXTRA_DIST += shared/abort/simple_abort.c
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

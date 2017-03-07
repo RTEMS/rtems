@@ -38,8 +38,6 @@ libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 # console
 libbsp_a_SOURCES += console/uart.c
-# abort
-libbsp_a_SOURCES += ../shared/abort/abort.c
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h

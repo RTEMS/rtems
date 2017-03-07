@@ -51,8 +51,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-# simple_abort
-libbsp_a_SOURCES += ../shared/abort/simple_abort.c
 # debugio
 libbsp_a_SOURCES += console/uart.c
 

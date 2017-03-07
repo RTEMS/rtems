@@ -47,8 +47,6 @@ libbsp_a_SOURCES += console/uart.c ../../shared/console.c \
     ../../shared/console_read.c ../../shared/console_write.c 
 # timer
 libbsp_a_SOURCES += timer/timer.c
-# abort
-libbsp_a_SOURCES += ../shared/abort/abort.c
 
 # irq
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \

@@ -118,28 +118,35 @@ _hang:  b       _hang
  * of 16 words (64 bytes)
  */
 vector_block:
-        ldr     pc, Reset_Handler
-        ldr     pc, Undefined_Handler
-        ldr     pc, SWI_Handler
-        ldr     pc, Prefetch_Handler
-        ldr     pc, Abort_Handler
+        ldr    pc, handler_addr_reset
+        ldr    pc, handler_addr_undef
+        ldr    pc, handler_addr_swi
+        ldr    pc, handler_addr_prefetch
+        ldr    pc, handler_addr_abort
         nop
-        ldr     pc, IRQ_Handler
-        ldr     pc, FIQ_Handler
+        ldr    pc, handler_addr_irq
+        ldr    pc, handler_addr_fiq
 
-Reset_Handler:          b       bsp_reset
-Undefined_Handler:      b       Undefined_Handler
-SWI_Handler:            b       SWI_Handler
-Prefetch_Handler:       b       Prefetch_Handler
-Abort_Handler:          b       Abort_Handler
-                        nop
-IRQ_Handler:            b       IRQ_Handler
-FIQ_Handler:            b       FIQ_Handler
+handler_addr_reset:
+        .word  bsp_reset
 
-.globl Reset_Handler
-.globl Undefined_Handler
-.globl SWI_Handler
-.globl Prefetch_Handler
-.globl Abort_Handler
-.globl IRQ_Handler
-.globl FIQ_Handler
+handler_addr_undef:
+        .word  _ARMV4_Exception_undef_default
+
+handler_addr_swi:
+        .word  _ARMV4_Exception_swi_default
+
+handler_addr_prefetch:
+        .word  _ARMV4_Exception_pref_abort_default
+
+handler_addr_abort:
+        .word  _ARMV4_Exception_data_abort_default
+
+handler_addr_reserved:
+        .word  _ARMV4_Exception_reserved_default
+
+handler_addr_irq:
+        .word  _ARMV4_Exception_interrupt
+
+handler_addr_fiq:
+        .word  _ARMV4_Exception_fiq_default

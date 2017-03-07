@@ -33,12 +33,6 @@ static void bsp_start_default( void )
   *EP7312_INTMR2 = 0;
 
   /*
-   * Init rtems exceptions management
-   */
-  /* FIXME: Use shared start.S */
-  rtems_exception_init_mngt();
-
-  /*
    * Init rtems interrupt management
    */
   bsp_interrupt_initialize();

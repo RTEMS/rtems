@@ -49,8 +49,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-#abort
-libbsp_a_SOURCES += ../shared/abort/abort.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c

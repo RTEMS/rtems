@@ -37,44 +37,38 @@
 ********************************************************/
 
 Vector_Init_Block:
-	LDR	PC, Reset_Addr
-	LDR	PC, Undefined_Addr
-	LDR	PC, SWI_Addr
-	LDR	PC, Prefetch_Addr
-	LDR	PC, Abort_Addr
-	NOP
-	LDR	PC, IRQ_Addr
-	LDR	PC, FIQ_Addr
+        ldr    pc, handler_addr_reset
+        ldr    pc, handler_addr_undef
+        ldr    pc, handler_addr_swi
+        ldr    pc, handler_addr_prefetch
+        ldr    pc, handler_addr_abort
+        nop
+        ldr    pc, handler_addr_irq
+        ldr    pc, handler_addr_fiq
 
-	.globl Reset_Addr
-Reset_Addr:	.long   _start
-Undefined_Addr:	.long	Undefined_Handler
-SWI_Addr:	.long	SWI_Handler
-Prefetch_Addr:	.long	Prefetch_Handler
-Abort_Addr:	.long	Abort_Handler
-		.long	0
-IRQ_Addr:	.long	IRQ_Handler
-FIQ_Addr:	.long	FIQ_Handler
+handler_addr_reset:
+        .word  _start
 
-/* The following handlers do not do anything useful */
-	.globl Undefined_Handler
-Undefined_Handler:
-        B       Undefined_Handler
-	.globl SWI_Handler
-SWI_Handler:
-        B       SWI_Handler
-	.globl Prefetch_Handler
-Prefetch_Handler:
-        B       Prefetch_Handler
-	.globl Abort_Handler
-Abort_Handler:
-        B       Abort_Handler
-	.globl IRQ_Handler
-IRQ_Handler:
-        B       IRQ_Handler
-	.globl FIQ_Handler
-FIQ_Handler:
-        B       FIQ_Handler
+handler_addr_undef:
+        .word  _ARMV4_Exception_undef_default
+
+handler_addr_swi:
+        .word  _ARMV4_Exception_swi_default
+
+handler_addr_prefetch:
+        .word  _ARMV4_Exception_pref_abort_default
+
+handler_addr_abort:
+        .word  _ARMV4_Exception_data_abort_default
+
+handler_addr_reserved:
+        .word  _ARMV4_Exception_reserved_default
+
+handler_addr_irq:
+        .word  _ARMV4_Exception_interrupt
+
+handler_addr_fiq:
+        .word  _ARMV4_Exception_fiq_default
 
 	.globl	_start
 _start:
