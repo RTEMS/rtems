@@ -435,11 +435,9 @@ PROC (_CPU_Context_switch):
 restore_context:
 
 #if defined(__ALTIVEC__) && !defined(PPC_MULTILIB_ALTIVEC)
-	mr	r14, r5
 	mr	r4, r5
 	.extern	_CPU_Context_switch_altivec
 	bl	_CPU_Context_switch_altivec
-	mr	r5, r14
 #endif
 
 	lwz	r1, PPC_CONTEXT_OFFSET_GPR1(r5)
