@@ -26,6 +26,10 @@ $(PROJECT_INCLUDE)/bsp/fatal.h: shared/include/fatal.h $(PROJECT_INCLUDE)/bsp/$(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fatal.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fatal.h
 
+$(PROJECT_INCLUDE)/bsp/fdt.h: shared/include/fdt.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/fdt.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/fdt.h
+
 $(PROJECT_INCLUDE)/bsp/console-termios.h: shared/include/console-termios.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/console-termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/console-termios.h

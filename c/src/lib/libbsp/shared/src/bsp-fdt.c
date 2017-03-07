@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -16,9 +16,12 @@
 
 #include <libfdt.h>
 
-#include <bsp.h>
 #include <bsp/fdt.h>
 #include <bsp/linker-symbols.h>
+
+#ifndef BSP_FDT_IS_SUPPORTED
+#warning "BSP FDT support indication not defined"
+#endif
 
 #ifndef BSP_FDT_BLOB_SIZE_MAX
 #define BSP_FDT_BLOB_SIZE_MAX 0

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -168,4 +168,9 @@ void bsp_start(void)
 #else
   qoriq.lcc.bptr &= ~BPTR_EN;
 #endif
+}
+
+uint32_t bsp_fdt_map_intr(uint32_t intr)
+{
+  return intr - 16;
 }

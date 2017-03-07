@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -36,6 +36,8 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define BSP_FEATURE_IRQ_EXTENSION
+
+#define BSP_FDT_IS_SUPPORTED
 
 #define QORIQ_CHIP(alpha, num) ((alpha) * 10000 + (num))
 

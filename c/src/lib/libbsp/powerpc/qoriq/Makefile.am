@@ -22,7 +22,6 @@ include_bsp_HEADERS = include/irq.h \
 	../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h \
 	../../shared/include/bootcard.h \
-	../../shared/include/fdt.h \
 	../../shared/include/utility.h \
 	../shared/include/start.h \
 	../shared/include/tictac.h \
