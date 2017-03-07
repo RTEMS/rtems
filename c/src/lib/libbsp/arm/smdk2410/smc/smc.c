@@ -293,7 +293,7 @@ static void smc_init( void)
   smc_read_id (buf, 4);
   smc_detect (buf[0], buf[1], buf[2]);
   printk ("SMC: [%02X-%02X-%02X-%02X]\n", buf[0], buf[1], buf[2], buf[3]);
-  printk ("SMC size: %dMB detected\n",smc_info.mb);
+  printk ("SMC size: %" PRIu32 "MB detected\n",smc_info.mb);
   smc_make_l2p();
 }
 
