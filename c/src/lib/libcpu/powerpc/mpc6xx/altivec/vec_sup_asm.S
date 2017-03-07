@@ -76,10 +76,10 @@
 	.set   r5,   5
 	.set   r6,   6
 	.set   r7,   7
-
+	.set   r9,   9
 	.set   r10, 10
 	.set   r11, 11
-	.set   r12, 12
+	/* Do not use r12, since this is used by _CPU_Context_switch() */
 
 	.set   cr5,  5
 
@@ -575,7 +575,7 @@ _CPU_save_altivec_volatile:
 	/* Save CRC -- it is used implicitly by all the LOAD/STORE macros
 	 * when testing if we really should do the load/store operation.
 	 */
-	mfcr      r12
+	mfcr      r9
 #endif
 
 	PREP_FOR_SAVE r0, r3, r4, r5, r6, r10
@@ -590,7 +590,7 @@ _CPU_save_altivec_volatile:
 
 #ifndef IGNORE_VRSAVE
 	/* Restore CRC */
-	mtcr      r12
+	mtcr      r9
 #endif
 	blr
 
@@ -603,7 +603,7 @@ _CPU_load_altivec_volatile:
 	/* Save CRC -- it is used implicitly by all the LOAD/STORE macros
 	 * when testing if we really should do the load/store operation.
 	 */
-	mfcr      r12
+	mfcr      r9
 #endif
 
 	/* Try to preload 1st line (where vscr and vrsave are stored) */
@@ -619,7 +619,7 @@ _CPU_load_altivec_volatile:
 	L_V0TOV19 r3, r4, r5, r6, r10, r11
 
 #ifndef IGNORE_VRSAVE
-	mtcr      r12
+	mtcr      r9
 #endif
 	blr
 
@@ -649,7 +649,7 @@ _CPU_Context_switch_altivec:
 	/* Save CRC -- it is used implicitly by all the LOAD/STORE macros
 	 * when testing if we really should do the load/store operation.
 	 */
-	mfcr      r12
+	mfcr      r9
 #endif
 
 	/* Is 'from' context == NULL ? (then we just do a 'restore') */
@@ -685,7 +685,7 @@ _CPU_Context_switch_altivec:
 	L_V20TOV31 r4, r5, r6, r7, r10, r11
 
 #ifndef IGNORE_VRSAVE
-	mtcr      r12
+	mtcr      r9
 #endif
 	blr
 
@@ -761,7 +761,7 @@ _CPU_altivec_load_all:
 	/* Save CRC -- it is used implicitly by all the LOAD/STORE macros
 	 * when testing if we really should do the load/store operation.
 	 */
-	mfcr      r12
+	mfcr      r9
 #endif
 
 	/* Try to preload 1st line (where vscr and vrsave are stored) */
@@ -777,7 +777,7 @@ _CPU_altivec_load_all:
 	L_V0TOV31 r3, r4, r5, r6, r10, r11
 
 #ifndef IGNORE_VRSAVE
-	mtcr      r12
+	mtcr      r9
 #endif
 	blr
 
@@ -791,7 +791,7 @@ _CPU_altivec_save_all:
 	/* Save CRC -- it is used implicitly by all the LOAD/STORE macros
 	 * when testing if we really should do the load/store operation.
 	 */
-	mfcr      r12
+	mfcr      r9
 #endif
 
 	PREP_FOR_SAVE r0, r3, r4, r5, r6, r10
@@ -806,7 +806,7 @@ _CPU_altivec_save_all:
 
 #ifndef IGNORE_VRSAVE
 	/* Restore CRC */
-	mtcr      r12
+	mtcr      r9
 #endif
 	blr
 
