@@ -1,6 +1,6 @@
 /* GRSPW ROUTER APB-Register Driver.
  *
- * COPYRIGHT (c) 2010.
+ * COPYRIGHT (c) 2010-2017.
  * Cobham Gaisler AB.
  *
  * The license and distribution terms for this file may be
@@ -12,106 +12,596 @@
 #include <rtems/libio.h>
 #include <rtems/bspIo.h>
 #include <stdio.h>
+#include <bsp.h>
+#include <rtems/bspIo.h> /* printk */
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grspw_router.h>
 
-#define ROUTER_DBG(args...)
+//#define STATIC
+#define STATIC static
 
-#define REG_READ(adr) (*(volatile unsigned int *)(adr))
-#define REG_WRITE(adr, value) (*(volatile unsigned int *)(adr) = (value))
+#define UNUSED __attribute__((unused))
+
+//#define DEBUG 1
+
+#ifdef DEBUG
+#define DBG(x...) printf(x)
+#else
+#define DBG(x...) 
+#endif
+
+#define THREAD_SAFE 1
+
+/* Use interrupt lock privmitives compatible with SMP defined in
+ * RTEMS 4.11.99 and higher.
+ */
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
+
+#ifdef THREAD_SAFE
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
+#else
+#define SPIN_DECLARE(lock)
+#define SPIN_INIT(lock, name)
+#define SPIN_LOCK(lock, level)
+#define SPIN_LOCK_IRQ(lock, level)
+#define SPIN_UNLOCK(lock, level)
+#define SPIN_UNLOCK_IRQ(lock, level)
+#define SPIN_IRQFLAGS(k)
+#define SPIN_ISR_IRQFLAGS(k)
+#define SPIN_FREE(lock)
+#endif
+
+#else
+
+#ifdef THREAD_SAFE
+#error THREAD SAFE operation not supported on this RTEMS version
+#else
+#define SPIN_DECLARE(lock)
+#define SPIN_INIT(lock, name)
+#define SPIN_LOCK(lock, level)
+#define SPIN_LOCK_IRQ(lock, level)
+#define SPIN_UNLOCK(lock, level)
+#define SPIN_UNLOCK_IRQ(lock, level)
+#define SPIN_IRQFLAGS(k)
+#define SPIN_ISR_IRQFLAGS(k)
+#define SPIN_FREE(lock)
+#endif
+
+#ifdef RTEMS_SMP
+#error SMP mode not compatible with these interrupt lock primitives
+#endif
+
+#endif
+
+#define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
+#define REG_READ(addr) (*(volatile unsigned int *)(addr))
+
+
+/*
+ * ROUTER RTPMAP register fields
+ */
+#define RTPMAP_PE (0x7fffffff << RTPMAP_PE_BIT)
+#define RTPMAP_PD (0x1 << RTPMAP_PD_BIT)
+
+#define RTPMAP_PE_BIT 1
+#define RTPMAP_PD_BIT 0
+
+/*
+ * ROUTER RTACTRL register fields
+ * DEFINED IN HEADER
+ */
+
+/*
+ * ROUTER PCTRL register fields
+ */
+#define PCTRL_RD (0xff << PCTRL_RD_BIT)
+#define PCTRL_ST (0x1 << PCTRL_ST_BIT)
+#define PCTRL_SR (0x1 << PCTRL_SR_BIT)
+#define PCTRL_AD (0x1 << PCTRL_AD_BIT)
+#define PCTRL_LR (0x1 << PCTRL_LR_BIT)
+#define PCTRL_PL (0x1 << PCTRL_PL_BIT)
+#define PCTRL_TS (0x1 << PCTRL_TS_BIT)
+#define PCTRL_IC (0x1 << PCTRL_IC_BIT)
+#define PCTRL_ET (0x1 << PCTRL_ET_BIT)
+#define PCTRL_NP (0x1 << PCTRL_NP_BIT)
+#define PCTRL_PS (0x1 << PCTRL_PS_BIT)
+#define PCTRL_BE (0x1 << PCTRL_BE_BIT)
+#define PCTRL_DI (0x1 << PCTRL_DI_BIT)
+#define PCTRL_TR (0x1 << PCTRL_TR_BIT)
+#define PCTRL_PR (0x1 << PCTRL_PR_BIT)
+#define PCTRL_TF (0x1 << PCTRL_TF_BIT)
+#define PCTRL_RS (0x1 << PCTRL_RS_BIT)
+#define PCTRL_TE (0x1 << PCTRL_TE_BIT)
+#define PCTRL_CE (0x1 << PCTRL_CE_BIT)
+#define PCTRL_AS (0x1 << PCTRL_AS_BIT)
+#define PCTRL_LS (0x1 << PCTRL_LS_BIT)
+#define PCTRL_LD (0x1 << PCTRL_LD_BIT)
+
+#define PCTRL_RD_BIT 24
+#define PCTRL_ST_BIT 21
+#define PCTRL_SR_BIT 20
+#define PCTRL_AD_BIT 19
+#define PCTRL_LR_BIT 18
+#define PCTRL_PL_BIT 17
+#define PCTRL_TS_BIT 16
+#define PCTRL_IC_BIT 15
+#define PCTRL_ET_BIT 14
+#define PCTRL_NP_BIT 13
+#define PCTRL_PS_BIT 12
+#define PCTRL_BE_BIT 11
+#define PCTRL_DI_BIT 10
+#define PCTRL_TR_BIT 9
+#define PCTRL_PR_BIT 8
+#define PCTRL_TF_BIT 7
+#define PCTRL_RS_BIT 6
+#define PCTRL_TE_BIT 5
+#define PCTRL_CE_BIT 3
+#define PCTRL_AS_BIT 2
+#define PCTRL_LS_BIT 1
+#define PCTRL_LD_BIT 0
+
+/*
+ * ROUTER PSTSCFG register fields
+ */
+#define PSTSCFG_EO (0x1 << PSTSCFG_EO_BIT)
+#define PSTSCFG_EE (0x1 << PSTSCFG_EE_BIT)
+#define PSTSCFG_PL (0x1 << PSTSCFG_PL_BIT)
+#define PSTSCFG_TT (0x1 << PSTSCFG_TT_BIT)
+#define PSTSCFG_PT (0x1 << PSTSCFG_PT_BIT)
+#define PSTSCFG_HC (0x1 << PSTSCFG_HC_BIT)
+#define PSTSCFG_PI (0x1 << PSTSCFG_PI_BIT)
+#define PSTSCFG_CE (0x1 << PSTSCFG_CE_BIT)
+#define PSTSCFG_EC (0xf << PSTSCFG_EC_BIT)
+#define PSTSCFG_TS (0x1 << PSTSCFG_TS_BIT)
+#define PSTSCFG_ME (0x1 << PSTSCFG_ME_BIT)
+#define PSTSCFG_IP (0x1f << PSTSCFG_IP_BIT)
+#define PSTSCFG_CP (0x1 << PSTSCFG_CP_BIT)
+#define PSTSCFG_PC (0xf << PSTSCFG_PC_BIT)
+#define PSTSCFG_WCLEAR (PSTSCFG_EO | PSTSCFG_EE | PSTSCFG_PL | \
+						PSTSCFG_TT | PSTSCFG_PT | PSTSCFG_HC | \
+						PSTSCFG_PI | PSTSCFG_CE | PSTSCFG_TS | \
+						PSTSCFG_ME | PSTSCFG_CP)
+
+#define PSTSCFG_EO_BIT 31
+#define PSTSCFG_EE_BIT 30
+#define PSTSCFG_PL_BIT 29
+#define PSTSCFG_TT_BIT 28
+#define PSTSCFG_PT_BIT 27
+#define PSTSCFG_HC_BIT 26
+#define PSTSCFG_PI_BIT 25
+#define PSTSCFG_CE_BIT 24
+#define PSTSCFG_EC_BIT 20
+#define PSTSCFG_TS_BIT 18
+#define PSTSCFG_ME_BIT 17
+#define PSTSCFG_IP_BIT 7
+#define PSTSCFG_CP_BIT 4
+#define PSTSCFG_PC_BIT 0
+
+/*
+ * ROUTER PSTS register fields
+ */
+#define PSTS_PT (0x3 << PSTS_PT_BIT)
+#define PSTS_PL (0x1 << PSTS_PL_BIT)
+#define PSTS_TT (0x1 << PSTS_TT_BIT)
+#define PSTS_RS (0x1 << PSTS_RS_BIT)
+#define PSTS_SR (0x1 << PSTS_SR_BIT)
+#define PSTS_LR (0x1 << PSTS_LR_BIT)
+#define PSTS_SP (0x1 << PSTS_SP_BIT)
+#define PSTS_AC (0x1 << PSTS_AC_BIT)
+#define PSTS_TS (0x1 << PSTS_TS_BIT)
+#define PSTS_ME (0x1 << PSTS_ME_BIT)
+#define PSTS_TF (0x1 << PSTS_TF_BIT)
+#define PSTS_RE (0x1 << PSTS_RE_BIT)
+#define PSTS_LS (0x7 << PSTS_LS_BIT)
+#define PSTS_IP (0x1f << PSTS_IP_BIT)
+#define PSTS_PR (0x1 << PSTS_PR_BIT)
+#define PSTS_PB (0x1 << PSTS_PB_BIT)
+#define PSTS_IA (0x1 << PSTS_IA_BIT)
+#define PSTS_CE (0x1 << PSTS_CE_BIT)
+#define PSTS_ER (0x1 << PSTS_ER_BIT)
+#define PSTS_DE (0x1 << PSTS_DE_BIT)
+#define PSTS_PE (0x1 << PSTS_PE_BIT)
+#define PSTS_WCLEAR (PSTS_PL | PSTS_TT | PSTS_RS | PSTS_SR | \
+					 PSTS_TS | PSTS_ME | PSTS_IA | PSTS_CE | \
+					 PSTS_ER | PSTS_DE | PSTS_PE)
+
+#define PSTS_PT_BIT 30
+#define PSTS_PL_BIT 29
+#define PSTS_TT_BIT 28
+#define PSTS_RS_BIT 27
+#define PSTS_SR_BIT 26
+#define PSTS_LR_BIT 22
+#define PSTS_SP_BIT 21
+#define PSTS_AC_BIT 20
+#define PSTS_TS_BIT 18
+#define PSTS_ME_BIT 17
+#define PSTS_TF_BIT 16
+#define PSTS_RE_BIT 15
+#define PSTS_LS_BIT 12
+#define PSTS_IP_BIT 7
+#define PSTS_PR_BIT 6
+#define PSTS_PB_BIT 5
+#define PSTS_IA_BIT 4
+#define PSTS_CE_BIT 3
+#define PSTS_ER_BIT 2
+#define PSTS_DE_BIT 1
+#define PSTS_PE_BIT 0
+
+/*
+ * ROUTER PTIMER register fields
+ */
+#define PTIMER_RL (0xffff << PTIMER_RL_BIT)
+
+#define PTIMER_RL_BIT 0
+
+/*
+ * ROUTER PCTRL2 register fields
+ */
+#define PCTRL2_SM (0xff << PCTRL2_SM_BIT)
+#define PCTRL2_SV (0xff << PCTRL2_SV_BIT)
+#define PCTRL2_OR (0x1 << PCTRL2_OR_BIT)
+#define PCTRL2_UR (0x1 << PCTRL2_UR_BIT)
+#define PCTRL2_AT (0x1 << PCTRL2_AT_BIT)
+#define PCTRL2_AR (0x1 << PCTRL2_AR_BIT)
+#define PCTRL2_IT (0x1 << PCTRL2_IT_BIT)
+#define PCTRL2_IR (0x1 << PCTRL2_IR_BIT)
+#define PCTRL2_SD (0x1f << PCTRL2_SD_BIT)
+#define PCTRL2_SC (0x1f << PCTRL2_SC_BIT)
+
+#define PCTRL2_SM_BIT 24
+#define PCTRL2_SV_BIT 16
+#define PCTRL2_OR_BIT 15
+#define PCTRL2_UR_BIT 14
+#define PCTRL2_AT_BIT 12
+#define PCTRL2_AR_BIT 11
+#define PCTRL2_IT_BIT 10
+#define PCTRL2_IR_BIT 9
+#define PCTRL2_SD_BIT 1
+#define PCTRL2_SC_BIT 0
+
+/*
+ * ROUTER RTRCFG register fields
+ */
+#define RTRCFG_SP (0x1f << RTRCFG_SP_BIT)
+#define RTRCFG_AP (0x1f << RTRCFG_AP_BIT)
+#define RTRCFG_FP (0x1f << RTRCFG_FP_BIT)
+#define RTRCFG_SR (0x1 << RTRCFG_SR_BIT)
+#define RTRCFG_PE (0x1 << RTRCFG_PE_BIT)
+#define RTRCFG_IC (0x1 << RTRCFG_IC_BIT)
+#define RTRCFG_IS (0x1 << RTRCFG_IS_BIT)
+#define RTRCFG_IP (0x1 << RTRCFG_IP_BIT)
+#define RTRCFG_AI (0x1 << RTRCFG_AI_BIT)
+#define RTRCFG_AT (0x1 << RTRCFG_AT_BIT)
+#define RTRCFG_IE (0x1 << RTRCFG_IE_BIT)
+#define RTRCFG_RE (0x1 << RTRCFG_RE_BIT)
+#define RTRCFG_EE (0x1 << RTRCFG_EE_BIT)
+#define RTRCFG_LS (0x1 << RTRCFG_LS_BIT)
+#define RTRCFG_SA (0x1 << RTRCFG_SA_BIT)
+#define RTRCFG_TF (0x1 << RTRCFG_TF_BIT)
+#define RTRCFG_ME (0x1 << RTRCFG_ME_BIT)
+#define RTRCFG_TA (0x1 << RTRCFG_TA_BIT)
+#define RTRCFG_PP (0x1 << RTRCFG_PP_BIT)
+#define RTRCFG_WCLEAR (RTRCFG_ME)
+
+#define RTRCFG_SP_BIT 27
+#define RTRCFG_AP_BIT 22
+#define RTRCFG_FP_BIT 17
+#define RTRCFG_SR_BIT 15
+#define RTRCFG_PE_BIT 14
+#define RTRCFG_IC_BIT 13
+#define RTRCFG_IS_BIT 12
+#define RTRCFG_IP_BIT 11
+#define RTRCFG_AI_BIT 10
+#define RTRCFG_AT_BIT 9
+#define RTRCFG_IE_BIT 8
+#define RTRCFG_RE_BIT 7
+#define RTRCFG_EE_BIT 6
+#define RTRCFG_LS_BIT 5
+#define RTRCFG_SA_BIT 4
+#define RTRCFG_TF_BIT 3
+#define RTRCFG_ME_BIT 2
+#define RTRCFG_TA_BIT 1
+#define RTRCFG_PP_BIT 0
+
+/*
+ * ROUTER TC register fields
+ */
+#define TC_RE (0x3f << TC_RE_BIT)
+#define TC_EN (0x3f << TC_EN_BIT)
+#define TC_CF (0x3f << TC_CF_BIT)
+#define TC_TC (0x3f << TC_TC_BIT)
+
+#define TC_RE_BIT 9
+#define TC_EN_BIT 8
+#define TC_CF_BIT 6
+#define TC_TC_BIT 0
+
+/*
+ * ROUTER VER register fields
+ */
+#define VER_MA (0xff << VER_MA_BIT)
+#define VER_MI (0xff << VER_MI_BIT)
+#define VER_PA (0xff << VER_PA_BIT)
+#define VER_ID (0xff << VER_ID_BIT)
+
+#define VER_MA_BIT 24
+#define VER_MI_BIT 16
+#define VER_PA_BIT 8
+#define VER_ID_BIT 0
+
+/*
+ * ROUTER IDIV register fields
+ */
+#define IDIV_ID (0xff << IDIV_ID_BIT)
+
+#define IDIV_ID_BIT 0
+
+/*
+ * ROUTER CFGWE register fields
+ */
+#define CFGWE_WE (0x1 << CFGWE_WE_BIT)
+
+#define CFGWE_WE_BIT 0
+
+/*
+ * ROUTER PRESCALER register fields
+ */
+#define PRESCALER_RL (0xffff << PRESCALER_RL_BIT)
+
+#define PRESCALER_RL_BIT 0
+
+/*
+ * ROUTER IMASK register fields
+ * DEFINED IN HEADER
+ */
+
+/*
+ * ROUTER ICODEGEN register fields
+ * DEFINED IN HEADER
+ */
+
+/*
+ * ROUTER ISRTIMER register fields
+ */
+#define ISRTIMER_RL (0xffff << ISRTIMER_RL_BIT)
+
+#define ISRTIMER_RL_BIT 0
+
+/*
+ * ROUTER AITIMER register fields
+ */
+#define AITIMER_RL (0xffff << AITIMER_RL_BIT)
+
+#define AITIMER_RL_BIT 0
+
+/*
+ * ROUTER ISRCTIMER register fields
+ */
+#define ISRCTIMER_RL (0x1f << ISRCTIMER_RL_BIT)
+
+#define ISRCTIMER_RL_BIT 0
+
+/*
+ * ROUTER CAP register fields
+ */
+#define CAP_AF (0x3 << CAP_AF_BIT)
+#define CAP_PF (0x7 << CAP_PF_BIT)
+#define CAP_RM (0x7 << CAP_RM_BIT)
+#define CAP_AS (0x1 << CAP_AS_BIT)
+#define CAP_AX (0x1 << CAP_AX_BIT)
+#define CAP_DP (0x1 << CAP_DP_BIT)
+#define CAP_ID (0x1 << CAP_ID_BIT)
+#define CAP_SD (0x1 << CAP_SD_BIT)
+#define CAP_PC (0x1f << CAP_PC_BIT)
+#define CAP_CC (0x1f << CAP_CC_BIT)
+
+#define CAP_AF_BIT 24
+#define CAP_PF_BIT 29
+#define CAP_RM_BIT 16
+#define CAP_AS_BIT 14
+#define CAP_AX_BIT 13
+#define CAP_DP_BIT 12
+#define CAP_ID_BIT 11
+#define CAP_SD_BIT 10
+#define CAP_PC_BIT 4
+#define CAP_CC_BIT 0
+
+/*
+ * ROUTER PNPVEND register fields
+ */
+#define PNPVEND_VI (0xffff << PNPVEND_VI_BIT)
+#define PNPVEND_PI (0xffff << PNPVEND_PI_BIT)
+
+#define PNPVEND_VI_BIT 16
+#define PNPVEND_PI_BIT 0
+
+/*
+ * ROUTER PNPUVEND register fields
+ */
+#define PNPUVEND_VI (0xffff << PNPUVEND_VI_BIT)
+#define PNPUVEND_PI (0xffff << PNPUVEND_PI_BIT)
+
+#define PNPUVEND_VI_BIT 16
+#define PNPUVEND_PI_BIT 0
+
+/*
+ * ROUTER MAXPLEN register fields
+ */
+#define MAXPLEN_ML (0xffffff << MAXPLEN_ML_BIT)
+
+#define MAXPLEN_ML_BIT 0
+
+/*
+ * ROUTER CHARO register fields
+ */
+#define CHARO_OR (0x1 << CHARO_OR_BIT)
+#define CHARO_CC (0x7fffffff << CHARO_CC_BIT)
+
+#define CHARO_OR_BIT 31
+#define CHARO_CC_BIT 0
+
+/*
+ * ROUTER CHARI register fields
+ */
+#define CHARI_OR (0x1 << CHARI_OR_BIT)
+#define CHARI_CC (0x7fffffff << CHARI_CC_BIT)
+
+#define CHARI_OR_BIT 31
+#define CHARI_CC_BIT 0
+
+/*
+ * ROUTER PKTO register fields
+ */
+#define PKTO_OR (0x1 << PKTO_OR_BIT)
+#define PKTO_CC (0x7fffffff << PKTO_CC_BIT)
+
+#define PKTO_OR_BIT 31
+#define PKTO_CC_BIT 0
+
+/*
+ * ROUTER PKTI register fields
+ */
+#define PKTI_OR (0x1 << PKTI_OR_BIT)
+#define PKTI_CC (0x7fffffff << PKTI_CC_BIT)
+
+#define PKTI_OR_BIT 31
+#define PKTI_CC_BIT 0
+
+/*
+ * ROUTER CRED register fields
+ */
+#define CRED_OC (0x3f << CRED_OC_BIT)
+#define CRED_IC (0x3f << CRED_IC_BIT)
+
+#define CRED_OC_BIT 6
+#define CRED_IC_BIT 0
+
+/*
+ * ROUTER RTRCOMB register fields
+ */
+#define RTRCOMB_SR (0x1 << RTRCOMB_SR_BIT)
+#define RTRCOMB_EN (0x1 << RTRCOMB_EN_BIT)
+#define RTRCOMB_PR (0x1 << RTRCOMB_PR_BIT)
+#define RTRCOMB_HD (0x1 << RTRCOMB_HD_BIT)
+#define RTRCOMB_PE (0x7ffff << RTRCOMB_PE_BIT)
+#define RTRCOMB_PD (0x1 << RTRCOMB_PD_BIT)
+
+#define RTRCOMB_SR_BIT 31
+#define RTRCOMB_EN_BIT 30
+#define RTRCOMB_PR_BIT 29
+#define RTRCOMB_HD_BIT 28
+#define RTRCOMB_PE_BIT 1
+#define RTRCOMB_PD_BIT 0
 
 struct router_regs {
 	unsigned int resv1;		/* 0x000 */
 	unsigned int psetup[255];	/* 0x004 */
-	unsigned int resv2[32];		/* 0x400 */
-	unsigned int routes[224];	/* 0x480 */
+	unsigned int resv2;		/* 0x400 */
+	unsigned int routes[255];	/* 0x404 */
 	unsigned int pctrl[32];		/* 0x800 */
 	unsigned int psts[32];		/* 0x880 */
 	unsigned int treload[32];	/* 0x900 */
-	unsigned int resv3[32];		/* 0x980 */
+	unsigned int pctrl2[32];	/* 0x980 */
 	unsigned int cfgsts;		/* 0xA00 */
 	unsigned int timecode;		/* 0xA04 */
 	unsigned int ver;		/* 0xA08 */
 	unsigned int idiv;		/* 0xA0C */
 	unsigned int cfgwe;		/* 0xA10 */
 	unsigned int tprescaler;	/* 0xA14 */
-	unsigned int resv4[123];	/* 0xA18 */
-	unsigned int charo[31];		/* 0xC04 */
-	unsigned int resv5;		/* 0xC80 */
+	unsigned int imask;		/* 0xA18 */
+	unsigned int ipmask;		/* 0xA1C */
+	unsigned int pip;		/* 0xA20 */
+	unsigned int icodegen;		/* 0xA24 */
+	unsigned int isr0;		/* 0xA28 */
+	unsigned int isr1;		/* 0xA2C */
+	unsigned int isrtimer;		/* 0xA30 */
+	unsigned int aitimer;		/* 0xA34 */
+	unsigned int isrctimer;		/* 0xA38 */
+	unsigned int resv4;		/* 0xA3C */
+	unsigned int lrunsts;		/* 0xA40 */
+	unsigned int cap;		/* 0xA44 */
+	unsigned int resv5[111];	/* 0xA48 */
+	unsigned int charo[31];		/* 0xC04 */ /* TODO check GR718 */
+	unsigned int resv6;		/* 0xC80 */
 	unsigned int chari[31];		/* 0xC84 */
-	unsigned int resv6;		/* 0xD00 */
+	unsigned int resv7;		/* 0xD00 */
 	unsigned int pkto[31];		/* 0xD04 */
-	unsigned int resv7;		/* 0xD80 */
+	unsigned int resv8;		/* 0xD80 */
 	unsigned int pkti[31];		/* 0xD84 */
+	unsigned int maxplen[32];		/* 0xE00 */
+	unsigned int resv9;		/* 0xE80 */
+	unsigned int credcnt[31];	/* 0xE84 */
+	unsigned int resv10[64];	/* 0xF00 */
+	unsigned int resv11;		/* 0x1000 */
+	unsigned int rtcomb[255];	/* 0x1004 */
 };
 
 struct router_priv {
-	char devName[32];
 	struct drvmgr_dev *dev;
+
+	/* ROUTER control registers */
 	struct router_regs *regs;
+
+	#ifdef THREAD_SAFE
+	/* ROUTER semaphore */
+	rtems_id sem;
+	#endif
+
+	/* ROUTER driver register */
+	char devname[9];
+	int index;			/* Index in order it was probed */
+
 	int minor;
 	int open;
 	struct router_hw_info hwinfo;
 	int nports;
+	int irq_init;
+
+	SPIN_DECLARE(plock[32])
+
 };
 
-static rtems_device_driver router_initialize(
-        rtems_device_major_number  major,
-        rtems_device_minor_number  minor,
-        void                    * arg
-        );
-
-static rtems_device_driver router_open(
-        rtems_device_major_number major,
-        rtems_device_minor_number minor,
-        void                    * arg
-        );
-
-static rtems_device_driver router_close(
-        rtems_device_major_number major,
-        rtems_device_minor_number minor,
-        void                    * arg
-        );
-
-static rtems_device_driver router_control(
-        rtems_device_major_number major,
-        rtems_device_minor_number minor,
-        void                    * arg
-        );
-
-#define ROUTER_DRIVER_TABLE_ENTRY \
-  { router_initialize, \
-    router_open, \
-    router_close, \
-    NULL, \
-    NULL, \
-    router_control }
-
-static void router_hwinfo(
-	struct router_priv *priv,
-	struct router_hw_info *hwinfo);
-
-static rtems_driver_address_table router_driver = ROUTER_DRIVER_TABLE_ENTRY;
-static int router_driver_io_registered = 0;
-static rtems_device_major_number router_driver_io_major = 0;
-
-/******************* Driver manager interface ***********************/
+int router_count = 0;
+static struct router_priv *priv_tab[ROUTER_MAX];
 
 /* Driver prototypes */
-int router_register_io(rtems_device_major_number *m);
+
+STATIC int router_init(struct router_priv *priv);
+STATIC void router_hwinfo(struct router_priv *priv,
+			  struct router_hw_info *hwinfo);
+STATIC int router_acontrol_set(struct router_priv *priv,
+		struct router_route_acontrol *control);
+STATIC int router_acontrol_get(struct router_priv *priv,
+		struct router_route_acontrol *control);
+STATIC int router_portmap_set(struct router_priv *priv,
+		struct router_route_portmap *pmap);
+STATIC int router_portmap_get(struct router_priv *priv,
+		struct router_route_portmap *pmap);
+
+/* -IRQ handler */
+void router_isr(void *arg);
 
 int router_init2(struct drvmgr_dev *dev);
 
-struct drvmgr_drv_ops router_ops = 
+struct drvmgr_drv_ops router_ops =
 {
-	.init = {NULL,  router_init2, NULL, NULL},
+	.init = {NULL,	router_init2, NULL, NULL},
 	.remove = NULL,
 	.info = NULL
 };
 
-struct amba_dev_id router_ids[] = 
+struct amba_dev_id router_ids[] =
 {
 	{VENDOR_GAISLER, GAISLER_SPW_ROUTER},
 	{0, 0}		/* Mark end of table */
@@ -136,7 +626,158 @@ struct amba_drv_info router_drv_info =
 
 void router_register_drv (void)
 {
+	DBG("Registering SPW ROUTER driver\n");
 	drvmgr_drv_register(&router_drv_info.general);
+}
+
+STATIC void router_hwinfo(struct router_priv *priv,
+		struct router_hw_info *hwinfo)
+{
+	unsigned int tmp;
+
+	/* Find router info */
+	tmp = REG_READ(&priv->regs->cfgsts);
+	hwinfo->nports_spw   = (tmp & RTRCFG_SP) >> RTRCFG_SP_BIT;
+	hwinfo->nports_amba  = (tmp & RTRCFG_AP) >> RTRCFG_AP_BIT;
+	hwinfo->nports_fifo  = (tmp & RTRCFG_FP) >> RTRCFG_FP_BIT;
+	hwinfo->srouting     = (tmp & RTRCFG_SR) >> RTRCFG_SR_BIT;
+	hwinfo->pnp_enable   = (tmp & RTRCFG_PE) >> RTRCFG_PE_BIT;
+	hwinfo->timers_avail = (tmp & RTRCFG_TA) >> RTRCFG_TA_BIT;
+	hwinfo->pnp_avail    = (tmp & RTRCFG_PP) >> RTRCFG_PP_BIT;
+
+	tmp = REG_READ(&priv->regs->ver);
+	hwinfo->ver_major = (tmp & VER_MA) >> VER_MA_BIT;
+	hwinfo->ver_minor = (tmp & VER_MI) >> VER_MI_BIT;
+	hwinfo->ver_patch = (tmp & VER_PA) >> VER_PA_BIT;
+	hwinfo->iid       = (tmp & VER_ID) >> VER_ID_BIT;
+
+	/* Find router capabilities */
+	tmp = REG_READ(&priv->regs->cap);
+	hwinfo->amba_port_fifo_size = 4 << ((tmp & CAP_AF) >> CAP_AF_BIT);
+	hwinfo->spw_port_fifo_size = 16 << ((tmp & CAP_PF) >> CAP_PF_BIT);
+	hwinfo->rmap_maxdlen = 4 << ((tmp & CAP_RM) >> CAP_RM_BIT);
+	hwinfo->aux_async = (tmp & CAP_AS) >> CAP_AS_BIT;
+	hwinfo->aux_dist_int_support = (tmp & CAP_AX) >> CAP_AX_BIT;
+	hwinfo->dual_port_support = (tmp & CAP_ID) >> CAP_ID_BIT;
+	hwinfo->dist_int_support = (tmp & CAP_DP) >> CAP_DP_BIT;
+	hwinfo->spwd_support = (tmp & CAP_SD) >> CAP_SD_BIT;
+	hwinfo->pktcnt_support = (tmp & CAP_PC) >> CAP_PC_BIT;
+	hwinfo->charcnt_support = (tmp & CAP_CC) >> CAP_CC_BIT;
+}
+
+STATIC void router_hwinfo_print(struct router_hw_info *hwinfo)
+{
+	DBG(" -PORTS= SPW: %d, AMBA: %d, FIFO: %d\n", hwinfo->nports_spw,
+			hwinfo->nports_amba, hwinfo->nports_fifo);
+	DBG(" -Static routing: %s, Timers: %s\n",
+			(hwinfo->srouting?"Enabled":"Disabled"),
+			(hwinfo->timers_avail?"Available":"N/A"));
+	DBG(" -PnP: %s, %s\n",
+			(hwinfo->pnp_avail?"Available":"N/A"),
+			(hwinfo->pnp_enable?"Enabled":"Disabled"));
+	DBG(" -Version= Major: 0x%02x, Minor: 0x%02x, Patch: 0x%02x, ID: 0x%02x\n",
+			hwinfo->ver_major, hwinfo->ver_minor,
+			hwinfo->ver_patch, hwinfo->iid);
+	DBG(" -Aux: %s, AuxDistInt: %s, DistInt: %s, SPWD: %s, PKTCNT: %s, "
+		"CHARCNT: %s\n",
+			(hwinfo->aux_async?"Async":"Sync"),
+			(hwinfo->aux_dist_int_support?"Supported":"N/A"),
+			(hwinfo->dist_int_support?"Supported":"N/A"),
+			(hwinfo->spwd_support?"Supported":"N/A"),
+			(hwinfo->pktcnt_support?"Supported":"N/A"),
+			(hwinfo->charcnt_support?"Supported":"N/A"));
+}
+
+STATIC int router_acontrol_set(struct router_priv *priv,
+		struct router_route_acontrol *control)
+{
+	int i;
+	for (i=0; i<31; i++) {
+		REG_WRITE(&priv->regs->routes[i], control->control[i]);
+	}
+	for (i=0; i<224; i++) {
+		REG_WRITE(&priv->regs->routes[i+31], control->control_logical[i]);
+	}
+	return ROUTER_ERR_OK;
+}
+
+STATIC int router_acontrol_get(struct router_priv *priv,
+		struct router_route_acontrol *control)
+{
+	int i;
+	for (i=0; i<31; i++) {
+		control->control[i] = REG_READ(&priv->regs->routes[i]);
+	}
+	for (i=0; i<224; i++) {
+		control->control_logical[i] = REG_READ(&priv->regs->routes[i+31]);
+	}
+	return ROUTER_ERR_OK;
+}
+
+STATIC int router_portmap_set(struct router_priv *priv,
+		struct router_route_portmap *pmap)
+{
+	int i;
+	for (i=0; i<31; i++) {
+		REG_WRITE(&priv->regs->psetup[i], pmap->pmap[i]);
+	}
+	for (i=0; i<224; i++) {
+		REG_WRITE(&priv->regs->psetup[i+31], pmap->pmap_logical[i]);
+	}
+	return ROUTER_ERR_OK;
+}
+
+STATIC int router_portmap_get(struct router_priv *priv,
+		struct router_route_portmap *pmap)
+{
+	int i;
+	for (i=0; i<31; i++) {
+		pmap->pmap[i] = REG_READ(&priv->regs->psetup[i]);
+	}
+	for (i=0; i<224; i++) {
+		pmap->pmap_logical[i] = REG_READ(&priv->regs->psetup[i+31]);
+	}
+	return ROUTER_ERR_OK;
+}
+
+STATIC int router_init(struct router_priv *priv)
+{
+	#ifdef THREAD_SAFE
+	int i;
+
+	/* Device Semaphore created with count = 1 */
+	if (rtems_semaphore_create(
+			rtems_build_name('S', 'R', 'O', '0' + priv->index), 1,
+			RTEMS_FIFO | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
+			RTEMS_NO_INHERIT_PRIORITY | RTEMS_LOCAL | \
+			RTEMS_NO_PRIORITY_CEILING, 0, &priv->sem) != RTEMS_SUCCESSFUL) {
+		return DRVMGR_FAIL;
+	}
+	#endif
+
+	/* Find router info */
+	router_hwinfo(priv, &priv->hwinfo);
+
+	priv->open = 0;
+	/* Number of ports has to consider the configuration port (1 + SPW + AMBA + FIFO) */
+	priv->nports = 1 + priv->hwinfo.nports_spw + priv->hwinfo.nports_amba +
+		priv->hwinfo.nports_fifo;
+	if ((priv->nports < 2) || (priv->nports > 32)) {
+		return DRVMGR_EIO;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Init port spin-lock memory structures */
+	for (i=0; i<priv->nports; i++) {
+		SPIN_INIT(&priv->plock[i],"portlock");
+	}
+	#endif
+
+	/* DEBUG print */
+	DBG("SPW ROUTER[%d] with following capabilities:\n", priv->index);
+	router_hwinfo_print(&priv->hwinfo);
+
+	return DRVMGR_OK;
 }
 
 int router_init2(struct drvmgr_dev *dev)
@@ -144,419 +785,1372 @@ int router_init2(struct drvmgr_dev *dev)
 	struct router_priv *priv = dev->priv;
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
-	char prefix[32];
-	rtems_status_code status;
+	unsigned int tmp;
+	int i;
+	int status;
 
-	if ( priv == NULL )
-		return DRVMGR_NOMEM;
-	priv->dev = dev;
+	DBG("SPW ROUTER[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
-	/* Do initialization */
-	if ( router_driver_io_registered == 0) {
-		/* Register the I/O driver only once for all cores */
-		if ( router_register_io(&router_driver_io_major) ) {
-			/* Failed to register I/O driver */
-			return DRVMGR_FAIL;
-		}
-
-		router_driver_io_registered = 1;
+	if (router_count >= ROUTER_MAX) {
+		return DRVMGR_ENORES;
 	}
+
+	if (priv == NULL) {
+		return DRVMGR_NOMEM;
+	}
+	priv->dev = dev;
 
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)priv->dev->businfo;
-	if ( ambadev == NULL ) {
+	if (ambadev == NULL) {
 		return DRVMGR_FAIL;
 	}
 	pnpinfo = &ambadev->info;
 	priv->regs = (struct router_regs *)pnpinfo->ahb_slv->start[0];
 	priv->minor = dev->minor_drv;
 
-	/* Register character device in registered region */
-	router_hwinfo(priv, &priv->hwinfo);
-	priv->open = 0;
-	priv->nports = priv->hwinfo.nports_spw + priv->hwinfo.nports_amba +
-			priv->hwinfo.nports_fifo;
-	if ( (priv->nports < 2) || (priv->nports > 32) )
-		return DRVMGR_FAIL;
-
-	/* Get Filesystem name prefix */
-	prefix[0] = '\0';
-	if ( drvmgr_get_dev_prefix(dev, prefix) ) {
-		/* Failed to get prefix, make sure of a unique FS name
-		 * by using the driver minor.
-		 */
-		sprintf(priv->devName, "/dev/router%d", dev->minor_drv);
-	} else {
-		/* Got special prefix, this means we have a bus prefix
-		 * And we should use our "bus minor"
-		 */
-		sprintf(priv->devName, "/dev/%srouter%d", prefix, dev->minor_bus);
+	/* Initilize driver struct */
+	status = router_init(priv);
+	if (status != DRVMGR_OK) {
+		return status;
 	}
 
-	/* Register Device */
-	status = rtems_io_register_name(priv->devName, router_driver_io_major, dev->minor_drv);
-	if (status != RTEMS_SUCCESSFUL) {
-		return DRVMGR_FAIL;
+	/* Startup Action:
+	 *  - Clear interrupts
+	 *  - Mask interrupts
+	 */
+
+	/* Mask interrupts in ROTUER */
+	REG_WRITE(&priv->regs->imask,0);
+	REG_WRITE(&priv->regs->ipmask,0);
+
+	/* Clear interrupts in ROTUER */
+	REG_WRITE(&priv->regs->pip,0xffffffff);
+
+	/* Clear errors in router and ports */
+	tmp = REG_READ(&priv->regs->cfgsts);
+	REG_WRITE(&priv->regs->cfgsts, tmp | RTRCFG_WCLEAR);
+	tmp = REG_READ(&priv->regs->psts[0]);
+	REG_WRITE(&priv->regs->psts[0], tmp & PSTSCFG_WCLEAR);
+	for (i=1; i<priv->nports; i++) {
+		tmp = REG_READ(&priv->regs->psts[i]);
+		REG_WRITE(&priv->regs->psts[i], tmp & PSTS_WCLEAR);
 	}
+
+	/* Register driver internally */
+	priv->index = router_count;
+	priv_tab[priv->index] = priv;
+	router_count++;
+
+	/* Device name */
+	sprintf(priv->devname, "router%d", priv->index);
 
 	return DRVMGR_OK;
 }
 
-int router_register_io(rtems_device_major_number *m)
+void *router_open(unsigned int dev_no)
 {
-	rtems_status_code r;
+	struct router_priv *priv, *ret;
 
-	if ((r = rtems_io_register_driver(0, &router_driver, m)) == RTEMS_SUCCESSFUL) {
-		ROUTER_DBG("ROUTER driver successfully registered, major: %d\n", *m);
-	} else {
-		switch(r) {
-		case RTEMS_TOO_MANY:
-			printk("ROUTER rtems_io_register_driver failed: RTEMS_TOO_MANY\n");
-			return -1;
-		case RTEMS_INVALID_NUMBER:  
-			printk("ROUTER rtems_io_register_driver failed: RTEMS_INVALID_NUMBER\n");
-			return -1;
-		case RTEMS_RESOURCE_IN_USE:
-			printk("ROUTER rtems_io_register_driver failed: RTEMS_RESOURCE_IN_USE\n");
-			return -1;
-		default:
-			printk("ROUTER rtems_io_register_driver failed\n");
-			return -1;
-		}
+	if (dev_no >= router_count) {
+		DBG("ROUTER Wrong index %u\n", dev_no);
+		return NULL;
 	}
+
+	priv = priv_tab[dev_no];
+
+	if (priv == NULL) {
+		DBG("ROUTER Device not initialized\n");
+		return NULL;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return NULL;
+	}
+	#endif
+
+	if (priv->open) {
+		DBG("ROUTER Device already opened\n");
+		ret = NULL;
+	} else {
+		/* Take the device */
+		priv->open = 1;
+		ret = priv;
+	}
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ret;
+}
+
+int router_close(void *d)
+{
+	struct router_priv *priv = d;
+	int ret;
+
+	if (priv == NULL) {
+		DBG("ROUTER Device not initialized\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	if (priv->open == 0) {
+		DBG("ROUTER Device already closed\n");
+		ret = ROUTER_ERR_ERROR;
+	} else {
+		/* Mark not open */
+		priv->open = 0;
+		ret = ROUTER_ERR_OK;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ret;
+}
+
+STATIC int router_check_open(void *d)
+{
+	struct router_priv *priv = d;
+
+	if (priv == NULL) {
+		DBG("ROUTER Device not initialized\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	if (priv->open == 0) {
+		DBG("ROUTER Device closed\n");
+		return ROUTER_ERR_ERROR;
+	}
+
 	return 0;
 }
 
-static rtems_device_driver router_initialize(
-	rtems_device_major_number major,
-	rtems_device_minor_number minor,
-	void *arg
-	)
+STATIC int router_check_port(void *d, int port)
 {
-	return RTEMS_SUCCESSFUL;
-}
+	int ret = router_check_open(d);
 
-static rtems_device_driver router_open(
-	rtems_device_major_number major,
-	rtems_device_minor_number minor,
-	void                    * arg
-	)
-{
-	struct router_priv *priv;
-	struct drvmgr_dev *dev;
-
-	if ( drvmgr_get_dev(&router_drv_info.general, minor, &dev) ) {
-		ROUTER_DBG("Wrong minor %d\n", minor);
-		return RTEMS_INVALID_NAME;
-	}
-	priv = (struct router_priv *)dev->priv;
-
-	if ( !priv || priv->open ) {
-		return RTEMS_RESOURCE_IN_USE;
+	if (ret == 0) {
+		struct router_priv *priv = d;
+		if((port < 0) || (port >= priv->nports)) {
+			DBG("ROUTER wrong port\n");
+			ret = ROUTER_ERR_EINVAL;
+		}
 	}
 
-	priv->open = 1;
-
-	return RTEMS_SUCCESSFUL;
+	return ret;
 }
 
-static rtems_device_driver router_close(
-        rtems_device_major_number major,
-        rtems_device_minor_number minor,
-        void                    * arg
-        )
+STATIC int router_check_distint_support(void *d)
 {
-	struct router_priv *priv;
-	struct drvmgr_dev *dev;
+	int ret = router_check_open(d);
 
-	if ( drvmgr_get_dev(&router_drv_info.general, minor, &dev) ) {
-		ROUTER_DBG("Wrong minor %d\n", minor);
-		return RTEMS_INVALID_NAME;
+	if (ret == 0) {
+		struct router_priv *priv = d;
+		if (priv->hwinfo.dist_int_support == 0) {
+			DBG("ROUTER Dist interrupts not supported\n");
+			ret = ROUTER_ERR_IMPLEMENTED;
+		}
 	}
-	priv = (struct router_priv *)dev->priv;
 
-	priv->open = 0;
-
-	return RTEMS_SUCCESSFUL;
+	return ret;
 }
 
-static void router_hwinfo(
-	struct router_priv *priv,
-	struct router_hw_info *hwinfo)
+int router_hwinfo_get(void *d, struct router_hw_info *hwinfo)
 {
-	unsigned int tmp;
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
 
-	tmp = REG_READ(&priv->regs->cfgsts);
-	hwinfo->nports_spw   = (tmp >> 27) & 0x1f;
-	hwinfo->nports_amba  = (tmp >> 22) & 0x1f;
-	hwinfo->nports_fifo  = (tmp >> 17) & 0x1f;
-	hwinfo->timers_avail = (tmp >>  1) & 0x1;
-	hwinfo->pnp_avail    = (tmp >>  0) & 0x1;
+	if (error)
+		return error;
 
-	tmp = REG_READ(&priv->regs->ver);
-	hwinfo->ver_major   = (tmp >> 24) & 0xff;
-	hwinfo->ver_minor   = (tmp >> 16) & 0xff;
-	hwinfo->ver_patch   = (tmp >>  8) & 0xff;
-	hwinfo->iid         = (tmp >>  0) & 0xff;
-}
-
-static int router_config_set(
-	struct router_priv *priv,
-	struct router_config *cfg)
-{
-	int i;
-
-	if ( (cfg->flags & (ROUTER_FLG_TPRES|ROUTER_FLG_TRLD)) &&
-	     !priv->hwinfo.timers_avail ) {
-		return RTEMS_NOT_IMPLEMENTED;
+	if (hwinfo == NULL) {
+		DBG("ROUTER Wrong pointer\n");
+		return ROUTER_ERR_EINVAL;
 	}
+
+	/* Get hwinfo */
+	router_hwinfo(priv, hwinfo);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_print(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	/* DEBUG print */
+	DBG("Number of routers: %d\n", router_count);
+	DBG("SPW ROUTER[%d] with following capabilities:\n", priv->index);
+	router_hwinfo_print(&priv->hwinfo);
+
+	return ROUTER_ERR_OK;
+}
+
+/* Configure Router. Leave field NULL in order to skip configuration
+ */
+int router_config_set(void *d, struct router_config *cfg)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (cfg == NULL) {
+		DBG("ROUTER CFG wrong\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	if ((cfg->flags & (ROUTER_FLG_TPRES|ROUTER_FLG_TRLD)) &&
+			!priv->hwinfo.timers_avail) {
+		return ROUTER_ERR_IMPLEMENTED;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
 
 	/* Write only configuration bits in Config register */
-	if ( cfg->flags & ROUTER_FLG_CFG ) {
-		REG_WRITE(&priv->regs->cfgsts, cfg->config & ~0x4);
+	if (cfg->flags & ROUTER_FLG_CFG) {
+		REG_WRITE(&priv->regs->cfgsts, cfg->config & ~(RTRCFG_WCLEAR));
 	}
 
 	/* Write Instance ID to Version Register */
-	if ( cfg->flags & ROUTER_FLG_IID ) {
-		REG_WRITE(&priv->regs->ver, cfg->iid);
+	if (cfg->flags & ROUTER_FLG_IID) {
+		REG_WRITE(&priv->regs->ver, (cfg->iid << VER_ID_BIT) & VER_ID);
 	}
 
 	/* Write startup-clock-divisor Register */
-	if ( cfg->flags & ROUTER_FLG_IDIV ) {
-		REG_WRITE(&priv->regs->idiv, cfg->idiv);
+	if (cfg->flags & ROUTER_FLG_IDIV) {
+		REG_WRITE(&priv->regs->idiv, (cfg->idiv << IDIV_ID_BIT) & IDIV_ID);
 	}
 
 	/* Write Timer Prescaler Register */
-	if ( cfg->flags & ROUTER_FLG_TPRES ) {
-		REG_WRITE(&priv->regs->tprescaler, cfg->timer_prescaler);
+	if (cfg->flags & ROUTER_FLG_TPRES) {
+		REG_WRITE(&priv->regs->tprescaler,
+				(cfg->timer_prescaler << PRESCALER_RL_BIT) & PRESCALER_RL);
 	}
 
-	/* Write Timer Reload Register */
-	if ( cfg->flags & ROUTER_FLG_TRLD ) {
-		for (i=0; i<=priv->nports; i++)
-			REG_WRITE(&priv->regs->treload[i], cfg->timer_reload[i]);
-	}
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
 
-	return 0;
+	return ROUTER_ERR_OK;
 }
 
-static int router_config_read(
-	struct router_priv *priv,
-	struct router_config *cfg)
+int router_config_get(void *d, struct router_config *cfg)
 {
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (cfg == NULL) {
+		DBG("ROUTER CFG wrong\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	cfg->config = REG_READ(&priv->regs->cfgsts) &
+		~(RTRCFG_SP|RTRCFG_AP|RTRCFG_FP|RTRCFG_SR|RTRCFG_PE|RTRCFG_ME|
+		  RTRCFG_TA|RTRCFG_PP);
+	cfg->iid = (REG_READ(&priv->regs->ver) & VER_ID) >> VER_ID_BIT;
+	cfg->idiv = (REG_READ(&priv->regs->idiv) & IDIV_ID) >> IDIV_ID_BIT;
+	cfg->timer_prescaler =
+		(REG_READ(&priv->regs->tprescaler) & PRESCALER_RL) >> PRESCALER_RL_BIT;
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+/* Configure Router routing table.
+ * Leave field NULL in order to skip configuration
+ */
+int router_routing_table_set(void *d, struct router_routing_table *cfg)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (cfg == NULL) {
+		DBG("ROUTER CFG wrong\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Write Address control */
+	if (cfg->flags & ROUTER_ROUTE_FLG_CTRL) {
+		router_acontrol_set(priv,&cfg->acontrol);
+	}
+
+	/* Write Port map */
+	if (cfg->flags & ROUTER_ROUTE_FLG_MAP) {
+		router_portmap_set(priv,&cfg->portmap);
+	}
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_routing_table_get(void *d, struct router_routing_table *cfg)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (cfg == NULL) {
+		DBG("ROUTER CFG wrong\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Read Address control */
+	router_acontrol_get(priv,&cfg->acontrol);
+
+	/* Read Port map */
+	router_portmap_get(priv,&cfg->portmap);
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_route_set(void *d, struct router_route *route)
+{
+	struct router_priv *priv = d;
 	int i;
+	unsigned int mask;
+	int error = router_check_open(d);
 
-	cfg->config = REG_READ(&priv->regs->cfgsts) & ~0xffff0007;
-	cfg->iid = REG_READ(&priv->regs->ver) & 0xff;
-	cfg->idiv = REG_READ(&priv->regs->idiv) & 0xff;
-	cfg->timer_prescaler = REG_READ(&priv->regs->tprescaler);
-	for (i=0; i<=priv->nports; i++)
-		cfg->timer_reload[i] = REG_READ(&priv->regs->treload[i]);
+	if (error)
+		return error;
 
-	return 0;
-}
-
-static int router_routes_set(
-	struct router_priv *priv,
-	struct router_routes *routes)
-{
-	int i;
-	for (i=0; i<224; i++)
-		REG_WRITE(&priv->regs->routes[i], routes->route[i]);
-	return 0;
-}
-
-static int router_routes_read(
-	struct router_priv *priv,
-	struct router_routes *routes)
-{
-	int i;
-	for (i=0; i<224; i++)
-		routes->route[i] = REG_READ(&priv->regs->routes[i]);
-	return 0;
-}
-
-static int router_ps_set(struct router_priv *priv, struct router_ps *ps)
-{
-	int i;
-	unsigned int *p = &ps->ps[0];
-	for (i=0; i<255; i++,p++) 
-		REG_WRITE(&priv->regs->psetup[i], *p);
-	return 0;
-}
-
-static int router_ps_read(struct router_priv *priv, struct router_ps *ps)
-{
-	int i;
-	unsigned int *p = &ps->ps[0];
-	for (i=0; i<255; i++,p++) 
-		REG_WRITE(&priv->regs->psetup[i], *p);
-	return 0;
-}
-
-static int router_we_set(struct router_priv *priv, int we)
-{
-	REG_WRITE(&priv->regs->cfgwe, we & 0x1);
-	return 0;
-}
-
-static int router_port_ctrl(struct router_priv *priv, struct router_port *port)
-{
-	unsigned int ctrl, sts;
-
-	if ( port->port > priv->nports )
-		return RTEMS_INVALID_NAME;
-
-	ctrl = port->ctrl;
-	if ( port->flag & ROUTER_PORTFLG_GET_CTRL ) {
-		ctrl = REG_READ(&priv->regs->pctrl[port->port]);
-	}
-	sts = port->sts;
-	if ( port->flag & ROUTER_PORTFLG_GET_STS ) {
-		sts = REG_READ(&priv->regs->psts[port->port]);
+	if (route == NULL) {
+		DBG("ROUTER route wrong\n");
+		return ROUTER_ERR_EINVAL;
 	}
 
-	if ( port->flag & ROUTER_PORTFLG_SET_CTRL ) {
-		REG_WRITE(&priv->regs->pctrl[port->port], port->ctrl);
-	}
-	if ( port->flag & ROUTER_PORTFLG_SET_STS ) {
-		REG_WRITE(&priv->regs->psts[port->port], port->sts);
+	if (route->from_address < 32) {
+		/* Physical address */
+		if ((route->from_address == 0) ||
+				(route->from_address >= priv->nports)) {
+			DBG("ROUTER wrong physical address\n");
+			return ROUTER_ERR_TOOMANY;
+		}
 	}
 
-	port->ctrl = ctrl;
-	port->sts = sts;
-	return 0;
+	/* Compute port map */
+	mask=0;
+	for (i=0; i < route->count; i++) {
+		if ((route->to_port[i] == 0) || (route->to_port[i] >= priv->nports)) {
+			DBG("ROUTER route wrong destiny port\n");
+			return ROUTER_ERR_EINVAL;
+		}
+		mask |= (0x1 << route->to_port[i]);
+	}
+	if (route->options & ROUTER_ROUTE_PACKETDISTRIBUTION_ENABLE) {
+		mask |= RTPMAP_PD;
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Write port map */
+	REG_WRITE(&priv->regs->psetup[route->from_address-1], mask);
+
+	/* Write Address control */
+	REG_WRITE(&priv->regs->routes[route->from_address-1],
+			route->options & (0xf));
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
 }
 
-static int router_cfgsts_set(struct router_priv *priv, unsigned int cfgsts)
+int router_route_get(void *d, struct router_route *route)
 {
+	struct router_priv *priv = d;
+	int i,count;
+	unsigned int mask;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (route == NULL) {
+		DBG("ROUTER route wrong\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	if (route->from_address < 32) {
+		/* Physical address */
+		if ((route->from_address == 0) ||
+				(route->from_address >= priv->nports)) {
+			DBG("ROUTER wrong physical address\n");
+			return ROUTER_ERR_TOOMANY;
+		}
+	}
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Get Address control */
+	route->options =
+		REG_READ(&priv->regs->routes[route->from_address-1]) & (0xf);
+
+	/* Read port map */
+	mask=REG_READ(&priv->regs->psetup[route->from_address-1]);
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	if (mask & RTPMAP_PD) {
+		route->options |= ROUTER_ROUTE_PACKETDISTRIBUTION_ENABLE;
+	}
+
+	/*DBG("ROUTE from address 0x%02x read, PMAP: 0x%08x, CTRL: 0x%08x\n",
+	 *		(unsigned int) route->from_address, mask,
+	 *		(unsigned int) route->options);*/
+
+	i=0;
+	count=0;
+	mask &= (RTPMAP_PE);
+	while (mask != 0) {
+		if (mask & 0x1) {
+			route->to_port[count] = i;
+			count++;
+		}
+		mask >>= 1;
+		i++;
+	}
+	route->count=count;
+
+	return ROUTER_ERR_OK;
+}
+
+int router_write_enable(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->cfgwe, 0x1);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_write_disable(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->cfgwe, 0x0);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_ioc(void *d, int port, struct router_port *cfg)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl, ctrl2, sts, timer, pktl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (cfg == NULL) {
+		DBG("ROUTER Wrong cfg\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = cfg->ctrl;
+	if (cfg->flag & ROUTER_PORT_FLG_GET_CTRL) {
+		ctrl = REG_READ(&priv->regs->pctrl[port]);
+	}
+	ctrl2 = cfg->ctrl;
+	if (cfg->flag & ROUTER_PORT_FLG_GET_CTRL2) {
+		ctrl2 = REG_READ(&priv->regs->pctrl2[port]);
+	}
+	sts = cfg->sts;
+	if (cfg->flag & ROUTER_PORT_FLG_GET_STS) {
+		sts = REG_READ(&priv->regs->psts[port]);
+	}
+	timer = cfg->timer_reload;
+	if (cfg->flag & ROUTER_PORT_FLG_GET_TIMER) {
+		REG_READ(&priv->regs->treload[port]);
+	}
+	pktl = cfg->packet_length;
+	if (cfg->flag & ROUTER_PORT_FLG_GET_PKTLEN) {
+		REG_READ(&priv->regs->maxplen[port]);
+	}
+
+	if (cfg->flag & ROUTER_PORT_FLG_SET_CTRL) {
+		REG_WRITE(&priv->regs->pctrl[port], cfg->ctrl);
+	}
+	if (cfg->flag & ROUTER_PORT_FLG_SET_CTRL2) {
+		REG_WRITE(&priv->regs->pctrl2[port], cfg->ctrl2);
+	}
+	if (cfg->flag & ROUTER_PORT_FLG_SET_STS) {
+		REG_WRITE(&priv->regs->psts[port], cfg->sts);
+	}
+	if (cfg->flag & ROUTER_PORT_FLG_SET_TIMER) {
+		REG_WRITE(&priv->regs->treload[port], cfg->timer_reload & PTIMER_RL);
+	}
+	if (cfg->flag & ROUTER_PORT_FLG_SET_PKTLEN) {
+		REG_WRITE(&priv->regs->maxplen[port], cfg->packet_length & MAXPLEN_ML);
+	}
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	cfg->ctrl = ctrl;
+	cfg->ctrl2 = ctrl2;
+	cfg->sts = sts;
+	cfg->timer_reload = timer;
+	cfg->packet_length = pktl;
+
+	return ROUTER_ERR_OK;
+}
+
+/* Read Port Control register */
+int router_port_ctrl_get(void *d, int port, uint32_t *ctrl)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (ctrl == NULL) {
+		DBG("ROUTER Wrong ctrl\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*ctrl = REG_READ(&priv->regs->pctrl[port]);
+	return ROUTER_ERR_OK;
+}
+
+/* Read Port Status register and clear errors if there are */
+int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk) /* review clrmsks */
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (sts == NULL) {
+		DBG("ROUTER Wrong sts\n");
+		return ROUTER_ERR_EINVAL;
+	}
+	*sts = REG_READ(&priv->regs->psts[port]);
+	if (port == 0) {
+		REG_WRITE(&priv->regs->psts[port], (*sts) & PSTSCFG_WCLEAR);
+	}else{
+		REG_WRITE(&priv->regs->psts[port], (*sts) & PSTS_WCLEAR);
+	}
+	return ROUTER_ERR_OK;
+}
+
+/* Read Port Control2 register */
+int router_port_ctrl2_get(void *d, int port, uint32_t *ctrl2)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (ctrl2 == NULL) {
+		DBG("ROUTER Wrong ctrl2\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*ctrl2 = REG_READ(&priv->regs->pctrl2[port]);
+	return ROUTER_ERR_OK;
+}
+
+/* Write Port Control Register */
+int router_port_ctrl_set(void *d, int port, uint32_t ctrl)
+{
+	struct router_priv *priv = d;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	REG_WRITE(&priv->regs->pctrl[port],ctrl); /* this is not SMP safe? */
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+/* Write Port Control2 Register */
+int router_port_ctrl2_set(void *d, int port, uint32_t ctrl2)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->pctrl2[port],ctrl2);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_treload_set(void *d, int port, uint32_t reload)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->treload[port], reload & PTIMER_RL);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_treload_get(void *d, int port, uint32_t *reload)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (reload == NULL) {
+		DBG("ROUTER Wrong reload pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*reload = REG_READ(&priv->regs->treload[port]) & PTIMER_RL;
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_maxplen_set(void *d, int port, uint32_t length)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->maxplen[port], length & MAXPLEN_ML);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_maxplen_get(void *d, int port, uint32_t *length)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (length == NULL) {
+		DBG("ROUTER Wrong length pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*length = REG_READ(&priv->regs->maxplen[port]);
+
+	return ROUTER_ERR_OK;
+}
+
+/* Get Port Link Status */
+int router_port_link_status(void *d, int port)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	return ((REG_READ(&priv->regs->psts[port]) & PSTS_LS) >> PSTS_LS_BIT);
+}
+
+int router_port_disable(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], (ctrl | PCTRL_DI));
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_enable(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], (ctrl & ~(PCTRL_DI)));
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_link_stop(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], ((ctrl & ~(PCTRL_LS) )| (PCTRL_LD)));
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_link_start(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], ((ctrl & ~(PCTRL_LD) )| (PCTRL_LS)));
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_link_receive_spill(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], (ctrl| (PCTRL_RS)));
+
+	/* Wait until the spill is done */
+	while(REG_READ(&priv->regs->pctrl[port]) & PCTRL_RS) {};
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_link_transmit_reset(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int ctrl;
+	SPIN_IRQFLAGS(irqflags);
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	ctrl = REG_READ(&priv->regs->pctrl[port]);
+	REG_WRITE(&priv->regs->pctrl[port], (ctrl| (PCTRL_TF)));
+
+	/* Wait until the spill is done */
+	while(REG_READ(&priv->regs->pctrl[port]) & PCTRL_TF) {};
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_cred_get(void *d, int port, uint32_t *cred)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	if (cred == NULL) {
+		DBG("ROUTER Wrong cred pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*cred = REG_READ(&priv->regs->credcnt[port]);
+	return ROUTER_ERR_OK;
+}
+
+int router_instance_set(void *d, uint8_t instance)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->ver, (instance << VER_ID_BIT) & VER_ID);
+	return ROUTER_ERR_OK;
+}
+
+int router_idiv_set(void *d, uint8_t idiv)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->idiv, (idiv << IDIV_ID_BIT) & IDIV_ID);
+	return ROUTER_ERR_OK;
+}
+
+int router_tpresc_set(void *d, uint32_t prescaler)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->tprescaler,
+			(prescaler << PRESCALER_RL_BIT) & PRESCALER_RL);
+	return ROUTER_ERR_OK;
+}
+
+int router_instance_get(void *d, uint8_t *instance)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (instance == NULL) {
+		DBG("ROUTER Wrong instance pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*instance = REG_READ(&priv->regs->ver);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_idiv_get(void *d, uint8_t *idiv)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (idiv == NULL) {
+		DBG("ROUTER Wrong idiv pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*idiv = REG_READ(&priv->regs->idiv);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_tpresc_get(void *d, uint32_t *prescaler)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (prescaler == NULL) {
+		DBG("ROUTER Wrong prescaler pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
+	*prescaler = REG_READ(&priv->regs->tprescaler);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_cfgsts_set(void *d, uint32_t cfgsts)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
 	REG_WRITE(&priv->regs->cfgsts, cfgsts);
-	return 0;
+
+	return ROUTER_ERR_OK;
 }
 
-static int router_cfgsts_read(struct router_priv *priv, unsigned int *cfgsts)
+int router_cfgsts_get(void *d, uint32_t *cfgsts)
 {
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	if (cfgsts == NULL) {
+		DBG("ROUTER Wrong cfgsts pointer\n");
+		return ROUTER_ERR_EINVAL;
+	}
+
 	*cfgsts = REG_READ(&priv->regs->cfgsts);
-	return 0;
+
+	return ROUTER_ERR_OK;
 }
 
-static int router_tc_read(struct router_priv *priv, unsigned int *tc)
+int router_tc_enable(void *d)
 {
-	*tc = REG_READ(&priv->regs->timecode);
-	return 0;
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->timecode, TC_EN);
+
+	return ROUTER_ERR_OK;
 }
 
-static rtems_device_driver router_control(
-	rtems_device_major_number major,
-	rtems_device_minor_number minor,
-	void                    * arg
-	)
+int router_tc_disable(void *d)
 {
-	struct router_priv *priv;
-	struct drvmgr_dev *dev;
-	rtems_libio_ioctl_args_t *ioarg = (rtems_libio_ioctl_args_t *) arg;
-	void *argp = (void *)ioarg->buffer;
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
 
-	if ( drvmgr_get_dev(&router_drv_info.general, minor, &dev) ) {
-		ROUTER_DBG("Wrong minor %d\n", minor);
-		return RTEMS_INVALID_NAME;
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->timecode, 0);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_tc_reset(void *d)
+{
+	struct router_priv *priv = d;
+	unsigned int tc;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	tc = REG_READ(&priv->regs->timecode);
+	REG_WRITE(&priv->regs->timecode, tc | TC_RE);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_tc_get(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	return (REG_READ(&priv->regs->timecode) & (TC_CF | TC_TC)) >> TC_TC_BIT;
+}
+
+int router_interrupt_unmask(void *d, int options)
+{
+	struct router_priv *priv = d;
+	unsigned int mask;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
 	}
-	priv = (struct router_priv *)dev->priv;
+	#endif
 
-	ioarg->ioctl_return = 0;
-	switch (ioarg->command) {
+	/* Unmask interrupts in ROTUER */
+	/* Get previous mask */
+	mask = REG_READ(&priv->regs->imask);
 
-	/* Get Hardware support/information available */
-	case GRSPWR_IOCTL_HWINFO:
-	{
-		struct router_hw_info *hwinfo = argp;
-		router_hwinfo(priv, hwinfo);
-		break;
+	/* Clear previous interrupts*/
+	REG_WRITE(&priv->regs->pip, 0xffffffff);
+
+	/* Set new mask */
+	REG_WRITE(&priv->regs->imask, mask | options);
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_interrupt_mask(void *d, int options)
+{
+	struct router_priv *priv = d;
+	unsigned int mask;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Mask interrupts in ROTUER */
+	/* Get previous mask */
+	mask = REG_READ(&priv->regs->imask);
+
+	/* Clear previous interrupts*/
+	REG_WRITE(&priv->regs->pip, 0xffffffff);
+
+	/* Set new mask */
+	REG_WRITE(&priv->regs->imask, mask & ~(options));
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_interrupt_unmask(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int mask;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Unmask interrupts in ROTUER */
+	/* Get previous mask */
+	mask = REG_READ(&priv->regs->ipmask);
+
+	/* Clear previous interrupts*/
+	REG_WRITE(&priv->regs->pip, (0x1 << port));
+
+	/* Set new mask */
+	REG_WRITE(&priv->regs->ipmask, mask | (0x1 << port));
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_interrupt_mask(void *d, int port)
+{
+	struct router_priv *priv = d;
+	unsigned int mask;
+	int error = router_check_port(d, port);
+
+	if (error)
+		return error;
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	/* Mask interrupts in ROTUER */
+	/* Get previous mask */
+	mask = REG_READ(&priv->regs->ipmask);
+
+	/* Clear previous interrupts*/
+	REG_WRITE(&priv->regs->pip, (0x1 << port));
+
+	/* Set new mask */
+	REG_WRITE(&priv->regs->ipmask, mask & ~(0x1 << port));
+
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_reset(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_open(d);
+
+	if (error)
+		return error;
+
+	/* Reset router */
+	REG_WRITE(&priv->regs->cfgsts, RTRCFG_RE);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_icodegen_enable(void *d, uint8_t intn, uint32_t aitimer,
+		int options)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	#ifdef THREAD_SAFE
+	/* Take device lock - Wait until we get semaphore */
+	if (rtems_semaphore_obtain(priv->sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT)
+			!= RTEMS_SUCCESSFUL) {
+		DBG("ROUTER Sempahore failed\n");
+		return ROUTER_ERR_ERROR;
+	}
+	#endif
+
+	REG_WRITE(&priv->regs->icodegen, (options & ~(ICODEGEN_IN)) |
+			ICODEGEN_EN | (intn & ICODEGEN_IN));
+
+	if (options & ICODEGEN_TE) {
+		REG_WRITE(&priv->regs->aitimer, (aitimer & AITIMER_RL));
 	}
 
-	/* Set Router Configuration */
-	case GRSPWR_IOCTL_CFG_SET:
-	{
-		struct router_config *cfg = argp;
-		return router_config_set(priv, cfg);
+	#ifdef THREAD_SAFE
+	/* Unlock dev */
+	rtems_semaphore_release(priv->sem);
+	#endif
+
+	return ROUTER_ERR_OK;
+}
+
+int router_icodegen_disable(void *d)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	REG_WRITE(&priv->regs->icodegen, ICODEGEN_TE);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_isrctimer_set(void *d, uint32_t reloadvalue)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	/* Set ISRC TIMER */
+	REG_WRITE(&priv->regs->isrctimer, (reloadvalue & (ISRCTIMER_RL)));
+
+	return ROUTER_ERR_OK;
+}
+
+int router_isrtimer_set(void *d, uint32_t reloadvalue)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	/* Set ISR TIMER */
+	REG_WRITE(&priv->regs->isrtimer, (reloadvalue & (ISRTIMER_RL)));
+
+	return ROUTER_ERR_OK;
+}
+
+int router_isrctimer_get(void *d, uint32_t *reloadvalue)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	if (reloadvalue == NULL) {
+		DBG("ROUTER Wrong reloadvalue pointer\n");
+		return ROUTER_ERR_EINVAL;
 	}
 
-	/* Read Router Configuration */
-	case GRSPWR_IOCTL_CFG_GET:
-	{
-		struct router_config *cfg = argp;
-		router_config_read(priv, cfg);
-		break;
+	/* Set ISRC TIMER */
+	*reloadvalue = REG_READ(&priv->regs->isrctimer) & (ISRCTIMER_RL);
+
+	return ROUTER_ERR_OK;
+}
+
+int router_isrtimer_get(void *d, uint32_t *reloadvalue)
+{
+	struct router_priv *priv = d;
+	int error = router_check_distint_support(d);
+
+	if (error)
+		return error;
+
+	if (reloadvalue == NULL) {
+		DBG("ROUTER Wrong reloadvalue pointer\n");
+		return ROUTER_ERR_EINVAL;
 	}
 
-	/* Routes */
-	case GRSPWR_IOCTL_ROUTES_SET:
-	{
-		struct router_routes *routes = argp;
-		return router_routes_set(priv, routes);
-	}
+	/* Set ISR TIMER */
+	*reloadvalue = REG_READ(&priv->regs->isrtimer) & (ISRTIMER_RL);
 
-	case GRSPWR_IOCTL_ROUTES_GET:
-	{
-		struct router_routes *routes = argp;
-		router_routes_read(priv, routes);
-		break;
-	}
-
-	/* Port Setup */
-	case GRSPWR_IOCTL_PS_SET:
-	{
-		struct router_ps *ps = argp;
-		return router_ps_set(priv, ps);
-	}
-
-	case GRSPWR_IOCTL_PS_GET:
-	{
-		struct router_ps *ps = argp;
-		router_ps_read(priv, ps);
-		break;
-	}
-
-	/* Set configuration write enable */
-	case GRSPWR_IOCTL_WE_SET:
-	{
-		return router_we_set(priv, (int)argp);
-	}
-
-	/* Set/Get Port Control/Status */
-	case GRSPWR_IOCTL_PORT:
-	{
-		struct router_port *port = argp;
-		int result;
-		if ( (result=router_port_ctrl(priv, port)) )
-			return result;
-		break;
-	}
-
-	/* Set Router Configuration/Status Register */
-	case GRSPWR_IOCTL_CFGSTS_SET:
-	{
-		return router_cfgsts_set(priv, (int)argp);
-	}
-
-	/* Get Router Configuration/Status Register */
-	case GRSPWR_IOCTL_CFGSTS_GET:
-	{
-		unsigned int *cfgsts = argp;
-		router_cfgsts_read(priv, cfgsts);
-		break;
-	}
-
-	/* Get Current Time-Code Register */
-	case GRSPWR_IOCTL_TC_GET:
-	{
-		unsigned int *tc = argp;
-		router_tc_read(priv, tc);
-		break;
-	}
-
-	default: return RTEMS_NOT_IMPLEMENTED;
-	}
-
-	return 0;
+	return ROUTER_ERR_OK;
 }
