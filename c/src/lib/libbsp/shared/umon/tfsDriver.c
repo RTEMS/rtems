@@ -252,7 +252,7 @@ static int rtems_tfs_open_worker(
   char *buf, *fstr, *istr, *bstr, pathcopy[TFSNAMESIZE*3+1];
 
   if (RTEMS_TFS_DEBUG)
-    printk("_open_r(%s,0x%" PRIx32 ",0x%" PRIx32 ")\n",path,oflag,mode);
+    printk("_open_r(%s,0x%x,0x%" PRIx32 ")\n",path,oflag,mode);
 
   if (!beenhere) {
     newlib_tfdlock();
@@ -458,7 +458,7 @@ static ssize_t rtems_tfs_read(
   fd = (int) iop->data0;
 
   if (RTEMS_TFS_DEBUG)
-    printk("_read_r(%d,%" PRId32 ")\n",fd,count);
+    printk("_read_r(%d,%zi)\n",fd,count);
 
   if ((fd < 3) || (fd >= MAXTFDS))
     return(EBADF);
@@ -519,7 +519,7 @@ static ssize_t rtems_tfs_write(
   fd = (int) iop->data0;
 
   if (RTEMS_TFS_DEBUG)
-    printk("rtems_tfs_write(%d,%" PRId32" )\n",fd,count);
+    printk("rtems_tfs_write(%d,%zi)\n",fd,count);
 
   if ((fd <= 0) || (fd >= MAXTFDS)) {
     rtems_set_errno_and_return_minus_one (EBADF);
