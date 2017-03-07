@@ -393,7 +393,6 @@ static bool  altera_cyclone_v_ds1339_probe(int minor)
     /* RTC is not DS1339 */
     return false;
 
-  printk("RTC detected, type = DS1339\n");
   return true;
 
 }
@@ -782,7 +781,6 @@ static bool  altera_cyclone_v_m41st87_probe(int minor)
     /* RTC is not M41ST87 */
     return false;
 
-  printk("RTC detected, type = M41ST87\n");
   return true;
 
 }
