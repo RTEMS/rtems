@@ -23,7 +23,8 @@
 /**
  * @brief The low level device.
  */
-static lpc176x_pwm_device *const pwm_device = PWM1_BASE_ADDR;
+static lpc176x_pwm_device *const pwm_device =
+  (lpc176x_pwm_device *) PWM1_BASE_ADDR;
 
 /**
  * @brief The possible output pins for each PWM output.

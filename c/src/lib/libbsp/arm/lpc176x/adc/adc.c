@@ -19,7 +19,8 @@
 #include <bsp/adc.h>
 #include <bsp/adc-defs.h>
 
-static lpc176x_adc_device *const adc_device = AD0_BASE_ADDR;
+static lpc176x_adc_device *const adc_device =
+  (lpc176x_adc_device *) AD0_BASE_ADDR;
 
 static const lpc176x_adc_pin_map adc_pinmap[ ADC_DEVICES_COUNT ] =
 {
