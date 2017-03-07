@@ -10,7 +10,7 @@
 /*
  *  Copyright (C) 2010 Gedare Bloom.
  *  Copyright (C) 2011 On-Line Applications Research Corporation (OAR).
- *  Copyright (c) 2014, 2016 embedded brains GmbH
+ *  Copyright (c) 2014, 2017 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -114,8 +114,10 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Release_critical(
 }
 
 #if defined(RTEMS_SMP)
+void _Scheduler_Request_ask_for_help( Thread_Control *the_thread );
+
 /**
- * @brief Registers an ask for help request.
+ * @brief Registers an ask for help request if necessary.
  *
  * The actual ask for help operation is carried out during
  * _Thread_Do_dispatch() on a processor related to the thread.  This yields a
@@ -130,22 +132,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Ask_for_help( Thread_Control *the_thread )
   _Assert( _Thread_State_is_owner( the_thread ) );
 
   if ( the_thread->Scheduler.helping_nodes > 0 ) {
-    ISR_lock_Context  lock_context;
-    Per_CPU_Control  *cpu;
-
-    _Thread_Scheduler_acquire_critical( the_thread, &lock_context );
-    cpu = _Thread_Get_CPU( the_thread );
-    _Per_CPU_Acquire( cpu );
-
-    _Chain_Append_unprotected(
-      &cpu->Threads_in_need_for_help,
-      &the_thread->Scheduler.Help_node
-    );
-
-    _Per_CPU_Release( cpu );
-    _Thread_Scheduler_release_critical( the_thread, &lock_context );
-
-    _Thread_Dispatch_request( _Per_CPU_Get(), cpu );
+    _Scheduler_Request_ask_for_help( the_thread );
   }
 }
 #endif

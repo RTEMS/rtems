@@ -1085,8 +1085,8 @@ static inline void _Scheduler_SMP_Yield(
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
     _Scheduler_SMP_Extract_from_scheduled( node );
-
-    needs_help = ( *enqueue_scheduled_fifo )( context, node );
+    ( *enqueue_scheduled_fifo )( context, node );
+    needs_help = false;
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
     ( *extract_from_ready )( context, node );
 
