@@ -21,6 +21,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 
 #include <bsp.h>
 #include <bsp/i2c.h>
