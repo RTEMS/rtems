@@ -243,6 +243,10 @@ libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtm.c
 libbsp_a_SOURCES += ../../sparc/shared/scrub/memscrub.c
 include_bsp_HEADERS += ../../sparc/shared/include/memscrub.h
 
+# L4STAT
+libbsp_a_SOURCES += ../../sparc/shared/stat/l4stat.c
+include_bsp_HEADERS += ../../sparc/shared/include/l4stat.h
+
 # Driver Manager 
 include_drvmgrdir = $(includedir)/drvmgr
 include_drvmgr_HEADERS = ../../sparc/shared/include/drvmgr/ambapp_bus_grlib.h

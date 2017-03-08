@@ -273,6 +273,10 @@ $(PROJECT_INCLUDE)/bsp/memscrub.h: ../../sparc/shared/include/memscrub.h $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/memscrub.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/memscrub.h
 
+$(PROJECT_INCLUDE)/bsp/l4stat.h: ../../sparc/shared/include/l4stat.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/l4stat.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/l4stat.h
+
 $(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
 	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)

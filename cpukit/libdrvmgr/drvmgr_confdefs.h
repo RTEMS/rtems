@@ -60,6 +60,7 @@ extern void grctm_register(void);
 extern void router_register_drv(void);
 extern void ahbstat_register_drv(void);
 extern void memscrub_register_drv(void);
+extern void l4stat_register_drv(void);
 
 
 /*** LEON2 AMBA Hard coded bus Drivers ***/
@@ -173,6 +174,9 @@ drvmgr_drv_reg_func drvmgr_drivers[] = {
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_MEMSCRUB
 	memscrub_register_drv,
+#endif
+#ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_L4STAT
+	l4stat_register_drv,
 #endif
 
 	/*** LEON2 AMBA Drivers ***/
