@@ -941,17 +941,17 @@ void print_bars(
 
   printk( "*** BARs for slot=%d func=%d\n", slot, func );
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_0, &addr);
-  printk("***    PCI DEVICE BAR0: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR0: 0x%lx\n", addr);
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_1, &addr);
-  printk("***    PCI DEVICE BAR1: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR1: 0x%lx\n", addr);
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_2, &addr);
-  printk("***    PCI DEVICE BAR2: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR2: 0x%lx\n", addr);
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_3, &addr);
-  printk("***    PCI DEVICE BAR3: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR3: 0x%lx\n", addr);
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_4, &addr);
-  printk("***    PCI DEVICE BAR4: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR4: 0x%lx\n", addr);
   pci_read_config_dword (0, slot, func, PCI_BASE_ADDRESS_5, &addr);
-  printk("***    PCI DEVICE BAR5: 0x%x\n", addr);
+  printk("***    PCI DEVICE BAR5: 0x%lx\n", addr);
 }
 
 void pci_memory_enable(
