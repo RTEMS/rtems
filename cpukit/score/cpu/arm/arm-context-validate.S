@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -99,12 +99,7 @@ FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 #ifdef ARM_MULTILIB_VFP
 	/* R3 contains the FPSCR */
 	vmrs	r3, FPSCR
-	movs	r4, #0x001f
-#ifdef ARM_MULTILIB_ARCH_V7M
-	movt	r4, #0xf000
-#else
-	movt	r4, #0xf800
-#endif
+	ldr	r4, =0xf000001f
 	bic	r3, r3, r4
 	and	r4, r4, r0
 	orr	r3, r3, r4
