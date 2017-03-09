@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -103,11 +103,7 @@ FUNCTION_ENTRY(_CPU_Context_validate)
 #ifdef ARM_MULTILIB_VFP
 	/* R3 contains the FPSCR */
 	vmrs	r3, FPSCR
-#ifdef ARM_MULTILIB_ARCH_V7M
 	ldr	r4, =0xf000001f
-#else
-	ldr	r4, =0xf800001f
-#endif
 	bic	r3, r3, r4
 	and	r4, r4, r0
 	orr	r3, r3, r4

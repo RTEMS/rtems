@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -33,7 +33,7 @@ FUNCTION_ENTRY(_CPU_Context_volatile_clobber)
 
 #ifdef ARM_MULTILIB_VFP
 	vmrs	r1, FPSCR
-	ldr	r2, =0xf800001f
+	ldr	r2, =0xf000001f
 	bic	r1, r1, r2
 	and	r2, r2, r0
 	orr	r1, r1, r2
