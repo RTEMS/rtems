@@ -16,7 +16,7 @@ all-local:
 	fi; \
 	tdata="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
 	if test -f "$$tdata"; then \
-	  vtdata="$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.cfg"; \
+	  vtdata="$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
 	 else \
 	  vtdata="all tests"; \
 	fi; \

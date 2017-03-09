@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-# Copyright 2014, 2016 Chris Johns <chrisj@rtems.org>
+# Copyright 2014, 2016, 2017 Chris Johns <chrisj@rtems.org>
 # All rights reserved
 #
 
@@ -74,21 +74,21 @@ if test -f $testdata; then
           state=$(echo $line | sed -e "s/:.*//g")
           case $state in
             include)
-              inf=$(echo $line | sed -e "s/include://g" -e 's/^[ \t]//;s/[ \t]$//')
+              inf=$(echo $line | sed -e 's/include://g;s/[[:blank:]]//g')
               if test -f $includepath/$inf; then
                 ntd="$includepath/$inf $ntd"
               fi
               ;;
             exclude)
-              line=$(echo $line | sed -e "s/exclude://g" -e 's/^[ \t]//;s/[ \t]$//')
+              line=$(echo $line | sed -e 's/exclude://g;s/[[:blank:]]//g')
               excluded_tests="${excluded_tests} $line"
               ;;
             expected-fail)
-              line=$(echo $line | sed -e "s/expected-fail://g" -e 's/^[ \t]//;s/[ \t]$//')
+              line=$(echo $line | sed -e 's/expected-fail://g;s/[[:blank:]]//g')
               expected_fails="${expected_fails} $line"
               ;;
             indeterminate)
-              line=$(echo $line | sed -e "s/indeterminate://g" -e 's/^[ \t]//;s/[ \t]$//')
+              line=$(echo $line | sed -e 's/indeterminate://g;s/[[:blank:]]//g')
               indeterminates="${indeterminates} $line"
               ;;
             *)
