@@ -49,6 +49,13 @@ extern const rtems_termios_device_handler tms570_sci_handler_interrupt;
 
 extern tms570_sci_context driver_context_table[];
 
+void tms570_sci_initialize(tms570_sci_context *ctx);
+
+bool tms570_sci_set_attributes(
+  rtems_termios_device_context *base,
+  const struct termios *term
+);
+
 /** @} */
 
 #ifdef __cplusplus
