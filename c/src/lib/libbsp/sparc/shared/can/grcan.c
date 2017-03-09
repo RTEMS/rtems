@@ -217,6 +217,8 @@ static unsigned int __inline__ _grcan_read_nocache(unsigned int address)
 }
 #endif
 
+#define NELEM(a) ((int) (sizeof (a) / sizeof (a[0])))
+
 static int grcan_count = 0;
 static struct grcan_priv *priv_tab[GRCAN_COUNT_MAX];
 
@@ -307,12 +309,12 @@ int grcan_init3(struct drvmgr_dev *dev)
 		/* Failed to get prefix, make sure of a unique FS name
 		 * by using the driver minor.
 		 */
-		sprintf(priv->devName, "/dev/grcan%d", dev->minor_drv);
+		sprintf(priv->devName, "grcan%d", dev->minor_drv);
 	} else {
 		/* Got special prefix, this means we have a bus prefix
 		 * And we should use our "bus minor"
 		 */
-		sprintf(priv->devName, "/dev/%sgrcan%d", prefix, dev->minor_bus);
+		sprintf(priv->devName, "%sgrcan%d", prefix, dev->minor_bus);
 	}
 
 	return DRVMGR_OK;
@@ -1177,6 +1179,25 @@ int grcan_dev_count(void)
 	return grcan_count;
 }
 
+void *grcan_open_by_name(char *name, int *dev_no)
+{
+	int i;
+	for (i = 0; i < grcan_count; i++){
+		struct grcan_priv *pDev;
+
+		pDev = priv_tab[i];
+		if (NULL == pDev) {
+			continue;
+		}
+		if (strncmp(pDev->devName, name, NELEM(pDev->devName)) == 0) {
+			if (dev_no)
+				*dev_no = i;
+			return grcan_open(i);
+		}
+	}
+	return NULL;
+}
+
 void *grcan_open(int dev_no)
 {
 	struct grcan_priv *pDev;
@@ -1463,7 +1484,8 @@ int grcan_start(void *d)
 	pDev->started = 1;
 
 	/* Register interrupt routine and enable IRQ at IRQ ctrl */
-	drvmgr_interrupt_register(pDev->dev, 0, "grcan", grcan_interrupt, pDev);
+	drvmgr_interrupt_register(pDev->dev, 0, pDev->devName,
+					grcan_interrupt, pDev);
 
 	return 0;
 }

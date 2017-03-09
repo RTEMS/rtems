@@ -171,6 +171,17 @@ extern int grcan_dev_count(void);
 extern void *grcan_open(int dev_no);
 
 /*
+ * Open a GRCAN device by name. Finds device index then calls
+ * grcan_open(index).
+ *
+ * name:	Device name to open
+ * dev_no:	Device number matching name. Will be set if device found.
+ * return:	Device handle to use with all other grcan_ API functions. The
+ *		function returns NULL if device can not be opened or not found.
+ */
+extern void *grcan_open_by_name(char *name, int *dev_no);
+
+/*
  * Close a GRCAN device
  *
  * return: This function always returns 0 (success)
