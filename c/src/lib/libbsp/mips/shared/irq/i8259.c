@@ -22,6 +22,7 @@
 #include <bsp/i8259.h>
 #include <bsp/pci.h>
 #include <bsp/irq-generic.h>
+#include <rtems/bspIo.h>
 
 
 #define DEBUG_8259      1
