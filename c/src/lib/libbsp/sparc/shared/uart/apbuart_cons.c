@@ -50,6 +50,11 @@ extern void apbuart_outbyte_polled(
 extern int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 extern struct apbuart_regs *dbg_uart; /* The debug UART */
 
+/* Probed hardware capabilities */
+enum {
+	CAP_FIFO = 0x01, /* FIFO available */
+	CAP_DI   = 0x02, /* RX delayed interrupt available */
+};
 struct apbuart_priv {
 	struct console_dev condev;
 	struct drvmgr_dev *dev;
@@ -58,6 +63,7 @@ struct apbuart_priv {
 	char devName[32];
 	volatile int sending;
 	int mode;
+	int cap;
 };
 
 /* Getters for different interfaces. It happens to be just casting which we do
@@ -186,6 +192,30 @@ static const rtems_termios_device_handler handler_polled = {
 	.mode           = TERMIOS_POLLED
 };
 
+/*
+ * APBUART hardware instantiation is flexible. Probe features here and driver
+ * can select appropriate routines for the hardware. probecap() return value
+ * is a CAP_ bitmask.
+ */
+static int probecap(struct apbuart_regs *regs)
+{
+	int cap = 0;
+
+	/* Probe FIFO */
+	if (regs->ctrl & APBUART_CTRL_FA) {
+		cap |= CAP_FIFO;
+
+		/* Probe RX delayed interrupt */
+		regs->ctrl |= APBUART_CTRL_DI;
+		if (regs->ctrl & APBUART_CTRL_DI) {
+			regs->ctrl &= ~APBUART_CTRL_DI;
+			cap |= CAP_DI;
+		}
+	}
+
+	return cap;
+}
+
 int apbuart_init1(struct drvmgr_dev *dev)
 {
 	struct apbuart_priv *priv;
@@ -253,6 +283,8 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	}
 
 	priv->regs->ctrl = db;
+
+	priv->cap = probecap(priv->regs);
 
 	/* The system console and Debug console may depend on this device, so
 	 * initialize it straight away.
@@ -417,6 +449,7 @@ static bool first_open(
 
 	if (uart->mode != TERMIOS_POLLED) {
 		int ret;
+		uint32_t ctrl;
 
 		/* Register interrupt and enable it */
 		ret = drvmgr_interrupt_register(
@@ -427,8 +460,15 @@ static bool first_open(
 		}
 
 		uart->sending = 0;
+
 		/* Turn on RX interrupts */
-		uart->regs->ctrl |= APBUART_CTRL_RI;
+		ctrl = uart->regs->ctrl;
+		ctrl |= APBUART_CTRL_RI;
+		if (uart->cap & CAP_DI) {
+			/* Use RX FIFO interrupt only if delayed interrupt available. */
+			ctrl |= (APBUART_CTRL_DI | APBUART_CTRL_RF);
+		}
+		uart->regs->ctrl = ctrl;
 	}
 
 	return true;
@@ -446,7 +486,7 @@ static void last_close(
 	if (uart->mode != TERMIOS_POLLED) {
 		/* Turn off RX interrupts */
 		rtems_termios_device_lock_acquire(base, &lock_context);
-		uart->regs->ctrl &= ~(APBUART_CTRL_RI);
+		uart->regs->ctrl &= ~(APBUART_CTRL_RI | APBUART_CTRL_RF);
 		rtems_termios_device_lock_release(base, &lock_context);
 
 		/**** Flush device ****/
