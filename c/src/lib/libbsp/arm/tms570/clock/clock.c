@@ -29,7 +29,6 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/tms570-rti.h>
-#include <rtems/counter.h>
 #include <rtems/timecounter.h>
 
 static struct timecounter tms570_rti_tc;
@@ -67,8 +66,6 @@ static void tms570_clock_driver_support_initialize_hardware( void )
 
   microsec_per_tick = rtems_configuration_get_microseconds_per_tick();
   tc_frequency = TMS570_PREFERRED_TC_FREQUENCY;
-
-  rtems_counter_initialize_converter(BSP_PLL_OUT_CLOCK);
 
   tc_prescaler = (BSP_PLL_OUT_CLOCK + tc_frequency) / (tc_frequency * 2);
 

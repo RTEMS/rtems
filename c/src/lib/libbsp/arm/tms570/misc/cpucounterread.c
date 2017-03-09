@@ -26,13 +26,10 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <stdlib.h>
+#include <rtems/counter.h>
+#include <rtems/sysinit.h>
 
-#include <rtems.h>
 #include <bsp.h>
-
-static int cpu_counter_initialized;
-
 
 /**
  * @brief set mode of Cortex-R performance counters
@@ -43,7 +40,7 @@ static int cpu_counter_initialized;
  * @param[in] enable_divider if set, CCNT counts clocks divided by 64
  * @retval Void
  */
-static inline void _CPU_Counter_init_perfcounters(
+static inline void tms570_init_perfcounters(
     int32_t do_reset,
     int32_t enable_divider
 )
@@ -81,28 +78,16 @@ static inline void _CPU_Counter_init_perfcounters(
  * @retval Void
  *
  */
-static void _CPU_Counter_initialize(void)
+static void tms570_cpu_counter_initialize(void)
 {
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-
-  if ( cpu_counter_initialized ) {
-    rtems_interrupt_enable(level);
-    return;
-  }
-
   /* enable user-mode access to the performance counter */
   asm volatile ("mcr p15, 0, %0, c9, c14, 0\n\t" :: "r"(1));
 
   /* disable counter overflow interrupts (just in case) */
   asm volatile ("mcr p15, 0, %0, c9, c14, 2\n\t" :: "r"(0x8000000f));
 
-  _CPU_Counter_init_perfcounters(false, false);
-
-  cpu_counter_initialized = 1;
-
-  rtems_interrupt_enable(level);
+  tms570_init_perfcounters(false, false);
+  rtems_counter_initialize_converter(2 * BSP_PLL_OUT_CLOCK);
 }
 
 /**
@@ -116,9 +101,12 @@ static void _CPU_Counter_initialize(void)
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
   uint32_t ticks;
-  if ( !cpu_counter_initialized ) {
-    _CPU_Counter_initialize();
-  }
   asm volatile ("mrc p15, 0, %0, c9, c13, 0\n": "=r" (ticks));
   return ticks;
 }
+
+RTEMS_SYSINIT_ITEM(
+  tms570_cpu_counter_initialize,
+  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
