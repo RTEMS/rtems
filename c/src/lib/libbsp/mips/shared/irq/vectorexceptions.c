@@ -17,48 +17,13 @@
  */
 
 #include <rtems.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <rtems/mips/iregdef.h>
 #include <rtems/mips/idtcpu.h>
 #include <rtems/bspIo.h>
 #include <bsp/irq-generic.h>
-
-static const char *const cause_strings[32] =
-{
-  /*  0 */ "Int",
-  /*  1 */ "TLB Mods",
-  /*  2 */ "TLB Load",
-  /*  3 */ "TLB Store",
-  /*  4 */ "Address Load",
-  /*  5 */ "Address Store",
-  /*  6 */ "Instruction Bus Error",
-  /*  7 */ "Data Bus Error",
-  /*  8 */ "Syscall",
-  /*  9 */ "Breakpoint",
-  /* 10 */ "Reserved Instruction",
-  /* 11 */ "Coprocessor Unuseable",
-  /* 12 */ "Overflow",
-  /* 13 */ "Trap",
-  /* 14 */ "Instruction Virtual Coherency Error",
-  /* 15 */ "FP Exception",
-  /* 16 */ "Reserved 16",
-  /* 17 */ "Reserved 17",
-  /* 18 */ "Reserved 18",
-  /* 19 */ "Reserved 19",
-  /* 20 */ "Reserved 20",
-  /* 21 */ "Reserved 21",
-  /* 22 */ "Reserved 22",
-  /* 23 */ "Watch",
-  /* 24 */ "Reserved 24",
-  /* 25 */ "Reserved 25",
-  /* 26 */ "Reserved 26",
-  /* 27 */ "Reserved 27",
-  /* 28 */ "Reserved 28",
-  /* 29 */ "Reserved 29",
-  /* 30 */ "Reserved 30",
-  /* 31 */ "Data Virtual Coherency Error"
-};
 
 struct regdef
 {
@@ -88,10 +53,12 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
      printk("   %s", dumpregs[i].name);
      for(j=0; j< 7-strlen(dumpregs[i].name); j++) printk(" ");
 #if (__mips == 1 ) || (__mips == 32)
-     printk("  %08X%c", frame_u32[dumpregs[i].offset], (i%3) ? '\t' : '\n' );
+     printk("  %08" PRIu32 "%c",
+            frame_u32[dumpregs[i].offset], (i%3) ? '\t' : '\n' );
 #elif __mips == 3
-     printk("  %08X", frame_u32[2 * dumpregs[i].offset + 1] );
-     printk("%08X%c", frame_u32[2 * dumpregs[i].offset], (i%2) ? '\t' : '\n' );
+     printk("  %08" PRIu32 "", frame_u32[2 * dumpregs[i].offset + 1] );
+     printk("%08" PRIu32 "%c",
+            frame_u32[2 * dumpregs[i].offset], (i%2) ? '\t' : '\n' );
 #endif
   }
   printk( "\n" );
