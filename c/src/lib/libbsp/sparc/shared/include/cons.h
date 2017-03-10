@@ -20,12 +20,14 @@
 
 struct console_dev;
 
-#define CONSOLE_FLAG_SYSCON      0x01
+#define CONSOLE_FLAG_SYSCON             0x01
+#define CONSOLE_FLAG_SYSCON_GRANT       0x02
 
 struct console_dev {
 	rtems_termios_device_context base;
-	/* Set to CONSOLE_FLAG_SYSCON if this UART should be system console and/or
-	 * debug console.
+	/* Set CONSOLE_FLAG_SYSCON to request this device to be system console
+	 * and/or debug console. CONSOLE_FLAG_SYSCON_GRANT will be set on the
+	 * device which was selected as system console.
 	 */
 	int flags;
 	char *fsname; /* File system prefix */

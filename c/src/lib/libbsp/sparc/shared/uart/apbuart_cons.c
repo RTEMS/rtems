@@ -440,10 +440,12 @@ static bool first_open(
 
 	uart->tty = tty;
 
-	/* Preserve values set by bootloader */
-	get_attributes(base, term);
-	term->c_oflag |= ONLCR;
-	set_attributes(base, term);
+	/* Inherit UART hardware parameters from bootloader on system console */
+	if (uart->condev.flags & CONSOLE_FLAG_SYSCON_GRANT) {
+		get_attributes(base, term);
+		term->c_oflag |= ONLCR;
+		set_attributes(base, term);
+	}
 
 	/* Enable TX/RX */
 	uart->regs->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;

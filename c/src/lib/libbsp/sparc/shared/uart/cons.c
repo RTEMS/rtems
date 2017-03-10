@@ -89,6 +89,10 @@ void console_dev_register(struct console_dev *dev)
 		/* Not enough console structures */
 		return;
 	}
+	dev->flags &= ~CONSOLE_FLAG_SYSCON_GRANT;
+	if (con->flags & FLAG_SYSCON) {
+		dev->flags |= CONSOLE_FLAG_SYSCON_GRANT;
+	}
 
 	/* Assign Console */
 	con->dev = dev;
