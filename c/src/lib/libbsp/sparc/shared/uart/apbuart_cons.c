@@ -307,8 +307,6 @@ int apbuart_init1(struct drvmgr_dev *dev)
 			priv->condev.flags &= ~CONSOLE_FLAG_SYSCON;
 	}
 
-	priv->condev.fsname = NULL;
-
 	/* Select 0=Polled, 1=IRQ, 2=Task-Driven UART Mode */
 	value = drvmgr_dev_key_get(priv->dev, "mode", DRVMGR_KT_INT);
 	if (value)
@@ -324,6 +322,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 		priv->condev.handler = &handler_polled;
 	}
 
+	priv->condev.fsname = NULL;
 	/* Get Filesystem name prefix */
 	prefix[0] = '\0';
 	if (drvmgr_get_dev_prefix(dev, prefix)) {
@@ -332,6 +331,8 @@ int apbuart_init1(struct drvmgr_dev *dev)
 		 */
 		sprintf(priv->devName, "/dev/%sapbuart%d", prefix, dev->minor_bus);
 		priv->condev.fsname = priv->devName;
+	} else {
+		sprintf(priv->devName, "/dev/apbuart%d", dev->minor_drv);
 	}
 
 	/* Register it as a console device, the console driver will register
@@ -453,7 +454,7 @@ static bool first_open(
 
 		/* Register interrupt and enable it */
 		ret = drvmgr_interrupt_register(
-			uart->dev, 0, "apbuart", apbuart_cons_isr, tty
+			uart->dev, 0, uart->devName, apbuart_cons_isr, tty
 		);
 		if (ret) {
 			return false;
