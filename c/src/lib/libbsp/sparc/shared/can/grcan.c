@@ -1612,13 +1612,16 @@ int grcan_set_rxcomplete(void *d, int complete)
 int grcan_get_stats(void *d, struct grcan_stats *stats)
 {
 	struct grcan_priv *pDev = d;
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
 	if ( !stats )
 		return -1;
 
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 	*stats = pDev->stats;
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	return 0;
 }
