@@ -358,8 +358,8 @@ static int apbuart_info(
 
 	if (priv->mode == TERMIOS_POLLED)
 		str1 = "TERMIOS_POLLED";
-	else if (priv->mode == TERMIOS_TASK_DRIVEN)
-		str1 = "TERMIOS_TASK_DRIVEN";
+	else if (priv->mode == TERMIOS_IRQ_DRIVEN)
+		str1 = "TERMIOS_IRQ_DRIVEN";
 	else if (priv->mode == TERMIOS_TASK_DRIVEN)
 		str1 = "TERMIOS_TASK_DRIVEN";
 	else
@@ -489,7 +489,8 @@ static void last_close(
 	if (uart->mode != TERMIOS_POLLED) {
 		/* Turn off RX interrupts */
 		rtems_termios_device_lock_acquire(base, &lock_context);
-		uart->regs->ctrl &= ~(APBUART_CTRL_RI | APBUART_CTRL_RF);
+		uart->regs->ctrl &=
+			~(APBUART_CTRL_DI | APBUART_CTRL_RI | APBUART_CTRL_RF);
 		rtems_termios_device_lock_release(base, &lock_context);
 
 		/**** Flush device ****/
@@ -515,28 +516,49 @@ static int read_polled(rtems_termios_device_context *base)
 	return apbuart_inbyte_nonblocking(uart->regs);
 }
 
+/* This function is called from TERMIOS rxdaemon task without device lock. */
 static int read_task(rtems_termios_device_context *base)
 {
+	rtems_interrupt_lock_context lock_context;
 	struct apbuart_priv *uart = base_get_priv(base);
-	int c, tot;
-	char buf[32];
+	struct apbuart_regs *regs = uart->regs;
+	int cnt;
+	char buf[33];
 	struct rtems_termios_tty *tty;
+	uint32_t ctrl_add;
 
-	tty = uart->tty;
-	tot = 0;
-	while ((c=apbuart_inbyte_nonblocking(uart->regs)) != EOF) {
-		buf[tot] = c;
-		tot++;
-		if (tot > 31) {
-			rtems_termios_enqueue_raw_characters(tty, buf, tot);
-			tot = 0;
-		}
+	ctrl_add = APBUART_CTRL_RI;
+	if (uart->cap & CAP_DI) {
+		ctrl_add |= (APBUART_CTRL_DI | APBUART_CTRL_RF);
 	}
-	if (tot > 0)
-		rtems_termios_enqueue_raw_characters(tty, buf, tot);
+	tty = uart->tty;
+	do {
+		cnt = 0;
+		while (
+			(regs->status & APBUART_STATUS_DR) &&
+			(cnt < sizeof(buf))
+		) {
+			buf[cnt] = regs->data;
+			cnt++;
+		}
+		if (0 < cnt) {
+			/* Tell termios layer about new characters */
+			rtems_termios_enqueue_raw_characters(tty, &buf[0], cnt);
+		}
+
+		/*
+		 * Turn on RX interrupts. A new character in FIFO now may not
+		 * cause interrupt so we must check data ready again
+		 * afterwards.
+		 */
+		rtems_termios_device_lock_acquire(base, &lock_context);
+		regs->ctrl |= ctrl_add;
+		rtems_termios_device_lock_release(base, &lock_context);
+	} while (regs->status & APBUART_STATUS_DR);
 
 	return EOF;
 }
+
 
 struct apbuart_baud {
 	unsigned int num;
@@ -779,6 +801,7 @@ static void write_interrupt(
 static void apbuart_cons_isr(void *arg)
 {
 	rtems_termios_tty *tty = arg;
+	rtems_termios_device_context *base;
 	struct console_dev *condev = rtems_termios_get_device_context(tty);
 	struct apbuart_priv *uart = condev_get_priv(condev);
 	struct apbuart_regs *regs = uart->regs;
@@ -787,7 +810,16 @@ static void apbuart_cons_isr(void *arg)
 	int cnt;
 
 	if (uart->mode == TERMIOS_TASK_DRIVEN) {
-		if ((status=regs->status) & APBUART_STATUS_DR) {
+		if ((status = regs->status) & APBUART_STATUS_DR) {
+			rtems_interrupt_lock_context lock_context;
+
+			/* Turn off RX interrupts */
+			base = rtems_termios_get_device_context(tty);
+			rtems_termios_device_lock_acquire(base, &lock_context);
+			regs->ctrl &=
+			    ~(APBUART_CTRL_DI | APBUART_CTRL_RI |
+			      APBUART_CTRL_RF);
+			rtems_termios_device_lock_release(base, &lock_context);
 			/* Activate termios RX daemon task */
 			rtems_termios_rxirq_occured(tty);
 		}
