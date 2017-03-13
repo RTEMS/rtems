@@ -125,7 +125,7 @@ static void test_normal_file_write(
   const char *mount_dir,
   const char *file_name )
 {
-  static const rtems_blkdev_stats complete_block_stats = {
+  static const rtems_blkdev_stats complete_existing_block_stats = {
     .read_hits            = 0,
     .read_misses          = 0,
     .read_ahead_transfers = 0,
@@ -135,14 +135,24 @@ static void test_normal_file_write(
     .write_blocks         = 1,
     .write_errors         = 0
   };
-  static const rtems_blkdev_stats new_block_stats = {
-    .read_hits            = 8,
+  static const rtems_blkdev_stats complete_new_block_stats = {
+    .read_hits            = 3,
     .read_misses          = 2,
     .read_ahead_transfers = 0,
     .read_blocks          = 2,
     .read_errors          = 0,
     .write_transfers      = 1,
-    .write_blocks         = 4,
+    .write_blocks         = 3,
+    .write_errors         = 0
+  };
+  static const rtems_blkdev_stats partial_new_block_stats = {
+    .read_hits            = 3,
+    .read_misses          = 3,
+    .read_ahead_transfers = 0,
+    .read_blocks          = 3,
+    .read_errors          = 0,
+    .write_transfers      = 1,
+    .write_blocks         = 3,
     .write_errors         = 0
   };
 
@@ -174,17 +184,21 @@ static void test_normal_file_write(
   num_bytes = write( fd, cluster_buf, cluster_size );
   rtems_test_assert( (ssize_t) cluster_size == num_bytes );
 
-  check_block_stats( dev_name, mount_dir, &complete_block_stats );
+  check_block_stats( dev_name, mount_dir, &complete_existing_block_stats );
   reset_block_stats( dev_name, mount_dir );
 
+  /* Write a complete cluster into a new file space */
   num_bytes = write( fd, cluster_buf, cluster_size );
   rtems_test_assert( (ssize_t) cluster_size == num_bytes );
+
+  check_block_stats( dev_name, mount_dir, &complete_new_block_stats );
+  reset_block_stats( dev_name, mount_dir );
 
   /* Write a new partial cluster into a new file space */
   num_bytes = write( fd, cluster_buf, 1 );
   rtems_test_assert( num_bytes == 1 );
 
-  check_block_stats( dev_name, mount_dir, &new_block_stats );
+  check_block_stats( dev_name, mount_dir, &partial_new_block_stats );
 
   rv = close( fd );
   rtems_test_assert( 0 == rv );

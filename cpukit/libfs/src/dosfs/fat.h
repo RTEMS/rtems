@@ -503,8 +503,7 @@ fat_cluster_write(fat_fs_info_t                    *fs_info,
                     uint32_t                          start_cln,
                     uint32_t                          offset,
                     uint32_t                          count,
-                    const void                       *buff,
-                    bool                              overwrite_cluster);
+                    const void                       *buff);
 
 ssize_t
 fat_sector_write(fat_fs_info_t                        *fs_info,

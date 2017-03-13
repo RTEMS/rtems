@@ -6,6 +6,7 @@ _SUBDIRS += fsimfsconfig03
 _SUBDIRS += fsimfsconfig02
 _SUBDIRS += fsimfsconfig01
 _SUBDIRS += fsdosfsname01
+_SUBDIRS += fsdosfsname02
 _SUBDIRS += fsdosfswrite01
 _SUBDIRS += fsdosfsformat01
 _SUBDIRS += fsfseeko01
