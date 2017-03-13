@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsdosfsname02
+
+directives:
+
+  - msdos_add_file()
+
+concepts:
+
+  - Ensure that directory entries accross cluster boundaries work.

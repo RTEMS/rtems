@@ -81,6 +81,7 @@ fsimfsconfig03/Makefile
 fsimfsconfig02/Makefile
 fsimfsconfig01/Makefile
 fsdosfsname01/Makefile
+fsdosfsname02/Makefile
 fsdosfswrite01/Makefile
 fsdosfsformat01/Makefile
 fsfseeko01/Makefile
