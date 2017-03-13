@@ -32,6 +32,7 @@ include_HEADERS += include/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 include_rtems_posix_HEADERS += include/rtems/posix/cond.h
 include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/mmanimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mutex.h

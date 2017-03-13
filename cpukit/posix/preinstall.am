@@ -72,6 +72,10 @@ $(PROJECT_INCLUDE)/rtems/posix/condimpl.h: include/rtems/posix/condimpl.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/mmanimpl.h: include/rtems/posix/mmanimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mmanimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mmanimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/mqueue.h: include/rtems/posix/mqueue.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
