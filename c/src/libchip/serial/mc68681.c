@@ -586,6 +586,8 @@ MC68681_STATIC int mc68681_baud_rate(
     baud_requested = B9600;              /* default to 9600 baud */
 
   baud_requested = rtems_termios_baud_to_index( baud_requested );
+  if (baud_requested == -1)
+    return -1;
 
   baud_tbl = (mc68681_baud_table_t *)
      ((uintptr_t)Console_Port_Tbl[minor]->ulClock);
