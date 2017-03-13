@@ -171,7 +171,9 @@ process(char *arg)
     error( ERR_ERRNO | ERR_FATAL, "Unable to open file (%s)\n", arg );
 
   if ( !test_only ) {
-    sprintf( outname, "%s.eoltmp", arg );
+    length = snprintf( outname, BUFFER_SIZE, "%s.eoltmp", arg );
+    if (length >= BUFFER_SIZE)
+      error( ERR_ERRNO | ERR_FATAL, "Tmp file name too long\n" );
 
     out = fopen( outname, "w" );
     if (!out)
