@@ -1087,6 +1087,23 @@ static void test_end_of_string_matches( void )
   rtems_test_assert( rc == 0 );
 }
 
+static void test_full_8_3_name( void )
+{
+  int rc;
+
+  rc = mkdir( MOUNT_DIR "/txtvsbin.txt", S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rc == 0 );
+
+  rc = unlink( MOUNT_DIR "/txtvsbin.txt" );
+  rtems_test_assert( rc == 0 );
+}
+
+static void test_special_cases( void )
+{
+  test_end_of_string_matches();
+  test_full_8_3_name();
+}
+
 /*
  * Main test method
  */
@@ -1145,7 +1162,7 @@ static void test( void )
     "/dev/rdb",
     NULL);
 
-  test_end_of_string_matches();
+  test_special_cases();
 
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );
@@ -1215,7 +1232,7 @@ static void test( void )
     "/dev/rdb",
     &mount_opts[1]);
 
-  test_end_of_string_matches();
+  test_special_cases();
 
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );
@@ -1280,7 +1297,7 @@ static void test( void )
     "/dev/rdc",
     &mount_opts[1]);
 
-  test_end_of_string_matches();
+  test_special_cases();
 
   rc = unmount( MOUNT_DIR );
   rtems_test_assert( rc == 0 );

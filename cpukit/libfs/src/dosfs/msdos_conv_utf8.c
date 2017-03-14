@@ -222,10 +222,10 @@ static int msdos_utf8_normalize_and_fold(
   );
 
   if ( result >= 0 ) {
-    if ( result < unicode_buf_size ) {
+    if ( result <= unicode_buf_size ) {
       unicodes_to_reencode = result;
     } else {
-      unicodes_to_reencode = unicode_buf_size - 1;
+      unicodes_to_reencode = unicode_buf_size;
       eno = ENOMEM;
     }
 
