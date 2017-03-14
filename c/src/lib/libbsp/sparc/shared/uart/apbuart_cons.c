@@ -497,6 +497,12 @@ static void last_close(
 		while (uart->sending) {
 			/* Wait until all data has been sent */
 		}
+		while (
+			(uart->regs->ctrl & APBUART_CTRL_TE) &&
+			!(uart->regs->status & APBUART_STATUS_TS)
+		) {
+			/* Wait until all data has left shift register */
+		}
 
 		/* Disable and unregister interrupt handler */
 		drvmgr_interrupt_unregister(uart->dev, 0, apbuart_cons_isr, tty);
@@ -846,7 +852,6 @@ static void apbuart_cons_isr(void *arg)
 	if (uart->sending && (status & APBUART_STATUS_TE)) {
 		/* Tell close that we sent everything */
 		cnt = uart->sending;
-		uart->sending = 0;
 
 		/*
 		 * Tell termios how much we have sent. dequeue() may call
