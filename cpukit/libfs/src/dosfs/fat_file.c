@@ -110,11 +110,9 @@ fat_file_open(
     /* access "removed-but-still-open" hash table */
     rc = _hash_search(fs_info, fs_info->rhash, key, key, &lfat_fd);
 
-    lfat_fd = (*fat_fd) = (fat_file_fd_t*)malloc(sizeof(fat_file_fd_t));
+    lfat_fd = (*fat_fd) = (fat_file_fd_t*)calloc(1, sizeof(fat_file_fd_t));
     if ( lfat_fd == NULL )
         rtems_set_errno_and_return_minus_one( ENOMEM );
-
-    memset(lfat_fd, 0, sizeof(fat_file_fd_t));
 
     lfat_fd->links_num = 1;
     lfat_fd->flags &= ~FAT_FILE_REMOVED;
