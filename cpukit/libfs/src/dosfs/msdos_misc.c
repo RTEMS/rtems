@@ -1650,8 +1650,8 @@ msdos_add_file (
     const char                           *name_dir_entry,
     fat_dir_pos_t                        *dir_pos,
     const uint32_t                        dir_offset,
-    const uint32_t                        empty_space_offset_param,
-    const uint32_t                        empty_space_entry_param,
+    uint32_t                              empty_space_offset,
+    uint32_t                              empty_space_entry,
     const uint32_t                        empty_space_count
 
 )
@@ -1659,8 +1659,6 @@ msdos_add_file (
     int              ret                = 0;
     ssize_t          bytes_written      = 0;
     uint8_t          lfn_checksum       = 0;
-    uint32_t         empty_space_offset = empty_space_offset_param;
-    uint32_t         empty_space_entry  = empty_space_entry_param;
     bool             read_cluster       = false;
     int              lfn_entry          = 0;
     fat_pos_t        lfn_start;
