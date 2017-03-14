@@ -179,6 +179,8 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
      */
     if (type == FAT_DIRECTORY)
     {
+        uint32_t unused;
+
         /* open new directory as fat-file */
         rc = fat_file_open(&fs_info->fat, &dir_pos, &fat_fd);
         if (rc != RC_OK)
@@ -188,10 +190,18 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
          * we opened fat-file for node we just created, so initialize fat-file
          * descritor
          */
-        fat_fd->fat_file_size = 0;
         fat_fd->fat_file_type = FAT_DIRECTORY;
         fat_fd->size_limit = MSDOS_MAX_DIR_LENGTH;
         fat_file_set_ctime_mtime(fat_fd, now);
+
+        /* extend it to contain exactly one cluster */
+        rc = fat_file_extend(&fs_info->fat,
+                             fat_fd,
+                             true,
+                             fs_info->fat.vol.bpc,
+                             &unused);
+        if (rc != RC_OK)
+            goto err;
 
         /*
          * dot and dotdot entries are identical to new node except the
@@ -226,33 +236,16 @@ msdos_creat_node(const rtems_filesystem_location_info_t  *parent_loc,
                 CT_LE_W((uint16_t  )(((parent_fat_fd->cln) & 0xFFFF0000)>>16));
         }
 
-        /*
-         * write dot and dotdot entries to new fat-file: currently fat-file
-         * correspondes to a new node is zero length, so it will be extended
-         * by one cluster and entries will be written
-         */
-        ret = fat_file_write(&fs_info->fat, fat_fd, 0,
-                             MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2,
-                             (uint8_t *)dot_dotdot);
-        if (ret < 0)
-        {
-            rc = -1;
-            goto error;
-        }
-
-        /* increment fat-file size by cluster size */
-        fat_fd->fat_file_size += fs_info->fat.vol.bpc;
-
         /* set up cluster num for dot entry */
         *MSDOS_DIR_FIRST_CLUSTER_LOW(DOT_NODE_P(dot_dotdot)) =
                 CT_LE_W((uint16_t  )((fat_fd->cln) & 0x0000FFFF));
         *MSDOS_DIR_FIRST_CLUSTER_HI(DOT_NODE_P(dot_dotdot)) =
                 CT_LE_W((uint16_t  )(((fat_fd->cln) & 0xFFFF0000) >> 16));
 
-        /* rewrite dot entry */
+        /* write dot and dotdot entries */
         ret = fat_file_write(&fs_info->fat, fat_fd, 0,
-                             MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE,
-                             (uint8_t *)DOT_NODE_P(dot_dotdot));
+                             MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE * 2,
+                             (uint8_t *)dot_dotdot);
         if (ret < 0)
         {
             rc = -1;
