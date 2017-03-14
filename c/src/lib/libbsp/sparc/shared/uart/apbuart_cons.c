@@ -806,7 +806,7 @@ static void apbuart_cons_isr(void *arg)
 	struct apbuart_priv *uart = condev_get_priv(condev);
 	struct apbuart_regs *regs = uart->regs;
 	unsigned int status;
-	char data;
+	char buf[33];
 	int cnt;
 
 	if (uart->mode == TERMIOS_TASK_DRIVEN) {
@@ -824,13 +824,22 @@ static void apbuart_cons_isr(void *arg)
 			rtems_termios_rxirq_occured(tty);
 		}
 	} else {
-		/* Get all received characters */
-		while ((status=regs->status) & APBUART_STATUS_DR) {
-			/* Data has arrived, get new data */
-			data = regs->data;
-
-			/* Tell termios layer about new character */
-			rtems_termios_enqueue_raw_characters(tty, &data, 1);
+		/*
+		 * Get all new characters from APBUART RX (FIFO) and store them
+		 * on the stack. Then tell termios about the new characters.
+		 * Maximum APBUART RX FIFO size is 32 characters.
+		 */
+		cnt = 0;
+		while (
+			((status=regs->status) & APBUART_STATUS_DR) &&
+			(cnt < sizeof(buf))
+		) {
+			buf[cnt] = regs->data;
+			cnt++;
+		}
+		if (0 < cnt) {
+			/* Tell termios layer about new characters */
+			rtems_termios_enqueue_raw_characters(tty, &buf[0], cnt);
 		}
 	}
 
