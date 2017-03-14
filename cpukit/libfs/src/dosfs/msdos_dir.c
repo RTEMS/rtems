@@ -281,14 +281,8 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                  */
                 if (lfn_start != FAT_FILE_SHORT_NAME)
                 {
-                    uint8_t  cs = 0;
-                    uint8_t* p = (uint8_t*) entry;
-                    int      i;
-
-                    for (i = 0; i < 11; i++, p++)
-                        cs = ((cs & 1) ? 0x80 : 0) + (cs >> 1) + *p;
-
-                    if (lfn_entries || (lfn_checksum != cs))
+                    if (lfn_entries ||
+                        lfn_checksum != msdos_lfn_checksum(entry))
                         lfn_start = FAT_FILE_SHORT_NAME;
 
                     eno = (*convert_handler->utf16_to_utf8) (

@@ -482,6 +482,8 @@ int msdos_get_dotdot_dir_info_cluster_num_and_offset(
 
 int msdos_sync(rtems_libio_t *iop);
 
+uint8_t msdos_lfn_checksum(const void *entry);
+
 #ifdef __cplusplus
 }
 #endif

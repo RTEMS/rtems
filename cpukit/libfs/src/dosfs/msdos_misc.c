@@ -55,6 +55,23 @@
 const char *const MSDOS_DOT_NAME    = ".          ";
 const char *const MSDOS_DOTDOT_NAME = "..         ";
 
+uint8_t
+msdos_lfn_checksum(const void *entry)
+{
+    const uint8_t *name;
+    uint8_t        cs;
+    int            i;
+
+    name = (const uint8_t *) MSDOS_DIR_NAME(entry);
+    cs = 0;
+
+    for (i = 0; i < MSDOS_SHORT_NAME_LEN; ++i) {
+        cs = ((cs & 1) ? 0x80 : 0) + (cs >> 1) + name[i];
+    }
+
+    return cs;
+}
+
 /* msdos_is_valid_name_char --
  *     Routine to check the character in a file or directory name.
  *     The characters support in the short file name are letters,
@@ -1535,14 +1552,8 @@ msdos_find_file_in_directory (
                      */
                     if (entry_matched)
                     {
-                        uint8_t  cs = 0;
-                        uint8_t* p = (uint8_t*) MSDOS_DIR_NAME(entry);
-                        int      i;
-
-                        for (i = 0; i < MSDOS_SHORT_NAME_LEN; i++, p++)
-                            cs = ((cs & 1) ? 0x80 : 0) + (cs >> 1) + *p;
-
-                        if (lfn_entry || (lfn_checksum != cs))
+                        if (lfn_entry ||
+                            lfn_checksum != msdos_lfn_checksum(entry))
                             entry_matched = false;
                         else if (filename_size_remaining == 0) {
                             filename_matched = true;
@@ -1561,7 +1572,7 @@ msdos_find_file_in_directory (
 
 #if MSDOS_FIND_PRINT
                         printf ("MSFS:[9.2] checksum, entry_matched:%i, lfn_entry:%i, lfn_checksum:%02x/%02x\n",
-                                entry_matched, lfn_entry, lfn_checksum, cs);
+                                entry_matched, lfn_entry, lfn_checksum, msdos_lfn_checksum(entry));
 #endif
                     } else {
                         bytes_in_entry = MSDOS_SHORT_NAME_LEN + 1;
@@ -1670,11 +1681,7 @@ msdos_add_file (
 
     if (fat_entries)
     {
-        uint8_t* p = (uint8_t*) MSDOS_DIR_NAME(name_dir_entry);
-        int      i;
-        for (i = 0; i < 11; i++, p++)
-            lfn_checksum =
-                ((lfn_checksum & 1) ? 0x80 : 0) + (lfn_checksum >> 1) + *p;
+        lfn_checksum = msdos_lfn_checksum(name_dir_entry);
     }
 
     /*
