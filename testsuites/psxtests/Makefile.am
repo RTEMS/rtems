@@ -12,7 +12,7 @@ _SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
     psxitimer psxmsgq01 psxmsgq02 psxmsgq03 psxmsgq04 \
     psxmutexattr01 psxobj01 psxrwlock01 psxsem01 psxshm01 psxshm02 \
     psxsignal01 psxsignal02 psxsignal03 psxsignal04 psxsignal05 psxsignal06 \
-    psxspin01 psxsysconf \
+    psxspin01 psxstrsignal01 psxsysconf \
     psxtime psxtimer01 psxtimer02 psxualarm psxusleep psxfatal01 psxfatal02 \
     psxintrcritical01 psxstack01 psxstack02 \
     psxeintr_join psxgetattrnp01 psxclock01

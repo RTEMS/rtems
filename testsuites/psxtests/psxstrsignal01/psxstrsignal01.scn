@@ -1,0 +1,38 @@
+** BEGIN OF TEST PSXSTRSIGNAL 1 ***
+=== Normal Signals
+signal=SIGHUP => Hangup
+signal=SIGINT => Interrupt
+signal=SIGQUIT => Quit
+signal=SIGILL => Illegal instruction
+signal=SIGTRAP => Trace/breakpoint trap
+signal=SIGIOT => Aborted
+signal=SIGABRT => Aborted
+signal=SIGFPE => Floating point exception
+signal=SIGKILL => Killed
+signal=SIGBUS => Bus error
+signal=SIGSEGV => Segmentation fault
+signal=SIGSYS => Bad system call
+signal=SIGPIPE => Broken pipe
+signal=SIGALRM => Alarm clock
+signal=SIGTERM => Terminated
+signal=SIGURG => Urgent I/O condition
+signal=SIGSTOP => Stopped (signal)
+signal=SIGTSTP => Stopped
+signal=SIGCONT => Continued
+signal=SIGCHLD => Child exited
+signal=SIGCLD => Child exited
+signal=SIGTTIN => Stopped (tty input)
+signal=SIGTTOU => Stopped (tty output)
+signal=SIGIO => I/O possible
+signal=SIGPOLL => I/O possible
+signal=SIGWINCH => Window changed
+signal=SIGUSR1 => User defined signal 1
+signal=SIGUSR2 => User defined signal 2
+
+=== Real-Time Signals
+signal=SIGRTMIN+0 => Real-time signal 0
+signal=SIGRTMIN+1 => Real-time signal 1
+signal=SIGRTMIN+2 => Real-time signal 2
+signal=SIGRTMIN+3 => Real-time signal 3
+signal=SIGRTMIN+4 => Real-time signal 4
+*** END OF TEST PSXSTRSIGNAL 1 ***

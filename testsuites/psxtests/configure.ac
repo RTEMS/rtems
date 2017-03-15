@@ -200,6 +200,7 @@ psxspin01/Makefile
 psxstack01/Makefile
 psxstack02/Makefile
 psxstat/Makefile
+psxstrsignal01/Makefile
 psxsysconf/Makefile
 psxtime/Makefile
 psxtimer01/Makefile
