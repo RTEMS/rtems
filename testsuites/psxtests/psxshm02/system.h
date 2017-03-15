@@ -31,7 +31,8 @@ const POSIX_Shm_Object_operations _POSIX_Shm_Object_operations = {
   _POSIX_Shm_Object_create_from_heap,
   _POSIX_Shm_Object_resize_from_heap,
   _POSIX_Shm_Object_delete_from_heap,
-  _POSIX_Shm_Object_read_from_heap
+  _POSIX_Shm_Object_read_from_heap,
+  _POSIX_Shm_Object_mmap_from_heap
 };
 #define CONFIGURE_HAS_OWN_POSIX_SHM_OBJECT_OPERATIONS
 

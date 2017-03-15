@@ -2586,7 +2586,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
           _POSIX_Shm_Object_create_from_workspace,
           _POSIX_Shm_Object_resize_from_workspace,
           _POSIX_Shm_Object_delete_from_workspace,
-          _POSIX_Shm_Object_read_from_workspace
+          _POSIX_Shm_Object_read_from_workspace,
+          _POSIX_Shm_Object_mmap_from_workspace
         };
       #endif
     #endif

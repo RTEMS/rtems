@@ -75,4 +75,21 @@ int _POSIX_Shm_Object_read_from_workspace(
   return count;
 }
 
+void * _POSIX_Shm_Object_mmap_from_workspace(
+  POSIX_Shm_Object *shm_obj,
+  size_t len,
+  int prot,
+  off_t off
+)
+{
+  if ( shm_obj == NULL || shm_obj->handle == NULL )
+    return 0;
+
+  /* This is already checked by mmap. Maybe make it a debug assert? */
+  if ( shm_obj->size < len + off ) {
+    return NULL;
+  }
+
+  return &(shm_obj->handle[off]);
+}
 

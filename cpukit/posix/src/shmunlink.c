@@ -40,8 +40,8 @@ int shm_unlink( const char *name )
     default:
       _Objects_Close( &_POSIX_Shm_Information, &shm->Object );
       if ( shm->reference_count == 0 ) {
-        /* TODO: need to make sure this counts mmaps too! */
-        /* only remove the shm object if no references exist to it. */
+        /* Only remove the shm object if no references exist to it. Otherwise,
+         * the shm object will be freed later in _POSIX_Shm_Attempt_delete */
         _POSIX_Shm_Free( shm );
       }
       break;

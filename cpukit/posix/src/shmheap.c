@@ -70,6 +70,7 @@ int _POSIX_Shm_Object_resize_from_heap(
   return err;
 }
 
+/* This is identical to _POSIX_Shm_Object_read_from_wkspace */
 int _POSIX_Shm_Object_read_from_heap(
   POSIX_Shm_Object *shm_obj,
   void *buf,
@@ -86,5 +87,24 @@ int _POSIX_Shm_Object_read_from_heap(
   memcpy( buf, shm_obj->handle, count );
 
   return count;
+}
+
+/* This is identical to _POSIX_Shm_Object_mmap_from_wkspace */
+void * _POSIX_Shm_Object_mmap_from_heap(
+  POSIX_Shm_Object *shm_obj,
+  size_t len,
+  int prot,
+  off_t off
+)
+{
+  if ( shm_obj == NULL || shm_obj->handle == NULL )
+    return 0;
+
+  /* This is already checked by mmap. Maybe make it a debug assert? */
+  if ( shm_obj->size < len + off ) {
+    return NULL;
+  }
+
+  return &(shm_obj->handle[off]);
 }
 

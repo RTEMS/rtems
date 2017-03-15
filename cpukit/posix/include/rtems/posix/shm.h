@@ -91,6 +91,16 @@ struct POSIX_Shm_Object_operations {
    * Returns the number of bytes read (copied) into @a buf.
    */
   int ( *object_read ) ( POSIX_Shm_Object *shm_obj, void *buf, size_t count );
+
+  /**
+   * @brief Maps a shared memory object.
+   *
+   * Establishes a memory mapping between the shared memory object and the
+   * caller.
+   *
+   * Returns the mapped address of the object.
+   */
+  void * ( *object_mmap ) ( POSIX_Shm_Object *shm_obj, size_t len, int prot, off_t off);
 };
 
 /**
@@ -144,6 +154,16 @@ extern int _POSIX_Shm_Object_read_from_workspace(
 );
 
 /**
+ * @brief object_mmap operation for shm objects stored in RTEMS Workspace.
+ */
+extern void * _POSIX_Shm_Object_mmap_from_workspace(
+  POSIX_Shm_Object *shm_obj,
+  size_t len,
+  int prot,
+  off_t off
+);
+
+/**
  * @brief object_create operation for shm objects stored in C program heap.
  */
 extern int _POSIX_Shm_Object_create_from_heap(
@@ -171,6 +191,16 @@ extern int _POSIX_Shm_Object_read_from_heap(
   POSIX_Shm_Object *shm_obj,
   void *buf,
   size_t count
+);
+
+/**
+ * @brief object_mmap operation for shm objects stored in C program heap.
+ */
+extern void * _POSIX_Shm_Object_mmap_from_heap(
+  POSIX_Shm_Object *shm_obj,
+  size_t len,
+  int prot,
+  off_t off
 );
 
 /** @} */
