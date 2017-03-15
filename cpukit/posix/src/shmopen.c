@@ -66,6 +66,7 @@ static ssize_t shm_read( rtems_libio_t *iop, void *buffer, size_t count )
       buffer,
       count
   );
+  _POSIX_Shm_Update_atime( shm );
   _POSIX_Shm_Release( shm, &queue_context );
 
   return bytes_read;

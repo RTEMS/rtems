@@ -84,6 +84,15 @@ RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Get_by_name(
   );
 }
 
+RTEMS_INLINE_ROUTINE void _POSIX_Shm_Update_atime(
+  POSIX_Shm_Control *shm
+)
+{
+  struct timeval now;
+  gettimeofday( &now, 0 );
+  shm->atime = now.tv_sec;
+}
+
 RTEMS_INLINE_ROUTINE void _POSIX_Shm_Update_mtime_ctime(
   POSIX_Shm_Control *shm
 )
