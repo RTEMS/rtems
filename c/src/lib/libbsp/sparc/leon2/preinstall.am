@@ -257,6 +257,10 @@ $(PROJECT_INCLUDE)/bsp/l2c.h: ../../sparc/shared/include/l2c.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/l2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/l2c.h
 
+$(PROJECT_INCLUDE)/bsp/griommu.h: ../../sparc/shared/include/griommu.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/griommu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/griommu.h
+
 $(PROJECT_INCLUDE)/bsp/grtc.h: ../../sparc/shared/include/grtc.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grtc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grtc.h

@@ -99,6 +99,10 @@ EXTRA_DIST += shared/mem/mctrl.c
 EXTRA_DIST += shared/l2c/l2c.c
 EXTRA_DIST += shared/include/l2c.h
 
+# GRIOMMU
+EXTRA_DIST += shared/iommu/griommu.c
+EXTRA_DIST += shared/include/griommu.h
+
 # MIL-STD-B1553 (Core1553BRM)
 EXTRA_DIST += shared/1553/b1553brm.c
 EXTRA_DIST += shared/1553/b1553rt.c

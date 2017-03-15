@@ -209,6 +209,10 @@ include_bsp_HEADERS += ../../sparc/shared/include/mctrl.h
 libbsp_a_SOURCES += ../../sparc/shared/l2c/l2c.c
 include_bsp_HEADERS += ../../sparc/shared/include/l2c.h
 
+# griommu
+libbsp_a_SOURCES += ../../sparc/shared/iommu/griommu.c
+include_bsp_HEADERS += ../../sparc/shared/include/griommu.h
+
 # timer
 libbsp_a_SOURCES += timer/timer.c
 libbsp_a_SOURCES += timer/watchdog.c

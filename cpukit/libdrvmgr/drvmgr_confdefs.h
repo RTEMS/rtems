@@ -48,6 +48,7 @@ extern void pcif_register_drv(void);
 extern void grpci_register_drv(void);
 extern void mctrl_register_drv(void);
 extern void l2cache_register_drv(void);
+extern void griommu_register_drv(void);
 extern void grpci2_register_drv(void);
 extern void spictrl_register_drv(void);
 extern void i2cmst_register_drv(void);
@@ -138,6 +139,9 @@ drvmgr_drv_reg_func drvmgr_drivers[] = {
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_L2CACHE
 	l2cache_register_drv,
+#endif
+#ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_GRIOMMU
+	griommu_register_drv,
 #endif
 #ifdef CONFIGURE_DRIVER_AMBAPP_GAISLER_SPICTRL
 	spictrl_register_drv,
