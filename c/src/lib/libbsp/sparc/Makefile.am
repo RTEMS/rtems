@@ -182,5 +182,9 @@ EXTRA_DIST += shared/include/grtc.h
 EXTRA_DIST += shared/tmtc/grtm.c
 EXTRA_DIST += shared/include/grtm.h
 
+# MEMSCRUB
+EXTRA_DIST += shared/stat/memscrub.c
+EXTRA_DIST += shared/include/memscrub.h
+
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

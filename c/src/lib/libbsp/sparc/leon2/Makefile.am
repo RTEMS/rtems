@@ -205,6 +205,10 @@ include_bsp_HEADERS += ../../sparc/shared/include/grtm.h
 libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtc.c
 libbsp_a_SOURCES += ../../sparc/shared/tmtc/grtm.c
 
+# MEMSCRUB
+libbsp_a_SOURCES += ../../sparc/shared/scrub/memscrub.c
+include_bsp_HEADERS += ../../sparc/shared/include/memscrub.h
+
 # Driver Manager
 include_drvmgrdir = $(includedir)/drvmgr
 include_drvmgr_HEADERS = ../../sparc/shared/include/drvmgr/ambapp_bus.h

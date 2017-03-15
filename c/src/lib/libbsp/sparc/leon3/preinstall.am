@@ -317,6 +317,10 @@ $(PROJECT_INCLUDE)/bsp/grtm.h: ../../sparc/shared/include/grtm.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grtm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grtm.h
 
+$(PROJECT_INCLUDE)/bsp/memscrub.h: ../../sparc/shared/include/memscrub.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/memscrub.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/memscrub.h
+
 $(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr
 	@: > $(PROJECT_INCLUDE)/drvmgr/$(dirstamp)
