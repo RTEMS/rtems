@@ -301,8 +301,8 @@ void rtems_filesystem_eval_path_cleanup(
 {
   free_location(&ctx->currentloc);
   rtems_filesystem_instance_unlock(&ctx->startloc->location);
-  rtems_filesystem_global_location_release(ctx->startloc);
-  rtems_filesystem_global_location_release(ctx->rootloc);
+  rtems_filesystem_global_location_release(ctx->startloc, false);
+  rtems_filesystem_global_location_release(ctx->rootloc, false);
 }
 
 void rtems_filesystem_eval_path_cleanup_with_parent(

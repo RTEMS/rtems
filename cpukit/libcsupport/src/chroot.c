@@ -80,7 +80,7 @@ int chroot( const char *path )
     }
 
     if ( rv != 0 ) {
-      rtems_filesystem_global_location_release( new_root_loc );
+      rtems_filesystem_global_location_release( new_root_loc, true );
     }
   } else {
     rv = -1;
@@ -89,7 +89,7 @@ int chroot( const char *path )
   rtems_filesystem_eval_path_cleanup( &ctx );
 
   if ( rv != 0 ) {
-    rtems_filesystem_global_location_release( new_current_loc );
+    rtems_filesystem_global_location_release( new_current_loc, false );
   }
 
   return rv;
