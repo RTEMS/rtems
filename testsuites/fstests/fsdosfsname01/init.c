@@ -50,7 +50,7 @@ const char rtems_test_name[] = "FSDOSFSNAME 1";
 #define NUMBER_OF_DIRECTORIES 8
 #define NUMBER_OF_FILES 13
 #define NUMBER_OF_DIRECTORIES_INVALID 25
-#define NUMBER_OF_DIRECTORIES_DUPLICATED 2
+#define NUMBER_OF_DIRECTORIES_DUPLICATED 3
 #define NUMBER_OF_MULTIBYTE_NAMES_DUPLICATED 2
 #define NUMBER_OF_FILES_DUPLICATED 2
 #define NUMBER_OF_NAMES_MULTIBYTE 10
@@ -190,6 +190,15 @@ static const name_duplicates DIRECTORY_DUPLICATES[
       "shrtdir",
       "SHRTDIR",
       "Shrtdir"
+    }
+  },
+  {
+    "Kurzdir",
+    3,
+    {
+      "kurzdir",
+      "KURZDIR",
+      "Kurzdir"
     }
   },
   {
