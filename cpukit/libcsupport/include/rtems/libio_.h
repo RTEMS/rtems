@@ -507,11 +507,14 @@ rtems_filesystem_global_location_t *rtems_filesystem_global_location_obtain(
  * deferred.  The next obtain call will do the actual release.
  *
  * @param[in] global_loc The global file system location.  It must not be NULL.
+ * @param[in] deferred If true, then do a deferred release, otherwise release
+ *   it immediately.
  *
  * @see rtems_filesystem_global_location_obtain().
  */
 void rtems_filesystem_global_location_release(
-  rtems_filesystem_global_location_t *global_loc
+  rtems_filesystem_global_location_t *global_loc,
+  bool deferred
 );
 
 void rtems_filesystem_location_detach(

@@ -44,8 +44,8 @@ void rtems_libio_free_user_env(void *arg)
   bool uses_global_env = env == &rtems_global_user_env;
 
   if (!uses_global_env) {
-    rtems_filesystem_global_location_release(env->current_directory);
-    rtems_filesystem_global_location_release(env->root_directory);
+    rtems_filesystem_global_location_release(env->current_directory, false);
+    rtems_filesystem_global_location_release(env->root_directory, false);
     free(env);
   }
 }

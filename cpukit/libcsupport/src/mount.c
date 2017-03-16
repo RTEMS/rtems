@@ -126,7 +126,7 @@ static int register_subordinate_file_system(
       );
       rtems_filesystem_mt_unlock();
     } else {
-      rtems_filesystem_global_location_release( mt_point_node );
+      rtems_filesystem_global_location_release( mt_point_node, true );
     }
   } else {
     rtems_filesystem_eval_path_error( &ctx, EBUSY );

@@ -106,7 +106,7 @@ void rtems_filesystem_global_location_assign(
   *lhs_global_loc_ptr = rhs_global_loc;
   rtems_filesystem_mt_entry_unlock(lock_context);
 
-  rtems_filesystem_global_location_release(lhs_global_loc);
+  rtems_filesystem_global_location_release(lhs_global_loc, true);
 }
 
 static void release_with_count(
@@ -184,10 +184,11 @@ rtems_filesystem_global_location_t *rtems_filesystem_global_location_obtain(
 }
 
 void rtems_filesystem_global_location_release(
-  rtems_filesystem_global_location_t *global_loc
+  rtems_filesystem_global_location_t *global_loc,
+  bool deferred
 )
 {
-  if (_Thread_Dispatch_is_enabled()) {
+  if (!deferred) {
     release_with_count(global_loc, 1);
   } else {
     rtems_interrupt_lock_context lock_context;
@@ -233,7 +234,7 @@ void rtems_filesystem_do_unmount(
   rtems_filesystem_mt_lock();
   rtems_chain_extract_unprotected(&mt_entry->mt_node);
   rtems_filesystem_mt_unlock();
-  rtems_filesystem_global_location_release(mt_entry->mt_point_node);
+  rtems_filesystem_global_location_release(mt_entry->mt_point_node, false);
   (*mt_entry->ops->fsunmount_me_h)(mt_entry);
 
   if (mt_entry->unmount_task != 0) {

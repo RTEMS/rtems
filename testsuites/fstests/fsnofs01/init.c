@@ -74,9 +74,9 @@ static void test_initial_values(void)
   rtems_test_assert(null_mt->mt_fs_root == null_loc);
   rtems_test_assert(!null_mt->mounted);
   rtems_test_assert(!null_mt->writeable);
-  rtems_test_assert(null_loc->reference_count == 6);
+  rtems_test_assert(null_loc->reference_count == 4);
   rtems_test_assert(null_loc->deferred_released_next == NULL);
-  rtems_test_assert(null_loc->deferred_released_count == 2);
+  rtems_test_assert(null_loc->deferred_released_count == 0);
 }
 
 static void test_location_obtain(void)
@@ -90,7 +90,7 @@ static void test_location_obtain(void)
   rtems_test_assert(node_count(loc_chain) == 1);
   rtems_test_assert(null_loc->reference_count == 5);
 
-  rtems_filesystem_global_location_release(null_loc);
+  rtems_filesystem_global_location_release(null_loc, false);
 
   rtems_test_assert(node_count(loc_chain) == 1);
   rtems_test_assert(null_loc->reference_count == 4);
@@ -106,7 +106,7 @@ static void test_null_location_obtain(void)
   rtems_test_assert(node_count(loc_chain) == 1);
   rtems_test_assert(null_loc->reference_count == 5);
 
-  rtems_filesystem_global_location_release(null_loc);
+  rtems_filesystem_global_location_release(null_loc, false);
 
   rtems_test_assert(node_count(loc_chain) == 1);
   rtems_test_assert(null_loc->reference_count == 4);

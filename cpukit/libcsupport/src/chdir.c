@@ -39,7 +39,7 @@ int rtems_filesystem_chdir( rtems_filesystem_location_info_t *loc )
     );
   } else {
     rtems_filesystem_location_error( &global_loc->location, ENOTDIR );
-    rtems_filesystem_global_location_release( global_loc );
+    rtems_filesystem_global_location_release( global_loc, true );
     rv = -1;
   }
 
