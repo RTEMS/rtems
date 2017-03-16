@@ -1760,10 +1760,11 @@ msdos_add_file (
 #endif
         for (i = 0; i < MSDOS_LFN_LEN_PER_ENTRY; ++i)
         {
-            if (!(*n == 0 && *(n+1) == 0))
+            if (*n != 0 || *(n + 1) != 0)
             {
                 *p = *n;
-                *(p+1) = *(n+1);
+                *(p + 1) = *(n + 1);
+                n += MSDOS_NAME_LFN_BYTES_PER_CHAR;
             }
             else
             {
@@ -1771,7 +1772,6 @@ msdos_add_file (
                 p [1] = fill;
                 fill = 0xff;
             }
-            n += MSDOS_NAME_LFN_BYTES_PER_CHAR;
 #if MSDOS_FIND_PRINT
             printf ( "'%c''%c'", *p, *(p+1) );
 #endif
