@@ -1441,6 +1441,9 @@ msdos_find_file_in_directory (
                 if ((*MSDOS_DIR_ATTR(entry) & MSDOS_ATTR_LFN_MASK) ==
                     MSDOS_ATTR_LFN)
                 {
+                    bool is_first_lfn_entry =
+                        (lfn_start.cln == FAT_FILE_SHORT_NAME);
+
 /*                    int   o;*/
 #if MSDOS_FIND_PRINT
                     printf ("MSFS:[4.2] lfn:%c entry:%i checksum:%i\n",
@@ -1452,7 +1455,7 @@ msdos_find_file_in_directory (
                      * If we are not already processing a LFN see if this is
                      * the first entry of a LFN ?
                      */
-                    if (lfn_start.cln == FAT_FILE_SHORT_NAME)
+                    if (is_first_lfn_entry)
                     {
                         entry_matched = false;
 
@@ -1464,23 +1467,10 @@ msdos_find_file_in_directory (
                              MSDOS_LAST_LONG_ENTRY) == 0)
                             continue;
 
-                        /*
-                         * Does the number of entries in the LFN directory
-                         * entry match the number we expect for this
-                         * file name. Note we do not know the number of
-                         * characters in the entry so this is check further
-                         * on when the characters are checked.
-                         */
-                        if (lfn_entries != (*MSDOS_DIR_ENTRY_TYPE(entry) &
-                                            MSDOS_LAST_LONG_ENTRY_MASK))
-                            continue;
-
-                        /*
-                         * Get the checksum of the short entry.
-                         */
                         lfn_start.cln = dir_offset;
                         lfn_start.ofs = dir_entry;
-                        lfn_entry = lfn_entries;
+                        lfn_entry = (*MSDOS_DIR_ENTRY_TYPE(entry)
+                            & MSDOS_LAST_LONG_ENTRY_MASK);
                         lfn_checksum = *MSDOS_DIR_LFN_CHECKSUM(entry);
 
 #if MSDOS_FIND_PRINT
@@ -1513,7 +1503,7 @@ msdos_find_file_in_directory (
                     bytes_in_entry = msdos_long_entry_to_utf8_name (
                         converter,
                         entry,
-                        (lfn_entry + 1) == lfn_entries,
+                        is_first_lfn_entry,
                         &entry_utf8_normalized[0],
                         sizeof (entry_utf8_normalized));
                     if (bytes_in_entry > 0) {
