@@ -288,7 +288,13 @@ msdos_get_valid_utf16_filename_character (const uint16_t utf16_character)
 static char
 msdos_get_valid_codepage_filename_character (const uint8_t character)
 {
-  return codepage_valid_char_map[(unsigned int)character];
+  char c = codepage_valid_char_map[character];
+
+  if (c == 0) {
+    c = '_';
+  }
+
+  return c;
 }
 
 static ssize_t
@@ -556,7 +562,6 @@ msdos_filename_utf8_to_short_name_for_save (
   size_t         name_size               = utf8_name_size;
   char          *dest_ptr                = (char*)short_name;
   unsigned int   i;
-  char           c;
   size_t         name_size_tmp;
   char           name_to_format_buf[MSDOS_SHORT_NAME_LEN +1];
 
@@ -606,10 +611,8 @@ msdos_filename_utf8_to_short_name_for_save (
           dest_ptr[0] = '_';
         else if ( 0xE5 == *name_ptr )
           dest_ptr[0] = 0x05;
-        else if (0 != (c = msdos_get_valid_codepage_filename_character( *name_ptr ) ) )
-          dest_ptr[0] = c;
         else
-          dest_ptr[0] = '_';
+          dest_ptr[0] = msdos_get_valid_codepage_filename_character(*name_ptr);
         ++name_ptr;
         ++returned_size;
         --name_size;
@@ -617,11 +620,7 @@ msdos_filename_utf8_to_short_name_for_save (
          * Validate and assign all other characters of the name part
          */
         for (i = 1; i <= 7 && name_size && *name_ptr != '.'; ++i) {
-          c = msdos_get_valid_codepage_filename_character ( *name_ptr );
-          if (c != 0)
-            dest_ptr[i] = c;
-          else
-            dest_ptr[i] = '_';
+          dest_ptr[i] = msdos_get_valid_codepage_filename_character(*name_ptr);
           ++name_ptr;
           ++returned_size;
           --name_size;
@@ -644,11 +643,7 @@ msdos_filename_utf8_to_short_name_for_save (
          * Copy in the extension part of the name, if any.
          */
         for (; i <= 10 && name_size ; i++) {
-          c = msdos_get_valid_codepage_filename_character ( *name_ptr);
-          if (c != 0)
-            dest_ptr[i] = c;
-          else
-            dest_ptr[i] = '_';
+          dest_ptr[i] = msdos_get_valid_codepage_filename_character(*name_ptr);
           ++name_ptr;
           ++returned_size;
           name_size--;
