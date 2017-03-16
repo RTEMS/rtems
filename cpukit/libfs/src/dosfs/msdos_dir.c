@@ -88,6 +88,11 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     size_t             string_size = sizeof(tmp_dirent.d_name);
     bool               is_first_entry;
 
+    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
+                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
+    if (sc != RTEMS_SUCCESSFUL)
+        rtems_set_errno_and_return_minus_one(EIO);
+
     /*
      * cast start and count - protect against using sizes that are not exact
      * multiples of the -dirent- size. These could result in unexpected
@@ -106,11 +111,6 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
              (fs_info->fat.vol.type & (FAT_FAT12 | FAT_FAT16))) ?
              fat_fd->fat_file_size                              :
              fs_info->fat.vol.bpc;
-
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
 
     while (count > 0 && cmpltd >= 0)
     {
