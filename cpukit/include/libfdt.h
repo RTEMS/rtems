@@ -143,7 +143,9 @@
 /* Low-level functions (you probably don't need these)                */
 /**********************************************************************/
 
+#ifndef SWIG /* This function is not useful in Python */
 const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int checklen);
+#endif
 static inline void *fdt_offset_ptr_w(void *fdt, int offset, int checklen)
 {
 	return (void *)(uintptr_t)fdt_offset_ptr(fdt, offset, checklen);
@@ -210,7 +212,6 @@ int fdt_next_subnode(const void *fdt, int offset);
 /**********************************************************************/
 /* General functions                                                  */
 /**********************************************************************/
-
 #define fdt_get_header(fdt, field) \
 	(fdt32_to_cpu(((const struct fdt_header *)(fdt))->field))
 #define fdt_magic(fdt)			(fdt_get_header(fdt, magic))
@@ -354,8 +355,10 @@ int fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size);
  * useful for finding subnodes based on a portion of a larger string,
  * such as a full path.
  */
+#ifndef SWIG /* Not available in Python */
 int fdt_subnode_offset_namelen(const void *fdt, int parentoffset,
 			       const char *name, int namelen);
+#endif
 /**
  * fdt_subnode_offset - find a subnode of a given node
  * @fdt: pointer to the device tree blob
@@ -391,7 +394,9 @@ int fdt_subnode_offset(const void *fdt, int parentoffset, const char *name);
  * Identical to fdt_path_offset(), but only consider the first namelen
  * characters of path as the path name.
  */
+#ifndef SWIG /* Not available in Python */
 int fdt_path_offset_namelen(const void *fdt, const char *path, int namelen);
+#endif
 
 /**
  * fdt_path_offset - find a tree node by its full path
@@ -550,10 +555,12 @@ const struct fdt_property *fdt_get_property_by_offset(const void *fdt,
  * Identical to fdt_get_property(), but only examine the first namelen
  * characters of name for matching the property name.
  */
+#ifndef SWIG /* Not available in Python */
 const struct fdt_property *fdt_get_property_namelen(const void *fdt,
 						    int nodeoffset,
 						    const char *name,
 						    int namelen, int *lenp);
+#endif
 
 /**
  * fdt_get_property - find a given property in a given node
@@ -624,8 +631,10 @@ static inline struct fdt_property *fdt_get_property_w(void *fdt, int nodeoffset,
  *		-FDT_ERR_BADSTRUCTURE,
  *		-FDT_ERR_TRUNCATED, standard meanings
  */
+#ifndef SWIG /* This function is not useful in Python */
 const void *fdt_getprop_by_offset(const void *fdt, int offset,
 				  const char **namep, int *lenp);
+#endif
 
 /**
  * fdt_getprop_namelen - get property value based on substring
@@ -638,6 +647,7 @@ const void *fdt_getprop_by_offset(const void *fdt, int offset,
  * Identical to fdt_getprop(), but only examine the first namelen
  * characters of name for matching the property name.
  */
+#ifndef SWIG /* Not available in Python */
 const void *fdt_getprop_namelen(const void *fdt, int nodeoffset,
 				const char *name, int namelen, int *lenp);
 static inline void *fdt_getprop_namelen_w(void *fdt, int nodeoffset,
@@ -647,6 +657,7 @@ static inline void *fdt_getprop_namelen_w(void *fdt, int nodeoffset,
 	return (void *)(uintptr_t)fdt_getprop_namelen(fdt, nodeoffset, name,
 						      namelen, lenp);
 }
+#endif
 
 /**
  * fdt_getprop - retrieve the value of a given property
@@ -707,8 +718,10 @@ uint32_t fdt_get_phandle(const void *fdt, int nodeoffset);
  * Identical to fdt_get_alias(), but only examine the first namelen
  * characters of name for matching the alias name.
  */
+#ifndef SWIG /* Not available in Python */
 const char *fdt_get_alias_namelen(const void *fdt,
 				  const char *name, int namelen);
+#endif
 
 /**
  * fdt_get_alias - retrieve the path referenced by a given alias
@@ -1106,10 +1119,12 @@ int fdt_size_cells(const void *fdt, int nodeoffset);
  * of the name. It is useful when you want to manipulate only one value of
  * an array and you have a string that doesn't end with \0.
  */
+#ifndef SWIG /* Not available in Python */
 int fdt_setprop_inplace_namelen_partial(void *fdt, int nodeoffset,
 					const char *name, int namelen,
 					uint32_t idx, const void *val,
 					int len);
+#endif
 
 /**
  * fdt_setprop_inplace - change a property's value, but not its size
@@ -1139,8 +1154,10 @@ int fdt_setprop_inplace_namelen_partial(void *fdt, int nodeoffset,
  *	-FDT_ERR_BADSTRUCTURE,
  *	-FDT_ERR_TRUNCATED, standard meanings
  */
+#ifndef SWIG /* Not available in Python */
 int fdt_setprop_inplace(void *fdt, int nodeoffset, const char *name,
 			const void *val, int len);
+#endif
 
 /**
  * fdt_setprop_inplace_u32 - change the value of a 32-bit integer property
@@ -1734,8 +1751,10 @@ int fdt_delprop(void *fdt, int nodeoffset, const char *name);
  * creating subnodes based on a portion of a larger string, such as a
  * full path.
  */
+#ifndef SWIG /* Not available in Python */
 int fdt_add_subnode_namelen(void *fdt, int parentoffset,
 			    const char *name, int namelen);
+#endif
 
 /**
  * fdt_add_subnode - creates a new node
