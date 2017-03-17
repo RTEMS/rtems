@@ -17,31 +17,43 @@
  *
  */
 
-
 #ifndef __AMBAPP_DEVS_H__
 #define __AMBAPP_DEVS_H__
 
 /* Vendor codes */
-#define VENDOR_GAISLER       1
-#define VENDOR_PENDER        2
-#define VENDOR_ESA           4
-#define VENDOR_ASTRIUM       6
-#define VENDOR_OPENCHIP      7
-#define VENDOR_OPENCORES     8
-#define VENDOR_CONTRIB       9
-#define VENDOR_EONIC         11
-#define VENDOR_RADIONOR      15
-#define VENDOR_GLEICHMANN    16
-#define VENDOR_MENTA         17
-#define VENDOR_SUN           19
-#define VENDOR_MOVIDIA       20
-#define VENDOR_ORBITA        23
-#define VENDOR_SYNOPSYS      33
-#define VENDOR_NASA          34
-#define VENDOR_ACTEL         172
-#define VENDOR_CAL           202
-#define VENDOR_EMBEDDIT      234
-#define VENDOR_CETON         203
+#define VENDOR_RESERVED      0x00
+#define VENDOR_GAISLER       0x01
+#define VENDOR_PENDER        0x02
+#define VENDOR_ESA           0x04
+#define VENDOR_ASTRIUM       0x06
+#define VENDOR_OPENCHIP      0x07
+#define VENDOR_OPENCORES     0x08
+#define VENDOR_CONTRIB       0x09
+#define VENDOR_DLR           0x0a
+#define VENDOR_EONIC         0x0b
+#define VENDOR_TELECOMPT     0x0c
+#define VENDOR_DTU           0x0d
+#define VENDOR_BSC           0x0e
+#define VENDOR_RADIONOR      0x0f
+#define VENDOR_GLEICHMANN    0x10
+#define VENDOR_MENTA         0x11
+#define VENDOR_SUN           0x13
+#define VENDOR_MOVIDIA       0x14
+#define VENDOR_ORBITA        0x17
+#define VENDOR_SIEMENS       0x1a
+#define VENDOR_SYNOPSYS      0x21
+#define VENDOR_NASA          0x22
+#define VENDOR_NIIET         0x23
+#define VENDOR_S3            0x31
+#define VENDOR_ACTEL         0xac
+#define VENDOR_APPLECORE     0xae
+#define VENDOR_C3E           0xc3
+#define VENDOR_CBKPAN        0xc8
+#define VENDOR_CAL           0xca
+#define VENDOR_CETON         0xcb
+#define VENDOR_EMBEDDIT      0xea
+#define VENDOR_NASA_GSFC     0xfc
+#define VENDOR_AZST          0xfe
 
 /* Gaisler Research device id's */
 #define GAISLER_LEON2DSU     0x002
@@ -136,6 +148,8 @@
 #define GAISLER_N2PLLCTRL    0x05b
 #define GAISLER_SPI2AHB      0x05c
 #define GAISLER_DDRSDMUX     0x05d
+#define GAISLER_AHBFROM      0x05e
+#define GAISLER_PCIEXP       0x05f
 #define GAISLER_APBPS2       0x060
 #define GAISLER_VGACTRL      0x061
 #define GAISLER_LOGAN        0x062
@@ -169,6 +183,7 @@
 #define GAISLER_GRPCI2       0x07c
 #define GAISLER_GRPCI2_DMA   0x07d
 #define GAISLER_GRPCI2_TB    0x07e
+#define GAISLER_MMA          0x07f
 #define GAISLER_SATCAN       0x080
 #define GAISLER_CANMUX       0x081
 #define GAISLER_GRTMRX       0x082
@@ -186,8 +201,31 @@
 #define GAISLER_GRPWTX       0x08d
 #define GAISLER_GRPWRX       0x08e
 #define GAISLER_GPREGBANK    0x08f
-#define GAISLER_MIG_SERIES7  0x090
+#define GAISLER_MIG_7SERIES  0x090
+#define GAISLER_GRSPW2_SIST  0x091
+#define GAISLER_SGMII        0x092
+#define GAISLER_RGMII        0x093
+#define GAISLER_IRQGEN       0x094
+#define GAISLER_GRDMAC       0x095
+#define GAISLER_AHB2AVLA     0x096
 #define GAISLER_SPWTDP       0x097
+#define GAISLER_L3STAT       0x098
+#define GAISLER_GR740THS     0x099
+#define GAISLER_GRRM         0x09a
+#define GAISLER_CMAP         0x09b
+#define GAISLER_CPGEN        0x09c
+#define GAISLER_AMBAPROT     0x09d
+#define GAISLER_IGLOO2_BRIDGE 0x09e
+#define GAISLER_AHB2AXI      0x09f
+#define GAISLER_AXI2AHB      0x0a0
+#define GAISLER_FDIR_RSTCTRL 0x0a1
+#define GAISLER_APB3MST      0x0a2
+#define GAISLER_LRAM         0x0a3
+#define GAISLER_BOOTSEQ      0x0a4
+#define GAISLER_TCCOP        0x0a5
+#define GAISLER_SPIMASTER    0x0a6
+#define GAISLER_SPISLAVE     0x0a7
+#define GAISLER_GRSRIO       0x0a8
 
 #define GAISLER_PIPEWRAPPER  0xffa
 #define GAISLER_L2TIME       0xffd  /* internal device: leon2 timer */
