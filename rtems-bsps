@@ -5,7 +5,7 @@ base_e=$(echo ${base} | sed -e 's/\//\\\//g')
 
 last_arch=""
 
-cfg_list=$(LANG=C LC_COLLATE=C find ${base} -depth 5 -name \*.cfg | sort)
+cfg_list=$(LANG=C LC_COLLATE=C find ${base} -mindepth 5 -name \*.cfg | sort)
 
 max_bsp_len=0
 arch_count=0
