@@ -46,6 +46,7 @@ void print_c_oflag(struct termios * tp);
 void print_c_lflag(struct termios * tp);
 void print_c_cflag(struct termios * tp);
 void print_c_cc(struct termios * tp);
+void print_baud(const char* name, speed_t spd);
 void print_termios(struct termios *tp);
 unsigned long get_baud_rate(void);
 unsigned long get_parity(void);
@@ -117,6 +118,9 @@ void print_c_oflag( struct termios * tp )
 
   if( tp->c_oflag & ONLCR )
     printf( "ONLCR " );
+
+  if( tp->c_oflag & ONOEOT )
+    printf( "ONOEOT " );
 
   if( tp->c_oflag & OCRNL )
     printf( "OCRNL " );
@@ -215,27 +219,38 @@ void print_c_oflag( struct termios * tp )
 void print_c_lflag( struct termios * tp )
 {
   char * c_lflag_bits [] = {
-    "ISIG",        /* 0000001 */
-    "ICANON",      /* 0000002 */
-    "XCASE",       /* 0000004 */
-    "ECHO",        /* 0000010 */
-    "ECHOE",       /* 0000020 */
-    "ECHOK",       /* 0000040 */
-    "ECHONL",      /* 0000100 */
-    "NOFLSH",      /* 0000200 */
-    "TOSTOP",      /* 0000400 */
-    "ECHOCTL",     /* 0001000 */
-    "ECHOPRT",     /* 0002000 */
-    "ECHOKE",      /* 0004000 */
-    "FLUSHO",      /* 0010000 */
-    "unknown",     /* 0020000 */
-    "PENDIN",      /* 0040000 */
-    "IEXTEN",      /* 0100000 */
-    "unknown",     /* 0200000 */
-    "unknown",     /* 0400000 */
-    "unknown",     /* 1000000 */
-    "unknown",     /* 2000000 */
-    "unknown",     /* 4000000 */
+    "ECHOKE",      /* 0x00000001 */
+    "ECHOE",       /* 0x00000002 */
+    "ECHOK",       /* 0x00000004 */
+    "ECHO",        /* 0x00000008 */
+    "ECHONL",      /* 0x00000010 */
+    "ECHOPRT",     /* 0x00000020 */
+    "ECHOCTL",     /* 0x00000040 */
+    "ISIG",        /* 0x00000080 */
+    "ICANON",      /* 0x00000100 */
+    "ALTWERASE",   /* 0x00000200 */
+    "IEXTEN",      /* 0x00000400 */
+    "EXTPROC",     /* 0x00000800 */
+    "XCASE",       /* 0x00001000 */
+    "unknown",     /* 0x00002000 */
+    "unknown",     /* 0x00004000 */
+    "unknown",     /* 0x00008000 */
+    "unknown",     /* 0x00010000 */
+    "unknown",     /* 0x00020000 */
+    "unknown",     /* 0x00040000 */
+    "unknown",     /* 0x00080000 */
+    "unknown",     /* 0x00100000 */
+    "unknown",     /* 0x00200000 */
+    "TOSTOP",      /* 0x00400000 */
+    "FLUSHO",      /* 0x00800000 */
+    "unknown",     /* 0x01000000 */
+    "NOKERNINFO",  /* 0x02000000 */
+    "unknown",     /* 0x04000000 */
+    "unknown",     /* 0x08000000 */
+    "unknown",     /* 0x10000000 */
+    "PENDIN",      /* 0x20000000 */
+    "unknown",     /* 0x40000000 */
+    "NOFLSH",      /* 0x80000000 */
   };
 
   printf( "c_lflag = 0x%08x\n\t", tp->c_lflag );
@@ -246,97 +261,7 @@ void print_c_lflag( struct termios * tp )
 
 void print_c_cflag( struct termios * tp )
 {
-  unsigned int baud;
-
   printf( "c_cflag = 0x%08x\n", tp->c_cflag );
-
-  baud = (tp->c_cflag & CBAUD) ;
-  if ( tp->c_cflag & CBAUDEX )
-  switch( baud ) {
-    case B0:
-      printf( "\tCBAUD =\tB0\n" );
-      break;
-
-    case B50:
-      printf( "\tCBAUD =\tB50\n" );
-      break;
-
-    case B75:
-      printf( "\tCBAUD =\tB75\n" );
-      break;
-
-    case B110:
-      printf( "\tCBAUD =\tB110\n" );
-      break;
-
-    case B134:
-      printf( "\tCBAUD =\tB134\n" );
-      break;
-
-    case B150:
-      printf( "\tCBAUD =\tB150\n" );
-      break;
-
-    case B200:
-      printf( "\tCBAUD =\tB200\n" );
-      break;
-
-    case B300:
-      printf( "\tCBAUD =\tB300\n" );
-      break;
-
-    case B600:
-      printf( "\tCBAUD =\tB600\n" );
-      break;
-
-    case B1200:
-      printf( "\tCBAUD =\tB1200\n" );
-      break;
-
-    case B1800:
-      printf( "\tCBAUD =\tB1800\n" );
-      break;
-
-    case B2400:
-      printf( "\tCBAUD =\tB2400\n" );
-      break;
-
-    case B4800:
-      printf( "\tCBAUD =\tB4800\n" );
-      break;
-
-    case B9600:
-      printf( "\tCBAUD =\tB9600\n" );
-      break;
-
-    case B19200:
-      printf( "\tCBAUD =\tB19200\n" );
-      break;
-
-    case B38400:
-      printf( "\tCBAUD =\tB38400\n" );
-      break;
-
-    case B57600:
-      printf( "\tCBAUD =\tB57600\n" );
-      break;
-
-    case B115200:
-      printf( "\tCBAUD =\tB115200\n" );
-      break;
-
-    case B230400:
-      printf( "\tCBAUD =\tB230400\n" );
-      break;
-
-    case B460800:
-      printf( "\tCBAUD =\tB460800\n" );
-      break;
-
-    default:
-      printf( "\tCBAUD =\tunknown (0x%08x)\n", baud );
-      break;
-    }
 
   switch( tp->c_cflag & CSIZE ) {
     case CS5:
@@ -355,6 +280,11 @@ void print_c_cflag( struct termios * tp )
       printf( "\tCSIZE =\tCS8\n" );
       break;
   }
+
+  if( tp->c_cflag & CIGNORE )
+    printf( "\tCIGNORE set: iqnore c_cflags enabled\n" );
+  else
+    printf( "\tCIGNORE clear: iqnore c_cflags disabled\n" );
 
   if( tp->c_cflag & CSTOPB )
     printf( "\tCSTOPB set: send 2 stop bits\n" );
@@ -386,17 +316,35 @@ void print_c_cflag( struct termios * tp )
   else
     printf( "\tCLOCAL clear: don't ignore modem lines\n" );
 
-#if defined(CBAUDEX)
-  if( tp->c_cflag & CBAUDEX )
-    printf( "\tCBAUDEX set: What does this do?\n" );
+  if( tp->c_cflag & CCTS_OFLOW )
+    printf( "\tCCTS_OFLOW: hardware CTS output flow control enabled\n" );
   else
-    printf( "\tCBAUDEX clear: What does this do?\n" );
-#endif
+    printf( "\tCCTS_OFLOW: hardware CTS output flow control disabled\n" );
+
+  if( tp->c_cflag & CRTS_IFLOW )
+    printf( "\tCRTS_IFLOW: hardware RTS input flow control enabled\n" );
+  else
+    printf( "\tCRTS_IFLOW: hardware RTS input flow control disabled\n" );
 
   if( tp->c_cflag & CRTSCTS )
     printf( "\tCRTSCTS: harware flow control enabled?\n" );
   else
     printf( "\tCRTSCTS: hardware flow control disabled?\n" );
+
+  if( tp->c_cflag & CDSR_OFLOW )
+    printf( "\tCDSR_OFLOW: hardware DSR output flow control enabled\n" );
+  else
+    printf( "\tCDSR_OFLOW: hardware DSR output flow control disabled\n" );
+
+  if( tp->c_cflag & CDTR_IFLOW )
+    printf( "\tCDTR_IFLOW: hardware DTR input flow control enabled\n" );
+  else
+    printf( "\tCDTR_IFLOW: hardware DTR input flow control disabled\n" );
+
+  if( tp->c_cflag & CCAR_OFLOW )
+    printf( "\tCCAR_OFLOW: hardware CD output flow control enabled\n" );
+  else
+    printf( "\tCCAR_OFLOW: hardware CD output flow control disabled\n" );
 }
 
 
@@ -404,29 +352,140 @@ void print_c_cc( struct termios * tp )
 {
   size_t i;
   char * cc_index_names [ /* NCCS */ ] = {
-    "[VINTR]   ",   /* 0 */
-    "[VQUIT]   ",   /* 1 */
-    "[VERASE]  ",   /* 2 */
-    "[VKILL]   ",   /* 3 */
-    "[VEOF]    ",   /* 4 */
-    "[VTIME]   ",   /* 5 */
-    "[VMIN]    ",   /* 6 */
-    "[VSWTC    ",   /* 7 */
-    "[VSTART]  ",   /* 8 */
-    "[VSTOP]   ",   /* 9 */
+    "[VEOF]    ",   /* 0 */
+    "[VEOL]    ",   /* 1 */
+    "[VEOL2]   ",   /* 2 */
+    "[VERASE]  ",   /* 3 */
+    "[VWERASE] ",   /* 4 */
+    "[VKILL]   ",   /* 5 */
+    "[VREPRINT]",   /* 6 */
+    "[VERASE2] ",   /* 7 */
+    "[VINTR]   ",   /* 8 */
+    "[VQUIT]   ",   /* 9 */
     "[VSUSP]   ",   /* 10 */
-    "[VEOL]    ",   /* 11 */
-    "[VREPRINT]",   /* 12 */
-    "[VDISCARD]",   /* 13 */
-    "[VWERASE] ",   /* 14 */
-    "[VLNEXT   ",   /* 15 */
-    "[VEOL2]   ",   /* 16 */
-    "unknown   ",   /* 17 */
-    "unknown   ",   /* 18 */
+    "[VDSUSP]  ",   /* 11 */
+    "[VSTART]  ",   /* 12 */
+    "[VSTOP]   ",   /* 13 */
+    "[VLNEXT]  ",   /* 14 */
+    "[VDISCARD]",   /* 15 */
+    "[VMIN]    ",   /* 16 */
+    "[VTIME]   ",   /* 17 */
+    "[VSTATUS] ",   /* 18 */
+    "unknown   ",   /* 19 */
   };
 
   for( i = 0; i < sizeof(cc_index_names)/sizeof(char*) ; i++ ) {
     printf( "c_cc%s = 0x%08x\n", cc_index_names[i], tp->c_cc[i] );
+  }
+}
+
+
+void print_baud( const char* name, speed_t spd )
+{
+  switch( spd ) {
+  case B0:
+    printf( "%s = B0\n", name );
+    break;
+
+  case B50:
+    printf( "%s = B50\n", name );
+    break;
+
+  case B75:
+    printf( "%s = B75\n", name );
+    break;
+
+  case B110:
+    printf( "%s = B110\n", name );
+    break;
+
+  case B134:
+    printf( "%s = B134\n", name );
+    break;
+
+  case B150:
+    printf( "%s = B150\n", name );
+    break;
+
+  case B200:
+    printf( "%s = B200\n", name );
+    break;
+
+  case B300:
+    printf( "%s = B300\n", name );
+    break;
+
+  case B600:
+    printf( "%s = B600\n", name );
+    break;
+
+  case B1200:
+    printf( "%s = B1200\n", name );
+    break;
+
+  case B1800:
+    printf( "%s = B1800\n", name );
+    break;
+
+  case B2400:
+    printf( "%s = B2400\n", name );
+    break;
+
+  case B4800:
+    printf( "%s = B4800\n", name );
+    break;
+
+  case B9600:
+    printf( "%s = B9600\n", name );
+    break;
+
+  case B19200:
+    printf( "%s = B19200\n", name );
+    break;
+
+  case B38400:
+    printf( "%s = B38400\n", name );
+    break;
+
+  case B7200:
+    printf( "%s = B7200\n", name );
+    break;
+
+  case B14400:
+    printf( "%s = B14400\n", name );
+    break;
+
+  case B28800:
+    printf( "%s = B28800\n", name );
+    break;
+
+  case B57600:
+    printf( "%s = B57600\n", name );
+    break;
+
+  case B76800:
+    printf( "%s = B76800\n", name );
+    break;
+
+  case B115200:
+    printf( "%s = B115200\n", name );
+    break;
+
+  case B230400:
+    printf( "%s = B230400\n", name );
+    break;
+
+  case B460800:
+    printf( "%s = B460800\n", name );
+    break;
+
+  case B921600:
+    printf( "%s = B921600\n", name );
+    break;
+
+  default:
+    printf( "%s = unknown (0x%08x)\n", name, (unsigned int)spd );
+    break;
   }
 }
 
@@ -439,6 +498,8 @@ void print_termios( struct termios *tp )
   print_c_cflag( tp );
   print_c_lflag( tp );
   print_c_cc( tp );
+  print_baud( "c_ispeed", tp->c_ispeed );
+  print_baud( "c_ospeed", tp->c_ospeed );
   printf( "\n" );
 }
 
@@ -450,7 +511,8 @@ unsigned long get_baud_rate(void)
   while( 1 ) {
     printf( "Enter the numerical value for the new baud rate.\n" );
     printf( "Choices are: 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800\n" );
-    printf( "2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800\n" );
+    printf( "2400, 4800, 9600, 19200, 38400, 7200, 14400, 28800, 57600, 76800\n" );
+    printf( "115200, 230400, 460800, 921600\n" );
     printf( "\nYour choice: " );
     scanf( "%lu", &baud_rate );
     printf( "\n" );
@@ -470,10 +532,15 @@ unsigned long get_baud_rate(void)
       case 9600:   return B9600;
       case 19200:  return B19200;
       case 38400:  return B38400;
+      case 7200:   return B7200;
+      case 14400:  return B14400;
+      case 28800:  return B28800;
       case 57600:  return B57600;
+      case 76800:  return B76800;
       case 115200: return B115200;
       case 230400: return B230400;
       case 460800: return B460800;
+      case 921600: return B921600;
 
       default:
         printf( "%lu is not a valid choice. Try again.\n\n", baud_rate );
@@ -589,7 +656,9 @@ void change_line_settings( struct termios *tp )
 
   sleep( sleep_time );
 
-  tp->c_cflag = CLOCAL | CREAD | parity | stop_bits | data_bits | baud_rate;
+  tp->c_cflag = CLOCAL | CREAD | parity | stop_bits | data_bits;
+  tp->c_ispeed = baud_rate;
+  tp->c_ospeed = baud_rate;
   if( tcsetattr( fileno( stdin ), TCSADRAIN, tp ) < 0 ) {
     perror( "change_line_settings(): tcsetattr() failed" );
     rtems_test_exit( 1 );

@@ -35,23 +35,32 @@
  *  POSIX 1003.1b 7.2.1 - Get and Set State
  */
 int tcsetattr(
-  int             fd,
-  int             opt,
-  struct termios *tp
+  int                   fd,
+  int                   opt,
+  const struct termios *tp
 )
 {
-  switch (opt) {
-  default:
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
+  struct termios localterm;
+
+  if (opt & TCSASOFT) {
+    localterm = *tp;
+    localterm.c_cflag |= CIGNORE;
+    tp = &localterm;
+  }
+
+  switch (opt & ~TCSASOFT) {
+
+  case TCSANOW:
+    return ioctl( fd, TIOCSETA, tp );
 
   case TCSADRAIN:
-    if (ioctl( fd, RTEMS_IO_TCDRAIN, NULL ) < 0)
-    	return -1;
-    /*
-     * Fall through to....
-     */
-  case TCSANOW:
-    return ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, tp );
+    return ioctl( fd, TIOCSETAW, tp );
+
+  case TCSAFLUSH:
+    return ioctl( fd, TIOCSETAF, tp );
+
+  default:
+    rtems_set_errno_and_return_minus_one( EINVAL );
   }
 }
 #endif

@@ -392,7 +392,7 @@ sccSetAttributes (int minor, const struct termios *t)
 {
   int baud;
 
-  switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
   default:	baud = -1;	break;
   case B50:	baud = 50;	break;
   case B75:	baud = 75;	break;

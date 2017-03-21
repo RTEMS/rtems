@@ -43,24 +43,24 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
+#define TTYDEFCHARS
 #include <termios.h>
 
 /*
- * Make a pre-existing termios structure into "raw" mode: character-at-a-time
- * mode with no characters interpreted, 8-bit data path.
+ * Obtain a termios structure which is similar to the one provided by
+ * the kernel.
  */
 void
-cfmakeraw(
+cfmakesane(
   struct termios *tp
 )
 {
-  tp->c_iflag &= ~(IMAXBEL|IXOFF|INPCK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON|IGNPAR);
-  tp->c_iflag |= IGNBRK;
-  tp->c_oflag &= ~OPOST;
-  tp->c_lflag &= ~(ECHO|ECHOE|ECHOK|ECHONL|ICANON|ISIG|IEXTEN|NOFLSH|TOSTOP|PENDIN);
-  tp->c_cflag &= ~(CSIZE|PARENB);
-  tp->c_cflag |= CS8|CREAD;
-  tp->c_cc[VMIN] = 1;
-  tp->c_cc[VTIME] = 0;
+  tp->c_cflag = TTYDEF_CFLAG;
+  tp->c_iflag = TTYDEF_IFLAG;
+  tp->c_lflag = TTYDEF_LFLAG;
+  tp->c_oflag = TTYDEF_OFLAG;
+  tp->c_ispeed = TTYDEF_SPEED;
+  tp->c_ospeed = TTYDEF_SPEED;
+  memcpy(&tp->c_cc, ttydefchars, sizeof ttydefchars);
 }
 #endif

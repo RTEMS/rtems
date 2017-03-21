@@ -190,7 +190,7 @@ IntUartSetAttributes(int minor, const struct termios *t)
 	if ( t != (const struct termios *)0 )
 	{
 		/* determine baud rate index */
-  		baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+    baud = rtems_termios_baud_to_number(t->c_ospeed);
 
 		/* determine data bits */
 		switch ( t->c_cflag & CSIZE )
@@ -447,7 +447,7 @@ IntUartInterruptOpen(int major, int minor, void *arg)
 		MCF5282_GPIO_PUAPAR |= MCF5282_GPIO_PUAPAR_PUAPA3|MCF5282_GPIO_PUAPAR_PUAPA2;
 		break;
 	case 2:
-		MCF5282_GPIO_PASPAR = 
+		MCF5282_GPIO_PASPAR =
 		  (MCF5282_GPIO_PASPAR
 		   & ~(MCF5282_GPIO_PASPAR_PASPA3(3)|MCF5282_GPIO_PASPAR_PASPA2(3)))
 		  |  (MCF5282_GPIO_PASPAR_PASPA3(2)|MCF5282_GPIO_PASPAR_PASPA2(2));

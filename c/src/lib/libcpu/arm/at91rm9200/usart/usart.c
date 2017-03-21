@@ -240,7 +240,7 @@ static int usart_set_attributes(int minor, const struct termios *t)
    } else
 	mode |= US_MR_PAR_NONE;
 
-  baud_requested = t->c_cflag & CBAUD;
+  baud_requested = t->c_ospeed;
 
   /* If not, set the dbgu console baud as USART baud default */
   if (!baud_requested)

@@ -198,7 +198,7 @@ rtems_task Init(
   ioctl_it();
   read_it();
   close_it();
-  
+
   TEST_END();
 
   rtems_test_exit(0);

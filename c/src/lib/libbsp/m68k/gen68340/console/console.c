@@ -474,20 +474,10 @@ SetAttributes (int minor, const struct termios *t)
 {
  rtems_interrupt_level level;
  float ispeed, ospeed;
- int isp, osp;
-
- /* output speed */
- if (t->c_cflag & CBAUDEX)
-    osp = (t->c_cflag & CBAUD) + CBAUD + 1;
- else
-    osp = t->c_cflag & CBAUD;
-
- /* input speed */
- isp = (t->c_cflag / (CIBAUD / CBAUD)) &  CBAUD;
 
  /* convert it */
- ispeed = rtems_termios_baud_to_number(isp);
- ospeed = rtems_termios_baud_to_number(osp);
+ ispeed = rtems_termios_baud_to_number(t->c_ispeed);
+ ospeed = rtems_termios_baud_to_number(t->c_ospeed);
 
  if (ispeed || ospeed) {
        /* update config table */
@@ -515,7 +505,7 @@ SetAttributes (int minor, const struct termios *t)
  }
 
  /* if serial module configuration has been changed */
- if (t->c_cflag & (CBAUD | CIBAUD | CSIZE | PARENB)) {
+ if (t->c_cflag & (CSIZE | PARENB)) {
     rtems_interrupt_disable(level);
     /* reinit the UART */
     dbugInitialise();
@@ -693,7 +683,7 @@ rtems_device_driver console_control(
 {
  	rtems_libio_ioctl_args_t *args = arg;
 
- 	if (args->command == RTEMS_IO_SET_ATTRIBUTES)
+  if (args->command == TIOCSETA)
  		SetAttributes (minor, (struct termios *)args->buffer);
 
 	return rtems_termios_ioctl (arg);

@@ -46,29 +46,31 @@ struct scidev_t {
   rtems_device_minor_number	minor ;
   unsigned short		opened ;
   tcflag_t			cflags ;
+  speed_t       spd ;
 } sci_device[SCI_MINOR_DEVICES] =
 {
-  { "/dev/sci0", SH_SCI_BASE_0, 0, 0, B9600 | CS8 },
-  { "/dev/sci1", SH_SCI_BASE_1, 1, 0, B9600 | CS8 }
+  { "/dev/sci0", SH_SCI_BASE_0, 0, 0, CS8, B9600 },
+  { "/dev/sci1", SH_SCI_BASE_1, 1, 0, CS8, B9600 }
 } ;
 
 /*  imported from scitab.rel */
 extern int _sci_get_brparms(
-  tcflag_t      cflag,
+  speed_t       spd,
   unsigned char *smr,
   unsigned char *brr );
 
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(
   struct scidev_t      *sci_dev,
-  tcflag_t      c_cflag )
+  tcflag_t      c_cflag,
+  speed_t       spd )
 {
   uint8_t  	smr ;
   uint8_t  	brr ;
 
-  if ( c_cflag & CBAUD )
+  if ( spd )
   {
-    if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
+    if ( _sci_get_brparms( spd, &smr, &brr ) != 0 )
       return -1 ;
   }
 
@@ -239,7 +241,7 @@ rtems_device_driver sh_sci_open(
     temp8 = read8(sci_device[minor].addr + SCI_SCR);
     temp8 &= ~(SCI_TE | SCI_RE) ;
     write8(temp8, sci_device[minor].addr + SCI_SCR);	/* Clear SCR */
-    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
+    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags, sci_device[minor].spd );
 
 /* FIXME: Should be one bit delay */
     CPU_delay(50000); /* microseconds */
@@ -250,7 +252,7 @@ rtems_device_driver sh_sci_open(
     temp8 = read8(sci_device[minor].addr + SCI_SCR);
     temp8 &= ~(SCI_TE | SCI_RE) ;
     write8(temp8, sci_device[minor].addr + SCI_SCR);	/* Clear SCR */
-    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
+    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags, sci_device[minor].spd );
 
 /* FIXME: Should be one bit delay */
     CPU_delay(50000); /* microseconds */

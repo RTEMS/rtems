@@ -26,12 +26,11 @@ int rtems_termios_set_initial_baud(
 )
 {
   int rv = 0;
-  tcflag_t c_cflag_baud = rtems_termios_number_to_baud(baud);
+  speed_t spd = rtems_termios_number_to_baud(baud);
 
-  if ( c_cflag_baud != 0 ) {
-    tcflag_t cbaud = CBAUD;
-
-    tty->termios.c_cflag = (tty->termios.c_cflag & ~cbaud) | c_cflag_baud;
+  if ( spd != 0 ) {
+    tty->termios.c_ispeed = spd;
+    tty->termios.c_ospeed = spd;
   } else {
     rv = -1;
   }

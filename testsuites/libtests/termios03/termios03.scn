@@ -1,4 +1,4 @@
-*** TEST TERMIOS03 ***
+*** BEGIN OF TEST TERMIOS 3 ***
 open(/dev/test) - OK
 Writing: This is test output.
 Transmitted 22 characters
@@ -68,7 +68,7 @@ Echoed 55 characters
 54 65 73 74 69 6e 67 20 56 4b 49 4c 4c 08 20 08 |Testing VKILL. .|
 08 20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 |. .. .. .. .. ..|
 20 08 08 20 08 08 20 08 08 20 08 08 20 08 08 20 | .. .. .. .. .. |
-08 08 20 08 2e 0d 0a
+08 08 20 08 2e 0d 0a                            |.. ....         |
 
 Reading (expected):
 7f 54 65 73 74 69 6e 67 20 56 45 52 41 53 45 20 |.Testing VERASE |
@@ -97,4 +97,4 @@ Echoed 140 characters
 20 08 08 08 08 08 08 08 08 08 0d 0a             | ...........    |
 
 close(/dev/test) - OK
-*** END OF TEST TERMIOS03 ***
+*** END OF TEST TERMIOS 3 ***

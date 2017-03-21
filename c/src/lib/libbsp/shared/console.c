@@ -244,12 +244,12 @@ rtems_device_driver console_open(
        * If this is not the console we do not want ECHO and so forth
        */
       IoctlArgs.iop     = args->iop;
-      IoctlArgs.command = RTEMS_IO_GET_ATTRIBUTES;
+      IoctlArgs.command = TIOCGETA;
       IoctlArgs.buffer  = &Termios;
       rtems_termios_ioctl( &IoctlArgs );
 
       Termios.c_lflag   = ICANON;
-      IoctlArgs.command = RTEMS_IO_SET_ATTRIBUTES;
+      IoctlArgs.command = TIOCSETA;
       rtems_termios_ioctl( &IoctlArgs );
     }
   }

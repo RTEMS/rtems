@@ -41,7 +41,7 @@ static int mmconsole_set_attributes(int minor, const struct termios *t)
 {
   int baud;
 
-  switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
     case B0:
       baud = 0;
       break;

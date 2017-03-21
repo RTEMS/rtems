@@ -1,1 +1,18 @@
-XXX fill in with test output
+*** BEGIN OF TEST TERMIOS 8 ***
+open(/dev/test) - OK
+Changing c_lflag to: non-canonical
+Changing to polling - VMIN=0 VTIME=0
+read - 0 expected
+Changing to half-second timeout - VMIN=0 VTIME=5
+read - 0 expected
+Changing to half-second timeout - VMIN=5 VTIME=3
+Enqueue 2 characters
+read - 2 expected
+Changing to half-second timeout - VMIN=5 VTIME=3
+Enqueue 1 character
+read - 1 expected
+Enqueue 7 characters
+read - 5 expected
+read - 2 expected
+close(/dev/test) - OK
+*** END OF TEST TERMIOS 8 ***

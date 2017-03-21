@@ -20,9 +20,7 @@
 
 #include <rtems/termiostypes.h>
 
-rtems_termios_baud_t rtems_termios_baud_to_number(tcflag_t c_cflag)
+rtems_termios_baud_t rtems_termios_baud_to_number(speed_t spd)
 {
-  uint32_t remote_value = (uint32_t) (c_cflag & CBAUD);
-
-  return rtems_assoc_local_by_remote(rtems_termios_baud_table, remote_value);
+  return rtems_assoc_local_by_remote(rtems_termios_baud_table, spd);
 }

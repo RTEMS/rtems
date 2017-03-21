@@ -362,7 +362,7 @@ static int mpc55xx_esci_termios_set_attributes( int minor, const struct termios 
 	cr1.B.TE = 1;
 
 	/* Baud rate */
-	switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
 		case B50: br = 50; break;
 		case B75: br = 75; break;
 		case B110: br = 110; break;

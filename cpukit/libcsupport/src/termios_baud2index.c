@@ -44,10 +44,15 @@ int rtems_termios_baud_to_index(
     case B9600:     baud_index = 13;  break;
     case B19200:    baud_index = 14;  break;
     case B38400:    baud_index = 15;  break;
-    case B57600:    baud_index = 16;  break;
-    case B115200:   baud_index = 17;  break;
-    case B230400:   baud_index = 18;  break;
-    case B460800:   baud_index = 19;  break;
+    case B7200:     baud_index = 16;  break;
+    case B14400:    baud_index = 17;  break;
+    case B28800:    baud_index = 18;  break;
+    case B57600:    baud_index = 19;  break;
+    case B76800:    baud_index = 20;  break;
+    case B115200:   baud_index = 21;  break;
+    case B230400:   baud_index = 22;  break;
+    case B460800:   baud_index = 23;  break;
+    case B921600:   baud_index = 24;  break;
     default:        baud_index = -1;  break;
   }
 

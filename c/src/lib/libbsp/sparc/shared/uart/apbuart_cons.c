@@ -39,7 +39,7 @@
 #ifdef DEBUG
 #define DBG(x...) printk(x)
 #else
-#define DBG(x...) 
+#define DBG(x...)
 #endif
 
 /* LEON3 Low level transmit/receive functions provided by debug-uart code */
@@ -85,7 +85,7 @@ static int apbuart_info(
 #define APBUART_INFO_FUNC NULL
 #endif
 
-struct drvmgr_drv_ops apbuart_ops = 
+struct drvmgr_drv_ops apbuart_ops =
 {
 	.init = {apbuart_init1, NULL, NULL, NULL},
 	.remove = NULL,
@@ -567,7 +567,7 @@ int apbuart_set_attributes(int minor, const struct termios *t)
 	uart->regs->ctrl = ctrl;
 
 	/* Baud rate */
-	baud = apbuart_baud_num2baud(t->c_cflag & CBAUD);
+  baud = apbuart_baud_num2baud(t->c_ospeed);
 	if (baud > 0){
 		/* Get APBUART core frequency */
 		drvmgr_freq_get(uart->dev, DEV_APB_SLV, &core_clk_hz);
@@ -588,7 +588,7 @@ void apbuart_get_attributes(struct console_dev *condev, struct termios *t)
 	unsigned int ctrl;
 	struct apbuart_baud *baud;
 
-	t->c_cflag = t->c_cflag & ~(CSIZE|PARENB|PARODD|CLOCAL|CBAUD);
+  t->c_cflag = t->c_cflag & ~(CSIZE|PARENB|PARODD|CLOCAL);
 
 	/* Hardware support only CS8 */
 	t->c_cflag |= CS8;

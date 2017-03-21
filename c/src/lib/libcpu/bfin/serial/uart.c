@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
  */
- 
+
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/termiostypes.h>
@@ -159,7 +159,7 @@ static int setAttributes(int minor, const struct termios *termios)
   uint16_t lcr;
 
   base = uartsConfig->channels[minor].uart_baseAddress;
-  switch (termios->c_cflag & CBAUD) {
+  switch (termios->c_ospeed) {
     case B0:      baud = 0;      break;
     case B50:     baud = 50;     break;
     case B75:     baud = 75;     break;

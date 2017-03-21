@@ -36,7 +36,7 @@ int tcdrain(
   int fd
 )
 {
-  return ioctl( fd, RTEMS_IO_TCDRAIN, 0 );
+  return ioctl( fd, TIOCDRAIN, 0 );
 }
 
 #endif

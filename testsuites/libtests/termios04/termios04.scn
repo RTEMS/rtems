@@ -1,5 +1,5 @@
-*** TEST TERMIOS04 ***
-open(/dev/test) - OK 
+*** BEGIN OF TEST TERMIOS 4 ***
+open(/dev/test) - OK
 Writing: This is interrupt driven test output.
 Transmitted 39 characters
 54 68 69 73 20 69 73 20 69 6e 74 65 72 72 75 70 |This is interrup|
@@ -29,5 +29,5 @@ As Read 37 characters
 4e 6f 6e 2d 42 6c 6f 63 6b 69 6e 67 20 69 6e 74 |Non-Blocking int|
 65 72 72 75 70 74 20 64 72 69 76 65 6e 20 72 65 |errupt driven re|
 61 64 2e 0d 0a                                  |ad...           |
-close(/dev/test) - OK 
-*** END OF TEST TERMIOS04 ***
+close(/dev/test) - OK
+*** END OF TEST TERMIOS 4 ***

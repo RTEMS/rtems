@@ -85,7 +85,7 @@ int termios_test_driver_set_attributes(
   const char            *char_size = "5";
   const char            *stop = "NONE";
 
-  baud_requested = t->c_cflag & CBAUD;
+  baud_requested = t->c_ispeed;
 
   number = rtems_termios_baud_to_number( baud_requested );
 
@@ -164,7 +164,7 @@ rtems_device_driver termios_test_driver_open(
   int               rc;
   rtems_libio_open_close_args_t *args = arg;
   static bool firstCall = true;
-  
+
   static const rtems_termios_callbacks Callbacks = {
     NULL,                                    /* firstOpen */
     NULL,                                    /* lastClose */
@@ -192,7 +192,7 @@ rtems_device_driver termios_test_driver_open(
     size_t i;
 
     firstCall = false;
-    
+
     for (i = 0; i < sizeof( allocSizes ) / sizeof( allocSizes [0] ); ++i) {
       void *opaque = rtems_heap_greedy_allocate( allocSizes, i );
 

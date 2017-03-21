@@ -192,7 +192,7 @@ static int mpc5200_psc_setAttributes(
     (struct mpc5200_psc *)(&mpc5200.psc[psc_minor_to_regset[minor]]);
 
   /* Baud rate */
-  baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+  baud = rtems_termios_baud_to_number(t->c_ospeed);
   if (baud > 0) {
    /*
     * Calculate baud rate

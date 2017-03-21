@@ -69,17 +69,6 @@ typedef uint32_t ioctl_command_t;
 /* this should be _IORW, but stdio got there first */
 #define	_IOWR(g,n,t)	_IOC(IOC_INOUT,	(g), (n), sizeof(t))
 
-/*
- *  IOCTL values
- */
-
-#define       RTEMS_IO_GET_ATTRIBUTES 1
-#define       RTEMS_IO_SET_ATTRIBUTES 2
-#define       RTEMS_IO_TCDRAIN        3
-#define       RTEMS_IO_RCVWAKEUP      4
-#define       RTEMS_IO_SNDWAKEUP      5
-#define       RTEMS_IO_TCFLUSH        6
-
 #ifdef _KERNEL
 
 #if defined(COMPAT_FREEBSD6) || defined(COMPAT_FREEBSD5) || \

@@ -60,7 +60,11 @@ struct winsize {
 						/* 3-7 unused */
 						/* 8-10 compat */
 						/* 11-12 unused */
-#define	TIOCEXCL	 _IO('t', 13)		/* set exclusive use of tty */
+#ifdef __rtems__
+#define RTEMS_IO_SNDWAKEUP _IOW('t', 11, struct ttywakeup ) /* send tty wakeup */
+#define RTEMS_IO_RCVWAKEUP _IOW('t', 12, struct ttywakeup ) /* recv tty wakeup */
+#endif /* __rtems__ */
+#define TIOCEXCL   _IO('t', 13)   /* set exclusive use of tty */
 #define	TIOCNXCL	 _IO('t', 14)		/* reset exclusive use of tty */
 #define	TIOCGPTN	_IOR('t', 15, int)	/* Get pts number. */
 #define	TIOCFLUSH	_IOW('t', 16, int)	/* flush buffers */

@@ -25,8 +25,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <termios.h>
-
-#include <rtems/libio_.h>
+#include <rtems/termiostypes.h>
 #include <rtems/seterr.h>
 
 /**
@@ -37,10 +36,10 @@ int cfsetispeed(
   speed_t         speed
 )
 {
-  if ( speed & ~CBAUD )
+  if ( rtems_termios_baud_to_index( speed ) == -1 )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  tp->c_cflag = (tp->c_cflag & ~CIBAUD) | (speed * (CIBAUD / CBAUD));
+  tp->c_ispeed = speed;
   return 0;
 }
 #endif

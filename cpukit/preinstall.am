@@ -104,6 +104,14 @@ $(PROJECT_INCLUDE)/sys/ttycom.h: libcsupport/include/sys/ttycom.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
 
+$(PROJECT_INCLUDE)/sys/ttydefaults.h: libcsupport/include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
+
+$(PROJECT_INCLUDE)/sys/_termios.h: libcsupport/include/sys/_termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_termios.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_termios.h
+
 $(PROJECT_INCLUDE)/sys/termios.h: libcsupport/include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h

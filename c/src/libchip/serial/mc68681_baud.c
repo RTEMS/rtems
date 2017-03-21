@@ -30,10 +30,15 @@ mc68681_baud_t mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
     0x0B,                      /* B9600 */
     MC68681_BAUD_NOT_VALID,    /* B19200 */
     0x0C,                      /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B7200 */
+    MC68681_BAUD_NOT_VALID,    /* B14400 */
+    MC68681_BAUD_NOT_VALID,    /* B28800 */
     MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B76800 */
     MC68681_BAUD_NOT_VALID,    /* B115200 */
     MC68681_BAUD_NOT_VALID,    /* B230400 */
-    MC68681_BAUD_NOT_VALID     /* B460800 */
+    MC68681_BAUD_NOT_VALID,    /* B460800 */
+    MC68681_BAUD_NOT_VALID     /* B921600 */
   },
   { /* ACR[7] = 1, X = 0 */
     MC68681_BAUD_NOT_VALID,    /* B0 */
@@ -52,10 +57,15 @@ mc68681_baud_t mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
     0x0B,                      /* B9600 */
     0x0C,                      /* B19200 */
     MC68681_BAUD_NOT_VALID,    /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B7200 */
+    MC68681_BAUD_NOT_VALID,    /* B14400 */
+    MC68681_BAUD_NOT_VALID,    /* B28800 */
     MC68681_BAUD_NOT_VALID,    /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B76800 */
     MC68681_BAUD_NOT_VALID,    /* B115200 */
     MC68681_BAUD_NOT_VALID,    /* B230400 */
-    MC68681_BAUD_NOT_VALID     /* B460800 */
+    MC68681_BAUD_NOT_VALID,    /* B460800 */
+    MC68681_BAUD_NOT_VALID     /* B921600 */
   },
   { /* ACR[7] = 0, X = 1 */
     MC68681_BAUD_NOT_VALID,    /* B0 */
@@ -74,10 +84,15 @@ mc68681_baud_t mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
     0x0B,                      /* B9600 */
     0x0C,                      /* B19200 */
     MC68681_BAUD_NOT_VALID,    /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B7200 */
+    MC68681_BAUD_NOT_VALID,    /* B14400 */
+    MC68681_BAUD_NOT_VALID,    /* B28800 */
     0x07,                      /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B76800 */
     0x08,                      /* B115200 */
     MC68681_BAUD_NOT_VALID,    /* B230400 */
-    MC68681_BAUD_NOT_VALID     /* B460800 */
+    MC68681_BAUD_NOT_VALID,    /* B460800 */
+    MC68681_BAUD_NOT_VALID     /* B921600 */
   },
   { /* ACR[7] = 1, X = 1 */
     MC68681_BAUD_NOT_VALID,    /* B0 */
@@ -96,9 +111,14 @@ mc68681_baud_t mc68681_baud_rate_table[4][RTEMS_TERMIOS_NUMBER_BAUD_RATES] = {
     0x0B,                      /* B9600 */
     MC68681_BAUD_NOT_VALID,    /* B19200 */
     0x0C,                      /* B38400 */
+    MC68681_BAUD_NOT_VALID,    /* B7200 */
+    MC68681_BAUD_NOT_VALID,    /* B14400 */
+    MC68681_BAUD_NOT_VALID,    /* B28800 */
     0x07,                      /* B57600 */
+    MC68681_BAUD_NOT_VALID,    /* B76800 */
     0x08,                      /* B115200 */
     MC68681_BAUD_NOT_VALID,    /* B230400 */
-    MC68681_BAUD_NOT_VALID     /* B460800 */
+    MC68681_BAUD_NOT_VALID,    /* B460800 */
+    MC68681_BAUD_NOT_VALID     /* B921600 */
   },
 };

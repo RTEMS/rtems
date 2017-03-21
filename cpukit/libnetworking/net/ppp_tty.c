@@ -224,7 +224,7 @@ pppopen(struct rtems_termios_tty *tty)
     sc->sc_relinq = pppasyncrelinq;
     sc->sc_outm = NULL;
     sc->sc_outmc = NULL;
-    
+
     /* preallocate mbufs for free queue */
     rtems_bsdnet_semaphore_obtain();
     for (i=0; i<NUM_MBUFQ; i++) {
@@ -243,8 +243,7 @@ pppopen(struct rtems_termios_tty *tty)
 
     /* initialize values */
     sc->sc_if.if_flags |= IFF_RUNNING;
-    sc->sc_if.if_baudrate =
-	rtems_termios_baud_to_number(tty->termios.c_cflag & CBAUD);
+    sc->sc_if.if_baudrate = tty->termios.c_ispeed;
 
     tty->t_sc = (void *)sc;
 
@@ -374,7 +373,7 @@ pppwrite(struct rtems_termios_tty *tty, rtems_libio_rw_args_t *rw_args)
     int                           n;
     int                           len;
     int                           maximum    = rw_args->count;
-    char                         *out_buffer = rw_args->buffer; 
+    char                         *out_buffer = rw_args->buffer;
     register struct ppp_softc    *sc         = (struct ppp_softc *)tty->t_sc;
     struct mbuf                  *m;
     struct mbuf                  *m0;
@@ -432,9 +431,11 @@ ppptioctl(struct rtems_termios_tty *tty, rtems_libio_ioctl_args_t *args)
     struct ppp_softc   *sc    = tty->t_sc;
 
     switch (cmd) {
-    case RTEMS_IO_GET_ATTRIBUTES:
-    case RTEMS_IO_SET_ATTRIBUTES:
-    case RTEMS_IO_TCDRAIN:
+    case TIOCGETA:
+    case TIOCSETA:
+    case TIOCSETAW:
+    case TIOCSETAF:
+    case TIOCDRAIN:
     case RTEMS_IO_SNDWAKEUP:
     case RTEMS_IO_RCVWAKEUP:
     case TIOCGETD:

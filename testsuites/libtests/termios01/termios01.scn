@@ -1,4 +1,4 @@
-*** TEST TERMIOS 01 ***
+*** BEGIN OF TEST TERMIOS 1 ***
 Test termios_baud2index...
 termios_baud_to_index(-2) - NOT OK
 termios_baud_to_index(B0) - OK
@@ -17,10 +17,15 @@ termios_baud_to_index(B4800) - OK
 termios_baud_to_index(B9600) - OK
 termios_baud_to_index(B19200) - OK
 termios_baud_to_index(B38400) - OK
+termios_baud_to_index(B7200) - OK
+termios_baud_to_index(B14400) - OK
+termios_baud_to_index(B28800) - OK
 termios_baud_to_index(B57600) - OK
+termios_baud_to_index(B76800) - OK
 termios_baud_to_index(B115200) - OK
 termios_baud_to_index(B230400) - OK
 termios_baud_to_index(B460800) - OK
+termios_baud_to_index(B921600) - OK
 
 Test termios_baud2number...
 termios_baud_to_number(-2) - NOT OK
@@ -40,10 +45,15 @@ termios_baud_to_number(B4800) - OK
 termios_baud_to_number(B9600) - OK
 termios_baud_to_number(B19200) - OK
 termios_baud_to_number(B38400) - OK
+termios_baud_to_number(B7200) - OK
+termios_baud_to_number(B14400) - OK
+termios_baud_to_number(B28800) - OK
 termios_baud_to_number(B57600) - OK
+termios_baud_to_number(B76800) - OK
 termios_baud_to_number(B115200) - OK
 termios_baud_to_number(B230400) - OK
 termios_baud_to_number(B460800) - OK
+termios_baud_to_number(B921600) - OK
 
 Test termios_number_to_baud...
 termios_number_to_baud(-2) - NOT OK
@@ -63,103 +73,179 @@ termios_number_to_baud(B4800) - OK
 termios_number_to_baud(B9600) - OK
 termios_number_to_baud(B19200) - OK
 termios_number_to_baud(B38400) - OK
+termios_number_to_baud(B7200) - OK
+termios_number_to_baud(B14400) - OK
+termios_number_to_baud(B28800) - OK
 termios_number_to_baud(B57600) - OK
+termios_number_to_baud(B76800) - OK
 termios_number_to_baud(B115200) - OK
 termios_number_to_baud(B230400) - OK
 termios_number_to_baud(B460800) - OK
+termios_number_to_baud(B921600) - OK
 
 Init - rtems_io_register_driver - Termios Test Driver - OK
 Termios_test_driver - rtems_io_register /dev/test - OK
-Init - Major slot returned = 2
+Init - Major slot returned = 3
 Init - open - /dev/test - OK
 Termios_test_driver - rtems_set_initial_baud - bad baud - OK
 Termios_test_driver - rtems_set_initial_baud - 38400 - OK
-tcsetattr - invalid operation - ENOTSUP
+tcsetattr - invalid operation - EINVAL
 cfmakeraw - OK
+cfmakesane - OK
 
 tcsetattr - drain - OK
-set_attributes - B0 5-NONE-1
+set_attributes - B0 8-NONE-2
 Test termios setting device baud rate...
 tcsetattr(TCSANOW, B0) - OK
-set_attributes - B0 5-NONE-1
+set_attributes - B0 8-NONE-2
 tcsetattr(TCSADRAIN, B0) - OK
-set_attributes - B0 5-NONE-1
+set_attributes - B0 8-NONE-2
+tcsetattr(TCSAFLUSH, B0) - OK
+set_attributes - B0 8-NONE-2
 tcsetattr(TCSANOW, B50) - OK
-set_attributes - B50 5-NONE-1
+set_attributes - B50 8-NONE-2
 tcsetattr(TCSADRAIN, B50) - OK
-set_attributes - B50 5-NONE-1
+set_attributes - B50 8-NONE-2
+tcsetattr(TCSAFLUSH, B50) - OK
+set_attributes - B50 8-NONE-2
 tcsetattr(TCSANOW, B75) - OK
-set_attributes - B75 5-NONE-1
+set_attributes - B75 8-NONE-2
 tcsetattr(TCSADRAIN, B75) - OK
-set_attributes - B75 5-NONE-1
+set_attributes - B75 8-NONE-2
+tcsetattr(TCSAFLUSH, B75) - OK
+set_attributes - B75 8-NONE-2
 tcsetattr(TCSANOW, B110) - OK
-set_attributes - B110 5-NONE-1
+set_attributes - B110 8-NONE-2
 tcsetattr(TCSADRAIN, B110) - OK
-set_attributes - B110 5-NONE-1
+set_attributes - B110 8-NONE-2
+tcsetattr(TCSAFLUSH, B110) - OK
+set_attributes - B110 8-NONE-2
 tcsetattr(TCSANOW, B134) - OK
-set_attributes - B134 5-NONE-1
+set_attributes - B134 8-NONE-2
 tcsetattr(TCSADRAIN, B134) - OK
-set_attributes - B134 5-NONE-1
+set_attributes - B134 8-NONE-2
+tcsetattr(TCSAFLUSH, B134) - OK
+set_attributes - B134 8-NONE-2
 tcsetattr(TCSANOW, B150) - OK
-set_attributes - B150 5-NONE-1
+set_attributes - B150 8-NONE-2
 tcsetattr(TCSADRAIN, B150) - OK
-set_attributes - B150 5-NONE-1
+set_attributes - B150 8-NONE-2
+tcsetattr(TCSAFLUSH, B150) - OK
+set_attributes - B150 8-NONE-2
 tcsetattr(TCSANOW, B200) - OK
-set_attributes - B200 5-NONE-1
+set_attributes - B200 8-NONE-2
 tcsetattr(TCSADRAIN, B200) - OK
-set_attributes - B200 5-NONE-1
+set_attributes - B200 8-NONE-2
+tcsetattr(TCSAFLUSH, B200) - OK
+set_attributes - B200 8-NONE-2
 tcsetattr(TCSANOW, B300) - OK
-set_attributes - B300 5-NONE-1
+set_attributes - B300 8-NONE-2
 tcsetattr(TCSADRAIN, B300) - OK
-set_attributes - B300 5-NONE-1
+set_attributes - B300 8-NONE-2
+tcsetattr(TCSAFLUSH, B300) - OK
+set_attributes - B300 8-NONE-2
 tcsetattr(TCSANOW, B600) - OK
-set_attributes - B600 5-NONE-1
+set_attributes - B600 8-NONE-2
 tcsetattr(TCSADRAIN, B600) - OK
-set_attributes - B600 5-NONE-1
+set_attributes - B600 8-NONE-2
+tcsetattr(TCSAFLUSH, B600) - OK
+set_attributes - B600 8-NONE-2
 tcsetattr(TCSANOW, B1200) - OK
-set_attributes - B1200 5-NONE-1
+set_attributes - B1200 8-NONE-2
 tcsetattr(TCSADRAIN, B1200) - OK
-set_attributes - B1200 5-NONE-1
+set_attributes - B1200 8-NONE-2
+tcsetattr(TCSAFLUSH, B1200) - OK
+set_attributes - B1200 8-NONE-2
 tcsetattr(TCSANOW, B1800) - OK
-set_attributes - B1800 5-NONE-1
+set_attributes - B1800 8-NONE-2
 tcsetattr(TCSADRAIN, B1800) - OK
-set_attributes - B1800 5-NONE-1
+set_attributes - B1800 8-NONE-2
+tcsetattr(TCSAFLUSH, B1800) - OK
+set_attributes - B1800 8-NONE-2
 tcsetattr(TCSANOW, B2400) - OK
-set_attributes - B2400 5-NONE-1
+set_attributes - B2400 8-NONE-2
 tcsetattr(TCSADRAIN, B2400) - OK
-set_attributes - B2400 5-NONE-1
+set_attributes - B2400 8-NONE-2
+tcsetattr(TCSAFLUSH, B2400) - OK
+set_attributes - B2400 8-NONE-2
 tcsetattr(TCSANOW, B4800) - OK
-set_attributes - B4800 5-NONE-1
+set_attributes - B4800 8-NONE-2
 tcsetattr(TCSADRAIN, B4800) - OK
-set_attributes - B4800 5-NONE-1
+set_attributes - B4800 8-NONE-2
+tcsetattr(TCSAFLUSH, B4800) - OK
+set_attributes - B4800 8-NONE-2
 tcsetattr(TCSANOW, B9600) - OK
-set_attributes - B9600 5-NONE-1
+set_attributes - B9600 8-NONE-2
 tcsetattr(TCSADRAIN, B9600) - OK
-set_attributes - B9600 5-NONE-1
+set_attributes - B9600 8-NONE-2
+tcsetattr(TCSAFLUSH, B9600) - OK
+set_attributes - B9600 8-NONE-2
 tcsetattr(TCSANOW, B19200) - OK
-set_attributes - B19200 5-NONE-1
+set_attributes - B19200 8-NONE-2
 tcsetattr(TCSADRAIN, B19200) - OK
-set_attributes - B19200 5-NONE-1
+set_attributes - B19200 8-NONE-2
+tcsetattr(TCSAFLUSH, B19200) - OK
+set_attributes - B19200 8-NONE-2
 tcsetattr(TCSANOW, B38400) - OK
-set_attributes - B38400 5-NONE-1
+set_attributes - B38400 8-NONE-2
 tcsetattr(TCSADRAIN, B38400) - OK
-set_attributes - B38400 5-NONE-1
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSAFLUSH, B38400) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSANOW, B7200) - OK
+set_attributes - B7200 8-NONE-2
+tcsetattr(TCSADRAIN, B7200) - OK
+set_attributes - B7200 8-NONE-2
+tcsetattr(TCSAFLUSH, B7200) - OK
+set_attributes - B7200 8-NONE-2
+tcsetattr(TCSANOW, B14400) - OK
+set_attributes - B14400 8-NONE-2
+tcsetattr(TCSADRAIN, B14400) - OK
+set_attributes - B14400 8-NONE-2
+tcsetattr(TCSAFLUSH, B14400) - OK
+set_attributes - B14400 8-NONE-2
+tcsetattr(TCSANOW, B28800) - OK
+set_attributes - B28800 8-NONE-2
+tcsetattr(TCSADRAIN, B28800) - OK
+set_attributes - B28800 8-NONE-2
+tcsetattr(TCSAFLUSH, B28800) - OK
+set_attributes - B28800 8-NONE-2
 tcsetattr(TCSANOW, B57600) - OK
-set_attributes - B57600 5-NONE-1
+set_attributes - B57600 8-NONE-2
 tcsetattr(TCSADRAIN, B57600) - OK
-set_attributes - B57600 5-NONE-1
+set_attributes - B57600 8-NONE-2
+tcsetattr(TCSAFLUSH, B57600) - OK
+set_attributes - B57600 8-NONE-2
+tcsetattr(TCSANOW, B76800) - OK
+set_attributes - B76800 8-NONE-2
+tcsetattr(TCSADRAIN, B76800) - OK
+set_attributes - B76800 8-NONE-2
+tcsetattr(TCSAFLUSH, B76800) - OK
+set_attributes - B76800 8-NONE-2
 tcsetattr(TCSANOW, B115200) - OK
-set_attributes - B115200 5-NONE-1
+set_attributes - B115200 8-NONE-2
 tcsetattr(TCSADRAIN, B115200) - OK
-set_attributes - B115200 5-NONE-1
+set_attributes - B115200 8-NONE-2
+tcsetattr(TCSAFLUSH, B115200) - OK
+set_attributes - B115200 8-NONE-2
 tcsetattr(TCSANOW, B230400) - OK
-set_attributes - B230400 5-NONE-1
+set_attributes - B230400 8-NONE-2
 tcsetattr(TCSADRAIN, B230400) - OK
-set_attributes - B230400 5-NONE-1
+set_attributes - B230400 8-NONE-2
+tcsetattr(TCSAFLUSH, B230400) - OK
+set_attributes - B230400 8-NONE-2
 tcsetattr(TCSANOW, B460800) - OK
-set_attributes - B460800 5-NONE-1
+set_attributes - B460800 8-NONE-2
 tcsetattr(TCSADRAIN, B460800) - OK
-set_attributes - B460800 5-NONE-1
+set_attributes - B460800 8-NONE-2
+tcsetattr(TCSAFLUSH, B460800) - OK
+set_attributes - B460800 8-NONE-2
+tcsetattr(TCSANOW, B921600) - OK
+set_attributes - B921600 8-NONE-2
+tcsetattr(TCSADRAIN, B921600) - OK
+set_attributes - B921600 8-NONE-2
+tcsetattr(TCSAFLUSH, B921600) - OK
+set_attributes - B921600 8-NONE-2
 Init - close - /dev/test - OK
 
 Init - open - /dev/test - OK
@@ -168,21 +254,37 @@ Termios_test_driver - rtems_set_initial_baud - 38400 - OK
 
 Test termios setting device character size ...
 tcsetattr(TCSANOW, CS5) - OK
-set_attributes - B38400 5-NONE-1
+set_attributes - B38400 5-NONE-2
 tcsetattr(TCSADRAIN, CS5) - OK
-set_attributes - B38400 5-NONE-1
+set_attributes - B38400 5-NONE-2
+tcsetattr(TCSAFLUSH, CS5) - OK
+set_attributes - B38400 5-NONE-2
+tcsetattr(TCSASOFT, CS5) - OK
+set_attributes - B38400 5-NONE-2
 tcsetattr(TCSANOW, CS6) - OK
-set_attributes - B38400 6-NONE-1
+set_attributes - B38400 6-NONE-2
 tcsetattr(TCSADRAIN, CS6) - OK
-set_attributes - B38400 6-NONE-1
+set_attributes - B38400 6-NONE-2
+tcsetattr(TCSAFLUSH, CS6) - OK
+set_attributes - B38400 6-NONE-2
+tcsetattr(TCSASOFT, CS6) - OK
+set_attributes - B38400 6-NONE-2
 tcsetattr(TCSANOW, CS7) - OK
-set_attributes - B38400 7-NONE-1
+set_attributes - B38400 7-NONE-2
 tcsetattr(TCSADRAIN, CS7) - OK
-set_attributes - B38400 7-NONE-1
+set_attributes - B38400 7-NONE-2
+tcsetattr(TCSAFLUSH, CS7) - OK
+set_attributes - B38400 7-NONE-2
+tcsetattr(TCSASOFT, CS7) - OK
+set_attributes - B38400 7-NONE-2
 tcsetattr(TCSANOW, CS8) - OK
-set_attributes - B38400 8-NONE-1
+set_attributes - B38400 8-NONE-2
 tcsetattr(TCSADRAIN, CS8) - OK
-set_attributes - B38400 8-NONE-1
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSAFLUSH, CS8) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSASOFT, CS8) - OK
+set_attributes - B38400 8-NONE-2
 Init - close - /dev/test - OK
 
 Init - open - /dev/test - OK
@@ -191,17 +293,29 @@ Termios_test_driver - rtems_set_initial_baud - 38400 - OK
 
 Test termios setting device parity ...
 tcsetattr(TCSANOW, none) - OK
-set_attributes - B38400 8-NONE-1
+set_attributes - B38400 8-NONE-2
 tcsetattr(TCSADRAIN, none) - OK
-set_attributes - B38400 8-NONE-1
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSAFLUSH, none) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSASOFT, none) - OK
+set_attributes - B38400 8-NONE-2
 tcsetattr(TCSANOW, even) - OK
-set_attributes - B38400 8-ODD-1
+set_attributes - B38400 8-ODD-2
 tcsetattr(TCSADRAIN, even) - OK
-set_attributes - B38400 8-ODD-1
+set_attributes - B38400 8-ODD-2
+tcsetattr(TCSAFLUSH, even) - OK
+set_attributes - B38400 8-ODD-2
+tcsetattr(TCSASOFT, even) - OK
+set_attributes - B38400 8-ODD-2
 tcsetattr(TCSANOW, odd) - OK
-set_attributes - B38400 8-EVEN-1
+set_attributes - B38400 8-EVEN-2
 tcsetattr(TCSADRAIN, odd) - OK
-set_attributes - B38400 8-EVEN-1
+set_attributes - B38400 8-EVEN-2
+tcsetattr(TCSAFLUSH, odd) - OK
+set_attributes - B38400 8-EVEN-2
+tcsetattr(TCSASOFT, odd) - OK
+set_attributes - B38400 8-EVEN-2
 Init - close - /dev/test - OK
 
 Init - open - /dev/test - OK
@@ -213,9 +327,17 @@ tcsetattr(TCSANOW, 1 bit) - OK
 set_attributes - B38400 8-NONE-1
 tcsetattr(TCSADRAIN, 1 bits) - OK
 set_attributes - B38400 8-NONE-1
+tcsetattr(TCSAFLUSH, 1 bits) - OK
+set_attributes - B38400 8-NONE-1
+tcsetattr(TCSASOFT, 1 bits) - OK
+set_attributes - B38400 8-NONE-1
 tcsetattr(TCSANOW, 2 bits) - OK
 set_attributes - B38400 8-NONE-2
 tcsetattr(TCSADRAIN, 2 bits) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSAFLUSH, 2 bits) - OK
+set_attributes - B38400 8-NONE-2
+tcsetattr(TCSASOFT, 2 bits) - OK
 set_attributes - B38400 8-NONE-2
 cfsetospeed(BAD BAUD) - EINVAL
 cfsetospeed(B0) - OK
@@ -250,14 +372,24 @@ cfsetospeed(B19200) - OK
 cfgetospeed(B19200) - OK
 cfsetospeed(B38400) - OK
 cfgetospeed(B38400) - OK
+cfsetospeed(B7200) - OK
+cfgetospeed(B7200) - OK
+cfsetospeed(B14400) - OK
+cfgetospeed(B14400) - OK
+cfsetospeed(B28800) - OK
+cfgetospeed(B28800) - OK
 cfsetospeed(B57600) - OK
 cfgetospeed(B57600) - OK
+cfsetospeed(B76800) - OK
+cfgetospeed(B76800) - OK
 cfsetospeed(B115200) - OK
 cfgetospeed(B115200) - OK
 cfsetospeed(B230400) - OK
 cfgetospeed(B230400) - OK
 cfsetospeed(B460800) - OK
 cfgetospeed(B460800) - OK
+cfsetospeed(B921600) - OK
+cfgetospeed(B921600) - OK
 cfsetispeed(BAD BAUD) - EINVAL
 cfsetispeed(B0) - OK
 cfgetispeed(B0) - OK
@@ -291,14 +423,24 @@ cfsetispeed(B19200) - OK
 cfgetispeed(B19200) - OK
 cfsetispeed(B38400) - OK
 cfgetispeed(B38400) - OK
+cfsetispeed(B7200) - OK
+cfgetispeed(B7200) - OK
+cfsetispeed(B14400) - OK
+cfgetispeed(B14400) - OK
+cfsetispeed(B28800) - OK
+cfgetispeed(B28800) - OK
 cfsetispeed(B57600) - OK
 cfgetispeed(B57600) - OK
+cfsetispeed(B76800) - OK
+cfgetispeed(B76800) - OK
 cfsetispeed(B115200) - OK
 cfgetispeed(B115200) - OK
 cfsetispeed(B230400) - OK
 cfgetispeed(B230400) - OK
 cfsetispeed(B460800) - OK
 cfgetispeed(B460800) - OK
+cfsetispeed(B921600) - OK
+cfgetispeed(B921600) - OK
 cfsetspeed(BAD BAUD) - EINVAL
 cfsetspeed(B0) - OK
 cfgetspeed(B0) - checking both inspeed and outspeed - OK
@@ -332,14 +474,24 @@ cfsetspeed(B19200) - OK
 cfgetspeed(B19200) - checking both inspeed and outspeed - OK
 cfsetspeed(B38400) - OK
 cfgetspeed(B38400) - checking both inspeed and outspeed - OK
+cfsetspeed(B7200) - OK
+cfgetspeed(B7200) - checking both inspeed and outspeed - OK
+cfsetspeed(B14400) - OK
+cfgetspeed(B14400) - checking both inspeed and outspeed - OK
+cfsetspeed(B28800) - OK
+cfgetspeed(B28800) - checking both inspeed and outspeed - OK
 cfsetspeed(B57600) - OK
 cfgetspeed(B57600) - checking both inspeed and outspeed - OK
+cfsetspeed(B76800) - OK
+cfgetspeed(B76800) - checking both inspeed and outspeed - OK
 cfsetspeed(B115200) - OK
 cfgetspeed(B115200) - checking both inspeed and outspeed - OK
 cfsetspeed(B230400) - OK
 cfgetspeed(B230400) - checking both inspeed and outspeed - OK
 cfsetspeed(B460800) - OK
 cfgetspeed(B460800) - checking both inspeed and outspeed - OK
+cfsetspeed(B921600) - OK
+cfgetspeed(B921600) - checking both inspeed and outspeed - OK
 Init - close - /dev/test - OK
 Multiple open of the device
 Termios_test_driver - rtems_set_initial_baud - bad baud - OK
@@ -395,4 +547,4 @@ Termios_test_driver - rtems_set_initial_baud - 38400 - OK
 Termios_test_driver - rtems_set_initial_baud - bad baud - OK
 Termios_test_driver - rtems_set_initial_baud - 38400 - OK
 
-*** END OF TEST TERMIOS 01 ***
+*** END OF TEST TERMIOS 1 ***

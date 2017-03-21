@@ -725,7 +725,7 @@ int cd2401_firstOpen(
    * We could have made a tcgetattr() call if we had our fd.
    */
   newarg.iop = args->iop;
-  newarg.command = RTEMS_IO_GET_ATTRIBUTES;
+  newarg.command = TIOCGETA;
   newarg.buffer = &termios;
   sc = rtems_termios_ioctl (&newarg);
   if (sc != RTEMS_SUCCESSFUL)
@@ -738,7 +738,7 @@ int cd2401_firstOpen(
    *  on the ttyMutex that it already owns; this is safe in RTEMS.
    */
   termios.c_cflag |= CLOCAL;    /* Ignore modem status lines */
-  newarg.command = RTEMS_IO_SET_ATTRIBUTES;
+  newarg.command = TIOCGETA;
   sc = rtems_termios_ioctl (&newarg);
   if (sc != RTEMS_SUCCESSFUL)
     rtems_fatal_error_occurred (sc);
@@ -844,8 +844,8 @@ int cd2401_setAttributes(
   /* Determine what the line parameters should be */
 
   /* baud rates */
-  out_baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
-  in_baud  = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+  out_baud = rtems_termios_baud_to_number(t->c_ospeed);
+  in_baud  = rtems_termios_baud_to_number(t->c_ispeed);
 
   /* Number of bits per char */
   csize = 0x07; /* to avoid a warning */

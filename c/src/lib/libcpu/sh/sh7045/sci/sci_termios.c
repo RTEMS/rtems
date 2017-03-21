@@ -59,7 +59,7 @@
  * Automatically generated function imported from scitab.rel
  */
 extern int _sci_get_brparms(
-  tcflag_t      cflag,
+  speed_t       spd,
   unsigned char *smr,
   unsigned char *brr
 );
@@ -77,9 +77,10 @@ int sh_sci_set_attributes(
     int a;
 
     tcflag_t c_cflag = t->c_cflag;
+    speed_t spd = t->c_ospeed;
 
-    if ( c_cflag & CBAUD ) {
-        if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
+    if ( spd ) {
+        if ( _sci_get_brparms( spd, &smr, &brr ) != 0 )
             return -1 ;
     }
 

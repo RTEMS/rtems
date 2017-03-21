@@ -12,6 +12,7 @@
 #endif
 
 #include "tmacros.h"
+#define TTYDEFCHARS
 #include <termios.h>
 #include <rtems/libcsupport.h>
 #include <rtems/malloc.h>
@@ -66,10 +67,15 @@ static const termios_baud_test_r baud_table[] = {
   { B9600,     9600 },
   { B19200,   19200 },
   { B38400,   38400 },
+  { B7200,     7200 },
+  { B14400,   14400 },
+  { B28800,   28800 },
   { B57600,   57600 },
+  { B76800,   76800 },
   { B115200, 115200 },
   { B230400, 230400 },
   { B460800, 460800 },
+  { B921600, 921600 },
   { INVALID_CONSTANT, INVALID_BAUD }
 };
 
@@ -233,16 +239,14 @@ static void test_termios_set_baud(
 
   puts( "Test termios setting device baud rate..." );
   for (i=0 ; baud_table[i].constant != INVALID_CONSTANT ; i++ ) {
-    tcflag_t cbaud = CBAUD;
-
     sc = tcgetattr( test, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
     }
 
-    attr.c_cflag &= ~cbaud;
-    attr.c_cflag |= baud_table[i].constant;
+    attr.c_ispeed = baud_table[i].constant;
+    attr.c_ospeed = baud_table[i].constant;
 
     printf(
       "tcsetattr(TCSANOW, B%" PRIdrtems_termios_baud_t ") - OK\n",
@@ -258,7 +262,17 @@ static void test_termios_set_baud(
       "tcsetattr(TCSADRAIN, B%" PRIdrtems_termios_baud_t ") - OK\n",
       baud_table[i].baud
     );
-    sc = tcsetattr( test, TCSANOW, &attr );
+    sc = tcsetattr( test, TCSADRAIN, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf(
+      "tcsetattr(TCSAFLUSH, B%" PRIdrtems_termios_baud_t ") - OK\n",
+      baud_table[i].baud
+    );
+    sc = tcsetattr( test, TCSAFLUSH, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
@@ -301,7 +315,21 @@ static void test_termios_set_charsize(
     }
 
     printf( "tcsetattr(TCSADRAIN, CS%d) - OK\n", char_size_table[i].bits );
-    sc = tcsetattr( test, TCSANOW, &attr );
+    sc = tcsetattr( test, TCSADRAIN, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSAFLUSH, CS%d) - OK\n", char_size_table[i].bits );
+    sc = tcsetattr( test, TCSAFLUSH, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSASOFT, CS%d) - OK\n", char_size_table[i].bits );
+    sc = tcsetattr( test, TCSASOFT, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
@@ -344,7 +372,21 @@ static void test_termios_set_parity(
     }
 
     printf( "tcsetattr(TCSADRAIN, %s) - OK\n", parity_table[i].parity );
-    sc = tcsetattr( test, TCSANOW, &attr );
+    sc = tcsetattr( test, TCSADRAIN, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSAFLUSH, %s) - OK\n", parity_table[i].parity );
+    sc = tcsetattr( test, TCSAFLUSH, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSASOFT, %s) - OK\n", parity_table[i].parity );
+    sc = tcsetattr( test, TCSASOFT, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
@@ -390,7 +432,21 @@ static void test_termios_set_stop_bits(
     }
 
     printf( "tcsetattr(TCSADRAIN, %d bits) - OK\n", stop_bits_table[i].stop );
-    sc = tcsetattr( test, TCSANOW, &attr );
+    sc = tcsetattr( test, TCSADRAIN, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSAFLUSH, %d bits) - OK\n", stop_bits_table[i].stop );
+    sc = tcsetattr( test, TCSAFLUSH, &attr );
+    if ( sc != 0 ) {
+      printf( "ERROR - return %d\n", sc );
+      rtems_test_exit(0);
+    }
+
+    printf( "tcsetattr(TCSASOFT, %d bits) - OK\n", stop_bits_table[i].stop );
+    sc = tcsetattr( test, TCSASOFT, &attr );
     if ( sc != 0 ) {
       printf( "ERROR - return %d\n", sc );
       rtems_test_exit(0);
@@ -404,9 +460,9 @@ static void test_termios_cfoutspeed(void)
   int sc;
   speed_t speed;
   struct termios term;
-  tcflag_t        bad;
+  speed_t bad;
 
-  bad = CBAUD << 1;
+  bad = B921600 << 1;
   memset( &term, '\0', sizeof(term) );
   puts( "cfsetospeed(BAD BAUD) - EINVAL" );
   sc = cfsetospeed( &term, bad );
@@ -436,9 +492,9 @@ static void test_termios_cfinspeed(void)
   int             sc;
   speed_t         speed;
   struct termios  term;
-  tcflag_t        bad;
+  speed_t         bad;
 
-  bad = CBAUD << 1;
+  bad = B921600 << 1;
   memset( &term, '\0', sizeof(term) );
   puts( "cfsetispeed(BAD BAUD) - EINVAL" );
   sc = cfsetispeed( &term, bad );
@@ -469,9 +525,9 @@ static void test_termios_cfsetspeed(void)
   int             status;
   speed_t         speed;
   struct termios  term;
-  tcflag_t        bad;
+  speed_t         bad;
 
-  bad = CBAUD << 1;
+  bad = B921600 << 1;
   memset( &term, '\0', sizeof(term) );
   puts( "cfsetspeed(BAD BAUD) - EINVAL" );
   status = cfsetspeed( &term, bad );
@@ -508,15 +564,45 @@ static void test_termios_cfmakeraw(void)
   puts( "cfmakeraw - OK" );
 
   /* Check that all of the flags were set correctly */
-  rtems_test_assert( ~(term.c_iflag & (IMAXBEL|IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON)) );
+  rtems_test_assert( ~(term.c_iflag & (IMAXBEL|IXOFF|INPCK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON|IGNPAR)) );
+
+  rtems_test_assert( term.c_iflag & (IGNBRK) );
 
   rtems_test_assert( ~(term.c_oflag & OPOST) );
 
-  rtems_test_assert( ~(term.c_lflag & (ECHO|ECHONL|ICANON|ISIG|IEXTEN)) );
+  rtems_test_assert( ~(term.c_lflag & (ECHO|ECHOE|ECHOK|ECHONL|ICANON|ISIG|IEXTEN|NOFLSH|TOSTOP|PENDIN)) );
 
   rtems_test_assert( ~(term.c_cflag & (CSIZE|PARENB)) );
 
-  rtems_test_assert( term.c_cflag & CS8 );
+  rtems_test_assert( term.c_cflag & (CS8|CREAD) );
+
+  rtems_test_assert( term.c_cc[VMIN] == 1 );
+
+  rtems_test_assert( term.c_cc[VTIME] == 0 );
+}
+
+static void test_termios_cfmakesane(void)
+{
+  struct termios  term;
+
+  memset( &term, '\0', sizeof(term) );
+  cfmakesane( &term );
+  puts( "cfmakesane - OK" );
+
+  /* Check that all of the flags were set correctly */
+  rtems_test_assert( term.c_iflag == TTYDEF_IFLAG );
+
+  rtems_test_assert( term.c_oflag == TTYDEF_OFLAG );
+
+  rtems_test_assert( term.c_lflag == TTYDEF_LFLAG );
+
+  rtems_test_assert( term.c_cflag == TTYDEF_CFLAG );
+
+  rtems_test_assert( term.c_ispeed == TTYDEF_SPEED );
+
+  rtems_test_assert( term.c_ospeed == TTYDEF_SPEED );
+
+  rtems_test_assert( memcmp(&term.c_cc, ttydefchars, sizeof(term.c_cc)) == 0 );
 }
 
 typedef struct {
@@ -684,7 +770,7 @@ static void test_set_attributes_error(void)
 
   rtems_test_assert( !ctx.done );
   errno = 0;
-  rv = ioctl( fd, RTEMS_IO_SET_ATTRIBUTES, &term );
+  rv = ioctl( fd, TIOCSETA, &term );
   rtems_test_assert( rv == -1 );
   rtems_test_assert( errno == EIO );
   rtems_test_assert( ctx.done );
@@ -702,8 +788,8 @@ static void test_set_best_baud(void)
 {
   static const struct {
     uint32_t baud;
-    tcflag_t cflag;
-  } baud_to_cflag_table[] = {
+    speed_t speed;
+  } baud_to_speed_table[] = {
     { 0,          B0 },
     { 25,         B0 },
     { 26,         B50 },
@@ -731,19 +817,17 @@ static void test_set_best_baud(void)
     { 0xffffffff, B460800 }
   };
 
-  size_t n = RTEMS_ARRAY_SIZE(baud_to_cflag_table);
+  size_t n = RTEMS_ARRAY_SIZE(baud_to_speed_table);
   size_t i;
 
   for ( i = 0; i < n; ++i ) {
     struct termios term;
-    tcflag_t cbaud_mask = CBAUD;
 
     memset( &term, 0xff, sizeof( term ) );
-    rtems_termios_set_best_baud( &term, baud_to_cflag_table[ i ].baud );
+    rtems_termios_set_best_baud( &term, baud_to_speed_table[ i ].baud );
 
-    rtems_test_assert(
-      (term.c_cflag & cbaud_mask) == baud_to_cflag_table[ i ].cflag
-    );
+    rtems_test_assert( term.c_ispeed == baud_to_speed_table[ i ].speed );
+    rtems_test_assert( term.c_ospeed == baud_to_speed_table[ i ].speed );
   }
 }
 
@@ -791,13 +875,14 @@ static rtems_task Init(
   /*
    * tcsetattr - ERROR invalid operation
    */
-  puts( "tcsetattr - invalid operation - ENOTSUP" );
+  puts( "tcsetattr - invalid operation - EINVAL" );
   rc = tcsetattr( test, INT_MAX, &t );
   rtems_test_assert( rc == -1 );
-  rtems_test_assert( errno == ENOTSUP );
+  rtems_test_assert( errno == EINVAL );
 
   test_termios_cfmakeraw();
-  
+  test_termios_cfmakesane();
+
   /*
    * tcsetattr - TCSADRAIN
    */

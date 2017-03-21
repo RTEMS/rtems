@@ -224,7 +224,7 @@ spiSetAttributes (int minor, const struct termios *t)
 
   /* FIXME: check c_cflag & CRTSCTS for hardware flowcontrol */
   /* FIXME: check and IMPLEMENT XON/XOFF                     */
-  switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
   default:	baud = -1;	break;
   case B50:	baud = 50;	break;
   case B75:	baud = 75;	break;

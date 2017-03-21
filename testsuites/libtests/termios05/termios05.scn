@@ -1,5 +1,5 @@
-*** TEST TERMIOS05 ***
-open(/dev/test) - OK 
+*** BEGIN OF TEST TERMIOS 5 ***
+open(/dev/test) - OK
 Writing: This is test output.
 Transmitted 20 characters
 54 68 69 73 20 69 73 20 74 65 73 74 20 6f 75 74 |This is test out|
@@ -55,5 +55,5 @@ Read 10 bytes from read(2)
 Echoed 12 characters
 0a 61 62 63 64 65 66 67 68 2e 0d 0a             |.abcdefgh...    |
 Changing c_iflag to: Disable to lower case mapping on input
-close(/dev/test) - OK 
-*** END OF TEST TERMIOS05 ***
+close(/dev/test) - OK
+*** END OF TEST TERMIOS 5 ***

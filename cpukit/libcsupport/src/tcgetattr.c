@@ -34,6 +34,6 @@ int tcgetattr(
   struct termios *tp
 )
 {
-  return ioctl( fd, RTEMS_IO_GET_ATTRIBUTES, tp );
+  return ioctl( fd, TIOCGETA, tp );
 }
 #endif

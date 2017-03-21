@@ -179,7 +179,7 @@ static int IntUartSetAttributes(
   /* check to see if input is valid */
   if ( t != (const struct termios *)0 ) {
     /* determine baud rate index */
-    baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+    baud = rtems_termios_baud_to_number(t->c_ospeed);
 
     /* determine data bits */
     switch ( t->c_cflag & CSIZE ) {
@@ -240,7 +240,7 @@ static int IntUartSetAttributes(
  * Description : This is the interrupt handler for the internal uart. It
  * determines which channel caused the interrupt before queueing any received
  * chars and dequeueing chars waiting for transmission.
- */ 
+ */
 static rtems_isr IntUartInterruptHandler(rtems_vector_number v)
 {
   unsigned int                chan = v - UART_INTC0_IRQ_VECTOR(0);
@@ -303,7 +303,7 @@ static rtems_isr IntUartInterruptHandler(rtems_vector_number v)
  * Description : This initialises the internal uart hardware for all
  * internal uarts. If the internal uart is to be interrupt driven then the
  * interrupt vectors are hooked.
- */ 
+ */
 static void IntUartInitialize(void)
 {
   unsigned int              chan;

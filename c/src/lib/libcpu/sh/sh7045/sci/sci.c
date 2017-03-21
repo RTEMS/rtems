@@ -72,9 +72,9 @@
 #define SH_SCI_BASE_0   SCI_SMR0
 #define SH_SCI_BASE_1   SCI_SMR1
 
-#define SH_SCI_DEF_COMM_0   B9600 | CS8
-#define SH_SCI_DEF_COMM_1   B38400 | CS8
-/*  #define SH_SCI_DEF_COMM_1   B9600 | CS8 */
+#define SH_SCI_DEF_COMM_0   CS8, B9600
+#define SH_SCI_DEF_COMM_1   CS8, B38400
+/*  #define SH_SCI_DEF_COMM_1   CS8, B9600 */
 
 struct scidev_t {
   char *                     name;
@@ -82,6 +82,7 @@ struct scidev_t {
   rtems_device_minor_number  minor;
   unsigned short             opened;
   tcflag_t                   cflags;
+  speed_t                    spd;
 } sci_device[SCI_MINOR_DEVICES] =
 {
   { "/dev/sci0", SH_SCI_BASE_0, 0, 0, SH_SCI_DEF_COMM_0 },
@@ -96,15 +97,16 @@ static sci_setup_t sio_param[2];
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(
   struct scidev_t  *sci_dev,
-  tcflag_t          c_cflag
+  tcflag_t          c_cflag,
+  speed_t           spd
 )
 {
   uint8_t  smr;
   uint8_t  brr;
 
-  if ( c_cflag & CBAUD )
+  if ( spd )
   {
-    if ( _sci_get_brparms( c_cflag, &smr, &brr ) != 0 )
+    if ( _sci_get_brparms( spd, &smr, &brr ) != 0 )
       return -1;
   }
 
@@ -351,7 +353,7 @@ rtems_device_driver sh_sci_open(
   /* set up SCI registers */
       write8(0x00, sci_device[minor].addr + SCI_SCR);   /* Clear SCR */
                                                    /* set SMR and BRR */
-    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags );
+    _sci_set_cflags( &sci_device[minor], sci_device[minor].cflags, sci_device[minor].spd );
 
     for (a=0; a < 10000L; a++) {                      /* Delay */
       __asm__ volatile ("nop");
@@ -526,7 +528,7 @@ static ssize_t _sh_sci_poll_write(int minor, const char *buf, size_t len)
  */
 static int _sh_sci_set_attributes( int minor, const struct termios *t)
 {
-    return _sci_set_cflags( &sci_device[ minor ], t->c_cflag);
+    return _sci_set_cflags( &sci_device[ minor ], t->c_cflag, t->c_ospeed);
 }
 
 

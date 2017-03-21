@@ -86,7 +86,7 @@ smc1SetAttributes (int minor, const struct termios *t)
 {
   int baud;
 
-  baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+  baud = rtems_termios_baud_to_number(t->c_ospeed);
   if (baud > 0)
     m360.brgc1 = smc1BRGC (baud);
   return 0;

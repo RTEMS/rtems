@@ -449,7 +449,7 @@ Z85C30_STATIC int z85c30_set_attributes(
    *  Assert ensures there is no division by 0.
    */
 
-  baud_requested = t->c_cflag & CBAUD;
+  baud_requested = t->c_ospeed;
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 

@@ -33,6 +33,6 @@ speed_t cfgetospeed(
   const struct termios *tp
 )
 {
-  return tp->c_cflag & CBAUD;
+  return tp->c_ospeed;
 }
 #endif

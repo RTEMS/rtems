@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/fcntl.h>
 #include <sys/ttycom.h>
 
 #include <rtems/termiostypes.h>
@@ -846,6 +847,7 @@ rtems_termios_ioctl (void *arg)
   struct rtems_termios_tty *tty = args->iop->data1;
   struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
   rtems_status_code sc;
+  int flags = *((int *)args->buffer);
 
   args->ioctl_return = 0;
   sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -865,13 +867,21 @@ rtems_termios_ioctl (void *arg)
     }
     break;
 
-  case RTEMS_IO_GET_ATTRIBUTES:
+  case TIOCGETA:
     *(struct termios *)args->buffer = tty->termios;
     break;
 
-  case RTEMS_IO_SET_ATTRIBUTES:
+  case TIOCSETA:
+  case TIOCSETAW:
+  case TIOCSETAF:
     tty->termios = *(struct termios *)args->buffer;
 
+    if (args->command == TIOCSETAW || args->command == TIOCSETAF) {
+      drainOutput (tty);
+      if (args->command == TIOCSETAF) {
+        flushInput (tty);
+      }
+    }
     /* check for and process change in flow control options */
     termios_set_flowctrl(tty);
 
@@ -880,7 +890,7 @@ rtems_termios_ioctl (void *arg)
       tty->rawInBufSemaphoreTimeout = RTEMS_NO_TIMEOUT;
       tty->rawInBufSemaphoreFirstTimeout = RTEMS_NO_TIMEOUT;
     } else {
-      tty->vtimeTicks = tty->termios.c_cc[VTIME] * 
+      tty->vtimeTicks = tty->termios.c_cc[VTIME] *
                     rtems_clock_get_ticks_per_second() / 10;
       if (tty->termios.c_cc[VTIME]) {
         tty->rawInBufSemaphoreOptions = RTEMS_WAIT;
@@ -905,25 +915,21 @@ rtems_termios_ioctl (void *arg)
     }
     break;
 
-  case RTEMS_IO_TCDRAIN:
+  case TIOCDRAIN:
     drainOutput (tty);
     break;
 
-  case RTEMS_IO_TCFLUSH:
-    switch ((intptr_t) args->buffer) {
-      case TCIFLUSH:
-        flushInput (tty);
-        break;
-      case TCOFLUSH:
-        flushOutput (tty);
-        break;
-      case TCIOFLUSH:
-        flushOutput (tty);
-        flushInput (tty);
-        break;
-      default:
-        sc = RTEMS_INVALID_NAME;
-        break;
+  case TIOCFLUSH:
+    if (flags == 0) {
+      flags = FREAD | FWRITE;
+    } else {
+      flags &= FREAD | FWRITE;
+    }
+    if (flags & FWRITE) {
+      flushOutput (tty);
+    }
+    if (flags & FREAD) {
+      flushInput (tty);
     }
     break;
 

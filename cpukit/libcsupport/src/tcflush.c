@@ -13,11 +13,30 @@
   #include "config.h"
 #endif
 
+#include <sys/fcntl.h>
 #include <termios.h>
 #include <stdint.h>
 #include <sys/ioccom.h>
+#include <rtems/libio.h>
+#include <rtems/libio_.h>
+#include <rtems/seterr.h>
 
-int tcflush( int fd, int queue )
+int tcflush( int fd, int which )
 {
-  return ioctl( fd, RTEMS_IO_TCFLUSH, (intptr_t) queue );
+  int com;
+
+  switch (which) {
+  case TCIFLUSH:
+    com = FREAD;
+    break;
+  case TCOFLUSH:
+    com = FWRITE;
+    break;
+  case TCIOFLUSH:
+    com = FREAD | FWRITE;
+    break;
+  default:
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  return ioctl( fd, TIOCFLUSH, &com );
 }

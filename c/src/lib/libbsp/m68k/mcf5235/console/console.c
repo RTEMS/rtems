@@ -174,7 +174,7 @@ IntUartSetAttributes(int minor, const struct termios *t)
 	if ( t != (const struct termios *)0 )
 	{
 		/* determine baud rate index */
-		baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+    baud = rtems_termios_baud_to_number(t->c_ospeed);
 
 		/* determine data bits */
 		switch ( t->c_cflag & CSIZE )
@@ -681,8 +681,10 @@ rtems_device_driver console_open(
     struct termios term;
     if (tcgetattr (STDIN_FILENO, &term) >= 0)
     {
-      term.c_cflag &= ~(CBAUD | CSIZE);
-      term.c_cflag |= CS8 | B19200;
+      term.c_cflag &= ~(CSIZE);
+      term.c_cflag |= CS8;
+      term.c_ispeed = B19200;
+      term.c_ospeed = B19200;
       tcsetattr (STDIN_FILENO, TCSANOW, &term);
     }
   }

@@ -581,7 +581,7 @@ MC68681_STATIC int mc68681_baud_rate(
       break;
   }
 
-  baud_requested = baud & CBAUD;
+  baud_requested = baud;
   if (!baud_requested)
     baud_requested = B9600;              /* default to 9600 baud */
 

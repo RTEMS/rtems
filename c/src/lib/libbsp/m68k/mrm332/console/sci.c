@@ -675,7 +675,7 @@ int   SciSetAttributes(
     /* if you look closely you will see this is the only thing we use */
     /* set the baud rate */
 
-    baud_requested = t->c_cflag & CBAUD;        /* baud rate */
+    baud_requested = t->c_ospeed;               /* baud rate */
 
     if (!baud_requested)
     {

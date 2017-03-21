@@ -25,8 +25,7 @@ void rtems_termios_set_best_baud(
 {
   const rtems_assoc_t *current = &rtems_termios_baud_table[ 0 ];
   const rtems_assoc_t *last = current;
-  tcflag_t cbaud_mask = CBAUD;
-  tcflag_t cbaud;
+  speed_t spd;
 
   while ( current->name != NULL && current->local_value < baud ) {
     last = current;
@@ -36,10 +35,11 @@ void rtems_termios_set_best_baud(
   if ( current->name != NULL ) {
     uint32_t mid = (last->local_value + current->local_value) / UINT32_C( 2 );
 
-    cbaud = baud <= mid ? last->remote_value : current->remote_value;
+    spd = baud <= mid ? last->remote_value : current->remote_value;
   } else {
-    cbaud = B460800;
+    spd = B460800;
   }
 
-  term->c_cflag = (term->c_cflag & ~cbaud_mask) | cbaud;
+  term->c_ispeed = spd;
+  term->c_ospeed = spd;
 }

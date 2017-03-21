@@ -702,7 +702,7 @@ typedef union {
                           /*    01 = BACK Porch. */
                           /*    10 = ACTIVE */
                           /*    11 = FRONT Porch */
-    unsigned VSTATUS:2;   /* TFT: Vertical Status (Read only). */
+    unsigned _VSTATUS:2;   /* TFT: Vertical Status (Read only). */
                           /*    00 = VSYNC */
                           /*    01 = BACK Porch. */
                           /*    10 = ACTIVE */

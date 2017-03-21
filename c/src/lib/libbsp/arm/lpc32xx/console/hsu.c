@@ -178,7 +178,7 @@ static bool lpc32xx_hsu_set_attributes(
 {
   lpc32xx_hsu_context *ctx = (lpc32xx_hsu_context *) base;
   volatile lpc32xx_hsu *hsu = ctx->hsu;
-  int baud_flags = term->c_cflag & CBAUD;
+  int baud_flags = term->c_ospeed;
 
   if (baud_flags != 0) {
     int32_t baud = rtems_termios_baud_to_number(baud_flags);

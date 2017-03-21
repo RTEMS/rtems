@@ -32,12 +32,12 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
     AC_CONFIG_SUBDIRS([t32mppc]);;
   tqm8xx )
     AC_CONFIG_SUBDIRS([tqm8xx]);;
-  virtex )
-    AC_CONFIG_SUBDIRS([virtex]);;
   virtex4 )
     AC_CONFIG_SUBDIRS([virtex4]);;
   virtex5 )
     AC_CONFIG_SUBDIRS([virtex5]);;
+  virtex )
+    AC_CONFIG_SUBDIRS([virtex]);;
   *)
     AC_MSG_ERROR([Invalid BSP]);;
   esac

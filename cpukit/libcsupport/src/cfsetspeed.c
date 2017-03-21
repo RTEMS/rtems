@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <termios.h>
+#include <rtems/termiostypes.h>
 #include <rtems/seterr.h>
 
 int cfsetspeed(
@@ -31,7 +32,7 @@ int cfsetspeed(
   speed_t speed
 )
 {
-  if ( speed & ~CBAUD )
+  if ( rtems_termios_baud_to_index( speed ) == -1 )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   cfsetispeed( tp, speed );

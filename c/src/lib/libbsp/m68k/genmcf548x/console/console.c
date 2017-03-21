@@ -307,7 +307,7 @@ IntUartSetAttributes(int minor, const struct termios *t)
 	if ( t != (const struct termios *)0 )
 	{
 		/* determine baud rate index */
-		baud = GetBaud( t->c_cflag & CBAUD );
+    baud = GetBaud( t->c_ospeed );
 
 		/* determine data bits */
 		switch ( t->c_cflag & CSIZE )

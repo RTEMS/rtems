@@ -227,7 +227,7 @@ conSetAttr(int port, int minor, const struct termios *t)
 {
   unsigned long baud, databits, parity, stopbits;
 
-  baud = rtems_termios_baud_to_number(t->c_cflag & CBAUD);
+  baud = rtems_termios_baud_to_number(t->c_ospeed);
   if ( baud > 115200 )
     rtems_fatal_error_occurred (RTEMS_INTERNAL_ERROR);
 

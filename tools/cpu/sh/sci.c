@@ -43,10 +43,15 @@ static unsigned int bitrate [] = {
   9600,
   19200,
   38400,
+  7200,
+  14400,
+  28800,
   57600,
+  76800,
   115200,
   230400,
-  460800
+  460800,
+  921600
 };
 
 static sci_tab_t test_array[4] ;
@@ -123,8 +128,9 @@ int shgen_gensci(
     "static struct sci_bitrate_t {\n"
     "  unsigned char n ;\n"
     "  unsigned char N ;\n"
+    "  speed_t       B ;\n"
     "} _sci_bitrates[] = {\n"
-    "/*  n    N      error */\n" );
+    "/*  n    N      B      error */\n" );
 
   for ( i = 0 ; i < sizeof(bitrate)/sizeof(int) ; i++ )
   {
@@ -132,9 +138,10 @@ int shgen_gensci(
 
     if ( i > 0 )
       fprintf( file, ",\n" );
-    fprintf( file, "  { %1d, %3d } /* %+7.2f%% ; B%d ",
+      fprintf( file, "  { %1d, %3d, %d } /* %+7.2f%% ; B%d ",
       best->n,
       best->N,
+      best->B,
       best->err,
       best->B );
     if ( best->n > 3 )
@@ -146,15 +153,19 @@ int shgen_gensci(
 
   fprintf( file,
     "int _sci_get_brparms( \n"
-    "  tcflag_t      cflag,\n"
+    "  speed_t        spd,\n"
     "  unsigned char *smr,\n"
     "  unsigned char *brr )\n"
     "{\n"
-    "  unsigned int offset ;\n\n"
-    "  offset = ( cflag & ( CBAUD & ~CBAUDEX ) )\n"
-    "    + ( ( cflag & CBAUDEX ) ? B38400 : 0 );\n"
-    "  if ( offset == 0 ) return -1 ;\n"
-    "  offset-- ;\n\n"
+    "  int offset = -1;\n"
+    "  int i;\n\n"
+    "  for(i = 0; i < sizeof(_sci_bitrates)/sizeof(_sci_bitrates[0]); i++) {\n"
+    "    if( _sci_bitrates[i].B == spd ) {\n"
+    "      offset = i;\n"
+    "      break;\n"
+    "    }\n"
+    "  }\n"
+    "  if ( offset == -1 ) return -1 ;\n"
     "  if ( _sci_bitrates[offset].n > 3 )  return -1;\n\n"
     "  *smr &= ~0x03;\n"
     "  *smr |= _sci_bitrates[offset].n;\n"

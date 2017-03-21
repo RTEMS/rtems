@@ -175,7 +175,7 @@ m8xx_smc_set_attributes (int minor, const struct termios *t)
   uint16_t   clen=0, cstopb, parenb, parodd, cread;
 
   /* Baud rate */
-  switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
   default:      baud = -1;      break;
   case B50:     baud = 50;      break;
   case B75:     baud = 75;      break;
@@ -271,7 +271,7 @@ m8xx_scc_set_attributes (int minor, const struct termios *t)
   uint16_t   csize=0, cstopb, parenb, parodd;
 
   /* Baud rate */
-  switch (t->c_cflag & CBAUD) {
+  switch (t->c_ospeed) {
   default:      baud = -1;      break;
   case B50:     baud = 50;      break;
   case B75:     baud = 75;      break;

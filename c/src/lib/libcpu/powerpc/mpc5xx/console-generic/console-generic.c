@@ -190,7 +190,7 @@ m5xx_uart_setAttributes(
     return RTEMS_INVALID_NUMBER;
 
   /* Baud rate */
-  baud = rtems_termios_baud_to_number( t->c_cflag & CBAUD );
+  baud = rtems_termios_baud_to_number( t->c_ospeed );
   if (baud > 0) {
     sccr0 &= ~QSMCM_SCI_BAUD(-1);
     sccr0 |= QSMCM_SCI_BAUD((bsp_clock_speed + (16 * baud)) / (32 * baud));
