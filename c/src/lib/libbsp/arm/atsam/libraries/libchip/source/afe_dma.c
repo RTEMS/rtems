@@ -206,6 +206,7 @@ uint32_t Afe_ConfigureDma(AfeDma *pAfed ,
 	pAfed->semaphore = 1;
 	pAfed->pCurrentCommand = 0;
 	assert(pXdmad == &XDMAD_Instance);
+	pAfed->pXdmad = pXdmad;
 	return 0;
 }
 

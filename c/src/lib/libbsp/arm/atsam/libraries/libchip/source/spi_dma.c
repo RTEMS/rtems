@@ -289,6 +289,7 @@ uint32_t SPID_Configure(Spid *pSpid ,
 	pSpid->semaphore = 1;
 	pSpid->pCurrentCommand = 0;
 	assert(pXdmad == &XDMAD_Instance);
+	pSpid->pXdmad = pXdmad;
 
 	/* Enable the SPI Peripheral ,Execute a software reset of the SPI,
 	    Configure SPI in Master Mode*/

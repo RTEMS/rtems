@@ -194,6 +194,7 @@ uint32_t Dac_ConfigureDma(DacDma *pDacd ,
 	pDacd->semaphore = 1;
 	pDacd->pCurrentCommand = 0;
 	assert(pXdmad == &XDMAD_Instance);
+	pDacd->pXdmad = pXdmad;
 	return 0;
 }
 
