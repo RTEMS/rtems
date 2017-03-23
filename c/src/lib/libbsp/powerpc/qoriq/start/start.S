@@ -54,13 +54,20 @@ _start:
 	bl	bsp_fdt_copy
 
 #ifdef QORIQ_HAS_WRITE_BACK_L1_CACHE
-	LWI	r3, bsp_section_start_begin
-	LWI	r4, bsp_section_data_load_end
-	sub	r4, r4, r3
-	bl	rtems_cache_flush_multiple_data_lines
-#else
-	bl	qoriq_l1cache_invalidate
+	/*
+	 * See PowerPC e500 Core Family Reference Manual, 11.5, L1 Data Cache
+	 * Flushing.
+	 */
+	LWI	r3, 12 * 128
+	mtctr	r3
+	LWI	r4, bsp_section_bss_begin
+1:
+	dcbz	r0, r4
+	addi	r4, r4, 32
+	bdnz	1b
 #endif
+
+	bl	qoriq_l1cache_invalidate
 
 #ifdef QORIQ_CLUSTER_1_L2CSR0
 	LWI	r3, QORIQ_CLUSTER_1_L2CSR0
