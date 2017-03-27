@@ -35,18 +35,6 @@ void bsp_start( void )
   void *need_remap_ptr;
   unsigned int need_remap_int;
 
-  #if BYTE_ORDER == BIG_ENDIAN
-    /*
-     * If CPU is big endian (TMS570 family variant)
-     * set the CPU mode to supervisor and big endian.
-     * Do not set mode if CPU is little endian
-     * (RM48 family variant) for which default mode 0x13
-     * defined in cpukit/score/cpu/arm/cpu.c
-     * is right.
-     */
-    arm_cpu_mode = 0x213;
-  #endif
-
   tms570_initialize_and_clear();
 
   /*

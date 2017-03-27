@@ -15,7 +15,7 @@
  *
  *  Copyright (c) 2007 Ray xu <rayx.cn@gmail.com>
  *
- *  Copyright (c) 2009, 2016 embedded brains GmbH
+ *  Copyright (c) 2009, 2017 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -26,14 +26,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems.h>
-#include <rtems/bspIo.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
+#include <rtems/score/assert.h>
+#include <rtems/score/cpu.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tls.h>
-#include <rtems/score/cpu.h>
 
 #ifdef ARM_MULTILIB_VFP
   RTEMS_STATIC_ASSERT(
@@ -89,12 +85,6 @@ RTEMS_STATIC_ASSERT(
 
 #ifdef ARM_MULTILIB_ARCH_V4
 
-/*
- * This variable can be used to change the running mode of the execution
- * contexts.
- */
-uint32_t arm_cpu_mode = 0x13;
-
 void _CPU_Context_Initialize(
   Context_Control *the_context,
   void *stack_area_begin,
@@ -105,10 +95,10 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
+  (void) new_level;
+
   the_context->register_sp = (uint32_t) stack_area_begin + stack_area_size;
   the_context->register_lr = (uint32_t) entry_point;
-  the_context->register_cpsr = ( ( new_level != 0 ) ? ARM_PSR_I : 0 )
-    | arm_cpu_mode;
   the_context->isr_dispatch_disable = 0;
 
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
@@ -120,25 +110,20 @@ void _CPU_Context_Initialize(
   }
 }
 
-/* Preprocessor magic for stringification of x */
-#define _CPU_ISR_LEVEL_DO_STRINGOF( x) #x
-#define _CPU_ISR_LEVEL_STRINGOF( x) _CPU_ISR_LEVEL_DO_STRINGOF( x)
-
 void _CPU_ISR_Set_level( uint32_t level )
 {
   uint32_t arm_switch_reg;
 
-  level = ( level != 0 ) ? ARM_PSR_I : 0;
+  /* Ignore the level parameter and just enable interrupts */
+  (void) level;
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[arm_switch_reg], cpsr\n"
-    "bic %[arm_switch_reg], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
-    "orr %[arm_switch_reg], %[level]\n"
+    "bic %[arm_switch_reg], #" RTEMS_XSTRING( ARM_PSR_I ) "\n"
     "msr cpsr, %0\n"
     ARM_SWITCH_BACK
     : [arm_switch_reg] "=&r" (arm_switch_reg)
-    : [level] "r" (level)
   );
 }
 
@@ -150,7 +135,7 @@ uint32_t _CPU_ISR_Get_level( void )
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
-    "and %[level], #" _CPU_ISR_LEVEL_STRINGOF( ARM_PSR_I ) "\n"
+    "and %[level], #" RTEMS_XSTRING( ARM_PSR_I ) "\n"
     ARM_SWITCH_BACK
     : [level] "=&r" (level) ARM_SWITCH_ADDITIONAL_OUTPUT
   );

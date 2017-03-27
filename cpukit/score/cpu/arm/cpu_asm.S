@@ -19,7 +19,7 @@
  *  COPYRIGHT (c) 2000 Canon Research Centre France SA.
  *  Emmanuel Raguet, mailto:raguet@crf.canon.fr
  *
- *  Copyright (c) 2013, 2016 embedded brains GmbH
+ *  Copyright (c) 2013, 2017 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -55,19 +55,21 @@
 
 DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 /* Start saving context */
-	mrs	r2, CPSR
-	stmia	r0,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
-
 	GET_SELF_CPU_CONTROL	r2
-	ldr	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
-
-#ifdef ARM_MULTILIB_VFP
-	add	r3, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
-	vstm	r3, {d8-d15}
-#endif
+	stm	r0, {r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
 
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
 	mrc	p15, 0, r3, c13, c0, 3
+#endif
+
+	ldr	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
+
+#ifdef ARM_MULTILIB_VFP
+	add	r5, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
+	vstm	r5, {d8-d15}
+#endif
+
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
 	str	r3, [r0, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
 #endif
 
@@ -106,28 +108,31 @@ DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 	clrex
 #endif
 
-	ldr	r4, [r1, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
-
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
 	ldr	r3, [r1, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
-	mcr	p15, 0, r3, c13, c0, 3
 #endif
 
+	ldr	r4, [r1, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
+
 #ifdef ARM_MULTILIB_VFP
-	add	r3, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET
-	vldm	r3, {d8-d15}
+	add	r5, r1, #ARM_CONTEXT_CONTROL_D8_OFFSET
+	vldm	r5, {d8-d15}
+#endif
+
+#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+	mcr	p15, 0, r3, c13, c0, 3
 #endif
 
 	str	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
 
-	ldmia	r1,  {r2, r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
-	msr	CPSR_fsxc, r2
-#ifdef __thumb__
-	bx	lr
-	nop
+	/* In ARMv5T and above the load of PC is an interworking branch */
+#if __ARM_ARCH >= 5
+	ldm	r1, {r4, r5, r6, r7, r8, r9, r10, r11, r13, pc}
 #else
-	mov	pc, lr
+	ldm	r1, {r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
+	bx	lr
 #endif
+
 /*
  *  void _CPU_Context_restore( new_context )
  *

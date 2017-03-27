@@ -8,7 +8,7 @@
  *  This include file contains information pertaining to the ARM
  *  processor.
  *
- *  Copyright (c) 2009, 2016 embedded brains GmbH
+ *  Copyright (c) 2009, 2017 embedded brains GmbH
  *
  *  Copyright (c) 2007 Ray Xu <Rayx.cn@gmail.com>
  *
@@ -120,11 +120,7 @@
 
 #define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
-#if defined(ARM_MULTILIB_ARCH_V7M)
-  #define CPU_ENABLE_ROBUST_THREAD_DISPATCH TRUE
-#else
-  #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
-#endif
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH TRUE
 
 #if defined(ARM_MULTILIB_HAS_WFI)
   #define CPU_PROVIDES_IDLE_THREAD_BODY TRUE
@@ -142,20 +138,6 @@
 
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
-/*
- * The interrupt mask disables only normal interrupts (IRQ).
- *
- * In order to support fast interrupts (FIQ) such that they can do something
- * useful, we have to disable the operating system support for FIQs.  Having
- * operating system support for them would require that FIQs are disabled
- * during critical sections of the operating system and application.  At this
- * level IRQs and FIQs would be equal.  It is true that FIQs could interrupt
- * the non critical sections of IRQs, so here they would have a small
- * advantage.  Without operating system support, the FIQs can execute at any
- * time (of course not during the service of another FIQ). If someone needs
- * operating system support for a FIQ, she can trigger a software interrupt and
- * service the request in a two-step process.
- */
 #define CPU_MODES_INTERRUPT_MASK 0x1
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
@@ -206,20 +188,16 @@
 #endif
 
 #ifdef ARM_MULTILIB_ARCH_V4
-  #if defined(ARM_MULTILIB_VFP)
-    #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 112
-  #elif defined(ARM_MULTILIB_HAS_THREAD_ID_REGISTER)
-    #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 48
-  #else
-    #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 44
-  #endif
+  #define ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE 40
 #endif
 
 #ifdef RTEMS_SMP
-  #ifdef ARM_MULTILIB_VFP
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 116
+  #if defined(ARM_MULTILIB_VFP)
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 112
+  #elif defined(ARM_MULTILIB_HAS_THREAD_ID_REGISTER)
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 48
   #else
-    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 52
+    #define ARM_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 44
   #endif
 #endif
 
@@ -244,7 +222,6 @@ extern "C" {
 
 typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
-  uint32_t register_cpsr;
   uint32_t register_r4;
   uint32_t register_r5;
   uint32_t register_r6;
@@ -255,6 +232,7 @@ typedef struct {
   uint32_t register_fp;
   uint32_t register_sp;
   uint32_t register_lr;
+  uint32_t isr_dispatch_disable;
 #elif defined(ARM_MULTILIB_ARCH_V6M) || defined(ARM_MULTILIB_ARCH_V7M)
   uint32_t register_r4;
   uint32_t register_r5;
@@ -283,9 +261,6 @@ typedef struct {
   uint64_t register_d14;
   uint64_t register_d15;
 #endif
-#ifdef ARM_MULTILIB_ARCH_V4
-  uint32_t isr_dispatch_disable;
-#endif
 #ifdef RTEMS_SMP
   volatile bool is_executing;
 #endif
@@ -294,8 +269,6 @@ typedef struct {
 typedef struct {
   /* Not supported */
 } Context_Control_fp;
-
-extern uint32_t arm_cpu_mode;
 
 static inline void _ARM_Data_memory_barrier( void )
 {
@@ -331,6 +304,20 @@ static inline uint32_t arm_interrupt_disable( void )
 #if defined(ARM_MULTILIB_ARCH_V4)
   uint32_t arm_switch_reg;
 
+  /*
+   * Disable only normal interrupts (IRQ).
+   *
+   * In order to support fast interrupts (FIQ) such that they can do something
+   * useful, we have to disable the operating system support for FIQs.  Having
+   * operating system support for them would require that FIQs are disabled
+   * during critical sections of the operating system and application.  At this
+   * level IRQs and FIQs would be equal.  It is true that FIQs could interrupt
+   * the non critical sections of IRQs, so here they would have a small
+   * advantage.  Without operating system support, the FIQs can execute at any
+   * time (of course not during the service of another FIQ). If someone needs
+   * operating system support for a FIQ, she can trigger a software interrupt and
+   * service the request in a two-step process.
+   */
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
     "mrs %[level], cpsr\n"
