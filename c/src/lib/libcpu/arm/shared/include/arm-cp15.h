@@ -8,7 +8,7 @@
 
 /*
  * Copyright (c) 2013 Hesham AL-Matary
- * Copyright (c) 2009-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009-2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -1465,6 +1465,451 @@ arm_cp15_set_hyp_vector_base_address(void *base)
     ARM_SWITCH_BACK
     : ARM_SWITCH_OUTPUT
     : [base] "r" (base)
+  );
+}
+
+/* PMCCNTR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_cycle_count(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c13, 0\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMCCNTR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_cycle_count(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c13, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMCEID0 */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_common_event_id_0(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 6\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMCEID1 */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_common_event_id_1(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 7\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+#define ARM_CP15_PMCLRSET_CYCLE_COUNTER 0x80000000
+
+/* PMCCNTENCLR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_count_enable_clear(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 2\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMCCNTENCLR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_count_enable_clear(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 2\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMCCNTENSET */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_count_enable_set(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMCCNTENSET */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_count_enable_set(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 1\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+#define ARM_CP15_PMCR_IMP(x) ((x) << 24)
+#define ARM_CP15_PMCR_IDCODE(x) ((x) << 16)
+#define ARM_CP15_PMCR_N(x) ((x) << 11)
+#define ARM_CP15_PMCR_DP (1U << 5)
+#define ARM_CP15_PMCR_X (1U << 3)
+#define ARM_CP15_PMCR_D (1U << 4)
+#define ARM_CP15_PMCR_C (1U << 2)
+#define ARM_CP15_PMCR_P (1U << 1)
+#define ARM_CP15_PMCR_E (1U << 0)
+
+/* PMCR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_control(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 0\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMCR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_control(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMINTENCLR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_interrupt_enable_clear(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c14, 2\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMINTENCLR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_interrupt_enable_clear(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c14, 2\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMINTENSET */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_interrupt_enable_set(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c14, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMINTENSET */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_interrupt_enable_set(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c14, 1\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMOVSR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_overflow_flag_status(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 3\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMOVSR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_overflow_flag_status(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 3\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMOVSSET */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_overflow_flag_status_set(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c14, 3\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMOVSSET */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_overflow_flag_status_set(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c14, 3\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMSELR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_event_counter_selection(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c12, 5\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMSELR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_event_counter_selection(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 5\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMSWINC */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_software_increment(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c12, 4\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMUSERENR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_user_enable(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c14, 0\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMUSERENR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_user_enable(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c14, 0\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMXEVCNTR */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_event_count(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c13, 2\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMXEVCNTR */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_event_count(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c13, 2\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
+  );
+}
+
+/* PMXEVTYPER */
+ARM_CP15_TEXT_SECTION static inline uint32_t
+arm_cp15_get_performance_monitors_event_type_select(void)
+{
+  ARM_SWITCH_REGISTERS;
+  uint32_t val;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mrc p15, 0, %[val], c9, c13, 1\n"
+    ARM_SWITCH_BACK
+    : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
+  );
+
+  return val;
+}
+
+/* PMXEVTYPER */
+ARM_CP15_TEXT_SECTION static inline void
+arm_cp15_set_performance_monitors_event_type_select(uint32_t val)
+{
+  ARM_SWITCH_REGISTERS;
+
+  __asm__ volatile (
+    ARM_SWITCH_TO_ARM
+    "mcr p15, 0, %[val], c9, c13, 1\n"
+    ARM_SWITCH_BACK
+    : ARM_SWITCH_OUTPUT
+    : [val] "r" (val)
   );
 }
 
