@@ -847,7 +847,7 @@ rtems_termios_ioctl (void *arg)
   struct rtems_termios_tty *tty = args->iop->data1;
   struct ttywakeup         *wakeup = (struct ttywakeup *)args->buffer;
   rtems_status_code sc;
-  int flags = *((int *)args->buffer);
+  int flags;
 
   args->ioctl_return = 0;
   sc = rtems_semaphore_obtain (tty->osem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
@@ -920,6 +920,8 @@ rtems_termios_ioctl (void *arg)
     break;
 
   case TIOCFLUSH:
+    flags = *((int *)args->buffer);
+
     if (flags == 0) {
       flags = FREAD | FWRITE;
     } else {
