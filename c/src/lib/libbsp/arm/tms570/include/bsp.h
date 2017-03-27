@@ -37,9 +37,6 @@
 #define BSP_OSCILATOR_CLOCK 8000000
 #define BSP_PLL_OUT_CLOCK 160000000
 
-/** Define operation count for Tests */
-#define OPERATION_COUNT 4
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
