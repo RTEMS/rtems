@@ -29,80 +29,30 @@
 #include <rtems/counter.h>
 #include <rtems/sysinit.h>
 
+#include <libcpu/arm-cp15.h>
+
 #include <bsp.h>
 
-/**
- * @brief set mode of Cortex-R performance counters
- *
- * Based on example found on http://stackoverflow.com
- *
- * @param[in] do_reset if set, values of the counters are reset
- * @param[in] enable_divider if set, CCNT counts clocks divided by 64
- * @retval Void
- */
-static inline void tms570_init_perfcounters(
-    int32_t do_reset,
-    int32_t enable_divider
-)
-{
-  /* in general enable all counters (including cycle counter) */
-  int32_t value = 1;
-
-  /* peform reset */
-  if (do_reset)
-  {
-    value |= 2;     /* reset all counters to zero */
-    value |= 4;     /* reset cycle counter to zero */
-  }
-
-  if (enable_divider)
-    value |= 8;     /* enable "by 64" divider for CCNT */
-
-  value |= 16;
-
-  /* program the performance-counter control-register */
-  asm volatile ("mcr p15, 0, %0, c9, c12, 0\t\n" :: "r"(value));
-
-  /* enable all counters */
-  asm volatile ("mcr p15, 0, %0, c9, c12, 1\t\n" :: "r"(0x8000000f));
-
-  /* clear overflows */
-  asm volatile ("mcr p15, 0, %0, c9, c12, 3\t\n" :: "r"(0x8000000f));
-}
-
-/**
- * @brief initialize Cortex-R performance counters subsystem
- *
- * Based on example found on http://stackoverflow.com
- *
- * @retval Void
- *
- */
 static void tms570_cpu_counter_initialize(void)
 {
-  /* enable user-mode access to the performance counter */
-  asm volatile ("mcr p15, 0, %0, c9, c14, 0\n\t" :: "r"(1));
+  uint32_t cycle_counter;
+  uint32_t pmcr;
 
-  /* disable counter overflow interrupts (just in case) */
-  asm volatile ("mcr p15, 0, %0, c9, c14, 2\n\t" :: "r"(0x8000000f));
+  cycle_counter = ARM_CP15_PMCLRSET_CYCLE_COUNTER;
+  arm_cp15_set_performance_monitors_interrupt_enable_clear(cycle_counter);
+  arm_cp15_set_performance_monitors_count_enable_set(cycle_counter);
 
-  tms570_init_perfcounters(false, false);
+  pmcr = arm_cp15_get_performance_monitors_control();
+  pmcr &= ~ARM_CP15_PMCR_D;
+  pmcr |= ARM_CP15_PMCR_E;
+  arm_cp15_set_performance_monitors_control(pmcr);
+
   rtems_counter_initialize_converter(2 * BSP_PLL_OUT_CLOCK);
 }
 
-/**
- * @brief returns the actual value of Cortex-R cycle counter register
- *
- * The register is incremented at each core clock period
- *
- * @retval x actual core clock counter value
- *
- */
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
-  uint32_t ticks;
-  asm volatile ("mrc p15, 0, %0, c9, c13, 0\n": "=r" (ticks));
-  return ticks;
+  return arm_cp15_get_performance_monitors_cycle_count();
 }
 
 RTEMS_SYSINIT_ITEM(
