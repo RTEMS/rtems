@@ -37,18 +37,6 @@
 #define BSP_OSCILATOR_CLOCK 8000000
 #define BSP_PLL_OUT_CLOCK 160000000
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-struct rtems_bsdnet_ifconfig;
-
-/** @} */
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
 #endif /* ASM */
 
 #endif /* LIBBSP_ARM_TMS570_BSP_H */
