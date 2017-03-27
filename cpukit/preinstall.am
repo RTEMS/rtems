@@ -72,10 +72,6 @@ $(PROJECT_INCLUDE)/memory.h: include/memory.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
 
-$(PROJECT_INCLUDE)/sys/ioccom.h: libcsupport/include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
-
 $(PROJECT_INCLUDE)/sys/event.h: libcsupport/include/sys/event.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/event.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/event.h
@@ -83,6 +79,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/event.h
 $(PROJECT_INCLUDE)/sys/filio.h: libcsupport/include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
+
+$(PROJECT_INCLUDE)/sys/ioccom.h: libcsupport/include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
 
 $(PROJECT_INCLUDE)/sys/ioctl.h: libcsupport/include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
@@ -92,21 +92,13 @@ $(PROJECT_INCLUDE)/sys/poll.h: libcsupport/include/sys/poll.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/poll.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/poll.h
 
-$(PROJECT_INCLUDE)/sys/statvfs.h: libcsupport/include/sys/statvfs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/statvfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/statvfs.h
-
 $(PROJECT_INCLUDE)/sys/sockio.h: libcsupport/include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
 
-$(PROJECT_INCLUDE)/sys/ttycom.h: libcsupport/include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
-
-$(PROJECT_INCLUDE)/sys/ttydefaults.h: libcsupport/include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
+$(PROJECT_INCLUDE)/sys/statvfs.h: libcsupport/include/sys/statvfs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/statvfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/statvfs.h
 
 $(PROJECT_INCLUDE)/sys/_termios.h: libcsupport/include/sys/_termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_termios.h
@@ -115,6 +107,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_termios.h
 $(PROJECT_INCLUDE)/sys/termios.h: libcsupport/include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
+
+$(PROJECT_INCLUDE)/sys/ttycom.h: libcsupport/include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
+
+$(PROJECT_INCLUDE)/sys/ttydefaults.h: libcsupport/include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
 
 $(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h

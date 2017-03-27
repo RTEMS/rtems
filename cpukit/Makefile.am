@@ -59,15 +59,17 @@ include_sys_HEADERS =
 include_HEADERS += include/crypt.h
 include_HEADERS += include/memory.h
 
-include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/event.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h
+include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/ioctl.h
 include_sys_HEADERS += libcsupport/include/sys/poll.h
-include_sys_HEADERS += libcsupport/include/sys/statvfs.h
 include_sys_HEADERS += libcsupport/include/sys/sockio.h
-include_sys_HEADERS += libcsupport/include/sys/ttycom.h
+include_sys_HEADERS += libcsupport/include/sys/statvfs.h
+include_sys_HEADERS += libcsupport/include/sys/_termios.h
 include_sys_HEADERS += libcsupport/include/sys/termios.h
+include_sys_HEADERS += libcsupport/include/sys/ttycom.h
+include_sys_HEADERS += libcsupport/include/sys/ttydefaults.h
 include_sys_HEADERS += libcsupport/include/sys/utsname.h
 
 include_sys_HEADERS += include/sys/endian.h
