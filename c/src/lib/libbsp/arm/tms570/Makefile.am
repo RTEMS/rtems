@@ -153,15 +153,14 @@ libbsp_a_SOURCES += console/tms570-sci.c
 # Clock
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += clock/clock.c
-libbsp_a_SOURCES += clock/benchmark_timer.c
 
 # RTC
 
 # GPIO
 libbsp_a_SOURCES += pinmux/pinmux.c
-# Timer
 
 # Benchmark Timer
+libbsp_a_SOURCES += ../../shared/timercpucounter.c
 
 # Misc
 libbsp_a_SOURCES += misc/cpucounterread.c
