@@ -427,20 +427,22 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 }
 
 /**
- * The structure of obj->detail is
+ * The structure of obj->linkmap is:
  *
  * |object_detail(0..obj_num)|section_detail(0..sec_num[0..obj_num])|
  * obj_name(0..obj_num)|section_name(0..sec_num[0..obj_num])
  *
  */
 static bool
-rtems_rtl_rap_load_details (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
+rtems_rtl_rap_load_linkmap (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 {
+  void*            detail;
   struct link_map* tmp1;
-  section_detail* tmp2;
-  uint32_t obj_detail_size;
-  uint32_t pos = 0;
-  int i,j;
+  section_detail*  tmp2;
+  uint32_t         obj_detail_size;
+  uint32_t         pos = 0;
+  int              i;
+  int              j;
 
   obj_detail_size = sizeof (struct link_map) * obj->obj_num;
 
@@ -449,25 +451,30 @@ rtems_rtl_rap_load_details (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     obj_detail_size += (obj->sec_num[i] * sizeof (section_detail));
   }
 
-  obj->detail = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                     obj_detail_size + rap->strtable_size, true);
+  detail = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                obj_detail_size + rap->strtable_size, true);
 
-  if (!obj->detail)
+  if (!detail)
   {
     rap->strtable_size = 0;
     rtems_rtl_set_error (ENOMEM, "no memory for obj global syms");
     return false;
   }
 
-  rap->strtable = obj->detail + obj_detail_size;
+  rap->strtable = detail + obj_detail_size;
 
-  /* Read the obj names and section names */
-  if (!rtems_rtl_obj_comp_read (rap->decomp, rap->strtable,
+  /*
+   *  Read the obj names and section names
+   */
+  if (!rtems_rtl_obj_comp_read (rap->decomp,
+                                rap->strtable,
                                 rap->strtable_size))
   {
-    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, obj->detail);
+    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, detail);
     return false;
   }
+
+  obj->linkmap = (struct link_map*) detail;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
   {
@@ -489,7 +496,7 @@ rtems_rtl_rap_load_details (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 
   for (i = 0; i < obj->obj_num; ++i)
   {
-    tmp1 = (struct link_map*) (obj->detail) + i;
+    tmp1 = obj->linkmap + i;
     tmp1->name = rap->strtable + pos;
     tmp1->sec_num = obj->sec_num[i];
     tmp1->rpathlen = rap->rpathlen;
@@ -509,17 +516,17 @@ rtems_rtl_rap_load_details (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     }
   }
 
-  tmp2 =(section_detail*) ((struct link_map*) (obj->detail) + obj->obj_num);
+  tmp2 = (section_detail*) (obj->linkmap + obj->obj_num);
 
   for (i = 0; i < obj->obj_num; ++i)
   {
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     {
-      printf ("File %d: %s\n", i, ((struct link_map*) obj->detail + i)->name);
-      printf ("Section: %d sections\n",(unsigned int) obj->sec_num[i]);
+      printf ("File %d: %s\n", i, (obj->linkmap + i)->name);
+      printf ("Section: %d sections\n", (unsigned int) obj->sec_num[i]);
     }
 
-    ((struct link_map*)obj->detail + i)->sec_detail = tmp2;
+    obj->linkmap[i].sec_detail = tmp2;
 
     for (j = 0; j < obj->sec_num[i]; ++j)
     {
@@ -532,7 +539,8 @@ rtems_rtl_rap_load_details (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
           !rtems_rtl_rap_read_uint32 (rap->decomp, &offset) ||
           !rtems_rtl_rap_read_uint32 (rap->decomp, &size))
       {
-        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->detail);
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->linkmap);
+        obj->linkmap = NULL;
         return false;
       }
 
@@ -907,7 +915,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
       printf ("rtl: rap: details: obj_num=%lu\n", obj->obj_num);
 
-    if (!rtems_rtl_rap_load_details (&rap, obj))
+    if (!rtems_rtl_rap_load_linkmap (&rap, obj))
       return false;
   }
 
@@ -972,6 +980,13 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
 
   rtems_rtl_obj_synchronize_cache (obj);
 
+  return true;
+}
+
+bool
+rtems_rtl_rap_file_unload (rtems_rtl_obj_t* obj)
+{
+  (void) obj;
   return true;
 }
 

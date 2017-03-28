@@ -1,0 +1,24 @@
+# Copyright (c) 2016 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl04
+
+directives:
+
+  dlopen
+  dlerror
+  dlclose
+
+concepts:
+
++ Load a single ELF object file containing C++ code with an exception.
++ Throw the exception.
++ Unload the ELF file.
+
+Note: the test fails because terminate is raised.

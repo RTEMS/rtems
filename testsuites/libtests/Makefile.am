@@ -44,7 +44,7 @@ _SUBDIRS += syscall01
 endif
 
 if DLTESTS
-_SUBDIRS += dl01 dl02
+_SUBDIRS += dl01 dl02 dl03 dl04 dl05
 endif
 
 include $(top_srcdir)/../automake/test-subdirs.am

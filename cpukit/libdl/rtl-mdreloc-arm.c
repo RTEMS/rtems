@@ -10,11 +10,14 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <unwind.h>
+#include <unwind-arm-common.h>
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include "rtl-trace.h"
+#include "rtl-unwind.h"
 
 /*
  * It is possible for the compiler to emit relocations for unaligned data.
@@ -22,6 +25,8 @@
  */
 #define	RELOC_ALIGNED_P(x) \
 	(((uintptr_t)(x) & (sizeof(void *) - 1)) == 0)
+
+#define SHT_ARM_EXIDX  0x70000001 /* Section holds ARM unwind info. */
 
 static inline Elf_Addr
 load_ptr(void *where)
@@ -50,6 +55,24 @@ isThumb(Elf_Word symvalue)
   if ((symvalue & 0x1) == 0x1)
     return true;
   else return false;
+}
+
+static inline Elf_SOff
+sign_extend31(Elf_Addr val)
+{
+  if (0x40000000 & val)
+    val =  ~((Elf_Addr)0x7fffffff) | (0x7fffffff & val);
+  return 0x7fffffff & val;
+}
+
+uint32_t
+rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
+                             const Elf_Shdr*        shdr)
+{
+  uint32_t flags = 0;
+  if (shdr->sh_type == SHT_ARM_EXIDX)
+    flags = RTEMS_RTL_OBJ_SECT_EH | RTEMS_RTL_OBJ_SECT_LOAD;
+  return flags;
 }
 
 bool
@@ -87,8 +110,11 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
   where = (Elf_Addr *)(sect->base + rel->r_offset);
 
   switch (ELF_R_TYPE(rel->r_info)) {
-		case R_TYPE(NONE):
-			break;
+    case R_TYPE(NONE):
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC)) {
+        printf ("rtl: NONE %p in %s\n", where, rtems_rtl_obj_oname (obj));
+      }
+      break;
 
     case R_TYPE(CALL):    /* BL/BLX */
     case R_TYPE(JUMP24):  /* B/BL<cond> */
@@ -165,24 +191,32 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
     case R_TYPE(REL32):     /* word32 (S + A) | T - P */
     case R_TYPE(ABS32):     /* word32 (S + A) | T */
     case R_TYPE(GLOB_DAT):  /* word32 (S + A) | T */
+    case R_TYPE(PREL31):    /* word32 (S + A) | T - P */
+    case R_TYPE(TARGET2):   /* Equivalent to REL32 */
       if (__predict_true(RELOC_ALIGNED_P(where))) {
         tmp = *where + symvalue;
         if (isThumb(symvalue))
           tmp |= 1;
-        if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32))
+        if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32) ||
+            ELF_R_TYPE(rel->r_info) == R_TYPE(TARGET2))
           tmp -= (Elf_Addr)where;
+        else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31))
+          tmp = sign_extend31(tmp - (Elf_Addr)where);
         *where = tmp;
       } else {
         tmp = load_ptr(where) + symvalue;
         if (isThumb(symvalue))
           tmp |= 1;
-        if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32))
+        if (ELF_R_TYPE(rel->r_info) == R_TYPE(REL32) ||
+            ELF_R_TYPE(rel->r_info) == R_TYPE(TARGET2))
           tmp -= (Elf_Addr)where;
+        else if (ELF_R_TYPE(rel->r_info) == R_TYPE(PREL31))
+          tmp = sign_extend31(tmp - (Elf_Addr)where);
         store_ptr(where, tmp);
       }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf ("rtl: REL32/ABS32/GLOB_DAT %p @ %p in %s",
+        printf ("rtl: REL32/ABS32/GLOB_DAT/PREL31/TARGET2 %p @ %p in %s\n",
                 (void *)tmp, where, rtems_rtl_obj_oname (obj));
       break;
 
@@ -306,7 +340,7 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
                 (void *)*where, where, rtems_rtl_obj_oname (obj));
       break;
 
-		default:
+    default:
       printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
               "contents = %p\n",
               ELF_R_SYM(rel->r_info), (uint32_t) ELF_R_TYPE(rel->r_info),
@@ -315,9 +349,83 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
                            "%s: Unsupported relocation type %ld "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-			return false;
+      return false;
   }
 
-	return true;
+  return true;
 }
 
+bool
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
+                            const char*            name,
+                            uint32_t               flags)
+{
+  /*
+   * We location the EH sections in section flags.
+   */
+  return false;
+}
+
+bool
+rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+{
+  return true;
+}
+
+bool
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+{
+  obj->loader = NULL;
+  return true;
+}
+
+/* An exception index table entry.  */
+typedef struct __EIT_entry
+{
+  _uw fnoffset;
+  _uw content;
+} __EIT_entry;
+
+/* The exception index table location in the base module */
+extern __EIT_entry __exidx_start;
+extern __EIT_entry __exidx_end;
+
+/*
+ * A weak reference is in libgcc, provide a real version and provide a way to
+ * manage loaded modules.
+ *
+ * Passed in the return address and a reference to the number of records
+ * found. We set the start of the exidx data and the number of records.
+ */
+_Unwind_Ptr __gnu_Unwind_Find_exidx (_Unwind_Ptr return_address,
+                                     int*        nrec) __attribute__ ((__noinline__,
+                                                                       __used__,
+                                                                       __noclone__));
+
+_Unwind_Ptr __gnu_Unwind_Find_exidx (_Unwind_Ptr return_address,
+                                     int*        nrec)
+{
+  rtems_rtl_data_t* rtl;
+  rtems_chain_node* node;
+  __EIT_entry*      exidx_start = &__exidx_start;
+  __EIT_entry*      exidx_end = &__exidx_end;
+
+  rtl = rtems_rtl_lock ();
+
+  node = rtems_chain_first (&rtl->objects);
+  while (!rtems_chain_is_tail (&rtl->objects, node)) {
+    rtems_rtl_obj_t* obj = (rtems_rtl_obj_t*) node;
+    if (rtems_rtl_obj_text_inside (obj, (void*) return_address)) {
+      exidx_start = (__EIT_entry*) obj->eh_base;
+      exidx_end = (__EIT_entry*) (obj->eh_base + obj->eh_size);
+      break;
+    }
+    node = rtems_chain_next (node);
+  }
+
+  rtems_rtl_unlock ();
+
+  *nrec = exidx_end - exidx_start;
+
+  return (_Unwind_Ptr) exidx_start;
+}

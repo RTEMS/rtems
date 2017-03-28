@@ -112,7 +112,7 @@ struct rtems_rtl_data_s
 };
 
 /**
- * Get the RTL data with out locking. This call assmes the RTL is locked.
+ * Get the RTL data with out locking. This call assumes the RTL is locked.
  *
  * @return rtems_rtl_data_t* The RTL data after being locked.
  * @retval NULL The RTL data is not initialised.

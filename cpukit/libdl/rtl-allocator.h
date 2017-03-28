@@ -146,6 +146,8 @@ void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag_t tag,
  * @param text_size The size of the read/exec section.
  * @param const_base Pointer to the const base pointer.
  * @param const_size The size of the read only section.
+ * @param eh_base Pointer to the eh base pointer.
+ * @param eh_size The size of the eh section.
  * @param data_base Pointer to the data base pointer.
  * @param data_size The size of the read/write secton.
  * @param bss_base Pointer to the bss base pointer.
@@ -155,6 +157,7 @@ void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag_t tag,
  */
 bool rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
                                  void** const_base, size_t const_size,
+                                 void** eh_base, size_t eh_size,
                                  void** data_base, size_t data_size,
                                  void** bss_base, size_t bss_size);
 
@@ -163,11 +166,13 @@ bool rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
  *
  * @param text_base Pointer to the text base pointer.
  * @param const_base Pointer to the const base pointer.
+ * @param eh_base Pointer to the eh base pointer.
  * @param data_base Pointer to the data base pointer.
  * @param bss_base Pointer to the bss base pointer.
  */
 void rtems_rtl_alloc_module_del (void** text_base, void** const_base,
-                                 void** data_base, void** bss_base);
+                                 void** eh_base, void** data_base,
+                                 void** bss_base);
 
 #ifdef __cplusplus
 }

@@ -127,6 +127,9 @@ deviceio01/Makefile
 devnullfatal01/Makefile
 dl01/Makefile
 dl02/Makefile
+dl03/Makefile
+dl04/Makefile
+dl05/Makefile
 dumpbuf01/Makefile
 ftp01/Makefile
 gxx01/Makefile

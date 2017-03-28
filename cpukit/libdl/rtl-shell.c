@@ -25,7 +25,7 @@
  *  Flag the targets where off_t is 32 bits. This is not a compiler type
  *  so we can't rely on prerdefines.
  */
-#if defined(__m32r__) || defined(__moxie__)
+#if defined(__moxie__)
 #define PRIdoff_t PRIo32
 #else
 #define PRIdoff_t PRIo64

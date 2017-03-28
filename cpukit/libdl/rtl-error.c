@@ -17,6 +17,7 @@
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -39,9 +40,15 @@ int
 rtems_rtl_get_error (char* message, size_t max_message)
 {
   rtems_rtl_data_t* rtl = rtems_rtl_lock ();
-  int               last_errno = rtl->last_errno;
-  strncpy (message, rtl->last_error, sizeof (rtl->last_error));
-  rtems_rtl_unlock ();
-  return last_errno;
-}
+  if (rtl != NULL)
+  {
+    int last_errno = rtl->last_errno;
+    strncpy (message, rtl->last_error, sizeof (rtl->last_error));
+    rtems_rtl_unlock ();
+    return last_errno;
+  }
 
+  strncpy(message, "RTL init error", max_message);
+
+  return EIO;
+}

@@ -41,6 +41,8 @@
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include "rtl-trace.h"
+#include "rtl-unwind.h"
+#include "rtl-unwind-dw2.h"
 
 /*
  * The following table holds for each relocation type:
@@ -128,6 +130,13 @@ static const int reloc_target_bitmask[] = {
 };
 #define RELOC_VALUE_BITMASK(t)  (reloc_target_bitmask[t])
 
+uint32_t
+rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
+                             const Elf_Shdr*        shdr)
+{
+  return 0;
+}
+
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
@@ -144,6 +153,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
 {
   Elf_Addr *where;
   Elf_Word type, value, mask;
+  Elf_Addr tmp = 0;
 
   where = (Elf_Addr *) (sect->base + rela->r_offset);
 
@@ -219,31 +229,32 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
   value &= mask;
 
   if (RELOC_UNALIGNED(type)) {
-    /* Handle unaligned relocations. */
-    Elf_Addr tmp = 0;
-    char *ptr = (char *)where;
+    /*
+     * Handle unaligned relocations.
+     */
+    char *ptr = (char*) where;
     int i, size = RELOC_TARGET_SIZE (type) / 8;
 
     /* Read it in one byte at a time. */
-    for (i=0; i<size; i++)
+    for (i = size - 1; i >= 0; i--)
       tmp = (tmp << 8) | ptr[i];
 
     tmp &= ~mask;
     tmp |= value;
 
     /* Write it back out. */
-    for (i=0; i<size; i++)
-      ptr[i] = ((tmp >> (8*i)) & 0xff);
-
+    for (i = size - 1; i >= 0; i--, tmp >>= 8)
+      ptr[i] = tmp & 0xff;
   } else {
     *where &= ~mask;
     *where |= value;
+    tmp = *where;
   }
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
     printf ("rtl: %s %p @ %p in %s\n",
-            reloc_names[type], (void *)*where, where, rtems_rtl_obj_oname (obj));
-
+            reloc_names[ELF_R_TYPE(rela->r_info)],
+            (void *)tmp, where, rtems_rtl_obj_oname (obj));
 
   return true;
 }
@@ -258,4 +269,24 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
 {
   printf ("rtl: rel type record not supported; please report\n");
   return false;
+}
+
+bool
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
+                            const char*            name,
+                            uint32_t               flags)
+{
+  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+}
+
+bool
+rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_register (obj);
+}
+
+bool
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_deregister (obj);
 }

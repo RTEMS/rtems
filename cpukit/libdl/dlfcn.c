@@ -130,7 +130,7 @@ dlerror (void)
 {
   static char msg[64];
   rtems_rtl_get_error (msg, sizeof (msg));
-	return msg;
+  return msg;
 }
 
 int

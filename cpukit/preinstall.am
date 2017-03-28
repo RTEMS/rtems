@@ -212,6 +212,10 @@ $(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h: libdl/rtl-sym.h $(PROJECT_INCLUDE)/rtems
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-sym.h
 
+$(PROJECT_INCLUDE)/rtems/rtl/rtl-trace.h: libdl/rtl-trace.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rtl-trace.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rtl-trace.h
+
 $(PROJECT_INCLUDE)/rtems/rtl/rap.h: libdl/rap.h $(PROJECT_INCLUDE)/rtems/rtl/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtl/rap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtl/rap.h

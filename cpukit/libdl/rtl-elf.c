@@ -30,6 +30,7 @@
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include "rtl-trace.h"
+#include "rtl-unwind.h"
 #include "rtl-unresolved.h"
 
 /**
@@ -169,6 +170,9 @@ rtems_rtl_elf_relocator (rtems_rtl_obj_t*      obj,
                                          &relbuf[0], reloc_size))
       return false;
 
+    /*
+     * Read the symbol details.
+     */
     if (is_rela)
       off = (obj->ooffset + symsect->offset +
              (ELF_R_SYM (rela->r_info) * sizeof (sym)));
@@ -246,7 +250,7 @@ rtems_rtl_elf_relocator (rtems_rtl_obj_t*      obj,
       if (is_rela)
       {
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: rela: sym:%s(%-2d)=%08lx type:%-2d off:%08lx addend:%d\n",
+          printf ("rtl: rela: sym:%s(%d)=%08lx type:%d off:%08lx addend:%d\n",
                   symname, (int) ELF_R_SYM (rela->r_info), symvalue,
                   (int) ELF_R_TYPE (rela->r_info), rela->r_offset, (int) rela->r_addend);
         if (!rtems_rtl_elf_relocate_rela (obj, rela, targetsect,
@@ -256,7 +260,7 @@ rtems_rtl_elf_relocator (rtems_rtl_obj_t*      obj,
       else
       {
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: rel: sym:%s(%-2d)=%08lx type:%-2d off:%08lx\n",
+          printf ("rtl: rel: sym:%s(%d)=%08lx type:%d off:%08lx\n",
                   symname, (int) ELF_R_SYM (rel->r_info), symvalue,
                   (int) ELF_R_TYPE (rel->r_info), rel->r_offset);
         if (!rtems_rtl_elf_relocate_rel (obj, rel, targetsect,
@@ -300,7 +304,7 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc_t* reloc,
     rela.r_info = reloc->rel[REL_R_INFO];
     rela.r_addend = reloc->rel[REL_R_ADDEND];
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: rela: sym:%-2d type:%-2d off:%08lx addend:%d\n",
+          printf ("rtl: rela: sym:%d type:%d off:%08lx addend:%d\n",
                   (int) ELF_R_SYM (rela.r_info), (int) ELF_R_TYPE (rela.r_info),
                   rela.r_offset, (int) rela.r_addend);
     if (!rtems_rtl_elf_relocate_rela (reloc->obj, &rela, sect,
@@ -313,7 +317,7 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc_t* reloc,
     rel.r_offset = reloc->rel[REL_R_OFFSET];
     rel.r_info = reloc->rel[REL_R_INFO];
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: rel: sym:%-2d type:%-2d off:%08lx\n",
+      printf ("rtl: rel: sym:%d type:%d off:%08lx\n",
               (int) ELF_R_SYM (rel.r_info), (int) ELF_R_TYPE (rel.r_info),
               rel.r_offset);
     if (!rtems_rtl_elf_relocate_rel (reloc->obj, &rel, sect,
@@ -652,6 +656,11 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
 
     flags = 0;
 
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
+      printf ("rtl: section: %2d: type=%d flags=%08x link=%d info=%d\n",
+              section, (int) shdr.sh_type, (unsigned int) shdr.sh_flags,
+              (int) shdr.sh_link, (int) shdr.sh_info);
+
     switch (shdr.sh_type)
     {
       case SHT_NULL:
@@ -707,9 +716,16 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
         break;
 
       default:
-        if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING))
-          printf ("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
-                  section, (int) shdr.sh_type, (int) shdr.sh_flags);
+        /*
+         * See if there are architecture specific flags?
+         */
+        flags = rtems_rtl_elf_section_flags (obj, &shdr);
+        if (flags == 0)
+        {
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING))
+            printf ("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
+                    section, (int) shdr.sh_type, (int) shdr.sh_flags);
+        }
         break;
     }
 
@@ -717,6 +733,13 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
     {
       char*  name;
       size_t len;
+
+      /*
+       * If link ordering this section must appear in the same order in memory
+       * as the linked-to section relative to the sections it loads with.
+       */
+      if ((shdr.sh_flags & SHF_LINK_ORDER) != 0)
+        flags |= RTEMS_RTL_OBJ_SECT_LINK;
 
       len = RTEMS_RTL_ELF_STRING_MAX;
       if (!rtems_rtl_obj_cache_read (strings, fd,
@@ -728,6 +751,12 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
         flags |= RTEMS_RTL_OBJ_SECT_CTOR;
       if (strcmp (".dtors", name) == 0)
         flags |= RTEMS_RTL_OBJ_SECT_DTOR;
+
+      if (rtems_rtl_elf_unwind_parse (obj, name, flags))
+      {
+        flags &= ~(RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_CONST);
+        flags |= RTEMS_RTL_OBJ_SECT_EH;
+      }
 
       if (!rtems_rtl_obj_add_section (obj, section, name,
                                       shdr.sh_size, shdr.sh_offset,
@@ -771,16 +800,19 @@ rtems_rtl_elf_file_check (rtems_rtl_obj_t* obj, int fd)
   return true;
 }
 
-bool rtems_rtl_elf_load_details (rtems_rtl_obj_t* obj)
+static bool
+rtems_rtl_elf_load_linkmap (rtems_rtl_obj_t* obj)
 {
   rtems_chain_control* sections = NULL;
   rtems_chain_node*    node = NULL;
   size_t               mask = 0;
-  struct link_map*     l = NULL;
   int                  sec_num = 0;
+  section_detail*      sd;
   int                  i = 0;
 
-  /* caculate the size of sections' name. */
+  /*
+   * Caculate the size of sections' name.
+   */
 
   for (mask = RTEMS_RTL_OBJ_SECT_TEXT;
        mask <= RTEMS_RTL_OBJ_SECT_BSS;
@@ -791,7 +823,6 @@ bool rtems_rtl_elf_load_details (rtems_rtl_obj_t* obj)
     while (!rtems_chain_is_tail (sections, node))
     {
       rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
-
       if ((sect->size != 0) && ((sect->flags & mask) != 0))
       {
         ++sec_num;
@@ -801,32 +832,31 @@ bool rtems_rtl_elf_load_details (rtems_rtl_obj_t* obj)
   }
 
   obj->obj_num = 1;
-  obj->detail = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                     sizeof(struct link_map) +
-                                     sec_num * sizeof (section_detail), true);
-  if (!obj->detail)
+  obj->linkmap = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                      sizeof(struct link_map) +
+                                      sec_num * sizeof (section_detail), true);
+  if (!obj->linkmap)
   {
-    rtems_rtl_set_error (ENOMEM, "no memory for obj global syms");
+    rtems_rtl_set_error (ENOMEM, "no memory for obj linkmap");
     return false;
   }
 
-  l = (struct link_map*) obj->detail;
-  l->name = obj->oname;
-  l->sec_num = sec_num;
-  l->sec_detail = (section_detail*) (l + 1);
-  l->rpathlen = 0;
-  l->rpath = NULL;
-  l->l_next = NULL;
-  l->l_prev = NULL;
-  l->sec_addr[rap_text] = obj->text_base;
-  l->sec_addr[rap_const] = obj->const_base;
-  l->sec_addr[rap_data] = obj->data_base;
-  l->sec_addr[rap_bss] = obj->bss_base;
+  obj->linkmap->name = obj->oname;
+  obj->linkmap->sec_num = sec_num;
+  obj->linkmap->sec_detail = (section_detail*) (obj->linkmap + 1);
+  obj->linkmap->rpathlen = 0;
+  obj->linkmap->rpath = NULL;
+  obj->linkmap->l_next = NULL;
+  obj->linkmap->l_prev = NULL;
+  obj->linkmap->sec_addr[rap_text] = obj->text_base;
+  obj->linkmap->sec_addr[rap_const] = obj->const_base;
+  obj->linkmap->sec_addr[rap_data] = obj->data_base;
+  obj->linkmap->sec_addr[rap_bss] = obj->bss_base;
 
-
-  section_detail* sd = l->sec_detail;
+  sd = obj->linkmap->sec_detail;
   sections = &obj->sections;
   node = rtems_chain_first (sections);
+
   for (mask = RTEMS_RTL_OBJ_SECT_TEXT;
        mask <= RTEMS_RTL_OBJ_SECT_BSS;
        mask <<= 1)
@@ -948,11 +978,23 @@ rtems_rtl_elf_file_load (rtems_rtl_obj_t* obj, int fd)
 
   rtems_rtl_symbol_obj_erase_local (obj);
 
-  if (!rtems_rtl_elf_load_details (obj))
+  if (!rtems_rtl_elf_load_linkmap (obj))
   {
     return false;
   }
 
+  if (!rtems_rtl_elf_unwind_register (obj))
+  {
+    return false;
+  }
+
+  return true;
+}
+
+bool
+rtems_rtl_elf_file_unload (rtems_rtl_obj_t* obj)
+{
+  rtems_rtl_elf_unwind_deregister (obj);
   return true;
 }
 

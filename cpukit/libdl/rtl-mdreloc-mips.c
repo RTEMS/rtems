@@ -9,6 +9,15 @@
 #include "rtl-elf.h"
 #include "rtl-error.h"
 #include "rtl-trace.h"
+#include "rtl-unwind.h"
+#include "rtl-unwind-dw2.h"
+
+uint32_t
+rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
+                             const Elf_Shdr*        shdr)
+{
+  return 0;
+}
 
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
@@ -187,4 +196,24 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
   }
 
   return true;
+}
+
+bool
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
+                            const char*            name,
+                            uint32_t               flags)
+{
+  return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
+}
+
+bool
+rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_register (obj);
+}
+
+bool
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+{
+  return rtems_rtl_elf_unwind_dw2_deregister (obj);
 }

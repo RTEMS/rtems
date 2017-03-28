@@ -56,14 +56,20 @@ typedef struct rtems_rtl_loader_format_s
 typedef bool (*rtems_rtl_loader_check) (rtems_rtl_obj_t* obj, int fd);
 
 /**
- * The type of the format loader handler. This handler loads the specific
+ * The type of the format loader load handler. This handler loads the specific
  * format.
  */
 typedef bool (*rtems_rtl_loader_load) (rtems_rtl_obj_t* obj, int fd);
 
 /**
- * The type of the format loader handler. This handler loads the specific
- * format.
+ * The type of the format loader unload handler. This handler unloads the
+ * specific format.
+ */
+typedef bool (*rtems_rtl_loader_unload) (rtems_rtl_obj_t* obj);
+
+/**
+ * The type of the format loader signature handler. This handler checks the
+ * format signature.
  */
 typedef rtems_rtl_loader_format_t* (*rtems_rtl_loader_sig) (void);
 
@@ -72,9 +78,10 @@ typedef rtems_rtl_loader_format_t* (*rtems_rtl_loader_sig) (void);
  */
 typedef struct rtems_rtl_loader_table_s
 {
-  rtems_rtl_loader_check check;     /**< The check handler. */
-  rtems_rtl_loader_load  load;      /**< The loader. */
-  rtems_rtl_loader_sig   signature; /**< The loader's signature. */
+  rtems_rtl_loader_check  check;     /**< The check handler. */
+  rtems_rtl_loader_load   load;      /**< The loader. */
+  rtems_rtl_loader_unload unload;    /**< The unloader. */
+  rtems_rtl_loader_sig    signature; /**< The loader's signature. */
 } rtems_rtl_loader_table_t;
 
 /**
@@ -84,18 +91,30 @@ typedef struct rtems_rtl_loader_table_s
 #define RTEMS_RTL_OBJ_SECT_CONST (1 << 1)  /**< Section holds program text. */
 #define RTEMS_RTL_OBJ_SECT_DATA  (1 << 2)  /**< Section holds program data. */
 #define RTEMS_RTL_OBJ_SECT_BSS   (1 << 3)  /**< Section holds program bss. */
-#define RTEMS_RTL_OBJ_SECT_REL   (1 << 4)  /**< Section holds relocation records. */
-#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 5)  /**< Section holds relocation addend
+#define RTEMS_RTL_OBJ_SECT_EH    (1 << 4)  /**< Section holds exception data. */
+#define RTEMS_RTL_OBJ_SECT_REL   (1 << 5)  /**< Section holds relocation records. */
+#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 6)  /**< Section holds relocation addend
                                             *   records. */
-#define RTEMS_RTL_OBJ_SECT_SYM   (1 << 6)  /**< Section holds symbols. */
-#define RTEMS_RTL_OBJ_SECT_STR   (1 << 7)  /**< Section holds strings. */
-#define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 8)  /**< Section allocates runtime memory. */
-#define RTEMS_RTL_OBJ_SECT_LOAD  (1 << 9)  /**< Section is loaded from object file. */
-#define RTEMS_RTL_OBJ_SECT_WRITE (1 << 10) /**< Section is writable, ie data. */
-#define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 11) /**< Section is executable. */
-#define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 12) /**< Section is preset to zero. */
-#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 13) /**< Section contains constructors. */
-#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 14) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_SYM   (1 << 7)  /**< Section holds symbols. */
+#define RTEMS_RTL_OBJ_SECT_STR   (1 << 8)  /**< Section holds strings. */
+#define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 9)  /**< Section allocates runtime memory. */
+#define RTEMS_RTL_OBJ_SECT_LOAD  (1 << 10) /**< Section is loaded from object file. */
+#define RTEMS_RTL_OBJ_SECT_WRITE (1 << 11) /**< Section is writable, ie data. */
+#define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 12) /**< Section is executable. */
+#define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 13) /**< Section is preset to zero. */
+#define RTEMS_RTL_OBJ_SECT_LINK  (1 << 14) /**< Section is link-ordered. */
+#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 15) /**< Section contains constructors. */
+#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 16) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_LOCD  (1 << 17) /**< Section has been located. */
+
+/**
+ * Section types mask.
+ */
+#define RTEMS_RTL_OBJ_SECT_TYPES (RTEMS_RTL_OBJ_SECT_TEXT | \
+                                  RTEMS_RTL_OBJ_SECT_CONST | \
+                                  RTEMS_RTL_OBJ_SECT_DATA | \
+                                  RTEMS_RTL_OBJ_SECT_BSS | \
+                                  RTEMS_RTL_OBJ_SECT_EH)
 
 /**
  * An object file is made up of sections and the can be more than
@@ -109,13 +128,14 @@ struct rtems_rtl_obj_sect_s
   const char*      name;        /**< The section's name. */
   size_t           size;        /**< The size of the section in memory. */
   off_t            offset;      /**< Offset into the object file. Relative to
-                                 * the start of the object file. */
+                                 *   the start of the object file. */
   uint32_t         alignment;   /**< Alignment of this section. */
   int              link;        /**< Section link field. */
   int              info;        /**< Secfion info field. */
   uint32_t         flags;       /**< The section's flags. */
   void*            base;        /**< The base address of the section in
                                  *   memory. */
+  int              load_order;  /**< Order we load sections. */
 };
 
 /**
@@ -135,6 +155,7 @@ struct rtems_rtl_obj_s
   rtems_chain_node     link;         /**< The node's link in the chain. */
   uint32_t             flags;        /**< The status of the object file. */
   uint32_t             users;        /**< References to the object file. */
+  int                  format;       /**< The format of the object file. */
   const char*          fname;        /**< The file name for the object. */
   const char*          oname;        /**< The object file name. Can be
                                       *   relative. */
@@ -153,26 +174,27 @@ struct rtems_rtl_obj_s
   size_t               global_size;  /**< Global symbol memory usage. */
   uint32_t             unresolved;   /**< The number of unresolved relocations. */
   void*                text_base;    /**< The base address of the text section
-                                      * in memory. */
+                                      *   in memory. */
+  size_t               text_size;     /**< The size of the text section. */
   void*                const_base;   /**< The base address of the const section
-                                      * in memory. */
+                                      *   in memory. */
+  void*                eh_base;      /**< The base address of the eh section
+                                      *   in memory. */
+  size_t               eh_size;      /**< The size of the eh section. */
   void*                data_base;    /**< The base address of the data section
-                                      * in memory. */
+                                      *   in memory. */
   void*                bss_base;     /**< The base address of the bss section
-                                      * in memory. */
+                                      *   in memory. */
   size_t               bss_size;     /**< The size of the bss section. */
   size_t               exec_size;    /**< The amount of executable memory
-                                      * allocated */
+                                      *   allocated */
   void*                entry;        /**< The entry point of the module. */
   uint32_t             checksum;     /**< The checksum of the text sections. A
-                                      * zero means do not checksum. */
-  void*                detail;       /**< The file details. It contains the elf file
-                                      * detail, mainly including elf file name,
-                                      * section offset, section size, which
-                                      * elf this section belongs to.*/
+                                      *   zero means do not checksum. */
   uint32_t*            sec_num;      /**< The sec nums of each obj. */
   uint32_t             obj_num;      /**< The count of elf files in an rtl obj. */
   struct link_map*     linkmap;      /**< For GDB. */
+  void*                loader;       /**< The file details specific to a loader. */
 };
 
 /**
@@ -258,6 +280,20 @@ static inline bool rtems_rtl_obj_aname_valid (const rtems_rtl_obj_t* obj)
 }
 
 /**
+ * Is the address inside the text section?
+ *
+ * @param obj The object file.
+ * @return bool There is an archive name
+ */
+static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj_t* obj,
+                                              const void*            address)
+{
+  return
+    (address >= obj->text_base) &&
+    (address < (obj->text_base + obj->text_size));
+}
+
+/**
  * Allocate an object structure on the heap.
  *
  * @retval NULL No memory for the object.
@@ -298,18 +334,6 @@ bool rtems_rtl_parse_name (const char*  name,
                            const char** aname,
                            const char** oname,
                            off_t*       ooffset);
-
-/**
- * Load the object file.
- *
- * @param obj The object file's descriptor.
- * @param fd The file descriptor.
- * @param load_syms Load symbols.
- * @param load_dep Load dependent object files.
- * @retval true The load was successful.
- * @retval false The load failed. The RTL error has been set.
- */
-bool rtems_rtl_obj_file_load (rtems_rtl_obj_t* obj, int fd);
 
 /**
  * Check of the name matches the object file's object name.
@@ -371,8 +395,8 @@ void rtems_rtl_obj_erase_sections (rtems_rtl_obj_t* obj);
  * @retval NULL The section was not found.
  * @return rtems_rtl_obj_sect_t* The named section.
  */
-rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section (rtems_rtl_obj_t* obj,
-                                                  const char*      name);
+rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section (const rtems_rtl_obj_t* obj,
+                                                  const char*            name);
 
 /**
  * Find a section given a section's index number.
@@ -382,21 +406,21 @@ rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section (rtems_rtl_obj_t* obj,
  * @retval NULL The section was not found.
  * @return rtems_rtl_obj_sect_t* The found section.
  */
-rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section_by_index (rtems_rtl_obj_t* obj,
-                                                           int              index);
+rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj_t* obj,
+                                                           int                    index);
 
 /**
- * The text size of the object file. Only use once all the sections has been
- * added. It includes alignments between sections that are part of the object's
- * text area. The consts sections are included in this section.
+ * The text section size. Only use once all the sections has been added. It
+ * includes alignments between sections that are part of the object's text
+ * area. The consts sections are included in this section.
  *
  * @param obj The object file's descriptor.
  * @return size_t The size of the text area of the object file.
  */
-size_t rtems_rtl_obj_text_size (rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_text_size (const rtems_rtl_obj_t* obj);
 
 /**
- * The text section alignment of the object file. Only use once all the
+ * The text section alignment for the object file. Only use once all the
  * sections has been added. The section alignment is the alignment of the first
  * text type section loaded the text section.
  *
@@ -406,20 +430,20 @@ size_t rtems_rtl_obj_text_size (rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_text_alignment (rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_text_alignment (const rtems_rtl_obj_t* obj);
 
 /**
- * The const size of the object file. Only use once all the sections has been
- * added. It includes alignments between sections that are part of the object's
- * const area. The consts sections are included in this section.
+ * The const section size. Only use once all the sections has been added. It
+ * includes alignments between sections that are part of the object's const
+ * area. The consts sections are included in this section.
  *
  * @param obj The object file's descriptor.
  * @return size_t The size of the const area of the object file.
  */
-size_t rtems_rtl_obj_const_size (rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_const_size (const rtems_rtl_obj_t* obj);
 
 /**
- * The const section alignment of the object file. Only use once all the
+ * The const section alignment for the object file. Only use once all the
  * sections has been added. The section alignment is the alignment of the first
  * const type section loaded the const section.
  *
@@ -429,20 +453,42 @@ size_t rtems_rtl_obj_const_size (rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_const_alignment (rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_const_alignment (const rtems_rtl_obj_t* obj);
 
 /**
- * The data size of the object file. Only use once all the sections has been
- * added. It includes alignments between sections that are part of the object's
- * data area.
+ * The eh section size. Only use once all the sections has been added. It
+ * includes alignments between sections that are part of the object's bss area.
+ *
+ * @param obj The object file's descriptor.
+ * @return size_t The size of the bss area of the object file.
+ */
+size_t rtems_rtl_obj_eh_size (const rtems_rtl_obj_t* obj);
+
+/**
+ * The eh section alignment for the object file. Only use once all the sections
+ * has been added. The section alignment is the alignment of the first bss type
+ * section loaded the bss section.
+ *
+ * You can assume the alignment is a positive integral power of 2 if not 0 or
+ * 1. If 0 or 1 then there is no alignment.
+ *
+ * @param obj The object file's descriptor.
+ * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
+ */
+uint32_t rtems_rtl_obj_eh_alignment (const rtems_rtl_obj_t* obj);
+
+/**
+ * The data section size. Only use once all the sections has been added. It
+ * includes alignments between sections that are part of the object's data
+ * area.
  *
  * @param obj The object file's descriptor.
  * @return size_t The size of the data area of the object file.
  */
-size_t rtems_rtl_obj_data_size (rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_data_size (const rtems_rtl_obj_t* obj);
 
 /**
- * The data section alignment of the object file. Only use once all the
+ * The data section alignment for the object file. Only use once all the
  * sections has been added. The section alignment is the alignment of the first
  * data type section loaded the data section.
  *
@@ -452,20 +498,19 @@ size_t rtems_rtl_obj_data_size (rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_data_alignment (rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_data_alignment (const rtems_rtl_obj_t* obj);
 
 /**
- * The bss size of the object file. Only use once all the sections has been
- * added. It includes alignments between sections that are part of the object's
- * bss area.
+ * The bss section size. Only use once all the sections has been added. It
+ * includes alignments between sections that are part of the object's bss area.
  *
  * @param obj The object file's descriptor.
  * @return size_t The size of the bss area of the object file.
  */
-size_t rtems_rtl_obj_bss_size (rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_bss_size (const rtems_rtl_obj_t* obj);
 
 /**
- * The bss section alignment of the object file. Only use once all the
+ * The bss section alignment for the object file. Only use once all the
  * sections has been added. The section alignment is the alignment of the first
  * bss type section loaded the bss section.
  *
@@ -475,7 +520,7 @@ size_t rtems_rtl_obj_bss_size (rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_bss_alignment (rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_bss_alignment (const rtems_rtl_obj_t* obj);
 
 /**
  * Relocate the object file. The object file's section are parsed for any
