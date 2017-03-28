@@ -50,6 +50,7 @@ static rtems_status_code _Semaphore_Set_priority(
 
   core_priority = _RTEMS_Priority_To_core( scheduler, new_priority, &valid );
   if ( new_priority != RTEMS_CURRENT_PRIORITY && !valid ) {
+    _ISR_lock_ISR_enable( &queue_context->Lock_context.Lock_context );
     return RTEMS_INVALID_PRIORITY;
   }
 
