@@ -1,0 +1,5 @@
+*** BEGIN OF TEST WHETSTONE ***
+
+Loops: 10000, Iterations: 1, Duration: 347.679499 sec.
+C Converted Double Precision Whetstones: 2.9 MIPS
+*** END OF TEST WHETSTONE ***

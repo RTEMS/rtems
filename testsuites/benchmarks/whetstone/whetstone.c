@@ -58,7 +58,7 @@ C**********************************************************************
 #include <math.h>
 
 /* the following is optional depending on the timing function used */
-#include <time.h>
+#include <sys/time.h>
 
 /* map the FORTRAN math functions, etc. to the C versions */
 #define DSIN	sin
@@ -82,6 +82,15 @@ void P3(double X, double Y, double *Z);
 double T,T1,T2,E1[5];
 int J,K,L;
 
+static double
+Time(void)
+{
+	struct timeval tv;
+
+	gettimeofday(&tv, NULL);
+	return (double)tv.tv_sec + (double)tv.tv_usec * 1e-6;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -94,8 +103,8 @@ main(int argc, char *argv[])
 
 	/* added for this version */
 	long loopstart;
-	long startsec, finisec;
-	float KIPS;
+	double startsec, finisec;
+	double KIPS;
 	int continuous;
 
 	loopstart = 1000;		/* see the note about LOOP below */
@@ -120,7 +129,7 @@ C
 C	Start benchmark timing at this point.
 C
 */
-	startsec = time(0);
+	startsec = Time();
 
 /*
 C
@@ -355,7 +364,7 @@ C
 C      Stop benchmark timing at this point.
 C
 */
-	finisec = time(0);
+	finisec = Time();
 
 /*
 C----------------------------------------------------------------
@@ -372,10 +381,10 @@ C--------------------------------------------------------------------
 		return(1);
 	}
 
-	printf("Loops: %ld, Iterations: %d, Duration: %ld sec.\n",
+	printf("Loops: %ld, Iterations: %d, Duration: %f sec.\n",
 			LOOP, II, finisec-startsec);
 
-	KIPS = (100.0*LOOP*II)/(float)(finisec-startsec);
+	KIPS = (100.0*LOOP*II)/(finisec-startsec);
 	if (KIPS >= 1000.0)
 		printf("C Converted Double Precision Whetstones: %.1f MIPS\n", KIPS/1000.0);
 	else

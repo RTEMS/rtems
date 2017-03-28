@@ -20,15 +20,19 @@
 
 const char rtems_test_name[] = "WHETSTONE";
 
-static void test(void)
-{
-}
+int main(int argc, char **argv);
 
 static void Init(rtems_task_argument arg)
 {
+  char *argv[] = {
+    "whetstone",
+    "10000",
+    NULL
+  };
+
   TEST_BEGIN();
 
-  test();
+  main(2, argv);
 
   TEST_END();
   rtems_test_exit(0);
@@ -40,6 +44,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
