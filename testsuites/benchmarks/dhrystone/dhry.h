@@ -345,6 +345,8 @@
  ***************************************************************************
  */
 
+#define TIME
+
 /* Compiler and system dependent definitions: */
 
 #ifndef TIME
@@ -420,4 +422,14 @@ typedef struct record
           } variant;
       } Rec_Type, *Rec_Pointer;
 
-
+void Proc_1 (Rec_Pointer);
+void Proc_2 (One_Fifty *);
+void Proc_3 (Rec_Pointer *);
+void Proc_4 (void);
+void Proc_5 (void);
+void Proc_6 (Enumeration, Enumeration *);
+void Proc_7 (One_Fifty, One_Fifty, One_Fifty *);
+void Proc_8 (Arr_1_Dim, Arr_2_Dim, int, int);
+Enumeration Func_1 (Capital_Letter, Capital_Letter);
+Boolean Func_2 (Str_30, Str_30);
+Boolean Func_3 (Enumeration);

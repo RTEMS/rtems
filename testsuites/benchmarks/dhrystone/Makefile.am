@@ -1,5 +1,5 @@
 rtems_tests_PROGRAMS = dhrystone
-dhrystone_SOURCES = init.c
+dhrystone_SOURCES = init.c dhry_1.c dhry_2.c
 
 dist_rtems_tests_DATA = dhrystone.scn dhrystone.doc
 
@@ -8,6 +8,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CFLAGS += -fno-inline -fno-builtin
 
 LINK_OBJS = $(dhrystone_OBJECTS)
 LINK_LIBS = $(dhrystone_LDLIBS)
