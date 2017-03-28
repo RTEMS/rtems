@@ -45,7 +45,7 @@ if test "$enable_tests" = "yes"; then
     AC_CONFIG_SUBDIRS(smptests)
   fi
   # Now do performance tests
-  AC_CONFIG_SUBDIRS(tmtests psxtmtests rhealstone)
+  AC_CONFIG_SUBDIRS(tmtests psxtmtests benchmarks rhealstone)
 fi
 
 # Explicitly list all Makefiles here
