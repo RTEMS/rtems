@@ -40,7 +40,7 @@ int pthread_detach( pthread_t thread )
     return ESRCH;
   }
 
-  _Thread_State_acquire( the_thread, &lock_context );
+  _Thread_State_acquire_critical( the_thread, &lock_context );
 
   the_thread->Life.state |= THREAD_LIFE_DETACHED;
   _Thread_Clear_state_locked( the_thread, STATES_WAITING_FOR_JOIN_AT_EXIT );
