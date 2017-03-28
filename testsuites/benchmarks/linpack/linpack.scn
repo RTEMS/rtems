@@ -1,0 +1,52 @@
+*** BEGIN OF TEST LINPACK ***
+Rolled Double Precision Linpack Benchmark - PC Version in 'C/C++'
+
+Compiler     INSERT COMPILER NAME HERE
+Optimisation INSERT OPTIMISATION OPTIONS HERE
+
+norm resid      resid           machep         x[0]-1          x[n-1]-1
+   1.7    7.41628980e-14   2.22044605e-16  -1.49880108e-14  -1.89848137e-14
+
+Times are reported for matrices of order          100
+1 pass times for array with leading dimension of  201
+
+      dgefa      dgesl      total     Mflops       unit      ratio
+    0.93482    0.02799    0.96281       0.71     2.8043    17.1930
+
+Calculating matgen overhead
+        10 times   0.78 seconds
+        20 times   1.56 seconds
+        40 times   3.13 seconds
+        80 times   6.26 seconds
+Overhead for 1 matgen      0.07824 seconds
+
+Calculating matgen/dgefa passes for 5 seconds
+        10 times  10.13 seconds
+Passes used          4 
+
+Times for array with leading dimension of 201
+
+      dgefa      dgesl      total     Mflops       unit      ratio
+    0.93483    0.02794    0.96278       0.71     2.8042    17.1924
+    0.93483    0.02791    0.96274       0.71     2.8041    17.1918
+    0.93483    0.02791    0.96274       0.71     2.8041    17.1919
+    0.93483    0.02791    0.96274       0.71     2.8041    17.1918
+    0.93483    0.02791    0.96274       0.71     2.8041    17.1918
+Average                                 0.71
+
+Calculating matgen2 overhead
+Overhead for 1 matgen      0.07824 seconds
+
+Times for array with leading dimension of 200
+
+      dgefa      dgesl      total     Mflops       unit      ratio
+    0.93487    0.02791    0.96278       0.71     2.8042    17.1924
+    0.93483    0.02791    0.96274       0.71     2.8041    17.1918
+    0.93484    0.02791    0.96275       0.71     2.8041    17.1919
+    0.93487    0.02791    0.96278       0.71     2.8042    17.1924
+    0.93484    0.02791    0.96275       0.71     2.8041    17.1919
+Average                                 0.71
+
+Rolled Double  Precision        0.71 Mflops 
+
+*** END OF TEST LINPACK ***

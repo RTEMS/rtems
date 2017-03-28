@@ -4,8 +4,10 @@ test set name: linpack
 
 directives:
 
-  TBD
+  None, this benchmark program depends on the compiler, standard libraries, the
+  processor and the memory system.  It is more or less independent of the
+  operating system, except some disturbance from the system clock service.
 
 concepts:
 
-  TBD
+  This is the linpack benchmark ported to RTEMS.
