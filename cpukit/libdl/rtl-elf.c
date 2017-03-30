@@ -656,6 +656,11 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
 
     flags = 0;
 
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
+      printf ("rtl: section: %2d: type=%d flags=%08x link=%d info=%d\n",
+              section, (int) shdr.sh_type, (unsigned int) shdr.sh_flags,
+              (int) shdr.sh_link, (int) shdr.sh_info);
+
     switch (shdr.sh_type)
     {
       case SHT_NULL:
@@ -712,7 +717,7 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
 
       default:
         /*
-         * See there are architecture specific flags?
+         * See if there are architecture specific flags?
          */
         flags = rtems_rtl_elf_section_flags (obj, &shdr);
         if (flags == 0)
@@ -728,6 +733,13 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj_t* obj, int fd, Elf_Ehdr* ehdr)
     {
       char*  name;
       size_t len;
+
+      /*
+       * If link ordering this section must appear in the same order in memory
+       * as the linked-to section relative to the sections it loads with.
+       */
+      if ((shdr.sh_flags & SHF_LINK_ORDER) != 0)
+        flags |= RTEMS_RTL_OBJ_SECT_LINK;
 
       len = RTEMS_RTL_ELF_STRING_MAX;
       if (!rtems_rtl_obj_cache_read (strings, fd,

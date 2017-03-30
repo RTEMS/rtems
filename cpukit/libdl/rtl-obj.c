@@ -601,12 +601,12 @@ typedef struct
 static bool
 rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*   sect = (rtems_rtl_obj_sect_t*) node;
+  rtems_rtl_obj_sect_t*          sect = (rtems_rtl_obj_sect_t*) node;
   rtems_rtl_obj_sect_sync_ctx_t* sync_ctx = data;
-  uintptr_t old_end;
-  uintptr_t new_start;
+  uintptr_t                      old_end;
+  uintptr_t                      new_start;
 
-  if ( !(sect->flags & sync_ctx->mask) || !sect->size)
+  if ((sect->flags & sync_ctx->mask) == 0 || sect->size == 0)
     return true;
 
   if (sync_ctx->end_va == sync_ctx->start_va)
@@ -632,7 +632,7 @@ rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
 }
 
 void
-rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj)
+rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t* obj)
 {
   rtems_rtl_obj_sect_sync_ctx_t sync_ctx;
 
@@ -643,7 +643,7 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj)
 
   sync_ctx.mask = RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_CONST |
                   RTEMS_RTL_OBJ_SECT_DATA | RTEMS_RTL_OBJ_SECT_BSS |
-                  RTEMS_RTL_OBJ_SECT_EXEC;
+                  RTEMS_RTL_OBJ_SECT_EH   | RTEMS_RTL_OBJ_SECT_EXEC;
 
   sync_ctx.start_va = 0;
   sync_ctx.end_va = sync_ctx.start_va;
@@ -667,6 +667,87 @@ rtems_rtl_obj_load_symbols (rtems_rtl_obj_t*             obj,
   return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
 }
 
+static int
+rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj_t* obj,
+                                        int              section,
+                                        uint32_t         visited_mask)
+{
+  rtems_chain_control* sections = &obj->sections;
+  rtems_chain_node*    node = rtems_chain_first (sections);
+  /*
+   * Find the section being linked-to. If the linked-to link field is 0 we have
+   * the end and the section's order is the position we are after.
+   */
+  while (!rtems_chain_is_tail (sections, node))
+  {
+    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    if (sect->section == section)
+    {
+      const uint32_t mask = sect->flags & RTEMS_RTL_OBJ_SECT_TYPES;
+      int            order = 0;
+      if (sect->link != 0)
+      {
+        /*
+         * Have we already visited this type of section? Avoid nesting for
+         * ever.
+         */
+        if ((sect->flags & visited_mask) != 0)
+        {
+          rtems_rtl_set_error (errno, "section link loop");
+          return -1;
+        }
+        return rtems_rtl_obj_sections_linked_to_order (obj,
+                                                       sect->link,
+                                                       visited_mask | mask);
+      }
+      node = rtems_chain_first (sections);
+      while (!rtems_chain_is_tail (sections, node))
+      {
+        sect = (rtems_rtl_obj_sect_t*) node;
+        if ((sect->flags & mask) == mask)
+        {
+          if (sect->section == section)
+            return order;
+          ++order;
+        }
+        node = rtems_chain_next (node);
+      }
+    }
+    node = rtems_chain_next (node);
+  }
+  rtems_rtl_set_error (errno, "section link not found");
+  return -1;
+}
+
+static void
+rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj_t* obj)
+{
+  rtems_chain_control* sections = &obj->sections;
+  rtems_chain_node*    node = rtems_chain_first (sections);
+  int                  order = 0;
+  while (!rtems_chain_is_tail (sections, node))
+  {
+    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    if ((sect->flags & mask) == mask)
+    {
+      /*
+       * If the section is linked in order find the linked-to section's order
+       * and move the section in the section list to
+       */
+      if (sect->link == 0)
+        sect->load_order = order++;
+      else
+      {
+        sect->load_order =
+          rtems_rtl_obj_sections_linked_to_order (obj,
+                                                  sect->link,
+                                                  mask);
+      }
+    }
+    node = rtems_chain_next (node);
+  }
+}
+
 static size_t
 rtems_rtl_obj_sections_loader (uint32_t                     mask,
                                rtems_rtl_obj_t*             obj,
@@ -679,42 +760,54 @@ rtems_rtl_obj_sections_loader (uint32_t                     mask,
   rtems_chain_node*    node = rtems_chain_first (sections);
   size_t               base_offset = 0;
   bool                 first = true;
+  int                  order = 0;
+
   while (!rtems_chain_is_tail (sections, node))
   {
     rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
 
     if ((sect->size != 0) && ((sect->flags & mask) != 0))
     {
-      if (!first)
-        base_offset = rtems_rtl_sect_align (base_offset, sect->alignment);
-
-      sect->base = base + base_offset;
-
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-        printf ("rtl: loading: %s -> %8p (l:%zi m:%04lx)\n",
-                sect->name, sect->base, sect->size, sect->flags);
-
-      if ((sect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == RTEMS_RTL_OBJ_SECT_LOAD)
+      if (sect->load_order == order)
       {
-        if (!handler (obj, fd, sect, data))
+        if (!first)
+          base_offset = rtems_rtl_sect_align (base_offset, sect->alignment);
+
+        first = false;
+
+        sect->base = base + base_offset;
+
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+          printf ("rtl: loading:%2d: %s -> %8p (s:%zi f:%04lx a:%lu l:%02d)\n",
+                  order, sect->name, sect->base, sect->size,
+                  sect->flags, sect->alignment, sect->link);
+
+        if ((sect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == RTEMS_RTL_OBJ_SECT_LOAD)
+        {
+          if (!handler (obj, fd, sect, data))
+          {
+            sect->base = 0;
+            return false;
+          }
+        }
+        else if ((sect->flags & RTEMS_RTL_OBJ_SECT_ZERO) == RTEMS_RTL_OBJ_SECT_ZERO)
+        {
+          memset (base + base_offset, 0, sect->size);
+        }
+        else
         {
           sect->base = 0;
+          rtems_rtl_set_error (errno, "section has no load/clear op");
           return false;
         }
-      }
-      else if ((sect->flags & RTEMS_RTL_OBJ_SECT_ZERO) == RTEMS_RTL_OBJ_SECT_ZERO)
-      {
-        memset (base + base_offset, 0, sect->size);
-      }
-      else
-      {
-        sect->base = 0;
-        rtems_rtl_set_error (errno, "section has no load op");
-        return false;
-      }
 
-      base_offset += sect->size;
-      first = false;
+        base_offset += sect->size;
+
+        ++order;
+
+        node = rtems_chain_first (sections);
+        continue;
+      }
     }
 
     node = rtems_chain_next (node);
@@ -763,7 +856,7 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
     return false;
   }
 
-  obj->exec_size = text_size + const_size + data_size + bss_size;
+  obj->exec_size = text_size + const_size + eh_size + data_size + bss_size;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
   {
@@ -778,6 +871,14 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
     printf ("rtl: load sect: bss   - b:%p s:%zi a:%" PRIu32 "\n",
             obj->bss_base, bss_size, rtems_rtl_obj_bss_alignment (obj));
   }
+
+  /*
+   * Determine the load order.
+   */
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_TEXT,  obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_CONST, obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_EH,    obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_DATA,  obj);
 
   /*
    * Load all text then data then bss sections in seperate operations so each

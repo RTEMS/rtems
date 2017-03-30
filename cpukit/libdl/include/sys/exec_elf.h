@@ -459,6 +459,10 @@ typedef struct {
 #define	SHF_WRITE	0x1		/* Section contains writable data */
 #define	SHF_ALLOC	0x2		/* Section occupies memory */
 #define	SHF_EXECINSTR	0x4		/* Section contains executable insns */
+#define	SHF_MERGE	0x10		/* Section contains data that can be merged */
+#define	SHF_STRINGS	0x20		/* Section contains null-terminated strings */
+#define	SHF_INFO_LINK	0x40		/* Section header's sh_info holds table index */
+#define	SHF_LINK_ORDER	0x80		/* Section has special ordering requirements */
 
 #define	SHF_MASKOS	0x0f000000	/* Operating system specific values */
 #define	SHF_MASKPROC	0xf0000000	/* Processor-specific values */
@@ -949,13 +953,13 @@ typedef struct {
 #define	SYMINFO_NUM		2
 
 /*
- * These constants are used for Elf32_Verdef struct's version number.  
+ * These constants are used for Elf32_Verdef struct's version number.
  */
 #define VER_DEF_NONE		0
 #define	VER_DEF_CURRENT		1
 
 /*
- * These constants are used for Elf32_Verdef struct's vd_flags.  
+ * These constants are used for Elf32_Verdef struct's vd_flags.
  */
 #define VER_FLG_BASE		0x1
 #define	VER_FLG_WEAK		0x2
@@ -967,7 +971,7 @@ typedef struct {
 #define	VER_NDX_GLOBAL		1
 
 /*
- * These constants are used for Elf32_Verneed struct's version number.  
+ * These constants are used for Elf32_Verneed struct's version number.
  */
 #define	VER_NEED_NONE		0
 #define	VER_NEED_CURRENT	1

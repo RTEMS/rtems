@@ -102,8 +102,19 @@ typedef struct rtems_rtl_loader_table_s
 #define RTEMS_RTL_OBJ_SECT_WRITE (1 << 11) /**< Section is writable, ie data. */
 #define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 12) /**< Section is executable. */
 #define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 13) /**< Section is preset to zero. */
-#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 14) /**< Section contains constructors. */
-#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 15) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_LINK  (1 << 14) /**< Section is link-ordered. */
+#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 15) /**< Section contains constructors. */
+#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 16) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_LOCD  (1 << 17) /**< Section has been located. */
+
+/**
+ * Section types mask.
+ */
+#define RTEMS_RTL_OBJ_SECT_TYPES (RTEMS_RTL_OBJ_SECT_TEXT | \
+                                  RTEMS_RTL_OBJ_SECT_CONST | \
+                                  RTEMS_RTL_OBJ_SECT_DATA | \
+                                  RTEMS_RTL_OBJ_SECT_BSS | \
+                                  RTEMS_RTL_OBJ_SECT_EH)
 
 /**
  * An object file is made up of sections and the can be more than
@@ -124,6 +135,7 @@ struct rtems_rtl_obj_sect_s
   uint32_t         flags;       /**< The section's flags. */
   void*            base;        /**< The base address of the section in
                                  *   memory. */
+  int              load_order;  /**< Order we load sections. */
 };
 
 /**

@@ -253,7 +253,8 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
     printf ("rtl: %s %p @ %p in %s\n",
-            reloc_names[type], (void *)tmp, where, rtems_rtl_obj_oname (obj));
+            reloc_names[ELF_R_TYPE(rela->r_info)],
+            (void *)tmp, where, rtems_rtl_obj_oname (obj));
 
   return true;
 }
