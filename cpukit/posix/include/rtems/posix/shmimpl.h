@@ -33,25 +33,6 @@ extern "C" {
 
 extern Objects_Information _POSIX_Shm_Information;
 
-RTEMS_INLINE_ROUTINE void _POSIX_Shm_Acquire(
-  POSIX_Shm_Control                 *the_shm,
-  Thread_queue_Context              *queue_context
-)
-{
-  _Thread_queue_Acquire(
-    &the_shm->Wait_queue,
-    queue_context
-  );
-}
-
-RTEMS_INLINE_ROUTINE void _POSIX_Shm_Release(
-  POSIX_Shm_Control                 *the_shm,
-  Thread_queue_Context              *queue_context
-)
-{
-  _Thread_queue_Release( &the_shm->Wait_queue, queue_context );
-}
-
 RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
 {
   return (POSIX_Shm_Control *)

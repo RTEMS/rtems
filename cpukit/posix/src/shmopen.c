@@ -55,42 +55,38 @@ static int shm_fstat(
 /* read() is unspecified for shared memory objects */
 static ssize_t shm_read( rtems_libio_t *iop, void *buffer, size_t count )
 {
-  Thread_queue_Context queue_context;
   ssize_t bytes_read;
   POSIX_Shm_Control *shm = iop_to_shm( iop );
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _POSIX_Shm_Acquire( shm, &queue_context );
+  _Objects_Allocator_lock();
   bytes_read = (*shm->shm_object.ops->object_read)(
       &shm->shm_object,
       buffer,
       count
   );
   _POSIX_Shm_Update_atime( shm );
-  _POSIX_Shm_Release( shm, &queue_context );
 
+  _Objects_Allocator_unlock();
   return bytes_read;
 }
 
 static int shm_ftruncate( rtems_libio_t *iop, off_t length )
 {
-  Thread_queue_Context queue_context;
   int err;
   POSIX_Shm_Control *shm = iop_to_shm( iop );
 
-  _Thread_queue_Context_initialize( &queue_context );
-  _POSIX_Shm_Acquire( shm, &queue_context );
+  _Objects_Allocator_lock();
 
   err = (*shm->shm_object.ops->object_resize)( &shm->shm_object, length );
 
   if ( err != 0 ) {
-    _POSIX_Shm_Release( shm, &queue_context );
+    _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( err );
   }
 
   _POSIX_Shm_Update_mtime_ctime( shm );
 
-  _POSIX_Shm_Release( shm, &queue_context );
+  _Objects_Allocator_unlock();
   return 0;
 }
 
