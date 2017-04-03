@@ -78,7 +78,7 @@ void qoriq_mmu_write_to_tlb1(qoriq_mmu_context *self, int first_tlb);
 
 void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear);
 
-void qoriq_mmu_config(int first_tlb, int scratch_tlb);
+void qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb);
 
 void qoriq_tlb1_write(
 	int esel,

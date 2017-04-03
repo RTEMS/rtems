@@ -120,6 +120,7 @@ _start:
 	bdnz	.Lnull_area_setup_loop
 .Lnull_area_setup_done:
 
+	li	r3, 1
 	bl	.Linitmmu
 
 	/* Clear SBSS */
@@ -232,8 +233,8 @@ _start:
 	mflr	SAVED_LINK_REGISTER
 
 	/* Configure MMU */
-	li	r3, FIRST_TLB
-	li	r4, SCRATCH_TLB
+	li	r4, FIRST_TLB
+	li	r5, SCRATCH_TLB
 	bl	qoriq_mmu_config
 	mtmsr	INITIAL_MSR
 	isync
@@ -320,6 +321,7 @@ _start_secondary_processor:
 	mr	START_STACK, r3
 
 	bl	.Linitmore
+	li	r3, 0
 	bl	.Linitmmu
 	b	bsp_start_on_secondary_processor
 #endif /* RTEMS_SMP */
