@@ -174,7 +174,7 @@ static int mpc55xx_linflex_set_attributes(int minor, const struct termios *t)
   LINFLEX_UARTCR_32B_tag uartcr = { .R = 0 };
   LINFLEX_GCR_32B_tag gcr = { .R = 0 };
   LINFLEX_LINIER_32B_tag ier = { .R = 0 };
-  rtems_termios_baud_t br = rtems_termios_baud_to_number(t->c_cflag);
+  rtems_termios_baud_t br = rtems_termios_baud_to_number(t->c_ospeed);
   LINFLEX_LINFBRR_32B_tag fbrr = { .R = 0 };
   LINFLEX_LINIBRR_32B_tag ibrr = { .R = 0 };
 

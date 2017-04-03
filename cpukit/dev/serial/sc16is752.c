@@ -148,7 +148,7 @@ static bool sc16is752_set_attributes(
 
   ctx->lcr = 0;
 
-  baud = rtems_termios_baud_to_number(term->c_cflag);
+  baud = rtems_termios_baud_to_number(term->c_ospeed);
   baud_successful = set_baud(ctx, baud);
   if (!baud_successful){
     return false;

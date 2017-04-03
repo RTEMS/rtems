@@ -148,7 +148,7 @@ static bool apbuart_set_attributes(
   rtems_termios_device_lock_release(base, &lock_context);
 
   /* Baud rate */
-  baud = rtems_termios_baud_to_number(t->c_cflag);
+  baud = rtems_termios_baud_to_number(t->c_ospeed);
   if (baud > 0) {
     /* Calculate Baud rate generator "scaler" number */
     scaler = (((uart->freq_hz * 10) / (baud * 8)) - 5) / 10;

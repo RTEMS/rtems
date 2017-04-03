@@ -88,7 +88,7 @@ static bool atsam_usart_set_attributes(
   rtems_termios_baud_t baud;
   uint32_t mr;
 
-  baud = rtems_termios_baud_to_number(term->c_cflag);
+  baud = rtems_termios_baud_to_number(term->c_ospeed);
   regs->US_BRGR = (BOARD_MCK / baud) / 16;
 
   if ((term->c_cflag & CREAD) != 0) {
@@ -327,7 +327,7 @@ static bool atsam_uart_set_attributes(
   rtems_termios_baud_t baud;
   uint32_t mr;
 
-  baud = rtems_termios_baud_to_number(term->c_cflag);
+  baud = rtems_termios_baud_to_number(term->c_ospeed);
   regs->UART_BRGR = (BOARD_MCK / baud) / 16;
 
   if ((term->c_cflag & CREAD) != 0) {

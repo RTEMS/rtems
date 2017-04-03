@@ -535,7 +535,7 @@ int ns16550_set_attributes(
    *  Assert ensures there is no division by 0.
    */
 
-  baud_requested = rtems_termios_baud_to_number(t->c_cflag);
+  baud_requested = rtems_termios_baud_to_number(t->c_ospeed);
   _Assert( baud_requested != 0 );
   ulBaudDivisor = NS16550_GetBaudDivisor(c, baud_requested);
 

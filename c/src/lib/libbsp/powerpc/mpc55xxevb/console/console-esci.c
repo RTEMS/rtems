@@ -190,7 +190,7 @@ static int mpc55xx_esci_set_attributes(int minor, const struct termios *t)
   volatile struct ESCI_tag *regs = self->regs;
   union ESCI_CR1_tag cr1 = { .R = regs->CR1.R };
   union ESCI_CR2_tag cr2 = MPC55XX_ZERO_FLAGS;
-  rtems_termios_baud_t br = rtems_termios_baud_to_number(t->c_cflag);
+  rtems_termios_baud_t br = rtems_termios_baud_to_number(t->c_ospeed);
 
   /* Enable module */
   cr2.B.MDIS = 0;
