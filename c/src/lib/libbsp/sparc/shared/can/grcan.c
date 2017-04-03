@@ -92,11 +92,11 @@
 
 /* Uncomment for debug output */
 /****************** DEBUG Definitions ********************/
-#define DBG_IOCTRL 1
 #define DBG_TX 2
 #define DBG_RX 4
+#define DBG_STATE 8
 
-#define DEBUG_FLAGS (DBG_IOCTRL | DBG_RX | DBG_TX )
+#define DEBUG_FLAGS (DBG_STATE | DBG_RX | DBG_TX )
 /*
 #define DEBUG
 #define DEBUGFUNCS
@@ -104,6 +104,13 @@
 #include <bsp/debug_defs.h>
 
 /*********************************************************/
+
+int state2err[4] = {
+	/* STATE_STOPPED */ GRCAN_RET_NOTSTARTED,
+	/* STATE_STARTED */ GRCAN_RET_OK,
+	/* STATE_BUSOFF  */ GRCAN_RET_BUSOFF,
+	/* STATE_AHBERR  */ GRCAN_RET_AHBERR
+};
 
 struct grcan_msg {
 	unsigned int head[2];
@@ -156,13 +163,13 @@ struct grcan_priv {
 
 static void __inline__ grcan_hw_reset(struct grcan_regs *regs);
 
-static unsigned int grcan_hw_read_try(
+static int grcan_hw_read_try(
 	struct grcan_priv *pDev,
 	struct grcan_regs *regs,
 	CANMsg *buffer,
 	int max);
 
-static unsigned int grcan_hw_write_try(
+static int grcan_hw_write_try(
 	struct grcan_priv *pDev,
 	struct grcan_regs *regs,
 	CANMsg *buffer,
@@ -601,17 +608,6 @@ static unsigned int grcan_hw_txspace(
 	return left / GRCAN_MSG_SIZE - WRAP_AROUND_TX_MSGS;
 }
 
-static int grcan_hw_rx_ongoing(struct grcan_regs *regs)
-{
-	return READ_REG(&regs->rx0ctrl) & GRCAN_RXCTRL_ONGOING;
-}
-
-static int grcan_hw_tx_ongoing(struct grcan_regs *regs)
-{
-	return READ_REG(&regs->tx0ctrl) & GRCAN_TXCTRL_ONGOING;
-}
-
-
 #define MIN_TSEG1 1
 #define MIN_TSEG2 2
 #define MAX_TSEG1 14
@@ -723,7 +719,7 @@ static int grcan_calc_timing(
 	return 0;
 }
 
-static unsigned int grcan_hw_read_try(
+static int grcan_hw_read_try(
 	struct grcan_priv *pDev,
 	struct grcan_regs *regs,
 	CANMsg * buffer,
@@ -733,7 +729,8 @@ static unsigned int grcan_hw_read_try(
 	int i, j;
 	CANMsg *dest;
 	struct grcan_msg *source, tmp;
-	unsigned int wp, rp, size, rxmax, addr, trunk_msg_cnt;
+	unsigned int wp, rp, size, rxmax, addr;
+	int trunk_msg_cnt;
 
 	FUNCDBG();
 
@@ -775,6 +772,15 @@ static unsigned int grcan_hw_read_try(
 			/* Read CAN message from DMA buffer */
 			tmp.head[0] = READ_DMA_WORD(&source->head[0]);
 			tmp.head[1] = READ_DMA_WORD(&source->head[1]);
+			if (tmp.head[1] & 0x4) {
+				DBGC(DBG_RX, "overrun\n");
+			}
+			if (tmp.head[1] & 0x2) {
+				DBGC(DBG_RX, "bus-off mode\n");
+			}
+			if (tmp.head[1] & 0x1) {
+				DBGC(DBG_RX, "error-passive mode\n");
+			}
 			/* Convert one grcan CAN message to one "software" CAN message */
 			dest->extended = tmp.head[0] >> 31;
 			dest->rtr = (tmp.head[0] >> 30) & 0x1;
@@ -794,29 +800,34 @@ static unsigned int grcan_hw_read_try(
 			dest++;	/* straight user buffer */
 			i--;
 		}
-		/* Increment Hardware READ pointer (mark read byte as read)
-		 * ! wait for registers to be safely re-configurable
-		 */
-		regs->rx0ctrl = 0;	/* DISABLE RX CHANNEL */
-		i = 0;
-		while (grcan_hw_rx_ongoing(regs) && (i < 1000)) {
-			i++;
+		{
+			/* A bus off interrupt may have occured after checking pDev->started */
+			SPIN_IRQFLAGS(oldLevel);
+
+			SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+			if (pDev->started == STATE_STARTED) {
+				regs->rx0rd = (unsigned int) source - addr;
+				regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
+			} else {
+				DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
+				trunk_msg_cnt = state2err[pDev->started];
+			}
+			SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 		}
-		regs->rx0rd = (unsigned int)source - addr;
-		regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;	/* ENABLE_RX_CHANNEL */
 		return trunk_msg_cnt;
 	}
 	return 0;
 }
 
-static unsigned int grcan_hw_write_try(
+static int grcan_hw_write_try(
 	struct grcan_priv *pDev,
 	struct grcan_regs *regs,
 	CANMsg * buffer,
 	int count
 )
 {
-	unsigned int rp, wp, size, txmax, addr, ret;
+	unsigned int rp, wp, size, txmax, addr;
+	int ret;
 	struct grcan_msg *dest;
 	CANMsg *source;
 	int space_left;
@@ -867,16 +878,20 @@ static unsigned int grcan_hw_write_try(
 		space_left--;
 	}
 
-	/* Update write pointer
-	 * ! wait for registers to be safely re-configurable
-	 */
-	regs->tx0ctrl = 0;	/* DISABLE TX CHANNEL */
-	i = 0;
-	while ((grcan_hw_tx_ongoing(regs)) && i < 1000) {
-		i++;
+	{
+		/* A bus off interrupt may have occured after checking pDev->started */
+		SPIN_IRQFLAGS(oldLevel);
+
+		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+		if (pDev->started == STATE_STARTED) {
+			regs->tx0wr = (unsigned int) dest - addr;
+			regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
+		} else {
+			DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
+			ret = state2err[pDev->started];
+		}
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 	}
-	regs->tx0wr = (unsigned int)dest - addr;	/* Update write pointer */
-	regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;	/* ENABLE_TX_CHANNEL */
 	return ret;
 }
 
@@ -884,7 +899,7 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 {
 	unsigned int wp, rp, size, irq;
 	unsigned int irq_trunk, dataavail;
-	int wait;
+	int wait, state;
 	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
@@ -894,6 +909,20 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 	 * when one or more messages are received
 	 */
 	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+	state = pDev->started;
+
+	/* A bus off interrupt may have occured after checking pDev->started */
+	if (state != STATE_STARTED) {
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
+		if (state == STATE_BUSOFF) {
+			DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
+		} else if (state == STATE_AHBERR) {
+			DBGC(DBG_STATE, "cancelled due to a AHB error\n");
+		} else {
+			DBGC(DBG_STATE, "cancelled due to STOP (unexpected) \n");
+		}
+		return state2err[state];
+	}
 
 	size = READ_REG(&pDev->regs->rx0size);
 	rp = READ_REG(&pDev->regs->rx0rd);
@@ -936,15 +965,18 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 				RTEMS_WAIT,
 				RTEMS_NO_TIMEOUT
 			) == RTEMS_UNSATISFIED
-		)
-			return -1;	/* Device driver has been closed or stopped, return with error status */
+		) {
+			DBGC(DBG_STATE, "UNSATISFIED\n");
+			/* Device driver has been closed or stopped, return with error status */
+			return state2err[pDev->started];
+		}
 	}
 
 	return 0;
 }
 
-/* Wait until min bytes available in TX circular buffer.
- * The IRQ RxIrq is used to pin point the location of
+/* Wait until min bytes available in TX circular buffer. TXIRQ is used to pin
+ * point the location of the CAN message corresponding to min.
  *
  * min must be at least WRAP_AROUND_TX_BYTES bytes less
  * than max buffer for this algo to work.
@@ -952,7 +984,7 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
  */
 static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 {
-	int wait;
+	int wait, state;
 	unsigned int irq, rp, wp, size, space_left;
 	unsigned int irq_trunk;
 	SPIN_IRQFLAGS(oldLevel);
@@ -961,6 +993,19 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 	/*FUNCDBG(); */
 
 	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+	state = pDev->started;
+	/* A bus off interrupt may have occured after checking pDev->started */
+	if (state != STATE_STARTED) {
+		SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
+		if (state == STATE_BUSOFF) {
+			DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
+		} else if (state == STATE_AHBERR) {
+			DBGC(DBG_STATE, "cancelled due to a AHB error\n");
+		} else {
+			DBGC(DBG_STATE, "cancelled due to STOP (unexpected)\n");
+		}
+		return state2err[state];
+	}
 
 	pDev->regs->tx0ctrl = GRCAN_TXCTRL_ENABLE;
 
@@ -1010,7 +1055,8 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 		    RTEMS_UNSATISFIED) {
 			/* Device driver has flushed us, this may be due to another thread has
 			 * closed the device, this is to avoid deadlock */
-			return -1;
+			DBGC(DBG_STATE, "UNSATISFIED\n");
+			return state2err[pDev->started];
 		}
 	}
 
@@ -1020,7 +1066,7 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 
 static int grcan_tx_flush(struct grcan_priv *pDev)
 {
-	int wait;
+	int wait, state;
 	unsigned int rp, wp;
 	SPIN_IRQFLAGS(oldLevel);
 	FUNCDBG();
@@ -1036,6 +1082,21 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 	) {
 		/* Wait for TX empty IRQ */
 		SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+		state = pDev->started;
+
+		/* A bus off interrupt may have occured after checking pDev->started */
+		if (state != STATE_STARTED) {
+			SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
+			if (state == STATE_BUSOFF) {
+				DBGC(DBG_STATE, "cancelled due to a BUS OFF error\n");
+			} else if (state == STATE_AHBERR) {
+				DBGC(DBG_STATE, "cancelled due to a AHB error\n");
+			} else {
+				DBGC(DBG_STATE, "cancelled due to STOP (unexpected)\n");
+			}
+			return state2err[state];
+		}
+
 		/* Clear pending TXEmpty IRQ */
 		pDev->regs->picr = GRCAN_TXEMPTY_IRQ;
 
@@ -1056,7 +1117,8 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 		if (rtems_semaphore_obtain
 		    (pDev->txempty_sem, RTEMS_WAIT,
 		     RTEMS_NO_TIMEOUT) == RTEMS_UNSATISFIED) {
-			return -1;
+			DBGC(DBG_STATE, "UNSATISFIED\n");
+			return state2err[pDev->started];
 		}
 	}
 	return 0;
@@ -1231,7 +1293,7 @@ void *grcan_open(int dev_no)
 
 	pDev->txblock = pDev->rxblock = 1;
 	pDev->txcomplete = pDev->rxcomplete = 0;
-	pDev->started = 0;
+	pDev->started = STATE_STOPPED;
 	pDev->config_changed = 1;
 	pDev->config.silent = 0;
 	pDev->config.abort = 0;
@@ -1296,12 +1358,7 @@ int grcan_close(void *d)
 
 	FUNCDBG();
 
-	if ( pDev->started ) {
-		/* Disable interrupts */
-		drvmgr_interrupt_unregister(pDev->dev, 0, grcan_interrupt, pDev);
-		grcan_hw_stop(pDev);
-		pDev->started = 0;
-	}
+	grcan_stop(d);
 
 	grcan_hw_reset(pDev->regs);
 
@@ -1318,6 +1375,7 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 	struct grcan_priv *pDev = d;
 	CANMsg *dest;
 	unsigned int count, left;
+	int nread;
 	int req_cnt;
 
 	FUNCDBG();
@@ -1326,14 +1384,19 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 	req_cnt = ucount;
 
 	if ( (!dest) || (req_cnt<1) )
-		return -1;
+		return GRCAN_RET_INVARG;
 
-	if ( !pDev->started )
-		return -2;
+	if (pDev->started != STATE_STARTED) {
+		return GRCAN_RET_NOTSTARTED;
+	}
 
-	/*FUNCDBG("grcan_read [%i,%i]: buf: 0x%x len: %i\n",major, minor, (unsigned int)rw_args->buffer,rw_args->count);*/
+	DBGC(DBG_RX, "grcan_read [%p]: buf: %p len: %u\n", d, msg, (unsigned int) ucount);
 
-	count = grcan_hw_read_try(pDev,pDev->regs,dest,req_cnt);
+	nread = grcan_hw_read_try(pDev,pDev->regs,dest,req_cnt);
+	if (nread < 0) {
+		return nread;
+	}
+	count = nread;
 	if ( !( pDev->rxblock && pDev->rxcomplete && (count!=req_cnt) ) ){
 		if ( count > 0 ) {
 			/* Successfully received messages (at least one) */
@@ -1343,7 +1406,7 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 		/* nothing read, shall we block? */
 		if ( !pDev->rxblock ) {
 			/* non-blocking mode */
-			return -3;
+			return GRCAN_RET_TIMEOUT;
 		}
 	}
 
@@ -1363,20 +1426,27 @@ int grcan_read(void *d, CANMsg *msg, size_t ucount)
 			}
 		}
 
-		if (grcan_wait_rxdata(pDev, left)) {
+		nread = grcan_wait_rxdata(pDev, left);
+		if (nread) {
 			/* The wait has been aborted, probably due to 
 			 * the device driver has been closed by another
-			 * thread.
+			 * thread or a bus-off. Return error code.
 			 */
-			return count;
+			return nread;
 		}
 
 		/* Try read bytes from circular buffer */
-		count += grcan_hw_read_try(
+		nread = grcan_hw_read_try(
 				pDev,
 				pDev->regs,
 				dest+count,
 				req_cnt-count);
+
+		if (nread < 0) {
+			/* The read was aborted by bus-off. */
+			return nread;
+		}
+		count += nread;
 	}
 	/* no need to unmask IRQ as IRQ Handler do that for us. */
 	return count;
@@ -1387,22 +1457,27 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 	struct grcan_priv *pDev = d;
 	CANMsg *source;
 	unsigned int count, left;
+	int nwritten;
 	int req_cnt;
 
 	DBGC(DBG_TX,"\n");
 
-	if ( !pDev->started || pDev->config.silent || pDev->flushing )
-		return -2;
+	if ((pDev->started != STATE_STARTED) || pDev->config.silent || pDev->flushing)
+		return GRCAN_RET_NOTSTARTED;
 
 	req_cnt = ucount;
 	source = (CANMsg *) msg;
 
 	/* check proper length and buffer pointer */
 	if (( req_cnt < 1) || (source == NULL) ){
-		return -1;
+		return GRCAN_RET_INVARG;
 	}
 
-	count = grcan_hw_write_try(pDev,pDev->regs,source,req_cnt);
+	nwritten = grcan_hw_write_try(pDev,pDev->regs,source,req_cnt);
+	if (nwritten < 0) {
+		return nwritten;
+	}
+	count = nwritten;
 	if ( !(pDev->txblock && pDev->txcomplete && (count!=req_cnt)) ) {
 		if ( count > 0 ) {
 			/* Successfully transmitted chars (at least one char) */
@@ -1412,7 +1487,7 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 		/* nothing written, shall we block? */
 		if ( !pDev->txblock ) {
 			/* non-blocking mode */
-			return -3;
+			return GRCAN_RET_TIMEOUT;
 		}
 	}
 
@@ -1436,14 +1511,15 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 			}
 		}
 
+		nwritten = grcan_wait_txspace(pDev,left);
 		/* Wait until more room in transmit buffer */
-		if ( grcan_wait_txspace(pDev,left) ){
+		if ( nwritten ) {
 			/* The wait has been aborted, probably due to 
 			 * the device driver has been closed by another
 			 * thread. To avoid deadlock we return directly
 			 * with error status.
 			 */
-			return count;
+			return nwritten;
 		}
 
 		if ( pDev->txerror ){
@@ -1455,11 +1531,17 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 		}
 
 		/* Try read bytes from circular buffer */
-		count += grcan_hw_write_try(
+		nwritten = grcan_hw_write_try(
 			pDev,
 			pDev->regs,
 			source+count,
 			req_cnt-count);
+
+		if (nwritten < 0) {
+			/* Write was aborted by bus-off. */
+			return nwritten;
+		}
+		count += nwritten;
 	}
 	/* no need to unmask IRQ as IRQ Handler do that for us. */
 
@@ -1469,19 +1551,20 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 int grcan_start(void *d)
 {
 	struct grcan_priv *pDev = d;
-	rtems_device_driver status;
 
 	FUNCDBG();
 
-	if ( pDev->started )
+	if (grcan_get_state(d) == STATE_STARTED) {
 		return -1;
+	}
 
-	if ( (status=grcan_hw_start(pDev)) != RTEMS_SUCCESSFUL ){
+	if ( (grcan_hw_start(pDev)) != RTEMS_SUCCESSFUL ){
 		return -2;
 	}
 
 	/* Read and write are now open... */
-	pDev->started = 1;
+	pDev->started = STATE_STARTED;
+	DBGC(DBG_STATE, "STOPPED|BUSOFF|AHBERR->STARTED\n");
 
 	/* Register interrupt routine and enable IRQ at IRQ ctrl */
 	drvmgr_interrupt_register(pDev->dev, 0, pDev->devName,
@@ -1493,22 +1576,34 @@ int grcan_start(void *d)
 int grcan_stop(void *d)
 {
 	struct grcan_priv *pDev = d;
+	SPIN_IRQFLAGS(oldLevel);
 
 	FUNCDBG();
 
-	if ( !pDev->started )
+	if (pDev->started == STATE_STOPPED)
 		return -1;
+
+	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
+	if (pDev->started == STATE_STARTED) {
+		grcan_hw_stop(pDev);
+		DBGC(DBG_STATE, "STARTED->STOPPED\n");
+	} else {
+		/*
+		 * started == STATE_[STOPPED|BUSOFF|AHBERR] so grcan_hw_stop()
+		 * might already been called from ISR.
+		 */
+		DBGC(DBG_STATE, "[STOPPED|BUSOFF|AHBERR]->STOPPED\n");
+	}
+	pDev->started = STATE_STOPPED;
+	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
 
 	/* Disable interrupts */
 	drvmgr_interrupt_unregister(pDev->dev, 0, grcan_interrupt, pDev);
 
-	grcan_hw_stop(pDev);
-	pDev->started = 0;
-
 	return 0;
 }
 
-int grcan_isstarted(void *d)
+int grcan_get_state(void *d)
 {
 	struct grcan_priv *pDev = d;
 
@@ -1524,7 +1619,7 @@ int grcan_flush(void *d)
 
 	FUNCDBG();
 
-	if ( !pDev->started || pDev->flushing || pDev->config.silent )
+	if ((pDev->started != STATE_STARTED) || pDev->flushing || pDev->config.silent)
 		return -1;
 
 	pDev->flushing = 1;
@@ -1547,7 +1642,7 @@ int grcan_set_silent(void* d, int silent)
 
 	FUNCDBG();
 
-	if ( pDev->started )
+	if (pDev->started == STATE_STARTED)
 		return -1;
 
 	pDev->config.silent = silent;
@@ -1562,7 +1657,7 @@ int grcan_set_abort(void* d, int abort)
 
 	FUNCDBG();
 
-	if ( pDev->started )
+	if (pDev->started == STATE_STARTED)
 		return -1;
 
 	pDev->config.abort = abort;
@@ -1579,7 +1674,7 @@ int grcan_set_selection(void *d, const struct grcan_selection *selection)
 
 	FUNCDBG();
 
-	if ( pDev->started )
+	if (pDev->started == STATE_STARTED)
 		return -1;
 
 	if ( !selection )
@@ -1675,7 +1770,7 @@ int grcan_set_speed(void *d, unsigned int speed)
 	FUNCDBG();
 
 	/* cannot change speed during run mode */
-	if ( pDev->started )
+	if (pDev->started == STATE_STARTED)
 		return -1;
 
 	/* get speed rate from argument */
@@ -1699,7 +1794,7 @@ int grcan_set_btrs(void *d, const struct grcan_timing *timing)
 	/* Set BTR registers manually
 	 * Read GRCAN/HurriCANe Manual.
 	 */
-	if ( pDev->started )
+	if (pDev->started == STATE_STARTED)
 		return -1;
 
 	if ( !timing )
@@ -1777,94 +1872,129 @@ int grcan_get_status(void* d, unsigned int *data)
 	return 0;
 }
 
+/* Error indicators */
+#define GRCAN_IRQ_ERRORS \
+		(GRCAN_RXAHBERR_IRQ | GRCAN_TXAHBERR_IRQ | GRCAN_OFF_IRQ)
+#define GRCAN_STAT_ERRORS (GRCAN_STAT_AHBERR | GRCAN_STAT_OFF)
+/* Warning & RX/TX sync indicators */
+#define GRCAN_IRQ_WARNS \
+		(GRCAN_ERR_IRQ | GRCAN_OR_IRQ | GRCAN_TXLOSS_IRQ | \
+		 GRCAN_RXSYNC_IRQ | GRCAN_TXSYNC_IRQ)
+#define GRCAN_STAT_WARNS (GRCAN_STAT_OR | GRCAN_STAT_PASS)
+
 /* Handle the IRQ */
 static void grcan_interrupt(void *arg)
 {
 	struct grcan_priv *pDev = arg;
 	unsigned int status = READ_REG(&pDev->regs->pimsr);
 	unsigned int canstat = READ_REG(&pDev->regs->stat);
+	unsigned int imr_clear;
 	SPIN_ISR_IRQFLAGS(irqflags);
 
 	/* Spurious IRQ call? */
 	if ( !status && !canstat )
 		return;
 
-	FUNCDBG();
-
-	/* Increment number of interrupts counter */
-	pDev->stats.ints++;
-
-	if ( (status & GRCAN_ERR_IRQ) || (canstat & GRCAN_STAT_PASS) ){
-		/* Error-Passive interrupt */
-		pDev->stats.passive_cnt++;
+	if (pDev->started != STATE_STARTED) {
+		DBGC(DBG_STATE, "not STARTED (unexpected interrupt)\n");
+		pDev->regs->picr = status;
+		return;
 	}
 
-	if ( (status & GRCAN_OFF_IRQ) || (canstat & GRCAN_STAT_OFF) ){
-		/* Bus-off condition interrupt 
+	FUNCDBG();
+
+	if ( (status & GRCAN_IRQ_ERRORS) || (canstat & GRCAN_STAT_ERRORS) ) {
+		/* Bus-off condition interrupt
 		 * The link is brought down by hardware, we wake all threads
 		 * that is blocked in read/write calls and stop futher calls
 		 * to read/write until user has called ioctl(fd,START,0).
 		 */
 		SPIN_LOCK(&pDev->devlock, irqflags);
-		pDev->started = 0;
+		DBGC(DBG_STATE, "STARTED->BUSOFF|AHBERR\n");
+		pDev->stats.ints++;
+		if ((status & GRCAN_OFF_IRQ) || (canstat & GRCAN_STAT_OFF)) {
+			/* CAN Bus-off interrupt */
+			DBGC(DBG_STATE, "BUSOFF: status: 0x%x, canstat: 0x%x\n",
+				status, canstat);
+			pDev->started = STATE_BUSOFF;
+			pDev->stats.busoff_cnt++;
+		} else {
+			/* RX or Tx AHB Error interrupt */
+			printk("AHBERROR: status: 0x%x, canstat: 0x%x\n",
+				status, canstat);
+			pDev->started = STATE_AHBERR;
+			pDev->stats.ahberr_cnt++;
+		}
 		grcan_hw_stop(pDev); /* this mask all IRQ sources */
+		pDev->regs->picr = 0x1ffff; /* clear all interrupts */
+		/*
+		 * Prevent driver from affecting bus. Driver can be started
+		 * again with grcan_start().
+		 */
 		SPIN_UNLOCK(&pDev->devlock, irqflags);
-		status=0x1ffff; /* clear all interrupts */
-		goto out;
+		/*
+		 * NOTE: Another interrupt may be pending now so ISR could be
+		 * executed one more time aftert this (first) return.
+		 */
+		return;
 	}
 
-	if ( (status & GRCAN_OR_IRQ) || (canstat & GRCAN_STAT_OR) ){
-		/* Over-run during reception interrupt */
-		pDev->stats.overrun_cnt++;
+	/* Mask interrupts in one place under spin-lock. */
+	imr_clear = status & (GRCAN_RXIRQ_IRQ | GRCAN_TXIRQ_IRQ | GRCAN_TXEMPTY_IRQ);
+
+	SPIN_LOCK(&pDev->devlock, irqflags);
+
+	/* Increment number of interrupts counter */
+	pDev->stats.ints++;
+	if ((status & GRCAN_IRQ_WARNS) || (canstat & GRCAN_STAT_WARNS)) {
+
+		if ( (status & GRCAN_ERR_IRQ) || (canstat & GRCAN_STAT_PASS) ) {
+			/* Error-Passive interrupt */
+			pDev->stats.passive_cnt++;
+		}
+
+		if ( (status & GRCAN_OR_IRQ) || (canstat & GRCAN_STAT_OR) ) {
+			/* Over-run during reception interrupt */
+			pDev->stats.overrun_cnt++;
+		}
+
+		if ( status & GRCAN_TXLOSS_IRQ ) {
+			pDev->stats.txloss_cnt++;
+		}
+
+		if ( status & GRCAN_TXSYNC_IRQ ) {
+			/* TxSync message transmitted interrupt */
+			pDev->stats.txsync_cnt++;
+		}
+
+		if ( status & GRCAN_RXSYNC_IRQ ) {
+			/* RxSync message received interrupt */
+			pDev->stats.rxsync_cnt++;
+		}
 	}
 
-	if ( (status & GRCAN_RXAHBERR_IRQ) ||
-	     (status & GRCAN_TXAHBERR_IRQ) ||
-	     (canstat & GRCAN_STAT_AHBERR) ){
-		/* RX or Tx AHB Error interrupt */
-		printk("AHBERROR: status: 0x%x, canstat: 0x%x\n",status,canstat);
-		pDev->stats.ahberr_cnt++;
-	}
+	if (imr_clear) {
+		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~imr_clear;
 
-	if ( status & GRCAN_TXLOSS_IRQ ) {
-		pDev->stats.txloss_cnt++;
-	}
-
-	if ( status & GRCAN_RXIRQ_IRQ ){
-		/* RX IRQ pointer interrupt */
-		/*printk("RxIrq 0x%x\n",status);*/
-		SPIN_LOCK(&pDev->devlock, irqflags);
-		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_RXIRQ_IRQ;
 		SPIN_UNLOCK(&pDev->devlock, irqflags);
-		rtems_semaphore_release(pDev->rx_sem);
-	}
 
-	if ( status & GRCAN_TXIRQ_IRQ ){
-		/* TX IRQ pointer interrupt */
-		SPIN_LOCK(&pDev->devlock, irqflags);
-		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_TXIRQ_IRQ;
+		if ( status & GRCAN_RXIRQ_IRQ ) {
+			/* RX IRQ pointer interrupt */
+			rtems_semaphore_release(pDev->rx_sem);
+		}
+
+		if ( status & GRCAN_TXIRQ_IRQ ) {
+			/* TX IRQ pointer interrupt */
+			rtems_semaphore_release(pDev->tx_sem);
+		}
+
+		if (status & GRCAN_TXEMPTY_IRQ ) {
+			rtems_semaphore_release(pDev->txempty_sem);
+		}
+	} else {
 		SPIN_UNLOCK(&pDev->devlock, irqflags);
-		rtems_semaphore_release(pDev->tx_sem);
 	}
 
-	if ( status & GRCAN_TXSYNC_IRQ ){
-		/* TxSync message transmitted interrupt */
-		pDev->stats.txsync_cnt++;
-	}
-
-	if ( status & GRCAN_RXSYNC_IRQ ){
-		/* RxSync message received interrupt */
-		pDev->stats.rxsync_cnt++;
-	}
-
-	if ( status & GRCAN_TXEMPTY_IRQ ){
-		SPIN_LOCK(&pDev->devlock, irqflags);
-		pDev->regs->imr = READ_REG(&pDev->regs->imr) & ~GRCAN_TXEMPTY_IRQ;
-		SPIN_UNLOCK(&pDev->devlock, irqflags);
-		rtems_semaphore_release(pDev->txempty_sem);
-	}
-
-out:
 	/* Clear IRQs */
 	pDev->regs->picr = status;
 }

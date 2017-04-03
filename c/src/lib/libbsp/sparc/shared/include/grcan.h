@@ -68,6 +68,7 @@ struct grcan_stats {
 	unsigned int txloss_cnt;
 	unsigned int ahberr_cnt;
 	unsigned int ints;
+	unsigned int busoff_cnt;
 };
 
 struct grcan_timing {
@@ -98,6 +99,39 @@ typedef struct {
 	unsigned char data[8];
 	unsigned int id;
 } CANMsg;
+
+enum {
+	GRCAN_RET_OK            =  0,
+	GRCAN_RET_INVARG        = -1,
+	GRCAN_RET_NOTSTARTED    = -2,
+	GRCAN_RET_TIMEOUT       = -3,
+	/* Bus-off condition detected (request aborted by driver) */
+	GRCAN_RET_BUSOFF        = -4,
+	/* AHB error condition detected (request aborted by driver) */
+	GRCAN_RET_AHBERR        = -5,
+};
+
+/*
+ * User functions can cause these transitions:
+ *   STATE_STOPPED -> STATE_STARTED
+ *   STATE_STARTED -> STATE_STOPPED
+ *   STATE_BUSOFF  -> STATE_STOPPED
+ *   STATE_AHBERR  -> STATE_STOPPED
+ *
+ * ISR can cause these transition
+ *   STATE_STARTED -> STATE_BUSOFF
+ *   STATE_STARTED -> STATE_AHBERR
+ *
+ * STATE_BUSOFF is entered from ISR on bus-off condition. STATE_AHBERR is
+ * entered from ISR on AHB DMA errors on RX/TX operations. At transition the ISR
+ * disables DMA, masks all interrupts and releases semaphores.
+ */
+enum grcan_state {
+	STATE_STOPPED		= 0,
+	STATE_STARTED		= 1,
+	STATE_BUSOFF		= 2,
+	STATE_AHBERR		= 3,
+};
 
 #define GRCAN_CFG_ABORT      0x00000001
 #define GRCAN_CFG_ENABLE0    0x00000002
@@ -198,13 +232,14 @@ extern int grcan_close(void *d);
  * count: Number of CAN messages to receive
  *
  * return:
- *   >=0:	Number of CAN messages received. This can be less than the
- *		count parameter.
- *   -1:	count parameter less than size of struct grcan_msg or NULL msg.
- *   -2:	Device not in started mode
- *   -3:	Timeout in non-blocking mode
- *   -4:	A blocking read was interrupted by a Bus-off error. Device has
- *		left started mode.
+ *   >=0:                       Number of CAN messages received. This can be
+ *                              less than the count parameter.
+ *   GRCAN_RET_INVARG:          count parameter less than one or NULL msg.
+ *   GRCAN_RET_NOTSTARTED:      Device not in started mode
+ *   GRCAN_RET_TIMEOUT:         Timeout in non-blocking mode
+ *   GRCAN_RET_BUSOFF:          A read was interrupted by a bus-off error.
+ *                              Device has left started mode.
+ *   GRCAN_RET_AHBERR:          Similar to BUSOFF, but was caused by AHB Error.
  */
 extern int grcan_read(
 	void *d,
@@ -222,18 +257,35 @@ extern int grcan_read(
  * count: Number of CAN messages to transmit
  *
  * return:
- *   >=0:	Number of CAN messages transmitted. This can be less than the
- *		count parameter.
- *   -1:	count parameter less than size of struct grcan_msg
- *   -2:	Device not in started mode
- *   -3:	Timeout in non-blocking mode
- *   -4:	Bus-off error. Device has left started mode
+ *   >=0:                       Number of CAN messages transmitted. This can be
+ *                              less than the count parameter.
+ *   GRCAN_RET_INVARG:          count parameter less than one.
+ *   GRCAN_RET_NOTSTARTED:      Device not in started mode
+ *   GRCAN_RET_TIMEOUT:         Timeout in non-blocking mode
+ *   GRCAN_RET_BUSOFF:          A write was interrupted by a Bus-off error.
+ *                              Device has left started mode
+ *   GRCAN_RET_AHBERR:          Similar to BUSOFF, but was caused by AHB Error.
  */
 extern int grcan_write(
 	void *d,
 	CANMsg *msg,
 	size_t count
 );
+
+/*
+ * Returns current GRCAN software state
+ *
+ * If STATE_BUSOFF or STATE_AHBERR is returned then the function grcan_stop()
+ * shall be called before continue using the driver.
+ *
+ * d: Device handle
+ * return:
+ *   STATE_STOPPED              Stopped
+ *   STATE_STARTED              Started
+ *   STATE_BUSOFF               Bus-off has been detected
+ *   STATE_AHBERR               AHB error has been detected
+ */
+extern int grcan_get_state(void *d);
 
 /* The remaining functions return 0 on success and non-zero on failure. */
 
@@ -244,8 +296,6 @@ extern int grcan_write(
 extern int grcan_start(void *d);
 /* stop to change baud rate/config or closing down */
 extern int grcan_stop(void *d);
-/* return 1 when started, othervise 0 */
-extern int grcan_isstarted(void *d);
 /* Wait until all TX messages have been sent */
 extern int grcan_flush(void *d);
 
