@@ -9,6 +9,7 @@ exclude: dl05
 exclude: fileio
 exclude: fsdosfsname01
 exclude: iostream
+exclude: linpack
 exclude: sptls01
 exclude: sptls02
 exclude: utf8proc01
