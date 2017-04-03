@@ -153,12 +153,12 @@ static void test_rofs(void)
 
 static void Init(rtems_task_argument arg)
 {
-  TEST_BEGIN():
+  TEST_BEGIN();
 
   test_create_file_system();
   test_rofs();
 
-  TEST_END():
+  TEST_END();
   rtems_test_exit(0);
 }
 

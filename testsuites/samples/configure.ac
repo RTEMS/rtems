@@ -37,7 +37,7 @@ AS_IF([test $HAS_CPLUSPLUS = yes],[
   [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE],
   [AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM(
-      [[#include <iostream>]], 
+      [[#include <iostream>]],
       [[std::cout << "hello" << std::endl;]])
     ],
     [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE=yes],
@@ -60,21 +60,21 @@ AC_CHECK_SIZEOF([time_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-base_sp/Makefile
-hello/Makefile
-loopback/Makefile
-minimum/Makefile
-fileio/Makefile
-nsecs/Makefile
-paranoia/Makefile
-ticker/Makefile
-unlimited/Makefile
 base_mp/Makefile
 base_mp/node1/Makefile
 base_mp/node2/Makefile
-iostream/Makefile
-cdtest/Makefile
-pppd/Makefile
+base_sp/Makefile
 capture/Makefile
+cdtest/Makefile
+fileio/Makefile
+hello/Makefile
+iostream/Makefile
+loopback/Makefile
+minimum/Makefile
+nsecs/Makefile
+paranoia/Makefile
+pppd/Makefile
+ticker/Makefile
+unlimited/Makefile
 ])
 AC_OUTPUT

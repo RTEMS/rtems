@@ -1,16 +1,21 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-_SUBDIRS =
-_SUBDIRS += fsjffs2gc01
-_SUBDIRS += fsimfsconfig03
-_SUBDIRS += fsimfsconfig02
-_SUBDIRS += fsimfsconfig01
+_SUBDIRS  =
+_SUBDIRS += fsbdpart01
+_SUBDIRS += fsdosfsformat01
 _SUBDIRS += fsdosfsname01
 _SUBDIRS += fsdosfsname02
-_SUBDIRS += fsdosfswrite01
-_SUBDIRS += fsdosfsformat01
-_SUBDIRS += fsfseeko01
 _SUBDIRS += fsdosfssync01
+_SUBDIRS += fsdosfswrite01
+_SUBDIRS += fsfseeko01
+_SUBDIRS += fsimfsconfig01
+_SUBDIRS += fsimfsconfig02
+_SUBDIRS += fsimfsconfig03
+_SUBDIRS += fsimfsgeneric01
+_SUBDIRS += fsjffs2gc01
+_SUBDIRS += fsnofs01
+_SUBDIRS += fsrfsbitmap01
+_SUBDIRS += fsrofs01
 _SUBDIRS += imfs_fserror
 _SUBDIRS += imfs_fslink
 _SUBDIRS += imfs_fspatheval
@@ -30,19 +35,20 @@ _SUBDIRS += jffs2_fstime
 _SUBDIRS += mdosfs_fserror
 _SUBDIRS += mdosfs_fspatheval
 _SUBDIRS += mdosfs_fsrdwr
-_SUBDIRS += mdosfs_fsstatvfs
 _SUBDIRS += mdosfs_fsscandir01
+_SUBDIRS += mdosfs_fsstatvfs
 _SUBDIRS += mdosfs_fstime
 _SUBDIRS += mimfs_fserror
 _SUBDIRS += mimfs_fslink
 _SUBDIRS += mimfs_fspatheval
 _SUBDIRS += mimfs_fspermission
 _SUBDIRS += mimfs_fsrdwr
+_SUBDIRS += mimfs_fsrename
 _SUBDIRS += mimfs_fsscandir01
 _SUBDIRS += mimfs_fssymlink
 _SUBDIRS += mimfs_fstime
-_SUBDIRS += mimfs_fsrename
 _SUBDIRS += mrfs_fserror
+_SUBDIRS += mrfs_fsfpathconf
 _SUBDIRS += mrfs_fslink
 _SUBDIRS += mrfs_fspatheval
 _SUBDIRS += mrfs_fspermission
@@ -50,11 +56,6 @@ _SUBDIRS += mrfs_fsrdwr
 _SUBDIRS += mrfs_fsscandir01
 _SUBDIRS += mrfs_fssymlink
 _SUBDIRS += mrfs_fstime
-_SUBDIRS += mrfs_fsfpathconf
-_SUBDIRS += fsrfsbitmap01
-_SUBDIRS += fsnofs01
-_SUBDIRS += fsimfsgeneric01
-_SUBDIRS += fsbdpart01
 
 EXTRA_DIST =
 EXTRA_DIST += support/ramdisk_support.c
@@ -63,5 +64,5 @@ EXTRA_DIST += support/fstest_support.c
 EXTRA_DIST += support/fstest_support.h
 EXTRA_DIST += support/fstest.h
 
-include $(top_srcdir)/../automake/test-subdirs.am
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

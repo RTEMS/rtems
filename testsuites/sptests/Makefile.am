@@ -80,5 +80,5 @@ _SUBDIRS += sptimerserver01
 _SUBDIRS += spclock_err02
 _SUBDIRS += spcpuset01
 
-include $(top_srcdir)/../automake/test-subdirs.am
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

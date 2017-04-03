@@ -25,11 +25,11 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-rhtaskswitch/Makefile
-rhtaskpreempt/Makefile
+rhdeadlockbrk/Makefile
 rhilatency/Makefile
 rhmlatency/Makefile
 rhsemshuffle/Makefile
-rhdeadlockbrk/Makefile
+rhtaskpreempt/Makefile
+rhtaskswitch/Makefile
 ])
 AC_OUTPUT

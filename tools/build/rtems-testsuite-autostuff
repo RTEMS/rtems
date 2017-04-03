@@ -1,0 +1,49 @@
+#! /usr/bin/env python
+
+#
+# Copyright 2017 Chris Johns <chrisj@rtems.org>
+# All rights reserved
+#
+
+#
+# Create the testsuite's configure.am and Makefile.am from the directories
+# found. This does not handle any conditional functionality that may be needed.
+#
+
+from __future__ import print_function
+import os
+import os.path
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file = sys.stderr, **kwargs)
+
+def die(*args, **kwargs):
+    print(*args, file = sys.stderr, **kwargs)
+    sys.exit(1)
+
+if len(sys.argv) != 2:
+    die('error: just provide the path to the test directory')
+
+testdir = sys.argv[1]
+
+if not os.path.exists(testdir):
+    die('error: not found: %s' % (testdir))
+if not os.path.isdir(testdir):
+    die('error: not a directory: %s' % (testdir))
+
+excludes = ['autom4te.cache']
+
+tests = sorted([t for t in os.listdir(testdir)
+                if os.path.isdir(os.path.join(testdir, t)) \
+                and t not in excludes \
+                and os.path.exists(os.path.join(testdir, t, 'Makefile.am'))])
+
+configure = ['AC_CONFIG_FILES([Makefile'] + ['%s/Makefile' % (t) for t in tests] + ['])']
+makefile  = ['_SUBDIRS  ='] + ['_SUBDIRS += %s' % (t) for t in tests]
+
+print(os.linesep.join(configure))
+print()
+print(os.linesep.join(makefile))
+
+sys.exit(0)

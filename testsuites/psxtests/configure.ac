@@ -184,8 +184,8 @@ psxonce01/Makefile
 psxpasswd01/Makefile
 psxpasswd02/Makefile
 psxpipe01/Makefile
-psxreaddir/Makefile
 psxrdwrv/Makefile
+psxreaddir/Makefile
 psxrwlock01/Makefile
 psxsem01/Makefile
 psxshm01/Makefile
@@ -202,11 +202,11 @@ psxstack02/Makefile
 psxstat/Makefile
 psxstrsignal01/Makefile
 psxsysconf/Makefile
+psxthreadname01/Makefile
 psxtime/Makefile
 psxtimer01/Makefile
 psxtimer02/Makefile
 psxtimes01/Makefile
-psxthreadname01/Makefile
 psxualarm/Makefile
 psxusleep/Makefile
 ])

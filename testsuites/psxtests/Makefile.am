@@ -1,48 +1,131 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-_SUBDIRS = psxclock
-_SUBDIRS += psxthreadname01
+## Some of the tests need other POSIX features to work while some do not.
+
+_SUBDIRS  =
 if HAS_POSIX
-_SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
-    psx10 psx11 psx12 psx13 psx14 psx15 psx16 \
-    psxaio01 psxaio02 psxaio03 \
-    psxalarm01 psxautoinit01 psxautoinit02 psxbarrier01 \
-    psxcancel psxcancel01 psxclassic01 psxcleanup psxcleanup01 \
-    psxconcurrency01 psxcond01 psxcond02 psxconfig01 psxenosys \
-    psxitimer psxmsgq01 psxmsgq02 psxmsgq03 psxmsgq04 \
-    psxmutexattr01 psxobj01 psxrwlock01 psxsem01 psxshm01 psxshm02 \
-    psxsignal01 psxsignal02 psxsignal03 psxsignal04 psxsignal05 psxsignal06 \
-    psxspin01 psxstrsignal01 psxsysconf \
-    psxtime psxtimer01 psxtimer02 psxualarm psxusleep psxfatal01 psxfatal02 \
-    psxintrcritical01 psxstack01 psxstack02 \
-    psxeintr_join psxgetattrnp01 psxclock01
+_SUBDIRS += psx01
+_SUBDIRS += psx02
+_SUBDIRS += psx03
+_SUBDIRS += psx04
+_SUBDIRS += psx05
+_SUBDIRS += psx06
+_SUBDIRS += psx07
+_SUBDIRS += psx08
+_SUBDIRS += psx09
+_SUBDIRS += psx10
+_SUBDIRS += psx11
+_SUBDIRS += psx12
+_SUBDIRS += psx14
+_SUBDIRS += psx15
+_SUBDIRS += psx16
+_SUBDIRS += psxaio01
+_SUBDIRS += psxaio02
+_SUBDIRS += psxaio03
+_SUBDIRS += psxalarm01
+_SUBDIRS += psxautoinit01
+_SUBDIRS += psxautoinit02
+_SUBDIRS += psxbarrier01
+_SUBDIRS += psxcancel
+_SUBDIRS += psxcancel01
+_SUBDIRS += psxclassic01
+_SUBDIRS += psxcleanup
+_SUBDIRS += psxcleanup01
 _SUBDIRS += psxcleanup02
+endif
+_SUBDIRS += psxclock
+if HAS_POSIX
+_SUBDIRS += psxclock01
+_SUBDIRS += psxconcurrency01
+_SUBDIRS += psxcond01
+_SUBDIRS += psxcond02
+_SUBDIRS += psxconfig01
+endif
+_SUBDIRS += psxdevctl01
+if HAS_POSIX
+_SUBDIRS += psxeintr_join
+_SUBDIRS += psxenosys
+_SUBDIRS += psxfatal01
+_SUBDIRS += psxfatal02
+endif
+if HAS_POSIX
 if HAS_CPLUSPLUS
 _SUBDIRS += psxglobalcon01
 _SUBDIRS += psxglobalcon02
 endif
+_SUBDIRS += psxhdrs
+_SUBDIRS += psxintrcritical01
+_SUBDIRS += psxitimer
 endif
-
-## File IO tests
-_SUBDIRS += psxfile01 psxfile02 psxfilelock01 psxgetrusage01 psxid01 \
-    psximfs01 psximfs02 psxreaddir psxstat psxmount psx13 psxchroot01 \
-    psxpasswd01 psxpasswd02 psxpipe01 psxtimes01 psxfchx01
-
-## POSIX Devctl tests
-_SUBDIRS += psxdevctl01
-
-## POSIX Keys are always available
-_SUBDIRS += psxkey01 psxkey02 psxkey03 psxkey04 \
-    psxkey05 psxkey06 psxkey08 psxkey09 psxkey10
-## But some of the tests need other POSIX features
+_SUBDIRS += psxkey01
+_SUBDIRS += psxkey02
+_SUBDIRS += psxkey03
+_SUBDIRS += psxkey04
+_SUBDIRS += psxkey05
+_SUBDIRS += psxkey06
 if HAS_POSIX
 _SUBDIRS += psxkey07
 endif
-
-## POSIX Once is always available
+_SUBDIRS += psxkey08
+_SUBDIRS += psxkey09
+_SUBDIRS += psxkey10
+if HAS_POSIX
+_SUBDIRS += psxmsgq01
+_SUBDIRS += psxmsgq02
+_SUBDIRS += psxmsgq03
+_SUBDIRS += psxmsgq04
+_SUBDIRS += psxmutexattr01
+_SUBDIRS += psxobj01
+endif
 _SUBDIRS += psxonce01
-
 _SUBDIRS += psxrdwrv
+if HAS_POSIX
+_SUBDIRS += psxrwlock01
+_SUBDIRS += psxsem01
+_SUBDIRS += psxshm01
+_SUBDIRS += psxshm02
+_SUBDIRS += psxsignal01
+_SUBDIRS += psxsignal02
+_SUBDIRS += psxsignal03
+_SUBDIRS += psxsignal04
+_SUBDIRS += psxsignal05
+_SUBDIRS += psxsignal06
+_SUBDIRS += psxspin01
+_SUBDIRS += psxstack01
+_SUBDIRS += psxstack02
+_SUBDIRS += psxstrsignal01
+_SUBDIRS += psxsysconf
+endif
+_SUBDIRS += psxthreadname01
+if HAS_POSIX
+_SUBDIRS += psxtime
+_SUBDIRS += psxtimer01
+_SUBDIRS += psxtimer02
+_SUBDIRS += psxualarm
+_SUBDIRS += psxusleep
+endif
 
-include $(top_srcdir)/../automake/test-subdirs.am
+
+
+## File IO tests
+_SUBDIRS += psx13
+_SUBDIRS += psxchroot01
+_SUBDIRS += psxfile01
+_SUBDIRS += psxfile02
+_SUBDIRS += psxfilelock01
+_SUBDIRS += psxgetattrnp01
+_SUBDIRS += psxgetrusage01
+_SUBDIRS += psxid01
+_SUBDIRS += psximfs01
+_SUBDIRS += psximfs02
+_SUBDIRS += psxmount
+_SUBDIRS += psxpasswd01
+_SUBDIRS += psxpasswd02
+_SUBDIRS += psxpipe01
+_SUBDIRS += psxreaddir
+_SUBDIRS += psxstat
+_SUBDIRS += psxtimes01
+_SUBDIRS += psxfchx01
+
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

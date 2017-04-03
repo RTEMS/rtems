@@ -53,17 +53,29 @@ case ${mode} in
 esac
 
 #
+# Read the common settings first.
+#
+if [ -f $includepath/testdata/rtems.tcfg ]; then
+ testdata="$includepath/testdata/rtems.tcfg $testdata"
+fi
+
+#
 # If there is no testdata all tests are valid and must pass.
 #
 
-if test -f $testdata; then
+if [ ! -z "$testdata" ]; then
   excluded_tests=""
   expected_fails=""
+  user_inputs=""
   indeterminates=""
+  benchmarks=""
   while [ ! -z "$testdata" ];
   do
     for td in $testdata;
     do
+      if [ ! -f $td ]; then
+        continue
+      fi
       ntd=""
       exec 3<& 0
       exec 0<$td
@@ -87,9 +99,17 @@ if test -f $testdata; then
               line=$(echo $line | sed -e 's/expected-fail://g;s/[[:blank:]]//g')
               expected_fails="${expected_fails} $line"
               ;;
+            user-input)
+              line=$(echo $line | sed -e 's/user-input://g;s/[[:blank:]]//g')
+              user_inputs="${user_inputs} $line"
+              ;;
             indeterminate)
               line=$(echo $line | sed -e 's/indeterminate://g;s/[[:blank:]]//g')
               indeterminates="${indeterminates} $line"
+              ;;
+            benchmark)
+              line=$(echo $line | sed -e 's/benchmark://g;s/[[:blank:]]//g')
+              benchmarks="${benchmarks} $line"
               ;;
             *)
               echo "error: invalid test state: $state in $td" 1>&2
@@ -119,26 +139,55 @@ if test -f $testdata; then
         fi
         ;;
       flags)
-        allow="no"
-        for et in ${expected_fails};
+        allow="yes"
+        for et in ${excluded_tests};
         do
           if test ${t} = ${et}; then
-            allow="yes"
+            allow="no"
           fi
         done
-        if test ${allow} = yes; then
-          output="-DTEST_STATE_EXPECTED_FAIL=1"
-        fi
-        allow="no"
-        for it in ${indeterminates};
-        do
-          if test ${t} = ${it}; then
-            allow="yes"
+	if test ${allow} = yes; then
+          allow="no"
+          for et in ${expected_fails};
+          do
+            if test ${t} = ${et}; then
+              allow="yes"
+            fi
+          done
+          if test ${allow} = yes; then
+            output="-DTEST_STATE_EXPECTED_FAIL=1"
           fi
-        done
-        if test ${allow} = yes; then
-          output="${output} -DTEST_STATE_INDETERMINATE=1"
-        fi
+          allow="no"
+          for ut in ${user_inputs};
+          do
+            if test ${t} = ${ut}; then
+              allow="yes"
+            fi
+          done
+          if test ${allow} = yes; then
+            output="-DTEST_STATE_USER_INPUT=1"
+          fi
+          allow="no"
+          for it in ${indeterminates};
+          do
+            if test ${t} = ${it}; then
+              allow="yes"
+            fi
+          done
+          if test ${allow} = yes; then
+            output="${output} -DTEST_STATE_INDETERMINATE=1"
+          fi
+          allow="no"
+          for bt in ${benchmarks};
+          do
+            if test ${t} = ${bt}; then
+              allow="yes"
+            fi
+          done
+          if test ${allow} = yes; then
+            output="${output} -DTEST_STATE_BENCHMARK=1"
+          fi
+	fi
         ;;
       *)
         echo "error: invalid mode" 1>&2

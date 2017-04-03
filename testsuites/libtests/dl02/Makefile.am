@@ -31,14 +31,9 @@ dl-tar.h: dl.tar
 	$(BIN2C) -H $< $@
 CLEANFILES += dl-tar.h
 
-dl02.pre$(EXEEXT): $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
-	@rm -f dl02.pre$(EXEEXT)
-	$(make-exe)
-	rm -f dl02.pre.ralf
-
-dl02.pre: dl02.pre$(EXEEXT)
-	mv $< $@
-CLEANFILES += dl02.pre
+dl02.pre: $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
+	@rm -f dl02.pre
+	$(LINK_APP)
 
 dl-sym.o: dl02.pre
 	rtems-syms -e -c "$(CFLAGS)" -o $@ $<

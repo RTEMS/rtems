@@ -7,5 +7,5 @@ _SUBDIRS += tmtimer01
 _SUBDIRS += tmcontext01
 _SUBDIRS += tmfine01
 
-include $(top_srcdir)/../automake/test-subdirs.am
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

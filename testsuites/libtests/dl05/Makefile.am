@@ -29,15 +29,10 @@ dl-tar.h: dl.tar
 	$(BIN2C) -H $< $@
 CLEANFILES += dl-tar.h
 
-dl05.pre$(EXEEXT): $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
-	@rm -f dl05.pre$(EXEEXT)
+dl05.pre: $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
+	@rm -f dl05.pre
 	$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) \
-		    -o $(basename $@)$(EXEEXT) $(LINK_OBJS) $(LINK_LIBS)
-	rm -f dl05.pre.ralf
-
-dl05.pre: dl05.pre$(EXEEXT)
-	mv $< $@
-CLEANFILES += dl05.pre
+		    -o $@ $(LINK_OBJS) $(LINK_LIBS)
 
 dl-sym.o: dl05.pre
 	rtems-syms -e -c "$(CFLAGS)" -o $@ $<

@@ -22,8 +22,8 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+dhrystone/Makefile
 linpack/Makefile
 whetstone/Makefile
-dhrystone/Makefile
 ])
 AC_OUTPUT

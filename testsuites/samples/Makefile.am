@@ -1,18 +1,24 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-_SUBDIRS = hello capture ticker base_sp unlimited minimum fileio
+_SUBDIRS  =
+_SUBDIRS += base_sp
+_SUBDIRS += capture
+_SUBDIRS += fileio
+_SUBDIRS += hello
+_SUBDIRS += minimum
+_SUBDIRS += nsecs
+_SUBDIRS += paranoia
+_SUBDIRS += ticker
+_SUBDIRS += unlimited
 
 if MPTESTS
 ## base_mp is a sample multiprocessing test
 _SUBDIRS += base_mp
 endif
 
-_SUBDIRS += paranoia
-
-_SUBDIRS += nsecs
-
 if CXXTESTS
-_SUBDIRS += iostream cdtest
+_SUBDIRS += cdtest
+_SUBDIRS += iostream
 endif
 
 if NETTESTS
@@ -24,5 +30,5 @@ _SUBDIRS += pppd
 endif
 endif
 
-include $(top_srcdir)/../automake/test-subdirs.am
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

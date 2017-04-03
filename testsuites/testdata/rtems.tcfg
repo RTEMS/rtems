@@ -1,0 +1,28 @@
+#
+# RTEMS Test Database common defines
+#
+# Format is one line per test with a directive. The directives are:
+#
+#       include: Include the test configuration file after this file
+#                has been processed.
+#       exclude: Exclude the test from being build and so run.
+#    user-input: The test requires user input to work.
+# indeterminate: The test result cannot be determined, it may pass or
+#                it may not pass.
+#
+
+#
+# User input tests.
+#
+user-input: capture
+user-input: fileio
+user-input: monitor
+user-input: termios
+user-input: top
+
+#
+# Benchmarks
+#
+benchmark: dhrystone
+benchmark: linpack
+benchmark: whetstone

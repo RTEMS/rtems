@@ -1,42 +1,85 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-_SUBDIRS = POSIX
-_SUBDIRS += termios09
-_SUBDIRS += libfdt01
-_SUBDIRS += defaultconfig01
-_SUBDIRS += pwdgrp02
-_SUBDIRS += shell01
-_SUBDIRS += pwdgrp01
-_SUBDIRS += crypt01
-_SUBDIRS += sha
-_SUBDIRS += i2c01
-_SUBDIRS += spi01
-_SUBDIRS += newlib01
-_SUBDIRS += block17
-_SUBDIRS += exit02
-_SUBDIRS += exit01
-_SUBDIRS += utf8proc01
-_SUBDIRS += md501
-_SUBDIRS += sparsedisk01
-_SUBDIRS += block16
-_SUBDIRS += block15
-_SUBDIRS += block14
+_SUBDIRS  =
+_SUBDIRS += POSIX
+_SUBDIRS += block01
+_SUBDIRS += block02
+_SUBDIRS += block03
+_SUBDIRS += block04
+_SUBDIRS += block05
+_SUBDIRS += block06
+_SUBDIRS += block07
+_SUBDIRS += block08
+_SUBDIRS += block09
+_SUBDIRS += block10
+_SUBDIRS += block11
+_SUBDIRS += block12
 _SUBDIRS += block13
-_SUBDIRS += rbheap01
-_SUBDIRS += flashdisk01
+_SUBDIRS += block14
+_SUBDIRS += block15
+_SUBDIRS += block16
+_SUBDIRS += block17
+_SUBDIRS += bspcmdline01
 _SUBDIRS += capture01
-
-_SUBDIRS += bspcmdline01 cpuuse devfs01 devfs02 devfs03 devfs04 \
-    deviceio01 devnullfatal01 dumpbuf01 gxx01 top\
-    malloctest malloc02 malloc03 malloc04 heapwalk \
-    putenvtest monitor monitor02 rtmonuse stackchk stackchk01 \
-    termios termios01 termios02 termios03 termios04 termios05 \
-    termios06 termios07 termios08 \
-    tztest block01 block02 block03 block04 block05 block06 block07 \
-    block08 block09 block10 block11 block12 stringto01 \
-    tar01 tar02 tar03 \
-    math mathf mathl complex \
-    mouse01 uid01
+_SUBDIRS += complex
+_SUBDIRS += cpuuse
+_SUBDIRS += crypt01
+_SUBDIRS += defaultconfig01
+_SUBDIRS += devfs01
+_SUBDIRS += devfs02
+_SUBDIRS += devfs03
+_SUBDIRS += devfs04
+_SUBDIRS += deviceio01
+_SUBDIRS += devnullfatal01
+_SUBDIRS += dumpbuf01
+_SUBDIRS += exit01
+_SUBDIRS += exit02
+_SUBDIRS += flashdisk01
+_SUBDIRS += gxx01
+_SUBDIRS += heapwalk
+_SUBDIRS += i2c01
+_SUBDIRS += libfdt01
+_SUBDIRS += malloc02
+_SUBDIRS += malloc03
+_SUBDIRS += malloc04
+_SUBDIRS += malloctest
+_SUBDIRS += math
+_SUBDIRS += mathf
+_SUBDIRS += mathl
+_SUBDIRS += md501
+_SUBDIRS += monitor
+_SUBDIRS += monitor02
+_SUBDIRS += mouse01
+_SUBDIRS += newlib01
+_SUBDIRS += putenvtest
+_SUBDIRS += pwdgrp01
+_SUBDIRS += pwdgrp02
+_SUBDIRS += rbheap01
+_SUBDIRS += rtmonuse
+_SUBDIRS += sha
+_SUBDIRS += shell01
+_SUBDIRS += sparsedisk01
+_SUBDIRS += spi01
+_SUBDIRS += stackchk
+_SUBDIRS += stackchk01
+_SUBDIRS += stringto01
+_SUBDIRS += tar01
+_SUBDIRS += tar02
+_SUBDIRS += tar03
+_SUBDIRS += termios
+_SUBDIRS += termios01
+_SUBDIRS += termios02
+_SUBDIRS += termios03
+_SUBDIRS += termios04
+_SUBDIRS += termios05
+_SUBDIRS += termios06
+_SUBDIRS += termios07
+_SUBDIRS += termios08
+_SUBDIRS += termios09
+_SUBDIRS += top
+_SUBDIRS += tztest
+_SUBDIRS += uid01
+_SUBDIRS += utf8proc01
 
 if NETTESTS
 if HAS_POSIX
@@ -47,6 +90,10 @@ _SUBDIRS += networking01
 _SUBDIRS += syscall01
 endif
 
+##
+## The libdl use use AM's BUILT_SOURCE and this has a weird side effect of
+## restarting the subdir loop. No idea why.
+##
 if DLTESTS
 _SUBDIRS += dl01 dl02 dl03
 if HAS_CXX
@@ -58,5 +105,5 @@ if DEBUGGERTESTS
 _SUBDIRS += debugger01
 endif
 
-include $(top_srcdir)/../automake/test-subdirs.am
+include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

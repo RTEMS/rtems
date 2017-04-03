@@ -53,9 +53,6 @@ AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
-smpmutex02/Makefile
-smppsxmutex01/Makefile
-smpstrongapa01/Makefile
 smp01/Makefile
 smp02/Makefile
 smp03/Makefile
@@ -83,20 +80,23 @@ smpmigration01/Makefile
 smpmigration02/Makefile
 smpmrsp01/Makefile
 smpmutex01/Makefile
+smpmutex02/Makefile
 smppsxaffinity01/Makefile
 smppsxaffinity02/Makefile
+smppsxmutex01/Makefile
 smppsxsignal01/Makefile
 smpschedaffinity01/Makefile
 smpschedaffinity02/Makefile
 smpschedaffinity03/Makefile
 smpschedaffinity04/Makefile
 smpschedaffinity05/Makefile
+smpschedsem01/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile
 smpscheduler03/Makefile
 smpscheduler04/Makefile
-smpschedsem01/Makefile
 smpsignal01/Makefile
+smpstrongapa01/Makefile
 smpswitchextension01/Makefile
 smpthreadlife01/Makefile
 smpunsupported01/Makefile
