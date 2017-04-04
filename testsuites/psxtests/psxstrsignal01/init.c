@@ -57,6 +57,10 @@ Signals_t Signals[] = {
   { NULL,       -1 },
 };
 
+void do_test(void);
+void do_test_rt(void);
+void *POSIX_Init(void *unused);
+
 void do_test(void)
 {
   int i;
