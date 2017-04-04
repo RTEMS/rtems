@@ -114,12 +114,12 @@ static void _dbug_dump(
 {
   int i;
 
-  printk(0,"%x : %x \t%x",0,sr,(unsigned short)(((unsigned)pc)>>16));
+  printk("%x : %x \t%x",0,sr,(unsigned short)(((unsigned)pc)>>16));
   for (i=2; i<size; i++) {
-    if ((i%8)==0) printk(0,"\n%x :",i/8);
-    printk(0," %x\t",stack[i-2]);
+    if ((i%8)==0) printk("\n%x :",i/8);
+    printk(" %x\t",stack[i-2]);
   }
-  printk(0,"\n");
+  printk("\n");
 }
 
 /******************************************************
@@ -146,45 +146,45 @@ void _dbug_dumpanic(void)
     vector = (_boot_panic_registers.format_id&0x0FFF)>>2;
     frametype = (_boot_panic_registers.format_id&0xF000)>>12;
 
-    printk(0,"\n---------------------------------------------\n");
+    printk("\n---------------------------------------------\n");
     if (vector<64)
-      printk(0,"%s",exceptionName[vector]);
+      printk("%s",exceptionName[vector]);
     else {
-      printk(0,"RESERVED USER");
+      printk("RESERVED USER");
     }
-    printk(0," exception (vector %x, type %x)\n",vector,frametype);
-    printk(0,"---------------------------------------------\n");
-    printk(0,"PC : 0x%x  ",pc);
-    printk(0,"A7 : 0x%x  ",_boot_panic_registers.a7);
-    printk(0,"SR : 0x%x\n",status);
+    printk(" exception (vector %x, type %x)\n",vector,frametype);
+    printk("---------------------------------------------\n");
+    printk("PC : 0x%x  ",pc);
+    printk("A7 : 0x%x  ",_boot_panic_registers.a7);
+    printk("SR : 0x%x\n",status);
     if (frametype==0x0c) {
-      printk(0,"\nfaulted address = 0x%x\n",faultedAddr);
+      printk("\nfaulted address = 0x%x\n",faultedAddr);
     }
-    printk(0,"---------------------------------------------\n");
-    printk(0,"               panic regs\n");
-    printk(0,"---------------------------------------------\n");
-    printk(0,"D[0..3] : %x \t%x \t%x \t%x\n",
+    printk("---------------------------------------------\n");
+    printk("               panic regs\n");
+    printk("---------------------------------------------\n");
+    printk("D[0..3] : %x \t%x \t%x \t%x\n",
         _boot_panic_registers.d0,_boot_panic_registers.d1,
         _boot_panic_registers.d2,_boot_panic_registers.d3);
-    printk(0,"D[4..7] : %x \t%x \t%x \t%x\n",
+    printk("D[4..7] : %x \t%x \t%x \t%x\n",
         _boot_panic_registers.d4,_boot_panic_registers.d5,
         _boot_panic_registers.d6,_boot_panic_registers.d7);
-    printk(0,"A[0..3] : %x \t%x \t%x \t%x\n",
+    printk("A[0..3] : %x \t%x \t%x \t%x\n",
         _boot_panic_registers.a0,_boot_panic_registers.a1,
         _boot_panic_registers.a2,_boot_panic_registers.a3);
-    printk(0,"A[4..7] : %x \t%x \t%x \t%x\n",
+    printk("A[4..7] : %x \t%x \t%x \t%x\n",
         _boot_panic_registers.a4,_boot_panic_registers.a5,
         _boot_panic_registers.a6,_boot_panic_registers.a7);
 
-    printk(0,"    SFC : %x",_boot_panic_registers.sfc);
-    printk(0,"    DFC : %x\n",_boot_panic_registers.dfc);
-    printk(0,"    VBR : %x\n",_boot_panic_registers.vbr);
-    printk(0,"---------------------------------------------\n");
-    printk(0,"               panic stack\n");
-    printk(0,"---------------------------------------------\n");
+    printk("    SFC : %x",_boot_panic_registers.sfc);
+    printk("    DFC : %x\n",_boot_panic_registers.dfc);
+    printk("    VBR : %x\n",_boot_panic_registers.vbr);
+    printk("---------------------------------------------\n");
+    printk("               panic stack\n");
+    printk("---------------------------------------------\n");
     _dbug_dump(status, pc, (unsigned short*)stack,64*2);
 
-    printk(0,"---------------------------------------------\n");
-    printk(0,"press escape to reboot\n");
+    printk("---------------------------------------------\n");
+    printk("press escape to reboot\n");
   } while ((c=getchark())!=ESCAPE);
 }
