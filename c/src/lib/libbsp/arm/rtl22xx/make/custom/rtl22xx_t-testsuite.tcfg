@@ -5,3 +5,4 @@
 #
 
 exclude: fsdosfsname01
+exclude: linpack

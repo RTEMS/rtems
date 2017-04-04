@@ -6,6 +6,7 @@
 
 exclude: fileio
 exclude: fsdosfsname01
+exclude: linpack
 exclude: iostream
 exclude: rtems++
 exclude: utf8proc01
