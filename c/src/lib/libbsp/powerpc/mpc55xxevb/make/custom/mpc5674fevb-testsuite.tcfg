@@ -3,3 +3,5 @@
 #
 
 include: testdata/dltests-broken-on-this-bsp.tcfg
+
+exclude: linpack

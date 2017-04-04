@@ -15,3 +15,4 @@ exclude: jffs2_fsrdwr
 exclude: jffs2_fsscandir01
 exclude: jffs2_fssymlink
 exclude: jffs2_fstime
+exclude: linpack
