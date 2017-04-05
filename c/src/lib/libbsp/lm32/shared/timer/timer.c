@@ -23,6 +23,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <rtems/btimer.h>
+#include <rtems/bspIo.h>
 #include "../include/system_conf.h"
 #include "../../shared/clock/clock.h"
 
