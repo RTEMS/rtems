@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -16,9 +16,10 @@
   #include "config.h"
 #endif
 
+#include <inttypes.h>
+#include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/counter.h>
@@ -42,6 +43,10 @@ const char rtems_test_name[] = "SPCACHE 1";
 #define I512() I64(); I64(); I64(); I64(); I64(); I64(); I64(); I64()
 
 CPU_STRUCTURE_ALIGNMENT static int data[1024];
+
+static bool do_longjmp;
+
+static jmp_buf instruction_invalidate_return_context;
 
 static void test_data_flush_and_invalidate(void)
 {
@@ -179,6 +184,7 @@ static void test_timing(void)
   uint64_t d[3];
   uint32_t cache_level;
   size_t cache_size;
+  bool exception;
 
   rtems_interrupt_lock_initialize(&lock, "test");
 
@@ -363,7 +369,18 @@ static void test_timing(void)
 
   d[0] = do_some_work();
   d[1] = do_some_work();
-  rtems_cache_invalidate_multiple_instruction_lines(do_some_work, 4096);
+
+  do_longjmp = true;
+
+  if (setjmp(instruction_invalidate_return_context) == 0) {
+    rtems_cache_invalidate_multiple_instruction_lines(do_some_work, 4096);
+    exception = false;
+  } else {
+    exception = true;
+  }
+
+  do_longjmp = false;
+
   d[2] = do_some_work();
 
   rtems_interrupt_lock_release(&lock, &lock_context);
@@ -377,6 +394,12 @@ static void test_timing(void)
     d[1],
     d[2]
   );
+
+  if (exception) {
+    printf(
+      "rtems_cache_invalidate_multiple_data_lines() generated an exception\n"
+    );
+  }
 
   rtems_interrupt_lock_destroy(&lock);
 }
@@ -469,12 +492,26 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
+static void fatal_extension(
+  rtems_fatal_source source,
+  bool always_set_to_false,
+  rtems_fatal_code error
+)
+{
+  if (source == RTEMS_FATAL_SOURCE_EXCEPTION && do_longjmp) {
+    _ISR_Set_level(0);
+    longjmp(instruction_invalidate_return_context, 1);
+  }
+}
+
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
