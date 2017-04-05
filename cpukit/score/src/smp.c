@@ -225,16 +225,15 @@ void _SMP_Send_message_broadcast( unsigned long message )
 }
 
 void _SMP_Send_message_multicast(
-    const size_t setsize,
-    const cpu_set_t *cpus,
-    unsigned long message
+  const Processor_mask targets,
+  unsigned long        message
 )
 {
   uint32_t cpu_count = _SMP_Get_processor_count();
   uint32_t cpu_index;
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-    if ( CPU_ISSET_S( cpu_index, setsize, cpus ) ) {
+    if ( _Processor_mask_Is_set( targets, cpu_index ) ) {
       _SMP_Send_message( cpu_index, message );
     }
   }

@@ -62,6 +62,37 @@ extern "C" {
  */
 typedef uint32_t Processor_mask[ PROCESSOR_MASK_FIELD_COUNT ];
 
+RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask mask )
+{
+  size_t i;
+
+  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
+    mask[ i ] = 0;
+  }
+}
+
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask mask )
+{
+  size_t i;
+
+  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
+    if ( mask[ i ] != 0 ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+RTEMS_INLINE_ROUTINE void _Processor_mask_Assign( Processor_mask dst, const Processor_mask src )
+{
+  size_t i;
+
+  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
+    dst[ i ] = src[ i ];
+  }
+}
+
 RTEMS_INLINE_ROUTINE void _Processor_mask_Set( Processor_mask mask, uint32_t index )
 {
   mask[ PROCESSOR_MASK_FIELD( index ) ] |= PROCESSOR_MASK_BIT( index );

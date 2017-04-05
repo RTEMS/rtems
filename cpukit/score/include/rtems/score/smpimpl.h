@@ -237,14 +237,12 @@ void _SMP_Send_message_broadcast(
  *
  *  The sending processor may be part of the set.
  *
- *  @param[in] setsize The size of the set of target processors of the message.
- *  @param[in] cpus The set of target processors of the message.
+ *  @param[in] targets The set of processors to send the message.
  *  @param[in] message The message.
  */
 void _SMP_Send_message_multicast(
-  const size_t setsize,
-  const cpu_set_t *cpus,
-  unsigned long message
+  const Processor_mask targets,
+  unsigned long        message
 );
 
 typedef void ( *SMP_Action_handler )( void *arg );
