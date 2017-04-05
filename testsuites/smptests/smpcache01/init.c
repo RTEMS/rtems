@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2014 Aeroflex Gaisler AB.  All rights reserved.
+ * Copyright (c) 2017 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -15,6 +16,7 @@
 #include <rtems/score/smpimpl.h>
 #include <rtems.h>
 #include <limits.h>
+#include <setjmp.h>
 #include <string.h>
 
 #include "tmacros.h"
@@ -30,6 +32,8 @@ CPU_STRUCTURE_ALIGNMENT static int data_to_flush[1024];
 typedef struct {
   SMP_barrier_Control barrier;
   uint32_t count[CPU_COUNT];
+  bool do_longjmp[CPU_COUNT];
+  jmp_buf instruction_invalidate_return_context[CPU_COUNT];
 } test_context;
 
 static test_context ctx = {
@@ -98,25 +102,42 @@ static void test_cache_invalidate_multiple_instruction_lines(
   SMP_barrier_State *bs
 )
 {
-  rtems_cache_invalidate_multiple_instruction_lines( &function_to_flush,
-      4 /* arbitrary size */ );
+  uint32_t self = rtems_get_current_processor();
+
+  ctx.do_longjmp[self] = true;
+
+  if (setjmp(ctx.instruction_invalidate_return_context[self]) == 0) {
+    rtems_cache_invalidate_multiple_instruction_lines( &function_to_flush,
+        4 /* arbitrary size */ );
+  }
+
+  ctx.do_longjmp[self] = false;
 }
 
-static void test_broadcast_action(
+static void barrier( SMP_barrier_State *bs )
+{
+  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
+}
+
+static void broadcast_test_init( void )
+{
+  ctx.count[rtems_get_current_processor()] = 0;
+}
+
+static void broadcast_test_body(
   size_t set_size,
   const cpu_set_t *cpu_set,
   SMP_barrier_State *bs
 )
 {
-  ctx.count[rtems_get_current_processor()] = 0;
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
   _SMP_Multicast_action( set_size, cpu_set, test_action, &ctx );
+}
 
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-
-  rtems_test_assert( ctx.count[rtems_get_current_processor()] ==
-      rtems_get_processor_count() );
+static void broadcast_test_fini( void )
+{
+  rtems_test_assert(
+    ctx.count[rtems_get_current_processor()] == rtems_get_processor_count()
+  );
 }
 
 static test_case test_cases[] = {
@@ -125,29 +146,23 @@ static test_case test_cases[] = {
   test_cache_flush_entire_data,
   test_cache_invalidate_entire_instruction,
   test_cache_invalidate_multiple_instruction_lines,
-  test_broadcast_action
+  broadcast_test_body
 };
-
-static void call_test(
-  size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs,
-  size_t i
-)
-{
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-  ( *test_cases[ i ] )( set_size, cpu_set, bs );
-  _SMP_barrier_Wait( &ctx.barrier, bs, rtems_get_processor_count() );
-}
 
 static void call_tests( size_t set_size,
     const cpu_set_t *cpu_set, SMP_barrier_State *bs  )
 {
   size_t i;
 
+  broadcast_test_init();
+
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
-    call_test( set_size, cpu_set, bs, i );
+    barrier( bs );
+    ( *test_cases[ i ] )( set_size, cpu_set, bs );
+    barrier( bs );
   }
+
+  broadcast_test_fini();
 }
 
 static void call_tests_isr_disabled( size_t set_size,
@@ -155,15 +170,19 @@ static void call_tests_isr_disabled( size_t set_size,
 {
   size_t i;
 
+  broadcast_test_init();
+
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     ISR_Level isr_level;
 
     _ISR_Local_disable( isr_level );
-
-    call_test( set_size, cpu_set, bs, i );
-
+    barrier( bs );
+    ( *test_cases[ i ] )( set_size, cpu_set, bs );
     _ISR_Local_enable( isr_level );
+    barrier( bs );
   }
+
+  broadcast_test_fini();
 }
 
 static void call_tests_with_thread_dispatch_disabled( size_t set_size,
@@ -171,15 +190,19 @@ static void call_tests_with_thread_dispatch_disabled( size_t set_size,
 {
   size_t i;
 
+  broadcast_test_init();
+
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     Per_CPU_Control *cpu_self;
 
     cpu_self = _Thread_Dispatch_disable();
-
-    call_test( set_size, cpu_set, bs, i );
-
+    barrier( bs );
+    ( *test_cases[ i ] )( set_size, cpu_set, bs );
+    barrier( bs );
     _Thread_Dispatch_enable( cpu_self );
   }
+
+  broadcast_test_fini();
 }
 
 static void cmlog(  const char* str )
@@ -265,6 +288,20 @@ static void Init(rtems_task_argument arg)
   rtems_test_exit(0);
 }
 
+static void fatal_extension(
+  rtems_fatal_source source,
+  bool always_set_to_false,
+  rtems_fatal_code error
+)
+{
+  uint32_t self = rtems_get_current_processor();
+
+  if (source == RTEMS_FATAL_SOURCE_EXCEPTION && ctx.do_longjmp[self]) {
+    _ISR_Set_level(0);
+    longjmp(ctx.instruction_invalidate_return_context[self], 1);
+  }
+}
+
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
@@ -274,7 +311,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .fatal = fatal_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
