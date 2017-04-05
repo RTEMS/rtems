@@ -110,13 +110,14 @@ static rtems_status_code pfpu_execute(struct pfpu_td *td)
   if (sc != RTEMS_SUCCESSFUL)
     return sc;
 
-  if (td->update)
+  if (td->update) {
     update_registers(td->registers);
     if (td->invalidate) {
       __asm__ volatile( /* Invalidate Level-1 data cache */
-      "wcsr DCC, r0\n"
-      "nop\n"
-    );
+        "wcsr DCC, r0\n"
+        "nop\n"
+      );
+    }
   }
 
   return RTEMS_SUCCESSFUL;
