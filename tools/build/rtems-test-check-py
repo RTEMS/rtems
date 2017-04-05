@@ -91,7 +91,7 @@ for tc in range(0, len(testconfig)):
         state = ls[0]
         test = ls[1]
         if state == 'include':
-            testconfig.insert(td, test)
+            testconfig.insert(tc, test)
         elif state in states:
             if state not in testdata:
                 testdata[state] = [test]
