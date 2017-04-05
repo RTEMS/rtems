@@ -20,6 +20,7 @@
 #include <bsp/irq-generic.h>
 #include <rtems/libio.h>
 #include <rtems/status-checks.h>
+#include <rtems/bspIo.h>
 #include "../include/system_conf.h"
 #include "milkymist_video.h"
 
