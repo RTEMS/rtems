@@ -22,6 +22,7 @@
 #include <rtems/libio.h>
 #include <rtems/fb.h>
 #include <rtems/framebuffer.h>
+#include <rtems/bspIo.h>
 
 static unsigned short int framebufferA[1024*768]
   __attribute__((aligned(32)));
