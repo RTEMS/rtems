@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <inttypes.h>
 
 #include <rtems/rtl/rtl-allocator.h>
 #include "rtl-obj-cache.h"
@@ -78,11 +79,12 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
   struct stat sb;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-    printf ("rtl: cache: %2d: fd=%d offset=%d length=%d area=[%d,%d] cache=[%d,%d] size=%d\n",
-            fd, cache->fd, (int) offset, (int) *length,
-            (int) offset, (int) offset + *length,
-            (int) cache->offset, (int) cache->offset + cache->level,
-            (int) cache->file_size);
+    printf ("rtl: cache: %2d: fd=%d offset=%" PRIdMAX "length=%zu area=[%"
+            PRIdMAX ",%" PRIdMAX "] cache=[%" PRIdMAX ",%" PRIdMAX "] size=%zu\n",
+            fd, cache->fd, offset, *length,
+            offset, offset + *length,
+            cache->offset, cache->offset + cache->level,
+            cache->file_size);
 
   if (*length > cache->size)
   {
@@ -172,10 +174,11 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
     }
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-      printf ("rtl: cache: %2d: seek: offset=%d buffer_offset=%d read=%d cache=[%d,%d] dist=%d\n",
-              fd, (int) offset + buffer_offset, (int) buffer_offset, (int) buffer_read,
-              (int) offset, (int) offset + buffer_read,
-              (int) (cache->file_size - offset));
+      printf ("rtl: cache: %2d: seek: offset=%" PRIdMAX "buffer_offset=%zu"
+              "read=%zu cache=[%" PRIdMAX ",%" PRIdMAX "] dist=%" PRIdMAX "\n",
+              fd, offset + buffer_offset, buffer_offset, buffer_read,
+              offset, offset + buffer_read,
+              (cache->file_size - offset));
 
     if (lseek (fd, offset + buffer_offset, SEEK_SET) < 0)
     {
