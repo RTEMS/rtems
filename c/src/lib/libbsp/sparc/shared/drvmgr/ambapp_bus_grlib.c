@@ -46,6 +46,12 @@ int ambapp_grlib_int_mask(
 int ambapp_grlib_int_unmask(
 	struct drvmgr_dev *dev,
 	int irq);
+#ifdef RTEMS_SMP
+int ambapp_grlib_int_set_affinity(
+	struct drvmgr_dev *dev,
+	int irq,
+	Processor_mask cpus);
+#endif
 int ambapp_grlib_get_params(
 	struct drvmgr_dev *dev,
 	struct drvmgr_bus_params *params);
@@ -63,6 +69,9 @@ struct ambapp_ops ambapp_grlib_ops = {
 	.int_clear = ambapp_grlib_int_clear,
 	.int_mask = ambapp_grlib_int_mask,
 	.int_unmask = ambapp_grlib_int_unmask,
+#ifdef RTEMS_SMP
+	.int_set_affinity = ambapp_grlib_int_set_affinity,
+#endif
 	.get_params = ambapp_grlib_get_params
 };
 
@@ -218,6 +227,36 @@ int ambapp_grlib_int_unmask
 	BSP_shared_interrupt_unmask(irq);
 	return DRVMGR_OK;
 }
+
+#ifdef RTEMS_SMP
+int ambapp_grlib_int_set_affinity
+	(
+	struct drvmgr_dev *dev,
+	int irq,
+	Processor_mask cpus
+	)
+{
+	uint32_t cpu_count = rtems_get_processor_count();
+	uint32_t cpu_index;
+	int enabled_cnt = 0;
+
+	for (cpu_index = 0; cpu_index < cpu_count; cpu_index++) {
+		if (_Processor_mask_Is_set(cpus, cpu_index)) {
+			BSP_Cpu_Unmask_interrupt(irq, cpu_index);
+			enabled_cnt++;
+		}
+	}
+
+	/* Propagate the interrupt to all CPUs */
+	if (enabled_cnt > 1) {
+		LEON_Enable_interrupt_broadcast(irq);
+	} else {
+		LEON_Disable_interrupt_broadcast(irq);
+	}
+
+	return DRVMGR_OK;
+}
+#endif
 
 int ambapp_grlib_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
 {

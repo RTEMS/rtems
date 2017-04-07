@@ -55,6 +55,13 @@ int ambapp_bus_freq_get(
 	unsigned int *freq_hz);
 void ambapp_dev_info(struct drvmgr_dev *, void (*print)(void *p, char *str), void *p);
 
+#ifdef RTEMS_SMP
+int ambapp_int_set_affinity(
+	struct drvmgr_dev *dev,
+	int index,
+	Processor_mask cpus);
+#endif
+
 struct drvmgr_bus_ops ambapp_bus_ops =
 {
 	.init		= 
@@ -70,6 +77,9 @@ struct drvmgr_bus_ops ambapp_bus_ops =
 	.int_unregister	= ambapp_int_unregister,
 	.int_clear	= ambapp_int_clear,
 	.int_mask	= ambapp_int_mask,
+#ifdef RTEMS_SMP
+	.int_set_affinity = ambapp_int_set_affinity,
+#endif
 	.int_unmask	= ambapp_int_unmask,
 	.get_params	= ambapp_get_params,
 	.get_freq	= ambapp_bus_freq_get,
@@ -782,3 +792,31 @@ int ambapp_bus_remove(struct drvmgr_bus *bus)
 {
 	return DRVMGR_OK;
 }
+
+#ifdef RTEMS_SMP
+int ambapp_int_set_affinity(
+	struct drvmgr_dev *dev,
+	int index,
+	Processor_mask cpus)
+{
+	struct ambapp_priv *priv;
+	int irq;
+
+	priv = dev->parent->priv;
+
+	/* Get IRQ number from index and device information */
+	irq = ambapp_int_get(dev, index);
+	if (irq < 0)
+		return DRVMGR_EINVAL;
+
+	DBG("Set interrupt affinity on 0x%x for dev 0x%x (IRQ: %d)\n",
+		(unsigned int)dev->parent->dev, (unsigned int)dev, irq);
+
+	if (priv->config->ops->int_set_affinity) {
+		/* Let device override driver default */
+		return priv->config->ops->int_set_affinity(dev, irq, cpus);
+	} else {
+		return DRVMGR_ENOSYS;
+	}
+}
+#endif
