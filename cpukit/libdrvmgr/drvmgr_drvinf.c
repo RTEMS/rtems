@@ -138,6 +138,19 @@ int drvmgr_interrupt_mask(
 	return dev->parent->ops->int_mask(dev, index);
 }
 
+#ifdef RTEMS_SMP
+int drvmgr_interrupt_set_affinity(
+	struct drvmgr_dev *dev,
+	int index,
+	Processor_mask cpus)
+{
+	if (!dev || !dev->parent || !dev->parent->ops->int_set_affinity)
+		return -1;
+
+	return dev->parent->ops->int_set_affinity(dev, index, cpus);
+}
+#endif
+
 int drvmgr_on_rootbus(struct drvmgr_dev *dev)
 {
 	if (dev->parent && dev->parent->dev && dev->parent->dev->parent)

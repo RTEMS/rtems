@@ -14,6 +14,7 @@
 #include <drvmgr/drvmgr_list.h>
 #include <stdint.h>
 #include <rtems/score/basedefs.h>
+#include <rtems/score/smpimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -137,6 +138,10 @@ struct drvmgr_bus_ops {
 	int	(*int_clear)(struct drvmgr_dev *, int index);
 	int	(*int_mask)(struct drvmgr_dev *, int index);
 	int	(*int_unmask)(struct drvmgr_dev *, int index);
+#ifdef RTEMS_SMP
+	int	(*int_set_affinity)(struct drvmgr_dev *, int index,
+				    Processor_mask cpus);
+#endif
 
 	/* Get Parameters */
 	int	(*get_params)(struct drvmgr_dev *, struct drvmgr_bus_params *);
@@ -627,6 +632,21 @@ extern int drvmgr_interrupt_unmask(
 extern int drvmgr_interrupt_mask(
 	struct drvmgr_dev *dev,
 	int index);
+
+/*! Force masking/disable an interrupt on the interrupt controller, this is not normally performed
+ *  since this will stop all other (shared) ISRs to be disabled until _unmask() is called.
+ *
+ *  \param dev        Device to mask interrupt for.
+ *  \param index      Index is used to identify the IRQ number if hardware has multiple IRQ sources.
+ *                    Normally Index is set to 0 to indicated the first and only IRQ source.
+ *                    A negative index is interpreted as a absolute bus IRQ number.
+ */
+#ifdef RTEMS_SMP
+extern int drvmgr_interrupt_set_affinity(
+	struct drvmgr_dev *dev,
+	int index,
+	Processor_mask cpus);
+#endif
 
 /*! drvmgr_translate() translation options */
 enum drvmgr_tr_opts {
