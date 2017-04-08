@@ -104,7 +104,8 @@ void _CPU_Initialize(void)
   uint32_t cr4;
     __asm__ __volatile__("mov %%cr4, %0":"=r"(cr4));
     if ( 0x600 != (cr4 & 0x600) ) {
-      printk("PANIC: RTEMS was compiled for SSE but BSP did not enable it (CR4: 0x%08x)\n", cr4);
+      printk("PANIC: RTEMS was compiled for SSE but BSP did not enable it"
+             "(CR4: 0%" PRIu32 ")\n", cr4);
       while ( 1 ) {
         __asm__ __volatile__("hlt");
 	  }
