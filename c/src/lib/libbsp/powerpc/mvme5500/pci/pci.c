@@ -33,6 +33,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 
 #define PCI_DEBUG 0
 #define PCI_PRINT 1
@@ -294,7 +295,7 @@ int pci_initialize(void)
 	  break;
        default :
 #if PCI_PRINT
-          printk("BSP unlisted vendor, Bus%d Slot%d DeviceID 0x%x \n",
+          printk("BSP unlisted vendor, Bus%d Slot%d DeviceID 0x%" PRIx32 "\n",
              ucBusNumber,ucSlotNumber, ulDeviceID);
 #endif
 	  /* Kate Feng : device not supported by BSP needs to remap the IRQ line on mvme5500/mvme6100 */
