@@ -40,6 +40,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <inttypes.h>
 
 #include <boot/main.h>
 #include <boot/balloc.h>
@@ -313,7 +314,7 @@ void bootstrap(void)
 		}
 	}
 	
-  printk("\nMemory statistics (total %d MB, starting at %x)\n",
+  printk("\nMemory statistics (total %d MB, starting at %" PRIxPTR ")\n",
 	    bootinfo.memmap.total >> 20, bootinfo.physmem_start);
 	printk(" %x: kernel entry point\n", KERNEL_VIRTUAL_ADDRESS);
 	printk(" %x: boot info structure\n", &bootinfo);
