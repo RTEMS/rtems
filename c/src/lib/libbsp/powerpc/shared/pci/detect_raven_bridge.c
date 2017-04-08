@@ -1,5 +1,6 @@
 #include <libcpu/io.h>
 #include <libcpu/spr.h>
+#include <inttypes.h>
 
 #include <bsp.h>
 #include <bsp/pci.h>
@@ -149,7 +150,7 @@ void detect_host_bridge(void)
   }
   pci_read_config_dword(0, 0, 0, 0, &id0);
 #ifdef SHOW_RAVEN_SETTINGS
-  printk("idreg 0 = 0x%x\n",id0);
+  printk("idreg 0 = 0x%" PRIu32 "\n",id0);
 #endif
   if((id0 == PCI_VENDOR_ID_MOTOROLA +
       (PCI_DEVICE_ID_MOTOROLA_RAVEN<<16)) ||
