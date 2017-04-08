@@ -9,6 +9,7 @@
 #include <bsp.h>
 #include <libcpu/powerpc-utility.h>
 #include "mmu_405.h"
+#include <inttypes.h>
 
 /* #define qLogTLB */
 /* #define qLogTLBDetails */
@@ -139,10 +140,13 @@ MakeTLBEntries(uint32_t startAt, uint32_t nBytes, bool EX, bool WR, bool I, uint
       mmu_set_processID(oldpid);
       
       if (tdex != index) {
-        printk(" Add TLB %d: At %X for $%X sizecode %d tagWord $%X  ",index, startAt, mask+1,sizeCode,tagWord);
+        printk(" Add TLB %d: At %" PRIx32 " for $%" PRIx32
+               " sizecode %d tagWord $%" PRIx32 "  ",
+               index, startAt, mask+1,sizeCode,tagWord);
         printk(" -- find failed, %d/%d!\n",tdex,index);
         MMU_GetTLBEntry(index, &tagWord, &dataWord, &pid);
-        printk(" -- reads back $%X : $%X, PID %d\n",tagWord,dataWord,pid);
+        printk(" -- reads back $%" PRIx32 " : $%" PRIx32
+               ", PID %d\n",tagWord,dataWord,pid);
       } else {
         #ifdef qLogTLBDetails
         printk(" Add TLB %d: At %X for $%X sizecode %d tagWord $%X\n",index, startAt, mask+1,sizeCode,tagWord);
@@ -267,19 +271,23 @@ int DataMissException(BSP_Exception_frame *f, unsigned int vector)
   
   addr = PPC_SPECIAL_PURPOSE_REGISTER(SPR_DEAR);
   excSyn  = PPC_SPECIAL_PURPOSE_REGISTER(SPR_ESR);
-  if (excSyn & kESR_DST) printk("\n---Data write to $%X attempted at $%X\n",addr,f->EXC_SRR0);
-            else printk("\n---Data read from $%X attempted at $%X\n",addr,f->EXC_SRR0);
+  if (excSyn & kESR_DST) printk("\n---Data write to $%" PRIx32
+      " attempted at $%" PRIx32 "\n",addr,f->EXC_SRR0);
+            else printk("\n---Data read from $%" PRIx32 " attempted at $%"
+                        PRIx32 "\n",addr,f->EXC_SRR0);
   return -1;
 }
 
 int InstructionMissException(BSP_Exception_frame *f, unsigned int vector)
 {
-  printk("\n---Instruction fetch attempted from $%X, no TLB exists\n",f->EXC_SRR0);
+  printk("\n---Instruction fetch attempted from $%" PRIx32 ", no TLB exists\n",
+         f->EXC_SRR0);
   return -1;
 }
 
 int InstructionFetchException(BSP_Exception_frame *f, unsigned int vector)
 {
-  printk("\n---Instruction fetch attempted from $%X, TLB is no-execute\n",f->EXC_SRR0);
+  printk("\n---Instruction fetch attempted from $%" PRIx32
+         ", TLB is no-execute\n",f->EXC_SRR0);
   return -1;
 }
