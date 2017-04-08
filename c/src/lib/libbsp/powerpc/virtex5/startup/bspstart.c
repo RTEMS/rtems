@@ -69,6 +69,7 @@
 
 #include <string.h>
 #include <fcntl.h>
+#include <inttypes.h>
 
 #define DO_DOWN_ALIGN(x,a) ((x) & ~((a)-1))
 
@@ -227,20 +228,20 @@ void bsp_start(void)
 
   /* Let the user know what parameters we were compiled with */
   printk("                  Base/Start     End         Size\n"
-         "RAM:              0x%08x              0x%x\n"
-         "RTEMS:                        0x%08x\n"
+         "RAM:              %p                    %p\n"
+         "RTEMS:                           %p\n"
          "Interrupt Stack:  0x%08x              0x%x\n"
-         "Stack:            0x%08x  0x%08x  0x%x\n"
-         "Workspace:        0x%08x  0x%08x\n"
-         "MsgArea:          0x%08x              0x%x\n"
-         "Physical RAM                  0x%08x\n",
-         (uint32_t)RamBase,                               (uint32_t)RamSize,
-         (uint32_t)__rtems_end,
-         intrStackStart,                                  intrStackSize,
-         (uint32_t)__stack_base, (uint32_t)_stack,        (uint32_t)StackSize,
-         (uint32_t)WorkAreaBase, (uint32_t)__bsp_ram_end,
-         (uint32_t)MsgAreaBase,                           (uint32_t)MsgAreaSize,
-         (uint32_t)__phy_ram_end);
+         "Stack:            %p             %p          %p\n"
+         "Workspace:        %p             %p\n"
+         "MsgArea:          %p             %p\n"
+         "Physical RAM                     %p\n",
+         RamBase,        RamSize,
+         __rtems_end,
+         intrStackStart,                intrStackSize,
+         __stack_base,   _stack,        StackSize,
+         WorkAreaBase,   __bsp_ram_end,
+         MsgAreaBase,    MsgAreaSize,
+         __phy_ram_end);
 
   /*
    * Initialize RTEMS IRQ system
