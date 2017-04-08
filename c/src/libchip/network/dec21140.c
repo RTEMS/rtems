@@ -36,6 +36,7 @@
  */
 
 #include <rtems.h>
+#include <inttypes.h>
 
 /*
  *  This driver only supports architectures with the new style
@@ -1020,7 +1021,8 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 #ifdef DEC_DEBUG
-   printk("dec2114x : unit %d base address %08x.\n", unitNumber, sc->base );
+   printk("dec2114x : unit %d base address %" PRIu32PTR ".\n", unitNumber,
+          sc->base );
 #endif
 
 
