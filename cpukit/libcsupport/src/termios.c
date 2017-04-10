@@ -578,9 +578,12 @@ rtems_termios_open_tty(
      */
     tty->termios.c_iflag = BRKINT | ICRNL | IXON | IMAXBEL;
     tty->termios.c_oflag = OPOST | ONLCR | XTABS;
-    tty->termios.c_cflag = B9600 | CS8 | CREAD | CLOCAL;
+    tty->termios.c_cflag = CS8 | CREAD | CLOCAL;
     tty->termios.c_lflag =
        ISIG | ICANON | IEXTEN | ECHO | ECHOK | ECHOE | ECHOCTL;
+
+    tty->termios.c_ispeed = B9600;
+    tty->termios.c_ospeed = B9600;
 
     tty->termios.c_cc[VINTR] = '\003';
     tty->termios.c_cc[VQUIT] = '\034';
