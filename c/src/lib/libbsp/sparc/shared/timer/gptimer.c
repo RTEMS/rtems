@@ -93,6 +93,7 @@ struct gptimer_priv {
 	struct gptimer_regs *regs;
 	unsigned int base_clk;
 	unsigned int base_freq;
+	unsigned int widthmask;
 	char separate_interrupt;
 	char isr_installed;
 
@@ -264,6 +265,10 @@ int gptimer_init1(struct drvmgr_dev *dev)
 		irq_ack_mask = ~GPTIMER_CTRL_IP;
 	else
 		irq_ack_mask = ~0;
+
+	/* Probe timer register width mask */
+	priv->regs->timer[timer_start].value = 0xffffffff;
+	priv->widthmask = priv->regs->timer[timer_start].value;
 
 	priv->timer_cnt = timer_cnt;
 	for (i=0; i<timer_cnt; i++) {
@@ -493,6 +498,16 @@ static void gptimer_tlib_get_counter(
 	*counter = timer->tregs->value;
 }
 
+static void gptimer_tlib_get_widthmask(
+	struct tlib_dev *hand,
+	unsigned int *widthmask)
+{
+	struct gptimer_timer *timer = (struct gptimer_timer *)hand;
+	struct gptimer_priv *priv = priv_from_timer(timer);
+
+	*widthmask = priv->widthmask;
+}
+
 static struct tlib_drv gptimer_tlib_drv =
 {
 	.reset = gptimer_tlib_reset,
@@ -506,4 +521,5 @@ static struct tlib_drv gptimer_tlib_drv =
 	.get_counter = gptimer_tlib_get_counter,
 	.custom = NULL,
 	.int_pend = gptimer_tlib_int_pend,
+	.get_widthmask = gptimer_tlib_get_widthmask,
 };

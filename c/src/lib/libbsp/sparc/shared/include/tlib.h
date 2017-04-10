@@ -43,6 +43,7 @@ struct tlib_drv {
 	void	(*get_counter)(struct tlib_dev *hand, unsigned int *counter);
 	int	(*custom)(struct tlib_dev *hand, int cmd, void *arg);
 	int	(*int_pend)(struct tlib_dev *hand, int ack);
+	void	(*get_widthmask)(struct tlib_dev *hand, unsigned int *widthmask);
 };
 
 struct tlib_dev {
@@ -181,6 +182,13 @@ static inline int tlib_interrupt_pending(void *hand, int ack)
 	struct tlib_dev *dev = hand;
 
 	return dev->drv->int_pend(dev, ack);
+}
+
+static inline void tlib_get_widthmask(void *hand, unsigned int *widthmask)
+{
+	struct tlib_dev *dev = hand;
+
+	dev->drv->get_widthmask(dev, widthmask);
 }
 
 #ifdef __cplusplus
