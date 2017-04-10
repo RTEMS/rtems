@@ -293,7 +293,7 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 *  B. Each Timer have an individual IRQ. The number is:
 	 *        BASE_IRQ + timer_index
 	 */
-	priv->separate_interrupt = regs->cfg & GPTIMER_CFG_SI;
+	priv->separate_interrupt = (regs->cfg & GPTIMER_CFG_SI) != 0;
 
 	return DRVMGR_OK;
 }
