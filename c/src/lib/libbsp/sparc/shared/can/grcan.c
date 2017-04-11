@@ -492,15 +492,19 @@ static void grcan_hw_stop(struct grcan_priv *pDev)
 
 static void grcan_sw_stop(struct grcan_priv *pDev)
 {
-	/* Reset semaphores to the initial state and wakeing
-	 * all threads waiting for an IRQ. The threads that
-	 * get woken up must check for RTEMS_UNSATISFIED in
+	/*
+	 * Release semaphores to wake all threads waiting for an IRQ.
+	 * The threads that
+	 * get woken up must check started state in
 	 * order to determine that they should return to
 	 * user space with error status.
+	 *
+	 * Entering into started mode again will reset the
+	 * semaphore count.
 	 */
-	rtems_semaphore_flush(pDev->rx_sem);
-	rtems_semaphore_flush(pDev->tx_sem);
-	rtems_semaphore_flush(pDev->txempty_sem);
+	rtems_semaphore_release(pDev->rx_sem);
+	rtems_semaphore_release(pDev->tx_sem);
+	rtems_semaphore_release(pDev->txempty_sem);
 }
 
 static void grcan_hw_config(struct grcan_regs *regs, struct grcan_config *conf)
@@ -962,17 +966,14 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 
 	/* Wait for IRQ to fire only if has been triggered */
 	if (wait) {
-		if (
-			rtems_semaphore_obtain(
-				pDev->rx_sem,
-				RTEMS_WAIT,
-				RTEMS_NO_TIMEOUT
-			) == RTEMS_UNSATISFIED
-		) {
-			DBGC(DBG_STATE, "UNSATISFIED\n");
-			/* Device driver has been closed or stopped, return with error status */
-			return state2err[pDev->started];
-		}
+		rtems_semaphore_obtain(pDev->rx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+		/*
+		 * The semaphore is released either due to the expected IRQ
+		 * condition or by BUSOFF, AHBERROR or another thread calling
+		 * grcan_stop(). In either case, state2err[] has the correnct
+		 * return value.
+		 */
+		return state2err[pDev->started];
 	}
 
 	return 0;
@@ -1054,13 +1055,8 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 
 	/* Wait for IRQ to fire only if it has been triggered */
 	if (wait) {
-		if (rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT) ==
-		    RTEMS_UNSATISFIED) {
-			/* Device driver has flushed us, this may be due to another thread has
-			 * closed the device, this is to avoid deadlock */
-			DBGC(DBG_STATE, "UNSATISFIED\n");
-			return state2err[pDev->started];
-		}
+		rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+		return state2err[pDev->started];
 	}
 
 	/* At this point the TxIRQ has been masked, we ned not to mask it */
@@ -1117,11 +1113,10 @@ static int grcan_tx_flush(struct grcan_priv *pDev)
 			break;
 
 		/* Wait for IRQ to wake us */
-		if (rtems_semaphore_obtain
-		    (pDev->txempty_sem, RTEMS_WAIT,
-		     RTEMS_NO_TIMEOUT) == RTEMS_UNSATISFIED) {
-			DBGC(DBG_STATE, "UNSATISFIED\n");
-			return state2err[pDev->started];
+		rtems_semaphore_obtain(pDev->txempty_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+		state = pDev->started;
+		if (state != STATE_STARTED) {
+			return state2err[state];
 		}
 	}
 	return 0;
@@ -1565,6 +1560,13 @@ int grcan_start(void *d)
 		return -2;
 	}
 
+	/* Clear semaphore state. This is to avoid effects from previous
+	 * bus-off/stop where semahpores where flushed() but the count remained.
+	 */
+	rtems_semaphore_obtain(pDev->rx_sem, RTEMS_NO_WAIT, 0);
+	rtems_semaphore_obtain(pDev->tx_sem, RTEMS_NO_WAIT, 0);
+	rtems_semaphore_obtain(pDev->txempty_sem, RTEMS_NO_WAIT, 0);
+
 	/* Read and write are now open... */
 	pDev->started = STATE_STARTED;
 	DBGC(DBG_STATE, "STOPPED|BUSOFF|AHBERR->STARTED\n");
@@ -1942,7 +1944,7 @@ static void grcan_interrupt(void *arg)
 		 */
 		SPIN_UNLOCK(&pDev->devlock, irqflags);
 
-		/* flush semaphores to wake blocked threads */
+		/* Release semaphores to wake blocked threads. */
 		grcan_sw_stop(pDev);
 
 		/*
