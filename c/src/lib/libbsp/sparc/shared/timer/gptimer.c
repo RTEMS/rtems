@@ -444,7 +444,13 @@ static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *d
 
 #if RTEMS_SMP
 	if (flags & TLIB_FLAGS_BROADCAST) {
-		drvmgr_interrupt_set_affinity(priv->dev, timer->tindex,
+		int tindex = 0;
+
+		if (priv->separate_interrupt) {
+			/* Offset interrupt number with HW subtimer index */
+			tindex = timer->tindex;
+		}
+		drvmgr_interrupt_set_affinity(priv->dev, tindex,
 					      _SMP_Online_processors);
 	}
 #endif
