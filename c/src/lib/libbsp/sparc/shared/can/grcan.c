@@ -488,7 +488,10 @@ static void grcan_hw_stop(struct grcan_priv *pDev)
 	/* Disable receiver & transmitter */
 	pDev->regs->rx0ctrl = 0;
 	pDev->regs->tx0ctrl = 0;
+}
 
+static void grcan_sw_stop(struct grcan_priv *pDev)
+{
 	/* Reset semaphores to the initial state and wakeing
 	 * all threads waiting for an IRQ. The threads that
 	 * get woken up must check for RTEMS_UNSATISFIED in
@@ -1577,6 +1580,7 @@ int grcan_stop(void *d)
 {
 	struct grcan_priv *pDev = d;
 	SPIN_IRQFLAGS(oldLevel);
+	int do_sw_stop;
 
 	FUNCDBG();
 
@@ -1586,6 +1590,7 @@ int grcan_stop(void *d)
 	SPIN_LOCK_IRQ(&pDev->devlock, oldLevel);
 	if (pDev->started == STATE_STARTED) {
 		grcan_hw_stop(pDev);
+		do_sw_stop = 1;
 		DBGC(DBG_STATE, "STARTED->STOPPED\n");
 	} else {
 		/*
@@ -1593,9 +1598,13 @@ int grcan_stop(void *d)
 		 * might already been called from ISR.
 		 */
 		DBGC(DBG_STATE, "[STOPPED|BUSOFF|AHBERR]->STOPPED\n");
+		do_sw_stop = 0;
 	}
 	pDev->started = STATE_STOPPED;
 	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
+
+	if (do_sw_stop)
+		grcan_sw_stop(pDev);
 
 	/* Disable interrupts */
 	drvmgr_interrupt_unregister(pDev->dev, 0, grcan_interrupt, pDev);
@@ -1932,6 +1941,10 @@ static void grcan_interrupt(void *arg)
 		 * again with grcan_start().
 		 */
 		SPIN_UNLOCK(&pDev->devlock, irqflags);
+
+		/* flush semaphores to wake blocked threads */
+		grcan_sw_stop(pDev);
+
 		/*
 		 * NOTE: Another interrupt may be pending now so ISR could be
 		 * executed one more time aftert this (first) return.
