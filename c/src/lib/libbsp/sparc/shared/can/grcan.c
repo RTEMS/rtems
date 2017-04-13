@@ -1051,7 +1051,7 @@ static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 
 	/* Wait for IRQ to fire only if it has been triggered */
 	if (wait) {
-		if (rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, 100) ==
+		if (rtems_semaphore_obtain(pDev->tx_sem, RTEMS_WAIT, RTEMS_NO_TIMEOUT) ==
 		    RTEMS_UNSATISFIED) {
 			/* Device driver has flushed us, this may be due to another thread has
 			 * closed the device, this is to avoid deadlock */
