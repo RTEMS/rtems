@@ -445,15 +445,15 @@ greth_initialize_hardware (struct greth_softc *sc)
             if ((phystatus >> 8) & 1) {
                     sc->phydev.extadv = read_mii(sc, phyaddr, 9);
                     sc->phydev.extpart = read_mii(sc, phyaddr, 10);
-                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000FD) &&
-                            (sc->phydev.extpart & GRETH_MII_EXTPRT_1000FD)) {
-                               sc->gb = 1;
-                               sc->fd = 1;
-                       }
                        if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000HD) &&
                             (sc->phydev.extpart & GRETH_MII_EXTPRT_1000HD)) {
                                sc->gb = 1;
                                sc->fd = 0;
+                       }
+                       if ( (sc->phydev.extadv & GRETH_MII_EXTADV_1000FD) &&
+                            (sc->phydev.extpart & GRETH_MII_EXTPRT_1000FD)) {
+                               sc->gb = 1;
+                               sc->fd = 1;
                        }
             }
             if ((sc->gb == 0) || ((sc->gb == 1) && (sc->gbit_mac == 0))) {
