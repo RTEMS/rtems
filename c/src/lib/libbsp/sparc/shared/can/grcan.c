@@ -979,12 +979,11 @@ static int grcan_wait_rxdata(struct grcan_priv *pDev, int min)
 	return 0;
 }
 
-/* Wait until min bytes available in TX circular buffer. TXIRQ is used to pin
+/* Wait for TX circular buffer to have room for min CAN messagges. TXIRQ is used to pin
  * point the location of the CAN message corresponding to min.
  *
- * min must be at least WRAP_AROUND_TX_BYTES bytes less
- * than max buffer for this algo to work.
- *
+ * min must be at least WRAP_AROUND_TX_MSGS less than max buffer capacity
+ * (pDev->txbuf_size/GRCAN_MSG_SIZE) for this algo to work.
  */
 static int grcan_wait_txspace(struct grcan_priv *pDev, int min)
 {
