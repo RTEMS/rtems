@@ -149,7 +149,6 @@ struct grcan_priv {
 
 	int txblock, rxblock;
 	int txcomplete, rxcomplete;
-	int txerror, rxerror;
 
 	struct grcan_filter sfilter;
 	struct grcan_filter afilter;
@@ -457,10 +456,6 @@ static rtems_device_driver grcan_hw_start(struct grcan_priv *pDev)
 	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_RXSYNC);
 	IRQ_UNMASK(pDev->irq + GRCAN_IRQ_IRQ);
 	SPIN_UNLOCK_IRQ(&pDev->devlock, oldLevel);
-
-	/* Reset some software data */
-	/*pDev->txerror = 0;
-	   pDev->rxerror = 0; */
 
 	/* Enable receiver/transmitter */
 	pDev->regs->rx0ctrl = GRCAN_RXCTRL_ENABLE;
@@ -1517,14 +1512,6 @@ int grcan_write(void *d, CANMsg *msg, size_t ucount)
 			 * with error status.
 			 */
 			return nwritten;
-		}
-
-		if ( pDev->txerror ){
-			/* Return number of bytes sent, compare write pointers */
-			pDev->txerror = 0;
-#if 0 
-#error HANDLE AMBA error
-#endif
 		}
 
 		/* Try read bytes from circular buffer */
