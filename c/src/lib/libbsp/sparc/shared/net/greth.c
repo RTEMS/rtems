@@ -41,6 +41,16 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+
 #ifdef malloc
 #undef malloc
 #endif
@@ -198,6 +208,8 @@ struct greth_softc
    unsigned long txRetryLimit;
    unsigned long txUnderrun;
 
+   /* Spin-lock ISR protection */
+   SPIN_DECLARE(devlock);
 };
 
 int greth_process_tx_gbit(struct greth_softc *sc);
@@ -219,12 +231,15 @@ static void greth_interrupt (void *arg)
         uint32_t ctrl;
         rtems_event_set events = 0;
         struct greth_softc *greth = arg;
-        
+        SPIN_ISR_IRQFLAGS(flags);
+
         /* read and clear interrupt cause */
         status = greth->regs->status;
         greth->regs->status = status;
+
+        SPIN_LOCK(&greth->devlock, flags);
         ctrl = greth->regs->ctrl;
-        
+
         /* Frame received? */
         if ((ctrl & GRETH_CTRL_RXIRQ) && (status & (GRETH_STATUS_RXERR | GRETH_STATUS_RXIRQ)))
         {
@@ -233,17 +248,18 @@ static void greth_interrupt (void *arg)
                 ctrl &= ~GRETH_CTRL_RXIRQ;
                 events |= INTERRUPT_EVENT;
         }
-        
+
         if ( (ctrl & GRETH_CTRL_TXIRQ) && (status & (GRETH_STATUS_TXERR | GRETH_STATUS_TXIRQ)) )
         {
                 greth->txInterrupts++;
                 ctrl &= ~GRETH_CTRL_TXIRQ;
                 events |= GRETH_TX_WAIT_EVENT;
         }
-        
+
         /* Clear interrupt sources */
         greth->regs->ctrl = ctrl;
-        
+        SPIN_UNLOCK(&greth->devlock, flags);
+
         /* Send the event(s) */
         if ( events )
             rtems_bsdnet_event_send(greth->daemonTid, events);
@@ -633,11 +649,11 @@ greth_Daemon (void *arg)
     struct mbuf *m;
     unsigned int len, len_status, bad;
     rtems_event_set events;
-    rtems_interrupt_level level;
+    SPIN_IRQFLAGS(flags);
     int first;
-		int tmp;
-		unsigned int addr;
-    
+    int tmp;
+    unsigned int addr;
+
     for (;;)
       {
         rtems_bsdnet_event_receive (INTERRUPT_EVENT | GRETH_TX_WAIT_EVENT,
@@ -753,26 +769,24 @@ again:
                     } else {
                             dp->rxdesc[dp->rx_ptr].ctrl = GRETH_RXD_ENABLE | GRETH_RXD_IRQ;
                     }
-                    rtems_interrupt_disable(level);
+                    SPIN_LOCK_IRQ(&dp->devlock, flags);
                     dp->regs->ctrl |= GRETH_CTRL_RXEN;
-                    rtems_interrupt_enable(level);
+                    SPIN_UNLOCK_IRQ(&dp->devlock, flags);
                     dp->rx_ptr = (dp->rx_ptr + 1) % dp->rxbufs;
             }
-        
+
         /* Always scan twice to avoid deadlock */
         if ( first ){
             first=0;
-            rtems_interrupt_disable(level);
+            SPIN_LOCK_IRQ(&dp->devlock, flags);
             dp->regs->ctrl |= GRETH_CTRL_RXIRQ;
-            rtems_interrupt_enable(level);
+            SPIN_UNLOCK_IRQ(&dp->devlock, flags);
             goto again;
         }
 
       }
-    
 }
 
-static int inside = 0;
 static int
 sendpacket (struct ifnet *ifp, struct mbuf *m)
 {
@@ -780,18 +794,13 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
     unsigned char *temp;
     struct mbuf *n;
     unsigned int len;
-    rtems_interrupt_level level;
-        
-    /*printf("Send packet entered\n");*/
-    if (inside) printf ("error: sendpacket re-entered!!\n");
-    inside = 1;
-    
+    SPIN_IRQFLAGS(flags);
+
     /*
      * Is there a free descriptor available?
      */
     if (GRETH_MEM_LOAD(&dp->txdesc[dp->tx_ptr].ctrl) & GRETH_TXD_ENABLE){
             /* No. */
-            inside = 0;
             return 1;
     }
     
@@ -833,13 +842,12 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
                             GRETH_TXD_WRAP | GRETH_TXD_ENABLE | len;
             }
             dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
-            rtems_interrupt_disable(level);
+            SPIN_LOCK_IRQ(&dp->devlock, flags);
             dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
-            rtems_interrupt_enable(level);
+            SPIN_UNLOCK_IRQ(&dp->devlock, flags);
             
     }
-    inside = 0;
-    
+
     return 0;
 }
 
@@ -854,11 +862,8 @@ sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
         int frags;
         struct mbuf *mtmp;
         int int_en;
-        rtems_interrupt_level level;
+        SPIN_IRQFLAGS(flags);
 
-        if (inside) printf ("error: sendpacket re-entered!!\n");
-        inside = 1;
-        
         len = 0;
 #ifdef GRETH_DEBUG
         printf("TXD: 0x%08x\n", (int) m->m_data);
@@ -877,13 +882,11 @@ sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
             dp->max_fragsize = frags;
         
         if ( frags > dp->txbufs ){
-            inside = 0;
             printf("GRETH: MBUF-chain cannot be sent. Increase descriptor count.\n");
             return -1;
         }
         
         if ( frags > (dp->txbufs-dp->tx_cnt) ){
-            inside = 0;
             /* Return number of fragments */
             return frags;
         }
@@ -947,12 +950,10 @@ sendpacket_gbit (struct ifnet *ifp, struct mbuf *m)
         dp->tx_cnt++;
       
         /* Tell Hardware about newly enabled descriptor */
-        rtems_interrupt_disable(level);
+        SPIN_LOCK_IRQ(&dp->devlock, flags);
         dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
-        rtems_interrupt_enable(level);
+        SPIN_UNLOCK_IRQ(&dp->devlock, flags);
 
-        inside = 0;
-               
         return 0;
 }
 
@@ -960,9 +961,9 @@ int greth_process_tx_gbit(struct greth_softc *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
-    rtems_interrupt_level level;
+    SPIN_IRQFLAGS(flags);
     int first=1;
-    
+
     /*
      * Send packets till queue is empty
      */
@@ -1010,10 +1011,10 @@ int greth_process_tx_gbit(struct greth_softc *sc)
              */
             if ( first ){
                 first = 0;
-                rtems_interrupt_disable(level);
+                SPIN_LOCK_IRQ(&sc->devlock, flags);
                 ifp->if_flags |= IFF_OACTIVE;
                 sc->regs->ctrl |= GRETH_CTRL_TXIRQ;
-                rtems_interrupt_enable(level);
+                SPIN_UNLOCK_IRQ(&sc->devlock, flags);
                 
                 /* We must check again to be sure that we didn't 
                  * miss an interrupt (if a packet was sent just before
@@ -1021,7 +1022,7 @@ int greth_process_tx_gbit(struct greth_softc *sc)
                  */
                 continue;
             }
-            
+
             return -1;
         }else{
             /* Sent Ok, proceed to process more packets if available */
@@ -1034,9 +1035,9 @@ int greth_process_tx(struct greth_softc *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
     struct mbuf *m;
-    rtems_interrupt_level level;
+    SPIN_IRQFLAGS(flags);
     int first=1;
-    
+
     /*
      * Send packets till queue is empty
      */
@@ -1076,18 +1077,18 @@ int greth_process_tx(struct greth_softc *sc)
              */
             if ( first ){
                 first = 0;
-                rtems_interrupt_disable(level);
+                SPIN_LOCK_IRQ(&sc->devlock, flags);
                 ifp->if_flags |= IFF_OACTIVE;
                 sc->regs->ctrl |= GRETH_CTRL_TXIRQ;
-                rtems_interrupt_enable(level);
-                
+                SPIN_UNLOCK_IRQ(&sc->devlock, flags);
+
                 /* We must check again to be sure that we didn't 
                  * miss an interrupt (if a packet was sent just before
                  * enabling interrupts)
                  */
                 continue;
             }
-            
+
             return -1;
         }else{
             /* Sent Ok, proceed to process more packets if available */
@@ -1128,26 +1129,23 @@ greth_init (void *arg)
 
     if (sc->daemonTid == 0)
       {
+          /*
+           * Start driver tasks
+           */
+          name[3] += sc->minor;
+          sc->daemonTid = rtems_bsdnet_newproc (name, 4096,
+                                                greth_Daemon, sc);
 
-	  /*
-	   * Start driver tasks
-	   */
-	  name[3] += sc->minor;
-	  sc->daemonTid = rtems_bsdnet_newproc (name, 4096,
-						  greth_Daemon, sc);
-
-	  /*
-	   * Set up GRETH hardware
-	   */
-      greth_initialize_hardware (sc);
-          
+          /*
+           * Set up GRETH hardware
+           */
+          greth_initialize_hardware (sc);
       }
 
     /*
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
-
 }
 
 /*
@@ -1157,13 +1155,16 @@ static void
 greth_stop (struct greth_softc *sc)
 {
     struct ifnet *ifp = &sc->arpcom.ac_if;
+    SPIN_IRQFLAGS(flags);
 
+    SPIN_LOCK_IRQ(&sc->devlock, flags);
     ifp->if_flags &= ~IFF_RUNNING;
 
     sc->regs->ctrl = 0;		        /* RX/TX OFF */
     sc->regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
     sc->regs->ctrl = 0;	         	/* Reset OFF */
-    
+    SPIN_UNLOCK_IRQ(&sc->devlock, flags);
+
     sc->next_tx_mbuf = NULL;
 }
 
@@ -1396,6 +1397,11 @@ int greth_init3(struct drvmgr_dev *dev)
         printk("GRETH: Failed to init device\n");
         return DRVMGR_FAIL;
     }
+
+    /* Initialize Spin-lock for GRSPW Device. This is to protect
+     * CTRL and DMACTRL registers from ISR.
+     */
+    SPIN_INIT(&sc->devlock, sc->devName);
 
     /* Register GRETH device as an Network interface */
     ifp = malloc(sizeof(struct rtems_bsdnet_ifconfig));
