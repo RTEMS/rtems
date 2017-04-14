@@ -284,7 +284,12 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
 
   if (!rtems_interrupt_is_in_progress()) {
     rtems_debugger_threads*              threads = rtems_debugger->threads;
-    Thread_Control*                      thread = _Thread_Executing;
+    #if USE_THREAD_EXECUTING
+     Thread_Control*                     thread = _Thread_Executing;
+    #else
+     const Per_CPU_Control*              cpu = _Per_CPU_Get_snapshot();
+     Thread_Control*                     thread = _Per_CPU_Get_executing(cpu);
+    #endif
     rtems_id*                            excludes;
     const rtems_id                       tid = thread->Object.id;
     DB_UINT                              pc;

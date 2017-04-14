@@ -717,7 +717,8 @@ target_exception(CPU_Exception_frame* frame)
     "mov  r3, #0\n"                                                     \
     "str  r3, [r2]\n"                 /* clear the FPU frame pointer */ \
     EXCEPTION_ENTRY_FPU(frame_fpu_size)                                 \
-    "msr  cpsr, r1\n"                        /* restore the irq mask */ \
+    "bic  r1, r1, %[psr_i]\n"        /* clear irq mask, debug checks */ \
+    "msr  cpsr, r1\n"       /* restore the state with irq mask clear */ \
     ASM_THUMB_MODE                                                      \
     : ARM_SWITCH_REG_ASM,                                               \
       [o_frame] "=r" (_frame)                                           \
