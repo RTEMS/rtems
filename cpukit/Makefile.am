@@ -111,6 +111,7 @@ include_rtems_debugger_HEADERS +=  libdebugger/rtems-debugger-remote.h
 endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h
+include_rtems_HEADERS += include/rtems/inttypes.h
 include_rtems_HEADERS += include/rtems/print.h
 include_rtems_HEADERS += include/rtems/printer.h
 include_rtems_HEADERS += include/rtems/userenv.h

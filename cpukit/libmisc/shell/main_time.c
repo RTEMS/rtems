@@ -22,16 +22,8 @@
 
 #include <rtems.h>
 #include <rtems/shell.h>
+#include <rtems/inttypes.h>
 #include "internal.h"
-
-/* Helper macro to print "time_t" */
-#if SIZEOF_TIME_T == 8
-#define PRIdtime_t PRId64
-#elif SIZEOF_TIME_T == 4
-#define PRIdtime_t PRId32
-#else
-#error "PRIdtime_t: unsupported size of time_t"
-#endif
 
 static int rtems_shell_main_time(
   int   argc,

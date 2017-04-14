@@ -28,15 +28,8 @@
 #endif
 
 #include <inttypes.h>
+#include <rtems/inttypes.h>
 #include <string.h>
-
-#if SIZEOF_OFF_T == 8
-#define PRIooff_t PRIo64
-#elif SIZEOF_OFF_T == 4
-#define PRIooff_t PRIo32
-#else
-#error "unsupported size of off_t"
-#endif
 
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-buffer.h>

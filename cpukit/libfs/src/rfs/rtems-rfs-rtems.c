@@ -25,13 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if SIZEOF_MODE_T == 8
-#define PRIomode_t PRIo64
-#elif SIZEOF_MODE_T == 4
-#define PRIomode_t PRIo32
-#else
-#error "unsupport size of mode_t"
-#endif
+#include <rtems/inttypes.h>
 
 #include <rtems/rfs/rtems-rfs-file.h>
 #include <rtems/rfs/rtems-rfs-dir.h>

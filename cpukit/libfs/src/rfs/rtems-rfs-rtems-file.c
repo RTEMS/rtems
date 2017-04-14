@@ -21,15 +21,8 @@
 #endif
 
 #include <inttypes.h>
+#include <rtems/inttypes.h>
 #include <string.h>
-
-#if SIZEOF_OFF_T == 8
-#define PRIdoff_t PRId64
-#elif SIZEOF_OFF_T == 4
-#define PRIdoff_t PRId32
-#else
-#error "unsupported size of off_t"
-#endif
 
 #include <rtems/rfs/rtems-rfs-file.h>
 #include "rtems-rfs-rtems.h"
