@@ -21,6 +21,7 @@
 #define _RTEMS_INTTYPES_H
 
 #include <inttypes.h>
+#include <rtems/score/cpuopts.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,40 +35,81 @@ extern "C" {
  */
 
 /** Helper macro to print "modet" in octal */
-#if SIZEOF_MODE_T == 8
+#if __RTEMS_SIZEOF_MODE_T__ == 8
 #define PRIomode_t PRIo64
-#elif SIZEOF_MODE_T == 4
+#elif __RTEMS_SIZEOF_MODE_T__ == 4
 #define PRIomode_t PRIo32
 #else
-#error "PRIomode_t: unsupport size of mode_t"
+#error "PRIomode_t: unsupported size of mode_t"
 #endif
 
 /** Helper macro to print "off_t" in octal */
-#if SIZEOF_OFF_T == 8
+#if __RTEMS_SIZEOF_OFF_T__ == 8
 #define PRIooff_t PRIo64
-#elif SIZEOF_OFF_T == 4
+#elif __RTEMS_SIZEOF_OFF_T__ == 4
 #define PRIooff_t PRIo32
 #else
 #error "PRIooff_t: unsupported size of off_t"
 #endif
 
 /** Helper macro to print "off_t" in decimal */
-#if SIZEOF_OFF_T == 8
+#if __RTEMS_SIZEOF_OFF_T__ == 8
 #define PRIdoff_t PRId64
-#elif SIZEOF_OFF_T == 4
+#elif __RTEMS_SIZEOF_OFF_T__ == 4
 #define PRIdoff_t PRId32
 #else
 #error "PRIdoff_t: unsupported size of off_t"
 #endif
 
 /** Helper macro to print "time_t" in decimal */
-#if SIZEOF_TIME_T == 8
+#if __RTEMS_SIZEOF_TIME_T__ == 8
 #define PRIdtime_t PRId64
-#elif SIZEOF_TIME_T == 4
+#elif __RTEMS_SIZEOF_TIME_T__ == 4
 #define PRIdtime_t PRId32
 #else
 #error "PRIdtime_t: unsupported size of time_t"
 #endif
+
+/*
+ * Various inttypes.h-stype macros to assist printing
+ * certain system types on different targets.
+ */
+
+#if defined(RTEMS_USE_16_BIT_OBJECT)
+#define PRIxrtems_id PRIx16
+#else
+#define PRIxrtems_id PRIx32
+#endif
+
+/* c.f. cpukit/score/include/rtems/score/priority.h */
+#define PRIdPriority_Control PRIu64
+#define PRIxPriority_Control PRIx64
+/* rtems_task_priority is a typedef to Priority_Control */
+#define PRIdrtems_task_priority PRIu32
+#define PRIxrtems_task_priority PRIx32
+
+/* c.f. cpukit/score/include/rtems/score/watchdog.h */
+#define PRIdWatchdog_Interval PRIu32
+/* rtems_interval is a typedef to Watchdog_Interval */
+#define PRIdrtems_interval    PRIdWatchdog_Interval
+
+/* c.f. cpukit/score/include/rtems/score/thread.h */
+#define PRIdThread_Entry_numeric_type PRIuPTR
+/* rtems_task_argument is a typedef to Thread_Entry_numeric_type */
+#define PRIdrtems_task_argument PRIdThread_Entry_numeric_type
+
+/* rtems_event_set is a typedef to unit32_t */
+#define PRIxrtems_event_set PRIx32
+
+/* HACK: newlib defines pthread_t as a typedef to __uint32_t */
+/* HACK: There is no portable way to print pthread_t's */
+#define PRIxpthread_t PRIx32
+
+/* rtems_signal_set is a typedef to uint32_t */
+#define PRIxrtems_signal_set PRIx32
+
+/* newlib's ino_t is a typedef to "unsigned long" */
+#define PRIxino_t "lx"
 
 /**@}*/
 

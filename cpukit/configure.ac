@@ -238,6 +238,30 @@ RTEMS_CPUOPT([__RTEMS_ADA__],
   [1],
   [Define to 1 if ada/gnat bindings are built-in])
 
+# These are used to provide <rtems/inttypes.h
+AC_CHECK_SIZEOF([mode_t])
+AC_CHECK_SIZEOF([off_t])
+AC_CHECK_SIZEOF([time_t])
+AC_CHECK_SIZEOF([size_t])
+
+## Provide sizeof(mode_t) information via cpuopts.h
+RTEMS_CPUOPT([__RTEMS_SIZEOF_MODE_T__],
+  [true],
+  [${ac_cv_sizeof_mode_t}],
+  [sizeof(mode_t)])
+
+## Provide sizeof(off_t) information via cpuopts.h
+RTEMS_CPUOPT([__RTEMS_SIZEOF_OFF_T__],
+  [true],
+  [${ac_cv_sizeof_off_t}],
+  [sizeof(off_t)])
+
+## Provide sizeof(time_t) information via cpuopts.h
+RTEMS_CPUOPT([__RTEMS_SIZEOF_TIME_T__],
+  [true],
+  [${ac_cv_sizeof_time_t}],
+  [sizeof(time_t)])
+
 ## Then we propagate a private copy of the value into cpuopts.h
 ## so it is always available to the RTEMS header files.
 
@@ -251,7 +275,7 @@ RTEMS_CPUOPT([__RTEMS_MINOR__],
   [$rtems_minor],
   [minor version portion of an RTEMS release])
 
-RTEMS_CPUOPT([__RTEMS_REVISION__],
+RTEMS_CPUOPT([__RTEMS_REVISION___],
   [true],
   [$rtems_revision],
   [revision version portion of an RTEMS release])
@@ -277,16 +301,6 @@ RTEMS_CHECK_GCC_WEAK
 # configuration-time diagnostics and are not really used.
 AC_CHECK_DECLS([_POSIX_LOGIN_NAME_MAX],,,[#include <limits.h>])
 AC_CHECK_DECLS([CHAR_BIT],,,[#include <limits.h>])
-
-# FIXME: We should get rid of this.
-# So far, only used in libfs/src/nfsclient/src/dirutils.c
-AC_CHECK_SIZEOF([mode_t])
-AC_CHECK_SIZEOF([off_t])
-
-# FIXME: We should get rid of this. It's a cludge.
-AC_CHECK_SIZEOF([time_t])
-
-AC_CHECK_SIZEOF([size_t])
 
 # FIXME: Mandatory in SUSv4, optional in SUSv3.
 #   Not implemented in GCC/newlib, so far.
