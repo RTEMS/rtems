@@ -16,6 +16,16 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 #
+# Search the include paths for a file.
+#
+def find_testdata(paths, name):
+    for p in paths:
+        fn = os.path.join(p, name)
+        if os.path.exists(fn):
+            return fn
+    return None
+
+#
 # Arguments. Keep it simple.
 #
 if len(sys.argv) < 4:
@@ -23,11 +33,18 @@ if len(sys.argv) < 4:
     print('INVALID-TEST-DATA')
     sys.exit(2)
 
-mode = sys.argv[1]
-testconfig = [sys.argv[2]]
-includepath = sys.argv[3]
-bsp = sys.argv[4]
-tests = sys.argv[5:]
+verbose = False
+args = 0
+
+if sys.argv[1] == '-v':
+    verbose = True
+    args = 1
+
+mode = sys.argv[args + 1]
+bsp = sys.argv[args + 2]
+includepaths = sys.argv[args + 4].split(':')
+testconfig = [find_testdata(includepaths, sys.argv[args + 3])]
+tests = sys.argv[args + 5:]
 
 #
 # Handle the modes.
@@ -47,8 +64,8 @@ else:
 #
 # Common RTEMS testsuite configuration. Load first.
 #
-rtems_testdata = os.path.join(includepath, 'testdata', 'rtems.tcfg')
-if os.path.exists(rtems_testdata):
+rtems_testdata = find_testdata(includepaths, os.path.join('testdata', 'rtems.tcfg'))
+if rtems_testdata is not None:
     testconfig.insert(0, rtems_testdata)
 
 states = ['exclude',
@@ -63,6 +80,13 @@ defines = { 'expected-fail' : '-DTEST_STATE_EXPECTED_FAIL=1',
 output = []
 testdata = {}
 
+if verbose:
+    eprint('mode: %s' % (mode))
+    eprint('testconfig: %s' % (', '.join(testconfig)))
+    eprint('includepaths: %s' % (includepaths))
+    eprint('bsp: %s' % (bsp))
+    eprint('tests: %s' % (', '.join(tests)))
+
 def clean(line):
     line = line[0:-1]
     b = line.find('#')
@@ -73,10 +97,16 @@ def clean(line):
 #
 # Load the test data.
 #
-for tc in range(0, len(testconfig)):
-    if not os.path.exists(testconfig[tc]):
+while len(testconfig):
+    tc = testconfig[0]
+    testconfig.remove(tc)
+    if verbose:
+        eprint('reading: %s' % (tc))
+    if not os.path.exists(tc):
+        if verbose:
+            eprint('%s: not found' % (tc))
         continue
-    with open(testconfig[tc]) as f:
+    with open(tc) as f:
         tdata = [clean(l) for l in f.readlines()]
     lc = 0
     for line in tdata:
@@ -84,6 +114,8 @@ for tc in range(0, len(testconfig)):
         ls = [s.strip() for s in line.split(':')]
         if len(line) == 0:
             continue
+        if verbose:
+            eprint('%4d: %s' % (lc, line))
         if len(ls) != 2:
             eprint('error: syntax error: %s:%d' % (tc, lc))
             print('INVALID-TEST-DATA')
@@ -91,7 +123,13 @@ for tc in range(0, len(testconfig)):
         state = ls[0]
         test = ls[1]
         if state == 'include':
-            testconfig.insert(tc, test)
+            td = find_testdata(includepaths, test)
+            if td is None:
+                eprint('error: include not found: %s:%d' % (tc, lc))
+                print('INVALID-TEST-DATA')
+            testconfig.insert(0, td)
+            if verbose:
+                eprint('include: %s' % (', '.join(testconfig)))
         elif state in states:
             if state not in testdata:
                 testdata[state] = [test]

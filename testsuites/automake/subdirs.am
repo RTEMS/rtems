@@ -15,7 +15,8 @@ all-local:
 	  target="all"; \
 	fi; \
 	tcheck="$(top_srcdir)/../../tools/build/rtems-test-check-py"; \
-	tdata="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
+	tdata="$(RTEMS_BSP)-testsuite.tcfg"; \
+	tincludes="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom:$(top_srcdir)/.."; \
 	if test -f "$$tdata"; then \
 	  vtdata="$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
 	else \
@@ -23,7 +24,7 @@ all-local:
 	fi; \
 	echo "BSP Testsuite Data: $$vtdata"; \
 	if test -f $$tcheck; then \
-	  list=`$$tcheck exclude $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $(_SUBDIRS)`; \
+	  list=`$$tcheck exclude $(RTEMS_BSP) $$tdata $$tincludes $(_SUBDIRS)`; \
 	else \
 	  list=$(_SUBDIRS); \
 	fi; \
@@ -31,7 +32,7 @@ all-local:
 	  echo "Making $$target in $$subdir"; \
 	  if test "$$subdir" != "."; then \
 	    if test -f $$tcheck; then \
-	      test_FLAGS=`$$tcheck flags $$tdata $(top_srcdir)/.. $(RTEMS_BSP) $$subdir`; \
+	      test_FLAGS=`$$tcheck flags $(RTEMS_BSP) $$tdata $$tincludes $$subdir`; \
 	    fi; \
 	    local_target="$$target"; \
 	    if test -z "$$test_FLAGS"; then \

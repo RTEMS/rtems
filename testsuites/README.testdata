@@ -1,0 +1,72 @@
+RTEMS Testsuite Configuration
+=============================
+
+The RTEMS Testsuite lets you configure the tests for a BSP. Every BSP can have
+a test configuration data file and this file is read when building the
+tests. The test configuration data can control what tests are build and now the
+tests are built.
+
+The test configuration data files have a `.tcfg` file extension. You can
+include other test configuration data files reducing repeated test
+sequences. There is also a global test configuration data file for global
+configurations.
+
+Command
+-------
+
+The build system invokes the test check tool to determine what it does.
+
+ rtems-test-check mode bsp testconfig includepaths test[s]
+
+Mode (mode)
+~~~~~~~~~~~
+
+The check command modes are:
+
+ 1. `exclude`: The input list of tests is checked against the excluded tests
+    and the tests that are not excluded are printed.
+
+ 2. `flags': The test build flags are returned. These flags can enumerate a
+    test in a specific way.
+
+BSP (bsp)
+~~~~~~~~~
+
+The name of the BSP.
+
+Test Configuration (testconfig)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The path to the BSP's test configration file. If the file does not exist the
+input list of tests is returned and there are no special build flags.
+
+Include Paths (inputpaths)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A colon (`:`) separated list of paths test configuration files are search
+for.
+
+Tests (test[s])
+~~~~~~~~~~~~~~~
+
+If the mode is `exclude` this argument is a list of tests to be checked. If the
+mode is `flags` a single test is required and the flags for the test are returned.
+
+File Format
+-----------
+
+The file is an ASCII text file of lines. And text after and including the `#`
+character is removed. Empty lines are ignored.
+
+A line is either the `include` directive or a test state. The states are:
+
+ exclude       : Exclude the test from being built.
+ expected-fail : The test is built but expected to fail.
+ user-input    : The test requires user input and may be aborted when running
+                 the tests.
+ indeterminate : The test result is indeterminate. This means the test may pass
+                 or may fail therefore it cannot be included in the regression
+                 results.
+ benchmark     : The test is a benchmark and maybe is aborted when running the
+                 tests because of the load and time the test may take to run.
+                 Performance changes are currently not viewed as a regression.
