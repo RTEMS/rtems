@@ -101,8 +101,9 @@ rtems_monitor_config_dump(
     length = 0;
     length += fprintf(stdout,"WORKSPACE");
     length += rtems_monitor_pad(DATACOL, length);
-    length += fprintf(stdout,"start: %p;  size: 0x%" PRIx32 "\n",
+    length += fprintf(stdout,"start: %p;  size: 0x%" PRIx32 " (%" PRId32 ")\n",
                      monitor_config->work_space_start,
+                     monitor_config->work_space_size,
                      monitor_config->work_space_size);
 
     length = 0;
@@ -116,18 +117,27 @@ rtems_monitor_config_dump(
     length = 0;
     length += fprintf(stdout,"MAXIMUMS");
     length += rtems_monitor_pad(DATACOL, length);
-    length += fprintf(stdout,"tasks: %" PRId32 ";  timers: %" PRId32 ";  sems: %" PRId32 ";  que's: %" PRId32 ";  ext's: %" PRId32 "\n",
-                     monitor_config->maximum_tasks,
-                     monitor_config->maximum_timers,
-                     monitor_config->maximum_semaphores,
-                     monitor_config->maximum_message_queues,
-                     monitor_config->maximum_extensions);
+    length += fprintf(stdout,"tasks: %" PRId32 "%c;  timers: %" PRId32 "%c;  sems: %" PRId32 "%c;  que's: %" PRId32 "%c;  ext's: %" PRId32 "%c;\n",
+                     monitor_config->maximum_tasks & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_tasks & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_timers & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_timers & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_semaphores & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_semaphores & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_message_queues & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_message_queues & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_extensions & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_extensions & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+');
     length = 0;
     length += rtems_monitor_pad(CONTCOL, length);
-    length += fprintf(stdout,"partitions: %" PRId32 ";  regions: %" PRId32 ";  ports: %" PRId32 ";  periods: %" PRId32 "\n",
-                     monitor_config->maximum_partitions,
-                     monitor_config->maximum_regions,
-                     monitor_config->maximum_ports,
-                     monitor_config->maximum_periods);
+    length += fprintf(stdout,"partitions: %" PRId32 "%c;  regions: %" PRId32 "%c;  ports: %" PRId32 "%c;  periods: %" PRId32 "%c;\n",
+                     monitor_config->maximum_partitions & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_partitions & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_regions & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_regions & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_ports & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_ports & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+',
+                     monitor_config->maximum_periods & ~OBJECTS_UNLIMITED_OBJECTS,
+                     (monitor_config->maximum_periods & OBJECTS_UNLIMITED_OBJECTS) == 0 ? ' ' : '+');
     return length;
 }
