@@ -46,6 +46,9 @@ includepaths = sys.argv[args + 4].split(':')
 testconfig = [find_testdata(includepaths, sys.argv[args + 3])]
 tests = sys.argv[args + 5:]
 
+if verbose:
+    eprint('cmd: %s' % (' '.join(sys.argv)))
+
 #
 # Handle the modes.
 #
@@ -82,7 +85,8 @@ testdata = {}
 
 if verbose:
     eprint('mode: %s' % (mode))
-    eprint('testconfig: %s' % (', '.join(testconfig)))
+    eprint('testconfig: %r' % (testconfig))
+    eprint('testconfig: %s' % (', '.join([x for x in testconfig if x is not None])))
     eprint('includepaths: %s' % (includepaths))
     eprint('bsp: %s' % (bsp))
     eprint('tests: %s' % (', '.join(tests)))
@@ -100,6 +104,8 @@ def clean(line):
 while len(testconfig):
     tc = testconfig[0]
     testconfig.remove(tc)
+    if tc is None:
+        continue
     if verbose:
         eprint('reading: %s' % (tc))
     if not os.path.exists(tc):
