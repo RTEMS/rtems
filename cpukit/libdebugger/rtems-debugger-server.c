@@ -245,8 +245,8 @@ rtems_debugger_task_create(const char*         name,
   sc = rtems_task_create (tname,
                           priority,
                           stack_size,
-                          RTEMS_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_NO_ASR,
+                          RTEMS_LOCAL | RTEMS_FLOATING_POINT,
                           id);
   if (sc != RTEMS_SUCCESSFUL) {
     *id = 0;
@@ -277,6 +277,7 @@ rtems_debugger_task_destroy(const char*    name,
 {
   while (timeout) {
     bool has_finished;
+
     rtems_debugger_lock();
     has_finished = *finished;
     rtems_debugger_unlock();
@@ -384,24 +385,24 @@ static int
 rtems_debugger_remote_connect(void)
 {
   rtems_debugger_remote* remote = rtems_debugger_remote_handle();
-  if (remote == NULL) {
-    errno = EIO;
-    return -1;
+  if (remote != NULL) {
+    if (!remote->isconnected(remote))
+      return remote->connect(remote);
   }
-  if (!remote->isconnected(remote))
-    return remote->connect(remote);
+  errno = EIO;
+  return -1;
 }
 
 static int
 rtems_debugger_remote_disconnect(void)
 {
   rtems_debugger_remote* remote = rtems_debugger_remote_handle();
-  if (remote == NULL) {
-    errno = EIO;
-    return -1;
+  if (remote != NULL) {
+    if (remote->isconnected(remote))
+      return remote->disconnect(remote);
   }
-  if (remote->isconnected(remote))
-    return remote->disconnect(remote);
+  errno = EIO;
+  return -1;
 }
 
 static int
@@ -1884,7 +1885,7 @@ rtems_debugger_destroy(void)
   if (rr < 0 && r == 0)
     r = rr;
 
-  rr = rtems_debugger_task_destroy("DBSr",
+  rr = rtems_debugger_task_destroy("DBSs",
                                    rtems_debugger->server_task,
                                    &rtems_debugger->server_finished,
                                    RTEMS_DEBUGGER_TIMEOUT_STOP);
@@ -1905,6 +1906,12 @@ static void
 rtems_debugger_main(rtems_task_argument arg)
 {
   int r;
+
+
+  rtems_debugger_lock();
+  rtems_debugger->server_running = true;
+  rtems_debugger->server_finished = false;
+  rtems_debugger_unlock();
 
   rtems_debugger_printf("rtems-db: remote running\n");
 
@@ -1940,8 +1947,8 @@ rtems_debugger_start(const char*          remote,
     return -1;
 
   rtems_debugger_lock();
-  rtems_debugger->server_running = true;
-  rtems_debugger->server_finished = false;
+  rtems_debugger->server_running = false;
+  rtems_debugger->server_finished = true;
   rtems_debugger_unlock();
 
   r = rtems_debugger_task_create("DBSs",
