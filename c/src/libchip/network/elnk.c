@@ -2346,7 +2346,7 @@ elnk_rxDaemon (void *arg)
 /*
  * Driver transmit daemon
  */
-void
+static void
 elnk_txDaemon (void *arg)
 {
    struct elnk_softc     *sc;
