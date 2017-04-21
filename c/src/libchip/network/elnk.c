@@ -100,6 +100,7 @@
 #include <libcpu/byteorder.h>
 #endif
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -1824,7 +1825,7 @@ xl_mediacheck(struct elnk_softc		*sc)
          return;
       else {
          printk("etherlink : unit elnk%d bogus xcvr value "
-                "in EEPROM (%x)\n", sc->xl_unit, sc->xl_xcvr);
+                "in EEPROM (%" PRIx32 ")\n", sc->xl_unit, sc->xl_xcvr);
          printk("etherlink : unit elnk%d choosing new default based "
                 "on card type\n", sc->xl_unit);
       }
@@ -2704,13 +2705,18 @@ elnk_init (void *arg)
                   xl_setcfg(sc);
                   break;
                case XL_XCVR_MII:
-                  printk("etherlink : unit elnk%d MII media not supported!\n", sc->xl_unit);
+                  printk(
+                   "etherlink : unit elnk%d MII media not supported!\n",
+                   sc->xl_unit);
                   break;
                case XL_XCVR_100BFX:
                   media = IFM_ETHER|IFM_100_FX;
                   break;
                default:
-                  printk("etherlink : unit elnk%d unknown XCVR type: %d\n", sc->xl_unit, sc->xl_xcvr);
+                  printk(
+                    "etherlink : unit elnk%d unknown XCVR type: %" PRId32 "\n",
+                    sc->xl_unit,
+                    sc->xl_xcvr);
                   /*
                    * This will probably be wrong, but it prevents
                    * the ifmedia code from panicking.
