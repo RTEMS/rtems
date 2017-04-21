@@ -1021,7 +1021,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 #ifdef DEC_DEBUG
-   printk("dec2114x : unit %d base address %" PRIu32PTR ".\n", unitNumber,
+   printk("dec2114x : unit %d base address %" PRIu32 ".\n", unitNumber,
           sc->base );
 #endif
 
