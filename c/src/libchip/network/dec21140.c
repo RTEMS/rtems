@@ -932,7 +932,8 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
    if ((unitNumber < 1) || (unitNumber > NDECDRIVER))
    {
-      printk("dec2114x : unit %i is invalid, must be (1 <= n <= %d)\n", unitNumber);
+      printk("dec2114x : unit %i is invalid, must be (1 <= n <= %d)\n",
+              unitNumber, NDECDRIVER);
       return 0;
    }
 
@@ -1022,8 +1023,7 @@ rtems_dec21140_driver_attach (struct rtems_bsdnet_ifconfig *config, int attach)
 
 
 #ifdef DEC_DEBUG
-   printk("dec2114x : unit %d base address %" PRIu32 ".\n", unitNumber,
-          sc->base );
+   printk("dec2114x : unit %d base address %p.\n", unitNumber, sc->base);
 #endif
 
 
