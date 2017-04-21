@@ -68,6 +68,7 @@
 
 #if defined(__i386__)
 #include <libcpu/byteorder.h>
+#include <libcpu/page.h>
 #endif
 
 #include <stdlib.h>
