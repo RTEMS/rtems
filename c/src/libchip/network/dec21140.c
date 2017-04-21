@@ -291,6 +291,8 @@ static struct dec21140_softc dec21140_softc[NDECDRIVER];
 static rtems_id rxDaemonTid;
 static rtems_id txDaemonTid;
 
+void dec21140_txDaemon (void *arg);
+
 /*
  * This routine reads a word (16 bits) from the serial EEPROM.
  */
