@@ -1679,7 +1679,7 @@ fxp_init(void *xsc)
 	struct fxp_cb_config *cbp;
 	struct fxp_cb_ias *cb_ias;
 	struct fxp_cb_tx *txp;
-	int i, prm, s, rv;
+	int i, prm, s;
 	rtems_status_code statcode;
 
 rtems_task_wake_after(100);
