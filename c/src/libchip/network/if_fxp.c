@@ -408,6 +408,9 @@ static __inline unsigned int fxp_pci_get_revid(struct fxp_softc *sc) {
   return revid;
 }
 
+/* Prototype to avoid warning. This must be a global symbol. */
+int rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching);
+
 int
 rtems_fxp_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 {
