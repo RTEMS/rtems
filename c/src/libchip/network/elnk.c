@@ -3100,6 +3100,9 @@ struct el_boards
       int pbus,pdev,pfun, vid, did, tindex;
 };
 
+/* Prototype to avoid warning. This must be a global symbol. */
+int rtems_elnk_driver_attach(struct rtems_bsdnet_ifconfig *config, int attach);
+
 /*
  * Attach an ELNK driver to the system
  */
