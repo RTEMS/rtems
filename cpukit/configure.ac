@@ -243,6 +243,8 @@ AC_CHECK_SIZEOF([mode_t])
 AC_CHECK_SIZEOF([off_t])
 AC_CHECK_SIZEOF([time_t])
 AC_CHECK_SIZEOF([size_t])
+AC_CHECK_SIZEOF([blksize_t])
+AC_CHECK_SIZEOF([blkcnt_t])
 
 ## Provide sizeof(mode_t) information via cpuopts.h
 RTEMS_CPUOPT([__RTEMS_SIZEOF_MODE_T__],
@@ -261,6 +263,18 @@ RTEMS_CPUOPT([__RTEMS_SIZEOF_TIME_T__],
   [true],
   [${ac_cv_sizeof_time_t}],
   [sizeof(time_t)])
+
+## Provide sizeof(blksize_t) information via cpuopts.h
+RTEMS_CPUOPT([__RTEMS_SIZEOF_BLKSIZE_T__],
+  [true],
+  [${ac_cv_sizeof_blksize_t}],
+  [sizeof(blksize_t)])
+
+## Provide sizeof(blkcnt_t) information via cpuopts.h
+RTEMS_CPUOPT([__RTEMS_SIZEOF_BLKCNT_T__],
+  [true],
+  [${ac_cv_sizeof_blkcnt_t}],
+  [sizeof(blkcnt_t)])
 
 ## Then we propagate a private copy of the value into cpuopts.h
 ## so it is always available to the RTEMS header files.

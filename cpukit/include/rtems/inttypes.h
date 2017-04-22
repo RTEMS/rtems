@@ -70,6 +70,28 @@ extern "C" {
 #error "PRIdtime_t: unsupported size of time_t"
 #endif
 
+/** Helper macro to print "blksize_t" in decimal */
+#if __RTEMS_SIZEOF_BLKSIZE_T__ == 8
+#define PRIxblksize_t PRIx64
+#elif __RTEMS_SIZEOF_BLKSIZE_T__ == 4
+#define PRIxblksize_t PRIx32
+#else
+/* Warn and fall back to "long" */
+#warning "unsupported size of blksize_t"
+#define PRIxblksize_t "lx"
+#endif
+
+/** Helper macro to print "blkcnt_t" in decimal */
+#if __RTEMS_SIZEOF_BLKCNT_T__ == 8
+#define PRIxblkcnt_t PRIx64
+#elif __RTEMS_SIZEOF_BLKCNT_T__ == 4
+#define PRIxblkcnt_t PRIx32
+#else
+/* Warn and fall back to "long" */
+#warning "unsupported size of blkcnt_t"
+#define PRIxblkcnt_t "lx"
+#endif
+
 /*
  * Various inttypes.h-stype macros to assist printing
  * certain system types on different targets.
