@@ -154,7 +154,7 @@ void ahbstat_isr(void *arg)
 		rc = ahbstat_error(priv->minor, priv->regs, status, fadr);
 
 	if ((rc & 0x1) == 0) {
-		printk("\n### AHBSTAT: %s %s error of size %lu by master %d"
+		printk("\n### AHBSTAT: %s %s error of size %lu by master %ld"
 			" at 0x%08lx\n",
 			status & AHBSTAT_STS_CE ? "single" : "non-correctable",
 			status & AHBSTAT_STS_HW ? "write" : "read",
