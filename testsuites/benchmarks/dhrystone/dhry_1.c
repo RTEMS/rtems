@@ -143,6 +143,11 @@ execution_start:
   Begin_Time = time ( (long *) 0);
 #endif
 
+#ifdef __rtems__
+  /* avoid used uninitialized warning */
+  Int_2_Loc = 0;
+#endif
+
   for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index)
   {
 
