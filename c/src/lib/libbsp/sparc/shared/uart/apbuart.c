@@ -571,7 +571,7 @@ static rtems_device_driver apbuart_read(rtems_device_major_number major, rtems_d
 	rtems_interrupt_disable(oldLevel);
 	do {
 		if ( (unsigned int)uart < 0x40000000 ) {
-      printk("UART %x is screwed\n",uart);
+	printk("UART %p is screwed\n",uart);
     }
 		/* Read from SW fifo */
 		if ( apbuart_fifo_get(uart->rxfifo,&buf[count]) != 0 ){
