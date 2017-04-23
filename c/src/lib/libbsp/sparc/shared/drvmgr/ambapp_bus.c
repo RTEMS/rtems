@@ -25,6 +25,7 @@
 
 #include <bsp.h>
 #include <ambapp.h>
+#include <rtems/bspIo.h>
 
 /*#define DEBUG 1*/
 #define DBG(args...)
