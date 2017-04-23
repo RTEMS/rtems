@@ -120,11 +120,12 @@ extern "C" {
 /* rtems_task_argument is a typedef to Thread_Entry_numeric_type */
 #define PRIdrtems_task_argument PRIdThread_Entry_numeric_type
 
-/* rtems_event_set is a typedef to unit32_t */
+/* rtems_event_set is a typedef to uint32_t */
 #define PRIxrtems_event_set PRIx32
 
-/* HACK: newlib defines pthread_t as a typedef to __uint32_t */
-/* HACK: There is no portable way to print pthread_t's */
+/* newlib defines pthread_t as a typedef to __uint32_t which matches
+ * RTEMS expectations for an Object ID.
+ */
 #define PRIxpthread_t PRIx32
 
 /* rtems_signal_set is a typedef to uint32_t */
@@ -132,6 +133,9 @@ extern "C" {
 
 /* newlib's ino_t is a typedef to "unsigned long" */
 #define PRIxino_t "lx"
+
+/* ioctl_command_t */
+#define PRIdioctl_command_t PRId32
 
 /**@}*/
 
