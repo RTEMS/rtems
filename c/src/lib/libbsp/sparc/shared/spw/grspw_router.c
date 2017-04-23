@@ -10,6 +10,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/bspIo.h>
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
