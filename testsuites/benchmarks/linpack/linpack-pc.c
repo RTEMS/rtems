@@ -534,6 +534,9 @@ int main (int argc, char **argv)
         fprintf(stdout,"\n");
         fprintf(stdout,ROLLING);fprintf(stdout,PREC);
         fprintf(stdout," Precision %11.2f Mflops \n\n",mflops);
+#ifdef __rtems__
+	return 0;
+#endif
 }
      
 /*----------------------*/ 
