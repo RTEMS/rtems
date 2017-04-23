@@ -154,31 +154,31 @@ void _dbug_dumpanic(void)
     }
     printk(" exception (vector %x, type %x)\n",vector,frametype);
     printk("---------------------------------------------\n");
-    printk("PC : 0x%x  ",pc);
-    printk("A7 : 0x%x  ",_boot_panic_registers.a7);
+    printk("PC : %p  ",pc);
+    printk("A7 : 0x%lx  ",_boot_panic_registers.a7);
     printk("SR : 0x%x\n",status);
     if (frametype==0x0c) {
-      printk("\nfaulted address = 0x%x\n",faultedAddr);
+      printk("\nfaulted address = %p\n",faultedAddr);
     }
     printk("---------------------------------------------\n");
     printk("               panic regs\n");
     printk("---------------------------------------------\n");
-    printk("D[0..3] : %x \t%x \t%x \t%x\n",
+    printk("D[0..3] : %lx \t%lx \t%lx \t%lx\n",
         _boot_panic_registers.d0,_boot_panic_registers.d1,
         _boot_panic_registers.d2,_boot_panic_registers.d3);
-    printk("D[4..7] : %x \t%x \t%x \t%x\n",
+    printk("D[4..7] : %lx \t%lx \t%lx \t%lx\n",
         _boot_panic_registers.d4,_boot_panic_registers.d5,
         _boot_panic_registers.d6,_boot_panic_registers.d7);
-    printk("A[0..3] : %x \t%x \t%x \t%x\n",
+    printk("A[0..3] : %lx \t%lx \t%lx \t%lx\n",
         _boot_panic_registers.a0,_boot_panic_registers.a1,
         _boot_panic_registers.a2,_boot_panic_registers.a3);
-    printk("A[4..7] : %x \t%x \t%x \t%x\n",
+    printk("A[4..7] : %lx \t%lx \t%lx \t%lx\n",
         _boot_panic_registers.a4,_boot_panic_registers.a5,
         _boot_panic_registers.a6,_boot_panic_registers.a7);
 
-    printk("    SFC : %x",_boot_panic_registers.sfc);
-    printk("    DFC : %x\n",_boot_panic_registers.dfc);
-    printk("    VBR : %x\n",_boot_panic_registers.vbr);
+    printk("    SFC : %lx",_boot_panic_registers.sfc);
+    printk("    DFC : %lx\n",_boot_panic_registers.dfc);
+    printk("    VBR : %lx\n",_boot_panic_registers.vbr);
     printk("---------------------------------------------\n");
     printk("               panic stack\n");
     printk("---------------------------------------------\n");
