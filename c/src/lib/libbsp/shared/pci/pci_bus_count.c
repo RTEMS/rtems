@@ -7,6 +7,7 @@
 
 #include <rtems.h>
 #include <rtems/pci.h>
+#include <rtems/bspIo.h>
 
 static uint8_t pci_number_of_buses = 0xff;
 
