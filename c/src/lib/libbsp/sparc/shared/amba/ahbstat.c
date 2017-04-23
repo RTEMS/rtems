@@ -13,6 +13,7 @@
 #include <drvmgr/ambapp_bus.h>
 
 #include <bsp/ahbstat.h>
+#include <rtems/bspIo.h>
 
 void ahbstat_isr(void *arg);
 
