@@ -38,11 +38,11 @@
 void init(void);
 void fini(void);
 
-void _init()
+void _init(void)
 {
 }
 
-void _fini()
+void _fini(void)
 {
 }
 
