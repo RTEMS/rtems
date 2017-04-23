@@ -10,6 +10,7 @@
  */
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <stdlib.h>
 #include <string.h>
 #include <bsp/genirq.h>
