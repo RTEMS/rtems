@@ -26,6 +26,7 @@ rtems_device_driver console_control(rtems_device_major_number major,
                                     rtems_device_minor_number minor,
                                     void*                     arg);
 
+void BSP_output_char(char ch);
 
 ssize_t __bsp_memory_write(int minor, const char* buf, size_t len)
 {
