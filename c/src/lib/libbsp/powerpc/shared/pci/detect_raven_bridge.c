@@ -182,7 +182,7 @@ void detect_host_bridge(void)
       printk("Raven MPIC is accessed via memory Space Access at address : %x\n", tmp);
 #endif
       OpenPIC=(volatile struct OpenPIC *) (tmp + PREP_ISA_MEM_BASE);
-      printk("OpenPIC found at %x.\n", OpenPIC);
+      printk("OpenPIC found at %p.\n", OpenPIC);
     }
   }
 
