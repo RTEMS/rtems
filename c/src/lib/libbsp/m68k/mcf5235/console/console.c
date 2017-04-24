@@ -94,11 +94,12 @@ IntUartSet(int minor, int baud, int databits, int parity, int stopbits, int hwfl
 	info->stopbits = stopbits;
 	info->hwflow   = hwflow;
 
-    clock_speed = get_CPU_clock_speed();
-    /* determine the baud divisor value */
-    divisor = ((clock_speed/2) / ( 32 * baud ));
-    if ( divisor < 2 )
-        divisor = 2;
+	clock_speed = get_CPU_clock_speed();
+	/* determine the baud divisor value */
+	divisor = ((clock_speed/2) / ( 32 * baud ));
+	if ( divisor < 2 ) {
+		divisor = 2;
+	}
 
 	/* check to see if doing hardware flow control */
 	if ( hwflow )
