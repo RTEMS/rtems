@@ -24,6 +24,7 @@
 #include <drvmgr/leon2_amba_bus.h>
 
 #include <bsp.h>
+#include <rtems/bspIo.h>
 
 #define DBG(args...)
 /*#define DBG(args...) printk(args)*/
