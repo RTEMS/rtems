@@ -63,19 +63,21 @@ const console_fns sh_sci_fns_polled =
 static const struct termios term1 = {
     0,
     0,
+    0,
+    0,
+    {0},
     B9600 | CS8,
-    0,
-    0,
-    { 0 }
+    B9600 | CS8
 };
 
 static const struct termios term2 = {
     0,
     0,
+    0,
+    0,
+    {0},
     B115200 | CS8,
-    0,
-    0,
-    { 0 }
+    B115200 | CS8
 };
 
 console_tbl	Console_Configuration_Ports[] = {
