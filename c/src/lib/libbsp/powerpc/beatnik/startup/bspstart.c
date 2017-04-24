@@ -373,7 +373,7 @@ void bsp_start( void )
   BSP_timers_initialize();
 
 #ifdef SHOW_MORE_INIT_SETTINGS
-  printk("MSR %x \n", _read_MSR());
+  printk("MSR 0x%lx \n", _read_MSR());
   printk("Exit from bspstart\n");
 #endif
 }
