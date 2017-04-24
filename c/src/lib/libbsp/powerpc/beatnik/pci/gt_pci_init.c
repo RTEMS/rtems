@@ -239,7 +239,7 @@ int				hose = PCI_BUS2HOSE(bus);
 	} while ( ! PCI_STATUS_OK(pcistat) && count-- );
 
 	if ( !PCI_STATUS_OK(rval) && !quiet) {
-		printk("Cleared PCI errors at discovery (hose %i): pci_stat was 0x%04x\n", hose, rval);
+		printk("Cleared PCI errors at discovery (hose %i): pci_stat was 0x%04lx\n", hose, rval);
 	}
 	if ( !PCI_STATUS_OK(pcistat) ) {
 		printk("Unable to clear PCI errors at discovery (hose %i) still 0x%04x after 10 attempts\n",hose, pcistat);
