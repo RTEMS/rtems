@@ -99,18 +99,24 @@ rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
 
 static void_func get_exception_handler(rtems_vector_number vector)
 {
+  void **vbr;
   void_func *exception_table;
 
-  m68k_get_vbr(exception_table);
+  m68k_get_vbr(vbr);
+
+  exception_table = (void_func *)vbr;
 
   return exception_table[vector_to_exception_vector(vector)];
 }
 
 static void set_exception_handler(rtems_vector_number vector, void_func handler)
 {
+  void **vbr;
   void_func *exception_table;
 
-  m68k_get_vbr(exception_table);
+  m68k_get_vbr(vbr);
+
+  exception_table = (void_func *)vbr;
 
   exception_table[vector_to_exception_vector(vector)] = handler;
 }
