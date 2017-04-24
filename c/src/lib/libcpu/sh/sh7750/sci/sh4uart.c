@@ -548,7 +548,7 @@ sh4uart_poll_write(sh4uart *uart, const char *buf, int len)
         }
         while ((SCSSR2 & SH7750_SCSSR2_TDFE) == 0 ||
                 (SCSSR2 & SH7750_SCSSR2_TEND) == 0);
-            *ssr2 &= ~(SH7750_SCSSR1_TDRE | SH7750_SCSSR2_TEND);
+        *ssr2 &= ~(SH7750_SCSSR1_TDRE | SH7750_SCSSR2_TEND);
       }
     }
   }
