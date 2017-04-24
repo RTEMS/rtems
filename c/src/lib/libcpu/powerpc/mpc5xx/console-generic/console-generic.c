@@ -76,10 +76,10 @@ int init_calls = 0;
 static struct termios default_termios = {
   0, 					/* input mode flags */
   0, 					/* output mode flags */
-  CS8 | CREAD | CLOCAL | B9600, 	/* control mode flags */
   0, 					/* local mode flags */
   0,					/* line discipline */
-  { 0 }					/* control characters */
+  { 0 },				/* control characters */
+  CS8 | CREAD | CLOCAL | B9600, 	/* control mode flags */
 };
 
 
