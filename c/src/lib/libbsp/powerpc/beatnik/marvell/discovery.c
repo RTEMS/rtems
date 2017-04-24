@@ -106,8 +106,8 @@ static DiscoveryVersion rval = unknown;
 		 * access methods are installed or not (as a matter of fact this shouldn't
 		 * matter for any device on hose 0)
 		 */
-printk("config addr is 0x%08x\n", BSP_pci_configuration.pci_config_addr);
-printk("config data is 0x%08x\n", BSP_pci_configuration.pci_config_data);
+printk("config addr is %p\n", BSP_pci_configuration.pci_config_addr);
+printk("config data is %p\n", BSP_pci_configuration.pci_config_data);
 		pci_read_config_word(0,0,0,PCI_VENDOR_ID, &ds);
 		if ( PCI_VENDOR_ID_MARVELL != ds ) {
 			if ( assertion ) {
