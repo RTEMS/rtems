@@ -8,6 +8,8 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/threaddispatch.h>
 
+#include <inttypes.h>
+
 static void
 rebootQuestion(void)
 {
@@ -60,12 +62,13 @@ void _BSP_Fatal_error(unsigned int v)
     printk("enabled\n");
   else
     printk(
-      "  Error occurred in a Thread Dispatching DISABLED context (level %i)\n",
+      "  Error occurred in a Thread Dispatching DISABLED"
+      "  context (level %" PRIu32 ")\n",
       _Thread_Dispatch_get_disable_level());
 
   if ( _ISR_Nest_level ) {
     printk(
-      "  Error occurred from ISR context (ISR nest level %i)\n",
+      "  Error occurred from ISR context (ISR nest level %" PRIu32 ")\n",
       _ISR_Nest_level
     );
   }
