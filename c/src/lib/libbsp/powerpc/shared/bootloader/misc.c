@@ -286,14 +286,15 @@ setup_hw(void)
 	       "Processor/Bus frequencies (Hz): %ld/%ld\n"
 	       "Time Base Divisor: %ld\n"
 	       "Memory Size: %lx\n"
-		   "Residual: %lx (length %u)\n",
+		   "Residual: %lx (length %lu)\n",
  	       vpd.PrintableModel,
 	       vpd.Serial,
 	       vpd.ProcessorHz,
                vpd.ProcessorBusHz,
 	       (vpd.TimeBaseDivisor ? vpd.TimeBaseDivisor : 4000),
 	       res->TotalMemory,
-		   (unsigned long)res, res->ResidualLength);
+	       (unsigned long)res,
+	       res->ResidualLength);
 
 	/* This reconfigures all the PCI subsystem */
         pci_init();
