@@ -281,12 +281,15 @@ SYM(hard_reset):
 	rd	%asr17, %o0		! get CPU identifier
 	srl	%o0, LEON3_ASR17_PROCESSOR_INDEX_SHIFT, %o0
 
-	cmp	%o0, 0
-	beq	cpu0
-	 nop
-
 	sll	%o0, PER_CPU_CONTROL_SIZE_LOG2, %l0
 	add	%g6, %l0, %g6
+
+	/* If LEON3_Boot_Cpu < 0 then assign us as boot CPU and continue. */
+	set	SYM(LEON3_Boot_Cpu), %o1
+	ld	[%o1], %o2
+	tst	%o2
+	bneg	.Lbootcpu
+	 nop
 
 	ld	[%g6 + PER_CPU_INTERRUPT_STACK_HIGH], %sp ! set stack pointer
 	sub	%sp, 4, %sp		! stack starts at end of area - 4
@@ -295,7 +298,8 @@ SYM(hard_reset):
 
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
 	 sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
-cpu0:
+.Lbootcpu:
+	st	%o0, [%o1]
 #endif
 
 	set	(SYM(rdb_start)), %g5	! End of RAM
