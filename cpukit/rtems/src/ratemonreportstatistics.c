@@ -23,11 +23,12 @@
 #include <rtems/printer.h>
 
 #include <inttypes.h>
+#include <rtems/inttypes.h>
 
 /* We print to 1/10's of milliseconds */
 #define NANOSECONDS_DIVIDER 1000
 #define PERCENT_FMT     "%04" PRId32
-#define NANOSECONDS_FMT "%06" PRId32
+#define NANOSECONDS_FMT "%06" PRIdtime_t
 
 void rtems_rate_monotonic_report_statistics_with_plugin(
   const rtems_printer *printer
@@ -112,9 +113,9 @@ ididididid NNNN ccccc mmmmmm X
 
       _Timespec_Divide_by_integer( total_cpu, the_stats.count, &cpu_average );
       rtems_printf( printer,
-        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* min cpu time */
-        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* max cpu time */
-        "%" PRId32 "."  NANOSECONDS_FMT " ",       /* avg cpu time */
+        "%" PRIdtime_t "."  NANOSECONDS_FMT "/"        /* min cpu time */
+        "%" PRIdtime_t "."  NANOSECONDS_FMT "/"        /* max cpu time */
+        "%" PRIdtime_t "."  NANOSECONDS_FMT " ",       /* avg cpu time */
         _Timespec_Get_seconds( min_cpu ),
 	  _Timespec_Get_nanoseconds( min_cpu ) / NANOSECONDS_DIVIDER,
         _Timespec_Get_seconds( max_cpu ),
@@ -135,9 +136,9 @@ ididididid NNNN ccccc mmmmmm X
 
       _Timespec_Divide_by_integer(total_wall, the_stats.count, &wall_average);
       rtems_printf( printer,
-        "%" PRId32 "." NANOSECONDS_FMT "/"        /* min wall time */
-        "%" PRId32 "." NANOSECONDS_FMT "/"        /* max wall time */
-        "%" PRId32 "." NANOSECONDS_FMT "\n",      /* avg wall time */
+        "%" PRIdtime_t "." NANOSECONDS_FMT "/"        /* min wall time */
+        "%" PRIdtime_t "." NANOSECONDS_FMT "/"        /* max wall time */
+        "%" PRIdtime_t "." NANOSECONDS_FMT "\n",      /* avg wall time */
         _Timespec_Get_seconds( min_wall ),
           _Timespec_Get_nanoseconds( min_wall ) / NANOSECONDS_DIVIDER,
         _Timespec_Get_seconds( max_wall ),
