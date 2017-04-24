@@ -41,12 +41,12 @@ void console_outbyte_polled(
 {
   if ( port == 0 ) {
     while ( (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE) == 0 );
-      LEON_REG.UART_Channel_1 = (unsigned int) ch;
-      return;
-    }
+    LEON_REG.UART_Channel_1 = (unsigned int) ch;
+    return;
+  }
 
-    while ( (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE) == 0 );
-    LEON_REG.UART_Channel_2 = (unsigned int) ch;
+  while ( (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_THE) == 0 );
+  LEON_REG.UART_Channel_2 = (unsigned int) ch;
 }
 
 /*
