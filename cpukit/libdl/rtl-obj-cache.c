@@ -23,6 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <rtems/inttypes.h>
 
 #include <rtems/rtl/rtl-allocator.h>
 #include "rtl-obj-cache.h"
@@ -79,8 +80,8 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
   struct stat sb;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-    printf ("rtl: cache: %2d: fd=%d offset=%" PRIdMAX "length=%zu area=[%"
-            PRIdMAX ",%" PRIdMAX "] cache=[%" PRIdMAX ",%" PRIdMAX "] size=%zu\n",
+    printf ("rtl: cache: %2d: fd=%d offset=%" PRIdoff_t "length=%zu area=[%"
+            PRIdoff_t ",%" PRIdoff_t "] cache=[%" PRIdoff_t ",%" PRIdoff_t "] size=%zu\n",
             fd, cache->fd, offset, *length,
             offset, offset + *length,
             cache->offset, cache->offset + cache->level,
