@@ -154,6 +154,7 @@ struct greth_softc
    greth_regs *regs;
    int minor;
    int phyaddr;  /* PHY Address configured by user (or -1 to autodetect) */
+   unsigned int edcl_dis;
 
    int acceptBroadcast;
    rtems_id daemonTid;
@@ -350,19 +351,18 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp1;
     int tmp2;
     struct timespec tstart, tnow;
-
     greth_regs *regs;
 
     regs = sc->regs;
-    
+
     /* Reset the controller.  */
     sc->rxInterrupts = 0;
     sc->rxPackets = 0;
 
-    regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
+    regs->ctrl = GRETH_CTRL_RST | GRETH_CTRL_DD | GRETH_CTRL_ED; /* Reset ON */
     for (i = 0; i<100 && (regs->ctrl & GRETH_CTRL_RST); i++)
         ;
-    regs->ctrl = GRETH_CTRL_DD; 	/* Reset OFF. SW do PHY Init */
+    regs->ctrl = GRETH_CTRL_DD | GRETH_CTRL_ED; /* Reset OFF. SW do PHY Init */
 
     /* Check if mac is gbit capable*/
     sc->gbit_mac = (regs->ctrl >> 27) & 1;
@@ -504,10 +504,10 @@ auto_neg_done:
     }
     while ((read_mii(sc, phyaddr, 0)) & 0x8000) {}
 
-    regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
+    regs->ctrl = GRETH_CTRL_RST | GRETH_CTRL_DD | GRETH_CTRL_ED; /* Reset ON */
     for (i = 0; i < 100 && (regs->ctrl & GRETH_CTRL_RST); i++)
         ;
-    regs->ctrl = GRETH_CTRL_DD;
+    regs->ctrl = GRETH_CTRL_DD | sc->edcl_dis; /* Reset OFF. SW do PHY Init */
 
     /* Initialize rx/tx descriptor table pointers. Due to alignment we 
      * always allocate maximum table size.
@@ -584,7 +584,7 @@ auto_neg_done:
         sc->tx_int_gen = sc->tx_int_gen_cur = sc->txbufs/2;
     }
     sc->next_tx_mbuf = NULL;
-    
+
     if ( !sc->gbit_mac )
         sc->max_fragsize = 1;
 
@@ -1160,9 +1160,13 @@ greth_stop (struct greth_softc *sc)
     SPIN_LOCK_IRQ(&sc->devlock, flags);
     ifp->if_flags &= ~IFF_RUNNING;
 
-    sc->regs->ctrl = 0;		        /* RX/TX OFF */
-    sc->regs->ctrl = GRETH_CTRL_RST;	/* Reset ON */
-    sc->regs->ctrl = 0;	         	/* Reset OFF */
+    /* RX/TX OFF */
+    sc->regs->ctrl = GRETH_CTRL_DD | GRETH_CTRL_ED;
+    /* Reset ON */
+    sc->regs->ctrl = GRETH_CTRL_RST | GRETH_CTRL_DD | GRETH_CTRL_ED;
+    /* Reset OFF and restore link settings previously detected if any */
+    sc->regs->ctrl = GRETH_CTRL_DD | sc->edcl_dis |
+                     (sc->gb << 8) | (sc->sp << 7) | (sc->fd << 4);
     SPIN_UNLOCK_IRQ(&sc->devlock, flags);
 
     sc->next_tx_mbuf = NULL;
@@ -1424,6 +1428,7 @@ int greth_device_init(struct greth_softc *sc)
     struct amba_dev_info *ambadev;
     struct ambapp_core *pnpinfo;
     union drvmgr_key_value *value;
+    unsigned int speed;
 
     /* Get device information from AMBA PnP information */
     ambadev = (struct amba_dev_info *)sc->dev->businfo;
@@ -1434,13 +1439,27 @@ int greth_device_init(struct greth_softc *sc)
     sc->regs = (greth_regs *)pnpinfo->apb_slv->start;
     sc->minor = sc->dev->minor_drv;
 
-    /* clear control register and reset NIC 
+    /* Remember EDCL enabled/disable state before reset */
+    sc->edcl_dis = sc->regs->ctrl & GRETH_CTRL_ED;
+
+    /* Default is to inherit EDCL Disable bit from HW. User can force En/Dis */
+    value = drvmgr_dev_key_get(sc->dev, "edclDis", DRVMGR_KT_INT);
+    if ( value ) {
+        /* Force EDCL mode. Has an effect later when GRETH+PHY is initialized */
+        if (value->i > 0)
+            sc->edcl_dis = GRETH_CTRL_ED;
+        else
+            sc->edcl_dis = 0;
+    }
+
+    /* clear control register and reset NIC and keep current speed modes.
      * This should be done as quick as possible during startup, this is to
      * stop DMA transfers after a reboot.
      */
-    sc->regs->ctrl = 0;
-    sc->regs->ctrl = GRETH_CTRL_RST;
-    sc->regs->ctrl = 0;
+    speed = sc->regs->ctrl & (GRETH_CTRL_GB | GRETH_CTRL_SP | GRETH_CTRL_FULLD);
+    sc->regs->ctrl = GRETH_CTRL_DD | GRETH_CTRL_ED;
+    sc->regs->ctrl = GRETH_CTRL_RST | GRETH_CTRL_DD | GRETH_CTRL_ED;
+    sc->regs->ctrl = GRETH_CTRL_DD | sc->edcl_dis | speed;
 
     /* Configure driver by overriding default config with the bus resources 
      * configured by the user

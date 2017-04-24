@@ -82,6 +82,7 @@ typedef struct _greth_regs {
 #define GRETH_CTRL_PRO          0x00000020 /* Promiscuous (receive all) */
 #define GRETH_CTRL_RST          0x00000040 /* Reset MAC */
 #define GRETH_CTRL_DD           0x00001000 /* Disable EDCL Duplex Detection */
+#define GRETH_CTRL_ED           0x00004000 /* EDCL Disable */
 
 /* Status Register */
 #define GRETH_STATUS_RXERR      0x00000001 /* Receive Error */
