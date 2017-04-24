@@ -62,6 +62,10 @@ typedef unsigned char bool;
  * NOTE: System headers on GNU/Linux may #define this macro already,
  * so if you want to change it, you need to #undef it first.
  */
+#ifdef __rtems__
+#	undef __always_inline
+#	define __always_inline inline
+#else
 #ifndef __always_inline
 #	ifdef __GNUC__
 #		define __always_inline \
@@ -69,6 +73,7 @@ typedef unsigned char bool;
 #	else
 #		define __always_inline inline
 #	endif
+#endif
 #endif
 
 /* Inline functions to access unaligned unsigned 32-bit integers */
