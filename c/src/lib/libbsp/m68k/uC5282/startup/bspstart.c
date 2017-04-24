@@ -18,6 +18,7 @@
 #include <rtems/error.h>
 #include <errno.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <mcf5282/mcf5282.h>
 
 /*
@@ -125,7 +126,7 @@ static void handler(int pc)
          || ((char *)nfp >= RamSize)
          || ((char *)(nfp[1]) >= RamSize))
             break;
-        printk("FP:%x -> %x    PC:%x\n", fp, nfp, nfp[1]);
+        printk("FP:%p -> %p    PC:%x\n", fp, nfp, nfp[1]);
         fp = nfp;
     }
     }
@@ -259,7 +260,7 @@ void bsp_start( void )
 		}
 		mfd = MCF5282_CLOCK_SYNCR;
 	}
-	printk("Assuming %uHz PLL ref. clock\n", BSP_pll_ref_clock);
+	printk("Assuming %" PRIu32 "Hz PLL ref. clock\n", BSP_pll_ref_clock);
 	rfd = (mfd >>  8) & 7;
 	mfd = (mfd >> 12) & 7;
 	/* Check against 'known' cases */
@@ -273,7 +274,11 @@ void bsp_start( void )
 	}
 	mfd = 2 * (mfd + 2);
 	/* sysclk = pll_ref * 2 * (MFD + 2) / 2^(rfd) */
-	printk("PLL multiplier: %u, output divisor: %u\n", mfd, rfd);
+	printk(
+          "PLL multiplier: %" PRIu32", output divisor: %" PRIu32 "\n",
+          mfd,
+          rfd
+        );
 	clk_speed = (BSP_pll_ref_clock * mfd) >> rfd;
   }
 
@@ -282,7 +287,8 @@ void bsp_start( void )
 	bsp_sysReset(0);
   } else {
   	BSP_sys_clk_speed = clk_speed;
-	printk("System clock speed: %uHz\n", bsp_get_CPU_clock_speed());
+	printk(
+          "System clock speed: %" PRIu32 "Hz\n", bsp_get_CPU_clock_speed());
   }
 }
 
@@ -471,7 +477,11 @@ fpga_trampoline (rtems_vector_number v)
     if (++loopcount >= 50) {
       rtems_interrupt_level level;
       rtems_interrupt_disable(level);
-      printk("\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%x) -- DISABLING ALL FPGA INTERRUPTS.\n", v & 0x3f);
+      printk(
+        "\nTOO MANY FPGA INTERRUPTS (LAST WAS 0x%lx) -- "
+        "DISABLING ALL FPGA INTERRUPTS.\n",
+        v & 0x3f
+      );
       MCF5282_INTC0_IMRL |= MCF5282_INTC_IMRL_INT1;
       rtems_interrupt_enable(level);
       return;
@@ -483,7 +493,7 @@ fpga_trampoline (rtems_vector_number v)
       rtems_interrupt_level level;
       rtems_vector_number nv;
       rtems_interrupt_disable(level);
-      printk("\nSPURIOUS FPGA INTERRUPT (0x%x).\n", v & 0x3f);
+      printk("\nSPURIOUS FPGA INTERRUPT (0x%lx).\n", v & 0x3f);
       if ((((nv = FPGA_IRQ_INFO) & 0x80) != 0)
           && ((nv & 0x3f) == (v & 0x3f))) {
         printk("DISABLING ALL FPGA INTERRUPTS.\n");
