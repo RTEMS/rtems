@@ -210,12 +210,14 @@ void _handler(int vec, ctxt *p) {
 		}
 	} else {
 	  MMUon();
-	  printk("\nPanic: vector=%x, dsisr=%lx, faultaddr =%lx, msr=%lx opcode=%lx\n", vec,
+	  printk(
+		"\nPanic: vector=%d, dsisr=%lx, faultaddr =%lx, "
+		  "msr=%lx opcode=%x\n", vec,
 		 cause, p->nip, p->msr, * ((unsigned int*) p->nip) );
 	  if (vec == 7) {
 	    unsigned int* ptr = ((unsigned int*) p->nip) - 4 * 10;
 	    for (; ptr <= (((unsigned int*) p->nip) + 4 * 10); ptr ++)
-	      printk("Hexdecimal code at address %x = %x\n", ptr, *ptr);
+	      printk("Hexdecimal code at address %p = %x\n", ptr, *ptr);
 	  }
 	  hang("Program or alignment exception at ", vaddr, p);
 	}
