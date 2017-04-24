@@ -187,8 +187,8 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *excPtr)
     int i;
     int j;
 
-    printk(" VSCR = 0x%08x\n", excPtr->VSCR);
-    printk("VRSAVE = 0x%08x\n", excPtr->VRSAVE);
+    printk(" VSCR = 0x%08" PRIx32 "\n", excPtr->VSCR);
+    printk("VRSAVE = 0x%08" PRIx32 "\n", excPtr->VRSAVE);
 
     for (i = 0; i < 32; ++i) {
       printk("  V%02i = 0x", i);
