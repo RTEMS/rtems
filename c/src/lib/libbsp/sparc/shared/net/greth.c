@@ -188,6 +188,7 @@ struct greth_softc
    int gb;
    int gbit_mac;
    int auto_neg;
+   unsigned int advmodes; /* advertise ethernet speed modes. 0 = all modes. */
    struct timespec auto_neg_time;
 
    /*
@@ -352,6 +353,7 @@ greth_initialize_hardware (struct greth_softc *sc)
     int tmp2;
     struct timespec tstart, tnow;
     greth_regs *regs;
+    unsigned int advmodes;
 
     regs = sc->regs;
 
@@ -394,6 +396,13 @@ greth_initialize_hardware (struct greth_softc *sc)
     /* Wait for reset to complete and get default values */
     while ((phyctrl = read_mii(sc, phyaddr, 0)) & 0x8000) {}
 
+    /* Set up PHY advertising modes for auto-negotiation */
+    advmodes = sc->advmodes;
+    if (advmodes == 0)
+        advmodes = GRETH_ADV_ALL;
+    if (!sc->gbit_mac)
+        advmodes &= ~(GRETH_ADV_1000_FD | GRETH_ADV_1000_HD);
+
     /* Enable/Disable GBit auto-neg advetisement so that the link partner
      * know that we have/haven't GBit capability. The MAC may not support
      * Gbit even though PHY does...
@@ -401,11 +410,26 @@ greth_initialize_hardware (struct greth_softc *sc)
     phystatus = read_mii(sc, phyaddr, 1);
     if (phystatus & 0x0100) {
         tmp1 = read_mii(sc, phyaddr, 9);
-        if (sc->gbit_mac)
-            write_mii(sc, phyaddr, 9, tmp1 | 0x300);
-        else
-            write_mii(sc, phyaddr, 9, tmp1 & ~(0x300));
+        tmp1 &= ~0x300;
+        if (advmodes & GRETH_ADV_1000_FD)
+            tmp1 |= 0x200;
+        if (advmodes & GRETH_ADV_1000_HD)
+            tmp1 |= 0x100;
+        write_mii(sc, phyaddr, 9, tmp1);
     }
+
+    /* Optionally limit the 10/100 modes as configured by user */
+    tmp1 = read_mii(sc, phyaddr, 4);
+    tmp1 &= ~0x1e0;
+    if (advmodes & GRETH_ADV_100_FD)
+        tmp1 |= 0x100;
+    if (advmodes & GRETH_ADV_100_HD)
+        tmp1 |= 0x080;
+    if (advmodes & GRETH_ADV_10_FD)
+        tmp1 |= 0x040;
+    if (advmodes & GRETH_ADV_10_HD)
+        tmp1 |= 0x020;
+    write_mii(sc, phyaddr, 4, tmp1);
 
     /* If autonegotiation implemented we start it */
     if (phystatus & 0x0008) {
@@ -1479,6 +1503,10 @@ int greth_device_init(struct greth_softc *sc)
     value = drvmgr_dev_key_get(sc->dev, "phyAdr", DRVMGR_KT_INT);
     if ( value && (value->i < 32) )
         sc->phyaddr = value->i;
+
+    value = drvmgr_dev_key_get(sc->dev, "advModes", DRVMGR_KT_INT);
+    if ( value )
+        sc->advmodes = value->i;
 
     return 0;
 }

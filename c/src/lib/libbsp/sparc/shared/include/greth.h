@@ -81,6 +81,8 @@ typedef struct _greth_regs {
 #define GRETH_CTRL_FULLD        0x00000010 /* Full Duplex */
 #define GRETH_CTRL_PRO          0x00000020 /* Promiscuous (receive all) */
 #define GRETH_CTRL_RST          0x00000040 /* Reset MAC */
+#define GRETH_CTRL_SP           0x00000080 /* 100MBit speed mode */
+#define GRETH_CTRL_GB           0x00000100 /* 1GBit speed mode */
 #define GRETH_CTRL_DD           0x00001000 /* Disable EDCL Duplex Detection */
 #define GRETH_CTRL_ED           0x00004000 /* EDCL Disable */
 
@@ -133,6 +135,14 @@ struct phy_device_info
    int extpart;
 };
 
+/* Limit speed modes advertised during auto-negotiation */
+#define GRETH_ADV_10_HD    0x0001
+#define GRETH_ADV_10_FD    0x0002
+#define GRETH_ADV_100_HD   0x0004
+#define GRETH_ADV_100_FD   0x0008
+#define GRETH_ADV_1000_HD  0x0010
+#define GRETH_ADV_1000_FD  0x0020
+#define GRETH_ADV_ALL      0x003f
 /*
 #ifdef CPU_U32_FIX
 void ipalign(struct mbuf *m);
