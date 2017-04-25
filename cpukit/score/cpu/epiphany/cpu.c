@@ -35,8 +35,8 @@
 #include <bsp/linker-symbols.h>
 #include <rtems/score/cpu.h>
 
-void init(void);
-void fini(void);
+void _init(void);
+void _fini(void);
 
 void _init(void)
 {
