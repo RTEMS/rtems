@@ -47,9 +47,14 @@ void BSP_shared_interrupt_init(void)
   for (i=0; i <= BSP_INTERRUPT_VECTOR_MAX_STD; i++) {
 #if defined(LEON3) && \
     (defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING))
-    /* Don't install IRQ handler on IPI interrupt */
-    if (i == LEON3_mp_irq)
-      continue;
+    /* Don't install IRQ handler on IPI interrupt. An SMP kernel with max one
+     * CPU does not use IPIs
+     */
+#ifdef RTEMS_SMP
+    if (rtems_configuration_get_maximum_processors() > 1)
+#endif
+      if (i == LEON3_mp_irq)
+        continue;
 #endif
     vector = SPARC_ASYNCHRONOUS_TRAP(i) + 0x10;
     rtems_interrupt_catch(bsp_isr_handler, vector, &previous_isr);
