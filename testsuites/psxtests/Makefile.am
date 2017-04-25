@@ -47,6 +47,7 @@ _SUBDIRS += psxeintr_join
 _SUBDIRS += psxenosys
 _SUBDIRS += psxfatal01
 _SUBDIRS += psxfatal02
+_SUBDIRS += psxgetattrnp01
 endif
 if HAS_POSIX
 if HAS_CPLUSPLUS
@@ -96,8 +97,8 @@ _SUBDIRS += psxstack02
 _SUBDIRS += psxstrsignal01
 _SUBDIRS += psxsysconf
 endif
-_SUBDIRS += psxthreadname01
 if HAS_POSIX
+_SUBDIRS += psxthreadname01
 _SUBDIRS += psxtime
 _SUBDIRS += psxtimer01
 _SUBDIRS += psxtimer02
@@ -113,7 +114,6 @@ _SUBDIRS += psxchroot01
 _SUBDIRS += psxfile01
 _SUBDIRS += psxfile02
 _SUBDIRS += psxfilelock01
-_SUBDIRS += psxgetattrnp01
 _SUBDIRS += psxgetrusage01
 _SUBDIRS += psxid01
 _SUBDIRS += psximfs01
