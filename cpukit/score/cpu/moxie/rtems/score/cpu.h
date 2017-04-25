@@ -625,7 +625,7 @@ uint32_t   _CPU_ISR_Get_level( void );
  *  XXX
  */
 #define _CPU_Fatal_halt( _source, _error ) \
-        printk("Fatal Error %d.%d Halted\n",_source,_error); \
+        printk("Fatal Error %d.%lu Halted\n",_source,_error); \
         for(;;)
 
 /* end of Fatal Error manager macros */
