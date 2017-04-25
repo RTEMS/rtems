@@ -175,8 +175,9 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
     }
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
-      printf ("rtl: cache: %2d: seek: offset=%" PRIdMAX "buffer_offset=%zu"
-              "read=%zu cache=[%" PRIdMAX ",%" PRIdMAX "] dist=%" PRIdMAX "\n",
+      printf ("rtl: cache: %2d: seek: offset=%" PRIdoff_t "buffer_offset=%zu"
+              "read=%zu cache=[%" PRIdoff_t ",%" PRIdoff_t "] "
+              "dist=%" PRIdoff_t "\n",
               fd, offset + buffer_offset, buffer_offset, buffer_read,
               offset, offset + buffer_read,
               (cache->file_size - offset));
