@@ -40,6 +40,9 @@ int pthread_mutex_init(
   const Scheduler_Control   *scheduler;
   Priority_Control           priority;
 
+  /* initialize to avoid warning for used uninitialized */
+  priority = 0;
+
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
 
