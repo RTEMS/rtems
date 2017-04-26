@@ -12,11 +12,13 @@
 
 #include <rtems/score/cpu.h>
 #include <rtems/bspIo.h>
+#include <inttypes.h>
 
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
-  uint32_t i;
+  int i;
+
   for ( i = 0; i < 32; ++i ) {
-      printk( "r%02i = 0x%016x\n",i, frame->r[i]);
+      printk( "r%02i = 0x%016" PRIx32 "\n",i, frame->r[i]);
   }
 }
