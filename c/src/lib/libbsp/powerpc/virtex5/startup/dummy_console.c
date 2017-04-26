@@ -1,5 +1,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <rtems/bspIo.h>
+#include <rtems/console.h>
 
 #include <string.h>
 
@@ -7,26 +9,6 @@ ssize_t app_memory_write(int minor, const char* buf, size_t len)
 __attribute__(( weak, alias("__bsp_memory_write") ));
 
 ssize_t __bsp_memory_write(int minor, const char* buf, size_t len);
-rtems_device_driver console_initialize(rtems_device_major_number major,
-                                       rtems_device_minor_number minor,
-                                       void*                     arg);
-rtems_device_driver console_open(rtems_device_major_number major,
-                                 rtems_device_minor_number minor,
-                                 void*                     arg);
-rtems_device_driver console_close(rtems_device_major_number major,
-                                  rtems_device_minor_number minor,
-                                  void*                     arg);
-rtems_device_driver console_read(rtems_device_major_number major,
-                                 rtems_device_minor_number minor,
-                                 void*                     arg);
-rtems_device_driver console_write(rtems_device_major_number major,
-                                  rtems_device_minor_number minor,
-                                  void*                     arg);
-rtems_device_driver console_control(rtems_device_major_number major,
-                                    rtems_device_minor_number minor,
-                                    void*                     arg);
-
-void BSP_output_char(char ch);
 
 ssize_t __bsp_memory_write(int minor, const char* buf, size_t len)
 {
