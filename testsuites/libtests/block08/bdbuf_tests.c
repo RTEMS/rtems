@@ -21,6 +21,7 @@
 #include <rtems/io.h>
 #include <rtems/diskdevs.h>
 #include <rtems/bdbuf.h>
+#include <rtems/inttypes.h>
 #include "bdbuf_tests.h"
 
 
