@@ -38,10 +38,6 @@ int pthread_mutex_init(
   const pthread_mutexattr_t *the_attr;
   POSIX_Mutex_Protocol       protocol;
   const Scheduler_Control   *scheduler;
-  Priority_Control           priority;
-
-  /* initialize to avoid warning for used uninitialized */
-  priority = 0;
 
   if ( attr ) the_attr = attr;
   else        the_attr = &_POSIX_Mutex_Default_attributes;
@@ -109,23 +105,6 @@ int pthread_mutex_init(
   }
 #endif
 
-  if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
-    int  prio_ceiling;
-    bool valid;
-
-    scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
-    prio_ceiling = the_attr->prio_ceiling;
-
-    if ( prio_ceiling == INT_MAX ) {
-      prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
-    }
-
-    priority = _POSIX_Priority_To_core( scheduler, prio_ceiling, &valid );
-    if ( !valid ) {
-      return EINVAL;
-    }
-  }
-
   the_mutex = _POSIX_Mutex_Allocate();
 
   if ( !the_mutex ) {
@@ -137,9 +116,27 @@ int pthread_mutex_init(
   the_mutex->is_recursive = ( the_attr->type == PTHREAD_MUTEX_RECURSIVE );
 
   switch ( protocol ) {
-    case POSIX_MUTEX_PRIORITY_CEILING:
+    case POSIX_MUTEX_PRIORITY_CEILING: {
+      int               prio_ceiling;
+      bool              valid;
+      Priority_Control  priority;
+
+      scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
+      prio_ceiling = the_attr->prio_ceiling;
+
+      if ( prio_ceiling == INT_MAX ) {
+	prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
+      }
+
+      priority = _POSIX_Priority_To_core( scheduler, prio_ceiling, &valid );
+      if ( !valid ) {
+        _POSIX_Mutex_Free(the_mutex);
+        _Objects_Allocator_unlock();
+	return EINVAL;
+      }
       _CORE_ceiling_mutex_Initialize( &the_mutex->Mutex, scheduler, priority );
       break;
+    }
     default:
       _Assert(
         the_mutex->protocol == POSIX_MUTEX_NO_PROTOCOL
