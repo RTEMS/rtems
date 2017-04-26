@@ -140,7 +140,11 @@ run_bdbuf_tests()
     test_dev = -1;
     while ((disk = rtems_disk_next(dev)) != NULL)
     {
-        printk("DEV: %s [%lu]\n", disk->name, disk->size);
+        printk(
+          "DEV: %s [%" PRIdrtems_blkdev_bnum "]\n",
+         disk->name,
+          disk->size
+        );
         dev = disk->dev;
         if (strcmp(disk->name, TEST_DISK_NAME) == 0)
             test_dev = dev;

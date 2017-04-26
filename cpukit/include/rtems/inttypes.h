@@ -137,8 +137,11 @@ extern "C" {
 /* ioctl_command_t */
 #define PRIdioctl_command_t PRId32
 
-/* rtems_vector_number */
-#define PRIdrtems_vector_number PRId32
+/* rtems_blkdev_bnum */
+#define PRIdrtems_blkdev_bnum PRId32
+
+/* rtems_blkdev_bnum */
+#define PRIdrtems_blkdev_bnum PRId32
 
 /**@}*/
 
