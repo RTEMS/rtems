@@ -131,6 +131,11 @@ int main (int argc, char **argv)
 execution_start:
   printf ("Execution starts, %d runs through Dhrystone\n", Number_Of_Runs);
 
+#ifdef __rtems__
+  /* avoid used uninitialized warning */
+  Int_2_Loc = 0;
+#endif
+
   /***************/
   /* Start timer */
   /***************/
@@ -141,11 +146,6 @@ execution_start:
 #endif
 #ifdef TIME
   Begin_Time = time ( (long *) 0);
-#endif
-
-#ifdef __rtems__
-  /* avoid used uninitialized warning */
-  Int_2_Loc = 0;
 #endif
 
   for (Run_Index = 1; Run_Index <= Number_Of_Runs; ++Run_Index)
