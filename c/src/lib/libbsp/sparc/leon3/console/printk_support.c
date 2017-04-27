@@ -25,8 +25,8 @@
 #include <bsp/apbuart.h>
 #include <bsp/apbuart_termios.h>
 
-int debug_uart_index __attribute__((weak)) = 0;
-struct apbuart_regs *dbg_uart = NULL;
+int leon3_debug_uart_index __attribute__((weak)) = 0;
+struct apbuart_regs *leon3_debug_uart = NULL;
 
 /* Before UART driver has registered (or when no UART is available), calls to
  * printk that gets to bsp_out_char() will be filling data into the
@@ -45,24 +45,24 @@ static void bsp_debug_uart_init(void)
   struct ambapp_dev *adev;
   struct ambapp_apb_info *apb;
 
-  /* Update debug_uart_index to index used as debug console.
-   * Let user select Debug console by setting debug_uart_index. If the
-   * BSP is to provide the default UART (debug_uart_index==0):
+  /* Update leon3_debug_uart_index to index used as debug console. Let user
+   * select Debug console by setting leon3_debug_uart_index. If the BSP is to
+   * provide the default UART (leon3_debug_uart_index==0):
    *   non-MP: APBUART[0] is debug console
    *   MP: LEON CPU index select UART
    */
-  if (debug_uart_index == 0) {
+  if (leon3_debug_uart_index == 0) {
 #if defined(RTEMS_MULTIPROCESSING)
-    debug_uart_index = LEON3_Cpu_Index;
+    leon3_debug_uart_index = LEON3_Cpu_Index;
 #else
-    debug_uart_index = 0;
+    leon3_debug_uart_index = 0;
 #endif
   } else {
-    debug_uart_index = debug_uart_index - 1; /* User selected dbg-console */
+    leon3_debug_uart_index--; /* User selected dbg-console */
   }
 
   /* Find APBUART core for System Debug Console */
-  i = debug_uart_index;
+  i = leon3_debug_uart_index;
   adev = (void *)ambapp_for_each(&ambapp_plb, (OPTIONS_ALL|OPTIONS_APB_SLVS),
                                  VENDOR_GAISLER, GAISLER_APBUART,
                                  ambapp_find_by_idx, (void *)&i);
@@ -71,9 +71,9 @@ static void bsp_debug_uart_init(void)
      * for printk
      */
     apb = (struct ambapp_apb_info *)adev->devinfo;
-    dbg_uart = (struct apbuart_regs *)apb->start;
-    dbg_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
-    dbg_uart->status = 0;
+    leon3_debug_uart = (struct apbuart_regs *)apb->start;
+    leon3_debug_uart->ctrl |= APBUART_CTRL_RE | APBUART_CTRL_TE;
+    leon3_debug_uart->status = 0;
   }
 }
 
@@ -86,14 +86,14 @@ RTEMS_SYSINIT_ITEM(
 /* putchar/getchar for printk */
 static void bsp_out_char(char c)
 {
-  if (dbg_uart == NULL) {
+  if (leon3_debug_uart == NULL) {
     /* Local debug buffer when UART driver has not registered */
     pre_printk_dbgbuf[pre_printk_pos++] = c;
     pre_printk_pos = pre_printk_pos & (sizeof(pre_printk_dbgbuf)-1);
     return;
   }
 
-  apbuart_outbyte_polled(dbg_uart, c, 1, 1);
+  apbuart_outbyte_polled(leon3_debug_uart, c, 1, 1);
 }
 
 /*
@@ -108,10 +108,10 @@ static int bsp_in_char(void)
 {
   int tmp;
 
-  if (dbg_uart == NULL)
+  if (leon3_debug_uart == NULL)
     return EOF;
 
-  while ((tmp = apbuart_inbyte_nonblocking(dbg_uart)) < 0)
+  while ((tmp = apbuart_inbyte_nonblocking(leon3_debug_uart)) < 0)
     ;
   return tmp;
 }

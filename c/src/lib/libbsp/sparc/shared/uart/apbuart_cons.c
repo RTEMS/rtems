@@ -48,7 +48,9 @@ extern void apbuart_outbyte_polled(
   int do_cr_on_newline,
   int wait_sent);
 extern int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
-extern struct apbuart_regs *dbg_uart; /* The debug UART */
+#ifdef LEON3
+extern struct apbuart_regs *leon3_debug_uart; /* The debug UART */
+#endif
 
 /* Probed hardware capabilities */
 enum {
@@ -263,7 +265,7 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	 */
 	db = 0;
 #ifdef LEON3
-	if (priv->regs == dbg_uart) {
+	if (priv->regs == leon3_debug_uart) {
 		db = priv->regs->ctrl & (LEON_REG_UART_CTRL_RE |
 					LEON_REG_UART_CTRL_TE |
 					LEON_REG_UART_CTRL_PE |
@@ -510,7 +512,7 @@ static void last_close(
 
 #ifdef LEON3
 	/* Disable TX/RX if not used for DEBUG */
-	if (uart->regs != dbg_uart)
+	if (uart->regs != leon3_debug_uart)
 		uart->regs->ctrl &= ~(APBUART_CTRL_RE | APBUART_CTRL_TE);
 #endif
 }

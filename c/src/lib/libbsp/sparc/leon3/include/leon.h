@@ -364,7 +364,7 @@ extern int syscon_uart_index;
  * 3 = APBUART[2]
  * ...
  */
-extern int debug_uart_index;
+extern int leon3_debug_uart_index;
 
 /* Let user override which on-chip TIMER core will be used for system clock
  * timer. This controls which timer core will be accociated with
