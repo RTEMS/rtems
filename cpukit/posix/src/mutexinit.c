@@ -115,35 +115,31 @@ int pthread_mutex_init(
   the_mutex->protocol = protocol;
   the_mutex->is_recursive = ( the_attr->type == PTHREAD_MUTEX_RECURSIVE );
 
-  switch ( protocol ) {
-    case POSIX_MUTEX_PRIORITY_CEILING: {
-      int               prio_ceiling;
-      bool              valid;
-      Priority_Control  priority;
+  if ( protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+    int               prio_ceiling;
+    bool              valid;
+    Priority_Control  priority;
 
-      scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
-      prio_ceiling = the_attr->prio_ceiling;
+    scheduler = _Thread_Scheduler_get_home( _Thread_Get_executing() );
+    prio_ceiling = the_attr->prio_ceiling;
 
-      if ( prio_ceiling == INT_MAX ) {
-	prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
-      }
-
-      priority = _POSIX_Priority_To_core( scheduler, prio_ceiling, &valid );
-      if ( !valid ) {
-        _POSIX_Mutex_Free(the_mutex);
-        _Objects_Allocator_unlock();
-	return EINVAL;
-      }
-      _CORE_ceiling_mutex_Initialize( &the_mutex->Mutex, scheduler, priority );
-      break;
+    if ( prio_ceiling == INT_MAX ) {
+      prio_ceiling = _POSIX_Priority_Get_maximum( scheduler );
     }
-    default:
-      _Assert(
-        the_mutex->protocol == POSIX_MUTEX_NO_PROTOCOL
-          || the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT
-      );
-      _CORE_recursive_mutex_Initialize( &the_mutex->Mutex.Recursive );
-      break;
+
+    priority = _POSIX_Priority_To_core( scheduler, prio_ceiling, &valid );
+    if ( !valid ) {
+      _POSIX_Mutex_Free(the_mutex);
+      _Objects_Allocator_unlock();
+      return EINVAL;
+    }
+    _CORE_ceiling_mutex_Initialize( &the_mutex->Mutex, scheduler, priority );
+  } else {
+    _Assert(
+      the_mutex->protocol == POSIX_MUTEX_NO_PROTOCOL
+	|| the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT
+    );
+    _CORE_recursive_mutex_Initialize( &the_mutex->Mutex.Recursive );
   }
 
   _Objects_Open_u32( &_POSIX_Mutex_Information, &the_mutex->Object, 0 );
