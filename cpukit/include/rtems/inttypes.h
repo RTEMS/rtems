@@ -143,6 +143,9 @@ extern "C" {
 /* rtems_blkdev_bnum */
 #define PRIdrtems_blkdev_bnum PRId32
 
+/* rtems_vector_number */
+#define PRIdrtems_vector_number PRId32
+
 /**@}*/
 
 #ifdef __cplusplus
