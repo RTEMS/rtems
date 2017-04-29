@@ -46,6 +46,7 @@ include_bsp_HEADERS += include/tms570-pinmux.h
 
 include_bsp_HEADERS += include/tms570-pins.h
 include_bsp_HEADERS += include/tms570ls3137zwt-pins.h
+include_bsp_HEADERS += include/tms570lc4357-pins.h
 
 include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
