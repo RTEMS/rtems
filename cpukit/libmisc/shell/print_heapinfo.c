@@ -24,9 +24,9 @@ void rtems_shell_print_heap_info(
 )
 {
   printf(
-    "Number of %s blocks:                    %12" PRId32 "\n"
-    "Largest %s block:                       %12" PRId32 "\n"
-    "Total bytes %s:                         %12" PRId32 "\n",
+    "Number of %s blocks:                    %12" PRIu32 "\n"
+    "Largest %s block:                       %12" PRIu32 "\n"
+    "Total bytes %s:                         %12" PRIu32 "\n",
     c, h->number,
     c, h->largest,
     c, h->total
