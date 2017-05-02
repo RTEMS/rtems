@@ -289,7 +289,7 @@ RTEMS_CPUOPT([__RTEMS_MINOR__],
   [$rtems_minor],
   [minor version portion of an RTEMS release])
 
-RTEMS_CPUOPT([__RTEMS_REVISION___],
+RTEMS_CPUOPT([__RTEMS_REVISION__],
   [true],
   [$rtems_revision],
   [revision version portion of an RTEMS release])
