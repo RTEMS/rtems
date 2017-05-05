@@ -1,6 +1,6 @@
 /*
  * Generic interrupt helpers mainly for GRLIB PCI peripherals
- * 
+ *
  * COPYRIGHT (c) 2008.
  * Cobham Gaisler AB.
  *
@@ -47,6 +47,7 @@ genirq_t genirq_init(int number_of_irqs)
 		return NULL;
 	memset(priv, 0, size);
 	priv->genirq_max = number_of_irqs - 1;
+
 	return priv;
 }
 
@@ -64,7 +65,7 @@ void genirq_destroy(genirq_t d)
 		while ( isrentry ) {
 			tmp = isrentry;
 			isrentry = isrentry->next;
-			free(tmp);
+			genirq_free_handler(tmp);
 		}
 	}
 
@@ -81,26 +82,28 @@ int genirq_check(genirq_t d, int irq)
 		return 0;
 }
 
-int genirq_register(genirq_t d, int irq, genirq_handler isr, void *arg)
+void *genirq_alloc_handler(genirq_handler isr, void *arg)
+{
+	struct genirq_handler_entry *newentry;
+
+	newentry = malloc(sizeof(struct genirq_handler_entry));
+	if ( newentry ) {
+		/* Initialize ISR entry */
+		newentry->isr     = isr;
+		newentry->arg     = arg;
+		newentry->enabled = 0;
+	}
+	return newentry;
+}
+
+int genirq_register(genirq_t d, int irq, void *handler)
 {
 	struct genirq_priv *priv = d;
 	struct genirq_irq_entry *irqentry;
-	struct genirq_handler_entry *isrentry, *newentry;
-	rtems_interrupt_level level;
-	
+	struct genirq_handler_entry *isrentry, *newentry = handler;
+
 	if ( genirq_check(d, irq) )
 		return -1;
-
-	newentry = malloc(sizeof(*newentry));
-	if ( !newentry )
-		return -1;
-
-	/* Initialize ISR entry */
-	newentry->isr     = isr;
-	newentry->arg     = arg;
-	newentry->enabled = 0;
-
-	rtems_interrupt_disable(level);
 
 	/* Insert new ISR entry first into table */
 	irqentry = &priv->genirq_table[irq];
@@ -108,29 +111,24 @@ int genirq_register(genirq_t d, int irq, genirq_handler isr, void *arg)
 	irqentry->head = newentry;
 	newentry->next = isrentry;
 
-	rtems_interrupt_enable(level);
-
 	if ( isrentry )
 		return 1; /* This is the first handler on this IRQ */
 	return 0;
 }
 
-int genirq_unregister(genirq_t d, int irq, genirq_handler isr, void *arg)
+void *genirq_unregister(genirq_t d, int irq, genirq_handler isr, void *arg)
 {
 	struct genirq_priv *priv = d;
 	struct genirq_irq_entry *irqentry;
 	struct genirq_handler_entry *isrentry, **prev;
-	rtems_interrupt_level level;
-	int ret;
+	void *ret;
 
 	if ( genirq_check(d, irq) )
-		return -1;
+		return NULL;
 
 	/* Remove isr[arg] from ISR list */
 	irqentry = &priv->genirq_table[irq];
-	ret = -1;
-
-	rtems_interrupt_disable(level);
+	ret = NULL;
 
 	prev = &irqentry->head;
 	isrentry = irqentry->head;
@@ -139,18 +137,16 @@ int genirq_unregister(genirq_t d, int irq, genirq_handler isr, void *arg)
 			/* Found ISR, remove it from list */
 			if ( isrentry->enabled ) {
 				/* Can not remove enabled ISRs, disable first */
-				ret = 1;
+				ret = NULL;
 				break;
 			}
 			*prev = isrentry->next;
-			ret = 0;
+			ret = isrentry;
 			break;
 		}
 		prev = &isrentry->next;
 		isrentry = isrentry->next;
 	}
-
-	rtems_interrupt_enable(level);
 
 	return ret;
 }
@@ -226,7 +222,7 @@ void genirq_doirq(genirq_t d, int irq)
 
 	irqentry = &priv->genirq_table[irq];
 	irqentry->stats.irq_cnt++;
-	
+
 	enabled = 0;
 
 	isrentry = irqentry->head;

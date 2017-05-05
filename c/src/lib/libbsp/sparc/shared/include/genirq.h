@@ -35,7 +35,7 @@ struct genirq_stats {
 extern genirq_t genirq_init(int number_of_irqs);
 
 /* Free the dynamically allocated memory that the genirq interface has 
- * allocated.
+ * allocated. Also the handlers will be freed.
  *
  * Returns zero on success, otherwise failure.
  */
@@ -47,33 +47,54 @@ extern void genirq_destroy(genirq_t d);
  */
 extern int genirq_check(genirq_t d, int irq);
 
-/* Register shared interrupt handler.
+/* Allocate one ISR handler and initialize it. Input to genirq_register().
  *
- * \param irq    The interrupt number to register ISR on
  * \param isr    The interrupt service routine called upon IRQ
  * \param arg    The argument given to isr() when called.
+ *
+ * Returns a pointer on success, on failure NULL is returned.
+ */
+extern void *genirq_alloc_handler(genirq_handler isr, void *arg);
+
+/* Free handler memory */
+#define genirq_free_handler(handler) free(handler)
+
+/* Register shared interrupt handler previously initialized with
+ * genirq_alloc_handler().
+ *
+ * NOTE: internal list structures are accessed and needs to be protected by
+ *       spin-locks/IRQ disable by the user to guarantee a correct behaviour.
+ *
+ * \param irq    The interrupt number to register ISR on
+ * \param handler Install the pre- allocated and initialized handler.
  *
  * Return Values
  * -1  = Failed
  * 0   = Handler registered Successfully, first handler on this IRQ
  * 1   = Handler registered Successfully, _not_ first handler on this IRQ
  */
-extern int genirq_register(genirq_t d, int irq, genirq_handler isr, void *arg);
+extern int genirq_register(genirq_t d, int irq, void *handler);
 
-/* Unregister an previous registered interrupt handler 
+/* Unregister an previous registered interrupt handler. It is the user's
+ * responsibility to free the handler returned by genirq_unregister().
+ *
+ * NOTE: internal list structures are accessed and needs to be protected by
+ *       spin-locks/IRQ disable by the user to guarantee a correct behaviour.
  *
  * Return Values
- *  -1 = ISR not registered before
- *  0  = ISR unregistered
- *  1  = Unable to unregister enabled ISR
+ * NULL    = ISR not registered before or unable to unregister enabled ISR
+ * Pointer = ISR sucessfully unregistered. Returned is the handler pointer
+ *           previously allocated with genirq_alloc_handler().
  */
-extern int genirq_unregister(genirq_t d, int irq, genirq_handler isr, void *arg);
+extern void *genirq_unregister(genirq_t d, int irq,
+				genirq_handler isr, void *arg);
 
 /* Enables IRQ only for this isr[arg] combination. Records if this 
  * is the first interrupt enable, only then must interrupts be enabled
  * on the interrupt controller.
  *
- * IRQs must be disabled before entering this function.
+ * NOTE: internal list structures are accessed and needs to be protected by
+ *       spin-locks/IRQ disable by the user to guarantee a correct behaviour.
  *
  * Return values
  *  -1 = Failure, for example isr[arg] not registered on this irq
@@ -86,7 +107,8 @@ extern int genirq_enable(genirq_t d, int irq, genirq_handler isr, void *arg);
  * is the only interrupt handler that is enabled on this IRQ, only then
  * must interrupts be disabled on the interrupt controller.
  *
- * IRQs must be disabled before entering this function.
+ * NOTE: internal list structures are accessed and needs to be protected by
+ *       spin-locks/IRQ disable by the user to guarantee a correct behaviour.
  *
  * Return values
  *  -1 = Failure, for example isr[arg] not registered on this irq
@@ -97,6 +119,9 @@ extern int genirq_disable(genirq_t d, int irq, genirq_handler isr, void *arg);
 
 /* Must be called by user when an IRQ has fired, the argument 'irq' 
  * is the IRQ number of the IRQ which was fired.
+ *
+ * NOTE: internal list structures are accessed and needs to be protected by
+ *       spin-locks/IRQ disable by the user to guarantee a correct behaviour.
  */
 extern void genirq_doirq(genirq_t d, int irq);
 
