@@ -137,6 +137,7 @@ static const ppc_exc_categories mpc_604_altivec_category_table = {
 static const ppc_exc_categories mpc_750_category_table = {
   PPC_BASIC_VECS,
 
+  [ASM_60X_PERFMON_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_60X_SYSMGMT_VECTOR] = PPC_EXC_CLASSIC | PPC_EXC_ASYNC,
   [ASM_60X_ADDR_VECTOR] = PPC_EXC_CLASSIC,
   [ASM_60X_ITM_VECTOR] = PPC_EXC_CLASSIC,
@@ -265,6 +266,7 @@ const ppc_exc_categories *ppc_exc_categories_for_cpu(ppc_cpu_id_t cpu)
   switch (cpu) {
     case PPC_7400:
     case PPC_750:
+    case PPC_750_IBM:
       return &mpc_750_category_table;
     case PPC_7455:
     case PPC_7457:

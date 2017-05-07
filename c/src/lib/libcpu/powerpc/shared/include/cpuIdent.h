@@ -30,6 +30,7 @@ typedef enum
   PPC_603e = 0x6,
   PPC_603ev = 0x7,
   PPC_750 = 0x8,
+  PPC_750_IBM = 0x7000,
   PPC_604e = 0x9,
   PPC_604r = 0xA,
   PPC_7400 = 0xC,

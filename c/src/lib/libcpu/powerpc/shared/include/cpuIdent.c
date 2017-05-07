@@ -38,6 +38,7 @@ const char *get_ppc_cpu_type_name(ppc_cpu_id_t cpu)
     case PPC_603ev:		return "MPC603ev";
     case PPC_604:		return "MPC604";
     case PPC_750:		return "MPC750";
+    case PPC_750_IBM:		return "IBM PPC750";
     case PPC_7400:		return "MPC7400";
     case PPC_7455:		return "MPC7455";
     case PPC_7457:              return "MPC7457";
@@ -113,6 +114,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
     case PPC_604:
     case PPC_604r:
     case PPC_750:
+    case PPC_750_IBM:
     case PPC_7400:
     case PPC_7455:
     case PPC_7457:
@@ -165,6 +167,7 @@ ppc_cpu_id_t get_ppc_cpu_type(void)
 	case PPC_604e:
 	case PPC_604r:
 	case PPC_750:
+	case PPC_750_IBM:
 		current_ppc_features.has_hw_ptbl_lkup	= 1;
 	case PPC_8260:
 	case PPC_8245:
