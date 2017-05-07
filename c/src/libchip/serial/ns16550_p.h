@@ -28,7 +28,9 @@
 #ifndef _NS16550_P_H_
 #define _NS16550_P_H_
 
+#ifndef ASM
 #include <libchip/serial.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +45,9 @@ extern "C" {
 
 #define NS16550_RECEIVE_BUFFER   0
 #define NS16550_TRANSMIT_BUFFER  0
+#define NS16550_DIVISOR_LATCH_L  0
 #define NS16550_INTERRUPT_ENABLE 1
+#define NS16550_DIVISOR_LATCH_M  1
 #define NS16550_INTERRUPT_ID     2
 #define NS16550_FIFO_CONTROL     2
 #define NS16550_LINE_CONTROL     3
