@@ -125,7 +125,7 @@ static inline bool bsp_interrupt_allocate_handler_index(
 
     return false;
   #else
-    *index = vector;
+    *index = bsp_interrupt_handler_index(vector);
     return true;
   #endif
 }
