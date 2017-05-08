@@ -23,6 +23,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/isrlock.h> /* spin-lock */
 #include <pci.h>
 
 #include <ambapp.h>
@@ -34,6 +35,16 @@
 #include <bsp/genirq.h>
 
 #include <bsp/gr_rasta_io.h>
+
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 /* Determines which PCI address the AHB masters will access, it should be
  * set so that the masters can access the CPU RAM. Default is base of CPU RAM,
@@ -108,8 +119,9 @@ struct gr_rasta_io_ver {
 /* Private data structure for driver */
 struct gr_rasta_io_priv {
 	/* Driver management */
-	struct drvmgr_dev	*dev;
+	struct drvmgr_dev		*dev;
 	char				prefix[16];
+	SPIN_DECLARE(devlock);
 
 	/* PCI */
 	pci_dev_t			pcidev;
@@ -233,10 +245,13 @@ void gr_rasta_io_isr (void *arg)
 	struct gr_rasta_io_priv *priv = arg;
 	unsigned int status, tmp;
 	int irq;
+	SPIN_ISR_IRQFLAGS(irqflags);
+
 	tmp = status = priv->irq->ipend;
 
 	/* DBG("GR-RASTA-IO: IRQ 0x%x\n",status); */
 
+	SPIN_LOCK(&priv->devlock, irqflags);
 	for(irq=0; irq<16; irq++) {
 		if ( status & (1<<irq) ) {
 			genirq_doirq(priv->genirq, irq);
@@ -246,6 +261,7 @@ void gr_rasta_io_isr (void *arg)
 				break;
 		}
 	}
+	SPIN_UNLOCK(&priv->devlock, irqflags);
 
 	/* ACK interrupt, this is because PCI is Level, so the IRQ Controller still drives the IRQ. */
 	if ( tmp ) 
@@ -590,6 +606,12 @@ int gr_rasta_io_init1(struct drvmgr_dev *dev)
 	if ((bar0_size == 0) || (bar1_size == 0))
 		return DRVMGR_ENORES;
 
+	/* Initialize spin-lock for this PCI peripheral device. This is to
+	 * protect the Interrupt Controller Registers. The genirq layer is
+         * protecting its own internals and ISR dispatching.
+         */
+	SPIN_INIT(&priv->devlock, priv->prefix);
+
 	/* Let user override which PCI address the AHB masters of the
 	 * GR-RASTA-IO board access when doing DMA to CPU RAM. The AHB masters
 	 * access the PCI Window of the AMBA bus, the MSB 4-bits of that address
@@ -685,12 +707,17 @@ int ambapp_rasta_io_int_register(
 	void *arg)
 {
 	struct gr_rasta_io_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 	int status;
+	void *h;
 
-	rtems_interrupt_disable(level);
+	h = genirq_alloc_handler(handler, arg);
+	if ( h == NULL )
+		return DRVMGR_FAIL;
 
-	status = genirq_register(priv->genirq, irq, handler, arg);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+
+	status = genirq_register(priv->genirq, irq, h);
 	if ( status == 0 ) {
 		/* Clear IRQ for first registered handler */
 		priv->irq->iclear = (1<<irq);
@@ -698,7 +725,8 @@ int ambapp_rasta_io_int_register(
 		status = 0;
 
 	if (status != 0) {
-		rtems_interrupt_enable(level);
+		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+		genirq_free_handler(h);
 		return DRVMGR_FAIL;
 	}
 
@@ -709,7 +737,7 @@ int ambapp_rasta_io_int_register(
 	} else if ( status == 1 )
 		status = 0;
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return status;
 }
@@ -721,10 +749,11 @@ int ambapp_rasta_io_int_unregister(
 	void *arg)
 {
 	struct gr_rasta_io_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 	int status;
+	void *handler;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	status = genirq_disable(priv->genirq, irq, isr, arg);
 	if ( status == 0 ) {
@@ -732,11 +761,16 @@ int ambapp_rasta_io_int_unregister(
 		priv->irq->mask[0] &= ~(1<<irq); /* mask interrupt source */
 	}
 
-	status = genirq_unregister(priv->genirq, irq, isr, arg);
-	if ( status != 0 )
+	handler = genirq_unregister(priv->genirq, irq, isr, arg);
+	if ( handler == NULL )
 		status = DRVMGR_FAIL;
+	else
+		status = DRVMGR_OK;
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+
+	if (handler)
+		genirq_free_handler(handler);
 
 	return status;
 }
@@ -746,19 +780,19 @@ int ambapp_rasta_io_int_unmask(
 	int irq)
 {
 	struct gr_rasta_io_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 
 	DBG("RASTA-IO IRQ %d: unmask\n", irq);
 
 	if ( genirq_check(priv->genirq, irq) )
 		return DRVMGR_EINVAL;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Enable IRQ for first enabled handler only */
 	priv->irq->mask[0] |= (1<<irq); /* unmask interrupt source */
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return DRVMGR_OK;
 }
@@ -768,19 +802,19 @@ int ambapp_rasta_io_int_mask(
 	int irq)
 {
 	struct gr_rasta_io_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 
 	DBG("RASTA-IO IRQ %d: mask\n", irq);
 
 	if ( genirq_check(priv->genirq, irq) )
 		return DRVMGR_EINVAL;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Disable/mask IRQ */
 	priv->irq->mask[0] &= ~(1<<irq); /* mask interrupt source */
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return DRVMGR_OK;
 }

@@ -23,6 +23,7 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
+#include <rtems/score/isrlock.h> /* spin-lock */
 #include <pci.h>
 #include <pci/access.h>
 
@@ -36,6 +37,16 @@
 #include <bsp/genirq.h>
 
 #include <bsp/gr_701.h>
+
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_BASE_ADDR 0x80000000
@@ -87,8 +98,9 @@ struct pci_bridge_regs {
 /* Private data structure for driver */
 struct gr701_priv {
 	/* Driver management */
-	struct drvmgr_dev	*dev;
+	struct drvmgr_dev		*dev;
 	char				prefix[16];
+	SPIN_DECLARE(devlock);
 
 	struct pci_bridge_regs		*pcib;
 	struct amba_bridge_regs		*ambab;
@@ -200,7 +212,9 @@ void gr701_interrupt(void *arg)
 	struct gr701_priv *priv = arg;
 	unsigned int status;
 	int irq = 0;
+	SPIN_ISR_IRQFLAGS(irqflags);
 
+	SPIN_LOCK(&priv->devlock, irqflags);
 	while ( (status=priv->pcib->istatus) != 0 ) {
 		priv->interrupt_cnt++;	/* An interrupt was generated */
 		irq = status;
@@ -208,6 +222,7 @@ void gr701_interrupt(void *arg)
 		/* ACK interrupt */
 		priv->pcib->istatus = 0;
 	}
+	SPIN_UNLOCK(&priv->devlock, irqflags);
 
 	/* ACK interrupt, this is because PCI is Level, so the IRQ Controller still drives the IRQ. */
 	if ( irq )
@@ -347,6 +362,12 @@ int gr701_init1(struct drvmgr_dev *dev)
 	if ((bar0_size == 0) || (bar1_size == 0))
 		return DRVMGR_ENORES;
 
+	/* Initialize spin-lock for this PCI perihperal device. This is to
+	 * protect the Interrupt Controller Registers. The genirq layer is
+         * protecting its own internals and ISR dispatching.
+         */
+	SPIN_INIT(&priv->devlock, priv->prefix);
+
 	priv->genirq = genirq_init(16);
 	if ( priv->genirq == NULL ) {
 		free(priv);
@@ -410,12 +431,17 @@ int ambapp_gr701_int_register(
 	void *arg)
 {
 	struct gr701_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 	int status;
+	void *h;
 
-	rtems_interrupt_disable(level);
+	h = genirq_alloc_handler(handler, arg);
+	if ( h == NULL )
+		return DRVMGR_FAIL;
 
-	status = genirq_register(priv->genirq, irq, handler, arg);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+
+	status = genirq_register(priv->genirq, irq, h);
 	if ( status == 0 ) {
 		/* Clear IRQ for first registered handler */
 		priv->pcib->iclear = (1<<irq);
@@ -423,7 +449,8 @@ int ambapp_gr701_int_register(
 		status = 0;
 
 	if (status != 0) {
-		rtems_interrupt_enable(level);
+		SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+		genirq_free_handler(h);
 		return DRVMGR_FAIL;
 	}
 
@@ -434,7 +461,7 @@ int ambapp_gr701_int_register(
 	} else if ( status == 1 )
 		status = DRVMGR_OK;
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return status;
 }
@@ -446,10 +473,11 @@ int ambapp_gr701_int_unregister(
 	void *arg)
 {
 	struct gr701_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 	int status;
+	void *handler;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	status = genirq_disable(priv->genirq, irq, isr, arg);
 	if ( status == 0 ) {
@@ -457,11 +485,16 @@ int ambapp_gr701_int_unregister(
 		priv->pcib->imask &= ~(1<<irq); /* mask interrupt source */
 	}
 
-	status = genirq_unregister(priv->genirq, irq, isr, arg);
-	if ( status != 0 )
+	handler = genirq_unregister(priv->genirq, irq, isr, arg);
+	if ( handler == NULL )
 		status = DRVMGR_FAIL;
+	else
+		status = DRVMGR_OK;
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
+
+	if (handler)
+		genirq_free_handler(handler);
 
 	return status;
 }
@@ -471,19 +504,19 @@ int ambapp_gr701_int_unmask(
 	int irq)
 {
 	struct gr701_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 
 	DBG("GR-701 IRQ %d: enable\n", irq);
 
 	if ( genirq_check(priv->genirq, irq) )
 		return DRVMGR_FAIL;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Enable IRQ */
 	priv->pcib->imask |= (1<<irq); /* unmask interrupt source */
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return DRVMGR_OK;
 }
@@ -493,19 +526,19 @@ int ambapp_gr701_int_mask(
 	int irq)
 {
 	struct gr701_priv *priv = dev->parent->dev->priv;
-	rtems_interrupt_level level;
+	SPIN_IRQFLAGS(irqflags);
 
 	DBG("GR-701 IRQ %d: disable\n", irq);
 
 	if ( genirq_check(priv->genirq, irq) )
 		return DRVMGR_FAIL;
 
-	rtems_interrupt_disable(level);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Disable IRQ */
 	priv->pcib->imask &= ~(1<<irq); /* mask interrupt source */
 
-	rtems_interrupt_enable(level);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return DRVMGR_OK;
 }
