@@ -186,8 +186,8 @@ void ahbstat_isr(void *arg)
 			" at 0x%08lx\n",
 			status & AHBSTAT_STS_CE ? "single" : "non-correctable",
 			status & AHBSTAT_STS_HW ? "write" : "read",
-			(int) (status & AHBSTAT_STS_HS) >> AHBSTAT_STS_HS_BIT,
-			(int) (status & AHBSTAT_STS_HM) >> AHBSTAT_STS_HM_BIT,
+			(status & AHBSTAT_STS_HS) >> AHBSTAT_STS_HS_BIT,
+			(status & AHBSTAT_STS_HM) >> AHBSTAT_STS_HM_BIT,
 			fadr);
 	}
 
