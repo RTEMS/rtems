@@ -83,7 +83,6 @@ EXTRA_DIST += shared/uart/cons.c
 EXTRA_DIST += shared/uart/apbuart_cons.c
 EXTRA_DIST += shared/include/cons.h
 EXTRA_DIST += shared/include/apbuart_cons.h
-EXTRA_DIST += shared/uart/apbuart.c
 EXTRA_DIST += shared/include/apbuart.h
 
 # CAN (OC_CAN, GRCAN)

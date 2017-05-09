@@ -170,8 +170,7 @@ libbsp_a_SOURCES += ../../sparc/shared/spw/grspw_router.c
 # UART
 include_bsp_HEADERS += ../../sparc/shared/include/apbuart.h \
     ../../sparc/shared/include/apbuart_termios.h
-libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c \
-    ../../sparc/shared/uart/apbuart_termios.c
+libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart_termios.c
 
 # I2CMST
 include_bsp_HEADERS += ../../sparc/shared/include/i2cmst.h

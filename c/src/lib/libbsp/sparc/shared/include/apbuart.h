@@ -25,33 +25,6 @@
 extern "C" {
 #endif
 
-typedef struct {
-  unsigned int hw_dovr;
-  unsigned int hw_parity;
-  unsigned int hw_frame;
-  unsigned int sw_dovr;
-  unsigned int rx_cnt;
-  unsigned int tx_cnt;
-} apbuart_stats;
-
-#define APBUART_START    0
-#define APBUART_STOP     1
-#define APBUART_SET_RXFIFO_LEN 2
-#define APBUART_SET_TXFIFO_LEN 3
-#define APBUART_SET_BAUDRATE   4
-#define APBUART_SET_SCALER     5
-#define APBUART_SET_BLOCKING   6
-#define APBUART_SET_ASCII_MODE 7
-
-
-#define APBUART_GET_STATS 16
-#define APBUART_CLR_STATS 17
-
-#define APBUART_BLK_RX 0x1
-#define APBUART_BLK_TX 0x2
-#define APBUART_BLK_FLUSH 0x4
-
-
 #define APBUART_CTRL_RE 0x1
 #define APBUART_CTRL_TE 0x2
 #define APBUART_CTRL_RI 0x4
@@ -79,12 +52,6 @@ typedef struct {
 #define APBUART_STATUS_RH 0x100
 #define APBUART_STATUS_TF 0x200
 #define APBUART_STATUS_RF 0x400
-
-/* Register APBUART driver
- * bus =  pointer to AMBA bus description used to search for APBUART(s).
- *        (&ambapp_plb for LEON3), (LEON2: see amba_scan)
- */
-int apbuart_register (struct ambapp_bus *bus);
 
 #ifdef __cplusplus
 }

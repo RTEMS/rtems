@@ -154,7 +154,6 @@ libbsp_a_SOURCES += ../../sparc/shared/spw/grspw_router.c
 
 # UART (RAW)
 include_bsp_HEADERS += ../../sparc/shared/include/apbuart.h
-libbsp_a_SOURCES += ../../sparc/shared/uart/apbuart.c
 
 # I2CMST
 include_bsp_HEADERS += ../../sparc/shared/include/i2cmst.h
