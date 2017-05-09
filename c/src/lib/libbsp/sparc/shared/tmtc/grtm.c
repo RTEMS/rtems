@@ -23,17 +23,15 @@
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grtm.h>
 
-#ifndef IRQ_GLOBAL_PREPARE
- #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
-#endif
-
-#ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
-#endif
-
-#ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
-#endif
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 /*
 #define DEBUG
@@ -364,6 +362,7 @@ struct grtm_priv {
 	int			irq;
 	int			minor;
 	int			subrev;		/* GRTM Revision */
+	SPIN_DECLARE(devlock);			/* spin-lock ISR protection */
 
 	int			open;
 	int			running;
@@ -510,6 +509,8 @@ static int grtm_init3(struct drvmgr_dev *dev)
 		 */
 		sprintf(priv->devName, "/dev/%sgrtm%d", prefix, dev->minor_bus);
 	}
+
+	SPIN_INIT(&priv->devlock, priv->devName);
 
 	/* Register Device */
 	status = rtems_io_register_name(priv->devName, grtm_driver_io_major, dev->minor_drv);
@@ -938,10 +939,11 @@ static rtems_device_driver grtm_close(rtems_device_major_number major, rtems_dev
 	pDev = (struct grtm_priv *)dev->priv;
 
 	if ( pDev->running ){
+		drvmgr_interrupt_unregister(dev, 0, grtm_interrupt, pDev);
 		grtm_stop(pDev);
 		pDev->running = 0;
 	}
-	
+
 	/* Reset core */
 	grtm_hw_reset(pDev);
 
@@ -1067,13 +1069,12 @@ static int grtm_free_sent(struct grtm_priv *pDev)
  * Return Value
  * Returns number of frames moved from ready to scheduled queue 
  */
-static int grtm_schedule_ready(struct grtm_priv *pDev, int ints_off)
+static int grtm_schedule_ready(struct grtm_priv *pDev)
 {
 	int cnt;
 	unsigned int ctrl, dmactrl;
 	struct grtm_ring *curr_bd;
 	struct grtm_frame *curr_frm, *last_frm;
-	IRQ_GLOBAL_PREPARE(oldLevel);
 
 	if ( !pDev->ready.head ){
 		return 0;
@@ -1165,23 +1166,83 @@ static int grtm_schedule_ready(struct grtm_priv *pDev, int ints_off)
 
 		/* Update TX ring posistion */
 		pDev->ring = curr_bd;
-		if ( !ints_off ) {
-			IRQ_GLOBAL_DISABLE(oldLevel);
-		}
 
 		/* Make hardware aware of the newly enabled descriptors */
 		dmactrl = READ_REG(&pDev->regs->dma_ctrl);
 		dmactrl &= ~(GRTM_DMA_CTRL_TXRST | GRTM_DMA_CTRL_RST);
 		dmactrl |= GRTM_DMA_CTRL_EN;
 		pDev->regs->dma_ctrl = dmactrl;
-		
-		if ( !ints_off ) {
-			IRQ_GLOBAL_ENABLE(oldLevel);
-		}
 	}
+
 	return cnt;
 }
 
+static void grtm_tx_process(struct grtm_priv *pDev)
+{
+	int num;
+
+	/* Free used descriptors and put the sent frame into the "Sent queue"  
+	 *   (SCHEDULED->SENT)
+	 */
+	num = grtm_free_sent(pDev);
+	pDev->scheduled_cnt -= num;
+	pDev->sent_cnt += num;
+
+	/* Use all available free descriptors there are frames for
+	 * in the ready queue.
+	 *   (READY->SCHEDULED)
+	 */
+	if (pDev->running) {
+		num = grtm_schedule_ready(pDev);
+		pDev->ready_cnt -= num;
+		pDev->scheduled_cnt += num;
+	}
+}
+
+/*
+ * The TX lock protects user tasks from the ISR. If TX DMA interrupt occurs
+ * while the user task is processing the TX DMA descriptors the ISR will
+ * ignore interrupt the request by not processing the DMA table since that
+ * is done by the user task anyway. In SMP, when a user task enters the TX DMA
+ * processing while the ISR (on another CPU) is also processing the user task
+ * will loop waiting for the ISR to complete.
+ */
+static int grtm_request_txlock(struct grtm_priv *pDev, int block)
+{
+	SPIN_IRQFLAGS(irqflags);
+	int got_lock = 0;
+
+	do {
+		SPIN_LOCK_IRQ(&pDev->devlock, irqflags);
+		if (pDev->handling_transmission == 0) {
+			pDev->handling_transmission = 1;
+			got_lock = 1;
+		}
+		SPIN_UNLOCK_IRQ(&pDev->devlock, irqflags);
+	} while (!got_lock && block);
+
+	return got_lock;
+}
+
+static inline int grtm_request_txlock_isr(struct grtm_priv *pDev)
+{
+	SPIN_ISR_IRQFLAGS(irqflags);
+	int got_lock = 0;
+
+	SPIN_LOCK(&pDev->devlock, irqflags);
+	if (pDev->handling_transmission == 0) {
+		pDev->handling_transmission = 1;
+		got_lock = 1;
+	}
+	SPIN_UNLOCK(&pDev->devlock, irqflags);
+
+	return got_lock;
+}
+
+static inline void grtm_release_txlock(struct grtm_priv *pDev)
+{
+	pDev->handling_transmission = 0;
+}
 
 static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
 {
@@ -1192,7 +1253,6 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 	int status;
 	struct grtm_ioc_config *cfg;
 	struct grtm_ioc_hw_status *hwregs;
-	IRQ_GLOBAL_PREPARE(oldLevel);
 	struct grtm_list *chain;
 	struct grtm_frame *curr;
 	struct grtm_ioc_hw *hwimpl;
@@ -1314,9 +1374,7 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 			return RTEMS_INVALID_NAME;
 		}
 		/* We disable interrupt in order to get a snapshot of the registers */
-		IRQ_GLOBAL_DISABLE(oldLevel);
 /* TODO: implement hwregs */
-		IRQ_GLOBAL_ENABLE(oldLevel);
 		break;
 
 		/* Put a chain of frames at the back of the "Ready frames" queue. This 
@@ -1328,16 +1386,20 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 		if ( !pDev->running ){
 			return RTEMS_RESOURCE_IN_USE;
 		}
-		num=0;
 
 		/* Get pointer to frame chain wished be sent */
 		chain = (struct grtm_list *)ioarg->buffer;
 		if ( !chain ){
 			/* No new frames to send ==> just trigger hardware
 			 * to send previously made ready frames to be sent.
+			 * If someone else is processing the DMA we igore the
+			 * request.
 			 */
-			pDev->handling_transmission = 1;
-			goto trigger_transmission;
+			if (grtm_request_txlock(pDev, 0)) {
+				grtm_tx_process(pDev);
+				grtm_release_txlock(pDev);
+			}
+			break;
 		}
 		if ( !chain->tail || !chain->head ){
 			return RTEMS_INVALID_NAME;
@@ -1347,6 +1409,7 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 
 		/* Mark ready frames unsent by clearing GRTM_FLAGS_SENT of all frames */
 
+		num = 0;
 		curr = chain->head;
 		while(curr != chain->tail){
 			curr->flags = curr->flags & ~(GRTM_FLAGS_SENT|GRRM_FLAGS_ERR);
@@ -1356,7 +1419,9 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 		curr->flags = curr->flags & ~(GRTM_FLAGS_SENT|GRRM_FLAGS_ERR);
 		num++;
 
-		pDev->handling_transmission = 1;
+		/* wait until we get the device lock */
+		grtm_request_txlock(pDev, 1);
+
 		/* 1. Put frames into ready queue 
 		 *    (New Frames->READY)
 		 */
@@ -1374,23 +1439,12 @@ static rtems_device_driver grtm_ioctl(rtems_device_major_number major, rtems_dev
 			chain->tail->next = NULL;
 		}
 		pDev->ready_cnt += num;	/* Added 'num' frames to ready queue */
-trigger_transmission:
-		/* 2. Free used descriptors and put the sent frame into the "Sent queue"  
-		 *    (SCHEDULED->SENT)
-		 */
-		num = grtm_free_sent(pDev);
-		pDev->scheduled_cnt -= num;
-		pDev->sent_cnt += num;
 
-		/* 3. Use all available free descriptors there are frames for
-		 *    in the ready queue.
-		 *    (READY->SCHEDULED)
+		/* 2. SCHEDULED->SENT
+		 * 3. READY->SCHEDULED
 		 */
-		num = grtm_schedule_ready(pDev,0);
-		pDev->ready_cnt -= num;
-		pDev->scheduled_cnt += num;
-	
-		pDev->handling_transmission = 0;
+		grtm_tx_process(pDev);
+		grtm_release_txlock(pDev);
 		break;
 
 		/* Take all available sent frames from the "Sent frames" queue.
@@ -1413,25 +1467,15 @@ trigger_transmission:
 		}
 
 		/* Lock out interrupt handler */
-		pDev->handling_transmission = 1;
+		grtm_request_txlock(pDev, 1);
 
 		do {
-			/* Move sent frames from descriptors to Sent queue. This makes more 
-			 * descriptors (BDs) available.
+			/* Process descriptor table and populate with new
+			 * buffers:
+			 *    * SCHEDULED->SENT
+			 *    * READY->SCHEDULED
 			 */
-			num = grtm_free_sent(pDev);
-			pDev->scheduled_cnt -= num;
-			pDev->sent_cnt += num;
-			
-
-			if ( pDev->running ){
-				/* Fill descriptors with as many frames from the ready list 
-				 * as possible.
-				 */
-				num = grtm_schedule_ready(pDev,0);
-				pDev->ready_cnt -= num;
-				pDev->scheduled_cnt += num;
-			}
+			grtm_tx_process(pDev);
 
 			/* Are there any frames on the sent queue waiting to be 
 			 * reclaimed?
@@ -1445,14 +1489,14 @@ trigger_transmission:
 				if ( pDev->running && pDev->config.blocking ){
 					ret = rtems_semaphore_obtain(pDev->sem_tx,RTEMS_WAIT,pDev->config.timeout);
 					if ( ret == RTEMS_TIMEOUT ) {
-						pDev->handling_transmission = 0;
+						grtm_release_txlock(pDev);
 						return RTEMS_TIMEOUT;
 					} else if ( ret == RTEMS_SUCCESSFUL ) {
 						/* There might be frames available, go check */
 						continue;
 					} else {
 						/* any error (driver closed, internal error etc.) */
-						pDev->handling_transmission = 0;
+						grtm_release_txlock(pDev);
 						return RTEMS_UNSATISFIED;
 					}
 
@@ -1461,7 +1505,7 @@ trigger_transmission:
 					chain->head = NULL;
 					chain->tail = NULL;
 					/* do not lock out interrupt handler any more */
-					pDev->handling_transmission = 0;
+					grtm_release_txlock(pDev);
 					return RTEMS_TIMEOUT;
 				}
 			}else{
@@ -1481,7 +1525,7 @@ trigger_transmission:
 		}while(1);
 		
 		/* do not lock out interrupt handler any more */
-		pDev->handling_transmission = 0;
+		grtm_release_txlock(pDev);
 		break;
 
 		default:
@@ -1495,17 +1539,15 @@ static void grtm_interrupt(void *arg)
 	struct grtm_priv *pDev = arg;
 	struct grtm_regs *regs = pDev->regs;
 	unsigned int status;
-	int num;
 
 	/* Clear interrupt by reading it */
 	status = READ_REG(&regs->dma_status);
-	
+
 	/* Spurious Interrupt? */
-	if ( !pDev->running )
+	if ( !pDev->running || !status)
 		return;
 
-	if ( status )
-		regs->dma_status = status;
+	regs->dma_status = status;
 
 	if ( status & GRTM_DMA_STS_TFF ){
 		pDev->stats.err_transfer_frame++;
@@ -1521,21 +1563,11 @@ static void grtm_interrupt(void *arg)
 
 	if ( status & GRTM_DMA_STS_TI ){
 		
-		if ( pDev->config.isr_desc_proc && !pDev->handling_transmission ) {
-			/* Free used descriptors and put the sent frame into the "Sent queue"  
-			 *   (SCHEDULED->SENT)
-			 */
-			num = grtm_free_sent(pDev);
-			pDev->scheduled_cnt -= num;
-			pDev->sent_cnt += num;
-
-			/* Use all available free descriptors there are frames for
-			 * in the ready queue.
-			 *   (READY->SCHEDULED)
-			 */
-			num = grtm_schedule_ready(pDev,1);
-			pDev->ready_cnt -= num;
-			pDev->scheduled_cnt += num;
+		if ( pDev->config.isr_desc_proc) {
+			if (grtm_request_txlock_isr(pDev)) {
+				grtm_tx_process(pDev);
+				grtm_release_txlock(pDev);
+			}
 
 #if 0
 			if ( (pDev->config.blocking==GRTM_BLKMODE_COMPLETE) && pDev->timeout ){
