@@ -25,6 +25,8 @@ tar02$(EXEEXT): $(tar02_OBJECTS) $(tar02_DEPENDENCIES)
 	@rm -f tar02$(EXEEXT)
 	$(make-exe)
 
+init.c: initial_filesystem_tar.h
+
 initial_filesystem_tar.c: initial_filesystem.tar
 	$(BIN2C) -C initial_filesystem.tar initial_filesystem_tar
 CLEANFILES += initial_filesystem_tar.c

@@ -15,6 +15,8 @@ AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 LINK_OBJS = $(dl04_OBJECTS)
 LINK_LIBS = $(dl04_LDLIBS)
 
+init.c: dl-tar.h
+
 dl-o4.o: dl-o4.cpp
 
 dl.tar: dl-o4.o

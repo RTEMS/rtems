@@ -20,10 +20,12 @@ mghttpd01$(EXEEXT): $(mghttpd01_OBJECTS) $(mghttpd01_DEPENDENCIES)
 	@rm -f mghttpd01$(EXEEXT)
 	$(make-exe)
 
-init_fs.c: 
+init.c: init_fs.h
+
+init_fs.c:
 	$(BIN2C) -C $(srcdir)/init_fs.tar init_fs
 CLEANFILES += init_fs.c
-	
+
 init_fs.h:
 	$(BIN2C) -H $(srcdir)/init_fs.tar init_fs
 CLEANFILES += init_fs.h
