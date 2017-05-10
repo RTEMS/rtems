@@ -10,29 +10,53 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <rtems.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
 #include <bsp/gr1553b.h>
 #include <bsp/gr1553bc.h>
 
+/* Use interrupt lock privmitives compatible with SMP defined in
+ * RTEMS 4.11.99 and higher.
+ */
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
+
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
+
+#else
+
+/* maintain single-core compatibility with older versions of RTEMS: */
+#define SPIN_DECLARE(name)
+#define SPIN_INIT(lock, name)
+#define SPIN_LOCK(lock, level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
+#define SPIN_UNLOCK(lock, level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
+#define SPIN_ISR_IRQFLAGS(k)
+#define SPIN_FREE(lock)
+
+#ifdef RTEMS_SMP
+#error SMP mode not compatible with these interrupt lock primitives
+#endif
+
+#endif
+
 #define GR1553BC_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553BC_READ_MEM(adr) (*(volatile uint32_t *)(adr))
 
 #define GR1553BC_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553BC_READ_REG(adr) (*(volatile uint32_t *)(adr))
-
-#ifndef IRQ_GLOBAL_PREPARE
- #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
-#endif
-
-#ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
-#endif
-
-#ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
-#endif
 
 /* Needed by list for data pinter and BD translation */
 struct gr1553bc_priv {
@@ -41,6 +65,7 @@ struct gr1553bc_priv {
 	struct gr1553bc_list *list;
 	struct gr1553bc_list *alist;
 	int started;
+	SPIN_DECLARE(devlock);
 
 	/* IRQ log management */
 	void *irq_log_p;
@@ -1276,6 +1301,8 @@ void *gr1553bc_open(int minor)
 	pnpinfo = &ambadev->info;
 	priv->regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
 
+	SPIN_INIT(&priv->devlock, "gr1553bc");
+
 	gr1553bc_device_init(priv);
 
 	/* Register ISR handler (unmask at IRQ controller) */
@@ -1310,6 +1337,7 @@ void gr1553bc_close(void *bc)
 
 	/* Free device */
 	gr1553_bc_close(priv->pdev);
+	SPIN_FREE(&priv->devlock);
 	free(priv->irq_log_p);
 	free(priv);
 }
@@ -1340,7 +1368,7 @@ int gr1553bc_start(void *bc, struct gr1553bc_list *list, struct gr1553bc_list *l
 	struct gr1553bc_priv *priv = bc;
 	union gr1553bc_bd *bd = NULL, *bd_async = NULL;
 	uint32_t ctrl, irqmask;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ( (list == NULL) && (list_async == NULL) )
 		return 0;
@@ -1365,7 +1393,8 @@ int gr1553bc_start(void *bc, struct gr1553bc_list *list, struct gr1553bc_list *l
 	}
 
 	/* Do "hot-swapping" of lists */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+
 	if ( list ) {
 		priv->list = list;
 		GR1553BC_WRITE_REG(&priv->regs->bc_bd, (uint32_t)bd);
@@ -1386,7 +1415,7 @@ int gr1553bc_start(void *bc, struct gr1553bc_list *list, struct gr1553bc_list *l
 		GR1553BC_WRITE_REG(&priv->regs->imask, irqmask);
 	}
 
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -1396,13 +1425,13 @@ int gr1553bc_pause(void *bc)
 {
 	struct gr1553bc_priv *priv = bc;
 	uint32_t ctrl;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	/* Do "hot-swapping" of lists */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	ctrl = GR1553BC_KEY | GR1553B_BC_ACT_SCSUS;
 	GR1553BC_WRITE_REG(&priv->regs->bc_ctrl, ctrl);
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -1412,12 +1441,12 @@ int gr1553bc_restart(void *bc)
 {
 	struct gr1553bc_priv *priv = bc;
 	uint32_t ctrl;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	ctrl = GR1553BC_KEY | GR1553B_BC_ACT_SCSRT;
 	GR1553BC_WRITE_REG(&priv->regs->bc_ctrl, ctrl);
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -1427,7 +1456,7 @@ int gr1553bc_stop(void *bc, int options)
 {
 	struct gr1553bc_priv *priv = bc;
 	uint32_t ctrl;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	ctrl = GR1553BC_KEY;
 	if ( options & 0x1 )
@@ -1435,10 +1464,10 @@ int gr1553bc_stop(void *bc, int options)
 	if ( options & 0x2 )
 		ctrl |= GR1553B_BC_ACT_ASSTP;
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	GR1553BC_WRITE_REG(&priv->regs->bc_ctrl, ctrl);
 	priv->started = 0;
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -1512,6 +1541,7 @@ void gr1553bc_isr(void *arg)
 	bcirq_func_t func;
 	void *data;
 	int handled, irq;
+	SPIN_ISR_IRQFLAGS(irqflags);
 
 	/* Did core make IRQ */
 	irq = GR1553BC_READ_REG(&priv->regs->irq);
@@ -1531,7 +1561,7 @@ void gr1553bc_isr(void *arg)
 
 	/* Get current posistion in hardware */
 	pos = (uint32_t *)GR1553BC_READ_REG(&priv->regs->bc_irqptr);
-	/* Convertin into CPU address */
+	/* Converting into CPU address */
 	pos = priv->irq_log_base +
 		((unsigned int)pos - (unsigned int)priv->irq_log_base_hw)/4;
 
@@ -1547,14 +1577,24 @@ void gr1553bc_isr(void *arg)
 		 * to, we compare the address of the bd to the ASYNC list
 		 * descriptor table area.
 		 */
+		SPIN_LOCK(&priv->devlock, irqflags);
 		if ( priv->alist && ((unsigned int)bd>=priv->alist->table_hw) &&
 		     ((unsigned int)bd <
 		     (priv->alist->table_hw + priv->alist->table_size))) {
 		     	/* BD in async list */
 			bd = gr1553bc_bd_hw2cpu(priv->alist, bd);
-		} else {
+		} else if (priv->list &&
+		           ((unsigned int)bd >= priv->list->table_hw) &&
+			   ((unsigned int)bd <
+			   (priv->list->table_hw + priv->list->table_size))) {
 			/* BD in sync list */
 			bd = gr1553bc_bd_hw2cpu(priv->list, bd);
+		} else {
+			/* error - unknown BD. Should not happen but could
+			 * if user has switched list. Ignore IRQ entry and
+			 * continue to next entry.
+			 */
+			bd = NULL;
 		}
 
 		/* Handle Descriptor that cased IRQ 
@@ -1563,23 +1603,28 @@ void gr1553bc_isr(void *arg)
 		 * that to a custom function we call that function, otherwise
 		 * we let the standard IRQ handle handle it.
 		 */
-		word0 = GR1553BC_READ_MEM(&bd->raw.words[0]);
-		if ( word0 == GR1553BC_UNCOND_IRQ ) {
+		if ( bd ) {
+			word0 = GR1553BC_READ_MEM(&bd->raw.words[0]);
 			word2 = GR1553BC_READ_MEM(&bd->raw.words[2]);
-			if ( (word2 & 0x3) == 0 ) {
-				func = (bcirq_func_t)(word2 & ~0x3);
-				data = (void *)
-					GR1553BC_READ_MEM(&bd->raw.words[3]);
-				func(bd, data);
-				handled = 1;
+			SPIN_UNLOCK(&priv->devlock, irqflags);
+			if ( word0 == GR1553BC_UNCOND_IRQ ) {
+				if ( (word2 & 0x3) == 0 ) {
+					func = (bcirq_func_t)(word2 & ~0x3);
+					data = (void *)
+					  GR1553BC_READ_MEM(&bd->raw.words[3]);
+					func(bd, data);
+					handled = 1;
+				}
 			}
-		}
 
-		if ( handled == 0 ) {
-			/* Let standard IRQ handle handle it */
-			priv->irq_func(bd, priv->irq_data);
+			if ( handled == 0 ) {
+				/* Let standard IRQ handle handle it */
+				priv->irq_func(bd, priv->irq_data);
+			} else {
+				handled = 0;
+			}
 		} else {
-			handled = 0;
+			SPIN_UNLOCK(&priv->devlock, irqflags);
 		}
 
 		/* Increment to next entry in IRQ LOG */
