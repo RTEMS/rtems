@@ -52,6 +52,8 @@ void Task_switch(
 #define CONFIGURE_MAXIMUM_TASKS             4
 #define CONFIGURE_MAXIMUM_TIMERS            1
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #include <rtems/confdefs.h>
 
 /* global variables */

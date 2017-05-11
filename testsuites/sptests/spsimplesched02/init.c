@@ -156,6 +156,8 @@ rtems_task Init(
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 #define CONFIGURE_INIT_TASK_PRIORITY        4
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>
 /* end of include file */

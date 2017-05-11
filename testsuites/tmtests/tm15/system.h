@@ -34,6 +34,8 @@ rtems_id   Task_id[ OPERATION_COUNT+1 ];   /* array of task ids */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #include <rtems/confdefs.h>
 
 /* end of include file */

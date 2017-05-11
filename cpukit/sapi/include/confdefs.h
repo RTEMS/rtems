@@ -224,8 +224,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * An internal define to indicate that this is an SMP application
  * configuration.
  */
-#if defined(RTEMS_SMP) && CONFIGURE_MAXIMUM_PROCESSORS > 1
-  #define _CONFIGURE_SMP_APPLICATION
+#ifdef RTEMS_SMP
+  #if !defined(CONFIGURE_DISABLE_SMP_CONFIGURATION)
+    #define _CONFIGURE_SMP_APPLICATION
+  #elif CONFIGURE_MAXIMUM_PROCESSORS > 1
+    #error "CONFIGURE_DISABLE_SMP_CONFIGURATION and CONFIGURE_MAXIMUM_PROCESSORS > 1 makes no sense"
+  #endif
 #endif
 
 #ifdef CONFIGURE_SMP_APPLICATION

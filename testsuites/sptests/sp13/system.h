@@ -97,6 +97,8 @@ TEST_EXTERN rtems_name Queue_name[ 4 ];      /* array of queue names */
 
 #define CONFIGURE_EXTRA_TASK_STACKS         (3 * RTEMS_MINIMUM_STACK_SIZE)
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #include <rtems/confdefs.h>
 
 /* end of include file */

@@ -19,6 +19,8 @@
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 static void timer(rtems_id id, void *arg)
 {
   rtems_task_wake_after(RTEMS_YIELD_PROCESSOR);

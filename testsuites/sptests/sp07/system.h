@@ -74,6 +74,8 @@ void Task_exit_extension(
 #define CONFIGURE_EXTRA_TASK_STACKS         (4 * RTEMS_MINIMUM_STACK_SIZE)
 #define CONFIGURE_MAXIMUM_TASKS             5
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #include <rtems/confdefs.h>
 
 /* global variables */
