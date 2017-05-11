@@ -523,7 +523,7 @@ static int __inline__ grtc_hw_data_avail(unsigned int rrp, unsigned rwp, unsigne
 	return rwp+(bufsize-rrp);
 }
 
-/* Reads as much as possiböe but not more than 'max' bytes from the TC receive buffer.
+/* Reads as much as possible but not more than 'max' bytes from the TC receive buffer.
  * Number of bytes put into 'buf' is returned.
  */
 static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, int max)
@@ -599,7 +599,7 @@ static int grtc_hw_read_try(struct grtc_priv *pDev, char *buf, int max)
 	return count;
 }
 
-/* Reads as much as possiböe but not more than 'max' bytes from the TC receive buffer.
+/* Reads as much as possible but not more than 'max' bytes from the TC receive buffer.
  * Number of bytes put into 'buf' is returned.
  */
 static int grtc_data_avail(struct grtc_priv *pDev)
@@ -658,6 +658,12 @@ static int grtc_start(struct grtc_priv *pDev)
 		DBG("GRTC: start: Reseting receiver failed\n");
 		return RTEMS_IO_ERROR;
 	}
+
+	/* make sure the RX semaphore is in the correct state when starting.
+	 * In case of a previous overrun condition it could be in incorrect
+	 * state (where rtems_semaphore_flush was used).
+	 */
+	rtems_semaphore_obtain(pDev->sem_rx, RTEMS_NO_WAIT, 0);
 
 	/* Set operating modes */
 	tmp = 0;
@@ -814,6 +820,7 @@ static rtems_device_driver grtc_open(
 	pDev->ready.cnt = 0;
 
 	pDev->running = 0;
+	pDev->overrun_condition = 0;
 
 	memset(&pDev->config,0,sizeof(pDev->config));
 
@@ -841,7 +848,7 @@ static rtems_device_driver grtc_close(rtems_device_major_number major, rtems_dev
 		grtc_stop(pDev);
 		pDev->running = 0;
 	}
-	
+
 	/* Reset core */
 	grtc_hw_reset(pDev);
 	
@@ -910,16 +917,22 @@ read_from_buffer:
 		/* Non-blocking mode and no data read. */
 		return RTEMS_TIMEOUT;
 	}
-	
+
 	/* Tell caller how much was read. */
-	
+
 	DBG("READ returning %d bytes, left: %d\n",rw_args->count-left,left);
-	
+
 	rw_args->bytes_moved = rw_args->count - left;
-	if ( rw_args->bytes_moved == 0 ){
+	if ( rw_args->bytes_moved == 0 ) {
+		if ( pDev->overrun_condition ) {
+			/* signal to the user that overrun has happend when
+			 * no more data can be read out.
+			 */
+			return RTEMS_IO_ERROR;
+		}
 		return RTEMS_TIMEOUT;
 	}
-	
+
 	return RTEMS_SUCCESSFUL;
 }
 
@@ -1569,6 +1582,8 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		case GRTC_IOC_ISSTARTED:
 		if ( !pDev->running ) {
 			return RTEMS_RESOURCE_IN_USE;
+		} else if ( pDev->overrun_condition ) {
+			return RTEMS_IO_ERROR;
 		}
 		break;
 
@@ -1850,13 +1865,20 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		frmlist->head = pDev->ready.head;
 		frmlist->tail = pDev->ready.tail;
 		frmlist->cnt = pDev->ready.cnt;
-		
+
 		/* Empty list */
 		pDev->ready.head = NULL;
 		pDev->ready.tail = NULL;
 		pDev->ready.cnt = 0;
+
+		if ((frmlist->cnt == 0) && pDev->overrun_condition) {
+			/* signal to the user that overrun has happend when
+			 * no more data can be read out.
+			 */
+			return RTEMS_IO_ERROR;
+		}
 		break;
-		
+
 		case GRTC_IOC_GET_CLCW_ADR:
 		if ( !data ) {
 			return RTEMS_INVALID_NAME;
@@ -1878,7 +1900,7 @@ static void grtc_interrupt(void *arg)
 
 	/* Clear interrupt by reading it */
 	status = READ_REG(&regs->pisr);
-	
+
 	/* Spurious Interrupt? */
 	if ( !pDev->running )
 		return;
