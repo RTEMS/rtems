@@ -43,7 +43,7 @@ extern "C" {
 #define GIC_ID_TO_ONE_BIT_REG_BIT(id) (1U << ((id) & 0x1fU))
 
 #define GIC_ID_TO_TWO_BITS_REG_INDEX(id) ((id) >> 4)
-#define GIC_ID_TO_TWO_BITS_REG_OFFSET(id) ((id) & 0xfU)
+#define GIC_ID_TO_TWO_BITS_REG_OFFSET(id) (((id) & 0xfU) << 1)
 
 static inline bool gic_id_is_enabled(volatile gic_dist *dist, uint32_t id)
 {
