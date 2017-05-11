@@ -882,30 +882,17 @@ l2c_310_flush_range( const void* d_addr, const size_t n_bytes )
     & ~L2C_310_DATA_LINE_MASK;
   const uint32_t ADDR_LAST         =
     (uint32_t)( (size_t)d_addr + n_bytes - 1 );
-  uint32_t       block_end         =
-    L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
   if ( n_bytes == 0 ) {
     return;
   }
 
-  for (;
-       adx      <= ADDR_LAST;
-       adx       = block_end + 1,
-       block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-    rtems_interrupt_lock_context lock_context;
-
-    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
-
-    for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
-      l2c_310_flush_1_line( l2cc, adx );
-    }
-
-    l2c_310_sync( l2cc );
-
-    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
+  for (; adx <= ADDR_LAST; adx += CPU_DATA_CACHE_ALIGNMENT ) {
+    l2c_310_flush_1_line( l2cc, adx );
   }
+
+  l2c_310_sync( l2cc );
 }
 
 static inline void
@@ -950,31 +937,18 @@ l2c_310_invalidate_range( const void* d_addr, const size_t n_bytes )
     & ~L2C_310_DATA_LINE_MASK;
   const uint32_t ADDR_LAST         =
     (uint32_t)( (size_t)d_addr + n_bytes - 1 );
-  uint32_t       block_end         =
-    L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES );
   volatile L2CC *l2cc = (volatile L2CC *) BSP_ARM_L2C_310_BASE;
 
   if ( n_bytes == 0 ) {
     return;
   }
 
-  for (;
-       adx      <= ADDR_LAST;
-       adx       = block_end + 1,
-       block_end = L2C_310_MIN( ADDR_LAST, adx + L2C_310_MAX_LOCKING_BYTES )) {
-    rtems_interrupt_lock_context lock_context;
-
-    rtems_interrupt_lock_acquire( &l2c_310_lock, &lock_context );
-
-    for (; adx <= block_end; adx += CPU_DATA_CACHE_ALIGNMENT ) {
-      /* Invalidate L2 cache line */
-      l2cc->inv_pa = adx;
-    }
-
-    l2c_310_sync( l2cc );
-
-    rtems_interrupt_lock_release( &l2c_310_lock, &lock_context );
+  for (; adx <= ADDR_LAST; adx += CPU_DATA_CACHE_ALIGNMENT ) {
+    /* Invalidate L2 cache line */
+    l2cc->inv_pa = adx;
   }
+
+  l2c_310_sync( l2cc );
 }
 
 
