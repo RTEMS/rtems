@@ -806,7 +806,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     !defined(CONFIGURE_SCHEDULER_SIMPLE_SMP) && \
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
-  #ifdef _CONFIGURE_SMP_APPLICATION
+  #if CONFIGURE_MAXIMUM_PROCESSORS > 1
     /**
      * If no scheduler is specified in an SMP configuration, the
      * priority scheduler is default.
