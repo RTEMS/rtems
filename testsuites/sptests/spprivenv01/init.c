@@ -90,7 +90,7 @@ rtems_task Init(
   sc = rtems_task_create( another_task_name,
 			  1,
 			  RTEMS_MINIMUM_STACK_SIZE * 2,
-			  RTEMS_INTERRUPT_LEVEL(31),
+			  RTEMS_DEFAULT_MODES,
 			  RTEMS_DEFAULT_ATTRIBUTES,
 			  &task_id
 			  );
