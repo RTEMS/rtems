@@ -3320,6 +3320,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #else
       false,
     #endif
+    #ifdef RTEMS_SMP
+      #ifdef _CONFIGURE_SMP_APPLICATION
+        true,
+      #else
+        false,
+      #endif
+    #endif
     _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
     CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
     #if defined(RTEMS_MULTIPROCESSING)

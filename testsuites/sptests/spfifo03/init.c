@@ -215,9 +215,9 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_BARRIERS 1
 
-#define CONFIGURE_INIT
 #define CONFIGURE_MAXIMUM_FIFOS 1
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

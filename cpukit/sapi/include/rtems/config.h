@@ -237,6 +237,10 @@ typedef struct {
    */
   bool                           stack_allocator_avoids_work_space;
 
+  #ifdef RTEMS_SMP
+    bool                         smp_enabled;
+  #endif
+
   uint32_t                       number_of_initial_extensions;
   const rtems_extensions_table  *User_extension_table;
   #if defined(RTEMS_MULTIPROCESSING)
@@ -360,7 +364,7 @@ extern const rtems_configuration_table Configuration;
  */
 #ifdef RTEMS_SMP
   #define rtems_configuration_is_smp_enabled() \
-        (rtems_configuration_get_maximum_processors() > 1)
+        (Configuration.smp_enabled)
 #else
   #define rtems_configuration_is_smp_enabled() \
         false
