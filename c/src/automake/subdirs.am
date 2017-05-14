@@ -1,30 +1,87 @@
-## Borrowed from automake-1.4 and adapted to RTEMS
+## Copyright 2017 Chris Johns <chrisj@rtems.org>
 
-## NOTE: This is a temporary work-around to keep
-## RTEMS's non automake standard make targets working.
-## Once automake is fully integrated these make targets
-## and this file will probably be removed
+##
+## The following builds in parallel. The subdirectories are
+## expanded into separate rules and all the targets are listed
+## and make runs as many as it can.
+##
+## A macro is defined and evaluated once for each directory. This
+## creates the instance of the rule. Use $(info ...) to print them.
+##
 
-preinstall-recursive:
-	@set fnord $(MAKEFLAGS); amf=$$2; \
-	dot_seen=no; \
-	target=`echo $@ | sed s/-recursive//`; \
-	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
-	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-am"; \
-	  else \
-	    local_target="$$target"; \
-	  fi; \
-	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
-## This trick allows "-k" to keep its natural meaning when running a
-## recursive rule.
-	   || case "$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac; \
-	done; \
-	if test "$$dot_seen" = "no"; then \
-	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
-	fi; test -z "$$fail"
+SUBDIRS_dot                            = $(filter     .,$(_SUBDIRS))
+SUBDIRS_no_dot                         = $(filter-out .,$(_SUBDIRS))
+SUBDIRS_no_dot_no_wrapup               = $(filter-out wrapup,$(SUBDIRS_no_dot))
+SUBDIRS_no_dot_no_testsuites           = $(filter-out testsuites,$(SUBDIRS_no_dot))
+SUBDIRS_no_dot_no_wrapup_no_testsuites = $(filter-out testsuites,$(SUBDIRS_no_dot_no_wrapup))
+SUBDIRS_wrapup                         = $(filter     wrapup,$(SUBDIRS_no_dot))
+SUBDIRS_testsuites                     = $(filter     testsuites,$(SUBDIRS_no_dot))
 
-preinstall: preinstall-recursive
-.PHONY: preinstall-recursive
+SUBDIR_TARGET     = $(subst /,-,$1)
+PREINSTALL_TARGET = preinstall-$(call SUBDIR_TARGET,$(1))
+
+preintstall_targets  = $(if "$(SUBDIRS_dot)" ".",preinstall-dot) $(foreach D,$(SUBDIRS_no_dot),$(call PREINSTALL_TARGET,$(D)))
+
+define PREINSTALL_DIR
+.PHONY: $1
+$1:
+	@+set fnord $(MAKEFLAGS); amf=$$$$2; \
+	subdir=$(2); \
+	subdir_label=`echo $(1) | sed -e 's/preinstall-//'`; \
+	target=`echo $$@ | sed -e 's/-recursive//' -e "s/-$$$${subdir_label}//"`$(3); \
+	echo "Making $$$$target in $$$$subdir"; \
+	(cd $$$$subdir && $(MAKE) $(AM_MAKEFLAGS) $$$$target) \
+	 || case "$$$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac;
+endef
+
+$(if "$(SUBDIRS_dot)" ".",$(eval $(call PREINSTALL_DIR,preinstall-dot,.,-am)))
+
+$(foreach D,$(SUBDIRS_no_dot),$(eval $(call PREINSTALL_DIR,$(call PREINSTALL_TARGET,$(D)),$(D))))
+
+preinstall: $(preintstall_targets)
+.PHONY: preinstall
+
+define CPUKITDIR
+.PHONY: $1
+$1: $(preintstall_targets)
+	@+set fnord $(MAKEFLAGS); amf=$$$$2; \
+	subdir=$(2); \
+	target=`echo $(MAKECMDGOALS) | sed s/-recursive//`; \
+	if test "$$$$target" = "all-local-am"; then \
+	  target="all-am"; \
+	fi; \
+	if test "$$$$target" = "all-local"; then \
+	  target="all"; \
+	fi; \
+	echo "Making $$$$target in $$$$subdir"; \
+	if test "$$$$subdir" != "."; then \
+	  cd $$$$subdir; \
+	  $(MAKE) $(AM_MAKEFLAGS) $$$$local_target; \
+	fi;
+endef
+
+#
+# This GNU make syntax is being used to stop automake thinking the code is for
+# it.
+#
+$(if "$(SUBDIRS_dot)" ".",$(eval $(call CPUKITDIR,dot,.)))
+
+$(foreach D,$(SUBDIRS_no_dot),$(eval $(call CPUKITDIR,$(D),$(D))))
+
+#
+# If there is a wrapup make it depend on all other directories except the
+# testsuite so it is not entered until everything but the testsuite has
+# finished.
+#
+$(if "$(SUBDIRS_wrapup)" "wrapup",wrapup: dot $(SUBDIRS_no_dot_no_wrapup_no_testsuites))
+
+#
+# If there is a testsuite make it depend on all other directories so it is not
+# entered until everything else has finished.
+#
+$(if "$(SUBDIRS_testsuites)" "testsuites",testsuites: dot $(SUBDIRS_no_dot_no_testsuites))
+
+#
+# The general build all rule for automake.
+#
+all-local: preinstall $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)

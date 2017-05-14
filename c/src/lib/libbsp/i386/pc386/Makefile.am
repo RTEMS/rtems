@@ -23,7 +23,7 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-SUBDIRS = . tools
+_SUBDIRS = . tools
 
 nodist_include_bsp_HEADERS += include/bspimpl.h
 include_bsp_HEADERS  = ../../i386/shared/irq/irq.h
@@ -258,3 +258,4 @@ EXTRA_DIST += times_p5
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am

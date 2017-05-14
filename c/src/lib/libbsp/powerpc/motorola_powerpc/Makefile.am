@@ -1,9 +1,9 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
-SUBDIRS = .
-SUBDIRS+= bootloader
+_SUBDIRS  = .
+_SUBDIRS += bootloader
 if QEMU
-SUBDIRS+= qemu_fakerom
+_SUBDIRS += qemu_fakerom
 endif
 
 include $(top_srcdir)/../../../../automake/compile.am
@@ -166,3 +166,4 @@ EXTRA_DIST += times.mcp750 times.mvme2307
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(top_srcdir)/../../../../automake/subdirs.am

@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 ## Descend into the @RTEMS_BSP_FAMILY@ directory
-SUBDIRS = @RTEMS_BSP_FAMILY@
+_SUBDIRS = @RTEMS_BSP_FAMILY@
 
 # FIXME: This does not work
 # DIST_SUBDIRS = @all_subdirs@ support/old_exception_processing \
