@@ -186,7 +186,7 @@ void *mmap(
       errno = EINVAL;
       return MAP_FAILED;
     }
-  } else if ( (flags & MAP_PRIVATE != MAP_PRIVATE) ) {
+  } else if ( (flags & MAP_PRIVATE) != MAP_PRIVATE ) {
     errno = EINVAL;
     return MAP_FAILED;
   }
