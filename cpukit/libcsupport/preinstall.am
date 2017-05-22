@@ -79,6 +79,14 @@ $(PROJECT_INCLUDE)/machine/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/machine/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/machine/$(dirstamp)
 
+$(PROJECT_INCLUDE)/machine/_kernel_cpuset.h: include/machine/_kernel_cpuset.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_cpuset.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_cpuset.h
+
+$(PROJECT_INCLUDE)/machine/_kernel_param.h: include/machine/_kernel_param.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_param.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_param.h
+
 $(PROJECT_INCLUDE)/machine/_kernel_time.h: include/machine/_kernel_time.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_time.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_time.h

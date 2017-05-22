@@ -25,6 +25,8 @@ include_rtems_HEADERS += include/rtems/gxx_wrappers.h
 
 include_machinedir = $(includedir)/machine
 include_machine_HEADERS =
+include_machine_HEADERS += include/machine/_kernel_cpuset.h
+include_machine_HEADERS += include/machine/_kernel_param.h
 include_machine_HEADERS += include/machine/_kernel_time.h
 include_machine_HEADERS += include/machine/_kernel_types.h
 
