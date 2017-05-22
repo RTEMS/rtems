@@ -39,7 +39,7 @@
 /*
  * Memory allocation
  */
-static uint32_t nmbuf       = (64L * 1024L) / MSIZE;
+static uint32_t nmbuf       = (64L * 1024L) / _SYS_MBUF_LEGACY_MSIZE;
        uint32_t nmbclusters = (128L * 1024L) / MCLBYTES;
 
 /*
@@ -221,8 +221,8 @@ bsd_init (void)
 	 * Set up mbuf data structures
 	 */
 
-	p = rtems_bsdnet_malloc_mbuf(nmbuf * MSIZE + MSIZE - 1,MBUF_MALLOC_MBUF);
-	p = (char *)(((uintptr_t)p + MSIZE - 1) & ~(MSIZE - 1));
+	p = rtems_bsdnet_malloc_mbuf(nmbuf * _SYS_MBUF_LEGACY_MSIZE + _SYS_MBUF_LEGACY_MSIZE - 1,MBUF_MALLOC_MBUF);
+	p = (char *)(((uintptr_t)p + _SYS_MBUF_LEGACY_MSIZE - 1) & ~(_SYS_MBUF_LEGACY_MSIZE - 1));
 	if (p == NULL) {
 		printf ("Can't get network memory.\n");
 		return -1;
@@ -230,7 +230,7 @@ bsd_init (void)
 	for (i = 0; i < nmbuf; i++) {
 		((struct mbuf *)p)->m_next = mmbfree;
 		mmbfree = (struct mbuf *)p;
-		p += MSIZE;
+		p += _SYS_MBUF_LEGACY_MSIZE;
 	}
 	mbstat.m_mbufs = nmbuf;
 	mbstat.m_mtypes[MT_FREE] = nmbuf;
@@ -296,7 +296,7 @@ rtems_bsdnet_initialize (void)
 	 * Set the memory allocation limits
 	 */
 	if (rtems_bsdnet_config.mbuf_bytecount)
-		nmbuf = rtems_bsdnet_config.mbuf_bytecount / MSIZE;
+		nmbuf = rtems_bsdnet_config.mbuf_bytecount / _SYS_MBUF_LEGACY_MSIZE;
 	if (rtems_bsdnet_config.mbuf_cluster_bytecount)
 		nmbclusters = rtems_bsdnet_config.mbuf_cluster_bytecount / MCLBYTES;
 

@@ -39,14 +39,15 @@
 #endif
 
 /*
- * Mbufs are of a single size, MSIZE (machine/machparam.h), which
+ * Mbufs are of a single size, _SYS_MBUF_LEGACY_MSIZE (machine/machparam.h), which
  * includes overhead.  An mbuf may add a single "mbuf cluster" of size
  * MCLBYTES (also in machine/machparam.h), which has no additional overhead
  * and is used instead of the internal data area; this is done when
  * at least MINCLSIZE of data must be stored.
  */
 
-#define	MLEN		(MSIZE - sizeof(struct m_hdr))	/* normal data len */
+#define	_SYS_MBUF_LEGACY_MSIZE 128
+#define	MLEN		(_SYS_MBUF_LEGACY_MSIZE - sizeof(struct m_hdr))	/* normal data len */
 #define	MHLEN		(MLEN - sizeof(struct pkthdr))	/* data len w/pkthdr */
 #define	MINCLSIZE	(MHLEN + MLEN)	/* smallest amount to put in cluster */
 #define	M_MAXCOMPRESS	(MHLEN / 2)	/* max amount to copy for compression */
@@ -59,7 +60,7 @@
  * cltom(x) 	-- Convert cluster # to ptr to beginning of cluster
  */
 #define	mtod(m, t)	((t)((m)->m_data))
-#define	dtom(x)		((struct mbuf *)((intptr_t)(x) & ~(MSIZE-1)))
+#define	dtom(x)		((struct mbuf *)((intptr_t)(x) & ~(_SYS_MBUF_LEGACY_MSIZE-1)))
 #define	mtocl(x)	(((uintptr_t)(x) - (uintptr_t)mbutl) >> MCLSHIFT)
 #define	cltom(x)	((caddr_t)((u_long)mbutl + ((u_long)(x) << MCLSHIFT)))
 
