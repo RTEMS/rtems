@@ -52,6 +52,7 @@
 #include <sys/reboot.h>
 #include <sys/socket.h>
 #include <sys/socketvar.h>
+#include <sys/uio.h>
 
 #include <net/if.h>
 #include <net/route.h>
