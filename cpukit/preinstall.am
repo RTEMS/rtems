@@ -50,15 +50,6 @@ $(PROJECT_INCLUDE)/utf8proc/utf8proc.h: libmisc/utf8proc/utf8proc.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/utf8proc/utf8proc.h
 
-$(PROJECT_INCLUDE)/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)
-	@: > $(PROJECT_INCLUDE)/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
-
-$(PROJECT_INCLUDE)/xz.h: libmisc/xz/xz.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/xz.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/xz.h
-
 $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sys
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
@@ -71,6 +62,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/crypt.h
 $(PROJECT_INCLUDE)/memory.h: include/memory.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/memory.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/memory.h
+
+$(PROJECT_INCLUDE)/xz.h: libmisc/xz/xz.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/xz.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/xz.h
 
 $(PROJECT_INCLUDE)/sys/event.h: libcsupport/include/sys/event.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/event.h

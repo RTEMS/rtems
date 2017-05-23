@@ -50,14 +50,13 @@ include_uuid_HEADERS = libmisc/uuid/uuid.h
 include_utf8procdir = $(includedir)/utf8proc
 include_utf8proc_HEADERS = libmisc/utf8proc/utf8proc.h
 
-include_xzdir = $(includedir)
-include_xz_HEADERS = libmisc/xz/xz.h
-
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
 include_HEADERS += include/crypt.h
 include_HEADERS += include/memory.h
+
+include_HEADERS += libmisc/xz/xz.h
 
 include_sys_HEADERS += libcsupport/include/sys/event.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h
