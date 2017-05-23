@@ -9,41 +9,37 @@ define TESTDIR
 $1:
 	@+set fnord $(MAKEFLAGS); \
 	subdir=$(1); \
-	target=`echo $(MAKECMDGOALS) | sed s/-recursive//`; \
-	if test "$$$$target" = "all-local-am"; then \
-	  target="all-am"; \
-	fi; \
-	if test "$$$$target" = "all-local"; then \
-	  target="all"; \
-	fi; \
-	tcheck="$(top_srcdir)/../../tools/build/rtems-test-check-py"; \
-	tdata="$(RTEMS_BSP)-testsuite.tcfg"; \
-	tincludes="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom:$(top_srcdir)/.."; \
-	if test -f "$$$$tdata"; then \
-	  vtdata="$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom/$(RTEMS_BSP)-testsuite.tcfg"; \
-	else \
-	  vtdata="all tests"; \
-	fi; \
-	echo "BSP Testsuite Data: $$$$vtdata"; \
-	if test -f $$$$tcheck; then \
-	  list=`$$$$tcheck exclude $(RTEMS_BSP) $$tdata $$$$tincludes $(_SUBDIRS)`; \
-	else \
-	  list=$(_SUBDIRS); \
-	fi; \
-	if test "$$$${list#*$$$$subdir}" != "$$$${list}"; then \
-	  echo "Making $$$$target in $$$$subdir"; \
-	  if test "$$$$subdir" != "."; then \
+	if test "$$$$subdir" != "."; then \
+	  target=`echo $(MAKECMDGOALS) | sed s/-recursive//`; \
+	  if test "$$$$target" = "all-local-am"; then \
+	    target="all-am"; \
+	  fi; \
+	  if test "$$$$target" = "all-local"; then \
+	    target="all"; \
+	  fi; \
+	  tcheck="$(top_srcdir)/../../tools/build/rtems-test-check-py"; \
+	  tdata="$(RTEMS_BSP)-testsuite.tcfg"; \
+	  tincludes="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom:$(top_srcdir)/.."; \
+	  if test -f $$$$tcheck; then \
+	    list=`$$$$tcheck exclude $(RTEMS_BSP) $$$$tdata $$$$tincludes $(_SUBDIRS)`; \
+	  else \
+	    list=; \
+	  fi; \
+	  if test "$$$${list#*$$$$subdir}" != "$$$$list"; then \
 	    if test -f $$$$tcheck; then \
 	      test_FLAGS=`$$$$tcheck flags $(RTEMS_BSP) $$$$tdata $$$$tincludes $$$$subdir`; \
 	    fi; \
 	    local_target="$$$$target"; \
 	    if test -z "$$$$test_FLAGS"; then \
-	      echo "BSP Testsuite Flags: $$$$subdir: PASS"; \
+	      echo "BSP Testsuite: $$$$subdir: PASS"; \
 	    else \
-	      echo "BSP Testsuite Flags: $$$$subdir: $$$$test_FLAGS"; \
+	      echo "BSP Testsuite: $$$$subdir: $$$$test_FLAGS"; \
 	    fi; \
+	    echo "Making $$$$target in $$$$subdir"; \
 	    cd $$$$subdir; \
 	    $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$$$test_FLAGS" $$$$local_target; \
+	  else \
+	    echo "BSP Testsuite: $$$$subdir: EXCLUDED"; \
 	  fi; \
 	fi;
 endef
