@@ -103,20 +103,6 @@ package RTEMS.Tasks is
       Result            :    out RTEMS.Status_Codes
    );
 
-   procedure Get_Note (
-      ID      : in     RTEMS.ID;
-      Notepad : in     RTEMS.Notepad_Index;
-      Note    :    out RTEMS.Unsigned32;
-      Result  :    out RTEMS.Status_Codes
-   );
-
-   procedure Set_Note (
-      ID      : in     RTEMS.ID;
-      Notepad : in     RTEMS.Notepad_Index;
-      Note    : in     RTEMS.Unsigned32;
-      Result  :    out RTEMS.Status_Codes
-   );
-
    procedure Wake_When (
       Time_Buffer : in     RTEMS.Time_Of_Day;
       Result      :    out RTEMS.Status_Codes
