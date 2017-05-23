@@ -270,8 +270,10 @@ _ARMV4_Exception_interrupt:
 	subs	pc, lr, #4
 
 #ifdef RTEMS_PROFILING
-#ifdef __thumb__
+#ifdef __thumb2__
 .thumb
+#else
+.arm
 #endif
 .Lskip_profiling:
 	BLX_TO_THUMB_1	bsp_interrupt_dispatch
