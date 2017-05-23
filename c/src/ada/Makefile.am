@@ -5,7 +5,6 @@ include_ada_HEADERS +=  \
     rtems-barrier.adb rtems-barrier.ads \
     rtems-clock.adb rtems-clock.ads \
     rtems-cpu_usage.ads \
-    rtems-debug.adb rtems-debug.ads \
     rtems-event.adb rtems-event.ads \
     rtems-extension.adb rtems-extension.ads \
     rtems-fatal.adb rtems-fatal.ads \

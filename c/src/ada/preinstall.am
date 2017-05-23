@@ -47,14 +47,6 @@ $(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads: rtems-cpu_usage.ads $(PROJECT
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads
 
-$(PROJECT_INCLUDE)/adainclude/rtems-debug.adb: rtems-debug.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-debug.adb
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-debug.adb
-
-$(PROJECT_INCLUDE)/adainclude/rtems-debug.ads: rtems-debug.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-debug.ads
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-debug.ads
-
 $(PROJECT_INCLUDE)/adainclude/rtems-event.adb: rtems-event.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-event.adb
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-event.adb
