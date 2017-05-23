@@ -190,7 +190,7 @@ package body DUMMY_RTEMS is
 -- Clock Manager
 
    procedure CLOCK_GET_TOD (
-      TIME_BUFFER :    out RTEMS.ADDRESS;
+      TIME_BUFFER :    out RTEMS.TIME_OF_DAY;
       RESULT      :    out RTEMS.STATUS_CODES
    ) is
       pragma Unreferenced(TIME_BUFFER);

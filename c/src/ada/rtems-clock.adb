@@ -122,4 +122,19 @@ package body RTEMS.Clock is
 
    end Tick;
 
+   function Get_Ticks_Since_Boot
+      return RTEMS.Interval
+   is
+      Watchdog_Ticks_since_boot : RTEMS.Interval;
+      pragma Import (
+         C,
+         Watchdog_Ticks_since_boot,
+         "_Watchdog_Ticks_since_boot"
+      );
+   begin
+
+      return Watchdog_Ticks_since_boot;
+
+   end Get_Ticks_Since_Boot;
+
 end RTEMS.Clock;

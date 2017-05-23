@@ -23,7 +23,6 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with TIME_TEST_SUPPORT;
 with TIMER_DRIVER;
-with RTEMS.CLOCK;
 
 package body TMTEST is
 
