@@ -131,6 +131,10 @@ $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h: include/tms570ls3137zwt-pins.h $(
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570ls3137zwt-pins.h
 
+$(PROJECT_INCLUDE)/bsp/tms570lc4357-pins.h: include/tms570lc4357-pins.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tms570lc4357-pins.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tms570lc4357-pins.h
+
 $(PROJECT_INCLUDE)/libcpu/arm-cp15.h: ../../../libcpu/arm/shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
