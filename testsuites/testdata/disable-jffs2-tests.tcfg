@@ -2,6 +2,7 @@
 # Some targets cannot declare the RAM disk space for the JFFS2 tests.
 #
 
+exclude: fsjffs2gc01
 exclude: jffs2_fserror
 exclude: jffs2_fslink
 exclude: jffs2_fspatheval
