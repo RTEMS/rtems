@@ -19,3 +19,8 @@ exclude: spstkalloc02
 exclude: sptls01
 exclude: tmcontext01
 exclude: utf8proc01
+
+#
+# Does not compile. See #3025.
+#
+exclude: linpack
