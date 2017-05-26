@@ -28,7 +28,6 @@ $1:
 	    if test -f $$$$tcheck; then \
 	      test_FLAGS=`$$$$tcheck flags $(RTEMS_BSP) $$$$tdata $$$$tincludes $(1)`; \
 	    fi; \
-	    local_target="$$$$target"; \
 	    if test -z "$$$$test_FLAGS"; then \
 	      echo "BSP Testsuite: $(1): PASS"; \
 	    else \
@@ -36,7 +35,7 @@ $1:
 	    fi; \
 	    echo "Making $$$$target in $(1)"; \
 	    cd $(1); \
-	    $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$$$test_FLAGS" $$$$local_target; \
+	    $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$$$test_FLAGS" $$$$target; \
 	  else \
 	    echo "BSP Testsuite: $(1): EXCLUDED"; \
 	  fi; \

@@ -56,7 +56,7 @@ $1: $(preintstall_targets)
 	echo "Making $$$$target in $$$$subdir"; \
 	if test "$$$$subdir" != "."; then \
 	  cd $$$$subdir; \
-	  $(MAKE) $(AM_MAKEFLAGS) $$$$local_target; \
+	  $(MAKE) $(AM_MAKEFLAGS) $$$$target; \
 	fi;
 endef
 
