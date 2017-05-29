@@ -22,6 +22,7 @@ SUBDIRS += sp23
 SUBDIRS += sp24
 SUBDIRS += sp25
 SUBDIRS += spname01
+SUBDIRS += spatcb01
 
 include $(top_srcdir)/../../../testsuites/automake/subdirs.am
 include $(top_srcdir)/../../../testsuites/automake/local.am
