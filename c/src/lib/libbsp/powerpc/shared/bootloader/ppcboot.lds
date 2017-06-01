@@ -1,5 +1,5 @@
 OUTPUT_ARCH(powerpc)
-/* OUTPUT_FORMAT(ppcboot) */
+OUTPUT_FORMAT ("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 SECTIONS
