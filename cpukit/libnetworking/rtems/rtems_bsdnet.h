@@ -6,12 +6,15 @@
 #ifndef _RTEMS_BSDNET_H
 #define _RTEMS_BSDNET_H
 
+#include <rtems.h>
+#include <sys/cpuset.h>
+#include <sys/ioccom.h>
+#include <sys/socket.h>
+#include <net/if.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems.h>
-#include <sys/cpuset.h>
 
 /*
  *  If this file is included from inside the Network Stack proper or
@@ -324,6 +327,25 @@ void* rtems_bsdnet_malloc_mbuf(size_t size, int type);
 
 #define SO_SNDWAKEUP	0x1020		/* wakeup when ready to send */
 #define SO_RCVWAKEUP	0x1021		/* wakeup when ready to receive */
+
+/*
+ * RTEMS additions for setting/getting `tap' function on incoming packets.
+ */
+struct ifnet;
+struct ether_header;
+struct mbuf;
+struct	rtems_tap_ifreq {
+	char	ifr_name[IFNAMSIZ];		/* if name, e.g. "en0" */
+	int	(*ifr_tap)(struct ifnet *, struct ether_header *, struct mbuf *);
+};
+#define        SIOCSIFTAP      _IOW('i', 88, struct rtems_tap_ifreq)     /* set tap function */
+#define        SIOCGIFTAP      _IOW('i', 89, struct rtems_tap_ifreq)     /* get tap function */
+
+#define	OSIOCGIFADDR	_IOWR('i', 13, struct ifreq)	/* get ifnet address */
+#define	OSIOCGIFDSTADDR	_IOWR('i', 15, struct ifreq)	/* get p-p address */
+#define	OSIOCGIFBRDADDR	_IOWR('i', 18, struct ifreq)	/* get broadcast addr */
+#define	OSIOCGIFCONF	_IOWR('i', 20, struct ifconf)	/* get ifnet list */
+#define	OSIOCGIFNETMASK _IOWR('i', 21, struct ifreq)	/* get net addr mask */
 
 struct socket;
 
