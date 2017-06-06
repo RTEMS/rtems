@@ -201,18 +201,18 @@ include_dev_miidir = $(includedir)/dev/mii
 include_dev_mii_HEADERS = dev/mii/mii.h
 
 if !HAS_NEWLIB_20170522_HEADER
-include_arpa_HEADERS += arpa/inet.h
-include_HEADERS += netdb.h
-include_HEADERS += syslog.h
-include_net_HEADERS += net/if.h
-include_netinet6_HEADERS = netinet6/in6.h
-include_netinet_HEADERS += netinet/in.h
-include_netinet_HEADERS += netinet/tcp.h
-include_sys_HEADERS += sys/_sockaddr_storage.h
-include_sys_HEADERS += sys/socket.h
-include_sys_HEADERS += sys/syslog.h
-include_sys_HEADERS += sys/ttydefaults.h
-include_sys_HEADERS += sys/un.h
+include_arpa_HEADERS += include/arpa/inet.h
+include_HEADERS += include/netdb.h
+include_HEADERS += include/syslog.h
+include_net_HEADERS += include/net/if.h
+include_netinet6_HEADERS = include/netinet6/in6.h
+include_netinet_HEADERS += include/netinet/in.h
+include_netinet_HEADERS += include/netinet/tcp.h
+include_sys_HEADERS += include/sys/_sockaddr_storage.h
+include_sys_HEADERS += include/sys/socket.h
+include_sys_HEADERS += include/sys/syslog.h
+include_sys_HEADERS += include/sys/ttydefaults.h
+include_sys_HEADERS += include/sys/un.h
 endif
 
 ## libc

@@ -419,51 +419,51 @@ $(PROJECT_INCLUDE)/dev/mii/mii.h: dev/mii/mii.h $(PROJECT_INCLUDE)/dev/mii/$(dir
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/mii/mii.h
 
 if !HAS_NEWLIB_20170522_HEADER
-$(PROJECT_INCLUDE)/arpa/inet.h: arpa/inet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+$(PROJECT_INCLUDE)/arpa/inet.h: include/arpa/inet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/inet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/inet.h
 
-$(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/netdb.h: include/netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
 
-$(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/syslog.h: include/syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syslog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
 
-$(PROJECT_INCLUDE)/net/if.h: net/if.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+$(PROJECT_INCLUDE)/net/if.h: include/net/if.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if.h
 
-$(PROJECT_INCLUDE)/netinet6/in6.h: netinet6/in6.h $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
+$(PROJECT_INCLUDE)/netinet6/in6.h: include/netinet6/in6.h $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet6/in6.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet6/in6.h
 
-$(PROJECT_INCLUDE)/netinet/in.h: netinet/in.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+$(PROJECT_INCLUDE)/netinet/in.h: include/netinet/in.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in.h
 
-$(PROJECT_INCLUDE)/netinet/tcp.h: netinet/tcp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+$(PROJECT_INCLUDE)/netinet/tcp.h: include/netinet/tcp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp.h
 
-$(PROJECT_INCLUDE)/sys/_sockaddr_storage.h: sys/_sockaddr_storage.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/_sockaddr_storage.h: include/sys/_sockaddr_storage.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
 
-$(PROJECT_INCLUDE)/sys/socket.h: sys/socket.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/socket.h: include/sys/socket.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socket.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socket.h
 
-$(PROJECT_INCLUDE)/sys/syslog.h: sys/syslog.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/syslog.h: include/sys/syslog.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/syslog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/syslog.h
 
-$(PROJECT_INCLUDE)/sys/ttydefaults.h: sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/ttydefaults.h: include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
 
-$(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+$(PROJECT_INCLUDE)/sys/un.h: include/sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/un.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 endif
