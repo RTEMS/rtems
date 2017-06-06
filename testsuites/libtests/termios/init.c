@@ -27,6 +27,7 @@
 #include <bsp.h>
 
 #include <rtems/shell.h>
+#include <rtems/termiostypes.h>
 
 #include <stdio.h>
 #include <unistd.h>
@@ -131,87 +132,6 @@ void print_c_oflag( struct termios * tp )
   if( tp->c_oflag & ONLRET )
     printf( "ONLRET " );
 
-  if( tp->c_oflag & OFILL )
-    printf( "OFILL " );
-
-  if( tp->c_oflag & OFDEL )
-    printf( "OFDEL " );
-
-  switch( tp->c_oflag & NLDLY ) {
-    case NL0:
-      printf( "NL0 " );
-      break;
-
-    case NL1:
-      printf( "NL1 " );
-      break;
-  }
-
-  switch( tp->c_oflag & CRDLY ) {
-    case CR0:
-      printf( "CR0 " );
-      break;
-
-    case CR1:
-      printf( "CR1 " );
-      break;
-
-    case CR2:
-      printf( "CR2 " );
-      break;
-
-    case CR3:
-      printf( "CR3 " );
-      break;
-  }
-
-  switch( tp->c_oflag & TABDLY ) {
-    case TAB0:
-      printf( "TAB0 " );
-      break;
-
-    case TAB1:
-      printf( "TAB1 " );
-      break;
-
-    case TAB2:
-      printf( "TAB2 " );
-      break;
-
-    case TAB3:
-      printf( "TAB3 " );
-      break;
-  }
-
-  switch( tp->c_oflag & BSDLY ) {
-    case BS0:
-      printf( "BS0 " );
-      break;
-
-    case BS1:
-      printf( "BS1 " );
-      break;
-  }
-
-  switch( tp->c_oflag & VTDLY ) {
-    case VT0:
-      printf( "VT0 " );
-      break;
-
-    case VT1:
-      printf( "VT1 " );
-      break;
-  }
-
-  switch( tp->c_oflag & FFDLY ) {
-    case FF0:
-      printf( "FF0" );
-      break;
-
-    case FF1:
-      printf( "FF1" );
-      break;
-  }
   printf( "\n" );
 }
 

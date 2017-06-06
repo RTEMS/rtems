@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <termios.h>
 #include <rtems/dumpbuf.h>
+#include <rtems/termiostypes.h>
 
 const char rtems_test_name[] = "TERMIOS 3";
 

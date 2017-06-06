@@ -848,7 +848,7 @@ static void test_opost(test_context *ctx)
 
 static void test_xtabs(test_context *ctx)
 {
-  tcflag_t oflags = OPOST | XTABS;
+  tcflag_t oflags = OPOST | OXTABS;
   size_t i;
 
   for (i = 0; i < DEVICE_COUNT; ++i) {
@@ -952,7 +952,7 @@ static void flush_task(rtems_task_argument arg)
 
 static void test_write(test_context *ctx)
 {
-  tcflag_t oflags = OPOST | ONLCR | XTABS;
+  tcflag_t oflags = OPOST | ONLCR | OXTABS;
   rtems_status_code sc;
   size_t i = INTERRUPT;
   device_context *dev = &ctx->devices[i];
@@ -1031,7 +1031,7 @@ static void test_write(test_context *ctx)
   buf[OUTPUT_BUFFER_SIZE - 1] = '\n';
   rtems_test_assert(memcmp(dev->output_buf, buf, OUTPUT_BUFFER_SIZE) == 0);
 
-  /* Ensure that XTABS output expansion is taken into account */
+  /* Ensure that OXTABS output expansion is taken into account */
 
   dev->tty->column = 0;
   clear_output(ctx, i);

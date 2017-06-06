@@ -20,6 +20,7 @@
 #include <rtems/libio.h>
 #include <rtems/assoc.h>
 #include <rtems/chain.h>
+#include <sys/ioccom.h>
 #include <stdint.h>
 #include <termios.h>
 
@@ -572,6 +573,14 @@ int rtems_termios_poll(
   rtems_libio_t *iop,
   int            events
 );
+
+#define RTEMS_IO_SNDWAKEUP _IOW('t', 11, struct ttywakeup ) /* send tty wakeup */
+#define RTEMS_IO_RCVWAKEUP _IOW('t', 12, struct ttywakeup ) /* recv tty wakeup */
+
+#define	OLCUC		0x00000100	/* map lower case to upper case on output */
+#define	IUCLC		0x00004000	/* map upper case to lower case on input */
+
+#define RTEMS_TERMIOS_NUMBER_BAUD_RATES 25
 
 #ifdef __cplusplus
 }

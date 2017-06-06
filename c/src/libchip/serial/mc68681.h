@@ -11,6 +11,8 @@
 #ifndef _MC68681_H_
 #define _MC68681_H_
 
+#include <rtems/termiostypes.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

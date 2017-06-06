@@ -95,9 +95,6 @@
 #define	IXANY		0x00000800	/* any char will restart after stop */
 #define	IMAXBEL		0x00002000	/* ring bell on input queue full */
 #endif  /*_POSIX_SOURCE */
-#ifdef __rtems__
-#define	IUCLC		0x00004000	/* map upper case to lower case on input */
-#endif /* __rtems__ */
 /*
  * Output flags - software output processing
  */
@@ -118,31 +115,10 @@
 #define	    TAB1	    0x00000004
 #define	    TAB2	    0x00000008
 #define	    TAB3	    0x0000000C	    /* expand tabs to spaces */
-#define	    XTABS	    0x0000000C
 #define	ONOEOT		0x00000010	/* discard EOT's (^D) on output) */
 #define	OCRNL		0x00000020	/* map CR to NL on output */
 #define	ONOCR		0x00000040	/* no CR output at column 0 */
 #define	ONLRET		0x00000080	/* NL performs CR function */
-#define	OLCUC		0x00000100	/* map lower case to upper case on output */
-#define	OFILL		0x00000200	/* send fill characters for a delay, rather than using a timed delay */
-#define	OFDEL		0x00000400	/* fill character is ASCII DEL (0177). if unset, fill character is ASCII NUL ('\0') */
-#define	NLDLY		0x00000800	/* newline delay mask */
-#define	    NL0	    0x00000000
-#define	    NL1	    0x00000800
-#define	CRDLY		0x00003000	/* carriage return delay mask */
-#define	    CR0	    0x00000000
-#define	    CR1	    0x00001000
-#define	    CR2	    0x00002000
-#define	    CR3	    0x00003000
-#define	BSDLY		0x00004000	/* Backspace delay mask */
-#define	    BS0	    0x00000000
-#define	    BS1	    0x00004000
-#define	VTDLY		0x00008000	/* Vertical tab delay mask */
-#define	    VT0	    0x00000000
-#define	    VT1	    0x00008000
-#define	FFDLY		0x00010000	/* Form feed delay mask */
-#define	    FF0	    0x00000000
-#define	    FF1	    0x00010000
 #endif /* __rtems__ */
 #endif  /*_POSIX_SOURCE */
 
@@ -242,10 +218,6 @@
 #define	EXTA	19200
 #define	EXTB	38400
 #endif  /* !_POSIX_SOURCE */
-
-#ifdef __rtems__
-#define RTEMS_TERMIOS_NUMBER_BAUD_RATES 25
-#endif /* __rtems__ */
 
 typedef unsigned int  tcflag_t;
 typedef unsigned char	cc_t;
