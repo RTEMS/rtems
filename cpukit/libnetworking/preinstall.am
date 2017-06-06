@@ -19,17 +19,9 @@ $(PROJECT_INCLUDE)/$(dirstamp):
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/$(dirstamp)
 
 if LIBNETWORKING
-$(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
-
 $(PROJECT_INCLUDE)/resolv.h: resolv.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/resolv.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/resolv.h
-
-$(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syslog.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
 
 $(PROJECT_INCLUDE)/arpa/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/arpa
@@ -39,10 +31,6 @@ PREINSTALL_DIRS += $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 $(PROJECT_INCLUDE)/arpa/ftp.h: arpa/ftp.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/ftp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/ftp.h
-
-$(PROJECT_INCLUDE)/arpa/inet.h: arpa/inet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/inet.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/inet.h
 
 $(PROJECT_INCLUDE)/arpa/nameser.h: arpa/nameser.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/nameser.h
@@ -93,10 +81,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/bpf.h
 $(PROJECT_INCLUDE)/net/ethernet.h: net/ethernet.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/ethernet.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/ethernet.h
-
-$(PROJECT_INCLUDE)/net/if.h: net/if.h $(PROJECT_INCLUDE)/net/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if.h
 
 $(PROJECT_INCLUDE)/net/if_arp.h: net/if_arp.h $(PROJECT_INCLUDE)/net/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if_arp.h
@@ -179,10 +163,6 @@ $(PROJECT_INCLUDE)/netinet/igmp_var.h: netinet/igmp_var.h $(PROJECT_INCLUDE)/net
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/igmp_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/igmp_var.h
 
-$(PROJECT_INCLUDE)/netinet/in.h: netinet/in.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in.h
-
 $(PROJECT_INCLUDE)/netinet/in_pcb.h: netinet/in_pcb.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in_pcb.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in_pcb.h
@@ -214,10 +194,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_mroute.h
 $(PROJECT_INCLUDE)/netinet/ip_var.h: netinet/ip_var.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/ip_var.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/ip_var.h
-
-$(PROJECT_INCLUDE)/netinet/tcp.h: netinet/tcp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp.h
 
 $(PROJECT_INCLUDE)/netinet/tcp_debug.h: netinet/tcp_debug.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp_debug.h
@@ -255,10 +231,6 @@ $(PROJECT_INCLUDE)/netinet6/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/netinet6
 	@: > $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
-
-$(PROJECT_INCLUDE)/netinet6/in6.h: netinet6/in6.h $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet6/in6.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet6/in6.h
 
 $(PROJECT_INCLUDE)/nfs/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/nfs
@@ -340,10 +312,6 @@ $(PROJECT_INCLUDE)/sys/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/sys/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sys/$(dirstamp)
 
-$(PROJECT_INCLUDE)/sys/_sockaddr_storage.h: sys/_sockaddr_storage.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
-
 $(PROJECT_INCLUDE)/sys/callout.h: sys/callout.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/callout.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/callout.h
@@ -404,10 +372,6 @@ $(PROJECT_INCLUDE)/sys/signalvar.h: sys/signalvar.h $(PROJECT_INCLUDE)/sys/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/signalvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/signalvar.h
 
-$(PROJECT_INCLUDE)/sys/socket.h: sys/socket.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socket.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socket.h
-
 $(PROJECT_INCLUDE)/sys/socketvar.h: sys/socketvar.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socketvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socketvar.h
@@ -416,25 +380,13 @@ $(PROJECT_INCLUDE)/sys/sysctl.h: sys/sysctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sysctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sysctl.h
 
-$(PROJECT_INCLUDE)/sys/syslog.h: sys/syslog.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/syslog.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/syslog.h
-
 $(PROJECT_INCLUDE)/sys/systm.h: sys/systm.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/systm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/systm.h
 
-$(PROJECT_INCLUDE)/sys/ttydefaults.h: sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
-
 $(PROJECT_INCLUDE)/sys/ucred.h: sys/ucred.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ucred.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ucred.h
-
-$(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/un.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
 
 $(PROJECT_INCLUDE)/vm/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/vm
@@ -466,6 +418,55 @@ $(PROJECT_INCLUDE)/dev/mii/mii.h: dev/mii/mii.h $(PROJECT_INCLUDE)/dev/mii/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/mii/mii.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/mii/mii.h
 
+if !HAS_NEWLIB_20170522_HEADER
+$(PROJECT_INCLUDE)/arpa/inet.h: arpa/inet.h $(PROJECT_INCLUDE)/arpa/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arpa/inet.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arpa/inet.h
+
+$(PROJECT_INCLUDE)/netdb.h: netdb.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netdb.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netdb.h
+
+$(PROJECT_INCLUDE)/syslog.h: syslog.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/syslog.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/syslog.h
+
+$(PROJECT_INCLUDE)/net/if.h: net/if.h $(PROJECT_INCLUDE)/net/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/net/if.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/net/if.h
+
+$(PROJECT_INCLUDE)/netinet6/in6.h: netinet6/in6.h $(PROJECT_INCLUDE)/netinet6/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet6/in6.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet6/in6.h
+
+$(PROJECT_INCLUDE)/netinet/in.h: netinet/in.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/in.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/in.h
+
+$(PROJECT_INCLUDE)/netinet/tcp.h: netinet/tcp.h $(PROJECT_INCLUDE)/netinet/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/netinet/tcp.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/netinet/tcp.h
+
+$(PROJECT_INCLUDE)/sys/_sockaddr_storage.h: sys/_sockaddr_storage.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_sockaddr_storage.h
+
+$(PROJECT_INCLUDE)/sys/socket.h: sys/socket.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/socket.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/socket.h
+
+$(PROJECT_INCLUDE)/sys/syslog.h: sys/syslog.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/syslog.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/syslog.h
+
+$(PROJECT_INCLUDE)/sys/ttydefaults.h: sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
+
+$(PROJECT_INCLUDE)/sys/un.h: sys/un.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/un.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/un.h
+endif
 $(PROJECT_INCLUDE)/ifaddrs.h: ifaddrs.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ifaddrs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/ifaddrs.h

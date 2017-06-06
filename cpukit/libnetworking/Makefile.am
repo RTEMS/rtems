@@ -22,9 +22,7 @@ libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetworking_CPPFLAGS)
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
-include_HEADERS = netdb.h
-include_HEADERS += resolv.h
-include_HEADERS += syslog.h
+include_HEADERS = resolv.h
 
 libnetworking_a_SOURCES = opt_atalk.h opt_bdg.h opt_compat.h opt_inet6.h \
     opt_inet.h opt_ipfw.h opt_ipx.h opt_mac.h opt_mrouting.h opt_netgraph.h \
@@ -37,7 +35,6 @@ libnetworking_a_SOURCES += bpfilter.h
 include_arpadir = $(includedir)/arpa
 
 include_arpa_HEADERS = arpa/ftp.h
-include_arpa_HEADERS += arpa/inet.h
 include_arpa_HEADERS += arpa/nameser.h
 include_arpa_HEADERS += arpa/nameser_compat.h
 
@@ -66,7 +63,6 @@ include_netdir = $(includedir)/net
 
 include_net_HEADERS = net/bpf.h
 include_net_HEADERS += net/ethernet.h
-include_net_HEADERS += net/if.h
 include_net_HEADERS += net/if_arp.h
 include_net_HEADERS += net/if_dl.h
 include_net_HEADERS += net/if_llc.h
@@ -95,7 +91,6 @@ include_netinet_HEADERS = netinet/icmp_var.h
 include_netinet_HEADERS += netinet/if_ether.h
 include_netinet_HEADERS += netinet/igmp.h
 include_netinet_HEADERS += netinet/igmp_var.h
-include_netinet_HEADERS += netinet/in.h
 include_netinet_HEADERS += netinet/in_pcb.h
 include_netinet_HEADERS += netinet/in_systm.h
 include_netinet_HEADERS += netinet/in_var.h
@@ -104,7 +99,6 @@ include_netinet_HEADERS += netinet/ip_fw.h
 include_netinet_HEADERS += netinet/ip_icmp.h
 include_netinet_HEADERS += netinet/ip_mroute.h
 include_netinet_HEADERS += netinet/ip_var.h
-include_netinet_HEADERS += netinet/tcp.h
 include_netinet_HEADERS += netinet/tcp_debug.h
 include_netinet_HEADERS += netinet/tcp_fsm.h
 include_netinet_HEADERS += netinet/tcp_seq.h
@@ -127,7 +121,6 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
 
 include_netinet6dir = $(includedir)/netinet6
 
-include_netinet6_HEADERS = netinet6/in6.h
 
 ## nfs
 
@@ -174,8 +167,7 @@ libnetworking_a_SOURCES += rtems/sghostname.c \
 
 include_sysdir = $(includedir)/sys
 
-include_sys_HEADERS = sys/_sockaddr_storage.h
-include_sys_HEADERS += sys/callout.h
+include_sys_HEADERS = sys/callout.h
 include_sys_HEADERS += sys/conf.h
 include_sys_HEADERS += sys/domain.h
 include_sys_HEADERS += sys/kernel.h
@@ -190,14 +182,10 @@ include_sys_HEADERS += sys/reboot.h
 include_sys_HEADERS += sys/resourcevar.h
 include_sys_HEADERS += sys/selinfo.h
 include_sys_HEADERS += sys/signalvar.h
-include_sys_HEADERS += sys/socket.h
 include_sys_HEADERS += sys/socketvar.h
 include_sys_HEADERS += sys/sysctl.h
-include_sys_HEADERS += sys/syslog.h
 include_sys_HEADERS += sys/systm.h
-include_sys_HEADERS += sys/ttydefaults.h
 include_sys_HEADERS += sys/ucred.h
-include_sys_HEADERS += sys/un.h
 
 # vm
 
@@ -211,6 +199,21 @@ include_vm_HEADERS += vm/vm_param.h
 # dev
 include_dev_miidir = $(includedir)/dev/mii
 include_dev_mii_HEADERS = dev/mii/mii.h
+
+if !HAS_NEWLIB_20170522_HEADER
+include_arpa_HEADERS += arpa/inet.h
+include_HEADERS += netdb.h
+include_HEADERS += syslog.h
+include_net_HEADERS += net/if.h
+include_netinet6_HEADERS = netinet6/in6.h
+include_netinet_HEADERS += netinet/in.h
+include_netinet_HEADERS += netinet/tcp.h
+include_sys_HEADERS += sys/_sockaddr_storage.h
+include_sys_HEADERS += sys/socket.h
+include_sys_HEADERS += sys/syslog.h
+include_sys_HEADERS += sys/ttydefaults.h
+include_sys_HEADERS += sys/un.h
+endif
 
 ## libc
 

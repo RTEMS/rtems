@@ -71,6 +71,35 @@ $(PROJECT_INCLUDE)/sys/event.h: libcsupport/include/sys/event.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/event.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/event.h
 
+$(PROJECT_INCLUDE)/sys/poll.h: libcsupport/include/sys/poll.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/poll.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/poll.h
+
+$(PROJECT_INCLUDE)/sys/statvfs.h: libcsupport/include/sys/statvfs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/statvfs.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/statvfs.h
+
+$(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
+
+$(PROJECT_INCLUDE)/sys/endian.h: include/sys/endian.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/endian.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/endian.h
+
+$(PROJECT_INCLUDE)/sys/priority.h: include/sys/priority.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/priority.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/priority.h
+
+if !HAS_NEWLIB_20170522_HEADER
+$(PROJECT_INCLUDE)/sys/_iovec.h: include/sys/_iovec.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_iovec.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_iovec.h
+
+$(PROJECT_INCLUDE)/sys/uio.h: include/sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
+
 $(PROJECT_INCLUDE)/sys/filio.h: libcsupport/include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
@@ -83,17 +112,9 @@ $(PROJECT_INCLUDE)/sys/ioctl.h: libcsupport/include/sys/ioctl.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
 
-$(PROJECT_INCLUDE)/sys/poll.h: libcsupport/include/sys/poll.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/poll.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/poll.h
-
 $(PROJECT_INCLUDE)/sys/sockio.h: libcsupport/include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
-
-$(PROJECT_INCLUDE)/sys/statvfs.h: libcsupport/include/sys/statvfs.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/statvfs.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/statvfs.h
 
 $(PROJECT_INCLUDE)/sys/_termios.h: libcsupport/include/sys/_termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_termios.h
@@ -110,27 +131,7 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
 $(PROJECT_INCLUDE)/sys/ttydefaults.h: libcsupport/include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
-
-$(PROJECT_INCLUDE)/sys/utsname.h: libcsupport/include/sys/utsname.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/utsname.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/utsname.h
-
-$(PROJECT_INCLUDE)/sys/endian.h: include/sys/endian.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/endian.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/endian.h
-
-$(PROJECT_INCLUDE)/sys/uio.h: include/sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
-
-$(PROJECT_INCLUDE)/sys/_iovec.h: include/sys/_iovec.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_iovec.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_iovec.h
-
-$(PROJECT_INCLUDE)/sys/priority.h: include/sys/priority.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/priority.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/priority.h
-
+endif
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsdnet

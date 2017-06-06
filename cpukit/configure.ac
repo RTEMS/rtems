@@ -166,6 +166,9 @@ if test x"$RTEMS_USE_NEWLIB" = xyes ; then
   AC_CHECK_DECLS([__getreent],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/reent.h>])
 fi
 
+AC_CHECK_HEADER([sys/socket.h],[],[])
+AM_CONDITIONAL(HAS_NEWLIB_20170522_HEADER,[test x"${ac_cv_header_sys_socket_h}" = xyes])
+
 RTEMS_CHECK_MULTIPROCESSING
 RTEMS_CHECK_POSIX_API
 RTEMS_CHECK_NETWORKING

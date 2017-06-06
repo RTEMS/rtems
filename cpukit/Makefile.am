@@ -59,22 +59,25 @@ include_HEADERS += include/memory.h
 include_HEADERS += libmisc/xz/xz.h
 
 include_sys_HEADERS += libcsupport/include/sys/event.h
+include_sys_HEADERS += libcsupport/include/sys/poll.h
+include_sys_HEADERS += libcsupport/include/sys/statvfs.h
+include_sys_HEADERS += libcsupport/include/sys/utsname.h
+
+include_sys_HEADERS += include/sys/endian.h
+include_sys_HEADERS += include/sys/priority.h
+
+if !HAS_NEWLIB_20170522_HEADER
+include_sys_HEADERS += include/sys/_iovec.h
+include_sys_HEADERS += include/sys/uio.h
 include_sys_HEADERS += libcsupport/include/sys/filio.h
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h
 include_sys_HEADERS += libcsupport/include/sys/ioctl.h
-include_sys_HEADERS += libcsupport/include/sys/poll.h
 include_sys_HEADERS += libcsupport/include/sys/sockio.h
-include_sys_HEADERS += libcsupport/include/sys/statvfs.h
 include_sys_HEADERS += libcsupport/include/sys/_termios.h
 include_sys_HEADERS += libcsupport/include/sys/termios.h
 include_sys_HEADERS += libcsupport/include/sys/ttycom.h
 include_sys_HEADERS += libcsupport/include/sys/ttydefaults.h
-include_sys_HEADERS += libcsupport/include/sys/utsname.h
-
-include_sys_HEADERS += include/sys/endian.h
-include_sys_HEADERS += include/sys/uio.h
-include_sys_HEADERS += include/sys/_iovec.h
-include_sys_HEADERS += include/sys/priority.h
+endif
 
 if LIBNETWORKING
 include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
