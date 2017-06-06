@@ -53,7 +53,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getmaps.c,v 1.11 2000/01/2
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
-#include <sys/mbuf.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #define NAMELEN 255

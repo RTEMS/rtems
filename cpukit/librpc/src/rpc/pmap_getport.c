@@ -48,7 +48,6 @@ static char *rcsid = "$FreeBSD: src/lib/libc/rpc/pmap_getport.c,v 1.10 2000/01/2
 #include <rpc/pmap_prot.h>
 #include <rpc/pmap_clnt.h>
 #include <sys/socket.h>
-#include <sys/mbuf.h>
 #include <net/if.h>
 #include <unistd.h>
 
