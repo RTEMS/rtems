@@ -87,7 +87,7 @@
 #include <sys/proc.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
-#include <sys/ioctl.h>
+#include <sys/filio.h>
 #include <sys/file.h>
 #include <sys/kernel.h>
 

@@ -31,6 +31,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include <sys/fcntl.h>
+#include <sys/filio.h>
 #include <sys/ttycom.h>
 
 #include <rtems/termiostypes.h>

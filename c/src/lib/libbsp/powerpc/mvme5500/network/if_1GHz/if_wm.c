@@ -61,7 +61,6 @@
 
 /* #include <sys/queue.h> */
 
-#include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>             /* SIOCADDMULTI, SIOC...     */
 #include <net/if.h>

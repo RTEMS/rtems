@@ -76,9 +76,9 @@ __KERNEL_RCSID(0, "$NetBSD: if_gfe.c,v 1.13.8.1 2005/04/29 11:28:56 kent Exp $")
 #include <sys/device.h>
 #endif
 #include <sys/errno.h>
-#include <sys/ioctl.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>
+#include <sys/sockio.h>
 
 #ifndef __rtems__
 #include <machine/bus.h>

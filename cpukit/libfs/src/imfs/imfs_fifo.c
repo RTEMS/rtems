@@ -19,6 +19,8 @@
 
 #include "imfs.h"
 
+#include <sys/filio.h>
+
 #define JNODE2PIPE(_jnode)  ( ((IMFS_fifo_t *)(_jnode))->pipe )
 
 #define LIBIO2PIPE(_iop)  ( JNODE2PIPE((IMFS_jnode_t *)(_iop)->pathinfo.node_access) )

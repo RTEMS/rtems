@@ -161,7 +161,6 @@ Mode of operation:
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
-#include <sys/ioctl.h>
 
 #include <net/ethernet.h>
 #include <net/if.h>

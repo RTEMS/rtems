@@ -45,7 +45,7 @@
 #include <sys/socketvar.h>
 #include <sys/domain.h>
 #include <sys/protosw.h>
-#include <sys/ioctl.h>
+#include <sys/sockio.h>
 
 #include <net/if.h>
 #include <net/route.h>

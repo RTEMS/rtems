@@ -82,7 +82,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <sys/ioctl.h>
+#include <sys/sockio.h>
 #include <sys/param.h>		/* for MAXHOSTNAMELEN */
 #include <sys/systm.h>
 #include <sys/socketvar.h>	/* for socreat() soclose() */

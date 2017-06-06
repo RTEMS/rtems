@@ -35,7 +35,7 @@ typedef	__uintptr_t		vm_size_t;
 #include <sys/cdefs.h>
 
 #include <sys/time.h>
-#include <sys/ioctl.h>
+#include <sys/ioccom.h>
 
 struct mdproc {
 	int	md_flags;

@@ -46,7 +46,6 @@
 #include <rtems/rtems_mii_ioctl.h>
 
 #include <sys/types.h>
-#include <sys/ioctl.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>
 #include <sys/socket.h>

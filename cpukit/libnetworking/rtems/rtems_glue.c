@@ -24,7 +24,7 @@
 #include <sys/sockio.h>
 #include <sys/callout.h>
 #include <sys/proc.h>
-#include <sys/ioctl.h>
+#include <sys/sockio.h>
 #include <sys/systm.h>
 #include <net/if.h>
 #include <net/route.h>

@@ -63,7 +63,7 @@
 #include <rtems/rtems_dhcp_failsafe.h>
 
 struct  proc;                   /* Unused parameter of some functions. */
-#include <sys/ioctl.h>
+#include <sys/sockio.h>
 #include <sys/socket.h>
 #include <net/route.h>
 #include <netinet/in.h>         /* for sockaddr_in */

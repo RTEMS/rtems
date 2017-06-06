@@ -52,7 +52,7 @@
 #include <sys/mbuf.h>
 #include <sys/socket.h>
 #include <errno.h>
-#include <sys/ioctl.h>
+#include <sys/sockio.h>
 #include <sys/time.h>
 
 #include <net/if.h>

@@ -27,7 +27,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/ioctl.h>
+#include <sys/ioccom.h>
 #include <sys/statvfs.h>
 #include <sys/uio.h>
 
