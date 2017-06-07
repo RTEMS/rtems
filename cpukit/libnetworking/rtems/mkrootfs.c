@@ -177,7 +177,9 @@ rtems_rootfs_append_host_rec (in_addr_t cip,
 
   if (cname && strlen (cname))
   {
-    snprintf (bufp, sizeof (buf), "%s\t\t%s", inet_ntoa (ip), cname);
+    char addrbuf[INET_ADDRSTRLEN];
+
+    snprintf (bufp, sizeof (buf), "%s\t\t%s", inet_ntoa_r (ip, addrbuf), cname);
     bufp += strlen (buf);
 
     if (dname && strlen (dname))

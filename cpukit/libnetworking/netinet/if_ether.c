@@ -343,8 +343,9 @@ arpresolve(
 			rt = la->la_rt;
 	}
 	if (la == 0 || rt == 0) {
+		char addrbuf[INET_ADDRSTRLEN];
 		log(LOG_DEBUG, "arpresolve: can't allocate llinfo for %s\n",
-			inet_ntoa(SIN(dst)->sin_addr));
+			inet_ntoa_r(SIN(dst)->sin_addr, addrbuf));
 		m_freem(m);
 		return (0);
 	}
@@ -449,6 +450,7 @@ in_arpinput(struct mbuf *m)
 	struct sockaddr sa;
 	struct in_addr isaddr, itaddr, myaddr;
 	int op;
+	char addrbuf[INET_ADDRSTRLEN];
 
 	ea = mtod(m, struct ether_arp *);
 	op = ntohs(ea->arp_op);
@@ -475,14 +477,14 @@ in_arpinput(struct mbuf *m)
 	    sizeof (ea->arp_sha))) {
 		log(LOG_ERR,
 		    "arp: ether address is broadcast for IP address %s!\n",
-		    inet_ntoa(isaddr));
+		    inet_ntoa_r(isaddr, addrbuf));
 		m_freem(m);
 		return;
 	}
 	if (isaddr.s_addr == myaddr.s_addr) {
 		log(LOG_ERR,
 		   "arp: %6D is using my IP address %s!\n",
-		   ea->arp_sha, ":", inet_ntoa(isaddr));
+		   ea->arp_sha, ":", inet_ntoa_r(isaddr, addrbuf));
 		itaddr = myaddr;
 		goto reply;
 	}
@@ -491,8 +493,8 @@ in_arpinput(struct mbuf *m)
 		if (sdl->sdl_alen &&
 		    bcmp((caddr_t)ea->arp_sha, LLADDR(sdl), sdl->sdl_alen))
 			log(LOG_INFO, "arp: %s moved from %6D to %6D\n",
-			    inet_ntoa(isaddr), (u_char *)LLADDR(sdl), ":",
-			    ea->arp_sha, ":");
+			    inet_ntoa_r(isaddr, addrbuf),
+			    (u_char *)LLADDR(sdl), ":", ea->arp_sha, ":");
 		(void)memcpy(LLADDR(sdl), ea->arp_sha, sizeof(ea->arp_sha));
 		sdl->sdl_alen = sizeof(ea->arp_sha);
 		if (rt->rt_expire)
@@ -549,7 +551,7 @@ reply:
 			rtfree(rt);
 #ifdef DEBUG_PROXY
 			printf("arp: proxying for %s\n",
-			       inet_ntoa(itaddr));
+			       inet_ntoa_r(itaddr, addrbuf));
 #endif
 		} else {
 			rt = la->la_rt;
@@ -619,8 +621,9 @@ arplookup(u_long addr, int create, int proxy)
 		why = "gateway route is not ours";
 
 	if (why && create) {
+		char addrbuf[INET_ADDRSTRLEN];
 		log(LOG_DEBUG, "arplookup %s failed: %s\n",
-		    inet_ntoa(sin.sin_addr), why);
+		    inet_ntoa_r(sin.sin_addr, addrbuf), why);
 		return 0;
 	} else if (why) {
 		return 0;

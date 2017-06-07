@@ -973,13 +973,14 @@ ip_dooptions(struct mbuf *m)
 			}
 
 			if (!ip_dosourceroute) {
-				char buf[4*sizeof "123"];
+				char buf0[INET_ADDRSTRLEN];
+				char buf1[INET_ADDRSTRLEN];
 
 nosourcerouting:
-				strcpy(buf, inet_ntoa(ip->ip_dst));
 				log(LOG_WARNING, 
 				    "attempted source route from %s to %s\n",
-				    inet_ntoa(ip->ip_src), buf);
+				    inet_ntoa_r(ip->ip_dst, buf0),
+				    inet_ntoa_r(ip->ip_src, buf1));
 				type = ICMP_UNREACH;
 				code = ICMP_UNREACH_SRCFAIL;
 				goto bad;

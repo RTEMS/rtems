@@ -380,13 +380,13 @@ findpcb:
 	 */
 	if (inp == NULL) {
 		if (log_in_vain && tiflags & TH_SYN) {
-			char buf[4*sizeof "123"];
+			char buf0[INET_ADDRSTRLEN];
+			char buf1[INET_ADDRSTRLEN];
 
-			strcpy(buf, inet_ntoa(ti->ti_dst));
 			log(LOG_INFO, "Connection attempt to TCP %s:%d"
 			    " from %s:%d\n",
-			    buf, ntohs(ti->ti_dport),
-			    inet_ntoa(ti->ti_src), ntohs(ti->ti_sport));
+			    inet_ntoa_r(ti->ti_dst, buf0), ntohs(ti->ti_dport),
+			    inet_ntoa_r(ti->ti_src, buf1), ntohs(ti->ti_sport));
 		}
 		goto dropwithreset;
 	}

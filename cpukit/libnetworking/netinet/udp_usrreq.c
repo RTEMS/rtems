@@ -281,13 +281,13 @@ udp_input(struct mbuf *m, int iphlen)
 	    ip->ip_dst, uh->uh_dport, 1);
 	if (inp == NULL) {
 		if (log_in_vain) {
-			char buf[4*sizeof "123"];
+			char buf0[INET_ADDRSTRLEN];
+			char buf1[INET_ADDRSTRLEN];
 
-			strcpy(buf, inet_ntoa(ip->ip_dst));
 			log(LOG_INFO, "Connection attempt to UDP %s:%d"
 			    " from %s:%d\n",
-				buf, ntohs(uh->uh_dport),
-				inet_ntoa(ip->ip_src), ntohs(uh->uh_sport));
+			    inet_ntoa_r(ip->ip_dst, buf0), ntohs(uh->uh_dport),
+			    inet_ntoa_r(ip->ip_src, buf1), ntohs(uh->uh_sport));
 		}
 		udpstat.udps_noport++;
 		if (m->m_flags & (M_BCAST | M_MCAST)) {

@@ -1132,8 +1132,9 @@ dhcp_init (int update_files)
       }
 
       for (i = 0; i < rtems_bsdnet_nameserver_count; i++) {
+        char addrbuf[INET_ADDRSTRLEN];
         strcpy(buf, "nameserver ");
-        strcat(buf, inet_ntoa(rtems_bsdnet_ntpserver[i]));
+        strcat(buf, inet_ntoa_r(rtems_bsdnet_ntpserver[i], addrbuf));
         strcat(buf, "\n");
         if (rtems_rootfs_file_append ("/etc/resolv.conf", MKFILE_MODE, 1, bufl))
           break;
