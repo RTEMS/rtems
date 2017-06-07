@@ -54,10 +54,10 @@ void test_cpu_nand_case_1(size_t cpu1, size_t cpu2)
 
   /* test if all bits clear except cpu1 */
   for (i=0 ; i<CPU_SETSIZE ; i++) {
-    if (i== cpu1)
-      rtems_test_assert( CPU_ISSET(i, &set3) == 0 );
-    else
+    if (i== cpu2)
       rtems_test_assert( CPU_ISSET(i, &set3) == 1 );
+    else
+      rtems_test_assert( CPU_ISSET(i, &set3) == 0 );
   }
 }
 
