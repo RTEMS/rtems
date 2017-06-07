@@ -48,6 +48,7 @@
 #include <netinet/tcp_var.h>
 #include <netinet/tcpip.h>
 #include <netinet/udp.h>
+#include <inttypes.h>
 
 static int fw_debug = 1;
 #ifdef IPFIREWALL_VERBOSE

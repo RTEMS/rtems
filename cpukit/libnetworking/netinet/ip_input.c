@@ -39,6 +39,7 @@
 #include "opt_ipfw.h"
 
 #include <stddef.h>
+#include <inttypes.h>
 
 #include <sys/param.h>
 #include <sys/systm.h>

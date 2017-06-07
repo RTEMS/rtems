@@ -155,6 +155,7 @@ Mode of operation:
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <inttypes.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
