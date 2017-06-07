@@ -100,6 +100,7 @@ struct arpreq {
 #define	ATF_USETRAILERS	0x10	/* has requested trailers */
 
 #ifdef _KERNEL
+#include <net/if_var.h>
 /*
  * Structure shared between the ethernet driver modules and
  * the address resolution code.  For example, each ec_softc or il_softc

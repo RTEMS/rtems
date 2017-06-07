@@ -44,8 +44,6 @@ typedef	u_int32_t tcp_seq;
 #define tcp6_seq	tcp_seq	/* for KAME src sync over BSD*'s */
 #define tcp6hdr		tcphdr	/* for KAME src sync over BSD*'s */
 
-typedef u_long	tcp_cc;			/* connection count per rfc1644 */
-
 /*
  * TCP header.
  * Per RFC 793, September, 1981.
@@ -91,19 +89,6 @@ struct tcphdr {
 #define TCPOPT_TIMESTAMP	8L
 #define    TCPOLEN_TIMESTAMP		10L
 #define    TCPOLEN_TSTAMP_APPA		(uint32_t)(TCPOLEN_TIMESTAMP+2) /* appendix A */
-#define    TCPOPT_TSTAMP_HDR		\
-    (uint32_t)(((uint32_t)TCPOPT_NOP<<24)| \
-               ((uint32_t)TCPOPT_NOP<<16)| \
-               ((uint32_t)TCPOPT_TIMESTAMP<<8)| \
-               ((uint32_t)TCPOLEN_TIMESTAMP))
-
-#define	TCPOPT_CC		11		/* CC options: RFC-1644 */
-#define TCPOPT_CCNEW		12
-#define TCPOPT_CCECHO		13
-#define	   TCPOLEN_CC			6
-#define	   TCPOLEN_CC_APPA		(TCPOLEN_CC+2)
-#define	   TCPOPT_CC_HDR(ccopt)		\
-    (TCPOPT_NOP<<24|TCPOPT_NOP<<16|(ccopt)<<8|TCPOLEN_CC)
 
 /*
  * Default maximum segment size for TCP.

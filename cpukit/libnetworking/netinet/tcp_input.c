@@ -52,6 +52,7 @@
 #include <machine/cpu.h>	/* before tcp_seq.h, for tcp_random18() */
 
 #include <net/if.h>
+#include <net/if_var.h>
 #include <net/route.h>
 
 #include <netinet/in.h>
