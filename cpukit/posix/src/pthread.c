@@ -254,7 +254,7 @@ static void _POSIX_Threads_Manager_initialization(void)
     _Assert( affinity->setsize == sizeof( attr->affinitysetpreallocated ) );
     attr->affinityset             = &attr->affinitysetpreallocated;
     attr->affinitysetsize         = affinity->setsize;
-    CPU_COPY( attr->affinityset, affinity->set );
+    CPU_COPY( affinity->set, attr->affinityset );
   #endif
 
   _Thread_Initialize_information(

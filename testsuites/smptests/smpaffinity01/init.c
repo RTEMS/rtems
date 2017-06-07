@@ -177,7 +177,7 @@ void Validate_affinity(void )
 
   /* Change the affinity for each low priority task */
   puts("Init - Change affinity on Low priority tasks");
-  CPU_COPY(&cpuset1, &cpuset0);
+  CPU_COPY(&cpuset0, &cpuset1);
   for (i=0; i<cpu_count; i++){
 
     CPU_CLR(i, &cpuset1);
@@ -193,7 +193,7 @@ void Validate_affinity(void )
   }
 
   puts("Init - Validate affinity on Low priority tasks");
-  CPU_COPY(&cpuset1, &cpuset0);
+  CPU_COPY(&cpuset0, &cpuset1);
   for (i=0; i<cpu_count; i++){
     CPU_CLR(i, &cpuset1);
 

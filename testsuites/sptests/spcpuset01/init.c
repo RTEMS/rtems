@@ -122,7 +122,7 @@ static void test_cpu_copy_case_1(void)
   CPU_ZERO(&set1);
   CPU_FILL(&set2);
 
-  CPU_COPY(&set2, &set1);
+  CPU_COPY(&set1, &set2);
 
   /* test if all bits clear in set2 */
   for (i=0 ; i<CPU_SETSIZE ; i++) {

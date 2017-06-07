@@ -117,7 +117,7 @@ static inline void _CPU_set_Set(
 {
   set->set     = &set->preallocated;
   set->setsize = setsize;
-  CPU_COPY( set->set, cpuset );
+  CPU_COPY( cpuset, set->set );
 }
 
 /**@}*/

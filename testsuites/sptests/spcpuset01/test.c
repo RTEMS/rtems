@@ -103,7 +103,7 @@ static void test_logic01_setup(size_t cpu1, size_t cpu2)
   CPU_ZERO(&set1);
   CPU_SET(cpu1, &set1);
   CPU_SET(cpu2, &set1);
-  CPU_COPY(&set2, &set1);
+  CPU_COPY(&set1, &set2);
   CPU_CLR(cpu2, &set2);
 }
 

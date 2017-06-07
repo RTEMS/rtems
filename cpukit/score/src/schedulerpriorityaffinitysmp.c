@@ -624,7 +624,7 @@ bool _Scheduler_priority_affinity_SMP_Get_affinity(
     return false;
   }
 
-  CPU_COPY( cpuset, node->Affinity.set );
+  CPU_COPY( node->Affinity.set, cpuset );
   return true;
 }
 
@@ -660,7 +660,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     _Scheduler_priority_affinity_SMP_Block( scheduler, thread, &node->Base.Base.Base );
   }
 
-  CPU_COPY( node->Affinity.set, cpuset );
+  CPU_COPY( cpuset, node->Affinity.set );
 
   if ( _States_Is_ready( current_state ) ) {
     /*
