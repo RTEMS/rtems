@@ -122,9 +122,11 @@ extern "C" {
 #define I386_CONTEXT_CONTROL_EBX_OFFSET 12
 #define I386_CONTEXT_CONTROL_ESI_OFFSET 16
 #define I386_CONTEXT_CONTROL_EDI_OFFSET 20
+#define I386_CONTEXT_CONTROL_GS_0_OFFSET 24
+#define I386_CONTEXT_CONTROL_GS_1_OFFSET 28
 
 #ifdef RTEMS_SMP
-  #define I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 24
+  #define I386_CONTEXT_CONTROL_IS_EXECUTING_OFFSET 32
 #endif
 
 /* structures */
@@ -136,12 +138,13 @@ extern "C" {
  */
 
 typedef struct {
-  uint32_t    eflags;   /* extended flags register                   */
-  void       *esp;      /* extended stack pointer register           */
-  void       *ebp;      /* extended base pointer register            */
-  uint32_t    ebx;      /* extended bx register                      */
-  uint32_t    esi;      /* extended source index register            */
-  uint32_t    edi;      /* extended destination index flags register */
+  uint32_t    eflags;     /* extended flags register                   */
+  void       *esp;        /* extended stack pointer register           */
+  void       *ebp;        /* extended base pointer register            */
+  uint32_t    ebx;        /* extended bx register                      */
+  uint32_t    esi;        /* extended source index register            */
+  uint32_t    edi;        /* extended destination index flags register */
+  segment_descriptors gs; /* gs segment descriptor                     */
 #ifdef RTEMS_SMP
   volatile bool is_executing;
 #endif

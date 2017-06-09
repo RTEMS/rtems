@@ -18,6 +18,7 @@
 
 #include <rtems/score/cpu.h>
 #include <bsp/irq.h>
+#include <bsp/tblsizes.h>
 
 /*
  * This locking is not enough if IDT is changed at runtime
@@ -331,7 +332,7 @@ uint16_t i386_next_empty_gdt_entry ()
     uint16_t                gdt_limit;
     segment_descriptors*    gdt_entry_tbl;
     /* initial amount of filled descriptors */
-    static uint16_t         segment_selector_index = 2;
+    static uint16_t         segment_selector_index = NUM_SYSTEM_GDT_DESCRIPTORS - 1;
 
     segment_selector_index += 1;
     i386_get_info_from_GDTR (&gdt_entry_tbl, &gdt_limit);

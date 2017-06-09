@@ -32,6 +32,8 @@
 .set REG_EBX,     I386_CONTEXT_CONTROL_EBX_OFFSET
 .set REG_ESI,     I386_CONTEXT_CONTROL_ESI_OFFSET
 .set REG_EDI,     I386_CONTEXT_CONTROL_EDI_OFFSET
+.set REG_GS_0,    I386_CONTEXT_CONTROL_GS_0_OFFSET
+.set REG_GS_1,    I386_CONTEXT_CONTROL_GS_1_OFFSET
 
         BEGIN_CODE
 
@@ -83,6 +85,12 @@ restore:
         movl      REG_EBX(eax),ebx         /* restore ebx */
         movl      REG_ESI(eax),esi         /* restore source register */
         movl      REG_EDI(eax),edi         /* restore destination register */
+        movl      REG_GS_0(eax), ecx       /* restore gs segment */
+        movl      REG_GS_1(eax), edx
+        movl      ecx, _Global_descriptor_table + 24
+        movl      edx, _Global_descriptor_table + 28
+        movl      $24, ecx
+        mov       ecx, gs
         ret
 
 /*

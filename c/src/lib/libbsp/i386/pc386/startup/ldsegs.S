@@ -171,8 +171,8 @@ next_step:
 /*---------------------------------------------------------------------------+
 | GDT itself
 +--------------------------------------------------------------------------*/
-#if GDT_SIZE < 3
-#error "GDT_SIZE must be at least 3"
+#if GDT_SIZE < NUM_SYSTEM_GDT_DESCRIPTORS
+#error "GDT_SIZE must be at least NUM_SYSTEM_GDT_DESCRIPTORS"
 #endif
 
 BEGIN_DATA
@@ -193,8 +193,12 @@ SYM (_Global_descriptor_table):
 	.word 0xffff, 0
 	.byte 0, 0x92, 0xcf, 0
 
+	/* gs segment */
+	.word 0xffff, 0
+	.byte 0, 0x92, 0xcf, 0
+
         /* allocated space for user segments */
-        .rept (GDT_SIZE - 3)
+        .rept (GDT_SIZE - NUM_SYSTEM_GDT_DESCRIPTORS)
         .word 0,0,0,0
         .endr
 

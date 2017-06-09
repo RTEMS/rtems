@@ -24,6 +24,7 @@
 #include <rtems/score/types.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/idtr.h>
+#include <rtems/score/tls.h>
 
 #include <rtems/bspIo.h>
 #include <rtems/score/percpu.h>
@@ -42,6 +43,12 @@ I386_ASSERT_OFFSET(ebp, EBP);
 I386_ASSERT_OFFSET(ebx, EBX);
 I386_ASSERT_OFFSET(esi, ESI);
 I386_ASSERT_OFFSET(edi, EDI);
+
+RTEMS_STATIC_ASSERT(
+  offsetof(Context_Control, gs)
+    == I386_CONTEXT_CONTROL_GS_0_OFFSET,
+  Context_Control_gs_0
+);
 
 #ifdef RTEMS_SMP
   I386_ASSERT_OFFSET(is_executing, IS_EXECUTING);
@@ -153,6 +160,7 @@ void _CPU_Context_Initialize(
 )
 {
   uint32_t _stack;
+  uint32_t tcb;
 
   (void) is_fp; /* avoid warning for being unused */
 
@@ -168,6 +176,23 @@ void _CPU_Context_Initialize(
   *((proc_ptr *)(_stack)) = (_entry_point);
   the_context->ebp     = (void *) 0;
   the_context->esp     = (void *) _stack;
+
+  if ( tls_area != NULL ) {
+    tcb = (uint32_t) _TLS_TCB_after_TLS_block_initialize( tls_area );
+  } else {
+    tcb = 0;
+  }
+
+  the_context->gs.limit_15_0 = 0xffff;
+  the_context->gs.base_address_15_0 = (tcb >> 0) & 0xffff;
+  the_context->gs.type = 0x2;
+  the_context->gs.descriptor_type = 0x1;
+  the_context->gs.limit_19_16 = 0xf;
+  the_context->gs.present = 0x1;
+  the_context->gs.operation_size = 0x1;
+  the_context->gs.granularity = 0x1;
+  the_context->gs.base_address_23_16 = (tcb >> 16) & 0xff;
+  the_context->gs.base_address_31_24 = (tcb >> 24) & 0xff;
 }
 
 uint32_t   _CPU_ISR_Get_level( void )
