@@ -59,7 +59,11 @@
         PUBLIC(_CPU_Context_switch)
 SYM(_CPU_Context_switch):
         st      %g5, [%o0 + G5_OFFSET]       ! save the global registers
-        st      %g7, [%o0 + G7_OFFSET]
+
+        /*
+         * No need to save the thread pointer %g7 since it is a thread
+         * invariant.  It is initialized once in _CPU_Context_Initialize().
+         */
 
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
         std     %l2, [%o0 + L2_OFFSET]

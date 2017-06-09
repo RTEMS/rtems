@@ -56,24 +56,15 @@
 DEFINE_FUNCTION_ARM(_CPU_Context_switch)
 /* Start saving context */
 	GET_SELF_CPU_CONTROL	r2
+	ldr	r3, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
 	stm	r0, {r4, r5, r6, r7, r8, r9, r10, r11, r13, r14}
-
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
-	mrc	p15, 0, r3, c13, c0, 3
-#endif
-
-	ldr	r4, [r2, #PER_CPU_ISR_DISPATCH_DISABLE]
 
 #ifdef ARM_MULTILIB_VFP
 	add	r5, r0, #ARM_CONTEXT_CONTROL_D8_OFFSET
 	vstm	r5, {d8-d15}
 #endif
 
-#ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
-	str	r3, [r0, #ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET]
-#endif
-
-	str	r4, [r0, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
+	str	r3, [r0, #ARM_CONTEXT_CONTROL_ISR_DISPATCH_DISABLE]
 
 #ifdef RTEMS_SMP
 	/*
