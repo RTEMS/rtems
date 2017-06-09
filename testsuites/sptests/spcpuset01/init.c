@@ -63,7 +63,7 @@ static void test_cpu_equal_case_1(void)
   rtems_test_assert( CPU_EQUAL(&set1, &set2) );
 
   /* compare all bits */
-  rtems_test_assert( CPU_CMP(&set1, &set2) );
+  rtems_test_assert( !CPU_CMP(&set1, &set2) );
 
   /* compare all bits */
   rtems_test_assert( CPU_EMPTY(&set1) );
