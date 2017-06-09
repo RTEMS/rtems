@@ -63,6 +63,7 @@
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 #include <bsp.h>
+#include <inttypes.h>
 
 #include <errno.h>
 #include <sys/param.h>
@@ -938,11 +939,11 @@ fxp_stats(struct fxp_softc *sc)
 {
 	struct ifnet *ifp = &sc->sc_if;
 
-	printf ("   Output packets:%-8lu", ifp->if_opackets);
-	printf ("    Collisions:%-8lu", ifp->if_collisions);
-	printf (" Output errors:%-8lu\n", ifp->if_oerrors);
-	printf ("    Input packets:%-8lu", ifp->if_ipackets);
-	printf ("  Input errors:%-8lu\n", ifp->if_ierrors);
+	printf ("   Output packets:%-8" PRIu64, ifp->if_opackets);
+	printf ("    Collisions:%-8" PRIu64, ifp->if_collisions);
+	printf (" Output errors:%-8" PRIu64 "\n", ifp->if_oerrors);
+	printf ("    Input packets:%-8" PRIu64, ifp->if_ipackets);
+	printf ("  Input errors:%-8" PRIu64 "\n", ifp->if_ierrors);
 }
 
 static void
