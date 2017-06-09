@@ -433,52 +433,15 @@ uint32_t   _CPU_ISR_Get_level( void );
 
 #ifndef ASM
 
-/*
- * Stack alignment note:
- *
- * We want the stack to look to the '_entry_point' routine
- * like an ordinary stack frame as if '_entry_point' was
- * called from C-code.
- * Note that '_entry_point' is jumped-to by the 'ret'
- * instruction returning from _CPU_Context_switch() or
- * _CPU_Context_restore() thus popping the _entry_point
- * from the stack.
- * However, _entry_point expects a frame to look like this:
- *
- *      args        [_Thread_Handler expects no args, however]
- *      ------      (alignment boundary)
- * SP-> return_addr return here when _entry_point returns which (never happens)
- *
- *
- * Hence we must initialize the stack as follows
- *
- *         [arg1          ]:  n/a
- *         [arg0 (aligned)]:  n/a
- *         [ret. addr     ]:  NULL
- * SP->    [jump-target   ]:  _entry_point
- *
- * When Context_switch returns it pops the _entry_point from
- * the stack which then finds a standard layout.
- */
-
-
-
-#define _CPU_Context_Initialize( _the_context, _stack_base, _size, \
-                                   _isr, _entry_point, _is_fp, _tls_area ) \
-  do { \
-    uint32_t   _stack; \
-    \
-    (void) _is_fp; /* avoid warning for being unused */ \
-    if ( (_isr) ) (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_OFF; \
-    else          (_the_context)->eflags = CPU_EFLAGS_INTERRUPTS_ON; \
-    \
-    _stack  = ((uint32_t)(_stack_base)) + (_size); \
-	_stack &= ~ (CPU_STACK_ALIGNMENT - 1); \
-    _stack -= 2*sizeof(proc_ptr*); /* see above for why we need to do this */ \
-    *((proc_ptr *)(_stack)) = (_entry_point); \
-    (_the_context)->ebp     = (void *) 0; \
-    (_the_context)->esp     = (void *) _stack; \
-  } while (0)
+void _CPU_Context_Initialize(
+  Context_Control *the_context,
+  void *stack_area_begin,
+  size_t stack_area_size,
+  uint32_t new_level,
+  void (*entry_point)( void ),
+  bool is_fp,
+  void *tls_area
+);
 
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) );

@@ -114,6 +114,62 @@ void _CPU_Initialize(void)
 #endif
 }
 
+/*
+ * Stack alignment note:
+ *
+ * We want the stack to look to the '_entry_point' routine
+ * like an ordinary stack frame as if '_entry_point' was
+ * called from C-code.
+ * Note that '_entry_point' is jumped-to by the 'ret'
+ * instruction returning from _CPU_Context_switch() or
+ * _CPU_Context_restore() thus popping the _entry_point
+ * from the stack.
+ * However, _entry_point expects a frame to look like this:
+ *
+ *      args        [_Thread_Handler expects no args, however]
+ *      ------      (alignment boundary)
+ * SP-> return_addr return here when _entry_point returns which (never happens)
+ *
+ *
+ * Hence we must initialize the stack as follows
+ *
+ *         [arg1          ]:  n/a
+ *         [arg0 (aligned)]:  n/a
+ *         [ret. addr     ]:  NULL
+ * SP->    [jump-target   ]:  _entry_point
+ *
+ * When Context_switch returns it pops the _entry_point from
+ * the stack which then finds a standard layout.
+ */
+
+void _CPU_Context_Initialize(
+  Context_Control *the_context,
+  void *_stack_base,
+  size_t _size,
+  uint32_t _isr,
+  void (*_entry_point)( void ),
+  bool is_fp,
+  void *tls_area
+)
+{
+  uint32_t _stack;
+
+  (void) is_fp; /* avoid warning for being unused */
+
+  if ( _isr ) {
+    the_context->eflags = CPU_EFLAGS_INTERRUPTS_OFF;
+  } else {
+    the_context->eflags = CPU_EFLAGS_INTERRUPTS_ON;
+  }
+
+  _stack  = ((uint32_t)(_stack_base)) + (_size);
+  _stack &= ~ (CPU_STACK_ALIGNMENT - 1);
+  _stack -= 2*sizeof(proc_ptr*); /* see above for why we need to do this */
+  *((proc_ptr *)(_stack)) = (_entry_point);
+  the_context->ebp     = (void *) 0;
+  the_context->esp     = (void *) _stack;
+}
+
 uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;
