@@ -1,5 +1,6 @@
 /*Note: this file is copy from 7312 BSP, and untested yet*/
 #include <rtems.h>
+#include <sys/param.h>
 #include <sys/mbuf.h>
 #include <bsp/irq.h>
 #include <libchip/cs8900.h>

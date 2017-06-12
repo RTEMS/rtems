@@ -5,6 +5,7 @@
 #include <rtems.h>
 #include <rtems/rtems_bsdnet_internal.h>
 #include <bsp.h>
+#include <sys/param.h>
 #include <sys/mbuf.h>
 
 #include "mv64340_eth_ll.h"
