@@ -28,7 +28,7 @@ static void create_and_start( uint32_t i )
 {
   rtems_status_code status;
   char              str[30];
-  char              name[5];
+  char              name[6];
 
   sprintf(name, "TA%02" PRId32 " ", i);
 
