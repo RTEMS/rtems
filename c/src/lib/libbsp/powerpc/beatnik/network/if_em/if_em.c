@@ -39,6 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <rtemscompat.h>
 #include <if_em.h>
 #include <rtemscompat1.h>
+#include <inttypes.h>
 #endif
 
 /*********************************************************************
@@ -1410,12 +1411,11 @@ em_encap(struct adapter *adapter, struct mbuf **m_headp)
                 return (error);
         }
 #else
-		error = 0;
+		(void)error;
 		{
 		struct mbuf *m;
 			for ( m=m_head, nsegs=0; m; m=m->m_next, nsegs++ ) {
 				if ( nsegs >= sizeof(segs)/sizeof(segs[0]) ) {
-					error = -1;
 					break;
 				}
 				segs[nsegs].ds_addr = mtod(m, unsigned);

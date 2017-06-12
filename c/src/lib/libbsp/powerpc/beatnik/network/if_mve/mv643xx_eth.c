@@ -89,6 +89,7 @@
 #include <bsp/gtreg.h>
 #include <libcpu/byteorder.h>
 
+#include <sys/param.h>
 #include <dev/mii/mii.h>
 #include <net/if_media.h>
 
@@ -384,7 +385,7 @@
 /* HELPER MACROS */
 
 /* Align base to alignment 'a' */
-#define _ALIGN(b, a)	((((uint32_t)(b)) + (a)-1) & (~((a)-1)))
+#define MV643XX_ALIGN(b, a)	((((uint32_t)(b)) + (a)-1) & (~((a)-1)))
 
 #define NOOP()			do {} while(0)
 
@@ -969,9 +970,8 @@ typedef char maxbuf[2048]; /* more than an ethernet packet */
  */
 static inline void FLUSH_BUF(register uintptr_t addr, register int len)
 {
-typedef char maxbuf[2048]; /* more than an ethernet packet */
 	asm volatile("":::"memory");
-	len = _ALIGN(len, RX_BUF_ALIGNMENT);
+	len = MV643XX_ALIGN(len, RX_BUF_ALIGNMENT);
 	do { 
 		asm volatile("dcbf %0, %1"::"b"(addr),"r"(len));
 		len -= RX_BUF_ALIGNMENT;
@@ -2434,7 +2434,7 @@ static int			inited = 0;
 */
 
 	if ( mp->rbuf_count > 0 ) {
-		mp->rx_ring = (MvEthRxDesc)_ALIGN(mp->ring_area, RING_ALIGNMENT);
+		mp->rx_ring = (MvEthRxDesc)MV643XX_ALIGN(mp->ring_area, RING_ALIGNMENT);
 		mveth_init_rx_desc_ring(mp);
 	}
 
@@ -2663,7 +2663,7 @@ unsigned long	l,o;
 	}
 
 	o = mtod(m, unsigned long);
-	l = _ALIGN(o, RX_BUF_ALIGNMENT) - o;
+	l = MV643XX_ALIGN(o, RX_BUF_ALIGNMENT) - o;
 
 	/* align start of buffer */
 	m->m_data += l;
