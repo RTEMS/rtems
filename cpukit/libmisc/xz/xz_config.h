@@ -11,7 +11,7 @@
 #define XZ_CONFIG_H
 
 /* Uncomment to enable CRC64 support. */
-#define XZ_USE_CRC64
+/* #define XZ_USE_CRC64 */
 
 /* Uncomment as needed to enable BCJ filter decoders. */
 /* #define XZ_DEC_X86 */
@@ -62,10 +62,6 @@ typedef unsigned char bool;
  * NOTE: System headers on GNU/Linux may #define this macro already,
  * so if you want to change it, you need to #undef it first.
  */
-#ifdef __rtems__
-#	undef __always_inline
-#	define __always_inline inline
-#else
 #ifndef __always_inline
 #	ifdef __GNUC__
 #		define __always_inline \
@@ -73,7 +69,6 @@ typedef unsigned char bool;
 #	else
 #		define __always_inline inline
 #	endif
-#endif
 #endif
 
 /* Inline functions to access unaligned unsigned 32-bit integers */

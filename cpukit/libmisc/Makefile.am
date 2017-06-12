@@ -195,7 +195,7 @@ libuuid_a_SOURCES = uuid/clear.c uuid/compare.c uuid/copy.c uuid/gen_uuid.c \
 
 ## xz-embedded
 noinst_LIBRARIES += libxz.a
-libxz_a_SOURCES = xz/xz/h xz/xz_crc32.c xz/xz_crc64.c \
+libxz_a_SOURCES = xz/xz/h xz/xz_crc32.c \
 	xz/xz_dec_lzma2.c xz/xz_dec_stream.c
 
 EXTRA_DIST += xz/README xz/COPING
