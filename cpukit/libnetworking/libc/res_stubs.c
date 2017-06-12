@@ -43,6 +43,7 @@
 #include <sys/types.h>
 #include <sys/cdefs.h>
 
+#ifndef __rtems__
 __weak_reference(__inet_addr, inet_addr);
 __weak_reference(__inet_aton, inet_aton);
 __weak_reference(__inet_lnaof, inet_lnaof);
@@ -57,6 +58,7 @@ __weak_reference(__inet_pton, inet_pton);
 __weak_reference(__inet_ntop, inet_ntop);
 __weak_reference(__inet_nsap_addr, inet_nsap_addr);
 __weak_reference(__inet_nsap_ntoa, inet_nsap_ntoa);
+#endif /* __rtems__ */
 
 __weak_reference(__sym_ston, sym_ston);
 __weak_reference(__sym_ntos, sym_ntos);
