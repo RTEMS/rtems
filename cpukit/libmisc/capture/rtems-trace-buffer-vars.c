@@ -19,7 +19,7 @@
  * Trace linker data.
  */
 uint32_t __rtld_trace_names_size __attribute__ ((weak));
-const char const* __rtld_trace_names[1] __attribute__ ((weak));
+const char *const __rtld_trace_names[1] __attribute__ ((weak));
 uint32_t __rtld_trace_enables_size __attribute__ ((weak));
 const uint32_t __rtld_trace_enables[1] __attribute__ ((weak));
 uint32_t __rtld_trace_triggers_size __attribute__ ((weak));
