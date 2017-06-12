@@ -28,13 +28,13 @@ const char rtems_test_name[] = "RBHEAP 1";
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
-#define PAGE_SIZE 1024
+#define TEST_PAGE_SIZE 1024
 
-#define PAGE_COUNT 8
+#define TEST_PAGE_COUNT 8
 
-static char area [PAGE_SIZE * PAGE_COUNT + PAGE_SIZE - 1];
+static char area [TEST_PAGE_SIZE * TEST_PAGE_COUNT + TEST_PAGE_SIZE - 1];
 
-static rtems_rbheap_chunk chunks [PAGE_COUNT];
+static rtems_rbheap_chunk chunks [TEST_PAGE_COUNT];
 
 static void extend_descriptors(rtems_rbheap_control *control)
 {
@@ -49,7 +49,7 @@ static void extend_descriptors(rtems_rbheap_control *control)
   rtems_chain_initialize(
     chain,
     chunks,
-    PAGE_COUNT,
+    TEST_PAGE_COUNT,
     sizeof(chunks [0])
   );
 }
@@ -57,13 +57,13 @@ static void extend_descriptors(rtems_rbheap_control *control)
 static uintptr_t idx(const rtems_rbheap_chunk *chunk)
 {
   uintptr_t base = (uintptr_t) area;
-  uintptr_t excess = base % PAGE_SIZE;
+  uintptr_t excess = base % TEST_PAGE_SIZE;
 
   if (excess > 0) {
-    base += PAGE_SIZE - excess;
+    base += TEST_PAGE_SIZE - excess;
   }
 
-  return (chunk->begin - base) / PAGE_SIZE;
+  return (chunk->begin - base) / TEST_PAGE_SIZE;
 }
 
 typedef struct {
@@ -102,9 +102,9 @@ static void test_init_begin_greater_than_end(void)
 
   sc = rtems_rbheap_initialize(
     &control,
-    (void *) PAGE_SIZE,
-    (uintptr_t) -PAGE_SIZE,
-    PAGE_SIZE,
+    (void *) TEST_PAGE_SIZE,
+    (uintptr_t) -TEST_PAGE_SIZE,
+    TEST_PAGE_SIZE,
     extend_descriptors,
     NULL
   );
@@ -118,9 +118,9 @@ static void test_init_begin_greater_than_aligned_begin(void)
 
   sc = rtems_rbheap_initialize(
     &control,
-    (void *) -(PAGE_SIZE / 2),
-    PAGE_SIZE,
-    PAGE_SIZE,
+    (void *) -(TEST_PAGE_SIZE / 2),
+    TEST_PAGE_SIZE,
+    TEST_PAGE_SIZE,
     extend_descriptors,
     NULL
   );
@@ -134,9 +134,9 @@ static void test_init_aligned_begin_greater_than_aligned_end(void)
 
   sc = rtems_rbheap_initialize(
     &control,
-    (void *) PAGE_SIZE,
-    PAGE_SIZE / 2,
-    PAGE_SIZE,
+    (void *) TEST_PAGE_SIZE,
+    TEST_PAGE_SIZE / 2,
+    TEST_PAGE_SIZE,
     extend_descriptors,
     NULL
   );
@@ -150,9 +150,9 @@ static void test_init_empty_descriptors(void)
 
   sc = rtems_rbheap_initialize(
     &control,
-    (void *) PAGE_SIZE,
-    PAGE_SIZE,
-    PAGE_SIZE,
+    (void *) TEST_PAGE_SIZE,
+    TEST_PAGE_SIZE,
+    TEST_PAGE_SIZE,
     rtems_rbheap_extend_descriptors_never,
     NULL
   );
@@ -172,7 +172,7 @@ static void test_chunk_tree(
 
   rtems_test_assert(
     rtems_chain_node_count_unprotected(&control->spare_descriptor_chain)
-      == PAGE_COUNT - chunk_count
+      == TEST_PAGE_COUNT - chunk_count
   );
 
   _RBTree_Iterate(
@@ -201,7 +201,7 @@ static void test_init_successful(rtems_rbheap_control *control)
     control,
     area,
     sizeof(area),
-    PAGE_SIZE,
+    TEST_PAGE_SIZE,
     extend_descriptors,
     NULL
   );
@@ -214,7 +214,7 @@ static void test_alloc_and_free_one(void)
 {
   static const chunk_descriptor chunks_0 [] = {
     { 0, true },
-    { PAGE_COUNT - 1, false }
+    { TEST_PAGE_COUNT - 1, false }
   };
   static const chunk_descriptor chunks_1 [] = {
     { 0, true }
@@ -226,7 +226,7 @@ static void test_alloc_and_free_one(void)
 
   test_init_successful(&control);
 
-  ptr = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  ptr = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
   rtems_test_assert(ptr != NULL);
 
   TEST_PAGE_TREE(&control, chunks_0);
@@ -265,7 +265,7 @@ static void test_alloc_huge_chunk(void)
 
   test_init_successful(&control);
 
-  ptr = rtems_rbheap_allocate(&control, (PAGE_COUNT + 1) * PAGE_SIZE);
+  ptr = rtems_rbheap_allocate(&control, (TEST_PAGE_COUNT + 1) * TEST_PAGE_SIZE);
   rtems_test_assert(ptr == NULL);
 
   TEST_PAGE_TREE(&control, chunks);
@@ -286,7 +286,7 @@ static void test_alloc_one_chunk(void)
 
   test_init_successful(&control);
 
-  ptr = rtems_rbheap_allocate(&control, PAGE_COUNT * PAGE_SIZE);
+  ptr = rtems_rbheap_allocate(&control, TEST_PAGE_COUNT * TEST_PAGE_SIZE);
   rtems_test_assert(ptr != NULL);
 
   TEST_PAGE_TREE(&control, chunks_0);
@@ -315,25 +315,25 @@ static void test_alloc_many_chunks(void)
 
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_rbheap_control control;
-  void *ptr [PAGE_COUNT];
+  void *ptr [TEST_PAGE_COUNT];
   void *null = NULL;
   int i = 0;
 
   test_init_successful(&control);
 
-  for (i = 0; i < PAGE_COUNT; ++i) {
-    ptr [i] = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  for (i = 0; i < TEST_PAGE_COUNT; ++i) {
+    ptr [i] = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
     rtems_test_assert(ptr [i] != NULL);
   }
 
   TEST_PAGE_TREE(&control, chunks_0);
 
-  null = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  null = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
   rtems_test_assert(null == NULL);
 
   TEST_PAGE_TREE(&control, chunks_0);
 
-  for (i = 0; i < PAGE_COUNT; ++i) {
+  for (i = 0; i < TEST_PAGE_COUNT; ++i) {
     sc = rtems_rbheap_free(&control, ptr [i]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
@@ -348,7 +348,7 @@ static void test_alloc_misaligned(void)
 
   test_init_successful(&control);
 
-  p = rtems_rbheap_allocate(&control, PAGE_SIZE - 1);
+  p = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE - 1);
   rtems_test_assert(p != NULL);
 }
 
@@ -363,7 +363,7 @@ static void test_alloc_with_malloc_extend(void)
     &control,
     area,
     sizeof(area),
-    PAGE_SIZE,
+    TEST_PAGE_SIZE,
     rtems_rbheap_extend_descriptors_with_malloc,
     NULL
   );
@@ -371,12 +371,12 @@ static void test_alloc_with_malloc_extend(void)
 
   opaque = rtems_heap_greedy_allocate(NULL, 0);
 
-  p = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  p = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
   rtems_test_assert(p == NULL);
 
   rtems_heap_greedy_free(opaque);
 
-  p = rtems_rbheap_allocate(&control, PAGE_SIZE);
+  p = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
   rtems_test_assert(p != NULL);
 }
 
@@ -410,7 +410,7 @@ static void test_free_double(void)
 
   test_init_successful(&control);
 
-  ptr = rtems_rbheap_allocate(&control, PAGE_COUNT * PAGE_SIZE);
+  ptr = rtems_rbheap_allocate(&control, TEST_PAGE_COUNT * TEST_PAGE_SIZE);
   rtems_test_assert(ptr != NULL);
 
   sc = rtems_rbheap_free(&control, ptr);
@@ -478,7 +478,7 @@ static void test_free_merge_left_or_right(bool left)
   test_init_successful(&control);
 
   for (i = sizeof(ptr) / sizeof(ptr [0]) - 1; i >= 0; --i) {
-    ptr [i] = rtems_rbheap_allocate(&control, PAGE_SIZE);
+    ptr [i] = rtems_rbheap_allocate(&control, TEST_PAGE_SIZE);
     rtems_test_assert(ptr [i] != NULL);
   }
 
