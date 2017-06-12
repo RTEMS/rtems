@@ -1260,7 +1260,10 @@ rtems_task Init(
   /*
    * Verify case where block is too large to calloc.
    */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than=N"
   p1 = calloc( 1, SIZE_MAX );
+#pragma GCC diagnostic pop
   if (p1) {
     printf("ERROR on attempt to calloc SIZE_MAX block expected failure.");
     free( p1 );
