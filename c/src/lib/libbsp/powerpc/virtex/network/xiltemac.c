@@ -19,9 +19,10 @@
 #define __BSD_VISIBLE
 #endif
 
-#include <rtems.h>
+#include <bsp.h>
 #include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
+#include <inttypes.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -80,7 +81,7 @@ static rtems_id       gXilTxThread = 0;
 static rtems_event_set gUnitSignals[ NUM_XILTEMAC_UNITS ]= { RTEMS_EVENT_1,
                                                             RTEMS_EVENT_2 };
 
-uint32_t xilTemacTxFifoVacancyBytes(uint32_t aBaseAddr)
+static uint32_t xilTemacTxFifoVacancyBytes(uint32_t aBaseAddr)
 {
   uint32_t ipisr = IN32(aBaseAddr + XTE_IPISR_OFFSET);
   uint32_t bytes = 0;
@@ -95,7 +96,7 @@ uint32_t xilTemacTxFifoVacancyBytes(uint32_t aBaseAddr)
   return bytes;
 }
 
-void xilTemacFifoRead64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
+static void xilTemacFifoRead64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
 {
   uint32_t numqwords = aBytes / 8;
   uint32_t xtrabytes = aBytes % 8;
@@ -146,7 +147,7 @@ void xilTemacFifoRead64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
   }
 }
 
-void xilTemacFifoWrite64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
+static void xilTemacFifoWrite64(uint32_t aBaseAddr, uint32_t* aBuf, uint32_t aBytes)
 {
   uint32_t numqwords = aBytes / 8;
   uint32_t xtrabytes = aBytes % 8;
@@ -279,7 +280,7 @@ void xilTemacStart(struct ifnet *ifp)
 
     /* Set the link speed */
     uint32_t emcfg = IN32(base + XTE_ECFG_OFFSET);
-    printk("xiltemacStart, default linkspeed: %08x\n", emcfg);
+    printk("xiltemacStart, default linkspeed: %08" PRIx32 "\n", emcfg);
     emcfg = (emcfg & ~XTE_ECFG_LINKSPD_MASK) | XTE_ECFG_LINKSPD_100;
     OUT32(base + XTE_ECFG_OFFSET, emcfg);
 
@@ -349,7 +350,7 @@ void xilTemacStart(struct ifnet *ifp)
     ipier |= (XTE_IPXR_AUTO_NEG_MASK);
     OUT32(base + XTE_IPIER_OFFSET, ipier);
 
-    printk("%s: xiltemacStart, ipier: %08x\n",DRIVER_PREFIX, ipier);
+    printk("%s: xiltemacStart, ipier: %08" PRIx32 "\n",DRIVER_PREFIX, ipier);
 
     /* Enable device global interrutps */
     OUT32(base + XTE_DGIE_OFFSET, XTE_DGIE_ENABLE_MASK);
@@ -412,7 +413,7 @@ void xilTemacPrintStats( struct ifnet *ifp )
    printf("\n");
 }
 
-void xilTemacIsrSingle(struct XilTemac* xilTemac)
+static void xilTemacIsrSingle(struct XilTemac* xilTemac)
 {
   uint32_t base = xilTemac->iAddr;
   uint32_t disr = IN32( base + XTE_DISR_OFFSET );
@@ -426,7 +427,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
     /* Handle all error conditions first */
     if( disr & (XTE_DXR_DPTO_MASK | XTE_DXR_TERR_MASK |
                 XTE_DXR_RECV_FIFO_MASK | XTE_DXR_SEND_FIFO_MASK) ) {
-      printk("%s: Fatal Bus error, disr: %08x\n", DRIVER_PREFIX, disr);
+      printk("%s: Fatal Bus error, disr: %08" PRIx32 "\n", DRIVER_PREFIX, disr);
       /*assert(0);*/
     }
     if( disr & XTE_DXR_CORE_MASK ) {
@@ -439,7 +440,7 @@ void xilTemacIsrSingle(struct XilTemac* xilTemac)
 
       /* Check for all fatal errors, even if that error is not enabled in ipier */
       if(ipisr & XTE_IPXR_FIFO_FATAL_ERROR_MASK) {
-        printk("%s: Fatal Fifo Error ipisr: %08x\n", DRIVER_PREFIX, ipisr);
+        printk("%s: Fatal Fifo Error ipisr: %08" PRIx32 "\n", DRIVER_PREFIX, ipisr);
         /*assert(0);*/
       }
 
@@ -541,12 +542,12 @@ int xilTemacIsrIsOn(const rtems_irq_connect_data *unused)
 #endif
 
 
-int32_t xilTemacSetMulticastFilter(struct ifnet *ifp)
+static int32_t xilTemacSetMulticastFilter(struct ifnet *ifp)
 {
   return 0;
 }
 
-int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
+static int xilTemacIoctl(struct ifnet* ifp, ioctl_command_t   aCommand, caddr_t aData)
 {
   struct XilTemac* xilTemac = ifp->if_softc;
   int32_t error = 0;
@@ -617,7 +618,7 @@ void xilTemacSend(struct ifnet* ifp)
  * cache friendly */
 static unsigned char gTxBuf[2048] __attribute__ ((aligned (32)));
 
-void xilTemacSendPacket(struct ifnet *ifp, struct mbuf* aMbuf)
+static void xilTemacSendPacket(struct ifnet *ifp, struct mbuf* aMbuf)
 {
   struct XilTemac  *xilTemac = ifp->if_softc;
   struct mbuf     *n = aMbuf;
@@ -660,7 +661,7 @@ void xilTemacSendPacket(struct ifnet *ifp, struct mbuf* aMbuf)
 #endif
 }
 
-void xilTemacTxThreadSingle(struct ifnet* ifp)
+static void xilTemacTxThreadSingle(struct ifnet* ifp)
 {
   struct XilTemac* xilTemac = ifp->if_softc;
   struct mbuf*     m;
@@ -751,7 +752,7 @@ void xilTemacTxThread( void *ignore )
   }
 }
 
-void xilTemacRxThreadSingle(struct ifnet* ifp)
+static void xilTemacRxThreadSingle(struct ifnet* ifp)
 {
   struct XilTemac* xilTemac = ifp->if_softc;
 
@@ -876,7 +877,7 @@ void xilTemacRxThread( void *ignore )
   }
 }
 
-int32_t xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDummy)
+int xilTemac_driver_attach(struct rtems_bsdnet_ifconfig* aBsdConfig, int aDummy)
 {
    struct ifnet*    ifp;
    int32_t          mtu;

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <inttypes.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/irq-extension.h>
@@ -72,7 +73,9 @@ static void smc91111_start(struct ifnet *ifp);
 static int smc_probe(struct lan91cxx_priv_data *cpd);
 static void smc91111_stop(struct lan91cxx_priv_data *cpd);
 static void smc91111_init(void *arg);
+#ifndef BSP_FEATURE_IRQ_EXTENSION
 static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd);
+#endif
 #if 0
 static int lan91cxx_phy_fixed(struct lan91cxx_priv_data *cpd);
 static void lan91cxx_phy_configure(struct lan91cxx_priv_data *cpd);
@@ -81,6 +84,7 @@ static void lan91cxx_phy_configure(struct lan91cxx_priv_data *cpd);
 #define min(l,r) ((l) < (r) ? (l) : (r))
 #define max(l,r) ((l) > (r) ? (l) : (r))
 
+#ifndef BSP_FEATURE_IRQ_EXTENSION
 /* \ ------------- Interrupt ------------- \ */
 static void lan91cxx_interrupt_handler(void *arg)
 {
@@ -136,6 +140,7 @@ static void lan91cxx_interrupt_handler(void *arg)
 	put_reg(cpd, LAN91CXX_POINTER, oldpointer);
 	HAL_WRITE_UINT16(cpd->base + (LAN91CXX_BS), oldbase);
 }
+#endif
 
 /* \ ------------- Rx receive ------------- \ */
 
@@ -440,7 +445,7 @@ static int readpacket(struct lan91cxx_priv_data *cpd)
 				db_printf("mbuf-chain:");
 				while (n) {
 					db_printf("[%" PRIxPTR ":%x]",
-						  n->m_data,
+						  mtod(n, uintptr_t),
 						  (unsigned int)(n->m_len));
 					n = n->m_next;
 				}
@@ -706,6 +711,7 @@ static void smc91111_start(struct ifnet *ifp)
 
 }
 
+#ifndef BSP_FEATURE_IRQ_EXTENSION
 /* called after a tx error interrupt, freet the packet */
 static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd)
 {
@@ -784,6 +790,7 @@ static void lan91cxx_finish_sent(struct lan91cxx_priv_data *cpd)
 	put_reg(cpd, LAN91CXX_PNR, saved_packet);
 
 }
+#endif
 
 /* \ ------------- Helpers ------------- \ */
 
@@ -1021,7 +1028,7 @@ static void smc91111_stop(struct lan91cxx_priv_data *cpd)
 int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 {
 	unsigned short val;
-	int i, rc;
+	int i;
 
 	DEBUG_FUNCTION();
 
@@ -1045,11 +1052,15 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 		}
 	}
 #else
-	db_printf("Install lan91cxx isr at vec/irq %d\n", cpd->config.vector);
-	rc = rtems_interrupt_handler_install(cpd->config.vector, "smc91cxx",
-		RTEMS_INTERRUPT_SHARED, lan91cxx_interrupt_handler, cpd);
-	if (rc != RTEMS_SUCCESSFUL)
-		return 0;
+	{
+		int rc;
+
+		db_printf("Install lan91cxx isr at vec/irq %d\n", cpd->config.vector);
+		rc = rtems_interrupt_handler_install(cpd->config.vector, "smc91cxx",
+			RTEMS_INTERRUPT_SHARED, lan91cxx_interrupt_handler, cpd);
+		if (rc != RTEMS_SUCCESSFUL)
+			return 0;
+	}
 #endif
 
 	/* Reset chip */
@@ -1235,7 +1246,7 @@ static int smc_probe(struct lan91cxx_priv_data *cpd)
 		/* I don't recognize this chip, so... */
 		db_printf
 		    ("smc_probe: IO %" PRIxPTR ": Unrecognized revision register:"
-		     " %x, Contact author. \n", cpd->base,
+		     " %x, Contact author. \n", (uintptr_t)cpd->base,
 		     revision_register);
 
 		return -ENODEV;

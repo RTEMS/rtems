@@ -71,7 +71,8 @@ extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 #include "xiltemac.h"
 #define RTEMS_BSP_NETWORK_DRIVER_NAME     XILTEMAC_DRIVER_PREFIX
 #endif
-extern xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
+struct rtems_bsdnet_ifconfig;
+extern int xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH xilTemac_driver_attach
 
 #ifdef __cplusplus
