@@ -20,7 +20,7 @@ mghttpd01$(EXEEXT): $(mghttpd01_OBJECTS) $(mghttpd01_DEPENDENCIES)
 	@rm -f mghttpd01$(EXEEXT)
 	$(make-exe)
 
-init.c: init_fs.h
+init.$(OBJEXT): init_fs.h
 
 init_fs.c:
 	$(BIN2C) -C $(srcdir)/init_fs.tar init_fs

@@ -14,7 +14,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 LINK_OBJS = $(dl05_OBJECTS)
 LINK_LIBS = $(dl05_LDLIBS)
 
-init.c: dl-tar.h
+init.$(OBJEXT): dl-tar.h
 
 dl-o5.o: dl-o5.cpp
 
