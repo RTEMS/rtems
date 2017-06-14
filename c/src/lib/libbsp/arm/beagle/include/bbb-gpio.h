@@ -35,6 +35,8 @@ extern "C" {
 #define BBB_PU_EN (1 << 4)
 #define BBB_PD_EN ~BBB_PU_EN
 #define BBB_MUXMODE(X) (X & 0x7)
+#define BBB_RXACTIVE (1 << 5)
+#define BBB_SLEWCTRL (1 << 6)
 
 #ifdef __cplusplus
 }

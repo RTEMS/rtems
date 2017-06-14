@@ -563,3 +563,139 @@
 
 
 
+/* I2C registers */
+#define AM335X_I2C0_BASE 0x44e0b000
+    /* I2C0 base address */
+#define AM335X_I2C1_BASE 0x4802a000
+    /* I2C1 base address */
+#define AM335X_I2C2_BASE 0x4819c000
+    /* I2C2 base address */
+#define AM335X_I2C_REVNB_LO        0x00
+    /* Module Revision Register (low bytes) */
+#define AM335X_I2C_REVNB_HI        0x04
+    /* Module Revision Register (high bytes) */
+#define AM335X_I2C_SYSC            0x10
+    /* System Configuration Register */
+#define AM335X_I2C_IRQSTATUS_RAW   0x24
+    /* I2C Status Raw Register */
+#define AM335X_I2C_IRQSTATUS       0x28
+    /* I2C Status Register */
+#define AM335X_I2C_IRQENABLE_SET   0x2c
+    /* I2C Interrupt Enable Set Register */
+#define AM335X_I2C_IRQENABLE_CLR   0x30
+    /* I2C Interrupt Enable Clear Register */
+#define AM335X_I2C_WE              0x34
+    /* I2C Wakeup Enable Register */
+#define AM335X_I2C_DMARXENABLE_SET 0x38
+    /* Receive DMA Enable Set Register */
+#define AM335X_I2C_DMATXENABLE_SET 0x3c
+    /* Transmit DMA Enable Set Register */
+#define AM335X_I2C_DMARXENABLE_CLR 0x40
+    /* Receive DMA Enable Clear Register */
+#define AM335X_I2C_DMATXENABLE_CLR 0x44
+    /* Transmit DMA Enable Clear Register */
+#define AM335X_I2C_DMARXWAKE_EN    0x48
+    /* Receive DMA Wakeup Register */
+#define AM335X_I2C_DMATXWAKE_EN    0x4c
+    /* Transmit DMA Wakeup Register */
+#define AM335X_I2C_SYSS            0x90
+    /* System Status Register */
+#define AM335X_I2C_BUF             0x94
+    /* Buffer Configuration Register */
+#define AM335X_I2C_CNT             0x98
+    /* Data Counter Register */
+#define AM335X_I2C_DATA            0x9c
+    /* Data Access Register */
+#define AM335X_I2C_CON             0xa4
+    /* I2C Configuration Register */
+#define AM335X_I2C_OA              0xa8
+    /* I2C Own Address Register */
+#define AM335X_I2C_SA              0xac
+    /* I2C Slave Address Register */
+#define AM335X_I2C_PSC             0xb0
+    /* I2C Clock Prescaler Register */
+#define AM335X_I2C_SCLL            0xb4
+    /* I2C SCL Low Time Register */
+#define AM335X_I2C_SCLH            0xb8
+    /* I2C SCL High Time Register */
+#define AM335X_I2C_SYSTEST         0xbc
+    /* System Test Register */
+#define AM335X_I2C_BUFSTAT         0xc0
+    /* I2C Buffer Status Register */
+#define AM335X_I2C_OA1             0xc4
+    /* I2C Own Address 1 Register */
+#define AM335X_I2C_OA2             0xc8
+    /* I2C Own Address 2 Register */
+#define AM335X_I2C_OA3             0xcc
+    /* I2C Own Address 3 Register */
+#define AM335X_I2C_ACTOA           0xd0
+    /* Active Own Address Register */
+#define AM335X_I2C_SBLOCK          0xd4
+    /* I2C Clock Blocking Enable Register */
+
+#define AM335X_CM_PER_L4LS_CLKSTCTRL  (0x0)
+#define AM335X_CM_PER_L4LS_CLKSTCTRL_CLKTRCTRL_SW_WKUP  (0x2u)
+#define AM335X_CM_PER_L4LS_CLKSTCTRL_CLKTRCTRL  (0x00000003u)
+#define AM335X_CM_PER_L4LS_CLKCTRL  (0x60)
+#define AM335X_CM_PER_L4LS_CLKCTRL_MODULEMODE_ENABLE  (0x2u)
+#define AM335X_CM_PER_L4LS_CLKCTRL_MODULEMODE  (0x00000003u)
+#define AM335X_CM_PER_I2C1_CLKCTRL  (0x48)
+#define AM335X_CM_PER_I2C1_CLKCTRL_MODULEMODE_ENABLE  (0x2u)
+#define AM335X_CM_PER_I2C1_CLKCTRL_MODULEMODE  (0x00000003u)
+#define AM335X_CM_PER_I2C2_CLKCTRL (0x44)
+#define AM335X_CM_PER_I2C2_CLKCTRL_MODULEMODE_ENABLE  (0x2u)
+#define AM335X_CM_PER_I2C2_CLKCTRL_MODULEMODE  (0x00000003u)
+#define AM335X_CM_PER_L4LS_CLKSTCTRL_CLKACTIVITY_L4LS_GCLK (0x00000100u)
+#define AM335X_CM_PER_L4LS_CLKSTCTRL_CLKACTIVITY_I2C_FCLK (0x01000000u)
+#define AM335X_CM_PER_I2C1_CLKCTRL_MODULEMODE   (0x00000003u)
+#define AM335X_I2C_CON_XSA  (0x00000100u)
+#define AM335X_I2C_CFG_10BIT_SLAVE_ADDR  AM335X_I2C_CON_XSA
+#define AM335X_I2C_CON_XSA_SHIFT  (0x00000008u)
+#define AM335X_I2C_CFG_7BIT_SLAVE_ADDR  (0 << AM335X_I2C_CON_XSA_SHIFT)
+#define AM335X_I2C_CON_I2C_EN   (0x00008000u)
+#define AM335X_I2C_CON_TRX   (0x00000200u)
+#define AM335X_I2C_CON_MST   (0x00000400u)
+#define AM335X_I2C_CON_STB   (0x00000800u)
+#define AM335X_I2C_SYSC_AUTOIDLE   (0x00000001u)
+
+/*I2C0 module clock registers*/
+
+#define AM335X_CM_WKUP_CONTROL_CLKCTRL   (0x4)
+#define AM335X_CM_WKUP_CLKSTCTRL   (0x0)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL   (0xb8)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL_MODULEMODE_ENABLE   (0x2u)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL_MODULEMODE   (0x00000003u)
+#define AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST_FUNC   (0x0u)
+#define AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST_SHIFT   (0x00000010u)
+#define AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST   (0x00030000u)
+#define AM335X_CM_WKUP_CLKSTCTRL_CLKACTIVITY_I2C0_GFCLK   (0x00000800u)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL_IDLEST_FUNC   (0x0u)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL_IDLEST_SHIFT   (0x00000010u)
+#define AM335X_CM_WKUP_I2C0_CLKCTRL_IDLEST   (0x00030000u)
+#define AM335X_SOC_CM_WKUP_REGS                     (AM335X_CM_PER_ADDR + 0x400)
+
+/* I2C status Register */
+#define AM335X_I2C_IRQSTATUS_NACK (1 << 1)
+#define AM335X_I2C_IRQSTATUS_ROVR (1 << 11)
+#define AM335X_I2C_IRQSTATUS_AL   (1<<0)
+#define AM335X_I2C_IRQSTATUS_ARDY (1 << 2)
+#define AM335X_I2C_IRQSTATUS_RRDY (1 << 3)
+#define AM335X_I2C_IRQSTATUS_XRDY (1 << 4)
+#define AM335X_I2C_IRQSTATUS_XUDF (1 << 10)
+#define AM335X_I2C_BUF_TXFIFO_CLR   (0x00000040u)
+#define AM335X_I2C_BUF_RXFIFO_CLR   (0x00004000u)
+#define AM335X_I2C_IRQSTATUS_AAS  (1 << 9)
+#define AM335X_I2C_IRQSTATUS_BF  (1 << 8)
+#define AM335X_I2C_IRQSTATUS_STC  (1 << 6)
+#define AM335X_I2C_IRQSTATUS_GC (1 << 5)
+#define AM335X_I2C_IRQSTATUS_XDR (1 << 14)
+#define AM335X_I2C_IRQSTATUS_RDR (1 << 13)
+
+#define AM335X_I2C_INT_RECV_READY AM335X_I2C_IRQSTATUS_RRDY
+#define AM335X_I2C_CON_STOP  (0x00000002u)
+#define AM335X_I2C_CON_START (0x00000001u)
+#define AM335X_I2C_CFG_MST_RX AM335X_I2C_CON_MST
+#define AM335X_I2C_CFG_MST_TX  (AM335X_I2C_CON_TRX | AM335X_I2C_CON_MST)
+#define AM335X_I2C_IRQSTATUS_RAW_BB   (0x00001000u)
+#define AM335X_CM_PER_OCPWP_L3_CLKSTCTRL_CLKACTIVITY_OCPWP_L4_GCLK (0x00000020u)
+#define AM335X_I2C_INT_STOP_CONDITION AM335X_I2C_IRQSTATUS_BF
