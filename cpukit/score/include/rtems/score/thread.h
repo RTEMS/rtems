@@ -768,10 +768,6 @@ struct _Thread_Control {
   /** This field is true if the thread uses the floating point unit. */
   bool                                  is_fp;
 
-#if __RTEMS_ADA__
-  /** This field is the GNAT self context pointer. */
-  void                                 *rtems_ada_self;
-#endif
   /** This field is the length of the time quantum that this thread is
    *  allowed to consume.  The algorithm used to manage limits on CPU usage
    *  is specified by budget_algorithm.

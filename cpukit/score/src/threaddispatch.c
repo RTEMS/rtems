@@ -30,10 +30,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
-#if __RTEMS_ADA__
-void *rtems_ada_self;
-#endif
-
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
 Thread_Control *_Thread_Allocated_fp;
 #endif
@@ -211,10 +207,6 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
      *  Since heir and executing are not the same, we need to do a real
      *  context switch.
      */
-#if __RTEMS_ADA__
-    executing->rtems_ada_self = rtems_ada_self;
-    rtems_ada_self = heir->rtems_ada_self;
-#endif
     if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
       heir->cpu_time_budget = rtems_configuration_get_ticks_per_timeslice();
 
