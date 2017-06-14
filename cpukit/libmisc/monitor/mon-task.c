@@ -76,6 +76,7 @@ rtems_monitor_task_canonical(
 {
     Thread_Control    *rtems_thread;
     RTEMS_API_Control *api;
+    Objects_Name       name;
 
     rtems_thread =
       RTEMS_DECONST( Thread_Control *, (const Thread_Control *) thread_void );
@@ -95,13 +96,20 @@ rtems_monitor_task_canonical(
       sizeof( canonical_task->long_name )
     );
 
+    name.name_u32 = _Thread_Scheduler_get_home( rtems_thread )->name;
+    _Objects_Name_to_string(
+      name,
+      false,
+      canonical_task->scheduler_name,
+      sizeof( canonical_task->scheduler_name )
+    );
+
     rtems_monitor_task_wait_info( canonical_task, rtems_thread );
 
     canonical_task->state = rtems_thread->current_state;
     canonical_task->entry = rtems_thread->Start.Entry;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
-    canonical_task->cpu = _Per_CPU_Get_index( _Thread_Get_CPU( rtems_thread ) );
     canonical_task->priority = _Thread_Get_priority( rtems_thread );
     canonical_task->events = api->Event.pending_events;
     /*
@@ -127,8 +135,8 @@ rtems_monitor_task_dump_header(
 )
 {
     fprintf(stdout,"\
-ID       NAME                 CPU PRI STATE  MODES    EVENTS WAITINFO\n"); /*
-0a010004 SHLL                   0 100 READY  P:T:nA   NONE   00000000 */
+ID       NAME                 SHED PRI STATE  MODES    EVENTS WAITINFO\n"); /*
+0a010004 SHLL                 UPD  100 READY  P:T:nA   NONE   00000000 */
 
     rtems_monitor_separator();
 }
@@ -159,16 +167,16 @@ rtems_monitor_task_dump(
     }
 
     length += rtems_monitor_pad(30, length);
-    length += fprintf(stdout, "%3" PRId32, monitor_task->cpu);
-    length += rtems_monitor_pad(34, length);
+    length += fprintf(stdout, "%s", monitor_task->scheduler_name);
+    length += rtems_monitor_pad(35, length);
     length += rtems_monitor_dump_priority(monitor_task->priority);
-    length += rtems_monitor_pad(38, length);
+    length += rtems_monitor_pad(39, length);
     length += rtems_monitor_dump_state(monitor_task->state);
-    length += rtems_monitor_pad(45, length);
+    length += rtems_monitor_pad(46, length);
     length += rtems_monitor_dump_modes(monitor_task->modes);
-    length += rtems_monitor_pad(52, length);
+    length += rtems_monitor_pad(53, length);
     length += rtems_monitor_dump_events(monitor_task->events);
-    length += rtems_monitor_pad(61, length);
+    length += rtems_monitor_pad(62, length);
     length += fprintf(stdout, "%s", monitor_task->wait);
 
     fprintf(stdout,"\n");
