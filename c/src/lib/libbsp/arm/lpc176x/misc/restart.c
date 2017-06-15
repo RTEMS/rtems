@@ -23,7 +23,7 @@
 #include <rtems.h>
 #include <bsp.h>
 
-void bsp_restart( const void const *addr )
+void bsp_restart( const void *const addr )
 {
   rtems_interrupt_level level;
 
