@@ -30,7 +30,7 @@
 
 static uint8_t* contents;
 
-static const char const* filename = "/dl-test";
+static const char *const filename = "/dl-test";
 
 static void dl_cache_create_file(void)
 {
