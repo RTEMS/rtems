@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2016 Punit Vara <punitvara@gmail.com>
  * Copyright (c) 2017 Sichen Zhao <zsc19940506@gmail.com>
  *
  * The license and distribution terms for this file may be
@@ -48,27 +49,26 @@ static void I2C0ModuleClkConfig( void )
             AM335X_CM_WKUP_I2C0_CLKCTRL_MODULEMODE ) ) ;
 
   /*
-  ** Waiting for IDLEST field in AM335X_CM_WKUP_CONTROL_CLKCTRL
-  ** register to attain
-  ** desired value.
-  */
+   * Waiting for IDLEST field in AM335X_CM_WKUP_CONTROL_CLKCTRL
+   * register to attain desired value.
+   */
   while ( ( AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST_FUNC <<
             AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST_SHIFT ) !=
           ( REG( AM335X_SOC_CM_WKUP_REGS + AM335X_CM_WKUP_CONTROL_CLKCTRL ) &
             AM335X_CM_WKUP_CONTROL_CLKCTRL_IDLEST ) ) ;
 
   /*
-  ** Waiting for CLKACTIVITY_I2C0_GFCLK field in AM335X_CM_WKUP_CLKSTCTRL
-  ** register to attain desired value.
-  */
+   * Waiting for CLKACTIVITY_I2C0_GFCLK field in AM335X_CM_WKUP_CLKSTCTRL
+   * register to attain desired value.
+   */
   while ( AM335X_CM_WKUP_CLKSTCTRL_CLKACTIVITY_I2C0_GFCLK !=
           ( REG( AM335X_SOC_CM_WKUP_REGS + AM335X_CM_WKUP_CLKSTCTRL ) &
             AM335X_CM_WKUP_CLKSTCTRL_CLKACTIVITY_I2C0_GFCLK ) ) ;
 
   /*
-  ** Waiting for IDLEST field in AM335X_CM_WKUP_I2C0_CLKCTRL register to attain
-  ** desired value.
-  */
+   * Waiting for IDLEST field in AM335X_CM_WKUP_I2C0_CLKCTRL register to attain
+   * desired value.
+   */
   while ( ( AM335X_CM_WKUP_I2C0_CLKCTRL_IDLEST_FUNC <<
             AM335X_CM_WKUP_I2C0_CLKCTRL_IDLEST_SHIFT ) !=
           ( REG( AM335X_SOC_CM_WKUP_REGS + AM335X_CM_WKUP_I2C0_CLKCTRL ) &
@@ -100,7 +100,7 @@ static void am335x_i2c_reset( bbb_i2c_bus *bus )
   }
 }
 /*
-   Possible values for msg->flag
+ * Possible values for msg->flag
  * - @ref I2C_M_TEN,
  * - @ref I2C_M_RD,
  * - @ref I2C_M_STOP,
@@ -116,13 +116,15 @@ static void am335x_i2c_set_address_size(
   volatile bbb_i2c_regs *regs
 )
 {
-  /*can be configured multiple modes here.
-   **Need to think about own address modes*/
+  /*
+   * Can be configured multiple modes here.
+   * Need to think about own address modes
+   */
   if ( ( msgs->flags & I2C_M_TEN ) == 0 ) {
-    /* 7-bit mode slave address mode*/
+    /* 7-bit mode slave address mode */
     REG( &regs->BBB_I2C_CON ) = AM335X_I2C_CFG_7BIT_SLAVE_ADDR;
   } else {
-    /* 10-bit slave address mode*/
+    /* 10-bit slave address mode */
     REG( &regs->BBB_I2C_CON ) = AM335X_I2C_CFG_10BIT_SLAVE_ADDR;
   }
 }
@@ -282,12 +284,14 @@ static void am335x_i2c_interrupt( void *arg )
 {
   bbb_i2c_bus           *bus = arg;
   volatile bbb_i2c_regs *regs = bus->regs;
-  /* get status of enabled interrupts */
+  /* Get status of enabled interrupts */
   uint32_t irqstatus = REG( &regs->BBB_I2C_IRQSTATUS );
   bool     done = false;
 
-  /* Clear all enabled interrupt except receive ready
-     and transmit ready interrupt in status register */
+  /*
+   * Clear all enabled interrupt except receive ready
+   * and transmit ready interrupt in status register
+   */
   REG( &regs->BBB_I2C_IRQSTATUS ) =
     ( irqstatus & ~( AM335X_I2C_IRQSTATUS_RRDY |
                      AM335X_I2C_IRQSTATUS_XRDY ) );
@@ -417,7 +421,7 @@ int am335x_i2c_bus_register(
   rtems_status_code sc;
   int               err;
 
-  /*check bus number is >0 & <MAX*/
+  /* Check bus number is >0 & <MAX */
   bus = (bbb_i2c_bus *) i2c_bus_alloc_and_init( sizeof( *bus ) );
 
   if ( bus == NULL ) {
