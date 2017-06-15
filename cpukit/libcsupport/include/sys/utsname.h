@@ -39,11 +39,11 @@ extern "C" {
  */
 
 #ifdef _KERNEL
-#define SYS_NMLN        32              /* uname(2) for the FreeBSD 1.1 ABI. */
+#define SYS_NMLN        48              /* uname(2) for the FreeBSD 1.1 ABI. */
 #endif
 
 #ifndef SYS_NMLN
-#define SYS_NMLN        32		/* User can override. */
+#define SYS_NMLN        48		/* User can override. */
 #endif
 
 struct utsname {
