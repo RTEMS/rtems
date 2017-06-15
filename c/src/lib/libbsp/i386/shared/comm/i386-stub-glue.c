@@ -71,7 +71,7 @@ __asm__ ("    movl  i386_gdb_uart_isr_regsav, %eax");        /* Restore eax */
 __asm__ ("    iret");                                        /* Done */
 
 static int gdb_hello_index;
-static const char const* gdb_hello = "+";
+static const char *const gdb_hello = "+";
 
 static inline uint8_t BSP_i8259a_irq_in_service_reg(uint32_t ioport)
 {
