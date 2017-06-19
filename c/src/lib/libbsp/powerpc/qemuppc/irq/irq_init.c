@@ -38,16 +38,16 @@ static int qemuppc_exception_handler(
 /*
  * functions to enable/disable a source at the ipic
  */
-rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 {
   /* FIXME: do something */
-  return RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 }
 
-rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 {
   /* FIXME: do something */
-  return RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

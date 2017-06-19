@@ -132,34 +132,22 @@ static void opb_intc_init(void)
     (OPB_INTC_MER_HIE | OPB_INTC_MER_ME);
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    if (BSP_IS_OPBINTC_IRQ(vector)) {
-      BSP_irq_enable_at_opbintc(vector);
-    }
-  } else {
-    sc = RTEMS_INVALID_ID;
+  if (BSP_IS_OPBINTC_IRQ(vector)) {
+    BSP_irq_enable_at_opbintc(vector);
   }
-
-  return sc;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    if (BSP_IS_OPBINTC_IRQ(vector)) {
-      BSP_irq_disable_at_opbintc(vector);
-    }
-  } else {
-    sc = RTEMS_INVALID_ID;
+  if (BSP_IS_OPBINTC_IRQ(vector)) {
+    BSP_irq_disable_at_opbintc(vector);
   }
-
-  return sc;
 }
 
 static int C_dispatch_irq_handler(BSP_Exception_frame *frame, unsigned int excNum)

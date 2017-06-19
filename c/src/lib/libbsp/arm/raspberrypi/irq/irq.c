@@ -139,26 +139,18 @@ void bsp_interrupt_dispatch(void)
   }
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  if ( vector > BSP_INTERRUPT_VECTOR_MAX )
-    return RTEMS_INVALID_ID;
-
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BCM2835_REG(bsp_vector_to_reg(vector)->enable_reg_addr) =
               bsp_vector_to_mask(vector);
-
-  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  if ( vector > BSP_INTERRUPT_VECTOR_MAX )
-    return RTEMS_INVALID_ID;
-
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   BCM2835_REG(bsp_vector_to_reg(vector)->disable_reg_addr) =
               bsp_vector_to_mask(vector);
-
-  return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_handler_default(rtems_vector_number vector)

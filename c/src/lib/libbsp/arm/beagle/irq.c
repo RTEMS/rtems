@@ -95,28 +95,28 @@ static uint32_t omap_get_mir_reg(rtems_vector_number vector, uint32_t *const mas
   return mir_reg;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
   uint32_t mask, cur;
   uint32_t mir_reg = omap_get_mir_reg(vector, &mask);
+
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
   cur = mmio_read(omap_intr.base + mir_reg);
   mmio_write(omap_intr.base + mir_reg, cur & ~mask);
   flush_data_cache();
-
-  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
   uint32_t mask, cur;
   uint32_t mir_reg = omap_get_mir_reg(vector, &mask);
 
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
   cur = mmio_read(omap_intr.base + mir_reg);
   mmio_write(omap_intr.base + mir_reg, cur | mask);
   flush_data_cache();
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

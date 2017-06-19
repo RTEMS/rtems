@@ -27,18 +27,16 @@ void bsp_interrupt_dispatch(void)
   AIC_CTL_REG(AIC_EOICR) = 0;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   AIC_CTL_REG(AIC_IECR) = 1 << vector;
-
-  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
   AIC_CTL_REG(AIC_IDCR) = 1 << vector;
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize(void)

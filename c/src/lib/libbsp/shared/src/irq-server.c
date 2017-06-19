@@ -56,7 +56,9 @@ static void bsp_interrupt_server_trigger(void *arg)
   rtems_interrupt_lock_context lock_context;
   rtems_interrupt_server_entry *e = arg;
 
-  bsp_interrupt_vector_disable(e->vector);
+  if (bsp_interrupt_is_valid_vector(e->vector)) {
+    bsp_interrupt_vector_disable(e->vector);
+  }
 
   rtems_interrupt_lock_acquire(&bsp_interrupt_server_lock, &lock_context);
 
@@ -324,7 +326,9 @@ static void bsp_interrupt_server_task(rtems_task_argument arg)
         (*current->handler)(current->arg);
       } while (action != NULL);
 
-      bsp_interrupt_vector_enable(vector);
+      if (bsp_interrupt_is_valid_vector(vector)) {
+        bsp_interrupt_vector_enable(vector);
+      }
     }
   }
 }

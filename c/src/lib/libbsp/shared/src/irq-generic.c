@@ -207,7 +207,6 @@ static rtems_status_code bsp_interrupt_handler_install(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
   bsp_interrupt_handler_entry *head = NULL;
@@ -346,11 +345,7 @@ static rtems_status_code bsp_interrupt_handler_install(
 
   /* Enable the vector if necessary */
   if (enable_vector) {
-    sc = bsp_interrupt_vector_enable(vector);
-    if (sc != RTEMS_SUCCESSFUL) {
-      bsp_interrupt_unlock();
-      return sc;
-    }
+    bsp_interrupt_vector_enable(vector);
   }
 
   /* Unlock */
@@ -375,7 +370,6 @@ static rtems_status_code bsp_interrupt_handler_remove(
   void *arg
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_interrupt_level level;
   rtems_vector_number index = 0;
   bsp_interrupt_handler_entry *head = NULL;
@@ -446,7 +440,7 @@ static rtems_status_code bsp_interrupt_handler_remove(
        */
 
       /* Disable the vector */
-      sc = bsp_interrupt_vector_disable(vector);
+      bsp_interrupt_vector_disable(vector);
 
       /* Clear entry */
       bsp_interrupt_disable(level);
@@ -458,12 +452,6 @@ static rtems_status_code bsp_interrupt_handler_remove(
 
       /* Allow shared handlers */
       bsp_interrupt_set_handler_unique(index, false);
-
-      /* Check status code */
-      if (sc != RTEMS_SUCCESSFUL) {
-        bsp_interrupt_unlock();
-        return sc;
-      }
     } else {
       /*
        * The match is the list tail and has a predecessor.

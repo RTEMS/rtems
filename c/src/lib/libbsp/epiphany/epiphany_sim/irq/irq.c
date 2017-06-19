@@ -53,12 +53,12 @@ rtems_status_code bsp_interrupt_facility_initialize()
   return 0;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  return 0;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  return 0;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 }

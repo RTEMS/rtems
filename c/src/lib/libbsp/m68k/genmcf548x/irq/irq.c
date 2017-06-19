@@ -59,42 +59,30 @@ static rtems_vector_number vector_to_exception_vector(
   return vector + 64U;
 }
 
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  volatile uint32_t *imr = vector_to_imr(vector);
+  uint32_t bit = vector_to_bit(vector);
+  rtems_interrupt_level level;
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    volatile uint32_t *imr = vector_to_imr(vector);
-    uint32_t bit = vector_to_bit(vector);
-    rtems_interrupt_level level;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    rtems_interrupt_disable(level);
-    *imr &= ~bit;
-    rtems_interrupt_enable(level);
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
-
-  return sc;
+  rtems_interrupt_disable(level);
+  *imr &= ~bit;
+  rtems_interrupt_enable(level);
 }
 
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  volatile uint32_t *imr = vector_to_imr(vector);
+  uint32_t bit = vector_to_bit(vector);
+  rtems_interrupt_level level;
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    volatile uint32_t *imr = vector_to_imr(vector);
-    uint32_t bit = vector_to_bit(vector);
-    rtems_interrupt_level level;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
 
-    rtems_interrupt_disable(level);
-    *imr |= bit;
-    rtems_interrupt_enable(level);
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
-
-  return sc;
+  rtems_interrupt_disable(level);
+  *imr |= bit;
+  rtems_interrupt_enable(level);
 }
 
 static void_func get_exception_handler(rtems_vector_number vector)

@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008-2014 embedded brains GmbH.
+ * Copyright (c) 2008, 2017 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,6 +30,7 @@
 #include <stdbool.h>
 
 #include <rtems/irq-extension.h>
+#include <rtems/score/assert.h>
 
 #ifdef RTEMS_SMP
   #include <rtems/score/atomic.h>
@@ -70,6 +71,8 @@ extern "C" {
   #define bsp_interrupt_enable(level) rtems_interrupt_enable(level)
   #define bsp_interrupt_fence(order) do { } while (0)
 #endif
+
+#define bsp_interrupt_assert(e) _Assert(e)
 
 struct bsp_interrupt_handler_entry {
   rtems_interrupt_handler handler;
@@ -215,32 +218,33 @@ rtems_status_code bsp_interrupt_facility_initialize(void);
  *
  * This function shall enable the vector at the corresponding facility (in most
  * cases the interrupt controller).  It will be called then the first handler
- * is installed for the vector in bsp_interrupt_handler_install().  It is
- * guaranteed that the vector number is within the BSP_INTERRUPT_VECTOR_MIN and
- * BSP_INTERRUPT_VECTOR_MAX range.
+ * is installed for the vector in bsp_interrupt_handler_install() for example.
+ *
+ * @note The implementation should use
+ * bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector)) to valdiate the
+ * vector number.
  *
  * @note You must not install or remove an interrupt handler in this function.
  * This may result in a deadlock.
- *
- * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_vector_enable(rtems_vector_number vector);
+void bsp_interrupt_vector_enable(rtems_vector_number vector);
 
 /**
  * @brief Disables the interrupt vector with number @a vector.
  *
  * This function shall disable the vector at the corresponding facility (in
  * most cases the interrupt controller).  It will be called then the last
- * handler is removed for the vector in bsp_interrupt_handler_remove().  It is
- * guaranteed that the vector number is within the BSP_INTERRUPT_VECTOR_MIN and
- * BSP_INTERRUPT_VECTOR_MAX range.
+ * handler is removed for the vector in bsp_interrupt_handler_remove() for
+ * example.
+ *
+ * @note The implementation should use
+ * bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector)) to valdiate the
+ * vector number.
  *
  * @note You must not install or remove an interrupt handler in this function.
  * This may result in a deadlock.
- *
- * @return On success RTEMS_SUCCESSFUL shall be returned.
  */
-rtems_status_code bsp_interrupt_vector_disable(rtems_vector_number vector);
+void bsp_interrupt_vector_disable(rtems_vector_number vector);
 
 /**
  * @brief Sequencially calls all interrupt handlers for the vector number @a

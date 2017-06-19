@@ -173,11 +173,6 @@ static void BSP_uart_off(const rtems_raw_irq_connect_data* used)
   bsp_interrupt_vector_disable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
-static int BSP_uart_isOn(const rtems_raw_irq_connect_data* used)
-{
-  return bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
-}
-
 /*
  * In order to have a possibility to break into
  * running program, one has to call this function
@@ -210,7 +205,6 @@ void i386_stub_glue_init_breakin(void)
 
     uart_raw_irq_data.on  = BSP_uart_on;
     uart_raw_irq_data.off = BSP_uart_off;
-    uart_raw_irq_data.isOn= BSP_uart_isOn;
 
     /* Install ISR  */
     uart_raw_irq_data.idtIndex = port_current->ulIntVector + BSP_IRQ_VECTOR_BASE;

@@ -328,28 +328,28 @@ BSP_CPM_irq_init(void)
 
 }
 
-rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 {
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
   if (is_cpm_irq(irqnum)) {
     /*
      * Enable interrupt at PIC level
      */
     BSP_irq_enable_at_cpm (irqnum);
   }
-
-  return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_disable( rtems_vector_number irqnum)
 {
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
   if (is_cpm_irq(irqnum)) {
     /*
      * disable interrupt at PIC level
      */
     BSP_irq_disable_at_cpm (irqnum);
   }
-
-  return RTEMS_SUCCESSFUL;
 }
 
 rtems_status_code bsp_interrupt_facility_initialize()

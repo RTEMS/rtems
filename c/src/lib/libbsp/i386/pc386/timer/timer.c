@@ -153,17 +153,12 @@ static void timerOn(const rtems_raw_irq_connect_data* used)
   bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
 }
 
-static int timerIsOn(const rtems_raw_irq_connect_data *used)
-{
-  return bsp_interrupt_vector_enable(used->idtIndex - BSP_IRQ_VECTOR_BASE);
-}
-
 static rtems_raw_irq_connect_data timer_raw_irq_data = {
   BSP_PERIODIC_TIMER + BSP_IRQ_VECTOR_BASE,
   timerisr,
   timerOn,
   timerOff,
-  timerIsOn
+  NULL
 };
 
 /*

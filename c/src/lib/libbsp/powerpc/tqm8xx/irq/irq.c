@@ -63,30 +63,26 @@ static rtems_status_code bsp_irq_enable_at_CPM(rtems_vector_number irqnum)
   return RTEMS_SUCCESSFUL;
 }
 
-rtems_status_code bsp_interrupt_vector_enable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  if (BSP_IS_CPM_IRQ(irqnum)) {
-    bsp_irq_enable_at_CPM(irqnum);
-    return RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (BSP_IS_CPM_IRQ(vector)) {
+    bsp_irq_enable_at_CPM(vector);
+  } else if (BSP_IS_SIU_IRQ(vector)) {
+    bsp_irq_enable_at_SIU(vector);
   }
-  else if (BSP_IS_SIU_IRQ(irqnum)) {
-    bsp_irq_enable_at_SIU(irqnum);
-    return RTEMS_SUCCESSFUL;
-  }
-  return RTEMS_INVALID_ID;
 }
 
-rtems_status_code bsp_interrupt_vector_disable( rtems_vector_number irqnum)
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  if (BSP_IS_CPM_IRQ(irqnum)) {
-    bsp_irq_disable_at_CPM(irqnum);
-    return RTEMS_SUCCESSFUL;
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+
+  if (BSP_IS_CPM_IRQ(vector)) {
+    bsp_irq_disable_at_CPM(vector);
+  } else if (BSP_IS_SIU_IRQ(vector)) {
+    bsp_irq_disable_at_SIU(vector);
   }
-  else if (BSP_IS_SIU_IRQ(irqnum)) {
-    bsp_irq_disable_at_SIU(irqnum);
-    return RTEMS_SUCCESSFUL;
-  }
-  return RTEMS_INVALID_ID;
 }
 
 /*
