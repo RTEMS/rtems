@@ -237,10 +237,11 @@ $(PROJECT_INCLUDE)/bsp/grcan.h: ../../sparc/shared/include/grcan.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grcan.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grcan.h
 
+if !HAS_SMP
 $(PROJECT_INCLUDE)/bsp/grspw.h: ../../sparc/shared/include/grspw.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grspw.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grspw.h
-
+endif
 $(PROJECT_INCLUDE)/bsp/grspw_pkt.h: ../../sparc/shared/include/grspw_pkt.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/grspw_pkt.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/grspw_pkt.h

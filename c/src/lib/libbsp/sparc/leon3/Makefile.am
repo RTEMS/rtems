@@ -163,10 +163,12 @@ libbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
     ../../sparc/shared/can/grcan.c
 
 # SpaceWire
+if !HAS_SMP
 include_bsp_HEADERS += ../../sparc/shared/include/grspw.h
+libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c
+endif
 include_bsp_HEADERS += ../../sparc/shared/include/grspw_pkt.h
 include_bsp_HEADERS += ../../sparc/shared/include/grspw_router.h
-libbsp_a_SOURCES += ../../sparc/shared/spw/grspw.c
 libbsp_a_SOURCES += ../../sparc/shared/spw/grspw_pkt.c
 libbsp_a_SOURCES += ../../sparc/shared/spw/grspw_router.c
 
