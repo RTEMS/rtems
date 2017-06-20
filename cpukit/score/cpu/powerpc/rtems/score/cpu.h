@@ -222,8 +222,8 @@ typedef struct {
   PPC_GPR_TYPE gpr29;
   PPC_GPR_TYPE gpr30;
   PPC_GPR_TYPE gpr31;
-  uint32_t gpr2;
   uint32_t isr_dispatch_disable;
+  uint32_t reserved_for_alignment;
   #if defined(PPC_MULTILIB_ALTIVEC)
     uint8_t v20[16];
     uint8_t v21[16];
@@ -270,12 +270,13 @@ typedef struct {
     double f30;
     double f31;
   #endif
+  /*
+   * The following items are at the structure end, so that we can use dcbz for
+   * the previous items to optimize the context switch.  We must not set the
+   * following items to zero via the dcbz.
+   */
+  uint32_t gpr2;
   #if defined(RTEMS_SMP)
-    /*
-     * This item is at the structure end, so that we can use dcbz for the
-     * previous items to optimize the context switch.  We must not set this
-     * item to zero via the dcbz.
-     */
     volatile uint32_t is_executing;
   #endif
 } ppc_context;
@@ -347,9 +348,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #define PPC_CONTEXT_OFFSET_GPR29 PPC_CONTEXT_GPR_OFFSET( 29 )
 #define PPC_CONTEXT_OFFSET_GPR30 PPC_CONTEXT_GPR_OFFSET( 30 )
 #define PPC_CONTEXT_OFFSET_GPR31 PPC_CONTEXT_GPR_OFFSET( 31 )
-#define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_GPR_OFFSET( 32 )
-#define PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE \
-  ( PPC_CONTEXT_GPR_OFFSET( 32 ) + 4 )
+#define PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE PPC_CONTEXT_GPR_OFFSET( 32 )
 
 #ifdef PPC_MULTILIB_ALTIVEC
   #define PPC_CONTEXT_OFFSET_V( v ) \
@@ -403,8 +402,10 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8)
 #endif
 
+#define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_VOLATILE_SIZE
+
 #ifdef RTEMS_SMP
-  #define PPC_CONTEXT_OFFSET_IS_EXECUTING PPC_CONTEXT_VOLATILE_SIZE
+  #define PPC_CONTEXT_OFFSET_IS_EXECUTING (PPC_CONTEXT_VOLATILE_SIZE + 4)
 #endif
 
 #ifndef ASM
