@@ -398,6 +398,10 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   #define PPC_CONTEXT_VOLATILE_SIZE PPC_CONTEXT_OFFSET_F( 32 )
 #elif defined(PPC_MULTILIB_ALTIVEC)
   #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_OFFSET_VRSAVE + 4)
+#elif defined(__ALTIVEC__)
+  #define PPC_CONTEXT_VOLATILE_SIZE \
+    (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8 \
+      + 16 * 12 + 32 + PPC_DEFAULT_CACHE_LINE_SIZE)
 #else
   #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8)
 #endif
