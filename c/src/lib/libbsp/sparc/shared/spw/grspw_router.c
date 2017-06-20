@@ -1331,7 +1331,7 @@ int router_port_ctrl_get(void *d, int port, uint32_t *ctrl)
 }
 
 /* Read Port Status register and clear errors if there are */
-int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk) /* review clrmsks */
+int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk)
 {
 	struct router_priv *priv = d;
 	int error = router_check_port(d, port);
@@ -1350,7 +1350,7 @@ int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk) /* rev
 	if (port == 0) {
 		REG_WRITE(&priv->regs->psts[port], ((*sts) & (PSTSCFG_WCLEAR & clrmsk)) | (PSTSCFG_WCLEAR2 & clrmsk));
 	}else{
-		REG_WRITE(&priv->regs->psts[port], (*sts) & PSTS_WCLEAR);
+		REG_WRITE(&priv->regs->psts[port], (*sts) & (PSTS_WCLEAR & clrmsk));
 	}
 	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
 	return ROUTER_ERR_OK;

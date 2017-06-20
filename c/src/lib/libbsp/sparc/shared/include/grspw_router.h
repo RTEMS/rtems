@@ -328,7 +328,7 @@ extern int router_port_maxplen_set(void *d, int port, uint32_t length);
 #define PSTS_PE_BIT 0
 
 /* Check Port Status register and clear errors if there are */
-extern int router_port_status(void *d, int port, uint32_t *sts);
+extern int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk);
 
 #define ROUTER_LINK_STATUS_ERROR_RESET 0
 #define ROUTER_LINK_STATUS_ERROR_WAIT 1
