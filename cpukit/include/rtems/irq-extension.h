@@ -333,6 +333,28 @@ rtems_status_code rtems_interrupt_server_handler_remove(
 );
 
 /**
+ * @brief Iterates over all interrupt handler of the interrupt vector with
+ * number @a vector which are installed on the interrupt server specified by
+ * @a server.
+ *
+ * A server identifier @a server of @c RTEMS_ID_NONE may be used to specify the
+ * default server.
+ *
+ * @see rtems_interrupt_handler_iterate()
+ *
+ * @retval RTEMS_SUCCESSFUL Shall be returned in case of success.
+ * @retval RTEMS_INCORRECT_STATE If the interrupt handler server is not
+ * initialized this shall be returned.
+ * @retval * For other errors see rtems_interrupt_handler_iterate().
+ */
+rtems_status_code rtems_interrupt_server_handler_iterate(
+  rtems_id server,
+  rtems_vector_number vector,
+  rtems_interrupt_per_handler_routine routine,
+  void *arg
+);
+
+/**
  * @brief Initializes the specified interrupt server entry.
  *
  * @param[in] entry The interrupt server entry to initialize.

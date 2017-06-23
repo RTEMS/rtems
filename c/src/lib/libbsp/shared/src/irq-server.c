@@ -389,6 +389,76 @@ rtems_status_code rtems_interrupt_server_handler_remove(
   );
 }
 
+typedef struct {
+  rtems_interrupt_per_handler_routine routine;
+  void *arg;
+} bsp_interrupt_server_handler_iterate_helper_data;
+
+static void bsp_interrupt_server_handler_iterate_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+  bsp_interrupt_server_handler_iterate_helper_data *hihd = hd->arg;
+  rtems_status_code sc;
+  rtems_interrupt_server_entry *e;
+  rtems_option trigger_options;
+
+  bsp_interrupt_lock();
+
+  e = bsp_interrupt_server_query_entry(hd->vector, &trigger_options);
+  if (e != NULL) {
+    rtems_interrupt_server_action **link = &e->actions;
+    rtems_interrupt_server_action *c;
+
+    while ((c = *link) != NULL) {
+      (*hihd->routine)(hihd->arg, NULL, trigger_options, c->handler, c->arg);
+      link = &c->next;
+    }
+
+    sc = RTEMS_SUCCESSFUL;
+  } else {
+    sc = RTEMS_UNSATISFIED;
+  }
+
+  bsp_interrupt_unlock();
+
+  hd->sc = sc;
+  rtems_event_transient_send(hd->task);
+}
+
+rtems_status_code rtems_interrupt_server_handler_iterate(
+  rtems_id server,
+  rtems_vector_number vector,
+  rtems_interrupt_per_handler_routine routine,
+  void *arg
+)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_handler_iterate_helper_data hihd;
+
+  sc = bsp_interrupt_server_is_initialized();
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
+
+  if (server != RTEMS_ID_NONE) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+    return RTEMS_INVALID_ID;
+  }
+
+  hihd.routine = routine;
+  hihd.arg = arg;
+  return bsp_interrupt_server_call_helper(
+    vector,
+    0,
+    NULL,
+    &hihd,
+    bsp_interrupt_server_handler_iterate_helper
+  );
+}
+
 rtems_status_code rtems_interrupt_server_initialize(
   rtems_task_priority priority,
   size_t stack_size,
