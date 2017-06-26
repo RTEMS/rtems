@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpscheduler07
+
+directives:
+
+  - Scheduler operations.
+
+concepts:
+
+  - Ensure that the scheduler operations basically work.

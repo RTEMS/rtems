@@ -37,6 +37,11 @@ static void apply_priority(
   Thread_queue_Context *queue_context
 )
 {
+  const Scheduler_Control *scheduler;
+
+  scheduler = _Thread_Scheduler_get_home(thread);
+  new_priority = _Scheduler_Map_priority(scheduler, new_priority);
+
   _Thread_queue_Context_initialize(queue_context);
   _Thread_queue_Context_clear_priority_updates(queue_context);
   _Thread_Wait_acquire(thread, queue_context);

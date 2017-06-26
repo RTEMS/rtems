@@ -126,6 +126,7 @@ include_rtems_score_HEADERS += include/rtems/score/threadmp.h
 endif
 
 if HAS_SMP
+include_rtems_score_HEADERS += include/rtems/score/scheduleredfsmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerprioritysmpimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityaffinitysmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
@@ -149,6 +150,7 @@ endif
 if HAS_SMP
 libscore_a_SOURCES += src/percpustatewait.c
 libscore_a_SOURCES += src/profilingsmplock.c
+libscore_a_SOURCES += src/scheduleredfsmp.c
 libscore_a_SOURCES += src/schedulerpriorityaffinitysmp.c
 libscore_a_SOURCES += src/schedulerprioritysmp.c
 libscore_a_SOURCES += src/schedulersimplesmp.c

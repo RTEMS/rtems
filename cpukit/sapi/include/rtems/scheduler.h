@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -88,6 +88,24 @@
     { \
       &RTEMS_SCHEDULER_CONTEXT_EDF_NAME( name ).Base, \
       SCHEDULER_EDF_ENTRY_POINTS, \
+      SCHEDULER_EDF_MAXIMUM_PRIORITY, \
+      ( obj_name ) \
+    }
+#endif
+
+#ifdef CONFIGURE_SCHEDULER_EDF_SMP
+  #include <rtems/score/scheduleredfsmp.h>
+
+  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name ) \
+    RTEMS_SCHEDULER_CONTEXT_NAME( EDF_SMP_ ## name )
+
+  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name ) \
+    static Scheduler_EDF_SMP_Context RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_EDF_SMP( name, obj_name ) \
+    { \
+      &RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name ).Base.Base, \
+      SCHEDULER_EDF_SMP_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }

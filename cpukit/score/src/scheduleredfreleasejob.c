@@ -20,6 +20,22 @@
 
 #include <rtems/score/scheduleredfimpl.h>
 
+Priority_Control _Scheduler_EDF_Map_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+)
+{
+  return SCHEDULER_EDF_PRIO_MSB | priority;
+}
+
+Priority_Control _Scheduler_EDF_Unmap_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+)
+{
+  return priority & ~SCHEDULER_EDF_PRIO_MSB;
+}
+
 void _Scheduler_EDF_Release_job(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,

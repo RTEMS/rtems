@@ -42,6 +42,7 @@ _SUBDIRS += smpscheduler03
 _SUBDIRS += smpscheduler04
 _SUBDIRS += smpscheduler05
 _SUBDIRS += smpscheduler06
+_SUBDIRS += smpscheduler07
 _SUBDIRS += smpsignal01
 _SUBDIRS += smpstrongapa01
 _SUBDIRS += smpswitchextension01
