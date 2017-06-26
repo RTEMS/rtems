@@ -1,5 +1,5 @@
 rtems_tests_PROGRAMS = smpscheduler03
-smpscheduler03_SOURCES = init.c
+smpscheduler03_SOURCES = init.c test.c
 
 dist_rtems_tests_DATA = smpscheduler03.scn smpscheduler03.doc
 
