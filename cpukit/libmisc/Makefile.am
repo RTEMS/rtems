@@ -174,6 +174,7 @@ libstringto_a_SOURCES = stringto/stringtodouble.c stringto/stringtofloat.c \
 noinst_LIBRARIES += libtestsupport.a
 libtestsupport_a_SOURCES =
 libtestsupport_a_SOURCES += testsupport/testbeginend.c
+libtestsupport_a_SOURCES += testsupport/testbusy.c
 libtestsupport_a_SOURCES += testsupport/testextension.c
 libtestsupport_a_SOURCES += testsupport/testparallel.c
 

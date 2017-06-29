@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -259,6 +259,22 @@ void rtems_test_parallel(
   const rtems_test_parallel_job *jobs,
   size_t job_count
 );
+
+/**
+ * @brief Performs a busy loop with the specified iteration count.
+ *
+ * This function is optimized to not perform memory accesses and should have a
+ * small jitter.
+ *
+ * @param[in] count The iteration count.
+ */
+void rtems_test_busy(uint_fast32_t count);
+
+/**
+ * @brief Returns a count value for rtems_test_busy() which yields roughly a
+ * duration of one clock tick.
+ */
+uint_fast32_t rtems_test_get_one_tick_busy_count(void);
 
 /** @} */
 
