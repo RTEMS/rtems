@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010, 2016 embedded brains GmbH.
+ *  Copyright (c) 2010, 2017 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -88,6 +88,16 @@
   #define RTEMS_COMPILER_MEMORY_BARRIER() __asm__ volatile("" ::: "memory")
 #else
   #define RTEMS_COMPILER_MEMORY_BARRIER()
+#endif
+
+/**
+ *  The following defines a compiler specific attribute which informs
+ *  the compiler that the method must not be inlined.
+ */
+#ifdef __GNUC__
+  #define RTEMS_NO_INLINE __attribute__((__noinline__))
+#else
+  #define RTEMS_NO_INLINE
 #endif
 
 /**
