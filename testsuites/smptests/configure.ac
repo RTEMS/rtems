@@ -90,6 +90,7 @@ smpschedaffinity02/Makefile
 smpschedaffinity03/Makefile
 smpschedaffinity04/Makefile
 smpschedaffinity05/Makefile
+smpschededf01/Makefile
 smpschedsem01/Makefile
 smpscheduler01/Makefile
 smpscheduler02/Makefile

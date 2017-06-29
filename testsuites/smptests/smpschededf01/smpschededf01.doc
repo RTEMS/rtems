@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschededf01
+
+directives:
+
+  - EDF SMP scheduler job release/cancel operations
+
+concepts:
+
+  - Ensure that a task set schedulable with EDF runs correctly.  This task set
+    is not schedulable with RMS.

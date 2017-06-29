@@ -35,6 +35,7 @@ _SUBDIRS += smppsxaffinity02
 _SUBDIRS += smpschedaffinity03
 _SUBDIRS += smpschedaffinity04
 _SUBDIRS += smpschedaffinity05
+_SUBDIRS += smpschededf01
 _SUBDIRS += smpschedsem01
 _SUBDIRS += smpscheduler01
 _SUBDIRS += smpscheduler02
