@@ -67,14 +67,16 @@ struct Scheduler_Node {
   /**
    * @brief Chain node for usage in various scheduler data structures.
    *
-   * Strictly this is the wrong place for this field since the data structures
+   * Strictly, this is the wrong place for this field since the data structures
    * to manage scheduler nodes belong to the particular scheduler
-   * implementation.  Currently all SMP scheduler implementations use chains.
-   * The node is here to simplify things, just like the object node in the
-   * thread control block.  It may be replaced with a union to add a red-black
-   * tree node in the future.
+   * implementation.  Currently, all SMP scheduler implementations use chains
+   * or red-black trees.  The node is here to simplify things, just like the
+   * object node in the thread control block.
    */
-  Chain_Node Node;
+  union {
+    Chain_Node Chain;
+    RBTree_Node RBTree;
+  } Node;
 
   /**
    * @brief The sticky level determines if this scheduler node should use an

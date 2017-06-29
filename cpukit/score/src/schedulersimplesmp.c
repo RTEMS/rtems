@@ -88,7 +88,7 @@ static Scheduler_Node *_Scheduler_simple_SMP_Get_highest_ready(
 
   (void) node;
 
-  _Assert( &first->Node != _Chain_Tail( &self->Ready ) );
+  _Assert( &first->Node.Chain != _Chain_Tail( &self->Ready ) );
 
   return first;
 }
@@ -101,10 +101,10 @@ static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
 
-  _Chain_Extract_unprotected( &scheduled_to_ready->Node );
+  _Chain_Extract_unprotected( &scheduled_to_ready->Node.Chain );
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    &scheduled_to_ready->Node,
+    &scheduled_to_ready->Node.Chain,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -117,10 +117,10 @@ static void _Scheduler_simple_SMP_Move_from_ready_to_scheduled(
   Scheduler_simple_SMP_Context *self =
     _Scheduler_simple_SMP_Get_self( context );
 
-  _Chain_Extract_unprotected( &ready_to_scheduled->Node );
+  _Chain_Extract_unprotected( &ready_to_scheduled->Node.Chain );
   _Chain_Insert_ordered_unprotected(
     &self->Base.Scheduled,
-    &ready_to_scheduled->Node,
+    &ready_to_scheduled->Node.Chain,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
@@ -135,7 +135,7 @@ static void _Scheduler_simple_SMP_Insert_ready_lifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    &node_to_insert->Node,
+    &node_to_insert->Node.Chain,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -150,7 +150,7 @@ static void _Scheduler_simple_SMP_Insert_ready_fifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
-    &node_to_insert->Node,
+    &node_to_insert->Node.Chain,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
@@ -162,7 +162,7 @@ static void _Scheduler_simple_SMP_Extract_from_ready(
 {
   (void) context;
 
-  _Chain_Extract_unprotected( &node_to_extract->Node );
+  _Chain_Extract_unprotected( &node_to_extract->Node.Chain );
 }
 
 void _Scheduler_simple_SMP_Block(

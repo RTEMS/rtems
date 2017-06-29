@@ -608,9 +608,9 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   (void) filter;
   (void) order;
 
-  _Assert( &lowest_scheduled->Node != _Chain_Tail( scheduled ) );
+  _Assert( &lowest_scheduled->Node.Chain != _Chain_Tail( scheduled ) );
   _Assert(
-    _Chain_Next( &lowest_scheduled->Node ) == _Chain_Tail( scheduled )
+    _Chain_Next( &lowest_scheduled->Node.Chain ) == _Chain_Tail( scheduled )
   );
 
   return lowest_scheduled;
@@ -708,7 +708,7 @@ static inline bool _Scheduler_SMP_Enqueue_ordered(
 
   lowest_scheduled = ( *get_lowest_scheduled )( context, node, order );
 
-  if ( ( *order )( &node->Node, &lowest_scheduled->Node ) ) {
+  if ( ( *order )( &node->Node.Chain, &lowest_scheduled->Node.Chain ) ) {
     _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       node,
@@ -769,7 +769,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled_ordered(
      */
     if (
       node->sticky_level > 0
-        && ( *order )( &node->Node, &highest_ready->Node )
+        && ( *order )( &node->Node.Chain, &highest_ready->Node.Chain )
     ) {
       ( *insert_scheduled )( context, node );
 
@@ -859,7 +859,7 @@ static inline void _Scheduler_SMP_Extract_from_scheduled(
   Scheduler_Node *node
 )
 {
-  _Chain_Extract_unprotected( &node->Node );
+  _Chain_Extract_unprotected( &node->Node.Chain );
 }
 
 static inline void _Scheduler_SMP_Schedule_highest_ready(
@@ -1109,7 +1109,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_lifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Scheduled,
-    &node_to_insert->Node,
+    &node_to_insert->Node.Chain,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -1123,7 +1123,7 @@ static inline void _Scheduler_SMP_Insert_scheduled_fifo(
 
   _Chain_Insert_ordered_unprotected(
     &self->Scheduled,
-    &node_to_insert->Node,
+    &node_to_insert->Node.Chain,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
@@ -1154,7 +1154,7 @@ static inline bool _Scheduler_SMP_Ask_for_help(
     node_state = _Scheduler_SMP_Node_state( node );
 
     if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
-      if ( ( *order )( &node->Node, &lowest_scheduled->Node ) ) {
+      if ( ( *order )( &node->Node.Chain, &lowest_scheduled->Node.Chain ) ) {
         _Thread_Scheduler_cancel_need_for_help(
           thread,
           _Thread_Get_CPU( thread )
@@ -1297,7 +1297,7 @@ static inline void _Scheduler_SMP_Add_processor(
   if ( ( *has_ready )( &self->Base ) ) {
     ( *enqueue_scheduled_fifo )( &self->Base, node );
   } else {
-    _Chain_Append_unprotected( &self->Scheduled, &node->Node );
+    _Chain_Append_unprotected( &self->Scheduled, &node->Node.Chain );
   }
 }
 

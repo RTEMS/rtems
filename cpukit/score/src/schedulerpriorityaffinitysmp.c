@@ -248,8 +248,14 @@ static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
      * than filter thread is, then we can't schedule the filter thread
      * to execute.
      */
-    if ( (*order)( &node->Base.Base.Base.Node, &filter->Base.Base.Base.Node ) )
+    if (
+      (*order)(
+        &node->Base.Base.Base.Node.Chain,
+        &filter->Base.Base.Base.Node.Chain
+      )
+    ) {
       break;
+    }
 
     /* cpu_index is the processor number thread is executing on */
     thread = _Scheduler_Node_get_owner( &node->Base.Base.Base );

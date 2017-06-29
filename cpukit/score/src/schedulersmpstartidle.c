@@ -30,6 +30,6 @@ void _Scheduler_SMP_Start_idle(
   node->state = SCHEDULER_SMP_NODE_SCHEDULED;
 
   _Thread_Set_CPU( idle, cpu );
-  _Chain_Append_unprotected( &self->Scheduled, &node->Base.Node );
+  _Chain_Append_unprotected( &self->Scheduled, &node->Base.Node.Chain );
   _Scheduler_SMP_Release_idle_thread( &self->Base, idle );
 }
