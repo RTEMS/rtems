@@ -33,6 +33,7 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_ftruncate_directory.c \
     src/defaults/default_handlers.c src/defaults/default_ops.c
 libdefaultfs_a_SOURCES += src/defaults/default_kqfilter.c
+libdefaultfs_a_SOURCES += src/defaults/default_mmap.c
 libdefaultfs_a_SOURCES += src/defaults/default_poll.c
 libdefaultfs_a_SOURCES += src/defaults/default_readv.c
 libdefaultfs_a_SOURCES += src/defaults/default_writev.c

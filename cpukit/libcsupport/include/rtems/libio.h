@@ -977,6 +977,28 @@ typedef int (*rtems_filesystem_kqfilter_t)(
 );
 
 /**
+ * @brief MMAP support.
+ *
+ * @param[in, out] iop The IO pointer.
+ * @param[in, out] addr The starting address of the mapped memory.
+ * @param[in] len The maximum number of bytes to map.
+ * @param[in] prot The desired memory protection.
+ * @param[in] off The offset within the file descriptor to map.
+ *
+ * @retval 0 Successful operation.
+ * @retval error An error occurred.  This is usually EINVAL.
+ *
+ * @see rtems_filesystem_default_mmap().
+ */
+typedef int (*rtems_filesystem_mmap_t)(
+  rtems_libio_t *iop,
+  void **addr,
+  size_t len,
+  int prot,
+  off_t off
+);
+
+/**
  * @brief File system node operations table.
  */
 struct _rtems_filesystem_file_handlers_r {
@@ -995,6 +1017,7 @@ struct _rtems_filesystem_file_handlers_r {
   rtems_filesystem_kqfilter_t kqfilter_h;
   rtems_filesystem_readv_t readv_h;
   rtems_filesystem_writev_t writev_h;
+  rtems_filesystem_mmap_t mmap_h;
 };
 
 /**
@@ -1214,6 +1237,21 @@ int rtems_filesystem_default_poll(
 int rtems_filesystem_default_kqfilter(
   rtems_libio_t *iop,
   struct knote *kn
+);
+
+/**
+ * @brief Default MMAP handler.
+ *
+ * @retval ENOTSUP Always.
+ *
+ * @see rtems_filesystem_mmap_t.
+ */
+int rtems_filesystem_default_mmap(
+  rtems_libio_t *iop,
+  void **addr,
+  size_t len,
+  int prot,
+  off_t off
 );
 
 /** @} */

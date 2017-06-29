@@ -106,6 +106,35 @@ static int shm_close( rtems_libio_t *iop )
   return 0;
 }
 
+static int shm_mmap(
+  rtems_libio_t *iop,
+  void** addr,
+  size_t len,
+  int prot,
+  off_t off
+)
+{
+  POSIX_Shm_Control *shm = iop_to_shm( iop );
+
+  _Objects_Allocator_lock();
+
+  *addr = (*shm->shm_object.ops->object_mmap)( &shm->shm_object, len, prot, off);
+  if ( *addr != NULL ) {
+    /* Keep a reference in the shared memory to prevent its removal. */
+    ++shm->reference_count;
+
+    /* Update atime */
+    _POSIX_Shm_Update_atime(shm);
+  } else {
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( ENOMEM );
+  }
+
+  _Objects_Allocator_unlock();
+
+  return 0;
+}
+
 static inline POSIX_Shm_Control *shm_allocate(
   const char *name_arg,
   size_t name_len,
@@ -275,6 +304,7 @@ static const rtems_filesystem_file_handlers_r shm_handlers = {
   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
   .fcntl_h = rtems_filesystem_default_fcntl,
   .kqfilter_h = rtems_filesystem_default_kqfilter,
+  .mmap_h = shm_mmap,
   .poll_h = rtems_filesystem_default_poll,
   .readv_h = rtems_filesystem_default_readv,
   .writev_h = rtems_filesystem_default_writev

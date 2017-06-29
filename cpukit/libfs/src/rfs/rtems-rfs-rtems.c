@@ -701,6 +701,7 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_link_handlers =
   .fdatasync_h = rtems_filesystem_default_fsync_or_fdatasync,
   .fcntl_h     = rtems_filesystem_default_fcntl,
   .kqfilter_h  = rtems_filesystem_default_kqfilter,
+  .mmap_h      = rtems_filesystem_default_mmap,
   .poll_h      = rtems_filesystem_default_poll,
   .readv_h     = rtems_filesystem_default_readv,
   .writev_h    = rtems_filesystem_default_writev

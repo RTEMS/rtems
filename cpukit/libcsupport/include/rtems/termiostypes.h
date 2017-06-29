@@ -565,6 +565,19 @@ int rtems_termios_kqfilter(
 );
 
 /**
+ * @brief Termios mmap() filter filesystem node handler
+ *
+ * Real implementation is provided by libbsd.
+ */
+int rtems_termios_mmap(
+  rtems_libio_t *iop,
+  void         **addr,
+  size_t         len,
+  int            prot,
+  off_t          off
+);
+
+/**
  * @brief Termios poll() filesystem node handler.
  *
  * Real implementation is provided by libbsd.
