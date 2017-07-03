@@ -80,7 +80,7 @@ static void Clock_driver_timecounter_tick( void )
 
     if ( _Per_CPU_Is_boot_processor( cpu ) ) {
       rtems_timecounter_tick();
-    } else if ( _Processor_mask_Is_set( _SMP_Online_processors, cpu_index ) ) {
+    } else if ( _Processor_mask_Is_set( &_SMP_Online_processors, cpu_index ) ) {
       _Watchdog_Tick( cpu );
     }
   }
@@ -227,7 +227,7 @@ rtems_device_driver Clock_initialize(
   Clock_driver_support_install_isr( Clock_isr, Old_ticker );
 
   #ifdef RTEMS_SMP
-    Clock_driver_support_set_interrupt_affinity( _SMP_Online_processors );
+    Clock_driver_support_set_interrupt_affinity( &_SMP_Online_processors );
   #endif
 
   /*

@@ -140,7 +140,7 @@ struct drvmgr_bus_ops {
 	int	(*int_unmask)(struct drvmgr_dev *, int index);
 #ifdef RTEMS_SMP
 	int	(*int_set_affinity)(struct drvmgr_dev *, int index,
-				    Processor_mask cpus);
+				    const Processor_mask *cpus);
 #endif
 
 	/* Get Parameters */
@@ -645,7 +645,7 @@ extern int drvmgr_interrupt_mask(
 extern int drvmgr_interrupt_set_affinity(
 	struct drvmgr_dev *dev,
 	int index,
-	Processor_mask cpus);
+	const Processor_mask *cpus);
 #endif
 
 /*! drvmgr_translate() translation options */

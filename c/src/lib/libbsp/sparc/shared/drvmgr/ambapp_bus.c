@@ -59,7 +59,7 @@ void ambapp_dev_info(struct drvmgr_dev *, void (*print)(void *p, char *str), voi
 int ambapp_int_set_affinity(
 	struct drvmgr_dev *dev,
 	int index,
-	Processor_mask cpus);
+	const Processor_mask *cpus);
 #endif
 
 struct drvmgr_bus_ops ambapp_bus_ops =

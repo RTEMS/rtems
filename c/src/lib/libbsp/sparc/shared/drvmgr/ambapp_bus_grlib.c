@@ -50,7 +50,7 @@ int ambapp_grlib_int_unmask(
 int ambapp_grlib_int_set_affinity(
 	struct drvmgr_dev *dev,
 	int irq,
-	Processor_mask cpus);
+	const Processor_mask *cpus);
 #endif
 int ambapp_grlib_get_params(
 	struct drvmgr_dev *dev,
@@ -233,7 +233,7 @@ int ambapp_grlib_int_set_affinity
 	(
 	struct drvmgr_dev *dev,
 	int irq,
-	Processor_mask cpus
+	const Processor_mask *cpus
 	)
 {
 	uint32_t cpu_count = rtems_get_processor_count();

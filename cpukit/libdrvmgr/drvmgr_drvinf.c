@@ -142,7 +142,7 @@ int drvmgr_interrupt_mask(
 int drvmgr_interrupt_set_affinity(
 	struct drvmgr_dev *dev,
 	int index,
-	Processor_mask cpus)
+	const Processor_mask *cpus)
 {
 	if (!dev || !dev->parent || !dev->parent->ops->int_set_affinity)
 		return -1;

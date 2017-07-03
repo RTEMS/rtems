@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -25,6 +25,9 @@
 
 #include <rtems/score/cpu.h>
 
+#include <sys/_bitset.h>
+#include <sys/bitset.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -41,75 +44,65 @@ extern "C" {
  * @{
  */
 
-#define PROCESSOR_MASK_BITS_PER_FIELD 32
-
-#define PROCESSOR_MASK_FIELD_COUNT \
-  ( ( CPU_MAXIMUM_PROCESSORS + PROCESSOR_MASK_BITS_PER_FIELD - 1 ) \
-    / PROCESSOR_MASK_BITS_PER_FIELD )
-
-#define PROCESSOR_MASK_BIT( index ) \
-  (1UL << ( ( index ) % PROCESSOR_MASK_BITS_PER_FIELD ) )
-
-#define PROCESSOR_MASK_FIELD( index ) \
-  ( ( index ) / PROCESSOR_MASK_BITS_PER_FIELD )
-
 /**
- * @brief A bit map consisting of 32-bit integer fields which is large enough
- * to provide one bit for each processor in the system.
- *
- * Processor 0 corresponds to the bit 0 (least-significant) of the field 0 in
- * the array, and so on.
+ * @brief A bit map which is large enough to provide one bit for each processor
+ * in the system.
  */
-typedef uint32_t Processor_mask[ PROCESSOR_MASK_FIELD_COUNT ];
+typedef BITSET_DEFINE( Processor_mask, CPU_MAXIMUM_PROCESSORS ) Processor_mask;
 
-RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask mask )
+RTEMS_INLINE_ROUTINE void _Processor_mask_Zero( Processor_mask *mask )
 {
-  size_t i;
-
-  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
-    mask[ i ] = 0;
-  }
+  BIT_ZERO( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
-RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask mask )
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
 {
-  size_t i;
-
-  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
-    if ( mask[ i ] != 0 ) {
-      return false;
-    }
-  }
-
-  return true;
+  return BIT_EMPTY( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
-RTEMS_INLINE_ROUTINE void _Processor_mask_Assign( Processor_mask dst, const Processor_mask src )
+RTEMS_INLINE_ROUTINE void _Processor_mask_Assign(
+  Processor_mask *dst, const Processor_mask *src
+)
 {
-  size_t i;
-
-  for ( i = 0; i < PROCESSOR_MASK_FIELD_COUNT; ++i ) {
-    dst[ i ] = src[ i ];
-  }
+  BIT_COPY( CPU_MAXIMUM_PROCESSORS, src, dst );
 }
 
-RTEMS_INLINE_ROUTINE void _Processor_mask_Set( Processor_mask mask, uint32_t index )
+RTEMS_INLINE_ROUTINE void _Processor_mask_Set(
+  Processor_mask *mask,
+  uint32_t        index
+)
 {
-  mask[ PROCESSOR_MASK_FIELD( index ) ] |= PROCESSOR_MASK_BIT( index );
+  BIT_SET( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
 
-RTEMS_INLINE_ROUTINE void _Processor_mask_Clear( Processor_mask mask, uint32_t index )
+RTEMS_INLINE_ROUTINE void _Processor_mask_Clear(
+  Processor_mask *mask,
+  uint32_t        index
+)
 {
-  mask[ PROCESSOR_MASK_FIELD( index ) ] &= ~PROCESSOR_MASK_BIT( index );
+  BIT_CLR( CPU_MAXIMUM_PROCESSORS, index, mask );
 }
 
 RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_set(
-  const Processor_mask mask,
-  uint32_t index
+  const Processor_mask *mask,
+  uint32_t              index
 )
 {
-  return ( mask[ PROCESSOR_MASK_FIELD( index ) ]
-    & PROCESSOR_MASK_BIT( index ) ) != 0;
+  return BIT_ISSET( CPU_MAXIMUM_PROCESSORS, index, mask );
+}
+
+/**
+ * @brief Returns the subset of 32 processors containing the specified index as
+ * an unsigned 32-bit integer.
+ */
+RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_To_uint32_t(
+  const Processor_mask *mask,
+  uint32_t              index
+)
+{
+  long bits = mask->__bits[ __bitset_words( index ) ];
+
+  return (uint32_t) (bits >> (32 * (index % _BITSET_BITS) / 32));
 }
 
 /** @} */

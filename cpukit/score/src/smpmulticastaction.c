@@ -47,12 +47,12 @@ void _SMP_Multicast_actions_process( void )
   while ( !_Chain_Is_tail( &_SMP_Multicast.Actions, &node->Node ) ) {
     next = (SMP_Multicast_action *) _Chain_Next( &node->Node );
 
-    if ( _Processor_mask_Is_set( node->targets, cpu_self_index ) ) {
-      _Processor_mask_Clear( node->targets, cpu_self_index );
+    if ( _Processor_mask_Is_set( &node->targets, cpu_self_index ) ) {
+      _Processor_mask_Clear( &node->targets, cpu_self_index );
 
       ( *node->handler )( node->arg );
 
-      if ( _Processor_mask_Is_zero( node->targets ) ) {
+      if ( _Processor_mask_Is_zero( &node->targets ) ) {
         _Chain_Extract_unprotected( &node->Node );
         _Atomic_Store_ulong( &node->done, 1, ATOMIC_ORDER_RELEASE );
       }
@@ -106,13 +106,13 @@ void _SMP_Multicast_action(
   }
 
   if( cpus == NULL ) {
-    _Processor_mask_Assign( targets, _SMP_Online_processors );
+    _Processor_mask_Assign( &targets, &_SMP_Online_processors );
   } else {
-    _Processor_mask_Zero( targets );
+    _Processor_mask_Zero( &targets );
 
     for ( i = 0; i < _SMP_Get_processor_count(); ++i ) {
       if ( CPU_ISSET_S( i, setsize, cpus ) ) {
-        _Processor_mask_Set( targets, i );
+        _Processor_mask_Set( &targets, i );
       }
     }
   }
@@ -120,14 +120,14 @@ void _SMP_Multicast_action(
   _Chain_Initialize_node( &node.Node );
   node.handler = handler;
   node.arg = arg;
-  _Processor_mask_Assign( node.targets, targets );
+  _Processor_mask_Assign( &node.targets, &targets );
   _Atomic_Store_ulong( &node.done, 0, ATOMIC_ORDER_RELAXED );
 
   _SMP_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
   _Chain_Prepend_unprotected( &_SMP_Multicast.Actions, &node.Node );
   _SMP_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
 
-  _SMP_Send_message_multicast( targets, SMP_MESSAGE_MULTICAST_ACTION );
+  _SMP_Send_message_multicast( &targets, SMP_MESSAGE_MULTICAST_ACTION );
   _SMP_Multicasts_try_process();
 
   while ( _Atomic_Load_ulong( &node.done, ATOMIC_ORDER_ACQUIRE ) == 0 ) {

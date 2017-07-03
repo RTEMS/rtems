@@ -133,7 +133,10 @@ static void qoriq_clock_cleanup(void)
   qoriq_clock_handler_install(&old_isr)
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
-  qoriq_pic_set_affinities(CLOCK_INTERRUPT, online_processors[0])
+  qoriq_pic_set_affinities( \
+    CLOCK_INTERRUPT, \
+    _Processor_mask_To_uint32_t(online_processors, 0) \
+  )
 
 #define Clock_driver_support_shutdown_hardware() \
   qoriq_clock_cleanup()

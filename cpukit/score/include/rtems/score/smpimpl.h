@@ -241,8 +241,8 @@ void _SMP_Send_message_broadcast(
  *  @param[in] message The message.
  */
 void _SMP_Send_message_multicast(
-  const Processor_mask targets,
-  unsigned long        message
+  const Processor_mask *targets,
+  unsigned long         message
 );
 
 typedef void ( *SMP_Action_handler )( void *arg );
