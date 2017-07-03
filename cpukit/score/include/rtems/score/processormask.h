@@ -25,8 +25,7 @@
 
 #include <rtems/score/cpu.h>
 
-#include <sys/_bitset.h>
-#include <sys/bitset.h>
+#include <sys/cpuset.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -103,6 +102,55 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_To_uint32_t(
   long bits = mask->__bits[ __bitset_words( index ) ];
 
   return (uint32_t) (bits >> (32 * (index % _BITSET_BITS) / 32));
+}
+
+typedef enum {
+  PROCESSOR_MASK_COPY_LOSSLESS,
+  PROCESSOR_MASK_COPY_PARTIAL_LOSS,
+  PROCESSOR_MASK_COPY_COMPLETE_LOSS,
+  PROCESSOR_MASK_COPY_INVALID_SIZE
+} Processor_mask_Copy_status;
+
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_at_most_partial_loss(
+  Processor_mask_Copy_status status
+)
+{
+  return (unsigned int) status <= PROCESSOR_MASK_COPY_PARTIAL_LOSS;
+}
+
+Processor_mask_Copy_status _Processor_mask_Copy(
+  long       *dst,
+  size_t      dst_size,
+  const long *src,
+  size_t      src_size
+);
+
+RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_To_cpu_set_t(
+  const Processor_mask *src,
+  size_t                dst_size,
+  cpu_set_t            *dst
+)
+{
+  return _Processor_mask_Copy(
+    &dst->__bits[ 0 ],
+    dst_size,
+    &src->__bits[ 0 ],
+    sizeof( *src )
+  );
+}
+
+RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_From_cpu_set_t(
+  Processor_mask  *dst,
+  size_t           src_size,
+  const cpu_set_t *src
+)
+{
+  return _Processor_mask_Copy(
+    &dst->__bits[ 0 ],
+    sizeof( *dst ),
+    &src->__bits[ 0 ],
+    src_size
+  );
 }
 
 /** @} */
