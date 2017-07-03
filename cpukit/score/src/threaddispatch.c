@@ -248,6 +248,7 @@ void _Thread_Dispatch( void )
 
   if ( cpu_self->dispatch_necessary ) {
     _Profiling_Thread_dispatch_disable( cpu_self, 0 );
+    _Assert( cpu_self->thread_dispatch_disable_level == 0 );
     cpu_self->thread_dispatch_disable_level = 1;
     _Thread_Do_dispatch( cpu_self, level );
   } else {
