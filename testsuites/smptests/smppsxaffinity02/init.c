@@ -89,7 +89,7 @@ void Validate_getaffinity_errors(void)
 
   /* Verify pthread_getaffinity_np validates cpusetsize */
   puts( "Init - pthread_getaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_getaffinity_np( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
+  sc = pthread_getaffinity_np( Init_id,  1, &cpuset );
   rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_getaffinity_np validates cpuset */

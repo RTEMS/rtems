@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -207,7 +207,13 @@ static void test(void)
   cpu_set_t first_cpu;
   cpu_set_t second_cpu;
   cpu_set_t all_cpus;
+  cpu_set_t online_cpus;
   uint32_t cpu_count;
+
+  cpu_count = rtems_get_processor_count();
+  rtems_test_assert(cpu_count == 1 || cpu_count == 2);
+
+  rtems_test_assert(rtems_get_current_processor() == 0);
 
   main_task_id = rtems_task_self();
 
@@ -221,9 +227,12 @@ static void test(void)
   CPU_SET(0, &all_cpus);
   CPU_SET(1, &all_cpus);
 
-  cpu_count = rtems_get_processor_count();
+  CPU_ZERO(&online_cpus);
+  CPU_SET(0, &online_cpus);
 
-  rtems_test_assert(rtems_get_current_processor() == 0);
+  if (cpu_count > 1) {
+    CPU_SET(1, &online_cpus);
+  }
 
   sc = rtems_scheduler_ident(SCHED_A, &scheduler_a_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -304,7 +313,7 @@ static void test(void)
   CPU_ZERO(&cpuset);
   sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  rtems_test_assert(CPU_EQUAL(&cpuset, &first_cpu));
+  rtems_test_assert(CPU_EQUAL(&cpuset, &online_cpus));
 
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
   rtems_test_assert(sched_get_priority_max(SCHED_RR) == 254);
@@ -326,7 +335,7 @@ static void test(void)
     CPU_ZERO(&cpuset);
     sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-    rtems_test_assert(CPU_EQUAL(&cpuset, &second_cpu));
+    rtems_test_assert(CPU_EQUAL(&cpuset, &online_cpus));
 
     sc = rtems_task_set_affinity(task_id, sizeof(all_cpus), &all_cpus);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);

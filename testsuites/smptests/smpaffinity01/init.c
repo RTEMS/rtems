@@ -84,7 +84,7 @@ void Validate_getaffinity_errors(void)
   puts(
     "Init - rtems_task_get_affinity - Invalid cpusetsize - RTEMS_INVALID_NUMBER"
   );
-  sc = rtems_task_get_affinity( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
+  sc = rtems_task_get_affinity( Init_id,  1, &cpuset );
   rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
 
   /* Verify rtems_task_get_affinity validates cpuset */

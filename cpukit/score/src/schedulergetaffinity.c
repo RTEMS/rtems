@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -24,33 +24,21 @@ bool _Scheduler_Get_affinity(
   cpu_set_t      *cpuset
 )
 {
-  const Scheduler_Control *scheduler;
-  ISR_lock_Context         lock_context;
-  bool                     ok;
-
-  if ( !_CPU_set_Is_large_enough( cpusetsize ) ) {
-    return false;
-  }
+  const Scheduler_Control    *scheduler;
+  ISR_lock_Context            lock_context;
+  Processor_mask             *affinity;
+  Processor_mask_Copy_status  status;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
 #if defined(RTEMS_SMP)
-  ok = ( *scheduler->Operations.get_affinity )(
-    scheduler,
-    the_thread,
-    cpusetsize,
-    cpuset
-  );
+  affinity = &the_thread->Scheduler.Affinity;
 #else
-  ok = _Scheduler_default_Get_affinity_body(
-    scheduler,
-    the_thread,
-    cpusetsize,
-    cpuset
-  );
+  affinity = &_Processor_mask_The_one_and_only;
 #endif
+  status = _Processor_mask_To_cpu_set_t( affinity, cpusetsize, cpuset );
 
   _Scheduler_Release_critical( scheduler, &lock_context );
-  return ok;
+  return status == PROCESSOR_MASK_COPY_LOSSLESS;
 }

@@ -37,7 +37,7 @@
 #include <rtems/score/watchdog.h>
 
 #if defined(RTEMS_SMP)
-  #include <rtems/score/cpuset.h>
+#include <rtems/score/processormask.h>
 #endif
 
 struct _pthread_cleanup_context;
@@ -311,6 +311,11 @@ typedef struct {
    * This list is protected by the thread scheduler lock.
    */
   Scheduler_Node *requests;
+
+  /**
+   * @brief The thread processor affinity set.
+   */
+  Processor_mask Affinity;
 #endif
 
   /**

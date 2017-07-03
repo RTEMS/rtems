@@ -611,29 +611,6 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
   );
 }
 
-/*
- * This is the public scheduler specific Change Priority operation.
- */
-bool _Scheduler_priority_affinity_SMP_Get_affinity(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *thread,
-  size_t                   cpusetsize,
-  cpu_set_t               *cpuset
-)
-{
-  Scheduler_priority_affinity_SMP_Node *node =
-    _Scheduler_priority_affinity_SMP_Thread_get_node(thread);
-
-  (void) scheduler;
-
-  if ( node->Affinity.setsize != cpusetsize ) {
-    return false;
-  }
-
-  CPU_COPY( node->Affinity.set, cpuset );
-  return true;
-}
-
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,

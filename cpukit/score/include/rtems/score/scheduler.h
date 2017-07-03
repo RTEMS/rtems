@@ -203,14 +203,6 @@ typedef struct {
   );
 
 #if defined(RTEMS_SMP)
-  /** @see _Scheduler_Get_affinity() */
-  bool ( *get_affinity )(
-    const Scheduler_Control *,
-    Thread_Control *,
-    size_t,
-    cpu_set_t *
-  );
-  
   /** @see _Scheduler_Set_affinity() */
   bool ( *set_affinity )(
     const Scheduler_Control *,
@@ -514,24 +506,6 @@ void _Scheduler_default_Start_idle(
 );
 
 #if defined(RTEMS_SMP)
-  /**
-   * @brief Get affinity for the default scheduler.
-   *
-   * @param[in] scheduler The scheduler instance.
-   * @param[in] thread The associated thread.
-   * @param[in] cpusetsize The size of the cpuset.
-   * @param[out] cpuset Affinity set containing all CPUs.
-   *
-   * @retval 0 Successfully got cpuset
-   * @retval -1 The cpusetsize is invalid for the system
-   */
-  bool _Scheduler_default_Get_affinity(
-    const Scheduler_Control *scheduler,
-    Thread_Control          *thread,
-    size_t                   cpusetsize,
-    cpu_set_t               *cpuset
-  );
-
   /** 
    * @brief Set affinity for the default scheduler.
    *
@@ -553,7 +527,6 @@ void _Scheduler_default_Start_idle(
   );
 
   #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
-    , _Scheduler_default_Get_affinity \
     , _Scheduler_default_Set_affinity
 #else
   #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY

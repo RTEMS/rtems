@@ -26,6 +26,8 @@
 
 #include <rtems/score/processormask.h>
 
+const Processor_mask _Processor_mask_The_one_and_only = { .__bits[ 0 ] = 1 };
+
 Processor_mask_Copy_status _Processor_mask_Copy(
   long       *dst,
   size_t      dst_size,

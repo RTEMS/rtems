@@ -252,6 +252,8 @@ RTEMS_INLINE_ROUTINE Processor_mask_Copy_status _Processor_mask_From_cpu_set_t(
   );
 }
 
+extern const Processor_mask _Processor_mask_The_one_and_only;
+
 /** @} */
 
 #ifdef __cplusplus

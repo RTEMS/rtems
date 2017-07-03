@@ -613,20 +613,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
   }
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_default_Get_affinity_body(
-  const Scheduler_Control *scheduler,
-  Thread_Control          *the_thread,
-  size_t                   cpusetsize,
-  cpu_set_t               *cpuset
-)
-{
-  (void) the_thread;
-
-  _Scheduler_Get_processor_set( scheduler, cpusetsize, cpuset );
-
-  return true;
-}
-
 bool _Scheduler_Get_affinity(
   Thread_Control *the_thread,
   size_t          cpusetsize,
