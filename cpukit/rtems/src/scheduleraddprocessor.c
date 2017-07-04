@@ -95,7 +95,7 @@ rtems_status_code rtems_scheduler_add_processor(
 
     _ISR_lock_ISR_disable( &lock_context );
     _Scheduler_Acquire_critical( scheduler, &lock_context );
-    ++scheduler_context->processor_count;
+    _Processor_mask_Set( &scheduler_context->Processors, cpu_index );
     cpu->Scheduler.control = scheduler;
     cpu->Scheduler.context = scheduler_context;
     ( *scheduler->Operations.add_processor )( scheduler, idle );

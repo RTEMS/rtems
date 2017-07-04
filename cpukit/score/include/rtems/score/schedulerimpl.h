@@ -589,28 +589,15 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_Has_processor_ownership(
 #endif
 }
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Get_processor_set(
-  const Scheduler_Control *scheduler,
-  size_t                   cpusetsize,
-  cpu_set_t               *cpuset
+RTEMS_INLINE_ROUTINE const Processor_mask *_Scheduler_Get_processors(
+  const Scheduler_Control *scheduler
 )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
-  uint32_t cpu_index;
-
-  CPU_ZERO_S( cpusetsize, cpuset );
-
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
 #if defined(RTEMS_SMP)
-    if ( _Scheduler_Has_processor_ownership( scheduler, cpu_index ) ) {
-      CPU_SET_S( (int) cpu_index, cpusetsize, cpuset );
-    }
+  return &_Scheduler_Get_context( scheduler )->Processors;
 #else
-    (void) scheduler;
-
-    CPU_SET_S( (int) cpu_index, cpusetsize, cpuset );
+  return &_Processor_mask_The_one_and_only;
 #endif
-  }
 }
 
 bool _Scheduler_Get_affinity(
@@ -688,7 +675,9 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_processor_count(
 )
 {
 #if defined(RTEMS_SMP)
-  return _Scheduler_Get_context( scheduler )->processor_count;
+  const Scheduler_Context *context = _Scheduler_Get_context( scheduler );
+
+  return _Processor_mask_Count( &context->Processors );
 #else
   (void) scheduler;
 

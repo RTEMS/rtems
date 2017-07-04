@@ -98,8 +98,8 @@ rtems_status_code rtems_scheduler_remove_processor(
    */
   _ISR_lock_ISR_disable( &lock_context );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
-  processor_count = scheduler_context->processor_count - 1;
-  scheduler_context->processor_count = processor_count;
+  _Processor_mask_Clear( &scheduler_context->Processors, cpu_index );
+  processor_count = _Processor_mask_Count( &scheduler_context->Processors );
   _Scheduler_Release_critical( scheduler, &lock_context );
   _ISR_lock_ISR_enable( &lock_context );
 
@@ -130,7 +130,7 @@ rtems_status_code rtems_scheduler_remove_processor(
     _Chain_Extract_unprotected( &scheduler_node->Thread.Scheduler_node.Chain );
     _Assert( _Chain_Is_empty( &idle->Scheduler.Scheduler_nodes ) );
   } else {
-    ++scheduler_context->processor_count;
+    _Processor_mask_Set( &scheduler_context->Processors, cpu_index );
   }
 
   cpu_self = _Thread_Dispatch_disable_critical( &lock_context );

@@ -227,9 +227,9 @@ typedef struct Scheduler_Context {
 
 #if defined(RTEMS_SMP)
   /**
-   * @brief Count of processors owned by this scheduler instance.
+   * @brief The set of processors owned by this scheduler instance.
    */
-  uint32_t processor_count;
+  Processor_mask Processors;
 #endif
 } Scheduler_Context;
 
