@@ -32,7 +32,7 @@ const char rtems_test_name[] = "SMPSCHEDULER 7";
 
 #include <rtems/scheduler.h>
 
-RTEMS_SCHEDULER_CONTEXT_EDF_SMP(a);
+RTEMS_SCHEDULER_CONTEXT_EDF_SMP(a, CONFIGURE_MAXIMUM_PROCESSORS);
 
 #define CONFIGURE_SCHEDULER_CONTROLS \
   RTEMS_SCHEDULER_CONTROL_EDF_SMP( a, rtems_build_name('T', 'E', 'S', 'T'))

@@ -457,7 +457,8 @@ void _Scheduler_strong_APA_Add_processor(
     context,
     idle,
     _Scheduler_strong_APA_Has_ready,
-    _Scheduler_strong_APA_Enqueue_scheduled_fifo
+    _Scheduler_strong_APA_Enqueue_scheduled_fifo,
+    _Scheduler_SMP_Do_nothing_register_idle
   );
 }
 

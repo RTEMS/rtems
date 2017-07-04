@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschededf03
+
+directives:
+
+  - EDF SMP scheduler operations.
+
+concepts:
+
+  - Randomized test case to show some stability of simple thread processor
+    affinity support of the EDF SMP scheduler.

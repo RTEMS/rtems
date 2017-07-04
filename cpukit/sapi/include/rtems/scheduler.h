@@ -99,12 +99,15 @@
   #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name ) \
     RTEMS_SCHEDULER_CONTEXT_NAME( EDF_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name ) \
-    static Scheduler_EDF_SMP_Context RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name )
+  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name, max_cpu_count ) \
+    static struct { \
+      Scheduler_EDF_SMP_Context Base; \
+      Scheduler_EDF_SMP_Ready_queue Ready[ ( max_cpu_count ) + 1 ]; \
+    } RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name )
 
   #define RTEMS_SCHEDULER_CONTROL_EDF_SMP( name, obj_name ) \
     { \
-      &RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name ).Base.Base, \
+      &RTEMS_SCHEDULER_CONTEXT_EDF_SMP_NAME( name ).Base.Base.Base, \
       SCHEDULER_EDF_SMP_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \

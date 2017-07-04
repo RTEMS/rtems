@@ -323,7 +323,8 @@ void _Scheduler_priority_SMP_Add_processor(
     context,
     idle,
     _Scheduler_priority_SMP_Has_ready,
-    _Scheduler_priority_SMP_Enqueue_scheduled_fifo
+    _Scheduler_priority_SMP_Enqueue_scheduled_fifo,
+    _Scheduler_SMP_Do_nothing_register_idle
   );
 }
 

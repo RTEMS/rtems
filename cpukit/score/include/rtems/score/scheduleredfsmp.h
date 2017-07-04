@@ -34,13 +34,63 @@ extern "C" {
  */
 
 typedef struct {
-  Scheduler_SMP_Context Base;
-  RBTree_Control        Ready;
-} Scheduler_EDF_SMP_Context;
+  Scheduler_SMP_Node Base;
+
+  /**
+   * @brief Generation number to ensure FIFO/LIFO order for threads of the same
+   * priority across different ready queues.
+   */
+  int64_t generation;
+
+  /**
+   * @brief The ready queue index depending on the processor affinity of the thread.
+   *
+   * The ready queue index zero is used for threads with a one-to-all thread
+   * processor affinity.  Threads with a one-to-one processor affinity use the
+   * processor index plus one as the ready queue index.
+   */
+  uint32_t ready_queue_index;
+} Scheduler_EDF_SMP_Node;
 
 typedef struct {
-  Scheduler_SMP_Node Base;
-} Scheduler_EDF_SMP_Node;
+  /**
+   * @brief Chain node for Scheduler_SMP_Context::Affine_queues.
+   */
+  Chain_Node Node;
+
+  /**
+   * @brief The ready threads of the corresponding affinity.
+   */
+  RBTree_Control Queue;
+
+  /**
+   * @brief The scheduled thread of the corresponding processor.
+   */
+  Scheduler_EDF_SMP_Node *scheduled;
+} Scheduler_EDF_SMP_Ready_queue;
+
+typedef struct {
+  Scheduler_SMP_Context Base;
+
+  /**
+   * @brief Current generation for FIFO/LIFO ordering.
+   */
+  int64_t generations[ 2 ];
+
+  /**
+   * @brief Chain of ready queues with affine threads to determine the highest
+   * priority ready thread.
+   */
+  Chain_Control Affine_queues;
+
+  /**
+   * @brief A table with ready queues.
+   *
+   * The index zero queue is used for threads with a one-to-all processor
+   * affinity.  Index one corresponds to processor index zero, and so on.
+   */
+  Scheduler_EDF_SMP_Ready_queue Ready[ RTEMS_ZERO_LENGTH_ARRAY ];
+} Scheduler_EDF_SMP_Context;
 
 #define SCHEDULER_EDF_SMP_ENTRY_POINTS \
   { \
@@ -62,8 +112,8 @@ typedef struct {
     _Scheduler_EDF_Release_job, \
     _Scheduler_EDF_Cancel_job, \
     _Scheduler_default_Tick, \
-    _Scheduler_SMP_Start_idle \
-    SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \
+    _Scheduler_EDF_SMP_Start_idle, \
+    _Scheduler_EDF_SMP_Set_affinity \
   }
 
 void _Scheduler_EDF_SMP_Initialize( const Scheduler_Control *scheduler );
@@ -126,6 +176,19 @@ void _Scheduler_EDF_SMP_Yield(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
   Scheduler_Node          *node
+);
+
+void _Scheduler_EDF_SMP_Start_idle(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *idle,
+  struct Per_CPU_Control  *cpu
+);
+
+bool _Scheduler_EDF_SMP_Set_affinity(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node,
+  const Processor_mask    *affinity
 );
 
 /** @} */
