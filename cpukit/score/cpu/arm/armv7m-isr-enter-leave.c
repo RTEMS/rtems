@@ -5,10 +5,10 @@
  */
 
 /*
- * Copyright (c) 2011 Sebastian Huber.  All rights reserved.
+ * Copyright (c) 2011, 2017 Sebastian Huber.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -30,19 +30,25 @@
 
 void _ARMV7M_Interrupt_service_enter( void )
 {
-  ++_Thread_Dispatch_disable_level;
-  ++_ISR_Nest_level;
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+
+  ++cpu_self->thread_dispatch_disable_level;
+  ++cpu_self->isr_nest_level;
 }
 
 void _ARMV7M_Interrupt_service_leave( void )
 {
-  --_ISR_Nest_level;
-  --_Thread_Dispatch_disable_level;
-  if (
-    _ISR_Nest_level == 0
-      && _Thread_Dispatch_disable_level == 0
-      && _Thread_Dispatch_necessary
-  ) {
+  Per_CPU_Control *cpu_self = _Per_CPU_Get();
+
+  --cpu_self->thread_dispatch_disable_level;
+  --cpu_self->isr_nest_level;
+
+  /*
+   * Optimistically activate a pendable service call if a thread dispatch is
+   * necessary.  The _ARMV7M_Pendable_service_call() will check that a thread
+   * dispatch is allowed.
+   */
+  if ( cpu_self->dispatch_necessary ) {
     _ARMV7M_SCB->icsr = ARMV7M_SCB_ICSR_PENDSVSET;
   }
 }
