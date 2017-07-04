@@ -66,7 +66,7 @@ void Validate_setaffinity_errors(void)
 
   /* Verify pthread_setaffinity_np validates cpusetsize */
   puts( "Init - pthread_setaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_setaffinity_np( Init_id,  sizeof(cpu_set_t) * 2, &cpuset );
+  sc = pthread_setaffinity_np( Init_id,  1, &cpuset );
   rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_setaffinity_np validates cpuset */

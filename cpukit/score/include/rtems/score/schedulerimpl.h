@@ -609,34 +609,13 @@ bool _Scheduler_Get_affinity(
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
-  size_t                   cpusetsize,
-  const cpu_set_t         *cpuset
+  const Processor_mask    *affinity
 )
 {
-  uint32_t cpu_count = _SMP_Get_processor_count();
-  uint32_t cpu_index;
-  bool     ok = true;
-
-  for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-#if defined(RTEMS_SMP)
-    const Per_CPU_Control   *cpu;
-    const Scheduler_Control *scheduler_of_cpu;
-
-    cpu = _Per_CPU_Get_by_index( cpu_index );
-    scheduler_of_cpu = _Scheduler_Get_by_CPU( cpu );
-
-    ok = ok
-      && ( CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
-        || ( !CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset )
-          && scheduler != scheduler_of_cpu ) );
-#else
-    (void) scheduler;
-
-    ok = ok && CPU_ISSET_S( (int) cpu_index, cpusetsize, cpuset );
-#endif
-  }
-
-  return ok;
+  return _Processor_mask_Is_subset(
+    affinity,
+    _Scheduler_Get_processors( scheduler )
+  );
 }
 
 bool _Scheduler_Set_affinity(

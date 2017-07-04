@@ -207,8 +207,7 @@ typedef struct {
   bool ( *set_affinity )(
     const Scheduler_Control *,
     Thread_Control *,
-    size_t,
-    const cpu_set_t *
+    const Processor_mask *
   );
 #endif
 } Scheduler_Operations;
@@ -507,23 +506,19 @@ void _Scheduler_default_Start_idle(
 
 #if defined(RTEMS_SMP)
   /** 
-   * @brief Set affinity for the default scheduler.
+   * @brief Default implementation of the set affinity scheduler operation.
    *
    * @param[in] scheduler The scheduler instance.
    * @param[in] thread The associated thread.
-   * @param[in] cpusetsize The size of the cpuset.
-   * @param[in] cpuset Affinity new affinity set.
+   * @param[in] affinity The new processor affinity set for the thread.
    *
-   * @retval 0 Successful
-   *
-   *  This method always returns successful and does not save
-   *  the cpuset.
+   * @retval true The processor set of the scheduler is a subset of the affinity set.
+   * @retval false Otherwise.
    */
   bool _Scheduler_default_Set_affinity(
     const Scheduler_Control *scheduler,
     Thread_Control          *thread,
-    size_t                   cpusetsize,
-    const cpu_set_t         *cpuset
+    const Processor_mask    *affinity
   );
 
   #define SCHEDULER_OPERATION_DEFAULT_GET_SET_AFFINITY \

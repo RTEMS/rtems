@@ -141,8 +141,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
  *
  * @param[in] scheduler The scheduler of the thread.
  * @param[in] thread The associated thread.
- * @param[in] cpusetsize The size of the cpuset.
- * @param[in] cpuset Affinity new affinity set.
+ * @param[in] affinity The new affinity set.
  *
  * @retval true if successful
  * @retval false if unsuccessful
@@ -150,8 +149,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
-  size_t                   cpusetsize,
-  const cpu_set_t         *cpuset
+  const Processor_mask    *affinity
 );
 
 /**

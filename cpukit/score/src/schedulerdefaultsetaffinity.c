@@ -24,14 +24,12 @@
 bool _Scheduler_default_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
-  size_t                   cpusetsize,
-  const cpu_set_t         *cpuset
+  const Processor_mask    *affinity
 )
 {
   return _Scheduler_default_Set_affinity_body(
     scheduler,
     thread,
-    cpusetsize,
-    cpuset
+    affinity
   );
 }
