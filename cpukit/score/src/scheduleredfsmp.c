@@ -115,8 +115,7 @@ static void _Scheduler_EDF_SMP_Do_update(
 
 static bool _Scheduler_EDF_SMP_Has_ready( Scheduler_Context *context )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
 
   return !_RBTree_Is_empty( &self->Ready );
 }
@@ -126,8 +125,7 @@ static Scheduler_Node *_Scheduler_EDF_SMP_Get_highest_ready(
   Scheduler_Node    *node
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_Node *first = (Scheduler_Node *) _RBTree_Minimum( &self->Ready );
 
   (void) node;
@@ -142,8 +140,7 @@ static void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
   Scheduler_Node    *scheduled_to_ready
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_EDF_SMP_Node *node =
     _Scheduler_EDF_SMP_Node_downcast( scheduled_to_ready );
 
@@ -162,8 +159,7 @@ static void _Scheduler_EDF_SMP_Move_from_ready_to_scheduled(
   Scheduler_Node    *ready_to_scheduled
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_EDF_SMP_Node *node =
     _Scheduler_EDF_SMP_Node_downcast( ready_to_scheduled );
 
@@ -181,8 +177,7 @@ static void _Scheduler_EDF_SMP_Insert_ready_lifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_EDF_SMP_Node *node =
     _Scheduler_EDF_SMP_Node_downcast( node_to_insert );
 
@@ -200,8 +195,7 @@ static void _Scheduler_EDF_SMP_Insert_ready_fifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_EDF_SMP_Node *node =
     _Scheduler_EDF_SMP_Node_downcast( node_to_insert );
 
@@ -219,8 +213,7 @@ static void _Scheduler_EDF_SMP_Extract_from_ready(
   Scheduler_Node    *node_to_extract
 )
 {
-  Scheduler_EDF_SMP_Context *self =
-    _Scheduler_EDF_SMP_Get_self( context );
+  Scheduler_EDF_SMP_Context *self = _Scheduler_EDF_SMP_Get_self( context );
   Scheduler_EDF_SMP_Node *node =
     _Scheduler_EDF_SMP_Node_downcast( node_to_extract );
 
