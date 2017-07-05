@@ -60,19 +60,6 @@ static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
     && _Scheduler_SMP_Insert_priority_fifo_order( to_insert, next );
 }
 
-/*
- * This method returns the scheduler node for the specified thread
- * as a scheduler specific type.
- */
-static Scheduler_priority_affinity_SMP_Node *
-_Scheduler_priority_affinity_SMP_Thread_get_node(
-  Thread_Control *thread
-)
-{
-  return (Scheduler_priority_affinity_SMP_Node *)
-    _Thread_Scheduler_get_home_node( thread );
-}
-
 static Scheduler_priority_affinity_SMP_Node *
 _Scheduler_priority_affinity_SMP_Node_downcast(
   Scheduler_Node *node
@@ -614,6 +601,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
+  Scheduler_Node          *node_base,
   const Processor_mask    *affinity
 )
 {
@@ -631,7 +619,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     return false;
   }
 
-  node = _Scheduler_priority_affinity_SMP_Thread_get_node( thread );
+  node = _Scheduler_priority_affinity_SMP_Node_downcast( node_base );
 
   /*
    * The old and new set are the same, there is no point in

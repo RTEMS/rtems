@@ -149,6 +149,7 @@ Thread_Control *_Scheduler_priority_affinity_SMP_Remove_processor(
 bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
+  Scheduler_Node          *node,
   const Processor_mask    *affinity
 );
 

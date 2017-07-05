@@ -207,6 +207,7 @@ typedef struct {
   bool ( *set_affinity )(
     const Scheduler_Control *,
     Thread_Control *,
+    Scheduler_Node *,
     const Processor_mask *
   );
 #endif
@@ -510,6 +511,7 @@ void _Scheduler_default_Start_idle(
    *
    * @param[in] scheduler The scheduler instance.
    * @param[in] thread The associated thread.
+   * @param[in] node The home scheduler node of the associated thread.
    * @param[in] affinity The new processor affinity set for the thread.
    *
    * @retval true The processor set of the scheduler is a subset of the affinity set.
@@ -518,6 +520,7 @@ void _Scheduler_default_Start_idle(
   bool _Scheduler_default_Set_affinity(
     const Scheduler_Control *scheduler,
     Thread_Control          *thread,
+    Scheduler_Node          *node,
     const Processor_mask    *affinity
   );
 

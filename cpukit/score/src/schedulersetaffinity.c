@@ -27,6 +27,7 @@ bool _Scheduler_Set_affinity(
   Processor_mask             affinity;
   Processor_mask_Copy_status status;
   const Scheduler_Control   *scheduler;
+  Scheduler_Node            *node;
   ISR_lock_Context           lock_context;
   bool                       ok;
 
@@ -38,10 +39,12 @@ bool _Scheduler_Set_affinity(
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
 
+  node = _Thread_Scheduler_get_home_node( the_thread );
 #if defined(RTEMS_SMP)
   ok = ( *scheduler->Operations.set_affinity )(
     scheduler,
     the_thread,
+    node,
     &affinity
   );
 
@@ -52,6 +55,7 @@ bool _Scheduler_Set_affinity(
   ok = _Scheduler_default_Set_affinity_body(
     scheduler,
     the_thread,
+    node,
     &affinity
   );
 #endif

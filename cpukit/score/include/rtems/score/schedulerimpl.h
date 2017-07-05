@@ -609,11 +609,13 @@ bool _Scheduler_Get_affinity(
 RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Scheduler_Control *scheduler,
   Thread_Control          *the_thread,
+  Scheduler_Node          *node,
   const Processor_mask    *affinity
 )
 {
   (void) scheduler;
   (void) the_thread;
+  (void) node;
   return _Processor_mask_Is_subset( affinity, _SMP_Get_online_processors() );
 }
 
