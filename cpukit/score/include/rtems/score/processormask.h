@@ -59,6 +59,11 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_zero( const Processor_mask *mask )
   return BIT_EMPTY( CPU_MAXIMUM_PROCESSORS, mask );
 }
 
+RTEMS_INLINE_ROUTINE void _Processor_mask_Fill( Processor_mask *mask )
+{
+  BIT_FILL( CPU_MAXIMUM_PROCESSORS, mask );
+}
+
 RTEMS_INLINE_ROUTINE void _Processor_mask_Assign(
   Processor_mask *dst, const Processor_mask *src
 )
@@ -88,6 +93,100 @@ RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_set(
 )
 {
   return BIT_ISSET( CPU_MAXIMUM_PROCESSORS, index, mask );
+}
+
+/**
+ * @brief Returns true if the processor sets a and b are equal, and false
+ * otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_equal(
+  const Processor_mask *a,
+  const Processor_mask *b
+)
+{
+  return !BIT_CMP( CPU_MAXIMUM_PROCESSORS, a, b );
+}
+
+/**
+ * @brief Returns true if the intersection of the processor sets a and b is
+ * non-empty, and false otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Has_overlap(
+  const Processor_mask *a,
+  const Processor_mask *b
+)
+{
+  return BIT_OVERLAP( CPU_MAXIMUM_PROCESSORS, a, b );
+}
+
+/**
+ * @brief Returns true if the processor set small is a subset of processor set
+ * big, and false otherwise.
+ */
+RTEMS_INLINE_ROUTINE bool _Processor_mask_Is_subset(
+  const Processor_mask *big,
+  const Processor_mask *small
+)
+{
+  return BIT_SUBSET( CPU_MAXIMUM_PROCESSORS, big, small );
+}
+
+/**
+ * @brief Performs a bitwise a = b & c.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_And(
+  Processor_mask       *a,
+  const Processor_mask *b,
+  const Processor_mask *c
+)
+{
+  BIT_AND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+}
+
+/**
+ * @brief Performs a bitwise a = b & ~c.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_Nand(
+  Processor_mask       *a,
+  const Processor_mask *b,
+  const Processor_mask *c
+)
+{
+  BIT_NAND2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+}
+
+/**
+ * @brief Performs a bitwise a = b | c.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_Or(
+  Processor_mask       *a,
+  const Processor_mask *b,
+  const Processor_mask *c
+)
+{
+  BIT_OR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+}
+
+/**
+ * @brief Performs a bitwise a = b ^ c.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_Xor(
+  Processor_mask       *a,
+  const Processor_mask *b,
+  const Processor_mask *c
+)
+{
+  BIT_XOR2( CPU_MAXIMUM_PROCESSORS, a, b, c );
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Count( const Processor_mask *a )
+{
+  return (uint32_t) BIT_COUNT( CPU_MAXIMUM_PROCESSORS, a );
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_Find_last_set( const Processor_mask *a )
+{
+  return (uint32_t) BIT_FLS( CPU_MAXIMUM_PROCESSORS, a );
 }
 
 /**
