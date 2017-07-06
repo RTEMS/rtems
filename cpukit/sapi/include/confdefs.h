@@ -811,9 +811,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if defined(RTEMS_SMP) && CONFIGURE_MAXIMUM_PROCESSORS > 1
     /**
      * If no scheduler is specified in an SMP configuration, the
-     * priority scheduler is default.
+     * EDF scheduler is default.
      */
-    #define CONFIGURE_SCHEDULER_PRIORITY_SMP
+    #define CONFIGURE_SCHEDULER_EDF_SMP
   #else
     /**
      * If no scheduler is specified in a uniprocessor configuration, the
