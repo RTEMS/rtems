@@ -47,7 +47,7 @@ static void task(rtems_task_argument arg)
 
   rtems_test_assert(rtems_get_current_processor() == 1);
   rtems_test_assert(sched_get_priority_min(SCHED_RR) == 1);
-  rtems_test_assert(sched_get_priority_max(SCHED_RR) == 126);
+  rtems_test_assert(sched_get_priority_max(SCHED_RR) == INT_MAX - 1);
 
   sc = rtems_semaphore_obtain(cmtx_id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   rtems_test_assert(sc == RTEMS_NOT_DEFINED);
@@ -345,11 +345,14 @@ static void test(void)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     rtems_test_assert(scheduler_id == scheduler_b_id);
 
-    sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
-    rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
-
     sc = rtems_task_set_affinity(task_id, sizeof(online_cpus), &online_cpus);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_task_set_scheduler(task_id, scheduler_a_id, 1);
+    rtems_test_assert(sc == RTEMS_UNSATISFIED);
 
     sc = rtems_task_get_scheduler(task_id, &scheduler_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -415,6 +418,7 @@ static void Init(rtems_task_argument arg)
 /* Lets see when the first RTEMS system hits this limit */
 #define CONFIGURE_MAXIMUM_PROCESSORS 64
 
+#define CONFIGURE_SCHEDULER_EDF_SMP
 #define CONFIGURE_SCHEDULER_PRIORITY_SMP
 #define CONFIGURE_SCHEDULER_SIMPLE_SMP
 
@@ -422,13 +426,13 @@ static void Init(rtems_task_argument arg)
 
 RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(a, 256);
 
-RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP(b, 128);
+RTEMS_SCHEDULER_CONTEXT_EDF_SMP(b, CONFIGURE_MAXIMUM_PROCESSORS);
 
 RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(c);
 
 #define CONFIGURE_SCHEDULER_CONTROLS \
   RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(a, SCHED_A), \
-  RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(b, SCHED_B), \
+  RTEMS_SCHEDULER_CONTROL_EDF_SMP(b, SCHED_B), \
   RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(c, SCHED_C)
 
 #define CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS \

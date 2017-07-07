@@ -1092,10 +1092,22 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 
   old_scheduler = _Thread_Scheduler_get_home( the_thread );
+  new_scheduler_node = _Thread_Scheduler_get_node_by_index(
+    the_thread,
+    _Scheduler_Get_index( new_scheduler )
+  );
 
   _Scheduler_Acquire_critical( new_scheduler, &lock_context );
 
-  if ( _Scheduler_Get_processor_count( new_scheduler ) == 0 ) {
+  if (
+    _Scheduler_Get_processor_count( new_scheduler ) == 0
+      || !( *new_scheduler->Operations.set_affinity )(
+        new_scheduler,
+        the_thread,
+        new_scheduler_node,
+        &the_thread->Scheduler.Affinity
+      )
+  ) {
     _Scheduler_Release_critical( new_scheduler, &lock_context );
     _Priority_Plain_insert(
       &old_scheduler_node->Wait.Priority,
@@ -1110,10 +1122,6 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   _Scheduler_Release_critical( new_scheduler, &lock_context );
 
   _Thread_Scheduler_process_requests( the_thread );
-  new_scheduler_node = _Thread_Scheduler_get_node_by_index(
-    the_thread,
-    _Scheduler_Get_index( new_scheduler )
-  );
 #else
   new_scheduler_node = old_scheduler_node;
 #endif
