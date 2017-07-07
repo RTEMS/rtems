@@ -223,9 +223,7 @@ static void test(void)
   CPU_ZERO(&second_cpu);
   CPU_SET(1, &second_cpu);
 
-  CPU_ZERO(&all_cpus);
-  CPU_SET(0, &all_cpus);
-  CPU_SET(1, &all_cpus);
+  CPU_FILL(&all_cpus);
 
   CPU_ZERO(&online_cpus);
   CPU_SET(0, &online_cpus);
@@ -348,6 +346,9 @@ static void test(void)
     rtems_test_assert(scheduler_id == scheduler_b_id);
 
     sc = rtems_task_set_affinity(task_id, sizeof(second_cpu), &second_cpu);
+    rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
+
+    sc = rtems_task_set_affinity(task_id, sizeof(online_cpus), &online_cpus);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     sc = rtems_task_get_scheduler(task_id, &scheduler_id);

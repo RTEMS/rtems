@@ -612,10 +612,9 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_default_Set_affinity_body(
   const Processor_mask    *affinity
 )
 {
-  return _Processor_mask_Is_subset(
-    affinity,
-    _Scheduler_Get_processors( scheduler )
-  );
+  (void) scheduler;
+  (void) the_thread;
+  return _Processor_mask_Is_subset( affinity, _SMP_Get_online_processors() );
 }
 
 bool _Scheduler_Set_affinity(
