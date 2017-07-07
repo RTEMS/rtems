@@ -106,7 +106,7 @@ void _SMP_Multicast_action(
   }
 
   if( cpus == NULL ) {
-    _Processor_mask_Assign( &targets, &_SMP_Online_processors );
+    _Processor_mask_Assign( &targets, _SMP_Get_online_processors() );
   } else {
     _Processor_mask_Zero( &targets );
 

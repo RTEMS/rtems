@@ -162,7 +162,7 @@ static void test_send_message_flood(
 
   for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) {
     rtems_test_assert(
-      _Processor_mask_Is_set(&_SMP_Online_processors, cpu_index)
+      _Processor_mask_Is_set(_SMP_Get_online_processors(), cpu_index)
     );
 
     printf(
@@ -176,7 +176,7 @@ static void test_send_message_flood(
 
   for (; cpu_index < CPU_COUNT; ++cpu_index) {
     rtems_test_assert(
-      !_Processor_mask_Is_set(&_SMP_Online_processors, cpu_index)
+      !_Processor_mask_Is_set(_SMP_Get_online_processors(), cpu_index)
     );
   }
 }

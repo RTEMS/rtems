@@ -248,7 +248,10 @@ bool _Thread_Initialize(
   RTEMS_STATIC_ASSERT( THREAD_SCHEDULER_BLOCKED == 0, Scheduler_state );
   the_thread->Scheduler.home = scheduler;
   _ISR_lock_Initialize( &the_thread->Scheduler.Lock, "Thread Scheduler" );
-  _Processor_mask_Assign( &the_thread->Scheduler.Affinity, &_SMP_Online_processors );
+  _Processor_mask_Assign(
+    &the_thread->Scheduler.Affinity,
+    _SMP_Get_online_processors()
+   );
   _ISR_lock_Initialize( &the_thread->Wait.Lock.Default, "Thread Wait Default" );
   _Thread_queue_Gate_open( &the_thread->Wait.Lock.Tranquilizer );
   _RBTree_Initialize_node( &the_thread->Wait.Link.Registry_node );

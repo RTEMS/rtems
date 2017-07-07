@@ -451,7 +451,7 @@ static void gptimer_tlib_irq_reg(struct tlib_dev *hand, tlib_isr_t func, void *d
 			tindex = timer->tindex;
 		}
 		drvmgr_interrupt_set_affinity(priv->dev, tindex,
-					      _SMP_Online_processors);
+					      _SMP_Get_online_processors());
 	}
 #endif
 

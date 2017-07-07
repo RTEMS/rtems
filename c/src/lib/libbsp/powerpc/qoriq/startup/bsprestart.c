@@ -100,7 +100,7 @@ static void restart_interrupt(void *arg)
 static void raise_restart_interrupt(void)
 {
   qoriq.pic.ipidr[RESTART_IPI_INDEX].reg =
-    _Processor_mask_To_uint32_t(&_SMP_Online_processors, 0);
+    _Processor_mask_To_uint32_t(_SMP_Get_online_processors(), 0);
   ppc_synchronize_data();
   ppc_synchronize_instructions();
 }
