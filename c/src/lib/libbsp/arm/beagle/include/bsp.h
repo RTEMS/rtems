@@ -187,6 +187,10 @@ static inline void flush_data_cache(void)
 #define BSP_GPIO_PINS_PER_BANK 32
 #endif
 
+#if BSP_START_COPY_FDT_FROM_U_BOOT
+#define BSP_FDT_IS_SUPPORTED
+#endif
+
 /* i2c stuff */
 typedef struct {
     uint32_t rx_or_tx;

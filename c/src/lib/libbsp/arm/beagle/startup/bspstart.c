@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
+#include <bsp/fdt.h>
 
 void bsp_start(void)
 {
@@ -26,4 +27,9 @@ void bsp_start(void)
 #endif
   bsp_interrupt_initialize();
   printk("\nRTEMS Beagleboard: %s\n", type);
+}
+
+uint32_t bsp_fdt_map_intr(uint32_t intr)
+{
+  return intr;
 }
