@@ -68,7 +68,6 @@ rtems_status_code rtems_scheduler_remove_processor(
 {
   const Scheduler_Control             *scheduler;
 #if defined(RTEMS_SMP)
-  uint32_t                             processor_count;
   Scheduler_Processor_removal_context  iter_context;
   ISR_lock_Context                     lock_context;
   Scheduler_Context                   *scheduler_context;
@@ -105,7 +104,6 @@ rtems_status_code rtems_scheduler_remove_processor(
   _ISR_lock_ISR_disable( &lock_context );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
   _Processor_mask_Clear( &scheduler_context->Processors, cpu_index );
-  processor_count = _Processor_mask_Count( &scheduler_context->Processors );
   _Scheduler_Release_critical( scheduler, &lock_context );
   _ISR_lock_ISR_enable( &lock_context );
 
