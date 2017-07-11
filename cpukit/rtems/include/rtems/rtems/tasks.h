@@ -577,6 +577,31 @@ rtems_status_code rtems_scheduler_ident_by_processor(
 );
 
 /**
+ * @brief Identifies a scheduler by a processor set.
+ *
+ * The scheduler is selected according to the highest numbered online processor
+ * in the specified processor set.
+ *
+ * @param[in] cpusetsize Size of the specified processor set buffer in
+ *   bytes.  This value must be positive.
+ * @param[out] cpuset The processor set to identify the scheduler.
+ * @param[out] id The scheduler identifier associated with the processor set.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a id parameter is @c NULL.
+ * @retval RTEMS_INVALID_SIZE Invalid processor set size.
+ * @retval RTEMS_INVALID_NAME The processor set contains no online processor.
+ * @retval RTEMS_INCORRECT_STATE The processor set is valid, however, the
+ *   highest numbered online processor in the specified processor set is not
+ *   owned by a scheduler.
+ */
+rtems_status_code rtems_scheduler_ident_by_processor_set(
+  size_t           cpusetsize,
+  const cpu_set_t *cpuset,
+  rtems_id        *id
+);
+
+/**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
  * @param[in] scheduler_id Identifier of the scheduler instance.

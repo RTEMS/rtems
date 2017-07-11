@@ -343,6 +343,7 @@ static void test_scheduler_ident(void)
   rtems_id scheduler_id;
   rtems_name name = BLUE;
   rtems_name invalid_name = RED;
+  cpu_set_t s;
 
   sc = rtems_scheduler_ident(name, NULL);
   rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
@@ -364,6 +365,24 @@ static void test_scheduler_ident(void)
 
   scheduler_id = 0;
   sc = rtems_scheduler_ident_by_processor(0, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == expected_id);
+
+  CPU_ZERO(&s);
+  CPU_SET(1, &s);
+  sc = rtems_scheduler_ident_by_processor_set(sizeof(s), &s, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  sc = rtems_scheduler_ident_by_processor_set(1, &s, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_SIZE);
+
+  sc = rtems_scheduler_ident_by_processor_set(sizeof(s), &s, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_NAME);
+
+  CPU_SET(0, &s);
+  scheduler_id = 0;
+  sc = rtems_scheduler_ident_by_processor_set(sizeof(s), &s, &scheduler_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(scheduler_id == expected_id);

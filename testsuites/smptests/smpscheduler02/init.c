@@ -134,8 +134,10 @@ static void test_scheduler_add_remove_processors(void)
   rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
 
   if (rtems_get_processor_count() > 1) {
+    rtems_id scheduler_id;
     rtems_id scheduler_b_id;
     rtems_id task_id;
+    cpu_set_t first_cpu;
 
     sc = rtems_scheduler_ident(SCHED_B, &scheduler_b_id);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -152,6 +154,15 @@ static void test_scheduler_add_remove_processors(void)
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
     rtems_test_assert(rtems_get_current_processor() == 1);
+
+    CPU_ZERO(&first_cpu);
+    CPU_SET(0, &first_cpu);
+    sc = rtems_scheduler_ident_by_processor_set(
+      sizeof(first_cpu),
+      &first_cpu,
+      &scheduler_id
+    );
+    rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
 
     sc = rtems_scheduler_add_processor(scheduler_a_id, 0);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
