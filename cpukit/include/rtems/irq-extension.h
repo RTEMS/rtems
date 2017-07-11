@@ -401,6 +401,42 @@ rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
 rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
 
 /**
+ * @brief Sets the processor affinity of the specified interrupt server.
+ *
+ * The scheduler is set determined by the highest numbered processor in the
+ * specified affinity set.
+ *
+ * This operation is only reliable in case the specified interrupt was
+ * suspended via rtems_interrupt_server_suspend().
+ *
+ * @param[in] server_index The interrupt server index.  Use
+ *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ * @param[in] affinity_size The storage size of the affinity set.
+ * @param[in] affinity The desired processor affinity set for the specified
+ *   interrupt server.
+ * @param[in] priority The task priority with respect to the corresponding
+ *   scheduler instance.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
+ * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
+ * @retval RTEMS_INVALID_NAME The affinity set contains no online processor.
+ * @retval RTEMS_INCORRECT_STATE The highest numbered online processor in the
+ *   specified affinity set is not owned by a scheduler.
+ * @retval RTEMS_INVALID_PRIORITY Invalid priority.
+ * @retval RTEMS_RESOURCE_IN_USE The interrupt server owns resources which deny
+ *   a scheduler change.
+ * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
+ */
+rtems_status_code rtems_interrupt_server_set_affinity(
+  uint32_t            server_index,
+  size_t              affinity_size,
+  const cpu_set_t    *affinity,
+  rtems_task_priority priority
+);
+
+/**
  * @brief Initializes the specified interrupt server entry.
  *
  * @param[in] server_index The interrupt server index.  Use

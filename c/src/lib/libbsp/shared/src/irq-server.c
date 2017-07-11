@@ -750,3 +750,36 @@ rtems_status_code rtems_interrupt_server_resume(uint32_t server_index)
   );
   return RTEMS_SUCCESSFUL;
 }
+
+rtems_status_code rtems_interrupt_server_set_affinity(
+  uint32_t            server_index,
+  size_t              affinity_size,
+  const cpu_set_t    *affinity,
+  rtems_task_priority priority
+)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_context *s;
+  rtems_id scheduler;
+
+  s = bsp_interrupt_server_get_context(server_index, &sc);
+  if (s == NULL) {
+    return sc;
+  }
+
+  sc = rtems_scheduler_ident_by_processor_set(
+    affinity_size,
+    affinity,
+    &scheduler
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
+
+  sc = rtems_task_set_scheduler(s->server, scheduler, priority);
+  if (sc != RTEMS_SUCCESSFUL) {
+    return sc;
+  }
+
+  return rtems_task_set_affinity(s->server, affinity_size, affinity);
+}
