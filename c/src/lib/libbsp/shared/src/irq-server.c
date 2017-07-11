@@ -694,6 +694,81 @@ rtems_status_code rtems_interrupt_server_request_initialize(
   return RTEMS_SUCCESSFUL;
 }
 
+static void bsp_interrupt_server_handler_move_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+  bsp_interrupt_server_handler_iterate_helper_data *hihd = hd->arg;
+  rtems_interrupt_server_entry *e;
+  rtems_option trigger_options;
+
+  bsp_interrupt_lock();
+
+  e = bsp_interrupt_server_query_entry(hd->vector, &trigger_options);
+  if (e != NULL) {
+    rtems_interrupt_lock_context lock_context;
+    bsp_interrupt_server_context *src = e->server;
+    bsp_interrupt_server_context *dst = hihd->arg;
+    bool pending;
+
+    rtems_interrupt_lock_acquire(&src->lock, &lock_context);
+
+    pending = !rtems_chain_is_node_off_chain(&e->node);
+    if (pending) {
+      rtems_chain_extract_unprotected(&e->node);
+      rtems_chain_set_off_chain(&e->node);
+    }
+
+    rtems_interrupt_lock_release(&src->lock, &lock_context);
+
+    e->server = dst;
+
+    if (pending) {
+      bsp_interrupt_server_trigger(e);
+    }
+  }
+
+  bsp_interrupt_unlock();
+
+  rtems_event_transient_send(hd->task);
+}
+
+rtems_status_code rtems_interrupt_server_move(
+  uint32_t source_server_index,
+  rtems_vector_number vector,
+  uint32_t destination_server_index
+)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_context *src;
+  bsp_interrupt_server_context *dst;
+  bsp_interrupt_server_handler_iterate_helper_data hihd;
+
+  src = bsp_interrupt_server_get_context(source_server_index, &sc);
+  if (src == NULL) {
+    return sc;
+  }
+
+  dst = bsp_interrupt_server_get_context(destination_server_index, &sc);
+  if (dst == NULL) {
+    return sc;
+  }
+
+  if (!bsp_interrupt_is_valid_vector(vector)) {
+    return RTEMS_INVALID_ID;
+  }
+
+  hihd.arg = dst;
+  bsp_interrupt_server_call_helper(
+    src,
+    vector,
+    0,
+    NULL,
+    &hihd,
+    bsp_interrupt_server_handler_move_helper
+  );
+  return RTEMS_SUCCESSFUL;
+}
+
 static void bsp_interrupt_server_entry_suspend_helper(void *arg)
 {
   bsp_interrupt_server_helper_data *hd = arg;

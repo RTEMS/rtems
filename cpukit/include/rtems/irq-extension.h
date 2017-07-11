@@ -362,6 +362,32 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
 );
 
 /**
+ * @brief Moves the interrupt handlers installed on the specified source
+ * interrupt server to the destination interrupt server.
+ *
+ * This function must be called from thread context.  It may block.  Calling
+ * this function within the context of an interrupt server is undefined
+ * behaviour.
+ *
+ * @param[in] source_server_index The source interrupt server index.  Use
+ *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ * @param[in] vector The interrupt vector number.
+ * @param[in] destination_server_index The destination interrupt server index.
+ *   Use @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
+ * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
+ * @retval RTEMS_INVALID_ID The vector number is invalid.
+ * @retval RTEMS_INVALID_ID The destination interrupt server index is invalid.
+ */
+rtems_status_code rtems_interrupt_server_move(
+  uint32_t            source_server_index,
+  rtems_vector_number vector,
+  uint32_t            destination_server_index
+);
+
+/**
  * @brief Suspends the specified interrupt server.
  *
  * A suspend request is sent to the specified interrupt server.  This function
