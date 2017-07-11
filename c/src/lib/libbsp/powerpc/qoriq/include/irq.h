@@ -372,14 +372,14 @@ rtems_status_code qoriq_pic_set_priority(
   int *old_priority
 );
 
-rtems_status_code qoriq_pic_set_affinity(
+void bsp_interrupt_set_affinity(
   rtems_vector_number vector,
-  uint32_t processor_index
+  const Processor_mask *affinity
 );
 
-rtems_status_code qoriq_pic_set_affinities(
+void bsp_interrupt_get_affinity(
   rtems_vector_number vector,
-  uint32_t processor_affinities
+  Processor_mask *affinity
 );
 
 /** @} */

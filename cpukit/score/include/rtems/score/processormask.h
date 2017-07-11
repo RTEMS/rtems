@@ -203,6 +203,31 @@ RTEMS_INLINE_ROUTINE uint32_t _Processor_mask_To_uint32_t(
   return (uint32_t) (bits >> (32 * (index % _BITSET_BITS) / 32));
 }
 
+/**
+ * @brief Creates a processor set from an unsigned 32-bit integer relative to
+ * the specified index.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_From_uint32_t(
+  Processor_mask *mask,
+  uint32_t        bits,
+  uint32_t        index
+)
+{
+  _Processor_mask_Zero( mask );
+  mask->__bits[ __bitset_words( index ) ] = ((long) bits) << (32 * (index % _BITSET_BITS) / 32);
+}
+
+/**
+ * @brief Creates a processor set from the specified index.
+ */
+RTEMS_INLINE_ROUTINE void _Processor_mask_From_index(
+  Processor_mask *mask,
+  uint32_t        index
+)
+{
+  BIT_SETOF( CPU_MAXIMUM_PROCESSORS, (int) index, mask );
+}
+
 typedef enum {
   PROCESSOR_MASK_COPY_LOSSLESS,
   PROCESSOR_MASK_COPY_PARTIAL_LOSS,

@@ -56,12 +56,11 @@ static void qoriq_clock_handler_install(rtems_isr_entry *old_isr)
   *old_isr = NULL;
 
 #if defined(RTEMS_MULTIPROCESSING) && !defined(RTEMS_SMP)
-  sc = qoriq_pic_set_affinity(
-    CLOCK_INTERRUPT,
-    ppc_processor_id()
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
+  {
+    Processor_mask affinity;
+
+    _Processor_mask_From_index(&affinity, ppc_processor_id());
+    bsp_interrupt_set_affinity(CLOCK_INTERRUPT, &affinity);
   }
 #endif
 
@@ -133,10 +132,7 @@ static void qoriq_clock_cleanup(void)
   qoriq_clock_handler_install(&old_isr)
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
-  qoriq_pic_set_affinities( \
-    CLOCK_INTERRUPT, \
-    _Processor_mask_To_uint32_t(online_processors, 0) \
-  )
+  bsp_interrupt_set_affinity(CLOCK_INTERRUPT, online_processors)
 
 #define Clock_driver_support_shutdown_hardware() \
   qoriq_clock_cleanup()

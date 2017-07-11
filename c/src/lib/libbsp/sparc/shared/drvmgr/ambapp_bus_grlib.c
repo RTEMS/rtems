@@ -22,6 +22,7 @@
 #include <bsp/genirq.h>
 
 #include <bsp.h>
+#include <bsp/irq.h>
 
 #define DBG(args...)
 /*#define DBG(args...) printk(args)*/
@@ -236,24 +237,7 @@ int ambapp_grlib_int_set_affinity
 	const Processor_mask *cpus
 	)
 {
-	uint32_t cpu_count = rtems_get_processor_count();
-	uint32_t cpu_index;
-	int enabled_cnt = 0;
-
-	for (cpu_index = 0; cpu_index < cpu_count; cpu_index++) {
-		if (_Processor_mask_Is_set(cpus, cpu_index)) {
-			BSP_Cpu_Unmask_interrupt(irq, cpu_index);
-			enabled_cnt++;
-		}
-	}
-
-	/* Propagate the interrupt to all CPUs */
-	if (enabled_cnt > 1) {
-		LEON_Enable_interrupt_broadcast(irq);
-	} else {
-		LEON_Disable_interrupt_broadcast(irq);
-	}
-
+	bsp_interrupt_set_affinity(irq, cpus);
 	return DRVMGR_OK;
 }
 #endif

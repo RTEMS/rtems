@@ -204,6 +204,43 @@ rtems_status_code rtems_interrupt_handler_iterate(
 );
 
 /**
+ * @brief Sets the processor affinity set of an interrupt vector.
+ *
+ * @param[in] vector The interrupt vector number.
+ * @param[in] affinity_size The storage size of the affinity set.
+ * @param[in] affinity_set The new processor affinity set for the interrupt
+ *   vector.  This pointer must not be @c NULL.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID The vector number is invalid.
+ * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
+ * @retval RTEMS_INVALID_NUMBER Invalid processor affinity set.
+ */
+rtems_status_code rtems_interrupt_set_affinity(
+  rtems_vector_number  vector,
+  size_t               affinity_size,
+  const cpu_set_t     *affinity
+);
+
+/**
+ * @brief Gets the processor affinity set of an interrupt vector.
+ *
+ * @param[in] vector The interrupt vector number.
+ * @param[in] affinity_size The storage size of the affinity set.
+ * @param[out] affinity_set The current processor affinity set for the
+ *   interrupt vector.  This pointer must not be @c NULL.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ID The vector number is invalid.
+ * @retval RTEMS_INVALID_SIZE Invalid affinity set size.
+ */
+rtems_status_code rtems_interrupt_get_affinity(
+  rtems_vector_number  vector,
+  size_t               affinity_size,
+  cpu_set_t           *affinity
+);
+
+/**
  * @brief An interrupt server action.
  *
  * This structure must be treated as an opaque data type.  Members must not be

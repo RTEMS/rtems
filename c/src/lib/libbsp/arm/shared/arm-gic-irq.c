@@ -153,20 +153,24 @@ rtems_status_code arm_gic_irq_get_priority(
   return sc;
 }
 
-rtems_status_code arm_gic_irq_set_affinity(
+void bsp_interrupt_set_affinity(
   rtems_vector_number vector,
-  uint8_t targets
+  const Processor_mask *affinity
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  volatile gic_dist *dist = ARM_GIC_DIST;
+  uint8_t targets = (uint8_t) _Processor_mask_To_uint32_t(affinity, 0);
 
-  if (bsp_interrupt_is_valid_vector(vector)) {
-    volatile gic_dist *dist = ARM_GIC_DIST;
+  gic_id_set_targets(dist, vector, targets);
+}
 
-    gic_id_set_targets(dist, vector, targets);
-  } else {
-    sc = RTEMS_INVALID_ID;
-  }
+void bsp_interrupt_get_affinity(
+  rtems_vector_number vector,
+  Processor_mask *affinity
+)
+{
+  volatile gic_dist *dist = ARM_GIC_DIST;
+  uint8_t targets = gic_id_get_targets(dist, vector);
 
-  return sc;
+  _Processor_mask_From_uint32_t(affinity, targets, 0);
 }

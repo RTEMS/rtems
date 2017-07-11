@@ -41,4 +41,14 @@ static inline bool bsp_interrupt_is_valid_vector(rtems_vector_number vector)
         LEON3_IrqCtrl_EIrq != 0));
 }
 
+void bsp_interrupt_set_affinity(
+  rtems_vector_number vector,
+  const Processor_mask *affinity
+);
+
+void bsp_interrupt_get_affinity(
+  rtems_vector_number vector,
+  Processor_mask *affinity
+);
+
 #endif /* LIBBSP_LEON3_IRQ_CONFIG_H */

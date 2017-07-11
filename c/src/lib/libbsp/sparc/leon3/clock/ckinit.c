@@ -192,16 +192,7 @@ static void bsp_clock_handler_install(rtems_isr *new)
 }
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
-  do { \
-    uint32_t cpu_count = _SMP_Processor_count; \
-    uint32_t cpu_index; \
-    LEON_Enable_interrupt_broadcast(clkirq); \
-    for (cpu_index = 0; cpu_index < cpu_count; ++cpu_index) { \
-      if (_Processor_mask_Is_set(online_processors, cpu_index)) { \
-        BSP_Cpu_Unmask_interrupt(clkirq, cpu_index); \
-      } \
-    } \
-  } while (0)
+  bsp_interrupt_set_affinity(clkirq, online_processors)
 
 static void leon3_clock_initialize(void)
 {

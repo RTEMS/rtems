@@ -58,9 +58,14 @@ rtems_status_code arm_gic_irq_get_priority(
   uint8_t *priority
 );
 
-rtems_status_code arm_gic_irq_set_affinity(
+void bsp_interrupt_set_affinity(
   rtems_vector_number vector,
-  uint8_t targets
+  const Processor_mask *affinity
+);
+
+void bsp_interrupt_get_affinity(
+  rtems_vector_number vector,
+  Processor_mask *affinity
 );
 
 typedef enum {
