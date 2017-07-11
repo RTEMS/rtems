@@ -45,6 +45,12 @@ static void fatal_extension(
       && !always_set_to_false
       && code == SMP_FATAL_BOOT_PROCESSOR_NOT_ASSIGNED_TO_SCHEDULER
   ) {
+    rtems_status_code sc;
+    rtems_id id;
+
+    sc = rtems_scheduler_ident_by_processor(0, &id);
+    assert(sc == RTEMS_INCORRECT_STATE);
+
     TEST_END();
   }
 }

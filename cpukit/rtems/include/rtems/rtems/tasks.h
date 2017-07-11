@@ -560,6 +560,23 @@ rtems_status_code rtems_scheduler_ident(
 );
 
 /**
+ * @brief Identifies a scheduler by a processor index.
+ *
+ * @param[in] cpu_index The processor index.
+ * @param[out] id The scheduler identifier associated with the processor index.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a id parameter is @c NULL.
+ * @retval RTEMS_INVALID_NAME Invalid processor index.
+ * @retval RTEMS_INCORRECT_STATE The processor index is valid, however, this
+ *   processor is not owned by a scheduler.
+ */
+rtems_status_code rtems_scheduler_ident_by_processor(
+  uint32_t  cpu_index,
+  rtems_id *id
+);
+
+/**
  * @brief Gets the set of processors owned by the specified scheduler instance.
  *
  * @param[in] scheduler_id Identifier of the scheduler instance.

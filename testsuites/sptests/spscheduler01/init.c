@@ -355,6 +355,18 @@ static void test_scheduler_ident(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(scheduler_id == expected_id);
+
+  sc = rtems_scheduler_ident_by_processor(1, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  sc = rtems_scheduler_ident_by_processor(1, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_INVALID_NAME);
+
+  scheduler_id = 0;
+  sc = rtems_scheduler_ident_by_processor(0, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(scheduler_id == expected_id);
 }
 
 static void test_scheduler_get_processors(void)

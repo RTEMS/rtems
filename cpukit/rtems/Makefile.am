@@ -108,6 +108,7 @@ librtems_a_SOURCES += src/taskwakewhen.c
 librtems_a_SOURCES += src/scheduleraddprocessor.c
 librtems_a_SOURCES += src/schedulergetprocessorset.c
 librtems_a_SOURCES += src/schedulerident.c
+librtems_a_SOURCES += src/scheduleridentbyprocessor.c
 librtems_a_SOURCES += src/schedulerremoveprocessor.c
 
 ## RATEMON_C_FILES
