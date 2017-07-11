@@ -319,6 +319,12 @@ rtems_status_code rtems_event_receive (
 #define RTEMS_EVENT_SYSTEM_NETWORK_CLOSE RTEMS_EVENT_26
 
 /**
+ * @brief Reserved system event to resume server threads, e.g timer or
+ * interrupt server.
+ */
+#define RTEMS_EVENT_SYSTEM_SERVER_RESUME RTEMS_EVENT_29
+
+/**
  * @brief Reserved system event for the server threads, e.g timer or interrupt
  * server.
  */

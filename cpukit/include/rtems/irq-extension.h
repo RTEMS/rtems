@@ -362,6 +362,45 @@ rtems_status_code rtems_interrupt_server_handler_iterate(
 );
 
 /**
+ * @brief Suspends the specified interrupt server.
+ *
+ * A suspend request is sent to the specified interrupt server.  This function
+ * waits for an acknowledgment from the specified interrupt server.
+ *
+ * This function must be called from thread context.  It may block.  Calling
+ * this function within the context of an interrupt server is undefined
+ * behaviour.
+ *
+ * @param[in] server_index The interrupt server index.  Use
+ *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ *
+ * @see rtems_interrupt_server_resume().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
+ * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ */
+rtems_status_code rtems_interrupt_server_suspend( uint32_t server_index );
+
+/**
+ * @brief Resumes the specified interrupt server.
+ *
+ * This function must be called from thread context.  It may block.  Calling
+ * this function within the context of an interrupt server is undefined
+ * behaviour.
+ *
+ * @param[in] server_index The interrupt server index.  Use
+ *   @c RTEMS_INTERRUPT_SERVER_DEFAULT to specify the default server.
+ *
+ * @see rtems_interrupt_server_suspend().
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation
+ * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
+ * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ */
+rtems_status_code rtems_interrupt_server_resume( uint32_t server_index );
+
+/**
  * @brief Initializes the specified interrupt server entry.
  *
  * @param[in] server_index The interrupt server index.  Use

@@ -635,7 +635,7 @@ void rtems_interrupt_server_entry_submit(
   bsp_interrupt_server_trigger(entry);
 }
 
-static void bsp_interrupt_server_entry_destroy_helper(void *arg)
+static void bsp_interrupt_server_entry_synchronize_helper(void *arg)
 {
   bsp_interrupt_server_helper_data *hd = arg;
 
@@ -665,7 +665,7 @@ void rtems_interrupt_server_entry_destroy(
     0,
     NULL,
     NULL,
-    bsp_interrupt_server_entry_destroy_helper
+    bsp_interrupt_server_entry_synchronize_helper
   );
 }
 
@@ -690,6 +690,63 @@ rtems_status_code rtems_interrupt_server_request_initialize(
     &request->action,
     handler,
     arg
+  );
+  return RTEMS_SUCCESSFUL;
+}
+
+static void bsp_interrupt_server_entry_suspend_helper(void *arg)
+{
+  bsp_interrupt_server_helper_data *hd = arg;
+  rtems_event_set events;
+
+  rtems_event_transient_send(hd->task);
+  rtems_event_system_receive(
+    RTEMS_EVENT_SYSTEM_SERVER_RESUME,
+    RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &events
+  );
+}
+
+rtems_status_code rtems_interrupt_server_suspend(uint32_t server_index)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_context *s;
+
+  s = bsp_interrupt_server_get_context(server_index, &sc);
+  if (s == NULL) {
+    return sc;
+  }
+
+  bsp_interrupt_server_call_helper(
+    s,
+    BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR,
+    0,
+    NULL,
+    NULL,
+    bsp_interrupt_server_entry_suspend_helper
+  );
+  return RTEMS_SUCCESSFUL;
+}
+
+rtems_status_code rtems_interrupt_server_resume(uint32_t server_index)
+{
+  rtems_status_code sc;
+  bsp_interrupt_server_context *s;
+
+  s = bsp_interrupt_server_get_context(server_index, &sc);
+  if (s == NULL) {
+    return sc;
+  }
+
+  rtems_event_system_send(s->server, RTEMS_EVENT_SYSTEM_SERVER_RESUME);
+  bsp_interrupt_server_call_helper(
+    s,
+    BSP_INTERRUPT_SERVER_MANAGEMENT_VECTOR,
+    0,
+    NULL,
+    NULL,
+    bsp_interrupt_server_entry_synchronize_helper
   );
   return RTEMS_SUCCESSFUL;
 }
