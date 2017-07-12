@@ -18,7 +18,7 @@
 #ifndef LIBBSP_ERC32_IRQ_CONFIG_H
 #define LIBBSP_ERC32_IRQ_CONFIG_H
 
-#include <rtems.h>
+#include <rtems/score/processormask.h>
 
 #define BSP_INTERRUPT_VECTOR_MAX_STD 15 /* Standard IRQ controller */
 #define BSP_INTERRUPT_VECTOR_MIN 0

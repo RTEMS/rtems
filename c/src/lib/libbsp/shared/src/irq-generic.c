@@ -28,6 +28,7 @@
 #include <stdlib.h>
 
 #include <rtems/score/apimutex.h>
+#include <rtems/score/processormask.h>
 #include <rtems/score/sysstate.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE

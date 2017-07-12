@@ -25,6 +25,7 @@
 
 #include <bsp.h>
 #include <bsp/arm-gic.h>
+#include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
 extern "C" {
