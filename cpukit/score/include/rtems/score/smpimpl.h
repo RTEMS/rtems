@@ -340,7 +340,7 @@ RTEMS_INLINE_ROUTINE const Processor_mask *_SMP_Get_online_processors( void )
 #if defined(RTEMS_SMP)
   return &_SMP_Online_processors;
 #else
-  return &_Processor_mask_The_one_and_only.
+  return &_Processor_mask_The_one_and_only;
 #endif
 }
 
