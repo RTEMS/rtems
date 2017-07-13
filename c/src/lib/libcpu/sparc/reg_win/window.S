@@ -51,19 +51,24 @@ SYM(window_overflow_trap_handler):
          */
 
         std  %l0, [%sp + 0x00]           ! save local register set
+        SPARC_LEON3FT_B2BST_NOP
         std  %l2, [%sp + 0x08]
         mov  %wim, %l3
         sll  %l3, SPARC_NUMBER_OF_REGISTER_WINDOWS-1 , %l2
                                          ! l2  = WIM << (Number Windows - 1)
         std  %l4, [%sp + 0x10]
+        SPARC_LEON3FT_B2BST_NOP
         std  %l6, [%sp + 0x18]
         srl  %l3, 1, %l3                 ! l3  = WIM >> 1
         wr   %l3, %l2, %wim              ! WIM = (WIM >> 1) ^
                                          !       (WIM << (Number Windows - 1))
                                          ! 3 instruction delay not needed here
         std  %i0, [%sp + 0x20]           ! save input register set
+        SPARC_LEON3FT_B2BST_NOP
         std  %i2, [%sp + 0x28]
+        SPARC_LEON3FT_B2BST_NOP
         std  %i4, [%sp + 0x30]
+        SPARC_LEON3FT_B2BST_NOP
         std  %i6, [%sp + 0x38]
         restore                          ! Go back to trap window.
         jmp  %l1                         ! Re-execute save.
@@ -206,13 +211,20 @@ save_frame_loop:
          */
 
         std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
 
         ba      save_frame_loop

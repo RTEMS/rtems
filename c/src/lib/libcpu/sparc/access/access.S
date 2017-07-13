@@ -59,6 +59,33 @@ SYM(_ld64):
 	retl
 	 ldd [%o0], %o0
 
+#if defined(__FIX_LEON3FT_B2BST)
+
+SYM(_st8):
+	stub %o1, [%o0]
+	retl
+	 nop
+
+SYM(_st_be16):
+SYM(_st16):
+	stuh %o1, [%o0]
+	retl
+	 nop
+
+SYM(_st_be32):
+SYM(_st32):
+	st %o1, [%o0]
+	retl
+	 nop
+
+SYM(_st_be64):
+SYM(_st64):
+	std %o1, [%o0]
+	retl
+	 nop
+
+#else
+
 SYM(_st8):
 	retl
 	 stb %o1, [%o0]
@@ -79,3 +106,4 @@ SYM(_st64):
 	mov %o1, %o2
 	retl
 	 std %o2, [%o0]
+#endif

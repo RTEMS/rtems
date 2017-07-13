@@ -46,23 +46,45 @@
 SYM(_CPU_Context_save_fp):
         ld      [%o0], %o1
         std     %f0, [%o1 + FO_F1_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f2, [%o1 + F2_F3_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f4, [%o1 + F4_F5_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f6, [%o1 + F6_F7_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f8, [%o1 + F8_F9_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f10, [%o1 + F1O_F11_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f12, [%o1 + F12_F13_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f14, [%o1 + F14_F15_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f16, [%o1 + F16_F17_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f18, [%o1 + F18_F19_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f20, [%o1 + F2O_F21_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f22, [%o1 + F22_F23_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f24, [%o1 + F24_F25_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f26, [%o1 + F26_F27_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f28, [%o1 + F28_F29_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f30, [%o1 + F3O_F31_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
+#if defined(__FIX_LEON3FT_B2BST)
+        st     %fsr, [%o1 + FSR_OFFSET]
+        jmp     %o7 + 8
+         nop
+#else
         jmp     %o7 + 8
          st     %fsr, [%o1 + FSR_OFFSET]
+#endif
 
 /*
  *  void _CPU_Context_restore_fp(

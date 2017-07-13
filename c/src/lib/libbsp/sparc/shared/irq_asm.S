@@ -66,14 +66,22 @@ SYM(_CPU_Context_switch):
          */
 
         std     %l0, [%o0 + L0_OFFSET]       ! save the local registers
+        SPARC_LEON3FT_B2BST_NOP
         std     %l2, [%o0 + L2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l4, [%o0 + L4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l6, [%o0 + L6_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         std     %i0, [%o0 + I0_OFFSET]       ! save the input registers
+        SPARC_LEON3FT_B2BST_NOP
         std     %i2, [%o0 + I2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i4, [%o0 + I4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i6, [%o0 + I6_FP_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         std     %o6, [%o0 + O6_SP_OFFSET]    ! save the output registers
 
@@ -158,14 +166,22 @@ save_frame_loop:
          */
 
         std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         ba      save_frame_loop
         nop
@@ -375,13 +391,20 @@ win_ovflow:
          */
 
         std     %l0, [%sp + CPU_STACK_FRAME_L0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l2, [%sp + CPU_STACK_FRAME_L2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l4, [%sp + CPU_STACK_FRAME_L4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %l6, [%sp + CPU_STACK_FRAME_L6_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
 
         std     %i0, [%sp + CPU_STACK_FRAME_I0_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i2, [%sp + CPU_STACK_FRAME_I2_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i4, [%sp + CPU_STACK_FRAME_I4_OFFSET]
+        SPARC_LEON3FT_B2BST_NOP
         std     %i6, [%sp + CPU_STACK_FRAME_I6_FP_OFFSET]
 
         restore
@@ -406,15 +429,21 @@ dont_do_the_window:
                                                ! make space for ISF
 
         std     %l0, [%sp + ISF_PSR_OFFSET]    ! save psr, PC
+        SPARC_LEON3FT_B2BST_NOP
         st      %l2, [%sp + ISF_NPC_OFFSET]    ! save nPC
         st      %g1, [%sp + ISF_G1_OFFSET]     ! save g1
         std     %g2, [%sp + ISF_G2_OFFSET]     ! save g2, g3
+        SPARC_LEON3FT_B2BST_NOP
         std     %l4, [%sp + ISF_G4_OFFSET]     ! save g4, g5 -- see above
+        SPARC_LEON3FT_B2BST_NOP
         st      %g7, [%sp + ISF_G7_OFFSET]     ! save g7
 
         std     %i0, [%sp + ISF_I0_OFFSET]     ! save i0, i1
+        SPARC_LEON3FT_B2BST_NOP
         std     %i2, [%sp + ISF_I2_OFFSET]     ! save i2, i3
+        SPARC_LEON3FT_B2BST_NOP
         std     %i4, [%sp + ISF_I4_OFFSET]     ! save i4, i5
+        SPARC_LEON3FT_B2BST_NOP
         std     %i6, [%sp + ISF_I6_FP_OFFSET]  ! save i6/fp, i7
 
         rd      %y, %g1
@@ -440,6 +469,7 @@ dont_do_the_window:
 
         add      %l7, 1, %l7
         st       %l7, [%g6 + PER_CPU_ISR_NEST_LEVEL]
+        SPARC_LEON3FT_B2BST_NOP
 
         add      %l6, 1, %l6
         st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
@@ -587,6 +617,7 @@ profiling_not_outer_most_exit:
         ldub     [%g6 + PER_CPU_DISPATCH_NEEDED], %o2
         ld       [%g6 + PER_CPU_ISR_DISPATCH_DISABLE], %o3
         st       %l7, [%g6 + PER_CPU_ISR_NEST_LEVEL]
+        SPARC_LEON3FT_B2BST_NOP
         sub      %l6, 1, %l6
         st       %l6, [%g6 + PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL]
 
@@ -635,21 +666,37 @@ isr_dispatch:
          */
         sub     %sp, FP_FRAME_SIZE, %sp
         std     %f0, [%sp + FP_FRAME_OFFSET_FO_F1]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f2, [%sp + FP_FRAME_OFFSET_F2_F3]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f4, [%sp + FP_FRAME_OFFSET_F4_F5]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f6, [%sp + FP_FRAME_OFFSET_F6_F7]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f8, [%sp + FP_FRAME_OFFSET_F8_F9]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f10, [%sp + FP_FRAME_OFFSET_F1O_F11]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f12, [%sp + FP_FRAME_OFFSET_F12_F13]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f14, [%sp + FP_FRAME_OFFSET_F14_F15]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f16, [%sp + FP_FRAME_OFFSET_F16_F17]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f18, [%sp + FP_FRAME_OFFSET_F18_F19]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f20, [%sp + FP_FRAME_OFFSET_F2O_F21]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f22, [%sp + FP_FRAME_OFFSET_F22_F23]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f24, [%sp + FP_FRAME_OFFSET_F24_F25]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f26, [%sp + FP_FRAME_OFFSET_F26_F27]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f28, [%sp + FP_FRAME_OFFSET_F28_F29]
+        SPARC_LEON3FT_B2BST_NOP
         std     %f30, [%sp + FP_FRAME_OFFSET_F3O_F31]
+        SPARC_LEON3FT_B2BST_NOP
         st      %fsr, [%sp + FP_FRAME_OFFSET_FSR]
         call    SYM(_Thread_Do_dispatch)
          mov    %g6, %o0

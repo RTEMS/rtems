@@ -282,6 +282,7 @@ y_checking:
 	 nop
 
 	st	%o1, [%sp + FRAME_OFFSET_BUFFER_2]
+	SPARC_LEON3FT_B2BST_NOP
 	/* Check floating point registers */
 	check_float_register	%f31
 	check_float_register	%f30
