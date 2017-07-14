@@ -81,9 +81,21 @@ $(PROJECT_LIB)/linkcmds.leon3: startup/linkcmds.leon3 $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.leon3
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.leon3
 
-$(PROJECT_LIB)/linkcmds.ngmp: startup/linkcmds.ngmp $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.ngmp
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.ngmp
+$(PROJECT_LIB)/linkcmds.ut699: startup/linkcmds.ut699 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.ut699
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.ut699
+
+$(PROJECT_LIB)/linkcmds.gr712rc: startup/linkcmds.gr712rc $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.gr712rc
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.gr712rc
+
+$(PROJECT_LIB)/linkcmds.ut700: startup/linkcmds.ut700 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.ut700
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.ut700
+
+$(PROJECT_LIB)/linkcmds.gr740: startup/linkcmds.gr740 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.gr740
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.gr740
 
 $(PROJECT_INCLUDE)/bsp/gnatcommon.h: ../shared/include/gnatcommon.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/gnatcommon.h
