@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -221,13 +222,19 @@ static arm_debug_hwbreak hw_breaks[ARM_HW_BREAKPOINT_MAX];
 //static arm_debug_hwbreak hw_watches[ARM_HW_WATCHPOINT_MAX];
 
 #if TARGET_DEBUG
+void rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context);
+void rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context);
+
 static void target_printk(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 static void
 target_printk(const char* format, ...)
 {
+  rtems_interrupt_lock_context lock_context;
   va_list ap;
   va_start(ap, format);
+  rtems_debugger_printk_lock(&lock_context);
   vprintk(format, ap);
+  rtems_debugger_printk_unlock(&lock_context);
   va_end(ap);
 }
 static const char*
@@ -261,6 +268,34 @@ mode_label(int mode)
 #endif
 
 /*
+ * CP register access.
+ */
+#define ARM_CP_INSTR(_opc, _cp, _op1, _val, _CRn, _CRm, _op2)           \
+  #_opc " p" #_cp ", " #_op1 ", %[" #_val "], c" #_CRn ", c" #_CRm ", " #_op2 "\n"
+
+#define ARM_CP_WRITE(_cp, _op1, _val, _CRn, _CRm, _op2)    \
+  do {                                                     \
+    ARM_SWITCH_REG;                                        \
+    asm volatile(                                          \
+      ASM_ARM_MODE                                         \
+      ARM_CP_INSTR(mcr, _cp, _op1, val, _CRn, _CRm, _op2)  \
+      ASM_THUMB_MODE                                       \
+      : ARM_SWITCH_REG_ASM                                 \
+      : [val] "r" (_val));                                 \
+  } while (0)
+
+#define ARM_CP_READ(_cp, _op1, _val, _CRn, _CRm, _op2)     \
+  do {                                                     \
+    ARM_SWITCH_REG;                                        \
+    asm volatile(                                          \
+      ASM_ARM_MODE                                         \
+      ARM_CP_INSTR(mrc, _cp, _op1, val, _CRn, _CRm, _op2)  \
+      ASM_THUMB_MODE                                       \
+      : ARM_SWITCH_REG_ASM,                                \
+        [val] "=&r" (_val));                               \
+  } while (0)
+
+/*
  * Read and write a CP14 register.
  *
  * The software debug event registers are not easy to program because there are
@@ -268,38 +303,31 @@ mode_label(int mode)
  * registers, you cannot program it. This means there is a switch table to do
  * this.
  */
-#define ARM_CP14_INSTR(_opc, _val, _CRn, _CRm, _opc2)                   \
-  #_opc " p14, 0, %[" #_val "], c" #_CRn ", c" #_CRm ", " #_opc2 "\n"
+#define ARM_CP14_WRITE(_val, _CRn, _CRm, _op2) \
+  ARM_CP_WRITE(14, 0, _val, _CRn, _CRm, _op2)
 
-#define ARM_CP14_WRITE(_val, _CRn, _CRm, _opc2)            \
-  do {                                                     \
-    ARM_SWITCH_REG;                                        \
-    asm volatile(                                          \
-      ASM_ARM_MODE                                         \
-      ARM_CP14_INSTR(mcr, val, _CRn, _CRm, _opc2)          \
-      ASM_THUMB_MODE                                       \
-      : ARM_SWITCH_REG_ASM                                 \
-      : [val] "r" (_val));                                 \
-  } while (0)
+#define ARM_CP14_READ(_val, _CRn, _CRm, _op2)  \
+  ARM_CP_READ(14, 0, _val, _CRn, _CRm, _op2)
 
-#define ARM_CP14_READ(_val, _CRn, _CRm, _opc2)             \
-  do {                                                     \
-    ARM_SWITCH_REG;                                        \
-    asm volatile(                                          \
-      ASM_ARM_MODE                                         \
-      ARM_CP14_INSTR(mrc, val, _CRn, _CRm, _opc2)          \
-      ASM_THUMB_MODE                                       \
-      : ARM_SWITCH_REG_ASM,                                \
-        [val] "=&r" (_val));                               \
-  } while (0)
+/*
+ * Read and write a CP15 register.
+ *
+ * The Context ID register is a process level context and used to scope
+ * hardware break points.
+ */
+#define ARM_CP15_WRITE(_val, _op1, _CRn, _CRm, _op2) \
+  ARM_CP_WRITE(15, _op1, _val, _CRn, _CRm, _op2)
+
+#define ARM_CP15_READ(_val, _op1, _CRn, _CRm, _op2)  \
+  ARM_CP_READ(15, _op1, _val, _CRn, _CRm, _op2)
 
 static int
 arm_debug_probe(rtems_debugger_target* target)
 {
   #define ID_VALUE(_i, _h, _l) ((_i >> _l) & ((1 << ((_h - _l) + 1)) -1))
   uint32_t          val;
-  const char const* vl = "[Invalid version]";
-  const char const* labels[] = {
+  const char*       vl = "[Invalid version]";
+  const char* const labels[] = {
     "ARMv6 [v6]",
     "ARMv6 [v6.1]",
     "ARMv7 [v7, all CP14 registers]",
@@ -471,39 +499,63 @@ arm_debug_break_write_value(int bp, uint32_t value)
 static void
 arm_debug_break_clear(void)
 {
-  arm_debug_hwbreak* bp = &hw_breaks[0];
-  int                i;
+  rtems_interrupt_lock_context lock_context;
+  arm_debug_hwbreak*           bp = &hw_breaks[0];
+  int                          i;
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   for (i = 0; i < hw_breakpoints; ++i, ++bp) {
     bp->enabled = false;
     bp->loaded = false;
   }
+  rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
+static inline void
+arm_debug_set_context_id(const uint32_t id)
+{
+  ARM_CP15_WRITE(id, 0, 13, 0, 1);
+}
+
+/*
+ * You can only load the hardware breaks points when in the SVC mode or the
+ * single step inverted break point will trigger.
+ */
 static void
 arm_debug_break_load(void)
 {
-  arm_debug_hwbreak* bp = &hw_breaks[0];
-  int                i;
-  for (i = 0; i < hw_breakpoints; ++i, ++bp) {
+  rtems_interrupt_lock_context lock_context;
+  arm_debug_hwbreak*            bp = &hw_breaks[0];
+  int                           i;
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  if (bp->enabled && !bp->loaded) {
+    arm_debug_set_context_id(0xdead1111);
+    arm_debug_break_write_value(0, bp->value);
+    arm_debug_break_write_control(0, bp->control);
+  }
+  ++bp;
+  for (i = 1; i < hw_breakpoints; ++i, ++bp) {
     if (bp->enabled && !bp->loaded) {
       bp->loaded = true;
-      target_printk("]]} hwbp: %i: v:%08lx c:%08lx l:%08x\n",
-                    i, bp->value, bp->control, bp->length);
       arm_debug_break_write_value(i, bp->value);
       arm_debug_break_write_control(i, bp->control);
     }
   }
+  rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
 static void
 arm_debug_break_unload(void)
 {
-  arm_debug_hwbreak* bp = &hw_breaks[0];
+  rtems_interrupt_lock_context lock_context;
+  arm_debug_hwbreak*           bp = &hw_breaks[0];
   int                i;
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
+  arm_debug_set_context_id(0);
   for (i = 0; i < hw_breakpoints; ++i, ++bp) {
     bp->loaded = false;
     arm_debug_break_write_control(i, 0);
   }
+  rtems_interrupt_lock_release(&target_lock, &lock_context);
 }
 
 #if NOT_USED_BUT_KEEPING
@@ -937,9 +989,9 @@ rtems_debugger_target_enable(void)
 {
   rtems_interrupt_lock_context lock_context;
   debug_session_active = true;
-  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   arm_debug_break_unload();
   arm_debug_break_clear();
+  rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   rtems_debugger_target_set_vectors();
   rtems_interrupt_lock_release(&target_lock, &lock_context);
   return 0;
@@ -953,6 +1005,8 @@ rtems_debugger_target_disable(void)
   void*                        text_begin;
   void*                        text_end;
 #endif
+  arm_debug_break_unload();
+  arm_debug_break_clear();
   rtems_interrupt_lock_acquire(&target_lock, &lock_context);
   debug_session_active = false;
 #if DOES_NOT_WORK
@@ -1063,11 +1117,11 @@ rtems_debugger_target_write_regs(rtems_debugger_thread* thread)
     uint32_t* regs = &thread->registers[0];
 
     /*
-     * Only write to debugger controlled threads. Do not touch the registers
-     * for threads blocked in the context switcher.
+     * Only write to debugger controlled exception threads. Do not touch the
+     * registers for threads blocked in the context switcher.
      */
     if (rtems_debugger_thread_flag(thread,
-                                   RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING)) {
+                                   RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
       CPU_Exception_frame* frame = thread->frame;
       frame->register_r0  = regs[REG_R0];
       frame->register_r1  = regs[REG_R1];
@@ -1131,81 +1185,76 @@ rtems_debugger_target_tcb_sp(rtems_debugger_thread* thread)
 int
 rtems_debugger_target_thread_stepping(rtems_debugger_thread* thread)
 {
-  if (rtems_debugger_thread_flag(thread,
-                                 (RTEMS_DEBUGGER_THREAD_FLAG_STEP |
-                                  RTEMS_DEBUGGER_THREAD_FLAG_STEPPING))) {
+  if (rtems_debugger_thread_flag(thread, RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
     /*
      * Single stepping and range stepping uses hardware debug breakpoint
      * 0. This is reserved for single stepping.
      */
     CPU_Exception_frame* frame = thread->frame;
     arm_debug_hwbreak*   bp = &hw_breaks[0];
-    int                  i;
-    for (i = 0; i < hw_breakpoints; ++i, ++bp) {
-      if (!bp->enabled) {
-        const uint32_t addr = (intptr_t) frame->register_pc;
-        const bool     thumb = (FRAME_SR & (1 << 5)) != 0 ? true : false;
-        uint32_t       bas;
+    target_printk("[} stepping: %s\n", bp->enabled ? "yes" : "no");
+    if (!bp->enabled) {
+      const uint32_t addr = (intptr_t) frame->register_pc;
+      const bool     thumb = (FRAME_SR & (1 << 5)) != 0 ? true : false;
+      uint32_t       bas;
 
-        bp->enabled = true;
-        bp->loaded = false;
-        bp->address = frame->register_pc;
-        bp->frame = frame;
-        bp->length = sizeof(uint32_t);
+      bp->enabled = true;
+      bp->loaded = false;
+      bp->address = frame->register_pc;
+      bp->frame = frame;
+      bp->length = sizeof(uint32_t);
 
-        if (thumb) {
-          uint16_t instr = *((uint16_t*) frame->register_pc);
-          switch (instr & 0xf800) {
-          case 0xe800:
-          case 0xf000:
-          case 0xf800:
-            break;
-          default:
-            bp->length = sizeof(uint16_t);
-            break;
-          }
+      if (thumb) {
+        uint16_t instr = *((uint16_t*) frame->register_pc);
+        switch (instr & 0xf800) {
+        case 0xe800:
+        case 0xf000:
+        case 0xf800:
+          break;
+        default:
+          bp->length = sizeof(uint16_t);
+          break;
         }
+      }
 
-        /*
-         * See table C3-2 Effect of byte address selection on Breakpoint
-         * generation and "Instruction address comparisoin programming
-         * examples.
-         */
-        if (thumb) {
-          if ((addr & (1 << 1)) == 0) {
-            bas = 0x3; /* b0011 */
-          }
-          else {
-            bas = 0xc; /* b1100 */
-          }
+      /*
+       * See table C3-2 Effect of byte address selection on Breakpoint
+       * generation and "Instruction address comparision programming
+       * examples.
+       */
+      if (thumb) {
+        if ((addr & (1 << 1)) == 0) {
+          bas = 0x3; /* b0011 */
         }
         else {
-          bas = 0xf; /* b1111 */
+          bas = 0xc; /* b1100 */
         }
-
-        arm_debug_break_setup(bp,
-                              addr & ~0x3,
-                              ARM_HW_BP_UNLINKED_INSTR_MISMATCH,
-                              bas,
-                              ARM_HW_BP_PRIV_PL0_SUP_SYS);
-
-        /*
-         * Save the interrupt state before stepping if set.
-         */
-#if ARM_PSR_HAS_INT_MASK
-        if ((FRAME_SR & CPSR_INTS_MASK) != 0) {
-          uint32_t int_state;
-          int_state =
-            (frame->register_cpsr & CPSR_INTS_MASK) << RTEMS_DEBUGGER_THREAD_FLAG_TARGET_BASE;
-          thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED | int_state;
-        }
-        /*
-         * Mask the interrupt when stepping.
-         */
-        FRAME_SR |= CPSR_INTS_MASK;
-#endif
-        break;
       }
+      else {
+        bas = 0xf; /* b1111 */
+      }
+
+      arm_debug_break_setup(bp,
+                            addr & ~0x3,
+                            ARM_HW_BP_UNLINKED_INSTR_MISMATCH,
+                            bas,
+                            ARM_HW_BP_PRIV_PL0_SUP_SYS);
+
+      /*
+       * Save the interrupt state before stepping if set.
+       */
+#if ARM_PSR_HAS_INT_MASK
+      if ((FRAME_SR & CPSR_INTS_MASK) != 0) {
+        uint32_t int_state;
+        int_state =
+          (frame->register_cpsr & CPSR_INTS_MASK) << RTEMS_DEBUGGER_THREAD_FLAG_TARGET_BASE;
+        thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_INTS_DISABLED | int_state;
+      }
+      /*
+       * Mask the interrupt when stepping.
+       */
+      FRAME_SR |= CPSR_INTS_MASK;
+#endif
     }
   }
   return 0;
@@ -1215,7 +1264,7 @@ int
 rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
 {
   int sig = RTEMS_DEBUGGER_SIGNAL_HUP;
-#if defined(ARM_EXCEPTION_RESET)
+#if defined(ARM_MULTILIB_ARCH_V4)
   switch (frame->vector) {
   case ARM_EXCEPTION_RESET:
   case ARM_EXCEPTION_SWI:
@@ -1243,6 +1292,22 @@ rtems_debugger_target_exception_to_signal(CPU_Exception_frame* frame)
 }
 
 int
+rtems_debugger_target_hwbreak_insert(void)
+{
+  /*
+   * Do nothing, load on exit of the exception handler.
+   */
+  return 0;
+}
+
+int
+rtems_debugger_target_hwbreak_remove(void)
+{
+  arm_debug_break_unload();
+  return 0;
+}
+
+int
 rtems_debugger_target_hwbreak_control(rtems_debugger_target_watchpoint wp,
                                       bool                             insert,
                                       DB_UINT                          addr,
@@ -1262,7 +1327,7 @@ rtems_debugger_target_cache_sync(rtems_debugger_target_swbreak* swbreak)
    */
   rtems_cache_flush_multiple_data_lines(swbreak->address,
                                         sizeof(breakpoint));
-  rtems_cache_invalidate_multiple_instruction_lines(swbreak->address,
-                                                    sizeof(breakpoint));
+  rtems_cache_instruction_sync_after_code_change(swbreak->address,
+                                                 sizeof(breakpoint));
   return 0;
 }

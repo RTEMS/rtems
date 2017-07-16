@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,12 +41,15 @@
 #include "rtems-debugger-threads.h"
 
 /**
- * Frame signature.
+ * Exception local stack frame data to synchronise with the debugger
+ * server's events loop processor.
  */
-#define TARGET_FRAME_MAGIC_NUM (2)
-#define TARGET_FRAME_MAGIC 0xdeadbeef, 0xb2107016
-static const uint32_t
-  frame_magic[TARGET_FRAME_MAGIC_NUM] = { TARGET_FRAME_MAGIC };
+typedef struct {
+  rtems_chain_node     node;
+  rtems_id             id;
+  CPU_Exception_frame* frame;
+  rtems_rx_cond        cond;
+} rtems_debugger_exception;
 
 #if TARGET_DEBUG
 #include <rtems/bspIo.h>
@@ -53,9 +57,12 @@ static void target_printk(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
 static void
 target_printk(const char* format, ...)
 {
+  rtems_interrupt_lock_context lock_context;
   va_list ap;
   va_start(ap, format);
+  rtems_debugger_printk_lock(&lock_context);
   vprintk(format, ap);
+  rtems_debugger_printk_unlock(&lock_context);
   va_end(ap);
 }
 #else
@@ -219,6 +226,11 @@ rtems_debugger_target_swbreak_insert(void)
       if (target->breakpoint_size > 4)
         memcpy(loc, &target->breakpoint[0], target->breakpoint_size);
       else {
+        if (rtems_debugger_verbose())
+          rtems_debugger_printf("rtems-db:  bp:  in: %p %p %d %d %d\n",
+                                loc, &target->breakpoint[0],
+                                (int) target->breakpoint_size,
+                                (int) i, (int) target->swbreaks.level);
         switch (target->breakpoint_size) {
         case 4:
           loc[3] = target->breakpoint[3];
@@ -276,29 +288,21 @@ rtems_debugger_target_swbreak_remove(void)
 rtems_debugger_target_exc_action
 rtems_debugger_target_exception(CPU_Exception_frame* frame)
 {
-  volatile const uint32_t magic[3] = {
-    (uint32_t) frame, TARGET_FRAME_MAGIC
-  };
-
-  (void) magic;
-
   if (!rtems_interrupt_is_in_progress()) {
     rtems_debugger_threads*              threads = rtems_debugger->threads;
-    #if USE_THREAD_EXECUTING
-     Thread_Control*                     thread = _Thread_Executing;
-    #else
-     const Per_CPU_Control*              cpu = _Per_CPU_Get_snapshot();
-     Thread_Control*                     thread = _Per_CPU_Get_executing(cpu);
-    #endif
-    rtems_id*                            excludes;
+    Thread_Control*                      thread = _Thread_Get_executing();
     const rtems_id                       tid = thread->Object.id;
+    rtems_id*                            excludes;
     DB_UINT                              pc;
     const rtems_debugger_thread_stepper* stepper;
+    rtems_debugger_exception             target_exception;
     size_t                               i;
 
     target_printk("[} tid:%08" PRIx32 ": thread:%08" PRIxPTR
                   " frame:%08" PRIxPTR "\n",
                   tid, (intptr_t) thread, (intptr_t) frame);
+
+    rtems_debugger_lock();
 
     /*
      * If the thread is the debugger recover.
@@ -307,9 +311,11 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
       if (rtems_debugger->target->memory_access) {
         target_printk("[} server access fault\n");
         rtems_debugger->target->memory_access = true;
+        rtems_debugger_unlock();
         longjmp(rtems_debugger->target->access_return, -1);
       }
       target_printk("[} server exception\n");
+      rtems_debugger_unlock();
       return rtems_debugger_target_exc_cascade;
     }
 
@@ -327,6 +333,7 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
          *        swbreak's contents.
          */
         target_printk("[} tid:%08lx: excluded\n", tid);
+        rtems_debugger_unlock();
         return rtems_debugger_target_exc_cascade;
       }
     }
@@ -340,18 +347,39 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
       stepper->thread->frame = frame;
       rtems_debugger_target_thread_stepping(stepper->thread);
       target_printk("[} tid:%08lx: stepping\n", tid);
+      rtems_debugger_unlock();
       return rtems_debugger_target_exc_step;
     }
 
     target_printk("[} tid:%08lx: suspending\n", tid);
 
     /*
-     * Tag the thread as being debugged, wake the debug server's event thread,
-     * then suspend this thread.
+     * Initialise the target exception data and queue ready for the debugger
+     * server's event processor to handle.
      */
-    _Thread_Set_state(thread, STATES_DEBUGGER);
-    rtems_debugger_server_events_wake();
-    rtems_task_suspend(tid);
+    rtems_chain_initialize_node(&target_exception.node);
+    target_exception.frame = frame;
+    target_exception.id = tid;
+    _Condition_Initialize(&target_exception.cond);
+
+    rtems_chain_append_unprotected(&rtems_debugger->exception_threads,
+                                   &target_exception.node);
+
+    /*
+     * Signal the debug server's thread.
+     */
+    rtems_debugger_server_events_signal();
+
+    /*
+     * Block on the exception thread's condition variable unlocking the
+     * debugger's mutex and letting the server's thread run.
+     */
+    _Condition_Wait_recursive(&target_exception.cond, &rtems_debugger->lock);
+
+    /*
+     * Unlock the debugger's lock now the exception is resuming.
+     */
+    rtems_debugger_unlock();
 
     target_printk("[} tid:%08lx: resuming\n", tid);
 
@@ -363,31 +391,39 @@ rtems_debugger_target_exception(CPU_Exception_frame* frame)
   return rtems_debugger_target_exc_cascade;
 }
 
-int
-rtems_debugger_target_set_exception_frame(rtems_debugger_thread* thread)
+void
+rtems_debugger_target_exception_thread(rtems_debugger_thread* thread)
 {
-  int r = 0;
+  rtems_chain_node* node;
   thread->frame = NULL;
-  thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING;
-  if ((thread->tcb->current_state & STATES_DEBUGGER) != 0) {
-    CPU_Exception_frame* frame = NULL;
-    DB_UINT*             sp;
-    int                  i;
-    sp = (DB_UINT*) rtems_debugger_target_tcb_sp(thread);
-    for (i = 0; i < 128; ++i) {
-      if (sp[i] == frame_magic[0] && sp[i + 1] == frame_magic[1]) {
-        frame = (CPU_Exception_frame*) sp[i + 2];
-        break;
-      }
+  thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION;
+  for (node = rtems_chain_first(&rtems_debugger->exception_threads);
+       !rtems_chain_is_tail(&rtems_debugger->exception_threads, node);
+       node = rtems_chain_next(node)) {
+    rtems_debugger_exception* target_exception = (rtems_debugger_exception*) node;
+    if (target_exception->id == thread->id) {
+      thread->frame = target_exception->frame;
+      thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION;
     }
-    _Thread_Clear_state(thread->tcb, STATES_DEBUGGER);
-    thread->frame = frame;
-    if (frame != NULL)
-      thread->flags |= RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING;
-    else
-      r = -1;
   }
-  return r;
+}
+
+void
+rtems_debugger_target_exception_thread_resume(rtems_debugger_thread* thread)
+{
+  rtems_chain_node* node;
+  for (node = rtems_chain_first(&rtems_debugger->exception_threads);
+       !rtems_chain_is_tail(&rtems_debugger->exception_threads, node);
+       node = rtems_chain_next(node)) {
+    rtems_debugger_exception* target_exception = (rtems_debugger_exception*) node;
+    if (target_exception->id == thread->id) {
+      rtems_chain_extract(node);
+      thread->frame = NULL;
+      thread->flags &= ~RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION;
+      _Condition_Signal(&target_exception->cond);
+      break;
+    }
+  }
 }
 
 int

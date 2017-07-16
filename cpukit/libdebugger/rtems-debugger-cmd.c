@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -180,11 +181,29 @@ static int rtems_shell_main_debugger(int argc, char *argv[])
       return 1;
     }
   }
+  else if (strcasecmp(argv[1], "verbose") == 0) {
+    if (!rtems_debugger_running()) {
+      printf("error: debugger not running.\n");
+      return 1;
+    }
+
+    if (argc == 3 && strcasecmp(argv[2], "on") == 0) {
+      rtems_debugger_set_verbose(true);
+    }
+    else if (argc == 3 && strcasecmp(argv[2], "off") == 0) {
+      rtems_debugger_set_verbose(false);
+    }
+    else {
+      printf("debugger verbose: not on or off\n");
+      return 1;
+    }
+  }
   else if (strcasecmp(argv[1], "help") == 0) {
     printf("debugger [start/stop/help] ...\n" \
            "  start -v -R remote -d device -t secs -P priority -l [stdout,stderr,kernel]\n" \
            "  stop\n" \
            "  remote-debug <on/off>\n" \
+           "  verbose <on/off>\n" \
            "  help\n");
   }
   else {

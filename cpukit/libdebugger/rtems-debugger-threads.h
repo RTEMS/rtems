@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -51,7 +52,7 @@ extern "C" {
 /**
  * Debugger thread flags.
  */
-#define RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING      (1 << 0)
+#define RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION      (1 << 0)
 #define RTEMS_DEBUGGER_THREAD_FLAG_REG_VALID      (1 << 1)
 #define RTEMS_DEBUGGER_THREAD_FLAG_REG_DIRTY      (1 << 2)
 #define RTEMS_DEBUGGER_THREAD_FLAG_CONTINUE       (1 << 3)
@@ -162,8 +163,8 @@ extern int rtems_debugger_thread_step(rtems_debugger_thread* thread);
  * Thread is stepping so record the details.
  */
 extern int rtems_debugger_thread_stepping(rtems_debugger_thread* thread,
-					  DB_UINT                start,
-					  DB_UINT                end);
+                                          DB_UINT                start,
+                                          DB_UINT                end);
 
 /**
  * Thread's PC in the stepping range? Returns the stepper is in range else
@@ -196,8 +197,8 @@ extern int rtems_debugger_thread_state(rtems_debugger_thread* thread);
  * Return a string of the thread's state.
  */
 extern int rtems_debugger_thread_state_str(rtems_debugger_thread* thread,
-					   char*                  buffer,
-					   size_t                 size);
+                                           char*                  buffer,
+                                           size_t                 size);
 
 /**
  * Return the thread's stack size.
@@ -214,8 +215,7 @@ extern void* rtems_debugger_thread_stack_area(rtems_debugger_thread* thread);
  * set.
  */
 static inline bool
-rtems_debugger_thread_flag(rtems_debugger_thread* thread,
-			   uint32_t               mask)
+rtems_debugger_thread_flag(rtems_debugger_thread* thread, uint32_t mask)
 {
   return (thread->flags & mask) != 0;
 }

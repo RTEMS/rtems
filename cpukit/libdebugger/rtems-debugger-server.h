@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -100,6 +101,8 @@ extern "C" {
 #define RTEMS_DEBUGGER_FLAG_NON_STOP     (1 << 2)
 #define RTEMS_DEBUGGER_FLAG_VCONT        (1 << 3)
 #define RTEMS_DEBUGGER_FLAG_MULTIPROCESS (1 << 4)
+#define RTEMS_DEBUGGER_FLAG_VERBOSE_LOCK (1 << 5)
+#define RTEMS_DEBUGGER_FLAG_VERBOSE_CMDS (1 << 6)
 
 /**
  * Forward decl for the threads and targets.
@@ -109,6 +112,12 @@ typedef struct rtems_debugger_threads rtems_debugger_threads;
 typedef struct rtems_debugger_target  rtems_debugger_target;
 
 /**
+ * Local types for the RTEMS-X interface.
+ */
+typedef struct _Condition_Control       rtems_rx_cond;
+typedef struct _Mutex_recursive_Control rtems_rx_mutex;
+
+/**
  * Debugger data.
  */
 typedef struct
@@ -116,10 +125,10 @@ typedef struct
   int                     port;
   int                     timeout;
   rtems_task_priority     priority;
-  rtems_id                lock;
-  rtems_id                lock_output;
+  rtems_rx_mutex          lock;
   rtems_debugger_remote*  remote;
   rtems_id                server_task;
+  rtems_rx_cond           server_cond;
   volatile bool           server_running;
   volatile bool           server_finished;
   rtems_id                events_task;
@@ -134,6 +143,7 @@ typedef struct
   uint8_t                 input[RTEMS_DEBUGGER_BUFFER_SIZE];
   uint8_t                 output[RTEMS_DEBUGGER_BUFFER_SIZE];
   rtems_debugger_threads* threads;
+  rtems_chain_control     exception_threads;
   int                     signal;
   rtems_debugger_target*  target;
 } rtems_debugger_server;
@@ -147,41 +157,44 @@ extern rtems_debugger_server* rtems_debugger;
  * Debug server printer.
  */
 extern int rtems_debugger_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
+extern int rtems_debugger_clean_printf(const char* format, ...) RTEMS_PRINTFLIKE(1, 2);
+extern void rtems_debugger_printk_lock(rtems_interrupt_lock_context* lock_context);
+extern void rtems_debugger_printk_unlock(rtems_interrupt_lock_context* lock_context);
 
 /**
  * Lock the Debugger.
  */
-extern int rtems_debugger_lock(void);
+extern void rtems_debugger_lock(void);
 
 /**
  * Unlock the Debugger.
  */
-extern int rtems_debugger_unlock(void);
+extern void rtems_debugger_unlock(void);
 
 /**
  * Is the server still running?
  */
-bool rtems_debugger_server_running(void);
+extern bool rtems_debugger_server_running(void);
 
 /**
  * Get the remote handle from the debugger.
  */
-rtems_debugger_remote* rtems_debugger_remote_handle(void);
+extern rtems_debugger_remote* rtems_debugger_remote_handle(void);
 
 /**
  * Is the debugger connected?
  */
-bool rtems_debugger_connected(void);
+extern bool rtems_debugger_connected(void);
 
 /**
  * Is the debugger events thread runnins?
  */
-bool rtems_debugger_server_events_running(void);
+extern bool rtems_debugger_server_events_running(void);
 
 /**
- * Wake events thread in the debug server.
+ * Signal events thread in the debug server to run.
  */
-extern int rtems_debugger_server_events_wake(void);
+extern void rtems_debugger_server_events_signal(void);
 
 /**
  * Check if verbose is on.

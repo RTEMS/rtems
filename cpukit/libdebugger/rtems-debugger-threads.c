@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
+ * Copyright (c) 2016-2017 Chris Johns <chrisj@rtems.org>.
+ * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -43,6 +44,7 @@ static const char * const excludes_defaults[] =
   "IRQS",
   "DBSs",
   "DBSe",
+  "IDLE",
 };
 
 static void
@@ -240,23 +242,13 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
      * See if there is a valid exception stack frame and if the thread is being
      * debugged.
      */
-    r = rtems_debugger_target_set_exception_frame(thread);
-    if (r < 0) {
-        rtems_debugger_printf("error: rtems-db: thread: snap: %08lx: not valid frame\n",
-                              id);
-    }
+    rtems_debugger_target_exception_thread(thread);
 
     /*
-     * Read the target registers into the thread register array.
-     */
-    rtems_debugger_target_read_regs(thread);
-
-    /*
-     * Debugger threads are stopped for breakpoint, segv or other errors have
-     * the RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING set.
+     * Exception threads have stopped for breakpoint, segv or other errors.
      */
     if (rtems_debugger_thread_flag(thread,
-                                   RTEMS_DEBUGGER_THREAD_FLAG_DEBUGGING)) {
+                                   RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
       rtems_id* stopped;
       r = rtems_debugger_block_resize(&threads->stopped);
       if (r < 0) {
@@ -275,6 +267,11 @@ snapshot_thread(rtems_tcb* tcb, void* arg)
         r = -1;
       }
     }
+
+    /*
+     * Read the target registers into the thread register array.
+     */
+    rtems_debugger_target_read_regs(thread);
 
     if (rtems_debugger_server_flag(RTEMS_DEBUGGER_FLAG_VERBOSE))
       rtems_debugger_printf("rtems-db: sys: thd: %08lx: signal: %d\n",
@@ -300,6 +297,8 @@ rtems_debugger_thread_system_suspend(void)
     if (rtems_debugger_verbose())
       rtems_debugger_printf("rtems-db: sys:    : suspending\n");
     r = rtems_debugger_target_swbreak_remove();
+    if (r == 0)
+      r = rtems_debugger_target_hwbreak_remove();
     if (r == 0) {
       rtems_debugger_thread* current;
       threads->current.level = 0;
@@ -352,15 +351,19 @@ rtems_debugger_thread_system_resume(bool detaching)
     size_t i;
     if (rtems_debugger_verbose())
       rtems_debugger_printf("rtems-db: sys:    : resuming\n");
-    if (!detaching)
+    if (!detaching) {
       r = rtems_debugger_target_swbreak_insert();
+      if (r == 0)
+        r = rtems_debugger_target_hwbreak_insert();
+    }
     if (r == 0) {
       for (i = 0; i < threads->current.level; ++i) {
         rtems_debugger_thread* thread = &current[i];
         rtems_status_code      sc;
         int                    rr;
         /*
-         * Check if resuming, which is continuing, a step, or stepping a range.
+         * Check if resuming, which can be continuing, a step, or stepping a
+         * range.
          */
         if (detaching ||
             rtems_debugger_thread_flag(thread,
@@ -376,10 +379,18 @@ rtems_debugger_thread_system_resume(bool detaching)
                 r = rr;
             }
           }
-          sc = rtems_task_resume(thread->id);
-          if (sc != RTEMS_SUCCESSFUL) {
-            rtems_debugger_printf("error: rtems-db: thread: resume: %08lx: %s\n",
-                                  thread->id, rtems_status_text(sc));
+          if (rtems_debugger_verbose())
+            rtems_debugger_printf("rtems-db: sys:    : resume: 0x%08lx\n",
+                                  thread->id);
+          if (rtems_debugger_thread_flag(thread,
+                                         RTEMS_DEBUGGER_THREAD_FLAG_EXCEPTION)) {
+              rtems_debugger_target_exception_thread_resume(thread);
+          } else {
+              sc = rtems_task_resume(thread->id);
+              if (sc != RTEMS_SUCCESSFUL) {
+                  rtems_debugger_printf("error: rtems-db: thread: resume: %08lx: %s\n",
+                                        thread->id, rtems_status_text(sc));
+              }
           }
           thread->flags &= ~(RTEMS_DEBUGGER_THREAD_FLAG_CONTINUE |
                              RTEMS_DEBUGGER_THREAD_FLAG_STEP);
@@ -420,10 +431,12 @@ rtems_debugger_thread_continue_all(void)
     size_t i;
     for (i = 0; i < threads->current.level; ++i) {
       rtems_debugger_thread* thread = &current[i];
-      int                    r;
-      r = rtems_debugger_thread_continue(thread);
-      if (r < 0)
-        break;
+      if (!rtems_debugger_thread_flag(thread,
+                                      RTEMS_DEBUGGER_THREAD_FLAG_STEP_INSTR)) {
+        r = rtems_debugger_thread_continue(thread);
+        if (r < 0)
+          break;
+      }
     }
   }
   else {
