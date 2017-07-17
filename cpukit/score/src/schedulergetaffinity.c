@@ -26,7 +26,7 @@ bool _Scheduler_Get_affinity(
 {
   const Scheduler_Control    *scheduler;
   ISR_lock_Context            lock_context;
-  Processor_mask             *affinity;
+  const Processor_mask       *affinity;
   Processor_mask_Copy_status  status;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
