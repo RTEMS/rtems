@@ -35,6 +35,15 @@
 /*
  * System call optimized trap table entry
  */
+#define FPDIS_TRAP(_handler)  \
+  mov   %psr, %l0 ; \
+  sethi %hi(_handler), %l4 ; \
+  jmp   %l4+%lo(_handler); \
+   sethi %hi(SPARC_PSR_EF_MASK), %l3
+
+/*
+ * System call optimized trap table entry
+ */
 #define IRQDIS_TRAP(_handler)  \
   mov   %psr, %l0 ; \
   sethi %hi(_handler), %l4 ; \
@@ -100,7 +109,11 @@ SYM(trap_table):
                                                 !    exception
   BAD_TRAP;                                     ! 02 illegal instruction
   BAD_TRAP;                                     ! 03 privileged instruction
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+  FPDIS_TRAP(SYM(syscall_lazy_fp_switch));      ! 04 fp disabled
+#else
   BAD_TRAP;                                     ! 04 fp disabled
+#endif
   WOTRAP(5, SYM(window_overflow_trap_handler)); ! 05 window overflow
   WUTRAP(6, SYM(window_underflow_trap_handler));! 06 window underflow
   BAD_TRAP;                                     ! 07 memory address not aligned
@@ -209,7 +222,7 @@ SYM(CLOCK_SPEED):
    */
   IRQDIS_TRAP(SYM(syscall_irqdis));             ! 89 IRQ Disable syscall trap
   IRQEN_TRAP(SYM(syscall_irqen));               ! 8A IRQ Enable syscall trap
-#if SPARC_HAS_FPU == 1
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   IRQDIS_TRAP(SYM(syscall_irqdis_fp));          ! 8B IRQ disable
                                                 ! and set PSR[EF] syscall trap
 #else

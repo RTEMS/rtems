@@ -7,7 +7,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014, 2016 embedded brains GmbH
+ *  Copyright (c) 2014, 2017 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -218,7 +218,17 @@ done_flushing:
         ! The next load is in a delay slot, which is all right
 #endif
 
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+        ld      [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET], %g2
+#endif
         ld      [%o1 + PSR_OFFSET], %g1       ! g1 = heir psr with traps enabled
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+        sethi   %hi(SPARC_PSR_EF_MASK), %g5
+        cmp     %g2, %g0
+        bne,a   .Lclear_psr_ef_done
+         andn   %g1, %g5, %g1                 ! g1 = heir psr w/o PSR[EF]
+.Lclear_psr_ef_done:
+#endif
         andn    %g1, SPARC_PSR_CWP_MASK, %g1  ! g1 = heir psr w/o cwp
         or      %g1, %g3, %g1                 ! g1 = heir psr with cwp
         mov     %g1, %psr                     ! restore status register and
@@ -583,7 +593,7 @@ pil_fixed:
          nop                            ! delay slot
 #endif
 
-#if SPARC_HAS_FPU == 1
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
         mov      %l0, %g1               ! PSR[EF] value of interrupted context
         ta       SPARC_SWTRAP_IRQDIS_FP ! **** DISABLE INTERRUPTS ****
 #else
@@ -652,10 +662,38 @@ isr_dispatch:
 
         mov      0, %o1                 ! ISR level for _Thread_Do_dispatch()
 
-#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
         /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
         andcc   %l0, %l5, %g0
-        be      non_fp_thread_dispatch
+        be      .Lnon_fp_thread_dispatch
+         ld     [%g6 + PER_CPU_OFFSET_EXECUTING], %l6
+
+        /* Set new floating point unit owner to executing thread */
+        st      %l6, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
+
+        call    SYM(_Thread_Do_dispatch)
+         mov    %g6, %o0
+
+        /*
+         * If we are still the floating point unit owner, then reset the
+         * floating point unit owner to NULL, otherwise clear PSR[EF] in the
+         * interrupt frame and let the FP disabled system call do the floating
+         * point context save/restore.
+         */
+        ld      [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET], %l7
+        cmp     %l6, %l7
+        bne     .Ldisable_fp
+         andn   %l0, %l5, %l0
+        ba      .Lthread_dispatch_done
+         st     %g0, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
+.Ldisable_fp:
+        ba      .Lthread_dispatch_done
+         st      %l0, [%fp + ISF_PSR_OFFSET]
+.Lnon_fp_thread_dispatch:
+#elif defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
+        /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
+        andcc   %l0, %l5, %g0
+        be      .Lnon_fp_thread_dispatch
          nop
 
         /*
@@ -722,17 +760,17 @@ isr_dispatch:
         ldd     [%sp + FP_FRAME_OFFSET_F28_F29], %f28
         ldd     [%sp + FP_FRAME_OFFSET_F3O_F31], %f30
         ld      [%sp + FP_FRAME_OFFSET_FSR], %fsr
-        ba      thread_dispatch_done
+        ba      .Lthread_dispatch_done
          add    %sp, FP_FRAME_SIZE, %sp
 
-non_fp_thread_dispatch:
+.Lnon_fp_thread_dispatch:
 #endif
 
         call    SYM(_Thread_Do_dispatch)
          mov    %g6, %o0
 
-#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
-thread_dispatch_done:
+#if SPARC_HAS_FPU == 1
+.Lthread_dispatch_done:
 #endif
 
         ta       SPARC_SWTRAP_IRQDIS ! **** DISABLE INTERRUPTS ****

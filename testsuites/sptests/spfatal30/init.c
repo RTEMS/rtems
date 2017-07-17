@@ -23,7 +23,8 @@
 
 const char rtems_test_name[] = "SPFATAL 30";
 
-#if CPU_HARDWARE_FP == TRUE && CPU_ALL_TASKS_ARE_FP == FALSE
+#if (CPU_HARDWARE_FP == TRUE && CPU_ALL_TASKS_ARE_FP == FALSE) \
+  || SPARC_HAS_FPU == 1
 #define EXPECT_ILLEGAL_USE_OF_FLOATING_POINT_UNIT
 #endif
 

@@ -23,7 +23,7 @@
 
 const char rtems_test_name[] = "SPFATAL 31";
 
-#if CPU_HARDWARE_FP == TRUE && defined(__sparc__)
+#if SPARC_HAS_FPU == 1
 #define EXPECT_ILLEGAL_USE_OF_FLOATING_POINT_UNIT
 #endif
 

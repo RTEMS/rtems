@@ -30,17 +30,28 @@ extern "C" {
 
 /*
  * The SPARC ABI is a bit special with respect to the floating point context.
- * The complete floating point context is volatile.  Thus from an ABI point
+ * The complete floating point context is volatile.  Thus, from an ABI point
  * of view nothing needs to be saved and restored during a context switch.
  * Instead the floating point context must be saved and restored during
- * interrupt processing.  Historically, the deferred floating point switch is
+ * interrupt processing.  Historically, the deferred floating point switch was
  * used for SPARC and the complete floating point context is saved and
  * restored during a context switch to the new floating point unit owner.
  * This is a bit dangerous since post-switch actions (e.g. signal handlers)
  * and context switch extensions may silently corrupt the floating point
- * context.  The floating point unit is disabled for interrupt handlers.
- * Thus in case an interrupt handler uses the floating point unit then this
- * will result in a trap.
+ * context.
+ *
+ * The floating point unit is disabled for interrupt handlers.  Thus, in case
+ * an interrupt handler uses the floating point unit then this will result in a
+ * trap (INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT).
+ *
+ * In uniprocessor configurations, a lazy floating point context switch is
+ * used.  In case an active floating point thread is interrupted (PSR[EF] == 1)
+ * and a thread dispatch is carried out, then this thread is registered as the
+ * floating point owner.  When a floating point owner is present during a
+ * context switch, the floating point unit is disabled for the heir thread
+ * (PSR[EF] == 0).  The floating point disabled trap checks that the use of the
+ * floating point unit is allowed and saves/restores the floating point context
+ * on demand.
  *
  * In SMP configurations, the deferred floating point switch is not supported
  * in principle.  So, use here a synchronous floating point switching.
@@ -52,6 +63,8 @@ extern "C" {
 #if SPARC_HAS_FPU == 1
   #if defined(RTEMS_SMP)
     #define SPARC_USE_SYNCHRONOUS_FP_SWITCH
+  #else
+    #define SPARC_USE_LAZY_FP_SWITCH
   #endif
 #endif
 
@@ -152,28 +165,7 @@ extern "C" {
  */
 #define CPU_IDLE_TASK_IS_FP      FALSE
 
-/**
- * Should the saving of the floating point registers be deferred
- * until a context switch is made to another different floating point
- * task?
- *
- * - If TRUE, then the floating point context will not be stored until
- * necessary.  It will remain in the floating point registers and not
- * disturned until another floating point task is switched to.
- *
- * - If FALSE, then the floating point context is saved when a floating
- * point task is switched out and restored when the next floating point
- * task is restored.  The state of the floating point registers between
- * those two operations is not specified.
- *
- * On the SPARC, we can disable the FPU for integer only tasks so
- * it is safe to defer floating point context switches.
- */
-#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
-  #define CPU_USE_DEFERRED_FP_SWITCH FALSE
-#else
-  #define CPU_USE_DEFERRED_FP_SWITCH TRUE
-#endif
+#define CPU_USE_DEFERRED_FP_SWITCH FALSE
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
@@ -356,6 +348,7 @@ typedef struct {
 /**@{**/
 
 #ifndef ASM
+typedef struct Context_Control_fp Context_Control_fp;
 
 /**
  * @brief SPARC basic context.
@@ -432,6 +425,10 @@ typedef struct {
    * SPARC CPU models at high interrupt rates.
    */
   uint32_t   isr_dispatch_disable;
+
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+  Context_Control_fp *fp_context;
+#endif
 
 #if defined(RTEMS_SMP)
   volatile uint32_t is_executing;
@@ -528,7 +525,7 @@ typedef struct {
  *
  * This structure defines floating point context area.
  */
-typedef struct {
+struct Context_Control_fp {
   /** This will contain the contents of the f0 and f1 register. */
   double      f0_f1;
   /** This will contain the contents of the f2 and f3 register. */
@@ -563,7 +560,7 @@ typedef struct {
   double      f30_f31;
   /** This will contain the contents of the floating point status register. */
   uint32_t    fsr;
-} Context_Control_fp;
+};
 
 #endif /* ASM */
 
@@ -669,13 +666,6 @@ typedef struct {
 #endif /* ASM */
 
 #ifndef ASM
-/**
- * This variable is contains the initialize context for the FP unit.
- * It is filled in by _CPU_Initialize and copied into the task's FP
- * context area during _CPU_Context_Initialize.
- */
-extern Context_Control_fp _CPU_Null_fp_context;
-
 /**
  * The following type defines an entry in the SPARC's trap table.
  *
@@ -958,18 +948,22 @@ void _CPU_Context_Initialize(
    _CPU_Context_restore( (_the_context) );
 
 /**
- * This routine initializes the FP context area passed to it to.
- *
- * The SPARC allows us to use the simple initialization model
- * in which an "initial" FP context was saved into _CPU_Null_fp_context
- * at CPU initialization and it is simply copied into the destination
- * context.
+ * @brief Nothing to do due to the synchronous or lazy floating point switch.
  */
 #define _CPU_Context_Initialize_fp( _destination ) \
-  do { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  } while (0)
+  do { } while ( 0 )
 
+/**
+ * @brief Nothing to do due to the synchronous or lazy floating point switch.
+ */
+#define _CPU_Context_save_fp( _fp_context_ptr ) \
+  do { } while ( 0 )
+
+/**
+ * @brief Nothing to do due to the synchronous or lazy floating point switch.
+ */
+#define _CPU_Context_restore_fp( _fp_context_ptr ) \
+  do { } while ( 0 )
 /* end of Context handler macros */
 
 /* Fatal Error manager macros */
@@ -1095,27 +1089,16 @@ void _CPU_Context_restore(
   }
 #endif
 
-/**
- * @brief SPARC specific save FPU method.
- *
- * This routine saves the floating point context passed to it.
- *
- * @param[in] fp_context_ptr is the area to save into
- */
-void _CPU_Context_save_fp(
-  Context_Control_fp **fp_context_ptr
-);
-
-/**
- * @brief SPARC specific restore FPU method.
- *
- * This routine restores the floating point context passed to it.
- *
- * @param[in] fp_context_ptr is the area to restore from
- */
-void _CPU_Context_restore_fp(
-  Context_Control_fp **fp_context_ptr
-);
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+#define _CPU_Context_Destroy( _the_thread, _the_context ) \
+  do { \
+    Per_CPU_Control *cpu_self = _Per_CPU_Get(); \
+    Thread_Control *_fp_owner = cpu_self->cpu_per_cpu.fp_owner; \
+    if ( _fp_owner == _the_thread ) { \
+      cpu_self->cpu_per_cpu.fp_owner = NULL; \
+    } \
+  } while ( 0 )
+#endif
 
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -18,6 +18,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpuimpl.h>
+#include <rtems/score/percpu.h>
 
 #define FRAME_OFFSET_BUFFER_0 (SPARC_MINIMUM_STACK_FRAME_SIZE)
 #define FRAME_OFFSET_BUFFER_1 (FRAME_OFFSET_BUFFER_0 + 0x04)
@@ -73,13 +74,15 @@
         PUBLIC(_CPU_Context_validate)
 SYM(_CPU_Context_validate):
 
-	/*
-	 * g2 checks if the Floating Point Unit in the Processor Status
-	 * Register (PSR) is set.
-	 */
+	/* g2 indicates if the FPU should be checked */
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+	ld	[%g6 + PER_CPU_OFFSET_EXECUTING], %g2
+	ld	[%g2 + %lo(SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET)], %g2
+#else
 	mov	%psr, %g2
 	sethi	%hi(SPARC_PSR_EF_MASK), %g3
 	and	%g2, %g3, %g2
+#endif
 
 	/* g1 is used to save the original pattern */
 	mov	%o0, %g1

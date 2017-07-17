@@ -120,9 +120,11 @@ static rtems_isr bsp_spurious_handler(
     .isf = isf
   };
 
+#if !defined(SPARC_USE_LAZY_FP_SWITCH)
   if ( SPARC_REAL_TRAP_NUMBER( trap ) == 4 ) {
     _Internal_error( INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT );
   }
+#endif
 
   rtems_fatal(
     RTEMS_FATAL_SOURCE_EXCEPTION,
@@ -157,10 +159,13 @@ void bsp_spurious_initialize()
      */
 
     if (( trap == 5 || trap == 6 ) ||
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+        ( trap == 4 ) ||
+#endif
         (( trap >= 0x11 ) && ( trap <= 0x1f )) ||
         (( trap >= 0x70 ) && ( trap <= 0x83 )) ||
         ( trap == 0x80 + SPARC_SWTRAP_IRQDIS ) ||
-#if SPARC_HAS_FPU == 1
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
         ( trap == 0x80 + SPARC_SWTRAP_IRQDIS_FP ) ||
 #endif
         ( trap == 0x80 + SPARC_SWTRAP_IRQEN ))

@@ -67,6 +67,24 @@
 /** This defines the size of the ISF area for use in assembly. */
 #define CPU_INTERRUPT_FRAME_SIZE SPARC_MINIMUM_STACK_FRAME_SIZE + 0x50
 
+#define SPARC_FP_CONTEXT_OFFSET_F0_F1 0
+#define SPARC_FP_CONTEXT_OFFSET_F2_F3 8
+#define SPARC_FP_CONTEXT_OFFSET_F4_F5 16
+#define SPARC_FP_CONTEXT_OFFSET_F6_F7 24
+#define SPARC_FP_CONTEXT_OFFSET_F8_F9 32
+#define SPARC_FP_CONTEXT_OFFSET_F10_F11 40
+#define SPARC_FP_CONTEXT_OFFSET_F12_F13 48
+#define SPARC_FP_CONTEXT_OFFSET_F14_F15 56
+#define SPARC_FP_CONTEXT_OFFSET_F16_F17 64
+#define SPARC_FP_CONTEXT_OFFSET_F18_F19 72
+#define SPARC_FP_CONTEXT_OFFSET_F20_F21 80
+#define SPARC_FP_CONTEXT_OFFSET_F22_F23 88
+#define SPARC_FP_CONTEXT_OFFSET_F24_F25 96
+#define SPARC_FP_CONTEXT_OFFSET_F26_F27 104
+#define SPARC_FP_CONTEXT_OFFSET_F28_F29 112
+#define SPARC_FP_CONTEXT_OFFSET_F30_F31 120
+#define SPARC_FP_CONTEXT_OFFSET_FSR 128
+
 #if ( SPARC_HAS_FPU == 1 )
   #define CPU_PER_CPU_CONTROL_SIZE 8
 #else
@@ -79,6 +97,14 @@
    * Per_CPU_Control begin.
    */
   #define SPARC_PER_CPU_FSR_OFFSET 0
+
+  #if defined(SPARC_USE_LAZY_FP_SWITCH)
+    /**
+     * @brief Offset of the CPU_Per_CPU_control::fp_owner field relative to the
+     * Per_CPU_Control begin.
+     */
+    #define SPARC_PER_CPU_FP_OWNER_OFFSET 4
+  #endif
 #endif
 
 #ifndef ASM
@@ -98,8 +124,15 @@ typedef struct {
    */
   uint32_t fsr;
 
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+  /**
+   * @brief The current floating point owner.
+   */
+  struct _Thread_Control *fp_owner;
+#else
   /* See Per_CPU_Control::Interrupt_frame */
   uint32_t reserved_for_alignment_of_interrupt_frame;
+#endif
 #endif
 } CPU_Per_CPU_control;
 

@@ -11,12 +11,15 @@
  *  COPYRIGHT:
  *
  *  COPYRIGHT (c) 1995. European Space Agency.
+ *  Copyright (c) 2016, 2017 embedded brains GmbH
  *
  *  This terms of the RTEMS license apply to this file.
  *
  */
 
 #include <rtems/asm.h>
+#include <rtems/score/cpuimpl.h>
+#include <rtems/score/percpu.h>
 #include "syscall.h"
 
 	.section    ".text"
@@ -95,7 +98,7 @@ SYM(syscall_irqen):
 	jmp	%l2				! Return to after TA 10.
 	 rett	%l2 + 4
 
-#if SPARC_HAS_FPU == 1
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
 	/*
 	 *  system call - Interrupt disable and set PSR[EF] according to caller
 	 *                specified %g1
@@ -130,6 +133,127 @@ SYM(syscall_irqdis_fp):
 	nop					! PSR write delay
 	jmp	%l2				! Return to after TA 9.
 	 rett	%l2 + 4
+#endif
+
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+
+	/*
+	 *  system call - Perform a lazy floating point switch
+	 *
+	 *  On entry:
+	 *
+	 *    l0 = psr (from trap table)
+	 *    l1 = pc
+	 *    l2 = npc
+	 *    l3 = SPARC_PSR_EF_MASK
+	 */
+
+.align 32				! Align to 32-byte cache-line
+	PUBLIC(syscall_lazy_fp_switch)
+
+SYM(syscall_lazy_fp_switch):
+	ld	[%g6 + PER_CPU_OFFSET_EXECUTING], %l4
+	ld	[%g6 + PER_CPU_ISR_NEST_LEVEL], %l5
+	ld	[%l4 + %lo(SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET)], %l6
+	ld	[%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET], %l7
+
+	/* Ensure that we are not in interrupt context */
+	cmp	%l5, 0
+	bne	.Lillegal_use_of_floating_point_unit
+	 or	%l0, %l3, %l0
+
+	/* Ensure that we are a proper floating point thread */
+	cmp	%l6, 0
+	be	.Lillegal_use_of_floating_point_unit
+	 ld	[%l4 + %lo(SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET)], %l6
+
+	/* Set PSR[EF] to 1, PSR write delay 3 instructions! */
+	mov	%l0, %psr
+
+	/*
+	 * Check if there is a floating point owner.  We have to check this
+	 * here, since the floating point owner may have been deleted in the
+	 * meantime.  Save the floating point context if necessary.
+	 */
+	cmp	%l7, 0
+	be	.Lfp_save_done
+	 nop
+	ld	[%l7 + %lo(SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET)], %l5
+	std	%f0, [%l5 + SPARC_FP_CONTEXT_OFFSET_F0_F1]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f2, [%l5 + SPARC_FP_CONTEXT_OFFSET_F2_F3]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f4, [%l5 + SPARC_FP_CONTEXT_OFFSET_F4_F5]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f6, [%l5 + SPARC_FP_CONTEXT_OFFSET_F6_F7]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f8, [%l5 + SPARC_FP_CONTEXT_OFFSET_F8_F9]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f10, [%l5 + SPARC_FP_CONTEXT_OFFSET_F10_F11]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f12, [%l5 + SPARC_FP_CONTEXT_OFFSET_F12_F13]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f14, [%l5 + SPARC_FP_CONTEXT_OFFSET_F14_F15]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f16, [%l5 + SPARC_FP_CONTEXT_OFFSET_F16_F17]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f18, [%l5 + SPARC_FP_CONTEXT_OFFSET_F18_F19]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f20, [%l5 + SPARC_FP_CONTEXT_OFFSET_F20_F21]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f22, [%l5 + SPARC_FP_CONTEXT_OFFSET_F22_F23]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f24, [%l5 + SPARC_FP_CONTEXT_OFFSET_F24_F25]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f26, [%l5 + SPARC_FP_CONTEXT_OFFSET_F26_F27]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f28, [%l5 + SPARC_FP_CONTEXT_OFFSET_F28_F29]
+	SPARC_LEON3FT_B2BST_NOP
+	std	%f30, [%l5 + SPARC_FP_CONTEXT_OFFSET_F30_F31]
+	SPARC_LEON3FT_B2BST_NOP
+	st	%fsr, [%l5 + SPARC_FP_CONTEXT_OFFSET_FSR]
+	SPARC_LEON3FT_B2BST_NOP
+	st	%g0, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
+	SPARC_LEON3FT_B2BST_NOP
+	st	%l5, [%l7 + %lo(SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET)]
+
+.Lfp_save_done:
+
+	/* Restore the floating point context if necessary */
+	cmp	%l6, 0
+	be	.Lfp_restore_done
+	 st	%g0, [%l4 + %lo(SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET)]
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F0_F1], %f0
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F2_F3], %f2
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F4_F5], %f4
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F6_F7], %f6
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F8_F9], %f8
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F10_F11], %f10
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F12_F13], %f12
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F14_F15], %f14
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F16_F17], %f16
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F18_F19], %f18
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F20_F21], %f20
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F22_F23], %f22
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F24_F25], %f24
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F26_F27], %f26
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F28_F29], %f28
+	ldd	[%l6 + SPARC_FP_CONTEXT_OFFSET_F30_F31], %f30
+	ld	[%l6 + SPARC_FP_CONTEXT_OFFSET_FSR], %fsr
+
+.Lfp_restore_done:
+
+	/* Now, retry the floating point instruction with PSR[EF] == 1 */
+	jmp	%l1
+	 rett	%l1 + 4
+
+.Lillegal_use_of_floating_point_unit:
+
+	sethi	%hi(_Internal_error), %l1
+	or	%l1, %lo(_Internal_error), %l1
+	mov	38, %i0
+	jmp	%l1
+	 rett	%l1 + 4
 #endif
 
 #if defined(RTEMS_PARAVIRT)

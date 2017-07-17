@@ -8,6 +8,8 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2017 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -21,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/tls.h>
+#include <rtems/score/thread.h>
 #include <rtems/rtems/cache.h>
 
 #if SPARC_HAS_FPU == 1
@@ -29,6 +32,14 @@
       == SPARC_PER_CPU_FSR_OFFSET,
     SPARC_PER_CPU_FSR_OFFSET
   );
+
+  #if defined(SPARC_USE_LAZY_FP_SWITCH)
+    RTEMS_STATIC_ASSERT(
+      offsetof( Per_CPU_Control, cpu_per_cpu.fp_owner)
+        == SPARC_PER_CPU_FP_OWNER_OFFSET,
+      SPARC_PER_CPU_FP_OWNER_OFFSET
+    );
+  #endif
 #endif
 
 #define SPARC_ASSERT_OFFSET(field, off) \
@@ -99,6 +110,30 @@ SPARC_ASSERT_ISF_OFFSET(i7, I7);
 SPARC_ASSERT_ISF_OFFSET(y, Y);
 SPARC_ASSERT_ISF_OFFSET(tpc, TPC);
 
+#define SPARC_ASSERT_FP_OFFSET(field, off) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof(Context_Control_fp, field) == SPARC_FP_CONTEXT_OFFSET_ ## off, \
+    Context_Control_fp_offset_ ## field \
+  )
+
+SPARC_ASSERT_FP_OFFSET(f0_f1, F0_F1);
+SPARC_ASSERT_FP_OFFSET(f2_f3, F2_F3);
+SPARC_ASSERT_FP_OFFSET(f4_f5, F4_F5);
+SPARC_ASSERT_FP_OFFSET(f6_f7, F6_F7);
+SPARC_ASSERT_FP_OFFSET(f8_f9, F8_F9);
+SPARC_ASSERT_FP_OFFSET(f10_f11, F10_F11);
+SPARC_ASSERT_FP_OFFSET(f12_f13, F12_F13);
+SPARC_ASSERT_FP_OFFSET(f14_f15, F14_F15);
+SPARC_ASSERT_FP_OFFSET(f16_f17, F16_F17);
+SPARC_ASSERT_FP_OFFSET(f18_f19, F18_F19);
+SPARC_ASSERT_FP_OFFSET(f20_f21, F20_F21);
+SPARC_ASSERT_FP_OFFSET(f22_f23, F22_F23);
+SPARC_ASSERT_FP_OFFSET(f24_f25, F24_F25);
+SPARC_ASSERT_FP_OFFSET(f26_f27, F26_F27);
+SPARC_ASSERT_FP_OFFSET(f28_f29, F28_F29);
+SPARC_ASSERT_FP_OFFSET(f30_f31, F30_F31);
+SPARC_ASSERT_FP_OFFSET(fsr, FSR);
+
 RTEMS_STATIC_ASSERT(
   sizeof(SPARC_Minimum_stack_frame) == SPARC_MINIMUM_STACK_FRAME_SIZE,
   SPARC_MINIMUM_STACK_FRAME_SIZE
@@ -109,10 +144,6 @@ RTEMS_STATIC_ASSERT(
   sizeof(CPU_Interrupt_frame) % CPU_ALIGNMENT == 0,
   CPU_Interrupt_frame_alignment
 );
-
-#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
-Context_Control_fp _CPU_Null_fp_context;
-#endif
 
 /*
  *  _CPU_Initialize
@@ -129,22 +160,16 @@ Context_Control_fp _CPU_Null_fp_context;
 
 void _CPU_Initialize(void)
 {
-#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
-  Context_Control_fp *pointer;
-  uint32_t            psr;
-
-  sparc_get_psr( psr );
-  psr |= SPARC_PSR_EF_MASK;
-  sparc_set_psr( psr );
-
-  /*
-   *  This seems to be the most appropriate way to obtain an initial
-   *  FP context on the SPARC.  The NULL fp context is copied it to
-   *  the task's FP context during Context_Initialize.
-   */
-
-  pointer = &_CPU_Null_fp_context;
-  _CPU_Context_save_fp( &pointer );
+#if defined(SPARC_USE_LAZY_FP_SWITCH)
+  __asm__ volatile (
+    ".global SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET\n"
+    ".set SPARC_THREAD_CONTROL_REGISTERS_FP_CONTEXT_OFFSET, %0\n"
+    ".global SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET\n"
+    ".set SPARC_THREAD_CONTROL_FP_CONTEXT_OFFSET, %1\n"
+    :
+    : "i" (offsetof(Thread_Control, Registers.fp_context)),
+      "i" (offsetof(Thread_Control, fp_context))
+  );
 #endif
 }
 
