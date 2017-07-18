@@ -816,6 +816,25 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
+ * @ingroup CPUContext
+ *
+ * @brief Destroys the context of the thread.
+ *
+ * It must be implemented as a macro and an implementation is optional.  The
+ * default implementation does nothing.
+ *
+ * @param[in] _the_thread The corresponding thread.
+ * @param[in] _the_context The context to destroy.
+ *
+ * Port Specific Information:
+ *
+ * XXX document implementation including references if appropriate
+ */
+#define _CPU_Context_Destroy( _the_thread, _the_context ) \
+  { \
+  }
+
+/**
  *  @ingroup CPUContext
  * 
  * Initialize the context to a state suitable for starting a

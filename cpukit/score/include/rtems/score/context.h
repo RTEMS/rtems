@@ -146,6 +146,13 @@ extern "C" {
 #define _Context_Save_fp( _fp ) \
    _CPU_Context_save_fp( _fp )
 
+#if defined(_CPU_Context_Destroy)
+  #define _Context_Destroy( _the_thread, _the_context ) \
+    _CPU_Context_Destroy( _the_thread, _the_context )
+#else
+  #define _Context_Destroy( _the_thread, _the_context )
+#endif
+
 #ifdef __cplusplus
 }
 #endif

@@ -205,7 +205,7 @@ static void _Thread_Free( Thread_Control *the_thread )
 #endif
 
   _Thread_queue_Destroy( &the_thread->Join_queue );
-
+  _Context_Destroy( the_thread, &the_thread->Registers );
   _Objects_Free( &information->Objects, &the_thread->Object );
 }
 
