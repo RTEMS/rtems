@@ -70,6 +70,8 @@ void rtems_print_buffer(const unsigned char *buffer, const int length)
   }
 }
 
+static char const hexlist[] = "0123456789abcdef";
+
 /**
  * @brief Print \p length bytes from \p buffer, both in hex and ASCII.
  * @details Non-printable chars will appear as dots.
@@ -80,35 +82,39 @@ void rtems_print_buffer(const unsigned char *buffer, const int length)
 static void Dump_Line(const unsigned char *buffer, const unsigned int length)
 {
   unsigned int i;
-  static char line_buffer[ROW_LENGTH] = "";
-  size_t tmp_len;
 
   /* Output the hex value of each byte. */
   for (i = 0; i < length; ++i) {
-    snprintf(&line_buffer[i * HEX_FMT_LENGTH], HEX_FMT_LENGTH + 1,
-             "%02x ", buffer[i]);
+    unsigned char c = buffer[i];
+
+    rtems_putc(hexlist[(c >> 4) & 0xf]);
+    rtems_putc(hexlist[0xf]);
+    rtems_putc(' ');
   }
 
   /* Fill the remaining space with whitespace (if necessary). */
   for (; i < BYTES_PER_ROW; ++i) {
-    strncat(line_buffer, "   ", HEX_FMT_LENGTH);
+    rtems_putc(' ');
+    rtems_putc(' ');
+    rtems_putc(' ');
   }
 
   /* Append a bar. */
-  strncat(line_buffer, "|", 1);
-  tmp_len = strnlen(line_buffer, ROW_LENGTH);
+  rtems_putc('|');
 
   /* Now output the ASCII glyphs of printable chars. */
   for (i = 0; i < length; ++i) {
-    snprintf(&line_buffer[tmp_len + i], ASCII_FMT_LENGTH + 1,
-             "%c", isprint(buffer[i]) ? buffer[i] : '.');
+    unsigned char c = buffer[i];
+
+    rtems_putc(isprint(c) ? c : '.');
   }
 
   /* Fill the remaining space with whitespace (if necessary). */
   for(; i < BYTES_PER_ROW; i++) {
-    strncat(line_buffer, " ", ASCII_FMT_LENGTH);
+    rtems_putc(' ');
   }
 
   /* Append another bar and print the resulting string. */
-  printk("%s|\n", line_buffer);
+  rtems_putc('|');
+  rtems_putc('\n');
 }
