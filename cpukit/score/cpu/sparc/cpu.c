@@ -110,7 +110,7 @@ RTEMS_STATIC_ASSERT(
   CPU_Interrupt_frame_alignment
 );
 
-#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
 Context_Control_fp _CPU_Null_fp_context;
 #endif
 
@@ -129,7 +129,7 @@ Context_Control_fp _CPU_Null_fp_context;
 
 void _CPU_Initialize(void)
 {
-#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if (SPARC_HAS_FPU == 1) && !defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   Context_Control_fp *pointer;
   uint32_t            psr;
 

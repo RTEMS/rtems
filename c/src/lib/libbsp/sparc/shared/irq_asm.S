@@ -25,7 +25,7 @@
 #include <rtems/score/percpu.h>
 #include <bspopts.h>
 
-#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   #define FP_FRAME_OFFSET_FO_F1 (SPARC_MINIMUM_STACK_FRAME_SIZE + 0)
   #define FP_FRAME_OFFSET_F2_F3 (FP_FRAME_OFFSET_FO_F1 + 8)
   #define FP_FRAME_OFFSET_F4_F5 (FP_FRAME_OFFSET_F2_F3 + 8)
@@ -652,7 +652,7 @@ isr_dispatch:
 
         mov      0, %o1                 ! ISR level for _Thread_Do_dispatch()
 
-#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
         /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
         andcc   %l0, %l5, %g0
         be      non_fp_thread_dispatch
@@ -731,7 +731,7 @@ non_fp_thread_dispatch:
         call    SYM(_Thread_Do_dispatch)
          mov    %g6, %o0
 
-#if SPARC_HAS_FPU == 1 && defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
 thread_dispatch_done:
 #endif
 

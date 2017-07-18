@@ -28,29 +28,31 @@ extern "C" {
 
 /* conditional compilation parameters */
 
-#if defined(RTEMS_SMP)
-  /*
-   * The SPARC ABI is a bit special with respect to the floating point context.
-   * The complete floating point context is volatile.  Thus from an ABI point
-   * of view nothing needs to be saved and restored during a context switch.
-   * Instead the floating point context must be saved and restored during
-   * interrupt processing.  Historically the deferred floating point switch is
-   * used for SPARC and the complete floating point context is saved and
-   * restored during a context switch to the new floating point unit owner.
-   * This is a bit dangerous since post-switch actions (e.g. signal handlers)
-   * and context switch extensions may silently corrupt the floating point
-   * context.  The floating point unit is disabled for interrupt handlers.
-   * Thus in case an interrupt handler uses the floating point unit then this
-   * will result in a trap.
-   *
-   * On SMP configurations the deferred floating point switch is not
-   * supported in principle.  So use here a safe floating point support.  Safe
-   * means that the volatile floating point context is saved and restored
-   * around a thread dispatch issued during interrupt processing.  Thus
-   * post-switch actions and context switch extensions may safely use the
-   * floating point unit.
-   */
-  #define SPARC_USE_SAFE_FP_SUPPORT
+/*
+ * The SPARC ABI is a bit special with respect to the floating point context.
+ * The complete floating point context is volatile.  Thus from an ABI point
+ * of view nothing needs to be saved and restored during a context switch.
+ * Instead the floating point context must be saved and restored during
+ * interrupt processing.  Historically, the deferred floating point switch is
+ * used for SPARC and the complete floating point context is saved and
+ * restored during a context switch to the new floating point unit owner.
+ * This is a bit dangerous since post-switch actions (e.g. signal handlers)
+ * and context switch extensions may silently corrupt the floating point
+ * context.  The floating point unit is disabled for interrupt handlers.
+ * Thus in case an interrupt handler uses the floating point unit then this
+ * will result in a trap.
+ *
+ * In SMP configurations, the deferred floating point switch is not supported
+ * in principle.  So, use here a synchronous floating point switching.
+ * Synchronous means that the volatile floating point context is saved and
+ * restored around a thread dispatch issued during interrupt processing.  Thus
+ * post-switch actions and context switch extensions may safely use the
+ * floating point unit.
+ */
+#if SPARC_HAS_FPU == 1
+  #if defined(RTEMS_SMP)
+    #define SPARC_USE_SYNCHRONOUS_FP_SWITCH
+  #endif
 #endif
 
 /**
@@ -117,7 +119,7 @@ extern "C" {
  *
  * This is set based upon the multilib settings.
  */
-#if ( SPARC_HAS_FPU == 1 ) && !defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if ( SPARC_HAS_FPU == 1 ) && !defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   #define CPU_HARDWARE_FP     TRUE
 #else
   #define CPU_HARDWARE_FP     FALSE
@@ -167,7 +169,7 @@ extern "C" {
  * On the SPARC, we can disable the FPU for integer only tasks so
  * it is safe to defer floating point context switches.
  */
-#if defined(SPARC_USE_SAFE_FP_SUPPORT)
+#if defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
   #define CPU_USE_DEFERRED_FP_SWITCH FALSE
 #else
   #define CPU_USE_DEFERRED_FP_SWITCH TRUE
