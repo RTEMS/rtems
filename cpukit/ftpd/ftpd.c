@@ -444,7 +444,7 @@ task_pool_init(int count, rtems_task_priority priority)
       priority, FTPD_STACKSIZE,
       RTEMS_PREEMPT | RTEMS_NO_TIMESLICE |
       RTEMS_NO_ASR | RTEMS_INTERRUPT_LEVEL(0),
-      RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
+      RTEMS_FLOATING_POINT | RTEMS_LOCAL,
       &info->tid);
     if (sc == RTEMS_SUCCESSFUL)
     {
