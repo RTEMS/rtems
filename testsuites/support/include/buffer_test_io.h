@@ -201,6 +201,20 @@ extern "C" {
 
   /* do not use iprintf if strict ansi mode */
   #if defined(_NEWLIB_VERSION) && !defined(__STRICT_ANSI__)
+    #define asprintf asiprintf
+    #define asnprintf asniprintf
+    #define dprintf diprintf
+    #define fprintf fiprintf
+    #define sprintf siprintf
+    #define snprintf sniprintf
+    #define vasprintf vasiprintf
+    #define vasnprintf vasniprintf
+    #define vdprintf vdiprintf
+    #define vfprintf vfiprintf
+    #define vprintf viprintf
+    #define vsprintf vsiprintf
+    #define vsnprintf vsniprintf
+
     #undef printf
     #define printf(...) \
       do { \
