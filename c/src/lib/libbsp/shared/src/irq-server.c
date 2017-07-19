@@ -710,6 +710,9 @@ static void bsp_interrupt_server_handler_move_helper(void *arg)
     bsp_interrupt_server_context *dst = hihd->arg;
     bool pending;
 
+    /* The source server is only used in SMP configurations for the lock */
+    (void) src;
+
     rtems_interrupt_lock_acquire(&src->lock, &lock_context);
 
     pending = !rtems_chain_is_node_off_chain(&e->node);
