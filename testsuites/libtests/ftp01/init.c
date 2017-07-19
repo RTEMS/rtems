@@ -249,4 +249,6 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
+
 #include <rtems/confdefs.h>
