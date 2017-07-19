@@ -133,6 +133,10 @@ static rtems_isr bsp_spurious_handler(
     .isf = isf
   };
 
+  if ( SPARC_REAL_TRAP_NUMBER( trap ) == 4 ) {
+    _Internal_error( INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT );
+  }
+
   rtems_fatal(
     RTEMS_FATAL_SOURCE_EXCEPTION,
     (rtems_fatal_code) &frame

@@ -34,6 +34,8 @@ _SUBDIRS = \
     spsem_err02 sptask_err01 spevent_err03 sptask_err03 sptask_err02 \
     sptask_err04 spclock_err01
 _SUBDIRS += spfatal29
+_SUBDIRS += spfatal30
+_SUBDIRS += spfatal31
 _SUBDIRS += spmutex01
 _SUBDIRS += spextensions01
 _SUBDIRS += spsysinit01

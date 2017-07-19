@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Donierstr. 4
@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED
+    error - 3 == INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT
   );
 }
 

@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal31
+
+directives:
+
+  - _Internal_error()
+
+concepts:
+
+  - Provoke an illegal use of the floating point unit in interrupt context and
+    ensure that the right internal error occurs.
