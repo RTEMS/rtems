@@ -1055,7 +1055,7 @@ int lan91cxx_hardware_init(struct lan91cxx_priv_data *cpd)
 	{
 		int rc;
 
-		db_printf("Install lan91cxx isr at vec/irq %d\n", cpd->config.vector);
+		db_printf("Install lan91cxx isr at vec/irq %" PRIu32 "\n", cpd->config.vector);
 		rc = rtems_interrupt_handler_install(cpd->config.vector, "smc91cxx",
 			RTEMS_INTERRUPT_SHARED, lan91cxx_interrupt_handler, cpd);
 		if (rc != RTEMS_SUCCESSFUL)
