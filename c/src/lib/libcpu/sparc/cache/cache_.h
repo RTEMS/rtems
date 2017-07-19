@@ -19,17 +19,22 @@
 
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 0
 
+#define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+
 static inline void _CPU_cache_invalidate_entire_instruction ( void )
 {
   __asm__ volatile ("flush");
 }
 
-/* XXX these need to be addressed */
-
-static inline void _CPU_cache_invalidate_1_instruction_line (
-  const void * i_addr )
+static inline void _CPU_cache_invalidate_instruction_range(
+  const void *i_addr,
+  size_t      n_bytes
+)
 {
+  __asm__ volatile ("flush");
 }
+
+/* XXX these need to be addressed */
 
 static inline void _CPU_cache_freeze_instruction ( void )
 {
