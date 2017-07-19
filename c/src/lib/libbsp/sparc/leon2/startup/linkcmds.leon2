@@ -1,0 +1,27 @@
+/*  linkcmds
+ */
+
+/* Default values, can be overridden */
+
+_PROM_SIZE = DEFINED (_PROM_SIZE) ? _PROM_SIZE : 2M;
+_PROM_START = DEFINED (_PROM_START) ? _PROM_START : 0x00000000;
+
+_RAM_SIZE = DEFINED (_RAM_SIZE) ? _RAM_SIZE : 4M;
+_RAM_START = DEFINED (_RAM_START) ? _RAM_START : 0x40000000;
+
+/*
+ *  Base address of the on-CPU peripherals
+ */
+
+_LEON_REG = 0x80000000;
+LEON_REG = _LEON_REG;
+
+/* these are the maximum values */
+
+MEMORY
+{
+  rom     : ORIGIN = 0x00000000, LENGTH = 256M
+  ram     : ORIGIN = 0x40000000, LENGTH = 1024M
+}
+
+INCLUDE linkcmds.base
