@@ -221,11 +221,9 @@ static void test(void)
   cpu_set_t online_cpus;
   uint32_t cpu_count;
 
-  cpu_count = rtems_get_processor_count();
-  rtems_test_assert(cpu_count == 1 || cpu_count == 2);
-
   rtems_test_assert(rtems_get_current_processor() == 0);
 
+  cpu_count = rtems_get_processor_count();
   main_task_id = rtems_task_self();
 
   CPU_ZERO(&first_cpu);
