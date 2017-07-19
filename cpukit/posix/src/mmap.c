@@ -114,6 +114,7 @@ void *mmap(
 {
   struct stat     sb;
   mmap_mapping   *mapping;
+  mmap_mapping   *current_mapping;
   ssize_t         r;
   rtems_libio_t  *iop;
   bool            map_fixed;
@@ -319,9 +320,9 @@ void *mmap(
        * error. POSIX allows us to also return successfully by unmapping
        * the overlapping prior mappings.
        */
-      mapping = (mmap_mapping*) node;
-      if ( ( addr >= mapping->addr ) &&
-           ( addr < ( mapping->addr + mapping->len )) ) {
+      current_mapping = (mmap_mapping*) node;
+      if ( ( addr >= current_mapping->addr ) &&
+           ( addr < ( current_mapping->addr + current_mapping->len )) ) {
         free( mapping );
         mmap_mappings_lock_release( );
         errno = ENXIO;
