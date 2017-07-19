@@ -200,6 +200,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
+/* We need a scheduler with lazy processor allocation for this test */
+#define CONFIGURE_SCHEDULER_SIMPLE_SMP
+
 #define CONFIGURE_INIT_TASK_PRIORITY FIRST_TASK_PRIORITY
 #define CONFIGURE_INIT_TASK_INITIAL_MODES RTEMS_DEFAULT_MODES
 #define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_DEFAULT_ATTRIBUTES
