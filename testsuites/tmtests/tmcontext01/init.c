@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -36,7 +36,7 @@ const char rtems_test_name[] = "TMCONTEXT 1";
 
 static rtems_counter_ticks t[SAMPLES];
 
-static volatile bool always_true = true;
+static volatile int prevent_optimization;
 
 static size_t cache_line_size;
 
@@ -59,19 +59,17 @@ static int dirty_data_cache(volatile int *data, size_t n, size_t clsz, int j)
   return i + j;
 }
 
-static int prevent_opt_func(int m, int n)
+static int call_at_level(
+  int start,
+  int fl,
+  int s,
+  bool dirty
+)
 {
-  if (m == 0) {
-    return n + 1;
-  } else if (m > 0 && n == 0) {
-    return prevent_opt_func(m - 1, 1);
-  } else {
-    return prevent_opt_func(m - 1, prevent_opt_func(m, n - 1));
-  }
-}
+  int prevent_optimization;;
 
-static int call_at_level(int start, int fl, int s, bool dirty)
-{
+  prevent_optimization = start + fl;
+
   if (fl == start) {
     /*
      * Some architectures like the SPARC have register windows.  A side-effect
@@ -82,11 +80,12 @@ static int call_at_level(int start, int fl, int s, bool dirty)
   }
 
   if (fl > 0) {
-    if (always_true) {
-      return call_at_level(start, fl - 1, s, dirty);
-    } else {
-      return prevent_opt_func(fl - 1, fl - 2);
-    }
+    call_at_level(
+      start,
+      fl - 1,
+      s,
+      dirty
+    );
   } else {
     char *volatile space;
     rtems_counter_ticks a;
@@ -107,9 +106,9 @@ static int call_at_level(int start, int fl, int s, bool dirty)
 
     b = rtems_counter_read();
     t[s] = rtems_counter_difference(b, a);
-
-    return 0;
   }
+
+  return prevent_optimization;
 }
 
 static void load_task(rtems_task_argument arg)
@@ -147,6 +146,8 @@ static void test_by_function_level(int fl, bool dirty)
   uint64_t q2;
   uint64_t q3;
   uint64_t max;
+
+  fl += prevent_optimization;
 
   rtems_interrupt_lock_initialize(&lock, "test");
   rtems_interrupt_lock_acquire(&lock, &lock_context);
