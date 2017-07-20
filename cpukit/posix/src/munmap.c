@@ -63,7 +63,7 @@ int munmap(void *addr, size_t len)
     mapping = (mmap_mapping*) node;
     if ( ( addr >= mapping->addr ) &&
          ( addr < ( mapping->addr + mapping->len )) ) {
-      rtems_chain_extract( node );
+      rtems_chain_extract_unprotected( node );
       /* FIXME: generally need a way to clean-up the backing object, but
        * currently it only matters for MAP_SHARED shm objects. */
       if ( mapping->is_shared_shm == true ) {

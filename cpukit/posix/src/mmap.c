@@ -371,7 +371,7 @@ void *mmap(
     rtems_libio_increment_mapping_refcnt(iop);
   }
 
-  rtems_chain_append( &mmap_mappings, &mapping->node );
+  rtems_chain_append_unprotected( &mmap_mappings, &mapping->node );
 
   mmap_mappings_lock_release( );
 
