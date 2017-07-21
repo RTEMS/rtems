@@ -143,8 +143,12 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/tmtc/grtm.c
 
 # MEMSCRUB
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/scrub/memscrub.c
+
 # L4STAT
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/stat/l4stat.c
+
+# SPWTDP
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/spw/spwtdp.c
 
 # Driver Manager
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/drvmgr/ambapp_bus.c
