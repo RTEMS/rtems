@@ -28,85 +28,11 @@
 #include <rtems/posix/mmanimpl.h>
 #include <rtems/posix/shmimpl.h>
 
-#define RTEMS_MUTEX_ATTRIBS \
-  (RTEMS_PRIORITY | RTEMS_SIMPLE_BINARY_SEMAPHORE | \
-   RTEMS_NO_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
 
 /**
- * Mmap chain of mappings.
+ * mmap chain of mappings.
  */
-rtems_chain_control mmap_mappings;
-
-/**
- * The id of the MMAP lock.
- */
-static rtems_id mmap_mappings_lock;
-
-/**
- * Create the lock.
- */
-static
-bool mmap_mappings_lock_create(
-  void
-)
-{
-  /*
-   * Lock the mapping table. We only create a lock if a call is made. First we
-   * test if a mapping lock is present. If one is present we lock it. If not
-   * the libio lock is locked and we then test the mapping lock again. If not
-   * present we create the mapping lock then release libio lock.
-   */
-  /* FIXME: double-checked locking anti-pattern. */
-  if ( mmap_mappings_lock == 0 ) {
-    rtems_status_code sc = RTEMS_SUCCESSFUL;
-    rtems_chain_initialize_empty( &mmap_mappings );
-    rtems_semaphore_obtain( rtems_libio_semaphore,
-                            RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-    /* FIXME: account for semaphore in confdefs, or maybe just use the
-     * rtems_libio_semaphore? */
-    if ( mmap_mappings_lock == 0 )
-      sc = rtems_semaphore_create( rtems_build_name( 'M', 'M', 'A', 'P' ),
-                                   1,
-                                   RTEMS_MUTEX_ATTRIBS,
-                                   RTEMS_NO_PRIORITY,
-                                   &mmap_mappings_lock );
-    rtems_semaphore_release( rtems_libio_semaphore );
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      errno = EINVAL;
-      return false;
-    }
-  }
-  return true;
-}
-
-bool mmap_mappings_lock_obtain(
-  void
-)
-{
-  if ( mmap_mappings_lock_create( ) ) {
-    rtems_status_code sc;
-    sc = rtems_semaphore_obtain( mmap_mappings_lock,
-                                 RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-    if ( sc != RTEMS_SUCCESSFUL ) {
-      errno = EINVAL;
-      return false;
-    }
-  }
-  return true;
-}
-
-bool mmap_mappings_lock_release(
-  void
-)
-{
-  rtems_status_code sc;
-  sc = rtems_semaphore_release( mmap_mappings_lock );
-  if (( sc != RTEMS_SUCCESSFUL ) && ( errno == 0 )) {
-    errno = EINVAL;
-    return false;
-  }
-  return true;
-}
+CHAIN_DEFINE_EMPTY( mmap_mappings );
 
 void *mmap(
   void *addr, size_t len, int prot, int flags, int fildes, off_t off
@@ -307,9 +233,7 @@ void *mmap(
     return MAP_FAILED;
   }
 
-  /* Lock access to mmap_mappings. Sets errno on failure. */
-  if ( !mmap_mappings_lock_obtain( ) )
-    return MAP_FAILED;
+  mmap_mappings_lock_obtain();
 
   if ( map_fixed ) {
     rtems_chain_node* node = rtems_chain_first (&mmap_mappings);

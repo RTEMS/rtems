@@ -39,8 +39,15 @@ typedef struct mmap_mappings_s {
 
 extern rtems_chain_control mmap_mappings;
 
-bool mmap_mappings_lock_obtain( void );
-bool mmap_mappings_lock_release( void );
+static inline void mmap_mappings_lock_obtain( void )
+{
+  rtems_libio_lock();
+}
+
+static inline void mmap_mappings_lock_release( void )
+{
+  rtems_libio_unlock();
+}
 
 #ifdef __cplusplus
 }

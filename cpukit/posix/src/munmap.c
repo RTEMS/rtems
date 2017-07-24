@@ -52,11 +52,7 @@ int munmap(void *addr, size_t len)
     return -1;
   }
 
-  /*
-   * Obtain the mmap lock. Sets errno on failure.
-   */
-  if ( !mmap_mappings_lock_obtain( ))
-    return -1;
+  mmap_mappings_lock_obtain();
 
   node = rtems_chain_first (&mmap_mappings);
   while ( !rtems_chain_is_tail( &mmap_mappings, node )) {
