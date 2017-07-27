@@ -43,9 +43,8 @@ dist_project_lib_DATA += startup/linkcmds \
 	../shared/startup/linkcmds.base \
 	startup/linkcmds.qoriq_core_0 \
 	startup/linkcmds.qoriq_core_1 \
-	startup/linkcmds.qoriq_p1020rdb \
-	startup/linkcmds.qoriq_t2080rdb \
-	startup/linkcmds.qoriq_t4240rdb
+	startup/linkcmds.qoriq_e500 \
+	startup/linkcmds.qoriq_e6500_32
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =

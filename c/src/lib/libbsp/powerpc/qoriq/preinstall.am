@@ -129,15 +129,11 @@ $(PROJECT_LIB)/linkcmds.qoriq_core_1: startup/linkcmds.qoriq_core_1 $(PROJECT_LI
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_core_1
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_core_1
 
-$(PROJECT_LIB)/linkcmds.qoriq_p1020rdb: startup/linkcmds.qoriq_p1020rdb $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_p1020rdb
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_p1020rdb
+$(PROJECT_LIB)/linkcmds.qoriq_e500: startup/linkcmds.qoriq_e500 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_e500
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_e500
 
-$(PROJECT_LIB)/linkcmds.qoriq_t2080rdb: startup/linkcmds.qoriq_t2080rdb $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_t2080rdb
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_t2080rdb
-
-$(PROJECT_LIB)/linkcmds.qoriq_t4240rdb: startup/linkcmds.qoriq_t4240rdb $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_t4240rdb
-PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_t4240rdb
+$(PROJECT_LIB)/linkcmds.qoriq_e6500_32: startup/linkcmds.qoriq_e6500_32 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_e6500_32
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_e6500_32
 
