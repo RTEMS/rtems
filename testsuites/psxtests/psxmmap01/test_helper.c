@@ -24,7 +24,7 @@ void fail_check(
 {
     va_list ap;
 
-    printf( "%s: %d: ", file, line );
+    printf( "%s: %zd: ", file, line );
 
     va_start(ap, fmt);
     vprintf(fmt, ap);
