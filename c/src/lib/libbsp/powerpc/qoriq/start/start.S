@@ -53,37 +53,6 @@ _start:
 	bl	.Linitearly
 	bl	bsp_fdt_copy
 
-#ifdef QORIQ_HAS_WRITE_BACK_L1_CACHE
-	/*
-	 * See PowerPC e500 Core Family Reference Manual, 11.5, L1 Data Cache
-	 * Flushing.
-	 */
-	LWI	r3, 12 * 128
-	mtctr	r3
-	LWI	r4, bsp_section_bss_begin
-1:
-	dcbz	r0, r4
-	addi	r4, r4, 32
-	bdnz	1b
-#endif
-
-	bl	qoriq_l1cache_invalidate
-
-#ifdef QORIQ_CLUSTER_1_L2CSR0
-	LWI	r3, QORIQ_CLUSTER_1_L2CSR0
-	bl	qoriq_l2cache_flush_invalidate
-#endif
-
-#ifdef QORIQ_CLUSTER_2_L2CSR0
-	LWI	r3, QORIQ_CLUSTER_2_L2CSR0
-	bl	qoriq_l2cache_flush_invalidate
-#endif
-
-#ifdef QORIQ_CLUSTER_3_L2CSR0
-	LWI	r3, QORIQ_CLUSTER_3_L2CSR0
-	bl	qoriq_l2cache_flush_invalidate
-#endif
-
 	/* Get start stack */
 	LWI	START_STACK, start_stack_end
 
@@ -94,12 +63,18 @@ _start:
 	LWI	r4, bsp_section_fast_text_load_begin
 	LWI	r5, bsp_section_fast_text_size
 	bl	.Lcopy
+	LWI	r3, bsp_section_fast_text_begin
+	LWI	r4, bsp_section_fast_text_size
+	bl	rtems_cache_flush_multiple_data_lines
 
 	/* Copy read-only data */
 	LWI	r3, bsp_section_rodata_begin
 	LWI	r4, bsp_section_rodata_load_begin
 	LWI	r5, bsp_section_rodata_size
 	bl	.Lcopy
+	LWI	r3, bsp_section_rodata_begin
+	LWI	r4, bsp_section_rodata_size
+	bl	rtems_cache_flush_multiple_data_lines
 
 	/* Copy fast data */
 	LWI	r3, bsp_section_fast_data_begin
@@ -206,7 +181,7 @@ _start:
 	/* Add TS1 entry for the first 4GiB of RAM */
 	li	r3, SCRATCH_TLB
 	li	r4, FSL_EIS_MAS1_TS
-	li	r5, FSL_EIS_MAS2_I
+	li	r5, FSL_EIS_MAS2_M
 	li	r6, FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW | FSL_EIS_MAS3_SX
 	li	r7, 0
 	li	r8, 0
