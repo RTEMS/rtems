@@ -135,7 +135,7 @@ extern "C" {
 #define PRIxino_t "lx"
 
 /* ioctl_command_t */
-#define PRIdioctl_command_t PRId32
+#define PRIdioctl_command_t "ld"
 
 /* rtems_blkdev_bnum */
 #define PRIdrtems_blkdev_bnum PRId32
