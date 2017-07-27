@@ -25,7 +25,7 @@ static int handler_fstat(
   return 0;
 }
 
-static ssize_t handler_mmap(
+static int handler_mmap(
   rtems_libio_t *iop,
   void **addr,
   size_t len,
