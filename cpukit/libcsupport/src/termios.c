@@ -2181,7 +2181,8 @@ rtems_termios_imfs_write (rtems_libio_t *iop, const void *buffer, size_t count)
 }
 
 static int
-rtems_termios_imfs_ioctl (rtems_libio_t *iop, uint32_t request, void *buffer)
+rtems_termios_imfs_ioctl (rtems_libio_t *iop, ioctl_command_t request,
+  void *buffer)
 {
   rtems_status_code sc;
   rtems_libio_ioctl_args_t args;

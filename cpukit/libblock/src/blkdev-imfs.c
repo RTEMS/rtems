@@ -154,7 +154,7 @@ static ssize_t rtems_blkdev_imfs_write(
 
 static int rtems_blkdev_imfs_ioctl(
   rtems_libio_t *iop,
-  uint32_t request,
+  ioctl_command_t request,
   void *buffer
 )
 {
