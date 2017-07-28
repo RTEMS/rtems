@@ -381,9 +381,8 @@ void bsp_interrupt_vector_enable( rtems_vector_number vector)
         BSP_enable_crit_irq_at_siu( vector);
         break;
       default:
-        rtems_interrupt_enable( level);
-        printk( "No valid base index\n");
-        return RTEMS_INVALID_NUMBER;
+        bsp_interrupt_assert(0);
+        break;
     }
 
     rtems_interrupt_enable( level);
@@ -415,9 +414,8 @@ void bsp_interrupt_vector_disable( rtems_vector_number vector)
         BSP_disable_crit_irq_at_siu( vector);
         break;
       default:
-        rtems_interrupt_enable( level);
-        printk( "No valid base index\n");
-        return RTEMS_INVALID_NUMBER;
+        bsp_interrupt_assert(0);
+        break;
     }
 
     rtems_interrupt_enable( level);
