@@ -25,8 +25,6 @@
 
 #include <libcpu/powerpc-utility.h>
 
-#define PPC_CACHE_ALIGNMENT 32
-
 #define WORD_SIZE 4
 
 #define WORD_MASK (WORD_SIZE - 1)
