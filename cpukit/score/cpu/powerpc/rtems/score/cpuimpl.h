@@ -193,6 +193,9 @@ typedef struct {
     double F13;
     uint64_t FPSCR;
   #endif
+  #if !defined(PPC_MULTILIB_ALTIVEC) && !defined(PPC_MULTILIB_FPU)
+    uint32_t RESERVED_FOR_STACK_ALIGNMENT;
+  #endif
 } CPU_Interrupt_frame;
 
 #ifdef RTEMS_SMP

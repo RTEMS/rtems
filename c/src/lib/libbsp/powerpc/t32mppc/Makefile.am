@@ -78,5 +78,9 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel
 
+if HAS_SMP
+libbsp_a_SOURCES += ../../shared/bspsmp.c
+endif
+
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

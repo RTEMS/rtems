@@ -37,7 +37,7 @@ void BSP_panic(char *s)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   (void) level;
 
   printk("%s PANIC %s\n", rtems_get_version_string(), s);
@@ -51,7 +51,7 @@ void _BSP_Fatal_error(unsigned n)
 {
   rtems_interrupt_level level;
 
-  rtems_interrupt_disable(level);
+  rtems_interrupt_local_disable(level);
   (void) level;
 
   printk("%s PANIC ERROR %u\n", rtems_get_version_string(), n);
