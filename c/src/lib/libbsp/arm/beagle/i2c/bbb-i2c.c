@@ -238,6 +238,7 @@ static void am335x_i2c_setup_write_transfer(
 
   REG( &regs->BBB_I2C_CNT ) = bus->current_msg_todo;
   no_bytes = REG( &regs->BBB_I2C_CNT );
+  (void) no_bytes; /* indicate we know that no_bytes is not referenced again */
   REG( &regs->BBB_I2C_SA ) = msgs->addr;
   REG( &regs->BBB_I2C_CON ) = AM335X_I2C_CFG_MST_TX | AM335X_I2C_CON_I2C_EN;
   am335x_clean_interrupts( regs );
