@@ -50,8 +50,8 @@ rtems_task Init(
 
   int status = 0;
   void *opaque;
-  char linkname_n[20] = {0};
-  char linkname_p[20] = {0};
+  char linkname_n[32] = {0};
+  char linkname_p[32] = {0};
   int i;
   struct stat stat_buf;
 
