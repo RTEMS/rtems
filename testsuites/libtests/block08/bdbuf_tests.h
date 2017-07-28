@@ -266,7 +266,7 @@ extern bool       good_test_result;
                  RTEMS_BLKDEV_REQ_WRITE)                                   \
         {                                                                  \
             printk("Unexpected message received by disk driver: "          \
-                   "req - 0x%" PRIx32 " (0x%" PRIx32 "), dev - %p (%p)\n", \
+                   "req - 0x%" PRIx32 " (0x%lx), dev - %p (%p)\n", \
                    (msg_)->val.driver_req.req, RTEMS_BLKIO_REQUEST,        \
                    (msg_)->val.driver_req.dd, test_dd);                    \
             return;                                                        \
