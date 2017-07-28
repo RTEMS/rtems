@@ -65,6 +65,8 @@ int Untar_FromGzChunk_Print(
       if (untar_succesful != UNTAR_SUCCESSFUL){
         return untar_succesful;
       }
+    } else {
+      untar_succesful = UNTAR_GZ_INFLATE_FAILED
     }
   } while (ctx->strm.avail_out == 0 && ctx->strm.avail_in > 0
       && status == Z_OK);
