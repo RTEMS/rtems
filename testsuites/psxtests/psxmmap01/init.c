@@ -102,7 +102,7 @@ static void mmap_map_at_zero( void )
         -1, 0);
     if (p == MAP_FAILED) {
       mmap_test_assert( map_at_zero_tests[i].ok == 0,
-          "mmap(%08lX, ...) failed\n", (uint32_t)map_at_zero_tests[i].addr );
+          "mmap(%08lX, ...) failed\n", (long)map_at_zero_tests[i].addr );
     } else {
       mmap_test_check( map_at_zero_tests[i].ok == 1,
           "mmap(%p, ...) succeeded: p=%p\n",
