@@ -74,6 +74,63 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
       SDRAMC_CFR1_TMRD(CLOCK_CYCLES_FROM_NS_MIN(14))
 };
 
+#elif defined ATSAM_SDRAM_MT48LC16M16A2P_6A
+
+/*
+ * Refresh: 7.81 us
+ * TWR: 12 ns
+ * TRC_TRFC: 60 ns
+ * TRP: 15 ns
+ * TRCD: 18 ns
+ * TRAS: 42 ns
+ * TXSR: 67 ns
+ * TMRD: 2 clock cycles
+ */
+
+#if ATSAM_MCK == 60000000
+const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
+  .sdramc_tr = 0x1D4,
+  .sdramc_cr =
+      SDRAMC_CR_NC_COL9
+    | SDRAMC_CR_NR_ROW13
+    | SDRAMC_CR_NB_BANK4
+    | SDRAMC_CR_CAS_LATENCY3
+    | SDRAMC_CR_DBW
+    | SDRAMC_CR_TWR(3)
+    | SDRAMC_CR_TRC_TRFC(8)
+    | SDRAMC_CR_TRP(3)
+    | SDRAMC_CR_TRCD(3)
+    | SDRAMC_CR_TRAS(5)
+    | SDRAMC_CR_TXSR(9),
+  .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
+  .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
+      SDRAMC_CFR1_TMRD(2)
+};
+
+#elif ATSAM_MCK == 123000000
+const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
+  .sdramc_tr = 960,
+  .sdramc_cr =
+      SDRAMC_CR_NC_COL9
+    | SDRAMC_CR_NR_ROW13
+    | SDRAMC_CR_NB_BANK4
+    | SDRAMC_CR_CAS_LATENCY3
+    | SDRAMC_CR_DBW
+    | SDRAMC_CR_TWR(2)
+    | SDRAMC_CR_TRC_TRFC(8)
+    | SDRAMC_CR_TRP(2)
+    | SDRAMC_CR_TRCD(3)
+    | SDRAMC_CR_TRAS(6)
+    | SDRAMC_CR_TXSR(9),
+  .sdramc_mdr = SDRAMC_MDR_MD_SDRAM,
+  .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
+      SDRAMC_CFR1_TMRD(2)
+};
+
+#else /* ATSAM_MCK unknown */
+#error Please check SDRAM settings for this frequency.
+#endif
+
 #else
   #error SDRAM not supported.
 #endif
