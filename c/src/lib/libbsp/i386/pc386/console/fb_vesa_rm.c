@@ -114,10 +114,10 @@ uint32_t VBE_controller_information( VBE_vbe_info_block *info_block,
     /* indicate to graphic's bios that VBE2.0 extended information is desired */
     if (queried_VBE_Version >= 0x200)
     {
-        strncpy(
-            (char *)&VBE_buffer->VbeSignature,
+        memcpy(
+            &VBE_buffer->VbeSignature,
             VBE20plus_SIGNATURE,
-            4*sizeof(size_t)
+            sizeof(VBE_buffer->VbeSignature)
         );
     }
     if (i386_real_interrupt_call(INTERRUPT_NO_VIDEO_SERVICES, &parret) == 0)
