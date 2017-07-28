@@ -1141,8 +1141,12 @@ typedef struct {
   RTEMS_STATIC_ASSERT( \
     offsetof( object_type, wait_queue_member ) \
       == offsetof( Thread_queue_Object, Wait_queue ) \
-    && ( &( ( (object_type *) 0 )->wait_queue_member ) \
-      == ( &( (Thread_queue_Object *) 0 )->Wait_queue ) ), \
+    && RTEMS_HAVE_MEMBER_SAME_TYPE( \
+      object_type, \
+      wait_queue_member, \
+      Thread_queue_Object, \
+      Wait_queue \
+    ), \
     object_type \
   )
 

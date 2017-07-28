@@ -373,6 +373,25 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
 #endif /*RTEMS_DEQUALIFY*/
 
 /**
+ * @brief Evaluates to true if the members of two types have the same type.
+ *
+ * @param[in] _t_lhs Left hand side type.
+ * @param[in] _m_lhs Left hand side member.
+ * @param[in] _t_rhs Right hand side type.
+ * @param[in] _m_rhs Right hand side member.
+ */
+#ifdef __GNUC__
+  #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) \
+    __builtin_types_compatible_p( \
+      __typeof( ( (_t_lhs *) 0 )->_m_lhs ), \
+      __typeof( ( (_t_rhs *) 0 )->_m_rhs ) \
+    )
+#else
+  #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) \
+    true
+#endif
+
+/**
  * @brief Concatenates _x and _y without expanding.
  */
 #define RTEMS_CONCAT( _x, _y ) _x##_y
