@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -14,8 +14,8 @@
 
 #include <bspopts.h>
 
+#include <rtems/score/percpu.h>
 #include <libcpu/powerpc-utility.h>
-
 #include <bsp/vectors.h>
 
 	.globl _start
@@ -38,6 +38,10 @@ _start:
 	subi	r1, r1, 16
 	li	r0, 0
 	stw	r0, 0(r1)
+
+#ifdef RTEMS_SMP
+	SET_SELF_CPU_CONTROL	r3
+#endif
 
 	/* Copy fast text */
 	LWI	r3, bsp_section_fast_text_begin
