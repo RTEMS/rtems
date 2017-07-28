@@ -60,10 +60,6 @@
   }
 #endif
 
-#if (BSP_IS_EDISON == 1 )
-  extern const console_fns edison_fns;
-#endif
-
 /*
  * Default to the PC VGA console if present and configured.
  */
@@ -99,27 +95,6 @@ unsigned long Console_Configuration_Count =
     (sizeof(Console_Configuration_Ports)/sizeof(console_tbl));
 
 static console_tbl Legacy_Ports[] = {
-#if (BSP_IS_EDISON == 1)
-  {
-    "/dev/com1",                           /* sDeviceName */
-    -1,                                    /* deviceType */
-    &edison_fns,                           /* pDeviceFns */
-    NULL,                                  /* deviceProbe */
-    NULL,                                  /* pDeviceFlow */
-    16,                                    /* ulMargin */
-    8,                                     /* ulHysteresis */
-    (void *) NULL,              /* NULL */ /* pDeviceParams */
-    0x00000000,                            /* ulCtrlPort1 */
-    0x00000000,                            /* ulCtrlPort2 */
-    0x00000000,                            /* ulDataPort */
-    NULL,                                  /* getRegister */
-    NULL,                                  /* setRegister */
-    NULL,/* unused */                      /* getData */
-    NULL,/* unused */                      /* setData */
-    0x0,                                   /* ulClock */
-    0x0                                    /* ulIntVector -- base for port */
-  },
-#endif
 #if BSP_ENABLE_COM1_COM4
   {
     "/dev/com1",                           /* sDeviceName */

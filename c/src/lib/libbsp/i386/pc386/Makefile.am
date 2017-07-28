@@ -69,11 +69,7 @@ noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
 
 # clock
-if RTEMS_EDISON
-libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
-else
 libbsp_a_SOURCES += clock/ckinit.c
-endif
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += clock/todcfg.c
 libbsp_a_SOURCES += ../../shared/tod.c
@@ -113,9 +109,6 @@ endif
 endif
 
 # console (non-graphics support)
-if RTEMS_EDISON
-libbsp_a_SOURCES += console/console_edison.c
-endif
 include_HEADERS += ../../i386/shared/comm/i386_io.h
 include_rtems_HEADERS += ../../shared/console_private.h
 libbsp_a_SOURCES += console/serial_mouse_config.c
