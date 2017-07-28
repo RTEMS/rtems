@@ -167,7 +167,7 @@ void bsp_interrupt_get_affinity(
 	_Processor_mask_From_uint32_t(affinity, src_cfg->dr, 0);
 }
 
-static rtems_status_code pic_vector_enable(rtems_vector_number vector, uint32_t msk)
+static void pic_vector_enable(rtems_vector_number vector, uint32_t msk)
 {
 	volatile qoriq_pic_src_cfg *src_cfg = get_src_cfg(vector);
 	rtems_interrupt_lock_context lock_context;
