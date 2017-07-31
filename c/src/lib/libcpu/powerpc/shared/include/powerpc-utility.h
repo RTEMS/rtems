@@ -941,16 +941,21 @@ void ShowBATS(void);
 	mtmsr	\level
 .endm
 
+.macro SET_SELF_CPU_CONTROL reg_0, reg_1
 #if defined(RTEMS_SMP)
-.macro SET_SELF_CPU_CONTROL reg
 	/* Use Book E Processor ID Register (PIR) */
-	mfspr	\reg, 286
-	slwi	\reg, \reg, PER_CPU_CONTROL_SIZE_LOG2
-	addis	\reg, \reg, _Per_CPU_Information@ha
-	addi	\reg, \reg, _Per_CPU_Information@l
-	mtspr	PPC_PER_CPU_CONTROL_REGISTER, \reg
-.endm
+	mfspr	\reg_0, 286
+	slwi	\reg_0, \reg_0, PER_CPU_CONTROL_SIZE_LOG2
+#if defined(__powerpc64__)
+	LA	\reg_1, _Per_CPU_Information
+	add	\reg_0, \reg_0, \reg_1
+#else
+	addis	\reg_0, \reg_0, _Per_CPU_Information@ha
+	addi	\reg_0, \reg_0, _Per_CPU_Information@l
 #endif
+	mtspr	PPC_PER_CPU_CONTROL_REGISTER, \reg_0
+#endif
+.endm
 
 .macro GET_SELF_CPU_CONTROL reg
 #if defined(RTEMS_SMP)

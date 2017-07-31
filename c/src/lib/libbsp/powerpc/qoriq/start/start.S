@@ -165,9 +165,7 @@ _start:
 	/* Set small-data anchor */
 	LA	r13, _SDA_BASE_
 
-#ifdef RTEMS_SMP
-	SET_SELF_CPU_CONTROL	r4
-#endif
+	SET_SELF_CPU_CONTROL	r4, r5
 
 	blr
 

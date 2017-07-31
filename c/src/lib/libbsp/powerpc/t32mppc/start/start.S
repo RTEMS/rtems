@@ -39,9 +39,7 @@ _start:
 	li	r0, 0
 	stw	r0, 0(r1)
 
-#ifdef RTEMS_SMP
-	SET_SELF_CPU_CONTROL	r3
-#endif
+	SET_SELF_CPU_CONTROL	r3, r4
 
 	/* Copy fast text */
 	LWI	r3, bsp_section_fast_text_begin
