@@ -108,6 +108,8 @@ void qoriq_restart_secondary_processor(
   const qoriq_start_spin_table *spin_table
 ) RTEMS_NO_RETURN;
 
+void qoriq_initialize_exceptions(void *interrupt_stack_begin);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

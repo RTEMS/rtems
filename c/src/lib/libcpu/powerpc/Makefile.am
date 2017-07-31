@@ -28,18 +28,22 @@ new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 if !mpc5xx
 noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
 new_exceptions_exc_bspsupport_rel_SOURCES = \
+    new-exceptions/bspsupport/ppc_exc_async_normal.S \
+    new-exceptions/bspsupport/ppc_exc_fatal.S \
+    new-exceptions/bspsupport/ppc_exc_print.c
+if !qoriq
+new_exceptions_exc_bspsupport_rel_SOURCES += \
     new-exceptions/bspsupport/ppc-code-copy.c \
     new-exceptions/bspsupport/ppc_exc.S \
-    new-exceptions/bspsupport/ppc_exc_async_normal.S \
     new-exceptions/bspsupport/ppc_exc_naked.S \
     new-exceptions/bspsupport/ppc_exc_hdl.c \
     new-exceptions/bspsupport/ppc_exc_initialize.c \
     new-exceptions/bspsupport/ppc_exc_global_handler.c \
-    new-exceptions/bspsupport/ppc_exc_print.c \
     new-exceptions/bspsupport/ppc_exc_categories.c \
     new-exceptions/bspsupport/ppc_exc_address.c \
     new-exceptions/bspsupport/ppc_exc_alignment.c \
     new-exceptions/bspsupport/ppc_exc_prologue.c
+endif
 
 new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_exc_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)

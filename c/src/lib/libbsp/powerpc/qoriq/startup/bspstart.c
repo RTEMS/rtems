@@ -110,6 +110,63 @@ static void initialize_frequency_parameters(void)
   rtems_counter_initialize_converter(fdt32_to_cpu(*val_fdt));
 }
 
+#define MTIVPR(base) \
+  __asm__ volatile ("mtivpr %0" : : "r" (base))
+
+#define MTIVOR(vec, offset) \
+  do { \
+    __asm__ volatile ("mtspr " RTEMS_XSTRING(vec) ", %0" : : "r" (offset)); \
+    offset += 16; \
+  } while (0)
+
+void qoriq_initialize_exceptions(void *interrupt_stack_begin)
+{
+  uintptr_t addr;
+
+  ppc_exc_initialize_interrupt_stack(
+    (uintptr_t) interrupt_stack_begin,
+    rtems_configuration_get_interrupt_stack_size()
+  );
+
+  addr = (uintptr_t) bsp_exc_vector_base;
+  MTIVPR(addr);
+  MTIVOR(BOOKE_IVOR0,  addr);
+  MTIVOR(BOOKE_IVOR1,  addr);
+  MTIVOR(BOOKE_IVOR2,  addr);
+  MTIVOR(BOOKE_IVOR3,  addr);
+  MTIVOR(BOOKE_IVOR4,  addr);
+  MTIVOR(BOOKE_IVOR5,  addr);
+  MTIVOR(BOOKE_IVOR6,  addr);
+#ifdef __PPC_CPU_E6500__
+  MTIVOR(BOOKE_IVOR7,  addr);
+#endif
+  MTIVOR(BOOKE_IVOR8,  addr);
+#ifdef __PPC_CPU_E6500__
+  MTIVOR(BOOKE_IVOR9,  addr);
+#endif
+  MTIVOR(BOOKE_IVOR10, addr);
+  MTIVOR(BOOKE_IVOR11, addr);
+  MTIVOR(BOOKE_IVOR12, addr);
+  MTIVOR(BOOKE_IVOR13, addr);
+  MTIVOR(BOOKE_IVOR14, addr);
+  MTIVOR(BOOKE_IVOR15, addr);
+  MTIVOR(BOOKE_IVOR32, addr);
+  MTIVOR(BOOKE_IVOR33, addr);
+#ifndef __PPC_CPU_E6500__
+  MTIVOR(BOOKE_IVOR34, addr);
+#endif
+  MTIVOR(BOOKE_IVOR35, addr);
+#ifdef __PPC_CPU_E6500__
+  MTIVOR(BOOKE_IVOR36, addr);
+  MTIVOR(BOOKE_IVOR37, addr);
+  MTIVOR(BOOKE_IVOR38, addr);
+  MTIVOR(BOOKE_IVOR39, addr);
+  MTIVOR(BOOKE_IVOR40, addr);
+  MTIVOR(BOOKE_IVOR41, addr);
+  MTIVOR(BOOKE_IVOR42, addr);
+#endif
+}
+
 void bsp_start(void)
 {
   unsigned long i = 0;
@@ -140,21 +197,7 @@ void bsp_start(void)
     }
   }
 
-  /* Initialize exception handler */
-  ppc_exc_initialize_with_vector_base(
-    (uintptr_t) bsp_section_work_begin,
-    rtems_configuration_get_interrupt_stack_size(),
-    bsp_exc_vector_base
-  );
-
-  /* Now it is possible to make the code execute only */
-  qoriq_mmu_change_perm(
-    FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SX,
-    FSL_EIS_MAS3_SX,
-    FSL_EIS_MAS3_SR
-  );
-
-  /* Initalize interrupt support */
+  qoriq_initialize_exceptions(bsp_section_work_begin);
   bsp_interrupt_initialize();
 
   rtems_cache_coherent_add_area(

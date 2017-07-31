@@ -96,19 +96,7 @@ void bsp_start_on_secondary_processor(void)
   uint32_t cpu_index_self = _SMP_Get_current_processor();
   const Per_CPU_Control *cpu_self = _Per_CPU_Get_by_index(cpu_index_self);
 
-  ppc_exc_initialize_with_vector_base(
-    (uintptr_t) cpu_self->interrupt_stack_low,
-    rtems_configuration_get_interrupt_stack_size(),
-    bsp_exc_vector_base
-  );
-
-  /* Now it is possible to make the code execute only */
-  qoriq_mmu_change_perm(
-    FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SX,
-    FSL_EIS_MAS3_SX,
-    FSL_EIS_MAS3_SR
-  );
-
+  qoriq_initialize_exceptions(cpu_self->interrupt_stack_low);
   bsp_interrupt_facility_initialize();
 
   start_thread_if_necessary(cpu_index_self);

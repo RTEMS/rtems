@@ -48,7 +48,7 @@ typedef struct {
 	.begin = (uint32_t) b, \
 	.size = (uint32_t) s, \
 	.mas2 = 0, \
-	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SX \
+	.mas3 = FSL_EIS_MAS3_SX \
 }
 
 #define ENTRY_R(b, s) { \
