@@ -23,6 +23,8 @@
 #define _RTEMS_POWERPC_REGISTERS_H
 
 /* Bit encodings for Machine State Register (MSR) */
+#define MSR_CM		(1<<31)		/* Computation mode */
+#define MSR_GS		(1<<28)		/* Guest state */
 #define MSR_UCLE	(1<<26)		/* User-mode cache lock enable (e500) */
 #define MSR_VE		(1<<25)		/* Alti-Vec enable (7400+) */
 #define MSR_SPE		(1<<25)		/* SPE enable (e500) */
@@ -344,6 +346,20 @@ lidate */
 #define BOOKE_SPRG7_W  263   /* Special Purpose Register General 7 (WO)   */
 #define BOOKE_PIR      286   /* Processor ID Register                     */
 #define BOOKE_DBSR     304   /* Debug Status Register                     */
+
+#define BOOKE_EPCR     307   /* Embedded Processor Control Register       */
+#define BOOKE_EPCR_EXTGS  (1 << 31)
+#define BOOKE_EPCR_DTLBGS (1 << 30)
+#define BOOKE_EPCR_ITLBGS (1 << 29)
+#define BOOKE_EPCR_DSIGS  (1 << 28)
+#define BOOKE_EPCR_ISIGS  (1 << 27)
+#define BOOKE_EPCR_DUVD   (1 << 26)
+#define BOOKE_EPCR_ICM    (1 << 25)
+#define BOOKE_EPCR_GICM   (1 << 24)
+#define BOOKE_EPCR_DGTMI  (1 << 23)
+#define BOOKE_EPCR_DMIUH  (1 << 22)
+#define BOOKE_EPCR_PMGS   (1 << 21)
+
 #define BOOKE_DBCR0    308   /* Debug Control Register 0                  */
 #define BOOKE_DBCR1    309   /* Debug Control Register 1                  */
 #define BOOKE_DBCR2    310   /* Debug Control Register 2                  */
