@@ -28,6 +28,7 @@
 /* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
 /* ---------------------------------------------------------------------------- */
 
+#include <bsp/atsam-clock-config.h>
 #include <bsp/atsam-spi.h>
 
 #include <dev/spi/spi.h>

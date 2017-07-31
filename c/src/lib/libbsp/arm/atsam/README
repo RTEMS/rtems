@@ -17,9 +17,28 @@ controller and speed combinations.
 Use BOARD_MAINOSC=XYZ to set the main oscillator frequency in Hz (default
 12MHz).
 
-Use BOARD_MCK=XYZ to set the Master Clock (MCK) frequency in Hz (default
-123MHz).  The default value enables operation of an external SDRAM, e.g. 150MHz
-would be too fast.
+Use ATSAM_MCK=XYZ to set the MCK frequency that should be used. The default case
+(123000000) enables operation of an external SDRAM on the SAMv71 Explained
+evaluation kit. Some other configurations (e.g. 150MHz) would be too fast on
+that board.
+
+Your application can also overwrite the clock settings. To overwrite the clock
+settings, define the following structures in your application:
+
+--------
+const struct atsam_clock_config atsam_clock_config = {
+  .pllar_init = my_custom_pllar_value,
+  .mckr_init = my_custom_mckr_value,
+  .mck_freq = my_resulting_mck_frequency
+};
+
+const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
+  .sdramc_tr = my_custom_sdramc_tr_value,
+  .sdramc_cr = my_custom_sdramc_cr_value,
+  .sdramc_mdr = my_custom_sdramc_mdr_value,
+  .sdramc_cfr1 = my_custom_sdramc_cfr1_value
+};
+--------
 
 Use ATSAM_CONSOLE_BAUD=XYZ to set the initial baud for console devices (default
 115200).

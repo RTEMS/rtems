@@ -17,6 +17,11 @@
 #include <include/board_memories.h>
 
 #if defined ATSAM_SDRAM_IS42S16100E_7BLI
+
+#if ATSAM_MCK != 123000000
+#error Please check SDRAM settings for this clock frequency.
+#endif
+
 const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
   /* FIXME: a lot of these values should be calculated using CPU frequency */
   .sdramc_tr = 1562,
@@ -37,8 +42,13 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
 };
 
 #elif defined ATSAM_SDRAM_IS42S16320F_7BL
+
+#if ATSAM_MCK != 123000000
+#error Please check SDRAM settings for this clock frequency.
+#endif
+
 #define CLOCK_CYCLES_FROM_NS_MAX(ns) \
-    (((ns) * (BOARD_MCK / 1000ul / 1000ul)) / 1000ul)
+    (((ns) * (ATSAM_MCK / 1000ul / 1000ul)) / 1000ul)
 #define CLOCK_CYCLES_FROM_NS_MIN(ns) (CLOCK_CYCLES_FROM_NS_MAX(ns) + 1)
 
 const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
@@ -63,12 +73,6 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
   .sdramc_cfr1 = SDRAMC_CFR1_UNAL_SUPPORTED |
       SDRAMC_CFR1_TMRD(CLOCK_CYCLES_FROM_NS_MIN(14))
 };
-
-#if CLOCK_CYCLES_FROM_NS_MIN(67) > 0xF
-  /* Prevent the fields to be out of range by checking the one with the biggest
-   * value. */
-  #error SDRAM calculation does not work for the selected clock frequency
-#endif
 
 #else
   #error SDRAM not supported.

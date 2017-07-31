@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <bsp/start.h>
 #include <bsp/pin-config.h>
+#include <bsp/atsam-clock-config.h>
 
 #include <chip.h>
 #include <include/board_lowlevel.h>

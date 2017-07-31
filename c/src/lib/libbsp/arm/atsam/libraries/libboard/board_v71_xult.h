@@ -153,7 +153,6 @@
 #else
 	#define BOARD_MCK    150000000
 #endif
-#endif /* __rtems__ */
 
 #if (BOARD_MCK==123000000)
 
@@ -166,6 +165,9 @@
 	#define PLL_DIV    0x01
 
 #endif
+#else /* __rtems__ */
+#include <bsp/atsam-clock-config.h>
+#endif /* __rtems__ */
 
 /*----------------------------------------------------------------------------*/
 /**

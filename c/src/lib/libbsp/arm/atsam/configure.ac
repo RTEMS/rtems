@@ -63,8 +63,10 @@ esac],
 RTEMS_BSPOPTS_SET([BOARD_MAINOSC],[*],[12000000])
 RTEMS_BSPOPTS_HELP([BOARD_MAINOSC],[Main oscillator frequency in Hz (default 12MHz)])
 
-RTEMS_BSPOPTS_SET([BOARD_MCK],[*],[123000000])
-RTEMS_BSPOPTS_HELP([BOARD_MCK],[Master Clock (MCK) frequency in Hz (default 123MHz)])
+RTEMS_BSPOPTS_SET([ATSAM_MCK],[*],[123000000])
+RTEMS_BSPOPTS_HELP([ATSAM_MCK],
+[Frequency of the MCK in Hz. Set to 0 to force application defined speed.
+See startup/pmc-config.c for available clock configurations.])
 
 RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_BAUD],[*],[115200])
 RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_BAUD],[initial baud for console devices (default 115200)])

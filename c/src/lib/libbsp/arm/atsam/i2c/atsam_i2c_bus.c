@@ -12,6 +12,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <bsp/atsam-clock-config.h>
 #include <bsp/atsam-i2c.h>
 
 #include <rtems/irq-extension.h>

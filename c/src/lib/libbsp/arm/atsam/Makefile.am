@@ -57,6 +57,7 @@ include_bsp_HEADERS += include/atsam-spi.h
 include_bsp_HEADERS += include/spi.h
 include_bsp_HEADERS += include/sc16is752.h
 include_bsp_HEADERS += include/power.h
+include_bsp_HEADERS += include/atsam-clock-config.h
 
 include_libchipdir = $(includedir)/libchip
 
@@ -398,6 +399,9 @@ libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
 libbsp_a_SOURCES += startup/getentropy-trng.c
 libbsp_a_SOURCES += startup/pin-config.c
+libbsp_a_SOURCES += startup/pmc-config.c
+libbsp_a_SOURCES += startup/power-clock.c
+libbsp_a_SOURCES += startup/power-rtc.c
 libbsp_a_SOURCES += startup/power.c
 libbsp_a_SOURCES += startup/power-rtc.c
 libbsp_a_SOURCES += startup/power-clock.c

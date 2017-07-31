@@ -15,6 +15,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/sysinit.h>
 
+#include <bsp/atsam-clock-config.h>
 #include <chip.h>
 #include <include/dbg_console.h>
 

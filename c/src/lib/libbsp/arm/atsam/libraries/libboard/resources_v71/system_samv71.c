@@ -45,6 +45,7 @@ extern "C" {
 	/* Clock Settings (600MHz PLL VDDIO 3.3V and VDDCORE 1.2V) */
 	/* Clock Settings (300MHz HCLK, 150MHz MCK)=> PRESC = 2, MDIV = 2 */
 #define SYS_BOARD_OSCOUNT   (CKGR_MOR_MOSCXTST(0x8U))
+#ifndef __rtems__
 #if BOARD_MCK == 123000000
 	/* For example usb_video, PLLA/HCLK/MCK clock is set to 492/246/123MHz to achieve
 	   the maximum performance, for other examples the clock is set to 300/300/150MHz */
@@ -65,8 +66,11 @@ extern "C" {
 	#error "unexpected Main Clock (MCK) frequency"
 #endif
 
-#ifndef __rtems__
 	uint32_t SystemCoreClock = CHIP_FREQ_MAINCK_RC_4MHZ;
+#else /* __rtems__ */
+#define SYS_BOARD_MCKR_MDIV ((atsam_clock_config.mckr_init) & PMC_MCKR_MDIV_Msk)
+#define SYS_BOARD_MCKR (atsam_clock_config.mckr_init)
+#define SYS_BOARD_PLLAR (atsam_clock_config.pllar_init)
 #endif /* __rtems__ */
 #define USBCLK_DIV          10
 
