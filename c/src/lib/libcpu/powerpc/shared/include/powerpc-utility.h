@@ -869,8 +869,16 @@ void ShowBATS(void);
 #include <rtems/asm.h>
 
 .macro LA reg, addr
+#if defined(__powerpc64__)
+	lis	\reg, (\addr)@highest
+	ori	\reg, \reg, (\addr)@higher
+	rldicr	\reg, \reg, 32, 31
+	oris	\reg, \reg, (\addr)@h
+	ori	\reg, \reg, (\addr)@l
+#else
 	lis	\reg, (\addr)@h
 	ori	\reg, \reg, (\addr)@l
+#endif
 .endm
 
 .macro LA32 reg, addr

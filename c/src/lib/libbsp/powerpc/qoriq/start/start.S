@@ -54,45 +54,45 @@ _start:
 	bl	bsp_fdt_copy
 
 	/* Get start stack */
-	LWI	START_STACK, start_stack_end
+	LA	START_STACK, start_stack_end
 
 	bl	.Linitmore
 
 	/* Copy fast text */
-	LWI	r3, bsp_section_fast_text_begin
-	LWI	r4, bsp_section_fast_text_load_begin
-	LWI	r5, bsp_section_fast_text_size
+	LA	r3, bsp_section_fast_text_begin
+	LA	r4, bsp_section_fast_text_load_begin
+	LA	r5, bsp_section_fast_text_size
 	bl	.Lcopy
-	LWI	r3, bsp_section_fast_text_begin
-	LWI	r4, bsp_section_fast_text_size
+	LA	r3, bsp_section_fast_text_begin
+	LA	r4, bsp_section_fast_text_size
 	bl	rtems_cache_flush_multiple_data_lines
 
 	/* Copy read-only data */
-	LWI	r3, bsp_section_rodata_begin
-	LWI	r4, bsp_section_rodata_load_begin
-	LWI	r5, bsp_section_rodata_size
+	LA	r3, bsp_section_rodata_begin
+	LA	r4, bsp_section_rodata_load_begin
+	LA	r5, bsp_section_rodata_size
 	bl	.Lcopy
-	LWI	r3, bsp_section_rodata_begin
-	LWI	r4, bsp_section_rodata_size
+	LA	r3, bsp_section_rodata_begin
+	LA	r4, bsp_section_rodata_size
 	bl	rtems_cache_flush_multiple_data_lines
 
 	/* Copy fast data */
-	LWI	r3, bsp_section_fast_data_begin
-	LWI	r4, bsp_section_fast_data_load_begin
-	LWI	r5, bsp_section_fast_data_size
+	LA	r3, bsp_section_fast_data_begin
+	LA	r4, bsp_section_fast_data_load_begin
+	LA	r5, bsp_section_fast_data_size
 	bl	.Lcopy
 
 	/* Copy data */
-	LWI	r3, bsp_section_data_begin
-	LWI	r4, bsp_section_data_load_begin
-	LWI	r5, bsp_section_data_size
+	LA	r3, bsp_section_data_begin
+	LA	r4, bsp_section_data_load_begin
+	LA	r5, bsp_section_data_size
 	bl	.Lcopy
 
 	/* NULL pointer access protection (only core 0 has to do this) */
 	mfspr	r3, BOOKE_PIR
 	cmpwi	r3, 0
 	bne	.Lnull_area_setup_done
-	LWI	r3, bsp_section_start_begin
+	LA	r3, bsp_section_start_begin
 	srawi	r3, r3, 2
 	mtctr	r3
 	li	r3, -4
@@ -106,13 +106,13 @@ _start:
 	bl	.Linitmmu
 
 	/* Clear SBSS */
-	LWI	r3, bsp_section_sbss_begin
-	LWI	r4, bsp_section_sbss_size
+	LA	r3, bsp_section_sbss_begin
+	LA	r4, bsp_section_sbss_size
 	bl	bsp_start_zero
 
 	/* Clear BSS */
-	LWI	r3, bsp_section_bss_begin
-	LWI	r4, bsp_section_bss_size
+	LA	r3, bsp_section_bss_begin
+	LA	r4, bsp_section_bss_size
 	bl	bsp_start_zero
 
 	/* Set up EABI and SYSV environment */
