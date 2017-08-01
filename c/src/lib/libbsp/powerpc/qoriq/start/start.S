@@ -333,7 +333,7 @@ bsp_exc_vector_base:
 	li	r3, 3
 	b	ppc_exc_fatal_normal
 	/* External input */
-	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
+	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
 	b	ppc_exc_interrupt
 	nop
 	nop

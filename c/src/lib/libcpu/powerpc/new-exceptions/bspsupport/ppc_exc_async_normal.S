@@ -73,7 +73,7 @@
 
 ppc_exc_min_prolog_async_tmpl_normal:
 
-	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
+	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
 
 #ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	stw	VECTOR_REGISTER, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
@@ -502,7 +502,7 @@ ppc_exc_interrupt:
 #endif /* RTEMS_PROFILING */
 
 	/* Pop stack */
-	addi	r1, r1, CPU_INTERRUPT_FRAME_SIZE
+	addi	r1, r1, PPC_EXC_INTERRUPT_FRAME_SIZE
 
 	/* Return */
 	rfi
