@@ -88,14 +88,11 @@ void *bsp_idle_thread( uintptr_t ignored );
 /* Internal data and functions */
 
 typedef struct {
-  uint32_t addr_upper;
-  uint32_t addr_lower;
-  uint32_t r3_upper;
-  uint32_t r3_lower;
+  uint64_t addr;
+  uint64_t r3;
   uint32_t reserved_0;
   uint32_t pir;
-  uint32_t r6_upper;
-  uint32_t r6_lower;
+  uint64_t r6;
   uint32_t reserved_1[8];
 } qoriq_start_spin_table;
 

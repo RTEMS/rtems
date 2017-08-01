@@ -79,7 +79,7 @@ static void start_thread_if_necessary(uint32_t cpu_index_self)
         && _SMP_Should_start_processor(cpu_index_next)
     ) {
       /* Thread Initial Next Instruction Address (INIA) */
-      PPC_SET_THREAD_MGMT_REGISTER(321, (uint32_t) _start_thread);
+      PPC_SET_THREAD_MGMT_REGISTER(321, (uintptr_t) _start_thread);
 
       /* Thread Initial Machine State (IMSR) */
       PPC_SET_THREAD_MGMT_REGISTER(289, QORIQ_INITIAL_MSR);
@@ -158,11 +158,10 @@ static bool release_processor(
     const Per_CPU_Control *cpu = _Per_CPU_Get_by_index(cpu_index);
 
     spin_table->pir = cpu_index;
-    spin_table->r3_lower = (uint32_t) cpu->interrupt_stack_high;
-    spin_table->addr_upper = 0;
+    spin_table->r3 = (uintptr_t) cpu->interrupt_stack_high;
     rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
     ppc_synchronize_data();
-    spin_table->addr_lower = (uint32_t) _start_secondary_processor;
+    spin_table->addr = (uintptr_t) _start_secondary_processor;
     rtems_cache_flush_multiple_data_lines(spin_table, sizeof(*spin_table));
   }
 
