@@ -39,6 +39,9 @@ project_lib_DATA = start.$(OBJEXT)
 libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
+libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crtn.S
+project_lib_DATA += rtems_crtn.$(OBJEXT)
+
 dist_project_lib_DATA += startup/linkcmds \
 	../shared/startup/linkcmds.base \
 	startup/linkcmds.qoriq_core_0 \

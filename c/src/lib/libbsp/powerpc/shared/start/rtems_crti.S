@@ -1,7 +1,40 @@
+/*
+ * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
 /* rtems_crti.S */
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 
+#if defined(__powerpc64__)
+	.section ".init","ax"
+	.align 2
+	.globl	_init
+	.type	_init,@function
+_init:
+	mflr	r0
+	std	r0,16(1)
+	stdu	r1,-96(1)
+
+	.section ".fini","ax"
+	.align 2
+	.globl	_fini
+	.type	_fini,@function
+_fini:
+	mflr	r0
+	std	r0,16(r1)
+	stdu	r1,-96(r1)
+#else
 	/* terminate the __init() function and create
 	 * a new head '_init' for use by RTEMS to
 	 * invoke C++ global constructors
@@ -32,3 +65,4 @@ _init:
 	stwu	r1,-16(r1)
 	mflr	r0
 	stw		r0,20(r1)
+#endif
