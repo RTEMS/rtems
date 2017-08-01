@@ -873,6 +873,11 @@ void ShowBATS(void);
 	ori	\reg, \reg, (\addr)@l
 .endm
 
+.macro LA32 reg, addr
+	lis	\reg, (\addr)@h
+	ori	\reg, \reg, (\addr)@l
+.endm
+
 .macro LWI reg, value
 	lis \reg, (\value)@h
 	ori	\reg, \reg, (\value)@l

@@ -25,7 +25,7 @@
  *
  *  Copyright (c) 2001 Surrey Satellite Technology Limited (SSTL).
  *
- *  Copyright (c) 2010, 2016 embedded brains GmbH.
+ *  Copyright (c) 2010, 2017 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -181,15 +181,35 @@ extern "C" {
  */
 
 #ifndef __SPE__
-  #define PPC_GPR_TYPE uint32_t
-  #define PPC_GPR_SIZE 4
-  #define PPC_GPR_LOAD lwz
-  #define PPC_GPR_STORE stw
+  #define PPC_GPR_TYPE uintptr_t
+  #if defined(__powerpc64__)
+    #define PPC_GPR_SIZE 8
+    #define PPC_GPR_LOAD ld
+    #define PPC_GPR_STORE std
+  #else
+    #define PPC_GPR_SIZE 4
+    #define PPC_GPR_LOAD lwz
+    #define PPC_GPR_STORE stw
+  #endif
 #else
   #define PPC_GPR_TYPE uint64_t
   #define PPC_GPR_SIZE 8
   #define PPC_GPR_LOAD evldd
   #define PPC_GPR_STORE evstdd
+#endif
+
+#if defined(__powerpc64__)
+  #define PPC_REG_SIZE 8
+  #define PPC_REG_LOAD ld
+  #define PPC_REG_STORE std
+  #define PPC_REG_STORE_UPDATE stdu
+  #define PPC_REG_CMP cmpd
+#else
+  #define PPC_REG_SIZE 4
+  #define PPC_REG_LOAD lwz
+  #define PPC_REG_STORE stw
+  #define PPC_REG_STORE_UPDATE stwu
+  #define PPC_REG_CMP cmpw
 #endif
 
 #ifndef ASM
@@ -200,10 +220,10 @@ extern "C" {
  * Linux and Embedded")
  */
 typedef struct {
-  uint32_t gpr1;
   uint32_t msr;
-  uint32_t lr;
   uint32_t cr;
+  uintptr_t gpr1;
+  uintptr_t lr;
   PPC_GPR_TYPE gpr14;
   PPC_GPR_TYPE gpr15;
   PPC_GPR_TYPE gpr16;
@@ -275,7 +295,7 @@ typedef struct {
    * the previous items to optimize the context switch.  We must not set the
    * following items to zero via the dcbz.
    */
-  uint32_t gpr2;
+  uintptr_t tp;
   #if defined(RTEMS_SMP)
     volatile uint32_t is_executing;
   #endif
@@ -322,13 +342,14 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 #endif
 #endif /* ASM */
 
-#define PPC_CONTEXT_OFFSET_GPR1 (PPC_DEFAULT_CACHE_LINE_SIZE + 0)
-#define PPC_CONTEXT_OFFSET_MSR (PPC_DEFAULT_CACHE_LINE_SIZE + 4)
-#define PPC_CONTEXT_OFFSET_LR (PPC_DEFAULT_CACHE_LINE_SIZE + 8)
-#define PPC_CONTEXT_OFFSET_CR (PPC_DEFAULT_CACHE_LINE_SIZE + 12)
+#define PPC_CONTEXT_OFFSET_MSR (PPC_DEFAULT_CACHE_LINE_SIZE)
+#define PPC_CONTEXT_OFFSET_CR (PPC_DEFAULT_CACHE_LINE_SIZE + 4)
+#define PPC_CONTEXT_OFFSET_GPR1 (PPC_DEFAULT_CACHE_LINE_SIZE + 8)
+#define PPC_CONTEXT_OFFSET_LR (PPC_DEFAULT_CACHE_LINE_SIZE + PPC_REG_SIZE + 8)
 
 #define PPC_CONTEXT_GPR_OFFSET( gpr ) \
-  (((gpr) - 14) * PPC_GPR_SIZE + PPC_DEFAULT_CACHE_LINE_SIZE + 16)
+  (((gpr) - 14) * PPC_GPR_SIZE + \
+    PPC_DEFAULT_CACHE_LINE_SIZE + 8 + 2 * PPC_REG_SIZE)
 
 #define PPC_CONTEXT_OFFSET_GPR14 PPC_CONTEXT_GPR_OFFSET( 14 )
 #define PPC_CONTEXT_OFFSET_GPR15 PPC_CONTEXT_GPR_OFFSET( 15 )
@@ -352,7 +373,7 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
 
 #ifdef PPC_MULTILIB_ALTIVEC
   #define PPC_CONTEXT_OFFSET_V( v ) \
-    ( ( ( v ) - 20 ) * 16 + PPC_DEFAULT_CACHE_LINE_SIZE + 96 )
+    ( ( ( v ) - 20 ) * 16 + PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 8)
   #define PPC_CONTEXT_OFFSET_V20 PPC_CONTEXT_OFFSET_V( 20 )
   #define PPC_CONTEXT_OFFSET_V21 PPC_CONTEXT_OFFSET_V( 21 )
   #define PPC_CONTEXT_OFFSET_V22 PPC_CONTEXT_OFFSET_V( 22 )
@@ -367,10 +388,10 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   #define PPC_CONTEXT_OFFSET_V31 PPC_CONTEXT_OFFSET_V( 31 )
   #define PPC_CONTEXT_OFFSET_VRSAVE PPC_CONTEXT_OFFSET_V( 32 )
   #define PPC_CONTEXT_OFFSET_F( f ) \
-    ( ( ( f ) - 14 ) * 8 + PPC_DEFAULT_CACHE_LINE_SIZE + 296 )
+    ( ( ( f ) - 14 ) * 8 + PPC_CONTEXT_OFFSET_VRSAVE + 8 )
 #else
   #define PPC_CONTEXT_OFFSET_F( f ) \
-    ( ( ( f ) - 14 ) * 8 + PPC_DEFAULT_CACHE_LINE_SIZE + 96 )
+    ( ( ( f ) - 14 ) * 8 + PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE + 8 )
 #endif
 
 #ifdef PPC_MULTILIB_FPU
@@ -406,10 +427,11 @@ static inline ppc_context *ppc_get_context( const Context_Control *context )
   #define PPC_CONTEXT_VOLATILE_SIZE (PPC_CONTEXT_GPR_OFFSET( 32 ) + 8)
 #endif
 
-#define PPC_CONTEXT_OFFSET_GPR2 PPC_CONTEXT_VOLATILE_SIZE
+#define PPC_CONTEXT_OFFSET_TP PPC_CONTEXT_VOLATILE_SIZE
 
 #ifdef RTEMS_SMP
-  #define PPC_CONTEXT_OFFSET_IS_EXECUTING (PPC_CONTEXT_VOLATILE_SIZE + 4)
+  #define PPC_CONTEXT_OFFSET_IS_EXECUTING \
+    (PPC_CONTEXT_OFFSET_TP + PPC_REG_SIZE)
 #endif
 
 #ifndef ASM
@@ -1056,13 +1078,15 @@ void _CPU_Context_validate( uintptr_t pattern );
 #endif
 
 typedef struct {
-  uint32_t EXC_SRR0;
-  uint32_t EXC_SRR1;
+  uintptr_t EXC_SRR0;
+  uintptr_t EXC_SRR1;
   uint32_t _EXC_number;
+  uint32_t RESERVED_FOR_ALIGNMENT_0;
   uint32_t EXC_CR;
-  uint32_t EXC_CTR;
   uint32_t EXC_XER;
-  uint32_t EXC_LR;
+  uintptr_t EXC_CTR;
+  uintptr_t EXC_LR;
+  uintptr_t RESERVED_FOR_ALIGNMENT_1;
   #ifdef __SPE__
     uint32_t EXC_SPEFSCR;
     uint64_t EXC_ACC;
@@ -1099,13 +1123,13 @@ typedef struct {
   PPC_GPR_TYPE GPR29;
   PPC_GPR_TYPE GPR30;
   PPC_GPR_TYPE GPR31;
-  #if defined(PPC_MULTILIB_ALTIVEC) || defined(PPC_MULTILIB_FPU)
-    uint32_t reserved_for_alignment;
-  #endif
+  uintptr_t RESERVED_FOR_ALIGNMENT_2;
   #ifdef PPC_MULTILIB_ALTIVEC
     uint32_t VRSAVE;
+    uint32_t RESERVED_FOR_ALIGNMENT_3[3];
 
     /* This field must take stvewx/lvewx requirements into account */
+    uint32_t RESERVED_FOR_ALIGNMENT_4[3];
     uint32_t VSCR;
 
     uint8_t V0[16];
@@ -1175,6 +1199,7 @@ typedef struct {
     double F30;
     double F31;
     uint64_t FPSCR;
+    uint64_t RESERVED_FOR_ALIGNMENT_5;
   #endif
 } CPU_Exception_frame;
 

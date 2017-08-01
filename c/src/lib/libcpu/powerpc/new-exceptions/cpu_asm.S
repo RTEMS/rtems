@@ -23,7 +23,7 @@
  *  COPYRIGHT (c) 1989-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2011, 2016 embedded brains GmbH
+ *  Copyright (c) 2011, 2017 embedded brains GmbH
  *
  *  The license and distribution terms for this file may in
  *  the file LICENSE in this distribution or at
@@ -267,8 +267,8 @@ PROC (_CPU_Context_switch):
 
 	GET_SELF_CPU_CONTROL	r12
 	mfmsr	r6
-	mflr	r7
-	mfcr	r8
+	mfcr	r7
+	mflr	r8
 	lwz	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
 	/*
@@ -287,10 +287,11 @@ PROC (_CPU_Context_switch):
 	stwcx.	r1, r3, r10
 #endif
 
-	stw	r1, PPC_CONTEXT_OFFSET_GPR1(r3)
 	stw	r6, PPC_CONTEXT_OFFSET_MSR(r3)
-	stw	r7, PPC_CONTEXT_OFFSET_LR(r3)
-	stw	r8, PPC_CONTEXT_OFFSET_CR(r3)
+	stw	r7, PPC_CONTEXT_OFFSET_CR(r3)
+	PPC_REG_STORE	r1, PPC_CONTEXT_OFFSET_GPR1(r3)
+	PPC_REG_STORE	r8, PPC_CONTEXT_OFFSET_LR(r3)
+
 	PPC_GPR_STORE	r14, PPC_CONTEXT_OFFSET_GPR14(r3)
 	PPC_GPR_STORE	r15, PPC_CONTEXT_OFFSET_GPR15(r3)
 
@@ -439,10 +440,10 @@ restore_context:
 	bl	_CPU_Context_switch_altivec
 #endif
 
-	lwz	r1, PPC_CONTEXT_OFFSET_GPR1(r5)
 	lwz	r6, PPC_CONTEXT_OFFSET_MSR(r5)
-	lwz	r7, PPC_CONTEXT_OFFSET_LR(r5)
-	lwz	r8, PPC_CONTEXT_OFFSET_CR(r5)
+	lwz	r7, PPC_CONTEXT_OFFSET_CR(r5)
+	PPC_REG_LOAD	r1, PPC_CONTEXT_OFFSET_GPR1(r5)
+	PPC_REG_LOAD	r8, PPC_CONTEXT_OFFSET_LR(r5)
 
 	PPC_GPR_LOAD	r14, PPC_CONTEXT_OFFSET_GPR14(r5)
 	PPC_GPR_LOAD	r15, PPC_CONTEXT_OFFSET_GPR15(r5)
@@ -469,7 +470,11 @@ restore_context:
 	PPC_GPR_LOAD	r30, PPC_CONTEXT_OFFSET_GPR30(r5)
 	PPC_GPR_LOAD	r31, PPC_CONTEXT_OFFSET_GPR31(r5)
 
-	lwz	r2, PPC_CONTEXT_OFFSET_GPR2(r5)
+#ifdef __powerpc64__
+	ld	r13, PPC_CONTEXT_OFFSET_TP(r5)
+#else
+	lwz	r2, PPC_CONTEXT_OFFSET_TP(r5)
+#endif
 	lwz	r11, PPC_CONTEXT_OFFSET_ISR_DISPATCH_DISABLE(r5)
 
 #ifdef PPC_MULTILIB_ALTIVEC
@@ -522,8 +527,8 @@ restore_context:
 	lfd	f31, PPC_CONTEXT_OFFSET_F31(r5)
 #endif
 
-	mtcr	r8
-	mtlr	r7
+	mtlr	r8
+	mtcr	r7
 	mtmsr	r6
 	stw	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
@@ -552,14 +557,14 @@ PROC (_CPU_Context_restore):
 	/* We may have a new heir */
 
 	/* Read the executing and heir */
-	lwz	r7, PER_CPU_OFFSET_EXECUTING(r12)
-	lwz	r8, PER_CPU_OFFSET_HEIR(r12)
+	PPC_REG_LOAD	r7, PER_CPU_OFFSET_EXECUTING(r12)
+	PPC_REG_LOAD	r8, PER_CPU_OFFSET_HEIR(r12)
 
 	/*
 	 * Update the executing only if necessary to avoid cache line
 	 * monopolization.
 	 */
-	cmpw	r7, r8
+	PPC_REG_CMP	r7, r8
 	beq	.Lcheck_is_executing
 
 	/* Calculate the heir context pointer */
@@ -568,7 +573,7 @@ PROC (_CPU_Context_restore):
 	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	/* Update the executing */
-	stw	r8, PER_CPU_OFFSET_EXECUTING(r12)
+	PPC_REG_STORE	r8, PER_CPU_OFFSET_EXECUTING(r12)
 
 	b	.Lcheck_is_executing
 #endif

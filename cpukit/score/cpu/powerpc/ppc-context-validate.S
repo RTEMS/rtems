@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -20,8 +20,8 @@
 #include <rtems/score/cpu.h>
 
 #define LR_OFFSET 8
-#define CR_OFFSET 12
-#define OFFSET(i) ((i) * PPC_GPR_SIZE + 16)
+#define CR_OFFSET 16
+#define OFFSET(i) ((i) * PPC_GPR_SIZE + 32)
 #define GPR14_OFFSET OFFSET(0)
 #define GPR15_OFFSET OFFSET(1)
 #define GPR16_OFFSET OFFSET(2)
@@ -100,29 +100,29 @@
 _CPU_Context_validate:
 
 	/* Save */
-	stwu	r1, -FRAME_SIZE(r1)
+	PPC_REG_STORE_UPDATE	r1, -FRAME_SIZE(r1)
 	mflr	r4
-	stw	r4, LR_OFFSET(r1)
+	PPC_REG_STORE	r4, LR_OFFSET(r1)
 	mfcr	r4
 	stw	r4, CR_OFFSET(r1)
-	stw	r14, GPR14_OFFSET(r1)
-	stw	r15, GPR15_OFFSET(r1)
-	stw	r16, GPR16_OFFSET(r1)
-	stw	r17, GPR17_OFFSET(r1)
-	stw	r18, GPR18_OFFSET(r1)
-	stw	r19, GPR19_OFFSET(r1)
-	stw	r20, GPR20_OFFSET(r1)
-	stw	r21, GPR21_OFFSET(r1)
-	stw	r22, GPR22_OFFSET(r1)
-	stw	r23, GPR23_OFFSET(r1)
-	stw	r24, GPR24_OFFSET(r1)
-	stw	r25, GPR25_OFFSET(r1)
-	stw	r26, GPR26_OFFSET(r1)
-	stw	r27, GPR27_OFFSET(r1)
-	stw	r28, GPR28_OFFSET(r1)
-	stw	r29, GPR29_OFFSET(r1)
-	stw	r30, GPR30_OFFSET(r1)
-	stw	r31, GPR31_OFFSET(r1)
+	PPC_REG_STORE	r14, GPR14_OFFSET(r1)
+	PPC_REG_STORE	r15, GPR15_OFFSET(r1)
+	PPC_REG_STORE	r16, GPR16_OFFSET(r1)
+	PPC_REG_STORE	r17, GPR17_OFFSET(r1)
+	PPC_REG_STORE	r18, GPR18_OFFSET(r1)
+	PPC_REG_STORE	r19, GPR19_OFFSET(r1)
+	PPC_REG_STORE	r20, GPR20_OFFSET(r1)
+	PPC_REG_STORE	r21, GPR21_OFFSET(r1)
+	PPC_REG_STORE	r22, GPR22_OFFSET(r1)
+	PPC_REG_STORE	r23, GPR23_OFFSET(r1)
+	PPC_REG_STORE	r24, GPR24_OFFSET(r1)
+	PPC_REG_STORE	r25, GPR25_OFFSET(r1)
+	PPC_REG_STORE	r26, GPR26_OFFSET(r1)
+	PPC_REG_STORE	r27, GPR27_OFFSET(r1)
+	PPC_REG_STORE	r28, GPR28_OFFSET(r1)
+	PPC_REG_STORE	r29, GPR29_OFFSET(r1)
+	PPC_REG_STORE	r30, GPR30_OFFSET(r1)
+	PPC_REG_STORE	r31, GPR31_OFFSET(r1)
 
 #ifdef PPC_MULTILIB_FPU
 	stfd	f14, F14_OFFSET(r1)
@@ -218,8 +218,12 @@ _CPU_Context_validate:
 	addi	r26, r3, 21
 	addi	r27, r3, 22
 
-	/* GPR28 contains the GPR2 pattern */
+	/* GPR28 contains the TP pattern */
+#ifdef __powerpc64__
+	xor	r28, r13, r3
+#else
 	xor	r28, r2, r3
+#endif
 
 	/* GPR29 and CR are equal most of the time */
 	addi	r29, r3, 24
@@ -330,101 +334,114 @@ check:
 	cmpw	r4, r29
 	bne	restore
 	addi	r4, r3, 1
-	cmpw	r4, r5
+	PPC_REG_CMP	r4, r5
 	bne	restore
 	addi	r4, r3, 2
-	cmpw	r4, r6
+	PPC_REG_CMP	r4, r6
 	bne	restore
 	addi	r4, r3, 3
-	cmpw	r4, r7
+	PPC_REG_CMP	r4, r7
 	bne	restore
 	addi	r4, r3, 4
-	cmpw	r4, r8
+	PPC_REG_CMP	r4, r8
 	bne	restore
 	addi	r4, r3, 5
-	cmpw	r4, r9
+	PPC_REG_CMP	r4, r9
 	bne	restore
 	addi	r4, r3, 6
-	cmpw	r4, r10
+	PPC_REG_CMP	r4, r10
 	bne	restore
 	addi	r4, r3, 7
-	cmpw	r4, r11
+	PPC_REG_CMP	r4, r11
 	bne	restore
 	addi	r4, r3, 8
-	cmpw	r4, r12
+	PPC_REG_CMP	r4, r12
 	bne	restore
+#ifdef __powerpc64__
+	lis	r4, .TOC.@highest
+	ori	r4, r4, .TOC.@higher
+	rldicr	r4, r4, 32, 31
+	oris	r4, r4, .TOC.@h
+	ori	r4, r4, .TOC.@l
+	PPC_REG_CMP	r4, r2
+#else
 	lis	r4, _SDA_BASE_@h
 	ori	r4, r4, _SDA_BASE_@l
-	cmpw	r4, r13
+	PPC_REG_CMP	r4, r13
+#endif
 	bne	restore
 	addi	r4, r3, 9
-	cmpw	r4, r14
+	PPC_REG_CMP	r4, r14
 	bne	restore
 	addi	r4, r3, 10
-	cmpw	r4, r15
+	PPC_REG_CMP	r4, r15
 	bne	restore
 	addi	r4, r3, 11
-	cmpw	r4, r16
+	PPC_REG_CMP	r4, r16
 	bne	restore
 	addi	r4, r3, 12
-	cmpw	r4, r17
+	PPC_REG_CMP	r4, r17
 	bne	restore
 	addi	r4, r3, 13
-	cmpw	r4, r18
+	PPC_REG_CMP	r4, r18
 	bne	restore
 	addi	r4, r3, 14
-	cmpw	r4, r19
+	PPC_REG_CMP	r4, r19
 	bne	restore
 	addi	r4, r3, 15
-	cmpw	r4, r20
+	PPC_REG_CMP	r4, r20
 	bne	restore
 	addi	r4, r3, 16
-	cmpw	r4, r21
+	PPC_REG_CMP	r4, r21
 	bne	restore
 	addi	r4, r3, 17
-	cmpw	r4, r22
+	PPC_REG_CMP	r4, r22
 	bne	restore
 	addi	r4, r3, 18
-	cmpw	r4, r23
+	PPC_REG_CMP	r4, r23
 	bne	restore
 	addi	r4, r3, 19
-	cmpw	r4, r24
+	PPC_REG_CMP	r4, r24
 	bne	restore
 	addi	r4, r3, 20
-	cmpw	r4, r25
+	PPC_REG_CMP	r4, r25
 	bne	restore
 	addi	r4, r3, 21
-	cmpw	r4, r26
+	PPC_REG_CMP	r4, r26
 	bne	restore
 	addi	r4, r3, 22
-	cmpw	r4, r27
+	PPC_REG_CMP	r4, r27
 	bne	restore
+#ifdef __powerpc64__
+	xor	r4, r13, r3
+#else
 	xor	r4, r2, r3
-	cmpw	r4, r28
+#endif
+	PPC_REG_CMP	r4, r28
 	bne	restore
 	addi	r4, r3, 24
-	cmpw	r4, r29
+	PPC_REG_CMP	r4, r29
 	bne	restore
 	mfmsr	r4
 	xor	r4, r4, r3
-	cmpw	r4, r30
+	PPC_REG_CMP	r4, r30
 	bne	restore
 	addi	r4, r3, 25
 	mflr	r5
-	cmpw	r4, r5
+	PPC_REG_CMP	r4, r5
 	bne	restore
 	addi	r4, r3, 26
 	mfctr	r5
-	cmpw	r4, r5
+	PPC_REG_CMP	r4, r5
 	bne	restore
 	rlwinm	r4, r3, 0, 25, 2
 	mfxer	r5
 	cmpw	r4, r5
 	bne	restore
 	addi	r4, r3, 28
-	cmpw	r4, r0
+	PPC_REG_CMP	r4, r0
 	bne	restore
-	cmpw	r31, r1
+	PPC_REG_CMP	r31, r1
 	bne	restore
 
 #ifdef PPC_MULTILIB_FPU
@@ -614,27 +631,27 @@ restore:
 	lfd	f14, F14_OFFSET(r1)
 #endif
 
-	lwz	r31, GPR31_OFFSET(r1)
-	lwz	r30, GPR30_OFFSET(r1)
-	lwz	r29, GPR29_OFFSET(r1)
-	lwz	r28, GPR28_OFFSET(r1)
-	lwz	r27, GPR27_OFFSET(r1)
-	lwz	r26, GPR26_OFFSET(r1)
-	lwz	r25, GPR25_OFFSET(r1)
-	lwz	r24, GPR24_OFFSET(r1)
-	lwz	r23, GPR23_OFFSET(r1)
-	lwz	r22, GPR22_OFFSET(r1)
-	lwz	r21, GPR21_OFFSET(r1)
-	lwz	r20, GPR20_OFFSET(r1)
-	lwz	r19, GPR19_OFFSET(r1)
-	lwz	r18, GPR18_OFFSET(r1)
-	lwz	r17, GPR17_OFFSET(r1)
-	lwz	r16, GPR16_OFFSET(r1)
-	lwz	r15, GPR15_OFFSET(r1)
-	lwz	r14, GPR14_OFFSET(r1)
+	PPC_REG_LOAD	r31, GPR31_OFFSET(r1)
+	PPC_REG_LOAD	r30, GPR30_OFFSET(r1)
+	PPC_REG_LOAD	r29, GPR29_OFFSET(r1)
+	PPC_REG_LOAD	r28, GPR28_OFFSET(r1)
+	PPC_REG_LOAD	r27, GPR27_OFFSET(r1)
+	PPC_REG_LOAD	r26, GPR26_OFFSET(r1)
+	PPC_REG_LOAD	r25, GPR25_OFFSET(r1)
+	PPC_REG_LOAD	r24, GPR24_OFFSET(r1)
+	PPC_REG_LOAD	r23, GPR23_OFFSET(r1)
+	PPC_REG_LOAD	r22, GPR22_OFFSET(r1)
+	PPC_REG_LOAD	r21, GPR21_OFFSET(r1)
+	PPC_REG_LOAD	r20, GPR20_OFFSET(r1)
+	PPC_REG_LOAD	r19, GPR19_OFFSET(r1)
+	PPC_REG_LOAD	r18, GPR18_OFFSET(r1)
+	PPC_REG_LOAD	r17, GPR17_OFFSET(r1)
+	PPC_REG_LOAD	r16, GPR16_OFFSET(r1)
+	PPC_REG_LOAD	r15, GPR15_OFFSET(r1)
+	PPC_REG_LOAD	r14, GPR14_OFFSET(r1)
 	lwz	r4, CR_OFFSET(r1)
 	mtcr	r4
-	lwz	r4, LR_OFFSET(r1)
+	PPC_REG_LOAD	r4, LR_OFFSET(r1)
 	mtlr	r4
 	addi	r1, r1, FRAME_SIZE
 	blr

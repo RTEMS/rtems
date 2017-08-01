@@ -129,10 +129,6 @@ void _CPU_Context_Initialize(
   if ( tls_area != NULL ) {
     void *tls_block = _TLS_TCB_before_TLS_block_initialize( tls_area );
 
-    the_ppc_context->gpr2 = (uint32_t) tls_block + 0x7000;
-  } else {
-    register uint32_t gpr2 __asm__("2");
-
-    the_ppc_context->gpr2 = gpr2;
+    the_ppc_context->tp = (uintptr_t) tls_block + 0x7000;
   }
 }

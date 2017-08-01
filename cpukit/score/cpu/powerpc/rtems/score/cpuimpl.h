@@ -10,7 +10,7 @@
  *
  * Copyright (C) 2007 Till Straumann <strauman@slac.stanford.edu>
  *
- * Copyright (c) 2009, 2016 embedded brains GmbH
+ * Copyright (c) 2009, 2017 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -22,13 +22,71 @@
 
 #include <rtems/score/cpu.h>
 
-#define SRR0_FRAME_OFFSET 8
-#define SRR1_FRAME_OFFSET 12
-#define EXCEPTION_NUMBER_OFFSET 16
-#define EXC_CR_OFFSET 20
-#define EXC_CTR_OFFSET 24
-#define EXC_XER_OFFSET 28
-#define EXC_LR_OFFSET 32
+/* Exception stack frame -> BSP_Exception_frame */
+#ifdef __powerpc64__
+  #define FRAME_LINK_SPACE 32
+#else
+  #define FRAME_LINK_SPACE 8
+#endif
+
+#define SRR0_FRAME_OFFSET FRAME_LINK_SPACE
+#define SRR1_FRAME_OFFSET (SRR0_FRAME_OFFSET + PPC_REG_SIZE)
+#define EXCEPTION_NUMBER_OFFSET (SRR1_FRAME_OFFSET + PPC_REG_SIZE)
+#define PPC_EXC_INTERRUPT_ENTRY_INSTANT_OFFSET (EXCEPTION_NUMBER_OFFSET + 4)
+#define EXC_CR_OFFSET (EXCEPTION_NUMBER_OFFSET + 8)
+#define EXC_XER_OFFSET (EXC_CR_OFFSET + 4)
+#define EXC_CTR_OFFSET (EXC_XER_OFFSET + 4)
+#define EXC_LR_OFFSET (EXC_CTR_OFFSET + PPC_REG_SIZE)
+#define PPC_EXC_INTERRUPT_FRAME_OFFSET (EXC_LR_OFFSET + PPC_REG_SIZE)
+
+#ifndef __SPE__
+  #define PPC_EXC_GPR_OFFSET(gpr) \
+    ((gpr) * PPC_GPR_SIZE + PPC_EXC_INTERRUPT_FRAME_OFFSET + PPC_REG_SIZE)
+  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET PPC_EXC_GPR_OFFSET(4)
+  #if defined(PPC_MULTILIB_ALTIVEC) && defined(PPC_MULTILIB_FPU)
+    #define PPC_EXC_VRSAVE_OFFSET PPC_EXC_GPR_OFFSET(33)
+    #define PPC_EXC_VSCR_OFFSET (PPC_EXC_VRSAVE_OFFSET + 28)
+    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + PPC_EXC_VSCR_OFFSET + 4)
+    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + PPC_EXC_VR_OFFSET(32))
+    #define PPC_EXC_FPSCR_OFFSET PPC_EXC_FR_OFFSET(32)
+    #define PPC_EXC_FRAME_SIZE PPC_EXC_FR_OFFSET(34)
+    #define PPC_EXC_MIN_VSCR_OFFSET (PPC_EXC_GPR_OFFSET(13) + 12)
+    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + PPC_EXC_MIN_VSCR_OFFSET + 4)
+    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + PPC_EXC_MIN_VR_OFFSET(20))
+    #define PPC_EXC_MIN_FPSCR_OFFSET PPC_EXC_MIN_FR_OFFSET(14)
+    #define CPU_INTERRUPT_FRAME_SIZE \
+      (PPC_EXC_MIN_FR_OFFSET(16) + PPC_STACK_RED_ZONE_SIZE)
+  #elif defined(PPC_MULTILIB_ALTIVEC)
+    #define PPC_EXC_VRSAVE_OFFSET PPC_EXC_GPR_OFFSET(33)
+    #define PPC_EXC_VSCR_OFFSET (PPC_EXC_VRSAVE_OFFSET + 28)
+    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + PPC_EXC_VSCR_OFFSET + 4)
+    #define PPC_EXC_FRAME_SIZE PPC_EXC_VR_OFFSET(32)
+    #define PPC_EXC_MIN_VSCR_OFFSET (PPC_EXC_GPR_OFFSET(13) + 12)
+    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + PPC_EXC_MIN_VSCR_OFFSET + 4)
+    #define CPU_INTERRUPT_FRAME_SIZE \
+      (PPC_EXC_MIN_VR_OFFSET(20) + PPC_STACK_RED_ZONE_SIZE)
+  #elif defined(PPC_MULTILIB_FPU)
+    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + PPC_EXC_GPR_OFFSET(33))
+    #define PPC_EXC_FPSCR_OFFSET PPC_EXC_FR_OFFSET(32)
+    #define PPC_EXC_FRAME_SIZE PPC_EXC_FR_OFFSET(34)
+    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + PPC_EXC_GPR_OFFSET(13))
+    #define PPC_EXC_MIN_FPSCR_OFFSET PPC_EXC_MIN_FR_OFFSET(14)
+    #define CPU_INTERRUPT_FRAME_SIZE \
+      (PPC_EXC_MIN_FR_OFFSET(16) + PPC_STACK_RED_ZONE_SIZE)
+  #else
+    #define PPC_EXC_FRAME_SIZE PPC_EXC_GPR_OFFSET(33)
+    #define CPU_INTERRUPT_FRAME_SIZE \
+      (PPC_EXC_GPR_OFFSET(13) + PPC_STACK_RED_ZONE_SIZE)
+  #endif
+#else
+  #define PPC_EXC_SPEFSCR_OFFSET 44
+  #define PPC_EXC_ACC_OFFSET 48
+  #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_GPR_SIZE + 56)
+  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET (PPC_EXC_GPR_OFFSET(4) + 4)
+  #define CPU_INTERRUPT_FRAME_SIZE (160 + PPC_STACK_RED_ZONE_SIZE)
+  #define PPC_EXC_FRAME_SIZE 320
+#endif
+
 #define GPR0_OFFSET PPC_EXC_GPR_OFFSET(0)
 #define GPR1_OFFSET PPC_EXC_GPR_OFFSET(1)
 #define GPR2_OFFSET PPC_EXC_GPR_OFFSET(2)
@@ -62,52 +120,6 @@
 #define GPR30_OFFSET PPC_EXC_GPR_OFFSET(30)
 #define GPR31_OFFSET PPC_EXC_GPR_OFFSET(31)
 
-/* Exception stack frame -> BSP_Exception_frame */
-#define FRAME_LINK_SPACE 8
-
-#ifndef __SPE__
-  #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_GPR_SIZE + 36)
-  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET PPC_EXC_GPR_OFFSET(4)
-  #if defined(PPC_MULTILIB_ALTIVEC) && defined(PPC_MULTILIB_FPU)
-    #define PPC_EXC_VRSAVE_OFFSET 168
-    #define PPC_EXC_VSCR_OFFSET 172
-    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
-    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + 688)
-    #define PPC_EXC_FPSCR_OFFSET 944
-    #define PPC_EXC_FRAME_SIZE 960
-    #define PPC_EXC_MIN_VSCR_OFFSET 92
-    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + 96)
-    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + 416)
-    #define PPC_EXC_MIN_FPSCR_OFFSET 528
-    #define CPU_INTERRUPT_FRAME_SIZE 544
-  #elif defined(PPC_MULTILIB_ALTIVEC)
-    #define PPC_EXC_VRSAVE_OFFSET 168
-    #define PPC_EXC_VSCR_OFFSET 172
-    #define PPC_EXC_VR_OFFSET(v) ((v) * 16 + 176)
-    #define PPC_EXC_FRAME_SIZE 688
-    #define PPC_EXC_MIN_VSCR_OFFSET 92
-    #define PPC_EXC_MIN_VR_OFFSET(v) ((v) * 16 + 96)
-    #define CPU_INTERRUPT_FRAME_SIZE 416
-  #elif defined(PPC_MULTILIB_FPU)
-    #define PPC_EXC_FR_OFFSET(f) ((f) * 8 + 168)
-    #define PPC_EXC_FPSCR_OFFSET 424
-    #define PPC_EXC_FRAME_SIZE 448
-    #define PPC_EXC_MIN_FR_OFFSET(f) ((f) * 8 + 96)
-    #define PPC_EXC_MIN_FPSCR_OFFSET 92
-    #define CPU_INTERRUPT_FRAME_SIZE 224
-  #else
-    #define PPC_EXC_FRAME_SIZE 176
-    #define CPU_INTERRUPT_FRAME_SIZE 96
-  #endif
-#else
-  #define PPC_EXC_SPEFSCR_OFFSET 36
-  #define PPC_EXC_ACC_OFFSET 40
-  #define PPC_EXC_GPR_OFFSET(gpr) ((gpr) * PPC_GPR_SIZE + 48)
-  #define PPC_EXC_VECTOR_PROLOGUE_OFFSET (PPC_EXC_GPR_OFFSET(4) + 4)
-  #define CPU_INTERRUPT_FRAME_SIZE 160
-  #define PPC_EXC_FRAME_SIZE 320
-#endif
-
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifdef RTEMS_SMP
@@ -124,15 +136,24 @@ extern "C" {
 #endif
 
 typedef struct {
-  uint32_t FRAME_SP;
-  uint32_t FRAME_LR;
-  uint32_t EXC_SRR0;
-  uint32_t EXC_SRR1;
-  uint32_t unused;
+  uintptr_t FRAME_SP;
+  #ifdef __powerpc64__
+    uint32_t FRAME_CR;
+    uint32_t FRAME_RESERVED;
+  #endif
+  uintptr_t FRAME_LR;
+  #ifdef __powerpc64__
+    uintptr_t FRAME_TOC;
+  #endif
+  uintptr_t EXC_SRR0;
+  uintptr_t EXC_SRR1;
+  uint32_t RESERVED_FOR_ALIGNMENT_0;
+  uint32_t EXC_INTERRUPT_ENTRY_INSTANT;
   uint32_t EXC_CR;
-  uint32_t EXC_CTR;
   uint32_t EXC_XER;
-  uint32_t EXC_LR;
+  uintptr_t EXC_CTR;
+  uintptr_t EXC_LR;
+  uintptr_t EXC_INTERRUPT_FRAME;
   #ifdef __SPE__
     uint32_t EXC_SPEFSCR;
     uint64_t EXC_ACC;
@@ -150,12 +171,12 @@ typedef struct {
   PPC_GPR_TYPE GPR10;
   PPC_GPR_TYPE GPR11;
   PPC_GPR_TYPE GPR12;
-  uint32_t EARLY_INSTANT;
   #ifdef PPC_MULTILIB_ALTIVEC
     /* This field must take stvewx/lvewx requirements into account */
+    uint32_t RESERVED_FOR_ALIGNMENT_3[3];
     uint32_t VSCR;
 
-    uint8_t V0[16] RTEMS_ALIGNED(16);
+    uint8_t V0[16];
     uint8_t V1[16];
     uint8_t V2[16];
     uint8_t V3[16];
@@ -192,9 +213,10 @@ typedef struct {
     double F12;
     double F13;
     uint64_t FPSCR;
+    uint64_t RESERVED_FOR_ALIGNMENT_4;
   #endif
-  #if !defined(PPC_MULTILIB_ALTIVEC) && !defined(PPC_MULTILIB_FPU)
-    uint32_t RESERVED_FOR_STACK_ALIGNMENT;
+  #if PPC_STACK_RED_ZONE_SIZE > 0
+    uint8_t RED_ZONE[ PPC_STACK_RED_ZONE_SIZE ];
   #endif
 } CPU_Interrupt_frame;
 

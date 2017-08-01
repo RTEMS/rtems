@@ -140,6 +140,12 @@ extern "C" {
 #define PPC_ALIGNMENT 8
 #endif
 
+#ifdef __powerpc64__
+#define PPC_STACK_RED_ZONE_SIZE 512
+#else
+#define PPC_STACK_RED_ZONE_SIZE 0
+#endif
+
 /*
  *  Unless specified above, If the model has FP support, it is assumed to
  *  support doubles (8-byte floating point numbers).

@@ -202,7 +202,7 @@ _start:
 	subi	r1, START_STACK, 2 * PPC_DEFAULT_CACHE_LINE_SIZE
 	clrrwi	r1, r1, PPC_DEFAULT_CACHE_LINE_POWER
 	li	r0, 0
-	stw	r0, 0(r1)
+	PPC_REG_STORE	r0, 0(r1)
 
 #ifdef INITIALIZE_FPU
 	bl	.Linitfpu
@@ -288,7 +288,7 @@ _start_thread:
 	subi	r1, r3, PPC_MINIMUM_STACK_FRAME_SIZE
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
-	stw	r0, 0(r1)
+	PPC_REG_STORE	r0, 0(r1)
 
 #ifdef INITIALIZE_FPU
 	bl	.Linitfpu
@@ -313,145 +313,145 @@ _start_secondary_processor:
 	.align 4
 bsp_exc_vector_base:
 	/* Critical input */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 0
 	b	ppc_exc_fatal_critical
 	/* Machine check */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 1
 	b	ppc_exc_fatal_machine_check
 	/* Data storage */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 2
 	b	ppc_exc_fatal_normal
 	/* Instruction storage */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 3
 	b	ppc_exc_fatal_normal
 	/* External input */
-	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
 	b	ppc_exc_interrupt
 	nop
 	nop
 	/* Alignment */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 5
 	b	ppc_exc_fatal_normal
 	/* Program */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 6
 	b	ppc_exc_fatal_normal
 #ifdef __PPC_CPU_E6500__
 	/* Floating-point unavailable */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 7
 	b	ppc_exc_fatal_normal
 #endif
 	/* System call */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 8
 	b	ppc_exc_fatal_normal
 #ifdef __PPC_CPU_E6500__
 	/* APU unavailable */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 9
 	b	ppc_exc_fatal_normal
 #endif
 	/* Decrementer */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 10
 	b	ppc_exc_fatal_normal
 	/* Fixed-interval timer interrupt */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 11
 	b	ppc_exc_fatal_normal
 	/* Watchdog timer interrupt */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 12
 	b	ppc_exc_fatal_critical
 	/* Data TLB error */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 13
 	b	ppc_exc_fatal_normal
 	/* Instruction TLB error */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 14
 	b	ppc_exc_fatal_normal
 	/* Debug */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 15
 	b	ppc_exc_fatal_debug
 	/* SPE APU unavailable or AltiVec unavailable */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 32
 	b	ppc_exc_fatal_normal
 	/* SPE floating-point data exception or AltiVec assist */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 33
 	b	ppc_exc_fatal_normal
 #ifndef __PPC_CPU_E6500__
 	/* SPE floating-point round exception */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 34
 	b	ppc_exc_fatal_normal
 #endif
 	/* Performance monitor */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 35
 	b	ppc_exc_fatal_normal
 #ifdef __PPC_CPU_E6500__
 	/* Processor doorbell interrupt */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 36
 	b	ppc_exc_fatal_normal
 	/* Processor doorbell critical interrupt */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 37
 	b	ppc_exc_fatal_critical
 	/* Guest processor doorbell */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 38
 	b	ppc_exc_fatal_normal
 	/* Guest processor doorbell critical and machine check */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 39
 	b	ppc_exc_fatal_critical
 	/* Hypervisor system call */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 40
 	b	ppc_exc_fatal_normal
 	/* Hypervisor privilege */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 41
 	b	ppc_exc_fatal_normal
 	/* LRAT error */
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 42
 	b	ppc_exc_fatal_normal
 #endif
