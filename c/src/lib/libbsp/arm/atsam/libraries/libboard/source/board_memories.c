@@ -203,6 +203,10 @@ void BOARD_ConfigureSdram(void)
 	set Mode to 1 in the Mode Register and perform a write access to
 	any SDRAM address.*/
 	SDRAMC->SDRAMC_MR = SDRAMC_MR_MODE_NOP;
+#ifdef __rtems__
+	(void) SDRAMC->SDRAMC_MR;
+	__DMB();
+#endif /* __rtems__ */
 	*pSdram = 0;
 
 	for (i = 0; i < 100000; i++);
@@ -211,6 +215,10 @@ void BOARD_ConfigureSdram(void)
 	The application must set Mode to 2 in the Mode Register and perform a write
 	access to any SDRAM address. */
 	SDRAMC->SDRAMC_MR = SDRAMC_MR_MODE_ALLBANKS_PRECHARGE;
+#ifdef __rtems__
+	(void) SDRAMC->SDRAMC_MR;
+	__DMB();
+#endif /* __rtems__ */
 	*pSdram = 0;
 
 	for (i = 0; i < 100000; i++);
@@ -220,6 +228,10 @@ void BOARD_ConfigureSdram(void)
 	SDRAM location eight times.*/
 	for (i = 0; i < 8; i++) {
 		SDRAMC->SDRAMC_MR = SDRAMC_MR_MODE_AUTO_REFRESH;
+#ifdef __rtems__
+		(void) SDRAMC->SDRAMC_MR;
+	__DMB();
+#endif /* __rtems__ */
 		*pSdram = 0;
 	}
 
@@ -233,6 +245,10 @@ void BOARD_ConfigureSdram(void)
 	4 banks) bank address, the SDRAM write access should be done at the address
 	0x70000000.*/
 	SDRAMC->SDRAMC_MR = SDRAMC_MR_MODE_LOAD_MODEREG;
+#ifdef __rtems__
+	(void) SDRAMC->SDRAMC_MR;
+	__DMB();
+#endif /* __rtems__ */
 	*pSdram = 0;
 
 	for (i = 0; i < 100000; i++);
@@ -251,6 +267,10 @@ void BOARD_ConfigureSdram(void)
 	/* 10. The application must go into Normal Mode, setting Mode to 0 in the
 	Mode Register and performing a write access at any location in the SDRAM. */
 	SDRAMC->SDRAMC_MR = SDRAMC_MR_MODE_NORMAL;
+#ifdef __rtems__
+	(void) SDRAMC->SDRAMC_MR;
+	__DMB();
+#endif /* __rtems__ */
 	*pSdram = 0;
 
 	for (i = 0; i < 100000; i++);
