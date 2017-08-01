@@ -38,12 +38,12 @@ bsp_fdt_blob[BSP_FDT_BLOB_SIZE_MAX / sizeof(uint32_t)];
 void bsp_fdt_copy(const void *src)
 {
   const uint32_t *s = (const uint32_t *) src;
-#ifdef BSP_FDT_BLOB_READ_ONLY
+#ifdef BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA
   uint32_t *d = (uint32_t *) ((uintptr_t) &bsp_fdt_blob[0]
     - (uintptr_t) bsp_section_rodata_begin
     + (uintptr_t) bsp_section_rodata_load_begin);
 #else
-  uint32_t *d = &bsp_fdt_blob[0];
+  uint32_t *d = RTEMS_DECONST(uint32_t *, &bsp_fdt_blob[0]);
 #endif
 
   if (s != d) {
