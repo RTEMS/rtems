@@ -498,4 +498,4 @@ ppc_exc_interrupt:
 	rfi
 
 /* Symbol provided for debugging and tracing */
-ppc_exc_wrap_async_normal_end:
+ppc_exc_interrupt_end:
