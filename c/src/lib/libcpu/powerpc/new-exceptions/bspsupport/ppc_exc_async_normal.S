@@ -69,7 +69,7 @@
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 	.global	ppc_exc_min_prolog_async_tmpl_normal
-	.global ppc_exc_wrap_async_normal
+	.global ppc_exc_interrupt
 
 ppc_exc_min_prolog_async_tmpl_normal:
 
@@ -84,9 +84,9 @@ ppc_exc_min_prolog_async_tmpl_normal:
 	 * We store the absolute branch target address here.  It will be used
 	 * to generate the branch operation in ppc_exc_make_prologue().
 	 */
-	.int	ppc_exc_wrap_async_normal
+	.int	ppc_exc_interrupt
 
-ppc_exc_wrap_async_normal:
+ppc_exc_interrupt:
 
 #ifdef RTEMS_PROFILING
 	/* Save non-volatile ENTRY_INSTANT_REGISTER */

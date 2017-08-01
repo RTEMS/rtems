@@ -63,7 +63,7 @@ mpc55xx_exc_vector_base:
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32763
 #endif
-	b	ppc_exc_wrap_async_normal
+	b	ppc_exc_interrupt
 #ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	nop
 	nop
@@ -93,7 +93,7 @@ mpc55xx_exc_vector_base:
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32752
 #endif
-	b	ppc_exc_wrap_async_normal
+	b	ppc_exc_interrupt
 #ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	nop
 	nop
@@ -103,7 +103,7 @@ mpc55xx_exc_vector_base:
 	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
 	li	r4, -32749
 #endif
-	b	ppc_exc_wrap_async_normal
+	b	ppc_exc_interrupt
 #ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
 	nop
 	nop

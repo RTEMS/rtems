@@ -334,7 +334,7 @@ bsp_exc_vector_base:
 	b	ppc_exc_fatal_normal
 	/* External input */
 	stwu	r1, -CPU_INTERRUPT_FRAME_SIZE(r1)
-	b	ppc_exc_wrap_async_normal
+	b	ppc_exc_interrupt
 	nop
 	nop
 	/* Alignment */
