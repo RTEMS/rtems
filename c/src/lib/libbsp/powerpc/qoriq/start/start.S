@@ -37,6 +37,7 @@
 #define INITIAL_MSR r14
 #define START_STACK r15
 #define SAVED_LINK_REGISTER r16
+#define FDT_REGISTER r17
 
 	.globl _start
 #ifdef RTEMS_SMP
@@ -50,8 +51,8 @@
 	.section ".bsp_start_text", "ax"
 
 _start:
+	mr	FDT_REGISTER, r3
 	bl	.Linitearly
-	bl	bsp_fdt_copy
 
 	/* Get start stack */
 	LA	START_STACK, start_stack_end
@@ -72,6 +73,12 @@ _start:
 	LA	r4, bsp_section_rodata_load_begin
 	LA	r5, bsp_section_rodata_size
 	bl	.Lcopy
+
+	/* Copy FDT into read-only data */
+	mr	r3, FDT_REGISTER
+	bl	bsp_fdt_copy
+
+	/* Flush read-only data */
 	LA	r3, bsp_section_rodata_begin
 	LA	r4, bsp_section_rodata_size
 	bl	rtems_cache_flush_multiple_data_lines
@@ -131,11 +138,6 @@ _start:
 	b	memcpy
 
 .Linitearly:
-	/*
-	 * Do not use r3 here, since it holds the FDT base pointer provided by
-	 * the boot loader.
-	 */
-
 #ifdef __powerpc64__
 	mfmsr	r0
 	oris	r0, r0, MSR_CM >> 16
