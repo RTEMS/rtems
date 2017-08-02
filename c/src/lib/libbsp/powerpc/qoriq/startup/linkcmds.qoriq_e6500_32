@@ -6,8 +6,8 @@
 
 MEMORY {
 	LOW     : ORIGIN = 0x00004000, LENGTH = 16M - 16k
-	HIGH    : ORIGIN = 0x01000000, LENGTH = 2048M - 80M
-	NOCACHE : ORIGIN = 0x7c000000, LENGTH = 64M
+	NOCACHE : ORIGIN = 0x01000000, LENGTH = 48M
+	HIGH    : ORIGIN = 0x04000000, LENGTH = 2048M - 64M
 	EMPTY   : ORIGIN = 0x00000000, LENGTH = 0
 }
 
@@ -32,8 +32,8 @@ REGION_ALIAS ("REGION_NVRAM", EMPTY);
 
 bsp_section_robarrier_align = 0x1000000;
 bsp_section_rwbarrier_align = 0x1000000;
-qoriq = 0xfe000000;
-qoriq_bman_portal = 0xf4000000;
-qoriq_qman_portal = 0xf6000000;
+qoriq = 0xffe000000;
+qoriq_bman_portal = 0xff4000000;
+qoriq_qman_portal = 0xff6000000;
 
 INCLUDE linkcmds.base

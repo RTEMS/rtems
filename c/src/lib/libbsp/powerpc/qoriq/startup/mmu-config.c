@@ -177,7 +177,9 @@ static void TEXT config_fdt_adjust(void)
 			size = 0;
 		}
 
+#ifndef __powerpc64__
 		size = MIN(size, 0x80000000U);
+#endif
 
 		if (
 			begin == 0
