@@ -139,6 +139,12 @@ _start:
 
 .Linitearly:
 #ifdef __powerpc64__
+	/* Enable 64-bit computation mode for exceptions */
+	mfspr	r0, BOOKE_EPCR
+	oris	r0, r0, BOOKE_EPCR_ICM >> 16
+	mtspr	BOOKE_EPCR, r0
+
+	/* Enable 64-bit computation mode */
 	mfmsr	r0
 	oris	r0, r0, MSR_CM >> 16
 	mtmsr	r0
