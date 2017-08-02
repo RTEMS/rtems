@@ -179,6 +179,7 @@ static inline POSIX_Shm_Control *shm_allocate(
   shm->shm_object.size = 0;
   shm->shm_object.ops = &_POSIX_Shm_Object_operations;
   shm->mode = mode & ~rtems_filesystem_umask;
+  shm->oflag = oflag;
   shm->uid = geteuid();
   shm->gid = getegid();
   shm->atime = (time_t) tv.tv_sec;

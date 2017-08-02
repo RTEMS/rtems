@@ -117,6 +117,7 @@ typedef struct {
    uid_t                uid;
    gid_t                gid;
    mode_t               mode;
+   int                  oflag;
 
    time_t               atime;
    time_t               mtime;
