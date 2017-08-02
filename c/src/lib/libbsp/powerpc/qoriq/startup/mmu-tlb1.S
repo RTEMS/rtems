@@ -32,7 +32,11 @@
 
 qoriq_tlb1_write:
 	rlwinm	r3, r3, 16, 10, 15
+#ifdef __powerpc64__
+	rldicr	r8, r8, 0, 51
+#else
 	rlwinm	r8, r8, 0, 0, 19
+#endif
 	oris	r3, r3, 0x1000
 	mtspr	FSL_EIS_MAS0, r3
 	oris	r4, r4, 0xc000
@@ -43,6 +47,11 @@ qoriq_tlb1_write:
 	mtspr	FSL_EIS_MAS2, r5
 	or	r6, r8, r6
 	mtspr	FSL_EIS_MAS3, r6
+#ifdef __powerpc64__
+	srdi	r8, r8, 32
+	or	r7, r7, r8
+	mtspr	FSL_EIS_MAS7, r7
+#endif
 	mtspr	FSL_EIS_MAS7, r7
 #ifdef QORIQ_HAS_HYPERVISOR_MODE
 	li	r0, 0

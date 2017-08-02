@@ -25,11 +25,11 @@
 
 #define TEXT __attribute__((section(".bsp_start_text")))
 
-static uint32_t TEXT power_of_two(uint32_t val)
+static uintptr_t TEXT power_of_two(uintptr_t val)
 {
-	uint32_t test_power = QORIQ_MMU_MIN_POWER;
-	uint32_t power = test_power;
-	uint32_t alignment = 1U << test_power;
+	uintptr_t test_power = QORIQ_MMU_MIN_POWER;
+	uintptr_t power = test_power;
+	uintptr_t alignment = 1U << test_power;
 
 	while (test_power <= QORIQ_MMU_MAX_POWER && (val & (alignment - 1)) == 0) {
 		power = test_power;
@@ -40,11 +40,11 @@ static uint32_t TEXT power_of_two(uint32_t val)
 	return power;
 }
 
-static uint32_t TEXT max_power_of_two(uint32_t val)
+static uintptr_t TEXT max_power_of_two(uintptr_t val)
 {
-	uint32_t test_power = QORIQ_MMU_MIN_POWER;
-	uint32_t power = test_power;
-	uint32_t max = 1U << test_power;
+	uintptr_t test_power = QORIQ_MMU_MIN_POWER;
+	uintptr_t power = test_power;
+	uintptr_t max = 1U << test_power;
 
 	do {
 		power = test_power;
@@ -150,7 +150,7 @@ static void TEXT compact(qoriq_mmu_context *self)
 	merge(self);
 }
 
-static void TEXT align(qoriq_mmu_context *self, uint32_t alignment)
+static void TEXT align(qoriq_mmu_context *self, uintptr_t alignment)
 {
 	qoriq_mmu_entry *entries = self->entries;
 	int n = self->count;
@@ -176,8 +176,8 @@ static void TEXT append(qoriq_mmu_context *self, const qoriq_mmu_entry *new_entr
 
 bool TEXT qoriq_mmu_add(
 	qoriq_mmu_context *self,
-	uint32_t begin,
-	uint32_t last,
+	uintptr_t begin,
+	uintptr_t last,
 	uint32_t mas1,
 	uint32_t mas2,
 	uint32_t mas3,
@@ -211,7 +211,7 @@ bool TEXT qoriq_mmu_add(
 	return ok;
 }
 
-static uint32_t TEXT min(uint32_t a, uint32_t b)
+static uintptr_t TEXT min(uintptr_t a, uintptr_t b)
 {
 	return a < b ? a : b;
 }
@@ -219,14 +219,14 @@ static uint32_t TEXT min(uint32_t a, uint32_t b)
 static bool TEXT split(qoriq_mmu_context *self, qoriq_mmu_entry *cur)
 {
 	bool again = false;
-	uint32_t begin = cur->begin;
-	uint32_t end = cur->last + 1;
-	uint32_t size = end - begin;
-	uint32_t begin_power = power_of_two(begin);
-	uint32_t size_power = max_power_of_two(size);
-	uint32_t power = min(begin_power, size_power);
-	uint32_t split_size = power < 32 ? (1U << power) : 0;
-	uint32_t split_pos = begin + split_size;
+	uintptr_t begin = cur->begin;
+	uintptr_t end = cur->last + 1;
+	uintptr_t size = end - begin;
+	uintptr_t begin_power = power_of_two(begin);
+	uintptr_t size_power = max_power_of_two(size);
+	uintptr_t power = min(begin_power, size_power);
+	uintptr_t split_size = power < 32 ? (1U << power) : 0;
+	uintptr_t split_pos = begin + split_size;
 
 	if (split_pos != end && !is_full(self)) {
 		qoriq_mmu_entry new_entry = *cur;
@@ -263,7 +263,7 @@ static TEXT void partition(qoriq_mmu_context *self)
 
 void TEXT qoriq_mmu_partition(qoriq_mmu_context *self, int max_count)
 {
-	uint32_t alignment = 4096;
+	uintptr_t alignment = 4096;
 
 	do {
 		align(self, alignment);
@@ -280,9 +280,9 @@ void TEXT qoriq_mmu_write_to_tlb1(qoriq_mmu_context *self, int first_tlb)
 
 	for (i = 0; i < n; ++i) {
 		qoriq_mmu_entry *cur = &entries [i];
-		uint32_t ea = cur->begin;
-		uint32_t size = cur->last - ea + 1;
-		uint32_t tsize = (power_of_two(size) - 10) / 2;
+		uintptr_t ea = cur->begin;
+		uintptr_t size = cur->last - ea + 1;
+		uintptr_t tsize = (power_of_two(size) - 10) / 2;
 		int tlb = first_tlb + i;
 
 		qoriq_tlb1_write(
@@ -292,7 +292,7 @@ void TEXT qoriq_mmu_write_to_tlb1(qoriq_mmu_context *self, int first_tlb)
 			cur->mas3,
 			cur->mas7,
 			ea,
-			tsize
+			(int) tsize
 		);
 	}
 }
@@ -302,8 +302,8 @@ void qoriq_mmu_change_perm(uint32_t test, uint32_t set, uint32_t clear)
 	int i = 0;
 
 	for (i = 0; i < 16; ++i) {
-		int mas0 = FSL_EIS_MAS0_TLBSEL | FSL_EIS_MAS0_ESEL(i);
-		int mas1 = 0;
+		uint32_t mas0 = FSL_EIS_MAS0_TLBSEL | FSL_EIS_MAS0_ESEL(i);
+		uint32_t mas1 = 0;
 
 		PPC_SET_SPECIAL_PURPOSE_REGISTER(FSL_EIS_MAS0, mas0);
 		asm volatile ("tlbre");

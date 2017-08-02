@@ -47,8 +47,8 @@ extern "C" {
 #define QORIQ_MMU_POWER_STEP 2
 
 typedef struct {
-	uint32_t begin;
-	uint32_t last;
+	uintptr_t begin;
+	uintptr_t last;
 	uint32_t mas1;
 	uint32_t mas2;
 	uint32_t mas3;
@@ -64,8 +64,8 @@ void qoriq_mmu_context_init(qoriq_mmu_context *self);
 
 bool qoriq_mmu_add(
 	qoriq_mmu_context *self,
-	uint32_t begin,
-	uint32_t last,
+	uintptr_t begin,
+	uintptr_t last,
 	uint32_t mas1,
 	uint32_t mas2,
 	uint32_t mas3,
@@ -86,8 +86,8 @@ void qoriq_tlb1_write(
 	uint32_t mas2,
 	uint32_t mas3,
 	uint32_t mas7,
-	uint32_t ea,
-	uint32_t tsize
+	uintptr_t ea,
+	int tsize
 );
 
 void qoriq_tlb1_invalidate(int esel);

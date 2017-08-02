@@ -37,23 +37,23 @@
 #define DATA __attribute__((section(".bsp_start_data")))
 
 typedef struct {
-	uint32_t begin;
-	uint32_t size;
+	uintptr_t begin;
+	uintptr_t size;
 	uint32_t mas2;
 	uint32_t mas3;
 	uint32_t mas7;
 } entry;
 
 #define ENTRY_X(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = 0, \
 	.mas3 = FSL_EIS_MAS3_SX \
 }
 
 #define ENTRY_R(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = 0, \
 	.mas3 = FSL_EIS_MAS3_SR \
 }
@@ -65,22 +65,22 @@ typedef struct {
 #endif
 
 #define ENTRY_RW(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = ENTRY_RW_MAS2, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
 }
 
 #define ENTRY_IO(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = FSL_EIS_MAS2_I | FSL_EIS_MAS2_G, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW \
 }
 
 #define ENTRY_DEV(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = FSL_EIS_MAS2_I | FSL_EIS_MAS2_G, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
@@ -96,8 +96,8 @@ typedef struct {
  * will occur.  No documentation reference for this is available.
  */
 #define ENTRY_DEV_CACHED(b, s) { \
-	.begin = (uint32_t) b, \
-	.size = (uint32_t) s, \
+	.begin = (uintptr_t) b, \
+	.size = (uintptr_t) s, \
 	.mas2 = FSL_EIS_MAS2_M | FSL_EIS_MAS2_G, \
 	.mas3 = FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW, \
 	.mas7 = QORIQ_MMU_DEVICE_MAS7 \
