@@ -67,13 +67,12 @@ static void Clock_driver_support_initialize_hardware(void)
   lm32_interrupt_unmask(CLOCK_IRQMASK);
 }
 
-static void Clock_driver_support_shutdown_hardware(void)
-{
-  /* Disable clock interrupts and stop */
-
-  lm32_interrupt_unmask(CLOCK_IRQMASK);
-  clockwrite(LM32_CLOCK_CR, LM32_CLOCK_CR_STOP);
-}
+#define Clock_driver_support_shutdown_hardware() \
+  do { \
+    /* Disable clock interrupts and stop */ \
+    lm32_interrupt_unmask(CLOCK_IRQMASK); \
+    clockwrite(LM32_CLOCK_CR, LM32_CLOCK_CR_STOP); \
+  } while (0)
 
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 

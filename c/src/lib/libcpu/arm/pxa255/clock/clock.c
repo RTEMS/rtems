@@ -111,10 +111,10 @@ static void Clock_driver_support_initialize_hardware(void)
     XSCALE_OS_TIMER_MR0 = XSCALE_OS_TIMER_TCR + period_num; \
   } while (0)
 
-static void Clock_driver_support_shutdown_hardware( void )
-{
-  BSP_remove_rtems_irq_handler(&clock_isr_data);
-}
+#define Clock_driver_support_shutdown_hardware() \
+  do { \
+    BSP_remove_rtems_irq_handler(&clock_isr_data); \
+  } while (0)
 
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 

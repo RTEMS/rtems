@@ -102,7 +102,9 @@ static void Clock_driver_timecounter_tick( void )
  */
 volatile uint32_t    Clock_driver_ticks;
 
+#ifdef Clock_driver_support_shutdown_hardware
 void Clock_exit( void );
+#endif
 
 /**
  *  @brief Clock_isr
@@ -181,6 +183,7 @@ rtems_isr Clock_isr(
   #endif
 }
 
+#ifdef Clock_driver_support_shutdown_hardware
 /**
  *  @brief Clock_exit
  *
@@ -193,6 +196,7 @@ void Clock_exit( void )
 
   /* do not restore old vector */
 }
+#endif
 
 /**
  * @brief Clock_initialize
@@ -237,7 +241,9 @@ rtems_device_driver Clock_initialize(
    */
   Clock_driver_support_initialize_hardware();
 
+#ifdef Clock_driver_support_shutdown_hardware
   atexit( Clock_exit );
+#endif
 
   /*
    *  If we are counting ISRs per tick, then initialize the counter.
