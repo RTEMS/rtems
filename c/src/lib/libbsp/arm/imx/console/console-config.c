@@ -173,6 +173,8 @@ static void imx_uart_interrupt(void *arg)
   regs = ctx->regs;
   usr2 = regs->usr2;
 
+  regs->usr1 = IMX_UART_USR1_AGTIM;
+
   while ((usr2 & IMX_UART_USR2_RDR) != 0) {
     char c;
 
