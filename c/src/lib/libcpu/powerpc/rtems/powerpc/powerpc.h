@@ -631,7 +631,11 @@ extern "C" {
 
 #define PPC_MSR_DISABLE_MASK (PPC_MSR_ME|PPC_MSR_EE|PPC_MSR_CE)
 
+#if defined(__powerpc64__)
+#define PPC_MINIMUM_STACK_FRAME_SIZE 32
+#else
 #define PPC_MINIMUM_STACK_FRAME_SIZE PPC_STACK_ALIGNMENT
+#endif
 
 #ifdef __cplusplus
 }

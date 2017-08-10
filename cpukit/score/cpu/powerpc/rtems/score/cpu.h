@@ -818,8 +818,8 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
-  uint32_t         *stack_base,
-  uint32_t          size,
+  void             *stack_base,
+  size_t            size,
   uint32_t          new_level,
   void             *entry_point,
   bool              is_fp,
