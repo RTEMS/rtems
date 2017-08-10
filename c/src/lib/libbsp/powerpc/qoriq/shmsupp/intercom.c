@@ -112,7 +112,7 @@ static void wait_for_event(rtems_event_set in)
 
 static void intercom_handler(void *arg)
 {
-	rtems_id task = (rtems_id) arg;
+	rtems_id task = (rtems_id) (uintptr_t) arg;
 	send_event(task, INTERCOM_EVENT_IPI);
 }
 
@@ -310,7 +310,7 @@ void qoriq_intercom_init(void)
 		"INTERCOM",
 		RTEMS_INTERRUPT_UNIQUE,
 		intercom_handler,
-		(void *) task
+		(void *) (uintptr_t) task
 	);
 	assert(sc == RTEMS_SUCCESSFUL);
 

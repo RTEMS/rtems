@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -115,8 +115,10 @@ _start:
 	LA	r4, bsp_section_bss_size
 	bl	bsp_start_zero
 
+#ifndef __powerpc64__
 	/* Set up EABI and SYSV environment */
 	bl	__eabi
+#endif
 
 	/* Clear command line */
 	li	r3, 0
@@ -124,7 +126,7 @@ _start:
 	bl	boot_card
 
 .Lcopy:
-	cmpw	r3, r4
+	PPC_REG_CMP	r3, r4
 	beqlr
 	b	memcpy
 
@@ -133,6 +135,13 @@ _start:
 	 * Do not use r3 here, since it holds the FDT base pointer provided by
 	 * the boot loader.
 	 */
+
+#ifdef __powerpc64__
+	mfmsr	r0
+	oris	r0, r0, MSR_CM >> 16
+	mtmsr	r0
+	isync
+#endif
 
 	/* Disable decrementer */
 	mfspr	r0, BOOKE_TCR
@@ -159,11 +168,15 @@ _start:
 	mtspr	HID0, r0
 #endif
 
+#ifdef __powerpc64__
+	LA32	r2, .TOC.
+#else
 	/* Invalidate TLS anchor */
 	li	r2, 0
 
 	/* Set small-data anchor */
 	LA	r13, _SDA_BASE_
+#endif
 
 	SET_SELF_CPU_CONTROL	r4, r5
 
@@ -282,7 +295,7 @@ _start_thread:
 
 	/* Initialize start stack */
 	GET_SELF_CPU_CONTROL	r3
-	lwz	r3, PER_CPU_INTERRUPT_STACK_HIGH(r3)
+	PPC_REG_LOAD	r3, PER_CPU_INTERRUPT_STACK_HIGH(r3)
 	subi	r1, r3, PPC_MINIMUM_STACK_FRAME_SIZE
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0

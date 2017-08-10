@@ -141,3 +141,7 @@ $(PROJECT_LIB)/linkcmds.qoriq_e6500_32: startup/linkcmds.qoriq_e6500_32 $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_e6500_32
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_e6500_32
 
+$(PROJECT_LIB)/linkcmds.qoriq_e6500_64: startup/linkcmds.qoriq_e6500_64 $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.qoriq_e6500_64
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.qoriq_e6500_64
+

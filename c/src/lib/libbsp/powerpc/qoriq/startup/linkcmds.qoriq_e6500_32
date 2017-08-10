@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * Memory map for T2080RDB.
+ * Memory map for e6500 core based QorIQ chips, e.g. T2080, T4240.
  */
 
 MEMORY {
