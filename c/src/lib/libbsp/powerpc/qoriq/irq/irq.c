@@ -105,10 +105,10 @@ static volatile qoriq_pic_src_cfg *get_src_cfg(rtems_vector_number vector)
 	} else if (vector < QORIQ_IRQ_EXT_BASE) {
 		return &qoriq.pic.ii_1 [vector - n];
 	} else {
-		uint32_t offs = ((uint32_t)
+		uintptr_t offs = ((uintptr_t)
 			src_cfg_offsets [vector - QORIQ_IRQ_EXT_BASE]) << 4;
 
-		return (volatile qoriq_pic_src_cfg *) ((uint32_t) &qoriq.pic + offs);
+		return (volatile qoriq_pic_src_cfg *) ((uintptr_t) &qoriq.pic + offs);
 	}
 }
 
