@@ -675,7 +675,7 @@ extern char _PPC_INTERRUPT_DISABLE_MASK[];
 
 static inline uint32_t ppc_interrupt_get_disable_mask( void )
 {
-  return (uint32_t) _PPC_INTERRUPT_DISABLE_MASK;
+  return (uint32_t) (uintptr_t) _PPC_INTERRUPT_DISABLE_MASK;
 }
 
 static inline uint32_t ppc_interrupt_disable( void )
