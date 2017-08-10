@@ -45,7 +45,7 @@ static uint8_t bsp_interrupt_handler_unique_table
 
 static void bsp_interrupt_handler_empty(void *arg)
 {
-  rtems_vector_number vector = (rtems_vector_number) arg;
+  rtems_vector_number vector = (rtems_vector_number) (uintptr_t) arg;
 
   bsp_interrupt_handler_default(vector);
 }
@@ -102,7 +102,7 @@ static inline void bsp_interrupt_clear_handler_entry(
 {
   e->handler = bsp_interrupt_handler_empty;
   bsp_interrupt_fence(ATOMIC_ORDER_RELEASE);
-  e->arg = (void *) vector;
+  e->arg = (void *) (uintptr_t) vector;
   e->info = NULL;
   e->next = NULL;
 }
