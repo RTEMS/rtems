@@ -612,7 +612,7 @@ static rtems_isr ata_interrupt_handler(rtems_vector_number vec)
 #else
 static void ata_interrupt_handler(rtems_irq_hdl_param handle)
 {
-  int ata_irq_chain_index = (int) handle;
+  uintptr_t ata_irq_chain_index = (uintptr_t) handle;
     rtems_chain_node *the_node =
       rtems_chain_last(&ata_irq_chain[ata_irq_chain_index].irq_chain);
     ata_queue_msg_t  msg;
@@ -1258,7 +1258,7 @@ rtems_ata_initialize(rtems_device_major_number major,
 		ata_irq_data.name   =
 		  IDE_Controller_Table[ctrl_minor].int_vec;
 		ata_irq_data.hdl    = ata_interrupt_handler;
-		ata_irq_data.handle = (rtems_irq_hdl_param) ctrl_minor;
+		ata_irq_data.handle = (rtems_irq_hdl_param) (uintptr_t) ctrl_minor;
 
 		status = ((0 == BSP_install_rtems_irq_handler(&ata_irq_data))
 			  ? RTEMS_INVALID_NUMBER
