@@ -47,7 +47,7 @@
 	.syntax	unified
 	.section	.text
 
-#ifdef __thumb__
+#ifdef __thumb2__
 FUNCTION_THUMB_ENTRY(_CPU_Context_validate)
 #else
 FUNCTION_ENTRY(_CPU_Context_validate)
