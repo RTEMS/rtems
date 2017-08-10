@@ -679,7 +679,11 @@ void _BSP_Fatal_error(unsigned int);
 
 #define CPU_STACK_MINIMUM_SIZE          (1024*8)
 
+#if defined(__powerpc64__)
+#define CPU_SIZEOF_POINTER 8
+#else
 #define CPU_SIZEOF_POINTER 4
+#endif
 
 /*
  *  CPU's worst alignment requirement for data types on a byte boundary.  This
