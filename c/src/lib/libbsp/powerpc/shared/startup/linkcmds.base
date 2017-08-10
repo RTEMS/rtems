@@ -53,7 +53,7 @@ SECTIONS {
 		*(.text.unlikely .text.*_unlikely)
 		*(.text .stub .text.* .gnu.linkonce.t.*)
 		*(.gnu.warning)
-		*(.glink)
+		*(.sfpr .glink)
 	} > REGION_TEXT AT > REGION_TEXT_LOAD
 	.init : ALIGN_WITH_INPUT {
 		KEEP (*(.init))
@@ -163,6 +163,18 @@ SECTIONS {
 	.dynamic : ALIGN_WITH_INPUT {
 		*(.dynamic)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.opd : ALIGN_WITH_INPUT {
+		KEEP (*(.opd))
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tm_clone_table : ALIGN_WITH_INPUT {
+		*(.tm_clone_table)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.toc1 : ALIGN_WITH_INPUT {
+		*(.toc1)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.branch_lt : ALIGN_WITH_INPUT {
+		*(.branch_lt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.got1 : ALIGN_WITH_INPUT {
 		*(.got1)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
@@ -171,6 +183,9 @@ SECTIONS {
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.got : ALIGN_WITH_INPUT {
 		*(.got)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.toc : ALIGN_WITH_INPUT {
+		*(.toc)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.plt : ALIGN_WITH_INPUT {
 		*(.plt)
