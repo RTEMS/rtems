@@ -47,7 +47,7 @@ void _CPU_set_Show_with_plugin(
   int i;
   rtems_printf(printer ,"%s: ", description);
   for(i=0; i<_NCPUWORDS; i++)
-    rtems_printf(printer ,"%" PRIx32 "", cpuset->__bits[i]);
+    rtems_printf(printer ,"%lx", cpuset->__bits[i]);
   rtems_printf(printer ,"\n");
 }
 
