@@ -278,6 +278,7 @@ ppc_exc_interrupt:
 #else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 	/* Call fixed high level handler */
 	bl	bsp_interrupt_dispatch
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 #ifdef RTEMS_PROFILING
@@ -287,6 +288,7 @@ ppc_exc_interrupt:
 	lwz	r4, PPC_EXC_INTERRUPT_ENTRY_INSTANT_OFFSET(FRAME_REGISTER)
 	GET_TIME_BASE	r5
 	bl	_Profiling_Outer_most_interrupt_entry_and_exit
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 .Lprofiling_done:
 #endif /* RTEMS_PROFILING */
 
@@ -334,6 +336,7 @@ ppc_exc_interrupt:
 	mfmsr	r4
 	ori	r4, r4, MSR_EE
 	bl	_Thread_Do_dispatch
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Disable interrupts */
 	wrteei	0

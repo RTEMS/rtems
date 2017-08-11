@@ -301,5 +301,10 @@ SYM (x):;				\
 #error "PPC_ASM_TYPE is not properly defined"
 #endif
 
+#if defined(__powerpc64__)
+#define PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE nop
+#else
+#define PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
+#endif
 
 #endif

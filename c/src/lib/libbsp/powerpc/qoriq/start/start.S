@@ -67,6 +67,7 @@ _start:
 	LA	r3, bsp_section_fast_text_begin
 	LA	r4, bsp_section_fast_text_size
 	bl	rtems_cache_flush_multiple_data_lines
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Copy read-only data */
 	LA	r3, bsp_section_rodata_begin
@@ -77,11 +78,13 @@ _start:
 	/* Copy FDT into read-only data */
 	mr	r3, FDT_REGISTER
 	bl	bsp_fdt_copy
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Flush read-only data */
 	LA	r3, bsp_section_rodata_begin
 	LA	r4, bsp_section_rodata_size
 	bl	rtems_cache_flush_multiple_data_lines
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Copy fast data */
 	LA	r3, bsp_section_fast_data_begin
@@ -116,11 +119,13 @@ _start:
 	LA	r3, bsp_section_sbss_begin
 	LA	r4, bsp_section_sbss_size
 	bl	bsp_start_zero
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Clear BSS */
 	LA	r3, bsp_section_bss_begin
 	LA	r4, bsp_section_bss_size
 	bl	bsp_start_zero
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 #ifndef __powerpc64__
 	/* Set up EABI and SYSV environment */
@@ -131,11 +136,13 @@ _start:
 	li	r3, 0
 
 	bl	boot_card
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 .Lcopy:
 	PPC_REG_CMP	r3, r4
 	beqlr
 	b	memcpy
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 .Linitearly:
 #ifdef __powerpc64__
@@ -196,6 +203,7 @@ _start:
 	/* Invalidate all TS1 MMU entries */
 	li	r3, 1
 	bl	qoriq_tlb1_invalidate_all_by_ts
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* Add TS1 entry for the first 4GiB of RAM */
 	li	r3, SCRATCH_TLB
@@ -206,6 +214,7 @@ _start:
 	li	r8, 0
 	li	r9, 11
 	bl	qoriq_tlb1_write
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	/* MSR initialization and use TS1 for address translation */
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
@@ -237,10 +246,12 @@ _start:
 	li	r4, FIRST_TLB
 	li	r5, SCRATCH_TLB
 	bl	qoriq_mmu_config
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	mtmsr	INITIAL_MSR
 	isync
 	li	r3, SCRATCH_TLB
 	bl	qoriq_tlb1_invalidate
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	mtlr	SAVED_LINK_REGISTER
 	blr
@@ -314,6 +325,7 @@ _start_thread:
 #endif
 
 	b	qoriq_start_thread
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 _start_secondary_processor:
 	bl	.Linitearly
@@ -325,7 +337,14 @@ _start_secondary_processor:
 	li	r3, 0
 	bl	.Linitmmu
 	b	bsp_start_on_secondary_processor
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif /* RTEMS_SMP */
+
+#ifdef __powerpc64__
+#define START_NOP_FOR_LINKER_TOC_POINTER_RESTORE nop; nop; nop; nop
+#else
+#define START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
+#endif
 
 	/* Exception vector prologues area */
 	.section ".bsp_start_text", "ax"
@@ -336,143 +355,170 @@ bsp_exc_vector_base:
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 0
 	b	ppc_exc_fatal_critical
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Machine check */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 1
 	b	ppc_exc_fatal_machine_check
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Data storage */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 2
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Instruction storage */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 3
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* External input */
 	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
 	b	ppc_exc_interrupt
 	nop
 	nop
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Alignment */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 5
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Program */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 6
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #ifdef __PPC_CPU_E6500__
 	/* Floating-point unavailable */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 7
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 	/* System call */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 8
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #ifdef __PPC_CPU_E6500__
 	/* APU unavailable */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 9
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 	/* Decrementer */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 10
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Fixed-interval timer interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 11
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Watchdog timer interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 12
 	b	ppc_exc_fatal_critical
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Data TLB error */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 13
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Instruction TLB error */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 14
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Debug */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 15
 	b	ppc_exc_fatal_debug
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* SPE APU unavailable or AltiVec unavailable */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 32
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* SPE floating-point data exception or AltiVec assist */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 33
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #ifndef __PPC_CPU_E6500__
 	/* SPE floating-point round exception */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 34
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 	/* Performance monitor */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 35
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #ifdef __PPC_CPU_E6500__
 	/* Processor doorbell interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 36
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Processor doorbell critical interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 37
 	b	ppc_exc_fatal_critical
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Guest processor doorbell */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 38
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Guest processor doorbell critical and machine check */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 39
 	b	ppc_exc_fatal_critical
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Hypervisor system call */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 40
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Hypervisor privilege */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 41
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* LRAT error */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 42
 	b	ppc_exc_fatal_normal
+	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 
 /* Symbol provided for debugging and tracing */

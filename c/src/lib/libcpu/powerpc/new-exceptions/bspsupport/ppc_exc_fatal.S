@@ -226,3 +226,4 @@ ppc_exc_fatal_normal:
 	li	r3, 9
 	addi	r4, r1, FRAME_LINK_SPACE
 	b	_Terminate
+	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE

@@ -113,10 +113,16 @@ static void initialize_frequency_parameters(void)
 #define MTIVPR(base) \
   __asm__ volatile ("mtivpr %0" : : "r" (base))
 
+#ifdef __powerpc64__
+#define VECTOR_TABLE_ENTRY_SIZE 32
+#else
+#define VECTOR_TABLE_ENTRY_SIZE 16
+#endif
+
 #define MTIVOR(vec, offset) \
   do { \
     __asm__ volatile ("mtspr " RTEMS_XSTRING(vec) ", %0" : : "r" (offset)); \
-    offset += 16; \
+    offset += VECTOR_TABLE_ENTRY_SIZE; \
   } while (0)
 
 void qoriq_initialize_exceptions(void *interrupt_stack_begin)
