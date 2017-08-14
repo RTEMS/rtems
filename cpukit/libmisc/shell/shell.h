@@ -94,6 +94,14 @@ typedef struct {
   const char *alias;
 } rtems_shell_alias_t;
 
+struct rtems_shell_topic_tt;
+typedef struct rtems_shell_topic_tt rtems_shell_topic_t;
+
+struct rtems_shell_topic_tt {
+  const char          *topic;
+  rtems_shell_topic_t *next;
+};
+
 /*
  * The return value has RTEMS_SHELL_KEYS_EXTENDED set if the key
  * is extended, ie a special key.
@@ -123,6 +131,26 @@ extern int rtems_shell_make_args(
   int   *argc_p,
   char **argv_p,
   int    max_args
+);
+
+extern rtems_shell_topic_t * rtems_shell_lookup_topic(
+  const char *topic
+);
+
+extern bool rtems_shell_can_see_cmd(
+  const rtems_shell_cmd_t *shell_cmd
+);
+
+extern int rtems_shell_execute_cmd(
+  const char *cmd, int argc, char *argv[]
+);
+
+/*
+ * Call to set up the shell environment if you need to execute commands before
+ * running a shell.
+ */
+extern void rtems_shell_init_environment(
+  void
 );
 
 extern int rtems_shell_cat_file(
