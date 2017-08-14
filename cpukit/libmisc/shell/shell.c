@@ -147,6 +147,12 @@ static void rtems_shell_init_once(void)
                           "running on %m\n");
 
   rtems_shell_init_commands();
+  rtems_shell_register_monitor_commands();
+}
+
+void rtems_shell_init_environment(void)
+{
+  assert(pthread_once(&rtems_shell_once, rtems_shell_init_once) == 0);
 }
 
 /*
@@ -721,10 +727,7 @@ bool rtems_shell_main_loop(
   FILE              *stdinToClose = NULL;
   FILE              *stdoutToClose = NULL;
 
-  eno = pthread_once(&rtems_shell_once, rtems_shell_init_once);
-  assert(eno == 0);
-
-  rtems_shell_register_monitor_commands();
+  rtems_shell_init_environment();
 
   shell_env = rtems_shell_init_env(shell_env_arg);
   if (shell_env == NULL) {
