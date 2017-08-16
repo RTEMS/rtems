@@ -10,6 +10,7 @@ include_dev_i2c_HEADERS += include/dev/i2c/eeprom.h
 include_dev_i2c_HEADERS += include/dev/i2c/gpio-nxp-pca9535.h
 include_dev_i2c_HEADERS += include/dev/i2c/i2c.h
 include_dev_i2c_HEADERS += include/dev/i2c/switch-nxp-pca9548a.h
+include_dev_i2c_HEADERS += include/dev/i2c/xilinx-axi-i2c.h
 
 include_dev_spidir = $(includedir)/dev/spi
 include_dev_spi_HEADERS =
@@ -36,6 +37,7 @@ libdev_a_SOURCES += i2c/gpio-nxp-pca9535.c
 libdev_a_SOURCES += i2c/i2c-bus.c
 libdev_a_SOURCES += i2c/i2c-dev.c
 libdev_a_SOURCES += i2c/switch-nxp-pca9548a.c
+libdev_a_SOURCES += i2c/xilinx-axi-i2c.c
 libdev_a_SOURCES += spi/spi-bus.c
 libdev_a_SOURCES += serial/sc16is752.c
 libdev_a_SOURCES += serial/sc16is752-spi.c
