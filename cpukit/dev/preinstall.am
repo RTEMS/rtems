@@ -27,6 +27,10 @@ $(PROJECT_INCLUDE)/dev/i2c/eeprom.h: include/dev/i2c/eeprom.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/eeprom.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/eeprom.h
 
+$(PROJECT_INCLUDE)/dev/i2c/fpga-i2c-slave.h: include/dev/i2c/fpga-i2c-slave.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/fpga-i2c-slave.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/fpga-i2c-slave.h
+
 $(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h: include/dev/i2c/gpio-nxp-pca9535.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/gpio-nxp-pca9535.h
@@ -42,6 +46,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/switch-nxp-pca9548a.h
 $(PROJECT_INCLUDE)/dev/i2c/xilinx-axi-i2c.h: include/dev/i2c/xilinx-axi-i2c.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/xilinx-axi-i2c.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/xilinx-axi-i2c.h
+
+$(PROJECT_INCLUDE)/dev/i2c/ti-ads-16bit-adc.h: include/dev/i2c/ti-ads-16bit-adc.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/ti-ads-16bit-adc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/ti-ads-16bit-adc.h
+
+$(PROJECT_INCLUDE)/dev/i2c/ti-lm25066a.h: include/dev/i2c/ti-lm25066a.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/ti-lm25066a.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/ti-lm25066a.h
+
+$(PROJECT_INCLUDE)/dev/i2c/ti-tmp112.h: include/dev/i2c/ti-tmp112.h $(PROJECT_INCLUDE)/dev/i2c/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/dev/i2c/ti-tmp112.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/dev/i2c/ti-tmp112.h
 
 $(PROJECT_INCLUDE)/dev/spi/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/dev/spi
