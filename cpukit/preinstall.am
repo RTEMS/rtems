@@ -516,6 +516,14 @@ $(PROJECT_INCLUDE)/rtems/dumpbuf.h: libmisc/dumpbuf/dumpbuf.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/dumpbuf.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/dumpbuf.h
 
+$(PROJECT_INCLUDE)/rtems/rtems-fdt.h: libmisc/rtems-fdt/rtems-fdt.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-fdt.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-fdt.h
+
+$(PROJECT_INCLUDE)/rtems/rtems-fdt-shell.h: libmisc/rtems-fdt/rtems-fdt-shell.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems-fdt-shell.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems-fdt-shell.h
+
 $(PROJECT_INCLUDE)/rtems/monitor.h: libmisc/monitor/monitor.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/monitor.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/monitor.h

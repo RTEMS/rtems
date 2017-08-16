@@ -218,6 +218,10 @@ include_rtems_HEADERS += libmisc/devnull/devzero.h
 ## dumpbuf
 include_rtems_HEADERS += libmisc/dumpbuf/dumpbuf.h
 
+## rtemsfdt
+include_rtems_HEADERS += libmisc/rtems-fdt/rtems-fdt.h
+include_rtems_HEADERS += libmisc/rtems-fdt/rtems-fdt-shell.h
+
 ## monitor
 include_rtems_HEADERS += libmisc/monitor/monitor.h
 
