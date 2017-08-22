@@ -191,6 +191,8 @@ static int gr1553_init2(struct drvmgr_dev *dev)
 		return DRVMGR_FAIL;
 	}
 	pnpinfo = &ambadev->info;
+	if ( pnpinfo->apb_slv == NULL )
+		return DRVMGR_EIO;
 	regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
 
 	/* Stop IRQ */
@@ -227,9 +229,6 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 
 	/* Get device information from AMBA PnP information */
 	ambadev = (struct amba_dev_info *)dev->businfo;
-	if ( ambadev == NULL ) {
-		return DRVMGR_FAIL;
-	}
 	pnpinfo = &ambadev->info;
 	regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
 
@@ -255,6 +254,12 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 		feat->dev = priv;
 		/* Init Minor and Next */
 		gr1553_list_add(&gr1553_rt_root, feat);
+	}
+
+	if ( priv->features == 0 ) {
+		/* no features in HW should never happen.. an I/O error? */
+		free(priv);
+		return DRVMGR_EIO;
 	}
 
 	return DRVMGR_OK;
