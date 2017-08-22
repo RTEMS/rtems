@@ -261,7 +261,6 @@ static void occan_fifo_clr(occan_fifo *fifo);
 /**** Hardware related Interface ****/
 static int occan_calc_speedregs(unsigned int clock_hz, unsigned int rate, occan_speed_regs *result);
 static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing);
-static int pelican_speed_auto(occan_priv *priv);
 static void pelican_init(occan_priv *priv);
 static void pelican_open(occan_priv *priv);
 static int pelican_start(occan_priv *priv);
@@ -1097,81 +1096,6 @@ static int occan_set_speedregs(occan_priv *priv, occan_speed_regs *timing)
 	return 0;
 }
 
-#if 0
-static unsigned int pelican_speed_auto_steplist [] = {
-	OCCAN_SPEED_500K,
-	OCCAN_SPEED_250K,
-	OCCAN_SPEED_125K,
-	OCCAN_SPEED_75K,
-	OCCAN_SPEED_50K,
-	OCCAN_SPEED_25K,
-	OCCAN_SPEED_10K,
-	0
-};
-#endif
-
-static int pelican_speed_auto(occan_priv *priv){
-	return -1;
-
-#if 0
-	int i=0;
-	occan_speed_regs timing;
-	unsigned int speed;
-	unsigned char tmp;
-
-	while ( (speed=pelican_speed_auto_steplist[i]) > 0){
-
-		/* Reset core */
-		WRITE_REG(priv, &priv->regs->mode, PELICAN_MOD_RESET);
-
-		/* tell int handler about the auto speed detection test */
-
-
-		/* wait for a moment (10ms) */
-		/*usleep(10000);*/
-
-		/* No acceptance filter */
-		pelican_set_accept(priv);
-
-		/* calc timing params for this */
-		if ( occan_calc_speedregs(priv->sys_freq_hz,speed,&timing) ){
-			/* failed to get good timings for this frequency
-			 * test with next
-			 */
-			 continue;
-		}
-
-		timing.sam = 0;
-
-		/* set timing params for this speed */
-		occan_set_speedregs(priv,&timing);
-
-		/* Empty previous messages in hardware RX fifo */
-		/*
-		while( READ_REG(priv, &priv->regs->) ){
-
-		}
-		*/
-
-		/* Clear pending interrupts */
-		tmp = READ_REG(priv, &priv->regs->intflags);
-
-		/* enable RX & ERR interrupt */
-		priv->regs->inten =
-
-		/* Get out of reset state */
-		priv->regs->mode = PELICAN_MOD_LISTEN;
-
-		/* wait for frames or errors */
-		while(1){
-			/* sleep 10ms */
-
-		}
-
-	}
-#endif
-}
-
 static rtems_device_driver occan_initialize(rtems_device_major_number major, rtems_device_minor_number unused, void *arg)
 {
 	return RTEMS_SUCCESSFUL;
@@ -1585,22 +1509,6 @@ static rtems_device_driver occan_ioctl(rtems_device_major_number major, rtems_de
 
 		case OCCAN_IOC_SPEED_AUTO:
 			return RTEMS_NOT_IMPLEMENTED;
-			if ( can->started )
-				return RTEMS_RESOURCE_IN_USE; /* EBUSY */
-
-			if ( (speed=pelican_speed_auto(can)) < 0 ){
-				/* failed */
-				return RTEMS_IO_ERROR;
-			}
-
-			/* set new speed */
-			can->speed = speed;
-
-			if ( (int *)ioarg->buffer ){
-				*(int *)ioarg->buffer = speed;
-			}
-			return RTEMS_SUCCESSFUL;
-			break;
 
 		case OCCAN_IOC_SET_BUFLEN:
 			/* set rx & tx fifo buffer length */
