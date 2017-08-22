@@ -106,14 +106,14 @@ static inline bool less_than_uint32_t( uint32_t * lhs, uint32_t * rhs )
 #define CPU_usage_Less_than( _lhs, _rhs ) _Timestamp_Less_than( _lhs, _rhs )
 
 static void
-print_memsize(rtems_cpu_usage_data* data, const uint32_t size, const char* label)
+print_memsize(rtems_cpu_usage_data* data, const uintptr_t size, const char* label)
 {
   if (size > (1024 * 1024))
-    rtems_printf(data->printer, "%4" PRIu32 "M %s", size / (1024 * 1024), label);
+    rtems_printf(data->printer, "%4" PRIuPTR "M %s", size / (1024 * 1024), label);
   else if (size > 1024)
-    rtems_printf(data->printer, "%4" PRIu32 "K %s", size / 1024, label);
+    rtems_printf(data->printer, "%4" PRIuPTR "K %s", size / 1024, label);
   else
-    rtems_printf(data->printer, "%4" PRIu32 " %s", size, label);
+    rtems_printf(data->printer, "%4" PRIuPTR " %s", size, label);
 }
 
 static int

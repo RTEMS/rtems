@@ -360,17 +360,17 @@ typedef struct {
   /**
    * @brief Number of blocks of this type.
    */
-  uint32_t number;
+  uintptr_t number;
 
   /**
    * @brief Largest block of this type.
    */
-  uint32_t largest;
+  uintptr_t largest;
 
   /**
    * @brief Total size of the blocks of this type.
    */
-  uint32_t total;
+  uintptr_t total;
 } Heap_Information;
 
 /**
