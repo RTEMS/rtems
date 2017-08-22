@@ -254,7 +254,7 @@ static int ambapp_scan2(
           continue;
 
         apbdev = ambapp_alloc_dev_struct(DEV_APB_SLV);
-        if (!dev)
+        if (!apbdev)
           return -1;
 
         ambapp_apb_dev_init(apbbase, abus->mmaps,
