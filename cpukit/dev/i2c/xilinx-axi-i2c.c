@@ -99,7 +99,7 @@
 
 typedef struct {
   i2c_bus               base;
-  uint32_t              regs;
+  uintptr_t             regs;
   i2c_msg*              msgs;
   uint32_t              msgs_remaining;
   i2c_msg*              current_msg;
