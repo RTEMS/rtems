@@ -2480,7 +2480,8 @@ const rtems_libio_helper rtems_fs_init_helper =
 #define CONFIGURE_MEMORY_FOR_POSIX_KEYS(_keys, _key_value_pairs) \
    (_Configure_Object_RAM(_keys, sizeof(POSIX_Keys_Control) ) \
     + _Configure_From_workspace( \
-        _key_value_pairs * sizeof(POSIX_Keys_Key_value_pair)))
+      _Configure_Max_Objects(_key_value_pairs) \
+        * sizeof(POSIX_Keys_Key_value_pair)))
 
 /*
  *  The rest of the POSIX threads API features are only available when
