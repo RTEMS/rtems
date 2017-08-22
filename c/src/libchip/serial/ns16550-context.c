@@ -188,7 +188,7 @@ static size_t ns16550_write_to_fifo(
   size_t len
 )
 {
-  uint32_t port = ctx->port;
+  uintptr_t port = ctx->port;
   ns16550_set_reg set = ctx->set_reg;
   size_t out = len > SP_FIFO_SIZE ? SP_FIFO_SIZE : len;
   size_t i;
@@ -207,7 +207,7 @@ static void ns16550_isr(void *arg)
 {
   rtems_termios_tty *tty = arg;
   ns16550_context *ctx = rtems_termios_get_device_context(tty);
-  uint32_t port = ctx->port;
+  uintptr_t port = ctx->port;
   ns16550_get_reg get = ctx->get_reg;
   int i = 0;
   char buf [SP_FIFO_SIZE];
@@ -277,7 +277,7 @@ static void ns16550_isr_task(void *arg)
 static int ns16550_read_task(rtems_termios_device_context *base)
 {
   ns16550_context *ctx = (ns16550_context *) base;
-  uint32_t port = ctx->port;
+  uintptr_t port = ctx->port;
   ns16550_get_reg get = ctx->get_reg;
   char buf[SP_FIFO_SIZE];
   int i;
