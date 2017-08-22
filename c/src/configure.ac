@@ -23,6 +23,7 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
+RTEMS_CHECK_SMP
 
 AC_MSG_NOTICE([setting up make/custom])
 
@@ -197,6 +198,7 @@ AS_IF([test "$host_cpu" = sparc],[
 ])
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
+AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 
 AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
   && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])

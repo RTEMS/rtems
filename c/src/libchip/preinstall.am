@@ -86,10 +86,11 @@ $(PROJECT_INCLUDE)/libchip/if_dcreg.h: network/if_dcreg.h $(PROJECT_INCLUDE)/lib
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/if_dcreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/if_dcreg.h
 
+if !HAS_SMP
 $(PROJECT_INCLUDE)/libchip/greth.h: network/greth.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/greth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/greth.h
-
+endif
 $(PROJECT_INCLUDE)/libchip/smc91111.h: network/smc91111.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/smc91111.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/smc91111.h

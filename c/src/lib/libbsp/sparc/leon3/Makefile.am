@@ -282,7 +282,9 @@ endif
 
 if HAS_NETWORKING
 noinst_PROGRAMS += leon_greth.rel
+if !HAS_SMP
 libbsp_a_SOURCES += leon_greth/leon_greth.c
+endif
 leon_greth_rel_SOURCES = ../../sparc/shared/net/greth.c
 include_bsp_HEADERS += ../../sparc/shared/include/greth.h
 leon_greth_rel_CPPFLAGS = $(AM_CPPFLAGS)

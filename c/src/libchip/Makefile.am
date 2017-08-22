@@ -37,11 +37,13 @@ libnetchip_a_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
     network/if_fxpvar.h network/sonic.h
 include_libchip_HEADERS += network/open_eth.h network/if_dcreg.h
-include_libchip_HEADERS += network/greth.h
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c \
     network/if_dc.c
+if !HAS_SMP
 libnetchip_a_SOURCES += network/greth.c
+include_libchip_HEADERS += network/greth.h
+endif
 include_libchip_HEADERS += network/smc91111.h network/smc91111exp.h
 libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
 endif
