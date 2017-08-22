@@ -14,6 +14,8 @@ AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 LINK_OBJS = $(dl01_OBJECTS)
 LINK_LIBS = $(dl01_LDLIBS)
 
+init.$(OBJEXT): dl-tar.h
+
 dl-o1.o: dl-o1.c
 
 dl.tar: dl-o1.o
@@ -29,14 +31,9 @@ dl-tar.h: dl.tar
 	$(BIN2C) -H $< $@
 CLEANFILES += dl-tar.h
 
-dl01.pre$(EXEEXT): $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
-	@rm -f dl01.pre$(EXEEXT)
-	$(make-exe)
-	rm -f dl01.pre.ralf
-
-dl01.pre: dl01.pre$(EXEEXT)
-	mv $< $@
-CLEANFILES += dl01.pre
+dl01.pre: $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
+	@rm -f dl01.pre
+	$(LINK_APP)
 
 dl-sym.o: dl01.pre
 	rtems-syms -e -c "$(CFLAGS)" -o $@ $<

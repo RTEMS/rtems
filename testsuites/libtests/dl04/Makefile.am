@@ -15,6 +15,8 @@ AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 LINK_OBJS = $(dl04_OBJECTS)
 LINK_LIBS = $(dl04_LDLIBS)
 
+init.$(OBJEXT): dl-tar.h
+
 dl-o4.o: dl-o4.cpp
 
 dl.tar: dl-o4.o
@@ -30,14 +32,9 @@ dl-tar.h: dl.tar
 	$(BIN2C) -H $< $@
 CLEANFILES += dl-tar.h
 
-dl04.pre$(EXEEXT): $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
-	@rm -f dl04.pre$(EXEEXT)
-	$(make-exe)
-	rm -f dl04.pre.ralf
-
-dl04.pre: dl04.pre$(EXEEXT)
-	mv $< $@
-CLEANFILES += dl04.pre
+dl04.pre: $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
+	@rm -f dl04.pre
+	$(LINK_APP)
 
 dl-sym.o: dl04.pre
 	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
