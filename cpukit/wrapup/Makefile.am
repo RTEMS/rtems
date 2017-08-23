@@ -57,6 +57,7 @@ TMP_LIBS += ../libmisc/libfsmount.a
 TMP_LIBS += ../libmisc/libmouse.a
 TMP_LIBS += ../libmisc/libmw-fb.a
 TMP_LIBS += ../libmisc/libredirector.a
+TMP_LIBS += ../libmisc/librtemsfdt.a
 TMP_LIBS += ../libmisc/libstringto.a
 TMP_LIBS += ../libmisc/libtestsupport.a
 
