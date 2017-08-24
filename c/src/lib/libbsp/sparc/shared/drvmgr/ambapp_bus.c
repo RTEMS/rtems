@@ -40,29 +40,45 @@ struct grlib_gptimer_regs {
 
 /* AMBA IMPLEMENTATION */
 
-int ambapp_bus_init1(struct drvmgr_bus *bus);
-int ambapp_bus_remove(struct drvmgr_bus *bus);
-int ambapp_unite(struct drvmgr_drv *drv, struct drvmgr_dev *dev);
-int ambapp_int_register(struct drvmgr_dev *dev, int index, const char *info, drvmgr_isr isr, void *arg);
-int ambapp_int_unregister(struct drvmgr_dev *dev, int index, drvmgr_isr isr, void *arg);
-int ambapp_int_clear(struct drvmgr_dev *dev, int index);
-int ambapp_int_mask(struct drvmgr_dev *dev, int index);
-int ambapp_int_unmask(struct drvmgr_dev *dev, int index);
-int ambapp_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params);
-int ambapp_bus_freq_get(
+static int ambapp_bus_init1(struct drvmgr_bus *bus);
+static int ambapp_bus_remove(struct drvmgr_bus *bus);
+static int ambapp_unite(struct drvmgr_drv *drv, struct drvmgr_dev *dev);
+static int ambapp_int_register(
+	struct drvmgr_dev *dev,
+	int index,
+	const char *info,
+	drvmgr_isr isr,
+	void *arg);
+static int ambapp_int_unregister(
+	struct drvmgr_dev *dev,
+	int index,
+	drvmgr_isr isr,
+	void *arg);
+static int ambapp_int_clear(struct drvmgr_dev *dev, int index);
+static int ambapp_int_mask(struct drvmgr_dev *dev, int index);
+static int ambapp_int_unmask(struct drvmgr_dev *dev, int index);
+static int ambapp_get_params(
+	struct drvmgr_dev *dev,
+	struct drvmgr_bus_params *params);
+static int ambapp_bus_freq_get(
 	struct drvmgr_dev *dev,
 	int options,
 	unsigned int *freq_hz);
-void ambapp_dev_info(struct drvmgr_dev *, void (*print)(void *p, char *str), void *p);
+#ifdef AMBAPPBUS_INFO_AVAIL
+static void ambapp_dev_info(
+	struct drvmgr_dev *,
+	void (*print)(void *p, char *str),
+	void *p);
+#endif
 
 #ifdef RTEMS_SMP
-int ambapp_int_set_affinity(
+static int ambapp_int_set_affinity(
 	struct drvmgr_dev *dev,
 	int index,
 	const Processor_mask *cpus);
 #endif
 
-struct drvmgr_bus_ops ambapp_bus_ops =
+static struct drvmgr_bus_ops ambapp_bus_ops =
 {
 	.init		= 
 	{
@@ -92,7 +108,7 @@ struct ambapp_priv {
 	struct ambapp_config		*config;
 };
 
-int ambapp_unite(struct drvmgr_drv *drv, struct drvmgr_dev *dev)
+static int ambapp_unite(struct drvmgr_drv *drv, struct drvmgr_dev *dev)
 {
 	struct amba_drv_info *adrv;
 	struct amba_dev_id *id;
@@ -149,7 +165,7 @@ static int ambapp_int_get(struct drvmgr_dev *dev, int index)
 	return irq;
 }
 
-int ambapp_int_register(
+static int ambapp_int_register(
 	struct drvmgr_dev *dev,
 	int index,
 	const char *info,
@@ -177,7 +193,7 @@ int ambapp_int_register(
 	}
 }
 
-int ambapp_int_unregister(
+static int ambapp_int_unregister(
 	struct drvmgr_dev *dev,
 	int index,
 	drvmgr_isr isr,
@@ -204,7 +220,7 @@ int ambapp_int_unregister(
 	}
 }
 
-int ambapp_int_clear(
+static int ambapp_int_clear(
 	struct drvmgr_dev *dev,
 	int index)
 {
@@ -229,7 +245,7 @@ int ambapp_int_clear(
 	}
 }
 
-int ambapp_int_mask(
+static int ambapp_int_mask(
 	struct drvmgr_dev *dev,
 	int index)
 {
@@ -254,7 +270,7 @@ int ambapp_int_mask(
 	}
 }
 
-int ambapp_int_unmask(
+static int ambapp_int_unmask(
 	struct drvmgr_dev *dev,
 	int index)
 {
@@ -315,7 +331,7 @@ void ambapp_bus_freq_register(
 	ambapp_freq_init(priv->config->abus, adev, freq_hz);
 }
 
-int ambapp_bus_freq_get(
+static int ambapp_bus_freq_get(
 	struct drvmgr_dev *dev,
 	int options,
 	unsigned int *freq_hz)
@@ -348,7 +364,9 @@ int ambapp_bus_freq_get(
 	return 0;
 }
 
-int ambapp_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
+static int ambapp_get_params(
+	struct drvmgr_dev *dev,
+	struct drvmgr_bus_params *params)
 {
 	struct ambapp_priv *priv = dev->parent->priv;
 
@@ -361,7 +379,7 @@ int ambapp_get_params(struct drvmgr_dev *dev, struct drvmgr_bus_params *params)
 }
 
 #ifdef AMBAPPBUS_INFO_AVAIL
-void ambapp_dev_info(
+static void ambapp_dev_info(
 	struct drvmgr_dev *dev,
 	void (*print_line)(void *p, char *str),
 	void *p)
@@ -782,19 +800,19 @@ int ambapp_bus_register(struct drvmgr_dev *dev, struct ambapp_config *config)
 /*** BUS INITIALIZE FUNCTIONS ***/
 
 /* Initialize the bus, register devices on this bus */
-int ambapp_bus_init1(struct drvmgr_bus *bus)
+static int ambapp_bus_init1(struct drvmgr_bus *bus)
 {
 	/* Initialize the bus, register devices on this bus */
 	return ambapp_ids_register(bus);
 }
 
-int ambapp_bus_remove(struct drvmgr_bus *bus)
+static int ambapp_bus_remove(struct drvmgr_bus *bus)
 {
 	return DRVMGR_OK;
 }
 
 #ifdef RTEMS_SMP
-int ambapp_int_set_affinity(
+static int ambapp_int_set_affinity(
 	struct drvmgr_dev *dev,
 	int index,
 	const Processor_mask *cpus)
