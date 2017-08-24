@@ -334,19 +334,9 @@ void drvmgr_info_bus(struct drvmgr_bus *bus, unsigned int options)
 	}
 }
 
-char *drv_ops_names[DRVMGR_OPS_NUM(struct drvmgr_drv_ops)] = {
-	"init[1]:",
-	"init[2]:",
-	"init[3]:",
-	"init[4]:",
-	"remove: ",
-	"info:   "
-};
-
 void drvmgr_info_drv(struct drvmgr_drv *drv, unsigned int options)
 {
 	struct drvmgr_dev *dev;
-	fun_ptr *ppfunc;
 	int i;
 
 	/* Print Driver */
@@ -355,9 +345,10 @@ void drvmgr_info_drv(struct drvmgr_drv *drv, unsigned int options)
 	printf("  NAME:        %s\n", drv->name ? drv->name : "NO_NAME");
 	printf("  BUS TYPE:    %d\n", drv->bus_type);
 	printf("  OPERATIONS:\n");
-	for (i = 0, ppfunc = (fun_ptr *)&drv->ops->init[0];
-	     i < DRVMGR_OPS_NUM(struct drvmgr_drv_ops); i++)
-		printf("   %s    %p\n", drv_ops_names[i], ppfunc[i]);
+	for (i = 0; i < DRVMGR_LEVEL_MAX; i++)
+		printf("   init[%d]:    %p\n", i + 1, drv->ops->init[i]);
+	printf("   remove:     %p\n", drv->ops->remove);
+	printf("   info:       %p\n", drv->ops->info);
 	printf("  NO. DEVICES: %d\n", drv->dev_cnt);
 
 	/* Print devices united with this driver? */
