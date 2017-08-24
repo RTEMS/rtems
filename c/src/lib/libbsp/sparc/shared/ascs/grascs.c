@@ -208,7 +208,7 @@ int ASCS_init(void) {
     
   /* Create semaphores for blocking ASCS_TC/TM functions */
   if(rtems_semaphore_create(rtems_build_name('A','S','C','0'),1,
-			    (RTEMS_FIFO|RTEMS_BINARY_SEMAPHORE|
+			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
 			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
 			     RTEMS_NO_PRIORITY_CEILING), 0,
 			    &cfg->tcsem1) != RTEMS_SUCCESSFUL) {
@@ -223,8 +223,9 @@ int ASCS_init(void) {
     DBG("ASCS_init: Failed to create semaphore ASC1\n");
     goto init_error2;
   }
+  /* Create semaphores for waiting on ASCS_TC/TM interrupt */
   if(rtems_semaphore_create(rtems_build_name('A','S','C','2'),0,
-			    (RTEMS_FIFO|RTEMS_BINARY_SEMAPHORE|
+			    (RTEMS_FIFO|RTEMS_SIMPLE_BINARY_SEMAPHORE|
 			     RTEMS_NO_INHERIT_PRIORITY|RTEMS_LOCAL|
 			     RTEMS_NO_PRIORITY_CEILING), 0,
 			    &cfg->tcsem2) != RTEMS_SUCCESSFUL) {
