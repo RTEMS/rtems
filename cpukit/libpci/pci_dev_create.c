@@ -26,9 +26,8 @@ struct pci_dev *pci_dev_create(int isbus)
 	else
 		size = sizeof(struct pci_dev);
 
-	ptr = malloc(size);
+	ptr = calloc(1, size);
 	if (!ptr)
 		rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
-	memset(ptr, 0, size);
 	return ptr;
 }
