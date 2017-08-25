@@ -17,6 +17,7 @@
 #endif
 
 #include <sched.h>
+#include <limits.h>
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
