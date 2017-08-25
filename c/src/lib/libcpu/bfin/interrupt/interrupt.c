@@ -15,6 +15,7 @@
 #include <bsp.h>
 #include <libcpu/cecRegs.h>
 #include <libcpu/sicRegs.h>
+#include <string.h>
 #include "interrupt.h"
 
 

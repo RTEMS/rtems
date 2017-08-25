@@ -9,6 +9,7 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <drvmgr/drvmgr.h>

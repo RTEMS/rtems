@@ -18,6 +18,8 @@
 #include <bsp.h>
 #include <bsp/vc.h>
 
+#include <string.h>
+
 #define MAX_CMDLINE_LENGTH 1024
 static int rpi_cmdline_ready = -1;
 static char rpi_cmdline_cached[MAX_CMDLINE_LENGTH] = "force .data placement";

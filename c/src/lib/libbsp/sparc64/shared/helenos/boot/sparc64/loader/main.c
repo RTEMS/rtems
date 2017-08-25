@@ -41,6 +41,7 @@
 #include <bsp.h>
 #include <rtems/bspIo.h>
 #include <inttypes.h>
+#include <string.h>
 
 #include <boot/main.h>
 #include <boot/balloc.h>

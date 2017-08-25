@@ -32,6 +32,8 @@
 
 #include <dev/spi/spi.h>
 
+#include <string.h>
+
 #define MAX_SPI_FREQUENCY 50000000
 
 typedef struct {

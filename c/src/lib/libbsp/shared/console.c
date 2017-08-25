@@ -20,6 +20,7 @@
 #include <rtems/libio.h>
 #include <rtems/console.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <termios.h>
 

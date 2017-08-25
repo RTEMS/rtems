@@ -20,6 +20,7 @@
 #include <bsp/fatal.h>
 #include <rtems/libio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <termios.h>
 

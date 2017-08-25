@@ -15,6 +15,7 @@
 #endif
 
 #include <errno.h>
+#include <string.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/shmimpl.h>
 

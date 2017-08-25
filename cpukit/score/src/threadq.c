@@ -18,6 +18,8 @@
 #include "config.h"
 #endif
 
+#include <string.h>
+
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/rbtreeimpl.h>
 #include <rtems/score/threadimpl.h>

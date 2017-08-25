@@ -20,6 +20,7 @@
  */
 
 #include <stdint.h>
+#include <string.h>
 #include <bsp/tms570-pom.h>
 #include <bsp/linker-symbols.h>
 #include <rtems/score/armv4.h>

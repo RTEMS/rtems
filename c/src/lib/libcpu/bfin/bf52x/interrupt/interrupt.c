@@ -27,6 +27,7 @@
 #include <bsp.h>
 #include <libcpu/cecRegs.h>
 #include <libcpu/sicRegs.h>
+#include <string.h>
 #include "interrupt.h"
 
 #define SIC_IAR_COUNT_SET0		  4

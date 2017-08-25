@@ -22,6 +22,7 @@
 #include <bsp/can.h>
 #include <bsp/can-defs.h>
 #include <bsp/mbed-pinmap.h>
+#include <string.h>
 
 /**
  * @brief The standard isr to be installed for all the can devices.

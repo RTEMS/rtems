@@ -16,6 +16,8 @@
 #include "config.h"
 #endif
 
+#include <string.h>
+
 #include <rtems/untar.h>
 
 int Untar_GzChunkContext_Init(

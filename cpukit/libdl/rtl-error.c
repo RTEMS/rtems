@@ -19,6 +19,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdarg.h>
 
 #include <rtems/rtl/rtl.h>

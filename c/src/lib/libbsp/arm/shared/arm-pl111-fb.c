@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <rtems/framebuffer.h>
 #include <rtems/fb.h>

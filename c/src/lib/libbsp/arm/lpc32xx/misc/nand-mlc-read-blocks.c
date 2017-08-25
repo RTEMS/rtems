@@ -21,6 +21,8 @@
 
 #include <bsp/nand-mlc.h>
 
+#include <string.h>
+
 static rtems_status_code read_page(
   uint32_t first_page_of_block,
   uint32_t page,

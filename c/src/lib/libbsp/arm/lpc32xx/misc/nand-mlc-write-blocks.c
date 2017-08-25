@@ -22,6 +22,8 @@
 
 #include <bsp/nand-mlc.h>
 
+#include <string.h>
+
 static const uint32_t ones_spare [MLC_LARGE_SPARE_WORD_COUNT] = {
   0xffffffff,
   0xffffffff,

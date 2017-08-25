@@ -10,6 +10,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <stddef.h>
 #include <drvmgr/drvmgr.h>
 #include <rtems.h>

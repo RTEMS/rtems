@@ -16,6 +16,7 @@
 
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <rtems/posix/shmimpl.h>
 
 int _POSIX_Shm_Object_create_from_heap(

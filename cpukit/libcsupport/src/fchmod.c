@@ -19,6 +19,7 @@
 #endif
 
 #include <sys/stat.h>
+#include <string.h>
 
 #include <rtems/libio_.h>
 

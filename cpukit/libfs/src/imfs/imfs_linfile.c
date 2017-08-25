@@ -17,6 +17,8 @@
   #include "config.h"
 #endif
 
+#include <string.h>
+
 #include "imfs.h"
 
 static ssize_t IMFS_linfile_read(

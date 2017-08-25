@@ -12,6 +12,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 #include <dev/i2c/i2c.h>
 #include <dev/i2c/ti-lm25066a.h>

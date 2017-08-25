@@ -21,6 +21,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-error.h"

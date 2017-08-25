@@ -14,6 +14,7 @@
 #include <bsp.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <ambapp.h>
 #include <rtems/libi2c.h>
 #include <drvmgr/drvmgr.h>

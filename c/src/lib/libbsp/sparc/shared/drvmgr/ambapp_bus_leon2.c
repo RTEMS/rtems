@@ -20,6 +20,7 @@
 #ifdef LEON2
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <libcpu/access.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>

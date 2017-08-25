@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <rtems/bspIo.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>

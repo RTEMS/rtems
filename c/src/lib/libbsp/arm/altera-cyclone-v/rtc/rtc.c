@@ -29,6 +29,7 @@
 #include <rtems/score/todimpl.h>
 #include <sys/filio.h>
 #include <fcntl.h>
+#include <string.h>
 #include <unistd.h>
 #include <bsp/i2cdrv.h>
 

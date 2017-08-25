@@ -20,6 +20,8 @@
 #ifndef LIBBSP_ARM_RASPBERRYPI_VC_DEFINES_H
 #define LIBBSP_ARM_RASPBERRYPI_VC_DEFINES_H
 
+#include <string.h>
+
 /**
  * @defgroup raspberrypi_vc Register Definitions
  *

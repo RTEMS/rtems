@@ -10,6 +10,7 @@
 
 #include <rtems.h>
 #include <stdio.h>
+#include <string.h>
 #include <pci/cfg.h>
 
 int pci_cfg_print_bus(struct pci_bus *bus);

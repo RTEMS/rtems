@@ -12,6 +12,7 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <stdlib.h>
+#include <string.h>
  
 #include <bsp/spwcuc.h>
 

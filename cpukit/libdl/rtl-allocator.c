@@ -14,6 +14,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-alloc-heap.h"

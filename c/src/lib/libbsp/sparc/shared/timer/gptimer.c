@@ -34,6 +34,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <stdlib.h>
+#include <string.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <grlib.h>

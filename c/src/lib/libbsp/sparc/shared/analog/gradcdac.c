@@ -11,6 +11,7 @@
 #include <rtems.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/gradcdac.h>
