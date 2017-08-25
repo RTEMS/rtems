@@ -43,19 +43,23 @@ clock_t _times(
    struct tms  *ptms
 )
 {
-  rtems_interval ticks, us_per_tick;
+  uint32_t       tick_interval;
+  struct bintime binuptime;
+  sbintime_t     uptime;
+  struct bintime bin_cpu_time_used;
+  sbintime_t     cpu_time_used;
 
   if ( !ptms )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  memset( ptms, 0, sizeof( *ptms ) );
+  tick_interval = (uint32_t)
+    (SBT_1US * rtems_configuration_get_microseconds_per_tick());
 
-  /*
-   *  This call does not depend on TOD being initialized and can't fail.
-   */
+  ptms = memset( ptms, 0, sizeof( *ptms ) );
 
-  ticks = rtems_clock_get_ticks_since_boot();
-  us_per_tick = rtems_configuration_get_microseconds_per_tick();
+  _TOD_Get_zero_based_uptime( &binuptime );
+  uptime = bttosbt( binuptime );
+  ptms->tms_stime = ((clock_t) uptime) / tick_interval;
 
   /*
    *  RTEMS technically has no notion of system versus user time
@@ -64,33 +68,11 @@ clock_t _times(
    *  of ticks since boot and the number of ticks executed by this
    *  this thread.
    */
-  {
-    Timestamp_Control  cpu_time_used;
-    Timestamp_Control  per_tick;
-    uint32_t           ticks_of_executing;
-    uint32_t           fractional_ticks;
+  _Thread_Get_CPU_time_used( _Thread_Get_executing(), &bin_cpu_time_used );
+  cpu_time_used = bttosbt( bin_cpu_time_used );
+  ptms->tms_utime = ((clock_t) cpu_time_used) / tick_interval;
 
-    _Thread_Get_CPU_time_used( _Thread_Get_executing(), &cpu_time_used );
-    _Timestamp_Set(
-      &per_tick,
-      rtems_configuration_get_microseconds_per_tick() /
-	  TOD_MICROSECONDS_PER_SECOND,
-      (rtems_configuration_get_nanoseconds_per_tick() %
-	  TOD_NANOSECONDS_PER_SECOND)
-    );
-    _Timestamp_Divide(
-      &cpu_time_used,
-      &per_tick,
-      &ticks_of_executing,
-      &fractional_ticks
-    );
-
-    ptms->tms_utime = ticks_of_executing * us_per_tick;
-  }
-
-  ptms->tms_stime  = ticks * us_per_tick;
-
-  return ticks * us_per_tick;
+  return ptms->tms_stime;
 }
 
 /**
