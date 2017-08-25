@@ -12,6 +12,7 @@
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/bspIo.h>
 #include <at91rm9200.h>
 #include <at91rm9200_emac.h>
 #include <at91rm9200_gpio.h>

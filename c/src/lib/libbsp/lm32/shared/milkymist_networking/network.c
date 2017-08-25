@@ -16,6 +16,7 @@
 #include <bsp/irq-generic.h>
 #include <stdio.h>
 #include <string.h>
+#include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/status-checks.h>
 #include <sys/param.h>

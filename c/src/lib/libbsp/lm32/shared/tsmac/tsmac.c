@@ -20,6 +20,7 @@
 #include <string.h>
 #include <errno.h>
 #include <rtems/error.h>
+#include <rtems/bspIo.h>
 #include <rtems/rtems_bsdnet.h>
 
 #include <sys/param.h>
