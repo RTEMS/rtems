@@ -20,6 +20,7 @@
  */
 
 #include <stdlib.h>
+#include <limits.h>
 
 #include <bsp.h>
 #include <rtems/libio.h>

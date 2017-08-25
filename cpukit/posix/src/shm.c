@@ -16,6 +16,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <limits.h>
 
 #include <rtems/system.h>
 #include <rtems/config.h>

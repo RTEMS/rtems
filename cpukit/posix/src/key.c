@@ -20,6 +20,8 @@
 #include "config.h"
 #endif
 
+#include <limits.h>
+
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
 

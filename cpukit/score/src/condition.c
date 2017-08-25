@@ -18,6 +18,7 @@
 
 #include <sys/lock.h>
 #include <errno.h>
+#include <limits.h>
 
 #include <rtems/score/atomic.h>
 #include <rtems/score/chainimpl.h>

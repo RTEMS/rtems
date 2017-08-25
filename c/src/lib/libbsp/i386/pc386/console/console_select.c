@@ -18,6 +18,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <limits.h>
 #include <stdlib.h>
 #include <termios.h>
 
