@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <pthread.h>
+#include <string.h>
 
 #include <pxa255.h>
 #include <bsp.h>
