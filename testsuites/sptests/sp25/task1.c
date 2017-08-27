@@ -187,7 +187,7 @@ rtems_task Task_1(
   status = rtems_region_get_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_information of RN01");
   printf(
-    "TA1 - got information - free = %" PRIu32 ", used = %" PRIu32 "\n",
+    "TA1 - got information - free = %" PRIuPTR ", used = %" PRIuPTR "\n",
     region_info.Free.number,
     region_info.Used.number
   );
@@ -199,7 +199,7 @@ rtems_task Task_1(
   status = rtems_region_get_free_information(region_id, &region_info);
   directive_failed(status, "rtems_region_get_free_information of RN01");
   printf(
-    "TA1 - got free information - free = %" PRIu32 ", used = %" PRIu32 "\n",
+    "TA1 - got free information - free = %" PRIuPTR ", used = %" PRIuPTR "\n",
     region_info.Free.number,
     region_info.Used.number
   );
