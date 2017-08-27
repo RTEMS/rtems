@@ -52,12 +52,12 @@ static void print_info(void)
   _Heap_Get_information(&task_stack_heap, &info);
 
   printf(
-    "used blocks = %" PRIu32 ", "
-    "largest used block = %" PRIu32 ", "
-    "used space = %" PRIu32 "\n"
-    "free blocks = %" PRIu32 ", "
-    "largest free block = %" PRIu32 ", "
-    "free space = %" PRIu32 "\n",
+    "used blocks = %" PRIuPTR ", "
+    "largest used block = %" PRIuPTR ", "
+    "used space = %" PRIuPTR "\n"
+    "free blocks = %" PRIuPTR ", "
+    "largest free block = %" PRIuPTR ", "
+    "free space = %" PRIuPTR "\n",
     info.Used.number,
     info.Used.largest,
     info.Used.total,
