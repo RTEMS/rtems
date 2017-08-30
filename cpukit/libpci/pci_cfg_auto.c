@@ -267,6 +267,22 @@ static void pci_dev_free(struct pci_dev *dev)
 }
 #endif
 
+static struct pci_dev *pci_dev_create(int isbus)
+{
+	void *ptr;
+	int size;
+
+	if (isbus)
+		size = sizeof(struct pci_bus);
+	else
+		size = sizeof(struct pci_dev);
+
+	ptr = calloc(1, size);
+	if (!ptr)
+		rtems_fatal_error_occurred(RTEMS_NO_MEMORY);
+	return ptr;
+}
+
 static void pci_find_devs(struct pci_bus *bus)
 {
 	uint32_t id, tmp;

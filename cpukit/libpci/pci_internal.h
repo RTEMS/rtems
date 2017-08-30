@@ -9,6 +9,3 @@
 
 /* Number of buses */
 extern int pci_bus_cnt;
-
-/* Allocate a PCI device for a standard device or a bridge device */
-struct pci_dev *pci_dev_create(int isbus);
