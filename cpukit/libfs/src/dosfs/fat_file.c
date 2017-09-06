@@ -168,11 +168,9 @@ fat_file_update(fat_fs_info_t *fs_info, fat_file_fd_t *fat_fd)
 {
     int ret_rc = RC_OK;
 
-    /*
-     * if fat-file descriptor is not marked as "removed", synchronize
-     * size, first cluster number, write time and date fields of the file
-     */
-    if (!FAT_FILE_IS_REMOVED(fat_fd) && FAT_FILE_HAS_META_DATA_CHANGED(fat_fd))
+    if (!FAT_FILE_IS_REMOVED(fat_fd) &&
+        FAT_FILE_HAS_META_DATA_CHANGED(fat_fd) &&
+        !FAT_FD_OF_ROOT_DIR(fat_fd))
     {
         int rc;
 
