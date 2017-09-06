@@ -1320,7 +1320,6 @@ struct rtems_libio_tt {
   rtems_driver_name_t                    *driver;
   off_t                                   offset;    /* current offset into file */
   uint32_t                                flags;
-  uint32_t                                mapping_refcnt; /* current mappings */
   rtems_filesystem_location_info_t        pathinfo;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */

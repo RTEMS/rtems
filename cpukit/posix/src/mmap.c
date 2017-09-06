@@ -48,6 +48,7 @@ void *mmap(
   bool            map_anonymous;
   bool            map_shared;
   bool            map_private;
+  bool            is_shared_shm;
   int             err;
 
   map_fixed = (flags & MAP_FIXED) == MAP_FIXED;
@@ -194,7 +195,6 @@ void *mmap(
   memset( mapping, 0, sizeof( mmap_mapping ));
   mapping->len = len;
   mapping->flags = flags;
-  mapping->iop = iop;
 
   if ( !map_anonymous ) {
     /*
@@ -206,19 +206,19 @@ void *mmap(
     if ( S_ISREG( sb.st_mode ) || S_ISBLK( sb.st_mode ) ||
          S_ISCHR( sb.st_mode ) || S_ISFIFO( sb.st_mode ) ||
          S_ISSOCK( sb.st_mode ) ) {
-      mapping->is_shared_shm = false;
+      is_shared_shm = false;
     } else {
-      mapping->is_shared_shm = true;
+      is_shared_shm = true;
     }
   } else {
-    mapping->is_shared_shm = false;
+    is_shared_shm = false;
   }
 
   if ( map_fixed ) {
     mapping->addr = addr;
   } else if ( map_private ) {
     /* private mappings of shared memory do not need special treatment. */
-    mapping->is_shared_shm = false;
+    is_shared_shm = false;
     posix_memalign( &mapping->addr, PAGE_SIZE, len );
     if ( !mapping->addr ) {
       free( mapping );
@@ -228,7 +228,7 @@ void *mmap(
   }
 
   /* MAP_FIXED is not supported for shared memory objects with MAP_SHARED. */
-  if ( map_fixed && mapping->is_shared_shm ) {
+  if ( map_fixed && is_shared_shm ) {
     free( mapping );
     errno = ENOTSUP;
     return MAP_FAILED;
@@ -280,6 +280,11 @@ void *mmap(
       memset( mapping->addr, 0, len );
     }
   } else if ( map_shared ) {
+    if ( is_shared_shm ) {
+      /* FIXME: This use of implementation details is a hack. */
+      mapping->shm = iop_to_shm( iop );
+    }
+
     err = (*iop->pathinfo.handlers->mmap_h)(
         iop, &mapping->addr, len, prot, off );
     if ( err != 0 ) {
@@ -287,13 +292,6 @@ void *mmap(
       free( mapping );
       return MAP_FAILED;
     }
-  }
-
-  if ( iop != NULL ) {
-    /* add an extra reference to the file associated with fildes that
-     * is not removed by a subsequent close().  This reference shall be removed
-     * when there are no more mappings to the file. */
-    rtems_libio_increment_mapping_refcnt(iop);
   }
 
   rtems_chain_append_unprotected( &mmap_mappings, &mapping->node );

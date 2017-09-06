@@ -18,6 +18,7 @@
 
 #include <rtems/libio_.h>
 #include <rtems/chain.h> /* FIXME: use score chains for proper layering? */
+#include <rtems/posix/shm.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,12 +30,11 @@ extern "C" {
  * Every mmap'ed region has a mapping.
  */
 typedef struct mmap_mappings_s {
-  rtems_chain_node node;  /**< The mapping chain's node */
-  void*            addr;  /**< The address of the mapped memory */
-  size_t           len;   /**< The length of memory mapped */
-  int              flags; /**< The mapping flags */
-  rtems_libio_t   *iop;   /**< The mapped object's file descriptor pointer */
-  bool             is_shared_shm; /**< True if MAP_SHARED of shared memory */
+  rtems_chain_node   node;  /**< The mapping chain's node */
+  void*              addr;  /**< The address of the mapped memory */
+  size_t             len;   /**< The length of memory mapped */
+  int                flags; /**< The mapping flags */
+  POSIX_Shm_Control *shm;   /**< The shared memory object or NULL */
 } mmap_mapping;
 
 extern rtems_chain_control mmap_mappings;

@@ -138,36 +138,8 @@ void rtems_libio_free(
   rtems_libio_lock();
 
     iop->flags = 0;
-    /* If the mapping_refcnt is non-zero, the deferred free will be
-     * called by munmap. The iop is no longer good to use, but it cannot
-     * be recycled until the mapped file is unmapped. deferred free knows
-     * it can recycle the iop in case flags == 0 and iop->data1 == iop,
-     * since these two conditions are not otherwise satisifed at
-     * the same time. It may be possible that iop->data1 == iop when
-     * flags != 0 because data1 is private to the driver. However, flags == 0
-     * means a freed iop, and an iop on the freelist cannot store a pointer
-     * to itself in data1, or else the freelist is corrupted. We can't use
-     * NULL in data1 as an indicator because it is used by the tail of the
-     * freelist. */
-    if ( iop->mapping_refcnt == 0 ) {
-      iop->data1 = rtems_libio_iop_freelist;
-      rtems_libio_iop_freelist = iop;
-    } else {
-      iop->data1 = iop;
-    }
+    iop->data1 = rtems_libio_iop_freelist;
+    rtems_libio_iop_freelist = iop;
 
-  rtems_libio_unlock();
-}
-
-void rtems_libio_check_deferred_free(
-  rtems_libio_t *iop
-)
-{
-  rtems_libio_lock();
-    if ( iop->mapping_refcnt == 0 && iop->flags == 0 && iop->data1 == iop) {
-      /* No mappings and rtems_libio_free already called, recycle the iop */
-      iop->data1 = rtems_libio_iop_freelist;
-      rtems_libio_iop_freelist = iop;
-    }
   rtems_libio_unlock();
 }

@@ -16,23 +16,14 @@
 #include <stdlib.h>
 #include <sys/mman.h>
 
-#include <rtems/posix/mmanimpl.h> 
+#include <rtems/posix/mmanimpl.h>
 #include <rtems/posix/shmimpl.h>
-
-static void shm_munmap( rtems_libio_t *iop )
-{
-  POSIX_Shm_Control *shm = iop_to_shm( iop );
-
-  /* decrement mmap's shm reference_count and maybe delete the object */
-  POSIX_Shm_Attempt_delete(shm);
-}
 
 int munmap(void *addr, size_t len)
 {
-  mmap_mapping      *mapping;
-  rtems_chain_node  *node;
-  uint32_t           refcnt;
-  
+  mmap_mapping     *mapping;
+  rtems_chain_node *node;
+
   /*
    * Clear errno.
    */
@@ -60,17 +51,13 @@ int munmap(void *addr, size_t len)
     if ( ( addr >= mapping->addr ) &&
          ( addr < ( mapping->addr + mapping->len )) ) {
       rtems_chain_extract_unprotected( node );
+
       /* FIXME: generally need a way to clean-up the backing object, but
        * currently it only matters for MAP_SHARED shm objects. */
-      if ( mapping->is_shared_shm == true ) {
-        shm_munmap(mapping->iop);
+      if ( mapping->shm != NULL ) {
+        POSIX_Shm_Attempt_delete(mapping->shm);
       }
-      if ( mapping->iop != NULL ) {
-        refcnt = rtems_libio_decrement_mapping_refcnt(mapping->iop);
-        if ( refcnt == 0 ) {
-          rtems_libio_check_deferred_free(mapping->iop);
-        }
-      }
+
       /* only free the mapping address for non-fixed mapping */
       if (( mapping->flags & MAP_FIXED ) != MAP_FIXED ) {
         /* only free the mapping address for non-shared mapping, because we

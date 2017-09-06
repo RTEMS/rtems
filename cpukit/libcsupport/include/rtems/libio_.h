@@ -304,47 +304,6 @@ void rtems_libio_free(
   rtems_libio_t *iop
 );
 
-/**
- * Garbage collects the free libio in case it was previously freed but there
- * were still references to it.
- */
-void rtems_libio_check_deferred_free( rtems_libio_t *iop );
-
-/**
- * Increment the reference count tracking number of mmap mappings of a file.
- * Returns the updated reference count value.
- */
-static inline uint32_t rtems_libio_increment_mapping_refcnt(rtems_libio_t *iop)
-{
-  uint32_t refcnt;
-  rtems_libio_lock();
-  refcnt = ++iop->mapping_refcnt;
-  rtems_libio_unlock();
-  return refcnt;
-}
-
-/**
- * Decrement the reference count tracking number of mmap mappings of a file.
- * Returns the updated reference count value.
- */
-static inline uint32_t rtems_libio_decrement_mapping_refcnt(rtems_libio_t *iop)
-{
-  uint32_t refcnt;
-  rtems_libio_lock();
-  refcnt = --iop->mapping_refcnt;
-  rtems_libio_unlock();
-  return refcnt;
-}
-
-static inline bool rtems_libio_is_mapped(rtems_libio_t *iop)
-{
-  bool is_mapped;
-  rtems_libio_lock();
-  is_mapped = iop->mapping_refcnt != 0;
-  rtems_libio_unlock();
-  return is_mapped;
-}
-
 /*
  *  File System Routine Prototypes
  */
