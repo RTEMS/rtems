@@ -1241,10 +1241,10 @@ msdos_compare_entry_against_filename (
     const uint8_t               *entry,
     const size_t                 entry_size,
     const uint8_t               *filename,
-    const size_t                 filename_size_remaining,
+    const size_t                 name_len_remaining,
     bool                        *is_matching)
 {
-  ssize_t      size_remaining = filename_size_remaining;
+  ssize_t      size_remaining = name_len_remaining;
   int          eno            = 0;
   uint8_t      entry_normalized[MSDOS_LFN_ENTRY_SIZE_UTF8];
   size_t       bytes_in_entry_normalized = sizeof ( entry_normalized );
@@ -1270,7 +1270,7 @@ msdos_compare_entry_against_filename (
                 *is_matching = true;
             } else {
                 *is_matching   = false;
-                size_remaining = filename_size_remaining;
+                size_remaining = name_len_remaining;
             }
 
         }
@@ -1285,6 +1285,18 @@ msdos_compare_entry_against_filename (
     }
 
     return size_remaining;
+}
+
+static void
+msdos_prepare_for_next_entry(
+    fat_pos_t *lfn_start,
+    bool      *entry_matched,
+    ssize_t   *name_len_remaining,
+    size_t     name_len_for_compare)
+{
+    lfn_start->cln = FAT_FILE_SHORT_NAME;
+    *entry_matched = false;
+    *name_len_remaining = name_len_for_compare;
 }
 
 static int
@@ -1308,14 +1320,14 @@ msdos_find_file_in_directory (
     uint32_t          dir_entry;
     fat_pos_t         lfn_start;
     uint8_t           lfn_checksum      = 0;
-    bool              entry_matched       = false;
+    bool              entry_matched;
     bool              empty_space_found = false;
     uint32_t          entries_per_block = bts2rd / MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE;
     int               lfn_entry         = 0;
     uint8_t           entry_utf8_normalized[MSDOS_LFN_ENTRY_SIZE_UTF8];
     size_t            bytes_in_entry;
     bool              filename_matched  = false;
-    ssize_t           filename_size_remaining = name_len_for_compare;
+    ssize_t           name_len_remaining;
     rtems_dosfs_convert_control *converter = fs_info->converter;
     uint32_t          dir_offset = 0;
 
@@ -1325,7 +1337,9 @@ msdos_find_file_in_directory (
      * create the entry if the name is not found.
      */
 
-    lfn_start.cln = lfn_start.ofs = FAT_FILE_SHORT_NAME;
+    msdos_prepare_for_next_entry(&lfn_start, &entry_matched,
+                                 &name_len_remaining,
+                                 name_len_for_compare);
 
     while (   (bytes_read = fat_file_read (&fs_info->fat, fat_fd, (dir_offset * bts2rd),
                                              bts2rd, fs_info->cl_buf)) != FAT_EOF
@@ -1419,6 +1433,9 @@ msdos_find_file_in_directory (
                 printf ("MSFS:[4.1] esc:%li esf:%i\n",
                         *empty_entry_count, empty_space_found);
 #endif
+                msdos_prepare_for_next_entry(&lfn_start, &entry_matched,
+                                             &name_len_remaining,
+                                             name_len_for_compare);
             }
             else
             {
@@ -1492,7 +1509,10 @@ msdos_find_file_in_directory (
 #if MSDOS_FIND_PRINT
                         printf ("MSFS:[4.4] no match\n");
 #endif
-                        lfn_start.cln = FAT_FILE_SHORT_NAME;
+                        msdos_prepare_for_next_entry(&lfn_start,
+                                                     &entry_matched,
+                                                     &name_len_remaining,
+                                                     name_len_for_compare);
                         continue;
                     }
 #if MSDOS_FIND_PRINT
@@ -1507,22 +1527,25 @@ msdos_find_file_in_directory (
                         &entry_utf8_normalized[0],
                         sizeof (entry_utf8_normalized));
                     if (bytes_in_entry > 0) {
-                        filename_size_remaining = msdos_compare_entry_against_filename (
+                        name_len_remaining = msdos_compare_entry_against_filename (
                             converter,
                             &entry_utf8_normalized[0],
                             bytes_in_entry,
                             &filename_converted[0],
-                            filename_size_remaining,
+                            name_len_remaining,
                             &entry_matched);
 
-                        if (filename_size_remaining < 0
-                            || (! entry_matched)) {
-                            filename_size_remaining = name_len_for_compare;
-                            lfn_start.cln = FAT_FILE_SHORT_NAME;
+                        if (name_len_remaining < 0 || !entry_matched) {
+                            msdos_prepare_for_next_entry(&lfn_start,
+                                                         &entry_matched,
+                                                         &name_len_remaining,
+                                                         name_len_for_compare);
                         }
                     } else {
-                      lfn_start.cln = FAT_FILE_SHORT_NAME;
-                      entry_matched   = false;
+                        msdos_prepare_for_next_entry(&lfn_start,
+                                                     &entry_matched,
+                                                     &name_len_remaining,
+                                                     name_len_for_compare);
                     }
                 }
                 else
@@ -1543,7 +1566,7 @@ msdos_find_file_in_directory (
                         if (lfn_entry ||
                             lfn_checksum != msdos_lfn_checksum(entry))
                             entry_matched = false;
-                        else if (filename_size_remaining == 0) {
+                        else if (name_len_remaining == 0) {
                             filename_matched = true;
                             rc = msdos_on_entry_found (
                                 fs_info,
@@ -1570,14 +1593,14 @@ msdos_find_file_in_directory (
                             &entry_utf8_normalized[0],
                             bytes_in_entry);
                         if (bytes_in_entry > 0) {
-                            filename_size_remaining = msdos_compare_entry_against_filename (
+                            name_len_remaining = msdos_compare_entry_against_filename (
                                 converter,
                                 &entry_utf8_normalized[0],
                                 bytes_in_entry,
                                 &filename_converted[0],
                                 name_len_for_compare,
                                 &entry_matched);
-                            if (entry_matched && filename_size_remaining == 0) {
+                            if (entry_matched && name_len_remaining == 0) {
                                 filename_matched = true;
                                 rc = msdos_on_entry_found (
                                     fs_info,
@@ -1591,15 +1614,17 @@ msdos_find_file_in_directory (
                                     &lfn_start
                                 );
                             }
-                            if (rc == RC_OK && (! filename_matched)) {
-                                lfn_start.cln           = FAT_FILE_SHORT_NAME;
-                                entry_matched           = false;
-                                filename_size_remaining = name_len_for_compare;
+                            if (rc == RC_OK && !filename_matched) {
+                                msdos_prepare_for_next_entry(&lfn_start,
+                                                             &entry_matched,
+                                                             &name_len_remaining,
+                                                             name_len_for_compare);
                             }
                         } else {
-                          lfn_start.cln           = FAT_FILE_SHORT_NAME;
-                          entry_matched           = false;
-                          filename_size_remaining = name_len_for_compare;
+                          msdos_prepare_for_next_entry(&lfn_start,
+                                                       &entry_matched,
+                                                       &name_len_remaining,
+                                                       name_len_for_compare);
                         }
                     }
                 }
