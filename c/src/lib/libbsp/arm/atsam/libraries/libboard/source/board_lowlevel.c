@@ -92,17 +92,27 @@ void _SetupMemoryRegion(void)
 	    START_Addr:-  0x00000000UL
 	    END_Addr:-    0x003FFFFFUL
 	****************************************************/
+
 	dwRegionBaseAddr =
 		ITCM_START_ADDRESS |
 		MPU_REGION_VALID |
 		MPU_DEFAULT_ITCM_REGION;        // 1
 
+#ifdef __rtems__
+	if (ITCM_END_ADDRESS + 1 != ITCM_START_ADDRESS) {
+#endif /* __rtems__ */
 	dwRegionAttr =
 		MPU_AP_PRIVILEGED_READ_WRITE |
 		MPU_CalMPURegionSize(ITCM_END_ADDRESS - ITCM_START_ADDRESS) |
 		MPU_REGION_ENABLE;
+#ifdef __rtems__
+	} else {
+		dwRegionAttr = MPU_REGION_DISABLE;
+	}
+#endif /* __rtems__ */
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+
 
 	/****************************************************
 	    Internal flash memory region --- Normal read-only
@@ -136,13 +146,22 @@ void _SetupMemoryRegion(void)
 		MPU_REGION_VALID |
 		MPU_DEFAULT_DTCM_REGION;         //3
 
+#ifdef __rtems__
+	if (DTCM_END_ADDRESS + 1 != DTCM_START_ADDRESS) {
+#endif /* __rtems__ */
 	dwRegionAttr =
 		MPU_AP_PRIVILEGED_READ_WRITE |
 		INNER_NORMAL_NOCACHE_TYPE(NON_SHAREABLE) |
 		MPU_CalMPURegionSize(DTCM_END_ADDRESS - DTCM_START_ADDRESS) |
 		MPU_REGION_ENABLE;
+#ifdef __rtems__
+	} else {
+		dwRegionAttr = MPU_REGION_DISABLE;
+	}
+#endif /* __rtems__ */
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+
 
 	/****************************************************
 	    SRAM Cacheable memory region --- Normal
@@ -183,6 +202,12 @@ void _SetupMemoryRegion(void)
 		MPU_REGION_ENABLE;
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+#else /* __rtems__ */
+	/* NOTE: The first SRAM region is increased so it covers the whole SRAM. If
+	 * the SRAM is something odd (like 384k on the SAME70Q21), the next higher
+	 * power of two will be used (in the example: 512k). That removes the need of
+	 * the second SRAM region. There is currently no memory after the SRAM so that
+	 * shouldn't be a problem. */
 #endif /* __rtems__ */
 
 #ifdef MPU_HAS_NOCACHE_REGION
@@ -218,6 +243,20 @@ void _SetupMemoryRegion(void)
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
 
+#ifdef __rtems__
+	dwRegionBaseAddr =
+		SYSTEM_START_ADDRESS |
+		MPU_REGION_VALID |
+		MPU_SYSTEM_REGION;
+
+	dwRegionAttr = MPU_AP_FULL_ACCESS |
+				   MPU_REGION_EXECUTE_NEVER |
+				   SHAREABLE_DEVICE_TYPE |
+				   MPU_CalMPURegionSize(SYSTEM_END_ADDRESS - SYSTEM_START_ADDRESS)
+				   | MPU_REGION_ENABLE;
+
+	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
+#endif /* __rtems__ */
 
 	/****************************************************
 	    External EBI memory  memory region --- Strongly Ordered
@@ -267,11 +306,19 @@ void _SetupMemoryRegion(void)
 		MPU_REGION_VALID |
 		MPU_QSPIMEM_REGION;              //8
 
+#ifdef __rtems__
+	if (QSPI_END_ADDRESS + 1 != QSPI_START_ADDRESS) {
+#endif /* __rtems__ */
 	dwRegionAttr =
 		MPU_AP_FULL_ACCESS |
 		INNER_NORMAL_WB_NWA_TYPE(SHAREABLE) |
 		MPU_CalMPURegionSize(QSPI_END_ADDRESS - QSPI_START_ADDRESS) |
 		MPU_REGION_ENABLE;
+#ifdef __rtems__
+	} else {
+		dwRegionAttr = MPU_REGION_DISABLE;
+	}
+#endif /* __rtems__ */
 
 	MPU_SetRegion(dwRegionBaseAddr, dwRegionAttr);
 
@@ -301,7 +348,11 @@ void _SetupMemoryRegion(void)
 				   | SCB_SHCSR_USGFAULTENA_Msk);
 
 	/* Enable the MPU region */
+#ifndef __rtems__
 	MPU_Enable(MPU_ENABLE | MPU_PRIVDEFENA);
+#else /* __rtems__ */
+	MPU_Enable(MPU_ENABLE);
+#endif /* __rtems__ */
 
 	memory_sync();
 }

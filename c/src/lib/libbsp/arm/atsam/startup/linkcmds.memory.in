@@ -8,6 +8,8 @@ MEMORY {
 	QSPIFLASH  : ORIGIN = 0x80000000, LENGTH = @ATSAM_MEMORY_QSPIFLASH_SIZE@
 }
 
+/* Must be used only for MPU definitions */
+
 atsam_memory_itcm_begin = ORIGIN (ITCM);
 atsam_memory_itcm_end = ORIGIN (ITCM) + LENGTH (ITCM);
 atsam_memory_itcm_size = LENGTH (ITCM);

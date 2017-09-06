@@ -54,6 +54,7 @@
 #if defined MPU_HAS_NOCACHE_REGION
 	#define MPU_NOCACHE_SRAM_REGION                 (11)
 #endif
+#define MPU_SYSTEM_REGION                       (12)
 
 #define MPU_REGION_VALID                        (0x10)
 #define MPU_REGION_ENABLE                       (0x01)
@@ -101,10 +102,17 @@
    */
 
 /********* IFLASH memory macros *********************/
+#ifdef __rtems__
+#define ITCM_START_ADDRESS                  ((uintptr_t) atsam_memory_itcm_begin)
+#define ITCM_END_ADDRESS                    ((uintptr_t) atsam_memory_itcm_end - 1)
+#define IFLASH_START_ADDRESS                ((uintptr_t) atsam_memory_intflash_begin)
+#define IFLASH_END_ADDRESS                  ((uintptr_t) atsam_memory_intflash_end - 1)
+#else /* !__rtems__ */
 #define ITCM_START_ADDRESS                  0x00000000UL
 #define ITCM_END_ADDRESS                    0x003FFFFFUL
 #define IFLASH_START_ADDRESS                0x00400000UL
 #define IFLASH_END_ADDRESS                  0x005FFFFFUL
+#endif /* __rtems__ */
 
 
 #define IFLASH_PRIVILEGE_START_ADDRESS      (IFLASH_START_ADDRESS)
@@ -114,24 +122,36 @@
 #define IFLASH_UNPRIVILEGE_END_ADDRESS      (IFLASH_END_ADDRESS)
 
 /**************** DTCM  *******************************/
+#ifdef __rtems__
+#define DTCM_START_ADDRESS                  ((uintptr_t) atsam_memory_dtcm_begin)
+#define DTCM_END_ADDRESS                    ((uintptr_t) atsam_memory_dtcm_end - 1)
+#else /* !__rtems__ */
 #define DTCM_START_ADDRESS                  0x20000000UL
 #define DTCM_END_ADDRESS                    0x203FFFFFUL
+#endif /* __rtems__ */
 
 
 /******* SRAM memory macros ***************************/
 
+#ifdef __rtems__
+#define SRAM_START_ADDRESS                  ((uintptr_t) atsam_memory_intsram_begin)
+#define SRAM_END_ADDRESS                    ((uintptr_t) atsam_memory_intsram_end - 1)
+#else /* !__rtems__ */
 #define SRAM_START_ADDRESS                  0x20400000UL
 #define SRAM_END_ADDRESS                    0x2045FFFFUL
+#endif /* __rtems__ */
 
+#ifndef __rtems__
 #if defined MPU_HAS_NOCACHE_REGION
 	#define NOCACHE_SRAM_REGION_SIZE            0x1000
 #endif
+#endif /* __rtems__ */
 
 /* Regions should be a 2^(N+1)  where 4 < N < 31 */
 #ifdef __rtems__
-#define SRAM_FIRST_START_ADDRESS            ((uintptr_t) atsam_memory_sdram_begin)
-#define SRAM_FIRST_END_ADDRESS              ((uintptr_t) atsam_memory_sdram_end - 1)
-#else /* __rtems__ */
+#define SRAM_FIRST_START_ADDRESS            ((uintptr_t) atsam_memory_intsram_begin)
+#define SRAM_FIRST_END_ADDRESS              ((uintptr_t) atsam_memory_intsram_end - 1)
+#else /* !__rtems__ */
 #define SRAM_FIRST_START_ADDRESS            (SRAM_START_ADDRESS)
 #define SRAM_FIRST_END_ADDRESS              (SRAM_FIRST_START_ADDRESS + 0x3FFFF)        // (2^18) 256 KB
 #endif /* __rtems__ */
@@ -140,7 +160,8 @@
 #ifdef __rtems__
 	#define SRAM_NOCACHE_START_ADDRESS          ((uintptr_t) atsam_memory_nocache_begin)
 	#define SRAM_NOCACHE_END_ADDRESS            ((uintptr_t) atsam_memory_nocache_end - 1)
-#else /* __rtems__ */
+	#define NOCACHE_SRAM_REGION_SIZE            (SRAM_NOCACHE_END_ADDRESS - SRAM_NOCACHE_START_ADDRESS)
+#else /* !__rtems__ */
 	#define SRAM_SECOND_START_ADDRESS           (SRAM_FIRST_END_ADDRESS+1)
 	#define SRAM_SECOND_END_ADDRESS             (SRAM_END_ADDRESS - NOCACHE_SRAM_REGION_SIZE)              // (2^17) 128 - 0x1000 KB
 	#define SRAM_NOCACHE_START_ADDRESS          (SRAM_SECOND_END_ADDRESS + 1)
@@ -155,18 +176,32 @@
 /************** Peripherals memory region macros ********/
 #define PERIPHERALS_START_ADDRESS            0x40000000UL
 #define PERIPHERALS_END_ADDRESS              0x5FFFFFFFUL
+#ifdef __rtems__
+#define SYSTEM_START_ADDRESS                 0xE0000000UL
+#define SYSTEM_END_ADDRESS                   0xFFFFFFFFUL
+#endif /* __rtems__ */
 
 /******* Ext EBI memory macros ***************************/
 #define EXT_EBI_START_ADDRESS                0x60000000UL
 #define EXT_EBI_END_ADDRESS                  0x6FFFFFFFUL
 
 /******* Ext-SRAM memory macros ***************************/
+#ifdef __rtems__
+#define SDRAM_START_ADDRESS                  ((uintptr_t) atsam_memory_sdram_begin)
+#define SDRAM_END_ADDRESS                    ((uintptr_t) atsam_memory_sdram_end - 1)
+#else /* !__rtems__ */
 #define SDRAM_START_ADDRESS                  0x70000000UL
 #define SDRAM_END_ADDRESS                    0x7FFFFFFFUL
+#endif /* __rtems__ */
 
 /******* QSPI macros ***************************/
+#ifdef __rtems__
+#define QSPI_START_ADDRESS                   ((uintptr_t) atsam_memory_qspiflash_begin)
+#define QSPI_END_ADDRESS                     ((uintptr_t) atsam_memory_qspiflash_end - 1)
+#else /* !__rtems__ */
 #define QSPI_START_ADDRESS                   0x80000000UL
 #define QSPI_END_ADDRESS                     0x9FFFFFFFUL
+#endif /* __rtems__ */
 
 /************** USBHS_RAM region macros ******************/
 #define USBHSRAM_START_ADDRESS               0xA0100000UL
