@@ -72,7 +72,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     fat_file_fd_t     *fat_fd = iop->pathinfo.node_access;
     fat_file_fd_t     *tmp_fat_fd = NULL;
     struct dirent      tmp_dirent;
-    size_t             tmp_lfn_len = 0;
+    size_t             lfn_len = 0;
     uint16_t          *lfn_buf = converter->buffer.data;
     char              *sfn_buf = converter->buffer.data;
     const size_t       buf_size = converter->buffer.size;
@@ -85,7 +85,6 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     uint32_t           lfn_start = FAT_FILE_SHORT_NAME;
     uint8_t            lfn_checksum = 0;
     int                lfn_entries = 0;
-    size_t             string_size = sizeof(tmp_dirent.d_name);
     bool               is_first_entry;
 
     sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
@@ -185,7 +184,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                      */
                     lfn_entries = (*MSDOS_DIR_ENTRY_TYPE(entry) &
                                    MSDOS_LAST_LONG_ENTRY_MASK);
-                    tmp_lfn_len = 0;
+                    lfn_len = 0;
                     lfn_checksum = *MSDOS_DIR_LFN_CHECKSUM(entry);
                     memset (tmp_dirent.d_name, 0, sizeof(tmp_dirent.d_name));
                 }
@@ -220,7 +219,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 
                 lfn_entries--;
                 offset_lfn = lfn_entries * MSDOS_LFN_LEN_PER_ENTRY;
-                tmp_lfn_len += msdos_get_utf16_string_from_long_entry (
+                lfn_len += msdos_get_utf16_string_from_long_entry (
                   entry,
                   &lfn_buf[offset_lfn],
                   buf_size - offset_lfn,
@@ -281,27 +280,30 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                  */
                 if (lfn_start != FAT_FILE_SHORT_NAME)
                 {
-                    if (lfn_entries ||
-                        lfn_checksum != msdos_lfn_checksum(entry))
-                        lfn_start = FAT_FILE_SHORT_NAME;
+                    if (lfn_entries == 0 &&
+                        lfn_checksum == msdos_lfn_checksum(entry)) {
+                        size_t len = sizeof(tmp_dirent.d_name) - 1;
 
-                    eno = (*convert_handler->utf16_to_utf8) (
-                        converter,
-                        lfn_buf,
-                        tmp_lfn_len,
-                        (uint8_t*)(&tmp_dirent.d_name[0]),
-                        &string_size);
-                    if (eno == 0) {
-                      tmp_dirent.d_namlen                    = string_size;
-                      tmp_dirent.d_name[tmp_dirent.d_namlen] = '\0';
-                    }
-                    else {
+                        eno = (*convert_handler->utf16_to_utf8) (
+                            converter,
+                            lfn_buf,
+                            lfn_len,
+                            (uint8_t *) &tmp_dirent.d_name[0],
+                            &len);
+                        if (eno == 0) {
+                            tmp_dirent.d_namlen = len;
+                            tmp_dirent.d_name[len] = '\0';
+                        } else {
+                            lfn_start = FAT_FILE_SHORT_NAME;
+                        }
+                    } else {
                         lfn_start = FAT_FILE_SHORT_NAME;
                     }
                 }
 
-                if (lfn_start == FAT_FILE_SHORT_NAME)
-                {
+                if (lfn_start == FAT_FILE_SHORT_NAME) {
+                    size_t len = sizeof(tmp_dirent.d_name) - 1;
+
                     /*
                      * convert dir entry from fixed 8+3 format (without dot)
                      * to 0..8 + 1dot + 0..3 format
@@ -312,13 +314,12 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                         converter,
                         sfn_buf,
                         tmp_dirent.d_namlen,
-                        (uint8_t*)(&tmp_dirent.d_name[0]),
-                        &string_size);
+                        (uint8_t *) &tmp_dirent.d_name[0],
+                        &len);
                     if ( 0 == eno ) {
-                      tmp_dirent.d_namlen                    = string_size;
-                      tmp_dirent.d_name[tmp_dirent.d_namlen] = '\0';
-                    }
-                    else {
+                      tmp_dirent.d_namlen = len;
+                      tmp_dirent.d_name[len] = '\0';
+                    } else {
                         cmpltd = -1;
                         errno  = eno;
                     }
