@@ -274,7 +274,7 @@ extern "C" {
 
 #define FAT_TOTAL_FSINFO_SIZE               512
 
-#define MS_BYTES_PER_CLUSTER_LIMIT           0x8000     /* 32K */
+#define MS_BYTES_PER_CLUSTER_LIMIT           0x10000    /* 64K */
 #define MS_BYTES_PER_CLUSTER_LIMIT_FAT12     0x1000     /*  4K */
 
 #define FAT_BR_EXT_FLAGS_MIRROR              0x0080
@@ -300,10 +300,10 @@ typedef struct fat_vol_s
     uint8_t            sec_mul;        /* log2 of 512bts sectors number per sector */
     uint8_t            spc;            /* sectors per cluster */
     uint8_t            spc_log2;       /* log2 of spc */
-    uint16_t           bpc;            /* bytes per cluster */
+    uint32_t           bpc;            /* bytes per cluster */
     uint8_t            bpc_log2;       /* log2 of bytes per cluster */
     uint8_t            sectors_per_block;    /* sectors per bdbuf block */
-    uint16_t           bytes_per_block;      /* number of bytes for the bduf block device handling */
+    uint32_t           bytes_per_block;      /* number of bytes for the bduf block device handling */
     uint8_t            bytes_per_block_log2; /* log2 of bytes_per_block */
     uint8_t            fats;           /* number of FATs */
     uint8_t            type;           /* FAT type */

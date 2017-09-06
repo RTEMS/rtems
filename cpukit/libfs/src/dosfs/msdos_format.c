@@ -316,7 +316,7 @@ static int msdos_format_eval_sectors_per_cluster
   uint32_t fatdata_sect_cnt;
   uint32_t fat_sectors_cnt;
   /*
-   * ensure, that maximum cluster size (32KByte) is not exceeded
+   * ensure, that maximum cluster size (64KiB) is not exceeded
    */
   while (MS_BYTES_PER_CLUSTER_LIMIT / bytes_per_sector < sectors_per_cluster) {
     sectors_per_cluster /= 2;
@@ -397,7 +397,7 @@ msdos_get_fat_type( const uint32_t bytes_per_sector,
   uint32_t ms_sectors_per_cluster_limit_FAT12 =
     ( MS_BYTES_PER_CLUSTER_LIMIT_FAT12 +1 ) / bytes_per_sector;
   uint32_t ms_sectors_per_cluster_limit_FAT16 =
-    ( MS_BYTES_PER_CLUSTER_LIMIT +1 ) / bytes_per_sector;
+    ( 0x8000 +1 ) / bytes_per_sector;
   uint8_t fattype = FAT_FAT32;
 
   if (   number_of_clusters < FAT_FAT12_MAX_CLN
@@ -427,13 +427,13 @@ msdos_set_sectors_per_cluster_from_request(
    * check sectors per cluster.
    * must be power of 2
    * must be smaller than or equal to 128
-   * sectors_per_cluster*bytes_per_sector must not be bigger than 32K
+   * sectors_per_cluster*bytes_per_sector must not be bigger than 64K
    */
   for ( onebit = 128; onebit >= 1; onebit = onebit >> 1 ) {
     if ( fmt_params->sectors_per_cluster >= onebit ) {
       fmt_params->sectors_per_cluster = onebit;
       if (   fmt_params->sectors_per_cluster
-          <= 32768L / fmt_params->bytes_per_sector ) {
+          <= MS_BYTES_PER_CLUSTER_LIMIT / fmt_params->bytes_per_sector ) {
         /* value is small enough so this value is ok */
         onebit = 1;
         ret_val = 0;

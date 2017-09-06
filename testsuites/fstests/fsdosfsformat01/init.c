@@ -469,6 +469,34 @@ static void test( void )
 
   rv = unlink( dev_name );
   rtems_test_assert( rv == 0 );
+
+  /* FAT32 with cluster size of 64KiB */
+
+  sc = rtems_sparse_disk_create_and_register(
+    dev_name,
+    SECTOR_SIZE,
+    1024,
+    16777216, /* 8GiB */
+    0
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  memset( &rqdata, 0, sizeof( rqdata ) );
+  rqdata.sectors_per_cluster = 128;
+  rqdata.quick_format = true;
+  rv = msdos_format( dev_name, &rqdata );
+  rtems_test_assert( rv == 0 );
+
+  test_disk_params(
+    dev_name,
+    mount_dir,
+    SECTOR_SIZE,
+    SECTOR_SIZE * rqdata.sectors_per_cluster,
+    rqdata.sectors_per_cluster
+  );
+
+  rv = unlink( dev_name );
+  rtems_test_assert( rv == 0 );
 }
 
 static void Init( rtems_task_argument arg )
