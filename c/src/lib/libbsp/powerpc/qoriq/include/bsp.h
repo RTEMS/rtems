@@ -25,6 +25,12 @@
 
 #include <bspopts.h>
 
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+#define QORIQ_THREAD_COUNT 1
+#else
+#define QORIQ_THREAD_COUNT QORIQ_PHYSICAL_THREAD_COUNT
+#endif
+
 #ifndef ASM
 
 #include <rtems.h>
