@@ -38,7 +38,7 @@ static void _POSIX_Condition_variables_Enqueue_callout(
 
   the_cond = POSIX_CONDITION_VARIABLE_OF_THREAD_QUEUE_QUEUE( queue );
 
-  mutex_error = pthread_mutex_unlock( &the_cond->mutex );
+  mutex_error = pthread_mutex_unlock( the_cond->mutex );
   if ( mutex_error != 0 ) {
     /*
      *  Historically, we ignored the unlock status since the behavior
@@ -107,13 +107,13 @@ int _POSIX_Condition_variables_Wait_support(
 
   if (
     the_cond->mutex != POSIX_CONDITION_VARIABLES_NO_MUTEX
-      && the_cond->mutex != *mutex
+      && the_cond->mutex != mutex
   ) {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );
     return EINVAL;
   }
 
-  the_cond->mutex = *mutex;
+  the_cond->mutex = mutex;
   executing = _Thread_Executing;
 
   if ( !already_timedout ) {
@@ -135,7 +135,7 @@ int _POSIX_Condition_variables_Wait_support(
   } else {
     _POSIX_Condition_variables_Release( the_cond, &queue_context );
 
-    mutex_error = pthread_mutex_unlock( &the_cond->mutex );
+    mutex_error = pthread_mutex_unlock( the_cond->mutex );
     if ( mutex_error != 0 ) {
       error = EPERM;
     } else {
