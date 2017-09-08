@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -20,16 +20,119 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <string.h>
+
+#include <libfdt.h>
+
 #include <rtems/bspIo.h>
 
 #include <libchip/ns16550.h>
 
+#include <asm/epapr_hcalls.h>
+
 #include <bsp.h>
+#include <bsp/fdt.h>
 #include <bsp/irq.h>
 #include <bsp/qoriq.h>
 #include <bsp/intercom.h>
 #include <bsp/uart-bridge.h>
 #include <bsp/console-termios.h>
+
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+typedef struct {
+  rtems_termios_device_context base;
+  uint32_t handle;
+} qoriq_bc_context;
+
+static bool qoriq_bc_probe(rtems_termios_device_context *base)
+{
+  qoriq_bc_context *ctx;
+  const void *fdt;
+  int node;
+  const uint32_t *handle;
+  int len;
+
+  fdt = bsp_fdt_get();
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "epapr,hv-byte-channel");
+  if (node < 0) {
+    return false;
+  }
+
+  handle = fdt_getprop(fdt, node, "hv-handle", &len);
+  if (handle == NULL || len != 4) {
+    return false;
+  }
+
+  ctx = (qoriq_bc_context *) base;
+  ctx->handle = fdt32_to_cpu(*handle);
+
+  return true;
+}
+
+static int qoriq_bc_read_polled(rtems_termios_device_context *base)
+{
+  qoriq_bc_context *ctx;
+  char buf[EV_BYTE_CHANNEL_MAX_BYTES];
+  unsigned int count;
+  unsigned int status;
+
+  ctx = (qoriq_bc_context *) base;
+  count = 1;
+  status = ev_byte_channel_receive(ctx->handle, &count, buf);
+
+  if (status != EV_SUCCESS) {
+    return -1;
+  }
+
+  return (unsigned char) buf[0];
+}
+
+static void qoriq_bc_write_polled(
+  rtems_termios_device_context *base,
+  const char *buf,
+  size_t len
+)
+{
+  qoriq_bc_context *ctx;
+  uint32_t handle;
+
+  ctx = (qoriq_bc_context *) base;
+  handle = ctx->handle;
+
+  while (len > 0) {
+    unsigned int count;
+    unsigned int status;
+    char buf2[EV_BYTE_CHANNEL_MAX_BYTES];
+    const char *out;
+
+    if (len < EV_BYTE_CHANNEL_MAX_BYTES) {
+      count = len;
+      out = memcpy(buf2, buf, len);
+    } else {
+      count = EV_BYTE_CHANNEL_MAX_BYTES;
+      out = buf;
+    }
+
+    status = ev_byte_channel_send(handle, &count, out);
+
+    if (status == EV_SUCCESS) {
+      len -= count;
+      buf += count;
+    }
+  }
+}
+
+static const rtems_termios_device_handler qoriq_bc_handler_polled = {
+  .poll_read = qoriq_bc_read_polled,
+  .write = qoriq_bc_write_polled,
+  .mode = TERMIOS_POLLED
+};
+
+static qoriq_bc_context qoriq_bc_context_0 = {
+  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("BC 0"),
+};
+#endif /* QORIQ_IS_HYPERVISOR_GUEST */
 
 #if (QORIQ_UART_0_ENABLE + QORIQ_UART_BRIDGE_0_ENABLE == 2) \
   || (QORIQ_UART_1_ENABLE + QORIQ_UART_BRIDGE_1_ENABLE == 2)
@@ -144,6 +247,14 @@ static ns16550_context qoriq_uart_context_1 = {
 #endif
 
 const console_device console_device_table[] = {
+  #ifdef QORIQ_IS_HYPERVISOR_GUEST
+    {
+      .device_file = "/dev/ttyBC0",
+      .probe = qoriq_bc_probe,
+      .handler = &qoriq_bc_handler_polled,
+      .context = &qoriq_bc_context_0.base
+    },
+  #endif
   #if QORIQ_UART_0_ENABLE
     {
       .device_file = "/dev/ttyS0",
@@ -192,7 +303,11 @@ static void output_char(char c)
 {
   rtems_termios_device_context *ctx = console_device_table[0].context;
 
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+  qoriq_bc_write_polled(ctx, &c, 1);
+#else
   ns16550_polled_putchar(ctx, c);
+#endif
 }
 
 BSP_output_char_function_type BSP_output_char = output_char;
