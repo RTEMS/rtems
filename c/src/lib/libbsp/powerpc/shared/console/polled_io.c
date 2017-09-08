@@ -426,8 +426,6 @@ void debug_putc(const u_char c)
 void
 debug_putc_onlcr(const char c)
 {
-	if ('\n'==c)
-		debug_putc('\r');
 	debug_putc(c);
 }
 
@@ -525,7 +523,7 @@ void my_puts(const u_char *s)
         char c;
 
         while ( ( c = *s++ ) != '\0' ) {
-				debug_putc_onlcr((const char)c);
+				rtems_putc(c);
         }
 }
 

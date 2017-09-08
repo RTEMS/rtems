@@ -150,8 +150,6 @@ DirectUARTWrite(const char c)
   volatile uint8_t* up = (uint8_t*)(BSP_UART_IOBASE_COM1);
   while ((up[LSR] & THRE) == 0) { ; }
   up[THR] = c;
-  if (c=='\n')
-    DirectUARTWrite('\r');
 }
 
 /* We will provide our own printk output function as it may get used early */

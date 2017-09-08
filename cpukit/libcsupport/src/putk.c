@@ -29,7 +29,7 @@ int putk(const char *s)
   int len_out = 0;
 
   for (p=s ; *p ; p++, len_out++ )
-    BSP_output_char(*p);
-  BSP_output_char('\n');
+    rtems_putc(*p);
+  rtems_putc('\n');
   return len_out + 1;
 }

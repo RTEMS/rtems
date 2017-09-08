@@ -637,9 +637,6 @@ static void A_BSP_output_char(
 #define PRINTK_WRITE mpc5200_uart_pollWrite
 
     PRINTK_WRITE(PRINTK_MINOR, &c, 1 );
-
-    if( c == '\n' )
-      PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
 }
 
 static int A_BSP_get_char(void)

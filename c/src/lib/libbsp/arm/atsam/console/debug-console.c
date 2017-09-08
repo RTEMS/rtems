@@ -20,10 +20,6 @@
 
 static void atsam_debug_console_out(char c)
 {
-  if (c == '\n') {
-    DBG_PutChar('\r');
-  }
-
   DBG_PutChar((uint8_t) c);
 }
 

@@ -411,9 +411,6 @@ unsigned long Console_Configuration_Count =
 
 static void outputChar(char ch)
 {
-  if (ch == '\n') {
-    xlite_write_char_polled( 0, '\r' );
-  }
    xlite_write_char_polled( 0, ch );
 }
 

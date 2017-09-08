@@ -44,11 +44,6 @@ void BSP_outch(char ch)
     console_tbl *port = Console_Port_Tbl[BSPPrintkPort];
     if (port->pDeviceFns && port->pDeviceFns->deviceWritePolled) {
       port->pDeviceFns->deviceWritePolled( BSPPrintkPort, ch );
-      /*
-       * No termios so expand the LF to LF/CR.
-       */
-      if ( ch == '\n')
-        port->pDeviceFns->deviceWritePolled( BSPPrintkPort, '\r' );
     }
     return;
   }

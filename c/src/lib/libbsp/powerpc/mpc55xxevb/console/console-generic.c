@@ -37,10 +37,6 @@ static void console_generic_char_out(char c)
   const console_generic_callbacks *cb =
     console_generic_info_table [minor].callbacks;
 
-  if (c == '\n') {
-    (*cb->poll_write)(minor, '\r');
-  }
-
   (*cb->poll_write)(minor, c);
 }
 

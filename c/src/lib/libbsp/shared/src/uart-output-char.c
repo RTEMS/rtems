@@ -35,10 +35,6 @@ static void uart_output_raw(char c)
 
 static void uart_output(char c)
 {
-  if (c == '\n') {
-    uart_output_raw('\r');
-  }
-
   uart_output_raw(c);
 }
 

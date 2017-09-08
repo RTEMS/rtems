@@ -37,10 +37,6 @@ static arm_pl050_context pl050_context = {
 
 static void output_char(char c)
 {
-  if (c == '\n') {
-    arm_pl011_write_polled(&pl011_context.base, '\r');
-  }
-
   arm_pl011_write_polled(&pl011_context.base, c);
 }
 

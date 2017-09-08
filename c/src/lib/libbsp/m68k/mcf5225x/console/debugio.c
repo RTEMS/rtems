@@ -22,9 +22,6 @@ static void _BSP_null_char(char c)
 {
   rtems_interrupt_level level=UART0_IRQ_LEVEL;
 
-  if (c == '\n')
-        _BSP_null_char('\r');
-
   rtems_interrupt_disable(level);
   while ((MCF_UART_USR(CONSOLE_PORT) & MCF_UART_USR_TXRDY) == 0)
     continue;

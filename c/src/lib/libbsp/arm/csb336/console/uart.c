@@ -461,9 +461,6 @@ static void  imx_uart_poll_write_char(int minor, char c)
 static void _BSP_output_char(char c)
 {
     poll_write(c);
-    if (c == '\n') {
-        poll_write('\r');
-    }
 }
 
 BSP_output_char_function_type BSP_output_char = _BSP_output_char;

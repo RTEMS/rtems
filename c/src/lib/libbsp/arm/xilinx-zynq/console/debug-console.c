@@ -24,10 +24,6 @@ static void zynq_debug_console_out(char c)
   rtems_termios_device_context *base =
     &zynq_uart_instances[BSP_CONSOLE_MINOR].base;
 
-  if (c == '\n') {
-    zynq_uart_write_polled(base, '\r');
-  }
-
   zynq_uart_write_polled(base, c);
 }
 

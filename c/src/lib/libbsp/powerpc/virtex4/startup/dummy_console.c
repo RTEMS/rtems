@@ -18,7 +18,7 @@ ssize_t __bsp_memory_write(int minor, const char* buf, size_t len)
   const char* const last = buf+len;
   while (buf < last)
   {
-    BSP_output_char(*buf++);
+    rtems_putc(*buf++);
   }
   return len;
 }

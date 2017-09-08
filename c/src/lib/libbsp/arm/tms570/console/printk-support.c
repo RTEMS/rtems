@@ -65,10 +65,6 @@ static void tms570_debug_console_putc(char ch)
  */
 static void tms570_debug_console_out(char c)
 {
-  if ( c == '\n' ) {
-    tms570_debug_console_putc('\r');
-  }
-
   tms570_debug_console_putc(c);
 }
 

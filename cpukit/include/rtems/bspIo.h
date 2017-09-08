@@ -55,6 +55,9 @@ typedef int 	(*BSP_polling_getchar_function_type) 	(void);
 /**
  * This variable points to the BSP provided method to output a
  * character for the purposes of debug output.
+ *
+ * It must output only the specific character.  It must not perform character
+ * translations, e.g. "\n" to "\r\n".
  */
 extern 	BSP_output_char_function_type 		BSP_output_char;
 
@@ -94,7 +97,8 @@ extern int vprintk(const char *fmt, va_list ap);
 /**
  * @brief Kernel Print
  *
- * This method allows the user to perform a debug printk().
+ * This method allows the user to perform a debug printk().  It performs a
+ * character translation from "\n" to "\r\n".
  *
  * @param[in] fmt is a printf()-style format string
  *
@@ -116,7 +120,8 @@ extern int putk(const char *s);
 /**
  * @brief Kernel Put Character
  *
- * This method allows the user to perform a debug putc().
+ * This method allows the user to perform a debug putc().  It performs a
+ * character translation from "\n" to "\r\n".
  *
  * @param[in] c is the character to print
  */

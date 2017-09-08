@@ -1426,8 +1426,6 @@ void _BSP_output_char(char c)
     printk_minor = PRINTK_MINOR;
 
   _167Bug_pollWrite(printk_minor, &c, 1);
-  if ( c == '\n' )
-      _167Bug_pollWrite(printk_minor, &cr_char, 1);
 }
 
 /*

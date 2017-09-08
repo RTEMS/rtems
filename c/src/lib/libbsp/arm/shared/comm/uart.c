@@ -294,7 +294,6 @@ void
 BSP_output_char_via_serial(int val)
 {
   BSP_uart_polled_write(BSPConsolePort, val);
-  if (val == '\n') BSP_uart_polled_write(BSPConsolePort,'\r');
 }
 
 /*

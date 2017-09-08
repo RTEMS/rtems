@@ -136,9 +136,6 @@ static void uart_write_polled( char c )
 
 static void _BSP_put_char( char c ) {
    uart_write_polled( c );
-   if (c == '\n') {
-       uart_write_polled('\r');
-   }
 }
 
 static int _BSP_get_char(void)

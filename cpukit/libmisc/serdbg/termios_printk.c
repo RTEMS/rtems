@@ -85,9 +85,6 @@ void termios_printk_outputchar
     /*
      * send character to debug serial port
      */
-    if (c == '\n') {
-      termios_printk_tty->device.write(termios_printk_tty->minor,&cr,1);
-    }
     termios_printk_tty->device.write(termios_printk_tty->minor,&c,1);
   }
 }

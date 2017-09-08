@@ -29,8 +29,6 @@ static void _BSP_null_char( char c )
 {
   rtems_interrupt_level level;
 
-  if (c == '\n')
-    _BSP_null_char('\r');
   rtems_interrupt_disable(level);
   while ( (MCF5282_UART_USR(CONSOLE_PORT) & MCF5282_UART_USR_TXRDY) == 0 )
     continue;

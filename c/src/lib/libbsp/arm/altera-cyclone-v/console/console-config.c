@@ -150,10 +150,6 @@ static void output_char(char c)
 {
   rtems_termios_device_context *ctx = console_device_table[0].context;
 
-  if (c == '\n') {
-    ns16550_polled_putchar( ctx, '\r' );
-  }
-
   ns16550_polled_putchar( ctx, c );
 }
 

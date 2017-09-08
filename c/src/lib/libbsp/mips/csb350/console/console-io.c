@@ -73,9 +73,6 @@ int console_inbyte_nonblocking(
 static void csb250_output_char(char c)
 {
     console_outbyte_polled( 0, c );
-    if (c == '\n') {
-        console_outbyte_polled( 0, '\r' );
-    }
 }
 
 static int csb250_get_char(void)

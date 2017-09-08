@@ -77,8 +77,6 @@ _BSP_null_char( char c )
 {
 	int level;
 
-    if (c == '\n')
-        _BSP_null_char('\r');
 	rtems_interrupt_disable(level);
     while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY)))
         continue;

@@ -193,8 +193,6 @@ static rtems_status_code do_poll_write(
 
 static void _BSP_output_char( char c )
 {
-  char cr = '\r';
-
   /*
    *  Can't rely on console_initialize having been called before this function
    *  is used, so it may fail unless output is done through EPPC-Bug.
@@ -202,9 +200,6 @@ static void _BSP_output_char( char c )
 #define PRINTK_WRITE m8xx_uart_pollWrite
 
   PRINTK_WRITE( PRINTK_MINOR, &c, 1 );
-  if( c == '\n' )
-    PRINTK_WRITE( PRINTK_MINOR, &cr, 1 );
-
 }
 
 /*

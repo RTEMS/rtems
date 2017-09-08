@@ -61,15 +61,7 @@ static void imx_uart_write_polled(rtems_termios_device_context *base, char c)
 
 static void imx_output_char(char c)
 {
-  imx_uart_context *ctx;
-
-  ctx = imx_uart_console;
-
-  if (c == '\n') {
-    imx_uart_write_polled(&ctx->base, '\r');
-  }
-
-  imx_uart_write_polled(&ctx->base, c);
+  imx_uart_write_polled(&imx_uart_console->base, c);
 }
 
 static void imx_uart_init_context(

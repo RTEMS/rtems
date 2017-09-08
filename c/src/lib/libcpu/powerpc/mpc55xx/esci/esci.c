@@ -659,9 +659,6 @@ static void mpc55xx_esci_output_char( char c)
 	mpc55xx_esci_driver_entry *e = &mpc55xx_esci_driver_table [MPC55XX_ESCI_CONSOLE_MINOR];
 
 	mpc55xx_esci_interrupts_disable( e);
-	if (c == '\n') {
-		mpc55xx_esci_write_char( e, '\r');
-	}
 	mpc55xx_esci_write_char( e, c);
 	mpc55xx_esci_interrupts_enable( e);
 }

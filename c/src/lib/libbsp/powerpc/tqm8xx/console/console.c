@@ -846,14 +846,10 @@ int BSP_output_chan = CONS_CHN_NONE; /* channel used for printk operation */
 static void console_debug_putc_onlcr(const char c)
 {
   rtems_interrupt_level irq_level;
-  static char cr_chr = '\r';
 
   if (BSP_output_chan != CONS_CHN_NONE) {
     rtems_interrupt_disable(irq_level);
 
-    if (c == '\n') {
-      sccPollWrite (BSP_output_chan,&cr_chr,1);
-    }
     sccPollWrite (BSP_output_chan,&c,1);
     rtems_interrupt_enable(irq_level);
   }

@@ -23,10 +23,6 @@ static void output_char(char c)
     Console_Port_Tbl[minor] : &Console_Configuration_Ports[minor];
   const console_fns *cf = ct->pDeviceFns;
 
-  if (c == '\n') {
-    (*cf->deviceWritePolled)(minor, '\r');
-  }
-
   (*cf->deviceWritePolled)(minor, c);
 }
 

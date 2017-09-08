@@ -100,10 +100,7 @@ static void output_char(char c)
 {
   const console_fns *con =
     Console_Configuration_Ports [Console_Port_Minor].pDeviceFns;
-  
-  if (c == '\n') {
-    con->deviceWritePolled((int) Console_Port_Minor, '\r');
-  }
+
   con->deviceWritePolled((int) Console_Port_Minor, c);
 }
 

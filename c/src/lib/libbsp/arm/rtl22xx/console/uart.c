@@ -250,9 +250,6 @@ static int uart_set_attributes(int minor, const struct termios *t)
 static void _BSP_put_char( char c )
 {
   uart_write_polled(0, c);
-  if (c == '\n') {
-    uart_write_polled(0, '\r');
-  }
 }
 
 BSP_output_char_function_type BSP_output_char = _BSP_put_char;
