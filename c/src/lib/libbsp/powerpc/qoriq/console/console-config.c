@@ -45,6 +45,15 @@
 #endif
 
 #if QORIQ_UART_0_ENABLE || QORIQ_UART_1_ENABLE
+  static bool uart_probe(rtems_termios_device_context *base)
+  {
+    ns16550_context *ctx = (ns16550_context *) base;
+
+    ctx->clock = BSP_bus_frequency;
+
+    return ns16550_probe(base);
+  }
+
   static uint8_t get_register(uintptr_t addr, uint8_t i)
   {
     volatile uint8_t *reg = (uint8_t *) addr;
@@ -138,7 +147,7 @@ const console_device console_device_table[] = {
   #if QORIQ_UART_0_ENABLE
     {
       .device_file = "/dev/ttyS0",
-      .probe = ns16550_probe,
+      .probe = uart_probe,
       .handler = DEVICE_FNS,
       .context = &qoriq_uart_context_0.base
     },
@@ -146,7 +155,7 @@ const console_device console_device_table[] = {
   #if QORIQ_UART_1_ENABLE
     {
       .device_file = "/dev/ttyS1",
-      .probe = ns16550_probe,
+      .probe = uart_probe,
       .handler = DEVICE_FNS,
       .context = &qoriq_uart_context_1.base
     },

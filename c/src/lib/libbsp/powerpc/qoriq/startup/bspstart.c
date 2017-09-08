@@ -26,8 +26,6 @@
 #include <rtems/config.h>
 #include <rtems/counter.h>
 
-#include <libchip/ns16550.h>
-
 #include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
@@ -175,8 +173,6 @@ void qoriq_initialize_exceptions(void *interrupt_stack_begin)
 
 void bsp_start(void)
 {
-  unsigned long i = 0;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type() function
    * store the result in global variables so that it can be used latter...
@@ -185,23 +181,6 @@ void bsp_start(void)
   get_ppc_cpu_revision();
 
   initialize_frequency_parameters();
-
-  /* Initialize some console parameters */
-  for (i = 0; i < console_device_count; ++i) {
-    const console_device *dev = &console_device_table[i];
-    const rtems_termios_device_handler *ns16550 =
-      #ifdef BSP_USE_UART_INTERRUPTS
-        &ns16550_handler_interrupt;
-      #else
-        &ns16550_handler_polled;
-      #endif
-
-    if (dev->handler == ns16550) {
-      ns16550_context *ctx = (ns16550_context *) dev->context;
-
-      ctx->clock = BSP_bus_frequency;
-    }
-  }
 
   qoriq_initialize_exceptions(bsp_section_work_begin);
   bsp_interrupt_initialize();
