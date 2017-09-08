@@ -22,7 +22,7 @@
 
 #include <rtems/score/percpu.h>
 
-#include <bspopts.h>
+#include <bsp.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -177,7 +177,7 @@ _start:
 	isync
 #endif
 
-#ifdef QORIQ_INITIAL_HID0
+#if defined(QORIQ_INITIAL_HID0) && !defined(QORIQ_IS_HYPERVISOR_GUEST)
 	/* HID0 initialization */
 	LWI	r0, QORIQ_INITIAL_HID0
 	mtspr	HID0, r0
@@ -200,6 +200,13 @@ _start:
 .Linitmore:
 	mflr	SAVED_LINK_REGISTER
 
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+	/* MSR initialization with guest state */
+	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
+	oris	r0, INITIAL_MSR, MSR_GS >> 16
+	mtmsr	r0
+	isync
+#else
 	/* Invalidate all TS1 MMU entries */
 	li	r3, 1
 	bl	qoriq_tlb1_invalidate_all_by_ts
@@ -221,6 +228,7 @@ _start:
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
 	mtmsr	r0
 	isync
+#endif
 
 	/*
 	 * Initialize start stack.  Make sure that we do not share a cache line
@@ -240,6 +248,7 @@ _start:
 	blr
 
 .Linitmmu:
+#ifndef QORIQ_IS_HYPERVISOR_GUEST
 	mflr	SAVED_LINK_REGISTER
 
 	/* Configure MMU */
@@ -254,6 +263,7 @@ _start:
 	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	mtlr	SAVED_LINK_REGISTER
+#endif
 	blr
 
 #ifdef INITIALIZE_FPU
