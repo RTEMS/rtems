@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2010-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2010, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -26,12 +26,90 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#include <asm/epapr_hcalls.h>
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
 #include <bsp/vectors.h>
 #include <bsp/utility.h>
 #include <bsp/qoriq.h>
+
+RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
+
+#define SPURIOUS 0xffff
+
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+
+void bsp_interrupt_set_affinity(
+	rtems_vector_number vector,
+	const Processor_mask *affinity
+)
+{
+	uint32_t config;
+	unsigned int priority;
+	uint32_t destination;
+	uint32_t new_destination;
+	rtems_interrupt_lock_context lock_context;
+
+	new_destination = _Processor_mask_Find_last_set(affinity) - 1;
+
+	rtems_interrupt_lock_acquire(&lock, &lock_context);
+	ev_int_get_config(vector, &config, &priority, &destination);
+	ev_int_set_config(vector, config, priority, new_destination);
+	rtems_interrupt_lock_release(&lock, &lock_context);
+}
+
+void bsp_interrupt_get_affinity(
+	rtems_vector_number vector,
+	Processor_mask *affinity
+)
+{
+	uint32_t config;
+	unsigned int priority;
+	uint32_t destination;
+
+	ev_int_get_config(vector, &config, &priority, &destination);
+	_Processor_mask_From_uint32_t(affinity, destination, 0);
+}
+
+void bsp_interrupt_vector_enable(rtems_vector_number vector)
+{
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+	ev_int_set_mask(vector, 0);
+}
+
+void bsp_interrupt_vector_disable(rtems_vector_number vector)
+{
+	bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+	ev_int_set_mask(vector, 1);
+}
+
+void bsp_interrupt_dispatch(void)
+{
+	unsigned int vector;
+
+	ev_int_iack(0, &vector);
+
+	if (vector != SPURIOUS) {
+		uint32_t msr;
+
+		msr = ppc_external_exceptions_enable();
+		bsp_interrupt_handler_dispatch(vector);
+		ppc_external_exceptions_disable(msr);
+
+		ev_int_eoi(vector);
+	} else {
+		bsp_interrupt_handler_default(vector);
+	}
+}
+
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+	return RTEMS_SUCCESSFUL;
+}
+
+#else /* !QORIQ_IS_HYPERVISOR_GUEST */
 
 #define VPR_MSK BSP_BBIT32(0)
 #define VPR_A BSP_BBIT32(1)
@@ -46,10 +124,6 @@
 
 #define GCR_RST BSP_BBIT32(0)
 #define GCR_M BSP_BBIT32(2)
-
-#define SPURIOUS 0xffff
-
-RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
 
 #define SRC_CFG_IDX(i) ((i) - QORIQ_IRQ_EXT_BASE)
 
@@ -291,3 +365,5 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
 	return RTEMS_SUCCESSFUL;
 }
+
+#endif /* QORIQ_IS_HYPERVISOR_GUEST */
