@@ -136,6 +136,14 @@ void *POSIX_Init(
 
   TEST_BEGIN();
 
+  puts( "Init: sem_init - SUCCESSFUL" );
+  status = sem_init(&sem2, 1, 1);
+  fatal_posix_service_status( status, 0, "sem_init with pshared != 0");
+
+  puts( "Init: sem_destroy - SUCCESSFUL" );
+  status = sem_destroy(&sem2);
+  fatal_posix_service_status( status, 0, "sem_destroy");
+
   puts( "Init: sem_init - UNSUCCESSFUL (EINVAL)" );
   status = sem_init(NULL, 0, 1);
   fatal_posix_service_status( status, -1, "sem_init error return status");
@@ -152,11 +160,6 @@ void *POSIX_Init(
   fatal_posix_service_status( status, -1, "sem_init error return status");
   fatal_posix_service_status( errno, ENOSPC, "sem_init errorno ENOSPC" );
 
-  puts( "Init: sem_init - UNSUCCESSFUL (ENOSYS -- pshared not supported)" );
-  status = sem_init(&sem2, 1, 1);
-  fatal_posix_service_status( status, -1, "sem_init error return status");
-  fatal_posix_service_status( errno, ENOSYS, "sem_init errno set to ENOSYS");
-
   puts( "Init: sem_getvalue - SUCCESSFUL ");
   for (i = 0; i < MAX_SEMS; i++) {
     status = sem_getvalue(&sems[i], &value);
@@ -165,6 +168,7 @@ void *POSIX_Init(
     fatal_posix_service_status( value, i, "sem_getvalue correct value" );
   }
   puts( "Init: sem_getvalue - UNSUCCESSFUL ");
+  sem2 = 0;
   status = sem_getvalue(&sem2, &value);
   fatal_posix_service_status( status, -1, "sem_getvalue error return status");
   fatal_posix_service_status( errno, EINVAL, "sem_getvalue errno EINVAL");

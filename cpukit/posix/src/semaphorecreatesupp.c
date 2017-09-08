@@ -42,17 +42,12 @@
 int _POSIX_Semaphore_Create_support(
   const char                *name_arg,
   size_t                     name_len,
-  int                        pshared,
   unsigned int               value,
   POSIX_Semaphore_Control  **the_sem
 )
 {
   POSIX_Semaphore_Control *the_semaphore;
   char                    *name;
-
-  /* Sharing semaphores among processes is not currently supported */
-  if (pshared != 0)
-    rtems_set_errno_and_return_minus_one( ENOSYS );
 
   /*
    * Make a copy of the user's string for name just in case it was
@@ -72,8 +67,6 @@ int _POSIX_Semaphore_Create_support(
     _Workspace_Free( name );
     rtems_set_errno_and_return_minus_one( ENOSPC );
   }
-
-  the_semaphore->process_shared  = pshared;
 
   if ( name ) {
     the_semaphore->named = true;

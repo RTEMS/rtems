@@ -119,7 +119,6 @@ sem_t *sem_open(
   status =_POSIX_Semaphore_Create_support(
     name,
     name_len,
-    false,         /* not shared across processes */
     value,
     &the_semaphore
   );

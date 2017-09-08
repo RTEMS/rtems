@@ -78,7 +78,6 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
 int _POSIX_Semaphore_Create_support(
   const char                *name,
   size_t                     name_len,
-  int                        pshared,
   unsigned int               value,
   POSIX_Semaphore_Control  **the_sem
 );
