@@ -190,11 +190,13 @@ void bsp_start(void)
     (uintptr_t) bsp_section_nocacheheap_size
   );
 
+#ifndef QORIQ_IS_HYPERVISOR_GUEST
   /* Disable boot page translation */
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
   qoriq.lcc.bstar &= ~LCC_BSTAR_EN;
 #else
   qoriq.lcc.bptr &= ~BPTR_EN;
+#endif
 #endif
 }
 
