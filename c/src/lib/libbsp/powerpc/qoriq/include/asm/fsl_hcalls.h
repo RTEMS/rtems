@@ -40,9 +40,7 @@
 #ifndef _FSL_HCALLS_H
 #define _FSL_HCALLS_H
 
-#include <linux/types.h>
-#include <linux/errno.h>
-#include <asm/byteorder.h>
+#include <stdint.h>
 #include <asm/epapr_hcalls.h>
 
 #define FH_API_VERSION			1
@@ -355,7 +353,7 @@ struct fh_sg_list {
  * Returns 0 for success, or an error code.
  */
 static inline unsigned int fh_partition_memcpy(unsigned int source,
-	unsigned int target, phys_addr_t sg_list, unsigned int count)
+	unsigned int target, uint64_t sg_list, unsigned int count)
 {
 	register uintptr_t r11 __asm__("r11");
 	register uintptr_t r3 __asm__("r3");

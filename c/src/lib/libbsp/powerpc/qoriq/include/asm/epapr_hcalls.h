@@ -53,9 +53,7 @@
 #include <uapi/asm/epapr_hcalls.h>
 
 #ifndef __ASSEMBLY__
-#include <linux/types.h>
-#include <linux/errno.h>
-#include <asm/byteorder.h>
+#include <sys/endian.h>
 
 /*
  * Hypercall register clobber list
@@ -103,7 +101,7 @@
 #define EV_HCALL_CLOBBERS1 EV_HCALL_CLOBBERS2, "r4"
 
 extern bool epapr_paravirt_enabled;
-extern u32 epapr_hypercall_start[];
+extern uint32_t epapr_hypercall_start[];
 
 #ifdef CONFIG_EPAPR_PARAVIRT
 int __init epapr_paravirt_early_init(void);
@@ -294,10 +292,10 @@ static inline unsigned int ev_byte_channel_send(unsigned int handle,
 	r11 = EV_HCALL_TOKEN(EV_BYTE_CHANNEL_SEND);
 	r3 = handle;
 	r4 = *count;
-	r5 = be32_to_cpu(p[0]);
-	r6 = be32_to_cpu(p[1]);
-	r7 = be32_to_cpu(p[2]);
-	r8 = be32_to_cpu(p[3]);
+	r5 = be32toh(p[0]);
+	r6 = be32toh(p[1]);
+	r7 = be32toh(p[2]);
+	r8 = be32toh(p[3]);
 
 	asm volatile("bl	epapr_hypercall_start"
 		: "+r" (r11), "+r" (r3),
@@ -345,10 +343,10 @@ static inline unsigned int ev_byte_channel_receive(unsigned int handle,
 	);
 
 	*count = r4;
-	p[0] = cpu_to_be32(r5);
-	p[1] = cpu_to_be32(r6);
-	p[2] = cpu_to_be32(r7);
-	p[3] = cpu_to_be32(r8);
+	p[0] = htobe32(r5);
+	p[1] = htobe32(r6);
+	p[2] = htobe32(r7);
+	p[3] = htobe32(r8);
 
 	return r3;
 }

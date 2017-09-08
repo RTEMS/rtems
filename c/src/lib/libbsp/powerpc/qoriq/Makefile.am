@@ -3,6 +3,8 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
+include_asmdir = $(includedir)/asm
+include_uapi_asmdir = $(includedir)/uapi/asm
 
 dist_project_lib_DATA = bsp_specs
 
@@ -31,6 +33,13 @@ include_bsp_HEADERS = include/irq.h \
 	include/intercom.h \
 	include/uart-bridge.h \
 	include/qoriq.h
+
+include_asm_HEADERS =
+include_asm_HEADERS += include/asm/epapr_hcalls.h
+include_asm_HEADERS += include/asm/fsl_hcalls.h
+
+include_uapi_asm_HEADERS =
+include_uapi_asm_HEADERS += include/uapi/asm/epapr_hcalls.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
@@ -64,6 +73,7 @@ libbsp_a_SOURCES += \
 	../shared/src/tictac.c \
 	../shared/src/bsp-start-zero.S \
 	../shared/startup/bspidle.c \
+	startup/epapr_hcalls.S \
 	startup/l1cache.S \
 	startup/l2cache.S \
 	startup/mmu.c \

@@ -33,6 +33,16 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
+$(PROJECT_INCLUDE)/asm/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/asm
+	@: > $(PROJECT_INCLUDE)/asm/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/asm/$(dirstamp)
+
+$(PROJECT_INCLUDE)/uapi/asm/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/uapi/asm
+	@: > $(PROJECT_INCLUDE)/uapi/asm/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/uapi/asm/$(dirstamp)
+
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -104,6 +114,18 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/uart-bridge.h
 $(PROJECT_INCLUDE)/bsp/qoriq.h: include/qoriq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/qoriq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/qoriq.h
+
+$(PROJECT_INCLUDE)/asm/epapr_hcalls.h: include/asm/epapr_hcalls.h $(PROJECT_INCLUDE)/asm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm/epapr_hcalls.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm/epapr_hcalls.h
+
+$(PROJECT_INCLUDE)/asm/fsl_hcalls.h: include/asm/fsl_hcalls.h $(PROJECT_INCLUDE)/asm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/asm/fsl_hcalls.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/asm/fsl_hcalls.h
+
+$(PROJECT_INCLUDE)/uapi/asm/epapr_hcalls.h: include/uapi/asm/epapr_hcalls.h $(PROJECT_INCLUDE)/uapi/asm/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uapi/asm/epapr_hcalls.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/uapi/asm/epapr_hcalls.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
