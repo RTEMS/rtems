@@ -83,7 +83,7 @@ ti_tmp112_get_temperature_raw(int fd, unsigned int* temp)
  * Set the configuration.
  */
 static inline int
-ti_tmp112_adc_set_mux(int fd, uint16_t config)
+ti_tmp112_adc_set_config(int fd, uint16_t config)
 {
   return ioctl(fd, TI_TMP112_SET_CONFIG, (void *)(uintptr_t) config);
 }
