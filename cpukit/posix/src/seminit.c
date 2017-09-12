@@ -18,17 +18,11 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
+#include <rtems/posix/semaphoreimpl.h>
 
-#include <errno.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <semaphore.h>
 #include <limits.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
+RTEMS_STATIC_ASSERT(NULL == SEM_FAILED, sem_failed);
 
 /*
  *  11.2.1 Initialize an Unnamed Semaphore, P1003.1b-1993, p.219
@@ -40,9 +34,6 @@ int sem_init(
   unsigned int   value
 )
 {
-  int                        status;
-  POSIX_Semaphore_Control   *the_semaphore;
-
   if ( sem == NULL ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
@@ -51,17 +42,6 @@ int sem_init(
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _Objects_Allocator_lock();
-  status = _POSIX_Semaphore_Create_support(
-    NULL,
-    0,
-    value,
-    &the_semaphore
-  );
-  _Objects_Allocator_unlock();
-
-  if ( status != -1 )
-    *sem = the_semaphore->Object.id;
-
-  return status;
+  _POSIX_Semaphore_Initialize( sem, NULL, value );
+  return 0;
 }

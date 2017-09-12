@@ -20,20 +20,11 @@
 
 #include <rtems/posix/semaphoreimpl.h>
 
-void _POSIX_Semaphore_Delete(
-  POSIX_Semaphore_Control *the_semaphore,
-  Thread_queue_Context    *queue_context
-)
+void _POSIX_Semaphore_Delete( POSIX_Semaphore_Control *the_semaphore )
 {
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
     _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
-    _CORE_semaphore_Destroy(
-      &the_semaphore->Semaphore,
-      POSIX_SEMAPHORE_TQ_OPERATIONS,
-      queue_context
-    );
+    _POSIX_Semaphore_Destroy( &the_semaphore->Semaphore );
     _POSIX_Semaphore_Free( the_semaphore );
-  } else {
-    _CORE_semaphore_Release( &the_semaphore->Semaphore, queue_context );
   }
 }

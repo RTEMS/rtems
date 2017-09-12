@@ -47,6 +47,14 @@ $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
+
+$(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h: include/rtems/posix/semaphoreimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h: include/rtems/posix/spinlockimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/spinlockimpl.h
@@ -119,14 +127,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/shm.h
 $(PROJECT_INCLUDE)/rtems/posix/shmimpl.h: include/rtems/posix/shmimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/shmimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/shmimpl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
-
-$(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h: include/rtems/posix/semaphoreimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphoreimpl.h
 
 $(PROJECT_INCLUDE)/rtems/posix/threadsup.h: include/rtems/posix/threadsup.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/threadsup.h

@@ -21,7 +21,6 @@
 
 #include <semaphore.h>
 #include <rtems/score/object.h>
-#include <rtems/score/coresem.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,19 +40,10 @@ extern "C" {
  */
 
 typedef struct {
-   Objects_Control         Object;
-   CORE_semaphore_Control  Semaphore;
-   bool                    named;
-   bool                    linked;
-   uint32_t                open_count;
-   /*
-    *  sem_t is 32-bit.  If Object_Id is 16-bit, then they are not
-    *  interchangeable.  We have to be able to return a pointer to
-    *  a 32-bit form of the 16-bit Id.
-    */
-   #if defined(RTEMS_USE_16_BIT_OBJECT)
-     sem_t                 Semaphore_id;
-   #endif
+   Objects_Control Object;
+   sem_t           Semaphore;
+   bool            linked;
+   uint32_t        open_count;
 }  POSIX_Semaphore_Control;
 
 /** @} */

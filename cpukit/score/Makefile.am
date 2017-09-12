@@ -80,6 +80,7 @@ include_rtems_score_HEADERS += include/rtems/score/schedulersimple.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersimpleimpl.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersmp.h
 include_rtems_score_HEADERS += include/rtems/score/schedulersmpimpl.h
+include_rtems_score_HEADERS += include/rtems/score/semaphoreimpl.h
 include_rtems_score_HEADERS += include/rtems/score/smp.h
 include_rtems_score_HEADERS += include/rtems/score/smpbarrier.h
 include_rtems_score_HEADERS += include/rtems/score/smplock.h

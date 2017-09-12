@@ -21,6 +21,8 @@ include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
+include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
 
 if HAS_PTHREADS
@@ -44,8 +46,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/pthreadimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
 include_rtems_posix_HEADERS += include/rtems/posix/shm.h
 include_rtems_posix_HEADERS += include/rtems/posix/shmimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
-include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
 include_rtems_posix_HEADERS += include/rtems/posix/timer.h
 include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
@@ -186,6 +186,15 @@ libposix_a_SOURCES += src/pspininit.c
 libposix_a_SOURCES += src/pspinlock.c
 libposix_a_SOURCES += src/pspinunlock.c
 
+## SEMAPHORE_C_FILES
+libposix_a_SOURCES += src/semdestroy.c
+libposix_a_SOURCES += src/semgetvalue.c
+libposix_a_SOURCES += src/seminit.c
+libposix_a_SOURCES += src/sempost.c
+libposix_a_SOURCES += src/semtimedwait.c
+libposix_a_SOURCES += src/semtrywait.c
+libposix_a_SOURCES += src/semwait.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES += src/sigpending.c \
     src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
@@ -199,12 +208,11 @@ libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
     src/rwlockattrinit.c src/rwlockattrsetpshared.c
 
 ## SEMAPHORE_C_FILES
-libposix_a_SOURCES += src/semaphore.c src/semaphorecreatesupp.c \
-    src/semaphoredeletesupp.c \
-    src/semaphorewaitsupp.c \
-    src/semclose.c src/semdestroy.c src/semgetvalue.c src/seminit.c \
-    src/semopen.c src/sempost.c src/semtimedwait.c src/semtrywait.c \
-    src/semunlink.c src/semwait.c
+libposix_a_SOURCES += src/semaphore.c
+libposix_a_SOURCES += src/semaphoredeletesupp.c
+libposix_a_SOURCES += src/semclose.c
+libposix_a_SOURCES += src/semopen.c
+libposix_a_SOURCES += src/semunlink.c
 
 ## TIME_C_FILES
 libposix_a_SOURCES += src/adjtime.c src/clockgetcpuclockid.c

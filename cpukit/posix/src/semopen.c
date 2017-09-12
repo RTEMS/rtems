@@ -18,17 +18,64 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
+#include <rtems/posix/semaphoreimpl.h>
+#include <rtems/score/wkspace.h>
 
-#include <errno.h>
+#include <stdarg.h>
 #include <fcntl.h>
-#include <pthread.h>
-#include <semaphore.h>
 #include <limits.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
+static sem_t *_POSIX_Semaphore_Create_support(
+  const char   *name_arg,
+  size_t        name_len,
+  unsigned int  value
+)
+{
+  POSIX_Semaphore_Control *the_semaphore;
+  char                    *name;
+
+  if ( value > SEM_VALUE_MAX ) {
+    rtems_set_errno_and_return_value( EINVAL, SEM_FAILED );
+  }
+
+  /*
+   * Make a copy of the user's string for name just in case it was
+   * dynamically constructed.
+   */
+  name = _Workspace_String_duplicate( name_arg, name_len );
+  if ( name == NULL ) {
+    rtems_set_errno_and_return_value( ENOMEM, SEM_FAILED );
+  }
+
+  the_semaphore = _POSIX_Semaphore_Allocate_unprotected();
+  if ( the_semaphore == NULL ) {
+    _Workspace_Free( name );
+    rtems_set_errno_and_return_value( ENOSPC, SEM_FAILED );
+  }
+
+  the_semaphore->open_count = 1;
+  the_semaphore->linked = true;
+
+  /*
+   *  POSIX does not appear to specify what the discipline for
+   *  blocking tasks on this semaphore should be.  It could somehow
+   *  be derived from the current scheduling policy.  One
+   *  thing is certain, no matter what we decide, it won't be
+   *  the same as  all other POSIX implementations. :)
+   */
+  _POSIX_Semaphore_Initialize( &the_semaphore->Semaphore, name, value );
+
+  /*
+   *  Make the semaphore available for use.
+   */
+  _Objects_Open_string(
+    &_POSIX_Semaphore_Information,
+    &the_semaphore->Object,
+    name
+  );
+
+  return &the_semaphore->Semaphore;
+}
 
 /*
  *  sem_open
@@ -59,10 +106,10 @@ sem_t *sem_open(
 
   va_list                    arg;
   unsigned int               value = 0;
-  int                        status;
   POSIX_Semaphore_Control   *the_semaphore;
   size_t                     name_len;
   Objects_Get_by_name_error  error;
+  sem_t                     *sem;
 
   if ( oflag & O_CREAT ) {
     va_start(arg, oflag);
@@ -108,7 +155,7 @@ sem_t *sem_open(
 
     the_semaphore->open_count += 1;
     _Objects_Allocator_unlock();
-    goto return_id;
+    return &the_semaphore->Semaphore;
   }
 
   /*
@@ -116,27 +163,12 @@ sem_t *sem_open(
    *  checked. We should go ahead and create a semaphore.
    */
 
-  status =_POSIX_Semaphore_Create_support(
+  sem = _POSIX_Semaphore_Create_support(
     name,
     name_len,
-    value,
-    &the_semaphore
+    value
   );
 
-  /*
-   * errno was set by Create_support, so don't set it again.
-   */
-
   _Objects_Allocator_unlock();
-
-  if ( status != 0 )
-    return SEM_FAILED;
-
-return_id:
-  #if defined(RTEMS_USE_16_BIT_OBJECT)
-    the_semaphore->Semaphore_id = the_semaphore->Object.id;
-    return &the_semaphore->Semaphore_id;
-  #else
-    return &the_semaphore->Object.id;
-  #endif
+  return sem;
 }

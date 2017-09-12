@@ -18,17 +18,12 @@
 #include "config.h"
 #endif
 
-#include <semaphore.h>
-
 #include <rtems/posix/semaphoreimpl.h>
 
-int sem_unlink(
-  const char *name
-)
+int sem_unlink( const char *name )
 {
   POSIX_Semaphore_Control   *the_semaphore;
   Objects_Get_by_name_error  error;
-  Thread_queue_Context       queue_context;
 
   _Objects_Allocator_lock();
 
@@ -39,12 +34,8 @@ int sem_unlink(
   }
 
   _POSIX_Semaphore_Namespace_remove( the_semaphore );
-
-  _ISR_lock_ISR_disable( &queue_context.Lock_context.Lock_context );
-  _CORE_semaphore_Acquire_critical( &the_semaphore->Semaphore, &queue_context );
   the_semaphore->linked = false;
-  _POSIX_Semaphore_Delete( the_semaphore, &queue_context );
-
+  _POSIX_Semaphore_Delete( the_semaphore );
   _Objects_Allocator_unlock();
   return 0;
 }

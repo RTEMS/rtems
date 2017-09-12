@@ -18,32 +18,37 @@
 #include "config.h"
 #endif
 
-#include <semaphore.h>
-
 #include <rtems/posix/semaphoreimpl.h>
 
-int sem_close(
-  sem_t *sem
-)
+int sem_close( sem_t *sem )
 {
   POSIX_Semaphore_Control *the_semaphore;
-  Thread_queue_Context     queue_context;
+  uint32_t                 open_count;
+
+  POSIX_SEMAPHORE_VALIDATE_OBJECT( sem );
+
+  if ( !_POSIX_Semaphore_Is_named( sem ) ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+
+  the_semaphore = _POSIX_Semaphore_Get( sem );
 
   _Objects_Allocator_lock();
-  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
 
-  if ( the_semaphore == NULL ) {
+  open_count = the_semaphore->open_count;
+
+  if ( open_count == 0 ) {
     _Objects_Allocator_unlock();
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 
-  _CORE_semaphore_Acquire_critical(
-    &the_semaphore->Semaphore,
-    &queue_context
-  );
-  the_semaphore->open_count -= 1;
-  _POSIX_Semaphore_Delete( the_semaphore, &queue_context );
+  if ( open_count == 1 && _POSIX_Semaphore_Is_busy( sem ) ) {
+    _Objects_Allocator_unlock();
+    rtems_set_errno_and_return_minus_one( EBUSY );
+  }
 
+  the_semaphore->open_count = open_count - 1;
+  _POSIX_Semaphore_Delete( the_semaphore );
   _Objects_Allocator_unlock();
   return 0;
 }

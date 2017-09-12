@@ -18,19 +18,11 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <limits.h>
-
-#include <rtems/system.h>
+#include <rtems/posix/semaphoreimpl.h>
 #include <rtems/config.h>
 #include <rtems/sysinit.h>
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
+
+#include <limits.h>
 
 Objects_Information _POSIX_Semaphore_Information;
 

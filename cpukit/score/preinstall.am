@@ -288,6 +288,10 @@ $(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h: include/rtems/score/scheduler
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulersmpimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/semaphoreimpl.h: include/rtems/score/semaphoreimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/semaphoreimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/semaphoreimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/smp.h: include/rtems/score/smp.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/smp.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/smp.h

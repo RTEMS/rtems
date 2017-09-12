@@ -21,7 +21,7 @@
 
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/posixapi.h>
-#include <rtems/score/coresemimpl.h>
+#include <rtems/score/semaphoreimpl.h>
 #include <rtems/seterr.h>
 
 #ifdef __cplusplus
@@ -29,12 +29,16 @@ extern "C" {
 #endif
 
 /**
+ * @brief This is a random number used to check if a semaphore object is
+ * properly initialized.
+ */
+#define POSIX_SEMAPHORE_MAGIC 0x5d367fe7UL
+
+/**
  *  This defines the information control block used to manage
  *  this class of objects.
  */
 extern Objects_Information _POSIX_Semaphore_Information;
-
-#define POSIX_SEMAPHORE_TQ_OPERATIONS &_Thread_queue_Operations_FIFO
 
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )
@@ -57,53 +61,45 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Free (
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get(
-  const sem_t          *id,
-  Thread_queue_Context *queue_context
+  sem_t *sem
 )
 {
-  _Thread_queue_Context_initialize( queue_context );
-  return (POSIX_Semaphore_Control *) _Objects_Get(
-    (Objects_Id) *id,
-    &queue_context->Lock_context.Lock_context,
-    &_POSIX_Semaphore_Information
-  );
+  return RTEMS_CONTAINER_OF( sem, POSIX_Semaphore_Control, Semaphore );
 }
 
-/**
- *  @brief POSIX Semaphore Create Support
- *
- *  This routine supports the sem_init and sem_open routines.
- */
+RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_named( const sem_t *sem )
+{
+  return sem->_Semaphore._Queue._name != NULL;
+}
 
-int _POSIX_Semaphore_Create_support(
-  const char                *name,
-  size_t                     name_len,
-  unsigned int               value,
-  POSIX_Semaphore_Control  **the_sem
-);
+RTEMS_INLINE_ROUTINE bool _POSIX_Semaphore_Is_busy( const sem_t *sem )
+{
+  return sem->_Semaphore._Queue._heads != NULL;
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Initialize(
+  sem_t        *sem,
+  const char   *name,
+  unsigned int  value
+)
+{
+  sem->_flags = (uintptr_t) sem ^ POSIX_SEMAPHORE_MAGIC;
+  _Semaphore_Initialize_named( &sem->_Semaphore, name, value );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Destroy( sem_t *sem )
+{
+  sem->_flags = 0;
+  _Semaphore_Destroy( &sem->_Semaphore );
+}
 
 /**
  *  @brief POSIX Semaphore Delete
  *
  * This routine supports the sem_close and sem_unlink routines.
  */
-void _POSIX_Semaphore_Delete(
-  POSIX_Semaphore_Control *the_semaphore,
-  Thread_queue_Context    *queue_context
-);
+void _POSIX_Semaphore_Delete( POSIX_Semaphore_Control *the_semaphore );
 
-/**
- * @brief POSIX semaphore wait support.
- *
- * This routine supports the sem_wait, sem_trywait, and sem_timedwait
- * services.
- */
-int _POSIX_Semaphore_Wait_support(
-  sem_t               *sem,
-  bool                 blocking,
-  Watchdog_Interval    timeout
-);
- 
 /**
  *  @brief POSIX Semaphore Namespace Remove
  */
@@ -128,6 +124,16 @@ RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(
     error
   );
 }
+
+#define POSIX_SEMAPHORE_VALIDATE_OBJECT( sem ) \
+  do { \
+    if ( \
+      ( sem ) == NULL \
+        || ( (uintptr_t) ( sem ) ^ POSIX_SEMAPHORE_MAGIC ) != ( sem )->_flags \
+    ) { \
+      rtems_set_errno_and_return_minus_one( EINVAL ); \
+    } \
+  } while ( 0 )
 
 #ifdef __cplusplus
 }

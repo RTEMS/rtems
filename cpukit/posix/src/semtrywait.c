@@ -18,21 +18,29 @@
 #include "config.h"
 #endif
 
-#include <stdarg.h>
-
-#include <errno.h>
-#include <fcntl.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <limits.h>
-
-#include <rtems/system.h>
 #include <rtems/posix/semaphoreimpl.h>
-#include <rtems/seterr.h>
 
-int sem_trywait(
-  sem_t *sem
-)
+int sem_trywait( sem_t *_sem )
 {
-  return _POSIX_Semaphore_Wait_support(sem, false, WATCHDOG_NO_TIMEOUT);
+  Sem_Control          *sem;
+  Thread_queue_Context  queue_context;
+  ISR_Level             level;
+  unsigned int          count;
+
+  POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
+
+  sem = _Sem_Get( &_sem->_Semaphore );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  _Sem_Queue_acquire_critical( sem, &queue_context );
+
+  count = sem->count;
+  if ( __predict_true( count > 0 ) ) {
+    sem->count = count - 1;
+    _Sem_Queue_release( sem, level, &queue_context );
+    return 0;
+  } else {
+    _Sem_Queue_release( sem, level, &queue_context );
+    rtems_set_errno_and_return_minus_one( EAGAIN );
+  }
 }

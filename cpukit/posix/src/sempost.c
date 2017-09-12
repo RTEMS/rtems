@@ -18,31 +18,51 @@
 #include "config.h"
 #endif
 
-#include <semaphore.h>
+#include <rtems/posix/semaphoreimpl.h>
+
 #include <limits.h>
 
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/posix/posixapi.h>
-
-int sem_post(
-  sem_t  *sem
-)
+int sem_post( sem_t *_sem )
 {
-  POSIX_Semaphore_Control *the_semaphore;
-  Thread_queue_Context     queue_context;
-  Status_Control           status;
+  Sem_Control          *sem;
+  ISR_Level             level;
+  Thread_queue_Context  queue_context;
+  Thread_queue_Heads   *heads;
+  unsigned int          count;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
+  POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 
-  if ( the_semaphore == NULL ) {
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  sem = _Sem_Get( &_sem->_Semaphore );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  _Sem_Queue_acquire_critical( sem, &queue_context );
+
+  heads = sem->Queue.Queue.heads;
+  count = sem->count;
+
+  if ( __predict_true( heads == NULL && count < SEM_VALUE_MAX ) ) {
+    sem->count = count + 1;
+    _Sem_Queue_release( sem, level, &queue_context );
+    return 0;
   }
 
-  status = _CORE_semaphore_Surrender(
-    &the_semaphore->Semaphore,
-    POSIX_SEMAPHORE_TQ_OPERATIONS,
-    SEM_VALUE_MAX,
-    &queue_context
-  );
-  return _POSIX_Zero_or_minus_one_plus_errno( status );
+  if ( __predict_true( heads != NULL ) ) {
+    const Thread_queue_Operations *operations;
+    Thread_Control *first;
+
+    _Thread_queue_Context_set_ISR_level( &queue_context, level );
+    operations = SEMAPHORE_TQ_OPERATIONS;
+    first = ( *operations->first )( heads );
+
+    _Thread_queue_Extract_critical(
+      &sem->Queue.Queue,
+      operations,
+      first,
+      &queue_context
+    );
+    return 0;
+  }
+
+  _Sem_Queue_release( sem, level, &queue_context );
+  rtems_set_errno_and_return_minus_one( EOVERFLOW );
 }

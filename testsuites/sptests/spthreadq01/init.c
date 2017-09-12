@@ -40,7 +40,6 @@ typedef struct {
   rtems_id mq;
   rtems_id br;
 #if defined(RTEMS_POSIX_API)
-  sem_t psem;
   pthread_mutex_t pmtx;
   pthread_cond_t pcv;
   pthread_rwlock_t prw;
@@ -119,12 +118,6 @@ static void posix_worker(test_context *ctx)
   int rv;
   int eno;
   char buf[1];
-
-  wake_up_master(ctx);
-  rtems_test_assert(get_wait_id(ctx) == ctx->psem);
-
-  rv = sem_post(&ctx->psem);
-  rtems_test_assert(rv == 0);
 
   eno = pthread_mutex_lock(&ctx->pmtx);
   rtems_test_assert(eno == 0);
@@ -217,12 +210,8 @@ static void test_classic_init(test_context *ctx)
 static void test_posix_init(test_context *ctx)
 {
 #if defined(RTEMS_POSIX_API)
-  int rv;
   int eno;
   struct mq_attr attr;
-
-  rv = sem_init(&ctx->psem, 0, 0);
-  rtems_test_assert(rv == 0);
 
   eno = pthread_mutex_init(&ctx->pmtx, NULL);
   rtems_test_assert(eno == 0);
@@ -306,16 +295,10 @@ static void test_classic_obj(test_context *ctx)
 static void test_posix_obj(test_context *ctx)
 {
 #if defined(RTEMS_POSIX_API)
-  int rv;
   int eno;
   char buf[1];
   unsigned prio;
   ssize_t n;
-
-  wait_for_worker(ctx);
-
-  rv = sem_wait(&ctx->psem);
-  rtems_test_assert(rv == 0);
 
   wait_for_worker(ctx);
 
@@ -377,7 +360,6 @@ static rtems_task Init(
 #define CONFIGURE_MAXIMUM_BARRIERS  1
 
 #if defined(RTEMS_POSIX_API)
-  #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
   #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
   #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1
   #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 1

@@ -18,31 +18,24 @@
 #include "config.h"
 #endif
 
-#include <semaphore.h>
-
 #include <rtems/posix/semaphoreimpl.h>
 
 int sem_getvalue(
-  sem_t  *__restrict sem,
+  sem_t  *__restrict _sem,
   int    *__restrict sval
 )
 {
-  POSIX_Semaphore_Control *the_semaphore;
-  Thread_queue_Context     queue_context;
+  Sem_Control          *sem;
+  ISR_Level             level;
+  Thread_queue_Context  queue_context;
 
-  the_semaphore = _POSIX_Semaphore_Get( sem, &queue_context );
+  POSIX_SEMAPHORE_VALIDATE_OBJECT( _sem );
 
-  if ( the_semaphore == NULL ) {
-    rtems_set_errno_and_return_minus_one( EINVAL );
-  }
-
-  _CORE_semaphore_Acquire_critical(
-    &the_semaphore->Semaphore,
-    &queue_context
-  );
-
-  *sval = _CORE_semaphore_Get_count( &the_semaphore->Semaphore );
-
-  _CORE_semaphore_Release( &the_semaphore->Semaphore, &queue_context );
+  sem = _Sem_Get( &_sem->_Semaphore );
+  _Thread_queue_Context_initialize( &queue_context );
+  _Thread_queue_Context_ISR_disable( &queue_context, level );
+  _Sem_Queue_acquire_critical( sem, &queue_context );
+  *sval = (int) sem->count;
+  _Sem_Queue_release( sem, level, &queue_context );
   return 0;
 }
