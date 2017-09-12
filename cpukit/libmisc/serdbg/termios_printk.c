@@ -69,7 +69,6 @@ void termios_printk_outputchar
 |    <none>                                                                 |
 \*=========================================================================*/
 {
-  static const char cr = '\r';
   /*
    * check, whether printk serial port is available
    */
