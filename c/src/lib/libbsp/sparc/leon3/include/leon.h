@@ -482,7 +482,7 @@ static inline uint32_t leon3_up_counter_high(void)
 static inline void leon3_up_counter_enable(void)
 {
   __asm__ volatile (
-    "mov %g0, %asr23"
+    "mov %g0, %asr22"
   );
 }
 
