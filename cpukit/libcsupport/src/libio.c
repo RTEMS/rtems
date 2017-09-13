@@ -116,7 +116,6 @@ rtems_libio_t *rtems_libio_allocate( void )
     iop = rtems_libio_iop_freelist;
     rtems_libio_iop_freelist = iop->data1;
     memset( iop, 0, sizeof(*iop) );
-    iop->flags = LIBIO_FLAGS_OPEN;
   }
 
   rtems_libio_unlock();

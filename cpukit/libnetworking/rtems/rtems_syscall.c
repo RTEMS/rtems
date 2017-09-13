@@ -81,12 +81,12 @@ rtems_bsdnet_makeFdForSocket (void *so)
       rtems_set_errno_and_return_minus_one( ENFILE );
 
   fd = rtems_libio_iop_to_descriptor(iop);
-  rtems_libio_iop_flags_set(iop, LIBIO_FLAGS_READ_WRITE);
   iop->data0 = fd;
   iop->data1 = so;
   iop->pathinfo.handlers = &socket_handlers;
   iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
   rtems_filesystem_location_add_to_mt_entry(&iop->pathinfo);
+  rtems_libio_iop_flags_initialize(iop, LIBIO_FLAGS_READ_WRITE);
   return fd;
 }
 

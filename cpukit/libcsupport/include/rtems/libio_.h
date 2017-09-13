@@ -90,6 +90,24 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
 extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 
 /**
+ * @brief Sets the iop flags to the specified flags together with
+ * LIBIO_FLAGS_OPEN.
+ *
+ * Use this once a file descriptor allocated via rtems_libio_allocate() is
+ * fully initialized.
+ *
+ * @param[in] iop The iop.
+ * @param[in] flags The flags.
+ */
+static inline void rtems_libio_iop_flags_initialize(
+  rtems_libio_t *iop,
+  uint32_t       flags
+)
+{
+  iop->flags = LIBIO_FLAGS_OPEN | flags;
+}
+
+/**
  * @brief Sets the specified flags in the iop.
  *
  * @param[in] iop The iop.

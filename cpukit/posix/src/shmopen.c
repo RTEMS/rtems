@@ -225,6 +225,7 @@ int shm_open( const char *name, int oflag, mode_t mode )
   POSIX_Shm_Control *shm;
   size_t len;
   Objects_Get_by_name_error obj_err;
+  uint32_t flags;
 
   if ( shm_check_oflag( oflag ) != 0 ) {
     return -1;
@@ -275,18 +276,21 @@ int shm_open( const char *name, int oflag, mode_t mode )
   }
 
   fd = rtems_libio_iop_to_descriptor( iop );
-  rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
-  if ( oflag & O_RDONLY ) {
-    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_READ );
-  } else {
-    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_READ_WRITE );
-  }
   iop->data0 = fd;
   iop->data1 = shm;
   iop->pathinfo.node_access = shm;
   iop->pathinfo.handlers = &shm_handlers;
   iop->pathinfo.mt_entry = &rtems_filesystem_null_mt_entry;
   rtems_filesystem_location_add_to_mt_entry( &iop->pathinfo );
+
+  flags = LIBIO_FLAGS_CLOSE_ON_EXEC;
+  if ( oflag & O_RDONLY ) {
+    flags |= LIBIO_FLAGS_READ;
+  } else {
+    flags |= LIBIO_FLAGS_READ_WRITE;
+  }
+
+  rtems_libio_iop_flags_initialize( iop, flags );
 
   return fd;
 }
