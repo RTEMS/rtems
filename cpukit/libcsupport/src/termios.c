@@ -1230,7 +1230,7 @@ static uint32_t
 rtems_termios_write_tty (rtems_libio_t *iop, rtems_termios_tty *tty,
                          const char *buf, uint32_t len)
 {
-  bool wait = ((iop->flags & LIBIO_FLAGS_NO_DELAY) == 0);
+  bool wait = !rtems_libio_iop_is_no_delay (iop);
 
   if (tty->termios.c_oflag & OPOST) {
     uint32_t todo = len;

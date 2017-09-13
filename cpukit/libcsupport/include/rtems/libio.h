@@ -1380,6 +1380,16 @@ static inline uint32_t rtems_libio_iop_flags( const rtems_libio_t *iop )
 }
 
 /**
+ * @brief Returns true if this is a no delay iop, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_no_delay( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_NO_DELAY ) != 0;
+}
+
+/**
  * @name External I/O Handlers
  */
 /**@{**/
