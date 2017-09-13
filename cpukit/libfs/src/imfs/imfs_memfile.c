@@ -87,7 +87,7 @@ static ssize_t memfile_write(
   IMFS_memfile_t *memfile = IMFS_iop_to_memfile( iop );
   ssize_t         status;
 
-  if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
+  if (rtems_libio_iop_is_append(iop))
     iop->offset = memfile->File.size;
 
   status = IMFS_memfile_write( memfile, iop->offset, buffer, count );

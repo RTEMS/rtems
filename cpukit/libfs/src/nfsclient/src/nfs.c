@@ -2566,7 +2566,7 @@ Nfs			nfs  = node->nfs;
 
 
 	SERP_ARGS(node).writearg.beginoffset = UINT32_C(0xdeadbeef);
-	if ( LIBIO_FLAGS_APPEND & iop->flags ) {
+	if (rtems_libio_iop_is_append(iop)) {
 		if ( updateAttr(node, 0) ) {
 			return -1;
 		}

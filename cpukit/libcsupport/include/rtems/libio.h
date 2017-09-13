@@ -1410,6 +1410,16 @@ static inline bool rtems_libio_iop_is_writeable( const rtems_libio_t *iop )
 }
 
 /**
+ * @brief Returns true if this is an append iop, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_append( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_APPEND ) != 0;
+}
+
+/**
  * @name External I/O Handlers
  */
 /**@{**/

@@ -91,7 +91,7 @@ msdos_file_write(rtems_libio_t *iop,const void *buffer, size_t count)
     if (sc != RTEMS_SUCCESSFUL)
         rtems_set_errno_and_return_minus_one(EIO);
 
-    if ((iop->flags & LIBIO_FLAGS_APPEND) != 0)
+    if (rtems_libio_iop_is_append(iop))
         iop->offset = fat_fd->fat_file_size;
 
     ret = fat_file_write(&fs_info->fat, fat_fd, iop->offset, count,

@@ -672,10 +672,10 @@ static ssize_t rtems_jffs2_file_write(rtems_libio_t *iop, const void *buf, size_
 
 	rtems_jffs2_do_lock(inode->i_sb);
 
-	if ((iop->flags & LIBIO_FLAGS_APPEND) == 0) {
-		pos = iop->offset;
-	} else {
+	if (rtems_libio_iop_is_append(iop)) {
 		pos = inode->i_size;
+	} else {
+		pos = iop->offset;
 	}
 
 	if (pos > inode->i_size) {

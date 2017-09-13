@@ -208,7 +208,7 @@ rtems_rfs_rtems_file_write (rtems_libio_t* iop,
 
     rtems_rfs_file_set_bpos (file, pos);
   }
-  else if (pos < file_size && (iop->flags & LIBIO_FLAGS_APPEND) != 0)
+  else if (pos < file_size && rtems_libio_iop_is_append(iop))
   {
     pos = file_size;
     rc = rtems_rfs_file_seek (file, pos, &pos);
