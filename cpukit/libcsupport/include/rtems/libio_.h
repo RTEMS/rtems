@@ -185,16 +185,6 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
       }                                                     \
   } while (0)
 
-/*
- *  rtems_libio_check_permissions
- *
- *  Macro to check if a file descriptor is open for this operation.
- *  On failure, return EINVAL
- */
-
-#define rtems_libio_check_permissions(_iop, _flag) \
-   rtems_libio_check_permissions_with_error(_iop, _flag, EINVAL )
-
 /**
  * @brief Clones a node.
  *
