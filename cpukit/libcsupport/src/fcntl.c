@@ -33,7 +33,6 @@ static int duplicate_iop( rtems_libio_t *iop )
   if (diop != NULL) {
     int oflag = rtems_libio_to_fcntl_flags( iop->flags );
 
-    oflag &= ~O_CREAT;
     diop->flags |= rtems_libio_fcntl_flags( oflag );
 
     rtems_filesystem_instance_lock( &iop->pathinfo );
@@ -76,7 +75,6 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
 
     if (rv == 0) {
       oflag = rtems_libio_to_fcntl_flags( iop->flags );
-      oflag &= ~O_CREAT;
       iop2->flags |= rtems_libio_fcntl_flags( oflag );
 
       rtems_filesystem_instance_lock( &iop->pathinfo );

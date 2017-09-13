@@ -55,7 +55,6 @@ static const rtems_assoc_t status_flags_assoc[] = {
 #endif
   { "NONBLOCK",  LIBIO_FLAGS_NO_DELAY,  O_NONBLOCK },
   { "APPEND",    LIBIO_FLAGS_APPEND,    O_APPEND },
-  { "CREATE",    LIBIO_FLAGS_CREATE,    O_CREAT },
   { 0, 0, 0 },
 };
 
@@ -102,10 +101,6 @@ int rtems_libio_to_fcntl_flags( uint32_t flags )
 
   if ( (flags & LIBIO_FLAGS_APPEND) == LIBIO_FLAGS_APPEND ) {
     fcntl_flags |= O_APPEND;
-  }
-
-  if ( (flags & LIBIO_FLAGS_CREATE) == LIBIO_FLAGS_CREATE ) {
-    fcntl_flags |= O_CREAT;
   }
 
   return fcntl_flags;

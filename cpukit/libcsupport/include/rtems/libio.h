@@ -1369,7 +1369,6 @@ typedef struct {
 #define LIBIO_FLAGS_WRITE         0x0004U  /* writing */
 #define LIBIO_FLAGS_OPEN          0x0100U  /* device is open */
 #define LIBIO_FLAGS_APPEND        0x0200U  /* all writes append */
-#define LIBIO_FLAGS_CREATE        0x0400U  /* create file */
 #define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800U  /* close on process exec() */
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
 
