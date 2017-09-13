@@ -200,7 +200,7 @@ int termios_printk_open
    * capture tty structure
    */
   if (!err_occurred) {
-    iop = &rtems_libio_iops[termios_printk_fd];
+    iop = rtems_libio_iop(termios_printk_fd);
     termios_printk_tty = iop->data1;
   }
   /*

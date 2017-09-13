@@ -137,7 +137,7 @@ int serdbg_open
    * capture tty structure
    */
   if (!err_occurred) {
-    iop = &rtems_libio_iops[serdbg_fd];
+    iop = rtems_libio_iop(serdbg_fd);
     serdbg_tty = iop->data1;
   }
   /*
