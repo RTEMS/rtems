@@ -1400,6 +1400,16 @@ static inline bool rtems_libio_iop_is_readable( const rtems_libio_t *iop )
 }
 
 /**
+ * @brief Returns true if this is a writeable iop, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_writeable( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_WRITE ) != 0;
+}
+
+/**
  * @name External I/O Handlers
  */
 /**@{**/

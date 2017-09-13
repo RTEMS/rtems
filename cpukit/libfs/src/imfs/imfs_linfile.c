@@ -56,7 +56,7 @@ static int IMFS_linfile_open(
   /*
    * Perform 'copy on write' for linear files
    */
-  if ((iop->flags & LIBIO_FLAGS_WRITE) != 0) {
+  if (rtems_libio_iop_is_writeable(iop)) {
     uint32_t count = file->File.size;
     const unsigned char *buffer = file->Linearfile.direct;
 

@@ -1032,11 +1032,11 @@ static int rtems_ftpfs_open(
   bool verbose = me->verbose;
   const struct timeval *timeout = &me->timeout;
 
-  e->write = (iop->flags & LIBIO_FLAGS_WRITE) != 0;
+  e->write = rtems_libio_iop_is_writeable(iop);
 
   /* Check for either read-only or write-only flags */
   if (
-    (iop->flags & LIBIO_FLAGS_WRITE) != 0
+    rtems_libio_iop_is_writeable(iop)
       && rtems_libio_iop_is_readable(iop)
   ) {
     eno = ENOTSUP;
