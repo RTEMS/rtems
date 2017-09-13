@@ -31,7 +31,7 @@
 
 #include "pipe.h"
 
-#define LIBIO_ACCMODE(_iop) ((_iop)->flags & LIBIO_FLAGS_READ_WRITE)
+#define LIBIO_ACCMODE(_iop) (rtems_libio_iop_flags(_iop) & LIBIO_FLAGS_READ_WRITE)
 #define LIBIO_NODELAY(_iop) ((_iop)->flags & LIBIO_FLAGS_NO_DELAY)
 
 static rtems_id pipe_semaphore = RTEMS_ID_NONE;

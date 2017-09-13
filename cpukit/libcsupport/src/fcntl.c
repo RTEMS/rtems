@@ -30,7 +30,7 @@ static int duplicate_iop( rtems_libio_t *iop )
   int            oflag;
   rtems_libio_t *diop;
 
-  oflag = rtems_libio_to_fcntl_flags( iop->flags );
+  oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
   diop = rtems_libio_allocate();
 
   if (diop != NULL) {
@@ -72,12 +72,12 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
   {
     int oflag;
 
-    if ((iop2->flags & LIBIO_FLAGS_OPEN) != 0) {
+    if ((rtems_libio_iop_flags( iop2 ) & LIBIO_FLAGS_OPEN) != 0) {
       rv = (*iop2->pathinfo.handlers->close_h)( iop2 );
     }
 
     if (rv == 0) {
-      oflag = rtems_libio_to_fcntl_flags( iop->flags );
+      oflag = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
       rtems_libio_iop_flags_set( iop2, rtems_libio_fcntl_flags( oflag ) );
 
       rtems_filesystem_instance_lock( &iop->pathinfo );
@@ -135,7 +135,7 @@ static int vfcntl(
       break;
 
     case F_GETFD:        /* get f_flags */
-      ret = ((iop->flags & LIBIO_FLAGS_CLOSE_ON_EXEC) != 0);
+      ret = ((rtems_libio_iop_flags(iop) & LIBIO_FLAGS_CLOSE_ON_EXEC) != 0);
       break;
 
     case F_SETFD:        /* set f_flags */
@@ -154,7 +154,7 @@ static int vfcntl(
       break;
 
     case F_GETFL:        /* more flags (cloexec) */
-      ret = rtems_libio_to_fcntl_flags( iop->flags );
+      ret = rtems_libio_to_fcntl_flags( rtems_libio_iop_flags( iop ) );
       break;
 
     case F_SETFL:

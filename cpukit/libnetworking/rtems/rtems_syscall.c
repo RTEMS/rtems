@@ -52,7 +52,7 @@ rtems_bsdnet_fdToSocket (int fd)
   iop = rtems_libio_iop(fd);
 
   /* same as rtems_libio_check_is_open(iop) but different return */
-  if ((iop->flags & LIBIO_FLAGS_OPEN) == 0) {
+  if ((rtems_libio_iop_flags(iop) & LIBIO_FLAGS_OPEN) == 0) {
     errno = EBADF;
     return NULL;
   }

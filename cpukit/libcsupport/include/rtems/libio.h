@@ -1374,6 +1374,11 @@ typedef struct {
 
 /** @} */
 
+static inline uint32_t rtems_libio_iop_flags( const rtems_libio_t *iop )
+{
+  return iop->flags;
+}
+
 /**
  * @name External I/O Handlers
  */
