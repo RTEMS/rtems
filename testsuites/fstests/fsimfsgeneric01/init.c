@@ -154,8 +154,7 @@ static int handler_fstat(
       *state = TEST_FSTAT_UNLINK;
       break;
     default:
-      printk("x\n");
-      //rtems_test_assert(0);
+      rtems_test_assert(0);
       break;
   }
 
