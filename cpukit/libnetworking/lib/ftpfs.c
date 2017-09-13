@@ -1037,7 +1037,7 @@ static int rtems_ftpfs_open(
   /* Check for either read-only or write-only flags */
   if (
     (iop->flags & LIBIO_FLAGS_WRITE) != 0
-      && (iop->flags & LIBIO_FLAGS_READ) != 0
+      && rtems_libio_iop_is_readable(iop)
   ) {
     eno = ENOTSUP;
   }

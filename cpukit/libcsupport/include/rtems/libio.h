@@ -1390,6 +1390,16 @@ static inline bool rtems_libio_iop_is_no_delay( const rtems_libio_t *iop )
 }
 
 /**
+ * @brief Returns true if this is a readable iop, otherwise returns false.
+ *
+ * @param[in] iop The iop.
+ */
+static inline bool rtems_libio_iop_is_readable( const rtems_libio_t *iop )
+{
+  return ( rtems_libio_iop_flags( iop ) & LIBIO_FLAGS_READ ) != 0;
+}
+
+/**
  * @name External I/O Handlers
  */
 /**@{**/

@@ -255,7 +255,7 @@ rtems_device_driver console_open(
     }
   }
 
-  if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
+  if (rtems_libio_iop_is_readable(args->iop) &&
       cptr->pDeviceFlow &&
       cptr->pDeviceFlow->deviceStartRemoteTx) {
     cptr->pDeviceFlow->deviceStartRemoteTx(minor);
@@ -288,7 +288,7 @@ rtems_device_driver console_close(
    * Stop only if it's the last one opened.
    */
   if ( (current_tty->refcount == 1) ) {
-    if ( (args->iop->flags&LIBIO_FLAGS_READ) &&
+    if (rtems_libio_iop_is_readable(args->iop) &&
           cptr->pDeviceFlow &&
           cptr->pDeviceFlow->deviceStopRemoteTx) {
       cptr->pDeviceFlow->deviceStopRemoteTx(minor);
