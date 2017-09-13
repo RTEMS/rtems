@@ -20,9 +20,9 @@
 
 #include <libfdt.h>
 
-uint32_t bsp_fdt_map_intr(uint32_t intr)
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
-  return intr + 32;
+  return intr[1] + 32;
 }
 
 void arm_generic_timer_get_config(

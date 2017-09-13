@@ -205,7 +205,7 @@ void bsp_start(void)
 #endif
 }
 
-uint32_t bsp_fdt_map_intr(uint32_t intr)
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
-  return intr - 16;
+  return intr[0] - 16;
 }

@@ -29,7 +29,7 @@ void bsp_start(void)
   printk("\nRTEMS Beagleboard: %s\n", type);
 }
 
-uint32_t bsp_fdt_map_intr(uint32_t intr)
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
-  return intr;
+  return intr[0];
 }

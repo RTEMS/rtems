@@ -53,11 +53,12 @@ const void *bsp_fdt_get(void);
  * This function is used by the libbsd to implement the OFW_BUS_MAP_INTR bus
  * method.
  *
- * @param[in] intr The FDT interrupt number.
+ * @param[in] intr The FDT interrupt number cells.
+ * @param[in] icells The FDT interrupt cell count.
  *
  * @return The interrupt vector of the FDT interrupt number.
  */
-uint32_t bsp_fdt_map_intr(uint32_t intr);
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells);
 
 #ifdef __cplusplus
 }
