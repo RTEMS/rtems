@@ -1536,8 +1536,6 @@ void SciSendBreak( void )
 ****************************************************************************/
 
 #if 0
-#define O_RDWR LIBIO_FLAGS_READ_WRITE           /* dont like this but... */
-
 void SciUnitTest()
 {
     uint8_t   byte;                             /* a character */
