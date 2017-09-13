@@ -275,11 +275,11 @@ int shm_open( const char *name, int oflag, mode_t mode )
   }
 
   fd = rtems_libio_iop_to_descriptor( iop );
-  iop->flags |= LIBIO_FLAGS_CLOSE_ON_EXEC;
+  rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
   if ( oflag & O_RDONLY ) {
-    iop->flags |= LIBIO_FLAGS_READ;
+    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_READ );
   } else {
-    iop->flags |= LIBIO_FLAGS_READ_WRITE;
+    rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_READ_WRITE );
   }
   iop->data0 = fd;
   iop->data1 = shm;

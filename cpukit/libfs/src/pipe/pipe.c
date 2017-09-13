@@ -64,7 +64,7 @@ int pipe_create(
   else {
   /* Reset open file to blocking mode */
     iop = rtems_libio_iop(filsdes[0]);
-    iop->flags &= ~LIBIO_FLAGS_NO_DELAY;
+    rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_NO_DELAY );
 
     filsdes[1] = open(fifopath, O_WRONLY);
 

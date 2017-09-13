@@ -265,7 +265,7 @@ void pipe_release(
     return;
 
   /* This is safe for IMFS, but how about other FSes? */
-  iop->flags &= ~LIBIO_FLAGS_OPEN;
+  rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_OPEN );
   if(iop->pathinfo.ops->unlink_h(&iop->pathinfo))
     return;
 #endif

@@ -33,7 +33,7 @@ static int duplicate_iop( rtems_libio_t *iop )
   if (diop != NULL) {
     int oflag = rtems_libio_to_fcntl_flags( iop->flags );
 
-    diop->flags |= rtems_libio_fcntl_flags( oflag );
+    rtems_libio_iop_flags_set( diop, rtems_libio_fcntl_flags( oflag ) );
 
     rtems_filesystem_instance_lock( &iop->pathinfo );
     rtems_filesystem_location_clone( &diop->pathinfo, &iop->pathinfo );
@@ -75,7 +75,7 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
 
     if (rv == 0) {
       oflag = rtems_libio_to_fcntl_flags( iop->flags );
-      iop2->flags |= rtems_libio_fcntl_flags( oflag );
+      rtems_libio_iop_flags_set( iop2, rtems_libio_fcntl_flags( oflag ) );
 
       rtems_filesystem_instance_lock( &iop->pathinfo );
       rtems_filesystem_location_clone( &iop2->pathinfo, &iop->pathinfo );
@@ -145,9 +145,9 @@ static int vfcntl(
        */
 
       if ( va_arg( ap, int ) )
-        iop->flags |= LIBIO_FLAGS_CLOSE_ON_EXEC;
+        rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
       else
-        iop->flags &= ~LIBIO_FLAGS_CLOSE_ON_EXEC;
+        rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_CLOSE_ON_EXEC );
       break;
 
     case F_GETFL:        /* more flags (cloexec) */
@@ -162,7 +162,8 @@ static int vfcntl(
        *  XXX If we are turning on append, should we seek to the end?
        */
 
-      iop->flags = (iop->flags & ~mask) | (flags & mask);
+      rtems_libio_iop_flags_clear( iop, mask );
+      rtems_libio_iop_flags_set( iop, flags & mask );
       break;
 
     case F_GETLK:

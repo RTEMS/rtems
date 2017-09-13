@@ -90,6 +90,46 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
 extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 
 /**
+ * @brief Sets the specified flags in the iop.
+ *
+ * @param[in] iop The iop.
+ * @param[in] set The flags to set.
+ *
+ * @return The previous flags.
+ */
+static inline uint32_t rtems_libio_iop_flags_set(
+  rtems_libio_t *iop,
+  uint32_t       set
+)
+{
+  uint32_t flags;
+
+  flags = iop->flags;
+  iop->flags = flags | set;
+  return flags;
+}
+
+/**
+ * @brief Clears the specified flags in the iop.
+ *
+ * @param[in] iop The iop.
+ * @param[in] clear The flags to clear.
+ *
+ * @return The previous flags.
+ */
+static inline uint32_t rtems_libio_iop_flags_clear(
+  rtems_libio_t *iop,
+  uint32_t       clear
+)
+{
+  uint32_t flags;
+
+  flags = iop->flags;
+  iop->flags = flags & ~clear;
+  return flags;
+}
+
+/**
  * @brief Maps a file descriptor to the iop.
  *
  * The file descriptor must be a valid index into the iop table.

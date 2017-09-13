@@ -102,9 +102,9 @@ static int IMFS_fifo_ioctl(
       err = -EFAULT;
     else {
       if (*(int *)buffer)
-        iop->flags |= LIBIO_FLAGS_NO_DELAY;
+        rtems_libio_iop_flags_set( iop, LIBIO_FLAGS_NO_DELAY );
       else
-        iop->flags &= ~LIBIO_FLAGS_NO_DELAY;
+        rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_NO_DELAY );
       return 0;
     }
   }

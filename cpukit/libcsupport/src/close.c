@@ -31,7 +31,7 @@ int close(
   iop = rtems_libio_iop(fd);
   rtems_libio_check_is_open(iop);
 
-  iop->flags &= ~LIBIO_FLAGS_OPEN;
+  rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_OPEN );
 
   rc = (*iop->pathinfo.handlers->close_h)( iop );
 

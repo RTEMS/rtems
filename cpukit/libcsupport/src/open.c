@@ -96,7 +96,7 @@ static int do_open(
     }
   }
 
-  iop->flags |= rtems_libio_fcntl_flags( oflag );
+  rtems_libio_iop_flags_set( iop, rtems_libio_fcntl_flags( oflag ) );
   rtems_filesystem_eval_path_extract_currentloc( &ctx, &iop->pathinfo );
   rtems_filesystem_eval_path_cleanup( &ctx );
 
