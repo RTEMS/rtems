@@ -99,7 +99,11 @@ static int do_open(
   rtems_filesystem_eval_path_extract_currentloc( &ctx, &iop->pathinfo );
   rtems_filesystem_eval_path_cleanup( &ctx );
 
-  iop->flags = rtems_libio_fcntl_flags( oflag );
+  _Atomic_Store_uint(
+    &iop->flags,
+    rtems_libio_fcntl_flags( oflag ),
+    ATOMIC_ORDER_RELAXED
+  );
 
   rv = (*iop->pathinfo.handlers->open_h)( iop, path, oflag, mode );
 

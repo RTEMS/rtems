@@ -28,6 +28,7 @@ int fdatasync(
 )
 {
   rtems_libio_t *iop;
+  int            rv;
 
   LIBIO_GET_IOP_WITH_ACCESS( fd, iop, LIBIO_FLAGS_WRITE, EBADF );
 
@@ -35,5 +36,7 @@ int fdatasync(
    *  Now process the fdatasync().
    */
 
-  return (*iop->pathinfo.handlers->fdatasync_h)( iop );
+  rv = (*iop->pathinfo.handlers->fdatasync_h)( iop );
+  rtems_libio_iop_drop( iop );
+  return rv;
 }

@@ -26,6 +26,7 @@ int fstat(
 )
 {
   rtems_libio_t *iop;
+  int            rv;
 
   /*
    *  Check to see if we were passed a valid pointer.
@@ -44,7 +45,9 @@ int fstat(
    */
   memset( sbuf, 0, sizeof(struct stat) );
 
-  return (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, sbuf );
+  rv = (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, sbuf );
+  rtems_libio_iop_drop( iop );
+  return rv;
 }
 
 /*

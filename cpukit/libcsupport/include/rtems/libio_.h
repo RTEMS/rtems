@@ -104,7 +104,11 @@ static inline void rtems_libio_iop_flags_initialize(
   uint32_t       flags
 )
 {
-  iop->flags = LIBIO_FLAGS_OPEN | flags;
+  _Atomic_Store_uint(
+    &iop->flags,
+    LIBIO_FLAGS_OPEN | flags,
+    ATOMIC_ORDER_RELEASE
+  );
 }
 
 /**
@@ -115,16 +119,12 @@ static inline void rtems_libio_iop_flags_initialize(
  *
  * @return The previous flags.
  */
-static inline uint32_t rtems_libio_iop_flags_set(
+static inline unsigned int rtems_libio_iop_flags_set(
   rtems_libio_t *iop,
-  uint32_t       set
+  unsigned int   set
 )
 {
-  uint32_t flags;
-
-  flags = iop->flags;
-  iop->flags = flags | set;
-  return flags;
+  return _Atomic_Fetch_or_uint( &iop->flags, set, ATOMIC_ORDER_RELAXED );
 }
 
 /**
@@ -135,16 +135,12 @@ static inline uint32_t rtems_libio_iop_flags_set(
  *
  * @return The previous flags.
  */
-static inline uint32_t rtems_libio_iop_flags_clear(
+static inline unsigned int rtems_libio_iop_flags_clear(
   rtems_libio_t *iop,
-  uint32_t       clear
+  unsigned int   clear
 )
 {
-  uint32_t flags;
-
-  flags = iop->flags;
-  iop->flags = flags & ~clear;
-  return flags;
+  return _Atomic_Fetch_and_uint( &iop->flags, ~clear, ATOMIC_ORDER_RELAXED );
 }
 
 /**
@@ -159,6 +155,36 @@ static inline uint32_t rtems_libio_iop_flags_clear(
 static inline rtems_libio_t *rtems_libio_iop( int fd )
 {
   return &rtems_libio_iops[ fd ];
+}
+
+/**
+ * @brief Holds a refernece to the iop.
+ *
+ * @param[in] iop The iop.
+ *
+ * @return The flags corresponding to the specified iop.
+ */
+static inline unsigned int rtems_libio_iop_hold( rtems_libio_t *iop )
+{
+  return _Atomic_Fetch_add_uint(
+    &iop->flags,
+    LIBIO_FLAGS_REFERENCE_INC,
+    ATOMIC_ORDER_ACQUIRE
+  );
+}
+
+/**
+ * @brief Drops a refernece to the iop.
+ *
+ * @param[in] iop The iop.
+ */
+static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
+{
+  _Atomic_Fetch_sub_uint(
+    &iop->flags,
+    LIBIO_FLAGS_REFERENCE_INC,
+    ATOMIC_ORDER_RELEASE
+  );
 }
 
 /*
@@ -192,13 +218,14 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
  */
 #define LIBIO_GET_IOP( _fd, _iop ) \
   do { \
-    uint32_t _flags; \
+    unsigned int _flags; \
     if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
       rtems_set_errno_and_return_minus_one( EBADF ); \
     } \
     _iop = rtems_libio_iop( _fd ); \
-    _flags = _iop->flags; \
+    _flags = rtems_libio_iop_hold( _iop ); \
     if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
+      rtems_libio_iop_drop( _iop ); \
       rtems_set_errno_and_return_minus_one( EBADF ); \
     } \
   } while ( 0 )
@@ -211,16 +238,17 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
  */
 #define LIBIO_GET_IOP_WITH_ACCESS( _fd, _iop, _access_flags, _access_error ) \
   do { \
-    uint32_t _flags; \
-    uint32_t _mandatory; \
+    unsigned int _flags; \
+    unsigned int _mandatory; \
     if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
       rtems_set_errno_and_return_minus_one( EBADF ); \
     } \
     _iop = rtems_libio_iop( _fd ); \
-    _flags = _iop->flags; \
+    _flags = rtems_libio_iop_hold( _iop ); \
     _mandatory = LIBIO_FLAGS_OPEN | ( _access_flags ); \
     if ( ( _flags & _mandatory ) != _mandatory ) { \
       int _error; \
+      rtems_libio_iop_drop( _iop ); \
       if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
         _error = EBADF; \
       } else { \
@@ -357,12 +385,12 @@ rtems_libio_t *rtems_libio_allocate(void);
 /**
  * Convert UNIX fnctl(2) flags to ones that RTEMS drivers understand
  */
-uint32_t rtems_libio_fcntl_flags( int fcntl_flags );
+unsigned int rtems_libio_fcntl_flags( int fcntl_flags );
 
 /**
  * Convert RTEMS internal flags to UNIX fnctl(2) flags
  */
-int rtems_libio_to_fcntl_flags( uint32_t flags );
+int rtems_libio_to_fcntl_flags( unsigned int flags );
 
 /**
  * This routine frees the resources associated with an IOP (file descriptor)
@@ -932,7 +960,7 @@ static inline ssize_t rtems_libio_iovec_eval(
   int                        fd,
   const struct iovec        *iov,
   int                        iovcnt,
-  uint32_t                   flags,
+  unsigned int               flags,
   rtems_libio_iovec_adapter  adapter
 )
 {
@@ -978,6 +1006,7 @@ static inline ssize_t rtems_libio_iovec_eval(
     total = ( *adapter )( iop, iov, iovcnt, total );
   }
 
+  rtems_libio_iop_drop( iop );
   return total;
 }
 

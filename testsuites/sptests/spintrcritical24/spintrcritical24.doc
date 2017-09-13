@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spintrcritical24
+
+directives:
+
+  - fcntl()
+  - close()
+
+concepts:
+
+  - Try to ensure that a close completes successful in case it is interrupted
+    by a call to fcntl() altering the iop flags.

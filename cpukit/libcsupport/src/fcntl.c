@@ -213,6 +213,8 @@ static int vfcntl(
       ret = -1;
     }
   }
+
+  rtems_libio_iop_drop( iop );
   return ret;
 }
 

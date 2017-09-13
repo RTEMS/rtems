@@ -31,6 +31,7 @@ ssize_t read(
 )
 {
   rtems_libio_t *iop;
+  ssize_t        n;
 
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
@@ -40,7 +41,9 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  return (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
+  n = (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
+  rtems_libio_iop_drop( iop );
+  return n;
 }
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE__READ_R)

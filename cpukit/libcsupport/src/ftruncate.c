@@ -32,6 +32,7 @@ int ftruncate( int fd, off_t length )
     LIBIO_GET_IOP_WITH_ACCESS( fd, iop, LIBIO_FLAGS_WRITE, EINVAL );
 
     rv = (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
+    rtems_libio_iop_drop( iop );
   } else {
     errno = EINVAL;
     rv = -1;

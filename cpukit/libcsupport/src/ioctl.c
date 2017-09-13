@@ -51,5 +51,6 @@ int ioctl(
   rc = (*iop->pathinfo.handlers->ioctl_h)( iop, command, buffer );
 
   va_end( ap );
+  rtems_libio_iop_drop( iop );
   return rc;
 }

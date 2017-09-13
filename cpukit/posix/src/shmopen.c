@@ -225,7 +225,7 @@ int shm_open( const char *name, int oflag, mode_t mode )
   POSIX_Shm_Control *shm;
   size_t len;
   Objects_Get_by_name_error obj_err;
-  uint32_t flags;
+  unsigned int flags;
 
   if ( shm_check_oflag( oflag ) != 0 ) {
     return -1;

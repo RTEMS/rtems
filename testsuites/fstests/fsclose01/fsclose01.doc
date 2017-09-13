@@ -1,0 +1,26 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: fsclose01
+
+directives:
+
+  - close()
+  - fcntl()
+  - fdatasync()
+  - fchdir()
+  - fchmod()
+  - fchown()
+  - fstat()
+  - fsync()
+  - ftruncate()
+  - ioctl()
+  - lseek()
+  - read()
+  - readv()
+  - write()
+  - writev()
+
+concepts:
+
+  - Ensure the close() return -1 with errno set to EBUSY in case the file
+    descriptor is still in use.

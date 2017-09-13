@@ -78,6 +78,7 @@ AC_CHECK_SIZEOF([blkcnt_t])
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
 fsbdpart01/Makefile
+fsclose01/Makefile
 fsdosfsformat01/Makefile
 fsdosfsname01/Makefile
 fsdosfsname02/Makefile

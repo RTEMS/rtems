@@ -37,6 +37,7 @@
 #include <rtems.h>
 #include <rtems/fs.h>
 #include <rtems/chain.h>
+#include <rtems/score/atomic.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -1319,7 +1320,7 @@ extern const rtems_filesystem_limits_and_options_t
 struct rtems_libio_tt {
   rtems_driver_name_t                    *driver;
   off_t                                   offset;    /* current offset into file */
-  uint32_t                                flags;
+  Atomic_Uint                             flags;
   rtems_filesystem_location_info_t        pathinfo;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */
@@ -1371,12 +1372,13 @@ typedef struct {
 #define LIBIO_FLAGS_APPEND        0x0200U  /* all writes append */
 #define LIBIO_FLAGS_CLOSE_ON_EXEC 0x0800U  /* close on process exec() */
 #define LIBIO_FLAGS_READ_WRITE    (LIBIO_FLAGS_READ | LIBIO_FLAGS_WRITE)
+#define LIBIO_FLAGS_REFERENCE_INC 0x1000U
 
 /** @} */
 
-static inline uint32_t rtems_libio_iop_flags( const rtems_libio_t *iop )
+static inline unsigned int rtems_libio_iop_flags( const rtems_libio_t *iop )
 {
-  return iop->flags;
+  return _Atomic_Load_uint( &iop->flags, ATOMIC_ORDER_RELAXED );
 }
 
 /**

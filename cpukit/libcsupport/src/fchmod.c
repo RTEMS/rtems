@@ -75,5 +75,7 @@ int fchmod( int fd, mode_t mode )
 
   rtems_filesystem_instance_unlock( &iop->pathinfo );
 
+  rtems_libio_iop_drop( iop );
+
   return rv;
 }

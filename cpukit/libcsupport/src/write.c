@@ -34,6 +34,7 @@ ssize_t write(
 )
 {
   rtems_libio_t *iop;
+  ssize_t        n;
 
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
@@ -43,5 +44,7 @@ ssize_t write(
   /*
    *  Now process the write() request.
    */
-  return (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
+  n = (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
+  rtems_libio_iop_drop( iop );
+  return n;
 }

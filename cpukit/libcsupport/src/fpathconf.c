@@ -82,9 +82,11 @@ long fpathconf(
       return_value = the_limits->posix_sync_io;
       break;
     default:
-      rtems_set_errno_and_return_minus_one( EINVAL );
+      errno = EINVAL;
+      return_value = -1;
       break;
   }
 
+  rtems_libio_iop_drop( iop );
   return return_value;
 }

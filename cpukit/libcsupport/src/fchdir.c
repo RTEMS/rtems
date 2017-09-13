@@ -59,6 +59,7 @@ int fchdir( int fd )
     }
   }
   rtems_filesystem_instance_unlock( &iop->pathinfo );
+  rtems_libio_iop_drop( iop );
 
   if ( rv == 0 ) {
     rv = rtems_filesystem_chdir( &loc );

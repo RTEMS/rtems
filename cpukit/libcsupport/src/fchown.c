@@ -72,5 +72,7 @@ int fchown( int fd, uid_t owner, gid_t group )
 
   rtems_filesystem_instance_unlock( &iop->pathinfo );
 
+  rtems_libio_iop_drop( iop );
+
   return rv;
 }
