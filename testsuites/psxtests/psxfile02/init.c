@@ -41,9 +41,15 @@ void do_with_fd(
 )
 {
   struct stat       stat_buff;
-  struct iovec      vec[4];
+  struct iovec      vec[2];
+  char              buf[2][1];
   off_t             res;
   int               status;
+
+  vec[0].iov_base = buf[0];
+  vec[0].iov_len = sizeof(buf[0]);
+  vec[1].iov_base = buf[1];
+  vec[1].iov_len = sizeof(buf[1]);
 
   printf("ftruncate %s\n", description);
   status = ftruncate(fd, 40);
@@ -88,13 +94,13 @@ void do_with_fd(
   rtems_test_assert( errno == EBADF );
 
   printf("readv %s\n", description);
-  status = readv(fd, vec, 4);
+  status = readv(fd, vec, 2);
   rtems_test_assert( status == -1 );
   printf( "%d: %s\n", errno, strerror( errno ) );
   rtems_test_assert( errno == EBADF );
 
   printf("writev %s\n", description);
-  status = writev(fd, vec, 4);
+  status = writev(fd, vec, 2);
   rtems_test_assert( status == -1 );
   printf( "%d: %s\n", errno, strerror( errno ) );
   rtems_test_assert( errno == EBADF );

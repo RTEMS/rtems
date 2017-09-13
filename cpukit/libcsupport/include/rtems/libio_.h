@@ -871,13 +871,6 @@ static inline ssize_t rtems_libio_iovec_eval(
   int            v;
   rtems_libio_t *iop;
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open( iop );
-  rtems_libio_check_permissions_with_error( iop, flags, EBADF );
-
-  *iopp = iop;
-
   /*
    *  Argument validation on IO vector
    */
@@ -909,6 +902,13 @@ static inline ssize_t rtems_libio_iovec_eval(
       rtems_set_errno_and_return_minus_one( EINVAL );
     }
   }
+
+  rtems_libio_check_fd( fd );
+  iop = rtems_libio_iop( fd );
+  rtems_libio_check_is_open( iop );
+  rtems_libio_check_permissions_with_error( iop, flags, EBADF );
+
+  *iopp = iop;
 
   return total;
 }

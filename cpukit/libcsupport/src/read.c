@@ -32,11 +32,12 @@ ssize_t read(
 {
   rtems_libio_t *iop;
 
+  rtems_libio_check_buffer( buffer );
+  rtems_libio_check_count( count );
+
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open( iop );
-  rtems_libio_check_buffer( buffer );
-  rtems_libio_check_count( count );
   rtems_libio_check_permissions_with_error( iop, LIBIO_FLAGS_READ, EBADF );
 
   /*
