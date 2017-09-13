@@ -89,15 +89,21 @@ extern rtems_filesystem_mount_table_entry_t rtems_filesystem_null_mt_entry;
  */
 extern rtems_filesystem_global_location_t rtems_filesystem_global_location_null;
 
-/*
- *  rtems_libio_iop
+/**
+ * @brief Maps a file descriptor to the iop.
  *
- *  Macro to return the file descriptor pointer.
+ * The file descriptor must be a valid index into the iop table.
+ *
+ * @param[in] fd The file descriptor.
+ *
+ * @return The iop corresponding to the specified file descriptor.
+ *
+ * @see rtems_libio_check_fd().
  */
-
-#define rtems_libio_iop(_fd) \
-  ((((uint32_t)(_fd)) < rtems_libio_number_iops) ? \
-         &rtems_libio_iops[_fd] : 0)
+static inline rtems_libio_t *rtems_libio_iop( int fd )
+{
+  return &rtems_libio_iops[ fd ];
+}
 
 /*
  *  rtems_libio_iop_to_descriptor
