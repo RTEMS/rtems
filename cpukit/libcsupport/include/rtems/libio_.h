@@ -171,13 +171,13 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
   } while (0)
 
 /*
- *  rtems_libio_check_permissions_with_error
+ *  rtems_libio_check_permissions
  *
  *  Macro to check if a file descriptor is open for this operation.
  *  On failure, return the user specified error.
  */
 
-#define rtems_libio_check_permissions_with_error(_iop, _flag, _errno) \
+#define rtems_libio_check_permissions(_iop, _flag, _errno) \
   do {                                                      \
       if (((_iop)->flags & (_flag)) == 0) {                 \
             rtems_set_errno_and_return_minus_one( _errno ); \
@@ -896,7 +896,7 @@ static inline ssize_t rtems_libio_iovec_eval(
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open( iop );
-  rtems_libio_check_permissions_with_error( iop, flags, EBADF );
+  rtems_libio_check_permissions( iop, flags, EBADF );
 
   *iopp = iop;
 
