@@ -65,7 +65,10 @@ static int duplicate2_iop( rtems_libio_t *iop, int fd2 )
   rtems_libio_t *iop2;
   int            rv = 0;
 
-  rtems_libio_check_fd( fd2 );
+  if ( (uint32_t) fd2 >= rtems_libio_number_iops ) {
+    rtems_set_errno_and_return_minus_one( EBADF );
+  }
+
   iop2 = rtems_libio_iop( fd2 );
 
   if (iop != iop2)
@@ -112,9 +115,7 @@ static int vfcntl(
   int            mask;
   int            ret = 0;
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open(iop);
+  LIBIO_GET_IOP( fd, iop );
 
   /*
    *  Now process the fcntl().

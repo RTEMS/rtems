@@ -35,10 +35,7 @@ ssize_t read(
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open( iop );
-  rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ, EBADF );
+  LIBIO_GET_IOP_WITH_ACCESS( fd, iop, LIBIO_FLAGS_READ, EBADF );
 
   /*
    *  Now process the read().

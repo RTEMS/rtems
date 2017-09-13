@@ -29,10 +29,7 @@ int ftruncate( int fd, off_t length )
   if ( length >= 0 ) {
     rtems_libio_t *iop;
 
-    rtems_libio_check_fd( fd );
-    iop = rtems_libio_iop( fd );
-    rtems_libio_check_is_open( iop );
-    rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE, EINVAL );
+    LIBIO_GET_IOP_WITH_ACCESS( fd, iop, LIBIO_FLAGS_WRITE, EINVAL );
 
     rv = (*iop->pathinfo.handlers->ftruncate_h)( iop, length );
   } else {

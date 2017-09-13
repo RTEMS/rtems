@@ -64,9 +64,7 @@ int fchown( int fd, uid_t owner, gid_t group )
   int rv;
   rtems_libio_t *iop;
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open(iop);
+  LIBIO_GET_IOP( fd, iop );
 
   rtems_filesystem_instance_lock( &iop->pathinfo );
 

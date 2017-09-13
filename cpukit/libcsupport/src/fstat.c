@@ -36,9 +36,7 @@ int fstat(
   /*
    *  Now process the stat() request.
    */
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open(iop);
+  LIBIO_GET_IOP( fd, iop );
 
   /*
    *  Zero out the stat structure so the various support

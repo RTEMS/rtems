@@ -44,14 +44,13 @@ rtems_bsdnet_fdToSocket (int fd)
 {
   rtems_libio_t *iop;
 
-  /* same as rtems_libio_check_fd(_fd) but different return */
   if ((uint32_t)fd >= rtems_libio_number_iops) {
     errno = EBADF;
     return NULL;
   }
+
   iop = rtems_libio_iop(fd);
 
-  /* same as rtems_libio_check_is_open(iop) but different return */
   if ((rtems_libio_iop_flags(iop) & LIBIO_FLAGS_OPEN) == 0) {
     errno = EBADF;
     return NULL;

@@ -27,9 +27,7 @@ int close(
   rtems_libio_t      *iop;
   int                 rc;
 
-  rtems_libio_check_fd(fd);
-  iop = rtems_libio_iop(fd);
-  rtems_libio_check_is_open(iop);
+  LIBIO_GET_IOP( fd, iop );
 
   rtems_libio_iop_flags_clear( iop, LIBIO_FLAGS_OPEN );
 

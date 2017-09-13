@@ -36,9 +36,7 @@ long fpathconf(
   rtems_libio_t                          *iop;
   const rtems_filesystem_limits_and_options_t *the_limits;
 
-  rtems_libio_check_fd(fd);
-  iop = rtems_libio_iop(fd);
-  rtems_libio_check_is_open(iop);
+  LIBIO_GET_IOP( fd, iop );
 
   /*
    *  Now process the information request.

@@ -155,8 +155,6 @@ static inline uint32_t rtems_libio_iop_flags_clear(
  * @param[in] fd The file descriptor.
  *
  * @return The iop corresponding to the specified file descriptor.
- *
- * @see rtems_libio_check_fd().
  */
 static inline rtems_libio_t *rtems_libio_iop( int fd )
 {
@@ -187,19 +185,50 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
       }                                              \
   } while (0)
 
-/*
- *  rtems_libio_check_fd
+/**
+ * @brief Macro to get the iop for the specified file descriptor.
  *
- *  Macro to check if a file descriptor number is valid.
+ * Checks that the file descriptor is in the valid range and open.
  */
+#define LIBIO_GET_IOP( _fd, _iop ) \
+  do { \
+    uint32_t _flags; \
+    if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
+      rtems_set_errno_and_return_minus_one( EBADF ); \
+    } \
+    _iop = rtems_libio_iop( _fd ); \
+    _flags = _iop->flags; \
+    if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
+      rtems_set_errno_and_return_minus_one( EBADF ); \
+    } \
+  } while ( 0 )
 
-#define rtems_libio_check_fd(_fd) \
-  do {                                                     \
-      if ((uint32_t) (_fd) >= rtems_libio_number_iops) {   \
-          errno = EBADF;                                   \
-          return -1;                                       \
-      }                                                    \
-  } while (0)
+/**
+ * @brief Macro to get the iop for the specified file descriptor with access
+ * flags and error.
+ *
+ * Checks that the file descriptor is in the valid range and open.
+ */
+#define LIBIO_GET_IOP_WITH_ACCESS( _fd, _iop, _access_flags, _access_error ) \
+  do { \
+    uint32_t _flags; \
+    uint32_t _mandatory; \
+    if ( (uint32_t) ( _fd ) >= rtems_libio_number_iops ) { \
+      rtems_set_errno_and_return_minus_one( EBADF ); \
+    } \
+    _iop = rtems_libio_iop( _fd ); \
+    _flags = _iop->flags; \
+    _mandatory = LIBIO_FLAGS_OPEN | ( _access_flags ); \
+    if ( ( _flags & _mandatory ) != _mandatory ) { \
+      int _error; \
+      if ( ( _flags & LIBIO_FLAGS_OPEN ) == 0 ) { \
+        _error = EBADF; \
+      } else { \
+        _error = _access_error; \
+      } \
+      rtems_set_errno_and_return_minus_one( _error ); \
+    } \
+  } while ( 0 )
 
 /*
  *  rtems_libio_check_buffer
@@ -226,21 +255,6 @@ static inline rtems_libio_t *rtems_libio_iop( int fd )
       if ((_count) == 0) {              \
           return 0;                     \
       }                                 \
-  } while (0)
-
-/*
- *  rtems_libio_check_permissions
- *
- *  Macro to check if a file descriptor is open for this operation.
- *  On failure, return the user specified error.
- */
-
-#define rtems_libio_check_permissions(_iop, _flag, _errno) \
-  do {                                                      \
-      if (((_iop)->flags & (_flag)) == 0) {                 \
-            rtems_set_errno_and_return_minus_one( _errno ); \
-            return -1;                                      \
-      }                                                     \
   } while (0)
 
 /**
@@ -951,11 +965,7 @@ static inline ssize_t rtems_libio_iovec_eval(
     }
   }
 
-  rtems_libio_check_fd( fd );
-  iop = rtems_libio_iop( fd );
-  rtems_libio_check_is_open( iop );
-  rtems_libio_check_permissions( iop, flags, EBADF );
-
+  LIBIO_GET_IOP_WITH_ACCESS( fd, iop, flags, EBADF );
   *iopp = iop;
 
   return total;
