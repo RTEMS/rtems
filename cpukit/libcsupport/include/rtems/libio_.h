@@ -921,12 +921,19 @@ static inline bool rtems_filesystem_is_parent_directory(
   return tokenlen == 2 && token [0] == '.' && token [1] == '.';
 }
 
-static inline ssize_t rtems_libio_iovec_eval(
-  int fd,
+typedef ssize_t ( *rtems_libio_iovec_adapter )(
+  rtems_libio_t      *iop,
   const struct iovec *iov,
-  int iovcnt,
-  uint32_t flags,
-  rtems_libio_t **iopp
+  int                 iovcnt,
+  ssize_t             total
+);
+
+static inline ssize_t rtems_libio_iovec_eval(
+  int                        fd,
+  const struct iovec        *iov,
+  int                        iovcnt,
+  uint32_t                   flags,
+  rtems_libio_iovec_adapter  adapter
 )
 {
   ssize_t        total;
@@ -966,7 +973,10 @@ static inline ssize_t rtems_libio_iovec_eval(
   }
 
   LIBIO_GET_IOP_WITH_ACCESS( fd, iop, flags, EBADF );
-  *iopp = iop;
+
+  if ( total > 0 ) {
+    total = ( *adapter )( iop, iov, iovcnt, total );
+  }
 
   return total;
 }

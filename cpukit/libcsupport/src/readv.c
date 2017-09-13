@@ -22,6 +22,16 @@
 
 #include <rtems/libio_.h>
 
+static ssize_t readv_adapter(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
+)
+{
+  return ( *iop->pathinfo.handlers->readv_h )( iop, iov, iovcnt, total );
+}
+
 /**
  *  readv() - POSIX 1003.1 - Read a Vector
  *
@@ -35,14 +45,11 @@ ssize_t readv(
   int                 iovcnt
 )
 {
-  ssize_t        total;
-  rtems_libio_t *iop;
-
-  total = rtems_libio_iovec_eval( fd, iov, iovcnt, LIBIO_FLAGS_READ, &iop );
-
-  if ( total > 0 ) {
-    total = ( *iop->pathinfo.handlers->readv_h )( iop, iov, iovcnt, total );
-  }
-
-  return total;
+  return rtems_libio_iovec_eval(
+    fd,
+    iov,
+    iovcnt,
+    LIBIO_FLAGS_READ,
+    readv_adapter
+  );
 }

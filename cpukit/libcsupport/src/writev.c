@@ -21,20 +21,27 @@
 
 #include <rtems/libio_.h>
 
+static ssize_t writev_adapter(
+  rtems_libio_t      *iop,
+  const struct iovec *iov,
+  int                 iovcnt,
+  ssize_t             total
+)
+{
+  return ( *iop->pathinfo.handlers->writev_h )( iop, iov, iovcnt, total );
+}
+
 ssize_t writev(
   int                 fd,
   const struct iovec *iov,
   int                 iovcnt
 )
 {
-  ssize_t        total;
-  rtems_libio_t *iop;
-
-  total = rtems_libio_iovec_eval( fd, iov, iovcnt, LIBIO_FLAGS_WRITE, &iop );
-
-  if ( total > 0 ) {
-    total = ( *iop->pathinfo.handlers->writev_h )( iop, iov, iovcnt, total );
-  }
-
-  return total;
+  return rtems_libio_iovec_eval(
+    fd,
+    iov,
+    iovcnt,
+    LIBIO_FLAGS_WRITE,
+    writev_adapter
+  );
 }
