@@ -38,8 +38,11 @@
  *  File descriptor Table Information
  */
 
-rtems_id           rtems_libio_semaphore;
-rtems_libio_t     *rtems_libio_iop_freelist;
+rtems_id rtems_libio_semaphore;
+
+void *rtems_libio_iop_free_head;
+
+void **rtems_libio_iop_free_tail = &rtems_libio_iop_free_head;
 
 static void rtems_libio_init( void )
 {
@@ -50,10 +53,11 @@ static void rtems_libio_init( void )
 
     if (rtems_libio_number_iops > 0)
     {
-        iop = rtems_libio_iop_freelist = &rtems_libio_iops[0];
+        iop = rtems_libio_iop_free_head = &rtems_libio_iops[0];
         for (i = 0 ; (i + 1) < rtems_libio_number_iops ; i++, iop++)
           iop->data1 = iop + 1;
         iop->data1 = NULL;
+        rtems_libio_iop_free_tail = &iop->data1;
     }
 
   /*

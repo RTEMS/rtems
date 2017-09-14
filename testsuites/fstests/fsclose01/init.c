@@ -405,6 +405,27 @@ static void worker_task(rtems_task_argument arg)
   }
 }
 
+static void test_fd_free_fifo(const char *path)
+{
+  int a;
+  int b;
+  int rv;
+
+  a = open(path, O_RDWR);
+  rtems_test_assert(a >= 0);
+
+  rv = close(a);
+  rtems_test_assert(rv == 0);
+
+  b = open(path, O_RDWR);
+  rtems_test_assert(b >= 0);
+
+  rv = close(b);
+  rtems_test_assert(rv == 0);
+
+  rtems_test_assert(a != b);
+}
+
 static void test(test_context *ctx)
 {
   const char *path = "generic";
@@ -419,6 +440,8 @@ static void test(test_context *ctx)
     ctx
   );
   rtems_test_assert(rv == 0);
+
+  test_fd_free_fifo(path);
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
@@ -469,15 +492,15 @@ static void test(test_context *ctx)
   rv = unlink(path);
   rtems_test_assert(rv == 0);
 
-  rtems_test_assert(ctx->close_count == 15);
+  rtems_test_assert(ctx->close_count == 17);
   rtems_test_assert(ctx->fcntl_count == 1);
   rtems_test_assert(ctx->fdatasync_count == 1);
-  rtems_test_assert(ctx->fstat_count == 38);
+  rtems_test_assert(ctx->fstat_count == 42);
   rtems_test_assert(ctx->fsync_count == 1);
   rtems_test_assert(ctx->ftruncate_count == 1);
   rtems_test_assert(ctx->ioctl_count == 1);
   rtems_test_assert(ctx->lseek_count == 1);
-  rtems_test_assert(ctx->open_count == 15);
+  rtems_test_assert(ctx->open_count == 17);
   rtems_test_assert(ctx->read_count == 1);
   rtems_test_assert(ctx->readv_count == 1);
   rtems_test_assert(ctx->write_count == 1);
@@ -495,7 +518,7 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_TASKS 2
 

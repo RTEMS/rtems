@@ -66,7 +66,8 @@ extern rtems_id                          rtems_libio_semaphore;
 
 extern const uint32_t rtems_libio_number_iops;
 extern rtems_libio_t rtems_libio_iops[];
-extern rtems_libio_t *rtems_libio_iop_freelist;
+extern void *rtems_libio_iop_free_head;
+extern void **rtems_libio_iop_free_tail;
 
 extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
 

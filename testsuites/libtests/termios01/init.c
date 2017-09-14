@@ -623,16 +623,23 @@ static rtems_status_code test_early_device_install(
   rtems_status_code sc;
   int fd;
   int rv;
+  int i;
 
   rtems_resource_snapshot_take( &snapshot );
 
   sc = rtems_termios_device_install( &dev[0], &handler, NULL, NULL );
   rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
-  errno = 0;
-  fd = open( &dev[0], O_RDWR );
-  rtems_test_assert( fd == -1 );
-  rtems_test_assert( errno == ENXIO );
+  /*
+   * The loop ensures that file descriptor 0 is the first free file descriptor
+   * after this test case.
+   */
+  for (i = 0; i < 4; ++i) {
+    errno = 0;
+    fd = open( &dev[0], O_RDWR );
+    rtems_test_assert( fd == -1 );
+    rtems_test_assert( errno == ENXIO );
+  }
 
   rv = unlink( &dev[0] );
   rtems_test_assert( rv == 0 );

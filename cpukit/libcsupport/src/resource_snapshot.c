@@ -87,7 +87,7 @@ static int open_files(void)
 
   rtems_libio_lock();
 
-  iop = rtems_libio_iop_freelist;
+  iop = rtems_libio_iop_free_head;
   while (iop != NULL) {
     ++free_count;
 

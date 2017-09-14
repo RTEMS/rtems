@@ -108,14 +108,21 @@ int rtems_libio_to_fcntl_flags( unsigned int flags )
 
 rtems_libio_t *rtems_libio_allocate( void )
 {
-  rtems_libio_t *iop = NULL;
+  rtems_libio_t *iop;
 
   rtems_libio_lock();
 
-  if (rtems_libio_iop_freelist) {
-    iop = rtems_libio_iop_freelist;
-    rtems_libio_iop_freelist = iop->data1;
-    memset( iop, 0, sizeof(*iop) );
+  iop = rtems_libio_iop_free_head;
+
+  if ( iop != NULL ) {
+    void *next;
+
+    next = iop->data1;
+    rtems_libio_iop_free_head = next;
+
+    if ( next == NULL ) {
+      rtems_libio_iop_free_tail = &rtems_libio_iop_free_head;
+    }
   }
 
   rtems_libio_unlock();
@@ -131,9 +138,9 @@ void rtems_libio_free(
 
   rtems_libio_lock();
 
-    iop->flags = 0;
-    iop->data1 = rtems_libio_iop_freelist;
-    rtems_libio_iop_freelist = iop;
+  iop = memset( iop, 0, sizeof( *iop ) );
+  *rtems_libio_iop_free_tail = iop;
+  rtems_libio_iop_free_tail = &iop->data1;
 
   rtems_libio_unlock();
 }
