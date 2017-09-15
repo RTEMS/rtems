@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/condimpl.h>
+#include <rtems/posix/posixapi.h>
 
 /**
  *  11.4.2 Initializing and Destroying a Condition Variable,
@@ -38,11 +39,13 @@ int pthread_cond_init(
   /*
    *  Be careful about attributes when global!!!
    */
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    return EINVAL;
 
   if ( !the_attr->is_initialized )
     return EINVAL;
+
+  if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
+    return EINVAL;
+  }
 
   the_cond = _POSIX_Condition_variables_Allocate();
 

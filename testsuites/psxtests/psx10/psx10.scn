@@ -1,4 +1,4 @@
-*** POSIX TEST 10 ***
+*** BEGIN OF TEST PSX 10 ***
 Init: pthread_condattr_init
 Init: pthread_condattr_init - EINVAL (attribute invalid)
 Init: pthread_condattr_destroy
@@ -15,12 +15,18 @@ Init: pthread_cond_init - EINVAL (attr not initialized)
 Init: pthread_cond_init - ENOMEM (too many conds)
 Init: pthread_cond_destroy
 Init: pthread_cond_destroy - EINVAL (cond invalid)
+Init: pthread_cond_init - EINVAL (invalid pshared)
+Init: pthread_condattr_setpshared - PTHREAD_PROCESS_SHARED
+Init: pthread_cond_init - OK
+Init: pthread_cond_destroy - OK
 Init: pthread_cond_init - attr
+
 Init: sleep to switch to Task_1
 Task_1: ID is 0x0b010002
 Task_1: pthread_cond_wait
 Init: pthread_cond_destroy - EBUSY (task1 waiting)
 Init: pthread_cond_signal
+
 Init: sleep - switch to Task_1 and Task_2
 Task_1: back from pthread_cond_wait release mutex
 Task_1: pthread_cond_wait
@@ -34,6 +40,7 @@ Task_2: back from pthread_cond_wait release mutex
 Task_2: task exit
 Init: pthread_cond_timedwait for 3 seconds
 Init: pthread_cond_timedwait - ETIMEDOUT - (mutex not acquired)
+
 Init: pthread_cond_signal - EINVAL (cond invalid)
 Init: pthread_cond_broadcast - EINVAL (cond invalid)
 Init: pthread_cond_wait - EINVAL (cond invalid)
@@ -45,6 +52,7 @@ Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_sec < current time)
 Init: pthread_cond_timedwait - ETIMEDOUT (abstime->tv_nsec < current time)
 Init: pthread_cond_wait - EINVAL (mutex not locked before call)
 Init: pthread_cond_timedwait - EINVAL (mutex not locked before call)
+
 Init: sleep - switch to Task_3
 Task_3: ID is 0x0b010004
 Task_3: pthread_cond_wait
@@ -52,4 +60,4 @@ Init: pthread_cond_signal
 Init: sleep - switch to Task_3
 Task_3: pthread_cond_wait - EINVAL (mutex not locked after signal)
 Task_3: task exit
-*** END OF POSIX TEST 10 ***
+*** END OF TEST PSX 10 ***

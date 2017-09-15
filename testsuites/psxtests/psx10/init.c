@@ -115,6 +115,25 @@ void *POSIX_Init(
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_destroy - EINVAL (cond invalid)" );
 
+/* pshared tests */
+
+  puts( "Init: pthread_cond_init - EINVAL (invalid pshared)" );
+  attr.process_shared = -1;
+  status = pthread_cond_init( &cond, &attr );
+  rtems_test_assert( status == EINVAL );
+
+  puts( "Init: pthread_condattr_setpshared - PTHREAD_PROCESS_SHARED" );
+  status = pthread_condattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
+  rtems_test_assert( status == 0 );
+
+  puts( "Init: pthread_cond_init - OK" );
+  status = pthread_cond_init( &cond, &attr );
+  rtems_test_assert( status == 0 );
+
+  puts( "Init: pthread_cond_destroy - OK" );
+  status = pthread_cond_destroy( &cond );
+  rtems_test_assert( status == 0 );
+
 /* initiailize the attribute for the rest of the test */
 
   puts( "Init: pthread_cond_init - attr" );
