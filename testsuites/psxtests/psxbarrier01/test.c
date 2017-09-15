@@ -161,6 +161,23 @@ int main(
   status = pthread_barrier_init( &barrier, &attr, 0 );
   rtems_test_assert( status == EINVAL );
 
+  puts( "pthread_barrier_init( &barrier, &attr, 1 ) -- EINVAL" );
+  attr.process_shared = -1;
+  status = pthread_barrier_init( &barrier, &attr, 1 );
+  rtems_test_assert( status == EINVAL );
+
+  puts( "pthread_barrierattr_setpshared( &attr, shared ) -- OK" );
+  status = pthread_barrierattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
+  rtems_test_assert( status == 0 );
+
+  puts( "pthread_barrier_init( &barrier, &attr, 1 ) -- OK" );
+  status = pthread_barrier_init( &barrier, &attr, 1 );
+  rtems_test_assert( status == 0 );
+
+  puts( "pthread_barrier_destroy( &barrier ) -- OK" );
+  status = pthread_barrier_destroy( &barrier );
+  rtems_test_assert( status == 0 );
+
   /* allocating too many */
   puts( "pthread_barrier_init( &barrier, NULL, 1 ) -- OK" );
   status = pthread_barrier_init( &barrier, NULL, 1 );

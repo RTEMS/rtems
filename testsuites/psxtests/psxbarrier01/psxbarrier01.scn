@@ -1,4 +1,4 @@
-*** POSIX BARRIER TEST 01 ***
+*** BEGIN OF TEST PSXBARRIER 1 ***
 pthread_barrierattr_init( NULL ) -- EINVAL
 pthread_barrierattr_setpshared( NULL, private ) -- EINVAL
 pthread_barrierattr_setpshared( NULL, shared ) -- EINVAL
@@ -19,6 +19,10 @@ pthread_barrier_init( NULL, NULL, 2 ) -- EINVAL
 pthread_barrier_init( &barrier, &attr, 2 ) -- EINVAL
 pthread_barrierattr_init( &attr ) -- OK
 pthread_barrier_init( &barrier, &attr, 0 ) -- EINVAL
+pthread_barrier_init( &barrier, &attr, 1 ) -- EINVAL
+pthread_barrierattr_setpshared( &attr, shared ) -- OK
+pthread_barrier_init( &barrier, &attr, 1 ) -- OK
+pthread_barrier_destroy( &barrier ) -- OK
 pthread_barrier_init( &barrier, NULL, 1 ) -- OK
 pthread_barrier_init( &barrier, NULL, 1 ) -- EAGAIN
 pthread_barrier_destroy( &barrier ) -- OK
@@ -38,4 +42,4 @@ Init: pthread_create - thread 2 OK
 pthread_barrier_wait( &Barrier ) for thread 0x0b010002
 pthread_barrier_wait - 0x0b010002 released
 pthread_barrier_wait - 0x0b010001 released
-*** END OF POSIX BARRIER TEST 01 ***
+*** END OF TEST PSXBARRIER 1 ***

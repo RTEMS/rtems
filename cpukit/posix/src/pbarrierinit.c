@@ -25,6 +25,7 @@
 
 #include <rtems/system.h>
 #include <rtems/posix/barrierimpl.h>
+#include <rtems/posix/posixapi.h>
 
 /*
  *  pthread_barrier_init
@@ -78,12 +79,8 @@ int pthread_barrier_init(
   if ( !the_attr->is_initialized )
     return EINVAL;
 
-  switch ( the_attr->process_shared ) {
-    case PTHREAD_PROCESS_PRIVATE:    /* only supported values */
-      break;
-    case PTHREAD_PROCESS_SHARED:
-    default:
-      return EINVAL;
+  if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
+    return EINVAL;
   }
 
   /*
