@@ -37,7 +37,7 @@ Init: pthread_mutexattr_setprotocol - SUCCESSFUL
 Init: pthread_mutexattr_setprioceiling - SUCCESSFUL
 Init: pthread_mutex_init - EINVAL (bad priority ceiling)
 Init: Resetting mutex attributes
-Init: pthread_mutex_init - ENOSYS (process wide scope)
+Init: pthread_mutex_init - process shared scope
 Init: pthread_mutex_init - EINVAL (invalid scope)
 Init: pthread_mutex_init - EINVAL (invalid type)
 Init: Resetting mutex attributes

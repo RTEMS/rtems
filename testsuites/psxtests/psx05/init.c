@@ -429,10 +429,13 @@ void *POSIX_Init(
   status = pthread_mutexattr_init( &attr );
   rtems_test_assert( !status );
 
-  puts( "Init: pthread_mutex_init - ENOSYS (process wide scope)" );
-  attr.process_shared = PTHREAD_PROCESS_SHARED;
+  puts( "Init: pthread_mutex_init - process shared scope" );
+  status = pthread_mutexattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
+  rtems_test_assert( status == 0 );
   status = pthread_mutex_init( &Mutex_id, &attr );
-  rtems_test_assert( status == ENOSYS );
+  rtems_test_assert( status == 0 );
+  status = pthread_mutex_destroy( &Mutex_id );
+  rtems_test_assert( status == 0 );
 
   puts( "Init: pthread_mutex_init - EINVAL (invalid scope)" );
   attr.process_shared = -1;

@@ -19,6 +19,7 @@
 #endif
 
 #include <rtems/posix/muteximpl.h>
+#include <rtems/posix/posixapi.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
@@ -62,14 +63,9 @@ int pthread_mutex_init(
   if ( !the_attr->is_initialized )
     return EINVAL;
 
-  /*
-   *  We only support process private mutexes.
-   */
-  if ( the_attr->process_shared == PTHREAD_PROCESS_SHARED )
-    return ENOSYS;
-
-  if ( the_attr->process_shared != PTHREAD_PROCESS_PRIVATE )
+  if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
     return EINVAL;
+  }
 
   /*
    *  Determine the discipline of the mutex
