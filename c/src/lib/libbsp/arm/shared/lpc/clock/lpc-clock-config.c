@@ -125,11 +125,8 @@ static void lpc_clock_cleanup(void)
 
 #define Clock_driver_support_at_tick() lpc_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() lpc_clock_initialize()
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do {						       \
-    lpc_clock_handler_install();		       \
-    old_isr = NULL;				       \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  lpc_clock_handler_install()
 
 #define Clock_driver_support_shutdown_hardware() lpc_clock_cleanup()
 

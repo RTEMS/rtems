@@ -38,16 +38,8 @@
 #endif
 
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    rtems_interrupt_handler_install( \
-      CLOCK_VECTOR, \
-      "clock", \
-      0, \
-      _new, \
-      NULL \
-    ); \
- } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+  rtems_interrupt_handler_install( CLOCK_VECTOR, "clock", 0, _new, NULL )
 
 
 #define Clock_driver_support_at_tick() \

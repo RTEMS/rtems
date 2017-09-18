@@ -25,10 +25,9 @@ void Clock_isr(void * arg);
     *EP7312_TC1EOI = 0xffffffff;                      \
   } while(0)
 
-#define Clock_driver_support_install_isr( _new, _old ) \
+#define Clock_driver_support_install_isr( _new )       \
   do {                                                 \
     rtems_status_code status = RTEMS_SUCCESSFUL;       \
-    (_old) = NULL; /* avoid warning */;                \
     status = rtems_interrupt_handler_install(          \
         BSP_TC1OI,                                     \
         "Clock",                                       \

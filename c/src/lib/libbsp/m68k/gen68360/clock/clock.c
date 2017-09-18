@@ -51,10 +51,8 @@ static unsigned long nsec;
 /*
  * Attach clock interrupt handler
  */
-#define Clock_driver_support_install_isr( _new, _old ) \
-    do {                                                          \
-        _old = (rtems_isr_entry)set_vector(_new, CLOCK_VECTOR, 1);  \
-    } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+    set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
  * Turn off the clock

@@ -170,11 +170,8 @@ static void _ARMV7M_Systick_cleanup(void)
 #define Clock_driver_support_initialize_hardware() \
   _ARMV7M_Systick_initialize()
 
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do { \
-    _ARMV7M_Systick_handler_install(); \
-    old_isr = NULL; \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  _ARMV7M_Systick_handler_install()
 
 #define Clock_driver_support_shutdown_hardware() \
   _ARMV7M_Systick_cleanup()

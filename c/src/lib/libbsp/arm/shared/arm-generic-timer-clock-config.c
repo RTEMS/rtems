@@ -195,11 +195,8 @@ RTEMS_SYSINIT_ITEM(
 #define Clock_driver_support_initialize_hardware() \
   arm_gt_clock_initialize()
 
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do { \
-    arm_gt_clock_handler_install(); \
-    old_isr = NULL; \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  arm_gt_clock_handler_install()
 
 /* Include shared source clock driver code */
 #include "../../shared/clockdrv_shell.h"

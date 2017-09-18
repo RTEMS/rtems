@@ -182,7 +182,7 @@ static void tms570_clock_driver_support_shutdown_hardware( void )
 #define Clock_driver_support_shutdown_hardware \
                         tms570_clock_driver_support_shutdown_hardware
 
-#define Clock_driver_support_install_isr(Clock_isr, Old_ticker ) \
+#define Clock_driver_support_install_isr(Clock_isr) \
               tms570_clock_driver_support_install_isr( Clock_isr )
 
 void Clock_isr(void *arg); /* to supress warning */

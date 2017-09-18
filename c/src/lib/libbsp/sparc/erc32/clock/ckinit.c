@@ -33,10 +33,8 @@
  */
 #define CLOCK_VECTOR ERC32_TRAP_TYPE( ERC32_INTERRUPT_REAL_TIME_CLOCK )
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
-  } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+  set_vector( _new, CLOCK_VECTOR, 1 )
 
 #define Clock_driver_support_set_interrupt_affinity( _online_processors ) \
   do { \

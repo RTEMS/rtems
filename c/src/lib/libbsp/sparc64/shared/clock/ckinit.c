@@ -81,10 +81,8 @@ static void Clock_driver_support_at_tick_helper(void)
 #endif
 }
 
-#define Clock_driver_support_install_isr(_new, _old) \
-  do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
-  } while ( 0 )
+#define Clock_driver_support_install_isr(_new) \
+  set_vector( _new, CLOCK_VECTOR, 1 )
 
 static void Clock_driver_support_initialize_hardware(void)
 {

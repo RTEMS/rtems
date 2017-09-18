@@ -26,8 +26,9 @@
     lm32_interrupt_ack(1 << MM_IRQ_TIMER0); \
   } while (0)
 
-#define Clock_driver_support_install_isr(_new, _old ) \
+#define Clock_driver_support_install_isr(_new ) \
   do { \
+    rtems_isr_entry _old; \
     rtems_interrupt_catch(_new, MM_IRQ_TIMER0, &_old); \
   } while (0)
 

@@ -202,11 +202,8 @@ static void a9mpcore_clock_cleanup(void)
 #define Clock_driver_support_initialize_hardware() \
   a9mpcore_clock_initialize()
 
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do { \
-    a9mpcore_clock_handler_install(); \
-    old_isr = NULL; \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  a9mpcore_clock_handler_install()
 
 #define Clock_driver_support_shutdown_hardware() \
   a9mpcore_clock_cleanup()

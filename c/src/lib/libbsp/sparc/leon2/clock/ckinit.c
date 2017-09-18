@@ -68,10 +68,8 @@ static void leon2_tc_tick( void )
 
 #define CLOCK_VECTOR LEON_TRAP_TYPE( LEON_INTERRUPT_TIMER1 )
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    _old = set_vector( _new, CLOCK_VECTOR, 1 ); \
-  } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+  set_vector( _new, CLOCK_VECTOR, 1 )
 
 extern int CLOCK_SPEED;
 

@@ -28,11 +28,8 @@ static uint32_t mips_timer_rate = 0;
 #define Clock_driver_support_at_tick() \
   mips_set_timer( mips_timer_rate );
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    rtems_interrupt_handler_install(CLOCK_VECTOR, \
-      "PIT clock",0, _new, NULL); \
-   } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+  rtems_interrupt_handler_install(CLOCK_VECTOR, "PIT clock",0, _new, NULL)
 
 #define Clock_driver_support_initialize_hardware() \
   do { \

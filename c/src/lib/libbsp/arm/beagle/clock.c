@@ -314,11 +314,8 @@ static void beagle_clock_cleanup(void)
 
 #define Clock_driver_support_at_tick() beagle_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() beagle_clock_initialize()
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do {                   \
-    beagle_clock_handler_install(isr);          \
-    old_isr = NULL;              \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  beagle_clock_handler_install(isr)
 
 #define Clock_driver_support_shutdown_hardware() beagle_clock_cleanup()
 

@@ -36,8 +36,8 @@ void au1x00_clock_init(void);
   } while(0)
 
 /* Set for rising edge interrupt */
-#define Clock_driver_support_install_isr( _new, _old )  \
-  do {                                                  \
+#define Clock_driver_support_install_isr( _new ) \
+  do { \
     rtems_interrupt_handler_install( \
       CLOCK_VECTOR, \
       "clock", \

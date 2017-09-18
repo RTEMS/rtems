@@ -70,11 +70,6 @@ extern volatile uint32_t Clock_driver_ticks;
   _SMP_Send_message_broadcast(SMP_MESSAGE_CLOCK_TICK)
 #endif
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    _old = NULL; \
-  } while(0)
-
 static uint32_t pc386_get_timecount_tsc(struct timecounter *tc)
 {
   return (uint32_t)rdtsc();

@@ -11,9 +11,6 @@
 
 #define CLOCK_VECTOR 0
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { _old = 0; } while(0)
-
 volatile bool clock_driver_enabled;
 
 #define Clock_driver_support_initialize_hardware() \

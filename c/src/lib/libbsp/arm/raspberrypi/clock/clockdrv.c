@@ -106,11 +106,8 @@ static void raspberrypi_clock_cleanup(void)
 
 #define Clock_driver_support_shutdown_hardware() raspberrypi_clock_cleanup()
 
-#define Clock_driver_support_install_isr(clock_isr, old_isr) \
-  do {                                                 \
-    raspberrypi_clock_handler_install_isr(clock_isr);  \
-    old_isr = NULL;                                    \
-  } while (0)
+#define Clock_driver_support_install_isr(clock_isr) \
+  raspberrypi_clock_handler_install_isr(clock_isr)
 
 #define CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR 1
 

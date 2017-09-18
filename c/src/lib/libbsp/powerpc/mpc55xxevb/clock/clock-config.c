@@ -248,11 +248,8 @@ static void mpc55xx_clock_cleanup(void)
 #define Clock_driver_timecounter_tick() mpc55xx_tc_tick()
 #define Clock_driver_support_initialize_hardware() \
   mpc55xx_clock_initialize()
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do { \
-    mpc55xx_clock_handler_install(isr); \
-    old_isr = NULL; \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  mpc55xx_clock_handler_install(isr)
 #define Clock_driver_support_shutdown_hardware() \
   mpc55xx_clock_cleanup()
 

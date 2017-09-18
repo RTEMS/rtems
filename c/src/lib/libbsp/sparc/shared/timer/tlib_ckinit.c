@@ -411,7 +411,7 @@ static const struct ops ops_irqamp = {
     } \
   } while (0)
 
-#define Clock_driver_support_install_isr( isr, old ) \
+#define Clock_driver_support_install_isr( isr ) \
   do { \
     rtems_device_driver ret; \
     ret = tlib_clock_install_isr( isr ); \

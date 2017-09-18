@@ -40,6 +40,13 @@
 #endif
 
 /**
+ * @brief Do nothing by default.
+ */
+#ifndef Clock_driver_support_install_isr
+  #define Clock_driver_support_install_isr(isr)
+#endif
+
+/**
  * @brief This method is rarely used so default it.
  */
 #ifndef Clock_driver_support_find_timer
@@ -215,8 +222,6 @@ rtems_device_driver Clock_initialize(
   void *pargp
 )
 {
-  rtems_isr_entry  Old_ticker;
-
   Clock_driver_ticks = 0;
 
   /*
@@ -227,8 +232,7 @@ rtems_device_driver Clock_initialize(
   /*
    *  Install vector
    */
-  (void) Old_ticker;
-  Clock_driver_support_install_isr( Clock_isr, Old_ticker );
+  Clock_driver_support_install_isr( Clock_isr );
 
   #ifdef RTEMS_SMP
     Clock_driver_support_set_interrupt_affinity(

@@ -49,11 +49,9 @@ static volatile qoriq_pic_global_timer *const qoriq_timecounter =
 
 static struct timecounter qoriq_clock_tc;
 
-static void qoriq_clock_handler_install(rtems_isr_entry *old_isr)
+static void qoriq_clock_handler_install(void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  *old_isr = NULL;
 
 #if defined(RTEMS_MULTIPROCESSING) && !defined(RTEMS_SMP)
   {
@@ -128,8 +126,8 @@ static void qoriq_clock_cleanup(void)
 #define Clock_driver_support_initialize_hardware() \
   qoriq_clock_initialize()
 
-#define Clock_driver_support_install_isr(clock_isr, old_isr) \
-  qoriq_clock_handler_install(&old_isr)
+#define Clock_driver_support_install_isr(clock_isr) \
+  qoriq_clock_handler_install()
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   bsp_interrupt_set_affinity(CLOCK_INTERRUPT, online_processors)

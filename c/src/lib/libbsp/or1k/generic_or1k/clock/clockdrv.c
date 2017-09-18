@@ -56,16 +56,12 @@ static void generic_or1k_clock_at_tick(void)
   cpu_counter_ticks += TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
 }
 
-static void generic_or1k_clock_handler_install(
-  proc_ptr new_isr,
-   proc_ptr old_isr
-)
+static void generic_or1k_clock_handler_install(proc_ptr new_isr)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  old_isr = NULL;
   _CPU_ISR_install_vector(OR1K_EXCEPTION_TICK_TIMER,
                           new_isr,
-                          old_isr);
+                          NULL);
 
   if (sc != RTEMS_SUCCESSFUL) {
     rtems_fatal_error_occurred(0xdeadbeef);
@@ -143,11 +139,8 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #define Clock_driver_support_initialize_hardware() generic_or1k_clock_initialize()
 
-#define Clock_driver_support_install_isr(isr, old_isr) \
-  do {                                                 \
-    old_isr = NULL;                                    \
-    generic_or1k_clock_handler_install(isr, old_isr);       \
-  } while (0)
+#define Clock_driver_support_install_isr(isr) \
+  generic_or1k_clock_handler_install(isr)
 
 #define Clock_driver_support_shutdown_hardware() generic_or1k_clock_cleanup()
 

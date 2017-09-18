@@ -169,11 +169,8 @@ static void leon3_tc_do_tick(void)
     } \
   } while (0)
 
-#define Clock_driver_support_install_isr( _new, _old ) \
-  do { \
-    (_old) = NULL; \
-    bsp_clock_handler_install(_new); \
-  } while(0)
+#define Clock_driver_support_install_isr( _new ) \
+  bsp_clock_handler_install(_new)
 
 static void bsp_clock_handler_install(rtems_isr *new)
 {

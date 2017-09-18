@@ -57,7 +57,7 @@ void new_brk_esr(void)
 }
 
 
-#define Clock_driver_support_install_isr( _new, _old ) \
+#define Clock_driver_support_install_isr( _new ) \
   do { \
     rtems_interrupt_handler_install( \
       CLOCK_VECTOR, \
