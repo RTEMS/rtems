@@ -38,6 +38,8 @@
 #include <bsp/uart-bridge.h>
 #include <bsp/console-termios.h>
 
+static void output_char(char c);
+
 #ifdef QORIQ_IS_HYPERVISOR_GUEST
 typedef struct {
   rtems_termios_device_context base;
@@ -67,6 +69,7 @@ static bool qoriq_bc_probe(rtems_termios_device_context *base)
   ctx = (qoriq_bc_context *) base;
   ctx->handle = fdt32_to_cpu(*handle);
 
+  BSP_output_char = output_char;
   return true;
 }
 
@@ -301,15 +304,27 @@ const size_t console_device_count = RTEMS_ARRAY_SIZE(console_device_table);
 
 static void output_char(char c)
 {
-  rtems_termios_device_context *ctx = console_device_table[0].context;
+  rtems_termios_device_context *base = console_device_table[0].context;
 
 #ifdef QORIQ_IS_HYPERVISOR_GUEST
-  qoriq_bc_write_polled(ctx, &c, 1);
+  qoriq_bc_write_polled(base, &c, 1);
 #else
-  ns16550_polled_putchar(ctx, c);
+  ns16550_polled_putchar(base, c);
 #endif
 }
 
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+static void qoriq_bc_output_char_init(char c)
+{
+  rtems_termios_device_context *base = console_device_table[0].context;
+
+  qoriq_bc_probe(base);
+  output_char(c);
+}
+
+BSP_output_char_function_type BSP_output_char = qoriq_bc_output_char_init;
+#else
 BSP_output_char_function_type BSP_output_char = output_char;
+#endif
 
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
