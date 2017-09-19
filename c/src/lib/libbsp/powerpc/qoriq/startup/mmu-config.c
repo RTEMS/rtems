@@ -135,6 +135,7 @@ static entry DATA config[] = {
 	ENTRY_RW(bsp_section_stack_begin, bsp_section_stack_size),
 	ENTRY_IO(bsp_section_nocache_begin, bsp_section_nocache_size),
 	ENTRY_IO(bsp_section_nocachenoload_begin, bsp_section_nocachenoload_size),
+#ifndef QORIQ_IS_HYPERVISOR_GUEST
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
 	/* BMan Portals */
 	ENTRY_DEV_CACHED(&qoriq_bman_portal[0][0], sizeof(qoriq_bman_portal[0])),
@@ -144,6 +145,7 @@ static entry DATA config[] = {
 	ENTRY_DEV(&qoriq_qman_portal[1][0], sizeof(qoriq_qman_portal[1])),
 #endif
 	ENTRY_DEV(&qoriq, sizeof(qoriq))
+#endif
 };
 
 static DATA char memory_path[] = "/memory";

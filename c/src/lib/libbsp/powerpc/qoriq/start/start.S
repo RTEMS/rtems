@@ -200,13 +200,6 @@ _start:
 .Linitmore:
 	mflr	SAVED_LINK_REGISTER
 
-#ifdef QORIQ_IS_HYPERVISOR_GUEST
-	/* MSR initialization with guest state */
-	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
-	oris	r0, INITIAL_MSR, MSR_GS >> 16
-	mtmsr	r0
-	isync
-#else
 	/* Invalidate all TS1 MMU entries */
 	li	r3, 1
 	bl	qoriq_tlb1_invalidate_all_by_ts
@@ -226,9 +219,11 @@ _start:
 	/* MSR initialization and use TS1 for address translation */
 	LWI	INITIAL_MSR, QORIQ_INITIAL_MSR
 	ori	r0, INITIAL_MSR, MSR_IS | MSR_DS
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+	oris	r0, r0, MSR_GS >> 16
+#endif
 	mtmsr	r0
 	isync
-#endif
 
 	/*
 	 * Initialize start stack.  Make sure that we do not share a cache line
@@ -248,7 +243,6 @@ _start:
 	blr
 
 .Linitmmu:
-#ifndef QORIQ_IS_HYPERVISOR_GUEST
 	mflr	SAVED_LINK_REGISTER
 
 	/* Configure MMU */
@@ -263,7 +257,6 @@ _start:
 	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 
 	mtlr	SAVED_LINK_REGISTER
-#endif
 	blr
 
 #ifdef INITIALIZE_FPU
