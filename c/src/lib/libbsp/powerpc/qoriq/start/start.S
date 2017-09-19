@@ -386,9 +386,9 @@ bsp_exc_vector_base:
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* External input */
 	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 4
 	b	ppc_exc_interrupt
-	nop
-	nop
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Alignment */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)

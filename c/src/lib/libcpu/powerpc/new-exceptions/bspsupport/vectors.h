@@ -422,7 +422,7 @@ extern uint32_t ppc_exc_cache_wb_check;
   /**
    * @brief Interrupt dispatch routine provided by BSP.
    */
-  void bsp_interrupt_dispatch(void);
+  void bsp_interrupt_dispatch(uintptr_t exception_number);
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
 
 /**

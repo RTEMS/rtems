@@ -85,7 +85,7 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
 	ev_int_set_mask(vector, 1);
 }
 
-void bsp_interrupt_dispatch(void)
+void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
 	unsigned int vector;
 
@@ -263,7 +263,7 @@ void bsp_interrupt_vector_disable(rtems_vector_number vector)
 	pic_vector_enable(vector, VPR_MSK);
 }
 
-static void qoriq_interrupt_dispatch(void)
+void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
 	rtems_vector_number vector = qoriq.pic.iack;
 
@@ -280,20 +280,6 @@ static void qoriq_interrupt_dispatch(void)
 		bsp_interrupt_handler_default(vector);
 	}
 }
-
-#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
-static int qoriq_external_exception_handler(BSP_Exception_frame *frame, unsigned exception_number)
-{
-	qoriq_interrupt_dispatch();
-
-	return 0;
-}
-#else
-void bsp_interrupt_dispatch(void)
-{
-	qoriq_interrupt_dispatch();
-}
-#endif
 
 static bool pic_is_ipi(rtems_vector_number vector)
 {
@@ -325,12 +311,6 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 {
 	rtems_vector_number i = 0;
 	uint32_t processor_id = ppc_processor_id();
-
-#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
-	if (ppc_exc_set_handler(ASM_EXT_VECTOR, qoriq_external_exception_handler)) {
-		return RTEMS_IO_ERROR;
-	}
-#endif
 
 	if (processor_id == 0) {
 		/* Core 0 must do the basic initialization */
