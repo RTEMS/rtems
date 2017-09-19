@@ -489,10 +489,18 @@ bsp_exc_vector_base:
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #ifdef __PPC_CPU_E6500__
 	/* Processor doorbell interrupt */
+#if defined(QORIQ_IS_HYPERVISOR_GUEST) && defined(RTEMS_SMP)
+	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+#else
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+#endif
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 36
+#if defined(QORIQ_IS_HYPERVISOR_GUEST) && defined(RTEMS_SMP)
+	b	ppc_exc_interrupt
+#else
 	b	ppc_exc_fatal_normal
+#endif
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Processor doorbell critical interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)

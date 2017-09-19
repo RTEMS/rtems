@@ -35,6 +35,10 @@
 #include <bsp/utility.h>
 #include <bsp/qoriq.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/smpimpl.h>
+#endif
+
 RTEMS_INTERRUPT_LOCK_DEFINE(static, lock, "QorIQ IRQ")
 
 #define SPURIOUS 0xffff
@@ -93,6 +97,13 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 		qoriq_decrementer_dispatch();
 		return;
 	}
+
+#ifdef RTEMS_SMP
+	if (exception_number == 36) {
+		_SMP_Inter_processor_interrupt_handler();
+		return;
+	}
+#endif
 
 	ev_int_iack(0, &vector);
 
