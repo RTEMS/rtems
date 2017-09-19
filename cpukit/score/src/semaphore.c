@@ -18,6 +18,8 @@
 
 #include <sys/lock.h>
 
+#include <limits.h>
+
 #include <rtems/score/assert.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
