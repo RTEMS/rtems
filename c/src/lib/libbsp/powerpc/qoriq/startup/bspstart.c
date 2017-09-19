@@ -166,11 +166,13 @@ void qoriq_initialize_exceptions(void *interrupt_stack_begin)
 #ifdef __PPC_CPU_E6500__
   MTIVOR(BOOKE_IVOR36, addr);
   MTIVOR(BOOKE_IVOR37, addr);
+#ifndef QORIQ_IS_HYPERVISOR_GUEST
   MTIVOR(BOOKE_IVOR38, addr);
   MTIVOR(BOOKE_IVOR39, addr);
   MTIVOR(BOOKE_IVOR40, addr);
   MTIVOR(BOOKE_IVOR41, addr);
   MTIVOR(BOOKE_IVOR42, addr);
+#endif
 #endif
 }
 
