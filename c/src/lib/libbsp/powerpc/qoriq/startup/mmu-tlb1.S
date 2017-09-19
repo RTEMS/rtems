@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -53,7 +53,7 @@ qoriq_tlb1_write:
 	mtspr	FSL_EIS_MAS7, r7
 #endif
 	mtspr	FSL_EIS_MAS7, r7
-#ifdef QORIQ_HAS_HYPERVISOR_MODE
+#if defined(QORIQ_HAS_HYPERVISOR_MODE) && !defined(QORIQ_IS_HYPERVISOR_GUEST)
 	li	r0, 0
 	mtspr	FSL_EIS_MAS8, r0
 #endif
@@ -72,7 +72,7 @@ qoriq_tlb1_invalidate:
 	mtspr	FSL_EIS_MAS2, r0
 	mtspr	FSL_EIS_MAS3, r0
 	mtspr	FSL_EIS_MAS7, r0
-#ifdef QORIQ_HAS_HYPERVISOR_MODE
+#if defined(QORIQ_HAS_HYPERVISOR_MODE) && !defined(QORIQ_IS_HYPERVISOR_GUEST)
 	mtspr	FSL_EIS_MAS8, r0
 #endif
 	isync
