@@ -46,7 +46,7 @@ int rtems_gxx_once(__gthread_once_t *once, void (*func) (void))
     printk( "gxx_wrappers: once=%x, func=%x\n", *once, func );
   #endif
 
-  return _Once( once, func );
+  return _Once( (unsigned char *) once, func );
 }
 
 int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))

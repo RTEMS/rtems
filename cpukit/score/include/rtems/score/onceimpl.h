@@ -37,7 +37,7 @@ extern "C" {
  * @{
  */
 
-int _Once( int *once_state, void (*init_routine)(void) );
+int _Once( unsigned char *once_state, void (*init_routine)(void) );
 
 /** @} */
 

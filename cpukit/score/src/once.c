@@ -20,7 +20,7 @@
 #define ONCE_STATE_RUNNING  1
 #define ONCE_STATE_COMPLETE 2
 
-int _Once( int *once_state, void ( *init_routine )( void ) )
+int _Once( unsigned char *once_state, void ( *init_routine )( void ) )
 {
   int eno = 0;
 
