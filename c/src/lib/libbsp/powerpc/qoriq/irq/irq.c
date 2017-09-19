@@ -89,6 +89,11 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 {
 	unsigned int vector;
 
+	if (exception_number == 10) {
+		qoriq_decrementer_dispatch();
+		return;
+	}
+
 	ev_int_iack(0, &vector);
 
 	if (vector != SPURIOUS) {

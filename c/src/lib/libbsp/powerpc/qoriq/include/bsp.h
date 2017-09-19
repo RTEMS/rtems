@@ -113,6 +113,12 @@ void qoriq_restart_secondary_processor(
 
 void qoriq_initialize_exceptions(void *interrupt_stack_begin);
 
+void qoriq_decrementer_dispatch(void);
+
+extern uint32_t bsp_time_base_frequency;
+
+extern uint32_t qoriq_clock_frequency;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

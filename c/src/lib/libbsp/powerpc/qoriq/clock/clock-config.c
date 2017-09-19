@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -31,6 +31,45 @@
 /* This is defined in clockdrv_shell.h */
 static rtems_isr Clock_isr(void *arg);
 
+static struct timecounter qoriq_clock_tc;
+
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+
+#define CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR
+
+void qoriq_decrementer_dispatch(void)
+{
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_TSR, BOOKE_TSR_DIS);
+  Clock_isr(NULL);
+}
+
+static uint32_t qoriq_clock_get_timecount(struct timecounter *tc)
+{
+  return ppc_alternate_time_base();
+}
+
+static void qoriq_clock_initialize(void)
+{
+  uint64_t frequency = bsp_time_base_frequency;
+  uint32_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
+  uint32_t interval = (uint32_t) ((frequency * us_per_tick) / 1000000);
+
+  PPC_SET_SPECIAL_PURPOSE_REGISTER(BOOKE_DECAR, interval - 1);
+  PPC_SET_SPECIAL_PURPOSE_REGISTER_BITS(
+    BOOKE_TCR,
+    BOOKE_TCR_DIE | BOOKE_TCR_ARE
+  );
+  ppc_set_decrementer_register(interval - 1);
+
+  qoriq_clock_tc.tc_get_timecount = qoriq_clock_get_timecount;
+  qoriq_clock_tc.tc_counter_mask = 0xffffffff;
+  qoriq_clock_tc.tc_frequency = qoriq_clock_frequency;
+  qoriq_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&qoriq_clock_tc);
+}
+
+#else /* !QORIQ_IS_HYPERVISOR_GUEST */
+
 static volatile qoriq_pic_global_timer *const qoriq_clock =
   #if QORIQ_CLOCK_TIMER < 4
     &qoriq.pic.gta [QORIQ_CLOCK_TIMER];
@@ -46,8 +85,6 @@ static volatile qoriq_pic_global_timer *const qoriq_timecounter =
   #endif
 
 #define CLOCK_INTERRUPT (QORIQ_IRQ_GT_BASE + QORIQ_CLOCK_TIMER)
-
-static struct timecounter qoriq_clock_tc;
 
 static void qoriq_clock_handler_install(void)
 {
@@ -123,9 +160,6 @@ static void qoriq_clock_cleanup(void)
   }
 }
 
-#define Clock_driver_support_initialize_hardware() \
-  qoriq_clock_initialize()
-
 #define Clock_driver_support_install_isr(clock_isr) \
   qoriq_clock_handler_install()
 
@@ -134,6 +168,11 @@ static void qoriq_clock_cleanup(void)
 
 #define Clock_driver_support_shutdown_hardware() \
   qoriq_clock_cleanup()
+
+#endif /* QORIQ_IS_HYPERVISOR_GUEST */
+
+#define Clock_driver_support_initialize_hardware() \
+  qoriq_clock_initialize()
 
 /* Include shared source clock driver code */
 #include "../../../shared/clockdrv_shell.h"

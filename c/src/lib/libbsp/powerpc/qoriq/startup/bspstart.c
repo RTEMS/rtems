@@ -48,7 +48,9 @@ qoriq_start_spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
 unsigned int BSP_bus_frequency;
 
 /* Configuration parameter for clock driver, ... */
-uint32_t bsp_clicks_per_usec;
+uint32_t bsp_time_base_frequency;
+
+uint32_t qoriq_clock_frequency;
 
 void BSP_panic(char *s)
 {
@@ -97,13 +99,14 @@ static void initialize_frequency_parameters(void)
   if (val_fdt == NULL || len != 4) {
     bsp_fatal(QORIQ_FATAL_FDT_NO_BUS_FREQUENCY);
   }
-  bsp_clicks_per_usec = fdt32_to_cpu(*val_fdt) / 1000000;
+  bsp_time_base_frequency = fdt32_to_cpu(*val_fdt);
 
   #ifdef __PPC_CPU_E6500__
     val_fdt = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);
     if (val_fdt == NULL || len != 4) {
       bsp_fatal(QORIQ_FATAL_FDT_NO_CLOCK_FREQUENCY);
     }
+    qoriq_clock_frequency = fdt32_to_cpu(*val_fdt);
   #endif
   rtems_counter_initialize_converter(fdt32_to_cpu(*val_fdt));
 }

@@ -425,10 +425,18 @@ bsp_exc_vector_base:
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
 	/* Decrementer */
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+#else
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+#endif
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 10
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+	b	ppc_exc_interrupt
+#else
 	b	ppc_exc_fatal_normal
+#endif
 	START_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 	/* Fixed-interval timer interrupt */
 	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
