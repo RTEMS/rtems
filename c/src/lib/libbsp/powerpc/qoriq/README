@@ -16,3 +16,14 @@ dynamic FDT adjustment by U-Boot.  Boot it for example via the
   bootm 1000000 - c00000
 
 U-Boot commands.
+
+For a Topaz hypervisor guest configuration use:
+
+  rtems/configure --enable-rtemsbsp=qoriq_e6500_32 \
+    QORIQ_IS_HYPERVISOR_GUEST=1 \
+    QORIQ_UART_0_ENABLE=0 \
+    QORIQ_UART_1_ENABLE=0 \
+    QORIQ_TLB1_ENTRY_COUNT=16
+
+You may have to adjust the linker command file according to your partition
+configuration.
