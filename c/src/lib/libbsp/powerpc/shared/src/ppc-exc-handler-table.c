@@ -19,7 +19,7 @@
 #ifndef PPC_EXC_CONFIG_BOOKE_ONLY
 static int ppc_exc_interrupt_dispatch(BSP_Exception_frame *f, unsigned vector)
 {
-  bsp_interrupt_dispatch();
+  bsp_interrupt_dispatch(vector);
 
   return 0;
 }

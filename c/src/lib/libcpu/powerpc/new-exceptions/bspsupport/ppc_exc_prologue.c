@@ -132,17 +132,15 @@ rtems_status_code ppc_exc_make_prologue(
   ) {
     prologue_template = ppc_exc_min_prolog_auto;
     prologue_template_size = (size_t) ppc_exc_min_prolog_size;
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
   } else if (
     category == PPC_EXC_CLASSIC_ASYNC
       && ppc_cpu_is_bookE() == PPC_BOOKE_E500
       && (ppc_interrupt_get_disable_mask() & MSR_CE) == 0
   ) {
     prologue_template = ppc_exc_min_prolog_async_tmpl_normal;
-#ifndef PPC_EXC_CONFIG_USE_FIXED_HANDLER
-    prologue_template_size = (size_t) ppc_exc_min_prolog_size;
+    prologue_template_size = 16;
     fixup_vector = true;
-#else /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
-    prologue_template_size = 8;
 #endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
   } else {
     prologue_template = ppc_exc_prologue_templates [category];

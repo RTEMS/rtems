@@ -16,6 +16,8 @@
 #include <rtems/score/percpu.h>
 #include <bsp/vectors.h>
 
+#ifdef PPC_EXC_CONFIG_USE_FIXED_HANDLER
+
 #define SCRATCH_0_REGISTER r0
 #define SCRATCH_1_REGISTER r3
 #define SCRATCH_2_REGISTER r4
@@ -458,3 +460,5 @@ ppc_exc_interrupt:
 
 /* Symbol provided for debugging and tracing */
 ppc_exc_interrupt_end:
+
+#endif /* PPC_EXC_CONFIG_USE_FIXED_HANDLER */
