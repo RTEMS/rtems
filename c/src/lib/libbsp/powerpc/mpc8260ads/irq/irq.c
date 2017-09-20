@@ -330,7 +330,7 @@ BSP_CPM_irq_init(void)
 
 void bsp_interrupt_vector_enable( rtems_vector_number irqnum)
 {
-  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(vector));
+  bsp_interrupt_assert(bsp_interrupt_is_valid_vector(irqnum));
 
   if (is_cpm_irq(irqnum)) {
     /*
