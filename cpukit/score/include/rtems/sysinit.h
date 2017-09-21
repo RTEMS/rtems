@@ -52,7 +52,6 @@ extern "C" {
 #define RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE        000364
 #define RTEMS_SYSINIT_POSIX_SEMAPHORE            000365
 #define RTEMS_SYSINIT_POSIX_TIMER                000366
-#define RTEMS_SYSINIT_POSIX_BARRIER              000367
 #define RTEMS_SYSINIT_POSIX_RWLOCK               000368
 #define RTEMS_SYSINIT_POSIX_SHM                  000369
 #define RTEMS_SYSINIT_POSIX_KEYS                 00036a

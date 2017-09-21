@@ -16,6 +16,7 @@ include_rtems_posixdir = $(includedir)/rtems/posix
 include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
 ## Some POSIX threads features are needed all the time
+include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
@@ -49,8 +50,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/shmimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
 include_rtems_posix_HEADERS += include/rtems/posix/timer.h
 include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/barrier.h
-include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 
@@ -68,14 +67,14 @@ libposix_a_SOURCES += src/wait.c src/waitpid.c
 libposix_a_SOURCES += src/pthreadgetnamenp.c
 libposix_a_SOURCES += src/pthreadsetnamenp.c
 
-if HAS_PTHREADS
-libposix_a_SOURCES +=  src/pthreadatfork.c
-
 ## BARRIER_C_FILES
 libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
-    src/barrierattrinit.c src/barrierattrsetpshared.c src/pbarrier.c \
+    src/barrierattrinit.c src/barrierattrsetpshared.c \
     src/pbarrierdestroy.c src/pbarrierinit.c \
     src/pbarrierwait.c
+
+if HAS_PTHREADS
+libposix_a_SOURCES +=  src/pthreadatfork.c
 
 ## CANCEL_C_FILES
 libposix_a_SOURCES += src/cancel.c \

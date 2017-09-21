@@ -100,12 +100,6 @@ typedef struct {
 
   /**
    * This field contains the maximum number of POSIX API
-   * barriers which are configured for this application.
-   */
-  uint32_t                            maximum_barriers;
-
-  /**
-   * This field contains the maximum number of POSIX API
    * read/write locks which are configured for this application.
    */
   uint32_t                            maximum_rwlocks;

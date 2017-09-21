@@ -2081,10 +2081,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_BARRIERS)
-      #define CONFIGURE_MAXIMUM_POSIX_BARRIERS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_RWLOCKS)
       #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
@@ -2448,7 +2444,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #include <signal.h>
   #include <limits.h>
   #include <mqueue.h>
-  #include <rtems/posix/barrier.h>
   #include <rtems/posix/cond.h>
   #include <rtems/posix/mqueue.h>
   #include <rtems/posix/mutex.h>
@@ -2570,21 +2565,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
     _Configure_POSIX_Named_Object_RAM( \
        _semaphores, sizeof(POSIX_Semaphore_Control) )
-
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API barriers.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-    #define CONFIGURE_MAXIMUM_POSIX_BARRIERS 0
-  #endif
-
-  /*
-   * This macro is calculated to specify the memory required for
-   * POSIX API barriers.
-   */
-  #define _CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(_barriers) \
-    _Configure_Object_RAM(_barriers, sizeof(POSIX_Barrier_Control) )
 
   /**
    * This configuration parameter specifies the maximum number of
@@ -2842,7 +2822,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
       _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
         CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
-      _CONFIGURE_MEMORY_FOR_POSIX_BARRIERS(CONFIGURE_MAXIMUM_POSIX_BARRIERS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
         CONFIGURE_MAXIMUM_POSIX_RWLOCKS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
@@ -3296,7 +3275,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
       CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
-      CONFIGURE_MAXIMUM_POSIX_BARRIERS,
       CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
       CONFIGURE_MAXIMUM_POSIX_SHMS,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
@@ -3512,7 +3490,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     uint32_t POSIX_QUEUED_SIGNALS;
     uint32_t POSIX_MESSAGE_QUEUES;
     uint32_t POSIX_SEMAPHORES;
-    uint32_t POSIX_BARRIERS;
     uint32_t POSIX_RWLOCKS;
     uint32_t POSIX_SHMS;
 #endif
@@ -3566,7 +3543,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ),
     _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ),
-    _CONFIGURE_MEMORY_FOR_POSIX_BARRIERS( CONFIGURE_MAXIMUM_POSIX_BARRIERS ),
     _CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( CONFIGURE_MAXIMUM_POSIX_RWLOCKS ),
     _CONFIGURE_MEMORY_FOR_POSIX_SHMS( CONFIGURE_MAXIMUM_POSIX_SHMS ),
     _CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
@@ -3638,7 +3614,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_BARRIERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_RWLOCKS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SHMS != 0) || \
       defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))

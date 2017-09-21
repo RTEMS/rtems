@@ -11,6 +11,8 @@
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2017 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -20,91 +22,74 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/posixapi.h>
 
-/*
- *  pthread_barrier_init
- *
- *  This directive creates a barrier.  A barrier id is returned.
- *
- *  Input parameters:
- *    barrier          - pointer to barrier id
- *    attr             - barrier attributes
- *    count            - number of threads before automatic release
- *
- *  Output parameters:
- *    barrier     - barrier id
- *    0           - if successful
- *    error code  - if unsuccessful
- */
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Barrier_Control, flags )
+    == offsetof( pthread_barrier_t, _flags ),
+  POSIX_BARRIER_CONTROL_FLAGS
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Barrier_Control, count )
+    == offsetof( pthread_barrier_t, _count ),
+  POSIX_BARRIER_CONTROL_COUNT
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Barrier_Control, waiting_threads )
+    == offsetof( pthread_barrier_t, _waiting_threads ),
+  POSIX_BARRIER_CONTROL_WAITING_THREADS
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Barrier_Control, Queue )
+    == offsetof( pthread_barrier_t, _Queue ),
+  POSIX_BARRIER_CONTROL_QUEUE
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( POSIX_Barrier_Control ) == sizeof( pthread_barrier_t ),
+  POSIX_BARRIER_CONTROL_SIZE
+);
 
 int pthread_barrier_init(
-  pthread_barrier_t           *barrier,
+  pthread_barrier_t           *_barrier,
   const pthread_barrierattr_t *attr,
   unsigned int                 count
 )
 {
-  POSIX_Barrier_Control         *the_barrier;
-  CORE_barrier_Attributes        the_attributes;
-  pthread_barrierattr_t          my_attr;
-  const pthread_barrierattr_t   *the_attr;
+  POSIX_Barrier_Control *barrier;
+
+  barrier = _POSIX_Barrier_Get( _barrier );
 
   /*
    *  Error check parameters
    */
-  if ( !barrier )
-    return EINVAL;
-
-  if ( count == 0 )
-    return EINVAL;
-
-  /*
-   * If the user passed in NULL, use the default attributes
-   */
-  if ( attr ) {
-    the_attr = attr;
-  } else {
-    (void) pthread_barrierattr_init( &my_attr );
-    the_attr = &my_attr;
-  }
-
-  /*
-   * Now start error checking the attributes that we are going to use
-   */
-  if ( !the_attr->is_initialized )
-    return EINVAL;
-
-  if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
+  if ( barrier == NULL ) {
     return EINVAL;
   }
 
-  /*
-   * Convert from POSIX attributes to Core Barrier attributes
-   */
-  the_attributes.discipline    = CORE_BARRIER_AUTOMATIC_RELEASE;
-  the_attributes.maximum_count = count;
-
-  the_barrier = _POSIX_Barrier_Allocate();
-
-  if ( !the_barrier ) {
-    _Objects_Allocator_unlock();
-    return EAGAIN;
+  if ( count == 0 ) {
+    return EINVAL;
   }
 
-  _CORE_barrier_Initialize( &the_barrier->Barrier, &the_attributes );
+  if ( attr != NULL ) {
+    /*
+     * Now start error checking the attributes that we are going to use
+     */
+    if ( !attr->is_initialized )
+      return EINVAL;
 
-  _Objects_Open_u32(
-    &_POSIX_Barrier_Information,
-    &the_barrier->Object,
-    0
-  );
+    if ( !_POSIX_Is_valid_pshared( attr->process_shared ) ) {
+      return EINVAL;
+    }
+  }
 
-  *barrier = the_barrier->Object.id;
-  _Objects_Allocator_unlock();
+  barrier->flags = (uintptr_t) barrier ^ POSIX_BARRIER_MAGIC;
+  barrier->count = count;
+  barrier->waiting_threads = 0;
+  _Thread_queue_Queue_initialize( &barrier->Queue.Queue, NULL );
   return 0;
 }

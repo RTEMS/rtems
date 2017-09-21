@@ -4,6 +4,8 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
+ *  Copyright (c) 2017 embedded brains GmbH
+ *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
@@ -16,6 +18,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* #define __USE_XOPEN2K XXX already defined on GNU/Linux */
 #include <pthread.h>
@@ -23,6 +26,55 @@
 #include "tmacros.h"
 
 const char rtems_test_name[] = "PSXBARRIER 1";
+
+static void test_barrier_null( void )
+{
+  int eno;
+
+  eno = pthread_barrier_init( NULL, NULL, 1 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_barrier_wait( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_barrier_destroy( NULL );
+  rtems_test_assert( eno == EINVAL );
+}
+
+static void test_barrier_not_initialized( void )
+{
+  pthread_barrier_t bar;
+  int eno;
+
+  memset( &bar, 0xff, sizeof( bar ) );
+
+  eno = pthread_barrier_wait(& bar) ;
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_barrier_destroy( &bar );
+  rtems_test_assert( eno == EINVAL );
+}
+
+static void test_barrier_invalid_copy( void )
+{
+  pthread_barrier_t bar;
+  pthread_barrier_t bar2;
+  int eno;
+
+  eno = pthread_barrier_init( &bar, NULL, 1 );
+  rtems_test_assert( eno == 0 );
+
+  memcpy( &bar2, &bar, sizeof( bar2 ) );
+
+  eno = pthread_barrier_wait( &bar2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_barrier_destroy( &bar2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_barrier_destroy( &bar );
+  rtems_test_assert( eno == 0 );
+}
 
 #define NUMBER_THREADS 2
 pthread_t ThreadIds[NUMBER_THREADS];
@@ -57,7 +109,7 @@ int main(
 )
 #endif
 {
-  pthread_barrier_t     bad_barrier = 100;
+  pthread_barrier_t    *bad_barrier = NULL;
   pthread_barrier_t     barrier;
   pthread_barrierattr_t attr;
   int                   status;
@@ -178,20 +230,6 @@ int main(
   status = pthread_barrier_destroy( &barrier );
   rtems_test_assert( status == 0 );
 
-  /* allocating too many */
-  puts( "pthread_barrier_init( &barrier, NULL, 1 ) -- OK" );
-  status = pthread_barrier_init( &barrier, NULL, 1 );
-  rtems_test_assert( status == 0 );
-
-  puts( "pthread_barrier_init( &barrier, NULL, 1 ) -- EAGAIN" );
-  status = pthread_barrier_init( &barrier, NULL, 1 );
-  rtems_test_assert( status == EAGAIN );
-
-  /* clean up */
-  puts( "pthread_barrier_destroy( &barrier ) -- OK" );
-  status = pthread_barrier_destroy( &barrier );
-  rtems_test_assert( status == 0 );
-
   puts( "pthread_barrierattr_destroy( &attr ) -- OK" );
   status = pthread_barrierattr_destroy( &attr );
   rtems_test_assert( status == 0 );
@@ -202,8 +240,8 @@ int main(
   status = pthread_barrier_destroy( NULL );
   rtems_test_assert( status == EINVAL );
 
-  puts( "pthread_barrier_destroy( &bad_barrier ) -- EINVAL" );
-  status = pthread_barrier_destroy( &bad_barrier );
+  puts( "pthread_barrier_destroy( bad_barrier ) -- EINVAL" );
+  status = pthread_barrier_destroy( bad_barrier );
   rtems_test_assert( status == EINVAL );
 
   /*************** pthread_barrier_wait ERROR CHECKs *********/
@@ -212,8 +250,8 @@ int main(
   status = pthread_barrier_wait( NULL );
   rtems_test_assert( status == EINVAL );
 
-  puts( "pthread_barrier_wait( &bad_barrier ) -- EINVAL" );
-  status = pthread_barrier_wait( &bad_barrier );
+  puts( "pthread_barrier_wait( bad_barrier ) -- EINVAL" );
+  status = pthread_barrier_wait( bad_barrier );
   rtems_test_assert( status == EINVAL );
 
   /*************** ACTUALLY CREATE ONE CHECK *****************/
@@ -224,7 +262,6 @@ int main(
   puts( "pthread_barrier_init( &barrier, &attr, 2 ) -- OK" );
   status = pthread_barrier_init( &barrier, &attr, 2 );
   rtems_test_assert( status == 0 );
-  rtems_test_assert( barrier != 0 );
 
   puts( "pthread_barrier_destroy( &barrier ) -- OK" );
   status = pthread_barrier_destroy( &barrier );
@@ -234,7 +271,6 @@ int main(
   puts( "pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS ) -- OK" );
   status = pthread_barrier_init( &Barrier, &attr, NUMBER_THREADS );
   rtems_test_assert( status == 0 );
-  rtems_test_assert( barrier != 0 );
 
   for (i=0 ; i<NUMBER_THREADS ; i++ ) {
 
@@ -252,6 +288,10 @@ int main(
 
     sleep(1);
   }
+
+  test_barrier_null();
+  test_barrier_not_initialized();
+  test_barrier_invalid_copy();
 
   /*************** END OF TEST *****************/
   TEST_END();
