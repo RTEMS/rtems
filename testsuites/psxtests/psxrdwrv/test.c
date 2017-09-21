@@ -194,6 +194,9 @@ int doErrorTest(void)
   fd = fileno(fp);
   fclose(fp);
 
+  /* clear out the vector to ensure it is valid */
+  memset(vec, 0, sizeof(vec));
+
   /* writev -- bad file descriptor */
   puts("writev bad file descriptor -- EBADF");
   rc = writev(fd, vec, 4);
