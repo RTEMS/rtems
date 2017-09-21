@@ -111,10 +111,10 @@ bsp_exc_vector_base:
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 4
 	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
-	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
+	stwu	r1, -EXC_GENERIC_SIZE(r1)
+	stw	r4, GPR4_OFFSET(r1)
 	li	r4, -32763
-	b	ppc_exc_interrupt
+	b	ppc_exc_wrap_nopush_std
 	stwu	r1, -EXC_GENERIC_SIZE(r1)
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 6
@@ -135,14 +135,14 @@ bsp_exc_vector_base:
 	stw	r4, GPR4_OFFSET(r1)
 	li	r4, 24
 	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
-	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
+	stwu	r1, -EXC_GENERIC_SIZE(r1)
+	stw	r4, GPR4_OFFSET(r1)
 	li	r4, -32752
-	b	ppc_exc_interrupt
-	stwu	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
-	stw	r4, PPC_EXC_VECTOR_PROLOGUE_OFFSET(r1)
+	b	ppc_exc_wrap_nopush_std
+	stwu	r1, -EXC_GENERIC_SIZE(r1)
+	stw	r4, GPR4_OFFSET(r1)
 	li	r4, -32749
-	b	ppc_exc_interrupt
+	b	ppc_exc_wrap_nopush_std
 	stw	r1, ppc_exc_lock_crit@sdarel(r13)
 	stw	r4, ppc_exc_vector_register_crit@sdarel(r13)
 	li	r4, -32748
