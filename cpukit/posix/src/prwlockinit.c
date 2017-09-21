@@ -23,35 +23,34 @@
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/posixapi.h>
 
-POSIX_RWLock_Control *_POSIX_RWLock_Get(
-  pthread_rwlock_t     *rwlock,
-  Thread_queue_Context *queue_context
-)
-{
-  _POSIX_Get_object_body(
-    POSIX_RWLock_Control,
-    rwlock,
-    queue_context,
-    &_POSIX_RWLock_Information,
-    PTHREAD_RWLOCK_INITIALIZER,
-    pthread_rwlock_init
-  );
-}
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_RWLock_Control, flags )
+    == offsetof( pthread_rwlock_t, _flags ),
+  POSIX_RWLOCK_CONTROL_FLAGS
+);
 
-/*
- *  pthread_rwlock_init
- *
- *  This directive creates a rwlock.  A rwlock id is returned.
- *
- *  Input parameters:
- *    rwlock          - pointer to rwlock id
- *    attr            - rwlock attributes
- *
- *  Output parameters:
- *    rwlock     - rwlock id
- *    0          - if successful
- *    error code - if unsuccessful
- */
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_RWLock_Control, RWLock.current_state )
+    == offsetof( pthread_rwlock_t, _current_state ),
+  POSIX_RWLOCK_CONTROL_CURRENT_STATE
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_RWLock_Control, RWLock.number_of_readers )
+    == offsetof( pthread_rwlock_t, _number_of_readers ),
+  POSIX_RWLOCK_CONTROL_NUMBER_OF_READERS
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_RWLock_Control, RWLock.Queue )
+    == offsetof( pthread_rwlock_t, _Queue ),
+  POSIX_RWLOCK_CONTROL_QUEUE
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( POSIX_RWLock_Control ) == sizeof( pthread_rwlock_t ),
+  POSIX_RWLOCK_CONTROL_SIZE
+);
 
 int pthread_rwlock_init(
   pthread_rwlock_t           *rwlock,
@@ -60,11 +59,11 @@ int pthread_rwlock_init(
 {
   POSIX_RWLock_Control *the_rwlock;
 
-  /*
-   *  Error check parameters
-   */
-  if ( !rwlock )
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+
+  if ( the_rwlock == NULL ) {
     return EINVAL;
+  }
 
   if ( attr != NULL ) {
     if ( !attr->is_initialized ) {
@@ -76,23 +75,7 @@ int pthread_rwlock_init(
     }
   }
 
-  the_rwlock = _POSIX_RWLock_Allocate();
-
-  if ( !the_rwlock ) {
-    _Objects_Allocator_unlock();
-    return EAGAIN;
-  }
-
+  the_rwlock->flags = (uintptr_t) the_rwlock ^ POSIX_RWLOCK_MAGIC;
   _CORE_RWLock_Initialize( &the_rwlock->RWLock );
-
-  _Objects_Open_u32(
-    &_POSIX_RWLock_Information,
-    &the_rwlock->Object,
-    0
-  );
-
-  *rwlock = the_rwlock->Object.id;
-
-  _Objects_Allocator_unlock();
   return 0;
 }

@@ -47,7 +47,6 @@
   #include <rtems/posix/muteximpl.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthreadimpl.h>
-  #include <rtems/posix/rwlockimpl.h>
   #include <rtems/posix/semaphoreimpl.h>
   #include <rtems/posix/timerimpl.h>
 #endif
@@ -72,7 +71,6 @@ static const struct {
     { OBJECTS_POSIX_API, OBJECTS_POSIX_CONDITION_VARIABLES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_MUTEXES },
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_RWLOCKS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_TIMERS }

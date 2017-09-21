@@ -90,7 +90,7 @@ void *WriteLockThread(void *arg)
   return NULL;
 }
 
-static void test_pshared_init(void)
+static void test_rwlock_pshared_init(void)
 {
   pthread_rwlock_t rwlock;
   pthread_rwlockattr_t attr;
@@ -126,6 +126,193 @@ static void test_pshared_init(void)
   rtems_test_assert(eno == 0);
 }
 
+static void test_rwlock_null( void )
+{
+  struct timespec to;
+  int eno;
+
+  eno = pthread_rwlock_destroy( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_init( NULL, NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_rdlock( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedrdlock( NULL, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedwrlock( NULL, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_tryrdlock( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_trywrlock( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_unlock( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_wrlock( NULL );
+  rtems_test_assert( eno == EINVAL );
+}
+
+static void test_rwlock_not_initialized( void )
+{
+  pthread_rwlock_t rw;
+  struct timespec to;
+  int eno;
+
+  memset( &rw, 0xff, sizeof( rw ) );
+
+  eno = pthread_rwlock_destroy( &rw );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_rdlock( &rw );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedrdlock( &rw, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedwrlock( &rw, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_tryrdlock( &rw );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_trywrlock( &rw );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_unlock( &rw );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_wrlock( &rw );
+  rtems_test_assert( eno == EINVAL );
+}
+
+static void test_rwlock_invalid_copy( void )
+{
+  pthread_rwlock_t rw;
+  pthread_rwlock_t rw2;
+  struct timespec to;
+  int eno;
+
+  eno = pthread_rwlock_init( &rw, NULL );
+  rtems_test_assert( eno == 0 );
+
+  memcpy( &rw2, &rw, sizeof( rw2 ) );
+
+  eno = pthread_rwlock_destroy( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_rdlock( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedrdlock( &rw2, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_rwlock_timedwrlock( &rw2, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_tryrdlock( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_trywrlock( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_unlock( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_wrlock( &rw2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_rwlock_destroy( &rw );
+  rtems_test_assert( eno == 0 );
+}
+
+static void test_rwlock_auto_initialization( void )
+{
+  struct timespec to;
+  int eno;
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_destroy( &rw );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_rwlock_destroy( &rw );
+    rtems_test_assert( eno == EINVAL );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_rdlock( &rw );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    to.tv_sec = 1;
+    to.tv_nsec = 1;
+    eno = pthread_rwlock_timedrdlock( &rw, &to );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    to.tv_sec = 1;
+    to.tv_nsec = 1;
+    eno = pthread_rwlock_timedwrlock( &rw, &to );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_tryrdlock( &rw );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_trywrlock( &rw );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_unlock( &rw );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    static pthread_rwlock_t rw = PTHREAD_RWLOCK_INITIALIZER;
+
+    eno = pthread_rwlock_wrlock( &rw );
+    rtems_test_assert( eno == 0 );
+  }
+}
+
 /*
  *  main entry point to the test
  */
@@ -140,7 +327,6 @@ int main(
 #endif
 {
   pthread_rwlock_t     rwlock;
-  pthread_rwlock_t     rwlock2;
   pthread_rwlockattr_t attr;
   int                  status;
   int                  p;
@@ -149,7 +335,11 @@ int main(
 
   TEST_BEGIN();
 
-  test_pshared_init();
+  test_rwlock_pshared_init();
+  test_rwlock_null();
+  test_rwlock_not_initialized();
+  test_rwlock_invalid_copy();
+  test_rwlock_auto_initialization();
 
   /*************** NULL POINTER CHECKS *****************/
   puts( "pthread_rwlockattr_init( NULL ) -- EINVAL" );
@@ -191,42 +381,6 @@ int main(
   puts( "pthread_rwlockattr_setpshared( &attr, private ) -- EINVAL" );
   status = pthread_rwlockattr_setpshared( &attr, ~PTHREAD_PROCESS_PRIVATE );
   rtems_test_assert( status == EINVAL );
-
-  /*************** AUTO INITIALIZATION *****************/
-
-  rwlock = PTHREAD_RWLOCK_INITIALIZER;
-  rwlock2 = PTHREAD_RWLOCK_INITIALIZER;
-
-  status = pthread_rwlock_rdlock( &rwlock );
-  rtems_test_assert( status == 0 );
-
-  status = pthread_rwlock_rdlock( &rwlock2 );
-  rtems_test_assert( status == EINVAL );
-
-  status = pthread_rwlock_destroy( &rwlock );
-  rtems_test_assert( status == 0 );
-
-  status = pthread_rwlock_rdlock( &rwlock2 );
-  rtems_test_assert( status == 0 );
-
-  status = pthread_rwlock_destroy( &rwlock );
-  rtems_test_assert( status == 0 );
-
-  rwlock = PTHREAD_RWLOCK_INITIALIZER;
-  rwlock2 = PTHREAD_RWLOCK_INITIALIZER;
-
-  status = pthread_rwlock_rdlock( &rwlock );
-  rtems_test_assert( status == 0 );
-
-  status = pthread_rwlock_destroy( &rwlock2 );
-  rtems_test_assert( status == EINVAL );
-
-  status = pthread_rwlock_destroy( &rwlock );
-  rtems_test_assert( status == 0 );
-
-  status = pthread_rwlock_destroy( &rwlock2 );
-  rtems_test_assert( status == 0 );
-  rtems_test_assert( rwlock2 != PTHREAD_RWLOCK_INITIALIZER );
 
   /*************** ACTUALLY WORK THIS TIME *****************/
   puts( "pthread_rwlockattr_init( &attr ) -- OK" );
@@ -309,7 +463,6 @@ int main(
   rtems_test_assert( status == EINVAL );
 
   /*************** BAD ID CHECK *****************/
-  rwlock = 1;
   /* make a valid abstime */
   puts( "clock_gettime(CLOCK_REALTIME, &abstime) -- OK" );
   status = clock_gettime( CLOCK_REALTIME, &abstime );
@@ -317,35 +470,35 @@ int main(
   abstime.tv_sec += 5;
 
   puts( "pthread_rwlock_destroy(BadId) -- EINVAL" );
-  status = pthread_rwlock_destroy(&rwlock);
+  status = pthread_rwlock_destroy(NULL);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_rdlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_rdlock(&rwlock);
+  status = pthread_rwlock_rdlock(NULL);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_timedrdlock(BadId, &abstime) -- EINVAL" );
-  status = pthread_rwlock_timedrdlock( &rwlock, &abstime);
+  status = pthread_rwlock_timedrdlock( NULL, &abstime);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_tryrdlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_tryrdlock(&rwlock);
+  status = pthread_rwlock_tryrdlock(NULL);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_wrlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_wrlock(&rwlock);
+  status = pthread_rwlock_wrlock(NULL);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_timedwrlock(BadId, &abstime) -- EINVAL" );
-  status = pthread_rwlock_timedwrlock( &rwlock, &abstime );
+  status = pthread_rwlock_timedwrlock( NULL, &abstime );
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_trywrlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_trywrlock(&rwlock);
+  status = pthread_rwlock_trywrlock(NULL);
   rtems_test_assert( status == EINVAL );
 
   puts( "pthread_rwlock_unlock(BadId) -- EINVAL" );
-  status = pthread_rwlock_unlock(&rwlock);
+  status = pthread_rwlock_unlock(NULL);
   rtems_test_assert( status == EINVAL );
 
   /*************** BAD ABSTIME CHECK *****************/
@@ -368,11 +521,6 @@ int main(
   puts( "pthread_rwlock_init( &rwlock, &attr ) -- OK" );
   status = pthread_rwlock_init( &rwlock, &attr );
   rtems_test_assert( status == 0 );
-  rtems_test_assert( rwlock != 0 );
-
-  puts( "pthread_rwlock_init( &rwlock, &attr ) -- EAGAIN" );
-  status = pthread_rwlock_init( &rwlock, &attr );
-  rtems_test_assert( status == EAGAIN );
 
   puts( "pthread_rwlock_destroy( &rwlock ) -- OK" );
   status = pthread_rwlock_destroy( &rwlock );
@@ -549,7 +697,6 @@ int main(
   puts( "pthread_rwlock_init( &rwlock, NULL ) -- OK" );
   status = pthread_rwlock_init( &rwlock, NULL );
   rtems_test_assert( status == 0 );
-  rtems_test_assert( rwlock != 0 );
 
   puts( "pthread_rwlock_unlock ( &rwlock ) -- OK" );
   status = pthread_rwlock_unlock( &rwlock );

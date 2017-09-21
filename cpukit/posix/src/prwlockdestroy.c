@@ -20,29 +20,23 @@
 #include <rtems/posix/rwlockimpl.h>
 
 int pthread_rwlock_destroy(
-  pthread_rwlock_t *rwlock
+  pthread_rwlock_t *_rwlock
 )
 {
   POSIX_RWLock_Control *the_rwlock;
   Thread_queue_Context  queue_context;
 
-  _Objects_Allocator_lock();
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
+  the_rwlock = _POSIX_RWLock_Get( _rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
-  if ( the_rwlock == NULL ) {
-    _Objects_Allocator_unlock();
-    return EINVAL;
-  }
-
-  _CORE_RWLock_Acquire_critical( &the_rwlock->RWLock, &queue_context );
+  _CORE_RWLock_Acquire( &the_rwlock->RWLock, &queue_context );
 
   /*
    *  If there is at least one thread waiting, then do not delete it.
    */
 
-  if ( !_Thread_queue_Is_empty( &the_rwlock->RWLock.Wait_queue.Queue ) ) {
+  if ( !_Thread_queue_Is_empty( &the_rwlock->RWLock.Queue.Queue ) ) {
     _CORE_RWLock_Release( &the_rwlock->RWLock, &queue_context );
-    _Objects_Allocator_unlock();
     return EBUSY;
   }
 
@@ -50,9 +44,7 @@ int pthread_rwlock_destroy(
    *  POSIX doesn't require behavior when it is locked.
    */
 
-  _Objects_Close( &_POSIX_RWLock_Information, &the_rwlock->Object );
+  the_rwlock->flags = ~the_rwlock->flags;
   _CORE_RWLock_Release( &the_rwlock->RWLock, &queue_context );
-  _POSIX_RWLock_Free( the_rwlock );
-  _Objects_Allocator_unlock();
   return 0;
 }

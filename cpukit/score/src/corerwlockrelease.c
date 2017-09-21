@@ -45,7 +45,7 @@ static Thread_Control *_CORE_RWLock_Flush_filter(
   the_rwlock = RTEMS_CONTAINER_OF(
     queue,
     CORE_RWLock_Control,
-    Wait_queue.Queue
+    Queue.Queue
   );
 
   switch ( the_rwlock->current_state ) {
@@ -73,11 +73,10 @@ static Thread_Control *_CORE_RWLock_Flush_filter(
   return the_thread;
 }
 
-Status_Control _CORE_RWLock_Surrender(
-  CORE_RWLock_Control  *the_rwlock,
-  Thread_queue_Context *queue_context
-)
+Status_Control _CORE_RWLock_Surrender( CORE_RWLock_Control *the_rwlock )
 {
+  Thread_queue_Context queue_context;
+
   /*
    *  If unlocked, then OK to read.
    *  Otherwise, we have to block.
@@ -85,11 +84,12 @@ Status_Control _CORE_RWLock_Surrender(
    *  If any thread is waiting, then we wait.
    */
 
-  _CORE_RWLock_Acquire_critical( the_rwlock, queue_context );
+  _Thread_queue_Context_initialize( &queue_context );
+  _CORE_RWLock_Acquire( the_rwlock, &queue_context );
 
   if ( the_rwlock->current_state == CORE_RWLOCK_UNLOCKED){
     /* This is an error at the caller site */
-    _CORE_RWLock_Release( the_rwlock, queue_context );
+    _CORE_RWLock_Release( the_rwlock, &queue_context );
     return STATUS_SUCCESSFUL;
   }
 
@@ -98,7 +98,7 @@ Status_Control _CORE_RWLock_Surrender(
 
     if ( the_rwlock->number_of_readers != 0 ) {
       /* must be unlocked again */
-      _CORE_RWLock_Release( the_rwlock, queue_context );
+      _CORE_RWLock_Release( the_rwlock, &queue_context );
       return STATUS_SUCCESSFUL;
     }
   }
@@ -116,10 +116,10 @@ Status_Control _CORE_RWLock_Surrender(
   the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
 
   _Thread_queue_Flush_critical(
-    &the_rwlock->Wait_queue.Queue,
+    &the_rwlock->Queue.Queue,
     CORE_RWLOCK_TQ_OPERATIONS,
     _CORE_RWLock_Flush_filter,
-    queue_context
+    &queue_context
   );
   return STATUS_SUCCESSFUL;
 }

@@ -38,6 +38,7 @@ include_rtems_score_HEADERS += include/rtems/score/coremsg.h
 include_rtems_score_HEADERS += include/rtems/score/coremsgimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coremutex.h
 include_rtems_score_HEADERS += include/rtems/score/coremuteximpl.h
+include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
 include_rtems_score_HEADERS += include/rtems/score/coresem.h
 include_rtems_score_HEADERS += include/rtems/score/coresemimpl.h
 include_rtems_score_HEADERS += include/rtems/score/cpuset.h
@@ -112,11 +113,6 @@ include_rtems_score_HEADERS += include/rtems/score/wkspace.h
 include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
 include_rtems_score_HEADERS += include/rtems/score/basedefs.h
 
-if HAS_PTHREADS
-include_rtems_score_HEADERS += include/rtems/score/corerwlock.h
-include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
-endif
-
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
 include_rtems_score_HEADERS += include/rtems/score/mpci.h
@@ -189,10 +185,8 @@ libscore_a_SOURCES += src/percpu.c
 libscore_a_SOURCES += src/percpuasm.c
 
 ## CORE_RWLOCK_C_FILES
-if HAS_PTHREADS
 libscore_a_SOURCES += src/corerwlock.c src/corerwlockobtainread.c \
     src/corerwlockobtainwrite.c src/corerwlockrelease.c
-endif
 
 ## CORE_SEMAPHORE_C_FILES
 libscore_a_SOURCES += src/coresem.c

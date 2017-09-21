@@ -51,6 +51,10 @@ $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h: include/rtems/posix/rwlockimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/semaphore.h: include/rtems/posix/semaphore.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/semaphore.h
@@ -143,14 +147,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timer.h
 $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h: include/rtems/posix/timerimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/rwlock.h: include/rtems/posix/rwlock.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlock.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlock.h
-
-$(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h: include/rtems/posix/rwlockimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h
 endif
 if HAS_PTHREADS
 endif

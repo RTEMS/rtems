@@ -2081,10 +2081,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_RWLOCKS)
-      #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_SHMS)
       #define CONFIGURE_MAXIMUM_POSIX_SHMS \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
@@ -2449,7 +2445,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #include <rtems/posix/mutex.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthread.h>
-  #include <rtems/posix/rwlock.h>
   #include <rtems/posix/semaphore.h>
   #include <rtems/posix/shm.h>
   #include <rtems/posix/threadsup.h>
@@ -2565,21 +2560,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
     _Configure_POSIX_Named_Object_RAM( \
        _semaphores, sizeof(POSIX_Semaphore_Control) )
-
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API rwlocks.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-    #define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 0
-  #endif
-
-  /*
-   * This macro is calculated to specify the memory required for
-   * POSIX API rwlocks.
-   */
-  #define _CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS(_rwlocks) \
-    _Configure_Object_RAM(_rwlocks, sizeof(POSIX_RWLock_Control) )
 
   /**
    * Configure the maximum number of POSIX shared memory objects.
@@ -2822,8 +2802,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
       _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
         CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
-      _CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( \
-        CONFIGURE_MAXIMUM_POSIX_RWLOCKS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
         CONFIGURE_MAXIMUM_POSIX_SHMS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_TIMERS(CONFIGURE_MAXIMUM_POSIX_TIMERS))
@@ -3275,7 +3253,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
       CONFIGURE_MAXIMUM_POSIX_SEMAPHORES,
-      CONFIGURE_MAXIMUM_POSIX_RWLOCKS,
       CONFIGURE_MAXIMUM_POSIX_SHMS,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
@@ -3490,7 +3467,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     uint32_t POSIX_QUEUED_SIGNALS;
     uint32_t POSIX_MESSAGE_QUEUES;
     uint32_t POSIX_SEMAPHORES;
-    uint32_t POSIX_RWLOCKS;
     uint32_t POSIX_SHMS;
 #endif
 
@@ -3543,7 +3519,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ),
     _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ),
-    _CONFIGURE_MEMORY_FOR_POSIX_RWLOCKS( CONFIGURE_MAXIMUM_POSIX_RWLOCKS ),
     _CONFIGURE_MEMORY_FOR_POSIX_SHMS( CONFIGURE_MAXIMUM_POSIX_SHMS ),
     _CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
 #endif
@@ -3614,7 +3589,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_RWLOCKS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SHMS != 0) || \
       defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))
   #error "CONFIGURATION ERROR: POSIX API support not configured!!"

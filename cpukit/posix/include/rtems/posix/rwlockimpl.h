@@ -19,9 +19,7 @@
 #ifndef _RTEMS_POSIX_RWLOCKIMPL_H
 #define _RTEMS_POSIX_RWLOCKIMPL_H
 
-#include <rtems/posix/rwlock.h>
 #include <rtems/score/corerwlockimpl.h>
-#include <rtems/score/objectimpl.h>
 
 #include <errno.h>
 #include <pthread.h>
@@ -30,43 +28,33 @@
 extern "C" {
 #endif
 
-/**
- * The following defines the information control block used to manage
- * this class of objects.
- */
+#define POSIX_RWLOCK_MAGIC 0x9621dabdUL
 
-extern Objects_Information _POSIX_RWLock_Information;
+typedef struct {
+  unsigned long flags;
+  CORE_RWLock_Control RWLock;
+} POSIX_RWLock_Control;
 
-/**
- * @brief Allocate a RWLock control block.
- *
- * This function allocates a RWLock control block from
- * the inactive chain of free RWLock control blocks.
- */
-RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Allocate( void )
-{
-  return (POSIX_RWLock_Control *) 
-    _Objects_Allocate( &_POSIX_RWLock_Information );
-}
-
-/**
- * @brief Free a RWLock control block.
- *
- * This routine frees a RWLock control block to the
- * inactive chain of free RWLock control blocks.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_RWLock_Free (
-  POSIX_RWLock_Control *the_RWLock
+RTEMS_INLINE_ROUTINE POSIX_RWLock_Control *_POSIX_RWLock_Get(
+  pthread_rwlock_t *rwlock
 )
 {
-  _CORE_RWLock_Destroy( &the_RWLock->RWLock );
-  _Objects_Free( &_POSIX_RWLock_Information, &the_RWLock->Object );
+  return (POSIX_RWLock_Control *) rwlock;
 }
 
-POSIX_RWLock_Control *_POSIX_RWLock_Get(
-  pthread_rwlock_t     *rwlock,
-  Thread_queue_Context *queue_context
-);
+bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock );
+
+#define POSIX_RWLOCK_VALIDATE_OBJECT( rw ) \
+  do { \
+    if ( ( rw ) == NULL ) { \
+      return EINVAL; \
+    } \
+    if ( ( (uintptr_t) ( rw ) ^ POSIX_RWLOCK_MAGIC ) != ( rw )->flags ) { \
+      if ( !_POSIX_RWLock_Auto_initialization( rw ) ) { \
+        return EINVAL; \
+      } \
+    } \
+  } while ( 0 )
 
 #ifdef __cplusplus
 }

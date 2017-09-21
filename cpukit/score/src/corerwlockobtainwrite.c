@@ -26,11 +26,12 @@
 
 Status_Control _CORE_RWLock_Seize_for_writing(
   CORE_RWLock_Control  *the_rwlock,
-  Thread_Control       *executing,
   bool                  wait,
   Thread_queue_Context *queue_context
 )
 {
+  Thread_Control *executing;
+
   /*
    *  If unlocked, then OK to read.
    *  Otherwise, we have to block.
@@ -38,7 +39,7 @@ Status_Control _CORE_RWLock_Seize_for_writing(
    *  If any thread is waiting, then we wait.
    */
 
-  _CORE_RWLock_Acquire_critical( the_rwlock, queue_context );
+  executing = _CORE_RWLock_Acquire( the_rwlock, queue_context );
 
   switch ( the_rwlock->current_state ) {
     case CORE_RWLOCK_UNLOCKED:
@@ -72,7 +73,7 @@ Status_Control _CORE_RWLock_Seize_for_writing(
   );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue(
-     &the_rwlock->Wait_queue.Queue,
+     &the_rwlock->Queue.Queue,
      CORE_RWLOCK_TQ_OPERATIONS,
      executing,
      queue_context

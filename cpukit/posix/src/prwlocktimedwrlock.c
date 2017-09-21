@@ -52,16 +52,13 @@ int pthread_rwlock_timedwrlock(
   timeout_status = _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks );
   do_wait = ( timeout_status == TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE );
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
-  if ( the_rwlock == NULL ) {
-    return EINVAL;
-  }
-
+  _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
   status = _CORE_RWLock_Seize_for_writing(
     &the_rwlock->RWLock,
-    _Thread_Executing,
     do_wait,
     &queue_context
   );

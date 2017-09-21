@@ -64,7 +64,6 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define POSIX_MQ_COUNT 5
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 19
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 7
-#define CONFIGURE_MAXIMUM_POSIX_RWLOCKS 31
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 41
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
@@ -471,18 +470,6 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
     snapshot.posix_api.active_mutexes == CONFIGURE_MAXIMUM_POSIX_MUTEXES
-  );
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-  for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_RWLOCKS; ++i) {
-    pthread_rwlock_t rwlock;
-    eno = pthread_rwlock_init(&rwlock, NULL);
-    rtems_test_assert(eno == 0);
-  }
-  rtems_resource_snapshot_take(&snapshot);
-  rtems_test_assert(
-    snapshot.posix_api.active_rwlocks == CONFIGURE_MAXIMUM_POSIX_RWLOCKS
   );
 #endif
 

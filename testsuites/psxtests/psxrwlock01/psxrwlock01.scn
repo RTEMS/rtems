@@ -1,4 +1,4 @@
-*** POSIX RWLOCK TEST 01 ***
+*** BEGIN OF TEST PSXRWLOCK 1 ***
 pthread_rwlockattr_init( NULL ) -- EINVAL
 pthread_rwlockattr_setpshared( NULL, private ) -- EINVAL
 pthread_rwlockattr_setpshared( NULL, shared ) -- EINVAL
@@ -37,7 +37,6 @@ pthread_rwlock_trywrlock(BadId) -- EINVAL
 pthread_rwlock_unlock(BadId) -- EINVAL
 pthread_rwlockattr_init( &attr ) -- OK
 pthread_rwlock_init( &rwlock, &attr ) -- OK
-pthread_rwlock_init( &rwlock, &attr ) -- EAGAIN
 pthread_rwlock_destroy( &rwlock ) -- OK
 pthread_rwlock_init( &rwlock, NULL ) -- OK
 pthread_rwlock_destroy( &rwlock ) -- OK
@@ -94,4 +93,4 @@ pthread_rwlock_destroy( &RWLock ) -- OK
 pthread_rwlock_init( &rwlock, NULL ) -- OK
 pthread_rwlock_unlock ( &rwlock ) -- OK
 pthread_rwlock_unlock ( &rwlock ) -- OK
-*** END OF POSIX RWLOCK TEST 01 ***
+*** END OF TEST PSXRWLOCK 1 ***

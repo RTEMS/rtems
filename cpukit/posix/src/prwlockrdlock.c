@@ -29,16 +29,13 @@ int pthread_rwlock_rdlock(
   Thread_queue_Context  queue_context;
   Status_Control        status;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
-  if ( the_rwlock == NULL ) {
-    return EINVAL;
-  }
-
+  _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_set_no_timeout( &queue_context );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
-    _Thread_Executing,
     true,                 /* we are willing to wait forever */
     &queue_context
   );

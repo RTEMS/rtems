@@ -29,15 +29,12 @@ int pthread_rwlock_trywrlock(
   Thread_queue_Context  queue_context;
   Status_Control        status;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
-  if ( the_rwlock == NULL ) {
-    return EINVAL;
-  }
-
+  _Thread_queue_Context_initialize( &queue_context );
   status = _CORE_RWLock_Seize_for_writing(
     &the_rwlock->RWLock,
-    _Thread_Executing,
     false,                 /* we are not willing to wait */
     &queue_context
   );

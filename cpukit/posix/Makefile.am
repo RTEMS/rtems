@@ -22,6 +22,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
@@ -50,8 +51,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/shmimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
 include_rtems_posix_HEADERS += include/rtems/posix/timer.h
 include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/rwlock.h
-include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
@@ -194,18 +193,14 @@ libposix_a_SOURCES += src/semtimedwait.c
 libposix_a_SOURCES += src/semtrywait.c
 libposix_a_SOURCES += src/semwait.c
 
-if HAS_PTHREADS
-libposix_a_SOURCES += src/sigpending.c \
-    src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
-    src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
-
 ## RWLOCK_C_FILES
-libposix_a_SOURCES += src/prwlock.c src/prwlockdestroy.c src/prwlockinit.c \
+libposix_a_SOURCES += src/prwlockdestroy.c src/prwlockinit.c \
     src/prwlockrdlock.c src/prwlocktimedrdlock.c src/prwlocktimedwrlock.c \
     src/prwlocktryrdlock.c src/prwlocktrywrlock.c src/prwlockunlock.c \
     src/prwlockwrlock.c src/rwlockattrdestroy.c src/rwlockattrgetpshared.c \
     src/rwlockattrinit.c src/rwlockattrsetpshared.c
 
+if HAS_PTHREADS
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c
 libposix_a_SOURCES += src/semaphoredeletesupp.c

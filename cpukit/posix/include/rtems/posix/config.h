@@ -99,12 +99,6 @@ typedef struct {
   uint32_t                            maximum_semaphores;
 
   /**
-   * This field contains the maximum number of POSIX API
-   * read/write locks which are configured for this application.
-   */
-  uint32_t                            maximum_rwlocks;
-
-  /**
    * Maximum configured number of POSIX Shared memory objects.
    */
   uint32_t                            maximum_shms;

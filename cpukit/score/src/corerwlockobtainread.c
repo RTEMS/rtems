@@ -26,18 +26,19 @@
 
 Status_Control _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control  *the_rwlock,
-  Thread_Control       *executing,
   bool                  wait,
   Thread_queue_Context *queue_context
 )
 {
+  Thread_Control *executing;
+
   /*
    *  If unlocked, then OK to read.
    *  If locked for reading and no waiters, then OK to read.
    *  If any thread is waiting, then we wait.
    */
 
-  _CORE_RWLock_Acquire_critical( the_rwlock, queue_context );
+  executing = _CORE_RWLock_Acquire( the_rwlock, queue_context );
 
   switch ( the_rwlock->current_state ) {
     case CORE_RWLOCK_UNLOCKED:
@@ -46,19 +47,13 @@ Status_Control _CORE_RWLock_Seize_for_reading(
       _CORE_RWLock_Release( the_rwlock, queue_context );
       return STATUS_SUCCESSFUL;
 
-    case CORE_RWLOCK_LOCKED_FOR_READING: {
-      Thread_Control *waiter;
-      waiter = _Thread_queue_First_locked(
-        &the_rwlock->Wait_queue,
-        CORE_RWLOCK_TQ_OPERATIONS
-      );
-      if ( !waiter ) {
+    case CORE_RWLOCK_LOCKED_FOR_READING:
+      if ( _Thread_queue_Is_empty( &the_rwlock->Queue.Queue ) ) {
         the_rwlock->number_of_readers += 1;
         _CORE_RWLock_Release( the_rwlock, queue_context );
         return STATUS_SUCCESSFUL;
       }
       break;
-    }
     case CORE_RWLOCK_LOCKED_FOR_WRITING:
       break;
   }
@@ -84,7 +79,7 @@ Status_Control _CORE_RWLock_Seize_for_reading(
   );
   _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
   _Thread_queue_Enqueue(
-     &the_rwlock->Wait_queue.Queue,
+     &the_rwlock->Queue.Queue,
      CORE_RWLOCK_TQ_OPERATIONS,
      executing,
      queue_context

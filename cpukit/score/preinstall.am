@@ -120,6 +120,10 @@ $(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h: include/rtems/score/coremuteximp
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coremuteximpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h: include/rtems/score/corerwlockimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/coresem.h: include/rtems/score/coresem.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coresem.h
@@ -412,15 +416,6 @@ $(PROJECT_INCLUDE)/rtems/score/basedefs.h: include/rtems/score/basedefs.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/basedefs.h
 
-if HAS_PTHREADS
-$(PROJECT_INCLUDE)/rtems/score/corerwlock.h: include/rtems/score/corerwlock.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlock.h
-
-$(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h: include/rtems/score/corerwlockimpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/corerwlockimpl.h
-endif
 if HAS_MP
 $(PROJECT_INCLUDE)/rtems/score/mpci.h: include/rtems/score/mpci.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mpci.h

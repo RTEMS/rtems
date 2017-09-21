@@ -23,20 +23,32 @@
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/posixapi.h>
 
+#include <string.h>
+
+bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock )
+{
+  POSIX_RWLock_Control zero;
+
+  memset( &zero, 0, sizeof( zero ) );
+
+  if ( memcmp( the_rwlock, &zero, sizeof( *the_rwlock ) ) != 0 ) {
+    return false;
+  }
+
+  the_rwlock->flags = POSIX_RWLOCK_MAGIC;
+  return true;
+}
+
 int pthread_rwlock_unlock(
   pthread_rwlock_t  *rwlock
 )
 {
   POSIX_RWLock_Control *the_rwlock;
-  Thread_queue_Context  queue_context;
   Status_Control        status;
 
-  the_rwlock = _POSIX_RWLock_Get( rwlock, &queue_context );
+  the_rwlock = _POSIX_RWLock_Get( rwlock );
+  POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
-  if ( the_rwlock == NULL ) {
-    return EINVAL;
-  }
-
-  status = _CORE_RWLock_Surrender( &the_rwlock->RWLock, &queue_context );
+  status = _CORE_RWLock_Surrender( &the_rwlock->RWLock );
   return _POSIX_Get_error( status );
 }

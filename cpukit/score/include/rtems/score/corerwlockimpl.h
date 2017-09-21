@@ -19,10 +19,10 @@
 #ifndef _RTEMS_SCORE_CORERWLOCKIMPL_H
 #define _RTEMS_SCORE_CORERWLOCKIMPL_H
 
-#include <rtems/score/corerwlock.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/status.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/threadqimpl.h>
-#include <rtems/score/status.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus
@@ -49,6 +49,40 @@ extern "C" {
 #define CORE_RWLOCK_THREAD_WAITING_FOR_WRITE 1
 
 /**
+ *  RWLock State.
+ */
+typedef enum {
+  /** This indicates the the RWLock is not currently locked.
+   */
+  CORE_RWLOCK_UNLOCKED,
+  /** This indicates the the RWLock is currently locked for reading.
+   */
+  CORE_RWLOCK_LOCKED_FOR_READING,
+  /** This indicates the the RWLock is currently locked for reading.
+   */
+  CORE_RWLOCK_LOCKED_FOR_WRITING
+}   CORE_RWLock_States;
+
+/**
+ *  The following defines the control block used to manage each
+ *  RWLock.
+ */
+typedef struct {
+  /** This field is the Waiting Queue used to manage the set of tasks
+   *  which are blocked waiting for the RWLock to be released.
+   */
+  Thread_queue_Syslock_queue Queue;
+
+  /** This element is the current state of the RWLock.
+   */
+  CORE_RWLock_States current_state;
+
+  /** This element contains the current number of thread waiting for this
+   *  RWLock to be released. */
+  unsigned int number_of_readers;
+}   CORE_RWLock_Control;
+
+/**
  *  @brief Initialize a RWlock.
  *
  *  This routine initializes the RWLock based on the parameters passed.
@@ -63,15 +97,27 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Destroy(
   CORE_RWLock_Control *the_rwlock
 )
 {
-  _Thread_queue_Destroy( &the_rwlock->Wait_queue );
+  (void) the_rwlock;
 }
 
-RTEMS_INLINE_ROUTINE void _CORE_RWLock_Acquire_critical(
+RTEMS_INLINE_ROUTINE Thread_Control *_CORE_RWLock_Acquire(
   CORE_RWLock_Control  *the_rwlock,
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_rwlock->Wait_queue, queue_context );
+  ISR_Level       level;
+  Thread_Control *executing;
+
+  _Thread_queue_Context_ISR_disable( queue_context, level );
+  _Thread_queue_Context_set_ISR_level( queue_context, level );
+  executing = _Thread_Executing;
+  _Thread_queue_Queue_acquire_critical(
+    &the_rwlock->Queue.Queue,
+    &executing->Potpourri_stats,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  return executing;
 }
 
 RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
@@ -79,7 +125,10 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
   Thread_queue_Context *queue_context
 )
 {
-  _Thread_queue_Release( &the_rwlock->Wait_queue, queue_context );
+  _Thread_queue_Queue_release(
+    &the_rwlock->Queue.Queue,
+    &queue_context->Lock_context.Lock_context
+  );
 }
 
 /**
@@ -93,7 +142,6 @@ RTEMS_INLINE_ROUTINE void _CORE_RWLock_Release(
 
 Status_Control _CORE_RWLock_Seize_for_reading(
   CORE_RWLock_Control  *the_rwlock,
-  Thread_Control       *executing,
   bool                  wait,
   Thread_queue_Context *queue_context
 );
@@ -108,7 +156,6 @@ Status_Control _CORE_RWLock_Seize_for_reading(
  */
 Status_Control _CORE_RWLock_Seize_for_writing(
   CORE_RWLock_Control  *the_rwlock,
-  Thread_Control       *executing,
   bool                  wait,
   Thread_queue_Context *queue_context
 );
@@ -123,10 +170,7 @@ Status_Control _CORE_RWLock_Seize_for_writing(
  *
  *  @retval Status is returned to indicate successful or failure.
  */
-Status_Control _CORE_RWLock_Surrender(
-  CORE_RWLock_Control  *the_rwlock,
-  Thread_queue_Context *queue_context
-);
+Status_Control _CORE_RWLock_Surrender( CORE_RWLock_Control *the_rwlock );
 
 /** @} */
 

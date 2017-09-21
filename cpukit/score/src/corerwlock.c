@@ -27,6 +27,5 @@ void _CORE_RWLock_Initialize(
 {
   the_rwlock->number_of_readers = 0;
   the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
-
-  _Thread_queue_Object_initialize( &the_rwlock->Wait_queue );
+  _Thread_queue_Queue_initialize( &the_rwlock->Queue.Queue, NULL );
 }
