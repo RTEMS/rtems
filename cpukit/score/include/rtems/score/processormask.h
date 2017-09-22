@@ -27,6 +27,8 @@
 
 #include <sys/cpuset.h>
 
+#include <strings.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
