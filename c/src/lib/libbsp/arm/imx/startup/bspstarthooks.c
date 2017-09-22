@@ -47,6 +47,15 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
 
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
+#ifdef RTEMS_SMP
+  uint32_t cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
+
+  arm_a9mpcore_start_enable_smp_in_auxiliary_control();
+
+  if (cpu_id != 0) {
+    arm_a9mpcore_start_on_secondary_processor();
+  }
+#endif
 }
 
 BSP_START_TEXT_SECTION void bsp_start_hook_1(void)
