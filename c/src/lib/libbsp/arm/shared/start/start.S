@@ -183,27 +183,34 @@ _start:
 	bl bsp_start_init_registers_core
 #endif
 
+#ifdef RTEMS_SMP
+	/* Read MPIDR and get current processor index */
+	mrc	p15, 0, r7, c0, c0, 5
+	and	r7, #0xff
+#endif
+
 #ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+#ifdef RTEMS_SMP
+	cmp	r7, #0
+	bne	1f
+#endif
 	mov	r0, r6
-	bl bsp_fdt_copy
+	bl	bsp_fdt_copy
+1:
 #endif
 
 #ifdef RTEMS_SMP
-	/* Read MPIDR and get current processor index */
-	mrc	p15, 0, r0, c0, c0, 5
-	and	r0, #0xff
-
         /*
          * Get current per-CPU control and store it in PL1 only Thread ID
          * Register (TPIDRPRW).
          */
 	ldr	r1, =_Per_CPU_Information
-	add	r1, r1, r0, asl #PER_CPU_CONTROL_SIZE_LOG2
+	add	r1, r1, r7, asl #PER_CPU_CONTROL_SIZE_LOG2
 	mcr	p15, 0, r1, c13, c0, 4
 
 	/* Calculate stack offset */
 	ldr	r1, =bsp_stack_all_size
-	mul	r1, r0
+	mul	r1, r7
 #endif
 
 	mrs	r4, cpsr	/* save original procesor status value  */
