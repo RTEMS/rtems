@@ -90,6 +90,42 @@ void *WriteLockThread(void *arg)
   return NULL;
 }
 
+static void test_pshared_init(void)
+{
+  pthread_rwlock_t rwlock;
+  pthread_rwlockattr_t attr;
+  int eno;
+
+  eno = pthread_rwlockattr_init(&attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlockattr_setpshared(&attr, PTHREAD_PROCESS_PRIVATE);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlock_init(&rwlock, &attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlock_destroy(&rwlock);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlockattr_setpshared(&attr, PTHREAD_PROCESS_SHARED);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlock_init(&rwlock, &attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_rwlock_destroy(&rwlock);
+  rtems_test_assert(eno == 0);
+
+  attr.process_shared = -1;
+
+  eno = pthread_rwlock_init(&rwlock, &attr);
+  rtems_test_assert(eno == EINVAL);
+
+  eno = pthread_rwlockattr_destroy(&attr);
+  rtems_test_assert(eno == 0);
+}
+
 /*
  *  main entry point to the test
  */
@@ -112,6 +148,8 @@ int main(
   struct timespec      abstime;
 
   TEST_BEGIN();
+
+  test_pshared_init();
 
   /*************** NULL POINTER CHECKS *****************/
   puts( "pthread_rwlockattr_init( NULL ) -- EINVAL" );

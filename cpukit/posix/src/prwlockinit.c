@@ -58,9 +58,7 @@ int pthread_rwlock_init(
   const pthread_rwlockattr_t *attr
 )
 {
-  POSIX_RWLock_Control        *the_rwlock;
-  pthread_rwlockattr_t         default_attr;
-  const pthread_rwlockattr_t  *the_attr;
+  POSIX_RWLock_Control *the_rwlock;
 
   /*
    *  Error check parameters
@@ -68,28 +66,14 @@ int pthread_rwlock_init(
   if ( !rwlock )
     return EINVAL;
 
-  /*
-   * If the user passed in NULL, use the default attributes
-   */
-  if ( attr ) {
-    the_attr = attr;
-  } else {
-    (void) pthread_rwlockattr_init( &default_attr );
-    the_attr = &default_attr;
-  }
-
-  /*
-   * Now start error checking the attributes that we are going to use
-   */
-  if ( !the_attr->is_initialized )
-    return EINVAL;
-
-  switch ( the_attr->process_shared ) {
-    case PTHREAD_PROCESS_PRIVATE:    /* only supported values */
-      break;
-    case PTHREAD_PROCESS_SHARED:
-    default:
+  if ( attr != NULL ) {
+    if ( !attr->is_initialized ) {
       return EINVAL;
+    }
+
+    if ( !_POSIX_Is_valid_pshared( attr->process_shared ) ) {
+      return EINVAL;
+    }
   }
 
   the_rwlock = _POSIX_RWLock_Allocate();
