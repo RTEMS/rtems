@@ -36,7 +36,7 @@ typedef struct {
 
 static imx_uart_context imx_uart_instances[7];
 
-static imx_uart_context *imx_uart_console;
+static imx_uart_context *imx_uart_console = &imx_uart_instances[0];
 
 static volatile imx_uart *imx_uart_get_regs(rtems_termios_device_context *base)
 {
