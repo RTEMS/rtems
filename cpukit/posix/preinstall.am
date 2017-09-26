@@ -31,6 +31,10 @@ $(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h: include/rtems/posix/barrierimpl.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/barrierimpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/condimpl.h: include/rtems/posix/condimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/key.h: include/rtems/posix/key.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/key.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/key.h
@@ -79,14 +83,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mqueue.h
 $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h: include/rtems/posix/aio_misc.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/aio_misc.h
-
-$(PROJECT_INCLUDE)/rtems/posix/cond.h: include/rtems/posix/cond.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/cond.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/cond.h
-
-$(PROJECT_INCLUDE)/rtems/posix/condimpl.h: include/rtems/posix/condimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/condimpl.h
 
 $(PROJECT_INCLUDE)/rtems/posix/mmanimpl.h: include/rtems/posix/mmanimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mmanimpl.h

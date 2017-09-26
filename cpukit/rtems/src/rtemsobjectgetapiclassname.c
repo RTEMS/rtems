@@ -51,7 +51,6 @@ static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Message Queue",           OBJECTS_POSIX_MESSAGE_QUEUES, 0},
   { "Mutex",                   OBJECTS_POSIX_MUTEXES, 0},
   { "Semaphore",               OBJECTS_POSIX_SEMAPHORES, 0},
-  { "Condition Variable",      OBJECTS_POSIX_CONDITION_VARIABLES, 0},
   { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
   { "Shared Memory",           OBJECTS_POSIX_SHMS, 0},
   { NULL,                      0, 0}

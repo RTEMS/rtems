@@ -32,29 +32,30 @@ int _POSIX_Condition_variables_Signal_support(
   bool                       is_broadcast
 )
 {
-  Thread_Control *the_thread;
+  POSIX_Condition_variables_Control *the_cond;
+  unsigned long                      flags;
+  const Thread_queue_Operations     *operations;
+  Thread_queue_Heads                *heads;
+
+  the_cond = _POSIX_Condition_variables_Get( cond );
+  POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
+  operations = POSIX_CONDITION_VARIABLES_TQ_OPERATIONS;
 
   do {
-    POSIX_Condition_variables_Control *the_cond;
-    Thread_queue_Context               queue_context;
+    Thread_queue_Context queue_context;
 
-    the_cond = _POSIX_Condition_variables_Get( cond, &queue_context );
+    _Thread_queue_Context_initialize( &queue_context );
+    _POSIX_Condition_variables_Acquire( the_cond, &queue_context );
 
-    if ( the_cond == NULL ) {
-      return EINVAL;
-    }
+    heads = the_cond->Queue.Queue.heads;
 
-    _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
+    if ( heads != NULL ) {
+      Thread_Control *the_thread;
 
-    the_thread = _Thread_queue_First_locked(
-      &the_cond->Wait_queue,
-      POSIX_CONDITION_VARIABLES_TQ_OPERATIONS
-    );
-
-    if ( the_thread != NULL ) {
+      the_thread = ( *operations->first )( heads );
       _Thread_queue_Extract_critical(
-        &the_cond->Wait_queue.Queue,
-        POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
+        &the_cond->Queue.Queue,
+        operations,
         the_thread,
         &queue_context
       );
@@ -62,7 +63,7 @@ int _POSIX_Condition_variables_Signal_support(
       the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
       _POSIX_Condition_variables_Release( the_cond, &queue_context );
     }
-  } while ( is_broadcast && the_thread != NULL );
+  } while ( is_broadcast && heads != NULL );
 
   return 0;
 }

@@ -198,7 +198,6 @@ rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_MAXIMUM_TASKS          rtems_resource_unlimited(10)
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES  2
 #define CONFIGURE_MAXIMUM_POSIX_KEYS     1
-#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES  2
 #define CONFIGURE_UNIFIED_WORK_AREAS
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE

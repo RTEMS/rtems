@@ -60,7 +60,6 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define CONFIGURE_MAXIMUM_TIMERS 59
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 17
 
-#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 29
 #define POSIX_MQ_COUNT 5
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 19
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 7
@@ -426,19 +425,6 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_resource_snapshot_take(&snapshot);
   rtems_test_assert(
     snapshot.rtems_api.active_timers == CONFIGURE_MAXIMUM_TIMERS
-  );
-#endif
-
-#ifdef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-  for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES; ++i) {
-    pthread_cond_t cond;
-    eno = pthread_cond_init(&cond, NULL);
-    rtems_test_assert(eno == 0);
-  }
-  rtems_resource_snapshot_take(&snapshot);
-  rtems_test_assert(
-    snapshot.posix_api.active_condition_variables
-      == CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
   );
 #endif
 

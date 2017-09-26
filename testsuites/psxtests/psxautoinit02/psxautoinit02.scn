@@ -1,5 +1,14 @@
-*** POSIX TEST -- AUTOMATIC INITIALIZAITON 02 ***
+*** BEGIN OF TEST PSXAUTOINIT 2 ***
 Init - pthread_cond_broadcast - auto initialize - OK
-Init - pthread_cond_broadcast - auto initialize - EINVAL
+Init - pthread_cond_signal - auto initialize - OK
+Init - pthread_cond_init - auto initialize - OK
+Init - pthread_mutex_lock - OK
+Init - pthread_cond_timedwait - auto initialize - OK
+Init - pthread_mutex_unlock - OK
+Init - pthread_mutex_destroy - OK
 Init - pthread_cond_destroy - OK
-*** END OF POSIX TEST AUTOMATIC INITIALIZATION 02 ***
+Init - pthread_cond_destroy - OK
+Init - pthread_cond_destroy - OK
+Init - pthread_cond_destroy - OK
+Init - pthread_cond_destroy - OK
+*** END OF TEST PSXAUTOINIT 2 ***

@@ -36,7 +36,6 @@
 #include <rtems/extensionimpl.h>
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/barrierimpl.h>
-#include <rtems/posix/condimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/psignalimpl.h>
@@ -104,8 +103,6 @@ typedef enum {
   POSIX_SIGNALS_POST,
   POSIX_THREADS_PRE,
   POSIX_THREADS_POST,
-  POSIX_CONDITION_VARIABLE_PRE,
-  POSIX_CONDITION_VARIABLE_POST,
   POSIX_MUTEX_PRE,
   POSIX_MUTEX_POST,
   POSIX_MESSAGE_QUEUE_PRE,
@@ -441,18 +438,6 @@ LAST(RTEMS_SYSINIT_POSIX_THREADS)
   next_step(POSIX_THREADS_POST);
 }
 
-FIRST(RTEMS_SYSINIT_POSIX_CONDITION_VARIABLE)
-{
-  assert(_POSIX_Condition_variables_Information.maximum == 0);
-  next_step(POSIX_CONDITION_VARIABLE_PRE);
-}
-
-LAST(RTEMS_SYSINIT_POSIX_CONDITION_VARIABLE)
-{
-  assert(_POSIX_Condition_variables_Information.maximum != 0);
-  next_step(POSIX_CONDITION_VARIABLE_POST);
-}
-
 FIRST(RTEMS_SYSINIT_POSIX_MUTEX)
 {
   assert(_POSIX_Mutex_Information.maximum == 0);
@@ -732,8 +717,6 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
-
-#define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
 

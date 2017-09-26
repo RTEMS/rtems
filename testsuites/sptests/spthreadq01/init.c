@@ -130,8 +130,6 @@ static void posix_worker(test_context *ctx)
   eno = pthread_mutex_lock(&ctx->pmtx);
   rtems_test_assert(eno == 0);
 
-  rtems_test_assert(get_wait_id(ctx) == ctx->pcv);
-
   eno = pthread_cond_signal(&ctx->pcv);
   rtems_test_assert(eno == 0);
 
@@ -343,7 +341,6 @@ static rtems_task Init(
 
 #if defined(RTEMS_POSIX_API)
   #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
-  #define CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES 1
   #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
   #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
     (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1))

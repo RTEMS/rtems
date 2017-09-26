@@ -21,6 +21,29 @@
 #include <rtems/posix/condimpl.h>
 #include <rtems/posix/posixapi.h>
 
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Condition_variables_Control, flags )
+    == offsetof( pthread_cond_t, _flags ),
+  POSIX_CONDITION_VARIABLES_CONTROL_FLAGS
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Condition_variables_Control, mutex )
+    == offsetof( pthread_cond_t, _mutex ),
+  POSIX_CONDITION_VARIABLES_CONTROL_COUNT
+);
+
+RTEMS_STATIC_ASSERT(
+  offsetof( POSIX_Condition_variables_Control, Queue )
+    == offsetof( pthread_cond_t, _Queue ),
+  POSIX_CONDITION_VARIABLES_CONTROL_QUEUE
+);
+
+RTEMS_STATIC_ASSERT(
+  sizeof( POSIX_Condition_variables_Control ) == sizeof( pthread_cond_t ),
+  POSIX_CONDITION_VARIABLES_CONTROL_SIZE
+);
+
 /**
  *  11.4.2 Initializing and Destroying a Condition Variable,
  *         P1003.1c/Draft 10, p. 87
@@ -30,41 +53,26 @@ int pthread_cond_init(
   const pthread_condattr_t *attr
 )
 {
-  POSIX_Condition_variables_Control   *the_cond;
-  const pthread_condattr_t            *the_attr;
+  POSIX_Condition_variables_Control *the_cond;
 
-  if ( attr ) the_attr = attr;
-  else        the_attr = &_POSIX_Condition_variables_Default_attributes;
+  the_cond = _POSIX_Condition_variables_Get( cond );
 
-  /*
-   *  Be careful about attributes when global!!!
-   */
-
-  if ( !the_attr->is_initialized )
-    return EINVAL;
-
-  if ( !_POSIX_Is_valid_pshared( the_attr->process_shared ) ) {
+  if ( the_cond == NULL ) {
     return EINVAL;
   }
 
-  the_cond = _POSIX_Condition_variables_Allocate();
-
-  if ( !the_cond ) {
-    _Objects_Allocator_unlock();
-    return ENOMEM;
+  if ( attr == NULL ) {
+    attr = &_POSIX_Condition_variables_Default_attributes;
   }
 
-  _POSIX_Condition_variables_Initialize( the_cond, the_attr );
+  if ( !attr->is_initialized ) {
+    return EINVAL;
+  }
 
-  _Objects_Open_u32(
-    &_POSIX_Condition_variables_Information,
-    &the_cond->Object,
-    0
-  );
+  if ( !_POSIX_Is_valid_pshared( attr->process_shared ) ) {
+    return EINVAL;
+  }
 
-  *cond = the_cond->Object.id;
-
-  _Objects_Allocator_unlock();
-
+  _POSIX_Condition_variables_Initialize( the_cond, attr );
   return 0;
 }

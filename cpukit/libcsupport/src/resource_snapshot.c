@@ -42,7 +42,6 @@
 
 #ifdef RTEMS_POSIX_API
   #include <rtems/posix/barrierimpl.h>
-  #include <rtems/posix/condimpl.h>
   #include <rtems/posix/mqueueimpl.h>
   #include <rtems/posix/muteximpl.h>
   #include <rtems/posix/psignal.h>
@@ -68,7 +67,6 @@ static const struct {
   { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS }
   #ifdef RTEMS_POSIX_API
     ,
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_CONDITION_VARIABLES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_MUTEXES },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },

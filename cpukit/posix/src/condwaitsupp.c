@@ -25,8 +25,6 @@
 #include <rtems/score/status.h>
 #include <rtems/score/threaddispatch.h>
 
-THREAD_QUEUE_OBJECT_ASSERT( POSIX_Condition_variables_Control, Wait_queue );
-
 static void _POSIX_Condition_variables_Enqueue_callout(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
@@ -58,6 +56,7 @@ int _POSIX_Condition_variables_Wait_support(
 )
 {
   POSIX_Condition_variables_Control *the_cond;
+  unsigned long                      flags;
   Thread_queue_Context               queue_context;
   int                                error;
   int                                mutex_error;
@@ -66,16 +65,10 @@ int _POSIX_Condition_variables_Wait_support(
   bool                               already_timedout;
   TOD_Absolute_timeout_conversion_results  status;
 
-  if ( mutex == NULL ) {
-    return EINVAL;
-  }
+  the_cond = _POSIX_Condition_variables_Get( cond );
+  POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
 
-  the_cond = _POSIX_Condition_variables_Get( cond, &queue_context );
-
-  if ( the_cond == NULL ) {
-    return EINVAL;
-  }
-
+  _Thread_queue_Context_initialize( &queue_context );
   already_timedout = false;
 
   if ( abstime != NULL ) {
@@ -88,8 +81,11 @@ int _POSIX_Condition_variables_Wait_support(
      *  then we do a polling operation and convert the UNSATISFIED
      *  status into the appropriate error.
      */
-    _Assert( the_cond->clock );
-    status = _TOD_Absolute_timeout_to_ticks(abstime, the_cond->clock, &timeout);
+    status = _TOD_Absolute_timeout_to_ticks(
+      abstime,
+      _POSIX_Condition_variables_Get_clock( flags ),
+      &timeout
+    );
     if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
       return EINVAL;
 
@@ -103,7 +99,7 @@ int _POSIX_Condition_variables_Wait_support(
     _Thread_queue_Context_set_no_timeout( &queue_context );
   }
 
-  _POSIX_Condition_variables_Acquire_critical( the_cond, &queue_context );
+  executing = _POSIX_Condition_variables_Acquire( the_cond, &queue_context );
 
   if (
     the_cond->mutex != POSIX_CONDITION_VARIABLES_NO_MUTEX
@@ -114,7 +110,6 @@ int _POSIX_Condition_variables_Wait_support(
   }
 
   the_cond->mutex = mutex;
-  executing = _Thread_Executing;
 
   if ( !already_timedout ) {
     _Thread_queue_Context_set_thread_state(
@@ -126,7 +121,7 @@ int _POSIX_Condition_variables_Wait_support(
       _POSIX_Condition_variables_Enqueue_callout
     );
     _Thread_queue_Enqueue(
-      &the_cond->Wait_queue.Queue,
+      &the_cond->Queue.Queue,
       POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
       executing,
       &queue_context

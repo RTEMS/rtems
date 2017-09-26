@@ -17,6 +17,7 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
 ## Some POSIX threads features are needed all the time
 include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
@@ -34,8 +35,6 @@ include_HEADERS += include/mqueue.h
 
 # include/rtems/posix
 include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
-include_rtems_posix_HEADERS += include/rtems/posix/cond.h
-include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mmanimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
@@ -72,6 +71,15 @@ libposix_a_SOURCES += src/barrierattrdestroy.c src/barrierattrgetpshared.c \
     src/pbarrierdestroy.c src/pbarrierinit.c \
     src/pbarrierwait.c
 
+## CONDITION_VARIABLE_C_FILES
+libposix_a_SOURCES += src/condattrdestroy.c \
+    src/condattrinit.c  \
+    src/condattrgetpshared.c src/condattrsetpshared.c \
+    src/condattrgetclock.c src/condattrsetclock.c \
+    src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
+    src/condinit.c src/condsignal.c src/condsignalsupp.c \
+    src/condtimedwait.c src/condwait.c src/condwaitsupp.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES +=  src/pthreadatfork.c
 
@@ -79,15 +87,6 @@ libposix_a_SOURCES +=  src/pthreadatfork.c
 libposix_a_SOURCES += src/cancel.c \
     src/cleanuppush.c src/setcancelstate.c \
     src/setcanceltype.c src/testcancel.c
-
-## CONDITION_VARIABLE_C_FILES
-libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
-    src/condattrinit.c  \
-    src/condattrgetpshared.c src/condattrsetpshared.c \
-    src/condattrgetclock.c src/condattrsetclock.c \
-    src/condbroadcast.c src/conddefaultattributes.c src/conddestroy.c \
-    src/condinit.c src/condsignal.c src/condsignalsupp.c \
-    src/condtimedwait.c src/condwait.c src/condwaitsupp.c src/condget.c
 
 ## MEMORY_C_FILES
 libposix_a_SOURCES += src/mlockall.c

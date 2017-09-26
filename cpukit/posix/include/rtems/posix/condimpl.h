@@ -16,16 +16,28 @@
 
 #ifndef _RTEMS_POSIX_CONDIMPL_H
 #define _RTEMS_POSIX_CONDIMPL_H
- 
-#include <rtems/posix/cond.h>
-#include <rtems/score/objectimpl.h>
-#include <rtems/score/threadqimpl.h>
 
 #include <errno.h>
+#include <pthread.h>
+
+#include <rtems/score/percpu.h>
+#include <rtems/score/threadqimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct {
+  unsigned long flags;
+  Thread_queue_Syslock_queue Queue;
+  pthread_mutex_t *mutex;
+} POSIX_Condition_variables_Control;
+
+#define POSIX_CONDITION_VARIABLES_CLOCK_MONOTONIC 0x1UL
+
+#define POSIX_CONDITION_VARIABLES_FLAGS_MASK 0x1UL
+
+#define POSIX_CONDITION_VARIABLES_MAGIC 0x18dfb1feUL
 
 /**
  *  Constant to indicate condition variable does not currently have
@@ -37,42 +49,76 @@ extern "C" {
 
 #define POSIX_CONDITION_VARIABLE_OF_THREAD_QUEUE_QUEUE( queue ) \
   RTEMS_CONTAINER_OF( \
-    queue, POSIX_Condition_variables_Control, Wait_queue.Queue )
-
-/**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _POSIX_Condition_variables_Information;
+    queue, POSIX_Condition_variables_Control, Queue.Queue )
 
 /**
  *  The default condition variable attributes structure.
  */
 extern const pthread_condattr_t _POSIX_Condition_variables_Default_attributes;
 
+static inline POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
+  pthread_cond_t *cond
+)
+{
+  return (POSIX_Condition_variables_Control *) cond;
+}
+
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Initialize(
   POSIX_Condition_variables_Control *the_cond,
   const pthread_condattr_t          *the_attr
 )
 {
-  _Thread_queue_Object_initialize( &the_cond->Wait_queue );
+  unsigned long flags;
+
+  _Thread_queue_Queue_initialize( &the_cond->Queue.Queue, NULL );
   the_cond->mutex = POSIX_CONDITION_VARIABLES_NO_MUTEX;
-  the_cond->clock = the_attr->clock;
+
+  flags = (uintptr_t) the_cond ^ POSIX_CONDITION_VARIABLES_MAGIC;
+  flags &= ~POSIX_CONDITION_VARIABLES_FLAGS_MASK;
+
+  if ( the_attr->clock == CLOCK_MONOTONIC ) {
+    flags |= POSIX_CONDITION_VARIABLES_CLOCK_MONOTONIC;
+  }
+
+  the_cond->flags = flags;
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Destroy(
   POSIX_Condition_variables_Control *the_cond
 )
 {
-  _Thread_queue_Destroy( &the_cond->Wait_queue );
+  the_cond->flags = ~the_cond->flags;
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Acquire_critical(
+RTEMS_INLINE_ROUTINE clockid_t _POSIX_Condition_variables_Get_clock(
+  unsigned long flags
+)
+{
+  if ( ( flags & POSIX_CONDITION_VARIABLES_CLOCK_MONOTONIC ) != 0 ) {
+    return CLOCK_MONOTONIC;
+  }
+
+  return CLOCK_REALTIME;
+}
+
+RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Condition_variables_Acquire(
   POSIX_Condition_variables_Control *the_cond,
   Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Acquire_critical( &the_cond->Wait_queue, queue_context );
+  ISR_Level       level;
+  Thread_Control *executing;
+
+  _Thread_queue_Context_ISR_disable( queue_context, level );
+  _Thread_queue_Context_set_ISR_level( queue_context, level );
+  executing = _Thread_Executing;
+  _Thread_queue_Queue_acquire_critical(
+    &the_cond->Queue.Queue,
+    &executing->Potpourri_stats,
+    &queue_context->Lock_context.Lock_context
+  );
+
+  return executing;
 }
 
 RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
@@ -80,42 +126,11 @@ RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Release(
   Thread_queue_Context              *queue_context
 )
 {
-  _Thread_queue_Release( &the_cond->Wait_queue, queue_context );
-}
-
-/**
- *  @brief POSIX Condition Variable Allocate
- *
- *  This function allocates a condition variable control block from
- *  the inactive chain of free condition variable control blocks.
- */
-RTEMS_INLINE_ROUTINE POSIX_Condition_variables_Control *
-  _POSIX_Condition_variables_Allocate( void )
-{
-  return (POSIX_Condition_variables_Control *)
-    _Objects_Allocate( &_POSIX_Condition_variables_Information );
-}
-
-/**
- *  @brief POSIX Condition Variable Free
- *
- *  This routine frees a condition variable control block to the
- *  inactive chain of free condition variable control blocks.
- */
-RTEMS_INLINE_ROUTINE void _POSIX_Condition_variables_Free (
-  POSIX_Condition_variables_Control *the_condition_variable
-)
-{
-  _Objects_Free(
-    &_POSIX_Condition_variables_Information,
-    &the_condition_variable->Object
+  _Thread_queue_Queue_release(
+    &the_cond->Queue.Queue,
+    &queue_context->Lock_context.Lock_context
   );
 }
-
-POSIX_Condition_variables_Control *_POSIX_Condition_variables_Get(
-  pthread_cond_t       *cond,
-  Thread_queue_Context *queue_context
-);
 
 /**
  * @brief Implements wake up version of the "signal" operation.
@@ -139,6 +154,27 @@ int _POSIX_Condition_variables_Wait_support(
   pthread_mutex_t           *mutex,
   const struct timespec     *abstime
 );
+
+bool _POSIX_Condition_variables_Auto_initialization(
+  POSIX_Condition_variables_Control *the_cond
+);
+
+#define POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags ) \
+  do { \
+    if ( ( the_cond ) == NULL ) { \
+      return EINVAL; \
+    } \
+    flags = ( the_cond )->flags; \
+    if ( \
+      ( ( (uintptr_t) ( the_cond ) ^ POSIX_CONDITION_VARIABLES_MAGIC ) \
+          & ~POSIX_CONDITION_VARIABLES_FLAGS_MASK ) \
+        != ( flags & ~POSIX_CONDITION_VARIABLES_FLAGS_MASK ) \
+    ) { \
+      if ( !_POSIX_Condition_variables_Auto_initialization( the_cond ) ) { \
+        return EINVAL; \
+      } \
+    } \
+  } while ( 0 )
 
 #ifdef __cplusplus
 }

@@ -17,6 +17,121 @@
 
 const char rtems_test_name[] = "PSX 10";
 
+static void test_cond_null( void )
+{
+  pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+  int eno;
+  struct timespec to;
+
+  eno = pthread_cond_init( NULL, NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_lock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_wait( NULL, &mtx );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_cond_timedwait( NULL, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_unlock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_signal( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_broadcast( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_destroy( NULL );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_destroy( &mtx );
+  rtems_test_assert( eno == 0 );
+}
+
+static void test_cond_not_initialized( void )
+{
+  pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+  pthread_cond_t cond;
+  int eno;
+  struct timespec to;
+
+  memset( &cond, 0xff, sizeof( cond ) );
+
+  eno = pthread_mutex_lock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_wait( &cond, &mtx );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_cond_timedwait( &cond, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_unlock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_signal( &cond );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_broadcast( &cond );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_destroy( &cond );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_destroy( &mtx );
+  rtems_test_assert( eno == 0 );
+}
+
+static void test_cond_invalid_copy( void )
+{
+  pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
+  pthread_cond_t cond;
+  pthread_cond_t cond2;
+  int eno;
+  struct timespec to;
+
+  eno = pthread_cond_init( &cond, NULL );
+  rtems_test_assert( eno == 0 );
+
+  memcpy( &cond2, &cond, sizeof( cond2 ) );
+
+  eno = pthread_mutex_lock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_wait( &cond2, &mtx );
+  rtems_test_assert( eno == EINVAL );
+
+  to.tv_sec = 1;
+  to.tv_nsec = 1;
+  eno = pthread_cond_timedwait( &cond2, &mtx, &to );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_mutex_unlock( &mtx );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_cond_signal( &cond2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_broadcast( &cond2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_destroy( &cond2 );
+  rtems_test_assert( eno == EINVAL );
+
+  eno = pthread_cond_destroy( &cond );
+  rtems_test_assert( eno == 0 );
+
+  eno = pthread_mutex_destroy( &mtx );
+  rtems_test_assert( eno == 0 );
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -29,6 +144,10 @@ void *POSIX_Init(
   struct timespec     timeout;
 
   TEST_BEGIN();
+
+  test_cond_null();
+  test_cond_not_initialized();
+  test_cond_invalid_copy();
 
   puts( "Init: pthread_condattr_init" );
   status = pthread_condattr_init( &attr );
@@ -96,16 +215,6 @@ void *POSIX_Init(
     printf( "status = %d\n", status );
   rtems_test_assert( status == EINVAL );
   puts( "Init: pthread_cond_init - EINVAL (attr not initialized)" );
-
-  status = pthread_cond_init( &cond, NULL );
-  if ( status != ENOMEM )
-    printf( "status = %d\n", status );
-  rtems_test_assert( status == ENOMEM );
-  puts( "Init: pthread_cond_init - ENOMEM (too many conds)" );
-
-  puts( "Init: pthread_cond_destroy" );
-  status = pthread_cond_destroy( &cond );
-  rtems_test_assert( !status );
 
 /* error for bad condition variable passed */
 
