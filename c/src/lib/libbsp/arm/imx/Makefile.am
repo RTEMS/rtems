@@ -41,7 +41,9 @@ include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
 include_arm_freescale_imx_HEADERS =
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_ccmvar.h
+include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_ecspireg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_gpcreg.h
+include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_i2creg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_srcreg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_uartreg.h
 

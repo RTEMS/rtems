@@ -135,9 +135,17 @@ $(PROJECT_INCLUDE)/arm/freescale/imx/imx_ccmvar.h: include/arm/freescale/imx/imx
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_ccmvar.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_ccmvar.h
 
+$(PROJECT_INCLUDE)/arm/freescale/imx/imx_ecspireg.h: include/arm/freescale/imx/imx_ecspireg.h $(PROJECT_INCLUDE)/arm/freescale/imx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_ecspireg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_ecspireg.h
+
 $(PROJECT_INCLUDE)/arm/freescale/imx/imx_gpcreg.h: include/arm/freescale/imx/imx_gpcreg.h $(PROJECT_INCLUDE)/arm/freescale/imx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_gpcreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_gpcreg.h
+
+$(PROJECT_INCLUDE)/arm/freescale/imx/imx_i2creg.h: include/arm/freescale/imx/imx_i2creg.h $(PROJECT_INCLUDE)/arm/freescale/imx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_i2creg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_i2creg.h
 
 $(PROJECT_INCLUDE)/arm/freescale/imx/imx_srcreg.h: include/arm/freescale/imx/imx_srcreg.h $(PROJECT_INCLUDE)/arm/freescale/imx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_srcreg.h

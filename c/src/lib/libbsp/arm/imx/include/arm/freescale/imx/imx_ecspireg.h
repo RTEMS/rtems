@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <info@embedded-brains.de>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rtems.org/license/LICENSE.
+ */
+
+#ifndef IMX_ECSPIREG_H
+#define IMX_ECSPIREG_H
+
+#include <bsp/utility.h>
+
+typedef struct {
+	uint32_t rxdata;
+	uint32_t txdata;
+	uint32_t conreg;
+#define IMX_ECSPI_CONREG_BURST_LENGTH(val) BSP_FLD32(val, 20, 31)
+#define IMX_ECSPI_CONREG_BURST_LENGTH_GET(reg) BSP_FLD32GET(reg, 20, 31)
+#define IMX_ECSPI_CONREG_BURST_LENGTH_SET(reg, val) BSP_FLD32SET(reg, val, 20, 31)
+#define IMX_ECSPI_CONREG_CHANNEL_SELECT(val) BSP_FLD32(val, 18, 19)
+#define IMX_ECSPI_CONREG_CHANNEL_SELECT_GET(reg) BSP_FLD32GET(reg, 18, 19)
+#define IMX_ECSPI_CONREG_CHANNEL_SELECT_SET(reg, val) BSP_FLD32SET(reg, val, 18, 19)
+#define IMX_ECSPI_CONREG_DRCTL(val) BSP_FLD32(val, 16, 17)
+#define IMX_ECSPI_CONREG_DRCTL_GET(reg) BSP_FLD32GET(reg, 16, 17)
+#define IMX_ECSPI_CONREG_DRCTL_SET(reg, val) BSP_FLD32SET(reg, val, 16, 17)
+#define IMX_ECSPI_CONREG_PRE_DIVIDER(val) BSP_FLD32(val, 12, 15)
+#define IMX_ECSPI_CONREG_PRE_DIVIDER_GET(reg) BSP_FLD32GET(reg, 12, 15)
+#define IMX_ECSPI_CONREG_PRE_DIVIDER_SET(reg, val) BSP_FLD32SET(reg, val, 12, 15)
+#define IMX_ECSPI_CONREG_POST_DIVIDER(val) BSP_FLD32(val, 8, 11)
+#define IMX_ECSPI_CONREG_POST_DIVIDER_GET(reg) BSP_FLD32GET(reg, 8, 11)
+#define IMX_ECSPI_CONREG_POST_DIVIDER_SET(reg, val) BSP_FLD32SET(reg, val, 8, 11)
+#define IMX_ECSPI_CONREG_CHANNEL_MODE(val) BSP_FLD32(val, 4, 7)
+#define IMX_ECSPI_CONREG_CHANNEL_MODE_GET(reg) BSP_FLD32GET(reg, 4, 7)
+#define IMX_ECSPI_CONREG_CHANNEL_MODE_SET(reg, val) BSP_FLD32SET(reg, val, 4, 7)
+#define IMX_ECSPI_CONREG_SMC BSP_BIT32(3)
+#define IMX_ECSPI_CONREG_XCH BSP_BIT32(2)
+#define IMX_ECSPI_CONREG_HT BSP_BIT32(1)
+#define IMX_ECSPI_CONREG_EN BSP_BIT32(0)
+	uint32_t configreg;
+#define IMX_ECSPI_CONFIGREG_HT_LENGTH(val) BSP_FLD32(val, 24, 28)
+#define IMX_ECSPI_CONFIGREG_HT_LENGTH_GET(reg) BSP_FLD32GET(reg, 24, 28)
+#define IMX_ECSPI_CONFIGREG_HT_LENGTH_SET(reg, val) BSP_FLD32SET(reg, val, 24, 28)
+#define IMX_ECSPI_CONFIGREG_SCLK_CTL(val) BSP_FLD32(val, 20, 23)
+#define IMX_ECSPI_CONFIGREG_SCLK_CTL_GET(reg) BSP_FLD32GET(reg, 20, 23)
+#define IMX_ECSPI_CONFIGREG_SCLK_CTL_SET(reg, val) BSP_FLD32SET(reg, val, 20, 23)
+#define IMX_ECSPI_CONFIGREG_DATA_CTL(val) BSP_FLD32(val, 16, 19)
+#define IMX_ECSPI_CONFIGREG_DATA_CTL_GET(reg) BSP_FLD32GET(reg, 16, 19)
+#define IMX_ECSPI_CONFIGREG_DATA_CTL_SET(reg, val) BSP_FLD32SET(reg, val, 16, 19)
+#define IMX_ECSPI_CONFIGREG_SS_POL(val) BSP_FLD32(val, 12, 15)
+#define IMX_ECSPI_CONFIGREG_SS_POL_GET(reg) BSP_FLD32GET(reg, 12, 15)
+#define IMX_ECSPI_CONFIGREG_SS_POL_SET(reg, val) BSP_FLD32SET(reg, val, 12, 15)
+#define IMX_ECSPI_CONFIGREG_SS_CTL(val) BSP_FLD32(val, 8, 11)
+#define IMX_ECSPI_CONFIGREG_SS_CTL_GET(reg) BSP_FLD32GET(reg, 8, 11)
+#define IMX_ECSPI_CONFIGREG_SS_CTL_SET(reg, val) BSP_FLD32SET(reg, val, 8, 11)
+#define IMX_ECSPI_CONFIGREG_SCLK_POL(val) BSP_FLD32(val, 4, 7)
+#define IMX_ECSPI_CONFIGREG_SCLK_POL_GET(reg) BSP_FLD32GET(reg, 4, 7)
+#define IMX_ECSPI_CONFIGREG_SCLK_POL_SET(reg, val) BSP_FLD32SET(reg, val, 4, 7)
+#define IMX_ECSPI_CONFIGREG_SCLK_PHA(val) BSP_FLD32(val, 0, 3)
+#define IMX_ECSPI_CONFIGREG_SCLK_PHA_GET(reg) BSP_FLD32GET(reg, 0, 3)
+#define IMX_ECSPI_CONFIGREG_SCLK_PHA_SET(reg, val) BSP_FLD32SET(reg, val, 0, 3)
+#define IMX_ECSPI_TC BSP_BIT32(7)
+#define IMX_ECSPI_RO BSP_BIT32(6)
+#define IMX_ECSPI_RF BSP_BIT32(5)
+#define IMX_ECSPI_RDR BSP_BIT32(4)
+#define IMX_ECSPI_RR BSP_BIT32(3)
+#define IMX_ECSPI_TF BSP_BIT32(2)
+#define IMX_ECSPI_TDR BSP_BIT32(1)
+#define IMX_ECSPI_TE BSP_BIT32(0)
+	uint32_t intreg;
+	uint32_t dmareg;
+#define IMX_ECSPI_DMAREG_RXTDEN BSP_BIT32(31)
+#define IMX_ECSPI_DMAREG_RX_DMA_LENGTH(val) BSP_FLD32(val, 24, 29)
+#define IMX_ECSPI_DMAREG_RX_DMA_LENGTH_GET(reg) BSP_FLD32GET(reg, 24, 29)
+#define IMX_ECSPI_DMAREG_RX_DMA_LENGTH_SET(reg, val) BSP_FLD32SET(reg, val, 24, 29)
+#define IMX_ECSPI_DMAREG_RXDEN BSP_BIT32(23)
+#define IMX_ECSPI_DMAREG_RX_THRESHOLD(val) BSP_FLD32(val, 16, 21)
+#define IMX_ECSPI_DMAREG_RX_THRESHOLD_GET(reg) BSP_FLD32GET(reg, 16, 21)
+#define IMX_ECSPI_DMAREG_RX_THRESHOLD_SET(reg, val) BSP_FLD32SET(reg, val, 16, 21)
+#define IMX_ECSPI_DMAREG_TEDEN BSP_BIT32(7)
+#define IMX_ECSPI_DMAREG_TX_THRESHOLD(val) BSP_FLD32(val, 0, 5)
+#define IMX_ECSPI_DMAREG_TX_THRESHOLD_GET(reg) BSP_FLD32GET(reg, 0, 5)
+#define IMX_ECSPI_DMAREG_TX_THRESHOLD_SET(reg, val) BSP_FLD32SET(reg, val, 0, 5)
+	uint32_t statreg;
+	uint32_t periodreg;
+#define IMX_ECSPI_PERIODREG_CSD_CTL(val) BSP_FLD32(val, 16, 21)
+#define IMX_ECSPI_PERIODREG_CSD_CTL_GET(reg) BSP_FLD32GET(reg, 16, 21)
+#define IMX_ECSPI_PERIODREG_CSD_CTL_SET(reg, val) BSP_FLD32SET(reg, val, 16, 21)
+#define IMX_ECSPI_PERIODREG_CSRC BSP_BIT32(15)
+#define IMX_ECSPI_PERIODREG_SAMPLE_PERIOD(val) BSP_FLD32(val, 0, 14)
+#define IMX_ECSPI_PERIODREG_SAMPLE_PERIOD_GET(reg) BSP_FLD32GET(reg, 0, 14)
+#define IMX_ECSPI_PERIODREG_SAMPLE_PERIOD_SET(reg, val) BSP_FLD32SET(reg, val, 0, 14)
+	uint32_t testreg;
+#define IMX_ECSPI_TESTREG_LBC BSP_BIT32(31)
+#define IMX_ECSPI_TESTREG_RXCNT(val) BSP_FLD32(val, 8, 14)
+#define IMX_ECSPI_TESTREG_RXCNT_GET(reg) BSP_FLD32GET(reg, 8, 14)
+#define IMX_ECSPI_TESTREG_RXCNT_SET(reg, val) BSP_FLD32SET(reg, val, 8, 14)
+#define IMX_ECSPI_TESTREG_TXCNT(val) BSP_FLD32(val, 0, 6)
+#define IMX_ECSPI_TESTREG_TXCNT_GET(reg) BSP_FLD32GET(reg, 0, 6)
+#define IMX_ECSPI_TESTREG_TXCNT_SET(reg, val) BSP_FLD32SET(reg, val, 0, 6)
+	uint32_t reserved_24[7];
+	uint32_t msgdata;
+} imx_ecspi;
+
+#endif /* IMX_ECSPIREG_H */
