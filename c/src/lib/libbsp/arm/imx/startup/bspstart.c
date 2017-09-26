@@ -17,6 +17,7 @@
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
+#include <bsp/linker-symbols.h>
 
 #include <libfdt.h>
 
@@ -57,4 +58,8 @@ void arm_generic_timer_get_config(
 void bsp_start(void)
 {
   bsp_interrupt_initialize();
+  rtems_cache_coherent_add_area(
+    bsp_section_nocacheheap_begin,
+    (uintptr_t) bsp_section_nocacheheap_size
+  );
 }
