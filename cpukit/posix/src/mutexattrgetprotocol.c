@@ -20,12 +20,7 @@
 
 #include <errno.h>
 #include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
+#include <stddef.h>
 
 /*
  *  13.6.1 Mutex Initialization Scheduling Attributes, P1003.1c/Draft 10, p. 128
@@ -36,7 +31,7 @@ int pthread_mutexattr_getprotocol(
   int                         *protocol
 )
 {
-  if ( !attr || !attr->is_initialized || !protocol )
+  if ( attr == NULL || !attr->is_initialized || protocol == NULL )
     return EINVAL;
 
   *protocol = attr->protocol;

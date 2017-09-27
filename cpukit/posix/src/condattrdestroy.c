@@ -18,13 +18,10 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
 #include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/score/watchdog.h>
-#include <rtems/posix/condimpl.h>
-#include <rtems/posix/muteximpl.h>
+#include <pthread.h>
+#include <stddef.h>
+#include <stdbool.h>
 
 /*
  *  11.4.1 Condition Variable Initialization Attributes,
@@ -35,7 +32,7 @@ int pthread_condattr_destroy(
   pthread_condattr_t *attr
 )
 {
-  if ( !attr || attr->is_initialized == false )
+  if ( attr == NULL || !attr->is_initialized )
     return EINVAL;
 
   attr->is_initialized = false;
