@@ -64,12 +64,6 @@ typedef struct {
 
   /**
    * This field contains the maximum number of POSIX API
-   * mutexes which are configured for this application.
-   */
-  uint32_t                            maximum_mutexes;
-
-  /**
-   * This field contains the maximum number of POSIX API
    * timers which are configured for this application.
    */
   uint32_t                            maximum_timers;

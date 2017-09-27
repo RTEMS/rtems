@@ -24,7 +24,6 @@
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS              10
 #define CONFIGURE_MAXIMUM_POSIX_KEYS                 10
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES              20
 
 /*
  *  Put the overrides of default configuration parameters here.

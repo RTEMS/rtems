@@ -31,30 +31,27 @@ int pthread_mutex_getprioceiling(
 )
 {
   POSIX_Mutex_Control  *the_mutex;
+  unsigned long         flags;
   Thread_queue_Context  queue_context;
 
   if ( prioceiling == NULL ) {
     return EINVAL;
   }
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
+  the_mutex = _POSIX_Mutex_Get( mutex );
+  POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );
 
-  if ( the_mutex == NULL ) {
-    return EINVAL;
-  }
+  _POSIX_Mutex_Acquire( the_mutex, &queue_context );
 
-  _POSIX_Mutex_Acquire_critical( the_mutex, &queue_context );
-
-  if ( the_mutex->protocol == POSIX_MUTEX_PRIORITY_CEILING ) {
+  if ( _POSIX_Mutex_Get_protocol( flags ) == POSIX_MUTEX_PRIORITY_CEILING ) {
     *prioceiling = _POSIX_Priority_From_core(
-      _CORE_ceiling_mutex_Get_scheduler( &the_mutex->Mutex ),
-      _CORE_ceiling_mutex_Get_priority( &the_mutex->Mutex )
+      _POSIX_Mutex_Get_scheduler( the_mutex ),
+      _POSIX_Mutex_Get_priority( the_mutex )
     );
   } else {
     *prioceiling = 0;
   }
 
   _POSIX_Mutex_Release( the_mutex, &queue_context );
-
   return 0;
 }

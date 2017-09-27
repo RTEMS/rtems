@@ -1834,13 +1834,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
      *   o disk lock
      */
     #define _CONFIGURE_LIBBLOCK_SEMAPHORES 1
-
-    /*
-     * POSIX Mutexes:
-     *  o bdbuf lock
-     *  o bdbuf sync lock
-     */
-    #define _CONFIGURE_LIBBLOCK_POSIX_MUTEXES 2
   #else
     /*
      * Semaphores:
@@ -1852,8 +1845,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
      *   o bdbuf buffer condition
      */
     #define _CONFIGURE_LIBBLOCK_SEMAPHORES 6
-
-    #define _CONFIGURE_LIBBLOCK_POSIX_MUTEXES 0
   #endif
 
   #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
@@ -1868,8 +1859,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS 0
   /** This specifies the number of Classic API semaphores needed by libblock. */
   #define _CONFIGURE_LIBBLOCK_SEMAPHORES 0
-  /** This specifies the number of POSIX Mutexes needed by libblock. */
-  #define _CONFIGURE_LIBBLOCK_POSIX_MUTEXES 0
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 /**@}*/
 
@@ -2039,10 +2028,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifdef RTEMS_POSIX_API
     #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
       #define CONFIGURE_MAXIMUM_POSIX_THREADS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_MUTEXES)
-      #define CONFIGURE_MAXIMUM_POSIX_MUTEXES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_TIMERS)
@@ -2423,7 +2408,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #include <limits.h>
   #include <mqueue.h>
   #include <rtems/posix/mqueue.h>
-  #include <rtems/posix/mutex.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthread.h>
   #include <rtems/posix/semaphore.h>
@@ -2447,21 +2431,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
   #endif
-
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API mutexes.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 0
-  #endif
-
-  /*
-   * This macro is calculated to specify the memory required for
-   * POSIX API mutexes.
-   */
-  #define _CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_mutexes) \
-    _Configure_Object_RAM(_mutexes, sizeof(POSIX_Mutex_Control) )
 
   /**
    * This configuration parameter specifies the maximum number of
@@ -2624,13 +2593,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 /**@{*/
 #ifdef CONFIGURE_GNAT_RTEMS
-
-  /**
-   * The GNAT run-time needs something less than (10) POSIX mutexes.
-   * We may be able to get by with less but why bother.
-   */
-  #define _CONFIGURE_GNAT_MUTEXES 10
-
   /**
    * This is the maximum number of Ada tasks which can be concurrently
    * in existence.  Twenty (20) are required to run all tests in the
@@ -2646,10 +2608,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifndef CONFIGURE_MAXIMUM_FAKE_ADA_TASKS
     #define CONFIGURE_MAXIMUM_FAKE_ADA_TASKS 0
   #endif
-
 #else
   /** This defines he number of POSIX mutexes GNAT needs. */
-  #define _CONFIGURE_GNAT_MUTEXES          0
   /** This defines he number of Ada tasks needed by the application. */
   #define CONFIGURE_MAXIMUM_ADA_TASKS      0
   /**
@@ -2674,11 +2634,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
     #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
   #endif
-  #ifndef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-    #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
-  #endif
-
-  #define _CONFIGURE_GO_INIT_MUTEXES 77
 
   #ifndef CONFIGURE_MAXIMUM_GOROUTINES
     #define CONFIGURE_MAXIMUM_GOROUTINES 400
@@ -2689,12 +2644,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #endif
 
 #else
-  /*
-   * This specifies the number of mutexes required by the Go run-time
-   * for its own use.
-   */
-  #define _CONFIGURE_GO_INIT_MUTEXES             0
-
   /** This specifies the maximum number of Go co-routines. */
   #define CONFIGURE_MAXIMUM_GOROUTINES          0
 
@@ -2720,25 +2669,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
      CONFIGURE_MAXIMUM_GOROUTINES)
 
 #ifdef RTEMS_POSIX_API
-  /**
-   * This macro provides summation of the POSIX Mutexes.
-   */
-  #define _CONFIGURE_POSIX_MUTEXES \
-    (CONFIGURE_MAXIMUM_POSIX_MUTEXES + \
-      _CONFIGURE_LIBBLOCK_POSIX_MUTEXES + \
-      _CONFIGURE_GNAT_MUTEXES + \
-      CONFIGURE_MAXIMUM_ADA_TASKS + \
-      CONFIGURE_MAXIMUM_FAKE_ADA_TASKS + \
-      _CONFIGURE_GO_INIT_MUTEXES + \
-      CONFIGURE_MAXIMUM_GO_CHANNELS)
-
   /*
    * This macro is calculated to specify the memory required for
    * the POSIX API in its entirety.
    */
   #define _CONFIGURE_MEMORY_FOR_POSIX \
-    (_CONFIGURE_MEMORY_FOR_POSIX_MUTEXES(_CONFIGURE_POSIX_MUTEXES) + \
-      _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
+    (_CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS( \
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
@@ -3189,7 +3125,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
      */
     posix_api_configuration_table Configuration_POSIX_API = {
       _CONFIGURE_POSIX_THREADS,
-      _CONFIGURE_POSIX_MUTEXES,
       CONFIGURE_MAXIMUM_POSIX_TIMERS,
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS,
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES,
@@ -3402,7 +3337,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
-    uint32_t POSIX_MUTEXES;
     uint32_t POSIX_TIMERS;
     uint32_t POSIX_QUEUED_SIGNALS;
     uint32_t POSIX_MESSAGE_QUEUES;
@@ -3451,7 +3385,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
-    _CONFIGURE_MEMORY_FOR_POSIX_MUTEXES( _CONFIGURE_POSIX_MUTEXES ),
     _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
     _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
@@ -3521,7 +3454,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #if !defined(RTEMS_POSIX_API)
   #if ((CONFIGURE_MAXIMUM_POSIX_THREADS != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_MUTEXES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \

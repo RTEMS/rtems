@@ -25,22 +25,16 @@ void *POSIX_Init(
 )
 {
   int             sc;
-  pthread_mutex_t mutex1;
-  pthread_mutex_t mutex2;
+  pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+  pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
   int             prioceiling;
 
   TEST_BEGIN();
 
   /* path using mutex get with interrupts disabled */
-  mutex1 = PTHREAD_MUTEX_INITIALIZER;
-  mutex2 = PTHREAD_MUTEX_INITIALIZER;
   puts( "Init - pthread_mutex_lock - auto initialize - OK" );
   sc = pthread_mutex_lock( &mutex1 );
   fatal_posix_service_status( sc, 0, "mutex lock OK" );
-
-  puts( "Init - pthread_mutex_lock - auto initialize - EINVAL" );
-  sc = pthread_mutex_lock( &mutex2 );
-  fatal_posix_service_status( sc, EINVAL, "mutex lock EINVAL" );
 
   puts( "Init - pthread_mutex_unlock - OK" );
   sc = pthread_mutex_unlock( &mutex1 );
@@ -51,22 +45,14 @@ void *POSIX_Init(
   fatal_posix_service_status( sc, 0, "mutex destroy OK" );
 
   /* path using mutex get with dispatching disabled */
-  mutex1 = PTHREAD_MUTEX_INITIALIZER;
-  mutex2 = PTHREAD_MUTEX_INITIALIZER;
   puts( "Init - pthread_mutex_getprioceiling - auto initialize - OK" );
   prioceiling = 1;
-  sc = pthread_mutex_getprioceiling( &mutex1, &prioceiling );
+  sc = pthread_mutex_getprioceiling( &mutex2, &prioceiling );
   fatal_posix_service_status( sc, 0, "mutex getprioceiling OK" );
   rtems_test_assert( prioceiling == 0 );
 
-  puts( "Init - pthread_mutex_getprioceiling - auto initialize - EINVAL" );
-  prioceiling = 1;
-  sc = pthread_mutex_getprioceiling( &mutex2, &prioceiling );
-  fatal_posix_service_status( sc, EINVAL, "mutex getprioceiling EINVAL" );
-  rtems_test_assert( prioceiling == 1 );
-
   puts( "Init - pthread_mutex_destroy - OK" );
-  sc = pthread_mutex_destroy( &mutex1 );
+  sc = pthread_mutex_destroy( &mutex2 );
   fatal_posix_service_status( sc, 0, "mutex destroy OK" );
 
   TEST_END();
@@ -81,7 +67,6 @@ void *POSIX_Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 

@@ -44,7 +44,6 @@ void *task_c(
 #define CONFIGURE_MAXIMUM_POSIX_THREADS             5
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS              5
 #define CONFIGURE_MAXIMUM_TIMERS                    4
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES             2
 
 
 #include <rtems/confdefs.h>

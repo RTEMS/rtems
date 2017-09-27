@@ -20,15 +20,11 @@
 #include <errno.h>
 
 #include <rtems/score/assert.h>
+#include <rtems/score/muteximpl.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 
 #define MUTEX_TQ_OPERATIONS &_Thread_queue_Operations_priority_inherit
-
-typedef struct {
-  Thread_queue_Syslock_queue Queue;
-} Mutex_Control;
 
 RTEMS_STATIC_ASSERT(
   offsetof( Mutex_Control, Queue )
@@ -40,11 +36,6 @@ RTEMS_STATIC_ASSERT(
   sizeof( Mutex_Control ) == sizeof( struct _Mutex_Control ),
   MUTEX_CONTROL_SIZE
 );
-
-typedef struct {
-  Mutex_Control Mutex;
-  unsigned int nest_level;
-} Mutex_recursive_Control;
 
 RTEMS_STATIC_ASSERT(
   offsetof( Mutex_recursive_Control, Mutex )

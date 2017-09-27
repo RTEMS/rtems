@@ -39,7 +39,6 @@ void *Task_3(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS  4
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES  2
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
@@ -62,6 +61,6 @@ TEST_EXTERN pthread_t        Task3_id;
 TEST_EXTERN pthread_mutex_t  Mutex_id;
 TEST_EXTERN pthread_mutex_t  Mutex2_id;
 TEST_EXTERN pthread_mutex_t  Mutex3_id;
-TEST_EXTERN pthread_mutex_t  Mutex_bad_id;
+TEST_EXTERN pthread_mutex_t *Mutex_bad_id;
 
 /* end of include file */

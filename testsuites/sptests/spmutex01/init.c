@@ -713,7 +713,6 @@ static void fatal_extension(
 #define CONFIGURE_MAXIMUM_SEMAPHORES 3
 
 #ifdef RTEMS_POSIX_API
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
 #endif
 
 #define CONFIGURE_INITIAL_EXTENSIONS \

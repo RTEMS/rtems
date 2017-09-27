@@ -21,27 +21,34 @@
 #include <rtems/posix/muteximpl.h>
 #include <rtems/posix/posixapi.h>
 
-THREAD_QUEUE_OBJECT_ASSERT(
-  POSIX_Mutex_Control,
-  Mutex.Recursive.Mutex.Wait_queue
-);
-
-static Status_Control _POSIX_Mutex_Lock_nested(
-  CORE_recursive_mutex_Control *the_recursive_mutex
+Status_Control _POSIX_Mutex_Seize_slow(
+  POSIX_Mutex_Control           *the_mutex,
+  const Thread_queue_Operations *operations,
+  Thread_Control                *executing,
+  bool                           wait,
+  Thread_queue_Context          *queue_context
 )
 {
-  POSIX_Mutex_Control *the_mutex;
-
-  the_mutex = RTEMS_CONTAINER_OF(
-    the_recursive_mutex,
-    POSIX_Mutex_Control,
-    Mutex.Recursive
-  );
-
-  if ( the_mutex->is_recursive ) {
-    return _CORE_recursive_mutex_Seize_nested( the_recursive_mutex );
+  if ( wait ) {
+    _Thread_queue_Context_set_thread_state(
+      queue_context,
+      STATES_WAITING_FOR_MUTEX
+    );
+    _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
+    _Thread_queue_Context_set_deadlock_callout(
+      queue_context,
+      _Thread_queue_Deadlock_status
+    );
+    _Thread_queue_Enqueue(
+      &the_mutex->Recursive.Mutex.Queue.Queue,
+      operations,
+      executing,
+      queue_context
+    );
+    return _Thread_Wait_get_status( executing );
   } else {
-    return STATUS_NESTING_NOT_ALLOWED;
+    _POSIX_Mutex_Release( the_mutex, queue_context );
+    return STATUS_UNAVAILABLE;
   }
 }
 
@@ -52,47 +59,47 @@ int _POSIX_Mutex_Lock_support(
 )
 {
   POSIX_Mutex_Control  *the_mutex;
+  unsigned long         flags;
   Thread_queue_Context  queue_context;
   Thread_Control       *executing;
   Status_Control        status;
 
-  the_mutex = _POSIX_Mutex_Get( mutex, &queue_context );
+  the_mutex = _POSIX_Mutex_Get( mutex );
+  POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );
 
-  if ( the_mutex == NULL ) {
-    return EINVAL;
-  }
-
-  executing = _Thread_Executing;
+  executing = _POSIX_Mutex_Acquire( the_mutex, &queue_context );
   _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
 
-  switch ( the_mutex->protocol ) {
+  switch ( _POSIX_Mutex_Get_protocol( flags ) ) {
     case POSIX_MUTEX_PRIORITY_CEILING:
-      status = _CORE_ceiling_mutex_Seize(
-        &the_mutex->Mutex,
+      status = _POSIX_Mutex_Ceiling_seize(
+        the_mutex,
+        flags,
         executing,
         wait,
-        _POSIX_Mutex_Lock_nested,
         &queue_context
       );
       break;
     case POSIX_MUTEX_NO_PROTOCOL:
-      status = _CORE_recursive_mutex_Seize(
-        &the_mutex->Mutex.Recursive,
+      status = _POSIX_Mutex_Seize(
+        the_mutex,
+        flags,
         POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS,
         executing,
         wait,
-        _POSIX_Mutex_Lock_nested,
         &queue_context
       );
       break;
     default:
-      _Assert( the_mutex->protocol == POSIX_MUTEX_PRIORITY_INHERIT );
-      status = _CORE_recursive_mutex_Seize(
-        &the_mutex->Mutex.Recursive,
-        CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
+      _Assert(
+        _POSIX_Mutex_Get_protocol( flags ) == POSIX_MUTEX_PRIORITY_INHERIT
+      );
+      status = _POSIX_Mutex_Seize(
+        the_mutex,
+        flags,
+        POSIX_MUTEX_PRIORITY_INHERIT_TQ_OPERATIONS,
         executing,
         wait,
-        _POSIX_Mutex_Lock_nested,
         &queue_context
       );
       break;

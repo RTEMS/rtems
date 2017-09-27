@@ -1514,6 +1514,7 @@ rtems_bdbuf_do_init (void)
   uint8_t*            buffer;
   size_t              b;
   rtems_status_code   sc;
+  bool                locked;
 
   if (rtems_bdbuf_tracer)
     printf ("bdbuf:init\n");
@@ -1546,7 +1547,8 @@ rtems_bdbuf_do_init (void)
 
   sc = rtems_bdbuf_lock_create (rtems_build_name ('B', 'D', 'C', 'l'),
                                 &bdbuf_cache.lock);
-  if (sc != RTEMS_SUCCESSFUL)
+  locked = (sc == RTEMS_SUCCESSFUL);
+  if (!locked)
     goto error;
 
   rtems_bdbuf_lock_cache ();
@@ -1729,7 +1731,7 @@ error:
   rtems_bdbuf_waiter_delete (&bdbuf_cache.transfer_waiters);
   rtems_bdbuf_lock_delete (&bdbuf_cache.sync_lock);
 
-  if (bdbuf_cache.lock != 0)
+  if (locked)
   {
     rtems_bdbuf_unlock_cache ();
     rtems_bdbuf_lock_delete (&bdbuf_cache.lock);

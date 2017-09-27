@@ -112,7 +112,6 @@ typedef struct {
 
 typedef struct {
   uint32_t active_message_queues;
-  uint32_t active_mutexes;
   uint32_t active_semaphores;
   uint32_t active_threads;
   uint32_t active_timers;

@@ -184,6 +184,10 @@ $(PROJECT_INCLUDE)/rtems/score/mrspimpl.h: include/rtems/score/mrspimpl.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/mrspimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/mrspimpl.h
 
+$(PROJECT_INCLUDE)/rtems/score/muteximpl.h: include/rtems/score/muteximpl.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/muteximpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/muteximpl.h
+
 $(PROJECT_INCLUDE)/rtems/score/object.h: include/rtems/score/object.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h

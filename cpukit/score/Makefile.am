@@ -54,6 +54,7 @@ include_rtems_score_HEADERS += include/rtems/score/isrlock.h
 include_rtems_score_HEADERS += include/rtems/score/freechain.h
 include_rtems_score_HEADERS += include/rtems/score/mrsp.h
 include_rtems_score_HEADERS += include/rtems/score/mrspimpl.h
+include_rtems_score_HEADERS += include/rtems/score/muteximpl.h
 include_rtems_score_HEADERS += include/rtems/score/object.h
 include_rtems_score_HEADERS += include/rtems/score/objectimpl.h
 include_rtems_score_HEADERS += include/rtems/score/onceimpl.h

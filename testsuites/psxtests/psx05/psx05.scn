@@ -3,7 +3,7 @@ Init's ID is 0x0b010001
 Init: pthread_mutexattr_init - EINVAL (NULL attr)
 Init: pthread_mutexattr_init - SUCCESSFUL
 Init: mutex protocol is (0) -- PTHREAD_PRIO_NONE
-Init: mutex priority ceiling is 254
+Init: mutex priority ceiling is 2147483647
 Init: mutex process shared is (0) -- PTHREAD_PROCESS_PRIVATE
 Init: pthread_mutexattr_destroy - SUCCESSFUL
 Init: pthread_mutexattr_destroy - EINVAL (NULL attr)
@@ -67,8 +67,9 @@ Init: pthread_mutex_timedlock - time out in the past
 Init: pthread_mutex_timedlock - EAGAIN (timeout)
 
 Init: pthread_mutex_init - SUCCESSFUL
-Init: pthread_mutex_init - EAGAIN (too many)
+Init: pthread_mutex_init - SUCCESSFUL
 Init: pthread_mutexattr_destroy - SUCCESSFUL
+Init: pthread_mutex_destroy - SUCCESSFUL
 Init: pthread_mutex_destroy - SUCCESSFUL
 Init: pthread_mutex_destroy - EINVAL (invalid id)
 
@@ -113,8 +114,6 @@ Task 3: pthread_mutex_lock unavailable (inherit case)
 Init: pthread_mutex_unlock - SUCCESSFUL
 Task 3: mutex acquired
 Task 3: unlock Mutex 2
-Task 3: pthread_getschedparam priority = 199
-Task 3: exit
 Init: pthread_mutex_getprioceiling- ceiling = 200
 Init: pthread_setschedparam - set Init priority to highest
 Init: pthread_mutex_lock - EINVAL (priority ceiling violation)

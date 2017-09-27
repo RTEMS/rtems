@@ -21,6 +21,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/key.h
 include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/config.h
+include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
@@ -38,8 +39,6 @@ include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 include_rtems_posix_HEADERS += include/rtems/posix/mmanimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
 include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/mutex.h
-include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
 include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/pthread.h
@@ -80,6 +79,16 @@ libposix_a_SOURCES += src/condattrdestroy.c \
     src/condinit.c src/condsignal.c src/condsignalsupp.c \
     src/condtimedwait.c src/condwait.c src/condwaitsupp.c
 
+## MUTEX_C_FILES
+libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
+    src/mutexattrgetprotocol.c src/mutexattrgetpshared.c \
+    src/mutexattrgettype.c src/mutexattrinit.c src/mutexattrsetprioceiling.c \
+    src/mutexattrsetprotocol.c src/mutexattrsetpshared.c \
+    src/mutexattrsettype.c src/mutexdestroy.c \
+    src/mutexgetprioceiling.c src/mutexinit.c src/mutexlock.c \
+    src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
+    src/mutextrylock.c src/mutexunlock.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES +=  src/pthreadatfork.c
 
@@ -112,16 +121,6 @@ libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
     src/mqueuesendsupp.c src/mqueuesetattr.c src/mqueuetimedreceive.c \
     src/mqueuetimedsend.c \
     src/mqueueunlink.c
-
-## MUTEX_C_FILES
-libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
-    src/mutexattrgetprotocol.c src/mutexattrgetpshared.c \
-    src/mutexattrgettype.c src/mutexattrinit.c src/mutexattrsetprioceiling.c \
-    src/mutexattrsetprotocol.c src/mutexattrsetpshared.c \
-    src/mutexattrsettype.c src/mutex.c src/mutexdestroy.c src/mutexget.c \
-    src/mutexgetprioceiling.c src/mutexinit.c src/mutexlock.c \
-    src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
-    src/mutextrylock.c src/mutexunlock.c
 
 ## PTHREAD_C_FILES
 libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \

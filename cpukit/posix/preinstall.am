@@ -47,6 +47,10 @@ $(PROJECT_INCLUDE)/rtems/posix/config.h: include/rtems/posix/config.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/config.h
 
+$(PROJECT_INCLUDE)/rtems/posix/muteximpl.h: include/rtems/posix/muteximpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/posixapi.h: include/rtems/posix/posixapi.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/posixapi.h
@@ -95,14 +99,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueue.h
 $(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h: include/rtems/posix/mqueueimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mqueueimpl.h
-
-$(PROJECT_INCLUDE)/rtems/posix/mutex.h: include/rtems/posix/mutex.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/mutex.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/mutex.h
-
-$(PROJECT_INCLUDE)/rtems/posix/muteximpl.h: include/rtems/posix/muteximpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/muteximpl.h
 
 $(PROJECT_INCLUDE)/rtems/posix/psignal.h: include/rtems/posix/psignal.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/psignal.h
