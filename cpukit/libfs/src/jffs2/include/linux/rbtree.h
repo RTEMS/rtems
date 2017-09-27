@@ -22,9 +22,6 @@ struct rb_node {
   struct rb_node *rb_right;
   struct rb_node *rb_parent;
   int rb_color;
-#if defined(RTEMS_DEBUG)
-  const RBTree_Control *rb_tree;
-#endif
 };
 
 RTEMS_STATIC_ASSERT(
