@@ -165,7 +165,7 @@ void _Thread_Stack_Free(
 bool _Thread_Initialize(
   Thread_Information                   *information,
   Thread_Control                       *the_thread,
-  const struct Scheduler_Control       *scheduler,
+  const struct _Scheduler_Control      *scheduler,
   void                                 *stack_area,
   size_t                                stack_size,
   bool                                  is_fp,

@@ -44,7 +44,7 @@ struct _pthread_cleanup_context;
 
 struct Per_CPU_Control;
 
-struct Scheduler_Control;
+struct _Scheduler_Control;
 
 struct User_extensions_Iterator;
 
@@ -261,7 +261,7 @@ typedef struct {
   /**
    * @brief The home scheduler control of this thread.
    */
-  const struct Scheduler_Control *home;
+  const struct _Scheduler_Control *home;
 
   /**
    * @brief The processor assigned by the current scheduler.

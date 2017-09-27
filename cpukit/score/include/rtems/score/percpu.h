@@ -452,7 +452,7 @@ typedef struct Per_CPU_Control {
        * This pointer is NULL in case this processor is currently not used by a
        * scheduler instance.
        */
-      const struct Scheduler_Control *control;
+      const struct _Scheduler_Control *control;
 
       /**
        * @brief The scheduler context of the scheduler owning this processor.

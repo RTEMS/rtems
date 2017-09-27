@@ -18,7 +18,7 @@
 #include <rtems/score/schedulernode.h>
 #include <rtems/score/priorityimpl.h>
 
-struct Scheduler_Control;
+struct _Scheduler_Control;
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,10 +31,10 @@ extern "C" {
   RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Priority )
 
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
-  const struct Scheduler_Control *scheduler,
-  Scheduler_Node                 *node,
-  Thread_Control                 *the_thread,
-  Priority_Control                priority
+  const struct _Scheduler_Control *scheduler,
+  Scheduler_Node                  *node,
+  Thread_Control                  *the_thread,
+  Priority_Control                 priority
 )
 {
   node->owner = the_thread;

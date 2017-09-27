@@ -22,7 +22,7 @@
 #include <rtems/score/cpu.h>
 #include <rtems/score/rbtree.h>
 
-struct Scheduler_Control;
+struct _Scheduler_Control;
 
 #ifdef __cplusplus
 extern "C" {
@@ -140,7 +140,7 @@ struct Priority_Aggregation {
   /**
    * @brief The scheduler instance of this priority aggregation.
    */
-  const struct Scheduler_Control *scheduler;
+  const struct _Scheduler_Control *scheduler;
 #endif
 
   /**

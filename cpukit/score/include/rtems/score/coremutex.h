@@ -27,7 +27,7 @@
 #include <rtems/score/watchdog.h>
 #include <rtems/score/interr.h>
 
-struct Scheduler_Control;
+struct _Scheduler_Control;
 
 #ifdef __cplusplus
 extern "C" {
@@ -90,7 +90,7 @@ typedef struct {
   /**
    * @brief The scheduler instance for this priority ceiling mutex.
    */
-  const struct Scheduler_Control *scheduler;
+  const struct _Scheduler_Control *scheduler;
 #endif
 } CORE_ceiling_mutex_Control;
 

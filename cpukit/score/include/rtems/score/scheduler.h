@@ -40,7 +40,7 @@ struct Per_CPU_Control;
  */
 /**@{*/
 
-typedef struct Scheduler_Control Scheduler_Control;
+typedef struct _Scheduler_Control Scheduler_Control;
 
 /**
  * @brief The scheduler operations.
@@ -236,7 +236,7 @@ typedef struct Scheduler_Context {
 /**
  * @brief Scheduler control.
  */
-struct Scheduler_Control {
+struct _Scheduler_Control {
   /**
    * @brief Reference to a statically allocated scheduler context.
    */
