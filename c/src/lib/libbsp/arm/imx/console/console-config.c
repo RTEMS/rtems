@@ -71,18 +71,10 @@ static void imx_uart_init_context(
 )
 {
   int node;
-  int len;
-  const uint32_t *val;
 
   rtems_termios_device_context_initialize(&ctx->base, "UART");
-
   node = fdt_path_offset(fdt, serial);
-
-  val = fdt_getprop(fdt, node, "reg", &len);
-  if (val != NULL && len >= 4) {
-    ctx->regs = (imx_uart *) fdt32_to_cpu(val[0]);
-  }
-
+  ctx->regs = imx_get_reg_of_node(fdt, node);
 #ifdef CONSOLE_USE_INTERRUPTS
   ctx->irq = imx_get_irq_of_node(fdt, node, 0);
 #endif

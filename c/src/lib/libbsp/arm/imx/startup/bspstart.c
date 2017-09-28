@@ -23,6 +23,19 @@
 
 #define MAGIC_IRQ_OFFSET 32
 
+void *imx_get_reg_of_node(const void *fdt, int node)
+{
+  int len;
+  const uint32_t *val;
+
+  val = fdt_getprop(fdt, node, "reg", &len);
+  if (val == NULL || len < 4) {
+    return NULL;
+  }
+
+  return (void *) fdt32_to_cpu(val[0]);
+}
+
 rtems_vector_number imx_get_irq_of_node(
   const void *fdt,
   int node,
