@@ -41,6 +41,12 @@ extern "C" {
 
 void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
 
+rtems_vector_number imx_get_irq_of_node(
+  const void *fdt,
+  int node,
+  size_t index
+);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

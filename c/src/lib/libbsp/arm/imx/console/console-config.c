@@ -84,12 +84,7 @@ static void imx_uart_init_context(
   }
 
 #ifdef CONSOLE_USE_INTERRUPTS
-  val = fdt_getprop(fdt, node, "interrupts", &len);
-  if (val != NULL && len >= 8) {
-    uint32_t cpu_val[2];
-    cpu_val[1] = fdt32_to_cpu(val[1]);
-    ctx->irq = bsp_fdt_map_intr(cpu_val, 2);
-  }
+  ctx->irq = imx_get_irq_of_node(fdt, node, 0);
 #endif
 }
 

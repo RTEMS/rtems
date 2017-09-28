@@ -21,9 +21,28 @@
 
 #include <libfdt.h>
 
+#define MAGIC_IRQ_OFFSET 32
+
+rtems_vector_number imx_get_irq_of_node(
+  const void *fdt,
+  int node,
+  size_t index
+)
+{
+  int len;
+  const uint32_t *val;
+
+  val = fdt_getprop(fdt, node, "interrupts", &len);
+  if (val == NULL || len < (int) ((index + 1) * 12)) {
+    return UINT32_MAX;
+  }
+
+  return fdt32_to_cpu(val[index * 3 + 1]) + MAGIC_IRQ_OFFSET;
+}
+
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
-  return intr[1] + 32;
+  return intr[1] + MAGIC_IRQ_OFFSET;
 }
 
 void arm_generic_timer_get_config(
@@ -46,13 +65,8 @@ void arm_generic_timer_get_config(
     bsp_fatal(IMX_FATAL_GENERIC_TIMER_FREQUENCY);
   }
 
-  val = fdt_getprop(fdt, node, "interrupts", &len);
-  if (val != NULL && len >= 8) {
-    /* FIXME: Figure out how Linux gets a proper IRQ number */
-    *irq = 16 + fdt32_to_cpu(val[1]);
-  } else {
-    bsp_fatal(IMX_FATAL_GENERIC_TIMER_IRQ);
-  }
+  /* FIXME: Figure out how Linux gets a proper IRQ number */
+  *irq = imx_get_irq_of_node(fdt, node, 0) - 16;
 }
 
 void bsp_start(void)
