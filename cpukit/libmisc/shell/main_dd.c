@@ -49,6 +49,7 @@ static char sccsid[] = "@(#)dd.c	8.5 (Berkeley) 4/2/94";
 __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 #endif
 
+#define _GNU_SOURCE
 #include <rtems.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
