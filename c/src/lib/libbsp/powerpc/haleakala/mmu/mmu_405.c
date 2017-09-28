@@ -272,22 +272,22 @@ int DataMissException(BSP_Exception_frame *f, unsigned int vector)
   addr = PPC_SPECIAL_PURPOSE_REGISTER(SPR_DEAR);
   excSyn  = PPC_SPECIAL_PURPOSE_REGISTER(SPR_ESR);
   if (excSyn & kESR_DST) printk("\n---Data write to $%" PRIx32
-      " attempted at $%" PRIx32 "\n",addr,f->EXC_SRR0);
+      " attempted at $%" PRIxPTR "\n",addr,f->EXC_SRR0);
             else printk("\n---Data read from $%" PRIx32 " attempted at $%"
-                        PRIx32 "\n",addr,f->EXC_SRR0);
+                        PRIxPTR "\n",addr,f->EXC_SRR0);
   return -1;
 }
 
 int InstructionMissException(BSP_Exception_frame *f, unsigned int vector)
 {
-  printk("\n---Instruction fetch attempted from $%" PRIx32 ", no TLB exists\n",
+  printk("\n---Instruction fetch attempted from $%" PRIxPTR ", no TLB exists\n",
          f->EXC_SRR0);
   return -1;
 }
 
 int InstructionFetchException(BSP_Exception_frame *f, unsigned int vector)
 {
-  printk("\n---Instruction fetch attempted from $%" PRIx32
+  printk("\n---Instruction fetch attempted from $%" PRIxPTR
          ", TLB is no-execute\n",f->EXC_SRR0);
   return -1;
 }
