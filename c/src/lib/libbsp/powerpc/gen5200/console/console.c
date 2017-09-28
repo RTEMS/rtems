@@ -623,8 +623,6 @@ static void A_BSP_output_char(
   char c
 )
 {
-  char cr = '\r';
-
   /*
    *  If we are using U-Boot, then the console is already initialized
    *  and we can just poll bytes out at any time.
