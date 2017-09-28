@@ -208,6 +208,7 @@ struct filedesc;
 struct mbuf;
 struct sockaddr;
 struct stat;
+struct uio;
 
 /*
  * From uipc_socket and friends
