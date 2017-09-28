@@ -78,7 +78,7 @@ bsp_irq_dispatch_list_base(
 {
 	rtems_irq_connect_data* vchain;
 	for( vchain = &tbl[irq];
-			((int)vchain != -1 && vchain->hdl != sentinel);
+			((intptr_t)vchain != -1 && vchain->hdl != sentinel);
 			vchain = (rtems_irq_connect_data*)vchain->next_handler )
 	{
           vchain->hdl(vchain->handle);

@@ -90,7 +90,7 @@ int BSP_install_rtems_shared_irq_handler  (const rtems_irq_connect_data* irq)
 
     rtems_interrupt_disable(level);
 
-    if ( (int)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
+    if ( (intptr_t)rtems_hdl_tbl[irq->name].next_handler  == -1 ) {
       rtems_interrupt_enable(level);
       printk("IRQ vector %d already connected to an unshared handler\n",irq->name);
 	  free(vchain);
@@ -210,7 +210,7 @@ int BSP_remove_rtems_irq_handler  (const rtems_irq_connect_data* irq)
       return 0;
     }
 
-    if( (int)rtems_hdl_tbl[irq->name].next_handler != -1 )
+    if( (intptr_t)rtems_hdl_tbl[irq->name].next_handler != -1 )
     {
        int found = 0;
 
@@ -345,7 +345,7 @@ int BSP_rtems_irq_mngt_set(rtems_irq_global_settings* config)
 
 	for ( i = config->irqBase; i < config->irqBase + config->irqNb; i++ ) {
 		for( vchain = &rtems_hdl_tbl[i];
-		     ((int)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
+		     ((intptr_t)vchain != -1 && vchain->hdl != default_rtems_entry.hdl);
 		     vchain = (rtems_irq_connect_data*)vchain->next_handler )
 		{
 			if (vchain->on)

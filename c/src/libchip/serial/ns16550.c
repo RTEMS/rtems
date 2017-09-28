@@ -708,7 +708,7 @@ NS16550_STATIC void ns16550_enable_interrupts(
 #if defined(BSP_FEATURE_IRQ_EXTENSION) || defined(BSP_FEATURE_IRQ_LEGACY)
   void ns16550_isr(void *arg)
   {
-    int minor = (int) arg;
+    int minor = (intptr_t) arg;
 
     ns16550_process( minor);
   }
@@ -733,7 +733,7 @@ NS16550_STATIC void ns16550_initialize_interrupts( int minor)
         "NS16550",
         RTEMS_INTERRUPT_SHARED,
         ns16550_isr,
-        (void *) minor
+        (void *) (intptr_t) minor
       );
       if (sc != RTEMS_SUCCESSFUL) {
         /* FIXME */
@@ -783,7 +783,7 @@ NS16550_STATIC void ns16550_cleanup_interrupts(int minor)
     sc = rtems_interrupt_handler_remove(
       c->ulIntVector,
       ns16550_isr,
-      (void *) minor
+      (void *) (intptr_t) minor
     );
     if (sc != RTEMS_SUCCESSFUL) {
       /* FIXME */
