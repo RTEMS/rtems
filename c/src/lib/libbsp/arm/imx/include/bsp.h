@@ -49,6 +49,17 @@ rtems_vector_number imx_get_irq_of_node(
   size_t index
 );
 
+/**
+ * @brief Registers an IMX I2C bus driver.
+ *
+ * @param[in] bus_path The I2C bus driver device path, e.g. "/dev/i2c-0".
+ * @param[in] alias_or_path The FDT alias or path, e.g. "i2c0".
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occurred.  The errno is set to indicate the error.
+ */
+int i2c_bus_register_imx(const char *bus_path, const char *alias_or_path);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

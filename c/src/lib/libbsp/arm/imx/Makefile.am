@@ -117,6 +117,9 @@ libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
 libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 
+# I2C
+libbsp_a_SOURCES += i2c/imx-i2c.c
+
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
 
