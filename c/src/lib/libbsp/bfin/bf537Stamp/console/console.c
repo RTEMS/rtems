@@ -45,7 +45,7 @@ static bfin_uart_channel_t channels[] = {
 #if (!BFIN_ON_SKYEYE)
 ,
   {"/dev/tty1",
-   (char *) UART1_BASE_ADDRESS,
+   UART1_BASE_ADDRESS,
    CONSOLE_USE_INTERRUPTS,
    0,
    NULL,
