@@ -48,6 +48,23 @@ static uint16_t eeprom_i2c_addr(eeprom *dev, uint32_t off)
     | ((off >> dev->i2c_address_shift) & dev->i2c_address_mask);
 }
 
+static void eeprom_set_addr(
+  const eeprom *dev,
+  uint32_t off,
+  uint8_t addr[EEPROM_MAX_ADDRESS_BYTES]
+)
+{
+  int shift = 24 - (4 - dev->address_bytes) * 8;
+
+  addr[0] = (uint8_t) (off >> shift);
+  shift -= 8;
+  addr[1] = (uint8_t) (off >> shift);
+  shift -= 8;
+  addr[2] = (uint8_t) (off >> shift);
+  shift -= 8;
+  addr[3] = (uint8_t) (off >> shift);
+}
+
 static ssize_t eeprom_read(
   i2c_dev *base,
   void *buf,
@@ -80,12 +97,7 @@ static ssize_t eeprom_read(
      */
     uint16_t cur = (uint16_t) (todo < 255 ?  todo : 255);
 
-    uint8_t addr[EEPROM_MAX_ADDRESS_BYTES] = {
-      (uint8_t) off,
-      (uint8_t) (off >> 8),
-      (uint8_t) (off >> 16),
-      (uint8_t) (off >> 24)
-    };
+    uint8_t addr[EEPROM_MAX_ADDRESS_BYTES];
     i2c_msg msgs[2] = {
       {
         .addr = i2c_addr,
@@ -101,6 +113,7 @@ static ssize_t eeprom_read(
     };
     int err;
 
+    eeprom_set_addr(dev, off, addr);
     err = i2c_bus_transfer(dev->base.bus, &msgs[0], RTEMS_ARRAY_SIZE(msgs));
     if (err != 0) {
       return err;
@@ -141,12 +154,7 @@ static ssize_t eeprom_write(
     uint16_t i2c_addr = eeprom_i2c_addr(dev, off);
     uint16_t rem = dev->page_size - (off & (dev->page_size - 1));
     uint16_t cur = (uint16_t) (todo < rem ? todo : rem);
-    uint8_t addr[EEPROM_MAX_ADDRESS_BYTES] = {
-      (uint8_t) off,
-      (uint8_t) (off >> 8),
-      (uint8_t) (off >> 16),
-      (uint8_t) (off >> 24)
-    };
+    uint8_t addr[EEPROM_MAX_ADDRESS_BYTES];
     i2c_msg msgs[2] = {
       {
         .addr = i2c_addr,
@@ -165,6 +173,7 @@ static ssize_t eeprom_write(
     ssize_t m;
     rtems_interval timeout;
 
+    eeprom_set_addr(dev, off, addr);
     err = i2c_bus_transfer(dev->base.bus, &msgs[0], RTEMS_ARRAY_SIZE(msgs));
     if (err != 0) {
       return err;
