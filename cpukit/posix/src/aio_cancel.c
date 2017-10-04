@@ -58,7 +58,7 @@ int aio_cancel(int fildes, struct aiocb  *aiocbp)
         rtems_chain_extract (&r_chain->next_fd);
         rtems_aio_remove_fd (r_chain);
         pthread_mutex_destroy (&r_chain->mutex);
-        pthread_cond_destroy (&r_chain->mutex);
+        pthread_cond_destroy (&r_chain->cond);
         free (r_chain);
 
         pthread_mutex_unlock (&aio_request_queue.mutex);
