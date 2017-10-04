@@ -123,6 +123,9 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 # I2C
 libbsp_a_SOURCES += i2c/imx-i2c.c
 
+# SPI
+libbsp_a_SOURCES += spi/imx-ecspi.c
+
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
 
