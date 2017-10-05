@@ -156,6 +156,7 @@ AC_CHECK_HEADER([pthread.h],[
   AC_CHECK_TYPES([pthread_barrier_t])
   AC_CHECK_TYPES([pthread_spinlock_t])
   AC_CHECK_TYPES([struct _pthread_cleanup_context],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <pthread.h>])
+  AC_CHECK_TYPES([struct _Priority_Node],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <pthread.h>])
 ])
 
 AC_CHECK_HEADER([signal.h],[
