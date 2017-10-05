@@ -17,10 +17,8 @@
 
 #include <rtems/score/basedefs.h>
 
-#if defined(RTEMS_POSIX_API)
 #include <errno.h>
 #include <pthread.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,13 +49,8 @@ typedef enum {
 /**
  * @brief Macro to build a status code from Classic and POSIX API parts.
  */
-#if defined(RTEMS_POSIX_API)
-  #define STATUS_BUILD( classic_status, posix_status ) \
-    ( ( ( (unsigned int) ( posix_status ) ) << 8 ) | ( classic_status ) )
-#else
-  #define STATUS_BUILD( classic_status, posix_status ) \
-    ( classic_status )
-#endif
+#define STATUS_BUILD( classic_status, posix_status ) \
+  ( ( ( (unsigned int) ( posix_status ) ) << 8 ) | ( classic_status ) )
 
 /**
  * @brief Macro to get the Classic API status code.
