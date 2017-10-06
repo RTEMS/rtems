@@ -175,19 +175,13 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
  *
  *  @param[in] _time points to the base time to be added to
  *  @param[in] _add points to the timestamp to add to the first argument
- *
- *  @retval This method returns the number of seconds @a time increased by.
  */
-RTEMS_INLINE_ROUTINE time_t _Timestamp_Add_to(
+RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
   Timestamp_Control *_time,
   const Timestamp_Control *_add
 )
 {
-  time_t seconds = _time->sec;
-
   bintime_add( _time, _add );
-
-  return _time->sec - seconds;
 }
 
 /**
