@@ -36,10 +36,15 @@ int clock_settime(
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( clock_id == CLOCK_REALTIME ) {
+    ISR_lock_Context lock_context;
+
     if ( tp->tv_sec < TOD_SECONDS_1970_THROUGH_1988 )
       rtems_set_errno_and_return_minus_one( EINVAL );
 
-    _TOD_Set_with_timespec( tp );
+    _TOD_Lock();
+    _TOD_Acquire( &lock_context );
+    _TOD_Set( tp, &lock_context );
+    _TOD_Unlock();
   }
 #ifdef _POSIX_CPUTIME
   else if ( clock_id == CLOCK_PROCESS_CPUTIME_ID )

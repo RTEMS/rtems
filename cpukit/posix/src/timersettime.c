@@ -39,7 +39,7 @@ static void _POSIX_Timer_Insert(
   ptimer->state = POSIX_TIMER_STATE_CREATE_RUN;
 
   /* Store the time when the timer was started again */
-  _TOD_Get_as_timespec( &ptimer->time );
+  _TOD_Get( &ptimer->time );
 
   _Watchdog_Insert(
     &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
@@ -132,7 +132,7 @@ int timer_settime(
   /* Convert absolute to relative time */
   if (flags == TIMER_ABSTIME) {
     struct timespec now;
-    _TOD_Get_as_timespec( &now );
+    _TOD_Get( &now );
     /* Check for seconds in the past */
     if ( _Timespec_Greater_than( &now, &normalize.it_value ) )
       rtems_set_errno_and_return_minus_one( EINVAL );

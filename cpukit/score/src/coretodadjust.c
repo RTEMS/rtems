@@ -21,11 +21,11 @@
 #include <rtems/score/todimpl.h>
 
 void _TOD_Adjust(
-  const Timestamp_Control *delta
+  const struct timespec *delta
 )
 {
-  Timestamp_Control tod;
-  ISR_lock_Context  lock_context;
+  ISR_lock_Context lock_context;
+  struct timespec  tod;
 
   /*
    * Currently, RTEMS does the adjustment in one movement.
@@ -38,7 +38,7 @@ void _TOD_Adjust(
   _TOD_Lock();
   _TOD_Acquire( &lock_context );
   _TOD_Get( &tod );
-  _Timestamp_Add_to( &tod, delta );
+  _Timespec_Add_to( &tod, delta );
   _TOD_Set( &tod, &lock_context );
   _TOD_Unlock();
 }

@@ -164,65 +164,27 @@ static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
  *
  * The caller must be the owner of the TOD lock.
  *
- * @param tod_as_timestamp The new time of day in timestamp format representing
+ * @param tod The new time of day in timespec format representing
  *   the time since UNIX Epoch.
  * @param lock_context The ISR lock context used for the corresponding
  *   _TOD_Acquire().  The caller must be the owner of the TOD lock.  This
  *   function will release the TOD lock.
  */
 void _TOD_Set(
-  const Timestamp_Control *tod_as_timestamp,
-  ISR_lock_Context        *lock_context
+  const struct timespec *tod,
+  ISR_lock_Context      *lock_context
 );
-
-/**
- * @brief Sets the time of day with timespec format.
- *
- * @param tod_as_timespec The new time of day in timespec format.
- *
- * @see _TOD_Set().
- */
-static inline void _TOD_Set_with_timespec(
-  const struct timespec *tod_as_timespec
-)
-{
-  Timestamp_Control tod_as_timestamp;
-  ISR_lock_Context  lock_context;
-
-  _Timestamp_Set(
-    &tod_as_timestamp,
-    tod_as_timespec->tv_sec,
-    tod_as_timespec->tv_nsec
-  );
-
-  _TOD_Lock();
-  _TOD_Acquire( &lock_context );
-  _TOD_Set( &tod_as_timestamp, &lock_context );
-  _TOD_Unlock();
-}
-
-/**
- *  @brief Gets the current time in the bintime format.
- *
- *  @param[out] time is the value gathered by the bintime request
- */
-static inline void _TOD_Get(
-  Timestamp_Control *time
-)
-{
-  _Timecounter_Bintime(time);
-}
 
 /**
  *  @brief Gets the current time in the timespec format.
  *
- *  @param[out] time is the value gathered by the nanotime request
+ *  @param[out] time is the value gathered by the request
  */
-static inline void _TOD_Get_as_timespec(
-  struct timespec *time
+static inline void _TOD_Get(
+  struct timespec *tod
 )
 {
-  _Timecounter_Nanotime(time);
+  _Timecounter_Nanotime( tod );
 }
 
 /**
@@ -324,7 +286,7 @@ RTEMS_INLINE_ROUTINE void _TOD_Get_timeval(
  * @param[in] delta is the amount to adjust
  */
 void _TOD_Adjust(
-  const Timestamp_Control *delta
+  const struct timespec *delta
 );
 
 /**

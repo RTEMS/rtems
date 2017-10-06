@@ -37,7 +37,7 @@ int clock_gettime(
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   if ( clock_id == CLOCK_REALTIME ) {
-    _TOD_Get_as_timespec(tp);
+    _TOD_Get(tp);
     return 0;
   }
 #ifdef CLOCK_MONOTONIC

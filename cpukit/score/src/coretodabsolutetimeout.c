@@ -47,7 +47,7 @@ TOD_Absolute_timeout_conversion_results _TOD_Absolute_timeout_to_ticks(
    *  Is the absolute time in the past?
    */
   if ( clock == CLOCK_REALTIME ) {
-    _TOD_Get_as_timespec( &current_time );
+    _TOD_Get( &current_time );
   } else {
     _Assert( clock == CLOCK_MONOTONIC );
     _TOD_Get_zero_based_uptime_as_timespec( &current_time );
