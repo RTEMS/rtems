@@ -1,4 +1,4 @@
-*** POSIX ATTRIBUTE TEST 1 ***
+*** BEGIN OF TEST PSXGETATTRNP 1 ***
 Init - pthread_getattr_np - attr NULL - EINVAL
 Init - pthread_getattr_np - invalid id - ESRCH
 Init - pthread_attr_init
@@ -16,7 +16,12 @@ Thread - pthread_getattr_np - Verify value
 Thread - pthread_setschedparam: Setting highest priority SCHED_FIFO
 Thread - Detach
 Thread - pthread_getattr_np
+Thread - Verify get stack
+Thread - Verify contention scope
+Thread - Verify explicit scheduler
 Thread - Verify SCHED_FIFO policy
 Thread - Verify max priority
 Thread - Verify detached
-*** END OF POSIX ATTRIBUTE TEST 1 ***
+Thread - Verify affinity
+Thread - Destroy
+*** END OF TEST PSXGETATTRNP 1 ***

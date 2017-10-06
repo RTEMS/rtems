@@ -24,27 +24,21 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/priorityimpl.h>
-#include <rtems/score/threadimpl.h>
-#include <rtems/score/cpusetimpl.h>
-
 int pthread_attr_setaffinity_np(
   pthread_attr_t    *attr,
   size_t             cpusetsize,
   const cpu_set_t   *cpuset
 )
 {
-  if ( !cpuset )
-    return EFAULT;
-  if ( !attr )
-    return EFAULT;
-
-  if (! _CPU_set_Is_valid( cpuset, cpusetsize ) )
+  if ( attr == NULL || !attr->is_initialized ) {
     return EINVAL;
+  }
+
+  if ( cpuset == NULL || cpusetsize != attr->affinitysetsize ) {
+    return EINVAL;
+  }
 
   CPU_COPY( cpuset, attr->affinityset );
-
   return 0;
 }
 

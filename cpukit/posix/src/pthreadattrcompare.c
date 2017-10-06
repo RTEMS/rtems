@@ -32,7 +32,10 @@ int rtems_pthread_attribute_compare(
   if ( attr1->is_initialized  !=  attr2->is_initialized )
     return 1;
 
-  if ( attr1->stackaddr != attr2->stackaddr )
+  if (
+    attr1->stackaddr != NULL &&
+      attr2->stackaddr != NULL &&
+      attr1->stackaddr != attr2->stackaddr )
     return 1;
 
   if ( attr1->stacksize != attr2->stacksize )

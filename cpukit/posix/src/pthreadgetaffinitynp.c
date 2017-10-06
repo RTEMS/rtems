@@ -25,8 +25,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/posix/pthreadimpl.h>
-#include <rtems/posix/priorityimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulerimpl.h>
 

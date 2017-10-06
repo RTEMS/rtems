@@ -56,8 +56,8 @@ int pthread_getschedparam(
 
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
-  *policy = api->Attributes.schedpolicy;
-  *param  = api->Attributes.schedparam;
+  *policy = api->schedpolicy;
+  *param  = api->schedparam;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
   priority = the_thread->Real_priority.priority;

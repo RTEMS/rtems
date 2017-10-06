@@ -140,5 +140,3 @@ $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h: include/rtems/posix/timerimpl.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/timerimpl.h
 endif
-if HAS_PTHREADS
-endif

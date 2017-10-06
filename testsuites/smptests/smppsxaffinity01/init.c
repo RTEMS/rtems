@@ -38,21 +38,30 @@ void Validate_attrgetaffinity_errors(void)
   cpu_set_t           cpuset;
   pthread_attr_t      attr;
 
+  sc = pthread_attr_init( &attr );
+  rtems_test_assert( sc == 0 );
+
   /* Verify pthread_attr_getaffinity_np validates attr  */
-  puts( "Init - pthread_attr_getaffinity_np - Invalid attr - EFAULT" );
-  sc = pthread_attr_getaffinity_np( NULL, sizeof(cpu_set_t), &cpuset );
-  rtems_test_assert( sc == EFAULT );
+  puts( "Init - pthread_attr_getaffinity_np - Invalid attr - EINVAL" );
+  sc = pthread_attr_getaffinity_np( NULL, sizeof( cpuset ), &cpuset );
+  rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_attr_getaffinity_np validates cpuset */
-  puts( "Init - pthread_attr_getaffinity_np - Invalid attr - EFAULT" );
-  sc = pthread_attr_getaffinity_np( &attr, sizeof(cpu_set_t), NULL );
-  rtems_test_assert( sc == EFAULT );
+  puts( "Init - pthread_attr_getaffinity_np - Invalid attr - EINVAL" );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( cpuset ), NULL );
+  rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_attr_getaffinity_np validates cpusetsize */
   puts( "Init - pthread_attr_getaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_attr_getaffinity_np( &attr, sizeof(cpu_set_t) * 2 , &cpuset );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( cpuset ) * 2 , &cpuset );
   rtems_test_assert( sc == EINVAL );
 
+  sc = pthread_attr_destroy( &attr );
+  rtems_test_assert( sc == 0 );
+
+  puts( "Init - pthread_attr_getaffinity_np - Not initialized attr - EINVAL" );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( cpuset ), &cpuset );
+  rtems_test_assert( sc == EINVAL );
 }
 
 void Validate_attrsetaffinity_errors(void)
@@ -61,31 +70,29 @@ void Validate_attrsetaffinity_errors(void)
   cpu_set_t           cpuset;
   pthread_attr_t      attr;
 
+  sc = pthread_attr_init( &attr );
+  rtems_test_assert( sc == 0 );
+
   /* Verify pthread_attr_setaffinity_np validates attr.  */
-  puts( "Init - pthread_attr_setaffinity_np - Invalid attr - EFAULT" );
-  sc = pthread_attr_setaffinity_np( NULL, sizeof(cpu_set_t), &cpuset );
-  rtems_test_assert( sc == EFAULT );
+  puts( "Init - pthread_attr_setaffinity_np - Invalid attr - EINVAL" );
+  sc = pthread_attr_setaffinity_np( NULL, sizeof( cpuset ), &cpuset );
+  rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_attr_setaffinity_np validates cpuset    */
-  puts( "Init - pthread_attr_setaffinity_np - Invalid attr - EFAULT" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t), NULL );
-  rtems_test_assert( sc == EFAULT );
+  puts( "Init - pthread_attr_setaffinity_np - Invalid attr - EINVAL" );
+  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ), NULL );
+  rtems_test_assert( sc == EINVAL );
 
   /* Verify pthread_attr_setaffinity_np validates cpusetsize */
   puts( "Init - pthread_attr_setaffinity_np - Invalid cpusetsize - EINVAL" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t) * 2 , &cpuset );
+  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ) * 2 , &cpuset );
   rtems_test_assert( sc == EINVAL );
 
-  /* Verify pthread_attr_setaffinity_np validates cpuset greater than 0  */
-  CPU_ZERO(&cpuset);
-  puts( "Init - pthread_attr_setaffinity_np - No cpus in cpuset - EINVAL" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t) , &cpuset );
-  rtems_test_assert( sc == EINVAL );
+  sc = pthread_attr_destroy( &attr );
+  rtems_test_assert( sc == 0 );
 
-  /* Verify pthread_attr_setaffinity_np validates invalid cpu in cpuset */
-  CPU_FILL(&cpuset);
-  puts( "Init - pthread_attr_setaffinity_np - Too many cpus in cpuset - EINVAL" );
-  sc = pthread_attr_setaffinity_np( &attr, sizeof(cpu_set_t) , &cpuset );
+  puts( "Init - pthread_attr_setaffinity_np - Not initialized attr - EINVAL" );
+  sc = pthread_attr_setaffinity_np( &attr, sizeof( cpuset ), &cpuset  );
   rtems_test_assert( sc == EINVAL );
 }
 

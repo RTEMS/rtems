@@ -41,6 +41,9 @@ void *Thread_1(
   struct sched_param  param;
   int                 sc;
   int                 value;
+  void               *stackaddr;
+  size_t              stacksize;
+  cpu_set_t           set;
 
   puts("Thread - pthread_getattr_np - Verify value");
   sc = pthread_getattr_np( Thread_id, &attr );
@@ -61,6 +64,24 @@ void *Thread_1(
   sc = pthread_getattr_np( Thread_id, &attr );
   rtems_test_assert( !sc );
 
+  puts("Thread - Verify get stack");
+  stackaddr = NULL;
+  stacksize = 0;
+  sc = pthread_attr_getstack( &attr, &stackaddr, &stacksize );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( stackaddr != NULL );
+  rtems_test_assert( stacksize != 0 );
+
+  puts("Thread - Verify contention scope");
+  sc = pthread_attr_getscope( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == PTHREAD_SCOPE_PROCESS );
+
+  puts("Thread - Verify explicit scheduler");
+  sc = pthread_attr_getinheritsched( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == PTHREAD_EXPLICIT_SCHED );
+
   puts("Thread - Verify SCHED_FIFO policy");
   sc = pthread_attr_getschedpolicy( &attr, &value );
   rtems_test_assert( !sc );
@@ -73,7 +94,19 @@ void *Thread_1(
 
   puts("Thread - Verify detached");
   sc = pthread_attr_getdetachstate( &attr, &value );
+  rtems_test_assert( sc == 0 );
   rtems_test_assert( value == PTHREAD_CREATE_DETACHED );
+
+  puts("Thread - Verify affinity");
+  CPU_ZERO( &set );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( set ), &set );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( CPU_ISSET( 0, &set ) );
+  rtems_test_assert( !CPU_ISSET( 1, &set ) );
+
+  puts("Thread - Destroy");
+  sc = pthread_attr_destroy( &attr );
+  rtems_test_assert( sc == 0 );
 
   return NULL; /* just so the compiler thinks we returned something */
 }

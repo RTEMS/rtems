@@ -43,8 +43,14 @@ typedef struct {
   /** Back pointer to thread of this POSIX API control. */
   Thread_Control         *thread;
 
-  /** This is the POSIX threads attribute set. */
-  pthread_attr_t          Attributes;
+  /** Created with explicit or inherited scheduler. */
+  bool created_with_explicit_scheduler;
+
+  /** The scheduler policy. */
+  int schedpolicy;
+
+  /** The scheduler parameters */
+  struct sched_param schedparam;
 
   /**
    * @brief Control block for the sporadic server scheduling policy.

@@ -1,11 +1,11 @@
-*** SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***
-Init - pthread_attr_setaffinity_np - Invalid attr - EFAULT
-Init - pthread_attr_setaffinity_np - Invalid attr - EFAULT
+*** BEGIN OF TEST SMPPSXAFFINITY 1 ***
+Init - pthread_attr_setaffinity_np - Invalid attr - EINVAL
+Init - pthread_attr_setaffinity_np - Invalid attr - EINVAL
 Init - pthread_attr_setaffinity_np - Invalid cpusetsize - EINVAL
-Init - pthread_attr_setaffinity_np - No cpus in cpuset - EINVAL
-Init - pthread_attr_setaffinity_np - Too many cpus in cpuset - EINVAL
-Init - pthread_attr_getaffinity_np - Invalid attr - EFAULT
-Init - pthread_attr_getaffinity_np - Invalid attr - EFAULT
+Init - pthread_attr_setaffinity_np - Not initialized attr - EINVAL
+Init - pthread_attr_getaffinity_np - Invalid attr - EINVAL
+Init - pthread_attr_getaffinity_np - Invalid attr - EINVAL
 Init - pthread_attr_getaffinity_np - Invalid cpusetsize - EINVAL
+Init - pthread_attr_getaffinity_np - Not initialized attr - EINVAL
 Init - Validate pthread_attr_setaffinity_np and pthread_attr_getaffinity_np
-*** END OF SMP POSIX AFFINITY ATTRIBUTE TEST 1 ***
+*** END OF TEST SMPPSXAFFINITY 1 ***

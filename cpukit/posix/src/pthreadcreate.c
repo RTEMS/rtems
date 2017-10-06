@@ -242,7 +242,10 @@ int pthread_create(
    */
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  _POSIX_Threads_Copy_attributes( &api->Attributes, the_attr );
+  api->created_with_explicit_scheduler =
+    ( the_attr->inheritsched == PTHREAD_EXPLICIT_SCHED );
+  api->schedpolicy = the_attr->schedpolicy;
+  api->schedparam = the_attr->schedparam;
   _Priority_Node_initialize( &api->Sporadic.Low_priority, core_low_prio );
   _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
 

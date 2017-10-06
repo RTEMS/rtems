@@ -75,9 +75,11 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
     .cputime_clock_allowed = 1,                        /* cputime_clock_allowed */
   #endif
   .detachstate             = PTHREAD_CREATE_JOINABLE,    /* detachstate */
-  .affinitysetsize         = 0,
-  .affinityset             = NULL,
-  .affinitysetpreallocated = {{0x0}}
+  .affinitysetsize         =
+    sizeof( _POSIX_Threads_Default_attributes.affinitysetpreallocated ),
+  .affinityset             =
+    &_POSIX_Threads_Default_attributes.affinitysetpreallocated,
+  .affinitysetpreallocated = {{0x1}}
 };
 
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
@@ -166,8 +168,7 @@ static bool _POSIX_Threads_Create_extension(
 
   /* XXX check all fields are touched */
   api->thread = created;
-  _POSIX_Threads_Initialize_attributes( &api->Attributes );
-  api->Attributes.schedparam.sched_priority = _POSIX_Priority_From_core(
+  api->schedparam.sched_priority = _POSIX_Priority_From_core(
     _Thread_Scheduler_get_home( created ),
     _Thread_Get_priority( created )
   );
@@ -203,7 +204,7 @@ static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
 
   _Thread_State_acquire( executing, &lock_context );
 
-  if ( api->Attributes.schedpolicy == SCHED_SPORADIC ) {
+  if ( api->schedpolicy == SCHED_SPORADIC ) {
     _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
   }
 

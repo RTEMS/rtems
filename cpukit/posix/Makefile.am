@@ -89,6 +89,11 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
     src/mutextrylock.c src/mutexunlock.c
 
+## PTHREAD_AFFINITY_C_FILES
+libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
+    src/pthreadattrgetaffinitynp.c  src/pthreadgetaffinitynp.c   \
+    src/pthreadsetaffinitynp.c
+
 if HAS_PTHREADS
 libposix_a_SOURCES +=  src/pthreadatfork.c
 
@@ -147,13 +152,6 @@ libposix_a_SOURCES += src/pthreadsetschedprio.c
 
 ## RTEMS specific support methods
 libposix_a_SOURCES += src/pthreadattrcompare.c
-
-if HAS_SMP
-## PTHREAD_AFFINITY_C_FILES
-libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
-    src/pthreadattrgetaffinitynp.c  src/pthreadgetaffinitynp.c   \
-    src/pthreadsetaffinitynp.c
-endif
 
 ## PSIGNAL_C_FILES
 libposix_a_SOURCES += src/psignal.c src/alarm.c src/kill.c src/killinfo.c \
