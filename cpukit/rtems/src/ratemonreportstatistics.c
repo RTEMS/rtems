@@ -26,9 +26,9 @@
 #include <rtems/inttypes.h>
 
 /* We print to 1/10's of milliseconds */
-#define NANOSECONDS_DIVIDER 1000
+#define NANOSECONDS_DIVIDER 1000L
 #define PERCENT_FMT     "%04" PRId32
-#define NANOSECONDS_FMT "%06" PRIdtime_t
+#define NANOSECONDS_FMT "%06ld"
 
 void rtems_rate_monotonic_report_statistics_with_plugin(
   const rtems_printer *printer
