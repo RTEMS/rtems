@@ -29,9 +29,13 @@ extern "C" {
  **/
 
 /*
- * Always 32bit for RTEMS at the moment. Do not add '()'. Leave plain.
+ * Do not add '()'. Leave plain.
  */
+#if defined(__powerpc64__) || defined(__arch64__)
+#define ELFSIZE 64
+#else
 #define ELFSIZE 32
+#endif
 
 /*
  * Define _STANDALONE then remove after.
