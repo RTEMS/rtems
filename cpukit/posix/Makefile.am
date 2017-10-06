@@ -199,6 +199,10 @@ libposix_a_SOURCES += src/prwlockdestroy.c src/prwlockinit.c \
     src/rwlockattrinit.c src/rwlockattrsetpshared.c
 
 if HAS_PTHREADS
+libposix_a_SOURCES += src/sigpending.c \
+    src/sigqueue.c src/sigsuspend.c src/sigtimedwait.c \
+    src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
+
 ## SEMAPHORE_C_FILES
 libposix_a_SOURCES += src/semaphore.c
 libposix_a_SOURCES += src/semaphoredeletesupp.c
