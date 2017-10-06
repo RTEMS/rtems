@@ -214,7 +214,7 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print_t* print, rtems_rtl_obj_t* obj)
     printf ("%-*cbss base      : %p (%zi)\n", print->indent, ' ',
             obj->bss_base, obj->bss_size);
   }
-  printf ("%-*cunresolved    : %lu\n", print->indent, ' ', obj->unresolved);
+  printf ("%-*cunresolved    : %" PRIu32 "\n", print->indent, ' ', obj->unresolved);
   printf ("%-*csymbols       : %zi\n", print->indent, ' ', obj->global_syms);
   printf ("%-*csymbol memory : %zi\n", print->indent, ' ', obj->global_size);
   if (print->symbols)

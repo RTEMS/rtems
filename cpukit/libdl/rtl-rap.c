@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -211,7 +212,7 @@ rtems_rtl_rap_loader (rtems_rtl_obj_t*      obj,
   rtems_rtl_rap_t* rap = (rtems_rtl_rap_t*) data;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: input %s=%lu\n",
+    printf ("rtl: rap: input %s=%" PRIu32 "\n",
             sect->name, rtems_rtl_obj_comp_input (rap->decomp));
 
   return rtems_rtl_obj_comp_read (rap->decomp, sect->base, sect->size);
@@ -266,7 +267,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     relocs = header & ~(1 << 31);
 
     if (relocs && rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: relocation: %s: header: %08lx relocs: %d %s\n",
+      printf ("rtl: relocation: %s: header: %08" PRIx32 " relocs: %d %s\n",
               rap_sections[section].name,
               header, relocs, is_rela ? "rela" : "rel");
 
@@ -315,7 +316,8 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
       }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf (" %2d: info=%08lx offset=%lu addend=%lu\n",
+        printf (" %2d: info=%08" PRIx32 " offset=%" PRIu32
+                " addend=%" PRIu32 "\n",
                 r, info, offset, addend);
 
       type = info & 0xff;
@@ -331,7 +333,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
           return false;
         }
 
-        symvalue = (Elf_Word) symsect->base + addend;
+        symvalue = (Elf_Addr) symsect->base + addend;
       }
       else if (rtems_rtl_elf_rel_resolve_sym (type))
       {
@@ -371,7 +373,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
           return false;
         }
 
-        symvalue = (Elf_Word) symbol->value;
+        symvalue = (Elf_Addr) symbol->value;
       }
 
       if (is_rela)
@@ -386,10 +388,10 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
         else rela.r_addend = addend;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf (" %2d: rela: type:%-2d off:%lu addend:%d" \
-                  " symname=%s symtype=%lu symvalue=0x%08lx\n",
+          printf (" %2d: rela: type:%-2d off:%" PRIu32 " addend:%d"
+                  " symname=%s symtype=%ju symvalue=0x%08jx\n",
                   r, (int) type, offset, (int) addend,
-                  symname, symtype, symvalue);
+                  symname, (uintmax_t) symtype, (uintmax_t) symvalue);
 
         if (!rtems_rtl_elf_relocate_rela (obj, &rela, targetsect,
                                           symname, symtype, symvalue))
@@ -406,10 +408,10 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
         rel.r_info = type;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf (" %2d: rel: type:%-2d off:%lu" \
-                  " symname=%s symtype=%lu symvalue=0x%08lx\n",
+          printf (" %2d: rel: type:%-2d off:%" PRIu32
+                  " symname=%s symtype=%ju symvalue=0x%08jx\n",
                   r, (int) type, offset,
-                  symname, symtype, symvalue);
+                  symname, (uintmax_t) symtype, (uintmax_t) symvalue);
 
         if (!rtems_rtl_elf_relocate_rel (obj, &rel, targetsect,
                                          symname, symtype, symvalue))
@@ -611,7 +613,8 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     }
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-      printf ("rtl: sym:load: data=0x%08lx name=0x%08lx value=0x%08lx\n",
+      printf ("rtl: sym:load: data=0x%08" PRIx32 " name=0x%08" PRIx32
+              " value=0x%08" PRIx32 "\n",
               data, name, value);
 
     /*
@@ -640,7 +643,7 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
       obj->global_table = NULL;
       obj->global_syms = 0;
       obj->global_size = 0;
-      rtems_rtl_set_error (EINVAL, "section index not found: %lu", data >> 16);
+      rtems_rtl_set_error (EINVAL, "section index not found: %" PRIu32, data >> 16);
       return false;
     }
 
@@ -816,14 +819,14 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
    */
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: input machine=%lu\n",
+    printf ("rtl: rap: input machine=%" PRIu32 "\n",
             rtems_rtl_obj_comp_input (rap.decomp));
 
   if (!rtems_rtl_rap_read_uint32 (rap.decomp, &rap.machinetype))
     return false;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: machinetype=%lu\n", rap.machinetype);
+    printf ("rtl: rap: machinetype=%" PRIu32 "\n", rap.machinetype);
 
   if (!rtems_rtl_rap_machine_check (rap.machinetype))
   {
@@ -835,7 +838,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
     return false;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: datatype=%lu\n", rap.datatype);
+    printf ("rtl: rap: datatype=%" PRIu32 "\n", rap.datatype);
 
   if (!rtems_rtl_rap_datatype_check (rap.datatype))
   {
@@ -847,7 +850,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
     return false;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: class=%lu\n", rap.class);
+    printf ("rtl: rap: class=%" PRIu32 "\n", rap.class);
 
   if (!rtems_rtl_rap_class_check (rap.class))
   {
@@ -864,7 +867,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
    */
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: input header=%lu\n",
+    printf ("rtl: rap: input header=%" PRIu32 "\n",
             rtems_rtl_obj_comp_input (rap.decomp));
 
   if (!rtems_rtl_rap_read_uint32 (rap.decomp, &rap.init))
@@ -885,7 +888,8 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
   rap.symbols = rap.symtab_size / (3 * sizeof (uint32_t));
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: load: symtab=%lu (%lu) strtab=%lu relocs=%lu\n",
+    printf ("rtl: rap: load: symtab=%" PRIu32 " (%" PRIu32
+            ") strtab=%" PRIu32 " relocs=%" PRIu32 "\n",
             rap.symtab_size, rap.symbols,
             rap.strtab_size, rap.relocs_size);
 
@@ -913,7 +917,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
       return false;
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
-      printf ("rtl: rap: details: obj_num=%lu\n", obj->obj_num);
+      printf ("rtl: rap: details: obj_num=%" PRIu32 "\n", obj->obj_num);
 
     if (!rtems_rtl_rap_load_linkmap (&rap, obj))
       return false;
@@ -943,7 +947,7 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
       return false;
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-      printf ("rtl: rap: %s: size=%lu align=%lu\n",
+      printf ("rtl: rap: %s: size=%" PRIu32 " align=%" PRIu32 "\n",
               rap_sections[section].name,
               rap.secs[section].size,
               rap.secs[section].alignment);
@@ -965,14 +969,14 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
     return false;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: input symbols=%lu\n",
+    printf ("rtl: rap: input symbols=%" PRIu32 "\n",
             rtems_rtl_obj_comp_input (rap.decomp));
 
   if (!rtems_rtl_rap_load_symbols (&rap, obj))
     return false;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
-    printf ("rtl: rap: input relocs=%lu\n",
+    printf ("rtl: rap: input relocs=%" PRIu32 "\n",
             rtems_rtl_obj_comp_input (rap.decomp));
 
   if (!rtems_rtl_rap_relocate (&rap, obj))

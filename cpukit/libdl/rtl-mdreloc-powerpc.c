@@ -7,6 +7,7 @@
 #include <sys/cdefs.h>
 
 #include <errno.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -183,12 +184,12 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
       break;
 
     default:
-      printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
+      printf ("rtl: reloc unknown: sym = %lu, type = %" PRIu32 ", offset = %p, "
               "contents = %p\n",
               ELF_R_SYM(rela->r_info), (uint32_t) ELF_R_TYPE(rela->r_info),
               (void *)rela->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
-                           "%s: Unsupported relocation type %ld "
+                           "%s: Unsupported relocation type %" PRId32
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
       return false;

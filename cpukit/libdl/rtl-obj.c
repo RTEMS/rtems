@@ -779,7 +779,8 @@ rtems_rtl_obj_sections_loader (uint32_t                     mask,
         sect->base = base + base_offset;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-          printf ("rtl: loading:%2d: %s -> %8p (s:%zi f:%04lx a:%lu l:%02d)\n",
+          printf ("rtl: loading:%2d: %s -> %8p (s:%zi f:%04" PRIx32
+                  " a:%" PRIu32 " l:%02d)\n",
                   order, sect->name, sect->base, sect->size,
                   sect->flags, sect->alignment, sect->link);
 
