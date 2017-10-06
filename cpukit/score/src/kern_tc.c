@@ -66,6 +66,7 @@ __FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
 #endif /* __rtems__ */
 #ifdef __rtems__
 #include <limits.h>
+#include <string.h>
 #include <rtems.h>
 ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
 #define _Timecounter_Release(lock_context) \
@@ -469,6 +470,24 @@ binuptime(struct bintime *bt)
 		bintime_addx(bt, th->th_scale * tc_delta(th));
 	} while (gen == 0 || gen != tc_getgen(th));
 }
+#ifdef __rtems__
+sbintime_t
+_Timecounter_Sbinuptime(void)
+{
+	struct timehands *th;
+	uint32_t gen;
+	sbintime_t sbt;
+
+	do {
+		th = timehands;
+		gen = tc_getgen(th);
+		sbt = bttosbt(th->th_offset);
+		sbt += (th->th_scale * tc_delta(th)) >> 32;
+	} while (gen == 0 || gen != tc_getgen(th));
+
+	return (sbt);
+}
+#endif /* __rtems__ */
 
 void
 nanouptime(struct timespec *tsp)

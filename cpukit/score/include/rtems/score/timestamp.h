@@ -52,7 +52,7 @@ extern "C" {
 /**
  *   Define the Timestamp control type.
  */
-typedef struct bintime Timestamp_Control;
+typedef sbintime_t Timestamp_Control;
 
 /**
  *  @brief Set timestamp to specified seconds and nanoseconds.
@@ -75,7 +75,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set(
   _ts.tv_sec = _seconds;
   _ts.tv_nsec = _nanoseconds;
 
-  timespec2bintime( &_ts, _time );
+  *_time = tstosbt(_ts);
 }
 
 /**
@@ -91,8 +91,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Set_to_zero(
   Timestamp_Control *_time
 )
 {
-  _time->sec = 0;
-  _time->frac = 0;
+  *_time = 0;
 }
 
 /**
@@ -112,13 +111,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Less_than(
   const Timestamp_Control *_rhs
 )
 {
-  if ( _lhs->sec < _rhs->sec )
-    return true;
-
-  if ( _lhs->sec > _rhs->sec )
-    return false;
-
-  return _lhs->frac < _rhs->frac;
+  return *_lhs < *_rhs;
 }
 
 /**
@@ -138,13 +131,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Greater_than(
   const Timestamp_Control *_rhs
 )
 {
-  if ( _lhs->sec > _rhs->sec )
-    return true;
-
-  if ( _lhs->sec < _rhs->sec )
-    return false;
-
-  return _lhs->frac > _rhs->frac;
+  return *_lhs > *_rhs;
 }
 
 /**
@@ -164,7 +151,7 @@ RTEMS_INLINE_ROUTINE bool _Timestamp_Equal_to(
   const Timestamp_Control *_rhs
 )
 {
-  return _lhs->sec == _rhs->sec && _lhs->frac == _rhs->frac;
+  return *_lhs == *_rhs;
 }
 
 /**
@@ -181,7 +168,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Add_to(
   const Timestamp_Control *_add
 )
 {
-  bintime_add( _time, _add );
+  *_time += *_add;
 }
 
 /**
@@ -203,10 +190,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Subtract(
   Timestamp_Control       *_result
 )
 {
-  _result->sec = _end->sec;
-  _result->frac = _end->frac;
-
-  bintime_sub( _result, _start );
+  *_result = *_end - *_start;
 }
 
 /**
@@ -232,8 +216,8 @@ RTEMS_INLINE_ROUTINE void _Timestamp_Divide(
   struct timespec _ts_left;
   struct timespec _ts_right;
 
-  bintime2timespec( _lhs, &_ts_left );
-  bintime2timespec( _rhs, &_ts_right );
+  _ts_left = sbttots( *_lhs );
+  _ts_right = sbttots( *_rhs );
 
   _Timespec_Divide(
     &_ts_left,
@@ -256,7 +240,7 @@ RTEMS_INLINE_ROUTINE time_t _Timestamp_Get_seconds(
   const Timestamp_Control *_time
 )
 {
-  return _time->sec;
+  return (*_time >> 32);
 }
 
 /**
@@ -274,7 +258,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Timestamp_Get_nanoseconds(
 {
   struct timespec _ts;
 
-  bintime2timespec( _time, &_ts );
+  _ts = sbttots( *_time );
 
   return (uint32_t) _ts.tv_nsec;
 }
@@ -294,7 +278,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Timestamp_Get_as_nanoseconds(
 {
   struct timespec _ts;
 
-  bintime2timespec( _time, &_ts );
+  _ts = sbttots( *_time );
 
   return _Timespec_Get_as_nanoseconds( &_ts );
 }
@@ -312,7 +296,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_To_timespec(
   struct timespec         *_timespec
 )
 {
-  bintime2timespec( _timestamp, _timespec );
+  *_timespec = sbttots( *_timestamp );
 }
 
 /**
@@ -326,7 +310,7 @@ RTEMS_INLINE_ROUTINE void _Timestamp_To_timeval(
   struct timeval          *_timeval
 )
 {
-  bintime2timeval( _timestamp, _timeval );
+  *_timeval = sbttotv( *_timestamp );
 }
 
 #ifdef __cplusplus

@@ -69,6 +69,13 @@ void _Timecounter_Microtime( struct timeval *tv );
 void _Timecounter_Binuptime( struct bintime *bt );
 
 /**
+ * @brief Returns the uptime in the sbintime_t format.
+ *
+ * @return Returns the uptime.
+ */
+sbintime_t _Timecounter_Sbinuptime( void );
+
+/**
  * @brief Returns the uptime in the timespec format.
  *
  * @param[out] ts Returns the uptime.

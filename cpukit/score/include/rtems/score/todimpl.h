@@ -201,7 +201,7 @@ static inline void _TOD_Get_uptime(
   Timestamp_Control *time
 )
 {
-  _Timecounter_Binuptime( time );
+  *time = _Timecounter_Sbinuptime();
 }
 
 /**
@@ -216,8 +216,7 @@ static inline void _TOD_Get_zero_based_uptime(
   Timestamp_Control *time
 )
 {
-  _Timecounter_Binuptime( time );
-  --time->sec;
+  *time = _Timecounter_Sbinuptime() - SBT_1S;
 }
 
 /**
