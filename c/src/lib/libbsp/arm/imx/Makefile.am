@@ -44,6 +44,8 @@ include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_ccmvar.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_ecspireg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_gpcreg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_i2creg.h
+include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_iomuxreg.h
+include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_iomuxvar.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_srcreg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_uartreg.h
 
@@ -89,6 +91,7 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/ccm.c
+libbsp_a_SOURCES += startup/imx_iomux.c
 if HAS_SMP
 libbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
 libbsp_a_SOURCES += startup/bspsmp.c

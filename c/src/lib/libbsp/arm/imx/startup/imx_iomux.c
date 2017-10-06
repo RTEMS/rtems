@@ -50,6 +50,7 @@
  */
 
 #include <sys/param.h>
+#ifndef __rtems__
 #include <sys/systm.h>
 #include <sys/bus.h>
 #include <sys/kernel.h>
@@ -63,16 +64,34 @@
 #include <dev/ofw/ofw_bus.h>
 #include <dev/ofw/ofw_bus_subr.h>
 #include <dev/fdt/fdt_pinctrl.h>
+#endif /* __rtems__ */
 
 #include <arm/freescale/imx/imx_iomuxvar.h>
+#ifndef __rtems__
 #include <arm/freescale/imx/imx_machdep.h>
+#else /* __rtems__ */
+#include <bsp.h>
+#include <bsp/fdt.h>
+#include <rtems/sysinit.h>
+#include <errno.h>
+#include <libfdt.h>
+#include <stdlib.h>
+
+typedef size_t bus_size_t;
+typedef int phandle_t;
+#endif /* __rtems__ */
 
 struct iomux_softc {
+#ifndef __rtems__
 	device_t	dev;
 	struct resource	*mem_res;
 	u_int		last_gpregaddr;
+#else /* __rtems__ */
+	volatile uint32_t *regs;
+#endif /* __rtems__ */
 };
 
+#ifndef __rtems__
 static struct iomux_softc *iomux_sc;
 
 static struct ofw_compat_data compat_data[] = {
@@ -85,6 +104,61 @@ static struct ofw_compat_data compat_data[] = {
 	{"fsl,imx51-iomuxc",	true},
 	{NULL,			false},
 };
+#else /* __rtems__ */
+static struct iomux_softc iomux_sc_instance;
+
+#define iomux_sc (&iomux_sc_instance);
+
+static void
+imx_iomux_init(void)
+{
+	const void *fdt;
+	int node;
+	struct iomux_softc *sc;
+
+	fdt = bsp_fdt_get();
+	node = fdt_node_offset_by_compatible(fdt, -1, "fsl,imx7d-iomuxc");
+	sc = iomux_sc;
+	sc->regs = imx_get_reg_of_node(fdt, node);
+}
+
+RTEMS_SYSINIT_ITEM(imx_iomux_init, RTEMS_SYSINIT_BSP_START,
+    RTEMS_SYSINIT_ORDER_MIDDLE);
+
+#define	OF_node_from_xref(phandle) fdt_node_offset_by_phandle(fdt, phandle)
+
+static int
+imx_iomux_getencprop_alloc(const char *fdt, int node, const char *name,
+    size_t elsz, void **buf)
+{
+	int len;
+	const uint32_t *val;
+	int i;
+	uint32_t *cell;
+
+	val = fdt_getprop(fdt, node, "fsl,pins", &len);
+	if (val == NULL || len < 0 || len % elsz != 0) {
+		return (-1);
+	}
+
+	cell = malloc((size_t)len);
+	*buf = cell;
+	if (cell == NULL) {
+		return (-1);
+	}
+
+	for (i = 0; i < len / 4; ++i) {
+		cell[i] = fdt32_to_cpu(val[i]);
+	}
+
+	return (len / (int)elsz);
+}
+
+#define	OF_getencprop_alloc(node, name, elsz, buf) \
+    imx_iomux_getencprop_alloc(fdt, node, name, elsz, buf)
+
+#define	OF_prop_free(buf) free(buf)
+#endif /* __rtems__ */
 
 /*
  * Each tuple in an fsl,pins property contains these fields.
@@ -106,14 +180,22 @@ static inline uint32_t
 RD4(struct iomux_softc *sc, bus_size_t off)
 {
 
+#ifndef __rtems__
 	return (bus_read_4(sc->mem_res, off));
+#else /* __rtems__ */
+	return (sc->regs[off / 4]);
+#endif /* __rtems__ */
 }
 
 static inline void
 WR4(struct iomux_softc *sc, bus_size_t off, uint32_t val)
 {
 
+#ifndef __rtems__
 	bus_write_4(sc->mem_res, off, val);
+#else /* __rtems__ */
+	sc->regs[off / 4] = val;
+#endif /* __rtems__ */
 }
 
 static void
@@ -142,8 +224,12 @@ iomux_configure_input(struct iomux_softc *sc, uint32_t reg, uint32_t val)
 	WR4(sc, reg, val);
 }
 
+#ifndef __rtems__
 static int
 iomux_configure_pins(device_t dev, phandle_t cfgxref)
+#else /* __rtems__ */
+int imx_iomux_configure_pins(const void *fdt, uint32_t cfgxref)
+#endif /* __rtems__ */
 {
 	struct iomux_softc *sc;
 	struct pincfg *cfgtuples, *cfg;
@@ -151,7 +237,11 @@ iomux_configure_pins(device_t dev, phandle_t cfgxref)
 	int i, ntuples;
 	uint32_t sion;
 
+#ifndef __rtems__
 	sc = device_get_softc(dev);
+#else /* __rtems__ */
+	sc = iomux_sc;
+#endif /* __rtems__ */
 	cfgnode = OF_node_from_xref(cfgxref);
 	ntuples = OF_getencprop_alloc(cfgnode, "fsl,pins", sizeof(*cfgtuples),
 	    (void **)&cfgtuples);
@@ -165,6 +255,7 @@ iomux_configure_pins(device_t dev, phandle_t cfgxref)
 		iomux_configure_input(sc, cfg->input_reg, cfg->input_val);
 		if ((cfg->padconf_val & PADCONF_NONE) == 0)
 			WR4(sc, cfg->padconf_reg, cfg->padconf_val);
+#ifndef __rtems__
 		if (bootverbose) {
 			char name[32]; 
 			OF_getprop(cfgnode, "name", &name, sizeof(name));
@@ -175,11 +266,13 @@ iomux_configure_pins(device_t dev, phandle_t cfgxref)
 			    cfg->input_reg, cfg->input_val,
 			    cfg->padconf_reg, cfg->padconf_val);
 		}
+#endif /* __rtems__ */
 	}
 	OF_prop_free(cfgtuples);
 	return (0);
 }
 
+#ifndef __rtems__
 static int
 iomux_probe(device_t dev)
 {
@@ -328,3 +421,4 @@ static devclass_t imx_iomux_devclass;
 EARLY_DRIVER_MODULE(imx_iomux, simplebus, imx_iomux_driver, 
     imx_iomux_devclass, 0, 0, BUS_PASS_CPU + BUS_PASS_ORDER_LATE);
 
+#endif /* __rtems__ */

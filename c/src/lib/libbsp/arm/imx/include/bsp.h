@@ -43,6 +43,8 @@ void arm_generic_timer_get_config(uint32_t *frequency, uint32_t *irq);
 
 void *imx_get_reg_of_node(const void *fdt, int node);
 
+int imx_iomux_configure_pins(const void *fdt, uint32_t phandle);
+
 rtems_vector_number imx_get_irq_of_node(
   const void *fdt,
   int node,
