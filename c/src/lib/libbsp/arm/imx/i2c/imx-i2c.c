@@ -400,17 +400,23 @@ static int imx_i2c_init(imx_i2c_bus *bus)
   return 0;
 }
 
-int i2c_bus_register_imx(const char *bus_path, const char *alias)
+int i2c_bus_register_imx(const char *bus_path, const char *alias_or_path)
 {
   const void *fdt;
+  const char *path;
   int node;
   imx_i2c_bus *bus;
   int eno;
 
   fdt = bsp_fdt_get();
-  alias = fdt_get_alias(fdt, alias);
+  path = fdt_get_alias(fdt, alias_or_path);
 
-  if (alias == NULL) {
+  if (path == NULL) {
+    path = alias_or_path;
+  }
+
+  node = fdt_path_offset(fdt, path);
+  if (node < 0) {
     rtems_set_errno_and_return_minus_one(ENXIO);
   }
 
@@ -419,7 +425,6 @@ int i2c_bus_register_imx(const char *bus_path, const char *alias)
     return -1;
   }
 
-  node = fdt_path_offset(fdt, alias);
   bus->regs = imx_get_reg_of_node(fdt, node);
   bus->irq = imx_get_irq_of_node(fdt, node, 0);
 
