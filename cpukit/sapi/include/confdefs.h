@@ -3523,7 +3523,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTOR configuration option is obsolete!"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete!"
 #endif
 
 /*
