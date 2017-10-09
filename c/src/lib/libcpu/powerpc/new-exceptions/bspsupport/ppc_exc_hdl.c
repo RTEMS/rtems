@@ -102,13 +102,11 @@ void ppc_exc_wrapup(BSP_Exception_frame *frame)
   }
 
   while (cpu_self->dispatch_necessary) {
-    uint32_t msr;
     rtems_interrupt_level level;
 
     cpu_self->isr_dispatch_disable = 1;
     cpu_self->thread_dispatch_disable_level = 1;
-    msr = ppc_machine_state_register();
-    _Thread_Do_dispatch(cpu_self, msr | MSR_EE);
+    _Thread_Do_dispatch(cpu_self, frame->EXC_SRR1);
     rtems_interrupt_local_disable(level);
     (void) level;
     cpu_self = _Per_CPU_Get();
