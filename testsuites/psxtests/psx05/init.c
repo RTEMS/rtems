@@ -29,12 +29,6 @@ void Print_mutexattr(
   pthread_mutexattr_t *attr
 );
 
-void calculate_abstimeout(
-  struct timespec *times,
-  uint32_t         seconds,
-  uint32_t         nanoseconds
-);
-
 void Print_mutexattr(
   char                *msg,
   pthread_mutexattr_t *attr
@@ -92,10 +86,10 @@ void Print_mutexattr(
   }
 }
 
-void calculate_abstimeout(
+static void calculate_abstimeout(
   struct timespec *times,
-  uint32_t         seconds,
-  uint32_t         nanoseconds
+  int              seconds,
+  long             nanoseconds
 )
 {
   struct timeval       tv1;
