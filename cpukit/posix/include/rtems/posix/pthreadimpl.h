@@ -103,14 +103,6 @@ int _POSIX_Thread_Translate_sched_param(
   Thread_CPU_budget_algorithm_callout *budget_callout
 );
 
-/*
- * rtems_pthread_attribute_compare
- */
-int rtems_pthread_attribute_compare(
-  const pthread_attr_t *attr1,
-  const pthread_attr_t *attr2
-);
-
 RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
 {
   _Objects_Allocator_lock();
