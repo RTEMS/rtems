@@ -218,14 +218,18 @@ extern int router_routing_table_get(void *d,
 /* Router Set/Get Port configuration */
 extern int router_port_ioc(void *d, int port, struct router_port *cfg);
 
+/* Read-modify-write Port Control register */
+extern int router_port_ctrl_rmw(void *d, int port, uint32_t *oldvalue, uint32_t bitmask, uint32_t value);
+/* Read-modify-write Port Control2 register */
+extern int router_port_ctrl2_rmw(void *d, int port, uint32_t *oldvalue, uint32_t bitmask, uint32_t value);
 /* Read Port Control register */
 extern int router_port_ctrl_get(void *d, int port, uint32_t *ctrl);
 /* Read Port Control2 register */
 extern int router_port_ctrl2_get(void *d, int port, uint32_t *ctrl2);
 /* Write Port Control Register */
-extern int router_port_ctrl_set(void *d, int port, uint32_t ctrl);
+extern int router_port_ctrl_set(void *d, int port, uint32_t mask, uint32_t ctrl);
 /* Write Port Control2 Register */
-extern int router_port_ctrl2_set(void *d, int port, uint32_t ctrl2);
+extern int router_port_ctrl2_set(void *d, int port, uint32_t mask, uint32_t ctrl2);
 /* Set Timer Reload Value for a specific port */
 extern int router_port_treload_set(void *d, int port, uint32_t reload);
 /* Get Timer Reload Value for a specific port */

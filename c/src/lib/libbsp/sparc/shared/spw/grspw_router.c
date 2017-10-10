@@ -690,7 +690,7 @@ int router_init2(struct drvmgr_dev *dev)
 	tmp = REG_READ(&priv->regs->cfgsts);
 	REG_WRITE(&priv->regs->cfgsts, tmp | RTRCFG_WCLEAR);
 	tmp = REG_READ(&priv->regs->psts[0]);
-	REG_WRITE(&priv->regs->psts[0], tmp & PSTSCFG_WCLEAR);
+	REG_WRITE(&priv->regs->psts[0], (tmp & PSTSCFG_WCLEAR) | PSTSCFG_WCLEAR2);
 	for (i=1; i<priv->nports; i++) {
 		tmp = REG_READ(&priv->regs->psts[i]);
 		REG_WRITE(&priv->regs->psts[i], tmp & PSTS_WCLEAR);
@@ -1262,6 +1262,56 @@ int router_port_ioc(void *d, int port, struct router_port *cfg)
 	return ROUTER_ERR_OK;
 }
 
+int router_port_ctrl_rmw(void *d, int port, uint32_t *oldvalue, uint32_t bitmask, uint32_t value)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+	unsigned int oldctrl, ctrl;
+	SPIN_IRQFLAGS(irqflags);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	oldctrl = REG_READ(&priv->regs->pctrl[port]);
+	ctrl = ((oldctrl & ~(bitmask)) | (value & bitmask));
+	REG_WRITE(&priv->regs->pctrl[port], ctrl);
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	if (oldvalue != NULL) {
+		*oldvalue = oldctrl;
+	}
+
+	return ROUTER_ERR_OK;
+}
+
+int router_port_ctrl2_rmw(void *d, int port, uint32_t *oldvalue, uint32_t bitmask, uint32_t value)
+{
+	struct router_priv *priv = d;
+	int error = router_check_port(d, port);
+	unsigned int oldctrl, ctrl;
+	SPIN_IRQFLAGS(irqflags);
+
+	if (error)
+		return error;
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
+
+	oldctrl = REG_READ(&priv->regs->pctrl2[port]);
+	ctrl = ((oldctrl & ~(bitmask)) | (value & bitmask));
+	REG_WRITE(&priv->regs->pctrl2[port], ctrl);
+
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
+
+	if (oldvalue != NULL) {
+		*oldvalue = oldctrl;
+	}
+
+	return ROUTER_ERR_OK;
+}
+
 /* Read Port Control register */
 int router_port_ctrl_get(void *d, int port, uint32_t *ctrl)
 {
@@ -1285,6 +1335,7 @@ int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk) /* rev
 {
 	struct router_priv *priv = d;
 	int error = router_check_port(d, port);
+	SPIN_IRQFLAGS(irqflags);
 
 	if (error)
 		return error;
@@ -1293,12 +1344,15 @@ int router_port_status(void *d, int port, uint32_t *sts, uint32_t clrmsk) /* rev
 		DBG("ROUTER Wrong sts\n");
 		return ROUTER_ERR_EINVAL;
 	}
+
+	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
 	*sts = REG_READ(&priv->regs->psts[port]);
 	if (port == 0) {
-		REG_WRITE(&priv->regs->psts[port], (*sts) & PSTSCFG_WCLEAR);
+		REG_WRITE(&priv->regs->psts[port], ((*sts) & (PSTSCFG_WCLEAR & clrmsk)) | (PSTSCFG_WCLEAR2 & clrmsk));
 	}else{
 		REG_WRITE(&priv->regs->psts[port], (*sts) & PSTS_WCLEAR);
 	}
+	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
 	return ROUTER_ERR_OK;
 }
 
@@ -1321,36 +1375,15 @@ int router_port_ctrl2_get(void *d, int port, uint32_t *ctrl2)
 }
 
 /* Write Port Control Register */
-int router_port_ctrl_set(void *d, int port, uint32_t ctrl)
+int router_port_ctrl_set(void *d, int port, uint32_t mask, uint32_t ctrl)
 {
-	struct router_priv *priv = d;
-	SPIN_IRQFLAGS(irqflags);
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
-
-	REG_WRITE(&priv->regs->pctrl[port],ctrl); /* this is not SMP safe? */
-
-	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, mask, ctrl);
 }
 
 /* Write Port Control2 Register */
-int router_port_ctrl2_set(void *d, int port, uint32_t ctrl2)
+int router_port_ctrl2_set(void *d, int port, uint32_t mask, uint32_t ctrl2)
 {
-	struct router_priv *priv = d;
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	REG_WRITE(&priv->regs->pctrl2[port],ctrl2);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, mask, ctrl2);
 }
 
 int router_port_treload_set(void *d, int port, uint32_t reload)
@@ -1429,82 +1462,22 @@ int router_port_link_status(void *d, int port)
 
 int router_port_disable(void *d, int port)
 {
-	struct router_priv *priv = d;
-	unsigned int ctrl;
-	SPIN_IRQFLAGS(irqflags);
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
-
-	ctrl = REG_READ(&priv->regs->pctrl[port]);
-	REG_WRITE(&priv->regs->pctrl[port], (ctrl | PCTRL_DI));
-
-	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, PCTRL_DI, PCTRL_DI);
 }
 
 int router_port_enable(void *d, int port)
 {
-	struct router_priv *priv = d;
-	unsigned int ctrl;
-	SPIN_IRQFLAGS(irqflags);
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
-
-	ctrl = REG_READ(&priv->regs->pctrl[port]);
-	REG_WRITE(&priv->regs->pctrl[port], (ctrl & ~(PCTRL_DI)));
-
-	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, PCTRL_DI, 0);
 }
 
 int router_port_link_stop(void *d, int port)
 {
-	struct router_priv *priv = d;
-	unsigned int ctrl;
-	SPIN_IRQFLAGS(irqflags);
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
-
-	ctrl = REG_READ(&priv->regs->pctrl[port]);
-	REG_WRITE(&priv->regs->pctrl[port], ((ctrl & ~(PCTRL_LS) )| (PCTRL_LD)));
-
-	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, PCTRL_LD | PCTRL_LS, PCTRL_LD);
 }
 
 int router_port_link_start(void *d, int port)
 {
-	struct router_priv *priv = d;
-	unsigned int ctrl;
-	SPIN_IRQFLAGS(irqflags);
-	int error = router_check_port(d, port);
-
-	if (error)
-		return error;
-
-	SPIN_LOCK_IRQ(&priv->plock[port], irqflags);
-
-	ctrl = REG_READ(&priv->regs->pctrl[port]);
-	REG_WRITE(&priv->regs->pctrl[port], ((ctrl & ~(PCTRL_LD) )| (PCTRL_LS)));
-
-	SPIN_UNLOCK_IRQ(&priv->plock[port], irqflags);
-
-	return ROUTER_ERR_OK;
+	return router_port_ctrl_rmw(d, port, NULL, PCTRL_LD | PCTRL_LS, PCTRL_LS);
 }
 
 int router_port_link_receive_spill(void *d, int port)
