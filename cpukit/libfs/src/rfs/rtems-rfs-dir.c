@@ -602,7 +602,7 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       }
 
       memset (dirent, 0, sizeof (struct dirent));
-      dirent->d_off = offset;
+      dirent->d_off = rtems_rfs_block_get_pos (fs, &map.bpos);
       dirent->d_reclen = sizeof (struct dirent);
 
       *length += elength;
