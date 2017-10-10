@@ -23,9 +23,6 @@
 #include <rtems/score/schedulerpriorityimpl.h>
 #include <rtems/score/schedulersmpimpl.h>
 #include <rtems/score/schedulerprioritysmpimpl.h>
-#include <rtems/score/wkspace.h>
-#include <rtems/score/cpusetimpl.h>
-
 #include <rtems/score/priority.h>
 
 /*
@@ -606,27 +603,27 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   const Processor_mask    *affinity
 )
 {
+  Scheduler_Context                    *context;
   Scheduler_priority_affinity_SMP_Node *node;
   States_Control                        current_state;
+  Processor_mask                        my_affinity;
   cpu_set_t                             cpuset;
-  size_t                                cpusetsize;
 
-  cpusetsize = sizeof( cpuset );
-  _Processor_mask_To_cpu_set_t( affinity, cpusetsize, &cpuset );
-  /*
-   * Validate that the cpset meets basic requirements.
-   */
-  if ( !_CPU_set_Is_valid( &cpuset, cpusetsize ) ) {
+  context = _Scheduler_Get_context( scheduler );
+  _Processor_mask_And( &my_affinity, &context->Processors, affinity );
+
+  if ( _Processor_mask_Count( &my_affinity ) == 0 ) {
     return false;
   }
 
+  _Processor_mask_To_cpu_set_t( &my_affinity, sizeof( cpuset ), &cpuset );
   node = _Scheduler_priority_affinity_SMP_Node_downcast( node_base );
 
   /*
    * The old and new set are the same, there is no point in
    * doing anything.
    */
-  if ( CPU_EQUAL_S( cpusetsize, &cpuset, node->Affinity.set ) )
+  if ( CPU_EQUAL( &cpuset, node->Affinity.set ) )
     return true;
 
   current_state = thread->current_state;

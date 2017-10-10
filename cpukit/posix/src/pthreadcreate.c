@@ -29,7 +29,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/pthreadattrimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/stackimpl.h>
@@ -170,11 +169,9 @@ int pthread_create(
     return EINVAL;
   }
 
-#if defined(RTEMS_SMP)
-  status = _CPU_set_Is_valid(the_attr->affinityset, the_attr->affinitysetsize);
-  if ( !status )
+  if ( the_attr->affinityset == NULL ) {
     return EINVAL;
-#endif
+  }
 
   /*
    *  Currently all POSIX threads are floating point if the hardware
@@ -223,7 +220,6 @@ int pthread_create(
 
   the_thread->Life.state |= THREAD_LIFE_CHANGE_DEFERRED;
 
-#if defined(RTEMS_SMP)
   _ISR_lock_ISR_disable( &lock_context );
    status = _Scheduler_Set_affinity(
      the_thread,
@@ -236,7 +232,6 @@ int pthread_create(
      _RTEMS_Unlock_allocator();
      return EINVAL;
    }
-#endif
 
   /*
    *  finish initializing the per API structure

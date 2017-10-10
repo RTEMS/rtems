@@ -45,11 +45,11 @@ void Validate_setaffinity_errors(void)
   int                 sc;
   cpu_set_t           cpuset;
 
-  /* Verify pthread_setaffinity_np checks that all cpu's exist. */
+  /* Verify pthread_setaffinity_np checks that more cpu's don't hurt. */
   CPU_FILL(&cpuset);
-  puts( "Init - pthread_setaffinity_np - Invalid cpu - EINVAL" );
+  puts( "Init - pthread_setaffinity_np - Lots of cpus - SUCCESS" );
   sc = pthread_setaffinity_np( Init_id, sizeof(cpu_set_t), &cpuset );
-  rtems_test_assert( sc == EINVAL );
+  rtems_test_assert( sc == 0 );
 
   /* Verify pthread_setaffinity_np checks that at least one cpu is set */
   CPU_ZERO(&cpuset);
