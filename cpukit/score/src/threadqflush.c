@@ -115,9 +115,7 @@ size_t _Thread_queue_Flush_critical(
   if ( node != tail ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Thread_Dispatch_disable_critical(
-      &queue_context->Lock_context.Lock_context
-    );
+    cpu_self = _Thread_queue_Dispatch_disable( queue_context );
     _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
     do {

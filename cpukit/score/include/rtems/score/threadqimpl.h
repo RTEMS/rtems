@@ -26,6 +26,7 @@
 #include <rtems/score/smp.h>
 #include <rtems/score/status.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/threaddispatch.h>
 
 #if defined(RTEMS_DEBUG)
 #include <string.h>
@@ -274,6 +275,15 @@ RTEMS_INLINE_ROUTINE void _Thread_queue_Context_set_ISR_level(
   _ISR_lock_Context_set_level(
     &queue_context->Lock_context.Lock_context,
     level
+  );
+}
+
+RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_queue_Dispatch_disable(
+  Thread_queue_Context *queue_context
+)
+{
+  return _Thread_Dispatch_disable_critical(
+    &queue_context->Lock_context.Lock_context
   );
 }
 

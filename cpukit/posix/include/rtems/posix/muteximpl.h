@@ -321,9 +321,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_set_owner(
   );
   _Thread_Wait_release_default_critical( owner, &lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _POSIX_Mutex_Release( the_mutex, queue_context );
   _Thread_Priority_update( queue_context );
   _Thread_Dispatch_enable( cpu_self );
@@ -413,9 +411,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_surrender(
   );
   _Thread_Wait_release_default_critical( executing, &lock_context );
 
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
 
   heads = the_mutex->Recursive.Mutex.Queue.Queue.heads;
 

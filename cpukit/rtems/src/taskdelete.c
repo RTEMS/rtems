@@ -47,9 +47,7 @@ rtems_status_code rtems_task_delete(
   if ( the_thread == executing ) {
     Per_CPU_Control *cpu_self;
 
-    cpu_self = _Thread_Dispatch_disable_critical(
-      &context.Base.Lock_context.Lock_context
-    );
+    cpu_self = _Thread_queue_Dispatch_disable( &context.Base );
     _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
 
     /*

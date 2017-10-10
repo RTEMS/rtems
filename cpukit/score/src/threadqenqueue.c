@@ -445,9 +445,7 @@ void _Thread_queue_Enqueue(
 
   the_thread->Wait.return_code = STATUS_SUCCESSFUL;
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
   ( *queue_context->enqueue_callout )( queue, the_thread, queue_context );
@@ -513,9 +511,7 @@ Status_Control _Thread_queue_Enqueue_sticky(
 
   the_thread->Wait.return_code = STATUS_SUCCESSFUL;
   _Thread_Wait_flags_set( the_thread, THREAD_QUEUE_INTEND_TO_BLOCK );
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
   if ( cpu_self->thread_dispatch_disable_level != 1 ) {
@@ -715,9 +711,7 @@ void _Thread_queue_Surrender(
 
   unblock = _Thread_queue_Make_ready_again( new_owner );
 
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
     queue,
     &queue_context->Lock_context.Lock_context
@@ -756,9 +750,7 @@ void _Thread_queue_Surrender_sticky(
   queue->owner = new_owner;
   _Thread_queue_Make_ready_again( new_owner );
 
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release(
     queue,
     &queue_context->Lock_context.Lock_context

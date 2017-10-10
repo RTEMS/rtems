@@ -179,9 +179,7 @@ RTEMS_INLINE_ROUTINE Status_Control _MRSP_Claim_ownership(
   }
 
   _MRSP_Set_owner( mrsp, executing );
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _MRSP_Release( mrsp, queue_context );
   _Thread_Priority_and_sticky_update( executing, 1 );
   _Thread_Dispatch_enable( cpu_self );

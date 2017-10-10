@@ -110,9 +110,7 @@ static rtems_status_code _Semaphore_Set_priority(
       break;
   }
 
-  cpu_self = _Thread_Dispatch_disable_critical(
-    &queue_context->Lock_context.Lock_context
-  );
+  cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Release(
     &the_semaphore->Core_control.Wait_queue,
     queue_context
