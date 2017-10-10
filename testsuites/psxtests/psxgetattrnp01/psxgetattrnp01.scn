@@ -2,6 +2,7 @@
 Init - pthread_getattr_np - attr NULL - EINVAL
 Init - pthread_getattr_np - invalid id - ESRCH
 Init - pthread_attr_init
+Init - pthread_attr_setaffinity_np
 Init - pthread_attr_setinheritsched - PTHREAD_EXPLICIT_SCHED
 Init - pthread_attr_setschedpolicy to SCHED_RR
 Init - pthread_attr_setschedparam to minimum priority + 2

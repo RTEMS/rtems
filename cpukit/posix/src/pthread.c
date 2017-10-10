@@ -49,7 +49,7 @@ Thread_Information _POSIX_Threads_Information;
  *  NOTE: Be careful .. if the default attribute set changes,
  *        _POSIX_Threads_Initialize_user_threads will need to be examined.
  */
-pthread_attr_t _POSIX_Threads_Default_attributes = {
+const pthread_attr_t _POSIX_Threads_Default_attributes = {
   .is_initialized  = true,                       /* is_initialized */
   .stackaddr       = NULL,                       /* stackaddr */
   .stacksize       = 0,                          /* stacksize -- will be adjusted to minimum */
@@ -79,7 +79,7 @@ pthread_attr_t _POSIX_Threads_Default_attributes = {
     sizeof( _POSIX_Threads_Default_attributes.affinitysetpreallocated ),
   .affinityset             =
     &_POSIX_Threads_Default_attributes.affinitysetpreallocated,
-  .affinitysetpreallocated = {{0x1}}
+  .affinitysetpreallocated = { { -1L } }
 };
 
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
@@ -243,21 +243,6 @@ User_extensions_Control _POSIX_Threads_User_extensions = {
  */
 static void _POSIX_Threads_Manager_initialization(void)
 {
-  #if defined(RTEMS_SMP)
-    const CPU_set_Control *affinity;
-    pthread_attr_t *attr;
-
-    /* Initialize default attribute. */
-    attr = &_POSIX_Threads_Default_attributes;
-
-    /*  Initialize the affinity to be the default cpu set for the system */
-    affinity = _CPU_set_Default();
-    _Assert( affinity->setsize == sizeof( attr->affinitysetpreallocated ) );
-    attr->affinityset             = &attr->affinitysetpreallocated;
-    attr->affinitysetsize         = affinity->setsize;
-    CPU_COPY( affinity->set, attr->affinityset );
-  #endif
-
   _Thread_Initialize_information(
     &_POSIX_Threads_Information, /* object information table */
     OBJECTS_POSIX_API,           /* object API */

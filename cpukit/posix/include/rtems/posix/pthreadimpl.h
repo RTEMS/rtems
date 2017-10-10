@@ -51,7 +51,7 @@ extern Thread_Information _POSIX_Threads_Information;
 /**
  * This variable contains the default POSIX Thread attributes.
  */
-extern pthread_attr_t _POSIX_Threads_Default_attributes;
+extern const pthread_attr_t _POSIX_Threads_Default_attributes;
 
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,

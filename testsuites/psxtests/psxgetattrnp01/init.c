@@ -190,6 +190,7 @@ void *POSIX_Init(
   size_t              stacksize;
   size_t              guardsize;
   struct sched_param  param;
+  cpu_set_t           set;
 
   TEST_BEGIN();
 
@@ -209,6 +210,12 @@ void *POSIX_Init(
   /* init task attributes */
   puts("Init - pthread_attr_init");
   sc = pthread_attr_init(&Thread_attr);
+  rtems_test_assert(!sc);
+
+  puts("Init - pthread_attr_setaffinity_np");
+  CPU_ZERO( &set );
+  CPU_SET( 0, &set );
+  sc = pthread_attr_setaffinity_np( &Thread_attr, sizeof( set ), &set );
   rtems_test_assert(!sc);
 
   puts("Init - pthread_attr_setinheritsched - PTHREAD_EXPLICIT_SCHED");
