@@ -167,7 +167,17 @@ rtems_rfs_group_bitmap_alloc (rtems_rfs_file_system* fs,
     goal -= RTEMS_RFS_ROOT_INO;
   }
   else
+  {
     size = fs->group_blocks;
+    /*
+     * It is possible for 'goal' to be zero. Any newly created inode will have
+     * its 'last_data_block' set to zero, which is then used as 'goal' to
+     * allocate new blocks. When that happens, we simply set 'goal' to zero and
+     * continue the search from there.
+     */
+    if (goal >= RTEMS_RFS_ROOT_INO)
+        goal -= RTEMS_RFS_ROOT_INO;
+  }
 
   group_start = goal / size;
   bit = (rtems_rfs_bitmap_bit) (goal % size);
@@ -324,8 +334,9 @@ rtems_rfs_group_bitmap_test (rtems_rfs_file_system* fs,
   }
   else
   {
-    if (no >= rtems_rfs_fs_blocks (fs))
+    if ((no < RTEMS_RFS_ROOT_INO) || (no >= rtems_rfs_fs_blocks (fs)))
         return EINVAL;
+    no -= RTEMS_RFS_ROOT_INO;
     size = fs->group_blocks;
   }
 
