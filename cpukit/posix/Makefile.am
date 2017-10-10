@@ -24,6 +24,7 @@ include_rtems_posix_HEADERS += include/rtems/posix/config.h
 include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
 include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
+include_rtems_posix_HEADERS += include/rtems/posix/pthreadattrimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
 include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
@@ -89,14 +90,25 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
     src/mutextrylock.c src/mutexunlock.c
 
+## PTHREAD_ATTR_C_FILES
+libposix_a_SOURCES += src/pthreadattrdefault.c src/pthreadattrdestroy.c \
+   src/pthreadattrgetdetachstate.c src/pthreadattrgetguardsize.c \
+   src/pthreadattrgetinheritsched.c src/pthreadattrgetschedparam.c \
+   src/pthreadattrgetschedpolicy.c src/pthreadattrgetscope.c \
+   src/pthreadattrgetstackaddr.c src/pthreadattrgetstack.c \
+   src/pthreadattrgetstacksize.c src/pthreadattrinit.c \
+   src/pthreadattrsetdetachstate.c src/pthreadattrsetguardsize.c \
+   src/pthreadattrsetinheritsched.c src/pthreadattrsetschedparam.c \
+   src/pthreadattrsetschedpolicy.c src/pthreadattrsetscope.c \
+   src/pthreadattrsetstackaddr.c src/pthreadattrsetstack.c \
+   src/pthreadattrsetstacksize.c
+
 ## PTHREAD_AFFINITY_C_FILES
 libposix_a_SOURCES += src/pthreadattrsetaffinitynp.c \
     src/pthreadattrgetaffinitynp.c  src/pthreadgetaffinitynp.c   \
     src/pthreadsetaffinitynp.c
 
 if HAS_PTHREADS
-libposix_a_SOURCES +=  src/pthreadatfork.c
-
 ## CANCEL_C_FILES
 libposix_a_SOURCES += src/cancel.c \
     src/cleanuppush.c src/setcancelstate.c \
@@ -128,18 +140,9 @@ libposix_a_SOURCES += src/mqueue.c src/mqueueclose.c \
     src/mqueueunlink.c
 
 ## PTHREAD_C_FILES
-libposix_a_SOURCES += src/pthreadatfork.c src/pthreadattrdestroy.c \
-    src/pthreadattrgetdetachstate.c src/pthreadattrgetinheritsched.c \
-    src/pthreadattrgetschedparam.c src/pthreadattrgetschedpolicy.c \
-    src/pthreadattrgetscope.c src/pthreadattrgetstackaddr.c \
-    src/pthreadattrgetstack.c src/pthreadattrgetstacksize.c \
-    src/pthreadattrinit.c src/pthreadattrsetdetachstate.c \
-    src/pthreadattrsetguardsize.c src/pthreadattrsetinheritsched.c \
-    src/pthreadattrsetschedparam.c src/pthreadattrsetschedpolicy.c \
-    src/pthreadattrsetscope.c src/pthreadattrsetstackaddr.c \
-    src/pthreadattrsetstack.c src/pthreadattrsetstacksize.c \
+libposix_a_SOURCES += src/pthreadatfork.c \
     src/pthreadgetattrnp.c \
-    src/pthreadattrgetguardsize.c src/pthread.c \
+    src/pthread.c \
     src/pthreadconcurrency.c \
     src/pthreadcreate.c src/pthreaddetach.c src/pthreadequal.c \
     src/pthreadexit.c src/pthreadgetcpuclockid.c \

@@ -19,11 +19,9 @@
 #endif
 
 #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
+
 #include <pthread.h>
 #include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/posix/pthreadimpl.h>
 
 int pthread_attr_setguardsize(
   pthread_attr_t  *attr,

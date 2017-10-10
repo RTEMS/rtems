@@ -48,11 +48,6 @@ extern "C" {
  */
 extern Thread_Information _POSIX_Threads_Information;
 
-/**
- * This variable contains the default POSIX Thread attributes.
- */
-extern const pthread_attr_t _POSIX_Threads_Default_attributes;
-
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,
   POSIX_API_Control *api
@@ -113,35 +108,11 @@ RTEMS_INLINE_ROUTINE Thread_Control *_POSIX_Threads_Allocate(void)
     _Objects_Allocate_unprotected( &_POSIX_Threads_Information.Objects );
 }
 
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Copy_attributes(
-  pthread_attr_t        *dst_attr,
-  const pthread_attr_t  *src_attr
-)
-{
-  *dst_attr = *src_attr;
-#if defined(RTEMS_SMP)
-  _Assert(
-    dst_attr->affinitysetsize == sizeof(dst_attr->affinitysetpreallocated)
-  );
-  dst_attr->affinityset = &dst_attr->affinitysetpreallocated;
-#endif
-}
-
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Free (
   Thread_Control *the_pthread
 )
 {
   _Objects_Free( &_POSIX_Threads_Information.Objects, &the_pthread->Object );
-}
-
-RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
-  pthread_attr_t  *attr
-)
-{
-  _POSIX_Threads_Copy_attributes(
-    attr,
-    &_POSIX_Threads_Default_attributes
-  );
 }
 
 /** @} */

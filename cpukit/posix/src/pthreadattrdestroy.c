@@ -20,8 +20,7 @@
 
 #include <pthread.h>
 #include <errno.h>
-
-#include <rtems/system.h>
+#include <stdbool.h>
 
 int pthread_attr_destroy(
   pthread_attr_t  *attr

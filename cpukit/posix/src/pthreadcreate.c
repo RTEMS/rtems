@@ -27,6 +27,7 @@
 
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/pthreadattrimpl.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/cpusetimpl.h>
 #include <rtems/score/threadimpl.h>

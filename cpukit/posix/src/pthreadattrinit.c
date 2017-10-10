@@ -18,11 +18,7 @@
 #include "config.h"
 #endif
 
-#include <pthread.h>
-#include <errno.h>
-
-#include <rtems/system.h>
-#include <rtems/posix/pthreadimpl.h>
+#include <rtems/posix/pthreadattrimpl.h>
 
 /**
  * 16.1.1 Thread Creation Attributes, P1003.1c/Draft 10, p, 140

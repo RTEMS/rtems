@@ -59,6 +59,10 @@ $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h: include/rtems/posix/priorityimpl.
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/priorityimpl.h
 
+$(PROJECT_INCLUDE)/rtems/posix/pthreadattrimpl.h: include/rtems/posix/pthreadattrimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/pthreadattrimpl.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/pthreadattrimpl.h
+
 $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h: include/rtems/posix/rwlockimpl.h $(PROJECT_INCLUDE)/rtems/posix/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/posix/rwlockimpl.h

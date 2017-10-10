@@ -23,9 +23,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-#include <rtems/posix/pthreadimpl.h>
-
 int pthread_attr_setschedpolicy(
   pthread_attr_t  *attr,
   int              policy
