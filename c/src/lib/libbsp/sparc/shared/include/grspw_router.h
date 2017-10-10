@@ -141,6 +141,80 @@ extern int router_routing_table_set(void *d,
 extern int router_routing_table_get(void *d, 
 		struct router_routing_table *cfg);
 
+/*
+ * ROUTER PCTRL register fields
+ */
+#define PCTRL_RD (0xff << PCTRL_RD_BIT)
+#define PCTRL_ST (0x1 << PCTRL_ST_BIT)
+#define PCTRL_SR (0x1 << PCTRL_SR_BIT)
+#define PCTRL_AD (0x1 << PCTRL_AD_BIT)
+#define PCTRL_LR (0x1 << PCTRL_LR_BIT)
+#define PCTRL_PL (0x1 << PCTRL_PL_BIT)
+#define PCTRL_TS (0x1 << PCTRL_TS_BIT)
+#define PCTRL_IC (0x1 << PCTRL_IC_BIT)
+#define PCTRL_ET (0x1 << PCTRL_ET_BIT)
+#define PCTRL_NP (0x1 << PCTRL_NP_BIT)
+#define PCTRL_PS (0x1 << PCTRL_PS_BIT)
+#define PCTRL_BE (0x1 << PCTRL_BE_BIT)
+#define PCTRL_DI (0x1 << PCTRL_DI_BIT)
+#define PCTRL_TR (0x1 << PCTRL_TR_BIT)
+#define PCTRL_PR (0x1 << PCTRL_PR_BIT)
+#define PCTRL_TF (0x1 << PCTRL_TF_BIT)
+#define PCTRL_RS (0x1 << PCTRL_RS_BIT)
+#define PCTRL_TE (0x1 << PCTRL_TE_BIT)
+#define PCTRL_CE (0x1 << PCTRL_CE_BIT)
+#define PCTRL_AS (0x1 << PCTRL_AS_BIT)
+#define PCTRL_LS (0x1 << PCTRL_LS_BIT)
+#define PCTRL_LD (0x1 << PCTRL_LD_BIT)
+
+#define PCTRL_RD_BIT 24
+#define PCTRL_ST_BIT 21
+#define PCTRL_SR_BIT 20
+#define PCTRL_AD_BIT 19
+#define PCTRL_LR_BIT 18
+#define PCTRL_PL_BIT 17
+#define PCTRL_TS_BIT 16
+#define PCTRL_IC_BIT 15
+#define PCTRL_ET_BIT 14
+#define PCTRL_NP_BIT 13
+#define PCTRL_PS_BIT 12
+#define PCTRL_BE_BIT 11
+#define PCTRL_DI_BIT 10
+#define PCTRL_TR_BIT 9
+#define PCTRL_PR_BIT 8
+#define PCTRL_TF_BIT 7
+#define PCTRL_RS_BIT 6
+#define PCTRL_TE_BIT 5
+#define PCTRL_CE_BIT 3
+#define PCTRL_AS_BIT 2
+#define PCTRL_LS_BIT 1
+#define PCTRL_LD_BIT 0
+
+/*
+ * ROUTER PCTRL2 register fields
+ */
+#define PCTRL2_SM (0xff << PCTRL2_SM_BIT)
+#define PCTRL2_SV (0xff << PCTRL2_SV_BIT)
+#define PCTRL2_OR (0x1 << PCTRL2_OR_BIT)
+#define PCTRL2_UR (0x1 << PCTRL2_UR_BIT)
+#define PCTRL2_AT (0x1 << PCTRL2_AT_BIT)
+#define PCTRL2_AR (0x1 << PCTRL2_AR_BIT)
+#define PCTRL2_IT (0x1 << PCTRL2_IT_BIT)
+#define PCTRL2_IR (0x1 << PCTRL2_IR_BIT)
+#define PCTRL2_SD (0x1f << PCTRL2_SD_BIT)
+#define PCTRL2_SC (0x1f << PCTRL2_SC_BIT)
+
+#define PCTRL2_SM_BIT 24
+#define PCTRL2_SV_BIT 16
+#define PCTRL2_OR_BIT 15
+#define PCTRL2_UR_BIT 14
+#define PCTRL2_AT_BIT 12
+#define PCTRL2_AR_BIT 11
+#define PCTRL2_IT_BIT 10
+#define PCTRL2_IR_BIT 9
+#define PCTRL2_SD_BIT 1
+#define PCTRL2_SC_BIT 0
+
 /* Router Set/Get Port configuration */
 extern int router_port_ioc(void *d, int port, struct router_port *cfg);
 
@@ -160,6 +234,94 @@ extern int router_port_treload_get(void *d, int port, uint32_t *reload);
 extern int router_port_maxplen_get(void *d, int port, uint32_t *length);
 /* Set Maximum packet length for a specific port */
 extern int router_port_maxplen_set(void *d, int port, uint32_t length);
+
+/*
+ * ROUTER PSTSCFG register fields
+ */
+#define PSTSCFG_EO (0x1 << PSTSCFG_EO_BIT)
+#define PSTSCFG_EE (0x1 << PSTSCFG_EE_BIT)
+#define PSTSCFG_PL (0x1 << PSTSCFG_PL_BIT)
+#define PSTSCFG_TT (0x1 << PSTSCFG_TT_BIT)
+#define PSTSCFG_PT (0x1 << PSTSCFG_PT_BIT)
+#define PSTSCFG_HC (0x1 << PSTSCFG_HC_BIT)
+#define PSTSCFG_PI (0x1 << PSTSCFG_PI_BIT)
+#define PSTSCFG_CE (0x1 << PSTSCFG_CE_BIT)
+#define PSTSCFG_EC (0xf << PSTSCFG_EC_BIT)
+#define PSTSCFG_TS (0x1 << PSTSCFG_TS_BIT)
+#define PSTSCFG_ME (0x1 << PSTSCFG_ME_BIT)
+#define PSTSCFG_IP (0x1f << PSTSCFG_IP_BIT)
+#define PSTSCFG_CP (0x1 << PSTSCFG_CP_BIT)
+#define PSTSCFG_PC (0xf << PSTSCFG_PC_BIT)
+#define PSTSCFG_WCLEAR (PSTSCFG_EO | PSTSCFG_EE | PSTSCFG_PL | \
+						PSTSCFG_TT | PSTSCFG_PT | PSTSCFG_HC | \
+						PSTSCFG_PI | PSTSCFG_CE | PSTSCFG_TS | \
+						PSTSCFG_ME | PSTSCFG_CP)
+#define PSTSCFG_WCLEAR2 (PSTSCFG_CE | PSTSCFG_CP)
+
+#define PSTSCFG_EO_BIT 31
+#define PSTSCFG_EE_BIT 30
+#define PSTSCFG_PL_BIT 29
+#define PSTSCFG_TT_BIT 28
+#define PSTSCFG_PT_BIT 27
+#define PSTSCFG_HC_BIT 26
+#define PSTSCFG_PI_BIT 25
+#define PSTSCFG_CE_BIT 24
+#define PSTSCFG_EC_BIT 20
+#define PSTSCFG_TS_BIT 18
+#define PSTSCFG_ME_BIT 17
+#define PSTSCFG_IP_BIT 7
+#define PSTSCFG_CP_BIT 4
+#define PSTSCFG_PC_BIT 0
+
+/*
+ * ROUTER PSTS register fields
+ */
+#define PSTS_PT (0x3 << PSTS_PT_BIT)
+#define PSTS_PL (0x1 << PSTS_PL_BIT)
+#define PSTS_TT (0x1 << PSTS_TT_BIT)
+#define PSTS_RS (0x1 << PSTS_RS_BIT)
+#define PSTS_SR (0x1 << PSTS_SR_BIT)
+#define PSTS_LR (0x1 << PSTS_LR_BIT)
+#define PSTS_SP (0x1 << PSTS_SP_BIT)
+#define PSTS_AC (0x1 << PSTS_AC_BIT)
+#define PSTS_TS (0x1 << PSTS_TS_BIT)
+#define PSTS_ME (0x1 << PSTS_ME_BIT)
+#define PSTS_TF (0x1 << PSTS_TF_BIT)
+#define PSTS_RE (0x1 << PSTS_RE_BIT)
+#define PSTS_LS (0x7 << PSTS_LS_BIT)
+#define PSTS_IP (0x1f << PSTS_IP_BIT)
+#define PSTS_PR (0x1 << PSTS_PR_BIT)
+#define PSTS_PB (0x1 << PSTS_PB_BIT)
+#define PSTS_IA (0x1 << PSTS_IA_BIT)
+#define PSTS_CE (0x1 << PSTS_CE_BIT)
+#define PSTS_ER (0x1 << PSTS_ER_BIT)
+#define PSTS_DE (0x1 << PSTS_DE_BIT)
+#define PSTS_PE (0x1 << PSTS_PE_BIT)
+#define PSTS_WCLEAR (PSTS_PL | PSTS_TT | PSTS_RS | PSTS_SR | \
+					 PSTS_TS | PSTS_ME | PSTS_IA | PSTS_CE | \
+					 PSTS_ER | PSTS_DE | PSTS_PE)
+
+#define PSTS_PT_BIT 30
+#define PSTS_PL_BIT 29
+#define PSTS_TT_BIT 28
+#define PSTS_RS_BIT 27
+#define PSTS_SR_BIT 26
+#define PSTS_LR_BIT 22
+#define PSTS_SP_BIT 21
+#define PSTS_AC_BIT 20
+#define PSTS_TS_BIT 18
+#define PSTS_ME_BIT 17
+#define PSTS_TF_BIT 16
+#define PSTS_RE_BIT 15
+#define PSTS_LS_BIT 12
+#define PSTS_IP_BIT 7
+#define PSTS_PR_BIT 6
+#define PSTS_PB_BIT 5
+#define PSTS_IA_BIT 4
+#define PSTS_CE_BIT 3
+#define PSTS_ER_BIT 2
+#define PSTS_DE_BIT 1
+#define PSTS_PE_BIT 0
 
 /* Check Port Status register and clear errors if there are */
 extern int router_port_status(void *d, int port, uint32_t *sts);
