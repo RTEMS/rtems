@@ -3,7 +3,7 @@
  *
  * @brief RTEMS File Systems Bitmap Routines
  * @ingroup rtems_rfs
- * 
+ *
  * These functions manage bit maps. A bit map consists of the map of bit
  * allocated in a block and a search map where a bit represents 32 actual
  * bits. The search map allows for a faster search for an available bit as 32
@@ -183,29 +183,44 @@ int
 rtems_rfs_bitmap_map_set (rtems_rfs_bitmap_control* control,
                           rtems_rfs_bitmap_bit      bit)
 {
-  rtems_rfs_bitmap_map map;
-  rtems_rfs_bitmap_map search_map;
-  int                  index;
-  int                  offset;
-  int                 rc;
+  rtems_rfs_bitmap_map     map;
+  rtems_rfs_bitmap_map     search_map;
+  int                      index;
+  int                      offset;
+  int                      rc;
+  rtems_rfs_bitmap_element element;
+
   rc = rtems_rfs_bitmap_load_map (control, &map);
   if (rc > 0)
     return rc;
+
   if (bit >= control->size)
     return EINVAL;
+
   search_map = control->search_bits;
   index      = rtems_rfs_bitmap_map_index (bit);
   offset     = rtems_rfs_bitmap_map_offset (bit);
-  map[index] = rtems_rfs_bitmap_set (map[index], 1 << offset);
+  element    = map[index];
+  map[index] = rtems_rfs_bitmap_set (element, 1 << offset);
+
+  /*
+   * If the element does not change, the bit was already set. There will be no
+   * further action to take.
+   */
+  if (rtems_rfs_bitmap_match(element, map[index]))
+      return 0;
+
+  control->free--;
+
+  rtems_rfs_buffer_mark_dirty (control->buffer);
   if (rtems_rfs_bitmap_match(map[index], RTEMS_RFS_BITMAP_ELEMENT_SET))
   {
     bit = index;
     index  = rtems_rfs_bitmap_map_index (bit);
     offset = rtems_rfs_bitmap_map_offset (bit);
     search_map[index] = rtems_rfs_bitmap_set (search_map[index], 1 << offset);
-    control->free--;
-    rtems_rfs_buffer_mark_dirty (control->buffer);
   }
+
   return 0;
 }
 
@@ -213,26 +228,40 @@ int
 rtems_rfs_bitmap_map_clear (rtems_rfs_bitmap_control* control,
                             rtems_rfs_bitmap_bit      bit)
 {
-  rtems_rfs_bitmap_map map;
-  rtems_rfs_bitmap_map search_map;
-  int                  index;
-  int                  offset;
-  int                  rc;
+  rtems_rfs_bitmap_map     map;
+  rtems_rfs_bitmap_map     search_map;
+  int                      index;
+  int                      offset;
+  int                      rc;
+  rtems_rfs_bitmap_element element;
+
   rc = rtems_rfs_bitmap_load_map (control, &map);
   if (rc > 0)
     return rc;
+
   if (bit >= control->size)
     return EINVAL;
-  search_map        = control->search_bits;
-  index             = rtems_rfs_bitmap_map_index (bit);
-  offset            = rtems_rfs_bitmap_map_offset (bit);
-  map[index]        = rtems_rfs_bitmap_clear (map[index], 1 << offset);
+
+  search_map = control->search_bits;
+  index      = rtems_rfs_bitmap_map_index (bit);
+  offset     = rtems_rfs_bitmap_map_offset (bit);
+  element    = map[index];
+  map[index] = rtems_rfs_bitmap_clear (element, 1 << offset);
+
+  /*
+   * If the element does not change, the bit was already clear. There will be
+   * no further action to take.
+   */
+  if (rtems_rfs_bitmap_match(element, map[index]))
+      return 0;
+
   bit               = index;
   index             = rtems_rfs_bitmap_map_index (bit);
   offset            = rtems_rfs_bitmap_map_offset(bit);
   search_map[index] = rtems_rfs_bitmap_clear (search_map[index], 1 << offset);
   rtems_rfs_buffer_mark_dirty (control->buffer);
   control->free++;
+
   return 0;
 }
 
