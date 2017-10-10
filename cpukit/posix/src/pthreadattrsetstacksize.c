@@ -20,9 +20,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/posix/pthreadimpl.h>
-#include <rtems/score/stackimpl.h>
-
 #include <pthread.h>
 #include <errno.h>
 
@@ -34,9 +31,6 @@ int pthread_attr_setstacksize(
   if ( !attr || !attr->is_initialized )
     return EINVAL;
 
-  if (stacksize < PTHREAD_MINIMUM_STACK_SIZE)
-    attr->stacksize = PTHREAD_MINIMUM_STACK_SIZE;
-  else
-    attr->stacksize = stacksize;
+  attr->stacksize = stacksize;
   return 0;
 }

@@ -47,7 +47,10 @@ static int attribute_compare(
       attr1->stackaddr != attr2->stackaddr )
     return 1;
 
-  if ( attr1->stacksize != attr2->stacksize )
+  if (
+    attr1->stacksize != 0 &&
+      attr2->stacksize != 0 &&
+       attr1->stacksize != attr2->stacksize )
     return 1;
 
   if ( attr1->contentionscope != attr2->contentionscope )
