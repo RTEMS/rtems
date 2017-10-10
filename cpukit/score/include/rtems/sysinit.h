@@ -31,7 +31,6 @@ extern "C" {
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000300
 #define RTEMS_SYSINIT_MP_EARLY                   000301
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000302
-#define RTEMS_SYSINIT_CPU_SET                    00030d
 #define RTEMS_SYSINIT_MP                         00030e
 #define RTEMS_SYSINIT_USER_EXTENSIONS            000320
 #define RTEMS_SYSINIT_CLASSIC_TASKS              000340

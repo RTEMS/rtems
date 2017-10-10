@@ -38,7 +38,6 @@
 #include <rtems/posix/config.h>
 #include <rtems/posix/keyimpl.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 Thread_Information _POSIX_Threads_Information;

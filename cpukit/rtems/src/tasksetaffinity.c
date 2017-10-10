@@ -20,7 +20,6 @@
 
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_task_set_affinity(

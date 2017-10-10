@@ -25,7 +25,6 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/config.h>
 
 bool _Thread_Initialize(

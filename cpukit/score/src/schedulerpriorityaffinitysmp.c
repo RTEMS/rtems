@@ -84,8 +84,11 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
    *  All we add is affinity information to the basic SMP node.
    */
   the_node = _Scheduler_priority_affinity_SMP_Node_downcast( node );
-  the_node->Affinity     = *_CPU_set_Default();
-  the_node->Affinity.set = &the_node->Affinity.preallocated;
+  _Processor_mask_To_cpu_set_t(
+    _SMP_Get_online_processors(),
+    sizeof( the_node->affinity ),
+    &the_node->affinity
+  );
 }
 
 /*
@@ -153,7 +156,7 @@ static Scheduler_Node *_Scheduler_priority_affinity_SMP_Get_highest_ready(
       /*
        * Can this thread run on this CPU?
        */
-      if ( CPU_ISSET( (int) victim_cpu_index, node->Affinity.set ) ) {
+      if ( CPU_ISSET( (int) victim_cpu_index, &node->affinity ) ) {
         highest = &node->Base.Base.Base;
         break;
       }
@@ -245,7 +248,7 @@ static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
     thread = _Scheduler_Node_get_owner( &node->Base.Base.Base );
     cpu_index = _Per_CPU_Get_index( _Thread_Get_CPU( thread ) );
 
-    if ( CPU_ISSET( (int) cpu_index, filter->Affinity.set ) ) {
+    if ( CPU_ISSET( (int) cpu_index, &filter->affinity ) ) {
       lowest_scheduled = &node->Base.Base.Base;
       break;
     }
@@ -623,7 +626,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
    * The old and new set are the same, there is no point in
    * doing anything.
    */
-  if ( CPU_EQUAL( &cpuset, node->Affinity.set ) )
+  if ( CPU_EQUAL( &cpuset, &node->affinity ) )
     return true;
 
   current_state = thread->current_state;
@@ -632,7 +635,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     _Scheduler_priority_affinity_SMP_Block( scheduler, thread, &node->Base.Base.Base );
   }
 
-  CPU_COPY( &cpuset, node->Affinity.set );
+  CPU_COPY( &cpuset, &node->affinity );
 
   if ( _States_Is_ready( current_state ) ) {
     /*

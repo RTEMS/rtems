@@ -25,7 +25,6 @@
 #include <errno.h>
 
 #include <rtems/score/threadimpl.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 int pthread_setaffinity_np(

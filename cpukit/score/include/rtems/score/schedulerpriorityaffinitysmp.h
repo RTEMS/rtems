@@ -22,7 +22,8 @@
 #include <rtems/score/schedulerpriority.h>
 #include <rtems/score/schedulersmp.h>
 #include <rtems/score/schedulerprioritysmp.h>
-#include <rtems/score/cpuset.h>
+
+#include <sys/cpuset.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -168,7 +169,7 @@ typedef struct {
   /**
    * Structure containing affinity set data and size
    */
-  CPU_set_Control Affinity;
+  cpu_set_t affinity;
 } Scheduler_priority_affinity_SMP_Node;
 
 /** @} */

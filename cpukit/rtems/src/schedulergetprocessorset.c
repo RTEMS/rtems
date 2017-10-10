@@ -17,7 +17,6 @@
 #endif
 
 #include <rtems/rtems/tasks.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
 rtems_status_code rtems_scheduler_get_processor_set(

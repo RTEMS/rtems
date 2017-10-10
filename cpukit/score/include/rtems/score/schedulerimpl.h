@@ -22,7 +22,6 @@
 
 #include <rtems/score/scheduler.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/cpusetimpl.h>
 #include <rtems/score/priorityimpl.h>
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/status.h>
