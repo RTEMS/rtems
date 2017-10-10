@@ -298,7 +298,7 @@ rtems_rfs_bitmap_map_clear_all (rtems_rfs_bitmap_control* control)
 
   elements = rtems_rfs_bitmap_elements (control->size);
 
-  control->free = elements;
+  control->free = control->size;
 
   for (e = 0; e < elements; e++)
     map[e] = RTEMS_RFS_BITMAP_ELEMENT_CLEAR;
