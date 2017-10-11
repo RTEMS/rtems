@@ -23,6 +23,8 @@
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
+#include <limits.h>
+
 RTEMS_STATIC_ASSERT(
   offsetof( POSIX_Mutex_Control, flags )
     == offsetof( pthread_mutex_t, _flags ),
