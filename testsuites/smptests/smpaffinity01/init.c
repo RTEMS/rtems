@@ -40,9 +40,9 @@ void Validate_setaffinity_errors(void)
   /* Verify rtems_task_set_affinity checks that all cpu's exist. */
   /* Note this check assumes you are running with less than 32 CPUs */
   CPU_FILL(&cpuset);
-  puts( "Init - rtems_task_set_affinity - Invalid cpu - RTEMS_INVALID_NUMBER" );
+  puts( "Init - rtems_task_set_affinity - Lots of cpus - SUCCESS" );
   sc = rtems_task_set_affinity( Init_id, sizeof(cpu_set_t), &cpuset );
-  rtems_test_assert( sc == RTEMS_INVALID_NUMBER );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   /* Verify rtems_task_set_affinity checks that at least one cpu is set */
   CPU_ZERO(&cpuset);

@@ -1,16 +1,16 @@
-*** SMP AFFINITY 1 ***
-Init - rtems_task_set_affinity - Invalid cpu - RTEMS_UNSATISFIED
-Init - rtems_task_set_affinity - no cpu - RTEMS_UNSATISFIED
+*** BEGIN OF TEST SMPAFFINITY 1 ***
+Init - rtems_task_set_affinity - Lots of cpus - SUCCESS
+Init - rtems_task_set_affinity - no cpu - RTEMS_INVALID_NUMBER
 Init - rtems_task_set_affinity - Invalid thread - RTEMS_INVALID_ID
-Init - rtems_task_set_affinity - Invalid cpusetsize - RTEMS_UNSATISFIED
-Init - rtems_task_set_affinity - Invalid cpuset - RTEMS_UNSATISFIED
+Init - rtems_task_set_affinity - Invalid cpusetsize - RTEMS_INVALID_NUMBER
+Init - rtems_task_set_affinity - Invalid cpuset - RTEMS_INVALID_ADDRESS
 Init - rtems_task_get_affinity - Invalid thread - RTEMS_INVALID_ID
-Init - rtems_task_get_affinity - Invalid cpusetsize - RTEMS_UNSATISFIED
-Init - rtems_task_get_affinity - Invalid cpuset - RTEMS_UNSATISFIED
+Init - rtems_task_get_affinity - Invalid cpusetsize - RTEMS_INVALID_NUMBER
+Init - rtems_task_get_affinity - Invalid cpuset - RTEMS_INVALID_ADDRESS
 Init - Set Init priority to high
 Init - Create Medium priority tasks
 Init - Create  Low priority tasks
 Init - Verify affinity on Low priority tasks
 Init - Change affinity on Low priority tasks
 Init - Validate affinity on Low priority tasks
-*** END OF SMP AFFINITY TEST 1 ***
+*** END OF TEST SMPAFFINITY 1 ***
