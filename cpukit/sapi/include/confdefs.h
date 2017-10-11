@@ -3522,8 +3522,28 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #error "Maximum priority configured higher than supported by target."
 #endif
 
+#ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
+  #warning "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 4.12"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
+  #warning "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 4.12"
+#endif
+
 #ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete!"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 4.12"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_POSIX_MUTEXES
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 4.12"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
+  #warning "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 4.12"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
+  #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 4.12"
 #endif
 
 /*
