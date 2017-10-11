@@ -44,7 +44,7 @@
 #include <rtems/score/watchdogimpl.h>
 #endif /* __rtems__ */
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD r284178 2015-06-09T11:49:56Z$");
+__FBSDID("$FreeBSD: head/sys/kern/kern_tc.c 324528 2017-10-11 11:03:11Z kib $");
 
 #include "opt_compat.h"
 #include "opt_ntp.h"
