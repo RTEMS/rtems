@@ -400,6 +400,7 @@ libbsp_a_SOURCES += startup/pin-config.c
 libbsp_a_SOURCES += startup/power.c
 libbsp_a_SOURCES += startup/power-rtc.c
 libbsp_a_SOURCES += startup/power-clock.c
+libbsp_a_SOURCES += startup/restart.c
 libbsp_a_SOURCES += startup/sdram-config.c
 
 # IRQ

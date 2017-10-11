@@ -91,6 +91,8 @@ void atsam_rtc_get_time(rtems_time_of_day *tod);
 
 
 
+void bsp_restart( const void *const addr );
+
 /** @} */
 
 #ifdef __cplusplus
