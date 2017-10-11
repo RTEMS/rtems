@@ -43,7 +43,7 @@ int adjtime(
   struct timeval       *olddelta
 )
 {
-  Timestamp_Control  delta_as_timestamp;
+  struct timespec delta_as_timespec;
 
   /*
    * Simple validations
@@ -75,14 +75,15 @@ int adjtime(
   }
 
   /*
-   * convert delta timeval to internal timestamp
+   * convert delta timeval to timespec
    */
-  _Timestamp_Set( &delta_as_timestamp, delta->tv_sec, delta->tv_usec * 1000 );
+  delta_as_timespec.tv_sec = delta->tv_sec;
+  delta_as_timespec.tv_nsec = delta->tv_usec * 1000;
 
   /*
    * Now apply the adjustment
    */
-  _TOD_Adjust( &delta_as_timestamp );
+  _TOD_Adjust( &delta_as_timespec );
 
   return 0;
 }
