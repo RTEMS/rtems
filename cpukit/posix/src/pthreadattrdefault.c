@@ -54,7 +54,9 @@ const pthread_attr_t _POSIX_Threads_Default_attributes = {
   .detachstate             = PTHREAD_CREATE_JOINABLE,    /* detachstate */
   .affinitysetsize         =
     sizeof( _POSIX_Threads_Default_attributes.affinitysetpreallocated ),
-  .affinityset             =
-    &_POSIX_Threads_Default_attributes.affinitysetpreallocated,
+  .affinityset             = RTEMS_DECONST(
+    cpu_set_t *,
+    &_POSIX_Threads_Default_attributes.affinitysetpreallocated
+  ),
   .affinitysetpreallocated = { { -1L } }
 };
