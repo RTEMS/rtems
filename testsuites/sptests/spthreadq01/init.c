@@ -113,7 +113,6 @@ static void posix_worker(test_context *ctx)
 {
 #if defined(RTEMS_POSIX_API)
   int rv;
-  int eno;
   char buf[1];
 
   wake_up_master(ctx);
@@ -178,7 +177,6 @@ static void test_classic_init(test_context *ctx)
 static void test_posix_init(test_context *ctx)
 {
 #if defined(RTEMS_POSIX_API)
-  int eno;
   struct mq_attr attr;
 
   memset(&attr, 0, sizeof(attr));
@@ -254,7 +252,6 @@ static void test_classic_obj(test_context *ctx)
 static void test_posix_obj(test_context *ctx)
 {
 #if defined(RTEMS_POSIX_API)
-  int eno;
   char buf[1];
   unsigned prio;
   ssize_t n;
