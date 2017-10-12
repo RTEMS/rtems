@@ -1,7 +1,8 @@
 rtems_tests_PROGRAMS = spprofiling01
 spprofiling01_SOURCES = init.c
 
-dist_rtems_tests_DATA = spprofiling01.scn spprofiling01.doc
+dist_rtems_tests_DATA = spprofiling01.scn
+dist_rtems_tests_DATA += spprofiling01.doc
 
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am

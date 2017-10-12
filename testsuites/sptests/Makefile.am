@@ -58,7 +58,6 @@ _SUBDIRS += spintrcritical22
 _SUBDIRS += spsem03
 _SUBDIRS += spmrsp01
 _SUBDIRS += spscheduler01
-_SUBDIRS += spprofiling01
 _SUBDIRS += spfatal28
 _SUBDIRS += spthreadlife01
 _SUBDIRS += spprofiling01
