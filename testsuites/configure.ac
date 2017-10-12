@@ -22,6 +22,14 @@ RTEMS_PROG_CXX_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 AM_PROG_CC_C_O
 
+AC_ARG_ENABLE([ada],
+[AS_HELP_STRING(--enable-ada,enable Ada support)],
+[case "${enable_ada}" in
+  yes) ;;
+  no) ;;
+  *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
+esac],[enable_ada=no])
+
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
@@ -43,6 +51,9 @@ if test "$enable_tests" = "yes"; then
   fi
   if test "$rtems_cv_RTEMS_SMP" = "yes"; then
     AC_CONFIG_SUBDIRS(smptests)
+  fi
+  if test "$enable_ada" = "yes"; then
+    AC_CONFIG_SUBDIRS(ada)
   fi
   # Now do performance tests
   AC_CONFIG_SUBDIRS(tmtests psxtmtests benchmarks rhealstone)

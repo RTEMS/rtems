@@ -153,15 +153,6 @@ AC_ARG_ENABLE([ada],
   *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
 esac],[enable_ada=no])
 
-RTEMS_BSP_CONFIG_SUBDIR(
-  [ada-tests],[ada-tests],
-  ['--enable-rtems-root=../' \
-   '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
-   '--with-project-top=${with_project_top}../' \
-   '--enable-rtemsbsp=$RTEMS_BSP' \
-  ],
-  [test x"$enable_tests" = xyes && test x"$enable_ada" = xyes])
-
 # HACK ALERT!
 
 # FIXME: Assume multilib implies in-source-tree multilibs

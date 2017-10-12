@@ -1,0 +1,33 @@
+_SUBDIRS =
+_SUBDIRS += tm01
+_SUBDIRS += tm02
+_SUBDIRS += tm03
+_SUBDIRS += tm04
+_SUBDIRS += tm05
+_SUBDIRS += tm06
+_SUBDIRS += tm07
+_SUBDIRS += tm08
+_SUBDIRS += tm09
+_SUBDIRS += tm10
+_SUBDIRS += tm11
+_SUBDIRS += tm12
+_SUBDIRS += tm13
+_SUBDIRS += tm14
+_SUBDIRS += tm15
+_SUBDIRS += tm16
+_SUBDIRS += tm17
+_SUBDIRS += tm18
+_SUBDIRS += tm19
+_SUBDIRS += tm20
+_SUBDIRS += tm21
+_SUBDIRS += tm22
+_SUBDIRS += tm23
+_SUBDIRS += tm24
+_SUBDIRS += tm25
+_SUBDIRS += tm28
+_SUBDIRS += tm29
+_SUBDIRS += tmck
+_SUBDIRS += tmoverhd
+
+include $(top_srcdir)/../automake/subdirs.am
+include $(top_srcdir)/../automake/local.am
