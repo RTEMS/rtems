@@ -84,6 +84,10 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
     _ARMV4_Exception_interrupt
   );
 
+  for (id = 0; id < id_count; id += 32) {
+    dist->icdicer[id / 32] = 0xffffffff;
+  }
+
   for (id = 0; id < id_count; ++id) {
     gic_id_set_priority(dist, id, PRIORITY_DEFAULT);
   }
