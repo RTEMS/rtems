@@ -251,7 +251,13 @@ bool tms570_sci_set_attributes(
   rtems_interrupt_lock_context lock_context;
   int32_t bauddiv;
   int32_t baudrate;
-  uint32_t flr_tx_ready = TMS570_SCI_FLR_TX_EMPTY | TMS570_SCI_FLR_TX_EMPTY;
+  uint32_t flr_tx_ready = TMS570_SCI_FLR_TX_EMPTY;
+  /*
+   * Test for TMS570_SCI_FLR_TXRDY is not necessary
+   * because both SCITD and SCITXSHF has to be empty
+   * to TX_EMPTY be asserted. But there is no interrupt
+   * option for TX_EMPTY. Polling is used isntead.
+   */
 
   /* Baud rate */
   baudrate = rtems_termios_baud_to_number(cfgetospeed(t));
