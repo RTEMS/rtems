@@ -358,21 +358,6 @@ void _Thread_Global_construction(
   const Thread_Entry_information *entry
 ) RTEMS_NO_RETURN;
 
-/**
- *  @brief Ended the delay of a thread.
- *
- *  This routine is invoked when a thread must be unblocked at the
- *  end of a time based delay (i.e. wake after or wake when).
- *  It is called by the watchdog handler.
- *
- *  @param[in] id is the thread id
- *  @param[in] ignored is not used
- */
-void _Thread_Delay_ended(
-  Objects_Id  id,
-  void       *ignored
-);
-
 RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
   Thread_Control   *the_thread,
   ISR_lock_Context *lock_context
