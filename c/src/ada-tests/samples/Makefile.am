@@ -1,7 +1,7 @@
-SUBDIRS = hello ticker base_sp nsecs
+_SUBDIRS = hello ticker base_sp nsecs
 
 if HAS_MP
-SUBDIRS += base_mp
+_SUBDIRS += base_mp
 endif
 DIST_SUBDIRS = hello ticker base_sp base_mp nsecs
 
