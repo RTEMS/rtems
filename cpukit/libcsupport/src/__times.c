@@ -43,11 +43,9 @@ clock_t _times(
    struct tms  *ptms
 )
 {
-  uint32_t       tick_interval;
-  struct bintime binuptime;
-  sbintime_t     uptime;
-  struct bintime bin_cpu_time_used;
-  sbintime_t     cpu_time_used;
+  uint32_t   tick_interval;
+  sbintime_t uptime;
+  sbintime_t cpu_time_used;
 
   if ( !ptms )
     rtems_set_errno_and_return_minus_one( EFAULT );
@@ -57,8 +55,7 @@ clock_t _times(
 
   ptms = memset( ptms, 0, sizeof( *ptms ) );
 
-  _TOD_Get_zero_based_uptime( &binuptime );
-  uptime = bttosbt( binuptime );
+  _TOD_Get_zero_based_uptime( &uptime );
   ptms->tms_stime = ((clock_t) uptime) / tick_interval;
 
   /*
@@ -68,8 +65,7 @@ clock_t _times(
    *  of ticks since boot and the number of ticks executed by this
    *  this thread.
    */
-  _Thread_Get_CPU_time_used( _Thread_Get_executing(), &bin_cpu_time_used );
-  cpu_time_used = bttosbt( bin_cpu_time_used );
+  _Thread_Get_CPU_time_used( _Thread_Get_executing(), &cpu_time_used );
   ptms->tms_utime = ((clock_t) cpu_time_used) / tick_interval;
 
   return ptms->tms_stime;
