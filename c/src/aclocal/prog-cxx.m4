@@ -15,6 +15,12 @@ else
   CXXFLAGS=${CXXFLAGS-${CFLAGS}}
 fi
 
+CXXFLAGS=`echo ${CXXFLAGS} | sed \
+  -e s/-Wmissing-prototypes// \
+  -e s/-Wimplicit-function-declaration// \
+  -e s/-Wstrict-prototypes// \
+  -e s/-Wnested-externs//`
+
 RTEMS_CHECK_TOOL(CXX,g++)
 if test "$RTEMS_HAS_CPLUSPLUS" = "yes";
 then
