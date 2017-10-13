@@ -140,6 +140,7 @@ psxcleanup01/Makefile
 psxcleanup02/Makefile
 psxclock/Makefile
 psxclock01/Makefile
+psxclockrealtime01/Makefile
 psxconcurrency01/Makefile
 psxcond01/Makefile
 psxcond02/Makefile

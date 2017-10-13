@@ -36,6 +36,7 @@ endif
 _SUBDIRS += psxclock
 if HAS_POSIX
 _SUBDIRS += psxclock01
+_SUBDIRS += psxclockrealtime01
 _SUBDIRS += psxconcurrency01
 _SUBDIRS += psxcond01
 _SUBDIRS += psxcond02

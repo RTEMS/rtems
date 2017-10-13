@@ -1,0 +1,20 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: psxclockrealtime01
+
+directives:
+
+  - pthread_mutex_timedlock()
+  - pthread_cond_timedwait()
+  - pthread_rwlock_timedrdlock()
+  - pthread_rwlock_timedwrlock()
+  - sem_timedwait()
+  - mq_timedsend()
+  - mq_timedreceive()
+  - clock_nanosleep()
+
+concepts:
+
+  - Test some invalid and extreme timeout values.
+  - Ensure that absolute CLOCK_REALTIME timeouts expire due to external clock
+    changes.
