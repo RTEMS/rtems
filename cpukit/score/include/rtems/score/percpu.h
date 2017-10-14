@@ -248,20 +248,23 @@ typedef struct {
  */
 typedef enum {
   /**
-   * @brief Index for relative per-CPU watchdog header.
+   * @brief Index for monotonic clock per-CPU watchdog header.
    *
-   * The reference time point for this header is current ticks value
-   * during insert.  Time is measured in clock ticks.
+   * The reference time point for the monotonic clock is the system start.  The
+   * clock resolution is one system clock tick.  It is used for the system
+   * clock tick based time services and the POSIX services using
+   * CLOCK_MONOTONIC.
    */
-  PER_CPU_WATCHDOG_RELATIVE,
+  PER_CPU_WATCHDOG_MONOTONIC,
 
   /**
-   * @brief Index for absolute per-CPU watchdog header.
+   * @brief Index for realtime clock per-CPU watchdog header.
    *
-   * The reference time point for this header is the POSIX Epoch.  Time is
-   * measured in nanoseconds since POSIX Epoch.
+   * The reference time point for the realtime clock is the POSIX Epoch.  The
+   * clock resolution is one nanosecond.  It is used for the time of day
+   * services and the POSIX services using CLOCK_REALTIME.
    */
-  PER_CPU_WATCHDOG_ABSOLUTE,
+  PER_CPU_WATCHDOG_REALTIME,
 
   /**
    * @brief Count of per-CPU watchdog headers.
@@ -395,7 +398,8 @@ typedef struct Per_CPU_Control {
     ISR_LOCK_MEMBER( Lock )
 
     /**
-     * @brief Watchdog ticks on this processor used for relative watchdogs.
+     * @brief Watchdog ticks on this processor used for monotonic clock
+     * watchdogs.
      */
     uint64_t ticks;
 

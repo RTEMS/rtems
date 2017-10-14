@@ -351,7 +351,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_relative(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_monotonic(
   Watchdog_Control  *the_watchdog,
   Per_CPU_Control   *cpu,
   Watchdog_Interval  ticks
@@ -361,7 +361,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_relative(
   Watchdog_Header  *header;
   uint64_t          expire;
 
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
@@ -372,7 +372,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_relative(
   return expire;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_absolute(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_realtime(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
   uint64_t          expire
@@ -381,7 +381,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_absolute(
   ISR_lock_Context  lock_context;
   Watchdog_Header  *header;
 
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ];
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
@@ -407,7 +407,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_relative(
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_monotonic(
   Watchdog_Control *the_watchdog
 )
 {
@@ -417,11 +417,11 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_relative(
   _Watchdog_Per_CPU_remove(
     the_watchdog,
     cpu,
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ]
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ]
   );
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_absolute(
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_realtime(
   Watchdog_Control *the_watchdog
 )
 {
@@ -431,11 +431,11 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_absolute(
   _Watchdog_Per_CPU_remove(
     the_watchdog,
     cpu,
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ]
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ]
   );
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_tickle_absolute(
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_tickle_realtime(
   Per_CPU_Control *cpu,
   uint64_t         now
 )
@@ -444,7 +444,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_tickle_absolute(
 
   _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
   _Watchdog_Tickle(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ],
     now,
     &cpu->Watchdog.Lock,
     &lock_context

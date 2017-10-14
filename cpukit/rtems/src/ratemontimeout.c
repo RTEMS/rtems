@@ -36,7 +36,7 @@ static void _Rate_monotonic_Renew_deadline(
 
   the_period->state = RATE_MONOTONIC_EXPIRED;
 
-  deadline = _Watchdog_Per_CPU_insert_relative(
+  deadline = _Watchdog_Per_CPU_insert_monotonic(
     &the_period->Timer,
     _Per_CPU_Get(),
     the_period->next_length

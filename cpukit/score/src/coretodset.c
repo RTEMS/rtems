@@ -43,7 +43,7 @@ void _TOD_Set(
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
     Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
 
-    _Watchdog_Per_CPU_tickle_absolute( cpu, tod_as_ticks );
+    _Watchdog_Per_CPU_tickle_realtime( cpu, tod_as_ticks );
   }
 
   _TOD.is_set = true;

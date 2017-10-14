@@ -385,7 +385,7 @@ static void _Thread_queue_Timeout(
     case WATCHDOG_RELATIVE:
       /* A relative timeout of 0 is a special case indefinite (no) timeout */
       if ( queue_context->timeout != 0 ) {
-        _Thread_Timer_insert_relative(
+        _Thread_Timer_insert_monotonic(
           the_thread,
           cpu_self,
           _Thread_Timeout,
@@ -394,7 +394,7 @@ static void _Thread_queue_Timeout(
       }
       break;
     case WATCHDOG_ABSOLUTE:
-      _Thread_Timer_insert_absolute(
+      _Thread_Timer_insert_realtime(
         the_thread,
         cpu_self,
         _Thread_Timeout,

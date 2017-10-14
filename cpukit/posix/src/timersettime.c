@@ -42,7 +42,7 @@ static void _POSIX_Timer_Insert(
   _TOD_Get( &ptimer->time );
 
   _Watchdog_Insert(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
     &ptimer->Timer,
     cpu->Watchdog.ticks + ticks
   );
@@ -152,7 +152,7 @@ int timer_settime(
 
     /* Stop the timer */
     _Watchdog_Remove(
-      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
       &ptimer->Timer
     );
 

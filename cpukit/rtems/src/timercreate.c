@@ -29,7 +29,7 @@
 #include <rtems/score/watchdogimpl.h>
 
 RTEMS_STATIC_ASSERT(
-  PER_CPU_WATCHDOG_ABSOLUTE == TIMER_CLASS_BIT_TIME_OF_DAY,
+  PER_CPU_WATCHDOG_REALTIME == TIMER_CLASS_BIT_TIME_OF_DAY,
   TIMER_CLASS_BIT_TIME_OF_DAY
 );
 
@@ -72,13 +72,13 @@ rtems_status_code _Timer_Fire(
 
     if ( _Timer_Is_interval_class( the_class ) ) {
       _Watchdog_Insert(
-        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
         &the_timer->Ticker,
         cpu->Watchdog.ticks + interval
       );
     } else {
       _Watchdog_Insert(
-        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_ABSOLUTE ],
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ],
         &the_timer->Ticker,
         _Watchdog_Ticks_from_seconds( interval )
       );

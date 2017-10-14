@@ -55,7 +55,7 @@ static void _POSIX_signals_Ualarm_TSR( Watchdog_Control *the_watchdog )
    * If the reset interval is non-zero, reschedule ourselves.
    */
   if ( _POSIX_signals_Ualarm_interval != 0 ) {
-    _Watchdog_Per_CPU_insert_relative(
+    _Watchdog_Per_CPU_insert_monotonic(
       the_watchdog,
       _Per_CPU_Get(),
       _POSIX_signals_Ualarm_interval
@@ -107,7 +107,7 @@ useconds_t ualarm(
   now = cpu->Watchdog.ticks;
 
   remaining = (useconds_t) _Watchdog_Cancel(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
     the_watchdog,
     now
   );
@@ -118,7 +118,7 @@ useconds_t ualarm(
     cpu = _Per_CPU_Get();
     _Watchdog_Set_CPU( the_watchdog, cpu );
     _Watchdog_Insert(
-      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
       the_watchdog,
       now + ticks_initial
     );

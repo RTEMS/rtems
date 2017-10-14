@@ -69,7 +69,7 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
     _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
   }
 
-  _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
+  _Watchdog_Per_CPU_remove_monotonic( &api->Sporadic.Timer );
   _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
 
   _Thread_Wait_release( the_thread, &queue_context );
@@ -165,7 +165,7 @@ static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
   _Thread_State_acquire( executing, &lock_context );
 
   if ( api->schedpolicy == SCHED_SPORADIC ) {
-    _Watchdog_Per_CPU_remove_relative( &api->Sporadic.Timer );
+    _Watchdog_Per_CPU_remove_monotonic( &api->Sporadic.Timer );
   }
 
   _Thread_State_release( executing, &lock_context );

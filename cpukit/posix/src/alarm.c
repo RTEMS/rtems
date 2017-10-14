@@ -77,14 +77,14 @@ unsigned int alarm(
   now = cpu->Watchdog.ticks;
 
   remaining = (unsigned long) _Watchdog_Cancel(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
     the_watchdog,
     now
   );
 
   if ( ticks != 0 ) {
     _Watchdog_Insert(
-      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ],
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
       the_watchdog,
       now + ticks
     );

@@ -39,7 +39,7 @@ static rtems_timer_service_routine test_release_from_isr(
 )
 {
   Per_CPU_Control *cpu_self = _Per_CPU_Get();
-  Watchdog_Header *header = &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_RELATIVE ];
+  Watchdog_Header *header = &cpu_self->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
   Watchdog_Control *watchdog = (Watchdog_Control *) header->first;
 
   if (

@@ -56,7 +56,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   the_thread->cpu_time_budget =
     _Timespec_To_ticks( &api->schedparam.sched_ss_init_budget );
 
-  _Watchdog_Per_CPU_insert_relative(
+  _Watchdog_Per_CPU_insert_monotonic(
     &api->Sporadic.Timer,
     _Per_CPU_Get(),
     _Timespec_To_ticks( &api->schedparam.sched_ss_repl_period )

@@ -81,7 +81,7 @@ rtems_status_code _Event_Seize(
   _Thread_Wait_release_default( executing, lock_context );
 
   if ( ticks ) {
-    _Thread_Timer_insert_relative(
+    _Thread_Timer_insert_monotonic(
       executing,
       cpu_self,
       _Thread_Timeout,
