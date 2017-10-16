@@ -351,7 +351,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_release_critical(
   _ISR_lock_Release( &cpu->Watchdog.Lock, lock_context );
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_monotonic(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   Watchdog_Control  *the_watchdog,
   Per_CPU_Control   *cpu,
   Watchdog_Interval  ticks

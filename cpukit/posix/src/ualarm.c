@@ -55,7 +55,7 @@ static void _POSIX_signals_Ualarm_TSR( Watchdog_Control *the_watchdog )
    * If the reset interval is non-zero, reschedule ourselves.
    */
   if ( _POSIX_signals_Ualarm_interval != 0 ) {
-    _Watchdog_Per_CPU_insert_monotonic(
+    _Watchdog_Per_CPU_insert_ticks(
       the_watchdog,
       _Per_CPU_Get(),
       _POSIX_signals_Ualarm_interval
