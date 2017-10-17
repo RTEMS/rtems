@@ -151,6 +151,7 @@ static bool _POSIX_Threads_Create_extension(
 
   _Watchdog_Preinitialize( &api->Sporadic.Timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize( &api->Sporadic.Timer, _POSIX_Threads_Sporadic_timer );
+  _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
 
   return true;
 }

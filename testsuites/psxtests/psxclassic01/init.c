@@ -52,8 +52,16 @@ rtems_task test_task(rtems_task_argument arg)
   int sc;
   struct sigaction new_action;
   sigset_t mask;
+  int policy;
+  struct sched_param param;
 
   printf("test_task starting...\n");
+
+  sc = pthread_getschedparam( pthread_self(), &policy, &param );
+  rtems_test_assert( sc == 0 );
+
+  sc = pthread_setschedparam( pthread_self(), policy, &param );
+  rtems_test_assert( sc == 0 );
 
   sc = sigemptyset (&new_action.sa_mask);
   rtems_test_assert( sc == 0 );
