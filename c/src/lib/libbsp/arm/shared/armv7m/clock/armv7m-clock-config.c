@@ -88,18 +88,6 @@ static void _ARMV7M_TC_systick_tick(void)
   );
 }
 
-static uint32_t _ARMV7M_TC_dwt_get_timecount(struct timecounter *tc)
-{
-  volatile ARMV7M_DWT *dwt = _ARMV7M_DWT;
-
-  return dwt->cyccnt;
-}
-
-static void _ARMV7M_TC_dwt_tick(void)
-{
-  rtems_timecounter_tick();
-}
-
 static void _ARMV7M_TC_tick(void)
 {
   (*_ARMV7M_TC.tick)();
@@ -131,7 +119,6 @@ static void _ARMV7M_Systick_initialize(void)
   #endif
   uint64_t us_per_tick = rtems_configuration_get_microseconds_per_tick();
   uint64_t interval = (freq * us_per_tick) / 1000000ULL;
-  bool cyccnt_enabled;
 
   systick->rvr = (uint32_t) interval;
   systick->cvr = 0;
@@ -139,23 +126,13 @@ static void _ARMV7M_Systick_initialize(void)
     | ARMV7M_SYSTICK_CSR_TICKINT
     | ARMV7M_SYSTICK_CSR_CLKSOURCE;
 
-  cyccnt_enabled = _ARMV7M_DWT_Enable_CYCCNT();
-  if (cyccnt_enabled) {
-    _ARMV7M_TC.base.tc.tc_get_timecount = _ARMV7M_TC_dwt_get_timecount;
-    _ARMV7M_TC.base.tc.tc_counter_mask = 0xffffffff;
-    _ARMV7M_TC.base.tc.tc_frequency = freq;
-    _ARMV7M_TC.base.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-    _ARMV7M_TC.tick = _ARMV7M_TC_dwt_tick;
-    rtems_timecounter_install(&_ARMV7M_TC.base.tc);
-  } else {
-    _ARMV7M_TC.tick = _ARMV7M_TC_systick_tick;
-    rtems_timecounter_simple_install(
-      &_ARMV7M_TC.base,
-      freq,
-      interval,
-      _ARMV7M_TC_systick_get_timecount
-    );
-  }
+  _ARMV7M_TC.tick = _ARMV7M_TC_systick_tick;
+  rtems_timecounter_simple_install(
+    &_ARMV7M_TC.base,
+    freq,
+    interval,
+    _ARMV7M_TC_systick_get_timecount
+  );
 }
 
 static void _ARMV7M_Systick_cleanup(void)
