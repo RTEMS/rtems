@@ -1857,11 +1857,10 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
   _Watchdog_Preinitialize( &timer->Watchdog, cpu );
 }
 
-RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_monotonic(
-  Thread_Control                 *the_thread,
-  Per_CPU_Control                *cpu,
-  Watchdog_Service_routine_entry  routine,
-  Watchdog_Interval               ticks
+RTEMS_INLINE_ROUTINE void _Thread_Add_timeout_ticks(
+  Thread_Control    *the_thread,
+  Per_CPU_Control   *cpu,
+  Watchdog_Interval  ticks
 )
 {
   ISR_lock_Context lock_context;
@@ -1870,7 +1869,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_monotonic(
 
   the_thread->Timer.header =
     &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
-  the_thread->Timer.Watchdog.routine = routine;
+  the_thread->Timer.Watchdog.routine = _Thread_Timeout;
   _Watchdog_Per_CPU_insert_ticks( &the_thread->Timer.Watchdog, cpu, ticks );
 
   _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
