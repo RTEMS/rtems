@@ -152,7 +152,7 @@ int nanosleep(
   if ( err != 0 )
     return -1;
   _Timespec_Add_to( &now, rqtp );
-  ticks = _Watchdog_Ticks_from_timespec( &now );
+  ticks = _Watchdog_Realtime_from_timespec( &now );
   err = nanosleep_helper( CLOCK_REALTIME,
       ticks,
       &now,
@@ -209,7 +209,7 @@ int clock_nanosleep(
 
   _Timespec_Add_to( &timeout, rqtp );
   if ( clock_id == CLOCK_REALTIME ) {
-    ticks = _Watchdog_Ticks_from_timespec( &timeout );
+    ticks = _Watchdog_Realtime_from_timespec( &timeout );
     err = nanosleep_helper(
         clock_id,
         ticks,
