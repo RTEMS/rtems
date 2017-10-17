@@ -24,6 +24,8 @@
 
 #include <rtems/score/basedefs.h>
 #include <rtems/score/assert.h>
+#include <rtems/posix/priorityimpl.h>
+#include <rtems/posix/threadsup.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -59,6 +61,22 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
     attr,
     &_POSIX_Threads_Default_attributes
   );
+}
+
+RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
+  const Thread_Control    *the_thread,
+  const POSIX_API_Control *api,
+  const Scheduler_Control *scheduler,
+  struct sched_param      *param
+)
+{
+  param->sched_ss_low_priority = _POSIX_Priority_From_core(
+    scheduler,
+    api->Sporadic.Low_priority.priority
+  );
+  param->sched_ss_repl_period = api->Sporadic.sched_ss_repl_period;
+  param->sched_ss_init_budget = api->Sporadic.sched_ss_init_budget;
+  param->sched_ss_max_repl = api->Sporadic.sched_ss_max_repl;
 }
 
 /** @} */

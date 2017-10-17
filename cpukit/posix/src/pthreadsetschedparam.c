@@ -41,28 +41,28 @@ static int _POSIX_Set_sched_param(
 {
   const Scheduler_Control *scheduler;
   POSIX_API_Control       *api;
+  int                      normal_prio;
   int                      low_prio;
-  int                      high_prio;
   bool                     valid;
   Priority_Control         core_normal_prio;
   Priority_Control         core_low_prio;
 
-  if ( policy == SCHED_SPORADIC ) {
-    low_prio = param->sched_ss_low_priority;
-    high_prio = param->sched_priority;
-  } else {
-    low_prio = param->sched_priority;
-    high_prio = low_prio;
-  }
+  normal_prio = param->sched_priority;
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
 
-  core_normal_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
+  core_normal_prio = _POSIX_Priority_To_core( scheduler, normal_prio, &valid );
   if ( !valid ) {
     return EINVAL;
   }
 
-  core_low_prio = _POSIX_Priority_To_core( scheduler, high_prio, &valid );
+  if ( policy == SCHED_SPORADIC ) {
+    low_prio = param->sched_ss_low_priority;
+  } else {
+    low_prio = normal_prio;
+  }
+
+  core_low_prio = _POSIX_Priority_To_core( scheduler, low_prio, &valid );
   if ( !valid ) {
     return EINVAL;
   }
@@ -95,13 +95,16 @@ static int _POSIX_Set_sched_param(
   }
 
   api->schedpolicy = policy;
-  api->schedparam  = *param;
 
   the_thread->budget_algorithm = budget_algorithm;
   the_thread->budget_callout   = budget_callout;
 
+  _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
+  api->Sporadic.sched_ss_repl_period = param->sched_ss_repl_period;
+  api->Sporadic.sched_ss_init_budget = param->sched_ss_init_budget;
+  api->Sporadic.sched_ss_max_repl = param->sched_ss_max_repl;
+
   if ( policy == SCHED_SPORADIC ) {
-    _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
     _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
   } else {
     the_thread->cpu_time_budget =

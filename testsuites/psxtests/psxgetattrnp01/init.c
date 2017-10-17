@@ -62,11 +62,7 @@ static int attribute_compare(
   if ( attr1->schedpolicy != attr2->schedpolicy )
     return 1;
 
-  if (memcmp(
-    &attr1->schedparam,
-    &attr2->schedparam,
-    sizeof(struct sched_param)
-  ))
+  if ( attr1->schedparam.sched_priority != attr2->schedparam.sched_priority )
     return 1;
 
   #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE

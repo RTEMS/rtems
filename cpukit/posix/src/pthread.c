@@ -126,12 +126,6 @@ static bool _POSIX_Threads_Create_extension(
 
   api = created->API_Extensions[ THREAD_API_POSIX ];
 
-  /* XXX check all fields are touched */
-  api->schedparam.sched_priority = _POSIX_Priority_From_core(
-    _Thread_Scheduler_get_home( created ),
-    _Thread_Get_priority( created )
-  );
-
   /*
    *  If the thread is not a posix thread, then all posix signals are blocked
    *  by default.

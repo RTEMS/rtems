@@ -241,8 +241,14 @@ int pthread_create(
   api->created_with_explicit_scheduler =
     ( the_attr->inheritsched == PTHREAD_EXPLICIT_SCHED );
   api->schedpolicy = the_attr->schedpolicy;
-  api->schedparam = the_attr->schedparam;
+
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
+  api->Sporadic.sched_ss_repl_period =
+    the_attr->schedparam.sched_ss_repl_period;
+  api->Sporadic.sched_ss_init_budget =
+    the_attr->schedparam.sched_ss_init_budget;
+  api->Sporadic.sched_ss_max_repl =
+    the_attr->schedparam.sched_ss_max_repl;
 
   if ( schedpolicy == SCHED_SPORADIC ) {
     _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer );

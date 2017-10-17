@@ -46,9 +46,6 @@ typedef struct {
   /** The scheduler policy. */
   int schedpolicy;
 
-  /** The scheduler parameters */
-  struct sched_param schedparam;
-
   /**
    * @brief Control block for the sporadic server scheduling policy.
    */
@@ -67,6 +64,23 @@ typedef struct {
      * policy.
      */
     Priority_Node Low_priority;
+
+    /**
+     * @brief Replenishment period for sporadic server.
+     */
+    struct timespec sched_ss_repl_period;
+
+    /**
+     * @brief Initial budget for sporadic server.
+     */
+    struct timespec sched_ss_init_budget;
+
+    /**
+     * @brief Maximum pending replenishments.
+     *
+     * Only used by pthread_getschedparam() and pthread_getattr_np().
+    */
+    int sched_ss_max_repl;
   } Sporadic;
 
   /** This is the set of signals which are currently unblocked. */
