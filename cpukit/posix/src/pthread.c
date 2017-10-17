@@ -122,25 +122,8 @@ static bool _POSIX_Threads_Create_extension(
 )
 {
   POSIX_API_Control *api;
-  POSIX_API_Control *executing_api;
 
   api = created->API_Extensions[ THREAD_API_POSIX ];
-
-  /*
-   *  If the thread is not a posix thread, then all posix signals are blocked
-   *  by default.
-   *
-   *  The check for class == 1 is debug.  Should never really happen.
-   */
-  RTEMS_STATIC_ASSERT( SIGNAL_EMPTY_MASK == 0, signals_pending );
-  if ( _Objects_Get_API( created->Object.id ) == OBJECTS_POSIX_API
-       #if defined(RTEMS_DEBUG)
-         && _Objects_Get_class( created->Object.id ) == 1
-       #endif
-  ) {
-    executing_api = _Thread_Get_executing()->API_Extensions[ THREAD_API_POSIX ];
-    api->signals_unblocked = executing_api->signals_unblocked;
-  }
 
   api->Sporadic.thread = created;
   _Watchdog_Preinitialize( &api->Sporadic.Timer, _Per_CPU_Get_by_index( 0 ) );

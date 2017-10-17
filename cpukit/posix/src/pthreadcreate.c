@@ -74,6 +74,7 @@ int pthread_create(
   Thread_Control                     *executing;
   const Scheduler_Control            *scheduler;
   POSIX_API_Control                  *api;
+  const POSIX_API_Control            *executing_api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
   Objects_Name                        name;
@@ -237,6 +238,9 @@ int pthread_create(
    *  finish initializing the per API structure
    */
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
+  executing_api = executing->API_Extensions[ THREAD_API_POSIX ];
+
+  api->signals_unblocked = executing_api->signals_unblocked;
 
   api->created_with_explicit_scheduler =
     ( the_attr->inheritsched == PTHREAD_EXPLICIT_SCHED );
