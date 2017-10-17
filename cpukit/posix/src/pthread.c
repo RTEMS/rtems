@@ -49,7 +49,7 @@ void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
   Thread_queue_Context  queue_context;
 
   api = RTEMS_CONTAINER_OF( watchdog, POSIX_API_Control, Sporadic.Timer );
-  the_thread = api->thread;
+  the_thread = api->Sporadic.thread;
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_clear_priority_updates( &queue_context );
@@ -127,7 +127,6 @@ static bool _POSIX_Threads_Create_extension(
   api = created->API_Extensions[ THREAD_API_POSIX ];
 
   /* XXX check all fields are touched */
-  api->thread = created;
   api->schedparam.sched_priority = _POSIX_Priority_From_core(
     _Thread_Scheduler_get_home( created ),
     _Thread_Get_priority( created )
@@ -149,6 +148,7 @@ static bool _POSIX_Threads_Create_extension(
     api->signals_unblocked = executing_api->signals_unblocked;
   }
 
+  api->Sporadic.thread = created;
   _Watchdog_Preinitialize( &api->Sporadic.Timer, _Per_CPU_Get_by_index( 0 ) );
   _Watchdog_Initialize( &api->Sporadic.Timer, _POSIX_Threads_Sporadic_timer );
   _Priority_Node_set_inactive( &api->Sporadic.Low_priority );

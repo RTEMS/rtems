@@ -40,9 +40,6 @@ extern "C" {
  * each thread in a system with POSIX configured.
  */
 typedef struct {
-  /** Back pointer to thread of this POSIX API control. */
-  Thread_Control         *thread;
-
   /** Created with explicit or inherited scheduler. */
   bool created_with_explicit_scheduler;
 
@@ -56,6 +53,9 @@ typedef struct {
    * @brief Control block for the sporadic server scheduling policy.
    */
   struct {
+    /** The thread of this sporadic control block */
+    Thread_Control *thread;
+
     /**
      * @brief This is the timer which controls when the thread executes at high
      * and low priority when using the sporadic server scheduling policy.
