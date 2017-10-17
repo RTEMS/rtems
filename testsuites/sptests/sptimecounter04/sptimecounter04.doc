@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: sptimecounter04
+
+directives:
+
+  - clock_gettime()
+
+concepts:
+
+  - Ensure that the time flow of CLOCK_REALTIME and CLOCK_MONOTONIC is close to
+  the clock driver ticks time flow.

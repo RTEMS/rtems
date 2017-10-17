@@ -53,6 +53,7 @@ _SUBDIRS += spintrcritical23
 _SUBDIRS += sptimecounter01
 _SUBDIRS += sptimecounter02
 _SUBDIRS += sptimecounter03
+_SUBDIRS += sptimecounter04
 _SUBDIRS += spatomic01
 _SUBDIRS += spintrcritical22
 _SUBDIRS += spsem03
