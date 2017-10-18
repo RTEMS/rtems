@@ -70,6 +70,8 @@ typedef struct {
   uint32_t initial_baud;
   bool has_fractional_divider_register;
   uint8_t modem_control;
+  uint8_t line_control;
+  uint32_t baud_divisor;
   size_t out_total;
   size_t out_remaining;
   size_t out_current;
