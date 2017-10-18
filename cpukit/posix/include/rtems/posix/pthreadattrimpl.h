@@ -25,7 +25,9 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/assert.h>
 #include <rtems/posix/priorityimpl.h>
+#if defined(RTEMS_POSIX_API)
 #include <rtems/posix/threadsup.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,6 +65,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
   );
 }
 
+#if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
   const Thread_Control    *the_thread,
   const POSIX_API_Control *api,
@@ -78,6 +81,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
   param->sched_ss_init_budget = api->Sporadic.sched_ss_init_budget;
   param->sched_ss_max_repl = api->Sporadic.sched_ss_max_repl;
 }
+#endif
 
 /** @} */
 
