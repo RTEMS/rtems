@@ -17,6 +17,7 @@ data = re.sub(r'\*\*\*.*\*\*\*', '', data)
 doc = libxml2.parseDoc(data)
 ctx = doc.xpathNewContext()
 
+plt.yscale('log')
 plt.title('Uncontested Mutex Performance')
 plt.xlabel('Active Workers')
 plt.ylabel('Operation Count')
@@ -37,10 +38,25 @@ def getCounterSums(variant):
 
 y = getCounterSums('ManySysLockMutex')
 x = range(1, len(y) + 1)
-plt.plot(x, y, label = 'Self-Contained Mutex', marker = 'o')
+plt.plot(x, y, label = 'Sys Lock Mutex', marker = 'o')
 
 y = getCounterSums('ManyMutex')
-plt.plot(x, y, label = 'Classic Mutex', marker = 'o')
+plt.plot(x, y, label = 'Classic Inheritance Mutex', marker = 'o')
+
+y = getCounterSums('ManyClassicCeilingMutex')
+plt.plot(x, y, label = 'Classic Ceiling Mutex', marker = 'o')
+
+y = getCounterSums('ManyClassicMrsPMutex')
+plt.plot(x, y, label = 'Classic MrsP Mutex', marker = 'o')
+
+y = getCounterSums('ManyPthreadSpinlock')
+plt.plot(x, y, label = 'Pthread Spinlock', marker = 'o')
+
+y = getCounterSums('ManyPthreadMutexInherit')
+plt.plot(x, y, label = 'Pthread Mutex Inherit', marker = 'o')
+
+y = getCounterSums('ManyPthreadMutexProtect')
+plt.plot(x, y, label = 'Pthread Mutex Protect', marker = 'o')
 
 plt.legend(loc = 'best')
 plt.show()

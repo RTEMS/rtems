@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,8 +19,10 @@
 #include "tmacros.h"
 
 #include <sys/lock.h>
-#include <stdio.h>
 #include <inttypes.h>
+#include <pthread.h>
+#include <sched.h>
+#include <stdio.h>
 
 #include <rtems/test.h>
 
@@ -37,7 +39,7 @@ typedef struct {
 typedef struct {
   rtems_test_parallel_context base;
   rtems_id master;
-  rtems_id sema[CPU_COUNT];
+  rtems_id sema;
   rtems_id mq[CPU_COUNT];
   uint32_t self_event_ops[CPU_COUNT][CPU_COUNT];
   uint32_t all_to_one_event_ops[CPU_COUNT][CPU_COUNT];
@@ -46,6 +48,11 @@ typedef struct {
   uint32_t self_msg_ops[CPU_COUNT][CPU_COUNT];
   uint32_t many_to_one_msg_ops[CPU_COUNT][CPU_COUNT];
   uint32_t many_sys_lock_mutex_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_classic_ceiling_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_classic_mrsp_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_pthread_spinlock_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_pthread_mutex_inherit_ops[CPU_COUNT][CPU_COUNT];
+  uint32_t many_pthread_mutex_protect_ops[CPU_COUNT][CPU_COUNT];
 } test_context;
 
 static test_context test_instance;
@@ -191,7 +198,7 @@ static void test_one_mutex_body(
 )
 {
   test_context *ctx = (test_context *) base;
-  rtems_id id = ctx->sema[0];
+  rtems_id id = ctx->sema;
   uint32_t counter = 0;
 
   while (!rtems_test_parallel_stop_job(&ctx->base)) {
@@ -232,8 +239,18 @@ static void test_many_mutex_body(
 )
 {
   test_context *ctx = (test_context *) base;
-  rtems_id id = ctx->sema[worker_index];
+  rtems_status_code sc;
+  rtems_id id;
   uint32_t counter = 0;
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+    0,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   while (!rtems_test_parallel_stop_job(&ctx->base)) {
     rtems_status_code sc;
@@ -248,6 +265,9 @@ static void test_many_mutex_body(
   }
 
   ctx->many_mutex_ops[active_workers - 1][worker_index] = counter;
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void test_many_mutex_fini(
@@ -408,6 +428,271 @@ static void test_many_sys_lock_mutex_fini(
   );
 }
 
+static void test_many_classic_ceiling_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  rtems_status_code sc;
+  rtems_id id;
+  uint32_t counter = 0;
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY_CEILING | RTEMS_PRIORITY,
+    1,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    rtems_status_code sc;
+
+    ++counter;
+
+    sc = rtems_semaphore_obtain(id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_semaphore_release(id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
+  ctx->many_classic_ceiling_ops[active_workers - 1][worker_index] = counter;
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test_many_classic_ceiling_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManyClassicCeilingMutex",
+    &ctx->many_classic_ceiling_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
+static void test_many_classic_mrsp_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  rtems_status_code sc;
+  rtems_id id;
+  uint32_t counter = 0;
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING,
+    1,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    rtems_status_code sc;
+
+    ++counter;
+
+    sc = rtems_semaphore_obtain(id, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+    sc = rtems_semaphore_release(id);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  }
+
+  ctx->many_classic_mrsp_ops[active_workers - 1][worker_index] = counter;
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void test_many_classic_mrsp_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManyClassicMrsPMutex",
+    &ctx->many_classic_mrsp_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
+static void test_many_pthread_spinlock_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  int eno;
+  pthread_spinlock_t spin;
+  uint32_t counter = 0;
+
+  eno = pthread_spin_init(&spin, 0);
+  rtems_test_assert(eno == 0);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    ++counter;
+
+    pthread_spin_lock(&spin);
+    pthread_spin_unlock(&spin);
+  }
+
+  ctx->many_pthread_spinlock_ops[active_workers - 1][worker_index] = counter;
+
+  eno = pthread_spin_destroy(&spin);
+  rtems_test_assert(eno == 0);
+}
+
+static void test_many_pthread_spinlock_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManyPthreadSpinlock",
+    &ctx->many_pthread_spinlock_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
+static void test_many_pthread_mutex_inherit_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  int eno;
+  pthread_mutexattr_t attr;
+  pthread_mutex_t mtx;
+  uint32_t counter = 0;
+
+  eno = pthread_mutexattr_init(&attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutex_init(&mtx, &attr);
+  rtems_test_assert(eno == 0);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    ++counter;
+
+    pthread_mutex_lock(&mtx);
+    pthread_mutex_unlock(&mtx);
+  }
+
+  ctx->many_pthread_mutex_inherit_ops[active_workers - 1][worker_index] =
+    counter;
+
+  eno = pthread_mutex_destroy(&mtx);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutexattr_destroy(&attr);
+  rtems_test_assert(eno == 0);
+}
+
+static void test_many_pthread_mutex_inherit_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManyPthreadMutexInherit",
+    &ctx->many_pthread_mutex_inherit_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
+static void test_many_pthread_mutex_protect_body(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers,
+  size_t worker_index
+)
+{
+  test_context *ctx = (test_context *) base;
+  int eno;
+  pthread_mutexattr_t attr;
+  pthread_mutex_t mtx;
+  uint32_t counter = 0;
+
+  eno = pthread_mutexattr_init(&attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_PROTECT);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutexattr_setprioceiling(
+    &attr,
+    sched_get_priority_max(SCHED_FIFO)
+  );
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutex_init(&mtx, &attr);
+  rtems_test_assert(eno == 0);
+
+  while (!rtems_test_parallel_stop_job(&ctx->base)) {
+    ++counter;
+
+    pthread_mutex_lock(&mtx);
+    pthread_mutex_unlock(&mtx);
+  }
+
+  ctx->many_pthread_mutex_protect_ops[active_workers - 1][worker_index] =
+    counter;
+
+  eno = pthread_mutex_destroy(&mtx);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_mutexattr_destroy(&attr);
+  rtems_test_assert(eno == 0);
+}
+
+static void test_many_pthread_mutex_protect_fini(
+  rtems_test_parallel_context *base,
+  void *arg,
+  size_t active_workers
+)
+{
+  test_context *ctx = (test_context *) base;
+
+  test_fini(
+    "ManyPthreadMutexProtect",
+    &ctx->many_pthread_mutex_protect_ops[active_workers - 1][0],
+    active_workers
+  );
+}
+
 static const rtems_test_parallel_job test_jobs[] = {
   {
     .init = test_init,
@@ -444,6 +729,31 @@ static const rtems_test_parallel_job test_jobs[] = {
     .body = test_many_sys_lock_mutex_body,
     .fini = test_many_sys_lock_mutex_fini,
     .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_classic_ceiling_body,
+    .fini = test_many_classic_ceiling_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_classic_mrsp_body,
+    .fini = test_many_classic_mrsp_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_pthread_spinlock_body,
+    .fini = test_many_pthread_spinlock_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_pthread_mutex_inherit_body,
+    .fini = test_many_pthread_mutex_inherit_fini,
+    .cascade = true
+  }, {
+    .init = test_init,
+    .body = test_many_pthread_mutex_protect_body,
+    .fini = test_many_pthread_mutex_protect_fini,
+    .cascade = true
   }
 };
 
@@ -451,24 +761,23 @@ static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
   const char *test = "TestTimeFine01";
+  rtems_status_code sc;
   size_t i;
 
   TEST_BEGIN();
 
   ctx->master = rtems_task_self();
 
+  sc = rtems_semaphore_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
+    0,
+    &ctx->sema
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
   for (i = 0; i < CPU_COUNT; ++i) {
-    rtems_status_code sc;
-
-    sc = rtems_semaphore_create(
-      rtems_build_name('T', 'E', 'S', 'T'),
-      1,
-      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-      0,
-      &ctx->sema[i]
-    );
-    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
     sc = rtems_message_queue_create(
       rtems_build_name('T', 'E', 'S', 'T'),
       MSG_COUNT,
@@ -501,7 +810,9 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES CPU_COUNT
+#define CONFIGURE_MAXIMUM_SEMAPHORES (1 + CPU_COUNT)
+
+#define CONFIGURE_MAXIMUM_MRSP_SEMAPHORES CPU_COUNT
 
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES CPU_COUNT
 
@@ -511,6 +822,8 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
+
+#define CONFIGURE_INIT_TASK_PRIORITY 2
 
 #define CONFIGURE_MAXIMUM_PROCESSORS CPU_COUNT
 
