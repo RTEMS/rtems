@@ -22,14 +22,11 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/status.h>
 
-void _Thread_Timeout( Watchdog_Control *watchdog )
+void _Thread_Continue( Thread_Control *the_thread, Status_Control status )
 {
-  Thread_Control       *the_thread;
-  Thread_queue_Context  queue_context;
-  Thread_Wait_flags     wait_flags;
-  bool                  unblock;
-
-  the_thread = RTEMS_CONTAINER_OF( watchdog, Thread_Control, Timer.Watchdog );
+  Thread_queue_Context queue_context;
+  Thread_Wait_flags    wait_flags;
+  bool                 unblock;
 
   _Thread_queue_Context_initialize( &queue_context );
   _Thread_queue_Context_clear_priority_updates( &queue_context );
@@ -44,7 +41,7 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
 
     _Thread_Wait_cancel( the_thread, &queue_context );
 
-    the_thread->Wait.return_code = STATUS_TIMEOUT;
+    the_thread->Wait.return_code = status;
 
     wait_class = wait_flags & THREAD_WAIT_CLASS_MASK;
     ready_again = wait_class | THREAD_WAIT_STATE_READY_AGAIN;
@@ -81,4 +78,16 @@ void _Thread_Timeout( Watchdog_Control *watchdog )
     }
 #endif
   }
+}
+
+void _Thread_Timeout( Watchdog_Control *the_watchdog )
+{
+  Thread_Control *the_thread;
+
+  the_thread = RTEMS_CONTAINER_OF(
+    the_watchdog,
+    Thread_Control,
+    Timer.Watchdog
+  );
+  _Thread_Continue( the_thread, STATUS_TIMEOUT );
 }

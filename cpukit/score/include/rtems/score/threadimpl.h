@@ -1841,11 +1841,25 @@ RTEMS_INLINE_ROUTINE Status_Control _Thread_Wait_get_status(
 }
 
 /**
+ * @brief Cancels a blocking operation so that the thread can continue its
+ * execution.
+ *
+ * In case this function actually cancelled the blocking operation, then the
+ * thread wait return code is set to the specified status.
+ *
+ * A specialization of this function is _Thread_Timeout().
+ *
+ * @param[in] the_thread The thread.
+ * @param[in] status The thread wait status.
+ */
+void _Thread_Continue( Thread_Control *the_thread, Status_Control status );
+
+/**
  * @brief General purpose thread wait timeout.
  *
- * @param[in] watchdog The thread timer watchdog.
+ * @param[in] the_watchdog The thread timer watchdog.
  */
-void _Thread_Timeout( Watchdog_Control *watchdog );
+void _Thread_Timeout( Watchdog_Control *the_watchdog );
 
 RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
   Thread_Timer_information *timer,
