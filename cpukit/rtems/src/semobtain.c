@@ -69,7 +69,11 @@ rtems_status_code rtems_semaphore_obtain(
   executing = _Thread_Executing;
   wait = !_Options_Is_no_wait( option_set );
 
-  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+  if ( wait ) {
+    _Thread_queue_Context_set_enqueue_timeout_ticks( &queue_context, timeout );
+  } else {
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
+  }
 
   switch ( the_semaphore->variant ) {
     case SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY:

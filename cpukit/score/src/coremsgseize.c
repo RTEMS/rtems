@@ -117,7 +117,6 @@ Status_Control _CORE_message_queue_Seize(
     queue_context,
     STATES_WAITING_FOR_MESSAGE
   );
-  _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
   _Thread_queue_Enqueue(
     &the_message_queue->Wait_queue.Queue,
     the_message_queue->operations,

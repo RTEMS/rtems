@@ -25,7 +25,7 @@
 #include <rtems/score/status.h>
 #include <rtems/score/threaddispatch.h>
 
-static void _POSIX_Condition_variables_Enqueue_callout(
+static void _POSIX_Condition_variables_Mutex_unlock(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
@@ -44,9 +44,50 @@ static void _POSIX_Condition_variables_Enqueue_callout(
      *  case, so we follow their lead.
      */
     _Assert( mutex_error == EINVAL || mutex_error == EPERM );
-    _Thread_queue_Extract( the_thread );
-    the_thread->Wait.return_code= STATUS_NOT_OWNER;
+    _Thread_Continue( the_thread, STATUS_NOT_OWNER );
   }
+}
+
+static void _POSIX_Condition_variables_Enqueue_no_timeout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
+}
+
+static void _POSIX_Condition_variables_Enqueue_with_timeout_monotonic(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Add_timeout_monotonic_timespec(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
+  _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
+}
+
+static void _POSIX_Condition_variables_Enqueue_with_timeout_realtime(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Add_timeout_realtime_timespec(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
+  _POSIX_Condition_variables_Mutex_unlock( queue, the_thread, queue_context );
 }
 
 int _POSIX_Condition_variables_Wait_support(
@@ -59,44 +100,32 @@ int _POSIX_Condition_variables_Wait_support(
   unsigned long                      flags;
   Thread_queue_Context               queue_context;
   int                                error;
-  int                                mutex_error;
   Thread_Control                    *executing;
-  Watchdog_Interval                  timeout;
-  bool                               already_timedout;
-  TOD_Absolute_timeout_conversion_results  status;
 
   the_cond = _POSIX_Condition_variables_Get( cond );
   POSIX_CONDITION_VARIABLES_VALIDATE_OBJECT( the_cond, flags );
 
   _Thread_queue_Context_initialize( &queue_context );
-  already_timedout = false;
 
   if ( abstime != NULL ) {
-    /*
-     *  POSIX requires that blocking calls with timeouts that take
-     *  an absolute timeout must ignore issues with the absolute
-     *  time provided if the operation would otherwise succeed.
-     *  So we check the abstime provided, and hold on to whether it
-     *  is valid or not.  If it isn't correct and in the future,
-     *  then we do a polling operation and convert the UNSATISFIED
-     *  status into the appropriate error.
-     */
-    status = _TOD_Absolute_timeout_to_ticks(
-      abstime,
-      _POSIX_Condition_variables_Get_clock( flags ),
-      &timeout
-    );
-    if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
-      return EINVAL;
+    _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
 
-    if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-        status == TOD_ABSOLUTE_TIMEOUT_IS_NOW ) {
-      already_timedout = true;
+    if ( _POSIX_Condition_variables_Get_clock( flags ) == CLOCK_MONOTONIC ) {
+      _Thread_queue_Context_set_enqueue_callout(
+        &queue_context,
+        _POSIX_Condition_variables_Enqueue_with_timeout_monotonic
+      );
     } else {
-      _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+      _Thread_queue_Context_set_enqueue_callout(
+        &queue_context,
+        _POSIX_Condition_variables_Enqueue_with_timeout_realtime
+      );
     }
   } else {
-    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Thread_queue_Context_set_enqueue_callout(
+      &queue_context,
+      _POSIX_Condition_variables_Enqueue_no_timeout
+    );
   }
 
   executing = _POSIX_Condition_variables_Acquire( the_cond, &queue_context );
@@ -111,32 +140,17 @@ int _POSIX_Condition_variables_Wait_support(
 
   the_cond->mutex = mutex;
 
-  if ( !already_timedout ) {
-    _Thread_queue_Context_set_thread_state(
-      &queue_context,
-      STATES_WAITING_FOR_CONDITION_VARIABLE
-    );
-    _Thread_queue_Context_set_enqueue_callout(
-      &queue_context,
-      _POSIX_Condition_variables_Enqueue_callout
-    );
-    _Thread_queue_Enqueue(
-      &the_cond->Queue.Queue,
-      POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
-      executing,
-      &queue_context
-    );
-    error = _POSIX_Get_error_after_wait( executing );
-  } else {
-    _POSIX_Condition_variables_Release( the_cond, &queue_context );
-
-    mutex_error = pthread_mutex_unlock( the_cond->mutex );
-    if ( mutex_error != 0 ) {
-      error = EPERM;
-    } else {
-      error = ETIMEDOUT;
-    }
-  }
+  _Thread_queue_Context_set_thread_state(
+    &queue_context,
+    STATES_WAITING_FOR_CONDITION_VARIABLE
+  );
+  _Thread_queue_Enqueue(
+    &the_cond->Queue.Queue,
+    POSIX_CONDITION_VARIABLES_TQ_OPERATIONS,
+    executing,
+    &queue_context
+  );
+  error = _POSIX_Get_error_after_wait( executing );
 
   /*
    *  If the thread is interrupted, while in the thread queue, by
@@ -155,6 +169,8 @@ int _POSIX_Condition_variables_Wait_support(
    */
 
   if ( error != EPERM ) {
+    int mutex_error;
+
     mutex_error = pthread_mutex_lock( mutex );
     if ( mutex_error != 0 ) {
       _Assert( mutex_error == EINVAL );

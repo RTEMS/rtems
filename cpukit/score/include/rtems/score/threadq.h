@@ -57,14 +57,16 @@ typedef struct Thread_queue_Operations Thread_queue_Operations;
  *
  * @param[in] queue The actual thread queue.
  * @param[in] the_thread The thread to enqueue.
+ * @param[in] cpu_self The current processor.
  * @param[in] queue_context The thread queue context of the lock acquire.
  *
  * @see _Thread_queue_Context_set_enqueue_callout().
  */
 typedef void ( *Thread_queue_Enqueue_callout )(
-  Thread_queue_Queue   *queue,
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
+  Thread_queue_Queue     *queue,
+  Thread_Control         *the_thread,
+  struct Per_CPU_Control *cpu_self,
+  Thread_queue_Context   *queue_context
 );
 
 /**
@@ -202,22 +204,31 @@ struct Thread_queue_Context {
    * @brief The enqueue callout for _Thread_queue_Enqueue().
    *
    * The callout is invoked after the release of the thread queue lock with
-   * thread dispatching disabled.  Afterwards the thread is blocked.
+   * thread dispatching disabled.  Afterwards the thread is blocked.  This
+   * callout must be used to install the thread watchdog for timeout handling.
    *
    * @see _Thread_queue_Enqueue_do_nothing_extra().
+   *   _Thread_queue_Add_timeout_ticks(), and
+   *   _Thread_queue_Add_timeout_realtime_timespec().
    */
   Thread_queue_Enqueue_callout enqueue_callout;
 
   /**
-   * @brief The clock discipline for the interval timeout.
-   * Use WATCHDOG_NO_TIMEOUT to block indefinitely.
-   */
-  Watchdog_Discipline timeout_discipline;
-
-  /**
    * @brief Interval to wait.
+   *
+   * May be used by the enqueue callout to register a timeout handler.
    */
-  uint64_t timeout;
+  union {
+    /**
+     * @brief The timeout in ticks.
+     */
+    Watchdog_Interval ticks;
+
+    /**
+     * @brief The timeout argument, e.g. pointer to struct timespec.
+     */
+    const void *arg;
+  } Timeout;
 
 #if defined(RTEMS_SMP)
   /**

@@ -102,7 +102,6 @@ static void _Mutex_Acquire_slow(
     queue_context,
     STATES_WAITING_FOR_MUTEX
   );
-  _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
   _Thread_queue_Context_set_deadlock_callout(
     queue_context,
     _Thread_queue_Deadlock_fatal
@@ -163,7 +162,7 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
     _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( mutex, level, &queue_context );
   } else {
-    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
     _Mutex_Acquire_slow( mutex, owner, executing, level, &queue_context );
   }
 }
@@ -193,21 +192,10 @@ int _Mutex_Acquire_timed(
 
     return 0;
   } else {
-    Watchdog_Interval ticks;
-
-    switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
-      case TOD_ABSOLUTE_TIMEOUT_INVALID:
-        _Mutex_Queue_release( mutex, level, &queue_context );
-        return EINVAL;
-      case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-      case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-        _Mutex_Queue_release( mutex, level, &queue_context );
-        return ETIMEDOUT;
-      default:
-        break;
-    }
-
-    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+    _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+      &queue_context,
+      abstime
+    );
     _Mutex_Acquire_slow( mutex, owner, executing, level, &queue_context );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
@@ -290,7 +278,7 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
     ++mutex->nest_level;
     _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
   } else {
-    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
     _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, level, &queue_context );
   }
 }
@@ -325,21 +313,10 @@ int _Mutex_recursive_Acquire_timed(
 
     return 0;
   } else {
-    Watchdog_Interval ticks;
-
-    switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
-      case TOD_ABSOLUTE_TIMEOUT_INVALID:
-        _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
-        return EINVAL;
-      case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-      case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-        _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
-        return ETIMEDOUT;
-      default:
-        break;
-    }
-
-    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+    _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+      &queue_context,
+      abstime
+    );
     _Mutex_Acquire_slow( &mutex->Mutex, owner, executing, level, &queue_context );
 
     return STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );

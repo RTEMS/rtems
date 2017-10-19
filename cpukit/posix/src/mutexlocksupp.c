@@ -25,16 +25,15 @@ Status_Control _POSIX_Mutex_Seize_slow(
   POSIX_Mutex_Control           *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
-  bool                           wait,
+  const struct timespec         *abstime,
   Thread_queue_Context          *queue_context
 )
 {
-  if ( wait ) {
+  if ( (uintptr_t) abstime != POSIX_MUTEX_ABSTIME_TRY_LOCK ) {
     _Thread_queue_Context_set_thread_state(
       queue_context,
       STATES_WAITING_FOR_MUTEX
     );
-    _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
     _Thread_queue_Context_set_deadlock_callout(
       queue_context,
       _Thread_queue_Deadlock_status
@@ -53,9 +52,9 @@ Status_Control _POSIX_Mutex_Seize_slow(
 }
 
 int _POSIX_Mutex_Lock_support(
-  pthread_mutex_t   *mutex,
-  bool               wait,
-  Watchdog_Interval  timeout
+  pthread_mutex_t              *mutex,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 )
 {
   POSIX_Mutex_Control  *the_mutex;
@@ -68,7 +67,8 @@ int _POSIX_Mutex_Lock_support(
   POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );
 
   executing = _POSIX_Mutex_Acquire( the_mutex, &queue_context );
-  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+  _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout);
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
 
   switch ( _POSIX_Mutex_Get_protocol( flags ) ) {
     case POSIX_MUTEX_PRIORITY_CEILING:
@@ -76,7 +76,7 @@ int _POSIX_Mutex_Lock_support(
         the_mutex,
         flags,
         executing,
-        wait,
+        abstime,
         &queue_context
       );
       break;
@@ -86,7 +86,7 @@ int _POSIX_Mutex_Lock_support(
         flags,
         POSIX_MUTEX_NO_PROTOCOL_TQ_OPERATIONS,
         executing,
-        wait,
+        abstime,
         &queue_context
       );
       break;
@@ -99,7 +99,7 @@ int _POSIX_Mutex_Lock_support(
         flags,
         POSIX_MUTEX_PRIORITY_INHERIT_TQ_OPERATIONS,
         executing,
-        wait,
+        abstime,
         &queue_context
       );
       break;

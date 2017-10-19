@@ -376,7 +376,7 @@ rtems_bsdnet_semaphore_obtain (void)
 		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
 	_Thread_queue_Context_initialize(&queue_context);
 	_ISR_lock_ISR_disable(&queue_context.Lock_context.Lock_context);
-	_Thread_queue_Context_set_no_timeout( &queue_context );
+	_Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
 	status = _CORE_recursive_mutex_Seize (
 		&the_networkSemaphore->Core_control.Mutex.Recursive,
 		CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,

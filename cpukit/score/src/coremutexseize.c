@@ -36,7 +36,6 @@ Status_Control _CORE_mutex_Seize_slow(
       queue_context,
       STATES_WAITING_FOR_MUTEX
     );
-    _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
     _Thread_queue_Context_set_deadlock_callout(
       queue_context,
       _Thread_queue_Deadlock_status

@@ -53,36 +53,9 @@ typedef struct Watchdog_Control Watchdog_Control;
 typedef uint32_t   Watchdog_Interval;
 
 /**
- *  @brief The clock discipline to use for the Watchdog timeout interval.
+ * @brief Special watchdog ticks value to indicate an infinite wait.
  */
-typedef enum {
-
-  /**
-   * @brief Indefinite wait.
-   *
-   * This is to indicate there is no timeout and not to use a watchdog. It
-   * must be equal to 0, which is an illegal relative clock interval, so that
-   * it may be used as a Watchdog_Interval value with WATCHDOG_RELATIVE to
-   * express an indefinite wait.
-   */
-  WATCHDOG_NO_TIMEOUT = 0,
-
-  /**
-   * @brief Relative clock.
-   *
-   * The reference time point for the watchdog is current ticks value
-   * during insert.  Time is measured in clock ticks.
-   */
-  WATCHDOG_RELATIVE,
-
-  /**
-   * @brief Absolute clock.
-   *
-   * The reference time point for this header is the POSIX Epoch.  Time is
-   * measured in nanoseconds since POSIX Epoch.
-   */
-  WATCHDOG_ABSOLUTE
-} Watchdog_Discipline;
+#define WATCHDOG_NO_TIMEOUT 0
 
 /**
  *  @brief Return type from a Watchdog Service Routine.

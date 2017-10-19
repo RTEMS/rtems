@@ -36,18 +36,17 @@ THREAD_QUEUE_OBJECT_ASSERT(
  */
 
 ssize_t _POSIX_Message_queue_Receive_support(
-  mqd_t               mqdes,
-  char               *msg_ptr,
-  size_t              msg_len,
-  unsigned int       *msg_prio,
-  bool                wait,
-  Watchdog_Interval   timeout
+  mqd_t                         mqdes,
+  char                         *msg_ptr,
+  size_t                        msg_len,
+  unsigned int                 *msg_prio,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 )
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;
   size_t                       length_out;
-  bool                         do_wait;
   Thread_Control              *executing;
   Status_Control               status;
 
@@ -67,21 +66,14 @@ ssize_t _POSIX_Message_queue_Receive_support(
     rtems_set_errno_and_return_minus_one( EMSGSIZE );
   }
 
+  _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout );
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
+
   /*
    *  Now if something goes wrong, we return a "length" of -1
    *  to indicate an error.
    */
-
   length_out = -1;
-
-  /*
-   *  A timed receive with a bad time will do a poll regardless.
-   */
-  if ( wait ) {
-    do_wait = ( the_mq->oflag & O_NONBLOCK ) == 0;
-  } else {
-    do_wait = wait;
-  }
 
   _CORE_message_queue_Acquire_critical(
     &the_mq->Message_queue,
@@ -97,13 +89,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
-  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_message_queue_Seize(
     &the_mq->Message_queue,
     executing,
     msg_ptr,
     &length_out,
-    do_wait,
+    ( the_mq->oflag & O_NONBLOCK ) == 0,
     &queue_context
   );
 

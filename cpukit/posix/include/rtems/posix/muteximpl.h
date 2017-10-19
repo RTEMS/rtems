@@ -132,7 +132,7 @@ Status_Control _POSIX_Mutex_Seize_slow(
   POSIX_Mutex_Control           *the_mutex,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
-  bool                           wait,
+  const struct timespec         *abstime,
   Thread_queue_Context          *queue_context
 );
 
@@ -171,7 +171,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Seize(
   unsigned long                  flags,
   const Thread_queue_Operations *operations,
   Thread_Control                *executing,
-  bool                           wait,
+  const struct timespec         *abstime,
   Thread_queue_Context          *queue_context
 )
 {
@@ -198,7 +198,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Seize(
     the_mutex,
     operations,
     executing,
-    wait,
+    abstime,
     queue_context
   );
 }
@@ -329,11 +329,11 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_set_owner(
 }
 
 RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_seize(
-  POSIX_Mutex_Control  *the_mutex,
-  unsigned long         flags,
-  Thread_Control       *executing,
-  bool                  wait,
-  Thread_queue_Context *queue_context
+  POSIX_Mutex_Control   *the_mutex,
+  unsigned long          flags,
+  Thread_Control        *executing,
+  const struct timespec *abstime,
+  Thread_queue_Context  *queue_context
 )
 {
   Thread_Control *owner;
@@ -371,7 +371,7 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_seize(
     the_mutex,
     POSIX_MUTEX_PRIORITY_CEILING_TQ_OPERATIONS,
     executing,
-    wait,
+    abstime,
     queue_context
   );
 }
@@ -444,16 +444,12 @@ RTEMS_INLINE_ROUTINE Status_Control _POSIX_Mutex_Ceiling_surrender(
   return STATUS_SUCCESSFUL;
 }
 
-/**
- *  @brief POSIX Mutex Lock Support Method
- *
- *  A support routine which implements guts of the blocking, non-blocking, and
- *  timed wait version of mutex lock.
- */
+#define POSIX_MUTEX_ABSTIME_TRY_LOCK ((uintptr_t) 1)
+
 int _POSIX_Mutex_Lock_support(
-  pthread_mutex_t           *mutex,
-  bool                       blocking,
-  Watchdog_Interval          timeout
+  pthread_mutex_t              *mutex,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 );
 
 static inline POSIX_Mutex_Control *_POSIX_Mutex_Get(

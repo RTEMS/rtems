@@ -38,7 +38,7 @@ rtems_status_code rtems_barrier_wait(
     return RTEMS_INVALID_ID;
   }
 
-  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
+  _Thread_queue_Context_set_enqueue_timeout_ticks( &queue_context, timeout );
   status = _CORE_barrier_Seize(
     &the_barrier->Barrier,
     _Thread_Executing,

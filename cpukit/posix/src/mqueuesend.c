@@ -61,7 +61,7 @@ int mq_send(
     msg_ptr,
     msg_len,
     msg_prio,
-    true,
-    WATCHDOG_NO_TIMEOUT
+    NULL,
+    _Thread_queue_Enqueue_do_nothing_extra
   );
 }

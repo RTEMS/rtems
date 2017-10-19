@@ -84,16 +84,38 @@ typedef struct {
   struct _Mutex_Control *mutex;
 } Condition_Enqueue_context;
 
-static void _Condition_Enqueue_callout(
-  Thread_queue_Queue   *queue,
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
-)
+static void _Condition_Mutex_release( Thread_queue_Context *queue_context )
 {
   Condition_Enqueue_context *context;
 
   context = (Condition_Enqueue_context *) queue_context;
   _Mutex_Release( context->mutex );
+}
+
+static void _Condition_Enqueue_no_timeout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _Condition_Mutex_release( queue_context );
+}
+
+static void _Condition_Enqueue_with_timeout(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+)
+{
+  _Thread_queue_Add_timeout_realtime_timespec(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
+  _Condition_Mutex_release( queue_context );
 }
 
 static Thread_Control *_Condition_Do_wait(
@@ -107,14 +129,11 @@ static Thread_Control *_Condition_Do_wait(
 
   context->mutex = _mutex;
   condition = _Condition_Get( _condition );
+  _ISR_lock_ISR_disable( &context->Base.Lock_context.Lock_context );
   executing = _Condition_Queue_acquire_critical( condition, &context->Base );
   _Thread_queue_Context_set_thread_state(
     &context->Base,
     STATES_WAITING_FOR_CONDITION_VARIABLE
-  );
-  _Thread_queue_Context_set_enqueue_callout(
-    &context->Base,
-    _Condition_Enqueue_callout
   );
   _Thread_queue_Enqueue(
     &condition->Queue.Queue,
@@ -134,8 +153,10 @@ void _Condition_Wait(
   Condition_Enqueue_context context;
 
   _Thread_queue_Context_initialize( &context.Base );
-  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
-  _Thread_queue_Context_set_no_timeout( &context.Base );
+  _Thread_queue_Context_set_enqueue_callout(
+    &context.Base,
+    _Condition_Enqueue_no_timeout
+  );
   _Condition_Do_wait( _condition, _mutex, &context );
   _Mutex_Acquire( _mutex );
 }
@@ -149,24 +170,13 @@ int _Condition_Wait_timed(
   Condition_Enqueue_context  context;
   Thread_Control            *executing;
   int                        eno;
-  Watchdog_Interval          ticks;
 
   _Thread_queue_Context_initialize( &context.Base );
-  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
-
-  switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
-    case TOD_ABSOLUTE_TIMEOUT_INVALID:
-      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
-      return EINVAL;
-    case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-    case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
-      return ETIMEDOUT;
-    default:
-      break;
-  }
-
-  _Thread_queue_Context_set_relative_timeout( &context.Base, ticks );
+  _Thread_queue_Context_set_enqueue_callout(
+    &context.Base,
+    _Condition_Enqueue_with_timeout
+  );
+  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime );
   executing = _Condition_Do_wait( _condition, _mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );
   _Mutex_Acquire( _mutex );
@@ -195,8 +205,10 @@ void _Condition_Wait_recursive(
   unsigned int              nest_level;
 
   _Thread_queue_Context_initialize( &context.Base );
-  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
-  _Thread_queue_Context_set_no_timeout( &context.Base );
+  _Thread_queue_Context_set_enqueue_callout(
+    &context.Base,
+    _Condition_Enqueue_no_timeout
+  );
   nest_level = _Condition_Unnest_mutex( _mutex );
   _Condition_Do_wait( _condition, &_mutex->_Mutex, &context );
   _Mutex_recursive_Acquire( _mutex );
@@ -213,23 +225,13 @@ int _Condition_Wait_recursive_timed(
   Thread_Control            *executing;
   int                        eno;
   unsigned int               nest_level;
-  Watchdog_Interval          ticks;
 
   _Thread_queue_Context_initialize( &context.Base );
-  _ISR_lock_ISR_disable( &context.Base.Lock_context.Lock_context );
-
-  switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
-    case TOD_ABSOLUTE_TIMEOUT_INVALID:
-      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
-      return EINVAL;
-    case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-    case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-      _ISR_lock_ISR_enable( &context.Base.Lock_context.Lock_context );
-      return ETIMEDOUT;
-    default:
-      break;
-  }
-  _Thread_queue_Context_set_relative_timeout( &context.Base, ticks );
+  _Thread_queue_Context_set_enqueue_callout(
+    &context.Base,
+    _Condition_Enqueue_with_timeout
+  );
+  _Thread_queue_Context_set_timeout_argument( &context.Base, abstime );
   nest_level = _Condition_Unnest_mutex( _mutex );
   executing = _Condition_Do_wait( _condition, &_mutex->_Mutex, &context );
   eno = STATUS_GET_POSIX( _Thread_Wait_get_status( executing ) );

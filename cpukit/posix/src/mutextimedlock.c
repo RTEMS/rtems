@@ -18,14 +18,7 @@
 #include "config.h"
 #endif
 
-#include <errno.h>
-#include <pthread.h>
-
-#include <rtems/system.h>
-#include <rtems/score/coremuteximpl.h>
-#include <rtems/score/todimpl.h>
 #include <rtems/posix/muteximpl.h>
-#include <rtems/posix/priorityimpl.h>
 
 /**
  * 11.3.3 Locking and Unlocking a Mutex, P1003.1c/Draft 10, p. 93
@@ -37,42 +30,9 @@ int pthread_mutex_timedlock(
   const struct timespec *abstime
 )
 {
-  Watchdog_Interval                            ticks;
-  bool                                         do_wait = true;
-  TOD_Absolute_timeout_conversion_results  status;
-  int                                          lock_status;
-
-  /*
-   *  POSIX requires that blocking calls with timeouts that take
-   *  an absolute timeout must ignore issues with the absolute
-   *  time provided if the operation would otherwise succeed.
-   *  So we check the abstime provided, and hold on to whether it
-   *  is valid or not.  If it isn't correct and in the future,
-   *  then we do a polling operation and convert the UNSATISFIED
-   *  status into the appropriate error.
-   *
-   *  If the status is TOD_ABSOLUTE_TIMEOUT_INVALID,
-   *  TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST, or TOD_ABSOLUTE_TIMEOUT_IS_NOW,
-   *  then we should not wait.
-   */
-  status = _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks );
-  if ( status != TOD_ABSOLUTE_TIMEOUT_IS_IN_FUTURE )
-    do_wait = false;
-
-  lock_status = _POSIX_Mutex_Lock_support( mutex, do_wait, ticks );
-  /*
-   *  This service only gives us the option to block.  We used a polling
-   *  attempt to lock if the abstime was not in the future.  If we did
-   *  not obtain the mutex, then not look at the status immediately,
-   *  make sure the right reason is returned.
-   */
-  if ( !do_wait && (lock_status == EBUSY) ) {
-    if ( status == TOD_ABSOLUTE_TIMEOUT_INVALID )
-      return EINVAL;
-    if ( status == TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
-         status == TOD_ABSOLUTE_TIMEOUT_IS_NOW )
-      return ETIMEDOUT;
-  }
-
-  return lock_status;
+  return _POSIX_Mutex_Lock_support(
+    mutex,
+    abstime,
+    _Thread_queue_Add_timeout_realtime_timespec
+  );
 }

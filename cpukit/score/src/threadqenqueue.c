@@ -359,6 +359,7 @@ bool _Thread_queue_Path_acquire_critical(
 void _Thread_queue_Enqueue_do_nothing_extra(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
   Thread_queue_Context *queue_context
 )
 {
@@ -375,36 +376,6 @@ void _Thread_queue_Deadlock_fatal( Thread_Control *the_thread )
   _Internal_error( INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK );
 }
 
-static void _Thread_queue_Timeout(
-  Thread_Control       *the_thread,
-  Per_CPU_Control      *cpu_self,
-  Thread_queue_Context *queue_context
-)
-{
-  switch ( queue_context->timeout_discipline ) {
-    case WATCHDOG_RELATIVE:
-      /* A relative timeout of 0 is a special case indefinite (no) timeout */
-      if ( queue_context->timeout != 0 ) {
-        _Thread_Add_timeout_ticks(
-          the_thread,
-          cpu_self,
-          (Watchdog_Interval) queue_context->timeout
-        );
-      }
-      break;
-    case WATCHDOG_ABSOLUTE:
-      _Thread_Timer_insert_realtime(
-        the_thread,
-        cpu_self,
-        _Thread_Timeout,
-        queue_context->timeout
-      );
-      break;
-    default:
-      break;
-  }
-}
-
 void _Thread_queue_Enqueue(
   Thread_queue_Queue            *queue,
   const Thread_queue_Operations *operations,
@@ -416,7 +387,6 @@ void _Thread_queue_Enqueue(
   bool             success;
 
   _Assert( queue_context->enqueue_callout != NULL );
-  _Assert( (uint8_t) queue_context->timeout_discipline != 0x7f );
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet ) {
@@ -447,17 +417,17 @@ void _Thread_queue_Enqueue(
   cpu_self = _Thread_queue_Dispatch_disable( queue_context );
   _Thread_queue_Queue_release( queue, &queue_context->Lock_context.Lock_context );
 
-  ( *queue_context->enqueue_callout )( queue, the_thread, queue_context );
+  ( *queue_context->enqueue_callout )(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
 
   /*
    *  Set the blocking state for this thread queue in the thread.
    */
   _Thread_Set_state( the_thread, queue_context->thread_state );
-
-  /*
-   *  If the thread wants to timeout, then schedule its timer.
-   */
-  _Thread_queue_Timeout( the_thread, cpu_self, queue_context );
 
   /*
    * At this point thread dispatching is disabled, however, we already released
@@ -491,6 +461,8 @@ Status_Control _Thread_queue_Enqueue_sticky(
 {
   Per_CPU_Control *cpu_self;
 
+  _Assert( queue_context->enqueue_callout != NULL );
+
   _Thread_Wait_claim( the_thread, queue );
 
   if ( !_Thread_queue_Path_acquire_critical( queue, the_thread, queue_context ) ) {
@@ -519,7 +491,13 @@ Status_Control _Thread_queue_Enqueue_sticky(
     );
   }
 
-  _Thread_queue_Timeout( the_thread, cpu_self, queue_context );
+  ( *queue_context->enqueue_callout )(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
+
   _Thread_Priority_update( queue_context );
   _Thread_Priority_and_sticky_update( the_thread, 1 );
   _Thread_Dispatch_enable( cpu_self );

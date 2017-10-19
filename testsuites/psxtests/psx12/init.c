@@ -210,7 +210,7 @@ static void *POSIX_Init( void *argument )
   puts( "Init: pthread_create - SUCCESSFUL" );
 
   /* Align with clock tick */
-  usleep( 1 );
+  sleep( 1 );
 
   ctx->start = now();
 

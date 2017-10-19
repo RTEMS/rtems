@@ -24,6 +24,8 @@
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/score/threadqimpl.h>
+#include <rtems/score/todimpl.h>
+#include <rtems/score/watchdogimpl.h>
 #include <rtems/score/isr.h>
 
 static int _POSIX_signals_Get_lowest(
@@ -89,20 +91,24 @@ int sigtimedwait(
    *        in the Open Group specification.
    */
 
-  if ( timeout ) {
-    Watchdog_Interval interval;
+  if ( timeout != NULL ) {
+    struct timespec end;
 
-    if ( !_Timespec_Is_valid( timeout ) )
-      rtems_set_errno_and_return_minus_one( EINVAL );
+    if ( !_Watchdog_Is_valid_interval_timespec( timeout ) ) {
+      return EINVAL;
+    }
 
-    interval = _Timespec_To_ticks( timeout );
+    _TOD_Get_zero_based_uptime_as_timespec( &end );
 
-    if ( !interval )
-      rtems_set_errno_and_return_minus_one( EINVAL );
+    /* In case this overflows, then the enqueue callout will reject it */
+    _Timespec_Add_to( &end, timeout );
 
-    _Thread_queue_Context_set_relative_timeout( &queue_context, interval );
+    _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
+      &queue_context,
+      &end
+    );
   } else {
-    _Thread_queue_Context_set_no_timeout( &queue_context );
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   }
 
   /*
@@ -160,7 +166,6 @@ int sigtimedwait(
     &queue_context,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL
   );
-  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   _Thread_queue_Enqueue(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,

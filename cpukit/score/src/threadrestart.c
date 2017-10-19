@@ -514,6 +514,7 @@ void _Thread_Cancel(
 static void _Thread_Close_enqueue_callout(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
   Thread_queue_Context *queue_context
 )
 {
@@ -534,7 +535,6 @@ void _Thread_Close(
     &context->Base,
     _Thread_Close_enqueue_callout
   );
-  _Thread_queue_Context_set_no_timeout( &context->Base );
   _Thread_State_acquire_critical(
     the_thread,
     &context->Base.Lock_context.Lock_context

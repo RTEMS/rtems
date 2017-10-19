@@ -51,29 +51,16 @@ int sem_timedwait(
     _Sem_Queue_release( sem, level, &queue_context );
     return 0;
   } else {
-    Watchdog_Interval ticks;
-    Status_Control    status;
-
-    switch ( _TOD_Absolute_timeout_to_ticks( abstime, CLOCK_REALTIME, &ticks ) ) {
-      case TOD_ABSOLUTE_TIMEOUT_INVALID:
-        _Sem_Queue_release( sem, level, &queue_context );
-        rtems_set_errno_and_return_minus_one( EINVAL );
-        break;
-      case TOD_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-      case TOD_ABSOLUTE_TIMEOUT_IS_NOW:
-        _Sem_Queue_release( sem, level, &queue_context );
-        rtems_set_errno_and_return_minus_one( ETIMEDOUT );
-        break;
-      default:
-        break;
-    }
+    Status_Control status;
 
     _Thread_queue_Context_set_thread_state(
       &queue_context,
       STATES_WAITING_FOR_SEMAPHORE
     );
-    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
-    _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
+    _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+      &queue_context,
+      abstime
+    );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue(
       &sem->Queue.Queue,

@@ -305,6 +305,7 @@ libscore_a_SOURCES += src/threadq.c \
     src/threadqextractwithproxy.c src/threadqfirst.c \
     src/threadqflush.c
 libscore_a_SOURCES += src/threadqops.c
+libscore_a_SOURCES += src/threadqtimeout.c
 
 ## TIMESPEC_C_FILES
 libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
@@ -316,7 +317,6 @@ libscore_a_SOURCES += src/timespecaddto.c src/timespecfromticks.c \
 libscore_a_SOURCES += src/coretod.c src/coretodset.c \
     src/coretodtickspersec.c \
     src/coretodadjust.c
-libscore_a_SOURCES += src/coretodabsolutetimeout.c
 
 ## WATCHDOG_C_FILES
 libscore_a_SOURCES += src/watchdoginsert.c

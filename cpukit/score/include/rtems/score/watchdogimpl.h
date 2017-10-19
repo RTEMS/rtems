@@ -284,6 +284,11 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
   }
 }
 
+/**
+ * @brief The maximum watchdog ticks value for the far future.
+ */
+#define WATCHDOG_MAXIMUM_TICKS UINT64_MAX
+
 #define WATCHDOG_NANOSECONDS_PER_SECOND 1000000000
 
 /**

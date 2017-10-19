@@ -33,7 +33,7 @@ int pthread_rwlock_rdlock(
   POSIX_RWLOCK_VALIDATE_OBJECT( the_rwlock );
 
   _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_set_no_timeout( &queue_context );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   status = _CORE_RWLock_Seize_for_reading(
     &the_rwlock->RWLock,
     true,                 /* we are willing to wait forever */

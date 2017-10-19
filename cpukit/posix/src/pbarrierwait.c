@@ -54,7 +54,6 @@ int pthread_barrier_wait( pthread_barrier_t *_barrier )
       STATES_WAITING_FOR_BARRIER
     );
     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
-    _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Enqueue(
       &barrier->Queue.Queue,
       POSIX_BARRIER_TQ_OPERATIONS,

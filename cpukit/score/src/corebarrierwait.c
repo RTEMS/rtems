@@ -48,7 +48,6 @@ Status_Control _CORE_barrier_Seize(
       queue_context,
       STATES_WAITING_FOR_BARRIER
     );
-    _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
     _Thread_queue_Enqueue(
       &the_barrier->Wait_queue.Queue,
       CORE_BARRIER_TQ_OPERATIONS,

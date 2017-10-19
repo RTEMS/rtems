@@ -22,6 +22,7 @@
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/score/coremsgimpl.h>
+#include <rtems/score/threadqimpl.h>
 
 #include <rtems/seterr.h>
 
@@ -63,12 +64,12 @@ void _POSIX_Message_queue_Delete(
  * @note This code ignores the O_RDONLY/O_WRONLY/O_RDWR flag at open time.
  */
 ssize_t _POSIX_Message_queue_Receive_support(
-  mqd_t               mqdes,
-  char               *msg_ptr,
-  size_t              msg_len,
-  unsigned int       *msg_prio,
-  bool                wait,
-  Watchdog_Interval   timeout
+  mqd_t                         mqdes,
+  char                         *msg_ptr,
+  size_t                        msg_len,
+  unsigned int                 *msg_prio,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 );
 
 /**
@@ -77,12 +78,12 @@ ssize_t _POSIX_Message_queue_Receive_support(
  *  This routine posts a message to a specified message queue.
  */
 int _POSIX_Message_queue_Send_support(
-  mqd_t               mqdes,
-  const char         *msg_ptr,
-  size_t              msg_len,
-  unsigned int        msg_prio,
-  bool                wait,
-  Watchdog_Interval   timeout
+  mqd_t                         mqdes,
+  const char                   *msg_ptr,
+  size_t                        msg_len,
+  unsigned int                  msg_prio,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 );
 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *

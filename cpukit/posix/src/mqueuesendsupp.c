@@ -35,18 +35,17 @@
 #include <fcntl.h>
 
 int _POSIX_Message_queue_Send_support(
-  mqd_t               mqdes,
-  const char         *msg_ptr,
-  size_t              msg_len,
-  unsigned int        msg_prio,
-  bool                wait,
-  Watchdog_Interval   timeout
+  mqd_t                         mqdes,
+  const char                   *msg_ptr,
+  size_t                        msg_len,
+  unsigned int                  msg_prio,
+  const struct timespec        *abstime,
+  Thread_queue_Enqueue_callout  enqueue_callout
 )
 {
   POSIX_Message_queue_Control *the_mq;
   Thread_queue_Context         queue_context;
   Status_Control               status;
-  bool                         do_wait;
   Thread_Control              *executing;
 
   /*
@@ -69,14 +68,8 @@ int _POSIX_Message_queue_Send_support(
     rtems_set_errno_and_return_minus_one( EBADF );
   }
 
-  /*
-   *  A timed receive with a bad time will do a poll regardless.
-   */
-  if ( wait ) {
-    do_wait = ( the_mq->oflag & O_NONBLOCK ) == 0;
-  } else {
-    do_wait = wait;
-  }
+  _Thread_queue_Context_set_enqueue_callout( &queue_context, enqueue_callout );
+  _Thread_queue_Context_set_timeout_argument( &queue_context, abstime );
 
   _CORE_message_queue_Acquire_critical(
     &the_mq->Message_queue,
@@ -92,14 +85,13 @@ int _POSIX_Message_queue_Send_support(
    *  Now perform the actual message receive
    */
   executing = _Thread_Executing;
-  _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
   status = _CORE_message_queue_Submit(
     &the_mq->Message_queue,
     executing,
     msg_ptr,
     msg_len,
     _POSIX_Message_queue_Priority_to_core( msg_prio ),
-    do_wait,
+    ( the_mq->oflag & O_NONBLOCK ) == 0,
     &queue_context
   );
   return _POSIX_Zero_or_minus_one_plus_errno( status );

@@ -65,6 +65,28 @@ typedef struct {
 void _Thread_queue_Enqueue_do_nothing_extra(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+);
+
+void _Thread_queue_Add_timeout_ticks(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+);
+
+void _Thread_queue_Add_timeout_monotonic_timespec(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
+  Thread_queue_Context *queue_context
+);
+
+void _Thread_queue_Add_timeout_realtime_timespec(
+  Thread_queue_Queue   *queue,
+  Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
   Thread_queue_Context *queue_context
 );
 
@@ -118,6 +140,40 @@ _Thread_queue_Context_set_thread_state(
 }
 
 /**
+ * @brief Sets the timeout ticks in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ * @param ticks The timeout in ticks.
+ *
+ * @see _Thread_queue_Enqueue().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_timeout_ticks(
+  Thread_queue_Context *queue_context,
+  Watchdog_Interval     ticks
+)
+{
+  queue_context->Timeout.ticks = ticks;
+}
+
+/**
+ * @brief Sets the timeout argument in the thread queue context.
+ *
+ * @param queue_context The thread queue context.
+ * @param arg The timeout argument.
+ *
+ * @see _Thread_queue_Enqueue().
+ */
+RTEMS_INLINE_ROUTINE void
+_Thread_queue_Context_set_timeout_argument(
+  Thread_queue_Context *queue_context,
+  const void           *arg
+)
+{
+  queue_context->Timeout.arg = arg;
+}
+
+/**
  * @brief Sets the enqueue callout in the thread queue context.
  *
  * @param queue_context The thread queue context.
@@ -150,55 +206,61 @@ _Thread_queue_Context_set_enqueue_do_nothing_extra(
 }
 
 /**
- * @brief Sets an indefinite timeout interval in the thread queue context.
+ * @brief Sets the enqueue callout to add a relative monotonic timeout in
+ * ticks.
  *
  * @param queue_context The thread queue context.
- * @param timeout The new timeout.
+ * @param ticks The timeout in ticks.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
-_Thread_queue_Context_set_no_timeout(
-  Thread_queue_Context *queue_context
+_Thread_queue_Context_set_enqueue_timeout_ticks(
+  Thread_queue_Context *queue_context,
+  Watchdog_Interval     ticks
 )
 {
-  queue_context->timeout_discipline = WATCHDOG_NO_TIMEOUT;
+  queue_context->Timeout.ticks = ticks;
+  queue_context->enqueue_callout = _Thread_queue_Add_timeout_ticks;
 }
 
 /**
- * @brief Sets a relative timeout in the thread queue context.
+ * @brief Sets the enqueue callout to add an absolute monotonic timeout in
+ * timespec format.
  *
  * @param queue_context The thread queue context.
- * @param discipline The clock discipline to use for the timeout.
+ * @param abstime The absolute monotonic timeout.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
-_Thread_queue_Context_set_relative_timeout(
-  Thread_queue_Context *queue_context,
-  Watchdog_Interval     timeout
+_Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
+  Thread_queue_Context  *queue_context,
+  const struct timespec *abstime
 )
 {
-  queue_context->timeout_discipline = WATCHDOG_RELATIVE;
-  queue_context->timeout = timeout;
+  queue_context->Timeout.arg = abstime;
+  queue_context->enqueue_callout =
+    _Thread_queue_Add_timeout_monotonic_timespec;
 }
 
 /**
- * @brief Sets an absolute timeout in the thread queue context.
+ * @brief Sets the enqueue callout to add an absolute realtime timeout in
+ * timespec format.
  *
  * @param queue_context The thread queue context.
- * @param discipline The clock discipline to use for the timeout.
+ * @param abstime The absolute realtime timeout.
  *
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
-_Thread_queue_Context_set_absolute_timeout(
-  Thread_queue_Context *queue_context,
-  uint64_t              timeout
+_Thread_queue_Context_set_enqueue_timeout_realtime_timespec(
+  Thread_queue_Context  *queue_context,
+  const struct timespec *abstime
 )
 {
-  queue_context->timeout_discipline = WATCHDOG_ABSOLUTE;
-  queue_context->timeout = timeout;
+  queue_context->Timeout.arg = abstime;
+  queue_context->enqueue_callout = _Thread_queue_Add_timeout_realtime_timespec;
 }
 
 /**
@@ -615,11 +677,10 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * - _Thread_queue_Context_set_thread_state(),
  *
  * - _Thread_queue_Context_set_enqueue_callout() or
- *   _Thread_queue_Context_set_enqueue_do_nothing_extra(),
- *
- * - _Thread_queue_Context_set_no_timeout() or
- *   _Thread_queue_Context_set_relative_timeout() or
- *   _Thread_queue_Context_set_absolute_timeout(), and
+ *   _Thread_queue_Context_set_enqueue_do_nothing_extra() or
+ *   _Thread_queue_Context_set_enqueue_timeout_ticks() or
+ *   _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec() or
+ *   _Thread_queue_Context_set_enqueue_timeout_realtime_timespec(),
  *
  * - _Thread_queue_Context_set_deadlock_callout().
  *
@@ -652,7 +713,6 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *       STATES_WAITING_FOR_MUTEX
  *     );
  *     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
- *     _Thread_queue_Context_set_no_timeout( &queue_context );
  *     _Thread_queue_Context_set_deadlock_callout(
  *       queue_context,
  *       _Thread_queue_Deadlock_fatal

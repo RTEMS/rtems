@@ -27,10 +27,18 @@
 static void _Region_Enqueue_callout(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
+  Per_CPU_Control      *cpu_self,
   Thread_queue_Context *queue_context
 )
 {
   Region_Control *the_region;
+
+  _Thread_queue_Add_timeout_ticks(
+    queue,
+    the_thread,
+    cpu_self,
+    queue_context
+  );
 
   the_region = REGION_OF_THREAD_QUEUE_QUEUE( queue );
   _Region_Unlock( the_region );
@@ -91,11 +99,11 @@ rtems_status_code rtems_region_get_segment(
         &queue_context,
         STATES_WAITING_FOR_SEGMENT
       );
+      _Thread_queue_Context_set_timeout_ticks( &queue_context, timeout );
       _Thread_queue_Context_set_enqueue_callout(
         &queue_context,
         _Region_Enqueue_callout
       );
-      _Thread_queue_Context_set_relative_timeout( &queue_context, timeout );
       _Thread_queue_Enqueue(
         &the_region->Wait_queue.Queue,
         the_region->wait_operations,
