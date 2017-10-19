@@ -356,7 +356,7 @@ bool _Thread_queue_Path_acquire_critical(
   return true;
 }
 
-void _Thread_queue_Enqueue_do_nothing(
+void _Thread_queue_Enqueue_do_nothing_extra(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context

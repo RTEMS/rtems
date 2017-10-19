@@ -72,7 +72,7 @@ int sem_timedwait(
       &queue_context,
       STATES_WAITING_FOR_SEMAPHORE
     );
-    _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
     _Thread_queue_Context_set_relative_timeout( &queue_context, ticks );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue(

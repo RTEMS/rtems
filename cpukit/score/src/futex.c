@@ -94,7 +94,7 @@ int _Futex_Wait( struct _Futex_Control *_futex, int *uaddr, int val )
       &queue_context,
       STATES_WAITING_FOR_FUTEX
     );
-    _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+    _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
     _Thread_queue_Context_set_no_timeout( &queue_context );
     _Thread_queue_Context_set_ISR_level( &queue_context, level );
     _Thread_queue_Enqueue(

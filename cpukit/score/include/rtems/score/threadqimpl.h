@@ -62,7 +62,7 @@ typedef struct {
   Thread_queue_Queue Queue;
 } Thread_queue_Syslock_queue;
 
-void _Thread_queue_Enqueue_do_nothing(
+void _Thread_queue_Enqueue_do_nothing_extra(
   Thread_queue_Queue   *queue,
   Thread_Control       *the_thread,
   Thread_queue_Context *queue_context
@@ -142,11 +142,11 @@ _Thread_queue_Context_set_enqueue_callout(
  * @see _Thread_queue_Enqueue().
  */
 RTEMS_INLINE_ROUTINE void
-_Thread_queue_Context_set_do_nothing_enqueue_callout(
+_Thread_queue_Context_set_enqueue_do_nothing_extra(
   Thread_queue_Context *queue_context
 )
 {
-  queue_context->enqueue_callout = _Thread_queue_Enqueue_do_nothing;
+  queue_context->enqueue_callout = _Thread_queue_Enqueue_do_nothing_extra;
 }
 
 /**
@@ -615,7 +615,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  * - _Thread_queue_Context_set_thread_state(),
  *
  * - _Thread_queue_Context_set_enqueue_callout() or
- *   _Thread_queue_Context_set_do_nothing_enqueue_callout(),
+ *   _Thread_queue_Context_set_enqueue_do_nothing_extra(),
  *
  * - _Thread_queue_Context_set_no_timeout() or
  *   _Thread_queue_Context_set_relative_timeout() or
@@ -651,7 +651,7 @@ Thread_Control *_Thread_queue_Do_dequeue(
  *       &queue_context,
  *       STATES_WAITING_FOR_MUTEX
  *     );
- *     _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+ *     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
  *     _Thread_queue_Context_set_no_timeout( &queue_context );
  *     _Thread_queue_Context_set_deadlock_callout(
  *       queue_context,

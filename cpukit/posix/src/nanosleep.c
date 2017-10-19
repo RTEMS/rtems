@@ -51,10 +51,7 @@ static inline int nanosleep_helper(
     &queue_context,
     STATES_WAITING_FOR_TIME | STATES_INTERRUPTIBLE_BY_SIGNAL
   );
-  _Thread_queue_Context_set_enqueue_callout(
-    &queue_context,
-    _Thread_queue_Enqueue_do_nothing
-  );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
 
   if ( discipline == WATCHDOG_ABSOLUTE ) {
     _Thread_queue_Context_set_absolute_timeout( &queue_context, ticks );

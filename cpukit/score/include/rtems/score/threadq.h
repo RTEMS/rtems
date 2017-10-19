@@ -204,7 +204,7 @@ struct Thread_queue_Context {
    * The callout is invoked after the release of the thread queue lock with
    * thread dispatching disabled.  Afterwards the thread is blocked.
    *
-   * @see _Thread_queue_Enqueue_do_nothing().
+   * @see _Thread_queue_Enqueue_do_nothing_extra().
    */
   Thread_queue_Enqueue_callout enqueue_callout;
 

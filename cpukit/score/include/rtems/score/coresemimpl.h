@@ -188,7 +188,7 @@ RTEMS_INLINE_ROUTINE Status_Control _CORE_semaphore_Seize(
     queue_context,
     STATES_WAITING_FOR_SEMAPHORE
   );
-  _Thread_queue_Context_set_do_nothing_enqueue_callout( queue_context );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( queue_context );
   _Thread_queue_Enqueue(
     &the_semaphore->Wait_queue.Queue,
     operations,

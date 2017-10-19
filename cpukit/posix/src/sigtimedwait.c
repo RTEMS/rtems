@@ -160,7 +160,7 @@ int sigtimedwait(
     &queue_context,
     STATES_WAITING_FOR_SIGNAL | STATES_INTERRUPTIBLE_BY_SIGNAL
   );
-  _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   _Thread_queue_Enqueue(
     &_POSIX_signals_Wait_queue.Queue,
     POSIX_SIGNALS_TQ_OPERATIONS,

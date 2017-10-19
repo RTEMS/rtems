@@ -39,7 +39,7 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
   void                 *value;
 
   _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_set_do_nothing_enqueue_callout( &queue_context );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
   _Thread_queue_Context_set_no_timeout( &queue_context );
   the_thread = _Thread_Get( thread, &queue_context.Lock_context.Lock_context );
 
