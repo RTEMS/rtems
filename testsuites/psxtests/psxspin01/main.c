@@ -13,11 +13,12 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#define CONFIGURE_INIT
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define TEST_INIT
 
 #include <bsp.h>
 #include <pmacros.h>

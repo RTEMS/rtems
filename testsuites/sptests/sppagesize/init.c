@@ -10,6 +10,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <tmacros.h>
 #include <rtems.h>
 #include <limits.h>

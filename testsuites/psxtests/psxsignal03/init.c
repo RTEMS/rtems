@@ -47,6 +47,8 @@
   #error "Test Mode not defined"
 #endif
 
+#define TEST_INIT
+
 #include <pmacros.h>
 #include <signal.h>
 #include <errno.h>

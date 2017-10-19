@@ -25,6 +25,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems/test.h>
 #include <tmacros.h>
 

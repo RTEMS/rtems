@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <tmacros.h>
 #include "test_support.h"
 
@@ -70,8 +72,7 @@ void write_helper(void)
         printf( "Total written = %zd\n", TotalWritten );
         return;
       }
-      fprintf(
-        stderr,
+      printf(
         "Unable to create largest IMFS file (error=%s)\n",
         strerror(errno)
       );
@@ -79,7 +80,7 @@ void write_helper(void)
     }
     TotalWritten += written;
   } while (1);
-  
+
 }
 
 void read_helper(void)
@@ -93,8 +94,7 @@ void read_helper(void)
     sc = read( TestFd, &ch, sizeof(ch) );
     if ( sc == 1 ) {
       if ( ch != (i%256) ) {
-        fprintf(
-          stderr,
+        printf(
           "MISMATCH 0x%02x != 0x%02x at offset %d\n",
           ch,
           i % 256,
@@ -104,8 +104,7 @@ void read_helper(void)
       }
       i++;
     } else if ( sc != 0 ) {
-      fprintf(
-        stderr,
+      printf(
         "ERROR - at offset %d - returned %zd and error=%s\n",
         i,
         sc,
@@ -139,12 +138,11 @@ void truncate_helper(void)
 
     rc = ftruncate( TestFd, new );
     if ( rc != 0 ) {
-      fprintf(
-	stderr,
-	"ERROR - at offset %d - returned %d and error=%s\n",
-	(int) new,
-	rc,
-	strerror( errno )
+      printf(
+        "ERROR - at offset %d - returned %d and error=%s\n",
+        (int) new,
+        rc,
+        strerror( errno )
       );
     }
     rtems_test_assert( rc == 0 );
@@ -162,8 +160,8 @@ void extend_helper(int eno)
   position = lseek( TestFd, 0, SEEK_END );
   printf( "Seek to end .. returned %d\n", (int) position );
 
-  /* 
-   * test case to ftruncate a file to a length > its size 
+  /*
+   * test case to ftruncate a file to a length > its size
    */
 
   rc = ftruncate( TestFd, 2 );
@@ -178,12 +176,11 @@ void extend_helper(int eno)
     rc = ftruncate( TestFd, new );
     if ( rc != 0 ) {
       if( errno != eno ) {
-	fprintf(
-	  stderr,
-	  "ERROR - at offset %d - returned %d and error=%s\n",
-	  (int) new,
-	  rc,
-	  strerror( errno )
+        printf(
+          "ERROR - at offset %d - returned %d and error=%s\n",
+          (int) new,
+          rc,
+          strerror( errno )
         );
 	break;
       }
@@ -239,7 +236,7 @@ rtems_task Init(
   open_it(true, false);
   read_helper();
   close_it();
-  
+
   open_it(false, false);
   truncate_helper();
 
@@ -250,7 +247,7 @@ rtems_task Init(
 
   extend_helper(ENOSPC);
 
-  /* 
+  /*
    * free the allocated heap memory
    */
   free(alloc_ptr);

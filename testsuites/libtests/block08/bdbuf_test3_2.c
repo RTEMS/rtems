@@ -154,7 +154,7 @@ bdbuf_test3_2_thread2(rtems_task_argument arg)
         TEST_FAILED();
     }
 
-    printk("Thread #2 DEBLOCK\n");
+    printf("Thread #2 DEBLOCK\n");
     CONTINUE_MAIN(2);
 
     rc = rtems_bdbuf_release_modified(bd);
@@ -184,7 +184,7 @@ bdbuf_test3_2_thread3(rtems_task_argument arg)
         TEST_FAILED();
     }
 
-    printk("Thread #3 DEBLOCK\n");
+    printf("Thread #3 DEBLOCK\n");
 
     CONTINUE_MAIN(3);
 

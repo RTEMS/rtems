@@ -61,7 +61,6 @@ _SUBDIRS += spmrsp01
 _SUBDIRS += spscheduler01
 _SUBDIRS += spfatal28
 _SUBDIRS += spthreadlife01
-_SUBDIRS += spprofiling01
 _SUBDIRS += spcache01
 _SUBDIRS += sptls03
 _SUBDIRS += spcpucounter01

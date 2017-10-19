@@ -51,6 +51,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <bsp.h>
 #include <stdio.h>
 #include "tmacros.h"
@@ -232,7 +234,7 @@ rtems_isr  LocalHwIsr(/*in*/ rtems_vector_number   Vector)
   /* Signal synchroniztion semaphore to invoke waiting task */
   status = rtems_semaphore_release(LocalHwSync_S);
   if (status != RTEMS_SUCCESSFUL) {
-    fprintf( stderr, "LocalHwISR release %d\n", status );
+    printf( "LocalHwISR release %d\n", status );
     while(1); /* Error */
   }
 

@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <rtems/btimer.h>
 #include <errno.h>
@@ -84,7 +86,7 @@ void *POSIX_Init(
   /* destroy mutex */
   status = pthread_mutex_destroy( &MutexId );
   rtems_test_assert( status == 0 );
-  
+
   TEST_END();
 
   rtems_test_exit(0);

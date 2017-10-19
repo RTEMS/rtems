@@ -23,7 +23,9 @@
 #include "config.h"
 #endif
 
-#define TESTS_USE_PRINTK
+#define TEST_INIT
+
+#define TESTS_USE_PRINTF
 #include "tmacros.h"
 
 #include <assert.h>
@@ -157,12 +159,12 @@ static rtems_bdbuf_buffer *do_get(char task)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  printk("%c: try get\n", task);
+  printf("%c: try get\n", task);
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("%c: get\n", task);
+  printf("%c: get\n", task);
 
   return bd;
 }
@@ -172,7 +174,7 @@ static rtems_bdbuf_buffer *do_get_mod(char task)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  printk("%c: try get modified\n", task);
+  printf("%c: try get modified\n", task);
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
@@ -183,7 +185,7 @@ static rtems_bdbuf_buffer *do_get_mod(char task)
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("%c: get modified\n", task);
+  printf("%c: get modified\n", task);
 
   return bd;
 }
@@ -193,12 +195,12 @@ static rtems_bdbuf_buffer *do_read(char task)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  printk("%c: try read\n", task);
+  printf("%c: try read\n", task);
 
   sc = rtems_bdbuf_read(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("%c: read\n", task);
+  printf("%c: read\n", task);
 
   return bd;
 }
@@ -207,41 +209,41 @@ static void do_rel(char task, rtems_bdbuf_buffer *bd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  printk("%c: release\n", task);
+  printf("%c: release\n", task);
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("%c: release done\n", task);
+  printf("%c: release done\n", task);
 }
 
 static void do_rel_mod(char task, rtems_bdbuf_buffer *bd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  printk("%c: release modified\n", task);
+  printf("%c: release modified\n", task);
 
   sc = rtems_bdbuf_release_modified(bd);
   ASSERT_SC(sc);
 
-  printk("%c: release modified done\n", task);
+  printf("%c: release modified done\n", task);
 }
 
 static void do_sync(char task, rtems_bdbuf_buffer *bd)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
-  printk("%c: sync\n", task);
+  printf("%c: sync\n", task);
 
   sc = rtems_bdbuf_sync(bd);
   ASSERT_SC(sc);
 
-  printk("%c: sync done\n", task);
+  printf("%c: sync done\n", task);
 }
 
 static void purge(char task)
 {
-  printk("%c: purge\n", task);
+  printf("%c: purge\n", task);
 
   rtems_bdbuf_purge_dev(dd);
 }
@@ -449,7 +451,7 @@ static rtems_task Init(rtems_task_argument argument)
   for (i_ac = 0; i_ac < ACCESS_COUNT; ++i_ac) {
     for (i_rel = 0; i_rel < RELEASE_COUNT; ++i_rel) {
       for (i_w = 0; i_w < WAITER_COUNT; ++i_w) {
-        printk("test case [access]: %s and %s %s\n", access_assoc_table [i_ac], release_assoc_table [i_rel], waiter_assoc_table [i_w]);
+        printf("test case [access]: %s and %s %s\n", access_assoc_table [i_ac], release_assoc_table [i_rel], waiter_assoc_table [i_w]);
         check_access(access_table [i_ac], release_table [i_rel], waiter_table [i_w]);
       }
     }
@@ -457,14 +459,14 @@ static rtems_task Init(rtems_task_argument argument)
 
   for (i_rel = 0; i_rel < RELEASE_COUNT; ++i_rel) {
     for (i_w = 0; i_w < WAITER_COUNT; ++i_w) {
-      printk("test case [intermediate]: %s %s\n", release_assoc_table [i_rel], waiter_assoc_table [i_w]);
+      printf("test case [intermediate]: %s %s\n", release_assoc_table [i_rel], waiter_assoc_table [i_w]);
       check_intermediate(release_table [i_rel], waiter_table [i_w]);
     }
   }
 
   for (i_p = 0; i_p < PURGER_COUNT; ++i_p) {
     for (i_w = 0; i_w < WAITER_COUNT; ++i_w) {
-      printk("test case [transfer]: %s %s\n", purger_assoc_table [i_p], waiter_assoc_table [i_w]);
+      printf("test case [transfer]: %s %s\n", purger_assoc_table [i_p], waiter_assoc_table [i_w]);
       check_transfer(purger_table [i_p], waiter_table [i_w]);
     }
   }

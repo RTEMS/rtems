@@ -13,14 +13,6 @@ extern "C" {
 #endif
 
 /*
- *  Uncomment this to get buffered test output.  When commented out,
- *  test output behaves as it always has and is printed using stdio.
- */
-
-/* #define TESTS_BUFFER_OUTPUT */
-/* #define TESTS_USE_PRINTK */
-
-/*
  * Test states. No state string is an expected pass.
  */
 #if (TEST_STATE_EXPECTED_FAIL && TEST_STATE_USER_INPUT) || \
@@ -78,46 +70,62 @@ extern "C" {
     } while (0)
 
   #if defined(TEST_STATE_STRING)
-    #define TEST_BEGIN() printk(TEST_BEGIN_STRING); printk(TEST_STATE_STRING);
+    #define TEST_BEGIN() \
+    do { \
+      printk("\n"); \
+      printk(TEST_BEGIN_STRING); \
+      printk(TEST_STATE_STRING); \
+    } while (0)
   #else
-    #define TEST_BEGIN() printk(TEST_BEGIN_STRING)
+    #define TEST_BEGIN() \
+    do { \
+      printk("\n"); \
+      printk(TEST_BEGIN_STRING); \
+    } while (0)
   #endif
 
-  #define TEST_END() printk(TEST_END_STRING)
+  #define TEST_END() \
+    do { \
+       printk( "\n" ); \
+       printk(TEST_END_STRING); \
+       printk( "\n" ); \
+    } while (0)
 
 /*
  *  BUFFER TEST OUTPUT
  */
-#elif defined(TESTS_BUFFER_OUTPUT)
+#else
 
   #include <stdio.h>
   #include <stdlib.h>
 
+  #define TEST_PRINT__FORMAT(_fmtpos, _appos) \
+              __attribute__((__format__(__printf__, _fmtpos, _appos)))
+
   #define _TEST_OUTPUT_BUFFER_SIZE 2048
+
   extern char _test_output_buffer[_TEST_OUTPUT_BUFFER_SIZE];
-  void _test_output_append(char *);
+
+  void _test_output_printf(const char *, ...) TEST_PRINT__FORMAT(1, 2);
+  void _test_output_append(const char *);
   void _test_output_flush(void);
 
   #define rtems_test_exit(_s) \
     do { \
+      fflush(stdout); \
+      fflush(stderr); \
       _test_output_flush(); \
       exit(_s); \
     } while (0)
 
   #undef printf
-  #define printf(...) \
-    do { \
-       char _buffer[128]; \
-       sprintf( _buffer, __VA_ARGS__); \
-       _test_output_append( _buffer ); \
-    } while (0)
+  #define printf(...) _test_output_printf( __VA_ARGS__ )
 
   #undef puts
   #define puts(_string) \
     do { \
-       char _buffer[128]; \
-       sprintf( _buffer, "%s\n", _string ); \
-       _test_output_append( _buffer ); \
+       _test_output_append( _string ); \
+       _test_output_append( "\n" ); \
     } while (0)
 
   #undef putchar
@@ -132,131 +140,77 @@ extern "C" {
   /* we write to stderr when there is a pause() */
   #define FLUSH_OUTPUT() _test_output_flush()
 
-  #if defined(TEST_INIT) || defined(CONFIGURE_INIT)
+  #if defined(TEST_STATE_STRING)
+    #define TEST_BEGIN() \
+    do { \
+       _test_output_append( "\n" ); \
+       _test_output_printf(TEST_BEGIN_STRING); \
+       _test_output_append(TEST_STATE_STRING); \
+       _test_output_append( "\n" ); \
+    } while (0)
+  #else
+    #define TEST_BEGIN() \
+      do { \
+         _test_output_append( "\n" ); \
+         _test_output_printf(TEST_BEGIN_STRING); \
+         _test_output_append( "\n" ); \
+      } while (0)
+  #endif
+
+  #define TEST_END() \
+    do { \
+       _test_output_append( "\n" ); \
+       _test_output_printf(TEST_END_STRING); \
+       _test_output_append( "\n" ); \
+    } while (0)
+
+  /*
+   * Inline the tests this way because adding the code to the support directory
+   * requires all the makefile files to changed.
+   */
+  #if defined(TEST_INIT)
 
     char _test_output_buffer[_TEST_OUTPUT_BUFFER_SIZE];
     int _test_output_buffer_index = 0;
 
-    void _test_output_append(char *_buffer)
+    void _test_output_printf(const char* format, ...)
     {
-      char *p;
-
-      for ( p=_buffer ; *p ; p++ ) {
-        _test_output_buffer[_test_output_buffer_index++] = *p;
-        _test_output_buffer[_test_output_buffer_index]   = '\0';
-        #if 0
-	  if ( *p == '\n' ) {
-	    fprintf( stderr, "BUFFER -- %s", _test_output_buffer );
-	    _test_output_buffer_index = 0;
-	   _test_output_buffer[0]   = '\0';
-	  }
-        #endif
-	if ( _test_output_buffer_index >= (_TEST_OUTPUT_BUFFER_SIZE - 80) )
-	  _test_output_flush();
-      }
+      va_list args;
+      char*   in;
+      size_t  size;
+      bool    lf;
+      va_start(args, format);
+      in = _test_output_buffer + _test_output_buffer_index;
+      size = vsniprintf(in,
+                        _TEST_OUTPUT_BUFFER_SIZE - _test_output_buffer_index,
+                        format, args);
+      lf = memchr(in, '\n', size);
+      _test_output_buffer_index += size;
+      if ( lf || _test_output_buffer_index >= (_TEST_OUTPUT_BUFFER_SIZE - 80) )
+        _test_output_flush();
+      va_end(args);
     }
 
-    #include <termios.h>
-    #include <unistd.h>
+    void _test_output_append(const char *_buffer)
+    {
+      char*  in;
+      size_t size;
+      bool   lf;
+      in = _test_output_buffer + _test_output_buffer_index;
+      size = strlcpy(in, _buffer, _TEST_OUTPUT_BUFFER_SIZE - _test_output_buffer_index);
+      lf = memchr(in, '\n', size);
+      if ( lf || _test_output_buffer_index >= (_TEST_OUTPUT_BUFFER_SIZE - 80) )
+        _test_output_flush();
+    }
 
     void _test_output_flush(void)
     {
-      fprintf( stderr, "%s", _test_output_buffer );
+      printk( _test_output_buffer );
       _test_output_buffer_index = 0;
-      tcdrain( 2 );
+      _test_output_buffer[0] = '\0';
     }
 
-    #endif
-
-#elif defined(TESTS_USE_PRINTF)
-
-  #include <stdio.h>
-  #include <stdlib.h>
-
-  #define rtems_test_exit(_s) \
-    do { \
-      exit(_s); \
-    } while (0)
-
-  #define FLUSH_OUTPUT() \
-    do { \
-      fflush(stdout); \
-    } while (0)
-
-  #if defined(TEST_STATE_STRING)
-    #define TEST_BEGIN() printf(TEST_BEGIN_STRING); printf(TEST_STATE_STRING)
-  #else
-    #define TEST_BEGIN() printf(TEST_BEGIN_STRING)
   #endif
-
-  #define TEST_END() printf(TEST_END_STRING)
-
-/*
- *  USE IPRINT
- */
-#else
-
-  #include <stdio.h>
-  #include <stdlib.h>
-
-  /* do not use iprintf if strict ansi mode */
-  #if defined(_NEWLIB_VERSION) && !defined(__STRICT_ANSI__)
-    #define asprintf asiprintf
-    #define asnprintf asniprintf
-    #define dprintf diprintf
-    #define fprintf fiprintf
-    #define sprintf siprintf
-    #define snprintf sniprintf
-    #define vasprintf vasiprintf
-    #define vasnprintf vasniprintf
-    #define vdprintf vdiprintf
-    #define vfprintf vfiprintf
-    #define vprintf viprintf
-    #define vsprintf vsiprintf
-    #define vsnprintf vsniprintf
-
-    #undef printf
-    #define printf(...) \
-      do { \
-         fiprintf( stderr, __VA_ARGS__ ); \
-      } while (0)
-  #else
-    #undef printf
-    #define printf(...) \
-      do { \
-         fprintf( stderr, __VA_ARGS__ ); \
-      } while (0)
-  #endif
-
-  #undef puts
-  #define puts(_s) \
-      do { \
-         printf( "%s\n", _s ); \
-      } while (0)
-
-  #undef putchar
-  #define putchar(_c) \
-    do { \
-       printf( "%c", _c ); \
-    } while (0)
-
-  #define rtems_test_exit(_s) \
-    do { \
-      exit(_s); \
-    } while (0)
-
-  #define FLUSH_OUTPUT() \
-    do { \
-      fflush(stdout); \
-    } while (0)
-
-  #if defined(TEST_STATE_STRING)
-    #define TEST_BEGIN() fiprintf(stderr, TEST_BEGIN_STRING); fiprintf(stderr, TEST_STATE_STRING)
-  #else
-    #define TEST_BEGIN() fiprintf(stderr, TEST_BEGIN_STRING)
-  #endif
-
-  #define TEST_END()  fiprintf( stderr, TEST_END_STRING)
 
 #endif
 

@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <rtems/btimer.h>
 #include "test_support.h"
@@ -79,7 +81,7 @@ void *POSIX_Init(
   benchmark_pthread_barrier_init();
   /* destroying barrier */
   benchmark_pthread_barrier_destroy();
-  
+
   TEST_END();
 
   rtems_test_exit(0);

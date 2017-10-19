@@ -18,6 +18,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems/score/atomic.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems.h>

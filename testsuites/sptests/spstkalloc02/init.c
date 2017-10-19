@@ -24,6 +24,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <tmacros.h>
 
 const char rtems_test_name[] = "SPSTKALLOC 2";

@@ -31,6 +31,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems/cpuuse.h>
 #include <tmacros.h>
 #include "test_support.h"

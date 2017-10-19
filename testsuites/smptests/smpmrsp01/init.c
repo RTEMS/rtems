@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <sys/param.h>
 
 #include <stdio.h>

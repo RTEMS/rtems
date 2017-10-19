@@ -16,6 +16,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <errno.h>
 #include <setjmp.h>
 #include <stdio.h>
@@ -128,24 +130,6 @@ typedef struct bdbuf_task_control
 #define BDBUF_SECONDS(msec) ((msec) * 1000UL)
 
 /**
- * Print a message to output and flush it.
- *
- * @param format The format string. See printf for details.
- * @param ... The arguments for the format text.
- * @return int The number of bytes written to the output.
- */
-static int
-bdbuf_test_printf (const char *format, ...)
-{
-  int ret = 0;
-  va_list args;
-  va_start (args, format);
-  ret =  vfprintf (stdout, format, args);
-  fflush (stdout);
-  return ret;
-}
-
-/**
  * Print the status code description and return true if true.
  *
  * @param sc The RTEMS status code.
@@ -172,7 +156,7 @@ bdbuf_disk_lock (bdbuf_disk* bdd)
   sc = rtems_semaphore_obtain (bdd->lock, RTEMS_WAIT, 0);
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("disk ioctl: lock failed: ");
+    printf ("disk ioctl: lock failed: ");
     bdbuf_test_print_sc (sc, true);
     return false;
   }
@@ -189,7 +173,7 @@ bdbuf_disk_unlock (bdbuf_disk* bdd)
   sc = rtems_semaphore_release (bdd->lock);
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("disk ioctl: unlock failed: ");
+    printf ("disk ioctl: unlock failed: ");
     bdbuf_test_print_sc (sc, true);
     return false;
   }
@@ -210,12 +194,12 @@ bdbuf_wait (const char* who, unsigned long timeout)
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("%s: wait: receive failed: ", who);
+    printf ("%s: wait: receive failed: ", who);
     bdbuf_test_print_sc (sc, true);
   }
   else if ((out & RTEMS_EVENT_0) == 0)
   {
-    bdbuf_test_printf ("%s: wait: received wrong event: %08x", who, out);
+    printf ("%s: wait: received wrong event: %08x", who, out);
   }
   return sc;
 }
@@ -226,7 +210,7 @@ bdbuf_wait (const char* who, unsigned long timeout)
 static bool
 bdbuf_send_wait_event (const char* task, const char* msg, rtems_id id)
 {
-  bdbuf_test_printf ("%s: %s: %08x: ", task, msg, id);
+  printf ("%s: %s: %08x: ", task, msg, id);
   return  bdbuf_test_print_sc (rtems_event_send (id, RTEMS_EVENT_0), true);
 }
 
@@ -244,12 +228,12 @@ bdbuf_watch (unsigned long timeout)
                             &out);
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("watch: receive failed: ");
+    printf ("watch: receive failed: ");
     bdbuf_test_print_sc (sc, true);
   }
   else if ((out & RTEMS_EVENT_1) == 0)
   {
-    bdbuf_test_printf ("watch: received wrong event: %08x", out);
+    printf ("watch: received wrong event: %08x", out);
   }
   return sc;
 }
@@ -260,7 +244,7 @@ bdbuf_watch (unsigned long timeout)
 static bool
 bdbuf_send_watch_event (const char* task, const char* msg, rtems_id id)
 {
-  bdbuf_test_printf ("%s: %s: %08x: ", task, msg, id);
+  printf ("%s: %s: %08x: ", task, msg, id);
   return  bdbuf_test_print_sc (rtems_event_send (id, RTEMS_EVENT_1), true);
 }
 
@@ -306,7 +290,7 @@ bdbuf_disk_driver_watch_wait (bdbuf_task_control* tc, unsigned long msecs)
   rtems_status_code sc = bdbuf_watch (msecs);
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("%s: driver watch: driver wait: ", tc->name);
+    printf ("%s: driver watch: driver wait: ", tc->name);
     passed = bdbuf_test_print_sc (sc, true);
   }
   bdbuf_clear_disk_driver_watch (tc);
@@ -337,7 +321,7 @@ bdbuf_sleep (unsigned long msecs)
   sc = rtems_task_wake_after (RTEMS_MICROSECONDS_TO_TICKS (msecs * 1000));
   if (sc != RTEMS_SUCCESSFUL)
   {
-    bdbuf_test_printf ("sleep wake after failed: ");
+    printf ("sleep wake after failed: ");
     bdbuf_test_print_sc (sc, true);
     return false;
   }
@@ -413,7 +397,7 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
 
     case BDBUF_DISK_WAIT:
       if (bdd->waiting)
-        bdbuf_test_printf ("disk ioctl: bad waiter: %s:%08x\n",
+        printf ("disk ioctl: bad waiter: %s:%08x\n",
                            bdd->waiting_name, bdd->waiting);
       bdd->waiting_name = "bdd";
 
@@ -431,22 +415,22 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
       break;
 
     case BDBUF_DISK_SLEEP:
-      bdbuf_test_printf ("disk ioctl: sleeping: %d msecs\n",
+      printf ("disk ioctl: sleeping: %d msecs\n",
                          bdd->driver_sleep);
       result = bdbuf_sleep (bdd->driver_sleep);
       break;
 
     case BDBUF_DISK_BLOCKS_INORDER:
-      bdbuf_test_printf ("disk ioctl: multi-block order check: count = %d\n",
+      printf ("disk ioctl: multi-block order check: count = %d\n",
                          req->bufnum);
       for (b = 0; b < (req->bufnum - 1); b++)
         if (req->bufs[b].block >= req->bufs[b + 1].block)
-          bdbuf_test_printf ("disk ioctl: out of order: index:%d (%d >= %d\n",
+          printf ("disk ioctl: out of order: index:%d (%d >= %d\n",
                              b, req->bufs[b].block, req->bufs[b + 1].block);
       break;
 
     default:
-      bdbuf_test_printf ("disk ioctl: invalid action: %d\n",
+      printf ("disk ioctl: invalid action: %d\n",
                          bdd->driver_action);
       result = false;
       break;
@@ -563,7 +547,7 @@ bdbuf_disk_initialize (rtems_device_major_number major,
 {
   rtems_status_code sc;
 
-  bdbuf_test_printf ("disk io init: ");
+  printf ("disk io init: ");
   sc = rtems_disk_io_initialize ();
   if (!bdbuf_test_print_sc (sc, true))
     return sc;
@@ -579,8 +563,8 @@ bdbuf_disk_initialize (rtems_device_major_number major,
 
     bdd->name = strdup (name);
 
-    bdbuf_test_printf ("disk init: %s\n", bdd->name);
-    bdbuf_test_printf ("disk lock: ");
+    printf ("disk init: %s\n", bdd->name);
+    printf ("disk lock: ");
 
     sc = rtems_semaphore_create (rtems_build_name ('B', 'D', 'D', 'K'), 1,
                                  RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |
@@ -596,7 +580,7 @@ bdbuf_disk_initialize (rtems_device_major_number major,
                                 bdbuf_disk_ioctl, bdd, name);
     if (sc != RTEMS_SUCCESSFUL)
     {
-      bdbuf_test_printf ("disk init: create phys failed: ");
+      printf ("disk init: create phys failed: ");
       bdbuf_test_print_sc (sc, true);
       return sc;
     }
@@ -631,7 +615,7 @@ bdbuf_tests_setup_disk (rtems_device_major_number *major,
   /*
    * Register the disk driver.
    */
-  bdbuf_test_printf ("register disk driver\n");
+  printf ("register disk driver\n");
 
   sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
                                  &bdbuf_disk_io_ops,
@@ -653,7 +637,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
 {
   rtems_status_code sc;
 
-  bdbuf_test_printf ("creating task: %s: priority: %d: ",
+  printf ("creating task: %s: priority: %d: ",
                      tc->name, priority);
 
   sc = rtems_task_create (rtems_build_name (tc->name[0], tc->name[1],
@@ -666,7 +650,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
   if (!bdbuf_test_print_sc (sc, true))
     return false;
 
-  bdbuf_test_printf ("starting task: %s: ", tc->name);
+  printf ("starting task: %s: ", tc->name);
 
   sc = rtems_task_start (tc->task, entry_point, (rtems_task_argument) tc);
 
@@ -694,7 +678,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 2) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_get[0]: ", tc->name);
+    printf ("%s: rtems_bdbuf_get[0]: ", tc->name);
     sc = rtems_bdbuf_get (tc->dd, 0, &bd);
     if (!bdbuf_test_print_sc (sc, true))
     {
@@ -702,7 +686,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
       break;
     }
 
-    bdbuf_test_printf ("%s: rtems_bdbuf_release[0]: ", tc->name);
+    printf ("%s: rtems_bdbuf_release[0]: ", tc->name);
     sc = rtems_bdbuf_release (bd);
     if (!bdbuf_test_print_sc (sc, true))
     {
@@ -742,7 +726,7 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
     sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -767,18 +751,18 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
       sc = bdbuf_wait (tc->name, BDBUF_SECONDS (5));
       if (sc != RTEMS_SUCCESSFUL)
       {
-        bdbuf_test_printf ("%s: wait failed: ", tc->name);
+        printf ("%s: wait failed: ", tc->name);
         bdbuf_test_print_sc (sc, true);
         passed = false;
         break;
       }
       else
       {
-        bdbuf_test_printf ("%s: rtems_bdbuf_release[%d]: unblocks task 1\n",
+        printf ("%s: rtems_bdbuf_release[%d]: unblocks task 1\n",
                            tc->name, i);
         bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
         sc = rtems_bdbuf_release (bd);
-        bdbuf_test_printf ("%s: rtems_bdbuf_release[%d]: ", tc->name, i);
+        printf ("%s: rtems_bdbuf_release[%d]: ", tc->name, i);
         if (!bdbuf_test_print_sc (sc, true))
         {
           passed = false;
@@ -815,11 +799,11 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
   /*
    * Read the buffer and then release it.
    */
-  bdbuf_test_printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
+  printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
   sc = rtems_bdbuf_read (tc->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[5]: ", tc->name);
+    printf ("%s: rtems_bdbuf_release_modified[5]: ", tc->name);
     sc = rtems_bdbuf_release_modified (bd);
     passed = bdbuf_test_print_sc (sc, true);
   }
@@ -828,11 +812,11 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
    * Read the buffer again and then just release. The buffer should
    * be maintained as modified.
    */
-  bdbuf_test_printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
+  printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
   sc = rtems_bdbuf_read (tc->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_release[5]: ", tc->name);
+    printf ("%s: rtems_bdbuf_release[5]: ", tc->name);
     sc = rtems_bdbuf_release (bd);
     passed = bdbuf_test_print_sc (sc, true);
   }
@@ -886,7 +870,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
 
   for (i = 0; (i < num) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
     sc = rtems_bdbuf_read (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -909,21 +893,21 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
      * Release half the buffers, wait 500msecs then release the
      * remainder. This tests the swap out timer on each buffer.
      */
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[0]: unblocks task 1\n",
+    printf ("%s: rtems_bdbuf_release_modified[0]: unblocks task 1\n",
                        tc->name);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
     sc = rtems_bdbuf_release_modified (bd);
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[0]: ", tc->name);
+    printf ("%s: rtems_bdbuf_release_modified[0]: ", tc->name);
     passed = bdbuf_test_print_sc (sc, true);
     if (passed)
     {
       for (i = 1; (i < (num / 2)) && passed; i++)
       {
-        bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: " \
+        printf ("%s: rtems_bdbuf_release_modified[%d]: " \
                            "unblocks task 1\n", tc->name, i);
         bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
         sc = rtems_bdbuf_release_modified (bd);
-        bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+        printf ("%s: rtems_bdbuf_release_modified[%d]: ",
                            tc->name, i);
         passed = bdbuf_test_print_sc (sc, true);
         if (!passed)
@@ -942,7 +926,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
 
           for (i = 0; (i < (num / 2)) && passed; i++)
           {
-            bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+            printf ("%s: rtems_bdbuf_release_modified[%d]: ",
                                tc->name, i + (num / 2));
             bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
             passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd),
@@ -958,7 +942,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
             if (!rtems_chain_is_empty (&buffers))
             {
               passed = false;
-              bdbuf_test_printf ("%s: buffer chain not empty\n", tc->name);
+              printf ("%s: buffer chain not empty\n", tc->name);
             }
           }
         }
@@ -1004,7 +988,7 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
     sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -1014,7 +998,7 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 4) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+    printf ("%s: rtems_bdbuf_release_modified[%d]: ",
                        tc->name, i);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
     passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd),
@@ -1023,7 +1007,7 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
 
   if (passed)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_sync[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_sync[%d]: ", tc->name, i);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
 
     passed = bdbuf_test_print_sc (rtems_bdbuf_sync (bd), true);
@@ -1061,7 +1045,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
     sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -1071,7 +1055,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+    printf ("%s: rtems_bdbuf_release_modified[%d]: ",
                        tc->name, i);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
     passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd),
@@ -1080,7 +1064,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
 
   if (passed)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
+    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
                        tc->name, i,
                        tc->major,
                        tc->minor);
@@ -1121,7 +1105,7 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
 
   for (i = 0; (i < 5) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
     sc = rtems_bdbuf_get (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -1136,19 +1120,19 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   pnode = node->previous;
   rtems_chain_extract (node);
   node = pnode;
-  bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[4]: ", tc->name);
+  printf ("%s: rtems_bdbuf_release_modified[4]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);
 
   bd = (rtems_bdbuf_buffer*) node;
   pnode = node->previous;
   rtems_chain_extract (node);
   node = pnode;
-  bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[3]: ", tc->name);
+  printf ("%s: rtems_bdbuf_release_modified[3]: ", tc->name);
   passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd), true);
 
   for (i = 0; (i < 3) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+    printf ("%s: rtems_bdbuf_release_modified[%d]: ",
                        tc->name, i);
     bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
     passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd),
@@ -1162,12 +1146,12 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
      */
     bdbuf_set_disk_driver_action (tc, BDBUF_DISK_BLOCKS_INORDER);
 
-    bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: checking order\n",
+    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: checking order\n",
                        tc->name, i,
                        tc->major,
                        tc->minor);
     sc = rtems_bdbuf_syncdev (tc->dd);
-    bdbuf_test_printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
+    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
                        tc->name, i,
                        tc->major,
                        tc->minor);
@@ -1230,14 +1214,14 @@ bdbuf_tests_task_0 (rtems_task_argument arg)
         /*
          * Invalid test for this task. An error.
          */
-        bdbuf_test_printf ("%s: invalid test: %d\n", tc->name, tc->test);
+        printf ("%s: invalid test: %d\n", tc->name, tc->test);
         tc->passed = false;
         tc->test = 0;
         break;
     }
   }
 
-  bdbuf_test_printf ("%s: delete task\n", tc->name);
+  printf ("%s: delete task\n", tc->name);
   rtems_task_delete (RTEMS_SELF);
 }
 
@@ -1264,16 +1248,16 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
 
   for (i = lower; (i < upper) && passed; i++)
   {
-    bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: blocking ...\n", tc->name, i);
+    printf ("%s: rtems_bdbuf_get[%d]: blocking ...\n", tc->name, i);
     sc = rtems_bdbuf_get (tc->dd, i, &bd);
-    bdbuf_test_printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
     if (!bdbuf_test_print_sc (sc, true))
     {
       passed = false;
       break;
     }
 
-    bdbuf_test_printf ("%s: rtems_bdbuf_release[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_release[%d]: ", tc->name, i);
     sc = rtems_bdbuf_release (bd);
     if (!bdbuf_test_print_sc (sc, true))
     {
@@ -1324,14 +1308,14 @@ bdbuf_tests_task_1 (rtems_task_argument arg)
         /*
          * Invalid test for this task. An error.
          */
-        bdbuf_test_printf ("%s: invalid test: %d\n", tc->name, tc->test);
+        printf ("%s: invalid test: %d\n", tc->name, tc->test);
         tc->passed = false;
         tc->test = 0;
         break;
     }
   }
 
-  bdbuf_test_printf ("%s: delete task\n", tc->name);
+  printf ("%s: delete task\n", tc->name);
   rtems_task_delete (RTEMS_SELF);
 }
 
@@ -1372,14 +1356,14 @@ bdbuf_tests_task_2 (rtems_task_argument arg)
         /*
          * Invalid test for this task. An error.
          */
-        bdbuf_test_printf ("%s: invalid test: %d\n", tc->name, tc->test);
+        printf ("%s: invalid test: %d\n", tc->name, tc->test);
         tc->passed = false;
         tc->test = 0;
         break;
     }
   }
 
-  bdbuf_test_printf ("%s: delete task\n", tc->name);
+  printf ("%s: delete task\n", tc->name);
   rtems_task_delete (RTEMS_SELF);
 }
 
@@ -1426,7 +1410,7 @@ bdbuf_tests_finished (bdbuf_task_control* tasks)
   }
 
   if (!finished)
-    bdbuf_test_printf ("master: test timed out\n");
+    printf ("master: test timed out\n");
   else
   {
     int t;
@@ -1778,7 +1762,7 @@ bdbuf_tester (void)
   /*
    * Change priority to a lower one.
    */
-  bdbuf_test_printf ("lower priority to %d: ", BDBUF_TESTS_PRI_HIGH + 1);
+  printf ("lower priority to %d: ", BDBUF_TESTS_PRI_HIGH + 1);
   bdbuf_test_print_sc (rtems_task_set_priority (RTEMS_SELF,
                                                 BDBUF_TESTS_PRI_HIGH + 1,
                                                 &old_priority),
@@ -1789,7 +1773,7 @@ bdbuf_tester (void)
    */
   if (!bdbuf_tests_setup_disk (&major, &dd))
   {
-    bdbuf_test_printf ("disk set up failed\n");
+    printf ("disk set up failed\n");
     return;
   }
 
@@ -1827,9 +1811,9 @@ bdbuf_tester (void)
    */
   for (t = 0; (t < BDBUF_TEST_NUM) && passed; t++)
   {
-    bdbuf_test_printf ("test %d: %s\n", t + 1, bdbuf_tests[t].label);
+    printf ("test %d: %s\n", t + 1, bdbuf_tests[t].label);
     passed = bdbuf_tests[t].test (tasks);
-    bdbuf_test_printf ("test %d: %s\n", t + 1, passed ? "passed" : "failed");
+    printf ("test %d: %s\n", t + 1, passed ? "passed" : "failed");
   }
 }
 

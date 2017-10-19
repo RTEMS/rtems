@@ -16,6 +16,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define TEST_INIT
+
 #define CONFIGURE_INIT
 #include "system.h"
 

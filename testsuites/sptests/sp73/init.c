@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <bsp.h>
 #include <inttypes.h>
 #include "tmacros.h"

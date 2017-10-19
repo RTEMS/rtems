@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems/profiling.h>
 #include <rtems/bspIo.h>
 #include <rtems.h>

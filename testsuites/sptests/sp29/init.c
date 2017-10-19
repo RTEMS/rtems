@@ -8,6 +8,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <tmacros.h>
 #include <bsp.h>
 

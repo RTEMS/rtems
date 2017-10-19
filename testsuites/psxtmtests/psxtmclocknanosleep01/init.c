@@ -13,6 +13,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <rtems/btimer.h>
 #include "test_support.h"
@@ -34,9 +36,9 @@ void *POSIX_Init(
 
   TEST_BEGIN();
 
-  benchmark_timer_initialize();    
+  benchmark_timer_initialize();
     clock_nanosleep( CLOCK_REALTIME, 0, &sleepTime, (struct  timespec *) NULL );
-  end_time = benchmark_timer_read();  
+  end_time = benchmark_timer_read();
 
   put_time( "nanosleep: yield", end_time, 1, 0, 0 );
 

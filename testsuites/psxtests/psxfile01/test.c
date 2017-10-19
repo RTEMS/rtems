@@ -118,7 +118,6 @@ void stat_a_file(
   rtems_test_assert( file );
 
   printf( "stat( %s ) returned ", file );
-  fflush( stdout );
 
   status = stat( file, &statbuf );
 
@@ -335,7 +334,7 @@ int main(
   status = close( fd );
   rtems_test_assert( status == 0 );
 
-  /* 
+  /*
    * Open a file in read-only mode and try to truncate
    */
 
@@ -362,7 +361,7 @@ int main(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  /* 
+  /*
    * Read from filedes opened for write
    */
 
@@ -387,7 +386,7 @@ int main(
   puts( "open /tmp/bha in read only mode -- OK" );
   fd = open( "/tmp/bha", O_CREAT | O_RDONLY, S_IRWXU|S_IRWXG|S_IRWXO );
   rtems_test_assert( fd != -1 );
-  
+
   puts( "attempt to read from /tmp/bha - expect EBADF" );
   status = write( fd, buffer, 10 );
   rtems_test_assert( status == -1 );
@@ -398,7 +397,7 @@ int main(
   status |= unlink( "/tmp/bha" );
   rtems_test_assert( status == 0 );
 
-  /* 
+  /*
    * Read/write from an unopened filedes
    */
   puts( "attempt to read from an unopened filedes - expect EBADF" );

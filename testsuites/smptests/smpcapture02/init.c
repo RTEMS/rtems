@@ -21,6 +21,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems.h>
 #include <bsp/irq.h>
 #include <rtems/captureimpl.h>

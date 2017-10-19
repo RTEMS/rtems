@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <pthread.h>
 #include <sched.h>
@@ -55,7 +57,7 @@ void benchmark_pthread_setschedparam(void)
 
   status = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( status == 0 );
-  
+
   /* Arbitrary priority, no other threads to preempt us so it doesn't matter. */
   param.sched_priority = 5;
   benchmark_timer_initialize();
@@ -69,7 +71,7 @@ void benchmark_pthread_setschedparam(void)
      1,       /* Only executed once */
      0,
      0
-  ); 
+  );
 }
 
 void *POSIX_Init(

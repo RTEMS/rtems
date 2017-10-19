@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <errno.h>
 #include <fcntl.h>
 #include <semaphore.h>

@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <time.h>
 #include <rtems.h>
 #include <rtems/test.h>

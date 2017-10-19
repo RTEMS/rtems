@@ -24,6 +24,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #define TESTS_USE_PRINTK
 #include "tmacros.h"
 #include <stdarg.h>

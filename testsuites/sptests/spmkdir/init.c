@@ -23,6 +23,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <sys/stat.h>
 #include <errno.h>
 #include <fcntl.h>

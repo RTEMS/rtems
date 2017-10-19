@@ -14,6 +14,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include "test_support.h"
 
 #define TESTS_USE_PRINTK

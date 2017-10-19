@@ -33,14 +33,14 @@ struct bdbuf_test_descr {
     { bdbuf_test1_3_main },
     { bdbuf_test1_4_main },
     { bdbuf_test1_5_main },
-    
+
     { bdbuf_test2_1_main },
     { bdbuf_test2_2_main },
-    
+
     { bdbuf_test3_1_main },
     { bdbuf_test3_2_main },
     { bdbuf_test3_3_main },
-    
+
     { bdbuf_test4_1_main },
     { bdbuf_test4_2_main },
     { bdbuf_test4_3_main },
@@ -88,7 +88,7 @@ bdbuf_test_start_aux_task(rtems_name name,
         printf("Failed to create task\n");
         return rc;
     }
-    
+
     rc = rtems_task_start(task_id, entry_point, arg);
     if (rc != RTEMS_SUCCESSFUL)
     {
@@ -126,7 +126,7 @@ run_bdbuf_tests()
 
     if (sc != RTEMS_SUCCESSFUL)
     {
-        printk("Failed to create message queue for test task: %u\n", sc);
+        printf("Failed to create message queue for test task: %u\n", sc);
         return;
     }
 
@@ -134,14 +134,14 @@ run_bdbuf_tests()
     sc = rtems_io_register_driver(0, &testdisk, &major);
     if (sc != RTEMS_SUCCESSFUL)
     {
-        printk("Failed to register TEST DEVICE: %d\n", sc);
+        printf("Failed to register TEST DEVICE: %d\n", sc);
         return;
     }
 
     test_dev = -1;
     while ((disk = rtems_disk_next(dev)) != NULL)
     {
-        printk(
+        printf(
           "DEV: %s [%" PRIdrtems_blkdev_bnum "]\n",
          disk->name,
           disk->size
@@ -185,7 +185,7 @@ run_bdbuf_tests()
                                     &g_test_ctx.test_sync_main[i]);
         if (sc != RTEMS_SUCCESSFUL)
         {
-            printk("Failed to create sync sem for test task: %u\n", sc);
+            printf("Failed to create sync sem for test task: %u\n", sc);
             return;
         }
     }
@@ -197,17 +197,17 @@ run_bdbuf_tests()
                                     &g_test_ctx.test_sync[i]);
         if (sc != RTEMS_SUCCESSFUL)
         {
-            printk("Failed to create sync sem for test task #%d: %u\n", i + 1, sc);
+            printf("Failed to create sync sem for test task #%d: %u\n", i + 1, sc);
             return;
         }
     }
-    
+
     sc = rtems_semaphore_create(rtems_build_name('T', 'S', 'M', 'E'),
                                 0, TEST_SEM_ATTRIBS, 0,
                                 &g_test_ctx.test_end_main);
     if (sc != RTEMS_SUCCESSFUL)
     {
-        printk("Failed to create end sync sem for test task: %u\n", sc);
+        printf("Failed to create end sync sem for test task: %u\n", sc);
         return;
     }
 
@@ -249,7 +249,7 @@ bdbuf_test_start_thread(unsigned int idx, rtems_task_entry func)
         sc = rtems_task_delete(g_test_ctx.test_task[idx]);
         if (sc != RTEMS_SUCCESSFUL)
         {
-            printk("Failed to delete test thread %u in test %s\n",
+            printf("Failed to delete test thread %u in test %s\n",
                    idx + 1, g_test_ctx.test_name);
             return sc;
         }
@@ -275,11 +275,10 @@ bdbuf_test_end()
                                         RTEMS_WAIT, RTEMS_NO_TIMEOUT);
             if (sc != RTEMS_SUCCESSFUL)
             {
-                printk("Failed to get a thread stopped\n");
+                printf("Failed to get a thread stopped\n");
             }
             g_test_ctx.test_task[i] = OBJECTS_ID_NONE;
         }
     }
     return RTEMS_SUCCESSFUL;
 }
-

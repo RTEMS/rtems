@@ -86,7 +86,6 @@
     (void) ctime_r( &_tv.tv_sec, _time_buffer ); \
     _time_buffer[ strlen( _time_buffer ) - 1 ] = 0; \
     printf( "%s%s%s\n", s1, _time_buffer, s2 ); \
-    fflush(stdout); \
   } while ( 0 )
 
 #define empty_line() puts( "" )

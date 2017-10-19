@@ -23,12 +23,14 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define TESTS_USE_PRINTK
+#define TESTS_USE_PRINTF
 #include "tmacros.h"
 
 #include <rtems.h>
@@ -88,21 +90,21 @@ static void task_low(rtems_task_argument arg)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  printk("L: try access: 0\n");
+  printf("L: try access: 0\n");
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("L: access: 0\n");
+  printf("L: access: 0\n");
 
   rtems_test_assert(bd->group->bds_per_group == 2);
 
-  printk("L: release: 0\n");
+  printf("L: release: 0\n");
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("L: release done: 0\n");
+  printf("L: release done: 0\n");
 
   TEST_END();
 
@@ -114,21 +116,21 @@ static void task_mid(rtems_task_argument arg)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
 
-  printk("M: try access: 0\n");
+  printf("M: try access: 0\n");
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("M: access: 0\n");
+  printf("M: access: 0\n");
 
   rtems_test_assert(bd->group->bds_per_group == 1);
 
-  printk("M: release: 0\n");
+  printf("M: release: 0\n");
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("M: release done: 0\n");
+  printf("M: release done: 0\n");
 
   rtems_task_delete(RTEMS_SELF);
 }
@@ -140,21 +142,21 @@ static void task_high(rtems_task_argument arg)
 
   change_block_size();
 
-  printk("H: try access: 0\n");
+  printf("H: try access: 0\n");
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("H: access: 0\n");
+  printf("H: access: 0\n");
 
   rtems_test_assert(bd->group->bds_per_group == 1);
 
-  printk("H: release: 0\n");
+  printf("H: release: 0\n");
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("H: release done: 0\n");
+  printf("H: release done: 0\n");
 
   rtems_task_delete(RTEMS_SELF);
 }
@@ -228,12 +230,12 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("I: try access: 0\n");
+  printf("I: try access: 0\n");
 
   sc = rtems_bdbuf_get(dd, 0, &bd);
   ASSERT_SC(sc);
 
-  printk("I: access: 0\n");
+  printf("I: access: 0\n");
 
   sc = rtems_task_set_priority(RTEMS_SELF, PRIORITY_IDLE, &cur_prio);
   ASSERT_SC(sc);
@@ -247,12 +249,12 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_task_set_priority(RTEMS_SELF, PRIORITY_INIT, &cur_prio);
   ASSERT_SC(sc);
 
-  printk("I: release: 0\n");
+  printf("I: release: 0\n");
 
   sc = rtems_bdbuf_release(bd);
   ASSERT_SC(sc);
 
-  printk("I: release done: 0\n");
+  printf("I: release done: 0\n");
 
   rtems_task_delete(RTEMS_SELF);
 }

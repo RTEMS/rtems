@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <coverhd.h>
 #include <pthread.h>
 #include <sched.h>

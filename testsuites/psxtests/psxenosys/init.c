@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <sys/types.h>
 #include <sys/wait.h>
 #if HAVE_SYS_MMAN_H

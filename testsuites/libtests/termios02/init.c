@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include "tmacros.h"
 #include <termios.h>
 #include <errno.h>

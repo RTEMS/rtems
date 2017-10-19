@@ -16,6 +16,8 @@
 #define SIGNAL_ONE               SIGUSR1
 #define SIGNAL_TWO               SIGUSR2
 
+#define TEST_INIT
+
 #include <pmacros.h>
 #include <signal.h>
 #include <errno.h>

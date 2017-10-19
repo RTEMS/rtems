@@ -23,6 +23,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #define CONFIGURE_INIT
 #include "system.h"
 

@@ -10,6 +10,9 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define TEST_INIT
+
 #include <errno.h>
 #include <timesys.h>
 #include <rtems/btimer.h>

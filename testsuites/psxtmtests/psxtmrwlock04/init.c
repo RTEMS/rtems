@@ -7,6 +7,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#define TEST_INIT
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

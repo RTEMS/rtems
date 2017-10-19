@@ -13,6 +13,8 @@
 
 #define CONFIGURE_INIT
 
+#define TEST_INIT
+
 #include "system.h"
 #include "tmacros.h"
 #include <stdio.h>

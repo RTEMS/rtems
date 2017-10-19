@@ -25,6 +25,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <rtems.h>
 #include <rtems/captureimpl.h>
 

@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include "tmacros.h"
 #include <fcntl.h>
 #include <rtems/dosfs.h>

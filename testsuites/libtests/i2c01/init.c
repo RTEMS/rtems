@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <dev/i2c/i2c.h>
 #include <dev/i2c/eeprom.h>
 #include <dev/i2c/gpio-nxp-pca9535.h>

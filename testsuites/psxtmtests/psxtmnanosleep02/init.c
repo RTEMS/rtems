@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <rtems/btimer.h>
 #include "test_support.h"
@@ -81,7 +83,7 @@ void *POSIX_Init(
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( !status );
   }
-  
+
   status = pthread_create( &threadId, NULL, Low, NULL );
   rtems_test_assert( !status );
 

@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include "tmacros.h"
 
 int main(int argc, char **argv);

@@ -12,6 +12,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <pthread.h>
 #include <sched.h>
@@ -38,7 +40,7 @@ void benchmark_pthread_setschedparam(void)
 
   /* make test_thread equal to POSIX_Init() */
   pthread_getschedparam(pthread_self(), &policy, &param);
-  
+
   pthread_setschedparam(thread_ID, policy, &param);
   /* At this point, we've switched to test_thread */
 

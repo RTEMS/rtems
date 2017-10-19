@@ -16,6 +16,8 @@
   #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <inttypes.h>
 #include <setjmp.h>
 #include <stdio.h>

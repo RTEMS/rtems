@@ -6,6 +6,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#define TEST_INIT
+
 #include <rtems.h>
 
 #include <stdio.h>

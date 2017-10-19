@@ -11,6 +11,8 @@
 #include "config.h"
 #endif
 
+#define TEST_INIT
+
 #include <timesys.h>
 #include <pthread.h>
 #include <rtems/btimer.h>
@@ -49,7 +51,7 @@ void benchmark_signal(void)
 void *POSIX_Init(
   void *argument
 )
-{  
+{
   TEST_BEGIN();
 
   pthread_cond_init(&CondID, NULL);
