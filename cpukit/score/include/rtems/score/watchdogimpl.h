@@ -284,14 +284,40 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
   }
 }
 
+#define WATCHDOG_NANOSECONDS_PER_SECOND 1000000000
+
 /**
- * @brief The bits necessary to store 1000000000 nanoseconds.
+ * @brief The bits necessary to store 1000000000
+ * (= WATCHDOG_NANOSECONDS_PER_SECOND) nanoseconds.
  *
  * The expiration time is an unsigned 64-bit integer.  To store absolute
  * timeouts we use 30 bits (2**30 == 1073741824) for the nanoseconds and 34
  * bits for the seconds since UNIX Epoch.  This leads to a year 2514 problem.
  */
 #define WATCHDOG_BITS_FOR_1E9_NANOSECONDS 30
+
+/**
+ * @brief The maximum number of seconds representable in the realtime watchdog
+ * format.
+ *
+ * We have 2**34 bits for the seconds part.
+ */
+#define WATCHDOG_REALTIME_MAX_SECONDS 0x3ffffffff
+
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
+  const struct timespec *ts
+)
+{
+  return ts != NULL
+    && (unsigned long) ts->tv_nsec < WATCHDOG_NANOSECONDS_PER_SECOND;
+}
+
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
+  const struct timespec *ts
+)
+{
+  return ts->tv_sec > WATCHDOG_REALTIME_MAX_SECONDS;
+}
 
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_seconds(
   uint32_t seconds
@@ -308,16 +334,13 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_timespec(
   const struct timespec *ts
 )
 {
-  /*
-   * The seconds are in time_t which is a signed integer.  Thus this cast is
-   * subject to the year 2038 problem in case time_t is a 32-bit integer.
-   */
-  uint64_t ticks = (uint64_t) ts->tv_sec;
+  uint64_t ticks;
 
-  _Assert( ticks < 0x400000000 );
-  _Assert( ts->tv_nsec >= 0 );
-  _Assert( ts->tv_nsec < 1000000000 );
+  _Assert( _Watchdog_Is_valid_timespec( ts ) );
+  _Assert( ts->tv_sec >= 0 );
+  _Assert( !_Watchdog_Is_far_future_realtime_timespec( ts ) );
 
+  ticks = (uint64_t) ts->tv_sec;
   ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
   ticks |= (uint32_t) ts->tv_nsec;
 
