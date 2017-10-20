@@ -326,6 +326,22 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_monotonic_timespec(
   return ts->tv_sec >= _Watchdog_Monotonic_max_seconds;
 }
 
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Monotonic_from_timespec(
+  const struct timespec *ts
+)
+{
+  uint64_t ticks;
+
+  _Assert( _Watchdog_Is_valid_timespec( ts ) );
+  _Assert( ts->tv_sec >= 0 );
+  _Assert( !_Watchdog_Is_far_future_monotonic_timespec( ts ) );
+
+  ticks = (uint64_t) ts->tv_sec * _Watchdog_Ticks_per_second;
+  ticks += (unsigned long) ts->tv_nsec / _Watchdog_Nanoseconds_per_tick;
+
+  return ticks;
+}
+
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
   const struct timespec *ts
 )
