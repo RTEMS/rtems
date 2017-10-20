@@ -2287,6 +2287,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
             RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
   #endif
 
+  #define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
+
   /** The configures the number of clock ticks per timeslice. */
   #ifndef CONFIGURE_TICKS_PER_TIMESLICE
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
@@ -3101,6 +3103,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   const size_t _Thread_Control_add_on_count =
     RTEMS_ARRAY_SIZE( _Thread_Control_add_ons );
+
+  const uint32_t _Watchdog_Ticks_per_second = _CONFIGURE_TICKS_PER_SECOND;
 
   /**
    * This is the Classic API Configuration Table.

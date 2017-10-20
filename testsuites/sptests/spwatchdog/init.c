@@ -57,6 +57,11 @@ static void test_watchdog_static_init( void )
   rtems_test_assert( memcmp( &a, &b, sizeof( a ) ) == 0 );
 }
 
+static void test_watchdog_config( void )
+{
+  rtems_test_assert( _Watchdog_Ticks_per_second == 100 );
+}
+
 static bool test_watchdog_is_inactive( test_watchdog *watchdog )
 {
   return _Watchdog_Get_state( &watchdog->Base ) == WATCHDOG_INACTIVE;
@@ -227,6 +232,7 @@ rtems_task Init(
 
   test_watchdog_operations();
   test_watchdog_static_init();
+  test_watchdog_config();
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
 
