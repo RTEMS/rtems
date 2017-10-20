@@ -72,6 +72,7 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
     defined(__or1k__)  || defined(__or1knd__) || \
     defined(__sparc__) || \
     defined(__ppc__) || defined(__PPC__) || \
+    defined(__riscv) || \
     defined(__sh__) || \
     defined(__BFIN__) || \
     defined(__m32c__) || \
