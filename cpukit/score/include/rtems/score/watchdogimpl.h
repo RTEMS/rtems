@@ -425,6 +425,31 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   return expire;
 }
 
+RTEMS_INLINE_ROUTINE bool _Watchdog_Per_CPU_lazy_insert_monotonic(
+  Watchdog_Control *the_watchdog,
+  Per_CPU_Control  *cpu,
+  uint64_t          expire
+)
+{
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
+  bool              insert;
+
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+
+  _Watchdog_Set_CPU( the_watchdog, cpu );
+
+  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
+  insert = ( expire > cpu->Watchdog.ticks );
+
+  if ( insert ) {
+    _Watchdog_Insert(header, the_watchdog, expire);
+  }
+
+  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
+  return insert;
+}
+
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_realtime(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
