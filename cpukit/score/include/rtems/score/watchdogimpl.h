@@ -312,6 +312,13 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
     && (unsigned long) ts->tv_nsec < WATCHDOG_NANOSECONDS_PER_SECOND;
 }
 
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
+  const struct timespec *ts
+)
+{
+  return _Watchdog_Is_valid_timespec( ts ) && ts->tv_sec >= 0;
+}
+
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
   const struct timespec *ts
 )
