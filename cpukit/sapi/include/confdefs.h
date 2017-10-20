@@ -3108,6 +3108,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   const size_t _Thread_Control_add_on_count =
     RTEMS_ARRAY_SIZE( _Thread_Control_add_ons );
 
+  const uint32_t _Watchdog_Nanoseconds_per_tick =
+    1000 * CONFIGURE_MICROSECONDS_PER_TICK;
+
   const uint32_t _Watchdog_Ticks_per_second = _CONFIGURE_TICKS_PER_SECOND;
 
   const uint64_t _Watchdog_Monotonic_max_seconds =
@@ -3167,7 +3170,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     _CONFIGURE_POSIX_KEYS,                     /* POSIX keys are always */
     CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS,  /*   enabled */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
-    1000 * CONFIGURE_MICROSECONDS_PER_TICK,   /* nanoseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */

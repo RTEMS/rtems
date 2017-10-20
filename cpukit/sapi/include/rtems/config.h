@@ -43,6 +43,8 @@ extern "C" {
 #define rtems_resource_maximum_per_allocation(resource) \
   _Objects_Maximum_per_allocation(resource)
 
+#include <rtems/score/watchdog.h>
+
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
  *  optional APIs like POSIX safely.
@@ -163,14 +165,6 @@ typedef struct {
    * between clock ticks.  This is the basis for RTEMS timing.
    */
   uint32_t                       microseconds_per_tick;
-
-  /** 
-   * This field specifies the number of nanoseconds which elapse
-   * between clock ticks.  This value is derived from the
-   * microseconds_per_tick field and provided to avoid calculation at
-   * run-time.
-   */
-  uint32_t                       nanoseconds_per_tick;
 
   /** 
    * This field specifies the number of ticks in each task's timeslice.
@@ -308,7 +302,7 @@ extern const rtems_configuration_table Configuration;
 #define rtems_configuration_get_milliseconds_per_tick() \
         (Configuration.microseconds_per_tick / 1000)
 #define rtems_configuration_get_nanoseconds_per_tick() \
-        (Configuration.nanoseconds_per_tick)
+        (_Watchdog_Nanoseconds_per_tick)
 
 #define rtems_configuration_get_ticks_per_timeslice() \
         (Configuration.ticks_per_timeslice)
