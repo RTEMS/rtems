@@ -319,6 +319,13 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
   return _Watchdog_Is_valid_timespec( ts ) && ts->tv_sec >= 0;
 }
 
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_monotonic_timespec(
+  const struct timespec *ts
+)
+{
+  return ts->tv_sec >= _Watchdog_Monotonic_max_seconds;
+}
+
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
   const struct timespec *ts
 )

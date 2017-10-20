@@ -166,6 +166,15 @@ extern volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
  */
 extern const uint32_t _Watchdog_Ticks_per_second;
 
+/**
+ * @brief The maximum number of seconds representable in the monotonic watchdog
+ * format.
+ *
+ * This constant is defined by the application configuration via
+ * <rtems/confdefs.h>.
+ */
+extern const uint64_t _Watchdog_Monotonic_max_seconds;
+
 /**@}*/
 
 #ifdef __cplusplus

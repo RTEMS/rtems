@@ -60,6 +60,7 @@ static void test_watchdog_static_init( void )
 static void test_watchdog_config( void )
 {
   rtems_test_assert( _Watchdog_Ticks_per_second == 100 );
+  rtems_test_assert( _Watchdog_Monotonic_max_seconds == 184467440737095516 );
 }
 
 static bool test_watchdog_is_inactive( test_watchdog *watchdog )
