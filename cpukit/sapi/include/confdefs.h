@@ -2287,6 +2287,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
             RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
   #endif
 
+  #if 1000000 % CONFIGURE_MICROSECONDS_PER_TICK != 0
+    #warning "The clock ticks per second is not an integer"
+  #endif
+
   #define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
 
   /** The configures the number of clock ticks per timeslice. */
