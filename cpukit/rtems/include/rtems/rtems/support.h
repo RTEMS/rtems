@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @brief Returns the number of micro seconds for the milli seconds value @a _ms.
  */
-#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) ((uint32_t)(_ms) * 1000UL)
+#define RTEMS_MILLISECONDS_TO_MICROSECONDS(_ms) ((_ms) * 1000UL)
 
 /**
  * @brief Returns the number of ticks for the milli seconds value @a _ms.
