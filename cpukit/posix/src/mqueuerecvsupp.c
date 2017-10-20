@@ -107,14 +107,14 @@ ssize_t _POSIX_Message_queue_Receive_support(
     &queue_context
   );
 
+  if ( status != STATUS_SUCCESSFUL ) {
+    rtems_set_errno_and_return_minus_one( _POSIX_Get_error( status ) );
+  }
+
   if ( msg_prio != NULL ) {
     *msg_prio = _POSIX_Message_queue_Priority_from_core(
       executing->Wait.count
     );
-  }
-
-  if ( status != STATUS_SUCCESSFUL ) {
-    rtems_set_errno_and_return_minus_one( _POSIX_Get_error( status ) );
   }
 
   return length_out;
