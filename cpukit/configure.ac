@@ -459,6 +459,7 @@ score/cpu/moxie/Makefile
 score/cpu/nios2/Makefile
 score/cpu/or1k/Makefile
 score/cpu/powerpc/Makefile
+score/cpu/riscv32/Makefile
 score/cpu/sh/Makefile
 score/cpu/sparc/Makefile
 score/cpu/sparc64/Makefile
