@@ -17,7 +17,7 @@ RB_GENERATE_REMOVE_COLOR( RBTree_Control, RBTree_Node, Node, static )
 RB_GENERATE_REMOVE( RBTree_Control, RBTree_Node, Node, static )
 
 #if defined(RTEMS_DEBUG)
-static RBTree_Node *_RBTree_Find_root( const RBTree_Node *the_node )
+static const RBTree_Node *_RBTree_Find_root( const RBTree_Node *the_node )
 {
   while ( true ) {
     const RBTree_Node *potential_root;
