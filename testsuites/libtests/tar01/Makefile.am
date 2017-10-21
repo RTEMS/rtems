@@ -51,10 +51,15 @@ tar01$(EXEEXT): $(tar01_OBJECTS) $(tar01_DEPENDENCIES)
 if TARTEST_XZ
 init.$(OBJEXT): initial_filesystem_tar.h \
 	initial_filesystem_tar_gz.h \
-	initial_filesystem_tar_xz.h
+	initial_filesystem_tar_xz.h \
+	initial_filesystem_tar.c \
+	initial_filesystem_tar_gz.c \
+	initial_filesystem_tar_xz.c
 else
 init.$(OBJEXT): initial_filesystem_tar.h \
-	initial_filesystem_tar_gz.h
+	initial_filesystem_tar_gz.h \
+	initial_filesystem_tar.c \
+	initial_filesystem_tar_gz.c
 endif
 
 initial_filesystem_tar.c: initial_filesystem.tar
