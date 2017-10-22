@@ -199,7 +199,7 @@ bdbuf_wait (const char* who, unsigned long timeout)
   }
   else if ((out & RTEMS_EVENT_0) == 0)
   {
-    printf ("%s: wait: received wrong event: %08x", who, out);
+    printf ("%s: wait: received wrong event: %08" PRIxrtems_event_set, who, out);
   }
   return sc;
 }
@@ -210,7 +210,7 @@ bdbuf_wait (const char* who, unsigned long timeout)
 static bool
 bdbuf_send_wait_event (const char* task, const char* msg, rtems_id id)
 {
-  printf ("%s: %s: %08x: ", task, msg, id);
+  printf ("%s: %s: %08" PRIxrtems_id ": ", task, msg, id);
   return  bdbuf_test_print_sc (rtems_event_send (id, RTEMS_EVENT_0), true);
 }
 
@@ -233,7 +233,7 @@ bdbuf_watch (unsigned long timeout)
   }
   else if ((out & RTEMS_EVENT_1) == 0)
   {
-    printf ("watch: received wrong event: %08x", out);
+    printf ("watch: received wrong event: %08" PRIxrtems_event_set, out);
   }
   return sc;
 }
@@ -244,7 +244,7 @@ bdbuf_watch (unsigned long timeout)
 static bool
 bdbuf_send_watch_event (const char* task, const char* msg, rtems_id id)
 {
-  printf ("%s: %s: %08x: ", task, msg, id);
+  printf ("%s: %s: %08" PRIxrtems_id ": ", task, msg, id);
   return  bdbuf_test_print_sc (rtems_event_send (id, RTEMS_EVENT_1), true);
 }
 
@@ -397,7 +397,7 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
 
     case BDBUF_DISK_WAIT:
       if (bdd->waiting)
-        printf ("disk ioctl: bad waiter: %s:%08x\n",
+        printf ("disk ioctl: bad waiter: %s:%08" PRIxrtems_id "\n",
                            bdd->waiting_name, bdd->waiting);
       bdd->waiting_name = "bdd";
 
@@ -415,18 +415,19 @@ bdbuf_disk_ioctl_process (bdbuf_disk* bdd, rtems_blkdev_request* req)
       break;
 
     case BDBUF_DISK_SLEEP:
-      printf ("disk ioctl: sleeping: %d msecs\n",
+      printf ("disk ioctl: sleeping: %" PRId32 " msecs\n",
                          bdd->driver_sleep);
       result = bdbuf_sleep (bdd->driver_sleep);
       break;
 
     case BDBUF_DISK_BLOCKS_INORDER:
-      printf ("disk ioctl: multi-block order check: count = %d\n",
-                         req->bufnum);
+      printf ("disk ioctl: multi-block order check: count = %" PRId32 "\n",
+              req->bufnum);
       for (b = 0; b < (req->bufnum - 1); b++)
         if (req->bufs[b].block >= req->bufs[b + 1].block)
-          printf ("disk ioctl: out of order: index:%d (%d >= %d\n",
-                             b, req->bufs[b].block, req->bufs[b + 1].block);
+          printf ("disk ioctl: out of order: index:%d "\
+                  "(%" PRIdrtems_blkdev_bnum " >= %" PRIdrtems_blkdev_bnum "\n",
+                  b, req->bufs[b].block, req->bufs[b + 1].block);
       break;
 
     default:
@@ -637,7 +638,7 @@ bdbuf_tests_create_task (bdbuf_task_control* tc,
 {
   rtems_status_code sc;
 
-  printf ("creating task: %s: priority: %d: ",
+  printf ("creating task: %s: priority: %" PRIdrtems_task_priority ": ",
                      tc->name, priority);
 
   sc = rtems_task_create (rtems_build_name (tc->name[0], tc->name[1],
@@ -1064,8 +1065,8 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
 
   if (passed)
   {
-    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
-                       tc->name, i,
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIuLEAST32 "]: ",
+                       tc->name,
                        tc->major,
                        tc->minor);
     passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (tc->dd), true);
@@ -1146,13 +1147,13 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
      */
     bdbuf_set_disk_driver_action (tc, BDBUF_DISK_BLOCKS_INORDER);
 
-    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: checking order\n",
-                       tc->name, i,
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIiLEAST32 "]: checking order\n",
+                       tc->name,
                        tc->major,
                        tc->minor);
     sc = rtems_bdbuf_syncdev (tc->dd);
-    printf ("%s: rtems_bdbuf_syncdev[%d:%d]: ",
-                       tc->name, i,
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIuLEAST32 "]: ",
+                       tc->name,
                        tc->major,
                        tc->minor);
     passed = bdbuf_test_print_sc (sc, true);
