@@ -55,7 +55,7 @@
 
 #include "libfdt_internal.h"
 
-static int fdt_sw_check_header_(void *fdt)
+static int fdt_sw_probe_(void *fdt)
 {
 	if (fdt_magic(fdt) != FDT_SW_MAGIC)
 		return -FDT_ERR_BADMAGIC;
@@ -63,10 +63,10 @@ static int fdt_sw_check_header_(void *fdt)
 	return 0;
 }
 
-#define FDT_SW_CHECK_HEADER(fdt) \
+#define FDT_SW_PROBE(fdt) \
 	{ \
 		int err; \
-		if ((err = fdt_sw_check_header_(fdt)) != 0) \
+		if ((err = fdt_sw_probe_(fdt)) != 0) \
 			return err; \
 	}
 
@@ -112,7 +112,7 @@ int fdt_resize(void *fdt, void *buf, int bufsize)
 	size_t headsize, tailsize;
 	char *oldtail, *newtail;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	headsize = fdt_off_dt_struct(fdt);
 	tailsize = fdt_size_dt_strings(fdt);
@@ -144,7 +144,7 @@ int fdt_add_reservemap_entry(void *fdt, uint64_t addr, uint64_t size)
 	struct fdt_reserve_entry *re;
 	int offset;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	if (fdt_size_dt_struct(fdt))
 		return -FDT_ERR_BADSTATE;
@@ -172,7 +172,7 @@ int fdt_begin_node(void *fdt, const char *name)
 	struct fdt_node_header *nh;
 	int namelen = strlen(name) + 1;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	nh = fdt_grab_space_(fdt, sizeof(*nh) + FDT_TAGALIGN(namelen));
 	if (! nh)
@@ -187,7 +187,7 @@ int fdt_end_node(void *fdt)
 {
 	fdt32_t *en;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	en = fdt_grab_space_(fdt, FDT_TAGSIZE);
 	if (! en)
@@ -225,7 +225,7 @@ int fdt_property_placeholder(void *fdt, const char *name, int len, void **valp)
 	struct fdt_property *prop;
 	int nameoff;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	nameoff = fdt_find_add_string_(fdt, name);
 	if (nameoff == 0)
@@ -262,7 +262,7 @@ int fdt_finish(void *fdt)
 	uint32_t tag;
 	int offset, nextoffset;
 
-	FDT_SW_CHECK_HEADER(fdt);
+	FDT_SW_PROBE(fdt);
 
 	/* Add terminator */
 	end = fdt_grab_space_(fdt, sizeof(*end));

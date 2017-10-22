@@ -117,7 +117,7 @@ uint32_t fdt_get_max_phandle(const void *fdt)
 
 int fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size)
 {
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 	*address = fdt64_to_cpu(fdt_mem_rsv_(fdt, n)->address);
 	*size = fdt64_to_cpu(fdt_mem_rsv_(fdt, n)->size);
 	return 0;
@@ -161,7 +161,7 @@ int fdt_subnode_offset_namelen(const void *fdt, int offset,
 {
 	int depth;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	for (depth = 0;
 	     (offset >= 0) && (depth >= 0);
@@ -187,7 +187,7 @@ int fdt_path_offset_namelen(const void *fdt, const char *path, int namelen)
 	const char *p = path;
 	int offset = 0;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	/* see if we have an alias */
 	if (*path != '/') {
@@ -237,7 +237,7 @@ const char *fdt_get_name(const void *fdt, int nodeoffset, int *len)
 	const char *nameptr;
 	int err;
 
-	if (((err = fdt_check_header(fdt)) != 0)
+	if (((err = fdt_ro_probe_(fdt)) != 0)
 	    || ((err = fdt_check_node_offset_(fdt, nodeoffset)) < 0))
 			goto fail;
 
@@ -462,7 +462,7 @@ int fdt_get_path(const void *fdt, int nodeoffset, char *buf, int buflen)
 	int offset, depth, namelen;
 	const char *name;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	if (buflen < 2)
 		return -FDT_ERR_NOSPACE;
@@ -514,7 +514,7 @@ int fdt_supernode_atdepth_offset(const void *fdt, int nodeoffset,
 	int offset, depth;
 	int supernodeoffset = -FDT_ERR_INTERNAL;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	if (supernodedepth < 0)
 		return -FDT_ERR_NOTFOUND;
@@ -573,7 +573,7 @@ int fdt_node_offset_by_prop_value(const void *fdt, int startoffset,
 	const void *val;
 	int len;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	/* FIXME: The algorithm here is pretty horrible: we scan each
 	 * property of a node in fdt_getprop(), then if that didn't
@@ -599,7 +599,7 @@ int fdt_node_offset_by_phandle(const void *fdt, uint32_t phandle)
 	if ((phandle == 0) || (phandle == -1))
 		return -FDT_ERR_BADPHANDLE;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	/* FIXME: The algorithm here is pretty horrible: we
 	 * potentially scan each property of a node in
@@ -752,7 +752,7 @@ int fdt_node_offset_by_compatible(const void *fdt, int startoffset,
 {
 	int offset, err;
 
-	FDT_CHECK_HEADER(fdt);
+	FDT_RO_PROBE(fdt);
 
 	/* FIXME: The algorithm here is pretty horrible: we scan each
 	 * property of a node in fdt_node_check_compatible(), then if
