@@ -90,6 +90,9 @@ libposix_a_SOURCES += src/mutexattrdestroy.c src/mutexattrgetprioceiling.c \
     src/mutexlocksupp.c src/mutexsetprioceiling.c src/mutextimedlock.c \
     src/mutextrylock.c src/mutexunlock.c
 
+## PTHREAD_C_FILES
+libposix_a_SOURCES += src/psxpriorityisvalid.c
+
 ## PTHREAD_ATTR_C_FILES
 libposix_a_SOURCES += src/pthreadattrdefault.c src/pthreadattrdestroy.c \
    src/pthreadattrgetdetachstate.c src/pthreadattrgetguardsize.c \
@@ -150,7 +153,7 @@ libposix_a_SOURCES += src/pthreadatfork.c \
     src/pthreadinitthreads.c src/pthreadjoin.c src/pthreadkill.c \
     src/pthreadself.c \
     src/pthreadsetschedparam.c src/pthreadsigmask.c \
-    src/psxpriorityisvalid.c src/psxtransschedparam.c
+    src/psxtransschedparam.c
 libposix_a_SOURCES += src/pthreadsetschedprio.c
 
 ## PSIGNAL_C_FILES
