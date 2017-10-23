@@ -1,51 +1,50 @@
-*** TEST PRINTK ***
+*** BEGIN OF TEST SPPRINTK ***
 This is a test of putk
 
-bad format -- %q in parentheses (q)
-bad format -- %lq in parentheses (q)
-%O octal upper case 16 -- 20
-%o octal lower case of 16 -- 20
-%I of 16 -- 16
-%i of 16 -- 16
-%D of 16 -- 16
-%d of 16 -- 16
-%-3d of 16 --  16
-%U of 16 -- 16
-%u of 16 -- 16
-%X of 16 -- 10
-%x of 16 -- 10
-%p of 0x1234 -- 1234
-%lo of 2147483647 -- 17777777777
-%li of 2147483647 -- 2147483647
-%lu of 2147483647 -- 2147483647
-%lx of 2147483647 -- 7FFFFFFF
-%lo of -2147483648 -- 20000000000
-%li of -2147483648 -- -2147483648
-%lx of -2147483648 -- 80000000
-%lo of 4294967295 -- 37777777777
-%lu of 4294967295 -- 4294967295
-%lx of 4294967295 -- FFFFFFFF
-%llo of 9223372036854775807 -- 777777777777777777777
-%lli of 9223372036854775807 -- 9223372036854775807
-%llu of 9223372036854775807 -- 9223372036854775807
-%llx of 9223372036854775807 -- 7FFFFFFFFFFFFFFF
+bad format                   -- %q in parentheses (%q)
+bad format                   -- %lq in parentheses (%lq)
+%o of 16                     -- 20
+%i of 16                     -- 16
+%d of 16                     -- 16
+'%-3d' of 16                 -- '16 '
+'%3d' of 16                  -- ' 16'
+%u of 16                     -- 16
+%X of 16                     -- 10
+%x of 16                     -- 10
+%p of 0x1234                 -- 0x1234
+%lo of 2147483647            -- 17777777777
+%li of 2147483647            -- 2147483647
+%lu of 2147483647            -- 2147483647
+%lx of 2147483647            -- 7fffffff
+%lo of -2147483648           -- 20000000000
+%li of -2147483648           -- -2147483648
+%lx of -2147483648           -- 80000000
+%lo of 4294967295            -- 37777777777
+%lu of 4294967295            -- 4294967295
+%lx of 4294967295            -- ffffffff
+%llo of 9223372036854775807  -- 777777777777777777777
+%lli of 9223372036854775807  -- 9223372036854775807
+%llu of 9223372036854775807  -- 9223372036854775807
+%llx of 9223372036854775807  -- 7fffffffffffffff
 %llo of -9223372036854775808 -- 1000000000000000000000
 %lli of -9223372036854775808 -- -9223372036854775808
 %llx of -9223372036854775808 -- 8000000000000000
 %llo of 18446744073709551615 -- 1777777777777777777777
 %llu of 18446744073709551615 -- 18446744073709551615
-%llx of 18446744073709551615 -- FFFFFFFFFFFFFFFF
-%d of -16 -- -16
-%d of -16 -- -16
-%u of -16 -- 4294967280
-%s of Mary Had a Little Lamb -- (Mary Had a Little Lamb)
-%s of NULL -- ()
-%12s of joel -- (                joel)
-%4s of joel -- (joel)
-%-12s of joel -- (joel                )
-%-4s of joel -- (joel)
-%c of X -- (X)
+%llx of 18446744073709551615 -- ffffffffffffffff
+%d of -16                    -- -16
+%d of -16                    -- -16
+%u of -16                    -- 4294967280
+%s of Mary Had a Little Lamb -- 'Mary Had a Little Lamb'
+%s of NULL                   -- '(null)'
+%12s of joel                 -- '                joel'
+%4s of joel                  -- 'joel'
+%-12s of joel                -- 'joel                '
+%-4s of joel                 -- 'joel'
+%c of X                      -- 'X'
+%hhu of X                    -- 88
 
 getchark - NULL getchar method - return -1
 getchark - test getchar method - returns 0x35
-*** END OF TEST PRINTK ***
+
+*** END OF TEST SPPRINTK ***

@@ -152,6 +152,10 @@ $(PROJECT_INCLUDE)/rtems/score/interr.h: include/rtems/score/interr.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/interr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/interr.h
 
+$(PROJECT_INCLUDE)/rtems/score/io.h: include/rtems/score/io.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/io.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/io.h
+
 $(PROJECT_INCLUDE)/rtems/score/isr.h: include/rtems/score/isr.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/isr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/isr.h

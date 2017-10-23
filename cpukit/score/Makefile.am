@@ -46,6 +46,7 @@ include_rtems_score_HEADERS += include/rtems/score/heap.h
 include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
 include_rtems_score_HEADERS += include/rtems/score/protectedheap.h
 include_rtems_score_HEADERS += include/rtems/score/interr.h
+include_rtems_score_HEADERS += include/rtems/score/io.h
 include_rtems_score_HEADERS += include/rtems/score/isr.h
 include_rtems_score_HEADERS += include/rtems/score/isrlevel.h
 include_rtems_score_HEADERS += include/rtems/score/isrlock.h
@@ -333,6 +334,8 @@ libscore_a_SOURCES += src/chain.c \
     src/chainnodecount.c \
     src/debugisthreaddispatchingallowed.c \
     src/interr.c src/isr.c src/wkspace.c src/wkstringduplicate.c
+libscore_a_SOURCES += src/ioprintf.c
+libscore_a_SOURCES += src/iovprintf.c
 libscore_a_SOURCES += src/isrisinprogress.c
 libscore_a_SOURCES += src/condition.c
 libscore_a_SOURCES += src/debugisownerofallocator.c

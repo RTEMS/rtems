@@ -1,10 +1,3 @@
-/**
- *  @file
- *
- *  @brief Print Formatted Output
- *  @ingroup libcsupport
- */
-
 /*
  * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
  *
@@ -23,15 +16,16 @@
 #include "config.h"
 #endif
 
-#include <rtems/bspIo.h>
 #include <rtems/score/io.h>
 
-static void vprintk_putchar( int c, void *arg )
+int _IO_Printf( IO_Put_char put_char, void *arg, char const  *fmt, ... )
 {
-  rtems_putc((char) c);
-}
+  va_list ap;
+  int     len;
 
-int vprintk( const char *fmt, va_list ap )
-{
-  return _IO_Vprintf( vprintk_putchar, NULL, fmt, ap );
+  va_start( ap, fmt );
+  len = _IO_Vprintf( put_char, arg, fmt, ap );
+  va_end( ap );
+
+  return len;
 }
