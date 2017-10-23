@@ -79,9 +79,64 @@ int fdt_ro_probe_(const void *fdt)
 	return 0;
 }
 
+static int check_off_(uint32_t hdrsize, uint32_t totalsize, uint32_t off)
+{
+	return (off >= hdrsize) && (off <= totalsize);
+}
+
+static int check_block_(uint32_t hdrsize, uint32_t totalsize,
+			uint32_t base, uint32_t size)
+{
+	if (!check_off_(hdrsize, totalsize, base))
+		return 0; /* block start out of bounds */
+	if ((base + size) < base)
+		return 0; /* overflow */
+	if (!check_off_(hdrsize, totalsize, base + size))
+		return 0; /* block end out of bounds */
+	return 1;
+}
+
 int fdt_check_header(const void *fdt)
 {
-	return fdt_ro_probe_(fdt);
+	size_t hdrsize = FDT_V16_SIZE;
+
+	if (fdt_magic(fdt) != FDT_MAGIC)
+		return -FDT_ERR_BADMAGIC;
+	if ((fdt_version(fdt) < FDT_FIRST_SUPPORTED_VERSION)
+	    || (fdt_last_comp_version(fdt) > FDT_LAST_SUPPORTED_VERSION))
+		return -FDT_ERR_BADVERSION;
+	if (fdt_version(fdt) < fdt_last_comp_version(fdt))
+		return -FDT_ERR_BADVERSION;
+
+	if (fdt_version(fdt) >= 17)
+		hdrsize = FDT_V17_SIZE;
+
+	if ((fdt_totalsize(fdt) < hdrsize)
+	    || (fdt_totalsize(fdt) > INT_MAX))
+		return -FDT_ERR_TRUNCATED;
+
+	/* Bounds check memrsv block */
+	if (!check_off_(hdrsize, fdt_totalsize(fdt), fdt_off_mem_rsvmap(fdt)))
+		return -FDT_ERR_TRUNCATED;
+
+	/* Bounds check structure block */
+	if (fdt_version(fdt) < 17) {
+		if (!check_off_(hdrsize, fdt_totalsize(fdt),
+				fdt_off_dt_struct(fdt)))
+			return -FDT_ERR_TRUNCATED;
+	} else {
+		if (!check_block_(hdrsize, fdt_totalsize(fdt),
+				  fdt_off_dt_struct(fdt),
+				  fdt_size_dt_struct(fdt)))
+			return -FDT_ERR_TRUNCATED;
+	}
+
+	/* Bounds check strings block */
+	if (!check_block_(hdrsize, fdt_totalsize(fdt),
+			  fdt_off_dt_strings(fdt), fdt_size_dt_strings(fdt)))
+		return -FDT_ERR_TRUNCATED;
+
+	return 0;
 }
 
 const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
