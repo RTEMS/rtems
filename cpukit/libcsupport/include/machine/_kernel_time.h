@@ -28,6 +28,8 @@
 #error "must be included via <sys/time.h> in kernel space"
 #endif
 
+#include <machine/_timecounter.h>
+
 /* Operations on timespecs */
 #define	timespecclear(tvp)	((tvp)->tv_sec = (tvp)->tv_nsec = 0)
 #define	timespecisset(tvp)	((tvp)->tv_sec || (tvp)->tv_nsec)

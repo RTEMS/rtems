@@ -25,6 +25,7 @@
 
 #include <sys/time.h>
 #include <sys/timetc.h>
+#include <machine/_timecounter.h>
 
 #include <rtems/score/isrlock.h>
 
@@ -227,7 +228,7 @@ extern volatile time_t _Timecounter_Time_second;
  * For compatibility with the FreeBSD network stack the initial value is one
  * second.
  */
-extern volatile time_t _Timecounter_Time_uptime;
+extern volatile int32_t _Timecounter_Time_uptime;
 
 /**
  * @brief The current timecounter.

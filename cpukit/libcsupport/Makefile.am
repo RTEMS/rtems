@@ -29,6 +29,7 @@ include_machine_HEADERS += include/machine/_kernel_cpuset.h
 include_machine_HEADERS += include/machine/_kernel_param.h
 include_machine_HEADERS += include/machine/_kernel_time.h
 include_machine_HEADERS += include/machine/_kernel_types.h
+include_machine_HEADERS += include/machine/_timecounter.h
 
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c

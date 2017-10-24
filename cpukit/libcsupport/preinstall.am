@@ -95,3 +95,7 @@ $(PROJECT_INCLUDE)/machine/_kernel_types.h: include/machine/_kernel_types.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_kernel_types.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_kernel_types.h
 
+$(PROJECT_INCLUDE)/machine/_timecounter.h: include/machine/_timecounter.h $(PROJECT_INCLUDE)/machine/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/machine/_timecounter.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/machine/_timecounter.h
+
