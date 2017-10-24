@@ -2291,6 +2291,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #warning "The clock ticks per second is not an integer"
   #endif
 
+  #if CONFIGURE_MICROSECONDS_PER_TICK <= 0
+    #error "The CONFIGURE_MICROSECONDS_PER_TICK must be positive"
+  #endif
+
   #define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
 
   /** The configures the number of clock ticks per timeslice. */
