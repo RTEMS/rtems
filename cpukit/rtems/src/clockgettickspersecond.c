@@ -20,6 +20,8 @@
 
 #include <rtems/rtems/clock.h>
 
+#undef rtems_clock_get_ticks_per_second
+
 rtems_interval rtems_clock_get_ticks_per_second(void)
 {
   return _Watchdog_Ticks_per_second;

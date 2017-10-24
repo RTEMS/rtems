@@ -198,6 +198,9 @@ RTEMS_INLINE_ROUTINE bool rtems_clock_tick_before(
  */
 rtems_interval rtems_clock_get_ticks_per_second(void);
 
+/* Optimized variant for C/C++ without function call overhead */
+#define rtems_clock_get_ticks_per_second() ( _Watchdog_Ticks_per_second )
+
 /**
  * @brief Set the Current TOD
  *
