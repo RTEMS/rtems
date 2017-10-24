@@ -703,18 +703,6 @@ RTEMS_INLINE_ROUTINE uint32_t _Scheduler_Get_index(
   return (uint32_t) (scheduler - &_Scheduler_Table[ 0 ]);
 }
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Thread_set_priority(
-  Thread_Control   *the_thread,
-  Priority_Control  new_priority,
-  bool              prepend_it
-)
-{
-  Scheduler_Node *scheduler_node;
-
-  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
-  _Scheduler_Node_set_priority( scheduler_node, new_priority, prepend_it );
-}
-
 #if defined(RTEMS_SMP)
 /**
  * @brief Gets an idle thread from the scheduler instance.
