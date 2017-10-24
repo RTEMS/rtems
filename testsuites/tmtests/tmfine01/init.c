@@ -30,7 +30,11 @@
 
 const char rtems_test_name[] = "TMFINE 1";
 
+#if defined(RTEMS_SMP)
 #define CPU_COUNT 32
+#else
+#define CPU_COUNT 1
+#endif
 
 #define MSG_COUNT 3
 
