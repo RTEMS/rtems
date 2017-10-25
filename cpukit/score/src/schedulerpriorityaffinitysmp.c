@@ -40,7 +40,7 @@
  */
 
 static bool _Scheduler_priority_affinity_SMP_Insert_priority_lifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
@@ -49,7 +49,7 @@ static bool _Scheduler_priority_affinity_SMP_Insert_priority_lifo_order(
 }
 
 static bool _Scheduler_priority_affinity_SMP_Insert_priority_fifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
@@ -283,6 +283,8 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
   self = _Scheduler_priority_SMP_Get_self( context );
 
   while (1) {
+    Priority_Control lowest_scheduled_priority;
+
     if ( _Priority_bit_map_Is_empty( &self->Bit_map ) ) {
       /* Nothing to do */
       break;
@@ -310,9 +312,12 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
     if ( lowest_scheduled == NULL )
       break;
 
+    lowest_scheduled_priority =
+      _Scheduler_SMP_Node_priority( lowest_scheduled );
+
     if (
       _Scheduler_SMP_Insert_priority_lifo_order(
-        &lowest_scheduled->Node.Chain,
+        &lowest_scheduled_priority,
         &highest_ready->Node.Chain
       )
     ) {

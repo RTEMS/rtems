@@ -98,13 +98,17 @@ static void _Scheduler_simple_SMP_Move_from_scheduled_to_ready(
   Scheduler_Node    *scheduled_to_ready
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self;
+  Priority_Control              priority_to_insert;
+
+  self = _Scheduler_simple_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( scheduled_to_ready );
 
   _Chain_Extract_unprotected( &scheduled_to_ready->Node.Chain );
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
     &scheduled_to_ready->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -114,13 +118,17 @@ static void _Scheduler_simple_SMP_Move_from_ready_to_scheduled(
   Scheduler_Node    *ready_to_scheduled
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self;
+  Priority_Control              priority_to_insert;
+
+  self = _Scheduler_simple_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( ready_to_scheduled );
 
   _Chain_Extract_unprotected( &ready_to_scheduled->Node.Chain );
   _Chain_Insert_ordered_unprotected(
     &self->Base.Scheduled,
     &ready_to_scheduled->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
@@ -130,12 +138,16 @@ static void _Scheduler_simple_SMP_Insert_ready_lifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self;
+  Priority_Control              priority_to_insert;
+
+  self = _Scheduler_simple_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( node_to_insert );
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
     &node_to_insert->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -145,12 +157,16 @@ static void _Scheduler_simple_SMP_Insert_ready_fifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_simple_SMP_Context *self =
-    _Scheduler_simple_SMP_Get_self( context );
+  Scheduler_simple_SMP_Context *self;
+  Priority_Control              priority_to_insert;
+
+  self = _Scheduler_simple_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( node_to_insert );
 
   _Chain_Insert_ordered_unprotected(
     &self->Ready,
     &node_to_insert->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }

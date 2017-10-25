@@ -39,49 +39,63 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
 }
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
-  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
-  const Thread_Control *thread_next = (const Thread_Control *) next;
+  const Priority_Control *priority_to_insert;
+  const Thread_Control   *thread_next;
 
-  return _Thread_Get_priority( thread_to_insert )
-    <= _Thread_Get_priority( thread_next );
+  priority_to_insert = (const Priority_Control *) to_insert;
+  thread_next = (const Thread_Control *) next;
+
+  return *priority_to_insert <= _Thread_Get_priority( thread_next );
 }
 
 RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_fifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
-  const Thread_Control *thread_to_insert = (const Thread_Control *) to_insert;
-  const Thread_Control *thread_next = (const Thread_Control *) next;
+  const Priority_Control *priority_to_insert;
+  const Thread_Control   *thread_next;
 
-  return _Thread_Get_priority( thread_to_insert )
-    < _Thread_Get_priority( thread_next );
+  priority_to_insert = (const Priority_Control *) to_insert;
+  thread_next = (const Thread_Control *) next;
+
+  return *priority_to_insert < _Thread_Get_priority( thread_next );
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_lifo(
-  Chain_Control *chain,
+  Chain_Control  *chain,
   Thread_Control *to_insert
 )
 {
+  Priority_Control priority_to_insert;
+
+  priority_to_insert = _Thread_Get_priority( to_insert );
+
   _Chain_Insert_ordered_unprotected(
     chain,
     &to_insert->Object.Node,
+    &priority_to_insert,
     _Scheduler_simple_Insert_priority_lifo_order
   );
 }
 
 RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
-  Chain_Control *chain,
+  Chain_Control  *chain,
   Thread_Control *to_insert
 )
 {
+  Priority_Control priority_to_insert;
+
+  priority_to_insert = _Thread_Get_priority( to_insert );
+
   _Chain_Insert_ordered_unprotected(
     chain,
     &to_insert->Object.Node,
+    &priority_to_insert,
     _Scheduler_simple_Insert_priority_fifo_order
   );
 }

@@ -22,17 +22,17 @@
 
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
 static bool _CORE_message_queue_Order(
-  const Chain_Node *left,
+  const void       *left,
   const Chain_Node *right
 )
 {
-   const CORE_message_queue_Buffer_control *left_message;
+   const int                               *left_priority;
    const CORE_message_queue_Buffer_control *right_message;
 
-   left_message = (const CORE_message_queue_Buffer_control *) left;
+   left_priority = (const int *) left;
    right_message = (const CORE_message_queue_Buffer_control *) right;
 
-   return _CORE_message_queue_Get_message_priority( left_message ) <
+   return *left_priority <
      _CORE_message_queue_Get_message_priority( right_message );
 }
 #endif
@@ -66,9 +66,13 @@ void _CORE_message_queue_Insert_message(
     _Chain_Append_unprotected( pending_messages, &the_message->Node );
 #if defined(RTEMS_SCORE_COREMSG_ENABLE_MESSAGE_PRIORITY)
   } else  if ( submit_type != CORE_MESSAGE_QUEUE_URGENT_REQUEST ) {
+    int priority;
+
+    priority = _CORE_message_queue_Get_message_priority( the_message );
     _Chain_Insert_ordered_unprotected(
       pending_messages,
       &the_message->Node,
+      &priority,
       _CORE_message_queue_Order
     );
 #endif

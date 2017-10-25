@@ -352,29 +352,31 @@ static inline void _Scheduler_SMP_Do_nothing_register_idle(
 }
 
 static inline bool _Scheduler_SMP_Insert_priority_lifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
-  const Scheduler_SMP_Node *node_to_insert =
-    (const Scheduler_SMP_Node *) to_insert;
-  const Scheduler_SMP_Node *node_next =
-    (const Scheduler_SMP_Node *) next;
+  const Priority_Control   *priority_to_insert;
+  const Scheduler_SMP_Node *node_next;
 
-  return node_to_insert->priority <= node_next->priority;
+  priority_to_insert = (const Priority_Control *) to_insert;
+  node_next = (const Scheduler_SMP_Node *) next;
+
+  return *priority_to_insert <= node_next->priority;
 }
 
 static inline bool _Scheduler_SMP_Insert_priority_fifo_order(
-  const Chain_Node *to_insert,
+  const void       *to_insert,
   const Chain_Node *next
 )
 {
-  const Scheduler_SMP_Node *node_to_insert =
-    (const Scheduler_SMP_Node *) to_insert;
-  const Scheduler_SMP_Node *node_next =
-    (const Scheduler_SMP_Node *) next;
+  const Priority_Control   *priority_to_insert;
+  const Scheduler_SMP_Node *node_next;
 
-  return node_to_insert->priority < node_next->priority;
+  priority_to_insert = (const Priority_Control *) to_insert;
+  node_next = (const Scheduler_SMP_Node *) next;
+
+  return *priority_to_insert < node_next->priority;
 }
 
 static inline Scheduler_SMP_Context *_Scheduler_SMP_Get_self(
@@ -719,12 +721,14 @@ static inline bool _Scheduler_SMP_Enqueue_ordered(
   Scheduler_SMP_Allocate_processor    allocate_processor
 )
 {
-  bool            needs_help;
-  Scheduler_Node *lowest_scheduled;
+  bool              needs_help;
+  Scheduler_Node   *lowest_scheduled;
+  Priority_Control  node_priority;
 
   lowest_scheduled = ( *get_lowest_scheduled )( context, node );
+  node_priority = _Scheduler_SMP_Node_priority( node );
 
-  if ( ( *order )( &node->Node.Chain, &lowest_scheduled->Node.Chain ) ) {
+  if ( ( *order )( &node_priority, &lowest_scheduled->Node.Chain ) ) {
     _Scheduler_SMP_Enqueue_to_scheduled(
       context,
       node,
@@ -776,8 +780,10 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled_ordered(
   while ( true ) {
     Scheduler_Node                   *highest_ready;
     Scheduler_Try_to_schedule_action  action;
+    Priority_Control                  node_priority;
 
     highest_ready = ( *get_highest_ready )( context, node );
+    node_priority = _Scheduler_SMP_Node_priority( node );
 
     /*
      * The node has been extracted from the scheduled chain.  We have to place
@@ -785,7 +791,7 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled_ordered(
      */
     if (
       node->sticky_level > 0
-        && ( *order )( &node->Node.Chain, &highest_ready->Node.Chain )
+        && ( *order )( &node_priority, &highest_ready->Node.Chain )
     ) {
       ( *insert_scheduled )( context, node );
 
@@ -1165,11 +1171,16 @@ static inline void _Scheduler_SMP_Insert_scheduled_lifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
+  Scheduler_SMP_Context *self;
+  Priority_Control       priority_to_insert;
+
+  self = _Scheduler_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( node_to_insert );
 
   _Chain_Insert_ordered_unprotected(
     &self->Scheduled,
     &node_to_insert->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_lifo_order
   );
 }
@@ -1179,11 +1190,16 @@ static inline void _Scheduler_SMP_Insert_scheduled_fifo(
   Scheduler_Node    *node_to_insert
 )
 {
-  Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
+  Scheduler_SMP_Context *self;
+  Priority_Control       priority_to_insert;
+
+  self = _Scheduler_SMP_Get_self( context );
+  priority_to_insert = _Scheduler_SMP_Node_priority( node_to_insert );
 
   _Chain_Insert_ordered_unprotected(
     &self->Scheduled,
     &node_to_insert->Node.Chain,
+    &priority_to_insert,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
@@ -1214,7 +1230,11 @@ static inline bool _Scheduler_SMP_Ask_for_help(
     node_state = _Scheduler_SMP_Node_state( node );
 
     if ( node_state == SCHEDULER_SMP_NODE_BLOCKED ) {
-      if ( ( *order )( &node->Node.Chain, &lowest_scheduled->Node.Chain ) ) {
+      Priority_Control node_priority;
+
+      node_priority = _Scheduler_SMP_Node_priority( node );
+
+      if ( ( *order )( &node_priority, &lowest_scheduled->Node.Chain ) ) {
         _Thread_Scheduler_cancel_need_for_help(
           thread,
           _Thread_Get_CPU( thread )

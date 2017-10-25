@@ -830,14 +830,14 @@ RTEMS_INLINE_ROUTINE bool _Chain_Get_with_empty_check_unprotected(
 /**
  * @brief Chain node order.
  *
- * @param[in] left The left node.
- * @param[in] right The right node.
+ * @param[in] left The left hand side.
+ * @param[in] right The right hand side.
  *
  * @retval true According to the order the left node precedes the right node.
  * @retval false Otherwise.
  */
 typedef bool ( *Chain_Node_order )(
-  const Chain_Node *left,
+  const void       *left,
   const Chain_Node *right
 );
 
@@ -848,20 +848,25 @@ typedef bool ( *Chain_Node_order )(
  * relation holds for all nodes from the head up to the inserted node.  Nodes
  * after the inserted node are not moved.
  *
- * @param[in,out] chain The chain.
- * @param[in,out] to_insert The node to insert.
+ * @param[in] the_chain The chain.
+ * @param[in] to_insert The node to insert.
+ * @param[in] left The left hand side passed to the order relation.  It must
+ *   correspond to the node to insert.  The separate left hand side parameter
+ *   may help the compiler to generate better code if it is stored in a local
+ *   variable.
  * @param[in] order The order relation.
  */
 RTEMS_INLINE_ROUTINE void _Chain_Insert_ordered_unprotected(
-  Chain_Control *chain,
-  Chain_Node *to_insert,
-  Chain_Node_order order
+  Chain_Control    *the_chain,
+  Chain_Node       *to_insert,
+  const void       *left,
+  Chain_Node_order  order
 )
 {
-  const Chain_Node *tail = _Chain_Immutable_tail( chain );
-  Chain_Node *next = _Chain_First( chain );
+  const Chain_Node *tail = _Chain_Immutable_tail( the_chain );
+  Chain_Node *next = _Chain_First( the_chain );
 
-  while ( next != tail && !( *order )( to_insert, next ) ) {
+  while ( next != tail && !( *order )( left, next ) ) {
     next = _Chain_Next( next );
   }
 

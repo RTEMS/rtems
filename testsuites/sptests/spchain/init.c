@@ -426,9 +426,14 @@ static void test_chain_node_count(void)
   }
 }
 
-static bool test_order( const Chain_Node *left, const Chain_Node *right )
+static bool test_order( const void *left, const Chain_Node *right )
 {
-  return left < right;
+  return (uintptr_t) left < (uintptr_t) right;
+}
+
+static void insert_ordered( Chain_Control *chain, Chain_Node *node )
+{
+  _Chain_Insert_ordered_unprotected( chain, node, node, test_order );
 }
 
 static void test_chain_insert_ordered( void )
@@ -446,11 +451,11 @@ static void test_chain_insert_ordered( void )
     _Chain_Initialize_node( &nodes[ i ] );
   }
 
-  _Chain_Insert_ordered_unprotected( &chain, &nodes[4], test_order );
-  _Chain_Insert_ordered_unprotected( &chain, &nodes[2], test_order );
-  _Chain_Insert_ordered_unprotected( &chain, &nodes[0], test_order );
-  _Chain_Insert_ordered_unprotected( &chain, &nodes[3], test_order );
-  _Chain_Insert_ordered_unprotected( &chain, &nodes[1], test_order );
+  insert_ordered( &chain, &nodes[4] );
+  insert_ordered( &chain, &nodes[2] );
+  insert_ordered( &chain, &nodes[0] );
+  insert_ordered( &chain, &nodes[3] );
+  insert_ordered( &chain, &nodes[1] );
 
   tail = _Chain_Immutable_tail( &chain );
   node = _Chain_Immutable_first( &chain );

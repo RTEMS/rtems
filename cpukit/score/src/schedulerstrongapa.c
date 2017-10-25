@@ -64,19 +64,23 @@ static void _Scheduler_strong_APA_Move_from_ready_to_scheduled(
   Scheduler_Node    *ready_to_scheduled
 )
 {
-  Scheduler_strong_APA_Context *self =
-    _Scheduler_strong_APA_Get_self( context );
-  Scheduler_strong_APA_Node *node =
-    _Scheduler_strong_APA_Node_downcast( ready_to_scheduled );
+  Scheduler_strong_APA_Context *self;
+  Scheduler_strong_APA_Node    *node;
+  Priority_Control              priority;
+
+  self = _Scheduler_strong_APA_Get_self( context );
+  node = _Scheduler_strong_APA_Node_downcast( ready_to_scheduled );
 
   _Scheduler_priority_Ready_queue_extract(
     &node->Base.Base.Node.Chain,
     &node->Ready_queue,
     &self->Bit_map
   );
+  priority = node->Base.priority;
   _Chain_Insert_ordered_unprotected(
     &self->Base.Scheduled,
     &node->Base.Base.Node.Chain,
+    &priority,
     _Scheduler_SMP_Insert_priority_fifo_order
   );
 }
