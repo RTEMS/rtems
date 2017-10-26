@@ -21,7 +21,7 @@
 #include <rtems/printer.h>
 #include <rtems/bspIo.h>
 
-static int printk_plugin(
+int rtems_printk_printer(
   void *ignored,
   const char *format,
   va_list ap
@@ -37,5 +37,5 @@ void rtems_print_printer_printk(
 )
 {
   printer->context = NULL;
-  printer->printer = printk_plugin;
+  printer->printer = rtems_printk_printer;
 }

@@ -29,7 +29,6 @@ rtems_task Init(rtems_task_argument argument);
 static void notification(int fd, int seconds_remaining, void *arg);
 
 const char rtems_test_name[] = "CAPTURE ENGINE";
-rtems_printer rtems_test_printer;
 
 volatile int can_proceed = 1;
 

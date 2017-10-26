@@ -21,7 +21,6 @@
 extern int paranoia(int, char **);
 
 const char rtems_test_name[] = "PARANOIA";
-rtems_printer rtems_test_printer;
 
 char *args[2] = { "paranoia", 0 };
 

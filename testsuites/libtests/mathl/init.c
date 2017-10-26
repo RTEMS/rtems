@@ -27,7 +27,6 @@
 #include <rtems/test.h>
 
 const char rtems_test_name[] = "MATHL";
-rtems_printer rtems_test_printer;
 #endif
 
 #include <stdio.h>

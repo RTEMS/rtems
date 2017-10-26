@@ -30,8 +30,6 @@
 
 const char rtems_test_name[] = "SP 20";
 
-rtems_printer rtems_test_printer;
-
 #define BUFFER_COUNT 20
 
 #define BUFFER_SIZE 100

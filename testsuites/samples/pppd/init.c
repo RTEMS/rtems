@@ -26,7 +26,6 @@
 #include "netconfig.h"
 
 const char rtems_test_name[] = "PPPD";
-rtems_printer rtems_test_printer;
 
 static void notification(int fd, int seconds_remaining, void *arg)
 {

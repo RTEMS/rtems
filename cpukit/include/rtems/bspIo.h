@@ -94,6 +94,12 @@ extern int getchark(void);
  */
 extern int vprintk(const char *fmt, va_list ap);
 
+int rtems_printk_printer(
+  void *ignored,
+  const char *format,
+  va_list ap
+);
+
 /**
  * @brief Kernel Print
  *

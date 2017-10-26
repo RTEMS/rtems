@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,6 +17,11 @@
 #endif
 
 #include <rtems/test.h>
+#include <rtems/bspIo.h>
+
+rtems_printer rtems_test_printer = {
+  .printer = rtems_printk_printer
+};
 
 int rtems_test_begin(void)
 {

@@ -16,8 +16,6 @@
 
 static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
 
-rtems_printer rtems_test_printer;
-
 static int locked_printf_plugin(void *context, const char *fmt, va_list ap)
 {
   (void) context;

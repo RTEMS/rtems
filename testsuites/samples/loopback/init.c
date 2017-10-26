@@ -13,7 +13,6 @@
 #include <bsp.h>
 
 const char rtems_test_name[] = "LOOPBACK";
-rtems_printer rtems_test_printer;
 
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
