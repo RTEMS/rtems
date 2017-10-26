@@ -116,7 +116,7 @@ static void test(void)
   /* 
    * Verify the Init task is running on the max core.
    */ 
-  printf("Verify Init task is on cpu %l" PRIu32 "\n",cpu_count-1);
+  printf("Verify Init task is on cpu %" PRIu32 "\n",cpu_count-1);
   cpu = rtems_get_current_processor();
   rtems_test_assert(cpu == (cpu_count-1));
 
