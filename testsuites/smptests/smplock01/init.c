@@ -24,7 +24,6 @@
 #include <rtems/test.h>
 #include <rtems.h>
 
-#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SMPLOCK 1";

@@ -29,7 +29,6 @@
 #include <rtems/score/smpbarrier.h>
 #include <rtems/score/smplock.h>
 
-#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SMPMRSP 1";

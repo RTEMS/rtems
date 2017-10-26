@@ -17,7 +17,6 @@
 #include "config.h"
 #endif
 
-#define TESTS_USE_PRINTK
 #define _POSIX_26_C_SOURCE
 #include "tmacros.h"
 #include <errno.h>

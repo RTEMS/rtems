@@ -18,7 +18,6 @@
 
 #include "test_support.h"
 
-#define TESTS_USE_PRINTK
 #include <tmacros.h>
 #include <errno.h>
 #include <unistd.h>

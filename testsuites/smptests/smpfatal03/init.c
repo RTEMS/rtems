@@ -18,7 +18,6 @@
 
 #define TEST_INIT
 
-#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SMPFATAL 3";

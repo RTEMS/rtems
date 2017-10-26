@@ -16,7 +16,6 @@
   #include "config.h"
 #endif
 
-#define TESTS_USE_PRINTK
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SPGLOBALCON 1";
