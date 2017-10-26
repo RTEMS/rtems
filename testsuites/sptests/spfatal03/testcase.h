@@ -9,6 +9,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/bspIo.h>
+
 #define CONFIGURE_MAXIMUM_SEMAPHORES 10
 
 #define FATAL_ERROR_TEST_NAME            "3"

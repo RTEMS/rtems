@@ -14,6 +14,8 @@
 #include "test_support.h"
 #include "tmacros.h"
 
+#include <rtems/bspIo.h>
+
 static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
 
 static int locked_printf_plugin(void *context, const char *fmt, va_list ap)

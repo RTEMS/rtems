@@ -30,6 +30,7 @@
 #include "tmacros.h"
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>

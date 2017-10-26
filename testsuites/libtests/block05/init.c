@@ -32,6 +32,7 @@
 #include <errno.h>
 
 #include <rtems.h>
+#include <rtems/bspIo.h>
 #include <rtems/bdbuf.h>
 #include <rtems/diskdevs.h>
 

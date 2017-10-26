@@ -25,6 +25,7 @@
 #define TEST_INIT
 
 #define TESTS_USE_PRINTK
+#include <rtems/bspIo.h>
 #include <tmacros.h>
 
 const char rtems_test_name[] = "SPPRINTK";

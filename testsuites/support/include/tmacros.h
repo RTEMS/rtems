@@ -60,7 +60,7 @@ extern "C" {
            && (((!_Thread_Dispatch_is_enabled()) == false && (_expect) != 0) \
              || ((!_Thread_Dispatch_is_enabled()) && (_expect) == 0)) \
     ) { \
-      printk( \
+      printf( \
         "\n_Thread_Dispatch_disable_level is (%i)" \
            " not %d detected at %s:%d\n", \
          !_Thread_Dispatch_is_enabled(), (_expect), __FILE__, __LINE__ ); \
@@ -77,7 +77,7 @@ extern "C" {
 #define check_if_allocator_mutex_is_not_owned() \
   do { \
     if ( _RTEMS_Allocator_is_owner() ) { \
-      printk( \
+      printf( \
         "\nRTEMS Allocator Mutex is owned by executing thread " \
           "and should not be.\n" \
         "Detected at %s:%d\n", \
