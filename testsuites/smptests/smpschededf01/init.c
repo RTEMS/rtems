@@ -20,7 +20,6 @@
 
 #include <rtems.h>
 #include <rtems/cpuuse.h>
-#include <rtems/printer.h>
 
 #include "tmacros.h"
 
@@ -73,7 +72,6 @@ static void t2(rtems_task_argument arg)
 static void test(test_context *ctx)
 {
   rtems_status_code sc;
-  rtems_printer printer;
 
   ctx->one_tick_busy = rtems_test_get_one_tick_busy_count();
 
@@ -117,9 +115,8 @@ static void test(test_context *ctx)
   sc = rtems_task_suspend(ctx->task[1]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_print_printer_printf(&printer);
-  rtems_cpu_usage_report_with_plugin(&printer);
-  rtems_rate_monotonic_report_statistics_with_plugin(&printer);
+  rtems_cpu_usage_report_with_plugin(&rtems_test_printer);
+  rtems_rate_monotonic_report_statistics_with_plugin(&rtems_test_printer);
 }
 
 static void Init(rtems_task_argument arg)

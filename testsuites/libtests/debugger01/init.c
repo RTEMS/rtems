@@ -25,14 +25,11 @@
 
 static void test(void)
 {
-  rtems_printer printer;
-
-  rtems_print_printer_fprintf(&printer, stdout);
   rtems_test_assert(rtems_debugger_start("test", "something",
-                                         3, 10, &printer) < 0);
+                                         3, 10, &rtems_test_printer) < 0);
   rtems_test_assert(rtems_debugger_register_test_remote() == 0);
   rtems_test_assert(rtems_debugger_start("test", "something",
-                                         3, 10, &printer) == 0);
+                                         3, 10, &rtems_test_printer) == 0);
   rtems_debugger_set_verbose(true);
   rtems_test_assert(rtems_debugger_remote_debug(true) == 0);
 

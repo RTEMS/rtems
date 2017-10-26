@@ -69,12 +69,13 @@ static void test_untar_check_mode(const char* file, int mode)
 void test_untar_from_memory(void)
 {
   rtems_status_code sc;
-  rtems_printer     printer;
-
-  rtems_print_printer_printf(&printer);
 
   printf("Untaring from memory - ");
-  sc = Untar_FromMemory_Print((void *)TARFILE_START, TARFILE_SIZE, &printer);
+  sc = Untar_FromMemory_Print(
+    (void *)TARFILE_START,
+    TARFILE_SIZE,
+    &rtems_test_printer
+  );
   if (sc != RTEMS_SUCCESSFUL) {
     printf ("error: untar failed: %s\n", rtems_status_text (sc));
     exit(1);
@@ -146,7 +147,6 @@ void test_untar_from_file(void)
 void test_untar_chunks_from_memory(void)
 {
   rtems_status_code sc;
-  rtems_printer     printer;
   int rv;
   Untar_ChunkContext ctx;
   unsigned long counter = 0;
@@ -154,8 +154,6 @@ void test_untar_chunks_from_memory(void)
   size_t buflen = TARFILE_SIZE;
 
   puts( "" );
-
-  rtems_print_printer_printf(&printer);
 
   /* make a directory to untar it into */
   rv = mkdir( "/dest2", 0777 );
@@ -167,7 +165,12 @@ void test_untar_chunks_from_memory(void)
   printf( "Untaring chunks from memory - " );
   Untar_ChunkContext_Init(&ctx);
   do {
-    sc = Untar_FromChunk_Print(&ctx, &buffer[counter], (size_t)1 , &printer);
+    sc = Untar_FromChunk_Print(
+      &ctx,
+      &buffer[counter],
+      (size_t)1 ,
+      &rtems_test_printer
+    );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
     counter ++;
   } while (counter < buflen);
@@ -191,7 +194,6 @@ void test_untar_chunks_from_memory(void)
 void test_untar_unzip_tgz(void)
 {
   int status;
-  rtems_printer     printer;
   int rv;
   Untar_GzChunkContext ctx;
   size_t i = 0;
@@ -202,8 +204,6 @@ void test_untar_unzip_tgz(void)
   puts( "" );
 
   rtems_test_assert( buflen != 0 );
-
-  rtems_print_printer_printf(&printer);
 
   /* make a directory to untar it into */
   rv = mkdir( "/dest3", 0777 );
@@ -217,7 +217,7 @@ void test_untar_unzip_tgz(void)
   status = Untar_GzChunkContext_Init(&ctx, &inflate_buffer, 1);
   rtems_test_assert(status == UNTAR_SUCCESSFUL);
   for(i = 0; i < buflen; i++) {
-    status = Untar_FromGzChunk_Print(&ctx, &buffer[i], 1, &printer);
+    status = Untar_FromGzChunk_Print(&ctx, &buffer[i], 1, &rtems_test_printer);
     rtems_test_assert(status == UNTAR_SUCCESSFUL);
   }
   printf( "successful\n" );
@@ -240,7 +240,6 @@ void test_untar_unzip_txz(void)
 {
 #if HAVE_XZ
   int status;
-  rtems_printer     printer;
   int rv;
   Untar_XzChunkContext ctx;
   size_t i = 0;
@@ -251,8 +250,6 @@ void test_untar_unzip_txz(void)
   puts( "" );
 
   rtems_test_assert( buflen != 0 );
-
-  rtems_print_printer_printf(&printer);
 
   /* make a directory to untar it into */
   rv = mkdir( "/dest4", 0777 );
@@ -270,7 +267,7 @@ void test_untar_unzip_txz(void)
                                      8 * 1024, &inflate_buffer, 1);
   rtems_test_assert(status == UNTAR_SUCCESSFUL);
   for(i = 0; i < buflen; i++) {
-    status = Untar_FromXzChunk_Print(&ctx, &buffer[i], 1, &printer);
+    status = Untar_FromXzChunk_Print(&ctx, &buffer[i], 1, &rtems_test_printer);
     rtems_test_assert(status == UNTAR_SUCCESSFUL);
   }
   printf( "successful\n" );

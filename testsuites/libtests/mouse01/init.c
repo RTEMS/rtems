@@ -97,10 +97,8 @@ void printf_uid_message(
   struct MW_UID_MESSAGE *uid
 )
 {
-  rtems_printer printer;
-  rtems_print_printer_printf( &printer );
   uid_print_message_with_plugin(
-    &printer,
+    &rtems_test_printer,
     uid
   );
 }
