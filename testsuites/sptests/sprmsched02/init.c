@@ -10,8 +10,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <rtems/cpuuse.h>
 #include <tmacros.h>
 #include <rtems/rtems/ratemonimpl.h>

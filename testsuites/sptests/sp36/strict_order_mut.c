@@ -10,8 +10,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <bsp.h>
 #include <stdio.h>
 #include "tmacros.h"

@@ -13,8 +13,6 @@
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-#define TEST_INIT
-
 #include <tmacros.h>
 
 #include <rtems/score/objectimpl.h>

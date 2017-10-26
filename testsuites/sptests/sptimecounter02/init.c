@@ -20,8 +20,6 @@
 
 #define _KERNEL
 
-#define TEST_INIT
-
 #include <sys/time.h>
 #include <sys/timetc.h>
 

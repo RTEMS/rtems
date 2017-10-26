@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/smpbarrier.h>
 #include <rtems/counter.h>

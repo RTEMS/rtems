@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <sys/time.h>
 #include <errno.h>
 #include <inttypes.h>

@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <bsp.h> /* for device driver prototypes */
 #include "tmacros.h"
 #include <rtems/imfs.h>

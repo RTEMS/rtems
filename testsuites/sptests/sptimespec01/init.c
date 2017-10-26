@@ -10,8 +10,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#define TEST_INIT
-
 #include <tmacros.h>
 #include "test_support.h"
 #include <rtems/timespec.h>

@@ -4,8 +4,6 @@
  * This file's license is 2-clause BSD as in this distribution's LICENSE file.
  */
 
-#define TEST_INIT
-
 #include <timesys.h>
 #include <rtems/btimer.h>
 

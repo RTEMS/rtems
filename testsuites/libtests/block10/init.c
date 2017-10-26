@@ -23,8 +23,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #define TESTS_USE_PRINTF
 #include "tmacros.h"
 

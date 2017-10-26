@@ -17,8 +17,6 @@
 #endif
 
 
-#define TEST_INIT
-
 #include "tmacros.h"
 
 #include <errno.h>

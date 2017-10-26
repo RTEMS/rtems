@@ -13,8 +13,6 @@
 
 #define NUM_CPUS   4
 
-#define TEST_INIT
-
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SMPAFFINITY 1";

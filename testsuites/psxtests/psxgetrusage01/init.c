@@ -19,8 +19,6 @@
 extern int getrusage(int who, struct rusage *usage);
 #endif
 
-#define TEST_INIT
-
 #include <tmacros.h>
 #include "test_support.h"
 

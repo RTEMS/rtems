@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <sys/stat.h>
 #include <stdio.h>
 #include <fcntl.h>

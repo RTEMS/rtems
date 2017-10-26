@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <sha256.h>
 #include <sha512.h>
 #include <stdio.h>

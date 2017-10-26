@@ -14,8 +14,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include "test_support.h"
 
 #include <tmacros.h>

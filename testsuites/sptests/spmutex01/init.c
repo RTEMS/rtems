@@ -27,8 +27,6 @@
 #include <pthread.h>
 #endif
 
-#define TEST_INIT
-
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SPMUTEX 1";

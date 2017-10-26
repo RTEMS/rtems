@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <pmacros.h>
 #include <signal.h>
 #include <errno.h>

@@ -39,8 +39,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <crypt.h>
 #include <string.h>
 

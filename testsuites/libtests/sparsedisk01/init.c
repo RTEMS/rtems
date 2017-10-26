@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <fcntl.h>
 #include <rtems/blkdev.h>
 #include "rtems/sparse-disk.h"

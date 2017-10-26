@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <tmacros.h>  /* includes bsp.h, stdio, etc... */
 
 const char rtems_test_name[] = "SP 32";

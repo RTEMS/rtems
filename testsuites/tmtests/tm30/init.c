@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <bsp.h>
 #include <coverhd.h>
 #include <tmacros.h>

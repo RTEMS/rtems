@@ -16,8 +16,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <sys/socket.h>
 #include <netdb.h>
 #include <string.h>

@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <rtems/score/smplock.h>
 #include <rtems/score/smplockmcs.h>
 #include <rtems/score/smplockseq.h>

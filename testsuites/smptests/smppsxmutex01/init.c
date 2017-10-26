@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <errno.h>
 #include <pthread.h>
 

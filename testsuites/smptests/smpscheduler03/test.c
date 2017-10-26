@@ -21,8 +21,6 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/schedulersmpimpl.h>
 
-#define TEST_INIT
-
 #include "tmacros.h"
 
 void Init(rtems_task_argument arg);

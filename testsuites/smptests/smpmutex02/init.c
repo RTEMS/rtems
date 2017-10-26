@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <inttypes.h>
 #include <string.h>
 #include <stdio.h>

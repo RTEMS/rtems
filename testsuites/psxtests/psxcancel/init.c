@@ -8,8 +8,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>

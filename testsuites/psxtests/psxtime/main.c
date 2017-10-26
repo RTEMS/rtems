@@ -14,8 +14,6 @@
 #endif
 
 
-#define TEST_INIT
-
 #include <bsp.h>
 #include <tmacros.h>  /* instantiate buffering code if needed */
 

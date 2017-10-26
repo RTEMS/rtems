@@ -13,8 +13,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include "system.h"
 #include <stdio.h>
 #include <stdlib.h>

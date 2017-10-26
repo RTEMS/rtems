@@ -12,8 +12,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <rtems/test.h>
 #include <bsp.h>
 #include <pmacros.h>

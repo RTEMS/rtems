@@ -24,8 +24,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <bsp.h>
 
 #include <rtems/shell.h>

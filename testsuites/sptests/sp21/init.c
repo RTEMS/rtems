@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <tmacros.h>
 #include <rtems/devnull.h>
 #include <rtems/devzero.h>

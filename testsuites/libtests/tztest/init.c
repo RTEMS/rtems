@@ -20,8 +20,6 @@
 
 #define CONFIGURE_INIT
 
-#define TEST_INIT
-
 #include <tmacros.h>
 #include <time.h>
 #include <stdlib.h>

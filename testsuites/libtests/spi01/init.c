@@ -16,8 +16,6 @@
   #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <dev/spi/spi.h>
 
 #include <sys/ioctl.h>

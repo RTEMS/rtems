@@ -25,8 +25,6 @@
 
 #define CONFIGURE_INIT
 
-#define TEST_INIT
-
 #include <bsp.h>
 #include <stdio.h>
 #include "tmacros.h"

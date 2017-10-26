@@ -16,8 +16,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/uio.h>

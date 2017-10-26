@@ -12,8 +12,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #include <pthread.h>
 #include <errno.h>
 #include "tmacros.h"

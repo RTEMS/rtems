@@ -11,8 +11,6 @@
 #include "config.h"
 #endif
 
-#define TEST_INIT
-
 #define _GNU_SOURCE
 #include <tmacros.h>
 #include <errno.h>

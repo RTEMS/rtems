@@ -22,8 +22,6 @@
 #undef RTEMS_PRINTFLIKE
 #define RTEMS_PRINTFLIKE(_a, _b)
 
-#define TEST_INIT
-
 #include <rtems/bspIo.h>
 #include <tmacros.h>
 

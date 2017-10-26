@@ -1,5 +1,3 @@
-#define TEST_INIT
-
 /*
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
