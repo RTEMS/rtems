@@ -28,10 +28,8 @@
  */
 #include <bsp/linker-symbols.h>
 #include <rtems/score/riscv-utility.h>
+#include <rtems/score/cpu.h>
 #include <rtems/asm.h>
-
-# define LREG lw
-# define SREG sw
 
 EXTERN(bsp_section_bss_begin)
 EXTERN(bsp_section_bss_end)
@@ -90,8 +88,8 @@ SYM(_start):
 
 _loop_clear_bss:
   bge   t0, t1, _end_clear_bss
-  sw    x0, 0(t0)
-  addi  t0, t0, 4
+  SREG    x0, 0(t0)
+  addi  t0, t0, CPU_SIZEOF_POINTER
   j     _loop_clear_bss
 _end_clear_bss:
 
@@ -101,7 +99,7 @@ _end_clear_bss:
 
   j boot_card
 
-  .align 2
+  .align 4
 bsp_start_vector_table_begin:
   .word _RISCV_Exception_default /* User int */
   .word _RISCV_Exception_default /* Supervisor int */

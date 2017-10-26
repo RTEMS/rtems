@@ -33,7 +33,6 @@
  * SUCH DAMAGE.
  */
 
-OUTPUT_FORMAT("elf32-littleriscv", "elf32-littleriscv", "elf32-littleriscv")
 OUTPUT_ARCH (riscv)
 
 ENTRY (_start)
@@ -68,9 +67,9 @@ bsp_section_xbarrier_align  = DEFINED (bsp_section_xbarrier_align) ? bsp_section
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
 bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1;
 
-bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
+bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 16;
 
-bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 1024;
+bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 4096;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
 _bsp_processor_count = DEFINED (_bsp_processor_count) ? _bsp_processor_count : 1;

@@ -60,11 +60,11 @@ extern "C" {
   * @{
   */
 
-#define REG(x)           (*((volatile uint32_t *) (x)))
+#define REG(x)           (*((volatile unsigned long *) (x)))
 #define BIT(n)           (1 << (n))
 
-#define MTIME_MM    0x0200bff8
-#define MTIMECMP_MM 0x02004000
+#define MTIME_MM    0x000000000200bff8
+#define MTIMECMP_MM 0x0000000002004000
 
 #ifdef __cplusplus
 }
