@@ -278,6 +278,8 @@ static void *worker(void *arg)
         expected_eno = -1;
         break;
       default:
+        to = NULL;
+        expected_eno = -1;
         rtems_test_assert(0);
         break;
     }
