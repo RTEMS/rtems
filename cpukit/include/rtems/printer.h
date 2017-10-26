@@ -74,7 +74,7 @@ static inline bool rtems_print_printer_valid(const rtems_printer *printer)
 }
 
 /**
- * @brief Initializes the rtems_printer struct to empty.
+ * @brief Initializes the printer to print nothing.
  *
  * An empty printer prints nothing. You can use this to implement an enable and
  * disable type print implementation.
@@ -88,31 +88,34 @@ static inline void rtems_print_printer_empty(rtems_printer *printer)
 }
 
 /**
- * @brief Initializes the rtems_printer struct to printk
- *
- * The printer will output to the kernel printk support.
+ * @brief Initializes the printer to print via printk().
  *
  * @param[in] printer Pointer to the printer structure.
  */
 void rtems_print_printer_printk(rtems_printer *printer);
 
 /**
- * @brief Initializes the rtems_printer struct to printf
- *
- * The printer will output to the libc printf support.
+ * @brief Initializes the printer to print via printf().
  *
  * @param[in] printer Pointer to the printer structure.
  */
-extern void rtems_print_printer_printf(rtems_printer *printer);
+void rtems_print_printer_printf(rtems_printer *printer);
 
 /**
- * @brief Initializes the rtems_printer struct to a fprintf device.
- *
- * The printer will output to the libc fprintf file provided.
+ * @brief Initializes the printer to print via fprintf() using the specified
+ * file stream.
  *
  * @param[in] printer Pointer to the printer structure.
  */
-extern void rtems_print_printer_fprintf(rtems_printer *printer, FILE *file);
+void rtems_print_printer_fprintf(rtems_printer *printer, FILE *file);
+
+/**
+ * @brief Initializes the printer to print via fprintf() using an unbuffered
+ * FILE stream with output through rtems_putc().
+ *
+ * @param[in] printer Pointer to the printer structure.
+ */
+void rtems_print_printer_fprintf_putc(rtems_printer *printer);
 
 typedef struct {
   rtems_id                     task;
