@@ -1,0 +1,26 @@
+include $(top_srcdir)/automake/compile.am
+include_rtemsdir = $(includedir)/rtems
+include_rtems_HEADERS = rtems/asm.h
+
+include_rtems_scoredir = $(includedir)/rtems/score
+include_rtems_score_HEADERS = rtems/score/cpu.h
+include_rtems_score_HEADERS += rtems/score/cpuatomic.h
+include_rtems_score_HEADERS += rtems/score/cpuimpl.h
+include_rtems_score_HEADERS += rtems/score/cpu_asm.h
+include_rtems_score_HEADERS += rtems/score/types.h
+include_rtems_score_HEADERS += rtems/score/riscv.h
+include_rtems_score_HEADERS += rtems/score/riscv-utility.h
+
+noinst_LIBRARIES = libscorecpu.a
+libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
+libscorecpu_a_SOURCES  = cpu.c
+libscorecpu_a_SOURCES += riscv-exception-handler.S
+libscorecpu_a_SOURCES += riscv-exception-default.c
+libscorecpu_a_SOURCES += riscv-exception-frame-print.c
+libscorecpu_a_SOURCES += riscv-context-switch.S
+libscorecpu_a_SOURCES += riscv-context-initialize.c
+libscorecpu_a_SOURCES += riscv-context-validate.S
+libscorecpu_a_SOURCES += riscv-context-volatile-clobber.S
+
+include $(srcdir)/preinstall.am
+include $(top_srcdir)/automake/local.am
