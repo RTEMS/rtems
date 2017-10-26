@@ -508,8 +508,8 @@ void make_many_symlinks(
 )
 {
   int  i;
-  char name1[5];
-  char name2[5];
+  char name1[32];
+  char name2[32];
   char *link_file;
 
   /* limit the link_count to ensure filename buffer doesn't overflow */
