@@ -248,7 +248,7 @@ Init (rtems_task_argument ignored)
 {
     rtems_status_code sc;
 
-    rtems_print_printer_printf(&rtems_test_printer);
+    rtems_print_printer_fprintf_putc(&rtems_test_printer);
 
     rtems_test_begin();
 

@@ -48,7 +48,7 @@ rtems_task Init(
   rtems_task_priority old_priority;
   rtems_mode          old_mode;
 
-  rtems_print_printer_printf(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   rtems_test_begin();
 
   status = rtems_shell_wait_for_input(

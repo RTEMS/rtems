@@ -59,7 +59,7 @@ int main( void )
 #endif
 {
 #if __rtems__
-  rtems_print_printer_printf(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   rtems_test_begin();
 #endif
 

@@ -37,7 +37,7 @@ rtems_task Init(
   M68KFPSPInstallExceptionHandlers ();
 #endif
 
-  rtems_print_printer_printf(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   rtems_test_begin();
   paranoia(1, args);
   rtems_test_end();

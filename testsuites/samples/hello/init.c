@@ -28,7 +28,7 @@ rtems_task Init(
   rtems_task_argument ignored
 )
 {
-  rtems_print_printer_printf(&rtems_test_printer);
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   rtems_test_begin();
   printf( "Hello World\n" );
   rtems_test_end();
