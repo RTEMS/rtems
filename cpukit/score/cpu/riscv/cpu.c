@@ -1,5 +1,5 @@
 /*
- * riscv32 CPU Dependent Source
+ * RISC-V CPU Dependent Source
  *
  * Copyright (c) 2015 University of York.
  * Hesham ALmatary <hesham@alumni.york.ac.uk>
@@ -59,12 +59,12 @@ void _CPU_Initialize(void)
   /* Do nothing */
 }
 
-void _CPU_ISR_Set_level(uint32_t level)
+void _CPU_ISR_Set_level(unsigned long level)
 {
   /* Do nothing */
 }
 
-uint32_t  _CPU_ISR_Get_level( void )
+unsigned long  _CPU_ISR_Get_level( void )
 {
   /* Do nothing */
   return 0;
@@ -80,7 +80,7 @@ void _CPU_ISR_install_raw_handler(
 }
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
+  unsigned long    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )

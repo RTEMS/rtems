@@ -1,10 +1,5 @@
 /*
- *
- * Copyright (c) 2015 University of York.
- * Hesham Almatary <hesham@alumni.york.ac.uk>
- *
- * COPYRIGHT (c) 1989-2006.
- * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,36 +27,19 @@
 #include "config.h"
 #endif
 
-#include <string.h>
-
 #include <rtems/score/cpu.h>
-#include <rtems/score/riscv-utility.h>
-#include <rtems/score/interr.h>
+#include <rtems/bspIo.h>
+#include <inttypes.h>
 
-void _CPU_Context_Initialize(
-  Context_Control *context,
-  void *stack_area_begin,
-  size_t stack_area_size,
-  uint32_t new_level,
-  void (*entry_point)( void ),
-  bool is_fp,
-  void *tls_area
-)
+void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
-  uintptr_t stack = ((uintptr_t) stack_area_begin);
+  int i;
 
-  /* Account for red-zone */
-  uintptr_t stack_high = stack + stack_area_size - RISCV_GCC_RED_ZONE_SIZE;
-
-  memset(context, 0, sizeof(*context));
-
-  /* Stack Pointer - sp/x2 */
-  context->x[2] = stack_high;
-  /* Frame Pointer - fp/x8 */
-  context->x[8] = stack_high;
-  /* Return Address - ra/x1 */
-  context->x[1] = (uintptr_t) entry_point;
-
-  /* Enable interrupts and FP */
-  context->mstatus = MSTATUS_FS | MSTATUS_MIE;
+  for ( i = 0; i < 32; ++i ) {
+#if __riscv_xlen == 32
+    printk( "x%02i = 0x%032" PRIx32 "\n", i, frame->x[i]);
+#else /* xlen == 64 */
+    printk( "x%02i = 0x%032" PRIx64 "\n", i, frame->x[i]);
+#endif
+  }
 }

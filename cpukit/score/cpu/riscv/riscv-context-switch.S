@@ -36,9 +36,6 @@
 .section .text, "ax"
 .align 4
 
-# define LREG lw
-# define SREG sw
-
 PUBLIC(_CPU_Context_switch)
 PUBLIC(_CPU_Context_restore)
 PUBLIC(_CPU_Context_restore_fp)

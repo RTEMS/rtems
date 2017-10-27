@@ -3,7 +3,7 @@
  *
  * @ingroup ScoreCPU
  *
- * @brief riscv32 exception support implementation.
+ * @brief RISC-V exception support implementation.
  */
 
 /*
@@ -41,9 +41,6 @@
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
 
-# define LREG lw
-# define SREG sw
-
 EXTERN(bsp_start_vector_table_begin)
 EXTERN(_Thread_Dispatch)
 PUBLIC(ISR_Handler)
@@ -52,7 +49,7 @@ PUBLIC(ISR_Handler)
 .align 4
 TYPE_FUNC(ISR_Handler)
 SYM(ISR_Handler):
-  addi sp, sp, -144
+  addi sp, sp, -1 * 36 * CPU_SIZEOF_POINTER
 
   SREG x1, (1 * CPU_SIZEOF_POINTER)(sp)
   /* Skip x2/sp */
@@ -103,15 +100,15 @@ SYM(ISR_Handler):
   /* Disable multitasking */
   la t1, THREAD_DISPATCH_DISABLE_LEVEL
 
-  LREG t2, (t0)
-  LREG t3, (t1)
+  lw t2, (t0)
+  lw t3, (t1)
   addi t2, t2, 1
   addi t3, t3, 1
-  SREG t2, (t0)
-  SREG t3, (t1)
+  sw t2, (t0)
+  sw t3, (t1)
 
   /* Save interrupted task stack pointer */
-  addi t4, sp, 144
+  addi t4, sp, 36 * CPU_SIZEOF_POINTER
   SREG t4, (2 * CPU_SIZEOF_POINTER)(sp)
 
   /* Keep sp (Exception frame address) in s1 */
@@ -126,7 +123,11 @@ SYM(ISR_Handler):
 
   /* calculate the offset */
   la   t5, bsp_start_vector_table_begin
+#if __riscv_xlen == 32
   slli t6, a0, 2
+#else /* xlen = 64 */
+  slli t6, a0, 3
+#endif
   add  t5, t5, t6
   LREG t5, (t5)
 
@@ -152,12 +153,12 @@ jump_to_c_handler:
   /* Enable multitasking */
   la t1, THREAD_DISPATCH_DISABLE_LEVEL
 
-  LREG t2, (t0)
-  LREG t3, (t1)
+  Lw t2, (t0)
+  lw t3, (t1)
   addi t2, t2, -1
   addi t3, t3, -1
-  SREG t2, (t0)
-  SREG t3, (t1)
+  sw t2, (t0)
+  sw t3, (t1)
 
   /* Check if _ISR_Nest_level > 0 */
   bgtz t2, exception_frame_restore
@@ -167,7 +168,7 @@ jump_to_c_handler:
 
   /* Check if dispatch needed */
   la   x31, DISPATCH_NEEDED
-  LREG x31, (x31)
+  lw x31, (x31)
   beqz x31, exception_frame_restore
 
   la x31, _Thread_Dispatch
@@ -215,6 +216,6 @@ jump_to_c_handler:
   LREG x31, (31 * CPU_SIZEOF_POINTER)(sp)
 
   /* Unwind exception frame */
-  addi sp, sp, 144
+  addi sp, sp, 36 * CPU_SIZEOF_POINTER
 
   mret

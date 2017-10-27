@@ -12,7 +12,10 @@ case "${target}" in
   no_cpu-*rtems*)
         RTEMS_CPU=no_cpu
 	;;
-  *) 
+  riscv*-*rtems*)
+        RTEMS_CPU=riscv
+	;;
+  *)
 	RTEMS_CPU=`echo $target | sed 's%^\([[^-]]*\)-\(.*\)$%\1%'`
 	;;
 esac

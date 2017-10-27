@@ -66,7 +66,7 @@ extern "C" {
 #define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
-#define CPU_MODES_INTERRUPT_MASK   0x00000001
+#define CPU_MODES_INTERRUPT_MASK   0x0000000000000001
 
 /*
  *  Processor defined structures required for cpukit/score.
@@ -75,13 +75,13 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
-  /* riscv32 has 32 32-bit general purpose registers (x0-x31). */
-  uint32_t  x[32];
+  /* riscv has 32 xlen-bit (where xlen can be 32 or 64) general purpose registers (x0-x31)*/
+  unsigned long x[32];
 
   /* Special purpose registers */
-  uint32_t  mstatus;
-  uint32_t  mcause;
-  uint32_t  mepc;
+  unsigned long mstatus;
+  unsigned long mcause;
+  unsigned long mepc;
 #ifdef RTEMS_SMP
   /**
    * @brief On SMP configurations the thread context must contain a boolean
@@ -138,7 +138,11 @@ typedef Context_Control CPU_Interrupt_frame;
 Context_Control_fp  _CPU_Null_fp_context;
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
+#if __riscv_xlen == 32
 #define CPU_STACK_MINIMUM_SIZE  4096
+#else
+#define CPU_STACK_MINIMUM_SIZE  4096 * 2
+#endif
 #define CPU_ALIGNMENT 8
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
@@ -152,14 +156,14 @@ Context_Control_fp  _CPU_Null_fp_context;
  *
  */
 
-static inline uint32_t riscv_interrupt_disable( void )
+static inline unsigned long riscv_interrupt_disable( void )
 {
-  register uint32_t status = read_csr(mstatus);
+  register unsigned long status = read_csr(mstatus);
   clear_csr(mstatus, MSTATUS_MIE);
   return status;
 }
 
-static inline void riscv_interrupt_enable(uint32_t level)
+static inline void riscv_interrupt_enable(unsigned long level)
 {
   write_csr(mstatus, level);
 }
@@ -176,14 +180,14 @@ static inline void riscv_interrupt_enable(uint32_t level)
       riscv_interrupt_disable(); \
     } while(0)
 
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( unsigned long level )
 {
   return ( level & MSTATUS_MIE ) != 0;
 }
 
-void _CPU_ISR_Set_level( uint32_t level );
+void _CPU_ISR_Set_level( unsigned long level );
 
-uint32_t _CPU_ISR_Get_level( void );
+unsigned long _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
@@ -194,7 +198,7 @@ void _CPU_Context_Initialize(
   Context_Control *context,
   void *stack_area_begin,
   size_t stack_area_size,
-  uint32_t new_level,
+  unsigned long new_level,
   void (*entry_point)( void ),
   bool is_fp,
   void *tls_area
@@ -262,15 +266,31 @@ typedef struct {
 } CPU_Per_CPU_control;
 #endif /* ASM */
 
+#if __riscv_xlen == 32
 #define CPU_SIZEOF_POINTER 4
+
+/* 32-bit load/store instructions */
+#define LREG lw
+#define SREG sw
+
 #define CPU_EXCEPTION_FRAME_SIZE 128
+#else /* xlen = 64 */
+#define CPU_SIZEOF_POINTER 8
+
+/* 64-bit load/store instructions */
+#define LREG ld
+#define SREG sd
+
+#define CPU_EXCEPTION_FRAME_SIZE 256
+#endif
+
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifndef ASM
 typedef uint16_t Priority_bit_map_Word;
 
 typedef struct {
-  uint32_t x[32];;
+  unsigned long x[32];;
 } CPU_Exception_frame;
 
 /**
@@ -321,7 +341,7 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
+  unsigned long    vector,
   proc_ptr   new_handler,
   proc_ptr   *old_handler
 );
@@ -423,8 +443,8 @@ void _CPU_Context_restore_fp(
  *
  */
 
-static inline unsigned int CPU_swap_u32(
-  unsigned int value
+static inline uint32_t CPU_swap_u32(
+  uint32_t value
 )
 {
   uint32_t   byte1, byte2, byte3, byte4, swapped;

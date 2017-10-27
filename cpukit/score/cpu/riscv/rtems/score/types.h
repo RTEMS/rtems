@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief riscv32 Architecture Types API
+ * @brief RISC-V Architecture Types API
  */
 
 /*

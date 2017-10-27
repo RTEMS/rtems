@@ -32,12 +32,11 @@
 
 .section	.text
 
-#define SREG sw
-#define LREG lw
 
 PUBLIC(_CPU_Context_validate)
 SYM(_CPU_Context_validate):
-  addi sp, sp, -144
+  /* RISC-V/RTEMS context has 36 registers of CPU_SIZEOF_POINTER size */
+  addi sp, sp, -1 * 36 * CPU_SIZEOF_POINTER
 
   SREG x1, (1 * CPU_SIZEOF_POINTER)(sp)
   /* Skip x2/sp */
@@ -197,5 +196,5 @@ restore:
 
   LREG x31, (31 * CPU_SIZEOF_POINTER)(sp)
 
-  addi sp, sp, 144
+  addi sp, sp, 36 * CPU_SIZEOF_POINTER
   ret

@@ -8,6 +8,8 @@ AC_DEFUN([RTEMS_CANONICAL_TARGET_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])
 AC_MSG_CHECKING(rtems target cpu)
 case "${host}" in
+riscv*-*-rtems*)
+	RTEMS_CPU=riscv;;
 *-*-rtems*)
 	RTEMS_CPU="$host_cpu";;
 *)
