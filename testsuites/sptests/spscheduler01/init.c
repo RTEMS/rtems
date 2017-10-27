@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -43,6 +43,7 @@ static void test_task_get_set_affinity(void)
   rtems_id task_id;
   rtems_status_code sc;
   cpu_set_t cpusetone;
+  cpu_set_t cpusetall;
   cpu_set_t cpuset;
   size_t big = 2 * CHAR_BIT * sizeof(cpu_set_t);
   size_t cpusetbigsize = CPU_ALLOC_SIZE(big);
@@ -51,6 +52,8 @@ static void test_task_get_set_affinity(void)
 
   CPU_ZERO(&cpusetone);
   CPU_SET(0, &cpusetone);
+
+  CPU_FILL(&cpusetall);
 
   sc = rtems_task_create(
     rtems_build_name('T', 'A', 'S', 'K'),
@@ -92,6 +95,14 @@ static void test_task_get_set_affinity(void)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_set_affinity(task_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
+
+  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpusetall), &cpusetall);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);

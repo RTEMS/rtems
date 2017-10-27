@@ -753,19 +753,18 @@ bool _Scheduler_EDF_SMP_Set_affinity(
 {
   Scheduler_Context *context;
   Processor_mask     a;
-  Processor_mask     b;
+  uint32_t           count;
   uint32_t           rqi;
 
   context = _Scheduler_Get_context( scheduler );
   _Processor_mask_And( &a, &context->Processors, affinity );
+  count = _Processor_mask_Count( &a );
 
-  if ( _Processor_mask_Count( &a ) == 0 ) {
+  if ( count == 0 ) {
     return false;
   }
 
-  _Processor_mask_And( &b, &_SMP_Online_processors, affinity );
-
-  if ( _Processor_mask_Count( &b ) == _SMP_Processor_count ) {
+  if ( count == _SMP_Processor_count ) {
     rqi = 0;
   } else {
     rqi = _Processor_mask_Find_last_set( &a );
