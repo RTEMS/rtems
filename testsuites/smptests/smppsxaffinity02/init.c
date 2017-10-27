@@ -113,6 +113,10 @@ void Validate_affinity(void )
   puts( "Init - Set Init priority to high");
   sc = pthread_getattr_np( Init_id, &attr );
   rtems_test_assert( sc == 0 );
+
+  sc = pthread_attr_setstack( &attr, NULL, 0 );
+  rtems_test_assert( sc == 0 );
+
   sc = pthread_attr_getschedparam( &attr, &param );
   rtems_test_assert( sc == 0 );
   param.sched_priority = sched_get_priority_max( SCHED_FIFO );
