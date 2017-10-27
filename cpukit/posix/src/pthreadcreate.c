@@ -77,6 +77,7 @@ int pthread_create(
   const POSIX_API_Control            *executing_api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
+  size_t                              stacksize;
   Objects_Name                        name;
   int                                 error;
   ISR_lock_Context                    lock_context;
@@ -96,8 +97,15 @@ int pthread_create(
    *  NOTE: If the user provides the stack we will let it drop below
    *        twice the minimum.
    */
-  if ( the_attr->stackaddr && !_Stack_Is_enough(the_attr->stacksize) )
-    return EINVAL;
+  if ( the_attr->stackaddr != NULL ) {
+    if ( !_Stack_Is_enough(the_attr->stacksize) ) {
+      return EINVAL;
+    }
+
+    stacksize = the_attr->stacksize;
+  } else {
+    stacksize = _POSIX_Threads_Ensure_minimum_stack( the_attr->stacksize );
+  }
 
   #if 0
     int  cputime_clock_allowed;  /* see time.h */
@@ -200,7 +208,7 @@ int pthread_create(
     the_thread,
     scheduler,
     the_attr->stackaddr,
-    _POSIX_Threads_Ensure_minimum_stack(the_attr->stacksize),
+    stacksize,
     is_fp,
     core_normal_prio,
     true,                 /* preemptible */
