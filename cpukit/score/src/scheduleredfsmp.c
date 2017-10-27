@@ -226,8 +226,7 @@ static inline Scheduler_EDF_SMP_Node *_Scheduler_EDF_SMP_Get_scheduled(
 
 static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
   Scheduler_Context *context,
-  Scheduler_Node    *filter_base,
-  Chain_Node_order   order
+  Scheduler_Node    *filter_base
 )
 {
   Scheduler_EDF_SMP_Node *filter;
@@ -249,7 +248,7 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
     }
   }
 
-  return _Scheduler_SMP_Get_lowest_scheduled( context, filter_base, order );
+  return _Scheduler_SMP_Get_lowest_scheduled( context, filter_base );
 }
 
 static inline void _Scheduler_EDF_SMP_Insert_ready(

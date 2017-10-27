@@ -210,8 +210,7 @@ void _Scheduler_priority_affinity_SMP_Block(
  */
 static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
   Scheduler_Context *context,
-  Scheduler_Node    *filter_base,
-  Chain_Node_order   order
+  Scheduler_Node    *filter_base
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
@@ -229,20 +228,6 @@ static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
     uint32_t                              cpu_index;
 
     node = (Scheduler_priority_affinity_SMP_Node *) chain_node;
-
-    /*
-     * If we didn't find a thread which is of equal or lower importance
-     * than filter thread is, then we can't schedule the filter thread
-     * to execute.
-     */
-    if (
-      (*order)(
-        &node->Base.Base.Base.Node.Chain,
-        &filter->Base.Base.Base.Node.Chain
-      )
-    ) {
-      break;
-    }
 
     /* cpu_index is the processor number thread is executing on */
     thread = _Scheduler_Node_get_owner( &node->Base.Base.Base );
@@ -309,8 +294,7 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
     lowest_scheduled =
       _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
         context,
-        highest_ready,
-        _Scheduler_SMP_Insert_priority_lifo_order
+        highest_ready
       );
 
     /*
@@ -322,8 +306,18 @@ static void _Scheduler_priority_affinity_SMP_Check_for_migrations(
      * considering affinity. But now we have to consider that thread's
      * affinity as we look to place it.
      */
+
     if ( lowest_scheduled == NULL )
       break;
+
+    if (
+      _Scheduler_SMP_Insert_priority_lifo_order(
+        &lowest_scheduled->Node.Chain,
+        &highest_ready->Node.Chain
+      )
+    ) {
+      break;
+    }
 
     /*
      * But if we found a thread which is lower priority than one

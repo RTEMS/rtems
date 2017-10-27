@@ -286,8 +286,7 @@ typedef Scheduler_Node *( *Scheduler_SMP_Get_highest_ready )(
 
 typedef Scheduler_Node *( *Scheduler_SMP_Get_lowest_scheduled )(
   Scheduler_Context *context,
-  Scheduler_Node    *filter,
-  Chain_Node_order   order
+  Scheduler_Node    *filter
 );
 
 typedef void ( *Scheduler_SMP_Extract )(
@@ -615,8 +614,7 @@ static inline Thread_Control *_Scheduler_SMP_Preempt(
 
 static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
   Scheduler_Context *context,
-  Scheduler_Node    *filter,
-  Chain_Node_order   order
+  Scheduler_Node    *filter
 )
 {
   Scheduler_SMP_Context *self = _Scheduler_SMP_Get_self( context );
@@ -625,7 +623,6 @@ static inline Scheduler_Node *_Scheduler_SMP_Get_lowest_scheduled(
     (Scheduler_Node *) _Chain_Last( scheduled );
 
   (void) filter;
-  (void) order;
 
   _Assert( &lowest_scheduled->Node.Chain != _Chain_Tail( scheduled ) );
   _Assert(
@@ -725,7 +722,7 @@ static inline bool _Scheduler_SMP_Enqueue_ordered(
   bool            needs_help;
   Scheduler_Node *lowest_scheduled;
 
-  lowest_scheduled = ( *get_lowest_scheduled )( context, node, order );
+  lowest_scheduled = ( *get_lowest_scheduled )( context, node );
 
   if ( ( *order )( &node->Node.Chain, &lowest_scheduled->Node.Chain ) ) {
     _Scheduler_SMP_Enqueue_to_scheduled(
@@ -1207,7 +1204,7 @@ static inline bool _Scheduler_SMP_Ask_for_help(
   ISR_lock_Context  lock_context;
   bool              success;
 
-  lowest_scheduled = ( *get_lowest_scheduled )( context, node, order );
+  lowest_scheduled = ( *get_lowest_scheduled )( context, node );
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
 
