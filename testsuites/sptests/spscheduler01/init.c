@@ -17,11 +17,15 @@
 #endif
 
 #define TEST_INIT
+#define _GNU_SOURCE
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
 
+#include <errno.h>
 #include <limits.h>
+#include <string.h>
+#include <pthread.h>
 
 #include "tmacros.h"
 
@@ -31,11 +35,82 @@ const char rtems_test_name[] = "SPSCHEDULER 1";
 
 #define RED rtems_build_name('r', 'e', 'd', ' ')
 
+#define BIG_NUM_CPUS (2 * CHAR_BIT * sizeof(cpu_set_t))
+
 static const rtems_id invalid_id = 1;
 
 static rtems_id master_id;
 
 static rtems_id sema_id;
+
+static void assert_eno(rtems_status_code sc, int eno)
+{
+  switch (sc) {
+    case RTEMS_SUCCESSFUL:
+      rtems_test_assert(eno == 0);
+      break;
+    case RTEMS_INVALID_ADDRESS:
+      rtems_test_assert(eno == EFAULT);
+      break;
+    case RTEMS_INVALID_ID:
+      rtems_test_assert(eno == ESRCH);
+      break;
+    case RTEMS_INVALID_NUMBER:
+      rtems_test_assert(eno == EINVAL);
+      break;
+    default:
+      rtems_test_assert(0);
+  }
+}
+
+static rtems_status_code task_get_affinity(
+  rtems_id id,
+  size_t cpusetsize,
+  cpu_set_t *cpuset
+)
+{
+  rtems_status_code sc;
+  int eno;
+  cpu_set_t *cpusetbig;
+
+  sc = rtems_task_get_affinity(id, cpusetsize, cpuset);
+
+  if (cpuset != NULL) {
+    cpusetbig = CPU_ALLOC(BIG_NUM_CPUS);
+    rtems_test_assert(cpusetbig != NULL);
+
+    memcpy(cpusetbig, cpuset, cpusetsize);
+  } else {
+    cpusetbig = NULL;
+  }
+
+  eno = pthread_getaffinity_np(id, cpusetsize, cpusetbig);
+
+  if (cpuset != NULL) {
+    rtems_test_assert(CPU_EQUAL_S(cpusetsize, cpusetbig, cpuset));
+    CPU_FREE(cpusetbig);
+  }
+
+  assert_eno(sc, eno);
+
+  return sc;
+}
+
+static rtems_status_code task_set_affinity(
+  rtems_id id,
+  size_t cpusetsize,
+  const cpu_set_t *cpuset
+)
+{
+  rtems_status_code sc;
+  int eno;
+
+  sc = rtems_task_set_affinity(id, cpusetsize, cpuset);
+  eno = pthread_setaffinity_np(id, cpusetsize, cpuset);
+  assert_eno(sc, eno);
+
+  return sc;
+}
 
 static void test_task_get_set_affinity(void)
 {
@@ -45,8 +120,7 @@ static void test_task_get_set_affinity(void)
   cpu_set_t cpusetone;
   cpu_set_t cpusetall;
   cpu_set_t cpuset;
-  size_t big = 2 * CHAR_BIT * sizeof(cpu_set_t);
-  size_t cpusetbigsize = CPU_ALLOC_SIZE(big);
+  size_t cpusetbigsize = CPU_ALLOC_SIZE(BIG_NUM_CPUS);
   cpu_set_t *cpusetbigone;
   cpu_set_t *cpusetbig;
 
@@ -65,66 +139,66 @@ static void test_task_get_set_affinity(void)
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_get_affinity(RTEMS_SELF, sizeof(cpuset), NULL);
+  sc = task_get_affinity(RTEMS_SELF, sizeof(cpuset), NULL);
   rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
 
-  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), NULL);
+  sc = task_set_affinity(RTEMS_SELF, sizeof(cpuset), NULL);
   rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
 
-  sc = rtems_task_get_affinity(RTEMS_SELF, 0, &cpuset);
+  sc = task_get_affinity(RTEMS_SELF, 0, &cpuset);
   rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
-  sc = rtems_task_set_affinity(RTEMS_SELF, 0, &cpuset);
+  sc = task_set_affinity(RTEMS_SELF, 0, &cpuset);
   rtems_test_assert(sc == RTEMS_INVALID_NUMBER);
 
-  sc = rtems_task_get_affinity(invalid_id, sizeof(cpuset), &cpuset);
+  sc = task_get_affinity(invalid_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  sc = rtems_task_set_affinity(invalid_id, sizeof(cpuset), &cpuset);
+  sc = task_set_affinity(invalid_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 
-  sc = rtems_task_get_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
+  sc = task_get_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
 
-  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
+  sc = task_set_affinity(RTEMS_SELF, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_affinity(self_id, sizeof(cpuset), &cpuset);
+  sc = task_set_affinity(self_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_set_affinity(task_id, sizeof(cpuset), &cpuset);
+  sc = task_set_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
-
-  sc = rtems_task_set_affinity(RTEMS_SELF, sizeof(cpusetall), &cpusetall);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
-  sc = rtems_task_get_affinity(task_id, sizeof(cpuset), &cpuset);
+  sc = task_get_affinity(task_id, sizeof(cpuset), &cpuset);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
 
-  cpusetbigone = CPU_ALLOC(big);
+  sc = task_set_affinity(RTEMS_SELF, sizeof(cpusetall), &cpusetall);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = task_get_affinity(task_id, sizeof(cpuset), &cpuset);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
+
+  cpusetbigone = CPU_ALLOC(BIG_NUM_CPUS);
   rtems_test_assert(cpusetbigone != NULL);
 
-  cpusetbig = CPU_ALLOC(big);
+  cpusetbig = CPU_ALLOC(BIG_NUM_CPUS);
   rtems_test_assert(cpusetbig != NULL);
 
   CPU_ZERO_S(cpusetbigsize, cpusetbigone);
   CPU_SET_S(0, cpusetbigsize, cpusetbigone);
 
-  sc = rtems_task_get_affinity(task_id, cpusetbigsize, cpusetbig);
+  sc = task_get_affinity(task_id, cpusetbigsize, cpusetbig);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   rtems_test_assert(CPU_EQUAL_S(cpusetbigsize, cpusetbig, cpusetbigone));
 
-  sc = rtems_task_set_affinity(task_id, cpusetbigsize, cpusetbig);
+  sc = task_set_affinity(task_id, cpusetbigsize, cpusetbig);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   sc = rtems_task_delete(task_id);
@@ -408,8 +482,7 @@ static void test_scheduler_get_processors(void)
   rtems_id scheduler_id;
   cpu_set_t cpusetone;
   cpu_set_t cpuset;
-  size_t big = 2 * CHAR_BIT * sizeof(cpu_set_t);
-  size_t cpusetbigsize = CPU_ALLOC_SIZE(big);
+  size_t cpusetbigsize = CPU_ALLOC_SIZE(BIG_NUM_CPUS);
   cpu_set_t *cpusetbigone;
   cpu_set_t *cpusetbig;
 
@@ -433,10 +506,10 @@ static void test_scheduler_get_processors(void)
 
   rtems_test_assert(CPU_EQUAL(&cpuset, &cpusetone));
 
-  cpusetbigone = CPU_ALLOC(big);
+  cpusetbigone = CPU_ALLOC(BIG_NUM_CPUS);
   rtems_test_assert(cpusetbigone != NULL);
 
-  cpusetbig = CPU_ALLOC(big);
+  cpusetbig = CPU_ALLOC(BIG_NUM_CPUS);
   rtems_test_assert(cpusetbig != NULL);
 
   CPU_ZERO_S(cpusetbigsize, cpusetbigone);

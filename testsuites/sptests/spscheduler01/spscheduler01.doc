@@ -6,6 +6,8 @@ directives:
 
   - rtems_task_get_affinity()
   - rtems_task_set_affinity()
+  - pthread_getaffinity_np()
+  - pthread_setaffinity_np()
   - rtems_task_get_scheduler()
   - rtems_task_set_scheduler()
   - rtems_scheduler_ident()
