@@ -13,19 +13,17 @@
 
 #include <time.h>
 #include <errno.h>
+#include <stdint.h>
 
 #include "pmacros.h"
 #include "pritime.h"
 
+#include <rtems.h>
 #include <rtems/score/todimpl.h>
 
 const char rtems_test_name[] = "PSXCLOCK";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-void check_enosys(int status);
-
-void check_enosys(int status)
+static void check_enosys(int status)
 {
   if ( (status == -1) && (errno == ENOSYS) )
     return;
@@ -33,7 +31,52 @@ void check_enosys(int status)
   rtems_test_exit(0);
 }
 
-rtems_task Init(
+typedef struct {
+  int counter;
+  struct timespec delta;
+} nanosleep_contex;
+
+static void task_nanosleep( rtems_task_argument arg )
+{
+  nanosleep_contex *ctx;
+
+  ctx = (nanosleep_contex *) arg;
+  ++ctx->counter;
+  nanosleep( &ctx->delta, NULL );
+}
+
+static void test_far_future_nanosleep( void )
+{
+  rtems_status_code sc;
+  rtems_id          id;
+  nanosleep_contex  ctx;
+
+  sc = rtems_task_create(
+    rtems_build_name( 'N', 'A', 'N', 'O' ),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  ctx.counter = 0;
+  ctx.delta.tv_sec = INT64_MAX;
+  ctx.delta.tv_nsec = 999999999;
+  sc = rtems_task_start( id, task_nanosleep, (rtems_task_argument) &ctx );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  rtems_test_assert( ctx.counter == 1 );
+
+  sc = rtems_task_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+}
+
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
@@ -139,6 +182,8 @@ rtems_task Init(
 
   printf( "Init: seconds remaining (%d)\n", (int)remaining );
   rtems_test_assert( !remaining );
+
+  test_far_future_nanosleep();
 
   /* error cases in nanosleep */
 
@@ -267,7 +312,7 @@ rtems_task Init(
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS             2
 
 #define CONFIGURE_INIT
 #include <rtems/confdefs.h>

@@ -63,7 +63,7 @@ int clock_nanosleep(
 )
 {
   Thread_queue_Context   queue_context;
-  struct timespec        spare_end;
+  struct timespec        uptime;
   const struct timespec *end;
   Thread_Control        *executing;
   int                    eno;
@@ -93,16 +93,8 @@ int clock_nanosleep(
       );
     }
   } else {
-    if ( !_Watchdog_Is_valid_interval_timespec( rqtp ) ) {
-      return EINVAL;
-    }
-
-    _TOD_Get_zero_based_uptime_as_timespec( &spare_end );
-
-    /* In case this overflows, then the enqueue callout will reject it */
-    _Timespec_Add_to( &spare_end, rqtp );
-
-    end = &spare_end;
+    _TOD_Get_zero_based_uptime_as_timespec( &uptime );
+    end = _Watchdog_Future_timespec( &uptime, rqtp );
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
       end

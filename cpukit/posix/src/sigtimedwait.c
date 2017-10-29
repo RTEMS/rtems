@@ -76,6 +76,7 @@ int sigtimedwait(
   siginfo_t             signal_information;
   siginfo_t            *the_info;
   int                   signo;
+  struct timespec       uptime;
   Thread_queue_Context  queue_context;
   int                   error;
 
@@ -92,20 +93,13 @@ int sigtimedwait(
    */
 
   if ( timeout != NULL ) {
-    struct timespec end;
+    const struct timespec *end;
 
-    if ( !_Watchdog_Is_valid_interval_timespec( timeout ) ) {
-      return EINVAL;
-    }
-
-    _TOD_Get_zero_based_uptime_as_timespec( &end );
-
-    /* In case this overflows, then the enqueue callout will reject it */
-    _Timespec_Add_to( &end, timeout );
-
+    _TOD_Get_zero_based_uptime_as_timespec( &uptime );
+    end = _Watchdog_Future_timespec( &uptime, timeout );
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
-      &end
+      end
     );
   } else {
     _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );

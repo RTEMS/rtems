@@ -324,6 +324,36 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_interval_timespec(
   return _Watchdog_Is_valid_timespec( ts ) && ts->tv_sec >= 0;
 }
 
+RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
+  struct timespec       *now,
+  const struct timespec *delta
+)
+{
+  uint64_t sec;
+
+  if ( !_Watchdog_Is_valid_interval_timespec( delta ) ) {
+    return NULL;
+  }
+
+  sec = (uint64_t) now->tv_sec;
+  sec += (uint64_t) delta->tv_sec;
+  now->tv_nsec += delta->tv_nsec;
+
+  /* We have 2 * (2**63 - 1) + 1 == UINT64_MAX */
+  if ( now->tv_nsec >= WATCHDOG_NANOSECONDS_PER_SECOND ) {
+    now->tv_nsec -= WATCHDOG_NANOSECONDS_PER_SECOND;
+    ++sec;
+  }
+
+  if ( sec <= INT64_MAX ) {
+    now->tv_sec = sec;
+  } else {
+    now->tv_sec = INT64_MAX;
+  }
+
+  return now;
+}
+
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_monotonic_timespec(
   const struct timespec *ts
 )
