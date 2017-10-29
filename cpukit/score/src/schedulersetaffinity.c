@@ -41,7 +41,7 @@ bool _Scheduler_Set_affinity(
    * _Thread_Initialize() which sets the default affinity to the set of online
    * processors.
    */
-  _Processor_mask_And( &affinity, &_SMP_Online_processors, &affinity );
+  _Processor_mask_And( &affinity, _SMP_Get_online_processors(), &affinity );
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
   _Scheduler_Acquire_critical( scheduler, &lock_context );
