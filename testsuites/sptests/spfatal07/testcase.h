@@ -9,6 +9,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/bspIo.h>
+
 /*
  *  Way too much stack space.  Should generate a fatal error
  *  on the init task create.
