@@ -163,6 +163,10 @@ $(PROJECT_INCLUDE)/arm/freescale/imx/imx_uartreg.h: include/arm/freescale/imx/im
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_uartreg.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_uartreg.h
 
+$(PROJECT_INCLUDE)/arm/freescale/imx/imx_wdogreg.h: include/arm/freescale/imx/imx_wdogreg.h $(PROJECT_INCLUDE)/arm/freescale/imx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/arm/freescale/imx/imx_wdogreg.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/arm/freescale/imx/imx_wdogreg.h
+
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)

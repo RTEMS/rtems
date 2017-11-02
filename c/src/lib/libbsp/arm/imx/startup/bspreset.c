@@ -14,7 +14,18 @@
 
 #include <bsp/bootcard.h>
 
+#include <arm/freescale/imx/imx_wdogreg.h>
+
 void bsp_reset(void)
 {
-  /* TODO */
+  volatile uint16_t *pcr;
+
+  pcr = (volatile uint16_t *) 0x30280000;
+  *pcr &= ~WDOG_CR_SRS;
+  *pcr &= ~WDOG_CR_SRS;
+  *pcr &= ~WDOG_CR_SRS;
+
+  while (true) {
+    /* Wait */
+  }
 }

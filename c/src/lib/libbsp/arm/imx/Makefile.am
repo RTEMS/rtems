@@ -48,6 +48,7 @@ include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_iomuxreg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_iomuxvar.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_srcreg.h
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_uartreg.h
+include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_wdogreg.h
 
 ###############################################################################
 #                  Data                                                       #
