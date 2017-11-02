@@ -32,6 +32,7 @@ static void Init(rtems_task_argument arg)
 
   TEST_BEGIN();
 
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   main(2, argv);
 
   TEST_END();

@@ -138,9 +138,9 @@ static bool
 bdbuf_test_print_sc (rtems_status_code sc, bool newline)
 {
   if (newline)
-    fprintf (stdout, "%s\n", rtems_status_text (sc));
+    printf ("%s\n", rtems_status_text (sc));
   else
-    fprintf (stdout, "%s", rtems_status_text (sc));
+    printf ("%s", rtems_status_text (sc));
   return sc == RTEMS_SUCCESSFUL;
 }
 

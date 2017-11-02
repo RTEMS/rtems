@@ -55,16 +55,14 @@ capture_CT1a (rtems_task_argument arg)
   sc = rtems_semaphore_obtain (mutex, RTEMS_WAIT, 0);
 
   if (sc != RTEMS_SUCCESSFUL)
-    fprintf (stdout, "error: CT1a: mutex obtain: %s\n",
-             rtems_status_text (sc));
+    printf ("error: CT1a: mutex obtain: %s\n", rtems_status_text (sc));
 
   capture_wait (2500);
 
   sc = rtems_semaphore_release (mutex);
 
   if (sc != RTEMS_SUCCESSFUL)
-    fprintf (stdout, "error: CT1a: mutex release: %s\n",
-             rtems_status_text (sc));
+    printf ("error: CT1a: mutex release: %s\n", rtems_status_text (sc));
 
   capture_CT1a_deleted = 1;
 
@@ -93,16 +91,14 @@ capture_CT1c (rtems_task_argument arg)
   sc = rtems_semaphore_obtain (mutex, RTEMS_WAIT, 0);
 
   if (sc != RTEMS_SUCCESSFUL)
-    fprintf (stdout, "error: CT1c: mutex obtain: %s\n",
-             rtems_status_text (sc));
+    printf ("error: CT1c: mutex obtain: %s\n", rtems_status_text (sc));
 
   capture_wait (500);
 
   sc = rtems_semaphore_release (mutex);
 
   if (sc != RTEMS_SUCCESSFUL)
-    fprintf (stdout, "error: CT1c: mutex release: %s\n",
-             rtems_status_text (sc));
+    printf ("error: CT1c: mutex release: %s\n", rtems_status_text (sc));
 
   capture_CT1c_deleted = 1;
 
@@ -130,8 +126,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot mutex: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot mutex: %s\n", rtems_status_text (sc));
     return;
   }
 
@@ -144,8 +139,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot create CT1a: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot create CT1a: %s\n", rtems_status_text (sc));
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -154,8 +148,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot start CT1a: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot start CT1a: %s\n", rtems_status_text (sc));
     rtems_task_delete (id[0]);
     rtems_semaphore_delete (mutex);
     return;
@@ -172,8 +165,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot create CT1b: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot create CT1b: %s\n", rtems_status_text (sc));
     rtems_task_delete (id[0]);
     rtems_semaphore_delete (mutex);
     return;
@@ -183,8 +175,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot start CT1b: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot start CT1b: %s\n", rtems_status_text (sc));
     rtems_task_delete (id[1]);
     rtems_task_delete (id[0]);
     rtems_semaphore_delete (mutex);
@@ -202,8 +193,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot create CT1c: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot create CT1c: %s\n", rtems_status_text (sc));
     rtems_task_delete (id[1]);
     rtems_task_delete (id[0]);
     rtems_semaphore_delete (mutex);
@@ -214,8 +204,7 @@ void capture_test_1 ()
 
   if (sc != RTEMS_SUCCESSFUL)
   {
-    fprintf (stdout, "error: Test 1: cannot start CT1c: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: cannot start CT1c: %s\n", rtems_status_text (sc));
     rtems_task_delete (id[2]);
     rtems_task_delete (id[1]);
     rtems_task_delete (id[0]);
@@ -234,7 +223,7 @@ void capture_test_1 ()
 
   if (!loops)
   {
-    fprintf (stdout, "error: Test 1: test tasks did not delete\n");
+    printf ("error: Test 1: test tasks did not delete\n");
     rtems_task_delete (id[2]);
     rtems_task_delete (id[1]);
     rtems_task_delete (id[0]);
@@ -242,8 +231,7 @@ void capture_test_1 ()
 
   sc = rtems_semaphore_delete (mutex);
   if (sc != RTEMS_SUCCESSFUL)
-    fprintf (stdout, "error: Test 1: deleting the mutex: %s\n",
-             rtems_status_text (sc));
+    printf ("error: Test 1: deleting the mutex: %s\n", rtems_status_text (sc));
 
 }
 

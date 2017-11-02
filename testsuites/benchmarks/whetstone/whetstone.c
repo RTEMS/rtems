@@ -56,6 +56,10 @@ C**********************************************************************
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#ifdef __rtems__
+#include <tmacros.h>
+#define fprintf(f, ...) rtems_printf(&rtems_test_printer, __VA_ARGS__)
+#endif /* __rtems__ */
 
 /* the following is optional depending on the timing function used */
 #include <sys/time.h>

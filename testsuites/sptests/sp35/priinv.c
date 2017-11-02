@@ -204,9 +204,6 @@ rtems_task LocalHwSim_Exec(rtems_task_argument TaskArg)
       rtems_task_wake_after(100);
 
       StartHw = FALSE;
-#if 0
-      fprintf( stderr, "StartHw -- fire ISR (%d)\n", ++ISRCount );
-#endif
 #if defined(TEST_USE_ISR)
       __asm__ volatile ("ta 5");
       __asm__ volatile ("nop");

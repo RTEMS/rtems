@@ -223,6 +223,11 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#ifdef __rtems__
+#include <tmacros.h>
+#undef print_time
+#define fprintf(f, ...) rtems_printf(&rtems_test_printer, __VA_ARGS__)
+#endif /* __rtems__ */
 
 
 static REAL atime[9][15];
