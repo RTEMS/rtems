@@ -22,7 +22,6 @@
 #include <rtems.h>
 #include <rtems/counter.h>
 
-#define TESTS_USE_PRINTF
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SPCPUCOUNTER 1";

@@ -28,7 +28,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define TESTS_USE_PRINTF
 #include "tmacros.h"
 
 #include <rtems.h>

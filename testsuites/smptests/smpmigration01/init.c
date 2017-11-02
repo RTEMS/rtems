@@ -16,7 +16,6 @@
   #include "config.h"
 #endif
 
-#define TESTS_USE_PRINTF
 #include "tmacros.h"
 
 #include <stdio.h>
