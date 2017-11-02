@@ -51,6 +51,8 @@ rtems_vector_number imx_get_irq_of_node(
   size_t index
 );
 
+void imx_uart_console_drain(void);
+
 /**
  * @brief Registers an IMX I2C bus driver.
  *

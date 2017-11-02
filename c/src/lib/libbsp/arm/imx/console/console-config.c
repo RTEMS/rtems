@@ -59,6 +59,19 @@ static void imx_uart_write_polled(rtems_termios_device_context *base, char c)
   regs->utxd = IMX_UART_UTXD_TX_DATA(c);
 }
 
+void imx_uart_console_drain(void)
+{
+  volatile imx_uart *regs;
+
+  regs = imx_uart_get_regs(&imx_uart_console->base);
+
+  if (regs != NULL) {
+    while ((regs->usr2 & IMX_UART_USR2_TXFE) == 0) {
+      /* Wait */
+    }
+  }
+}
+
 static void imx_output_char(char c)
 {
   imx_uart_write_polled(&imx_uart_console->base, c);
