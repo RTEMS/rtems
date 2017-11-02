@@ -23,9 +23,9 @@ void bsp_reset(void)
   imx_uart_console_drain();
 
   pcr = (volatile uint16_t *) 0x30280000;
-  *pcr &= ~WDOG_CR_SRS;
-  *pcr &= ~WDOG_CR_SRS;
-  *pcr &= ~WDOG_CR_SRS;
+  *pcr = WDOG_CR_WDE;
+  *pcr = WDOG_CR_WDE;
+  *pcr = WDOG_CR_WDE;
 
   while (true) {
     /* Wait */
