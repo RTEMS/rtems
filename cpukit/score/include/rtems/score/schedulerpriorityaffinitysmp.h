@@ -167,9 +167,9 @@ typedef struct {
   Scheduler_priority_SMP_Node Base;
 
   /**
-   * Structure containing affinity set data and size
+   * @brief The thread processor affinity set.
    */
-  cpu_set_t affinity;
+  Processor_mask Affinity;
 } Scheduler_priority_affinity_SMP_Node;
 
 /** @} */

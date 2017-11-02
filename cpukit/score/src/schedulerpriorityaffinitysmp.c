@@ -84,11 +84,7 @@ void _Scheduler_priority_affinity_SMP_Node_initialize(
    *  All we add is affinity information to the basic SMP node.
    */
   the_node = _Scheduler_priority_affinity_SMP_Node_downcast( node );
-  _Processor_mask_To_cpu_set_t(
-    _SMP_Get_online_processors(),
-    sizeof( the_node->affinity ),
-    &the_node->affinity
-  );
+  _Processor_mask_Assign( &the_node->Affinity, _SMP_Get_online_processors() );
 }
 
 /*
@@ -156,7 +152,7 @@ static Scheduler_Node *_Scheduler_priority_affinity_SMP_Get_highest_ready(
       /*
        * Can this thread run on this CPU?
        */
-      if ( CPU_ISSET( (int) victim_cpu_index, &node->affinity ) ) {
+      if ( _Processor_mask_Is_set( &node->Affinity, victim_cpu_index ) ) {
         highest = &node->Base.Base.Base;
         break;
       }
@@ -233,7 +229,7 @@ static Scheduler_Node * _Scheduler_priority_affinity_SMP_Get_lowest_scheduled(
     thread = _Scheduler_Node_get_owner( &node->Base.Base.Base );
     cpu_index = _Per_CPU_Get_index( _Thread_Get_CPU( thread ) );
 
-    if ( CPU_ISSET( (int) cpu_index, &filter->affinity ) ) {
+    if ( _Processor_mask_Is_set( &filter->Affinity, cpu_index ) ) {
       lowest_scheduled = &node->Base.Base.Base;
       break;
     }
@@ -609,7 +605,6 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
   Scheduler_priority_affinity_SMP_Node *node;
   States_Control                        current_state;
   Processor_mask                        my_affinity;
-  cpu_set_t                             cpuset;
 
   context = _Scheduler_Get_context( scheduler );
   _Processor_mask_And( &my_affinity, &context->Processors, affinity );
@@ -618,14 +613,13 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     return false;
   }
 
-  _Processor_mask_To_cpu_set_t( &my_affinity, sizeof( cpuset ), &cpuset );
   node = _Scheduler_priority_affinity_SMP_Node_downcast( node_base );
 
   /*
    * The old and new set are the same, there is no point in
    * doing anything.
    */
-  if ( CPU_EQUAL( &cpuset, &node->affinity ) )
+  if ( _Processor_mask_Is_equal( &node->Affinity, affinity ) )
     return true;
 
   current_state = thread->current_state;
@@ -634,7 +628,7 @@ bool _Scheduler_priority_affinity_SMP_Set_affinity(
     _Scheduler_priority_affinity_SMP_Block( scheduler, thread, &node->Base.Base.Base );
   }
 
-  CPU_COPY( &cpuset, &node->affinity );
+  _Processor_mask_Assign( &node->Affinity, affinity );
 
   if ( _States_Is_ready( current_state ) ) {
     /*
