@@ -20,9 +20,6 @@
 #define _RTEMS_SCORE_SCHEDULER_H
 
 #include <rtems/score/thread.h>
-#if defined(RTEMS_SMP)
-  #include <sys/cpuset.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
