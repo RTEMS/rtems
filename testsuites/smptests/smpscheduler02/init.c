@@ -380,6 +380,10 @@ static void test(void)
     sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
+    /* Ensure that the other task waits for the mutex owned by us */
+    sc = rtems_task_wake_after(2);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
     sc = rtems_task_set_scheduler(RTEMS_SELF, scheduler_b_id, 1);
     rtems_test_assert(sc == RTEMS_RESOURCE_IN_USE);
 
