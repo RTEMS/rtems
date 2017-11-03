@@ -138,6 +138,7 @@ libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/resource_snapshot.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
+libcsupport_a_SOURCES += src/consolesimple.c
 libcsupport_a_SOURCES += src/printertask.c
 libcsupport_a_SOURCES += src/printerfprintfputc.c
 

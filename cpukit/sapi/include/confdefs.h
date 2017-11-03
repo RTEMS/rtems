@@ -1610,8 +1610,25 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define NULL_DRIVER_TABLE_ENTRY \
  { NULL, NULL, NULL, NULL, NULL, NULL }
 
+#if defined(CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER) && \
+  defined(CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER)
+#error "CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER and CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER are mutually exclusive"
+#endif
+
 #ifdef CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
   #include <rtems/console.h>
+#endif
+
+#ifdef CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+  #include <rtems/console.h>
+
+  #ifdef CONFIGURE_INIT
+    RTEMS_SYSINIT_ITEM(
+      _Console_simple_Initialize,
+      RTEMS_SYSINIT_DEVICE_DRIVERS,
+      RTEMS_SYSINIT_ORDER_SECOND
+    );
+  #endif
 #endif
 
 #ifdef CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
