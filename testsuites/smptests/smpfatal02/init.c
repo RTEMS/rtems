@@ -117,7 +117,7 @@ static rtems_status_code test_driver_init(
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS \
   { .initialization_entry = test_driver_init }

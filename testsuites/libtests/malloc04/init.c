@@ -22,7 +22,7 @@ const char rtems_test_name[] = "MALLOC 4";
 /* configuration information */
 /* At top of file to have access to configuration variables */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS             1

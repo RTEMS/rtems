@@ -122,7 +122,7 @@ rtems_task Init(
 #define CONFIGURE_INIT
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* Two Tasks: Init and Timer Server */

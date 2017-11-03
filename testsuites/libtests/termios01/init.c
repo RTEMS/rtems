@@ -1006,7 +1006,7 @@ static rtems_task Init(
 #define CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS \
   { .initialization_entry = test_early_device_install }
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* include an extra slot for registering the termios one dynamically */

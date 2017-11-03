@@ -49,7 +49,7 @@ test_shutdown_filesystem (void)
 
 /* drivers */
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 /**
  * Configure base RTEMS resources.
