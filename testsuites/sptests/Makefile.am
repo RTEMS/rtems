@@ -33,6 +33,7 @@ _SUBDIRS = \
     spsignal_err01 spport_err01 spmsgq_err01 spmsgq_err02 spsem_err01 \
     spsem_err02 sptask_err01 spevent_err03 sptask_err03 sptask_err02 \
     sptask_err04 spclock_err01
+_SUBDIRS += spconsole01
 _SUBDIRS += spintrcritical24
 _SUBDIRS += spfatal29
 _SUBDIRS += spfatal30

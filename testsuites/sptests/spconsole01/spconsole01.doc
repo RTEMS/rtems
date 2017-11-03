@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spconsole01
+
+directives:
+
+  - write()
+
+concepts:
+
+  - Test console driver transmit function.
