@@ -14,7 +14,7 @@
 #define CONFIGURE_INIT
 #include "system.h"
 #include <stdio.h>
-#include <stdlib.h> /* exit */
+#include <tmacros.h>
 
 extern int paranoia(int, char **);
 
@@ -36,8 +36,8 @@ rtems_task Init(
 #endif
 
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
-  rtems_test_begin();
+  TEST_BEGIN();
   paranoia(1, args);
-  rtems_test_end();
-  exit( 0 );
+  TEST_END();
+  rtems_test_exit( 0 );
 }

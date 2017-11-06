@@ -14,17 +14,12 @@
 #endif
 
 #include "system.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 #include <rtems.h>
 #include <rtems/capture-cli.h>
 #include <rtems/monitor.h>
 #include <rtems/shell.h>
-
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
-static void notification(int fd, int seconds_remaining, void *arg);
+#include <tmacros.h>
 
 const char rtems_test_name[] = "CAPTURE ENGINE";
 
@@ -47,7 +42,7 @@ rtems_task Init(
   rtems_mode          old_mode;
 
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
-  rtems_test_begin();
+  TEST_BEGIN();
 
   status = rtems_shell_wait_for_input(
     STDIN_FILENO,
@@ -74,8 +69,7 @@ rtems_task Init(
 
     rtems_task_delete (RTEMS_SELF);
   } else {
-    rtems_test_end();
-
-    exit( 0 );
+    TEST_END();
+    rtems_test_exit( 0 );
   }
 }

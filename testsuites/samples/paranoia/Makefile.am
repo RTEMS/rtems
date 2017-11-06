@@ -9,6 +9,8 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 #  -DCYGNUS   turns on more verbose msgs
 AM_CPPFLAGS += -DNOSIGNAL -DCYGNUS -DNOMAIN
 

@@ -22,23 +22,16 @@
 #include "config.h"
 #endif
 
-/*
- * @fixme This test should use the test macros but the include paths are
- *        are wrong in the build system.
- */
-#if __rtems__
-#include <bsp.h> /* for device driver prototypes */
-#include <rtems/test.h>
-
-const char rtems_test_name[] = "MATH";
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 
 extern void domath(void);
 
 #if __rtems__
+#include <tmacros.h>
+
+const char rtems_test_name[] = "MATH";
+
 /* NOTICE: the clock driver is explicitly disabled */
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
