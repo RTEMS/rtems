@@ -36,6 +36,8 @@ const char rtems_test_name[] = "TERMIOS 9";
 
 #define OUTPUT_BUFFER_SIZE 64
 
+#define INPUT_BUFFER_SIZE 64
+
 static const char * const paths[DEVICE_COUNT] = {
   "/interrupt",
   "/polled"
@@ -47,7 +49,9 @@ typedef struct {
   size_t output_pending;
   size_t output_count;
   char output_buf[OUTPUT_BUFFER_SIZE];
-  int input_char;
+  size_t input_head;
+  size_t input_tail;
+  unsigned char input_buf[INPUT_BUFFER_SIZE];
   int callback_counter;
 } device_context;
 
@@ -64,8 +68,7 @@ static test_context test_instance = {
     {
       .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Interrupt")
     }, {
-      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Polled"),
-      .input_char = -1
+      .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("Polled")
     }
   }
 };
@@ -112,9 +115,14 @@ static void write_interrupt(
 static int read_polled(rtems_termios_device_context *base)
 {
   device_context *dev = (device_context *) base;
-  int c = dev->input_char;
+  int c;
 
-  dev->input_char = -1;
+  if (dev->input_head != dev->input_tail) {
+    c = dev->input_buf[dev->input_head];
+    dev->input_head = (dev->input_head + 1) % INPUT_BUFFER_SIZE;
+  } else {
+    c = -1;
+  }
 
   return c;
 }
@@ -187,12 +195,16 @@ static void setup(test_context *ctx)
 
 static void input(test_context *ctx, size_t i, char c)
 {
+  device_context *dev = &ctx->devices[i];
+
   switch (i) {
     case INTERRUPT:
-      rtems_termios_enqueue_raw_characters(ctx->devices[i].tty, &c, sizeof(c));
+      rtems_termios_enqueue_raw_characters(dev->tty, &c, sizeof(c));
       break;
     case POLLED:
-      ctx->devices[i].input_char = (unsigned char) c;
+      dev->input_buf[dev->input_tail] = (unsigned char) c;
+      dev->input_tail = (dev->input_tail + 1) % INPUT_BUFFER_SIZE;
+      rtems_test_assert(dev->input_head != dev->input_tail);
       break;
     default:
       rtems_test_assert(0);
@@ -523,11 +535,13 @@ static void test_rx_callback_icanon(test_context *ctx)
   input(ctx, i, '\n');
   rtems_test_assert(dev->callback_counter == 1);
 
-  n = read(ctx->fds[i], buf, 3);
-  rtems_test_assert(n == 3);
+  n = read(ctx->fds[i], buf, 2);
+  rtems_test_assert(n == 1);
   rtems_test_assert(buf[0] == '\n');
-  rtems_test_assert(buf[1] == 'a');
-  rtems_test_assert(buf[2] == '\n');
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'a');
+  rtems_test_assert(buf[1] == '\n');
 
   input(ctx, i, '\4');
   rtems_test_assert(dev->callback_counter == 2);
@@ -538,11 +552,15 @@ static void test_rx_callback_icanon(test_context *ctx)
   input(ctx, i, '\n');
   rtems_test_assert(dev->callback_counter == 2);
 
-  n = read(ctx->fds[i], buf, 2);
+  n = read(ctx->fds[i], buf, 1);
+  rtems_test_assert(n == 0);
+
+  n = read(ctx->fds[i], buf, 3);
   rtems_test_assert(n == 2);
   rtems_test_assert(buf[0] == 'b');
   rtems_test_assert(buf[1] == '\n');
 
+  /* EOL */
   input(ctx, i, '1');
   rtems_test_assert(dev->callback_counter == 3);
 
@@ -552,12 +570,15 @@ static void test_rx_callback_icanon(test_context *ctx)
   input(ctx, i, '\n');
   rtems_test_assert(dev->callback_counter == 3);
 
-  n = read(ctx->fds[i], buf, 3);
-  rtems_test_assert(n == 3);
+  n = read(ctx->fds[i], buf, 2);
+  rtems_test_assert(n == 1);
   rtems_test_assert(buf[0] == '1');
-  rtems_test_assert(buf[1] == 'c');
-  rtems_test_assert(buf[2] == '\n');
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'c');
+  rtems_test_assert(buf[1] == '\n');
 
+  /* EOL2 */
   input(ctx, i, '2');
   rtems_test_assert(dev->callback_counter == 4);
 
@@ -567,11 +588,13 @@ static void test_rx_callback_icanon(test_context *ctx)
   input(ctx, i, '\n');
   rtems_test_assert(dev->callback_counter == 4);
 
-  n = read(ctx->fds[i], buf, 3);
-  rtems_test_assert(n == 3);
+  n = read(ctx->fds[i], buf, 2);
+  rtems_test_assert(n == 1);
   rtems_test_assert(buf[0] == '2');
-  rtems_test_assert(buf[1] == 'd');
-  rtems_test_assert(buf[2] == '\n');
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'd');
+  rtems_test_assert(buf[1] == '\n');
 
   for (j = 0; j < 255; ++j) {
     input(ctx, i, 'e');
@@ -588,6 +611,38 @@ static void test_rx_callback_icanon(test_context *ctx)
   dev->tty->tty_rcv.sw_pfn = NULL;
   dev->tty->tty_rcv.sw_arg = NULL;
   set_veol_veol2(ctx, i, '\0', '\0');
+  clear_set_lflag(ctx, i, ICANON, 0);
+}
+
+static void test_read_icanon(test_context *ctx, size_t i)
+{
+  ssize_t n;
+  char buf[3];
+
+  clear_set_lflag(ctx, i, 0, ICANON);
+
+  input(ctx, i, 'a');
+  input(ctx, i, '\n');
+  input(ctx, i, 'b');
+  input(ctx, i, '\n');
+  input(ctx, i, 'c');
+  input(ctx, i, '\n');
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'a');
+  rtems_test_assert(buf[1] == '\n');
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'b');
+  rtems_test_assert(buf[1] == '\n');
+
+  n = read(ctx->fds[i], buf, 3);
+  rtems_test_assert(n == 2);
+  rtems_test_assert(buf[0] == 'c');
+  rtems_test_assert(buf[1] == '\n');
+
   clear_set_lflag(ctx, i, ICANON, 0);
 }
 
@@ -1106,6 +1161,8 @@ static void Init(rtems_task_argument arg)
   test_inlcr(ctx);
   test_rx_callback(ctx);
   test_rx_callback_icanon(ctx);
+  test_read_icanon(ctx, INTERRUPT);
+  test_read_icanon(ctx, POLLED);
   test_onlret(ctx);
   test_onlcr(ctx);
   test_onocr(ctx);

@@ -1570,8 +1570,10 @@ fillBufferQueue (struct rtems_termios_tty *tty)
 
       /* continue processing new character */
       if (tty->termios.c_lflag & ICANON) {
-        if (siproc (c, tty))
-          wait = false;
+        if (siproc (c, tty)) {
+          /* In canonical mode, input is made available line by line */
+          return;
+        }
       } else {
         siproc (c, tty);
         if (tty->ccount >= tty->termios.c_cc[VMIN])
