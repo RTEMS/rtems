@@ -262,6 +262,14 @@ void test(void)
 
   init_keg();
 
+  /*
+   * Ensure that jiffies != 0, to use most likely path in
+   * jffs2_mark_node_obsolete().
+   */
+  while (rtems_clock_get_ticks_since_boot() == 0) {
+    /* Wait */
+  }
+
   fd = open("/", O_RDONLY);
   rtems_test_assert(fd >= 0);
 
