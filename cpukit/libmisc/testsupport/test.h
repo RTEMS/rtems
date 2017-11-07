@@ -58,28 +58,51 @@ void rtems_test_fatal_extension(
   { NULL, NULL, NULL, NULL, NULL, NULL, NULL, rtems_test_fatal_extension }
 
 /**
- * @brief Begin of test message format string.
+ * @brief Test states.
  */
-#define TEST_BEGIN_STRING "\n\n*** BEGIN OF TEST %s ***\n", rtems_test_name
+typedef enum
+{
+  RTEMS_TEST_STATE_PASS,
+  RTEMS_TEST_STATE_FAIL,
+  RTEMS_TEST_STATE_USER_INPUT,
+  RTEMS_TEST_STATE_INDETERMINATE,
+  RTEMS_TEST_STATE_BENCHMARK
+} RTEMS_TEST_STATE;
 
-/**
- * @brief End of test message format string.
- */
-#define TEST_END_STRING "*** END OF TEST %s ***\n", rtems_test_name
+#if (TEST_STATE_EXPECTED_FAIL && TEST_STATE_USER_INPUT) || \
+    (TEST_STATE_EXPECTED_FAIL && TEST_STATE_INDETERMINATE) || \
+    (TEST_STATE_EXPECTED_FAIL && TEST_STATE_BENCHMARK) || \
+    (TEST_STATE_USER_INPUT    && TEST_STATE_INDETERMINATE) || \
+    (TEST_STATE_USER_INPUT    && TEST_STATE_BENCHMARK) || \
+    (TEST_STATE_INDETERMINATE && TEST_STATE_BENCHMARK)
+  #error Test states must be unique
+#endif
+
+#if TEST_STATE_EXPECTED_FAIL
+  #define TEST_STATE RTEMS_TEST_STATE_FAIL
+#elif TEST_STATE_USER_INPUT
+  #define TEST_STATE RTEMS_TEST_STATE_USER_INPUT
+#elif TEST_STATE_INDETERMINATE
+  #define TEST_STATE RTEMS_TEST_STATE_INDETERMINATE
+#elif TEST_STATE_BENCHMARK
+  #define TEST_STATE RTEMS_TEST_STATE_BENCHMARK
+#else
+  #define TEST_STATE RTEMS_TEST_STATE_PASS
+#endif
 
 /**
  * @brief Prints a begin of test message using printf().
  *
  * @returns As specified by printf().
  */
-int rtems_test_begin(void);
+int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state);
 
 /**
  * @brief Prints an end of test message using printf().
  *
  * @returns As specified by printf().
  */
-int rtems_test_end(void);
+int rtems_test_end(const char* name);
 
 /**
  * @brief Prints via the RTEMS printer.

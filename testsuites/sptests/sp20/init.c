@@ -38,7 +38,7 @@ static long buffers[ BUFFER_COUNT ][ BUFFER_SIZE / sizeof(long) ];
 
 void end_of_test( void )
 {
-  rtems_test_printf( TEST_END_STRING );
+  TEST_END();
   rtems_printer_task_drain( &printer_task );
   rtems_test_exit( 0 );
 }
@@ -59,7 +59,7 @@ rtems_task Init(
   error = rtems_print_printer_task( &rtems_test_printer, &printer_task );
   rtems_test_assert( error == 0 );
 
-  rtems_test_printf( TEST_BEGIN_STRING );
+  TEST_BEGIN();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

@@ -47,14 +47,14 @@ static int num_inst = 0;
 static void check_begin_of_test(void)
 {
   if ( num_inst == 0 ) {
-    printf(TEST_BEGIN_STRING);
+    TEST_BEGIN();
   }
 }
 
 static void check_end_of_test(void)
 {
   if ( num_inst == 0 ) {
-    printk(TEST_END_STRING);
+    TEST_END();
   }
 }
 
