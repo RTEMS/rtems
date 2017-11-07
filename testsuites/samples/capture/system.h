@@ -39,7 +39,7 @@ extern void setup_tasks_to_watch(void);
 
 #include <bsp.h> /* for device driver prototypes */
 
-#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
