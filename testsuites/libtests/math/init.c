@@ -55,13 +55,13 @@ int main( void )
 {
 #if __rtems__
   rtems_print_printer_fprintf_putc(&rtems_test_printer);
-  rtems_test_begin();
+  TEST_BEGIN();
 #endif
 
   domath();
 
 #if __rtems__
-  rtems_test_end();
+  TEST_END();
 #endif
   exit( 0 );
 }
