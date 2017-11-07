@@ -94,3 +94,7 @@ $(PROJECT_INCLUDE)/rtems/timespec.h: include/rtems/timespec.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/timespec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/timespec.h
 
+$(PROJECT_INCLUDE)/rtems/version.h: include/rtems/version.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/version.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/version.h
+

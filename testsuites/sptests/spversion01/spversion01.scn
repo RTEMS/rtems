@@ -1,0 +1,21 @@
+Valid version control:
+
+*** BEGIN OF TEST VERSION 1 ***
+Release  : 4.11.99.0.d71542c8bef50261bc3904ef6a17f0b6087d04d9-modified
+Major    : 4
+Minor    : 11
+Revision : 99
+VC Key   : d71542c8bef50261bc3904ef6a17f0b6087d04d9-modified
+
+*** END OF TEST VERSION 1 ***
+
+No valid version control:
+
+*** BEGIN OF TEST VERSION 1 ***
+Release  : 4.11.99.0
+Major    : 4
+Minor    : 11
+Revision : 99
+VC Key   : (null)
+
+*** END OF TEST VERSION 1 ***

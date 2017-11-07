@@ -1,0 +1,7 @@
+/*
+ * Automatically generated. Do not edit.
+ */
+#if !defined(_RTEMS_VERSION_VC_KEY_H_)
+#define _RTEMS_VERSION_VC_KEY_H_
+@VERSION_VC_KEY@
+#endif

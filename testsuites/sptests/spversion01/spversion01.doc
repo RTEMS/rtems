@@ -1,0 +1,24 @@
+#  Copyright (C) 2017
+#  Chris Johns <chrisj@rtems.org>
+#
+#  The license and distribution terms for this file may be
+#  found in the file LICENSE in this distribution or at
+#  http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name:  spversion01
+
+directives:
+
+  rtems_version - return the RTEMS version string with VC indent if present.
+  rtems_major - return the RTEMS major version number.
+  rtems_minor - return the RTEMS minor version number.
+  rtems_release - return the RTEMS version release number.
+  rtems_version_control_key - return the RTEMS Version Control (VC) key string.
+
+concepts:
+
++ Ensure the files are correctly generated and the headers can be built and
+  the API is usable.
