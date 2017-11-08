@@ -95,86 +95,106 @@ copy:
 	.section ".bsp_start_text", "ax"
 	.align 4
 bsp_exc_vector_base:
-	stw	r1, ppc_exc_lock_crit@sdarel(r13)
-	stw	r4, ppc_exc_vector_register_crit@sdarel(r13)
-	li	r4, -32767
-	b	ppc_exc_wrap_bookE_crit
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 2
-	b	ppc_exc_wrap_nopush_e500_mchk
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 3
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 4
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, -32763
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 6
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 7
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 8
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 12
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 24
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, -32752
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, -32749
-	b	ppc_exc_wrap_nopush_std
-	stw	r1, ppc_exc_lock_crit@sdarel(r13)
-	stw	r4, ppc_exc_vector_register_crit@sdarel(r13)
-	li	r4, -32748
-	b	ppc_exc_wrap_bookE_crit
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 18
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 17
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 13
-	b	ppc_exc_wrap_nopush_bookE_crit
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 10
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 25
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 26
-	b	ppc_exc_wrap_nopush_std
-	stwu	r1, -EXC_GENERIC_SIZE(r1)
-	stw	r4, GPR4_OFFSET(r1)
-	li	r4, 15
-	b	ppc_exc_wrap_nopush_std
+	/* Critical input */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 0
+	b	ppc_exc_fatal_critical
+	/* Machine check */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 1
+	b	ppc_exc_fatal_machine_check
+	/* Data storage */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 2
+	b	ppc_exc_fatal_normal
+	/* Instruction storage */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 3
+	b	ppc_exc_fatal_normal
+	/* External input */
+	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 4
+	b	ppc_exc_interrupt
+	/* Alignment */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 5
+	b	ppc_exc_fatal_normal
+	/* Program */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 6
+	b	ppc_exc_fatal_normal
+	/* Floating-point unavailable */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 7
+	b	ppc_exc_fatal_normal
+	/* System call */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 8
+	b	ppc_exc_fatal_normal
+	/* APU unavailable */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 9
+	b	ppc_exc_fatal_normal
+	/* Decrementer */
+	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 10
+	b	ppc_exc_interrupt
+	/* Fixed-interval timer interrupt */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 11
+	b	ppc_exc_fatal_normal
+	/* Watchdog timer interrupt */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 12
+	b	ppc_exc_fatal_critical
+	/* Data TLB error */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 13
+	b	ppc_exc_fatal_normal
+	/* Instruction TLB error */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 14
+	b	ppc_exc_fatal_normal
+	/* Debug */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 15
+	b	ppc_exc_fatal_debug
+	/* SPE APU unavailable or AltiVec unavailable */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 32
+	b	ppc_exc_fatal_normal
+	/* SPE floating-point data exception or AltiVec assist */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 33
+	b	ppc_exc_fatal_normal
+	/* SPE floating-point round exception */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 34
+	b	ppc_exc_fatal_normal
+	/* Performance monitor */
+	PPC_REG_STORE_UPDATE	r1, -EXC_GENERIC_SIZE(r1)
+	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	li	r3, 35
+	b	ppc_exc_fatal_normal
 
 	/* Start stack area */
 	.section ".bsp_rwextra", "aw", @nobits

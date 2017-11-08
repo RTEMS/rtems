@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -28,6 +28,10 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define BSP_FEATURE_IRQ_EXTENSION
+
+extern uint32_t bsp_time_base_frequency;
+
+void t32mppc_decrementer_dispatch(void);
 
 #endif /* ASM */
 

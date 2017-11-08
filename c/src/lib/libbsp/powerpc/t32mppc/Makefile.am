@@ -49,13 +49,14 @@ libbsp_a_SOURCES += \
 	../../shared/gnatinstallhandler.c \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
+	../shared/src/ppc-exc-handler-table.c \
 	../shared/src/tictac.c \
 	../shared/src/bsp-start-zero.S \
 	startup/bspstart.c \
 	startup/bspreset.c
 
 # Clock
-libbsp_a_SOURCES += ../shared/clock/clock.c
+libbsp_a_SOURCES += clock/clock-config.c
 
 # Timer
 libbsp_a_SOURCES += ../../shared/timerstub.c

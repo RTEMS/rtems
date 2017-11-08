@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -18,6 +18,7 @@
 #include <rtems.h>
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
+#include <rtems/score/processormask.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,6 +26,24 @@ extern "C" {
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
 #define BSP_INTERRUPT_VECTOR_MAX 0
+
+RTEMS_INLINE_ROUTINE void bsp_interrupt_set_affinity(
+  rtems_vector_number   vector,
+  const Processor_mask *affinity
+)
+{
+  (void) vector;
+  (void) affinity;
+}
+
+RTEMS_INLINE_ROUTINE void bsp_interrupt_get_affinity(
+  rtems_vector_number  vector,
+  Processor_mask      *affinity
+)
+{
+  (void) vector;
+  _Processor_mask_From_index( affinity, 0 );
+}
 
 #ifdef __cplusplus
 }
