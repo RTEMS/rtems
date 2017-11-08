@@ -12,6 +12,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <sys/param.h>
+
 #include <rtems/bspIo.h>
 #include <rtems/console.h>
 #include <rtems/sysinit.h>
@@ -25,12 +27,14 @@
 
 #include <libfdt.h>
 
+#define IMX_UART_TX_FIFO_LEVEL 16
+
 typedef struct {
   rtems_termios_device_context base;
   volatile imx_uart *regs;
 #ifdef CONSOLE_USE_INTERRUPTS
   rtems_vector_number irq;
-  bool transmitting;
+  int tx_in_progress;
 #endif
 } imx_uart_context;
 
@@ -177,8 +181,8 @@ static void imx_uart_interrupt(void *arg)
     usr2 = regs->usr2;
   }
 
-  if (ctx->transmitting && (regs->usr1 & IMX_UART_USR1_TRDY) != 0) {
-    rtems_termios_dequeue_characters(tty, 1);
+  if (ctx->tx_in_progress > 0 && (regs->usr1 & IMX_UART_USR1_TRDY) != 0) {
+    rtems_termios_dequeue_characters(tty, ctx->tx_in_progress);
   }
 }
 #endif
@@ -218,7 +222,7 @@ static bool imx_uart_first_open(
 #ifdef CONSOLE_USE_INTERRUPTS
   ufcr = regs->ufcr;
   ufcr = IMX_UART_UFCR_RXTL_SET(ufcr, 16);
-  ufcr = IMX_UART_UFCR_TXTL_SET(ufcr, 16);
+  ufcr = IMX_UART_UFCR_TXTL_SET(ufcr, IMX_UART_TX_FIFO_LEVEL);
   regs->ufcr = ufcr;
   regs->ucr1 |= IMX_UART_UCR1_RRDYEN;
   regs->ucr2 |= IMX_UART_UCR2_ATEN;
@@ -260,6 +264,7 @@ static void imx_uart_write(
 #ifdef CONSOLE_USE_INTERRUPTS
   imx_uart_context *ctx;
   volatile imx_uart *regs;
+  int n;
   uint32_t ucr1;
 
   ctx = (imx_uart_context *) base;
@@ -267,15 +272,21 @@ static void imx_uart_write(
   ucr1 = regs->ucr1;
 
   if (len > 0) {
-    ctx->transmitting = true;
-    regs->utxd = IMX_UART_UTXD_TX_DATA(buf[0]);
+    int i;
+
+    n = (int) MIN(len, IMX_UART_TX_FIFO_LEVEL);
     ucr1 |= IMX_UART_UCR1_TRDYEN;
+
+    for (i = 0; i < n; ++i) {
+      regs->utxd = IMX_UART_UTXD_TX_DATA(buf[i]);
+    }
   } else {
-    ctx->transmitting = false;
+    n = 0;
     ucr1 &= ~IMX_UART_UCR1_TRDYEN;
   }
 
   regs->ucr1 = ucr1;
+  ctx->tx_in_progress = n;
 #else
   size_t i;
 
