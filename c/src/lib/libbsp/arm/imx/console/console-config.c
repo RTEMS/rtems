@@ -23,6 +23,7 @@
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
 
+#include <arm/freescale/imx/imx_ccmvar.h>
 #include <arm/freescale/imx/imx_uartreg.h>
 
 #include <libfdt.h>
@@ -192,6 +193,24 @@ static bool imx_uart_set_attributes(
   const struct termios *term
 )
 {
+  imx_uart_context *ctx;
+  volatile imx_uart *regs;
+  uint32_t ufcr;
+  uint32_t baud;
+
+  ctx = (imx_uart_context *) base;
+  regs = imx_uart_get_regs(&ctx->base);
+
+  baud = rtems_termios_baud_to_number(term->c_ospeed);
+
+  if (baud != 0) {
+    ufcr = regs->ufcr;
+    ufcr = IMX_UART_UFCR_RFDIV_SET(ufcr, 0x5);
+    regs->ufcr = ufcr;
+    regs->ubir = 15;
+    regs->ubmr = imx_ccm_uart_hz() / baud - 1;
+  }
+
   return true;
 }
 
