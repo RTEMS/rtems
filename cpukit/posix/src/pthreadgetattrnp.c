@@ -60,10 +60,10 @@ int pthread_getattr_np(
   attr->stackaddr = the_thread->Start.Initial_stack.area;
   attr->stacksize = the_thread->Start.Initial_stack.size;
 
-  if ( api->created_with_explicit_scheduler ) {
-    attr->inheritsched = PTHREAD_EXPLICIT_SCHED;
-  } else {
+  if ( the_thread->was_created_with_inherited_scheduler ) {
     attr->inheritsched = PTHREAD_INHERIT_SCHED;
+  } else {
+    attr->inheritsched = PTHREAD_EXPLICIT_SCHED;
   }
 
   scheduler = _Thread_Scheduler_get_home( the_thread );

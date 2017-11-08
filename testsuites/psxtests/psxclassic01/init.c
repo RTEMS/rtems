@@ -17,7 +17,7 @@
 #include "config.h"
 #endif
 
-#include "tmacros.h"
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <rtems.h>
@@ -26,6 +26,7 @@
 #include <errno.h>
 #include <string.h>
 #include <sched.h>
+#include <tmacros.h>
 
 const char rtems_test_name[] = "PSXCLASSIC 1";
 
@@ -48,21 +49,76 @@ static rtems_task test_task(rtems_task_argument arg)
   int sc;
   struct sigaction new_action;
   sigset_t mask;
-  int policy;
+  void *addr;
+  size_t size;
+  int value;
   struct sched_param param;
+  cpu_set_t set;
+  pthread_attr_t attr;
 
   printf("test_task starting...\n");
 
-  policy = -1;
+  value = -1;
   memset( &param, -1, sizeof( param ) );
-  sc = pthread_getschedparam( pthread_self(), &policy, &param );
+  sc = pthread_getschedparam( pthread_self(), &value, &param );
   rtems_test_assert( sc == 0 );
-  rtems_test_assert( policy == SCHED_FIFO );
+  rtems_test_assert( value == SCHED_FIFO );
   rtems_test_assert(
     param.sched_priority == sched_get_priority_max( SCHED_FIFO )
   );
 
-  sc = pthread_setschedparam( pthread_self(), policy, &param );
+  sc = pthread_setschedparam( pthread_self(), value, &param );
+  rtems_test_assert( sc == 0 );
+
+  sc = pthread_getattr_np( pthread_self(), &attr );
+  rtems_test_assert( sc == 0 );
+
+  addr = NULL;
+  size = 0;
+  sc = pthread_attr_getstack( &attr, &addr, &size );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( addr != NULL );
+  rtems_test_assert( size == RTEMS_MINIMUM_STACK_SIZE );
+
+  value = -1;
+  sc = pthread_attr_getscope( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == PTHREAD_SCOPE_PROCESS );
+
+  value = -1;
+  sc = pthread_attr_getinheritsched( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == PTHREAD_EXPLICIT_SCHED );
+
+  value = -1;
+  sc = pthread_attr_getschedpolicy( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == SCHED_FIFO );
+
+  memset( &param, -1, sizeof( param ) );
+  sc = pthread_attr_getschedparam( &attr, &param );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert(
+    param.sched_priority == sched_get_priority_max( SCHED_FIFO )
+  );
+
+  size = 1;
+  sc = pthread_attr_getguardsize( &attr, &size );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( size == 0 );
+
+  value = -1;
+  sc = pthread_attr_getdetachstate( &attr, &value );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( value == PTHREAD_CREATE_JOINABLE );
+
+  CPU_ZERO( &set );
+  sc = pthread_attr_getaffinity_np( &attr, sizeof( set ), &set );
+  rtems_test_assert( sc == 0 );
+  rtems_test_assert( CPU_ISSET( 0, &set ) );
+  rtems_test_assert( CPU_COUNT( &set ) == 1 );
+
+  sc = pthread_attr_destroy( &attr );
   rtems_test_assert( sc == 0 );
 
   sc = sigemptyset (&new_action.sa_mask);

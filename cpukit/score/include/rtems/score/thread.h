@@ -773,6 +773,12 @@ struct _Thread_Control {
   /** This field is true if the thread uses the floating point unit. */
   bool                                  is_fp;
 
+  /**
+   * @brief True, if the thread was created with an inherited scheduler
+   * (PTHREAD_INHERIT_SCHED), and false otherwise.
+   */
+  bool was_created_with_inherited_scheduler;
+
   /** This field is the length of the time quantum that this thread is
    *  allowed to consume.  The algorithm used to manage limits on CPU usage
    *  is specified by budget_algorithm.

@@ -250,8 +250,8 @@ int pthread_create(
 
   api->signals_unblocked = executing_api->signals_unblocked;
 
-  api->created_with_explicit_scheduler =
-    ( the_attr->inheritsched == PTHREAD_EXPLICIT_SCHED );
+  the_thread->was_created_with_inherited_scheduler =
+    ( the_attr->inheritsched == PTHREAD_INHERIT_SCHED );
 
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period =
