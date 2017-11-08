@@ -252,7 +252,6 @@ int pthread_create(
 
   api->created_with_explicit_scheduler =
     ( the_attr->inheritsched == PTHREAD_EXPLICIT_SCHED );
-  api->schedpolicy = the_attr->schedpolicy;
 
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period =

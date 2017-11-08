@@ -24,30 +24,26 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
+#include <sched.h>
 
 const char rtems_test_name[] = "PSXCLASSIC 1";
 
-int       Caught_signo = -1;
-siginfo_t Caught_siginfo = { -1, -1, };
+static int       Caught_signo = -1;
+static siginfo_t Caught_siginfo = { -1, -1, };
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument arg);
-void handler(int signo);
-void handler_info(int signo, siginfo_t *info, void *context);
-rtems_task test_task(rtems_task_argument arg);
-
-void handler(int signo)
+static void handler(int signo)
 {
   Caught_signo = signo;
 }
 
-void handler_info(int signo, siginfo_t *info, void *context)
+static void handler_info(int signo, siginfo_t *info, void *context)
 {
   Caught_signo = signo;
   Caught_siginfo = *info;
 }
 
-rtems_task test_task(rtems_task_argument arg)
+static rtems_task test_task(rtems_task_argument arg)
 {
   int sc;
   struct sigaction new_action;
@@ -57,8 +53,14 @@ rtems_task test_task(rtems_task_argument arg)
 
   printf("test_task starting...\n");
 
+  policy = -1;
+  memset( &param, -1, sizeof( param ) );
   sc = pthread_getschedparam( pthread_self(), &policy, &param );
   rtems_test_assert( sc == 0 );
+  rtems_test_assert( policy == SCHED_FIFO );
+  rtems_test_assert(
+    param.sched_priority == sched_get_priority_max( SCHED_FIFO )
+  );
 
   sc = pthread_setschedparam( pthread_self(), policy, &param );
   rtems_test_assert( sc == 0 );
@@ -132,7 +134,7 @@ static rtems_id create_task( void )
   return task_id;
 }
 
-rtems_task Init( rtems_task_argument arg )
+static rtems_task Init( rtems_task_argument arg )
 {
   rtems_id  task_id;
   int       status;

@@ -94,8 +94,6 @@ static int _POSIX_Set_sched_param(
     );
   }
 
-  api->schedpolicy = policy;
-
   the_thread->budget_algorithm = budget_algorithm;
   the_thread->budget_callout   = budget_callout;
 

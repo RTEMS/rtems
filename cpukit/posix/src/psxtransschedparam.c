@@ -23,6 +23,23 @@
 
 #include <rtems/posix/pthreadimpl.h>
 
+int _POSIX_Thread_Translate_to_sched_policy(
+  Thread_CPU_budget_algorithms budget_algorithm
+)
+{
+  switch ( budget_algorithm ) {
+    case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
+      return SCHED_OTHER;
+    case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
+      return SCHED_RR;
+    case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
+      return SCHED_SPORADIC;
+    default:
+      _Assert( budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_NONE );
+      return SCHED_FIFO;
+  }
+}
+
 int _POSIX_Thread_Translate_sched_param(
   int                                  policy,
   struct sched_param                  *param,

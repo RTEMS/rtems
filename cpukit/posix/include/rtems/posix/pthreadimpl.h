@@ -77,6 +77,10 @@ void _POSIX_Threads_Sporadic_budget_callout(
   Thread_Control *the_thread
 );
 
+int _POSIX_Thread_Translate_to_sched_policy(
+  Thread_CPU_budget_algorithms budget_algorithm
+);
+
 /**
  * @brief Translate sched_param into SuperCore terms.
  *
