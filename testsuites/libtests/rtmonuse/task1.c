@@ -105,8 +105,6 @@ rtems_task Task_1_through_5(
 
         printf( "TA5 - PERIODS CHECK OK (%" PRIu32 ")\n", pass );
 
-        FLUSH_OUTPUT();
-
         if ( pass == 10 ) {
           puts( "" );
           rtems_rate_monotonic_report_statistics();

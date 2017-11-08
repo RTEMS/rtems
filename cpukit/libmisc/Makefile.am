@@ -182,6 +182,7 @@ libtestsupport_a_SOURCES += testsupport/testbeginend.c
 libtestsupport_a_SOURCES += testsupport/testbusy.c
 libtestsupport_a_SOURCES += testsupport/testextension.c
 libtestsupport_a_SOURCES += testsupport/testparallel.c
+libtestsupport_a_SOURCES += testsupport/testwrappers.c
 
 ## fsmount
 noinst_LIBRARIES += libfsmount.a

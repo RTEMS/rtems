@@ -123,6 +123,12 @@ int rtems_test_end(const char* name)
   );
 }
 
+void rtems_test_exit(int status)
+{
+  (void) status;
+  rtems_shutdown_executive(0);
+}
+
 int rtems_test_printf(
   const char* format,
   ...

@@ -2,3 +2,5 @@ preinstall:
 .PHONY: preinstall
 
 PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
+
+TEST_LD_FLAGS = -Wl,--wrap=printf -Wl,--wrap=puts -Wl,--wrap=putchar

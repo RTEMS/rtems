@@ -44,7 +44,6 @@ rtems_task Task_2(
   directive_failed( status, "rtems_signal_send" );
 
   puts( "TA2 - rtems_task_wake_after - yield processor" );
-  FLUSH_OUTPUT();
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "rtems_task_wake_after" );
 

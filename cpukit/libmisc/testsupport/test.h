@@ -105,6 +105,12 @@ int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state);
 int rtems_test_end(const char* name);
 
 /**
+ * @brief Exit the test without calling exit() since it closes stdin, etc and
+ * pulls in stdio code
+ */
+void rtems_test_exit(int status);
+
+/**
  * @brief Prints via the RTEMS printer.
  *
  * @returns As specified by printf().

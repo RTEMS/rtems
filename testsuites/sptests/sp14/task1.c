@@ -52,9 +52,7 @@ rtems_task Task_1(
   status = rtems_signal_catch( Process_asr, RTEMS_NO_ASR );
   directive_failed( status, "rtems_signal_catch" );
 
-  FLUSH_OUTPUT();
-
-rtems_test_pause();
+  rtems_test_pause();
 
   puts( "TA1 - rtems_signal_send - RTEMS_SIGNAL_1 to self" );
   status = rtems_signal_send( RTEMS_SELF, RTEMS_SIGNAL_1 );
@@ -98,7 +96,6 @@ rtems_test_pause();
     );
 
   puts( "TA1 - rtems_task_mode - enable ASRs" );
-  FLUSH_OUTPUT();
   status = rtems_task_mode( RTEMS_ASR, RTEMS_ASR_MASK, &previous_mode );
   directive_failed( status, "rtems_task_mode" );
 

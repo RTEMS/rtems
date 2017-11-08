@@ -64,7 +64,6 @@ extern "C" {
         "\n_Thread_Dispatch_disable_level is (%i)" \
            " not %d detected at %s:%d\n", \
          !_Thread_Dispatch_is_enabled(), (_expect), __FILE__, __LINE__ ); \
-      FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \
   } while ( 0 )
@@ -84,7 +83,6 @@ extern "C" {
         __FILE__, \
         __LINE__ \
       ); \
-      FLUSH_OUTPUT(); \
       rtems_test_exit( 1 ); \
     } \
   } while ( 0 )
@@ -107,7 +105,6 @@ extern "C" {
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%s) got (%s)\n", \
               (_msg), rtems_status_text(_desired), rtems_status_text(_stat) ); \
-      FLUSH_OUTPUT(); \
       rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
@@ -137,7 +134,6 @@ extern "C" {
     printf( "\n%s FAILED -- expected (%d - %s) got (%ld %d - %s)\n", \
 	    (_msg), _desired, strerror(_desired), \
             statx, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
     rtems_test_exit( _stat ); \
   }
 
@@ -153,7 +149,6 @@ extern "C" {
               (_msg), _desired, strerror(_desired), _stat, strerror(_stat) ); \
       printf( "\n FAILED -- errno (%d - %s)\n", \
               errno, strerror(errno) ); \
-      FLUSH_OUTPUT(); \
       rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
@@ -166,7 +161,6 @@ extern "C" {
     check_dispatch_disable_level( 0 ); \
     printf( "\n%s FAILED -- expected (-1) got (%p - %d/%s)\n", \
 	    (_msg), _ptr, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
     rtems_test_exit( -1 ); \
   }
 
@@ -178,7 +172,6 @@ extern "C" {
     check_dispatch_disable_level( 0 ); \
     printf( "\n%s FAILED -- expected (-1) got (%" PRId32 " - %d/%s)\n", \
 	    (_msg), _ptr, errno, strerror(errno) ); \
-    FLUSH_OUTPUT(); \
     rtems_test_exit( -1 ); \
   }
 
@@ -202,7 +195,6 @@ extern "C" {
     if ( (_stat) != (_desired) ) { \
       printf( "\n%s FAILED -- expected (%d) got (%d)\n", \
               (_msg), (_desired), (_stat) ); \
-      FLUSH_OUTPUT(); \
       rtems_test_exit( _stat ); \
     } \
   } while ( 0 )
@@ -229,7 +221,6 @@ extern "C" {
 #define put_dot( _c ) \
   do { \
     putchar( _c ); \
-    FLUSH_OUTPUT(); \
   } while ( 0 )
 
 #define new_line  puts( "" )
@@ -240,20 +231,17 @@ extern "C" {
 #define rtems_test_pause() \
     do { \
       printf( "<pause>\n" ); \
-      FLUSH_OUTPUT(); \
   } while ( 0 )
 
 #define rtems_test_pause_and_screen_number( _screen ) \
   do { \
     printf( "<pause - screen %d>\n", (_screen) ); \
-    FLUSH_OUTPUT(); \
   } while ( 0 )
 #else
 #define rtems_test_pause() \
   do { \
     char buffer[ 80 ]; \
     printf( "<pause>" ); \
-    FLUSH_OUTPUT(); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
@@ -262,7 +250,6 @@ extern "C" {
   do { \
     char buffer[ 80 ]; \
     printf( "<pause - screen %d>", (_screen) ); \
-    FLUSH_OUTPUT(); \
     gets( buffer ); \
     puts( "" ); \
   } while ( 0 )
