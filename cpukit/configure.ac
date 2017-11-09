@@ -341,6 +341,9 @@ AC_CHECK_DECLS([utime],,,[#include <sys/types.h>
 ## Check if libc provides decl of utimes
 AC_CHECK_DECLS([utimes],,,[#include <sys/time.h>])
 
+# Ensure that Newlib does not provide things now in <machine/_timecounter.h>
+AC_CHECK_DECLS([_Timecounter_Time_second],[RTEMS_TOOL_CHAIN_ERROR],,[#include <sys/time.h>])
+
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])
 AM_CONDITIONAL(NEWLIB,test x"$RTEMS_USE_NEWLIB" = x"yes")
