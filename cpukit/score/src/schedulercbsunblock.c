@@ -34,12 +34,11 @@ void _Scheduler_CBS_Unblock(
   Scheduler_CBS_Node   *the_node;
   Scheduler_CBS_Server *serv_info;
   Priority_Control      priority;
-  bool                  prepend_it;
 
   the_node = _Scheduler_CBS_Node_downcast( node );
   serv_info = the_node->cbs_server;
-  priority = _Scheduler_Node_get_priority( &the_node->Base.Base, &prepend_it );
-  (void) prepend_it;
+  priority = _Scheduler_Node_get_priority( &the_node->Base.Base );
+  priority = SCHEDULER_PRIORITY_PURIFY( priority );
 
   /*
    * Late unblock rule for deadline-driven tasks. The remaining time to

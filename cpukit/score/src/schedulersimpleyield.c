@@ -26,12 +26,16 @@ void _Scheduler_simple_Yield(
   Scheduler_Node          *node
 )
 {
-  Scheduler_simple_Context *context =
-    _Scheduler_simple_Get_context( scheduler );
+  Scheduler_simple_Context *context;
+  unsigned int              insert_priority;
+
+  context = _Scheduler_simple_Get_context( scheduler );
 
   (void) node;
 
   _Chain_Extract_unprotected( &the_thread->Object.Node );
-  _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
+  insert_priority = (unsigned int) _Thread_Get_priority( the_thread );
+  insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
+  _Scheduler_simple_Insert( &context->Ready, the_thread, insert_priority );
   _Scheduler_simple_Schedule_body( scheduler, the_thread, false );
 }

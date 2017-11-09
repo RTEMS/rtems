@@ -31,18 +31,17 @@ void _Scheduler_priority_Unblock (
   Scheduler_priority_Context *context;
   Scheduler_priority_Node    *the_node;
   unsigned int                priority;
-  bool                        prepend_it;
+  unsigned int                unmapped_priority;
 
   context = _Scheduler_priority_Get_context( scheduler );
   the_node = _Scheduler_priority_Node_downcast( node );
-  priority = (unsigned int )
-    _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
-  (void) prepend_it;
+  priority = (unsigned int ) _Scheduler_Node_get_priority( &the_node->Base );
+  unmapped_priority = SCHEDULER_PRIORITY_UNMAP( priority );
 
-  if ( priority != the_node->Ready_queue.current_priority ) {
+  if ( unmapped_priority != the_node->Ready_queue.current_priority ) {
     _Scheduler_priority_Ready_queue_update(
       &the_node->Ready_queue,
-      priority,
+      unmapped_priority,
       &context->Bit_map,
       &context->Ready[ 0 ]
     );

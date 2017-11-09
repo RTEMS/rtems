@@ -39,26 +39,7 @@ _Scheduler_EDF_SMP_Node_downcast( Scheduler_Node *node )
   return (Scheduler_EDF_SMP_Node *) node;
 }
 
-static inline bool _Scheduler_EDF_SMP_Less(
-  const void        *left,
-  const RBTree_Node *right
-)
-{
-  const Priority_Control   *the_left;
-  const Scheduler_SMP_Node *the_right;
-  Priority_Control          prio_left;
-  Priority_Control          prio_right;
-
-  the_left = left;
-  the_right = RTEMS_CONTAINER_OF( right, Scheduler_SMP_Node, Base.Node.RBTree );
-
-  prio_left = *the_left;
-  prio_right = the_right->priority;
-
-  return prio_left < prio_right;
-}
-
-static inline bool _Scheduler_EDF_SMP_Less_or_equal(
+static inline bool _Scheduler_EDF_SMP_Priority_less_equal(
   const void        *left,
   const RBTree_Node *right
 )
@@ -254,20 +235,21 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
 static inline void _Scheduler_EDF_SMP_Insert_ready(
   Scheduler_Context *context,
   Scheduler_Node    *node_base,
-  int                generation_index,
-  bool            ( *less )( const void *, const RBTree_Node * )
+  Priority_Control   insert_priority
 )
 {
   Scheduler_EDF_SMP_Context     *self;
   Scheduler_EDF_SMP_Node        *node;
   uint32_t                       rqi;
   Scheduler_EDF_SMP_Ready_queue *ready_queue;
+  int                            generation_index;
   int                            increment;
   int64_t                        generation;
 
   self = _Scheduler_EDF_SMP_Get_self( context );
   node = _Scheduler_EDF_SMP_Node_downcast( node_base );
   rqi = node->ready_queue_index;
+  generation_index = SCHEDULER_PRIORITY_IS_APPEND( insert_priority );
   increment = ( generation_index << 1 ) - 1;
   ready_queue = &self->Ready[ rqi ];
 
@@ -279,8 +261,8 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
   _RBTree_Insert_inline(
     &ready_queue->Queue,
     &node->Base.Base.Node.RBTree,
-    &node->Base.priority,
-    less
+    &insert_priority,
+    _Scheduler_EDF_SMP_Priority_less_equal
   );
 
   if ( rqi != 0 && _Chain_Is_node_off_chain( &ready_queue->Node ) ) {
@@ -327,12 +309,14 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
   Scheduler_Node    *scheduled_to_ready
 )
 {
+  Priority_Control insert_priority;
+
   _Chain_Extract_unprotected( &scheduled_to_ready->Node.Chain );
+  insert_priority = _Scheduler_SMP_Node_priority( scheduled_to_ready );
   _Scheduler_EDF_SMP_Insert_ready(
     context,
     scheduled_to_ready,
-    1,
-    _Scheduler_EDF_SMP_Less
+    insert_priority
   );
 }
 
@@ -341,33 +325,15 @@ static inline void _Scheduler_EDF_SMP_Move_from_ready_to_scheduled(
   Scheduler_Node    *ready_to_scheduled
 )
 {
+  Priority_Control insert_priority;
+
   _Scheduler_EDF_SMP_Extract_from_ready( context, ready_to_scheduled );
-  _Scheduler_SMP_Insert_scheduled_fifo( context, ready_to_scheduled );
-}
-
-static inline void _Scheduler_EDF_SMP_Insert_ready_lifo(
-  Scheduler_Context *context,
-  Scheduler_Node    *node_to_insert
-)
-{
-  _Scheduler_EDF_SMP_Insert_ready(
+  insert_priority = _Scheduler_SMP_Node_priority( ready_to_scheduled );
+  insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
+  _Scheduler_SMP_Insert_scheduled(
     context,
-    node_to_insert,
-    0,
-    _Scheduler_EDF_SMP_Less_or_equal
-  );
-}
-
-static inline void _Scheduler_EDF_SMP_Insert_ready_fifo(
-  Scheduler_Context *context,
-  Scheduler_Node    *node_to_insert
-)
-{
-  _Scheduler_EDF_SMP_Insert_ready(
-    context,
-    node_to_insert,
-    1,
-    _Scheduler_EDF_SMP_Less
+    ready_to_scheduled,
+    insert_priority
   );
 }
 
@@ -444,100 +410,42 @@ void _Scheduler_EDF_SMP_Block(
   );
 }
 
-static inline bool _Scheduler_EDF_SMP_Enqueue_ordered(
-  Scheduler_Context    *context,
-  Scheduler_Node       *node,
-  Chain_Node_order      order,
-  Scheduler_SMP_Insert  insert_ready,
-  Scheduler_SMP_Insert  insert_scheduled
+static inline bool _Scheduler_EDF_SMP_Enqueue(
+  Scheduler_Context *context,
+  Scheduler_Node    *node,
+  Priority_Control   insert_priority
 )
 {
-  return _Scheduler_SMP_Enqueue_ordered(
+  return _Scheduler_SMP_Enqueue(
     context,
     node,
-    order,
-    insert_ready,
-    insert_scheduled,
+    insert_priority,
+    _Scheduler_SMP_Priority_less_equal,
+    _Scheduler_EDF_SMP_Insert_ready,
+    _Scheduler_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
   );
 }
 
-static inline bool _Scheduler_EDF_SMP_Enqueue_lifo(
+static inline bool _Scheduler_EDF_SMP_Enqueue_scheduled(
   Scheduler_Context *context,
-  Scheduler_Node    *node
+  Scheduler_Node    *node,
+  Priority_Control   insert_priority
 )
 {
-  return _Scheduler_EDF_SMP_Enqueue_ordered(
+  return _Scheduler_SMP_Enqueue_scheduled(
     context,
     node,
-    _Scheduler_SMP_Insert_priority_lifo_order,
-    _Scheduler_EDF_SMP_Insert_ready_lifo,
-    _Scheduler_SMP_Insert_scheduled_lifo
-  );
-}
-
-static inline bool _Scheduler_EDF_SMP_Enqueue_fifo(
-  Scheduler_Context *context,
-  Scheduler_Node    *node
-)
-{
-  return _Scheduler_EDF_SMP_Enqueue_ordered(
-    context,
-    node,
-    _Scheduler_SMP_Insert_priority_fifo_order,
-    _Scheduler_EDF_SMP_Insert_ready_fifo,
-    _Scheduler_SMP_Insert_scheduled_fifo
-  );
-}
-
-static inline bool _Scheduler_EDF_SMP_Enqueue_scheduled_ordered(
-  Scheduler_Context *context,
-  Scheduler_Node *node,
-  Chain_Node_order order,
-  Scheduler_SMP_Insert insert_ready,
-  Scheduler_SMP_Insert insert_scheduled
-)
-{
-  return _Scheduler_SMP_Enqueue_scheduled_ordered(
-    context,
-    node,
-    order,
+    insert_priority,
+    _Scheduler_SMP_Priority_less_equal,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
-    insert_ready,
-    insert_scheduled,
+    _Scheduler_EDF_SMP_Insert_ready,
+    _Scheduler_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
-  );
-}
-
-static inline bool _Scheduler_EDF_SMP_Enqueue_scheduled_lifo(
-  Scheduler_Context *context,
-  Scheduler_Node *node
-)
-{
-  return _Scheduler_EDF_SMP_Enqueue_scheduled_ordered(
-    context,
-    node,
-    _Scheduler_SMP_Insert_priority_lifo_order,
-    _Scheduler_EDF_SMP_Insert_ready_lifo,
-    _Scheduler_SMP_Insert_scheduled_lifo
-  );
-}
-
-static inline bool _Scheduler_EDF_SMP_Enqueue_scheduled_fifo(
-  Scheduler_Context *context,
-  Scheduler_Node *node
-)
-{
-  return _Scheduler_EDF_SMP_Enqueue_scheduled_ordered(
-    context,
-    node,
-    _Scheduler_SMP_Insert_priority_fifo_order,
-    _Scheduler_EDF_SMP_Insert_ready_fifo,
-    _Scheduler_SMP_Insert_scheduled_fifo
   );
 }
 
@@ -554,7 +462,7 @@ void _Scheduler_EDF_SMP_Unblock(
     thread,
     node,
     _Scheduler_EDF_SMP_Do_update,
-    _Scheduler_EDF_SMP_Enqueue_fifo
+    _Scheduler_EDF_SMP_Enqueue
   );
 }
 
@@ -568,9 +476,9 @@ static inline bool _Scheduler_EDF_SMP_Do_ask_for_help(
     context,
     the_thread,
     node,
-    _Scheduler_SMP_Insert_priority_lifo_order,
-    _Scheduler_EDF_SMP_Insert_ready_lifo,
-    _Scheduler_SMP_Insert_scheduled_lifo,
+    _Scheduler_SMP_Priority_less_equal,
+    _Scheduler_EDF_SMP_Insert_ready,
+    _Scheduler_SMP_Insert_scheduled,
     _Scheduler_EDF_SMP_Move_from_scheduled_to_ready,
     _Scheduler_EDF_SMP_Get_lowest_scheduled,
     _Scheduler_EDF_SMP_Allocate_processor
@@ -591,10 +499,8 @@ void _Scheduler_EDF_SMP_Update_priority(
     node,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Do_update,
-    _Scheduler_EDF_SMP_Enqueue_fifo,
-    _Scheduler_EDF_SMP_Enqueue_lifo,
-    _Scheduler_EDF_SMP_Enqueue_scheduled_fifo,
-    _Scheduler_EDF_SMP_Enqueue_scheduled_lifo,
+    _Scheduler_EDF_SMP_Enqueue,
+    _Scheduler_EDF_SMP_Enqueue_scheduled,
     _Scheduler_EDF_SMP_Do_ask_for_help
   );
 }
@@ -672,7 +578,7 @@ void _Scheduler_EDF_SMP_Add_processor(
     context,
     idle,
     _Scheduler_EDF_SMP_Has_ready,
-    _Scheduler_EDF_SMP_Enqueue_scheduled_fifo,
+    _Scheduler_EDF_SMP_Enqueue_scheduled,
     _Scheduler_EDF_SMP_Register_idle
   );
 }
@@ -688,7 +594,7 @@ Thread_Control *_Scheduler_EDF_SMP_Remove_processor(
     context,
     cpu,
     _Scheduler_EDF_SMP_Extract_from_ready,
-    _Scheduler_EDF_SMP_Enqueue_fifo
+    _Scheduler_EDF_SMP_Enqueue
   );
 }
 
@@ -705,8 +611,8 @@ void _Scheduler_EDF_SMP_Yield(
     thread,
     node,
     _Scheduler_EDF_SMP_Extract_from_ready,
-    _Scheduler_EDF_SMP_Enqueue_fifo,
-    _Scheduler_EDF_SMP_Enqueue_scheduled_fifo
+    _Scheduler_EDF_SMP_Enqueue,
+    _Scheduler_EDF_SMP_Enqueue_scheduled
   );
 }
 
@@ -777,7 +683,7 @@ bool _Scheduler_EDF_SMP_Set_affinity(
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Enqueue_fifo,
+    _Scheduler_EDF_SMP_Enqueue,
     _Scheduler_EDF_SMP_Allocate_processor
   );
 

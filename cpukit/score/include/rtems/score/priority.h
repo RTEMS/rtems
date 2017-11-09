@@ -8,7 +8,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2016 embedded brains GmbH.
+ *  Copyright (c) 2016, 2017 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -45,11 +45,23 @@ extern "C" {
  */
 
 /**
- * @brief A plain thread priority value.
+ * @brief The thread priority control.
  *
  * Lower values represent higher priorities.  So, a priority value of zero
  * represents the highest priority thread.  This value is reserved for internal
  * threads and the priority ceiling protocol.
+ *
+ * The format of the thread priority control depends on the context.  A thread
+ * priority control may contain a user visible priority for API import/export.
+ * It may also contain a scheduler internal priority value.  Values are
+ * translated via the scheduler map/unmap priority operations.  The format of
+ * scheduler interal values depend on the particular scheduler implementation.
+ * It may for example encode a deadline in case of the EDF scheduler.
+ *
+ * The thread priority control value contained in the scheduler node
+ * (Scheduler_Node::Priority::value) uses the least-significant bit to indicate
+ * if the thread should be appended or prepended to its priority group, see
+ * SCHEDULER_PRIORITY_APPEND().
  */
 typedef uint64_t Priority_Control;
 

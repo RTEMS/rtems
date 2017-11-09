@@ -216,18 +216,18 @@ RTEMS_INLINE_ROUTINE void _Scheduler_priority_Schedule_body(
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_priority_Ready_queue_update(
   Scheduler_priority_Ready_queue *ready_queue,
-  Priority_Control                new_priority,
+  unsigned int                    new_priority,
   Priority_bit_map_Control       *bit_map,
   Chain_Control                  *ready_queues
 )
 {
-  ready_queue->current_priority = (unsigned int) new_priority;
+  ready_queue->current_priority = new_priority;
   ready_queue->ready_chain = &ready_queues[ new_priority ];
 
   _Priority_bit_map_Initialize_information(
     bit_map,
     &ready_queue->Priority_map,
-    (unsigned int) new_priority
+    new_priority
   );
 }
 

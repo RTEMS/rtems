@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,6 +30,12 @@ extern "C" {
 #define SCHEDULER_NODE_OF_WAIT_PRIORITY( node ) \
   RTEMS_CONTAINER_OF( node, Scheduler_Node, Wait.Priority )
 
+/**
+ * @brief Priority append indicator for the priority control used for the
+ * scheduler node priority.
+ */
+#define SCHEDULER_PRIORITY_APPEND_FLAG 1
+
 RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   const struct _Scheduler_Control *scheduler,
   Scheduler_Node                  *node,
@@ -40,7 +46,6 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_do_initialize(
   node->owner = the_thread;
 
   node->Priority.value = priority;
-  node->Priority.prepend_it = false;
 
 #if defined(RTEMS_SMP)
   _Chain_Initialize_node( &node->Thread.Wait_node );
@@ -69,12 +74,10 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Scheduler_Node_get_owner(
 }
 
 RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
-  Scheduler_Node *node,
-  bool           *prepend_it_p
+  Scheduler_Node *node
 )
 {
   Priority_Control priority;
-  bool             prepend_it;
 
 #if defined(RTEMS_SMP)
   unsigned int     seq;
@@ -84,13 +87,10 @@ RTEMS_INLINE_ROUTINE Priority_Control _Scheduler_Node_get_priority(
 #endif
 
     priority = node->Priority.value;
-    prepend_it = node->Priority.prepend_it;
 
 #if defined(RTEMS_SMP)
   } while ( _SMP_sequence_lock_Read_retry( &node->Priority.Lock, seq ) );
 #endif
-
-  *prepend_it_p = prepend_it;
 
   return priority;
 }
@@ -107,8 +107,8 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Node_set_priority(
   seq = _SMP_sequence_lock_Write_begin( &node->Priority.Lock );
 #endif
 
+  new_priority |= ( prepend_it ? 0 : SCHEDULER_PRIORITY_APPEND_FLAG );
   node->Priority.value = new_priority;
-  node->Priority.prepend_it = prepend_it;
 
 #if defined(RTEMS_SMP)
   _SMP_sequence_lock_Write_end( &node->Priority.Lock, seq );

@@ -175,6 +175,12 @@ struct Scheduler_Node {
      *
      * The producer of this value is _Thread_Change_priority().  The consumer
      * is the scheduler via the unblock and update priority operations.
+     *
+     * This priority control consists of two parts.  One part is the plain
+     * priority value (most-significant 63 bits).  The other part is the
+     * least-significant bit which indicates if the thread should be appended
+     * (bit set) or prepended (bit cleared) to its priority group, see
+     * SCHEDULER_PRIORITY_APPEND().
      */
     Priority_Control value;
 
@@ -184,13 +190,6 @@ struct Scheduler_Node {
      */
     SMP_sequence_lock_Control Lock;
 #endif
-
-    /**
-     * @brief In case a priority update is necessary and this is true, then
-     * enqueue the thread as the first of its priority group, otherwise enqueue
-     * the thread as the last of its priority group.
-     */
-    bool prepend_it;
   } Priority;
 };
 

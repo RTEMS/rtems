@@ -25,7 +25,7 @@ Priority_Control _Scheduler_EDF_Map_priority(
   Priority_Control         priority
 )
 {
-  return SCHEDULER_EDF_PRIO_MSB | priority;
+  return SCHEDULER_EDF_PRIO_MSB | SCHEDULER_PRIORITY_MAP( priority );
 }
 
 Priority_Control _Scheduler_EDF_Unmap_priority(
@@ -33,7 +33,7 @@ Priority_Control _Scheduler_EDF_Unmap_priority(
   Priority_Control         priority
 )
 {
-  return priority & ~SCHEDULER_EDF_PRIO_MSB;
+  return SCHEDULER_PRIORITY_UNMAP( priority & ~SCHEDULER_EDF_PRIO_MSB );
 }
 
 void _Scheduler_EDF_Release_job(
@@ -48,7 +48,16 @@ void _Scheduler_EDF_Release_job(
 
   _Thread_Wait_acquire_critical( the_thread, queue_context );
 
-  _Priority_Node_set_priority( priority_node, deadline );
+  /*
+   * There is no integer overflow problem here due to the
+   * SCHEDULER_PRIORITY_MAP().  The deadline is in clock ticks.  With the
+   * minimum clock tick interval of 1us, the uptime is limited to about 146235
+   * years.
+   */
+  _Priority_Node_set_priority(
+    priority_node,
+    SCHEDULER_PRIORITY_MAP( deadline )
+  );
 
   if ( _Priority_Node_is_active( priority_node ) ) {
     _Thread_Priority_changed(

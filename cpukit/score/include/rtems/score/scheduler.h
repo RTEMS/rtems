@@ -334,19 +334,32 @@ extern const Scheduler_Control _Scheduler_Table[];
 #endif
 
 /**
- * @brief Returns the thread priority.
+ * @brief Returns the scheduler internal thread priority mapped by
+ * SCHEDULER_PRIORITY_MAP().
  *
  * @param[in] scheduler Unused.
- * @param[in] priority The thread priority.
+ * @param[in] priority The user visible thread priority.
  *
- * @return priority The thread priority.
+ * @return priority The scheduler internal thread priority.
  */
 Priority_Control _Scheduler_default_Map_priority(
   const Scheduler_Control *scheduler,
   Priority_Control         priority
 );
 
-#define _Scheduler_default_Unmap_priority _Scheduler_default_Map_priority
+/**
+ * @brief Returns the user visible thread priority unmapped by
+ * SCHEDULER_PRIORITY_UNMAP().
+ *
+ * @param[in] scheduler Unused.
+ * @param[in] priority The scheduler internal thread priority.
+ *
+ * @return priority The user visible thread priority.
+ */
+Priority_Control _Scheduler_default_Unmap_priority(
+  const Scheduler_Control *scheduler,
+  Priority_Control         priority
+);
 
 #if defined(RTEMS_SMP)
   /**

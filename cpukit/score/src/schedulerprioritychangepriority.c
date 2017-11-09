@@ -29,8 +29,8 @@ void _Scheduler_priority_Update_priority(
 {
   Scheduler_priority_Context *context;
   Scheduler_priority_Node    *the_node;
-  unsigned int                priority;
-  bool                        prepend_it;
+  unsigned int                new_priority;
+  unsigned int                unmapped_priority;
 
   if ( !_Thread_Is_ready( the_thread ) ) {
     /* Nothing to do */
@@ -38,10 +38,11 @@ void _Scheduler_priority_Update_priority(
   }
 
   the_node = _Scheduler_priority_Node_downcast( node );
-  priority = (unsigned int )
-    _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
+  new_priority = (unsigned int)
+    _Scheduler_Node_get_priority( &the_node->Base );
+  unmapped_priority = SCHEDULER_PRIORITY_UNMAP( new_priority );
 
-  if ( priority == the_node->Ready_queue.current_priority ) {
+  if ( unmapped_priority == the_node->Ready_queue.current_priority ) {
     /* Nothing to do */
     return;
   }
@@ -56,19 +57,19 @@ void _Scheduler_priority_Update_priority(
 
   _Scheduler_priority_Ready_queue_update(
     &the_node->Ready_queue,
-    priority,
+    unmapped_priority,
     &context->Bit_map,
     &context->Ready[ 0 ]
   );
 
-  if ( prepend_it ) {
-    _Scheduler_priority_Ready_queue_enqueue_first(
+  if ( SCHEDULER_PRIORITY_IS_APPEND( new_priority ) ) {
+    _Scheduler_priority_Ready_queue_enqueue(
       &the_thread->Object.Node,
       &the_node->Ready_queue,
       &context->Bit_map
     );
   } else {
-    _Scheduler_priority_Ready_queue_enqueue(
+    _Scheduler_priority_Ready_queue_enqueue_first(
       &the_thread->Object.Node,
       &the_node->Ready_queue,
       &context->Bit_map

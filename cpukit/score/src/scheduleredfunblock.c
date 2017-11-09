@@ -31,15 +31,16 @@ void _Scheduler_EDF_Unblock(
   Scheduler_EDF_Context *context;
   Scheduler_EDF_Node    *the_node;
   Priority_Control       priority;
-  bool                   prepend_it;
+  Priority_Control       insert_priority;
 
   context = _Scheduler_EDF_Get_context( scheduler );
   the_node = _Scheduler_EDF_Node_downcast( node );
-  priority = _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
-  (void) prepend_it;
+  priority = _Scheduler_Node_get_priority( &the_node->Base );
+  priority = SCHEDULER_PRIORITY_PURIFY( priority );
+  insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
 
   the_node->priority = priority;
-  _Scheduler_EDF_Enqueue( context, the_node, priority );
+  _Scheduler_EDF_Enqueue( context, the_node, insert_priority );
 
   /*
    *  If the thread that was unblocked is more important than the heir,

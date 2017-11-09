@@ -37,6 +37,36 @@ extern "C" {
 /**@{**/
 
 /**
+ * @brief Maps a priority value to support the append indicator.
+ */
+#define SCHEDULER_PRIORITY_MAP( priority ) ( ( priority ) << 1 )
+
+/**
+ * @brief Returns the plain priority value.
+ */
+#define SCHEDULER_PRIORITY_UNMAP( priority ) ( ( priority ) >> 1 )
+
+/**
+ * @brief Clears the priority append indicator bit.
+ */
+#define SCHEDULER_PRIORITY_PURIFY( priority )  \
+  ( ( priority ) & ~( (Priority_Control) SCHEDULER_PRIORITY_APPEND_FLAG ) )
+
+/**
+ * @brief Returns the priority control with the append indicator bit set.
+ */
+#define SCHEDULER_PRIORITY_APPEND( priority )  \
+  ( ( priority ) | SCHEDULER_PRIORITY_APPEND_FLAG )
+
+/**
+ * @brief Returns true, if the item should be appended to its priority group,
+ * otherwise returns false and the item should be prepended to its priority
+ * group.
+ */
+#define SCHEDULER_PRIORITY_IS_APPEND( priority ) \
+  ( ( ( priority ) & SCHEDULER_PRIORITY_APPEND_FLAG ) != 0 )
+
+/**
  *  @brief Initializes the scheduler to the policy chosen by the user.
  *
  *  This routine initializes the scheduler to the policy chosen by the user

@@ -38,65 +38,31 @@ RTEMS_INLINE_ROUTINE Scheduler_simple_Context *
   return (Scheduler_simple_Context *) _Scheduler_Get_context( scheduler );
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_lifo_order(
+RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Priority_less_equal(
   const void       *to_insert,
   const Chain_Node *next
 )
 {
-  const Priority_Control *priority_to_insert;
-  const Thread_Control   *thread_next;
+  const unsigned int   *priority_to_insert;
+  const Thread_Control *thread_next;
 
-  priority_to_insert = (const Priority_Control *) to_insert;
+  priority_to_insert = (const unsigned int *) to_insert;
   thread_next = (const Thread_Control *) next;
 
   return *priority_to_insert <= _Thread_Get_priority( thread_next );
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_simple_Insert_priority_fifo_order(
-  const void       *to_insert,
-  const Chain_Node *next
-)
-{
-  const Priority_Control *priority_to_insert;
-  const Thread_Control   *thread_next;
-
-  priority_to_insert = (const Priority_Control *) to_insert;
-  thread_next = (const Thread_Control *) next;
-
-  return *priority_to_insert < _Thread_Get_priority( thread_next );
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_lifo(
+RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert(
   Chain_Control  *chain,
-  Thread_Control *to_insert
+  Thread_Control *to_insert,
+  unsigned int    insert_priority
 )
 {
-  Priority_Control priority_to_insert;
-
-  priority_to_insert = _Thread_Get_priority( to_insert );
-
   _Chain_Insert_ordered_unprotected(
     chain,
     &to_insert->Object.Node,
-    &priority_to_insert,
-    _Scheduler_simple_Insert_priority_lifo_order
-  );
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_simple_Insert_priority_fifo(
-  Chain_Control  *chain,
-  Thread_Control *to_insert
-)
-{
-  Priority_Control priority_to_insert;
-
-  priority_to_insert = _Thread_Get_priority( to_insert );
-
-  _Chain_Insert_ordered_unprotected(
-    chain,
-    &to_insert->Object.Node,
-    &priority_to_insert,
-    _Scheduler_simple_Insert_priority_fifo_order
+    &insert_priority,
+    _Scheduler_simple_Priority_less_equal
   );
 }
 

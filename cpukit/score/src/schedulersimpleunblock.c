@@ -28,13 +28,15 @@ void _Scheduler_simple_Unblock(
 )
 {
   Scheduler_simple_Context *context;
-  Priority_Control          priority;
+  unsigned int              priority;
+  unsigned int              insert_priority;
 
   (void) node;
 
   context = _Scheduler_simple_Get_context( scheduler );
-  _Scheduler_simple_Insert_priority_fifo( &context->Ready, the_thread );
   priority = _Thread_Get_priority( the_thread );
+  insert_priority = SCHEDULER_PRIORITY_APPEND( priority );
+  _Scheduler_simple_Insert( &context->Ready, the_thread, insert_priority );
 
   /*
    *  If the thread that was unblocked is more important than the heir,

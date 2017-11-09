@@ -79,7 +79,7 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less(
   return prio_left < prio_right;
 }
 
-RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less_or_equal(
+RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Priority_less_equal(
   const void        *left,
   const RBTree_Node *right
 )
@@ -101,28 +101,14 @@ RTEMS_INLINE_ROUTINE bool _Scheduler_EDF_Less_or_equal(
 RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue(
   Scheduler_EDF_Context *context,
   Scheduler_EDF_Node    *node,
-  Priority_Control       priority
+  Priority_Control       insert_priority
 )
 {
   _RBTree_Insert_inline(
     &context->Ready,
     &node->Node,
-    &priority,
-    _Scheduler_EDF_Less
-  );
-}
-
-RTEMS_INLINE_ROUTINE void _Scheduler_EDF_Enqueue_first(
-  Scheduler_EDF_Context *context,
-  Scheduler_EDF_Node    *node,
-  Priority_Control       priority
-)
-{
-  _RBTree_Insert_inline(
-    &context->Ready,
-    &node->Node,
-    &priority,
-    _Scheduler_EDF_Less_or_equal
+    &insert_priority,
+    _Scheduler_EDF_Priority_less_equal
   );
 }
 

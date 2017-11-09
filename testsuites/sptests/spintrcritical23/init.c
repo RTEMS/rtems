@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -43,12 +43,15 @@ static void change_priority(rtems_id timer, void *arg)
   /* The arg is NULL */
   test_context *ctx = &ctx_instance;
   rtems_interrupt_lock_context lock_context;
+  unsigned int next_priority;
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
-  if (
-    ctx->scheduler_node->Ready_queue.current_priority
-      != ctx->scheduler_node->Base.Priority.value
-  ) {
+
+  next_priority = SCHEDULER_PRIORITY_UNMAP(
+    (unsigned int) ctx->scheduler_node->Base.Priority.value
+  );
+
+  if ( ctx->scheduler_node->Ready_queue.current_priority != next_priority ) {
     rtems_task_priority priority_interrupt;
     rtems_task_priority priority_task;
     rtems_task_priority previous;
@@ -84,11 +87,13 @@ static bool test_body(void *arg)
   rtems_task_priority previous;
 
   rtems_interrupt_lock_acquire(&ctx->lock, &lock_context);
+
   priority_last = ctx->priority_task;
   priority_task = 1 + (priority_last + 1) % 3;
   priority_interrupt = 1 + (priority_task + 1) % 3;
   ctx->priority_task = priority_task;
   ctx->priority_interrupt = priority_interrupt;
+
   rtems_interrupt_lock_release(&ctx->lock, &lock_context);
 
   sc = rtems_task_set_priority(

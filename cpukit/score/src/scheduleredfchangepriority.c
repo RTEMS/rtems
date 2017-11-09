@@ -29,7 +29,7 @@ void _Scheduler_EDF_Update_priority(
   Scheduler_EDF_Context *context;
   Scheduler_EDF_Node    *the_node;
   Priority_Control       priority;
-  bool                   prepend_it;
+  Priority_Control       insert_priority;
 
   if ( !_Thread_Is_ready( the_thread ) ) {
     /* Nothing to do */
@@ -37,7 +37,8 @@ void _Scheduler_EDF_Update_priority(
   }
 
   the_node = _Scheduler_EDF_Node_downcast( node );
-  priority = _Scheduler_Node_get_priority( &the_node->Base, &prepend_it );
+  insert_priority = _Scheduler_Node_get_priority( &the_node->Base );
+  priority = SCHEDULER_PRIORITY_PURIFY( insert_priority );
 
   if ( priority == the_node->priority ) {
     /* Nothing to do */
@@ -48,12 +49,6 @@ void _Scheduler_EDF_Update_priority(
   context = _Scheduler_EDF_Get_context( scheduler );
 
   _Scheduler_EDF_Extract( context, the_node );
-
-  if ( prepend_it ) {
-    _Scheduler_EDF_Enqueue_first( context, the_node, priority );
-  } else {
-    _Scheduler_EDF_Enqueue( context, the_node, priority );
-  }
-
+  _Scheduler_EDF_Enqueue( context, the_node, insert_priority );
   _Scheduler_EDF_Schedule_body( scheduler, the_thread, false );
 }
