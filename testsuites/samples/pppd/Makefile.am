@@ -9,6 +9,8 @@ include $(top_srcdir)/../automake/leaf.am
 
 pppd_LDLIBS = -lpppd
 
+AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+
 LINK_OBJS = $(pppd_OBJECTS)
 LINK_LIBS = $(pppd_LDLIBS)
 
