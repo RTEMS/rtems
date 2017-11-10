@@ -43,7 +43,7 @@ libbsp_a_SOURCES += startup/bspclean.c \
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console
-libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+libbsp_a_SOURCES += console/console.c
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 # tod

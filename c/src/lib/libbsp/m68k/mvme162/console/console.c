@@ -273,4 +273,5 @@ static void _BSP_output_char(char c)
 }
 
 /* Printk function */
-BSP_output_char_function_type BSP_output_char = _BSP_output_char;
+BSP_output_char_function_type           BSP_output_char = _BSP_output_char;
+BSP_polling_getchar_function_type       BSP_poll_char = NULL;
