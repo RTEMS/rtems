@@ -138,7 +138,7 @@ extern int rtems_enet_driver_attach (struct rtems_bsdnet_ifconfig *config);
  *  This is very dependent on the clock speed of the target.
  */
 
-#define delay( microseconds ) \
+#define rtems_bsp_delay( microseconds ) \
   { register uint32_t _delay=(microseconds); \
     register uint32_t _tmp=123; \
     __asm__ volatile( "0: \
