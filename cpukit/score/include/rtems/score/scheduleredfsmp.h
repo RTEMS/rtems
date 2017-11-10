@@ -73,7 +73,7 @@ typedef struct {
   Scheduler_SMP_Context Base;
 
   /**
-   * @brief Current generation for FIFO/LIFO ordering.
+   * @brief Current generation for LIFO (index 0) and FIFO (index 1) ordering.
    */
   int64_t generations[ 2 ];
 

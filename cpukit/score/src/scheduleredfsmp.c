@@ -254,8 +254,7 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
 static inline void _Scheduler_EDF_SMP_Insert_ready(
   Scheduler_Context *context,
   Scheduler_Node    *node_base,
-  size_t             generation_index,
-  int                increment,
+  int                generation_index,
   bool            ( *less )( const void *, const RBTree_Node * )
 )
 {
@@ -263,11 +262,13 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
   Scheduler_EDF_SMP_Node        *node;
   uint32_t                       rqi;
   Scheduler_EDF_SMP_Ready_queue *ready_queue;
+  int                            increment;
   int64_t                        generation;
 
   self = _Scheduler_EDF_SMP_Get_self( context );
   node = _Scheduler_EDF_SMP_Node_downcast( node_base );
   rqi = node->ready_queue_index;
+  increment = ( generation_index << 1 ) - 1;
   ready_queue = &self->Ready[ rqi ];
 
   generation = self->generations[ generation_index ];
@@ -330,7 +331,6 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
   _Scheduler_EDF_SMP_Insert_ready(
     context,
     scheduled_to_ready,
-    0,
     1,
     _Scheduler_EDF_SMP_Less
   );
@@ -353,8 +353,7 @@ static inline void _Scheduler_EDF_SMP_Insert_ready_lifo(
   _Scheduler_EDF_SMP_Insert_ready(
     context,
     node_to_insert,
-    1,
-    -1,
+    0,
     _Scheduler_EDF_SMP_Less_or_equal
   );
 }
@@ -367,7 +366,6 @@ static inline void _Scheduler_EDF_SMP_Insert_ready_fifo(
   _Scheduler_EDF_SMP_Insert_ready(
     context,
     node_to_insert,
-    0,
     1,
     _Scheduler_EDF_SMP_Less
   );
