@@ -143,7 +143,7 @@ extern char _SYS_CLOCK_FREQUENCY; /* Don't use this variable directly!!! */
  *  This is very dependent on the clock speed of the target.
  */
 
-#define delay( microseconds ) \
+#define rtems_bsp_delay( microseconds ) \
   { register uint32_t         _delay=(microseconds); \
     register uint32_t         _tmp=123; \
     __asm__ volatile( "0: \
