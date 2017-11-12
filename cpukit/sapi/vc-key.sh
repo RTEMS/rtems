@@ -15,7 +15,7 @@ if test $# -ge 1; then
   cd $repo
   if test -n ${git}; then
    git rev-parse --git-dir > /dev/null 2>&1
-   if test $? == 0; then
+   if test $? = 0; then
     git status > /dev/null 2>&1
     if git diff-index --quiet HEAD --; then
      modified=""
@@ -24,7 +24,7 @@ if test $# -ge 1; then
     fi
     vc_ident="$(git rev-parse --verify HEAD)${modified}"
     if test $# -ge 1; then
-     if test "${vc_ident}" == "$1"; then
+     if test "${vc_ident}" = "$1"; then
       vc_ident="matches"
      fi
     fi
