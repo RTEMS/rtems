@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT
+    error - 3 == INTERNAL_ERROR_ARC4RANDOM_GETENTROPY_FAIL
   );
 }
 
