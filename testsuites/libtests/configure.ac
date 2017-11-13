@@ -155,6 +155,7 @@ newlib01/Makefile
 putenvtest/Makefile
 pwdgrp01/Makefile
 pwdgrp02/Makefile
+getentropy01/Makefile
 rbheap01/Makefile
 rtmonuse/Makefile
 sha/Makefile

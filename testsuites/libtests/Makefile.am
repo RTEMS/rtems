@@ -54,6 +54,7 @@ _SUBDIRS += newlib01
 _SUBDIRS += putenvtest
 _SUBDIRS += pwdgrp01
 _SUBDIRS += pwdgrp02
+_SUBDIRS += getentropy01
 _SUBDIRS += rbheap01
 _SUBDIRS += rtmonuse
 _SUBDIRS += sha

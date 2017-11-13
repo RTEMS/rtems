@@ -1,0 +1,17 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: random01
+
+directives:
+
+  getentropy
+
+concepts:
+
+  Ensure that getentropy() works with different sizes of arrays and delivers
+  different values on multiple calls. It is mainly a check that the function
+  does anything at all and does not write over the end of the buffer.
+
+  Note that this test doesn't check any quality of the random numbers. If you
+  need some reliable information about quality you should use something like the
+  Diehard tests.
