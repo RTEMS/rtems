@@ -332,7 +332,6 @@ libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 libbsp_a_SOURCES += ../../shared/bspclean.c
 libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
@@ -397,6 +396,7 @@ libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
 libbsp_a_SOURCES += ../shared/armv7m/startup/armv7m-cpucounter.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
+libbsp_a_SOURCES += startup/getentropy-trng.c
 libbsp_a_SOURCES += startup/pin-config.c
 libbsp_a_SOURCES += startup/power.c
 libbsp_a_SOURCES += startup/power-rtc.c
