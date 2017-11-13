@@ -34,6 +34,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c

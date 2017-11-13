@@ -27,6 +27,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/startup/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/getentropy-cpucounter.c \
     startup/setvec.c ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c

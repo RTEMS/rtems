@@ -31,6 +31,7 @@ libbsp_a_SOURCES += \
     ../../shared/bsppredriverhook.c ../shared/startup/bspstart.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
 # console
 libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c

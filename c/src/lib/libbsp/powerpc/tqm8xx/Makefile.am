@@ -62,6 +62,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../shared/startup/bspidle.c \
     startup/bspstart.c startup/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     startup/mmutlbtab.c startup/cpuinit.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
 

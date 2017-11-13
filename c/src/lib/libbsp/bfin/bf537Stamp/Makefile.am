@@ -30,6 +30,7 @@ libbsp_a_SOURCES += \
 	startup/bspstart.c \
 	../../shared/bspclean.c ../../shared/sbrk.c ../../shared/setvec.c \
 	../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
+	../../shared/getentropy-cpucounter.c \
 	../../shared/bspgetworkarea.c
 
 libbsp_a_SOURCES += console/console.c

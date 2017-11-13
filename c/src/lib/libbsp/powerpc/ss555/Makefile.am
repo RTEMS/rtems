@@ -36,6 +36,7 @@ libbsp_a_SOURCES += console/console.c
 libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c startup/iss555.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c start/start.S \
     ../../shared/bspgetworkarea.c
 # tm27supp

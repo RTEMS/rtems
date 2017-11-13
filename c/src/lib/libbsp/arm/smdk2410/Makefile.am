@@ -34,6 +34,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/memmap.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c

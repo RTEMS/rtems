@@ -32,6 +32,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     startup/bspgetcpuclockspeed.c \
     ../../shared/bspgetworkarea.c startup/init5235.c startup/bspstart.c \
     ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c \
     startup/copyvectors.c
 # clock

@@ -66,6 +66,7 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/pgtbl_setup.c \
     ../../powerpc/shared/startup/pgtbl_activate.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     startup/bspclean.c \
     ../../shared/gnatinstallhandler.c
 

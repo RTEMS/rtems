@@ -29,6 +29,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bspreset_loop.c \
     startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
     ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c mmu/mmu_405.c mmu/mmu_405asm.S 

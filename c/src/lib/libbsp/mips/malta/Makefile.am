@@ -43,6 +43,7 @@ libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 libbsp_a_SOURCES += ../../shared/sbrk.c
 libbsp_a_SOURCES += startup/inittlb.c
 libbsp_a_SOURCES += ../shared/startup/idttlb.S

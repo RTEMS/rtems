@@ -36,6 +36,7 @@ libbsp_a_SOURCES += \
     ../../shared/bspgetworkarea.c \
     ../../shared/bsppredriverhook.c ../../shared/bspstart.c \
     ../../shared/bspclean.c startup/bspreset.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/syscalls.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c

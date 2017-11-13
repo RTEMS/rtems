@@ -36,6 +36,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c \
     ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c
 
 # pclock

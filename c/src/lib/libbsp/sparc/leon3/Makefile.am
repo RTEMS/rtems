@@ -38,6 +38,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += startup/bspclean.c
 libbsp_a_SOURCES += \
     ../../shared/bootcard.c startup/bspstart.c \
+    ../../shared/getentropy-cpucounter.c \
     startup/bsppredriver.c \
     ../../sparc/shared/startup/bspgetworkarea.c ../../shared/sbrk.c \
     startup/setvec.c \

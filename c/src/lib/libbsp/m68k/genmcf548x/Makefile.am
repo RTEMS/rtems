@@ -41,6 +41,7 @@ libbsp_a_SOURCES += \
   ../../shared/bspreset_loop.c \
   ../../shared/bsppredriverhook.c startup/init548x.c startup/bspstart.c \
   ../../shared/bootcard.c ../../shared/sbrk.c ../../shared/setvec.c \
+  ../../shared/getentropy-cpucounter.c \
   ../../shared/gnatinstallhandler.c
 # clock
 libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h

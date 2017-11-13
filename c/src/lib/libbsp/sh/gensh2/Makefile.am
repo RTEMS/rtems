@@ -38,6 +38,7 @@ libbsp_a_SOURCES += startup/hw_init.c \
     ../../shared/bsppredriverhook.c \
     ../shared/startup/bspstart.c \
     ../../shared/bspgetworkarea.c ../../shared/sbrk.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c ../../shared/bspclean.c \
     ../shared/bsphwinit.c
 # scitab

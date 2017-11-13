@@ -41,6 +41,7 @@ dist_project_lib_DATA += ../shared/startup/linkcmds
 startup_SOURCES = startup/bspclean.c startup/m5op_sparc.S \
     ../../shared/bsppredriverhook.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspstart.c \
     ../shared/startup/setvec.c \

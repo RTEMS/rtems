@@ -92,6 +92,7 @@ libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c \
+	../../shared/getentropy-cpucounter.c \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
 	../../shared/bsppredriverhook.c \

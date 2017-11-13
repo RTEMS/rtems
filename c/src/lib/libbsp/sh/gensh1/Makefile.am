@@ -37,6 +37,7 @@ libbsp_a_SOURCES += \
     ../../shared/bspclean.c ../../shared/bspreset_loop.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/sbrk.c ../../shared/bootcard.c ../shared/bsphwinit.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c
 # scitab
 libbsp_a_SOURCES += scitab.c

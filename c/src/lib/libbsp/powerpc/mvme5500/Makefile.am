@@ -33,6 +33,7 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../powerpc/shared/startup/zerobss.c \
     ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     startup/bspclean.c \
     ../../shared/gnatinstallhandler.c startup/bspreset.c \
     ../../powerpc/shared/startup/probeMemEnd.c

@@ -32,6 +32,7 @@ startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c \
     startup/cmain.c startup/bspstart.c startup/bsppanic.c
 # pclock

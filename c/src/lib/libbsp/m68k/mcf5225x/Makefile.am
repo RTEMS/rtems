@@ -30,6 +30,7 @@ libbsp_a_SOURCES = \
     ../../shared/bspgetworkarea.c \
     startup/init5225x.c startup/bspstart.c \
     ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += clock/clock.c

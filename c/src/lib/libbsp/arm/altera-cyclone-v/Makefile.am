@@ -151,6 +151,7 @@ libbsp_a_SOURCES += hwlib/src/hwmgr/alt_reset_manager.c
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
+libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c

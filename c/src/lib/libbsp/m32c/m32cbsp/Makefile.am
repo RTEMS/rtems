@@ -29,6 +29,7 @@ startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c startup/crtn.S
 clock_SOURCES = ../../shared/clock_driver_simidle.c
 console_SOURCES = ../../shared/console-polled.c console/console-io.c \

@@ -52,6 +52,7 @@ libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../shared/startup/bspidle.c startup/bspstart.c ../../shared/bootcard.c \
+    ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c startup/cpuinit.c \
     ../../shared/bspgetworkarea.c
 

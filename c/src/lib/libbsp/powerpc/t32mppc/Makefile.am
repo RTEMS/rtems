@@ -44,6 +44,7 @@ libbsp_a_SOURCES =
 # Startup
 libbsp_a_SOURCES += \
 	../../shared/bootcard.c \
+	../../shared/getentropy-cpucounter.c \
 	../../shared/bsppredriverhook.c \
 	../../shared/sbrk.c \
 	../../shared/gnatinstallhandler.c \

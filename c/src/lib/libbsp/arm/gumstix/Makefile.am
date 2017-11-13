@@ -31,6 +31,7 @@ libbsp_a_SOURCES =
 libbsp_a_SOURCES += \
   ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
   ../../shared/bootcard.c ../../shared/sbrk.c \
+  ../../shared/getentropy-cpucounter.c \
   ../../shared/gnatinstallhandler.c \
   ../../shared/bspclean.c startup/bspstart.c startup/bspreset.c startup/memmap.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
