@@ -288,6 +288,22 @@ int fdt_move(const void *fdt, void *buf, int bufsize);
 /**********************************************************************/
 
 /**
+ * fdt_get_string - retrieve a string from the strings block of a device tree
+ * @fdt: pointer to the device tree blob
+ * @stroffset: offset of the string within the strings block (native endian)
+ * @lenp: optional pointer to return the string's length
+ *
+ * fdt_get_string() retrieves a pointer to a single string from the
+ * strings block of the device tree blob at fdt, and optionally also
+ * returns the string's length in *lenp.
+ *
+ * returns:
+ *     a pointer to the string, on success
+ *     NULL, if stroffset is out of bounds, or doesn't point to a valid string
+ */
+const char *fdt_get_string(const void *fdt, int stroffset, int *lenp);
+
+/**
  * fdt_string - retrieve a string from the strings block of a device tree
  * @fdt: pointer to the device tree blob
  * @stroffset: offset of the string within the strings block (native endian)
@@ -297,7 +313,7 @@ int fdt_move(const void *fdt, void *buf, int bufsize);
  *
  * returns:
  *     a pointer to the string, on success
- *     NULL, if stroffset is out of bounds
+ *     NULL, if stroffset is out of bounds, or doesn't point to a valid string
  */
 const char *fdt_string(const void *fdt, int stroffset);
 
