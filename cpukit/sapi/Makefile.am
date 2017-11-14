@@ -57,11 +57,9 @@ libsapi_a_CPPFLAGS += -I.
 
 BUILT_SOURCES = version-vc-key.h
 
-.PHONY: $(vc_key_stamp)
+.PHONY: generate-vc-key
 
-$(vc_key_stamp):
-
-version-vc-key.h: $(vc_key_stamp)
+generate-vc-key:
 	@+current_vc_key=""; \
 	if test -f $(vc_key_stamp); then \
 	 current_vc_key=`cat $(vc_key_stamp)`; \
@@ -79,9 +77,11 @@ version-vc-key.h: $(vc_key_stamp)
 	 echo "$$vc_key" > $(vc_key_stamp); \
 	fi
 
-version.$(OBJEXT):$ version-vc-key.h
+version-vc-key.h: generate-vc-key
 
-all-local: version-vc-key.h
+$(srcdir)/src/version.c: version-vc-key.h
+
+all-local: generate-vc-key
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
