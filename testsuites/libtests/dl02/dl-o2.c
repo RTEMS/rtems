@@ -6,9 +6,11 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <stdio.h>
-
 #include "dl-o2.h"
+
+#include <rtems/test.h>
+
+#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
 
 int dl_o2_func1 (int argc, char* argv[])
 {

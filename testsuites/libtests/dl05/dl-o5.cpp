@@ -1,6 +1,11 @@
-#include <cstdio>
-#include <stdexcept>
 #include "dl-load.h" /* make the symbol a C linkage */
+
+#include <stdexcept>
+
+#include <rtems/test.h>
+
+#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+
 void exception_dl(bool throw_runtime)
 {
   printf("exception_dl: begin\n");
