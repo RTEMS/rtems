@@ -29,6 +29,7 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/seterr.h>
+#include <rtems/score/assert.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -181,11 +182,33 @@ static inline unsigned int rtems_libio_iop_hold( rtems_libio_t *iop )
  */
 static inline void rtems_libio_iop_drop( rtems_libio_t *iop )
 {
+#if defined(RTEMS_DEBUG)
+  unsigned int flags;
+  bool         success;
+
+  flags = _Atomic_Load_uint( &iop->flags, ATOMIC_ORDER_RELAXED );
+
+  do {
+    unsigned int desired;
+
+    _Assert( flags >= LIBIO_FLAGS_REFERENCE_INC );
+
+    desired = flags - LIBIO_FLAGS_REFERENCE_INC;
+    success = _Atomic_Compare_exchange_uint(
+      &iop->flags,
+      &flags,
+      desired,
+      ATOMIC_ORDER_RELEASE,
+      ATOMIC_ORDER_RELAXED
+    );
+  } while ( !success );
+#else
   _Atomic_Fetch_sub_uint(
     &iop->flags,
     LIBIO_FLAGS_REFERENCE_INC,
     ATOMIC_ORDER_RELEASE
   );
+#endif
 }
 
 /*
