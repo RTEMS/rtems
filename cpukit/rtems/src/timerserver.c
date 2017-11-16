@@ -15,7 +15,7 @@
 /*  COPYRIGHT (c) 1989-2008.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2009, 2016 embedded brains GmbH.
+ *  Copyright (c) 2009, 2017 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -92,6 +92,9 @@ static rtems_task _Timer_server_Body(
 )
 {
   Timer_server_Control *ts = (Timer_server_Control *) arg;
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+  Thread_Control *executing = _Thread_Get_executing();
+#endif
 
   while ( true ) {
     ISR_lock_Context  lock_context;
@@ -121,6 +124,9 @@ static rtems_task _Timer_server_Body(
       _Timer_server_Release( ts, &lock_context );
 
       ( *routine )( id, user_data );
+#if defined(RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT)
+      _Assert( !_Thread_Owns_resources( executing ) );
+#endif
 
       _Timer_server_Acquire( ts, &lock_context );
     }
