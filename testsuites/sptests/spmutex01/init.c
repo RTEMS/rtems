@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -39,16 +39,17 @@ typedef enum {
   REQ_WAKE_UP_MASTER = RTEMS_EVENT_0,
   REQ_WAKE_UP_HELPER = RTEMS_EVENT_1,
   REQ_MTX_0_OBTAIN = RTEMS_EVENT_2,
-  REQ_MTX_0_RELEASE = RTEMS_EVENT_3,
-  REQ_MTX_1_OBTAIN = RTEMS_EVENT_4,
-  REQ_MTX_1_OBTAIN_TIMEOUT = RTEMS_EVENT_5,
-  REQ_MTX_1_RELEASE = RTEMS_EVENT_6,
-  REQ_MTX_2_OBTAIN = RTEMS_EVENT_7,
-  REQ_MTX_2_RELEASE = RTEMS_EVENT_8,
-  REQ_MTX_C11_OBTAIN = RTEMS_EVENT_9,
-  REQ_MTX_C11_RELEASE = RTEMS_EVENT_10,
-  REQ_MTX_POSIX_OBTAIN = RTEMS_EVENT_11,
-  REQ_MTX_POSIX_RELEASE = RTEMS_EVENT_12
+  REQ_MTX_0_OBTAIN_UNSATISFIED = RTEMS_EVENT_3,
+  REQ_MTX_0_RELEASE = RTEMS_EVENT_4,
+  REQ_MTX_1_OBTAIN = RTEMS_EVENT_5,
+  REQ_MTX_1_OBTAIN_TIMEOUT = RTEMS_EVENT_6,
+  REQ_MTX_1_RELEASE = RTEMS_EVENT_7,
+  REQ_MTX_2_OBTAIN = RTEMS_EVENT_8,
+  REQ_MTX_2_RELEASE = RTEMS_EVENT_9,
+  REQ_MTX_C11_OBTAIN = RTEMS_EVENT_10,
+  REQ_MTX_C11_RELEASE = RTEMS_EVENT_11,
+  REQ_MTX_POSIX_OBTAIN = RTEMS_EVENT_12,
+  REQ_MTX_POSIX_RELEASE = RTEMS_EVENT_13
 } request_id;
 
 typedef enum {
@@ -158,6 +159,14 @@ static void obtain_timeout(test_context *ctx, mutex_id id)
   rtems_test_assert(sc == RTEMS_TIMEOUT);
 }
 
+static void obtain_unsatisfied(test_context *ctx, mutex_id id)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->mtx[id], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_UNSATISFIED);
+}
+
 static void obtain(test_context *ctx, mutex_id id)
 {
   rtems_status_code sc;
@@ -179,6 +188,14 @@ static void release(test_context *ctx, mutex_id id)
   rtems_status_code sc;
 
   sc = rtems_semaphore_release(ctx->mtx[id]);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void flush(test_context *ctx, mutex_id id)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_flush(ctx->mtx[id]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
@@ -303,6 +320,11 @@ static void worker(rtems_task_argument arg)
 
     if ((events & REQ_MTX_0_OBTAIN) != 0) {
       obtain(ctx, MTX_0);
+      ++ctx->generation[id];
+    }
+
+    if ((events & REQ_MTX_0_OBTAIN_UNSATISFIED) != 0) {
+      obtain_unsatisfied(ctx, MTX_0);
       ++ctx->generation[id];
     }
 
@@ -525,6 +547,19 @@ static void test_inherit_nested_horizontal(test_context *ctx)
   check_generations(ctx, A_1, NONE);
 }
 
+static void test_inherit_flush(test_context *ctx)
+{
+  assert_prio(ctx, M, 3);
+  obtain(ctx, MTX_0);
+  request(ctx, A_1, REQ_MTX_0_OBTAIN_UNSATISFIED);
+  check_generations(ctx, NONE, NONE);
+  assert_prio(ctx, M, 1);
+  flush(ctx, MTX_0);
+  check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  release(ctx, MTX_0);
+}
+
 static void test_deadlock_two_classic(test_context *ctx)
 {
   obtain(ctx, MTX_0);
@@ -674,6 +709,7 @@ static void Init(rtems_task_argument arg)
   test_inherit_nested_vertical(ctx);
   test_inherit_nested_vertical_timeout(ctx);
   test_inherit_nested_horizontal(ctx);
+  test_inherit_flush(ctx);
   test_deadlock_two_classic(ctx);
   test_deadlock_three_classic(ctx);
   test_deadlock_c11_and_classic(ctx);

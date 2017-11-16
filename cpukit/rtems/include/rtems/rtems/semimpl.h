@@ -58,11 +58,15 @@ RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
   const Semaphore_Control *the_semaphore
 )
 {
+  if ( the_semaphore->variant == SEMAPHORE_VARIANT_MUTEX_INHERIT_PRIORITY ) {
+    return &_Thread_queue_Operations_priority_inherit;
+  }
+
   if ( the_semaphore->discipline == SEMAPHORE_DISCIPLINE_PRIORITY ) {
     return &_Thread_queue_Operations_priority;
-  } else {
-    return &_Thread_queue_Operations_FIFO;
   }
+
+  return &_Thread_queue_Operations_FIFO;
 }
 
 /**
