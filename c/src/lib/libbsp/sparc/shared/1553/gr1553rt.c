@@ -25,17 +25,16 @@
 #define GR1553RT_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553RT_READ_REG(adr) (*(volatile uint32_t *)(adr))
 
-#ifndef IRQ_GLOBAL_PREPARE
- #define IRQ_GLOBAL_PREPARE(level) rtems_interrupt_level level
-#endif
-
-#ifndef IRQ_GLOBAL_DISABLE
- #define IRQ_GLOBAL_DISABLE(level) rtems_interrupt_disable(level)
-#endif
-
-#ifndef IRQ_GLOBAL_ENABLE
- #define IRQ_GLOBAL_ENABLE(level) rtems_interrupt_enable(level)
-#endif
+/* map via rtems_interrupt_lock_* API: */
+#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
+#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
+#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
+#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
+#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
+#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
+#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
+#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
 
 /* Software representation of one hardware descriptor */
 struct gr1553rt_sw_bd {
@@ -74,6 +73,7 @@ struct gr1553rt_priv {
 	/* Software State */
 	int started;
 	struct gr1553rt_cfg cfg;
+	SPIN_DECLARE(devlock);
 
 	/* Handle to GR1553B RT device layer */
 	struct drvmgr_dev **pdev;
@@ -313,7 +313,7 @@ int gr1553rt_bd_init(
 	unsigned short bdid;
 	struct gr1553rt_bd *bd;
 	unsigned int nextbd, dataptr;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ( entry_no >= list->bd_cnt )
 		return -1;
@@ -353,12 +353,12 @@ int gr1553rt_bd_init(
 			);
 	}
 
-	/* Get current status, and clear */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	/* Init BD */
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	bd->ctrl = flags & GR1553RT_BD_FLAGS_IRQEN;
 	bd->dptr = (unsigned int)dptr;
 	bd->next = nextbd;
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;	
 }
@@ -374,7 +374,7 @@ int gr1553rt_bd_update(
 	unsigned short bdid;
 	struct gr1553rt_bd *bd;
 	unsigned int tmp, dataptr;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ( entry_no >= list->bd_cnt )
 		return -1;
@@ -400,8 +400,8 @@ int gr1553rt_bd_update(
 		}
 	}
 
-	/* Get current status, and clear */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	/* Get current values and then set new values in BD */
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	/* READ/WRITE Status/Control word */
 	if ( status ) {
 		tmp = bd->ctrl;
@@ -418,7 +418,7 @@ int gr1553rt_bd_update(
 		}
 		*dptr = (uint16_t *)tmp;
 	}
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -431,12 +431,12 @@ int gr1553rt_irq_err
 	)
 {
 	struct gr1553rt_priv *priv = rt;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	priv->irq_err.func = func;
 	priv->irq_err.data = data;
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -449,12 +449,12 @@ int gr1553rt_irq_mc
 	)
 {
 	struct gr1553rt_priv *priv = rt;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	priv->irq_mc.func = func;
 	priv->irq_mc.data = data;
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -469,9 +469,9 @@ int gr1553rt_irq_sa
 	)
 {
 	struct gr1553rt_priv *priv = rt;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	if ( tx ) {
 		priv->irq_tx[subadr].func = func;
 		priv->irq_tx[subadr].data = data;
@@ -479,7 +479,7 @@ int gr1553rt_irq_sa
 		priv->irq_rx[subadr].func = func;
 		priv->irq_rx[subadr].data = data;
 	}
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -493,10 +493,11 @@ void gr1553rt_isr(void *data)
 	unsigned int *last, *curr, entry, hwbd;
 	int type, samc, mcode, subadr;
 	int listid;
-	struct gr1553rt_irq *isr;
-	struct gr1553rt_irqerr *isrerr;
-	struct gr1553rt_irqmc *isrmc;
+	struct gr1553rt_irq *pisr, isr;
+	struct gr1553rt_irqerr isrerr;
+	struct gr1553rt_irqmc isrmc;
 	unsigned int irq;
+	SPIN_ISR_IRQFLAGS(irqflags);
 
 	/* Ack IRQ before reading current write pointer, but after
 	 * reading current IRQ pointer. This is because RT_EVIRQ
@@ -516,9 +517,12 @@ void gr1553rt_isr(void *data)
 		return;
 
 	if ( irq & (GR1553B_IRQ_RTTE|GR1553B_IRQ_RTD) ) {
-		isrerr = &priv->irq_err;
-		if ( isrerr->func ) {
-			isrerr->func(irq, isrerr->data);
+		/* copy func and arg while owning lock */
+		SPIN_LOCK(&priv->devlock, irqflags);
+		isrerr = priv->irq_err;
+		SPIN_UNLOCK(&priv->devlock, irqflags);
+		if ( isrerr.func ) {
+			isrerr.func(irq, isrerr.data);
 		}
 
 		/* Stop Hardware and enter non-started mode. This will
@@ -556,42 +560,51 @@ void gr1553rt_isr(void *data)
 					/* Receive */
 					listid = priv->subadrs[subadr].rxlistid;
 					hwbd = priv->sas_cpu[subadr].rxptr;
-					isr = &priv->irq_rx[subadr];
+					pisr = &priv->irq_rx[subadr];
 				} else {
 					/* Transmit */
 					listid = priv->subadrs[subadr].txlistid;
 					hwbd = priv->sas_cpu[subadr].txptr;
-					isr = &priv->irq_tx[subadr];
+					pisr = &priv->irq_tx[subadr];
 				}
 
 				index = ((unsigned int)hwbd - (unsigned int)
 					priv->bds_hw)/sizeof(struct gr1553rt_bd);
 
+				/* copy func and arg while owning lock */
+				SPIN_LOCK(&priv->devlock, irqflags);
+				isr = *pisr;
+				SPIN_UNLOCK(&priv->devlock, irqflags);
+
 				/* Call user ISR of RX/TX transfer */
-				if ( isr->func ) {
-					isr->func(
+				if ( isr.func ) {
+					isr.func(
 						priv->lists[listid],
 						entry,
 						priv->swbds[index].this_next,
-						isr->data
+						isr.data
 						);
 				}
 			} else if ( type == 0x2) {
 				/* Modecode */
 				mcode = samc;
-				isrmc = &priv->irq_mc;
+
+				/* copy func and arg while owning lock */
+				SPIN_LOCK(&priv->devlock, irqflags);
+				isrmc = priv->irq_mc;
+				SPIN_UNLOCK(&priv->devlock, irqflags);
 
 				/* Call user ISR of ModeCodes RX/TX */
-				if ( isrmc->func ) {
-					isrmc->func(
+				if ( isrmc.func ) {
+					isrmc.func(
 						mcode,
 						entry,
-						isrmc->data
+						isrmc.data
 						);
 				}
 			} else {
 				/* ERROR OF SOME KIND, EVLOG OVERWRITTEN? */
-				exit(-1);
+				rtems_fatal_error_occurred(RTEMS_IO_ERROR);
 			}
 		}
 
@@ -637,66 +650,6 @@ int gr1553rt_indication(void *rt, int subadr, int *txeno, int *rxeno)
 	return 0;
 }
 
-#if 0
-int gr1553rt_bd_irq(
-	struct gr1553rt_list *list,
-	unsigned short entry_no,
-	void (*func)(struct gr1553rt_list *list, int entry, void *data),
-	void *data
-	)
-{
-	struct gr1553rt_priv *priv = list->rt;
-	int irqid;
-	int ret;
-	IRQ_GLOBAL_PREPARE(oldLevel);
-
-	if ( entry_no == 0xffff ) {
-		/* Default interrupt for all list entries without
-		 * assigned IRQ function.
-		 */
-		list->irqs[0].func = func;
-		list->irqs[0].data = data;
-		return 0;
-	}
-
-	if ( entry_no >= list->bd_cnt ) {
-		return -1;
-	}
-
-	bdid = list->bds[entry_no];
-	irqid = priv->swbds[bdid].irqid;
-
-	ret = 0;
-	IRQ_GLOBAL_DISABLE(oldLevel);
-	if ( (irqid != 0) && (func == 0) ) {
-		/* Unassign IRQ function */
-		list->irqs[irqid].func = NULL;
-		list->irqs[irqid].data = NULL;
-		irqid = 0; /* Disable IRQ (default handler) */
-	} else if ( priv->swbds[bdid].irqid != 0 ) {
-		/* reassign IRQ function */
-		list->irqs[irqid].func = func;
-		list->irqs[irqid].data = data;
-	} else {
-		/* Find free IRQ spot. If no free irqid=0 (general IRQ) */
-		ret = -1;
-		for (i=0; i<list->cfg->maxirq; i++) {
-			if ( list->irqs[i].func == NULL ) {
-				irqid = i;
-				list->irqs[i].func = func;
-				list->irqs[i].data = data;
-				ret = 0;
-				break;
-			}
-		}
-	}
-	priv->swbds[bdid].irqid = irqid;
-	IRQ_GLOBAL_ENABLE(oldLevel);
-
-	return ret;
-}
-#endif
-
 void gr1553rt_hw_stop(struct gr1553rt_priv *priv);
 
 void gr1553rt_register(void)
@@ -730,6 +683,8 @@ void *gr1553rt_open(int minor)
 	ambadev = (struct amba_dev_info *)(*pdev)->businfo;
 	pnpinfo = &ambadev->info;
 	priv->regs = (struct gr1553b_regs *)pnpinfo->apb_slv->start;
+
+	SPIN_INIT(&priv->devlock, "gr1553rt");
 
 	/* Start with default configuration */
 	/*priv->cfg = gr1553rt_default_config;*/
@@ -766,6 +721,7 @@ void gr1553rt_close(void *rt)
 
 	/* Free dynamically allocated buffers if any */
 	gr1553rt_sw_free(priv);
+	SPIN_FREE(&priv->devlock);
 
 	/* Return RT/BC device */
 	gr1553_rt_close(priv->pdev);
@@ -1025,7 +981,7 @@ int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg)
 int gr1553rt_start(void *rt)
 {
 	struct gr1553rt_priv *priv = rt;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
 	if ( priv->started )
 		return -1;
@@ -1054,7 +1010,7 @@ int gr1553rt_start(void *rt)
 	priv->regs->rt_evirq = 0;
 
 	/* Clear and old IRQ flag and Enable IRQ */
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	priv->regs->irq = GR1553B_IRQ_RTEV|GR1553B_IRQ_RTD|GR1553B_IRQ_RTTE;
 	priv->regs->imask |= GR1553B_IRQEN_RTEVE | GR1553B_IRQEN_RTDE |
 			GR1553B_IRQEN_RTTEE;
@@ -1066,7 +1022,7 @@ int gr1553rt_start(void *rt)
 
 	/* Tell software RT is started */
 	priv->started = 1;
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
@@ -1074,9 +1030,9 @@ int gr1553rt_start(void *rt)
 void gr1553rt_stop(void *rt)
 {
 	struct gr1553rt_priv *priv = rt;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 
 	/* Stop Hardware */
 	gr1553rt_hw_stop(priv);
@@ -1084,7 +1040,7 @@ void gr1553rt_stop(void *rt)
 	/* Software state */
 	priv->started = 0;
 
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 }
 
 void gr1553rt_sa_schedule(
@@ -1164,9 +1120,9 @@ void gr1553rt_status(void *rt, struct gr1553rt_status *status)
 	struct gr1553rt_priv *priv = rt;
 	struct gr1553b_regs *regs = priv->regs;
 	unsigned int tmp;
-	IRQ_GLOBAL_PREPARE(oldLevel);
+	SPIN_IRQFLAGS(irqflags);
 
-	IRQ_GLOBAL_DISABLE(oldLevel);
+	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
 	status->status = regs->rt_stat;
 	status->bus_status = regs->rt_stat2;
 
@@ -1178,7 +1134,7 @@ void gr1553rt_status(void *rt, struct gr1553rt_status *status)
 	status->time_res = tmp >> 16;
 	status->time = tmp & 0xffff;
 
-	IRQ_GLOBAL_ENABLE(oldLevel);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 }
 
 void gr1553rt_list_sa(struct gr1553rt_list *list, int *subadr, int *tx)
