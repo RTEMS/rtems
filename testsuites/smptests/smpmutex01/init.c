@@ -47,7 +47,9 @@ typedef enum {
   REQ_SET_DONE = RTEMS_EVENT_10,
   REQ_WAIT_FOR_DONE = RTEMS_EVENT_11,
   REQ_SEND_EVENT_2 = RTEMS_EVENT_12,
-  REQ_SEND_EVENT_3 = RTEMS_EVENT_13
+  REQ_SEND_EVENT_3 = RTEMS_EVENT_13,
+  REQ_CEIL_OBTAIN = RTEMS_EVENT_14,
+  REQ_CEIL_RELEASE = RTEMS_EVENT_15
 } request_id;
 
 typedef enum {
@@ -67,6 +69,7 @@ typedef struct {
   rtems_id mtx;
   rtems_id mtx_2;
   rtems_id sem;
+  rtems_id ceil;
   rtems_id tasks[TASK_COUNT];
   Atomic_Uint done;
   task_id id_2;
@@ -305,6 +308,22 @@ static void sem_release(test_context *ctx)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
+static void ceil_obtain(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_obtain(ctx->ceil, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void ceil_release(test_context *ctx)
+{
+  rtems_status_code sc;
+
+  sc = rtems_semaphore_release(ctx->ceil);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
 static void wait(void)
 {
   rtems_status_code sc;
@@ -467,6 +486,16 @@ static void worker(rtems_task_argument arg)
       send_event(ctx, ctx->id_3, ctx->events_3);
     }
 
+    if ((events & REQ_CEIL_OBTAIN) != 0) {
+      ceil_obtain(ctx);
+      ++ctx->generation[id];
+    }
+
+    if ((events & REQ_CEIL_RELEASE) != 0) {
+      ceil_release(ctx);
+      ++ctx->generation[id];
+    }
+
     if ((events & REQ_SET_DONE) != 0) {
       set_done(ctx);
     }
@@ -520,6 +549,15 @@ static void test_init(test_context *ctx)
     &ctx->sem
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('C', 'E', 'I', 'L'),
+    1,
+    RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY | RTEMS_PRIORITY_CEILING,
+    1,
+    &ctx->ceil
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
 static void test_simple_inheritance(test_context *ctx)
@@ -546,6 +584,21 @@ static void test_flush_inheritance(test_context *ctx)
   check_generations(ctx, A_1, NONE);
   assert_prio(ctx, M, 3);
   release(ctx);
+}
+
+static void test_ceiling_mutex(test_context *ctx)
+{
+  assert_prio(ctx, M, 3);
+  ceil_obtain(ctx);
+  assert_prio(ctx, M, 1);
+  send_event(ctx, A_1, REQ_CEIL_OBTAIN);
+  yield();
+  check_generations(ctx, NONE, NONE);
+  ceil_release(ctx);
+  check_generations(ctx, A_1, NONE);
+  assert_prio(ctx, M, 3);
+  send_event(ctx, A_1, REQ_CEIL_RELEASE);
+  check_generations(ctx, A_1, NONE);
 }
 
 static void test_dequeue_order_one_scheduler_instance(test_context *ctx)
@@ -967,6 +1020,7 @@ static void test(test_context *ctx)
   }
 
   test_flush_inheritance(ctx);
+  test_ceiling_mutex(ctx);
 }
 
 static void Init(rtems_task_argument arg)
@@ -1000,7 +1054,7 @@ RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(b);
 
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
-#define CONFIGURE_MAXIMUM_SEMAPHORES 3
+#define CONFIGURE_MAXIMUM_SEMAPHORES 4
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

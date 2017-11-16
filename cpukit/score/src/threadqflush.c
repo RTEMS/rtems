@@ -92,6 +92,13 @@ size_t _Thread_queue_Flush_critical(
       break;
     }
 
+    /*
+     * We do not have enough space in the queue context to collect all priority
+     * updates, so clear it each time.  We unconditionally do the priority
+     * update for the owner later if it exists.
+     */
+    _Thread_queue_Context_clear_priority_updates( queue_context );
+
     do_unblock = _Thread_queue_Extract_locked(
       queue,
       operations,
