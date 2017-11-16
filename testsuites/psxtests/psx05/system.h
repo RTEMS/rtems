@@ -42,8 +42,6 @@ void *Task_3(
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
-#define CONFIGURE_DISABLE_SMP_CONFIGURATION
-
 #include <rtems/confdefs.h>
 
 /* global variables */
