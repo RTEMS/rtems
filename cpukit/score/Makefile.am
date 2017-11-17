@@ -292,7 +292,6 @@ libscore_a_SOURCES += src/threadentryadaptoridle.c
 libscore_a_SOURCES += src/threadentryadaptornumeric.c
 libscore_a_SOURCES += src/threadentryadaptorpointer.c
 libscore_a_SOURCES += src/threadgetcputimeused.c
-libscore_a_SOURCES += src/threadglobalconstruction.c
 libscore_a_SOURCES += src/threaditerate.c
 libscore_a_SOURCES += src/threadname.c
 libscore_a_SOURCES += src/threadscheduler.c

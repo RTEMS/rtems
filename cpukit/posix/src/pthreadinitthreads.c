@@ -31,19 +31,6 @@
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
 #include <rtems/posix/config.h>
-#include <rtems/rtems/config.h>
-
-static void *_POSIX_Global_construction( void *arg )
-{
-  Thread_Control           *executing = _Thread_Get_executing();
-  Thread_Entry_information  entry = executing->Start.Entry;
-
-  entry.Kinds.Pointer.entry = Configuration_POSIX_API
-    .User_initialization_threads_table[ 0 ].thread_entry;
-
-  (void) arg;
-  _Thread_Global_construction( executing, &entry );
-}
 
 void _POSIX_Threads_Initialize_user_threads_body(void)
 {
@@ -53,7 +40,6 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
-  bool                                register_global_construction;
   void                             *(*thread_entry)(void *);
 
   user_threads = Configuration_POSIX_API.User_initialization_threads_table;
@@ -61,9 +47,6 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
 
   if ( !user_threads )
     return;
-
-  register_global_construction =
-    Configuration_RTEMS_API.number_of_initialization_tasks == 0;
 
   /*
    *  Be careful .. if the default attribute set changes, this may need to.
@@ -88,11 +71,6 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
       _Internal_error( INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL );
     }
 
-    if ( register_global_construction ) {
-      register_global_construction = false;
-      thread_entry = _POSIX_Global_construction;
-    }
-
     eno = pthread_create(
       &thread_id,
       &attr,
@@ -101,6 +79,10 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     );
     if ( eno != 0 ) {
       _Internal_error( INTERNAL_ERROR_POSIX_INIT_THREAD_CREATE_FAILED );
+    }
+
+    if ( _Thread_Global_constructor == 0 ) {
+      _Thread_Global_constructor = thread_id;
     }
   }
 }

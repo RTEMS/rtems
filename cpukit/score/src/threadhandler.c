@@ -24,6 +24,50 @@
 #include <rtems/score/isrlevel.h>
 #include <rtems/score/userextimpl.h>
 
+/*
+ *  Conditional magic to determine what style of C++ constructor
+ *  initialization this target and compiler version uses.
+ */
+#if defined(__USE_INIT_FINI__)
+  #if defined(__ARM_EABI__)
+    #define INIT_NAME __libc_init_array
+  #else
+    #define INIT_NAME _init
+  #endif
+
+  extern void INIT_NAME(void);
+  #define EXECUTE_GLOBAL_CONSTRUCTORS
+#endif
+
+#if defined(__USE__MAIN__)
+  extern void __main(void);
+  #define INIT_NAME __main
+  #define EXECUTE_GLOBAL_CONSTRUCTORS
+#endif
+
+Objects_Id _Thread_Global_constructor;
+
+static void _Thread_Global_construction( Thread_Control *executing )
+{
+#if defined(EXECUTE_GLOBAL_CONSTRUCTORS)
+  if ( executing->Object.id == _Thread_Global_constructor ) {
+    /*
+     * Prevent double construction in case the initialization thread is deleted
+     * and then recycled.  There is not need for extra synchronization since
+     * this variable is set during the sequential system boot procedure.
+     */
+    _Thread_Global_constructor = 0;
+
+    /*
+     *  _init could be a weak symbol and we SHOULD test it but it isn't
+     *  in any configuration I know of and it generates a warning on every
+     *  RTEMS target configuration.  --joel (12 May 2007)
+     */
+    INIT_NAME();
+  }
+#endif
+}
+
 void _Thread_Handler( void )
 {
   Thread_Control  *executing;
@@ -79,6 +123,8 @@ void _Thread_Handler( void )
    * storage.  Blocking synchronization primitives are allowed also.
    */
   _User_extensions_Thread_begin( executing );
+
+  _Thread_Global_construction( executing );
 
   /*
    *  RTEMS supports multiple APIs and each API can define a different

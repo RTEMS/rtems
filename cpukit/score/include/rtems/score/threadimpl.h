@@ -70,6 +70,16 @@ typedef struct {
 extern Thread_Information _Thread_Internal_information;
 
 /**
+ * @brief Object identifier of the global constructor thread.
+ *
+ * This variable is set by _RTEMS_tasks_Initialize_user_tasks_body() or
+ * _POSIX_Threads_Initialize_user_threads_body().
+ *
+ * It is consumed by _Thread_Handler().
+ */
+extern Objects_Id _Thread_Global_constructor;
+
+/**
  *  The following points to the thread whose floating point
  *  context is currently loaded.
  */
@@ -344,19 +354,6 @@ void _Thread_Entry_adaptor_pointer( Thread_Control *executing );
  *  setting the initial isr level properly here is safe.
  */
 void _Thread_Handler( void );
-
-/**
- * @brief Executes the global constructors and then restarts itself as the
- * first initialization thread.
- *
- * The first initialization thread is the first RTEMS initialization task or
- * the first POSIX initialization thread in case no RTEMS initialization tasks
- * are present.
- */
-void _Thread_Global_construction(
-  Thread_Control                 *executing,
-  const Thread_Entry_information *entry
-) RTEMS_NO_RETURN;
 
 RTEMS_INLINE_ROUTINE void _Thread_State_acquire_critical(
   Thread_Control   *the_thread,

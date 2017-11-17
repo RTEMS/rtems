@@ -64,6 +64,7 @@ _SUBDIRS += spfatal28
 _SUBDIRS += spthreadlife01
 _SUBDIRS += spcache01
 _SUBDIRS += sptls03
+_SUBDIRS += sptls04
 _SUBDIRS += spcpucounter01
 if HAS_CPLUSPLUS
 _SUBDIRS += spglobalcon01

@@ -318,7 +318,7 @@ static void three_fatal(
 {
   if (source == RTEMS_FATAL_SOURCE_EXIT) {
     assert_forward_order(3);
-    assert(counter == 72);
+    assert(counter == 68);
     TEST_END();
   }
 }
@@ -453,8 +453,8 @@ static void test(void)
 #endif
 
   active_extensions = 4;
-  assert(counter == 14);
-  counter = 16;
+  assert(counter == 10);
+  counter = 12;
 
   sc = rtems_task_create(
     rtems_build_name('W', 'O', 'R', 'K'),
