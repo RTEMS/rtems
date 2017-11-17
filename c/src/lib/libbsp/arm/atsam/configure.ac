@@ -68,6 +68,12 @@ RTEMS_BSPOPTS_HELP([ATSAM_MCK],
 [Frequency of the MCK in Hz. Set to 0 to force application defined speed.
 See startup/pmc-config.c for available clock configurations.])
 
+RTEMS_BSPOPTS_SET([ATSAM_CHANGE_CLOCK_FROM_SRAM],[*],[0])
+RTEMS_BSPOPTS_HELP([ATSAM_CHANGE_CLOCK_FROM_SRAM],
+[Move the functions that set up the clock into the SRAM.
+This allows to change the clock frequency even if the application is started from SDRAM.
+Requires a TCM_SIZE > 0.])
+
 RTEMS_BSPOPTS_SET([ATSAM_CONSOLE_BAUD],[*],[115200])
 RTEMS_BSPOPTS_HELP([ATSAM_CONSOLE_BAUD],[initial baud for console devices (default 115200)])
 

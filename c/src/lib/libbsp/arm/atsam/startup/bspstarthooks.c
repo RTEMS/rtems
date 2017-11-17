@@ -70,32 +70,28 @@ static BSP_START_TEXT_SECTION bool tcm_setup_and_check_if_do_efc_config(
   }
 }
 
-void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
+static bool ATSAM_START_SRAM_SECTION sdram_settings_unchanged(void)
+{
+  return (
+    (SDRAMC->SDRAMC_CR == BOARD_Sdram_Config.sdramc_cr) &&
+    (SDRAMC->SDRAMC_TR == BOARD_Sdram_Config.sdramc_tr) &&
+    (SDRAMC->SDRAMC_MDR == BOARD_Sdram_Config.sdramc_mdr) &&
+    (SDRAMC->SDRAMC_CFR1 == BOARD_Sdram_Config.sdramc_cfr1)
+  );
+}
+
+static void ATSAM_START_SRAM_SECTION setup_CPU_and_SDRAM(void)
+{
+  SystemInit();
+  if (!PMC_IsPeriphEnabled(ID_SDRAMC) || !sdram_settings_unchanged()) {
+    BOARD_ConfigureSdram();
+  }
+}
+
+static void configure_tcm(void)
 {
   uintptr_t tcm_size;
   uint32_t itcmcr_sz;
-
-  system_init_flash(BOARD_MCK);
-  SystemInit();
-
-  PIO_Configure(&atsam_pin_config[0], atsam_pin_config_count);
-  MATRIX->CCFG_SYSIO = atsam_matrix_ccfg_sysio;
-
-  if (!PMC_IsPeriphEnabled(ID_SDRAMC)) {
-    BOARD_ConfigureSdram();
-  }
-
-  if ((SCB->CCR & SCB_CCR_IC_Msk) == 0) {
-    SCB_EnableICache();
-  }
-
-  if ((SCB->CCR & SCB_CCR_DC_Msk) == 0) {
-    SCB_EnableDCache();
-  }
-
-  _SetupMemoryRegion();
-
-  /* Configure tightly coupled memory interfaces */
 
   tcm_size = (uintptr_t) atsam_memory_itcm_size;
   itcmcr_sz = (SCB->ITCMCR & SCB_ITCMCR_SZ_Msk) >> SCB_ITCMCR_SZ_Pos;
@@ -119,6 +115,35 @@ void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
       tcm_disable();
     }
   }
+}
+
+void BSP_START_TEXT_SECTION bsp_start_hook_0(void)
+{
+  system_init_flash(BOARD_MCK);
+
+  PIO_Configure(&atsam_pin_config[0], atsam_pin_config_count);
+  MATRIX->CCFG_SYSIO = atsam_matrix_ccfg_sysio;
+
+  configure_tcm();
+#if ATSAM_CHANGE_CLOCK_FROM_SRAM != 0
+  /* Early copy of .fast_text section for CPU and SDRAM setup. */
+  bsp_start_memcpy_libc(
+    bsp_section_fast_text_begin,
+    bsp_section_fast_text_load_begin,
+    (size_t) bsp_section_fast_text_size
+  );
+#endif
+  setup_CPU_and_SDRAM();
+
+  if ((SCB->CCR & SCB_CCR_IC_Msk) == 0) {
+    SCB_EnableICache();
+  }
+
+  if ((SCB->CCR & SCB_CCR_DC_Msk) == 0) {
+    SCB_EnableDCache();
+  }
+
+  _SetupMemoryRegion();
 }
 
 void BSP_START_TEXT_SECTION bsp_start_hook_1(void)

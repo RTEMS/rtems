@@ -41,7 +41,11 @@
  *        Exported functions
  *----------------------------------------------------------------------------*/
 
+#ifndef __rtems__
 extern void BOARD_ConfigureSdram(void);
+#else /* __rtems__ */
+extern void BOARD_ConfigureSdram(void) ATSAM_START_SRAM_SECTION;
+#endif /* __rtems__ */
 extern uint32_t BOARD_SdramValidation(uint32_t baseAddr, uint32_t size);
 
 #endif /* #ifndef BOARD_MEMORIES_H */

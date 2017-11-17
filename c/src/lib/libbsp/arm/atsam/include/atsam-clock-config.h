@@ -23,6 +23,14 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#if ATSAM_CHANGE_CLOCK_FROM_SRAM != 0
+/* Note: fast_text is the simplest section to put this code into. Other
+ * possibilities would include creating a new section. */
+#define ATSAM_START_SRAM_SECTION BSP_FAST_TEXT_SECTION
+#else
+#define ATSAM_START_SRAM_SECTION
+#endif
+
 struct atsam_clock_config {
   /* Initialization value for the PMC_PLLAR. */
   uint32_t pllar_init;
@@ -32,6 +40,7 @@ struct atsam_clock_config {
   uint32_t mck_freq;
 };
 
+ATSAM_START_SRAM_SECTION
 extern const struct atsam_clock_config atsam_clock_config;
 
 #define BOARD_MCK (atsam_clock_config.mck_freq)
@@ -43,6 +52,7 @@ struct BOARD_Sdram_Config {
   uint32_t sdramc_cfr1;
 };
 
+ATSAM_START_SRAM_SECTION
 extern const struct BOARD_Sdram_Config BOARD_Sdram_Config;
 
 #ifdef __cplusplus

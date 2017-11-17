@@ -22,8 +22,11 @@ Use ATSAM_MCK=XYZ to set the MCK frequency that should be used. The default case
 evaluation kit. Some other configurations (e.g. 150MHz) would be too fast on
 that board.
 
-Your application can also overwrite the clock settings. To overwrite the clock
-settings, define the following structures in your application:
+Your application can also overwrite the clock settings.  If you have a
+bootloader with one setting in your internal flash and an application with
+another setting in your external SDRAM, you should also use the
+ATSAM_CHANGE_CLOCK_FROM_SRAM=1 option. To overwrite the clock settings, define
+the following structures in your application:
 
 --------
 const struct atsam_clock_config atsam_clock_config = {

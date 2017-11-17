@@ -78,7 +78,11 @@ extern "C" {
 	 * \brief Setup the microcontroller system.
 	 * Initialize the System and update the SystemFrequency variable.
 	 */
+#ifndef __rtems__
 	void SystemInit(void)
+#else /* __rtems__ */
+	void ATSAM_START_SRAM_SECTION SystemInit(void)
+#endif /* __rtems__ */
 {
 	uint32_t read_MOR;
 	/* Set FWS according to SYS_BOARD_MCKR configuration */

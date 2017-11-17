@@ -29,6 +29,9 @@
 
 #ifndef SYSTEM_SAMS70_H_INCLUDED
 #define SYSTEM_SAMS70_H_INCLUDED
+#ifdef __rtems__
+#include <bsp/atsam-clock-config.h>
+#endif /* __rtems__ */
 
 /* @cond 0 */
 /**INDENT-OFF**/
@@ -46,7 +49,11 @@ extern uint32_t SystemCoreClock; /* System Clock Frequency (Core Clock) */
  * @brief Setup the microcontroller system.
  * Initialize the System and update the SystemCoreClock variable.
  */
+#ifndef __rtems__
 void SystemInit(void);
+#else /* __rtems__ */
+void ATSAM_START_SRAM_SECTION SystemInit(void);
+#endif /* __rtems__ */
 
 /**
  * @brief Updates the SystemCoreClock with current core Clock
