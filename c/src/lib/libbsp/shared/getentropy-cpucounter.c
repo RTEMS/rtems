@@ -20,35 +20,50 @@
  * you need for example a strong crypto.
  */
 
+#include <sys/param.h>
 #include <unistd.h>
 #include <string.h>
-#include <rtems/sysinit.h>
+#include <rtems/bsd.h>
 #include <rtems/counter.h>
+#include <rtems/sysinit.h>
+
+static uint32_t state;
 
 int getentropy(void *ptr, size_t n)
 {
-	uint8_t *dest = ptr;
+  uint8_t *dest = ptr;
 
-	while (n > 0) {
-		rtems_counter_ticks ticks;
+  state ^= rtems_counter_read();
+  state *= 25169206;
+  state += 1679610226;
 
-		ticks = rtems_counter_read();
+  while (n > 0) {
+    size_t m;
 
-		if (n >= sizeof(ticks)) {
-			memcpy(dest, &ticks, sizeof(ticks));
-			n -= sizeof(ticks);
-			dest += sizeof(ticks);
-		} else {
-			/*
-			 * Fill the remaining bytes with only the least
-			 * significant byte of the time. That is the byte with
-			 * the most changes.
-			 */
-			*dest = ticks & 0xFF;
-			--n;
-			++dest;
-		}
-	}
+    m = MIN(n, sizeof(state));
+    memcpy(dest, &state, m);
+    n -= m;
+    dest += m;
+    state *= 85236167;
+    state += 30557471;
+  }
 
-	return 0;
+  return 0;
 }
+
+static void getentropy_init(void)
+{
+  struct bintime bt;
+
+  rtems_bsd_bintime(&bt);
+  state = (uint32_t) bt.frac;
+  state ^= (uint32_t) (bt.frac >> 32);
+  state ^= (uint32_t) bt.sec;
+  state ^= (uint32_t) (bt.sec >> 32);
+}
+
+RTEMS_SYSINIT_ITEM(
+  getentropy_init,
+  RTEMS_SYSINIT_DEVICE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_LAST
+);
