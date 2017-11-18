@@ -1832,22 +1832,17 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     0 : CONFIGURE_BDBUF_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
 
   #ifdef RTEMS_BDBUF_USE_PTHREAD
-    /*
-     * Semaphores:
-     *   o disk lock
-     */
-    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 1
+    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 0
   #else
     /*
      * Semaphores:
-     *   o disk lock
      *   o bdbuf lock
      *   o bdbuf sync lock
      *   o bdbuf access condition
      *   o bdbuf transfer condition
      *   o bdbuf buffer condition
      */
-    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 6
+    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 5
   #endif
 
   #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
