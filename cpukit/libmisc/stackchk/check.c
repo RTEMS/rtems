@@ -407,7 +407,7 @@ static bool Stack_check_Dump_threads_usage(
 
   rtems_printf(
     printer,
-    "0x%08" PRIx32 " %-21s 0x%08" PRIuPTR " 0x%08" PRIuPTR " 0x%08" PRIuPTR " %6" PRId32 " ",
+    "0x%08" PRIx32 " %-21s 0x%08" PRIxPTR " 0x%08" PRIxPTR " 0x%08" PRIxPTR " %6" PRId32 " ",
     id,
     name,
     (uintptr_t) stack->area,
@@ -451,7 +451,7 @@ void rtems_stack_checker_report_usage_with_plugin(
   rtems_printf(
      printer,
      "                             STACK USAGE BY THREAD\n"
-     "ID         NAME                  LOW        HIGH       CURRENT    AVAIL  USED\n"
+     "ID         NAME                  LOW        HIGH       CURRENT     AVAIL   USED\n"
   );
 
   /* iterate over all threads and dump the usage */
