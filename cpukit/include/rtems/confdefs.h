@@ -1831,20 +1831,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     (CONFIGURE_BDBUF_TASK_STACK_SIZE <= CONFIGURE_MINIMUM_TASK_STACK_SIZE ? \
     0 : CONFIGURE_BDBUF_TASK_STACK_SIZE - CONFIGURE_MINIMUM_TASK_STACK_SIZE))
 
-  #ifdef RTEMS_BDBUF_USE_PTHREAD
-    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 0
-  #else
-    /*
-     * Semaphores:
-     *   o bdbuf lock
-     *   o bdbuf sync lock
-     *   o bdbuf access condition
-     *   o bdbuf transfer condition
-     *   o bdbuf buffer condition
-     */
-    #define _CONFIGURE_LIBBLOCK_SEMAPHORES 5
-  #endif
-
   #if defined(CONFIGURE_HAS_OWN_BDBUF_TABLE) || \
       defined(CONFIGURE_BDBUF_BUFFER_SIZE) || \
       defined(CONFIGURE_BDBUF_BUFFER_COUNT)
@@ -1856,7 +1842,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   /** This specifies the extra stack space configured for libblock tasks. */
   #define _CONFIGURE_LIBBLOCK_TASK_EXTRA_STACKS 0
   /** This specifies the number of Classic API semaphores needed by libblock. */
-  #define _CONFIGURE_LIBBLOCK_SEMAPHORES 0
 #endif /* CONFIGURE_APPLICATION_NEEDS_LIBBLOCK */
 /**@}*/
 
@@ -2111,7 +2096,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    */
   #define _CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + \
-      _CONFIGURE_TERMIOS_SEMAPHORES + _CONFIGURE_LIBBLOCK_SEMAPHORES + \
+      _CONFIGURE_TERMIOS_SEMAPHORES + \
       _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
       _CONFIGURE_NETWORKING_SEMAPHORES)
 
