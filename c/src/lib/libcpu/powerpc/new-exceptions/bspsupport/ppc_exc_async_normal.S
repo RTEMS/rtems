@@ -88,6 +88,13 @@ ppc_exc_interrupt:
 	oris	FRAME_REGISTER, FRAME_REGISTER, MSR_SPE >> 16
 	mtmsr	FRAME_REGISTER
 	isync
+
+	/*
+	 * Save high order part of SCRATCH_1_REGISTER here.  The low order part
+	 * was saved in the minimal prologue.
+	 */
+	evmergehi	SCRATCH_1_REGISTER, SCRATCH_1_REGISTER, FRAME_REGISTER
+	PPC_REG_STORE	FRAME_REGISTER, GPR3_OFFSET(r1)
 #endif
 
 #if defined(PPC_MULTILIB_FPU) || defined(PPC_MULTILIB_ALTIVEC)

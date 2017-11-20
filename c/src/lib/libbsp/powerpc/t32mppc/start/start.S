@@ -147,7 +147,7 @@ bsp_exc_vector_base:
 	b	ppc_exc_fatal_normal
 	/* Decrementer */
 	PPC_REG_STORE_UPDATE	r1, -PPC_EXC_INTERRUPT_FRAME_SIZE(r1)
-	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
+	PPC_REG_STORE	r3, PPC_EXC_GPR3_PROLOGUE_OFFSET(r1)
 	li	r3, 10
 	b	ppc_exc_interrupt
 	/* Fixed-interval timer interrupt */
