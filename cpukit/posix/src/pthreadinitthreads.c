@@ -40,7 +40,6 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
   posix_initialization_threads_table *user_threads;
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
-  void                             *(*thread_entry)(void *);
 
   user_threads = Configuration_POSIX_API.User_initialization_threads_table;
   maximum      = Configuration_POSIX_API.number_of_initialization_threads;
@@ -66,15 +65,10 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
     eno = pthread_attr_setstacksize(&attr, user_threads[ index ].stack_size);
     _Assert( eno == 0 );
 
-    thread_entry = user_threads[ index ].thread_entry;
-    if ( thread_entry == NULL ) {
-      _Internal_error( INTERNAL_ERROR_POSIX_INIT_THREAD_ENTRY_IS_NULL );
-    }
-
     eno = pthread_create(
       &thread_id,
       &attr,
-      thread_entry,
+      user_threads[ index ].thread_entry,
       NULL
     );
     if ( eno != 0 ) {
