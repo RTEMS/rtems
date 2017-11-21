@@ -105,12 +105,6 @@ int i;
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("\n%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-}
-
 char *rtems_progname;
 
 /*

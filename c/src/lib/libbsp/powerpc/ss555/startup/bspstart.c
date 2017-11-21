@@ -42,12 +42,6 @@ uint32_t   bsp_clock_speed;	       /* Serial clocks per second */
 uint32_t   bsp_timer_least_valid;
 uint32_t   bsp_timer_average_overhead;
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-}
-
 /*
  *  bsp_start()
  *

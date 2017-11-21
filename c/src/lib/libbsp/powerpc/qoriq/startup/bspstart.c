@@ -52,20 +52,6 @@ uint32_t bsp_time_base_frequency;
 
 uint32_t qoriq_clock_frequency;
 
-void _BSP_Fatal_error(unsigned n)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_local_disable(level);
-  (void) level;
-
-  printk("%s PANIC ERROR %u\n", rtems_get_version_string(), n);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 static void initialize_frequency_parameters(void)
 {
   const void *fdt = bsp_fdt_get();

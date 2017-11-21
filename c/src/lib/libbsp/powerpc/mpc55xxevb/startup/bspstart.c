@@ -49,18 +49,6 @@ unsigned int bsp_clock_speed = 0;
 
 uint32_t bsp_clicks_per_usec = 0;
 
-void _BSP_Fatal_error(unsigned n)
-{
-	rtems_interrupt_level level;
-
-	(void) level;
-	rtems_interrupt_disable( level);
-
-	while (true) {
-		mpc55xx_wait_for_interrupt();
-	}
-}
-
 static void null_pointer_protection(void)
 {
 #ifdef MPC55XX_NULL_POINTER_PROTECTION

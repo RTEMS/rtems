@@ -51,20 +51,6 @@ static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, un
   return 0;
 }
 
-void _BSP_Fatal_error(unsigned n)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable( level);
-  (void) level;
-
-  printk( "%s PANIC ERROR %u\n", rtems_get_version_string(), n);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 void bsp_start( void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;

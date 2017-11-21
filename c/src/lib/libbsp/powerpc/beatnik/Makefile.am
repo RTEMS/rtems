@@ -58,7 +58,6 @@ libbsp_a_SOURCES =
 
 libbsp_a_SOURCES += startup/bspstart.c \
     ../shared/motorola/vpd.c startup/bspreset.c startup/i2c_init.c \
-    ../../powerpc/shared/startup/panic.c \
     ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/probeMemEnd.c \
     ../../powerpc/shared/startup/bsppredriverhook.c \

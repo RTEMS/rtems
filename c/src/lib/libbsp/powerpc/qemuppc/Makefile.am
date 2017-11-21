@@ -34,7 +34,7 @@ startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c \
-    startup/cmain.c startup/bspstart.c startup/bsppanic.c
+    startup/cmain.c startup/bspstart.c
 # pclock
 # clock_SOURCES = ../../shared/clock_driver_simidle.c
 clock_SOURCES = ../shared/clock/clock.c

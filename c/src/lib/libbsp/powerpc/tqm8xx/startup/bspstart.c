@@ -51,20 +51,6 @@ uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
-void _BSP_Fatal_error( unsigned n)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable( level);
-  (void) level;
-
-  printk( "%s PANIC ERROR %u\n", _RTEMS_version, n);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 static const char *bsp_tqm_get_cib_string( const char *cib_id)
 {
   char srch_pattern[10] = "";

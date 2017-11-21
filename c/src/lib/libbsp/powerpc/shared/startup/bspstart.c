@@ -84,15 +84,6 @@ unsigned int BSP_processor_frequency;
  */
 unsigned int BSP_time_base_divisor;
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-
-  while (true) {
-    /* Do nothing */
-  }
-}
-
 /*
  *  Use the shared implementations of the following routines
  */

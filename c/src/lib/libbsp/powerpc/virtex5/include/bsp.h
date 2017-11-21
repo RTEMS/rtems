@@ -99,7 +99,6 @@ void zero_bss(void);
 #endif /* ASM */
 
 void BSP_ask_for_reset(void);
-void _BSP_Fatal_error(unsigned int v);
 
 #ifdef __cplusplus
 }

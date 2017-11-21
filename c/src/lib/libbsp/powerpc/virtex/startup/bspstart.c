@@ -103,15 +103,3 @@ void bsp_start( void )
 
   bsp_interrupt_initialize();
 }
-
-void _BSP_Fatal_error(unsigned int v)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-  (void) level;
-
-  while (true) {
-    /* Do nothing */
-  }
-}

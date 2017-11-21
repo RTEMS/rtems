@@ -60,12 +60,6 @@ unsigned int BSP_time_base_divisor;
 
 extern unsigned long __rtems_end[];
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-}
-
 /*
  *  bsp_start
  *

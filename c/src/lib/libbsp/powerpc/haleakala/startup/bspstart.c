@@ -200,16 +200,3 @@ void bsp_start( void )
    */
   BSP_rtems_irq_mng_init(0);
 }
-
-static void BSP_ask_for_reset(void)
-{
-  printk("system stopped, press RESET");
-  while(1) {};
-}
-
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s FATAL ERROR %x\n",_RTEMS_version, v);
-  BSP_ask_for_reset();
-}
-

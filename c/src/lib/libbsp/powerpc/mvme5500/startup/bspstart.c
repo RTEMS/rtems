@@ -111,12 +111,6 @@ static unsigned char ConfVPD_buff[200];
 static char cmdline_buf[CMDLINE_BUF_SIZE];
 char *BSP_commandline_string = cmdline_buf;
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-}
-
 /* NOTE: we cannot simply malloc the commandline string;
  * save_boot_params() is called during a very early stage when
  * libc/malloc etc. are not yet initialized!

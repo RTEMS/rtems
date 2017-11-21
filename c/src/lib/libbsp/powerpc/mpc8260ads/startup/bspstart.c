@@ -103,14 +103,6 @@ static void _BSP_GPLED1_off(void)
   csr->bcsr0 |=  GP1_LED;		/* Turn off GP1 LED */
 }
 
-void _BSP_Fatal_error(unsigned int v)
-{
-  _BSP_GPLED0_on();
-  _BSP_GPLED1_on();
-  printk("%s PANIC ERROR %x\n",_RTEMS_version, v);
-  __asm__ __volatile ("sc");
-}
-
 static void _BSP_Uart1_enable(void)
 {
   BCSR *csr;

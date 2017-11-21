@@ -70,7 +70,6 @@ extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 #endif /* ASM */
 
 void BSP_ask_for_reset(void);
-void _BSP_Fatal_error(unsigned int v);
 
 /*
  * Prototypes for BSP methods shared across file boundaries

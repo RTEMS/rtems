@@ -675,22 +675,21 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
   _CPU_MSR_SET(msr);
 }
 
-/* Fatal Error manager macros */
-
-/*
- *  This routine copies _error into a known place -- typically a stack
- *  location or a register, optionally disables interrupts, and
- *  halts/stops the CPU.
- */
-
-void _BSP_Fatal_error(unsigned int);
-
 #endif /* ASM */
 
 #define _CPU_Fatal_halt( _source, _error ) \
-  _BSP_Fatal_error(_error)
-
-/* end of Fatal Error manager macros */
+  do { \
+    ppc_interrupt_disable(); \
+    __asm__ volatile ( \
+      "mr 3, %0\n" \
+      "mr 4, %1\n" \
+      "1:\n" \
+      "b 1b\n" \
+      : \
+      : "r" (_source), "r" (_error) \
+      : "memory" \
+    ); \
+  } while ( 0 )
 
 /*
  *  Should be large enough to run all RTEMS tests.  This ensures
