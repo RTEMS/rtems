@@ -12,10 +12,6 @@
  * workspace will reside in RAM, starting at the beginning of the internal
  * RAM.  The system startup code will configure the external RAM to begin
  * where the internal RAM ends, so as to make one large RAM block.
- *
- * Debugging mode is chosen when the RTEMS_DEBUG symbol is defined.  The
- * RTEMS_DEBUG symbol is defined in the bsp_specs file whenever make(1) is
- * invoked with VARIANT=DEBUG.
  */
 
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
