@@ -21,6 +21,7 @@
  */
 
 #include <bsp.h>
+#include <bsp/irq.h>
 #include <bspopts.h>
 #include <bsp/fatal.h>
 #include <rtems/rtems/intr.h>
