@@ -36,6 +36,7 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    ../../shared/sbrk.c \
                    ../../shared/gnatinstallhandler.c \
                    ../shared/src/memcpy.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 
 # start
 libbsp_a_SOURCES += start/start.S

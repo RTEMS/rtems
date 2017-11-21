@@ -44,6 +44,7 @@ startup_SOURCES = startup/bspclean.c startup/m5op_sparc.S \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspstart.c \
+    ../../shared/bspreset.c \
     ../shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c  \
     ../shared/helenos/boot/genarch/balloc.c \

@@ -35,6 +35,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # console
 libbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
 

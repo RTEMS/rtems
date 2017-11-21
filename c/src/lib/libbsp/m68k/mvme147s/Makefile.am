@@ -37,6 +37,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/setvec.c \
     ../../shared/bspgetworkarea.c ../../shared/setvec.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 libbsp_a_SOURCES += ../mvme147/clock/ckinit.c
 # console

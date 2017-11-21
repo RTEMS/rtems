@@ -42,7 +42,7 @@ RTEMS_BSPOPTS_SET([HAS_LOW_LEVEL_INIT],[*],[])
 RTEMS_BSPOPTS_HELP([HAS_LOW_LEVEL_INIT],
 [If defined, we will do all the low level init of the chip (like bus/memory...).])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS
 RTEMS_BSP_LINKCMDS
 
 # Explicitly list all Makefiles here

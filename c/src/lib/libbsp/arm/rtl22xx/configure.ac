@@ -23,7 +23,7 @@ RTEMS_BSPOPTS_HELP([ON_SKYEYE],
  time spent in the idle task is minimized.  This significantly reduces
  the wall time required to execute the RTEMS test suites.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

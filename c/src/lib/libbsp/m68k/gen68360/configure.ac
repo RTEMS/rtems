@@ -30,7 +30,7 @@ RTEMS_BSPOPTS_SET([GEN68360_040],[gen68360_040],[1])
 RTEMS_BSPOPTS_HELP([GEN68360_040],
 [If defined, use custom settings for the gen68360_040 BSP.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

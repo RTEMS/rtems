@@ -65,6 +65,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     startup/mmutlbtab.c startup/cpuinit.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 
 if HAS_NETWORKING
 network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__

@@ -39,6 +39,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c start/start.S \
     ../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # tm27supp
 libbsp_a_SOURCES += startup/tm27supp.c
 

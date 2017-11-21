@@ -38,6 +38,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     startup/dumpanic.c ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 libbsp_a_SOURCES += clock/ckinit.c
 # console

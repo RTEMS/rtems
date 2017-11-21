@@ -57,6 +57,7 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/bspclean.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # tod
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 # pclock

@@ -20,7 +20,7 @@ time spent in the idle task is minimized.  This significantly reduces
 the wall time required to execute the RTEMS test suites.])
 
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

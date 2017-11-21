@@ -48,7 +48,7 @@ and a little memory is saved.])
 RTEMS_BSPOPTS_SET([BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN],[indicate that the interrupt stack is at the work area begin])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1, 1)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

@@ -36,7 +36,7 @@ RTEMS_BSPOPTS_SET([PPC_VECTOR_FILE_BASE],[*],[0x0100])
 RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

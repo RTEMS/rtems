@@ -38,6 +38,7 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 
 # pclock
 libbsp_a_SOURCES += ../shared/clock/p_clock.c

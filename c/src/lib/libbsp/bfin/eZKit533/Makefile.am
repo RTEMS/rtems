@@ -33,6 +33,7 @@ libbsp_a_SOURCES += \
 	../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/bspgetworkarea.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 
 libbsp_a_SOURCES += console/console-io.c
 

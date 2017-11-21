@@ -90,6 +90,7 @@ startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bsppredriverhook.c \
+    ../../shared/bspreset.c \
     ../shared/startup/setvec.c \
     ../../shared/gnatinstallhandler.c  \
     ../shared/helenos/boot/genarch/balloc.c \

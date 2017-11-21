@@ -33,6 +33,7 @@ libbsp_a_SOURCES += startup/alloc360.c ../../shared/bspclean.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console

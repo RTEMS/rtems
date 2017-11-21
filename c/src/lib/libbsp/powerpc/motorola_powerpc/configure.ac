@@ -50,7 +50,7 @@ RTEMS_BSPOPTS_SET([qemu],[qemuprep*],[1])
 RTEMS_BSPOPTS_SET([qemu],[*],[])
 RTEMS_BSPOPTS_HELP([qemu],[Defined for QEMU BSP -- undefined for others])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

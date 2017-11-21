@@ -28,6 +28,7 @@ dist_project_lib_DATA += startup/linkcmds
 startup_SOURCES = ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
+    ../../shared/bspreset.c \
     startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c startup/crtn.S

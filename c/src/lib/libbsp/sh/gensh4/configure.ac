@@ -31,7 +31,7 @@ RTEMS_BSPOPTS_SET([COPY_DATA_FROM_ROM],[*],[0])
 RTEMS_BSPOPTS_HELP([COPY_DATA_FROM_ROM],
    [Whether to copy data from ROM to RAM in start.S])
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

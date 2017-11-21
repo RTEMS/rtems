@@ -25,7 +25,7 @@ RTEMS_BSPOPTS_HELP([START_HW_INIT],
 ## Used in scitab/Makefile.am
 AC_SUBST(CPU_CLOCK_RATE_HZ)
 
-RTEMS_BSP_CLEANUP_OPTIONS(0, 1)
+RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

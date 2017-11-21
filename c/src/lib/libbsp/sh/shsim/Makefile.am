@@ -38,6 +38,7 @@ libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../shared/bsphwinit.c
 libbsp_a_SOURCES += startup/sysexit.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 
 # clock
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c

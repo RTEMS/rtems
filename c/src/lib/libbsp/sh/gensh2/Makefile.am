@@ -41,6 +41,7 @@ libbsp_a_SOURCES += startup/hw_init.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c ../../shared/bspclean.c \
     ../shared/bsphwinit.c
+libbsp_a_SOURCES += ../../shared/bspreset.c
 # scitab
 libbsp_a_SOURCES += scitab.c
 # console
