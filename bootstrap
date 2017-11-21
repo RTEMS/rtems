@@ -42,7 +42,7 @@ AC_DEFUN([RTEMS_CHECK_BSPDIR],
   case "\$1" in
 EOF
 
-for i in `ls */bsp_specs | LANG=C LC_COLLATE=C sort`; do
+for i in `ls -1 */make | grep make | LANG=C LC_COLLATE=C sort`; do
   d=`dirname $i`
 cat << EOF >> acinclude.m4~
   $d )
