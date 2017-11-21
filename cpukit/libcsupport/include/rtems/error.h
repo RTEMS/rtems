@@ -48,7 +48,7 @@
 #define _RTEMS_RTEMS_ERROR_H
 
 #include <rtems/rtems/status.h>
-#include <rtems/score/interr.h>
+#include <rtems/fatal.h>
 
 #include <stdarg.h>
 
@@ -123,14 +123,6 @@ int rtems_verror(
   const char         *printf_format,
   va_list             arglist
 );
-
-/**
- * rtems_panic is shorthand for rtems_error(RTEMS_ERROR_PANIC, ...)
- */
-void rtems_panic(
-  const char *printf_format,
-  ...
-) RTEMS_NO_RETURN;
 
 extern int rtems_panic_in_progress;
 

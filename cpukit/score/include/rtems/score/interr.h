@@ -124,6 +124,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_SMP = 10,
 
   /**
+   * @brief Fatal source of rtems_panic().
+   *
+   * @see rtem
+   */
+  RTEMS_FATAL_SOURCE_PANIC = 11,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for

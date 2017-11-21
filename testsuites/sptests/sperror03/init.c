@@ -16,8 +16,7 @@
 
 const char rtems_test_name[] = "SPERROR 3";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument argument);
+static const char fmt[] = "Dummy panic\n";
 
 static void fatal_extension(
   rtems_fatal_source source,
@@ -26,24 +25,20 @@ static void fatal_extension(
 )
 {
   if (
-    source == RTEMS_FATAL_SOURCE_EXIT
+    source == RTEMS_FATAL_SOURCE_PANIC
       && !always_set_to_false
-      && error == 0
+      && error == (rtems_fatal_code) fmt
   ) {
     TEST_END();
   }
 }
 
-rtems_task Init(
+static rtems_task Init(
   rtems_task_argument argument
 )
 {
   TEST_BEGIN();
-
-  rtems_panic(
-    "Dummy panic\n"
-  );
-
+  rtems_panic( fmt );
   rtems_test_assert(0);
 }
 

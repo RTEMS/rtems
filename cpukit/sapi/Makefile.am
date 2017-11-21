@@ -43,6 +43,7 @@ libsapi_a_SOURCES += src/delaynano.c
 libsapi_a_SOURCES += src/rbtree.c
 libsapi_a_SOURCES += src/rbtreefind.c
 libsapi_a_SOURCES += src/rbtreeinsert.c
+libsapi_a_SOURCES += src/panic.c
 libsapi_a_SOURCES += src/profilingiterate.c
 libsapi_a_SOURCES += src/profilingreportxml.c
 libsapi_a_SOURCES += src/tcsimpleinstall.c

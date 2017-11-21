@@ -89,6 +89,18 @@ RTEMS_NO_RETURN RTEMS_INLINE_ROUTINE void rtems_fatal(
 }
 
 /**
+ * @brief Prints the specified message via printk() and terminates the system.
+ *
+ * @param[in] fmt The message format.
+ * @param[in] ... The message parameters.
+ *
+ * @see _Terminate().
+ */
+RTEMS_NO_RETURN void rtems_panic(
+  const char *fmt, ...
+) RTEMS_PRINTFLIKE( 1, 2 );
+
+/**
  * @brief Returns a text for a fatal source.
  *
  * The text for each fatal source is the enumerator constant.

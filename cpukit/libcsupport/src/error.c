@@ -98,18 +98,3 @@ int rtems_error(
 
   return chars_written;
 }
-
-void rtems_panic(
-  const char *printf_format,
-  ...
-)
-{
-  va_list arglist;
-
-  va_start(arglist, printf_format);
-  (void) rtems_verror(RTEMS_ERROR_PANIC, printf_format, arglist);
-  va_end(arglist);
-
-  rtems_error(0, "fatal error, exiting");
-  _exit(errno);
-}
