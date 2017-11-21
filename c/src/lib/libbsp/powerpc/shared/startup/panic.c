@@ -18,12 +18,6 @@ rebootQuestion(void)
   bsp_reset();
 }
 
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  rebootQuestion();
-}
-
 #define THESRC _Internal_errors_What_happened.the_source
 #define THEERR _Internal_errors_What_happened.the_error
 

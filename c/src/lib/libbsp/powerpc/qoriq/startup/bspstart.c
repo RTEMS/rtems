@@ -52,20 +52,6 @@ uint32_t bsp_time_base_frequency;
 
 uint32_t qoriq_clock_frequency;
 
-void BSP_panic(char *s)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_local_disable(level);
-  (void) level;
-
-  printk("%s PANIC %s\n", rtems_get_version_string(), s);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 void _BSP_Fatal_error(unsigned n)
 {
   rtems_interrupt_level level;

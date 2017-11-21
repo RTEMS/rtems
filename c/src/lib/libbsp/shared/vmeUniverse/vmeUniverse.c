@@ -283,7 +283,7 @@ extern int k_vsprintf(char *, char *, va_list);
 char	buf[200];
 	rval = k_vsprintf(buf,fmt,ap);
 	if (rval > sizeof(buf))
-			BSP_panic("vmeUniverse/uprintk: buffer overrun");
+			rtems_panic("vmeUniverse/uprintk: buffer overrun");
 	printk(buf);
 	return rval;
 }
@@ -2032,15 +2032,15 @@ rtems_irq_connect_data	aarrggh;
 	if ( shared ) {
 #if BSP_SHARED_HANDLER_SUPPORT > 0
 		if (!BSP_install_rtems_shared_irq_handler(&aarrggh))
-			BSP_panic("unable to install vmeUniverse shared irq handler");
+			rtems_panic("unable to install vmeUniverse shared irq handler");
 #else
 		uprintf(stderr,"vmeUniverse: WARNING: your BSP doesn't support sharing interrupts\n");
 		if (!BSP_install_rtems_irq_handler(&aarrggh))
-			BSP_panic("unable to install vmeUniverse irq handler");
+			rtems_panic("unable to install vmeUniverse irq handler");
 #endif
 	} else {
 		if (!BSP_install_rtems_irq_handler(&aarrggh))
-			BSP_panic("unable to install vmeUniverse irq handler");
+			rtems_panic("unable to install vmeUniverse irq handler");
 	}
 }
 

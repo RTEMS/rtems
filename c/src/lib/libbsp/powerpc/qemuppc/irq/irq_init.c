@@ -31,7 +31,7 @@ static int qemuppc_exception_handler(
   unsigned exception_number
 )
 {
-  BSP_panic("Unexpected interrupt occured");
+  rtems_panic("Unexpected interrupt occured");
   return 0;
 }
 

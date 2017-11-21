@@ -526,7 +526,7 @@ sccInitialize (int chan)
    */
   rxBuf[chan] = malloc(sizeof(*rxBuf[chan]) + 2*PPC_CACHE_ALIGNMENT);
   if (rxBuf[chan] == NULL) {
-    BSP_panic("Cannot allocate console rx buffer\n");
+    rtems_panic("Cannot allocate console rx buffer\n");
   }
   else {
     /*

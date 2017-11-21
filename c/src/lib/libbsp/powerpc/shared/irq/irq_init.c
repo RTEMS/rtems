@@ -208,7 +208,7 @@ void VIA_isa_bridge_interrupts_setup(void)
     }
   }
 loop_exit:
-  if (!found) BSP_panic("VIA_82C586 PCI/ISA bridge not found!n");
+  if (!found) rtems_panic("VIA_82C586 PCI/ISA bridge not found!n");
 
   tmp = inb(0x810);
   if  ( !(tmp & 0x2)) {
@@ -355,7 +355,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
       /*
        * put something here that will show the failure...
        */
-      BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
+      rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
     }
 
 #ifdef TRACE_IRQ_INIT

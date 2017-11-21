@@ -111,12 +111,6 @@ static unsigned char ConfVPD_buff[200];
 static char cmdline_buf[CMDLINE_BUF_SIZE];
 char *BSP_commandline_string = cmdline_buf;
 
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc");
-}
-
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);

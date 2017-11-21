@@ -133,6 +133,6 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
 		/*
 		 * put something here that will show the failure...
 		 */
-		BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
+		rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
 	}
 }

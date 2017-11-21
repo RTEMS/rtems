@@ -429,7 +429,7 @@ int err;
 #error  "BSP_PCI_VME_DRIVER_DOES_EOI/BSP_PIC_DO_EOI feature can only be used with vmeUniverse"
 #endif
   if ( vmeUniverse0PciIrqLine < 0 )
-	BSP_panic("Unable to get universe interrupt line info from PCI config");
+	rtems_panic("Unable to get universe interrupt line info from PCI config");
   _BSP_vme_bridge_irq = vmeUniverse0PciIrqLine;
 #endif
   return 0;

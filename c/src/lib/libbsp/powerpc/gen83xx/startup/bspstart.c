@@ -51,20 +51,6 @@ static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, un
   return 0;
 }
 
-void BSP_panic(char *s)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-  (void) level;
-
-  printk("%s PANIC %s\n", rtems_get_version_string(), s);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 void _BSP_Fatal_error(unsigned n)
 {
   rtems_interrupt_level level;
@@ -145,7 +131,7 @@ void bsp_start( void)
   /* Install default handler for the decrementer exception */
   sc = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);
   if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot install decrementer exception handler");
+    rtems_panic("cannot install decrementer exception handler");
   }
 
   /* Initalize interrupt support */

@@ -51,20 +51,6 @@ uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
-void BSP_panic( char *s)
-{
-  rtems_interrupt_level level;
-
-  rtems_interrupt_disable( level);
-  (void) level; /* avoid set but not used warning */
-
-  printk( "%s PANIC %s\n", _RTEMS_version, s);
-
-  while (1) {
-    /* Do nothing */
-  }
-}
-
 void _BSP_Fatal_error( unsigned n)
 {
   rtems_interrupt_level level;
@@ -169,7 +155,7 @@ void bsp_start( void)
   if (RTEMS_SUCCESSFUL !=
       bsp_tqm_get_cib_uint32("cu",
 			     &BSP_bus_frequency)) {
-    BSP_panic("Cannot determine BUS frequency\n");
+    rtems_panic("Cannot determine BUS frequency\n");
   }
 
   bsp_time_base_frequency = BSP_bus_frequency / 16;

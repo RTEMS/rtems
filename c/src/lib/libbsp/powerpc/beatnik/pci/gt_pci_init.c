@@ -193,7 +193,7 @@ extern pci_config_access_functions pci_indirect_functions;
 	pci_initialize();
 	/* check for overflow of an unsigned char */
 	if ( BSP_pci_hose1_bus_base + pci_bus_count() > 255 ) {
-		BSP_panic("Too many PCI busses in the system");
+		rtems_panic("Too many PCI busses in the system");
 	}
 	/* readjust total number */
 	ucMaxPCIBus+=BSP_pci_hose1_bus_base;

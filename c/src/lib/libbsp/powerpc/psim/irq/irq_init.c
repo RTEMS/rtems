@@ -80,7 +80,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
     /*
      * put something here that will show the failure...
      */
-    BSP_panic(
+    rtems_panic(
       "Unable to initialize RTEMS interrupt Management!!! System locked\n"
     );
   }
@@ -95,7 +95,7 @@ static int psim_exception_handler(
   unsigned exception_number
 )
 {
-  BSP_panic("Unexpected interrupt occured");
+  rtems_panic("Unexpected interrupt occured");
   return 0;
 }
 

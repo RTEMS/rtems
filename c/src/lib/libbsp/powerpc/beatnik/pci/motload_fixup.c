@@ -163,7 +163,7 @@ uint32_t	b0,b1,r0,r1,lim,dis;
 		break;
 
 		default:
-			BSP_panic("Unknown discovery version; switch in file: "__FILE__" not implemented (yet)");
+			rtems_panic("Unknown discovery version; switch in file: "__FILE__" not implemented (yet)");
 		break; /* never get here */
 	}
 

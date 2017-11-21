@@ -136,7 +136,6 @@ extern unsigned int BSP_time_base_divisor;
 #define BSP_Convert_decrementer( _value ) \
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 
-extern void BSP_panic(char *s);
 extern void bsp_reset(void);
 /* extern int printk(const char *, ...) __attribute__((format(printf, 1, 2))); */
 extern int BSP_disconnect_clock_handler(void);

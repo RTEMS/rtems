@@ -188,7 +188,7 @@ void detect_host_bridge(void)
 
 #if BSP_PCI_IRQ_NUMBER > 0
   if (OpenPIC == (volatile struct OpenPIC *)0) {
-    BSP_panic("OpenPic Not found\n");
+    rtems_panic("OpenPic Not found\n");
   }
 #endif
 

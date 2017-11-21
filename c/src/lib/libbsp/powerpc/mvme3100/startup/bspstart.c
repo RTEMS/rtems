@@ -105,12 +105,6 @@ int i;
 BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
-void BSP_panic(char *s)
-{
-  printk("\n%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc");
-}
-
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("\n%s PANIC ERROR %x\n",_RTEMS_version, v);
@@ -186,7 +180,7 @@ BSP_calc_freqs( void )
     break;
 
     default:
-      BSP_panic("Unknown PLL sys-clock ratio; something's wrong here");
+      rtems_panic("Unknown PLL sys-clock ratio; something's wrong here");
   }
 
   switch ( e500_ratio ) {
@@ -195,7 +189,7 @@ BSP_calc_freqs( void )
     break;
 
     default:
-      BSP_panic("Unknown PLL e500-clock ratio; something's wrong here");
+      rtems_panic("Unknown PLL e500-clock ratio; something's wrong here");
   }
 
   printk("Core Complex Bus (CCB) Clock Freq: %10u Hz\n", BSP_bus_frequency);

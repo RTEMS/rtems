@@ -1602,15 +1602,15 @@ rtems_irq_connect_data	xx;
 	if ( shared ) {
 #if BSP_SHARED_HANDLER_SUPPORT > 0
 		if (!BSP_install_rtems_shared_irq_handler(&xx))
-			BSP_panic("unable to install vmeTsi148 shared irq handler");
+			rtems_panic("unable to install vmeTsi148 shared irq handler");
 #else
         uprintf(stderr,"vmeTsi148: WARNING: your BSP doesn't support sharing interrupts\n");
 		if (!BSP_install_rtems_irq_handler(&xx))
-			BSP_panic("unable to install vmeTsi148 irq handler");
+			rtems_panic("unable to install vmeTsi148 irq handler");
 #endif
 	} else {
 		if (!BSP_install_rtems_irq_handler(&xx))
-			BSP_panic("unable to install vmeTsi148 irq handler");
+			rtems_panic("unable to install vmeTsi148 irq handler");
 	}
 }
 

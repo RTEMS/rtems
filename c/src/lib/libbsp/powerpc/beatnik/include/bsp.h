@@ -52,7 +52,7 @@ typedef enum {
  * is cached and repeated calls just return the cached value.
  *
  * If a non-zero argument is passed, the routine panics
- * (BSP_panic) if no recognized bridge is found;
+ * (rtems_panic) if no recognized bridge is found;
  */
 DiscoveryVersion BSP_getDiscoveryVersion(int assertion);
 
@@ -233,7 +233,6 @@ extern char *BSP_commandline_string;
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 
 extern rtems_configuration_table  BSP_Configuration;
-extern void BSP_panic(char *s);
 extern void bsp_reset(void);
 extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);

@@ -321,6 +321,6 @@ void BSP_rtems_irq_mngt_init(unsigned cpuId)
    * initialize interrupt management
    */
   if (!BSP_rtems_irq_mngt_set(&initialConfig)) {
-    BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
+    rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
   }
 }

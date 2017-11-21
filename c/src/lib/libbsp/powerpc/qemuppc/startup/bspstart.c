@@ -99,7 +99,7 @@ void bsp_start( void )
   /* Install default handler for the decrementer exception */
   sc = ppc_exc_set_handler( ASM_DEC_VECTOR, default_decrementer_exception_handler);
   if (sc != RTEMS_SUCCESSFUL) {
-    BSP_panic("cannot install decrementer exception handler");
+    rtems_panic("cannot install decrementer exception handler");
   }
 
   /* Initalize interrupt support */

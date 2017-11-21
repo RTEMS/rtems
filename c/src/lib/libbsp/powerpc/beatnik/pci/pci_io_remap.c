@@ -84,7 +84,7 @@ rtems_pci_io_remap(int bus_from, int bus_to, uint32_t offset)
   unsigned int  bas, lim;
 
   if ( offset & ((1<<12)-1) ) {
-    BSP_panic("rtems_pci_io_remap(): offset must be 4k aligned");
+    rtems_panic("rtems_pci_io_remap(): offset must be 4k aligned");
     return -1;
   }
 
@@ -114,12 +114,12 @@ rtems_pci_io_remap(int bus_from, int bus_to, uint32_t offset)
         switch ( b ) {
           default:
             printk("PCI header type %i (@%i/%i/%i)\n", b, bus, dev, fun);
-            BSP_panic("rtems_pci_io_remap(): unknown PCI header type");
+            rtems_panic("rtems_pci_io_remap(): unknown PCI header type");
           return -1; /* keep compiler happy */
 
           case PCI_HEADER_TYPE_CARDBUS:
             printk("PCI header type %i (@%i/%i/%i)\n", b, bus, dev, fun);
-            BSP_panic("rtems_pci_io_remap():  don't know how to deal with Cardbus bridge");
+            rtems_panic("rtems_pci_io_remap():  don't know how to deal with Cardbus bridge");
           return -1;
 
           case PCI_HEADER_TYPE_NORMAL:
@@ -167,7 +167,7 @@ rtems_pci_io_remap(int bus_from, int bus_to, uint32_t offset)
           switch ( b ) {
             default:
               printk("Unknown IO range type 0x%x (@%i/%i/%i)\n", b, bus, dev, fun);
-              BSP_panic("rtems_pci_io_remap(): unknown IO range type");
+              rtems_panic("rtems_pci_io_remap(): unknown IO range type");
             return -1;
 
             case PCI_IO_RANGE_TYPE_16:

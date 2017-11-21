@@ -554,7 +554,7 @@ int i;
 		break;
 
 		default:
-			BSP_panic("Unable to initialize interrupt controller; unknown chip");
+			rtems_panic("Unable to initialize interrupt controller; unknown chip");
 		break;
 	}
 

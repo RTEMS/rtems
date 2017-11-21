@@ -254,7 +254,7 @@ int pci_initialize(void)
       }
 
       if (++numPCIDevs > PCI_MAX_DEVICES) {
-	 BSP_panic("Too many PCI devices found; increase PCI_MAX_DEVICES in pci.h\n");
+	 rtems_panic("Too many PCI devices found; increase PCI_MAX_DEVICES in pci.h\n");
       }
 
       if (!deviceFound) deviceFound=1;

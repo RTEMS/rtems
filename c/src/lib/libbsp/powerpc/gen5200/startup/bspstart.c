@@ -112,12 +112,6 @@ uint32_t bsp_time_base_frequency;
 /* Legacy */
 uint32_t bsp_clicks_per_usec;
 
-void BSP_panic(char *s)
-{
-  printk("%s PANIC %s\n",_RTEMS_version, s);
-  __asm__ __volatile ("sc");
-}
-
 void _BSP_Fatal_error(unsigned int v)
 {
   printk("%s PANIC ERROR %x\n",_RTEMS_version, v);

@@ -133,18 +133,6 @@ void BSP_ask_for_reset(void)
 }
 
 
-void BSP_panic(char *s)
-{
-  RTEMS_UNUSED rtems_interrupt_level level;
-
-  rtems_interrupt_disable(level);
-
-  printk("\n%s PANIC %s\n", rtems_get_version_string(), s);
-
-  BSP_ask_for_reset();
-}
-
-
 void _BSP_Fatal_error(unsigned int v)
 {
   RTEMS_UNUSED rtems_interrupt_level level;

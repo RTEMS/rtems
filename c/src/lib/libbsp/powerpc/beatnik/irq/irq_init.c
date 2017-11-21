@@ -100,7 +100,7 @@ int i;
 		/*
 		 * put something here that will show the failure...
 		 */
-		BSP_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
+		rtems_panic("Unable to initialize RTEMS interrupt Management!!! System locked\n");
 	}
 
 #ifdef TRACE_IRQ_INIT  

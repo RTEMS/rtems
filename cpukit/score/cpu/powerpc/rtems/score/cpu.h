@@ -675,8 +675,6 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
   _CPU_MSR_SET(msr);
 }
 
-void BSP_panic(char *);
-
 /* Fatal Error manager macros */
 
 /*

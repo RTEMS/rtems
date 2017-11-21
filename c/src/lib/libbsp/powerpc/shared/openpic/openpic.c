@@ -178,7 +178,7 @@ void openpic_init(int main_pic, unsigned char *polarities, unsigned char *senses
     const char *version, *vendor, *device;
 
     if (!OpenPIC)
-	BSP_panic("No OpenPIC found");
+	rtems_panic("No OpenPIC found");
 
     t = openpic_read(&OpenPIC->Global.Feature_Reporting0);
     switch (t & OPENPIC_FEATURE_VERSION_MASK) {

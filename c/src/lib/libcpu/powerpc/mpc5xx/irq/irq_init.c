@@ -141,7 +141,7 @@ void CPU_rtems_irq_mng_init(unsigned cpuId)
       /*
        * put something here that will show the failure...
        */
-      BSP_panic("Unable to initialize RTEMS interrupt Management\n");
+      rtems_panic("Unable to initialize RTEMS interrupt Management\n");
     }
 
   /*
@@ -155,11 +155,11 @@ void CPU_rtems_irq_mng_init(unsigned cpuId)
     vectorDesc.off         = nop_raw_enable;
     vectorDesc.isOn        = raw_is_connected;
     if (!mpc5xx_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS decrementer raw exception\n");
+      rtems_panic("Unable to initialize RTEMS decrementer raw exception\n");
     }
     vectorDesc.exceptIndex = ASM_EXT_VECTOR;
     vectorDesc.hdl.vector  = ASM_EXT_VECTOR;
     if (!mpc5xx_set_exception (&vectorDesc)) {
-      BSP_panic("Unable to initialize RTEMS external raw exception\n");
+      rtems_panic("Unable to initialize RTEMS external raw exception\n");
     }
 }

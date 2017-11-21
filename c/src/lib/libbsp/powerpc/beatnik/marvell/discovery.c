@@ -112,7 +112,7 @@ printk("config data is %p\n", BSP_pci_configuration.pci_config_data);
 		if ( PCI_VENDOR_ID_MARVELL != ds ) {
 			if ( assertion ) {
 				printk("Host bridge vendor id: 0x%04x\n",ds);
-				BSP_panic("Host bridge vendor @ pci(0,0,0) is not MARVELL");
+				rtems_panic("Host bridge vendor @ pci(0,0,0) is not MARVELL");
 			}
 			else return unknown;
 		}
@@ -140,7 +140,7 @@ printk("config data is %p\n", BSP_pci_configuration.pci_config_data);
 					printk("Marvell device id 0x%04x, revision 0x%02x; check %s:%u\n",
 							ds, dc,
 							__FILE__,__LINE__);
-					BSP_panic("Unknown Marvell bridge or revision@ pci(0,0,0) is not MARVELL");
+					rtems_panic("Unknown Marvell bridge or revision@ pci(0,0,0) is not MARVELL");
 				}
 			break;
 		}
