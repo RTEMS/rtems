@@ -67,14 +67,17 @@ struct ops {
  * clock (tick) timer in SMP configuration.
  */
 
+#ifndef RTEMS_SMP
 /* "simple timecounter" interface. Only for non-SMP. */
 static const struct ops ops_simple;
+#else
 /* Hardware support up-counter using LEON3 %asr23. */
 static const struct ops ops_timetag;
 /* Timestamp counter available in some IRQ(A)MP instantiations. */
 static const struct ops ops_irqamp;
 /* Separate GPTIMER subtimer as timecounter */
 static const struct ops ops_subtimer;
+#endif
 
 struct clock_priv {
   const struct ops *ops;
@@ -174,6 +177,7 @@ static rtems_device_driver tlib_clock_install_isr(rtems_isr *isr)
   return RTEMS_SUCCESSFUL;
 }
 
+#ifndef RTEMS_SMP
 /** Simple counter **/
 static uint32_t simple_tlib_tc_get(rtems_timecounter_simple *tc)
 {
@@ -257,6 +261,8 @@ static const struct ops ops_simple = {
   .shutdown_hardware  = NULL,
 };
 
+#else
+
 /** Subtimer as counter **/
 static uint32_t subtimer_get_timecount(struct timecounter *tc)
 {
@@ -316,7 +322,6 @@ static const struct ops ops_subtimer = {
   .shutdown_hardware  = subtimer_shutdown_hardware,
 };
 
-#if defined(LEON3)
 /** DSU timetag as counter **/
 static uint32_t timetag_get_timecount(struct timecounter *tc)
 {
@@ -346,9 +351,7 @@ static const struct ops ops_timetag = {
   .timecounter_tick   = timetag_timecounter_tick,
   .shutdown_hardware  = NULL,
 };
-#endif
 
-#if defined(LEON3)
 /** IRQ(A)MP timestamp as counter **/
 static uint32_t irqamp_get_timecount(struct timecounter *tc)
 {
