@@ -6,7 +6,7 @@
 
 AC_PREREQ(2.69)
 AC_INIT([rtems-c-src-lib-libbsp-or1k-generic],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([bsp_specs])
+AC_CONFIG_SRCDIR([make/custom/generic_or1k.cfg])
 RTEMS_TOP(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU

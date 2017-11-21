@@ -7,7 +7,7 @@
 
 AC_PREREQ(2.69)
 AC_INIT([rtems-c-src-lib-libbsp-epiphany-sim],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
-AC_CONFIG_SRCDIR([bsp_specs])
+AC_CONFIG_SRCDIR([make/custom/epiphany_sim.cfg])
 RTEMS_TOP(../../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
