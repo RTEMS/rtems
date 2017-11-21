@@ -21,4 +21,9 @@ RTEMS_BSPOPTS_HELP([BSP_RESET_BOARD_AT_EXIT],
 RTEMS_BSPOPTS_SET([BSP_PRINT_EXCEPTION_CONTEXT],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_PRINT_EXCEPTION_CONTEXT],
 [If defined to a non-zero value, prints the exception context when an
-unexpected exception occurs.])])
+unexpected exception occurs.])
+
+RTEMS_BSPOPTS_SET([BSP_VERBOSE_FATAL_EXTENSION],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_VERBOSE_FATAL_EXTENSION],
+[If defined to a non-zero value, prints the some information in case of a fatal
+error.])])
