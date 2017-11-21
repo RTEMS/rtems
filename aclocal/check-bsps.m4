@@ -8,10 +8,10 @@ AC_REQUIRE([RTEMS_TOP])dnl sets RTEMS_TOPdir
 
 AC_MSG_CHECKING([for available BSPs])
   $1=
-  for bsp_spec in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU"/*/bsp_specs 2>/dev/null`; do
-    bsp_family=`echo "$bsp_spec" | sed \
+  for bsp_make in `echo "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU"/*/make 2>/dev/null`; do
+    bsp_family=`echo "$bsp_make" | sed \
       -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
-      -e "s,/bsp_specs$,,"`
+      -e "s,/make$,,"`
     for bsp_cfgs in `ls "$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/make/custom/"*.cfg 2>/dev/null`; do
       bsp_cfg=`echo "$bsp_cfgs" | sed \
         -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/$bsp_family/make/custom/,," \
