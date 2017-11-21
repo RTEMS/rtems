@@ -38,7 +38,6 @@ int pthread_getschedparam(
 {
   Thread_Control               *the_thread;
   Thread_queue_Context          queue_context;
-  const POSIX_API_Control      *api;
   Thread_CPU_budget_algorithms  budget_algorithm;
   const Scheduler_Control      *scheduler;
   Priority_Control              priority;
@@ -54,12 +53,10 @@ int pthread_getschedparam(
     return ESRCH;
   }
 
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
   _Thread_Wait_acquire_critical( the_thread, &queue_context );
 
   scheduler = _Thread_Scheduler_get_home( the_thread );
-  _POSIX_Threads_Get_sched_param_sporadic( the_thread, api, scheduler, param );
+  _POSIX_Threads_Get_sched_param_sporadic( the_thread, scheduler, param );
   priority = the_thread->Real_priority.priority;
   budget_algorithm = the_thread->budget_algorithm;
 

@@ -36,7 +36,6 @@ int pthread_getattr_np(
 {
   Thread_Control               *the_thread;
   ISR_lock_Context              lock_context;
-  const POSIX_API_Control      *api;
   Thread_CPU_budget_algorithms  budget_algorithm;
   const Scheduler_Control      *scheduler;
   bool                          ok;
@@ -55,8 +54,6 @@ int pthread_getattr_np(
 
   _Thread_State_acquire_critical( the_thread, &lock_context );
 
-  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
-
   attr->stackaddr = the_thread->Start.Initial_stack.area;
   attr->stacksize = the_thread->Start.Initial_stack.size;
 
@@ -73,7 +70,6 @@ int pthread_getattr_np(
   );
   _POSIX_Threads_Get_sched_param_sporadic(
     the_thread,
-    api,
     scheduler,
     &attr->schedparam
   );

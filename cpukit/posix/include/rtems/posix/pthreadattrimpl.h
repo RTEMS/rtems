@@ -68,11 +68,13 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
 #if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
   const Thread_Control    *the_thread,
-  const POSIX_API_Control *api,
   const Scheduler_Control *scheduler,
   struct sched_param      *param
 )
 {
+  const POSIX_API_Control *api;
+
+  api = the_thread->API_Extensions[ THREAD_API_POSIX ];
   param->sched_ss_low_priority = _POSIX_Priority_From_core(
     scheduler,
     api->Sporadic.Low_priority.priority
