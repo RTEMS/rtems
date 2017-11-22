@@ -7,5 +7,7 @@
 %{!nostdlib: %{qrtems: start.o%s -e _start crtbegin.o%s}}
 
 *link:
-%(old_link) %{!qrtems: %(old_link)} %{qrtems: crtend.o%s -dc -dp -N}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N}
 
+*endfile:
+%{!qrtems: %(old_endfile)} %{!nostdlib: %{qrtems: crtend.o%s}}
