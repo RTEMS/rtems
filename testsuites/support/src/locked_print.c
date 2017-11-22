@@ -14,7 +14,9 @@
 #include "test_support.h"
 #include "tmacros.h"
 
+#include <unistd.h>
 #include <rtems/bspIo.h>
+#include <rtems/counter.h>
 
 static rtems_id locked_print_semaphore;      /* synchronisation semaphore */
 
@@ -62,9 +64,23 @@ int locked_vprintf(const char *fmt, va_list ap)
   locked_print_initialize();
 
   /* Lock semaphore without releasing the cpu */
-  do {
-    sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
-  } while (sc != RTEMS_SUCCESSFUL );
+  sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
+
+  if ( sc != RTEMS_SUCCESSFUL ) {
+    uint8_t e;
+    rtems_counter_ticks w;
+
+    /* Use exponential backoff to avoid a livelock */
+
+    getentropy( &e, sizeof( e ) );
+    w = e + 1;
+
+    do {
+      rtems_counter_delay_ticks( w );
+      w *= 2;
+      sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
+    } while (sc != RTEMS_SUCCESSFUL );
+  }
 
   rv = vprintf(fmt, ap);
 
