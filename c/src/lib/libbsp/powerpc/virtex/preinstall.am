@@ -62,10 +62,6 @@ $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
-$(PROJECT_INCLUDE)/coverhd.h: include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
 $(PROJECT_INCLUDE)/bsp/linker-symbols.h: ../shared/include/linker-symbols.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/linker-symbols.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/linker-symbols.h

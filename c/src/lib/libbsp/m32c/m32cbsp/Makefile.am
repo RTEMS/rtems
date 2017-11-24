@@ -16,7 +16,6 @@ nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 EXTRA_DIST = start/start.S
 start.$(OBJEXT): start/start.S

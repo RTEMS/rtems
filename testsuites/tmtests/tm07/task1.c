@@ -95,7 +95,7 @@ rtems_task High_task(
       end_time,
       operation_count,
       0,
-      CALLING_OVERHEAD_TASK_RESTART
+      0
     );
   } else
     (void) rtems_task_suspend( RTEMS_SELF );

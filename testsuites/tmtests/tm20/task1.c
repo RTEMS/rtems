@@ -115,7 +115,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PARTITION_CREATE
+    0
   );
 
   Region_name = rtems_build_name( 'R', 'E', 'G', 'N' );
@@ -136,7 +136,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_CREATE
+    0
   );
 
   benchmark_timer_initialize();
@@ -148,7 +148,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PARTITION_GET_BUFFER
+    0
   );
 
   buffer_count = 0;
@@ -175,7 +175,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PARTITION_GET_BUFFER
+    0
   );
 
   benchmark_timer_initialize();
@@ -187,7 +187,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PARTITION_RETURN_BUFFER
+    0
   );
 
   for ( index = 0 ; index < buffer_count ; index++ ) {
@@ -209,7 +209,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PARTITION_DELETE
+    0
   );
 
   status = rtems_region_get_segment(
@@ -236,7 +236,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_GET_SEGMENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -254,7 +254,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_GET_SEGMENT
+    0
   );
 
   status = rtems_region_return_segment( Region_id, Buffer_address_3 );
@@ -269,7 +269,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_RETURN_SEGMENT
+    0
   );
 
   status = rtems_region_get_segment(
@@ -299,7 +299,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_RETURN_SEGMENT
+    0
   );
 
   status = rtems_region_return_segment( Region_id, Buffer_address_2 );
@@ -348,7 +348,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_DELETE
+    0
   );
 
   benchmark_timer_initialize();
@@ -366,7 +366,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_INITIALIZE
+    0
   );
 
   benchmark_timer_initialize();
@@ -379,7 +379,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_OPEN
+    0
   );
 
   benchmark_timer_initialize();
@@ -392,7 +392,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_CLOSE
+    0
   );
 
   benchmark_timer_initialize();
@@ -405,7 +405,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_READ
+    0
   );
 
   benchmark_timer_initialize();
@@ -418,7 +418,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_WRITE
+    0
   );
 
   benchmark_timer_initialize();
@@ -431,7 +431,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_IO_CONTROL
+    0
   );
 
   TEST_END();
@@ -451,7 +451,7 @@ rtems_task Task_2(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_GET_SEGMENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -468,7 +468,7 @@ rtems_task Task_2(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_REGION_RETURN_SEGMENT
+    0
   );
 
   status = rtems_task_delete( RTEMS_SELF );

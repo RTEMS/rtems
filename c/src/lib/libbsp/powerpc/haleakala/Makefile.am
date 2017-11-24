@@ -14,7 +14,6 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
-include_HEADERS += include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../powerpc/shared/start/rtems_crti.S

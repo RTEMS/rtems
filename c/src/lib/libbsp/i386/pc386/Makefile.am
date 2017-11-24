@@ -42,7 +42,6 @@ include_bsp_HEADERS += ../../i386/shared/smp/smp-imps.h
 endif
 
 include_HEADERS += include/crt.h
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

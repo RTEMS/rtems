@@ -14,7 +14,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <semaphore.h>
-#include <coverhd.h>
 #include <tmacros.h>
 #include <timesys.h>
 #include "test_support.h"

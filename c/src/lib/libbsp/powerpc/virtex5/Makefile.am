@@ -13,7 +13,6 @@ include_HEADERS    += ../../shared/include/tm27.h
 include_bsp_HEADERS =
 
 nodist_include_HEADERS     = include/bspopts.h
-nodist_include_HEADERS    += include/coverhd.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES             = include/bspopts.h
 

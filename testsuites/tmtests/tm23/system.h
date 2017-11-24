@@ -11,7 +11,6 @@
  */
 
 
-#include <coverhd.h>
 #include <tmacros.h>
 
 /* functions */

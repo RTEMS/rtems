@@ -16,7 +16,6 @@ EXTRA_DIST = README
 
 noinst_PROGRAMS =
 
-include_HEADERS += ../../shared/include/coverhd.h
 
 include_bsp_HEADERS = include/irq.h \
 	../../shared/include/irq-generic.h \

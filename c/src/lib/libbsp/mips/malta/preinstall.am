@@ -77,10 +77,6 @@ $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
-$(PROJECT_INCLUDE)/coverhd.h: ../../shared/include/coverhd.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/coverhd.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/coverhd.h
-
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)

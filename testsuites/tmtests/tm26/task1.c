@@ -15,7 +15,6 @@
 #include <rtems.h>
 #include "system.h"
 #include "fptest.h"
-#include <coverhd.h>
 #include <tmacros.h>
 #include <timesys.h>
 

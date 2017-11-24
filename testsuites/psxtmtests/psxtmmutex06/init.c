@@ -11,7 +11,6 @@
 #include "config.h"
 #endif
 
-#include <coverhd.h>
 #include <tmacros.h>
 #include <timesys.h>
 #include "test_support.h"

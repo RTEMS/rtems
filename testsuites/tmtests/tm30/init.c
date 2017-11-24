@@ -12,7 +12,6 @@
 #endif
 
 #include <bsp.h>
-#include <coverhd.h>
 #include <tmacros.h>
 #include <timesys.h>
 #include "test_support.h"

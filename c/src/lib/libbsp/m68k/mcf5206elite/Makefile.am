@@ -15,7 +15,6 @@ DISTCLEANFILES = include/bspopts.h
 
 _SUBDIRS = . tools
 
-include_HEADERS += include/coverhd.h
 include_HEADERS += include/i2c.h
 include_HEADERS += include/i2cdrv.h
 include_HEADERS += include/ds1307.h

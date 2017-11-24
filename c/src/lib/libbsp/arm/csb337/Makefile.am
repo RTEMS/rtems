@@ -30,7 +30,6 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 if ENABLE_LCD
 nodist_include_HEADERS += console/sed1356_16bit.h

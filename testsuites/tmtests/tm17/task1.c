@@ -125,7 +125,7 @@ rtems_task Last_task(
     end_time,
     operation_count - 1u,
     overhead,
-    CALLING_OVERHEAD_TASK_SET_PRIORITY
+    0
   );
 
   TEST_END();

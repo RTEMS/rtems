@@ -22,7 +22,6 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += include/coverhd.h
 
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
 

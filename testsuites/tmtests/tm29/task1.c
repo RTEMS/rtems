@@ -51,7 +51,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_CREATE
+    0
   );
 
   benchmark_timer_initialize();
@@ -63,7 +63,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
+    0
   );
 
   benchmark_timer_initialize();
@@ -75,7 +75,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
+    0
   );
 
   benchmark_timer_initialize();
@@ -87,7 +87,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_CANCEL
+    0
   );
 
   benchmark_timer_initialize();
@@ -99,7 +99,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_DELETE
+    0
   );
 
   status = rtems_rate_monotonic_create( Period_name, &id );
@@ -117,7 +117,7 @@ rtems_task Init(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_RATE_MONOTONIC_DELETE
+    0
   );
 
 #define LOOP_TASK_PRIORITY ((RTEMS_MAXIMUM_PRIORITY / 2u) + 1u)
@@ -203,7 +203,7 @@ rtems_task Low_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_RATE_MONOTONIC_PERIOD
+    0
   );
 
   TEST_END();

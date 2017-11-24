@@ -34,7 +34,6 @@ include_HEADERS += ../shared/CMSIS/Include/cmsis_gcc.h
 include_HEADERS += include/bsp.h
 
 nodist_include_HEADERS =
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 nodist_include_HEADERS += include/bspopts.h
 
 include_bspdir = $(includedir)/bsp

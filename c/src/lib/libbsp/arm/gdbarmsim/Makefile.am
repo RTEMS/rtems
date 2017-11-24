@@ -20,7 +20,6 @@ nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../shared/start/start.S

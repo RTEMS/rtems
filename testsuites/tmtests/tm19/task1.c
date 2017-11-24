@@ -100,7 +100,7 @@ rtems_asr Process_asr_for_pass_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_SIGNAL_SEND
+    0
   );
 
   benchmark_timer_initialize();
@@ -133,7 +133,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_SIGNAL_CATCH
+    0
   );
 
   benchmark_timer_initialize();
@@ -145,7 +145,7 @@ rtems_task Task_1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_SIGNAL_SEND
+    0
   );
 
   benchmark_timer_initialize();

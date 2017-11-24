@@ -29,7 +29,6 @@ include_bsp_HEADERS += include/u-boot-config.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

@@ -146,7 +146,7 @@ rtems_task High_task(
     end_time,
     operation_count - 1u,
     0u,
-    CALLING_OVERHEAD_EVENT_SEND
+    0
   );
 
   TEST_END();

@@ -25,7 +25,6 @@ EXTRA_DIST += shared/vmeUniverse/vmeUniverse.c \
     shared/vmeUniverse/README.porting \
     shared/vmeUniverse/README.universe
 
-EXTRA_DIST += shared/include/coverhd.h
 EXTRA_DIST += shared/gdbstub/rtems-stub-glue.c
 EXTRA_DIST += shared/include/bootcard.h
 

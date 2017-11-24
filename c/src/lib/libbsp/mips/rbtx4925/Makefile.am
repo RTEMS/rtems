@@ -20,7 +20,6 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-nodist_include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

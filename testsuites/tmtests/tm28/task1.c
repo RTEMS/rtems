@@ -82,7 +82,7 @@ rtems_task Test_task (
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PORT_CREATE
+    0
   );
 
   benchmark_timer_initialize();
@@ -99,7 +99,7 @@ rtems_task Test_task (
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_PORT_EXTERNAL_TO_INTERNAL
+    0
   );
 
   benchmark_timer_initialize();
@@ -116,7 +116,7 @@ rtems_task Test_task (
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_PORT_INTERNAL_TO_EXTERNAL
+    0
   );
 
   benchmark_timer_initialize();
@@ -128,7 +128,7 @@ rtems_task Test_task (
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_PORT_DELETE
+    0
   );
 
   TEST_END();

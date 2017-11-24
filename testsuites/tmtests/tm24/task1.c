@@ -91,7 +91,7 @@ rtems_task High_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_WAKE_AFTER
+    0
   );
 
   Task_count = 0;
@@ -116,7 +116,7 @@ rtems_task Tasks(
       end_time,
       OPERATION_COUNT,
       overhead,
-      CALLING_OVERHEAD_TASK_WAKE_AFTER
+      0
     );
 
   TEST_END();

@@ -17,7 +17,6 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 
-include_HEADERS += include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

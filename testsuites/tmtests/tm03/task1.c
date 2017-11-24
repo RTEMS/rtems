@@ -167,7 +167,7 @@ rtems_task High_task(
     end_time,
     operation_count - 1,
     0,
-    CALLING_OVERHEAD_SEMAPHORE_RELEASE
+    0
   );
 
   TEST_END();

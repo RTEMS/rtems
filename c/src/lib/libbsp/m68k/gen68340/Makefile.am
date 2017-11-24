@@ -14,7 +14,6 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-include_HEADERS += include/coverhd.h
 include_HEADERS += include/m340uart.h
 include_HEADERS += include/m340timer.h
 include_HEADERS += include/m68340.h

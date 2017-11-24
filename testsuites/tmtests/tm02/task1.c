@@ -175,7 +175,7 @@ rtems_task Low_task(
     end_time,
     operation_count - 1,
     0,
-    CALLING_OVERHEAD_SEMAPHORE_OBTAIN
+    0
   );
 
   TEST_END();

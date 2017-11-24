@@ -103,7 +103,7 @@ rtems_task Low_task(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_CLOCK_TICK
+    0
   );
 
   TEST_END();

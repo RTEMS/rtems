@@ -102,7 +102,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_SET_PRIORITY
+    0
   );
 
   benchmark_timer_initialize();
@@ -120,7 +120,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_SET_PRIORITY
+    0
   );
 
   benchmark_timer_initialize();
@@ -137,7 +137,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_MODE
+    0
   );
 
   benchmark_timer_initialize();
@@ -160,7 +160,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT * 2,
     overhead,
-    CALLING_OVERHEAD_TASK_MODE
+    0
   );
 
   benchmark_timer_initialize();                 /* must be one host */
@@ -172,7 +172,7 @@ rtems_task test_task(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_TASK_MODE
+    0
   );
 
   status = rtems_task_mode( RTEMS_NO_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
@@ -197,7 +197,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_CLOCK_SET
+    0
   );
 
   benchmark_timer_initialize();
@@ -210,7 +210,7 @@ rtems_task test_task(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_CLOCK_GET
+    0
   );
 
   TEST_END();
@@ -228,7 +228,7 @@ rtems_task test_task1(
     end_time,
     1,
     0,
-    CALLING_OVERHEAD_TASK_MODE
+    0
   );
 
   (void) rtems_task_suspend( RTEMS_SELF );

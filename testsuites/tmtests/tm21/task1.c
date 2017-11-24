@@ -139,7 +139,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -152,7 +152,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_MESSAGE_QUEUE_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -165,7 +165,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_SEMAPHORE_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -178,7 +178,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_PARTITION_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -191,7 +191,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_REGION_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -204,7 +204,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_PORT_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -217,7 +217,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TIMER_IDENT
+    0
   );
 
   benchmark_timer_initialize();
@@ -230,7 +230,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_RATE_MONOTONIC_IDENT
+    0
   );
 
   TEST_END();

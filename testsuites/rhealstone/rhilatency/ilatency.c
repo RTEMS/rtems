@@ -17,7 +17,6 @@
 #include <timesys.h>
 #include <rtems/btimer.h>
 #include <rtems/score/schedulerpriorityimpl.h>
-#include <coverhd.h>
 
 /* configuration information */
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

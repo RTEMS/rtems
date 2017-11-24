@@ -15,7 +15,6 @@ DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += include/coverhd.h
 include_HEADERS += include/system_conf.h
 
 noinst_LIBRARIES = libbspstart.a

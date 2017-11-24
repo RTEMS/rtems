@@ -34,8 +34,7 @@ include_bsp_HEADERS += include/irq.h
 include_bsp_HEADERS += include/uart.h
 include_bsp_HEADERS += include/generic_or1k.h
 
-nodist_include_HEADERS = ../../shared/include/coverhd.h \
-  include/bspopts.h
+nodist_include_HEADERS = include/bspopts.h
 
 ###############################################################################
 #                  Data                                                       #

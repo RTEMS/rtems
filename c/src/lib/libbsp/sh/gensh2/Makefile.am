@@ -13,7 +13,6 @@ nodist_include_HEADERS = include/bspopts.h
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
-include_HEADERS += include/coverhd.h
 
 EXTRA_DIST = start/start.ram start/start.rom
 noinst_LIBRARIES = libbspstart.a

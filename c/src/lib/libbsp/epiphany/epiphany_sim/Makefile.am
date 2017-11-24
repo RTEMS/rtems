@@ -18,7 +18,6 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
-include_HEADERS += ../../shared/include/coverhd.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 include_bsp_HEADERS = ../shared/include/linker-symbols.h

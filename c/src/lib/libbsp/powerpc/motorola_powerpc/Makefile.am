@@ -22,7 +22,6 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 include_HEADERS += ../../powerpc/shared/include/nvram.h
-include_HEADERS += ../../shared/include/coverhd.h
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = ../../powerpc/shared/start/start.S

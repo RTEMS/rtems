@@ -11,7 +11,6 @@
 #include "config.h"
 #endif
 
-#include <coverhd.h>
 #include <pthread.h>
 #include <sched.h>
 #include <tmacros.h>

@@ -20,8 +20,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 
-nodist_include_HEADERS = ../../shared/include/coverhd.h
-nodist_include_HEADERS += include/bspopts.h
+nodist_include_HEADERS = include/bspopts.h
 
 nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 

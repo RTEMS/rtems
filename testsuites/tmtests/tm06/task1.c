@@ -94,7 +94,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     overhead,
-    CALLING_OVERHEAD_TASK_RESTART
+    0
   );
 
   for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
@@ -122,7 +122,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     0,
-    CALLING_OVERHEAD_TASK_SUSPEND
+    0
   );
 
   benchmark_timer_initialize();
@@ -135,7 +135,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     0,
-    CALLING_OVERHEAD_TASK_RESUME
+    0
   );
 
   benchmark_timer_initialize();
@@ -148,7 +148,7 @@ rtems_task Task_1(
     end_time,
     OPERATION_COUNT,
     0,
-    CALLING_OVERHEAD_TASK_RESUME
+    0
   );
 
   TEST_END();
