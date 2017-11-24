@@ -38,6 +38,7 @@ AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+spthread01/Makefile
 sptls04/Makefile
 spconsole01/Makefile
 spintrcritical24/Makefile

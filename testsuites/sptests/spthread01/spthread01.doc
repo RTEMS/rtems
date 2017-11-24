@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spthread01
+
+directives:
+
+  - All macros and functions defined by <rtems/thread.h>.
+
+concepts:
+
+  - Test <rtems/thread.h> API.
