@@ -1173,7 +1173,7 @@ static void test_heap_size_with_overhead(void)
 static void test_posix_memalign(void)
 {
   void *p1;
-  int i;
+  size_t i;
   int sc;
   int maximumShift;
 
@@ -1199,14 +1199,16 @@ static void test_posix_memalign(void)
 
   maximumShift = (sizeof(size_t) * CHAR_BIT) - 1;
   for ( i=sizeof(void *) ; i<maximumShift ; i++ ) {
-    size_t alignment = 1 << i;
+    size_t alignment = 1;
+
+    alignment <<= i;
 
     p1 = NULL; /* Initialize p1 to aovid used uninitialized */
 
-    printf( "posix_memalign - alignment of %zd -- OK\n", alignment);
+    printf( "posix_memalign - alignment of %zu -- OK\n", alignment);
     sc = posix_memalign( &p1, alignment, 8 );
     if ( sc == ENOMEM ) {
-      printf( "posix_memalign - ran out of memory trying %zd\n", alignment );
+      printf( "posix_memalign - ran out of memory trying %zu\n", alignment );
       break;
     }
     posix_service_failed( sc, "posix_memalign alignment OK" );
