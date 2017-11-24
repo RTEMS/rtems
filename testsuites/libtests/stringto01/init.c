@@ -60,8 +60,8 @@ static int get_base_10_or_16(const char *s)
 
 /* Test integer conversions */
 #define TEST_STRING_TO_TYPE          int
-#define STRING_TO_MAX                LONG_MAX
-#define STRING_TO_MAX_STRING         __XSTRING(LONG_MAX)
+#define STRING_TO_MAX                INT_MAX
+#define STRING_TO_MAX_STRING         __XSTRING(INT_MAX)
 #define TEST_STRING_TO_NAME          test_rtems_string_to_int
 #define STRING_TO_NAME_METHOD        rtems_string_to_int
 #define STRING_TO_NAME_METHOD_STRING "rtems_string_to_int"
