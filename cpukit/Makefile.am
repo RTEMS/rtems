@@ -278,6 +278,50 @@ include_drvmgr_HEADERS += libdrvmgr/drvmgr_confdefs.h
 include_drvmgr_HEADERS += libdrvmgr/drvmgr_list.h
 endif
 
+if LIBGNAT
+include_adaincludedir = $(includedir)/adainclude
+include_adainclude_HEADERS =
+include_adainclude_HEADERS += include/adainclude/rtems.adb
+include_adainclude_HEADERS += include/adainclude/rtems.ads
+include_adainclude_HEADERS += include/adainclude/rtems-barrier.adb
+include_adainclude_HEADERS += include/adainclude/rtems-barrier.ads
+include_adainclude_HEADERS += include/adainclude/rtems-clock.adb
+include_adainclude_HEADERS += include/adainclude/rtems-clock.ads
+include_adainclude_HEADERS += include/adainclude/rtems-cpu_usage.ads
+include_adainclude_HEADERS += include/adainclude/rtems-event.adb
+include_adainclude_HEADERS += include/adainclude/rtems-event.ads
+include_adainclude_HEADERS += include/adainclude/rtems-extension.adb
+include_adainclude_HEADERS += include/adainclude/rtems-extension.ads
+include_adainclude_HEADERS += include/adainclude/rtems-fatal.adb
+include_adainclude_HEADERS += include/adainclude/rtems-fatal.ads
+include_adainclude_HEADERS += include/adainclude/rtems-interrupt.ads
+include_adainclude_HEADERS += include/adainclude/rtems-io.adb
+include_adainclude_HEADERS += include/adainclude/rtems-io.ads
+include_adainclude_HEADERS += include/adainclude/rtems-message_queue.adb
+include_adainclude_HEADERS += include/adainclude/rtems-message_queue.ads
+include_adainclude_HEADERS += include/adainclude/rtems-multiprocessing.adb
+include_adainclude_HEADERS += include/adainclude/rtems-multiprocessing.ads
+include_adainclude_HEADERS += include/adainclude/rtems-object.adb
+include_adainclude_HEADERS += include/adainclude/rtems-object.ads
+include_adainclude_HEADERS += include/adainclude/rtems-partition.adb
+include_adainclude_HEADERS += include/adainclude/rtems-partition.ads
+include_adainclude_HEADERS += include/adainclude/rtems-port.adb
+include_adainclude_HEADERS += include/adainclude/rtems-port.ads
+include_adainclude_HEADERS += include/adainclude/rtems-rate_monotonic.adb
+include_adainclude_HEADERS += include/adainclude/rtems-rate_monotonic.ads
+include_adainclude_HEADERS += include/adainclude/rtems-region.adb
+include_adainclude_HEADERS += include/adainclude/rtems-region.ads
+include_adainclude_HEADERS += include/adainclude/rtems-semaphore.adb
+include_adainclude_HEADERS += include/adainclude/rtems-semaphore.ads
+include_adainclude_HEADERS += include/adainclude/rtems-signal.adb
+include_adainclude_HEADERS += include/adainclude/rtems-signal.ads
+include_adainclude_HEADERS += include/adainclude/rtems-stack_checker.ads
+include_adainclude_HEADERS += include/adainclude/rtems-tasks.adb
+include_adainclude_HEADERS += include/adainclude/rtems-tasks.ads
+include_adainclude_HEADERS += include/adainclude/rtems-timer.adb
+include_adainclude_HEADERS += include/adainclude/rtems-timer.ads
+endif
+
 ## HACK: doxygen filter.
 EXTRA_DIST = doxy-filter
 

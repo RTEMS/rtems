@@ -620,3 +620,165 @@ $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h: libdrvmgr/drvmgr_list.h $(PROJECT_INCLU
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/drvmgr/drvmgr_list.h
 endif
+if LIBGNAT
+$(PROJECT_INCLUDE)/adainclude/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/adainclude
+	@: > $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+
+$(PROJECT_INCLUDE)/adainclude/rtems.adb: include/adainclude/rtems.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems.ads: include/adainclude/rtems.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-barrier.adb: include/adainclude/rtems-barrier.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-barrier.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-barrier.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-barrier.ads: include/adainclude/rtems-barrier.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-barrier.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-barrier.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-clock.adb: include/adainclude/rtems-clock.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-clock.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-clock.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-clock.ads: include/adainclude/rtems-clock.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-clock.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-clock.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads: include/adainclude/rtems-cpu_usage.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-cpu_usage.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-event.adb: include/adainclude/rtems-event.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-event.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-event.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-event.ads: include/adainclude/rtems-event.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-event.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-event.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-extension.adb: include/adainclude/rtems-extension.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-extension.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-extension.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-extension.ads: include/adainclude/rtems-extension.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-extension.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-extension.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-fatal.adb: include/adainclude/rtems-fatal.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-fatal.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-fatal.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-fatal.ads: include/adainclude/rtems-fatal.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-fatal.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-fatal.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-interrupt.ads: include/adainclude/rtems-interrupt.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-interrupt.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-interrupt.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-io.adb: include/adainclude/rtems-io.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-io.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-io.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-io.ads: include/adainclude/rtems-io.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-io.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-io.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-message_queue.adb: include/adainclude/rtems-message_queue.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-message_queue.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-message_queue.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-message_queue.ads: include/adainclude/rtems-message_queue.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-message_queue.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-message_queue.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.adb: include/adainclude/rtems-multiprocessing.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads: include/adainclude/rtems-multiprocessing.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-multiprocessing.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-object.adb: include/adainclude/rtems-object.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-object.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-object.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-object.ads: include/adainclude/rtems-object.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-object.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-object.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-partition.adb: include/adainclude/rtems-partition.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-partition.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-partition.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-partition.ads: include/adainclude/rtems-partition.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-partition.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-partition.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-port.adb: include/adainclude/rtems-port.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-port.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-port.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-port.ads: include/adainclude/rtems-port.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-port.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-port.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.adb: include/adainclude/rtems-rate_monotonic.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.ads: include/adainclude/rtems-rate_monotonic.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-rate_monotonic.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-region.adb: include/adainclude/rtems-region.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-region.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-region.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-region.ads: include/adainclude/rtems-region.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-region.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-region.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-semaphore.adb: include/adainclude/rtems-semaphore.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-semaphore.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-semaphore.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-semaphore.ads: include/adainclude/rtems-semaphore.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-semaphore.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-semaphore.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-signal.adb: include/adainclude/rtems-signal.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-signal.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-signal.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-signal.ads: include/adainclude/rtems-signal.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-signal.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-signal.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-stack_checker.ads: include/adainclude/rtems-stack_checker.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-stack_checker.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-stack_checker.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-tasks.adb: include/adainclude/rtems-tasks.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-tasks.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-tasks.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-tasks.ads: include/adainclude/rtems-tasks.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-tasks.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-tasks.ads
+
+$(PROJECT_INCLUDE)/adainclude/rtems-timer.adb: include/adainclude/rtems-timer.adb $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-timer.adb
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-timer.adb
+
+$(PROJECT_INCLUDE)/adainclude/rtems-timer.ads: include/adainclude/rtems-timer.ads $(PROJECT_INCLUDE)/adainclude/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/adainclude/rtems-timer.ads
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/adainclude/rtems-timer.ads
+endif

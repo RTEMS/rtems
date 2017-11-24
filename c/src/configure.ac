@@ -142,16 +142,7 @@ AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 BSP_SUBDIRS="$BSP_SUBDIRS lib"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS support"
-BSP_SUBDIRS="$BSP_SUBDIRS ada"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
-
-AC_ARG_ENABLE([ada],
-[AS_HELP_STRING(--enable-ada,enable ada support)],
-[case "${enable_ada}" in
-  yes) ;;
-  no) ;;
-  *)  AC_MSG_ERROR(bad value ${enable_ada} for --enable-ada) ;;
-esac],[enable_ada=no])
 
 # HACK ALERT!
 
@@ -191,9 +182,6 @@ AS_IF([test "$host_cpu" = sparc],[
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 
-AM_CONDITIONAL(RTEMS_ADA,[test x"$enable_ada" = x"yes" \
-  && test x"$rtems_cv_HAS_POSIX_API" = x"yes"])
-
 RTEMS_PROJECT_ROOT
 
 # Explicitly list all Makefiles here
@@ -208,7 +196,6 @@ libchip/Makefile
 lib/Makefile
 lib/libcpu/Makefile
 lib/libbsp/Makefile
-ada/Makefile
 wrapup/Makefile
 ])
 
