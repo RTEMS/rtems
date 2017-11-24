@@ -125,8 +125,14 @@ static void test(void)
 
   rtems_test_assert((size_t) (e - b) == RTEMS_ARRAY_SIZE(a));
   rtems_test_assert((size_t) (ce - cb) == RTEMS_ARRAY_SIZE(ca));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw) == sizeof(a));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro) == sizeof(ca));
+  rtems_test_assert(
+    RTEMS_LINKER_SET_SIZE(test_rw)
+      == sizeof(const int *) * RTEMS_ARRAY_SIZE(a)
+  );
+  rtems_test_assert(
+    RTEMS_LINKER_SET_SIZE(test_ro)
+      == sizeof(const int *) * RTEMS_ARRAY_SIZE(ca)
+  );
   rtems_test_assert(
     RTEMS_LINKER_SET_ITEM_COUNT(test_rw) == RTEMS_ARRAY_SIZE(a)
   );
@@ -139,8 +145,14 @@ static void test(void)
   rtems_test_assert((size_t) (ei - bi) == RTEMS_ARRAY_SIZE(a));
   rtems_test_assert((size_t) (cei - cbi) == RTEMS_ARRAY_SIZE(ca));
   rtems_test_assert((size_t) (se - sb) == 3);
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_rw_i) == sizeof(a));
-  rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_i) == sizeof(ca));
+  rtems_test_assert(
+    RTEMS_LINKER_SET_SIZE(test_rw_i)
+      == sizeof(const int *) * RTEMS_ARRAY_SIZE(a)
+  );
+  rtems_test_assert(
+    RTEMS_LINKER_SET_SIZE(test_ro_i)
+      == sizeof(const int *) * RTEMS_ARRAY_SIZE(ca)
+  );
   rtems_test_assert(RTEMS_LINKER_SET_SIZE(test_ro_s) == 3 * sizeof(int *));
   rtems_test_assert(
     RTEMS_LINKER_SET_ITEM_COUNT(test_rw_i) == RTEMS_ARRAY_SIZE(a)
