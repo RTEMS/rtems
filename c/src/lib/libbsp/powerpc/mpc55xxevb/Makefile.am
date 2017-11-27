@@ -42,7 +42,7 @@ libbsp_a_SOURCES =
 
 # Includes
 include_HEADERS = include/bsp.h
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h
 include_bsp_HEADERS =

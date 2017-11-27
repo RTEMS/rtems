@@ -602,6 +602,10 @@ $(PROJECT_INCLUDE)/rtems/fsmount.h: libmisc/fsmount/fsmount.h $(PROJECT_INCLUDE)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/fsmount.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/fsmount.h
 
+$(PROJECT_INCLUDE)/rtems/tm27-default.h: include/rtems/tm27-default.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/tm27-default.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/tm27-default.h
+
 if LIBDRVMGR
 $(PROJECT_INCLUDE)/drvmgr/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/drvmgr

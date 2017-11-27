@@ -25,7 +25,7 @@ project_lib_DATA += startup/linkcmds.qspiflash
 ###############################################################################
 
 include_HEADERS =
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 include_HEADERS += ../shared/CMSIS/Include/core_cm7.h
 include_HEADERS += ../shared/CMSIS/Include/core_cmInstr.h
 include_HEADERS += ../shared/CMSIS/Include/core_cmFunc.h

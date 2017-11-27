@@ -9,7 +9,7 @@ dist_project_lib_DATA = bsp_specs
 
 # include
 include_HEADERS     = include/bsp.h
-include_HEADERS    += ../../shared/include/tm27.h
+include_HEADERS    += include/tm27.h
 
 include_bsp_HEADERS =
 

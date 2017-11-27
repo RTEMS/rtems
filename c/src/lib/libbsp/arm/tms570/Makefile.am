@@ -86,7 +86,7 @@ include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys.h
 include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys2.h
 include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pcr.h
 
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 
 # ----------------------------
 # ------  Data

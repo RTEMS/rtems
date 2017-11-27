@@ -270,6 +270,8 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
 
+include_rtems_HEADERS += include/rtems/tm27-default.h
+
 ## Driver manager
 if LIBDRVMGR
 include_drvmgrdir = $(includedir)/drvmgr

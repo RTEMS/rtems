@@ -51,7 +51,7 @@ include_bsp_HEADERS += include/ssp.h
 include_bsp_HEADERS += include/start-config.h
 include_bsp_HEADERS += include/system-clocks.h
 
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 
 ###############################################################################
 #                  Data                                                       #

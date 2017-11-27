@@ -279,7 +279,7 @@ $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h: include/ti_herc/reg_pcr.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/ti_herc/reg_pcr.h
 
-$(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 

@@ -57,7 +57,7 @@ include_bsp_HEADERS += include/lpc-clock-config.h
 include_bsp_HEADERS += include/system-clocks.h
 include_bsp_HEADERS += include/mbed-pinmap.h
 
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 
 
 # ----------------------------

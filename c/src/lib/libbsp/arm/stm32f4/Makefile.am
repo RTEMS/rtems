@@ -26,7 +26,7 @@ EXTRA_DIST += startup/linkcmds.stm32f105rc
 ###############################################################################
 
 include_HEADERS =
-include_HEADERS += ../../shared/include/tm27.h
+include_HEADERS += include/tm27.h
 include_HEADERS += include/bsp.h
 
 nodist_include_HEADERS =

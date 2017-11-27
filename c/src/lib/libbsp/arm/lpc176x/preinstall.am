@@ -173,7 +173,7 @@ $(PROJECT_INCLUDE)/bsp/mbed-pinmap.h: include/mbed-pinmap.h $(PROJECT_INCLUDE)/b
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mbed-pinmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mbed-pinmap.h
 
-$(PROJECT_INCLUDE)/tm27.h: ../../shared/include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
+$(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
