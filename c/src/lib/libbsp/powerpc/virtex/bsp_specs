@@ -10,4 +10,5 @@
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
 
 *link:
-%{!qrtems: %(old_link)} %{qrtems: -dc -dp -N -u __vectors}
+%{!qrtems: %(old_link)} %{qrtems: -dc -dp -u __vectors -N}
+

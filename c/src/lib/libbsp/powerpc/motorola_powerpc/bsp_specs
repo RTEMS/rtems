@@ -7,8 +7,8 @@
 %{!nostdlib: %{qrtems: ecrti%O%s rtems_crti%O%s crtbegin.o%s \
   vectors_entry%O%s start.o%s -e __rtems_entry_point -u __vectors}}
 
-*endfile:
-%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
-
 *link:
 %{!qrtems: %(old_link)} %{qrtems: -dp -Bstatic}
+
+*endfile:
+%{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
