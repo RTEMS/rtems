@@ -17,6 +17,7 @@ exclude: fsrfsbitmap01
 exclude: sha
 exclude: spstkalloc02
 exclude: sptls01
+exclude: sptls04
 exclude: tmcontext01
 exclude: utf8proc01
 
