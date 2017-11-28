@@ -149,17 +149,3 @@ halted:	nop
   .align CPU_ALIGNMENT
   param_space:
   	.space 8
-
-.section .fini
-  .global _fini
-  _fini:
-    nop
-    retl
-    nop
-
-.section .init
-  .global _init
-  _init:
-    nop
-    retl
-    nop
