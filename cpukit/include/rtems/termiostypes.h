@@ -20,6 +20,7 @@
 #include <rtems/libio.h>
 #include <rtems/assoc.h>
 #include <rtems/chain.h>
+#include <rtems/thread.h>
 #include <sys/ioccom.h>
 #include <stdint.h>
 #include <termios.h>
@@ -52,7 +53,7 @@ struct rtems_termios_rawbuf {
   volatile unsigned int  Head;
   volatile unsigned int  Tail;
   volatile unsigned int  Size;
-  rtems_id    Semaphore;
+  rtems_binary_semaphore Semaphore;
 };
 
 typedef enum {
@@ -77,7 +78,7 @@ typedef struct rtems_termios_device_context {
     rtems_interrupt_lock interrupt;
 
     /* Used for TERMIOS_IRQ_SERVER_DRIVEN or TERMIOS_TASK_DRIVEN */
-    rtems_id mutex;
+    rtems_mutex mutex;
   } lock;
 
   void ( *lock_acquire )(
@@ -300,8 +301,8 @@ typedef struct rtems_termios_tty {
   /*
    * Mutual-exclusion semaphores
    */
-  rtems_id  isem;
-  rtems_id  osem;
+  rtems_mutex isem;
+  rtems_mutex osem;
 
   /*
    * The canonical (cooked) character buffer
@@ -326,7 +327,7 @@ typedef struct rtems_termios_tty {
    * Raw input character buffer
    */
   struct rtems_termios_rawbuf rawInBuf;
-  uint32_t                    rawInBufSemaphoreOptions;
+  bool                        rawInBufSemaphoreWait;
   rtems_interval              rawInBufSemaphoreTimeout;
   rtems_interval              rawInBufSemaphoreFirstTimeout;
   unsigned int                rawInBufDropped;  /* Statistics */
@@ -594,6 +595,8 @@ int rtems_termios_poll(
 #define	IUCLC		0x00004000	/* map upper case to lower case on input */
 
 #define RTEMS_TERMIOS_NUMBER_BAUD_RATES 25
+
+extern rtems_mutex rtems_termios_ttyMutex;
 
 #ifdef __cplusplus
 }

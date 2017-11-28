@@ -635,10 +635,11 @@ static rtems_status_code test_early_device_install(
    * after this test case.
    */
   for (i = 0; i < 4; ++i) {
-    errno = 0;
     fd = open( &dev[0], O_RDWR );
-    rtems_test_assert( fd == -1 );
-    rtems_test_assert( errno == ENXIO );
+    rtems_test_assert( fd == i );
+
+    rv = close( fd );
+    rtems_test_assert( rv == 0 );
   }
 
   rv = unlink( &dev[0] );

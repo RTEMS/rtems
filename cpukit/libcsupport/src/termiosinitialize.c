@@ -22,34 +22,6 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems.h>
-#include <rtems/libio.h>
-#include <ctype.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <termios.h>
-#include <unistd.h>
+#include <rtems/termiostypes.h>
 
-rtems_id rtems_termios_ttyMutex;
-
-void
-rtems_termios_initialize (void)
-{
-  rtems_status_code sc;
-
-  /*
-   * Create the mutex semaphore for the tty list
-   */
-  if (!rtems_termios_ttyMutex) {
-    sc = rtems_semaphore_create (
-      rtems_build_name ('T', 'R', 'm', 'i'),
-      1,
-      RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-      RTEMS_NO_PRIORITY,
-      &rtems_termios_ttyMutex);
-    if (sc != RTEMS_SUCCESSFUL)
-      rtems_fatal_error_occurred (sc);
-  }
-}
+rtems_mutex rtems_termios_ttyMutex = RTEMS_MUTEX_INITIALIZER( "termios" );

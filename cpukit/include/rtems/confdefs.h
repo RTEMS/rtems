@@ -155,30 +155,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE(rtems_libio_iops);
 #endif
 
-/*
- * This macro determines if termios is disabled by this application.
- * This only means that resources will not be reserved.  If you end
- * up using termios, it will fail.
- */
-#ifdef CONFIGURE_TERMIOS_DISABLED
-  #define _CONFIGURE_TERMIOS_SEMAPHORES 0
-#else
-  /**
-   * This macro specifies the number of serial or PTY ports that will
-   * use termios.
-   */
-  #ifndef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
-  #define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 1
-  #endif
-
-  /*
-   * This macro reserves the number of semaphores required by termios
-   * based upon the number of communication ports that will use it.
-   */
-  #define _CONFIGURE_TERMIOS_SEMAPHORES \
-    ((CONFIGURE_NUMBER_OF_TERMIOS_PORTS * 4) + 1)
-#endif
-
 /**
  * This macro specifies the number of PTYs that can be concurrently
  * active.
@@ -2096,7 +2072,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    */
   #define _CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + \
-      _CONFIGURE_TERMIOS_SEMAPHORES + \
       _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
       _CONFIGURE_NETWORKING_SEMAPHORES)
 
@@ -3509,6 +3484,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
+#endif
+
+#ifdef CONFIGURE_TERMIOS_DISABLED
+  #warning "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS

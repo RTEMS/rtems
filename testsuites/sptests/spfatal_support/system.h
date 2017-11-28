@@ -71,11 +71,7 @@ extern rtems_extensions_table initial_extensions;
   RTEMS_TEST_INITIAL_EXTENSION
 
 /* extra parameters may be in testcase.h */
-#ifdef FATAL_USE_TERMIOS_CONSOLE
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-#else
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
-#endif
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
 /* always need an Init task, some cases need more tasks */

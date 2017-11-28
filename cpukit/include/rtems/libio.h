@@ -1891,7 +1891,10 @@ typedef struct rtems_termios_callbacks {
   int    outputUsesInterrupts;
 } rtems_termios_callbacks;
 
-void rtems_termios_initialize (void);
+RTEMS_INLINE_ROUTINE void rtems_termios_initialize( void )
+{
+  /* Nothing to do, provided for backward compatibility */
+}
 
 /*
  * CCJ: Change before opening a tty. Newer code from Eric is coming
