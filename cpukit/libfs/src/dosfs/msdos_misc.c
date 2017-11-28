@@ -1585,7 +1585,8 @@ msdos_find_file_in_directory (
                         printf ("MSFS:[9.2] checksum, entry_matched:%i, lfn_entry:%i, lfn_checksum:%02x/%02x\n",
                                 entry_matched, lfn_entry, lfn_checksum, msdos_lfn_checksum(entry));
 #endif
-                    } else {
+                    } else if ((*MSDOS_DIR_ATTR(entry) & MSDOS_ATTR_VOLUME_ID)
+                               == 0) {
                         bytes_in_entry = MSDOS_SHORT_NAME_LEN + 1;
                         bytes_in_entry = msdos_short_entry_to_utf8_name (
                             converter,
