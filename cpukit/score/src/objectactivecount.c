@@ -27,7 +27,7 @@ Objects_Maximum _Objects_Active_count(
   size_t inactive;
   size_t maximum;
 
-  _Assert( _Debug_Is_owner_of_allocator() );
+  _Assert( _Objects_Allocator_is_owner() );
 
   inactive = _Chain_Node_count_unprotected( &information->Inactive );
   maximum  = information->maximum;

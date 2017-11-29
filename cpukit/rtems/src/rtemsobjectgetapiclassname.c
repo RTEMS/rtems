@@ -25,7 +25,6 @@
 
 static const rtems_assoc_t rtems_object_api_internal_assoc[] = {
   { "Thread",                  OBJECTS_INTERNAL_THREADS, 0},
-  { "Mutex",                   OBJECTS_INTERNAL_MUTEXES, 0},
   { NULL,                      0, 0}
 };
 

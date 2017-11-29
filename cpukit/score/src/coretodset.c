@@ -32,7 +32,7 @@ void _TOD_Set(
   uint32_t        cpu_count;
   uint32_t        cpu_index;
 
-  _Assert( _API_Mutex_Is_owner( _Once_Mutex ) );
+  _Assert( _TOD_Is_owner() );
 
   timespec2bintime( tod, &tod_as_bintime );
   _Timecounter_Set_clock( &tod_as_bintime, lock_context );

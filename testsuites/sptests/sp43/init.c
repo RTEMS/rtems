@@ -347,9 +347,9 @@ rtems_task Init(
     rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS ) );
   printf( "rtems_object_get_api_class_name(CLASSIC_API, 0) = %s\n",
     rtems_object_get_api_class_name( OBJECTS_CLASSIC_API, 0 ) );
-  printf("rtems_object_get_api_class_name(INTERNAL_API, MUTEXES) = %s\n",
+  printf("rtems_object_get_api_class_name(INTERNAL_API, THREADS) = %s\n",
     rtems_object_get_api_class_name(
-       OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_MUTEXES));
+       OBJECTS_INTERNAL_API, OBJECTS_INTERNAL_THREADS));
   printf("rtems_object_get_api_class_name(CLASSIC_API, RTEMS_BARRIERS) = %s\n",
     rtems_object_get_api_class_name(
        OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS));

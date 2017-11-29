@@ -31,7 +31,7 @@ void _Objects_Shrink_information(
   uint32_t          block;
   uint32_t          index_base;
 
-  _Assert( _Debug_Is_owner_of_allocator() );
+  _Assert( _Objects_Allocator_is_owner() );
 
   /*
    * Search the list to find block or chunk with all objects inactive.

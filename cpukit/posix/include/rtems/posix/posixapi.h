@@ -21,8 +21,8 @@
 
 #include <rtems/config.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/apimutex.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/score/onceimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/seterr.h>
 

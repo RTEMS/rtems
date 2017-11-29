@@ -27,7 +27,6 @@
 #include <rtems/sysinit.h>
 #include <rtems/score/sysstate.h>
 
-#include <rtems/score/apimutex.h>
 #include <rtems/score/copyrt.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/interr.h>
@@ -59,10 +58,6 @@ _Objects_Information_table[ OBJECTS_APIS_LAST + 1 ] = {
   &_POSIX_Objects[ 0 ]
 };
 
-API_Mutex_Control *_RTEMS_Allocator_Mutex;
-
-API_Mutex_Control *_Once_Mutex;
-
 static void rtems_initialize_data_structures(void)
 {
   /*
@@ -82,10 +77,6 @@ static void rtems_initialize_data_structures(void)
   _Thread_Dispatch_initialization();
 
   _ISR_Handler_initialization();
-
-  _API_Mutex_Initialization( 2 );
-  _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
-  _API_Mutex_Allocate( &_Once_Mutex );
 
   _Thread_Handler_initialization();
 

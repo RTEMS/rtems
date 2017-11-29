@@ -101,14 +101,6 @@ extern "C" {
   bool _Debug_Is_thread_dispatching_allowed( void );
 #endif
 
-/**
- * @brief Returns true if the current thread of execution owns the allocator
- * mutex.
- */
-#if defined( RTEMS_DEBUG )
-  bool _Debug_Is_owner_of_allocator( void );
-#endif
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

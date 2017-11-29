@@ -19,7 +19,6 @@
 #define _RTEMS_SCORE_TODIMPL_H
 
 #include <rtems/score/tod.h>
-#include <rtems/score/apimutex.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/watchdog.h>
@@ -143,16 +142,13 @@ typedef struct {
 
 extern TOD_Control _TOD;
 
-static inline void _TOD_Lock( void )
-{
-  /* FIXME: https://devel.rtems.org/ticket/2630 */
-  _API_Mutex_Lock( _Once_Mutex );
-}
+void _TOD_Lock( void );
 
-static inline void _TOD_Unlock( void )
-{
-  _API_Mutex_Unlock( _Once_Mutex );
-}
+void _TOD_Unlock( void );
+
+#if defined(RTEMS_DEBUG)
+bool _TOD_Is_owner( void );
+#endif
 
 static inline void _TOD_Acquire( ISR_lock_Context *lock_context )
 {

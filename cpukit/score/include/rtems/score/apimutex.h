@@ -18,8 +18,9 @@
 #ifndef _RTEMS_SCORE_APIMUTEX_H
 #define _RTEMS_SCORE_APIMUTEX_H
 
-#include <rtems/score/coremutex.h>
-#include <rtems/score/object.h>
+#include <rtems/score/thread.h>
+
+#include <sys/lock.h>
 
 /**
  * @defgroup ScoreAPIMutex API Mutex Handler
@@ -39,14 +40,9 @@ extern "C" {
  */
 typedef struct {
   /**
-   * @brief Allows each API Mutex to be a full-fledged RTEMS object.
+   * A recursive mutex.
    */
-  Objects_Control Object;
-
-  /**
-   * Contains the SuperCore mutex information.
-   */
-  CORE_recursive_mutex_Control Mutex;
+  struct _Mutex_recursive_Control Mutex;
 
   /**
    * @brief The thread life protection state before the outer-most mutex
@@ -56,20 +52,10 @@ typedef struct {
 } API_Mutex_Control;
 
 /**
- *  @brief Initialization for the API Mutexe Handler.
- *
- *  The value @a maximum_mutexes is the maximum number of API mutexes that may
- *  exist at any time.
- *
- *  @param[in] maximum_mutexes is the maximum number of API mutexes.
+ * @brief Statically initialize an API mutex.
  */
-void _API_Mutex_Initialization( uint32_t maximum_mutexes );
-
-/**
- * @brief Allocates an API mutex from the inactive set and returns it in
- * @a mutex.
- */
-void _API_Mutex_Allocate( API_Mutex_Control **mutex );
+#define API_MUTEX_INITIALIZER( name ) \
+  { _MUTEX_RECURSIVE_NAMED_INITIALIZER( name ), 0 }
 
 /**
  * @brief Acquires the specified API mutex.
@@ -107,40 +93,11 @@ bool _API_Mutex_Is_owner( const API_Mutex_Control *mutex );
  */
 /**@{**/
 
-/**
- *  @brief Memory allocation mutex.
- *
- *  This points to the API Mutex instance used to ensure that only
- *  one thread at a time is allocating or freeing memory.
- */
-extern API_Mutex_Control *_RTEMS_Allocator_Mutex;
+void _RTEMS_Lock_allocator( void );
 
-static inline void _RTEMS_Lock_allocator( void )
-{
-  _API_Mutex_Lock( _RTEMS_Allocator_Mutex );
-}
+void _RTEMS_Unlock_allocator( void );
 
-static inline void _RTEMS_Unlock_allocator( void )
-{
-  _API_Mutex_Unlock( _RTEMS_Allocator_Mutex );
-}
-
-static inline bool _RTEMS_Allocator_is_owner( void )
-{
-  return _API_Mutex_Is_owner( _RTEMS_Allocator_Mutex );
-}
-
-extern API_Mutex_Control *_Once_Mutex;
-
-static inline void _Once_Lock( void )
-{
-  _API_Mutex_Lock( _Once_Mutex );
-}
-
-static inline void _Once_Unlock( void )
-{
-  _API_Mutex_Unlock( _Once_Mutex );
-}
+bool _RTEMS_Allocator_is_owner( void );
 
 /** @} */
 

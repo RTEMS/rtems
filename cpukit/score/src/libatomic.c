@@ -59,21 +59,19 @@ void _Libatomic_Protect_end( void *ptr, __uint32_t isr_level )
   _ISR_Local_enable( isr_level );
 }
 
-/*
- * FIXME: The once lock should be only a temporary solution. We need a
- * dedicated internal mutex for this.
- */
+static API_Mutex_Control _Libatomic_Mutex =
+  API_MUTEX_INITIALIZER( "_Libatomic" );
 
 void _Libatomic_Lock_n( void *ptr, __size_t n )
 {
   (void) ptr;
   (void) n;
-  _Once_Lock();
+  _API_Mutex_Lock( &_Libatomic_Mutex );
 }
 
 void _Libatomic_Unlock_n( void *ptr, __size_t n )
 {
   (void) ptr;
   (void) n;
-  _Once_Unlock();
+  _API_Mutex_Unlock( &_Libatomic_Mutex );
 }

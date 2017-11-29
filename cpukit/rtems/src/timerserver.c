@@ -29,7 +29,7 @@
 #include <rtems.h>
 #include <rtems/rtems/timerimpl.h>
 #include <rtems/rtems/tasksimpl.h>
-#include <rtems/score/apimutex.h>
+#include <rtems/score/onceimpl.h>
 #include <rtems/score/todimpl.h>
 
 static Timer_server_Control _Timer_server_Default;

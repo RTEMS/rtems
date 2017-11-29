@@ -49,12 +49,11 @@ typedef bool    (*Objects_Name_comparators)(
  */
 typedef enum {
   OBJECTS_INTERNAL_NO_CLASS =  0,
-  OBJECTS_INTERNAL_THREADS  =  1,
-  OBJECTS_INTERNAL_MUTEXES  =  2
+  OBJECTS_INTERNAL_THREADS  =  1
 } Objects_Internal_API;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_INTERNAL_CLASSES_LAST OBJECTS_INTERNAL_MUTEXES
+#define OBJECTS_INTERNAL_CLASSES_LAST OBJECTS_INTERNAL_THREADS
 
 /**
  *  This enumerated type is used in the class field of the object ID

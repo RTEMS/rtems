@@ -162,8 +162,10 @@ libscore_a_SOURCES += src/schedulersmpstartidle.c
 endif
 
 ## CORE_APIMUTEX_C_FILES
-libscore_a_SOURCES += src/apimutex.c \
-    src/apimutexlock.c src/apimutexisowner.c src/apimutexunlock.c
+libscore_a_SOURCES += src/allocatormutex.c
+libscore_a_SOURCES += src/apimutexisowner.c
+libscore_a_SOURCES += src/apimutexlock.c
+libscore_a_SOURCES += src/apimutexunlock.c
 
 ## CORE_BARRIER_C_FILES
 libscore_a_SOURCES += src/corebarrier.c src/corebarrierrelease.c \
@@ -337,7 +339,6 @@ libscore_a_SOURCES += src/ioprintf.c
 libscore_a_SOURCES += src/iovprintf.c
 libscore_a_SOURCES += src/isrisinprogress.c
 libscore_a_SOURCES += src/condition.c
-libscore_a_SOURCES += src/debugisownerofallocator.c
 libscore_a_SOURCES += src/futex.c
 libscore_a_SOURCES += src/profilingisrentryexit.c
 libscore_a_SOURCES += src/mutex.c

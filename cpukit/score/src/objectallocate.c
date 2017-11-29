@@ -43,7 +43,7 @@ Objects_Control *_Objects_Allocate_unprotected(
   Objects_Control *the_object;
 
   _Assert(
-    _Debug_Is_owner_of_allocator()
+    _Objects_Allocator_is_owner()
       || !_System_state_Is_up( _System_state_Get() )
   );
 

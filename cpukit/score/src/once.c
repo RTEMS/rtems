@@ -54,3 +54,15 @@ int _Once( unsigned char *once_state, void ( *init_routine )( void ) )
 
   return eno;
 }
+
+static API_Mutex_Control _Once_Mutex = API_MUTEX_INITIALIZER( "_Once" );
+
+void _Once_Lock( void )
+{
+  _API_Mutex_Lock( &_Once_Mutex );
+}
+
+void _Once_Unlock( void )
+{
+  _API_Mutex_Unlock( &_Once_Mutex );
+}

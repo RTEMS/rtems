@@ -2794,13 +2794,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 /**
- * RTEMS uses two instance of an internal mutex class.  This accounts
- * for these mutexes.
- */
-#define _CONFIGURE_API_MUTEX_MEMORY \
-  _Configure_Object_RAM(2, sizeof(API_Mutex_Control))
-
-/**
  * This calculates the amount of memory reserved for the IDLE tasks.
  * In an SMP system, each CPU core has its own idle task.
  */
@@ -2829,8 +2822,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #define _CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
   ( _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS + \
-    _CONFIGURE_INTERRUPT_STACK_MEMORY + \
-    _CONFIGURE_API_MUTEX_MEMORY \
+    _CONFIGURE_INTERRUPT_STACK_MEMORY \
   )
 
 /**

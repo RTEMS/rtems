@@ -232,13 +232,13 @@ LAST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
 
 FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(_RTEMS_Allocator_Mutex == NULL);
+  assert(_Thread_Internal_information.Objects.maximum == 0);
   next_step(DATA_STRUCTURES_PRE);
 }
 
 LAST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(_RTEMS_Allocator_Mutex != NULL);
+  assert(_Thread_Internal_information.Objects.maximum != 0);
   next_step(DATA_STRUCTURES_POST);
 }
 

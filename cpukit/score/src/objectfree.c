@@ -29,7 +29,7 @@ void _Objects_Free(
 {
   uint32_t    allocation_size = information->allocation_size;
 
-  _Assert( _Debug_Is_owner_of_allocator() );
+  _Assert( _Objects_Allocator_is_owner() );
 
   _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 

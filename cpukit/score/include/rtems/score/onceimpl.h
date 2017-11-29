@@ -39,6 +39,10 @@ extern "C" {
 
 int _Once( unsigned char *once_state, void (*init_routine)(void) );
 
+void _Once_Lock( void );
+
+void _Once_Unlock( void );
+
 /** @} */
 
 #ifdef __cplusplus
