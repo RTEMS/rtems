@@ -19,6 +19,7 @@
 #include <bsp/irq.h>
 #include <mc9328mxl.h>
 #include <rtems/console.h>
+#include <inttypes.h>
 
 /* Define this to use interrupt driver UART driver */
 #define USE_INTERRUPTS 1
@@ -426,7 +427,7 @@ static void imx_uart_set_baud(int minor, int baud)
     case MC9328MXL_UART_FCR_RFDIV_6:  ref_freq = perclk1/6; break;
     case MC9328MXL_UART_FCR_RFDIV_7:  ref_freq = perclk1/7; break;
     default:
-        rtems_panic("%s:%d Unknown RFDIV: 0x%x",
+        rtems_panic("%s:%d Unknown RFDIV: 0x%" PRIx32,
                     __FUNCTION__, __LINE__,
                     fcr & MC9328MXL_UART_FCR_RFDIV_MASK);
         break;
