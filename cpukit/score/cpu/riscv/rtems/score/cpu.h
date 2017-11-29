@@ -216,8 +216,7 @@ void _CPU_Context_Initialize(
    *(*(_destination)) = _CPU_Null_fp_context; \
   }
 
-extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
-RTEMS_NO_RETURN;
+extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 
 /* end of Fatal Error manager macros */
 
@@ -398,7 +397,7 @@ void _CPU_Context_switch(
 
 void _CPU_Context_restore(
   Context_Control *new_context
-) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+) RTEMS_NO_RETURN;
 
 /*
  *  _CPU_Context_save_fp
