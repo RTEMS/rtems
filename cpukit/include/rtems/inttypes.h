@@ -70,7 +70,7 @@ extern "C" {
 #error "PRIdtime_t: unsupported size of time_t"
 #endif
 
-/** Helper macro to print "blksize_t" in decimal */
+/** Helper macro to print "blksize_t" in hexadecimal */
 #if __RTEMS_SIZEOF_BLKSIZE_T__ == 8
 #define PRIxblksize_t PRIx64
 #elif __RTEMS_SIZEOF_BLKSIZE_T__ == 4
@@ -81,7 +81,7 @@ extern "C" {
 #define PRIxblksize_t "lx"
 #endif
 
-/** Helper macro to print "blkcnt_t" in decimal */
+/** Helper macro to print "blkcnt_t" in hexadecimal */
 #if __RTEMS_SIZEOF_BLKCNT_T__ == 8
 #define PRIxblkcnt_t PRIx64
 #elif __RTEMS_SIZEOF_BLKCNT_T__ == 4
