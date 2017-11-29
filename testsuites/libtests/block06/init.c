@@ -869,7 +869,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
 
   for (i = 0; (i < num) && passed; i++)
   {
-    printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
+    printf ("%s: rtems_bdbuf_read[%zd]: ", tc->name, i);
     sc = rtems_bdbuf_read (tc->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
@@ -902,12 +902,11 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
     {
       for (i = 1; (i < (num / 2)) && passed; i++)
       {
-        printf ("%s: rtems_bdbuf_release_modified[%d]: " \
+        printf ("%s: rtems_bdbuf_release_modified[%zd]: " \
                            "unblocks task 1\n", tc->name, i);
         bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
         sc = rtems_bdbuf_release_modified (bd);
-        printf ("%s: rtems_bdbuf_release_modified[%d]: ",
-                           tc->name, i);
+        printf ("%s: rtems_bdbuf_release_modified[%zd]: ", tc->name, i);
         passed = bdbuf_test_print_sc (sc, true);
         if (!passed)
           break;
@@ -925,7 +924,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
 
           for (i = 0; (i < (num / 2)) && passed; i++)
           {
-            printf ("%s: rtems_bdbuf_release_modified[%d]: ",
+            printf ("%s: rtems_bdbuf_release_modified[%zd]: ",
                                tc->name, i + (num / 2));
             bd = (rtems_bdbuf_buffer*) rtems_chain_get (&buffers);
             passed = bdbuf_test_print_sc (rtems_bdbuf_release_modified (bd),
