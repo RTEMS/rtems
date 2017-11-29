@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/fatal.h>
+#include <rtems/bspIo.h>
 
 #include <stdarg.h>
 
