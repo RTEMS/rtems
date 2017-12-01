@@ -37,9 +37,6 @@ package body SPTEST is
       STATUS : RTEMS.STATUS_CODES;
    begin
 
-      TEXT_IO.NEW_LINE( 2 );
-      TEST_SUPPORT.ADA_TEST_BEGIN;
-
       TIME := ( 1988, 12, 31, 9, 0, 0, 0 );
 
       RTEMS.CLOCK.SET( TIME, STATUS );

@@ -3,8 +3,13 @@
  *  On-Line Applications Research Corporation (OAR).
  */
 
+#include <sys/types.h>
+#include <limits.h>
+#include <pthread.h>
+#include <stdio.h>
 #include <stdlib.h>
 
+#include <rtems.h>
 #include <rtems/test.h>
 #include <rtems/score/threadimpl.h>
 
@@ -34,6 +39,7 @@ uint32_t work_space_size(void);
 uint32_t is_configured_multiprocessing(void);
 uint32_t get_node(void);
 rtems_id tcb_to_id(Thread_Control *tcb);
+void check_type(long type, long size, long alignment);
 
 /*
  *  By putting this in brackets rather than quotes, we get the search
@@ -99,3 +105,52 @@ uint32_t get_node(void)
   return _Objects_Local_node;
 }
 
+typedef struct {
+  const char *name;
+  long size;
+  long alignment;
+} type_spec;
+
+#define TYPE_SPEC(t) { #t, sizeof(t) * CHAR_BIT, _Alignof(t) }
+
+static const type_spec types[] = {
+  TYPE_SPEC(clockid_t),
+  TYPE_SPEC(pid_t),
+  TYPE_SPEC(pthread_attr_t),
+  TYPE_SPEC(pthread_condattr_t),
+  TYPE_SPEC(pthread_cond_t),
+  TYPE_SPEC(pthread_key_t),
+  TYPE_SPEC(pthread_mutexattr_t),
+  TYPE_SPEC(pthread_mutex_t),
+  TYPE_SPEC(pthread_rwlockattr_t),
+  TYPE_SPEC(pthread_rwlock_t),
+  TYPE_SPEC(pthread_t),
+  TYPE_SPEC(rtems_id),
+  TYPE_SPEC(sigset_t),
+  TYPE_SPEC(stack_t),
+  TYPE_SPEC(struct sched_param),
+  TYPE_SPEC(struct sigaction),
+  TYPE_SPEC(struct timespec)
+};
+
+void check_type(long type, long size, long alignment)
+{
+  if (type >= 0 && type < (long) RTEMS_ARRAY_SIZE(types)) {
+    const type_spec *ts;
+
+    ts = &types[type];
+    printf(
+      "%s: size %li == %li, alignment %li == %li\n",
+      ts->name,
+      ts->size,
+      size,
+      ts->alignment,
+      alignment
+    );
+    if (ts->size != size || ts->alignment != alignment) {
+      exit(0);
+    }
+  } else {
+    exit(0);
+  }
+}
