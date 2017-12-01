@@ -20,6 +20,6 @@
 
 package SPTEST is
 
-   task AdaTask;
+   task type AdaTask;
 
 end SPTEST;

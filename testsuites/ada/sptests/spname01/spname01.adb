@@ -17,12 +17,11 @@
 --  http://www.rtems.org/license/LICENSE.
 --
 
+with SPTEST;
+
 procedure SPNAME01 is
+  t : SPTEST.AdaTask;
 begin
-
-   loop
-      delay 120.0;
-   end loop;
-
+   null;
 end SPNAME01;
 
