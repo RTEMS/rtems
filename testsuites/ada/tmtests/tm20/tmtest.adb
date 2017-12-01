@@ -264,7 +264,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          RTEMS.REGION.GET_SEGMENT(
             TMTEST.REGION_ID,
-            1998,
+            1900,
             RTEMS.NO_WAIT,
             RTEMS.NO_TIMEOUT,
             TMTEST.BUFFER_ADDRESS_4,
@@ -316,7 +316,7 @@ package body TMTEST is
       TIMER_DRIVER.INITIALIZE;
          RTEMS.REGION.GET_SEGMENT(
             TMTEST.REGION_ID,
-            1998,
+            1900,
             RTEMS.DEFAULT_OPTIONS,
             RTEMS.NO_TIMEOUT,
             TMTEST.BUFFER_ADDRESS_2,
@@ -364,7 +364,7 @@ package body TMTEST is
 
       RTEMS.REGION.GET_SEGMENT(
          TMTEST.REGION_ID,
-         1998,
+         1900,
          RTEMS.DEFAULT_OPTIONS,
          RTEMS.NO_TIMEOUT,
          TMTEST.BUFFER_ADDRESS_2,
