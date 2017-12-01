@@ -316,6 +316,8 @@ package body SPTEST is
       PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
    begin
 
+      THE_PRIORITY := 4;
+
       loop
 
          THE_PRIORITY := THE_PRIORITY - 1;
