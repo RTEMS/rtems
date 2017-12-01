@@ -274,11 +274,6 @@ pragma Elaborate_Body (RTEMS);
    );
    pragma Convention (C, Thread_Switch_Extension);
 
-   type Thread_Post_Switch_Extension is access procedure (
-      Current_Task : in     RTEMS.TCB_Pointer
-   );
-   pragma Convention (C, Thread_Post_Switch_Extension);
-
    type Thread_Begin_Extension is access procedure (
       Current_Task : in     RTEMS.TCB_Pointer
    );
@@ -288,6 +283,11 @@ pragma Elaborate_Body (RTEMS);
       Current_Task : in     RTEMS.TCB_Pointer
    );
    pragma Convention (C, Thread_Exitted_Extension);
+
+   type Thread_Terminate_Extension is access procedure (
+      Current_Task : in     RTEMS.TCB_Pointer
+   );
+   pragma Convention (C, Thread_Terminate_Extension);
 
    type Fatal_Error_Extension is access procedure (
       Error : in     RTEMS.Unsigned32
@@ -301,10 +301,10 @@ pragma Elaborate_Body (RTEMS);
          Thread_Restart     : RTEMS.Thread_Restart_Extension;
          Thread_Delete      : RTEMS.Thread_Delete_Extension;
          Thread_Switch      : RTEMS.Thread_Switch_Extension;
-         Thread_Post_Switch : RTEMS.Thread_Post_Switch_Extension;
          Thread_Begin       : RTEMS.Thread_Begin_Extension;
          Thread_Exitted     : RTEMS.Thread_Exitted_Extension;
          Fatal              : RTEMS.Fatal_Error_Extension;
+         Thread_Terminate   : RTEMS.Thread_Terminate_Extension;
       end record;
 
    type Extensions_Table_Pointer is access all Extensions_Table;
