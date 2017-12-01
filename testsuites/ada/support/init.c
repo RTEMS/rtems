@@ -45,6 +45,8 @@ rtems_id tcb_to_id(Thread_Control *tcb);
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
+#define CONFIGURE_DISABLE_SMP_CONFIGURATION
+
 #include <config.h>
 
 const char rtems_test_name[] = ADA_TEST_NAME;
