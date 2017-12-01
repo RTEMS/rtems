@@ -39,7 +39,7 @@ package body MPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT( "*** SAMPLE MULTIPROCESSOR APPLICATION ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
       TEXT_IO.PUT( "Creating and starting an application task" );
 
 
@@ -91,7 +91,7 @@ package body MPTEST is
       UNSIGNED32_IO.PUT( TID, BASE => 16 );
       TEXT_IO.NEW_LINE;
  
-      TEXT_IO.PUT_LINE( "*** END OF SAMPLE MULTIPROCESSOR APPLICATION  ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

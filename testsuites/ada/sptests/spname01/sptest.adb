@@ -33,7 +33,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** Ada Task Name TEST ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       RTEMS.Object_Get_Name( RTEMS.Self, StringName, Pointer );
       if Pointer = RTEMS.Null_Address then
@@ -53,7 +53,7 @@ package body SPTEST is
          TEXT_IO.PUT_LINE( "My name is (" & StringName & ")" );
       end if;
 
-      TEXT_IO.PUT_LINE( "*** END OF Ada Task Name TEST ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

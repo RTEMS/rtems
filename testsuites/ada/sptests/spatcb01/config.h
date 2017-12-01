@@ -13,4 +13,6 @@
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
+#define ADA_TEST_NAME "ADA SPATCB 1"
+
 #include <rtems/confdefs.h>

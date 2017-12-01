@@ -38,7 +38,8 @@ package body MPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT( "*** TEST 4 -- NODE " );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
+      TEXT_IO.PUT( "*** NODE " );
       UNSIGNED32_IO.PUT(
          TEST_SUPPORT.NODE,
          WIDTH => 1
@@ -154,7 +155,7 @@ package body MPTEST is
 
       TEXT_IO.PUT_LINE( "Local task priority has been set" );
 
-      TEXT_IO.PUT_LINE( "*** END OF TEST 4 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

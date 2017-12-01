@@ -131,7 +131,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TEST 7 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       SPTEST.EXTENSION_NAME( 1 ) := RTEMS.BUILD_NAME(  'E', 'X', 'T', ' ' );
 
@@ -419,7 +419,7 @@ package body SPTEST is
          TEXT_IO.PUT_LINE( "TASK_EXITTED - user extension invoked correctly" );
       end if;
 
-      TEXT_IO.PUT_LINE( "*** END OF TEST 7 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end TASK_EXIT_EXTENSION;

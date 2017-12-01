@@ -19,6 +19,7 @@
 --
 
 with TEXT_IO;
+with TEST_SUPPORT;
 
 package body SPTEST is
 
@@ -33,9 +34,9 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** HELLO WORLD TEST ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
       TEXT_IO.PUT_LINE( "Hello World" );
-      TEXT_IO.PUT_LINE( "*** END OF HELLO WORLD TEST ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

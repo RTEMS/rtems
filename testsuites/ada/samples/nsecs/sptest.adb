@@ -23,6 +23,7 @@ with Interfaces.C;
 with RTEMS;
 with RTEMS.Clock;
 with Text_IO;
+with TEST_SUPPORT;
 use type Interfaces.C.Long;
 use type RTEMS.Time_T;
 
@@ -69,7 +70,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** NANOSECOND CLOCK TEST ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       --
       --  Iterate 10 times showing difference in TOD
@@ -144,7 +145,7 @@ package body SPTEST is
 
       delay( 1.0 );
 
-      TEXT_IO.PUT_LINE( "*** END OF NANOSECOND CLOCK TEST ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

@@ -40,7 +40,7 @@ package body TMTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TIME TEST 16 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       RTEMS.TASKS.CREATE( 
          RTEMS.BUILD_NAME( 'T', 'E', 'S', 'T' ),
@@ -188,7 +188,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.EVENT_SEND 
       );
 
-      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 16 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end HIGH_TASK;

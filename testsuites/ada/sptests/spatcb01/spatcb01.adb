@@ -14,13 +14,14 @@
 --
 
 with TEXT_IO;
+with TEST_SUPPORT;
 with System.Task_Primitives.Operations;
 with System.Tasking;
 
 procedure SPATCB01 is
   Self_Id : constant System.Tasking.Task_Id := System.Task_Primitives.Operations.Self;
 begin
-  TEXT_IO.PUT_LINE( "*** BEGIN OF TEST SPATCB 1 ***" );
+  TEST_SUPPORT.ADA_TEST_BEGIN;
   TEXT_IO.PUT_LINE( Self_Id.Common.Task_Image( 1 .. Self_Id.Common.Task_Image_Len ) );
-  TEXT_IO.PUT_LINE( "*** END OF TEST SPATCB 1 ***" );
+  TEST_SUPPORT.ADA_TEST_END;
 end SPATCB01;

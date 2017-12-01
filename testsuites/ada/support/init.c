@@ -3,9 +3,9 @@
  *  On-Line Applications Research Corporation (OAR).
  */
 
-#include <bsp.h>
 #include <stdlib.h>
 
+#include <rtems/test.h>
 #include <rtems/score/threadimpl.h>
 
 /*
@@ -26,6 +26,8 @@ static void *POSIX_Init(
  *  Prototypes for various test support routines. Since these are bound to
  *  from Ada, there are no external .h files even though they must be public.
  */
+void ada_test_begin(void);
+void ada_test_end(void);
 uint32_t milliseconds_per_tick(void);
 uint32_t ticks_per_second(void);
 uint32_t work_space_size(void);
@@ -41,7 +43,21 @@ rtems_id tcb_to_id(Thread_Control *tcb);
 #define CONFIGURE_GNAT_RTEMS
 #define CONFIGURE_MEMORY_OVERHEAD  (256)
 
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+
 #include <config.h>
+
+const char rtems_test_name[] = ADA_TEST_NAME;
+
+void ada_test_begin(void)
+{
+  rtems_test_begin(rtems_test_name, RTEMS_TEST_STATE_PASS);
+}
+
+void ada_test_end(void)
+{
+  rtems_test_end(rtems_test_name);
+}
 
 rtems_id tcb_to_id(
   Thread_Control *tcb

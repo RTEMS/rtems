@@ -40,7 +40,8 @@ package body MPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT( "*** TEST 8 -- NODE " );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
+      TEXT_IO.PUT( "*** NODE " );
       UNSIGNED32_IO.PUT(
          TEST_SUPPORT.NODE,
          WIDTH => 1
@@ -163,7 +164,7 @@ package body MPTEST is
 
             TEXT_IO.PUT_LINE( "Global semaphore deleted" );
 
-            TEXT_IO.PUT_LINE( "*** END OF TEST 8 ***" );
+            TEST_SUPPORT.ADA_TEST_END;
 
             RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
@@ -184,7 +185,7 @@ package body MPTEST is
             RTEMS.SEMAPHORE.DELETE( MPTEST.SEMAPHORE_ID( 1 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "SEMAPHORE_DELETE" );
 
-            TEXT_IO.PUT_LINE( "*** END OF TEST 8 ***" );
+            TEST_SUPPORT.ADA_TEST_END;
 
             RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

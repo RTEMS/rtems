@@ -41,7 +41,7 @@ package body TMTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TIME TEST 9 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       RTEMS.TASKS.CREATE( 
          1,
@@ -108,7 +108,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.MESSAGE_QUEUE_DELETE
       );
 
-      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 9 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end TEST_TASK;

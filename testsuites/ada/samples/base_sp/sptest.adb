@@ -36,7 +36,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** SAMPLE SINGLE PROCESSOR APPLICATION ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
       TEXT_IO.PUT_LINE( "Creating and starting an application task" );
 
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
@@ -84,7 +84,7 @@ package body SPTEST is
       UNSIGNED32_IO.PUT( TID, BASE => 16 );
       TEXT_IO.NEW_LINE;
 
-      TEXT_IO.PUT_LINE( "*** END OF SAMPLE SINGLE PROCESSOR APPLICATION ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

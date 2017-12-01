@@ -26,6 +26,8 @@
 
 #define CONFIGURE_MAXIMUM_TASKS             5
 
+#define ADA_TEST_NAME "ADA SP 7"
+
 #include <rtems/confdefs.h>
 
 /* end of include file */

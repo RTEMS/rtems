@@ -25,6 +25,8 @@
 
 #define CONFIGURE_MAXIMUM_TASKS              1
 
+#define ADA_TEST_NAME "ADA NSECS"
+
 #include <rtems/confdefs.h>
 
 /* end of include file */

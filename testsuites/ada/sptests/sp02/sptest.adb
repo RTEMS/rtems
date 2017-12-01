@@ -37,7 +37,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TEST 2 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       SPTEST.PREEMPT_TASK_NAME := RTEMS.BUILD_NAME(  'P', 'R', 'M', 'T' );
 
@@ -281,7 +281,7 @@ package body SPTEST is
       RTEMS.TASKS.WAKE_AFTER( 5 * TEST_SUPPORT.TICKS_PER_SECOND, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_WAKE_AFTER" );
 
-      TEXT_IO.PUT_LINE( "*** END OF TEST 2 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
    
    end TASK_1;

@@ -82,7 +82,8 @@ package body MPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT( "*** TEST 14 -- NODE " );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
+      TEXT_IO.PUT( "*** NODE " );
       UNSIGNED32_IO.PUT(
          TEST_SUPPORT.NODE,
          WIDTH => 1

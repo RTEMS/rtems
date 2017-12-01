@@ -40,7 +40,7 @@ package body TMTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TIME TEST 2 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       TMTEST.TEST_INIT;
 
@@ -198,7 +198,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.SEMAPHORE_OBTAIN 
       );
 
-      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 2 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;

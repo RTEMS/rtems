@@ -38,7 +38,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TEST 1 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       TIME := ( 1988, 12, 31, 9, 0, 0, 0 );
 
@@ -133,7 +133,7 @@ package body SPTEST is
          TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "CLOCK_GET_TOD" );
 
          if TIME.SECOND >= 35 then
-            TEXT_IO.PUT_LINE( "*** END OF CLOCK TICK TEST ***" );
+            TEST_SUPPORT.ADA_TEST_END;
             RTEMS.SHUTDOWN_EXECUTIVE( 0 );
          end if;
 

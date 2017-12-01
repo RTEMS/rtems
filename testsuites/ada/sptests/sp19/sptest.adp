@@ -38,7 +38,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TEST 19 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       SPTEST.TASK_NAME( 1 ) := RTEMS.BUILD_NAME(  'T', 'A', '1', ' ' );
       SPTEST.TASK_NAME( 2 ) := RTEMS.BUILD_NAME(  'T', 'A', '2', ' ' );
@@ -313,7 +313,7 @@ package body SPTEST is
             RTEMS.TASKS.DELETE( SPTEST.TASK_ID( 3 ), STATUS );
             TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_DELETE OF TA3" );
  
-            TEXT_IO.PUT_LINE( "*** END OF TEST 19 ***" );
+            TEST_SUPPORT.ADA_TEST_END;
             RTEMS.SHUTDOWN_EXECUTIVE( 0 );
          end if;
 

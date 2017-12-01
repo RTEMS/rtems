@@ -40,7 +40,7 @@ package body SPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TEST 22 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       TIME := ( 1988, 12, 31, 9, 0, 0, 0 );
 
@@ -289,7 +289,7 @@ TEST_SUPPORT.PAUSE;
       RTEMS.TIMER.DELETE( TMID, STATUS );
       TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TIMER_DELETE" );
           
-      TEXT_IO.PUT_LINE( "*** END OF TEST 22 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
    
    end TASK_1;

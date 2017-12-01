@@ -40,7 +40,8 @@ package body MPTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT( "*** TEST 10 -- NODE " );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
+      TEXT_IO.PUT( "*** NODE " );
       UNSIGNED32_IO.PUT(
          TEST_SUPPORT.NODE,
          WIDTH => 1
@@ -164,7 +165,7 @@ package body MPTEST is
 
       end if;
 
-      TEXT_IO.PUT_LINE( "*** END OF TEST 10 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
 
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 

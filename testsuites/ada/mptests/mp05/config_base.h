@@ -20,6 +20,8 @@
 
 #define CONFIGURE_MAXIMUM_TASKS                       2
 
+#define ADA_TEST_NAME "ADA MP 5"
+
 #define CONFIGURE_MAXIMUM_POSIX_THREADS              10
 #define CONFIGURE_MAXIMUM_POSIX_KEYS                 10
 

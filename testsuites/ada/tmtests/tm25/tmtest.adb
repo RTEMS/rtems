@@ -41,7 +41,7 @@ package body TMTEST is
    begin
 
       TEXT_IO.NEW_LINE( 2 );
-      TEXT_IO.PUT_LINE( "*** TIME TEST 25 ***" );
+      TEST_SUPPORT.ADA_TEST_BEGIN;
 
       RTEMS.SEMAPHORE.CREATE(
          RTEMS.BUILD_NAME( 'S', 'M', '1', ' ' ),
@@ -147,7 +147,7 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.CLOCK_TICK
       );
 
-      TEXT_IO.PUT_LINE( "*** END OF TIME TEST 25 ***" );
+      TEST_SUPPORT.ADA_TEST_END;
       RTEMS.SHUTDOWN_EXECUTIVE( 0 );
 
    end LOW_TASK;
