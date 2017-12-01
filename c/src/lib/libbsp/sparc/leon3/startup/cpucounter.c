@@ -57,6 +57,9 @@ static void leon3_counter_initialize(void)
   } else if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
 
+    /* Enable timer just in case no clock driver is configured */
+    gpt->timer[LEON3_CLOCK_INDEX].ctrl |= GPTIMER_TIMER_CTRL_EN;
+
     _SPARC_Counter_initialize(
       _SPARC_Counter_read_address,
       _SPARC_Counter_difference_clock_period,
