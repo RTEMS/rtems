@@ -63,7 +63,7 @@ package body SPTEST is
          2, 
          2048, 
          RTEMS.DEFAULT_MODES,
-         RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.FLOATING_POINT,
          SPTEST.TASK_ID( 2 ),
          STATUS
       );
@@ -74,7 +74,7 @@ package body SPTEST is
          2, 
          2048, 
          RTEMS.DEFAULT_MODES,
-         RTEMS.DEFAULT_ATTRIBUTES,
+         RTEMS.FLOATING_POINT,
          SPTEST.TASK_ID( 3 ),
          STATUS
       );
