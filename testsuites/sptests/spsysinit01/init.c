@@ -516,13 +516,13 @@ LAST(RTEMS_SYSINIT_IDLE_THREADS)
 
 FIRST(RTEMS_SYSINIT_LIBIO)
 {
-  assert(rtems_libio_semaphore == 0);
+  assert(rtems_libio_iop_free_head == NULL);
   next_step(LIBIO_PRE);
 }
 
 LAST(RTEMS_SYSINIT_LIBIO)
 {
-  assert(rtems_libio_semaphore != 0);
+  assert(rtems_libio_iop_free_head == &rtems_libio_iops[0]);
   next_step(LIBIO_POST);
 }
 

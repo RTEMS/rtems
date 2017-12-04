@@ -18,27 +18,28 @@
 #include "config.h"
 #endif
 
-#include <rtems/libio_.h>               /* libio_.h pulls in rtems */
-#include <rtems.h>
-#include <rtems/assoc.h>                /* assoc.h not included by rtems.h */
+#include <rtems/libio_.h>
 
-#include <stdio.h>                      /* O_RDONLY, et.al. */
-#include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <errno.h>
+#include <pthread.h>
 
-#include <errno.h>
-#include <string.h>                     /* strcmp */
-#include <unistd.h>
-#include <stdlib.h>                     /* calloc() */
-
-#include <rtems/libio.h>                /* libio.h not pulled in by rtems */
 #include <rtems/sysinit.h>
+#include <rtems/score/apimutex.h>
 
 /*
  *  File descriptor Table Information
  */
 
-rtems_id rtems_libio_semaphore;
+static API_Mutex_Control rtems_libio_mutex = API_MUTEX_INITIALIZER( "_Libio" );
+
+void rtems_libio_lock( void )
+{
+  _API_Mutex_Lock( &rtems_libio_mutex );
+}
+
+void rtems_libio_unlock( void )
+{
+  _API_Mutex_Unlock( &rtems_libio_mutex );
+}
 
 void *rtems_libio_iop_free_head;
 
@@ -46,7 +47,6 @@ void **rtems_libio_iop_free_tail = &rtems_libio_iop_free_head;
 
 static void rtems_libio_init( void )
 {
-    rtems_status_code rc;
     uint32_t i;
     rtems_libio_t *iop;
     int eno;
@@ -69,22 +69,6 @@ static void rtems_libio_init( void )
   );
   if (eno != 0) {
     _Internal_error( INTERNAL_ERROR_LIBIO_USER_ENV_KEY_CREATE_FAILED );
-  }
-
-  /*
-   *  Create the binary semaphore used to provide mutual exclusion
-   *  on the IOP Table.
-   */
-
-  rc = rtems_semaphore_create(
-    RTEMS_LIBIO_SEM,
-    1,
-    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-    RTEMS_NO_PRIORITY,
-    &rtems_libio_semaphore
-  );
-  if ( rc != RTEMS_SUCCESSFUL ) {
-    _Internal_error( INTERNAL_ERROR_LIBIO_SEM_CREATE_FAILED );
   }
 }
 

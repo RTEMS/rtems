@@ -141,11 +141,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 /*
- * Semaphore count used by the IO library.
- */
-#define _CONFIGURE_LIBIO_SEMAPHORES 1
-
-/*
  * POSIX key count used by the IO library.
  */
 #define _CONFIGURE_LIBIO_POSIX_KEYS 1
@@ -2120,7 +2115,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    * capabilities.
    */
   #define _CONFIGURE_SEMAPHORES \
-    (CONFIGURE_MAXIMUM_SEMAPHORES + _CONFIGURE_LIBIO_SEMAPHORES + \
+    (CONFIGURE_MAXIMUM_SEMAPHORES + \
       _CONFIGURE_TERMIOS_SEMAPHORES + _CONFIGURE_LIBBLOCK_SEMAPHORES + \
       _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
       _CONFIGURE_NETWORKING_SEMAPHORES)

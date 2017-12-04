@@ -53,15 +53,6 @@ extern "C" {
 #define F_DUP2FD 20
 
 /*
- *  Semaphore to protect the io table
- */
-
-#define RTEMS_LIBIO_SEM         rtems_build_name('L', 'B', 'I', 'O')
-#define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
-
-extern rtems_id                          rtems_libio_semaphore;
-
-/*
  *  File descriptor Table Information
  */
 
@@ -347,15 +338,9 @@ void rtems_libio_free_user_env( void *env );
 
 extern pthread_key_t rtems_current_user_env_key;
 
-static inline void rtems_libio_lock( void )
-{
-  rtems_semaphore_obtain( rtems_libio_semaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT );
-}
+void rtems_libio_lock( void );
 
-static inline void rtems_libio_unlock( void )
-{
-  rtems_semaphore_release( rtems_libio_semaphore );
-}
+void rtems_libio_unlock( void );
 
 static inline void rtems_filesystem_mt_lock( void )
 {
