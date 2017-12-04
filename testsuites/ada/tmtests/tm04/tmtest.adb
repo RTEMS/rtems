@@ -196,6 +196,15 @@ package body TMTEST is
          RTEMS_CALLING_OVERHEAD.SEMAPHORE_RELEASE
       );
 
+      -- All low priority (non-preemptible) tasks are ready now.  We must
+      -- prevent them from running (this would result in an invalid task exit),
+      -- since the rtems_task_delete() performs an implicit join.
+      for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
+      loop
+         RTEMS.TASKS.SUSPEND( TMTEST.TASK_ID( INDEX ), STATUS );
+         TEST_SUPPORT.DIRECTIVE_FAILED( STATUS, "TASK_SUSPEND" );
+      end loop;
+
       for INDEX in 1 .. TIME_TEST_SUPPORT.OPERATION_COUNT
       loop
          RTEMS.TASKS.DELETE( TMTEST.TASK_ID( INDEX ), STATUS );
