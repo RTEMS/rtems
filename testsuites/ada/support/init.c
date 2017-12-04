@@ -80,7 +80,8 @@ uint32_t ticks_per_second(void)
 
 uint32_t work_space_size(void)
 {
-  return CONFIGURE_EXECUTIVE_RAM_SIZE;
+  return rtems_configuration_get_work_space_size()
+    + rtems_configuration_get_stack_space_size();
 }
 
 uint32_t is_configured_multiprocessing(void)
