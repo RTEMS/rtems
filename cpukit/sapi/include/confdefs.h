@@ -150,15 +150,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #define _CONFIGURE_LIBIO_POSIX_KEYS 1
 
-/*
- *  Driver Manager Configuration
- */
-#ifdef RTEMS_DRVMGR_STARTUP
-  #define _CONFIGURE_DRVMGR_SEMAPHORES 1
-#else
-  #define _CONFIGURE_DRVMGR_SEMAPHORES 0
-#endif
-
 #ifdef CONFIGURE_INIT
   rtems_libio_t rtems_libio_iops[CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS];
 
@@ -2132,7 +2123,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     (CONFIGURE_MAXIMUM_SEMAPHORES + _CONFIGURE_LIBIO_SEMAPHORES + \
       _CONFIGURE_TERMIOS_SEMAPHORES + _CONFIGURE_LIBBLOCK_SEMAPHORES + \
       _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
-      _CONFIGURE_NETWORKING_SEMAPHORES + _CONFIGURE_DRVMGR_SEMAPHORES)
+      _CONFIGURE_NETWORKING_SEMAPHORES)
 
   /*
    * This macro is calculated to specify the memory required for

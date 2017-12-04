@@ -7,6 +7,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/score/apimutex.h>
+
 /*  Structure hold all information the driver manager needs to know of. Used
  *  internally by Driver Manager routines.
  */
@@ -15,7 +17,7 @@ struct drvmgr {
 	int	initializing_objs;
 
 	/* Device tree Lock */
-	rtems_id		lock;
+	API_Mutex_Control	lock;
 
 	/* The first device - The root device and it's driver */
 	struct drvmgr_drv	*root_drv;
@@ -49,20 +51,17 @@ extern struct drvmgr drvmgr;
 
 extern void _DRV_Manager_Lock(void);
 extern void _DRV_Manager_Unlock(void);
-extern int _DRV_Manager_Init_Lock(void);
 
 /* The best solution is to implement the locking with a RW lock, however there
  * is no such API available. Care must be taken so that dead-lock isn't created
  * for example in recursive functions.
  */
 #if defined(DRVMGR_USE_LOCKS) && (DRVMGR_USE_LOCKS == 1)
- #define DRVMGR_LOCK_INIT() _DRV_Manager_Init_Lock()
  #define DRVMGR_LOCK_WRITE() _DRV_Manager_Lock()
  #define DRVMGR_LOCK_READ() _DRV_Manager_Lock()
  #define DRVMGR_UNLOCK() _DRV_Manager_Unlock()
 #else
  /* no locking */
- #define DRVMGR_LOCK_INIT() 
  #define DRVMGR_LOCK_WRITE() 
  #define DRVMGR_LOCK_READ() 
  #define DRVMGR_UNLOCK() 

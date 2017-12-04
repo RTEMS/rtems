@@ -30,7 +30,7 @@
 struct drvmgr drvmgr = {
 	.level =		0,
 	.initializing_objs =	0,
-	.lock =                 0,
+	.lock =			API_MUTEX_INITIALIZER("_Drvmgr"),
 	.root_dev =		{0},
 	.root_drv =		NULL,
 
@@ -95,11 +95,6 @@ void _DRV_Manager_init_level(int level)
 void _DRV_Manager_initialization(void)
 {
 	drvmgr_drv_reg_func *drvreg;
-
-	/* drvmgr is already initialized statically by compiler except
-	 * the lock
-	 */
-	DRVMGR_LOCK_INIT();
 
 	/* Call driver register functions. */
 	drvreg = &drvmgr_drivers[0];

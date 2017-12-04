@@ -13,25 +13,10 @@
 
 void _DRV_Manager_Lock(void)
 {
-	rtems_semaphore_obtain(drvmgr.lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	_API_Mutex_Lock(&drvmgr.lock);
 }
 
 void _DRV_Manager_Unlock(void)
 {
-	rtems_semaphore_release(drvmgr.lock);
-}
-
-int _DRV_Manager_Init_Lock(void)
-{
-	int rc;
-
-	rc = rtems_semaphore_create(
-		rtems_build_name('D', 'R', 'V', 'M'),
-		1,
-		RTEMS_DEFAULT_ATTRIBUTES,
-		0,
-		&drvmgr.lock);
-	if (rc != RTEMS_SUCCESSFUL)
-		return -1;
-	return 0;
+	_API_Mutex_Unlock(&drvmgr.lock);
 }
