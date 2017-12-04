@@ -2475,49 +2475,50 @@ package body SPTEST is
 
       RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
-         SPTEST.REGION_BAD_AREA'ADDRESS,
-         128,
+         SPTEST.REGION_GOOD_AREA(
+            SPTEST.REGION_START_OFFSET - 2 * SPTEST.REGION_LENGTH )'ADDRESS,
+         SPTEST.REGION_LENGTH,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
-         RTEMS.NOT_IMPLEMENTED,
-         "REGION_EXTEND WITH NOT_IMPLEMENTED"
+         RTEMS.SUCCESSFUL,
+         "REGION_EXTEND"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - region_extend - non-contiguous lower - NOT_IMPLEMENTED"
+         "TA1 - region_extend - non-contiguous lower - SUCCESSFUL"
       );
 
       RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( 
             SPTEST.REGION_START_OFFSET - SPTEST.REGION_LENGTH )'ADDRESS,
-         128,
+         SPTEST.REGION_LENGTH,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
-         RTEMS.NOT_IMPLEMENTED,
-         "REGION_EXTEND WITH NOT_IMPLEMENTED"
+         RTEMS.SUCCESSFUL,
+         "REGION_EXTEND"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - region_extend - contiguous lower - NOT_IMPLEMENTED"
+         "TA1 - region_extend - contiguous lower - SUCCESSFUL"
       );
 
       RTEMS.REGION.EXTEND(
          SPTEST.REGION_ID( 1 ),
          SPTEST.REGION_GOOD_AREA( 
-            SPTEST.REGION_START_OFFSET + SPTEST.REGION_LENGTH + 16 )'ADDRESS,
-         128,
+            SPTEST.REGION_START_OFFSET + 2 * SPTEST.REGION_LENGTH )'ADDRESS,
+         SPTEST.REGION_LENGTH,
          STATUS
       );
       TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
          STATUS,
-         RTEMS.NOT_IMPLEMENTED,
-         "REGION_EXTEND WITH NOT_IMPLEMENTED"
+         RTEMS.SUCCESSFUL,
+         "REGION_EXTEND"
       );
       TEXT_IO.PUT_LINE(
-         "TA1 - region_extend - non-contiguous higher - NOT_IMPLEMENTED"
+         "TA1 - region_extend - non-contiguous higher - SUCCESSFUL"
       );
 
    end SCREEN_12;

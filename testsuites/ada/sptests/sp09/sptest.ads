@@ -165,7 +165,7 @@ package SPTEST is
       of RTEMS.UNSIGNED32;
    for REGION_GOOD_AREA'ALIGNMENT use RTEMS.STRUCTURE_ALIGNMENT;
 
-   REGION_START_OFFSET : constant RTEMS.UNSIGNED32 := 1024;
+   REGION_START_OFFSET : constant RTEMS.UNSIGNED32 := 2048;
    REGION_LENGTH       : constant RTEMS.UNSIGNED32 := 512;
 
 --
@@ -174,7 +174,7 @@ package SPTEST is
 -- 
 
    REGION_BAD_AREA_ADDRESS : constant System.Address :=
-       System.Storage_Elements.To_Address(16#00000006#);
+       System.Storage_Elements.To_Address(16#00000000#);
 
    REGION_BAD_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 255 )
       of RTEMS.UNSIGNED8;
