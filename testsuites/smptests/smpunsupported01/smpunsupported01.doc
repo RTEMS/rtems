@@ -16,3 +16,7 @@ concepts:
     on SMP configurations.
   - Ensure that rtems_task_create() with RTEMS_NO_PREEMPT returns an error
     status on SMP configurations.
+  - Ensure that rtems_task_mode() with RTEMS_INTERRUPT_MASK returns an
+    error status
+  - Ensure that rtems_task_create() with RTEMS_INTERRUPT_MASK returns an
+    error status
