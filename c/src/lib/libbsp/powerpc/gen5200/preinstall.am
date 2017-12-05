@@ -117,14 +117,6 @@ $(PROJECT_INCLUDE)/bsp/bestcomm/include/ppctypes.h: bestcomm/include/ppctypes.h 
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bestcomm/include/ppctypes.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bestcomm/include/ppctypes.h
 
-$(PROJECT_INCLUDE)/bsp/bestcomm/include/sdma.h: bestcomm/include/mgt5200/sdma.h $(PROJECT_INCLUDE)/bsp/bestcomm/include/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bestcomm/include/sdma.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bestcomm/include/sdma.h
-
-$(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200.h: bestcomm/include/mgt5200/mgt5200.h $(PROJECT_INCLUDE)/bsp/bestcomm/include/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200.h
-
 $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200/mgt5200.h: bestcomm/include/mgt5200/mgt5200.h $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200/mgt5200.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bestcomm/include/mgt5200/mgt5200.h

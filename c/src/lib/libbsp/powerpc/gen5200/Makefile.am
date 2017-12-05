@@ -62,9 +62,7 @@ include_bestcomm_HEADERS = bestcomm/bestcomm_priv.h \
 	bestcomm/dma_image.capi.h \
 	bestcomm/bestcomm_api.h \
 	bestcomm/bestcomm_glue.h
-include_bestcomm_include_HEADERS = bestcomm/include/ppctypes.h \
-	bestcomm/include/mgt5200/sdma.h \
-	bestcomm/include/mgt5200/mgt5200.h
+include_bestcomm_include_HEADERS = bestcomm/include/ppctypes.h
 include_bestcomm_include_mgt5200_HEADERS = bestcomm/include/mgt5200/mgt5200.h \
 	bestcomm/include/mgt5200/sdma.h
 include_bestcomm_task_api_HEADERS = bestcomm/task_api/tasksetup_general.h \
