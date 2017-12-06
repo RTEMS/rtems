@@ -1097,6 +1097,30 @@ static void test_end_of_string_matches( void )
   rtems_test_assert( rc == 0 );
 }
 
+static void test_end_of_string_matches_2( void )
+{
+  int rc;
+  int fd;
+
+  fd = open( MOUNT_DIR "/ets.beam", O_RDWR | O_CREAT,
+             S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH );
+  rtems_test_assert( fd >= 0 );
+  rc = close( fd );
+  rtems_test_assert( rc == 0 );
+
+  fd = open( MOUNT_DIR "/sets.beam", O_RDWR | O_CREAT,
+             S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH );
+  rtems_test_assert( fd >= 0 );
+  rc = close( fd );
+  rtems_test_assert( rc == 0 );
+
+  rc = unlink( MOUNT_DIR "/sets.beam" );
+  rtems_test_assert( rc == 0 );
+
+  rc = unlink( MOUNT_DIR "/ets.beam" );
+  rtems_test_assert( rc == 0 );
+}
+
 static void test_full_8_3_name( void )
 {
   int rc;
@@ -1151,6 +1175,7 @@ static void test_file_with_same_name_as_volume_label( void )
 static void test_special_cases( void )
 {
   test_end_of_string_matches();
+  test_end_of_string_matches_2();
   test_full_8_3_name();
   test_file_with_same_name_as_volume_label();
   test_dir_with_same_name_as_volume_label();
