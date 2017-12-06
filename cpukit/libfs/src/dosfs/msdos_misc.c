@@ -1564,9 +1564,13 @@ msdos_find_file_in_directory (
                     if (entry_matched)
                     {
                         if (lfn_entry ||
-                            lfn_checksum != msdos_lfn_checksum(entry))
-                            entry_matched = false;
-                        else if (name_len_remaining == 0) {
+                            name_len_remaining > 0 ||
+                            lfn_checksum != msdos_lfn_checksum(entry)) {
+                            msdos_prepare_for_next_entry(&lfn_start,
+                                                         &entry_matched,
+                                                         &name_len_remaining,
+                                                         name_len_for_compare);
+                        } else if (name_len_remaining == 0) {
                             filename_matched = true;
                             rc = msdos_on_entry_found (
                                 fs_info,
