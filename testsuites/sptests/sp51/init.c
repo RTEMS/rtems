@@ -101,6 +101,9 @@ rtems_task Init(
   fatal_directive_status(
     sc, RTEMS_NOT_OWNER_OF_RESOURCE, "rtems_semaphore_release" );
 
+  sc = rtems_semaphore_delete( mutex );
+  directive_failed( sc, "rtems_semaphore_delete" );
+
   test_create_initially_locked_prio_inherit_sema();
 
   TEST_END();
