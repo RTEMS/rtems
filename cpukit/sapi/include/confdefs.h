@@ -198,7 +198,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 #ifdef CONFIGURE_SMP_MAXIMUM_PROCESSORS
-  #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 4.12"
+  #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 5.1"
   #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
 #endif
 
@@ -219,7 +219,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 #ifdef CONFIGURE_SMP_APPLICATION
-  #warning "CONFIGURE_SMP_APPLICATION is obsolete since RTEMS 4.12"
+  #warning "CONFIGURE_SMP_APPLICATION is obsolete since RTEMS 5.1"
 #endif
 
 /*
@@ -3535,27 +3535,27 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_BARRIERS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_CONDITION_VARIABLES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUE_DESCRIPTORS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_MUTEXES
-  #warning "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_MUTEXES configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_RWLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_RWLOCKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
-  #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 4.12"
+  #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 /*
