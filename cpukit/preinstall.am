@@ -91,47 +91,6 @@ $(PROJECT_INCLUDE)/sys/priority.h: include/sys/priority.h $(PROJECT_INCLUDE)/sys
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/priority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/priority.h
 
-if !HAS_NEWLIB_20170522_HEADER
-$(PROJECT_INCLUDE)/sys/_iovec.h: include/sys/_iovec.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_iovec.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_iovec.h
-
-$(PROJECT_INCLUDE)/sys/uio.h: include/sys/uio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/uio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/uio.h
-
-$(PROJECT_INCLUDE)/sys/filio.h: libcsupport/include/sys/filio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/filio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/filio.h
-
-$(PROJECT_INCLUDE)/sys/ioccom.h: libcsupport/include/sys/ioccom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioccom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioccom.h
-
-$(PROJECT_INCLUDE)/sys/ioctl.h: libcsupport/include/sys/ioctl.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ioctl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ioctl.h
-
-$(PROJECT_INCLUDE)/sys/sockio.h: libcsupport/include/sys/sockio.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/sockio.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/sockio.h
-
-$(PROJECT_INCLUDE)/sys/_termios.h: libcsupport/include/sys/_termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/_termios.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/_termios.h
-
-$(PROJECT_INCLUDE)/sys/termios.h: libcsupport/include/sys/termios.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/termios.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/termios.h
-
-$(PROJECT_INCLUDE)/sys/ttycom.h: libcsupport/include/sys/ttycom.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttycom.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttycom.h
-
-$(PROJECT_INCLUDE)/sys/ttydefaults.h: libcsupport/include/sys/ttydefaults.h $(PROJECT_INCLUDE)/sys/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sys/ttydefaults.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sys/ttydefaults.h
-endif
 if LIBNETWORKING
 $(PROJECT_INCLUDE)/rtems/bsdnet/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/bsdnet
