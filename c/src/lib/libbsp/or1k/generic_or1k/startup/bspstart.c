@@ -16,10 +16,9 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
-#include <libcpu/cache.h>
 
 void bsp_start( void )
 {
-  _CPU_cache_enable_instruction();
-  _CPU_cache_enable_data();
+  rtems_cache_enable_instruction();
+  rtems_cache_enable_data();
 }

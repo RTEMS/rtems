@@ -18,8 +18,7 @@
 #include <rtems/score/interr.h>
 #include <rtems/score/or1k-utility.h>
 #include <rtems/score/percpu.h>
-#include <libcpu/cache.h>
-#include <cache_.h>
+#include "cache_.h"
 
 static inline void _CPU_OR1K_Cache_data_block_prefetch(const void *d_addr)
 {
