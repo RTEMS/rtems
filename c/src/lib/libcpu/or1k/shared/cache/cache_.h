@@ -6,7 +6,7 @@
 #define __OR1K_CACHE_H
 
 #include <bsp/cache_.h>
-#include <libcpu/cache.h>
+#include "../../../shared/include/cache.h"
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS 1
 

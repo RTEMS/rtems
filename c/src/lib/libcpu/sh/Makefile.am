@@ -4,9 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-include_libcpudir = $(includedir)/libcpu
-include_libcpu_HEADERS = ../shared/include/cache.h
-
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = ../shared/src/cache_manager.c
 cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache

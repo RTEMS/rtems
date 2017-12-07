@@ -9,7 +9,7 @@ noinst_PROGRAMS =
 ## cache
 include_libcpudir = $(includedir)/libcpu
 
-include_libcpu_HEADERS = ../shared/include/cache.h
+include_libcpu_HEADERS =
 
 noinst_PROGRAMS += shared/cache.rel
 shared_cache_rel_SOURCES = shared/cache/cache.c \

@@ -28,7 +28,7 @@
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT M68K_INSTRUCTION_CACHE_ALIGNMENT
 #endif
 
-#include <libcpu/cache.h>
+#include "../../../shared/include/cache.h"
 
 #endif
 /* end of include file */

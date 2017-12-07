@@ -113,10 +113,6 @@ $(PROJECT_INCLUDE)/libcpu/gpioRegs.h: include/gpioRegs.h $(PROJECT_INCLUDE)/libc
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/gpioRegs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/gpioRegs.h
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
-
 $(PROJECT_INCLUDE)/libcpu/mmu.h: mmu/mmu.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/mmu.h

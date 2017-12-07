@@ -51,8 +51,6 @@ include_libcpu_HEADERS += include/spiRegs.h
 include_libcpu_HEADERS += include/rtcRegs.h
 include_libcpu_HEADERS += include/gpioRegs.h
 
-
-include_libcpu_HEADERS += ../shared/include/cache.h
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache.c \
     ../shared/src/cache_manager.c cache/cache_.h

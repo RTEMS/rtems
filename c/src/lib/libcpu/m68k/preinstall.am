@@ -14,15 +14,6 @@ PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
 if shared
-$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
-	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-
-$(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
-
 endif
 if mcf5206
 $(PROJECT_INCLUDE)/mcf5206/$(dirstamp):

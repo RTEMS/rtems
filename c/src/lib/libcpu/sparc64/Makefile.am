@@ -10,9 +10,6 @@ noinst_PROGRAMS =
 # The other shared code is probably usable, but should be defined separately.
 # See the example at the end of Makefile.am.
 if shared
-include_libcpudir = $(includedir)/libcpu
-
-include_libcpu_HEADERS = ../shared/include/cache.h
 
 noinst_PROGRAMS += shared/shared-score.rel
 shared_shared_score_rel_SOURCES = shared/score/cpu.c shared/score/interrupt.S

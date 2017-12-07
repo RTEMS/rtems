@@ -7,7 +7,6 @@ include $(top_srcdir)/../../../automake/compile.am
 include_libcpudir = $(includedir)/libcpu
 
 include_libcpu_HEADERS = page.h cpuModel.h
-include_libcpu_HEADERS += ../shared/include/cache.h
 include_libcpu_HEADERS += byteorder.h
 
 noinst_PROGRAMS += cache.rel

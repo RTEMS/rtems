@@ -94,10 +94,6 @@ $(PROJECT_INCLUDE)/libcpu/cpuIdent.h: shared/include/cpuIdent.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cpuIdent.h
 
-$(PROJECT_INCLUDE)/libcpu/cache.h: ../shared/include/cache.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/cache.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/cache.h
-
 $(PROJECT_INCLUDE)/libcpu/spr.h: shared/include/spr.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/spr.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/spr.h

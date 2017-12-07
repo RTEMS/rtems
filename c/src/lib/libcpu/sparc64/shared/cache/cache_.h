@@ -18,7 +18,7 @@
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 0
 #endif
 
-#include <libcpu/cache.h>
+#include "../../../shared/include/cache.h"
 
 #endif
 /* end of include file */

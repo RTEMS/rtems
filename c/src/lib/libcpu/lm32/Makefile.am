@@ -7,10 +7,7 @@ DISTCLEANFILES =
 noinst_PROGRAMS =
 
 if shared
-include_libcpudir = $(includedir)/libcpu
 
-## shared/cache
-include_libcpu_HEADERS = ../shared/include/cache.h
 noinst_PROGRAMS += shared/cache.rel
 shared_cache_rel_SOURCES = ../shared/src/no_cache.c shared/cache/cache_.h \
     ../shared/src/cache_manager.c

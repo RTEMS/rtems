@@ -5,7 +5,7 @@
 #ifndef __MIPS_CACHE_h
 #define __MIPS_CACHE_h
 
-#include <libcpu/cache.h>
+#include "../../../shared/include/cache.h"
 
 /* TBD */
 

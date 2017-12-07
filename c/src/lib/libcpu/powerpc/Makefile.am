@@ -86,8 +86,6 @@ shared_cache_rel_SOURCES = shared/src/cache_.h \
 shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
 shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include_libcpu_HEADERS += ../shared/include/cache.h
-
 # shared/stack
 noinst_PROGRAMS += shared/stack.rel
 shared_stack_rel_SOURCES = shared/src/stack.c shared/include/spr.h shared/src/stackTrace.h
