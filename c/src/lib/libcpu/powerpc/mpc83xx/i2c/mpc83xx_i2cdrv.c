@@ -19,11 +19,7 @@
 #include <stdlib.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#if defined(LIBBSP_POWERPC_GEN83XX_BSP_H)
-  #include <mpc83xx/mpc83xx_i2cdrv.h>
-#elif defined(LIBBSP_POWERPC_MPC55XXEVB_BSP_H)
-  #include <bsp/mpc83xx_i2cdrv.h>
-#endif
+#include <mpc83xx/mpc83xx_i2cdrv.h>
 #include <rtems/error.h>
 #include <rtems/bspIo.h>
 #include <errno.h>

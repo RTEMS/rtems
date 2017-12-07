@@ -16,6 +16,11 @@ include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += new-exceptions/bspsupport/vectors.h
 
+include_mpc83xxdir = $(includedir)/mpc83xx
+
+include_mpc83xx_HEADERS =
+include_mpc83xx_HEADERS += mpc83xx/i2c/mpc83xx_i2cdrv.h
+
 EXTRA_DIST =
 
 noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
@@ -369,9 +374,8 @@ endif
 if mpc83xx
 
 # Includes
-include_mpc83xxdir = $(includedir)/mpc83xx
 
-include_mpc83xx_HEADERS = mpc83xx/include/mpc83xx.h
+include_mpc83xx_HEADERS += mpc83xx/include/mpc83xx.h
 
 # Network
 include_bsp_HEADERS += mpc83xx/network/tsec.h
@@ -383,7 +387,6 @@ mpc83xx_tsec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 # i2c
-include_mpc83xx_HEADERS += mpc83xx/i2c/mpc83xx_i2cdrv.h
 noinst_PROGRAMS += mpc83xx/i2c.rel
 mpc83xx_i2c_rel_SOURCES = mpc83xx/i2c/mpc83xx_i2cdrv.c \
 	mpc83xx/i2c/mpc83xx_i2cdrv.h

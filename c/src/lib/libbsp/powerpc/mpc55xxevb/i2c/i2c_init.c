@@ -21,7 +21,7 @@
 
 #include <bsp.h>
 #include <bsp/irq.h>
-#include <bsp/mpc83xx_i2cdrv.h>
+#include <mpc83xx/mpc83xx_i2cdrv.h>
 
 #if MPC55XX_CHIP_FAMILY == 551
   static void i2c_probe(mpc83xx_i2c_softc_t *self)

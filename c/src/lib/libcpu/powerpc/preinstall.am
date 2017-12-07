@@ -58,6 +58,15 @@ $(PROJECT_INCLUDE)/bsp/vectors.h: new-exceptions/bspsupport/vectors.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/vectors.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/vectors.h
 
+$(PROJECT_INCLUDE)/mpc83xx/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc83xx
+	@: > $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+
+$(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h: mpc83xx/i2c/mpc83xx_i2cdrv.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
+
 if !mpc5xx
 endif
 if shared
@@ -217,11 +226,6 @@ $(PROJECT_INCLUDE)/mpc8260/mmu.h: mpc8260/include/mmu.h $(PROJECT_INCLUDE)/mpc82
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc8260/mmu.h
 endif
 if mpc83xx
-$(PROJECT_INCLUDE)/mpc83xx/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/mpc83xx
-	@: > $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
-
 $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h: mpc83xx/include/mpc83xx.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
@@ -229,10 +233,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx.h
 $(PROJECT_INCLUDE)/bsp/tsec.h: mpc83xx/network/tsec.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tsec.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tsec.h
-
-$(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h: mpc83xx/i2c/mpc83xx_i2cdrv.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_i2cdrv.h
 
 $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_spidrv.h: mpc83xx/spi/mpc83xx_spidrv.h $(PROJECT_INCLUDE)/mpc83xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc83xx/mpc83xx_spidrv.h
