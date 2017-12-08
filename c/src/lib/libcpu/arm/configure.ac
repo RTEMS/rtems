@@ -20,10 +20,7 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
 AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "arm1136" || \
-		       test "$RTEMS_CPU_MODEL" = "at91rm9200" || \
 		       test "$RTEMS_CPU_MODEL" = "shared")
-
-AM_CONDITIONAL(at91rm9200, test "$RTEMS_CPU_MODEL" = "at91rm9200")
 
 RTEMS_AMPOLISH3
 

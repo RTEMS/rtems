@@ -45,6 +45,38 @@ $(PROJECT_INCLUDE)/tm27.h: include/tm27.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/tm27.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/tm27.h
 
+$(PROJECT_INCLUDE)/at91rm9200_dbgu.h: include/at91rm9200_dbgu.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_dbgu.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_dbgu.h
+
+$(PROJECT_INCLUDE)/at91rm9200_emac.h: include/at91rm9200_emac.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_emac.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_emac.h
+
+$(PROJECT_INCLUDE)/at91rm9200_gpio.h: include/at91rm9200_gpio.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_gpio.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_gpio.h
+
+$(PROJECT_INCLUDE)/at91rm9200.h: include/at91rm9200.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200.h
+
+$(PROJECT_INCLUDE)/at91rm9200_mem.h: include/at91rm9200_mem.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_mem.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_mem.h
+
+$(PROJECT_INCLUDE)/at91rm9200_pmc.h: include/at91rm9200_pmc.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_pmc.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_pmc.h
+
+$(PROJECT_INCLUDE)/at91rm9200_usart.h: include/at91rm9200_usart.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200_usart.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/at91rm9200_usart.h
+
+$(PROJECT_INCLUDE)/bits.h: include/bits.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bits.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bits.h
+
 if ENABLE_LCD
 $(PROJECT_INCLUDE)/sed1356.h: include/sed1356.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sed1356.h
@@ -109,4 +141,8 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-generic.h
 $(PROJECT_INCLUDE)/bsp/irq-info.h: ../../shared/include/irq-info.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq-info.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq-info.h
+
+$(PROJECT_INCLUDE)/bsp/irq.h: include/bsp/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
