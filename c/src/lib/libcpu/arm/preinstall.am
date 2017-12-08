@@ -74,20 +74,3 @@ $(PROJECT_INCLUDE)/bsp/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirs
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
-if s3c24xx
-$(PROJECT_INCLUDE)/s3c24xx.h: s3c24xx/include/s3c24xx.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c24xx.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/s3c24xx.h
-
-$(PROJECT_INCLUDE)/s3c2400.h: s3c24xx/include/s3c2400.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c2400.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/s3c2400.h
-
-$(PROJECT_INCLUDE)/s3c2410.h: s3c24xx/include/s3c2410.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c2410.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/s3c2410.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: s3c24xx/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-endif

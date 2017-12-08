@@ -71,30 +71,5 @@ at91rm9200_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if s3c24xx
-include_HEADERS = s3c24xx/include/s3c24xx.h s3c24xx/include/s3c2400.h s3c24xx/include/s3c2410.h
-
-## s3c24xx/clock
-noinst_PROGRAMS += s3c24xx/clock.rel
-s3c24xx_clock_rel_SOURCES = s3c24xx/clock/clockdrv.c s3c24xx/clock/support.c
-s3c24xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-s3c24xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## s3c24xx/timer
-noinst_PROGRAMS += s3c24xx/timer.rel
-s3c24xx_timer_rel_SOURCES = s3c24xx/timer/timer.c
-s3c24xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-s3c24xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## s3c24xx/interrupt
-include_bsp_HEADERS += s3c24xx/irq/irq.h
-
-noinst_PROGRAMS += s3c24xx/irq.rel
-s3c24xx_irq_rel_SOURCES = s3c24xx/irq/irq.c \
-    s3c24xx/irq/irq.h
-s3c24xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-s3c24xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am
