@@ -71,31 +71,6 @@ at91rm9200_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
 at91rm9200_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if mc9328mxl
-include_HEADERS = mc9328mxl/include/mc9328mxl.h
-
-## mc9328mxl/clock
-noinst_PROGRAMS += mc9328mxl/clock.rel
-mc9328mxl_clock_rel_SOURCES = mc9328mxl/clock/clockdrv.c
-mc9328mxl_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mc9328mxl_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mc9328mxl/timer
-noinst_PROGRAMS += mc9328mxl/timer.rel
-mc9328mxl_timer_rel_SOURCES = mc9328mxl/timer/timer.c
-mc9328mxl_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mc9328mxl_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mc9328mxl/interrupt
-include_bsp_HEADERS += mc9328mxl/irq/irq.h
-
-noinst_PROGRAMS += mc9328mxl/irq.rel
-mc9328mxl_irq_rel_SOURCES = mc9328mxl/irq/irq.c \
-    mc9328mxl/irq/irq.h
-mc9328mxl_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mc9328mxl_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if s3c24xx
 include_HEADERS = s3c24xx/include/s3c24xx.h s3c24xx/include/s3c2400.h s3c24xx/include/s3c2410.h
 

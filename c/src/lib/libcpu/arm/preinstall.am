@@ -74,15 +74,6 @@ $(PROJECT_INCLUDE)/bsp/irq.h: at91rm9200/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirs
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
-if mc9328mxl
-$(PROJECT_INCLUDE)/mc9328mxl.h: mc9328mxl/include/mc9328mxl.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mc9328mxl.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mc9328mxl.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: mc9328mxl/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-endif
 if s3c24xx
 $(PROJECT_INCLUDE)/s3c24xx.h: s3c24xx/include/s3c24xx.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/s3c24xx.h

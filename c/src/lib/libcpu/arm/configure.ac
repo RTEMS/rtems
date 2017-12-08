@@ -21,12 +21,10 @@ RTEMS_PROG_CCAS
 
 AM_CONDITIONAL(shared, test "$RTEMS_CPU_MODEL" = "arm1136" || \
 		       test "$RTEMS_CPU_MODEL" = "at91rm9200" || \
-		       test "$RTEMS_CPU_MODEL" = "mc9328mxl" || \
 		       test "$RTEMS_CPU_MODEL" = "s3c2410" || \
 		       test "$RTEMS_CPU_MODEL" = "shared")
 
 AM_CONDITIONAL(at91rm9200, test "$RTEMS_CPU_MODEL" = "at91rm9200")
-AM_CONDITIONAL(mc9328mxl, test "$RTEMS_CPU_MODEL" = "mc9328mxl")
 AM_CONDITIONAL(lpc22xx, test "$RTEMS_CPU_MODEL" = "lpc22xx")
 AM_CONDITIONAL(s3c24xx, test "$RTEMS_CPU_MODEL" = "s3c2410")
 
