@@ -78,10 +78,11 @@ rtems_task test_task(
 )
 {
   rtems_status_code   status;
-  uint32_t      index;
+  uint32_t            index;
   rtems_task_priority old_priority;
   rtems_time_of_day   time;
-  uint32_t      old_mode;
+  rtems_mode          old_mode;
+  rtems_mode          desired_mode;
 
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ )
@@ -140,16 +141,18 @@ rtems_task test_task(
     0
   );
 
+  desired_mode = old_mode;
+
   benchmark_timer_initialize();
     for ( index=1 ; index <= OPERATION_COUNT ; index++ ) {
       (void) rtems_task_mode(
-        RTEMS_INTERRUPT_LEVEL(1),
-        RTEMS_INTERRUPT_MASK,
+        RTEMS_TIMESLICE_MASK,
+        desired_mode,
         &old_mode
       );
       (void) rtems_task_mode(
-        RTEMS_INTERRUPT_LEVEL(0),
-        RTEMS_INTERRUPT_MASK,
+        RTEMS_TIMESLICE_MASK,
+        desired_mode,
         &old_mode
       );
     }
@@ -183,7 +186,7 @@ rtems_task test_task(
 
   /* preempted by test_task1 */
   benchmark_timer_initialize();
-    (void)  rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
+    (void) rtems_task_mode( RTEMS_PREEMPT, RTEMS_PREEMPT_MASK, &old_mode );
 
   build_time( &time, 1, 1, 1988, 0, 0, 0, 0 );
 
