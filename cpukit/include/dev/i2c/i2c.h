@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -28,6 +28,7 @@
 
 #include <rtems.h>
 #include <rtems/seterr.h>
+#include <rtems/thread.h>
 
 #include <sys/ioctl.h>
 #include <sys/stat.h>
@@ -139,7 +140,7 @@ struct i2c_bus {
   /**
    * @brief Mutex to protect the bus access.
    */
-  rtems_id mutex;
+  rtems_recursive_mutex mutex;
 
   /**
    * @brief Default slave device address.

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -33,20 +33,12 @@
 
 void i2c_bus_obtain(i2c_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_obtain(bus->mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_lock(&bus->mutex);
 }
 
 void i2c_bus_release(i2c_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_release(bus->mutex);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_unlock(&bus->mutex);
 }
 
 int i2c_bus_transfer(i2c_bus *bus, i2c_msg *msgs, uint32_t msg_count)
@@ -286,21 +278,7 @@ static int i2c_bus_do_init(
   void (*destroy)(i2c_bus *bus)
 )
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_create(
-    rtems_build_name('I', '2', 'C', ' '),
-    1,
-    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-    0,
-    &bus->mutex
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    (*destroy)(bus);
-
-    rtems_set_errno_and_return_minus_one(ENOMEM);
-  }
-
+  rtems_recursive_mutex_init(&bus->mutex, "I2C Bus");
   bus->transfer = i2c_bus_transfer_default;
   bus->set_clock = i2c_bus_set_clock_default;
   bus->destroy = destroy;
@@ -310,11 +288,7 @@ static int i2c_bus_do_init(
 
 void i2c_bus_destroy(i2c_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_delete(bus->mutex);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_destroy(&bus->mutex);
 }
 
 void i2c_bus_destroy_and_free(i2c_bus *bus)
