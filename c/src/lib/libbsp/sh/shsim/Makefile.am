@@ -38,6 +38,8 @@ libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../shared/bsphwinit.c
 libbsp_a_SOURCES += startup/sysexit.c
 libbsp_a_SOURCES += ../../shared/bspreset.c
+libbsp_a_SOURCES += startup/cpu_asm.c
+libbsp_a_SOURCES += startup/ispshgdb.c
 
 # clock
 libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
@@ -51,9 +53,7 @@ libbsp_a_SOURCES += console/console-debugio.c
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel \
-    ../../../libcpu/@RTEMS_CPU@/cache.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
