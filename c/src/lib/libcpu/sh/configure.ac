@@ -19,8 +19,6 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-AM_CONDITIONAL([sh7750],[test x"$RTEMS_CPU_MODEL" = x"sh7750"])
-
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here
