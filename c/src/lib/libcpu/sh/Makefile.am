@@ -9,49 +9,6 @@ cache_rel_SOURCES = ../shared/src/cache_manager.c
 cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
 cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-if sh7032
-# NOTE: Unlike other CPUS, we install into a subdirectory to avoid
-#       file name conflicts
-include_shdir = $(includedir)/sh
-include_rtems_scoredir = $(includedir)/rtems/score
-
-include_sh_HEADERS = sh7032/include/sci.h
-include_sh_HEADERS += sh7032/include/sh7_pfc.h
-include_sh_HEADERS += sh7032/include/sh7_sci.h
-include_rtems_score_HEADERS = sh7032/include/ispsh7032.h
-include_rtems_score_HEADERS += sh7032/include/iosh7032.h
-
-## sh7032/clock
-noinst_PROGRAMS += sh7032/clock.rel
-sh7032_clock_rel_SOURCES = sh7032/clock/ckinit.c
-sh7032_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-sh7032_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## sh7032/delay
-noinst_PROGRAMS += sh7032/delay.rel
-sh7032_delay_rel_SOURCES = sh7032/delay/delay.c
-sh7032_delay_rel_CPPFLAGS = $(AM_CPPFLAGS)
-sh7032_delay_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## sh7032/sci
-noinst_PROGRAMS += sh7032/sci.rel
-sh7032_sci_rel_SOURCES = sh7032/sci/sci.c
-sh7032_sci_rel_CPPFLAGS = $(AM_CPPFLAGS)
-sh7032_sci_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## sh7032/score
-noinst_PROGRAMS += sh7032/score.rel
-sh7032_score_rel_SOURCES = sh7032/score/cpu_asm.c sh7032/score/ispsh7032.c
-sh7032_score_rel_CPPFLAGS = $(AM_CPPFLAGS)
-sh7032_score_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-### sh7032/timer
-noinst_PROGRAMS += sh7032/timer.rel
-sh7032_timer_rel_SOURCES = sh7032/timer/timer.c
-sh7032_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-sh7032_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if sh7045
 # NOTE: Unlike other CPUS, we install into a subdirectory to avoid
 #       file name conflicts

@@ -13,37 +13,6 @@ all-am: $(PREINSTALL_FILES)
 PREINSTALL_FILES =
 CLEANFILES = $(PREINSTALL_FILES)
 
-if sh7032
-$(PROJECT_INCLUDE)/sh/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/sh
-	@: > $(PROJECT_INCLUDE)/sh/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/sh/$(dirstamp)
-
-$(PROJECT_INCLUDE)/rtems/score/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems/score
-	@: > $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-
-$(PROJECT_INCLUDE)/sh/sci.h: sh7032/include/sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sci.h
-
-$(PROJECT_INCLUDE)/sh/sh7_pfc.h: sh7032/include/sh7_pfc.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_pfc.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_pfc.h
-
-$(PROJECT_INCLUDE)/sh/sh7_sci.h: sh7032/include/sh7_sci.h $(PROJECT_INCLUDE)/sh/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/sh/sh7_sci.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/sh/sh7_sci.h
-
-$(PROJECT_INCLUDE)/rtems/score/ispsh7032.h: sh7032/include/ispsh7032.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/ispsh7032.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/ispsh7032.h
-
-$(PROJECT_INCLUDE)/rtems/score/iosh7032.h: sh7032/include/iosh7032.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/iosh7032.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/iosh7032.h
-endif
 if sh7045
 $(PROJECT_INCLUDE)/sh/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/sh

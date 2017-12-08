@@ -2,9 +2,18 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
 
+include_shdir = $(includedir)/sh
+include_rtems_scoredir = $(includedir)/rtems/score
 include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
+
+include_sh_HEADERS = include/sh/sci.h
+include_sh_HEADERS += include/sh/sh7_pfc.h
+include_sh_HEADERS += include/sh/sh7_sci.h
+
+include_rtems_score_HEADERS = include/rtems/score/ispsh7032.h
+include_rtems_score_HEADERS += include/rtems/score/iosh7032.h
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
@@ -38,20 +47,19 @@ libbsp_a_SOURCES += \
     ../../shared/sbrk.c ../../shared/bootcard.c ../shared/bsphwinit.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c
+libbsp_a_SOURCES += clock/ckinit.c
+libbsp_a_SOURCES += clock/delay.c
+libbsp_a_SOURCES += startup/cpu_asm.c startup/ispsh7032.c
+libbsp_a_SOURCES += timer/timer.c
 # scitab
 libbsp_a_SOURCES += scitab.c
 # console
 libbsp_a_SOURCES += ../../sh/shared/console.c
+libbsp_a_SOURCES += console/sci.c
 # debugio
 libbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/sci.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/delay.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/score.rel \
-    ../../../libcpu/@RTEMS_CPU@/cache.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
 
 EXTRA_DIST = times
 

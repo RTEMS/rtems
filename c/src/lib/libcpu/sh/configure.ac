@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-sh],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([sh7032])
+AC_CONFIG_SRCDIR([cache])
 RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
@@ -19,7 +19,6 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-AM_CONDITIONAL([sh7032],[test x"$RTEMS_CPU_MODEL" = x"sh7032"])
 AM_CONDITIONAL([sh7045],[test x"$RTEMS_CPU_MODEL" = x"sh7045"])
 AM_CONDITIONAL([sh7750],[test x"$RTEMS_CPU_MODEL" = x"sh7750"])
 
