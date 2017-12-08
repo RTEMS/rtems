@@ -176,7 +176,7 @@ rtems_task Init(
 /* END OF RTEMS_PREEMPT */
 
 /* BEGINNING OF RTEMS_INTERRUPT_LEVEL */
-
+#if !defined(RTEMS_SMP)
   status = rtems_task_mode(
     RTEMS_INTERRUPT_LEVEL(3),
     RTEMS_INTERRUPT_MASK,
@@ -198,7 +198,7 @@ rtems_task Init(
     "TA1 - rtems_task_mode - RTEMS_INTERRUPT_LEVEL( 5 ) - previous mode: ",
     previous_mode
   );
-
+#endif
 /* END OF RTEMS_INTERRUPT_LEVEL */
 
 /* BEGINNING OF COMBINATIONS */
