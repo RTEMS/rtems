@@ -91,12 +91,3 @@ $(PROJECT_INCLUDE)/bsp/irq.h: s3c24xx/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
-if lpc22xx
-$(PROJECT_INCLUDE)/lpc22xx.h: lpc22xx/include/lpc22xx.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/lpc22xx.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/lpc22xx.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: lpc22xx/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-endif

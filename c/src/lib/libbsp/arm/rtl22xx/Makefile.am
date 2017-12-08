@@ -8,6 +8,7 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
+include_HEADERS += include/lpc22xx.h
 
 include_bsp_HEADERS =
 
@@ -38,6 +39,8 @@ libbsp_a_SOURCES += \
     ../../shared/gnatinstallhandler.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+libbsp_a_SOURCES += timer/timer.c
+libbsp_a_SOURCES += clock/clockdrv.c
 # console
 libbsp_a_SOURCES += ../../shared/console.c \
     ../../shared/console_select.c ../../shared/console_control.c \
@@ -45,12 +48,14 @@ libbsp_a_SOURCES += ../../shared/console.c \
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h
+include_bsp_HEADERS += include/bsp/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += irq/irq.c
 # debugio
 libbsp_a_SOURCES += console/uart.c
 
@@ -67,10 +72,7 @@ network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-libbsp_a_LIBADD =  \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
+libbsp_a_LIBADD =
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
