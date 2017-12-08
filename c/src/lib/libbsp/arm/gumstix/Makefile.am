@@ -9,6 +9,8 @@ dist_project_lib_DATA = bsp_specs
 
 include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
+include_HEADERS += include/pxa255.h
+include_HEADERS += include/ffuart.h
 
 include_bsp_HEADERS =
 
@@ -35,20 +37,25 @@ libbsp_a_SOURCES += \
   ../../shared/bspclean.c startup/bspstart.c startup/bspreset.c startup/memmap.c
 libbsp_a_SOURCES += ../../shared/cpucounterread.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+libbsp_a_SOURCES += clock/clock.c
+libbsp_a_SOURCES += timer/timer.c
 
 #console
 libbsp_a_SOURCES += console/uarts.c ../../shared/console.c \
   ../../shared/console_select.c  ../../shared/console_control.c \
   ../../shared/console_read.c ../../shared/console_write.c 
+libbsp_a_SOURCES += console/ffuart.c
 # IRQ
 include_bsp_HEADERS += ../../shared/include/irq-generic.h \
 	../../shared/include/irq-info.h
+include_bsp_HEADERS += include/bsp/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 libbsp_a_SOURCES += ../../shared/src/irq-server.c
 libbsp_a_SOURCES += ../../shared/src/irq-shell.c
+libbsp_a_SOURCES += irq/irq.c
 
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
@@ -67,11 +74,7 @@ rtl8019_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/ffuart.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
 
 if ON_SKYEYE
 if HAS_NETWORKING

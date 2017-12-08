@@ -37,19 +37,6 @@ $(PROJECT_INCLUDE)/libcpu/arm-cp15.h: shared/include/arm-cp15.h $(PROJECT_INCLUD
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 endif
-if pxa255
-$(PROJECT_INCLUDE)/pxa255.h: pxa255/include/pxa255.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/pxa255.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/pxa255.h
-
-$(PROJECT_INCLUDE)/ffuart.h: pxa255/include/ffuart.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/ffuart.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/ffuart.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: pxa255/irq/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
-endif
 if at91rm9200
 $(PROJECT_INCLUDE)/at91rm9200.h: at91rm9200/include/at91rm9200.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/at91rm9200.h
