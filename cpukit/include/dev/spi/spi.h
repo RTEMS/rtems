@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -27,6 +27,7 @@
 
 #include <rtems.h>
 #include <rtems/seterr.h>
+#include <rtems/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,7 +97,7 @@ struct spi_bus {
   /**
    * @brief Mutex to protect the bus access.
    */
-  rtems_id mutex;
+  rtems_recursive_mutex mutex;
 
   /**
    * @brief Maximum Speed in Hz

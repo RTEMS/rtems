@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -33,20 +33,12 @@
 
 static void spi_bus_obtain(spi_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_obtain(bus->mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_lock(&bus->mutex);
 }
 
 static void spi_bus_release(spi_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_release(bus->mutex);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_unlock(&bus->mutex);
 }
 
 static void spi_bus_set_defaults(spi_bus *bus, spi_ioc_transfer *msg)
@@ -304,34 +296,18 @@ static int spi_bus_do_init(
   void (*destroy)(spi_bus *bus)
 )
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_create(
-    rtems_build_name('S', 'P', 'I', ' '),
-    1,
-    RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY | RTEMS_PRIORITY,
-    0,
-    &bus->mutex
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    (*destroy)(bus);
-    rtems_set_errno_and_return_minus_one(ENOMEM);
-  }
-
+  rtems_recursive_mutex_init(&bus->mutex, "SPI Bus");
   bus->transfer = spi_bus_transfer_default;
   bus->setup = spi_bus_setup_default;
   bus->destroy = destroy;
   bus->bits_per_word = 8;
+
   return 0;
 }
 
 void spi_bus_destroy(spi_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_delete(bus->mutex);
-  _Assert(sc == RTEMS_SUCCESSFUL);
-  (void) sc;
+  rtems_recursive_mutex_destroy(&bus->mutex);
 }
 
 void spi_bus_destroy_and_free(spi_bus *bus)
