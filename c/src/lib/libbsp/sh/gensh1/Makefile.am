@@ -59,7 +59,10 @@ libbsp_a_SOURCES += console/sci.c
 # debugio
 libbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
 
 EXTRA_DIST = times
 

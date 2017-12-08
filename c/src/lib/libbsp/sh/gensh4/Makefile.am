@@ -52,7 +52,10 @@ libbsp_a_SOURCES += console/sh4uart.c
 # hw_init
 libbsp_a_SOURCES += hw_init/hw_init.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
+# Cache
+libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
+libbsp_a_SOURCES += ../../shared/include/cache_.h
+libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
 
 EXTRA_DIST = times
 
