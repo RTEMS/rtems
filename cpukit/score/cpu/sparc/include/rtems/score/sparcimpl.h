@@ -81,6 +81,7 @@ static inline void _SPARC_Counter_initialize(
     "\t.long\t_SPARC_Counter_read_address\n" \
     "\t.long\t_SPARC_Counter_difference_one\n" \
     "\t.long\t_SPARC_Counter\n" \
+    "\t.previous\n" \
   )
 
 #ifdef __cplusplus
