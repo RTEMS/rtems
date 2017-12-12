@@ -12,9 +12,8 @@
 #include <rtems.h>
 #include <rtems/libio.h>
 #include <rtems/error.h>
+#include <rtems/thread.h>
 #include <rtems/rtems_bsdnet.h>
-#include <rtems/rtems/semimpl.h>
-#include <rtems/score/coremuteximpl.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/domain.h>
@@ -45,10 +44,8 @@ static uint32_t nmbuf       = (64L * 1024L) / _SYS_MBUF_LEGACY_MSIZE;
 /*
  * Network task synchronization
  */
-static rtems_id networkSemaphore;
-#ifdef RTEMS_FAST_MUTEX
-Semaphore_Control   *the_networkSemaphore;
-#endif
+static rtems_recursive_mutex networkMutex =
+    RTEMS_RECURSIVE_MUTEX_INITIALIZER("_Network");
 static rtems_id networkDaemonTid;
 static uint32_t   networkDaemonPriority;
 #ifdef RTEMS_SMP
@@ -111,31 +108,19 @@ rtems_bsdnet_initialize_sockaddr_in(struct sockaddr_in *addr)
 uint32_t
 rtems_bsdnet_semaphore_release_recursive(void)
 {
-#ifdef RTEMS_FAST_MUTEX
 	uint32_t nest_count;
-	uint32_t i;
 
-	nest_count =
-		the_networkSemaphore ?
-		the_networkSemaphore->Core_control.Mutex.Recursive.nest_level + 1 : 0;
-	for (i = 0; i < nest_count; ++i) {
-		rtems_bsdnet_semaphore_release();
-	}
-
+	nest_count = networkMutex._nest_level;
+	networkMutex._nest_level = 0;
+	rtems_recursive_mutex_unlock(&networkMutex);
 	return nest_count;
-#else
-	#error "not implemented"
-#endif
 }
 
 void
 rtems_bsdnet_semaphore_obtain_recursive(uint32_t nest_count)
 {
-	uint32_t i;
-
-	for (i = 0; i < nest_count; ++i) {
-		rtems_bsdnet_semaphore_obtain();
-	}
+	rtems_recursive_mutex_lock(&networkMutex);
+	networkMutex._nest_level = nest_count;
 }
 
 /*
@@ -265,7 +250,7 @@ bsd_init (void)
 static int
 rtems_bsdnet_initialize (void)
 {
-	rtems_status_code sc;
+	rtems_bsdnet_semaphore_obtain ();
 
 	/*
 	 * Set the priority of all network tasks
@@ -313,27 +298,6 @@ rtems_bsdnet_initialize (void)
         rtems_set_sb_efficiency( rtems_bsdnet_config.sb_efficiency );
 
 	/*
-	 * Create the task-synchronization semaphore
-	 */
-	sc = rtems_semaphore_create (rtems_build_name('B', 'S', 'D', 'n'),
-					0,
-					RTEMS_PRIORITY |
-						RTEMS_BINARY_SEMAPHORE |
-						RTEMS_INHERIT_PRIORITY |
-						RTEMS_NO_PRIORITY_CEILING |
-						RTEMS_LOCAL,
-					0,
-					&networkSemaphore);
-	if (sc != RTEMS_SUCCESSFUL) {
-		printf ("Can't create network seamphore: `%s'\n", rtems_status_text (sc));
-		return -1;
-	}
-#ifdef RTEMS_FAST_MUTEX
-	the_networkSemaphore = (Semaphore_Control *)
-		_Objects_Get_no_protection(networkSemaphore, &_Semaphore_Information);
-#endif
-
-	/*
 	 * Compute clock tick conversion factors
 	 */
 	rtems_bsdnet_ticks_per_second = rtems_clock_get_ticks_per_second();
@@ -345,8 +309,10 @@ rtems_bsdnet_initialize (void)
 	/*
 	 * Set up BSD-style sockets
 	 */
-	if (bsd_init () < 0)
+	if (bsd_init () < 0) {
+		rtems_bsdnet_semaphore_release ();
 		return -1;
+	}
 
 	/*
 	 * Start network daemon
@@ -369,32 +335,7 @@ rtems_bsdnet_initialize (void)
 void
 rtems_bsdnet_semaphore_obtain (void)
 {
-#ifdef RTEMS_FAST_MUTEX
-	Thread_queue_Context queue_context;
-	Status_Control status;
-	if (!the_networkSemaphore)
-		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
-	_Thread_queue_Context_initialize(&queue_context);
-	_ISR_lock_ISR_disable(&queue_context.Lock_context.Lock_context);
-	_Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
-	status = _CORE_recursive_mutex_Seize (
-		&the_networkSemaphore->Core_control.Mutex.Recursive,
-		CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
-		_Thread_Executing,
-		true,			/* wait */
-		_CORE_recursive_mutex_Seize_nested,
-		&queue_context
-	);
-	if (status != STATUS_SUCCESSFUL)
-		rtems_panic ("rtems-net: can't obtain network sema: %d\n", status);
-#else
-	rtems_status_code sc;
-
-	sc = rtems_semaphore_obtain (networkSemaphore, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	if (sc != RTEMS_SUCCESSFUL)
-		rtems_panic ("rtems-net: can't obtain network semaphore: `%s'\n",
-                 rtems_status_text (sc));
-#endif
+	rtems_recursive_mutex_lock(&networkMutex);
 }
 
 /*
@@ -403,30 +344,7 @@ rtems_bsdnet_semaphore_obtain (void)
 void
 rtems_bsdnet_semaphore_release (void)
 {
-#ifdef RTEMS_FAST_MUTEX
-	Thread_queue_Context queue_context;
-	Status_Control status;
-
-	if (!the_networkSemaphore)
-		rtems_panic ("rtems-net: network sema obtain: network not initialised\n");
-	_Thread_queue_Context_initialize(&queue_context);
-	_ISR_lock_ISR_disable(&queue_context.Lock_context.Lock_context);
-	status = _CORE_recursive_mutex_Surrender(
-		&the_networkSemaphore->Core_control.Mutex.Recursive,
-		CORE_MUTEX_TQ_PRIORITY_INHERIT_OPERATIONS,
-		_Thread_Executing,
-		&queue_context
-	);
-	if (status != STATUS_SUCCESSFUL)
-		rtems_panic ("rtems-net: can't release network sema: %i\n");
-#else
-	rtems_status_code sc;
-
-	sc = rtems_semaphore_release (networkSemaphore);
-	if (sc != RTEMS_SUCCESSFUL)
-		rtems_panic ("rtems-net: can't release network semaphore: `%s'\n",
-                 rtems_status_text (sc));
-#endif
+	rtems_recursive_mutex_unlock(&networkMutex);
 }
 
 static int

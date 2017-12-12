@@ -2057,23 +2057,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #endif
 
   /*
-   * This specifies the number of Classic API semaphores required
-   */
-  #ifdef RTEMS_NETWORKING
-    #define _CONFIGURE_NETWORKING_SEMAPHORES 1
-  #else
-    #define _CONFIGURE_NETWORKING_SEMAPHORES 0
-  #endif
-
-  /*
    * This macro is calculated to specify the number of Classic API
    * semaphores required by the application and configured RTEMS
    * capabilities.
    */
   #define _CONFIGURE_SEMAPHORES \
     (CONFIGURE_MAXIMUM_SEMAPHORES + \
-      _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS + \
-      _CONFIGURE_NETWORKING_SEMAPHORES)
+      _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS)
 
   /*
    * This macro is calculated to specify the memory required for
