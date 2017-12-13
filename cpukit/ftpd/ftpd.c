@@ -203,6 +203,7 @@
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/error.h>
+#include <rtems/ftpd.h>
 #include <rtems/libio.h>
 #include <rtems/userenv.h>
 #include <syslog.h>
@@ -211,8 +212,6 @@
 #include <sys/socket.h>
 #include <arpa/ftp.h>
 #include <netinet/in.h>
-
-#include "ftpd.h"
 
 
 #ifdef __GNUC__
