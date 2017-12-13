@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 #if RTEMS_RTL_TRACE
 static rtems_rtl_trace_mask rtems_rtl_trace_flags;

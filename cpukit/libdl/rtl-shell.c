@@ -28,7 +28,7 @@
 #include <rtems/rtl/rtl.h>
 #include "rtl-chain-iterator.h"
 #include "rtl-shell.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 /**
  * The type of the shell handlers we have.

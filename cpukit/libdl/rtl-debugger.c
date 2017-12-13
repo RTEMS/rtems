@@ -29,8 +29,8 @@
 #include <stdio.h>
 #include <link.h>
 #include <rtems/rtl/rtl.h>
-#include "rtl-trace.h"
-#include "rtl-obj-fwd.h"
+#include <rtems/rtl/rtl-trace.h>
+#include <rtems/rtl/rtl-obj-fwd.h>
 
 struct r_debug  _rtld_debug;
 

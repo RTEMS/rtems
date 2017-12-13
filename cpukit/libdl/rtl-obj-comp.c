@@ -23,7 +23,7 @@
 #include <unistd.h>
 
 #include <rtems/rtl/rtl-allocator.h>
-#include "rtl-obj-comp.h"
+#include <rtems/rtl/rtl-obj-comp.h>
 #include "rtl-error.h"
 
 #include "fastlz.h"

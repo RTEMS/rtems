@@ -25,8 +25,8 @@
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-error.h"
-#include "rtl-sym.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-sym.h>
+#include <rtems/rtl/rtl-trace.h>
 
 /**
  * The single symbol forced into the global symbol table that is used to load a

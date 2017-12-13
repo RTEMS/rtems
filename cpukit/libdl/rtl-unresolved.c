@@ -25,8 +25,8 @@
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-error.h"
-#include "rtl-unresolved.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-unresolved.h>
+#include <rtems/rtl/rtl-trace.h>
 
 static rtems_rtl_unresolv_block_t*
 rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved_t* unresolved)

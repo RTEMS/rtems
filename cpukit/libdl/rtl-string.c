@@ -15,7 +15,7 @@
 
 #include <string.h>
 
-#include "rtl-allocator.h"
+#include <rtems/rtl/rtl-allocator.h>
 #include "rtl-string.h"
 
 char*

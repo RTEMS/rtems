@@ -27,11 +27,11 @@
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-chain-iterator.h"
-#include "rtl-obj.h"
+#include <rtems/rtl/rtl-obj.h>
 #include "rtl-error.h"
 #include "rtl-find-file.h"
 #include "rtl-string.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 #if RTEMS_RTL_RAP_LOADER
 #include "rtl-rap.h"

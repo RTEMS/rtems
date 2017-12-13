@@ -26,10 +26,10 @@
 #include <rtems/libio_.h>
 
 #include <rtems/rtl/rtl.h>
-#include "rtl-allocator.h"
+#include <rtems/rtl/rtl-allocator.h>
 #include "rtl-error.h"
 #include "rtl-string.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 /**
  * Semaphore configuration to create a mutex.

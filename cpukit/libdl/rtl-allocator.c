@@ -18,7 +18,7 @@
 
 #include <rtems/rtl/rtl.h>
 #include "rtl-alloc-heap.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 /**
  * Tags as symbols for tracing.

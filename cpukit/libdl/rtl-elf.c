@@ -29,9 +29,9 @@
 #include <rtems/rtl/rtl.h>
 #include "rtl-elf.h"
 #include "rtl-error.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 #include "rtl-unwind.h"
-#include "rtl-unresolved.h"
+#include <rtems/rtl/rtl-unresolved.h>
 
 /**
  * The offsets in the unresolved array.

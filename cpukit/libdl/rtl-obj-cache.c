@@ -26,9 +26,9 @@
 #include <rtems/inttypes.h>
 
 #include <rtems/rtl/rtl-allocator.h>
-#include "rtl-obj-cache.h"
+#include <rtems/rtl/rtl-obj-cache.h>
 #include "rtl-error.h"
-#include "rtl-trace.h"
+#include <rtems/rtl/rtl-trace.h>
 
 bool
 rtems_rtl_obj_cache_open (rtems_rtl_obj_cache_t* cache, size_t size)
