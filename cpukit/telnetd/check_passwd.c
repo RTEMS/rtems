@@ -70,7 +70,7 @@
 #include <rtems/telnetd.h>
 
 #include "des.h"
-#include "passwd.h"
+#include <rtems/passwd.h>
 
 /**
  * @brief Standard Telnet login check that uses DES to encrypt the passphrase.
