@@ -315,18 +315,14 @@ typedef struct {
 	struct jffs2_inode_cache *inode_cache[];
 } rtems_jffs2_fs_info;
 
-static void rtems_jffs2_do_lock(const struct super_block *sb)
+static void rtems_jffs2_do_lock(struct super_block *sb)
 {
-	rtems_status_code sc = rtems_semaphore_obtain(sb->s_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-	assert(sc == RTEMS_SUCCESSFUL);
-	(void) sc; /* avoid unused variable warning */
+	rtems_recursive_mutex_lock(&sb->s_mutex);
 }
 
-static void rtems_jffs2_do_unlock(const struct super_block *sb)
+static void rtems_jffs2_do_unlock(struct super_block *sb)
 {
-	rtems_status_code sc = rtems_semaphore_release(sb->s_mutex);
-	assert(sc == RTEMS_SUCCESSFUL);
-	(void) sc; /* avoid unused variable warning */
+	rtems_recursive_mutex_unlock(&sb->s_mutex);
 }
 
 static void rtems_jffs2_free_directory_entries(struct _inode *inode)
@@ -366,15 +362,9 @@ static void rtems_jffs2_free_fs_info(rtems_jffs2_fs_info *fs_info, bool do_mount
 		free(c->blocks);
 	}
 
-	if (sb->s_mutex != 0) {
-		rtems_status_code sc = rtems_semaphore_delete(sb->s_mutex);
-		assert(sc == RTEMS_SUCCESSFUL);
-		(void) sc; /* avoid unused variable warning */
-	}
-
 	rtems_jffs2_flash_control_destroy(fs_info->sb.s_flash_control);
 	rtems_jffs2_compressor_control_destroy(fs_info->sb.s_compressor_control);
-
+	rtems_recursive_mutex_destroy(&sb->s_mutex);
 	free(fs_info);
 }
 
@@ -883,16 +873,16 @@ static const rtems_filesystem_eval_path_generic_config rtems_jffs2_eval_config =
 
 static void rtems_jffs2_lock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
-	const rtems_jffs2_fs_info *fs_info = mt_entry->fs_info;
-	const struct super_block *sb = &fs_info->sb;
+	rtems_jffs2_fs_info *fs_info = mt_entry->fs_info;
+	struct super_block *sb = &fs_info->sb;
 
 	rtems_jffs2_do_lock(sb);
 }
 
 static void rtems_jffs2_unlock(const rtems_filesystem_mount_table_entry_t *mt_entry)
 {
-	const rtems_jffs2_fs_info *fs_info = mt_entry->fs_info;
-	const struct super_block *sb = &fs_info->sb;
+	rtems_jffs2_fs_info *fs_info = mt_entry->fs_info;
+	struct super_block *sb = &fs_info->sb;
 
 	rtems_jffs2_do_unlock(sb);
 }
@@ -1245,6 +1235,10 @@ int rtems_jffs2_initialize(
 	c = JFFS2_SB_INFO(sb);
 
 	if (err == 0) {
+		rtems_recursive_mutex_init(&sb->s_mutex, RTEMS_FILESYSTEM_TYPE_JFFS2);
+	}
+
+	if (err == 0) {
 		uint32_t blocks = fc->flash_size / fc->block_size;
 
 		if ((fc->block_size * blocks) != fc->flash_size) {
@@ -1258,18 +1252,6 @@ int rtems_jffs2_initialize(
 			       fc->flash_size / fc->block_size);
 			err = -EINVAL;
 		}
-	}
-
-	if (err == 0) {
-		rtems_status_code sc = rtems_semaphore_create(
-			rtems_build_name('J', 'F', 'F', 'S'),
-			1,
-			RTEMS_PRIORITY | RTEMS_INHERIT_PRIORITY | RTEMS_BINARY_SEMAPHORE,
-			0,
-			&sb->s_mutex
-		);
-
-		err = sc == RTEMS_SUCCESSFUL ? 0 : -ENOMEM;
 	}
 
 	if (err == 0) {

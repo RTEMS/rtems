@@ -449,14 +449,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_JFFS2) && \
     defined(CONFIGURE_FILESYSTEM_JFFS2)
   #include <rtems/jffs2.h>
-  #if !defined(CONFIGURE_MAXIMUM_JFFS2_MOUNTS)
-    #define CONFIGURE_MAXIMUM_JFFS2_MOUNTS 1
-  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_JFFS2 \
     { RTEMS_FILESYSTEM_TYPE_JFFS2, rtems_jffs2_initialize }
-  #define _CONFIGURE_SEMAPHORES_FOR_JFFS2 CONFIGURE_MAXIMUM_JFFS2_MOUNTS
-#else
-  #define _CONFIGURE_SEMAPHORES_FOR_JFFS2 0
 #endif
 
 /**
@@ -467,8 +461,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     (_CONFIGURE_SEMAPHORES_FOR_FIFOS + \
      _CONFIGURE_SEMAPHORES_FOR_NFS + \
      _CONFIGURE_SEMAPHORES_FOR_DOSFS + \
-     _CONFIGURE_SEMAPHORES_FOR_RFS + \
-     _CONFIGURE_SEMAPHORES_FOR_JFFS2)
+     _CONFIGURE_SEMAPHORES_FOR_RFS)
 
 #ifdef CONFIGURE_INIT
 

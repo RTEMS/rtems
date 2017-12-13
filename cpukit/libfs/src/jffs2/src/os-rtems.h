@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include <rtems/jffs2.h>
+#include <rtems/thread.h>
 
 #define CONFIG_JFFS2_RTIME
 
@@ -104,7 +105,7 @@ struct super_block {
 	rtems_jffs2_compressor_control	*s_compressor_control;
 	bool			s_is_readonly;
 	unsigned char		s_gc_buffer[PAGE_CACHE_SIZE]; // Avoids malloc when user may be under memory pressure
-	rtems_id		s_mutex;
+	rtems_recursive_mutex	s_mutex;
 	char			s_name_buf[JFFS2_MAX_NAME_LEN];
 };
 
