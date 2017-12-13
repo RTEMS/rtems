@@ -37,8 +37,6 @@
 #include <rtems.h>
 #include <rtems/score/threadimpl.h>
 
-#include <bsp/linker-symbols.h>
-
 #include "rtems-debugger-target.h"
 #include "rtems-debugger-threads.h"
 
@@ -945,6 +943,10 @@ target_exception_data_abort(void)
  * The init value for the text section.
  */
 static uint32_t text_section_flags;
+
+/* Defined by linkcmds.base */
+extern char bsp_section_text_begin[];
+extern char bsp_section_text_end[];
 
 static void
 rtems_debugger_target_set_vectors(void)
