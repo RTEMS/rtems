@@ -9,7 +9,7 @@
 #ifndef _RTEMS_SHELL_INTERNAL_H
 #define _RTEMS_SHELL_INTERNAL_H
 
-#include "shell.h"
+#include <rtems/shell.h>
 
 extern rtems_shell_cmd_t   * rtems_shell_first_cmd;
 extern rtems_shell_topic_t * rtems_shell_first_topic;
