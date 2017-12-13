@@ -34,11 +34,11 @@
 #include <inttypes.h>
 
 #include <rtems/libio_.h>
+#include <rtems/dosfs.h>
 
 #include "fat.h"
 #include "fat_fat_operations.h"
 #include "msdos.h"
-#include "dosfs.h"
 
 #define ONE_GB (1024L * 1024L * 1024L)
 

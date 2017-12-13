@@ -25,7 +25,7 @@
 #endif
 
 #include <rtems/libio_.h>
-#include "dosfs.h"
+#include <rtems/dosfs.h>
 #include "msdos.h"
 
 static int msdos_clone_node_info(rtems_filesystem_location_info_t *loc)
