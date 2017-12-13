@@ -59,3 +59,12 @@ $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h: rtems/score/cpuatomic.h $(PROJECT_IN
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/cpuatomic.h
 
+$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
+	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
+	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+
+$(PROJECT_INCLUDE)/libcpu/arm-cp15.h: include/libcpu/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
+

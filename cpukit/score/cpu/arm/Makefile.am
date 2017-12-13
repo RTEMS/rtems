@@ -12,6 +12,9 @@ include_rtems_score_HEADERS += rtems/score/armv7m.h
 include_rtems_score_HEADERS += rtems/score/types.h
 include_rtems_score_HEADERS += rtems/score/cpuatomic.h
 
+include_libcpudir = $(includedir)/libcpu
+include_libcpu_HEADERS = include/libcpu/arm-cp15.h
+
 noinst_LIBRARIES = libscorecpu.a
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 libscorecpu_a_SOURCES =

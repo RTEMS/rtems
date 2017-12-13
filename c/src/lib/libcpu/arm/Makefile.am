@@ -16,7 +16,6 @@ include_libcpu_HEADERS =
 if shared
 
 include_libcpu_HEADERS += shared/include/mmu.h
-include_libcpu_HEADERS += shared/include/arm-cp15.h
 
 ## shared/arm920
 noinst_PROGRAMS += shared/arm920.rel
