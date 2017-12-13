@@ -18,7 +18,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 static const IMFS_node_control IMFS_node_control_hard_link;
 

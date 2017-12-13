@@ -17,7 +17,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 static const rtems_filesystem_file_handlers_r IMFS_dir_minimal_handlers = {
   .open_h = rtems_filesystem_default_open,

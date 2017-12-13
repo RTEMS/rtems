@@ -21,7 +21,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 int IMFS_unmount( rtems_filesystem_mount_table_entry_t *mt_entry )
 {

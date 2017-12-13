@@ -17,7 +17,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 #include <sys/filio.h>
 

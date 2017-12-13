@@ -18,7 +18,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 #define jnode_get_control( jnode ) \
   (&((IMFS_directory_t *) jnode)->Entries)

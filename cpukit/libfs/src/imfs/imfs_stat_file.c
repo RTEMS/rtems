@@ -17,7 +17,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 int imfs_memfile_bytes_per_block;
 

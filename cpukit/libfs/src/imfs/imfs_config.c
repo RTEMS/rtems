@@ -20,7 +20,7 @@
 
 #include <rtems.h>
 #include <rtems/libio_.h>
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 /* XXX this structure should use real constants */
 

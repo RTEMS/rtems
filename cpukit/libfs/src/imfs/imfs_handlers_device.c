@@ -18,7 +18,7 @@
   #include "config.h"
 #endif
 
-#include "imfs.h"
+#include <rtems/imfs.h>
 
 static int IMFS_stat_device(
   const rtems_filesystem_location_info_t *loc,
