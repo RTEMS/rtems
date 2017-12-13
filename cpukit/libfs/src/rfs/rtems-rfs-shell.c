@@ -32,7 +32,7 @@
 
 #if __rtems__
 #include "rtems-rfs-rtems.h"
-#include "rtems-rfs-shell.h"
+#include <rtems/rtems-rfs-shell.h>
 #endif
 
 /**
