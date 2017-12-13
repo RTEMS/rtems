@@ -259,7 +259,7 @@ struct pollfd {
 #define POLLIN 1
 #endif
 
-#include "mongoose.h"
+#include <mghttpd/mongoose.h>
 
 #define MONGOOSE_VERSION "3.9"
 #define PASSWORDS_FILE_NAME ".htpasswd"
