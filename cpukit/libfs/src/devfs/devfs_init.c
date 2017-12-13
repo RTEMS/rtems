@@ -15,7 +15,7 @@
   #include "config.h"
 #endif
 
-#include "devfs.h"
+#include <rtems/devfs.h>
 
 const rtems_filesystem_operations_table devFS_ops = {
   .lock_h = rtems_filesystem_default_lock,

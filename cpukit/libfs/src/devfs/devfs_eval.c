@@ -17,7 +17,7 @@
 
 #include <string.h>
 
-#include "devfs.h"
+#include <rtems/devfs.h>
 
 static devFS_node *devFS_search_node(
   const devFS_data *data,

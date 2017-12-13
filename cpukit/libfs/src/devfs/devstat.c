@@ -15,7 +15,7 @@
   #include "config.h"
 #endif
 
-#include "devfs.h"
+#include <rtems/devfs.h>
 
 int devFS_stat(
   const rtems_filesystem_location_info_t *loc,
