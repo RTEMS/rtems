@@ -7,7 +7,7 @@
 #endif
 
 #include <rtems.h>
-#include "monitor.h"
+#include <rtems/monitor.h>
 #include <rtems/rtems/semimpl.h>
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
