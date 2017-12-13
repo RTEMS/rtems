@@ -417,14 +417,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_DOSFS) && \
     defined(CONFIGURE_FILESYSTEM_DOSFS)
   #include <rtems/dosfs.h>
-  #if !defined(CONFIGURE_MAXIMUM_DOSFS_MOUNTS)
-    #define CONFIGURE_MAXIMUM_DOSFS_MOUNTS 1
-  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_DOSFS \
     { RTEMS_FILESYSTEM_TYPE_DOSFS, rtems_dosfs_initialize }
-  #define _CONFIGURE_SEMAPHORES_FOR_DOSFS CONFIGURE_MAXIMUM_DOSFS_MOUNTS
-#else
-  #define _CONFIGURE_SEMAPHORES_FOR_DOSFS 0
 #endif
 
 /**
@@ -460,7 +454,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS \
     (_CONFIGURE_SEMAPHORES_FOR_FIFOS + \
      _CONFIGURE_SEMAPHORES_FOR_NFS + \
-     _CONFIGURE_SEMAPHORES_FOR_DOSFS + \
      _CONFIGURE_SEMAPHORES_FOR_RFS)
 
 #ifdef CONFIGURE_INIT

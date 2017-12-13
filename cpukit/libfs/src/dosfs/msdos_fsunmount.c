@@ -54,7 +54,7 @@ msdos_shut_down(rtems_filesystem_mount_table_entry_t *temp_mt_entry)
 
     fat_shutdown_drive(&fs_info->fat);
 
-    rtems_semaphore_delete(fs_info->vol_sema);
+    rtems_recursive_mutex_destroy(&fs_info->vol_mutex);
     (*converter->handler->destroy)( converter );
     free(fs_info->cl_buf);
     free(temp_mt_entry->fs_info);

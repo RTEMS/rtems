@@ -24,6 +24,7 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <rtems/dosfs.h>
+#include <rtems/thread.h>
 
 #include "fat.h"
 #include "fat_file.h"
@@ -62,11 +63,7 @@ typedef struct msdos_fs_info_s
                                                             * nodes of file
                                                             * type
                                                             */
-    rtems_id                          vol_sema;           /*
-                                                           * semaphore
-                                                           * associated with
-                                                           * the volume
-                                                           */
+    rtems_recursive_mutex vol_mutex;
     uint8_t                          *cl_buf;              /*
                                                             * just placeholder
                                                             * for anything
@@ -75,15 +72,21 @@ typedef struct msdos_fs_info_s
     rtems_dosfs_convert_control      *converter;
 } msdos_fs_info_t;
 
+RTEMS_INLINE_ROUTINE void msdos_fs_lock(msdos_fs_info_t *fs_info)
+{
+    rtems_recursive_mutex_lock(&fs_info->vol_mutex);
+}
+
+RTEMS_INLINE_ROUTINE void msdos_fs_unlock(msdos_fs_info_t *fs_info)
+{
+    rtems_recursive_mutex_unlock(&fs_info->vol_mutex);
+}
+
 /* a set of routines that handle the nodes which are directories */
 extern const rtems_filesystem_file_handlers_r  msdos_dir_handlers;
 
 /* a set of routines that handle the nodes which are files */
 extern const rtems_filesystem_file_handlers_r  msdos_file_handlers;
-
-/* Volume semaphore timeout value. This value can be changed to a number
- * of ticks to help debugging or if you need such a  */
-#define MSDOS_VOLUME_SEMAPHORE_TIMEOUT    RTEMS_NO_TIMEOUT
 
 /*
  * Macros for fetching fields from 32 bytes long FAT Directory Entry

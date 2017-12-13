@@ -57,7 +57,6 @@ msdos_initialize_support(
     )
 {
     int                rc = RC_OK;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = NULL;
     fat_file_fd_t     *fat_fd = NULL;
     fat_dir_pos_t      root_pos;
@@ -133,20 +132,8 @@ msdos_initialize_support(
         rtems_set_errno_and_return_minus_one(ENOMEM);
     }
 
-    sc = rtems_semaphore_create(3,
-                                1,
-                                RTEMS_BINARY_SEMAPHORE | RTEMS_PRIORITY |
-                                RTEMS_INHERIT_PRIORITY,
-                                0,
-                                &fs_info->vol_sema);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-        fat_file_close(&fs_info->fat, fat_fd);
-        fat_shutdown_drive(&fs_info->fat);
-        free(fs_info->cl_buf);
-        free(fs_info);
-        rtems_set_errno_and_return_minus_one( EIO );
-    }
+    rtems_recursive_mutex_init(&fs_info->vol_mutex,
+                               RTEMS_FILESYSTEM_TYPE_DOSFS);
 
     temp_mt_entry->mt_fs_root->location.node_access = fat_fd;
     temp_mt_entry->mt_fs_root->location.handlers = directory_handlers;

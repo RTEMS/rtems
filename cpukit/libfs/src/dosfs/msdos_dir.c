@@ -65,7 +65,6 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
 {
     int                rc = RC_OK;
     int                eno = 0;
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = iop->pathinfo.mt_entry->fs_info;
     rtems_dosfs_convert_control *converter = fs_info->converter;
     const rtems_dosfs_convert_handler *convert_handler = converter->handler;
@@ -87,10 +86,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
     int                lfn_entries = 0;
     bool               is_first_entry;
 
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
+    msdos_fs_lock(fs_info);
 
     /*
      * cast start and count - protect against using sizes that are not exact
@@ -123,7 +119,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                             bts2rd, fs_info->cl_buf);
         if (ret < MSDOS_DIRECTORY_ENTRY_STRUCT_SIZE)
         {
-            rtems_semaphore_release(fs_info->vol_sema);
+            msdos_fs_unlock(fs_info);
             rtems_set_errno_and_return_minus_one(EIO);
         }
 
@@ -137,7 +133,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
             if ((*MSDOS_DIR_ENTRY_TYPE(entry)) ==
                 MSDOS_THIS_DIR_ENTRY_AND_REST_EMPTY)
             {
-                rtems_semaphore_release(fs_info->vol_sema);
+                msdos_fs_unlock(fs_info);
                 return cmpltd;
             }
 
@@ -252,7 +248,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                                     j * bts2rd, &cur_cln);
                 if (rc != RC_OK)
                 {
-                    rtems_semaphore_release(fs_info->vol_sema);
+                    msdos_fs_unlock(fs_info);
                     return rc;
                 }
 
@@ -262,7 +258,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                 rc = fat_file_open(&fs_info->fat, &dir_pos, &tmp_fat_fd);
                 if (rc != RC_OK)
                 {
-                    rtems_semaphore_release(fs_info->vol_sema);
+                    msdos_fs_unlock(fs_info);
                     return rc;
                 }
 
@@ -336,7 +332,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                     rc = fat_file_close(&fs_info->fat, tmp_fat_fd);
                     if (rc != RC_OK)
                     {
-                        rtems_semaphore_release(fs_info->vol_sema);
+                        msdos_fs_unlock(fs_info);
                         return rc;
                     }
                 }
@@ -348,7 +344,7 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
         j++;
     }
 
-    rtems_semaphore_release(fs_info->vol_sema);
+    msdos_fs_unlock(fs_info);
     return cmpltd;
 }
 
@@ -382,14 +378,10 @@ msdos_dir_stat(
     struct stat *buf
 )
 {
-    rtems_status_code  sc = RTEMS_SUCCESSFUL;
     msdos_fs_info_t   *fs_info = loc->mt_entry->fs_info;
     fat_file_fd_t     *fat_fd = loc->node_access;
 
-    sc = rtems_semaphore_obtain(fs_info->vol_sema, RTEMS_WAIT,
-                                MSDOS_VOLUME_SEMAPHORE_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        rtems_set_errno_and_return_minus_one(EIO);
+    msdos_fs_lock(fs_info);
 
     buf->st_dev = rtems_disk_get_device_identifier(fs_info->fat.vol.dd);
     buf->st_ino = fat_fd->ino;
@@ -402,7 +394,7 @@ msdos_dir_stat(
     buf->st_ctime = fat_fd->ctime;
     buf->st_mtime = fat_fd->mtime;
 
-    rtems_semaphore_release(fs_info->vol_sema);
+    msdos_fs_unlock(fs_info);
     return RC_OK;
 }
 
