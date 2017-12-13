@@ -29,13 +29,14 @@
 #if __rtems__
 #include <rtems.h>
 #include <rtems/error.h>
+#include <rtems/thread.h>
 #endif
 
 /**
  * RFS Mutex type.
  */
 #if __rtems__
-typedef rtems_id rtems_rfs_mutex;
+typedef rtems_recursive_mutex rtems_rfs_mutex;
 #else
 typedef uint32_t rtems_rfs_mutex; /* place holder */
 #endif
@@ -73,16 +74,7 @@ static inline int
 rtems_rfs_mutex_lock (rtems_rfs_mutex* mutex)
 {
 #if __rtems__
-  rtems_status_code sc = rtems_semaphore_obtain (*mutex, RTEMS_WAIT, 0);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-#if RTEMS_RFS_TRACE
-    if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: obtain failed: %s\n",
-              rtems_status_text (sc));
-#endif
-    return EIO;
-  }
+  rtems_recursive_mutex_lock(mutex);
 #endif
   return 0;
 }
@@ -99,16 +91,7 @@ static inline int
 rtems_rfs_mutex_unlock (rtems_rfs_mutex* mutex)
 {
 #if __rtems__
-  rtems_status_code sc = rtems_semaphore_release (*mutex);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-#if RTEMS_RFS_TRACE
-    if (rtems_rfs_trace (RTEMS_RFS_TRACE_MUTEX))
-      printf ("rtems-rfs: mutex: release failed: %s\n",
-              rtems_status_text (sc));
-#endif
-    return EIO;
-  }
+  rtems_recursive_mutex_unlock(mutex);
 #endif
   return 0;
 }

@@ -427,14 +427,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_RFS) && \
     defined(CONFIGURE_FILESYSTEM_RFS)
   #include <rtems/rtems-rfs.h>
-  #if !defined(CONFIGURE_MAXIMUM_RFS_MOUNTS)
-    #define CONFIGURE_MAXIMUM_RFS_MOUNTS 1
-  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_RFS \
     { RTEMS_FILESYSTEM_TYPE_RFS, rtems_rfs_rtems_initialise }
-  #define _CONFIGURE_SEMAPHORES_FOR_RFS CONFIGURE_MAXIMUM_RFS_MOUNTS
-#else
-  #define _CONFIGURE_SEMAPHORES_FOR_RFS 0
 #endif
 
 /**
@@ -453,8 +447,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 #define _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS \
     (_CONFIGURE_SEMAPHORES_FOR_FIFOS + \
-     _CONFIGURE_SEMAPHORES_FOR_NFS + \
-     _CONFIGURE_SEMAPHORES_FOR_RFS)
+     _CONFIGURE_SEMAPHORES_FOR_NFS)
 
 #ifdef CONFIGURE_INIT
 
