@@ -21,8 +21,7 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
-
-#include "stdio-redirect.h"
+#include <rtems/stdio-redirect.h>
 
 #define RTEMS_STDIO_REDIRECT_LOCK_ATTRIBS                             \
   (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |                          \
