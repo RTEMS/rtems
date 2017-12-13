@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "captureimpl.h"
+#include <rtems/captureimpl.h>
 #include "capture_buffer.h"
 
 /*

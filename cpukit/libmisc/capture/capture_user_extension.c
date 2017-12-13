@@ -24,13 +24,11 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <rtems/rtems/tasksimpl.h>
 
-#include "captureimpl.h"
-
+#include <rtems/captureimpl.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/todimpl.h>
-
+#include <rtems/rtems/tasksimpl.h>
 
 /*
  * RTEMS Capture User Extension Data.
