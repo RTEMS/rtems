@@ -18,7 +18,7 @@ libz_a_SOURCES += zconf.h
 libz_a_SOURCES += zlib.h
 libz_a_SOURCES += zutil.c zutil.h
 
-include_HEADERS = zlib.h zconf.h
+include_HEADERS = zlib.h
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

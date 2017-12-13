@@ -22,6 +22,10 @@ $(PROJECT_INCLUDE)/endian.h: include/endian.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/endian.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/endian.h
 
+$(PROJECT_INCLUDE)/zconf.h: include/zconf.h $(PROJECT_INCLUDE)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/zconf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/zconf.h
+
 $(PROJECT_INCLUDE)/rtems/$(dirstamp):
 	@$(MKDIR_P) $(PROJECT_INCLUDE)/rtems
 	@: > $(PROJECT_INCLUDE)/rtems/$(dirstamp)
