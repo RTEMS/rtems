@@ -53,7 +53,7 @@
 #include "ccp.h"
 #include "pathnames.h"
 #include "patchlevel.h"
-#include "rtemsdialer.h"
+#include <rtems/rtemsdialer.h>
 
 #ifdef CBCP_SUPPORT
 #include "cbcp.h"
