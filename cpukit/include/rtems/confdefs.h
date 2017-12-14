@@ -227,17 +227,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_BARRIERS_FOR_FIFOS   0
 #endif
 
-/*
- * This specifies the number of semaphores required for the configured
- * number of FIFOs and named pipes.
- */
-#if CONFIGURE_MAXIMUM_FIFOS > 0 || CONFIGURE_MAXIMUM_PIPES > 0
-  #define _CONFIGURE_SEMAPHORES_FOR_FIFOS \
-    (1 + (CONFIGURE_MAXIMUM_FIFOS + CONFIGURE_MAXIMUM_PIPES))
-#else
-  #define _CONFIGURE_SEMAPHORES_FOR_FIFOS 0
-#endif
-
 /**
  *  @defgroup ConfigFilesystems Filesystems and Mount Table Configuration
  *
@@ -445,9 +434,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This computes the number of semaphores required for the various
  * file systems including the FIFO plugin to the IMFS.
  */
-#define _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS \
-    (_CONFIGURE_SEMAPHORES_FOR_FIFOS + \
-     _CONFIGURE_SEMAPHORES_FOR_NFS)
+#define _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS _CONFIGURE_SEMAPHORES_FOR_NFS
 
 #ifdef CONFIGURE_INIT
 

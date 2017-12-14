@@ -19,6 +19,7 @@
 #define _RTEMS_PIPE_H
 
 #include <rtems/libio.h>
+#include <rtems/thread.h>
 
 /**
  * @defgroup FIFO_PIPE FIFO/Pipe File System Support
@@ -45,7 +46,7 @@ typedef struct pipe_control {
   unsigned int waitingWriters;
   unsigned int readerCounter;     /* incremental counters */
   unsigned int writerCounter;     /* for differentiation of successive opens */
-  rtems_id Semaphore;
+  rtems_mutex Mutex;
   rtems_id readBarrier;   /* wait queues */
   rtems_id writeBarrier;
 #if 0
