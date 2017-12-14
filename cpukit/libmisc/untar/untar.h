@@ -233,7 +233,7 @@ int Untar_XzChunkContext_Init(
  */
 int Untar_FromXzChunk_Print(
   Untar_XzChunkContext *ctx,
-  void *chunk,
+  const void *chunk,
   size_t chunk_size,
   const rtems_printer* printer
 );
