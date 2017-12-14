@@ -118,10 +118,6 @@ $(PROJECT_INCLUDE)/bsp/bbb-pwm.h: include/bbb-pwm.h $(PROJECT_INCLUDE)/bsp/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bbb-pwm.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bbb-pwm.h
 
-$(PROJECT_INCLUDE)/libcpu/arm-cp15.h: ../../../libcpu/arm/shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
-
 $(PROJECT_INCLUDE)/libcpu/omap3.h: ../../../libcpu/arm/shared/include/omap3.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/omap3.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/omap3.h

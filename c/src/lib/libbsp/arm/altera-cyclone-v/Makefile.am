@@ -11,7 +11,6 @@ include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
 include_bsp_socaldir = $(includedir)/bsp/socal
-include_libcpudir = $(includedir)/libcpu
 
 dist_project_lib_DATA = bsp_specs
 
@@ -91,10 +90,6 @@ include_bsp_socal_HEADERS += hwlib/include/socal/alt_sysmgr.h
 include_bsp_socal_HEADERS += hwlib/include/socal/alt_uart.h
 include_bsp_socal_HEADERS += hwlib/include/socal/hps.h
 include_bsp_socal_HEADERS += hwlib/include/socal/socal.h
-
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
-
-
 
 ###############################################################################
 #                  Data                                                       #

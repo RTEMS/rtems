@@ -33,11 +33,6 @@ $(PROJECT_INCLUDE)/bsp/$(dirstamp):
 	@: > $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 PREINSTALL_DIRS += $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 
-$(PROJECT_INCLUDE)/libcpu/$(dirstamp):
-	@$(MKDIR_P) $(PROJECT_INCLUDE)/libcpu
-	@: > $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-PREINSTALL_DIRS += $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -145,10 +140,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/zynq-uart.h
 $(PROJECT_INCLUDE)/bsp/zynq-uart-regs.h: include/zynq-uart-regs.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/zynq-uart-regs.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/zynq-uart-regs.h
-
-$(PROJECT_INCLUDE)/libcpu/arm-cp15.h: ../../../libcpu/arm/shared/include/arm-cp15.h $(PROJECT_INCLUDE)/libcpu/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/libcpu/arm-cp15.h
 
 $(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)

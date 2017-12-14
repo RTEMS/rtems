@@ -10,7 +10,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
-include_libcpudir = $(includedir)/libcpu
 
 dist_project_lib_DATA = bsp_specs
 
@@ -53,8 +52,6 @@ include_bsp_HEADERS += include/mailbox.h
 include_bsp_HEADERS += include/vc.h
 include_bsp_HEADERS += include/rpi-fb.h
 include_bsp_HEADERS += console/fbcons.h
-
-include_libcpu_HEADERS =  ../../../libcpu/arm/shared/include/arm-cp15.h
 
 ###############################################################################
 # Data                                                       #

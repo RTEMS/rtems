@@ -3,7 +3,6 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 
 include_bspdir = $(includedir)/bsp
-include_libcpudir = $(includedir)/libcpu
 include_arm_freescale_imxdir = $(includedir)/arm/freescale/imx
 
 dist_project_lib_DATA = bsp_specs
@@ -35,8 +34,6 @@ include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
 include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
 include_bsp_HEADERS += ../shared/include/arm-release-id.h
 include_bsp_HEADERS += include/irq.h
-
-include_libcpu_HEADERS = ../../../libcpu/arm/shared/include/arm-cp15.h
 
 include_arm_freescale_imx_HEADERS =
 include_arm_freescale_imx_HEADERS += include/arm/freescale/imx/imx_ccmvar.h

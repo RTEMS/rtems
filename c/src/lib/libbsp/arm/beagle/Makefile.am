@@ -43,7 +43,6 @@ include_bsp_HEADERS += include/bbb-gpio.h
 include_bsp_HEADERS += include/bbb-pwm.h
 
 include_libcpu_HEADERS =
-include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/arm-cp15.h
 include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/omap3.h
 include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/am335x.h
 include_libcpu_HEADERS += ../../../libcpu/arm/shared/include/omap_timer.h
