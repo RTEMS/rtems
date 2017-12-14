@@ -29,10 +29,6 @@
  * SUCH DAMAGE.
  */
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
-#include <bsp/linker-symbols.h>
 #include <rtems/score/cpu.h>
 
 void _init(void);
