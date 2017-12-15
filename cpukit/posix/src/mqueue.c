@@ -35,8 +35,6 @@
 
 Objects_Information _POSIX_Message_queue_Information;
 
-Objects_Information _POSIX_Message_queue_Information_fds;
-
 /*
  *  _POSIX_Message_queue_Manager_initialization
  *
