@@ -390,14 +390,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #if !defined(CONFIGURE_FILESYSTEM_ENTRY_NFS) && \
     defined(CONFIGURE_FILESYSTEM_NFS)
   #include <librtemsNfs.h>
-  #if !defined(CONFIGURE_MAXIMUM_NFS_MOUNTS)
-    #define CONFIGURE_MAXIMUM_NFS_MOUNTS 1
-  #endif
   #define CONFIGURE_FILESYSTEM_ENTRY_NFS \
     { RTEMS_FILESYSTEM_TYPE_NFS, rtems_nfs_initialize }
-  #define _CONFIGURE_SEMAPHORES_FOR_NFS ((CONFIGURE_MAXIMUM_NFS_MOUNTS * 2) + 1)
-#else
-  #define _CONFIGURE_SEMAPHORES_FOR_NFS 0
 #endif
 
 /**
@@ -429,12 +423,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_FILESYSTEM_ENTRY_JFFS2 \
     { RTEMS_FILESYSTEM_TYPE_JFFS2, rtems_jffs2_initialize }
 #endif
-
-/**
- * This computes the number of semaphores required for the various
- * file systems including the FIFO plugin to the IMFS.
- */
-#define _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS _CONFIGURE_SEMAPHORES_FOR_NFS
 
 #ifdef CONFIGURE_INIT
 
@@ -2023,15 +2011,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #endif
 
   /*
-   * This macro is calculated to specify the number of Classic API
-   * semaphores required by the application and configured RTEMS
-   * capabilities.
-   */
-  #define _CONFIGURE_SEMAPHORES \
-    (CONFIGURE_MAXIMUM_SEMAPHORES + \
-      _CONFIGURE_SEMAPHORES_FOR_FILE_SYSTEMS)
-
-  /*
    * This macro is calculated to specify the memory required for
    * Classic API Semaphores using MRSP. This is only available in
    * SMP configurations.
@@ -2054,7 +2033,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    * If there are no user or support semaphores defined, then we can assume
    * that no memory need be allocated at all for semaphores.
    */
-  #if _CONFIGURE_SEMAPHORES == 0
+  #if CONFIGURE_MAXIMUM_SEMAPHORES == 0
     #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
   #else
     #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
@@ -2740,7 +2719,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define _CONFIGURE_MEMORY_FOR_CLASSIC \
    (_CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS + \
     _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER ) + \
-   _CONFIGURE_MEMORY_FOR_SEMAPHORES(_CONFIGURE_SEMAPHORES) + \
+   _CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES) + \
    _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES) + \
    _CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS) + \
    _CONFIGURE_MEMORY_FOR_REGIONS( CONFIGURE_MAXIMUM_REGIONS ) + \
@@ -3029,7 +3008,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   rtems_api_configuration_table Configuration_RTEMS_API = {
     _CONFIGURE_TASKS,
     CONFIGURE_MAXIMUM_TIMERS + _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER,
-    _CONFIGURE_SEMAPHORES,
+    CONFIGURE_MAXIMUM_SEMAPHORES,
     CONFIGURE_MAXIMUM_MESSAGE_QUEUES,
     CONFIGURE_MAXIMUM_PARTITIONS,
     CONFIGURE_MAXIMUM_REGIONS,
@@ -3292,7 +3271,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     /* Classic API Pieces */
     _CONFIGURE_MEMORY_FOR_TASKS(CONFIGURE_MAXIMUM_TASKS, 0),
     _CONFIGURE_MEMORY_FOR_TIMERS(CONFIGURE_MAXIMUM_TIMERS),
-    _CONFIGURE_MEMORY_FOR_SEMAPHORES(_CONFIGURE_SEMAPHORES),
+    _CONFIGURE_MEMORY_FOR_SEMAPHORES(CONFIGURE_MAXIMUM_SEMAPHORES),
     _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(CONFIGURE_MAXIMUM_MESSAGE_QUEUES),
     _CONFIGURE_MEMORY_FOR_PARTITIONS(CONFIGURE_MAXIMUM_PARTITIONS),
     _CONFIGURE_MEMORY_FOR_REGIONS( CONFIGURE_MAXIMUM_REGIONS ),

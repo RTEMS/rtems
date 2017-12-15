@@ -67,6 +67,7 @@
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
+#include <rtems/thread.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -197,19 +198,9 @@ static struct timeval _nfscalltimeout = { 10, 0 };	/* {secs, us } */
 #define STATIC static
 #endif
 
-#define MUTEX_ATTRIBUTES    (RTEMS_LOCAL           |   \
-                            RTEMS_PRIORITY         |   \
-                            RTEMS_INHERIT_PRIORITY |   \
-                            RTEMS_BINARY_SEMAPHORE)
+#define LOCK(s)		rtems_recursive_mutex_lock(&(s))
 
-#define LOCK(s)		do {                               \
-						rtems_semaphore_obtain((s),    \
-									RTEMS_WAIT,        \
-									RTEMS_NO_TIMEOUT); \
-					} while (0)
-
-#define UNLOCK(s)	do { rtems_semaphore_release((s)); \
-					} while (0)
+#define UNLOCK(s)	rtems_recursive_mutex_unlock(&(s))
 
 RTEMS_INTERRUPT_LOCK_DEFINE(static, nfs_global_lock, "NFS")
 
@@ -1036,6 +1027,9 @@ rtems_status_code status;
 	if (0==bigPoolDepth)
 		bigPoolDepth   = 10;
 
+	rtems_recursive_mutex_init(&nfsGlob.llock, "NFSl");
+	rtems_recursive_mutex_init(&nfsGlob.lock, "NFSm");
+
 	/* it's crucial to zero out the 'next' pointer
 	 * because it terminates the xdr_entry recursion
 	 *
@@ -1067,26 +1061,6 @@ rtems_status_code status;
 		goto cleanup;
 	}
 
-	status = rtems_semaphore_create(
-		rtems_build_name('N','F','S','l'),
-		1,
-		MUTEX_ATTRIBUTES,
-		0,
-		&nfsGlob.llock);
-	if (status != RTEMS_SUCCESSFUL) {
-		goto cleanup;
-	}
-
-	status = rtems_semaphore_create(
-		rtems_build_name('N','F','S','m'),
-		1,
-		MUTEX_ATTRIBUTES,
-		0,
-		&nfsGlob.lock);
-	if (status != RTEMS_SUCCESSFUL) {
-		goto cleanup;
-	}
-
 	if (sizeof(ino_t) < sizeof(u_int)) {
 		fprintf(stderr,
 			"WARNING: Using 'short st_ino' hits performance and may fail to access/find correct files\n");
@@ -1112,23 +1086,16 @@ nfsCleanup(void)
 {
 int			refuse;
 
-	if (nfsGlob.llock != 0) {
-		LOCK(nfsGlob.llock);
-		if ( (refuse = nfsGlob.num_mounted_fs) ) {
-			fprintf(stderr,"Refuse to unload NFS; %i filesystems still mounted.\n",
-							refuse);
-			nfsMountsShow(stderr);
-			/* yes, printing is slow - but since you try to unload the driver,
-			 * you assume nobody is using NFS, so what if they have to wait?
-			 */
-			UNLOCK(nfsGlob.llock);
-			return -1;
-		}
-	}
-
-	if (nfsGlob.lock != 0) {
-		rtems_semaphore_delete(nfsGlob.lock);
-		nfsGlob.lock = 0;
+	LOCK(nfsGlob.llock);
+	if ( (refuse = nfsGlob.num_mounted_fs) ) {
+		fprintf(stderr,"Refuse to unload NFS; %i filesystems still mounted.\n",
+						refuse);
+		nfsMountsShow(stderr);
+		/* yes, printing is slow - but since you try to unload the driver,
+		 * you assume nobody is using NFS, so what if they have to wait?
+		 */
+		UNLOCK(nfsGlob.llock);
+		return -1;
 	}
 
 	if (nfsGlob.smallPool != NULL) {
@@ -1146,10 +1113,10 @@ int			refuse;
 		nfsGlob.nfs_major = 0xffffffff;
 	}
 
-	if (nfsGlob.llock != 0) {
-		rtems_semaphore_delete(nfsGlob.llock);
-		nfsGlob.llock = 0;
-	}
+	UNLOCK(nfsGlob.llock);
+
+	rtems_recursive_mutex_destroy(&nfsGlob.lock);
+	rtems_recursive_mutex_destroy(&nfsGlob.llock);
 
 	return 0;
 }
@@ -3138,7 +3105,7 @@ rtems_filesystem_location_info_t	old;
 		/* must restore the cwd because 'freenode' will be called on it */
 		rtems_filesystem_current->location = old;
 	}
-	rtems_semaphore_release(rpa->sync);
+	rtems_binary_semaphore_post(&rpa->sync);
 	rtems_task_delete(RTEMS_SELF);
 }
 
@@ -3165,15 +3132,7 @@ rtems_status_code	status;
 	arg.len  = len;
 	arg.sync = 0;
 
-	status = rtems_semaphore_create(
-					rtems_build_name('r','e','s','s'),
-					0,
-					RTEMS_SIMPLE_BINARY_SEMAPHORE,
-					0,
-					&arg.sync);
-
-	if (RTEMS_SUCCESSFUL != status)
-		goto cleanup;
+	rtems_binary_semaphore_init(&arg.sync, "NFSress");
 
 	rtems_task_set_priority(RTEMS_SELF, RTEMS_CURRENT_PRIORITY, &pri);
 
@@ -3197,13 +3156,12 @@ rtems_status_code	status;
 
 
 	/* synchronize with the helper task */
-	rtems_semaphore_obtain(arg.sync, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+	rtems_binary_semaphore_wait(&arg.sync);
 
 	status = arg.status;
 
 cleanup:
-	if (arg.sync)
-		rtems_semaphore_delete(arg.sync);
+	rtems_binary_semaphore_destroy(&arg.sync);
 
 	return status;
 }

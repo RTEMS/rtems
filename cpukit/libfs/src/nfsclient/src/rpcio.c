@@ -72,6 +72,7 @@
 #include <rtems.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
+#include <rtems/thread.h>
 #include <stdlib.h>
 #include <time.h>
 #include <rpc/rpc.h>
@@ -81,6 +82,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <errno.h>
+#include <inttypes.h>
 #include <string.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -199,50 +201,13 @@ static struct timeval _rpc_default_timeout = { 10 /* secs */, 0 /* usecs */ };
 #define XACT_HASH_MSK	((XACT_HASHS)-1)	/* mask to extract the hash index from a RPC-XID */
 
 
-#define MU_LOCK(mutex)		do { 							\
-							assert(							\
-								RTEMS_SUCCESSFUL ==			\
-								rtems_semaphore_obtain(		\
-										(mutex),			\
-										RTEMS_WAIT,			\
-										RTEMS_NO_TIMEOUT	\
-										) );				\
-							} while(0)
+#define MU_LOCK(mutex)		rtems_recursive_mutex_lock(&(mutex))
 
-#define MU_UNLOCK(mutex)	do {							\
-							assert(							\
-								RTEMS_SUCCESSFUL ==			\
-								rtems_semaphore_release(	\
-										(mutex)				\
-										) );				\
-							} while(0)
+#define MU_UNLOCK(mutex)	rtems_recursive_mutex_unlock(&(mutex))
 
-#define MU_CREAT(pmutex)	do {							\
-							assert(							\
-								RTEMS_SUCCESSFUL ==			\
-								rtems_semaphore_create(		\
-										rtems_build_name(	\
-											'R','P','C','l'	\
-											),				\
-										1,					\
-										MUTEX_ATTRIBUTES,	\
-										0,					\
-										(pmutex)) );		\
-							} while (0)
+#define MU_CREAT(pmutex)	rtems_recursive_mutex_init((pmutex), "RPCl")
 
-
-#define MU_DESTROY(mutex)	do {							\
-							assert(							\
-								RTEMS_SUCCESSFUL ==			\
-								rtems_semaphore_delete(		\
-										mutex				\
-										) );				\
-							} while (0)
-
-#define MUTEX_ATTRIBUTES	(RTEMS_LOCAL           | 		\
-			   				RTEMS_PRIORITY         | 		\
-			   				RTEMS_INHERIT_PRIORITY | 		\
-						   	RTEMS_BINARY_SEMAPHORE)
+#define MU_DESTROY(mutex)	rtems_recursive_mutex_destroy(&(mutex))
 
 #define FIRST_ATTEMPT		0x88888888 /* some time that is never reached */
 
@@ -269,7 +234,7 @@ typedef struct RpcUdpServerRec_ {
 		struct sockaddr     sa;
 		}					addr;
 		AUTH				*auth;
-		rtems_id			authlock;		/* must MUTEX the auth object - it's not clear
+		rtems_recursive_mutex			authlock;		/* must MUTEX the auth object - it's not clear
 											 *  what is better:
 											 *   1 having one (MUTEXed) auth per server
 											 *	   who is shared among all transactions
@@ -397,10 +362,10 @@ static rtems_id			msgQ    = 0;		/* message queue where the daemon picks up
 											 * requests
 											 */
 #ifndef NDEBUG
-static rtems_id			llock	= 0;		/* MUTEX protecting the server list */
-static rtems_id			hlock	= 0;		/* MUTEX protecting the hash table and the list of servers */
+static rtems_recursive_mutex	llock;		/* MUTEX protecting the server list */
+static rtems_recursive_mutex	hlock;		/* MUTEX protecting the hash table and the list of servers */
 #endif
-static rtems_id			fini	= 0;		/* a synchronization semaphore we use during
+static rtems_binary_semaphore	fini	= RTEMS_BINARY_SEMAPHORE_INITIALIZER("RPCf");	/* a synchronization semaphore we use during
 											 * module cleanup / driver unloading
 											 */
 static rtems_interval	ticksPerSec;		/* cached system clock rate (WHO IS ASSUMED NOT
@@ -1021,20 +986,13 @@ struct sockwakeup	wkup;
 int
 rpcUdpCleanup(void)
 {
-	rtems_semaphore_create(
-			rtems_build_name('R','P','C','f'),
-			0,
-			RTEMS_DEFAULT_ATTRIBUTES,
-			0,
-			&fini);
 	rtems_event_send(rpciod, RPCIOD_KILL_EVENT);
 	/* synchronize with daemon */
-	rtems_semaphore_obtain(fini, RTEMS_WAIT, 5*ticksPerSec);
+	rtems_binary_semaphore_wait_timed_ticks(&fini, 5*ticksPerSec);
 	/* if the message queue is still there, something went wrong */
 	if (!msgQ) {
 		rtems_task_delete(rpciod);
 	}
-	rtems_semaphore_delete(fini);
 	return (msgQ !=0);
 }
 
@@ -1228,7 +1186,7 @@ rtems_status_code	status;
 			if (i>=0) {
 				fprintf(stderr,"RPCIO There are still transactions circulating; I refuse to go away\n");
 				fprintf(stderr,"(1st in slot %i)\n",i);
-				rtems_semaphore_release(fini);
+				rtems_binary_semaphore_post(&fini);
 			} else {
 				break;
 			}
@@ -1349,7 +1307,7 @@ rtems_status_code	status;
 					fprintf(stderr,"RPCIO XACT timed out; waking up requestor\n");
 #endif
 					if ( rtems_event_send(xact->requestor, RTEMS_RPC_EVENT) ) {
-						rtems_panic("RPCIO PANIC: requestor id was 0x%08x",
+						rtems_panic("RPCIO PANIC: requestor id was 0x%08" PRIx32,
 									xact->requestor);
 					}
 
@@ -1527,7 +1485,7 @@ rtems_status_code	status;
 
 	fprintf(stderr,"RPC daemon exited...\n");
 
-	rtems_semaphore_release(fini);
+	rtems_binary_semaphore_post(&fini);
 	rtems_task_suspend(RTEMS_SELF);
 }
 
