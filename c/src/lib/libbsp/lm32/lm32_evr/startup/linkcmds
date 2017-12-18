@@ -1,7 +1,8 @@
 OUTPUT_FORMAT("elf32-lm32", "elf32-lm32",
               "elf32-lm32")
 OUTPUT_ARCH(lm32)
-ENTRY(_start)
+ENTRY(start)
+STARTUP(start.o)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 
