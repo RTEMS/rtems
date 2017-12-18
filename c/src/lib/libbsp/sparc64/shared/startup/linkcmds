@@ -18,7 +18,8 @@ RAM_END = RamBase + RamSize;
 
 /* Default linker script, for normal executables */
 OUTPUT_FORMAT("elf64-sparc")
-ENTRY(start)
+ENTRY(_start)
+STARTUP(start.o)
 
 MEMORY
 {
