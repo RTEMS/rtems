@@ -12,6 +12,7 @@ OUTPUT_FORMAT("elf32-m32c", "elf32-m32c",
 	      "elf32-m32c")
 OUTPUT_ARCH(m32c)
 ENTRY(_start)
+STARTUP(start.o)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 MEMORY {
