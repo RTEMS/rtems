@@ -52,7 +52,7 @@ start16.$(OBJEXT): start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 
 start16-elf32.$(OBJEXT): start16.$(OBJEXT)
-	$(LD) -N -T $(top_srcdir)/startup/linkcmds -Ttext $(START16ADDR) -e start16 -nostdlib \
+	$(LD) -N -Ttext $(START16ADDR) -e start16 -nostdlib \
 	  --oformat=elf32-i386 \
 	-o $@ $<
 
