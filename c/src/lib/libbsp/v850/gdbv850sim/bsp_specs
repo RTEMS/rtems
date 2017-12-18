@@ -1,13 +1,5 @@
-%rename endfile old_endfile
 %rename startfile old_startfile
-%rename link old_link
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
-%{!nostdlib: %{qrtems: start.o%s -e _start}}
-
-*link:
-%{!qrtems: %(old_link)} %{qrtems: %(old_link)}
-
-*endfile:
-%{!qrtems: %(old_endfile)} %{qrtems: %(old_link)}
+%{!nostdlib: %{qrtems: }}

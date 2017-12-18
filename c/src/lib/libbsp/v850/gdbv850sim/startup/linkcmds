@@ -9,6 +9,7 @@ _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 /* Default linker script, for normal executables */
 OUTPUT_FORMAT("elf32-v850-rh850", "elf32-v850-rh850",
 	      "elf32-v850-rh850")
+STARTUP(start.o)
 OUTPUT_ARCH(v850-rh850)
 ENTRY(_start)
 /* GROUP(-lc -lsim -lgcc) */
