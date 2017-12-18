@@ -3,6 +3,7 @@ OUTPUT_FORMAT("elf32-bfin", "elf32-bfin",
 
 OUTPUT_ARCH(bfin)
 ENTRY(__start)
+STARTUP(start.o)
 
 /*
  * Declare some sizes.
