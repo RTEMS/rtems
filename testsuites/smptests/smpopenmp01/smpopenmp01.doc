@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpopenmp01
+
+directives:
+
+  - None
+
+concepts:
+
+  - OpenMP micro benchmark.

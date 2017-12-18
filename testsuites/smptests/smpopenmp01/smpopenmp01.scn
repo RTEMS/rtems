@@ -1,0 +1,81 @@
+*** BEGIN OF TEST SMPOPENMP 1 ***
+*** TEST VERSION: 5.0.0.4c8cffc19865eaa3b033ce2776bcce9992f24b18
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 6d9c77c77d271d1fc2dfe8493d6713930b52a6dd, Newlib 3.0.0)
+<SMPOpenMP01>
+        <Microbench numThreads="1" majorLoopCount="20">
+                <BarrierBench unit="s">0.720318</BarrierBench>
+                <ParallelBench unit="s">1.121403</ParallelBench>
+                <StaticBench unit="s">0.059288</StaticBench>
+                <DynamicBench unit="s">0.440113</DynamicBench>
+                <GuidedBench unit="s">0.003230</GuidedBench>
+                <RuntimeBench unit="s">0.440121</RuntimeBench>
+                <SingleBench unit="s">0.116486</SingleBench>
+        </Microbench>
+        <Microbench numThreads="2" majorLoopCount="20">
+                <BarrierBench unit="s">0.416734</BarrierBench>
+                <ParallelBench unit="s">0.259013</ParallelBench>
+                <StaticBench unit="s">0.015311</StaticBench>
+                <DynamicBench unit="s">0.196751</DynamicBench>
+                <GuidedBench unit="s">0.002367</GuidedBench>
+                <RuntimeBench unit="s">0.199640</RuntimeBench>
+                <SingleBench unit="s">0.077629</SingleBench>
+        </Microbench>
+        <Microbench numThreads="3" majorLoopCount="20">
+                <BarrierBench unit="s">0.748332</BarrierBench>
+                <ParallelBench unit="s">0.387318</ParallelBench>
+                <StaticBench unit="s">0.021244</StaticBench>
+                <DynamicBench unit="s">0.141558</DynamicBench>
+                <GuidedBench unit="s">0.001544</GuidedBench>
+                <RuntimeBench unit="s">0.142693</RuntimeBench>
+                <SingleBench unit="s">0.117683</SingleBench>
+        </Microbench>
+        <Microbench numThreads="4" majorLoopCount="20">
+                <BarrierBench unit="s">0.552830</BarrierBench>
+                <ParallelBench unit="s">0.323241</ParallelBench>
+                <StaticBench unit="s">0.017796</StaticBench>
+                <DynamicBench unit="s">0.099475</DynamicBench>
+                <GuidedBench unit="s">0.001259</GuidedBench>
+                <RuntimeBench unit="s">0.100053</RuntimeBench>
+                <SingleBench unit="s">0.091069</SingleBench>
+        </Microbench>
+        <Microbench numThreads="5" majorLoopCount="20">
+                <BarrierBench unit="s">0.882791</BarrierBench>
+                <ParallelBench unit="s">0.452561</ParallelBench>
+                <StaticBench unit="s">0.023620</StaticBench>
+                <DynamicBench unit="s">0.094107</DynamicBench>
+                <GuidedBench unit="s">0.000989</GuidedBench>
+                <RuntimeBench unit="s">0.093911</RuntimeBench>
+                <SingleBench unit="s">0.130070</SingleBench>
+        </Microbench>
+        <Microbench numThreads="6" majorLoopCount="20">
+                <BarrierBench unit="s">0.670385</BarrierBench>
+                <ParallelBench unit="s">0.393587</ParallelBench>
+                <StaticBench unit="s">0.021141</StaticBench>
+                <DynamicBench unit="s">0.072322</DynamicBench>
+                <GuidedBench unit="s">0.000937</GuidedBench>
+                <RuntimeBench unit="s">0.069804</RuntimeBench>
+                <SingleBench unit="s">0.104107</SingleBench>
+        </Microbench>
+        <Microbench numThreads="7" majorLoopCount="20">
+                <BarrierBench unit="s">1.031511</BarrierBench>
+                <ParallelBench unit="s">0.466571</ParallelBench>
+                <StaticBench unit="s">0.024944</StaticBench>
+                <DynamicBench unit="s">0.069194</DynamicBench>
+                <GuidedBench unit="s">0.000814</GuidedBench>
+                <RuntimeBench unit="s">0.069596</RuntimeBench>
+                <SingleBench unit="s">0.133137</SingleBench>
+        </Microbench>
+        <Microbench numThreads="8" majorLoopCount="20">
+                <BarrierBench unit="s">0.761015</BarrierBench>
+                <ParallelBench unit="s">0.452577</ParallelBench>
+                <StaticBench unit="s">0.023979</StaticBench>
+                <DynamicBench unit="s">0.061193</DynamicBench>
+                <GuidedBench unit="s">0.000799</GuidedBench>
+                <RuntimeBench unit="s">0.061519</RuntimeBench>
+                <SingleBench unit="s">0.114285</SingleBench>
+        </Microbench>
+</SMPOpenMP01>
+
+*** END OF TEST SMPOPENMP 1 ***

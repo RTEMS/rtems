@@ -30,6 +30,7 @@ _SUBDIRS += smpmigration02
 _SUBDIRS += smpmrsp01
 _SUBDIRS += smpmutex01
 _SUBDIRS += smpmutex02
+_SUBDIRS += smpopenmp01
 _SUBDIRS += smpschedaffinity03
 _SUBDIRS += smpschedaffinity04
 _SUBDIRS += smpschedaffinity05
