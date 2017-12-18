@@ -39,6 +39,7 @@
 
 OUTPUT_ARCH(sh)
 ENTRY(_start)
+STARTUP(start.o)
 
 /* These assignments load code into SH7045F EVB SRAM for monitor debugging */
 

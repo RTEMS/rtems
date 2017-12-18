@@ -37,9 +37,9 @@
  *	by the authors or by TGA Technologies.
  */
 
-OUTPUT_FORMAT("coff-sh")
 OUTPUT_ARCH(sh)
 ENTRY(_start)
+STARTUP(start.o)
 
 /* These assignments load code into SH7045F EVB SRAM for monitor debugging */
 _RamBase = DEFINED(_RamBase) ? _RamBase : 0x00440000;
