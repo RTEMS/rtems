@@ -50,6 +50,8 @@ RAM_END = _RAM_END;
  */
 EXTERN(rtems_get_version_string);
 
+STARTUP(start.o)
+
 /*
  * stick everything in ram (of course)
  */
