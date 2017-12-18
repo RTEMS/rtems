@@ -17,6 +17,8 @@ RamSize = _sdram_size;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x4000;
 
+ENTRY(_start)
+STARTUP(start.o)
 
 MEMORY
 {
