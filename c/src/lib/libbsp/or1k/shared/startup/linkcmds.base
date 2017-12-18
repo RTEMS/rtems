@@ -17,6 +17,7 @@
 OUTPUT_ARCH (or1k)
 
 ENTRY (_start)
+STARTUP (start.o)
 
 /*
  * Global symbols that may be defined externally
