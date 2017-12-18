@@ -45,7 +45,8 @@ OUTPUT_FORMAT( "elf32-littlenios2",
                "elf32-littlenios2",
                "elf32-littlenios2" )
 OUTPUT_ARCH( nios2 )
-ENTRY( _start )
+ENTRY(start)
+STARTUP(start.o)
 
 /* Do we need any of these for elf?
    __DYNAMIC = 0;
