@@ -10,6 +10,9 @@ RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
+ENTRY(start)
+STARTUP(start.o)
+
 SECTIONS
 { 
   /* 0x80000000 - 0x800FFFFF used by YAMON
