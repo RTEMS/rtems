@@ -17,6 +17,8 @@
 
 OUTPUT_ARCH(sh)
 ENTRY(_start)
+STARTUP(start.o)
+
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 
