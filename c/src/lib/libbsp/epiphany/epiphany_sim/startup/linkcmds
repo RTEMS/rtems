@@ -37,6 +37,7 @@ OUTPUT_FORMAT("elf32-epiphany", "elf32-epiphany", "elf32-epiphany")
 OUTPUT_ARCH (epiphany)
 
 ENTRY (_start)
+STARTUP (start.o)
 
 MEMORY
 {
