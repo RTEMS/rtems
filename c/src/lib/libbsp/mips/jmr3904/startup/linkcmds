@@ -10,6 +10,9 @@ RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 _StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
+ENTRY(_start)
+STARTUP(start.o)
+
 SECTIONS
 { 
     . = 0x88000000;
