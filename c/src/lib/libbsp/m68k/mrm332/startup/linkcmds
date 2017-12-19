@@ -2,6 +2,8 @@
  */
 
 OUTPUT_ARCH(m68k)
+ENTRY(start)
+STARTUP(start.o)
 __DYNAMIC  =  0;
 
 /*
