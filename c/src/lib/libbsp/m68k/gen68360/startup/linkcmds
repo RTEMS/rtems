@@ -27,6 +27,9 @@ MEMORY {
         dpram : ORIGIN = 0x0E000000, LENGTH = 8k
 }
 
+ENTRY(start)
+STARTUP(start.o)
+
 /*
  * Load objects
  */
