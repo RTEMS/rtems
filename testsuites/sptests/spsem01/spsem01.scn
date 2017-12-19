@@ -1,0 +1,15 @@
+*** BEGIN OF TEST SPSEM 1 ***
+init: S0 created
+init: S1 created
+init: TA01 created with priority 36
+init: TA02 created with priority 34
+TA01: started with priority 36
+TA01: priority 36, holding S0
+TA01: priority 36, holding S0, S1
+TA02: started with priority 34
+TA01: priority 34, holding S0
+TA02: priority 34, holding S1
+TA02: suspending
+TA01: priority 36
+TA01: exiting
+*** END OF TEST SPSEM 1 ***

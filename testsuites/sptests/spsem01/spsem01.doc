@@ -1,0 +1,19 @@
+This test exposes a potential priority inversion when priority inheritance is
+used and multiple locks are acquired by a low priority task. The scenario
+consists of 2 tasks of different priority and 2 semaphore/mutexes using
+priority inheritance. The scenario is:
+
+Task 1 has priority 36.  Task 2 has priority 34.
+
+1. Task 1 obtains semaphore S1.
+2. Task 1 obtains semaphore S2
+3. Task 2 preempts Task 1.
+4. Task 2 blocks on S2.  Task 1 inherits priority 34.
+5. Task 1 resumes. Task 1 releases S2. Task 1 continues to run at priority 34.
+6. Task 1 releases S1. Task 1 changes priority back to 36.
+7. Task 2 now preempts Task 1 and begins operating again.
+
+During steps 5-6 Task 1 executes when Task 2 should be able to execute.
+
+Stepping down the priority of Task 1 when it releases S2 back to its original
+priority when it obtained S2 fixes the priority inversion.

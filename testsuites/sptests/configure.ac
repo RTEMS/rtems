@@ -131,6 +131,9 @@ spintrcritical17/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
+spsem01/Makefile
+spsem02/Makefile
+spsem03/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile

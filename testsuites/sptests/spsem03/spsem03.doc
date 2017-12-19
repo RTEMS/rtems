@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spsem03
+
+directives:
+
+  - rtems_semaphore_obtain()
+
+concepts:
+
+  - Demonstrate that the priority inheritance protocol works with indirectly
+    referenced semaphore owners.
