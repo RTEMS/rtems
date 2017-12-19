@@ -28,6 +28,7 @@ _StackSize = DEFINED(_StackSize) ? _StackSize : 0x400;
 _VBR = 0x40000000;
 
 ENTRY(start)
+STARTUP(start.o)
 
 MEMORY
 {
