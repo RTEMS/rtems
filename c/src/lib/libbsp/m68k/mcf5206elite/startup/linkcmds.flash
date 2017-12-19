@@ -51,6 +51,9 @@ MEMORY
 
 MBase = 0x10000000;
 
+ENTRY(start)
+STARTUP(start.o)
+
 /* Interrupt Vector table located at start of external static RAM */
 _VBR = 0x30000000;
 
