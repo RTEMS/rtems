@@ -19,6 +19,9 @@ RamSize = DEFINED(RamSize) ? RamSize : 31M;
 *  WARNING: it MUST match BSP_RAMBAR !!!!!!!!!!! */
 _VBR = 0x20000000;
 
+ENTRY(start)
+STARTUP(start.o)
+
 /*
  * Setup the memory map of the CSB360 board
  *
