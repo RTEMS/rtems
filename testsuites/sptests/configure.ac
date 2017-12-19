@@ -134,6 +134,7 @@ spprintk/Makefile
 spsem01/Makefile
 spsem02/Makefile
 spsem03/Makefile
+spsem04/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile

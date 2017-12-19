@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spsem04
+
+directives:
+
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+
+concepts:
+
+  - Demonstrate that the priority inheritance protocol works with stepping
+    down of priority on semaphore release.
