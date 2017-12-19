@@ -38,6 +38,8 @@ __SRAMBASE = DEFINED(__SRAMBASE) ? __SRAMBASE : 0x20000000 ;
 _VBR = 0x0;
 
 ENTRY(start)
+STARTUP(start.o)
+
 MEMORY
 {
     ram : ORIGIN = 0, LENGTH = 16M
