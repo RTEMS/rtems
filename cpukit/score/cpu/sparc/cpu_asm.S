@@ -683,11 +683,13 @@ isr_dispatch:
         cmp     %l6, %l7
         bne,a   .Ldisable_fp
          andn   %l0, %l5, %l0
+        st      %g0, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
         ba      .Lthread_dispatch_done
-         st     %g0, [%g6 + SPARC_PER_CPU_FP_OWNER_OFFSET]
+         nop
 .Ldisable_fp:
+        st       %l0, [%fp + ISF_PSR_OFFSET]
         ba      .Lthread_dispatch_done
-         st      %l0, [%fp + ISF_PSR_OFFSET]
+         nop
 .Lnon_fp_thread_dispatch:
 #elif defined(SPARC_USE_SYNCHRONOUS_FP_SWITCH)
         /* Test if we interrupted a floating point thread (PSR[EF] == 1) */
