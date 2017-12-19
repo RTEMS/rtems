@@ -146,7 +146,6 @@ libbsp_a_SOURCES += hwlib/src/hwmgr/alt_reset_manager.c
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
 libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
@@ -160,6 +159,7 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
 libbsp_a_SOURCES += startup/bspclean.c
+libbsp_a_SOURCES += startup/bspgetworkarea.c
 libbsp_a_SOURCES += startup/bspreset.c
 libbsp_a_SOURCES += startup/bspstart.c
 libbsp_a_SOURCES += startup/bspstarthooks.c
