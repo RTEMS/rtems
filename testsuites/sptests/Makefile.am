@@ -24,7 +24,7 @@ _SUBDIRS = \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17
 
-_SUBDIRS += spsem01 spsem02 spsem03 spsem04
+_SUBDIRS += spsem01 spsem02 spsem03 spsem04 spsem05
  
 DIST_SUBDIRS = $(_SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h
