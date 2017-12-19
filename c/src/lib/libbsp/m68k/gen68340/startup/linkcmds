@@ -35,6 +35,9 @@ MEMORY {
 /*        dpram : ORIGIN = 0xFE000000, LENGTH = 8k */
 }
 
+ENTRY(start)
+STARTUP(start.o)
+
 /*
  * Declare low-order three octets of Ethernet address.
  */
