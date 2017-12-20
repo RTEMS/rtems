@@ -9,6 +9,8 @@ OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
 OUTPUT_ARCH(powerpc)
 
 ENTRY(download_entry)
+EXTERN(download_entry)
+EXTERN(__vectors)
 
 MsgAreaSize       = DEFINED(MsgAreaSize)   ? MsgAreaSize   : 1M;
 RamBase           = DEFINED(RamBase)       ? RamBase       : 0x0;
