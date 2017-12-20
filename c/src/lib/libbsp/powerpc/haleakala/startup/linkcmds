@@ -12,6 +12,7 @@
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
 OUTPUT_ARCH(powerpc)
 ENTRY(download_entry)
+EXTERN(__vectors)
 
 kIntrStackSize = 16K;
 kMainStackSize = 64K;
