@@ -17,6 +17,7 @@
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
 OUTPUT_ARCH(powerpc) 
 ENTRY(start)
+EXTERN(_vectors)
 
 int_ram_org	= 0x003F9800;		/* base of internal RAM */
 int_ram_top	= 0x00400000;		/* top of internal RAM */
