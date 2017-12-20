@@ -42,7 +42,8 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += ../shared/startup/linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.share
+dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =

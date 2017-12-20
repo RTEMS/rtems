@@ -61,7 +61,11 @@ $(PROJECT_LIB)/motld_start.$(OBJEXT): motld_start.$(OBJEXT) $(PROJECT_LIB)/$(dir
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/motld_start.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/motld_start.$(OBJEXT)
 
-$(PROJECT_LIB)/linkcmds: ../shared/startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/linkcmds.share: ../shared/startup/linkcmds.share $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.share
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.share
+
+$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 

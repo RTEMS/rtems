@@ -1,0 +1,5 @@
+STARTUP(mvme5500start.o)
+ENTRY(__rtems_entry_point)
+EXTERN(__vectors)
+
+INCLUDE linkcmds.share

@@ -1,0 +1,6 @@
+INPUT(vectors_entry.o)
+STARTUP(start.o)
+ENTRY(__rtems_entry_point)
+EXTERN(_vectors)
+
+INCLUDE linkcmds.share

@@ -69,7 +69,11 @@ $(PROJECT_LIB)/vectors_entry.$(OBJEXT): vectors_entry.$(OBJEXT) $(PROJECT_LIB)/$
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/vectors_entry.$(OBJEXT)
 TMPINSTALL_FILES += $(PROJECT_LIB)/vectors_entry.$(OBJEXT)
 
-$(PROJECT_LIB)/linkcmds: ../shared/startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
+$(PROJECT_LIB)/linkcmds.share: ../shared/startup/linkcmds.share $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.share
+PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.share
+
+$(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
 

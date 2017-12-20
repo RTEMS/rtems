@@ -33,7 +33,8 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 libbspstart_a_SOURCES += ../../powerpc/shared/start/vectors_entry.S
 project_lib_DATA += vectors_entry.$(OBJEXT)
 
-dist_project_lib_DATA += ../shared/startup/linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.share
+dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES += libbsp.a
 libbsp_a_SOURCES =
