@@ -21,6 +21,7 @@
  */
 
 ENTRY (_start)
+STARTUP (start.o)
 
 /*
  * Global symbols that may be defined externally

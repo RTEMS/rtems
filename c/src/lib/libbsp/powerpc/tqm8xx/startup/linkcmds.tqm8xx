@@ -4,6 +4,8 @@
  * TQM8xx
  */
 
+EXTERN (__vectors)
+
 TopRamReserved = DEFINED(TopRamReserved) ? TopRamReserved : 0;	
 MEMORY {
 	RAM   : ORIGIN = 0x0, LENGTH = 128M

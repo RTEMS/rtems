@@ -4,6 +4,8 @@
  * @brief Memory map for QorIQ Core 1.
  */
 
+EXTERN (__vectors)
+
 MEMORY {
 	RAM : ORIGIN = 0x4000000, LENGTH = 64M
 	EMPTY : ORIGIN = 0x0, LENGTH = 0

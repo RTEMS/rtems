@@ -1,3 +1,5 @@
+EXTERN (__vectors)
+
 MEMORY {
 	RAM : ORIGIN = 0x0, LENGTH = 128M
 	EMPTY : ORIGIN = 0x0, LENGTH = 0

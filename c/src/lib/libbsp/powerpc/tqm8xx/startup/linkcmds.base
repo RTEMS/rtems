@@ -7,6 +7,8 @@
 OUTPUT_FORMAT ("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
 OUTPUT_ARCH (powerpc)
 ENTRY (start)
+STARTUP (start.o)
+EXTERN (__vectors)
 
 bsp_ram_start = ORIGIN (RAM);
 bsp_ram_end = ORIGIN (RAM) + LENGTH (RAM);

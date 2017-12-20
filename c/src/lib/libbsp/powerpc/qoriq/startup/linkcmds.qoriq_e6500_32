@@ -4,6 +4,8 @@
  * Memory map for e6500 core based QorIQ chips, e.g. T2080, T4240.
  */
 
+EXTERN (__vectors)
+
 MEMORY {
 	LOW     : ORIGIN = 0x00004000, LENGTH = 16M - 16k
 	NOCACHE : ORIGIN = 0x01000000, LENGTH = 48M

@@ -9,6 +9,8 @@ bsp_rom_end = bsp_rom_start + bsp_rom_size;
 IMMRBAR = 0xe0000000;
 mpc83xx = IMMRBAR;
 
+EXTERN (__vectors)
+
 MEMORY {
 	EMPTY : ORIGIN = 0x0, LENGTH = 0
 }

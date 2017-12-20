@@ -4,6 +4,8 @@
  * Memory map for P1020RDB.
  */
 
+EXTERN (__vectors)
+
 MEMORY {
 	LOW : ORIGIN = 0x4000, LENGTH = 16M - 16k
 	HIGH : ORIGIN = 0x1000000, LENGTH = 512M - 16M

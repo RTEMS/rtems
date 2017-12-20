@@ -8,6 +8,8 @@
  * be able to compile against this BSP.
  */
 
+EXTERN (__vectors)
+
 MEMORY {
 	RAM : ORIGIN = 0x0, LENGTH = 128M
 	ROM : ORIGIN = 0xfe000000, LENGTH = 8M
