@@ -461,10 +461,8 @@ static void tear_down(test_context *ctx)
 static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
-  rtems_resource_snapshot snapshot;
 
-  TEST_BEGIN();
-  rtems_resource_snapshot_take(&snapshot);
+  printf("*** BEGIN OF TEST SPMUTEX 1 ***\n");
 
   set_up(ctx);
   test_inherit(ctx);
@@ -475,8 +473,7 @@ static void Init(rtems_task_argument arg)
   test_inherit_flush(ctx);
   tear_down(ctx);
 
-  rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
-  TEST_END();
+  printf("*** END OF TEST SPMUTEX 1 ***\n");
   rtems_test_exit(0);
 }
 
@@ -486,12 +483,6 @@ static void Init(rtems_task_argument arg)
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 3
-
-#ifdef RTEMS_POSIX_API
-#define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
-#endif
-
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_PRIORITY 3
 

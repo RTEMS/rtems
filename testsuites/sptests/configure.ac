@@ -128,6 +128,7 @@ spintrcritical14/Makefile
 spintrcritical15/Makefile
 spintrcritical16/Makefile
 spintrcritical17/Makefile
+spmutex01/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile

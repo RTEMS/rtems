@@ -23,7 +23,7 @@ _SUBDIRS = \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
     spintrcritical17
-
+_SUBDIRS += spmutex01
 _SUBDIRS += spsem01 spsem02 spsem03 spsem04 spsem05
  
 DIST_SUBDIRS = $(_SUBDIRS) spfatal_support spintrcritical_support
