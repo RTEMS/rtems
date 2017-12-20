@@ -253,6 +253,7 @@ RTEMS_SYSINIT_ITEM(PIO_SysInitializeInterrupts, RTEMS_SYSINIT_BSP_START,
  * handler).
  * \param pPin  Pointer to a Pin instance.
  * \param handler  Interrupt handler function pointer.
+ * \param arg Pointer to interrupt handler argument
  */
 void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *, void *arg),
     void *arg)
@@ -271,6 +272,8 @@ void PIO_ConfigureIt(const Pin *pPin, void (*handler)(const Pin *, void *arg),
 	pSource = &(_aIntSources[_dwNumSources]);
 	pSource->pPin = pPin;
 	pSource->handler = handler;
+	pSource->arg = arg;
+
 	_dwNumSources++;
 
 	rtems_interrupt_enable(level);
