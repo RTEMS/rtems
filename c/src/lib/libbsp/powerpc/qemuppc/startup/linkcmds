@@ -2,6 +2,9 @@ OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
               "elf32-powerpc")
 OUTPUT_ARCH(powerpc:common)
 ENTRY(_start)
+STARTUP(start.o)
+EXTERN(__vectors)
+
 MEMORY
   {
         RAM       : ORIGIN = 0, LENGTH = 4M
