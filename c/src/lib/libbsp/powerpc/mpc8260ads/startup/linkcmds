@@ -8,6 +8,8 @@ OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
 OUTPUT_ARCH(powerpc)
 
 ENTRY(start)
+STARTUP(start.o)
+EXTERN(__vectors)
 
 /*
  * Declare some sizes.
