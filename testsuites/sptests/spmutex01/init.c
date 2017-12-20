@@ -16,16 +16,8 @@
   #include "config.h"
 #endif
 
-#include <threads.h>
-#include <setjmp.h>
-
 #include <rtems.h>
 #include <rtems/libcsupport.h>
-
-#ifdef RTEMS_POSIX_API
-#include <errno.h>
-#include <pthread.h>
-#endif
 
 #include "tmacros.h"
 
@@ -45,10 +37,6 @@ typedef enum {
   REQ_MTX_1_RELEASE = RTEMS_EVENT_6,
   REQ_MTX_2_OBTAIN = RTEMS_EVENT_7,
   REQ_MTX_2_RELEASE = RTEMS_EVENT_8,
-  REQ_MTX_C11_OBTAIN = RTEMS_EVENT_9,
-  REQ_MTX_C11_RELEASE = RTEMS_EVENT_10,
-  REQ_MTX_POSIX_OBTAIN = RTEMS_EVENT_11,
-  REQ_MTX_POSIX_RELEASE = RTEMS_EVENT_12
 } request_id;
 
 typedef enum {
@@ -68,14 +56,9 @@ typedef enum {
 
 typedef struct {
   rtems_id mtx[MTX_COUNT];
-  mtx_t mtx_c11;
-#ifdef RTEMS_POSIX_API
-  pthread_mutex_t mtx_posix;
-#endif
   rtems_id tasks[TASK_COUNT];
   int generation[TASK_COUNT];
   int expected_generation[TASK_COUNT];
-  jmp_buf deadlock_return_context;
 } test_context;
 
 static test_context test_instance;
@@ -166,14 +149,6 @@ static void obtain(test_context *ctx, mutex_id id)
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void deadlock_obtain(test_context *ctx, mutex_id id)
-{
-  rtems_status_code sc;
-
-  sc = rtems_semaphore_obtain(ctx->mtx[id], RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  rtems_test_assert(sc == RTEMS_INCORRECT_STATE);
-}
-
 static void release(test_context *ctx, mutex_id id)
 {
   rtems_status_code sc;
@@ -181,55 +156,6 @@ static void release(test_context *ctx, mutex_id id)
   sc = rtems_semaphore_release(ctx->mtx[id]);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 }
-
-static void obtain_c11(test_context *ctx)
-{
-  int status;
-
-  status = mtx_lock(&ctx->mtx_c11);
-  rtems_test_assert(status == thrd_success);
-}
-
-static void deadlock_obtain_c11(test_context *ctx)
-{
-  if (setjmp(ctx->deadlock_return_context) == 0) {
-    (void) mtx_lock(&ctx->mtx_c11);
-  }
-}
-
-static void release_c11(test_context *ctx)
-{
-  int status;
-
-  status = mtx_unlock(&ctx->mtx_c11);
-  rtems_test_assert(status == thrd_success);
-}
-
-#ifdef RTEMS_POSIX_API
-static void obtain_posix(test_context *ctx)
-{
-  int error;
-
-  error = pthread_mutex_lock(&ctx->mtx_posix);
-  rtems_test_assert(error == 0);
-}
-
-static void deadlock_obtain_posix(test_context *ctx)
-{
-  int error;
-
-  error = pthread_mutex_lock(&ctx->mtx_posix);
-  rtems_test_assert(error == EDEADLK);
-}
-
-static void release_posix(test_context *ctx)
-{
-  int error;
-
-  error = pthread_mutex_unlock(&ctx->mtx_posix);
-  rtems_test_assert(error == 0);
-}
-#endif
 
 static void check_generations(test_context *ctx, task_id a, task_id b)
 {
@@ -335,28 +261,6 @@ static void worker(rtems_task_argument arg)
       release(ctx, MTX_2);
       ++ctx->generation[id];
     }
-
-    if ((events & REQ_MTX_C11_OBTAIN) != 0) {
-      obtain_c11(ctx);
-      ++ctx->generation[id];
-    }
-
-    if ((events & REQ_MTX_C11_RELEASE) != 0) {
-      release_c11(ctx);
-      ++ctx->generation[id];
-    }
-
-#ifdef RTEMS_POSIX_API
-    if ((events & REQ_MTX_POSIX_OBTAIN) != 0) {
-      obtain_posix(ctx);
-      ++ctx->generation[id];
-    }
-
-    if ((events & REQ_MTX_POSIX_RELEASE) != 0) {
-      release_posix(ctx);
-      ++ctx->generation[id];
-    }
-#endif
   }
 }
 
@@ -382,28 +286,6 @@ static void set_up(test_context *ctx)
     );
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
-
-  status = mtx_init(&ctx->mtx_c11, mtx_plain);
-  rtems_test_assert(status == thrd_success);
-
-#ifdef RTEMS_POSIX_API
-  {
-    int error;
-    pthread_mutexattr_t attr;
-
-    error = pthread_mutexattr_init(&attr);
-    rtems_test_assert(error == 0);
-
-    error = pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
-    rtems_test_assert(error == 0);
-
-    error = pthread_mutex_init(&ctx->mtx_posix, &attr);
-    rtems_test_assert(error == 0);
-
-    error = pthread_mutexattr_destroy(&attr);
-    rtems_test_assert(error == 0);
-  }
-#endif
 }
 
 static void test_inherit(test_context *ctx)
@@ -525,114 +407,6 @@ static void test_inherit_nested_horizontal(test_context *ctx)
   check_generations(ctx, A_1, NONE);
 }
 
-static void test_deadlock_two_classic(test_context *ctx)
-{
-  obtain(ctx, MTX_0);
-  request(ctx, A_1, REQ_MTX_1_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain(ctx, MTX_1);
-  release(ctx, MTX_0);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_1_RELEASE);
-  check_generations(ctx, A_1, NONE);
-}
-
-static void test_deadlock_three_classic(test_context *ctx)
-{
-  obtain(ctx, MTX_0);
-  request(ctx, A_1, REQ_MTX_1_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_2_0, REQ_MTX_2_OBTAIN);
-  check_generations(ctx, A_2_0, NONE);
-  request(ctx, A_2_0, REQ_MTX_1_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain(ctx, MTX_2);
-  release(ctx, MTX_0);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_1_RELEASE);
-  check_generations(ctx, A_1, A_2_0);
-  request(ctx, A_2_0, REQ_MTX_2_RELEASE);
-  check_generations(ctx, A_2_0, NONE);
-  request(ctx, A_2_0, REQ_MTX_1_RELEASE);
-  check_generations(ctx, A_2_0, NONE);
-}
-
-static void test_deadlock_c11_and_classic(test_context *ctx)
-{
-  obtain_c11(ctx);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_C11_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain(ctx, MTX_0);
-  release_c11(ctx);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_C11_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-}
-
-static void test_deadlock_classic_and_c11(test_context *ctx)
-{
-  obtain(ctx, MTX_0);
-  request(ctx, A_1, REQ_MTX_C11_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain_c11(ctx);
-  release(ctx, MTX_0);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_C11_RELEASE);
-  check_generations(ctx, A_1, NONE);
-}
-
-static void test_deadlock_posix_and_classic(test_context *ctx)
-{
-#ifdef RTEMS_POSIX_API
-  obtain_posix(ctx);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_POSIX_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain(ctx, MTX_0);
-  release_posix(ctx);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_POSIX_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-#endif
-}
-
-static void test_deadlock_classic_and_posix(test_context *ctx)
-{
-#ifdef RTEMS_POSIX_API
-  obtain(ctx, MTX_0);
-  request(ctx, A_1, REQ_MTX_POSIX_OBTAIN);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_OBTAIN);
-  check_generations(ctx, NONE, NONE);
-  deadlock_obtain_posix(ctx);
-  release(ctx, MTX_0);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_0_RELEASE);
-  check_generations(ctx, A_1, NONE);
-  request(ctx, A_1, REQ_MTX_POSIX_RELEASE);
-  check_generations(ctx, A_1, NONE);
-#endif
-}
-
 static void tear_down(test_context *ctx)
 {
   rtems_status_code sc;
@@ -647,17 +421,6 @@ static void tear_down(test_context *ctx)
     sc = rtems_semaphore_delete(ctx->mtx[i]);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
-
-  mtx_destroy(&ctx->mtx_c11);
-
-#ifdef RTEMS_POSIX_API
-  {
-    int error;
-
-    error = pthread_mutex_destroy(&ctx->mtx_posix);
-    rtems_test_assert(error == 0);
-  }
-#endif
 }
 
 static void Init(rtems_task_argument arg)
@@ -674,35 +437,11 @@ static void Init(rtems_task_argument arg)
   test_inherit_nested_vertical(ctx);
   test_inherit_nested_vertical_timeout(ctx);
   test_inherit_nested_horizontal(ctx);
-  test_deadlock_two_classic(ctx);
-  test_deadlock_three_classic(ctx);
-  test_deadlock_c11_and_classic(ctx);
-  test_deadlock_classic_and_c11(ctx);
-  test_deadlock_posix_and_classic(ctx);
-  test_deadlock_classic_and_posix(ctx);
   tear_down(ctx);
 
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
   TEST_END();
   rtems_test_exit(0);
-}
-
-static void fatal_extension(
-  rtems_fatal_source source,
-  bool is_internal,
-  rtems_fatal_code error
-)
-{
-
-  if (
-    source == INTERNAL_ERROR_CORE
-      && !is_internal
-      && error == INTERNAL_ERROR_THREAD_QUEUE_DEADLOCK
-  ) {
-    test_context *ctx = &test_instance;
-
-    longjmp(ctx->deadlock_return_context, 1);
-  }
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
@@ -716,9 +455,7 @@ static void fatal_extension(
 #define CONFIGURE_MAXIMUM_POSIX_MUTEXES 1
 #endif
 
-#define CONFIGURE_INITIAL_EXTENSIONS \
-  { .fatal = fatal_extension }, \
-  RTEMS_TEST_INITIAL_EXTENSION
+#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_INIT_TASK_PRIORITY 3
 

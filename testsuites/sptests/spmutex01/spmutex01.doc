@@ -6,8 +6,6 @@ directives:
 
   - mtx_lock()
   - mtx_unlock()
-  - pthread_mutex_lock()
-  - pthread_mutex_unlock()
   - rtems_semaphore_create()
   - rtems_semaphore_obtain()
   - rtems_semaphore_release()
@@ -16,4 +14,3 @@ concepts:
 
   - Ensure that priority inheritance mechanism works.
   - Ensure that thread priority queueing discipline works.
-  - Ensure that deadlock detection works in various combinations.
