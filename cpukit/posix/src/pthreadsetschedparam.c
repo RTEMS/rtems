@@ -69,7 +69,7 @@ static int _POSIX_Set_sched_param(
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
-  _Watchdog_Per_CPU_remove_monotonic( &api->Sporadic.Timer );
+  _Watchdog_Per_CPU_remove_ticks( &api->Sporadic.Timer );
 
   _Priority_Node_set_priority( &the_thread->Real_priority, core_normal_prio );
 

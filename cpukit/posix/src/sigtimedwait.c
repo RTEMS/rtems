@@ -95,7 +95,7 @@ int sigtimedwait(
   if ( timeout != NULL ) {
     const struct timespec *end;
 
-    _TOD_Get_zero_based_uptime_as_timespec( &uptime );
+    _Timecounter_Nanouptime( &uptime );
     end = _Watchdog_Future_timespec( &uptime, timeout );
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,

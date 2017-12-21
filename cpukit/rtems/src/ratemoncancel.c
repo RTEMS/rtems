@@ -32,7 +32,7 @@ void _Rate_monotonic_Cancel(
 
   _Rate_monotonic_Acquire_critical( the_period, lock_context );
 
-  _Watchdog_Per_CPU_remove_monotonic( &the_period->Timer );
+  _Watchdog_Per_CPU_remove_ticks( &the_period->Timer );
   the_period->state = RATE_MONOTONIC_INACTIVE;
   _Scheduler_Cancel_job(
     the_period->owner,

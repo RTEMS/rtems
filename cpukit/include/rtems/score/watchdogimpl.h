@@ -303,19 +303,19 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Next_first(
  * @brief The bits necessary to store 1000000000
  * (= WATCHDOG_NANOSECONDS_PER_SECOND) nanoseconds.
  *
- * The expiration time is an unsigned 64-bit integer.  To store absolute
+ * The expiration time is an unsigned 64-bit integer.  To store nanoseconds
  * timeouts we use 30 bits (2**30 == 1073741824) for the nanoseconds and 34
  * bits for the seconds since UNIX Epoch.  This leads to a year 2514 problem.
  */
 #define WATCHDOG_BITS_FOR_1E9_NANOSECONDS 30
 
 /**
- * @brief The maximum number of seconds representable in the realtime watchdog
- * format.
+ * @brief The maximum number of seconds representable in the nanoseconds
+ * watchdog format.
  *
  * We have 2**34 bits for the seconds part.
  */
-#define WATCHDOG_REALTIME_MAX_SECONDS 0x3ffffffff
+#define WATCHDOG_MAX_SECONDS 0x3ffffffff
 
 RTEMS_INLINE_ROUTINE bool _Watchdog_Is_valid_timespec(
   const struct timespec *ts
@@ -362,34 +362,11 @@ RTEMS_INLINE_ROUTINE const struct timespec * _Watchdog_Future_timespec(
   return now;
 }
 
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_monotonic_timespec(
+RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_timespec(
   const struct timespec *ts
 )
 {
-  return ts->tv_sec >= _Watchdog_Monotonic_max_seconds;
-}
-
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Monotonic_from_timespec(
-  const struct timespec *ts
-)
-{
-  uint64_t ticks;
-
-  _Assert( _Watchdog_Is_valid_timespec( ts ) );
-  _Assert( ts->tv_sec >= 0 );
-  _Assert( !_Watchdog_Is_far_future_monotonic_timespec( ts ) );
-
-  ticks = (uint64_t) ts->tv_sec * _Watchdog_Ticks_per_second;
-  ticks += (unsigned long) ts->tv_nsec / _Watchdog_Nanoseconds_per_tick;
-
-  return ticks;
-}
-
-RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
-  const struct timespec *ts
-)
-{
-  return ts->tv_sec > WATCHDOG_REALTIME_MAX_SECONDS;
+  return ts->tv_sec > WATCHDOG_MAX_SECONDS;
 }
 
 RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
@@ -411,7 +388,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
 
   _Assert( _Watchdog_Is_valid_timespec( ts ) );
   _Assert( ts->tv_sec >= 0 );
-  _Assert( !_Watchdog_Is_far_future_realtime_timespec( ts ) );
+  _Assert( !_Watchdog_Is_far_future_timespec( ts ) );
 
   ticks = (uint64_t) ts->tv_sec;
   ticks <<= WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
@@ -457,7 +434,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   Watchdog_Header  *header;
   uint64_t          expire;
 
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
@@ -468,46 +445,19 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_ticks(
   return expire;
 }
 
-RTEMS_INLINE_ROUTINE bool _Watchdog_Per_CPU_lazy_insert_monotonic(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert(
   Watchdog_Control *the_watchdog,
   Per_CPU_Control  *cpu,
+  Watchdog_Header  *header,
   uint64_t          expire
 )
 {
-  ISR_lock_Context  lock_context;
-  Watchdog_Header  *header;
-  bool              insert;
-
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  ISR_lock_Context lock_context;
 
   _Watchdog_Set_CPU( the_watchdog, cpu );
 
   _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
-  insert = ( expire > cpu->Watchdog.ticks );
-
-  if ( insert ) {
-    _Watchdog_Insert(header, the_watchdog, expire);
-  }
-
-  _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
-  return insert;
-}
-
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Per_CPU_insert_realtime(
-  Watchdog_Control *the_watchdog,
-  Per_CPU_Control  *cpu,
-  uint64_t          expire
-)
-{
-  ISR_lock_Context  lock_context;
-  Watchdog_Header  *header;
-
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
-
-  _Watchdog_Set_CPU( the_watchdog, cpu );
-
-  _Watchdog_Per_CPU_acquire_critical( cpu, &lock_context );
-  _Watchdog_Insert(header, the_watchdog, expire);
+  _Watchdog_Insert( header, the_watchdog, expire );
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
   return expire;
 }
@@ -528,7 +478,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove(
   _Watchdog_Per_CPU_release_critical( cpu, &lock_context );
 }
 
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_monotonic(
+RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_ticks(
   Watchdog_Control *the_watchdog
 )
 {
@@ -538,21 +488,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_monotonic(
   _Watchdog_Per_CPU_remove(
     the_watchdog,
     cpu,
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ]
-  );
-}
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_realtime(
-  Watchdog_Control *the_watchdog
-)
-{
-  Per_CPU_Control *cpu;
-
-  cpu = _Watchdog_Get_CPU( the_watchdog );
-  _Watchdog_Per_CPU_remove(
-    the_watchdog,
-    cpu,
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ]
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ]
   );
 }
 

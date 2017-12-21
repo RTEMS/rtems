@@ -45,7 +45,7 @@ static rtems_timer_service_routine test_release_from_isr(
 )
 {
   Per_CPU_Control *cpu = _Per_CPU_Get();
-  Watchdog_Header *header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  Watchdog_Header *header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   Watchdog_Control *watchdog = (Watchdog_Control *) header->first;
 
   if (
@@ -55,7 +55,7 @@ static rtems_timer_service_routine test_release_from_isr(
   ) {
     Thread_Wait_flags flags = _Thread_Wait_flags_get( thread );
 
-    _Watchdog_Per_CPU_remove_monotonic( watchdog );
+    _Watchdog_Per_CPU_remove_ticks( watchdog );
 
     rtems_test_assert( getState() == RATE_MONOTONIC_ACTIVE );
 

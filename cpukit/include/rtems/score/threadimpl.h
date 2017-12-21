@@ -1864,7 +1864,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_initialize(
 )
 {
   _ISR_lock_Initialize( &timer->Lock, "Thread Timer" );
-  timer->header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  timer->header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   _Watchdog_Preinitialize( &timer->Watchdog, cpu );
 }
 
@@ -1879,7 +1879,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Add_timeout_ticks(
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
 
   the_thread->Timer.header =
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   the_thread->Timer.Watchdog.routine = _Thread_Timeout;
   _Watchdog_Per_CPU_insert_ticks( &the_thread->Timer.Watchdog, cpu, ticks );
 
@@ -1893,14 +1893,15 @@ RTEMS_INLINE_ROUTINE void _Thread_Timer_insert_realtime(
   uint64_t                        expire
 )
 {
-  ISR_lock_Context lock_context;
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
 
   _ISR_lock_ISR_disable_and_acquire( &the_thread->Timer.Lock, &lock_context );
 
-  the_thread->Timer.header =
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
+  the_thread->Timer.header = header;
   the_thread->Timer.Watchdog.routine = routine;
-  _Watchdog_Per_CPU_insert_realtime( &the_thread->Timer.Watchdog, cpu, expire );
+  _Watchdog_Per_CPU_insert( &the_thread->Timer.Watchdog, cpu, header, expire );
 
   _ISR_lock_Release_and_ISR_enable( &the_thread->Timer.Lock, &lock_context );
 }

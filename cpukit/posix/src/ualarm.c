@@ -107,7 +107,7 @@ useconds_t ualarm(
   now = cpu->Watchdog.ticks;
 
   remaining = (useconds_t) _Watchdog_Cancel(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
+    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ],
     the_watchdog,
     now
   );
@@ -118,7 +118,7 @@ useconds_t ualarm(
     cpu = _Per_CPU_Get();
     _Watchdog_Set_CPU( the_watchdog, cpu );
     _Watchdog_Insert(
-      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ],
       the_watchdog,
       now + ticks_initial
     );

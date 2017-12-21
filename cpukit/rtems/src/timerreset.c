@@ -37,7 +37,7 @@ rtems_status_code rtems_timer_reset(
     if ( _Timer_Is_interval_class( the_timer->the_class ) ) {
       _Timer_Cancel( cpu, the_timer );
       _Watchdog_Insert(
-        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
+        &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ],
         &the_timer->Ticker,
         cpu->Watchdog.ticks + the_timer->initial
       );

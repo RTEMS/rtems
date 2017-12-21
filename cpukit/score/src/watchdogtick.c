@@ -70,7 +70,7 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
   ++ticks;
   cpu->Watchdog.ticks = ticks;
 
-  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ];
   first = _Watchdog_Header_first( header );
 
   if ( first != NULL ) {
@@ -78,6 +78,20 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
       header,
       first,
       ticks,
+      &cpu->Watchdog.Lock,
+      &lock_context
+    );
+  }
+
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  first = _Watchdog_Header_first( header );
+
+  if ( first != NULL ) {
+    _Timecounter_Getnanouptime( &now );
+    _Watchdog_Tickle(
+      header,
+      first,
+      _Watchdog_Ticks_from_timespec( &now ),
       &cpu->Watchdog.Lock,
       &lock_context
     );

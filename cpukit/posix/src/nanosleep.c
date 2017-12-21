@@ -25,7 +25,7 @@
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/timespec.h>
-#include <rtems/score/todimpl.h>
+#include <rtems/score/timecounter.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/posix/posixapi.h>
 #include <rtems/seterr.h>
@@ -93,7 +93,7 @@ int clock_nanosleep(
       );
     }
   } else {
-    _TOD_Get_zero_based_uptime_as_timespec( &uptime );
+    _Timecounter_Nanouptime( &uptime );
     end = _Watchdog_Future_timespec( &uptime, rqtp );
     _Thread_queue_Context_set_enqueue_timeout_monotonic_timespec(
       &queue_context,
@@ -119,7 +119,7 @@ int clock_nanosleep(
     if ( eno == EINTR ) {
       struct timespec actual_end;
 
-      _TOD_Get_zero_based_uptime_as_timespec( &actual_end );
+      _Timecounter_Nanouptime( &actual_end );
 
       if ( _Timespec_Less_than( &actual_end, end ) ) {
         _Timespec_Subtract( &actual_end, end, rmtp );

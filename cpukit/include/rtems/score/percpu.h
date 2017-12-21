@@ -248,14 +248,13 @@ typedef struct {
  */
 typedef enum {
   /**
-   * @brief Index for monotonic clock per-CPU watchdog header.
+   * @brief Index for tick clock per-CPU watchdog header.
    *
-   * The reference time point for the monotonic clock is the system start.  The
+   * The reference time point for the tick clock is the system start.  The
    * clock resolution is one system clock tick.  It is used for the system
-   * clock tick based time services and the POSIX services using
-   * CLOCK_MONOTONIC.
+   * clock tick based time services.
    */
-  PER_CPU_WATCHDOG_MONOTONIC,
+  PER_CPU_WATCHDOG_TICKS,
 
   /**
    * @brief Index for realtime clock per-CPU watchdog header.
@@ -265,6 +264,15 @@ typedef enum {
    * services and the POSIX services using CLOCK_REALTIME.
    */
   PER_CPU_WATCHDOG_REALTIME,
+
+  /**
+   * @brief Index for monotonic clock per-CPU watchdog header.
+   *
+   * The reference time point for the monotonic clock is the system start.  The
+   * clock resolution is one nanosecond.  It is used for the POSIX services
+   * using CLOCK_MONOTONIC.
+   */
+  PER_CPU_WATCHDOG_MONOTONIC,
 
   /**
    * @brief Count of per-CPU watchdog headers.

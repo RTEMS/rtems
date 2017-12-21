@@ -3112,9 +3112,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   const uint32_t _Watchdog_Ticks_per_second = _CONFIGURE_TICKS_PER_SECOND;
 
-  const uint64_t _Watchdog_Monotonic_max_seconds =
-    UINT64_MAX / _CONFIGURE_TICKS_PER_SECOND;
-
   /**
    * This is the Classic API Configuration Table.
    */

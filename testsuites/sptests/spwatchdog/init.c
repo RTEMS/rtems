@@ -59,7 +59,6 @@ static void test_watchdog_config( void )
 {
   rtems_test_assert( _Watchdog_Nanoseconds_per_tick == 10000000 );
   rtems_test_assert( _Watchdog_Ticks_per_second == 100 );
-  rtems_test_assert( _Watchdog_Monotonic_max_seconds == 184467440737095516 );
   rtems_test_assert( rtems_clock_get_ticks_per_second() == 100 );
   #undef rtems_clock_get_ticks_per_second
   rtems_test_assert( rtems_clock_get_ticks_per_second() == 100 );

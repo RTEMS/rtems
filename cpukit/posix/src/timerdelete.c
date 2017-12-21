@@ -56,7 +56,7 @@ int timer_delete(
     cpu = _POSIX_Timer_Acquire_critical( ptimer, &lock_context );
     ptimer->state = POSIX_TIMER_STATE_FREE;
     _Watchdog_Remove(
-      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
+      &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_TICKS ],
       &ptimer->Timer
     );
     _POSIX_Timer_Release( cpu, &lock_context );
