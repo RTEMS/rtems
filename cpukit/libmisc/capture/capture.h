@@ -711,7 +711,7 @@ static inline rtems_task_priority
 rtems_capture_task_real_priority (rtems_capture_task_t* task)
 {
   if (rtems_capture_task_valid (task))
-    return task->tcb->real_priority;
+    return task->tcb->Priority_node.real_priority;
   return 0;
 }
 
@@ -726,7 +726,7 @@ static inline rtems_task_priority
 rtems_capture_task_curr_priority (rtems_capture_task_t* task)
 {
   if (rtems_capture_task_valid (task))
-    return task->tcb->current_priority;
+    return task->tcb->Priority_node.current_priority;
   return 0;
 }
 

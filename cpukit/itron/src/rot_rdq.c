@@ -43,7 +43,7 @@ ER rot_rdq(
    * Yield of processor will rotate the queue for this processor.
    */
 
-  priority = _ITRON_Task_Core_to_Priority(_Thread_Executing->current_priority);
+  priority = _ITRON_Task_Core_to_Priority(_Thread_Executing->Priority_node.current_priority);
   if ( priority == tskpri )
     _Thread_Yield_processor();
   else {

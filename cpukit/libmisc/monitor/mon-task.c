@@ -29,7 +29,7 @@ rtems_monitor_task_canonical(
     canonical_task->argument = rtems_thread->Start.numeric_argument;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
-    canonical_task->priority = rtems_thread->current_priority;
+    canonical_task->priority = rtems_thread->Priority_node.current_priority;
     canonical_task->state = rtems_thread->current_state;
     canonical_task->wait_id = rtems_thread->Wait.id;
     canonical_task->events = api->pending_events;

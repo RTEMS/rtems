@@ -78,7 +78,7 @@ Thread_Control *_Thread_MP_Allocate_proxy (
 
     the_proxy->Object.id = _MPCI_Receive_server_tcb->receive_packet->source_tid;
 
-    the_proxy->current_priority =
+    the_proxy->Priority_node.current_priority =
       _MPCI_Receive_server_tcb->receive_packet->source_priority;
 
     the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );

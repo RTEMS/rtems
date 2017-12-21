@@ -76,12 +76,12 @@ int pthread_setschedparam(
         case SCHED_RR:
           the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
 
-          the_thread->real_priority =
+          the_thread->Priority_node.real_priority =
             _POSIX_Priority_To_core( api->schedparam.sched_priority );
 
           _Thread_Change_priority(
              the_thread,
-             the_thread->real_priority,
+             the_thread->Priority_node.real_priority,
              true
           );
           break;

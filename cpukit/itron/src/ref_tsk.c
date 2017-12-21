@@ -74,7 +74,7 @@ ER ref_tsk(
 
       pk_rtsk->exinf   = NULL;   /* extended information */
       pk_rtsk->tskpri  =
-                    _ITRON_Task_Core_to_Priority(the_thread->current_priority);
+                    _ITRON_Task_Core_to_Priority(the_thread->Priority_node.current_priority);
 
       /*
        * Mask in the tskstat information

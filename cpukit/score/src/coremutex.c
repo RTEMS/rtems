@@ -71,12 +71,12 @@ CORE_mutex_Status _CORE_mutex_Initialize(
       Priority_Control ceiling = the_mutex->Attributes.priority_ceiling;
 
       if ( is_priority_ceiling &&
-           _Thread_Executing->current_priority < ceiling )
+           _Thread_Executing->Priority_node.current_priority < ceiling )
        return CORE_MUTEX_STATUS_CEILING_VIOLATED;
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
-       the_mutex->queue.priority_before = _Thread_Executing->current_priority;
+       the_mutex->queue.priority_before = _Thread_Executing->Priority_node.current_priority;
 #endif
 
       _Thread_Executing->resource_count++;

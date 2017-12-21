@@ -277,6 +277,17 @@ typedef struct {
 }   Thread_Wait_information;
 
 /**
+ * @brief Encapsulates base and inherited priority.
+ */
+typedef struct Thread_Priority_node {
+  Chain_Node               Node;
+  /** current priority = min(real_priority, min(Inherited_priorities)) */
+  Priority_Control         current_priority;
+  /** base priority irrespective of inheritance/ceiling */
+  Priority_Control         real_priority;
+} Thread_Priority_node;
+
+/**
  *  The following defines the control block used to manage
  *  each thread proxy.
  *
@@ -288,10 +299,9 @@ typedef struct {
   Objects_Control          Object;
   /** This field is the current execution state of this proxy. */
   States_Control           current_state;
-  /** This field is the current priority state of this proxy. */
-  Priority_Control         current_priority;
-  /** This field is the base priority of this proxy. */
-  Priority_Control         real_priority;
+  /** This field encapsulates the base and current (inherited) priority
+   * of this proxy. */
+  Thread_Priority_node     Priority_node;
   /** This field is the number of mutexes currently held by this proxy. */
   uint32_t                 resource_count;
 
@@ -338,10 +348,9 @@ struct Thread_Control_struct {
   Objects_Control          Object;
   /** This field is the current execution state of this thread. */
   States_Control           current_state;
-  /** This field is the current priority state of this thread. */
-  Priority_Control         current_priority;
-  /** This field is the base priority of this thread. */
-  Priority_Control         real_priority;
+  /** This field encapsulates the base and current (inherited) priority
+   * of this thread. */
+  Thread_Priority_node     Priority_node;
   /** This field is the number of mutexes currently held by this thread. */
   uint32_t                 resource_count;
   /** This field is the blocking information for this thread. */

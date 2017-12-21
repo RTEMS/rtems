@@ -214,7 +214,7 @@ int killinfo(
         printk("\n 0x%08x/0x%08x %d/%d 0x%08x 1",
           the_thread->Object.id,
           ((interested) ? interested->Object.id : 0),
-          the_thread->current_priority, interested_priority,
+          the_thread->Priority_node.current_priority, interested_priority,
           the_thread->current_state
         );
       #endif
@@ -223,7 +223,7 @@ int killinfo(
        *  If this thread is of lower priority than the interested thread,
        *  go on to the next thread.
        */
-      if ( the_thread->current_priority > interested_priority )
+      if ( the_thread->Priority_node.current_priority > interested_priority )
         continue;
       DEBUG_STEP("2");
 
@@ -250,9 +250,9 @@ int killinfo(
        *        so we never have to worry about deferencing a NULL
        *        interested thread.
        */
-      if ( the_thread->current_priority < interested_priority ) {
+      if ( the_thread->Priority_node.current_priority < interested_priority ) {
         interested   = the_thread;
-        interested_priority = the_thread->current_priority;
+        interested_priority = the_thread->Priority_node.current_priority;
         continue;
       }
       DEBUG_STEP("4");
@@ -270,7 +270,7 @@ int killinfo(
         DEBUG_STEP("5");
         if ( _States_Is_ready( the_thread->current_state ) ) {
           interested          = the_thread;
-          interested_priority = the_thread->current_priority;
+          interested_priority = the_thread->Priority_node.current_priority;
           continue;
         }
 
@@ -281,7 +281,7 @@ int killinfo(
           if ( _States_Is_interruptible_by_signal(the_thread->current_state) ) {
             DEBUG_STEP("8");
             interested          = the_thread;
-            interested_priority = the_thread->current_priority;
+            interested_priority = the_thread->Priority_node.current_priority;
             continue;
           }
         }

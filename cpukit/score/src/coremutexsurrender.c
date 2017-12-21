@@ -135,12 +135,12 @@ CORE_mutex_Status _CORE_mutex_Surrender(
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
        _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
-    if(the_mutex->queue.priority_before != holder->current_priority)
+    if(the_mutex->queue.priority_before != holder->Priority_node.current_priority)
       _Thread_Change_priority(holder,the_mutex->queue.priority_before,true);
 #endif
     if ( holder->resource_count == 0 &&
-         holder->real_priority != holder->current_priority ) {
-      _Thread_Change_priority( holder, holder->real_priority, true );
+         holder->Priority_node.real_priority != holder->Priority_node.current_priority ) {
+      _Thread_Change_priority( holder, holder->Priority_node.real_priority, true );
     }
   }
 
@@ -174,18 +174,18 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY_INHERIT:
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
 	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
-	  the_mutex->queue.priority_before = the_thread->current_priority;
+	  the_mutex->queue.priority_before = the_thread->Priority_node.current_priority;
 #endif
           the_thread->resource_count++;
           break;
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
 	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
-	  the_mutex->queue.priority_before = the_thread->current_priority;
+	  the_mutex->queue.priority_before = the_thread->Priority_node.current_priority;
 #endif
           the_thread->resource_count++;
           if (the_mutex->Attributes.priority_ceiling <
-              the_thread->current_priority){
+              the_thread->Priority_node.current_priority){
               _Thread_Change_priority(
                 the_thread,
                 the_mutex->Attributes.priority_ceiling,

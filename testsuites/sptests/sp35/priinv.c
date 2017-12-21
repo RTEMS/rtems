@@ -81,7 +81,8 @@ const char *CallerName(void)
   static char buffer[32];
 #if defined(TEST_PRINT_TASK_ID)
   sprintf( buffer, "0x%08x -- %d",
-      rtems_task_self(), _Thread_Executing->current_priority );
+      rtems_task_self(), _Thread_Executing->Priority_node.current_priority
+  );
 #else
   volatile union {
     uint32_t u;
@@ -95,7 +96,7 @@ const char *CallerName(void)
   #endif
   sprintf( buffer, "%c%c%c%c -- %" PRIdPriority_Control,
       TempName.c[0], TempName.c[1], TempName.c[2], TempName.c[3],
-      _Thread_Executing->current_priority
+      _Thread_Executing->Priority_node.current_priority
   );
 #endif
   return buffer;
@@ -247,7 +248,7 @@ void AccessLocalHw(void)
   uint32_t              LeaveCnt;    /*      :         */
 
   /* Store information about the current situation */
-  EnterPrio = _Thread_Executing->current_priority;
+  EnterPrio = _Thread_Executing->Priority_node.current_priority;
   EnterCnt  = _Thread_Executing->resource_count;
 
 
@@ -266,14 +267,14 @@ void AccessLocalHw(void)
   directive_failed( Sts, "rtems_semaphore_obtain(LocalHwAccess_R...)" );
 
   /* Store information about the current situation */
-  AccessPrio = _Thread_Executing->current_priority;
+  AccessPrio = _Thread_Executing->Priority_node.current_priority;
   AccessCnt  = _Thread_Executing->resource_count;
 
   Sts = rtems_semaphore_release(LocalHwAccess_R);
   directive_failed( Sts, "rtems_semaphore_release(LocalHwAccess_R)" );
 
   /* Store information about the current situation */
-  LeavePrio = _Thread_Executing->current_priority;
+  LeavePrio = _Thread_Executing->Priority_node.current_priority;
   LeaveCnt  = _Thread_Executing->resource_count;
 
 #if defined(TEST_PRINT_STATISTICS)
@@ -308,7 +309,7 @@ void AccessRemoteHw(void)
   uint32_t              LeaveCnt;    /*      :         */
 
   /* Store information about the current situation */
-  EnterPrio = _Thread_Executing->current_priority;
+  EnterPrio = _Thread_Executing->Priority_node.current_priority;
   EnterCnt  = _Thread_Executing->resource_count;
 
 
@@ -326,14 +327,14 @@ void AccessRemoteHw(void)
   AccessLocalHw();
 
   /* Store information about the current situation */
-  AccessPrio = _Thread_Executing->current_priority;
+  AccessPrio = _Thread_Executing->Priority_node.current_priority;
   AccessCnt  = _Thread_Executing->resource_count;
 
   Sts = rtems_semaphore_release(RemoteHwAccess_R);
   directive_failed( Sts, "rtems_semaphore_release(RemoreHwAccess_R" );
 
   /* Store information about the current situation */
-  LeavePrio = _Thread_Executing->current_priority;
+  LeavePrio = _Thread_Executing->Priority_node.current_priority;
   LeaveCnt  = _Thread_Executing->resource_count;
 
 #if defined(TEST_PRINT_STATISTICS)

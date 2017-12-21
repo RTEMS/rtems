@@ -531,8 +531,8 @@ rtems_capture_record (rtems_capture_task_t* task,
      */
 
     if ((events & RTEMS_CAPTURE_RECORD_EVENTS) ||
-        ((task->tcb->real_priority >= capture_ceiling) &&
-         (task->tcb->real_priority <= capture_floor) &&
+        ((task->tcb->Priority_node.real_priority >= capture_ceiling) &&
+         (task->tcb->Priority_node.real_priority <= capture_floor) &&
          ((capture_flags & RTEMS_CAPTURE_GLOBAL_WATCH) ||
           (control && (control->flags & RTEMS_CAPTURE_WATCH)))))
     {
@@ -545,8 +545,8 @@ rtems_capture_record (rtems_capture_task_t* task,
         capture_count++;
         capture_in->task   = task;
         capture_in->events = (events |
-                              (task->tcb->real_priority) |
-                              (task->tcb->current_priority << 8));
+                              (task->tcb->Priority_node.real_priority) |
+                              (task->tcb->Priority_node.current_priority << 8));
 
         if ((events & RTEMS_CAPTURE_RECORD_EVENTS) == 0)
           task->flags |= RTEMS_CAPTURE_TRACED;

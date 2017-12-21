@@ -84,10 +84,10 @@ void _Thread_Clear_state(
          *    Even if the thread isn't preemptible, if the new heir is
          *    a pseudo-ISR system task, we need to do a context switch.
          */
-        if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+        if ( the_thread->Priority_node.current_priority < _Thread_Heir->Priority_node.current_priority ) {
           _Thread_Heir = the_thread;
           if ( _Thread_Executing->is_preemptible ||
-               the_thread->current_priority == 0 )
+               the_thread->Priority_node.current_priority == 0 )
             _Context_Switch_necessary = true;
         }
       }

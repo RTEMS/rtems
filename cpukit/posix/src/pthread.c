@@ -84,20 +84,20 @@ void _POSIX_Threads_Sporadic_budget_TSR(
   the_thread->cpu_time_budget = ticks;
 
   new_priority = _POSIX_Priority_To_core( api->schedparam.sched_priority );
-  the_thread->real_priority = new_priority;
+  the_thread->Priority_node.real_priority = new_priority;
 
   /*
    *  If holding a resource, then do not change it.
    */
   #if 0
     printk( "TSR %d %d %d\n", the_thread->resource_count,
-        the_thread->current_priority, new_priority );
+        the_thread->Priority_node.current_priority, new_priority );
   #endif
   if ( the_thread->resource_count == 0 ) {
     /*
      *  If this would make them less important, then do not change it.
      */
-    if ( the_thread->current_priority > new_priority ) {
+    if ( the_thread->Priority_node.current_priority > new_priority ) {
       _Thread_Change_priority( the_thread, new_priority, true );
       #if 0
         printk( "raise priority\n" );
@@ -130,14 +130,14 @@ void _POSIX_Threads_Sporadic_budget_callout(
   the_thread->cpu_time_budget = 0xFFFFFFFF; /* XXX should be based on MAX_U32 */
 
   new_priority = _POSIX_Priority_To_core(api->schedparam.sched_ss_low_priority);
-  the_thread->real_priority = new_priority;
+  the_thread->Priority_node.real_priority = new_priority;
 
   /*
    *  If holding a resource, then do not change it.
    */
   #if 0
     printk( "callout %d %d %d\n", the_thread->resource_count,
-	the_thread->current_priority, new_priority );
+	the_thread->Priority_node.current_priority, new_priority );
   #endif
   if ( the_thread->resource_count == 0 ) {
     /*
@@ -145,7 +145,7 @@ void _POSIX_Threads_Sporadic_budget_callout(
      *  to logically lower than sched_ss_low_priority, then we do not want to
      *  change it.
      */
-    if ( the_thread->current_priority < new_priority ) {
+    if ( the_thread->Priority_node.current_priority < new_priority ) {
       _Thread_Change_priority( the_thread, new_priority, true );
       #if 0
         printk( "lower priority\n" );
@@ -181,7 +181,7 @@ bool _POSIX_Threads_Create_extension(
   api->schedpolicy = _POSIX_Threads_Default_attributes.schedpolicy;
   api->schedparam  = _POSIX_Threads_Default_attributes.schedparam;
   api->schedparam.sched_priority =
-     _POSIX_Priority_From_core( created->current_priority );
+     _POSIX_Priority_From_core( created->Priority_node.current_priority );
 
   /*
    *  POSIX 1003.1 1996, 18.2.2.2

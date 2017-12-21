@@ -61,10 +61,10 @@ void _CORE_mutex_Seize_interrupt_blocking(
 
   executing = _Thread_Executing;
   if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
-    if ( the_mutex->holder->current_priority > executing->current_priority ) {
+    if ( the_mutex->holder->Priority_node.current_priority > executing->Priority_node.current_priority ) {
       _Thread_Change_priority(
         the_mutex->holder,
-        executing->current_priority,
+        executing->Priority_node.current_priority,
         false
       );
     }

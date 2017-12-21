@@ -63,8 +63,8 @@ void _Thread_Reset(
       (void) _Watchdog_Remove( &the_thread->Timer );
   }
 
-  if ( the_thread->current_priority != the_thread->Start.initial_priority ) {
-    the_thread->real_priority = the_thread->Start.initial_priority;
+  if ( the_thread->Priority_node.current_priority != the_thread->Start.initial_priority ) {
+    the_thread->Priority_node.real_priority = the_thread->Start.initial_priority;
     _Thread_Set_priority( the_thread, the_thread->Start.initial_priority );
   }
 }

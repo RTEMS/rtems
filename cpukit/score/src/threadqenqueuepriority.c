@@ -69,7 +69,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
 
   _Chain_Initialize_empty( &the_thread->Wait.Block2n );
 
-  priority     = the_thread->current_priority;
+  priority     = the_thread->Priority_node.current_priority;
   header_index = _Thread_queue_Header_number( priority );
   header       = &the_thread_queue->Queues.Priority[ header_index ];
   block_state  = the_thread_queue->state;
@@ -82,7 +82,7 @@ restart_forward_search:
   _ISR_Disable( level );
   search_thread = (Thread_Control *) header->first;
   while ( !_Chain_Is_tail( header, (Chain_Node *)search_thread ) ) {
-    search_priority = search_thread->current_priority;
+    search_priority = search_thread->Priority_node.current_priority;
     if ( priority <= search_priority )
       break;
 
@@ -90,7 +90,7 @@ restart_forward_search:
     search_thread = (Thread_Control *) search_thread->Object.Node.next;
     if ( _Chain_Is_tail( header, (Chain_Node *)search_thread ) )
       break;
-    search_priority = search_thread->current_priority;
+    search_priority = search_thread->Priority_node.current_priority;
     if ( priority <= search_priority )
       break;
 #endif
@@ -130,14 +130,14 @@ restart_reverse_search:
   _ISR_Disable( level );
   search_thread = (Thread_Control *) header->last;
   while ( !_Chain_Is_head( header, (Chain_Node *)search_thread ) ) {
-    search_priority = search_thread->current_priority;
+    search_priority = search_thread->Priority_node.current_priority;
     if ( priority >= search_priority )
       break;
 #if ( CPU_UNROLL_ENQUEUE_PRIORITY == TRUE )
     search_thread = (Thread_Control *) search_thread->Object.Node.previous;
     if ( _Chain_Is_head( header, (Chain_Node *)search_thread ) )
       break;
-    search_priority = search_thread->current_priority;
+    search_priority = search_thread->Priority_node.current_priority;
     if ( priority >= search_priority )
       break;
 #endif

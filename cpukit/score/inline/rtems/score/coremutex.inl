@@ -146,7 +146,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
        _Chain_Prepend_unprotected( &executing->lock_mutex,
                                    &the_mutex->queue.lock_queue );
-       the_mutex->queue.priority_before = executing->current_priority;
+       the_mutex->queue.priority_before = executing->Priority_node.current_priority;
 #endif
 
       executing->resource_count++;
@@ -165,7 +165,7 @@ RTEMS_INLINE_ROUTINE int _CORE_mutex_Seize_interrupt_trylock_body(
       Priority_Control  current;
 
       ceiling = the_mutex->Attributes.priority_ceiling;
-      current = executing->current_priority;
+      current = executing->Priority_node.current_priority;
       if ( current == ceiling ) {
         _ISR_Enable( *level_p );
         return 0;

@@ -52,7 +52,7 @@ ER chg_pri(
         _ITRON_return_errorno( E_PAR );
 
       new_priority = _ITRON_Task_Priority_to_Core( tskpri );
-      the_thread->real_priority = new_priority;
+      the_thread->Priority_node.real_priority = new_priority;
 
       /*
        * The priority should not be changed until later if priority
@@ -60,7 +60,7 @@ ER chg_pri(
        */
 
       if ( the_thread->resource_count == 0 ||
-           the_thread->current_priority > new_priority )
+           the_thread->Priority_node.current_priority > new_priority )
         _Thread_Change_priority( the_thread, new_priority, false );
 
       break;
