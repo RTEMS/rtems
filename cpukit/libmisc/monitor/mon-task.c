@@ -8,6 +8,7 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>
 
@@ -110,7 +111,9 @@ rtems_monitor_task_canonical(
     canonical_task->entry = rtems_thread->Start.Entry;
     canonical_task->stack = rtems_thread->Start.Initial_stack.area;
     canonical_task->stack_size = rtems_thread->Start.Initial_stack.size;
-    canonical_task->priority = _Thread_Get_priority( rtems_thread );
+    canonical_task->priority = SCHEDULER_PRIORITY_UNMAP(
+      _Thread_Get_priority( rtems_thread )
+    );
     canonical_task->events = api->Event.pending_events;
     /*
      * FIXME: make this optionally cpu_time_executed
