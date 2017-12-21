@@ -18,6 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/coremutex.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/states.h>
@@ -50,6 +51,7 @@ void _Thread_queue_Flush(
 )
 {
   Thread_Control *the_thread;
+  CORE_mutex_Control *mutex;
 
   while ( (the_thread = _Thread_queue_Dequeue( the_thread_queue )) ) {
 #if defined(RTEMS_MULTIPROCESSING)
@@ -58,5 +60,9 @@ void _Thread_queue_Flush(
     else
 #endif
       the_thread->Wait.return_code = status;
+    if ( the_thread->Priority_node.waiting_to_hold != NULL ) {
+      mutex = _Thread_Dequeue_priority_node( &the_thread->Priority_node );
+      _Thread_Evaluate_priority( mutex->holder );
+    }
   }
 }

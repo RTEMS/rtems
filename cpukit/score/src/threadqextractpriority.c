@@ -18,6 +18,7 @@
 
 #include <rtems/system.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/coremutex.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/states.h>
@@ -57,6 +58,7 @@ bool _Thread_queue_Extract_priority_helper(
   Chain_Node     *new_first_node;
   Chain_Node     *new_second_node;
   Chain_Node     *last_node;
+  CORE_mutex_Control *mutex;
 
   the_node = (Chain_Node *) the_thread;
   _ISR_Disable( level );
@@ -105,6 +107,9 @@ bool _Thread_queue_Extract_priority_helper(
     _ISR_Enable( level );
     return true;
   }
+
+  mutex = _Thread_Dequeue_priority_node( &the_thread->Priority_node );
+  _Thread_Evaluate_priority( mutex->holder );
 
   if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
     _ISR_Enable( level );

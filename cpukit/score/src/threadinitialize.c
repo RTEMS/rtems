@@ -192,7 +192,11 @@ bool _Thread_Initialize(
   #if defined(RTEMS_ITRON_API)
     the_thread->suspend_count         = 0;
   #endif
-  the_thread->Priority_node.real_priority           = priority;
+  _Chain_Set_off_chain( &the_thread->Priority_node.Node );
+  the_thread->Priority_node.real_priority    = priority;
+  the_thread->Priority_node.current_priority = priority;
+  the_thread->Priority_node.waiting_to_hold  = NULL;
+  _Chain_Initialize_empty( &the_thread->Priority_node.Inherited_priorities );
   the_thread->Start.initial_priority  = priority;
   _Thread_Set_priority( the_thread, priority );
 

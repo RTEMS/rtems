@@ -19,6 +19,7 @@
 #include <rtems/system.h>
 #include <rtems/score/apiext.h>
 #include <rtems/score/context.h>
+#include <rtems/score/coremutex.h>
 #include <rtems/score/interr.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
@@ -46,6 +47,8 @@ void _Thread_Reset(
   Thread_Entry_numeric_type  numeric_argument
 )
 {
+  CORE_mutex_Control *mutex;
+
   the_thread->resource_count   = 0;
   #if defined(RTEMS_ITRON_API)
     the_thread->suspend_count  = 0;
@@ -61,6 +64,19 @@ void _Thread_Reset(
 
     if ( _Watchdog_Is_active( &the_thread->Timer ) )
       (void) _Watchdog_Remove( &the_thread->Timer );
+  }
+
+  if ( the_thread->Priority_node.waiting_to_hold != NULL ) {
+    mutex = _Thread_Dequeue_priority_node( &the_thread->Priority_node );
+    _Thread_Evaluate_priority( mutex->holder );
+  }
+
+  while ( !_Chain_Is_empty( &the_thread->Priority_node.Inherited_priorities ) ) {
+    _Thread_Dequeue_priority_node(
+      ((Thread_Priority_node*)_Chain_First(
+        &the_thread->Priority_node.Inherited_priorities
+      ))
+    );
   }
 
   if ( the_thread->Priority_node.current_priority != the_thread->Start.initial_priority ) {

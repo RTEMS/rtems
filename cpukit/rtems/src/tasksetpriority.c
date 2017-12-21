@@ -75,9 +75,7 @@ rtems_status_code rtems_task_set_priority(
       *old_priority = the_thread->Priority_node.current_priority;
       if ( new_priority != RTEMS_CURRENT_PRIORITY ) {
         the_thread->Priority_node.real_priority = new_priority;
-        if ( the_thread->resource_count == 0 ||
-             the_thread->Priority_node.current_priority > new_priority )
-          _Thread_Change_priority( the_thread, new_priority, false );
+        _Thread_Evaluate_priority( the_thread );
       }
       _Thread_Enable_dispatch();
       return RTEMS_SUCCESSFUL;

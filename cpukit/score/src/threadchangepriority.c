@@ -88,8 +88,10 @@ void _Thread_Change_priority(
    *  Do not bother recomputing all the priority related information if
    *  we are not REALLY changing priority.
    */
- if ( the_thread->Priority_node.current_priority != new_priority )
+  if ( the_thread->Priority_node.current_priority != new_priority ) {
     _Thread_Set_priority( the_thread, new_priority );
+    _Thread_Requeue_priority_node( the_thread );
+  }
 
   _ISR_Disable( level );
 

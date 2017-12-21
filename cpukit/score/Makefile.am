@@ -154,7 +154,8 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadsuspend.c \
     src/threadtickletimeslice.c src/threadyieldprocessor.c \
-    src/iterateoverthreads.c src/threadblockingoperationcancel.c
+    src/iterateoverthreads.c src/threadblockingoperationcancel.c \
+    src/threadprioritynode.c
 
 ## THREAD_C_FILES only used by ITRON API
 if LIBITRON

@@ -124,6 +124,9 @@ CORE_mutex_Status _CORE_mutex_Surrender(
 #endif
     holder->resource_count--;
   }
+  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
+    _Thread_Release_inherited_priority( the_mutex );
+  }
   the_mutex->holder    = NULL;
   the_mutex->holder_id = 0;
 
@@ -132,8 +135,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
    *  inherited priority must be lowered if this is the last
    *  mutex (i.e. resource) this task has.
    */
-  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
-       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+  if ( _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
 #ifdef __RTEMS_STRICT_ORDER_MUTEX__
     if(the_mutex->queue.priority_before != holder->Priority_node.current_priority)
       _Thread_Change_priority(holder,the_mutex->queue.priority_before,true);

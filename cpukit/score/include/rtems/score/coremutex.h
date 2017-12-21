@@ -216,7 +216,7 @@ typedef struct {
  *
  *  The following defines the control block used to manage each mutex.
  */
-typedef struct {
+typedef struct CORE_mutex_Control {
   /** This field is the Waiting Queue used to manage the set of tasks
    *  which are blocked waiting to lock the mutex.
    */
