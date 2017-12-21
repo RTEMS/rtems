@@ -88,18 +88,12 @@ rtems_status_code rtems_task_mode(
    *  These are generic thread scheduling characteristics.
    */
   preempt_enabled = false;
-#if !defined( RTEMS_SMP )
   if ( mask & RTEMS_PREEMPT_MASK ) {
-    if ( rtems_configuration_is_smp_enabled() &&
-         !_Modes_Is_preempt( mode_set ) ) {
-      return RTEMS_NOT_IMPLEMENTED;
-    }
     bool is_preempt_enabled = _Modes_Is_preempt( mode_set );
 
     preempt_enabled = !executing->is_preemptible && is_preempt_enabled;
     executing->is_preemptible = is_preempt_enabled;
   }
-#endif
 
   if ( mask & RTEMS_TIMESLICE_MASK ) {
     if ( _Modes_Is_timeslice(mode_set) ) {
@@ -113,11 +107,9 @@ rtems_status_code rtems_task_mode(
   /*
    *  Set the new interrupt level
    */
-#if !defined( RTEMS_SMP )
   if ( mask & RTEMS_INTERRUPT_MASK ) {
     _Modes_Set_interrupt_level( mode_set );
   }
-#endif
 
   /*
    *  This is specific to the RTEMS API
