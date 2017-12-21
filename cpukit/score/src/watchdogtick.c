@@ -23,6 +23,7 @@
 
 void _Watchdog_Do_tickle(
   Watchdog_Header  *header,
+  Watchdog_Control *first,
   uint64_t          now,
 #ifdef RTEMS_SMP
   ISR_lock_Control *lock,
@@ -30,39 +31,33 @@ void _Watchdog_Do_tickle(
   ISR_lock_Context *lock_context
 )
 {
-  while ( true ) {
-    Watchdog_Control *the_watchdog;
-
-    the_watchdog = (Watchdog_Control *) header->first;
-
-    if ( the_watchdog == NULL ) {
-      break;
-    }
-
-    if ( the_watchdog->expire <= now ) {
+  do {
+    if ( first->expire <= now ) {
       Watchdog_Service_routine_entry routine;
 
-      _Watchdog_Next_first( header, the_watchdog );
-      _RBTree_Extract( &header->Watchdogs, &the_watchdog->Node.RBTree );
-      _Watchdog_Set_state( the_watchdog, WATCHDOG_INACTIVE );
-      routine = the_watchdog->routine;
+      _Watchdog_Next_first( header, first );
+      _RBTree_Extract( &header->Watchdogs, &first->Node.RBTree );
+      _Watchdog_Set_state( first, WATCHDOG_INACTIVE );
+      routine = first->routine;
 
       _ISR_lock_Release_and_ISR_enable( lock, lock_context );
-      ( *routine )( the_watchdog );
+      ( *routine )( first );
       _ISR_lock_ISR_disable_and_acquire( lock, lock_context );
     } else {
       break;
     }
-  }
 
-  _ISR_lock_Release_and_ISR_enable( lock, lock_context );
+    first = _Watchdog_Header_first( header );
+  } while ( first != NULL );
 }
 
 void _Watchdog_Tick( Per_CPU_Control *cpu )
 {
-  ISR_lock_Context lock_context;
-  uint64_t         ticks;
-  struct timespec  now;
+  ISR_lock_Context  lock_context;
+  Watchdog_Header  *header;
+  Watchdog_Control *first;
+  uint64_t          ticks;
+  struct timespec   now;
 
   if ( _Per_CPU_Is_boot_processor( cpu ) ) {
     ++_Watchdog_Ticks_since_boot;
@@ -75,18 +70,34 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
   ++ticks;
   cpu->Watchdog.ticks = ticks;
 
-  _Watchdog_Tickle(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ],
-    ticks,
-    &cpu->Watchdog.Lock,
-    &lock_context
-  );
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_MONOTONIC ];
+  first = _Watchdog_Header_first( header );
 
-  _Timecounter_Getnanotime( &now );
-  _Watchdog_Per_CPU_tickle_realtime(
-    cpu,
-    _Watchdog_Realtime_from_timespec( &now )
-  );
+  if ( first != NULL ) {
+    _Watchdog_Tickle(
+      header,
+      first,
+      ticks,
+      &cpu->Watchdog.Lock,
+      &lock_context
+    );
+  }
+
+  header = &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ];
+  first = _Watchdog_Header_first( header );
+
+  if ( first != NULL ) {
+    _Timecounter_Getnanotime( &now );
+    _Watchdog_Tickle(
+      header,
+      first,
+      _Watchdog_Realtime_from_timespec( &now ),
+      &cpu->Watchdog.Lock,
+      &lock_context
+    );
+  }
+
+  _ISR_lock_Release_and_ISR_enable( &cpu->Watchdog.Lock, &lock_context );
 
   _Scheduler_Tick( cpu );
 }

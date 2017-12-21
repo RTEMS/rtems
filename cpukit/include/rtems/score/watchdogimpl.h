@@ -96,6 +96,13 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Header_initialize(
   header->first = NULL;
 }
 
+RTEMS_INLINE_ROUTINE Watchdog_Control *_Watchdog_Header_first(
+  const Watchdog_Header *header
+)
+{
+  return (Watchdog_Control *) header->first;
+}
+
 RTEMS_INLINE_ROUTINE void _Watchdog_Header_destroy(
   Watchdog_Header *header
 )
@@ -187,6 +194,7 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Initialize(
 
 void _Watchdog_Do_tickle(
   Watchdog_Header  *header,
+  Watchdog_Control *first,
   uint64_t          now,
 #if defined(RTEMS_SMP)
   ISR_lock_Control *lock,
@@ -195,11 +203,11 @@ void _Watchdog_Do_tickle(
 );
 
 #if defined(RTEMS_SMP)
-  #define _Watchdog_Tickle( header, now, lock, lock_context ) \
-    _Watchdog_Do_tickle( header, now, lock, lock_context )
+  #define _Watchdog_Tickle( header, first, now, lock, lock_context ) \
+    _Watchdog_Do_tickle( header, first, now, lock, lock_context )
 #else
-  #define _Watchdog_Tickle( header, now, lock, lock_context ) \
-    _Watchdog_Do_tickle( header, now, lock_context )
+  #define _Watchdog_Tickle( header, first, now, lock, lock_context ) \
+    _Watchdog_Do_tickle( header, first, now, lock_context )
 #endif
 
 /**
@@ -545,22 +553,6 @@ RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_remove_realtime(
     the_watchdog,
     cpu,
     &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ]
-  );
-}
-
-RTEMS_INLINE_ROUTINE void _Watchdog_Per_CPU_tickle_realtime(
-  Per_CPU_Control *cpu,
-  uint64_t         now
-)
-{
-  ISR_lock_Context lock_context;
-
-  _ISR_lock_ISR_disable_and_acquire( &cpu->Watchdog.Lock, &lock_context );
-  _Watchdog_Tickle(
-    &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ],
-    now,
-    &cpu->Watchdog.Lock,
-    &lock_context
   );
 }
 
