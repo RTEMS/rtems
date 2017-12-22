@@ -40,16 +40,17 @@ int clock_gettime(
     _TOD_Get(tp);
     return 0;
   }
+
 #ifdef CLOCK_MONOTONIC
   if ( clock_id == CLOCK_MONOTONIC ) {
-    _TOD_Get_zero_based_uptime_as_timespec( tp );
+    _Timecounter_Nanouptime( tp );
     return 0;
   }
 #endif
 
 #ifdef _POSIX_CPUTIME
   if ( clock_id == CLOCK_PROCESS_CPUTIME_ID ) {
-    _TOD_Get_zero_based_uptime_as_timespec( tp );
+    _Timecounter_Nanouptime( tp );
     return 0;
   }
 #endif
