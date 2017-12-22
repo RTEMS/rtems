@@ -119,12 +119,12 @@ void _Thread_queue_Add_timeout_realtime_timespec(
     } else if ( _Watchdog_Is_far_future_realtime_timespec( abstime ) ) {
       expire = WATCHDOG_MAXIMUM_TICKS;
     } else {
-      expire = _Watchdog_Realtime_from_timespec( abstime );
+      expire = _Watchdog_Ticks_from_timespec( abstime );
     }
 
     _Timecounter_Getnanotime( &now );
 
-    if ( expire > _Watchdog_Realtime_from_timespec( &now ) ) {
+    if ( expire > _Watchdog_Ticks_from_timespec( &now ) ) {
       ISR_lock_Context lock_context;
 
       _ISR_lock_ISR_disable_and_acquire(

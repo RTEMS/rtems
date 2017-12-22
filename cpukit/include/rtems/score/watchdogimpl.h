@@ -392,7 +392,7 @@ RTEMS_INLINE_ROUTINE bool _Watchdog_Is_far_future_realtime_timespec(
   return ts->tv_sec > WATCHDOG_REALTIME_MAX_SECONDS;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_seconds(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_seconds(
   uint32_t seconds
 )
 {
@@ -403,7 +403,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_seconds(
   return ticks;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_timespec(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
   const struct timespec *ts
 )
 {
@@ -420,7 +420,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_timespec(
   return ticks;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Realtime_from_sbintime(
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime(
   sbintime_t sbt
 )
 {

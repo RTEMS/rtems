@@ -91,7 +91,7 @@ void _Watchdog_Tick( Per_CPU_Control *cpu )
     _Watchdog_Tickle(
       header,
       first,
-      _Watchdog_Realtime_from_timespec( &now ),
+      _Watchdog_Ticks_from_timespec( &now ),
       &cpu->Watchdog.Lock,
       &lock_context
     );

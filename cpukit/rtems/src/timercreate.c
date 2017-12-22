@@ -80,7 +80,7 @@ rtems_status_code _Timer_Fire(
       _Watchdog_Insert(
         &cpu->Watchdog.Header[ PER_CPU_WATCHDOG_REALTIME ],
         &the_timer->Ticker,
-        _Watchdog_Realtime_from_seconds( interval )
+        _Watchdog_Ticks_from_seconds( interval )
       );
     }
 

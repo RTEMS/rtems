@@ -56,7 +56,7 @@ rtems_status_code rtems_task_wake_when(
       executing,
       cpu_self,
       _Thread_Timeout,
-      _Watchdog_Realtime_from_seconds( seconds )
+      _Watchdog_Ticks_from_seconds( seconds )
     );
   _Thread_Dispatch_enable( cpu_self );
   return RTEMS_SUCCESSFUL;

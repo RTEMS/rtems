@@ -37,7 +37,7 @@ void _TOD_Set(
   timespec2bintime( tod, &tod_as_bintime );
   _Timecounter_Set_clock( &tod_as_bintime, lock_context );
 
-  tod_as_ticks = _Watchdog_Realtime_from_timespec( tod );
+  tod_as_ticks = _Watchdog_Ticks_from_timespec( tod );
   cpu_count = _SMP_Get_processor_count();
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
