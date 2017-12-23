@@ -191,3 +191,4 @@ EXTRA_DIST += shared/include/l4stat.h
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
+include $(srcdir)/../../../../../bsps/sparc/headers.am

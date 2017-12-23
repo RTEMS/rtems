@@ -12,38 +12,15 @@ CLEANFILES =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
 _SUBDIRS = . tools
 
-nodist_include_bsp_HEADERS += include/bspimpl.h
-include_bsp_HEADERS  = ../../i386/shared/irq/irq.h
-include_bsp_HEADERS += ../../i386/shared/irq/irq_asm.h
-include_bsp_HEADERS += ../../i386/shared/comm/tty_drv.h
-include_bsp_HEADERS += ../../i386/shared/realmode_int/realmode_int.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += console/rtd316.h
-include_bsp_HEADERS += console/exar17d15x.h
-include_bsp_HEADERS += include/tblsizes.h
-
-if HAS_SMP
-include_bsp_HEADERS += ../../i386/shared/irq/apic.h
-include_bsp_HEADERS += ../../i386/shared/smp/smp-imps.h
-endif
-
-include_HEADERS += include/crt.h
+TMPINSTALL_FILES =
 
 EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
@@ -63,9 +40,13 @@ start16.bin: start16-elf32.$(OBJEXT)
 	$(OBJCOPY) -O binary $< $@
 CLEANFILES += start16.bin
 
+$(PROJECT_LIB)/start16.bin: start16.bin $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start16.bin
+TMPINSTALL_FILES += $(PROJECT_LIB)/start16.bin
+
 project_lib_DATA += start16.bin
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -76,14 +57,7 @@ libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += clock/todcfg.c
 libbsp_a_SOURCES += ../../shared/tod.c
 
-include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS  =
-
 if RTEMS_VGA
-include_rtems_HEADERS += console/keyboard.h
-include_rtems_HEADERS += console/kd.h
-include_rtems_HEADERS += console/ps2_drv.h
-include_rtems_HEADERS += console/vgacons.h
 libbsp_a_SOURCES += console/inch.c
 libbsp_a_SOURCES += console/outch.c
 libbsp_a_SOURCES += console/defkeymap.c
@@ -95,7 +69,6 @@ libbsp_a_SOURCES += console/vt.c
 libbsp_a_SOURCES += console/videoAsm.S
 libbsp_a_SOURCES += console/kbd_parser.c
 libbsp_a_SOURCES += console/vgacons.c
-include_bsp_HEADERS += console/fb_default_mode.h
 if USE_VGA
 libbsp_a_SOURCES += console/fb_vga.c
 endif
@@ -103,15 +76,11 @@ if USE_CIRRUS_GD5446
 libbsp_a_SOURCES += console/fb_cirrus.c
 endif
 if USE_VBE_RM
-include_bsp_HEADERS += include/vbe3.h
-include_HEADERS += include/edid.h
-include_bsp_HEADERS += include/fb_vesa.h
 libbsp_a_SOURCES += console/fb_vesa_rm.c
 endif
 endif
 
 # console (non-graphics support)
-include_HEADERS += ../../i386/shared/comm/i386_io.h
 libbsp_a_SOURCES += console/serial_mouse_config.c
 libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
 libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
@@ -142,7 +111,6 @@ libbsp_a_SOURCES += ../../i386/shared/pci/pci_io.c
 libbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
 libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
-include_HEADERS += ../../i386/shared/comm/uart.h
 # startup
 libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 libbsp_a_SOURCES += startup/bsp_fatal_halt.c
@@ -246,6 +214,6 @@ EXTRA_DIST += STATUS
 EXTRA_DIST += times_i486dx
 EXTRA_DIST += times_p5
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
 include $(top_srcdir)/../../../../automake/subdirs.am
+include $(srcdir)/../../../../../../bsps/i386/pc386/headers.am

@@ -1,3 +1,2 @@
-preinstall-am: $(PREINSTALL_FILES)
-preinstall: preinstall-am
-.PHONY: preinstall preinstall-am
+
+all-local: $(TMPINSTALL_FILES)

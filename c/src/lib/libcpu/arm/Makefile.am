@@ -6,16 +6,8 @@ EXTRA_DIST =
 
 noinst_PROGRAMS =
 
-include_bspdir = $(includedir)/bsp
-include_libcpudir = $(includedir)/libcpu
-
-include_bsp_HEADERS =
-include_libcpu_HEADERS =
-
 ## shared/include
 if shared
-
-include_libcpu_HEADERS += shared/include/mmu.h
 
 ## shared/arm920
 noinst_PROGRAMS += shared/arm920.rel
@@ -24,5 +16,4 @@ shared_arm920_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
 shared_arm920_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

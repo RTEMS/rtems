@@ -5,132 +5,11 @@ _SUBDIRS = cpu
 
 ## include
 
-include_sysdir = $(includedir)/sys
-
-include_sys_HEADERS =
-include_sys_HEADERS += include/sys/_ffcounter.h
-include_sys_HEADERS += include/sys/timeffc.h
-include_sys_HEADERS += include/sys/timepps.h
-include_sys_HEADERS += include/sys/timetc.h
-include_sys_HEADERS += include/sys/timex.h
-
-include_rtemsdir = $(includedir)/rtems
-
-include_rtems_HEADERS =
-include_rtems_HEADERS += include/rtems/linkersets.h
-include_rtems_HEADERS += include/rtems/sysinit.h
-include_rtems_HEADERS += include/rtems/system.h
-include_rtems_HEADERS += include/rtems/seterr.h
-
-include_rtems_scoredir = $(includedir)/rtems/score
-
-include_rtems_score_HEADERS = include/rtems/score/address.h
-include_rtems_score_HEADERS += include/rtems/score/apimutex.h
-include_rtems_score_HEADERS += include/rtems/score/assert.h
-include_rtems_score_HEADERS += include/rtems/score/atomic.h
-include_rtems_score_HEADERS += include/rtems/score/chain.h
-include_rtems_score_HEADERS += include/rtems/score/chainimpl.h
-include_rtems_score_HEADERS += include/rtems/score/context.h
-include_rtems_score_HEADERS += include/rtems/score/copyrt.h
-include_rtems_score_HEADERS += include/rtems/score/corebarrier.h
-include_rtems_score_HEADERS += include/rtems/score/corebarrierimpl.h
-include_rtems_score_HEADERS += include/rtems/score/coremsg.h
-include_rtems_score_HEADERS += include/rtems/score/coremsgimpl.h
-include_rtems_score_HEADERS += include/rtems/score/coremutex.h
-include_rtems_score_HEADERS += include/rtems/score/coremuteximpl.h
-include_rtems_score_HEADERS += include/rtems/score/corerwlockimpl.h
-include_rtems_score_HEADERS += include/rtems/score/coresem.h
-include_rtems_score_HEADERS += include/rtems/score/coresemimpl.h
-include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
-include_rtems_score_HEADERS += include/rtems/score/heap.h
-include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
-include_rtems_score_HEADERS += include/rtems/score/protectedheap.h
-include_rtems_score_HEADERS += include/rtems/score/interr.h
-include_rtems_score_HEADERS += include/rtems/score/io.h
-include_rtems_score_HEADERS += include/rtems/score/isr.h
-include_rtems_score_HEADERS += include/rtems/score/isrlevel.h
-include_rtems_score_HEADERS += include/rtems/score/isrlock.h
-include_rtems_score_HEADERS += include/rtems/score/freechain.h
-include_rtems_score_HEADERS += include/rtems/score/mrsp.h
-include_rtems_score_HEADERS += include/rtems/score/mrspimpl.h
-include_rtems_score_HEADERS += include/rtems/score/muteximpl.h
-include_rtems_score_HEADERS += include/rtems/score/object.h
-include_rtems_score_HEADERS += include/rtems/score/objectimpl.h
-include_rtems_score_HEADERS += include/rtems/score/onceimpl.h
-include_rtems_score_HEADERS += include/rtems/score/percpu.h
-include_rtems_score_HEADERS += include/rtems/score/priority.h
-include_rtems_score_HEADERS += include/rtems/score/priorityimpl.h
-include_rtems_score_HEADERS += include/rtems/score/prioritybitmap.h
-include_rtems_score_HEADERS += include/rtems/score/prioritybitmapimpl.h
-include_rtems_score_HEADERS += include/rtems/score/profiling.h
-include_rtems_score_HEADERS += include/rtems/score/processormask.h
-include_rtems_score_HEADERS += include/rtems/score/rbtree.h
-include_rtems_score_HEADERS += include/rtems/score/rbtreeimpl.h
-include_rtems_score_HEADERS += include/rtems/score/scheduler.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulercbs.h
-include_rtems_score_HEADERS += include/rtems/score/schedulercbsimpl.h
-include_rtems_score_HEADERS += include/rtems/score/scheduleredf.h
-include_rtems_score_HEADERS += include/rtems/score/scheduleredfimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulernode.h
-include_rtems_score_HEADERS += include/rtems/score/schedulernodeimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerpriority.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerprioritysmp.h
-include_rtems_score_HEADERS += include/rtems/score/schedulersimple.h
-include_rtems_score_HEADERS += include/rtems/score/schedulersimpleimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulersmp.h
-include_rtems_score_HEADERS += include/rtems/score/schedulersmpimpl.h
-include_rtems_score_HEADERS += include/rtems/score/semaphoreimpl.h
-include_rtems_score_HEADERS += include/rtems/score/smp.h
-include_rtems_score_HEADERS += include/rtems/score/smpbarrier.h
-include_rtems_score_HEADERS += include/rtems/score/smplock.h
-include_rtems_score_HEADERS += include/rtems/score/smplockseq.h
-include_rtems_score_HEADERS += include/rtems/score/smpimpl.h
-include_rtems_score_HEADERS += include/rtems/score/stack.h
-include_rtems_score_HEADERS += include/rtems/score/stackimpl.h
-include_rtems_score_HEADERS += include/rtems/score/states.h
-include_rtems_score_HEADERS += include/rtems/score/statesimpl.h
-include_rtems_score_HEADERS += include/rtems/score/status.h
-include_rtems_score_HEADERS += include/rtems/score/sysstate.h
-include_rtems_score_HEADERS += include/rtems/score/thread.h
-include_rtems_score_HEADERS += include/rtems/score/threadimpl.h
-include_rtems_score_HEADERS += include/rtems/score/threaddispatch.h
-include_rtems_score_HEADERS += include/rtems/score/threadq.h
-include_rtems_score_HEADERS += include/rtems/score/threadqimpl.h
-include_rtems_score_HEADERS += include/rtems/score/timespec.h
-include_rtems_score_HEADERS += include/rtems/score/timestamp.h
-include_rtems_score_HEADERS += include/rtems/score/timecounter.h
-include_rtems_score_HEADERS += include/rtems/score/timecounterimpl.h
-include_rtems_score_HEADERS += include/rtems/score/tls.h
-include_rtems_score_HEADERS += include/rtems/score/tod.h
-include_rtems_score_HEADERS += include/rtems/score/todimpl.h
-include_rtems_score_HEADERS += include/rtems/score/userext.h
-include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
-include_rtems_score_HEADERS += include/rtems/score/watchdog.h
-include_rtems_score_HEADERS += include/rtems/score/watchdogimpl.h
-include_rtems_score_HEADERS += include/rtems/score/wkspace.h
-include_rtems_score_HEADERS += include/rtems/score/cpuopts.h
-include_rtems_score_HEADERS += include/rtems/score/basedefs.h
-
 if HAS_MP
 # We only build multiprocessing related files if HAS_MP was defined
-include_rtems_score_HEADERS += include/rtems/score/mpci.h
-include_rtems_score_HEADERS += include/rtems/score/mpciimpl.h
-include_rtems_score_HEADERS += include/rtems/score/mppkt.h
-include_rtems_score_HEADERS += include/rtems/score/objectmp.h
-include_rtems_score_HEADERS += include/rtems/score/threadmp.h
 endif
 
 if HAS_SMP
-include_rtems_score_HEADERS += include/rtems/score/scheduleredfsmp.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerprioritysmpimpl.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerpriorityaffinitysmp.h
-include_rtems_score_HEADERS += include/rtems/score/schedulersimplesmp.h
-include_rtems_score_HEADERS += include/rtems/score/schedulerstrongapa.h
-include_rtems_score_HEADERS += include/rtems/score/smplockmcs.h
-include_rtems_score_HEADERS += include/rtems/score/smplockstats.h
-include_rtems_score_HEADERS += include/rtems/score/smplockticket.h
 endif
 
 ## src
@@ -352,8 +231,10 @@ libscore_a_SOURCES += src/processormaskcopy.c
 
 EXTRA_DIST = src/Unlimited.txt
 
-DISTCLEANFILES = include/rtems/score/cpuopts.h
+# This file is in the build tree
+DISTCLEANFILES = ../..include/rtems/score/cpuopts.h
+include_rtems_scoredir = $(includedir)/rtems/score
+include_rtems_score_HEADERS = ../../include/rtems/score/cpuopts.h
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

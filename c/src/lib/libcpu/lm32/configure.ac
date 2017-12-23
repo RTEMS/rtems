@@ -3,6 +3,8 @@
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-lm32],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 RTEMS_TOP([../../../../..],[../../..])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 

@@ -4,19 +4,8 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-include_HEADERS += include/psim.h
-
-include_bsp_HEADERS = ../shared/include/linker-symbols.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 
 
@@ -30,8 +19,8 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
+project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
-dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -52,8 +41,6 @@ libbsp_a_SOURCES += ../../shared/console-polled.c
 libbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 # irq
-include_bsp_HEADERS += irq/irq.h ../shared/openpic/openpic.h \
-    ../../shared/include/irq-generic.h
 libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
     ../shared/openpic/openpic.c ../../shared/src/irq-server.c  \
     ../../shared/src/irq-generic.c ../../shared/src/irq-default-handler.c
@@ -84,5 +71,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/psim/headers.am

@@ -4,26 +4,18 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
-
-
-dist_project_lib_DATA += startup/linkcmds
 
 EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
+
+project_lib_DATA += linkcmds
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
@@ -38,10 +30,6 @@ libbsp_a_SOURCES += ../shared/clock/clock.c
 
 # console
 libbsp_a_SOURCES += console/console.c
-
-include_bsp_HEADERS = irq/irq.h \
-	../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h
 
 # irq
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
@@ -84,5 +72,5 @@ endif
 
 EXTRA_DIST += times
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/mpc8260ads/headers.am

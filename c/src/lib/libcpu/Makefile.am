@@ -1,5 +1,3 @@
-include_libcpudir = $(includedir)/libcpu
-
 EXTRA_DIST =
 EXTRA_DIST += shared/include/cache.h
 EXTRA_DIST += shared/src/cache_manager.c

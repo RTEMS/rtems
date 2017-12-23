@@ -208,5 +208,4 @@ libxz_a_SOURCES = xz/xz/h xz/xz_crc32.c \
 EXTRA_DIST += xz/README xz/COPING
 
 ## ---
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

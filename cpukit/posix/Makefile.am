@@ -11,46 +11,10 @@ libposix_a_SOURCES =
 libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
     src/clockgetres.c src/sysconf.c
 
-include_rtems_posixdir = $(includedir)/rtems/posix
-
-include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
-
 ## Some POSIX threads features are needed all the time
-include_rtems_posix_HEADERS += include/rtems/posix/barrierimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/condimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/key.h
-include_rtems_posix_HEADERS += include/rtems/posix/keyimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/config.h
-include_rtems_posix_HEADERS += include/rtems/posix/muteximpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/posixapi.h
-include_rtems_posix_HEADERS += include/rtems/posix/priorityimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/pthreadattrimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/rwlockimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/semaphore.h
-include_rtems_posix_HEADERS += include/rtems/posix/semaphoreimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/spinlockimpl.h
-
 if HAS_PTHREADS
 # include
-include_HEADERS = include/aio.h
-include_HEADERS += include/mqueue.h
-
 # include/rtems/posix
-include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
-include_rtems_posix_HEADERS += include/rtems/posix/mmanimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/mqueue.h
-include_rtems_posix_HEADERS += include/rtems/posix/mqueueimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/psignal.h
-include_rtems_posix_HEADERS += include/rtems/posix/psignalimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/pthread.h
-include_rtems_posix_HEADERS += include/rtems/posix/pthreadimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/ptimer.h
-include_rtems_posix_HEADERS += include/rtems/posix/shm.h
-include_rtems_posix_HEADERS += include/rtems/posix/shmimpl.h
-include_rtems_posix_HEADERS += include/rtems/posix/threadsup.h
-include_rtems_posix_HEADERS += include/rtems/posix/timer.h
-include_rtems_posix_HEADERS += include/rtems/posix/timerimpl.h
-
 ## src
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
     src/aio_read.c src/aio_return.c src/aio_suspend.c src/aio_write.c \
@@ -236,5 +200,4 @@ endif
 libposix_a_SOURCES += src/sched_getprioritymin.c
 libposix_a_SOURCES += src/sched_getprioritymax.c
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

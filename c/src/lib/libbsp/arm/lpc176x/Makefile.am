@@ -11,55 +11,12 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-
-dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA = startup/bsp_specs
 
 
 # ----------------------------
 # ------  Headers
 # ----------------------------
-
-include_HEADERS = include/bsp.h
-
-nodist_include_HEADERS = include/bspopts.h
-
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../shared/include/start.h
-include_bsp_HEADERS += ../shared/lpc/include/lpc-timer.h
-include_bsp_HEADERS += ../shared/lpc/include/lpc-i2s.h
-include_bsp_HEADERS += ../shared/lpc/include/lpc-dma.h
-include_bsp_HEADERS += ../shared/armv7m/include/armv7m-irq.h
-include_bsp_HEADERS += include/dma.h
-include_bsp_HEADERS += include/io-defs.h
-include_bsp_HEADERS += include/io.h
-include_bsp_HEADERS += include/common-types.h
-include_bsp_HEADERS += include/gpio-defs.h
-include_bsp_HEADERS += include/lpc-gpio.h
-include_bsp_HEADERS += include/can.h
-include_bsp_HEADERS += include/can-defs.h
-include_bsp_HEADERS += include/pwmout.h
-include_bsp_HEADERS += include/pwmout-defs.h
-include_bsp_HEADERS += include/adc.h
-include_bsp_HEADERS += include/adc-defs.h
-include_bsp_HEADERS += include/timer-defs.h
-include_bsp_HEADERS += include/timer.h
-include_bsp_HEADERS += include/watchdog.h
-include_bsp_HEADERS += include/watchdog-defs.h
-include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/lpc176x.h
-include_bsp_HEADERS += include/lpc-clock-config.h
-include_bsp_HEADERS += include/system-clocks.h
-include_bsp_HEADERS += include/mbed-pinmap.h
-
-include_HEADERS += include/tm27.h
 
 
 # ----------------------------
@@ -70,12 +27,11 @@ EXTRA_DIST += ../shared/start/start.S
 start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
-project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST += startup/linkcmds.lpc1768_mbed
-EXTRA_DIST += startup/linkcmds.lpc1768_mbed_ahb_ram
-EXTRA_DIST += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
-
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed
+dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram
+dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
 
 # ----------------------------
 # ------  LibBSP
@@ -84,7 +40,7 @@ EXTRA_DIST += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS =
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 libbsp_a_LIBADD =
 
 # Shared
@@ -172,5 +128,5 @@ libbsp_a_SOURCES += startup/bspstarthooks.c
 
 DISTCLEANFILES = include/bspopts.h
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/lpc176x/headers.am

@@ -10,6 +10,11 @@ dirutils_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 if LIBNETWORKING
 project_lib_LIBRARIES = libnfs.a
 
+$(PROJECT_LIB)/libnfs.a: libnfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnfs.a
+TMPINSTALL_FILES = $(PROJECT_LIB)/libnfs.a
+
+
 # if you have CEXP set this variable to 'YES'
 # and some "help" info will be compiled in.
 libnfs_a_SOURCES = src/rpcio.c src/rpcio.h
@@ -18,8 +23,6 @@ libnfs_a_SOURCES += proto/mount_prot.h proto/nfs_prot.h
 
 # With CEXP
 # libnfs_a_SOURCES += dirutils.c rpcio.modini.c nfs.modini.c cexphelp.c
-
-include_HEADERS = src/librtemsNfs.h
 
 # PGMS=${ARCH}/nfs.obj ${ARCH}/rpcio.obj ${ARCH}/dirutils.obj
 
@@ -66,5 +69,4 @@ $(srcdir)/proto/nfs_prot_xdr.c: proto/nfs_prot.x proto/nfs_prot.h
 	> nfs_prot_xdr.c)
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

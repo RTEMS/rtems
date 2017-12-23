@@ -4,13 +4,14 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([score])
 RTEMS_TOP([..],[])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 
 AM_INIT_AUTOMAKE([no-define nostdinc subdir-objects foreign 1.12.2])
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_RTEMS_DEBUG
@@ -488,10 +489,5 @@ telnetd/Makefile
 pppd/Makefile
 mghttpd/Makefile
 wrapup/Makefile])
-
-AC_CONFIG_COMMANDS([preinstall-stamp],
-[test -z "$with_multisubdir" && ${MAKE} preinstall-stamp],
-[MAKE=${MAKE}
-with_multisubdir="$with_multisubdir"])
 
 AC_OUTPUT

@@ -4,10 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-include_libcpudir = $(includedir)/libcpu
-include_libcpu_HEADERS =
-include_libcpu_HEADERS += include/libcpu/access.h
-
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache/cache_.h \
     ../shared/src/cache_manager.c
@@ -33,5 +29,4 @@ access_rel_SOURCES = access/access.S access/access_le.c
 access_rel_CPPFLAGS = $(AM_CPPFLAGS)
 access_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

@@ -22,6 +22,5 @@ shared_misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(NIOS2_CPPFLAGS)
 shared_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-include $(srcdir)/preinstall.am
 
 include $(top_srcdir)/../../../automake/local.am

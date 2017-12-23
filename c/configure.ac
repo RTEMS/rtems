@@ -5,6 +5,8 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([src])
 RTEMS_TOP(..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 
@@ -65,6 +67,7 @@ AC_SUBST(RTEMS_BSP_LIST)
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile],[
 for bsp in : $RTEMS_BSP_LIST; do test "x$bsp" = x: && continue
+rtems_source_top=$(cd ${srcdir}/.. && pwd)
 cat >> Makefile << BSPEOF
 
 $bsp: src/configure
@@ -72,7 +75,8 @@ $bsp: src/configure
 	  echo "Configuring RTEMS_BSP=$bsp"; \\
 	  \$(MKDIR_P) $bsp; \\
 	  ( cd $bsp && \\
-	    CONFIG_SHELL=\$(SHELL) RTEMS_BSP=$bsp \$(rtems_bsp_configure) ) \\
+           CONFIG_SHELL=\$(SHELL) RTEMS_BSP=$bsp \$(rtems_bsp_configure) \\
+           --with-rtems-build-top=\$\${PWD} --with-rtems-source-top=${rtems_source_top} ) \\
 	  || case "\$\$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac;
 BSPEOF
 done

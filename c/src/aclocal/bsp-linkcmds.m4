@@ -13,5 +13,5 @@ done
 AS_IF([test -z "${LINKCMDS}"],[
   AC_MSG_ERROR([can not determine linkcmds])])
 
-AC_CONFIG_LINKS([startup/linkcmds:${LINKCMDS}])
+AC_CONFIG_LINKS([linkcmds:${LINKCMDS}])
 ])

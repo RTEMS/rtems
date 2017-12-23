@@ -4,18 +4,7 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += include/irq.h
+dist_project_lib_DATA = startup/bsp_specs
 
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
@@ -26,16 +15,14 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA = bsp_specs
-dist_project_lib_DATA += startup/linkcmds.m5484FireEngine.flash
+project_lib_DATA += linkcmds
 dist_project_lib_DATA += startup/linkcmds.COBRA5475
 dist_project_lib_DATA += startup/linkcmds.m5484FireEngine
-
-project_lib_DATA += startup/linkcmds
+dist_project_lib_DATA += startup/linkcmds.m5484FireEngine.flash
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS =
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # startup
 libbsp_a_SOURCES += \
@@ -82,5 +69,5 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

@@ -4,11 +4,9 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
 
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
@@ -24,46 +22,26 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
-project_lib_DATA += startup/linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base	
-dist_project_lib_DATA += startup/linkcmds.mpc55xx
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 dist_project_lib_DATA += startup/linkcmds.gwlcfm
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb
 dist_project_lib_DATA += startup/linkcmds.mpc5566evb_spe
-dist_project_lib_DATA += startup/linkcmds.mpc5643l_evb
+dist_project_lib_DATA += startup/linkcmds.mpc55xx
 dist_project_lib_DATA += startup/linkcmds.mpc5643l_dpu
-dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
-dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
-dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
+dist_project_lib_DATA += startup/linkcmds.mpc5643l_evb
 dist_project_lib_DATA += startup/linkcmds.mpc5668g
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508
-dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_boot
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_app
+dist_project_lib_DATA += startup/linkcmds.mpc5674f_ecu508_boot
+dist_project_lib_DATA += startup/linkcmds.mpc5674fevb
+dist_project_lib_DATA += startup/linkcmds.mpc5674fevb_spe
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6
 dist_project_lib_DATA += startup/linkcmds.mpc5674f_rsm6_base
+dist_project_lib_DATA += startup/linkcmds.phycore_mpc5554
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
-
-# Includes
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
-include_bsp_HEADERS += ../shared/include/start.h
-include_bsp_HEADERS += ../shared/include/tictac.h
-include_bsp_HEADERS += include/bsp/irq.h
-include_bsp_HEADERS += include/mpc55xx-config.h
-include_bsp_HEADERS += include/smsc9218i.h
-include_bsp_HEADERS += include/console-esci.h
-include_bsp_HEADERS += include/console-generic.h
-include_bsp_HEADERS += include/console-linflex.h
 
 # startup
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -141,5 +119,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/mpc55xxevb/headers.am

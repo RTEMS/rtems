@@ -112,6 +112,11 @@ librfs_a_SOURCES = \
 
 # JFFS2
 project_lib_LIBRARIES = libjffs2.a
+
+$(PROJECT_LIB)/libjffs2.a: libjffs2.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libjffs2.a
+TMPINSTALL_FILES = $(PROJECT_LIB)/libjffs2.a
+
 libjffs2_a_SOURCES =
 libjffs2_a_SOURCES += src/jffs2/src/build.c
 libjffs2_a_SOURCES += src/jffs2/src/compat-crc32.c
@@ -139,6 +144,5 @@ libjffs2_a_CPPFLAGS += -D__ECOS
 libjffs2_a_CPPFLAGS += '-DKBUILD_MODNAME="JFFS2"'
 
 # ---
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

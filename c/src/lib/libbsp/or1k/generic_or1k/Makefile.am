@@ -10,33 +10,11 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-include_libcpudir = $(includedir)/libcpu
-
-dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA = startup/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
 ###############################################################################
-
-include_bsp_HEADERS =
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
-include_bsp_HEADERS += ../../../libbsp/shared/include/mm.h
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../shared/include/cache_.h
-include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/uart.h
-include_bsp_HEADERS += include/generic_or1k.h
-
-nodist_include_HEADERS = include/bspopts.h
 
 ###############################################################################
 #                  Data                                                       #
@@ -47,8 +25,8 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-project_lib_DATA += startup/linkcmds
-project_lib_DATA += ../shared/startup/linkcmds.base
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -57,7 +35,7 @@ project_lib_DATA += ../shared/startup/linkcmds.base
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS =
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 libbsp_a_LIBADD =
 
 # Startup
@@ -104,5 +82,5 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
 
 DISTCLEANFILES = include/bspopts.h
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/or1k/generic_or1k/headers.am

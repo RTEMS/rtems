@@ -4,28 +4,8 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h 
-include_HEADERS += include/tm27.h
-include_HEADERS += ../shared/include/asm.h
-
-include_bootdir = $(includedir)/boot
-include_boot_HEADERS = ../shared/helenos/boot/include/align.h \
-  ../shared/helenos/boot/include/balloc.h \
-  ../shared/helenos/boot/include/gentypes.h \
-  ../shared/helenos/boot/include/main.h \
-  ../shared/helenos/boot/include/ofwarch.h \
-  ../shared/helenos/boot/include/ofw.h \
-  ../shared/helenos/boot/include/ofw_tree.h \
-  ../shared/helenos/boot/include/register.h \
-  ../shared/helenos/boot/include/stack.h \
-  ../shared/helenos/boot/include/types.h
-
-nodist_include_HEADERS = include/bspopts.h    
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h 
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -75,5 +55,5 @@ libbsp_a_LIBADD = \
       ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/sparc64-syscall.rel 
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/sparc64/niagara/headers.am

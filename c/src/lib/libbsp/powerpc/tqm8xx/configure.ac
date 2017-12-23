@@ -4,6 +4,9 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-tqm8xx],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/pghplus.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -95,7 +98,6 @@ RTEMS_BSPOPTS_HELP([BSP_USE_NETWORK_SCC],
 AC_CONFIG_FILES([Makefile])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 RTEMS_PPC_EXCEPTIONS
 

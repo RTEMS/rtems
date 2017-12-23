@@ -4,11 +4,6 @@ noinst_PROGRAMS =
 
 include $(top_srcdir)/../../../automake/compile.am
 
-include_libcpudir = $(includedir)/libcpu
-
-include_libcpu_HEADERS = page.h cpuModel.h
-include_libcpu_HEADERS += byteorder.h
-
 noinst_PROGRAMS += cache.rel
 cache_rel_SOURCES = cache.c cache_.h \
     ../shared/src/cache_manager.c ../shared/include/cache.h
@@ -25,5 +20,4 @@ page_rel_SOURCES = page.c page.h
 page_rel_CPPFLAGS = $(AM_CPPFLAGS)
 page_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

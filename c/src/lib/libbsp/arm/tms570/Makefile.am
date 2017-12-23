@@ -11,81 +11,11 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-
-include_bsp_ti_herculesdir = $(includedir)/bsp/ti_herc
-
-dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA = startup/bsp_specs
 
 # ----------------------------
 # ------  Headers
 # ----------------------------
-
-include_HEADERS = include/bsp.h
-
-nodist_include_HEADERS = include/bspopts.h
-
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../../shared/include/uart-output-char.h
-include_bsp_HEADERS += ../shared/include/start.h
-include_bsp_HEADERS += include/tms570.h
-include_bsp_HEADERS += include/tms570-sci.h
-include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/tms570-rti.h
-include_bsp_HEADERS += include/tms570-vim.h
-include_bsp_HEADERS += include/tms570-pom.h
-include_bsp_HEADERS += include/tms570-sci-driver.h
-include_bsp_HEADERS += include/system-clocks.h
-include_bsp_HEADERS += include/tms570-pinmux.h
-
-include_bsp_HEADERS += include/tms570-pins.h
-include_bsp_HEADERS += include/tms570ls3137zwt-pins.h
-include_bsp_HEADERS += include/tms570lc4357-pins.h
-
-include_bsp_ti_hercules_HEADERS = include/ti_herc/reg_adc.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_ccmsr.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_crc.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dcan.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dcc.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dma.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_dmm.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_efuse.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emacc.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emacm.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_emif.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_esm.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_flash.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_flex_ray.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_gio.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_htu.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_i2c.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_iomm.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_lin.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_mdio.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_n2het.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pbist.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pll.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pmm.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_rti.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_rtp.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sci.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_tcr.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_tcram.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_vim.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pom.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_spi.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_stc.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_sys2.h
-include_bsp_ti_hercules_HEADERS += include/ti_herc/reg_pcr.h
-
-include_HEADERS += include/tm27.h
 
 # ----------------------------
 # ------  Data
@@ -95,12 +25,12 @@ EXTRA_DIST += ../shared/start/start.S
 start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
-project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk
-EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_with_loader
-EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_sdram
-EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_intram
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += startup/linkcmds.tms570ls3137_hdk
+dist_project_lib_DATA += startup/linkcmds.tms570ls3137_hdk_intram
+dist_project_lib_DATA += startup/linkcmds.tms570ls3137_hdk_sdram
+dist_project_lib_DATA += startup/linkcmds.tms570ls3137_hdk_with_loader
 
 # ----------------------------
 # ------  LibBSP
@@ -109,7 +39,7 @@ EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_intram
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS =
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 libbsp_a_LIBADD =
 
 # Shared
@@ -184,10 +114,6 @@ libbsp_a_SOURCES += hwinit/tms570_selftest_par_std.c
 libbsp_a_SOURCES += hwinit/tms570_selftest_parity.c
 libbsp_a_SOURCES += hwinit/tms570_tcram_tests.c
 
-include_bsp_HEADERS += hwinit/tms570_selftest_parity.h
-include_bsp_HEADERS += hwinit/tms570_hwinit.h
-include_bsp_HEADERS += hwinit/tms570_selftest.h
-
 # Start hooks
 libbsp_a_SOURCES += hwinit/bspstarthooks-hwinit.c
 else
@@ -201,5 +127,5 @@ endif
 
 DISTCLEANFILES = include/bspopts.h
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/tms570/headers.am

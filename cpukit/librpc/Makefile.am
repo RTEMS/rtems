@@ -4,26 +4,6 @@ include $(top_srcdir)/automake/compile.am
 EXTRA_DIST =
 
 if LIBRPC
-include_rpcdir = $(includedir)/rpc
-
-include_rpc_HEADERS = include/rpc/auth.h
-include_rpc_HEADERS += include/rpc/auth_unix.h
-include_rpc_HEADERS += include/rpc/clnt.h
-include_rpc_HEADERS += include/rpc/clnt_stat.h
-include_rpc_HEADERS += include/rpc/clnt_soc.h
-include_rpc_HEADERS += include/rpc/svc.h
-include_rpc_HEADERS += include/rpc/svc_auth.h
-include_rpc_HEADERS += include/rpc/svc_soc.h
-include_rpc_HEADERS += include/rpc/pmap_clnt.h
-include_rpc_HEADERS += include/rpc/pmap_prot.h
-include_rpc_HEADERS += include/rpc/pmap_rmt.h
-include_rpc_HEADERS += include/rpc/rpc.h
-include_rpc_HEADERS += include/rpc/types.h
-include_rpc_HEADERS += include/rpc/xdr.h
-include_rpc_HEADERS += include/rpc/rpc_com.h
-include_rpc_HEADERS += include/rpc/rpc_msg.h
-include_rpc_HEADERS += include/rpc/rpcent.h
-
 man_MANS =
 
 noinst_LIBRARIES = libxdr.a
@@ -90,5 +70,4 @@ EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
     include/rpcsvc/ypupdate_prot.x include/rpcsvc/yp.x \
     include/rpcsvc/ypxfrd.x
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

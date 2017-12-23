@@ -1,6 +1,6 @@
-if LIBDL
-
 include $(top_srcdir)/automake/compile.am
+
+if LIBDL
 
 noinst_LIBRARIES = libdl.a
 libdl_a_SOURCES = \
@@ -33,5 +33,4 @@ libdl_a_CPPFLAGS = $(AM_CPPFLAGS) -DRTEMS_RTL_RAP_LOADER=1 -DRTEMS_RTL_ELF_LOADE
 
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

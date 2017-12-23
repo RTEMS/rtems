@@ -9,6 +9,9 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-arm-lpc32xx],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/lpc32xx_mzx.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -106,7 +109,6 @@ RTEMS_BSPOPTS_SET([TESTS_USE_PRINTK],[*],[1])
 RTEMS_BSPOPTS_HELP([TESTS_USE_PRINTK],[tests use printk() for output])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -4,23 +4,12 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 _SUBDIRS = . tools
 
-include_HEADERS += include/i2c.h
-include_HEADERS += include/i2cdrv.h
-include_HEADERS += include/ds1307.h
-include_HEADERS += include/nvram.h
 
 EXTRA_DIST += times
 
@@ -29,8 +18,10 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds startup/gdbinit \
-    startup/linkcmds.flash
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += startup/linkcmds.flash
+
+dist_project_lib_DATA += startup/gdbinit
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -64,5 +55,5 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mbus.rel
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/m68k/mcf5206elite/headers.am

@@ -10,6 +10,7 @@ include $(top_srcdir)/../automake/leaf.am
 pppd_LDLIBS = -lpppd
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
 
 LINK_OBJS = $(pppd_OBJECTS)
 LINK_LIBS = $(pppd_LDLIBS)

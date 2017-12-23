@@ -5,18 +5,9 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-
-dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA = startup/bsp_specs
 
 # include
-include_HEADERS     = include/bsp.h
-include_HEADERS    += include/tm27.h
-
-include_bsp_HEADERS =
-
-nodist_include_HEADERS     = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES             = include/bspopts.h
 
 # start
@@ -25,7 +16,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
 
@@ -49,11 +40,9 @@ libbsp_a_SOURCES += startup/dummy_console.c \
                     ../../shared/dummy_printk_support.c
 
 # irq
-include_bsp_HEADERS += include/irq.h
 libbsp_a_SOURCES += irq/irq_init.c
 
 # mmu
-include_bsp_HEADERS += include/mmu.h
 libbsp_a_SOURCES += mmu/mmu.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -65,5 +54,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
 
 EXTRA_DIST += times
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/virtex4/headers.am

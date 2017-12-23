@@ -1,29 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-include_rtemsdir = $(includedir)/rtems
-
-include_rtems_HEADERS = include/confdefs.h
-include_rtems_HEADERS += include/rtems/bsd.h
-include_rtems_HEADERS += include/rtems/chain.h
-include_rtems_HEADERS += include/rtems/config.h
-include_rtems_HEADERS += include/rtems/counter.h
-include_rtems_HEADERS += include/rtems/extension.h
-include_rtems_HEADERS += include/rtems/extensionimpl.h
-include_rtems_HEADERS += include/rtems/fatal.h
-include_rtems_HEADERS += include/rtems/init.h
-include_rtems_HEADERS += include/rtems/io.h
-include_rtems_HEADERS += include/rtems/ioimpl.h
-include_rtems_HEADERS += include/rtems/mptables.h
-include_rtems_HEADERS += include/rtems/cbs.h
-include_rtems_HEADERS += include/rtems/profiling.h
-include_rtems_HEADERS += include/rtems/rbheap.h
-include_rtems_HEADERS += include/rtems/rbtree.h
-include_rtems_HEADERS += include/rtems/scheduler.h
-include_rtems_HEADERS += include/rtems/timecounter.h
-include_rtems_HEADERS += include/rtems/timespec.h
-include_rtems_HEADERS += include/rtems/version.h
-
 EXTRA_DIST = include/rtems/README
 
 noinst_LIBRARIES = libsapi.a
@@ -84,5 +61,4 @@ $(srcdir)/src/version.c: version-vc-key.h
 
 all-local: generate-vc-key
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

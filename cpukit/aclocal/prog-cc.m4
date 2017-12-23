@@ -29,11 +29,10 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 AS_IF([test "$GCC" = yes && test "$rtems_cv_CFLAGS_set" != set],
 [CFLAGS="$CFLAGS -Wall -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs"])
 
-RTEMS_CPPFLAGS="-I\$(top_builddir) -I\$(PROJECT_INCLUDE)"
-AC_SUBST(RTEMS_CPPFLAGS)
-
 AS_IF([test "$GCC" = yes],[
   RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -r"
 ])
 AC_SUBST(RTEMS_RELLDFLAGS)
+
+RTEMS_INCLUDES
 ])

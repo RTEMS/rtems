@@ -6,9 +6,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 
 _SUBDIRS = @RTEMS_BSP_FAMILY@
 
-include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS = shared/include/linker-symbols.h
-
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
+include $(srcdir)/../../../../../bsps/riscv/headers.am

@@ -10,6 +10,5 @@ _SUBDIRS = @RTEMS_BSP_FAMILY@
 
 EXTRA_DIST =
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

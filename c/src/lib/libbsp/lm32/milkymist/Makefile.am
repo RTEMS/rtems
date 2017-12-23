@@ -4,43 +4,19 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS  = include/bsp.h
-include_HEADERS += include/tm27.h
-
-include_bsp_HEADERS  = ../../lm32/shared/include/irq.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_gpio/milkymist_gpio.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_buttons/milkymist_buttons.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_ac97/milkymist_ac97.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_usbinput/milkymist_usbinput.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_pfpu/milkymist_pfpu.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_tmu/milkymist_tmu.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_memcard/milkymist_memcard.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_flash/milkymist_flash.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_dmx/milkymist_dmx.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_midi/milkymist_midi.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_ir/milkymist_ir.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_video/milkymist_video.h
-include_bsp_HEADERS += ../../lm32/shared/milkymist_versions/milkymist_versions.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += include/system_conf.h
 
 EXTRA_DIST += ../../lm32/shared/start/start.S
 start.$(OBJEXT): ../../lm32/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -124,5 +100,5 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/lm32/milkymist/headers.am

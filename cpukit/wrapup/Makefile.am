@@ -5,6 +5,11 @@ include $(top_srcdir)/automake/compile.am
 ARCH = o-optimize
 
 project_lib_LIBRARIES = librtemscpu.a
+
+$(PROJECT_LIB)/librtemscpu.a: librtemscpu.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu.a
+TMPINSTALL_FILES = $(PROJECT_LIB)/librtemscpu.a
+
 librtemscpu_a_SOURCES =
 
 TMP_LIBS =
@@ -134,5 +139,4 @@ librtemscpu.a: $(TMP_LIBS)
 
 all-local: $(TMPINSTALL_FILES)
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

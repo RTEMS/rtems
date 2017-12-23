@@ -1,4 +1,4 @@
-CC = @CC@ $(GCCSPECS)
+CC = @CC@
 
 check_PROGRAMS =
 

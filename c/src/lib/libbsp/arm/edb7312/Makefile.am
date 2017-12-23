@@ -4,33 +4,21 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-include_bsp_HEADERS =
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
-
-include_HEADERS += include/ep7312.h
 
 EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
-include_HEADERS += ../../arm/shared/comm/uart.h
 # startup
 libbsp_a_SOURCES += \
     ../../shared/bspgetworkarea.c \
@@ -52,9 +40,6 @@ libbsp_a_SOURCES += console/uart.c ../../shared/console.c \
 libbsp_a_SOURCES += timer/timer.c
 
 # irq
-include_bsp_HEADERS += ../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h \
-	irq/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
@@ -83,5 +68,5 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/edb7312/headers.am

@@ -1,7 +1,5 @@
 include $(top_srcdir)/automake/compile.am
 
-include_HEADERS =
-
 noinst_LIBRARIES = libstdthreads.a
 
 libstdthreads_a_CFLAGS = -std=c11

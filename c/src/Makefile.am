@@ -3,6 +3,13 @@ ACLOCAL_AMFLAGS = -I aclocal
 _SUBDIRS = . @BSP_SUBDIRS@
 DIST_SUBDIRS = @BSP_SUBDIRS@
 
+$(PROJECT_LIB)/$(dirstamp):
+	@echo "Making project library directory: $(PROJECT_LIB)"
+	@$(MKDIR_P) $(PROJECT_LIB)
+	@: > $(PROJECT_LIB)/$(dirstamp)
+
+all-local: $(PROJECT_LIB)/$(dirstamp)
+
 clean-local:
 	$(RM) -r $(PROJECT_RELEASE)
 
@@ -23,13 +30,6 @@ DISTCLEANFILES += @CUSTOM_CFG_FILES@
 noinst_DATA += make/custom/default.cfg
 DISTCLEANFILES += make/custom/default.cfg
 
-noinst_DATA += preinstall-stamp
-
-preinstall-stamp:
-	$(MAKE) $(AM_MAKEFLAGS) preinstall
-	touch preinstall-stamp
-CLEANFILES = preinstall-stamp
-
 @host_alias@-@RTEMS_BSP@.pc: config.status bsp.pc.in
 	./config.status --file=$@:$(srcdir)/bsp.pc.in
 
@@ -42,3 +42,4 @@ include $(DEPDIR)/cfg.P
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
+include $(srcdir)/../../bsps/headers.am

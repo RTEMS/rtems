@@ -4,6 +4,8 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-sparc64],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([shared])
 RTEMS_TOP([../../../../..],[../../..])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 

@@ -7,7 +7,7 @@ ada_base_sp$(EXEEXT): base_sp.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.$(OBJEXT): ../../support/init.c
-	$(COMPILE.c) -I$(srcdir) -c $<
+	$(COMPILE.c) $(AM_CPPFLAGS) -I$(srcdir) -c $<
 
 noinst_PROGRAMS = ada_base_sp
 

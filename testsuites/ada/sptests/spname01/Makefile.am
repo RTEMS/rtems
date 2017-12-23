@@ -10,7 +10,7 @@ ada_spname01$(EXEEXT): spname01.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.$(OBJEXT): ../../support/init.c
-	$(COMPILE.c) -I$(srcdir) -c $<
+	$(COMPILE.c) $(AM_CPPFLAGS) -I$(srcdir) -c $<
 
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_spname01.scn

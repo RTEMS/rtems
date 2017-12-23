@@ -4,6 +4,8 @@ AC_PREREQ([2.69])
 AC_INIT([rtems],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([c])
 RTEMS_TOP([.])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 # Abort if trying to build inside of the source tree.
 AS_IF([test -f aclocal/version.m4],[
@@ -26,7 +28,6 @@ RTEMS_ENABLE_CXX
 RTEMS_ENABLE_TESTS  
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_RTEMSBSP
-RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_PARAVIRT
 RTEMS_ENABLE_DRVMGR
 
@@ -48,9 +49,6 @@ AS_IF([test $host != $build],[
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
 ])
 
-AS_IF([test x"$enable_multilib" = x"yes"],[
-  RTEMS_TARGET_CONFIG_SUBDIRS([cpukit])
-])
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile])

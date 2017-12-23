@@ -9,6 +9,9 @@ AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-arm-beagle],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
 AC_CONFIG_SRCDIR([make/custom/beagleboardorig.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.11.1])
@@ -46,7 +49,6 @@ RTEMS_BSPOPTS_SET([BBB_DEBUG],[beaglebone*],[0])
 RTEMS_BSPOPTS_HELP([BBB_DEBUG],[Enable BBB debug])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

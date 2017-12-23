@@ -4,6 +4,9 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-gen5200],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/brs5l.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -129,7 +132,6 @@ AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
 AC_CONFIG_FILES([Makefile])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 RTEMS_PPC_EXCEPTIONS
 

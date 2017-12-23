@@ -7,6 +7,8 @@ AC_INIT([rtems-c-src-lib-libbsp-sparc64],[_RTEMS_VERSION],[https://devel.rtems.o
 # AC_CONFIG_SRCDIR([shared])
 
 RTEMS_TOP(../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define foreign 1.12.2])

@@ -4,19 +4,10 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-include_HEADERS += include/mc9328mxl.h
-
-include_bsp_HEADERS =
-libbsp_a_CPPFLAGS =
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -45,9 +36,6 @@ libbsp_a_SOURCES += timer/timer.c
 # console
 libbsp_a_SOURCES += console/uart.c
 # IRQ
-include_bsp_HEADERS += ../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h
-include_bsp_HEADERS += include/bsp/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
@@ -76,5 +64,5 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/csb336/headers.am

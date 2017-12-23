@@ -8,7 +8,7 @@ AC_DEFUN([RTEMS_BSP_CONFIGURE],
 
   RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-  AC_CONFIG_HEADERS([include/bspopts.tmp:include/bspopts.h.in],[
+  AC_CONFIG_HEADERS([include/bspopts.tmp:bspopts.h.in],[
 echo "/* BSP dependent options file */"         >$tmp/config.h
 echo "/* automatically generated -- DO NOT EDIT!! */" >>$tmp/config.h
 echo                                                  >>$tmp/config.h

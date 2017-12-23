@@ -1,6 +1,6 @@
-if LIBDEBUGGER
-
 include $(top_srcdir)/automake/compile.am
+
+if LIBDEBUGGER
 
 noinst_LIBRARIES = libdebugger.a
 libdebugger_a_SOURCES = \
@@ -19,5 +19,4 @@ endif
 
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

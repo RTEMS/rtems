@@ -4,27 +4,20 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_HEADERS += include/erc32.h
 
 EXTRA_DIST += ../../sparc/shared/start/start.S
 start.$(OBJEXT): ../../sparc/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds ../shared/startup/linkcmds.base
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -51,7 +44,6 @@ libbsp_a_SOURCES += ../../sparc/shared/cpu.c
 libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
-include_bsp_HEADERS = ../shared/include/gnatcommon.h
 # console
 libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
     ../../shared/console_select.c  ../../shared/console_control.c \
@@ -65,10 +57,6 @@ libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 libbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-include_bsp_HEADERS += \
-    ../../shared/include/irq-generic.h \
-    ../../shared/include/irq-info.h \
-    include/bsp/irq.h
 libbsp_a_SOURCES += \
     ../../sparc/shared/irq/irq-shared.c \
     ../../sparc/shared/irq/bsp_isr_handler.c \
@@ -103,5 +91,5 @@ endif
 
 EXTRA_DIST += times
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/sparc/erc32/headers.am

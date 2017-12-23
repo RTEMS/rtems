@@ -5,6 +5,8 @@ AC_INIT([rtems-c-src-tests-rhealstone],[_RTEMS_VERSION],[https://devel.rtems.org
 AC_CONFIG_SRCDIR([rhtaskswitch])
 AC_CONFIG_HEADER([config.h])
 RTEMS_TOP([../..],[..])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 

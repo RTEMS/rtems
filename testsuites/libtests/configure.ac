@@ -5,6 +5,8 @@ AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[https://devel.rtems.org/n
 AC_CONFIG_SRCDIR([cpuuse])
 AC_CONFIG_HEADER([config.h])
 RTEMS_TOP([../..],[..])
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
 

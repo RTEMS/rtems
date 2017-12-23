@@ -6,6 +6,11 @@ include $(top_srcdir)/automake/compile.am
 
 ## Setup the variant build subdirectory
 project_lib_DATA = o-optimize/librtemsbsp.a
+
+$(PROJECT_LIB)/librtemsbsp.a: o-optimize/librtemsbsp.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemsbsp.a
+TMPINSTALL_FILES = $(PROJECT_LIB)/librtemsbsp.a
+
 CLEANFILES = o-optimize/librtemsbsp.a
 
 SRCS = ../support/libsupport.a
@@ -62,5 +67,4 @@ o-optimize/librtemsbsp.a: $(SRCS)
 	rm -f $@-list o-optimize/*.$(OBJEXT) o-optimize/*.rel
 	$(RANLIB) $@
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

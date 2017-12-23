@@ -1,8 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-AM_CPPFLAGS += -I$(srcdir)
-
 EXTRA_DIST = README
 EXTRA_DIST += rtems/bootp.h
 
@@ -22,8 +20,6 @@ libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetworking_CPPFLAGS)
 
 ## poll.h is not in the list because RTEMS does not have poll()
 ## and installing poll.h confuses autoconf.
-include_HEADERS = resolv.h
-
 libnetworking_a_SOURCES = opt_atalk.h opt_bdg.h opt_compat.h opt_inet6.h \
     opt_inet.h opt_ipfw.h opt_ipx.h opt_mac.h opt_mrouting.h opt_netgraph.h \
     opt_tcpdebug.h opt_ipsec.h loop.h
@@ -31,12 +27,6 @@ libnetworking_a_SOURCES += opt_ppp.h
 libnetworking_a_SOURCES += bpfilter.h
 
 # arpa
-
-include_arpadir = $(includedir)/arpa
-
-include_arpa_HEADERS = arpa/ftp.h
-include_arpa_HEADERS += arpa/nameser.h
-include_arpa_HEADERS += arpa/nameser_compat.h
 
 ## kern
 
@@ -46,67 +36,15 @@ libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
 
 ## machine
 
-include_machinedir = $(includedir)/machine
-
-include_machine_HEADERS = machine/_align.h
-include_machine_HEADERS += machine/cpu.h
-include_machine_HEADERS += machine/cpufunc.h
-include_machine_HEADERS += machine/in_cksum.h
-include_machine_HEADERS += machine/_kernel_lock.h
-include_machine_HEADERS += machine/vmparam.h
-
 libnetworking_a_SOURCES += machine/limits.h
 
 ## net
-
-include_netdir = $(includedir)/net
-
-include_net_HEADERS = net/bpf.h
-include_net_HEADERS += net/ethernet.h
-include_net_HEADERS += net/if_arp.h
-include_net_HEADERS += net/if_dl.h
-include_net_HEADERS += net/if_llc.h
-include_net_HEADERS += net/if_ppp.h
-include_net_HEADERS += net/if_types.h
-include_net_HEADERS += net/if_var.h
-include_net_HEADERS += net/netisr.h
-include_net_HEADERS += net/ppp_defs.h
-include_net_HEADERS += net/radix.h
-include_net_HEADERS += net/raw_cb.h
-include_net_HEADERS += net/route.h
-include_net_HEADERS += net/if_pppvar.h
-include_net_HEADERS += net/slcompress.h
-include_net_HEADERS += net/if_media.h
-include_net_HEADERS += net/ppp_comp.h
 
 libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
     net/radix.c net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c \
     net/if_ppp.c net/ppp_tty.c net/slcompress.c
 
 ## netinet
-
-include_netinetdir = $(includedir)/netinet
-
-include_netinet_HEADERS = netinet/icmp_var.h
-include_netinet_HEADERS += netinet/if_ether.h
-include_netinet_HEADERS += netinet/igmp.h
-include_netinet_HEADERS += netinet/igmp_var.h
-include_netinet_HEADERS += netinet/in_pcb.h
-include_netinet_HEADERS += netinet/in_systm.h
-include_netinet_HEADERS += netinet/in_var.h
-include_netinet_HEADERS += netinet/ip.h
-include_netinet_HEADERS += netinet/ip_fw.h
-include_netinet_HEADERS += netinet/ip_icmp.h
-include_netinet_HEADERS += netinet/ip_mroute.h
-include_netinet_HEADERS += netinet/ip_var.h
-include_netinet_HEADERS += netinet/tcp_debug.h
-include_netinet_HEADERS += netinet/tcp_fsm.h
-include_netinet_HEADERS += netinet/tcp_seq.h
-include_netinet_HEADERS += netinet/tcp_timer.h
-include_netinet_HEADERS += netinet/tcp_var.h
-include_netinet_HEADERS += netinet/tcpip.h
-include_netinet_HEADERS += netinet/udp.h
-include_netinet_HEADERS += netinet/udp_var.h
 
 libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
     netinet/in_cksum.c netinet/in_pcb.c netinet/in_proto.c netinet/in_rmx.c \
@@ -119,39 +57,13 @@ libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
 
 ## netinet6
 
-include_netinet6dir = $(includedir)/netinet6
-
 
 ## nfs
-
-include_nfsdir = $(includedir)/nfs
-
-include_nfs_HEADERS = nfs/nfsproto.h
-include_nfs_HEADERS += nfs/rpcv2.h
-include_nfs_HEADERS += nfs/xdr_subs.h
 
 libnetworking_a_SOURCES += nfs/bootp_subr.c
 
 ## nfsclient
-include_nfsclientdir = $(includedir)/nfsclient
-
-include_nfsclient_HEADERS = nfsclient/nfsargs.h
-include_nfsclient_HEADERS += nfsclient/nfsdiskless.h
-
 ## rtems
-
-include_rtemsdir = $(includedir)/rtems
-
-include_rtems_HEADERS = rtems/rtems_bsdnet.h
-include_rtems_HEADERS += rtems/rtems_bsdnet_internal.h
-include_rtems_HEADERS += rtems/dhcp.h
-include_rtems_HEADERS += rtems/rtems_dhcp_failsafe.h
-include_rtems_HEADERS += rtems/tftp.h
-include_rtems_HEADERS += rtems/ftpfs.h
-include_rtems_HEADERS += rtems/mkrootfs.h
-include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
-include_rtems_HEADERS += rtems/rtems_netdb.h
-include_rtems_HEADERS += rtems/rtems_netinet_in.h
 
 libnetworking_a_SOURCES += rtems/sghostname.c \
     rtems/rtems_glue.c rtems/rtems_malloc_mbuf.c rtems/rtems_syscall.c \
@@ -165,49 +77,15 @@ libnetworking_a_SOURCES += rtems/sghostname.c \
 
 ## sys
 
-include_sysdir = $(includedir)/sys
-
-include_sys_HEADERS = sys/callout.h
-include_sys_HEADERS += sys/conf.h
-include_sys_HEADERS += sys/domain.h
-include_sys_HEADERS += sys/kernel.h
-include_sys_HEADERS += sys/libkern.h
-include_sys_HEADERS += sys/linker_set.h
-include_sys_HEADERS += sys/malloc.h
-include_sys_HEADERS += sys/mbuf.h
-include_sys_HEADERS += sys/mount.h
-include_sys_HEADERS += sys/proc.h
-include_sys_HEADERS += sys/protosw.h
-include_sys_HEADERS += sys/reboot.h
-include_sys_HEADERS += sys/resourcevar.h
-include_sys_HEADERS += sys/selinfo.h
-include_sys_HEADERS += sys/signalvar.h
-include_sys_HEADERS += sys/socketvar.h
-include_sys_HEADERS += sys/sysctl.h
-include_sys_HEADERS += sys/systm.h
-include_sys_HEADERS += sys/ucred.h
-
 # vm
 
-include_vmdir = $(includedir)/vm
-
-include_vm_HEADERS = vm/vm.h
-include_vm_HEADERS += vm/vm_extern.h
-include_vm_HEADERS += vm/vm_kern.h
-include_vm_HEADERS += vm/vm_param.h
-
 # dev
-include_dev_miidir = $(includedir)/dev/mii
-include_dev_mii_HEADERS = dev/mii/mii.h
-
 ## libc
 
 libc_CPPFLAGS = -DNOPOLL -DNOSELECT -D__BSD_VISIBLE -D_THREAD_SAFE
 
 noinst_LIBRARIES += libc.a
 libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(libc_CPPFLAGS)
-
-include_HEADERS += ifaddrs.h
 
 libc_a_SOURCES = libc/base64.c \
     libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
@@ -259,5 +137,5 @@ endif
 
 EXTRA_DIST += $(UNUSED_FILES)
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am
+include $(srcdir)/headers.am

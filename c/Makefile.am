@@ -12,7 +12,6 @@ DIST_SUBDIRS = $(RTEMS_BSP)
 
 ## Let all RTEMS' make targets depend on ${RTEMS_BSP}
 all-local: $(RTEMS_BSP)
-preinstall-am: $(RTEMS_BSP)
 
 ## Pull in extra files intro the distribution
 EXTRA_DIST = ACKNOWLEDGEMENTS

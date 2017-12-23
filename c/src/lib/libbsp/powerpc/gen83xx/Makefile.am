@@ -4,30 +4,9 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
-
-include_bsp_HEADERS =
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/u-boot.h
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
-include_bsp_HEADERS += ../shared/include/start.h
-include_bsp_HEADERS += ../shared/include/tictac.h
-include_bsp_HEADERS += ../shared/include/u-boot-board-info.h
-include_bsp_HEADERS += include/hwreg_vals.h
-include_bsp_HEADERS += include/irq.h
-include_bsp_HEADERS += include/tsec-config.h
-include_bsp_HEADERS += include/u-boot-config.h
 
 noinst_PROGRAMS =
 
@@ -42,14 +21,14 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds \
-    ../shared/startup/linkcmds.base \
-    startup/linkcmds.mpc83xx \
-    startup/linkcmds.mpc8309som \
-    startup/linkcmds.mpc8313erdb \
-    startup/linkcmds.br_uid \
-    startup/linkcmds.mpc8349eamds \
-    startup/linkcmds.hsc_cm01
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
+dist_project_lib_DATA += startup/linkcmds.br_uid
+dist_project_lib_DATA += startup/linkcmds.hsc_cm01
+dist_project_lib_DATA += startup/linkcmds.mpc8309som
+dist_project_lib_DATA += startup/linkcmds.mpc8313erdb
+dist_project_lib_DATA += startup/linkcmds.mpc8349eamds
+dist_project_lib_DATA += startup/linkcmds.mpc83xx
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -119,5 +98,5 @@ endif
 
 EXTRA_DIST += README.mpc8349eamds
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/gen83xx/headers.am

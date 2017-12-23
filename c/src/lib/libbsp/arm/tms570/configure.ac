@@ -10,6 +10,9 @@ AC_INIT([rtems-c-src-lib-libbsp-arm-tms570],[_RTEMS_VERSION],
 				[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/tms570ls3137_hdk.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -55,7 +58,6 @@ RTEMS_BSPOPTS_HELP([TMS570_USE_HWINIT_STARTUP],[Include BSP startup code for TMS
 AM_CONDITIONAL(TMS570_USE_HWINIT_STARTUP,test "$TMS570_USE_HWINIT_STARTUP" = "1")
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

@@ -5,32 +5,7 @@ noinst_LIBRARIES = libcsupport.a libcalloc.a
 libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
 libcalloc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-include_rtemsdir = $(includedir)/rtems
-include_rtems_HEADERS  = include/iosupp.h
-include_rtems_HEADERS += include/ringbuf.h
-include_rtems_HEADERS += include/rtems/tod.h
-include_rtems_HEADERS += include/spurious.h
-include_rtems_HEADERS += include/vmeintr.h
-
 ## rtems
-include_rtems_HEADERS += include/rtems/assoc.h
-include_rtems_HEADERS += include/rtems/deviceio.h
-include_rtems_HEADERS += include/rtems/error.h
-include_rtems_HEADERS += include/rtems/libcsupport.h
-include_rtems_HEADERS += include/rtems/libio.h
-include_rtems_HEADERS += include/rtems/libio_.h
-include_rtems_HEADERS += include/rtems/malloc.h
-include_rtems_HEADERS += include/rtems/termiostypes.h
-include_rtems_HEADERS += include/rtems/gxx_wrappers.h
-
-include_machinedir = $(includedir)/machine
-include_machine_HEADERS =
-include_machine_HEADERS += include/machine/_kernel_cpuset.h
-include_machine_HEADERS += include/machine/_kernel_param.h
-include_machine_HEADERS += include/machine/_kernel_time.h
-include_machine_HEADERS += include/machine/_kernel_types.h
-include_machine_HEADERS += include/machine/_timecounter.h
-
 ##  General stuff
 ERROR_C_FILES = src/error.c src/__assert.c
 
@@ -157,5 +132,4 @@ libcalloc_a_CFLAGS = -fno-builtin
 
 EXTRA_DIST = src/TODO src/CASES src/README
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/local.am

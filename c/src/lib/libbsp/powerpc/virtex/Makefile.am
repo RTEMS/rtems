@@ -4,28 +4,15 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-include_HEADERS += include/xparameters_dflt.h
 if HAS_NETWORKING
-include_HEADERS += network/xiltemac.h
 endif
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-
-include_bsp_HEADERS =
 
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-
-include_bsp_HEADERS += ../shared/include/linker-symbols.h
 
 EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
@@ -38,7 +25,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
-project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 noinst_LIBRARIES = libbsp.a
@@ -60,10 +47,6 @@ libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
     ../../shared/console_read.c ../../shared/console_write.c 
 
 # irq
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += include/opbintctrl.h
-include_bsp_HEADERS += irq/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
@@ -98,5 +81,5 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/virtex/headers.am

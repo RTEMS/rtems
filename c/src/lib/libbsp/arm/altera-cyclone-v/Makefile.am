@@ -11,60 +11,13 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-include_bsp_socaldir = $(includedir)/bsp/socal
-
-dist_project_lib_DATA = bsp_specs
+dist_project_lib_DATA = startup/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
 ###############################################################################
 
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-
-include_bsp_HEADERS =
-include_bsp_socal_HEADERS =
-
-include_bsp_HEADERS += ../../shared/include/utility.h
-include_bsp_HEADERS += ../../shared/include/irq-generic.h
-include_bsp_HEADERS += ../../shared/include/irq-info.h
-include_bsp_HEADERS += ../../shared/include/stackalloc.h
-include_bsp_HEADERS += ../shared/include/start.h
-include_bsp_HEADERS += ../shared/include/arm-a9mpcore-clock.h
-include_bsp_HEADERS += ../shared/include/arm-a9mpcore-irq.h
-include_bsp_HEADERS += ../shared/include/arm-a9mpcore-regs.h
-include_bsp_HEADERS += ../shared/include/arm-a9mpcore-start.h
-include_bsp_HEADERS += ../shared/include/arm-cp15-start.h
-include_bsp_HEADERS += ../shared/include/arm-errata.h
-include_bsp_HEADERS += ../shared/include/arm-gic.h
-include_bsp_HEADERS += ../shared/include/arm-gic-irq.h
-include_bsp_HEADERS += ../shared/include/arm-gic-regs.h
-include_bsp_HEADERS += ../shared/include/arm-gic-tm27.h
-include_bsp_HEADERS += ../shared/include/arm-release-id.h
-include_bsp_HEADERS += include/irq.h
-
 # Altera hwlib
-include_bsp_HEADERS += hwlib/include/alt_16550_uart.h
-include_bsp_HEADERS += hwlib/include/alt_address_space.h
-include_bsp_HEADERS += hwlib/include/alt_cache.h
-include_bsp_HEADERS += hwlib/include/alt_clock_group.h
-include_bsp_HEADERS += hwlib/include/alt_clock_manager.h
-include_bsp_HEADERS += hwlib/include/alt_dma_common.h
-include_bsp_HEADERS += hwlib/include/alt_dma.h
-include_bsp_HEADERS += hwlib/include/alt_dma_program.h
-include_bsp_HEADERS += hwlib/include/alt_generalpurpose_io.h
-include_bsp_HEADERS += hwlib/include/alt_hwlibs_ver.h
-include_bsp_HEADERS += hwlib/include/alt_i2c.h
-include_bsp_HEADERS += hwlib/include/alt_interrupt_common.h
-include_bsp_HEADERS += hwlib/include/alt_mpu_registers.h
-include_bsp_HEADERS += hwlib/include/alt_qspi_private.h
-include_bsp_HEADERS += hwlib/include/alt_reset_manager.h
-include_bsp_HEADERS += hwlib/include/hwlib.h
 #The following Altera hwlib header files have been left out because so far 
 #they are not required:
 #include_bsp_HEADERS += hwlib/include/alt_bridge_manager.h
@@ -77,22 +30,6 @@ include_bsp_HEADERS += hwlib/include/hwlib.h
 #include_bsp_HEADERS += hwlib/include/alt_interrupt.h
 
 # Some of the headers from hwlib need the files from socal. Install them.
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_acpidmap.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_clkmgr.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_dmanonsecure.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_dmasecure.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_gpio.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_i2c.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_l3.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_qspidata.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_qspi.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_rstmgr.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_sdr.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_sysmgr.h
-include_bsp_socal_HEADERS += hwlib/include/socal/alt_uart.h
-include_bsp_socal_HEADERS += hwlib/include/socal/hps.h
-include_bsp_socal_HEADERS += hwlib/include/socal/socal.h
-
 ###############################################################################
 #                  Data                                                       #
 ###############################################################################
@@ -102,10 +39,10 @@ start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-project_lib_DATA += startup/linkcmds
-project_lib_DATA += startup/linkcmds.altcycv
-project_lib_DATA += startup/linkcmds.altcycv_devkit
-project_lib_DATA += startup/linkcmds.altcycv_devkit_smp
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += startup/linkcmds.altcycv
+dist_project_lib_DATA += startup/linkcmds.altcycv_devkit
+dist_project_lib_DATA += startup/linkcmds.altcycv_devkit_smp
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -114,7 +51,7 @@ project_lib_DATA += startup/linkcmds.altcycv_devkit_smp
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS =
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 libbsp_a_LIBADD =
 
 # for the Altera hwlib
@@ -191,8 +128,6 @@ libbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 # I2C
 libbsp_a_SOURCES += i2c/i2cdrv.c
 libbsp_a_SOURCES += i2c/i2cdrv-config.c
-include_bsp_HEADERS += include/i2cdrv.h
-
 # RTC
 libbsp_a_SOURCES += ../../shared/tod.c
 libbsp_a_SOURCES += rtc/rtc.c
@@ -209,5 +144,5 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/arm-l2c-310
 
 DISTCLEANFILES = include/bspopts.h
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/altera-cyclone-v/headers.am

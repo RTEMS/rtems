@@ -9,6 +9,9 @@ AC_PREREQ(2.69)
 AC_INIT([rtems-c-src-lib-libbsp-epiphany-sim],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 AC_CONFIG_SRCDIR([make/custom/epiphany_sim.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign subdir-objects 1.12.2])
@@ -30,7 +33,6 @@ RTEMS_CHECK_SMP
 AM_CONDITIONAL(HAS_SMP,[test "$rtems_cv_HAS_SMP" = "yes"])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

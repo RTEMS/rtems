@@ -10,6 +10,9 @@ AC_INIT([rtems-c-src-lib-libbsp-arm-lpc176x],[_RTEMS_VERSION],
 				[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/lpc1768_mbed_ahb_ram.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -68,7 +71,6 @@ RTEMS_BSPOPTS_SET([LPC_DMA_CHANNEL_COUNT],[*],[2])
 RTEMS_BSPOPTS_HELP([LPC_DMA_CHANNEL_COUNT],[DMA channel count])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

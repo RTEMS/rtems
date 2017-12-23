@@ -8,20 +8,12 @@ noinst_PROGRAMS =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
 project_lib_DATA      = 
 
 #include
-include_HEADERS = include/bsp.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-nodist_include_HEADERS += include/tm27.h
 DISTCLEANFILES += include/bspopts.h
-
-include_bsp_HEADERS =
 
 #start
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
@@ -50,8 +42,8 @@ project_lib_DATA += motld_start.$(OBJEXT)
 
 #startup
 
+project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
-dist_project_lib_DATA += startup/linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -69,15 +61,10 @@ libbsp_a_SOURCES += startup/bspstart.c \
     startup/bspclean.c \
     ../../shared/gnatinstallhandler.c
 
-include_bsp_HEADERS += ../shared/motorola/vpd.h
-
 #pclock
 libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 #console
-include_bsp_HEADERS += ../../powerpc/shared/console/consoleIo.h
-include_bsp_HEADERS += ../../powerpc/shared/console/uart.h
-
 libbsp_a_SOURCES +=  \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
@@ -85,43 +72,22 @@ libbsp_a_SOURCES +=  \
     ../../powerpc/shared/console/uart.h
 
 #irq
-include_bsp_HEADERS += irq/irq.h
-
 libbsp_a_SOURCES += irq/irq_init.c irq/discovery_pic.c 
 
 #marvell
-include_bsp_HEADERS += marvell/gtreg.h marvell/gtintrreg.h \
-    marvell/gti2creg.h marvell/gti2c_busdrv.h marvell/gt_timer.h \
-    marvell/gtpcireg.h
-
 libbsp_a_SOURCES += marvell/discovery.c marvell/gti2c.c marvell/gt_timer.c
 
 #flash
-include_bsp_HEADERS += ../shared/flash/flashPgm.h
-include_bsp_HEADERS += ../shared/flash/flashPgmPvt.h
-
 libbsp_a_SOURCES += ../shared/flash/flash.c \
     ../shared/flash/intelFlash.c \
     flash/flashcfg.c
 
 #pci
-include_bsp_HEADERS += ../../powerpc/shared/pci/pci.h
-
 libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     pci/gt_pci_init.c pci/pci_io_remap.c pci/motload_fixup.c \
     ../../powerpc/shared/pci/pcifinddevice.c
 
 #vme
-include_bsp_HEADERS += vme/VMEConfig.h \
-    ../../shared/vmeUniverse/vmeUniverse.h \
-    ../../shared/vmeUniverse/vmeUniverseDMA.h \
-    ../../shared/vmeUniverse/vme_am_defs.h \
-    ../../shared/vmeUniverse/vmeTsi148.h \
-    ../../shared/vmeUniverse/vmeTsi148DMA.h \
-    ../../shared/vmeUniverse/bspVmeDmaList.h \
-    ../../shared/vmeUniverse/VME.h \
-    ../../shared/vmeUniverse/VMEDMA.h
-
 libbsp_a_SOURCES += ../shared/vme/vmeconfig.c \
     ../shared/vme/vme_universe.c \
     ../../shared/vmeUniverse/vmeUniverse.c \
@@ -130,16 +96,11 @@ libbsp_a_SOURCES += ../shared/vme/vmeconfig.c \
 
 #network
 if HAS_NETWORKING
-include_bsp_HEADERS += network/support/early_enet_link_status.h \
-    network/support/bsp_bsdnet_attach.h
-
 noinst_PROGRAMS += network_support.rel
 network_support_rel_SOURCES = network/support/early_link_status.c \
     network/support/bsp_attach.c
 network_support_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_support_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-include_bsp_HEADERS += network/if_mve/if_mve_pub.h
 
 noinst_PROGRAMS += network_if_mve_tmp.rel
 network_if_mve_tmp_rel_SOURCES  = network/if_mve/mv643xx_eth.c
@@ -169,8 +130,6 @@ network_if_mve.rel: network_if_mve_tmp.rel
                    -G mveth_serial_ctrl_config_val \
 	           $^ $@
 
-include_bsp_HEADERS += network/if_gfe/if_gfe_pub.h
-
 noinst_PROGRAMS += network_if_gfe_tmp.rel
 network_if_gfe_tmp_rel_SOURCES = network/if_gfe/if_gfe.c network/if_gfe/if_gfe_rtems.c
 network_if_gfe_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) \
@@ -185,8 +144,6 @@ network_if_gfe.rel: network_if_gfe_tmp.rel
                    -G rtems_gfe_setup -G rtems_gfe_early_link_check_ops \
                    $^ $@
 
-
-include_bsp_HEADERS += network/if_em/if_em_pub.h
 
 noinst_PROGRAMS += network_if_em_tmp.rel
 network_if_em_tmp_rel_SOURCES = network/if_em/if_em.c \
@@ -224,5 +181,5 @@ endif
 
 EXTRA_DIST += README LICENSE
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/beatnik/headers.am

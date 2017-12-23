@@ -56,5 +56,4 @@ endif
 #endif
 ### End of example.
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/local.am

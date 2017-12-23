@@ -14,29 +14,7 @@ SUBDIRS_no_dot           = $(filter-out .,$(_SUBDIRS))
 SUBDIRS_no_dot_no_wrapup = $(filter-out wrapup,$(SUBDIRS_no_dot))
 SUBDIRS_wrapup           = $(filter     wrapup,$(SUBDIRS_no_dot))
 
-SUBDIR_TARGET     = $(subst /,-,$1)
-PREINSTALL_TARGET = preinstall-$(call SUBDIR_TARGET,$(1))
-
-preintstall_targets  = $(if "$(SUBDIRS_dot)" ".",preinstall-dot) $(foreach D,$(SUBDIRS_no_dot),$(call PREINSTALL_TARGET,$(D)))
-
-define PREINSTALL_DIR
-.PHONY: $1
-$1:
-	@+set fnord $(MAKEFLAGS); amf=$$$$2; \
-	subdir=$(2); \
-	subdir_label=`echo $(1) | sed -e 's/preinstall-//'`; \
-	target=`echo $$@ | sed -e 's/-recursive//' -e "s/-$$$${subdir_label}//"`$(3); \
-	echo "Making $$$$target in $$$$subdir"; \
-	(cd $$$$subdir && $(MAKE) $(AM_MAKEFLAGS) $$$$target) \
-	 || case "$$$$amf" in *=*) exit 1;; *k*) fail=yes;; *) exit 1;; esac;
-endef
-
-$(if "$(SUBDIRS_dot)" ".",$(eval $(call PREINSTALL_DIR,preinstall-dot,.,-am)))
-
-$(foreach D,$(SUBDIRS_no_dot),$(eval $(call PREINSTALL_DIR,$(call PREINSTALL_TARGET,$(D)),$(D))))
-
 preinstall: $(preintstall_targets)
-.PHONY: preinstall
 
 define CPUKITDIR
 .PHONY: $1
@@ -71,4 +49,4 @@ $(foreach D,$(SUBDIRS_no_dot),$(eval $(call CPUKITDIR,$(D),$(D))))
 #
 $(if "$(SUBDIRS_wrapup)" "wrapup",wrapup: dot $(foreach D,$(SUBDIRS_no_dot_no_wrapup),$(D)),)
 
-all-local: preinstall $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
+all-local: $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)

@@ -5,6 +5,8 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([libchip])
 RTEMS_TOP(../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
 
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_NETWORKING
@@ -14,14 +16,12 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define subdir-objects no-exeext foreign 1.12.2])
 AM_MAINTAINER_MODE
 
-RTEMS_ENABLE_MULTILIB
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_CXX
 RTEMS_ENV_RTEMSBSP
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 RTEMS_CHECK_SMP
 
@@ -111,6 +111,7 @@ RTEMS_CHECK_GCC_WEAK
 
 AC_SUBST(CUSTOM_CFG_FILES)
 
+RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_MULTIPROCESSING
 
 BSP_SUBDIRS=
@@ -144,10 +145,7 @@ BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
-# HACK ALERT!
-
-# FIXME: Assume multilib implies in-source-tree multilibs
-# Build testsuites multilibbed
+# Build testsuites
 RTEMS_BSP_CONFIG_SUBDIR(
   [testsuites],[../../testsuites],
   ['--enable-rtems-root=../' \
@@ -157,20 +155,7 @@ RTEMS_BSP_CONFIG_SUBDIR(
    '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
    '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
   ],
-  [test x"$enable_tests" != x"no" && test x"$multilib" = xno])
-
-# Build testsuites non-multilibbed
-RTEMS_BSP_CONFIG_SUBDIR(
-  [testsuites],[../../testsuites],
-  ['--enable-rtems-root=../' \
-   '--enable-cpukit-root=${with_project_root}..' \
-   '--enable-project-root=${with_project_root}../$RTEMS_BSP' \
-   '--with-project-top=${with_project_top}../' \
-   '--enable-rtemsbsp=$RTEMS_BSP' \
-   '--includedir=${exec_prefix}/${RTEMS_BSP}/lib/include' \
-   '--libdir=${exec_prefix}/${RTEMS_BSP}/lib' \
-  ],
-  [test x"$enable_tests" != x"no" && test x"$multilib" = xyes])
+  [test x"$enable_tests" != x"no"])
 
 AC_SUBST([BSP_SUBDIRS],[$BSP_SUBDIRS])
 

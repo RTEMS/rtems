@@ -3,6 +3,7 @@ AC_DEFUN([RTEMS_CHECK_NETWORKING],
 [dnl
 AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])dnl
 AC_REQUIRE([RTEMS_ENABLE_NETWORKING])dnl
+AC_REQUIRE([RTEMS_INCLUDES])dnl
 
 AC_CACHE_CHECK([whether CPU supports networking],
   rtems_cv_HAS_NETWORKING,
@@ -23,7 +24,8 @@ AC_CACHE_CHECK([whether CPU supports networking],
           && test x"$ac_cv_type_uint32_t" = xyes \
           && test x"$ac_cv_type_int64_t" = xyes \
           && test x"$ac_cv_type_uint64_t" = xyes],
-        [rtems_cv_HAS_NETWORKING=yes],
+        [rtems_cv_HAS_NETWORKING=yes
+        RTEMS_CPPFLAGS="${RTEMS_CPPFLAGS} -I${RTEMS_SOURCE_ROOT}/cpukit/libnetworking"],
         [rtems_cv_HAS_NETWORKING=no])
       ],[
         rtems_cv_HAS_NETWORKING=disabled

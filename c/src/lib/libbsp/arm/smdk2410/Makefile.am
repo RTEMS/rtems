@@ -4,22 +4,10 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
-include_HEADERS = include/bsp.h
-include_HEADERS += smc/smc.h
-include_HEADERS += include/tm27.h
-include_HEADERS += include/s3c24xx.h
-include_HEADERS += include/s3c2400.h
-include_HEADERS += include/s3c2410.h
-
-include_bsp_HEADERS =
-libbsp_a_CPPFLAGS =
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 EXTRA_DIST += start/start.S
@@ -27,7 +15,7 @@ start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -58,9 +46,6 @@ libbsp_a_SOURCES += ../../shared/console_read.c
 libbsp_a_SOURCES += ../../shared/console_write.c
 libbsp_a_SOURCES += ../../shared/console_control.c
 # IRQ
-include_bsp_HEADERS += ../../shared/include/irq-generic.h \
-	../../shared/include/irq-info.h
-include_bsp_HEADERS += include/bsp/irq.h
 libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
 libbsp_a_SOURCES += ../../shared/src/irq-generic.c
 libbsp_a_SOURCES += ../../shared/src/irq-info.c
@@ -80,5 +65,5 @@ libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/arm/smdk2410/headers.am

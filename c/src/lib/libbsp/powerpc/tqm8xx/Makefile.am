@@ -4,24 +4,12 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 
-include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
-    include/irq.h \
-    ../../shared/include/irq-generic.h \
-    ../../shared/include/irq-info.h \
-    spi/spi.h
 
 EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
@@ -33,9 +21,9 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
+dist_project_lib_DATA += startup/linkcmds.tqm8xx
 dist_project_lib_DATA += startup/linkcmds.tqm8xx_base
-EXTRA_DIST += startup/linkcmds.tqm8xx
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
@@ -92,5 +80,5 @@ if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
 endif
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/tqm8xx/headers.am

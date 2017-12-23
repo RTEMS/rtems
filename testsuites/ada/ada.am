@@ -2,18 +2,14 @@ SUFFIXES = .adb .ali .ads .adp
 
 GNATMAKE = @GNATMAKE@
 
-AM_ADAFLAGS = -I$(PROJECT_ROOT)/lib/include/adainclude \
--I$(PROJECT_ROOT)/@RTEMS_BSP@/lib/include/adainclude \
+AM_ADAFLAGS = -I$(RTEMS_SOURCE_ROOT)/cpukit/include/adainclude \
 -I$(top_srcdir)/support
 
 GNATCOMPILE = $(GNATMAKE) \
 -bargs -Mgnat_main \
 -margs $(AM_ADAFLAGS) $(ADAFLAGS) \
 -cargs $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-    $(GCCSPECS) \
--largs $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-    $(GCCSPECS) \
-$(AM_LDFLAGS) $(LDFLAGS) init.o
+-largs $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) init.o
 
 CLEANFILES += *.ali *.o b~*.adb b~*.ads
 

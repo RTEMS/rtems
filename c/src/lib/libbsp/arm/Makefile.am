@@ -5,9 +5,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 ## added but it is present in the source tree.
 _SUBDIRS = @RTEMS_BSP_FAMILY@
 
-include_bspdir = $(includedir)/bsp
-include_bsp_HEADERS = shared/include/linker-symbols.h
-
 dist_project_lib_DATA = shared/startup/linkcmds.base
 dist_project_lib_DATA += shared/startup/linkcmds.armv4
 dist_project_lib_DATA += shared/startup/linkcmds.armv7m
@@ -18,6 +15,6 @@ EXTRA_DIST =
 EXTRA_DIST += shared/comm/uart.h
 EXTRA_DIST += shared/comm/uart.c
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
+include $(srcdir)/../../../../../bsps/arm/headers.am

@@ -8,6 +8,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
+AM_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
 
 LINK_OBJS = $(syscall01_OBJECTS)
 LINK_LIBS = $(syscall01_LDLIBS)

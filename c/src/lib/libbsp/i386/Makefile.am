@@ -27,3 +27,4 @@ EXTRA_DIST += shared/pci/pci_io.c
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am
+include $(srcdir)/../../../../../bsps/i386/headers.am

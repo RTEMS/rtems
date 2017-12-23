@@ -4,74 +4,16 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
-
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h 
-include_HEADERS += include/tm27.h
-include_HEADERS += ../shared/include/asm.h 
-include_HEADERS += ../shared/include/traptable.h 
+dist_project_lib_DATA = startup/bsp_specs
 
 ## these are the include files used by the boot process from HelenOS Sparc64
-include_bootdir = $(includedir)/boot
-include_boot_HEADERS = \
-  ../shared/helenos/boot/include/align.h \
-  ../shared/helenos/boot/include/balloc.h \
-  ../shared/helenos/boot/include/gentypes.h \
-  ../shared/helenos/boot/include/main.h \
-  ../shared/helenos/boot/include/ofwarch.h \
-  ../shared/helenos/boot/include/ofw.h \
-  ../shared/helenos/boot/include/ofw_tree.h \
-  ../shared/helenos/boot/include/register.h \
-  ../shared/helenos/boot/include/stack.h \
-  ../shared/helenos/boot/include/types.h 
-
 ## These include files mimic the HelenOS kernel include layout, which 
 ## in HelenOS-0.4.2 is more complicated than the boot include dirs.
 
 # assumed by the HelenOS sources to be in the root includedir. We place them
 # in a kernel include directory.
-include_kerneldir = $(includedir)/kernel
-include_kernel_HEADERS = \
-  ../shared/helenos/kernel/generic/include/align.h
-
-include_archdir = $(includedir)/arch
-include_arch_HEADERS = \
-  ../shared/helenos/kernel/sparc64/include/arch.h \
-  ../shared/helenos/kernel/sparc64/include/boot.h \
-  ../shared/helenos/kernel/sparc64/include/regdef.h \
-  ../shared/helenos/kernel/sparc64/include/stack.h 
-
-include_arch_sun4udir = $(includedir)/arch/sun4u
-include_arch_sun4u_HEADERS = \
-  ../shared/helenos/kernel/sparc64/include/sun4u/arch.h 
-
-include_arch_mmdir = $(includedir)/arch/mm
-include_arch_mm_HEADERS = \
-  ../shared/helenos/kernel/sparc64/include/mm/cache_spec.h \
-  ../shared/helenos/kernel/sparc64/include/mm/frame.h \
-  ../shared/helenos/kernel/sparc64/include/mm/mmu.h \
-  ../shared/helenos/kernel/sparc64/include/mm/page.h \
-  ../shared/helenos/kernel/sparc64/include/mm/tlb.h \
-  ../shared/helenos/kernel/sparc64/include/mm/tte.h
 
 
-include_arch_mm_sun4udir = $(includedir)/arch/mm/sun4u
-include_arch_mm_sun4u_HEADERS = \
-  ../shared/helenos/kernel/sparc64/include/mm/sun4u/frame.h \
-  ../shared/helenos/kernel/sparc64/include/mm/sun4u/mmu.h \
-  ../shared/helenos/kernel/sparc64/include/mm/sun4u/page.h \
-  ../shared/helenos/kernel/sparc64/include/mm/sun4u/tlb.h \
-  ../shared/helenos/kernel/sparc64/include/mm/sun4u/tte.h
-
-include_genarch_ofwdir = $(includedir)/genarch/ofw
-include_genarch_ofw_HEADERS = \
-  ../shared/helenos/kernel/genarch/include/ofw/ofw_tree.h
-
-
-nodist_include_HEADERS = include/bspopts.h    
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h 
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -127,5 +69,5 @@ libbsp_a_LIBADD = \
       ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/sparc64-syscall.rel 
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/sparc64/usiii/headers.am

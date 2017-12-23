@@ -3,6 +3,3 @@
 ## Once automake is fully integrated these make targets
 ## and this file will probably be removed
 
-preinstall-am: $(PREINSTALL_FILES)
-preinstall: preinstall-am
-.PHONY: preinstall preinstall-am

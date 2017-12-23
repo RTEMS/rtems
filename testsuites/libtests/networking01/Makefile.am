@@ -10,7 +10,7 @@ include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
-AM_CPPFLAGS += -I$(top_srcdir)/termios04
+AM_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
 
 LINK_OBJS = $(networking01_OBJECTS)
 LINK_LIBS = $(networking01_LDLIBS)

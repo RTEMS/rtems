@@ -4,6 +4,9 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-m68k-genmcf548x],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([make/custom/COBRA5475.cfg])
 RTEMS_TOP(../../../../../..)
+RTEMS_SOURCE_TOP
+RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -43,7 +46,6 @@ RTEMS_BSPOPTS_HELP([HAS_LOW_LEVEL_INIT],
 [If defined, we will do all the low level init of the chip (like bus/memory...).])
 
 RTEMS_BSP_CLEANUP_OPTIONS
-RTEMS_BSP_LINKCMDS
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

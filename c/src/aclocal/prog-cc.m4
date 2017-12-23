@@ -29,18 +29,15 @@ dnl check if the compiler supports --specs
 RTEMS_GCC_SPECS
 
 AS_IF([test x"$rtems_cv_gcc_specs" = xyes],[
-GCCSPECS="-B\$(PROJECT_ROOT)/lib/ -B\$(PROJECT_ROOT)/$RTEMS_BSP/lib/"
+GCCSPECS="-B\$(RTEMS_SOURCE_ROOT)/c/src/lib/libbsp/\$(RTEMS_CPU)/\$(RTEMS_BSP_FAMILY)/"
 GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
 AC_SUBST(GCCSPECS)
-
-AS_IF([test x"$rtems_cv_gcc_isystem" = xyes],[
-  RTEMS_CPPFLAGS="-isystem \$(PROJECT_INCLUDE)"],[
-  RTEMS_CPPFLAGS="-I\$(PROJECT_INCLUDE)"
-])
-AC_SUBST(RTEMS_CPPFLAGS)
 
 AS_IF([test "$GCC" = yes],[
   RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -r"
 ])
 AC_SUBST(RTEMS_RELLDFLAGS)
+
+RTEMS_INCLUDES
+RTEMS_BSP_INCLUDES
 ])

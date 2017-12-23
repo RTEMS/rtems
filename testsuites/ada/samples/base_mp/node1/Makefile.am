@@ -14,7 +14,7 @@ ada_base_mp_node1$(EXEEXT): ../mptest.adb init.o
 	$(GNATCOMPILE) -margs -a $< -o $@
 
 init.o: ../../../support/init.c
-	$(COMPILE.c) -DNODE_NUMBER=1 -I$(srcdir)/.. -c $<
+	$(COMPILE.c) $(AM_CPPFLAGS) -DNODE_NUMBER=1 -I$(srcdir)/.. -c $<
 
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_base_mp-node1.scn

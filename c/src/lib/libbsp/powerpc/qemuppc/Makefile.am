@@ -4,16 +4,8 @@ EXTRA_DIST =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-include_bspdir = $(includedir)/bsp
+dist_project_lib_DATA = startup/bsp_specs
 
-dist_project_lib_DATA = bsp_specs
-
-include_HEADERS = include/bsp.h
-include_HEADERS += include/tm27.h
-
-nodist_include_HEADERS = include/bspopts.h
-nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
-nodist_include_bsp_HEADERS += ../../shared/include/console-polled.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -28,7 +20,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds
+project_lib_DATA += linkcmds
 
 # startup
 startup_SOURCES = ../../shared/bspclean.c \
@@ -46,9 +38,6 @@ clock_SOURCES = ../shared/clock/clock.c
 console_SOURCES = ../../shared/console-polled.c console/console-io.c
 
 # irq
-include_bsp_HEADERS = irq/irq.h \
-    ../../shared/include/irq-generic.h \
-    ../../shared/include/irq-info.h
 irq_SOURCES =
 irq_SOURCES += ../../shared/src/irq-default-handler.c
 irq_SOURCES += ../../shared/src/irq-generic.c
@@ -70,5 +59,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel
 
-include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/qemuppc/headers.am
