@@ -70,7 +70,7 @@ libbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

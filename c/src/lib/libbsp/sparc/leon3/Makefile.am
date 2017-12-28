@@ -229,7 +229,7 @@ include_bsp_HEADERS += include/watchdog.h
 # Cache
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += include/cache_.h
-libbsp_a_CPPFLAGS = -I$(srcdir)/include
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/include
 
 # GR712
 include_bsp_HEADERS += ../../sparc/shared/include/grascs.h
