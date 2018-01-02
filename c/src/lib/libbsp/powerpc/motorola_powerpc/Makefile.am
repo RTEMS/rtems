@@ -7,6 +7,7 @@ _SUBDIRS += qemu_fakerom
 endif
 
 include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 

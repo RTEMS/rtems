@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 include_bestcommdir = $(include_bspdir)/bestcomm

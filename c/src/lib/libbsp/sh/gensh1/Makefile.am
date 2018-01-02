@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../bsp.am
 
 include_shdir = $(includedir)/sh
 include_rtems_scoredir = $(includedir)/rtems/score

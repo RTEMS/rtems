@@ -9,6 +9,7 @@ include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 CLEANFILES =
 
 include $(top_srcdir)/../../../../automake/compile.am
+include $(top_srcdir)/../../bsp.am
 
 include_bspdir = $(includedir)/bsp
 
