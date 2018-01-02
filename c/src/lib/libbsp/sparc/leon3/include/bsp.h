@@ -233,13 +233,6 @@ extern const unsigned char LEON3_mp_irq;
 extern const unsigned char LEON3_irq_to_cpu[32];
 #endif
 
-/* BSP PCI Interrupt support */
-#define BSP_PCI_shared_interrupt_register    BSP_shared_interrupt_register
-#define BSP_PCI_shared_interrupt_unregister  BSP_shared_interrupt_unregister
-#define BSP_PCI_shared_interrupt_unmask      BSP_shared_interrupt_unmask
-#define BSP_PCI_shared_interrupt_mask        BSP_shared_interrupt_mask
-#define BSP_PCI_shared_interrupt_clear       BSP_shared_interrupt_clear
-
 /* Common driver build-time configurations. On small systems undefine
  * [DRIVER]_INFO_AVAIL to avoid info routines get dragged in. It is good
  * for debugging and printing information about the system, but makes the

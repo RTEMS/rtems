@@ -177,13 +177,6 @@ void rtems_bsp_delay(int usecs);
 void console_outbyte_polled(int  port, unsigned char ch);
 int console_inbyte_nonblocking(int port);
 
-/* BSP PCI Interrupt support - to avoid warnings by libpci */
-#define BSP_PCI_shared_interrupt_register    BSP_shared_interrupt_register
-#define BSP_PCI_shared_interrupt_unregister  BSP_shared_interrupt_unregister
-#define BSP_PCI_shared_interrupt_unmask      BSP_shared_interrupt_unmask
-#define BSP_PCI_shared_interrupt_mask        BSP_shared_interrupt_mask
-#define BSP_PCI_shared_interrupt_clear       BSP_shared_interrupt_clear
-
 #ifdef __cplusplus
 }
 #endif
