@@ -27,6 +27,7 @@
 #include <stdint.h>
 #include <rtems.h>
 #include <rtems/diskdevs.h>
+#include <rtems/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,7 +51,7 @@ typedef struct rtems_sparse_disk rtems_sparse_disk;
 typedef void (*rtems_sparse_disk_delete_handler)(rtems_sparse_disk *sparse_disk);
 
 struct rtems_sparse_disk {
-  rtems_id                         mutex;
+  rtems_mutex                      mutex;
   rtems_blkdev_bnum                blocks_with_buffer;
   size_t                           used_count;
   uint32_t                         media_block_size;

@@ -58,7 +58,6 @@ static rtems_status_code sparse_disk_initialize( rtems_sparse_disk *sd,
   const rtems_sparse_disk_delete_handler                            sparse_disk_delete,
   const uint8_t                                                     fill_pattern )
 {
-  rtems_status_code sc;
   rtems_blkdev_bnum i;
 
   if ( NULL == sd )
@@ -78,17 +77,7 @@ static rtems_status_code sparse_disk_initialize( rtems_sparse_disk *sd,
 
   sd->delete_handler = sparse_disk_delete;
 
-  sc                 = rtems_semaphore_create(
-    rtems_build_name( 'S', 'P', 'A', 'R' ),
-    1,
-    RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | RTEMS_INHERIT_PRIORITY,
-    0,
-    &sd->mutex
-    );
-
-  if ( sc != RTEMS_SUCCESSFUL ) {
-    return sc;
-  }
+  rtems_mutex_init( &sd->mutex, "Sparse Disk" );
 
   data                  += sizeof( rtems_sparse_disk );
 
@@ -236,12 +225,8 @@ static int sparse_disk_read_write(
   uint8_t                *buff;
   size_t                  buff_size;
   unsigned int            bytes_handled;
-  rtems_status_code       sc;
 
-  sc = rtems_semaphore_obtain(sparse_disk->mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL) {
-      rtems_fatal_error_occurred( 0xdeadbeef );
-  }
+  rtems_mutex_lock( &sparse_disk->mutex );
 
   for ( req_buffer = 0;
         ( 0 <= rv ) && ( req_buffer < req->bufnum );
@@ -271,10 +256,7 @@ static int sparse_disk_read_write(
     }
   }
 
-  sc = rtems_semaphore_release( sparse_disk->mutex );
-  if (sc != RTEMS_SUCCESSFUL) {
-      rtems_fatal_error_occurred( 0xdeadbeef );
-  }
+  rtems_mutex_unlock( &sparse_disk->mutex );
 
   if ( 0 > rv )
     rtems_blkdev_request_done( req, RTEMS_IO_ERROR );
@@ -289,7 +271,6 @@ static int sparse_disk_read_write(
  */
 static int sparse_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp )
 {
-  rtems_status_code  sc;
   rtems_sparse_disk *sd = rtems_disk_get_driver_data( dd );
 
   if ( RTEMS_BLKIO_REQUEST == req ) {
@@ -303,12 +284,7 @@ static int sparse_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *argp )
         break;
     }
   } else if ( RTEMS_BLKIO_DELETED == req ) {
-    sc = rtems_semaphore_delete( sd->mutex );
-
-    if ( RTEMS_SUCCESSFUL != sc )
-      rtems_fatal_error_occurred( 0xdeadbeef );
-
-    sd->mutex = RTEMS_ID_NONE;
+    rtems_mutex_destroy( &sd->mutex );
 
     if ( NULL != sd->delete_handler )
       ( *sd->delete_handler )( sd );
