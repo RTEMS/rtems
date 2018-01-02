@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -16,7 +17,7 @@ DISTCLEANFILES = include/bspopts.h
 
 include_HEADERS += include/mrm332.h
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

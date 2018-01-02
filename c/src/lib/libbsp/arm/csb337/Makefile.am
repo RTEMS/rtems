@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -52,7 +53,7 @@ libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
-EXTRA_DIST = startup/linkcmds.csb337
+EXTRA_DIST += startup/linkcmds.csb337
 EXTRA_DIST += startup/linkcmds.csb637
 EXTRA_DIST += README
 EXTRA_DIST += README.kit637_v6

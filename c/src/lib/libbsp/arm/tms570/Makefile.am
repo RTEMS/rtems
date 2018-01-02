@@ -6,6 +6,7 @@
 #
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -97,7 +98,6 @@ libbspstart_a_SOURCES = ../shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST =
 EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk
 EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_with_loader
 EXTRA_DIST += startup/linkcmds.tms570ls3137_hdk_sdram

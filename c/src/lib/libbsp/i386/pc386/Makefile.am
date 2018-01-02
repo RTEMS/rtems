@@ -2,6 +2,7 @@
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 # FIXME: We must not include *.cfg
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -48,7 +49,7 @@ noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST = start/start16.S
+EXTRA_DIST += start/start16.S
 start16.$(OBJEXT): start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 

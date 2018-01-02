@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -19,7 +20,7 @@ project_lib_DATA =
 project_lib_DATA += start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST = startup/linkcmds.lm3s6965 startup/linkcmds.lm3s6965_qemu startup/linkcmds.lm3s3749
+EXTRA_DIST += startup/linkcmds.lm3s6965 startup/linkcmds.lm3s6965_qemu startup/linkcmds.lm3s3749
 
 ###############################################################################
 #                  Header                                                     #

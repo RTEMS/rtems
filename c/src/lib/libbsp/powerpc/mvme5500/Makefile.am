@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -23,7 +24,7 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # UNUSED
-EXTRA_DIST = startup/bootpstuff.c
+EXTRA_DIST += startup/bootpstuff.c
 
 # startup
 libbsp_a_SOURCES += startup/bspstart.c \

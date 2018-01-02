@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -67,7 +68,7 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
                   ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
                   ../../../libcpu/@RTEMS_CPU@/e500/timer.rel
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

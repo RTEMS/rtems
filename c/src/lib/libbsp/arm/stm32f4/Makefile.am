@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -19,7 +20,7 @@ project_lib_DATA =
 project_lib_DATA += start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
-EXTRA_DIST = startup/linkcmds.stm32f4
+EXTRA_DIST += startup/linkcmds.stm32f4
 EXTRA_DIST += startup/linkcmds.stm32f105rc
 
 ###############################################################################

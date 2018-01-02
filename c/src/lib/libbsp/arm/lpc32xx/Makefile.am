@@ -6,6 +6,7 @@
 #
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -64,7 +65,7 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 project_lib_DATA += startup/linkcmds.lpc32xx
 
-EXTRA_DIST = startup/linkcmds.lpc32xx_phycore \
+EXTRA_DIST += startup/linkcmds.lpc32xx_phycore \
 	startup/linkcmds.lpc32xx_mzx_stage_1 \
 	startup/linkcmds.lpc32xx_mzx_stage_2 \
 	startup/linkcmds.lpc32xx_mzx

@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -21,7 +22,7 @@ include_HEADERS += include/i2cdrv.h
 include_HEADERS += include/ds1307.h
 include_HEADERS += include/nvram.h
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -16,7 +17,7 @@ DISTCLEANFILES = include/bspopts.h
 
 include_bsp_HEADERS = irq/irq.h
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 dist_project_lib_DATA += startup/linkcmds
 

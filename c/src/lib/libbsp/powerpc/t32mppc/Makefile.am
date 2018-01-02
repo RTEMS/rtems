@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -13,7 +14,7 @@ include_HEADERS += include/tm27.h
 nodist_include_HEADERS = include/bspopts.h
 DISTCLEANFILES = include/bspopts.h
 
-EXTRA_DIST = README
+EXTRA_DIST += README
 
 noinst_PROGRAMS =
 

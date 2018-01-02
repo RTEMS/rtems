@@ -3,6 +3,7 @@
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -50,7 +51,7 @@ libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../../shared/include/cache_.h
 libbsp_a_CPPFLAGS = -I$(srcdir)/../../shared/include
 
-EXTRA_DIST = times
+EXTRA_DIST += times
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

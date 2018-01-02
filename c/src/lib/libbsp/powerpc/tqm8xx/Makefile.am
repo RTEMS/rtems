@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -21,8 +22,6 @@ include_bsp_HEADERS = include/tqm.h include/8xx_immap.h \
     ../../shared/include/irq-generic.h \
     ../../shared/include/irq-info.h \
     spi/spi.h
-
-EXTRA_DIST =
 
 noinst_LIBRARIES = libbspstart.a
 libbspstart_a_SOURCES = start/start.S

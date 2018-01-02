@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -300,7 +301,7 @@ include_bsp_HEADERS += ../../sparc/shared/include/network_interface_add.h
 libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
 endif
 
-EXTRA_DIST = shmsupp/README
+EXTRA_DIST += shmsupp/README
 if HAS_MP
 # shmsupp
 libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \

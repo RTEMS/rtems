@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -113,7 +114,7 @@ libbsp_a_LIBADD += network.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
 endif
 
-EXTRA_DIST = README.mpc8349eamds
+EXTRA_DIST += README.mpc8349eamds
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/../../../../automake/local.am

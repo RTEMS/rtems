@@ -1,4 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
+EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -54,7 +55,7 @@ libbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
     ../shared/openpic/openpic.c ../../shared/src/irq-server.c  \
     ../../shared/src/irq-generic.c ../../shared/src/irq-default-handler.c
 
-EXTRA_DIST = vectors/README
+EXTRA_DIST += vectors/README
 # vectors
 libbsp_a_SOURCES += vectors/align_h.S
 
