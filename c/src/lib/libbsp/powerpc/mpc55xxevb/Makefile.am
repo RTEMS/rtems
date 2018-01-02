@@ -58,6 +58,7 @@ include_bsp_HEADERS += ../../shared/include/utility.h
 include_bsp_HEADERS += ../shared/include/linker-symbols.h
 include_bsp_HEADERS += ../shared/include/start.h
 include_bsp_HEADERS += ../shared/include/tictac.h
+include_bsp_HEADERS += include/bsp/irq.h
 include_bsp_HEADERS += include/mpc55xx-config.h
 include_bsp_HEADERS += include/smsc9218i.h
 include_bsp_HEADERS += include/console-esci.h

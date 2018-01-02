@@ -272,10 +272,6 @@ $(PROJECT_INCLUDE)/mpc55xx/siu.h: mpc55xx/include/siu.h $(PROJECT_INCLUDE)/mpc55
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/siu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/siu.h
 
-$(PROJECT_INCLUDE)/mpc55xx/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/irq.h
-
 $(PROJECT_INCLUDE)/mpc55xx/watchdog.h: mpc55xx/include/watchdog.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/watchdog.h
@@ -311,10 +307,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/regs-edma.h
 $(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h: mpc55xx/include/regs-mmu.h $(PROJECT_INCLUDE)/mpc55xx/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/mpc55xx/regs-mmu.h
-
-$(PROJECT_INCLUDE)/bsp/irq.h: mpc55xx/include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 endif
 if qoriq
 $(PROJECT_INCLUDE)/bsp/tsec.h: mpc83xx/network/tsec.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)

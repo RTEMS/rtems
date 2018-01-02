@@ -425,7 +425,6 @@ include_mpc55xx_HEADERS += mpc55xx/include/edma.h
 include_mpc55xx_HEADERS += mpc55xx/include/emios.h
 include_mpc55xx_HEADERS += mpc55xx/include/mpc55xx.h
 include_mpc55xx_HEADERS += mpc55xx/include/siu.h
-include_mpc55xx_HEADERS += mpc55xx/include/irq.h
 include_mpc55xx_HEADERS += mpc55xx/include/watchdog.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc551x.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc555x.h
@@ -435,8 +434,6 @@ include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc5668.h
 include_mpc55xx_HEADERS += mpc55xx/include/fsl-mpc567x.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-edma.h
 include_mpc55xx_HEADERS += mpc55xx/include/regs-mmu.h
-
-include_bsp_HEADERS += mpc55xx/include/irq.h
 
 # IRQ
 noinst_PROGRAMS += mpc55xx/irq.rel

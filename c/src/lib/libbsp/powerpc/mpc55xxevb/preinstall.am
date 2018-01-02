@@ -157,6 +157,10 @@ $(PROJECT_INCLUDE)/bsp/tictac.h: ../shared/include/tictac.h $(PROJECT_INCLUDE)/b
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/tictac.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/tictac.h
 
+$(PROJECT_INCLUDE)/bsp/irq.h: include/bsp/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
+
 $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h: include/mpc55xx-config.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/mpc55xx-config.h
