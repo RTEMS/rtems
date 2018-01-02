@@ -1,5 +1,8 @@
 include $(top_srcdir)/automake/compile.am
 
+include_libcpudir = $(includedir)/libcpu
+include_libcpu_HEADERS = include/libcpu/byteorder.h
+
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS = rtems/asm.h
 

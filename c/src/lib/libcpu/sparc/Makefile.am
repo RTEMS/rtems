@@ -6,7 +6,6 @@ noinst_PROGRAMS =
 
 include_libcpudir = $(includedir)/libcpu
 include_libcpu_HEADERS =
-include_libcpu_HEADERS += include/libcpu/byteorder.h
 include_libcpu_HEADERS += include/libcpu/access.h
 
 noinst_PROGRAMS += cache.rel
