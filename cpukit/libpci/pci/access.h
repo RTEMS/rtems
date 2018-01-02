@@ -17,9 +17,6 @@
 #include <rtems/score/basedefs.h>
 #include <pci.h>
 
-/* Let BSP configure load/store from PCI */
-#include <bsp.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -203,96 +200,6 @@ RTEMS_INLINE_ROUTINE void pci_st8(volatile uint8_t *addr, uint8_t val)
 {
 	*addr = val;
 }
-
-#ifdef BSP_PCI_BIG_ENDIAN
-
-/* BSP has decided Big Endian PCI Bus (non-standard) */
-
-RTEMS_INLINE_ROUTINE uint16_t pci_ld_le16(volatile uint16_t *addr)
-{
-	return ld_be16(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_le16(volatile uint16_t *addr, uint16_t val)
-{
-	st_be16(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint32_t pci_ld_le32(volatile uint32_t *addr)
-{
-	return ld_be32(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_le32(volatile uint32_t *addr, uint32_t val)
-{
-	st_be32(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint16_t pci_ld_be16(volatile uint16_t *addr)
-{
-	return ld_le16(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_be16(volatile uint16_t *addr, uint16_t val)
-{
-	st_le16(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint32_t pci_ld_be32(volatile uint32_t *addr)
-{
-	return ld_le32(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_be32(volatile uint32_t *addr, uint32_t val)
-{
-	st_le32(addr, val);
-}
-
-#else
-
-/* Little Endian PCI Bus */
-
-RTEMS_INLINE_ROUTINE uint16_t pci_ld_le16(volatile uint16_t *addr)
-{
-	return ld_le16(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_le16(volatile uint16_t *addr, uint16_t val)
-{
-	st_le16(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint32_t pci_ld_le32(volatile uint32_t *addr)
-{
-	return ld_le32(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_le32(volatile uint32_t *addr, uint32_t val)
-{
-	st_le32(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint16_t pci_ld_be16(volatile uint16_t *addr)
-{
-	return ld_be16(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_be16(volatile uint16_t *addr, uint16_t val)
-{
-	st_be16(addr, val);
-}
-
-RTEMS_INLINE_ROUTINE uint32_t pci_ld_be32(volatile uint32_t *addr)
-{
-	return ld_be32(addr);
-}
-
-RTEMS_INLINE_ROUTINE void pci_st_be32(volatile uint32_t *addr, uint32_t val)
-{
-	st_be32(addr, val);
-}
-
-#endif
 
 /* Registers-over-Memory Space access routines. The routines are not inlined
  * so it is possible during run-time to select which function implemention
