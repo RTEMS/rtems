@@ -47,9 +47,9 @@ nodist_include_HEADERS += console/sed1356_16bit.h
 nodist_include_HEADERS += console/font8x16.h
 endif
 
-noinst_LIBRARIES = libbspstart.a
-
-libbspstart_a_SOURCES = start/start.S
+EXTRA_DIST += start/start.S
+start.$(OBJEXT): start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
@@ -58,7 +58,7 @@ EXTRA_DIST += startup/linkcmds.csb637
 EXTRA_DIST += README
 EXTRA_DIST += README.kit637_v6
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 
 # startup
 libbsp_a_SOURCES = \

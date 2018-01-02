@@ -28,14 +28,15 @@ DISTCLEANFILES = include/bspopts.h
 
 
 EXTRA_DIST += start/start.ram start/start.rom
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = start/start.S
+EXTRA_DIST += start/start.S
+start.$(OBJEXT): start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds startup/linkcmds.ram \
     startup/linkcmds.rom
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen

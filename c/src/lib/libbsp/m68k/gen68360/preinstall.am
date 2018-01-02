@@ -53,10 +53,6 @@ $(PROJECT_INCLUDE)/bsp/bootcard.h: ../../shared/include/bootcard.h $(PROJECT_INC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/bootcard.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/bootcard.h
 
-$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
-
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds
@@ -68,4 +64,8 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.prom
 $(PROJECT_LIB)/linkcmds.bootp: startup/linkcmds.bootp $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.bootp
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.bootp
+
+$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 

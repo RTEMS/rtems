@@ -20,8 +20,9 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/leon.h
 
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../../sparc/shared/start/start.S
+EXTRA_DIST += ../../sparc/shared/start/start.S
+start.$(OBJEXT): ../../sparc/shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
@@ -29,7 +30,7 @@ dist_project_lib_DATA += startup/linkcmds
 dist_project_lib_DATA += startup/linkcmds.leon2
 dist_project_lib_DATA += startup/linkcmds.at697f
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # startup

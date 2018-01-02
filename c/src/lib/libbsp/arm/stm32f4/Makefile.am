@@ -12,12 +12,11 @@ include_bspdir = $(includedir)/bsp
 
 dist_project_lib_DATA = bsp_specs
 
-noinst_LIBRARIES = libbspstart.a
+EXTRA_DIST += ../shared/start/start.S
+start.$(OBJEXT): ../shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
 
-libbspstart_a_SOURCES = ../shared/start/start.S
-
-project_lib_DATA =
-project_lib_DATA += start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
 EXTRA_DIST += startup/linkcmds.stm32f4
@@ -69,7 +68,7 @@ include_bsp_HEADERS += include/rcc.h
 #                  LibBSP                                                     #
 ###############################################################################
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
 libbsp_a_CPPFLAGS =

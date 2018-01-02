@@ -61,6 +61,10 @@ $(PROJECT_INCLUDE)/bsp/irq.h: include/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
+$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
+TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
+
 $(PROJECT_LIB)/bsp_specs: bsp_specs $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/bsp_specs
 PREINSTALL_FILES += $(PROJECT_LIB)/bsp_specs
@@ -76,10 +80,6 @@ PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.COBRA5475
 $(PROJECT_LIB)/linkcmds.m5484FireEngine: startup/linkcmds.m5484FireEngine $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds.m5484FireEngine
 PREINSTALL_FILES += $(PROJECT_LIB)/linkcmds.m5484FireEngine
-
-$(PROJECT_LIB)/start.$(OBJEXT): start.$(OBJEXT) $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start.$(OBJEXT)
-TMPINSTALL_FILES += $(PROJECT_LIB)/start.$(OBJEXT)
 
 $(PROJECT_LIB)/linkcmds: startup/linkcmds $(PROJECT_LIB)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/linkcmds

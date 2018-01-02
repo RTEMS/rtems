@@ -97,10 +97,9 @@ include_bsp_socal_HEADERS += hwlib/include/socal/socal.h
 #                  Data                                                       #
 ###############################################################################
 
-noinst_LIBRARIES = libbspstart.a
-
-libbspstart_a_SOURCES = ../shared/start/start.S
-
+EXTRA_DIST += ../shared/start/start.S
+start.$(OBJEXT): ../shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += startup/linkcmds
@@ -112,7 +111,7 @@ project_lib_DATA += startup/linkcmds.altcycv_devkit_smp
 #                  LibBSP                                                     #
 ###############################################################################
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
 libbsp_a_CPPFLAGS =

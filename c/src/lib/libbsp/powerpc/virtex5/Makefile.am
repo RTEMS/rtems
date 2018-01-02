@@ -19,13 +19,14 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES             = include/bspopts.h
 
 # start
-noinst_LIBRARIES      = libbspstart.a
-libbspstart_a_SOURCES = ../../powerpc/shared/start/rtems_crti.S
-project_lib_DATA      = rtems_crti.$(OBJEXT)
+EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = rtems_crti.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 
 # startup
 libbsp_a_SOURCES = startup/bspclean.c \

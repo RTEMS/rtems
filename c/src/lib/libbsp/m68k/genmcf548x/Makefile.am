@@ -21,18 +21,19 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = start/start.S
+EXTRA_DIST += start/start.S
+start.$(OBJEXT): start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA = bsp_specs
 dist_project_lib_DATA += startup/linkcmds.m5484FireEngine.flash
 dist_project_lib_DATA += startup/linkcmds.COBRA5475
 dist_project_lib_DATA += startup/linkcmds.m5484FireEngine
 
-project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_CPPFLAGS =
 

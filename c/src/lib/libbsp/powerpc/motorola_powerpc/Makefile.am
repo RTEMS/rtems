@@ -25,20 +25,25 @@ noinst_PROGRAMS =
 
 include_HEADERS += ../../powerpc/shared/include/nvram.h
 
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../../powerpc/shared/start/start.S
+EXTRA_DIST += ../../powerpc/shared/start/start.S
+start.$(OBJEXT): ../../powerpc/shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-libbspstart_a_SOURCES += ../../powerpc/shared/start/rtems_crti.S
+EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-libbspstart_a_SOURCES += ../../powerpc/shared/start/vectors_entry.S
+EXTRA_DIST += ../../powerpc/shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += vectors_entry.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # startup

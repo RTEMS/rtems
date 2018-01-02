@@ -16,15 +16,15 @@ nodist_include_bsp_HEADERS = ../../shared/include/bootcard.h
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
-
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = start/start.S
-project_lib_DATA = start.$(OBJEXT)
-
 dist_project_lib_DATA += startup/linkcmds startup/linkcmdsflash \
     startup/linkcmdsram
 
-noinst_LIBRARIES += libbsp.a
+EXTRA_DIST += start/start.S
+start.$(OBJEXT): start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
+
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # startup

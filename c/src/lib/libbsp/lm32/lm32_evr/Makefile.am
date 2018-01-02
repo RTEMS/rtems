@@ -19,13 +19,14 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/system_conf.h
 
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../../lm32/shared/start/start.S
+EXTRA_DIST += ../../lm32/shared/start/start.S
+start.$(OBJEXT): ../../lm32/shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 libbsp_a_LIBADD =
 

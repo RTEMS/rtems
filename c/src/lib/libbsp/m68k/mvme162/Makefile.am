@@ -24,13 +24,14 @@ nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
 include_rtems_zilogdir = $(includedir)/rtems/zilog
 include_rtems_zilog_HEADERS = ../../shared/include/zilog/z8036.h
 
-noinst_LIBRARIES = libbspstart.a
-libbspstart_a_SOURCES = ../../m68k/shared/start/start.S
+EXTRA_DIST += ../../m68k/shared/start/start.S
+start.$(OBJEXT): ../../m68k/shared/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES += libbsp.a
+noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # startup
