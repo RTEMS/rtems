@@ -21,7 +21,6 @@
 #include <pci/cfg.h>
 #include <pci/access.h>
 #include <sys/endian.h>
-#include <bsp.h> /* For PCI endianness config */
 
 #include <rtems.h>
 #include <rtems/shell.h>
