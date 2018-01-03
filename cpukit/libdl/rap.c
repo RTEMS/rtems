@@ -419,7 +419,7 @@ rtems_rap_get_error (char* message, size_t max_message)
 {
   rtems_rap_data_t* rap = rtems_rap_lock ();
   int               last_errno = rap->last_errno;
-  strncpy (message, rap->last_error, sizeof (rap->last_error));
+  strlcpy (message, rap->last_error, max_message);
   rtems_rap_unlock ();
   return last_errno;
 }
