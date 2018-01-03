@@ -205,6 +205,7 @@
 #include <rtems/error.h>
 #include <rtems/ftpd.h>
 #include <rtems/libio.h>
+#include <rtems/thread.h>
 #include <rtems/userenv.h>
 #include <syslog.h>
 
@@ -274,13 +275,13 @@ typedef struct
  */
 typedef struct
 {
-  FTPD_SessionInfo_t    *info;
-  FTPD_SessionInfo_t    **queue;
-  int                   count;
-  int                   head;
-  int                   tail;
-  rtems_id              mutex;
-  rtems_id              sem;
+  FTPD_SessionInfo_t       *info;
+  FTPD_SessionInfo_t       **queue;
+  int                      count;
+  int                      head;
+  int                      tail;
+  rtems_mutex              mutex;
+  rtems_counting_semaphore sem;
 } FTPD_TaskPool_t;
 
 /*
@@ -363,15 +364,11 @@ task_pool_done(int count)
     free(task_pool.info);
   if(task_pool.queue)
     free(task_pool.queue);
-  if(task_pool.mutex != (rtems_id)-1)
-    rtems_semaphore_delete(task_pool.mutex);
-  if(task_pool.sem != (rtems_id)-1)
-    rtems_semaphore_delete(task_pool.sem);
+  rtems_mutex_destroy(&task_pool.mutex);
+  rtems_counting_semaphore_destroy(&task_pool.sem);
   task_pool.info = 0;
   task_pool.queue = 0;
   task_pool.count = 0;
-  task_pool.sem = -1;
-  task_pool.mutex = -1;
 }
 
 /*
@@ -398,32 +395,9 @@ task_pool_init(int count, rtems_task_priority priority)
 
   task_pool.count = 0;
   task_pool.head = task_pool.tail = 0;
-  task_pool.mutex = (rtems_id)-1;
-  task_pool.sem   = (rtems_id)-1;
 
-  sc = rtems_semaphore_create(
-    rtems_build_name('F', 'T', 'P', 'M'),
-    1,
-    RTEMS_DEFAULT_ATTRIBUTES
-    | RTEMS_BINARY_SEMAPHORE
-    | RTEMS_INHERIT_PRIORITY
-    | RTEMS_PRIORITY,
-    RTEMS_NO_PRIORITY,
-    &task_pool.mutex);
-
-  if(sc == RTEMS_SUCCESSFUL)
-    sc = rtems_semaphore_create(
-      rtems_build_name('F', 'T', 'P', 'S'),
-      count,
-      RTEMS_DEFAULT_ATTRIBUTES,
-      RTEMS_NO_PRIORITY,
-      &task_pool.sem);
-
-  if(sc != RTEMS_SUCCESSFUL) {
-    task_pool_done(0);
-    syslog(LOG_ERR, "ftpd: Can not create semaphores");
-    return 0;
-  }
+  rtems_mutex_init(&task_pool.mutex, "FTPD");
+  rtems_counting_semaphore_init(&task_pool.sem, "FTPD", (unsigned int) count);
 
   task_pool.info = (FTPD_SessionInfo_t*)
     malloc(sizeof(FTPD_SessionInfo_t) * count);
@@ -485,16 +459,12 @@ static FTPD_SessionInfo_t*
 task_pool_obtain(void)
 {
   FTPD_SessionInfo_t* info = 0;
-  rtems_status_code sc;
-  sc = rtems_semaphore_obtain(task_pool.sem, RTEMS_NO_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc == RTEMS_SUCCESSFUL)
-  {
-    rtems_semaphore_obtain(task_pool.mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-    info = task_pool.queue[task_pool.head];
-    if(++task_pool.head >= task_pool.count)
-      task_pool.head = 0;
-    rtems_semaphore_release(task_pool.mutex);
-  }
+  rtems_counting_semaphore_wait(&task_pool.sem);
+  rtems_mutex_lock(&task_pool.mutex);
+  info = task_pool.queue[task_pool.head];
+  if(++task_pool.head >= task_pool.count)
+    task_pool.head = 0;
+  rtems_mutex_unlock(&task_pool.mutex);
   return info;
 }
 
@@ -513,12 +483,12 @@ task_pool_obtain(void)
 static void
 task_pool_release(FTPD_SessionInfo_t* info)
 {
-  rtems_semaphore_obtain(task_pool.mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+  rtems_mutex_lock(&task_pool.mutex);
   task_pool.queue[task_pool.tail] = info;
   if(++task_pool.tail >= task_pool.count)
     task_pool.tail = 0;
-  rtems_semaphore_release(task_pool.mutex);
-  rtems_semaphore_release(task_pool.sem);
+  rtems_mutex_unlock(&task_pool.mutex);
+  rtems_counting_semaphore_post(&task_pool.sem);
 }
 
 /*
