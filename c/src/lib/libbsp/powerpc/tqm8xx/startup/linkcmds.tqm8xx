@@ -13,4 +13,4 @@ MEMORY {
 	ROM : ORIGIN = 0x40000000, LENGTH = 8M
 }
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.tqm8xx_base

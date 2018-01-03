@@ -32,7 +32,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-dist_project_lib_DATA += startup/linkcmds.base
+dist_project_lib_DATA += startup/linkcmds.gen5200_base
 project_lib_DATA += startup/linkcmds
 EXTRA_DIST += startup/linkcmds.brs5l
 EXTRA_DIST += startup/linkcmds.brs6l

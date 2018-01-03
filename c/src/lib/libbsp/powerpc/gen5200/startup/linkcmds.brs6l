@@ -12,4 +12,4 @@ MEMORY {
 	REGS : ORIGIN = 0xf0000000, LENGTH = 64k
 }
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.gen5200_base

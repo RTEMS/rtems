@@ -12,4 +12,4 @@ MEMORY {
 	DPRAM : ORIGIN = 0xff000000, LENGTH = 1k
 }
 
-INCLUDE linkcmds.base
+INCLUDE linkcmds.gen5200_base
