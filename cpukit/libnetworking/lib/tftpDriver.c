@@ -30,6 +30,7 @@
 #include <rtems/seterr.h>
 #include <rtems/rtems_bsdnet.h>
 #include <rtems/tftp.h>
+#include <rtems/thread.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -151,7 +152,7 @@ struct tftpStream {
  */
 typedef struct tftpfs_info_s {
   uint32_t flags;
-  rtems_id tftp_mutex;
+  rtems_mutex tftp_mutex;
   int nStreams;
   struct tftpStream ** volatile tftpStreams;
 } tftpfs_info_t;
@@ -180,7 +181,6 @@ int rtems_tftpfs_initialize(
   const void                           *data
 )
 {
-  rtems_status_code  sc;
   const char *device = mt_entry->dev;
   size_t devicelen = strlen (device);
   tftpfs_info_t *fs;
@@ -213,18 +213,7 @@ int rtems_tftpfs_initialize(
    *  NOTE:  This could be in an fsinfo for this filesystem type.
    */
 
-  sc = rtems_semaphore_create (
-    rtems_build_name('T', 'F', 'T', 'P'),
-    1,
-    RTEMS_BINARY_SEMAPHORE |
-    RTEMS_PRIORITY |
-    RTEMS_INHERIT_PRIORITY,
-    0,
-    &fs->tftp_mutex
-  );
-
-  if (sc != RTEMS_SUCCESSFUL)
-      goto error;
+  rtems_mutex_init (&fs->tftp_mutex, "TFTPFS");
 
   if (data) {
       char* config = (char*) data;
@@ -256,10 +245,10 @@ releaseStream (tftpfs_info_t *fs, int s)
 {
     if (fs->tftpStreams[s] && (fs->tftpStreams[s]->socket >= 0))
         close (fs->tftpStreams[s]->socket);
-    rtems_semaphore_obtain (fs->tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
+    rtems_mutex_lock (&fs->tftp_mutex);
     free (fs->tftpStreams[s]);
     fs->tftpStreams[s] = NULL;
-    rtems_semaphore_release (fs->tftp_mutex);
+    rtems_mutex_unlock (&fs->tftp_mutex);
 }
 
 static void
@@ -269,7 +258,7 @@ rtems_tftpfs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
   int            s;
   for (s = 0; s < fs->nStreams; s++)
       releaseStream (fs, s);
-  rtems_semaphore_delete (fs->tftp_mutex);
+  rtems_mutex_destroy (&fs->tftp_mutex);
   free (fs);
   free (mt_entry->mt_fs_root->location.node_access);
 }
@@ -536,7 +525,6 @@ static int rtems_tftp_open_worker(
     char                 *cp2;
     char                 *remoteFilename;
     rtems_interval       now;
-    rtems_status_code    sc;
     char                 *hostname;
 
     /*
@@ -583,9 +571,7 @@ static int rtems_tftp_open_worker(
     /*
      * Find a free stream
      */
-    sc = rtems_semaphore_obtain (fs->tftp_mutex, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-    if (sc != RTEMS_SUCCESSFUL)
-        return EBUSY;
+    rtems_mutex_lock (&fs->tftp_mutex);
     for (s = 0 ; s < fs->nStreams ; s++) {
         if (fs->tftpStreams[s] == NULL)
         break;
@@ -599,13 +585,13 @@ static int rtems_tftp_open_worker(
 
         np = realloc (fs->tftpStreams, ++fs->nStreams * sizeof *fs->tftpStreams);
         if (np == NULL) {
-            rtems_semaphore_release (fs->tftp_mutex);
+            rtems_mutex_unlock (&fs->tftp_mutex);
             return ENOMEM;
         }
         fs->tftpStreams = np;
     }
     tp = fs->tftpStreams[s] = malloc (sizeof (struct tftpStream));
-    rtems_semaphore_release (fs->tftp_mutex);
+    rtems_mutex_unlock (&fs->tftp_mutex);
     if (tp == NULL)
         return ENOMEM;
     iop->data0 = s;
