@@ -19,6 +19,7 @@
 #include "config.h"
 #endif
 
+#include <pthread.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,7 +39,8 @@
  */
 typedef struct rtems_rap_data_s
 {
-  rtems_id            lock;           /**< The RAP lock id */
+  pthread_once_t      once;
+  rtems_mutex         lock;           /**< The RAP lock id */
   rtems_chain_control apps;           /**< List if loaded application. */
   int                 last_errno;     /**< Last error number. */
   char                last_error[64]; /**< Last error string. */
@@ -56,13 +58,6 @@ typedef struct rtems_rap_app_s
 } rtems_rap_app_t;
 
 /**
- * Semaphore configuration to create a mutex.
- */
-#define RTEMS_MUTEX_ATTRIBS \
-  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE | \
-   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
-
-/**
  * RTL entry.
  */
 #if (RTL_GLUE(__USER_LABEL_PREFIX__, 1) == RTL_GLUE(_, 1))
@@ -74,7 +69,7 @@ typedef struct rtems_rap_app_s
 /**
  * Static RAP data is returned to the user when the loader is locked.
  */
-static rtems_rap_data_t rap_;
+static rtems_rap_data_t rap_ = { .once = PTHREAD_ONCE_INIT };
 
 /**
  * Verbose level for the RAP loader.
@@ -89,90 +84,35 @@ typedef int (*rtems_rap_entry_t)(int argc, const char* argv[]);
 /**
  * Forward decl.
  */
-static bool rtems_rap_unlock (void);
+static void rtems_rap_unlock (void);
 
-static bool
+static void
 rtems_rap_data_init (void)
 {
   /*
-   * Lock the RAP. We only create a lock if a call is made. First we test if a
-   * lock is present. If one is present we lock it. If not the libio lock is
-   * locked and we then test the lock again. If not present we create the lock
-   * then release libio lock.
+   * Create the RAP lock.
    */
-  if (!rap_.lock)
-  {
-    rtems_libio_lock ();
+  rtems_mutex_init (&rap_.lock, "RAP");
 
-    if (!rap_.lock)
-    {
-      rtems_status_code sc;
-      rtems_id          lock;
-
-      /*
-       * Create the RAP lock.
-       */
-      sc = rtems_semaphore_create (rtems_build_name ('R', 'A', 'P', '_'),
-                                   1, RTEMS_MUTEX_ATTRIBS,
-                                   RTEMS_NO_PRIORITY, &lock);
-      if (sc != RTEMS_SUCCESSFUL)
-        return false;
-
-      sc = rtems_semaphore_obtain (lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-      if (sc != RTEMS_SUCCESSFUL)
-      {
-        rtems_semaphore_delete (lock);
-        return false;
-      }
-
-      rap_.lock = lock;
-
-      /*
-       * Initialise the objects list and create any required services.
-       */
-      rtems_chain_initialize_empty (&rap_.apps);
-    }
-
-    rtems_libio_unlock ();
-
-    rtems_rap_unlock ();
-  }
-  return true;
+  /*
+   * Initialise the objects list and create any required services.
+   */
+  rtems_chain_initialize_empty (&rap_.apps);
 }
 
 static rtems_rap_data_t*
 rtems_rap_lock (void)
 {
-  rtems_status_code sc;
-
-  if (!rtems_rap_data_init ())
-    return NULL;
-
-  sc = rtems_semaphore_obtain (rap_.lock,
-                               RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    errno = EINVAL;
-    return NULL;
-  }
+  pthread_once (&rap_.once, rtems_rap_data_init);
+  rtems_mutex_lock (&rap_.lock);
 
   return &rap_;
 }
 
-static bool
+static void
 rtems_rap_unlock (void)
 {
-  /*
-   * Not sure any error should be returned or an assert.
-   */
-  rtems_status_code sc;
-  sc = rtems_semaphore_release (rap_.lock);
-  if ((sc != RTEMS_SUCCESSFUL) && (errno == 0))
-  {
-    errno = EINVAL;
-    return false;
-  }
-  return true;
+  rtems_mutex_unlock (&rap_.lock);
 }
 
 static rtems_rap_app_t*
