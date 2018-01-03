@@ -20,8 +20,8 @@
 #define _RTEMS_RTL_H_
 
 #include <link.h>
-#include <rtems.h>
 #include <rtems/chain.h>
+#include <rtems/thread.h>
 
 #include <rtems/rtl/rtl-allocator.h>
 #include <rtems/rtl/rtl-fwd.h>
@@ -96,7 +96,7 @@ typedef void (*rtems_rtl_cdtor_t)(void);
  */
 struct rtems_rtl_data_s
 {
-  rtems_id               lock;           /**< The RTL lock id */
+  rtems_recursive_mutex  lock;           /**< The RTL lock */
   rtems_rtl_alloc_data_t allocator;      /**< The allocator data. */
   rtems_chain_control    objects;        /**< List if loaded object files. */
   const char*            paths;          /**< Search paths for archives. */
@@ -183,11 +183,8 @@ rtems_rtl_data_t* rtems_rtl_lock (void);
 
 /**
  * Unlock the Run-time Linker.
- *
- * @return True The RTL is unlocked.
- * @return False The RTL could not be unlocked. Not much you can do.
  */
-bool rtems_rtl_unlock (void);
+void rtems_rtl_unlock (void);
 
 /**
  * Check a pointer is a valid object file descriptor returning the pointer as

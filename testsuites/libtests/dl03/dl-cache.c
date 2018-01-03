@@ -75,7 +75,7 @@ static void dl_init_rtl(void)
    */
   rtems_test_assert(rtems_rtl_data () == NULL);
   rtems_test_assert(rtems_rtl_lock () != NULL);
-  rtems_test_assert(rtems_rtl_unlock () == true);
+  rtems_rtl_unlock ();
   rtems_test_assert(rtems_rtl_data () != NULL);
   rtems_rtl_trace_set_mask(RTEMS_RTL_TRACE_ALL | RTEMS_RTL_TRACE_CACHE);
 }
