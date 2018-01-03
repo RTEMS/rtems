@@ -84,13 +84,13 @@ libbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
 libbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
 libbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
-include_bsp_HEADERS += ../../powerpc/shared/irq/irq.h \
+include_bsp_HEADERS += include/bsp/irq.h \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 # irq
 libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c
 libbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
-libbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c ../../powerpc/shared/irq/irq.h
+libbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c
 
 include_bsp_HEADERS += ../../powerpc/shared/motorola/motorola.h
 # motorola

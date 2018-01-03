@@ -74,8 +74,7 @@ libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
 include_bsp_HEADERS += irq/irq.h
 # irq
 libbsp_a_SOURCES += irq/irq_init.c \
-    ../../powerpc/shared/irq/openpic_i8259_irq.c \
-    ../../powerpc/shared/irq/irq.h
+    ../../powerpc/shared/irq/openpic_i8259_irq.c
 
 include_bsp_HEADERS += ../../powerpc/shared/openpic/openpic.h
 # openpic
