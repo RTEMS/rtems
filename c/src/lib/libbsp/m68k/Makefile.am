@@ -14,7 +14,7 @@ EXTRA_DIST += shared/start.S
 
 EXTRA_DIST += shared/bspspuriousinit.c shared/m68000spurious.c
 
-EXTRA_DIST += shared/mvme/mvme16x_hw.h
+include_HEADERS = shared/mvme/mvme16x_hw.h
 
 EXTRA_DIST += shared/gdbstub/m68k-stub.c shared/gdbstub/gdb_if.h
 

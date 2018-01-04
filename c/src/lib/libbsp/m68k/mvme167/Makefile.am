@@ -18,8 +18,6 @@ noinst_PROGRAMS =
 
 include_HEADERS += include/page_table.h
 
-nodist_include_HEADERS += $(top_srcdir)/../shared/mvme/mvme16x_hw.h
-
 EXTRA_DIST += ../../m68k/shared/start/start.S
 start.$(OBJEXT): ../../m68k/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
