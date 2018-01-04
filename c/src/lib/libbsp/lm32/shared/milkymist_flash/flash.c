@@ -18,7 +18,7 @@
 #include <rtems/libio.h>
 #include <rtems/status-checks.h>
 #include "../include/system_conf.h"
-#include "milkymist_flash.h"
+#include <bsp/milkymist_flash.h>
 
 static struct flash_partition partitions[FLASH_PARTITION_COUNT]
   = FLASH_PARTITIONS;

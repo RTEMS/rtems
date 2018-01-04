@@ -19,7 +19,7 @@
 #include <bsp/irq-generic.h>
 #include <rtems/libio.h>
 #include "../include/system_conf.h"
-#include "milkymist_midi.h"
+#include <bsp/milkymist_midi.h>
 
 #define DEVICE_NAME "/dev/midi"
 

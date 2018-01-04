@@ -18,7 +18,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "../include/system_conf.h"
-#include "milkymist_dmx.h"
+#include <bsp/milkymist_dmx.h>
 
 #define IN_DEVICE_NAME "/dev/dmx_in"
 #define OUT_DEVICE_NAME "/dev/dmx_out"

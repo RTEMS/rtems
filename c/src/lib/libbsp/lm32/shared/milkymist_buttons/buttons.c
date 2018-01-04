@@ -21,7 +21,7 @@
 #include <bsp/irq-generic.h>
 #include <rtems/libio.h>
 #include "../include/system_conf.h"
-#include "milkymist_buttons.h"
+#include <bsp/milkymist_buttons.h>
 
 #define DEVICE_NAME "/dev/buttons"
 

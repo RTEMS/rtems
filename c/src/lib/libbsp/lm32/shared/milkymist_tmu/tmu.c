@@ -21,7 +21,7 @@
 #include <rtems/libio.h>
 #include <rtems/status-checks.h>
 #include "../include/system_conf.h"
-#include "milkymist_tmu.h"
+#include <bsp/milkymist_tmu.h>
 
 #define DEVICE_NAME "/dev/tmu"
 

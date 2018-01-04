@@ -20,7 +20,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "../include/system_conf.h"
-#include "milkymist_versions.h"
+#include <bsp/milkymist_versions.h>
 
 #define SOC_DEVICE_NAME "/dev/soc"
 #define PCB_DEVICE_NAME "/dev/pcb"

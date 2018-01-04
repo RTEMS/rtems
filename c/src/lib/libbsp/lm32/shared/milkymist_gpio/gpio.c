@@ -22,7 +22,7 @@
 #include <bsp.h>
 #include <rtems/libio.h>
 #include "../include/system_conf.h"
-#include "milkymist_gpio.h"
+#include <bsp/milkymist_gpio.h>
 
 struct milkymist_gpio {
   char *name;

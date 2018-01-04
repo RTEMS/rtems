@@ -17,7 +17,7 @@
 #include <rtems/libio.h>
 #include <rtems/status-checks.h>
 #include "../include/system_conf.h"
-#include "milkymist_ac97.h"
+#include <bsp/milkymist_ac97.h>
 
 #define SND_DEVICE_NAME "/dev/snd"
 #define MIXER_DEVICE_NAME "/dev/mixer"

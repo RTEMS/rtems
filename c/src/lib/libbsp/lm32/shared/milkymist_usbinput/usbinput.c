@@ -21,7 +21,7 @@
 #include <rtems/libio.h>
 #include <rtems/status-checks.h>
 #include "../include/system_conf.h"
-#include "milkymist_usbinput.h"
+#include <bsp/milkymist_usbinput.h>
 
 #include "comloc.h"
 

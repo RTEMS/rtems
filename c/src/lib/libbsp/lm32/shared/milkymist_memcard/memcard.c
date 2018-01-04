@@ -19,7 +19,7 @@
 #include <errno.h>
 #include <bsp.h>
 #include "../include/system_conf.h"
-#include "milkymist_memcard.h"
+#include <bsp/milkymist_memcard.h>
 
 //#define MEMCARD_DEBUG
 

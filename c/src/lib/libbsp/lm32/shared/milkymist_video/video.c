@@ -22,7 +22,7 @@
 #include <rtems/status-checks.h>
 #include <rtems/bspIo.h>
 #include "../include/system_conf.h"
-#include "milkymist_video.h"
+#include <bsp/milkymist_video.h>
 
 #define DEVICE_NAME "/dev/video"
 #define N_BUFFERS 3
