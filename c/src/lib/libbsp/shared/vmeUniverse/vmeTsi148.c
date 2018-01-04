@@ -59,9 +59,9 @@
 #define __INSIDE_RTEMS_BSP__
 #define _VME_TSI148_DECLARE_SHOW_ROUTINES
 
-#include "vmeTsi148.h"
+#include <bsp/vmeTsi148.h>
 #include <bsp/VMEDMA.h>
-#include "vmeTsi148DMA.h"
+#include <bsp/vmeTsi148DMA.h>
 #include "bspVmeDmaListP.h"
 
 
