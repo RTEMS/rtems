@@ -9,13 +9,12 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include "ata_internal.h"
-
 #include <assert.h>
 #include <string.h>
 
 #include <libchip/ide_ctrl_io.h>
 #include <libchip/ide_ctrl_cfg.h>
+#include <libchip/ata_internal.h>
 
 /* ata_process_request_on_init_phase --
  *     Process the ATA request during system initialization. Request

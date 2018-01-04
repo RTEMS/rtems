@@ -27,7 +27,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "cs8900.h"
+#include <libchip/cs8900.h>
 
 /*
  * We expect to be able to read a complete packet into an mbuf.

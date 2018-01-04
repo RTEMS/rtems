@@ -171,7 +171,7 @@ Mode of operation:
 #include <netinet/if_ether.h>
 
 #include "i82586reg.h"
-#include "i82586var.h"
+#include <libchip/i82586var.h>
 
 #if defined(ALIGNBYTES) && defined(ALIGN)
 /* FIXME: Redefine because some versions of 

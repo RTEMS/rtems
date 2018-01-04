@@ -22,7 +22,7 @@
 #include <rtems/blkdev.h>
 #include <libchip/ide_ctrl_io.h>
 #include <libchip/ide_ctrl_cfg.h>
-#include "ata_internal.h"
+#include <libchip/ata_internal.h>
 #include <libchip/ata.h>
 
 #define ATA_DEBUG 0

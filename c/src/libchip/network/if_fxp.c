@@ -92,7 +92,7 @@
 #include <net/if_types.h>
 
 #include "if_fxpreg.h"
-#include "if_fxpvar.h"
+#include <libchip/if_fxpvar.h>
 
 /*
  * some adaptation replacements for RTEMS

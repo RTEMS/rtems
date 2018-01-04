@@ -187,7 +187,7 @@
 #include <bsp/irq.h>
 
 
-#include "if_dcreg.h"
+#include <libchip/if_dcreg.h>
 
 
 #define DRIVER_PREFIX 	"tl"

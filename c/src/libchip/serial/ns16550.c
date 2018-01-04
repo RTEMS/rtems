@@ -43,8 +43,8 @@
 
 #include <bsp.h>
 
-#include "ns16550_p.h"
-#include "ns16550.h"
+#include <libchip/ns16550_p.h>
+#include <libchip/ns16550.h>
 
 #if defined(BSP_FEATURE_IRQ_EXTENSION)
   #include <bsp/irq.h>
