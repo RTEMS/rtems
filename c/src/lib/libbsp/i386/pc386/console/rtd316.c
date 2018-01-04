@@ -26,7 +26,7 @@
 #include <rtems/bspIo.h>
 #include <bsp/rtd316.h>
 #include <rtems/score/i386.h>
-#include <rtems/console_private.h>
+#include "../../../shared/console_private.h"
 
 #define RTD_CLOCK_RATE  (460800 * 32)
 

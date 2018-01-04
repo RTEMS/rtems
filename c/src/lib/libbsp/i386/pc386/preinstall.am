@@ -162,10 +162,6 @@ $(PROJECT_INCLUDE)/i386_io.h: ../../i386/shared/comm/i386_io.h $(PROJECT_INCLUDE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/i386_io.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/i386_io.h
 
-$(PROJECT_INCLUDE)/rtems/console_private.h: ../../shared/console_private.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/console_private.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/console_private.h
-
 $(PROJECT_INCLUDE)/uart.h: ../../i386/shared/comm/uart.h $(PROJECT_INCLUDE)/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/uart.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/uart.h

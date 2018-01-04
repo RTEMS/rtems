@@ -112,7 +112,6 @@ endif
 
 # console (non-graphics support)
 include_HEADERS += ../../i386/shared/comm/i386_io.h
-include_rtems_HEADERS += ../../shared/console_private.h
 libbsp_a_SOURCES += console/serial_mouse_config.c
 libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
 libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
