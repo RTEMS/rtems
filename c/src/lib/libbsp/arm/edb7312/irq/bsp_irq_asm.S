@@ -14,7 +14,7 @@
 
 #define __asm__
 #include <bsp.h>
-#include "irq.h"
+#include <bsp/irq.h>
 
 	.extern edb7312_interrupt_dispatch
 
