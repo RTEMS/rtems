@@ -58,7 +58,7 @@ field = type, length, { data }
 #include <sys/fcntl.h>
 #include <bsp.h>
 
-#include "vpd.h"
+#include <bsp/vpd.h>
 
 /* FIXME XXX: all of the early i2c reading stuff should
  * be moved elsewhere. This file should only deal with
