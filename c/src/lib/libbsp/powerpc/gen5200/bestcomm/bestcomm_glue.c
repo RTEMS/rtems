@@ -20,13 +20,13 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include "../include/mpc5200.h"
-#include "include/ppctypes.h"			/* uint32, et. al.		   */
-#include "dma_image.h"
-#include "task_api/bestcomm_cntrl.h"
-#include "bestcomm_api.h"
-#include "bestcomm_glue.h"
-#include "include/mgt5200/sdma.h"
+#include <bsp/mpc5200.h>
+#include <bsp/bestcomm/include/ppctypes.h> /* uint32, et. al.		   */
+#include <bsp/bestcomm/dma_image.h>
+#include <bsp/bestcomm/task_api/bestcomm_cntrl.h>
+#include <bsp/bestcomm/bestcomm_api.h>
+#include <bsp/bestcomm/bestcomm_glue.h>
+#include <bsp/bestcomm/include/mgt5200/sdma.h>
 #include <rtems/score/heapimpl.h>
 
 extern const uint32 taskTableBytes;

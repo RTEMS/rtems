@@ -19,7 +19,7 @@
 #include <rtems.h>
 #include <bsp.h>
 #include <bsp/irq.h>
-#include "../include/mpc5200.h"
+#include <bsp/mpc5200.h>
 #include "./pcmcia_ide.h"
 
 #include <libchip/ide_ctrl.h>

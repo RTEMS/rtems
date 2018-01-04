@@ -23,7 +23,7 @@
 ******************************************************************************/
 
 
-#include "include/ppctypes.h"
+#include <bsp/bestcomm/include/ppctypes.h>
 
 uint32 taskTableBytes = 0x00001500;  /* Number of bytes in image */
 

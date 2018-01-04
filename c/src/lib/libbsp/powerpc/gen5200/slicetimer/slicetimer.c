@@ -107,8 +107,8 @@
 #include <rtems/libio.h>
 
 #include <bsp/irq.h>
-#include "../include/mpc5200.h"
-#include "../slicetimer/slicetimer.h"
+#include <bsp/mpc5200.h>
+#include <bsp/slicetimer.h>
 #include <stdio.h>
 
 uint32_t value0 = 0;

@@ -26,12 +26,12 @@
 #include <string.h>
 #endif
 
-#include "include/ppctypes.h"
-#include "include/mgt5200/sdma.h"
-#include "include/mgt5200/mgt5200.h"
+#include <bsp/bestcomm/include/ppctypes.h>
+#include <bsp/bestcomm/include/mgt5200/sdma.h>
+#include <bsp/bestcomm/include/mgt5200/mgt5200.h>
 
-#include "dma_image.h"
-#include "bestcomm_api.h"
+#include <bsp/bestcomm/dma_image.h>
+#include <bsp/bestcomm/bestcomm_api.h>
 
 #ifdef __MWERKS__
 __declspec(section ".text") extern const uint32 taskTable;

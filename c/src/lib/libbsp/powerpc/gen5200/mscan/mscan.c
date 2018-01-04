@@ -24,7 +24,7 @@
 #include <rtems/libio.h>
 #include <string.h>
 
-#include "../include/bsp.h"
+#include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/irq.h>
 #include "../mscan/mscan_int.h"

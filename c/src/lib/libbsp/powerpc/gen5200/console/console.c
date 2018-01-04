@@ -99,7 +99,7 @@
 #include <string.h>
 
 #include <rtems.h>
-#include "../include/mpc5200.h"
+#include <bsp/mpc5200.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 

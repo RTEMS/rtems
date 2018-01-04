@@ -28,7 +28,7 @@ extern "C" {
 
 #include <bsp/mscan-base.h>
 
-#include "../mscan/mscan.h"
+#include <bsp/mscan.h>
 
 #define MSCAN_RX_BUFF_NUM        4
 #define MSCAN_TX_BUFF_NUM        3

@@ -22,7 +22,7 @@
 *
 ******************************************************************************/
 
-#include "dma_image.h"
+#include <bsp/bestcomm/dma_image.h>
 
 TASK_PCI_TX_api_t  TASK_PCI_TX_storage;
 TASK_PCI_TX_api_t *TASK_PCI_TX_api=&TASK_PCI_TX_storage;

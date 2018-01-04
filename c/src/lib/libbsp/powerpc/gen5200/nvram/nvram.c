@@ -83,8 +83,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <bsp.h>
-#include "../include/mpc5200.h"
-#include "nvram.h"
+#include <bsp/mpc5200.h>
+#include <bsp/nvram.h>
 #include "m93cxx.h"
 
 /*

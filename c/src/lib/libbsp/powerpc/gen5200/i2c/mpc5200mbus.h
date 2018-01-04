@@ -34,8 +34,9 @@
 #ifndef __MPC5200BSP_MPC5200MBUS_H__
 #define __MPC5200BSP_MPC5200MBUS_H__
 
-#include "../include/mpc5200.h"
-#include "../include/i2c.h"
+#include <bsp/mpc5200.h>
+#include <i2c.h>
+
 
 /* States of I2C machine */
 typedef enum mpc5200mbus_i2c_state {

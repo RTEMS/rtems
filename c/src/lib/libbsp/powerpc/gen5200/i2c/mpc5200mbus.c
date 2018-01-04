@@ -30,10 +30,10 @@
  *
  * http://www.rtems.org/license/LICENSE.
  */
-#include "mpc5200mbus.h"
-#include "../include/mpc5200.h"
+#include "../i2c/mpc5200mbus.h"
+#include <bsp/mpc5200.h>
 #include <bsp/irq.h>
-#include "../include/i2c.h"
+#include <i2c.h>
 
 /* Events of I2C machine */
 typedef enum i2c_event {
