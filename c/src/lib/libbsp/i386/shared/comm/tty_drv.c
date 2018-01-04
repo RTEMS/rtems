@@ -29,7 +29,7 @@
 #include <termios.h>
 #include <uart.h>
 #include <libcpu/cpuModel.h>
-#include "tty_drv.h"
+#include <bsp/tty_drv.h>
 
 int BSP_poll_read(int);
 

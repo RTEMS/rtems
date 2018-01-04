@@ -29,8 +29,8 @@
 
 #define  INITIALIZE_MOUSE
 /* Some configuration switches are present in the include file... */
+#include <rtems/ps2_drv.h>
 #include "ps2_mouse.h"
-#include "ps2_drv.h"
 
 static void kbd_write_command_w(int data);
 #if 0

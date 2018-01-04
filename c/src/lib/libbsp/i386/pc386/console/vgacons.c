@@ -21,7 +21,7 @@
 #include <bsp.h>
 #include <crt.h>
 #include <assert.h>
-#include "keyboard.h"
+#include <rtems/keyboard.h>
 
 #define VGACONS_STATIC static
 

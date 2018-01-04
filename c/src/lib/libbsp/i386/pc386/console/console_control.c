@@ -28,7 +28,7 @@
 #include <libchip/serial.h>
 #include <rtems/mouse_parser.h>
 #if BSP_ENABLE_VGA
-#include "keyboard.h"
+#include <rtems/keyboard.h>
 #endif
 #include "../../../shared/console_private.h"
 

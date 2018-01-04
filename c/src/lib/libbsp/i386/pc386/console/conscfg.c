@@ -20,7 +20,7 @@
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
 #if BSP_ENABLE_VGA
-#include "vgacons.h"
+#include <rtems/vgacons.h>
 #endif
 #include <bsp/irq.h>
 #include "../../../shared/console_private.h"

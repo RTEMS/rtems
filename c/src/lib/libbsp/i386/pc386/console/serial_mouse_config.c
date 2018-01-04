@@ -14,7 +14,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include "libchip/serial.h"
+#include <libchip/serial.h>
 #include "../../../shared/console_private.h"
 
 /* select which serial port the mouse is connected to */
