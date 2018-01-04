@@ -63,7 +63,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/score/sysstate.h>
 
-#include "mpc8540_i2c_busdrv.h"
+#include <bsp/mpc8540_i2c_busdrv.h>
 
 #define STATIC static
 
