@@ -5,7 +5,7 @@
  * Notes:
  */
 
-#include "MCD_dma.h"
+#include <mcf548x/MCD_dma.h>
 
 u32 MCD_varTab0[];
 u32 MCD_varTab1[];

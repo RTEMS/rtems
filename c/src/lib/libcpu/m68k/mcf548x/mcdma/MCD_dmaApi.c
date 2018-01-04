@@ -5,9 +5,9 @@
  * Notes:
  */
 
-#include "MCD_dma.h"
-#include "MCD_tasksInit.h"
-#include "MCD_progCheck.h"
+#include <mcf548x/MCD_dma.h>
+#include <mcf548x/MCD_tasksInit.h>
+#include <mcf548x/MCD_progCheck.h>
 
 /********************************************************************/
 /*

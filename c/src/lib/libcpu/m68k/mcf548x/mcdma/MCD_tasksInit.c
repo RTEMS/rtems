@@ -10,8 +10,8 @@
  * Do not edit!
  */
 
-#include "MCD_dma.h"
-#include "MCD_tasksInit.h"
+#include <mcf548x/MCD_dma.h>
+#include <mcf548x/MCD_tasksInit.h>
 
 extern dmaRegs *MCD_dmaBar;
 
