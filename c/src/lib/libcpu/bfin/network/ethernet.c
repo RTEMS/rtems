@@ -34,7 +34,7 @@
 
 #include <libcpu/dmaRegs.h>
 #include <libcpu/ethernetRegs.h>
-#include "ethernet.h"
+#include <libcpu/ethernet.h>
 
 #if (BFIN_ETHERNET_DEBUG & BFIN_ETHERNET_DEBUG_DUMP_MBUFS)
 #include <rtems/dumpbuf.h>

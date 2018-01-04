@@ -15,7 +15,7 @@
 #include <errno.h>
 #include <rtems/libi2c.h>
 #include <libcpu/spiRegs.h>
-#include "spi.h"
+#include <libcpu/spi.h>
 
 
 #ifndef BFIN_REG16

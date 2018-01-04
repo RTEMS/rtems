@@ -28,7 +28,7 @@
 #include <libcpu/cecRegs.h>
 #include <libcpu/sicRegs.h>
 #include <string.h>
-#include "interrupt.h"
+#include <bsp/interrupt.h>
 
 #define SIC_IAR_COUNT_SET0		  4
 #define SIC_IAR_BASE_ADDRESS_0  0xFFC00150

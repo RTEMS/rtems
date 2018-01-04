@@ -18,7 +18,7 @@
 
 #include <libcpu/uartRegs.h>
 #include <libcpu/dmaRegs.h>
-#include "uart.h"
+#include <libcpu/uart.h>
 
 /* flags */
 #define BFIN_UART_XMIT_BUSY 0x01

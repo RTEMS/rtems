@@ -12,7 +12,7 @@
 #include <rtems.h>
 
 #include <libcpu/memoryRegs.h>
-#include "mmu.h"
+#include <libcpu/mmu.h>
 
 /* NOTE: see notes in mmu.h */
 

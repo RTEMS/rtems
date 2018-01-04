@@ -15,7 +15,7 @@
 #include <rtems.h>
 
 #include <libcpu/twiRegs.h>
-#include "twi.h"
+#include <libcpu/twi.h>
 
 
 #ifndef N_BFIN_TWI
