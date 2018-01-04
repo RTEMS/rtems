@@ -63,7 +63,7 @@
 
 #include <stdint.h>
 
-#include "gt_timer.h"
+#include <bsp/gt_timer.h>
 
 #define DEBUG
 
