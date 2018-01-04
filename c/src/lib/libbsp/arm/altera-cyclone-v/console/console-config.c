@@ -20,10 +20,10 @@
 #include <bsp/irq.h>
 #include <bsp/alt_clock_manager.h>
 #include <bsp/console-termios.h>
-#include "socal/alt_rstmgr.h"
-#include "socal/socal.h"
-#include "socal/alt_uart.h"
-#include "socal/hps.h"
+#include <bsp/socal/alt_rstmgr.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/alt_uart.h>
+#include <bsp/socal/hps.h>
 
 #ifdef BSP_USE_UART_INTERRUPTS
   #define DEVICE_FNS &ns16550_handler_interrupt

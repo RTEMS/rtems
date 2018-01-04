@@ -37,15 +37,15 @@
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "hwlib.h"
-#include "alt_clock_manager.h"
+#include <bsp/hwlib.h>
+#include <bsp/alt_clock_manager.h>
 #include "alt_qspi.h"
-#include "alt_qspi_private.h"
-#include "socal/alt_qspi.h"
-#include "socal/alt_rstmgr.h"
-#include "socal/alt_sysmgr.h"
-#include "socal/hps.h"
-#include "socal/socal.h"
+#include <bsp/alt_qspi_private.h>
+#include <bsp/socal/alt_qspi.h>
+#include <bsp/socal/alt_rstmgr.h>
+#include <bsp/socal/alt_sysmgr.h>
+#include <bsp/socal/hps.h>
+#include <bsp/socal/socal.h>
 
 /////
 

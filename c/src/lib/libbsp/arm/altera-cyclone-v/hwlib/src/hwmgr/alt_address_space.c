@@ -35,11 +35,11 @@
  ******************************************************************************/
 
 #include <stddef.h>
-#include "alt_address_space.h"
-#include "socal/alt_l3.h"
-#include "socal/socal.h"
-#include "socal/alt_acpidmap.h"
-#include "hwlib.h"
+#include <bsp/alt_address_space.h>
+#include <bsp/socal/alt_l3.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/alt_acpidmap.h>
+#include <bsp/hwlib.h>
 
 
 #define ALT_ACP_ID_MAX_INPUT_ID     7

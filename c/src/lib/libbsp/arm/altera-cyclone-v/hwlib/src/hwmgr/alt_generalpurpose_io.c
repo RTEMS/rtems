@@ -32,12 +32,12 @@
 #include    <stdlib.h>
 #include    <stdbool.h>
 
-#include    "socal/hps.h"
-#include    "socal/socal.h"
-#include    "socal/alt_gpio.h"
-#include    "socal/alt_rstmgr.h"
-#include    "hwlib.h"
-#include    "alt_generalpurpose_io.h"
+#include    <bsp/socal/hps.h>
+#include    <bsp/socal/socal.h>
+#include    <bsp/socal/alt_gpio.h>
+#include    <bsp/socal/alt_rstmgr.h>
+#include    <bsp/hwlib.h>
+#include    <bsp/alt_generalpurpose_io.h>
 
 
 /****************************************************************************************/

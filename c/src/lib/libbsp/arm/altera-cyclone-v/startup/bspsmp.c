@@ -16,10 +16,10 @@
 
 #include <bsp/start.h>
 
-#include <socal/alt_rstmgr.h>
-#include <socal/alt_sysmgr.h>
-#include <socal/hps.h>
-#include <socal/socal.h>
+#include <bsp/socal/alt_rstmgr.h>
+#include <bsp/socal/alt_sysmgr.h>
+#include <bsp/socal/hps.h>
+#include <bsp/socal/socal.h>
 
 bool _CPU_SMP_Start_processor(uint32_t cpu_index)
 {

@@ -28,8 +28,8 @@
  * 
  ******************************************************************************/
 
-#include "alt_i2c.h"
-#include "alt_reset_manager.h"
+#include <bsp/alt_i2c.h>
+#include <bsp/alt_reset_manager.h>
 #include <stdio.h>
 
 /////

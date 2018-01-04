@@ -28,12 +28,12 @@
  * 
  ******************************************************************************/
 
-#include "alt_16550_uart.h"
-#include "alt_clock_manager.h"
-#include "socal/alt_rstmgr.h"
-#include "socal/alt_uart.h"
-#include "socal/hps.h"
-#include "socal/socal.h"
+#include <bsp/alt_16550_uart.h>
+#include <bsp/alt_clock_manager.h>
+#include <bsp/socal/alt_rstmgr.h>
+#include <bsp/socal/alt_uart.h>
+#include <bsp/socal/hps.h>
+#include <bsp/socal/socal.h>
 
 /////
 

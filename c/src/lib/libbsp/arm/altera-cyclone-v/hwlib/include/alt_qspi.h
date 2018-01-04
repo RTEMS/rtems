@@ -52,7 +52,7 @@
 #ifndef __ALT_QSPI_H__
 #define __ALT_QSPI_H__
 
-#include "hwlib.h"
+#include <bsp/hwlib.h>
 
 #ifdef __cplusplus
 extern "C"

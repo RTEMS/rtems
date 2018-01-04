@@ -19,10 +19,10 @@
 #include <bsp/arm-cp15-start.h>
 #include <bsp/arm-a9mpcore-start.h>
 #include <bsp/linker-symbols.h>
-#include <alt_address_space.h>
-#include <socal/socal.h>
-#include <socal/alt_sdr.h>
-#include <socal/hps.h>
+#include <bsp/alt_address_space.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/alt_sdr.h>
+#include <bsp/socal/hps.h>
 
 /* 1 MB reset default value for address filtering start */
 #define BSPSTART_L2_CACHE_ADDR_FILTERING_START_RESET 0x100000

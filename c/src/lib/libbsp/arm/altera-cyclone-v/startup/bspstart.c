@@ -18,7 +18,7 @@
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 
-#include <alt_clock_manager.h>
+#include <bsp/alt_clock_manager.h>
 
 #include <libfdt.h>
 

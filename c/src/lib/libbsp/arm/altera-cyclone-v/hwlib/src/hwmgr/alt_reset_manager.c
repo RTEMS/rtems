@@ -35,10 +35,10 @@
 * 
 ******************************************************************************/
 
-#include "alt_reset_manager.h"
-#include "socal/socal.h"
-#include "socal/hps.h"
-#include "socal/alt_rstmgr.h"
+#include <bsp/alt_reset_manager.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/hps.h>
+#include <bsp/socal/alt_rstmgr.h>
 
 /////
 

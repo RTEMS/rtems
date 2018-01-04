@@ -29,19 +29,19 @@
  ******************************************************************************/
 
 #include <stdio.h>
-#include "alt_dma.h"
-#include "socal/socal.h"
-#include "socal/hps.h"
-#include "socal/alt_rstmgr.h"
-#include "socal/alt_sysmgr.h"
+#include <bsp/alt_dma.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/hps.h>
+#include <bsp/socal/alt_rstmgr.h>
+#include <bsp/socal/alt_sysmgr.h>
 
 #if ALT_DMA_PERIPH_PROVISION_16550_SUPPORT
-#include "alt_16550_uart.h"
-#include "socal/alt_uart.h"
+#include <bsp/alt_16550_uart.h>
+#include <bsp/socal/alt_uart.h>
 #endif
 
 #if ALT_DMA_PERIPH_PROVISION_QSPI_SUPPORT
-#include "socal/alt_qspi.h"
+#include <bsp/socal/alt_qspi.h>
 #endif
 
 /////

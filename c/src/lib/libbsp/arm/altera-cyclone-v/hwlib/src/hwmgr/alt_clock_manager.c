@@ -33,12 +33,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include "socal/hps.h"
-#include "socal/socal.h"
-#include "socal/alt_sysmgr.h"
-#include "hwlib.h"
-#include "alt_clock_manager.h"
-#include "alt_mpu_registers.h"
+#include <bsp/socal/hps.h>
+#include <bsp/socal/socal.h>
+#include <bsp/socal/alt_sysmgr.h>
+#include <bsp/hwlib.h>
+#include <bsp/alt_clock_manager.h>
+#include <bsp/alt_mpu_registers.h>
 
 #define UINT12_MAX              (4096)
 

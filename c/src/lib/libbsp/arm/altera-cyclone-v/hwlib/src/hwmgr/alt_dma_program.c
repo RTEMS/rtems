@@ -28,8 +28,8 @@
  *
  ******************************************************************************/
 
-#include "alt_dma_program.h"
-#include "alt_cache.h"
+#include <bsp/alt_dma_program.h>
+#include <bsp/alt_cache.h>
 #include <stdio.h>
 
 /////
