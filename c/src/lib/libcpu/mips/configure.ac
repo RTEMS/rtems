@@ -2,7 +2,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libcpu-mips],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([tx39])
+AC_CONFIG_SRCDIR([timer])
 RTEMS_TOP([../../../../..],[../../..])
 
 RTEMS_CANONICAL_TARGET_CPU
