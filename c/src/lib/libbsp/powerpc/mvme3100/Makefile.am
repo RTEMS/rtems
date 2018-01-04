@@ -89,9 +89,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
-include_bsp_HEADERS += \
-  ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-
 include_bsp_HEADERS += vme/VMEConfig.h \
     ../../shared/vmeUniverse/vmeTsi148.h \
     ../../shared/vmeUniverse/vme_am_defs.h \

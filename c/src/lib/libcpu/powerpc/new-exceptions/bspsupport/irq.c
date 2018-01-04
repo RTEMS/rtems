@@ -12,11 +12,11 @@
 #include <stdlib.h>
 
 #include <rtems.h>
-#include "irq_supp.h"
-#include <bsp/vectors.h>
 #include <stdlib.h>
 #include <rtems/bspIo.h> /* for printk */
 #include <libcpu/spr.h>
+#include <bsp/irq_supp.h>
+#include <bsp/vectors.h>
 
 /*
  * default handler connected on each irq after bsp initialization

@@ -58,10 +58,6 @@ libbsp_a_SOURCES += irq/irq_init.c
 include_bsp_HEADERS += include/mmu.h
 libbsp_a_SOURCES += mmu/mmu.c
 
-#vectors
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
                   ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
                   ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \

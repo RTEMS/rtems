@@ -1,7 +1,7 @@
-#include "stackTrace.h"
-#include <rtems/bspIo.h>
-#include <libcpu/spr.h>
 #include <inttypes.h>
+#include <rtems/bspIo.h>
+#include <libcpu/stackTrace.h>
+#include <libcpu/spr.h>
 
 SPR_RO(PPC_LR)
 

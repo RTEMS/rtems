@@ -45,8 +45,7 @@ include_bsp_HEADERS = ../../powerpc/shared/console/uart.h \
 libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c
 
-include_bsp_HEADERS += irq/irq.h \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+include_bsp_HEADERS += irq/irq.h
 
 # irq
 libbsp_a_SOURCES += irq/irq_init.c irq/irq.c

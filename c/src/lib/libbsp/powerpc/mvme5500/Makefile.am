@@ -63,8 +63,6 @@ libbsp_a_SOURCES += irq/irq_init.c irq/BSP_irq.c
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 
 include_bsp_HEADERS += vectors/bspException.h
-include_bsp_HEADERS += \
-	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
 
 # vectors
 libbsp_a_SOURCES += vectors/exceptionhandler.c \

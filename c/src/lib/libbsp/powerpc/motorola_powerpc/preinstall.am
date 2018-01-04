@@ -89,10 +89,6 @@ $(PROJECT_INCLUDE)/bsp/irq.h: include/bsp/irq.h $(PROJECT_INCLUDE)/bsp/$(dirstam
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq.h
 
-$(PROJECT_INCLUDE)/bsp/irq_supp.h: ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/irq_supp.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/irq_supp.h
-
 $(PROJECT_INCLUDE)/bsp/motorola.h: ../../powerpc/shared/motorola/motorola.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/motorola.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/motorola.h

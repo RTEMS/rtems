@@ -62,8 +62,6 @@ EXTRA_DIST += vectors/README
 # vectors
 libbsp_a_SOURCES += vectors/align_h.S
 
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-
 EXTRA_DIST += shmsupp/README
 if HAS_MP
 # shmdr

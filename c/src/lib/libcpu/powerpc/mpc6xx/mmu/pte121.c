@@ -76,7 +76,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "pte121.h"
+#include <libcpu/pte121.h>
 
 /************************** CONSTANT DEFINITIONS **************************/
 

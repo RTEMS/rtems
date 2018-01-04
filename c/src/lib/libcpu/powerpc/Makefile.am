@@ -14,6 +14,7 @@ include_libcpu_HEADERS = shared/include/powerpc-utility.h
 include_bspdir = $(includedir)/bsp
 
 include_bsp_HEADERS =
+include_bsp_HEADERS += new-exceptions/bspsupport/irq_supp.h
 include_bsp_HEADERS += new-exceptions/bspsupport/vectors.h
 
 include_mpc83xxdir = $(includedir)/mpc83xx
@@ -60,8 +61,6 @@ new_exceptions_irq_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_irq_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-EXTRA_DIST += new-exceptions/bspsupport/vectors.h
-EXTRA_DIST += new-exceptions/bspsupport/irq_supp.h
 EXTRA_DIST += new-exceptions/bspsupport/README
 EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_test.c
 

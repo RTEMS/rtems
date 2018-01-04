@@ -74,7 +74,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "e500_mmu.h"
+#include <libcpu/e500_mmu.h>
 
 #define TLBIVAX_TLBSEL  (1<<(63-60))
 #define TLBIVAX_INV_ALL  (1<<(63-61))

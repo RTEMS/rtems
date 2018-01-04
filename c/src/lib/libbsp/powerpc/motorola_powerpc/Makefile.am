@@ -84,8 +84,7 @@ libbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
 libbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
 libbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
-include_bsp_HEADERS += include/bsp/irq.h \
-	../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
+include_bsp_HEADERS += include/bsp/irq.h
 
 # irq
 libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c

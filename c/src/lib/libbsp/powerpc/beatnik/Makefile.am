@@ -111,10 +111,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     pci/gt_pci_init.c pci/pci_io_remap.c pci/motload_fixup.c \
     ../../powerpc/shared/pci/pcifinddevice.c
 
-#vectors
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/vectors.h
-include_bsp_HEADERS += ../../../libcpu/@RTEMS_CPU@/@exceptions@/bspsupport/irq_supp.h
-
 #vme
 include_bsp_HEADERS += vme/VMEConfig.h \
     ../../shared/vmeUniverse/vmeUniverse.h \
