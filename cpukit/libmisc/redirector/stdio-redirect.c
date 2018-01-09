@@ -19,48 +19,29 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <rtems.h>
+#include <rtems/thread.h>
 #include <rtems/error.h>
 #include <rtems/stdio-redirect.h>
-
-#define RTEMS_STDIO_REDIRECT_LOCK_ATTRIBS                             \
-  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |                          \
-   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
 
 #define RTEMS_STDIO_REDIRECT_RUNNING  (1 << 0)
 #define RTEMS_STDIO_REDIRECT_FINISHED (1 << 1)
 
-static bool
+static void
 rtems_stdio_redirect_lock(rtems_stdio_redirect* sr)
 {
-  rtems_status_code sc = rtems_semaphore_obtain (sr->lock,
-                                                 RTEMS_WAIT,
-                                                 RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    fprintf(stderr, "error: stdio-redirect: lock failed: %s\n", rtems_status_text(sc));
-    return false;
-  }
-  return true;
+  rtems_mutex_lock(&sr->lock);
 }
 
-static bool
+static void
 rtems_stdio_redirect_unlock(rtems_stdio_redirect* sr)
 {
-  rtems_status_code sc = rtems_semaphore_release (sr->lock);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    fprintf(stderr, "error: stdio-redirect: unlock failed: %s\n", rtems_status_text(sc));
-    return false;
-  }
-  return true;
+  rtems_mutex_unlock(&sr->lock);
 }
 
-static bool
+static void
 rtems_stdio_redirect_write (rtems_stdio_redirect* sr, const char* buf, ssize_t len)
 {
-  if (!rtems_stdio_redirect_lock(sr))
-    return false;
+  rtems_stdio_redirect_lock(sr);
 
   if (sr->buffer)
   {
@@ -93,7 +74,7 @@ rtems_stdio_redirect_write (rtems_stdio_redirect* sr, const char* buf, ssize_t l
   if (sr->handler)
     sr->handler(buf, len);
 
-  return rtems_stdio_redirect_unlock(sr);
+  rtems_stdio_redirect_unlock(sr);
 }
 
 static rtems_task
@@ -111,8 +92,7 @@ rtems_stdio_redirect_reader(rtems_task_argument arg)
     if (sr->echo)
       write (sr->fd_dup, sr->input, r);
 
-    if (!rtems_stdio_redirect_write (sr, sr->input, r))
-      break;
+    rtems_stdio_redirect_write (sr, sr->input, r);
   }
 
   sr->state |= RTEMS_STDIO_REDIRECT_FINISHED;
@@ -189,17 +169,7 @@ rtems_stdio_redirect_open(int                          fd,
   sr->echo = echo;
   sr->handler = handler;
 
-  sc = rtems_semaphore_create (rtems_build_name ('R', 'S', 'R', 'l'),
-                               1, RTEMS_STDIO_REDIRECT_LOCK_ATTRIBS, 0,
-                               &sr->lock);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    fprintf(stderr, "error: stdio-redirect: lock create: %s\n", rtems_status_text(sc));
-    free(sr->buffer);
-    free(sr->input);
-    free(sr);
-    return NULL;
-  }
+  rtems_mutex_init(&sr->lock, "stdio-redirect");
 
   name = rtems_build_name ('S', 'R', '0' + (fd / 10), '0' + (fd % 10));
   sc = rtems_task_create (name,
@@ -211,7 +181,7 @@ rtems_stdio_redirect_open(int                          fd,
   if (sc != RTEMS_SUCCESSFUL)
   {
     fprintf(stderr, "error: stdio-redirect: reader create: %s\n", rtems_status_text(sc));
-    rtems_semaphore_delete(sr->lock);
+    rtems_mutex_destroy(&sr->lock);
     free(sr->buffer);
     free(sr->input);
     free(sr);
@@ -237,7 +207,7 @@ rtems_stdio_redirect_open(int                          fd,
   {
     fprintf(stderr, "error: stdio-redirect: reader start: %s\n", rtems_status_text(sc));
     rtems_task_delete(sr->reader);
-    rtems_semaphore_delete(sr->lock);
+    rtems_mutex_destroy(&sr->lock);
     free(sr->buffer);
     free(sr->input);
     free(sr);
@@ -250,31 +220,30 @@ rtems_stdio_redirect_open(int                          fd,
 void
 rtems_stdio_redirect_close(rtems_stdio_redirect* sr)
 {
-  if (rtems_stdio_redirect_lock(sr))
+  rtems_stdio_redirect_lock(sr);
+
+  sr->state &= ~RTEMS_STDIO_REDIRECT_RUNNING;
+  close(sr->pipe[0]);
+
+  rtems_stdio_redirect_unlock(sr);
+
+  while (sr->state & RTEMS_STDIO_REDIRECT_FINISHED)
   {
-    sr->state &= ~RTEMS_STDIO_REDIRECT_RUNNING;
-    close(sr->pipe[0]);
-
-    rtems_stdio_redirect_unlock(sr);
-
-    while (sr->state & RTEMS_STDIO_REDIRECT_FINISHED)
-    {
-      usleep(250UL * 1000000UL);
-    }
-
-    rtems_stdio_redirect_lock(sr);
-
-    dup2(sr->fd, sr->fd_dup);
-
-    free(sr->buffer);
-    free(sr->input);
-
-    rtems_stdio_redirect_unlock(sr);
-
-    rtems_semaphore_delete(sr->lock);
-
-    free(sr);
+    usleep(250UL * 1000000UL);
   }
+
+  rtems_stdio_redirect_lock(sr);
+
+  dup2(sr->fd, sr->fd_dup);
+
+  free(sr->buffer);
+  free(sr->input);
+
+  rtems_stdio_redirect_unlock(sr);
+
+  rtems_mutex_destroy(&sr->lock);
+
+  free(sr);
 }
 
 ssize_t
@@ -284,8 +253,7 @@ rtems_stdio_redirect_read(rtems_stdio_redirect* sr,
 {
   ssize_t written = 0;
 
-  if (!rtems_stdio_redirect_lock(sr))
-    return written;
+  rtems_stdio_redirect_lock(sr);
 
   if (sr->buffer)
   {

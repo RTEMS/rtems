@@ -42,6 +42,7 @@
 
 #include <stdbool.h>
 #include <rtems.h>
+#include <rtems/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -63,7 +64,7 @@ typedef struct
 {
   volatile uint32_t            state;       /**< The state. */
   rtems_id                     reader;      /**< The reader thread. */
-  rtems_id                     lock;        /**< Lock for this struct. */
+  rtems_mutex                  lock;        /**< Lock for this struct. */
   int                          fd;          /**< The file descriptor to redirect. */
   int                          fd_dup;      /**< Duplicated fd to write to. */
   int                          pipe[2];     /**< The pipe to the reader thread. */
