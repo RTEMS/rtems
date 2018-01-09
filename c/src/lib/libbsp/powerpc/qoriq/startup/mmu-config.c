@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -150,9 +150,103 @@ static entry DATA config[] = {
 
 static DATA char memory_path[] = "/memory";
 
-static void TEXT config_fdt_adjust(void)
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+static void TEXT add_dpaa_bqman_portals(
+	qoriq_mmu_context *context,
+	const void *fdt,
+	const char *compatible
+)
 {
-	const void *fdt = bsp_fdt_get();
+	int node;
+
+	node = -1;
+
+	while (true) {
+		const void *val;
+		int len;
+		uintptr_t paddr;
+		uintptr_t size;
+
+		node = fdt_node_offset_by_compatible(fdt, node, compatible);
+		if (node < 0) {
+			break;
+		}
+
+		val = fdt_getprop(fdt, node, "reg", &len);
+		if (len != 32) {
+			continue;
+		}
+
+		paddr = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[0]);
+		size = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[1]);
+
+		qoriq_mmu_add(
+			context,
+			paddr,
+			paddr + size - 1,
+			0,
+			FSL_EIS_MAS2_M | FSL_EIS_MAS2_G,
+			FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
+			QORIQ_MMU_DEVICE_MAS7
+		);
+
+		paddr = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[2]);
+		size = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[3]);
+
+		qoriq_mmu_add(
+			context,
+			paddr,
+			paddr + size - 1,
+			0,
+			FSL_EIS_MAS2_I | FSL_EIS_MAS2_G,
+			FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
+			QORIQ_MMU_DEVICE_MAS7
+		);
+	}
+}
+
+static void TEXT add_dpaa_bpool(qoriq_mmu_context *context, const void *fdt)
+{
+	int node;
+
+	node = -1;
+
+	while (true) {
+		const void *val;
+		int len;
+		uintptr_t config_count;
+		uintptr_t size;
+		uintptr_t paddr;
+
+		node = fdt_node_offset_by_compatible(fdt, node, "fsl,bpool");
+		if (node < 0) {
+			break;
+		}
+
+		val = fdt_getprop(fdt, node, "fsl,bpool-ethernet-cfg", &len);
+		if (len != 24) {
+			continue;
+		}
+
+		config_count = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[0]);
+		size = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[1]);
+		paddr = (uintptr_t) fdt64_to_cpu(((fdt64_t *) val)[2]);
+
+		qoriq_mmu_add(
+			context,
+			paddr,
+			paddr + config_count * size - 1,
+			0,
+			FSL_EIS_MAS2_M,
+			FSL_EIS_MAS3_SR | FSL_EIS_MAS3_SW,
+			0
+		);
+	}
+}
+#endif
+
+static void TEXT config_fdt_adjust(const void *fdt)
+{
 	int node;
 
 	node = fdt_path_offset_namelen(
@@ -198,18 +292,30 @@ static void TEXT config_fdt_adjust(void)
 void TEXT qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb)
 {
 	qoriq_mmu_context context;
-	int i = 0;
-
-	if (boot_processor) {
-		config_fdt_adjust();
-	}
-
-	qoriq_mmu_context_init(&context);
+	const void *fdt;
+	int max_count;
+	int i;
 
 	for (i = 0; i < QORIQ_TLB1_ENTRY_COUNT; ++i) {
 		if (i != scratch_tlb) {
 			qoriq_tlb1_invalidate(i);
 		}
+	}
+
+	fdt = bsp_fdt_get();
+	qoriq_mmu_context_init(&context);
+
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+	add_dpaa_bqman_portals(&context, fdt, "fsl,bman-portal");
+	add_dpaa_bqman_portals(&context, fdt, "fsl,qman-portal");
+	add_dpaa_bpool(&context, fdt);
+	max_count = QORIQ_TLB1_ENTRY_COUNT - 1;
+#else
+	max_count = (3 * QORIQ_TLB1_ENTRY_COUNT) / 4;
+#endif
+
+	if (boot_processor) {
+		config_fdt_adjust(fdt);
 	}
 
 	for (i = 0; i < (int) (sizeof(config) / sizeof(config [0])); ++i) {
@@ -227,7 +333,7 @@ void TEXT qoriq_mmu_config(bool boot_processor, int first_tlb, int scratch_tlb)
 		}
 	}
 
-	qoriq_mmu_partition(&context, (3 * QORIQ_TLB1_ENTRY_COUNT) / 4);
+	qoriq_mmu_partition(&context, max_count);
 	qoriq_mmu_write_to_tlb1(&context, first_tlb);
 }
 

@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2011-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -84,31 +84,17 @@ static void TEXT sort(qoriq_mmu_context *self)
 	}
 }
 
-static bool TEXT mas_equal(const qoriq_mmu_entry *a, const qoriq_mmu_entry *b)
+static bool TEXT mas_compatible(const qoriq_mmu_entry *a, const qoriq_mmu_entry *b)
 {
-	return a->mas1 == b->mas1 && a->mas2 == b->mas2 && a->mas3 == b->mas3;
+	uint32_t m = FSL_EIS_MAS2_M;
+
+	return (a->mas2 & ~m) == (b->mas2 & ~m);
 }
 
 static bool TEXT can_merge(const qoriq_mmu_entry *prev, const qoriq_mmu_entry *cur)
 {
-	bool can = false;
-
-	if (prev->begin == cur->begin || prev->last >= cur->begin - 1) {
-		/*
-		 * Here we can technically merge.  We need a heuristic to
-		 * prevent merges in case the MAS values differ and the boarder
-		 * is reasonably well aligned.
-		 */
-		if (
-			mas_equal(prev, cur)
-				|| prev->last != cur->begin - 1
-				|| power_of_two(cur->begin) < 24
-		) {
-			can = true;
-		}
-	}
-
-	return can;
+	return mas_compatible(prev, cur)
+		&& (prev->begin == cur->begin || prev->last >= cur->begin - 1);
 }
 
 static void TEXT merge(qoriq_mmu_context *self)
@@ -130,7 +116,7 @@ static void TEXT merge(qoriq_mmu_context *self)
 
 			if (cur->last > prev->last) {
 				prev->last = cur->last;
-			}	
+			}
 
 			for (j = i + 1; j < n; ++j) {
 				entries [j - 1] = entries [j];
@@ -150,16 +136,72 @@ static void TEXT compact(qoriq_mmu_context *self)
 	merge(self);
 }
 
+static bool TEXT can_expand_down(
+	const qoriq_mmu_context *self,
+	const qoriq_mmu_entry *cur,
+	int i,
+	uintptr_t new_begin
+)
+{
+	int j;
+
+	for (j = 0; j < i; ++j) {
+		const qoriq_mmu_entry *before = &self->entries[j];
+
+		if (
+			before->begin <= new_begin
+				&& new_begin <= before->last
+				&& !mas_compatible(before, cur)
+		) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+static bool TEXT can_expand_up(
+	const qoriq_mmu_context *self,
+	const qoriq_mmu_entry *cur,
+	int i,
+	int n,
+	uintptr_t new_last
+)
+{
+	int j;
+
+	for (j = i + 1; j < n; ++j) {
+		const qoriq_mmu_entry *after = &self->entries[j];
+
+		if (
+			after->begin <= new_last
+				&& new_last <= after->last
+				&& !mas_compatible(after, cur)
+		) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 static void TEXT align(qoriq_mmu_context *self, uintptr_t alignment)
 {
-	qoriq_mmu_entry *entries = self->entries;
 	int n = self->count;
-	int i = 0;
+	int i;
 
 	for (i = 0; i < n; ++i) {
-		qoriq_mmu_entry *cur = &entries [i];
-		cur->begin &= ~(alignment - 1);
-		cur->last = alignment + (cur->last & ~(alignment - 1)) - 1;
+		qoriq_mmu_entry *cur = &self->entries[i];
+		uintptr_t new_begin = cur->begin & ~(alignment - 1);
+		uintptr_t new_last = alignment + (cur->last & ~(alignment - 1)) - 1;
+
+		if (
+			can_expand_down(self, cur, i, new_begin)
+				&& can_expand_up(self, cur, i, n, new_last)
+		) {
+			cur->begin = new_begin;
+			cur->last = new_last;
+		}
 	}
 }
 
@@ -264,6 +306,8 @@ static TEXT void partition(qoriq_mmu_context *self)
 void TEXT qoriq_mmu_partition(qoriq_mmu_context *self, int max_count)
 {
 	uintptr_t alignment = 4096;
+
+	sort(self);
 
 	do {
 		align(self, alignment);
