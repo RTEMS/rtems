@@ -52,6 +52,7 @@
 #define NIC_RESET_EVENT         RTEMS_EVENT_3
 
 #include <bsp.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -137,7 +138,6 @@ static int uti596_wait ( uti596_softc_ *, uint8_t);
 static int uti596_issueCA ( uti596_softc_ *, uint8_t);
 static void uti596_addCmd ( i596_cmd * );
 static void uti596_addPolledCmd ( i596_cmd * );
-static void uti596_dump_scb ( void );
 static int uti596_setScpAndScb ( uti596_softc_ * );
 static int uti596_diagnose ( void );
 static int uti596_configure ( uti596_softc_ * );
@@ -665,6 +665,7 @@ static void uti596_CU_dump ( i596_dump_result * drp)
 }
 #endif
 
+#if defined(DBG_STAT) || !defined(IGNORE_NO_RFA)
 /*
  *  uti596_dump_scb
  *
@@ -683,15 +684,16 @@ static void uti596_dump_scb ( void )
   printk(("command 0x%x\n",uti596_softc.scb.command))
   printk(("cmd 0x%x\n",(int)uti596_softc.scb.pCmd))
   printk(("rfd 0x%x\n",(int)uti596_softc.scb.pRfd))
-  printk(("crc_err 0x%x\n",uti596_softc.scb.crc_err))
-  printk(("align_err 0x%x\n",uti596_softc.scb.align_err))
-  printk(("resource_err 0x%x\n",uti596_softc.scb.resource_err ))
-  printk(("over_err 0x%x\n",uti596_softc.scb.over_err))
-  printk(("rcvdt_err 0x%x\n",uti596_softc.scb.rcvdt_err))
-  printk(("short_err 0x%x\n",uti596_softc.scb.short_err))
+  printk(("crc_err 0x%" PRIx32 "\n",uti596_softc.scb.crc_err))
+  printk(("align_err 0x%" PRIx32 "\n",uti596_softc.scb.align_err))
+  printk(("resource_err 0x%" PRIx32 "\n",uti596_softc.scb.resource_err ))
+  printk(("over_err 0x%" PRIx32 "\n",uti596_softc.scb.over_err))
+  printk(("rcvdt_err 0x%" PRIx32 "\n",uti596_softc.scb.rcvdt_err))
+  printk(("short_err 0x%" PRIx32 "\n",uti596_softc.scb.short_err))
   printk(("t_on 0x%x\n",uti596_softc.scb.t_on))
   printk(("t_off 0x%x\n",uti596_softc.scb.t_off))
 }
+#endif
 
 /*
  *  uti596_setScpAndScb
@@ -1002,7 +1004,7 @@ void uti596_initMem(
   uti596_initTBD( sc );
 
   /* Padding used to fill short tx frames */
-  memset ( &sc->zeroes, 0, 64);
+  memset ( RTEMS_DEVOLATILE( char *, sc->zeroes ), 0, 64);
 
   /* now need ISR  */
   sc->resetDone = 1;
@@ -1071,8 +1073,6 @@ void uti596_initialize_hardware(
   uti596_softc_ *sc
 )
 {
-  rtems_isr_entry dummy;
-
   printk(("uti596_initialize_hardware: begins\n"))
 
   /* Get the PCCChip2 to assert bus snooping signals on behalf of the i82596 */
@@ -1093,7 +1093,7 @@ void uti596_initialize_hardware(
    * Install the interrupt handler
    * calls rtems_interrupt_catch
    */
-  dummy = (rtems_isr_entry) set_vector( uti596_DynamicInterruptHandler, 0x57, 1 );
+  set_vector( uti596_DynamicInterruptHandler, 0x57, 1 );
 
   /* Initialize the 82596 memory */
   uti596_initMem(sc);
@@ -1142,7 +1142,7 @@ void uti596_reset_hardware(
                            INTERRUPT_EVENT);
 
     if ( status_code != RTEMS_SUCCESSFUL ) {
-      printk(("****ERROR:Could NOT send event to tid 0x%x : %s\n",
+      printk(("****ERROR:Could NOT send event to tid 0x%" PRIx32 " : %s\n",
              sc->txDaemonTid, rtems_status_text (status_code) ))
     }
   }
@@ -1638,10 +1638,10 @@ int uti596_attach(
 {
   uti596_softc_ *sc = &uti596_softc;				/* device dependent data structure */
   struct ifnet * ifp = (struct ifnet *)&sc->arpcom.ac_if;       /* ifnet structure */
-  unsigned char j1;    /* State of J1 jumpers */
   int unitNumber;
   char *unitName;
 #if defined(mvme167)
+  unsigned char j1;    /* State of J1 jumpers */
   char *pAddr;
   int addr;
 #endif
@@ -1681,10 +1681,10 @@ int uti596_attach(
    * structure values is unrecoverable and would be lost here.
    */
 
+#if defined(mvme167)
   /* Read the J1 header */
   j1 = (unsigned char)(lcsr->vector_base & 0xFF);
 
-#if defined(mvme167)
   if ( !(j1 & 0x10) ) {
   	/* Jumper J1-4 is on, configure from NVRAM */
 
@@ -2119,7 +2119,7 @@ void uti596_resetDaemon(
                                 RTEMS_NO_TIMEOUT, &events);
 
     rtems_clock_get_tod(&tm_struct);
-    printk(("reset daemon: Resetting NIC @ %d:%d:%d \n",
+    printk(("reset daemon: Resetting NIC @ %" PRIu32 ":%" PRIu32 ":%" PRIu32 " \n",
            tm_struct.hour, tm_struct.minute, tm_struct.second))
 
     sc->stats.nic_reset_count++;
@@ -2373,7 +2373,7 @@ int fullStatus;
                                  INTERRUPT_EVENT);
 
             if ( sc != RTEMS_SUCCESSFUL ) {
-              printk(("****ERROR:Could NOT send event to tid 0x%x : %s\n",
+              printk(("****ERROR:Could NOT send event to tid 0x%" PRIu32 " : %s\n",
                      uti596_softc.txDaemonTid, rtems_status_text (sc) ))
             }
 						#ifdef DBG_ISR
@@ -2437,7 +2437,7 @@ int fullStatus;
           sc = rtems_bsdnet_event_send (uti596_softc.txDaemonTid,
                                  INTERRUPT_EVENT);
           if ( sc != RTEMS_SUCCESSFUL ) {
-            printk(("****ERROR:Could NOT send event to tid 0x%x : %s\n",
+            printk(("****ERROR:Could NOT send event to tid 0x%" PRIu32 " : %s\n",
             				 uti596_softc.txDaemonTid, rtems_status_text (sc) ))
           }
 					#ifdef DBG_ISR
