@@ -72,6 +72,14 @@ RTEMS_BSPOPTS_HELP([ATSAM_MCK],
 [Frequency of the MCK in Hz. Set to 0 to force application defined speed.
 See startup/pmc-config.c for available clock configurations.])
 
+RTEMS_BSPOPTS_SET([ATSAM_SLOWCLOCK_USE_XTAL],[*],[1])
+RTEMS_BSPOPTS_HELP([ATSAM_SLOWCLOCK_USE_XTAL],
+[Use the external crystal as source for the slow clock instead of the internal
+RC oscillator. Note that on the ATSAM the NRST pin seems to depend on the slow
+clock as well as all watchdogs. If ATSAM_SLOWCLOCK_USE_XTAL is set to 1 without
+a external crystal connected, the controller might hang in the switching process
+without a working NRST pin. ])
+
 RTEMS_BSPOPTS_SET([ATSAM_CHANGE_CLOCK_FROM_SRAM],[*],[0])
 RTEMS_BSPOPTS_HELP([ATSAM_CHANGE_CLOCK_FROM_SRAM],
 [Move the functions that set up the clock into the SRAM.

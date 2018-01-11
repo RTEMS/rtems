@@ -93,6 +93,7 @@ extern "C" {
 	 * OSC
 	 */
 
+#if ATSAM_SLOWCLOCK_USE_XTAL == 1
 	read_MOR = PMC->CKGR_MOR;
 	/* enable external crystal - enable RC OSC */
 	read_MOR |= (CKGR_MOR_KEY_PASSWD | CKGR_MOR_XT32KFME);
@@ -104,6 +105,7 @@ extern "C" {
 
 		while (!(SUPC->SUPC_SR & SUPC_SR_OSCSEL));
 	}
+#endif
 
 	/* Initialize main oscillator */
 	if (!(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL)) {

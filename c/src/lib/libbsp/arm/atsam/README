@@ -43,6 +43,10 @@ const struct BOARD_Sdram_Config BOARD_Sdram_Config = {
 };
 --------
 
+Use ATSAM_SLOWCLOCK_USE_XTAL=0 to disable the usage of the external 32kHz
+oscillator for the slow clock. This is useful for example for the SAM E70
+Xplained kit.
+
 Use ATSAM_CONSOLE_BAUD=XYZ to set the initial baud for console devices (default
 115200).
 
