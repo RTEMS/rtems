@@ -35,7 +35,7 @@ noinst_LIBRARIES += libnetchip.a
 libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS)
 libnetchip_a_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 include_libchip_HEADERS += network/cs8900.h network/i82586var.h \
-    network/if_fxpvar.h network/sonic.h
+    network/if_fxpvar.h network/sonic.h network/wd80x3.h
 include_libchip_HEADERS += network/open_eth.h network/if_dcreg.h
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c \

@@ -10,7 +10,7 @@
  */
 
 #include <bsp.h>
-#include <wd80x3.h>
+#include <libchip/wd80x3.h>
 
 #include <stdio.h>
 #include <stdarg.h>

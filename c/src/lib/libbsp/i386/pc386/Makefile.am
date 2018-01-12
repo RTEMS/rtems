@@ -203,14 +203,9 @@ ne2000_rel_LDFLAGS += -Wl,--undefined=rtems_ne_driver_attach
 endif
 
 if HAS_NETWORKING
-# This driver needs to be reworked for the BSD stack.
-# We only install wd80x3.h if HAS_NETWORKING was defined
-include_HEADERS += include/wd80x3.h
-
 wd8003_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += wd8003.rel
 wd8003_rel_SOURCES = wd8003/wd8003.c
-wd8003_rel_SOURCES += include/wd80x3.h
 wd8003_rel_CPPFLAGS = $(AM_CPPFLAGS) $(wd8003_CPPFLAGS)
 wd8003_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 wd8003_rel_LDFLAGS += -Wl,--undefined=rtems_wd_driver_attach

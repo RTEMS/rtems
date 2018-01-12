@@ -135,7 +135,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/vme/vme_universe.c
 
 if QEMU
 if HAS_NETWORKING
-nodist_include_HEADERS  += $(srcdir)/../../i386/pc386/include/wd80x3.h
 ne2000_CPPFLAGS          = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 ne2000_CPPFLAGS         += '-Dbsp_cmdline_arg=rtems_bsp_cmdline_get_param_raw'
 noinst_PROGRAMS         += ne2000.rel

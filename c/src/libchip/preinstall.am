@@ -78,6 +78,10 @@ $(PROJECT_INCLUDE)/libchip/sonic.h: network/sonic.h $(PROJECT_INCLUDE)/libchip/$
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/sonic.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/sonic.h
 
+$(PROJECT_INCLUDE)/libchip/wd80x3.h: network/wd80x3.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/wd80x3.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/wd80x3.h
+
 $(PROJECT_INCLUDE)/libchip/open_eth.h: network/open_eth.h $(PROJECT_INCLUDE)/libchip/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/libchip/open_eth.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/libchip/open_eth.h

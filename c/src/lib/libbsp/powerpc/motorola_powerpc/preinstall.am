@@ -138,11 +138,6 @@ $(PROJECT_INCLUDE)/bsp/VMEDMA.h: ../../shared/vmeUniverse/VMEDMA.h $(PROJECT_INC
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEDMA.h
 
 if QEMU
-if HAS_NETWORKING
-$(PROJECT_INCLUDE)/wd80x3.h: $(srcdir)/../../i386/pc386/include/wd80x3.h $(PROJECT_INCLUDE)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/wd80x3.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/wd80x3.h
-endif
 endif
 if QEMU
 endif
