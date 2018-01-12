@@ -16,6 +16,9 @@
  * ones, and merge with some other header files.
  */
 
+#if !defined(_AM335X_H_)
+#define _AM335X_H_
+
 /* Interrupt controller memory map */
 #define OMAP3_DM37XX_INTR_BASE 0x48200000 /* INTCPS physical address */
 
@@ -485,7 +488,6 @@
 #define AM335X_PWMSS_SYSCONFIG     0x4
 #define AM335X_PWMSS_CLKCONFIG     0x8
 #define AM335X_PWMSS_CLK_EN_ACK        0x100
-#define AM335X_PWMSS_CLKSTATUS     0xC
 #define AM335X_EPWM_TBCTL          0x0
 #define AM335X_EPWM_TBSTS          0x2
 #define AM335X_EPWM_TBPHSHR        0x4
@@ -536,7 +538,6 @@
 #define AM335X_EPWM_TBCTL_CTRMODE             (0x0003u)
 #define AM335X_EPWM_COUNTER_MODE_MASK         AM335X_EPWM_TBCTL_CTRMODE
 #define AM335X_TBCTL_FREERUN                  (2 << 14)
-#define AM335X_TBCTL_CTRMODE_UP               (0x0000u)
 #define AM335X_TBCTL_CTRMODE_SHIFT            (0x0000u)
 #define AM335X_EPWM_COUNT_UP                  (AM335X_TBCTL_CTRMODE_UP << \
                                                      AM335X_TBCTL_CTRMODE_SHIFT)
@@ -699,3 +700,5 @@
 #define AM335X_I2C_IRQSTATUS_RAW_BB   (0x00001000u)
 #define AM335X_CM_PER_OCPWP_L3_CLKSTCTRL_CLKACTIVITY_OCPWP_L4_GCLK (0x00000020u)
 #define AM335X_I2C_INT_STOP_CONDITION AM335X_I2C_IRQSTATUS_BF
+
+#endif
