@@ -22,7 +22,7 @@
 #include <stdarg.h>
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
-#include "greth.h"
+#include <libchip/greth.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
