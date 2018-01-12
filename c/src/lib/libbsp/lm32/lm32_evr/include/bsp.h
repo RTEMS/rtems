@@ -35,10 +35,6 @@
  * @brief EVR support package.
  */
 
-#if defined(RTEMS_NETWORKING)
-#include <rtems/rtems_bsdnet.h>
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -53,6 +49,8 @@ extern "C" {
 #define CPU_U32_FIX
 
 #if defined(RTEMS_NETWORKING)
+struct rtems_bsdnet_ifconfig;
+
 extern int rtems_tsmac_driver_attach(struct rtems_bsdnet_ifconfig *config,
 				     int attaching);
 

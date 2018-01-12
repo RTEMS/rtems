@@ -48,7 +48,6 @@ extern "C" {
 #define CPU_U32_FIX
 
 #if defined(RTEMS_NETWORKING)
-#include <rtems/rtems_bsdnet.h>
 struct rtems_bsdnet_ifconfig;
 extern int rtems_minimac_driver_attach (struct rtems_bsdnet_ifconfig *config,
                                         int attaching);
