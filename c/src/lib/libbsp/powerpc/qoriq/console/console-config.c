@@ -84,7 +84,7 @@ static int qoriq_bc_read_polled(rtems_termios_device_context *base)
   count = 1;
   status = ev_byte_channel_receive(ctx->handle, &count, buf);
 
-  if (status != EV_SUCCESS) {
+  if (status != EV_SUCCESS || count == 0) {
     return -1;
   }
 
