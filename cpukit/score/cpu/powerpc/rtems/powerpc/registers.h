@@ -623,6 +623,7 @@ lidate */
 #define FSL_EIS_MCAR 573
 #define FSL_EIS_DSRR0 574
 #define FSL_EIS_DSRR1 575
+#define FSL_EIS_EPR 702
 
 /* Freescale Book E Implementation Standards (EIS): Signal Processing Engine (SPE) */
 
