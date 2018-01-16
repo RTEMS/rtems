@@ -64,7 +64,7 @@ EXTRA_DIST += shared/startup/bspstart.c shared/startup/pgtbl_setup.c \
 EXTRA_DIST += shared/tod/todcfg.c
 
 ## shared/vme
-EXTRA_DIST += shared/vme/vmeconfig.c shared/vme/VMEConfig.h
+EXTRA_DIST += shared/vme/vmeconfig.c \
 	shared/vme/README shared/vme/vme_universe.c
 
 include $(top_srcdir)/../../../automake/subdirs.am

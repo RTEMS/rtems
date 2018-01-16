@@ -121,7 +121,7 @@ $(PROJECT_INCLUDE)/bsp/VME.h: ../../shared/vmeUniverse/VME.h $(PROJECT_INCLUDE)/
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VME.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VME.h
 
-$(PROJECT_INCLUDE)/bsp/VMEConfig.h: ../../powerpc/shared/vme/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
+$(PROJECT_INCLUDE)/bsp/VMEConfig.h: include/bsp/VMEConfig.h $(PROJECT_INCLUDE)/bsp/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/bsp/VMEConfig.h
 

@@ -120,7 +120,7 @@ libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
 include_bsp_HEADERS += ../../shared/vmeUniverse/vmeUniverse.h \
     ../../shared/vmeUniverse/vme_am_defs.h \
     ../../shared/vmeUniverse/VME.h \
-    ../../powerpc/shared/vme/VMEConfig.h \
+    include/bsp/VMEConfig.h \
     ../../shared/vmeUniverse/vmeUniverseDMA.h\
     ../../shared/vmeUniverse/bspVmeDmaList.h\
     ../../shared/vmeUniverse/VMEDMA.h
@@ -132,7 +132,6 @@ libbsp_a_SOURCES += ../../shared/vmeUniverse/vme_am_defs.h
 libbsp_a_SOURCES += ../../shared/vmeUniverse/VME.h
 libbsp_a_SOURCES += ../../powerpc/shared/vme/vmeconfig.c
 libbsp_a_SOURCES += ../../powerpc/shared/vme/vme_universe.c
-libbsp_a_SOURCES += ../../powerpc/shared/vme/VMEConfig.h
 
 if QEMU
 if HAS_NETWORKING
