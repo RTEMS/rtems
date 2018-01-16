@@ -32,6 +32,8 @@
 #include <bsp/qoriq.h>
 #include <bsp/intercom.h>
 
+#ifdef RTEMS_MULTIPROCESSING
+
 #define INTERCOM_EVENT_IPI RTEMS_EVENT_13
 #define INTERCOM_EVENT_WAKE_UP RTEMS_EVENT_14
 
@@ -492,3 +494,5 @@ intercom_packet *qoriq_intercom_clone_packet(const intercom_packet *packet)
 
 	return clone;
 }
+
+#endif /* RTEMS_MULTIPROCESSING */
