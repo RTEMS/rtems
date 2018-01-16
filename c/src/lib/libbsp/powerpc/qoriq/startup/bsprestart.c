@@ -48,7 +48,7 @@ static RTEMS_NO_RETURN void do_restart(void *addr)
   bsp_fatal(QORIQ_FATAL_RESTART_FAILED);
 }
 
-#ifdef RTEMS_SMP
+#if defined(RTEMS_SMP) && !defined(QORIQ_IS_HYPERVISOR_GUEST)
 
 #include <rtems/score/smpimpl.h>
 #include <rtems/score/smpbarrier.h>
@@ -133,7 +133,7 @@ void bsp_restart(void *addr)
   bsp_fatal(QORIQ_FATAL_RESTART_INTERRUPT_FAILED);
 }
 
-#else /* RTEMS_SMP */
+#else /* !RTEMS_SMP || QORIQ_IS_HYPERVISOR_GUEST */
 
 void bsp_restart(void *addr)
 {
@@ -144,4 +144,4 @@ void bsp_restart(void *addr)
   do_restart(addr);
 }
 
-#endif /* !RTEMS_SMP */
+#endif /* RTEMS_SMP && !QORIQ_IS_HYPERVISOR_GUEST */

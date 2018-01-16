@@ -32,6 +32,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#ifdef QORIQ_IS_HYPERVISOR_GUEST
+
+#define BSP_INTERRUPT_VECTOR_MAX 1023
+
+#else /* !QORIQ_IS_HYPERVISOR_GUEST */
+
 #define QORIQ_IRQ_ERROR 0
 
 #if QORIQ_CHIP_IS_T_VARIANT(QORIQ_CHIP_VARIANT)
@@ -344,7 +350,11 @@ extern "C" {
 #define QORIQ_IRQ_GT_B_2 (QORIQ_IRQ_GT_BASE + 6)
 #define QORIQ_IRQ_GT_B_3 (QORIQ_IRQ_GT_BASE + 7)
 
+#define BSP_INTERRUPT_VECTOR_MAX QORIQ_IRQ_GT_B_3
+
 /** @} */
+
+#endif /* QORIQ_IS_HYPERVISOR_GUEST */
 
 /**
  * @defgroup QorIQInterrupt QorIQ - Interrupt Support
@@ -357,7 +367,6 @@ extern "C" {
  */
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
-#define BSP_INTERRUPT_VECTOR_MAX QORIQ_IRQ_GT_B_3
 
 #define QORIQ_PIC_PRIORITY_LOWEST 1
 #define QORIQ_PIC_PRIORITY_HIGHEST 15
