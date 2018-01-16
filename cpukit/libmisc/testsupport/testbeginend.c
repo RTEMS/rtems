@@ -22,7 +22,6 @@
 #include <rtems/bspIo.h>
 #include <rtems/version.h>
 
-#define TEST_BUILD_DEFAULT "default"
 #if RTEMS_POSIX
   #define TEST_BUILD_DEFAULT ""
   #define TEST_BUILD_POSIX   "posix "
@@ -64,6 +63,9 @@
   #define TEST_BUILD_PROFILING "profiling "
 #else
   #define TEST_BUILD_PROFILING
+#endif
+#ifndef TEST_BUILD_DEFAULT
+#define TEST_BUILD_DEFAULT "default"
 #endif
 
 #define TEST_BUILD_STRING \
