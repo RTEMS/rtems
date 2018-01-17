@@ -1,6 +1,5 @@
 %rename endfile old_endfile
 %rename startfile old_startfile
-%rename link old_link
 
 *startfile:
 %{!qrtems: %(old_startfile)} \
@@ -8,6 +7,3 @@
 
 *endfile:
 %{!qrtems: %(old_endfile)} %{qrtems: crtend.o%s ecrtn.o%s}
-
-*link:
-%{!qrtems: %(old_link)} %{qrtems: -dp -Bstatic}
