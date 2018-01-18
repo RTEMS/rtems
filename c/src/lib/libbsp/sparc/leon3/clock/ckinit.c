@@ -13,7 +13,7 @@
  *  COPYRIGHT (c) 2004.
  *  Gaisler Research.
  *
- *  Copyright (c) 2014, 2016 embedded brains GmbH
+ *  Copyright (c) 2014, 2018 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -229,6 +229,13 @@ static void leon3_clock_initialize(void)
     leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
     leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
+
+    /*
+     * At least one TSISEL field must be non-zero to enable the timestamp
+     * counter.  Use an arbitrary interrupt source.
+     */
+    irqmp_ts->control = 0x1;
+
     rtems_timecounter_install(&leon3_tc.tc);
   } else {
 #ifdef RTEMS_SMP
