@@ -82,7 +82,7 @@ int locked_vprintf(const char *fmt, va_list ap)
     } while (sc != RTEMS_SUCCESSFUL );
   }
 
-  rv = vprintf(fmt, ap);
+  rv = vprintk(fmt, ap);
 
   /* Release the semaphore  */
   rtems_semaphore_release( locked_print_semaphore );
