@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -22,62 +22,6 @@
 #include <rtems/bspIo.h>
 #include <rtems/version.h>
 
-#if RTEMS_POSIX
-  #define TEST_BUILD_DEFAULT ""
-  #define TEST_BUILD_POSIX   "posix "
-#else
-  #define TEST_BUILD_POSIX
-#endif
-#if RTEMS_SMP
-  #define TEST_BUILD_DEFAULT ""
-  #define TEST_BUILD_SMP     "smp "
-#else
-  #define TEST_BUILD_SMP
-#endif
-#if RTEMS_MULTIPROCESSING
-  #define TEST_BUILD_DEFAULT ""
-  #define TEST_BUILD_MP      "mp "
-#else
-  #define TEST_BUILD_MP
-#endif
-#if RTEMS_PARAVIRT
-  #define TEST_BUILD_DEFAULT  ""
-  #define TEST_BUILD_PARAVIRT "paravirt "
-#else
-  #define TEST_BUILD_PARAVIRT
-#endif
-#if RTEMS_NETWORKING
-  #define TEST_BUILD_DEFAULT    ""
-  #define TEST_BUILD_NETWORKING "legacy-net "
-#else
-  #define TEST_BUILD_NETWORKING
-#endif
-#if RTEMS_DEBUG
-  #define TEST_BUILD_DEFAULT ""
-  #define TEST_BUILD_DEBUG   "debug "
-#else
-  #define TEST_BUILD_DEBUG
-#endif
-#if RTEMS_PROFILING
-  #define TEST_BUILD_DEFAULT   ""
-  #define TEST_BUILD_PROFILING "profiling "
-#else
-  #define TEST_BUILD_PROFILING
-#endif
-#ifndef TEST_BUILD_DEFAULT
-#define TEST_BUILD_DEFAULT "default"
-#endif
-
-#define TEST_BUILD_STRING \
-         TEST_BUILD_DEFAULT \
-         TEST_BUILD_POSIX \
-         TEST_BUILD_SMP \
-         TEST_BUILD_MP \
-         TEST_BUILD_PARAVIRT \
-         TEST_BUILD_NETWORKING \
-         TEST_BUILD_DEBUG \
-         TEST_BUILD_PROFILING
-
 rtems_printer rtems_test_printer = {
   .printer = rtems_printk_printer
 };
@@ -93,28 +37,39 @@ static const char* const test_state_strings[] =
 
 int rtems_test_begin(const char* name, const RTEMS_TEST_STATE state)
 {
-  int l;
-  l = rtems_printf(
+  return rtems_printf(
     &rtems_test_printer,
-    "\n\n*** BEGIN OF TEST %s ***\n", name
+    "\n\n*** BEGIN OF TEST %s ***\n"
+    "*** TEST VERSION: %s\n"
+    "*** TEST STATE: %s\n"
+    "*** TEST BUILD:"
+#if RTEMS_DEBUG
+    " RTEMS_DEBUG"
+#endif
+#if RTEMS_MULTIPROCESSING
+    " RTEMS_MULTIPROCESSING"
+#endif
+#if RTEMS_NETWORKING
+    " RTEMS_NETWORKING"
+#endif
+#if RTEMS_PARAVIRT
+    " RTEMS_PARAVIRT"
+#endif
+#if RTEMS_POSIX_API
+    " RTEMS_POSIX_API"
+#endif
+#if RTEMS_PROFILING
+    " RTEMS_PROFILING"
+#endif
+#if RTEMS_SMP
+    " RTEMS_SMP"
+#endif
+    "\n"
+    "*** TEST TOOLS: " __VERSION__ "\n",
+    name,
+    rtems_version(),
+    test_state_strings[state]
   );
-  l += rtems_printf(
-    &rtems_test_printer,
-    "*** TEST VERSION: %s\n", rtems_version()
-  );
-  l += rtems_printf(
-    &rtems_test_printer,
-    "*** TEST STATE: %s\n", test_state_strings[state]
-  );
-  l += rtems_printf(
-    &rtems_test_printer,
-    "*** TEST BUILD: %s\n", TEST_BUILD_STRING
-  );
-  l += rtems_printf(
-    &rtems_test_printer,
-    "*** TEST TOOLS: " __VERSION__ "\n"
-  );
-  return l;
 }
 
 int rtems_test_end(const char* name)
