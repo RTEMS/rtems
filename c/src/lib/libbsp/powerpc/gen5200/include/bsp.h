@@ -142,7 +142,7 @@ LINKER_SYMBOL(MBAR);
 #ifndef ASM
 
 #include <rtems.h>
-#include <i2cdrv.h>
+#include <bsp/i2cdrv.h>
 #include <bsp/irq.h>
 #include <bsp/vectors.h>
 #include <bsp/u-boot.h>

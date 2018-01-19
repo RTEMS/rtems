@@ -36,11 +36,11 @@
  */
 
 #include <bsp.h>
+#include <bsp/i2c.h>
+#include <bsp/i2cdrv.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/i2c.h"
-#include "../include/i2cdrv.h"
 #include "mpc5200mbus.h"
 
 #ifndef I2C_NUMBER_OF_BUSES

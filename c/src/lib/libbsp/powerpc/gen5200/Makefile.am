@@ -12,8 +12,7 @@ include_bestcomm_task_apidir = $(include_bestcommdir)/task_api
 
 dist_project_lib_DATA = bsp_specs
 
-include_HEADERS = include/bsp.h include/i2cdrv.h \
-    include/i2c.h
+include_HEADERS = include/bsp.h
 include_HEADERS += include/tm27.h
 
 nodist_include_HEADERS = include/bspopts.h

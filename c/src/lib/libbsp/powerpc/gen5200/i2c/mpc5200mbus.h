@@ -35,7 +35,7 @@
 #define __MPC5200BSP_MPC5200MBUS_H__
 
 #include <bsp/mpc5200.h>
-#include <i2c.h>
+#include <bsp/i2c.h>
 
 
 /* States of I2C machine */

@@ -42,10 +42,10 @@
 
 #include <rtems.h>
 #include <bsp/fatal.h>
+#include <bsp/i2c.h>
 #include <libchip/rtc.h>
 #include <string.h>
 #include "../tod/pcf8563.h"
-#include "../include/i2c.h"
 
 /* Convert from/to Binary-Coded Decimal representation */
 #define From_BCD( _x ) ((((_x) >> 4) * 10) + ((_x) & 0x0F))

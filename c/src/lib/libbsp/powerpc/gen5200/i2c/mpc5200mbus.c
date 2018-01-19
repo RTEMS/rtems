@@ -33,7 +33,7 @@
 #include "../i2c/mpc5200mbus.h"
 #include <bsp/mpc5200.h>
 #include <bsp/irq.h>
-#include <i2c.h>
+#include <bsp/i2c.h>
 
 /* Events of I2C machine */
 typedef enum i2c_event {

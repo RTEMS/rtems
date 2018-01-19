@@ -33,7 +33,7 @@
  */
 
 #include <bsp.h>
-#include "../include/i2c.h"
+#include <bsp/i2c.h>
 #include <libchip/rtc.h>
 #include "../tod/pcf8563.h"
 
