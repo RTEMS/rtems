@@ -101,24 +101,3 @@ int locked_printf(const char *fmt, ...)
 
   return rv;
 }
-
-void locked_printk(const char *fmt, ...)
-{
-  va_list           ap;       /* points to each unnamed argument in turn */
-  rtems_status_code sc;
-
-
-  locked_print_initialize();
-
-  /* Lock semaphore without releasing the cpu */
-  do {
-    sc = rtems_semaphore_obtain( locked_print_semaphore, RTEMS_NO_WAIT, 0 );
-  } while (sc != RTEMS_SUCCESSFUL );
-
-  va_start(ap, fmt); /* make ap point to 1st unnamed arg */
-  vprintk(fmt, ap);
-  va_end(ap);        /* clean up when done */
-
-  /* Release the semaphore  */
-  rtems_semaphore_release( locked_print_semaphore );
-}
