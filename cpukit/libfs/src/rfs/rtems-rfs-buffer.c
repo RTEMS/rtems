@@ -411,7 +411,7 @@ rtems_rfs_buffer_sync (rtems_rfs_file_system* fs)
 }
 
 int
-rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, size_t size)
+rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, uint32_t size)
 {
   int rc;
 

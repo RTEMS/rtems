@@ -268,7 +268,7 @@ int rtems_rfs_buffer_sync (rtems_rfs_file_system* fs);
  * @retval 0 Successful operation.
  * @retval error_code An error occurred.
  */
-int rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, size_t size);
+int rtems_rfs_buffer_setblksize (rtems_rfs_file_system* fs, uint32_t size);
 
 /**
  * Release any chained buffers.
