@@ -719,7 +719,7 @@ STATIC int spictrl_libi2c_read_bytes(rtems_libi2c_bus_t *bushdl,
 	DBG("SPICTRL: spictrl_libi2c_read_bytes %d\n", nbytes);
 	ret = spictrl_read_write(priv, bytes, NULL, nbytes);
 	if ( ret < 0 ) {
-		printf("SPICTRL: Error Reading\n");
+		printk("SPICTRL: Error Reading\n");
 	} 
 #ifdef DEBUG
 	else {

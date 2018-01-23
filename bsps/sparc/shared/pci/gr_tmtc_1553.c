@@ -331,13 +331,13 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	priv->pcidev = devinfo->pcidev;
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
-	printf("\n\n--- GR-TMTC-1553[%d] ---\n", dev->minor_drv);
-	printf(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
+	printk("\n\n--- GR-TMTC-1553[%d] ---\n", dev->minor_drv);
+	printk(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
 		PCI_DEV_EXPAND(priv->pcidev));
-	printf(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n",
+	printk(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n",
 		devinfo->id.vendor, devinfo->id.device);
-	printf(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
-	printf(" IRQ: %d\n\n\n", devinfo->irq);
+	printk(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
+	printk(" IRQ: %d\n\n\n", devinfo->irq);
 
 	/* all neccessary space assigned to GR-TMTC-1553 target? */
 	if (bar0_size == 0)
@@ -361,7 +361,7 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 		genirq_destroy(priv->genirq);
 		free(priv);
 		dev->priv = NULL;
-		printf(" Failed to initialize GR-TMTC-1553 HW: %d\n", status);
+		printk(" Failed to initialize GR-TMTC-1553 HW: %d\n", status);
 		return DRVMGR_FAIL;
 	}
 

@@ -349,14 +349,14 @@ int gr701_init1(struct drvmgr_dev *dev)
 	bar0_size = devinfo->resources[0].size;
 	bar1 = devinfo->resources[1].address;
 	bar1_size = devinfo->resources[1].size;
-	printf("\n\n--- GR-701[%d] ---\n", dev->minor_drv);
-	printf(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
+	printk("\n\n--- GR-701[%d] ---\n", dev->minor_drv);
+	printk(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
 		PCI_DEV_EXPAND(priv->pcidev));
-	printf(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n\n\n",
+	printk(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n\n\n",
 		devinfo->id.vendor, devinfo->id.device);
-	printf(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
-	printf(" PCI BAR[1]: 0x%lx - 0x%lx\n", bar1, bar1 + bar1_size - 1);
-	printf(" IRQ: %d\n\n\n", devinfo->irq);
+	printk(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
+	printk(" PCI BAR[1]: 0x%lx - 0x%lx\n", bar1, bar1 + bar1_size - 1);
+	printk(" IRQ: %d\n\n\n", devinfo->irq);
 
 	/* all neccessary space assigned to GR-701 target? */
 	if ((bar0_size == 0) || (bar1_size == 0))
@@ -379,7 +379,7 @@ int gr701_init1(struct drvmgr_dev *dev)
 		genirq_destroy(priv->genirq);
 		free(priv);
 		dev->priv = NULL;
-		printf(" Failed to initialize GR-701 HW\n");
+		printk(" Failed to initialize GR-701 HW\n");
 		return DRVMGR_FAIL;
 	}
 

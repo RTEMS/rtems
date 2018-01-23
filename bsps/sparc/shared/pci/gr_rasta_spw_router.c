@@ -377,7 +377,6 @@ static int gr_rasta_spw_router_hw_init(struct gr_rasta_spw_router_priv *priv)
 	/* Make sure dirq(0) sampling is enabled */
 	ctrl = priv->grpci2->ctrl;
 	ctrl = (ctrl & 0xFFFFFF0F) | (1 << 4);
-	printf("data: 0x%x\n", ctrl);
 	priv->grpci2->ctrl = ctrl;
 
 	/* Successfully registered the RASTA-SPW-ROUTER board */
@@ -427,13 +426,13 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 	priv->pcidev = devinfo->pcidev;
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
-	printf("\n\n--- GR-RASTA-SPW-ROUTER[%d] ---\n", dev->minor_drv);
-	printf(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
+	printk("\n\n--- GR-RASTA-SPW-ROUTER[%d] ---\n", dev->minor_drv);
+	printk(" PCI BUS: 0x%x, SLOT: 0x%x, FUNCTION: 0x%x\n",
 		PCI_DEV_EXPAND(priv->pcidev));
-	printf(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n",
+	printk(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n",
 		devinfo->id.vendor, devinfo->id.device);
-	printf(" PCI BAR[0]: 0x%08lx - 0x%08lx\n", bar0, bar0 + bar0_size - 1);
-	printf(" IRQ: %d\n\n\n", devinfo->irq);
+	printk(" PCI BAR[0]: 0x%08lx - 0x%08lx\n", bar0, bar0 + bar0_size - 1);
+	printk(" IRQ: %d\n\n\n", devinfo->irq);
 
 	/* all neccessary space assigned to GR-RASTA-SPW-ROUTER target? */
 	if (bar0_size == 0)
@@ -464,7 +463,7 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 
 	if ((status = gr_rasta_spw_router_hw_init(priv)) != 0) {
 		genirq_destroy(priv->genirq);
-		printf(" Failed to initialize GR-RASTA-SPW-ROUTER HW: %d\n", status);
+		printk(" Failed to initialize GR-RASTA-SPW-ROUTER HW: %d\n", status);
 		return DRVMGR_FAIL;
 	}
 

@@ -475,7 +475,7 @@ int l2cache_init1(struct drvmgr_dev *dev)
 	/* Initialize L2CACHE Hardware */
 	status = l2cache_init(priv);
 	if (status) {
-		printf("Failed to initialize l2cache driver %d\n", status);
+		printk("Failed to initialize l2cache driver %d\n", status);
 		return -1;
 	}
 

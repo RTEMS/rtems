@@ -627,7 +627,7 @@ int grpci_init1(struct drvmgr_dev *dev)
 	grpcipriv = priv;
 	status = grpci_init(priv);
 	if (status) {
-		printf("Failed to initialize grpci driver %d\n", status);
+		printk("Failed to initialize grpci driver %d\n", status);
 		return DRVMGR_FAIL;
 	}
 

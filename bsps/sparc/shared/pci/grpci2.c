@@ -905,7 +905,7 @@ int grpci2_init1(struct drvmgr_dev *dev)
 	/* Initialize GRPCI2 Hardware */
 	status = grpci2_init(priv);
 	if (status) {
-		printf("Failed to initialize grpci2 driver %d\n", status);
+		printk("Failed to initialize grpci2 driver %d\n", status);
 		return -1;
 	}
 

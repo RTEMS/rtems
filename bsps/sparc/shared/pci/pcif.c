@@ -509,7 +509,7 @@ int pcif_init1(struct drvmgr_dev *dev)
 	DBG("PCIF[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
 	if ( pcif_minor != 0 ) {
-		printf("Driver only supports one PCI core\n");
+		printk("Driver only supports one PCI core\n");
 		return DRVMGR_FAIL;
 	}
 
@@ -523,7 +523,7 @@ int pcif_init1(struct drvmgr_dev *dev)
 
 	pcifpriv = priv;
 	if ( pcif_init(priv) ) {
-		printf("Failed to initialize PCIF driver\n");
+		printk("Failed to initialize PCIF driver\n");
 		free(priv);
 		dev->priv = NULL;
 		return DRVMGR_FAIL;
