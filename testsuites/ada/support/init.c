@@ -35,7 +35,7 @@ void ada_test_begin(void);
 void ada_test_end(void);
 uint32_t milliseconds_per_tick(void);
 uint32_t ticks_per_second(void);
-uint32_t work_space_size(void);
+size_t work_space_size(void);
 uint32_t is_configured_multiprocessing(void);
 uint32_t get_node(void);
 rtems_id tcb_to_id(Thread_Control *tcb);
@@ -84,7 +84,7 @@ uint32_t ticks_per_second(void)
   return rtems_clock_get_ticks_per_second();
 }
 
-uint32_t work_space_size(void)
+size_t work_space_size(void)
 {
   return rtems_configuration_get_work_space_size()
     + rtems_configuration_get_stack_space_size();

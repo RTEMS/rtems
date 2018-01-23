@@ -28,8 +28,8 @@ package RTEMS.Partition is
    procedure Create (
       Name             : in     RTEMS.Name;
       Starting_Address : in     RTEMS.Address;
-      Length           : in     RTEMS.Unsigned32;
-      Buffer_Size      : in     RTEMS.Unsigned32;
+      Length           : in     RTEMS.Size;
+      Buffer_Size      : in     RTEMS.Size;
       Attribute_Set    : in     RTEMS.Attribute;
       ID               :    out RTEMS.ID;
       Result           :    out RTEMS.Status_Codes

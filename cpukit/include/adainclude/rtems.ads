@@ -46,6 +46,7 @@ pragma Elaborate_Body (RTEMS);
    subtype Address             is System.Address;
    subtype Single              is Interfaces.C.C_float;
    subtype Double              is Interfaces.C.Double;
+   subtype Size                is Interfaces.C.size_t;
 
    --
    --  The following define the size of each of the base types in
@@ -206,8 +207,7 @@ pragma Elaborate_Body (RTEMS);
    ) return RTEMS.Mode;
    pragma Import (C, Interrupt_Level, "rtems_interrupt_level_body");
 
-   Minimum_Stack_Size : RTEMS.Unsigned32;
-   pragma Import (C, Minimum_Stack_Size, "rtems_minimum_stack_size");
+   function Minimum_Stack_Size return RTEMS.Size;
 
    --
    --  Notepad index constants

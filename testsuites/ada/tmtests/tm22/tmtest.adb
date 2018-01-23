@@ -137,7 +137,7 @@ package body TMTEST is
       BUFFER_POINTER : RTEMS.ADDRESS;
       OVERHEAD       : RTEMS.UNSIGNED32;
       COUNT          : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE   : RTEMS.Size := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 

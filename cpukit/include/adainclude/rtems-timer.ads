@@ -98,7 +98,7 @@ package RTEMS.Timer is
 
    procedure Initiate_Server (
       Server_Priority : in     RTEMS.Tasks.Priority;
-      Stack_Size      : in     Unsigned32;
+      Stack_Size      : in     RTEMS.Size;
       Attribute_Set   : in     RTEMS.Attribute;
       Result          :    out RTEMS.Status_Codes
    );

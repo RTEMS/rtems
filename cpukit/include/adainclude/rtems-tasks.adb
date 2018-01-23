@@ -27,7 +27,7 @@ package body RTEMS.Tasks is
    procedure Create
      (Name             : in RTEMS.Name;
       Initial_Priority : in Priority;
-      Stack_Size       : in RTEMS.Unsigned32;
+      Stack_Size       : in RTEMS.Size;
       Initial_Modes    : in RTEMS.Mode;
       Attribute_Set    : in RTEMS.Attribute;
       ID               : out RTEMS.ID;
@@ -36,7 +36,7 @@ package body RTEMS.Tasks is
       function Create_Base
         (Name             : RTEMS.Name;
          Initial_Priority : Priority;
-         Stack_Size       : RTEMS.Unsigned32;
+         Stack_Size       : RTEMS.Size;
          Initial_Modes    : RTEMS.Mode;
          Attribute_Set    : RTEMS.Attribute;
          ID               : access RTEMS.ID)

@@ -131,7 +131,7 @@ package body TMTEST is
       EMPTY_FLUSH_COUNT : RTEMS.UNSIGNED32;
       BUFFER            : TMTEST.BUFFER;
       BUFFER_POINTER    : RTEMS.ADDRESS;
-      MESSAGE_SIZE      : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE      : RTEMS.Size := 0;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 

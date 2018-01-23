@@ -27,8 +27,8 @@ package body RTEMS.Region is
    procedure Create
      (Name             : in RTEMS.Name;
       Starting_Address : in RTEMS.Address;
-      Length           : in RTEMS.Unsigned32;
-      Page_Size        : in RTEMS.Unsigned32;
+      Length           : in RTEMS.Size;
+      Page_Size        : in RTEMS.Size;
       Attribute_Set    : in RTEMS.Attribute;
       ID               : out RTEMS.ID;
       Result           : out RTEMS.Status_Codes)
@@ -36,8 +36,8 @@ package body RTEMS.Region is
       function Create_Base
         (Name             : RTEMS.Name;
          Starting_Address : RTEMS.Address;
-         Length           : RTEMS.Unsigned32;
-         Page_Size        : RTEMS.Unsigned32;
+         Length           : RTEMS.Size;
+         Page_Size        : RTEMS.Size;
          Attribute_Set    : RTEMS.Attribute;
          ID               : access RTEMS.ID)
          return             RTEMS.Status_Codes;
@@ -90,13 +90,13 @@ package body RTEMS.Region is
    procedure Extend
      (ID               : in RTEMS.ID;
       Starting_Address : in RTEMS.Address;
-      Length           : in RTEMS.Unsigned32;
+      Length           : in RTEMS.Size;
       Result           : out RTEMS.Status_Codes)
    is
       function Extend_Base
         (ID               : RTEMS.ID;
          Starting_Address : RTEMS.Address;
-         Length           : RTEMS.Unsigned32)
+         Length           : RTEMS.Size)
          return             RTEMS.Status_Codes;
       pragma Import (C, Extend_Base, "rtems_region_extend");
    begin
@@ -107,7 +107,7 @@ package body RTEMS.Region is
 
    procedure Get_Segment
      (ID         : in RTEMS.ID;
-      Size       : in RTEMS.Unsigned32;
+      Size       : in RTEMS.Size;
       Option_Set : in RTEMS.Option;
       Timeout    : in RTEMS.Interval;
       Segment    : out RTEMS.Address;
@@ -115,7 +115,7 @@ package body RTEMS.Region is
    is
       function Get_Segment_Base
         (ID         : RTEMS.ID;
-         Size       : RTEMS.Unsigned32;
+         Size       : RTEMS.Size;
          Option_Set : RTEMS.Option;
          Timeout    : RTEMS.Interval;
          Segment    : access RTEMS.Address)
@@ -138,19 +138,19 @@ package body RTEMS.Region is
    procedure Get_Segment_Size
      (ID      : in RTEMS.ID;
       Segment : in RTEMS.Address;
-      Size    : out RTEMS.Unsigned32;
+      Size    : out RTEMS.Size;
       Result  : out RTEMS.Status_Codes)
    is
       function Get_Segment_Size_Base
         (ID      : RTEMS.ID;
          Segment : RTEMS.Address;
-         Size    : access RTEMS.Unsigned32)
+         Size    : access RTEMS.Size)
          return    RTEMS.Status_Codes;
       pragma Import
         (C,
          Get_Segment_Size_Base,
          "rtems_region_get_segment_size");
-      Size_Base : aliased RTEMS.Unsigned32;
+      Size_Base : aliased RTEMS.Size;
    begin
 
       Result := Get_Segment_Size_Base (ID, Segment, Size_Base'Access);
@@ -180,21 +180,21 @@ package body RTEMS.Region is
    procedure Resize_Segment
      (ID       : in RTEMS.ID;
       Segment  : in RTEMS.Address;
-      Size     : in RTEMS.Unsigned32;
-      Old_Size : out RTEMS.Unsigned32;
+      Size     : in RTEMS.Size;
+      Old_Size : out RTEMS.Size;
       Result   : out RTEMS.Status_Codes)
    is
       function Resize_Segment_Base
         (ID       : RTEMS.ID;
          Segment  : RTEMS.Address;
-         Size     : RTEMS.Unsigned32;
-         Old_Size : access RTEMS.Unsigned32)
+         Size     : RTEMS.Size;
+         Old_Size : access RTEMS.Size)
          return     RTEMS.Status_Codes;
       pragma Import
         (C,
          Resize_Segment_Base,
          "rtems_region_resize_segment");
-      Old_Size_Base : aliased RTEMS.Unsigned32;
+      Old_Size_Base : aliased RTEMS.Size;
    begin
 
       Result   :=

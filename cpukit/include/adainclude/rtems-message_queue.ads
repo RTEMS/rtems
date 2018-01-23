@@ -28,7 +28,7 @@ package RTEMS.Message_Queue is
    procedure Create (
       Name             : in     RTEMS.Name;
       Count            : in     RTEMS.Unsigned32;
-      Max_Message_Size : in     RTEMS.Unsigned32;
+      Max_Message_Size : in     RTEMS.Size;
       Attribute_Set    : in     RTEMS.Attribute;
       ID               :    out RTEMS.ID;
       Result           :    out RTEMS.Status_Codes
@@ -49,21 +49,21 @@ package RTEMS.Message_Queue is
    procedure Send (
       ID     : in     RTEMS.ID;
       Buffer : in     RTEMS.Address;
-      Size   : in     RTEMS.Unsigned32;
+      Size   : in     RTEMS.Size;
       Result :    out RTEMS.Status_Codes
    );
 
    procedure Urgent (
       ID     : in     RTEMS.ID;
       Buffer : in     RTEMS.Address;
-      Size   : in     RTEMS.Unsigned32;
+      Size   : in     RTEMS.Size;
       Result :    out RTEMS.Status_Codes
    );
 
    procedure Broadcast (
       ID     : in     RTEMS.ID;
       Buffer : in     RTEMS.Address;
-      Size   : in     RTEMS.Unsigned32;
+      Size   : in     RTEMS.Size;
       Count  :    out RTEMS.Unsigned32;
       Result :    out RTEMS.Status_Codes
    );
@@ -73,7 +73,7 @@ package RTEMS.Message_Queue is
       Buffer     : in     RTEMS.Address;
       Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
-      Size       : in out RTEMS.Unsigned32;
+      Size       : in out RTEMS.Size;
       Result     :    out RTEMS.Status_Codes
    );
 

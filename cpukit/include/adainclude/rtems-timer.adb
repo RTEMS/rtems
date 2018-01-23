@@ -184,13 +184,13 @@ package body RTEMS.Timer is
 
    procedure Initiate_Server
      (Server_Priority : in RTEMS.Tasks.Priority;
-      Stack_Size      : in RTEMS.Unsigned32;
+      Stack_Size      : in RTEMS.Size;
       Attribute_Set   : in RTEMS.Attribute;
       Result          : out RTEMS.Status_Codes)
    is
       function Initiate_Server_Base
         (Server_Priority : RTEMS.Tasks.Priority;
-         Stack_Size      : RTEMS.Unsigned32;
+         Stack_Size      : RTEMS.Size;
          Attribute_Set   : RTEMS.Attribute)
          return            RTEMS.Status_Codes;
       pragma Import

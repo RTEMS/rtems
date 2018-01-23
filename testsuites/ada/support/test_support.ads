@@ -181,7 +181,7 @@ package Test_Support is
 --
 
    function Work_Space_Size
-   return RTEMS.Unsigned32;
+   return RTEMS.Size;
 
 --
 --  Return an indication of whether multiprocessing is configured

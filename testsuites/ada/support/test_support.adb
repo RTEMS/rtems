@@ -227,8 +227,8 @@ package body Test_Support is
 --
 
    function Work_Space_Size
-   return RTEMS.Unsigned32 is 
-      function Work_Space_Size_Base return RTEMS.Unsigned32;
+   return RTEMS.Size is
+      function Work_Space_Size_Base return RTEMS.Size;
       pragma Import (C, Work_Space_Size_Base, "work_space_size");
    begin
       return Work_Space_Size_Base;

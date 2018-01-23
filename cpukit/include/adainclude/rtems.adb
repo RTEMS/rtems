@@ -229,4 +229,11 @@ package body RTEMS is
       Shutdown_Executive_Base (Status);
    end Shutdown_Executive;
 
+   function Minimum_Stack_Size return RTEMS.Size is
+      size : RTEMS.Unsigned32;
+      pragma Import (C, size, "rtems_minimum_stack_size");
+   begin
+      return RTEMS.Size (size);
+   end Minimum_Stack_Size;
+
 end RTEMS;

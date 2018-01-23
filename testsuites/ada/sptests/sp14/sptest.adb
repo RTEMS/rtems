@@ -25,6 +25,8 @@ with UNSIGNED32_IO;
 with INTERFACES; use INTERFACES;
 with RTEMS.TIMER;
 with RTEMS.SIGNAL;
+with Interfaces.C;
+use Interfaces.C;
 
 package body SPTEST is
 

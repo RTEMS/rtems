@@ -22,6 +22,8 @@ with RTEMS;
 with RTEMS.TASKS;
 with SPTEST;
 with TEST_SUPPORT;
+with Interfaces.C;
+use Interfaces.C;
 
 procedure SP12 is
   INIT_ID : RTEMS.ID;

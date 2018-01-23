@@ -42,7 +42,7 @@ package RTEMS.Tasks is
    procedure Create (
       Name             : in     RTEMS.Name;
       Initial_Priority : in     Priority;
-      Stack_Size       : in     Unsigned32;
+      Stack_Size       : in     RTEMS.Size;
       Initial_Modes    : in     RTEMS.Mode;
       Attribute_Set    : in     RTEMS.Attribute;
       ID               :    out RTEMS.ID;

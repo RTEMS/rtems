@@ -28,8 +28,8 @@ package RTEMS.Region is
    procedure Create (
       Name             : in     RTEMS.Name;
       Starting_Address : in     RTEMS.Address;
-      Length           : in     RTEMS.Unsigned32;
-      Page_Size        : in     RTEMS.Unsigned32;
+      Length           : in     RTEMS.Size;
+      Page_Size        : in     RTEMS.Size;
       Attribute_Set    : in     RTEMS.Attribute;
       ID               :    out RTEMS.ID;
       Result           :    out RTEMS.Status_Codes
@@ -49,13 +49,13 @@ package RTEMS.Region is
    procedure Extend (
       ID               : in     RTEMS.ID;
       Starting_Address : in     RTEMS.Address;
-      Length           : in     RTEMS.Unsigned32;
+      Length           : in     RTEMS.Size;
       Result           :    out RTEMS.Status_Codes
    );
 
    procedure Get_Segment (
       ID         : in     RTEMS.ID;
-      Size       : in     RTEMS.Unsigned32;
+      Size       : in     RTEMS.Size;
       Option_Set : in     RTEMS.Option;
       Timeout    : in     RTEMS.Interval;
       Segment    :    out RTEMS.Address;
@@ -65,7 +65,7 @@ package RTEMS.Region is
    procedure Get_Segment_Size (
       ID         : in     RTEMS.ID;
       Segment    : in     RTEMS.Address;
-      Size       :    out RTEMS.Unsigned32;
+      Size       :    out RTEMS.Size;
       Result     :    out RTEMS.Status_Codes
    );
 
@@ -78,8 +78,8 @@ package RTEMS.Region is
    procedure Resize_Segment (
       ID         : in     RTEMS.ID;
       Segment    : in     RTEMS.Address;
-      Size       : in     RTEMS.Unsigned32;
-      Old_Size   :    out RTEMS.Unsigned32;
+      Size       : in     RTEMS.Size;
+      Old_Size   :    out RTEMS.Size;
       Result     :    out RTEMS.Status_Codes
    );
 

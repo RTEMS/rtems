@@ -27,8 +27,8 @@ package body RTEMS.Partition is
    procedure Create
      (Name             : in RTEMS.Name;
       Starting_Address : in RTEMS.Address;
-      Length           : in RTEMS.Unsigned32;
-      Buffer_Size      : in RTEMS.Unsigned32;
+      Length           : in RTEMS.Size;
+      Buffer_Size      : in RTEMS.Size;
       Attribute_Set    : in RTEMS.Attribute;
       ID               : out RTEMS.ID;
       Result           : out RTEMS.Status_Codes)
@@ -36,8 +36,8 @@ package body RTEMS.Partition is
       function Create_Base
         (Name             : RTEMS.Name;
          Starting_Address : RTEMS.Address;
-         Length           : RTEMS.Unsigned32;
-         Buffer_Size      : RTEMS.Unsigned32;
+         Length           : RTEMS.Size;
+         Buffer_Size      : RTEMS.Size;
          Attribute_Set    : RTEMS.Attribute;
          ID               : access RTEMS.Event_Set)
          return             RTEMS.Status_Codes;

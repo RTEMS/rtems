@@ -27,7 +27,7 @@ package body RTEMS.Message_Queue is
    procedure Create
      (Name             : in RTEMS.Name;
       Count            : in RTEMS.Unsigned32;
-      Max_Message_Size : in RTEMS.Unsigned32;
+      Max_Message_Size : in RTEMS.Size;
       Attribute_Set    : in RTEMS.Attribute;
       ID               : out RTEMS.ID;
       Result           : out RTEMS.Status_Codes)
@@ -36,7 +36,7 @@ package body RTEMS.Message_Queue is
       function Create_Base
         (Name             : RTEMS.Name;
          Count            : RTEMS.Unsigned32;
-         Max_Message_Size : RTEMS.Unsigned32;
+         Max_Message_Size : RTEMS.Size;
          Attribute_Set    : RTEMS.Attribute;
          ID               : access RTEMS.ID)
          return             RTEMS.Status_Codes;
@@ -101,13 +101,13 @@ package body RTEMS.Message_Queue is
    procedure Send
      (ID     : in RTEMS.ID;
       Buffer : in RTEMS.Address;
-      Size   : in RTEMS.Unsigned32;
+      Size   : in RTEMS.Size;
       Result : out RTEMS.Status_Codes)
    is
       function Send_Base
         (ID     : RTEMS.ID;
          Buffer : RTEMS.Address;
-         Size   : RTEMS.Unsigned32)
+         Size   : RTEMS.Size)
          return   RTEMS.Status_Codes;
       pragma Import (C, Send_Base, "rtems_message_queue_send");
    begin
@@ -119,13 +119,13 @@ package body RTEMS.Message_Queue is
    procedure Urgent
      (ID     : in RTEMS.ID;
       Buffer : in RTEMS.Address;
-      Size   : in RTEMS.Unsigned32;
+      Size   : in RTEMS.Size;
       Result : out RTEMS.Status_Codes)
    is
       function Urgent_Base
         (ID     : RTEMS.ID;
          Buffer : RTEMS.Address;
-         Size   : RTEMS.Unsigned32)
+         Size   : RTEMS.Size)
          return   RTEMS.Status_Codes;
       pragma Import
         (C,
@@ -140,14 +140,14 @@ package body RTEMS.Message_Queue is
    procedure Broadcast
      (ID     : in RTEMS.ID;
       Buffer : in RTEMS.Address;
-      Size   : in RTEMS.Unsigned32;
+      Size   : in RTEMS.Size;
       Count  : out RTEMS.Unsigned32;
       Result : out RTEMS.Status_Codes)
    is
       function Broadcast_Base
         (ID     : RTEMS.ID;
          Buffer : RTEMS.Address;
-         Size   : RTEMS.Unsigned32;
+         Size   : RTEMS.Size;
          Count  : access RTEMS.Unsigned32)
          return   RTEMS.Status_Codes;
       pragma Import
@@ -168,13 +168,13 @@ package body RTEMS.Message_Queue is
       Buffer     : in RTEMS.Address;
       Option_Set : in RTEMS.Option;
       Timeout    : in RTEMS.Interval;
-      Size       : in out RTEMS.Unsigned32;
+      Size       : in out RTEMS.Size;
       Result     : out RTEMS.Status_Codes)
    is
       function Receive_Base
         (ID         : RTEMS.ID;
          Buffer     : RTEMS.Address;
-         Size       : access RTEMS.Unsigned32;
+         Size       : access RTEMS.Size;
          Option_Set : RTEMS.Option;
          Timeout    : RTEMS.Interval)
          return       RTEMS.Status_Codes;
@@ -182,7 +182,7 @@ package body RTEMS.Message_Queue is
         (C,
          Receive_Base,
          "rtems_message_queue_receive");
-      Size_Base : aliased RTEMS.Unsigned32;
+      Size_Base : aliased RTEMS.Size;
    begin
 
       Size_Base := Size;

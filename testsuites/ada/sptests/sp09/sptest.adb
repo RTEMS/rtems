@@ -30,6 +30,8 @@ with RTEMS.RATE_MONOTONIC;
 with RTEMS.REGION;
 with RTEMS.SEMAPHORE;
 with RTEMS.TIMER;
+with Interfaces.C;
+use Interfaces.C;
 
 package body SPTEST is
 
@@ -1126,7 +1128,7 @@ package body SPTEST is
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE   : RTEMS.Size := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 
@@ -3035,7 +3037,7 @@ package body SPTEST is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE   : RTEMS.Size := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 

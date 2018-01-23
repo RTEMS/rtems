@@ -183,7 +183,7 @@ package body TMTEST is
       pragma Unreferenced(ARGUMENT);
       BUFFER         : TMTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE   : RTEMS.Size := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
  

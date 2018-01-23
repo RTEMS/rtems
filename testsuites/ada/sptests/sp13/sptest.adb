@@ -25,6 +25,7 @@ with TEST_SUPPORT;
 with TEXT_IO;
 with UNSIGNED32_IO;
 use type RTEMS.STATUS_CODES;
+use type RTEMS.Size;
 
 package body SPTEST is
 
@@ -227,9 +228,9 @@ package body SPTEST is
       BUFFER                     : SPTEST.BUFFER;
       BUFFER_POINTER             : constant RTEMS.ADDRESS := BUFFER'ADDRESS;
       COUNT                      : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE               : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE               : RTEMS.Size := 0;
       STATUS                     : RTEMS.STATUS_CODES;
-      SIZE                       : RTEMS.UNSIGNED32 := 0;
+      SIZE                       : RTEMS.Size := 0;
    begin
 
       RTEMS.MESSAGE_QUEUE.IDENT( 
@@ -578,7 +579,7 @@ TEST_SUPPORT.PAUSE;
           RTEMS.MESSAGE_QUEUE.CREATE(
               SPTEST.QUEUE_NAME( 1 ),
               2,            -- just 2 msgs each
-              RTEMS.UNSIGNED32( QUEUE_SIZE ),
+              RTEMS.Size( QUEUE_SIZE ),
               RTEMS.DEFAULT_ATTRIBUTES,
               QUEUE_ID( 1 ),
               STATUS
@@ -606,7 +607,7 @@ TEST_SUPPORT.PAUSE;
           RTEMS.MESSAGE_QUEUE.CREATE(
               SPTEST.QUEUE_NAME( 1 ),
               2,            -- just 2 msgs each
-              RTEMS.UNSIGNED32( QUEUE_SIZE ),
+              RTEMS.Size( QUEUE_SIZE ),
               RTEMS.DEFAULT_ATTRIBUTES,
               SPTEST.QUEUE_ID( 1 ),
               STATUS
@@ -620,7 +621,7 @@ TEST_SUPPORT.PAUSE;
           RTEMS.MESSAGE_QUEUE.SEND(
              SPTEST.QUEUE_ID( 1 ),
              BIG_SEND_BUFFER_POINTER,
-             RTEMS.UNSIGNED32( QUEUE_SIZE + 1 ),
+             RTEMS.Size( QUEUE_SIZE + 1 ),
              STATUS
           );
           TEST_SUPPORT.FATAL_DIRECTIVE_STATUS(
@@ -631,7 +632,7 @@ TEST_SUPPORT.PAUSE;
           RTEMS.MESSAGE_QUEUE.SEND(
              SPTEST.QUEUE_ID( 1 ),
              BIG_SEND_BUFFER_POINTER,
-             RTEMS.UNSIGNED32( QUEUE_SIZE ),
+             RTEMS.Size( QUEUE_SIZE ),
              STATUS
           );
           TEST_SUPPORT.DIRECTIVE_FAILED(
@@ -639,7 +640,7 @@ TEST_SUPPORT.PAUSE;
           );
 
           -- now read and verify the message just sent
-          SIZE := INTERFACES.UNSIGNED_32(QUEUE_SIZE);
+          SIZE := RTEMS.Size(QUEUE_SIZE);
           RTEMS.MESSAGE_QUEUE.RECEIVE(
              SPTEST.QUEUE_ID( 1 ),
              BIG_RECEIVE_BUFFER_POINTER,
@@ -651,7 +652,7 @@ TEST_SUPPORT.PAUSE;
           TEST_SUPPORT.DIRECTIVE_FAILED(
              STATUS, "message_queue_receive exact size"
           );
-          if SIZE /= RTEMS.UNSIGNED32( QUEUE_SIZE ) then
+          if SIZE /= RTEMS.Size( QUEUE_SIZE ) then
               TEXT_IO.PUT(
                  "TA1 - exact size size match failed for queue_size = "
               );
@@ -694,7 +695,7 @@ TEST_SUPPORT.PAUSE;
       BUFFER            : SPTEST.BUFFER;
       BUFFER_POINTER    : RTEMS.ADDRESS;
       PREVIOUS_PRIORITY : RTEMS.TASKS.PRIORITY;
-      MESSAGE_SIZE      : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE      : RTEMS.Size := 0;
       STATUS            : RTEMS.STATUS_CODES;
    begin
 
@@ -830,7 +831,7 @@ TEST_SUPPORT.PAUSE;
       BUFFER         : SPTEST.BUFFER;
       BUFFER_POINTER : RTEMS.ADDRESS;
       COUNT          : RTEMS.UNSIGNED32;
-      MESSAGE_SIZE   : RTEMS.UNSIGNED32 := 0;
+      MESSAGE_SIZE   : RTEMS.Size := 0;
       STATUS         : RTEMS.STATUS_CODES;
    begin
 

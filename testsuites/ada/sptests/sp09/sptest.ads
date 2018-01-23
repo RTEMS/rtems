@@ -161,12 +161,12 @@ package SPTEST is
 --  starting area and length.
 -- 
 
-   REGION_GOOD_AREA : array ( RTEMS.UNSIGNED32 range 0 .. 4095 )
-      of RTEMS.UNSIGNED32;
+   REGION_GOOD_AREA : array ( RTEMS.Size range 0 .. 4095 )
+      of RTEMS.Size;
    for REGION_GOOD_AREA'ALIGNMENT use RTEMS.STRUCTURE_ALIGNMENT;
 
-   REGION_START_OFFSET : constant RTEMS.UNSIGNED32 := 2048;
-   REGION_LENGTH       : constant RTEMS.UNSIGNED32 := 512;
+   REGION_START_OFFSET : constant RTEMS.Size := 2048;
+   REGION_LENGTH       : constant RTEMS.Size := 512;
 
 --
 --  The following area defines a memory area to be used as the
