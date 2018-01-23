@@ -512,8 +512,12 @@ xilinx_axi_i2c_read_rx_fifo(xilinx_axi_i2c_bus* bus)
          */
         xilinx_axi_i2c_disable_clear_irq(bus, INT_TX_ERROR);
         xilinx_axi_i2c_set_cr(bus, CR_TXAK);
-        xilinx_axi_i2c_write_rx_pirq(bus, 0);
         xilinx_axi_i2c_read_rx_bytes(bus, level);
+        /*
+         * Set the RX PIRQ to 0 after the RX data has been read. There is an
+         * observed timing issue and glitch if written before.
+         */
+        xilinx_axi_i2c_write_rx_pirq(bus, 0);
         break;
 
       case 0:
