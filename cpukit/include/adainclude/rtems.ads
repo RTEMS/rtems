@@ -126,7 +126,7 @@ pragma Elaborate_Body (RTEMS);
          Ticks   : RTEMS.Unsigned32; -- elapsed ticks between seconds
       end record;
 
-   type Time_T is new Interfaces.C.Long;
+   type Time_T is new Long_Long_Integer;
 
    type Timespec is record
       TV_Sec  : Time_T;
