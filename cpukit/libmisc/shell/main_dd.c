@@ -335,6 +335,21 @@ getfdtype(rtems_shell_dd_globals* globals, IO *io)
 }
 
 static void
+swapbytes(void *v, size_t len)
+{
+	unsigned char *p = v;
+	unsigned char t;
+
+	while (len > 1) {
+		t = p[0];
+		p[0] = p[1];
+		p[1] = t;
+		p += 2;
+		len -= 2;
+	}
+}
+
+static void
 dd_in(rtems_shell_dd_globals* globals)
 {
 	ssize_t n;
@@ -431,7 +446,7 @@ dd_in(rtems_shell_dd_globals* globals)
 				++st.swab;
 				--n;
 			}
-			swab(in.dbp, in.dbp, (size_t)n);
+			swapbytes(in.dbp, (size_t)n);
 		}
 
 		in.dbp += in.dbrcnt;
