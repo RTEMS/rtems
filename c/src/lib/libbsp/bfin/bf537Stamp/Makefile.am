@@ -30,6 +30,7 @@ libbsp_a_SOURCES += \
 libbsp_a_SOURCES += ../../shared/bspreset.c
 
 libbsp_a_SOURCES += console/console.c
+libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/networkconfig.c
@@ -37,7 +38,6 @@ endif
 
 libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/mmu.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/interrupt.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/cache.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/uart.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/clock.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rtc.rel

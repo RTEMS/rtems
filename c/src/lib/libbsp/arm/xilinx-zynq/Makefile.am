@@ -35,8 +35,6 @@ project_lib_DATA += linkcmds
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -84,10 +82,7 @@ libbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 libbsp_a_SOURCES += i2c/cadence-i2c.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
-libbsp_a_SOURCES += ../shared/arm-l2c-310/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/arm-l2c-310
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c startup/bspstartmmu.c

@@ -55,8 +55,9 @@ libbsp_a_SOURCES += ../shared/irq/irq.c
 libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
-libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rm52xx/timer.rel
 
 include $(top_srcdir)/../../../../automake/local.am

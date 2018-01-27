@@ -155,15 +155,12 @@ libbsp_a_SOURCES += ../../sparc/shared/analog/gradcdac.c
 libbsp_a_SOURCES += ../../sparc/shared/mem/mctrl.c
 # l2cache
 libbsp_a_SOURCES += ../../sparc/shared/l2c/l2c.c
+libbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/cache.c
 # griommu
 libbsp_a_SOURCES += ../../sparc/shared/iommu/griommu.c
 # timer
 libbsp_a_SOURCES += timer/timer.c
 libbsp_a_SOURCES += timer/watchdog.c
-# Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += include/cache_.h
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/include
 
 # GR712
 libbsp_a_SOURCES += ../../sparc/shared/ascs/grascs.c

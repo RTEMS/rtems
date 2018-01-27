@@ -2,5 +2,4 @@
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
-include_bsp_HEADERS += ../../../../../bsps/or1k/include/bsp/cache_.h
 include_bsp_HEADERS += ../../../../../bsps/or1k/include/bsp/linker-symbols.h

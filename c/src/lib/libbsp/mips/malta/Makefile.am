@@ -54,8 +54,9 @@ libbsp_a_SOURCES += ../../shared/console_control.c
 # timer
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
-libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
 
 # pci
 libbsp_a_SOURCES += pci/pci.c

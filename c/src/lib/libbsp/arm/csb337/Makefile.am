@@ -9,8 +9,6 @@ dist_project_lib_DATA = startup/bsp_specs
 if ENABLE_LCD
 endif
 
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 if ENABLE_UMON
 endif
 
@@ -76,10 +74,7 @@ libbsp_a_SOURCES += ../../shared/umon/umoncons.c
 endif
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
-libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c

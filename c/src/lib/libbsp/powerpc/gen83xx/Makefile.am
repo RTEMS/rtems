@@ -73,13 +73,9 @@ libbsp_a_SOURCES += i2c/i2c_init.c
 # bsp_spi
 libbsp_a_SOURCES += spi/spi_init.c
 
-if HAS_NETWORKING
-libbsp_a_SOURCES += network/network.c
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
-endif
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-	../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
 	../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
@@ -87,6 +83,11 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/gtm.rel
+
+if HAS_NETWORKING
+libbsp_a_SOURCES += network/network.c
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
+endif
 
 EXTRA_DIST += README.mpc8349eamds
 

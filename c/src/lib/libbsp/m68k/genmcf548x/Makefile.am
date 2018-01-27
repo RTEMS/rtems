@@ -49,9 +49,7 @@ libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += irq/intc-icr-init-values.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/include
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/cache.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c

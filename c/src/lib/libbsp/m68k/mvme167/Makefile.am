@@ -41,8 +41,9 @@ if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c
 endif
 
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
+
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/fpsp.rel
 

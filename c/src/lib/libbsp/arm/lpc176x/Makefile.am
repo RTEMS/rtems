@@ -40,8 +40,6 @@ dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -114,9 +112,7 @@ libbsp_a_SOURCES += misc/restart.c
 libbsp_a_SOURCES += watchdog/watchdog.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c

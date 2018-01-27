@@ -74,7 +74,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-info.c
 libbsp_a_SOURCES += irq/irq.c
 
 # Cache
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
+libbsp_a_SOURCES += ../../../../../../bsps/or1k/shared/cache/cache.c
 
 ###############################################################################
 #                  Special Rules                                              #

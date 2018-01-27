@@ -143,6 +143,7 @@ libbsp_a_SOURCES += ../../sparc/shared/analog/gradcdac.c
 libbsp_a_SOURCES += ../../sparc/shared/mem/mctrl.c
 # l2cache
 libbsp_a_SOURCES += ../../sparc/shared/l2c/l2c.c
+libbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/cache.c
 # griommu
 libbsp_a_SOURCES += ../../sparc/shared/iommu/griommu.c
 # timer
@@ -177,7 +178,6 @@ endif
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/access.rel \
-    ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
 

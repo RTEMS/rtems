@@ -136,9 +136,7 @@ libbsp_a_SOURCES += clock/systick-freq.c
 libbsp_a_SOURCES += ../../shared/timerstub.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/armv7m/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv7m/include
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7m.c
 
 # Network
 if HAS_NETWORKING

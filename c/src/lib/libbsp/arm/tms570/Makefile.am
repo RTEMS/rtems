@@ -39,8 +39,6 @@ dist_project_lib_DATA += startup/linkcmds.tms570ls3137_hdk_with_loader
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -96,9 +94,7 @@ libbsp_a_SOURCES += misc/cpucounterread.c
 # Watchdog
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../../libcpu/arm/shared/include/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../../../libcpu/arm/shared/include
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if TMS570_USE_HWINIT_STARTUP
 libbsp_a_SOURCES += hwinit/tms570_sys_core.S

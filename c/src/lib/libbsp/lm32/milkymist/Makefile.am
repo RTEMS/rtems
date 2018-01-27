@@ -88,9 +88,7 @@ libbsp_a_SOURCES += ../../lm32/shared/milkymist_video/video.c
 libbsp_a_SOURCES += ../../lm32/shared/milkymist_versions/versions.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += ../../lm32/shared/milkymist_networking/network.c

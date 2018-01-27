@@ -170,8 +170,9 @@ libbsp_a_SOURCES += ne2000/ne2000.c
 libbsp_a_SOURCES += wd8003/wd8003.c
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/page.rel
+libbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c
+
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/page.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/score.rel
 
 if HAS_SMP

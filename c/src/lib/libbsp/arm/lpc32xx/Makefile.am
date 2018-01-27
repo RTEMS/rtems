@@ -40,8 +40,6 @@ dist_project_lib_DATA += startup/linkcmds.lpc32xx_mzx
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -103,11 +101,7 @@ libbsp_a_SOURCES += misc/idle-thread.c
 # I2C
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
-libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
-
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c

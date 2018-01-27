@@ -22,12 +22,6 @@ endif
 # endof bf52x
 ############
 
-noinst_PROGRAMS += cache.rel
-cache_rel_SOURCES = cache/cache.c \
-    ../shared/src/cache_manager.c cache/cache_.h
-cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/cache
-cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 noinst_PROGRAMS += mmu.rel
 mmu_rel_SOURCES = mmu/mmu.c
 mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)

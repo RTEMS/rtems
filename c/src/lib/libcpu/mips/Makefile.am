@@ -6,13 +6,6 @@ EXTRA_DIST =
 
 noinst_PROGRAMS =
 
-## cache
-noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/cache/cache.c \
-    ../shared/src/cache_manager.c shared/cache/cache_.h
-shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 ## interrupts
 
 if rm52xx

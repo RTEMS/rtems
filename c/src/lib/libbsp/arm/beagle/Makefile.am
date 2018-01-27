@@ -36,7 +36,6 @@ dist_project_lib_DATA += startup/linkcmds.beagle
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 libbsp_a_LIBADD =
 
 # Shared
@@ -97,10 +96,7 @@ libbsp_a_SOURCES += clock.c
 libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
-libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 ###############################################################################
 #                  Special Rules                                              #

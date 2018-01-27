@@ -38,9 +38,7 @@ libbsp_a_SOURCES += console/sh4uart.c
 libbsp_a_SOURCES += hw_init/hw_init.c
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 EXTRA_DIST += times
 

@@ -45,8 +45,9 @@ libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 endif
 
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
+
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
 EXTRA_DIST += times

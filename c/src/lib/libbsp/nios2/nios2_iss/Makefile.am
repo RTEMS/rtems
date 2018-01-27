@@ -44,7 +44,7 @@ libbsp_a_SOURCES += console/console.c ../../shared/console-polled.c
 libbsp_a_SOURCES += timer/timer.c
 
 # Cache
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cache.rel
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/nios2/nios2_iss/headers.am

@@ -37,8 +37,9 @@ libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
 # timer
 libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
+
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
 EXTRA_DIST += times

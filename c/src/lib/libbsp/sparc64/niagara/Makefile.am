@@ -50,9 +50,10 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+
 libbsp_a_LIBADD = \
       ../../../libcpu/@RTEMS_CPU@/shared/shared-score.rel \
-      ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
       ../../../libcpu/@RTEMS_CPU@/shared/sparc64-syscall.rel 
 
 include $(top_srcdir)/../../../../automake/local.am

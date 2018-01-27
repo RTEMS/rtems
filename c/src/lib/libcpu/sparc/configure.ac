@@ -21,9 +21,6 @@ AM_PROG_CC_C_O
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 
-AM_CONDITIONAL(has_instruction_cache, test "$RTEMS_CPU_MODEL" = "leon1" \
-|| test "$RTEMS_CPU_MODEL" = "leon2" || test "$RTEMS_CPU_MODEL" = "leon3" )
-
 RTEMS_AMPOLISH3
 
 # Explicitly list all Makefiles here

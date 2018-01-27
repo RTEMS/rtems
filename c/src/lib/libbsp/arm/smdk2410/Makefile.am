@@ -6,8 +6,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = startup/bsp_specs
 
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 DISTCLEANFILES = include/bspopts.h
 
 EXTRA_DIST += start/start.S
@@ -58,10 +56,7 @@ libbsp_a_SOURCES += smc/smc.c
 libbsp_a_SOURCES += smc/smc.h
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
-libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
 

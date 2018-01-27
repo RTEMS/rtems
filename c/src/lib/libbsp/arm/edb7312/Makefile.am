@@ -50,9 +50,7 @@ libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += irq/bsp_irq_asm.S
 
 # Cache
-libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
-libbsp_a_SOURCES += ../../shared/include/cache_.h
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
+libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c

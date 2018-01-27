@@ -41,10 +41,10 @@ if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c
 endif
 
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf532x.c
+
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
-    ../../../libcpu/@RTEMS_CPU@/mcf532x/cachepd.rel
+    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5329/headers.am

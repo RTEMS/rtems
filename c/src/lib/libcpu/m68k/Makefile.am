@@ -6,13 +6,6 @@ noinst_PROGRAMS =
 
 if shared
 
-noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/cache/cache.c
-shared_cache_rel_SOURCES += shared/cache/cache_.h
-shared_cache_rel_SOURCES += ../shared/src/cache_manager.c
-shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 ## shared/misc
 
 # gcc doesn't recognize difference between the cpu32 and cpu32+ so we have to
@@ -92,46 +85,6 @@ mcf5206_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if mcf5223x
-## mcf5223x/include
-## mcf5223x/cache
-noinst_PROGRAMS += mcf5223x/cachepd.rel
-mcf5223x_cachepd_rel_SOURCES = mcf5223x/cache/cachepd.c
-mcf5223x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-mcf5223x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-if mcf5225x
-## mcf5225x/include
-# mcf5225x/cache
-noinst_PROGRAMS += mcf5225x/cachepd.rel
-mcf5225x_cachepd_rel_SOURCES = mcf5225x/cache/cachepd.c
-mcf5225x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-mcf5225x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# Network
-if HAS_NETWORKING
-endif ## HAS_NETWORKING
-endif
-
-if mcf5235
-## mcf5235/include
-## mcf5235/cache
-noinst_PROGRAMS += mcf5235/cachepd.rel
-mcf5235_cachepd_rel_SOURCES = mcf5235/cache/cachepd.c
-mcf5235_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-mcf5235_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-if mcf532x
-## mcf532x/include
-## mcf532x/cache
-noinst_PROGRAMS += mcf532x/cachepd.rel
-mcf532x_cachepd_rel_SOURCES = mcf532x/cache/cachepd.c
-mcf532x_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-mcf532x_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if mcf5272
 ## mcf5272/include
 ## clock
@@ -145,14 +98,6 @@ noinst_PROGRAMS += mcf5272/timer.rel
 mcf5272_timer_rel_SOURCES = mcf5272/timer/timer.c mcf5272/timer/timerisr.S
 mcf5272_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mcf5272_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-if mcf5282
-## mcf5282/include
-noinst_PROGRAMS += mcf5282/cachepd.rel
-mcf5282_cachepd_rel_SOURCES = mcf5282/cache/cachepd.c
-mcf5282_cachepd_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-mcf5282_cachepd_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mcf548x

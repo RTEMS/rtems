@@ -51,14 +51,6 @@ shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c shared/include/cpuIdent.
 shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
-# shared/cache
-noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/src/cache_.h \
-    ../shared/src/cache_manager.c \
-    ../shared/include/cache.h
-shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/src
-shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # shared/stack
 noinst_PROGRAMS += shared/stack.rel
 shared_stack_rel_SOURCES = shared/src/stack.c shared/include/spr.h shared/src/stackTrace.h

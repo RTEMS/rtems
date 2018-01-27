@@ -83,10 +83,11 @@ project_lib_DATA += mvme5500start.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \

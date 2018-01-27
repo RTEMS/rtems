@@ -45,9 +45,10 @@ libbsp_a_SOURCES += irq/irq_init.c
 # mmu
 libbsp_a_SOURCES += mmu/mmu.c
 
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
                   ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-                  ../../../libcpu/@RTEMS_CPU@/shared/cache.rel \
                   ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
                   ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
                   ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel

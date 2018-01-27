@@ -21,19 +21,7 @@ shared_sparc64_syscall_rel_SOURCES = shared/syscall/sparc64-syscall.S \
   shared/syscall/sparc64-syscall.h
 shared_sparc64_syscall_rel_CPPFLAGS = $(AM_CPPFLAGS)
 shared_sparc64_syscall_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += shared/cache.rel
-shared_cache_rel_SOURCES = shared/cache/cache.c shared/cache/cache_.h \
-    ../shared/src/cache_manager.c
-shared_cache_rel_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shared/cache
-shared_cache_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
-
-#if has_instruction_cache
-#cache_rel_CPPFLAGS += -DHAS_INSTRUCTION_CACHE
-#endif
-
-
 
 ### This is an example of how to define a separate score implementation.
 ## NOTE: Unlike other CPUs, we install into a subdirectory to avoid
