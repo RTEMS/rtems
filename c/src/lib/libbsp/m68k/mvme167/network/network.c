@@ -1,6 +1,7 @@
 /*  network.c: An 82596 ethernet driver for rtems-bsd.
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
 #define KERNEL
 
 /*

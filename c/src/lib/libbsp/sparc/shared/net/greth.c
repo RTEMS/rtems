@@ -11,6 +11,9 @@
  *              multiple GRETH cores. <daniel@gaisler.com>
  *  2007-09-07, Ported GBIT support from 4.6.5
  */
+
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <rtems.h>
 #define _KERNEL
 #define CPU_U32_FIX

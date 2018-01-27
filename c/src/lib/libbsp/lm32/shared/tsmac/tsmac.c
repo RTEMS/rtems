@@ -12,6 +12,7 @@
  *  Micro-Research Finland Oy
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
 #define _KERNEL
 
 #include <rtems.h>

@@ -80,10 +80,9 @@ timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 if HAS_NETWORKING
 ## network
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 noinst_PROGRAMS += network.rel
 network_rel_SOURCES = network/ethernet.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
+network_rel_CPPFLAGS = $(AM_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 

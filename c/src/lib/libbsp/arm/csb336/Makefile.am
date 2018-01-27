@@ -51,18 +51,11 @@ libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network.c network/lan91c11x.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/lan91c11x.c
+libbsp_a_SOURCES += network/network.c
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/arm/csb336/headers.am

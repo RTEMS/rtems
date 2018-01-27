@@ -53,6 +53,8 @@
  * eric@skatter.usask.ca
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <bsp.h>
 
 #include <stdio.h>

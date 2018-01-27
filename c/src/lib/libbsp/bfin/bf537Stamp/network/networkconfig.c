@@ -11,7 +11,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
 
 #include <bsp.h>
 #include <rtems/rtems_bsdnet.h>

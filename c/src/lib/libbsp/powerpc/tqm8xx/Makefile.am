@@ -58,11 +58,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
 libbsp_a_SOURCES += ../../shared/bspreset.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network_scc.c network/network_fec.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/network_fec.c
+libbsp_a_SOURCES += network/network_scc.c
 endif
 
 libbsp_a_LIBADD = \
@@ -75,10 +72,6 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/tqm8xx/headers.am

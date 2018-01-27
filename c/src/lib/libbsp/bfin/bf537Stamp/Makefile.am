@@ -32,11 +32,7 @@ libbsp_a_SOURCES += ../../shared/bspreset.c
 libbsp_a_SOURCES += console/console.c
 
 if HAS_NETWORKING
-networkconfig_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += networkconfig.rel
-networkconfig_rel_SOURCES = network/networkconfig.c
-networkconfig_rel_CPPFLAGS = $(AM_CPPFLAGS) $(networkconfig_CPPFLAGS)
-networkconfig_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/networkconfig.c
 endif
 
 libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/mmu.rel
@@ -48,7 +44,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rtc.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/timer.rel
 
 if HAS_NETWORKING
-libbsp_a_LIBADD += networkconfig.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/network.rel
 endif
 

@@ -73,11 +73,7 @@ libbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
 endif
 
 if HAS_NETWORKING
-erc32sonic_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += erc32sonic.rel
-erc32sonic_rel_SOURCES = erc32sonic/erc32sonic.c
-erc32sonic_rel_CPPFLAGS = $(AM_CPPFLAGS) $(erc32sonic_CPPFLAGS)
-erc32sonic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += erc32sonic/erc32sonic.c
 endif
 
 libbsp_a_LIBADD  = \
@@ -85,9 +81,6 @@ libbsp_a_LIBADD  = \
     ../../../libcpu/@RTEMS_CPU@/cache.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
-if HAS_NETWORKING
-libbsp_a_LIBADD += erc32sonic.rel
-endif
 
 EXTRA_DIST += times
 

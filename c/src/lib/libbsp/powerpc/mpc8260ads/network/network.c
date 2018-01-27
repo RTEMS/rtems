@@ -23,6 +23,9 @@
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
  */
+
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <mpc8260.h>

@@ -37,8 +37,6 @@ project_lib_DATA += linkcmds
 noinst_LIBRARIES = libbsp.a
 
 libbsp_a_SOURCES =
-libbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-libbsp_a_LIBADD =
 
 # Shared
 libbsp_a_SOURCES += ../../shared/bootcard.c
@@ -119,7 +117,7 @@ libbsp_a_SOURCES += spi/spi.c
 libbsp_a_SOURCES += ../../../libcpu/shared/src/cache_manager.c
 libbsp_a_SOURCES += ../shared/include/arm-cache-l1.h
 libbsp_a_SOURCES += ../shared/armv467ar-basic-cache/cache_.h
-libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/armv467ar-basic-cache
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../shared/armv467ar-basic-cache
 
 # Start hooks
 libbsp_a_SOURCES += startup/bspstarthooks.c
@@ -127,23 +125,6 @@ libbsp_a_SOURCES += startup/bspstarthooks.c
 # LIBMM
 libbsp_a_SOURCES += startup/mm_config_table.c
 libbsp_a_SOURCES += ../shared/mminit.c
-
-###############################################################################
-# Network                                                    #
-###############################################################################
-
-#if HAS_NETWORKING
-#
-#noinst_PROGRAMS = network.rel
-#
-#network_rel_SOURCES = ../shared/lpc/network/lpc-ethernet.c
-#network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
-#network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-#
-#
-#libbsp_a_LIBADD += network.rel
-#
-#endif
 
 ###############################################################################
 #                  Special Rules                                              #

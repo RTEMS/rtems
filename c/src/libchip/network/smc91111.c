@@ -1,3 +1,5 @@
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <rtems.h>
 #include <errno.h>
 

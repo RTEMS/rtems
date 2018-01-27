@@ -74,11 +74,8 @@ libbsp_a_SOURCES += i2c/i2c_init.c
 libbsp_a_SOURCES += spi/spi_init.c
 
 if HAS_NETWORKING
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES   = network/network.c
-network_rel_CPPFLAGS  = $(AM_CPPFLAGS)
-network_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__  -D__BSD_VISIBLE
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/network.c
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
@@ -90,11 +87,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/gtm.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
-endif
 
 EXTRA_DIST += README.mpc8349eamds
 

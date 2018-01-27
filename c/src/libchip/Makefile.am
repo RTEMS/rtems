@@ -23,7 +23,6 @@ libide_a_CPPFLAGS = $(AM_CPPFLAGS)
 if HAS_NETWORKING
 noinst_LIBRARIES += libnetchip.a
 libnetchip_a_CPPFLAGS = $(AM_CPPFLAGS)
-libnetchip_a_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
 libnetchip_a_SOURCES = network/cs8900.c network/dec21140.c network/i82586.c \
     network/sonic.c network/if_fxp.c network/elnk.c network/open_eth.c \
     network/if_dc.c

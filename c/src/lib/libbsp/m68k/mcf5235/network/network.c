@@ -4,6 +4,8 @@
  * TO DO: Check network stack code -- force longword alignment of all tx mbufs?
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <bsp.h>
 #include <stdio.h>
 #include <errno.h>

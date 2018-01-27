@@ -13,6 +13,8 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <bsp.h>
 #include <libchip/smc91111exp.h>
 #include <rtems/bspIo.h>

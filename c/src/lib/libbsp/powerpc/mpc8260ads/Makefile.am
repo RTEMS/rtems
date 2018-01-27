@@ -50,12 +50,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c \
 libbsp_a_SOURCES += ../../shared/bspreset.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-network_CPPFLAGS += -D__BSD_VISIBLE
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network.c network/if_hdlcsubr.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/if_hdlcsubr.c
+libbsp_a_SOURCES += network/network.c
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
@@ -66,9 +62,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 EXTRA_DIST += times
 

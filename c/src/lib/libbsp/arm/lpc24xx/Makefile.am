@@ -137,15 +137,7 @@ libbsp_a_SOURCES += startup/start-config-pinsel.c
 ###############################################################################
 
 if HAS_NETWORKING
-
-noinst_PROGRAMS = network.rel
-
-network_rel_SOURCES = ../shared/lpc/network/lpc-ethernet.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-libbsp_a_LIBADD += network.rel
-
+libbsp_a_SOURCES += ../shared/lpc/network/lpc-ethernet.c
 endif
 
 ###############################################################################

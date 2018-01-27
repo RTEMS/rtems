@@ -1,4 +1,7 @@
 /*Note: this file is copy from 7312 BSP, and untested yet*/
+
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <rtems.h>
 #include <sys/param.h>
 #include <sys/mbuf.h>

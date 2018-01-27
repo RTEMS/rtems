@@ -110,12 +110,7 @@ libbsp_a_SOURCES += ../../powerpc/shared/vme/vme_universe.c
 
 if QEMU
 if HAS_NETWORKING
-ne2000_CPPFLAGS          = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-ne2000_CPPFLAGS         += '-Dbsp_cmdline_arg=rtems_bsp_cmdline_get_param_raw'
-noinst_PROGRAMS         += ne2000.rel
-ne2000_rel_SOURCES       = ../../i386/pc386/ne2000/ne2000.c
-ne2000_rel_CPPFLAGS      = $(AM_CPPFLAGS) $(ne2000_CPPFLAGS)
-ne2000_rel_LDFLAGS       = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += ../../i386/pc386/ne2000/ne2000.c
 endif
 endif
 
@@ -131,12 +126,6 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
-
-if QEMU
-if HAS_NETWORKING
-libbsp_a_LIBADD+=ne2000.rel
-endif
-endif
 
 EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
               README.MVME2400 \

@@ -7,6 +7,9 @@
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
  */
+
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #include <bsp.h>
 #include <rtems/m68k/m68360.h>
 #include <stdio.h>

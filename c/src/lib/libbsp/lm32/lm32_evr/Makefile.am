@@ -46,11 +46,7 @@ libbsp_a_SOURCES += ../../shared/include/cache_.h
 libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
 
 if HAS_NETWORKING
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = ../../lm32/shared/tsmac/tsmac.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-libbsp_a_LIBADD += network.rel
+libbsp_a_SOURCES += ../../lm32/shared/tsmac/tsmac.c
 endif
 
 

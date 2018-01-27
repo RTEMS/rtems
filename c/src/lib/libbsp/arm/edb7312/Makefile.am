@@ -55,17 +55,7 @@ libbsp_a_SOURCES += ../../shared/include/cache_.h
 libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/../../shared/include
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-# libcpu libraries could go here
-libbsp_a_LIBADD =
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
+libbsp_a_SOURCES += network/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

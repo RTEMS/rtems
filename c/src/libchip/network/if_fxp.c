@@ -55,6 +55,8 @@
  *     Original RTEMS modifications.
  */
 
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
 #if defined(__i386__)
 
 /*#define DEBUG_OUT 0*/

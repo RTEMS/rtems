@@ -50,19 +50,11 @@ libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/network.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/network.c
 endif
 
 libbsp_a_LIBADD  = ../../../libcpu/mips/shared/cache.rel
 libbsp_a_LIBADD += ../../../libcpu/mips/shared/interrupts.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/mips/csb350/headers.am

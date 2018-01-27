@@ -189,35 +189,13 @@ libbsp_a_SOURCES += startup/bspsmp.c
 endif
 
 if HAS_NETWORKING
-noinst_PROGRAMS += leon_smc91111.rel
-leon_smc91111_rel_SOURCES = leon_smc91111/leon_smc91111.c
-leon_smc91111_rel_CPPFLAGS = $(AM_CPPFLAGS)
-leon_smc91111_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-leon_smc91111_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-if HAS_NETWORKING
-noinst_PROGRAMS += leon_open_eth.rel
-leon_open_eth_rel_SOURCES = leon_open_eth/leon_open_eth.c
-leon_open_eth_rel_CPPFLAGS = $(AM_CPPFLAGS)
-leon_open_eth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-leon_open_eth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-if HAS_NETWORKING
-noinst_PROGRAMS += leon_greth.rel
+libbsp_a_SOURCES += leon_smc91111/leon_smc91111.c
+libbsp_a_SOURCES += leon_open_eth/leon_open_eth.c
+libbsp_a_SOURCES += ../../sparc/shared/net/greth.c
+libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
 if !HAS_SMP
 libbsp_a_SOURCES += leon_greth/leon_greth.c
 endif
-leon_greth_rel_SOURCES = ../../sparc/shared/net/greth.c
-leon_greth_rel_CPPFLAGS = $(AM_CPPFLAGS)
-leon_greth_rel_CPPFLAGS += -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-leon_greth_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-# BSP Network configuration
-if HAS_NETWORKING
-libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
 endif
 
 EXTRA_DIST += shmsupp/README
@@ -231,12 +209,6 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/access.rel \
     ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
     ../../../libcpu/@RTEMS_CPU@/syscall.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += leon_open_eth.rel
-libbsp_a_LIBADD += leon_greth.rel
-libbsp_a_LIBADD += leon_smc91111.rel
-endif
 
 EXTRA_DIST += times
 

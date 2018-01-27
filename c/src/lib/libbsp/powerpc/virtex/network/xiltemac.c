@@ -9,15 +9,9 @@
  * http://www.rtems.org/license/LICENSE.
  *
  */
-#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 
-#ifndef __INSIDE_RTEMS_BSD_TCPIP_STACK__
 #define __INSIDE_RTEMS_BSD_TCPIP_STACK__
-#endif
-
-#ifndef __BSD_VISIBLE
-#define __BSD_VISIBLE
-#endif
+#define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 
 #include <bsp.h>
 #include <rtems/bspIo.h>

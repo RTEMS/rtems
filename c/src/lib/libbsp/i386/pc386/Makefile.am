@@ -162,34 +162,12 @@ appstart.$(OBJEXT): appcpustart.$(OBJEXT)
 endif
 
 if HAS_NETWORKING
-ne2000_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += ne2000.rel
-ne2000_rel_SOURCES = ne2000/ne2000.c
-ne2000_rel_CPPFLAGS = $(AM_CPPFLAGS) $(ne2000_CPPFLAGS)
-ne2000_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-ne2000_rel_LDFLAGS += -Wl,--undefined=rtems_ne_driver_attach
-endif
-
-if HAS_NETWORKING
-wd8003_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += wd8003.rel
-wd8003_rel_SOURCES = wd8003/wd8003.c
-wd8003_rel_CPPFLAGS = $(AM_CPPFLAGS) $(wd8003_CPPFLAGS)
-wd8003_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-wd8003_rel_LDFLAGS += -Wl,--undefined=rtems_wd_driver_attach
-endif
-
-if HAS_NETWORKING
-3c509_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS += 3c509.rel
-3c509_rel_SOURCES = 3c509/3c509.c
-3c509_rel_SOURCES += 3c509/3c509.h
-3c509_rel_SOURCES += 3c509/elink.c
-3c509_rel_SOURCES += 3c509/elink.h
-3c509_rel_CPPFLAGS = $(AM_CPPFLAGS) $(3c509_CPPFLAGS)
-3c509_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-3c509_rel_LDFLAGS += -Wl,--undefined=rtems_3c509_driver_attach
-3c509_rel_LDFLAGS += -Wl,--undefined=ep_board
+libbsp_a_SOURCES += 3c509/3c509.c
+libbsp_a_SOURCES += 3c509/3c509.h
+libbsp_a_SOURCES += 3c509/elink.c
+libbsp_a_SOURCES += 3c509/elink.h
+libbsp_a_SOURCES += ne2000/ne2000.c
+libbsp_a_SOURCES += wd8003/wd8003.c
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/cache.rel
@@ -198,14 +176,6 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/score.rel
 
 if HAS_SMP
 libbsp_a_LIBADD += appstart.$(OBJEXT)
-endif
-
-# We only build the Network library if HAS_NETWORKING was defined
-# dec21140 is supported via libchip
-if HAS_NETWORKING
-libbsp_a_LIBADD += ne2000.rel
-libbsp_a_LIBADD += wd8003.rel
-libbsp_a_LIBADD += 3c509.rel
 endif
 
 EXTRA_DIST += HOWTO

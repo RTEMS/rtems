@@ -39,11 +39,7 @@ libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
 libbsp_a_SOURCES += irq/irq_init.c irq/irq.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D__INSIDE_RTEMS_BSD_TCPIP_STACK__
-noinst_PROGRAMS = network.rel
-network_rel_SOURCES = network/network.c 
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/network.c 
 endif
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
@@ -53,10 +49,6 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/haleakala/headers.am

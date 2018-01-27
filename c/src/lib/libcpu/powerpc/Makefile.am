@@ -300,7 +300,6 @@ if mpc83xx
 if HAS_NETWORKING
 noinst_PROGRAMS += mpc83xx/tsec.rel
 mpc83xx_tsec_rel_SOURCES = mpc83xx/network/tsec.c
-mpc83xx_tsec_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
 mpc83xx_tsec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
@@ -388,7 +387,6 @@ if qoriq
 if HAS_NETWORKING
 noinst_PROGRAMS += tsec.rel
 tsec_rel_SOURCES = mpc83xx/network/tsec.c
-tsec_rel_CPPFLAGS = $(AM_CPPFLAGS) -D__INSIDE_RTEMS_BSD_TCPIP_STACK__ -D__BSD_VISIBLE
 tsec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
