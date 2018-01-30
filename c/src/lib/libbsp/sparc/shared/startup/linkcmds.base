@@ -3,7 +3,6 @@
 
 OUTPUT_ARCH(sparc)
 __DYNAMIC  =  0;
-ENTRY(start)
 
 /*
  * The memory map looks like this:

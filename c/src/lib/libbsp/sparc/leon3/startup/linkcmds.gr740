@@ -16,4 +16,6 @@ MEMORY
 _PROM_START = ORIGIN (rom);
 _RAM_START = ORIGIN (ram);
 
+ENTRY(start)
+
 INCLUDE linkcmds.base

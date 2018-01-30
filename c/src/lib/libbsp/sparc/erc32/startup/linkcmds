@@ -24,4 +24,6 @@ MEMORY
   ram     : ORIGIN = 0x02000000, LENGTH = 32M
 }
 
+ENTRY(start)
+
 INCLUDE linkcmds.base
