@@ -143,21 +143,21 @@ SECTIONS {
                *(.gcc_except_table .gcc_except_table.*)
        } > REGION_RODATA AT > REGION_RODATA_LOAD
        .tdata :   {
-               __TLS_Data_begin = .;
+               _TLS_Data_begin = .;
                *(.tdata .tdata.* .gnu.linkonce.td.*)
-               __TLS_Data_end = .;
+               _TLS_Data_end = .;
        } > REGION_RODATA AT > REGION_RODATA_LOAD
        .tbss :   {
-               __TLS_BSS_begin = .;
+               _TLS_BSS_begin = .;
                *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
-               __TLS_BSS_end = .;
+               _TLS_BSS_end = .;
        } > REGION_RODATA AT > REGION_RODATA_LOAD
-       __TLS_Data_size = __TLS_Data_end - __TLS_Data_begin;
-       __TLS_Data_begin = __TLS_Data_size != 0 ? __TLS_Data_begin : __TLS_BSS_begin;
-       __TLS_Data_end = __TLS_Data_size != 0 ? __TLS_Data_end : __TLS_BSS_begin;
-       __TLS_BSS_size = __TLS_BSS_end - __TLS_BSS_begin;
-       __TLS_Size = __TLS_BSS_end - __TLS_Data_begin;
-       __TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
+       _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+       _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+       _TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
+       _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+       _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+       _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
        .preinit_array :   {
                PROVIDE_HIDDEN (__preinit_array_start = .);
                KEEP (*(.preinit_array))
@@ -363,8 +363,8 @@ SECTIONS {
   } > REGION_STACK AT > REGION_STACK
   bsp_section_stack_size = bsp_section_stack_begin - bsp_section_stack_end;
 
-  _RamBase = ORIGIN (REGION_WORK);
-  _RamSize = LENGTH (REGION_WORK);
-  _WorkAreaBase = bsp_section_work_begin;
-  _HeapSize = 0;
+  RamBase = ORIGIN (REGION_WORK);
+  RamSize = LENGTH (REGION_WORK);
+  WorkAreaBase = bsp_section_work_begin;
+  HeapSize = 0;
 }

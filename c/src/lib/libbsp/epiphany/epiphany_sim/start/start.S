@@ -28,19 +28,19 @@
 
 EXTERN(bsp_section_bss_begin)
 EXTERN(bsp_section_bss_end)
-EXTERN(ISR_Handler)
+EXTERN(_ISR_Handler)
 EXTERN(bsp_start_vector_table_end)
 EXTERN(bsp_start_vector_table_size)
 EXTERN(bsp_vector_table_size)
 EXTERN(bsp_section_stack_begin)
 
-PUBLIC(EPIPHANY_Exception_default)
+PUBLIC(_EPIPHANY_Exception_default)
 PUBLIC(bsp_start_vector_table_begin)
-PUBLIC(start)
+PUBLIC(_start)
 
 .section .vector, "wax"
-TYPE_FUNC(start)
-SYM(start):
+TYPE_FUNC(_start)
+SYM(_start):
   .balign 4 ;
     b .normal_start
 
@@ -71,7 +71,7 @@ SYM(start):
   .balign 4 ; 0x24
     b _EPIPHANY_Exception_default
 
-_bsp_start_vector_table_begin:
+bsp_start_vector_table_begin:
   .word .normal_start /* Reset */
   .word _EPIPHANY_Exception_default /* SW exception */
   .word _EPIPHANY_Exception_default /* Data Page Fault */
@@ -117,8 +117,8 @@ _bss_clear_loop:
 
 _jump_to_c:
   /* Jump to bootcard */
-  mov  r3, %low(_boot_card)
-  movt r3, %high(_boot_card)
+  mov  r3, %low(boot_card)
+  movt r3, %high(boot_card)
   jalr r3
 
  /* Should never reach here */
@@ -162,6 +162,6 @@ _jump_to_c:
   jr   r63
 
 .balign 4
-TYPE_FUNC(EPIPHANY_Exception_default)
-SYM(EPIPHANY_Exception_default):
+TYPE_FUNC(_EPIPHANY_Exception_default)
+SYM(_EPIPHANY_Exception_default):
   idle

@@ -43,12 +43,12 @@
 
 EXTERN(bsp_start_vector_table_begin)
 EXTERN(_Thread_Dispatch)
-PUBLIC(ISR_Handler)
+PUBLIC(_ISR_Handler)
 
 .section .text, "ax"
 .align 4
-TYPE_FUNC(ISR_Handler)
-SYM(ISR_Handler):
+TYPE_FUNC(_ISR_Handler)
+SYM(_ISR_Handler):
   /* Reserve space for CPU_Exception_frame */
   sub sp, sp, #(CPU_EXCEPTION_FRAME_SIZE)
 
@@ -134,8 +134,8 @@ SYM(ISR_Handler):
   movfs r1,iret
   str r1, [sp,64]
 
-  mov  r33, %low(__Per_CPU_Information)
-  movt r33, %high(__Per_CPU_Information)
+  mov  r33, %low(_Per_CPU_Information)
+  movt r33, %high(_Per_CPU_Information)
 
        add  r6, r33, #(PER_CPU_ISR_NEST_LEVEL)
        add  r8, r33, #(PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL)
@@ -151,7 +151,7 @@ SYM(ISR_Handler):
   /* Keep sp (Exception frame address) in r32 - Callee saved */
   mov  r32, sp
 
-  /* Keep __Per_CPU_Information address in r33 - Callee saved */
+  /* Keep _Per_CPU_Information address in r33 - Callee saved */
   mov  r33, r18
 
   /* Call the exception handler from vector table.
@@ -163,7 +163,7 @@ SYM(ISR_Handler):
 
   mov  r27, r62
   lsl  r27, r27, #2
-  mov  r26, %low(_bsp_start_vector_table_begin)
+  mov  r26, %low(bsp_start_vector_table_begin)
   movt r15, #0
   add  r27, r27, r26
   ldr  r27, [r27]
@@ -184,7 +184,7 @@ jump_to_c_handler:
   /* Switch back to the interrupted task stack */
   mov  sp, r32
 
-  /* Get the address of __Per_CPU_Information */
+  /* Get the address of _Per_CPU_Information */
   mov r18, r33
 
   /* Decrement nesting level and enable multitasking */
@@ -213,8 +213,8 @@ jump_to_c_handler:
   sub     r35, r31, #0
   beq     exception_frame_restore
 
-  mov     r35, %low(__Thread_Dispatch)
-  movt    r35, %high(__Thread_Dispatch)
+  mov     r35, %low(_Thread_Dispatch)
+  movt    r35, %high(_Thread_Dispatch)
   jalr    r35
 
 exception_frame_restore:
