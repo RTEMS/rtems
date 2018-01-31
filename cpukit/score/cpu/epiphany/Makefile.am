@@ -9,6 +9,7 @@ libscorecpu_a_SOURCES  = cpu.c
 libscorecpu_a_SOURCES += epiphany-exception-handler.S
 libscorecpu_a_SOURCES += epiphany-context-switch.S
 libscorecpu_a_SOURCES += epiphany-context-initialize.c
+libscorecpu_a_SOURCES += setjmp.S
 
 libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 
