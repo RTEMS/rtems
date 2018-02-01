@@ -28,9 +28,9 @@
 
 const char rtems_test_name[] = "SP 20";
 
-#define BUFFER_COUNT 20
+#define BUFFER_COUNT 16
 
-#define BUFFER_SIZE 100
+#define BUFFER_SIZE 512
 
 static rtems_printer_task_context printer_task;
 
