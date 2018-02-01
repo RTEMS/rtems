@@ -16,7 +16,6 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/fatal.h>
-#include <cache_.h>
 #include <leon.h>
 #include <rtems/bspIo.h>
 #include <rtems/score/smpimpl.h>
@@ -88,7 +87,7 @@ void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
 
 void _CPU_SMP_Prepare_start_multitasking( void )
 {
-  _CPU_cache_invalidate_entire_instruction();
+  rtems_cache_invalidate_entire_instruction();
 }
 
 void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
