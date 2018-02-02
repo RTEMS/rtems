@@ -21,12 +21,17 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef struct {
+  uint8_t     spi_peripheral_id;
+  const Pin  *pins;
+  Spi        *spi_regs;
+  size_t      pin_count;
+  bool        chip_select_decode;
+} atsam_spi_config;
+
 int spi_bus_register_atsam(
   const char *bus_path,
-  uint8_t     spi_peripheral_id,
-  Spi        *spi_regs,
-  const Pin  *pins,
-  size_t      pin_count
+  const atsam_spi_config *config
 );
 
 #ifdef __cplusplus

@@ -66,12 +66,17 @@ int atsam_register_spi_0(void)
     PIN_SPI0_CLOCK
   };
 
+  static const atsam_spi_config config = {
+    .spi_peripheral_id = ID_SPI0,
+    .spi_regs = SPI0,
+    .pins = pins,
+    .pin_count = RTEMS_ARRAY_SIZE(pins),
+    .chip_select_decode = false
+  };
+
   return spi_bus_register_atsam(
     ATSAM_SPI_0_BUS_PATH,
-    ID_SPI0,
-    SPI0,
-    pins,
-    RTEMS_ARRAY_SIZE(pins)
+    &config
   );
 }
 
@@ -90,11 +95,16 @@ int atsam_register_spi_1(void)
     PIN_SPI1_CLOCK
   };
 
+  static const atsam_spi_config config = {
+    .spi_peripheral_id = ID_SPI1,
+    .spi_regs = SPI1,
+    .pins = pins,
+    .pin_count = RTEMS_ARRAY_SIZE(pins),
+    .chip_select_decode = false
+  };
+
   return spi_bus_register_atsam(
     ATSAM_SPI_1_BUS_PATH,
-    ID_SPI1,
-    SPI1,
-    pins,
-    RTEMS_ARRAY_SIZE(pins)
+    &config
   );
 }

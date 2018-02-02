@@ -49,6 +49,7 @@ typedef struct {
   uint32_t dma_rx_channel;
   int transfer_in_progress;
   bool chip_select_active;
+  bool chip_select_decode;
 } atsam_spi_bus;
 
 static void atsam_spi_wakeup_task(atsam_spi_bus *bus)
@@ -91,17 +92,27 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 {
   uint8_t delay_cs;
   uint32_t csr = 0;
+  uint32_t mode = 0;
+  uint32_t cs = bus->base.cs;
 
   delay_cs = atsam_calculate_dlybcs(bus->base.delay_usecs);
+
+  mode |= SPI_MR_DLYBCS(delay_cs);
+  mode |= SPI_MR_MSTR;
+  mode |= SPI_MR_MODFDIS;
+  if (bus->chip_select_decode) {
+    mode |= SPI_MR_PCS(bus->base.cs);
+    mode |= SPI_MR_PCSDEC;
+    cs /= 4;
+  } else {
+    mode |= SPI_PCS(bus->base.cs);
+  }
 
   SPID_Configure(
     &bus->spi,
     bus->spi.pSpiHw,
     bus->spi.spiId,
-    (SPI_MR_DLYBCS(delay_cs) |
-      SPI_MR_MSTR |
-      SPI_MR_MODFDIS |
-      SPI_PCS(bus->base.cs)),
+    mode,
     &XDMAD_Instance
   );
 
@@ -113,7 +124,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
   atsam_set_phase_and_polarity(bus->base.mode, &csr);
 
-  SPI_ConfigureNPCS(bus->spi.pSpiHw, bus->base.cs, csr);
+  SPI_ConfigureNPCS(bus->spi.pSpiHw, cs, csr);
 }
 
 static void atsam_spi_start_dma_transfer(
@@ -141,7 +152,11 @@ static void atsam_spi_do_transfer(
 
     bus->chip_select_active = true;
 
-    SPI_ChipSelect(pSpiHw, 1 << msg->cs);
+    if (bus->chip_select_decode) {
+      pSpiHw->SPI_MR = (pSpiHw->SPI_MR & ~SPI_MR_PCS_Msk) | SPI_MR_PCS(msg->cs);
+    } else {
+      SPI_ChipSelect(pSpiHw, 1 << msg->cs);
+    }
     SPI_Enable(pSpiHw);
   }
 
@@ -389,10 +404,7 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 
 int spi_bus_register_atsam(
   const char *bus_path,
-  uint8_t     spi_peripheral_id,
-  Spi        *spi_regs,
-  const Pin  *pins,
-  size_t      pin_count
+  const atsam_spi_config *config
 )
 {
   atsam_spi_bus *bus;
@@ -410,11 +422,12 @@ int spi_bus_register_atsam(
   bus->base.speed_hz = bus->base.max_speed_hz;
   bus->base.delay_usecs = 1;
   bus->base.cs = 1;
-  bus->spi.spiId = spi_peripheral_id;
-  bus->spi.pSpiHw = spi_regs;
+  bus->spi.spiId = config->spi_peripheral_id;
+  bus->spi.pSpiHw = config->spi_regs;
+  bus->chip_select_decode = config->chip_select_decode;
 
-  PIO_Configure(pins, pin_count);
-  PMC_EnablePeripheral(spi_peripheral_id);
+  PIO_Configure(config->pins, config->pin_count);
+  PMC_EnablePeripheral(config->spi_peripheral_id);
   atsam_configure_spi(bus);
   atsam_spi_init_xdma(bus);
 
