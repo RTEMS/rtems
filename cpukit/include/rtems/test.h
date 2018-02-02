@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -288,6 +288,19 @@ void rtems_test_parallel(
   const rtems_test_parallel_job *jobs,
   size_t job_count
 );
+
+/**
+ * @brief Performs a busy loop for the specified seconds and nanoseconds based
+ * on the CPU usage of the executing thread.
+ *
+ * This function continuously reads the CPU usage of the executing thread.
+ * This operation may lead to a scheduler instance lock contention in SMP
+ * configurations.
+ *
+ * @param[in] seconds The busy seconds.
+ * @param[in] nanoseconds The busy nanoseconds.
+ */
+void rtems_test_busy_cpu_usage(time_t seconds, long nanoseconds);
 
 /**
  * @brief Performs a busy loop with the specified iteration count.

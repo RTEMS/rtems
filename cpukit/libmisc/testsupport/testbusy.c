@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,6 +19,7 @@
 
 #include <rtems/test.h>
 #include <rtems.h>
+#include <rtems/score/threadimpl.h>
 
 static uint_fast32_t estimate_busy_loop_maximum( void )
 {
@@ -104,4 +105,20 @@ uint_fast32_t rtems_test_get_one_tick_busy_count( void )
   } while ( b - a > 1 );
 
   return m;
+}
+
+void rtems_test_busy_cpu_usage( time_t seconds, long nanoseconds )
+{
+  Thread_Control    *executing;
+  Timestamp_Control  busy;
+  Timestamp_Control  start;
+  Timestamp_Control  now;
+
+  executing = _Thread_Get_executing();
+  _Thread_Get_CPU_time_used( executing, &start );
+  _Timestamp_Set( &busy, seconds, nanoseconds );
+
+  do {
+    _Thread_Get_CPU_time_used( executing, &now );
+  } while ( now - start < busy );
 }
