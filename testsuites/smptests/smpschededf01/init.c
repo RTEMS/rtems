@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2017, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -24,18 +24,16 @@
 const char rtems_test_name[] = "SMPSCHEDEDF 1";
 
 typedef struct {
-  uint_fast32_t one_tick_busy;
   rtems_id task[2];
 } test_context;
 
 static test_context test_instance;
 
-static void t(test_context *ctx, rtems_interval p, uint_fast32_t c)
+static void t(test_context *ctx, rtems_interval p, long nanoseconds)
 {
   rtems_status_code sc;
   rtems_id period;
   rtems_name name;
-  uint_fast32_t busy;
 
   sc = rtems_object_get_classic_name(rtems_task_self(), &name);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -43,10 +41,8 @@ static void t(test_context *ctx, rtems_interval p, uint_fast32_t c)
   sc = rtems_rate_monotonic_create(name, &period);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  busy = (c - 1) * ctx->one_tick_busy + (4 * ctx->one_tick_busy) / 5;
-
   while (true) {
-    rtems_test_busy(busy);
+    rtems_test_busy_cpu_usage(0, nanoseconds);
 
     sc = rtems_rate_monotonic_period(period, p);
     rtems_test_assert(sc == RTEMS_SUCCESSFUL);
@@ -57,21 +53,19 @@ static void t1(rtems_task_argument arg)
 {
   test_context *ctx = (test_context *) arg;
 
-  t(ctx, 50, 25);
+  t(ctx, 50, 25000000);
 }
 
 static void t2(rtems_task_argument arg)
 {
   test_context *ctx = (test_context *) arg;
 
-  t(ctx, 75, 30);
+  t(ctx, 75, 30000000);
 }
 
 static void test(test_context *ctx)
 {
   rtems_status_code sc;
-
-  ctx->one_tick_busy = rtems_test_get_one_tick_busy_count();
 
   sc = rtems_task_create(
     rtems_build_name('T', '1', ' ', ' '),
