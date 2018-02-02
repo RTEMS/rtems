@@ -94,6 +94,60 @@ static void get_abs_timeout(struct timespec *to)
   }
 }
 
+static bool eq_tq(
+  const struct _Thread_queue_Queue *a,
+  const struct _Thread_queue_Queue *b
+)
+{
+  return a->_Lock._next_ticket == b->_Lock._next_ticket
+    && a->_Lock._now_serving == b->_Lock._now_serving
+    && a->_heads == b->_heads
+    && a->_owner == b->_owner
+    && a->_name == b->_name;
+}
+
+static bool eq_mtx(
+  const struct _Mutex_Control *a,
+  const struct _Mutex_Control *b
+)
+{
+  return eq_tq(&a->_Queue, &b->_Queue);
+}
+
+static bool eq_rec_mtx(
+  const struct _Mutex_recursive_Control *a,
+  const struct _Mutex_recursive_Control *b
+)
+{
+  return eq_mtx(&a->_Mutex, &b->_Mutex)
+    && a->_nest_level == b->_nest_level;
+}
+
+static bool eq_cond(
+  const struct _Condition_Control *a,
+  const struct _Condition_Control *b
+)
+{
+  return eq_tq(&a->_Queue, &b->_Queue);
+}
+
+static bool eq_sem(
+  const struct _Semaphore_Control *a,
+  const struct _Semaphore_Control *b
+)
+{
+  return eq_tq(&a->_Queue, &b->_Queue)
+    && a->_count == b->_count;
+}
+
+static bool eq_futex(
+  const struct _Futex_Control *a,
+  const struct _Futex_Control *b
+)
+{
+  return eq_tq(&a->_Queue, &b->_Queue);
+}
+
 static void test_initialization(test_context *ctx)
 {
   struct _Mutex_Control mtx = _MUTEX_INITIALIZER;
@@ -108,11 +162,11 @@ static void test_initialization(test_context *ctx)
   _Semaphore_Initialize(&ctx->sem, 1);
   _Futex_Initialize(&ctx->futex);
 
-  rtems_test_assert(memcmp(&mtx, &ctx->mtx, sizeof(mtx)) == 0);
-  rtems_test_assert(memcmp(&rec_mtx, &ctx->rec_mtx, sizeof(rec_mtx)) == 0);
-  rtems_test_assert(memcmp(&cond, &ctx->cond, sizeof(cond)) == 0);
-  rtems_test_assert(memcmp(&sem, &ctx->sem, sizeof(sem)) == 0);
-  rtems_test_assert(memcmp(&futex, &ctx->futex, sizeof(futex)) == 0);
+  rtems_test_assert(eq_mtx(&mtx, &ctx->mtx));
+  rtems_test_assert(eq_rec_mtx(&rec_mtx, &ctx->rec_mtx));
+  rtems_test_assert(eq_cond(&cond, &ctx->cond));
+  rtems_test_assert(eq_sem(&sem, &ctx->sem));
+  rtems_test_assert(eq_futex(&futex, &ctx->futex));
 
   _Mutex_Destroy(&mtx);
   _Mutex_recursive_Destroy(&rec_mtx);
