@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -426,7 +426,7 @@ static void test_fd_free_fifo(const char *path)
   rtems_test_assert(a != b);
 }
 
-static void test(test_context *ctx)
+static void test_close(test_context *ctx)
 {
   const char *path = "generic";
   int rv;
@@ -507,10 +507,33 @@ static void test(test_context *ctx)
   rtems_test_assert(ctx->writev_count == 1);
 }
 
+static void test_tmpfile(test_context *ctx)
+{
+  rtems_resource_snapshot before;
+  FILE *f;
+  int rv;
+
+  rv = mkdir("/tmp", S_IRWXU | S_IRWXG | S_IRWXO);
+  rtems_test_assert(rv == 0);
+
+  f = tmpfile();
+  rtems_test_assert(f != NULL);
+  rv = fclose(f);
+  rtems_test_assert(rv == 0);
+
+  rtems_resource_snapshot_take(&before);
+  f = tmpfile();
+  rtems_test_assert(f != NULL);
+  rv = fclose(f);
+  rtems_test_assert(rv == 0);
+  rtems_test_assert(rtems_resource_snapshot_check(&before));
+}
+
 static void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
-  test(&test_instance);
+  test_close(&test_instance);
+  test_tmpfile(&test_instance);
   TEST_END();
   rtems_test_exit(0);
 }

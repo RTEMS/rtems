@@ -17,6 +17,7 @@ directives:
   - lseek()
   - read()
   - readv()
+  - tmpfile()
   - write()
   - writev()
 
@@ -24,3 +25,4 @@ concepts:
 
   - Ensure the close() return -1 with errno set to EBUSY in case the file
     descriptor is still in use.
+  - Ensure that close() cleans up resources allocated by tmpfile().
