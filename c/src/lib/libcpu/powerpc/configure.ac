@@ -40,7 +40,6 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "e500")
 
 # test on CPU type
-AM_CONDITIONAL(mpc505, test "$RTEMS_CPU_MODEL" = "mpc505")
 AM_CONDITIONAL(mpc55xx, test "$RTEMS_CPU_MODEL" = "mpc55xx")
 AM_CONDITIONAL(mpc5xx, test "$RTEMS_CPU_MODEL" = "mpc555" )
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \

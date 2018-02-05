@@ -144,26 +144,6 @@ mpc5xx_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc5xx_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-if mpc505
-# mpc505/ictrl
-noinst_PROGRAMS += mpc505/ictrl.rel
-mpc505_ictrl_rel_SOURCES = mpc505/ictrl/ictrl.c
-mpc505_ictrl_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc505_ictrl_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc505/timer
-noinst_PROGRAMS += mpc505/timer.rel
-mpc505_timer_rel_SOURCES = mpc505/timer/timer.c
-mpc505_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc505_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc505/vector
-noinst_PROGRAMS += mpc505/vectors.rel
-mpc505_vectors_rel_SOURCES = mpc505/vectors/vectors.S
-mpc505_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc505_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if mpc6xx
 
 # mpc6xx/mmu
