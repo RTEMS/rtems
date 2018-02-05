@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -21,6 +21,11 @@
 #include <bsp/alt_clock_manager.h>
 
 #include <libfdt.h>
+
+uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
+{
+  return intr[1] + 32;
+}
 
 static void set_clock(
   const void *fdt,

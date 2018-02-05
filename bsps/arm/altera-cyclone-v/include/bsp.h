@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -18,6 +18,8 @@
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
+
+#define BSP_FDT_IS_SUPPORTED
 
 #ifndef ASM
 
