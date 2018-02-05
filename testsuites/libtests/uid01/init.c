@@ -132,9 +132,6 @@ rtems_task Init(
     TERMIOS_TEST_DRIVER_TABLE_ENTRY, \
     SERIAL_MOUSE_DRIVER_TABLE_ENTRY
 
-/* one for the console and one for the test port */
-#define CONFIGURE_NUMBER_OF_TERMIOS_PORTS 2
-
 /* we need to be able to open the test device and mouse */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 #define CONFIGURE_MAXIMUM_TASKS  1

@@ -3421,8 +3421,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #error "Maximum priority configured higher than supported by target."
 #endif
 
-#ifdef CONFIGURE_TERMIOS_DISABLED
-  #warning "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
+#ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
+  #warning "The CONFIGURE_NUMBER_OF_TERMIOS_PORTS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_BARRIERS
@@ -3447,6 +3447,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
   #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_TERMIOS_DISABLED
+  #warning "The CONFIGURE_TERMIOS_DISABLED configuration option is obsolete since RTEMS 5.1"
 #endif
 
 /*

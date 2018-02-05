@@ -53,12 +53,6 @@ static void *Init( uintptr_t ignored )
 #define CONFIGURE_DISABLE_NEWLIB_REENTRANCY
 
 /*
- *  This test does not need the console driver so there is no reason
- *  to configure termios.
- */
-#define CONFIGURE_TERMIOS_DISABLED
-
-/*
  *  This test does not use any stdio.
  */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 0
