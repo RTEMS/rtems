@@ -156,6 +156,9 @@ libbsp_a_SOURCES += spi/sc16is752.c
 libbsp_a_SOURCES += ../../shared/tod.c
 libbsp_a_SOURCES += rtc/rtc-config.c
 
+# Helper functions
+libbsp_a_SOURCES += utils/iocopy.c
+
 # Includes
 libbsp_a_CPPFLAGS += -I$(srcdir)/../shared/CMSIS/Include
 libbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libboard

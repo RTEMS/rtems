@@ -11,6 +11,7 @@ include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/atsam-clock-
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/atsam-i2c.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/atsam-spi.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/i2c.h
+include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/iocopy.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/irq.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/pin-config.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/atsam/include/bsp/power.h
