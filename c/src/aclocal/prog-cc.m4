@@ -28,10 +28,12 @@ test "$rtems_cv_gcc_pipe" = "yes" && CC="$CC --pipe"
 dnl check if the compiler supports --specs
 RTEMS_GCC_SPECS
 
-AS_IF([test x"$rtems_cv_gcc_specs" = xyes],[
+dnl Compilers that does not support --specs (Clang) still needs -B and -qrtems
 GCCSPECS="-B\$(RTEMS_SOURCE_ROOT)/bsps/\$(RTEMS_CPU)/\$(RTEMS_BSP_FAMILY)/start"
-GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
+AS_IF([test x"$rtems_cv_gcc_specs" = xyes],[
+GCCSPECS="${GCCSPECS} -specs bsp_specs"])
 AC_SUBST(GCCSPECS)
+GCCSPECS="${GCCSPECS} -qrtems"
 
 AS_IF([test "$GCC" = yes],[
   RTEMS_RELLDFLAGS="-qnolinkcmds -nostdlib -r"
