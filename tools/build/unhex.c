@@ -684,8 +684,6 @@ error(int error_flag, ...)
     register char *format;
     int local_errno;
 
-    extern int errno;
-
     (void) fflush(stdout);          /* in case stdout/stderr same */
 
     local_errno = error_flag & ~ERR_MASK;
