@@ -652,13 +652,13 @@ static struct nfsstats {
 		 * linked ist of mounted NFS
 		 * and the num_mounted_fs field
 		 */
-	rtems_id					llock;
+	rtems_recursive_mutex			llock;
 		/* A lock for protecting misc
 		 * stuff  within the driver.
 		 * The lock must only be held
 		 * for short periods of time.
 		 */
-	rtems_id					lock;
+	rtems_recursive_mutex			lock;
 		/* Our major number as assigned
 		 * by RTEMS
 		 */
@@ -691,7 +691,7 @@ static struct nfsstats {
 	 */
 	RpcUdpXactPool smallPool;
 	RpcUdpXactPool bigPool;
-} nfsGlob = {0, 0,  0xffffffff, 0, 0, 0, NULL, NULL};
+} nfsGlob = {RTEMS_RECURSIVE_MUTEX_INITIALIZER("NFS List"), RTEMS_RECURSIVE_MUTEX_INITIALIZER("NFS Misc"),  0xffffffff, 0, 0, 0, NULL, NULL};
 
 /*
  * Global variable to tune the 'st_blksize' (stat(2)) value this nfs
@@ -3082,7 +3082,7 @@ typedef struct ResolvePathArgRec_ {
 	rtems_filesystem_location_info_t	*loc;	/* IN: location to resolve	*/
 	char								*buf;	/* IN/OUT: buffer where to put the path */
 	int									len;	/* IN: buffer length		*/
-	rtems_id							sync;	/* IN: synchronization		*/
+	rtems_binary_semaphore			sync;	/* IN: synchronization		*/
 	rtems_status_code					status; /* OUT: result				*/
 } ResolvePathArgRec, *ResolvePathArg;
 
@@ -3130,7 +3130,6 @@ rtems_status_code	status;
 	arg.loc  = loc;
 	arg.buf  = buf;
 	arg.len  = len;
-	arg.sync = 0;
 
 	rtems_binary_semaphore_init(&arg.sync, "NFSress");
 
