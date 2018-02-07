@@ -1294,7 +1294,7 @@ static void rtems_ftpfs_unmount_me(
 
 static int rtems_ftpfs_ioctl(
   rtems_libio_t *iop,
-  uint32_t command,
+  ioctl_command_t command,
   void *arg
 )
 {

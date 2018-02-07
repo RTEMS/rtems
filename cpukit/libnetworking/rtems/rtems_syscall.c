@@ -762,7 +762,7 @@ so_ioctl (rtems_libio_t *iop, struct socket *so, uint32_t   command, void *buffe
 }
 
 static int
-rtems_bsdnet_ioctl (rtems_libio_t *iop, uint32_t   command, void *buffer)
+rtems_bsdnet_ioctl (rtems_libio_t *iop, ioctl_command_t command, void *buffer)
 {
 	struct socket *so;
 	int error;
