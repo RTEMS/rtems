@@ -35,11 +35,8 @@
 #ifndef BOOT_GENTYPES_H_
 #define BOOT_GENTYPES_H_
 
-#define NULL 0
-#define false 0
-#define true 1
-
-typedef unsigned long size_t;
+#include <stddef.h>
+#include <stdbool.h>
 
 #endif
 
