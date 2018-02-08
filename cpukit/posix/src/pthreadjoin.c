@@ -72,7 +72,7 @@ static int _POSIX_Threads_Join( pthread_t thread, void **value_ptr )
       &queue_context.Lock_context.Lock_context
     );
     _Thread_State_release( the_thread, &queue_context.Lock_context.Lock_context );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct( cpu_self );
   } else {
     _Thread_Join(
       the_thread,

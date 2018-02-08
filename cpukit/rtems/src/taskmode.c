@@ -143,7 +143,7 @@ rtems_status_code rtems_task_mode(
     _Thread_State_acquire( executing, &lock_context );
     _Scheduler_Schedule( executing );
     _Thread_State_release( executing, &lock_context );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct( cpu_self );
   }
 
   return RTEMS_SUCCESSFUL;

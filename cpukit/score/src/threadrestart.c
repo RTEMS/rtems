@@ -300,7 +300,7 @@ static Per_CPU_Control *_Thread_Wait_for_join(
   ) {
     _Thread_Set_state_locked( executing, STATES_WAITING_FOR_JOIN_AT_EXIT );
     _Thread_State_release( executing, &lock_context );
-    _Thread_Dispatch_enable( cpu_self );
+    _Thread_Dispatch_direct( cpu_self );
 
     /* Let other threads run */
 
@@ -660,7 +660,7 @@ void _Thread_Restart_self(
   _Thread_Wait_release_default( executing, lock_context );
 
   _Thread_Priority_update( &queue_context );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   RTEMS_UNREACHABLE();
 }
 

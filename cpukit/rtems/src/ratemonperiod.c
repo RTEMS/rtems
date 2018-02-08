@@ -85,7 +85,7 @@ static void _Rate_monotonic_Release_postponed_job(
   cpu_self = _Thread_Dispatch_disable_critical( lock_context );
   _Rate_monotonic_Release( the_period, lock_context );
   _Thread_Priority_update( &queue_context );
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
 }
 
 static void _Rate_monotonic_Release_job(
@@ -263,7 +263,7 @@ static rtems_status_code _Rate_monotonic_Block_while_active(
     _Thread_Unblock( executing );
   }
 
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   return RTEMS_SUCCESSFUL;
 }
 

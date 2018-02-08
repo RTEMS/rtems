@@ -96,7 +96,7 @@ rtems_status_code _Event_Seize(
     _Thread_Unblock( executing );
   }
 
-  _Thread_Dispatch_enable( cpu_self );
+  _Thread_Dispatch_direct( cpu_self );
   return _Status_Get_after_wait( executing );
 }
 
