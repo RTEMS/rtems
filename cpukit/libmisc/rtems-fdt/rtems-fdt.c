@@ -17,7 +17,7 @@
 #include <zlib.h>
 
 #include <rtems/rtems-fdt.h>
-#include <rtems/libio_.h>
+#include <rtems/thread.h>
 
 /**
  * An index for quick access to the FDT by name or offset.
@@ -57,122 +57,28 @@ struct rtems_fdt_blob
  */
 typedef struct
 {
-  rtems_id            lock;     /**< The FDT lock id */
+  rtems_mutex         lock;     /**< The FDT lock id */
   rtems_chain_control blobs;    /**< List if loaded blobs. */
   const char*         paths;    /**< Search paths for blobs. */
 } rtems_fdt_data;
 
-/**
- * Semaphore configuration to create a mutex.
- */
-#define RTEMS_MUTEX_ATTRIBS                                           \
-  (RTEMS_PRIORITY | RTEMS_BINARY_SEMAPHORE |                          \
-   RTEMS_INHERIT_PRIORITY | RTEMS_NO_PRIORITY_CEILING | RTEMS_LOCAL)
-
-/**
- * The FDT data.
- */
-static rtems_fdt_data* fdt_data;
-
-static bool
-rtems_fdt_unlock (void)
+static void
+rtems_fdt_unlock (rtems_fdt_data *fdt)
 {
-  /*
-   * Not sure any error should be returned or an assert.
-   */
-  rtems_status_code sc;
-  sc = rtems_semaphore_release (fdt_data->lock);
-  if ((sc != RTEMS_SUCCESSFUL) && (errno == 0))
-  {
-    errno = EINVAL;
-    return false;
-  }
-  return true;
-}
-
-static bool
-rtems_fdt_data_init (void)
-{
-  /*
-   * Lock the FDT. We only create a lock if a call is made. First we test if a
-   * lock is present. If one is present we lock it. If not the libio lock is
-   * locked and we then test the lock again. If not present we create the lock
-   * then release libio lock.
-   */
-  if (!fdt_data)
-  {
-    rtems_libio_lock ();
-
-    if (!fdt_data)
-    {
-      rtems_status_code sc;
-      rtems_id          lock;
-
-      /*
-       * Always in the heap.
-       */
-      fdt_data = malloc (sizeof (rtems_fdt_data));
-      if (!fdt_data)
-      {
-        errno = ENOMEM;
-        return false;
-      }
-
-      *fdt_data = (rtems_fdt_data) { 0 };
-
-      /*
-       * Create the FDT lock.
-       */
-      sc = rtems_semaphore_create (rtems_build_name ('F', 'D', 'T', ' '),
-                                   1, RTEMS_MUTEX_ATTRIBS,
-                                   RTEMS_NO_PRIORITY, &lock);
-      if (sc != RTEMS_SUCCESSFUL)
-      {
-        free (fdt_data);
-        return false;
-      }
-
-      sc = rtems_semaphore_obtain (lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-      if (sc != RTEMS_SUCCESSFUL)
-      {
-        rtems_semaphore_delete (lock);
-        free (fdt_data);
-        return false;
-      }
-
-      fdt_data->lock = lock;
-
-      /*
-       * Initialise the blob list.
-       */
-      rtems_chain_initialize_empty (&fdt_data->blobs);
-    }
-
-    rtems_libio_unlock ();
-
-    rtems_fdt_unlock ();
-  }
-
-  return true;
+  rtems_mutex_unlock (&fdt->lock);
 }
 
 static rtems_fdt_data*
 rtems_fdt_lock (void)
 {
-  rtems_status_code sc;
+  static rtems_fdt_data fdt_instance = {
+    .lock = RTEMS_MUTEX_INITIALIZER ("FDT"),
+    .blobs = RTEMS_CHAIN_INITIALIZER_EMPTY (fdt_instance.blobs)
+  };
+  rtems_fdt_data *fdt = &fdt_instance;
 
-  if (!rtems_fdt_data_init ())
-    return NULL;
-
-  sc = rtems_semaphore_obtain (fdt_data->lock,
-                               RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    errno = EINVAL;
-    return NULL;
-  }
-
-  return fdt_data;
+  rtems_mutex_lock (&fdt->lock);
+  return fdt;
 }
 
 /**
@@ -438,10 +344,12 @@ rtems_fdt_dup_handle (rtems_fdt_handle* from, rtems_fdt_handle* to)
 {
   if (from && to)
   {
-    (void) rtems_fdt_lock ();
+    rtems_fdt_data* fdt;
+
+    fdt = rtems_fdt_lock ();
     to->blob = from->blob;
     ++to->blob->refs;
-    rtems_fdt_unlock ();
+    rtems_fdt_unlock (fdt);
   }
 }
 
@@ -469,7 +377,7 @@ rtems_fdt_release_handle (rtems_fdt_handle* handle)
       node = rtems_chain_next (node);
     }
 
-    rtems_fdt_unlock ();
+    rtems_fdt_unlock (fdt);
 
     handle->blob = NULL;
   }
@@ -492,13 +400,13 @@ rtems_fdt_valid_handle (const rtems_fdt_handle* handle)
       rtems_fdt_blob* blob = (rtems_fdt_blob*) node;
       if (handle->blob == blob)
       {
-        rtems_fdt_unlock ();
+        rtems_fdt_unlock (fdt);
         return true;
       }
       node = rtems_chain_next (node);
     }
 
-    rtems_fdt_unlock ();
+    rtems_fdt_unlock (fdt);
   }
 
   return false;
@@ -529,14 +437,14 @@ rtems_fdt_find_path_offset (rtems_fdt_handle* handle, const char* path)
     {
       ++temp_handle.blob->refs;
       handle->blob = temp_handle.blob;
-      rtems_fdt_unlock ();
+      rtems_fdt_unlock (fdt);
       return offset;
     }
 
     node = rtems_chain_next (node);
   }
 
-  rtems_fdt_unlock ();
+  rtems_fdt_unlock (fdt);
 
   return -FDT_ERR_NOTFOUND;
 }
@@ -693,7 +601,7 @@ rtems_fdt_load (const char* filename, rtems_fdt_handle* handle)
 
   blob->refs = 1;
 
-  rtems_fdt_unlock ();
+  rtems_fdt_unlock (fdt);
 
   handle->blob = blob;
 
@@ -737,7 +645,7 @@ rtems_fdt_register (const void* dtb, rtems_fdt_handle* handle)
 
   blob->refs = 1;
 
-  rtems_fdt_unlock ();
+  rtems_fdt_unlock (fdt);
 
   handle->blob = blob;
 
@@ -754,17 +662,19 @@ rtems_fdt_register (const void* dtb, rtems_fdt_handle* handle)
 int
 rtems_fdt_unload (rtems_fdt_handle* handle)
 {
-  (void) rtems_fdt_lock ();
+  rtems_fdt_data* fdt;
+
+  fdt = rtems_fdt_lock ();
 
   if (!rtems_fdt_valid_handle (handle))
   {
-    rtems_fdt_unlock ();
+    rtems_fdt_unlock (fdt);
     return -RTEMS_FDT_ERR_INVALID_HANDLE;
   }
 
   if (handle->blob->refs > 1)
   {
-    rtems_fdt_unlock ();
+    rtems_fdt_unlock (fdt);
     return -RTEMS_FDT_ERR_REFERENCED;
   }
 
@@ -774,7 +684,7 @@ rtems_fdt_unload (rtems_fdt_handle* handle)
 
   handle->blob = NULL;
 
-  rtems_fdt_unlock ();
+  rtems_fdt_unlock (fdt);
 
   rtems_fdt_release_index(&handle->blob->index);
 
