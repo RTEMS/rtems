@@ -34,7 +34,7 @@ rtems_status_code rtems_task_wake_after(
   Per_CPU_Control *cpu_self;
 
   cpu_self = _Thread_Dispatch_disable();
-    executing = _Thread_Executing;
+    executing = _Per_CPU_Get_executing( cpu_self );
 
     if ( ticks == 0 ) {
       _Thread_Yield( executing );

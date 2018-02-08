@@ -49,7 +49,7 @@ rtems_status_code rtems_task_wake_when(
     return RTEMS_INVALID_CLOCK;
 
   cpu_self = _Thread_Dispatch_disable();
-    executing = _Thread_Executing;
+    executing = _Per_CPU_Get_executing( cpu_self );
     _Thread_Set_state( executing, STATES_WAITING_FOR_TIME );
     _Thread_Wait_flags_set( executing, THREAD_WAIT_STATE_BLOCKED );
     _Thread_Timer_insert_realtime(
