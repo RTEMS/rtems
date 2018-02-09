@@ -34,6 +34,7 @@ rtems_task Init(
 {
   rtems_status_code status;
 
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );

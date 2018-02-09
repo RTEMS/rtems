@@ -144,6 +144,7 @@ rtems_task Init(
   rtems_id          task_id;
   rtems_status_code status;
 
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   Print_Warning();
 
   TEST_BEGIN();
