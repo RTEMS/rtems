@@ -107,6 +107,8 @@ extern "C" {
 #define EFR_RTS_FLOW_CTRL_EN (1u << 6)
 #define EFR_CTS_FLOW_CTRL_EN (1u << 7)
 
+/* IOCONTROL: User accessible. Therefore see sc16is752.h for the defines. */
+
 #define SC16IS752_FIFO_DEPTH 64
 
 #ifdef __cplusplus

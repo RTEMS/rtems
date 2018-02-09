@@ -251,9 +251,54 @@ rtems_status_code sc16is752_spi_create(
 #define SC16IS752_SET_SLEEP_MODE _IOW('d', 0, int)
 
 /**
+ * @brief Set the I/O Control bits except for the SRESET.
+ *
+ * Note that it will not be possible to set the SRESET. Otherwise the driver
+ * might would have an undefined state.
+ */
+#define SC16IS752_SET_IOCONTROL _IOW('d', 1, uint8_t)
+
+/**
+ * @brief Set the I/O pins direction register.
+ */
+#define SC16IS752_SET_IODIR _IOW('d', 2, uint8_t)
+
+/**
+ * @brief Set the I/O pins state register.
+ */
+#define SC16IS752_SET_IOSTATE _IOW('d', 3, uint8_t)
+
+/**
  * @brief Returns non-zero in case the sleep mode is enabled, otherwise zero.
  */
 #define SC16IS752_GET_SLEEP_MODE _IOR('d', 0, int)
+
+/**
+ * @brief Read the I/O Control register.
+ */
+#define SC16IS752_GET_IOCONTROL _IOR('d', 1, uint8_t)
+
+/**
+ * @brief Read the I/O pins direction register.
+ */
+#define SC16IS752_GET_IODIR _IOR('d', 2, uint8_t)
+
+/**
+ * @brief Read the I/O pins state register.
+ */
+#define SC16IS752_GET_IOSTATE _IOR('d', 3, uint8_t)
+
+/**
+ * @brief Bits for the IOCONTROL register.
+ * @{
+ */
+#define SC16IS752_IOCONTROL_SRESET (1u << 3)
+#define SC16IS752_IOCONTROL_GPIO_3_0_OR_MODEM (1u << 2)
+#define SC16IS752_IOCONTROL_GPIO_7_4_OR_MODEM (1u << 1)
+#define SC16IS752_IOCONTROL_IOLATCH (1u << 0)
+/**
+ * @}
+ */
 
 #ifdef __cplusplus
 }
