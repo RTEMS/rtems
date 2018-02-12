@@ -234,11 +234,13 @@ static bool sc16is752_first_open(
   set_efr(ctx, EFR_ENHANCED_FUNC_ENABLE);
 
   rtems_termios_set_initial_baud(tty, 115200);
-  sc16is752_set_attributes(base, term);
+  ok = sc16is752_set_attributes(base, term);
+  if (!ok) {
+    return ok;
+  }
 
-  (*ctx->install_irq)(ctx);
-
-  return true;
+  ok = (*ctx->install_irq)(ctx);
+  return ok;
 }
 
 static void sc16is752_last_close(
