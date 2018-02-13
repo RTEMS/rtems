@@ -868,23 +868,23 @@ sendpacket (struct ifnet *ifp, struct mbuf *m)
             if ((m = m->m_next) == NULL)
                     break;
     }
-    
+
     m_freem (n);
-    
+
     /* don't send long packets */
 
     if (len <= GRETH_MAXBUF_LEN) {
             if (dp->tx_ptr < dp->txbufs-1) {
-                    dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_ENABLE | len;
+                    dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_IRQ |
+                                                  GRETH_TXD_ENABLE | len;
             } else {
-                    dp->txdesc[dp->tx_ptr].ctrl = 
+                    dp->txdesc[dp->tx_ptr].ctrl = GRETH_TXD_IRQ |
                             GRETH_TXD_WRAP | GRETH_TXD_ENABLE | len;
             }
             dp->tx_ptr = (dp->tx_ptr + 1) % dp->txbufs;
             SPIN_LOCK_IRQ(&dp->devlock, flags);
             dp->regs->ctrl = dp->regs->ctrl | GRETH_CTRL_TXEN;
             SPIN_UNLOCK_IRQ(&dp->devlock, flags);
-            
     }
 
     return 0;
