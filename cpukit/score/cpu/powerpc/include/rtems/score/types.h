@@ -51,8 +51,6 @@ extern "C" {
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
-typedef void ppc_isr;
-
 #ifdef __cplusplus
 }
 #endif
