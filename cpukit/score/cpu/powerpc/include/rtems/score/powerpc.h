@@ -1,7 +1,7 @@
 /**
  * @file
  * 
- * @brief IBM/Motorola Power Pc Definitions
+ * @brief IBM/Motorola PowerPC Definitions
  * 
  * This file contains definitions for the IBM/Motorola PowerPC
  * family members.
