@@ -1378,19 +1378,15 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This group contains the elements needed to define the Classic API
  * Initialization Tasks Table.
  *
- *  Default User Initialization Task Table.  This table guarantees that
- *  one user initialization table is defined.
- */
-#ifdef CONFIGURE_RTEMS_INIT_TASKS_TABLE
-
-#ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-
-/*
- *  The user is defining their own table information and setting the
+ * Default User Initialization Task Table.  This table guarantees that
+ * one user initialization table is defined.
+ *
+ *  WHEN CONFIGURE_HAS_OWN_INIT_TASK_TABLE is defined, the user is
+ *  responsible for defining their own table information and setting the
  *  appropriate variables.
  */
-
-#else
+#if defined(CONFIGURE_RTEMS_INIT_TASKS_TABLE) && \
+    !defined(CONFIGURE_HAS_OWN_INIT_TASK_TABLE)
 
 /**
  * When using the default Classic API Initialization Tasks Table, this is
@@ -1485,9 +1481,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #define CONFIGURE_INIT_TASK_TABLE_SIZE \
   RTEMS_ARRAY_SIZE(CONFIGURE_INIT_TASK_TABLE)
 
-#endif    /* CONFIGURE_HAS_OWN_INIT_TASK_TABLE */
-
 #else     /* CONFIGURE_RTEMS_INIT_TASKS_TABLE */
+#ifdef CONFIGURE_HAS_OWN_INIT_TASK_TABLE
+
+/*
+ * The user application is responsible for defining everything
+ * when CONFIGURE_HAS_OWN_INIT_TABLE is defined.
+ */
+#else     /* not using standard or providing own Init Task Table */
 
 /*
  * This is the name of the Initialization Task when none is configured.
@@ -1503,6 +1504,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This is the stack size of the Initialization Task when none is configured.
  */
 #define CONFIGURE_INIT_TASK_STACK_SIZE 0
+
+#endif    /* CONFIGURE_HAS_OWN_INIT_TASK_TABLE */
 
 #endif
 /**@}*/  /* end of Classic API Initialization Tasks Table */
