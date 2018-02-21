@@ -64,6 +64,7 @@ void ada_test_begin(void)
 
 void ada_test_end(void)
 {
+  fsync(STDOUT_FILENO);
   rtems_test_end(rtems_test_name);
 }
 

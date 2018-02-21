@@ -16,31 +16,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/imfs.h>
 
-static ssize_t _Console_simple_Read(
-  rtems_libio_t *iop,
-  void          *buffer,
-  size_t         count
-)
-{
-  char    *buf;
-  ssize_t  i;
-  ssize_t  n;
-
-  buf = buffer;
-  n = (ssize_t) count;
-
-  for ( i = 0; i < n; ++i ) {
-    int c;
-
-    do {
-      c = getchark();
-    } while (c == -1);
-
-    buf[ i ] = (char) c;
-  }
-
-  return n;
-}
+#include "consolesimple.h"
 
 static ssize_t _Console_simple_Write(
   rtems_libio_t *iop,

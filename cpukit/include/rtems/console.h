@@ -150,11 +150,18 @@ rtems_device_driver console_control(
 /**
  * @brief Initializes a simple console device.
  *
- * This device writes via rtems_putc() and reads via getchark().  The Termios
- * framework is not used.  There is no support to change device settings, e.g.
- * baud, stop bits, parity, etc.
+ * See CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER documentation in the
+ * "RTEMS Classic API Guide".
  */
 void _Console_simple_Initialize( void );
+
+/**
+ * @brief Initializes a simple task console device.
+ *
+ * See CONFIGURE_APPLICATION_NEEDS_SIMPLE_TASK_CONSOLE_DRIVER documentation in
+ * the "RTEMS Classic API Guide".
+ */
+void _Console_simple_task_Initialize( void );
 
 #ifdef __cplusplus
 }
