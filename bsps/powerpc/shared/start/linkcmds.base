@@ -100,10 +100,10 @@ SECTIONS {
 		*(.eh_frame_hdr)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.eh_frame : ALIGN_WITH_INPUT {
-		KEEP (*(*.eh_frame))
+		KEEP (*(.eh_frame))
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.gcc_except_table : ALIGN_WITH_INPUT {
-		*(.gcc_except_table *.gcc_except_table.*)
+		*(.gcc_except_table .gcc_except_table.*)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.tdata : ALIGN_WITH_INPUT {
 		_TLS_Data_begin = .;
@@ -260,7 +260,7 @@ SECTIONS {
 		*(set_domain_*);
 		*(set_pseudo_*);
 
-		KEEP (*(SORT(*.rtemsroset.*)))
+		KEEP (*(SORT(.rtemsroset.*)))
 		bsp_section_rodata_end = .;
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
