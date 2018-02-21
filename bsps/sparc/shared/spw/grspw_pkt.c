@@ -113,6 +113,7 @@ struct grspw_regs {
 #define GRSPW_CTRL_RC_BIT	29
 #define GRSPW_CTRL_NCH_BIT	27
 #define GRSPW_CTRL_PO_BIT	26
+#define GRSPW_CTRL_CC_BIT	25
 #define GRSPW_CTRL_ID_BIT	24
 #define GRSPW_CTRL_LE_BIT	22
 #define GRSPW_CTRL_PS_BIT	21
@@ -137,6 +138,7 @@ struct grspw_regs {
 #define GRSPW_CTRL_RC	(1<<GRSPW_CTRL_RC_BIT)
 #define GRSPW_CTRL_NCH	(0x3<<GRSPW_CTRL_NCH_BIT)
 #define GRSPW_CTRL_PO	(1<<GRSPW_CTRL_PO_BIT)
+#define GRSPW_CTRL_CC	(1<<GRSPW_CTRL_CC_BIT)
 #define GRSPW_CTRL_ID	(1<<GRSPW_CTRL_ID_BIT)
 #define GRSPW_CTRL_LE	(1<<GRSPW_CTRL_LE_BIT)
 #define GRSPW_CTRL_PS	(1<<GRSPW_CTRL_PS_BIT)
@@ -3120,6 +3122,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	ctrl = REG_READ(&priv->regs->ctrl);
 	priv->hwsup.rmap = (ctrl & GRSPW_CTRL_RA) >> GRSPW_CTRL_RA_BIT;
 	priv->hwsup.rmap_crc = (ctrl & GRSPW_CTRL_RC) >> GRSPW_CTRL_RC_BIT;
+	priv->hwsup.ccsds_crc = (ctrl & GRSPW_CTRL_CC) >> GRSPW_CTRL_CC_BIT;
 	priv->hwsup.rx_unalign = (ctrl & GRSPW_CTRL_RX) >> GRSPW_CTRL_RX_BIT;
 	priv->hwsup.nports = 1 + ((ctrl & GRSPW_CTRL_PO) >> GRSPW_CTRL_PO_BIT);
 	priv->hwsup.ndma_chans = 1 + ((ctrl & GRSPW_CTRL_NCH) >> GRSPW_CTRL_NCH_BIT);

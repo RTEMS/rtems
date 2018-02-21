@@ -35,9 +35,19 @@ extern int grspw_work_task_priority;
 #define TXPKT_FLAG_HCRC 0x0100
 
 /* Enable Data CRC generation (if CRC is available in HW)
- * Data CRC will be appended (one byte at end of packet)
+ * Data CRC will be appended (one or two byte at end of packet, depending on
+ * Data CRC type)
  */
 #define TXPKT_FLAG_DCRC 0x0200
+
+/* Data CRC type */
+#define TXPKT_FLAG_DCRCT_MASK   0x0c00
+/* RMAP CRC. 1 byte */
+#define TXPKT_FLAG_DCRCT_RMAP   0x0000
+/* CCSDS/CCITT CRC-16. 2 byte */
+#define TXPKT_FLAG_DCRCT_CCSDS  0x0400
+/* 16-bit ISO-checksum (J.G. Fletcher, ISO 8473-1:1998). 2 byte */
+#define TXPKT_FLAG_DCRCT_ISO16  0x0800
 
 /* Control how many bytes the beginning of the Header 
  * the CRC should not be calculated for */
@@ -60,7 +70,8 @@ extern int grspw_work_task_priority;
 #define TXPKT_FLAG_NOCRC_LENf 0x0000000f
 
 #define TXPKT_FLAG_INPUT_MASK (TXPKT_FLAG_NOCRC_MASK | TXPKT_FLAG_IE | \
-				TXPKT_FLAG_HCRC | TXPKT_FLAG_DCRC)
+				TXPKT_FLAG_HCRC | TXPKT_FLAG_DCRC | \
+				TXPKT_FLAG_DCRCT_MASK)
 
 /* Marks if packet was transmitted or not */
 #define TXPKT_FLAG_TX 0x4000
@@ -176,6 +187,7 @@ struct grspw_hw_sup {
 	char	irq;		/* SpW Distributed Interrupt available if 1 */
 	char	irq_num;	/* Number of interrupts that can be generated */
 	char	itmr_width;	/* SpW Intr. ISR timers bit width. 0=no timer */
+	char	ccsds_crc;	/* CCSDS CRC-16 and 16-bit ISO is available */
 };
 
 struct grspw_core_stats {
