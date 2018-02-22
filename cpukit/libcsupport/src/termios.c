@@ -372,8 +372,6 @@ rtems_termios_open_tty(
   const rtems_termios_callbacks *callbacks
 )
 {
-  rtems_status_code sc;
-
   if (tty == NULL) {
     static char c = 'a';
     rtems_termios_device_context *ctx;
@@ -490,6 +488,8 @@ rtems_termios_open_tty(
      * Create I/O tasks
      */
     if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
+      rtems_status_code sc;
+
       sc = rtems_task_create (
                                    rtems_build_name ('T', 'x', 'T', c),
            TERMIOS_TXTASK_PRIO,
@@ -516,8 +516,6 @@ rtems_termios_open_tty(
         (tty->handler.mode == TERMIOS_TASK_DRIVEN)){
       rtems_binary_semaphore_init (&tty->rawInBuf.Semaphore,
                                    "termios raw input");
-      if (sc != RTEMS_SUCCESSFUL)
-        rtems_fatal_error_occurred (sc);
     }
 
     /*
@@ -573,6 +571,8 @@ rtems_termios_open_tty(
      * start I/O tasks, if needed
      */
     if (tty->handler.mode == TERMIOS_TASK_DRIVEN) {
+      rtems_status_code sc;
+
       sc = rtems_task_start(
         tty->rxTaskId, rtems_termios_rxdaemon, (rtems_task_argument)tty);
       if (sc != RTEMS_SUCCESSFUL)
