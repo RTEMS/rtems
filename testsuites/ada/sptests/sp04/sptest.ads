@@ -45,6 +45,7 @@ package SPTEST is
 --
 
    RUN_COUNT : array ( RTEMS.UNSIGNED32 range 1 .. 3 ) of RTEMS.UNSIGNED32;
+   pragma Volatile (RUN_COUNT);
 
 --
 --  INIT
