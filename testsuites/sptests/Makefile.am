@@ -71,6 +71,7 @@ if HAS_CPLUSPLUS
 _SUBDIRS += spglobalcon01
 _SUBDIRS += sptls02
 endif
+_SUBDIRS += spglobalcon02
 _SUBDIRS += sptls01
 _SUBDIRS += spintrcritical20
 _SUBDIRS += spintrcritical21

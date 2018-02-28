@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spglobalcon02
+
+directives:
+
+  - _Thread_Global_construction
+  - _exit
+
+concepts:
+
+  - Ensure global construction and destruction works.

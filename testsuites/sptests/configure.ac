@@ -59,6 +59,7 @@ sptimecounter03/Makefile
 sptimecounter04/Makefile
 spatomic01/Makefile
 spglobalcon01/Makefile
+spglobalcon02/Makefile
 spintrcritical22/Makefile
 spsem03/Makefile
 spmrsp01/Makefile
