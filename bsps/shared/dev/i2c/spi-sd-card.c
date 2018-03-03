@@ -5,12 +5,13 @@
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * Copyright (c) 2008, 2018 embedded brains GmbH
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -25,7 +26,6 @@
 #include <rtems.h>
 #include <rtems/libi2c.h>
 #include <rtems/libio.h>
-#include <rtems/diskdevs.h>
 #include <rtems/blkdev.h>
 
 #include <libchip/spi-sd-card.h>
@@ -1238,11 +1238,9 @@ sd_card_disk_block_write_cleanup:
 
 static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 {
-	RTEMS_DEBUG_PRINT( "sd_card_disk_ioctl minor = %u, req = 0x%08x, arg = %p\n",
-	                (unsigned)rtems_filesystem_dev_minor_t(dd->dev), (unsigned)req, arg);
+	RTEMS_DEBUG_PRINT( "sd_card_disk_ioctl req = 0x%08x, arg = %p\n", (unsigned)req, arg);
 	if (req == RTEMS_BLKIO_REQUEST) {
-		rtems_device_minor_number minor = rtems_disk_get_minor_number( dd);
-		sd_card_driver_entry *e = &sd_card_driver_table [minor];
+		sd_card_driver_entry *e = rtems_disk_get_driver_data( dd);
 		rtems_blkdev_request *r = (rtems_blkdev_request *) arg;
 		int (*f)( sd_card_driver_entry *, rtems_blkdev_request *);
 		uint32_t retries = e->retries;
@@ -1272,18 +1270,14 @@ static int sd_card_disk_ioctl( rtems_disk_device *dd, uint32_t req, void *arg)
 	}
 }
 
-static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rtems_device_minor_number minor, void *arg)
+rtems_status_code sd_card_register( void)
 {
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
+	size_t i;
 
-	/* Initialize disk IO */
-	sc = rtems_disk_io_initialize();
-	RTEMS_CHECK_SC( sc, "Initialize RTEMS disk IO");
-
-	for (minor = 0; minor < sd_card_driver_table_size; ++minor) {
-		sd_card_driver_entry *e = &sd_card_driver_table [minor];
-		dev_t dev = rtems_filesystem_make_dev_t( major, minor);
+	for (i = 0; i < sd_card_driver_table_size; ++i) {
+		sd_card_driver_entry *e = &sd_card_driver_table [i];
 		uint32_t retries = e->retries;
+		rtems_status_code sc;
 
 		/* Initialize SD Card */
 		do {
@@ -1292,31 +1286,9 @@ static rtems_status_code sd_card_disk_init( rtems_device_major_number major, rte
 		RTEMS_CHECK_SC( sc, "Initialize SD Card");
 
 		/* Create disk device */
-		sc = rtems_disk_create_phys( dev, e->block_size, e->block_number, sd_card_disk_ioctl, NULL, e->device_name);
+		sc = rtems_blkdev_create( e->device_name, e->block_size, e->block_number, sd_card_disk_ioctl, NULL);
 		RTEMS_CHECK_SC( sc, "Create disk device");
 	}
-
-	return RTEMS_SUCCESSFUL;
-}
-
-/** @} */
-
-static const rtems_driver_address_table sd_card_disk_ops = {
-	.initialization_entry = sd_card_disk_init,
-	.open_entry = rtems_blkdev_generic_open,
-	.close_entry = rtems_blkdev_generic_close,
-	.read_entry = rtems_blkdev_generic_read,
-	.write_entry = rtems_blkdev_generic_write,
-	.control_entry = rtems_blkdev_generic_ioctl
-};
-
-rtems_status_code sd_card_register( void)
-{
-	rtems_status_code sc = RTEMS_SUCCESSFUL;
-	rtems_device_major_number major = 0;
-
-	sc = rtems_io_register_driver( 0, &sd_card_disk_ops, &major);
-	RTEMS_CHECK_SC( sc, "Register disk SD Card driver");
 
 	return RTEMS_SUCCESSFUL;
 }
