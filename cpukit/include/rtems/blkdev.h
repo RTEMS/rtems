@@ -296,6 +296,7 @@ rtems_blkdev_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
  * @retval RTEMS_INVALID_NUMBER Media block size or count is not positive.
  * @retval RTEMS_NO_MEMORY Not enough memory.
  * @retval RTEMS_UNSATISFIED Cannot create generic device node.
+ * @retval RTEMS_INCORRECT_STATE Cannot initialize bdbuf.
  *
  * @see rtems_blkdev_create_partition(), rtems_bdbuf_set_block_size(), and
  * rtems_blkdev_request.

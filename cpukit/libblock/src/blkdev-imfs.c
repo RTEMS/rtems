@@ -6,10 +6,10 @@
  */
 
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -279,9 +279,15 @@ rtems_status_code rtems_blkdev_create(
   void *driver_data
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_blkdev_imfs_context *ctx = malloc(sizeof(*ctx));
+  rtems_status_code sc;
+  rtems_blkdev_imfs_context *ctx;
 
+  sc = rtems_bdbuf_init();
+  if (sc != RTEMS_SUCCESSFUL) {
+    return RTEMS_INCORRECT_STATE;
+  }
+
+  ctx = malloc(sizeof(*ctx));
   if (ctx != NULL) {
     sc = rtems_disk_init_phys(
       &ctx->dd,
