@@ -16,7 +16,7 @@ OUTPUT_FORMAT("elf32-m68k", "elf32-m68k", "elf32-m68k")
 
 OUTPUT_ARCH(m68k)
 
-ENTRY(_start)
+ENTRY(start)
 STARTUP(start.o)
 
 bsp_initstack_size = DEFINED (bsp_initstack_size) ? bsp_initstack_size : 2048;
