@@ -11,6 +11,8 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/version.h>
+#include <rtems/score/threadimpl.h>
+#include <inttypes.h>
 
 void bsp_fatal_extension(
   rtems_fatal_source source,
@@ -19,6 +21,8 @@ void bsp_fatal_extension(
 )
 {
   #if BSP_VERBOSE_FATAL_EXTENSION
+    Thread_Control *executing;
+
     printk(
       "\n"
       "*** FATAL ***\n"
@@ -55,6 +59,22 @@ void bsp_fatal_extension(
       rtems_version(),
       __VERSION__
     );
+
+    executing = _Thread_Get_executing();
+
+    if ( executing != NULL ) {
+      char name[ 32 ];
+
+      _Thread_Get_name( executing, name, sizeof( name ) );
+      printk(
+        "executing thread ID: 0x08%" PRIx32 "\n"
+        "executing thread name: %s\n",
+        executing->Object.id,
+        name
+      );
+    } else {
+      printk( "executing thread is NULL\n" );
+    }
   #endif
 
   #if (BSP_PRESS_KEY_FOR_RESET)
