@@ -888,7 +888,7 @@ rtems_capture_task_start_priority (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_real_priority (rtems_tcb* tcb)
 {
-  return tcb->Real_priority.priority;
+  return SCHEDULER_PRIORITY_UNMAP (tcb->Real_priority.priority);
 }
 
 /**
@@ -903,7 +903,7 @@ rtems_capture_task_real_priority (rtems_tcb* tcb)
 static inline rtems_task_priority
 rtems_capture_task_curr_priority (rtems_tcb* tcb)
 {
-  return _Thread_Get_priority (tcb);
+  return SCHEDULER_PRIORITY_UNMAP (_Thread_Get_priority (tcb));
 }
 
 /**
