@@ -36,7 +36,6 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/score/types.h>
 #include <rtems/score/isr.h>
 
 /*

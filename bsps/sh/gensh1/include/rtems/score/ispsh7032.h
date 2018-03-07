@@ -27,8 +27,6 @@
 extern "C" {
 #endif
 
-#include <rtems/score/types.h>
-
 extern void __ISR_Handler( uint32_t   vector );
 
 
