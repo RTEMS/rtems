@@ -71,11 +71,12 @@
 
 static ssize_t IntUartPollWrite(int minor, const char *buf, size_t len);
 static int IntUartPollRead (int minor);
+static int IntUartSetAttributes(int minor, const struct termios *t);
 
 static void
-_BSP_null_char( char c )
+psc_output_char( char c )
 {
-	int level;
+	rtems_interrupt_level level;
 
 	rtems_interrupt_disable(level);
     while (!((MCF548X_PSC_SR(CONSOLE_PORT) & MCF548X_PSC_SR_TXRDY)))
@@ -85,7 +86,17 @@ _BSP_null_char( char c )
         continue;
 	rtems_interrupt_enable(level);
 }
-BSP_output_char_function_type     BSP_output_char = _BSP_null_char;
+
+static void
+psc_output_char_init(char c)
+{
+	IntUartSetAttributes(CONSOLE_PORT, NULL);
+	BSP_output_char = psc_output_char;
+	psc_output_char(c);
+}
+
+BSP_output_char_function_type     BSP_output_char = psc_output_char_init;
+
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 #define MAX_UART_INFO     4
@@ -485,7 +496,7 @@ IntUartInitialize(void)
 		bsp_interrupt_vector_enable(MCF548X_IRQ_PSC(chan));
 	} /* of chan loop */
 
-
+	BSP_output_char = psc_output_char;
 } /* IntUartInitialise */
 
 /***************************************************************************
