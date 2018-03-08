@@ -709,10 +709,25 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and the following:
  *
- *    - CONFIGURE_SCHEDULER_CONTEXT
- *    - CONFIGURE_SCHEDULER_CONTROLS
+ *    - CONFIGURE_SCHEDULER
+ *    - CONFIGURE_SCHEDULER_TABLE_ENTRIES
  *    - CONFIGURE_SCHEDULER_USER_PER_THREAD
  */
+
+#ifdef CONFIGURE_SCHEDULER_CONTEXT
+  #warning "CONFIGURE_SCHEDULER_CONTEXT has been renamed to CONFIGURE_SCHEDULER since RTEMS 5.1"
+  #define CONFIGURE_SCHEDULER CONFIGURE_SCHEDULER_CONTEXT
+#endif
+
+#ifdef CONFIGURE_SCHEDULER_CONTROLS
+  #warning "CONFIGURE_SCHEDULER_CONTROLS has been renamed to CONFIGURE_SCHEDULER_TABLE_ENTRIES since RTEMS 5.1"
+  #define CONFIGURE_SCHEDULER_TABLE_ENTRIES CONFIGURE_SCHEDULER_CONTROLS
+#endif
+
+#ifdef CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
+  #warning "CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS has been renamed to CONFIGURE_SCHEDULER_ASSIGNMENTS since RTEMS 5.1"
+  #define CONFIGURE_SCHEDULER_ASSIGNMENTS CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
+#endif
 
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
@@ -750,16 +765,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'D', ' ')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -774,16 +789,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'D', ' ')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -798,16 +813,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'A', ' ')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( \
         dflt, \
         CONFIGURE_SCHEDULER_NAME \
@@ -825,16 +840,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'A', 'P', 'A')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_STRONG_APA( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_STRONG_APA(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -848,12 +863,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'P', 'S', ' ')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -867,13 +882,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'P', 'S', ' ')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(dflt)
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -887,12 +902,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'E', 'D', 'F')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_EDF(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -906,13 +921,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('M', 'E', 'D', 'F')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT \
+    #define CONFIGURE_SCHEDULER \
       RTEMS_SCHEDULER_CONTEXT_EDF_SMP(dflt, CONFIGURE_MAXIMUM_PROCESSORS)
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_EDF_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
@@ -926,12 +941,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_SCHEDULER_NAME rtems_build_name('U', 'C', 'B', 'S')
   #endif
 
-  #if !defined(CONFIGURE_SCHEDULER_CONTROLS)
+  #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTEXT RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
 
     /** Configure the controls for this scheduler instance */
-    #define CONFIGURE_SCHEDULER_CONTROLS \
+    #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
       RTEMS_SCHEDULER_CONTROL_CBS(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 
@@ -953,12 +968,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * this code to know which scheduler is configured by the user.
  */
 #ifdef CONFIGURE_INIT
-  #if defined(CONFIGURE_SCHEDULER_CONTEXT)
-    CONFIGURE_SCHEDULER_CONTEXT;
+  #if defined(CONFIGURE_SCHEDULER)
+    CONFIGURE_SCHEDULER;
   #endif
 
   const Scheduler_Control _Scheduler_Table[] = {
-    CONFIGURE_SCHEDULER_CONTROLS
+    CONFIGURE_SCHEDULER_TABLE_ENTRIES
   };
 
   #define CONFIGURE_SCHEDULER_COUNT RTEMS_ARRAY_SIZE( _Scheduler_Table )
@@ -967,109 +982,109 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     const size_t _Scheduler_Count = CONFIGURE_SCHEDULER_COUNT;
 
     const Scheduler_Assignment _Scheduler_Initial_assignments[] = {
-      #if defined(CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS)
-        CONFIGURE_SMP_SCHEDULER_ASSIGNMENTS
+      #if defined(CONFIGURE_SCHEDULER_ASSIGNMENTS)
+        CONFIGURE_SCHEDULER_ASSIGNMENTS
       #else
-        #define _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT \
+        #define _CONFIGURE_SCHEDULER_ASSIGN \
           RTEMS_SCHEDULER_ASSIGN( \
             0, \
             RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL \
           )
-        _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        _CONFIGURE_SCHEDULER_ASSIGN
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 2
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 3
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 4
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 5
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 6
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 7
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 8
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 9
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 10
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 11
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 12
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 13
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 14
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 15
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 16
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 17
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 18
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 19
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 20
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 21
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 22
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 23
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 24
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 25
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 26
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 27
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 28
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 29
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 30
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 31
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #if CONFIGURE_MAXIMUM_PROCESSORS >= 32
-          , _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+          , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #undef _CONFIGURE_SMP_SCHEDULER_ASSIGN_OPT
+        #undef _CONFIGURE_SCHEDULER_ASSIGN
       #endif
     };
 

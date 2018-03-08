@@ -63,16 +63,24 @@
   #define SCHEDULER_CBS_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( CBS_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_CBS( name ) \
+  #define RTEMS_SCHEDULER_CBS( name ) \
     static Scheduler_EDF_Context SCHEDULER_CBS_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_CBS( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_CBS( name, obj_name ) \
     { \
       &SCHEDULER_CBS_CONTEXT_NAME( name ).Base, \
       SCHEDULER_CBS_ENTRY_POINTS, \
       SCHEDULER_CBS_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_CBS( name ) \
+    RTEMS_SCHEDULER_CBS( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_CBS( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_CBS( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_EDF
@@ -81,16 +89,24 @@
   #define SCHEDULER_EDF_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( EDF_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_EDF( name ) \
+  #define RTEMS_SCHEDULER_EDF( name ) \
     static Scheduler_EDF_Context SCHEDULER_EDF_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_EDF( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_EDF( name, obj_name ) \
     { \
       &SCHEDULER_EDF_CONTEXT_NAME( name ).Base, \
       SCHEDULER_EDF_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_EDF( name ) \
+    RTEMS_SCHEDULER_EDF( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_EDF( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_EDF( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_EDF_SMP
@@ -99,19 +115,27 @@
   #define SCHEDULER_EDF_SMP_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( EDF_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name, max_cpu_count ) \
+  #define RTEMS_SCHEDULER_EDF_SMP( name, max_cpu_count ) \
     static struct { \
       Scheduler_EDF_SMP_Context Base; \
       Scheduler_EDF_SMP_Ready_queue Ready[ ( max_cpu_count ) + 1 ]; \
     } SCHEDULER_EDF_SMP_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_EDF_SMP( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name ) \
     { \
       &SCHEDULER_EDF_SMP_CONTEXT_NAME( name ).Base.Base.Base, \
       SCHEDULER_EDF_SMP_ENTRY_POINTS, \
       SCHEDULER_EDF_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_EDF_SMP( name, max_cpu_count ) \
+    RTEMS_SCHEDULER_EDF_SMP( name, max_cpu_count )
+
+  #define RTEMS_SCHEDULER_CONTROL_EDF_SMP( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_EDF_SMP( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY
@@ -120,13 +144,13 @@
   #define SCHEDULER_PRIORITY_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( priority_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY( name, prio_count ) \
+  #define RTEMS_SCHEDULER_PRIORITY( name, prio_count ) \
     static struct { \
       Scheduler_priority_Context Base; \
       Chain_Control              Ready[ ( prio_count ) ]; \
     } SCHEDULER_PRIORITY_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name ) \
     { \
       &SCHEDULER_PRIORITY_CONTEXT_NAME( name ).Base.Base, \
       SCHEDULER_PRIORITY_ENTRY_POINTS, \
@@ -135,6 +159,14 @@
       ) - 1, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY( name, prio_count ) \
+    RTEMS_SCHEDULER_PRIORITY( name, prio_count )
+
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_PRIORITY( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY_AFFINITY_SMP
@@ -143,13 +175,13 @@
   #define SCHEDULER_PRIORITY_AFFINITY_SMP_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( priority_affinity_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( name, prio_count ) \
+  #define RTEMS_SCHEDULER_PRIORITY_AFFINITY_SMP( name, prio_count ) \
     static struct { \
       Scheduler_priority_SMP_Context Base; \
       Chain_Control                  Ready[ ( prio_count ) ]; \
     } SCHEDULER_PRIORITY_AFFINITY_SMP_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name ) \
     { \
       &SCHEDULER_PRIORITY_AFFINITY_SMP_CONTEXT_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_AFFINITY_SMP_ENTRY_POINTS, \
@@ -158,6 +190,14 @@
       ) - 1, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( name, prio_count ) \
+    RTEMS_SCHEDULER_PRIORITY_AFFINITY_SMP( name, prio_count )
+
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_PRIORITY_SMP
@@ -166,13 +206,13 @@
   #define SCHEDULER_PRIORITY_SMP_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( priority_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( name, prio_count ) \
+  #define RTEMS_SCHEDULER_PRIORITY_SMP( name, prio_count ) \
     static struct { \
       Scheduler_priority_SMP_Context Base; \
       Chain_Control                  Ready[ ( prio_count ) ]; \
     } SCHEDULER_PRIORITY_SMP_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name ) \
     { \
       &SCHEDULER_PRIORITY_SMP_CONTEXT_NAME( name ).Base.Base.Base, \
       SCHEDULER_PRIORITY_SMP_ENTRY_POINTS, \
@@ -181,6 +221,14 @@
       ) - 1, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( name, prio_count ) \
+    RTEMS_SCHEDULER_PRIORITY_SMP( name, prio_count )
+
+  #define RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_PRIORITY_SMP( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_STRONG_APA
@@ -189,13 +237,13 @@
   #define SCHEDULER_STRONG_APA_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( strong_APA_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_STRONG_APA( name, prio_count ) \
+  #define RTEMS_SCHEDULER_STRONG_APA( name, prio_count ) \
     static struct { \
       Scheduler_strong_APA_Context Base; \
       Chain_Control                Ready[ ( prio_count ) ]; \
     } SCHEDULER_STRONG_APA_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_STRONG_APA( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name ) \
     { \
       &SCHEDULER_STRONG_APA_CONTEXT_NAME( name ).Base.Base.Base, \
       SCHEDULER_STRONG_APA_ENTRY_POINTS, \
@@ -204,6 +252,14 @@
       ) - 1, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_STRONG_APA( name, prio_count ) \
+    RTEMS_SCHEDULER_STRONG_APA( name, prio_count )
+
+  #define RTEMS_SCHEDULER_CONTROL_STRONG_APA( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_STRONG_APA( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_SIMPLE
@@ -212,17 +268,25 @@
   #define SCHEDULER_SIMPLE_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( simple_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_SIMPLE( name ) \
+  #define RTEMS_SCHEDULER_SIMPLE( name ) \
     static Scheduler_simple_Context \
       SCHEDULER_SIMPLE_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_SIMPLE( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name ) \
     { \
       &SCHEDULER_SIMPLE_CONTEXT_NAME( name ).Base, \
       SCHEDULER_SIMPLE_ENTRY_POINTS, \
       SCHEDULER_SIMPLE_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_SIMPLE( name ) \
+    RTEMS_SCHEDULER_SIMPLE( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_SIMPLE( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_SIMPLE( name, obj_name )
 #endif
 
 #ifdef CONFIGURE_SCHEDULER_SIMPLE_SMP
@@ -231,17 +295,25 @@
   #define SCHEDULER_SIMPLE_SMP_CONTEXT_NAME( name ) \
     SCHEDULER_CONTEXT_NAME( simple_SMP_ ## name )
 
-  #define RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( name ) \
+  #define RTEMS_SCHEDULER_SIMPLE_SMP( name ) \
     static Scheduler_simple_SMP_Context \
       SCHEDULER_SIMPLE_SMP_CONTEXT_NAME( name )
 
-  #define RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP( name, obj_name ) \
+  #define RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name ) \
     { \
       &SCHEDULER_SIMPLE_SMP_CONTEXT_NAME( name ).Base.Base, \
       SCHEDULER_SIMPLE_SMP_ENTRY_POINTS, \
       SCHEDULER_SIMPLE_SMP_MAXIMUM_PRIORITY, \
       ( obj_name ) \
     }
+
+  /* Provided for backward compatibility */
+
+  #define RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP( name ) \
+    RTEMS_SCHEDULER_SIMPLE_SMP( name )
+
+  #define RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP( name, obj_name ) \
+    RTEMS_SCHEDULER_TABLE_SIMPLE_SMP( name, obj_name )
 #endif
 
 #endif /* _RTEMS_SAPI_SCHEDULER_H */
