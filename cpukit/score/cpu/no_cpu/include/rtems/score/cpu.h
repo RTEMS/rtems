@@ -40,7 +40,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/no_cpu.h>
 
 /* conditional compilation parameters */
@@ -1492,6 +1492,10 @@ CPU_Counter_ticks _CPU_Counter_difference(
   {
     context->is_executing = is_executing;
   }
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
+
 #endif
 
 #ifdef __cplusplus

@@ -10,4 +10,3 @@ include_rtems_score_HEADERS += include/rtems/score/cpu.h
 include_rtems_score_HEADERS += include/rtems/score/cpu_asm.h
 include_rtems_score_HEADERS += include/rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += include/rtems/score/no_cpu.h
-include_rtems_score_HEADERS += include/rtems/score/types.h
