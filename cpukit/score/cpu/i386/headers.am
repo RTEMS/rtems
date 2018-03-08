@@ -17,4 +17,3 @@ include_rtems_score_HEADERS += include/rtems/score/i386.h
 include_rtems_score_HEADERS += include/rtems/score/idtr.h
 include_rtems_score_HEADERS += include/rtems/score/interrupts.h
 include_rtems_score_HEADERS += include/rtems/score/registers.h
-include_rtems_score_HEADERS += include/rtems/score/types.h
