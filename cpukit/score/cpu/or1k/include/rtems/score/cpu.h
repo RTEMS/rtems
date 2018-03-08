@@ -30,7 +30,7 @@ extern "C" {
 
 #include <rtems/score/or1k.h>            /* pick up machine definitions */
 #include <rtems/score/or1k-utility.h>
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #ifndef ASM
 #include <rtems/bspIo.h>
 #include <stdint.h>
@@ -862,6 +862,9 @@ CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
 );
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #endif /* ASM */
 
