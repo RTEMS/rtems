@@ -37,7 +37,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/m32c.h>
 
 /* conditional compilation parameters */
@@ -977,6 +977,9 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 {
   return second - first;
 }
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef unsigned long CPU_Uint32ptr;
 
 #ifdef __cplusplus
 }
