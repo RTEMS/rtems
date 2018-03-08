@@ -37,9 +37,6 @@
 
 #include <sys/types.h>
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
-
 /**
  * @defgroup POSIX_MQUEUE POSIX Message Queues
  *
