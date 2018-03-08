@@ -49,7 +49,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 
 /*
  *  Define the name of the CPU family.

@@ -35,7 +35,7 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/powerpc.h>
 #include <rtems/powerpc/registers.h>
 
@@ -1247,6 +1247,9 @@ _CPU_Context_initialize_altivec(
 void _CPU_Fatal_error(
   uint32_t   _error
 );
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #endif /* ASM */
 
