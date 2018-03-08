@@ -11,4 +11,3 @@ include_rtems_score_HEADERS += include/rtems/score/cpuatomic.h
 include_rtems_score_HEADERS += include/rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += include/rtems/score/sh.h
 include_rtems_score_HEADERS += include/rtems/score/sh_io.h
-include_rtems_score_HEADERS += include/rtems/score/types.h
