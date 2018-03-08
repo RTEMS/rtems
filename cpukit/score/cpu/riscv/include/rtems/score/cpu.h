@@ -39,8 +39,8 @@
 extern "C" {
 #endif
 
+#include <rtems/score/basedefs.h>
 #include <rtems/score/riscv.h> /* pick up machine definitions */
-#include <rtems/score/types.h>
 #include <rtems/score/riscv-utility.h>
 #ifndef ASM
 #include <rtems/bspIo.h>
@@ -594,6 +594,9 @@ static inline void _CPU_Context_Set_is_executing(
   context->is_executing = is_executing;
 }
 #endif /* RTEMS_SMP */
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #endif /* ASM */
 
