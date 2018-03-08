@@ -29,7 +29,7 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/arm.h>
 
 #if defined(ARM_MULTILIB_ARCH_V4)
@@ -692,6 +692,9 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 void _ARM_Exception_default( CPU_Exception_frame *frame );
 
 /** @} */
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #ifdef __cplusplus
 }
