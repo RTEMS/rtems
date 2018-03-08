@@ -39,8 +39,8 @@
 extern "C" {
 #endif
 
+#include <rtems/score/basedefs.h>
 #include <rtems/score/epiphany.h> /* pick up machine definitions */
-#include <rtems/score/types.h>
 #ifndef ASM
 #include <rtems/bspIo.h>
 #include <stdint.h>
@@ -863,6 +863,9 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 {
   return second - first;
 }
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #endif /* ASM */
 
