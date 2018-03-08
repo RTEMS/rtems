@@ -24,7 +24,7 @@
 extern "C" {
 #endif
 
-#include <rtems/score/types.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/score/nios2.h>
 
 #define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
@@ -362,6 +362,9 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 {
   return second - first;
 }
+
+/** Type that can store a 32-bit integer or a pointer. */
+typedef uintptr_t CPU_Uint32ptr;
 
 #endif /* ASM */
 

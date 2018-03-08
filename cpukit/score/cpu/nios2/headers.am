@@ -17,4 +17,3 @@ include_rtems_score_HEADERS += include/rtems/score/cpuimpl.h
 include_rtems_score_HEADERS += include/rtems/score/nios2-count-zeros.h
 include_rtems_score_HEADERS += include/rtems/score/nios2-utility.h
 include_rtems_score_HEADERS += include/rtems/score/nios2.h
-include_rtems_score_HEADERS += include/rtems/score/types.h
