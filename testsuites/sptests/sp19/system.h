@@ -40,7 +40,11 @@ rtems_task Task_1(
 
 #define CONFIGURE_MAXIMUM_TASKS             7
 
-#define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
+void thread_switch_extension( Thread_Control *, Thread_Control * );
+
+#define CONFIGURE_INITIAL_EXTENSIONS \
+  { .thread_switch = thread_switch_extension }, \
+  RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
