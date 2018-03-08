@@ -768,14 +768,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_PRIORITY( \
+      RTEMS_SCHEDULER_PRIORITY( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_PRIORITY(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -792,14 +792,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_PRIORITY_SMP( \
+      RTEMS_SCHEDULER_PRIORITY_SMP( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_PRIORITY_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -816,14 +816,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_PRIORITY_AFFINITY_SMP( \
+      RTEMS_SCHEDULER_PRIORITY_AFFINITY_SMP( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_PRIORITY_AFFINITY_SMP( \
+      RTEMS_SCHEDULER_TABLE_PRIORITY_AFFINITY_SMP( \
         dflt, \
         CONFIGURE_SCHEDULER_NAME \
       )
@@ -843,14 +843,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_STRONG_APA( \
+      RTEMS_SCHEDULER_STRONG_APA( \
         dflt, \
         CONFIGURE_MAXIMUM_PRIORITY + 1 \
       )
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_STRONG_APA(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_STRONG_APA(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -865,11 +865,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_SIMPLE(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_SIMPLE(dflt)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_SIMPLE(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_SIMPLE(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -885,11 +885,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_SIMPLE_SMP(dflt)
+      RTEMS_SCHEDULER_SIMPLE_SMP(dflt)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_SIMPLE_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_SIMPLE_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -904,11 +904,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_EDF(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_EDF(dflt)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_EDF(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_EDF(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -924,11 +924,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_CONTEXT_EDF_SMP(dflt, CONFIGURE_MAXIMUM_PROCESSORS)
+      RTEMS_SCHEDULER_EDF_SMP(dflt, CONFIGURE_MAXIMUM_PROCESSORS)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_EDF_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_EDF_SMP(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 #endif
 
@@ -943,11 +943,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
-    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CONTEXT_CBS(dflt)
+    #define CONFIGURE_SCHEDULER RTEMS_SCHEDULER_CBS(dflt)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
-      RTEMS_SCHEDULER_CONTROL_CBS(dflt, CONFIGURE_SCHEDULER_NAME)
+      RTEMS_SCHEDULER_TABLE_CBS(dflt, CONFIGURE_SCHEDULER_NAME)
   #endif
 
   #ifndef CONFIGURE_CBS_MAXIMUM_SERVERS
