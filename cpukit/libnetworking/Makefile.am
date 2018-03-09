@@ -138,4 +138,6 @@ endif
 EXTRA_DIST += $(UNUSED_FILES)
 
 include $(top_srcdir)/automake/local.am
+if LIBNETWORKING
 include $(srcdir)/headers.am
+endif

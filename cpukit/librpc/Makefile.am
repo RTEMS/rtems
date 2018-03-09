@@ -3,7 +3,7 @@ include $(top_srcdir)/automake/compile.am
 
 EXTRA_DIST =
 
-if LIBRPC
+if LIBNETWORKING
 man_MANS =
 
 noinst_LIBRARIES = libxdr.a
@@ -17,7 +17,7 @@ endif
 libxdr_mans = src/xdr/xdr.3
 EXTRA_DIST += $(libxdr_mans)
 
-if LIBRPC
+if LIBNETWORKING
 man_MANS += $(libxdr_mans)
 
 noinst_LIBRARIES += librpc.a
@@ -47,7 +47,7 @@ librpc_mans = src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \
     src/rpc/rpc.5 src/rpc/rstat.1 src/rpc/rtime.3
 EXTRA_DIST += $(librpc_mans)
 
-if LIBRPC
+if LIBNETWORKING
 man_MANS += $(librpc_mans)
 endif
 

@@ -3,6 +3,7 @@
 
 include_HEADERS =
 include_HEADERS += ifaddrs.h
+include_HEADERS += librtemsNfs.h
 include_HEADERS += loop.h
 include_HEADERS += poll.h
 include_HEADERS += resolv.h
@@ -80,6 +81,26 @@ include_nfsclientdir = $(includedir)/nfsclient
 include_nfsclient_HEADERS =
 include_nfsclient_HEADERS += nfsclient/nfsargs.h
 include_nfsclient_HEADERS += nfsclient/nfsdiskless.h
+
+include_rpcdir = $(includedir)/rpc
+include_rpc_HEADERS =
+include_rpc_HEADERS += rpc/auth.h
+include_rpc_HEADERS += rpc/auth_unix.h
+include_rpc_HEADERS += rpc/clnt.h
+include_rpc_HEADERS += rpc/clnt_soc.h
+include_rpc_HEADERS += rpc/clnt_stat.h
+include_rpc_HEADERS += rpc/pmap_clnt.h
+include_rpc_HEADERS += rpc/pmap_prot.h
+include_rpc_HEADERS += rpc/pmap_rmt.h
+include_rpc_HEADERS += rpc/rpc.h
+include_rpc_HEADERS += rpc/rpc_com.h
+include_rpc_HEADERS += rpc/rpc_msg.h
+include_rpc_HEADERS += rpc/rpcent.h
+include_rpc_HEADERS += rpc/svc.h
+include_rpc_HEADERS += rpc/svc_auth.h
+include_rpc_HEADERS += rpc/svc_soc.h
+include_rpc_HEADERS += rpc/types.h
+include_rpc_HEADERS += rpc/xdr.h
 
 include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
