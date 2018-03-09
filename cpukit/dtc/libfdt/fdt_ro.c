@@ -170,21 +170,42 @@ uint32_t fdt_get_max_phandle(const void *fdt)
 	return 0;
 }
 
+static const struct fdt_reserve_entry *fdt_mem_rsv(const void *fdt, int n)
+{
+	int offset = n * sizeof(struct fdt_reserve_entry);
+	int absoffset = fdt_off_mem_rsvmap(fdt) + offset;
+
+	if (absoffset < fdt_off_mem_rsvmap(fdt))
+		return NULL;
+	if (absoffset > fdt_totalsize(fdt) - sizeof(struct fdt_reserve_entry))
+		return NULL;
+	return fdt_mem_rsv_(fdt, n);
+}
+
 int fdt_get_mem_rsv(const void *fdt, int n, uint64_t *address, uint64_t *size)
 {
+	const struct fdt_reserve_entry *re;
+
 	FDT_RO_PROBE(fdt);
-	*address = fdt64_to_cpu(fdt_mem_rsv_(fdt, n)->address);
-	*size = fdt64_to_cpu(fdt_mem_rsv_(fdt, n)->size);
+	re = fdt_mem_rsv(fdt, n);
+	if (!re)
+		return -FDT_ERR_BADOFFSET;
+
+	*address = fdt64_to_cpu(re->address);
+	*size = fdt64_to_cpu(re->size);
 	return 0;
 }
 
 int fdt_num_mem_rsv(const void *fdt)
 {
-	int i = 0;
+	int i;
+	const struct fdt_reserve_entry *re;
 
-	while (fdt64_to_cpu(fdt_mem_rsv_(fdt, i)->size) != 0)
-		i++;
-	return i;
+	for (i = 0; (re = fdt_mem_rsv(fdt, i)) != NULL; i++) {
+		if (fdt64_to_cpu(re->size) == 0)
+			return i;
+	}
+	return -FDT_ERR_TRUNCATED;
 }
 
 static int nextprop_(const void *fdt, int offset)
