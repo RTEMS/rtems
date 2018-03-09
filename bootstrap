@@ -152,7 +152,7 @@ headers)
           if test x$d != x. ; then
             am_dir=`echo $dir | sed 's%[/-]%_%g'`
             am_dir="_$am_dir"
-            echo -e "\ninclude${am_dir}dir = \$(includedir)/$dir" >> "$tmp"
+            printf "\ninclude%sdir = \$(includedir)/$dir\n" "$am_dir" >> "$tmp"
           else
             am_dir=""
             echo "" >> "$tmp"
@@ -161,7 +161,7 @@ headers)
         fi
         echo "include${am_dir}_HEADERS += $inc$j" >> "$tmp"
         if test $j = bsp.h ; then
-          echo -e "include_HEADERS += include/bspopts.h" >> "$tmp"
+          echo "include_HEADERS += include/bspopts.h" >> "$tmp"
         fi
       done
     done
