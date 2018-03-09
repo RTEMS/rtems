@@ -56,9 +56,10 @@ libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += ../shared/irq/interruptmask_TX49.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tx49/timer.rel
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/gettime.S
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/mips/rbtx4925/headers.am

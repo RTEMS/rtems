@@ -54,8 +54,8 @@ libbsp_a_SOURCES += network/network.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
-
-libbsp_a_LIBADD = ../../../libcpu/mips/shared/interrupts.rel
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/mips/csb350/headers.am

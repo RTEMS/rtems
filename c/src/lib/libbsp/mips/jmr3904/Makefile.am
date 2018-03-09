@@ -18,6 +18,7 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -DTX39
 libbsp_a_SOURCES =
 
 # startup
@@ -48,8 +49,8 @@ libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/mips/jmr3904/headers.am

@@ -18,6 +18,7 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 
 noinst_LIBRARIES = libbsp.a
+libbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -DRM52XX
 libbsp_a_SOURCES =
 
 # startup
@@ -56,9 +57,10 @@ libbsp_a_SOURCES += irq/vectorisrs.c
 libbsp_a_SOURCES += ../shared/irq/interruptmask.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/interrupts.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rm52xx/timer.rel
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/gettime.S
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/mips/hurricane/headers.am
