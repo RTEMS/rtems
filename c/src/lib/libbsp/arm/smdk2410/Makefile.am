@@ -58,7 +58,7 @@ libbsp_a_SOURCES += smc/smc.h
 # Cache
 libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/arm/smdk2410/headers.am

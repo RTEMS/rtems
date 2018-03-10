@@ -52,11 +52,6 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 # Cache
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-#libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel \
-#    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/clock.rel \
-#    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel \
-#    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel
-
 # Shared
 if shared
 libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c

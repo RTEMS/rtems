@@ -55,7 +55,7 @@ libbsp_a_SOURCES += rtl8019/rtl8019.c rtl8019/wd80x3.h
 endif
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/arm920.rel
+libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/arm/gumstix/headers.am
