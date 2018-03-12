@@ -30,6 +30,9 @@
 #define _RTEMS_SCORE_CPU_H
 
 #include <rtems/score/basedefs.h>
+#if defined(RTEMS_PARAVIRT)
+#include <rtems/score/paravirt.h>
+#endif
 #include <rtems/score/arm.h>
 
 #if defined(ARM_MULTILIB_ARCH_V4)
@@ -297,6 +300,11 @@ static inline void _ARM_Instruction_synchronization_barrier( void )
 #endif
 }
 
+#if defined(ARM_DISABLE_INLINE_ISR_DISABLE_ENABLE)
+uint32_t arm_interrupt_disable( void );
+void arm_interrupt_enable( uint32_t level );
+void arm_interrupt_flash( uint32_t level );
+#else
 static inline uint32_t arm_interrupt_disable( void )
 {
   uint32_t level;
@@ -387,6 +395,7 @@ static inline void arm_interrupt_flash( uint32_t level )
   );
 #endif
 }
+#endif  /* !ARM_DISABLE_INLINE_ISR_DISABLE_ENABLE */
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \

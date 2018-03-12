@@ -49,9 +49,11 @@ extern "C" {
   #define ARM_MULTILIB_HAS_BARRIER_INSTRUCTIONS
 #endif
 
-#if defined(__ARM_ARCH_7A__) \
-  || defined(__ARM_ARCH_7R__)
-  #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+#ifndef ARM_DISABLE_THREAD_ID_REGISTER_USE
+  #if defined(__ARM_ARCH_7A__) \
+    || defined(__ARM_ARCH_7R__)
+    #define ARM_MULTILIB_HAS_THREAD_ID_REGISTER
+  #endif
 #endif
 
 #if defined(__ARM_ARCH_7A__)
