@@ -176,11 +176,6 @@ libbsp_a_SOURCES += ../../sparc/shared/net/greth.c
 libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
 endif
 
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/access.rel \
-    ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
-    ../../../libcpu/@RTEMS_CPU@/syscall.rel
-
 EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am

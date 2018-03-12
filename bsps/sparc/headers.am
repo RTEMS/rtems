@@ -69,7 +69,3 @@ include_drvmgr_HEADERS += ../../../../../bsps/sparc/include/drvmgr/ambapp_bus.h
 include_drvmgr_HEADERS += ../../../../../bsps/sparc/include/drvmgr/ambapp_bus_grlib.h
 include_drvmgr_HEADERS += ../../../../../bsps/sparc/include/drvmgr/bspcommon.h
 include_drvmgr_HEADERS += ../../../../../bsps/sparc/include/drvmgr/leon2_amba_bus.h
-
-include_libcpudir = $(includedir)/libcpu
-include_libcpu_HEADERS =
-include_libcpu_HEADERS += ../../../../../bsps/sparc/include/libcpu/access.h

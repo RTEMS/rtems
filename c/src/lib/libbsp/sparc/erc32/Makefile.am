@@ -78,11 +78,6 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-libbsp_a_LIBADD  = \
-    ../../../libcpu/@RTEMS_CPU@/access.rel \
-    ../../../libcpu/@RTEMS_CPU@/reg_win.rel \
-    ../../../libcpu/@RTEMS_CPU@/syscall.rel
-
 EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
