@@ -30,6 +30,10 @@
 
 #include <rtems.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * The base name of the nv disks.
  */
@@ -207,5 +211,9 @@ extern const rtems_nvdisk_config rtems_nvdisk_configuration[];
  * Support is present in confdefs.h for providing this variable.
  */
 extern uint32_t rtems_nvdisk_configuration_size;
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif

@@ -24,6 +24,10 @@
 
 #include <rtems.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /**
  * @defgroup RTEMSFDisk Flash Disk Device
  *
@@ -456,5 +460,9 @@ extern const rtems_flashdisk_config rtems_flashdisk_configuration[];
 extern uint32_t rtems_flashdisk_configuration_size;
 
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif
