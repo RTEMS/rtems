@@ -74,10 +74,10 @@ static rtems_shell_env_t *rtems_shell_init_env(
     return NULL;
   if ( !shell_env_p ) {
     *shell_env = rtems_global_shell_env;
+    shell_env->taskname = NULL;
   } else {
     *shell_env = *shell_env_p;
   }
-  shell_env->taskname = NULL;
 
   return shell_env;
 }
