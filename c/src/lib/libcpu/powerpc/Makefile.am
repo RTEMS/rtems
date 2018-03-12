@@ -33,12 +33,6 @@ endif
 
 new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
 new_exceptions_exc_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += new-exceptions/irq_bspsupport.rel
-
-new_exceptions_irq_bspsupport_rel_SOURCES = new-exceptions/bspsupport/irq.c
-new_exceptions_irq_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
-new_exceptions_irq_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 EXTRA_DIST += new-exceptions/bspsupport/README

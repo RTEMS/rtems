@@ -106,6 +106,7 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
@@ -113,8 +114,7 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/irq_bspsupport.rel
+    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
