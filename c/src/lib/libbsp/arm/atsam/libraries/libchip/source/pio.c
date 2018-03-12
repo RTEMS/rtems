@@ -481,3 +481,19 @@ void PIO_SetPinType(Pin *pin, uint8_t pinType)
 	pin->type = pinType;
 }
 
+/**
+ * \brief Set the drive strength of the pin.
+ *
+ * \param pin  Pointer to a Pin instance describing one or more pins.
+ * \param strength  0 for low drive strength or 1 for high drive strength.
+ */
+void PIO_SetDriveStrength(const Pin *pin, uint8_t strength)
+{
+	Pio *pio = pin->pio;
+
+	if (strength) {
+		pio->PIO_DRIVER |= pin->mask;
+	} else {
+		pio->PIO_DRIVER &= ~(pin->mask);
+	}
+}

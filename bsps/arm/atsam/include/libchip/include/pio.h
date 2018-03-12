@@ -209,6 +209,8 @@ extern void PIO_DisableWriteProtect(const Pin *pin);
 extern void PIO_SetPinType(Pin *pin, uint8_t pinType);
 
 extern uint32_t PIO_GetWriteProtectViolationInfo(const Pin *pin);
+
+extern void PIO_SetDriveStrength(const Pin *pin, uint8_t strength);
 #ifdef __cplusplus
 }
 #endif
