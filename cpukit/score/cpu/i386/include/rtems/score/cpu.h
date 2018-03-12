@@ -28,6 +28,9 @@ extern "C" {
 #endif
 
 #include <rtems/score/basedefs.h>
+#if defined(RTEMS_PARAVIRT)
+#include <rtems/score/paravirt.h>
+#endif
 #include <rtems/score/i386.h>
 
 /* conditional compilation parameters */
@@ -381,7 +384,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  *     + set a particular level
  */
 
-#if !defined(RTEMS_PARAVIRT)
+#if !defined(I386_DISABLE_INLINE_ISR_DISABLE_ENABLE)
 #define _CPU_ISR_Disable( _level ) i386_disable_interrupts( _level )
 
 #define _CPU_ISR_Enable( _level )  i386_enable_interrupts( _level )

@@ -33,7 +33,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
  * 
  */
 /**@{**/
-#if !defined(RTEMS_PARAVIRT)
+#if !defined(I386_DISABLE_INLINE_ISR_DISABLE_ENABLE)
 #define i386_disable_interrupts( _level ) \
   { \
     __asm__ volatile ( "pushf ; \

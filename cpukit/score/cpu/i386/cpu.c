@@ -198,7 +198,7 @@ uint32_t   _CPU_ISR_Get_level( void )
 {
   uint32_t   level;
 
-#if !defined(RTEMS_PARAVIRT)
+#if !defined(I386_DISABLE_INLINE_ISR_DISABLE_ENABLE)
   i386_get_interrupt_level( level );
 #else
   level = i386_get_interrupt_level();
