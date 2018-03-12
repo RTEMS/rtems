@@ -128,12 +128,15 @@ PROC (_CPU_Context_save_fp):
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
  * available. Therefore, we must explicitely enable it here!
  */
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	mfmsr	r4
 	andi.	r5,r4,MSR_FP
 	bne	1f
 	ori	r5,r4,MSR_FP
 	mtmsr	r5
 	isync
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
+
 1:
 	lwz	r3, 0(r3)
 	STF	f0, FP_0(r3)
@@ -170,9 +173,12 @@ PROC (_CPU_Context_save_fp):
 	STF	f31, FP_31(r3)
 	mffs	f2
 	STF	f2, FP_FPSCR(r3)
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	bne	1f
 	mtmsr	r4
 	isync
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
+
 1:
 	blr
 
@@ -196,12 +202,15 @@ PROC (_CPU_Context_restore_fp):
 /* A FP context switch may occur in an ISR or exception handler when the FPU is not
  * available. Therefore, we must explicitely enable it here!
  */
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	mfmsr	r4
 	andi.	r5,r4,MSR_FP
 	bne	1f
 	ori	r5,r4,MSR_FP
 	mtmsr	r5
 	isync
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
+
 1:
 	LDF	f2, FP_FPSCR(r3)
 	mtfsf	255, f2
@@ -238,8 +247,11 @@ PROC (_CPU_Context_restore_fp):
 	LDF	f30, FP_30(r3)
 	LDF	f31, FP_31(r3)
 	bne	1f
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	mtmsr	r4
 	isync
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
+
 1:
 	blr
 #endif /* PPC_HAS_FPU == 1 */
@@ -266,7 +278,9 @@ PROC (_CPU_Context_switch):
 	/* Save context to r3 */
 
 	GET_SELF_CPU_CONTROL	r12
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	mfmsr	r6
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
 	mfcr	r7
 	mflr	r8
 	lwz	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
@@ -529,7 +543,9 @@ restore_context:
 
 	mtlr	r8
 	mtcr	r7
+#if !defined(PPC_DISABLE_MSR_ACCESS)
 	mtmsr	r6
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
 	stw	r11, PER_CPU_ISR_DISPATCH_DISABLE(r12)
 
 #ifdef BSP_USE_SYNC_IN_CONTEXT_SWITCH

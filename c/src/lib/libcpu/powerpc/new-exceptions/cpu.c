@@ -64,7 +64,7 @@ void _CPU_Context_Initialize(
 )
 {
   ppc_context *the_ppc_context;
-  uint32_t   msr_value;
+  uint32_t   msr_value = 0;
   uintptr_t  sp;
   uintptr_t  stack_alignment;
 
@@ -75,9 +75,10 @@ void _CPU_Context_Initialize(
 
   sp = (uintptr_t) memset((void *) sp, 0, PPC_MINIMUM_STACK_FRAME_SIZE);
 
-  _CPU_MSR_GET( msr_value );
-
   the_ppc_context = ppc_get_context( the_context );
+
+#if !defined(PPC_DISABLE_MSR_ACCESS)
+  _CPU_MSR_GET( msr_value );
 
   /*
    * Setting the interrupt mask here is not strictly necessary
@@ -113,7 +114,10 @@ void _CPU_Context_Initialize(
 
 #ifdef PPC_MULTILIB_ALTIVEC
   msr_value |= MSR_VE;
+#endif
+#endif  /* END PPC_DISABLE_MSR_ACCESS */
 
+#ifdef PPC_MULTILIB_ALTIVEC
   the_ppc_context->vrsave = 0;
 #endif
 

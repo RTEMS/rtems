@@ -672,6 +672,7 @@ extern "C" {
  *
  * A one bit means that this bit should be cleared.
  */
+#if !defined(PPC_DISABLE_INLINE_ISR_DISABLE_ENABLE)
 extern char _PPC_INTERRUPT_DISABLE_MASK[];
 
 static inline uint32_t ppc_interrupt_get_disable_mask( void )
@@ -734,6 +735,12 @@ static inline void ppc_interrupt_flash( uint32_t level )
     : "r" (level)
   );
 }
+#else
+uint32_t ppc_interrupt_get_disable_mask( void );
+uint32_t ppc_interrupt_disable( void );
+void ppc_interrupt_enable( uint32_t level );
+void ppc_interrupt_flash( uint32_t level );
+#endif /* PPC_DISABLE_INLINE_ISR_DISABLE_ENABLE */
 
 #define _CPU_ISR_Disable( _isr_cookie ) \
   do { \

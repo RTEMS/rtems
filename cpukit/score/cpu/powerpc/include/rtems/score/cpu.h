@@ -36,6 +36,9 @@
 #define _RTEMS_SCORE_CPU_H
 
 #include <rtems/score/basedefs.h>
+#if defined(RTEMS_PARAVIRT)
+#include <rtems/score/paravirt.h>
+#endif
 #include <rtems/score/powerpc.h>
 #include <rtems/powerpc/registers.h>
 
@@ -654,6 +657,8 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
   return ( level & MSR_EE ) != 0;
 }
 
+#if !defined(PPC_DISABLE_INLINE_ISR_DISABLE_ENABLE)
+
 static inline uint32_t   _CPU_ISR_Get_level( void )
 {
   register unsigned int msr;
@@ -674,6 +679,13 @@ static inline void _CPU_ISR_Set_level( uint32_t   level )
   }
   _CPU_MSR_SET(msr);
 }
+#else
+/* disable, enable, etc. are in registers.h */
+uint32_t ppc_get_interrupt_level( void );
+void ppc_set_interrupt_level( uint32_t level );
+#define _CPU_ISR_Get_level( _new_level ) ppc_get_interrupt_level()
+#define _CPU_ISR_Set_level( _new_level ) ppc_set_interrupt_level(_new_level)
+#endif
 
 #endif /* ASM */
 
