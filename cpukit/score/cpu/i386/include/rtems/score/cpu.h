@@ -274,12 +274,26 @@ typedef void (*cpuExcHandlerType) (CPU_Exception_frame*);
 extern cpuExcHandlerType _currentExcHandler;
 extern void rtems_exception_init_mngt(void);
 
+#ifdef RTEMS_SMP
+  /* Throw compile-time error to indicate incomplete support */
+  #error "i386 targets do not support SMP.\
+ See: https://devel.rtems.org/ticket/3335"
+
+  /*
+   * This size must match the size of the CPU_Interrupt_frame, which must be
+   * used in the SMP context switch code, which is incomplete at the moment.
+   */
+  #define CPU_INTERRUPT_FRAME_SIZE 4
+#endif
+
 /*
  * This port does not pass any frame info to the
  * interrupt handler.
  */
 
-typedef void CPU_Interrupt_frame;
+typedef struct {
+  uint32_t todo_replace_with_apt_registers;
+} CPU_Interrupt_frame;
 
 typedef enum {
   I386_EXCEPTION_DIVIDE_BY_ZERO      = 0,
