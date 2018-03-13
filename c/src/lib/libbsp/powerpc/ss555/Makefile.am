@@ -37,15 +37,15 @@ libbsp_a_SOURCES += startup/tm27supp.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/exceptions/ppc_exc_print.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/clock.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/console-generic.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq_asm.S
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq_init.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/raw_exception.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors_init.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors.S
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/mpc5xx/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc5xx/console-generic.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc5xx/exceptions.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc5xx/irq.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc5xx/timer.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

@@ -45,41 +45,6 @@ if ppc405
 ## ppc4xx/include
 endif # ppc405
 
-
-## mpc5xx
-EXTRA_DIST += mpc5xx/README
-if mpc5xx
-# mpc5xx/clock
-noinst_PROGRAMS += mpc5xx/clock.rel
-mpc5xx_clock_rel_SOURCES = mpc5xx/clock/clock.c
-mpc5xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc5xx/console-generic
-noinst_PROGRAMS += mpc5xx/console-generic.rel
-mpc5xx_console_generic_rel_SOURCES = mpc5xx/console-generic/console-generic.c
-mpc5xx_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc5xx/exceptions
-noinst_PROGRAMS += mpc5xx/exceptions.rel
-mpc5xx_exceptions_rel_SOURCES = mpc5xx/exceptions/raw_exception.c
-mpc5xx_exceptions_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_exceptions_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc5xx/irq
-noinst_PROGRAMS += mpc5xx/irq.rel
-mpc5xx_irq_rel_SOURCES = mpc5xx/irq/irq.c mpc5xx/irq/irq_init.c mpc5xx/irq/irq_asm.S
-mpc5xx_irq_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc5xx/timer
-noinst_PROGRAMS += mpc5xx/timer.rel
-mpc5xx_timer_rel_SOURCES = mpc5xx/timer/timer.c
-mpc5xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if mpc6xx
 
 # mpc6xx/mmu
