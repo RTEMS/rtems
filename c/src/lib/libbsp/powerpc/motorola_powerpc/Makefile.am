@@ -119,9 +119,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 libbsp_a_LIBADD = \
     polledIO.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/stack.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
@@ -136,4 +133,5 @@ EXTRA_DIST += times.mcp750 times.mvme2307
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(top_srcdir)/../../../../automake/subdirs.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/motorola_powerpc/headers.am

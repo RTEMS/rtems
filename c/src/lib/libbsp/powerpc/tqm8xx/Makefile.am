@@ -65,8 +65,6 @@ endif
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
     ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
@@ -75,4 +73,5 @@ libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/tqm8xx/headers.am

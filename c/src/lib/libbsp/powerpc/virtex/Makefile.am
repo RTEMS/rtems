@@ -68,10 +68,8 @@ libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
-libbsp_a_LIBADD += \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-    ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel
+libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/virtex/headers.am

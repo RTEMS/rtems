@@ -4,12 +4,7 @@ include $(top_srcdir)/../../../automake/compile.am
 
 EXTRA_DIST =
 
-noinst_PROGRAMS = new-exceptions/rtems-cpu.rel
-new_exceptions_rtems_cpu_rel_SOURCES = new-exceptions/cpu.c \
-    new-exceptions/cpu_asm.S
-new_exceptions_rtems_cpu_rel_CPPFLAGS = $(AM_CPPFLAGS)
-new_exceptions_rtems_cpu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
+noinst_PROGRAMS =
 
 if !mpc5xx
 noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
@@ -38,21 +33,6 @@ endif
 EXTRA_DIST += new-exceptions/bspsupport/README
 EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_test.c
 
-# shared/include
-if shared
-noinst_PROGRAMS += shared/cpuIdent.rel
-shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c shared/include/cpuIdent.h
-shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
-shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# shared/stack
-noinst_PROGRAMS += shared/stack.rel
-shared_stack_rel_SOURCES = shared/src/stack.c shared/include/spr.h shared/src/stackTrace.h
-shared_stack_rel_CPPFLAGS = $(AM_CPPFLAGS)
-shared_stack_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-endif
-
 EXTRA_DIST += ppc403/README ppc403/vectors/README
 if ppc4xx
 # ppc403/clock
@@ -70,10 +50,6 @@ ppc403_console_rel_SOURCES = ppc403/console/console.c
 endif
 ppc403_console_rel_CPPFLAGS = $(AM_CPPFLAGS)
 ppc403_console_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-shared_cpuIdent_rel_SOURCES = shared/include/cpuIdent.c
-shared_cpuIdent_rel_CPPFLAGS = $(AM_CPPFLAGS)
-shared_cpuIdent_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # ppc403/timer
 noinst_PROGRAMS += ppc403/timer.rel

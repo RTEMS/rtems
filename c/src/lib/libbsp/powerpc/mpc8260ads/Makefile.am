@@ -56,9 +56,7 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/rtems-cpu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
@@ -67,4 +65,5 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/cpuIdent.rel \
 EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/mpc8260ads/headers.am
