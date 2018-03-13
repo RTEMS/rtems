@@ -110,8 +110,7 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel
+    ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel
 
 if HAS_NETWORKING
 libbsp_a_LIBADD += network.rel
@@ -121,4 +120,5 @@ EXTRA_DIST += LICENSE README KNOWN_PROBLEMS
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions.am
 include $(srcdir)/../../../../../../bsps/powerpc/mvme3100/headers.am

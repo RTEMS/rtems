@@ -75,8 +75,7 @@ libbsp_a_SOURCES += spi/spi_init.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@exceptions@/exc_bspsupport.rel \
-	../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
 	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
@@ -91,4 +90,5 @@ EXTRA_DIST += README.mpc8349eamds
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions.am
 include $(srcdir)/../../../../../../bsps/powerpc/gen83xx/headers.am

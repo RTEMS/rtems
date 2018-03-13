@@ -17,6 +17,12 @@
 #include <rtems/system.h>
 #include <rtems/score/percpu.h>
 
+/*
+ * This code uses the small-data area which is not available in the 64-bit
+ * PowerPC ELFv2 ABI.
+ */
+#ifndef __powerpc64__
+
 #include "ppc_exc_asm_macros.h"
 
 /******************************************************/
@@ -175,3 +181,5 @@ ppc_exc_wrap_auto_async:
 
 	.global	__ppc_exc_wrappers_end
 __ppc_exc_wrappers_end = .
+
+#endif /* !__powerpc64__ */

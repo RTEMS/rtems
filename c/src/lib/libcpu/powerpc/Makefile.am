@@ -6,33 +6,6 @@ EXTRA_DIST =
 
 noinst_PROGRAMS =
 
-if !mpc5xx
-noinst_PROGRAMS += new-exceptions/exc_bspsupport.rel
-new_exceptions_exc_bspsupport_rel_SOURCES = \
-    new-exceptions/bspsupport/ppc_exc_async_normal.S \
-    new-exceptions/bspsupport/ppc_exc_fatal.S \
-    new-exceptions/bspsupport/ppc_exc_print.c
-if !qoriq
-new_exceptions_exc_bspsupport_rel_SOURCES += \
-    new-exceptions/bspsupport/ppc-code-copy.c \
-    new-exceptions/bspsupport/ppc_exc.S \
-    new-exceptions/bspsupport/ppc_exc_naked.S \
-    new-exceptions/bspsupport/ppc_exc_hdl.c \
-    new-exceptions/bspsupport/ppc_exc_initialize.c \
-    new-exceptions/bspsupport/ppc_exc_global_handler.c \
-    new-exceptions/bspsupport/ppc_exc_categories.c \
-    new-exceptions/bspsupport/ppc_exc_address.c \
-    new-exceptions/bspsupport/ppc_exc_alignment.c \
-    new-exceptions/bspsupport/ppc_exc_prologue.c
-endif
-
-new_exceptions_exc_bspsupport_rel_CPPFLAGS = $(AM_CPPFLAGS)
-new_exceptions_exc_bspsupport_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-EXTRA_DIST += new-exceptions/bspsupport/README
-EXTRA_DIST += new-exceptions/bspsupport/ppc_exc_test.c
-
 EXTRA_DIST += ppc403/README ppc403/vectors/README
 if ppc4xx
 # ppc403/clock
@@ -105,13 +78,6 @@ noinst_PROGRAMS += mpc5xx/timer.rel
 mpc5xx_timer_rel_SOURCES = mpc5xx/timer/timer.c
 mpc5xx_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc5xx_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc5xx/vectors
-noinst_PROGRAMS += mpc5xx/vectors.rel
-mpc5xx_vectors_rel_SOURCES = mpc5xx/vectors/vectors_init.c mpc5xx/vectors/vectors.S \
-    new-exceptions/bspsupport/ppc_exc_print.c
-mpc5xx_vectors_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc5xx_vectors_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 if mpc6xx
