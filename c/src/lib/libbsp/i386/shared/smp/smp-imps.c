@@ -804,6 +804,11 @@ uint32_t _CPU_SMP_Initialize( void )
   return (uint32_t) imps_probe();
 }
 
+void _CPU_SMP_Prepare_start_multitasking( void )
+{
+  /* Do nothing */
+}
+
 bool _CPU_SMP_Start_processor( uint32_t cpu_index )
 {
   (void) cpu_index;
