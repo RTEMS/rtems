@@ -57,9 +57,9 @@ int     gdbarmsim__isatty(int);
 int     gdbarmsim_gettimeofday(struct timeval *, void *);
 int     gdbarmsim_unlink(const char *);
 int     gdbarmsim_link(void);
-int     gdbarmsim_stat(const char *, struct stat *);
-int     gdbarmsim_fstat(int, struct stat *);
-int	    gdbarmsim_swistat(int fd, struct stat * st);
+/* int     gdbarmsim_stat(const char *, struct stat *); */
+/* int     gdbarmsim_fstat(int, struct stat *); */
+/* int	    gdbarmsim_swistat(int fd, struct stat * st); */
 int     gdbarmsim_close(int);
 clock_t gdbarmsim_clock(void);
 int     gdbarmsim_swiclose(int);
