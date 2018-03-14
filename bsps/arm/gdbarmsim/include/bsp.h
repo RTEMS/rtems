@@ -47,11 +47,13 @@ void *clock_driver_sim_idle_body(uintptr_t);
 
 /*
  * Access to the GDB simulator.
+ *
+ * NOTE: Full list possible is included. Not all are available in BSP.
  */
 int     gdbarmsim_system(const char *);
 int     gdbarmsim_rename(const char *, const char *);
 int     gdbarmsim__isatty(int);
-clock_t gdbarmsim_times(struct tms *);
+/* clock_t gdbarmsim_times(struct tms *); */
 int     gdbarmsim_gettimeofday(struct timeval *, void *);
 int     gdbarmsim_unlink(const char *);
 int     gdbarmsim_link(void);
