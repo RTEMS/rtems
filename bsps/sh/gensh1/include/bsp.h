@@ -56,19 +56,6 @@ extern void *CPU_Interrupt_stack_low;
 extern void *CPU_Interrupt_stack_high;
 
 /*
- *  Device Driver Table Entries
- */
-
-/*
- * We redefine CONSOLE_DRIVER_TABLE_ENTRY to redirect /dev/console
- */
-#undef CONSOLE_DRIVER_TABLE_ENTRY
-#define CONSOLE_DRIVER_TABLE_ENTRY \
-  BSP_CONSOLE_DRIVER_TABLE_ENTRY, \
-  { console_initialize, console_open, console_close, \
-      console_read, console_write, console_control }
-
-/*
  * BSP methods that cross file boundaries.
  */
 void bsp_hw_init(void);
