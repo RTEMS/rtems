@@ -38,4 +38,4 @@
 #define DS1307_NVRAM_END    (0x3F) /* End location of non-volatile memory */
 #define DS1307_NVRAM_SIZE   (56)   /* Size of non-volatile memory */
 
-#endif __RTC_DS1307__
+#endif /* __RTC_DS1307__ */
