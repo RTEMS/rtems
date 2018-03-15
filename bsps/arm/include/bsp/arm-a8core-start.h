@@ -27,7 +27,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-BSP_START_TEXT_SECTION static inline arm_a8core_start_set_vector_base(void)
+BSP_START_TEXT_SECTION static inline void arm_a8core_start_set_vector_base(void)
 {
   /*
    * Do not use bsp_vector_table_begin == 0, since this will get optimized away.
@@ -43,7 +43,7 @@ BSP_START_TEXT_SECTION static inline arm_a8core_start_set_vector_base(void)
   }
 }
 
-BSP_START_TEXT_SECTION static inline arm_a8core_start_hook_1(void)
+BSP_START_TEXT_SECTION static inline void arm_a8core_start_hook_1(void)
 {
   arm_a8core_start_set_vector_base();
 }
