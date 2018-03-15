@@ -331,9 +331,18 @@ extern "C" {
 #define TIMER2_PERIOD          0xFFC00628L
 #define TIMER2_WIDTH           0xFFC0062CL
 
+/*
+ * These are defined in bsps/bfin/include/bf52x.h. Ensure those definitions
+ * are consistent with our expectations.
 #define TIMER_ENABLE           0xFFC00640L
 #define TIMER_DISABLE          0xFFC00644L
 #define TIMER_STATUS           0xFFC00648L
+*/
+#if ((TIMER_ENABLE != 0xFFC00640L) || \
+     (TIMER_DISABLE != 0xFFC00644L) || \
+     (TIMER_STATUS != 0xFFC00648L))
+#error "Timer register addresses are inconsistent"
+#endif
 
 /* Real Time Clock          Chapter 16 */
 #define RTC_STAT               0xFFC00300L
