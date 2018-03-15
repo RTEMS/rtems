@@ -376,8 +376,8 @@ typedef struct {
 /* Digital Video Standard Supported */
 #define DVS_undef               0x0
 #define DVS_DVI                 0x1
-#define DVS_HDMI-a              0x2
-#define DVS_HDMI-b              0x3
+#define DVS_HDMI_a              0x2
+#define DVS_HDMI_b              0x3
 #define DVS_MDDI                0x4
 #define DVS_DiplayPort          0x5
 
