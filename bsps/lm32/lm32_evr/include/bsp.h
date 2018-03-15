@@ -39,12 +39,10 @@
 extern "C" {
 #endif
 
-#define BSP_DIRTY_MEMORY 1
-
-  /*
-   * lm32 requires certain aligment of mbuf because unaligned uint32_t
-   * accesses are not handled properly.
-   */
+/*
+ * lm32 requires certain aligment of mbuf because unaligned uint32_t
+ * accesses are not handled properly.
+ */
 
 #define CPU_U32_FIX
 
