@@ -139,16 +139,18 @@ SECTIONS {
 		PROVIDE_HIDDEN (__fini_array_end = .);
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.ctors : ALIGN_WITH_INPUT {
+		KEEP (*ecrti.o(.ctors))
 		KEEP (*crtbegin.o(.ctors))
 		KEEP (*crtbegin?.o(.ctors))
-		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o *ecrtn.o) .ctors))
 		KEEP (*(SORT(.ctors.*)))
 		KEEP (*(.ctors))
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.dtors : ALIGN_WITH_INPUT {
+		KEEP (*ecrti.o(.dtors))
 		KEEP (*crtbegin.o(.dtors))
 		KEEP (*crtbegin?.o(.dtors))
-		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o *ecrtn.o) .dtors))
 		KEEP (*(SORT(.dtors.*)))
 		KEEP (*(.dtors))
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
