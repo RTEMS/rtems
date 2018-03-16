@@ -222,11 +222,6 @@
  * for JPK HSC_CM01
  */
 
-/* fpga BCSR register */
-#define FPGA_START 0xF8000000
-#define FPGA_SIZE  0x8000
-#define FPGA_END   (FPGA_START+FPGA_SIZE-1)
-
 /*
  * working values for various registers, used in start/start.S
  */
