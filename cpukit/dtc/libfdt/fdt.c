@@ -96,20 +96,32 @@ static int check_block_(uint32_t hdrsize, uint32_t totalsize,
 	return 1;
 }
 
+size_t fdt_header_size_(uint32_t version)
+{
+	if (version <= 1)
+		return FDT_V1_SIZE;
+	else if (version <= 2)
+		return FDT_V2_SIZE;
+	else if (version <= 3)
+		return FDT_V3_SIZE;
+	else if (version <= 16)
+		return FDT_V16_SIZE;
+	else
+		return FDT_V17_SIZE;
+}
+
 int fdt_check_header(const void *fdt)
 {
-	size_t hdrsize = FDT_V16_SIZE;
+	size_t hdrsize;
 
 	if (fdt_magic(fdt) != FDT_MAGIC)
 		return -FDT_ERR_BADMAGIC;
+	hdrsize = fdt_header_size(fdt);
 	if ((fdt_version(fdt) < FDT_FIRST_SUPPORTED_VERSION)
 	    || (fdt_last_comp_version(fdt) > FDT_LAST_SUPPORTED_VERSION))
 		return -FDT_ERR_BADVERSION;
 	if (fdt_version(fdt) < fdt_last_comp_version(fdt))
 		return -FDT_ERR_BADVERSION;
-
-	if (fdt_version(fdt) >= 17)
-		hdrsize = FDT_V17_SIZE;
 
 	if ((fdt_totalsize(fdt) < hdrsize)
 	    || (fdt_totalsize(fdt) > INT_MAX))
