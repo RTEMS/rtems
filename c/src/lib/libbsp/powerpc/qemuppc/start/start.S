@@ -3,13 +3,15 @@
 
 #include <bspopts.h>
 
-        #.section ".text"
-	.section .entry_point_section,"awx",@progbits
-        .global _start
+	.global bsp_interrupt_stack_start
+	.global bsp_interrupt_stack_end
+	.global _start
+
+	.section .bsp_start_text,"awx",@progbits
 
 _start:
-	lis   %r1,_stack@h
-	ori   %r1,%r1,_stack@l
+	lis   %r1,bsp_interrupt_stack_start@h
+	ori   %r1,%r1,bsp_interrupt_stack_start@l
 	/* Make sure stack is properly aligned */
 	li    %r3, CPU_STACK_ALIGNMENT - 1
 	andc  %r1, %r1, %r3
@@ -40,3 +42,11 @@ __eabi:
 _reset:
 	b _start
 	.size _reset, . - _reset
+
+	/* Start stack area */
+	.section ".bsp_rwextra", "aw", @nobits
+	.align 4
+	.space 4096
+bsp_interrupt_stack_start:
+	.space 32768
+bsp_interrupt_stack_end:

@@ -1,221 +1,38 @@
-OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
-              "elf32-powerpc")
-OUTPUT_ARCH(powerpc:common)
-ENTRY(_start)
-STARTUP(start.o)
 EXTERN(__vectors)
 
 MEMORY
   {
-        RAM       : ORIGIN = 0, LENGTH = 4M
+        EMPTY     : ORIGIN = 0, LENGTH = 0
+        RAM       : ORIGIN = 0x2000, LENGTH = 4M - 0x2000
         ROM       : ORIGIN = 0xFFC00000, LENGTH = 4M
         VECTORS   : ORIGIN = 0xFFF00000, LENGTH = 0x20000
         RESET     : ORIGIN = 0xFFFFFFFC, LENGTH = 0x4
   }
 
-RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-RamSize = DEFINED(RamSize) ? RamSize : 4M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 0;
+REGION_ALIAS ("REGION_START", ROM);
+REGION_ALIAS ("REGION_FAST_TEXT", ROM);
+REGION_ALIAS ("REGION_FAST_TEXT_LOAD", ROM);
+REGION_ALIAS ("REGION_TEXT", ROM);
+REGION_ALIAS ("REGION_TEXT_LOAD", ROM);
+REGION_ALIAS ("REGION_RODATA", ROM);
+REGION_ALIAS ("REGION_RODATA_LOAD", ROM);
+REGION_ALIAS ("REGION_FAST_DATA", RAM);
+REGION_ALIAS ("REGION_FAST_DATA_LOAD", ROM);
+REGION_ALIAS ("REGION_DATA", RAM);
+REGION_ALIAS ("REGION_DATA_LOAD", ROM);
+REGION_ALIAS ("REGION_BSS", RAM);
+REGION_ALIAS ("REGION_RWEXTRA", RAM);
+REGION_ALIAS ("REGION_WORK", RAM);
+REGION_ALIAS ("REGION_STACK", RAM);
+REGION_ALIAS ("REGION_NOCACHE", EMPTY);
+REGION_ALIAS ("REGION_NOCACHE_LOAD", EMPTY);
+REGION_ALIAS ("REGION_NVRAM", EMPTY);
 
-bsp_section_align = 32;
-
-SECTIONS
-{
-  /* Read-only sections, merged into text segment: */
-  . = 0xfffc0000;
-/*
-  .entry_point_section :
-  {
-  } =0
-*/
-
-  .text           :
-  {
-    *(.entry_point_section)
-    *(.text .text.* .gnu.linkonce.t.*)
-    *(.eh_frame_hdr*)
-    *(.eh_frame*)
-
-    /*
-     * Special FreeBSD sysctl sections.
-     */
-    . = ALIGN (16);
-    __start_set_sysctl_set = .;
-    *(set_sysctl_*);
-    __stop_set_sysctl_set = ABSOLUTE(.);
-    *(set_domain_*);
-    *(set_pseudo_*);
-
-    /* .gnu.warning sections are handled specially by elf32.em.  */
-    *(.gnu.warning)
-    . = ALIGN (bsp_section_align);
-    __text_end = .;
-  } >ROM =0
-  .init           :
-  {
-    KEEP (*(.init))
-  } >ROM =0
-  .fini           :
-  {
-    _fini = .;
-    KEEP (*(.fini))
-  } >ROM =0
-
-  /* Put .ctors and .dtors next to the .got2 section, so that the pointers
-     get relocated with -mrelocatable. Also put in the .fixup pointers.
-     The current compiler no longer needs this, but keep it around for 2.7.2  */
-   PROVIDE (__GOT2_START__ = .);
-   PROVIDE (_GOT2_START_ = .);
-  .got2		  :  { *(.got2) 	} >ROM =0
-  PROVIDE (__GOT2_END__ = .);
-  PROVIDE (_GOT2_END_ = .);
-
-  PROVIDE (__CTOR_LIST__ = .);
-  .ctors	  : { *(.ctors) 	} >ROM =0
-  PROVIDE (__CTOR_END__ = .);
-
-  PROVIDE (__DTOR_LIST__ = .);
-  .dtors	  : { *(.dtors) 	} >ROM =0
-  PROVIDE (__DTOR_END__ = .);
-  .jcr            : { KEEP (*(.jcr))	} > ROM =0
-
-  .tdata : {
-    _TLS_Data_begin = .;
-    *(.tdata .tdata.* .gnu.linkonce.td.*)
-    _TLS_Data_end = .;
-  } >ROM =0
-  .tbss : {
-    _TLS_BSS_begin = .;
-    *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
-    _TLS_BSS_end = .;
-  } >ROM =0
-  _TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
-  _TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
-  _TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
-  _TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
-  _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
-  _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
-
-  .rodata :
-  {
-    *(.rodata .rodata.* .gnu.linkonce.r.*)
-    *(.rodata1)
-    KEEP (*(SORT(.rtemsroset.*)))
-    . = ALIGN (bsp_section_align);
-    __rodata_end = .;
-  } >ROM =0
-
-  .vectors :
-  {
-    . = . + 0x2000; /* skip vector area */
-  } >RAM
-
-  __sdata2_load = __rodata_end;
-  .sdata2 : AT (__sdata2_load)
-  {
-    __sdata2_start = .;
-    PROVIDE (_SDA2_BASE_ = 32768);
-    *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
-    . = ALIGN (bsp_section_align);
-    __sdata2_end = .;
-  } >RAM
-  .sbss2 :
-  {
-    __sbss2_start = .;
-    *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
-    . = ALIGN (bsp_section_align);
-    __sbss2_end = .;
-  } >RAM
-  __data_load = __sdata2_load + SIZEOF (.sdata2);
-  .data : AT(__data_load)
-  {
-    __data_start = .;
-    *(.data .data.* .gnu.linkonce.d.*)
-    KEEP (*(SORT(.rtemsrwset.*)))
-    KEEP (*(.gnu.linkonce.d.*personality*))
-    SORT(CONSTRUCTORS)
-    *(.data1)
-    . = ALIGN (bsp_section_align);
-    __data_end = .;
-  } >RAM
-  __sdata_load = __data_load + SIZEOF (.data);
-  .sdata : AT(__sdata_load) {
-    __sdata_start = .;
-    PROVIDE (_SDA_BASE_ = 32768);
-    *(.sdata .sdata.* .gnu.linkonce.s.*)
-
-    . = ALIGN (bsp_section_align);
-
-    _edata = .;
-    __sdata_end = .;
-    PROVIDE (edata = .);
-
-    /*
-     * BSP: End of data section
-     */
-    bsp_section_data_end = .;
-  } > RAM
-
-  PROVIDE (__EXCEPT_START__ = .);
-  .gcc_except_table   : { *(.gcc_except_table*) } >RAM
-  PROVIDE (__EXCEPT_END__ = .);
-
-  .sbss :
-  {
-    __sbss_start = .;
-    *(.dynsbss)
-    *(.sbss .sbss.* .gnu.linkonce.sb.*)
-    *(.scommon)
-    . = ALIGN (bsp_section_align);
-    __sbss_end = .;
-  } >RAM
-  .bss  :
-  {
-   __bss_start = .;
-   *(.dynbss)
-   *(.bss .bss.* .gnu.linkonce.b.*)
-   *(COMMON)
-    . = ALIGN (bsp_section_align);
-   __bss_end = .;
-
-   /* Allocate the main stack area.  Make sure it starts 16bytes aligned
-      to accommodate any possible program expectation.  */
-   _stack = ALIGN(16) + 0x1000;
-   _end = _stack;
-  } >RAM
-
-  /*
-   * BSP: Interrupt stack
-   */
-  bsp_interrupt_stack_start = _end;
-  bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
-  bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
-
-  bsp_work_area_start = bsp_interrupt_stack_end;
-  WorkAreaBase = bsp_work_area_start;
-   . = RamBase + RamSize;
-
+SECTIONS {
   .reset :
   {
    KEEP(*(.reset))
   } >RESET
-
-  /* DWARF 1.1 and DWARF 2 */
-  .debug_aranges  0 : { *(.debug_aranges) }
-  .debug_pubnames 0 : { *(.debug_pubnames) }
-  /* DWARF 2 */
-  .debug_info     0 : { *(.debug_info .gnu.linkonce.wi.*) }
-  .debug_abbrev   0 : { *(.debug_abbrev) }
-  .debug_line     0 : { *(.debug_line) }
-  .debug_frame    0 : { *(.debug_frame) }
-  .debug_str      0 : { *(.debug_str) }
-  .debug_loc      0 : { *(.debug_loc) }
-  .debug_macinfo  0 : { *(.debug_macinfo) }
-  /* SGI/MIPS DWARF 2 extensions */
-  .debug_weaknames 0 : { *(.debug_weaknames) }
-  .debug_funcnames 0 : { *(.debug_funcnames) }
-  .debug_typenames 0 : { *(.debug_typenames) }
-  .debug_varnames  0 : { *(.debug_varnames) }
-  /DISCARD/ : { *(.note.GNU-stack) }
 }
 
+INCLUDE linkcmds.base

@@ -1,4 +1,5 @@
 #include <bsp/bootcard.h>
+#include <bsp/linker-symbols.h>
 
 static void
 __outb(int port, unsigned char v)
@@ -30,13 +31,6 @@ __bzero (unsigned char *d, int len)
     *d++ = 0;
 }
 
-extern unsigned char __sdata2_load[], __sdata2_start[], __sdata2_end[];
-extern unsigned char __data_load[], __data_start[], __data_end[];
-extern unsigned char __sdata_load[], __sdata_start[], __sdata_end[];
-extern unsigned char __sbss2_start[], __sbss2_end[];
-extern unsigned char __sbss_start[], __sbss_end[];
-extern unsigned char __bss_start[], __bss_end[];
-
 
 /*
  * Prototype this here because it is just the entry symbol and
@@ -49,12 +43,9 @@ void cmain (void)
   /*
    * init variable sections
    */
-  __memcpy (__sdata2_start, __sdata2_load, __sdata2_end - __sdata2_start);
-  __memcpy (__sdata_start , __sdata_load , __sdata_end  - __sdata_start);
-  __memcpy (__data_start  , __data_load  , __data_end   - __data_start);
-  __bzero (__sbss2_start  , __sbss2_end - __sbss2_start);
-  __bzero (__sbss_start   , __sbss_end  - __sbss_start);
-  __bzero (__bss_start    , __bss_end   - __bss_start);
+  __memcpy (bsp_section_data_begin, bsp_section_data_load_begin, (int)bsp_section_data_size);
+  __bzero (bsp_section_bss_begin, (int)bsp_section_bss_size);
+  __bzero (bsp_section_sbss_begin, (int)bsp_section_sbss_size);
   /* printk( "start of BSP\n"); */
   boot_card(0);
   /* printk( "end of BSP\n"); */
