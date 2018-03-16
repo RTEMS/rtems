@@ -16,6 +16,7 @@
 #ifndef _RTEMS_IMFS_H
 #define _RTEMS_IMFS_H
 
+#include <sys/time.h>
 #include <limits.h>
 
 #include <rtems/libio_.h>
@@ -337,41 +338,39 @@ static inline IMFS_memfile_t *IMFS_iop_to_memfile( const rtems_libio_t *iop )
   return (IMFS_memfile_t *) iop->pathinfo.node_access;
 }
 
+static inline time_t _IMFS_get_time( void )
+{
+  struct bintime now;
+
+  /* Use most efficient way to get the time in seconds (CLOCK_REALTIME) */
+  _Timecounter_Getbintime( &now );
+
+  return now.sec;
+}
+
 static inline void IMFS_update_atime( IMFS_jnode_t *jnode )
 {
-  struct timeval now;
-
-  gettimeofday( &now, 0 );
-
-  jnode->stat_atime = now.tv_sec;
+  jnode->stat_atime = _IMFS_get_time();
 }
 
 static inline void IMFS_update_mtime( IMFS_jnode_t *jnode )
 {
-  struct timeval now;
-
-  gettimeofday( &now, 0 );
-
-  jnode->stat_mtime = now.tv_sec;
+  jnode->stat_mtime = _IMFS_get_time();
 }
 
 static inline void IMFS_update_ctime( IMFS_jnode_t *jnode )
 {
-  struct timeval now;
-
-  gettimeofday( &now, 0 );
-
-  jnode->stat_ctime = now.tv_sec;
+  jnode->stat_ctime = _IMFS_get_time();
 }
 
 static inline void IMFS_mtime_ctime_update( IMFS_jnode_t *jnode )
 {
-  struct timeval now;
+  time_t now;
 
-  gettimeofday( &now, 0 );
+  now = _IMFS_get_time();
 
-  jnode->stat_mtime = now.tv_sec;
-  jnode->stat_ctime = now.tv_sec;
+  jnode->stat_mtime = now;
+  jnode->stat_ctime = now;
 }
 
 typedef struct {
