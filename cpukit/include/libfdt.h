@@ -298,6 +298,8 @@ int fdt_move(const void *fdt, void *buf, int bufsize);
 /* Read-only functions                                                */
 /**********************************************************************/
 
+int fdt_check_full(const void *fdt, size_t bufsize);
+
 /**
  * fdt_get_string - retrieve a string from the strings block of a device tree
  * @fdt: pointer to the device tree blob
