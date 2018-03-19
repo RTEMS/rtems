@@ -148,6 +148,13 @@ extern "C" {
 	(GMAC_ISR_RCOMP | GMAC_ISR_RXUBR | GMAC_ISR_ROVR)
 #define GMAC_INT_TX_STATUS_ERR_BITS  \
 	(GMAC_ISR_TUR | GMAC_ISR_RLEX | GMAC_ISR_TFC | GMAC_ISR_HRESP)
+
+// Rx descriptor status flags
+#define   GMAC_RXDESC_ST_CKSUM_RESULT_NOT_CHECKED        (0)
+#define   GMAC_RXDESC_ST_CKSUM_RESULT_IP_CHECKED         (1)
+#define   GMAC_RXDESC_ST_CKSUM_RESULT_IP_AND_TCP_CHECKED (2)
+#define   GMAC_RXDESC_ST_CKSUM_RESULT_IP_AND_UDP_CHECKED (3)
+
 /*----------------------------------------------------------------------------
  *        Types
  *----------------------------------------------------------------------------*/
@@ -186,13 +193,11 @@ typedef struct _GmacRxDescriptor {
 					 vlanPriority: 3,       /** VLAN priority (if VLAN detected) */
 					 bPriorityDetected: 1,  /** Priority tag detected */
 					 bVlanDetected: 1,      /**< VLAN tag detected */
-					 bTypeIDMatch: 1,       /**< Type ID match */
-					 bAddr4Match: 1,        /**< Address register 4 match */
-					 bAddr3Match: 1,        /**< Address register 3 match */
-					 bAddr2Match: 1,        /**< Address register 2 match */
-					 bAddr1Match: 1,        /**< Address register 1 match */
+					 typeIDMatchOrCksumResult: 2,
+					 bTypeIDMatchFoundOrCksumSNAPState: 1,
+					 specAddrMatchRegister: 2,
+					 bSpecAddrMatchFound: 1,
 					 reserved: 1,
-					 bExtAddrMatch: 1,      /**< External address match */
 					 bUniHashMatch: 1,      /**< Unicast hash match */
 					 bMultiHashMatch: 1,    /**< Multicast hash match */
 					 bBroadcastDetected: 1;  /**< Global all ones broadcast
