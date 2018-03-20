@@ -20,12 +20,13 @@ who can be trusted to distinguish between changes which require
 others to review, require a problem report, or can be safely committed
 with limited review.
 
-Write After Approval is granted to experienced but also trusted 
+Write After Approval is granted to experienced but also trusted
 RTEMS developers.  These developers may be less familiar with
 the breadth of RTEMS.  Developers with write after approval need
-to submit their patches for review. Once the patches have been
-approved by a developer with Blanket Write Privileges, the patches
-may be checked in.  
+to submit their patches for review.  Once the patches have been approved by a
+developer with Blanket Write Privileges, the patches may be checked in.
+A BSP-specific patch may be checked in three work days after sending it to
+devel@rtems.org in case nobody explicitly rejected the patch.
 
 Localized Write Permission is for developers who have primary
 responsibility for a port and all associated BSPs, a BSP, or other
