@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -24,14 +24,17 @@
 #include "config.h"
 #endif
 
-#include "tmacros.h"
-#include <stdarg.h>
+#include <sys/stat.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdarg.h>
 
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <rtems/bdbuf.h>
-#include <rtems/diskdevs.h>
+#include <rtems/blkdev.h>
+
+#include <tmacros.h>
 
 const char rtems_test_name[] = "BLOCK 5";
 
@@ -394,32 +397,33 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 }
 
 static void disk_register(
+  const char *dev,
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
   rtems_disk_device **dd_ptr
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-  dev_t dev = 0;
+  rtems_status_code sc;
+  int rv;
+  int fd;
 
-  sc = rtems_io_register_driver(0, &disk_ops, &major);
-  ASSERT_SC(sc);
-
-  dev = rtems_filesystem_make_dev_t(major, 0);
-
-  sc = rtems_disk_create_phys(
+  sc = rtems_blkdev_create(
     dev,
     block_size,
     block_count,
     disk_ioctl,
-    NULL,
     NULL
   );
   ASSERT_SC(sc);
 
-  *dd_ptr = rtems_disk_obtain(dev);
-  rtems_test_assert(*dd_ptr!= NULL);
+  fd = open(dev, O_RDWR);
+  rtems_test_assert(rv >= 0);
+
+  rv = rtems_disk_fd_get_disk_device(fd, dd_ptr);
+  rtems_test_assert(rv == 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
 }
 
 static rtems_task Init(rtems_task_argument argument)
@@ -431,12 +435,9 @@ static rtems_task Init(rtems_task_argument argument)
 
   task_id_init = rtems_task_self();
 
-  sc = rtems_disk_io_initialize();
-  ASSERT_SC(sc);
+  disk_register("dd_b", BLOCK_SIZE_A, BLOCK_COUNT_A, &dd_a);
 
-  disk_register(BLOCK_SIZE_A, BLOCK_COUNT_A, &dd_a);
-
-  disk_register(BLOCK_SIZE_B, BLOCK_COUNT_B, &dd_b);
+  disk_register("dd_a", BLOCK_SIZE_B, BLOCK_COUNT_B, &dd_b);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),
@@ -516,6 +517,8 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
+
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_TASKS 4
 #define CONFIGURE_MAXIMUM_DRIVERS 4
