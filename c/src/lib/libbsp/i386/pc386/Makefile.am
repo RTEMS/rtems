@@ -171,6 +171,10 @@ libbsp_a_SOURCES += wd8003/wd8003.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/cpuModel.S
+libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/displayCpu.c
+libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/idtr.S
+libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/page.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/page.rel
 libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/score.rel
