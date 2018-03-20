@@ -93,6 +93,23 @@ __rtems_entry_point:
 	mtspr	IBAT0L,r8
 	mtspr	IBAT0U,r11
 	isync
+/*   Map section where residual is located if outside
+ *   the first 256Mb of RAM.  This is to support cases
+ *   where the available system memory is larger than
+ *   256Mb of RAM.
+ */
+	mr	r9, r1 /* Get where residual was mapped */
+	lis r12,0xf0000000@h
+	and	r9,r9,r12
+	cmpi	0,1,r9, 0
+	beq	enter_C_code
+	isync
+	ori r11,r9,0x1ffe
+	mtspr	DBAT1L,r8		/* N.B. 6xx (not 601) have valid */
+	mtspr	DBAT1U,r11		/* bit in upper BAT register */
+	mtspr	IBAT1L,r8
+	mtspr	IBAT1U,r11
+	isync
 
 /*
  * we now have the 1st 256M of ram mapped with the bats. We are still

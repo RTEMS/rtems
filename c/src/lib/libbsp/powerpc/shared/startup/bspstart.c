@@ -300,6 +300,24 @@ void bsp_start( void )
    */
   _BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
 
+  if (BSP_mem_size > 0x10000000)
+  {
+    /* Support cases of system memory size larger than 256Mb.
+     *
+     * We use BAT3 in order to obtain access to the top section of the RAM.
+     * We also need to do this just before setting up the page table because
+     * this is where the page table will be located.
+     */
+    const unsigned int mem256Count = (BSP_mem_size / 0x10000000);
+    const unsigned int BAT3Addr    = ((BSP_mem_size % 0x10000000)  ?
+                                       (mem256Count     * 0x10000000) :
+                                      ((mem256Count-1) * 0x10000000));
+    setdbat(3, BAT3Addr, BAT3Addr, 0x10000000, IO_PAGE);
+#ifdef SHOW_MORE_INIT_SETTINGS
+    printk("Setting up BAT3 for large memory support. (BAT3 --> 0x%x)\n", BAT3Addr);
+#endif
+  }
+
   /* Allocate and set up the page table mappings
    * This is only available on >604 CPUs.
    *
