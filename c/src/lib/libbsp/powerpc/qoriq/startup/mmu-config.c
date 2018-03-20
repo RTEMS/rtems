@@ -258,33 +258,34 @@ static void TEXT config_fdt_adjust(const void *fdt)
 	if (node >= 0) {
 		int len;
 		const void *val;
-		uint64_t begin;
-		uint64_t size;
+		uint64_t mem_begin;
+		uint64_t mem_size;
 
 		val = fdt_getprop(fdt, node, "reg", &len);
 		if (len == 8) {
-			begin = fdt32_to_cpu(((fdt32_t *) val)[0]);
-			size = fdt32_to_cpu(((fdt32_t *) val)[1]);
+			mem_begin = fdt32_to_cpu(((fdt32_t *) val)[0]);
+			mem_size = fdt32_to_cpu(((fdt32_t *) val)[1]);
 		} else if (len == 16) {
-			begin = fdt64_to_cpu(((fdt64_t *) val)[0]);
-			size = fdt64_to_cpu(((fdt64_t *) val)[1]);
+			mem_begin = fdt64_to_cpu(((fdt64_t *) val)[0]);
+			mem_size = fdt64_to_cpu(((fdt64_t *) val)[1]);
 		} else {
-			begin = 0;
-			size = 0;
+			mem_begin = 0;
+			mem_size = 0;
 		}
 
 #ifndef __powerpc64__
-		size = MIN(size, 0x80000000U);
+		mem_size = MIN(mem_size, 0x80000000U);
 #endif
 
 		if (
-			begin == 0
-				&& size > (uintptr_t) bsp_section_work_end
+			mem_begin == 0
+				&& mem_size > (uintptr_t) bsp_section_work_end
 				&& (uintptr_t) bsp_section_nocache_end
 					< (uintptr_t) bsp_section_work_end
 		) {
-			config[WORKSPACE_ENTRY_INDEX].size += (uintptr_t) size
-				- (uintptr_t) bsp_section_work_end;
+			/* Assign new value to allow a bsp_restart() */
+			config[WORKSPACE_ENTRY_INDEX].size = (uintptr_t) mem_size
+				- (uintptr_t) bsp_section_work_begin;
 		}
 	}
 }

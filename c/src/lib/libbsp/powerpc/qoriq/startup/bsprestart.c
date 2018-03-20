@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -29,22 +29,21 @@
 
 #include <libcpu/powerpc-utility.h>
 
+#include <string.h>
+
+static char fdt_copy[BSP_FDT_BLOB_SIZE_MAX];
+
 static RTEMS_NO_RETURN void do_restart(void *addr)
 {
   void (*restart)(uintptr_t);
-  uintptr_t fdt;
 
   qoriq_reset_qman_and_bman();
 
+  memcpy(fdt_copy, bsp_fdt_get(), sizeof(fdt_copy));
+  rtems_cache_flush_multiple_data_lines(fdt_copy, sizeof(fdt_copy));
+
   restart = addr;
-
-  fdt = (uintptr_t) bsp_fdt_get();
-#ifdef BSP_FDT_BLOB_READ_ONLY
-  fdt -= (uintptr_t) bsp_section_rodata_begin;
-  fdt += (uintptr_t) bsp_section_rodata_load_begin;
-#endif
-
-  (*restart)(fdt);
+  (*restart)((uintptr_t) fdt_copy);
   bsp_fatal(QORIQ_FATAL_RESTART_FAILED);
 }
 
