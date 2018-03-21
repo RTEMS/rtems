@@ -165,10 +165,10 @@ libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
 
 if HAS_NETWORKING

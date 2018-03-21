@@ -107,9 +107,9 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/e500/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/e500/timer.rel \
     ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel
 
 if HAS_NETWORKING

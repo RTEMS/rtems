@@ -46,9 +46,9 @@ libbsp_a_SOURCES += irq/irq_init.c
 libbsp_a_SOURCES += mmu/mmu.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-                  ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel
 
 EXTRA_DIST += times
 

@@ -97,8 +97,6 @@ LINKER_SYMBOL(bsp_exc_vector_base);
 
 /* Expected by clock.c */
 uint32_t    bsp_clicks_per_usec;
-uint32_t    bsp_timer_least_valid;
-uint32_t    bsp_timer_average_overhead;
 
 /*
  * Bus Frequency
@@ -189,8 +187,6 @@ void bsp_start(void)
   rtems_counter_initialize_converter(
     BSP_bus_frequency / (BSP_time_base_divisor / 1000)
   );
-  bsp_timer_average_overhead = 2;
-  bsp_timer_least_valid      = 3;
 
   /*
    * Initialize the interrupt related settings.

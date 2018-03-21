@@ -46,10 +46,6 @@ uint32_t bsp_time_base_frequency;
 /* Legacy */
 uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
 
-/* for timer: */
-uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
-uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-
 static const char *bsp_tqm_get_cib_string( const char *cib_id)
 {
   char srch_pattern[10] = "";
@@ -145,8 +141,6 @@ void bsp_start( void)
 
   bsp_time_base_frequency = BSP_bus_frequency / 16;
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
-  bsp_timer_least_valid = 3;
-  bsp_timer_average_overhead = 3;
   rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */

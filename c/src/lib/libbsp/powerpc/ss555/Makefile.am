@@ -37,9 +37,9 @@ libbsp_a_SOURCES += startup/tm27supp.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/exceptions/ppc_exc_print.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/clock.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/console-generic.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/timer.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq_asm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq_init.c

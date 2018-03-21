@@ -74,9 +74,9 @@ libbsp_a_SOURCES += i2c/i2c_init.c
 libbsp_a_SOURCES += spi/spi_init.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
-	../../../libcpu/@RTEMS_CPU@/mpc6xx/timer.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
 	../../../libcpu/@RTEMS_CPU@/mpc83xx/gtm.rel

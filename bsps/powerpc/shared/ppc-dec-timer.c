@@ -21,6 +21,10 @@
 #include <assert.h>
 #include <libcpu/powerpc-utility.h>
 
+#ifndef BSP_Convert_decrementer
+#define BSP_Convert_decrementer(value) (value)
+#endif
+
 uint64_t   Timer_driver_Start_time;
 
 bool benchmark_timer_find_average_overhead = false;

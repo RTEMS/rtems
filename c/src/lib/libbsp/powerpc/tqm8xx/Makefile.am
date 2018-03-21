@@ -63,13 +63,13 @@ libbsp_a_SOURCES += network/network_scc.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

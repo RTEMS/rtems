@@ -68,8 +68,6 @@ bool       bsp_serial_external_clock;
 bool       bsp_serial_xon_xoff;
 bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
-uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
-uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
 
 extern char IntrStack_start [];
 extern char intrStack [];
@@ -172,8 +170,6 @@ void bsp_start(void)
   bsp_serial_xon_xoff 	     = 0;
   bsp_serial_cts_rts 	     = 0;
   bsp_serial_rate 	     = 9600;
-  bsp_timer_average_overhead = 3;
-  bsp_timer_least_valid    = 3;
   bsp_clock_speed 	   = 40000000;
   rtems_counter_initialize_converter(bsp_clock_speed);
 

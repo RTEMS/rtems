@@ -44,9 +44,9 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/ppc403/clock.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

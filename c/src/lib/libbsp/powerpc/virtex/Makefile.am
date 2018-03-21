@@ -62,11 +62,8 @@ if HAS_NETWORKING
 libbsp_a_SOURCES += = network/xiltemac.c
 endif
 
-# timer
-libbsp_a_SOURCES += timer/timer-config.c
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/ppc403/timer.rel
-
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

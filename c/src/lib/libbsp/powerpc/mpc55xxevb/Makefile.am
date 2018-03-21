@@ -107,14 +107,14 @@ endif
 # BSP library
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/siu.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/edma.rel \
     ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/emios.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dspi.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dspi.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

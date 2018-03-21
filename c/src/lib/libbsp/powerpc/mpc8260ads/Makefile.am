@@ -55,11 +55,11 @@ libbsp_a_SOURCES += network/network.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/timer.rel
+    ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel
 
 EXTRA_DIST += times
 
