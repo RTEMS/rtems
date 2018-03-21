@@ -232,7 +232,6 @@ extern char *BSP_commandline_string;
 #define BSP_Convert_decrementer( _value ) \
   ((unsigned long long) ((((unsigned long long)BSP_time_base_divisor) * 1000000ULL) /((unsigned long long) BSP_bus_frequency)) * ((unsigned long long) (_value)))
 
-extern rtems_configuration_table  BSP_Configuration;
 extern void bsp_reset(void);
 extern int BSP_disconnect_clock_handler (void);
 extern int BSP_connect_clock_handler (void);

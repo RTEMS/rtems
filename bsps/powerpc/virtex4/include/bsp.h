@@ -66,7 +66,6 @@ extern "C" {
 /* miscellaneous stuff assumed to exist */
 extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
-extern rtems_configuration_table BSP_Configuration;     /* owned by BSP */
 #endif /* ASM */
 
 void BSP_ask_for_reset(void);
