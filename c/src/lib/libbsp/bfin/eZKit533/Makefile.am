@@ -31,15 +31,10 @@ libbsp_a_SOURCES += ../../shared/bspreset.c
 
 libbsp_a_SOURCES += console/console-io.c
 libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
-
-libbsp_a_LIBADD  = ../../../libcpu/@RTEMS_CPU@/mmu.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/interrupt.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/uart.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/clock.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/rtc.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/timer.rel
+libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
 
 EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/bfin/shared/shared.am
 include $(srcdir)/../../../../../../bsps/bfin/eZKit533/headers.am
