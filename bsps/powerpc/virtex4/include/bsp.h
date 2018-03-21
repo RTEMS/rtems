@@ -63,11 +63,6 @@
 extern "C" {
 #endif
 
-/* miscellaneous stuff assumed to exist */
-extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
-#endif /* ASM */
-
 void BSP_ask_for_reset(void);
 
 /*
@@ -78,5 +73,7 @@ void zero_bss(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* ASM */
 
 #endif

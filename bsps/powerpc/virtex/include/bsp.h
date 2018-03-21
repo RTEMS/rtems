@@ -61,9 +61,6 @@ extern "C" {
 
 #define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
 
-/* miscellaneous stuff assumed to exist */
-extern bool bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
-
 /* Network Defines */
 #if 1 /* EB/doe changes */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"

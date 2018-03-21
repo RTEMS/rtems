@@ -49,7 +49,6 @@ uint32_t bsp_clicks_per_usec; /* for PIT driver: OSCCLK */
 /* for timer: */
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 static const char *bsp_tqm_get_cib_string( const char *cib_id)
 {

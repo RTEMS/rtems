@@ -96,7 +96,6 @@ LINKER_SYMBOL(bsp_exc_vector_base);
 
 /* Expected by clock.c */
 uint32_t    bsp_clicks_per_usec;
-bool        bsp_timer_internal_clock;   /* true, when timer runs with CPU clk */
 uint32_t    bsp_timer_least_valid;
 uint32_t    bsp_timer_average_overhead;
 
@@ -168,7 +167,6 @@ void bsp_start(void)
 
   /* Timebase register ticks/microsecond;  The application may override these */
   bsp_clicks_per_usec        = 350;
-  bsp_timer_internal_clock   = true;
   bsp_timer_average_overhead = 2;
   bsp_timer_least_valid      = 3;
   rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);

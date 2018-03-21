@@ -56,6 +56,3 @@ uint32_t bsp_timer_average_overhead = 2;
 
 /* Least valid number from timer */
 uint32_t bsp_timer_least_valid = 3;
-
-/* TRUE, when timer runs with CPU clk */
-bool bsp_timer_internal_clock = true;

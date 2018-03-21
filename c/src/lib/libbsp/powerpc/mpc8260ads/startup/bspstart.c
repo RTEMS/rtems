@@ -70,7 +70,6 @@ bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
 uint32_t   bsp_timer_average_overhead; /* Average overhead of timer in ticks */
 uint32_t   bsp_timer_least_valid;      /* Least valid number from timer      */
-bool       bsp_timer_internal_clock;   /* TRUE, when timer runs with CPU clk */
 
 extern char IntrStack_start [];
 extern char intrStack [];

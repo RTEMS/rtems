@@ -53,7 +53,6 @@
 #include <bsp/irq.h>
 
 extern uint32_t   bsp_clicks_per_usec;
-extern bool       bsp_timer_internal_clock;
 
 volatile uint32_t Clock_driver_ticks;
 static uint32_t   pit_value, tick_time;
@@ -171,11 +170,7 @@ static void ClockOn(const rtems_irq_connect_data* unused)
 
 #ifndef ppc405 /* this is a ppc403 */
   __asm__ volatile ("mfdcr %0, 0xa0" : "=r" (iocr));              /* IOCR */
-  if (bsp_timer_internal_clock) {
-    iocr &= ~4;                         /* timer clocked from system clock */
-  } else {
-    iocr |= 4;                          /* select external timer clock */
-  }
+  iocr &= ~4;                         /* timer clocked from system clock */
   __asm__ volatile ("mtdcr 0xa0, %0" : "=r" (iocr) : "0" (iocr)); /* IOCR */
 
   __asm__ volatile ("mfspr %0, 0x11f" : "=r" ((pvr))); /* PVR */
@@ -194,11 +189,7 @@ static void ClockOn(const rtems_irq_connect_data* unused)
 
 #else /* ppc405 */
   __asm__ volatile ("mfdcr %0, 0x0b2" : "=r" (iocr));              /*405GP CPC0_CR1 */
-  if (bsp_timer_internal_clock) {
-    iocr &=~0x800000;               /* timer clocked from system clock CETE*/
-  } else {
-    iocr |= 0x800000;               /* select external timer clock CETE*/
-  }
+  iocr &=~0x800000;               /* timer clocked from system clock CETE*/
   __asm__ volatile ("mtdcr 0x0b2, %0" : "=r" (iocr) : "0" (iocr)); /* 405GP CPC0_CR1 */
 
   /*
