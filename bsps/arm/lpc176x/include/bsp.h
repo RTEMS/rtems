@@ -38,9 +38,6 @@
 #include <rtems.h>
 #include <bsp/default-initial-extension.h>
 
-/** Define operation count for Tests */
-#define OPERATION_COUNT 4
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
