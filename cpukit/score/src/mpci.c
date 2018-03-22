@@ -225,6 +225,7 @@ static void _MPCI_Enqueue_callout(
   Thread_queue_Context   *queue_context
 )
 {
+  _Thread_queue_Add_timeout_ticks( queue, the_thread, cpu_self, queue_context );
   _Thread_Dispatch_unnest( cpu_self );
 }
 
@@ -250,11 +251,11 @@ Status_Control _MPCI_Send_request_packet(
     &queue_context,
     STATES_WAITING_FOR_RPC_REPLY | extra_state
   );
+  _Thread_queue_Context_set_timeout_ticks( &queue_context, the_packet->timeout );
   _Thread_queue_Context_set_enqueue_callout(
     &queue_context,
     _MPCI_Enqueue_callout
   );
-  _Thread_queue_Context_set_enqueue_timeout_ticks( &queue_context, the_packet->timeout );
 
   cpu_self = _Thread_Dispatch_disable();
 
