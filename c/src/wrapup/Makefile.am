@@ -31,7 +31,7 @@ SRCS += ../libchip/libi2cio.a
 SRCS += ../libchip/libdisplay.a
 
 if HAS_MP
-SRCS += ../libchip/shmdr.rel
+SRCS += ../libchip/libshmdr.a
 endif
 
 o-optimize/librtemsbsp.a: $(SRCS)
