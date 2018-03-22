@@ -219,12 +219,13 @@ void _MPCI_Send_process_packet (
 }
 
 static void _MPCI_Enqueue_callout(
-  Thread_queue_Queue   *queue,
-  Thread_Control       *the_thread,
-  Thread_queue_Context *queue_context
+  Thread_queue_Queue     *queue,
+  Thread_Control         *the_thread,
+  struct Per_CPU_Control *cpu_self,
+  Thread_queue_Context   *queue_context
 )
 {
-  _Thread_Dispatch_unnest( _Per_CPU_Get() );
+  _Thread_Dispatch_unnest( cpu_self );
 }
 
 Status_Control _MPCI_Send_request_packet(
@@ -253,7 +254,7 @@ Status_Control _MPCI_Send_request_packet(
     &queue_context,
     _MPCI_Enqueue_callout
   );
-  _Thread_queue_Context_set_relative_timeout( &queue_context, the_packet->timeout );
+  _Thread_queue_Context_set_enqueue_timeout_ticks( &queue_context, the_packet->timeout );
 
   cpu_self = _Thread_Dispatch_disable();
 
@@ -336,7 +337,7 @@ void _MPCI_Receive_server(
 
   executing = _Thread_Get_executing();
   _Thread_queue_Context_initialize( &queue_context );
-  _Thread_queue_Context_set_no_timeout( &queue_context );
+  _Thread_queue_Context_set_enqueue_do_nothing_extra( &queue_context );
 
   for ( ; ; ) {
 
