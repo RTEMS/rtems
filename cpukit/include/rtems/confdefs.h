@@ -1830,15 +1830,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK 0
 #endif
 
-/**
- * This defines the timers required for the shared memory driver in
- * a multiprocessing configuration.
- */
-#ifndef _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER
-  #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
-#endif
-
-
 #if defined(RTEMS_MULTIPROCESSING)
   /*
    *  Default Multiprocessing Configuration Table.  The defaults are
@@ -1896,15 +1887,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 1
 
     #endif /* CONFIGURE_HAS_OWN_MULTIPROCESSING_TABLE */
-
   #else
-
-    #define CONFIGURE_MULTIPROCESSING_TABLE    NULL
-
+    #define CONFIGURE_MULTIPROCESSING_TABLE NULL
+    #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
     #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
-
   #endif /* CONFIGURE_MP_APPLICATION */
 #else
+  #define _CONFIGURE_TIMER_FOR_SHARED_MEMORY_DRIVER 0
   #define _CONFIGURE_MPCI_RECEIVE_SERVER_COUNT 0
 #endif /* RTEMS_MULTIPROCESSING */
 /**@}*/ /* end of Multiprocessing Configuration */
