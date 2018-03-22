@@ -108,13 +108,13 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/misc.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/irq.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/siu.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/edma.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/emios.rel \
-    ../../../libcpu/@RTEMS_CPU@/@RTEMS_CPU_MODEL@/dspi.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/dev/dspi.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/copy.S
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/edma.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/emios.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/flash_support.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/irq.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/siu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

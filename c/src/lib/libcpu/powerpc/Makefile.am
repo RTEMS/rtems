@@ -168,52 +168,6 @@ endif
 ##############################################################################
 
 ##############################################################################
-# START: MPC55XX                                                             #
-##############################################################################
-if mpc55xx
-
-# IRQ
-noinst_PROGRAMS += mpc55xx/irq.rel
-mpc55xx_irq_rel_SOURCES = mpc55xx/irq/irq.c
-mpc55xx_irq_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# FEC
-noinst_PROGRAMS += mpc55xx/fec.rel
-mpc55xx_fec_rel_SOURCES = mpc55xx/fec/fec.c
-mpc55xx_fec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# eDMA
-noinst_PROGRAMS += mpc55xx/edma.rel
-mpc55xx_edma_rel_SOURCES = mpc55xx/edma/edma.c
-mpc55xx_edma_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# eMIOS
-noinst_PROGRAMS += mpc55xx/emios.rel
-mpc55xx_emios_rel_SOURCES = mpc55xx/emios/emios.c
-mpc55xx_emios_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# SIU
-noinst_PROGRAMS += mpc55xx/siu.rel
-mpc55xx_siu_rel_SOURCES = mpc55xx/siu/siu.c
-mpc55xx_siu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# DSPI
-noinst_PROGRAMS += mpc55xx/dspi.rel
-mpc55xx_dspi_rel_SOURCES = mpc55xx/dspi/dspi.c
-mpc55xx_dspi_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# Misc
-noinst_PROGRAMS += mpc55xx/misc.rel
-mpc55xx_misc_rel_SOURCES = mpc55xx/misc/copy.S \
-	mpc55xx/misc/flash_support.c
-mpc55xx_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-endif
-##############################################################################
-# END: MPC55XX                                                               #
-##############################################################################
-
-##############################################################################
 # START: QorIQ                                                               #
 ##############################################################################
 if qoriq

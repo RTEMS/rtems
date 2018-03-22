@@ -27,7 +27,6 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "mpc7400" \
 || test "$RTEMS_CPU_MODEL" = "mpc7455" \
 || test "$RTEMS_CPU_MODEL" = "mpc555" \
-|| test "$RTEMS_CPU_MODEL" = "mpc55xx" \
 || test "$RTEMS_CPU_MODEL" = "ppc405" \
 || test "$RTEMS_CPU_MODEL" = "ppc440" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
@@ -40,7 +39,6 @@ AM_CONDITIONAL(shared, \
 || test "$RTEMS_CPU_MODEL" = "e500")
 
 # test on CPU type
-AM_CONDITIONAL(mpc55xx, test "$RTEMS_CPU_MODEL" = "mpc55xx")
 AM_CONDITIONAL(mpc5xx, test "$RTEMS_CPU_MODEL" = "mpc555" )
 AM_CONDITIONAL(mpc6xx, test "$RTEMS_CPU_MODEL" = "mpc6xx" \
 || test "$RTEMS_CPU_MODEL" = "mpc604" \
