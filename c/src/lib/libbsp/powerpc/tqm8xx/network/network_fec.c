@@ -374,7 +374,7 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
   /*
    * Issue reset to FEC
    */
-  m8xx.fec.ecntrl=0x1;
+  m8xx.fec.ecntrl = M8xx_FEC_ECNTRL_RESET;
 
   /*
    * Put ethernet transciever in reset
@@ -385,7 +385,7 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
    * Configure I/O ports
    */
   m8xx.pdpar = 0x1fff;
-  m8xx.pddir = 0x1c58;
+  m8xx.pddir = 0x1fff;
 
   /*
    * Take ethernet transciever out of reset
@@ -451,7 +451,7 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
    *   Half duplex
    *   No loopback
    */
-  m8xx.fec.r_cntrl = 0x00000006;
+  m8xx.fec.r_cntrl = M8xx_FEC_R_CNTRL_MII_MODE | M8xx_FEC_R_CNTRL_DRT;
 
   /*
    * Set up Transmit Control Register:
@@ -474,7 +474,7 @@ m8xx_fec_initialize_hardware (struct m8xx_fec_enet_struct *sc)
    *   FEC arbitration ID = 0 => U-bus arbitration = 6
    *   RISC arbitration ID = 1 => U-bus arbitration = 5
    */
-  m8xx.sdcr = 1;
+  m8xx.sdcr = M8xx_SDCR_RAID_5;
 
   /*
    * Set up receive buffer descriptors
@@ -894,9 +894,9 @@ static void fec_init (void *arg)
    * Set flags appropriately
    */
   if (ifp->if_flags & IFF_PROMISC)
-    m8xx.fec.r_cntrl |= 0x8;
+    m8xx.fec.r_cntrl |= M8xx_FEC_R_CNTRL_PROM;
   else
-    m8xx.fec.r_cntrl &= ~0x8;
+    m8xx.fec.r_cntrl &= ~M8xx_FEC_R_CNTRL_PROM;
 
   /*
    * init timer so the "watchdog function gets called periodically
@@ -911,7 +911,7 @@ static void fec_init (void *arg)
   /*
    * Enable receiver and transmitter
    */
-  m8xx.fec.ecntrl = 0x2;
+  m8xx.fec.ecntrl = M8xx_FEC_ECNTRL_ETHER_EN | M8xx_FEC_ECNTRL_FEC_PINMUX;
 }
 
 /*
@@ -1104,9 +1104,11 @@ int fec_mode_adapt
    */
   if (0 == (IFM_FDX & IFM_OPTIONS(media))) {
     m8xx.fec.x_cntrl &= ~M8xx_FEC_X_CNTRL_FDEN;
+    m8xx.fec.r_cntrl |=  M8xx_FEC_R_CNTRL_DRT;
   }
   else {
     m8xx.fec.x_cntrl |=  M8xx_FEC_X_CNTRL_FDEN;
+    m8xx.fec.r_cntrl &= ~M8xx_FEC_R_CNTRL_DRT;
   }
   /*
    * store current media state for future compares

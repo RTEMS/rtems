@@ -290,6 +290,22 @@ typedef struct m8xxFECRegisters_ {
 #define M8xx_FEC_MII_DATA_WDATA(n) ((n) & 0xffff           )
 #define M8xx_FEC_MII_DATA_RDATA(reg) ((reg) & 0xffff       )
   /*
+   * bits for FEC ECNTRL register
+   */
+#define M8xx_FEC_ECNTRL_FEC_PINMUX ( 1           << (31-29))
+#define M8xx_FEC_ECNTRL_ETHER_EN   ( 1           << (31-30))
+#define M8xx_FEC_ECNTRL_RESET      ( 1           << (31-31))
+
+  /*
+   * bits for FEC R_CNTRL register
+   */
+#define M8xx_FEC_R_CNTRL_BC_REJ     ( 1           << (31-27))
+#define M8xx_FEC_R_CNTRL_PROM       ( 1           << (31-28))
+#define M8xx_FEC_R_CNTRL_MII_MODE   ( 1           << (31-29))
+#define M8xx_FEC_R_CNTRL_DRT        ( 1           << (31-30))
+#define M8xx_FEC_R_CNTRL_LOOP       ( 1           << (31-31))
+
+  /*
    * bits for FEC X_CNTRL register
    */
 #define M8xx_FEC_X_CNTRL_FDEN       ( 1           << (31-29))
