@@ -106,28 +106,4 @@ mpc8xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc8xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-EXTRA_DIST += mpc8260/README
-if mpc8260
-# mpc8260/console-generic
-noinst_PROGRAMS += mpc8260/console-generic.rel
-mpc8260_console_generic_rel_SOURCES = mpc8260/console-generic/console-generic.c \
-    mpc8260/include/console.h
-mpc8260_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8260_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc8260/cpm
-noinst_PROGRAMS += mpc8260/cpm.rel
-mpc8260_cpm_rel_SOURCES = mpc8260/cpm/cp.c mpc8260/cpm/dpram.c mpc8260/cpm/brg.c \
-    mpc8260/include/cpm.h
-mpc8260_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8260_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc8260/mmu
-noinst_PROGRAMS += mpc8260/mmu.rel
-mpc8260_mmu_rel_SOURCES = mpc8260/mmu/mmu.c \
-                          mpc8260/include/mmu.h
-mpc8260_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8260_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 include $(top_srcdir)/../../../automake/local.am

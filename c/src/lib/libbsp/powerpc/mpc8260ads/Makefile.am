@@ -56,10 +56,11 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc8260/console-generic.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/cpm.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8260/mmu.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/dev/console-generic.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/brg.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/cp.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/dpram.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/mmu.c
 
 EXTRA_DIST += times
 
