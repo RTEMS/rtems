@@ -42,7 +42,6 @@ include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/ofw.h
 include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/ofw_tree.h
 include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/ofwarch.h
 include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/register.h
-include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/stack.h
 include_boot_HEADERS += ../../../../../bsps/sparc64/include/boot/types.h
 
 include_genarch_ofwdir = $(includedir)/genarch/ofw

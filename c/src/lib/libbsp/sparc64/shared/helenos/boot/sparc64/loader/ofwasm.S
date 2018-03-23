@@ -33,7 +33,7 @@
  * located in the HelenOS code base.
  */
 
-#include <boot/stack.h>
+#include <arch/stack.h>
 #include <boot/register.h>
 
 .register %g2, #scratch
