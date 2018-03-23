@@ -64,12 +64,10 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/console-generic.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/cpm.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc8xx/mmu.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/dev/console-generic.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/dpram.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

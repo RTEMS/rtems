@@ -79,31 +79,4 @@ e500_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
 e500_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
-EXTRA_DIST += mpc8xx/README
-if mpc8xx
-# mpc8xx/clock
-noinst_PROGRAMS += mpc8xx/clock.rel
-mpc8xx_clock_rel_SOURCES = mpc8xx/clock/clock.c
-mpc8xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc8xx/console-generic
-noinst_PROGRAMS += mpc8xx/console-generic.rel
-mpc8xx_console_generic_rel_SOURCES = mpc8xx/console-generic/console-generic.c
-mpc8xx_console_generic_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8xx_console_generic_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc8xx/cpm
-noinst_PROGRAMS += mpc8xx/cpm.rel
-mpc8xx_cpm_rel_SOURCES = mpc8xx/cpm/cp.c mpc8xx/cpm/dpram.c
-mpc8xx_cpm_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8xx_cpm_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# mpc8xx/mmu
-noinst_PROGRAMS += mpc8xx/mmu.rel
-mpc8xx_mmu_rel_SOURCES = mpc8xx/mmu/mmu.c
-mpc8xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc8xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 include $(top_srcdir)/../../../automake/local.am
