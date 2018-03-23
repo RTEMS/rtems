@@ -103,7 +103,7 @@ libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c \
 	network/if_intercom.c
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/tsec.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
 if HAS_SMP

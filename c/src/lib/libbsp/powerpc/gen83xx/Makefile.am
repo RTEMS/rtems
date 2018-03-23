@@ -75,15 +75,15 @@ libbsp_a_SOURCES += spi/spi_init.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/gtm.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel   \
-	../../../libcpu/@RTEMS_CPU@/mpc83xx/i2c.rel  \
-	../../../libcpu/@RTEMS_CPU@/mpc83xx/spi.rel \
-	../../../libcpu/@RTEMS_CPU@/mpc83xx/gtm.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/mpc83xx/tsec.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
 EXTRA_DIST += README.mpc8349eamds

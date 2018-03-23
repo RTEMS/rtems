@@ -95,8 +95,7 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += startup/sd-card-init.c
 
 # I2C
-libbsp_a_SOURCES += i2c/i2c_init.c \
-    ../../../libcpu/powerpc/mpc83xx/i2c/mpc83xx_i2cdrv.c
+libbsp_a_SOURCES += i2c/i2c_init.c
 
 # Network
 if HAS_NETWORKING
@@ -108,6 +107,7 @@ endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/dev/dspi.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/copy.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/edma.c
