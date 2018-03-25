@@ -461,8 +461,18 @@ const void *fdt_getprop_by_offset(const void *fdt, int offset,
 	prop = fdt_get_property_by_offset_(fdt, offset, lenp);
 	if (!prop)
 		return NULL;
-	if (namep)
-		*namep = fdt_string(fdt, fdt32_to_cpu(prop->nameoff));
+	if (namep) {
+		const char *name;
+		int namelen;
+		name = fdt_get_string(fdt, fdt32_to_cpu(prop->nameoff),
+				      &namelen);
+		if (!name) {
+			if (lenp)
+				*lenp = namelen;
+			return NULL;
+		}
+		*namep = name;
+	}
 
 	/* Handle realignment */
 	if (fdt_version(fdt) < 0x10 && (offset + sizeof(*prop)) % 8 &&
