@@ -48,15 +48,15 @@ libbsp_a_SOURCES += ../../shared/src/irq-shell.c
 libbsp_a_SOURCES += irq/irq.c
 libbsp_a_SOURCES += irq/intc-icr-init-values.c
 
-# Cache
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c
 endif
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
-                  ../../../libcpu/@RTEMS_CPU@/mcf548x/mcdma.rel
+libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mcf548x/mcdma.rel
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

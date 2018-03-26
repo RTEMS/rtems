@@ -20,15 +20,8 @@
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
-#if defined(mcf5272)
   for( ; ; ) {
     __asm__ volatile( "nop" );
     __asm__ volatile( "nop" );
   }
-#else
-  for( ; ; ) {
-    /* supervisor mode, all interrupts on */
-    __asm__ volatile( "stop #0x3000":::"cc" );
-  }
-#endif
 }

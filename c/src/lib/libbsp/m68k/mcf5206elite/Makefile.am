@@ -43,11 +43,11 @@ libbsp_a_SOURCES += tod/ds1307.c tod/todcfg.c ../../shared/tod.c
 # nvram
 libbsp_a_SOURCES += nvram/nvram.c
 
-# Cache
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/mcfuart.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5206/timer.rel \

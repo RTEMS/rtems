@@ -39,9 +39,8 @@ libbsp_a_SOURCES += spurious/spinit.c
 libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/mrm332/headers.am

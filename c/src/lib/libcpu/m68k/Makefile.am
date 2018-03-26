@@ -4,20 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-if shared
-
-## shared/misc
-
-if mcf5272
-M68K_CPPFLAGS = -Dmcf5272
-endif
-
-noinst_PROGRAMS += shared/misc.rel
-shared_misc_rel_SOURCES = shared/misc/m68kidle.c shared/misc/memProbe.c
-shared_misc_rel_CPPFLAGS = $(AM_CPPFLAGS) $(M68K_CPPFLAGS)
-shared_misc_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if m68040
 ## m68040/fpsp
 noinst_PROGRAMS += m68040/fpsp.rel

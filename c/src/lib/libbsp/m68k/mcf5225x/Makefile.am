@@ -34,9 +34,8 @@ libbsp_a_SOURCES += console/debugio.c
 libbsp_a_SOURCES += timer/timer.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5225x.c
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5225x/headers.am

@@ -33,11 +33,11 @@ libbsp_a_SOURCES += ../../shared/bspreset.c
 # console
 libbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
 
-# Cache
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/csb360/start/idle-mcf5272.c
 
 libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/shared/misc.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5272/clock.rel \
     ../../../libcpu/@RTEMS_CPU@/mcf5272/timer.rel
 
