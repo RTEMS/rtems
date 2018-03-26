@@ -6,7 +6,6 @@ include_HEADERS += ../../../../../bsps/powerpc/include/mpc5xx.h
 include_HEADERS += ../../../../../bsps/powerpc/include/mpc8260.h
 include_HEADERS += ../../../../../bsps/powerpc/include/mpc8xx.h
 include_HEADERS += ../../../../../bsps/powerpc/include/nvram.h
-include_HEADERS += ../../../../../bsps/powerpc/include/tty_drv.h
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
