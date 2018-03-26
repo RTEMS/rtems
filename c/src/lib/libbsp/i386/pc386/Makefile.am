@@ -176,11 +176,8 @@ libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/displayCpu.c
 libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/idtr.S
 libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/page.c
 
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/page.rel
-libbsp_a_LIBADD += ../../../libcpu/@RTEMS_CPU@/score.rel
-
 if HAS_SMP
-libbsp_a_LIBADD += appstart.$(OBJEXT)
+libbsp_a_LIBADD = appstart.$(OBJEXT)
 endif
 
 EXTRA_DIST += HOWTO
