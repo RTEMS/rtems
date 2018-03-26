@@ -99,10 +99,7 @@ libbsp_a_SOURCES += i2c/mpc8540_i2c.c i2c/i2c_init.c
 libbsp_a_SOURCES += ../shared/motorola/vpd.c
 
 if HAS_NETWORKING
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/tsec.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_SOURCES += network/tsec.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
@@ -110,10 +107,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 EXTRA_DIST += LICENSE README KNOWN_PROBLEMS
 
