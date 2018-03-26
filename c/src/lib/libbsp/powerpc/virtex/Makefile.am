@@ -63,7 +63,7 @@ libbsp_a_SOURCES += = network/xiltemac.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

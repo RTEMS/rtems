@@ -63,7 +63,7 @@ libbsp_a_SOURCES += network/network_scc.c
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/dev/console-generic.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/dpram.c

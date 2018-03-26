@@ -47,7 +47,7 @@ libbsp_a_SOURCES += mmu/mmu.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc403.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 EXTRA_DIST += times
 

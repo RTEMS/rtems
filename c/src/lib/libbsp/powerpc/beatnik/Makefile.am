@@ -170,11 +170,11 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 EXTRA_DIST += README LICENSE
 
