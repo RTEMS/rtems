@@ -35,11 +35,6 @@ extern "C" {
 
 #ifndef ASM
 
-#ifdef RTEMS_POSIX_API
-/** The following is used by the POSIX implementation to catch bad paths.  */
-int POSIX_NOT_IMPLEMENTED( void );
-#endif
-
 /**
  *  The following is the extern for the RTEMS version string.
  *
