@@ -22,8 +22,7 @@ rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.tqm8xx
-dist_project_lib_DATA += startup/linkcmds.tqm8xx_base
+dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
 noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =

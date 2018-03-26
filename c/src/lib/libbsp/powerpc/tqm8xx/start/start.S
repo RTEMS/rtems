@@ -25,9 +25,12 @@
 
 .extern boot_card
 
-.section ".entry"
-PUBLIC_VAR (start)
-start:
+PUBLIC_VAR (_start)
+PUBLIC_VAR (bsp_interrupt_stack_start)
+PUBLIC_VAR (bsp_interrupt_stack_end)
+
+.section ".bsp_start_text", "ax"
+_start:
 
 	/*
 	 * basic CPU setup:
@@ -59,12 +62,12 @@ start_1:
 	 * ROM or relocatable startup: copy startup code to SDRAM
 	 */
 	/* get start address of text section in RAM */
-	LA	r29, bsp_section_text_start
+	LA	r29, bsp_section_text_begin
 	/* get start address of text section in ROM (add reloc offset) */
 	add	r30, r20, r29
 	/* get size of startup code */
 	LA	r28, end_reloc_startup
-	LA	r31, bsp_section_text_start
+	LA	r31, bsp_section_text_begin
 	sub	28,r28,r31
 	/* copy startup code from ROM to RAM location */
 	bl	copy_image
@@ -85,7 +88,7 @@ copy_rest_of_text:
 	/* get start address of text section in ROM (add reloc offset) */
 	add	r30, r20, r29
 	/* get size of rest of code */
-	LA	r28, bsp_section_text_start
+	LA	r28, bsp_section_text_begin
 	LA	r31, bsp_section_text_size
 	add	r28,r28,r31
 	sub	r28,r28,r29
@@ -95,7 +98,7 @@ copy_rest_of_text:
 	 * ROM or relocatable startup: copy data to SDRAM
 	 */
 	/* get start address of data section in RAM */
-	LA	r29, bsp_section_data_start
+	LA	r29, bsp_section_data_begin
 	/* get start address of data section in ROM (add reloc offset) */
 	add	r30, r20, r29
 	/* get size of RAM image */
@@ -108,7 +111,7 @@ start_code_in_ram:
 	/*
 	 * ROM/RAM startup: clear bss in SDRAM
 	 */
-	LA	r3, bsp_section_bss_start  /* get start address of bss section */
+	LA	r3, bsp_section_bss_begin  /* get start address of bss section */
 	LWI	r4, bsp_section_bss_size   /* get size of bss section */
 	bl	mpc8xx_zero_4          /* Clear the bss section */
 	/*
@@ -116,7 +119,7 @@ start_code_in_ram:
 	 */
 
 	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start
+	LA	r1, bsp_section_text_begin
         addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */
 
 	/* Create NULL */
@@ -282,3 +285,10 @@ mpc8xx_zero_4_tail:
 	blr
 
 end_reloc_startup:
+
+	/* Interrupt stack */
+	.section ".bsp_rwextra", "aw", @nobits
+	.align 4
+bsp_interrupt_stack_start:
+	.space 32768
+bsp_interrupt_stack_end:

@@ -96,7 +96,8 @@ void bsp_start( void)
 {
 
   uintptr_t interrupt_stack_start = (uintptr_t) bsp_interrupt_stack_start;
-  uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_size;
+  uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_end
+    - interrupt_stack_start;
 
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
