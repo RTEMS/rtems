@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	util.sa 3.7 7/29/91

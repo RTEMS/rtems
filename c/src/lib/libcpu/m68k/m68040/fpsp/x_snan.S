@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	x_snan.sa 3.3 7/1/91

@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	bugfix.sa 3.2 1/31/91

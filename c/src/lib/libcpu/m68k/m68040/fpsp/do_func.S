@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	do_func.sa 3.4 2/18/91

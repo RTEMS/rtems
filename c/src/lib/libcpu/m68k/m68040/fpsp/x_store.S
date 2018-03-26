@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	x_store.sa 3.2 1/24/91

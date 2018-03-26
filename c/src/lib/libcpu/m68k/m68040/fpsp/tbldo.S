@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	tbldo.sa 3.1 12/10/90

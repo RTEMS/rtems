@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	x_fline.sa 3.3 1/10/91

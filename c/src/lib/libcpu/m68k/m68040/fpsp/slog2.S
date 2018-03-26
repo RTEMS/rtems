@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	slog2.sa 3.1 12/10/90

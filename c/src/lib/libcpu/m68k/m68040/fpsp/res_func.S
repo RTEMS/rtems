@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	res_func.sa 3.9 7/29/91

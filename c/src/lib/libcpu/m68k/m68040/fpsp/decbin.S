@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	decbin.sa 3.3 12/19/90

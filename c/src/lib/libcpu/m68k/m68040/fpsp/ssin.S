@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	ssin.sa 3.3 7/29/91

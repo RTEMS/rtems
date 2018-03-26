@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	binstr.sa 3.3 12/19/90

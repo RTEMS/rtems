@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	bindec.sa 3.4 1/3/91

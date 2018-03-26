@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	x_unsupp.sa 3.3 7/1/91

@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	scale.sa 3.3 7/30/91

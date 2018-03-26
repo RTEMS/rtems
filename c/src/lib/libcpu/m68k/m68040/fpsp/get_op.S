@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	get_op.sa 3.6 5/19/92

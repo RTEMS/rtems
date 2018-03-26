@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	skeleton.sa 3.2 4/26/91

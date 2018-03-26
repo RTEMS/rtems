@@ -1,3 +1,4 @@
+#include "fpsp-namespace.h"
 //
 //
 //	x_operr.sa 3.5 7/1/91
