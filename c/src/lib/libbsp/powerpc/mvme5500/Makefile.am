@@ -66,6 +66,7 @@ network_rel_SOURCES = network/if_100MHz/GT64260eth.c \
     network/if_1GHz/if_wm.c network/if_1GHz/pci_map.c
 network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
 network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
+libbsp_a_LIBADD = network.rel
 endif
 
 EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
@@ -83,6 +84,8 @@ project_lib_DATA += mvme5500start.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
@@ -90,13 +93,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network.rel
-endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

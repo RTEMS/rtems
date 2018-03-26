@@ -39,13 +39,4 @@ if ppc405
 ## ppc4xx/include
 endif # ppc405
 
-if mpc6xx
-# mpc6xx/altivec
-noinst_PROGRAMS += mpc6xx/altivec.rel
-mpc6xx_altivec_rel_SOURCES = mpc6xx/altivec/vec_sup.c mpc6xx/altivec/vec_sup_asm.S
-mpc6xx_altivec_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc6xx_altivec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-EXTRA_DIST      += mpc6xx/altivec/README
-
 include $(top_srcdir)/../../../automake/local.am

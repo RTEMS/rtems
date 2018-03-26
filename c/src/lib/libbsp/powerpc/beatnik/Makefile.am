@@ -158,11 +158,16 @@ network_if_em.rel: network_if_em_tmp.rel
 	$(OBJCOPY) -G rtems_em_attach -G net_driver_ticks_per_sec \
                    -G rtems_em_pci_setup -G rtems_em_early_link_check_ops \
                    $^ $@
+
+libbsp_a_LIBADD = network_support.rel \
+    network_if_mve.rel network_if_gfe.rel network_if_em.rel
 endif
 
 # tod
 libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
@@ -170,13 +175,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
-
-if HAS_NETWORKING
-libbsp_a_LIBADD += network_support.rel \
-    network_if_mve.rel network_if_gfe.rel network_if_em.rel
-endif
 
 EXTRA_DIST += README LICENSE
 
