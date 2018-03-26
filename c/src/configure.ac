@@ -129,7 +129,7 @@ AC_CONFIG_SUBDIRS([make])
 BSP_SUBDIRS="$BSP_SUBDIRS make"
 
 RTEMS_CPU_SUBDIRS(lib/libcpu)
-if test -d "${srcdir}/lib/libcpu/${RTEMS_CPU}/configure.ac"; then
+if test -f "${srcdir}/lib/libcpu/${RTEMS_CPU}/configure.ac"; then
   libcpu_cpu_subdir="${RTEMS_CPU}"
 else
   libcpu_cpu_subdir=
