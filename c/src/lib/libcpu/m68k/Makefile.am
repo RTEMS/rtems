@@ -4,21 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-if mcf5272
-## mcf5272/include
-## clock
-noinst_PROGRAMS += mcf5272/clock.rel
-mcf5272_clock_rel_SOURCES = mcf5272/clock/ckinit.c
-mcf5272_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5272_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## timer
-noinst_PROGRAMS += mcf5272/timer.rel
-mcf5272_timer_rel_SOURCES = mcf5272/timer/timer.c mcf5272/timer/timerisr.S
-mcf5272_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5272_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if mcf548x
 ## mcf548x/include
 ## mcf548x/mcdma
