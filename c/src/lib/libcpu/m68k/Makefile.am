@@ -4,31 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-if m68040
-## m68040/fpsp
-noinst_PROGRAMS += m68040/fpsp.rel
-m68040_fpsp_rel_SOURCES = m68040/fpsp/rtems_fpsp.c m68040/fpsp/bindec.S \
-    m68040/fpsp/binstr.S m68040/fpsp/bugfix.S m68040/fpsp/decbin.S \
-    m68040/fpsp/do_func.S m68040/fpsp/gen_except.S m68040/fpsp/get_op.S \
-    m68040/fpsp/kernel_ex.S m68040/fpsp/res_func.S m68040/fpsp/round.S \
-    m68040/fpsp/rtems_skel.S m68040/fpsp/sacos.S m68040/fpsp/sasin.S \
-    m68040/fpsp/satan.S m68040/fpsp/satanh.S m68040/fpsp/scale.S \
-    m68040/fpsp/scosh.S m68040/fpsp/setox.S m68040/fpsp/sgetem.S \
-    m68040/fpsp/sint.S m68040/fpsp/slog2.S m68040/fpsp/slogn.S \
-    m68040/fpsp/smovecr.S m68040/fpsp/srem_mod.S m68040/fpsp/ssin.S \
-    m68040/fpsp/ssinh.S m68040/fpsp/stan.S m68040/fpsp/stanh.S \
-    m68040/fpsp/sto_res.S m68040/fpsp/stwotox.S m68040/fpsp/tbldo.S \
-    m68040/fpsp/util.S m68040/fpsp/x_bsun.S m68040/fpsp/x_fline.S \
-    m68040/fpsp/x_operr.S m68040/fpsp/x_ovfl.S m68040/fpsp/x_snan.S \
-    m68040/fpsp/x_store.S m68040/fpsp/x_unfl.S m68040/fpsp/x_unimp.S \
-    m68040/fpsp/x_unsupp.S
-m68040_fpsp_rel_CPPFLAGS = $(AM_CPPFLAGS)
-m68040_fpsp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_HEADERS = m68040/fpsp/fpsp.defs
-endif
-EXTRA_DIST = m68040/fpsp/README
-
 if mcf5206
 # mcf5206/include
 ## mcf5206/clock
