@@ -97,8 +97,7 @@ libbsp_a_SOURCES += shmsupp/lock.S \
 	shmsupp/intercom-mpci.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/e500/mmu.rel
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c \

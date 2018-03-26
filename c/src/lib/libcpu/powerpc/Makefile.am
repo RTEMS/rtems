@@ -41,14 +41,6 @@ endif # ppc405
 
 if mpc6xx
 
-# mpc6xx/mmu
-noinst_PROGRAMS += mpc6xx/mmu.rel
-mpc6xx_mmu_rel_SOURCES = mpc6xx/mmu/bat.c mpc6xx/mmu/bat.h \
-    mpc6xx/mmu/pte121.c mpc6xx/mmu/pte121.h \
-    mpc6xx/mmu/mmuAsm.S
-mpc6xx_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc6xx_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # mpc6xx/clock
 noinst_PROGRAMS += mpc6xx/clock.rel
 mpc6xx_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
@@ -69,14 +61,6 @@ noinst_PROGRAMS += e500/clock.rel
 e500_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
 e500_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
 e500_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
-# e500/mmu
-if e500_mmu
-noinst_PROGRAMS += e500/mmu.rel
-e500_mmu_rel_SOURCES = e500/mmu/mmu.c e500/mmu/e500_mmu.h
-e500_mmu_rel_CPPFLAGS = $(AM_CPPFLAGS)
-e500_mmu_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 
 include $(top_srcdir)/../../../automake/local.am

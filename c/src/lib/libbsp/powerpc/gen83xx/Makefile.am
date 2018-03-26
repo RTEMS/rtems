@@ -74,12 +74,13 @@ libbsp_a_SOURCES += i2c/i2c_init.c
 libbsp_a_SOURCES += spi/spi_init.c
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/gtm.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
-
-libbsp_a_LIBADD = ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel
 
 if HAS_NETWORKING
 libbsp_a_SOURCES += network/network.c

@@ -115,13 +115,15 @@ endif
 endif
 
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-dec-timer.c
 
 libbsp_a_LIBADD = \
     polledIO.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mpc6xx/mmu.rel \
     ../../../libcpu/@RTEMS_CPU@/mpc6xx/altivec.rel
 
 EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
