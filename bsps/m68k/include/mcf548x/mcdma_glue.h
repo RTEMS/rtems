@@ -20,6 +20,7 @@
 #define _MCDMA_GLUE_H
 
 #include <rtems.h>
+#include <rtems/irq.h>
 #include <mcf548x/mcf548x.h>
 
 #define MCDMA_CLR_PENDING(chan) (MCF548X_DMA_DIPR = (1 << (chan)))
