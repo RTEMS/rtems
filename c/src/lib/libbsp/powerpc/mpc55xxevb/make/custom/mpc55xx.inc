@@ -11,8 +11,6 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU = powerpc
 
-RTEMS_CPU_MODEL = mpc55xx
-
 CPU_CFLAGS_FLOAT ?= -msoft-float -mno-spe
 
 # FIXME

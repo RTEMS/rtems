@@ -5,11 +5,10 @@
 include $(RTEMS_ROOT)/make/custom/default.cfg
 #
 # FIXME: we might want to use the e300 CPU model explicitely,
-# using RTEMS_CPU_MODEL=e300 and -me300
+# using -me300
 # but I doubt the compiler actually generates different code
 #
 RTEMS_CPU=powerpc
-RTEMS_CPU_MODEL=mpc83xx
 
 #  This contains the compiler options necessary to select the CPU model
 #  and (hopefully) optimize for it. 

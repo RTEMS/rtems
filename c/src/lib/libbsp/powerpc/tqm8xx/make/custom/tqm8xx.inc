@@ -5,7 +5,6 @@
 include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU=powerpc
-RTEMS_CPU_MODEL=mpc860
 
 CPU_CFLAGS = -mcpu=860 -Dmpc860 \
              -mstrict-align -fno-strict-aliasing \
