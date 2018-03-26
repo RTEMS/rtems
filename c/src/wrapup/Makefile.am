@@ -17,9 +17,6 @@ SRCS = ../support/libsupport.a
 
 SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 
-# FIXME: ATM, there is no libcpu.a, anymore.
-# SRCS += $(wildcard $(PROJECT_LIB)/libcpu.a)
-
 SRCS += ../libchip/libflash.a
 SRCS += ../libchip/librtcio.a
 SRCS += ../libchip/libserialio.a

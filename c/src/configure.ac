@@ -128,19 +128,11 @@ RTEMS_BSP_CONFIG_SUBDIR(
 AC_CONFIG_SUBDIRS([make])
 BSP_SUBDIRS="$BSP_SUBDIRS make"
 
-RTEMS_CPU_SUBDIRS(lib/libcpu)
-if test -f "${srcdir}/lib/libcpu/${RTEMS_CPU}/configure.ac"; then
-  libcpu_cpu_subdir="${RTEMS_CPU}"
-else
-  libcpu_cpu_subdir=
-fi
-AC_SUBST(libcpu_cpu_subdir)
-
 # Is there code where there should be for this BSP?
 RTEMS_CPU_SUBDIRS([lib/libbsp])
 AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
-BSP_SUBDIRS="$BSP_SUBDIRS lib"
+BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
@@ -178,8 +170,6 @@ AC_CONFIG_FILES([Makefile],
 AC_CONFIG_FILES([
 support/Makefile
 libchip/Makefile
-lib/Makefile
-lib/libcpu/Makefile
 lib/libbsp/Makefile
 wrapup/Makefile
 ])
