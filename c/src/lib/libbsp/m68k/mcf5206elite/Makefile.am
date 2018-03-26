@@ -46,12 +46,11 @@ libbsp_a_SOURCES += nvram/nvram.c
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
-
-libbsp_a_LIBADD = \
-    ../../../libcpu/@RTEMS_CPU@/mcf5206/clock.rel \
-    ../../../libcpu/@RTEMS_CPU@/mcf5206/mcfuart.rel \
-    ../../../libcpu/@RTEMS_CPU@/mcf5206/timer.rel \
-    ../../../libcpu/@RTEMS_CPU@/mcf5206/mbus.rel
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/ckinit.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/mcfmbus.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/mcfuart.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/timer.c
+libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/timerisr.S
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5206elite/headers.am

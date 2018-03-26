@@ -4,33 +4,6 @@ include $(top_srcdir)/../../../automake/compile.am
 
 noinst_PROGRAMS =
 
-if mcf5206
-# mcf5206/include
-## mcf5206/clock
-noinst_PROGRAMS += mcf5206/clock.rel
-mcf5206_clock_rel_SOURCES = mcf5206/clock/ckinit.c
-mcf5206_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5206_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mcf5206/mcfuart
-noinst_PROGRAMS += mcf5206/mcfuart.rel
-mcf5206_mcfuart_rel_SOURCES = mcf5206/console/mcfuart.c
-mcf5206_mcfuart_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5206_mcfuart_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mcf5206/mbus
-noinst_PROGRAMS += mcf5206/mbus.rel
-mcf5206_mbus_rel_SOURCES = mcf5206/mbus/mcfmbus.c
-mcf5206_mbus_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5206_mbus_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-## mcf5206/timer
-noinst_PROGRAMS += mcf5206/timer.rel
-mcf5206_timer_rel_SOURCES = mcf5206/timer/timer.c mcf5206/timer/timerisr.S
-mcf5206_timer_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mcf5206_timer_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
-
 if mcf5272
 ## mcf5272/include
 ## clock
