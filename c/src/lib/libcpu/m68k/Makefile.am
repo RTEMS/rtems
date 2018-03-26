@@ -8,10 +8,6 @@ if shared
 
 ## shared/misc
 
-# gcc doesn't recognize difference between the cpu32 and cpu32+ so we have to
-if mcpu32p
-M68K_CPPFLAGS = -D__mcpu32p__
-endif
 if mcf5272
 M68K_CPPFLAGS = -Dmcf5272
 endif
