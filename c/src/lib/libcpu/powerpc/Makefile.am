@@ -40,13 +40,6 @@ if ppc405
 endif # ppc405
 
 if mpc6xx
-
-# mpc6xx/clock
-noinst_PROGRAMS += mpc6xx/clock.rel
-mpc6xx_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
-mpc6xx_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-mpc6xx_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # mpc6xx/altivec
 noinst_PROGRAMS += mpc6xx/altivec.rel
 mpc6xx_altivec_rel_SOURCES = mpc6xx/altivec/vec_sup.c mpc6xx/altivec/vec_sup_asm.S
@@ -54,13 +47,5 @@ mpc6xx_altivec_rel_CPPFLAGS = $(AM_CPPFLAGS)
 mpc6xx_altivec_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 endif
 EXTRA_DIST      += mpc6xx/altivec/README
-
-# e500/clock
-if e500_clock
-noinst_PROGRAMS += e500/clock.rel
-e500_clock_rel_SOURCES = mpc6xx/clock/c_clock.c mpc6xx/clock/c_clock.h
-e500_clock_rel_CPPFLAGS = $(AM_CPPFLAGS)
-e500_clock_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-endif
 
 include $(top_srcdir)/../../../automake/local.am
