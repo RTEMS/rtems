@@ -48,18 +48,13 @@ void bsp_interrupt_handler_default(rtems_vector_number vector)
 
 rtems_status_code bsp_interrupt_facility_initialize()
 {
-  /* TODO */
-  return 0;
+  return RTEMS_NOT_IMPLEMENTED;
 }
 
 void bsp_interrupt_vector_enable(rtems_vector_number vector)
 {
-  /* TODO */
-  return 0;
 }
 
 void bsp_interrupt_vector_disable(rtems_vector_number vector)
 {
-  /* TODO */
-  return 0;
 }

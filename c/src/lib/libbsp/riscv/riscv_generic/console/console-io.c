@@ -124,7 +124,6 @@ void console_initialize_hardware(void)
 static void outbyte_console(char ch)
 {
   htif_console_putchar(ch);
-  return 0;
 }
 
 static char inbyte_console(void)
