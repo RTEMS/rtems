@@ -139,8 +139,6 @@ libjffs2_a_CFLAGS =
 libjffs2_a_CFLAGS += -Wno-pointer-sign
 libjffs2_a_CPPFLAGS =
 libjffs2_a_CPPFLAGS += $(AM_CPPFLAGS) -I$(srcdir)/src/jffs2/include
-libjffs2_a_CPPFLAGS += -D__ECOS
-libjffs2_a_CPPFLAGS += '-DKBUILD_MODNAME="JFFS2"'
 
 # ---
 include $(top_srcdir)/automake/subdirs.am

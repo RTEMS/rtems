@@ -1,3 +1,5 @@
+#include "rtems-jffs2-config.h"
+
 /*
  * JFFS2 -- Journalling Flash File System, Version 2.
  *
