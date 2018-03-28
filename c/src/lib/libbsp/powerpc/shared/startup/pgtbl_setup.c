@@ -1,6 +1,5 @@
 #include <rtems.h>
 #include <libcpu/mmu.h>
-#include <libcpu/page.h>
 #include <rtems/bspIo.h>
 #include <libcpu/pte121.h>
 
@@ -15,6 +14,9 @@
  *       Also, the 'setup' routine must reduce
  *       *pmemsize by the size of the page table.
  */
+/* to align the pointer to the (next) page boundary */
+#define PAGE_ALIGN(addr)	(((addr)+PAGE_SIZE-1)&PAGE_MASK)
+
 
 /*
  * Authorship

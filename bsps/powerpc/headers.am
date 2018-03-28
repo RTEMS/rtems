@@ -37,7 +37,6 @@ include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/e500_mmu.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/io.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/irq.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/mmu.h
-include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/page.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/pgtable.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/powerpc-utility.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/pte121.h

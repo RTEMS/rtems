@@ -19,7 +19,6 @@
 #include "bootldr.h"
 #include "pci.h"
 #include <libcpu/io.h>
-#include <libcpu/page.h>
 #include <bsp/consoleIo.h>
 #include <string.h>
 #include <bsp.h>
