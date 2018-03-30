@@ -1,8 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_DIST = README
-EXTRA_DIST += rtems/bootp.h
 
 # poll is not supported
 UNUSED_FILES = poll.h
@@ -116,14 +114,12 @@ libc_mans = libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
     libc/getservent.3 libc/inet.3 libc/linkaddr.3 libc/ns.3 \
     libc/rcmd.3 libc/resolver.3
-EXTRA_DIST += $(libc_mans)
 
 if LIBNETWORKING
 man_MANS = $(libc_MANS)
 
 ## lib
 
-EXTRA_DIST += lib/README
 
 lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 
@@ -135,7 +131,6 @@ lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
 lib_a_SOURCES += rtems/rtems_syscall_api.c
 endif
 
-EXTRA_DIST += $(UNUSED_FILES)
 
 include $(top_srcdir)/automake/local.am
 if LIBNETWORKING

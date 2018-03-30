@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -19,7 +18,6 @@ noinst_PROGRAMS =
 if ENABLE_LCD
 endif
 
-EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -28,8 +26,6 @@ project_lib_DATA += linkcmds
 dist_project_lib_DATA += startup/linkcmds.csb337
 dist_project_lib_DATA += startup/linkcmds.csb637
 
-EXTRA_DIST += README
-EXTRA_DIST += README.kit637_v6
 
 noinst_LIBRARIES = libbsp.a
 

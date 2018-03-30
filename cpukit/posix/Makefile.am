@@ -1,7 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_DIST =
 
 noinst_LIBRARIES = libposix.a
 libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
@@ -189,7 +188,6 @@ libposix_a_SOURCES += src/getitimer.c src/setitimer.c
 libposix_a_SOURCES += src/psxpriorityisvalid.c
 libposix_a_SOURCES += src/psxnametoid.c
 
-EXTRA_DIST += src/README.mqueue
 
 libposix_a_SOURCES += src/sched_getparam.c \
     src/sched_getscheduler.c \

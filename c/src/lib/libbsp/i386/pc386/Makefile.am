@@ -2,7 +2,6 @@
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 # FIXME: We must not include *.cfg
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
@@ -22,12 +21,10 @@ _SUBDIRS = . tools
 
 TMPINSTALL_FILES =
 
-EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += start/start16.S
 start16.$(OBJEXT): start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 
@@ -180,11 +177,6 @@ if HAS_SMP
 libbsp_a_LIBADD = appstart.$(OBJEXT)
 endif
 
-EXTRA_DIST += HOWTO
-EXTRA_DIST += README.dec21140
-EXTRA_DIST += STATUS
-EXTRA_DIST += times_i486dx
-EXTRA_DIST += times_p5
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(top_srcdir)/../../../../automake/subdirs.am

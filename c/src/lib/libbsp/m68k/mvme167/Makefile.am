@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -10,7 +9,6 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 
-EXTRA_DIST += ../../m68k/shared/start/start.S
 start.$(OBJEXT): ../../m68k/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -45,7 +43,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp.am

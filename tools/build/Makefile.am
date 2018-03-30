@@ -11,9 +11,7 @@ rtems_bin2c_SOURCES = rtems-bin2c.c compat.c
 bin_SCRIPTS = install-if-change
 
 noinst_SCRIPTS = multigen cvsignore-add.sh
-EXTRA_DIST = multigen cvsignore-add.sh
 
 noinst_SCRIPTS += doxy-filter
-EXTRA_DIST += doxy-filter
 
 include $(top_srcdir)/../../automake/host.am

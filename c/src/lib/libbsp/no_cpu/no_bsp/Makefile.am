@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -32,7 +31,6 @@ libbsp_a_SOURCES += timer/timer.c timer/timerisr.c
 libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/no_cpu/no_bsp/headers.am

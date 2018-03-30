@@ -1,6 +1,5 @@
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_DIST =
 noinst_LIBRARIES =
 noinst_PROGRAMS =
 
@@ -32,9 +31,6 @@ endif
 libnetchip_a_SOURCES += network/smc91111.c network/smc91111config.h
 endif
 
-EXTRA_DIST += network/README network/README.cs8900 network/README.dec21140 \
-    network/README.i82586 network/README.open_eth network/README.sonic \
-    network/cs8900.c.bsp network/README.tulipclone
 
 # rtc
 noinst_LIBRARIES += librtcio.a
@@ -44,8 +40,6 @@ librtcio_a_SOURCES = rtc/rtcprobe.c rtc/icm7170.c rtc/icm7170_reg.c \
     rtc/m48t08_reg.c rtc/m48t08_reg2.c rtc/m48t08_reg4.c rtc/m48t08_reg8.c \
     rtc/mc146818a.c rtc/mc146818a_ioreg.c rtc/ds1375.c
 
-EXTRA_DIST += rtc/README.ds1643 rtc/README.icm7170 rtc/README.m48t08 \
-    rtc/README.m48t18 rtc/STATUS
 
 # i2c
 noinst_LIBRARIES += libi2cio.a
@@ -74,8 +68,6 @@ libserialio_a_SOURCES = serial/mc68681.c serial/mc68681_baud.c \
     serial/z85c30_p.h
 libserialio_a_SOURCES += serial/ns16550-context.c
 
-EXTRA_DIST += serial/README.mc68681 serial/README.ns16550 \
-    serial/README.xr88681 serial/README.z85c30 serial/STATUS
 
 ## shmdr
 if HAS_MP
@@ -86,7 +78,6 @@ libshmdr_a_SOURCES = shmdr/addlq.c shmdr/cnvpkt.c shmdr/getlq.c shmdr/dump.c \
     shmdr/mpisr.c shmdr/poll.c shmdr/receive.c shmdr/retpkt.c shmdr/send.c
 endif
 
-EXTRA_DIST += shmdr/README
 
 ## --
 

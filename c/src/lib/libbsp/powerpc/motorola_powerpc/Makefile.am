@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 _SUBDIRS  = .
 _SUBDIRS += bootloader
@@ -17,17 +16,14 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 
-EXTRA_DIST += ../../powerpc/shared/start/start.S
 start.$(OBJEXT): ../../powerpc/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/vectors_entry.S
 vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += vectors_entry.$(OBJEXT)
@@ -126,11 +122,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 libbsp_a_LIBADD = polledIO.rel
 
-EXTRA_DIST += BOOTING README.mtx603e README.MVME2100 README.MVME2300 \
-              README.MVME2400 \
-    README.OTHERBOARDS
-EXTRA_DIST += README.dec21140
-EXTRA_DIST += times.mcp750 times.mvme2307
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(top_srcdir)/../../../../automake/subdirs.am

@@ -1,7 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_DIST = include/rtems/README
 
 noinst_LIBRARIES = libsapi.a
 libsapi_a_SOURCES = src/extension.c src/extensioncreate.c \

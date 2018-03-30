@@ -11,7 +11,6 @@ MAKE_FILES = README directory.cfg lib.cfg
 rtems_make_DATA = $(MAKE_FILES) $(GENERIC_FILES)
 
 noinst_DATA = leaf.cfg
-EXTRA_DIST = leaf.cfg
 
 rtemsdir = $(exec_prefix)
 rtems_bspdir = $(rtemsdir)/@RTEMS_BSP@

@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -11,7 +10,6 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 
-EXTRA_DIST += ../../sparc/shared/start/start.S
 start.$(OBJEXT): ../../sparc/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -176,7 +174,6 @@ libbsp_a_SOURCES += ../../sparc/shared/net/greth.c
 libbsp_a_SOURCES += ../../sparc/shared/net/network_interface_add.c
 endif
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/sparc/leon2/headers.am

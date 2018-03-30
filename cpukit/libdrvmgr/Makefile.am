@@ -2,7 +2,6 @@ include $(top_srcdir)/automake/compile.am
 
 if LIBDRVMGR
 
-EXTRA_DIST=
 
 noinst_LIBRARIES = libdrvmgr.a
 

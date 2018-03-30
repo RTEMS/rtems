@@ -13,6 +13,5 @@ libtelnetd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 endif
 
-EXTRA_DIST = README
 
 include $(top_srcdir)/automake/local.am

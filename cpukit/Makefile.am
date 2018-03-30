@@ -88,7 +88,6 @@ if LIBGNAT
 endif
 
 ## HACK: doxygen filter.
-EXTRA_DIST = doxy-filter
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

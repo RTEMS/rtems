@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 CLEANFILES      =
 DISTCLEANFILES  =
@@ -16,21 +15,17 @@ project_lib_DATA      =
 DISTCLEANFILES += include/bspopts.h
 
 #start
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 
-EXTRA_DIST += ../../powerpc/shared/start/preload.S
 preload.$(OBJEXT): ../../powerpc/shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-EXTRA_DIST += ../../powerpc/shared/start/vectors_entry.S
 vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-EXTRA_DIST += ../../powerpc/shared/start/start.S
 start.$(OBJEXT): ../../powerpc/shared/start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
@@ -176,7 +171,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
-EXTRA_DIST += README LICENSE
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

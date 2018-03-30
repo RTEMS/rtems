@@ -9,11 +9,8 @@ dist_project_lib_DATA = shared/startup/linkcmds.base
 dist_project_lib_DATA += shared/startup/linkcmds.armv4
 dist_project_lib_DATA += shared/startup/linkcmds.armv7m
 
-EXTRA_DIST =
 
 # comm
-EXTRA_DIST += shared/comm/uart.h
-EXTRA_DIST += shared/comm/uart.c
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

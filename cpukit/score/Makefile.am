@@ -229,7 +229,6 @@ libscore_a_SOURCES += src/kern_tc.c
 libscore_a_SOURCES += src/libatomic.c
 libscore_a_SOURCES += src/processormaskcopy.c
 
-EXTRA_DIST = src/Unlimited.txt
 
 # This file is in the build tree
 DISTCLEANFILES = ../..include/rtems/score/cpuopts.h

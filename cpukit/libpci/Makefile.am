@@ -3,7 +3,6 @@ include $(top_srcdir)/automake/multilib.am
 
 if LIBPCI
 
-EXTRA_DIST=
 
 ## PCI Library
 noinst_LIBRARIES = libpci.a

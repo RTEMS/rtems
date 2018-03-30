@@ -1,6 +1,5 @@
 rtems_tests_PROGRAMS = mathl
 mathl_SOURCES = init.c domathl.c
-EXTRA_DIST = $(srcdir)/../math/domath.in
 
 # FIXME: Skip long double, not yet supported in newlib
 # => This test currently is a nop

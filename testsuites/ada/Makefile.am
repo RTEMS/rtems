@@ -7,7 +7,6 @@ endif
 
 DIST_SUBDIRS = support samples sptests tmtests mptests
 
-EXTRA_DIST = ada.am
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

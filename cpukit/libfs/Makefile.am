@@ -3,7 +3,6 @@ include $(top_srcdir)/automake/compile.am
 
 _SUBDIRS = src/nfsclient
 
-EXTRA_DIST = README
 
 noinst_LIBRARIES = libdefaultfs.a
 libdefaultfs_a_SOURCES = \

@@ -1,7 +1,6 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
-EXTRA_DIST =
 
 if LIBNETWORKING
 man_MANS =
@@ -15,7 +14,6 @@ libxdr_a_SOURCES = src/xdr/xdr.c src/xdr/xdr_array.c src/xdr/xdr_float.c \
 endif
 
 libxdr_mans = src/xdr/xdr.3
-EXTRA_DIST += $(libxdr_mans)
 
 if LIBNETWORKING
 man_MANS += $(libxdr_mans)
@@ -45,29 +43,13 @@ librpc_mans = src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \
     src/rpc/rpc.3 src/rpc/rpc_secure.3 src/rpc/rstat_svc.8 \
     src/rpc/des_crypt.3 src/rpc/getrpcport.3 src/rpc/publickey.5 \
     src/rpc/rpc.5 src/rpc/rstat.1 src/rpc/rtime.3
-EXTRA_DIST += $(librpc_mans)
 
 if LIBNETWORKING
 man_MANS += $(librpc_mans)
 endif
 
-EXTRA_DIST += src/rpc/DISCLAIMER src/rpc/README
 
-EXTRA_DIST += README_RTEMS
 
 ## FIXME: Unused
-EXTRA_DIST += include/rpcsvc/bootparam_prot.x include/rpcsvc/crypt.x \
-    include/rpcsvc/key_prot.x include/rpcsvc/klm_prot.x \
-    include/rpcsvc/mount.x include/rpcsvc/nfs_prot.x \
-    include/rpcsvc/nis_cache.x include/rpcsvc/nis_callback.x \
-    include/rpcsvc/nis_db.h include/rpcsvc/nislib.h \
-    include/rpcsvc/nis_object.x include/rpcsvc/nis_tags.h \
-    include/rpcsvc/nis.x include/rpcsvc/nlm_prot.x \
-    include/rpcsvc/pmap_prot.x include/rpcsvc/rex.x include/rpcsvc/rnusers.x \
-    include/rpcsvc/rquota.x include/rpcsvc/rstat.x include/rpcsvc/rwall.x \
-    include/rpcsvc/sm_inter.x include/rpcsvc/spray.x include/rpcsvc/ypclnt.h \
-    include/rpcsvc/yppasswd.x include/rpcsvc/yp_prot.h \
-    include/rpcsvc/ypupdate_prot.x include/rpcsvc/yp.x \
-    include/rpcsvc/ypxfrd.x
 
 include $(top_srcdir)/automake/local.am

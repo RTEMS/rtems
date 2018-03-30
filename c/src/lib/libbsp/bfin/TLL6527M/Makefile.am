@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -11,7 +10,6 @@ DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 
-EXTRA_DIST += ../shared/start/start.S
 start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -32,7 +30,6 @@ libbsp_a_SOURCES += console/console.c
 libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 libbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/start/interrupt.c
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared.am

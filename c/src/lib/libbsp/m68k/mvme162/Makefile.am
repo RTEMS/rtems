@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -11,7 +10,6 @@ noinst_PROGRAMS =
 
 ## Zilog component header files
 
-EXTRA_DIST += ../../m68k/shared/start/start.S
 start.$(OBJEXT): ../../m68k/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -52,7 +50,6 @@ if HAS_FPSP
 include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp.am
 endif
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/m68k/mvme162/headers.am

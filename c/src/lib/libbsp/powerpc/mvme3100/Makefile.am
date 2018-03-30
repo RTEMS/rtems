@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -13,15 +12,12 @@ noinst_PROGRAMS =
 
 project_lib_DATA =
 
-EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
-EXTRA_DIST += ../shared/start/preload.S
 preload.$(OBJEXT): ../shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-EXTRA_DIST += ../shared/start/vectors_entry.S
 vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
@@ -31,7 +27,6 @@ motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) \
 
 project_lib_DATA += motld_start.$(OBJEXT)
 
-EXTRA_DIST += ../shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
@@ -108,7 +103,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
-EXTRA_DIST += LICENSE README KNOWN_PROBLEMS
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am

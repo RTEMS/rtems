@@ -8,7 +8,6 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 ## added but it is present in the source tree.
 _SUBDIRS = @RTEMS_BSP_FAMILY@
 
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../automake/subdirs.am
 include $(top_srcdir)/../../../automake/local.am

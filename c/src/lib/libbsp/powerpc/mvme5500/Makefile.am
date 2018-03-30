@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -14,7 +13,6 @@ noinst_LIBRARIES = libbsp.a
 libbsp_a_SOURCES =
 
 # UNUSED
-EXTRA_DIST += startup/bootpstuff.c
 
 # startup
 libbsp_a_SOURCES += startup/bspstart.c \
@@ -69,7 +67,6 @@ network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 libbsp_a_LIBADD = network.rel
 endif
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)

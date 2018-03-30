@@ -1,5 +1,4 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -8,22 +7,18 @@ dist_project_lib_DATA = startup/bsp_specs
 
 DISTCLEANFILES = include/bspopts.h
 
-EXTRA_DIST += README
 
 noinst_PROGRAMS =
 
 
-EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crti.S
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-EXTRA_DIST += ../../powerpc/shared/start/rtems_crtn.S
 rtems_crtn.$(OBJEXT): ../../powerpc/shared/start/rtems_crtn.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crtn.$(OBJEXT)

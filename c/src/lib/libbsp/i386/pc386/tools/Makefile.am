@@ -1,6 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../../../../aclocal
 
-EXTRA_DIST = Spec.doc
 
 # HACK: autoconf wants to transform the name, but RTEMS *.cfgs are not able
 # to deal with it.

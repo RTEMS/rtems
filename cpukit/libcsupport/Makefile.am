@@ -132,6 +132,5 @@ libcsupport_a_SOURCES += src/flockfile.c src/funlockfile.c src/ftrylockfile.c
 libcalloc_a_SOURCES = src/calloc.c
 libcalloc_a_CFLAGS = -fno-builtin
 
-EXTRA_DIST = src/TODO src/CASES src/README
 
 include $(top_srcdir)/automake/local.am

@@ -58,12 +58,6 @@ _SUBDIRS += mrfs_fsscandir01
 _SUBDIRS += mrfs_fssymlink
 _SUBDIRS += mrfs_fstime
 
-EXTRA_DIST =
-EXTRA_DIST += support/ramdisk_support.c
-EXTRA_DIST += support/ramdisk_support.h
-EXTRA_DIST += support/fstest_support.c
-EXTRA_DIST += support/fstest_support.h
-EXTRA_DIST += support/fstest.h
 
 include $(top_srcdir)/../automake/subdirs.am
 include $(top_srcdir)/../automake/local.am

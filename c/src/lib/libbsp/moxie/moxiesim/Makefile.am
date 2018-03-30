@@ -3,7 +3,6 @@
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
-EXTRA_DIST =
 
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
@@ -13,7 +12,6 @@ dist_project_lib_DATA = startup/bsp_specs
 DISTCLEANFILES = include/bspopts.h
 
 
-EXTRA_DIST += start/start.S
 start.$(OBJEXT): start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -42,7 +40,6 @@ libbsp_a_SOURCES += ../../shared/timerstub.c
 # Cache
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-EXTRA_DIST += times
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/moxie/moxiesim/headers.am
