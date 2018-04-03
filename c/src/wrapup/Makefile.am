@@ -13,8 +13,6 @@ TMPINSTALL_FILES = $(PROJECT_LIB)/librtemsbsp.a
 
 CLEANFILES = o-optimize/librtemsbsp.a
 
-SRCS = ../support/libsupport.a
-
 SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 
 SRCS += ../libchip/libflash.a

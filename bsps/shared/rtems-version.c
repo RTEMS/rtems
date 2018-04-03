@@ -9,6 +9,8 @@
 
 #include <rtems/system.h>
 
+#include <bspopts.h>
+
 #ifndef RTEMS_VERSION
 #error "Missing RTEMS_VERSION"
 #endif
@@ -23,4 +25,5 @@
 #endif
 
 const char _RTEMS_version[] =
-  "rtems-" RTEMS_VERSION " (" CPU_NAME "/" CPU_MODEL_NAME "/" RTEMS_BSP ")";
+  "rtems-" RTEMS_VERSION " (" CPU_NAME "/" CPU_MODEL_NAME "/"
+  RTEMS_XSTRING( RTEMS_BSP ) ")";

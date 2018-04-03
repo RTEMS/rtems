@@ -134,7 +134,6 @@ AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
 BSP_SUBDIRS="$BSP_SUBDIRS libchip"
-BSP_SUBDIRS="$BSP_SUBDIRS support"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 # Build testsuites
@@ -168,7 +167,6 @@ AC_CONFIG_FILES([Makefile],
  MAKE=${MAKE}])
 
 AC_CONFIG_FILES([
-support/Makefile
 libchip/Makefile
 lib/libbsp/Makefile
 wrapup/Makefile

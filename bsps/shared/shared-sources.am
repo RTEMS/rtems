@@ -1,0 +1,1 @@
+libbsp_a_SOURCES += ../../../../../../bsps/shared/rtems-version.c
