@@ -35,4 +35,5 @@ libbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
 libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m32c/m32cbsp/headers.am

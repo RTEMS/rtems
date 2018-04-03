@@ -73,4 +73,5 @@ libbsp_a_SOURCES += irq/interruptmask.c
 libbsp_a_SOURCES += ../shared/irq/i8259.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/malta/headers.am

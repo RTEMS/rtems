@@ -81,4 +81,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/or1k/shared/cache/cache.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/or1k/generic_or1k/headers.am

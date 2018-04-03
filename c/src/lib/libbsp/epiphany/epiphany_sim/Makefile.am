@@ -68,4 +68,5 @@ libbsp_a_SOURCES += console/console-io.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/epiphany/epiphany_sim/headers.am

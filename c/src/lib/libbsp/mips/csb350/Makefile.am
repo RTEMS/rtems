@@ -56,4 +56,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
 libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/csb350/headers.am

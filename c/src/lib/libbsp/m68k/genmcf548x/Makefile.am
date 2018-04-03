@@ -59,4 +59,5 @@ libbsp_a_SOURCES += network/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

@@ -49,6 +49,7 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions.am
 include $(srcdir)/../../../../../../bsps/powerpc/virtex4/headers.am

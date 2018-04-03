@@ -97,4 +97,5 @@ libbsp_a_SOURCES += startup/fb-config.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/realview-pbx-a9/headers.am

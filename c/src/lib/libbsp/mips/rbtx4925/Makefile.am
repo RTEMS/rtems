@@ -60,4 +60,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/timer.c
 libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/gettime.S
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/rbtx4925/headers.am

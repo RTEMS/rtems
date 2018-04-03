@@ -93,4 +93,5 @@ libbsp_a_SOURCES += ../../lm32/shared/milkymist_networking/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/lm32/milkymist/headers.am

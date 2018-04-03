@@ -124,6 +124,7 @@ libbsp_a_LIBADD = polledIO.rel
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions.am

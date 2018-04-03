@@ -90,4 +90,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/stm32f4/headers.am

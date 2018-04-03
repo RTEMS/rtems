@@ -38,4 +38,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/m68k/csb360/dev/timerisr.S
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/csb360/start/idle-mcf5272.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/csb360/headers.am

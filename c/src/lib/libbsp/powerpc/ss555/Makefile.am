@@ -45,5 +45,6 @@ libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors_init.c
 libbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/vectors.S
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
 include $(srcdir)/../../../../../../bsps/powerpc/ss555/headers.am

@@ -36,4 +36,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5225x/headers.am

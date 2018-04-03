@@ -179,5 +179,6 @@ endif
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(srcdir)/../../../../../../bsps/i386/pc386/headers.am

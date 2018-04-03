@@ -128,4 +128,5 @@ libbsp_a_SOURCES += ../shared/mminit.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/raspberrypi/headers.am

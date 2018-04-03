@@ -57,4 +57,5 @@ libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/gdbarmsim/headers.am

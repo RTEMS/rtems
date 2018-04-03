@@ -41,4 +41,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 noinst_LIBRARIES = libbsp.a
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/v850/gdbv850sim/headers.am

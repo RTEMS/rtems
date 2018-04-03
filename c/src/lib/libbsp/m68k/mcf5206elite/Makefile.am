@@ -50,4 +50,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/timer.c
 libbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/dev/timerisr.S
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mcf5206elite/headers.am
