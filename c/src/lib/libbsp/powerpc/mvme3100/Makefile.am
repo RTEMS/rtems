@@ -73,15 +73,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
-# vme
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeTsi148.c \
-    ../../shared/vmeUniverse/bspVmeDmaList.c \
-    ../../shared/vmeUniverse/vmeTsi148.h \
-    ../../shared/vmeUniverse/vme_am_defs.h \
-    ../../shared/vmeUniverse/VME.h \
-    ../../powerpc/shared/vme/vmeconfig.c \
-    ../../powerpc/shared/vme/vme_universe.c
-
 # flash
 libbsp_a_SOURCES += ../shared/flash/flash.c \
     ../shared/flash/spansionFlash.c \
@@ -108,4 +99,5 @@ include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/vme-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/mvme3100/headers.am

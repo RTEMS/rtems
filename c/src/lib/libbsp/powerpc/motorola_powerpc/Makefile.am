@@ -95,15 +95,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h
 libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.h
 libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
 
-# vme
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c
-libbsp_a_SOURCES += ../../shared/vmeUniverse/bspVmeDmaList.c
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.h
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vme_am_defs.h
-libbsp_a_SOURCES += ../../shared/vmeUniverse/VME.h
-libbsp_a_SOURCES += ../../powerpc/shared/vme/vmeconfig.c
-libbsp_a_SOURCES += ../../powerpc/shared/vme/vme_universe.c
-
 if QEMU
 if HAS_NETWORKING
 libbsp_a_SOURCES += ../../i386/pc386/ne2000/ne2000.c
@@ -128,4 +119,5 @@ include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/vme-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/motorola_powerpc/headers.am

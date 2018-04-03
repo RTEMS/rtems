@@ -25,6 +25,11 @@ include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/tsec.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/u-boot-board-info.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/uart.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vectors.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vmeTsi148.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vmeTsi148DMA.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vmeUniverse.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vmeUniverseDMA.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vme_am_defs.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/vpd.h
 
 include_libcpudir = $(includedir)/libcpu

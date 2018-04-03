@@ -52,11 +52,6 @@ libbsp_a_SOURCES += vectors/exceptionhandler.c \
 # GT64260
 libbsp_a_SOURCES += GT64260/GT64260TWSI.c GT64260/MVME5500I2C.c
 
-# vme
-libbsp_a_SOURCES += ../../shared/vmeUniverse/vmeUniverse.c\
-	../shared/vme/vmeconfig.c ../../shared/vmeUniverse/bspVmeDmaList.c\
-	../shared/vme/vme_universe.c
-
 if HAS_NETWORKING
 network_CPPFLAGS = -D_KERNEL -D__BSD_VISIBLE
 noinst_PROGRAMS += network.rel
@@ -95,4 +90,5 @@ include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/vme-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/mvme5500/headers.am

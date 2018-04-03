@@ -82,13 +82,6 @@ libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     pci/gt_pci_init.c pci/pci_io_remap.c pci/motload_fixup.c \
     ../../powerpc/shared/pci/pcifinddevice.c
 
-#vme
-libbsp_a_SOURCES += ../shared/vme/vmeconfig.c \
-    ../shared/vme/vme_universe.c \
-    ../../shared/vmeUniverse/vmeUniverse.c \
-    ../../shared/vmeUniverse/vmeTsi148.c \
-    ../../shared/vmeUniverse/bspVmeDmaList.c
-
 #network
 if HAS_NETWORKING
 noinst_PROGRAMS += network_support.rel
@@ -176,4 +169,5 @@ include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/vme-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/beatnik/headers.am

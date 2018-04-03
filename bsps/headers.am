@@ -23,11 +23,6 @@ include_bsp_HEADERS += ../../bsps/include/bsp/stackalloc.h
 include_bsp_HEADERS += ../../bsps/include/bsp/u-boot.h
 include_bsp_HEADERS += ../../bsps/include/bsp/uart-output-char.h
 include_bsp_HEADERS += ../../bsps/include/bsp/utility.h
-include_bsp_HEADERS += ../../bsps/include/bsp/vmeTsi148.h
-include_bsp_HEADERS += ../../bsps/include/bsp/vmeTsi148DMA.h
-include_bsp_HEADERS += ../../bsps/include/bsp/vmeUniverse.h
-include_bsp_HEADERS += ../../bsps/include/bsp/vmeUniverseDMA.h
-include_bsp_HEADERS += ../../bsps/include/bsp/vme_am_defs.h
 
 include_libchipdir = $(includedir)/libchip
 include_libchip_HEADERS =
