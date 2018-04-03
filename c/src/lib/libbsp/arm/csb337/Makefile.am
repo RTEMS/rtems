@@ -8,9 +8,6 @@ dist_project_lib_DATA = startup/bsp_specs
 if ENABLE_LCD
 endif
 
-if ENABLE_UMON
-endif
-
 DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
@@ -61,12 +58,12 @@ libbsp_a_SOURCES += console/sed1356.c console/fbcons.c
 endif
 # umon
 if ENABLE_UMON
-libbsp_a_SOURCES += ../../shared/umon/umonrtemsglue.c  \
-    ../../shared/umon/monlib.c ../../shared/umon/tfsDriver.c \
-    ../../shared/umon/umoncons.c startup/umonsupp.c
+libbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/monlib.c
+libbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/tfsDriver.c
+libbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umonrtemsglue.c
 endif
 if ENABLE_UMON_CONSOLE
-libbsp_a_SOURCES += ../../shared/umon/umoncons.c
+libbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umoncons.c
 endif
 
 # Cache
