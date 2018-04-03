@@ -13,17 +13,7 @@ TMPINSTALL_FILES = $(PROJECT_LIB)/librtemsbsp.a
 
 CLEANFILES = o-optimize/librtemsbsp.a
 
-SRCS += ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
-
-SRCS += ../libchip/libflash.a
-SRCS += ../libchip/librtcio.a
-SRCS += ../libchip/libserialio.a
-SRCS += ../libchip/libide.a
-if HAS_NETWORKING
-SRCS += ../libchip/libnetchip.a
-endif
-SRCS += ../libchip/libi2cio.a
-SRCS += ../libchip/libdisplay.a
+SRCS = ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 
 if HAS_MP
 SRCS += ../libchip/libshmdr.a

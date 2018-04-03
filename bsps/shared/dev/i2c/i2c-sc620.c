@@ -18,10 +18,6 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#ifdef HAVE_CONFIG_H
-  #include "config.h"
-#endif
-
 #include <libchip/i2c-sc620.h>
 
 #include <rtems/libio.h>

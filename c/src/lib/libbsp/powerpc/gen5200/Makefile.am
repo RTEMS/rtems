@@ -57,7 +57,7 @@ libbsp_a_SOURCES += console/console.c
 libbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c i2c/mpc5200mbus.c i2c/mpc5200mbus.h
 # ide
 libbsp_a_SOURCES += ide/idecfg.c ide/pcmcia_ide.c ide/pcmcia_ide.h
-libbsp_a_SOURCES += ide/ata.c
+libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/dev/mpc5200-ata.c
 libbsp_a_SOURCES += ide/ata-instance.c
 libbsp_a_SOURCES += ide/ata-dma-pio-single.c
 
