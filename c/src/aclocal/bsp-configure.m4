@@ -34,4 +34,7 @@ echo "#endif /* __BSP_OPTIONS_H */"                   >>$tmp/config.h
   RTEMS_CHECK_MULTIPROCESSING
 
   RTEMS_BSP_BOOTCARD_OPTIONS
+
+  RTEMS_BSPOPTS_HELP([RTEMS_BSP],[The RTEMS BSP name])
+  RTEMS_BSPOPTS_SET([RTEMS_BSP],[*],[$RTEMS_BSP])
 ])
