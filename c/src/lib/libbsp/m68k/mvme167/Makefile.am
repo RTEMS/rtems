@@ -46,5 +46,5 @@ libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
-include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp.am
+include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mvme167/headers.am
