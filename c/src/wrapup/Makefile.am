@@ -15,10 +15,6 @@ CLEANFILES = o-optimize/librtemsbsp.a
 
 SRCS = ../lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/libbsp.a
 
-if HAS_MP
-SRCS += ../libchip/libshmdr.a
-endif
-
 o-optimize/librtemsbsp.a: $(SRCS)
 	rm -f $@
 	$(MKDIR_P) o-optimize

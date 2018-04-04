@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([libchip])
+AC_CONFIG_SRCDIR([lib])
 RTEMS_TOP(../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
@@ -110,7 +110,7 @@ RTEMS_CHECK_GCC_WEAK
 
 AC_SUBST(CUSTOM_CFG_FILES)
 
-RTEMS_CHECK_MULTIPROCESSING
+RTEMS_ENABLE_MULTILIB
 
 BSP_SUBDIRS=
 ## Configure ${srcdir}/../../cpukit as cpukit/ if multilibs are disabled
@@ -131,7 +131,6 @@ RTEMS_CPU_SUBDIRS([lib/libbsp])
 AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
-BSP_SUBDIRS="$BSP_SUBDIRS libchip"
 BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 # Build testsuites
@@ -162,7 +161,6 @@ AC_CONFIG_FILES([Makefile],
  MAKE=${MAKE}])
 
 AC_CONFIG_FILES([
-libchip/Makefile
 lib/libbsp/Makefile
 wrapup/Makefile
 ])

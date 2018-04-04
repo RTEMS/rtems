@@ -51,3 +51,19 @@ libbsp_a_SOURCES += ../../../../../../bsps/shared/net/smc91111.c
 libbsp_a_SOURCES += ../../../../../../bsps/shared/net/sonic.c
 endif
 libbsp_a_SOURCES += ../../../../../../bsps/shared/rtems-version.c
+if HAS_MP
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-addlq.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-cnvpkt.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-dump.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-fatal.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-getlq.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-getpkt.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-init.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-initlq.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-intr.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-poll.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-receive.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-retpkt.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-send.c
+libbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-shmisr.c
+endif
