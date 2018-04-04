@@ -68,6 +68,6 @@ endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
-include $(srcdir)/../../../../../../bsps/powerpc/shared/shared.am
+include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/t32mppc/headers.am
