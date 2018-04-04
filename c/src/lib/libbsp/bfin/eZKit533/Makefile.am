@@ -16,20 +16,20 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
 	startup/bspstart.c \
 	../../shared/bspclean.c ../../shared/sbrk.c ../../shared/setvec.c \
 	../../shared/bootcard.c ../../shared/gnatinstallhandler.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
-libbsp_a_SOURCES += console/console-io.c
-libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
+librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

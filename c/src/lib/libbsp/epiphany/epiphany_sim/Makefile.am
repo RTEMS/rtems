@@ -28,42 +28,42 @@ project_lib_DATA += linkcmds
 #                  LibBSP                                                     #
 ###############################################################################
 
-noinst_LIBRARIES = libbsp.a
+project_lib_LIBRARIES = librtemsbsp.a
 
 # Startup
-libbsp_a_SOURCES = ../../shared/bspreset.c
-libbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES = ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 
 # Shared
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/src/stackalloc.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 
 # clock
-libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 
 # Timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
 # console
-libbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # debugio
-libbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += console/console-io.c
 
 DISTCLEANFILES = include/bspopts.h
 

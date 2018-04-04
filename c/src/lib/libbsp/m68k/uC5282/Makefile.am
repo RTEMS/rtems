@@ -15,11 +15,11 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspclean.c startup/bspreset.c \
+librtemsbsp_a_SOURCES += startup/bspclean.c startup/bspreset.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     startup/init5282.c startup/bspstart.c ../../shared/bootcard.c \
@@ -27,19 +27,19 @@ libbsp_a_SOURCES += startup/bspclean.c startup/bspreset.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
-libbsp_a_SOURCES += clock/clock.c ../../../clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clock.c ../../../clockdrv_shell.h
 # console
-libbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/console.c
 # timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += network/network.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5282.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5282.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

@@ -31,11 +31,11 @@ project_lib_DATA += vectors_entry.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
  	../../powerpc/shared/startup/bspgetworkarea.c \
  	../../powerpc/shared/showbats.c \
     ../../powerpc/shared/startup/bsppredriverhook.c \
@@ -51,9 +51,9 @@ libbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
 
 
 # tod
-libbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
 # pclock
-libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # Needs conditional compilation
 polledIO_CPPFLAGS = -DSTATIC_LOG_ALLOC
@@ -63,55 +63,55 @@ polledIO_rel_CPPFLAGS = $(AM_CPPFLAGS) $(polledIO_CPPFLAGS)
 polledIO_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 # console
-libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
-libbsp_a_SOURCES += ../../powerpc/shared/console/console.c
-libbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
-libbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
-libbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 # irq
-libbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c
-libbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
-libbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c
 
 # motorola
-libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h
-libbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.c
 
 # openpic
-libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
-libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
-libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 
 # pci
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
-libbsp_a_SOURCES += ../../powerpc/shared/pci/detect_raven_bridge.c
-libbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/detect_raven_bridge.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
 
 # residual
-libbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h
-libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.h
-libbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/residual.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
 
 if QEMU
 if HAS_NETWORKING
-libbsp_a_SOURCES += ../../i386/pc386/ne2000/ne2000.c
+librtemsbsp_a_SOURCES += ../../i386/pc386/ne2000/ne2000.c
 endif
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
-libbsp_a_LIBADD = polledIO.rel
+librtemsbsp_a_LIBADD = polledIO.rel
 
 
 include $(top_srcdir)/../../../../automake/local.am

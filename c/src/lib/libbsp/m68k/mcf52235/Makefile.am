@@ -15,11 +15,11 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/bspreset_loop.c \
     ../../shared/bspgetworkarea.c \
     startup/init52235.c ../../shared/bspstart.c startup/cfinit.c \
@@ -28,17 +28,17 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
 # clock
-libbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
 # console
-libbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/console.c
 # debugio
-libbsp_a_SOURCES += console/debugio.c
+librtemsbsp_a_SOURCES += console/debugio.c
 # timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5223x.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5223x.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

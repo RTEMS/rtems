@@ -15,8 +15,8 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES = \
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES = \
     ../../shared/bspclean.c \
     ../../shared/bspreset_loop.c \
     ../../shared/bsppredriverhook.c \
@@ -26,14 +26,14 @@ libbsp_a_SOURCES = \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += clock/clock.c
-libbsp_a_SOURCES += console/console.c
-libbsp_a_SOURCES += console/debugio.c
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/debugio.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5225x.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5225x.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

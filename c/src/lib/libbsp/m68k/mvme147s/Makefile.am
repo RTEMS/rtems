@@ -17,35 +17,35 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c \
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/setvec.c \
     ../../shared/bspgetworkarea.c ../../shared/setvec.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
-libbsp_a_SOURCES += ../mvme147/clock/ckinit.c
+librtemsbsp_a_SOURCES += ../mvme147/clock/ckinit.c
 # console
-libbsp_a_SOURCES += ../mvme147/console/console.c \
+librtemsbsp_a_SOURCES += ../mvme147/console/console.c \
     ../../shared/dummy_printk_support.c
 # timer
-libbsp_a_SOURCES += ../mvme147/timer/timer.c ../mvme147/timer/timerisr.S
+librtemsbsp_a_SOURCES += ../mvme147/timer/timer.c ../mvme147/timer/timerisr.S
 
 if HAS_MP
 # shmsupp
-libbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
+librtemsbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
     shmsupp/mpisr.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

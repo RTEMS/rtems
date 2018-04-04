@@ -1,4 +1,4 @@
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpu_asm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpu.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpuIdent.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-print-stack.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpu_asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cpuIdent.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/ppc-print-stack.c

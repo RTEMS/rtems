@@ -34,11 +34,11 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspstart.c \
+librtemsbsp_a_SOURCES += startup/bspstart.c \
     startup/misc.c ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/bsppredriverhook.c \
     ../../powerpc/shared/startup/zerobss.c \
@@ -46,53 +46,53 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/bspclean.c \
     ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # tod
-libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 # pclock
-libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
-libbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/uart.h
 
 # irq
-libbsp_a_SOURCES += irq/irq_init.c \
+librtemsbsp_a_SOURCES += irq/irq_init.c \
     ../../powerpc/shared/irq/openpic_i8259_irq.c
 
 # openpic
-libbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \
     ../../powerpc/shared/openpic/openpic.c \
     ../../powerpc/shared/openpic/openpic.h
 
 # pci
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     pci/detect_host_bridge.c \
     ../../powerpc/shared/pci/generic_clear_hberrs.c \
     ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
 
 # flash
-libbsp_a_SOURCES += ../shared/flash/flash.c \
+librtemsbsp_a_SOURCES += ../shared/flash/flash.c \
     ../shared/flash/spansionFlash.c \
     flash/flashcfg.c
 
 # i2c
-libbsp_a_SOURCES += i2c/mpc8540_i2c.c i2c/i2c_init.c
+librtemsbsp_a_SOURCES += i2c/mpc8540_i2c.c i2c/i2c_init.c
 
 # vpd
-libbsp_a_SOURCES += ../shared/motorola/vpd.c
+librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/tsec.c
+librtemsbsp_a_SOURCES += network/tsec.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

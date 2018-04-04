@@ -40,10 +40,10 @@ project_lib_DATA += motld_start.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.share
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
-libbsp_a_SOURCES += startup/bspstart.c \
+librtemsbsp_a_SOURCES += startup/bspstart.c \
     ../shared/motorola/vpd.c startup/bspreset.c startup/i2c_init.c \
     ../../powerpc/shared/startup/bspgetworkarea.c \
     ../../powerpc/shared/startup/probeMemEnd.c \
@@ -57,28 +57,28 @@ libbsp_a_SOURCES += startup/bspstart.c \
     ../../shared/gnatinstallhandler.c
 
 #pclock
-libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 #console
-libbsp_a_SOURCES +=  \
+librtemsbsp_a_SOURCES +=  \
     ../../powerpc/shared/console/uart.c \
     ../../powerpc/shared/console/console.c \
     ../../powerpc/shared/console/consoleIo.h \
     ../../powerpc/shared/console/uart.h
 
 #irq
-libbsp_a_SOURCES += irq/irq_init.c irq/discovery_pic.c 
+librtemsbsp_a_SOURCES += irq/irq_init.c irq/discovery_pic.c 
 
 #marvell
-libbsp_a_SOURCES += marvell/discovery.c marvell/gti2c.c marvell/gt_timer.c
+librtemsbsp_a_SOURCES += marvell/discovery.c marvell/gti2c.c marvell/gt_timer.c
 
 #flash
-libbsp_a_SOURCES += ../shared/flash/flash.c \
+librtemsbsp_a_SOURCES += ../shared/flash/flash.c \
     ../shared/flash/intelFlash.c \
     flash/flashcfg.c
 
 #pci
-libbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
     pci/gt_pci_init.c pci/pci_io_remap.c pci/motload_fixup.c \
     ../../powerpc/shared/pci/pcifinddevice.c
 
@@ -147,22 +147,22 @@ network_if_em.rel: network_if_em_tmp.rel
                    -G rtems_em_pci_setup -G rtems_em_early_link_check_ops \
                    $^ $@
 
-libbsp_a_LIBADD = network_support.rel \
+librtemsbsp_a_LIBADD = network_support.rel \
     network_if_mve.rel network_if_gfe.rel network_if_em.rel
 endif
 
 # tod
-libbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

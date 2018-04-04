@@ -16,33 +16,33 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
+librtemsbsp_a_LIBADD =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../shared/startup/bspstart.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/setvec.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../shared/startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspreset.c
 # clock
-libbsp_a_SOURCES += ../../lm32/shared/clock/ckinit.c
+librtemsbsp_a_SOURCES += ../../lm32/shared/clock/ckinit.c
 # console
-libbsp_a_SOURCES += ../../lm32/shared/console/console.c
-libbsp_a_SOURCES += ../../lm32/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../lm32/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../lm32/shared/console/uart.c
 # timer
-libbsp_a_SOURCES += ../../lm32/shared/timer/timer.c
+librtemsbsp_a_SOURCES += ../../lm32/shared/timer/timer.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += ../../lm32/shared/tsmac/tsmac.c
+librtemsbsp_a_SOURCES += ../../lm32/shared/tsmac/tsmac.c
 endif
 
 

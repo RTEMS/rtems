@@ -13,50 +13,50 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += startup/bspidle.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += startup/bspreset.c
-libbsp_a_SOURCES += startup/memmap.c
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspidle.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/memmap.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
-libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
-libbsp_a_SOURCES += timer/timer.c
-libbsp_a_SOURCES += clock/clockdrv.c
-libbsp_a_SOURCES += clock/support.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES += clock/support.c
 # console
-libbsp_a_SOURCES += console/uart.c
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += ../../shared/console_select.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_write.c
-libbsp_a_SOURCES += ../../shared/console_control.c
+librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../shared/console.c
+librtemsbsp_a_SOURCES += ../../shared/console_select.c
+librtemsbsp_a_SOURCES += ../../shared/console_read.c
+librtemsbsp_a_SOURCES += ../../shared/console_write.c
+librtemsbsp_a_SOURCES += ../../shared/console_control.c
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 # smc
-libbsp_a_SOURCES += smc/smc.c
-libbsp_a_SOURCES += smc/smc.h
+librtemsbsp_a_SOURCES += smc/smc.c
+librtemsbsp_a_SOURCES += smc/smc.h
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

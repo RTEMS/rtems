@@ -25,42 +25,42 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
-libbsp_a_LIBADD =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
+librtemsbsp_a_LIBADD =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
     ../../shared/bspreset_loop.c \
     startup/bspstart.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
+librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 
 # bspconsole
-libbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
+librtemsbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
     ../../shared/console_select.c ../../shared/console_control.c \
     ../../shared/console_read.c ../../shared/console_write.c 
 
 # irq
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
 
 # clock
-libbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/clock.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += = network/xiltemac.c
+librtemsbsp_a_SOURCES += = network/xiltemac.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

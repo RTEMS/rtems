@@ -45,106 +45,106 @@ project_lib_DATA += start16.bin
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
-libbsp_a_SOURCES += clock/todcfg.c
-libbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
 
 if RTEMS_VGA
-libbsp_a_SOURCES += console/inch.c
-libbsp_a_SOURCES += console/outch.c
-libbsp_a_SOURCES += console/defkeymap.c
-libbsp_a_SOURCES += console/keyboard.c
-libbsp_a_SOURCES += console/pc_keyb.c
-libbsp_a_SOURCES += console/ps2_mouse.c
-libbsp_a_SOURCES += console/vgainit.c
-libbsp_a_SOURCES += console/vt.c
-libbsp_a_SOURCES += console/videoAsm.S
-libbsp_a_SOURCES += console/kbd_parser.c
-libbsp_a_SOURCES += console/vgacons.c
+librtemsbsp_a_SOURCES += console/inch.c
+librtemsbsp_a_SOURCES += console/outch.c
+librtemsbsp_a_SOURCES += console/defkeymap.c
+librtemsbsp_a_SOURCES += console/keyboard.c
+librtemsbsp_a_SOURCES += console/pc_keyb.c
+librtemsbsp_a_SOURCES += console/ps2_mouse.c
+librtemsbsp_a_SOURCES += console/vgainit.c
+librtemsbsp_a_SOURCES += console/vt.c
+librtemsbsp_a_SOURCES += console/videoAsm.S
+librtemsbsp_a_SOURCES += console/kbd_parser.c
+librtemsbsp_a_SOURCES += console/vgacons.c
 if USE_VGA
-libbsp_a_SOURCES += console/fb_vga.c
+librtemsbsp_a_SOURCES += console/fb_vga.c
 endif
 if USE_CIRRUS_GD5446
-libbsp_a_SOURCES += console/fb_cirrus.c
+librtemsbsp_a_SOURCES += console/fb_cirrus.c
 endif
 if USE_VBE_RM
-libbsp_a_SOURCES += console/fb_vesa_rm.c
+librtemsbsp_a_SOURCES += console/fb_vesa_rm.c
 endif
 endif
 
 # console (non-graphics support)
-libbsp_a_SOURCES += console/serial_mouse_config.c
-libbsp_a_SOURCES += ../../i386/shared/comm/uart.c
-libbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
-libbsp_a_SOURCES += ../../i386/shared/realmode_int/realmode_int.c
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += console/console_select.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_write.c
-libbsp_a_SOURCES += console/console_control.c
-libbsp_a_SOURCES += console/conscfg.c
-libbsp_a_SOURCES += console/printk_support.c
-libbsp_a_SOURCES += console/exar17d15x.c
-libbsp_a_SOURCES += console/rtd316.c
-libbsp_a_SOURCES += console/uart_bus_pci.c
-libbsp_a_SOURCES += console/gdb_select.c
+librtemsbsp_a_SOURCES += console/serial_mouse_config.c
+librtemsbsp_a_SOURCES += ../../i386/shared/comm/uart.c
+librtemsbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
+librtemsbsp_a_SOURCES += ../../i386/shared/realmode_int/realmode_int.c
+librtemsbsp_a_SOURCES += ../../shared/console.c
+librtemsbsp_a_SOURCES += console/console_select.c
+librtemsbsp_a_SOURCES += ../../shared/console_read.c
+librtemsbsp_a_SOURCES += ../../shared/console_write.c
+librtemsbsp_a_SOURCES += console/console_control.c
+librtemsbsp_a_SOURCES += console/conscfg.c
+librtemsbsp_a_SOURCES += console/printk_support.c
+librtemsbsp_a_SOURCES += console/exar17d15x.c
+librtemsbsp_a_SOURCES += console/rtd316.c
+librtemsbsp_a_SOURCES += console/uart_bus_pci.c
+librtemsbsp_a_SOURCES += console/gdb_select.c
 
 # gdb
-libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
-libbsp_a_SOURCES += ../../i386/shared/comm/i386-stub-glue.c
-libbsp_a_SOURCES += ../../i386/shared/comm/gdb_glue.c
+librtemsbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
+librtemsbsp_a_SOURCES += ../../i386/shared/comm/i386-stub-glue.c
+librtemsbsp_a_SOURCES += ../../i386/shared/comm/gdb_glue.c
 
 # gnat
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 # pci
-libbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c
-libbsp_a_SOURCES += ../../i386/shared/pci/pci_io.c
-libbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
-libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
+librtemsbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c
+librtemsbsp_a_SOURCES += ../../i386/shared/pci/pci_io.c
+librtemsbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
+librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 # startup
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += startup/bsp_fatal_halt.c
-libbsp_a_SOURCES += startup/bspgetworkarea.c
-libbsp_a_SOURCES += startup/bspidle.S
-libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += startup/bspcmdline.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += startup/bspreset.c
-libbsp_a_SOURCES += ../../i386/shared/irq/idt.c
-libbsp_a_SOURCES += ../../i386/shared/irq/irq.c
-libbsp_a_SOURCES += ../../i386/shared/irq/irq_init.c
-libbsp_a_SOURCES += ../../i386/shared/irq/elcr.c
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += startup/ldsegs.S
-libbsp_a_SOURCES += ../../i386/shared/irq/irq_asm.S
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/bspidle.S
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspcmdline.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../i386/shared/irq/idt.c
+librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../i386/shared/irq/elcr.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += startup/ldsegs.S
+librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq_asm.S
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
 
 # timer
-libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
+librtemsbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 
 if HAS_IDE
 # ide
-libbsp_a_SOURCES += ide/ide.c
-libbsp_a_SOURCES += ide/idecfg.c
+librtemsbsp_a_SOURCES += ide/ide.c
+librtemsbsp_a_SOURCES += ide/idecfg.c
 endif
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c
-libbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c
+librtemsbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c
+librtemsbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
 appcpustart.$(OBJEXT): start/start16.S
@@ -159,22 +159,22 @@ appstart.$(OBJEXT): appcpustart.$(OBJEXT)
 endif
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += 3c509/3c509.c
-libbsp_a_SOURCES += 3c509/3c509.h
-libbsp_a_SOURCES += 3c509/elink.c
-libbsp_a_SOURCES += 3c509/elink.h
-libbsp_a_SOURCES += ne2000/ne2000.c
-libbsp_a_SOURCES += wd8003/wd8003.c
+librtemsbsp_a_SOURCES += 3c509/3c509.c
+librtemsbsp_a_SOURCES += 3c509/3c509.h
+librtemsbsp_a_SOURCES += 3c509/elink.c
+librtemsbsp_a_SOURCES += 3c509/elink.h
+librtemsbsp_a_SOURCES += ne2000/ne2000.c
+librtemsbsp_a_SOURCES += wd8003/wd8003.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/cpuModel.S
-libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/displayCpu.c
-libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/idtr.S
-libbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/page.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/cpuModel.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/displayCpu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/idtr.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/page.c
 
 if HAS_SMP
-libbsp_a_LIBADD = appstart.$(OBJEXT)
+librtemsbsp_a_LIBADD = appstart.$(OBJEXT)
 endif
 
 

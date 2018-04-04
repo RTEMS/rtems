@@ -17,45 +17,45 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += startup/bsppredriver.c
-libbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
-libbsp_a_SOURCES += ../../shared/bspstart.c
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += startup/setvec.c
-libbsp_a_SOURCES += startup/spurious.c
-libbsp_a_SOURCES += startup/erc32mec.c
-libbsp_a_SOURCES += startup/boardinit.S
-libbsp_a_SOURCES += startup/bspidle.c
-libbsp_a_SOURCES += startup/bspdelay.c
-libbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
-libbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bsppredriver.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += startup/setvec.c
+librtemsbsp_a_SOURCES += startup/spurious.c
+librtemsbsp_a_SOURCES += startup/erc32mec.c
+librtemsbsp_a_SOURCES += startup/boardinit.S
+librtemsbsp_a_SOURCES += startup/bspidle.c
+librtemsbsp_a_SOURCES += startup/bspdelay.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_halt.c
 # ISR Handler
-libbsp_a_SOURCES += ../../sparc/shared/cpu.c
-libbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
+librtemsbsp_a_SOURCES += ../../sparc/shared/cpu.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
-libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
-libbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
+librtemsbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
     ../../shared/console_select.c  ../../shared/console_control.c \
     ../../shared/console_read.c ../../shared/console_write.c
 # debugio
-libbsp_a_SOURCES += console/debugputs.c
+librtemsbsp_a_SOURCES += console/debugputs.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
     ../../sparc/shared/irq/irq-shared.c \
     ../../sparc/shared/irq/bsp_isr_handler.c \
     ../../shared/src/irq-default-handler.c \
@@ -66,15 +66,15 @@ libbsp_a_SOURCES += \
     ../../shared/src/irq-shell.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/bspsmp.c
-libbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
+librtemsbsp_a_SOURCES += ../../shared/bspsmp.c
+librtemsbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
 endif
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += erc32sonic/erc32sonic.c
+librtemsbsp_a_SOURCES += erc32sonic/erc32sonic.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

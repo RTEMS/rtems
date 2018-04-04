@@ -21,49 +21,49 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # irq
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # clock
-libbsp_a_SOURCES += ../shared/clock/clock.c
-libbsp_a_SOURCES += clock/p_clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES += clock/p_clock.c
 
 # console
-libbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/console.c
 # spi
-libbsp_a_SOURCES += spi/spi.c
+librtemsbsp_a_SOURCES += spi/spi.c
 # timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c \
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../shared/startup/bspidle.c \
     startup/bspstart.c startup/bspgetworkarea.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     startup/mmutlbtab.c startup/cpuinit.c ../../shared/sbrk.c \
     ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/network_fec.c
-libbsp_a_SOURCES += network/network_scc.c
+librtemsbsp_a_SOURCES += network/network_fec.c
+librtemsbsp_a_SOURCES += network/network_scc.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/dev/console-generic.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/dpram.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/dev/console-generic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/dpram.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

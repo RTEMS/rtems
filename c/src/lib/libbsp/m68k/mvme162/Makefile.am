@@ -16,11 +16,11 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/bspclean.c \
+librtemsbsp_a_SOURCES += startup/bspclean.c \
     ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../shared/bootcard.c  \
     ../../shared/getentropy-cpucounter.c \
@@ -28,23 +28,23 @@ libbsp_a_SOURCES += startup/bspclean.c \
     ../../shared/bspgetworkarea.c startup/page_table.c \
     ../../shared/sbrk.c ../../shared/setvec.c \
     ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
-libbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
-libbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/console.c
 # timer
-libbsp_a_SOURCES += timer/timer.c timer/timerisr.S
+librtemsbsp_a_SOURCES += timer/timer.c timer/timerisr.S
 # tod
-libbsp_a_SOURCES += tod/tod.c
+librtemsbsp_a_SOURCES += tod/tod.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += ../mvme167/network/network.c
+librtemsbsp_a_SOURCES += ../mvme167/network/network.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
-libbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
 if HAS_FPSP
 include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp-sources.am

@@ -18,27 +18,27 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += ../../shared/bspclean.c \
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
     ../../shared/bsppredriverhook.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
-libbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 # console
-libbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c \
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c console/console-io.c \
    console/syscalls.S
 # timer
-libbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -23,11 +23,11 @@ project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../shared/startup/linkcmds.base
 dist_project_lib_DATA += startup/linkcmds.t32mppc
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # Startup
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
 	../../shared/bootcard.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/bsppredriverhook.c \
@@ -42,28 +42,28 @@ libbsp_a_SOURCES += \
 	startup/bspreset.c
 
 # Clock
-libbsp_a_SOURCES += clock/clock-config.c
+librtemsbsp_a_SOURCES += clock/clock-config.c
 
 # Timer
-libbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console-termios.c
-libbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios.c
+librtemsbsp_a_SOURCES += console/console.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
 if HAS_SMP
-libbsp_a_SOURCES += ../../shared/bspsmp.c
+librtemsbsp_a_SOURCES += ../../shared/bspsmp.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

@@ -31,11 +31,11 @@ dist_project_lib_DATA += startup/linkcmds.qoriq_e500
 dist_project_lib_DATA += startup/linkcmds.qoriq_e6500_32
 dist_project_lib_DATA += startup/linkcmds.qoriq_e6500_64
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # Startup
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
 	../../shared/bootcard.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/sbrk.c \
@@ -60,48 +60,48 @@ libbsp_a_SOURCES += \
 	startup/bsprestart.c
 
 # Clock
-libbsp_a_SOURCES += clock/clock-config.c \
+librtemsbsp_a_SOURCES += clock/clock-config.c \
 	../../shared/clockdrv_shell.h
 
 # Timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console-termios-init.c
-libbsp_a_SOURCES += ../../shared/console-termios.c
-libbsp_a_SOURCES += console/uart-bridge-master.c
-libbsp_a_SOURCES += console/uart-bridge-slave.c
-libbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios.c
+librtemsbsp_a_SOURCES += console/uart-bridge-master.c
+librtemsbsp_a_SOURCES += console/uart-bridge-slave.c
+librtemsbsp_a_SOURCES += console/console-config.c
 
 # RTC
-libbsp_a_SOURCES += ../../shared/tod.c \
+librtemsbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
 # MPCI
-libbsp_a_SOURCES += shmsupp/lock.S \
+librtemsbsp_a_SOURCES += shmsupp/lock.S \
 	shmsupp/intercom.c \
 	shmsupp/intercom-mpci.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/network.c \
+librtemsbsp_a_SOURCES += network/network.c \
 	network/if_intercom.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
 if HAS_SMP
-libbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += startup/bspsmp.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

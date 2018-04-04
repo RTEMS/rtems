@@ -57,11 +57,11 @@ console_SOURCES = ../../shared/console.c  ../shared/console/conscfg.c \
 
 timer_SOURCES = ../../shared/timerstub.c
 
-noinst_LIBRARIES = libbsp.a 
-libbsp_a_SOURCES = $(startup_SOURCES) $(mmu_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
+project_lib_LIBRARIES = librtemsbsp.a 
+librtemsbsp_a_SOURCES = $(startup_SOURCES) $(mmu_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
     $(timer_SOURCES)
 
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

@@ -20,57 +20,57 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += startup/simple_access.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += startup/bspreset.c
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += startup/inittlb.c
-libbsp_a_SOURCES += ../shared/startup/idttlb.S
+librtemsbsp_a_SOURCES += startup/simple_access.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += startup/inittlb.c
+librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
 
 # clock
-libbsp_a_SOURCES += ../shared/clock/clockdrv.c
-libbsp_a_SOURCES += ../shared/clock/mips_timer.S
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += ../shared/clock/clockdrv.c
+librtemsbsp_a_SOURCES += ../shared/clock/mips_timer.S
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # console
-libbsp_a_SOURCES += console/conscfg.c
-libbsp_a_SOURCES += console/printk_support.c
-libbsp_a_SOURCES += ../../shared/console.c
-libbsp_a_SOURCES += ../../shared/console_select.c
-libbsp_a_SOURCES += ../../shared/console_read.c
-libbsp_a_SOURCES += ../../shared/console_write.c
-libbsp_a_SOURCES += ../../shared/console_control.c
+librtemsbsp_a_SOURCES += console/conscfg.c
+librtemsbsp_a_SOURCES += console/printk_support.c
+librtemsbsp_a_SOURCES += ../../shared/console.c
+librtemsbsp_a_SOURCES += ../../shared/console_select.c
+librtemsbsp_a_SOURCES += ../../shared/console_read.c
+librtemsbsp_a_SOURCES += ../../shared/console_write.c
+librtemsbsp_a_SOURCES += ../../shared/console_control.c
 # timer
-libbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
-libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
-libbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 
 # pci
-libbsp_a_SOURCES += pci/pci.c
-libbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
+librtemsbsp_a_SOURCES += pci/pci.c
+librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 #isr
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
-libbsp_a_SOURCES += ../shared/irq/irq.c
-libbsp_a_SOURCES += irq/vectorisrs.c
-libbsp_a_SOURCES += irq/interruptmask.c
-libbsp_a_SOURCES += ../shared/irq/i8259.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
+librtemsbsp_a_SOURCES += ../shared/irq/irq.c
+librtemsbsp_a_SOURCES += irq/vectorisrs.c
+librtemsbsp_a_SOURCES += irq/interruptmask.c
+librtemsbsp_a_SOURCES += ../shared/irq/i8259.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

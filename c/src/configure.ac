@@ -131,7 +131,6 @@ RTEMS_CPU_SUBDIRS([lib/libbsp])
 AC_SUBST(libbsp_cpu_subdir,$RTEMS_CPU)
 
 BSP_SUBDIRS="$BSP_SUBDIRS lib/libbsp"
-BSP_SUBDIRS="$BSP_SUBDIRS wrapup"
 
 # Build testsuites
 RTEMS_BSP_CONFIG_SUBDIR(
@@ -162,7 +161,6 @@ AC_CONFIG_FILES([Makefile],
 
 AC_CONFIG_FILES([
 lib/libbsp/Makefile
-wrapup/Makefile
 ])
 
 AC_OUTPUT

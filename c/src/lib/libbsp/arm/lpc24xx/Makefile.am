@@ -44,12 +44,12 @@ dist_project_lib_DATA += startup/linkcmds.lpc40xx_ea_rom_int
 #                  LibBSP                                                     #
 ###############################################################################
 
-noinst_LIBRARIES = libbsp.a
+project_lib_LIBRARIES = librtemsbsp.a
 
-libbsp_a_SOURCES =
+librtemsbsp_a_SOURCES =
 
 # Shared
-libbsp_a_SOURCES += ../../shared/bootcard.c \
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/bspclean.c \
 	../../shared/bspgetworkarea.c \
@@ -58,45 +58,45 @@ libbsp_a_SOURCES += ../../shared/bootcard.c \
 	../../shared/sbrk.c \
 	../../shared/src/stackalloc.c \
 	../../shared/src/uart-output-char.c
-libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 # Startup
-libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
-libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
-libbsp_a_SOURCES += startup/bspreset-armv4.c
-libbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/bspreset-armv4.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
-libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
-libbsp_a_SOURCES += irq/irq.c
-libbsp_a_SOURCES += irq/irq-dispatch.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
+librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += irq/irq-dispatch.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console-termios-init.c
-libbsp_a_SOURCES += ../../shared/console-termios.c
-libbsp_a_SOURCES += console/console-config.c
-libbsp_a_SOURCES += console/uart-probe-1.c
-libbsp_a_SOURCES += console/uart-probe-2.c
-libbsp_a_SOURCES += console/uart-probe-3.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios.c
+librtemsbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += console/uart-probe-1.c
+librtemsbsp_a_SOURCES += console/uart-probe-2.c
+librtemsbsp_a_SOURCES += console/uart-probe-3.c
 
 # Clock
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
-libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
-libbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # RTC
-libbsp_a_SOURCES += ../../shared/tod.c \
+librtemsbsp_a_SOURCES += ../../shared/tod.c \
 	rtc/rtc-config.c
 
 # Misc
-libbsp_a_SOURCES += misc/system-clocks.c \
+librtemsbsp_a_SOURCES += misc/system-clocks.c \
 	misc/dma.c \
 	misc/dma-copy.c \
 	misc/bspidle.c \
@@ -106,32 +106,32 @@ libbsp_a_SOURCES += misc/system-clocks.c \
 	misc/timer.c
 
 # SSP
-libbsp_a_SOURCES += ssp/ssp.c
+librtemsbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
-libbsp_a_SOURCES += i2c/i2c.c \
+librtemsbsp_a_SOURCES += i2c/i2c.c \
 	i2c/i2c-config.c
 
 # Framebuffer
-libbsp_a_SOURCES += ../shared/arm-pl111-fb.c
-libbsp_a_SOURCES += startup/fb-config.c
+librtemsbsp_a_SOURCES += ../shared/arm-pl111-fb.c
+librtemsbsp_a_SOURCES += startup/fb-config.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # Start hooks
-libbsp_a_SOURCES += startup/bspstarthooks.c
-libbsp_a_SOURCES += startup/start-config-emc-dynamic.c
-libbsp_a_SOURCES += startup/start-config-emc-static.c
-libbsp_a_SOURCES += startup/start-config-mpu.c
-libbsp_a_SOURCES += startup/start-config-pinsel.c
+librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += startup/start-config-emc-dynamic.c
+librtemsbsp_a_SOURCES += startup/start-config-emc-static.c
+librtemsbsp_a_SOURCES += startup/start-config-mpu.c
+librtemsbsp_a_SOURCES += startup/start-config-pinsel.c
 
 ###############################################################################
 #                  Network                                                    #
 ###############################################################################
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += ../shared/lpc/network/lpc-ethernet.c
+librtemsbsp_a_SOURCES += ../shared/lpc/network/lpc-ethernet.c
 endif
 
 ###############################################################################

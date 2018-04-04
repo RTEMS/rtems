@@ -15,10 +15,10 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-noinst_LIBRARIES = libbsp.a
+project_lib_LIBRARIES = librtemsbsp.a
 
 # startup
-libbsp_a_SOURCES = startup/bspclean.c \
+librtemsbsp_a_SOURCES = startup/bspclean.c \
                    ../shared/startup/zerobss.c \
                    ../../shared/bspgetworkarea.c \
                    startup/bspstart.c \
@@ -27,27 +27,27 @@ libbsp_a_SOURCES = startup/bspclean.c \
                    ../../shared/sbrk.c \
                    ../../shared/gnatinstallhandler.c \
                    ../shared/src/memcpy.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 # start
-libbsp_a_SOURCES += start/start.S
+librtemsbsp_a_SOURCES += start/start.S
 
 # clock & timer
-libbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
-libbsp_a_SOURCES += startup/dummy_console.c \
+librtemsbsp_a_SOURCES += startup/dummy_console.c \
                     ../../shared/dummy_printk_support.c
 
 # irq
-libbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
 
 # mmu
-libbsp_a_SOURCES += mmu/mmu.c
+librtemsbsp_a_SOURCES += mmu/mmu.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

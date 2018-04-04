@@ -27,11 +27,11 @@ dist_project_lib_DATA += startup/linkcmds.mpc8313erdb
 dist_project_lib_DATA += startup/linkcmds.mpc8349eamds
 dist_project_lib_DATA += startup/linkcmds.mpc83xx
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
 	../../shared/bootcard.c \
 	../../shared/getentropy-cpucounter.c \
 	../../shared/bsppredriverhook.c \
@@ -49,39 +49,39 @@ libbsp_a_SOURCES += \
         ../shared/uboot_getenv.c
 
 # clock
-libbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/clock.c
 
 # irq
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # console
-libbsp_a_SOURCES += ../../shared/console-termios-init.c
-libbsp_a_SOURCES += ../../shared/console-termios.c
-libbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios.c
+librtemsbsp_a_SOURCES += console/console-config.c
 
 # bsp_i2c
-libbsp_a_SOURCES += i2c/i2c_init.c
+librtemsbsp_a_SOURCES += i2c/i2c_init.c
 # bsp_spi
-libbsp_a_SOURCES += spi/spi_init.c
+librtemsbsp_a_SOURCES += spi/spi_init.c
 
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/gtm.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/gtm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/network.c
-libbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
+librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
 

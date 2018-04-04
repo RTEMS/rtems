@@ -15,40 +15,40 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += startup/linkcmds
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
     ../../shared/bspgetworkarea.c \
     ../../shared/bsppredriverhook.c startup/bspstart.c ../../shared/bspclean.c \
     ../../shared/bspreset.c startup/memmap.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
-libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
-libbsp_a_SOURCES += clock/clockdrv.c
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES += timer/timer.c
 # console
-libbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += console/uart.c
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 if HAS_NETWORKING
-libbsp_a_SOURCES += network/lan91c11x.c
-libbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += network/lan91c11x.c
+librtemsbsp_a_SOURCES += network/network.c
 endif
 
-libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am

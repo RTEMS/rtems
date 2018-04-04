@@ -31,46 +31,46 @@ dist_project_lib_DATA += startup/linkcmds.beagle
 #                  LibBSP                                                     #
 ###############################################################################
 
-noinst_LIBRARIES = libbsp.a
+project_lib_LIBRARIES = librtemsbsp.a
 
-libbsp_a_SOURCES =
-libbsp_a_LIBADD =
+librtemsbsp_a_SOURCES =
+librtemsbsp_a_LIBADD =
 
 # Shared
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/src/bsp-fdt.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/src/stackalloc.c
-libbsp_a_SOURCES += ../../shared/gpio.c
-libbsp_a_SOURCES += ../../shared/cpucounterdiff.c
-libbsp_a_SOURCES += ../../shared/timerstub.c
-libbsp_a_SOURCES += ../../shared/cpucounterread.c
-libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
-libbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
-libbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/src/bsp-fdt.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../shared/gpio.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
+librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-libbsp_a_SOURCES += startup/bspreset.c
-libbsp_a_SOURCES += startup/bspstart.c
-libbsp_a_SOURCES += startup/bspstarthooks.c
-libbsp_a_SOURCES += startup/bspstartmmu.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += startup/bspstartmmu.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console.c \
+librtemsbsp_a_SOURCES += ../../shared/console.c \
         ../../shared/console_select.c \
   console/console-config.c \
         ../../shared/console_read.c \
@@ -78,23 +78,23 @@ libbsp_a_SOURCES += ../../shared/console.c \
         ../../shared/console_control.c
 
 # I2C
-libbsp_a_SOURCES += i2c/bbb-i2c.c
+librtemsbsp_a_SOURCES += i2c/bbb-i2c.c
 
 # GPIO
-libbsp_a_SOURCES += gpio/bbb-gpio.c
+librtemsbsp_a_SOURCES += gpio/bbb-gpio.c
 
 #pwm
-libbsp_a_SOURCES += pwm/pwm.c
+librtemsbsp_a_SOURCES += pwm/pwm.c
 
 #RTC
-libbsp_a_SOURCES += rtc.c
-libbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += rtc.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
 # Clock
-libbsp_a_SOURCES += clock.c
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 ###############################################################################
 #                  Special Rules                                              #

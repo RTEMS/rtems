@@ -35,85 +35,85 @@ dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
 # ------  LibBSP
 # ----------------------------
 
-noinst_LIBRARIES = libbsp.a
+project_lib_LIBRARIES = librtemsbsp.a
 
-libbsp_a_SOURCES =
+librtemsbsp_a_SOURCES =
 
 # Shared
-libbsp_a_SOURCES += ../../shared/bootcard.c
-libbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-libbsp_a_SOURCES += ../../shared/bspclean.c
-libbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-libbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-libbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
-libbsp_a_SOURCES += ../../shared/sbrk.c
-libbsp_a_SOURCES += ../../shared/src/stackalloc.c
-libbsp_a_SOURCES += ../../shared/src/uart-output-char.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../shared/src/uart-output-char.c
 
 # Startup
-libbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
-libbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
-libbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
 
 # IRQ
-libbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-libbsp_a_SOURCES += ../../shared/src/irq-generic.c
-libbsp_a_SOURCES += ../../shared/src/irq-info.c
-libbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-libbsp_a_SOURCES += ../../shared/src/irq-server.c
-libbsp_a_SOURCES += ../../shared/src/irq-shell.c
-libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
-libbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
-libbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # Console
-libbsp_a_SOURCES += ../../shared/console-termios-init.c
-libbsp_a_SOURCES += ../../shared/console-termios.c
-libbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../shared/console-termios.c
+librtemsbsp_a_SOURCES += console/console-config.c
 
 # Clock
-libbsp_a_SOURCES += ../../shared/clockdrv_shell.h
-libbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
-libbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
+librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # RTC
-libbsp_a_SOURCES += ../../shared/tod.c \
+librtemsbsp_a_SOURCES += ../../shared/tod.c \
 			rtc/rtc-config.c
 
 # GPIO
-libbsp_a_SOURCES += gpio/lpc-gpio.c
+librtemsbsp_a_SOURCES += gpio/lpc-gpio.c
 
 # CAN
-libbsp_a_SOURCES += can/can.c
+librtemsbsp_a_SOURCES += can/can.c
 
 # PWMOUT
-libbsp_a_SOURCES += pwmout/pwmout.c
+librtemsbsp_a_SOURCES += pwmout/pwmout.c
 
 # ADC
-libbsp_a_SOURCES += adc/adc.c
+librtemsbsp_a_SOURCES += adc/adc.c
 
 # Timer
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timer.c
 
 # Benchmark Timer
-libbsp_a_SOURCES += benchmark_timer/benchmark_timer.c
+librtemsbsp_a_SOURCES += benchmark_timer/benchmark_timer.c
 
 # Misc
-libbsp_a_SOURCES += misc/system-clocks.c
-libbsp_a_SOURCES += misc/dma.c
-libbsp_a_SOURCES += misc/dma-copy.c
-libbsp_a_SOURCES += misc/bspidle.c
-libbsp_a_SOURCES += misc/io.c
-libbsp_a_SOURCES += misc/restart.c
+librtemsbsp_a_SOURCES += misc/system-clocks.c
+librtemsbsp_a_SOURCES += misc/dma.c
+librtemsbsp_a_SOURCES += misc/dma-copy.c
+librtemsbsp_a_SOURCES += misc/bspidle.c
+librtemsbsp_a_SOURCES += misc/io.c
+librtemsbsp_a_SOURCES += misc/restart.c
 
 # Watchdog
-libbsp_a_SOURCES += watchdog/watchdog.c
+librtemsbsp_a_SOURCES += watchdog/watchdog.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # Start hooks
-libbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += startup/bspstarthooks.c
 
 
 # ----------------------------

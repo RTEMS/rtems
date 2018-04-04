@@ -15,28 +15,28 @@ project_lib_DATA += linkcmds
 dist_project_lib_DATA += startup/linkcmds.rom
 dist_project_lib_DATA += startup/linkcmds.rom2ram
 
-noinst_LIBRARIES = libbsp.a
-libbsp_a_SOURCES =
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-libbsp_a_SOURCES += \
+librtemsbsp_a_SOURCES += \
     ../../shared/bsppredriverhook.c ../shared/startup/bspstart.c \
     ../../shared/bspgetworkarea.c \
     ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
     ../../shared/getentropy-cpucounter.c \
     ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
-libbsp_a_SOURCES += ../../shared/bspreset.c
-libbsp_a_SOURCES += startup/cpu_asm.c startup/ispsh7750.c
-libbsp_a_SOURCES += clock/ckinit.c
-libbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += startup/cpu_asm.c startup/ispsh7750.c
+librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES += timer/timer.c
 # console
-libbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
-libbsp_a_SOURCES += console/sh4uart.c
+librtemsbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += console/sh4uart.c
 # hw_init
-libbsp_a_SOURCES += hw_init/hw_init.c
+librtemsbsp_a_SOURCES += hw_init/hw_init.c
 
 # Cache
-libbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 
 include $(top_srcdir)/../../../../automake/local.am
