@@ -42,12 +42,7 @@ librtemsbsp_a_SOURCES += ../../shared/console_read.c
 librtemsbsp_a_SOURCES += ../../shared/console_write.c
 librtemsbsp_a_SOURCES += ../../shared/console_control.c
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 # smc
 librtemsbsp_a_SOURCES += smc/smc.c
@@ -59,5 +54,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/smdk2410/headers.am

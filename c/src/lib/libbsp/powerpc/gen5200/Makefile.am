@@ -62,13 +62,7 @@ librtemsbsp_a_SOURCES += ide/ata-instance.c
 librtemsbsp_a_SOURCES += ide/ata-dma-pio-single.c
 
 # irq
-librtemsbsp_a_SOURCES += include/irq.h \
-	irq/irq.c \
-	../../shared/src/irq-generic.c \
-	../../shared/src/irq-legacy.c \
-	../../shared/src/irq-info.c \
-	../../shared/src/irq-shell.c \
-	../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 # mscan
 librtemsbsp_a_SOURCES += mscan/mscan.c mscan/mscan-base.c mscan/mscan.h mscan/mscan_int.h
@@ -114,7 +108,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/gen5200/headers.am

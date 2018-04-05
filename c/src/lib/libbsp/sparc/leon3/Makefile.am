@@ -80,12 +80,7 @@ librtemsbsp_a_SOURCES += \
     ../../sparc/shared/irq/genirq.c  \
     ../../sparc/shared/irq/irq-shared.c \
     ../../sparc/shared/irq/bsp_isr_handler.c \
-    ../../shared/src/irq-default-handler.c \
-    ../../shared/src/irq-generic.c \
-    ../../shared/src/irq-info.c \
-    ../../shared/src/irq-legacy.c \
-    ../../shared/src/irq-server.c \
-    ../../shared/src/irq-shell.c
+    ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # PCI
 librtemsbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
@@ -201,5 +196,6 @@ endif
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sparc/leon3/headers.am

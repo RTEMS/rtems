@@ -58,12 +58,7 @@ librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += \
     ../../sparc/shared/irq/irq-shared.c \
     ../../sparc/shared/irq/bsp_isr_handler.c \
-    ../../shared/src/irq-default-handler.c \
-    ../../shared/src/irq-generic.c \
-    ../../shared/src/irq-info.c \
-    ../../shared/src/irq-legacy.c \
-    ../../shared/src/irq-server.c \
-    ../../shared/src/irq-shell.c
+    ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../shared/bspsmp.c
@@ -78,5 +73,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sparc/erc32/headers.am

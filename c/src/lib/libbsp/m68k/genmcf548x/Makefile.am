@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
 librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
 librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c

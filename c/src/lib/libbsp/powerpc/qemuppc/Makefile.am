@@ -36,12 +36,7 @@ console_SOURCES = ../../shared/console-polled.c console/console-io.c
 
 # irq
 irq_SOURCES =
-irq_SOURCES += ../../shared/src/irq-default-handler.c
-irq_SOURCES += ../../shared/src/irq-generic.c
-irq_SOURCES += ../../shared/src/irq-info.c
-irq_SOURCES += ../../shared/src/irq-legacy.c
-irq_SOURCES += ../../shared/src/irq-server.c
-irq_SOURCES += ../../shared/src/irq-shell.c
+irq_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 irq_SOURCES += irq/irq_init.c
 
 project_lib_LIBRARIES = librtemsbsp.a
@@ -55,7 +50,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/qemuppc/headers.am

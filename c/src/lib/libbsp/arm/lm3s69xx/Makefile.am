@@ -51,12 +51,7 @@ librtemsbsp_a_SOURCES += startup/io.c
 librtemsbsp_a_SOURCES += startup/syscon.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 
@@ -89,5 +84,6 @@ librtemsbsp_a_SOURCES += ssi/ssi.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/lm3s69xx/headers.am

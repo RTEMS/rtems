@@ -105,12 +105,7 @@ librtemsbsp_a_SOURCES += startup/bspsmp.c
 endif
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-gic-irq.c
 
 # Console
@@ -139,5 +134,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/altera-cyclone-v/headers.am

@@ -54,9 +54,7 @@ librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 
 # Cache
@@ -68,5 +66,6 @@ librtemsbsp_a_SOURCES += console/console-io.c
 DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/epiphany/epiphany_sim/headers.am

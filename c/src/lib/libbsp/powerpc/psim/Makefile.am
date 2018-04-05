@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES += console/console-io.c console/consupp.S
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
-    ../shared/openpic/openpic.c ../../shared/src/irq-server.c  \
-    ../../shared/src/irq-generic.c ../../shared/src/irq-default-handler.c
+    ../shared/openpic/openpic.c \
+    ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # vectors
 librtemsbsp_a_SOURCES += vectors/align_h.S
@@ -66,7 +66,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/psim/headers.am

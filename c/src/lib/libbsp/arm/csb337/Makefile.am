@@ -46,12 +46,7 @@ librtemsbsp_a_SOURCES += ../../shared/console.c console/uarts.c \
 librtemsbsp_a_SOURCES += console/dbgu.c
 librtemsbsp_a_SOURCES += console/usart.c
 # IRQ
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 if ENABLE_LCD
 librtemsbsp_a_SOURCES += console/sed1356.c console/fbcons.c
@@ -76,5 +71,6 @@ endif
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/csb337/headers.am

@@ -126,12 +126,7 @@ librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/ldsegs.S
 librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq_asm.S
-librtemsbsp_a_SOURCES += ../../shared/src/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c timer/timerisr.S
@@ -179,6 +174,7 @@ endif
 
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(top_srcdir)/../../../../automake/subdirs.am
 include $(srcdir)/../../../../../../bsps/i386/pc386/headers.am

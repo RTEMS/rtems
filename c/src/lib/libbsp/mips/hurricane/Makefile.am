@@ -44,11 +44,6 @@ librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/regs.h
 #isr
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c
 librtemsbsp_a_SOURCES += irq/vectorisrs.c
@@ -61,5 +56,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/timer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/gettime.S
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/hurricane/headers.am

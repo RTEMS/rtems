@@ -61,11 +61,6 @@ librtemsbsp_a_SOURCES += pci/pci.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 #isr
-librtemsbsp_a_SOURCES += ../../shared/src/irq-generic.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-legacy.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-info.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-shell.c
-librtemsbsp_a_SOURCES += ../../shared/src/irq-server.c
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c
 librtemsbsp_a_SOURCES += irq/vectorisrs.c
@@ -73,5 +68,6 @@ librtemsbsp_a_SOURCES += irq/interruptmask.c
 librtemsbsp_a_SOURCES += ../shared/irq/i8259.c
 
 include $(top_srcdir)/../../../../automake/local.am
+include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/malta/headers.am
