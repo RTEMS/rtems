@@ -56,11 +56,9 @@ librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console.c
-librtemsbsp_a_SOURCES += ../../shared/console_control.c
-librtemsbsp_a_SOURCES += ../../shared/console_read.c
-librtemsbsp_a_SOURCES += ../../shared/console_select.c
-librtemsbsp_a_SOURCES += ../../shared/console_write.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 librtemsbsp_a_SOURCES += console/console-config.c
 librtemsbsp_a_SOURCES += console/uart.c
 

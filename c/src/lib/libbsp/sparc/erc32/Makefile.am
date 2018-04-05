@@ -42,9 +42,10 @@ librtemsbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
 librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console
-librtemsbsp_a_SOURCES += console/erc32_console.c ../../shared/console.c \
-    ../../shared/console_select.c  ../../shared/console_control.c \
-    ../../shared/console_read.c ../../shared/console_write.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+librtemsbsp_a_SOURCES += console/erc32_console.c
 # debugio
 librtemsbsp_a_SOURCES += console/debugputs.c
 # clock

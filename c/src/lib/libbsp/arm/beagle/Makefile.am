@@ -65,12 +65,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console.c \
-        ../../shared/console_select.c \
-  console/console-config.c \
-        ../../shared/console_read.c \
-        ../../shared/console_write.c \
-        ../../shared/console_control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+librtemsbsp_a_SOURCES += console/console-config.c
 
 # I2C
 librtemsbsp_a_SOURCES += i2c/bbb-i2c.c

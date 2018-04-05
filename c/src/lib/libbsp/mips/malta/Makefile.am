@@ -41,13 +41,11 @@ librtemsbsp_a_SOURCES += ../shared/clock/mips_timer.S
 librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # console
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 librtemsbsp_a_SOURCES += console/conscfg.c
 librtemsbsp_a_SOURCES += console/printk_support.c
-librtemsbsp_a_SOURCES += ../../shared/console.c
-librtemsbsp_a_SOURCES += ../../shared/console_select.c
-librtemsbsp_a_SOURCES += ../../shared/console_read.c
-librtemsbsp_a_SOURCES += ../../shared/console_write.c
-librtemsbsp_a_SOURCES += ../../shared/console_control.c
 # timer
 librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 

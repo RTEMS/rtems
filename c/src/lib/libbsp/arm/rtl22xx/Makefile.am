@@ -31,14 +31,13 @@ librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += clock/clockdrv.c
 # console
-librtemsbsp_a_SOURCES += ../../shared/console.c \
-    ../../shared/console_select.c ../../shared/console_control.c \
-    ../../shared/console_read.c ../../shared/console_write.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+librtemsbsp_a_SOURCES += console/uart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
-# debugio
-librtemsbsp_a_SOURCES += console/uart.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

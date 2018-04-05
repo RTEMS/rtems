@@ -27,7 +27,7 @@
 
 #include <rtems/termiostypes.h>
 #include <libchip/serial.h>
-#include "console_private.h"
+#include "legacy-console.h"
 
 /*
  * Method to return true if the device associated with the

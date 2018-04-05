@@ -34,12 +34,10 @@ librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += clock/clockdrv.c
 librtemsbsp_a_SOURCES += clock/support.c
 # console
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 librtemsbsp_a_SOURCES += console/uart.c
-librtemsbsp_a_SOURCES += ../../shared/console.c
-librtemsbsp_a_SOURCES += ../../shared/console_select.c
-librtemsbsp_a_SOURCES += ../../shared/console_read.c
-librtemsbsp_a_SOURCES += ../../shared/console_write.c
-librtemsbsp_a_SOURCES += ../../shared/console_control.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c

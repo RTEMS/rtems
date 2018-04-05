@@ -26,7 +26,7 @@
 
 #include <rtems/termiostypes.h>
 #include <libchip/serial.h>
-#include "console_private.h"
+#include "legacy-console.h"
 
 unsigned long               Console_Port_Count  = 0;
 console_tbl               **Console_Port_Tbl    = NULL;
@@ -371,4 +371,32 @@ rtems_device_driver console_initialize(
   }
 
   return RTEMS_SUCCESSFUL;
+}
+
+/*
+ *  console_read
+ *
+ *  This routine uses the termios driver to read a character.
+ */
+rtems_device_driver console_read(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return rtems_termios_read (arg);
+}
+
+/*
+ *  console_write
+ *
+ *  this routine uses the termios driver to write a character.
+ */
+rtems_device_driver console_write(
+  rtems_device_major_number major,
+  rtems_device_minor_number minor,
+  void                    * arg
+)
+{
+  return rtems_termios_write (arg);
 }

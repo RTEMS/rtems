@@ -30,7 +30,7 @@
 #include <libchip/ns16550.h>
 #include <bsp/bspimpl.h>
 
-#include "../../../shared/console_private.h"
+#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
 
 /*
  * Used in the stub to print output.

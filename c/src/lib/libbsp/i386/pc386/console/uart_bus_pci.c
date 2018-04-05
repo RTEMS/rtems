@@ -236,7 +236,7 @@ DRIVER_MODULE(uart, pci, uart_pci_driver, uart_devclass, NULL, NULL);
 #include <libchip/ns16550.h>
 #include <rtems/bspIo.h>
 #include <rtems/pci.h>
-#include "../../../shared/console_private.h"
+#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
 
 #define MAX_BOARDS 4
 

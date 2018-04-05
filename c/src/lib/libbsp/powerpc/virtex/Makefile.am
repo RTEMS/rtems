@@ -38,9 +38,10 @@ librtemsbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
 librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 
 # bspconsole
-librtemsbsp_a_SOURCES += console/consolelite.c ../../shared/console.c \
-    ../../shared/console_select.c ../../shared/console_control.c \
-    ../../shared/console_read.c ../../shared/console_write.c 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+librtemsbsp_a_SOURCES += console/consolelite.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

@@ -37,9 +37,10 @@ startup_SOURCES = startup/bspclean.c startup/m5op_sparc.S \
 #clock_SOURCES = ../../shared/clock_driver_simidle.c
 clock_SOURCES = ../shared/clock/ckinit.c
 
-console_SOURCES = ../../shared/console.c  ../shared/console/conscfg.c \
-    ../../shared/console_select.c ../../shared/console_control.c \
-    ../../shared/console_read.c ../../shared/console_write.c
+console_SOURCES = ../shared/console/conscfg.c
+console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 
 timer_SOURCES = ../../shared/timerstub.c
 

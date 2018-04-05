@@ -3,8 +3,9 @@
  *
  * @ingroup Console
  *
- * @brief Generic libchip console read extension
+ * @brief Generic libchip console io_ctl extension
  */
+
 
 /*
  *  This file is an extension of the generic console driver
@@ -27,18 +28,18 @@
 #include <rtems/termiostypes.h>
 #include <rtems/console.h>
 #include <libchip/serial.h>
-#include "console_private.h"
+#include "legacy-console.h"
 
 /*
- *  console_read
+ *  console_control
  *
- *  This routine uses the termios driver to read a character.
+ *  this routine uses the termios driver to process io
  */
-rtems_device_driver console_read(
+rtems_device_driver console_control(
   rtems_device_major_number major,
   rtems_device_minor_number minor,
   void                    * arg
 )
 {
-  return rtems_termios_read (arg);
+  return rtems_termios_ioctl (arg);
 }

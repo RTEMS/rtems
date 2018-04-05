@@ -30,9 +30,10 @@ librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += clock/clockdrv.c
 librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
-librtemsbsp_a_SOURCES += console/uart.c ../../shared/console.c \
-    ../../shared/console_select.c  ../../shared/console_control.c \
-    ../../shared/console_read.c ../../shared/console_write.c 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+librtemsbsp_a_SOURCES += console/uart.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 
