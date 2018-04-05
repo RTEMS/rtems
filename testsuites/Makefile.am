@@ -1,6 +1,5 @@
 ACLOCAL_AMFLAGS = -I aclocal
 
-DISTCLEANFILES =
 CLEANFILES =
 
 noinst_HEADERS =

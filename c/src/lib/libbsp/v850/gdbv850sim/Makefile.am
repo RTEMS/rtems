@@ -8,7 +8,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = startup/bsp_specs
 
-DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 

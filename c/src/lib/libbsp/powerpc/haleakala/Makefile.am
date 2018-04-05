@@ -5,7 +5,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = startup/bsp_specs
 
-DISTCLEANFILES = include/bspopts.h
 
 
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S

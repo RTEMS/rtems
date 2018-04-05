@@ -9,7 +9,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = startup/bsp_specs
 
-DISTCLEANFILES = include/bspopts.h
 
 
 start.$(OBJEXT): start/start.S

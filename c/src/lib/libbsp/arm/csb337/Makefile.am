@@ -8,7 +8,6 @@ dist_project_lib_DATA = startup/bsp_specs
 if ENABLE_LCD
 endif
 
-DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 

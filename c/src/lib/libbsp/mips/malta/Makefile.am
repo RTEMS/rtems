@@ -11,7 +11,6 @@ dist_project_lib_DATA = startup/bsp_specs
 #isr
 #pci
 #irq
-DISTCLEANFILES = include/bspopts.h
 
 
 start.$(OBJEXT): start/start.S

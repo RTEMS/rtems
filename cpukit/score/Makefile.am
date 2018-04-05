@@ -231,7 +231,6 @@ libscore_a_SOURCES += src/processormaskcopy.c
 
 
 # This file is in the build tree
-DISTCLEANFILES = ../..include/rtems/score/cpuopts.h
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = ../../include/rtems/score/cpuopts.h
 

@@ -8,7 +8,6 @@ dist_project_lib_DATA = startup/bsp_specs
 if HAS_NETWORKING
 endif
 
-DISTCLEANFILES = include/bspopts.h
 
 noinst_PROGRAMS =
 

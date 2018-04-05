@@ -1,7 +1,6 @@
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
 CLEANFILES      =
-DISTCLEANFILES  =
 noinst_PROGRAMS =
 
 include $(top_srcdir)/../../../../automake/compile.am
@@ -12,7 +11,6 @@ dist_project_lib_DATA = startup/bsp_specs
 project_lib_DATA      = 
 
 #include
-DISTCLEANFILES += include/bspopts.h
 
 #start
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S

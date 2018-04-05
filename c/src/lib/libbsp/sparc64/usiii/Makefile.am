@@ -13,7 +13,6 @@ dist_project_lib_DATA = startup/bsp_specs
 # in a kernel include directory.
 
 
-DISTCLEANFILES = include/bspopts.h
 noinst_PROGRAMS =
 
 

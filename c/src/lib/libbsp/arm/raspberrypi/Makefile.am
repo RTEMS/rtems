@@ -120,7 +120,6 @@ librtemsbsp_a_SOURCES += ../shared/mminit.c
 #                  Special Rules                                              #
 ###############################################################################
 
-DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

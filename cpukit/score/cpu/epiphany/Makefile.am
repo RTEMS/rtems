@@ -1,7 +1,6 @@
 include $(top_srcdir)/automake/compile.am
 
 CLEANFILES =
-DISTCLEANFILES =
 
 noinst_LIBRARIES = libscorecpu.a
 

@@ -63,7 +63,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 # debugio
 librtemsbsp_a_SOURCES += console/console-io.c
 
-DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

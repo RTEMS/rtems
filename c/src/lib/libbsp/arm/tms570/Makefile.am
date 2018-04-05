@@ -114,7 +114,6 @@ endif
 # ------  Special Rules
 # ----------------------------
 
-DISTCLEANFILES = include/bspopts.h
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

@@ -20,24 +20,19 @@ make/@RTEMS_BSP@.cache: make/bsp.mak @CUSTOM_CFG_FILES@
 	make/@RTEMS_BSP@.cache
 
 noinst_DATA = make/@RTEMS_BSP@.cache
-DISTCLEANFILES = make/@RTEMS_BSP@.cache
 
 rtems_makedir = $(prefix)/make
 rtems_make_customdir = $(rtems_makedir)/custom
 rtems_make_custom_DATA = @CUSTOM_CFG_FILES@
-DISTCLEANFILES += @CUSTOM_CFG_FILES@
 
 noinst_DATA += make/custom/default.cfg
-DISTCLEANFILES += make/custom/default.cfg
 
 @host_alias@-@RTEMS_BSP@.pc: config.status bsp.pc.in
 	./config.status --file=$@:$(srcdir)/bsp.pc.in
 
 pkgconfigdir = $(prefix)/lib/pkgconfig
 pkgconfig_DATA = @host_alias@-@RTEMS_BSP@.pc
-DISTCLEANFILES += @host_alias@-@RTEMS_BSP@.pc
 
-DISTCLEANFILES += $(DEPDIR)/cfg.P
 include $(DEPDIR)/cfg.P
 
 include $(top_srcdir)/automake/subdirs.am
