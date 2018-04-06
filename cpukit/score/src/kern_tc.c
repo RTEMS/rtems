@@ -65,7 +65,6 @@
 #include <sys/cdefs.h>
 __FBSDID("$FreeBSD$");
 
-#include "opt_compat.h"
 #include "opt_ntp.h"
 #include "opt_ffclock.h"
 
