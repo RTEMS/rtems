@@ -13,7 +13,7 @@ bootloader_SOURCES = ../../../powerpc/shared/bootloader/head.S \
     ../../../powerpc/shared/bootloader/zlib.c \
     ../../../powerpc/shared/bootloader/mm.c \
     ../../../powerpc/shared/bootloader/em86.c \
-    ../../../powerpc/shared/console/polled_io.c \
+    ../../../../../../../bsps/powerpc/motorola_powerpc/dev/polled_io.c \
     ../../../powerpc/shared/bootloader/lib.c \
     ../../../powerpc/shared/bootloader/bootldr.h \
     ../../../powerpc/shared/bootloader/zlib.h \

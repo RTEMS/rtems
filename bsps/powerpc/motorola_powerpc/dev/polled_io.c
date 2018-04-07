@@ -24,6 +24,10 @@
 #include <bsp.h>
 #include <libcpu/spr.h>
 
+#ifndef __BOOT__
+#define STATIC_LOG_ALLOC
+#endif
+
 #ifdef BSP_KBD_IOBASE
 #define USE_KBD_SUPPORT
 #endif

@@ -54,14 +54,8 @@ librtemsbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
-# Needs conditional compilation
-polledIO_CPPFLAGS = -DSTATIC_LOG_ALLOC
-noinst_PROGRAMS += polledIO.rel
-polledIO_rel_SOURCES = ../../powerpc/shared/console/polled_io.c
-polledIO_rel_CPPFLAGS = $(AM_CPPFLAGS) $(polledIO_CPPFLAGS)
-polledIO_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
 # console
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/dev/polled_io.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
@@ -109,9 +103,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/ppc-irq-legacy.c
-
-librtemsbsp_a_LIBADD = polledIO.rel
-
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
