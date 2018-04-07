@@ -52,13 +52,9 @@ librtemsbsp_a_SOURCES += vectors/exceptionhandler.c \
 librtemsbsp_a_SOURCES += GT64260/GT64260TWSI.c GT64260/MVME5500I2C.c
 
 if HAS_NETWORKING
-network_CPPFLAGS = -D_KERNEL -D__BSD_VISIBLE
-noinst_PROGRAMS += network.rel
-network_rel_SOURCES = network/if_100MHz/GT64260eth.c \
-    network/if_1GHz/if_wm.c network/if_1GHz/pci_map.c
-network_rel_CPPFLAGS = $(AM_CPPFLAGS) $(network_CPPFLAGS)
-network_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-librtemsbsp_a_LIBADD = network.rel
+librtemsbsp_a_SOURCES += network/if_100MHz/GT64260eth.c
+librtemsbsp_a_SOURCES += network/if_1GHz/if_wm.c
+librtemsbsp_a_SOURCES += network/if_1GHz/pci_map.c
 endif
 
 rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S

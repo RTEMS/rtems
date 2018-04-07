@@ -18,12 +18,16 @@
  * 3) Added S/W support for multi mbuf.  (TODO : Let the H/W do it)
  *
  */
-#define BYTE_ORDER BIG_ENDIAN
 
-#define INET
+#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+
+#define BYTE_ORDER BIG_ENDIAN
 
 #include <rtems.h>
 #include <rtems/bspIo.h>	    /* printk */
+#include <rtems/error.h>
+#include <rtems/rtems_bsdnet.h>
+#include <rtems/rtems_bsdnet_internal.h>
 #include <stdio.h>		    /* printf for statistics */
 #include <string.h>
 
@@ -35,12 +39,7 @@
 #include <sys/systm.h>
 #include <sys/mbuf.h>
 
-#include <rtems/rtems_bsdnet.h>
-#include <rtems/rtems_bsdnet_internal.h>
-#include <rtems/error.h>
 #include <errno.h>
-
-#include <rtems/rtems/types.h>
 
 /* #include <sys/queue.h> */
 
