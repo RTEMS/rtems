@@ -1,6 +1,9 @@
 #ifndef RTEMS_COMPAT_DEFS_H
 #define RTEMS_COMPAT_DEFS_H
 
+#include <stdint.h>
+#include <stddef.h>
+
 /* Number of device instances the driver should support
  * - may be limited to 1 depending on IRQ API
  * (braindamaged PC586 and powerpc)
@@ -37,7 +40,7 @@
  *
  */
 #undef  IF_REG_HEADER
-#define  IF_VAR_HEADER <if_gfevar.h>
+#define  IF_VAR_HEADER "../if_gfe/if_gfevar.h"
 
 /* define if a pci device */
 /*
@@ -119,4 +122,40 @@ int snprintf(char *, size_t, const char *,...);
 #define delay(arg)	DELAY(arg)
 
 #define KASSERT(a...) do {} while (0)
+
+#define gfe_assign_desc _bsd_gfe_assign_desc
+#define gfe_attach _bsd_gfe_attach
+#define gfe_dbg_config _bsd_gfe_dbg_config
+#define gfe_dmamem_alloc _bsd_gfe_dmamem_alloc
+#define gfe_dmamem_free _bsd_gfe_dmamem_free
+#define gfe_hash_alloc _bsd_gfe_hash_alloc
+#define gfe_hash_compute _bsd_gfe_hash_compute
+#define gfe_hash_entry_op _bsd_gfe_hash_entry_op
+#define gfe_hash_fill _bsd_gfe_hash_fill
+#define gfe_ifioctl _bsd_gfe_ifioctl
+#define gfe_ifstart _bsd_gfe_ifstart
+#define gfe_ifwatchdog _bsd_gfe_ifwatchdog
+#define gfe_init _bsd_gfe_init
+#define gfe_intr _bsd_gfe_intr
+#define gfe_mdio_access _bsd_gfe_mdio_access
+#define gfe_mii_read _bsd_gfe_mii_read
+#define gfe_mii_write _bsd_gfe_mii_write
+#define gfe_probe _bsd_gfe_probe
+#define gfe_rx_cleanup _bsd_gfe_rx_cleanup
+#define gfe_rx_get _bsd_gfe_rx_get
+#define gfe_rx_prime _bsd_gfe_rx_prime
+#define gfe_rx_process _bsd_gfe_rx_process
+#define gfe_rx_rxqalloc _bsd_gfe_rx_rxqalloc
+#define gfe_rx_rxqinit _bsd_gfe_rx_rxqinit
+#define gfe_rx_stop _bsd_gfe_rx_stop
+#define gfe_tick _bsd_gfe_tick
+#define gfe_tx_cleanup _bsd_gfe_tx_cleanup
+#define gfe_tx_done _bsd_gfe_tx_done
+#define gfe_tx_enqueue _bsd_gfe_tx_enqueue
+#define gfe_tx_start _bsd_gfe_tx_start
+#define gfe_tx_stop _bsd_gfe_tx_stop
+#define gfe_tx_txqalloc _bsd_gfe_tx_txqalloc
+#define gfe_whack _bsd_gfe_whack
+#define the_gfe_devs _bsd_the_gfe_devs
+
 #endif

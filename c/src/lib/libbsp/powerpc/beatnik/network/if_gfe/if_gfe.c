@@ -48,7 +48,8 @@
  */
 
 #ifdef __rtems__
-#include <rtemscompat.h>
+#include "rtemscompat_defs.h"
+#include "../porting/rtemscompat.h"
 #include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -121,7 +122,7 @@ __KERNEL_RCSID(0, "$NetBSD: if_gfe.c,v 1.13.8.1 2005/04/29 11:28:56 kent Exp $")
 
 #include	"gtvar.h"
 #include	"if_gfevar.h"
-#include 	<rtemscompat1.h>
+#include 	"../porting/rtemscompat1.h"
 #define		ether_sprintf ether_sprintf_macro
 #endif
 

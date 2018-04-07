@@ -37,8 +37,9 @@
 
 #include <sys/cdefs.h>
 #ifdef __rtems__
-#include <rtemscompat.h>
-#include <if_em_hw.h>
+#include "rtemscompat_defs.h"
+#include "../porting/rtemscompat.h"
+#include "if_em_hw.h"
 #else
 __FBSDID("$FreeBSD: /repoman/r/ncvs/src/sys/dev/em/if_em_hw.c,v 1.16 2005/05/26 23:32:02 tackerman Exp $");
 

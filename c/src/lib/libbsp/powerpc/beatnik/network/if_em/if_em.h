@@ -93,7 +93,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include <dev/em/if_em_hw.h>
 #else
-#include <if_em_hw.h>
+#include "if_em_hw.h"
 #endif
 
 /* Tunables */

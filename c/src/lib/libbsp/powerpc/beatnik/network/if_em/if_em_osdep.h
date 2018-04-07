@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define _RTEMS_OS_H_
 
 #include <rtems.h>
-#include <rtemscompat.h>
+#include "../porting/rtemscompat.h"
 
 #include <sys/types.h>
 #include <sys/param.h>

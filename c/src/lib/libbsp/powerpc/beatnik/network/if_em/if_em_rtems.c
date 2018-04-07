@@ -1,4 +1,5 @@
-#include "if_xxx_rtems.c"
+#include "rtemscompat_defs.h"
+#include "../porting/if_xxx_rtems.c"
 #include <bsp/early_enet_link_status.h>
 #include <bsp/if_em_pub.h>
 

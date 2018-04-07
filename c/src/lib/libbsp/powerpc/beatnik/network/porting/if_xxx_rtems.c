@@ -1,4 +1,4 @@
-#include <rtemscompat.h>
+#include "rtemscompat.h"
 
 /* Template for driver task, setup and attach routines. To be instantiated
  * by defining the relevant symbols in header files.
@@ -37,7 +37,7 @@
 #include IF_VAR_HEADER
 #endif
 
-#include <rtemscompat1.h>
+#include "rtemscompat1.h"
 
 #define EX_EVENT RTEMS_EVENT_1
 #undef  IRQ_AT_8259

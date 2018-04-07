@@ -110,7 +110,7 @@ device_is_attached(netdev_t *dev)
 
 #ifdef NETDRIVER_PCI
 #include NETDRIVER_PCI
-#include <pcireg.h>
+#include "pcireg.h"
 
 static inline unsigned
 pci_read_config(device_t dev, unsigned addr, unsigned width)

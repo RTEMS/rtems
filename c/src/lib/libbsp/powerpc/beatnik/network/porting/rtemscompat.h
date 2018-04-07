@@ -49,8 +49,6 @@ static inline void  the_real_free(void *p)
 #endif
 #include <rtems/bspIo.h>
 
-#include "rtemscompat_defs.h"
-
 #define NET_EMB(x,y,z) x ## y ## z
 #define NET_EMBEMB(x,y,z) NET_EMB(x,y,z)
 

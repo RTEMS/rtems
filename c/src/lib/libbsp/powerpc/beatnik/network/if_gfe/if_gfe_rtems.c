@@ -1,5 +1,6 @@
 /* Author: T. Straumann <strauman@slac.stanford.edu>; see ../../LICENSE */
-#include "rtemscompat.h"
+#include "rtemscompat_defs.h"
+#include "../porting/rtemscompat.h"
 #include "gtethreg.h"
 
 #include <bsp/early_enet_link_status.h>
@@ -17,7 +18,7 @@
 #define	GT_WRITE(sc, reg, v) \
 	bus_space_write_4((sc)->sc_gt_memt, (sc)->sc_gt_memh, reg, (v))
 
-#include "if_xxx_rtems.c"
+#include "../porting/if_xxx_rtems.c"
 
 #include <bsp.h>
 #include <libcpu/io.h>

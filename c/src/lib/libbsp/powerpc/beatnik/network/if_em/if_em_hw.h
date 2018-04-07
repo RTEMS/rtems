@@ -42,7 +42,7 @@
 #ifndef __rtems__
 #include <dev/em/if_em_osdep.h>
 #else
-#include <if_em_osdep.h>
+#include "if_em_osdep.h"
 #endif
 
 

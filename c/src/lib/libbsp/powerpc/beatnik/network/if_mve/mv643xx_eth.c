@@ -90,7 +90,11 @@
 #include <libcpu/byteorder.h>
 
 #include <sys/param.h>
+#include <sys/proc.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
 #include <dev/mii/mii.h>
+#include <net/if_var.h>
 #include <net/if_media.h>
 
 /* Not so nice; would be more elegant not to depend on C library but the
@@ -138,13 +142,11 @@
 /* Enable debugging messages and some support routines  (dump rings etc.)                    */      
 #undef  MVETH_DEBUG
 
-#ifndef DISABLE_DETACHING	/* can override from Makefile */
 /* Hack for driver development; rtems bsdnet doesn't implement detaching an interface :-(
  * but this hack allows us to unload/reload the driver module which makes development
  * a lot less painful.
  */
-#define MVETH_DETACH_HACK
-#endif
+#undef MVETH_DETACH_HACK
 
 /* Ring sizes */
 

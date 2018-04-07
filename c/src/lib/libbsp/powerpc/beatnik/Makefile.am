@@ -82,71 +82,14 @@ librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
 
 #network
 if HAS_NETWORKING
-noinst_PROGRAMS += network_support.rel
-network_support_rel_SOURCES = network/support/early_link_status.c \
-    network/support/bsp_attach.c
-network_support_rel_CPPFLAGS = $(AM_CPPFLAGS)
-network_support_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-noinst_PROGRAMS += network_if_mve_tmp.rel
-network_if_mve_tmp_rel_SOURCES  = network/if_mve/mv643xx_eth.c
-network_if_mve_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) -DDISABLE_DETACHING
-network_if_mve_tmp_rel_CFLAGS   = $(AM_CFLAGS)
-network_if_mve_tmp_rel_LDFLAGS  = $(RTEMS_RELLDFLAGS)
-
-# remove all unneccessary global symbols to avoid name clashes
-# with BSD stuff;
-network_if_mve.rel: network_if_mve_tmp.rel
-	$(OBJCOPY) -G rtems_mve_attach -G rtems_mve_early_link_check_ops \
-                   -G BSP_mve_ack_irqs -G BSP_mve_disable_irqs \
-                   -G BSP_mve_enable_irqs -G BSP_mve_init_hw \
-                   -G BSP_mve_ack_irq_mask -G BSP_mve_disable_irq_mask \
-                   -G BSP_mve_enable_irq_mask -G BSP_mve_setup_1 \
-                   -G BSP_mve_read_eaddr -G BSP_mve_send_buf \
-                   -G BSP_mve_send_buf_raw \
-                   -G BSP_mve_setup -G BSP_mve_stop_hw \
-                   -G BSP_mve_swipe_rx -G BSP_mve_swipe_tx \
-                   -G BSP_mve_detach -G BSP_mve_media_ioctl \
-                   -G BSP_mve_get_tid \
-                   -G BSP_mve_dump_stats -G BSP_mve_ack_link_chg \
-                   -G BSP_mve_mcast_filter_clear \
-                   -G BSP_mve_mcast_filter_accept_all \
-                   -G BSP_mve_mcast_filter_accept_add \
-                   -G BSP_mve_mcast_filter_accept_del \
-                   -G mveth_serial_ctrl_config_val \
-	           $^ $@
-
-noinst_PROGRAMS += network_if_gfe_tmp.rel
-network_if_gfe_tmp_rel_SOURCES = network/if_gfe/if_gfe.c network/if_gfe/if_gfe_rtems.c
-network_if_gfe_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    -I$(srcdir)/network/porting -I$(srcdir)/network/if_gfe
-network_if_gfe_tmp_rel_CFLAGS   = $(AM_CFLAGS)
-network_if_gfe_tmp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-# remove all unneccessary global symbols to avoid name clashes
-# with BSD stuff;
-network_if_gfe.rel: network_if_gfe_tmp.rel
-	$(OBJCOPY) -G rtems_gfe_attach -G net_driver_ticks_per_sec \
-                   -G rtems_gfe_setup -G rtems_gfe_early_link_check_ops \
-                   $^ $@
-
-
-noinst_PROGRAMS += network_if_em_tmp.rel
-network_if_em_tmp_rel_SOURCES = network/if_em/if_em.c \
-    network/if_em/if_em_hw.c \
-    network/if_em/if_em_rtems.c
-network_if_em_tmp_rel_CPPFLAGS = $(AM_CPPFLAGS) \
-    -I$(srcdir)/network/porting -I$(srcdir)/network/if_em
-network_if_em_tmp_rel_CFLAGS   = $(AM_CFLAGS)
-network_if_em_tmp_rel_LDFLAGS = $(RTEMS_RELLDFLAGS)
-
-network_if_em.rel: network_if_em_tmp.rel
-	$(OBJCOPY) -G rtems_em_attach -G net_driver_ticks_per_sec \
-                   -G rtems_em_pci_setup -G rtems_em_early_link_check_ops \
-                   $^ $@
-
-librtemsbsp_a_LIBADD = network_support.rel \
-    network_if_mve.rel network_if_gfe.rel network_if_em.rel
+librtemsbsp_a_SOURCES += network/if_em/if_em.c
+librtemsbsp_a_SOURCES += network/if_em/if_em_hw.c
+librtemsbsp_a_SOURCES += network/if_em/if_em_rtems.c
+librtemsbsp_a_SOURCES += network/if_gfe/if_gfe.c
+librtemsbsp_a_SOURCES += network/if_gfe/if_gfe_rtems.c
+librtemsbsp_a_SOURCES += network/if_mve/mv643xx_eth.c
+librtemsbsp_a_SOURCES += network/support/bsp_attach.c
+librtemsbsp_a_SOURCES += network/support/early_link_status.c
 endif
 
 # tod
