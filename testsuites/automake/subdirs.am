@@ -16,29 +16,9 @@ $1:
 	  if test "$$$$target" = "all-local"; then \
 	    target="all"; \
 	  fi; \
-	  tcheck="$(top_srcdir)/../../tools/build/rtems-test-check-py"; \
-	  tdata="$(RTEMS_BSP)-testsuite.tcfg"; \
-	  tincludes="$(top_srcdir)/../../c/src/lib/libbsp/$(RTEMS_CPU)/$(RTEMS_BSP_FAMILY)/make/custom:$(top_srcdir)/.."; \
-	  if test -f $$$$tcheck; then \
-	    check_result=`$$$$tcheck exclude $(RTEMS_BSP) $$$$tdata $$$$tincludes $(1)`; \
-	  else \
-	    check_result="$(1)"; \
-	  fi; \
-	  if test "$(1)" = "$$$$check_result"; then \
-	    if test -f $$$$tcheck; then \
-	      test_FLAGS=`$$$$tcheck flags $(RTEMS_BSP) $$$$tdata $$$$tincludes $(1)`; \
-	    fi; \
-	    if test -z "$$$$test_FLAGS"; then \
-	      echo "BSP Testsuite: $(1): PASS"; \
-	    else \
-	      echo "BSP Testsuite: $(1): $$$$test_FLAGS"; \
-	    fi; \
-	    echo "Making $$$$target in $(1)"; \
-	    cd $(1); \
-	    $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$$$test_FLAGS" $$$$target; \
-	  else \
-	    echo "BSP Testsuite: $(1): EXCLUDED"; \
-	  fi; \
+	  echo "Making $$$$target in $(1)"; \
+	  cd $(1); \
+	  $(MAKE) $(AM_MAKEFLAGS) TEST_FLAGS="$$$$test_FLAGS" $$$$target; \
 	fi;
 endef
 
