@@ -32,8 +32,8 @@ RTEMS_CHECK_CXX(RTEMS_BSP)
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 
-AM_CONDITIONAL(SMPTESTS,test "$rtems_cv_RTEMS_SMP" = "yes")
-
+AM_CONDITIONAL(NO_SMP,test "$rtems_cv_RTEMS_SMP" != "yes")
+AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
 AM_CONDITIONAL([HAS_POSIX],[test x"${rtems_cv_RTEMS_POSIX_API}" = xyes])
 
 # These are SMP related and were added to newlib by RTEMS.
@@ -53,62 +53,62 @@ AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
   #define _GNU_SOURCE
   #include <pthread.h>]])
 
-# Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-smpopenmp01/Makefile
-smp01/Makefile
-smp02/Makefile
-smp03/Makefile
-smp05/Makefile
-smp07/Makefile
-smp08/Makefile
-smp09/Makefile
-smpaffinity01/Makefile
-smpatomic01/Makefile
-smpcache01/Makefile
-smpcapture01/Makefile
-smpcapture02/Makefile
-smpclock01/Makefile
-smpfatal01/Makefile
-smpfatal02/Makefile
-smpfatal03/Makefile
-smpfatal04/Makefile
-smpfatal05/Makefile
-smpfatal06/Makefile
-smpfatal08/Makefile
-smpipi01/Makefile
-smpload01/Makefile
-smplock01/Makefile
-smpmigration01/Makefile
-smpmigration02/Makefile
-smpmrsp01/Makefile
-smpmutex01/Makefile
-smpmutex02/Makefile
-smppsxaffinity01/Makefile
-smppsxaffinity02/Makefile
-smppsxmutex01/Makefile
-smppsxsignal01/Makefile
-smpschedaffinity01/Makefile
-smpschedaffinity02/Makefile
-smpschedaffinity03/Makefile
-smpschedaffinity04/Makefile
-smpschedaffinity05/Makefile
-smpschededf01/Makefile
-smpschededf02/Makefile
-smpschededf03/Makefile
-smpschedsem01/Makefile
-smpscheduler01/Makefile
-smpscheduler02/Makefile
-smpscheduler03/Makefile
-smpscheduler04/Makefile
-smpscheduler05/Makefile
-smpscheduler06/Makefile
-smpscheduler07/Makefile
-smpsignal01/Makefile
-smpstrongapa01/Makefile
-smpswitchextension01/Makefile
-smpthreadlife01/Makefile
-smpunsupported01/Makefile
-smpwakeafter01/Makefile
-])
+# BSP Test configuration
+RTEMS_TEST_CHECK([smp01])
+RTEMS_TEST_CHECK([smp02])
+RTEMS_TEST_CHECK([smp03])
+RTEMS_TEST_CHECK([smp05])
+RTEMS_TEST_CHECK([smp07])
+RTEMS_TEST_CHECK([smp08])
+RTEMS_TEST_CHECK([smp09])
+RTEMS_TEST_CHECK([smpaffinity01])
+RTEMS_TEST_CHECK([smpatomic01])
+RTEMS_TEST_CHECK([smpcache01])
+RTEMS_TEST_CHECK([smpcapture01])
+RTEMS_TEST_CHECK([smpcapture02])
+RTEMS_TEST_CHECK([smpclock01])
+RTEMS_TEST_CHECK([smpfatal01])
+RTEMS_TEST_CHECK([smpfatal02])
+RTEMS_TEST_CHECK([smpfatal03])
+RTEMS_TEST_CHECK([smpfatal04])
+RTEMS_TEST_CHECK([smpfatal05])
+RTEMS_TEST_CHECK([smpfatal06])
+RTEMS_TEST_CHECK([smpfatal08])
+RTEMS_TEST_CHECK([smpipi01])
+RTEMS_TEST_CHECK([smpload01])
+RTEMS_TEST_CHECK([smplock01])
+RTEMS_TEST_CHECK([smpmigration01])
+RTEMS_TEST_CHECK([smpmigration02])
+RTEMS_TEST_CHECK([smpmrsp01])
+RTEMS_TEST_CHECK([smpmutex01])
+RTEMS_TEST_CHECK([smpmutex02])
+RTEMS_TEST_CHECK([smpopenmp01])
+RTEMS_TEST_CHECK([smppsxaffinity01])
+RTEMS_TEST_CHECK([smppsxaffinity02])
+RTEMS_TEST_CHECK([smppsxmutex01])
+RTEMS_TEST_CHECK([smppsxsignal01])
+RTEMS_TEST_CHECK([smpschedaffinity01])
+RTEMS_TEST_CHECK([smpschedaffinity02])
+RTEMS_TEST_CHECK([smpschedaffinity03])
+RTEMS_TEST_CHECK([smpschedaffinity04])
+RTEMS_TEST_CHECK([smpschedaffinity05])
+RTEMS_TEST_CHECK([smpschededf01])
+RTEMS_TEST_CHECK([smpschededf02])
+RTEMS_TEST_CHECK([smpschededf03])
+RTEMS_TEST_CHECK([smpschedsem01])
+RTEMS_TEST_CHECK([smpscheduler01])
+RTEMS_TEST_CHECK([smpscheduler02])
+RTEMS_TEST_CHECK([smpscheduler03])
+RTEMS_TEST_CHECK([smpscheduler04])
+RTEMS_TEST_CHECK([smpscheduler05])
+RTEMS_TEST_CHECK([smpscheduler06])
+RTEMS_TEST_CHECK([smpscheduler07])
+RTEMS_TEST_CHECK([smpsignal01])
+RTEMS_TEST_CHECK([smpstrongapa01])
+RTEMS_TEST_CHECK([smpswitchextension01])
+RTEMS_TEST_CHECK([smpthreadlife01])
+RTEMS_TEST_CHECK([smpunsupported01])
+RTEMS_TEST_CHECK([smpwakeafter01])
+
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
