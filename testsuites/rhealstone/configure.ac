@@ -25,13 +25,13 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-# Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-rhdeadlockbrk/Makefile
-rhilatency/Makefile
-rhmlatency/Makefile
-rhsemshuffle/Makefile
-rhtaskpreempt/Makefile
-rhtaskswitch/Makefile
-])
+# BSP Test configuration
+RTEMS_TEST_CHECK([rhdeadlockbrk])
+RTEMS_TEST_CHECK([rhilatency])
+RTEMS_TEST_CHECK([rhmlatency])
+RTEMS_TEST_CHECK([rhsemshuffle])
+RTEMS_TEST_CHECK([rhtaskpreempt])
+RTEMS_TEST_CHECK([rhtaskswitch])
+
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
