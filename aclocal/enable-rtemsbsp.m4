@@ -6,7 +6,7 @@ AC_DEFUN([RTEMS_ENABLE_RTEMSBSP],
 AC_BEFORE([$0], [RTEMS_ENV_RTEMSBSP])
 AC_ARG_ENABLE(rtemsbsp,
 [AS_HELP_STRING([--enable-rtemsbsp="bsp1 bsp2 .."],
-[BSPs to include in build])],
+[BSPs to include in build, required for SMP and MP builds])],
 [case "${enable_rtemsbsp}" in
   yes ) enable_rtemsbsp="" ;;
   no ) enable_rtemsbsp="no" ;;

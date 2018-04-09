@@ -5,8 +5,9 @@ AC_ARG_ENABLE(multiprocessing,
 [enable multiprocessing interface; the multiprocessing interface is a
 communication interface between different RTEMS instances and allows
 synchronization of objects via message passing])],
-[case "${enable_multiprocessing}" in 
-  yes) ;;
+[case "${enable_multiprocessing}" in
+  yes) test -z $enable_rtemsbsp && AC_MSG_ERROR([Multiprocessing requires BSPs to be provided, none have, see --enable-rtemsbsp])
+       ;;
   no) ;;
   *)  AC_MSG_ERROR(bad value ${enableval} for enable-multiprocessing option) ;;
 esac],[enable_multiprocessing=no])
