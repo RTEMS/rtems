@@ -22,10 +22,10 @@ RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 
-# Explicitly list all Makefiles here
-AC_CONFIG_FILES([Makefile
-dhrystone/Makefile
-linpack/Makefile
-whetstone/Makefile
-])
+# BSP Test configuration
+RTEMS_TEST_CHECK([dhrystone])
+RTEMS_TEST_CHECK([linpack])
+RTEMS_TEST_CHECK([whetstone])
+
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
