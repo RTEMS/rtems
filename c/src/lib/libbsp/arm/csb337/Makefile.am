@@ -55,6 +55,7 @@ if ENABLE_UMON
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/monlib.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/tfsDriver.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umonrtemsglue.c
+librtemsbsp_a_SOURCES += startup/umonsupp.c
 endif
 if ENABLE_UMON_CONSOLE
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umoncons.c
