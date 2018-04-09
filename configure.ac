@@ -25,11 +25,15 @@ RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_CXX
-RTEMS_ENABLE_TESTS  
+RTEMS_ENABLE_TESTS
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_RTEMSBSP
 RTEMS_ENABLE_PARAVIRT
 RTEMS_ENABLE_DRVMGR
+
+## Check if there are valid tools install and in the path.
+RTEMS_CHECK_TOOL(RTEMS_CC,gcc)
+test -z "$RTEMS_CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 ## NOTES:
 ## * tools/build are host-native tools to be installed on the host.
