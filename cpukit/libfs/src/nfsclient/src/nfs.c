@@ -80,8 +80,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include <nfs_prot.h>
-#include <mount_prot.h>
+#include "../proto/nfs_prot.h"
+#include "../proto/mount_prot.h"
 
 #include "rpcio.h"
 #include "librtemsNfs.h"
