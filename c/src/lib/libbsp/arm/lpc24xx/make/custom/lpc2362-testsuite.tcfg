@@ -18,6 +18,9 @@ exclude: fsdosfsformat01
 exclude: fsjffs2gc01
 exclude: fsrfsbitmap01
 exclude: ftp01
+exclude: iconv
+exclude: iconv_close
+exclude: iconv_open
 exclude: iostream
 exclude: jffs2_fserror
 exclude: jffs2_fslink
