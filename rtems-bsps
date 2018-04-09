@@ -1,6 +1,7 @@
 #! /bin/sh
 
-base="c/src/lib/libbsp"
+top=$(dirname $0)
+base="${top}/c/src/lib/libbsp"
 base_e=$(echo ${base} | sed -e 's/\//\\\//g')
 
 last_arch=""
