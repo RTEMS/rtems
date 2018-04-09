@@ -23,10 +23,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "initial_filesystem_tar.h"
-#include "initial_filesystem_tar_gz.h"
+#include "tar01_tar.h"
+#include "tar01_tar_gz.h"
 #if HAVE_XZ
-#include "initial_filesystem_tar_xz.h"
+#include "tar01_tar_xz.h"
 #endif
 
 const char rtems_test_name[] = "TAR 1";
@@ -39,13 +39,13 @@ void test_untar_chunks_from_memory(void);
 void test_untar_unzip_tgz(void);
 void test_untar_unzip_txz(void);
 
-#define TARFILE_START initial_filesystem_tar
-#define TARFILE_SIZE  initial_filesystem_tar_size
-#define TARFILE_GZ_START initial_filesystem_tar_gz
-#define TARFILE_GZ_SIZE  initial_filesystem_tar_gz_size
+#define TARFILE_START    tar01_tar
+#define TARFILE_SIZE     tar01_tar_size
+#define TARFILE_GZ_START tar01_tar_gz
+#define TARFILE_GZ_SIZE  tar01_tar_gz_size
 #if HAVE_XZ
-#define TARFILE_XZ_START initial_filesystem_tar_xz
-#define TARFILE_XZ_SIZE  initial_filesystem_tar_xz_size
+#define TARFILE_XZ_START tar01_tar_xz
+#define TARFILE_XZ_SIZE  tar01_tar_xz_size
 #endif
 
 void test_cat(

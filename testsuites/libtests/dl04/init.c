@@ -27,10 +27,10 @@ const char rtems_test_name[] = "libdl (RTL) 4";
 /* forward declarations to avoid warnings */
 static rtems_task Init(rtems_task_argument argument);
 
-#include "dl-tar.h"
+#include "dl04-tar.h"
 
-#define TARFILE_START dl_tar
-#define TARFILE_SIZE  dl_tar_size
+#define TARFILE_START dl04_tar
+#define TARFILE_SIZE  dl04_tar_size
 
 static int test(void)
 {

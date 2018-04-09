@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "initial_filesystem_tar.h"
+#include "tar02_tar.h"
 
 const char rtems_test_name[] = "TAR 2";
 
@@ -32,8 +32,8 @@ const char rtems_test_name[] = "TAR 2";
 rtems_task Init(rtems_task_argument argument);
 void test_tarfs_load(void);
 
-#define TARFILE_START initial_filesystem_tar
-#define TARFILE_SIZE  initial_filesystem_tar_size
+#define TARFILE_START tar02_tar
+#define TARFILE_SIZE  tar02_tar_size
 
 static const char file[] = "/home/test_file";
 
