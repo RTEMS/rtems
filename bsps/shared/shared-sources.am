@@ -61,9 +61,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-getpkt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-initlq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-intr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-mpisr.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-poll.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-receive.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-retpkt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-send.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/shmdr/shmdr-shmisr.c
 endif
