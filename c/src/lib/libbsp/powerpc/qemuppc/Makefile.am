@@ -18,31 +18,28 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
+project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 # startup
-startup_SOURCES = ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bspreset.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/gnatinstallhandler.c \
-    startup/cmain.c startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/cmain.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
 # pclock
-# clock_SOURCES = ../../shared/clock_driver_simidle.c
-clock_SOURCES = ../shared/clock/clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/clock.c
 # console
-console_SOURCES = ../../shared/console-polled.c console/console-io.c
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += console/console-io.c
 
 # irq
-irq_SOURCES =
-irq_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-irq_SOURCES += irq/irq_init.c
-
-project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = $(startup_SOURCES)
-librtemsbsp_a_SOURCES += $(clock_SOURCES)
-librtemsbsp_a_SOURCES += $(console_SOURCES)
-librtemsbsp_a_SOURCES += $(irq_SOURCES)
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c

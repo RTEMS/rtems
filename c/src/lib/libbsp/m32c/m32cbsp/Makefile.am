@@ -14,23 +14,23 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bspreset.c \
-    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/gnatinstallhandler.c startup/crtn.S
-clock_SOURCES = ../../shared/clock_driver_simidle.c
-console_SOURCES = ../../shared/console-polled.c console/console-io.c \
-   console/syscalls.S
-timer_SOURCES = timer/timer.c
-
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = $(startup_SOURCES)
-librtemsbsp_a_SOURCES += $(clock_SOURCES)
-librtemsbsp_a_SOURCES += $(console_SOURCES)
-librtemsbsp_a_SOURCES += $(timer_SOURCES)
+librtemsbsp_a_SOURCES =
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/crtn.S
+librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += console/syscalls.S
+librtemsbsp_a_SOURCES += timer/timer.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

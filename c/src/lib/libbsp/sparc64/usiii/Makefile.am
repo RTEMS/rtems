@@ -23,46 +23,40 @@ project_lib_DATA = start.$(OBJEXT)
 
 dist_project_lib_DATA += ../shared/startup/linkcmds
 
-startup_SOURCES = ../../shared/bspclean.c \
-    ../../shared/bspstart.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bspreset.c \
-    ../shared/startup/setvec.c \
-    ../../shared/gnatinstallhandler.c  \
-    ../shared/helenos/boot/genarch/balloc.c \
-    ../shared/helenos/boot/genarch/ofw.c \
-    ../shared/helenos/boot/genarch/ofw_tree.c \
-    ../shared/helenos/boot/generic/string.c \
-    ../shared/helenos/boot/sparc64/loader/ofwarch.c \
-    ../shared/helenos/boot/sparc64/loader/main.c \
-    ../shared/helenos/boot/sparc64/loader/ofwasm.S \
-    ../shared/asm/asm.S \
-    start/bspinit.S
-
-mmu_SOURCES = \
-    ../shared/helenos/kernel/sparc64/src/cache.S \
-    ../shared/helenos/kernel/sparc64/src/sun4u/takemmu.S \
-    ../shared/start/trap_table.S
-
-#clock_SOURCES = ../../shared/clock_driver_simidle.c
-clock_SOURCES = ../shared/clock/ckinit.c
-
-console_SOURCES = ../shared/console/conscfg.c
-console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
-console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
-console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-
-timer_SOURCES = ../../shared/timerstub.c
-
 project_lib_LIBRARIES = librtemsbsp.a 
-librtemsbsp_a_SOURCES = $(startup_SOURCES)
-librtemsbsp_a_SOURCES += $(mmu_SOURCES)
-librtemsbsp_a_SOURCES += $(clock_SOURCES)
-librtemsbsp_a_SOURCES += $(console_SOURCES)
-librtemsbsp_a_SOURCES += $(timer_SOURCES)
+librtemsbsp_a_SOURCES =
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../shared/startup/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/balloc.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw_tree.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/generic/string.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwarch.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/main.c
+librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwasm.S
+librtemsbsp_a_SOURCES += ../shared/asm/asm.S
+librtemsbsp_a_SOURCES += start/bspinit.S
+
+librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/cache.S
+librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/sun4u/takemmu.S
+librtemsbsp_a_SOURCES += ../shared/start/trap_table.S
+
+librtemsbsp_a_SOURCES += ../shared/clock/ckinit.c
+
+librtemsbsp_a_SOURCES += ../shared/console/conscfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
+
+librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
