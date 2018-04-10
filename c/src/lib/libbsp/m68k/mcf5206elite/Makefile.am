@@ -23,19 +23,27 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-    ../../shared/bspstart.c startup/init5206e.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES += startup/init5206e.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # console
-librtemsbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 # i2c
-librtemsbsp_a_SOURCES += i2c/i2c.c i2c/i2cdrv.c
+librtemsbsp_a_SOURCES += i2c/i2c.c
+librtemsbsp_a_SOURCES += i2c/i2cdrv.c
 # tod
-librtemsbsp_a_SOURCES += tod/ds1307.c tod/todcfg.c ../../shared/tod.c
+librtemsbsp_a_SOURCES += tod/ds1307.c
+librtemsbsp_a_SOURCES += tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
 # nvram
 librtemsbsp_a_SOURCES += nvram/nvram.c
 

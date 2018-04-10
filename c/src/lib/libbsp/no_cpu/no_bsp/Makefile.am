@@ -13,22 +13,28 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/startup/bspgetworkarea.c \
-    startup/bspstart.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    startup/setvec.c ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += startup/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c timer/timerisr.c
+librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timerisr.c
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
-    shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += shmsupp/addrconv.c
+librtemsbsp_a_SOURCES += shmsupp/getcfg.c
+librtemsbsp_a_SOURCES += shmsupp/lock.c
+librtemsbsp_a_SOURCES += shmsupp/mpisr.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

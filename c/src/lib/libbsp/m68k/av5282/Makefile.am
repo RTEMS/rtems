@@ -18,16 +18,20 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsppredriverhook.c \
-    ../../shared/bspreset_loop.c \
-    ../../shared/bspgetworkarea.c \
-    startup/init5282.c startup/bspstart.c \
-    ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/init5282.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 # clock
-librtemsbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # timer

@@ -26,21 +26,26 @@ BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
 # startup
-librtemsbsp_a_SOURCES += startup/hw_init.c \
-    ../../shared/bsppredriverhook.c \
-    ../shared/startup/bspstart.c \
-    ../../shared/bspgetworkarea.c ../../shared/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/gnatinstallhandler.c ../../shared/bspclean.c \
-    ../shared/bsphwinit.c
+librtemsbsp_a_SOURCES += startup/hw_init.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../shared/bsphwinit.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += clock/ckinit.c
-librtemsbsp_a_SOURCES += startup/cpu_asm.c startup/ispsh7045.c
+librtemsbsp_a_SOURCES += startup/cpu_asm.c
+librtemsbsp_a_SOURCES += startup/ispsh7045.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console
-librtemsbsp_a_SOURCES += ../../sh/shared/console.c console/config.c
+librtemsbsp_a_SOURCES += ../../sh/shared/console.c
+librtemsbsp_a_SOURCES += console/config.c
 librtemsbsp_a_SOURCES += console/sci.c
 librtemsbsp_a_SOURCES += console/sci_termios.c
 # debugio

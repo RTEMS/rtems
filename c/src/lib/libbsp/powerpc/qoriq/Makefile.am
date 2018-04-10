@@ -34,33 +34,32 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # Startup
-librtemsbsp_a_SOURCES += \
-	../../shared/bootcard.c \
-	../../shared/getentropy-cpucounter.c \
-	../../shared/sbrk.c \
-	../../shared/gnatinstallhandler.c \
-	../../shared/bspclean.c \
-	../../shared/src/bsp-fdt.c \
-	../shared/src/ppc-exc-handler-table.c \
-	../shared/src/tictac.c \
-	../shared/src/bsp-start-zero.S \
-	../shared/startup/bspidle.c \
-	startup/epapr_hcalls.S \
-	startup/l1cache.S \
-	startup/l2cache.S \
-	startup/mmu.c \
-	startup/mmu-tlb1.S \
-	startup/mmu-config.c \
-	startup/portal.c \
-	startup/restart.S \
-	startup/bsppredriverhook.c \
-	startup/bspstart.c \
-	startup/bspreset.c \
-	startup/bsprestart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/src/bsp-fdt.c
+librtemsbsp_a_SOURCES += ../shared/src/ppc-exc-handler-table.c
+librtemsbsp_a_SOURCES += ../shared/src/tictac.c
+librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
+librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
+librtemsbsp_a_SOURCES += startup/epapr_hcalls.S
+librtemsbsp_a_SOURCES += startup/l1cache.S
+librtemsbsp_a_SOURCES += startup/l2cache.S
+librtemsbsp_a_SOURCES += startup/mmu.c
+librtemsbsp_a_SOURCES += startup/mmu-tlb1.S
+librtemsbsp_a_SOURCES += startup/mmu-config.c
+librtemsbsp_a_SOURCES += startup/portal.c
+librtemsbsp_a_SOURCES += startup/restart.S
+librtemsbsp_a_SOURCES += startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/bsprestart.c
 
 # Clock
-librtemsbsp_a_SOURCES += clock/clock-config.c \
-	../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clock-config.c
+librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c
@@ -77,20 +76,20 @@ librtemsbsp_a_SOURCES += console/uart-bridge-slave.c
 librtemsbsp_a_SOURCES += console/console-config.c
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c \
-	rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # MPCI
-librtemsbsp_a_SOURCES += shmsupp/lock.S \
-	shmsupp/intercom.c \
-	shmsupp/intercom-mpci.c
+librtemsbsp_a_SOURCES += shmsupp/lock.S
+librtemsbsp_a_SOURCES += shmsupp/intercom.c
+librtemsbsp_a_SOURCES += shmsupp/intercom-mpci.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c \
-	network/if_intercom.c
+librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += network/if_intercom.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 

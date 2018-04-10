@@ -17,15 +17,15 @@ project_lib_DATA += linkcmds
 project_lib_LIBRARIES = librtemsbsp.a
 
 # startup
-librtemsbsp_a_SOURCES = startup/bspclean.c \
-                   ../shared/startup/zerobss.c \
-                   ../../shared/bspgetworkarea.c \
-                   startup/bspstart.c \
-                   ../../shared/bootcard.c \
-                   ../../shared/getentropy-cpucounter.c \
-                   ../../shared/sbrk.c \
-                   ../../shared/gnatinstallhandler.c \
-                   ../shared/src/memcpy.c
+librtemsbsp_a_SOURCES = startup/bspclean.c
+librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../shared/src/memcpy.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 # start
@@ -35,8 +35,8 @@ librtemsbsp_a_SOURCES += start/start.S
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += startup/dummy_console.c \
-                    ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += startup/dummy_console.c
+librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

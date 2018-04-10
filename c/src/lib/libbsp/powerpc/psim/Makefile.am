@@ -22,11 +22,14 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c \
-    ../../shared/bspgetworkarea.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 # pclock
@@ -34,20 +37,24 @@ librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 # debugio
-librtemsbsp_a_SOURCES += console/console-io.c console/consupp.S
+librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += console/consupp.S
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c ../shared/irq/openpic_i8259_irq.c \
-    ../shared/openpic/openpic.c \
-    ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # vectors
 librtemsbsp_a_SOURCES += vectors/align_h.S
 
 if HAS_MP
 # shmdr
-librtemsbsp_a_SOURCES += \
-    shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += shmsupp/addrconv.c
+librtemsbsp_a_SOURCES += shmsupp/getcfg.c
+librtemsbsp_a_SOURCES += shmsupp/lock.c
+librtemsbsp_a_SOURCES += shmsupp/mpisr.c
 endif
 
 if HAS_NETWORKING

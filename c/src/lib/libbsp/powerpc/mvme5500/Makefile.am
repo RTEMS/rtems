@@ -14,23 +14,26 @@ librtemsbsp_a_SOURCES =
 # UNUSED
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspstart.c \
-    ../../powerpc/shared/startup/pgtbl_setup.c startup/pgtbl_activate.c \
-    ../../powerpc/shared/startup/bsppredriverhook.c \
-    ../../powerpc/shared/startup/zerobss.c \
-    ../../powerpc/shared/startup/bspgetworkarea.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    startup/bspclean.c \
-    ../../shared/gnatinstallhandler.c startup/bspreset.c \
-    ../../powerpc/shared/startup/probeMemEnd.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_setup.c
+librtemsbsp_a_SOURCES += startup/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += startup/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/probeMemEnd.c
 
 # pclock
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
-    ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
 
 # pci
 librtemsbsp_a_SOURCES += pci/pci.c
@@ -39,17 +42,20 @@ librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c irq/BSP_irq.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += irq/BSP_irq.c
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += tod/todcfg.c
 
 # vectors
-librtemsbsp_a_SOURCES += vectors/exceptionhandler.c \
-    ../../powerpc/shared/start/vectors_entry.S
+librtemsbsp_a_SOURCES += vectors/exceptionhandler.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/start/vectors_entry.S
 
 # GT64260
-librtemsbsp_a_SOURCES += GT64260/GT64260TWSI.c GT64260/MVME5500I2C.c
+librtemsbsp_a_SOURCES += GT64260/GT64260TWSI.c
+librtemsbsp_a_SOURCES += GT64260/MVME5500I2C.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/if_100MHz/GT64260eth.c

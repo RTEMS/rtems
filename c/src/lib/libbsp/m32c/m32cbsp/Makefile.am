@@ -27,8 +27,10 @@ console_SOURCES = ../../shared/console-polled.c console/console-io.c \
 timer_SOURCES = timer/timer.c
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+librtemsbsp_a_SOURCES = $(startup_SOURCES)
+librtemsbsp_a_SOURCES += $(clock_SOURCES)
+librtemsbsp_a_SOURCES += $(console_SOURCES)
+librtemsbsp_a_SOURCES += $(timer_SOURCES)
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

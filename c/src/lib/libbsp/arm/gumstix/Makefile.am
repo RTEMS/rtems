@@ -17,12 +17,16 @@ project_lib_DATA += linkcmds
 project_lib_LIBRARIES = librtemsbsp.a
 
 librtemsbsp_a_SOURCES =
-librtemsbsp_a_SOURCES += \
-  ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-  ../../shared/bootcard.c ../../shared/sbrk.c \
-  ../../shared/getentropy-cpucounter.c \
-  ../../shared/gnatinstallhandler.c \
-  ../../shared/bspclean.c startup/bspstart.c startup/bspreset.c startup/memmap.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/memmap.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += clock/clock.c
@@ -44,7 +48,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 if ON_SKYEYE
 librtemsbsp_a_SOURCES += fb/fb.c
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += rtl8019/rtl8019.c rtl8019/wd80x3.h
+librtemsbsp_a_SOURCES += rtl8019/rtl8019.c
+librtemsbsp_a_SOURCES += rtl8019/wd80x3.h
 endif
 endif
 

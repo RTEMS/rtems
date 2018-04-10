@@ -37,48 +37,53 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspstart.c \
-    startup/misc.c ../../powerpc/shared/startup/bspgetworkarea.c \
-    ../../powerpc/shared/startup/bsppredriverhook.c \
-    ../../powerpc/shared/startup/zerobss.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bspclean.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/misc.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += tod/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
-    ../../powerpc/shared/console/console.c \
-    ../../powerpc/shared/console/consoleIo.h \
-    ../../powerpc/shared/console/uart.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c \
-    ../../powerpc/shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h \
-    ../../powerpc/shared/openpic/openpic.c \
-    ../../powerpc/shared/openpic/openpic.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 
 # pci
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
-    pci/detect_host_bridge.c \
-    ../../powerpc/shared/pci/generic_clear_hberrs.c \
-    ../../powerpc/shared/pci/pcifinddevice.c ../../powerpc/shared/pci/pci.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
 
 # flash
-librtemsbsp_a_SOURCES += ../shared/flash/flash.c \
-    ../shared/flash/spansionFlash.c \
-    flash/flashcfg.c
+librtemsbsp_a_SOURCES += ../shared/flash/flash.c
+librtemsbsp_a_SOURCES += ../shared/flash/spansionFlash.c
+librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 # i2c
-librtemsbsp_a_SOURCES += i2c/mpc8540_i2c.c i2c/i2c_init.c
+librtemsbsp_a_SOURCES += i2c/mpc8540_i2c.c
+librtemsbsp_a_SOURCES += i2c/i2c_init.c
 
 # vpd
 librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c

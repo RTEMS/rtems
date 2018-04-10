@@ -18,12 +18,16 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bsppredriverhook.c startup/bspstart.c ../../shared/bspclean.c \
-    ../../shared/bspreset.c startup/memmap.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += startup/memmap.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += clock/clockdrv.c

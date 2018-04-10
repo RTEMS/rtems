@@ -41,44 +41,51 @@ dist_project_lib_DATA += ../shared/startup/linkcmds.share
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
-librtemsbsp_a_SOURCES += startup/bspstart.c \
-    ../shared/motorola/vpd.c startup/bspreset.c startup/i2c_init.c \
-    ../../powerpc/shared/startup/bspgetworkarea.c \
-    ../../powerpc/shared/startup/probeMemEnd.c \
-    ../../powerpc/shared/startup/bsppredriverhook.c \
-    ../../powerpc/shared/startup/zerobss.c \
-    ../../powerpc/shared/startup/pgtbl_setup.c \
-    ../../powerpc/shared/startup/pgtbl_activate.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    startup/bspclean.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/i2c_init.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/probeMemEnd.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += startup/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 #pclock
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 
 #console
-librtemsbsp_a_SOURCES +=  \
-    ../../powerpc/shared/console/uart.c \
-    ../../powerpc/shared/console/console.c \
-    ../../powerpc/shared/console/consoleIo.h \
-    ../../powerpc/shared/console/uart.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 #irq
-librtemsbsp_a_SOURCES += irq/irq_init.c irq/discovery_pic.c 
+librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += irq/discovery_pic.c 
 
 #marvell
-librtemsbsp_a_SOURCES += marvell/discovery.c marvell/gti2c.c marvell/gt_timer.c
+librtemsbsp_a_SOURCES += marvell/discovery.c
+librtemsbsp_a_SOURCES += marvell/gti2c.c
+librtemsbsp_a_SOURCES += marvell/gt_timer.c
 
 #flash
-librtemsbsp_a_SOURCES += ../shared/flash/flash.c \
-    ../shared/flash/intelFlash.c \
-    flash/flashcfg.c
+librtemsbsp_a_SOURCES += ../shared/flash/flash.c
+librtemsbsp_a_SOURCES += ../shared/flash/intelFlash.c
+librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 #pci
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c \
-    pci/gt_pci_init.c pci/pci_io_remap.c pci/motload_fixup.c \
-    ../../powerpc/shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += pci/gt_pci_init.c
+librtemsbsp_a_SOURCES += pci/pci_io_remap.c
+librtemsbsp_a_SOURCES += pci/motload_fixup.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
 
 #network
 if HAS_NETWORKING
@@ -93,7 +100,8 @@ librtemsbsp_a_SOURCES += network/support/early_link_status.c
 endif
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += tod/todcfg.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S

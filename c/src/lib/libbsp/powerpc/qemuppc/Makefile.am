@@ -39,8 +39,10 @@ irq_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 irq_SOURCES += irq/irq_init.c
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(irq_SOURCES)
+librtemsbsp_a_SOURCES = $(startup_SOURCES)
+librtemsbsp_a_SOURCES += $(clock_SOURCES)
+librtemsbsp_a_SOURCES += $(console_SOURCES)
+librtemsbsp_a_SOURCES += $(irq_SOURCES)
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c

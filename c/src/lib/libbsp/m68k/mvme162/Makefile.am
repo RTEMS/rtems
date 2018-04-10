@@ -19,21 +19,25 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    startup/bspstart.c ../../shared/bootcard.c  \
-    ../../shared/getentropy-cpucounter.c \
-    startup/page_table.c \
-    ../../shared/bspgetworkarea.c startup/page_table.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += startup/page_table.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/page_table.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c timer/timerisr.S
+librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += timer/timerisr.S
 # tod
 librtemsbsp_a_SOURCES += tod/tod.c
 

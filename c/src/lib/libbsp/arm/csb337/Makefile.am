@@ -26,13 +26,16 @@ dist_project_lib_DATA += startup/linkcmds.csb637
 project_lib_LIBRARIES = librtemsbsp.a
 
 # startup
-librtemsbsp_a_SOURCES = \
-    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-    startup/bspstart.c \
-    ../../shared/bspclean.c startup/bspreset.c \
-    startup/memmap.c ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES = ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/memmap.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += startup/pmc.c
@@ -49,7 +52,8 @@ librtemsbsp_a_SOURCES += console/usart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 if ENABLE_LCD
-librtemsbsp_a_SOURCES += console/sed1356.c console/fbcons.c
+librtemsbsp_a_SOURCES += console/sed1356.c
+librtemsbsp_a_SOURCES += console/fbcons.c
 endif
 # umon
 if ENABLE_UMON

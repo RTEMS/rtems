@@ -34,23 +34,25 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c \
- 	../../powerpc/shared/startup/bspgetworkarea.c \
- 	../../powerpc/shared/showbats.c \
-    ../../powerpc/shared/startup/bsppredriverhook.c \
- 	../../powerpc/shared/startup/zerobss.c \
-    ../../powerpc/shared/startup/pgtbl_setup.c \
-    ../../powerpc/shared/startup/pgtbl_activate.c \
-	../../powerpc/shared/startup/ppc_idle.c \
-    ../../powerpc/shared/startup/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bspclean.c \
-    ../../shared/gnatinstallhandler.c \
-    startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/showbats.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/ppc_idle.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
 
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c ../../powerpc/shared/tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/tod/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 

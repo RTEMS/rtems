@@ -18,16 +18,20 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bspstart.c startup/init5272.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES += startup/init5272.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # console
-librtemsbsp_a_SOURCES += console/console-io.c ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c

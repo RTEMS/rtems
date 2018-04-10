@@ -29,12 +29,15 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_LIBADD =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bspgetworkarea.c \
-    ../../shared/bspreset_loop.c \
-    startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 
 # bspconsole
@@ -51,7 +54,8 @@ librtemsbsp_a_SOURCES += irq/irq_init.c
 librtemsbsp_a_SOURCES += ../shared/clock/clock.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += = network/xiltemac.c
+librtemsbsp_a_SOURCES += =
+librtemsbsp_a_SOURCES += network/xiltemac.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c

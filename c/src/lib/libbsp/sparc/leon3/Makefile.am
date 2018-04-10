@@ -26,13 +26,16 @@ librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += startup/bspclean.c
-librtemsbsp_a_SOURCES += \
-    ../../shared/bootcard.c startup/bspstart.c \
-    ../../shared/getentropy-cpucounter.c \
-    startup/bsppredriver.c \
-    ../../sparc/shared/startup/bspgetworkarea.c ../../shared/sbrk.c \
-    startup/setvec.c \
-    startup/spurious.c startup/bspidle.S startup/bspdelay.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += startup/bsppredriver.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += startup/setvec.c
+librtemsbsp_a_SOURCES += startup/spurious.c
+librtemsbsp_a_SOURCES += startup/bspidle.S
+librtemsbsp_a_SOURCES += startup/bspdelay.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += startup/cpucounter.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
@@ -42,7 +45,8 @@ librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/cpu.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
-librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/gnatcommon.c
 # AMBA bus
 librtemsbsp_a_SOURCES += amba/amba.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
@@ -74,12 +78,11 @@ librtemsbsp_a_SOURCES += ../../sparc/shared/uart/apbuart_cons.c
 librtemsbsp_a_SOURCES += console/printk_support.c
 
 # IRQ
-librtemsbsp_a_SOURCES += \
-    startup/eirq.c \
-    ../../sparc/shared/irq/genirq.c  \
-    ../../sparc/shared/irq/irq-shared.c \
-    ../../sparc/shared/irq/bsp_isr_handler.c \
-    ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += startup/eirq.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq/genirq.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq/irq-shared.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq/bsp_isr_handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # PCI
 librtemsbsp_a_SOURCES += ../../sparc/shared/pci/grpci.c
@@ -110,8 +113,8 @@ librtemsbsp_a_SOURCES += ../../sparc/shared/1553/gr1553bm.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/1553/gr1553rt.c
 
 # CAN
-librtemsbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
-    ../../sparc/shared/can/grcan.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/can/occan.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/can/grcan.c
 
 # SpaceWire
 if !HAS_SMP
@@ -189,8 +192,10 @@ endif
 
 if HAS_MP
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
-    shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += shmsupp/addrconv.c
+librtemsbsp_a_SOURCES += shmsupp/getcfg.c
+librtemsbsp_a_SOURCES += shmsupp/lock.c
+librtemsbsp_a_SOURCES += shmsupp/mpisr.c
 endif
 
 

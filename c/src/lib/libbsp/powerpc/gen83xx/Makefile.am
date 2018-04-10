@@ -30,22 +30,21 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += \
-	../../shared/bootcard.c \
-	../../shared/getentropy-cpucounter.c \
-	../../shared/bsppredriverhook.c \
-	../../shared/sbrk.c \
-	../../shared/gnatinstallhandler.c \
-	../shared/src/tictac.c \
-	startup/cpuinit.c \
-	../shared/startup/bspidle.c \
-	startup/bspstart.c \
-	../../shared/bspclean.c \
-	startup/bspreset.c \
-	startup/bsprestart.c \
-	../../shared/bspgetworkarea.c \
-        ../../shared/src/bsp-uboot-board-info.c \
-        ../shared/uboot_getenv.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../shared/src/tictac.c
+librtemsbsp_a_SOURCES += startup/cpuinit.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += startup/bsprestart.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/src/bsp-uboot-board-info.c
+librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
 
 # clock
 librtemsbsp_a_SOURCES += ../shared/clock/clock.c

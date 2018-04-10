@@ -17,23 +17,28 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bspreset_loop.c \
-    startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bsppredriverhook.c ../../shared/bspgetworkarea.c \
-    ../../shared/sbrk.c \
-    ../../shared/gnatinstallhandler.c mmu/mmu_405.c mmu/mmu_405asm.S 
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += mmu/mmu_405.c
+librtemsbsp_a_SOURCES += mmu/mmu_405asm.S 
 
 # dlentry
 librtemsbsp_a_SOURCES += dlentry/dlentry.S
 
 # console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c \
-    ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c irq/irq.c
+librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += irq/irq.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network.c 

@@ -85,7 +85,8 @@ librtemsbsp_a_SOURCES += misc/mailbox.c
 librtemsbsp_a_SOURCES += misc/vc.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 
 # Timer
 librtemsbsp_a_SOURCES += misc/timer.c

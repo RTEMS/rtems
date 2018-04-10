@@ -72,8 +72,8 @@ librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
 librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c \
-	rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # Misc
 librtemsbsp_a_SOURCES += misc/boot.c

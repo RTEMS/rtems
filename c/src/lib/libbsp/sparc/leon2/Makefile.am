@@ -41,18 +41,19 @@ librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_halt.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/cpu.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
 # gnatsupp
-librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
+librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/gnatcommon.c
 # console
-librtemsbsp_a_SOURCES += console/console.c console/debugputs.c
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
 librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # IRQ
 librtemsbsp_a_SOURCES += ../../sparc/shared/irq/genirq.c
-librtemsbsp_a_SOURCES += \
-    ../../sparc/shared/irq/irq-shared.c \
-    ../../sparc/shared/irq/bsp_isr_handler.c \
-    ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq/irq-shared.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/irq/bsp_isr_handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # AMBA bus
 librtemsbsp_a_SOURCES += ../../sparc/shared/amba/ambapp.c
@@ -100,8 +101,8 @@ librtemsbsp_a_SOURCES += ../../sparc/shared/1553/gr1553bm.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/1553/gr1553rt.c
 
 # CAN
-librtemsbsp_a_SOURCES += ../../sparc/shared/can/occan.c \
-    ../../sparc/shared/can/grcan.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/can/occan.c
+librtemsbsp_a_SOURCES += ../../sparc/shared/can/grcan.c
 
 # SpaceWire
 if !HAS_SMP

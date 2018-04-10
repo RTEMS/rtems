@@ -15,16 +15,17 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = \
-    ../../shared/bspclean.c \
-    ../../shared/bspreset_loop.c \
-    ../../shared/bsppredriverhook.c \
-    ../../shared/bspgetworkarea.c \
-    startup/init5225x.c startup/bspstart.c \
-    ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/sbrk.c ../../shared/setvec.c \
-    ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES = ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += startup/init5225x.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += clock/clock.c
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/debugio.c

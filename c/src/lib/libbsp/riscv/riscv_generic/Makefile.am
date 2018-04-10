@@ -46,7 +46,8 @@ librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c ../../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c

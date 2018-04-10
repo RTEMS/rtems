@@ -26,19 +26,18 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # Startup
-librtemsbsp_a_SOURCES += \
-	../../shared/bootcard.c \
-	../../shared/getentropy-cpucounter.c \
-	../../shared/bsppredriverhook.c \
-	../../shared/sbrk.c \
-	../../shared/gnatinstallhandler.c \
-	../../shared/bspclean.c \
-	../../shared/bspgetworkarea.c \
-	../shared/src/ppc-exc-handler-table.c \
-	../shared/src/tictac.c \
-	../shared/src/bsp-start-zero.S \
-	startup/bspstart.c \
-	startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../shared/src/ppc-exc-handler-table.c
+librtemsbsp_a_SOURCES += ../shared/src/tictac.c
+librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += startup/bspreset.c
 
 # Clock
 librtemsbsp_a_SOURCES += clock/clock-config.c

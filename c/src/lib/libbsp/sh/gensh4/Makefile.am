@@ -18,18 +18,23 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += \
-    ../../shared/bsppredriverhook.c ../shared/startup/bspstart.c \
-    ../../shared/bspgetworkarea.c \
-    ../../shared/bspclean.c ../../shared/sbrk.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/gnatinstallhandler.c ../shared/bsphwinit.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../shared/bsphwinit.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
-librtemsbsp_a_SOURCES += startup/cpu_asm.c startup/ispsh7750.c
+librtemsbsp_a_SOURCES += startup/cpu_asm.c
+librtemsbsp_a_SOURCES += startup/ispsh7750.c
 librtemsbsp_a_SOURCES += clock/ckinit.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console
-librtemsbsp_a_SOURCES += console/console.c ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 librtemsbsp_a_SOURCES += console/sh4uart.c
 # hw_init
 librtemsbsp_a_SOURCES += hw_init/hw_init.c

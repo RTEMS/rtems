@@ -78,7 +78,8 @@ librtemsbsp_a_SOURCES += i2c/cadence-i2c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c startup/bspstartmmu.c
+librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += startup/bspstartmmu.c
 
 ###############################################################################
 #                  Special Rules                                              #

@@ -45,8 +45,10 @@ console_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-selec
 timer_SOURCES = ../../shared/timerstub.c
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = $(startup_SOURCES) $(clock_SOURCES) $(console_SOURCES) \
-    $(timer_SOURCES)
+librtemsbsp_a_SOURCES = $(startup_SOURCES)
+librtemsbsp_a_SOURCES += $(clock_SOURCES)
+librtemsbsp_a_SOURCES += $(console_SOURCES)
+librtemsbsp_a_SOURCES += $(timer_SOURCES)
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 

@@ -49,15 +49,15 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c \
-	../../shared/getentropy-cpucounter.c \
-	../../shared/bspclean.c \
-	../../shared/bspgetworkarea.c \
-	../../shared/bsppredriverhook.c \
-	../../shared/gnatinstallhandler.c \
-	../../shared/sbrk.c \
-	../../shared/src/stackalloc.c \
-	../../shared/src/uart-output-char.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../shared/src/uart-output-char.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 # Startup
@@ -87,25 +87,25 @@ librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c \
-	rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # Misc
-librtemsbsp_a_SOURCES += misc/system-clocks.c \
-	misc/dma.c \
-	misc/dma-copy.c \
-	misc/bspidle.c \
-	misc/io.c \
-	misc/lcd.c \
-	misc/restart.c \
-	misc/timer.c
+librtemsbsp_a_SOURCES += misc/system-clocks.c
+librtemsbsp_a_SOURCES += misc/dma.c
+librtemsbsp_a_SOURCES += misc/dma-copy.c
+librtemsbsp_a_SOURCES += misc/bspidle.c
+librtemsbsp_a_SOURCES += misc/io.c
+librtemsbsp_a_SOURCES += misc/lcd.c
+librtemsbsp_a_SOURCES += misc/restart.c
+librtemsbsp_a_SOURCES += misc/timer.c
 
 # SSP
 librtemsbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/i2c.c \
-	i2c/i2c-config.c
+librtemsbsp_a_SOURCES += i2c/i2c.c
+librtemsbsp_a_SOURCES += i2c/i2c-config.c
 
 # Framebuffer
 librtemsbsp_a_SOURCES += ../shared/arm-pl111-fb.c

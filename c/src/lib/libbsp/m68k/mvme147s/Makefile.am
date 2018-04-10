@@ -20,26 +20,32 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c \
-    ../../shared/bsppredriverhook.c \
-    startup/bspstart.c ../../shared/bootcard.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/setvec.c \
-    ../../shared/bspgetworkarea.c ../../shared/setvec.c \
-    ../../shared/sbrk.c ../../shared/gnatinstallhandler.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
+librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 librtemsbsp_a_SOURCES += ../mvme147/clock/ckinit.c
 # console
-librtemsbsp_a_SOURCES += ../mvme147/console/console.c \
-    ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += ../mvme147/console/console.c
+librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
 # timer
-librtemsbsp_a_SOURCES += ../mvme147/timer/timer.c ../mvme147/timer/timerisr.S
+librtemsbsp_a_SOURCES += ../mvme147/timer/timer.c
+librtemsbsp_a_SOURCES += ../mvme147/timer/timerisr.S
 
 if HAS_MP
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c shmsupp/getcfg.c shmsupp/lock.c \
-    shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += shmsupp/addrconv.c
+librtemsbsp_a_SOURCES += shmsupp/getcfg.c
+librtemsbsp_a_SOURCES += shmsupp/lock.c
+librtemsbsp_a_SOURCES += shmsupp/mpisr.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c

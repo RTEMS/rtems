@@ -17,18 +17,23 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/start_c.c \
-    ../../shared/bspstart.c startup/bsppredriverhook.c \
-    ../../shared/bootcard.c ../../shared/sbrk.c \
-    ../../shared/getentropy-cpucounter.c \
-    ../../shared/bspclean.c \
-    ../../shared/setvec.c \
-    ../../shared/bspgetworkarea.c ../../shared/gnatinstallhandler.c 
+librtemsbsp_a_SOURCES += startup/start_c.c
+librtemsbsp_a_SOURCES += ../../shared/bspstart.c
+librtemsbsp_a_SOURCES += startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../../shared/bootcard.c
+librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c 
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
-librtemsbsp_a_SOURCES += console/console.c console/sci.c console/sci.h
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += console/sci.c
+librtemsbsp_a_SOURCES += console/sci.h
 # spurious
 librtemsbsp_a_SOURCES += spurious/spinit.c
 # timer

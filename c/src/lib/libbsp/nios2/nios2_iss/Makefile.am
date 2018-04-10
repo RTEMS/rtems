@@ -32,9 +32,11 @@ librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clock.c ../../../shared/clockdrv_shell.h
+librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 # console
-librtemsbsp_a_SOURCES += console/console.c ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 
