@@ -68,7 +68,6 @@ librtemsbsp_a_SOURCES += console/debug-console.c
 librtemsbsp_a_SOURCES += console/zynq-uart.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 
 # I2C

@@ -51,7 +51,6 @@ librtemsbsp_a_SOURCES += console/erc32_console.c
 librtemsbsp_a_SOURCES += console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

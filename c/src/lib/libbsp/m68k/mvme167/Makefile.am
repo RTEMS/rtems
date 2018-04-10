@@ -33,7 +33,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += console/console-recording.h
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += timer/timerisr.S

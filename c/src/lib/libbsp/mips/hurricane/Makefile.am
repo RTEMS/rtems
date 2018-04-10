@@ -34,14 +34,12 @@ librtemsbsp_a_SOURCES += ../shared/irq/exception.S
 librtemsbsp_a_SOURCES += startup/usc.S
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
-librtemsbsp_a_SOURCES += clock/clock.h
 
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # liblnk
 librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S
-librtemsbsp_a_SOURCES += ../shared/liblnk/regs.h
 #isr
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c

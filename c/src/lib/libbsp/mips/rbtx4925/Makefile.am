@@ -34,13 +34,11 @@ librtemsbsp_a_SOURCES += ../shared/startup/idtmem.S
 librtemsbsp_a_SOURCES += ../shared/irq/exception.S
 # clock
 librtemsbsp_a_SOURCES += clock/clockdrv.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 librtemsbsp_a_SOURCES += console/console-io.c
 # liblnk
 librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S
-librtemsbsp_a_SOURCES += ../shared/liblnk/regs.h
 #isr
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c

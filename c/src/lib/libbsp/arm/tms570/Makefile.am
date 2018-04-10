@@ -70,7 +70,6 @@ librtemsbsp_a_SOURCES += console/printk-support.c
 librtemsbsp_a_SOURCES += console/tms570-sci.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += clock/clock.c
 
 # RTC

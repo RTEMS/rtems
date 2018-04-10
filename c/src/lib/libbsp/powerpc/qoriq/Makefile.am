@@ -59,7 +59,6 @@ librtemsbsp_a_SOURCES += startup/bsprestart.c
 
 # Clock
 librtemsbsp_a_SOURCES += clock/clock-config.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c

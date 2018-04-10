@@ -31,7 +31,6 @@ librtemsbsp_a_SOURCES += ../../shared/setvec.c
 librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 # clock
 librtemsbsp_a_SOURCES += clock/clock.c
-librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # timer

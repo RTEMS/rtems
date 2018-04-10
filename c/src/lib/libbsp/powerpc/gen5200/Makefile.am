@@ -30,16 +30,9 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # bestcomm
-librtemsbsp_a_SOURCES += bestcomm/include/ppctypes.h
-librtemsbsp_a_SOURCES += bestcomm/include/mgt5200/mgt5200.h
-librtemsbsp_a_SOURCES += bestcomm/include/mgt5200/sdma.h
 librtemsbsp_a_SOURCES += bestcomm/bestcomm_api.c
-librtemsbsp_a_SOURCES += bestcomm/bestcomm_api.h
 librtemsbsp_a_SOURCES += bestcomm/bestcomm_glue.c
-librtemsbsp_a_SOURCES += bestcomm/bestcomm_glue.h
 librtemsbsp_a_SOURCES += bestcomm/dma_image.c
-librtemsbsp_a_SOURCES += bestcomm/dma_image.capi.h
-librtemsbsp_a_SOURCES += bestcomm/dma_image.h
 librtemsbsp_a_SOURCES += bestcomm/dma_image.reloc.c
 librtemsbsp_a_SOURCES += bestcomm/load_task.c
 librtemsbsp_a_SOURCES += bestcomm/tasksetup_ata.c
@@ -59,11 +52,6 @@ librtemsbsp_a_SOURCES += bestcomm/tasksetup_gen_tx_bd.c
 librtemsbsp_a_SOURCES += bestcomm/tasksetup_lpc.c
 librtemsbsp_a_SOURCES += bestcomm/tasksetup_pci_rx.c
 librtemsbsp_a_SOURCES += bestcomm/tasksetup_pci_tx.c
-librtemsbsp_a_SOURCES += bestcomm/bestcomm_priv.h
-librtemsbsp_a_SOURCES += bestcomm/task_api/bestcomm_api_mem.h
-librtemsbsp_a_SOURCES += bestcomm/task_api/bestcomm_cntrl.h
-librtemsbsp_a_SOURCES += bestcomm/task_api/tasksetup_bdtable.h
-librtemsbsp_a_SOURCES += bestcomm/task_api/tasksetup_general.h
 # clock
 # clock
 librtemsbsp_a_SOURCES += ../shared/clock/clock.c
@@ -73,11 +61,9 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += i2c/i2c.c
 librtemsbsp_a_SOURCES += i2c/i2cdrv.c
 librtemsbsp_a_SOURCES += i2c/mpc5200mbus.c
-librtemsbsp_a_SOURCES += i2c/mpc5200mbus.h
 # ide
 librtemsbsp_a_SOURCES += ide/idecfg.c
 librtemsbsp_a_SOURCES += ide/pcmcia_ide.c
-librtemsbsp_a_SOURCES += ide/pcmcia_ide.h
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/dev/mpc5200-ata.c
 librtemsbsp_a_SOURCES += ide/ata-instance.c
 librtemsbsp_a_SOURCES += ide/ata-dma-pio-single.c
@@ -88,22 +74,16 @@ librtemsbsp_a_SOURCES += irq/irq.c
 # mscan
 librtemsbsp_a_SOURCES += mscan/mscan.c
 librtemsbsp_a_SOURCES += mscan/mscan-base.c
-librtemsbsp_a_SOURCES += mscan/mscan.h
-librtemsbsp_a_SOURCES += mscan/mscan_int.h
 
 # nvram
 librtemsbsp_a_SOURCES += nvram/nvram.c
-librtemsbsp_a_SOURCES += nvram/nvram.h
-librtemsbsp_a_SOURCES += nvram/m93cxx.h
 
 # slicetimer
 librtemsbsp_a_SOURCES += slicetimer/slicetimer.c
-librtemsbsp_a_SOURCES += slicetimer/slicetimer.h
 
 # tod
 librtemsbsp_a_SOURCES += tod/todcfg.c
 librtemsbsp_a_SOURCES += tod/pcf8563.c
-librtemsbsp_a_SOURCES += tod/pcf8563.h
 librtemsbsp_a_SOURCES += ../../shared/tod.c
 
 # startup

@@ -63,8 +63,6 @@ librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 #console
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 #irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

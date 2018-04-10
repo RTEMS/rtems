@@ -121,7 +121,6 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/debug-console.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 librtemsbsp_a_SOURCES += clock/systick-freq.c
 

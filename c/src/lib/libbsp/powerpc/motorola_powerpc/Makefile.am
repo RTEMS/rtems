@@ -60,9 +60,6 @@ librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/dev/polled_io.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/keyboard.h
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 # irq
 librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/irq_init.c
@@ -70,24 +67,18 @@ librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/i8259.c
 
 # motorola
-librtemsbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.h
 librtemsbsp_a_SOURCES += ../../powerpc/shared/motorola/motorola.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 
 # pci
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/detect_raven_bridge.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
 
 # residual
-librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/pnp.h
-librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/residual.h
 librtemsbsp_a_SOURCES += ../../powerpc/shared/residual/residual.c
 
 if QEMU

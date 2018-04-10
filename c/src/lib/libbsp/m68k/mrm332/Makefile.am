@@ -33,7 +33,6 @@ librtemsbsp_a_SOURCES += clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/sci.c
-librtemsbsp_a_SOURCES += console/sci.h
 # spurious
 librtemsbsp_a_SOURCES += spurious/spinit.c
 # timer

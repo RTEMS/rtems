@@ -63,7 +63,6 @@ librtemsbsp_a_SOURCES += console/console-config.c
 librtemsbsp_a_SOURCES += console/uart.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # Timer

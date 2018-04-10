@@ -114,7 +114,6 @@ librtemsbsp_a_SOURCES += ../../shared/console-termios.c
 librtemsbsp_a_SOURCES += console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 
 # I2C

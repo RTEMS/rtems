@@ -62,7 +62,6 @@ librtemsbsp_a_SOURCES += timer/timer.c
 
 # clock
 librtemsbsp_a_SOURCES += clock/clockdrv.c
-librtemsbsp_a_SOURCES += ../../../shared/clockdrv_shell.h
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

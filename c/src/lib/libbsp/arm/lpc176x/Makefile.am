@@ -67,7 +67,6 @@ librtemsbsp_a_SOURCES += ../../shared/console-termios.c
 librtemsbsp_a_SOURCES += console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 

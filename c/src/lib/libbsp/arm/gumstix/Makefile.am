@@ -49,7 +49,6 @@ if ON_SKYEYE
 librtemsbsp_a_SOURCES += fb/fb.c
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += rtl8019/rtl8019.c
-librtemsbsp_a_SOURCES += rtl8019/wd80x3.h
 endif
 endif
 

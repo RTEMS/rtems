@@ -84,7 +84,6 @@ librtemsbsp_a_SOURCES += rtc.c
 librtemsbsp_a_SOURCES += ../../shared/tod.c
 # Clock
 librtemsbsp_a_SOURCES += clock.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

@@ -69,7 +69,6 @@ librtemsbsp_a_SOURCES += console/hsu.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 
 # RTC
 librtemsbsp_a_SOURCES += ../../shared/tod.c

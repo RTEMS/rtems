@@ -29,7 +29,6 @@ librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 # clock
 librtemsbsp_a_SOURCES += clock/clockdrv.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 librtemsbsp_a_SOURCES += console/console-io.c
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c

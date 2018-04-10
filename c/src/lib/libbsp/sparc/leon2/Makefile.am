@@ -48,7 +48,6 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # IRQ
 librtemsbsp_a_SOURCES += ../../sparc/shared/irq/genirq.c
 librtemsbsp_a_SOURCES += ../../sparc/shared/irq/irq-shared.c

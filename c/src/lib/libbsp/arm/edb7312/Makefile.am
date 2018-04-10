@@ -31,7 +31,6 @@ librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 
 # clock
 librtemsbsp_a_SOURCES += clock/clockdrv.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c

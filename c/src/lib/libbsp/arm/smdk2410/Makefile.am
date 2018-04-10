@@ -43,7 +43,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 # smc
 librtemsbsp_a_SOURCES += smc/smc.c
-librtemsbsp_a_SOURCES += smc/smc.h
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

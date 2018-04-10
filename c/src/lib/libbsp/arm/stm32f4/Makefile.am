@@ -67,7 +67,6 @@ librtemsbsp_a_SOURCES += i2c/i2c.c
 librtemsbsp_a_SOURCES += i2c/i2c-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # Timer

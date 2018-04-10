@@ -49,7 +49,6 @@ librtemsbsp_a_SOURCES =
 
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
-librtemsbsp_a_SOURCES += ../../shared/clockdrv_shell.h
 librtemsbsp_a_SOURCES += clock/todcfg.c
 librtemsbsp_a_SOURCES += ../../shared/tod.c
 
@@ -153,9 +152,7 @@ endif
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += 3c509/3c509.c
-librtemsbsp_a_SOURCES += 3c509/3c509.h
 librtemsbsp_a_SOURCES += 3c509/elink.c
-librtemsbsp_a_SOURCES += 3c509/elink.h
 librtemsbsp_a_SOURCES += ne2000/ne2000.c
 librtemsbsp_a_SOURCES += wd8003/wd8003.c
 endif

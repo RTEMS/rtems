@@ -57,24 +57,19 @@ librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
 # console
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/consoleIo.h
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.h
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.h
 
 # pci
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
 librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
 librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.h
 
 # flash
 librtemsbsp_a_SOURCES += ../shared/flash/flash.c
