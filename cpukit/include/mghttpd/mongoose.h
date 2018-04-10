@@ -124,6 +124,19 @@ struct mg_callbacks {
   // Parameters:
   //   status: HTTP error status code.
   int  (*http_error)(struct mg_connection *, int status);
+
+  // Called when mongoose needs to generate an HTTP etag.
+  // Implementing this callback allows a custom etag to be generated. If
+  // not implemented the standard etag generator is used which is the
+  // modification time as a hex value and the file size.
+  // Use this callback if the modification time cannot be controlled.
+  // Parameters:
+  //   path: path to the file being requested
+  //   etag: buffer to write the etag into
+  //   etag_len: the length of the etag buffer
+  // Return value:
+  int  (*http_etag)(const struct mg_connection *,
+                    const char *path, char *etag, size_t etag_len);
 };
 
 // Start web server.
