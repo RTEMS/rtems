@@ -10,6 +10,41 @@ AC_ARG_ENABLE(rtemsbsp,
 [case "${enable_rtemsbsp}" in
   yes ) enable_rtemsbsp="" ;;
   no ) enable_rtemsbsp="no" ;;
-  *) enable_rtemsbsp="$enable_rtemsbsp" ;;
+  *) enable_rtemsbsp="$enable_rtemsbsp"
+     srctop=${srcdir}
+     while test x${srctop} != x/
+     do
+       if test -d ${srctop}/cpukit -a -d ${srctop}/c/src/lib/libbsp; then
+         break
+       fi
+       srctop=$(dirname ${srctop})
+     done
+     if test x${srctop} = x/; then
+       AC_MSG_ERROR([Cannot find the top of source tree, please report to devel@rtems.org])
+     fi
+     target_arch=$(echo ${target_alias} | sed -e "s/\-.*//g")
+     libbsp=${srctop}/c/src/lib/libbsp
+     libbsp_e=$(echo ${libbsp} | sed -e 's/\//\\\//g')
+     cfg_list=$(LANG=C LC_COLLATE=C find ${libbsp} -mindepth 5 -name \*.cfg)
+     for bsp in ${enable_rtemsbsp};
+     do
+       found=no
+       for bsp_path in ${cfg_list};
+       do
+         cfg_bsp=$(echo ${bsp_path} | sed -e "s/.*\///" -e 's/\.cfg//')
+         if test x$bsp = x$cfg_bsp; then
+           cfg_arch=$(echo ${bsp_path} | sed -e "s/${libbsp_e}*\///" -e 's/\/.*//')
+           if test x${target_arch} != x${cfg_arch}; then
+             AC_MSG_ERROR([BSP '$bsp' architecture does not match the --target architecture, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
+           fi
+           found=yes
+           break
+         fi
+       done
+       if test $found = no; then
+         AC_MSG_ERROR([BSP '$bsp' not found, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
+       fi
+     done
+     ;;
 esac],[enable_rtemsbsp=""])
 ])
