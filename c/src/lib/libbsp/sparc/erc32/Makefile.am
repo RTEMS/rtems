@@ -9,7 +9,7 @@ dist_project_lib_DATA = startup/bsp_specs
 noinst_PROGRAMS =
 
 
-start.$(OBJEXT): ../../sparc/shared/start/start.S
+start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
@@ -22,7 +22,7 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += startup/bsppredriver.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/bootcard.c
@@ -34,14 +34,14 @@ librtemsbsp_a_SOURCES += startup/erc32mec.c
 librtemsbsp_a_SOURCES += startup/boardinit.S
 librtemsbsp_a_SOURCES += startup/bspidle.c
 librtemsbsp_a_SOURCES += startup/bspdelay.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_exit.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsp_fatal_exit.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsp_fatal_halt.c
 # ISR Handler
-librtemsbsp_a_SOURCES += ../../sparc/shared/cpu.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/irq_asm.S
+librtemsbsp_a_SOURCES += ../shared/cpu.c
+librtemsbsp_a_SOURCES += ../shared/irq_asm.S
 # gnatsupp
 librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/gnatcommon.c
+librtemsbsp_a_SOURCES += ../shared/gnatcommon.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
@@ -55,8 +55,8 @@ librtemsbsp_a_SOURCES += clock/ckinit.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../../sparc/shared/irq/irq-shared.c
-librtemsbsp_a_SOURCES += ../../sparc/shared/irq/bsp_isr_handler.c
+librtemsbsp_a_SOURCES += ../shared/irq/irq-shared.c
+librtemsbsp_a_SOURCES += ../shared/irq/bsp_isr_handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 if HAS_SMP

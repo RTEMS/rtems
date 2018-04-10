@@ -77,9 +77,9 @@ endif
 
 # console (non-graphics support)
 librtemsbsp_a_SOURCES += console/serial_mouse_config.c
-librtemsbsp_a_SOURCES += ../../i386/shared/comm/uart.c
-librtemsbsp_a_SOURCES += ../../i386/shared/comm/tty_drv.c
-librtemsbsp_a_SOURCES += ../../i386/shared/realmode_int/realmode_int.c
+librtemsbsp_a_SOURCES += ../shared/comm/uart.c
+librtemsbsp_a_SOURCES += ../shared/comm/tty_drv.c
+librtemsbsp_a_SOURCES += ../shared/realmode_int/realmode_int.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += console/console_select.c
 librtemsbsp_a_SOURCES += console/console_control.c
@@ -91,16 +91,16 @@ librtemsbsp_a_SOURCES += console/uart_bus_pci.c
 librtemsbsp_a_SOURCES += console/gdb_select.c
 
 # gdb
-librtemsbsp_a_SOURCES += ../../i386/shared/comm/i386-stub.c
-librtemsbsp_a_SOURCES += ../../i386/shared/comm/i386-stub-glue.c
-librtemsbsp_a_SOURCES += ../../i386/shared/comm/gdb_glue.c
+librtemsbsp_a_SOURCES += ../shared/comm/i386-stub.c
+librtemsbsp_a_SOURCES += ../shared/comm/i386-stub-glue.c
+librtemsbsp_a_SOURCES += ../shared/comm/gdb_glue.c
 
 # gnat
 librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 # pci
-librtemsbsp_a_SOURCES += ../../i386/shared/pci/pcibios.c
-librtemsbsp_a_SOURCES += ../../i386/shared/pci/pci_io.c
+librtemsbsp_a_SOURCES += ../shared/pci/pcibios.c
+librtemsbsp_a_SOURCES += ../shared/pci/pci_io.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
@@ -113,15 +113,15 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/bspcmdline.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += ../../i386/shared/irq/idt.c
-librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq.c
-librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq_init.c
-librtemsbsp_a_SOURCES += ../../i386/shared/irq/elcr.c
+librtemsbsp_a_SOURCES += ../shared/irq/idt.c
+librtemsbsp_a_SOURCES += ../shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../shared/irq/elcr.c
 librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/ldsegs.S
-librtemsbsp_a_SOURCES += ../../i386/shared/irq/irq_asm.S
+librtemsbsp_a_SOURCES += ../shared/irq/irq_asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # timer
@@ -135,8 +135,8 @@ librtemsbsp_a_SOURCES += ide/idecfg.c
 endif
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../i386/shared/smp/getcpuid.c
-librtemsbsp_a_SOURCES += ../../i386/shared/smp/smp-imps.c
+librtemsbsp_a_SOURCES += ../shared/smp/getcpuid.c
+librtemsbsp_a_SOURCES += ../shared/smp/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
 appcpustart.$(OBJEXT): start/start16.S

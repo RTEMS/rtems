@@ -8,7 +8,7 @@ dist_project_lib_DATA = startup/bsp_specs
 # include
 
 # start
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += start/start.S
 
 # clock & timer
-librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c
 
 # console
 librtemsbsp_a_SOURCES += startup/dummy_console.c

@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += timer/timer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console
-librtemsbsp_a_SOURCES += ../../sh/shared/console.c
+librtemsbsp_a_SOURCES += ../shared/console.c
 librtemsbsp_a_SOURCES += console/config.c
 librtemsbsp_a_SOURCES += console/sci.c
 librtemsbsp_a_SOURCES += console/sci_termios.c

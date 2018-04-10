@@ -7,7 +7,7 @@ dist_project_lib_DATA = startup/bsp_specs
 
 
 
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
@@ -33,8 +33,8 @@ librtemsbsp_a_SOURCES += mmu/mmu_405asm.S
 librtemsbsp_a_SOURCES += dlentry/dlentry.S
 
 # console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../shared/console/uart.c
+librtemsbsp_a_SOURCES += ../shared/console/console.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

@@ -9,7 +9,7 @@ noinst_PROGRAMS =
 
 ## Zilog component header files
 
-start.$(OBJEXT): ../../m68k/shared/start/start.S
+start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

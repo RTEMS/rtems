@@ -13,18 +13,18 @@ project_lib_DATA      =
 #include
 
 #start
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 
-preload.$(OBJEXT): ../../powerpc/shared/start/preload.S
+preload.$(OBJEXT): ../shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-vectors_entry.$(OBJEXT): ../../powerpc/shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-start.$(OBJEXT): ../../powerpc/shared/start/start.S
+start.$(OBJEXT): ../shared/start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
 motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) start.$(OBJEXT)
@@ -45,24 +45,24 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/i2c_init.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/probeMemEnd.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_setup.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/pgtbl_activate.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../shared/startup/probeMemEnd.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 #pclock
-librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c
 
 #console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../shared/console/uart.c
+librtemsbsp_a_SOURCES += ../shared/console/console.c
 
 #irq
 librtemsbsp_a_SOURCES += irq/irq_init.c
@@ -79,11 +79,11 @@ librtemsbsp_a_SOURCES += ../shared/flash/intelFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 #pci
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../shared/pci/pci.c
 librtemsbsp_a_SOURCES += pci/gt_pci_init.c
 librtemsbsp_a_SOURCES += pci/pci_io_remap.c
 librtemsbsp_a_SOURCES += pci/motload_fixup.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../shared/pci/pcifinddevice.c
 
 #network
 if HAS_NETWORKING

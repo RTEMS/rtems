@@ -26,7 +26,7 @@ motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) \
 
 project_lib_DATA += motld_start.$(OBJEXT)
 
-rtems_crti.$(OBJEXT): ../../powerpc/shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
@@ -39,10 +39,10 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/misc.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/bsppredriverhook.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
+librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
+librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
@@ -52,24 +52,24 @@ librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += ../../shared/tod.c
 librtemsbsp_a_SOURCES += tod/todcfg.c
 # pclock
-librtemsbsp_a_SOURCES += ../../powerpc/shared/clock/p_clock.c
+librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/uart.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/console/console.c
+librtemsbsp_a_SOURCES += ../shared/console/uart.c
+librtemsbsp_a_SOURCES += ../shared/console/console.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../shared/irq/openpic_i8259_irq.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../../powerpc/shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../shared/openpic/openpic.c
 
 # pci
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../shared/pci/pci.c
 librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/generic_clear_hberrs.c
-librtemsbsp_a_SOURCES += ../../powerpc/shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../shared/pci/generic_clear_hberrs.c
+librtemsbsp_a_SOURCES += ../shared/pci/pcifinddevice.c
 
 # flash
 librtemsbsp_a_SOURCES += ../shared/flash/flash.c
