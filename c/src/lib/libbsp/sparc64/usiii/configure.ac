@@ -8,7 +8,7 @@ RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
 
 RTEMS_CANONICAL_TARGET_CPU
-AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
+AM_INIT_AUTOMAKE([no-define nostdinc foreign subdir-objects 1.12.2])
 RTEMS_BSP_CONFIGURE
 
 

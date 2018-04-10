@@ -14,7 +14,7 @@ AC_SUBST(RTEMS_TOPdir,../../..)
 
 RTEMS_CANONICAL_TARGET_CPU
 
-AM_INIT_AUTOMAKE([no-define foreign 1.12.2])
+AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.12.2])
 AM_MAINTAINER_MODE
 
 RTEMS_VERSIONING
