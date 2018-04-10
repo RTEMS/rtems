@@ -1961,7 +1961,6 @@ sptimespec01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sptimespec01) \
 	$(support_includes)
 endif
 
-if HAS_CPLUSPLUS
 if TEST_sptls01
 sp_tests += sptls01
 sp_screens += sptls01/sptls01.scn
@@ -1970,8 +1969,8 @@ sptls01_SOURCES = sptls01/init.c
 sptls01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sptls01) \
 	$(support_includes)
 endif
-endif
 
+if HAS_CPLUSPLUS
 if TEST_sptls02
 sp_tests += sptls02
 sp_screens += sptls02/sptls02.scn
@@ -1979,6 +1978,7 @@ sp_docs += sptls02/sptls02.doc
 sptls02_SOURCES = sptls02/init.cc
 sptls02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sptls02) \
 	$(support_includes)
+endif
 endif
 
 if TEST_sptls03
