@@ -195,6 +195,9 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
     return;
   }
 
+  /* Check the free and size are equal after opening */
+  rtems_test_assert( control.free == control.size );
+
   /*
    * This is a new bitmap with no bits set. Try and find a bit with a few
    * seeds.
@@ -244,6 +247,8 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   printf ("  8. Set all bits: %s (%s)\n",
           rc == 0 ? "PASS" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
+  /* Check the free is 0 */
+  rtems_test_assert( control.free == 0 );
 
   bit = rand () % size;
 
@@ -251,6 +256,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   printf ("  9. Clear bit %" PRId32 ": %s (%s)\n",
           bit, rc == 0 ? "PASS" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
+  rtems_test_assert( control.free == 1);
 
   last_bit = bit;
   rc = rtems_rfs_bitmap_map_alloc (&control, 0, &result, &bit);
@@ -269,6 +275,7 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   printf (" 12. Clear bit 0: %s (%s)\n",
           rc == 0 ? "pass" : "FAIL", strerror (rc));
   rtems_rfs_exit_on_error (rc, false, &control, buffer.buffer);
+  rtems_test_assert( control.free == 1);
 
   rc = rtems_rfs_bitmap_map_alloc (&control, size - 1, &result, &bit);
   result = result && (bit == 0);
@@ -426,6 +433,18 @@ rtems_rfs_bitmap_ut_test_bitmap (size_t size)
   printf (" 34. Clear all bits in the map.\n");
   rc = rtems_rfs_bitmap_map_clear_all(&control);
   rtems_test_assert( rc == 0 );
+  /* Check the free and size are equal after clearing all */
+  rtems_test_assert( control.free == control.size );
+
+  /* Check accounting for bits when setting a bit, see #3089 */
+  printf (" 35. Set a bit and check accounting.\n");
+  rc = rtems_rfs_bitmap_map_set(&control, 0);
+  rtems_test_assert( rc == 0 );
+  rtems_test_assert( control.free == control.size - 1);
+  /* Setting again should not change the accounting. */
+  rc = rtems_rfs_bitmap_map_set(&control, 0);
+  rtems_test_assert( rc == 0 );
+  rtems_test_assert( control.free == control.size - 1);
 
   rtems_rfs_bitmap_close (&control);
   free (buffer.buffer);
