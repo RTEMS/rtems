@@ -30,7 +30,6 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c

@@ -22,7 +22,6 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += startup/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/page_table.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c

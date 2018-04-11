@@ -36,6 +36,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/ns16550-contex
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/serprobe.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/z85c30.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/z85c30_reg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bootcard.c
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/cs8900.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/net/dec21140.c

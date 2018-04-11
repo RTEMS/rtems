@@ -25,7 +25,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c

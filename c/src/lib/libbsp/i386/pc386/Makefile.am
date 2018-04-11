@@ -117,7 +117,6 @@ librtemsbsp_a_SOURCES += ../shared/irq/idt.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c
 librtemsbsp_a_SOURCES += ../shared/irq/elcr.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/ldsegs.S

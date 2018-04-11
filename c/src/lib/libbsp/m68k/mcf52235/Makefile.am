@@ -26,7 +26,6 @@ librtemsbsp_a_SOURCES += startup/init52235.c
 librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 librtemsbsp_a_SOURCES += startup/cfinit.c
 librtemsbsp_a_SOURCES += startup/bspgetcpuclockspeed.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c

@@ -21,7 +21,6 @@ librtemsbsp_a_SOURCES += startup/bspidle.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/memmap.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 

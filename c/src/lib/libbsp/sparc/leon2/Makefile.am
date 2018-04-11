@@ -27,7 +27,6 @@ librtemsbsp_a_SOURCES += startup/bsppredriver.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/setvec.c

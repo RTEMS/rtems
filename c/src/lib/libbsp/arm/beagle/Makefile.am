@@ -37,7 +37,6 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_LIBADD =
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/src/bsp-fdt.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c

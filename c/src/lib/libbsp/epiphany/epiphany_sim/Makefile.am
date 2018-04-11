@@ -35,7 +35,6 @@ librtemsbsp_a_SOURCES = ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c

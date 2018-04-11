@@ -87,7 +87,6 @@ librtemsbsp_a_SOURCES += tod/pcf8563.c
 librtemsbsp_a_SOURCES += ../../shared/tod.c
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c

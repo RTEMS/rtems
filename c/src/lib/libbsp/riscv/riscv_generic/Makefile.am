@@ -36,7 +36,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c

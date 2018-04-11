@@ -37,7 +37,6 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/bootcard.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
