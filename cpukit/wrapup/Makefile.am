@@ -103,10 +103,10 @@ TMP_LIBS += ../libdebugger/libdebugger.a
 endif
 
 librtemscpu.a: $(TMP_LIBS)
-	rm -f $@
-	$(MKDIR_P) $(ARCH)
-	rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
-	for f in $(TMP_LIBS); do \
+	$(AM_V_GEN)rm -f $@
+	$(AM_V_GEN)$(MKDIR_P) $(ARCH)
+	$(AM_V_GEN)rm -rf $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
+	$(AM_V_at)for f in $(TMP_LIBS); do \
 	  case $$f in \
 	  *.$(OBJEXT) | *.rel) \
 	    if test -f $(ARCH)/`basename $$f`; then \
@@ -123,16 +123,16 @@ librtemscpu.a: $(TMP_LIBS)
 	    ;; \
 	  *.a) \
 	    cd $(ARCH); \
-	      $(AR) xv ../$$f || exit 1; \
+	      $(AR) xv ../$$f > /dev/null || exit 1; \
 	      chmod a-w * ; \
             cd ..; \
 	    ;; \
 	  esac; \
 	done
-	ls $(ARCH)/* > $@-list
-	$(AR) rc $@ @$@-list
-	rm -f $@-list $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
-	$(RANLIB) $@
+	$(AM_V_GEN)ls $(ARCH)/* > $@-list
+	$(AM_V_AR)$(AR) rc $@ @$@-list
+	$(AM_V_GEN)rm -f $@-list $(ARCH)/*.$(OBJEXT) $(ARCH)/*.rel
+	$(AM_V_at)$(RANLIB) $@
 
 all-local: $(TMPINSTALL_FILES)
 

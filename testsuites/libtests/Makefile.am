@@ -324,24 +324,24 @@ lib_docs += dl01/dl01.doc
 dl01_SOURCES = dl01/init.c dl01/dl-load.c dl01-tar.c dl01-tar.h
 dl01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl01) $(support_includes)
 dl01-o1.o: dl01/dl-o1.c
-	$(COMPILE) -c -o $@ $<
+	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
 dl01.tar: dl01-o1.o
 	@rm -f $@
-	$(PAX) -w -f $@ $<
+	$(AM_V_GEN)$(PAX) -w -f $@ $<
 dl01-tar.c: dl01.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl01-tar.h: dl01.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl01-tar.o: dl01-tar.c dl01-tar.h
 dl01/init.c: dl01-tar.o
 dl01.pre: $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
 	@rm -f dl01.pre
-	$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 dl01-sym.o: dl01.pre
-	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl01$(EXEEXT):  $(dl01_OBJECTS) $(dl01_DEPENDENCIES) dl01-sym.o
 	@rm -f $@
-	$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl01.pre dl01-sym.o dl02-o1.o dl01.tar dl01-tar.h
 endif
 endif
@@ -354,26 +354,26 @@ lib_docs += dl02/dl02.doc
 dl02_SOURCES = dl02/init.c dl02/dl-load.c dl02-tar.c dl02-tar.h
 dl02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl02) $(support_includes)
 dl02-o1.o: dl02/dl-o1.c
-	$(COMPILE) -c -o $@ $<
+	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
 dl02-o2.o: dl02/dl-o2.c
-	$(COMPILE) -c -o $@ $<
+	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
 dl02.tar: dl02-o1.o dl02-o2.o
 	@rm -f $@
-	$(PAX) -w -f $@ $<
+	$(AM_V_GEN)$(PAX) -w -f $@ $<
 dl02-tar.c: dl02.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl02-tar.h: dl02.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl02-tar.o: dl02-tar.c dl02-tar.h
 dl02/init.c: dl02-tar.o
 dl02.pre: $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
 	@rm -f dl02.pre
-	$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 dl02-sym.o: dl02.pre
-	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl02$(EXEEXT):  $(dl02_OBJECTS) $(dl02_DEPENDENCIES) dl02-sym.o
 	@rm -f $@
-	$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl02.pre dl02-sym.o dl02-o1.o dl02-o2.o dl02.tar dl02-tar.h
 endif
 endif
@@ -398,24 +398,24 @@ dl04_SOURCES = dl04/init.c dl04/dl-load.c dl04/dl-cpp.cpp dl04-tar.c \
 	dl04-tar.h
 dl04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl04) $(support_includes)
 dl04-o4.o: dl04/dl-o4.cpp
-	$(CXXCOMPILE) -c -o $@ $<
+	$(AM_V_GEN)$(CXXCOMPILE) -c -o $@ $<
 dl04.tar: dl04-o4.o
 	@rm -f $@
-	$(PAX) -w -f $@ $<
+	$(AM_V_GEN)$(PAX) -w -f $@ $<
 dl04-tar.c: dl04.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl04-tar.h: dl04.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl04-tar.o: dl04-tar.c dl04-tar.h
 dl04/init.c: dl04-tar.o
 dl04.pre: $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
 	@rm -f dl04.pre
-	$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 dl04-sym.o: dl04.pre
-	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl04$(EXEEXT):  $(dl04_OBJECTS) $(dl04_DEPENDENCIES) dl04-sym.o
 	@rm -f $@
-	$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl04.pre dl04-sym.o dl04-o4.o dl04.tar dl04-tar.h
 endif
 endif
@@ -431,24 +431,24 @@ dl05_SOURCES = dl05/init.c dl05/dl-load.c dl05/dl-cpp.cpp dl05-tar.c \
 	dl05-tar.h
 dl05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl05) $(support_includes)
 dl05-o5.o: dl05/dl-o5.cpp
-	$(CXXCOMPILE) -c -o $@ $<
+	$(AM_V_CXX)$(CXXCOMPILE) -c -o $@ $<
 dl05.tar: dl05-o5.o
 	@rm -f $@
-	$(PAX) -w -f $@ $<
+	$(AM_V_GEN)$(PAX) -w -f $@ $<
 dl05-tar.c: dl05.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl05-tar.h: dl05.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl05-tar.o: dl05-tar.c dl05-tar.h
 dl05/init.c: dl05-tar.o
 dl05.pre: $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
 	@rm -f dl05.pre
-	$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 dl05-sym.o: dl05.pre
-	rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl05$(EXEEXT):  $(dl05_OBJECTS) $(dl05_DEPENDENCIES) dl05-sym.o
 	@rm -f $@
-	$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl05.pre dl05-sym.o dl05-o5.o dl05.tar dl05-tar.h
 endif
 endif
@@ -743,9 +743,9 @@ mghttpd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mghttpd01) \
 	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
 mghttpd01_LDADD = -lmghttpd
 mghttpd01_tar.c: mghttpd01/mghttpd01.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 mghttpd01_tar.h: mghttpd01/mghttpd01.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 mghttpd01-tar.o: mghttpd01-tar.c mghttpd01-tar.h
 mghttpd01/init.c: mghttpd01_tar.h
 CLEANFILES += mghttpd01.tar mghttpd01_tar.c mghttpd01_tar.h
@@ -1005,36 +1005,36 @@ tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar01_LDADD = -lrtemscpu -lz
 tar01.tar: Makefile
-	rm -rf tar01_fs
-	$(MKDIR_P) tar01_fs/home
-	(echo "This is a test of loading an RTEMS filesystem from an" ; \
-	echo "initial tar image.") > tar01_fs/home/test_file
-	(echo "#! joel" ; \
-	echo "ls -las /dev") > tar01_fs/home/test_script
-	chmod +x tar01_fs/home/test_script
-	(cd tar01_fs; \
-	$(LN_S) home/test_file symlink; \
-	$(PAX) -w -f ../tar01.tar home symlink)
+	$(AM_V_GEN)rm -rf tar01_fs
+	$(AM_V_GEN)$(MKDIR_P) tar01_fs/home
+	$(AM_V_GEN)(echo "This is a test of loading an RTEMS filesystem from an"; \
+	 echo "initial tar image.") > tar01_fs/home/test_file
+	$(AM_V_GEN)(echo "#! joel"; \
+	 echo "ls -las /dev") > tar01_fs/home/test_script
+	$(AM_V_GEN)chmod +x tar01_fs/home/test_script
+	$(AM_V_GEN)(cd tar01_fs; \
+	 $(LN_S) home/test_file symlink; \
+	 $(PAX) -w -f ../tar01.tar home symlink)
 tar01_tar.c: tar01.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar01_tar.h: tar01.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar01-tar.o: tar01-tar.c tar01-tar.h
 tar01.tar.gz: tar01.tar
-	$(GZIP) < $< > $@
+	$(AM_V_GEN)$(GZIP) < $< > $@
 tar01_tar_gz.c: tar01.tar.gz
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar01_tar_gz.h: tar01.tar.gz
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 CLEANFILES += tar01.tar tar01_tar.c tar01_tar.h \
 	tar01.tar.gz tar01_tar_gz.c tar01_tar_gz.h
 if TARTEST_XZ
 tar01.tar.xz: tar01.tar
-	$(XZ) < $< > $@
+	$(AM_V_GEN)$(XZ) < $< > $@
 tar01_tar_xz.c: tar01.tar.xz
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar01_tar_xz.h: tar01.tar.xz
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 TAR01_XZ_H = tar01_tar_xz.h
 CLEANFILES += tar01.tar.xz tar01_tar_xz.c tar01_tar_xz.h
 endif
@@ -1052,20 +1052,20 @@ tar02_SOURCES = tar02/init.c ../psxtests/psxfile01/test_cat.c \
 tar02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar02) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
 tar02.tar: Makefile
-	rm -rf tar02_fs
-	$(MKDIR_P) tar02_fs/home
-	(echo "This is a test of loading an RTEMS filesystem from an" ; \
-	echo "initial tar image.") > tar02_fs/home/test_file
-	(echo "#! joel" ; \
-	echo "ls -las /dev") > tar02_fs/home/test_script
-	chmod +x tar02_fs/home/test_script
-	(cd tar02_fs; \
-	$(LN_S) home/test_file symlink; \
-	$(PAX) -w -f ../tar02.tar home symlink)
+	$(AM_V_GEN)rm -rf tar02_fs
+	$(AM_V_GEN)$(MKDIR_P) tar02_fs/home
+	$(AM_V_GEN)(echo "This is a test of loading an RTEMS filesystem from an" ; \
+	 echo "initial tar image.") > tar02_fs/home/test_file
+	$(AM_V_GEN)(echo "#! joel" ; \
+	 echo "ls -las /dev") > tar02_fs/home/test_script
+	$(AM_V_GEN)chmod +x tar02_fs/home/test_script
+	$(AM_V_GEN)(cd tar02_fs; \
+	 $(LN_S) home/test_file symlink; \
+	 $(PAX) -w -f ../tar02.tar home symlink)
 tar02_tar.c: tar02.tar
-	$(BIN2C) -C $< $@
+	$(AM_V_GEN)$(BIN2C) -C $< $@
 tar02_tar.h: tar02.tar
-	$(BIN2C) -H $< $@
+	$(AM_V_GEN)$(BIN2C) -H $< $@
 tar02-tar.o: tar02-tar.c tar02-tar.h
 tar02/init.c: tar02_tar.h
 CLEANFILES += tar02.tar tar02_tar.c tar02_tar.h
