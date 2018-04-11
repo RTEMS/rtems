@@ -17,11 +17,9 @@ SUBDIRS_no_dot_no_wrapup_no_testsuites = $(filter-out testsuites,$(SUBDIRS_no_do
 SUBDIRS_wrapup                         = $(filter     wrapup,$(SUBDIRS_no_dot))
 SUBDIRS_testsuites                     = $(filter     testsuites,$(SUBDIRS_no_dot))
 
-preinstall: $(preintstall_targets)
-
 define CPUKITDIR
 .PHONY: $1
-$1: $(preintstall_targets)
+$1:
 	@+set fnord $(MAKEFLAGS); amf=$$$$2; \
 	subdir=$(2); \
 	target=`echo $(MAKECMDGOALS) | sed s/-recursive//`; \
@@ -62,4 +60,5 @@ $(if "$(SUBDIRS_testsuites)" "testsuites",testsuites: dot $(SUBDIRS_no_dot_no_te
 #
 # The general build all rule for automake.
 #
-all-local: $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
+all-local:   $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
+clean-local: $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)

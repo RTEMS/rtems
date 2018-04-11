@@ -24,4 +24,5 @@ endef
 
 $(foreach T,$(_SUBDIRS),$(eval $(call TESTDIR,$(strip $(T)))))
 
-all-local:  $(_SUBDIRS)
+all-local:   $(_SUBDIRS)
+clean-local: $(_SUBDIRS)

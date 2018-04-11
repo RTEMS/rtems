@@ -49,4 +49,5 @@ $(foreach D,$(SUBDIRS_no_dot),$(eval $(call CPUKITDIR,$(D),$(D))))
 #
 $(if "$(SUBDIRS_wrapup)" "wrapup",wrapup: dot $(foreach D,$(SUBDIRS_no_dot_no_wrapup),$(D)),)
 
-all-local: $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
+all-local:   $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
+clean-local: $(if "$(SUBDIRS_dot)" ".",dot) $(SUBDIRS_no_dot)
