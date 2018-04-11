@@ -28,7 +28,6 @@ librtemsbsp_a_SOURCES += ../../shared/setvec.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # clock
 librtemsbsp_a_SOURCES += ../mvme147/clock/ckinit.c

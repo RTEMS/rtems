@@ -96,7 +96,6 @@ librtemsbsp_a_SOURCES += ../shared/comm/i386-stub-glue.c
 librtemsbsp_a_SOURCES += ../shared/comm/gdb_glue.c
 
 # gnat
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 # pci
 librtemsbsp_a_SOURCES += ../shared/pci/pcibios.c

@@ -26,7 +26,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 
 # irq
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c

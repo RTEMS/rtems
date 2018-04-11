@@ -34,7 +34,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/timerstub.c
 librtemsbsp_a_SOURCES += ../../shared/src/bsp-fdt.c

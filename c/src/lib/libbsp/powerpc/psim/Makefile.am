@@ -28,7 +28,6 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 # pclock

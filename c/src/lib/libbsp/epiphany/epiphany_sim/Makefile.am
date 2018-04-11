@@ -38,7 +38,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c

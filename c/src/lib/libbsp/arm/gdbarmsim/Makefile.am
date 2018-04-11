@@ -25,7 +25,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += startup/syscalls.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c

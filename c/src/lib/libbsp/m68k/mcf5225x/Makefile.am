@@ -24,7 +24,6 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += clock/clock.c
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/debugio.c

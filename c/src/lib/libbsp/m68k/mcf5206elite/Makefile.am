@@ -31,7 +31,6 @@ librtemsbsp_a_SOURCES += startup/init5206e.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # console
 librtemsbsp_a_SOURCES += console/console.c

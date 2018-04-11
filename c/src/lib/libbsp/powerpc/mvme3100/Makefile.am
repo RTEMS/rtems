@@ -45,7 +45,6 @@ librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
 librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # tod
 librtemsbsp_a_SOURCES += ../../shared/tod.c

@@ -33,7 +33,6 @@ librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += ../shared/startup/setvec.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/balloc.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw_tree.c

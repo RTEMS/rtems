@@ -47,7 +47,6 @@ librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/mmutlbtab.c
 librtemsbsp_a_SOURCES += startup/cpuinit.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/gnatinstallhandler.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 
 if HAS_NETWORKING
