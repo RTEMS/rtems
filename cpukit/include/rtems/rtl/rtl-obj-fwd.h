@@ -23,14 +23,14 @@ extern "C" {
 /**
  * The forward declaration of the obj section structure.
  */
-struct rtems_rtl_obj_sect_s;
-typedef struct rtems_rtl_obj_sect_s rtems_rtl_obj_sect_t;
+struct rtems_rtl_obj_sect;
+typedef struct rtems_rtl_obj_sect rtems_rtl_obj_sect;
 
 /**
  * The forward declaration of the obj structure.
  */
-struct rtems_rtl_obj_s;
-typedef struct rtems_rtl_obj_s rtems_rtl_obj_t;
+struct rtems_rtl_obj;
+typedef struct rtems_rtl_obj rtems_rtl_obj;
 
 #ifdef __cplusplus
 }

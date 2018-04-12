@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2016 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2016, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -42,9 +42,9 @@ extern "C" {
  * @retval true The section contains unwind information.
  * @retval false The section does not contain unwind information.
  */
-bool rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj_t* obj,
-				     const char*            name,
-				     uint32_t               flags);
+bool rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj* obj,
+				     const char*          name,
+				     uint32_t             flags);
 
 /**
  * Architecture specific handler to add an object file's unwind information to
@@ -54,7 +54,7 @@ bool rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj_t* obj,
  * @retval true The unwind information has been registered.
  * @retval false The unwind information could not be registered.
  */
-bool rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj_t* obj);
+bool rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj* obj);
 
 /**
  * Architecture specific handler to remove an object file's unwind information
@@ -64,7 +64,7 @@ bool rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj_t* obj);
  * @retval true The unwind information has been deregistered.
  * @retval false The unwind information could not be deregistered.
  */
-bool rtems_rtl_elf_unwind_dw2_deregister (const rtems_rtl_obj_t* obj);
+bool rtems_rtl_elf_unwind_dw2_deregister (const rtems_rtl_obj* obj);
 
 /**
  * Read signed and unsigned LEB128 values.

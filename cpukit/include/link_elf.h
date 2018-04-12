@@ -70,10 +70,10 @@ void _rtld_debug_state (void);
 /*
  * add link map to the list.
  */
-int _rtld_linkmap_add (rtems_rtl_obj_t* obj);
+int _rtld_linkmap_add (rtems_rtl_obj* obj);
 
 /*
  * Remove link map from the list.
  */
-void _rtld_linkmap_delete (rtems_rtl_obj_t* obj);
+void _rtld_linkmap_delete (rtems_rtl_obj* obj);
 #endif	/* _LINK_ELF_H_ */

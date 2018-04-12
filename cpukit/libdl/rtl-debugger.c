@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -43,7 +43,7 @@ _rtld_debug_state (void)
 }
 
 int
-_rtld_linkmap_add (rtems_rtl_obj_t* obj)
+_rtld_linkmap_add (rtems_rtl_obj* obj)
 {
   struct link_map* l = obj->linkmap;
   struct link_map* prev;
@@ -76,7 +76,7 @@ _rtld_linkmap_add (rtems_rtl_obj_t* obj)
 }
 
 void
-_rtld_linkmap_delete (rtems_rtl_obj_t* obj)
+_rtld_linkmap_delete (rtems_rtl_obj* obj)
 {
   struct link_map* l = obj->linkmap;
   /*

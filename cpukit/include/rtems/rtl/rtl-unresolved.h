@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -63,75 +63,75 @@ extern "C" {
  * Hack to work around machine size. This needs to be cleaned up
  * to better support 64bit targets.
  */
-typedef uint32_t rtems_rtl_word_t;
+typedef uint32_t rtems_rtl_word;
 
 /**
  * The types of records in the blocks.
  */
-typedef enum rtems_rtl_unresolved_rtype_e
+typedef enum rtems_rtl_unresolved_rtype
 {
   rtems_rtl_unresolved_empty = 0,  /**< The records is empty. Must always be 0 */
   rtems_rtl_unresolved_name = 1,   /**< The record is a name. */
   rtems_rtl_unresolved_reloc = 2   /**< The record is a relocation record. */
-} rtems_rtl_unresolved_rtype_t;
+} rtems_rtl_unresolved_rtype;
 
 /**
  * Unresolved externals symbol names. The names are reference counted and
  * separate from the relocation records because a number of records could
  * reference the same symbol name.
  */
-typedef struct rtems_rtl_unresolv_name_s
+typedef struct rtems_rtl_unresolv_name
 {
-  uint16_t refs;       /**< The number of references to this name. */
-  uint16_t length;     /**< The length of this name. */
+  uint16_t   refs;     /**< The number of references to this name. */
+  uint16_t   length;   /**< The length of this name. */
   const char name[12]; /**< The symbol name. */
-} rtems_rtl_unresolv_name_t;
+} rtems_rtl_unresolv_name;
 
 /**
  * Unresolved externals symbols require the relocation records to be held
  * and references.
  */
-typedef struct rtems_rtl_unresolv_reloc_s
+typedef struct rtems_rtl_unresolv_reloc
 {
-  rtems_rtl_obj_t* obj;     /**< The relocation's object file. */
-  uint16_t         flags;   /**< Format specific flags. */
-  uint16_t         name;    /**< The symbol's name. */
-  uint16_t         sect;    /**< The target section. */
-  rtems_rtl_word_t rel[3];  /**< Relocation record. */
-} rtems_rtl_unresolv_reloc_t;
+  rtems_rtl_obj* obj;     /**< The relocation's object file. */
+  uint16_t       flags;   /**< Format specific flags. */
+  uint16_t       name;    /**< The symbol's name. */
+  uint16_t       sect;    /**< The target section. */
+  rtems_rtl_word rel[3];  /**< Relocation record. */
+} rtems_rtl_unresolv_reloc;
 
 /**
  * Unresolved externals records.
  */
-typedef struct rtems_rtl_unresolv_rec_s
+typedef struct rtems_rtl_unresolv_rec
 {
-  rtems_rtl_unresolved_rtype_t type;
+  rtems_rtl_unresolved_rtype type;
   union
   {
-    rtems_rtl_unresolv_name_t name;    /**< The name, or */
-    rtems_rtl_unresolv_reloc_t reloc;  /**< the relocation record. */
+    rtems_rtl_unresolv_name  name;   /**< The name, or */
+    rtems_rtl_unresolv_reloc reloc;  /**< the relocation record. */
   } rec;
-} rtems_rtl_unresolv_rec_t;
+} rtems_rtl_unresolv_rec;
 
 /**
  * Unresolved blocks.
  */
-typedef struct rtems_rtl_unresolv_block_s
+typedef struct rtems_rtl_unresolv_block
 {
-  rtems_chain_node         link; /**< Blocks are chained. */
-  uint32_t                 recs; /**< The number of records in the block. */
-  rtems_rtl_unresolv_rec_t rec;  /**< The records. More follow. */
-} rtems_rtl_unresolv_block_t;
+  rtems_chain_node       link; /**< Blocks are chained. */
+  uint32_t               recs; /**< The number of records in the block. */
+  rtems_rtl_unresolv_rec rec;  /**< The records. More follow. */
+} rtems_rtl_unresolv_block;
 
 /**
  * Unresolved table holds the names and relocations.
  */
-typedef struct rtems_rtl_unresolved_s
+typedef struct rtems_rtl_unresolved
 {
   uint32_t marker;
   size_t              block_recs; /**< The records per blocks allocated. */
   rtems_chain_control blocks;     /**< List of blocks. */
-} rtems_rtl_unresolved_t;
+} rtems_rtl_unresolved;
 
 /**
  * The iterator function used to iterate over the unresolved table.
@@ -141,8 +141,8 @@ typedef struct rtems_rtl_unresolved_s
  * @retval true The iterator has finished.
  * @retval false The iterator has not finished. Keep iterating.
  */
-typedef bool rtems_rtl_unresolved_iterator_t (rtems_rtl_unresolv_rec_t* rec,
-                                              void*                     data);
+typedef bool rtems_rtl_unresolved_iterator (rtems_rtl_unresolv_rec* rec,
+                                            void*                   data);
 
 /**
  * Open an unresolved relocation table.
@@ -153,21 +153,21 @@ typedef bool rtems_rtl_unresolved_iterator_t (rtems_rtl_unresolv_rec_t* rec,
  * @retval false The unresolved relocation table could not created. The RTL
  *               error has the error.
  */
-bool rtems_rtl_unresolved_table_open (rtems_rtl_unresolved_t* unresolved,
-                                      size_t                  block_records);
+bool rtems_rtl_unresolved_table_open (rtems_rtl_unresolved* unresolved,
+                                      size_t                block_records);
 
 /**
  * Close the table and erase the blocks.
  *
  * @param unreolved Close the unresolved table.
  */
-void rtems_rtl_unresolved_table_close (rtems_rtl_unresolved_t* unresolved);
+void rtems_rtl_unresolved_table_close (rtems_rtl_unresolved* unresolved);
 
 /**
  * Iterate over the table of unresolved entries.
  */
-bool rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator_t iterator,
-                                    void*                           data);
+bool rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator iterator,
+                                    void*                         data);
 
 /**
  * Add a relocation to the list of unresolved relocations.
@@ -181,11 +181,11 @@ bool rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator_t iterator,
  * @retval true The relocation has been added.
  * @retval false The relocation could not be added.
  */
-bool rtems_rtl_unresolved_add (rtems_rtl_obj_t*        obj,
-                               const uint16_t          flags,
-                               const char*             name,
-                               const uint16_t          sect,
-                               const rtems_rtl_word_t* rel);
+bool rtems_rtl_unresolved_add (rtems_rtl_obj*        obj,
+                               const uint16_t        flags,
+                               const char*           name,
+                               const uint16_t        sect,
+                               const rtems_rtl_word* rel);
 
 /**
  * Resolve the unresolved symbols.
@@ -200,10 +200,10 @@ void rtems_rtl_unresolved_resolve (void);
  * @param esyms The exported symbol table.
  * @param size The size of the table in bytes.
  */
-bool rtems_rtl_unresolved_remove (rtems_rtl_obj_t*        obj,
-                                  const char*             name,
-                                  const uint16_t          sect,
-                                  const rtems_rtl_word_t* rel);
+bool rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
+                                  const char*           name,
+                                  const uint16_t        sect,
+                                  const rtems_rtl_word* rel);
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -54,8 +54,8 @@
 /**
  * Static RTL data is returned to the user when the linker is locked.
  */
-static rtems_rtl_data_t* rtl;
-static bool              rtl_data_init;
+static rtems_rtl_data* rtl;
+static bool            rtl_data_init;
 
 /**
  * Define a default base global symbol loader function that is weak
@@ -101,7 +101,7 @@ rtems_rtl_data_init (void)
       /*
        * Always in the heap.
        */
-      rtl = malloc (sizeof (rtems_rtl_data_t));
+      rtl = malloc (sizeof (rtems_rtl_data));
       if (!rtl)
       {
         rtems_libio_unlock ();
@@ -109,7 +109,7 @@ rtems_rtl_data_init (void)
         return false;
       }
 
-      *rtl = (rtems_rtl_data_t) { 0 };
+      *rtl = (rtems_rtl_data) { 0 };
 
       /*
        * The initialise the allocator data.
@@ -230,13 +230,13 @@ rtems_rtl_data_init (void)
   return true;
 }
 
-rtems_rtl_data_t*
-rtems_rtl_data (void)
+rtems_rtl_data*
+rtems_rtl_data_unprotected (void)
 {
   return rtl;
 }
 
-rtems_rtl_symbols_t*
+rtems_rtl_symbols*
 rtems_rtl_global_symbols (void)
 {
   if (!rtl)
@@ -247,8 +247,8 @@ rtems_rtl_global_symbols (void)
   return &rtl->globals;
 }
 
-rtems_rtl_unresolved_t*
-rtems_rtl_unresolved (void)
+rtems_rtl_unresolved*
+rtems_rtl_unresolved_unprotected (void)
 {
   if (!rtl)
   {
@@ -259,9 +259,9 @@ rtems_rtl_unresolved (void)
 }
 
 void
-rtems_rtl_obj_caches (rtems_rtl_obj_cache_t** symbols,
-                      rtems_rtl_obj_cache_t** strings,
-                      rtems_rtl_obj_cache_t** relocs)
+rtems_rtl_obj_caches (rtems_rtl_obj_cache** symbols,
+                      rtems_rtl_obj_cache** strings,
+                      rtems_rtl_obj_cache** relocs)
 {
   if (!rtl)
   {
@@ -295,11 +295,11 @@ rtems_rtl_obj_caches_flush (void)
 }
 
 void
-rtems_rtl_obj_comp (rtems_rtl_obj_comp_t** decomp,
-                    rtems_rtl_obj_cache_t* cache,
-                    int                    fd,
-                    int                    compression,
-                    off_t                  offset)
+rtems_rtl_obj_decompress (rtems_rtl_obj_comp** decomp,
+                          rtems_rtl_obj_cache* cache,
+                          int                  fd,
+                          int                  compression,
+                          off_t                offset)
 {
   if (!rtl)
   {
@@ -312,7 +312,7 @@ rtems_rtl_obj_comp (rtems_rtl_obj_comp_t** decomp,
   }
 }
 
-rtems_rtl_data_t*
+rtems_rtl_data*
 rtems_rtl_lock (void)
 {
   if (!rtems_rtl_data_init ())
@@ -329,10 +329,10 @@ rtems_rtl_unlock (void)
   rtems_recursive_mutex_unlock (&rtl->lock);
 }
 
-rtems_rtl_obj_t*
+rtems_rtl_obj*
 rtems_rtl_check_handle (void* handle)
 {
-  rtems_rtl_obj_t*    obj;
+  rtems_rtl_obj*    obj;
   rtems_chain_node* node;
 
   obj = handle;
@@ -340,7 +340,7 @@ rtems_rtl_check_handle (void* handle)
 
   while (!rtems_chain_is_tail (&rtl->objects, node))
   {
-    rtems_rtl_obj_t* check = (rtems_rtl_obj_t*) node;
+    rtems_rtl_obj* check = (rtems_rtl_obj*) node;
     if (check == obj)
       return obj;
     node = rtems_chain_next (node);
@@ -349,11 +349,11 @@ rtems_rtl_check_handle (void* handle)
   return NULL;
 }
 
-rtems_rtl_obj_t*
+rtems_rtl_obj*
 rtems_rtl_find_obj (const char* name)
 {
   rtems_chain_node* node;
-  rtems_rtl_obj_t*  found = NULL;
+  rtems_rtl_obj*    found = NULL;
   const char*       aname = NULL;
   const char*       oname = NULL;
   off_t             ooffset;
@@ -365,7 +365,7 @@ rtems_rtl_find_obj (const char* name)
 
   while (!rtems_chain_is_tail (&rtl->objects, node))
   {
-    rtems_rtl_obj_t* obj = (rtems_rtl_obj_t*) node;
+    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
     if ((aname == NULL && strcmp (obj->oname, oname) == 0) ||
         (aname != NULL &&
          strcmp (obj->aname, aname) == 0 && strcmp (obj->oname, oname) == 0))
@@ -385,10 +385,10 @@ rtems_rtl_find_obj (const char* name)
   return found;
 }
 
-rtems_rtl_obj_t*
+rtems_rtl_obj*
 rtems_rtl_load_object (const char* name, int mode)
 {
-  rtems_rtl_obj_t* obj;
+  rtems_rtl_obj* obj;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
     printf ("rtl: loading '%s'\n", name);
@@ -464,7 +464,7 @@ rtems_rtl_load_object (const char* name, int mode)
 }
 
 bool
-rtems_rtl_unload_object (rtems_rtl_obj_t* obj)
+rtems_rtl_unload_object (rtems_rtl_obj* obj)
 {
   bool ok = true;
 
@@ -505,7 +505,7 @@ rtems_rtl_unload_object (rtems_rtl_obj_t* obj)
 }
 
 void
-rtems_rtl_run_ctors (rtems_rtl_obj_t* obj)
+rtems_rtl_run_ctors (rtems_rtl_obj* obj)
 {
   rtems_rtl_obj_run_ctors (obj);
 }
@@ -615,7 +615,7 @@ rtems_rtl_base_sym_global_add (const unsigned char* esyms,
   rtems_rtl_unlock ();
 }
 
-rtems_rtl_obj_t*
+rtems_rtl_obj*
 rtems_rtl_baseimage (void)
 {
   return NULL;

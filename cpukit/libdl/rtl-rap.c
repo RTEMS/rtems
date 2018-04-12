@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012-2013 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2013, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -45,7 +45,7 @@
 /**
  * The ELF format signature.
  */
-static rtems_rtl_loader_format_t rap_sig =
+static rtems_rtl_loader_format rap_sig =
 {
   .label = "RAP",
   .flags = RTEMS_RTL_FMT_COMP
@@ -54,11 +54,11 @@ static rtems_rtl_loader_format_t rap_sig =
 /**
  * The section definitions found in a RAP file.
  */
-typedef struct rtems_rtl_rap_sectdef_s
+typedef struct rtems_rtl_rap_sectdef
 {
   const char*    name;    /**< Name of the section. */
   const uint32_t flags;   /**< Section flags. */
-} rtems_rtl_rap_sectdef_t;
+} rtems_rtl_rap_sectdef;
 
 /**
  * The section indexes. These are fixed.
@@ -74,7 +74,7 @@ typedef struct rtems_rtl_rap_sectdef_s
 /**
  * The sections as loaded from a RAP file.
  */
-static const rtems_rtl_rap_sectdef_t rap_sections[RTEMS_RTL_RAP_SECS] =
+static const rtems_rtl_rap_sectdef rap_sections[RTEMS_RTL_RAP_SECS] =
 {
   { ".text",  RTEMS_RTL_OBJ_SECT_TEXT  | RTEMS_RTL_OBJ_SECT_LOAD },
   { ".const", RTEMS_RTL_OBJ_SECT_CONST | RTEMS_RTL_OBJ_SECT_LOAD },
@@ -87,38 +87,38 @@ static const rtems_rtl_rap_sectdef_t rap_sections[RTEMS_RTL_RAP_SECS] =
 /**
  * The section definitions found in a RAP file.
  */
-typedef struct rtems_rtl_rap_section_s
+typedef struct rtems_rtl_rap_section
 {
   uint32_t size;       /**< The size of the section. */
   uint32_t alignment;  /**< The alignment of the section. */
-} rtems_rtl_rap_section_t;
+} rtems_rtl_rap_section;
 
 /**
  * The RAP loader.
  */
-typedef struct rtems_rtl_rap_s
+typedef struct rtems_rtl_rap
 {
-  rtems_rtl_obj_cache_t*  file;         /**< The file cache for the RAP file. */
-  rtems_rtl_obj_comp_t*   decomp;       /**< The decompression streamer. */
-  uint32_t                length;       /**< The file length. */
-  uint32_t                version;      /**< The RAP file version. */
-  uint32_t                compression;  /**< The type of compression. */
-  uint32_t                checksum;     /**< The checksum. */
-  uint32_t                machinetype;  /**< The ELF machine type. */
-  uint32_t                datatype;     /**< The ELF data type. */
-  uint32_t                class;        /**< The ELF class. */
-  uint32_t                init;         /**< The initialisation strtab offset. */
-  uint32_t                fini;         /**< The finish strtab offset. */
-  rtems_rtl_rap_section_t secs[RTEMS_RTL_RAP_SECS]; /**< The sections. */
-  uint32_t                symtab_size;  /**< The symbol table size. */
-  char*                   strtab;       /**< The string table. */
-  uint32_t                strtab_size;  /**< The string table size. */
-  uint32_t                relocs_size;  /**< The relocation table size. */
-  uint32_t                symbols;      /**< The number of symbols. */
-  uint32_t                strtable_size;/**< The size of section names and obj names. */
-  uint32_t                rpathlen;     /**< The length of rpath. */
-  char*                   strtable;     /**< The detail string which resides in obj detail. */
-} rtems_rtl_rap_t;
+  rtems_rtl_obj_cache*  file;         /**< The file cache for the RAP file. */
+  rtems_rtl_obj_comp*   decomp;       /**< The decompression streamer. */
+  uint32_t              length;       /**< The file length. */
+  uint32_t              version;      /**< The RAP file version. */
+  uint32_t              compression;  /**< The type of compression. */
+  uint32_t              checksum;     /**< The checksum. */
+  uint32_t              machinetype;  /**< The ELF machine type. */
+  uint32_t              datatype;     /**< The ELF data type. */
+  uint32_t              class;        /**< The ELF class. */
+  uint32_t              init;         /**< The initialisation strtab offset. */
+  uint32_t              fini;         /**< The finish strtab offset. */
+  rtems_rtl_rap_section secs[RTEMS_RTL_RAP_SECS]; /**< The sections. */
+  uint32_t              symtab_size;  /**< The symbol table size. */
+  char*                 strtab;       /**< The string table. */
+  uint32_t              strtab_size;  /**< The string table size. */
+  uint32_t              relocs_size;  /**< The relocation table size. */
+  uint32_t              symbols;      /**< The number of symbols. */
+  uint32_t              strtable_size;/**< The size of section names and obj names. */
+  uint32_t              rpathlen;     /**< The length of rpath. */
+  char*                 strtable;     /**< The detail string which resides in obj detail. */
+} rtems_rtl_rap;
 
 /**
  * Check the machine type.
@@ -191,7 +191,7 @@ rtems_rtl_rap_get_uint32 (const uint8_t* buffer)
 }
 
 static bool
-rtems_rtl_rap_read_uint32 (rtems_rtl_obj_comp_t* comp, uint32_t* value)
+rtems_rtl_rap_read_uint32 (rtems_rtl_obj_comp* comp, uint32_t* value)
 {
   uint8_t buffer[sizeof (uint32_t)];
 
@@ -204,12 +204,12 @@ rtems_rtl_rap_read_uint32 (rtems_rtl_obj_comp_t* comp, uint32_t* value)
 }
 
 static bool
-rtems_rtl_rap_loader (rtems_rtl_obj_t*      obj,
-                      int                   fd,
-                      rtems_rtl_obj_sect_t* sect,
-                      void*                 data)
+rtems_rtl_rap_loader (rtems_rtl_obj*      obj,
+                      int                 fd,
+                      rtems_rtl_obj_sect* sect,
+                      void*               data)
 {
-  rtems_rtl_rap_t* rap = (rtems_rtl_rap_t*) data;
+  rtems_rtl_rap* rap = (rtems_rtl_rap*) data;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD))
     printf ("rtl: rap: input %s=%" PRIu32 "\n",
@@ -219,7 +219,7 @@ rtems_rtl_rap_loader (rtems_rtl_obj_t*      obj,
 }
 
 static bool
-rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
+rtems_rtl_rap_relocate (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
 {
   #define SYMNAME_BUFFER_SIZE (1024)
   char*    symname_buffer = NULL;
@@ -237,11 +237,11 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 
   for (section = 0; section < RTEMS_RTL_RAP_SECS; ++section)
   {
-    rtems_rtl_obj_sect_t*  targetsect;
-    uint32_t               header = 0;
-    int                    relocs;
-    bool                   is_rela;
-    int                    r;
+    rtems_rtl_obj_sect* targetsect;
+    uint32_t            header = 0;
+    int                 relocs;
+    bool                is_rela;
+    int                 r;
 
     targetsect = rtems_rtl_obj_find_section (obj, rap_sections[section].name);
 
@@ -320,7 +320,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 
       if ((info & (1 << 31)) == 0)
       {
-        rtems_rtl_obj_sect_t* symsect;
+        rtems_rtl_obj_sect* symsect;
 
         symsect = rtems_rtl_obj_find_section_by_index (obj, info >> 8);
         if (!symsect)
@@ -333,7 +333,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
       }
       else if (rtems_rtl_elf_rel_resolve_sym (type))
       {
-        rtems_rtl_obj_sym_t* symbol;
+        rtems_rtl_obj_sym* symbol;
 
         symname_size = (info & ~(3 << 30)) >> 8;
 
@@ -432,7 +432,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
  *
  */
 static bool
-rtems_rtl_rap_load_linkmap (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
+rtems_rtl_rap_load_linkmap (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
 {
   void*            detail;
   struct link_map* tmp1;
@@ -565,13 +565,13 @@ rtems_rtl_rap_load_linkmap (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 }
 
 static bool
-rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
+rtems_rtl_rap_load_symbols (rtems_rtl_rap* rap, rtems_rtl_obj* obj)
 {
-  rtems_rtl_obj_sym_t* gsym;
-  int                  sym;
+  rtems_rtl_obj_sym* gsym;
+  int                sym;
 
   obj->global_size =
-    rap->symbols * sizeof (rtems_rtl_obj_sym_t) + rap->strtab_size;
+    rap->symbols * sizeof (rtems_rtl_obj_sym) + rap->strtab_size;
 
   obj->global_table = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL,
                                            obj->global_size, true);
@@ -585,7 +585,7 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
   obj->global_syms = rap->symbols;
 
   rap->strtab = (((char*) obj->global_table) +
-                 (rap->symbols * sizeof (rtems_rtl_obj_sym_t)));
+                 (rap->symbols * sizeof (rtems_rtl_obj_sym)));
 
   if (!rtems_rtl_obj_comp_read (rap->decomp, rap->strtab, rap->strtab_size))
   {
@@ -595,10 +595,10 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 
   for (sym = 0, gsym = obj->global_table; sym < rap->symbols; ++sym)
   {
-    rtems_rtl_obj_sect_t* symsect;
-    uint32_t              data;
-    uint32_t              name;
-    uint32_t              value;
+    rtems_rtl_obj_sect* symsect;
+    uint32_t            data;
+    uint32_t            name;
+    uint32_t            value;
 
     if (!rtems_rtl_rap_read_uint32 (rap->decomp, &data) ||
         !rtems_rtl_rap_read_uint32 (rap->decomp, &name) ||
@@ -756,15 +756,15 @@ rtems_rtl_rap_parse_header (uint8_t*  rhdr,
 }
 
 bool
-rtems_rtl_rap_file_check (rtems_rtl_obj_t* obj, int fd)
+rtems_rtl_rap_file_check (rtems_rtl_obj* obj, int fd)
 {
-  rtems_rtl_obj_cache_t* header;
-  uint8_t*               rhdr = NULL;
-  size_t                 rlen = 64;
-  uint32_t               length = 0;
-  uint32_t               version = 0;
-  uint32_t               compression = 0;
-  uint32_t               checksum = 0;
+  rtems_rtl_obj_cache* header;
+  uint8_t*             rhdr = NULL;
+  size_t               rlen = 64;
+  uint32_t             length = 0;
+  uint32_t             version = 0;
+  uint32_t             compression = 0;
+  uint32_t             checksum = 0;
 
   rtems_rtl_obj_caches (&header, NULL, NULL);
 
@@ -784,12 +784,12 @@ rtems_rtl_rap_file_check (rtems_rtl_obj_t* obj, int fd)
 }
 
 bool
-rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
+rtems_rtl_rap_file_load (rtems_rtl_obj* obj, int fd)
 {
-  rtems_rtl_rap_t rap = { 0 };
-  uint8_t*        rhdr = NULL;
-  size_t          rlen = 64;
-  int             section;
+  rtems_rtl_rap rap = { 0 };
+  uint8_t*      rhdr = NULL;
+  size_t        rlen = 64;
+  int           section;
 
   rtems_rtl_obj_caches (&rap.file, NULL, NULL);
 
@@ -811,8 +811,8 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
   /*
    * Set up the decompressor.
    */
-  rtems_rtl_obj_comp (&rap.decomp, rap.file, fd, rap.compression,
-                      rlen + obj->ooffset);
+  rtems_rtl_obj_decompress (&rap.decomp, rap.file, fd, rap.compression,
+                            rlen + obj->ooffset);
 
   /*
    * uint32_t: machinetype
@@ -990,13 +990,13 @@ rtems_rtl_rap_file_load (rtems_rtl_obj_t* obj, int fd)
 }
 
 bool
-rtems_rtl_rap_file_unload (rtems_rtl_obj_t* obj)
+rtems_rtl_rap_file_unload (rtems_rtl_obj* obj)
 {
   (void) obj;
   return true;
 }
 
-rtems_rtl_loader_format_t*
+rtems_rtl_loader_format*
 rtems_rtl_rap_file_sig (void)
 {
   return &rap_sig;

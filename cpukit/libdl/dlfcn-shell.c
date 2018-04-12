@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -98,7 +98,7 @@ shell_dlsym (int argc, char* argv[])
   return -1;
 }
 
-typedef int (*call_t)(int argc, char* argv[]);
+typedef int (*call_p)(int argc, char* argv[]);
 
 int
 shell_dlcall (int argc, char* argv[])
@@ -106,7 +106,7 @@ shell_dlcall (int argc, char* argv[])
   void* value;
   if (lookup_dlsym (&value, argc, argv))
   {
-    call_t call = value;
+    call_p call = value;
     int    r;
     printf ("(*%p)(%d, ....)\n", value, argc - 3);
     r = call (argc - 3, argv + 3);

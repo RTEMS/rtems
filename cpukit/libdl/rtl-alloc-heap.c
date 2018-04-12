@@ -18,10 +18,10 @@
 #include "rtl-alloc-heap.h"
 
 void
-rtems_rtl_alloc_heap (bool                  allocate,
-                      rtems_rtl_alloc_tag_t tag,
-                      void**                address,
-                      size_t                size)
+rtems_rtl_alloc_heap (bool                allocate,
+                      rtems_rtl_alloc_tag tag,
+                      void**              address,
+                      size_t              size)
 {
   if (allocate)
     *address = malloc (size);

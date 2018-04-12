@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -35,10 +35,10 @@ extern "C" {
  * @param size The size of the allocation if an allocation request and
  *             not used if deleting or freeing a previous allocation.
  */
-void rtems_rtl_alloc_heap(bool                  allocate,
-                          rtems_rtl_alloc_tag_t tag,
-                          void**                address,
-                          size_t                size);
+void rtems_rtl_alloc_heap(bool                allocate,
+                          rtems_rtl_alloc_tag tag,
+                          void**              address,
+                          size_t              size);
 
 #ifdef __cplusplus
 }

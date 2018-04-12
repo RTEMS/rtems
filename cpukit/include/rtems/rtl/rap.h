@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2013 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2013, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -42,7 +42,7 @@ extern "C" {
 /**
  * The module iterator handle.
  */
-typedef bool (*rtems_rap_iterator_t) (void* handle);
+typedef bool (*rtems_rap_iterator) (void* handle);
 
 /**
  * Load an application.
@@ -78,7 +78,7 @@ void* rtems_rap_find (const char* name);
  * @retval true The iterator function returned did not return false.
  * @retval false The iterator function returned false..
  */
-bool rtems_rap_iterate (rtems_rap_iterator_t iterator);
+bool rtems_rap_iterate (rtems_rap_iterator iterator);
 
 /**
  * Return the name of the module given a handle.

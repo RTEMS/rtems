@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -51,7 +51,7 @@
  * The table of supported loader formats.
  */
 #define RTEMS_RTL_LOADERS (RTEMS_RTL_ELF_LOADER_COUNT + RTEMS_RTL_RAP_LOADER_COUNT)
-static const rtems_rtl_loader_table_t loaders[RTEMS_RTL_LOADERS] =
+static const rtems_rtl_loader_table loaders[RTEMS_RTL_LOADERS] =
 {
 #if RTEMS_RTL_RAP_LOADER
   { .check     = rtems_rtl_rap_file_check,
@@ -68,12 +68,12 @@ static const rtems_rtl_loader_table_t loaders[RTEMS_RTL_LOADERS] =
 #endif
 };
 
-rtems_rtl_obj_t*
+rtems_rtl_obj*
 rtems_rtl_obj_alloc (void)
 {
-  rtems_rtl_obj_t* obj = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                              sizeof (rtems_rtl_obj_t),
-                                              true);
+  rtems_rtl_obj* obj = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                            sizeof (rtems_rtl_obj),
+                                            true);
   if (obj)
   {
     /*
@@ -89,7 +89,7 @@ rtems_rtl_obj_alloc (void)
 }
 
 static void
-rtems_rtl_obj_free_names (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_free_names (rtems_rtl_obj* obj)
 {
   if (rtems_rtl_obj_oname_valid (obj))
     rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, (void*) obj->oname);
@@ -100,7 +100,7 @@ rtems_rtl_obj_free_names (rtems_rtl_obj_t* obj)
 }
 
 bool
-rtems_rtl_obj_free (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_free (rtems_rtl_obj* obj)
 {
   if (obj->users || ((obj->flags & RTEMS_RTL_OBJ_LOCKED) != 0))
   {
@@ -122,7 +122,7 @@ rtems_rtl_obj_free (rtems_rtl_obj_t* obj)
 }
 
 bool
-rtems_rtl_obj_unresolved (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_unresolved (rtems_rtl_obj* obj)
 {
   return (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED) != 0 ? true : false;
 }
@@ -208,7 +208,7 @@ rtems_rtl_parse_name (const char*  name,
 }
 
 static bool
-rtems_rtl_obj_parse_name (rtems_rtl_obj_t* obj, const char* name)
+rtems_rtl_obj_parse_name (rtems_rtl_obj* obj, const char* name)
 {
   return rtems_rtl_parse_name (name, &(obj->aname), &(obj->oname), &(obj->ooffset));
 }
@@ -262,13 +262,13 @@ typedef struct
 {
   uint32_t mask; /**< The selection mask to sum. */
   size_t   size; /**< The size of all section fragments. */
-} rtems_rtl_obj_sect_summer_t;
+} rtems_rtl_obj_sect_summer_data;
 
 static bool
 rtems_rtl_obj_sect_summer (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*        sect = (rtems_rtl_obj_sect_t*) node;
-  rtems_rtl_obj_sect_summer_t* summer = data;
+  rtems_rtl_obj_sect*             sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_summer_data* summer = data;
   if ((sect->flags & summer->mask) == summer->mask)
     summer->size =
       rtems_rtl_sect_align (summer->size, sect->alignment) + sect->size;
@@ -276,9 +276,9 @@ rtems_rtl_obj_sect_summer (rtems_chain_node* node, void* data)
 }
 
 static size_t
-rtems_rtl_obj_section_size (const rtems_rtl_obj_t* obj, uint32_t mask)
+rtems_rtl_obj_section_size (const rtems_rtl_obj* obj, uint32_t mask)
 {
-  rtems_rtl_obj_sect_summer_t summer;
+  rtems_rtl_obj_sect_summer_data summer;
   summer.mask = mask;
   summer.size = 0;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
@@ -295,7 +295,7 @@ typedef struct
 {
   uint32_t mask;      /**< The selection mask to look for alignment. */
   uint32_t alignment; /**< The alignment of the section type. */
-} rtems_rtl_obj_sect_aligner_t;
+} rtems_rtl_obj_sect_aligner_data;
 
 /**
  * The section aligner iterator.
@@ -303,8 +303,8 @@ typedef struct
 static bool
 rtems_rtl_obj_sect_aligner (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*         sect = (rtems_rtl_obj_sect_t*) node;
-  rtems_rtl_obj_sect_aligner_t* aligner = data;
+  rtems_rtl_obj_sect*              sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_aligner_data* aligner = data;
   if ((sect->flags & aligner->mask) == aligner->mask)
   {
     aligner->alignment = sect->alignment;
@@ -314,9 +314,9 @@ rtems_rtl_obj_sect_aligner (rtems_chain_node* node, void* data)
 }
 
 static size_t
-rtems_rtl_obj_section_alignment (const rtems_rtl_obj_t* obj, uint32_t mask)
+rtems_rtl_obj_section_alignment (const rtems_rtl_obj* obj, uint32_t mask)
 {
-  rtems_rtl_obj_sect_aligner_t aligner;
+  rtems_rtl_obj_sect_aligner_data aligner;
   aligner.mask = mask;
   aligner.alignment = 0;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
@@ -326,16 +326,16 @@ rtems_rtl_obj_section_alignment (const rtems_rtl_obj_t* obj, uint32_t mask)
 }
 
 static bool
-rtems_rtl_obj_section_handler (uint32_t                     mask,
-                               rtems_rtl_obj_t*             obj,
-                               int                          fd,
-                               rtems_rtl_obj_sect_handler_t handler,
-                               void*                        data)
+rtems_rtl_obj_section_handler (uint32_t                   mask,
+                               rtems_rtl_obj*             obj,
+                               int                        fd,
+                               rtems_rtl_obj_sect_handler handler,
+                               void*                      data)
 {
   rtems_chain_node* node = rtems_chain_first (&obj->sections);
   while (!rtems_chain_is_tail (&obj->sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
     if ((sect->flags & mask) != 0)
     {
       if (!handler (obj, fd, sect, data))
@@ -347,7 +347,7 @@ rtems_rtl_obj_section_handler (uint32_t                     mask,
 }
 
 bool
-rtems_rtl_match_name (rtems_rtl_obj_t* obj, const char* name)
+rtems_rtl_match_name (rtems_rtl_obj* obj, const char* name)
 {
   const char* n1 = obj->oname;
   while ((*n1 != '\0') && (*n1 != '\n') && (*n1 != '/') &&
@@ -363,10 +363,10 @@ rtems_rtl_match_name (rtems_rtl_obj_t* obj, const char* name)
 }
 
 bool
-rtems_rtl_obj_find_file (rtems_rtl_obj_t* obj, const char* name)
+rtems_rtl_obj_find_file (rtems_rtl_obj* obj, const char* name)
 {
-  const char*       pname;
-  rtems_rtl_data_t* rtl;
+  const char*     pname;
+  rtems_rtl_data* rtl;
 
   /*
    * Parse the name. The object descriptor will have the archive name and/or
@@ -403,21 +403,21 @@ rtems_rtl_obj_find_file (rtems_rtl_obj_t* obj, const char* name)
 }
 
 bool
-rtems_rtl_obj_add_section (rtems_rtl_obj_t* obj,
-                           int              section,
-                           const char*      name,
-                           size_t           size,
-                           off_t            offset,
-                           uint32_t         alignment,
-                           int              link,
-                           int              info,
-                           uint32_t         flags)
+rtems_rtl_obj_add_section (rtems_rtl_obj* obj,
+                           int            section,
+                           const char*    name,
+                           size_t         size,
+                           off_t          offset,
+                           uint32_t       alignment,
+                           int            link,
+                           int            info,
+                           uint32_t       flags)
 {
   if (size > 0)
   {
-    rtems_rtl_obj_sect_t* sect = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
-                                                      sizeof (rtems_rtl_obj_sect_t),
-                                                      true);
+    rtems_rtl_obj_sect* sect = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                                    sizeof (rtems_rtl_obj_sect),
+                                                    true);
     if (!sect)
     {
       rtems_rtl_set_error (ENOMEM, "adding allocated section");
@@ -442,13 +442,13 @@ rtems_rtl_obj_add_section (rtems_rtl_obj_t* obj,
 }
 
 void
-rtems_rtl_obj_erase_sections (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_erase_sections (rtems_rtl_obj* obj)
 {
   rtems_chain_node* node = rtems_chain_first (&obj->sections);
   while (!rtems_chain_is_tail (&obj->sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
-    rtems_chain_node*     next_node = rtems_chain_next (node);
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
+    rtems_chain_node*   next_node = rtems_chain_next (node);
     rtems_chain_extract (node);
     rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, (void*) sect->name);
     rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, sect);
@@ -461,16 +461,16 @@ rtems_rtl_obj_erase_sections (rtems_rtl_obj_t* obj)
  */
 typedef struct
 {
-  rtems_rtl_obj_sect_t*  sect;  /**< The matching section. */
-  const char*            name;  /**< The name to match. */
-  int                    index; /**< The index to match. */
-} rtems_rtl_obj_sect_finder_t;
+  rtems_rtl_obj_sect*  sect;  /**< The matching section. */
+  const char*          name;  /**< The name to match. */
+  int                  index; /**< The index to match. */
+} rtems_rtl_obj_sect_finder;
 
 static bool
 rtems_rtl_obj_sect_match_name (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*        sect = (rtems_rtl_obj_sect_t*) node;
-  rtems_rtl_obj_sect_finder_t* match = data;
+  rtems_rtl_obj_sect*        sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_finder* match = data;
   if (strcmp (sect->name, match->name) == 0)
   {
     match->sect = sect;
@@ -479,11 +479,11 @@ rtems_rtl_obj_sect_match_name (rtems_chain_node* node, void* data)
   return true;
 }
 
-rtems_rtl_obj_sect_t*
-rtems_rtl_obj_find_section (const rtems_rtl_obj_t* obj,
-                            const char*            name)
+rtems_rtl_obj_sect*
+rtems_rtl_obj_find_section (const rtems_rtl_obj* obj,
+                            const char*          name)
 {
-  rtems_rtl_obj_sect_finder_t match;
+  rtems_rtl_obj_sect_finder match;
   match.sect = NULL;
   match.name = name;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
@@ -495,8 +495,8 @@ rtems_rtl_obj_find_section (const rtems_rtl_obj_t* obj,
 static bool
 rtems_rtl_obj_sect_match_index (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*        sect = (rtems_rtl_obj_sect_t*) node;
-  rtems_rtl_obj_sect_finder_t* match = data;
+  rtems_rtl_obj_sect*        sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_finder* match = data;
   if (sect->section == match->index)
   {
     match->sect = sect;
@@ -505,11 +505,11 @@ rtems_rtl_obj_sect_match_index (rtems_chain_node* node, void* data)
   return true;
 }
 
-rtems_rtl_obj_sect_t*
-rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj_t* obj,
-                                     int                    index)
+rtems_rtl_obj_sect*
+rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* obj,
+                                     int                  index)
 {
-  rtems_rtl_obj_sect_finder_t match;
+  rtems_rtl_obj_sect_finder match;
   match.sect = NULL;
   match.index = index;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
@@ -519,70 +519,70 @@ rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj_t* obj,
 }
 
 size_t
-rtems_rtl_obj_text_size (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_text_size (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_TEXT);
 }
 
 uint32_t
-rtems_rtl_obj_text_alignment (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_text_alignment (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_TEXT);
 }
 
 size_t
-rtems_rtl_obj_const_size (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_const_size (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_CONST);
 }
 
 uint32_t
-rtems_rtl_obj_eh_alignment (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_eh_alignment (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_EH);
 }
 
 size_t
-rtems_rtl_obj_eh_size (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_eh_size (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_EH);
 }
 
 uint32_t
-rtems_rtl_obj_const_alignment (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_const_alignment (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_CONST);
 }
 
 size_t
-rtems_rtl_obj_data_size (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_data_size (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_DATA);
 }
 
 uint32_t
-rtems_rtl_obj_data_alignment (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_data_alignment (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_DATA);
 }
 
 size_t
-rtems_rtl_obj_bss_size (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_bss_size (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_BSS);
 }
 
 uint32_t
-rtems_rtl_obj_bss_alignment (const rtems_rtl_obj_t* obj)
+rtems_rtl_obj_bss_alignment (const rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_BSS);
 }
 
 bool
-rtems_rtl_obj_relocate (rtems_rtl_obj_t*             obj,
-                        int                          fd,
-                        rtems_rtl_obj_sect_handler_t handler,
-                        void*                        data)
+rtems_rtl_obj_relocate (rtems_rtl_obj*             obj,
+                        int                        fd,
+                        rtems_rtl_obj_sect_handler handler,
+                        void*                      data)
 {
   uint32_t mask = RTEMS_RTL_OBJ_SECT_REL | RTEMS_RTL_OBJ_SECT_RELA;
   return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
@@ -597,15 +597,15 @@ typedef struct
   void     *start_va;
   void     *end_va;
   size_t   cache_line_size;
-} rtems_rtl_obj_sect_sync_ctx_t;
+} rtems_rtl_obj_sect_sync_ctx;
 
 static bool
 rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect_t*          sect = (rtems_rtl_obj_sect_t*) node;
-  rtems_rtl_obj_sect_sync_ctx_t* sync_ctx = data;
-  uintptr_t                      old_end;
-  uintptr_t                      new_start;
+  rtems_rtl_obj_sect*          sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_sync_ctx* sync_ctx = data;
+  uintptr_t                    old_end;
+  uintptr_t                    new_start;
 
   if ((sect->flags & sync_ctx->mask) == 0 || sect->size == 0)
     return true;
@@ -633,9 +633,9 @@ rtems_rtl_obj_sect_sync_handler (rtems_chain_node* node, void* data)
 }
 
 void
-rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_synchronize_cache (rtems_rtl_obj* obj)
 {
-  rtems_rtl_obj_sect_sync_ctx_t sync_ctx;
+  rtems_rtl_obj_sect_sync_ctx sync_ctx;
 
   if (rtems_cache_get_instruction_line_size() == 0)
     return;
@@ -659,19 +659,19 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t* obj)
 }
 
 bool
-rtems_rtl_obj_load_symbols (rtems_rtl_obj_t*             obj,
-                            int                          fd,
-                            rtems_rtl_obj_sect_handler_t handler,
-                            void*                        data)
+rtems_rtl_obj_load_symbols (rtems_rtl_obj*             obj,
+                            int                        fd,
+                            rtems_rtl_obj_sect_handler handler,
+                            void*                      data)
 {
   uint32_t mask = RTEMS_RTL_OBJ_SECT_SYM;
   return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
 }
 
 static int
-rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj_t* obj,
-                                        int              section,
-                                        uint32_t         visited_mask)
+rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj* obj,
+                                        int            section,
+                                        uint32_t       visited_mask)
 {
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
@@ -681,7 +681,7 @@ rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj_t* obj,
    */
   while (!rtems_chain_is_tail (sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
     if (sect->section == section)
     {
       const uint32_t mask = sect->flags & RTEMS_RTL_OBJ_SECT_TYPES;
@@ -704,7 +704,7 @@ rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj_t* obj,
       node = rtems_chain_first (sections);
       while (!rtems_chain_is_tail (sections, node))
       {
-        sect = (rtems_rtl_obj_sect_t*) node;
+        sect = (rtems_rtl_obj_sect*) node;
         if ((sect->flags & mask) == mask)
         {
           if (sect->section == section)
@@ -721,14 +721,14 @@ rtems_rtl_obj_sections_linked_to_order (rtems_rtl_obj_t* obj,
 }
 
 static void
-rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj_t* obj)
+rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj* obj)
 {
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
   int                  order = 0;
   while (!rtems_chain_is_tail (sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
     if ((sect->flags & mask) == mask)
     {
       /*
@@ -750,12 +750,12 @@ rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj_t* obj)
 }
 
 static size_t
-rtems_rtl_obj_sections_loader (uint32_t                     mask,
-                               rtems_rtl_obj_t*             obj,
-                               int                          fd,
-                               uint8_t*                     base,
-                               rtems_rtl_obj_sect_handler_t handler,
-                               void*                        data)
+rtems_rtl_obj_sections_loader (uint32_t                   mask,
+                               rtems_rtl_obj*             obj,
+                               int                        fd,
+                               uint8_t*                   base,
+                               rtems_rtl_obj_sect_handler handler,
+                               void*                      data)
 {
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
@@ -765,7 +765,7 @@ rtems_rtl_obj_sections_loader (uint32_t                     mask,
 
   while (!rtems_chain_is_tail (sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
 
     if ((sect->size != 0) && ((sect->flags & mask) != 0))
     {
@@ -819,10 +819,10 @@ rtems_rtl_obj_sections_loader (uint32_t                     mask,
 }
 
 bool
-rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
-                             int                          fd,
-                             rtems_rtl_obj_sect_handler_t handler,
-                             void*                        data)
+rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
+                             int                        fd,
+                             rtems_rtl_obj_sect_handler handler,
+                             void*                      data)
 {
   size_t text_size;
   size_t const_size;
@@ -907,17 +907,17 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
 }
 
 static void
-rtems_rtl_obj_run_cdtors (rtems_rtl_obj_t* obj, uint32_t mask)
+rtems_rtl_obj_run_cdtors (rtems_rtl_obj* obj, uint32_t mask)
 {
   rtems_chain_node* node = rtems_chain_first (&obj->sections);
   while (!rtems_chain_is_tail (&obj->sections, node))
   {
-    rtems_rtl_obj_sect_t* sect = (rtems_rtl_obj_sect_t*) node;
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
     if ((sect->flags & mask) == mask)
     {
-      rtems_rtl_cdtor_t* handler;
-      size_t             handlers = sect->size / sizeof (rtems_rtl_cdtor_t);
-      int                c;
+      rtems_rtl_cdtor* handler;
+      size_t           handlers = sect->size / sizeof (rtems_rtl_cdtor);
+      int              c;
       for (c = 0, handler = sect->base; c < handlers; ++c)
         if (*handler)
           (*handler) ();
@@ -927,13 +927,13 @@ rtems_rtl_obj_run_cdtors (rtems_rtl_obj_t* obj, uint32_t mask)
 }
 
 void
-rtems_rtl_obj_run_ctors (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_CTOR);
 }
 
 void
-rtems_rtl_obj_run_dtors (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj)
 {
   return rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_DTOR);
 }
@@ -943,7 +943,7 @@ rtems_rtl_obj_run_dtors (rtems_rtl_obj_t* obj)
  * object descriptor.
  */
 static bool
-rtems_rtl_obj_archive_find (rtems_rtl_obj_t* obj, int fd)
+rtems_rtl_obj_archive_find (rtems_rtl_obj* obj, int fd)
 {
 #define RTEMS_RTL_AR_IDENT      "!<arch>\n"
 #define RTEMS_RTL_AR_IDENT_SIZE (sizeof (RTEMS_RTL_AR_IDENT) - 1)
@@ -1167,11 +1167,11 @@ rtems_rtl_obj_archive_find (rtems_rtl_obj_t* obj, int fd)
 }
 
 static bool
-rtems_rtl_obj_file_load (rtems_rtl_obj_t* obj, int fd)
+rtems_rtl_obj_file_load (rtems_rtl_obj* obj, int fd)
 {
   int l;
 
-  for (l = 0; l < (sizeof (loaders) / sizeof (rtems_rtl_loader_table_t)); ++l)
+  for (l = 0; l < (sizeof (loaders) / sizeof (rtems_rtl_loader_table)); ++l)
   {
     if (loaders[l].check (obj, fd))
     {
@@ -1185,7 +1185,7 @@ rtems_rtl_obj_file_load (rtems_rtl_obj_t* obj, int fd)
 }
 
 static bool
-rtems_rtl_obj_file_unload (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_file_unload (rtems_rtl_obj* obj)
 {
   if (obj->format >= 0 && obj->format < RTEMS_RTL_LOADERS)
       return loaders[obj->format].unload (obj);
@@ -1193,7 +1193,7 @@ rtems_rtl_obj_file_unload (rtems_rtl_obj_t* obj)
 }
 
 bool
-rtems_rtl_obj_load (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_load (rtems_rtl_obj* obj)
 {
   int fd;
 
@@ -1244,7 +1244,7 @@ rtems_rtl_obj_load (rtems_rtl_obj_t* obj)
 }
 
 bool
-rtems_rtl_obj_unload (rtems_rtl_obj_t* obj)
+rtems_rtl_obj_unload (rtems_rtl_obj* obj)
 {
   _rtld_linkmap_delete(obj);
   rtems_rtl_obj_file_unload (obj);

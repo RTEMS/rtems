@@ -67,8 +67,8 @@ sign_extend31(Elf_Addr val)
 }
 
 uint32_t
-rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
-                             const Elf_Shdr*        shdr)
+rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
+                             const Elf_Shdr*      shdr)
 {
   uint32_t flags = 0;
   if (shdr->sh_type == SHT_ARM_EXIDX)
@@ -83,24 +83,24 @@ rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 }
 
 bool
-rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
-                             const Elf_Rela*             rela,
-                             const rtems_rtl_obj_sect_t* sect,
-                             const char*                 symname,
-                             const Elf_Byte              syminfo,
-                             const Elf_Word              symvalue)
+rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+                             const Elf_Rela*           rela,
+                             const rtems_rtl_obj_sect* sect,
+                             const char*               symname,
+                             const Elf_Byte            syminfo,
+                             const Elf_Word            symvalue)
 {
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
   return false;
 }
 
 bool
-rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
-                            const Elf_Rel*              rel,
-                            const rtems_rtl_obj_sect_t* sect,
-                            const char*                 symname,
-                            const Elf_Byte              syminfo,
-                            const Elf_Word              symvalue)
+rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+                            const Elf_Rel*            rel,
+                            const rtems_rtl_obj_sect* sect,
+                            const char*               symname,
+                            const Elf_Byte            syminfo,
+                            const Elf_Word            symvalue)
 {
   Elf_Addr *where;
   Elf_Addr tmp;
@@ -357,9 +357,9 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
 }
 
 bool
-rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
-                            const char*            name,
-                            uint32_t               flags)
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
+                            const char*          name,
+                            uint32_t             flags)
 {
   /*
    * We location the EH sections in section flags.
@@ -368,13 +368,13 @@ rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
 }
 
 bool
-rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj)
 {
   return true;
 }
 
 bool
-rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj)
 {
   obj->loader = NULL;
   return true;
@@ -406,7 +406,7 @@ _Unwind_Ptr __gnu_Unwind_Find_exidx (_Unwind_Ptr return_address,
 _Unwind_Ptr __gnu_Unwind_Find_exidx (_Unwind_Ptr return_address,
                                      int*        nrec)
 {
-  rtems_rtl_data_t* rtl;
+  rtems_rtl_data*   rtl;
   rtems_chain_node* node;
   __EIT_entry*      exidx_start = &__exidx_start;
   __EIT_entry*      exidx_end = &__exidx_end;
@@ -415,7 +415,7 @@ _Unwind_Ptr __gnu_Unwind_Find_exidx (_Unwind_Ptr return_address,
 
   node = rtems_chain_first (&rtl->objects);
   while (!rtems_chain_is_tail (&rtl->objects, node)) {
-    rtems_rtl_obj_t* obj = (rtems_rtl_obj_t*) node;
+    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
     if (rtems_rtl_obj_text_inside (obj, (void*) return_address)) {
       exidx_start = (__EIT_entry*) obj->eh_base;
       exidx_end = (__EIT_entry*) (obj->eh_base + obj->eh_size);

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -44,18 +44,18 @@ typedef struct rtems_rap_data_s
   rtems_chain_control apps;           /**< List if loaded application. */
   int                 last_errno;     /**< Last error number. */
   char                last_error[64]; /**< Last error string. */
-} rtems_rap_data_t;
+} rtems_rap_data;
 
 /**
  * The RAP file data. This structure is allocated on the heap when a file is
  * loaded.
  */
-typedef struct rtems_rap_app_s
+typedef struct rtems_rap_app
 {
   rtems_chain_node node;         /**< The node's link in the chain. */
   const char*      name;         /**< The file name */
   void*            handle;       /**< The dlopen handle. */
-} rtems_rap_app_t;
+} rtems_rap_app;
 
 /**
  * RTL entry.
@@ -69,7 +69,7 @@ typedef struct rtems_rap_app_s
 /**
  * Static RAP data is returned to the user when the loader is locked.
  */
-static rtems_rap_data_t rap_ = { .once = PTHREAD_ONCE_INIT };
+static rtems_rap_data rap_ = { .once = PTHREAD_ONCE_INIT };
 
 /**
  * Verbose level for the RAP loader.
@@ -79,7 +79,7 @@ static bool rap_verbose;
 /**
  * RAP entry call signature.
  */
-typedef int (*rtems_rap_entry_t)(int argc, const char* argv[]);
+typedef int (*rtems_rap_entry)(int argc, const char* argv[]);
 
 /**
  * Forward decl.
@@ -100,7 +100,7 @@ rtems_rap_data_init (void)
   rtems_chain_initialize_empty (&rap_.apps);
 }
 
-static rtems_rap_data_t*
+static rtems_rap_data*
 rtems_rap_lock (void)
 {
   pthread_once (&rap_.once, rtems_rap_data_init);
@@ -115,10 +115,10 @@ rtems_rap_unlock (void)
   rtems_mutex_unlock (&rap_.lock);
 }
 
-static rtems_rap_app_t*
+static rtems_rap_app*
 rtems_rap_check_handle (void* handle)
 {
-  rtems_rap_app_t*  app;
+  rtems_rap_app*    app;
   rtems_chain_node* node;
 
   app = handle;
@@ -126,7 +126,7 @@ rtems_rap_check_handle (void* handle)
 
   while (!rtems_chain_is_tail (&rap_.apps, node))
   {
-    rtems_rap_app_t* check = (rtems_rap_app_t*) node;
+    rtems_rap_app* check = (rtems_rap_app*) node;
     if (check == app)
       return app;
     node = rtems_chain_next (node);
@@ -135,17 +135,17 @@ rtems_rap_check_handle (void* handle)
   return NULL;
 }
 
-static rtems_rap_app_t*
+static rtems_rap_app*
 rtems_rap_app_alloc (void)
 {
-  rtems_rap_app_t* app = malloc (sizeof (rtems_rap_app_t));
-  memset (app, 0, sizeof (rtems_rap_app_t));
+  rtems_rap_app* app = malloc (sizeof (rtems_rap_app));
+  memset (app, 0, sizeof (rtems_rap_app));
   rtems_chain_append (&rap_.apps, &app->node);
   return app;
 }
 
 static void
-rtems_rap_app_free (rtems_rap_app_t* app)
+rtems_rap_app_free (rtems_rap_app* app)
 {
   if (app->handle)
   {
@@ -158,7 +158,7 @@ rtems_rap_app_free (rtems_rap_app_t* app)
 }
 
 static bool
-rtems_rap_match_name (rtems_rap_app_t* app, const char* name)
+rtems_rap_match_name (rtems_rap_app* app, const char* name)
 {
   const char* a;
 
@@ -211,8 +211,8 @@ rtems_rap_get_rtl_error (void)
 static void
 rtems_rap_set_error (int error, const char* format, ...)
 {
-  rtems_rap_data_t* rap = rtems_rap_lock ();
-  va_list           ap;
+  rtems_rap_data* rap = rtems_rap_lock ();
+  va_list         ap;
   va_start (ap, format);
   rap->last_errno = error;
   vsnprintf (rap->last_error, sizeof (rap->last_error), format, ap);
@@ -223,7 +223,7 @@ rtems_rap_set_error (int error, const char* format, ...)
 bool
 rtems_rap_load (const char* name, int mode, int argc, const char* argv[])
 {
-  rtems_rap_data_t* rap = rtems_rap_lock ();
+  rtems_rap_data* rap = rtems_rap_lock ();
 
   if (!rap)
     return false;
@@ -236,11 +236,11 @@ rtems_rap_load (const char* name, int mode, int argc, const char* argv[])
    */
   if (!rtems_rap_find (name))
   {
-    rtems_rap_app_t*  app;
-    rtems_rap_entry_t init;
-    rtems_rap_entry_t fini;
-    size_t            size = 0;
-    int               r;
+    rtems_rap_app*  app;
+    rtems_rap_entry init;
+    rtems_rap_entry fini;
+    size_t          size = 0;
+    int             r;
 
     /*
      * Allocate a new application descriptor and attempt to load it.
@@ -309,9 +309,9 @@ rtems_rap_load (const char* name, int mode, int argc, const char* argv[])
 bool
 rtems_rap_unload (const char* name)
 {
-  rtems_rap_app_t*  app;
-  rtems_rap_entry_t fini;
-  int               r;
+  rtems_rap_app*  app;
+  rtems_rap_entry fini;
+  int             r;
 
   rtems_rap_lock ();
 
@@ -352,14 +352,14 @@ rtems_rap_unload (const char* name)
 void*
 rtems_rap_find (const char* name)
 {
-  rtems_rap_data_t* rap = rtems_rap_lock ();
+  rtems_rap_data*   rap = rtems_rap_lock ();
   rtems_chain_node* node;
 
   node = rtems_chain_first (&rap->apps);
 
   while (!rtems_chain_is_tail (&rap->apps, node))
   {
-    rtems_rap_app_t* app = (rtems_rap_app_t*) node;
+    rtems_rap_app* app = (rtems_rap_app*) node;
     if (rtems_rap_match_name (app, name))
     {
       rtems_rap_unlock ();
@@ -374,9 +374,9 @@ rtems_rap_find (const char* name)
 }
 
 bool
-rtems_rap_iterate (rtems_rap_iterator_t iterator)
+rtems_rap_iterate (rtems_rap_iterator iterator)
 {
-  rtems_rap_data_t* rap = rtems_rap_lock ();
+  rtems_rap_data*   rap = rtems_rap_lock ();
   rtems_chain_node* node;
   bool              result = true;
 
@@ -384,7 +384,7 @@ rtems_rap_iterate (rtems_rap_iterator_t iterator)
 
   while (!rtems_chain_is_tail (&rap->apps, node))
   {
-    rtems_rap_app_t* app = (rtems_rap_app_t*) node;
+    rtems_rap_app* app = (rtems_rap_app*) node;
     result = iterator (app);
     if (!result)
       break;
@@ -399,7 +399,7 @@ rtems_rap_iterate (rtems_rap_iterator_t iterator)
 const char*
 rtems_rap_name (void* handle)
 {
-  rtems_rap_app_t* app = rtems_rap_check_handle (handle);
+  rtems_rap_app* app = rtems_rap_check_handle (handle);
   if (app)
     return app->name;
   return NULL;
@@ -408,7 +408,7 @@ rtems_rap_name (void* handle)
 void*
 rtems_rap_dl_handle (void* handle)
 {
-  rtems_rap_app_t* app = rtems_rap_check_handle (handle);
+  rtems_rap_app* app = rtems_rap_check_handle (handle);
   if (app)
     return app->handle;
   return NULL;
@@ -417,8 +417,8 @@ rtems_rap_dl_handle (void* handle)
 int
 rtems_rap_get_error (char* message, size_t max_message)
 {
-  rtems_rap_data_t* rap = rtems_rap_lock ();
-  int               last_errno = rap->last_errno;
+  rtems_rap_data* rap = rtems_rap_lock ();
+  int             last_errno = rap->last_errno;
   strlcpy (message, rap->last_error, max_message);
   rtems_rap_unlock ();
   return last_errno;

@@ -35,7 +35,7 @@ extern "C" {
 /**
  * Loader format definition.
  */
-typedef struct rtems_rtl_loader_format_s
+typedef struct rtems_rtl_loader_format
 {
   /**
    * The format label. This can be used to determine and manage
@@ -47,42 +47,42 @@ typedef struct rtems_rtl_loader_format_s
    * The format flags.
    */
   uint32_t flags;
-} rtems_rtl_loader_format_t;
+} rtems_rtl_loader_format;
 
 /**
  * The type of the format loader check handler. This handler checks the format
  * and if it is detected as suitable it returns true.
  */
-typedef bool (*rtems_rtl_loader_check) (rtems_rtl_obj_t* obj, int fd);
+typedef bool (*rtems_rtl_loader_check) (rtems_rtl_obj* obj, int fd);
 
 /**
  * The type of the format loader load handler. This handler loads the specific
  * format.
  */
-typedef bool (*rtems_rtl_loader_load) (rtems_rtl_obj_t* obj, int fd);
+typedef bool (*rtems_rtl_loader_load) (rtems_rtl_obj* obj, int fd);
 
 /**
  * The type of the format loader unload handler. This handler unloads the
  * specific format.
  */
-typedef bool (*rtems_rtl_loader_unload) (rtems_rtl_obj_t* obj);
+typedef bool (*rtems_rtl_loader_unload) (rtems_rtl_obj* obj);
 
 /**
  * The type of the format loader signature handler. This handler checks the
  * format signature.
  */
-typedef rtems_rtl_loader_format_t* (*rtems_rtl_loader_sig) (void);
+typedef rtems_rtl_loader_format* (*rtems_rtl_loader_sig) (void);
 
 /**
  * Table for supported loadable formats.
  */
-typedef struct rtems_rtl_loader_table_s
+typedef struct rtems_rtl_loader_table
 {
   rtems_rtl_loader_check  check;     /**< The check handler. */
   rtems_rtl_loader_load   load;      /**< The loader. */
   rtems_rtl_loader_unload unload;    /**< The unloader. */
   rtems_rtl_loader_sig    signature; /**< The loader's signature. */
-} rtems_rtl_loader_table_t;
+} rtems_rtl_loader_table;
 
 /**
  * Flags for the various section types.
@@ -121,7 +121,7 @@ typedef struct rtems_rtl_loader_table_s
  * one of a specific type of sections. All sections and grouped
  * together in memory.
  */
-struct rtems_rtl_obj_sect_s
+struct rtems_rtl_obj_sect
 {
   rtems_chain_node node;        /**< The node's link in the chain. */
   int              section;     /**< The section number. */
@@ -150,51 +150,51 @@ struct rtems_rtl_obj_sect_s
  * RTL Object. There is one for each object module loaded plus one for the base
  * kernel image.
  */
-struct rtems_rtl_obj_s
+struct rtems_rtl_obj
 {
-  rtems_chain_node     link;         /**< The node's link in the chain. */
-  uint32_t             flags;        /**< The status of the object file. */
-  uint32_t             users;        /**< References to the object file. */
-  int                  format;       /**< The format of the object file. */
-  const char*          fname;        /**< The file name for the object. */
-  const char*          oname;        /**< The object file name. Can be
-                                      *   relative. */
-  const char*          aname;        /**< The archive name containing the
-                                      *   object. NULL means the object is not
-                                      *   in a lib */
-  off_t                ooffset;      /**< The object offset in the archive. */
-  size_t               fsize;        /**< Size of the object file. */
-  rtems_chain_control  sections;     /**< The sections of interest in the
-                                      *   object file. */
-  rtems_rtl_obj_sym_t* local_table;  /**< Local symbol table. */
-  size_t               local_syms;   /**< Local symbol count. */
-  size_t               local_size;   /**< Local symbol memory usage. */
-  rtems_rtl_obj_sym_t* global_table; /**< Global symbol table. */
-  size_t               global_syms;  /**< Global symbol count. */
-  size_t               global_size;  /**< Global symbol memory usage. */
-  uint32_t             unresolved;   /**< The number of unresolved relocations. */
-  void*                text_base;    /**< The base address of the text section
-                                      *   in memory. */
-  size_t               text_size;     /**< The size of the text section. */
-  void*                const_base;   /**< The base address of the const section
-                                      *   in memory. */
-  void*                eh_base;      /**< The base address of the eh section
-                                      *   in memory. */
-  size_t               eh_size;      /**< The size of the eh section. */
-  void*                data_base;    /**< The base address of the data section
-                                      *   in memory. */
-  void*                bss_base;     /**< The base address of the bss section
-                                      *   in memory. */
-  size_t               bss_size;     /**< The size of the bss section. */
-  size_t               exec_size;    /**< The amount of executable memory
-                                      *   allocated */
-  void*                entry;        /**< The entry point of the module. */
-  uint32_t             checksum;     /**< The checksum of the text sections. A
-                                      *   zero means do not checksum. */
-  uint32_t*            sec_num;      /**< The sec nums of each obj. */
-  uint32_t             obj_num;      /**< The count of elf files in an rtl obj. */
-  struct link_map*     linkmap;      /**< For GDB. */
-  void*                loader;       /**< The file details specific to a loader. */
+  rtems_chain_node    link;         /**< The node's link in the chain. */
+  uint32_t            flags;        /**< The status of the object file. */
+  uint32_t            users;        /**< References to the object file. */
+  int                 format;       /**< The format of the object file. */
+  const char*         fname;        /**< The file name for the object. */
+  const char*         oname;        /**< The object file name. Can be
+                                     *   relative. */
+  const char*         aname;        /**< The archive name containing the
+                                     *   object. NULL means the object is not
+                                     *   in a lib */
+  off_t               ooffset;      /**< The object offset in the archive. */
+  size_t              fsize;        /**< Size of the object file. */
+  rtems_chain_control sections;     /**< The sections of interest in the
+                                     *   object file. */
+  rtems_rtl_obj_sym*  local_table;  /**< Local symbol table. */
+  size_t              local_syms;   /**< Local symbol count. */
+  size_t              local_size;   /**< Local symbol memory usage. */
+  rtems_rtl_obj_sym*  global_table; /**< Global symbol table. */
+  size_t              global_syms;  /**< Global symbol count. */
+  size_t              global_size;  /**< Global symbol memory usage. */
+  uint32_t            unresolved;   /**< The number of unresolved relocations. */
+  void*               text_base;    /**< The base address of the text section
+                                     *   in memory. */
+  size_t              text_size;    /**< The size of the text section. */
+  void*               const_base;   /**< The base address of the const section
+                                     *   in memory. */
+  void*               eh_base;      /**< The base address of the eh section
+                                     *   in memory. */
+  size_t              eh_size;      /**< The size of the eh section. */
+  void*               data_base;    /**< The base address of the data section
+                                     *   in memory. */
+  void*               bss_base;     /**< The base address of the bss section
+                                     *   in memory. */
+  size_t              bss_size;     /**< The size of the bss section. */
+  size_t              exec_size;    /**< The amount of executable memory
+                                     *   allocated */
+  void*               entry;        /**< The entry point of the module. */
+  uint32_t            checksum;     /**< The checksum of the text sections. A
+                                     *   zero means do not checksum. */
+  uint32_t*           sec_num;      /**< The sec nums of each obj. */
+  uint32_t            obj_num;      /**< The count of elf files in an rtl obj. */
+  struct link_map*    linkmap;      /**< For GDB. */
+  void*               loader;       /**< The file details specific to a loader. */
 };
 
 /**
@@ -208,10 +208,10 @@ struct rtems_rtl_obj_s
  * @retval true The operation was successful.
  * @retval false The operation failed and the RTL has been set.
  */
-typedef bool (*rtems_rtl_obj_sect_handler_t)(rtems_rtl_obj_t*      obj,
-                                             int                   fd,
-                                             rtems_rtl_obj_sect_t* sect,
-                                             void*                 data);
+typedef bool (*rtems_rtl_obj_sect_handler)(rtems_rtl_obj*      obj,
+                                           int                 fd,
+                                           rtems_rtl_obj_sect* sect,
+                                           void*               data);
 
 /**
  * Get the file name.
@@ -219,7 +219,7 @@ typedef bool (*rtems_rtl_obj_sect_handler_t)(rtems_rtl_obj_t*      obj,
  * @param obj The object file.
  * @return const char* The string.
  */
-static inline const char* rtems_rtl_obj_fname (const rtems_rtl_obj_t* obj)
+static inline const char* rtems_rtl_obj_fname (const rtems_rtl_obj* obj)
 {
   return obj->fname;
 }
@@ -230,7 +230,7 @@ static inline const char* rtems_rtl_obj_fname (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return bool There is a file name
  */
-static inline bool rtems_rtl_obj_fname_valid (const rtems_rtl_obj_t* obj)
+static inline bool rtems_rtl_obj_fname_valid (const rtems_rtl_obj* obj)
 {
   return obj->fname;
 }
@@ -241,7 +241,7 @@ static inline bool rtems_rtl_obj_fname_valid (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return const char* The string.
  */
-static inline const char* rtems_rtl_obj_oname (const rtems_rtl_obj_t* obj)
+static inline const char* rtems_rtl_obj_oname (const rtems_rtl_obj* obj)
 {
   return obj->oname;
 }
@@ -252,7 +252,7 @@ static inline const char* rtems_rtl_obj_oname (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return bool There is an object name
  */
-static inline bool rtems_rtl_obj_oname_valid (const rtems_rtl_obj_t* obj)
+static inline bool rtems_rtl_obj_oname_valid (const rtems_rtl_obj* obj)
 {
   return obj->oname;
 }
@@ -263,7 +263,7 @@ static inline bool rtems_rtl_obj_oname_valid (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return const char* The string.
  */
-static inline const char* rtems_rtl_obj_aname (const rtems_rtl_obj_t* obj)
+static inline const char* rtems_rtl_obj_aname (const rtems_rtl_obj* obj)
 {
   return obj->aname;
 }
@@ -274,7 +274,7 @@ static inline const char* rtems_rtl_obj_aname (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return bool There is an archive name
  */
-static inline bool rtems_rtl_obj_aname_valid (const rtems_rtl_obj_t* obj)
+static inline bool rtems_rtl_obj_aname_valid (const rtems_rtl_obj* obj)
 {
   return obj->aname;
 }
@@ -285,8 +285,8 @@ static inline bool rtems_rtl_obj_aname_valid (const rtems_rtl_obj_t* obj)
  * @param obj The object file.
  * @return bool There is an archive name
  */
-static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj_t* obj,
-                                              const void*            address)
+static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj* obj,
+                                              const void*          address)
 {
   return
     (address >= obj->text_base) &&
@@ -298,7 +298,7 @@ static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj_t* obj,
  *
  * @retval NULL No memory for the object.
  */
-rtems_rtl_obj_t* rtems_rtl_obj_alloc (void);
+rtems_rtl_obj* rtems_rtl_obj_alloc (void);
 
 /**
  * Free the object structure and related resources.
@@ -307,7 +307,7 @@ rtems_rtl_obj_t* rtems_rtl_obj_alloc (void);
  * @retval false The object has dependences.
  * @retval true The object has been freed.
  */
-bool rtems_rtl_obj_free (rtems_rtl_obj_t* obj);
+bool rtems_rtl_obj_free (rtems_rtl_obj* obj);
 
 /**
  * Does the object file have unresolved external references ? If it does the
@@ -317,7 +317,7 @@ bool rtems_rtl_obj_free (rtems_rtl_obj_t* obj);
  * @retval true The object file has unresolved externals.
  * @retval false The object file has all external references resolved.
  */
-bool rtems_rtl_obj_unresolved (rtems_rtl_obj_t* obj);
+bool rtems_rtl_obj_unresolved (rtems_rtl_obj* obj);
 
 /**
  * Parses a filename and returns newly allocated strings with the archive name,
@@ -341,7 +341,7 @@ bool rtems_rtl_parse_name (const char*  name,
  * @param obj The object file's descriptor.
  * @param name The name to match.
  */
-bool rtems_rtl_match_name (rtems_rtl_obj_t* obj, const char* name);
+bool rtems_rtl_match_name (rtems_rtl_obj* obj, const char* name);
 
 /**
  * Find an object file on disk that matches the name. The object descriptor is
@@ -353,7 +353,7 @@ bool rtems_rtl_match_name (rtems_rtl_obj_t* obj, const char* name);
  * @retval true The file has been found.
  * @retval false The file could not be located. The RTL error has been set.
  */
-bool rtems_rtl_obj_find_file (rtems_rtl_obj_t* obj, const char* name);
+bool rtems_rtl_obj_find_file (rtems_rtl_obj* obj, const char* name);
 
 /**
  * Add a section to the object descriptor.
@@ -370,22 +370,22 @@ bool rtems_rtl_obj_find_file (rtems_rtl_obj_t* obj, const char* name);
  * @retval true The section has been added.
  * @retval false The section has not been added. See the RTL error.
  */
-bool rtems_rtl_obj_add_section (rtems_rtl_obj_t* obj,
-                                int              section,
-                                const char*      name,
-                                size_t           size,
-                                off_t            offset,
-                                uint32_t         alignment,
-                                int              link,
-                                int              info,
-                                uint32_t         flags);
+bool rtems_rtl_obj_add_section (rtems_rtl_obj* obj,
+                                int            section,
+                                const char*    name,
+                                size_t         size,
+                                off_t          offset,
+                                uint32_t       alignment,
+                                int            link,
+                                int            info,
+                                uint32_t       flags);
 
 /**
  * Erase the object file descriptor's sections.
  *
  * @param obj The object file's descriptor.
  */
-void rtems_rtl_obj_erase_sections (rtems_rtl_obj_t* obj);
+void rtems_rtl_obj_erase_sections (rtems_rtl_obj* obj);
 
 /**
  * Find the section given a name.
@@ -395,8 +395,8 @@ void rtems_rtl_obj_erase_sections (rtems_rtl_obj_t* obj);
  * @retval NULL The section was not found.
  * @return rtems_rtl_obj_sect_t* The named section.
  */
-rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section (const rtems_rtl_obj_t* obj,
-                                                  const char*            name);
+rtems_rtl_obj_sect* rtems_rtl_obj_find_section (const rtems_rtl_obj* obj,
+                                                const char*          name);
 
 /**
  * Find a section given a section's index number.
@@ -406,8 +406,8 @@ rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section (const rtems_rtl_obj_t* obj,
  * @retval NULL The section was not found.
  * @return rtems_rtl_obj_sect_t* The found section.
  */
-rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj_t* obj,
-                                                           int                    index);
+rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* obj,
+                                                         int                  index);
 
 /**
  * The text section size. Only use once all the sections has been added. It
@@ -417,7 +417,7 @@ rtems_rtl_obj_sect_t* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj_t
  * @param obj The object file's descriptor.
  * @return size_t The size of the text area of the object file.
  */
-size_t rtems_rtl_obj_text_size (const rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_text_size (const rtems_rtl_obj* obj);
 
 /**
  * The text section alignment for the object file. Only use once all the
@@ -430,7 +430,7 @@ size_t rtems_rtl_obj_text_size (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_text_alignment (const rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_text_alignment (const rtems_rtl_obj* obj);
 
 /**
  * The const section size. Only use once all the sections has been added. It
@@ -440,7 +440,7 @@ uint32_t rtems_rtl_obj_text_alignment (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return size_t The size of the const area of the object file.
  */
-size_t rtems_rtl_obj_const_size (const rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_const_size (const rtems_rtl_obj* obj);
 
 /**
  * The const section alignment for the object file. Only use once all the
@@ -453,7 +453,7 @@ size_t rtems_rtl_obj_const_size (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_const_alignment (const rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_const_alignment (const rtems_rtl_obj* obj);
 
 /**
  * The eh section size. Only use once all the sections has been added. It
@@ -462,7 +462,7 @@ uint32_t rtems_rtl_obj_const_alignment (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return size_t The size of the bss area of the object file.
  */
-size_t rtems_rtl_obj_eh_size (const rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_eh_size (const rtems_rtl_obj* obj);
 
 /**
  * The eh section alignment for the object file. Only use once all the sections
@@ -475,7 +475,7 @@ size_t rtems_rtl_obj_eh_size (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_eh_alignment (const rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_eh_alignment (const rtems_rtl_obj* obj);
 
 /**
  * The data section size. Only use once all the sections has been added. It
@@ -485,7 +485,7 @@ uint32_t rtems_rtl_obj_eh_alignment (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return size_t The size of the data area of the object file.
  */
-size_t rtems_rtl_obj_data_size (const rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_data_size (const rtems_rtl_obj* obj);
 
 /**
  * The data section alignment for the object file. Only use once all the
@@ -498,7 +498,7 @@ size_t rtems_rtl_obj_data_size (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_data_alignment (const rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_data_alignment (const rtems_rtl_obj* obj);
 
 /**
  * The bss section size. Only use once all the sections has been added. It
@@ -507,7 +507,7 @@ uint32_t rtems_rtl_obj_data_alignment (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return size_t The size of the bss area of the object file.
  */
-size_t rtems_rtl_obj_bss_size (const rtems_rtl_obj_t* obj);
+size_t rtems_rtl_obj_bss_size (const rtems_rtl_obj* obj);
 
 /**
  * The bss section alignment for the object file. Only use once all the
@@ -520,7 +520,7 @@ size_t rtems_rtl_obj_bss_size (const rtems_rtl_obj_t* obj);
  * @param obj The object file's descriptor.
  * @return uint32_t The alignment. Can be 0 or 1 for not aligned or the alignment.
  */
-uint32_t rtems_rtl_obj_bss_alignment (const rtems_rtl_obj_t* obj);
+uint32_t rtems_rtl_obj_bss_alignment (const rtems_rtl_obj* obj);
 
 /**
  * Relocate the object file. The object file's section are parsed for any
@@ -533,17 +533,17 @@ uint32_t rtems_rtl_obj_bss_alignment (const rtems_rtl_obj_t* obj);
  * @retval true The object file was relocated.
  * @retval false The relocation failed. The RTL error is set.
  */
-bool rtems_rtl_obj_relocate (rtems_rtl_obj_t*             obj,
-                             int                          fd,
-                             rtems_rtl_obj_sect_handler_t handler,
-                             void*                        data);
+bool rtems_rtl_obj_relocate (rtems_rtl_obj*             obj,
+                             int                        fd,
+                             rtems_rtl_obj_sect_handler handler,
+                             void*                      data);
 
 /**
  * Synchronize caches to make code visible to CPU(s)
  *
  * @param obj The object file's descriptor.
  */
-void rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj);
+void rtems_rtl_obj_synchronize_cache (rtems_rtl_obj* obj);
 
 /**
  * Relocate an object file's unresolved reference.
@@ -553,8 +553,8 @@ void rtems_rtl_obj_synchronize_cache (rtems_rtl_obj_t*    obj);
  * @retval true The object file record was relocated.
  * @retval false The relocation failed. The RTL error is set.
  */
-bool rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc_t* reloc,
-                                        rtems_rtl_obj_sym_t*        sym);
+bool rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
+                                        rtems_rtl_obj_sym*        sym);
 
 /**
  * Load the symbols from the object file. Only the exported or public symbols
@@ -567,10 +567,10 @@ bool rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc_t* reloc,
  * @retval true The object file's symbol where loaded.
  * @retval false The symbol loading failed. The RTL error is set.
  */
-bool rtems_rtl_obj_load_symbols (rtems_rtl_obj_t*             obj,
-                                 int                          fd,
-                                 rtems_rtl_obj_sect_handler_t handler,
-                                 void*                        data);
+bool rtems_rtl_obj_load_symbols (rtems_rtl_obj*             obj,
+                                 int                        fd,
+                                 rtems_rtl_obj_sect_handler handler,
+                                 void*                      data);
 
 /**
  * Load the sections that have been allocated memory in the target. The bss
@@ -584,10 +584,10 @@ bool rtems_rtl_obj_load_symbols (rtems_rtl_obj_t*             obj,
  * @retval true The object has been sucessfully loaded.
  * @retval false The load failed. The RTL error has been set.
  */
-bool rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
-                                  int                          fd,
-                                  rtems_rtl_obj_sect_handler_t handler,
-                                  void*                        data);
+bool rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
+                                  int                        fd,
+                                  rtems_rtl_obj_sect_handler handler,
+                                  void*                      data);
 
 /**
  * Invoke the constructors the object has. Constructors are a table of pointers
@@ -597,7 +597,7 @@ bool rtems_rtl_obj_load_sections (rtems_rtl_obj_t*             obj,
  *
  * @param obj The object file's descriptor.
  */
-void rtems_rtl_obj_run_ctors (rtems_rtl_obj_t* obj);
+void rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj);
 
 /**
  * Invoke the destructors the object has. Destructors are a table of pointers
@@ -607,7 +607,7 @@ void rtems_rtl_obj_run_ctors (rtems_rtl_obj_t* obj);
  *
  * @param obj The object file's descriptor.
  */
-void rtems_rtl_obj_run_dtors (rtems_rtl_obj_t* obj);
+void rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj);
 
 /**
  * Load the object file, reading all sections into memory, symbols and
@@ -617,7 +617,7 @@ void rtems_rtl_obj_run_dtors (rtems_rtl_obj_t* obj);
  * @retval true The object file has been loaded.
  * @retval false The load failed. The RTL error has been set.
  */
-bool rtems_rtl_obj_load (rtems_rtl_obj_t* obj);
+bool rtems_rtl_obj_load (rtems_rtl_obj* obj);
 
 /**
  * Unload the object file, erasing all symbols and releasing all memory.
@@ -626,7 +626,7 @@ bool rtems_rtl_obj_load (rtems_rtl_obj_t* obj);
  * @retval true The object file has been unloaded.
  * @retval false The unload failed. The RTL error has been set.
  */
-bool rtems_rtl_obj_unload (rtems_rtl_obj_t* obj);
+bool rtems_rtl_obj_unload (rtems_rtl_obj* obj);
 
 #ifdef __cplusplus
 }

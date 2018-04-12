@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 /**
- * Sets the error. 
+ * Sets the error.
  *
  * Assumes the RTL has been locked.
  *

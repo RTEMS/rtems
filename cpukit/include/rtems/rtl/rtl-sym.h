@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -26,22 +26,22 @@ extern "C" {
 /**
  * An object file symbol.
  */
-typedef struct rtems_rtl_obj_sym_s
+typedef struct rtems_rtl_obj_sym
 {
   rtems_chain_node node;    /**< The node's link in the chain. */
   const char*      name;    /**< The symbol's name. */
   void*            value;   /**< The value of the symbol. */
   uint32_t         data;    /**< Format specific data. */
-} rtems_rtl_obj_sym_t;
+} rtems_rtl_obj_sym;
 
 /**
  * Table of symbols stored in a hash table.
  */
-typedef struct rtems_rtl_symbols_s
+typedef struct rtems_rtl_symbols
 {
   rtems_chain_control* buckets;
   size_t               nbuckets;
-} rtems_rtl_symbols_t;
+} rtems_rtl_symbols;
 
 /**
  * Open a symbol table with the specified number of buckets.
@@ -52,15 +52,15 @@ typedef struct rtems_rtl_symbols_s
  * @retval false The symbol table could not created. The RTL
  *               error has the error.
  */
-bool rtems_rtl_symbol_table_open (rtems_rtl_symbols_t* symbols,
-                                  size_t               buckets);
+bool rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
+                                  size_t             buckets);
 
 /**
  * Close the table and erase the hash table.
  *
  * @param symbols Close the symbol table.
  */
-void rtems_rtl_symbol_table_close (rtems_rtl_symbols_t* symbols);
+void rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols);
 
 /**
  * Add a table of exported symbols to the symbol table.
@@ -83,7 +83,7 @@ void rtems_rtl_symbol_table_close (rtems_rtl_symbols_t* symbols);
  * @param esyms The exported symbol table.
  * @param size The size of the table in bytes.
  */
-bool rtems_rtl_symbol_global_add (rtems_rtl_obj_t*     obj,
+bool rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
                                   const unsigned char* esyms,
                                   unsigned int         size);
 
@@ -94,7 +94,7 @@ bool rtems_rtl_symbol_global_add (rtems_rtl_obj_t*     obj,
  * @retval NULL No symbol found.
  * @return rtems_rtl_obj_sym_t* Reference to the symbol.
  */
-rtems_rtl_obj_sym_t* rtems_rtl_symbol_global_find (const char* name);
+rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
 
 /**
  * Find a symbol given the symbol label in the local object file.
@@ -104,29 +104,29 @@ rtems_rtl_obj_sym_t* rtems_rtl_symbol_global_find (const char* name);
  * @retval NULL No symbol found.
  * @return rtems_rtl_obj_sym_t* Reference to the symbol.
  */
-rtems_rtl_obj_sym_t* rtems_rtl_symbol_obj_find (rtems_rtl_obj_t* obj,
-                                                const char*      name);
+rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find (rtems_rtl_obj* obj,
+                                              const char*    name);
 
 /**
  * Add the object file's symbols to the global table.
  *
  * @param obj The object file the symbols are to be added.
  */
-void rtems_rtl_symbol_obj_add (rtems_rtl_obj_t* obj);
+void rtems_rtl_symbol_obj_add (rtems_rtl_obj* obj);
 
 /**
  * Erase the object file's local symbols.
  *
  * @param obj The object file the local symbols are to be erased from.
  */
-void rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj_t* obj);
+void rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj* obj);
 
 /**
  * Erase the object file's symbols.
  *
  * @param obj The object file the symbols are to be erased from.
  */
-void rtems_rtl_symbol_obj_erase (rtems_rtl_obj_t* obj);
+void rtems_rtl_symbol_obj_erase (rtems_rtl_obj* obj);
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -31,8 +31,8 @@
 #include <stdio.h>
 
 bool
-rtems_rtl_obj_comp_open (rtems_rtl_obj_comp_t*  comp,
-                         size_t                 size)
+rtems_rtl_obj_comp_open (rtems_rtl_obj_comp* comp,
+                         size_t              size)
 {
   comp->cache  = NULL;
   comp->fd = -1;
@@ -51,7 +51,7 @@ rtems_rtl_obj_comp_open (rtems_rtl_obj_comp_t*  comp,
 }
 
 void
-rtems_rtl_obj_comp_close (rtems_rtl_obj_comp_t* comp)
+rtems_rtl_obj_comp_close (rtems_rtl_obj_comp* comp)
 {
   rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, comp->buffer);
   comp->cache = NULL;
@@ -64,11 +64,11 @@ rtems_rtl_obj_comp_close (rtems_rtl_obj_comp_t* comp)
 }
 
 void
-rtems_rtl_obj_comp_set (rtems_rtl_obj_comp_t*  comp,
-                        rtems_rtl_obj_cache_t* cache,
-                        int                    fd,
-                        int                    compression,
-                        off_t                  offset)
+rtems_rtl_obj_comp_set (rtems_rtl_obj_comp*  comp,
+                        rtems_rtl_obj_cache* cache,
+                        int                  fd,
+                        int                  compression,
+                        off_t                offset)
 {
   comp->cache = cache;
   comp->fd = fd;
@@ -79,9 +79,9 @@ rtems_rtl_obj_comp_set (rtems_rtl_obj_comp_t*  comp,
 }
 
 bool
-rtems_rtl_obj_comp_read (rtems_rtl_obj_comp_t* comp,
-                         void*                 buffer,
-                         size_t                length)
+rtems_rtl_obj_comp_read (rtems_rtl_obj_comp* comp,
+                         void*               buffer,
+                         size_t              length)
 {
   uint8_t* bin = buffer;
 

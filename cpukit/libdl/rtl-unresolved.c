@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -28,16 +28,16 @@
 #include <rtems/rtl/rtl-unresolved.h>
 #include <rtems/rtl/rtl-trace.h>
 
-static rtems_rtl_unresolv_block_t*
-rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved_t* unresolved)
+static rtems_rtl_unresolv_block*
+rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved* unresolved)
 {
   /*
    * The block header contains a record.
    */
   size_t size =
-    (sizeof(rtems_rtl_unresolv_block_t) +
-     (sizeof(rtems_rtl_unresolv_rec_t) * (unresolved->block_recs - 1)));
-  rtems_rtl_unresolv_block_t* block =
+    (sizeof(rtems_rtl_unresolv_block) +
+     (sizeof(rtems_rtl_unresolv_rec) * (unresolved->block_recs - 1)));
+  rtems_rtl_unresolv_block* block =
     rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_EXTERNAL, size, true);
   if (block)
     rtems_chain_append (&unresolved->blocks, &block->link);
@@ -50,25 +50,25 @@ static size_t
 rtems_rtl_unresolved_name_recs (const char* name)
 {
   size_t length = strlen (name);
-  return ((length + sizeof(rtems_rtl_unresolv_name_t) - 1) /
-          sizeof(rtems_rtl_unresolv_name_t));
+  return ((length + sizeof(rtems_rtl_unresolv_name) - 1) /
+          sizeof(rtems_rtl_unresolv_name));
 }
 
 static int
-rtems_rtl_unresolved_rec_index (rtems_rtl_unresolv_block_t* block,
-                                rtems_rtl_unresolv_rec_t* rec)
+rtems_rtl_unresolved_rec_index (rtems_rtl_unresolv_block* block,
+                                rtems_rtl_unresolv_rec* rec)
 {
-  return (rec - &block->rec) / sizeof (rtems_rtl_unresolv_rec_t);
+  return (rec - &block->rec) / sizeof (rtems_rtl_unresolv_rec);
 }
 
-static rtems_rtl_unresolv_rec_t*
-rtems_rtl_unresolved_rec_first (rtems_rtl_unresolv_block_t* block)
+static rtems_rtl_unresolv_rec*
+rtems_rtl_unresolved_rec_first (rtems_rtl_unresolv_block* block)
 {
   return &block->rec;
 }
 
-static rtems_rtl_unresolv_rec_t*
-rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec_t* rec)
+static rtems_rtl_unresolv_rec*
+rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec* rec)
 {
 
   switch (rec->type)
@@ -84,8 +84,8 @@ rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec_t* rec)
       /*
        * Determine how many records the name occupies. Round up.
        */
-      rec += ((rec->rec.name.length + sizeof(rtems_rtl_unresolv_name_t) - 1) /
-              sizeof(rtems_rtl_unresolv_name_t));
+      rec += ((rec->rec.name.length + sizeof(rtems_rtl_unresolv_name) - 1) /
+              sizeof(rtems_rtl_unresolv_name));
       break;
 
     case rtems_rtl_unresolved_reloc:
@@ -100,23 +100,23 @@ rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec_t* rec)
 }
 
 static bool
-rtems_rtl_unresolved_rec_is_last (rtems_rtl_unresolv_block_t* block,
-                                  rtems_rtl_unresolv_rec_t*   rec)
+rtems_rtl_unresolved_rec_is_last (rtems_rtl_unresolv_block* block,
+                                  rtems_rtl_unresolv_rec*   rec)
 {
   int index = (rec - &block->rec) / sizeof (rec);
   return !rec || (index >= block->recs) || (rec->type == rtems_rtl_unresolved_empty);
 }
 
-static rtems_rtl_unresolv_rec_t*
-rtems_rtl_unresolved_rec_first_free (rtems_rtl_unresolv_block_t* block)
+static rtems_rtl_unresolv_rec*
+rtems_rtl_unresolved_rec_first_free (rtems_rtl_unresolv_block* block)
 {
   return &block->rec + block->recs;
 }
 
 static int
-rtems_rtl_unresolved_find_name (rtems_rtl_unresolved_t* unresolved,
-                                const char*             name,
-                                bool                    update_refcount)
+rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
+                                const char*           name,
+                                bool                  update_refcount)
 {
   size_t length = strlen (name);
   int    index = 1;
@@ -124,8 +124,8 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved_t* unresolved,
   rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
   while (!rtems_chain_is_tail (&unresolved->blocks, node))
   {
-    rtems_rtl_unresolv_block_t* block = (rtems_rtl_unresolv_block_t*) node;
-    rtems_rtl_unresolv_rec_t* rec = rtems_rtl_unresolved_rec_first (block);
+    rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
+    rtems_rtl_unresolv_rec* rec = rtems_rtl_unresolved_rec_first (block);
 
     while (!rtems_rtl_unresolved_rec_is_last (block, rec))
     {
@@ -152,21 +152,21 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved_t* unresolved,
 /**
  * Struct to pass relocation data in the interator.
  */
-typedef struct rtems_rtl_unresolved_reloc_data_s
+typedef struct rtems_rtl_unresolved_reloc_data
 {
   uint16_t                  name;     /**< Name index. */
-  rtems_rtl_unresolv_rec_t* name_rec; /**< Name record. */
-  rtems_rtl_obj_sym_t*      sym;      /**< The symbol record. */
-} rtems_rtl_unresolved_reloc_data_t;
+  rtems_rtl_unresolv_rec* name_rec; /**< Name record. */
+  rtems_rtl_obj_sym*      sym;      /**< The symbol record. */
+} rtems_rtl_unresolved_reloc_data;
 
 static bool
-rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec_t* rec,
-                                    void*                     data)
+rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
+                                    void*                   data)
 {
   if (rec->type == rtems_rtl_unresolved_reloc)
   {
-    rtems_rtl_unresolved_reloc_data_t* rd;
-    rd = (rtems_rtl_unresolved_reloc_data_t*) data;
+    rtems_rtl_unresolved_reloc_data* rd;
+    rd = (rtems_rtl_unresolved_reloc_data*) data;
 
     if (rec->rec.reloc.name == rd->name)
     {
@@ -190,13 +190,13 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec_t* rec,
 }
 
 static bool
-rtems_rtl_unresolved_resolve_iterator (rtems_rtl_unresolv_rec_t* rec,
-                                       void*                     data)
+rtems_rtl_unresolved_resolve_iterator (rtems_rtl_unresolv_rec* rec,
+                                       void*                   data)
 {
   if (rec->type == rtems_rtl_unresolved_name)
   {
-    rtems_rtl_unresolved_reloc_data_t* rd;
-    rd = (rtems_rtl_unresolved_reloc_data_t*) data;
+    rtems_rtl_unresolved_reloc_data* rd;
+    rd = (rtems_rtl_unresolved_reloc_data*) data;
 
     ++rd->name;
 
@@ -223,25 +223,25 @@ rtems_rtl_unresolved_resolve_iterator (rtems_rtl_unresolv_rec_t* rec,
 }
 
 static void
-rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block_t* block,
-                                  rtems_rtl_unresolv_rec_t* rec,
-                                  size_t count,
-                                  size_t recs_per_block)
+rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block* block,
+                                  rtems_rtl_unresolv_rec*   rec,
+                                  size_t                    count,
+                                  size_t                    recs_per_block)
 {
   size_t index = rtems_rtl_unresolved_rec_index (block, rec);
   size_t bytes =
-    (block->recs - index - count) * sizeof (rtems_rtl_unresolv_rec_t);
+    (block->recs - index - count) * sizeof (rtems_rtl_unresolv_rec);
   if (bytes)
     memmove (rec, rec + count, bytes);
   --block->recs;
-  bytes = count * sizeof (rtems_rtl_unresolv_rec_t);
+  bytes = count * sizeof (rtems_rtl_unresolv_rec);
   memset (&block->rec + block->recs, 0, bytes);
 }
 
 static void
 rtems_rtl_unresolved_compact (void)
 {
-  rtems_rtl_unresolved_t* unresolved = rtems_rtl_unresolved ();
+  rtems_rtl_unresolved* unresolved = rtems_rtl_unresolved_unprotected ();
   if (unresolved)
   {
     /*
@@ -251,9 +251,9 @@ rtems_rtl_unresolved_compact (void)
     rtems_chain_node* node = rtems_chain_last (&unresolved->blocks);
     while (!rtems_chain_is_head (&unresolved->blocks, node))
     {
-      rtems_chain_node* prev = rtems_chain_previous (node);
-      rtems_rtl_unresolv_block_t* block = (rtems_rtl_unresolv_block_t*) node;
-      rtems_rtl_unresolv_rec_t* rec = rtems_rtl_unresolved_rec_first (block);
+      rtems_chain_node*         prev = rtems_chain_previous (node);
+      rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
+      rtems_rtl_unresolv_rec*   rec = rtems_rtl_unresolved_rec_first (block);
 
       while (!rtems_rtl_unresolved_rec_is_last (block, rec))
       {
@@ -295,8 +295,8 @@ rtems_rtl_unresolved_compact (void)
 }
 
 bool
-rtems_rtl_unresolved_table_open (rtems_rtl_unresolved_t* unresolved,
-                                 size_t                  block_recs)
+rtems_rtl_unresolved_table_open (rtems_rtl_unresolved* unresolved,
+                                 size_t                block_recs)
 {
   unresolved->marker = 0xdeadf00d;
   unresolved->block_recs = block_recs;
@@ -305,7 +305,7 @@ rtems_rtl_unresolved_table_open (rtems_rtl_unresolved_t* unresolved,
 }
 
 void
-rtems_rtl_unresolved_table_close (rtems_rtl_unresolved_t* unresolved)
+rtems_rtl_unresolved_table_close (rtems_rtl_unresolved* unresolved)
 {
   rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
   while (!rtems_chain_is_tail (&unresolved->blocks, node))
@@ -317,17 +317,17 @@ rtems_rtl_unresolved_table_close (rtems_rtl_unresolved_t* unresolved)
 }
 
 bool
-rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator_t iterator,
-                               void*                           data)
+rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator iterator,
+                               void*                         data)
 {
-  rtems_rtl_unresolved_t* unresolved = rtems_rtl_unresolved ();
+  rtems_rtl_unresolved* unresolved = rtems_rtl_unresolved_unprotected ();
   if (unresolved)
   {
     rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
     while (!rtems_chain_is_tail (&unresolved->blocks, node))
     {
-      rtems_rtl_unresolv_block_t* block = (rtems_rtl_unresolv_block_t*) node;
-      rtems_rtl_unresolv_rec_t* rec = rtems_rtl_unresolved_rec_first (block);
+      rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
+      rtems_rtl_unresolv_rec*   rec = rtems_rtl_unresolved_rec_first (block);
 
       while (!rtems_rtl_unresolved_rec_is_last (block, rec))
       {
@@ -343,24 +343,24 @@ rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator_t iterator,
 }
 
 bool
-rtems_rtl_unresolved_add (rtems_rtl_obj_t*        obj,
-                          const uint16_t          flags,
-                          const char*             name,
-                          const uint16_t          sect,
-                          const rtems_rtl_word_t* rel)
+rtems_rtl_unresolved_add (rtems_rtl_obj*        obj,
+                          const uint16_t        flags,
+                          const char*           name,
+                          const uint16_t        sect,
+                          const rtems_rtl_word* rel)
 {
-  rtems_rtl_unresolved_t* unresolved;
-  rtems_chain_node* node;
-  rtems_rtl_unresolv_block_t* block;
-  rtems_rtl_unresolv_rec_t* rec;
-  int name_index;
-  size_t name_recs;
+  rtems_rtl_unresolved*     unresolved;
+  rtems_chain_node*         node;
+  rtems_rtl_unresolv_block* block;
+  rtems_rtl_unresolv_rec*   rec;
+  int                       name_index;
+  size_t                    name_recs;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
     printf ("rtl: unresolv: add: %s(s:%d) -> %s\n",
             rtems_rtl_obj_oname (obj), sect, name);
 
-  unresolved = rtems_rtl_unresolved ();
+  unresolved = rtems_rtl_unresolved_unprotected ();
   if (!unresolved)
     return false;
 
@@ -371,7 +371,7 @@ rtems_rtl_unresolved_add (rtems_rtl_obj_t*        obj,
   block = NULL;
   while (!rtems_chain_is_tail (&unresolved->blocks, node))
   {
-    block = (rtems_rtl_unresolv_block_t*) node;
+    block = (rtems_rtl_unresolv_block*) node;
     if (block->recs < unresolved->block_recs)
       break;
     block = NULL;
@@ -397,7 +397,7 @@ rtems_rtl_unresolved_add (rtems_rtl_obj_t*        obj,
    */
   if (name_index < 0)
   {
-    rtems_rtl_unresolv_block_t* name_block = block;
+    rtems_rtl_unresolv_block* name_block = block;
 
     /*
      * Is there enough room to fit the name ? It not add a new block.
@@ -447,7 +447,7 @@ rtems_rtl_unresolved_add (rtems_rtl_obj_t*        obj,
 void
 rtems_rtl_unresolved_resolve (void)
 {
-  rtems_rtl_unresolved_reloc_data_t rd;
+  rtems_rtl_unresolved_reloc_data rd;
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
     printf ("rtl: unresolv: global resolve\n");
   rd.name = 0;
@@ -458,15 +458,14 @@ rtems_rtl_unresolved_resolve (void)
 }
 
 bool
-rtems_rtl_unresolved_remove (rtems_rtl_obj_t*        obj,
-                             const char*             name,
-                             const uint16_t          sect,
-                             const rtems_rtl_word_t* rel)
+rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
+                             const char*           name,
+                             const uint16_t        sect,
+                             const rtems_rtl_word* rel)
 {
-  rtems_rtl_unresolved_t* unresolved;
-  unresolved = rtems_rtl_unresolved ();
+  rtems_rtl_unresolved* unresolved;
+  unresolved = rtems_rtl_unresolved_unprotected ();
   if (!unresolved)
     return false;
   return false;
 }
-

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012-2014 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2014, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -32,7 +32,7 @@
  * The single symbol forced into the global symbol table that is used to load a
  * symbol table from an object file.
  */
-static rtems_rtl_obj_sym_t global_sym_add =
+static rtems_rtl_obj_sym global_sym_add =
 {
   .name  = "rtems_rtl_base_sym_global_add",
   .value = (void*) rtems_rtl_base_sym_global_add
@@ -49,8 +49,8 @@ rtems_rtl_symbol_hash (const char *s)
 }
 
 static void
-rtems_rtl_symbol_global_insert (rtems_rtl_symbols_t* symbols,
-                                rtems_rtl_obj_sym_t* symbol)
+rtems_rtl_symbol_global_insert (rtems_rtl_symbols* symbols,
+                                rtems_rtl_obj_sym* symbol)
 {
   uint_fast32_t hash = rtems_rtl_symbol_hash (symbol->name);
   rtems_chain_append (&symbols->buckets[hash % symbols->nbuckets],
@@ -58,8 +58,8 @@ rtems_rtl_symbol_global_insert (rtems_rtl_symbols_t* symbols,
 }
 
 bool
-rtems_rtl_symbol_table_open (rtems_rtl_symbols_t* symbols,
-                             size_t               buckets)
+rtems_rtl_symbol_table_open (rtems_rtl_symbols* symbols,
+                             size_t             buckets)
 {
   symbols->buckets = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL,
                                           buckets * sizeof (rtems_chain_control),
@@ -77,21 +77,21 @@ rtems_rtl_symbol_table_open (rtems_rtl_symbols_t* symbols,
 }
 
 void
-rtems_rtl_symbol_table_close (rtems_rtl_symbols_t* symbols)
+rtems_rtl_symbol_table_close (rtems_rtl_symbols* symbols)
 {
   rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, symbols->buckets);
 }
 
 bool
-rtems_rtl_symbol_global_add (rtems_rtl_obj_t*     obj,
+rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
                              const unsigned char* esyms,
                              unsigned int         size)
 {
-  rtems_rtl_symbols_t* symbols;
-  rtems_rtl_obj_sym_t* sym;
-  size_t               count;
-  size_t               s;
-  uint32_t             marker;
+  rtems_rtl_symbols* symbols;
+  rtems_rtl_obj_sym* sym;
+  size_t             count;
+  size_t             s;
+  uint32_t           marker;
 
   count = 0;
   s = 0;
@@ -127,7 +127,7 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj_t*     obj,
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_GLOBAL_SYM))
     printf ("rtl: global symbol add: %zi\n", count);
 
-  obj->global_size = count * sizeof (rtems_rtl_obj_sym_t);
+  obj->global_size = count * sizeof (rtems_rtl_obj_sym);
   obj->global_table = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL,
                                            obj->global_size, true);
   if (!obj->global_table)
@@ -172,10 +172,10 @@ rtems_rtl_symbol_global_add (rtems_rtl_obj_t*     obj,
   return true;
 }
 
-rtems_rtl_obj_sym_t*
+rtems_rtl_obj_sym*
 rtems_rtl_symbol_global_find (const char* name)
 {
-  rtems_rtl_symbols_t* symbols;
+  rtems_rtl_symbols*   symbols;
   uint_fast32_t        hash;
   rtems_chain_control* bucket;
   rtems_chain_node*    node;
@@ -188,7 +188,7 @@ rtems_rtl_symbol_global_find (const char* name)
 
   while (!rtems_chain_is_tail (bucket, node))
   {
-    rtems_rtl_obj_sym_t* sym = (rtems_rtl_obj_sym_t*) node;
+    rtems_rtl_obj_sym* sym = (rtems_rtl_obj_sym*) node;
     /*
      * Use the hash. I could add this to the symbol but it uses more memory.
      */
@@ -200,11 +200,11 @@ rtems_rtl_symbol_global_find (const char* name)
   return NULL;
 }
 
-rtems_rtl_obj_sym_t*
-rtems_rtl_symbol_obj_find (rtems_rtl_obj_t* obj, const char* name)
+rtems_rtl_obj_sym*
+rtems_rtl_symbol_obj_find (rtems_rtl_obj* obj, const char* name)
 {
-  rtems_rtl_obj_sym_t* sym;
-  size_t               s;
+  rtems_rtl_obj_sym* sym;
+  size_t             s;
   /*
    * Check the object file's symbols first. If not found search the
    * global symbol table.
@@ -225,11 +225,11 @@ rtems_rtl_symbol_obj_find (rtems_rtl_obj_t* obj, const char* name)
 }
 
 void
-rtems_rtl_symbol_obj_add (rtems_rtl_obj_t* obj)
+rtems_rtl_symbol_obj_add (rtems_rtl_obj* obj)
 {
-  rtems_rtl_symbols_t* symbols;
-  rtems_rtl_obj_sym_t* sym;
-  size_t               s;
+  rtems_rtl_symbols* symbols;
+  rtems_rtl_obj_sym* sym;
+  size_t             s;
 
   symbols = rtems_rtl_global_symbols ();
 
@@ -238,7 +238,7 @@ rtems_rtl_symbol_obj_add (rtems_rtl_obj_t* obj)
 }
 
 void
-rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj_t* obj)
+rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj* obj)
 {
   if (obj->local_table)
   {
@@ -250,13 +250,13 @@ rtems_rtl_symbol_obj_erase_local (rtems_rtl_obj_t* obj)
 }
 
 void
-rtems_rtl_symbol_obj_erase (rtems_rtl_obj_t* obj)
+rtems_rtl_symbol_obj_erase (rtems_rtl_obj* obj)
 {
   rtems_rtl_symbol_obj_erase_local (obj);
   if (obj->global_table)
   {
-    rtems_rtl_obj_sym_t* sym;
-    size_t               s;
+    rtems_rtl_obj_sym* sym;
+    size_t             s;
     for (s = 0, sym = obj->global_table; s < obj->global_syms; ++s, ++sym)
         if (!rtems_chain_is_node_off_chain (&sym->node))
           rtems_chain_extract (&sym->node);

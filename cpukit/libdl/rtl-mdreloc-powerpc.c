@@ -24,8 +24,8 @@
 #define l(x) ((u_int32_t)(x) & 0xffff)
 
 uint32_t
-rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
-                             const Elf_Shdr*        shdr)
+rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
+                             const Elf_Shdr*      shdr)
 {
   return 0;
 }
@@ -37,12 +37,12 @@ rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 }
 
 bool
-rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
-                             const Elf_Rela*             rela,
-                             const rtems_rtl_obj_sect_t* sect,
-                             const char*                 symname,
-                             const Elf_Byte              syminfo,
-                             const Elf_Word              symvalue)
+rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+                             const Elf_Rela*           rela,
+                             const rtems_rtl_obj_sect* sect,
+                             const char*               symname,
+                             const Elf_Byte            syminfo,
+                             const Elf_Word            symvalue)
 {
   Elf_Addr* where;
   Elf_Word tmp;
@@ -198,33 +198,33 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
 }
 
 bool
-rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
-                            const Elf_Rel*              rel,
-                            const rtems_rtl_obj_sect_t* sect,
-                            const char*                 symname,
-                            const Elf_Byte              syminfo,
-                            const Elf_Word              symvalue)
+rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+                            const Elf_Rel*            rel,
+                            const rtems_rtl_obj_sect* sect,
+                            const char*               symname,
+                            const Elf_Byte            syminfo,
+                            const Elf_Word            symvalue)
 {
   printf ("rtl: rel type record not supported; please report\n");
   return false;
 }
 
 bool
-rtems_rtl_elf_unwind_parse (const rtems_rtl_obj_t* obj,
-                            const char*            name,
-                            uint32_t               flags)
+rtems_rtl_elf_unwind_parse (const rtems_rtl_obj* obj,
+                            const char*          name,
+                            uint32_t             flags)
 {
   return rtems_rtl_elf_unwind_dw2_parse (obj, name, flags);
 }
 
 bool
-rtems_rtl_elf_unwind_register (rtems_rtl_obj_t* obj)
+rtems_rtl_elf_unwind_register (rtems_rtl_obj* obj)
 {
   return rtems_rtl_elf_unwind_dw2_register (obj);
 }
 
 bool
-rtems_rtl_elf_unwind_deregister (rtems_rtl_obj_t* obj)
+rtems_rtl_elf_unwind_deregister (rtems_rtl_obj* obj)
 {
   return rtems_rtl_elf_unwind_dw2_deregister (obj);
 }

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -67,8 +67,8 @@ extern "C" {
  * @retval 0 Unknown or unsupported flags.
  * @retval uint32_t RTL object file flags.
  */
-uint32_t rtems_rtl_elf_section_flags (const rtems_rtl_obj_t* obj,
-                                      const Elf_Shdr*        shdr);
+uint32_t rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
+                                      const Elf_Shdr*      shdr);
 
 /**
  * Architecture specific handler to check is a relocation record's type is
@@ -94,12 +94,12 @@ bool rtems_rtl_elf_rel_resolve_sym (Elf_Word type);
  * @retval bool The relocation has been applied.
  * @retval bool The relocation could not be applied.
  */
-bool rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
-                                 const Elf_Rel*              rel,
-                                 const rtems_rtl_obj_sect_t* sect,
-                                 const char*                 symname,
-                                 const Elf_Byte              syminfo,
-                                 const Elf_Word              symvalue);
+bool rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+                                 const Elf_Rel*            rel,
+                                 const rtems_rtl_obj_sect* sect,
+                                 const char*               symname,
+                                 const Elf_Byte            syminfo,
+                                 const Elf_Word            symvalue);
 
 /**
  * Architecture specific relocation handler compiled in for a specific
@@ -115,12 +115,12 @@ bool rtems_rtl_elf_relocate_rel (const rtems_rtl_obj_t*      obj,
  * @retval bool The relocation has been applied.
  * @retval bool The relocation could not be applied.
  */
-bool rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
-                                  const Elf_Rela*             rela,
-                                  const rtems_rtl_obj_sect_t* sect,
-                                  const char*                 symname,
-                                  const Elf_Byte              syminfo,
-                                  const Elf_Word              symvalue);
+bool rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+                                  const Elf_Rela*           rela,
+                                  const rtems_rtl_obj_sect* sect,
+                                  const char*               symname,
+                                  const Elf_Byte            syminfo,
+                                  const Elf_Word            symvalue);
 
 /**
  * Find the symbol. The symbol is passed as an ELF type symbol with the name
@@ -139,10 +139,10 @@ bool rtems_rtl_elf_relocate_rela (const rtems_rtl_obj_t*      obj,
  * @retval true The symbol resolved.
  * @retval false The symbol could not be result. The RTL error is set.
  */
-bool rtems_rtl_elf_find_symbol (rtems_rtl_obj_t* obj,
-                                const Elf_Sym*   sym,
-                                const char*      symname,
-                                Elf_Word*        value);
+bool rtems_rtl_elf_find_symbol (rtems_rtl_obj* obj,
+                                const Elf_Sym* sym,
+                                const char*    symname,
+                                Elf_Word*      value);
 
 /**
  * The ELF format check handler.
@@ -150,7 +150,7 @@ bool rtems_rtl_elf_find_symbol (rtems_rtl_obj_t* obj,
  * @param obj The object being checked.
  * @param fd The file descriptor.
  */
-bool rtems_rtl_elf_file_check (rtems_rtl_obj_t* obj, int fd);
+bool rtems_rtl_elf_file_check (rtems_rtl_obj* obj, int fd);
 
 /**
  * The ELF format load handler.
@@ -158,21 +158,21 @@ bool rtems_rtl_elf_file_check (rtems_rtl_obj_t* obj, int fd);
  * @param obj The object to load.
  * @param fd The file descriptor.
  */
-bool rtems_rtl_elf_file_load (rtems_rtl_obj_t* obj, int fd);
+bool rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd);
 
 /**
  * The ELF format unload handler.
  *
  * @param obj The object to unload.
  */
-bool rtems_rtl_elf_file_unload (rtems_rtl_obj_t* obj);
+bool rtems_rtl_elf_file_unload (rtems_rtl_obj* obj);
 
 /**
  * The ELF format signature handler.
  *
- * @return rtems_rtl_loader_format_t* The format's signature.
+ * @return rtems_rtl_loader_format* The format's signature.
  */
-rtems_rtl_loader_format_t* rtems_rtl_elf_file_sig (void);
+rtems_rtl_loader_format* rtems_rtl_elf_file_sig (void);
 
 #ifdef __cplusplus
 }

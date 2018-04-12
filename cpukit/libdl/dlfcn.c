@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -19,10 +19,10 @@
 #include <dlfcn.h>
 #include <rtems/rtl/rtl.h>
 
-static rtems_rtl_obj_t*
+static rtems_rtl_obj*
 dl_get_obj_from_handle (void* handle)
 {
-  rtems_rtl_obj_t* obj;
+  rtems_rtl_obj* obj;
 
   /*
    * Handle the special cases provided in NetBSD and Sun documentation.
@@ -43,7 +43,7 @@ dl_get_obj_from_handle (void* handle)
 void*
 dlopen (const char* name, int mode)
 {
-  rtems_rtl_obj_t* obj = NULL;
+  rtems_rtl_obj* obj = NULL;
 
   if (!rtems_rtl_lock ())
     return NULL;
@@ -67,8 +67,8 @@ dlopen (const char* name, int mode)
 int
 dlclose (void* handle)
 {
-  rtems_rtl_obj_t* obj;
-  int              r;
+  rtems_rtl_obj* obj;
+  int            r;
 
   if (!rtems_rtl_lock ())
     return -1;
@@ -96,9 +96,9 @@ dlclose (void* handle)
 void*
 dlsym (void* handle, const char *symbol)
 {
-  rtems_rtl_obj_t*     obj;
-  rtems_rtl_obj_sym_t* sym = NULL;
-  void*                symval = NULL;
+  rtems_rtl_obj*     obj;
+  rtems_rtl_obj_sym* sym = NULL;
+  void*              symval = NULL;
 
   if (!rtems_rtl_lock ())
     return NULL;
@@ -136,8 +136,8 @@ dlerror (void)
 int
 dlinfo (void* handle, int request, void* p)
 {
-  rtems_rtl_obj_t* obj;
-  int              rc = -1;
+  rtems_rtl_obj* obj;
+  int            rc = -1;
 
   if (!rtems_rtl_lock () || !p)
     return -1;

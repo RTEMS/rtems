@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -39,7 +39,7 @@ static const char* tag_labels[6] =
 #endif
 
 void
-rtems_rtl_alloc_initialise (rtems_rtl_alloc_data_t* data)
+rtems_rtl_alloc_initialise (rtems_rtl_alloc_data* data)
 {
   int c;
   data->allocator = rtems_rtl_alloc_heap;
@@ -48,10 +48,10 @@ rtems_rtl_alloc_initialise (rtems_rtl_alloc_data_t* data)
 }
 
 void*
-rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero)
+rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero)
 {
-  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
-  void*             address = NULL;
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+  void*           address = NULL;
 
   /*
    * Obtain memory from the allocator. The address field is set by the
@@ -76,9 +76,9 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero)
 }
 
 void
-rtems_rtl_alloc_del (rtems_rtl_alloc_tag_t tag, void* address)
+rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address)
 {
-  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
     printf ("rtl: alloc: del: %s addr=%p\n",
@@ -90,22 +90,22 @@ rtems_rtl_alloc_del (rtems_rtl_alloc_tag_t tag, void* address)
   rtems_rtl_unlock ();
 }
 
-rtems_rtl_allocator_t
-rtems_rtl_alloc_hook (rtems_rtl_allocator_t handler)
+rtems_rtl_allocator
+rtems_rtl_alloc_hook (rtems_rtl_allocator handler)
 {
-  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
-  rtems_rtl_allocator_t previous = rtl->allocator.allocator;
+  rtems_rtl_data*     rtl = rtems_rtl_lock ();
+  rtems_rtl_allocator previous = rtl->allocator.allocator;
   rtl->allocator.allocator = handler;
   rtems_rtl_unlock ();
   return previous;
 }
 
 void
-rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag_t tag,
-                              rtems_rtl_ptr_t*      handle,
-                              size_t                size)
+rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag tag,
+                              rtems_rtl_ptr*      handle,
+                              size_t              size)
 {
-  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
   {
@@ -118,7 +118,7 @@ rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag_t tag,
 
   if (rtl)
   {
-    rtems_rtl_alloc_data_t* allocator = &rtl->allocator;
+    rtems_rtl_alloc_data* allocator = &rtl->allocator;
     handle->pointer = rtems_rtl_alloc_new (tag, size, false);
     if (!rtems_rtl_ptr_null (handle))
       rtems_chain_append_unprotected (&allocator->indirects[tag],
@@ -129,10 +129,10 @@ rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag_t tag,
 }
 
 void
-rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag_t tag,
-                              rtems_rtl_ptr_t*      handle)
+rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag tag,
+                              rtems_rtl_ptr*      handle)
 {
-  rtems_rtl_data_t* rtl = rtems_rtl_lock ();
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
   {

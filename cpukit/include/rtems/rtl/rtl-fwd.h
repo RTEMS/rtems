@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -23,8 +23,8 @@ extern "C" {
 /**
  * The forward declaration of the obj structure.
  */
-struct rtems_rtl_data_s;
-typedef struct rtems_rtl_data_s rtems_rtl_data_t;
+struct rtems_rtl_data;
+typedef struct rtems_rtl_data rtems_rtl_data;
 
 #ifdef __cplusplus
 }

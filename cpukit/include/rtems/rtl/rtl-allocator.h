@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -30,7 +30,7 @@ extern "C" {
  * @note It is best to use the object tag for general memory allocation and to
  *       leave the tags with specific access properties to the module data
  */
-enum rtems_rtl_alloc_tags_e {
+enum rtems_rtl_alloc_tags {
   RTEMS_RTL_ALLOC_OBJECT,     /**< A generic memory object. */
   RTEMS_RTL_ALLOC_SYMBOL,     /**< Memory used for symbols. */
   RTEMS_RTL_ALLOC_EXTERNAL,   /**< Memory used for external symbols. */
@@ -42,7 +42,7 @@ enum rtems_rtl_alloc_tags_e {
 /**
  * The allocator tag type.
  */
-typedef enum rtems_rtl_alloc_tags_e rtems_rtl_alloc_tag_t;
+typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
 
 /**
  * The number of tags.
@@ -63,29 +63,29 @@ typedef enum rtems_rtl_alloc_tags_e rtems_rtl_alloc_tag_t;
  * @param size The size of the allocation if an allocation request and
  *             not used if deleting or freeing a previous allocation.
  */
-typedef void (*rtems_rtl_allocator_t)(bool                  allocate,
-                                      rtems_rtl_alloc_tag_t tag,
-                                      void**                address,
-                                      size_t                size);
+typedef void (*rtems_rtl_allocator)(bool                allocate,
+                                    rtems_rtl_alloc_tag tag,
+                                    void**              address,
+                                    size_t              size);
 
 /**
  * The allocator data.
  */
-struct rtems_rtl_alloc_data_s {
+struct rtems_rtl_alloc_data {
   /**< The memory allocator handler. */
-  rtems_rtl_allocator_t allocator;
+  rtems_rtl_allocator allocator;
   /**< The indirect pointer chains. */
   rtems_chain_control indirects[RTEMS_RTL_ALLOC_TAGS];
 };
 
-typedef struct rtems_rtl_alloc_data_s rtems_rtl_alloc_data_t;
+typedef struct rtems_rtl_alloc_data rtems_rtl_alloc_data;
 
 /**
  * Initialise the allocate data.
  *
  * @param data The data to initialise.
  */
-void rtems_rtl_alloc_initialise (rtems_rtl_alloc_data_t* data);
+void rtems_rtl_alloc_initialise (rtems_rtl_alloc_data* data);
 
 /**
  * The Runtime Loader allocator new allocates new memory and optionally clear
@@ -96,7 +96,7 @@ void rtems_rtl_alloc_initialise (rtems_rtl_alloc_data_t* data);
  * @param zero If true the memory is cleared.
  * @return void* The memory address or NULL is not memory available.
  */
-void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero);
+void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
 
 /**
  * The Runtime Loader allocator delete deletes allocated memory.
@@ -104,7 +104,7 @@ void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag_t tag, size_t size, bool zero);
  * @param tag The type of allocation request.
  * @param address The memory address to delete. A NULL is ignored.
  */
-void rtems_rtl_alloc_del (rtems_rtl_alloc_tag_t tag, void* address);
+void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
 
 /**
  * Hook the Runtime Loader allocatior. A handler can call the previous handler
@@ -113,9 +113,9 @@ void rtems_rtl_alloc_del (rtems_rtl_alloc_tag_t tag, void* address);
  * returned.
  *
  * @param handler The handler to use as the allocator.
- * @return rtems_rtl_alloc_handler_t The previous handler.
+ * @return rtems_rtl_alloc_handler The previous handler.
  */
-rtems_rtl_allocator_t rtems_rtl_alloc_hook (rtems_rtl_allocator_t handler);
+rtems_rtl_allocator rtems_rtl_alloc_hook (rtems_rtl_allocator handler);
 
 /**
  * Allocate memory to an indirect handle.
@@ -124,9 +124,9 @@ rtems_rtl_allocator_t rtems_rtl_alloc_hook (rtems_rtl_allocator_t handler);
  * @param handle The handle to allocate the memory to.
  * @param size The size of the allocation.
  */
-void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag_t tag,
-                                   rtems_rtl_ptr_t*      handle,
-                                   size_t                size);
+void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag tag,
+                                   rtems_rtl_ptr*      handle,
+                                   size_t              size);
 
 /**
  * Free memory from an indirect handle.
@@ -134,8 +134,8 @@ void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag_t tag,
  * @param tag The type of allocation request.
  * @param handle The handle to free the memory from.
  */
-void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag_t tag,
-                                   rtems_rtl_ptr_t*      handle);
+void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag tag,
+                                   rtems_rtl_ptr*      handle);
 
 /**
  * Allocate the memory for a module given the size of the text, const, data and

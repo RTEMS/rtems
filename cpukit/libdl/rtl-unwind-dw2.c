@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012-2016 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012-2016, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -35,9 +35,9 @@ void __register_frame (void *begin);
 void __deregister_frame (void *begin);
 
 bool
-rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj_t* obj,
-                                const char*            name,
-                                uint32_t               flags)
+rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj* obj,
+                                const char*          name,
+                                uint32_t             flags)
 {
   return
     ((flags & RTEMS_RTL_OBJ_SECT_CONST) != 0) &&
@@ -46,9 +46,9 @@ rtems_rtl_elf_unwind_dw2_parse (const rtems_rtl_obj_t* obj,
 }
 
 bool
-rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj_t* obj)
+rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj* obj)
 {
-  rtems_rtl_obj_sect_t* sect = rtems_rtl_obj_find_section (obj, ".eh_frame");
+  rtems_rtl_obj_sect* sect = rtems_rtl_obj_find_section (obj, ".eh_frame");
 
   if (sect != NULL && sect->size > 0 && sect->base != NULL)
   {
@@ -58,9 +58,9 @@ rtems_rtl_elf_unwind_dw2_register (const rtems_rtl_obj_t* obj)
   return true;
 }
 
-bool rtems_rtl_elf_unwind_dw2_deregister (const rtems_rtl_obj_t* obj)
+bool rtems_rtl_elf_unwind_dw2_deregister (const rtems_rtl_obj* obj)
 {
-  rtems_rtl_obj_sect_t* sect = rtems_rtl_obj_find_section (obj, ".eh_frame");
+  rtems_rtl_obj_sect* sect = rtems_rtl_obj_find_section (obj, ".eh_frame");
 
   if (sect != NULL && sect->size > 0 && sect->base != NULL)
   {

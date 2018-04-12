@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012, 2018 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -31,7 +31,7 @@
 #include <rtems/rtl/rtl-trace.h>
 
 bool
-rtems_rtl_obj_cache_open (rtems_rtl_obj_cache_t* cache, size_t size)
+rtems_rtl_obj_cache_open (rtems_rtl_obj_cache* cache, size_t size)
 {
   cache->fd        = -1;
   cache->file_size = 0;
@@ -48,7 +48,7 @@ rtems_rtl_obj_cache_open (rtems_rtl_obj_cache_t* cache, size_t size)
 }
 
 void
-rtems_rtl_obj_cache_close (rtems_rtl_obj_cache_t* cache)
+rtems_rtl_obj_cache_close (rtems_rtl_obj_cache* cache)
 {
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
     printf ("rtl: cache: %2d: close\n", cache->fd);
@@ -60,7 +60,7 @@ rtems_rtl_obj_cache_close (rtems_rtl_obj_cache_t* cache)
 }
 
 void
-rtems_rtl_obj_cache_flush (rtems_rtl_obj_cache_t* cache)
+rtems_rtl_obj_cache_flush (rtems_rtl_obj_cache* cache)
 {
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_CACHE))
     printf ("rtl: cache: %2d: flush\n", cache->fd);
@@ -71,11 +71,11 @@ rtems_rtl_obj_cache_flush (rtems_rtl_obj_cache_t* cache)
 }
 
 bool
-rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
-                          int                    fd,
-                          off_t                  offset,
-                          void**                 buffer,
-                          size_t*                length)
+rtems_rtl_obj_cache_read (rtems_rtl_obj_cache* cache,
+                          int                  fd,
+                          off_t                offset,
+                          void**               buffer,
+                          size_t*              length)
 {
   struct stat sb;
 
@@ -238,11 +238,11 @@ rtems_rtl_obj_cache_read (rtems_rtl_obj_cache_t* cache,
 }
 
 bool
-rtems_rtl_obj_cache_read_byval (rtems_rtl_obj_cache_t* cache,
-                                int                    fd,
-                                off_t                  offset,
-                                void*                  buffer,
-                                size_t                 length)
+rtems_rtl_obj_cache_read_byval (rtems_rtl_obj_cache* cache,
+                                int                  fd,
+                                off_t                offset,
+                                void*                buffer,
+                                size_t               length)
 {
   void*  cbuffer = 0;
   size_t len = length;
