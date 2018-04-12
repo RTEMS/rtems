@@ -246,11 +246,7 @@ rtems_rtl_rap_relocate (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     targetsect = rtems_rtl_obj_find_section (obj, rap_sections[section].name);
 
     if (!targetsect)
-    {
-      rtems_rtl_set_error (EINVAL, "no target section found");
-      free (symname_buffer);
-      return false;
-    }
+      continue;
 
     if (!rtems_rtl_rap_read_uint32 (rap->decomp, &header))
     {
@@ -592,7 +588,10 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
                  (rap->symbols * sizeof (rtems_rtl_obj_sym_t)));
 
   if (!rtems_rtl_obj_comp_read (rap->decomp, rap->strtab, rap->strtab_size))
+  {
+    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
     return false;
+  }
 
   for (sym = 0, gsym = obj->global_table; sym < rap->symbols; ++sym)
   {
@@ -605,7 +604,7 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
         !rtems_rtl_rap_read_uint32 (rap->decomp, &name) ||
         !rtems_rtl_rap_read_uint32 (rap->decomp, &value))
     {
-      free (obj->global_table);
+      rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
       obj->global_table = NULL;
       obj->global_syms = 0;
       obj->global_size = 0;
@@ -629,7 +628,7 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     {
       rtems_rtl_set_error (EINVAL,
                            "duplicate global symbol: %s", rap->strtab + name);
-      free (obj->global_table);
+      rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
       obj->global_table = NULL;
       obj->global_syms = 0;
       obj->global_size = 0;
@@ -639,7 +638,7 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
     symsect = rtems_rtl_obj_find_section_by_index (obj, data >> 16);
     if (!symsect)
     {
-      free (obj->global_table);
+      rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, obj->global_table);
       obj->global_table = NULL;
       obj->global_syms = 0;
       obj->global_size = 0;
@@ -661,6 +660,9 @@ rtems_rtl_rap_load_symbols (rtems_rtl_rap_t* rap, rtems_rtl_obj_t* obj)
 
     ++gsym;
   }
+
+  if (obj->global_syms)
+    rtems_rtl_symbol_obj_add (obj);
 
   return true;
 }
