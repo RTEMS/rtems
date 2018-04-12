@@ -364,7 +364,7 @@ dl02-o2.o: dl02/dl-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl02.tar: dl02-o1.o dl02-o2.o
 	@rm -f $@
-	$(AM_V_GEN)$(PAX) -w -f $@ $<
+	$(AM_V_GEN)$(PAX) -w -f $@ $+
 dl02-tar.c: dl02.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 dl02-tar.h: dl02.tar

@@ -26,7 +26,7 @@ int dl_load_test(void)
   const char* err;
 
   rtems_rtl_trace_set_mask(RTEMS_RTL_TRACE_ALL);
-  handle = dlopen("/dl-o4.o", RTLD_GLOBAL | RTLD_NOW);
+  handle = dlopen("/dl04-o4.o", RTLD_GLOBAL | RTLD_NOW);
   err = dlerror();
   if (err != NULL)
     printf("dlopen: %s\n", err);

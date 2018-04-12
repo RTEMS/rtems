@@ -36,7 +36,7 @@ int dl_load_test(void)
 
   rtems_rtl_trace_set_mask(RTEMS_RTL_TRACE_ALL);
 
-  handle = dlopen("/dl-o5.o", RTLD_GLOBAL | RTLD_NOW);
+  handle = dlopen("/dl05-o5.o", RTLD_GLOBAL | RTLD_NOW);
   if (handle == NULL)
   {
     err = dlerror();

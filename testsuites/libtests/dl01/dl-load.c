@@ -28,9 +28,9 @@ int dl_load_test(void)
   int    unresolved;
   char*  message = "loaded";
 
-  printf("load: /dl-o1.o\n");
+  printf("load: /dl01-o1.o\n");
 
-  handle = dlopen ("/dl-o1.o", RTLD_NOW | RTLD_GLOBAL);
+  handle = dlopen ("/dl01-o1.o", RTLD_NOW | RTLD_GLOBAL);
   if (!handle)
   {
     printf("dlopen failed: %s\n", dlerror());

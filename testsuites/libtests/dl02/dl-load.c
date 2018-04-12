@@ -49,10 +49,10 @@ int dl_load_test(void)
   int    call_ret;
   int    ret;
 
-  o1 = dl_load_obj("/dl-o1.o");
+  o1 = dl_load_obj("/dl02-o1.o");
   if (!o1)
     return 1;
-  o2 = dl_load_obj("/dl-o2.o");
+  o2 = dl_load_obj("/dl02-o2.o");
   if (!o1)
     return 1;
 
