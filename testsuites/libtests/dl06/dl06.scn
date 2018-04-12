@@ -1,0 +1,24 @@
+*** BEGIN OF TEST libdl (RTL) 6 ***
+*** TEST VERSION: 5.0.0.af6168c6ef19b317c8724ca5950699414d15cf3c-modified
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING RTEMS_POSIX_API
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 4b3e0f8e3d6998b84a2503dd2e11578989b1672b, Newlib 3.0.0)
+
+load: /dl06.rap
+handle: 0x2041ee0 loaded
+Loaded module: argc:4 [/opt/work/chris/rtems/kernel/rtems.git/c/src/../../testsuites/libtests/dl06/dl06-o1.c]
+libm: lcong48
+libm: atan2
+libm: tan
+handle: 0x2041ee0 closed
+
+*** END OF TEST libdl (RTL) 6 ***
+
+
+*** FATAL ***
+fatal source: 5 (RTEMS_FATAL_SOURCE_EXIT)
+fatal code: 0 (0x00000000)
+RTEMS version: 5.0.0.af6168c6ef19b317c8724ca5950699414d15cf3c-modified
+RTEMS tools: 7.3.0 20180125 (RTEMS 5, RSB 4b3e0f8e3d6998b84a2503dd2e11578989b1672b, Newlib 3.0.0)
+executing thread ID: 0x08a010001
+executing thread name: UI1

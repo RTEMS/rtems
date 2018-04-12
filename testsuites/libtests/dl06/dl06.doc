@@ -1,0 +1,20 @@
+# Copyright (c) 2018 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl06
+
+directives:
+
+  n/a
+
+concepts:
+
++ Create a single RAP for file with 2 object files where one references
+  functions in libm that should never be part of the kernel base image.
++ Load the RAP image and executable the math library calls.

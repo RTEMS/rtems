@@ -323,8 +323,12 @@ lib_screens += dl01/dl01.scn
 lib_docs += dl01/dl01.doc
 dl01_SOURCES = dl01/init.c dl01/dl-load.c dl01-tar.c dl01-tar.h
 dl01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl01) $(support_includes)
-dl01-o1.o: dl01/dl-o1.c
-	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
+dl01/init.c: dl01-tar.o
+dl01.pre: $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
+	@rm -f dl01.pre
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl01-o1.o: dl01/dl-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl01.tar: dl01-o1.o
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ $<
@@ -333,15 +337,12 @@ dl01-tar.c: dl01.tar
 dl01-tar.h: dl01.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl01-tar.o: dl01-tar.c dl01-tar.h
-dl01/init.c: dl01-tar.o
-dl01.pre: $(dl01_OBJECTS) $(dl01_DEPENDENCIES)
-	@rm -f dl01.pre
-	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl01-sym.o: dl01.pre
 	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl01$(EXEEXT):  $(dl01_OBJECTS) $(dl01_DEPENDENCIES) dl01-sym.o
 	@rm -f $@
-	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl01.pre dl01-sym.o dl02-o1.o dl01.tar dl01-tar.h
 endif
 endif
@@ -353,10 +354,14 @@ lib_screens += dl02/dl02.scn
 lib_docs += dl02/dl02.doc
 dl02_SOURCES = dl02/init.c dl02/dl-load.c dl02-tar.c dl02-tar.h
 dl02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl02) $(support_includes)
-dl02-o1.o: dl02/dl-o1.c
-	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
-dl02-o2.o: dl02/dl-o2.c
-	$(AM_V_GEN)$(COMPILE) -c -o $@ $<
+dl02/init.c: dl02-tar.o
+dl02.pre: $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
+	@rm -f dl02.pre
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl02-o1.o: dl02/dl-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl02-o2.o: dl02/dl-o2.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl02.tar: dl02-o1.o dl02-o2.o
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ $<
@@ -365,15 +370,12 @@ dl02-tar.c: dl02.tar
 dl02-tar.h: dl02.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl02-tar.o: dl02-tar.c dl02-tar.h
-dl02/init.c: dl02-tar.o
-dl02.pre: $(dl02_OBJECTS) $(dl02_DEPENDENCIES)
-	@rm -f dl02.pre
-	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl02-sym.o: dl02.pre
 	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl02$(EXEEXT):  $(dl02_OBJECTS) $(dl02_DEPENDENCIES) dl02-sym.o
 	@rm -f $@
-	$(AM_V_CLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl02.pre dl02-sym.o dl02-o1.o dl02-o2.o dl02.tar dl02-tar.h
 endif
 endif
@@ -397,7 +399,11 @@ lib_docs += dl04/dl04.doc
 dl04_SOURCES = dl04/init.c dl04/dl-load.c dl04/dl-cpp.cpp dl04-tar.c \
 	dl04-tar.h
 dl04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl04) $(support_includes)
-dl04-o4.o: dl04/dl-o4.cpp
+dl04/init.c: dl04-tar.o
+dl04.pre: $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
+	@rm -f dl04.pre
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl04-o4.o: dl04/dl-o4.cpp Makefile
 	$(AM_V_GEN)$(CXXCOMPILE) -c -o $@ $<
 dl04.tar: dl04-o4.o
 	@rm -f $@
@@ -407,10 +413,7 @@ dl04-tar.c: dl04.tar
 dl04-tar.h: dl04.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl04-tar.o: dl04-tar.c dl04-tar.h
-dl04/init.c: dl04-tar.o
-dl04.pre: $(dl04_OBJECTS) $(dl04_DEPENDENCIES)
-	@rm -f dl04.pre
-	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl04-sym.o: dl04.pre
 	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
 dl04$(EXEEXT):  $(dl04_OBJECTS) $(dl04_DEPENDENCIES) dl04-sym.o
@@ -430,6 +433,10 @@ lib_docs += dl05/dl05.doc
 dl05_SOURCES = dl05/init.c dl05/dl-load.c dl05/dl-cpp.cpp dl05-tar.c \
 	dl05-tar.h
 dl05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl05) $(support_includes)
+dl05/init.c: dl05-tar.o
+dl05.pre: $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
+	@rm -f dl05.pre
+	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 dl05-o5.o: dl05/dl-o5.cpp
 	$(AM_V_CXX)$(CXXCOMPILE) -c -o $@ $<
 dl05.tar: dl05-o5.o
@@ -440,17 +447,62 @@ dl05-tar.c: dl05.tar
 dl05-tar.h: dl05.tar
 	$(AM_V_GEN)$(BIN2C) -H $< $@
 dl05-tar.o: dl05-tar.c dl05-tar.h
-dl05/init.c: dl05-tar.o
-dl05.pre: $(dl05_OBJECTS) $(dl05_DEPENDENCIES)
-	@rm -f dl05.pre
-	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl05-sym.o: dl05.pre
 	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
-dl05$(EXEEXT):  $(dl05_OBJECTS) $(dl05_DEPENDENCIES) dl05-sym.o
+dl05$(EXEEXT): $(dl05_OBJECTS) $(dl05_DEPENDENCIES) dl05-sym.o
 	@rm -f $@
 	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl05.pre dl05-sym.o dl05-o5.o dl05.tar dl05-tar.h
 endif
+endif
+endif
+
+if DLTESTS
+if TEST_dl06
+lib_tests += dl06
+lib_screens += dl06/dl06.scn
+lib_docs += dl06/dl06.doc
+dl06_SOURCES = dl06/init.c dl06/dl-load.c dl06-tar.c dl06-tar.h
+dl06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl06) $(support_includes)
+dl06/init.c: dl06-tar.o
+dl06-pre.tar: Makefile
+	$(AM_V_at)echo "Something in a file" > dl06_pre_file
+	$(AM_V_GEN)$(PAX) -w -f $@ dl06_pre_file
+dl06-pre-tar.c: dl06-pre.tar
+	$(AM_V_GEN)$(BIN2C) -N dl06_tar -C $< $@
+dl06-pre-tar.h: dl06-pre.tar
+	$(AM_V_GEN)$(BIN2C) -N dl06_tar -H $< $@
+dl06-pre-tar.o: dl06-pre-tar.c dl06-pre-tar.h
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl06-pre-init.o: dl06-pre-tar.o
+	$(AM_V_CC)$(COMPILE)  $(dl06_CPPFLAGS) $(CPU_CFLAGS) $(AM_CFLAGS) \
+		-DDL06_PRE -c -o $@ $(srcdir)/dl06/init.c
+dl06.pre: dl06-pre-init.o dl06/dl06-dl-load.o dl06-pre-tar.o
+	@rm -f $@
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl06-o1.o: dl06/dl06-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl06-o2.o: dl06/dl06-o2.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl06.rap: dl06.pre dl06-o1.o dl06-o2.o
+	$(AM_V_GEN)rtems-ld -r $(RTEMS_BUILD_ROOT) -O rap -b $< -e rtems_main -s \
+	 -o $@ $(filter-out dl06.pre,$+) -lm
+dl06.tar: dl06.rap
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ $<
+dl06-tar.c: dl06.tar
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+dl06-tar.h: dl06.tar
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+dl06-tar.o: dl06-tar.c dl06-tar.h
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl06-sym.o: dl06.pre
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+dl06$(EXEEXT): $(dl06_OBJECTS) dl06-sym.o
+	@rm -f $@
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+CLEANFILES += dl06.pre dl06-sym.o dl06-o1.o dl06-o2.o dl06.tar dl06-tar.h
 endif
 endif
 
