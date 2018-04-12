@@ -52,7 +52,7 @@ int myfgetc(FILE *f)
   return c;
 }
 
-void process(const char *ifname, const char *ofname)
+void process(const char *ifname, const char *ofname, const char *forced_name)
 {
   FILE *ifile, *ocfile, *ohfile;
   char buf[PATH_MAX+1], *p;
@@ -119,7 +119,8 @@ void process(const char *ifname, const char *ofname)
   }
 
   /* find basename */
-  char *ifbasename_to_free = strdup(ifname);
+  char *ifbasename_to_free =
+    forced_name != NULL ? strdup(forced_name) : strdup(ifname);
   if ( ifbasename_to_free == NULL ) {
     fprintf(stderr, "cannot allocate memory\n" );
     fclose(ifile);
@@ -260,7 +261,7 @@ void usage(void)
 {
   fprintf(
      stderr,
-     "usage: bin2c [-csvzCH] <input_file> <output_file>\n"
+     "usage: bin2c [-csvzCH] [-N name] <input_file> <output_file>\n"
      "  <input_file> is the binary file to convert\n"
      "  <output_file> should not have a .c or .h extension\n"
      "\n"
@@ -270,12 +271,14 @@ void usage(void)
      "  -z - add zero terminator\n"
      "  -H - create c-header only\n"
      "  -C - create c-source file only\n"
+     "  -N - force name of data array\n"
     );
   exit(1);
 }
 
 int main(int argc, char **argv)
 {
+  const char *name = NULL;
   while (argc > 3) {
     if (!strcmp(argv[1], "-c")) {
       useconst = 0;
@@ -303,6 +306,16 @@ int main(int argc, char **argv)
       createH = 1;
       --argc;
       ++argv;
+    } else if (!strcmp(argv[1], "-N")) {
+      --argc;
+      ++argv;
+      if (argc <= 1) {
+        fprintf(stderr, "error: -N needs a name\n");
+        usage();
+      }
+      name = argv[1];
+      --argc;
+      ++argv;
     } else {
       usage();
     }
@@ -312,7 +325,6 @@ int main(int argc, char **argv)
   }
 
   /* process( input_file, output_basename ) */
-  process(argv[1], argv[2]);
+  process(argv[1], argv[2], name);
   return 0;
 }
-
