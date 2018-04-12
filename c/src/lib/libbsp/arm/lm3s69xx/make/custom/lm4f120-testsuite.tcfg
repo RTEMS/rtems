@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+include: testdata/disable-iconv-tests.tcfg
 exclude: fileio
 exclude: cdtest
 exclude: iostream

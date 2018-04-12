@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+include: testdata/disable-iconv-tests.tcfg
 exclude: fsdosfsname01
 exclude: fsjffs2gc01
 exclude: jffs2_fserror

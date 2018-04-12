@@ -1,0 +1,7 @@
+#
+# Some targets cannot declare the RAM disk space for the ICONV tests.
+#
+
+exclude: iconv
+exclude: iconv_open
+exclude: iconv_close

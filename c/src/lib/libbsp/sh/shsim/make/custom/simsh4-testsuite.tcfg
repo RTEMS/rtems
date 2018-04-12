@@ -5,6 +5,7 @@
 
 include: testdata/require-tick-isr.tcfg
 include: testdata/disable-intrcritical-tests.tcfg
+include: testdata/disable-iconv-tests.tcfg
 
 exclude: fileio
 exclude: fsdosfsname01

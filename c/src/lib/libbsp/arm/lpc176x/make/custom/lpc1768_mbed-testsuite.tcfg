@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+include: testdata/disable-iconv-tests.tcfg
 exclude: flashdisk01
 exclude: ftp01
 exclude: utf8proc01
