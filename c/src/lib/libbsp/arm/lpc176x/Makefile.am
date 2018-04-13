@@ -45,7 +45,7 @@ librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../shared/src/uart-output-char.c
 
 # Startup

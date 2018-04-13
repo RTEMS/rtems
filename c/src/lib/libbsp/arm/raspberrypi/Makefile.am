@@ -43,7 +43,7 @@ librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 if BSP_START_IN_HYP_SUPPORT

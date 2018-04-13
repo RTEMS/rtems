@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/src/stackalloc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 
 # Startup
 librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
