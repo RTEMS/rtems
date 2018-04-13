@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/bsprestart.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../../shared/src/bsp-uboot-board-info.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-info.c
 librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
 
 # clock
