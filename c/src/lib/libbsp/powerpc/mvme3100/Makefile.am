@@ -47,7 +47,7 @@ librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/bspclean.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += tod/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c

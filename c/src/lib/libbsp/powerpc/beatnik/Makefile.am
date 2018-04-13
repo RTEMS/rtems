@@ -96,7 +96,7 @@ librtemsbsp_a_SOURCES += network/support/early_link_status.c
 endif
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += tod/todcfg.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c

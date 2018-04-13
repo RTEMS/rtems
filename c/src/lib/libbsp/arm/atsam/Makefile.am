@@ -143,7 +143,7 @@ librtemsbsp_a_SOURCES += spi/atsam_spi_init.c
 librtemsbsp_a_SOURCES += spi/sc16is752.c
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # Helper functions

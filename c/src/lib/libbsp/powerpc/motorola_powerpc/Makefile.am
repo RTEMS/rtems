@@ -49,7 +49,7 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += ../shared/tod/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c

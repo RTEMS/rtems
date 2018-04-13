@@ -118,7 +118,7 @@ librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
 librtemsbsp_a_SOURCES += i2c/i2cdrv.c
 librtemsbsp_a_SOURCES += i2c/i2cdrv-config.c
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc.c
 
 # Cache

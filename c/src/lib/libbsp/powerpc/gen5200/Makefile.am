@@ -84,7 +84,7 @@ librtemsbsp_a_SOURCES += slicetimer/slicetimer.c
 # tod
 librtemsbsp_a_SOURCES += tod/todcfg.c
 librtemsbsp_a_SOURCES += tod/pcf8563.c
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 
 # startup
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c

@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += i2c/i2cdrv.c
 # tod
 librtemsbsp_a_SOURCES += tod/ds1307.c
 librtemsbsp_a_SOURCES += tod/todcfg.c
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 # nvram
 librtemsbsp_a_SOURCES += nvram/nvram.c
 

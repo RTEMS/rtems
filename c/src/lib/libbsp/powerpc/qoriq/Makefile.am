@@ -73,7 +73,7 @@ librtemsbsp_a_SOURCES += console/uart-bridge-slave.c
 librtemsbsp_a_SOURCES += console/console-config.c
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # MPCI

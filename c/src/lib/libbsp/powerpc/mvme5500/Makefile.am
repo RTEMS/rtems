@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += irq/irq_init.c
 librtemsbsp_a_SOURCES += irq/BSP_irq.c
 
 # tod
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += tod/todcfg.c
 
 # vectors

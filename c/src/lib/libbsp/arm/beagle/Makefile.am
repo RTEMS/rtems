@@ -79,7 +79,7 @@ librtemsbsp_a_SOURCES += pwm/pwm.c
 
 #RTC
 librtemsbsp_a_SOURCES += rtc.c
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 # Clock
 librtemsbsp_a_SOURCES += clock.c
 

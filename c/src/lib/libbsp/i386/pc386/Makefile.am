@@ -50,7 +50,7 @@ librtemsbsp_a_SOURCES =
 # clock
 librtemsbsp_a_SOURCES += clock/ckinit.c
 librtemsbsp_a_SOURCES += clock/todcfg.c
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 
 if RTEMS_VGA
 librtemsbsp_a_SOURCES += console/inch.c

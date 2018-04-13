@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += console/hsu.c
 librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
 
 # RTC
-librtemsbsp_a_SOURCES += ../../shared/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # Misc
