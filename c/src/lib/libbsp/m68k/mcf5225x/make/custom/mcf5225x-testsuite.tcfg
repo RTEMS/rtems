@@ -5,19 +5,12 @@
 #
 
 include: testdata/disable-iconv-tests.tcfg
+include: testdata/disable-jffs2-tests.tcfg
+
 exclude: cdtest
 exclude: dl05
 exclude: fileio
 exclude: flashdisk01
 exclude: fsdosfsname01
-exclude: fsjffs2gc01
 exclude: iostream
-exclude: jffs2_fserror
-exclude: jffs2_fslink
-exclude: jffs2_fspatheval
-exclude: jffs2_fspermission
-exclude: jffs2_fsrdwr
-exclude: jffs2_fsscandir01
-exclude: jffs2_fssymlink
-exclude: jffs2_fstime
 exclude: linpack
