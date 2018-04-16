@@ -170,7 +170,7 @@ extern "C" {
 
 #define sh_get_interrupt_level( _level ) \
 { \
-  register uint32_t   _tmpsr ; \
+  uint32_t   _tmpsr ; \
   \
   __asm__ volatile( "stc sr, %0" : "=r" (_tmpsr) ); \
   _level = (_tmpsr & 0xf0) >> 4 ; \
@@ -178,7 +178,7 @@ extern "C" {
 
 #define sh_set_interrupt_level( _newlevel ) \
 { \
-  register uint32_t   _tmpsr; \
+  uint32_t   _tmpsr; \
   \
   __asm__ volatile ( "stc sr, %0" : "=r" (_tmpsr) ); \
   _tmpsr = ( _tmpsr & ~0xf0 ) | ((_newlevel) << 4) ; \
@@ -194,7 +194,7 @@ static inline uint32_t sh_swap_u32(
   uint32_t value
 )
 {
-  register uint32_t swapped;
+  uint32_t swapped;
 
   __asm__ volatile (
     "swap.b %1,%0; "
@@ -210,7 +210,7 @@ static inline uint16_t sh_swap_u16(
   uint16_t value
 )
 {
-  register uint16_t swapped ;
+  uint16_t swapped ;
 
   __asm__ volatile ( "swap.b %1,%0" : "=r" (swapped) : "r"  (value) );
 

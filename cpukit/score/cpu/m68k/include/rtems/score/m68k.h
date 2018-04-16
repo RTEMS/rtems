@@ -334,7 +334,7 @@ extern "C" {
 
 #if ( defined(__mcoldfire__) )
 #define m68k_disable_interrupts( _level ) \
-   do { register uint32_t   _tmpsr = 0x0700; \
+   do { uint32_t   _tmpsr = 0x0700; \
         __asm__ volatile ( "move.w %%sr,%0\n\t" \
  		       "or.l   %0,%1\n\t" \
  		       "move.w %1,%%sr" \
@@ -354,7 +354,7 @@ extern "C" {
 
 #if ( defined(__mcoldfire__) )
 #define m68k_flash_interrupts( _level ) \
-   do { register uint32_t   _tmpsr = 0x0700; \
+   do { uint32_t   _tmpsr = 0x0700; \
 	asm volatile ( "move.w %2,%%sr\n\t" \
 		       "or.l   %2,%1\n\t" \
 		       "move.w %1,%%sr" \
@@ -371,7 +371,7 @@ extern "C" {
 
 #define m68k_get_interrupt_level( _level ) \
   do { \
-    register uint32_t   _tmpsr; \
+    uint32_t   _tmpsr; \
     \
     __asm__ volatile( "move.w %%sr,%0" : "=d" (_tmpsr)); \
     _level = (_tmpsr & 0x0700) >> 8; \
@@ -379,7 +379,7 @@ extern "C" {
 
 #define m68k_set_interrupt_level( _newlevel ) \
   do { \
-    register uint32_t   _tmpsr; \
+    uint32_t   _tmpsr; \
     \
     __asm__ volatile( "move.w  %%sr,%0" : "=d" (_tmpsr)); \
     _tmpsr = (_tmpsr & 0xf8ff) | ((_newlevel) << 8); \

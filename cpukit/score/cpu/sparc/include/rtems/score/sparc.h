@@ -390,7 +390,7 @@ void sparc_syscall_exit(uint32_t exitcode1, uint32_t exitcode2)
  */
 #define sparc_get_interrupt_level( _level ) \
   do { \
-    register uint32_t   _psr_level = 0; \
+    uint32_t _psr_level = 0; \
     \
     sparc_get_psr( _psr_level ); \
     (_level) = \

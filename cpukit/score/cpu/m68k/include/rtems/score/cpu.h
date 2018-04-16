@@ -501,7 +501,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    register int dumby; \
+    int dumby; \
     \
     __asm__ volatile ( \
        "   clr.l   %1\n"         \
@@ -521,7 +521,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
 #elif ( M68K_HAS_EXTB_L == 1 )
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    register int dumby; \
+    int dumby; \
     \
     __asm__ volatile ( "   move.w  %2,%1\n"        \
        "   lsr.w   #8,%1\n"        \
@@ -539,7 +539,7 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
 #else
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    register int dumby; \
+    int dumby; \
     \
     __asm__ volatile ( "   move.w  %2,%1\n"        \
        "   lsr.w   #8,%1\n"        \

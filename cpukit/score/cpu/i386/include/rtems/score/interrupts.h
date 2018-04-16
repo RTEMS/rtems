@@ -62,7 +62,7 @@ typedef int  (*rtems_raw_irq_is_enabled)	(const struct __rtems_raw_irq_connect_d
 
 #define i386_get_interrupt_level( _level ) \
   do { \
-    register uint32_t   _eflags; \
+    uint32_t   _eflags; \
     \
     __asm__ volatile ( "pushf ; \
                     pop %0" \

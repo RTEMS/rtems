@@ -522,8 +522,8 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
 
 #define _CPU_Bitfield_Find_first_bit( _value, _output ) \
   { \
-    register uint16_t __value_in_register = ( _value ); \
-    uint16_t          __output = 0; \
+    uint16_t __value_in_register = ( _value ); \
+    uint16_t __output = 0; \
     __asm__ volatile ( "bsfw    %0,%1 " \
                     : "=r" ( __value_in_register ), "=r" ( __output ) \
                     : "0"  ( __value_in_register ), "1"  ( __output ) \

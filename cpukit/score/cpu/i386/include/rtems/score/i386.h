@@ -136,7 +136,7 @@ static inline uint16_t i386_swap_u16(
  */
 static inline unsigned int i386_get_cr0(void)
 {
-  register unsigned int segment = 0;
+  unsigned int segment = 0;
 
   __asm__ volatile ( "movl %%cr0,%0" : "=r" (segment) : "0" (segment) );
 
@@ -150,7 +150,7 @@ static inline void i386_set_cr0(unsigned int segment)
 
 static inline unsigned int i386_get_cr2(void)
 {
-  register unsigned int segment = 0;
+  unsigned int segment = 0;
 
   __asm__ volatile ( "movl %%cr2,%0" : "=r" (segment) : "0" (segment) );
 
@@ -159,7 +159,7 @@ static inline unsigned int i386_get_cr2(void)
 
 static inline unsigned int i386_get_cr3(void)
 {
-  register unsigned int segment = 0;
+  unsigned int segment = 0;
 
   __asm__ volatile ( "movl %%cr3,%0" : "=r" (segment) : "0" (segment) );
 
@@ -243,7 +243,7 @@ int i386_Physical_to_real(
 
 static __inline__ unsigned short i386_get_cs(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%cs,%0" : "=r" (segment) : "0" (segment) );
 
@@ -252,7 +252,7 @@ static __inline__ unsigned short i386_get_cs(void)
 
 static __inline__ unsigned short i386_get_ds(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%ds,%0" : "=r" (segment) : "0" (segment) );
 
@@ -261,7 +261,7 @@ static __inline__ unsigned short i386_get_ds(void)
 
 static __inline__ unsigned short i386_get_es(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%es,%0" : "=r" (segment) : "0" (segment) );
 
@@ -270,7 +270,7 @@ static __inline__ unsigned short i386_get_es(void)
 
 static __inline__ unsigned short i386_get_ss(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%ss,%0" : "=r" (segment) : "0" (segment) );
 
@@ -279,7 +279,7 @@ static __inline__ unsigned short i386_get_ss(void)
 
 static __inline__ unsigned short i386_get_fs(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%fs,%0" : "=r" (segment) : "0" (segment) );
 
@@ -288,7 +288,7 @@ static __inline__ unsigned short i386_get_fs(void)
 
 static __inline__ unsigned short i386_get_gs(void)
 {
-  register unsigned short segment = 0;
+  unsigned short segment = 0;
 
   __asm__ volatile ( "movw %%gs,%0" : "=r" (segment) : "0" (segment) );
 
@@ -300,29 +300,29 @@ static __inline__ unsigned short i386_get_gs(void)
  */
 
 #define i386_outport_byte( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned char  __value = _value; \
+do { unsigned short __port  = _port; \
+     unsigned char  __value = _value; \
      \
      __asm__ volatile ( "outb %0,%1" : : "a" (__value), "d" (__port) ); \
    } while (0)
 
 #define i386_outport_word( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned short __value = _value; \
+do { unsigned short __port  = _port; \
+     unsigned short __value = _value; \
      \
      __asm__ volatile ( "outw %0,%1" : : "a" (__value), "d" (__port) ); \
    } while (0)
 
 #define i386_outport_long( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned int  __value = _value; \
+do { unsigned short __port  = _port; \
+     unsigned int  __value = _value; \
      \
      __asm__ volatile ( "outl %0,%1" : : "a" (__value), "d" (__port) ); \
    } while (0)
 
 #define i386_inport_byte( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned char  __value = 0; \
+do { unsigned short __port  = _port; \
+     unsigned char  __value = 0; \
      \
      __asm__ volatile ( "inb %1,%0" : "=a" (__value) \
                                 : "d"  (__port) \
@@ -331,8 +331,8 @@ do { register unsigned short __port  = _port; \
    } while (0)
 
 #define i386_inport_word( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned short __value = 0; \
+do { unsigned short __port  = _port; \
+     unsigned short __value = 0; \
      \
      __asm__ volatile ( "inw %1,%0" : "=a" (__value) \
                                 : "d"  (__port) \
@@ -341,8 +341,8 @@ do { register unsigned short __port  = _port; \
    } while (0)
 
 #define i386_inport_long( _port, _value ) \
-do { register unsigned short __port  = _port; \
-     register unsigned int  __value = 0; \
+do { unsigned short __port  = _port; \
+     unsigned int  __value = 0; \
      \
      __asm__ volatile ( "inl %1,%0" : "=a" (__value) \
                                 : "d"  (__port) \

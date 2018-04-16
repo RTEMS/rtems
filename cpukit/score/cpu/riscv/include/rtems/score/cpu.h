@@ -158,7 +158,7 @@ Context_Control_fp  _CPU_Null_fp_context;
 
 static inline unsigned long riscv_interrupt_disable( void )
 {
-  register unsigned long status = read_csr(mstatus);
+  unsigned long status = read_csr(mstatus);
   clear_csr(mstatus, MSTATUS_MIE);
   return status;
 }

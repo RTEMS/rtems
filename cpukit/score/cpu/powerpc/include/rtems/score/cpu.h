@@ -661,7 +661,7 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
 
 static inline uint32_t   _CPU_ISR_Get_level( void )
 {
-  register unsigned int msr;
+  uint32_t msr;
   _CPU_MSR_GET(msr);
   if (msr & MSR_EE) return 0;
   else	return 1;
@@ -669,7 +669,7 @@ static inline uint32_t   _CPU_ISR_Get_level( void )
 
 static inline void _CPU_ISR_Set_level( uint32_t   level )
 {
-  register unsigned int msr;
+  uint32_t msr;
   _CPU_MSR_GET(msr);
   if (!(level & CPU_MODES_INTERRUPT_MASK)) {
     msr |= ppc_interrupt_get_disable_mask();
