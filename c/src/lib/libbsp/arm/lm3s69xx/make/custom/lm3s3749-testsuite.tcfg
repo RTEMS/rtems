@@ -4,9 +4,9 @@
 # Format is one line per test that is _NOT_ built.
 #
 
-
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
+include: testdata/disable-mrfs-tests.tcfg
 
 exclude: capture
 exclude: cdtest
@@ -27,15 +27,6 @@ exclude: mghttpd01
 exclude: mdosfs_fserror
 exclude: mdosfs_fsrdwr
 exclude: monitor02
-exclude: mrfs_fserror
-exclude: mrfs_fsfpathconf
-exclude: mrfs_fslink
-exclude: mrfs_fspatheval
-exclude: mrfs_fspermission
-exclude: mrfs_fsrdwr
-exclude: mrfs_fsscandir01
-exclude: mrfs_fssymlink
-exclude: mrfs_fstime
 exclude: paranoia
 exclude: pppd
 exclude: rtems++
