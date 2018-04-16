@@ -4,6 +4,7 @@
 # Format is one line per test that is _NOT_ built.
 #
 
+include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
 
 exclude: capture
@@ -19,9 +20,6 @@ exclude: fsdosfsname01
 exclude: fsdosfsformat01
 exclude: fsrfsbitmap01
 exclude: ftp01
-exclude: iconv
-exclude: iconv_close
-exclude: iconv_open
 exclude: iostream
 exclude: linpack
 exclude: loopback
