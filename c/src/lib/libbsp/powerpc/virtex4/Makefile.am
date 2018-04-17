@@ -20,7 +20,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 # startup
 librtemsbsp_a_SOURCES = startup/bspclean.c
 librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c

@@ -40,7 +40,7 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/bsprestart.c
-librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-info.c
 librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
 

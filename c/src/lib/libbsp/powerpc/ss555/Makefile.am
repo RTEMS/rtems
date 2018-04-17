@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += startup/iss555.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += start/start.S
-librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # tm27supp
 librtemsbsp_a_SOURCES += startup/tm27supp.c
