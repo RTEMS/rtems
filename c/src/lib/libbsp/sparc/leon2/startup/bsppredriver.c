@@ -65,18 +65,7 @@ struct drvmgr_bus_res leon2_amba_res __attribute__((weak)) =
     DRVMGR_RES_EMPTY
   },
 };
-
-/*
- *  bsp_driver_level_hook
- *
- *  BSP driver level hook. Called just after drivers have reached initialization
- *  level 'level' (1,2,3,4). See exinit.c for meaning of the every level.
- */
-void bsp_driver_level_hook( int level )
-{
-}
-
-#endif
+#endif /* RTEMS_DRVMGR_STARTUP */
 
 /*
  *  bsp_predriver_hook

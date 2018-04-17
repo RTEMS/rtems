@@ -350,12 +350,6 @@ extern void _DRV_Manager_initialization(void);
  */
 extern void _DRV_Manager_init_level(int level);
 
-/*! This function must be defined by the BSP when the driver manager is enabled
- * and initialized during BSP initialization. The function is called after a
- * init level is reached the first time by the driver manager.
- */
-extern void bsp_driver_level_hook(int level);
-
 /*! Init driver manager all in one go, will call _DRV_Manager_initialization(),
  *  then _DRV_Manager_init_level([1..DRVMGR_LEVEL_MAX]).
  *  Typically called from Init task when user wants to initilize driver
