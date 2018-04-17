@@ -34,7 +34,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/bspstart.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../shared/showbats.c
 librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
