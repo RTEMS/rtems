@@ -15,6 +15,7 @@ exclude: dl01
 exclude: dl02
 exclude: dl04
 exclude: dl05
+exclude: dl06
 exclude: ftp01
 exclude: fileio
 exclude: flashdisk01
