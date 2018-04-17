@@ -21,7 +21,7 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
-librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += startup/init5329.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
