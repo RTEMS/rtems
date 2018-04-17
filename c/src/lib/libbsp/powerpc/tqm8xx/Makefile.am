@@ -47,7 +47,7 @@ librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/mmutlbtab.c
 librtemsbsp_a_SOURCES += startup/cpuinit.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network_fec.c

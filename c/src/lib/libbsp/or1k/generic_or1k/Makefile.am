@@ -37,7 +37,7 @@ librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 librtemsbsp_a_LIBADD =
 
 # Startup
-librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 
 # Shared

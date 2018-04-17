@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += startup/init5206e.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c
-librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c

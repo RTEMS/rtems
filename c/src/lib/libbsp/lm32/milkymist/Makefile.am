@@ -23,7 +23,7 @@ librtemsbsp_a_LIBADD =
 librtemsbsp_a_SOURCES += startup/bspclean.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../../shared/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 

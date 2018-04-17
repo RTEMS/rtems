@@ -31,7 +31,7 @@ project_lib_DATA += linkcmds
 project_lib_LIBRARIES = librtemsbsp.a
 
 # Startup
-librtemsbsp_a_SOURCES = ../../shared/bspreset.c
+librtemsbsp_a_SOURCES = ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../shared/bspstart.c
 librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
 
