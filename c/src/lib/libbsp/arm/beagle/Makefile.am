@@ -39,7 +39,7 @@ librtemsbsp_a_LIBADD =
 # Shared
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-fdt.c
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c

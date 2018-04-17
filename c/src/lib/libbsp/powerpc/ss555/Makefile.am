@@ -21,7 +21,7 @@ librtemsbsp_a_SOURCES += clock/p_clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/iss555.c

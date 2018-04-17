@@ -15,7 +15,7 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_SOURCES = ../../shared/bspclean.c
+librtemsbsp_a_SOURCES = ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c

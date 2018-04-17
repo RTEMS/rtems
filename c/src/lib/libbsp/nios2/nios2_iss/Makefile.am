@@ -20,7 +20,7 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset_loop.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c

@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
 librtemsbsp_a_SOURCES += startup/bspstart.c

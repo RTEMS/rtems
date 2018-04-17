@@ -20,7 +20,7 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_LIBADD =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c

@@ -22,7 +22,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += startup/bsppredriver.c
 librtemsbsp_a_SOURCES += ../../shared/bspreset.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
