@@ -12,14 +12,13 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <rtems/sysinit.h>
 
 /*
- *  bsp_predriver_hook
- *
- *  BSP predriver hook. Called just before drivers are initialized.
- *  Is used to initialize shared interrupt handling.
+ * Called just before drivers are initialized.  Is used to initialize shared
+ * interrupt handling.
  */
-void bsp_predriver_hook( void )
+static void erc32_pre_driver_hook( void )
 {
   bsp_spurious_initialize();
 
@@ -27,4 +26,15 @@ void bsp_predriver_hook( void )
    * controller has been found and initialized.
    */
   BSP_shared_interrupt_init();
+}
+
+RTEMS_SYSINIT_ITEM(
+  erc32_pre_driver_hook,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void bsp_start(void)
+{
+  /* Nothing to do */
 }

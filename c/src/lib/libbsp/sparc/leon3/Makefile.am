@@ -28,7 +28,6 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += startup/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/bsppredriver.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/setvec.c

@@ -24,7 +24,6 @@ BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c

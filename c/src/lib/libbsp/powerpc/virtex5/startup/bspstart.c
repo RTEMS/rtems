@@ -58,6 +58,7 @@
 #include <rtems/counter.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+#include <rtems/sysinit.h>
 
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
@@ -227,7 +228,13 @@ void bsp_start(void)
  *  BSP predriver hook.  Called by boot_card() just before drivers are
  *  initialized.  Clear out any stale interrupts here.
  */
-void bsp_predriver_hook(void)
+static void virtex5_pre_driver_hook(void)
 {
   app_bsp_predriver_hook();
 }
+
+RTEMS_SYSINIT_ITEM(
+  virtex5_pre_driver_hook,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

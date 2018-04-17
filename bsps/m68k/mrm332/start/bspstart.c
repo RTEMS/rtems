@@ -9,14 +9,20 @@
 
 #include <bsp.h>
 #include <bsp/bootcard.h>
+#include <rtems/sysinit.h>
 
 extern void Spurious_Initialize(void);
 
 /*
- *  Call Spurious_Initialize in bsp_predriver_hook because
- *  bsp_predriver_hook is call after the _ISR_Vector_Table allocation
+ * Must be called after the _ISR_Vector_Table allocation
  */
-void bsp_predriver_hook(void)
+RTEMS_SYSINIT_ITEM(
+  Spurious_Initialize,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+void bsp_start(void)
 {
-  Spurious_Initialize();
+  /* Nothing to do */
 }

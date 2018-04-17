@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include <rtems/sysinit.h>
 #include <rtems/system.h>
 #include <rtems/powerpc/powerpc.h>
 
@@ -37,6 +38,7 @@
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
+#include <bsp/VME.h>
 #include <bsp/bspException.h>
 
 #include <rtems/bspIo.h>
@@ -341,3 +343,9 @@ unsigned char ReadConfVPD_buff(int offset)
 {
   return(ConfVPD_buff[offset]);
 }
+
+RTEMS_SYSINIT_ITEM(
+  BSP_vme_config,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

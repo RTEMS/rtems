@@ -17,6 +17,7 @@
 #include <bsp/bootcard.h>
 #include <cplb.h>
 #include <libcpu/interrupt.h>
+#include <rtems/sysinit.h>
 
 const unsigned int dcplbs_table[16][2] = {
   { 0xFFA00000,   (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) },
@@ -117,14 +118,11 @@ static void Init_Flags(void)
   *((uint8_t*)FlashA_PortB_Data) = 0x00;
 }
 
-/*
- * BSP predriver hook.  Called just before drivers are initialized.
- * Used to setup libc and install any BSP extensions.
- */
-void bsp_predriver_hook(void)
-{
-  bfin_interrupt_init();
-}
+RTEMS_SYSINIT_ITEM(
+  bfin_interrupt_init,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 void bsp_start( void )
 {

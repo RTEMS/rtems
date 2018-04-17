@@ -25,6 +25,7 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
+#include <rtems/sysinit.h>
 #include <libcpu/spr.h>
 #include <libcpu/io.h>
 #include <libcpu/e500_mmu.h>
@@ -34,6 +35,7 @@
 #include <bsp/vpd.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
+#include <bsp/VME.h>
 #include <rtems/powerpc/powerpc.h>
 
 #define SHOW_MORE_INIT_SETTINGS
@@ -419,3 +421,20 @@ VpdBufRec          vpdData [] = {
   printk("Exit from bspstart\n");
 #endif
 }
+
+static void mvme3100_i2c_initialize(void)
+{
+  BSP_i2c_initialize();
+}
+
+RTEMS_SYSINIT_ITEM(
+  mvme3100_i2c_initialize,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+RTEMS_SYSINIT_ITEM(
+  BSP_vme_config,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

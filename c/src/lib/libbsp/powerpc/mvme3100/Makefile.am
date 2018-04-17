@@ -40,7 +40,6 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/misc.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
 librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c

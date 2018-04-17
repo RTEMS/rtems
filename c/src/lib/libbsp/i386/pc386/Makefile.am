@@ -104,7 +104,6 @@ librtemsbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 # startup
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
 librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += startup/bspidle.S

@@ -24,9 +24,9 @@ dist_project_lib_DATA += startup/linkcmds.csb637
 
 
 project_lib_LIBRARIES = librtemsbsp.a
+librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES = ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c

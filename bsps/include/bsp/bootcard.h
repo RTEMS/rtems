@@ -53,8 +53,6 @@ extern const char *bsp_boot_cmdline;
 
 void bsp_start(void);
 
-void bsp_predriver_hook(void);
-
 void bsp_reset(void);
 
 /**

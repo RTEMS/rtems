@@ -22,7 +22,6 @@ librtemsbsp_a_SOURCES += clock/p_clock.c
 librtemsbsp_a_SOURCES += console/console.c
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/iss555.c
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c

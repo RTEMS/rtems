@@ -49,12 +49,6 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_MIDDLE
 );
 
-RTEMS_SYSINIT_ITEM(
-  bsp_predriver_hook,
-  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
-);
-
 /*
  *  This is the initialization framework routine that weaves together
  *  calls to RTEMS and the BSP in the proper sequence to initialize

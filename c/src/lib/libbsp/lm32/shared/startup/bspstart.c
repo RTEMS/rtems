@@ -33,9 +33,3 @@ void bsp_start(void)
   /* Setup console baud rate */
   BSP_uart_init(UART_BAUD_RATE);
 }
-
-void bsp_predriver_hook(void)
-{
-}
-
-

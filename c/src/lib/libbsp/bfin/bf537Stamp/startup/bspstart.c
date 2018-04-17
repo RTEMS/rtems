@@ -22,7 +22,7 @@
 #include <libcpu/mmu.h>
 #include <libcpu/mmuRegs.h>
 #include <libcpu/interrupt.h>
-
+#include <rtems/sysinit.h>
 
 static bfin_mmu_config_t mmuRegions = {
     /* instruction */
@@ -69,13 +69,11 @@ static void initPLL(void);
 static void initEBIU(void);
 static void initGPIO(void);
 
-/*
- *  BSP predriver hook.
- */
-void bsp_predriver_hook(void)
-{
-  bfin_interrupt_init();
-}
+RTEMS_SYSINIT_ITEM(
+  bfin_interrupt_init,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 void bsp_start(void)
 {

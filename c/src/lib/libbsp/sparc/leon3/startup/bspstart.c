@@ -4,6 +4,9 @@
  *  The generic CPU dependent initialization has been performed
  *  before any of these are invoked.
  *
+ *  COPYRIGHT (c) 2011
+ *  Aeroflex Gaisler
+ *
  *  COPYRIGHT (c) 1989-2013.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -19,6 +22,7 @@
 #include <bsp.h>
 #include <leon.h>
 #include <bsp/bootcard.h>
+#include <drvmgr/drvmgr.h>
 #include <rtems/sysinit.h>
 
 #if defined(RTEMS_SMP) || defined(RTEMS_MULTIPROCESSING)
@@ -80,3 +84,42 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_BSP_START,
   RTEMS_SYSINIT_ORDER_FIRST
 );
+
+static void leon3_interrupt_common_init( void )
+{
+  /* Initialize shared interrupt handling, must be done after IRQ
+   * controller has been found and initialized.
+   */
+  BSP_shared_interrupt_init();
+}
+
+/*
+ * Called just before drivers are initialized.  Is used to initialize shared
+ * interrupt handling.
+ */
+static void leon3_pre_driver_hook( void )
+{
+  bsp_spurious_initialize();
+
+#ifndef RTEMS_DRVMGR_STARTUP
+  leon3_interrupt_common_init();
+#endif
+}
+
+RTEMS_SYSINIT_ITEM(
+  leon3_pre_driver_hook,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+
+#ifdef RTEMS_DRVMGR_STARTUP
+/*
+ * Initialize shared interrupt handling, must be done after IRQ controller has
+ * been found and initialized.
+ */
+RTEMS_SYSINIT_ITEM(
+  leon3_interrupt_common_init,
+  RTEMS_SYSINIT_DRVMGR_LEVEL_1,
+  RTEMS_SYSINIT_ORDER_LAST
+);
+#endif

@@ -16,6 +16,7 @@
 #include <cplb.h>
 #include <bsp/interrupt.h>
 #include <libcpu/ebiuRegs.h>
+#include <rtems/sysinit.h>
 
 const unsigned int dcplbs_table[16][2] = {  
   { 0xFFA00000, (PAGE_SIZE_1MB | CPLB_D_PAGE_MGMT | CPLB_WT) },
@@ -121,13 +122,11 @@ static void Init_Flags(void)
   *((uint16_t*)PORTHIO_SET)  = 0x1<<15;
 }
 
-/*
- *  bsp_predriver_hook
- */
-void bsp_predriver_hook(void)
-{
-  bfin_interrupt_init();
-}
+RTEMS_SYSINIT_ITEM(
+  bfin_interrupt_init,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
 
 void bsp_start( void )
 {

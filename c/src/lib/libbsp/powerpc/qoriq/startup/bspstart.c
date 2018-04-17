@@ -25,6 +25,7 @@
 #include <rtems.h>
 #include <rtems/config.h>
 #include <rtems/counter.h>
+#include <rtems/sysinit.h>
 
 #include <libcpu/powerpc-utility.h>
 
@@ -33,6 +34,7 @@
 #include <bsp/console-termios.h>
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
+#include <bsp/intercom.h>
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
 #include <bsp/mmu.h>
@@ -185,3 +187,11 @@ uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
   return intr[0];
 #endif
 }
+
+#ifdef RTEMS_MULTIPROCESSING
+RTEMS_SYSINIT_ITEM(
+  qoriq_intercom_init,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);
+#endif

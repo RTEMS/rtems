@@ -20,6 +20,7 @@
 #include <bsp/bootcard.h>
 #include <rtems/bspIo.h>
 #include <rtems/counter.h>
+#include <rtems/sysinit.h>
 #include <bsp/consoleIo.h>
 #include <libcpu/spr.h>
 #include <bsp/residual.h>
@@ -30,6 +31,7 @@
 #include <libcpu/pte121.h>
 #include <libcpu/cpuIdent.h>
 #include <bsp/vectors.h>
+#include <bsp/VME.h>
 #include <bsp/motorola.h>
 #include <rtems/powerpc/powerpc.h>
 
@@ -374,3 +376,9 @@ void bsp_start( void )
   printk("Exit from bspstart\n");
 #endif
 }
+
+RTEMS_SYSINIT_ITEM(
+  BSP_vme_config,
+  RTEMS_SYSINIT_BSP_PRE_DRIVERS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

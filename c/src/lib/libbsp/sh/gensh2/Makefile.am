@@ -27,7 +27,6 @@ CLEANFILES = scitab.c
 
 # startup
 librtemsbsp_a_SOURCES += startup/hw_init.c
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c

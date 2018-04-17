@@ -37,7 +37,6 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/bspstart.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../shared/showbats.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
 librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
 librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c

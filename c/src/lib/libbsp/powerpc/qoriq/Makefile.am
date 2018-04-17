@@ -50,7 +50,6 @@ librtemsbsp_a_SOURCES += startup/mmu-tlb1.S
 librtemsbsp_a_SOURCES += startup/mmu-config.c
 librtemsbsp_a_SOURCES += startup/portal.c
 librtemsbsp_a_SOURCES += startup/restart.S
-librtemsbsp_a_SOURCES += startup/bsppredriverhook.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/bsprestart.c

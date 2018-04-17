@@ -27,7 +27,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/setvec.c
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 
 # clock
 librtemsbsp_a_SOURCES += clock/clock.c

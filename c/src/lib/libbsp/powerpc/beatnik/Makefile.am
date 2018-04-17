@@ -47,7 +47,6 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/i2c_init.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../shared/startup/probeMemEnd.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
 librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
 librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c

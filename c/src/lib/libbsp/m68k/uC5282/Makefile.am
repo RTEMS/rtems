@@ -20,7 +20,6 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += startup/bspclean.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += ../../shared/bsppredriverhook.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += startup/init5282.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
