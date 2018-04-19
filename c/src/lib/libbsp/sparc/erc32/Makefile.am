@@ -58,7 +58,7 @@ librtemsbsp_a_SOURCES += ../shared/irq/bsp_isr_handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../shared/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
 librtemsbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
 endif
 

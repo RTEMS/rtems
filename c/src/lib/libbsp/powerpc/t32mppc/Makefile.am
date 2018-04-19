@@ -53,7 +53,7 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../shared/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
