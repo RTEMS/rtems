@@ -19,7 +19,8 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += startup/start_c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mrm332/start/bspstart.c
-librtemsbsp_a_SOURCES += ../../shared/sbrk.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../shared/setvec.c
