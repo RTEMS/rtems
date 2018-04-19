@@ -53,7 +53,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 

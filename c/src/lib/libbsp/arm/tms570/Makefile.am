@@ -75,7 +75,7 @@ librtemsbsp_a_SOURCES += clock/clock.c
 librtemsbsp_a_SOURCES += pinmux/pinmux.c
 
 # Benchmark Timer
-librtemsbsp_a_SOURCES += ../../shared/timercpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-cpucounter.c
 
 # Misc
 librtemsbsp_a_SOURCES += misc/cpucounterread.c

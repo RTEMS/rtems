@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c
 librtemsbsp_a_SOURCES += console/syscalls.S
 # timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

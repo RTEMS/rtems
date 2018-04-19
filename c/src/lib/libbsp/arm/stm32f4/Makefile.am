@@ -67,7 +67,7 @@ librtemsbsp_a_SOURCES += i2c/i2c-config.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 
 # Timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

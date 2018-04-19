@@ -122,7 +122,7 @@ librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
 librtemsbsp_a_SOURCES += clock/systick-freq.c
 
 # Timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7m.c

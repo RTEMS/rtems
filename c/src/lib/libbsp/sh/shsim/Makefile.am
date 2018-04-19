@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += console/console-support.S
 librtemsbsp_a_SOURCES += console/console-debugio.c
 
 # timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

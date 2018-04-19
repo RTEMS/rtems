@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += console/console-io.c
 # clock
 librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
 # timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 # start hooks
 librtemsbsp_a_SOURCES += startup/bspstarthooks.c
 librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S

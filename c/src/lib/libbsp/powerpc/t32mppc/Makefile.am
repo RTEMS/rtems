@@ -40,7 +40,7 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += clock/clock-config.c
 
 # Timer
-librtemsbsp_a_SOURCES += ../../shared/timerstub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
