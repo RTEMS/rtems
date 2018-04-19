@@ -88,7 +88,7 @@ librtemsbsp_a_SOURCES += clock/clockdrv.c
 librtemsbsp_a_SOURCES += misc/timer.c
 
 # GPIO
-librtemsbsp_a_SOURCES += ../../shared/gpio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/gpio/gpio-support.c
 librtemsbsp_a_SOURCES += gpio/rpi-gpio.c
 
 # RTC
