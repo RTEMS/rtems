@@ -156,7 +156,7 @@ librtemsbsp_a_SOURCES += ../shared/drvmgr/get_resarray_count.c
 
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
-librtemsbsp_a_SOURCES += ../../shared/bspsmpgetcurrentprocessor.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/getcurrentprocessor-zero.c
 endif
 
 if HAS_NETWORKING
