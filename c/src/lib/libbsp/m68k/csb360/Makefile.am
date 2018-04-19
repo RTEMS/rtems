@@ -24,7 +24,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
 librtemsbsp_a_SOURCES += startup/init5272.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # console
 librtemsbsp_a_SOURCES += console/console-io.c

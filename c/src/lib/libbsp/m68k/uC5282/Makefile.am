@@ -25,7 +25,7 @@ librtemsbsp_a_SOURCES += startup/init5282.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 # clock
 librtemsbsp_a_SOURCES += clock/clock.c
 # console
