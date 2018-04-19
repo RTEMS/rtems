@@ -100,7 +100,7 @@ librtemsbsp_a_SOURCES += ../shared/comm/gdb_glue.c
 # pci
 librtemsbsp_a_SOURCES += ../shared/pci/pcibios.c
 librtemsbsp_a_SOURCES += ../shared/pci/pci_io.c
-librtemsbsp_a_SOURCES += ../../shared/pci/pci_bus_count.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_bus_count.c
 librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
 
 # startup
