@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES =
 # Shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S

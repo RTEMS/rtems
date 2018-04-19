@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 

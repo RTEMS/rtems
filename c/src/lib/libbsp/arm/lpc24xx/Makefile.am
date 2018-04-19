@@ -55,7 +55,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/uart-output-char.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 
 # Startup
 librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S

@@ -25,8 +25,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += startup/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += clock/clockdrv.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console

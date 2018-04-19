@@ -25,8 +25,8 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
 librtemsbsp_a_SOURCES += startup/syscalls.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c

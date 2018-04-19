@@ -24,8 +24,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/memmap.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../shared/cpucounterdiff.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += clock/clock.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
