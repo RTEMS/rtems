@@ -42,7 +42,7 @@ librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
 librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c
 librtemsbsp_a_SOURCES += ../shared/startup/ppc_idle.c
 librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
-librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 

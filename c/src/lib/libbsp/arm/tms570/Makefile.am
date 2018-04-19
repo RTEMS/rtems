@@ -39,7 +39,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # Shared
-librtemsbsp_a_SOURCES += ../../shared/getentropy-cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../shared/sbrk.c
