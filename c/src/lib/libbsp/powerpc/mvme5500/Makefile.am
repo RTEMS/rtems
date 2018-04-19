@@ -36,7 +36,7 @@ librtemsbsp_a_SOURCES += ../shared/console/console.c
 librtemsbsp_a_SOURCES += pci/pci.c
 librtemsbsp_a_SOURCES += pci/pci_interface.c
 librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
-librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_find_device.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

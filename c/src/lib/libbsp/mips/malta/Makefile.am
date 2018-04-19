@@ -52,7 +52,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 
 # pci
 librtemsbsp_a_SOURCES += pci/pci.c
-librtemsbsp_a_SOURCES += ../../shared/pci/pci_find_device.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_find_device.c
 
 #isr
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
