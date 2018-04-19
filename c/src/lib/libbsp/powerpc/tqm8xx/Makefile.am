@@ -28,8 +28,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/clock.c
-librtemsbsp_a_SOURCES += clock/p_clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/tqm8xx/clock/p_clock.c
 
 # console
 librtemsbsp_a_SOURCES += console/console.c

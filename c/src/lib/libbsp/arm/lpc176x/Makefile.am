@@ -64,8 +64,8 @@ librtemsbsp_a_SOURCES += ../../shared/console-termios.c
 librtemsbsp_a_SOURCES += console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
-librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-nxp-lpc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c

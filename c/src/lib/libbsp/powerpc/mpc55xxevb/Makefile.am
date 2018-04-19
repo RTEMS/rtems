@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += startup/start-flash.S
 librtemsbsp_a_SOURCES += startup/start-watchdog.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clock-config.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/mpc55xxevb/clock/clock-config.c
 
 # console
 librtemsbsp_a_SOURCES += console/console-config.c

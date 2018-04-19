@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
 librtemsbsp_a_SOURCES += ../shared/irq/exception.S
 librtemsbsp_a_SOURCES += startup/usc.S
 # clock
-librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/hurricane/clock/ckinit.c
 
 # console
 librtemsbsp_a_SOURCES += console/console.c

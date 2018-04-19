@@ -46,7 +46,7 @@ librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/cache.S
 librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/sun4u/takemmu.S
 librtemsbsp_a_SOURCES += ../shared/start/trap_table.S
 
-librtemsbsp_a_SOURCES += ../shared/clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
 
 librtemsbsp_a_SOURCES += ../shared/console/conscfg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

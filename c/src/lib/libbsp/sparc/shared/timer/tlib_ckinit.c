@@ -401,7 +401,7 @@ static const struct ops ops_irqamp = {
 };
 #endif
 
-/** Interface to the Clock Driver Shell (clockdrv_shell.h) **/
+/** Interface to the Clock Driver Shell (dev/clock/clockimpl.h) **/
 #define Clock_driver_support_find_timer() \
   do { \
     rtems_device_driver ret; \
@@ -447,7 +447,7 @@ static const struct ops ops_irqamp = {
     } \
   } while (0)
 
-#include "../../../shared/clockdrv_shell.h"
+#include "../../../shared/dev/clock/clockimpl.h"
 
 #endif /* RTEMS_DRVMGR_STARTUP */
 

@@ -58,7 +58,7 @@ librtemsbsp_a_SOURCES += console/uart.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/or1k/generic_or1k/clock/clockdrv.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

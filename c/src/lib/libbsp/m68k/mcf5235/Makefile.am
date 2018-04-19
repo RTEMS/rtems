@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/copyvectors.c
 # clock
-librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mcf5235/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # timer

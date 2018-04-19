@@ -55,7 +55,7 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/bsprestart.c
 
 # Clock
-librtemsbsp_a_SOURCES += clock/clock-config.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/qoriq/clock/clock-config.c
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c

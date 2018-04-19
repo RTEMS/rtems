@@ -26,7 +26,7 @@ librtemsbsp_a_SOURCES += startup/bspreset.c
 librtemsbsp_a_SOURCES += startup/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
-librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/gumstix/clock/clock.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 #console

@@ -320,4 +320,4 @@ static void beagle_clock_cleanup(void)
 #define Clock_driver_support_shutdown_hardware() beagle_clock_cleanup()
 
 /* Include shared source clock driver code */
-#include "../../shared/clockdrv_shell.h"
+#include "../../shared/dev/clock/clockimpl.h"

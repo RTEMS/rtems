@@ -49,4 +49,4 @@ static void Clock_driver_support_initialize_hardware(void)
 
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
-#include "../../../shared/clockdrv_shell.h"
+#include "../../../shared/dev/clock/clockimpl.h"

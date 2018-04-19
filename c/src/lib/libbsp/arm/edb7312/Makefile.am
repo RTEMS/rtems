@@ -27,7 +27,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/edb7312/clock/clockdrv.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c

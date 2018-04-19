@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-inf
 librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
 
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

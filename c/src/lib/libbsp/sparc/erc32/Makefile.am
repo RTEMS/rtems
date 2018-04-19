@@ -48,7 +48,7 @@ librtemsbsp_a_SOURCES += console/erc32_console.c
 # debugio
 librtemsbsp_a_SOURCES += console/debugputs.c
 # clock
-librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/erc32/clock/ckinit.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

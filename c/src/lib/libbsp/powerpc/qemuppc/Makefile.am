@@ -29,7 +29,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += startup/cmain.c
 librtemsbsp_a_SOURCES += startup/bspstart.c
 # pclock
-librtemsbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c

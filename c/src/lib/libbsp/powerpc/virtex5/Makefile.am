@@ -30,7 +30,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += start/start.S
 
 # clock & timer
-librtemsbsp_a_SOURCES += ../shared/clock/p_clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 
 # console
 librtemsbsp_a_SOURCES += startup/dummy_console.c
@@ -43,7 +43,7 @@ librtemsbsp_a_SOURCES += irq/irq_init.c
 librtemsbsp_a_SOURCES += mmu/mmu.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/clock-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 
 

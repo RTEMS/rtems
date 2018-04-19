@@ -42,7 +42,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 
 # clock
-librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c

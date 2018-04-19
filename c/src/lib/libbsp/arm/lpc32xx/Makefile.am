@@ -65,7 +65,7 @@ librtemsbsp_a_SOURCES += console/console-config.c
 librtemsbsp_a_SOURCES += console/hsu.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/lpc/clock/lpc-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-nxp-lpc.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c

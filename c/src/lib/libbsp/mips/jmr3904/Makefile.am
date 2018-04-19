@@ -25,7 +25,7 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/jmr3904/clock/clockdrv.c
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c

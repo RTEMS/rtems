@@ -48,7 +48,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq_init.c
 
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += =

@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += startup/dumpanic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
-librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/gen68340/clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/m340uart.c

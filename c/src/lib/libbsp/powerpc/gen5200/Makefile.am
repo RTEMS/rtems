@@ -54,7 +54,7 @@ librtemsbsp_a_SOURCES += bestcomm/tasksetup_pci_rx.c
 librtemsbsp_a_SOURCES += bestcomm/tasksetup_pci_tx.c
 # clock
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # i2c

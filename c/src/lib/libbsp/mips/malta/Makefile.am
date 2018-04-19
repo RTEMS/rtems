@@ -34,8 +34,8 @@ librtemsbsp_a_SOURCES += startup/inittlb.c
 librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
 
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/clockdrv.c
-librtemsbsp_a_SOURCES += ../shared/clock/mips_timer.S
+librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/shared/clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/shared/clock/mips_timer.S
 
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

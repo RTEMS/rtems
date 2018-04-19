@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c
 # clock
-librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 # start hooks

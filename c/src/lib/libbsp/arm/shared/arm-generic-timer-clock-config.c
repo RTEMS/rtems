@@ -42,7 +42,7 @@ typedef struct {
 
 static arm_gt_clock_context arm_gt_clock_instance;
 
-/* This is defined in clockdrv_shell.h */
+/* This is defined in dev/clock/clockimpl.h */
 void Clock_isr(rtems_irq_hdl_param arg);
 
 static inline uint64_t arm_gt_clock_get_compare_value(void)
@@ -199,4 +199,4 @@ RTEMS_SYSINIT_ITEM(
   arm_gt_clock_handler_install()
 
 /* Include shared source clock driver code */
-#include "../../shared/clockdrv_shell.h"
+#include "../../shared/dev/clock/clockimpl.h"

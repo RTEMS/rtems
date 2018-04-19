@@ -64,7 +64,7 @@ librtemsbsp_a_SOURCES += ../shared/timer/gptimer.c
 librtemsbsp_a_SOURCES += ../shared/timer/tlib.c
 librtemsbsp_a_SOURCES += ../shared/timer/tlib_ckinit.c
 # non-Driver Manager Clock Implementation
-librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/leon3/clock/ckinit.c
 
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-termios.c

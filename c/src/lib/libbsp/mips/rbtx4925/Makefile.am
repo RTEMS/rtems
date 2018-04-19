@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
 librtemsbsp_a_SOURCES += ../shared/startup/idtmem.S
 librtemsbsp_a_SOURCES += ../shared/irq/exception.S
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/rbtx4925/clock/clockdrv.c
 # console
 librtemsbsp_a_SOURCES += console/console-io.c
 # liblnk

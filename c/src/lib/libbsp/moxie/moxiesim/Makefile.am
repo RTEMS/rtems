@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
-librtemsbsp_a_SOURCES += ../../shared/clock_driver_simidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 # console
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c
 librtemsbsp_a_SOURCES += console/console-io.c

@@ -29,7 +29,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += startup/setvec.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/nios2/nios2_iss/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += ../../shared/console-polled.c

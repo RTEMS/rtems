@@ -82,7 +82,7 @@ librtemsbsp_a_SOURCES += misc/mailbox.c
 librtemsbsp_a_SOURCES += misc/vc.c
 
 # clock
-librtemsbsp_a_SOURCES += clock/clockdrv.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/raspberrypi/clock/clockdrv.c
 
 # Timer
 librtemsbsp_a_SOURCES += misc/timer.c

@@ -118,8 +118,8 @@ librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += console/debug-console.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/armv7m/clock/armv7m-clock-config.c
-librtemsbsp_a_SOURCES += clock/systick-freq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/atsam/clock/systick-freq.c
 
 # Timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c

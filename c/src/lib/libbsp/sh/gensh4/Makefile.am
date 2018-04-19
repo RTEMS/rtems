@@ -27,7 +27,7 @@ librtemsbsp_a_SOURCES += ../shared/bsphwinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += startup/cpu_asm.c
 librtemsbsp_a_SOURCES += startup/ispsh7750.c
-librtemsbsp_a_SOURCES += clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh4/clock/ckinit.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console
 librtemsbsp_a_SOURCES += console/console.c

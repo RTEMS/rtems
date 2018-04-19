@@ -30,7 +30,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
-librtemsbsp_a_SOURCES += clock/clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/gen68360/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c

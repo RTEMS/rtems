@@ -17,7 +17,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # pclock
-librtemsbsp_a_SOURCES += clock/p_clock.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/ss555/clock/p_clock.c
 # console
 librtemsbsp_a_SOURCES += console/console.c
 # startup
@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES += startup/tm27supp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/exceptions/ppc_exc_print.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/clock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/clock/clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/console-generic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq_asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/irq.c

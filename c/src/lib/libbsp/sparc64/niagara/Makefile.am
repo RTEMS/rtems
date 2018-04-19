@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwasm.S
 librtemsbsp_a_SOURCES += start/bspinit.S
 librtemsbsp_a_SOURCES += ../shared/asm/asm.S
 
-librtemsbsp_a_SOURCES += ../shared/clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
 
 librtemsbsp_a_SOURCES += ../shared/console/conscfg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

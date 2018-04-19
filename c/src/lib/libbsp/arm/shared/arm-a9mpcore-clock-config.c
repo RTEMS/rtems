@@ -25,7 +25,7 @@
 
 static struct timecounter a9mpcore_tc;
 
-/* This is defined in clockdrv_shell.h */
+/* This is defined in dev/clock/clockimpl.h */
 void Clock_isr(rtems_irq_hdl_param arg);
 
 __attribute__ ((weak)) uint32_t a9mpcore_clock_periphclk(void)
@@ -209,4 +209,4 @@ static void a9mpcore_clock_cleanup(void)
   a9mpcore_clock_cleanup()
 
 /* Include shared source clock driver code */
-#include "../../shared/clockdrv_shell.h"
+#include "../../shared/dev/clock/clockimpl.h"

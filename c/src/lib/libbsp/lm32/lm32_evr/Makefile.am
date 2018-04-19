@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../shared/startup/bspreset.c
 # clock
-librtemsbsp_a_SOURCES += ../shared/clock/ckinit.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/lm32/shared/clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += ../shared/console/console.c
 librtemsbsp_a_SOURCES += ../shared/console/uart.c

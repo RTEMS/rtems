@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 librtemsbsp_a_SOURCES += startup/bspreset.c
 
 # Clock
-librtemsbsp_a_SOURCES += clock/clock-config.c
+librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/t32mppc/clock/clock-config.c
 
 # Timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
