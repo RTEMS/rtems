@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/rtl22xx/clock/clockdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/rtl22xx/console/uart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c

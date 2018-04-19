@@ -30,8 +30,8 @@ librtemsbsp_a_SOURCES += ../shared/startup/bspreset.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/lm32/shared/clock/ckinit.c
 # console
-librtemsbsp_a_SOURCES += ../shared/console/console.c
-librtemsbsp_a_SOURCES += ../shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/console/uart.c
 # timer
 librtemsbsp_a_SOURCES += ../shared/timer/timer.c
 

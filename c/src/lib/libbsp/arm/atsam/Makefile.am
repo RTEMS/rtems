@@ -113,9 +113,9 @@ librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += console/debug-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/console/debug-console.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c

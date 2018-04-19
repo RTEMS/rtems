@@ -71,12 +71,12 @@ librtemsbsp_a_SOURCES += irq/irq.c
 librtemsbsp_a_SOURCES += irq/irq-dispatch.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/uart-probe-1.c
-librtemsbsp_a_SOURCES += console/uart-probe-2.c
-librtemsbsp_a_SOURCES += console/uart-probe-3.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/console/uart-probe-1.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/console/uart-probe-2.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/console/uart-probe-3.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-nxp-lpc.c

@@ -24,8 +24,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mcf5225x/clock/clock.c
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += console/debugio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5225x/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5225x/console/debugio.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5225x.c

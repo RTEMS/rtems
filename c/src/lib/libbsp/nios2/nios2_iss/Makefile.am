@@ -31,8 +31,8 @@ librtemsbsp_a_SOURCES += startup/setvec.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/nios2/nios2_iss/clock/clock.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

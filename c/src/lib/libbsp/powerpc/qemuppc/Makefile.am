@@ -31,8 +31,8 @@ librtemsbsp_a_SOURCES += startup/bspstart.c
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
-librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qemuppc/console/console-io.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

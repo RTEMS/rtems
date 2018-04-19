@@ -30,7 +30,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/csb336/clock/clockdrv.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console
-librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/console/uart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c

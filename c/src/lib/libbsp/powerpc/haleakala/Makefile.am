@@ -30,8 +30,8 @@ librtemsbsp_a_SOURCES += mmu/mmu_405asm.S
 librtemsbsp_a_SOURCES += dlentry/dlentry.S
 
 # console
-librtemsbsp_a_SOURCES += ../shared/console/uart.c
-librtemsbsp_a_SOURCES += ../shared/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

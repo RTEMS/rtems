@@ -30,7 +30,7 @@
 #if BSP_ENABLE_VGA
 #include <rtems/keyboard.h>
 #endif
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 /*
  *  console_control

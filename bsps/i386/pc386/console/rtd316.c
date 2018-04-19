@@ -26,7 +26,7 @@
 #include <rtems/bspIo.h>
 #include <bsp/rtd316.h>
 #include <rtems/score/i386.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 #define RTD_CLOCK_RATE  (460800 * 32)
 

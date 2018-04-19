@@ -27,7 +27,7 @@
 #include <rtems/bspIo.h>
 #include <rtems/pci.h>
 #include <bsp/exar17d15x.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 #define MAX_BOARDS 4
 

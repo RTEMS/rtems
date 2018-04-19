@@ -65,7 +65,7 @@ librtemsbsp_a_SOURCES += irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/console/console-config.c
 
 # I2C
 librtemsbsp_a_SOURCES += i2c/bbb-i2c.c

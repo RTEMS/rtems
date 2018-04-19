@@ -31,9 +31,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mcf52235/clock/clock.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/console/console.c
 # debugio
-librtemsbsp_a_SOURCES += console/debugio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/console/debugio.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

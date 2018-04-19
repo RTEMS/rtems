@@ -19,7 +19,7 @@ librtemsbsp_a_SOURCES =
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/ss555/clock/p_clock.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/console/console.c
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += startup/bspstart.c

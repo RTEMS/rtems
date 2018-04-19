@@ -55,8 +55,8 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/dev/polled_io.c
-librtemsbsp_a_SOURCES += ../shared/console/uart.c
-librtemsbsp_a_SOURCES += ../shared/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # irq
 librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c

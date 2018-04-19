@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/genmcf548x/clock/clock.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/console/console.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

@@ -28,8 +28,8 @@ librtemsbsp_a_SOURCES += startup/syscalls.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
-librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/console/console-io.c
 # clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 # timer

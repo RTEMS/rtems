@@ -53,42 +53,42 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/i386/pc386/clock/todcfg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 
 if RTEMS_VGA
-librtemsbsp_a_SOURCES += console/inch.c
-librtemsbsp_a_SOURCES += console/outch.c
-librtemsbsp_a_SOURCES += console/defkeymap.c
-librtemsbsp_a_SOURCES += console/keyboard.c
-librtemsbsp_a_SOURCES += console/pc_keyb.c
-librtemsbsp_a_SOURCES += console/ps2_mouse.c
-librtemsbsp_a_SOURCES += console/vgainit.c
-librtemsbsp_a_SOURCES += console/vt.c
-librtemsbsp_a_SOURCES += console/videoAsm.S
-librtemsbsp_a_SOURCES += console/kbd_parser.c
-librtemsbsp_a_SOURCES += console/vgacons.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/inch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/outch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/defkeymap.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/keyboard.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/pc_keyb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/ps2_mouse.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/vgainit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/vt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/videoAsm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/kbd_parser.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/vgacons.c
 if USE_VGA
-librtemsbsp_a_SOURCES += console/fb_vga.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/fb_vga.c
 endif
 if USE_CIRRUS_GD5446
-librtemsbsp_a_SOURCES += console/fb_cirrus.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/fb_cirrus.c
 endif
 if USE_VBE_RM
-librtemsbsp_a_SOURCES += console/fb_vesa_rm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/fb_vesa_rm.c
 endif
 endif
 
 # console (non-graphics support)
-librtemsbsp_a_SOURCES += console/serial_mouse_config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/serial_mouse_config.c
 librtemsbsp_a_SOURCES += ../shared/comm/uart.c
 librtemsbsp_a_SOURCES += ../shared/comm/tty_drv.c
 librtemsbsp_a_SOURCES += ../shared/realmode_int/realmode_int.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
-librtemsbsp_a_SOURCES += console/console_select.c
-librtemsbsp_a_SOURCES += console/console_control.c
-librtemsbsp_a_SOURCES += console/conscfg.c
-librtemsbsp_a_SOURCES += console/printk_support.c
-librtemsbsp_a_SOURCES += console/exar17d15x.c
-librtemsbsp_a_SOURCES += console/rtd316.c
-librtemsbsp_a_SOURCES += console/uart_bus_pci.c
-librtemsbsp_a_SOURCES += console/gdb_select.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/console_select.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/console_control.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/conscfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/exar17d15x.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/rtd316.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/uart_bus_pci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/gdb_select.c
 
 # gdb
 librtemsbsp_a_SOURCES += ../shared/comm/i386-stub.c

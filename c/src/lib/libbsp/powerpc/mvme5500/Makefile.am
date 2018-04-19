@@ -29,8 +29,8 @@ librtemsbsp_a_SOURCES += ../shared/startup/probeMemEnd.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += ../shared/console/uart.c
-librtemsbsp_a_SOURCES += ../shared/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # pci
 librtemsbsp_a_SOURCES += pci/pci.c

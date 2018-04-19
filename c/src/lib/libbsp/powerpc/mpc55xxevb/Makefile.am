@@ -72,10 +72,10 @@ librtemsbsp_a_SOURCES += startup/start-watchdog.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/mpc55xxevb/clock/clock-config.c
 
 # console
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/console-esci.c
-librtemsbsp_a_SOURCES += console/console-generic.c
-librtemsbsp_a_SOURCES += console/console-linflex.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/console/console-esci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/console/console-generic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/console/console-linflex.c
 
 # irq_generic
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

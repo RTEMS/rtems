@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += startup/usc.S
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/hurricane/clock/ckinit.c
 
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/hurricane/console/console.c
 # liblnk
 librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S

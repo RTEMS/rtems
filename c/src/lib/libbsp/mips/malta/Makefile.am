@@ -41,8 +41,8 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/shared/clock/mips_timer.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/conscfg.c
-librtemsbsp_a_SOURCES += console/printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/console/conscfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/console/printk_support.c
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 

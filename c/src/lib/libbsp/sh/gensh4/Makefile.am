@@ -30,9 +30,9 @@ librtemsbsp_a_SOURCES += startup/ispsh7750.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh4/clock/ckinit.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
-librtemsbsp_a_SOURCES += console/sh4uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/console/sh4uart.c
 # hw_init
 librtemsbsp_a_SOURCES += hw_init/hw_init.c
 

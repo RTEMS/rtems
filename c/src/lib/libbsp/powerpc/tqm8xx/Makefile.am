@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/tqm8xx/clock/p_clock.c
 
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/console/console.c
 # spi
 librtemsbsp_a_SOURCES += spi/spi.c
 # timer

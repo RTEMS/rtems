@@ -67,12 +67,12 @@ librtemsbsp_a_SOURCES += ../shared/timer/tlib_ckinit.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/leon3/clock/ckinit.c
 
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/console/console.c
 librtemsbsp_a_SOURCES += ../shared/uart/cons.c
 librtemsbsp_a_SOURCES += ../shared/uart/apbuart_cons.c
 # debugio
-librtemsbsp_a_SOURCES += console/printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/console/printk_support.c
 
 # IRQ
 librtemsbsp_a_SOURCES += startup/eirq.c

@@ -56,8 +56,8 @@ librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/console/uart.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c

@@ -30,8 +30,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mvme147/clock/ckinit.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += timer/timerisr.S

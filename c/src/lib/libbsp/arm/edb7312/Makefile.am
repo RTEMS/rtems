@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/edb7312/clock/clockdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/console/uart.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 

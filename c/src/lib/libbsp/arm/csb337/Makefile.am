@@ -43,15 +43,15 @@ librtemsbsp_a_SOURCES += timer/timer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/uarts.c
-librtemsbsp_a_SOURCES += console/dbgu.c
-librtemsbsp_a_SOURCES += console/usart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/uarts.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/dbgu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/usart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 if ENABLE_LCD
-librtemsbsp_a_SOURCES += console/sed1356.c
-librtemsbsp_a_SOURCES += console/fbcons.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/sed1356.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/fbcons.c
 endif
 # umon
 if ENABLE_UMON

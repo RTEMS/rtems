@@ -25,7 +25,7 @@
 #include <bsp.h>
 #include <libchip/serial.h>
 #include <libchip/ns16550.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 rtems_device_minor_number BSPPrintkPort = 0;
 

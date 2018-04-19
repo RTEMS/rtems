@@ -23,7 +23,7 @@
 #include <rtems/vgacons.h>
 #endif
 #include <bsp/irq.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 #if BSP_ENABLE_VGA
 #define VGA_CONSOLE_FUNCTIONS  &vgacons_fns

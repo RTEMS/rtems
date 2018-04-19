@@ -59,10 +59,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-gic-irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/debug-console.c
-librtemsbsp_a_SOURCES += console/zynq-uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/debug-console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/zynq-uart.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c

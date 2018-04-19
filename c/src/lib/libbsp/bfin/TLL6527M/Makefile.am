@@ -25,7 +25,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/start/interrupt.c
 

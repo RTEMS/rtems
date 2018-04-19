@@ -27,8 +27,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # console
-librtemsbsp_a_SOURCES += console/console-io.c
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/csb360/console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c

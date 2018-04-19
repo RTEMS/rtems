@@ -42,8 +42,8 @@ librtemsbsp_a_SOURCES += ../shared/irq_asm.S
 librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
 librtemsbsp_a_SOURCES += ../shared/gnatcommon.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
-librtemsbsp_a_SOURCES += console/debugputs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/leon2/clock/ckinit.c
 # IRQ

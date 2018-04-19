@@ -48,7 +48,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 librtemsbsp_a_SOURCES += timer/timer.c
 
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -58,7 +58,7 @@ librtemsbsp_a_SOURCES += irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # debugio
-librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/epiphany/epiphany_sim/console/console-io.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

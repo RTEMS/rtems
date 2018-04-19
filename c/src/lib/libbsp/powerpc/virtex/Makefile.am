@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/consolelite.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/console/consolelite.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

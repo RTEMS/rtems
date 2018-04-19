@@ -16,7 +16,7 @@ dist_project_lib_DATA = startup/bsp_specs
 # Header                                                     #
 ###############################################################################
 
-noinst_HEADERS = console/font_data.h
+noinst_HEADERS = ../../../../../../bsps/arm/raspberrypi/console/font_data.h
 
 ###############################################################################
 # Data                                                       #
@@ -68,12 +68,12 @@ librtemsbsp_a_SOURCES += irq/irq.c
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/console_select.c
-librtemsbsp_a_SOURCES += console/usart.c
-librtemsbsp_a_SOURCES += console/fb.c
-librtemsbsp_a_SOURCES += console/fbcons.c
-librtemsbsp_a_SOURCES += console/outch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/console_select.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/usart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fbcons.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/outch.c
 
 # Mailbox
 librtemsbsp_a_SOURCES += misc/mailbox.c

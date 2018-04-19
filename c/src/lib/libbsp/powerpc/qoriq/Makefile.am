@@ -65,11 +65,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/uart-bridge-master.c
-librtemsbsp_a_SOURCES += console/uart-bridge-slave.c
-librtemsbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/console/uart-bridge-master.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/console/uart-bridge-slave.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/console/console-config.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c

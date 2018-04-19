@@ -27,8 +27,8 @@ librtemsbsp_a_SOURCES += ../shared/crt1.c
 librtemsbsp_a_SOURCES += startup/trap.S
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
-librtemsbsp_a_SOURCES += console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/v850/gdbv850sim/console/console-io.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 
 # Cache

@@ -28,8 +28,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/csb350/clock/clockdrv.c
 # console
-librtemsbsp_a_SOURCES += console/console-io.c
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 #isr

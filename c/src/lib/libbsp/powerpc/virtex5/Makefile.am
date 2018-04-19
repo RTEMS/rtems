@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 
 # console
 librtemsbsp_a_SOURCES += startup/dummy_console.c
-librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

@@ -29,7 +29,7 @@
 #include <rtems/termiostypes.h>
 #include <bsp/bspimpl.h>
 
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 #ifdef RTEMS_RUNTIME_CONSOLE_SELECT
   #include <crt.h>
 #endif

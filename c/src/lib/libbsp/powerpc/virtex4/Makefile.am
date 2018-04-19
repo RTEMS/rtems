@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES += start/start.S
 
 # console
 librtemsbsp_a_SOURCES += startup/dummy_console.c
-librtemsbsp_a_SOURCES += ../../shared/dummy_printk_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

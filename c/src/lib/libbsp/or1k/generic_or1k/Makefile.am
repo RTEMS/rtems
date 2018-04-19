@@ -51,8 +51,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/console/uart.c
 
 # Timer
 librtemsbsp_a_SOURCES += timer/timer.c

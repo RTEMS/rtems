@@ -62,9 +62,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += irq/irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/printk-support.c
-librtemsbsp_a_SOURCES += console/tms570-sci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/console/printk-support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/console/tms570-sci.c
 
 # Clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/tms570/clock/clock.c

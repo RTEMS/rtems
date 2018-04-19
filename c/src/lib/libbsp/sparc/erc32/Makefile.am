@@ -44,9 +44,9 @@ librtemsbsp_a_SOURCES += ../shared/gnatcommon.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/erc32_console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/console/erc32_console.c
 # debugio
-librtemsbsp_a_SOURCES += console/debugputs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/erc32/clock/ckinit.c
 # timer

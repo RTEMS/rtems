@@ -24,9 +24,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += startup/crtn.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
-librtemsbsp_a_SOURCES += console/console-io.c
-librtemsbsp_a_SOURCES += console/syscalls.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/console/syscalls.S
 librtemsbsp_a_SOURCES += timer/timer.c
 
 # Cache

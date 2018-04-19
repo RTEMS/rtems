@@ -15,7 +15,7 @@
 #include <fcntl.h>
 
 #include <libchip/serial.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 
 /* select which serial port the mouse is connected to */
 #if defined(SERIAL_MOUSE_COM2)

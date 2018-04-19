@@ -26,7 +26,7 @@
 
 #include <rtems/termiostypes.h>
 #include <libchip/serial.h>
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../shared/dev/serial/legacy-console.h"
 #include <bsp/rpi-fb.h>
 
 rtems_device_minor_number BSPPrintkPort = 0;

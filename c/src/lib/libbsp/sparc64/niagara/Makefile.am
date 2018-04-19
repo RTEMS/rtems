@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../shared/asm/asm.S
 
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
 
-librtemsbsp_a_SOURCES += ../shared/console/conscfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/console/conscfg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c

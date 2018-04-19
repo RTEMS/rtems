@@ -32,10 +32,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 # debugio
-librtemsbsp_a_SOURCES += console/console-io.c
-librtemsbsp_a_SOURCES += console/consupp.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/console/consupp.S
 
 # irq
 librtemsbsp_a_SOURCES += irq/irq_init.c

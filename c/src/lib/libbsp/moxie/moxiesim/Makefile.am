@@ -30,9 +30,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 # console
-librtemsbsp_a_SOURCES += ../../shared/console-polled.c
-librtemsbsp_a_SOURCES += console/console-io.c
-librtemsbsp_a_SOURCES += console/syscalls.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/moxie/moxiesim/console/console-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/moxie/moxiesim/console/syscalls.S
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 

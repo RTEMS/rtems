@@ -106,9 +106,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-gic-irq.c
 
 # Console
-librtemsbsp_a_SOURCES += ../../shared/console-termios-init.c
-librtemsbsp_a_SOURCES += ../../shared/console-termios.c
-librtemsbsp_a_SOURCES += console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/console/console-config.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c

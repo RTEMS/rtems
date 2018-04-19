@@ -56,8 +56,8 @@ librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
-librtemsbsp_a_SOURCES += console/console-config.c
-librtemsbsp_a_SOURCES += console/usart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/console/usart.c
 
 # I2C
 librtemsbsp_a_SOURCES += i2c/i2c.c

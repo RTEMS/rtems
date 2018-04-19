@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += startup/copyvectors.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/mcf5235/clock/clock.c
 # console
-librtemsbsp_a_SOURCES += console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5235/console/console.c
 # timer
 librtemsbsp_a_SOURCES += timer/timer.c
 
