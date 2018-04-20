@@ -56,7 +56,7 @@ librtemsbsp_a_SOURCES += network/xiltemac.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

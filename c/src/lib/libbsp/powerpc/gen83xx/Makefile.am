@@ -61,7 +61,7 @@ librtemsbsp_a_SOURCES += i2c/i2c_init.c
 librtemsbsp_a_SOURCES += spi/spi_init.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/bat.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/mmuAsm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/pte121.c

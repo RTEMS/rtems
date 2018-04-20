@@ -54,7 +54,7 @@ librtemsbsp_a_SOURCES += network/network_scc.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/dev/console-generic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/dpram.c

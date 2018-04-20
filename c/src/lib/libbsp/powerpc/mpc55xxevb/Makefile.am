@@ -95,7 +95,7 @@ endif
 # BSP library
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/dev/dspi.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/copy.S

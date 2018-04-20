@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += startup/tm27supp.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/exceptions/ppc_exc_print.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/clock/clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/dev/console-generic.c

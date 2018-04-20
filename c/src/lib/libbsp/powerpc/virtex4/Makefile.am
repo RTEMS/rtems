@@ -42,7 +42,7 @@ librtemsbsp_a_SOURCES += mmu/mmu.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc403.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/dev/timer-ppc-dec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 
 
 include $(top_srcdir)/../../../../automake/local.am
