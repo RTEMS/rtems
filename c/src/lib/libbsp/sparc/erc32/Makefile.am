@@ -36,7 +36,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exi
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_halt.c
 # gnatsupp
 librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
-librtemsbsp_a_SOURCES += ../shared/gnatcommon.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/gnatcommon.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c
@@ -50,8 +50,8 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/erc32/clock/ckinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/btimer/btimer.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../shared/irq/irq-shared.c
-librtemsbsp_a_SOURCES += ../shared/irq/bsp_isr_handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/irq/irq-shared.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/irq/bsp_isr_handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 if HAS_SMP
