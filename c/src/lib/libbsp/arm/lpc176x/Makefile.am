@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/lpc176x/start/bsp_specs
 
 
 # ----------------------------
@@ -27,9 +27,9 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed
-dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram
-dist_project_lib_DATA += startup/linkcmds.lpc1768_mbed_ahb_ram_eth
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed_ahb_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc176x/start/linkcmds.lpc1768_mbed_ahb_ram_eth
 
 # ----------------------------
 # ------  LibBSP
@@ -48,9 +48,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/uart-output-char.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/bspstart.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -104,7 +104,7 @@ librtemsbsp_a_SOURCES += watchdog/watchdog.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/bspstarthooks.c
 
 
 # ----------------------------

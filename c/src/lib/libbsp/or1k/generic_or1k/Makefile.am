@@ -9,7 +9,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/or1k/generic_or1k/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -24,7 +24,7 @@ start.$(OBJEXT): ../../../../../../bsps/or1k/generic_or1k/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/or1k/shared/start/linkcmds.base
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -38,7 +38,7 @@ librtemsbsp_a_LIBADD =
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/start/bspstart.c
 
 # Shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c

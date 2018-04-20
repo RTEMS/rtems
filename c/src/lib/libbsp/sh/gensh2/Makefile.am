@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/sh/gensh2/start/bsp_specs
 
 
 
@@ -12,8 +12,8 @@ start.$(OBJEXT): ../../../../../../bsps/sh/gensh2/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.ram
-dist_project_lib_DATA += startup/linkcmds.rom
+dist_project_lib_DATA += ../../../../../../bsps/sh/gensh2/start/linkcmds.ram
+dist_project_lib_DATA += ../../../../../../bsps/sh/gensh2/start/linkcmds.rom
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -26,8 +26,8 @@ BUILT_SOURCES = scitab.c
 CLEANFILES = scitab.c
 
 # startup
-librtemsbsp_a_SOURCES += startup/hw_init.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/hw_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
@@ -35,8 +35,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../shared/bsphwinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh2/clock/ckinit.c
-librtemsbsp_a_SOURCES += startup/cpu_asm.c
-librtemsbsp_a_SOURCES += startup/ispsh7045.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/cpu_asm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/ispsh7045.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c

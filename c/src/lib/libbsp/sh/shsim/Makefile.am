@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/sh/shsim/start/bsp_specs
 
 
 
@@ -17,16 +17,16 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += ../shared/startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../shared/bsphwinit.c
-librtemsbsp_a_SOURCES += startup/sysexit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shsim/start/sysexit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += startup/cpu_asm.c
-librtemsbsp_a_SOURCES += startup/ispshgdb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shsim/start/cpu_asm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shsim/start/ispshgdb.c
 
 # clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c

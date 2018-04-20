@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/csb337/start/bsp_specs
 
 if ENABLE_LCD
 endif
@@ -19,8 +19,8 @@ start.$(OBJEXT): ../../../../../../bsps/arm/csb337/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.csb337
-dist_project_lib_DATA += startup/linkcmds.csb637
+dist_project_lib_DATA += ../../../../../../bsps/arm/csb337/start/linkcmds.csb337
+dist_project_lib_DATA += ../../../../../../bsps/arm/csb337/start/linkcmds.csb637
 
 
 project_lib_LIBRARIES = librtemsbsp.a
@@ -28,15 +28,15 @@ librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/memmap.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
-librtemsbsp_a_SOURCES += startup/pmc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/pmc.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/csb337/clock/clock.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # console
@@ -58,7 +58,7 @@ if ENABLE_UMON
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/monlib.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/tfsDriver.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umonrtemsglue.c
-librtemsbsp_a_SOURCES += startup/umonsupp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/umonsupp.c
 endif
 if ENABLE_UMON_CONSOLE
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/umon/umoncons.c

@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/m68k/mcf52235/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -21,10 +21,10 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
-librtemsbsp_a_SOURCES += startup/init52235.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/start/init52235.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
-librtemsbsp_a_SOURCES += startup/cfinit.c
-librtemsbsp_a_SOURCES += startup/bspgetcpuclockspeed.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/start/cfinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/start/bspgetcpuclockspeed.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c

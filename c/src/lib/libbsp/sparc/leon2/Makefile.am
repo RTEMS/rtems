@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/sparc/leon2/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -14,9 +14,9 @@ start.$(OBJEXT): ../../../../../../bsps/sparc/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
-dist_project_lib_DATA += startup/linkcmds.at697f
-dist_project_lib_DATA += startup/linkcmds.leon2
+dist_project_lib_DATA += ../../../../../../bsps/sparc/shared/start/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon2/start/linkcmds.at697f
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon2/start/linkcmds.leon2
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -24,16 +24,16 @@ librtemsbsp_a_SOURCES =
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/setvec.c
-librtemsbsp_a_SOURCES += startup/spurious.c
-librtemsbsp_a_SOURCES += startup/bspidle.c
-librtemsbsp_a_SOURCES += startup/bspdelay.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp_fatal_exit.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/spurious.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspdelay.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_halt.c
 
 # ISR Handler
 librtemsbsp_a_SOURCES += ../shared/cpu.c

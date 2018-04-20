@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/epiphany/epiphany_sim/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #

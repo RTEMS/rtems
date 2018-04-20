@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/nios2/nios2_iss/start/bsp_specs
 
 
 
@@ -22,11 +22,11 @@ librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/start/setvec.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/nios2/nios2_iss/clock/clock.c

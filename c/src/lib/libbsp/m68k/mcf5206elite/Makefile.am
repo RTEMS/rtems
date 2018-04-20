@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/m68k/mcf5206elite/start/bsp_specs
 
 
 _SUBDIRS = . tools
@@ -15,9 +15,9 @@ start.$(OBJEXT): ../../../../../../bsps/m68k/mcf5206elite/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.flash
+dist_project_lib_DATA += ../../../../../../bsps/m68k/mcf5206elite/start/linkcmds.flash
 
-dist_project_lib_DATA += startup/gdbinit
+dist_project_lib_DATA += ../../../../../../bsps/m68k/mcf5206elite/start/gdbinit
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -26,7 +26,7 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
-librtemsbsp_a_SOURCES += startup/init5206e.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/start/init5206e.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c

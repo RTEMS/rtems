@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/raspberrypi/start/bsp_specs
 
 ###############################################################################
 # Header                                                     #
@@ -43,23 +43,23 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 if BSP_START_IN_HYP_SUPPORT
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-in-hyp-support.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-in-hyp-support.S
 endif
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/cmdline.c
-librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/cmdline.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspgetworkarea.c
 if HAS_SMP
-librtemsbsp_a_SOURCES += startup/bspsmp.c
-librtemsbsp_a_SOURCES += startup/bspsmp_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspsmp_init.c
 endif
 
 # Restart
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspreset.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
@@ -105,10 +105,10 @@ librtemsbsp_a_SOURCES += spi/spi.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspstarthooks.c
 
 # LIBMM
-librtemsbsp_a_SOURCES += startup/mm_config_table.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/mm_config_table.c
 librtemsbsp_a_SOURCES += ../shared/mminit.c
 
 ###############################################################################

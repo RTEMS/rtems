@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/gdbarmsim/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -21,10 +21,10 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/syscalls.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/start/syscalls.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 # console
@@ -35,8 +35,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 # start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 
 # IRQ
 librtemsbsp_a_SOURCES += irq/irq.c

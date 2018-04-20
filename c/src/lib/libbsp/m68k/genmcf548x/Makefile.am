@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/m68k/genmcf548x/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -13,9 +13,9 @@ start.$(OBJEXT): ../../../../../../bsps/m68k/genmcf548x/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.COBRA5475
-dist_project_lib_DATA += startup/linkcmds.m5484FireEngine
-dist_project_lib_DATA += startup/linkcmds.m5484FireEngine.flash
+dist_project_lib_DATA += ../../../../../../bsps/m68k/genmcf548x/start/linkcmds.COBRA5475
+dist_project_lib_DATA += ../../../../../../bsps/m68k/genmcf548x/start/linkcmds.m5484FireEngine
+dist_project_lib_DATA += ../../../../../../bsps/m68k/genmcf548x/start/linkcmds.m5484FireEngine.flash
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -25,8 +25,8 @@ librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
-librtemsbsp_a_SOURCES += startup/init548x.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/init548x.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c

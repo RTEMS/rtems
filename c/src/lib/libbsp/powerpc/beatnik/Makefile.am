@@ -6,7 +6,7 @@ noinst_PROGRAMS =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/beatnik/start/bsp_specs
 
 project_lib_DATA      = 
 
@@ -36,23 +36,23 @@ project_lib_DATA += motld_start.$(OBJEXT)
 #startup
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.share
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.share
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspstart.c
 librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/i2c_init.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../shared/startup/probeMemEnd.c
-librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
-librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c
-librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/i2c_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/probeMemEnd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/zerobss.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspclean.c
 
 #pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c

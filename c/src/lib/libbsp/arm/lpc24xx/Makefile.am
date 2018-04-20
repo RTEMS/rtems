@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/lpc24xx/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -25,20 +25,20 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.lpc17xx_ea_ram
-dist_project_lib_DATA += startup/linkcmds.lpc17xx_ea_rom_int
-dist_project_lib_DATA += startup/linkcmds.lpc17xx_plx800_ram
-dist_project_lib_DATA += startup/linkcmds.lpc17xx_plx800_rom_int
-dist_project_lib_DATA += startup/linkcmds.lpc2362
-dist_project_lib_DATA += startup/linkcmds.lpc23xx_tli800
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_ea
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_ncs_ram
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_ncs_rom_ext
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_ncs_rom_int
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_plx800_ram
-dist_project_lib_DATA += startup/linkcmds.lpc24xx_plx800_rom_int
-dist_project_lib_DATA += startup/linkcmds.lpc40xx_ea_ram
-dist_project_lib_DATA += startup/linkcmds.lpc40xx_ea_rom_int
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc17xx_ea_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc17xx_ea_rom_int
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc17xx_plx800_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc17xx_plx800_rom_int
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc2362
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc23xx_tli800
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ea
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_rom_ext
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_ncs_rom_int
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_plx800_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc24xx_plx800_rom_int
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc40xx_ea_ram
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc24xx/start/linkcmds.lpc40xx_ea_rom_int
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -58,10 +58,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/uart-output-ch
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspreset-armv4.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspreset-armv4.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspstart.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -105,17 +105,17 @@ librtemsbsp_a_SOURCES += i2c/i2c-config.c
 
 # Framebuffer
 librtemsbsp_a_SOURCES += ../shared/arm-pl111-fb.c
-librtemsbsp_a_SOURCES += startup/fb-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/fb-config.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += startup/start-config-emc-dynamic.c
-librtemsbsp_a_SOURCES += startup/start-config-emc-static.c
-librtemsbsp_a_SOURCES += startup/start-config-mpu.c
-librtemsbsp_a_SOURCES += startup/start-config-pinsel.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/start-config-emc-dynamic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/start-config-emc-static.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/start-config-mpu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/start-config-pinsel.c
 
 ###############################################################################
 #                  Network                                                    #

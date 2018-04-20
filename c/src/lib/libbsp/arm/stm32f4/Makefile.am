@@ -7,15 +7,15 @@ include $(top_srcdir)/../../bsp.am
 #                  Data                                                       #
 ###############################################################################
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/stm32f4/start/bsp_specs
 
 start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.stm32f105rc
-dist_project_lib_DATA += startup/linkcmds.stm32f4
+dist_project_lib_DATA += ../../../../../../bsps/arm/stm32f4/start/linkcmds.stm32f105rc
+dist_project_lib_DATA += ../../../../../../bsps/arm/stm32f4/start/linkcmds.stm32f4
 
 ###############################################################################
 #                  Header                                                     #
@@ -39,13 +39,13 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspstarthook.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/io.c
-librtemsbsp_a_SOURCES += startup/rcc.c
-librtemsbsp_a_SOURCES += startup/start-config-io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/bspstarthook.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/rcc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/stm32f4/start/start-config-io.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

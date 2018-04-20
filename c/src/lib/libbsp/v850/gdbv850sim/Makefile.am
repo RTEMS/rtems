@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/v850/gdbv850sim/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -22,9 +22,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/v850/gdbv850sim/start/bspreset.c
 librtemsbsp_a_SOURCES += ../shared/crt1.c
-librtemsbsp_a_SOURCES += startup/trap.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/v850/gdbv850sim/start/trap.S
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c

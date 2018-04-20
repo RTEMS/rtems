@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/sparc64/usiii/start/bsp_specs
 
 ## these are the include files used by the boot process from HelenOS Sparc64
 ## These include files mimic the HelenOS kernel include layout, which 
@@ -21,7 +21,7 @@ start.$(OBJEXT): ../../../../../../bsps/sparc64/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-dist_project_lib_DATA += ../shared/startup/linkcmds
+dist_project_lib_DATA += ../../../../../../bsps/sparc64/shared/start/linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a 
 librtemsbsp_a_SOURCES =
@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += ../shared/startup/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/balloc.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw_tree.c

@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/m68k/mrm332/start/bsp_specs
 
 
 
@@ -17,7 +17,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/start_c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mrm332/start/start_c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mrm332/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c

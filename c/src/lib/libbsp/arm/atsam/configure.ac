@@ -65,7 +65,7 @@ RTEMS_BSPOPTS_HELP([BOARD_MAINOSC],[Main oscillator frequency in Hz (default 12M
 RTEMS_BSPOPTS_SET([ATSAM_MCK],[*],[123000000])
 RTEMS_BSPOPTS_HELP([ATSAM_MCK],
 [Frequency of the MCK in Hz. Set to 0 to force application defined speed.
-See startup/pmc-config.c for available clock configurations.])
+See start/pmc-config.c for available clock configurations.])
 
 RTEMS_BSPOPTS_SET([ATSAM_SLOWCLOCK_USE_XTAL],[*],[1])
 RTEMS_BSPOPTS_HELP([ATSAM_SLOWCLOCK_USE_XTAL],
@@ -107,6 +107,6 @@ ATSAM_LINKCMD([ATSAM_MEMORY_NOCACHE_SIZE],[size of NOCACHE section in bytes],[0x
 
 AC_CONFIG_FILES([
 Makefile
-linkcmds.memory:startup/linkcmds.memory.in
+linkcmds.memory:../../../../../../bsps/arm/atsam/start/linkcmds.memory.in
 ])
 AC_OUTPUT

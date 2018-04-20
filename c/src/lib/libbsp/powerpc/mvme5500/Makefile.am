@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/mvme5500/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -14,16 +14,16 @@ librtemsbsp_a_SOURCES =
 # UNUSED
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
-librtemsbsp_a_SOURCES += startup/pgtbl_activate.c
-librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/zerobss.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/bspclean.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += ../shared/startup/probeMemEnd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/probeMemEnd.c
 
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
@@ -72,7 +72,7 @@ mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 project_lib_DATA += mvme5500start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.share
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.share
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup_asm.S

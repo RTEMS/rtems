@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/beagle/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -25,7 +25,7 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.beagle
+dist_project_lib_DATA += ../../../../../../bsps/arm/beagle/start/linkcmds.beagle
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -47,15 +47,15 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/gpio/gpio-support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += startup/bspstartmmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/start/bspstartmmu.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

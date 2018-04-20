@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/ss555/start/bsp_specs
 
 
 
@@ -22,15 +22,15 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/ss555/clock/p_clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/console/console.c
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/iss555.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/iss555.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/start.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # tm27supp
-librtemsbsp_a_SOURCES += startup/tm27supp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/tm27supp.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c

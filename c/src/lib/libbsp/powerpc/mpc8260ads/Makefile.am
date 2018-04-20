@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/mpc8260ads/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -33,11 +33,11 @@ librtemsbsp_a_SOURCES += irq/irq.c
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/cpuinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/cpuinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 

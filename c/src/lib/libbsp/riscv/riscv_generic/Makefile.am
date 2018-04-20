@@ -8,7 +8,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/riscv/riscv_generic/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -33,7 +33,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 # Startup
 librtemsbsp_a_SOURCES = ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
-librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv_generic/start/bsp_fatal_halt.c
 
 # Shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c

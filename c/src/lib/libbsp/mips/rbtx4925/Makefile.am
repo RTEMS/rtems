@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/mips/rbtx4925/start/bsp_specs
 
 #isr
 
@@ -23,12 +23,12 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/rbtx4925/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/inittlb.c
-librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
-librtemsbsp_a_SOURCES += ../shared/startup/idtmem.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/rbtx4925/start/inittlb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/start/idttlb.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/start/idtmem.S
 librtemsbsp_a_SOURCES += ../shared/irq/exception.S
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/rbtx4925/clock/clockdrv.c

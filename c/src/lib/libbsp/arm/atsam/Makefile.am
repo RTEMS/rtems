@@ -7,7 +7,7 @@ include $(top_srcdir)/../../bsp.am
 #                  Data                                                       #
 ###############################################################################
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/atsam/start/bsp_specs
 
 start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
@@ -15,9 +15,9 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 project_lib_DATA += linkcmds.memory
-dist_project_lib_DATA += startup/linkcmds.intsram
-dist_project_lib_DATA += startup/linkcmds.sdram
-dist_project_lib_DATA += startup/linkcmds.qspiflash
+dist_project_lib_DATA += ../../../../../../bsps/arm/atsam/start/linkcmds.intsram
+dist_project_lib_DATA += ../../../../../../bsps/arm/atsam/start/linkcmds.sdram
+dist_project_lib_DATA += ../../../../../../bsps/arm/atsam/start/linkcmds.qspiflash
 
 ###############################################################################
 #                  Header                                                     #
@@ -91,21 +91,19 @@ librtemsbsp_a_SOURCES += libraries/libboard/source/board_memories.c
 librtemsbsp_a_SOURCES += libraries/libboard/source/dbg_console.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
 librtemsbsp_a_SOURCES += ../shared/armv7m/startup/armv7m-cpucounter.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += startup/getentropy-trng.c
-librtemsbsp_a_SOURCES += startup/pin-config.c
-librtemsbsp_a_SOURCES += startup/pmc-config.c
-librtemsbsp_a_SOURCES += startup/power-clock.c
-librtemsbsp_a_SOURCES += startup/power-rtc.c
-librtemsbsp_a_SOURCES += startup/power.c
-librtemsbsp_a_SOURCES += startup/power-rtc.c
-librtemsbsp_a_SOURCES += startup/power-clock.c
-librtemsbsp_a_SOURCES += startup/restart.c
-librtemsbsp_a_SOURCES += startup/sdram-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/getentropy-trng.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pin-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/pmc-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-clock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power-rtc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/power.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/restart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/sdram-config.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

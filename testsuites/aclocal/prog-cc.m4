@@ -25,7 +25,7 @@ dnl check target cc
 RTEMS_PROG_CC
 
 AS_IF([test x"$GCC" = xyes],[
-GCCSPECS="-B\$(RTEMS_SOURCE_ROOT)/c/src/lib/libbsp/\$(RTEMS_CPU)/\$(RTEMS_BSP_FAMILY)/startup/"
+GCCSPECS="-B\$(RTEMS_SOURCE_ROOT)/bsps/\$(RTEMS_CPU)/\$(RTEMS_BSP_FAMILY)/start"
 GCCSPECS="${GCCSPECS} -specs bsp_specs -qrtems"])
 AC_SUBST(GCCSPECS)
 

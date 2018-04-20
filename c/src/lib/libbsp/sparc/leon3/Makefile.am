@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/sparc/leon3/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -14,30 +14,30 @@ start.$(OBJEXT): ../../../../../../bsps/sparc/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
-dist_project_lib_DATA += startup/linkcmds.gr712rc
-dist_project_lib_DATA += startup/linkcmds.gr740
-dist_project_lib_DATA += startup/linkcmds.leon3
-dist_project_lib_DATA += startup/linkcmds.ut699
-dist_project_lib_DATA += startup/linkcmds.ut700
+dist_project_lib_DATA += ../../../../../../bsps/sparc/shared/start/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon3/start/linkcmds.gr712rc
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon3/start/linkcmds.gr740
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon3/start/linkcmds.leon3
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon3/start/linkcmds.ut699
+dist_project_lib_DATA += ../../../../../../bsps/sparc/leon3/start/linkcmds.ut700
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspclean.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/setvec.c
-librtemsbsp_a_SOURCES += startup/spurious.c
-librtemsbsp_a_SOURCES += startup/bspidle.S
-librtemsbsp_a_SOURCES += startup/bspdelay.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/spurious.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspidle.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspdelay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
-librtemsbsp_a_SOURCES += startup/cpucounter.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp_fatal_exit.c
-librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/cpucounter.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bsp_fatal_halt.c
 
 # ISR Handler
 librtemsbsp_a_SOURCES += ../shared/cpu.c
@@ -75,7 +75,7 @@ librtemsbsp_a_SOURCES += ../shared/uart/apbuart_cons.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/console/printk_support.c
 
 # IRQ
-librtemsbsp_a_SOURCES += startup/eirq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/eirq.c
 librtemsbsp_a_SOURCES += ../shared/irq/genirq.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq-shared.c
 librtemsbsp_a_SOURCES += ../shared/irq/bsp_isr_handler.c
@@ -174,7 +174,7 @@ librtemsbsp_a_SOURCES += ../shared/drvmgr/ambapp_bus_grlib.c
 librtemsbsp_a_SOURCES += ../shared/drvmgr/get_resarray_count.c
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspsmp.c
 endif
 
 if HAS_NETWORKING

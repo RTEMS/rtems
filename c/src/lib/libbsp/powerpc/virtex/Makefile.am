@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/virtex/start/bsp_specs
 
 if HAS_NETWORKING
 endif
@@ -22,7 +22,7 @@ project_lib_DATA += rtems_crti.$(OBJEXT)
 
 # Link commands
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.base
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -32,7 +32,7 @@ librtemsbsp_a_LIBADD =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-loop.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S

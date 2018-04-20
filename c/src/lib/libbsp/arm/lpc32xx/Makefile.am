@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/lpc32xx/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -25,11 +25,11 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.lpc32xx
-dist_project_lib_DATA += startup/linkcmds.lpc32xx_phycore
-dist_project_lib_DATA += startup/linkcmds.lpc32xx_mzx_stage_1
-dist_project_lib_DATA += startup/linkcmds.lpc32xx_mzx_stage_2
-dist_project_lib_DATA += startup/linkcmds.lpc32xx_mzx
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc32xx/start/linkcmds.lpc32xx
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc32xx/start/linkcmds.lpc32xx_phycore
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc32xx/start/linkcmds.lpc32xx_mzx_stage_1
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc32xx/start/linkcmds.lpc32xx_mzx_stage_2
+dist_project_lib_DATA += ../../../../../../bsps/arm/lpc32xx/start/linkcmds.lpc32xx_mzx
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -47,12 +47,12 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/uart-output-char.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspstart.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -93,7 +93,7 @@ librtemsbsp_a_SOURCES += misc/idle-thread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspstarthooks.c
 
 ###############################################################################
 #                  Network                                                    #

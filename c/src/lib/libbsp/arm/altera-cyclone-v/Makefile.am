@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/altera-cyclone-v/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -38,9 +38,9 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.altcycv
-dist_project_lib_DATA += startup/linkcmds.altcycv_devkit
-dist_project_lib_DATA += startup/linkcmds.altcycv_devkit_smp
+dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv
+dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit
+dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit_smp
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -85,20 +85,20 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-fdt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspclean.c
-librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += startup/mmu-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspclean.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/mmu-config.c
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
-librtemsbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspsmp.c
 endif
 
 # IRQ

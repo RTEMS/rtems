@@ -42,7 +42,7 @@ RTEMS_BSP_CLEANUP_OPTIONS
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
 Makefile
-linkcmds:startup/linkcmds.in
+linkcmds:../../../../../../bsps/powerpc/virtex/start/linkcmds.in
 ])
 
 RTEMS_PPC_EXCEPTIONS

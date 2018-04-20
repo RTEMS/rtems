@@ -7,16 +7,16 @@ include $(top_srcdir)/../../bsp.am
 #                  Data                                                       #
 ###############################################################################
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/lm3s69xx/start/bsp_specs
 
 start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.lm3s3749
-dist_project_lib_DATA += startup/linkcmds.lm3s6965
-dist_project_lib_DATA += startup/linkcmds.lm3s6965_qemu
+dist_project_lib_DATA += ../../../../../../bsps/arm/lm3s69xx/start/linkcmds.lm3s3749
+dist_project_lib_DATA += ../../../../../../bsps/arm/lm3s69xx/start/linkcmds.lm3s6965
+dist_project_lib_DATA += ../../../../../../bsps/arm/lm3s69xx/start/linkcmds.lm3s6965_qemu
 
 ###############################################################################
 #                  Header                                                     #
@@ -40,12 +40,12 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 
 # Startup
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspstarthook.c
-librtemsbsp_a_SOURCES += startup/io.c
-librtemsbsp_a_SOURCES += startup/syscon.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/bspstarthook.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/syscon.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

@@ -10,7 +10,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/xilinx-zynq/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -42,16 +42,16 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstart.c
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
-librtemsbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspsmp.c
 endif
 
 # IRQ
@@ -74,8 +74,8 @@ librtemsbsp_a_SOURCES += i2c/cadence-i2c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
-librtemsbsp_a_SOURCES += startup/bspstartmmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstartmmu.c
 
 ###############################################################################
 #                  Special Rules                                              #

@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/gen5200/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -18,13 +18,13 @@ rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.brs5l
-dist_project_lib_DATA += startup/linkcmds.brs6l
-dist_project_lib_DATA += startup/linkcmds.dp2
-dist_project_lib_DATA += startup/linkcmds.gen5200_base
-dist_project_lib_DATA += startup/linkcmds.icecube
-dist_project_lib_DATA += startup/linkcmds.pm520_cr825
-dist_project_lib_DATA += startup/linkcmds.pm520_ze30
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.brs5l
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.brs6l
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.dp2
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.gen5200_base
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.icecube
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.pm520_cr825
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen5200/start/linkcmds.pm520_ze30
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -94,14 +94,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-info.c
 librtemsbsp_a_SOURCES += ../shared/showbats.c
 librtemsbsp_a_SOURCES += ../shared/src/memcpy.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
 librtemsbsp_a_SOURCES += ../shared/uboot_dump_bdinfo.c
 librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/cpuinit.c 
-librtemsbsp_a_SOURCES += startup/uboot_support.c
-librtemsbsp_a_SOURCES += startup/bestcomm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/cpuinit.c 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/uboot_support.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/start/bestcomm.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network_5200/network.c

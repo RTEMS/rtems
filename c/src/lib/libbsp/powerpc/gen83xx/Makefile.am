@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/gen83xx/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -18,13 +18,13 @@ rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
-dist_project_lib_DATA += startup/linkcmds.br_uid
-dist_project_lib_DATA += startup/linkcmds.hsc_cm01
-dist_project_lib_DATA += startup/linkcmds.mpc8309som
-dist_project_lib_DATA += startup/linkcmds.mpc8313erdb
-dist_project_lib_DATA += startup/linkcmds.mpc8349eamds
-dist_project_lib_DATA += startup/linkcmds.mpc83xx
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.br_uid
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.hsc_cm01
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.mpc8309som
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.mpc8313erdb
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.mpc8349eamds
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/gen83xx/start/linkcmds.mpc83xx
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -33,12 +33,12 @@ librtemsbsp_a_SOURCES =
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../shared/src/tictac.c
-librtemsbsp_a_SOURCES += startup/cpuinit.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/cpuinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bsprestart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/bsprestart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-info.c
 librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c

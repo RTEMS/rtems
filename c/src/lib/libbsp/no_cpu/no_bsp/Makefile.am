@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/no_cpu/no_bsp/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -14,11 +14,11 @@ librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../../shared/startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/setvec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/no_cpu/no_bsp/clock/ckinit.c

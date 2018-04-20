@@ -11,7 +11,7 @@ CLEANFILES =
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/i386/pc386/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -104,20 +104,20 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_bus_count.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_find_device.c
 
 # startup
-librtemsbsp_a_SOURCES += startup/bsp_fatal_halt.c
-librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
-librtemsbsp_a_SOURCES += startup/bspidle.S
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspcmdline.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bsp_fatal_halt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspidle.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspcmdline.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspreset.c
 librtemsbsp_a_SOURCES += ../shared/irq/idt.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c
 librtemsbsp_a_SOURCES += ../shared/irq/elcr.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/ldsegs.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/ldsegs.S
 librtemsbsp_a_SOURCES += ../shared/irq/irq_asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
@@ -140,7 +140,7 @@ appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DSMP_SECONDARY_CORE -o $@ -c $<
 
 appstart.$(OBJEXT): appcpustart.$(OBJEXT)
-	$(LD) -r -N -T $(top_srcdir)/startup/linkcmds \
+	$(LD) -r -N -T $(top_srcdir)/../../../../../../bsps/i386/pc386/start/linkcmds \
 	    -Ttext 0x70000 -e app_processor_start -nostdlib \
 	    -o appstart_tmp.exe $<
 	$(OBJCOPY) -O binary appstart_tmp.exe appstart.bin

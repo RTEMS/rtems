@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/m68k/gen68360/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -13,18 +13,18 @@ start.$(OBJEXT): ../../../../../../bsps/m68k/gen68360/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.bootp
-dist_project_lib_DATA += startup/linkcmds.prom
+dist_project_lib_DATA += ../../../../../../bsps/m68k/gen68360/start/linkcmds.bootp
+dist_project_lib_DATA += ../../../../../../bsps/m68k/gen68360/start/linkcmds.prom
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/alloc360.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/start/alloc360.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspstart-empty.c
-librtemsbsp_a_SOURCES += startup/init68360.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/start/init68360.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/setvec.c

@@ -5,9 +5,9 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 ## added but it is present in the source tree.
 _SUBDIRS = @RTEMS_BSP_FAMILY@
 
-dist_project_lib_DATA = shared/startup/linkcmds.base
-dist_project_lib_DATA += shared/startup/linkcmds.armv4
-dist_project_lib_DATA += shared/startup/linkcmds.armv7m
+dist_project_lib_DATA = ../../../../../bsps/arm/shared/start/linkcmds.base
+dist_project_lib_DATA += ../../../../../bsps/arm/shared/start/linkcmds.armv4
+dist_project_lib_DATA += ../../../../../bsps/arm/shared/start/linkcmds.armv7m
 
 
 # comm

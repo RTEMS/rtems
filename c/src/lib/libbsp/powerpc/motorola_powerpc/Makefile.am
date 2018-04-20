@@ -9,7 +9,7 @@ endif
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/motorola_powerpc/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -28,23 +28,23 @@ vectors_entry.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/vectors_ent
 project_lib_DATA += vectors_entry.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.share
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.share
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/bspstart.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../shared/showbats.c
-librtemsbsp_a_SOURCES += ../shared/startup/zerobss.c
-librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_setup.c
-librtemsbsp_a_SOURCES += ../shared/startup/pgtbl_activate.c
-librtemsbsp_a_SOURCES += ../shared/startup/ppc_idle.c
-librtemsbsp_a_SOURCES += ../shared/startup/sbrk.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/zerobss.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_setup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/pgtbl_activate.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/ppc_idle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/bspreset.c
 
 
 # tod

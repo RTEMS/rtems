@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/imx/start/bsp_specs
 
 ###############################################################################
 #                  Header                                                     #
@@ -18,7 +18,7 @@ start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += startup/linkcmds.imx7
+dist_project_lib_DATA += ../../../../../../bsps/arm/imx/start/linkcmds.imx7
 
 ###############################################################################
 #                  LibBSP                                                     #
@@ -37,18 +37,18 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-fdt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
-librtemsbsp_a_SOURCES += ../shared/startup/bsp-start-memcpy.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 
 # Startup
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/ccm.c
-librtemsbsp_a_SOURCES += startup/imx_iomux.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/ccm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/imx_iomux.c
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
-librtemsbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspsmp.c
 endif
 
 # IRQ
@@ -72,7 +72,7 @@ librtemsbsp_a_SOURCES += i2c/imx-i2c.c
 librtemsbsp_a_SOURCES += spi/imx-ecspi.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += startup/bspstarthooks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspstarthooks.c
 
 ###############################################################################
 #                  Special Rules                                              #

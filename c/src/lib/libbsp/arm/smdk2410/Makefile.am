@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/arm/smdk2410/start/bsp_specs
 
 
 start.$(OBJEXT): ../../../../../../bsps/arm/smdk2410/start/start.S
@@ -16,11 +16,11 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/start/bspidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/memmap.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/start/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 

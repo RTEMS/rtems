@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/qemuppc/start/bsp_specs
 
 noinst_PROGRAMS =
 
@@ -26,8 +26,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/cmain.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qemuppc/start/cmain.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qemuppc/start/bspstart.c
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 # console

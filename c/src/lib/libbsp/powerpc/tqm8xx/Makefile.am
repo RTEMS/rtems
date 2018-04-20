@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/tqm8xx/start/bsp_specs
 
 
 noinst_PROGRAMS =
@@ -18,7 +18,7 @@ rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.base
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -39,12 +39,12 @@ librtemsbsp_a_SOURCES += spi/spi.c
 librtemsbsp_a_SOURCES += timer/timer.c
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/bspgetworkarea.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
-librtemsbsp_a_SOURCES += startup/mmutlbtab.c
-librtemsbsp_a_SOURCES += startup/cpuinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/mmutlbtab.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/start/cpuinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 

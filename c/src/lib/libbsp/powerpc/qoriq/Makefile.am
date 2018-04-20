@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/powerpc/qoriq/start/bsp_specs
 
 
 
@@ -23,12 +23,12 @@ rtems_crtn.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crtn.S
 project_lib_DATA += rtems_crtn.$(OBJEXT)
 
 project_lib_DATA += linkcmds
-dist_project_lib_DATA += ../shared/startup/linkcmds.base
-dist_project_lib_DATA += startup/linkcmds.qoriq_core_0
-dist_project_lib_DATA += startup/linkcmds.qoriq_core_1
-dist_project_lib_DATA += startup/linkcmds.qoriq_e500
-dist_project_lib_DATA += startup/linkcmds.qoriq_e6500_32
-dist_project_lib_DATA += startup/linkcmds.qoriq_e6500_64
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/shared/start/linkcmds.base
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/qoriq/start/linkcmds.qoriq_core_0
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/qoriq/start/linkcmds.qoriq_core_1
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/qoriq/start/linkcmds.qoriq_e500
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/qoriq/start/linkcmds.qoriq_e6500_32
+dist_project_lib_DATA += ../../../../../../bsps/powerpc/qoriq/start/linkcmds.qoriq_e6500_64
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -41,18 +41,18 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-fdt.c
 librtemsbsp_a_SOURCES += ../shared/src/ppc-exc-handler-table.c
 librtemsbsp_a_SOURCES += ../shared/src/tictac.c
 librtemsbsp_a_SOURCES += ../shared/src/bsp-start-zero.S
-librtemsbsp_a_SOURCES += ../shared/startup/bspidle.c
-librtemsbsp_a_SOURCES += startup/epapr_hcalls.S
-librtemsbsp_a_SOURCES += startup/l1cache.S
-librtemsbsp_a_SOURCES += startup/l2cache.S
-librtemsbsp_a_SOURCES += startup/mmu.c
-librtemsbsp_a_SOURCES += startup/mmu-tlb1.S
-librtemsbsp_a_SOURCES += startup/mmu-config.c
-librtemsbsp_a_SOURCES += startup/portal.c
-librtemsbsp_a_SOURCES += startup/restart.S
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
-librtemsbsp_a_SOURCES += startup/bsprestart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/epapr_hcalls.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/l1cache.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/l2cache.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/mmu-tlb1.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/mmu-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/portal.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/restart.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bsprestart.c
 
 # Clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/qoriq/clock/clock-config.c
@@ -90,7 +90,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += startup/bspsmp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bspsmp.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

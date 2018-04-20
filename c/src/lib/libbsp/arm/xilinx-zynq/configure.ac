@@ -144,5 +144,5 @@ RTEMS_BSP_CLEANUP_OPTIONS
 
 AC_CONFIG_FILES([
 Makefile
-linkcmds:startup/linkcmds.in])
+linkcmds:../../../../../../bsps/arm/xilinx-zynq/start/linkcmds.in])
 AC_OUTPUT

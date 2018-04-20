@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I ../../../../aclocal
 include $(top_srcdir)/../../../../automake/compile.am
 include $(top_srcdir)/../../bsp.am
 
-dist_project_lib_DATA = startup/bsp_specs
+dist_project_lib_DATA = ../../../../../../bsps/mips/malta/start/bsp_specs
 
 #isr
 #pci
@@ -23,15 +23,15 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 # startup
-librtemsbsp_a_SOURCES += startup/simple_access.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/start/simple_access.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
-librtemsbsp_a_SOURCES += startup/bspstart.c
-librtemsbsp_a_SOURCES += startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/start/bspstart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += startup/inittlb.c
-librtemsbsp_a_SOURCES += ../shared/startup/idttlb.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/malta/start/inittlb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/start/idttlb.S
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/shared/clock/clockdrv.c
