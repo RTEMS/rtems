@@ -43,7 +43,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bsp_fatal_halt
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/gnatsupp/gnatsupp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/gnatcommon.c
 # AMBA bus
-librtemsbsp_a_SOURCES += amba/amba.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/amba.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/amba/ambapp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/amba/ambapp_alloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/amba/ambapp_count.c
