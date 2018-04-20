@@ -14,11 +14,7 @@ bootloader_SOURCES = ../../../powerpc/shared/bootloader/head.S \
     ../../../powerpc/shared/bootloader/mm.c \
     ../../../powerpc/shared/bootloader/em86.c \
     ../../../../../../../bsps/powerpc/motorola_powerpc/dev/polled_io.c \
-    ../../../powerpc/shared/bootloader/lib.c \
-    ../../../powerpc/shared/bootloader/bootldr.h \
-    ../../../powerpc/shared/bootloader/zlib.h \
-    ../../../powerpc/shared/bootloader/pci.h \
-    ../../../powerpc/shared/console/keyboard.h
+    ../../../powerpc/shared/bootloader/lib.c
 
 # ----
 # Remove references to EABI when compiling bootloader
