@@ -28,10 +28,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/btimer/btimer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/btimer/timerisr.c
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c
-librtemsbsp_a_SOURCES += shmsupp/getcfg.c
-librtemsbsp_a_SOURCES += shmsupp/lock.c
-librtemsbsp_a_SOURCES += shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/addrconv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/getcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/mpisr.c
 
 
 include $(top_srcdir)/../../../../automake/local.am

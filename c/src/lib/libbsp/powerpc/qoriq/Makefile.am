@@ -76,9 +76,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # MPCI
-librtemsbsp_a_SOURCES += shmsupp/lock.S
-librtemsbsp_a_SOURCES += shmsupp/intercom.c
-librtemsbsp_a_SOURCES += shmsupp/intercom-mpci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/mpci/lock.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/mpci/intercom.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/mpci/intercom-mpci.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/mmu/e500-mmu.c

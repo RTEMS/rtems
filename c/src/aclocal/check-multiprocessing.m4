@@ -22,7 +22,7 @@ AS_IF([test "$rtems_cv_want_multiprocessing" = "yes"],
 [
   AC_CACHE_CHECK([whether BSP supports multiprocessing],
   [rtems_cv_HAS_MP],[
-    if test -d "$srcdir/${RTEMS_TOPdir}/c/src/lib/libbsp/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/shmsupp"; then
+    if test -d "${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/mpci"; then
         rtems_cv_HAS_MP="yes" ;
     else
         rtems_cv_HAS_MP="no";

@@ -39,10 +39,10 @@ librtemsbsp_a_SOURCES += ../mvme147/timer/timerisr.S
 
 if HAS_MP
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c
-librtemsbsp_a_SOURCES += shmsupp/getcfg.c
-librtemsbsp_a_SOURCES += shmsupp/lock.c
-librtemsbsp_a_SOURCES += shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147s/mpci/addrconv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147s/mpci/getcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147s/mpci/lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147s/mpci/mpisr.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c

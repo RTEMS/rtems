@@ -48,10 +48,10 @@ librtemsbsp_a_SOURCES += vectors/align_h.S
 
 if HAS_MP
 # shmdr
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c
-librtemsbsp_a_SOURCES += shmsupp/getcfg.c
-librtemsbsp_a_SOURCES += shmsupp/lock.c
-librtemsbsp_a_SOURCES += shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/mpci/addrconv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/mpci/getcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/mpci/lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/mpci/mpisr.c
 endif
 
 if HAS_NETWORKING

@@ -186,10 +186,10 @@ endif
 
 if HAS_MP
 # shmsupp
-librtemsbsp_a_SOURCES += shmsupp/addrconv.c
-librtemsbsp_a_SOURCES += shmsupp/getcfg.c
-librtemsbsp_a_SOURCES += shmsupp/lock.c
-librtemsbsp_a_SOURCES += shmsupp/mpisr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/addrconv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/getcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/mpisr.c
 endif
 
 
