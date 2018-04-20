@@ -73,7 +73,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/pci/grpci.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/pci/pcif.c
 librtemsbsp_a_SOURCES +=  ../../../../../../bsps/sparc/shared/pci/pci_memreg_sparc_le.c
 librtemsbsp_a_SOURCES +=  ../../../../../../bsps/sparc/shared/pci/pci_memreg_sparc_be.c
-librtemsbsp_a_SOURCES +=  pci/at697_pci.c
+librtemsbsp_a_SOURCES +=  ../../../../../../bsps/sparc/leon2/pci/at697_pci.c
 
 # PCI target devices
 librtemsbsp_a_SOURCES +=  ../../../../../../bsps/sparc/shared/pci/gr_701.c
