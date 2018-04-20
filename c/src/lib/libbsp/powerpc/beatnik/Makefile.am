@@ -13,18 +13,18 @@ project_lib_DATA      =
 #include
 
 #start
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
 
-preload.$(OBJEXT): ../shared/start/preload.S
+preload.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-start.$(OBJEXT): ../shared/start/start.S
+start.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/start.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
 motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) start.$(OBJEXT)

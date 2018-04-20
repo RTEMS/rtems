@@ -11,13 +11,13 @@ noinst_PROGRAMS =
 
 project_lib_DATA =
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/powerpc/mvme3100/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
-preload.$(OBJEXT): ../shared/start/preload.S
+preload.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/preload.S
 	$(CPPASCOMPILE) -DASM -o $@ -c $<
 
-vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 
 motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) \
@@ -26,7 +26,7 @@ motld_start.$(OBJEXT):	preload.$(OBJEXT) vectors_entry.$(OBJEXT) \
 
 project_lib_DATA += motld_start.$(OBJEXT)
 
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 

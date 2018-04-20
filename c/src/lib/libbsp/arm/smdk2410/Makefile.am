@@ -6,7 +6,7 @@ include $(top_srcdir)/../../bsp.am
 dist_project_lib_DATA = startup/bsp_specs
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/arm/smdk2410/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

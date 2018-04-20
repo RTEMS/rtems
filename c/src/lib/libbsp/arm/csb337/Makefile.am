@@ -14,7 +14,7 @@ noinst_PROGRAMS =
 if ENABLE_LCD
 endif
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/arm/csb337/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

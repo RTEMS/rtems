@@ -9,7 +9,7 @@ dist_project_lib_DATA = startup/bsp_specs
 # include
 
 # start
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../shared/src/memcpy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
 # start
-librtemsbsp_a_SOURCES += start/start.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex4/start/start.S
 
 # console
 librtemsbsp_a_SOURCES += startup/dummy_console.c

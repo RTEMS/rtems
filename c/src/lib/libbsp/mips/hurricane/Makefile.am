@@ -8,7 +8,7 @@ dist_project_lib_DATA = startup/bsp_specs
 #isr
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/mips/hurricane/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

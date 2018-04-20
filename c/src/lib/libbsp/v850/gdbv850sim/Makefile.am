@@ -11,7 +11,7 @@ dist_project_lib_DATA = startup/bsp_specs
 noinst_PROGRAMS =
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/v850/gdbv850sim/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

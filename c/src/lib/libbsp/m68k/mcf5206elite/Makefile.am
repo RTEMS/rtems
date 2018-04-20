@@ -10,7 +10,7 @@ _SUBDIRS = . tools
 
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/m68k/mcf5206elite/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

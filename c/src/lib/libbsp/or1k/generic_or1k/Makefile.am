@@ -19,7 +19,7 @@ dist_project_lib_DATA = startup/bsp_specs
 #                  Data                                                       #
 ###############################################################################
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/or1k/generic_or1k/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

@@ -17,7 +17,7 @@ noinst_PROGRAMS =
 
 
 
-start.$(OBJEXT): ../shared/start/start.S
+start.$(OBJEXT): ../../../../../../bsps/sparc64/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
@@ -40,11 +40,11 @@ librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwarch.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/main.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwasm.S
 librtemsbsp_a_SOURCES += ../shared/asm/asm.S
-librtemsbsp_a_SOURCES += start/bspinit.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/usiii/start/bspinit.S
 
 librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/cache.S
 librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/sun4u/takemmu.S
-librtemsbsp_a_SOURCES += ../shared/start/trap_table.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/trap_table.S
 
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
 

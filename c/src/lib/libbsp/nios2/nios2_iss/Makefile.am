@@ -7,9 +7,9 @@ dist_project_lib_DATA = startup/bsp_specs
 
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/nios2/nios2_iss/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
-crtnn.$(OBJEXT): start/crtnn.S
+crtnn.$(OBJEXT): ../../../../../../bsps/nios2/nios2_iss/start/crtnn.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT) crtnn.$(OBJEXT)
 

@@ -48,7 +48,7 @@ librtemsbsp_a_SOURCES += tod/todcfg.c
 
 # vectors
 librtemsbsp_a_SOURCES += vectors/exceptionhandler.c
-librtemsbsp_a_SOURCES += ../shared/start/vectors_entry.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vectors_entry.S
 
 # GT64260
 librtemsbsp_a_SOURCES += GT64260/GT64260TWSI.c
@@ -60,12 +60,12 @@ librtemsbsp_a_SOURCES += network/if_1GHz/if_wm.c
 librtemsbsp_a_SOURCES += network/if_1GHz/pci_map.c
 endif
 
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = rtems_crti.$(OBJEXT)
 
 noinst_PROGRAMS += mvme5500start.$(OBJEXT)
-mvme5500start___OBJEXT__SOURCES = ../shared/start/preload.S start/start.S
+mvme5500start___OBJEXT__SOURCES = ../../../../../../bsps/powerpc/shared/start/preload.S ../../../../../../bsps/powerpc/mvme5500/start/start.S
 mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS)
 mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 

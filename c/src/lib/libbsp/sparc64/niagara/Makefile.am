@@ -9,7 +9,7 @@ noinst_PROGRAMS =
 
 
 
-start.$(OBJEXT): ../shared/start/start.S
+start.$(OBJEXT): ../../../../../../bsps/sparc64/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
@@ -32,7 +32,7 @@ librtemsbsp_a_SOURCES += ../shared/helenos/boot/generic/string.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwarch.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/main.c
 librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwasm.S
-librtemsbsp_a_SOURCES += start/bspinit.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/niagara/start/bspinit.S
 librtemsbsp_a_SOURCES += ../shared/asm/asm.S
 
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c

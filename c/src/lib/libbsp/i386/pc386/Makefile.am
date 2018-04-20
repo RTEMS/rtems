@@ -20,11 +20,11 @@ _SUBDIRS = . tools
 
 TMPINSTALL_FILES =
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-start16.$(OBJEXT): start/start16.S
+start16.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
 
 start16-elf32.$(OBJEXT): start16.$(OBJEXT)
@@ -136,7 +136,7 @@ librtemsbsp_a_SOURCES += ../shared/smp/getcpuid.c
 librtemsbsp_a_SOURCES += ../shared/smp/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
-appcpustart.$(OBJEXT): start/start16.S
+appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
 	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DSMP_SECONDARY_CORE -o $@ -c $<
 
 appstart.$(OBJEXT): appcpustart.$(OBJEXT)

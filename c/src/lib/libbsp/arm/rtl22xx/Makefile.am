@@ -9,7 +9,7 @@ dist_project_lib_DATA = startup/bsp_specs
 noinst_PROGRAMS =
 
 
-start.$(OBJEXT): start/start.S
+start.$(OBJEXT): ../../../../../../bsps/arm/rtl22xx/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 

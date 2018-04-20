@@ -15,15 +15,15 @@ dist_project_lib_DATA = startup/bsp_specs
 noinst_PROGRAMS =
 
 
-start.$(OBJEXT): ../shared/start/start.S
+start.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
-rtems_crti.$(OBJEXT): ../shared/start/rtems_crti.S
+rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += rtems_crti.$(OBJEXT)
 
-vectors_entry.$(OBJEXT): ../shared/start/vectors_entry.S
+vectors_entry.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/vectors_entry.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA += vectors_entry.$(OBJEXT)
 

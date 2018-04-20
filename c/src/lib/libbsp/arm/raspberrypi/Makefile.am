@@ -22,7 +22,7 @@ noinst_HEADERS = ../../../../../../bsps/arm/raspberrypi/console/font_data.h
 # Data                                                       #
 ###############################################################################
 
-start.$(OBJEXT): ../shared/start/start.S
+start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
 
