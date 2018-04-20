@@ -36,7 +36,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/console/console.c
 # spi
 librtemsbsp_a_SOURCES += spi/spi.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/btimer/btimer.c
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspidle.c

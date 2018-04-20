@@ -30,7 +30,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/jmr3904/clock/clockdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/jmr3904/console/console-io.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/jmr3904/btimer/btimer.c
 #isr
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c

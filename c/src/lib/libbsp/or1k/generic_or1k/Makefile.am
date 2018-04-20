@@ -55,7 +55,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/console/consol
 librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/console/uart.c
 
 # Timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/btimer/btimer.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/or1k/generic_or1k/clock/clockdrv.c

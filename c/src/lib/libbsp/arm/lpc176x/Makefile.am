@@ -84,7 +84,7 @@ librtemsbsp_a_SOURCES += pwmout/pwmout.c
 librtemsbsp_a_SOURCES += adc/adc.c
 
 # Timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/btimer/btimer.c
 
 # Benchmark Timer
 librtemsbsp_a_SOURCES += benchmark_timer/benchmark_timer.c

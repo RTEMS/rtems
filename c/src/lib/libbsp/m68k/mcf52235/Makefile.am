@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/console/console.c
 # debugio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/console/debugio.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf52235/btimer/btimer.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5223x.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c

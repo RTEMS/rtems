@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/nios2/nios2_iss/clock/clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/nios2/nios2_iss/btimer/btimer.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

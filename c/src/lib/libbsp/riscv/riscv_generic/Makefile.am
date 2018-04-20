@@ -45,7 +45,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES +=../../../../../../bsps/riscv/riscv_generic/clock/clockdrv.c
 
 # Timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv_generic/btimer/btimer.c
 
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c

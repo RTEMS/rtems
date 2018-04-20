@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/pmc.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/csb337/clock/clock.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/btimer/btimer.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-control.c

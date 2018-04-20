@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/gen68360/clock/clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/btimer/btimer.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network.c

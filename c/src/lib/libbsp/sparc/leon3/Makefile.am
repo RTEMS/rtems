@@ -60,9 +60,9 @@ librtemsbsp_a_SOURCES += ../shared/amba/ambapp_show.c
 librtemsbsp_a_SOURCES += ../shared/amba/ahbstat.c
 
 # Clock Driver and Timer Library
-librtemsbsp_a_SOURCES += ../shared/timer/gptimer.c
-librtemsbsp_a_SOURCES += ../shared/timer/tlib.c
-librtemsbsp_a_SOURCES += ../shared/timer/tlib_ckinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/btimer/gptimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/btimer/tlib.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/btimer/tlib_ckinit.c
 # non-Driver Manager Clock Implementation
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/leon3/clock/ckinit.c
 
@@ -151,8 +151,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/cache.c
 # griommu
 librtemsbsp_a_SOURCES += ../shared/iommu/griommu.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
-librtemsbsp_a_SOURCES += timer/watchdog.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/btimer/btimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/btimer/watchdog.c
 
 # GR712
 librtemsbsp_a_SOURCES += ../shared/ascs/grascs.c

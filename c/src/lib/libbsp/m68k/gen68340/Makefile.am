@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68340/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68340/console/m340uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68340/btimer/btimer.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c

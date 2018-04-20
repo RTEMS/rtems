@@ -27,7 +27,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/console/console-io.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/console/syscalls.S
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/btimer/btimer.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/genmcf548x/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/console/console.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/btimer/btimer.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

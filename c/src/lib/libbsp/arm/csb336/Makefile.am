@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/csb336/clock/clockdrv.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/btimer/btimer.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/console/uart.c
 # IRQ

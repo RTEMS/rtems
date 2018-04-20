@@ -50,7 +50,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/console/debugputs.c
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc/erc32/clock/ckinit.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/btimer/btimer.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../shared/irq/irq-shared.c

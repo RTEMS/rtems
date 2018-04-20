@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh2/clock/ckinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/cpu_asm.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/ispsh7045.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/btimer/btimer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console

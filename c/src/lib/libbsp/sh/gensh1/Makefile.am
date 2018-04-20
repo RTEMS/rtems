@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh1/clock/ckinit.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sh/gensh1/clock/delay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/start/cpu_asm.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/start/ispsh7032.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/btimer/btimer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console

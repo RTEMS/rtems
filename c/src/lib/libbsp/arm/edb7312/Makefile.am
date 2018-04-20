@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console-select.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/console/uart.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/btimer/btimer.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

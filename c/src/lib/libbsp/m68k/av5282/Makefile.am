@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/m68k/av5282/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/av5282/console/console.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/av5282/btimer/btimer.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network.c

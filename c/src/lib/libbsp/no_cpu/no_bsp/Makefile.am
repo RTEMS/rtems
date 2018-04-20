@@ -25,8 +25,8 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/no_cpu/no_bsp/clock/ckinit.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/console/console.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
-librtemsbsp_a_SOURCES += timer/timerisr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/btimer/btimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/btimer/timerisr.c
 # shmsupp
 librtemsbsp_a_SOURCES += shmsupp/addrconv.c
 librtemsbsp_a_SOURCES += shmsupp/getcfg.c

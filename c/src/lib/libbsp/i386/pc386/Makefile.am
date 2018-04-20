@@ -122,8 +122,8 @@ librtemsbsp_a_SOURCES += ../shared/irq/irq_asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
-librtemsbsp_a_SOURCES += timer/timerisr.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/btimer/btimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/btimer/timerisr.S
 
 if HAS_IDE
 # ide

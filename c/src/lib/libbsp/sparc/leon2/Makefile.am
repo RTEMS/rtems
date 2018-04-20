@@ -66,8 +66,8 @@ librtemsbsp_a_SOURCES += ../shared/amba/ambapp_show.c
 librtemsbsp_a_SOURCES += ../shared/amba/ahbstat.c
 
 # Clock Driver and Timer Library
-librtemsbsp_a_SOURCES += ../shared/timer/gptimer.c
-librtemsbsp_a_SOURCES += ../shared/timer/tlib.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/btimer/gptimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/btimer/tlib.c
 
 # PCI
 librtemsbsp_a_SOURCES += ../shared/pci/grpci2.c
@@ -137,7 +137,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/cache.c
 # griommu
 librtemsbsp_a_SOURCES += ../shared/iommu/griommu.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/btimer/btimer.c
 
 # TM/TC
 librtemsbsp_a_SOURCES += ../shared/tmtc/grtc.c

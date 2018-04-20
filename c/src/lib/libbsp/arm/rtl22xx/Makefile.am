@@ -27,7 +27,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/rtl22xx/btimer/btimer.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/rtl22xx/clock/clockdrv.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

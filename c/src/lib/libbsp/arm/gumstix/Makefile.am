@@ -27,7 +27,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/start/memmap.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/gumstix/clock/clock.c
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/btimer/btimer.c
 
 #console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

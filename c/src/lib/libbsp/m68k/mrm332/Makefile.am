@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mrm332/console/sci.c
 # spurious
 librtemsbsp_a_SOURCES += spurious/spinit.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mrm332/btimer/btimer.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c

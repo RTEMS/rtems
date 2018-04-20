@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/lm32/shared/clock/ckinit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/console/uart.c
 # timer
-librtemsbsp_a_SOURCES += ../shared/timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/btimer/btimer.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

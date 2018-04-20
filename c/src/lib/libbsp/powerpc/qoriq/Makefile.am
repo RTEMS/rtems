@@ -58,7 +58,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/start/bsprestart.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/qoriq/clock/clock-config.c
 
 # Timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/btimer/btimer.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c

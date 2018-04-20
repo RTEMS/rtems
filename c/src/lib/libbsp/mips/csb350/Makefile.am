@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/csb350/clock/clockdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/console/console-io.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
 # timer
-librtemsbsp_a_SOURCES += timer/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/btimer/btimer.c
 #isr
 librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../shared/irq/irq.c
