@@ -60,7 +60,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/getcurrentprocessor
 endif
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += erc32sonic/erc32sonic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/net/erc32sonic.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

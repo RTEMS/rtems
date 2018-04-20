@@ -175,12 +175,12 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/start/bspsmp.c
 endif
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += leon_smc91111/leon_smc91111.c
-librtemsbsp_a_SOURCES += leon_open_eth/leon_open_eth.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_smc91111.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_open_eth.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/net/greth.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/net/network_interface_add.c
 if !HAS_SMP
-librtemsbsp_a_SOURCES += leon_greth/leon_greth.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/net/leon_greth.c
 endif
 endif
 

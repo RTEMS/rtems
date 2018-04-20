@@ -157,8 +157,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/getcurrentprocessor
 endif
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += leon_smc91111/leon_smc91111.c
-librtemsbsp_a_SOURCES += leon_open_eth/leon_open_eth.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/net/leon_smc91111.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/net/leon_open_eth.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/net/greth.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/net/network_interface_add.c
 endif
