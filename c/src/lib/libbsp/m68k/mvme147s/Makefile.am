@@ -31,11 +31,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147/clock/ckinit.c
 # console
-librtemsbsp_a_SOURCES += ../mvme147/console/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 # timer
-librtemsbsp_a_SOURCES += ../mvme147/timer/timer.c
-librtemsbsp_a_SOURCES += ../mvme147/timer/timerisr.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147/btimer/btimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme147/btimer/timerisr.S
 
 if HAS_MP
 # shmsupp
