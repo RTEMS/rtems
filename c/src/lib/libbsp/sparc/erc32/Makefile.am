@@ -35,7 +35,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/start/bspdelay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_halt.c
 # gnatsupp
-librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/erc32/gnatsupp/gnatsupp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/gnatcommon.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
