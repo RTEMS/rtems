@@ -35,8 +35,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon2/start/bspdelay.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_exit.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/start/bsp_fatal_halt.c
 
-# ISR Handler
-librtemsbsp_a_SOURCES += ../shared/irq_asm.S
 # gnatsupp
 librtemsbsp_a_SOURCES += gnatsupp/gnatsupp.c
 librtemsbsp_a_SOURCES += ../shared/gnatcommon.c
