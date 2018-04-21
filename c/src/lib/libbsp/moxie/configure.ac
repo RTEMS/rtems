@@ -4,7 +4,6 @@
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-moxie],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([moxiesim])
 RTEMS_TOP(../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP

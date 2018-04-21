@@ -9,7 +9,6 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-mpc55xxevb],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([make/custom/gwlcfm.cfg])
 RTEMS_TOP(../../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP

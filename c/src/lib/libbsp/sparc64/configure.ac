@@ -4,7 +4,6 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-sparc64],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 
 # GAB: ./shared is used by sparc v7/8 bsps
-# AC_CONFIG_SRCDIR([shared])
 
 RTEMS_TOP(../../../../..)
 RTEMS_SOURCE_TOP

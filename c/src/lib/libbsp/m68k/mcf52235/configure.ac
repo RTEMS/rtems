@@ -2,7 +2,6 @@
 
 AC_PREREQ([2.69])
 AC_INIT([rtems-c-src-lib-libbsp-m68k-mcf52235],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
-AC_CONFIG_SRCDIR([make/custom/mcf52235.cfg])
 RTEMS_TOP(../../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP

@@ -7,7 +7,6 @@
 
 AC_PREREQ([2.68])
 AC_INIT([rtems-c-src-lib-libbsp-arm-beagle],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
-AC_CONFIG_SRCDIR([make/custom/beagleboardorig.cfg])
 RTEMS_TOP(../../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
