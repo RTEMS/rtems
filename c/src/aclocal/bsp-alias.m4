@@ -1,11 +1,13 @@
 dnl _RTEMS_BSP_ALIAS(BSP_ALIAS,RTEMS_BSP_FAMILY)
 dnl Internal subroutine to RTEMS_BSP_ALIAS
-AC_DEFUN([_RTEMS_BSP_ALIAS],
-[# account for "aliased" bsps which share source code
-      for bsp_cfgs in `ls "$srcdir"/"$RTEMS_TOPdir"/c/src/lib/libbsp/"$RTEMS_CPU"/*/"make/custom/$1.cfg" 2>/dev/null`; do
+AC_DEFUN([_RTEMS_BSP_ALIAS],[
+AC_REQUIRE([RTEMS_CANONICAL_TARGET_CPU])
+AC_REQUIRE([RTEMS_SOURCE_TOP])
+# account for "aliased" bsps which share source code
+      for bsp_cfgs in `ls "${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}"/*/"config/$1.cfg" 2>/dev/null`; do
         $2=`echo "$bsp_cfgs" | sed \
-          -e "s,^$srcdir/$RTEMS_TOPdir/c/src/lib/libbsp/$RTEMS_CPU/,," \
-          -e "s,/make/custom/.*\.cfg$,,"`
+          -e "s,^${RTEMS_SOURCE_ROOT}/bsps/$RTEMS_CPU/,," \
+          -e "s,/config/.*\.cfg$,,"`
         break
       done
 ])

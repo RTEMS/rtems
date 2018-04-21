@@ -5,6 +5,7 @@ AC_PREREQ([2.69])
 AC_INIT([rtems-c],[_RTEMS_VERSION],[https://devel.rtems.org/newticket])
 AC_CONFIG_SRCDIR([src])
 RTEMS_TOP(..)
+with_rtems_source_top=$(cd ${srcdir}/.. && pwd)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
 
@@ -30,7 +31,7 @@ AS_IF([test x"$enable_rtemsbsp" = x"no"],[
 
 # Check sanity of BSPs in $rtems_bsp
 for _rtems_bsp in : $rtems_bsp; do test "x$_rtems_bsp" = x: && continue
-  # make sure there is a make/custom file for the bsp
+  # make sure there is a config/*.cfg file for the bsp
   _RTEMS_CHECK_CUSTOM_BSP([$_rtems_bsp.cfg],[bsp_cfg])
 
   AS_IF([test -n "$bsp_cfg"],

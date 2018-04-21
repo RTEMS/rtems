@@ -23,9 +23,9 @@ AC_ARG_ENABLE(rtemsbsp,
        AC_MSG_ERROR([Cannot find the top of source tree, please report to devel@rtems.org])
      fi
      target_arch=$(echo ${target_alias} | sed -e "s/\-.*//g")
-     libbsp=${srctop}/c/src/lib/libbsp
+     libbsp=${srctop}/bsps
      libbsp_e=$(echo ${libbsp} | sed -e 's/\//\\\//g')
-     cfg_list=$(LANG=C LC_COLLATE=C find ${libbsp} -mindepth 5 -name \*.cfg)
+     cfg_list=$(LANG=C LC_COLLATE=C find ${libbsp} -mindepth 1 -name \*.cfg)
      for bsp in ${enable_rtemsbsp};
      do
        found=no
