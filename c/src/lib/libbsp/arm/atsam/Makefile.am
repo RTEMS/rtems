@@ -41,54 +41,54 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 
 # libchip
-librtemsbsp_a_SOURCES += libraries/libchip/source/acc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/aes.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/afec.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/afe_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/dac_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/efc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/exceptions.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/flashd.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/gmac.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/gmacd.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/hsmci.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/icm.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/isi.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/mcan.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/mediaLB.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/mpu.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/pio.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/pio_capture.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/pio_it.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/pmc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/pwmc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/qspi.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/qspi_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/rstc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/rtc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/rtt.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/sdramc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/spi.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/spi_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/ssc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/supc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/tc.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/trng.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/twi.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/twid.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/uart.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/uart_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/usart.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/usart_dma.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/wdt.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/xdmad.c
-librtemsbsp_a_SOURCES += libraries/libchip/source/xdma_hardware_interface.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/acc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/aes.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/afec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/afe_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/dac_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/efc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/exceptions.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/flashd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/gmac.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/gmacd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/hsmci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/icm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/isi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/mcan.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/mediaLB.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/mpu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/pio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/pio_capture.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/pio_it.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/pmc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/pwmc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/qspi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/qspi_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/rstc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/rtc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/rtt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/sdramc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/spi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/spi_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/ssc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/supc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/tc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/trng.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/twi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/twid.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/uart_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/usart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/usart_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/wdt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/xdmad.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libchip/source/xdma_hardware_interface.c
 
 # libboard
-librtemsbsp_a_SOURCES += libraries/libboard/resources_v71/system_samv71.c
-librtemsbsp_a_SOURCES += libraries/libboard/source/board_lowlevel.c
-librtemsbsp_a_SOURCES += libraries/libboard/source/board_memories.c
-librtemsbsp_a_SOURCES += libraries/libboard/source/dbg_console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libboard/resources_v71/system_samv71.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libboard/source/board_lowlevel.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libboard/source/board_memories.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/contrib/libraries/libboard/source/dbg_console.c
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
@@ -144,14 +144,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += rtc/rtc-config.c
 
 # Helper functions
-librtemsbsp_a_SOURCES += utils/iocopy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/iocopy.c
 
 # Includes
-librtemsbsp_a_CPPFLAGS += -I$(srcdir)/../shared/CMSIS/Include
-librtemsbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libboard
-librtemsbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libboard/include
-librtemsbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libchip
-librtemsbsp_a_CPPFLAGS += -I$(srcdir)/libraries/libchip/include
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/shared/CMSIS/Include
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libboard
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libboard/include
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libchip
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libchip/include
 
 # hack to get the BSP to build
 librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/include/libchip
