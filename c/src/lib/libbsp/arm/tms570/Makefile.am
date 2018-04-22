@@ -55,7 +55,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspstart.c
 
 # POM
-librtemsbsp_a_SOURCES += pom/tms570-pom.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570-pom.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
@@ -72,7 +72,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/tms570/clock/clock.c
 # RTC
 
 # GPIO
-librtemsbsp_a_SOURCES += pinmux/pinmux.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/pinmux.c
 
 # Benchmark Timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-cpucounter.c
@@ -86,21 +86,21 @@ librtemsbsp_a_SOURCES += misc/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if TMS570_USE_HWINIT_STARTUP
-librtemsbsp_a_SOURCES += hwinit/tms570_sys_core.S
-librtemsbsp_a_SOURCES += hwinit/fail_notification.c
-librtemsbsp_a_SOURCES += hwinit/init_emif_sdram.c
-librtemsbsp_a_SOURCES += hwinit/init_esm.c
-librtemsbsp_a_SOURCES += hwinit/init_pinmux.c
-librtemsbsp_a_SOURCES += hwinit/init_system.c
-librtemsbsp_a_SOURCES += hwinit/tms570_selftest.c
-librtemsbsp_a_SOURCES += hwinit/tms570_selftest_par_can.c
-librtemsbsp_a_SOURCES += hwinit/tms570_selftest_par_mibspi.c
-librtemsbsp_a_SOURCES += hwinit/tms570_selftest_par_std.c
-librtemsbsp_a_SOURCES += hwinit/tms570_selftest_parity.c
-librtemsbsp_a_SOURCES += hwinit/tms570_tcram_tests.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_sys_core.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/fail_notification.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/init_emif_sdram.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/init_esm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/init_pinmux.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/init_system.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_selftest.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_selftest_par_can.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_selftest_par_mibspi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_selftest_par_std.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_selftest_parity.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/tms570_tcram_tests.c
 
 # Start hooks
-librtemsbsp_a_SOURCES += hwinit/bspstarthooks-hwinit.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspstarthooks-hwinit.c
 else
 # Start hooks
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/bspstarthooks.c
