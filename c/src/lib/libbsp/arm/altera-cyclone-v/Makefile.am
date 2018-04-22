@@ -12,27 +12,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = ../../../../../../bsps/arm/altera-cyclone-v/start/bsp_specs
 
-###############################################################################
-#                  Header                                                     #
-###############################################################################
-
-# Altera hwlib
-#The following Altera hwlib header files have been left out because so far 
-#they are not required:
-#include_bsp_HEADERS += hwlib/include/alt_bridge_manager.h
-#include_bsp_HEADERS += hwlib/include/alt_fpga_manager.h
-#include_bsp_HEADERS += hwlib/include/alt_globaltmr.h
-#include_bsp_HEADERS += hwlib/include/alt_system_manager.h
-#include_bsp_HEADERS += hwlib/include/alt_timers.h
-#include_bsp_HEADERS += hwlib/include/alt_watchdog.h
-#The following Altera hwlib headers would be problematic with RTEMS:
-#include_bsp_HEADERS += hwlib/include/alt_interrupt.h
-
-# Some of the headers from hwlib need the files from socal. Install them.
-###############################################################################
-#                  Data                                                       #
-###############################################################################
-
 start.$(OBJEXT): ../../../../../../bsps/arm/shared/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
@@ -42,41 +21,25 @@ dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkc
 dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit
 dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit_smp
 
-###############################################################################
-#                  LibBSP                                                     #
-###############################################################################
-
 project_lib_LIBRARIES = librtemsbsp.a
 
 librtemsbsp_a_SOURCES =
 librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # for the Altera hwlib
-librtemsbsp_a_CPPFLAGS += -I${srcdir}/hwlib/include
-librtemsbsp_a_CPPFLAGS += -std=gnu99
+librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/altera-cyclone-v/contrib/hwlib/include
 CFLAGS += -Wno-missing-prototypes
 
 # hwlib from Altera
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_16550_uart.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_address_space.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_clock_manager.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_dma_program.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_generalpurpose_io.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_i2c.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_qspi.c
-librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_reset_manager.c
-#The following Altera hwlib source files have been left out because so far 
-#they are not required:
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_bridge_manager.c
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_fpga_manager.c
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_globaltmr.c
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_system_manager.c
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_timers.c
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_watchdog.c
-# The following Altera hwlib source files would be problematic with RTEMS:
-#librtemsbsp_a_SOURCES += hwlib/src/hwmgr/alt_interrupt.c
-
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_16550_uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_address_space.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_clock_manager.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_dma_program.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_generalpurpose_io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_qspi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/contrib/hwlib/src/hwmgr/alt_reset_manager.c
 
 # Shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
