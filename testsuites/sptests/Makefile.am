@@ -306,14 +306,6 @@ sp35_SOURCES = sp35/priinv.c
 sp35_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp35) $(support_includes)
 endif
 
-if TEST_sp36
-sp_tests += sp36
-sp_screens += sp36/sp36.scn
-sp_docs += sp36/sp36.doc
-sp36_SOURCES = sp36/strict_order_mut.c
-sp36_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sp36) $(support_includes)
-endif
-
 if TEST_sp37
 sp_tests += sp37
 sp_screens += sp37/sp37.scn
