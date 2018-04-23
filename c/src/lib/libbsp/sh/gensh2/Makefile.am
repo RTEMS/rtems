@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/btimer/btimer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console
-librtemsbsp_a_SOURCES += ../shared/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/console/config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/console/sci.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/console/sci_termios.c

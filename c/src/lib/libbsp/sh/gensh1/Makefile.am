@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/btimer/btimer.c
 # scitab
 librtemsbsp_a_SOURCES += scitab.c
 # console
-librtemsbsp_a_SOURCES += ../shared/console.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh1/console/sci.c
 # debugio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
