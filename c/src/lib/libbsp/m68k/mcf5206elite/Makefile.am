@@ -35,8 +35,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 # i2c
-librtemsbsp_a_SOURCES += i2c/i2c.c
-librtemsbsp_a_SOURCES += i2c/i2cdrv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/i2c/i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/i2c/i2cdrv.c
 # tod
 librtemsbsp_a_SOURCES += tod/ds1307.c
 librtemsbsp_a_SOURCES += tod/todcfg.c

@@ -56,7 +56,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/console/console-config.c
 
 # bsp_i2c
-librtemsbsp_a_SOURCES += i2c/i2c_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/i2c/i2c_init.c
 # bsp_spi
 librtemsbsp_a_SOURCES += spi/spi_init.c
 

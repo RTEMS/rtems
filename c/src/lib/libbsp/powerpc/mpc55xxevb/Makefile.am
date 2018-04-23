@@ -84,7 +84,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/start/sd-card-init.c
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/i2c_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/i2c/i2c_init.c
 
 # Network
 if HAS_NETWORKING

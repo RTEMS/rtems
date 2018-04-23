@@ -68,7 +68,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/console/console-config.c
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/bbb-i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/i2c/bbb-i2c.c
 
 # GPIO
 librtemsbsp_a_SOURCES += gpio/bbb-gpio.c

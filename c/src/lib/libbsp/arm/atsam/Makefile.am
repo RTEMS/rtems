@@ -131,8 +131,8 @@ librtemsbsp_a_SOURCES += network/if_atsam.c
 endif
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/atsam_i2c_bus.c
-librtemsbsp_a_SOURCES += i2c/atsam_i2c_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_bus.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_init.c
 
 # SPI
 librtemsbsp_a_SOURCES += spi/atsam_spi_bus.c

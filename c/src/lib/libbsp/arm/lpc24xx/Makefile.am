@@ -100,8 +100,8 @@ librtemsbsp_a_SOURCES += misc/timer.c
 librtemsbsp_a_SOURCES += ssp/ssp.c
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/i2c.c
-librtemsbsp_a_SOURCES += i2c/i2c-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/i2c/i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/i2c/i2c-config.c
 
 # Framebuffer
 librtemsbsp_a_SOURCES += ../shared/arm-pl111-fb.c

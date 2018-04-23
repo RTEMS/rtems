@@ -74,8 +74,8 @@ librtemsbsp_a_SOURCES += ../shared/flash/spansionFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 # i2c
-librtemsbsp_a_SOURCES += i2c/mpc8540_i2c.c
-librtemsbsp_a_SOURCES += i2c/i2c_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/mpc8540_i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/i2c_init.c
 
 # vpd
 librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c

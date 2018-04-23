@@ -74,7 +74,7 @@ librtemsbsp_a_SOURCES += rtc/rtc-config.c
 # Misc
 librtemsbsp_a_SOURCES += misc/boot.c
 librtemsbsp_a_SOURCES += misc/emc.c
-librtemsbsp_a_SOURCES += misc/i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/i2c/i2c.c
 librtemsbsp_a_SOURCES += misc/nand-mlc.c
 librtemsbsp_a_SOURCES += misc/nand-mlc-erase-block-safe.c
 librtemsbsp_a_SOURCES += misc/nand-mlc-read-blocks.c

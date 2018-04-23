@@ -96,7 +96,7 @@ librtemsbsp_a_SOURCES += gpio/rpi-gpio.c
 # SSP
 
 # I2C
-librtemsbsp_a_SOURCES += i2c/i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/i2c/i2c.c
 
 # SPI
 librtemsbsp_a_SOURCES += spi/spi.c

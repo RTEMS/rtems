@@ -58,9 +58,9 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/console/console.c
 # i2c
-librtemsbsp_a_SOURCES += i2c/i2c.c
-librtemsbsp_a_SOURCES += i2c/i2cdrv.c
-librtemsbsp_a_SOURCES += i2c/mpc5200mbus.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/i2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/i2cdrv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/mpc5200mbus.c
 # ide
 librtemsbsp_a_SOURCES += ide/idecfg.c
 librtemsbsp_a_SOURCES += ide/pcmcia_ide.c
