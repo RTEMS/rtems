@@ -32,18 +32,18 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/setvec.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/balloc.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/genarch/ofw_tree.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/generic/string.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwarch.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/main.c
-librtemsbsp_a_SOURCES += ../shared/helenos/boot/sparc64/loader/ofwasm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/balloc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/ofw.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/ofw_tree.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/generic/string.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwarch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/main.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwasm.S
 librtemsbsp_a_SOURCES += ../shared/asm/asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/usiii/start/bspinit.S
 
-librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/cache.S
-librtemsbsp_a_SOURCES += ../shared/helenos/kernel/sparc64/src/sun4u/takemmu.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/kernel/sparc64/src/cache.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/kernel/sparc64/src/sun4u/takemmu.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/trap_table.S
 
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
