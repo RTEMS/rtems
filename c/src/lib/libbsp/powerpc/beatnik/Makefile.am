@@ -76,11 +76,11 @@ librtemsbsp_a_SOURCES += ../shared/flash/intelFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 #pci
-librtemsbsp_a_SOURCES += ../shared/pci/pci.c
-librtemsbsp_a_SOURCES += pci/gt_pci_init.c
-librtemsbsp_a_SOURCES += pci/pci_io_remap.c
-librtemsbsp_a_SOURCES += pci/motload_fixup.c
-librtemsbsp_a_SOURCES += ../shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/gt_pci_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/pci_io_remap.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/pci/motload_fixup.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 #network
 if HAS_NETWORKING

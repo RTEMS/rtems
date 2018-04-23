@@ -33,9 +33,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # pci
-librtemsbsp_a_SOURCES += pci/pci.c
-librtemsbsp_a_SOURCES += pci/pci_interface.c
-librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/pci/pci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/pci/pci_interface.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/pci/detect_host_bridge.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_find_device.c
 
 # irq

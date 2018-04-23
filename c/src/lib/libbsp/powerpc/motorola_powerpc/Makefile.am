@@ -70,10 +70,10 @@ librtemsbsp_a_SOURCES += ../shared/motorola/motorola.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 
 # pci
-librtemsbsp_a_SOURCES += ../shared/pci/pci.c
-librtemsbsp_a_SOURCES += ../shared/pci/detect_raven_bridge.c
-librtemsbsp_a_SOURCES += ../shared/pci/generic_clear_hberrs.c
-librtemsbsp_a_SOURCES += ../shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/detect_raven_bridge.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/generic_clear_hberrs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 # residual
 librtemsbsp_a_SOURCES += ../shared/residual/residual.c

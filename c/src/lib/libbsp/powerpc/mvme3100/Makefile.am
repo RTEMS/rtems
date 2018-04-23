@@ -63,10 +63,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic_i8259
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 
 # pci
-librtemsbsp_a_SOURCES += ../shared/pci/pci.c
-librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
-librtemsbsp_a_SOURCES += ../shared/pci/generic_clear_hberrs.c
-librtemsbsp_a_SOURCES += ../shared/pci/pcifinddevice.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pci.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/pci/detect_host_bridge.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/generic_clear_hberrs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 # flash
 librtemsbsp_a_SOURCES += ../shared/flash/flash.c
