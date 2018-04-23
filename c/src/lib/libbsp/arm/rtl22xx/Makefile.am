@@ -42,7 +42,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/rtl22xx/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/rtl22xx/net/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

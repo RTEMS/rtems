@@ -100,7 +100,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspstarthooks.
 ###############################################################################
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../shared/lpc/network/lpc-ethernet.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/net/
 endif
 
 ###############################################################################

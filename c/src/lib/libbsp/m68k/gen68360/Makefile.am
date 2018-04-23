@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/btimer/btimer.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/gen68360/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c

@@ -45,7 +45,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 if ON_SKYEYE
 librtemsbsp_a_SOURCES += fb/fb.c
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += rtl8019/rtl8019.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/net/rtl8019.c
 endif
 endif
 

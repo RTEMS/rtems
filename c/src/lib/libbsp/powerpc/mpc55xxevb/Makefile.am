@@ -88,8 +88,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/i2c/i2c_init.
 
 # Network
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/smsc9218i.c
-librtemsbsp_a_SOURCES += network/if_smc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/net/smsc9218i.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc55xxevb/net/if_smc.c
 endif
 
 # BSP library

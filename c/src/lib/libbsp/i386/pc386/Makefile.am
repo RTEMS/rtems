@@ -148,10 +148,10 @@ appstart.$(OBJEXT): appcpustart.$(OBJEXT)
 endif
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += 3c509/3c509.c
-librtemsbsp_a_SOURCES += 3c509/elink.c
-librtemsbsp_a_SOURCES += ne2000/ne2000.c
-librtemsbsp_a_SOURCES += wd8003/wd8003.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/3c509.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/elink.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/ne2000.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/wd8003.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/cache/cache.c

@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/irq/vectorisrs.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/interruptmask.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

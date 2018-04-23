@@ -42,8 +42,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/if_hdlcsubr.c
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/net/if_hdlcsubr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c

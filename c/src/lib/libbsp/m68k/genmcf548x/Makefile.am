@@ -51,7 +51,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/mcdma/mcdma_glue
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/start/cache.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/net/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am

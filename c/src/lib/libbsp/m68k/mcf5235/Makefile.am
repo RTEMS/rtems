@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5235/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5235/btimer/btimer.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5235/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5235.c

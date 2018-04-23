@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/lan91c11x.c
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/net/lan91c11x.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm920-mmu.c

@@ -52,7 +52,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += =
-librtemsbsp_a_SOURCES += network/xiltemac.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/net/xiltemac.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c

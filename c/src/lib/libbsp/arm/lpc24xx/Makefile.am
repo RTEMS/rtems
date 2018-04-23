@@ -122,7 +122,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/start-config-p
 ###############################################################################
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../shared/lpc/network/lpc-ethernet.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/net/
 endif
 
 ###############################################################################

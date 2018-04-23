@@ -80,7 +80,7 @@ librtemsbsp_a_SOURCES += ../shared/residual/residual.c
 
 if QEMU
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../../i386/pc386/ne2000/ne2000.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/net/ne2000.c
 endif
 endif
 

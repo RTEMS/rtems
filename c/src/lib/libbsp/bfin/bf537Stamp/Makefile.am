@@ -31,7 +31,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/interrupt.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/networkconfig.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/networkconfig.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/ethernet.c
 endif
 

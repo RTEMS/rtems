@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme162/btimer/timerisr.S
 librtemsbsp_a_SOURCES += tod/tod.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../mvme167/network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/net/network.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache.c

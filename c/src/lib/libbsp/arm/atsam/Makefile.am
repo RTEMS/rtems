@@ -127,7 +127,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7m.c
 
 # Network
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/if_atsam.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/net/if_atsam.c
 endif
 
 # I2C

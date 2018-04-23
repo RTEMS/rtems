@@ -55,7 +55,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/mpci/mpisr.c
 endif
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/if_sim.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/net/if_sim.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/altivec/vec_sup.c

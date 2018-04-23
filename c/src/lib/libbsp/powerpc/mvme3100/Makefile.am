@@ -81,7 +81,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/i2c_init.c
 librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/tsec.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/net/tsec.c
 endif
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c

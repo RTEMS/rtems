@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/btimer/btimer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += ../shared/tsmac/tsmac.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/net/tsmac.c
 endif
 
 

@@ -70,7 +70,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_i2cd
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/dev/mpc83xx_spidrv.c
 
 if HAS_NETWORKING
-librtemsbsp_a_SOURCES += network/network.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/net/network.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/net/tsec.c
 endif
 
