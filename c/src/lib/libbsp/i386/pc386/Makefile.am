@@ -127,8 +127,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/btimer/timerisr.S
 
 if HAS_IDE
 # ide
-librtemsbsp_a_SOURCES += ide/ide.c
-librtemsbsp_a_SOURCES += ide/idecfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/ata/ide.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/ata/idecfg.c
 endif
 
 if HAS_SMP

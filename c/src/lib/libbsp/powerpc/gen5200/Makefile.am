@@ -62,11 +62,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/i2c.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/i2cdrv.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/i2c/mpc5200mbus.c
 # ide
-librtemsbsp_a_SOURCES += ide/idecfg.c
-librtemsbsp_a_SOURCES += ide/pcmcia_ide.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/ata/idecfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/ata/pcmcia_ide.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/dev/mpc5200-ata.c
-librtemsbsp_a_SOURCES += ide/ata-instance.c
-librtemsbsp_a_SOURCES += ide/ata-dma-pio-single.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/ata/ata-instance.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/ata/ata-dma-pio-single.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/irq/irq.c
