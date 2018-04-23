@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/i2c/imx-i2c.c
 
 # SPI
-librtemsbsp_a_SOURCES += spi/imx-ecspi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/spi/imx-ecspi.c
 
 # Start hooks
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspstarthooks.c

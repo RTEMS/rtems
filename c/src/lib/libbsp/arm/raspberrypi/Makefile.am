@@ -99,7 +99,7 @@ librtemsbsp_a_SOURCES += gpio/rpi-gpio.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/i2c/i2c.c
 
 # SPI
-librtemsbsp_a_SOURCES += spi/spi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/spi/spi.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

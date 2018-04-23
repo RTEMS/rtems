@@ -135,9 +135,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_bus.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/i2c/atsam_i2c_init.c
 
 # SPI
-librtemsbsp_a_SOURCES += spi/atsam_spi_bus.c
-librtemsbsp_a_SOURCES += spi/atsam_spi_init.c
-librtemsbsp_a_SOURCES += spi/sc16is752.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/spi/atsam_spi_bus.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/spi/atsam_spi_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/spi/sc16is752.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
