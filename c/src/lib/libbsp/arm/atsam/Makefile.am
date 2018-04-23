@@ -141,7 +141,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/spi/sc16is752.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/rtc/rtc-config.c
 
 # Helper functions
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/iocopy.c

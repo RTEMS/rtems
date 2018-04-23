@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/irq/BSP_irq.c
 
 # tod
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/rtc/todcfg.c
 
 # vectors
 librtemsbsp_a_SOURCES += vectors/exceptionhandler.c

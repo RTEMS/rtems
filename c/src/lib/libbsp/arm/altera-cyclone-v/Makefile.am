@@ -81,7 +81,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/i2c/i2cdrv.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/i2c/i2cdrv-config.c
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += rtc/rtc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/rtc/rtc.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-l2c-310.c

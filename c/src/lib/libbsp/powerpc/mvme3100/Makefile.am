@@ -47,7 +47,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # tod
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += tod/todcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/rtc/todcfg.c
 # pclock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/p_clock.c
 

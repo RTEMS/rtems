@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-armv7m.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/rtc/rtc-config.c
 
 # GPIO
 librtemsbsp_a_SOURCES += gpio/lpc-gpio.c

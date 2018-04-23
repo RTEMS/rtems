@@ -73,7 +73,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/console/console-co
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/rtc/rtc-config.c
 
 # MPCI
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qoriq/mpci/lock.S

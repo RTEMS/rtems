@@ -82,8 +82,8 @@ librtemsbsp_a_SOURCES += nvram/nvram.c
 librtemsbsp_a_SOURCES += slicetimer/slicetimer.c
 
 # tod
-librtemsbsp_a_SOURCES += tod/todcfg.c
-librtemsbsp_a_SOURCES += tod/pcf8563.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/rtc/todcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/rtc/pcf8563.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 
 # startup

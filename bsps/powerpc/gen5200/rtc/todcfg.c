@@ -35,7 +35,7 @@
 #include <bsp.h>
 #include <bsp/i2c.h>
 #include <libchip/rtc.h>
-#include "../tod/pcf8563.h"
+#include "pcf8563.h"
 
 /* Forward function declaration */
 bool mpc5200_pcf8563_probe(int minor);

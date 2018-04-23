@@ -36,7 +36,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme162/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme162/btimer/btimer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme162/btimer/timerisr.S
 # tod
-librtemsbsp_a_SOURCES += tod/tod.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme162/rtc/tod.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mvme167/net/network.c

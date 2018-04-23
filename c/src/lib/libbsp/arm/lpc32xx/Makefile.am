@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-nxp-lpc.c
 
 # RTC
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
-librtemsbsp_a_SOURCES += rtc/rtc-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/rtc/rtc-config.c
 
 # Misc
 librtemsbsp_a_SOURCES += misc/boot.c
