@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/console/uart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/irq/irq.c
 # smc
 librtemsbsp_a_SOURCES += smc/smc.c
 

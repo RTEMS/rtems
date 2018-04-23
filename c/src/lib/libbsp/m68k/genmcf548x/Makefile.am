@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/btimer/btimer.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
-librtemsbsp_a_SOURCES += irq/intc-icr-init-values.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/intc-icr-init-values.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c

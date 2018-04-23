@@ -25,7 +25,7 @@ librtemsbsp_a_SOURCES =
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/tqm8xx/irq/irq.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c

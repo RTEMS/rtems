@@ -34,8 +34,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/irq/irq.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network.c 

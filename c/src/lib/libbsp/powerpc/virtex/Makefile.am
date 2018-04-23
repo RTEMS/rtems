@@ -45,7 +45,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/console/consoleli
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex/irq/irq_init.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c

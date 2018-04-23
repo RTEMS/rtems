@@ -111,14 +111,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspcmdline.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/bspreset.c
-librtemsbsp_a_SOURCES += ../shared/irq/idt.c
-librtemsbsp_a_SOURCES += ../shared/irq/irq.c
-librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c
-librtemsbsp_a_SOURCES += ../shared/irq/elcr.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/idt.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/elcr.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/ldsegs.S
-librtemsbsp_a_SOURCES += ../shared/irq/irq_asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/shared/irq/irq_asm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # timer

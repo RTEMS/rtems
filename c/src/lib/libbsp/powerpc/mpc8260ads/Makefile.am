@@ -29,7 +29,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/console/conso
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/irq/irq.c
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c

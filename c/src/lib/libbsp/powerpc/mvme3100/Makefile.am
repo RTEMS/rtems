@@ -56,11 +56,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += ../shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic_i8259_irq.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 
 # pci
 librtemsbsp_a_SOURCES += ../shared/pci/pci.c

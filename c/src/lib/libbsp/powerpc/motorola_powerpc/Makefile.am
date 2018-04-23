@@ -59,15 +59,15 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 # irq
-librtemsbsp_a_SOURCES += ../shared/irq/irq_init.c
-librtemsbsp_a_SOURCES += ../shared/irq/openpic_i8259_irq.c
-librtemsbsp_a_SOURCES += ../shared/irq/i8259.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/i8259.c
 
 # motorola
 librtemsbsp_a_SOURCES += ../shared/motorola/motorola.c
 
 # openpic
-librtemsbsp_a_SOURCES += ../shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 
 # pci
 librtemsbsp_a_SOURCES += ../shared/pci/pci.c

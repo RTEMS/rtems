@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/start/bspstarthook
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
 
 # IRQ
-librtemsbsp_a_SOURCES += irq/irq.c
-librtemsbsp_a_SOURCES += irq/irq-dispatch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gdbarmsim/irq/irq-dispatch.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # Cache

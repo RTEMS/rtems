@@ -49,8 +49,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/syscon.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq.c
-librtemsbsp_a_SOURCES += ../shared/armv7m/irq/armv7m-irq-dispatch.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-armv7m.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-dispatch-armv7m.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

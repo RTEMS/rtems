@@ -36,7 +36,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qemuppc/console/console-
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/qemuppc/irq/irq_init.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c

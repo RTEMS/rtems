@@ -38,8 +38,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/btimer/btimer.c
 
 # irq
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
-librtemsbsp_a_SOURCES += irq/bsp_irq_asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/edb7312/irq/bsp_irq_asm.S
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c

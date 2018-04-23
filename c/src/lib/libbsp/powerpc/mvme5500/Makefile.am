@@ -39,8 +39,8 @@ librtemsbsp_a_SOURCES += pci/detect_host_bridge.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/pci/pci_find_device.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += irq/BSP_irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/irq/BSP_irq.c
 
 # tod
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c

@@ -33,10 +33,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled
 # timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/btimer/btimer.c
 #isr
-librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
-librtemsbsp_a_SOURCES += ../shared/irq/irq.c
-librtemsbsp_a_SOURCES += irq/vectorisrs.c
-librtemsbsp_a_SOURCES += ../shared/irq/interruptmask.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/vectorexceptions.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/csb350/irq/vectorisrs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/interruptmask.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += network/network.c

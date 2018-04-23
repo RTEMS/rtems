@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ide/ata-instance.c
 librtemsbsp_a_SOURCES += ide/ata-dma-pio-single.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/irq/irq.c
 
 # mscan
 librtemsbsp_a_SOURCES += mscan/mscan.c

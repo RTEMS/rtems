@@ -63,7 +63,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspreset.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/irq/irq.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c

@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/btimer/btimer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/console/uart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb336/irq/irq.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c

@@ -38,9 +38,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/console/console-io.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/console/consupp.S
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += ../shared/irq/openpic_i8259_irq.c
-librtemsbsp_a_SOURCES += ../shared/openpic/openpic.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic_i8259_irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # vectors

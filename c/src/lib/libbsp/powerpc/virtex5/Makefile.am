@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex5/start/dummy_cons
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 
 # irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex5/irq/irq_init.c
 
 # mmu
 librtemsbsp_a_SOURCES += mmu/mmu.c

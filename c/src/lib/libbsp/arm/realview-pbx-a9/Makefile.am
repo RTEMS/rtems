@@ -58,7 +58,7 @@ endif
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += ../shared/arm-gic-irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-gic.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c

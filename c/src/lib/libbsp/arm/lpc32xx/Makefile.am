@@ -56,7 +56,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspstart.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/irq/irq.c
 
 # Console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c

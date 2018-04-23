@@ -62,8 +62,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/console.c
 
 #irq
-librtemsbsp_a_SOURCES += irq/irq_init.c
-librtemsbsp_a_SOURCES += irq/discovery_pic.c 
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/irq/irq_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/irq/discovery_pic.c 
 
 #marvell
 librtemsbsp_a_SOURCES += marvell/discovery.c

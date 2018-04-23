@@ -48,7 +48,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/dbgu.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/usart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/irq/irq.c
 if ENABLE_LCD
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/sed1356.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/console/fbcons.c

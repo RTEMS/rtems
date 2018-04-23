@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 
 # irq
-librtemsbsp_a_SOURCES += ../shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/irq/irq.c
 
 # clock
 librtemsbsp_a_SOURCES += ../shared/milkymist_clock/ckinit.c

@@ -28,7 +28,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/hurricane/start/inittlb.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/start/idtmem.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/start/idttlb.S
-librtemsbsp_a_SOURCES += ../shared/irq/exception.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/exception.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/hurricane/start/usc.S
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/hurricane/clock/ckinit.c
@@ -39,10 +39,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/hurricane/console/console.c
 librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
 librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S
 #isr
-librtemsbsp_a_SOURCES += ../shared/irq/vectorexceptions.c
-librtemsbsp_a_SOURCES += ../shared/irq/irq.c
-librtemsbsp_a_SOURCES += irq/vectorisrs.c
-librtemsbsp_a_SOURCES += ../shared/irq/interruptmask.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/vectorexceptions.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/hurricane/irq/vectorisrs.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/interruptmask.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/installisrentries.c

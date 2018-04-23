@@ -62,7 +62,7 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/or1k/generic_or1k/clock/clockdrv.
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/generic_or1k/irq/irq.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/or1k/shared/cache/cache.c

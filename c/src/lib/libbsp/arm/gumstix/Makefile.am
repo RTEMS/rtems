@@ -37,7 +37,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/console/uarts.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/console/ffuart.c
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
-librtemsbsp_a_SOURCES += irq/irq.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/irq/irq.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
