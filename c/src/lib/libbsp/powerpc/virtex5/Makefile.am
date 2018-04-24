@@ -23,7 +23,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex5/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += ../shared/src/memcpy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/memcpy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 
 # start
