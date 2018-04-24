@@ -74,7 +74,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c
 
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/i2c/i2cdrv.c

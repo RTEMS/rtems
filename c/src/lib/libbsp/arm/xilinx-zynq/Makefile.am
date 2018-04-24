@@ -65,7 +65,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/debug-co
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/console/zynq-uart.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c
 
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/i2c/cadence-i2c.c

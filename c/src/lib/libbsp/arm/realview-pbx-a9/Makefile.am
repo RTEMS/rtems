@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../shared/arm-pl050.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
