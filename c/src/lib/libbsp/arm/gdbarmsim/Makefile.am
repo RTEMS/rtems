@@ -49,7 +49,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 # Shared
 if shared
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
-librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-ttb-entries.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
