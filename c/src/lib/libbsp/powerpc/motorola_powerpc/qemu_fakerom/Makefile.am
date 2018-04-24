@@ -12,10 +12,10 @@ project_lib_DATA += qemu_fakerom.bin
 
 
 ## IMPORTANT: head.S must be first, T. Straumann 12/17/2001
-qemu_fakerom.$(OBJEXT): ../../../powerpc/shared/bootloader/qemu_fakerom.S
+qemu_fakerom.$(OBJEXT): ../../../../../../../bsps/powerpc/motorola_powerpc/bootloader/qemu_fakerom.S
 	$(CPPASCOMPILE) -c -o $@ $^
 
-qemu_fakeres.$(OBJEXT): ../../../powerpc/shared/bootloader/qemu_fakeres.c
+qemu_fakeres.$(OBJEXT): ../../../../../../../bsps/powerpc/motorola_powerpc/bootloader/qemu_fakeres.c
 	$(CC) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o $@ $^
 
 qemu_fakerom.elf: qemu_fakerom.$(OBJEXT) qemu_fakeres.$(OBJEXT)
