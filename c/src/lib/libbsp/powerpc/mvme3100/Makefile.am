@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/generic_clear
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 # flash
-librtemsbsp_a_SOURCES += ../shared/flash/flash.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/flash.c
 librtemsbsp_a_SOURCES += ../shared/flash/spansionFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 

@@ -71,7 +71,7 @@ librtemsbsp_a_SOURCES += marvell/gti2c.c
 librtemsbsp_a_SOURCES += marvell/gt_timer.c
 
 #flash
-librtemsbsp_a_SOURCES += ../shared/flash/flash.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/flash.c
 librtemsbsp_a_SOURCES += ../shared/flash/intelFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 
