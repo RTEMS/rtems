@@ -78,7 +78,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/start/bspstarthooks.c
 
 # Framebuffer
-librtemsbsp_a_SOURCES += ../shared/arm-pl111-fb.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/fb/arm-pl111.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/start/fb-config.c
 
 ###############################################################################
