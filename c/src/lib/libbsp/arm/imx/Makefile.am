@@ -60,7 +60,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/console/console-config.c
 
 # Clock
-librtemsbsp_a_SOURCES += ../shared/arm-generic-timer-clock-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-generic-timer.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
