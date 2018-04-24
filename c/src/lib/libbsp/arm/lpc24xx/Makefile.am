@@ -59,7 +59,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounter
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
-librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bspreset-armv7m.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspreset-armv4.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspstart.c
 

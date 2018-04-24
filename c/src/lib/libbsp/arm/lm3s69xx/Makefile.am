@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/stackalloc.c
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bsp-start-memcpy.S
-librtemsbsp_a_SOURCES += ../shared/armv7m/startup/bspreset.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/bspreset-armv7m.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/bspstarthook.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/start/io.c
