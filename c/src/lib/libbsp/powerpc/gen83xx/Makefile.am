@@ -41,7 +41,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen83xx/start/bsprestart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bsp-uboot-board-info.c
-librtemsbsp_a_SOURCES += ../shared/uboot_getenv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/u-boot/uboot_getenv.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/powerpc/shared/clock/clock.c
