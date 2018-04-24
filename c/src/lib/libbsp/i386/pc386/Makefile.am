@@ -77,9 +77,9 @@ endif
 
 # console (non-graphics support)
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/serial_mouse_config.c
-librtemsbsp_a_SOURCES += ../shared/comm/uart.c
-librtemsbsp_a_SOURCES += ../shared/comm/tty_drv.c
-librtemsbsp_a_SOURCES += ../shared/realmode_int/realmode_int.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/uart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/tty_drv.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/realmode_int.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/legacy-console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/console_select.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/console_control.c
@@ -91,9 +91,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/uart_bus_pci.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/gdb_select.c
 
 # gdb
-librtemsbsp_a_SOURCES += ../shared/comm/i386-stub.c
-librtemsbsp_a_SOURCES += ../shared/comm/i386-stub-glue.c
-librtemsbsp_a_SOURCES += ../shared/comm/gdb_glue.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/i386-stub.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/i386-stub-glue.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/console/gdb_glue.c
 
 # gnat
 
@@ -132,8 +132,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/ata/idecfg.c
 endif
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../shared/smp/getcpuid.c
-librtemsbsp_a_SOURCES += ../shared/smp/smp-imps.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/getcpuid.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/i386/pc386/start/smp-imps.c
 
 project_lib_DATA += appstart.$(OBJEXT)
 appcpustart.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S

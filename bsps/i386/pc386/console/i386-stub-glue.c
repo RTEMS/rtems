@@ -12,7 +12,7 @@
 #include <bsp/irq-generic.h>
 #include <libchip/serial.h>
 
-#include "../../../../../../../bsps/shared/dev/serial/legacy-console.h"
+#include "../../../shared/dev/serial/legacy-console.h"
 
 int  putDebugChar(int ch);     /* write a single character      */
 int  getDebugChar(void);       /* read and return a single char */
