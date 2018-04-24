@@ -64,7 +64,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/irq/irq-gic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/getserialmouseps2.c
-librtemsbsp_a_SOURCES += ../shared/arm-pl011.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl011.c
 librtemsbsp_a_SOURCES += ../shared/arm-pl050.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/console/console-config.c
 
