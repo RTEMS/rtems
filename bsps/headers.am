@@ -18,7 +18,6 @@ include_bsp_HEADERS += ../../bsps/include/bsp/fdt.h
 include_bsp_HEADERS += ../../bsps/include/bsp/gpio.h
 include_bsp_HEADERS += ../../bsps/include/bsp/irq-generic.h
 include_bsp_HEADERS += ../../bsps/include/bsp/irq-info.h
-include_bsp_HEADERS += ../../bsps/include/bsp/mm.h
 include_bsp_HEADERS += ../../bsps/include/bsp/stackalloc.h
 include_bsp_HEADERS += ../../bsps/include/bsp/u-boot.h
 include_bsp_HEADERS += ../../bsps/include/bsp/uart-output-char.h

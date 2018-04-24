@@ -109,7 +109,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspstartho
 
 # LIBMM
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/mm_config_table.c
-librtemsbsp_a_SOURCES += ../shared/mminit.c
 
 ###############################################################################
 #                  Special Rules                                              #
