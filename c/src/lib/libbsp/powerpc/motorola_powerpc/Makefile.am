@@ -76,7 +76,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/generic_clear
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice.c
 
 # residual
-librtemsbsp_a_SOURCES += ../shared/residual/residual.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/residual.c
 
 if QEMU
 if HAS_NETWORKING
