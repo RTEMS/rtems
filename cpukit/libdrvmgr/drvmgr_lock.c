@@ -13,14 +13,14 @@
 
 void _DRV_Manager_Lock( void )
 {
-  if ( !_System_state_Is_before_multitasking( _System_state_Get() ) ) {
+  if ( !_System_state_Is_before_initialization( _System_state_Get() ) ) {
     _API_Mutex_Lock( &drvmgr.lock );
   }
 }
 
 void _DRV_Manager_Unlock(void)
 {
-  if ( !_System_state_Is_before_multitasking( _System_state_Get() ) ) {
+  if ( !_System_state_Is_before_initialization( _System_state_Get() ) ) {
     _API_Mutex_Unlock( &drvmgr.lock );
   }
 }
