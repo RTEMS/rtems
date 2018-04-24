@@ -78,7 +78,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/mpc8540_i2c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/i2c_init.c
 
 # vpd
-librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vpd.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/net/tsec.c

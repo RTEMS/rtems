@@ -42,7 +42,7 @@ project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspstart.c
-librtemsbsp_a_SOURCES += ../shared/motorola/vpd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vpd.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/start/i2c_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/bspgetworkarea.c
