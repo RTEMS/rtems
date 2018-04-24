@@ -70,7 +70,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice
 
 # flash
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/flash.c
-librtemsbsp_a_SOURCES += ../shared/flash/spansionFlash.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/spansionFlash.c
 librtemsbsp_a_SOURCES += flash/flashcfg.c
 
 # i2c
