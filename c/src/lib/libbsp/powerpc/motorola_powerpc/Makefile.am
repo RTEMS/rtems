@@ -64,7 +64,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic_i8259
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/i8259.c
 
 # motorola
-librtemsbsp_a_SOURCES += ../shared/motorola/motorola.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/motorola_powerpc/start/motorola.c
 
 # openpic
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
