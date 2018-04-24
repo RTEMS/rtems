@@ -7,16 +7,20 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
 #include <drvmgr/drvmgr.h>
 #include "drvmgr_internal.h"
+#include <rtems/score/sysstate.h>
 
-void _DRV_Manager_Lock(void)
+void _DRV_Manager_Lock( void )
 {
-	_API_Mutex_Lock(&drvmgr.lock);
+  if ( !_System_state_Is_before_multitasking( _System_state_Get() ) ) {
+    _API_Mutex_Lock( &drvmgr.lock );
+  }
 }
 
 void _DRV_Manager_Unlock(void)
 {
-	_API_Mutex_Unlock(&drvmgr.lock);
+  if ( !_System_state_Is_before_multitasking( _System_state_Get() ) ) {
+    _API_Mutex_Unlock( &drvmgr.lock );
+  }
 }
