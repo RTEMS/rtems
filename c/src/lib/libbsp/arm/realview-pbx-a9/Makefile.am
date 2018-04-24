@@ -52,7 +52,7 @@ librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/start/bspstart.c
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/start/bspsmp.c
 endif
 

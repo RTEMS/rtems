@@ -50,7 +50,7 @@ librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-ttb-entries.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstart.c
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspsmp.c
 endif
 

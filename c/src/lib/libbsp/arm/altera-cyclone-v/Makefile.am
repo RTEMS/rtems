@@ -60,7 +60,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspst
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspstarthooks.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/mmu-config.c
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/altera-cyclone-v/start/bspsmp.c
 endif
 

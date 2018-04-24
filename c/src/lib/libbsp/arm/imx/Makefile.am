@@ -47,7 +47,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/ccm.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/imx_iomux.c
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../shared/arm-a9mpcore-smp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/start/arm-a9mpcore-smp.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/start/bspsmp.c
 endif
 
