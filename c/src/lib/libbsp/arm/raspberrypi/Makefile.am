@@ -62,7 +62,7 @@ endif
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspreset.c
 
 # IRQ
-librtemsbsp_a_SOURCES += ../shared/arm-cp15-set-exception-handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cp15/arm-cp15-set-exception-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/irq/irq.c
 
 # Console
