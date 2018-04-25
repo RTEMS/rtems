@@ -72,14 +72,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/ata/ata-dma-pio-
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/irq/irq.c
 
 # mscan
-librtemsbsp_a_SOURCES += mscan/mscan.c
-librtemsbsp_a_SOURCES += mscan/mscan-base.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/mscan/mscan.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/mscan/mscan-base.c
 
 # nvram
-librtemsbsp_a_SOURCES += nvram/nvram.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/nvram/nvram.c
 
 # slicetimer
-librtemsbsp_a_SOURCES += slicetimer/slicetimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/slicetimer/slicetimer.c
 
 # tod
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/gen5200/rtc/todcfg.c
