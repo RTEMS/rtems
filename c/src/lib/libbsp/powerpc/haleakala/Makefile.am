@@ -23,7 +23,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/start/bspstart
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += mmu/mmu_405.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/start/mmu_405.c
 librtemsbsp_a_SOURCES += mmu/mmu_405asm.S 
 
 # dlentry
