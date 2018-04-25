@@ -72,18 +72,18 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/rtc/rtc-config.c
 
 # Misc
-librtemsbsp_a_SOURCES += misc/boot.c
-librtemsbsp_a_SOURCES += misc/emc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/boot.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/emc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/i2c/i2c.c
-librtemsbsp_a_SOURCES += misc/nand-mlc.c
-librtemsbsp_a_SOURCES += misc/nand-mlc-erase-block-safe.c
-librtemsbsp_a_SOURCES += misc/nand-mlc-read-blocks.c
-librtemsbsp_a_SOURCES += misc/nand-mlc-write-blocks.c
-librtemsbsp_a_SOURCES += misc/restart.c
-librtemsbsp_a_SOURCES += misc/system-clocks.c
-librtemsbsp_a_SOURCES += misc/timer.c
-librtemsbsp_a_SOURCES += misc/nand-select.c
-librtemsbsp_a_SOURCES += misc/idle-thread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/nand/nand-mlc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/nand/nand-mlc-erase-block-safe.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/nand/nand-mlc-read-blocks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/nand/nand-mlc-write-blocks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/restart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/system-clocks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/nand/nand-select.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc32xx/start/bspidle.c
 
 # SSP
 
