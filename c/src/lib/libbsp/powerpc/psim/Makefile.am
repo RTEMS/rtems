@@ -44,7 +44,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/irq/openpic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 
 # vectors
-librtemsbsp_a_SOURCES += vectors/align_h.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/psim/start/align_h.S
 
 if HAS_MP
 # shmdr
