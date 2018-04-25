@@ -78,7 +78,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/start/pinmux.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-cpucounter.c
 
 # Misc
-librtemsbsp_a_SOURCES += misc/cpucounterread.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/tms570/cpucounter/cpucounterread.c
 
 # Watchdog
 
