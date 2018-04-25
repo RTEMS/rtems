@@ -47,12 +47,12 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/rtc/todcfg.c
 
 # vectors
-librtemsbsp_a_SOURCES += vectors/exceptionhandler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/start/exceptionhandler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/start/vectors_entry.S
 
 # GT64260
-librtemsbsp_a_SOURCES += GT64260/GT64260TWSI.c
-librtemsbsp_a_SOURCES += GT64260/MVME5500I2C.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/GT64260/GT64260TWSI.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/GT64260/MVME5500I2C.c
 
 if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme5500/net/if_100MHz/GT64260eth.c
