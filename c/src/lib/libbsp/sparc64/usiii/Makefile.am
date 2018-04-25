@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/gene
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwarch.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/main.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwasm.S
-librtemsbsp_a_SOURCES += ../shared/asm/asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/halt.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/usiii/start/bspinit.S
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/kernel/sparc64/src/cache.S

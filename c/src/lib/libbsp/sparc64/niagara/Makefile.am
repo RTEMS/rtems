@@ -33,7 +33,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/spar
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/main.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwasm.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/niagara/start/bspinit.S
-librtemsbsp_a_SOURCES += ../shared/asm/asm.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/halt.S
 
 librtemsbsp_a_SOURCES +=../../../../../../bsps/sparc64/shared/clock/ckinit.c
 
