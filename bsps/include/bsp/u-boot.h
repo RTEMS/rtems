@@ -34,11 +34,7 @@
   typedef unsigned long phys_size_t;
 #endif
 
-#ifdef U_BOOT_GENERIC_BOARD_INFO
-  #include <bsp/u-boot-generic-board-info.h>
-#else
-  #include <bsp/u-boot-board-info.h>
-#endif
+#include <bsp/u-boot-board-info.h>
 
 #ifdef __cplusplus
 extern "C" {
