@@ -38,7 +38,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex4/irq/irq_init.c
 
 # mmu
-librtemsbsp_a_SOURCES += mmu/mmu.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/virtex4/start/mmu.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc403.c
