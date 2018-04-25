@@ -34,7 +34,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/console/sh4uart.c
 # hw_init
-librtemsbsp_a_SOURCES += hw_init/hw_init.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh4/start/hw_init.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
