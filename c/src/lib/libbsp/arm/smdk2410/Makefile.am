@@ -39,7 +39,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/console/uart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/irq/irq.c
 # smc
-librtemsbsp_a_SOURCES += smc/smc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/smc/smc.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
