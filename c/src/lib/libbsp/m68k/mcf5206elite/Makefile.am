@@ -42,7 +42,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/rtc/ds1307.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/rtc/todcfg.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 # nvram
-librtemsbsp_a_SOURCES += nvram/nvram.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/mcf5206elite/nvram/nvram.c
 
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
