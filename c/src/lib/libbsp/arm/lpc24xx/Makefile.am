@@ -87,17 +87,17 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/rtc/rtc-config.c
 
 # Misc
-librtemsbsp_a_SOURCES += misc/system-clocks.c
-librtemsbsp_a_SOURCES += misc/dma.c
-librtemsbsp_a_SOURCES += misc/dma-copy.c
-librtemsbsp_a_SOURCES += misc/bspidle.c
-librtemsbsp_a_SOURCES += misc/io.c
-librtemsbsp_a_SOURCES += misc/lcd.c
-librtemsbsp_a_SOURCES += misc/restart.c
-librtemsbsp_a_SOURCES += misc/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/system-clocks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/dma-copy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/fb/lcd.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/restart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/start/timer.c
 
 # SSP
-librtemsbsp_a_SOURCES += ssp/ssp.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/spi/ssp.c
 
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc24xx/i2c/i2c.c
