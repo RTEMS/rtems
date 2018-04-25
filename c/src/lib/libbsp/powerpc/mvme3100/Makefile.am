@@ -71,7 +71,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pcifinddevice
 # flash
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/flash.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/spansionFlash.c
-librtemsbsp_a_SOURCES += flash/flashcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/flash/flashcfg.c
 
 # i2c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mvme3100/i2c/mpc8540_i2c.c
