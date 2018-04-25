@@ -5,11 +5,6 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = ../../../../../../bsps/m68k/mcf5206elite/start/bsp_specs
 
-
-_SUBDIRS = . tools
-
-
-
 start.$(OBJEXT): ../../../../../../bsps/m68k/mcf5206elite/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)

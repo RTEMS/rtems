@@ -15,8 +15,6 @@ RTEMS_BSP_CONFIGURE
 
 RTEMS_BSP_CLEANUP_OPTIONS
 
-AC_CONFIG_SUBDIRS(tools)
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
