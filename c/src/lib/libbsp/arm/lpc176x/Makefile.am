@@ -72,33 +72,33 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/rtc/rtc-config.c
 
 # GPIO
-librtemsbsp_a_SOURCES += gpio/lpc-gpio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/gpio/lpc-gpio.c
 
 # CAN
-librtemsbsp_a_SOURCES += can/can.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/can/can.c
 
 # PWMOUT
-librtemsbsp_a_SOURCES += pwmout/pwmout.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/pwm/pwmout.c
 
 # ADC
-librtemsbsp_a_SOURCES += adc/adc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/adc.c
 
 # Timer
-librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/btimer/btimer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/timer/timer.c
 
 # Benchmark Timer
-librtemsbsp_a_SOURCES += benchmark_timer/benchmark_timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/btimer/btimer.c
 
 # Misc
-librtemsbsp_a_SOURCES += misc/system-clocks.c
-librtemsbsp_a_SOURCES += misc/dma.c
-librtemsbsp_a_SOURCES += misc/dma-copy.c
-librtemsbsp_a_SOURCES += misc/bspidle.c
-librtemsbsp_a_SOURCES += misc/io.c
-librtemsbsp_a_SOURCES += misc/restart.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/system-clocks.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/dma.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/dma-copy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/bspidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/io.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/restart.c
 
 # Watchdog
-librtemsbsp_a_SOURCES += watchdog/watchdog.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lpc176x/start/watchdog.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
