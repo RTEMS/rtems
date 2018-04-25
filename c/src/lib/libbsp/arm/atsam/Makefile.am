@@ -147,7 +147,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/rtc/rtc-config.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/atsam/start/iocopy.c
 
 # Includes
-librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/shared/CMSIS/Include
 librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libboard
 librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libboard/include
 librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/atsam/contrib/libraries/libchip
