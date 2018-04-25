@@ -71,16 +71,16 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/console/console-confi
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/i2c/bbb-i2c.c
 
 # GPIO
-librtemsbsp_a_SOURCES += gpio/bbb-gpio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/gpio/bbb-gpio.c
 
 #pwm
-librtemsbsp_a_SOURCES += pwm/pwm.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/pwm/pwm.c
 
 #RTC
-librtemsbsp_a_SOURCES += rtc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/rtc/rtc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/rtc/rtc-support.c
 # Clock
-librtemsbsp_a_SOURCES += clock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/clock/clock.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
