@@ -36,8 +36,8 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/mips/rbtx4938/clock/clockdrv.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/rbtx4938/console/console-io.c
 # liblnk
-librtemsbsp_a_SOURCES += ../shared/liblnk/lnklib.S
-librtemsbsp_a_SOURCES += ../shared/liblnk/pmon.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/liblnk/lnklib.S
+librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/liblnk/pmon.S
 #isr
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/vectorexceptions.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/irq.c
