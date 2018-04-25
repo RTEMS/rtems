@@ -76,20 +76,20 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/fbcons.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/console/outch.c
 
 # Mailbox
-librtemsbsp_a_SOURCES += misc/mailbox.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/mailbox.c
 
 # VideoCore
-librtemsbsp_a_SOURCES += misc/vc.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/vc.c
 
 # clock
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/raspberrypi/clock/clockdrv.c
 
 # Timer
-librtemsbsp_a_SOURCES += misc/timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/timer.c
 
 # GPIO
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/gpio/gpio-support.c
-librtemsbsp_a_SOURCES += gpio/rpi-gpio.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/gpio/rpi-gpio.c
 
 # RTC
 
