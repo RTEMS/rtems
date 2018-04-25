@@ -66,14 +66,14 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/irq/irq_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/irq/discovery_pic.c 
 
 #marvell
-librtemsbsp_a_SOURCES += marvell/discovery.c
-librtemsbsp_a_SOURCES += marvell/gti2c.c
-librtemsbsp_a_SOURCES += marvell/gt_timer.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/marvell/discovery.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/marvell/gti2c.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/marvell/gt_timer.c
 
 #flash
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/flash.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/flash/intelFlash.c
-librtemsbsp_a_SOURCES += flash/flashcfg.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/beatnik/flash/flashcfg.c
 
 #pci
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/pci/pci.c
