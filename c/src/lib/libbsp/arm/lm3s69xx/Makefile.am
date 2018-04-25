@@ -69,7 +69,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 # SSI
-librtemsbsp_a_SOURCES += ssi/ssi.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/i2c/ssi.c
 
 ###############################################################################
 #                  Special Rules                                              #
