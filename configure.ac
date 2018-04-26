@@ -43,12 +43,6 @@ test -z "$RTEMS_CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
-case $enable_tests in
-yes | samples )
-  RTEMS_BUILD_CONFIG_SUBDIRS([testsuites/tools])
-  ;;
-esac
-
 # Some BSPs carelessly apply these tools as build-tools
 AS_IF([test $host != $build],[
 RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
