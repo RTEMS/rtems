@@ -14,14 +14,11 @@
 #define _PRIMODE_H
 
 #include <inttypes.h>
+#include <rtems/score/cpuopts.h>
 
-#ifndef SIZEOF_MODE_T
-#error "missing SIZEOF_MODE_T"
-#endif
-
-#if SIZEOF_MODE_T == 8
+#if __RTEMS_SIZEOF_MODE_T__ == 8
 #define PRIomode_t PRIo64
-#elif SIZEOF_MODE_T == 4
+#elif __RTEMS_SIZEOF_MODE_T__ == 4
 #define PRIomode_t PRIo32
 #else
 #error "unsupported size of mode_t"

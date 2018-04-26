@@ -24,34 +24,13 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_PROG_CXX_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
-RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
-
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
-RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
-RTEMS_CHECK_CXX(RTEMS_BSP)
-RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
+RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 
 AM_CONDITIONAL(NO_SMP,test "$rtems_cv_RTEMS_SMP" != "yes")
 AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
 AM_CONDITIONAL([HAS_POSIX],[test x"${rtems_cv_RTEMS_POSIX_API}" = xyes])
-
-# These are SMP related and were added to newlib by RTEMS.
-AC_CHECK_DECLS([pthread_attr_setaffinity_np],[],[],[[
-  #define _GNU_SOURCE
-  #include <pthread.h>]])
-AC_CHECK_DECLS([pthread_attr_getaffinity_np],[],[],[[
-  #define _GNU_SOURCE
-  #include <pthread.h>]])
-AC_CHECK_DECLS([pthread_setaffinity_np],[],[],[[
-  #define _GNU_SOURCE
-  #include <pthread.h>]])
-AC_CHECK_DECLS([pthread_getaffinity_np],[],[],[[
-  #define _GNU_SOURCE
-  #include <pthread.h>]])
-AC_CHECK_DECLS([pthread_getattr_np],[],[],[[
-  #define _GNU_SOURCE
-  #include <pthread.h>]])
 
 # BSP Test configuration
 RTEMS_TEST_CHECK([smp01])

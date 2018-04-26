@@ -29,9 +29,6 @@ RTEMS_CHECK_CXX(RTEMS_BSP)
 
 AM_CONDITIONAL([HAS_CPLUSPLUS],[test $HAS_CPLUSPLUS = "yes"])
 
-# FIXME: We should get rid of this. It's a cludge.
-AC_CHECK_SIZEOF([time_t])
-
 # Some tests should not be built/run in SMP configurations
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 AM_CONDITIONAL(NO_SMP,test "$rtems_cv_RTEMS_SMP" != "yes")

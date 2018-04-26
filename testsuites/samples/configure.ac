@@ -30,36 +30,11 @@ RTEMS_CHECK_CXX(RTEMS_BSP)
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 RTEMS_CHECK_CPUOPTS([RTEMS_SMP])
 
-CXXTESTS=$HAS_CPLUSPLUS
-AS_IF([test $HAS_CPLUSPLUS = yes],[
-  AC_LANG_PUSH([C++])
-  AC_CHECK_HEADERS([cstdio cstdlib iostream],[],[CXXTESTS=no])
-  AC_CACHE_CHECK(
-  [if iostream supports std:: namespace],
-  [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE],
-  [AC_COMPILE_IFELSE(
-    [AC_LANG_PROGRAM(
-      [[#include <iostream>]],
-      [[std::cout << "hello" << std::endl;]])
-    ],
-    [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE=yes],
-    [rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE=no])
-  ])
-  AS_IF([test $rtems_cv_HAVE_IOSTREAM_STD_NAMESPACE = no],[CXXTESTS=no])
-  AS_IF([test $CXXTESTS = no],[
-    AC_MSG_WARN([disabling C++ tests])
-  ])
-  AC_LANG_POP
-])
-
-AM_CONDITIONAL([CXXTESTS],[test $CXXTESTS = "yes"])
+AM_CONDITIONAL([CXXTESTS],[test "$HAS_CPLUSPLUS" = "yes"])
 AM_CONDITIONAL(NETTESTS,test "$rtems_cv_RTEMS_NETWORKING" = "yes")
 AM_CONDITIONAL(HAS_MP,test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes")
 AM_CONDITIONAL(NO_SMP,test "$rtems_cv_RTEMS_SMP" != "yes")
 AM_CONDITIONAL(HAS_SMP,test "$rtems_cv_RTEMS_SMP" = "yes")
-
-# FIXME: We should get rid of this. It's a cludge.
-AC_CHECK_SIZEOF([time_t])
 
 # BSP Test configuration
 RTEMS_TEST_CHECK([base_mp])

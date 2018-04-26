@@ -22,8 +22,6 @@
 
 const char rtems_test_name[] = "SMPPSXAFFINITY 2";
 
-#if HAVE_DECL_PTHREAD_GETAFFINITY_NP
-
 pthread_t           Init_id;
 pthread_t           Med_id[NUM_CPUS-1];
 pthread_t           Low_id[NUM_CPUS];
@@ -217,18 +215,6 @@ void *POSIX_Init(
   rtems_test_exit(0);
 }
 
-#else
-void *POSIX_Init(
-  void *ignored
-)
-{
-  TEST_BEGIN();
-  puts( " Affinity NOT Supported");
-  TEST_END();
-  rtems_test_exit(0);
-}
-
-#endif
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

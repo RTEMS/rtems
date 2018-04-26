@@ -25,10 +25,6 @@
 
 const char rtems_test_name[] = "PSXIMFS 2";
 
-#if !HAVE_DECL_SETEUID
-extern int seteuid(uid_t euid);
-#endif
-
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 

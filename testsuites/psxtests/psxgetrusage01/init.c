@@ -15,10 +15,6 @@
 #include <sys/resource.h>
 #include <errno.h>
 
-#if !HAVE_DECL_GETRUSAGE
-extern int getrusage(int who, struct rusage *usage);
-#endif
-
 #include <tmacros.h>
 #include "test_support.h"
 

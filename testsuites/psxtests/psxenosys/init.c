@@ -13,10 +13,7 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
-#if HAVE_SYS_MMAN_H
-/* POSIX mandates mprotect in sys/mman.h, but newlib doesn't have this */
 #include <sys/mman.h>
-#endif
 #include <pthread.h>
 
 #define CONFIGURE_INIT
@@ -29,13 +26,6 @@
 #include <sched.h>
 
 const char rtems_test_name[] = "PSXENOSYS";
-
-#if !HAVE_DECL_MPROTECT
-extern int mprotect(const void *addr, size_t len, int prot);
-#endif
-#if !HAVE_DECL_PTHREAD_ATFORK
-extern int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void));
-#endif
 
 void check_enosys(int status);
 

@@ -54,7 +54,6 @@ void *Test_Thread(void *arg)
 
 void *POSIX_Init(void *argument)
 {
-#if HAVE_DECL_PTHREAD_ATTR_SETSTACK
   int                 sc;
   pthread_t           id;
   pthread_attr_t      attr;
@@ -83,10 +82,7 @@ void *POSIX_Init(void *argument)
   delay_request.tv_nsec = 5 * 100000000;
   sc = nanosleep( &delay_request, NULL );
   rtems_test_assert( !sc );
-#else
-  puts( "pthread_set_stack not supported - SKIPPING TEST CASE" );
-#endif
-  
+
   TEST_END();
 
   rtems_test_exit(0);

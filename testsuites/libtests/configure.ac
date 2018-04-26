@@ -40,8 +40,6 @@ AS_IF([test "x$PAX" = "xno"],[
 	AC_MSG_ERROR([pax is missing.])
 ])
 
-AC_CHECK_HEADERS([complex.h])
-
 AM_CONDITIONAL(TARTESTS,test "$as_ln_s" = "ln -s" && test -n "$PAX" && test -n "$GZIP")
 AM_CONDITIONAL(TARTEST_XZ,test -n "$XZ")
 

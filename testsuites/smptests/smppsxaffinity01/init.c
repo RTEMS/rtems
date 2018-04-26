@@ -20,8 +20,6 @@
 
 const char rtems_test_name[] = "SMPPSXAFFINITY 1";
 
-#if HAVE_DECL_PTHREAD_GETAFFINITY_NP
-
 #define CPU_COUNT 4
 
 pthread_t           Init_id;
@@ -151,18 +149,6 @@ void *POSIX_Init(
   rtems_test_exit(0);
 }
 
-#else
-void *POSIX_Init(
-  void *ignored
-)
-{
-  TEST_BEGIN();
-  puts( " POSIX Affinity Methods NOT Supported");
-  TEST_END();
-  rtems_test_exit(0);
-}
-
-#endif
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER

@@ -33,10 +33,6 @@
 
 const char rtems_test_name[] = "PSXTIME";
 
-#if !HAVE_DECL_ADJTIME
-extern int adjtime(const struct timeval *delta, struct timeval *olddelta);
-#endif
-
 void test_adjtime(void);
 void check_a_tod(
   rtems_time_of_day *the_tod

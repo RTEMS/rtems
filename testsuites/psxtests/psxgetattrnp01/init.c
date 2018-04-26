@@ -23,9 +23,6 @@ const char rtems_test_name[] = "PSXGETATTRNP 1";
 /* forward declarations to avoid warnings */
 void *POSIX_Init(void *argument);
 
-#if HAVE_DECL_PTHREAD_GETATTR_NP
-
-
 void *Thread_1(void *argument);
 
 pthread_t           Init_id;
@@ -65,10 +62,8 @@ static int attribute_compare(
   if ( attr1->schedparam.sched_priority != attr2->schedparam.sched_priority )
     return 1;
 
-  #if HAVE_DECL_PTHREAD_ATTR_SETGUARDSIZE
-    if ( attr1->guardsize != attr2->guardsize )
-      return 1;
-  #endif
+  if ( attr1->guardsize != attr2->guardsize )
+    return 1;
 
   #if defined(_POSIX_THREAD_CPUTIME)
     if ( attr1->cputime_clock_allowed != attr2->cputime_clock_allowed )
@@ -270,19 +265,7 @@ void *POSIX_Init(
   rtems_test_exit(0);
   return NULL; /* just so the compiler thinks we returned something */
 }
-#else
-void *POSIX_Init(
-  void *ignored
-)
-{
-  TEST_BEGIN();
-  puts( "  pthread_getattr_np NOT supported" );
-  TEST_END();
-  rtems_test_exit(0);
-  return NULL; /* just so the compiler thinks we returned something */
-}
 
-#endif
 /* configuration information */
 
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
