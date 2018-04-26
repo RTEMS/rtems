@@ -16,31 +16,9 @@ dist_project_lib_DATA = ../../../../../../bsps/i386/pc386/start/bsp_specs
 
 noinst_PROGRAMS =
 
-_SUBDIRS = . tools
-
-TMPINSTALL_FILES =
-
 start.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start.S
 	$(CPPASCOMPILE) -o $@ -c $<
 project_lib_DATA = start.$(OBJEXT)
-
-start16.$(OBJEXT): ../../../../../../bsps/i386/pc386/start/start16.S
-	$(CPPASCOMPILE) $(AM_CPPFLAGS) -DHEADERADDR=$(HEADERADDR) -o $@ -c $<
-
-start16-elf32.$(OBJEXT): start16.$(OBJEXT)
-	$(LD) -N -Ttext $(START16ADDR) -e start16 -nostdlib \
-	  --oformat=elf32-i386 \
-	-o $@ $<
-
-start16.bin: start16-elf32.$(OBJEXT)
-	$(OBJCOPY) -O binary $< $@
-CLEANFILES += start16.bin
-
-$(PROJECT_LIB)/start16.bin: start16.bin $(PROJECT_LIB)/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/start16.bin
-TMPINSTALL_FILES += $(PROJECT_LIB)/start16.bin
-
-project_lib_DATA += start16.bin
 
 project_lib_DATA += linkcmds
 
