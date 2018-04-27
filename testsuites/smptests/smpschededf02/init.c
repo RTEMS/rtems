@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2016, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -117,10 +117,10 @@ static const test_action test_actions[] = {
   UNBLOCK(      0,              0,    1),
   BLOCK(        1,              0, IDLE),
   UNBLOCK(      1,              0,    1),
-  RESET,
   /*
    * Show that FIFO order is honoured across all threads of the same priority.
    */
+  RESET,
   SET_PRIORITY( 1,  P(0),    IDLE, IDLE),
   SET_PRIORITY( 2,  P(1),    IDLE, IDLE),
   SET_PRIORITY( 3,  P(1),    IDLE, IDLE),
@@ -135,12 +135,12 @@ static const test_action test_actions[] = {
   BLOCK(        1,              0,    2),
   BLOCK(        2,              3,    0),
   BLOCK(        3,              4,    0),
-  RESET,
   /*
    * Schedule a high priority affine thread directly with a low priority affine
    * thread in the corresponding ready queue.  In this case we, remove the
    * affine ready queue in _Scheduler_EDF_SMP_Allocate_processor().
    */
+  RESET,
   UNBLOCK(      0,              0, IDLE),
   UNBLOCK(      1,              0,    1),
   SET_PRIORITY( 1,  P(2),       0,    1),
@@ -151,6 +151,11 @@ static const test_action test_actions[] = {
   UNBLOCK(      2,              0,    2),
   BLOCK(        1,              0,    2),
   BLOCK(        2,              0,    3),
+  /* Force migration of a higher priority one-to-all thread */
+  RESET,
+  UNBLOCK(      0,              0, IDLE),
+  SET_AFFINITY( 1,  A(1, 0),    0, IDLE),
+  UNBLOCK(      1,              1,    0),
   RESET
 };
 
