@@ -1,0 +1,15 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: record01
+
+directives:
+
+  - rtems_record_drain()
+  - rtems_record_produce()
+  - rtems_record_produce_2()
+  - rtems_record_produce_n()
+  - rtems_record_start_server()
+
+concepts:
+
+  - Ensure that the event recording works.

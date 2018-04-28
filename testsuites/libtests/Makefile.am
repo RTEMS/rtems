@@ -995,6 +995,24 @@ realloc_norun_SOURCES = POSIX/realloc.c
 realloc_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
+if TEST_record01
+lib_tests += record01
+lib_screens += record01/record01.scn
+lib_docs += record01/record01.doc
+record01_SOURCES = record01/init.c
+record01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_record01) \
+	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
+endif
+
+if TEST_record02
+lib_tests += record02
+lib_screens += record02/record02.scn
+lib_docs += record02/record02.doc
+record02_SOURCES = record02/init.c
+record02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_record02) \
+	$(support_includes)
+endif
+
 if TEST_rtmonuse
 lib_tests += rtmonuse
 lib_screens += rtmonuse/rtmonuse.scn

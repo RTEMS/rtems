@@ -2123,6 +2123,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     defined(CONFIGURE_STACK_CHECKER_ENABLED) || \
     (defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY))
   static const rtems_extensions_table Configuration_Initial_Extensions[] = {
+    #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0 && \
+      defined(CONFIGURE_RECORD_EXTENSIONS_ENABLED)
+      RECORD_EXTENSION,
+    #endif
     #if !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
       RTEMS_NEWLIB_EXTENSION,
     #endif
@@ -2965,6 +2969,33 @@ struct _reent *__getreent(void)
       _CONFIGURE_MAXIMUM_PROCESSORS,
     #endif
   };
+
+  #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS > 0
+    #include <rtems/record.h>
+
+    #if (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS & (CONFIGURE_RECORD_PER_PROCESSOR_ITEMS - 1)) != 0
+      #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be a power of two"
+    #endif
+
+    #if CONFIGURE_RECORD_PER_PROCESSOR_ITEMS < 16
+      #error "CONFIGURE_RECORD_PER_PROCESSOR_ITEMS must be at least 16"
+    #endif
+
+    const unsigned int _Record_Item_count = CONFIGURE_RECORD_PER_PROCESSOR_ITEMS;
+
+    struct Record_Configured_control {
+      Record_Control    Control;
+      rtems_record_item Items[ CONFIGURE_RECORD_PER_PROCESSOR_ITEMS ];
+    };
+
+    PER_CPU_DATA_ITEM( Record_Configured_control, _Record_Per_CPU );
+
+    RTEMS_SYSINIT_ITEM(
+      _Record_Initialize,
+      RTEMS_SYSINIT_RECORD,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
+  #endif
 #endif
 
 #if defined(RTEMS_SMP)

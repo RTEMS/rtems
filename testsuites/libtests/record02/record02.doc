@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: record02
+
+directives:
+
+  - rtems_record_client_init()
+  - rtems_record_client_run()
+
+concepts:
+
+  - Simple event recording use case.

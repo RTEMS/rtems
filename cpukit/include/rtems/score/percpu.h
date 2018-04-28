@@ -69,6 +69,8 @@ extern "C" {
 
 #if !defined( ASM )
 
+struct Record_Control;
+
 struct _Thread_Control;
 
 struct Scheduler_Context;
@@ -512,6 +514,8 @@ typedef struct Per_CPU_Control {
      */
     bool boot;
   #endif
+
+  struct Record_Control *record;
 
   Per_CPU_Stats Stats;
 } Per_CPU_Control;
