@@ -100,7 +100,7 @@ RTEMS_PROG_CCAS
 RTEMS_CANONICALIZE_TOOLS
 
 # Append warning flags if CFLAGS wasn't set.
-AS_IF([test "$GCC" = yes && test "$rtems_cv_CFLAGS_set" != set],
+AS_IF([test "$GCC" = yes],
 [CFLAGS="$CFLAGS -Wall -Wmissing-prototypes -Wimplicit-function-declaration -Wstrict-prototypes -Wnested-externs"])
 
 AS_IF([test -n "${CFLAGS}"],[
