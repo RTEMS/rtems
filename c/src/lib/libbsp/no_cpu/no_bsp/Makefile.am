@@ -14,7 +14,7 @@ librtemsbsp_a_SOURCES =
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
