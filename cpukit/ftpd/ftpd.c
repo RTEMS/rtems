@@ -199,6 +199,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <inttypes.h>
+#include <sched.h>
 
 #include <rtems.h>
 #include <rtems/rtems_bsdnet.h>
@@ -304,6 +305,19 @@ static int ftpd_timeout = 0;
  * Global access flags.
  */
 static int ftpd_access = 0;
+
+static void
+yield(void)
+{
+/*
+ * If we build not for the legacy network stack, then we use the libbsd.  In
+ * the libbsd there is no global network stack semaphore which provides round
+ * robin fairness for threads of equal priority.
+ */
+#ifndef RTEMS_NETWORKING
+  yield();
+#endif
+}
 
 /*
  * serr
@@ -786,6 +800,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
       {
         if(send(s, buf, n, 0) != n)
           break;
+        yield();
       }
     }
     else if (info->xfer_mode == TYPE_A)
@@ -821,6 +836,7 @@ command_retrieve(FTPD_SessionInfo_t  *info, char const *filename)
           }
         }
         while((rest -= i) > 0);
+        yield();
       }
     }
 
@@ -1014,6 +1030,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
           res = 0;
           break;
         }
+        yield();
       }
     }
     else if(info->xfer_mode == TYPE_A)
@@ -1075,6 +1092,7 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
             res = 0;
         }
         while((rest -= i) > 0);
+        yield();
       }
     }
 
