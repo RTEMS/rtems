@@ -10,7 +10,6 @@ include_HEADERS += resolv.h
 
 include_arpadir = $(includedir)/arpa
 include_arpa_HEADERS =
-include_arpa_HEADERS += arpa/ftp.h
 include_arpa_HEADERS += arpa/nameser.h
 include_arpa_HEADERS += arpa/nameser_compat.h
 

@@ -22,6 +22,10 @@ include_HEADERS += include/xz.h
 include_HEADERS += include/zconf.h
 include_HEADERS += include/zlib.h
 
+include_arpadir = $(includedir)/arpa
+include_arpa_HEADERS =
+include_arpa_HEADERS += include/arpa/ftp.h
+
 include_dev_i2cdir = $(includedir)/dev/i2c
 include_dev_i2c_HEADERS =
 include_dev_i2c_HEADERS += include/dev/i2c/eeprom.h
