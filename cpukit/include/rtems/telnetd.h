@@ -88,6 +88,11 @@ typedef struct {
 } rtems_telnetd_config_table;
 
 /**
+ * @brief Start the Telnet subsystem with the provided configuration.
+ */
+rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table *config);
+
+/**
  * @brief Telnet configuration.
  *
  * The application must provide this configuration table.  It is used by
