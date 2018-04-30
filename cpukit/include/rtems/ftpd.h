@@ -5,7 +5,7 @@
 #ifndef _RTEMS_FTPD_H
 #define _RTEMS_FTPD_H
 
-#include <rtems/rtems/tasks.h>
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,6 +54,7 @@ struct rtems_ftpd_configuration
                                                   3 - browse-only */
    rtems_shell_login_check_t login;            /* Login check or 0 to ignore
                                                   user/passwd. */
+   bool                    verbose;            /* Say hello! */
 };
 
 /*
@@ -64,6 +65,10 @@ struct rtems_ftpd_configuration
 #define CONTINUE        3       /* positive intermediate */
 #define TRANSIENT       4       /* transient negative completion */
 #define ERROR           5       /* permanent negative completion */
+
+int rtems_ftpd_start(const struct rtems_ftpd_configuration *config);
+
+extern struct rtems_ftpd_configuration rtems_ftpd_configuration;
 
 int rtems_initialize_ftpd(void);
 
