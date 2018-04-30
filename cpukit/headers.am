@@ -161,6 +161,7 @@ include_rtems_HEADERS += include/rtems/rbheap.h
 include_rtems_HEADERS += include/rtems/rbtree.h
 include_rtems_HEADERS += include/rtems/ringbuf.h
 include_rtems_HEADERS += include/rtems/rtc.h
+include_rtems_HEADERS += include/rtems/rtems-debugger-remote-tcp.h
 include_rtems_HEADERS += include/rtems/rtems-debugger.h
 include_rtems_HEADERS += include/rtems/rtems-fdt-shell.h
 include_rtems_HEADERS += include/rtems/rtems-fdt.h

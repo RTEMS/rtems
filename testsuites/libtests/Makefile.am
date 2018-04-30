@@ -246,6 +246,7 @@ debugger01_SOURCES = debugger01/init.c debugger01/remote.c \
 	debugger01/system.h
 debugger01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_debugger01) \
 	$(support_includes)
+debugger01_LDADD = -ldebugger
 endif
 endif
 

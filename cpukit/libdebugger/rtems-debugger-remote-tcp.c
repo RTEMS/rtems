@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.
- * All rights reserved.
+ * Copyright (c) 2016 Chris Johns <chrisj@rtems.org>.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -38,7 +37,7 @@
 #include <rtems/debugger/rtems-debugger-server.h>
 #include <rtems/debugger/rtems-debugger-remote.h>
 
-#include "rtems-debugger-remote-tcp.h"
+#include <rtems/rtems-debugger-remote-tcp.h>
 
 /**
  * Debugger default server port. 'RT' as ASCII.
@@ -277,6 +276,7 @@ tcp_remote_disconnect(rtems_debugger_remote* remote)
 
   tcp = (rtems_debugger_remote_tcp*) remote->data;
   close(tcp->fd);
+  tcp->fd = -1;
 
   rtems_debugger_unlock();
 

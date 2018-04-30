@@ -2,20 +2,20 @@ include $(top_srcdir)/automake/compile.am
 
 if LIBDEBUGGER
 
-noinst_LIBRARIES = libdebugger.a
+project_lib_LIBRARIES = libdebugger.a
 libdebugger_a_SOURCES = \
   rtems-debugger-block.c \
   rtems-debugger-cmd.c \
   rtems-debugger-remote.c \
   rtems-debugger-server.c \
   rtems-debugger-target.c \
+  rtems-debugger-remote-tcp.c \
   rtems-debugger-threads.c \
   rtems-debugger-@RTEMS_CPU@.c
 
-if LIBNETWORKING
-libdebugger_a_SOURCES += \
-  rtems-debugger-remote-tcp.c
-endif
+$(PROJECT_LIB)/libdebugger.a: libdebugger.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libdebugger.a
+TMPINSTALL_FILES = $(PROJECT_LIB)/libdebugger.a
 
 endif
 

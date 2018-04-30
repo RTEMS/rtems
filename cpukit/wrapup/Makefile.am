@@ -98,10 +98,6 @@ if LIBDL
 TMP_LIBS += ../libdl/libdl.a
 endif
 
-if LIBDEBUGGER
-TMP_LIBS += ../libdebugger/libdebugger.a
-endif
-
 librtemscpu.a: $(TMP_LIBS)
 	$(AM_V_GEN)rm -f $@
 	$(AM_V_GEN)$(MKDIR_P) $(ARCH)
