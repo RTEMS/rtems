@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 #include <unistd.h>
 /*-----------------------------------------*/
 #define IAC_ESC    255
@@ -453,8 +454,13 @@ rtems_device_driver my_pty_initialize(
     chmod(telnet_ptys[ndx].devname,0660);
     chown(telnet_ptys[ndx].devname,2,0); /* tty,root*/
   };
-  printk("Device: /dev/pty%X../dev/pty%X (%d)pseudo-terminals registered.\n",
-          0,rtems_telnetd_maximum_ptys-1,rtems_telnetd_maximum_ptys);
+  syslog(
+    LOG_KERN | LOG_INFO,
+    "/dev/pty%X../dev/pty%X (%d) pseudo-terminals registered.\n",
+    0,
+    rtems_telnetd_maximum_ptys - 1,
+    rtems_telnetd_maximum_ptys
+  );
 
   return RTEMS_SUCCESSFUL;
 }
