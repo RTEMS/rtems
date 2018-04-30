@@ -115,7 +115,6 @@ include_rtems_HEADERS += rtems/rtems_mii_ioctl.h
 include_rtems_HEADERS += rtems/rtems_netdb.h
 include_rtems_HEADERS += rtems/rtems_netinet_in.h
 include_rtems_HEADERS += rtems/rtems_syscall.h
-include_rtems_HEADERS += rtems/tftp.h
 
 include_rtems_bsdnetdir = $(includedir)/rtems/bsdnet
 include_rtems_bsdnet_HEADERS =

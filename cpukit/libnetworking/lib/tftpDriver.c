@@ -28,7 +28,6 @@
 #include <rtems.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
-#include <rtems/rtems_bsdnet.h>
 #include <rtems/tftp.h>
 #include <rtems/thread.h>
 #include <sys/types.h>
@@ -36,6 +35,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+
+#ifdef RTEMS_NETWORKING
+#include <rtems/rtems_bsdnet.h>
+#endif
 
 #ifdef RTEMS_TFTP_DRIVER_DEBUG
 int rtems_tftp_driver_debug = 1;
@@ -537,9 +540,11 @@ static int rtems_tftp_open_worker(
      */
     hostname = full_path_name;
     cp1 = strchr (full_path_name, ':');
-    if (!cp1)
+    if (!cp1) {
+#ifdef RTEMS_NETWORKING
         hostname = "BOOTP_HOST";
-    else {
+#endif
+    } else {
         *cp1 = '\0';
         ++cp1;
     }
@@ -547,9 +552,12 @@ static int rtems_tftp_open_worker(
     /*
      * Convert hostname to Internet address
      */
+#ifdef RTEMS_NETWORKING
     if (strcmp (hostname, "BOOTP_HOST") == 0)
         farAddress = rtems_bsdnet_bootp_server_address;
-    else if (inet_aton (hostname, &farAddress) == 0) {
+    else
+#endif
+    if (inet_aton (hostname, &farAddress) == 0) {
         struct hostent *he = gethostbyname(hostname);
         if (he == NULL)
             return ENOENT;
@@ -559,9 +567,11 @@ static int rtems_tftp_open_worker(
     /*
      * Extract file pathname component
      */
+#ifdef RTEMS_NETWORKING
     if (strcmp (cp1, "BOOTP_FILE") == 0) {
         cp1 = rtems_bsdnet_bootp_boot_file_name;
     }
+#endif
     if (*cp1 == '\0')
         return ENOENT;
     remoteFilename = cp1;

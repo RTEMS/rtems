@@ -190,6 +190,7 @@ include_rtems_HEADERS += include/rtems/termios_printk.h
 include_rtems_HEADERS += include/rtems/termios_printk_cnf.h
 include_rtems_HEADERS += include/rtems/termiostypes.h
 include_rtems_HEADERS += include/rtems/test.h
+include_rtems_HEADERS += include/rtems/tftp.h
 include_rtems_HEADERS += include/rtems/thread.h
 include_rtems_HEADERS += include/rtems/timecounter.h
 include_rtems_HEADERS += include/rtems/timespec.h

@@ -1,6 +1,14 @@
 include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
+project_lib_LIBRARIES =
+TMPINSTALL_FILES =
+
+project_lib_LIBRARIES += libtftpfs.a
+libtftpfs_a_SOURCES = lib/tftpDriver.c
+$(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtftpfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libtftpfs.a
 
 # poll is not supported
 UNUSED_FILES = poll.h
@@ -127,7 +135,7 @@ noinst_LIBRARIES += lib.a
 lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(lib_CPPFLAGS) -D__BSD_VISIBLE
 
 lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
-    lib/syslog.c lib/tftpDriver.c
+    lib/syslog.c
 lib_a_SOURCES += rtems/rtems_syscall_api.c
 endif
 
