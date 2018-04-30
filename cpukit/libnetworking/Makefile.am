@@ -4,6 +4,12 @@ include $(top_srcdir)/automake/compile.am
 project_lib_LIBRARIES =
 TMPINSTALL_FILES =
 
+project_lib_LIBRARIES += libftpfs.a
+libftpfs_a_SOURCES = lib/ftpfs.c
+$(PROJECT_LIB)/libftpfs.a: libftpfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libftpfs.a
+
 project_lib_LIBRARIES += libtftpfs.a
 libtftpfs_a_SOURCES = lib/tftpDriver.c
 $(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
@@ -134,7 +140,7 @@ lib_CPPFLAGS = -DNOPOLL -DNOSELECT
 noinst_LIBRARIES += lib.a
 lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(lib_CPPFLAGS) -D__BSD_VISIBLE
 
-lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c lib/ftpfs.c \
+lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c \
     lib/syslog.c
 lib_a_SOURCES += rtems/rtems_syscall_api.c
 endif

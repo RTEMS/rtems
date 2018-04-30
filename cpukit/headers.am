@@ -124,6 +124,7 @@ include_rtems_HEADERS += include/rtems/framebuffer.h
 include_rtems_HEADERS += include/rtems/fs.h
 include_rtems_HEADERS += include/rtems/fsmount.h
 include_rtems_HEADERS += include/rtems/ftpd.h
+include_rtems_HEADERS += include/rtems/ftpfs.h
 include_rtems_HEADERS += include/rtems/gxx_wrappers.h
 include_rtems_HEADERS += include/rtems/ide_part_table.h
 include_rtems_HEADERS += include/rtems/imfs.h

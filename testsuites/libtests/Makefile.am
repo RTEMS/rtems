@@ -582,7 +582,7 @@ lib_docs += ftp01/ftp01.doc
 ftp01_SOURCES = ftp01/init.c
 ftp01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ftp01) \
 	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-ftp01_LDADD = -lftpd
+ftp01_LDADD = -lftpd -lftpfs
 endif
 endif
 

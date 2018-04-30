@@ -106,7 +106,6 @@ include_rtemsdir = $(includedir)/rtems
 include_rtems_HEADERS =
 include_rtems_HEADERS += rtems/bootp.h
 include_rtems_HEADERS += rtems/dhcp.h
-include_rtems_HEADERS += rtems/ftpfs.h
 include_rtems_HEADERS += rtems/mkrootfs.h
 include_rtems_HEADERS += rtems/rtems_bsdnet.h
 include_rtems_HEADERS += rtems/rtems_bsdnet_internal.h
