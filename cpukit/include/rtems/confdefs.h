@@ -1324,7 +1324,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 /**
  * Zero of one returns 0 if the parameter is 0 else 1 is returned.
  */
-#define _Configure_Zero_or_One(_number) ((_number) ? 1 : 0)
+#define _Configure_Zero_or_One(_number) ((_number) != 0 ? 1 : 0)
 
 /**
  * General helper to align up a value.
