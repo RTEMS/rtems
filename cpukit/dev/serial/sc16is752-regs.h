@@ -99,7 +99,23 @@ extern "C" {
 #define LSR_ERROR_BITS (7u << 2)
 
 /* MCR */
-#define MCR_PRESCALE_NEEDED (1u << 0)
+#define MCR_DTR             (1u << 0)
+#define MCR_RTS             (1u << 1)
+#define MCR_TCR_TLR         (1u << 2)
+#define MCR_LOOPBACK        (1u << 4)
+#define MCR_XON_ANY         (1u << 5)
+#define MCR_IRDA_ENABLE     (1u << 6)
+#define MCR_PRESCALE_NEEDED (1u << 7)
+
+/* MSR */
+#define MSR_dCTS (1u << 0)
+#define MSR_dDSR (1u << 1)
+#define MSR_dRI  (1u << 2)
+#define MSR_dCD  (1u << 3)
+#define MSR_CTS  (1u << 4)
+#define MSR_DSR  (1u << 5)
+#define MSR_RI   (1u << 6)
+#define MSR_CD   (1u << 7)
 
 /* EFR */
 #define EFR_ENHANCED_FUNC_ENABLE (1u << 4)

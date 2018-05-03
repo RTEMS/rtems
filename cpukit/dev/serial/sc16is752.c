@@ -277,6 +277,73 @@ static void sc16is752_write(
   }
 }
 
+static void sc16is752_get_modem_bits(sc16is752_context *ctx, int *bits)
+{
+  *bits = 0;
+  uint8_t msr;
+  uint8_t mcr;
+
+  read_reg(ctx, SC16IS752_MSR, &msr, 1);
+  read_reg(ctx, SC16IS752_MCR, &mcr, 1);
+
+  if (msr & MSR_CTS) {
+    *bits |= TIOCM_CTS;
+  }
+  if (msr & MSR_DSR) {
+    *bits |= TIOCM_DSR;
+  }
+  if (msr & MSR_RI) {
+    *bits |= TIOCM_RI;
+  }
+  if (msr & MSR_CD) {
+    *bits |= TIOCM_CD;
+  }
+  if ((mcr & MCR_DTR) == 0) {
+    *bits |= TIOCM_DTR;
+  }
+  if ((mcr & MCR_RTS) == 0) {
+    *bits |= TIOCM_RTS;
+  }
+}
+
+static void sc16is752_set_modem_bits(
+  sc16is752_context *ctx, int *bits, int set, int clear
+)
+{
+  uint8_t mcr;
+
+  read_reg(ctx, SC16IS752_MCR, &mcr, 1);
+
+  if (bits != NULL) {
+    if ((*bits & TIOCM_DTR) == 0) {
+      mcr |= MCR_DTR;
+    } else {
+      mcr &= ~MCR_DTR;
+    }
+
+    if ((*bits & TIOCM_RTS) == 0) {
+      mcr |= MCR_RTS;
+    } else {
+      mcr &= ~MCR_RTS;
+    }
+  }
+
+  if ((set & TIOCM_DTR) != 0) {
+    mcr &= ~MCR_DTR;
+  }
+  if ((set & TIOCM_RTS) != 0) {
+    mcr &= ~MCR_RTS;
+  }
+  if ((clear & TIOCM_DTR) != 0) {
+    mcr |= MCR_DTR;
+  }
+  if ((clear & TIOCM_RTS) != 0) {
+    mcr |= MCR_RTS;
+  }
+
+  write_reg(ctx, SC16IS752_MCR, &mcr, 1);
+}
+
 static int sc16is752_ioctl(
   rtems_termios_device_context *base,
   ioctl_command_t               request,
@@ -311,6 +378,18 @@ static int sc16is752_ioctl(
       break;
     case SC16IS752_GET_IOSTATE:
       read_reg(ctx, SC16IS752_IOSTATE, (uint8_t *)buffer, 1);
+      break;
+    case TIOCMGET:
+      sc16is752_get_modem_bits(ctx, (int *)buffer);
+      break;
+    case TIOCMSET:
+      sc16is752_set_modem_bits(ctx, (int *)buffer, 0, 0);
+      break;
+    case TIOCMBIS:
+      sc16is752_set_modem_bits(ctx, NULL, *(int *)buffer, 0);
+      break;
+    case TIOCMBIC:
+      sc16is752_set_modem_bits(ctx, NULL, 0, *(int *)buffer);
       break;
     default:
       rtems_set_errno_and_return_minus_one(EINVAL);
