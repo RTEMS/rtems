@@ -333,6 +333,12 @@ extern rtems_interrupt_lock LEON3_IrqCtrl_Lock;
   #define LEON3_CLOCK_INDEX 0
 #endif
 
+#if defined(RTEMS_SMP)
+#define LEON3_COUNTER_GPTIMER_INDEX (LEON3_CLOCK_INDEX + 1)
+#else
+#define LEON3_COUNTER_GPTIMER_INDEX LEON3_CLOCK_INDEX
+#endif
+
 /*
  * We assume that a boot loader (usually GRMON) initialized the GPTIMER 0 to
  * run with 1MHz.  This is used to determine all clock frequencies of the PnP

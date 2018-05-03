@@ -109,14 +109,6 @@ static void generic_or1k_clock_initialize(void)
   rtems_timecounter_install(&or1ksim_tc);
 }
 
-CPU_Counter_ticks _CPU_Counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
-{
-  return second - first;
-}
-
 #define Clock_driver_support_at_tick() generic_or1k_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() generic_or1k_clock_initialize()

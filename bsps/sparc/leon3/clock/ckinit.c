@@ -27,6 +27,7 @@
 #include <rtems/rtems/intr.h>
 #include <ambapp.h>
 #include <rtems/score/profiling.h>
+#include <rtems/score/sparcimpl.h>
 #include <rtems/timecounter.h>
 
 /* The LEON3 BSP Timer driver can rely on the Driver Manager if the
@@ -42,59 +43,7 @@ static int clkirq;
 
 static void (*leon3_tc_tick)(void);
 
-static rtems_timecounter_simple leon3_tc;
-
-#ifndef RTEMS_SMP
-static uint32_t leon3_tc_get(rtems_timecounter_simple *tc)
-{
-  return LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].value;
-}
-
-static bool leon3_tc_is_pending(rtems_timecounter_simple *tc)
-{
-  return LEON_Is_interrupt_pending(clkirq);
-}
-
-static void leon3_tc_at_tick( rtems_timecounter_simple *tc )
-{
-  /* Nothing to do */
-}
-
-static uint32_t leon3_tc_get_timecount(struct timecounter *tc)
-{
-  return rtems_timecounter_simple_downcounter_get(
-    tc,
-    leon3_tc_get,
-    leon3_tc_is_pending
-  );
-}
-
-static void leon3_tc_tick_simple(void)
-{
-  rtems_timecounter_simple_downcounter_tick(
-    &leon3_tc,
-    leon3_tc_get,
-    leon3_tc_at_tick
-  );
-}
-#endif
-
-static uint32_t leon3_tc_get_timecount_up_counter(struct timecounter *tc)
-{
-  return leon3_up_counter_low();
-}
-
-static uint32_t leon3_tc_get_timecount_irqmp(struct timecounter *tc)
-{
-  return LEON3_IrqCtrl_Regs->timestamp[0].counter;
-}
-
-#ifdef RTEMS_SMP
-static uint32_t leon3_tc_get_timecount_second_timer(struct timecounter *tc)
-{
-  return 0xffffffff - LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX + 1].value;
-}
-#endif
+static struct timecounter leon3_tc;
 
 #ifdef RTEMS_PROFILING
 #define IRQMP_TIMESTAMP_S1_S2 ((1U << 25) | (1U << 26))
@@ -146,12 +95,23 @@ static void leon3_tc_tick_irqmp_timestamp_init(void)
   rtems_timecounter_tick();
 }
 
-#ifdef RTEMS_SMP
-static void leon3_tc_tick_second_timer(void)
+static void leon3_tc_tick_default(void)
 {
+#ifndef RTEMS_SMP
+  SPARC_Counter *counter;
+  rtems_interrupt_level level;
+
+  counter = &_SPARC_Counter_mutable;
+  rtems_interrupt_local_disable(level);
+
+  LEON3_IrqCtrl_Regs->iclear = counter->pending_mask;
+  counter->accumulated += counter->interval;
+
+  rtems_interrupt_local_enable(level);
+#endif
+
   rtems_timecounter_tick();
 }
-#endif
 
 static void leon3_tc_do_tick(void)
 {
@@ -196,9 +156,11 @@ static void leon3_clock_initialize(void)
 {
   volatile struct irqmp_timestamp_regs *irqmp_ts;
   volatile struct gptimer_regs *gpt;
+  struct timecounter *tc;
 
   irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
   gpt = LEON3_Timer_Regs;
+  tc = &leon3_tc;
 
   gpt->timer[LEON3_CLOCK_INDEX].reload =
     rtems_configuration_get_microseconds_per_tick() - 1;
@@ -210,10 +172,8 @@ static void leon3_clock_initialize(void)
 
   if (leon3_up_counter_is_available()) {
     /* Use the LEON4 up-counter if available */
-    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_up_counter;
-    leon3_tc.tc.tc_counter_mask = 0xffffffff;
-    leon3_tc.tc.tc_frequency = leon3_up_counter_frequency();
-    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+    tc->tc_get_timecount = _SPARC_Get_timecount_asr23;
+    tc->tc_frequency = leon3_up_counter_frequency();
 
 #ifdef RTEMS_PROFILING
     if (!leon3_irqmp_has_timestamp(irqmp_ts)) {
@@ -222,13 +182,11 @@ static void leon3_clock_initialize(void)
 #endif
 
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
-    rtems_timecounter_install(&leon3_tc.tc);
   } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
     /* Use the interrupt controller timestamp counter if available */
-    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_irqmp;
-    leon3_tc.tc.tc_counter_mask = 0xffffffff;
-    leon3_tc.tc.tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
-    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+    tc->tc_get_timecount = _SPARC_Get_timecount_up;
+    tc->tc_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
+
     leon3_tc_tick = leon3_tc_tick_irqmp_timestamp_init;
 
     /*
@@ -236,8 +194,6 @@ static void leon3_clock_initialize(void)
      * counter.  Use an arbitrary interrupt source.
      */
     irqmp_ts->control = 0x1;
-
-    rtems_timecounter_install(&leon3_tc.tc);
   } else {
 #ifdef RTEMS_SMP
     /*
@@ -245,24 +201,32 @@ static void leon3_clock_initialize(void)
      * controller.  At least on SMP configurations we must use a second timer
      * in free running mode for the timecounter.
      */
-    gpt->timer[LEON3_CLOCK_INDEX + 1].ctrl =
+    gpt->timer[LEON3_COUNTER_GPTIMER_INDEX].ctrl =
       GPTIMER_TIMER_CTRL_EN | GPTIMER_TIMER_CTRL_IE;
-    leon3_tc.tc.tc_get_timecount = leon3_tc_get_timecount_second_timer;
-    leon3_tc.tc.tc_counter_mask = 0xffffffff;
-    leon3_tc.tc.tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER;
-    leon3_tc.tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-    leon3_tc_tick = leon3_tc_tick_second_timer;
-    rtems_timecounter_install(&leon3_tc.tc);
+
+    tc->tc_get_timecount = _SPARC_Get_timecount_down;
 #else
-    leon3_tc_tick = leon3_tc_tick_simple;
-    rtems_timecounter_simple_install(
-      &leon3_tc,
-      LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
-      rtems_configuration_get_microseconds_per_tick(),
-      leon3_tc_get_timecount
-    );
+    SPARC_Counter *counter;
+
+    counter = &_SPARC_Counter_mutable;
+    counter->read_isr_disabled = _SPARC_Counter_read_clock_isr_disabled;
+    counter->read = _SPARC_Counter_read_clock;
+    counter->counter_register = &gpt->timer[LEON3_CLOCK_INDEX].value;
+    counter->pending_register = &LEON3_IrqCtrl_Regs->ipend;
+    counter->pending_mask = UINT32_C(1) << clkirq;
+    counter->accumulated = rtems_configuration_get_microseconds_per_tick();
+    counter->interval = rtems_configuration_get_microseconds_per_tick();
+
+    tc->tc_get_timecount = _SPARC_Get_timecount_clock;
 #endif
+
+    tc->tc_frequency = LEON3_GPTIMER_0_FREQUENCY_SET_BY_BOOT_LOADER,
+    leon3_tc_tick = leon3_tc_tick_default;
   }
+
+  tc->tc_counter_mask = 0xffffffff;
+  tc->tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(tc);
 }
 
 #define Clock_driver_support_initialize_hardware() \
