@@ -228,6 +228,7 @@ static void Init(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
 
+  rtems_print_printer_fprintf_putc(&rtems_test_printer);
   TEST_BEGIN();
 
   test_delay_nanoseconds(ctx);
