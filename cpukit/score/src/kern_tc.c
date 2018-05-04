@@ -97,7 +97,6 @@ ISR_LOCK_DEFINE(, _Timecounter_Lock, "Timecounter")
   _ISR_lock_Release_and_ISR_enable(&_Timecounter_Lock, lock_context)
 #define hz rtems_clock_get_ticks_per_second()
 #define printf(...)
-#define bcopy(x, y, z) memcpy(y, x, z);
 #define log(...)
 /* FIXME: https://devel.rtems.org/ticket/2348 */
 #define ntp_update_second(a, b) do { (void) a; (void) b; } while (0)
@@ -1550,7 +1549,7 @@ _Timecounter_Windup(struct bintime *new_boottimebin,
 	th->th_generation = 0;
 	atomic_thread_fence_rel();
 #if defined(RTEMS_SMP)
-	bcopy(tho, th, offsetof(struct timehands, th_generation));
+	memcpy(th, tho, offsetof(struct timehands, th_generation));
 #endif
 	if (new_boottimebin != NULL)
 		th->th_boottime = *new_boottimebin;
