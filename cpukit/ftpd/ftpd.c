@@ -314,7 +314,7 @@ yield(void)
  * robin fairness for threads of equal priority.
  */
 #ifndef RTEMS_NETWORKING
-  yield();
+  sched_yield();
 #endif
 }
 
