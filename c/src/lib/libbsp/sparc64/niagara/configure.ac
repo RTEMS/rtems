@@ -10,6 +10,10 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
 RTEMS_BSP_CONFIGURE
 
+RTEMS_BSPOPTS_SET([SUN4V],[niagara],[1])
+RTEMS_BSPOPTS_SET([SUN4V],[*],[])
+RTEMS_BSPOPTS_HELP([SUN4V],
+[If defined, enable SUN model optons for the Niagara model.])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 

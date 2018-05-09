@@ -10,13 +10,21 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
 RTEMS_BSP_CONFIGURE
 
-
 RTEMS_BSPOPTS_SET([SIMSPARC_FAST_IDLE],[*],[])
 RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 [If defined, speed up the clock ticks while the idle task is running so
 time spent in the idle task is minimized.  This significantly reduces
 the wall time required to execute the RTEMS test suites.])
 
+RTEMS_BSPOPTS_SET([US3],[usiii],[1])
+RTEMS_BSPOPTS_SET([US3],[*],[])
+RTEMS_BSPOPTS_HELP([US3],
+[If defined, enable UltraSPARC optons for the USIII BSP.])
+
+RTEMS_BSPOPTS_SET([SUN4U],[usiii],[1])
+RTEMS_BSPOPTS_SET([SUN4U],[*],[])
+RTEMS_BSPOPTS_HELP([SUN4U],
+[If defined, enable SUN model optons for the USIII BSP.])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 

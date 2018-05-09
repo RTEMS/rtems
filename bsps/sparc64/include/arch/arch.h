@@ -37,10 +37,14 @@
 #ifndef KERN_sparc64_ARCH_H_
 #define KERN_sparc64_ARCH_H_
 
+#include <bspopts.h>
+
 #if defined (SUN4U)
 #include <arch/sun4u/arch.h>
 #elif defined (SUN4V)
 #include <arch/sun4v/arch.h>
+#else
+#error "No SUN model defined"
 #endif
 
 #define ASI_AIUP		0x10	/** Access to primary context with user privileges. */

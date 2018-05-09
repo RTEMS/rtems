@@ -35,10 +35,14 @@
 #ifndef KERN_sparc64_MMU_H_
 #define KERN_sparc64_MMU_H_
 
+#include <bspopts.h>
+
 #if defined (SUN4U)
 #include <arch/mm/sun4u/mmu.h>
 #elif defined (SUN4V)
 #include <arch/mm/sun4v/mmu.h>
+#else
+#error "No SUN model defined"
 #endif
 
 
