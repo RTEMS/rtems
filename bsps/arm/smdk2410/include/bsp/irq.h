@@ -86,6 +86,8 @@
 #define BSP_INT_RTC          30
 #define BSP_INT_ADC          31
 #define BSP_MAX_INT          32
+#else
+#error "Undefined Samsung CPU model"
 #endif
 
 #define BSP_INTERRUPT_VECTOR_MIN 0
