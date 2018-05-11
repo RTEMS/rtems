@@ -34,9 +34,13 @@ AC_ARG_ENABLE(rtemsbsp,
          cfg_bsp=$(echo ${bsp_path} | sed -e "s/.*\///" -e 's/\.cfg//')
          if test x$bsp = x$cfg_bsp; then
            cfg_arch=$(echo ${bsp_path} | sed -e "s/${libbsp_e}*\///" -e 's/\/.*//')
-           if test x${target_arch} != x${cfg_arch}; then
-             AC_MSG_ERROR([BSP '$bsp' architecture does not match the --target architecture, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
-           fi
+           case ${cfg_arch} in
+             ${target_arch$}* )
+               ;;
+             * )
+               AC_MSG_ERROR([BSP '$bsp' architecture does not match the --target architecture, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
+               ;;
+           esac
            found=yes
            break
          fi
