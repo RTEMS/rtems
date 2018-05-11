@@ -8,7 +8,7 @@ AC_ARG_ENABLE(smp,
 [case "${enableval}" in
   yes) test -z $enable_rtemsbsp && AC_MSG_ERROR([SMP requires BSPs to be provided, none have, see --enable-rtemsbsp])
        case "${RTEMS_CPU}" in
-         arm|powerpc|sparc|i386) RTEMS_HAS_SMP=yes ;;
+         arm|powerpc|riscv*|sparc|i386) RTEMS_HAS_SMP=yes ;;
          *)          RTEMS_HAS_SMP=no ;;
        esac
        ;;

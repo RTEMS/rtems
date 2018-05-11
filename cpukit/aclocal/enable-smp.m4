@@ -7,7 +7,7 @@ AC_ARG_ENABLE(smp,
 (SMP)])],
 [case "${enableval}" in 
   yes) case "${RTEMS_CPU}" in
-         arm|powerpc|sparc|i386) RTEMS_HAS_SMP=yes ;;
+         arm|powerpc|riscv*|sparc|i386) RTEMS_HAS_SMP=yes ;;
          *)          RTEMS_HAS_SMP=no ;;
        esac
        ;;
