@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH
+ * Copyright (c) 2013, 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,6 +35,16 @@
 #include <rtems/score/cpu.h>
 
 #define CPU_PER_CPU_CONTROL_SIZE 0
+
+#if __riscv_xlen == 32
+
+#define CPU_INTERRUPT_FRAME_SIZE 144
+
+#elif __riscv_xlen == 64
+
+#define CPU_INTERRUPT_FRAME_SIZE 288
+
+#endif /* __riscv_xlen */
 
 #ifndef ASM
 

@@ -80,43 +80,6 @@ typedef struct {
   unsigned long mcause;
   unsigned long mepc;
 #ifdef RTEMS_SMP
-  /**
-   * @brief On SMP configurations the thread context must contain a boolean
-   * indicator to signal if this context is executing on a processor.
-   *
-   * This field must be updated during a context switch.  The context switch
-   * to the heir must wait until the heir context indicates that it is no
-   * longer executing on a processor.  The context switch must also check if
-   * a thread dispatch is necessary to honor updates of the heir thread for
-   * this processor.  This indicator must be updated using an atomic test and
-   * set operation to ensure that at most one processor uses the heir
-   * context at the same time.
-   *
-   * @code
-   * void _CPU_Context_switch(
-   *   Context_Control *executing,
-   *   Context_Control *heir
-   * )
-   * {
-   *   save( executing );
-   *
-   *   executing->is_executing = false;
-   *   memory_barrier();
-   *
-   *   if ( test_and_set( &heir->is_executing ) ) {
-   *     do {
-   *       Per_CPU_Control *cpu_self = _Per_CPU_Get_snapshot();
-   *
-   *       if ( cpu_self->dispatch_necessary ) {
-   *         heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
-   *       }
-   *     } while ( test_and_set( &heir->is_executing ) );
-   *   }
-   *
-   *   restore( heir );
-   * }
-   * @endcode
-   */
   volatile bool is_executing;
 #endif
 } Context_Control;
@@ -480,102 +443,36 @@ uint32_t _CPU_Counter_frequency( void );
 CPU_Counter_ticks _CPU_Counter_read( void );
 
 #ifdef RTEMS_SMP
-/**
- * @brief Performs CPU specific SMP initialization in the context of the boot
- * processor.
- *
- * This function is invoked on the boot processor during system
- * initialization.  All interrupt stacks are allocated at this point in case
- * the CPU port allocates the interrupt stacks.  This function is called
- * before _CPU_SMP_Start_processor() or _CPU_SMP_Finalize_initialization() is
- * used.
- *
- * @return The count of physically or virtually available processors.
- * Depending on the configuration the application may use not all processors.
- */
+
 uint32_t _CPU_SMP_Initialize( void );
 
-/**
- * @brief Starts a processor specified by its index.
- *
- * This function is invoked on the boot processor during system
- * initialization.
- *
- * This function will be called after _CPU_SMP_Initialize().
- *
- * @param[in] cpu_index The processor index.
- *
- * @retval true Successful operation.
- * @retval false Unable to start this processor.
- */
 bool _CPU_SMP_Start_processor( uint32_t cpu_index );
 
-/**
- * @brief Performs final steps of CPU specific SMP initialization in the
- * context of the boot processor.
- *
- * This function is invoked on the boot processor during system
- * initialization.
- *
- * This function will be called after all processors requested by the
- * application have been started.
- *
- * @param[in] cpu_count The minimum value of the count of processors
- * requested by the application configuration and the count of physically or
- * virtually available processors.
- */
 void _CPU_SMP_Finalize_initialization( uint32_t cpu_count );
 
-/**
- * @brief Returns the index of the current processor.
- *
- * An architecture specific method must be used to obtain the index of the
- * current processor in the system.  The set of processor indices is the
- * range of integers starting with zero up to the processor count minus one.
- */
-uint32_t _CPU_SMP_Get_current_processor( void );
+void _CPU_SMP_Prepare_start_multitasking( void );
 
-/**
- * @brief Sends an inter-processor interrupt to the specified target
- * processor.
- *
- * This operation is undefined for target processor indices out of range.
- *
- * @param[in] target_processor_index The target processor index.
- */
+static inline uint32_t _CPU_SMP_Get_current_processor( void )
+{
+  unsigned long mhartid;
+
+  __asm__ volatile ( "csrr %0, mhartid" : "=&r" ( mhartid ) );
+
+  return (uint32_t) mhartid;
+}
+
 void _CPU_SMP_Send_interrupt( uint32_t target_processor_index );
 
-/**
- * @brief Broadcasts a processor event.
- *
- * Some architectures provide a low-level synchronization primitive for
- * processors in a multi-processor environment.  Processors waiting for this
- * event may go into a low-power state and stop generating system bus
- * transactions.  This function must ensure that preceding store operations
- * can be observed by other processors.
- *
- * @see _CPU_SMP_Processor_event_receive().
- */
-void _CPU_SMP_Processor_event_broadcast( void );
+static inline void _CPU_SMP_Processor_event_broadcast( void )
+{
+  __asm__ volatile ( "" : : : "memory" );
+}
 
-/**
- * @brief Receives a processor event.
- *
- * This function will wait for the processor event and may wait forever if no
- * such event arrives.
- *
- * @see _CPU_SMP_Processor_event_broadcast().
- */
 static inline void _CPU_SMP_Processor_event_receive( void )
 {
   __asm__ volatile ( "" : : : "memory" );
 }
 
-/**
- * @brief Gets the is executing indicator of the thread context.
- *
- * @param[in] context The context.
- */
 static inline bool _CPU_Context_Get_is_executing(
   const Context_Control *context
 )
@@ -583,12 +480,6 @@ static inline bool _CPU_Context_Get_is_executing(
   return context->is_executing;
 }
 
-/**
- * @brief Sets the is executing indicator of the thread context.
- *
- * @param[in] context The context.
- * @param[in] is_executing The new value for the is executing indicator.
- */
 static inline void _CPU_Context_Set_is_executing(
   Context_Control *context,
   bool is_executing
@@ -596,6 +487,7 @@ static inline void _CPU_Context_Set_is_executing(
 {
   context->is_executing = is_executing;
 }
+
 #endif /* RTEMS_SMP */
 
 /** Type that can store a 32-bit integer or a pointer. */

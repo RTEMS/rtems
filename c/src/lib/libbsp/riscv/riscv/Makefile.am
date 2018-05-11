@@ -61,6 +61,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 # debugio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/console-io.c
 
+if HAS_SMP
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
+endif
 
 include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

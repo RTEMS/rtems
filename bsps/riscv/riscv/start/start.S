@@ -52,6 +52,11 @@ SYM(_start):
 	la	gp, __global_pointer$
 	.option	pop
 
+#ifdef RTEMS_SMP
+	csrr	s0, mhartid
+	bnez	s0, .Lloop_forever
+#endif
+
 	la	t0, ISR_Handler
 	csrw	mtvec, t0
 
@@ -69,6 +74,11 @@ SYM(_start):
 	csrs	mstatus, t0
 
 	j	boot_card
+
+#ifdef RTEMS_SMP
+.Lloop_forever:
+	j	.Lloop_forever
+#endif
 
 	.align	4
 bsp_start_vector_table_begin:
