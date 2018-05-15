@@ -143,7 +143,12 @@ void * task_a (void *arg)
        rtems_test_exit(0);
      }
      if (! _Timespec_Equal_to( &timerdata.it_value, &my_period )){
-       perror ("Error in Task A timer_gettime\n");
+       fprintf(
+           stderr, "Error in Task A timer_gettime:\n"
+           "  re-armed timer: %" PRIdtime_t ":%ld does not match interval: %" PRIdtime_t ":%ld\n",
+           timerdata.it_value.tv_sec, timerdata.it_value.tv_nsec,
+           my_period.tv_sec, my_period.tv_nsec
+      );
      }
      clock = time(NULL);
      printf("Executing task A with count = %2i %s", params->count, ctime(&clock));
@@ -291,7 +296,12 @@ void * task_c (void *arg)
        rtems_test_exit(0);
      }
      if (! _Timespec_Equal_to( &timerdata.it_value, &my_period) ){
-       perror ("Error in Task C timer_gettime\n");
+       fprintf(
+           stderr, "Error in Task A timer_gettime:\n"
+           "  re-armed timer: %" PRIdtime_t ":%ld does not match interval: %" PRIdtime_t ":%ld\n",
+           timerdata.it_value.tv_sec, timerdata.it_value.tv_nsec,
+           my_period.tv_sec, my_period.tv_nsec
+       );
      }
      pthread_mutex_lock (&data.mutex);
      while (data.updated == FALSE) {
