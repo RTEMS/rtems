@@ -16,15 +16,8 @@ RTEMS_BSPOPTS_HELP([SIMSPARC_FAST_IDLE],
 time spent in the idle task is minimized.  This significantly reduces
 the wall time required to execute the RTEMS test suites.])
 
-RTEMS_BSPOPTS_SET([US3],[usiii],[1])
-RTEMS_BSPOPTS_SET([US3],[*],[])
-RTEMS_BSPOPTS_HELP([US3],
-[If defined, enable UltraSPARC optons for the USIII BSP.])
-
-RTEMS_BSPOPTS_SET([SUN4U],[usiii],[1])
-RTEMS_BSPOPTS_SET([SUN4U],[*],[])
-RTEMS_BSPOPTS_HELP([SUN4U],
-[If defined, enable SUN model optons for the USIII BSP.])
+AC_DEFINE(US3, 1, [UltraSPARC model option])
+AC_DEFINE(SUN4U, 1, [SUN model option])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 
