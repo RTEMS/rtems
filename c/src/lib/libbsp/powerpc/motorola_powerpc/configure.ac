@@ -47,6 +47,20 @@ RTEMS_BSPOPTS_SET([qemu],[qemuprep*],[1])
 RTEMS_BSPOPTS_SET([qemu],[*],[])
 RTEMS_BSPOPTS_HELP([qemu],[Defined for QEMU BSP -- undefined for others])
 
+RTEMS_BSPOPTS_SET([mpc750],[mcp750],[1])
+RTEMS_BSPOPTS_SET([mpc750],[*],[])
+RTEMS_BSPOPTS_HELP([mpc750],[Define when mpc750 -- undefined for others])
+
+RTEMS_BSPOPTS_SET([mpc603e],[mtx603e],[1])
+RTEMS_BSPOPTS_SET([mpc603e],[mvme2100],[1])
+RTEMS_BSPOPTS_SET([mpc603e],[*],[])
+RTEMS_BSPOPTS_HELP([mpc603e],[Define when ppc603e -- undefined for others])
+
+RTEMS_BSPOPTS_SET([__ppc_generic],[qemuprep],[1])
+RTEMS_BSPOPTS_SET([__ppc_generic],[qemuprep-altivec],[1])
+RTEMS_BSPOPTS_SET([__ppc_generic],[*],[])
+RTEMS_BSPOPTS_HELP([__ppc_generic],[Define when generic PPC -- undefined for others])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
