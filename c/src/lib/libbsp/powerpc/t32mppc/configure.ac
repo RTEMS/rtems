@@ -24,7 +24,7 @@ RTEMS_BSPOPTS_SET([PPC_EXC_CONFIG_BOOKE_ONLY],[*],[1])
 RTEMS_BSPOPTS_HELP([PPC_EXC_CONFIG_BOOKE_ONLY],
 [only support Book E exception types])
 
-
+AC_DEFINE(__ppc_generic, 1, [PowerPC model option])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 RTEMS_PPC_EXCEPTIONS
