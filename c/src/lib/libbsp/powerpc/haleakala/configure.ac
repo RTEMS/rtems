@@ -25,6 +25,8 @@ RTEMS_BSPOPTS_HELP([PPC_VECTOR_FILE_BASE],
 [This defines the base address of the exception table.
  NOTE: Vectors are actually at 0xFFF00000 but file starts at offset.])
 
+AC_DEFINE(ppc405, 1, [PowerPC model option])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
