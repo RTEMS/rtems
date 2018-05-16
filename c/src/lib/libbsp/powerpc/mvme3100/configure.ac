@@ -37,6 +37,8 @@ Note that the policy can still be defined by the application
 CONFIGURE_MALLOC_BSP_SUPPORTS_SBRK this feature is removed
 and a little memory is saved.])
 
+AC_DEFINE(__ppc_generic, 1, [PowerPC model option])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
