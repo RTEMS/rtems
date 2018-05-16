@@ -159,7 +159,7 @@ RTEMS_BSPOPTS_SET([QORIQ_BUS_CLOCK_DIVIDER],[qoriq_e6500*],[2])
 RTEMS_BSPOPTS_SET([QORIQ_BUS_CLOCK_DIVIDER],[*],[1])
 RTEMS_BSPOPTS_HELP([QORIQ_BUS_CLOCK_DIVIDER],[divider of the platform clock to get the clock most on-chip peripherals])
 
-
+AC_DEFINE(__ppc_generic, 1, [PowerPC model option])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 RTEMS_PPC_EXCEPTIONS
