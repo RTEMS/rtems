@@ -6,8 +6,7 @@ include $(RTEMS_ROOT)/make/custom/default.cfg
 
 RTEMS_CPU=powerpc
 
-CPU_CFLAGS = -mcpu=860 -Dmpc860 \
-             -mstrict-align -fno-strict-aliasing \
+CPU_CFLAGS = -mcpu=860 -mstrict-align -fno-strict-aliasing \
              -meabi -msdata=sysv -fno-common
 
 # optimize flag: typically -O2

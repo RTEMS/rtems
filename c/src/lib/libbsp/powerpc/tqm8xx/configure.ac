@@ -87,6 +87,7 @@ RTEMS_BSPOPTS_HELP([BSP_USE_NETWORK_SCC],
 [If defined, then the BSP will use the Serial Communications Controller (SCC1)
  for 10MBit networking.])
 
+AC_DEFINE(mpc860, 1, [PowerPC model option])
 
 # Explicitly list a Makefile here
 AC_CONFIG_FILES([Makefile])
