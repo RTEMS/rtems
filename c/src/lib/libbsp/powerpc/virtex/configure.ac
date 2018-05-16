@@ -36,6 +36,8 @@ VIRTEX_REGION([VIRTEX_FAST_RAM_LENGTH],[fast RAM region length],[0x0])
 VIRTEX_REGION([VIRTEX_RESET_ORIGIN],[reset region origin],[0x7ffffec])
 VIRTEX_REGION([VIRTEX_RESET_LENGTH],[reset region length],[0x14])
 
+AC_DEFINE(ppc405, 1, [PowerPC model option])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 # Explicitly list all Makefiles here
