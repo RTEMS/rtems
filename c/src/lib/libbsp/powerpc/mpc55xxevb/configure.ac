@@ -214,6 +214,8 @@ RTEMS_BSPOPTS_HELP([MPC55XX_NEEDS_LOW_LEVEL_INIT],[if defined, do low level init
 RTEMS_BSPOPTS_SET([MPC55XX_ENABLE_START_PROLOGUE],[mpc5674f_rsm6],[1])
 RTEMS_BSPOPTS_HELP([MPC55XX_ENABLE_START_PROLOGUE],[if defined, enable start prologue])
 
+AC_DEFINE(__ppc_generic, 1, [PowerPC model option])
+
 AC_CONFIG_FILES([Makefile])
 
 RTEMS_BSP_CLEANUP_OPTIONS

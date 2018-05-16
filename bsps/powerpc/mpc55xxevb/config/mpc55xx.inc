@@ -15,7 +15,7 @@ CPU_CFLAGS_FLOAT ?= -msoft-float -mno-spe
 
 # FIXME
 CPU_CFLAGS = -mcpu=8540 -meabi -msdata=sysv -fno-common $(CPU_CFLAGS_FLOAT) \
-    -D__ppc_generic -mstrict-align
+    -mstrict-align
 
 CFLAGS_OPTIMIZE_V = -O2 -g -fno-keep-inline-functions
 CFLAGS_OPTIMIZE_V += -ffunction-sections -fdata-sections
