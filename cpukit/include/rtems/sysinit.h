@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -28,6 +28,7 @@ extern "C" {
  */
 #define RTEMS_SYSINIT_BSP_WORK_AREAS             000100
 #define RTEMS_SYSINIT_BSP_START                  000200
+#define RTEMS_SYSINIT_CPU_COUNTER                000300
 #define RTEMS_SYSINIT_INITIAL_EXTENSIONS         000400
 #define RTEMS_SYSINIT_MP_EARLY                   000500
 #define RTEMS_SYSINIT_DATA_STRUCTURES            000600

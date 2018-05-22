@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2015, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -67,6 +67,8 @@ typedef enum {
   BSP_WORK_AREAS_POST,
   BSP_START_PRE,
   BSP_START_POST,
+  CPU_COUNTER_PRE,
+  CPU_COUNTER_POST,
   INITIAL_EXTENSIONS_PRE,
   INITIAL_EXTENSIONS_POST,
   DATA_STRUCTURES_PRE,
@@ -216,6 +218,20 @@ LAST(RTEMS_SYSINIT_BSP_START)
   TEST_BEGIN();
 
   next_step(BSP_START_POST);
+}
+
+FIRST(RTEMS_SYSINIT_CPU_COUNTER)
+{
+  /*
+   * Since the work performed here is BSP-specific, there is no way to test pre
+   * and post conditions.
+   */
+  next_step(CPU_COUNTER_PRE);
+}
+
+LAST(RTEMS_SYSINIT_CPU_COUNTER)
+{
+  next_step(CPU_COUNTER_POST);
 }
 
 FIRST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
