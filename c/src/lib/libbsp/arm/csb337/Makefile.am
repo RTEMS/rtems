@@ -36,7 +36,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterfrequency.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/start/pmc.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/csb337/clock/clock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/csb337/btimer/btimer.c

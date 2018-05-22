@@ -27,7 +27,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterfrequency.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/smdk2410/btimer/btimer.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/smdk2410/clock/clockdrv.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/smdk2410/clock/support.c

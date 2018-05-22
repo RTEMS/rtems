@@ -600,10 +600,13 @@ uint32_t _CPU_Counter_frequency( void );
 
 CPU_Counter_ticks _CPU_Counter_read( void );
 
-CPU_Counter_ticks _CPU_Counter_difference(
+static inline CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
-);
+)
+{
+  return second - first;
+}
 
 #if CPU_PROVIDES_IDLE_THREAD_BODY == TRUE
   void *_CPU_Thread_Idle_body( uintptr_t ignored );
