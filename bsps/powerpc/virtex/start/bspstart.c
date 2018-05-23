@@ -74,6 +74,11 @@ LINKER_SYMBOL(virtex_exc_vector_base);
  */
 uint32_t bsp_time_base_frequency = XPAR_CPU_PPC405_CORE_CLOCK_FREQ_HZ;
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_time_base_frequency;
+}
+
 /*
  *  bsp_start
  *
@@ -88,8 +93,6 @@ void bsp_start( void )
    */
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
-
-  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /*
    * Initialize default raw exception handlers.

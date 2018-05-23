@@ -51,6 +51,11 @@ static int mpc83xx_decrementer_exception_handler( BSP_Exception_frame *frame, un
   return 0;
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_time_base_frequency;
+}
+
 void bsp_start( void)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
@@ -92,7 +97,6 @@ void bsp_start( void)
 #endif /* HAS_UBOOT */
   bsp_time_base_frequency = BSP_bus_frequency / 4;
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
-  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize some console parameters */
   for (i = 0; i < console_device_count; ++i) {

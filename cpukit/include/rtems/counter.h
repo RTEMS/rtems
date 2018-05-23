@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -60,6 +60,16 @@ extern "C" {
  * @brief Unsigned integer type for counter values.
  */
 typedef CPU_Counter_ticks rtems_counter_ticks;
+
+/**
+ * @brief Returns the current counter frequency in Hz.
+ *
+ * @return The current counter frequency in Hz.
+ */
+static inline uint32_t rtems_counter_frequency( void )
+{
+  return _CPU_Counter_frequency();
+}
 
 /**
  * @brief Reads the current counter values.

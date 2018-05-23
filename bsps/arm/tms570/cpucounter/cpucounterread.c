@@ -46,8 +46,11 @@ static void tms570_cpu_counter_initialize(void)
   pmcr &= ~ARM_CP15_PMCR_D;
   pmcr |= ARM_CP15_PMCR_E;
   arm_cp15_set_performance_monitors_control(pmcr);
+}
 
-  rtems_counter_initialize_converter(2 * BSP_PLL_OUT_CLOCK);
+uint32_t _CPU_Counter_frequency(void)
+{
+  return 2 * BSP_PLL_OUT_CLOCK;
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)
@@ -57,6 +60,6 @@ CPU_Counter_ticks _CPU_Counter_read(void)
 
 RTEMS_SYSINIT_ITEM(
   tms570_cpu_counter_initialize,
-  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_CPU_COUNTER,
   RTEMS_SYSINIT_ORDER_FIRST
 );

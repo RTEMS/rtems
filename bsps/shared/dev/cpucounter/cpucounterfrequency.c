@@ -1,22 +1,20 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
- *  <info@embedded-brains.de>
+ *  <rtems@embedded-brains.de>
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp.h>
-#include <bsp/bootcard.h>
-#include <bsp/irq-generic.h>
+#include <rtems/score/cpu.h>
 
-void bsp_start(void)
+uint32_t _CPU_Counter_frequency( void )
 {
-  bsp_interrupt_initialize();
+  return 1000000000;
 }

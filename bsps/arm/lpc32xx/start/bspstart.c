@@ -26,6 +26,11 @@
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return LPC32XX_PERIPH_CLK;
+}
+
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
   return lpc32xx_timer();
@@ -33,6 +38,5 @@ CPU_Counter_ticks _CPU_Counter_read(void)
 
 void bsp_start(void)
 {
-  rtems_counter_initialize_converter(LPC32XX_PERIPH_CLK);
   bsp_interrupt_initialize();
 }

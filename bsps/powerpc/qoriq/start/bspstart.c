@@ -54,6 +54,15 @@ uint32_t bsp_time_base_frequency;
 
 uint32_t qoriq_clock_frequency;
 
+uint32_t _CPU_Counter_frequency(void)
+{
+#ifdef __PPC_CPU_E6500__
+  return qoriq_clock_frequency;
+#else
+  return bsp_time_base_frequency;
+#endif
+}
+
 static void initialize_frequency_parameters(void)
 {
   const void *fdt = bsp_fdt_get();
@@ -82,7 +91,6 @@ static void initialize_frequency_parameters(void)
     }
     qoriq_clock_frequency = fdt32_to_cpu(*val_fdt);
   #endif
-  rtems_counter_initialize_converter(fdt32_to_cpu(*val_fdt));
 }
 
 #define MTIVPR(base) \

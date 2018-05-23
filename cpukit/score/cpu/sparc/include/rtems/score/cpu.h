@@ -1158,6 +1158,8 @@ static inline uint32_t CPU_swap_u32(
 
 typedef uint32_t CPU_Counter_ticks;
 
+uint32_t _CPU_Counter_frequency( void );
+
 typedef CPU_Counter_ticks ( *SPARC_Counter_read )( void );
 
 typedef CPU_Counter_ticks ( *SPARC_Counter_difference )(

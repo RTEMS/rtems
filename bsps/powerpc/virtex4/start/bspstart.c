@@ -130,6 +130,10 @@ void BSP_ask_for_reset(void)
   for(;;);
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_clicks_per_usec * 1000000;
+}
 
 /*===================================================================*/
 
@@ -166,7 +170,6 @@ void bsp_start(void)
 
   /* Timebase register ticks/microsecond;  The application may override these */
   bsp_clicks_per_usec        = 350;
-  rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);
 
   /*
    * Initialize the interrupt related settings.

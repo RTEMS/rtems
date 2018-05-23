@@ -192,6 +192,11 @@ BSP_calc_freqs( void )
   printk("CPU Clock Freq:                    %10u Hz\n", BSP_processor_frequency);
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return BSP_bus_frequency / (BSP_time_base_divisor / 1000);
+}
+
 /*
  *  bsp_start
  *
@@ -367,9 +372,6 @@ VpdBufRec          vpdData [] = {
   _BSP_clear_hostbridge_errors(0 /* enableMCP */, 0/*quiet*/);
 
   bsp_clicks_per_usec = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
-  rtems_counter_initialize_converter(
-    BSP_bus_frequency / (BSP_time_base_divisor / 1000)
-  );
 
   /*
    * Initalize RTEMS IRQ system

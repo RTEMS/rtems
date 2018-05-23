@@ -5,6 +5,7 @@ CLEANFILES =
 noinst_LIBRARIES = libscorecpu.a
 
 libscorecpu_a_SOURCES =
+libscorecpu_a_SOURCES += ../no_cpu/cpucounterfrequency.c
 libscorecpu_a_SOURCES += ../no_cpu/cpucounterread.c
 libscorecpu_a_SOURCES += nios2-context-initialize.c
 libscorecpu_a_SOURCES += nios2-context-switch.S

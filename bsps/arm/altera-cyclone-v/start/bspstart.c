@@ -13,7 +13,6 @@
  */
 
 #include <bsp/bootcard.h>
-#include <bsp/arm-a9mpcore-clock.h>
 #include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
 #include <bsp/linker-symbols.h>
@@ -95,7 +94,6 @@ static void update_clocks(void)
 void bsp_start(void)
 {
   update_clocks();
-  a9mpcore_clock_initialize_early();
   bsp_interrupt_initialize();
   rtems_cache_coherent_add_area(
     bsp_section_nocacheheap_begin,

@@ -153,6 +153,11 @@ DirectUARTWrite(const char c)
 BSP_output_char_function_type     BSP_output_char = DirectUARTWrite;
 BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_clicks_per_usec * 1000000;
+}
+
 /*===================================================================*/
 
 void bsp_start( void )
@@ -178,7 +183,6 @@ void bsp_start( void )
   /* Set globals visible to clock.c */
   /* timebase register ticks/microsecond = CPU Clk in MHz */
   bsp_clicks_per_usec = 400;
-  rtems_counter_initialize_converter(bsp_clicks_per_usec * 1000000);
 
   /*
    * Initialize default raw exception handlers.

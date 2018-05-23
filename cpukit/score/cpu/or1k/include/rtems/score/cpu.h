@@ -665,8 +665,6 @@ void _CPU_Context_Initialize(
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #ifndef ASM
-typedef uint32_t CPU_Counter_ticks;
-
 typedef struct {
   uint32_t r[32];
 
@@ -855,6 +853,8 @@ static inline unsigned int CPU_swap_u32(
   (((value&0xff) << 8) | ((value >> 8)&0xff))
 
 typedef uint32_t CPU_Counter_ticks;
+
+uint32_t _CPU_Counter_frequency( void );
 
 CPU_Counter_ticks _CPU_Counter_read( void );
 

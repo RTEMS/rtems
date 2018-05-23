@@ -19,6 +19,16 @@
 #include <bsp.h>
 #include <bsp/fatal.h>
 
+uint32_t _CPU_Counter_frequency(void)
+{
+#ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
+  return = BSP_ARMV7M_SYSTICK_FREQUENCY;
+#else
+  volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
+  return ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100;
+#endif
+}
+
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
   volatile ARMV7M_DWT *dwt = _ARMV7M_DWT;
@@ -32,22 +42,13 @@ static void armv7m_cpu_counter_initialize(void)
 
   cyccnt_enabled = _ARMV7M_DWT_Enable_CYCCNT();
 
-  if (cyccnt_enabled) {
-    #ifdef BSP_ARMV7M_SYSTICK_FREQUENCY
-      uint64_t freq = BSP_ARMV7M_SYSTICK_FREQUENCY;
-    #else
-      volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
-      uint64_t freq = ARMV7M_SYSTICK_CALIB_TENMS_GET(systick->calib) * 100ULL;
-    #endif
-
-    rtems_counter_initialize_converter(freq);
-  } else {
+  if (!cyccnt_enabled) {
     bsp_fatal(BSP_ARM_ARMV7M_CPU_COUNTER_INIT);
   }
 }
 
 RTEMS_SYSINIT_ITEM(
   armv7m_cpu_counter_initialize,
-  RTEMS_SYSINIT_BSP_START,
+  RTEMS_SYSINIT_CPU_COUNTER,
   RTEMS_SYSINIT_ORDER_FIRST
 );

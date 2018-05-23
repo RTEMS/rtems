@@ -166,6 +166,11 @@ static void arm_gt_clock_initialize(void)
   rtems_timecounter_install(tc);
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return arm_gt_clock_instance.interval;
+}
+
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
   return (uint32_t) arm_gt_clock_get_count();
@@ -179,14 +184,12 @@ static void arm_gt_clock_early_init(void)
     &arm_gt_clock_instance.interval,
     &arm_gt_clock_instance.irq
   );
-
-  rtems_counter_initialize_converter(arm_gt_clock_instance.interval);
 }
 
 RTEMS_SYSINIT_ITEM(
   arm_gt_clock_early_init,
-  RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_LAST
+  RTEMS_SYSINIT_CPU_COUNTER,
+  RTEMS_SYSINIT_ORDER_FIRST
 );
 
 #define Clock_driver_support_at_tick() \

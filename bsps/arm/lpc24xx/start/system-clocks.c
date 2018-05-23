@@ -61,8 +61,11 @@ void lpc24xx_timer_initialize(void)
 
   /* Start timer */
   T1TCR = TCR_EN;
+}
 
-  rtems_counter_initialize_converter(LPC24XX_PCLK);
+uint32_t _CPU_Counter_frequency(void)
+{
+  return LPC24XX_PCLK;
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)

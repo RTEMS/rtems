@@ -18,11 +18,17 @@
 #include <rtems/sysinit.h>
 #include <rtems/score/sparcimpl.h>
 
+static uint32_t leon3_counter_frequency = 1000000000;
+
+uint32_t _CPU_Counter_frequency(void)
+{
+  return leon3_up_counter_frequency;
+}
+
 static void leon3_counter_initialize(void)
 {
   volatile struct irqmp_timestamp_regs *irqmp_ts;
   volatile struct gptimer_regs *gpt;
-  unsigned int freq;
 
   irqmp_ts = &LEON3_IrqCtrl_Regs->timestamp[0];
   gpt = LEON3_Timer_Regs;
@@ -38,8 +44,7 @@ static void leon3_counter_initialize(void)
       NULL
     );
 
-    freq = leon3_up_counter_frequency();
-    rtems_counter_initialize_converter(freq);
+    leon3_counter_frequency = leon3_up_counter_frequency();
   } else if (leon3_irqmp_has_timestamp(irqmp_ts)) {
     /* Use the interrupt controller timestamp counter if available */
 
@@ -52,8 +57,7 @@ static void leon3_counter_initialize(void)
       (volatile const uint32_t *) &irqmp_ts->counter
     );
 
-    freq = ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev);
-    rtems_counter_initialize_converter(freq);
+    leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_IrqCtrl_Adev);
   } else if (gpt != NULL) {
     /* Fall back to the first GPTIMER if available */
 
@@ -66,15 +70,15 @@ static void leon3_counter_initialize(void)
       (volatile const uint32_t *) &gpt->timer[LEON3_CLOCK_INDEX].value
     );
 
-    freq = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev);
-    rtems_counter_initialize_converter(freq / (gpt->scaler_reload - 1));
+    leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev) /
+      (gpt->scaler_reload - 1);
   }
 }
 
 RTEMS_SYSINIT_ITEM(
   leon3_counter_initialize,
-  RTEMS_SYSINIT_BSP_START,
-  RTEMS_SYSINIT_ORDER_THIRD
+  RTEMS_SYSINIT_CPU_COUNTER,
+  RTEMS_SYSINIT_ORDER_FIRST
 );
 
 SPARC_COUNTER_DEFINITION;

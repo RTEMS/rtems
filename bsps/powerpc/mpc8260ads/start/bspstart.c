@@ -114,6 +114,11 @@ static void _BSP_Uart2_enable(void)
   csr->bcsr1 &= ~UART2_E;		/* Enable Uart2 */
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_clock_speed;
+}
+
 void bsp_start(void)
 {
   /* Set MPC8260ADS board LEDS and Uart enable lines */
@@ -171,7 +176,6 @@ void bsp_start(void)
   bsp_serial_cts_rts 	     = 0;
   bsp_serial_rate 	     = 9600;
   bsp_clock_speed 	   = 40000000;
-  rtems_counter_initialize_converter(bsp_clock_speed);
 
 #ifdef REV_0_2
   /* set up some board specific registers */

@@ -54,6 +54,11 @@ static int default_decrementer_exception_handler( BSP_Exception_frame *frame, un
   return 0;
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_time_base_frequency;
+}
+
 /*
  *  bsp_start
  *
@@ -80,7 +85,6 @@ void bsp_start( void )
   BSP_bus_frequency        = 20;
   bsp_time_base_frequency  = 20000000;
   bsp_clicks_per_usec      = BSP_bus_frequency;
-  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /*
    * Initialize the interrupt related settings.

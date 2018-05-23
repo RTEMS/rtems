@@ -77,13 +77,15 @@ static void t32mppc_initialize_exceptions(void *interrupt_stack_begin)
   MTIVOR(BOOKE_IVOR35, addr);
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_time_base_frequency;
+}
+
 void bsp_start(void)
 {
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
-
-  rtems_counter_initialize_converter(bsp_time_base_frequency);
-
   t32mppc_initialize_exceptions(bsp_section_work_begin);
   bsp_interrupt_initialize();
 }

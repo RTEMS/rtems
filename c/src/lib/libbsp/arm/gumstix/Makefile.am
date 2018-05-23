@@ -24,6 +24,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/start/bspreset.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/gumstix/start/memmap.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterfrequency.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterread.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/cpucounter/cpucounterdiff.c
 librtemsbsp_a_SOURCES +=../../../../../../bsps/arm/gumstix/clock/clock.c

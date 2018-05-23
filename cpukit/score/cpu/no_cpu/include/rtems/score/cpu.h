@@ -1329,6 +1329,13 @@ static inline uint32_t CPU_swap_u32(
 typedef uint32_t CPU_Counter_ticks;
 
 /**
+ * @brief Returns the current CPU counter frequency in Hz.
+ *
+ * @return The current CPU counter frequency in Hz.
+ */
+uint32_t _CPU_Counter_frequency( void );
+
+/**
  * @brief Returns the current CPU counter value.
  *
  * A CPU counter is some free-running counter.  It ticks usually with a

@@ -854,6 +854,8 @@ static inline void _CPU_Context_validate( uintptr_t pattern )
 
 typedef uint32_t CPU_Counter_ticks;
 
+uint32_t _CPU_Counter_frequency( void );
+
 CPU_Counter_ticks _CPU_Counter_read( void );
 
 static inline CPU_Counter_ticks _CPU_Counter_difference(

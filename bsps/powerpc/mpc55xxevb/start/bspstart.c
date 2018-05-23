@@ -63,6 +63,11 @@ static void null_pointer_protection(void)
 #endif
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+	return bsp_clock_speed;
+}
+
 void bsp_start(void)
 {
 	null_pointer_protection();
@@ -82,7 +87,6 @@ void bsp_start(void)
 
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
-	rtems_counter_initialize_converter(bsp_clock_speed);
 
 	/* Initialize exceptions */
 	ppc_exc_initialize_with_vector_base(

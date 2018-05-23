@@ -22,15 +22,6 @@ extern "C" {
  */
 uint32_t a9mpcore_clock_periphclk(void);
 
-/**
- * @brief Do early clock initialization so that the CPU counter conversion
- * works.
- */
-static inline void a9mpcore_clock_initialize_early(void)
-{
-  rtems_counter_initialize_converter(a9mpcore_clock_periphclk());
-}
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

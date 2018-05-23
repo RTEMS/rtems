@@ -157,6 +157,11 @@ static void a9mpcore_clock_initialize(void)
   rtems_timecounter_install(&a9mpcore_tc);
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return a9mpcore_clock_periphclk();
+}
+
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
   volatile a9mpcore_gt *gt = A9MPCORE_GT;

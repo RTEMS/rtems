@@ -92,6 +92,11 @@ static rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
   return RTEMS_SUCCESSFUL;
 }
 
+uint32_t _CPU_Counter_frequency(void)
+{
+  return bsp_time_base_frequency;
+}
+
 void bsp_start( void)
 {
 
@@ -142,7 +147,6 @@ void bsp_start( void)
 
   bsp_time_base_frequency = BSP_bus_frequency / 16;
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
-  rtems_counter_initialize_converter(bsp_time_base_frequency);
 
   /* Initialize exception handler */
   ppc_exc_initialize(interrupt_stack_start, interrupt_stack_size);

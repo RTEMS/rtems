@@ -28,6 +28,8 @@
 #include <rtems/timecounter.h>
 #include <rtems/score/sparcimpl.h>
 
+#define ERC32_REAL_TIME_CLOCK_FREQUENCY 1000000
+
 /*
  *  The Real Time Clock Counter Timer uses this trap type.
  */
@@ -78,19 +80,22 @@ static void erc32_tc_tick( void )
   );
 }
 
-static void erc32_counter_initialize( uint32_t frequency )
+static void erc32_counter_initialize( void )
 {
   _SPARC_Counter_initialize(
     _SPARC_Counter_read_address,
     _SPARC_Counter_difference_clock_period,
     &ERC32_MEC.Real_Time_Clock_Counter
   );
-  rtems_counter_initialize_converter( frequency );
+}
+
+uint32_t _CPU_Counter_frequency(void)
+{
+  return ERC32_REAL_TIME_CLOCK_FREQUENCY;
 }
 
 #define Clock_driver_support_initialize_hardware() \
   do { \
-    uint32_t frequency = 1000000; \
     /* approximately 1 us per countdown */ \
     ERC32_MEC.Real_Time_Clock_Scalar  = CLOCK_SPEED - 1; \
     ERC32_MEC.Real_Time_Clock_Counter = \
@@ -108,11 +113,11 @@ static void erc32_counter_initialize( uint32_t frequency )
     );  \
     rtems_timecounter_simple_install( \
         &erc32_tc, \
-        frequency, \
+        ERC32_REAL_TIME_CLOCK_FREQUENCY, \
         rtems_configuration_get_microseconds_per_tick(), \
         erc32_tc_get_timecount \
     ); \
-    erc32_counter_initialize( frequency ); \
+    erc32_counter_initialize(); \
   } while (0)
 
 #define Clock_driver_timecounter_tick() erc32_tc_tick()
