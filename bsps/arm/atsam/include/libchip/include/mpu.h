@@ -55,6 +55,10 @@
 	#define MPU_NOCACHE_SRAM_REGION                 (11)
 #endif
 #define MPU_SYSTEM_REGION                       (12)
+#ifdef __rtems__
+/* Reserve the region with highest priority for user applications */
+#define MPU_USER_DEFINED_REGION                 (15)
+#endif /* __rtems__ */
 
 #define MPU_REGION_VALID                        (0x10)
 #define MPU_REGION_ENABLE                       (0x01)
