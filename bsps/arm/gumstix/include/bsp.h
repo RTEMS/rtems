@@ -51,9 +51,6 @@ console_tbl *BSP_get_uart_from_minor(int minor);
 
 static inline int32_t BSP_get_baud(void) {return 115200;}
 
-/** @brief How big should the interrupt stack be? */
-#define CONFIGURE_INTERRUPT_STACK_MEMORY  (16 * 1024)
-
 #define ST_PIMR_PIV	33	/* 33 ticks of the 32.768Khz clock ~= 1msec */
 
 #define outport_byte(port,val) *((unsigned char volatile*)(port)) = (val)
