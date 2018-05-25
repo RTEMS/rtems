@@ -21,7 +21,17 @@
 
 #include <rtems/score/threadimpl.h>
 
-#include <ctype.h>
+/*
+ * Do not use isprint() from <ctypes.h> since this depends on the heavy weight
+ * C locale support of Newlib.
+ */
+static bool _Objects_Name_char_is_printable( char c )
+{
+  unsigned char uc;
+
+  uc = (unsigned char) c;
+  return uc >= ' ' && uc <= '~';
+}
 
 size_t _Objects_Name_to_string(
   Objects_Name  name,
@@ -55,7 +65,7 @@ size_t _Objects_Name_to_string(
   if ( s != NULL ) {
     while ( *s != '\0' ) {
       if ( i < buffer_size ) {
-        *d = isprint((unsigned char) *s) ? *s : '*';
+        *d = _Objects_Name_char_is_printable(*s) ? *s : '*';
         ++d;
       }
 
