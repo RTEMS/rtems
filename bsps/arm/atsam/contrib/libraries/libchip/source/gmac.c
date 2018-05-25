@@ -99,7 +99,11 @@ uint16_t GMAC_PHYData(Gmac *pGmac)
 uint8_t GMAC_SetMdcClock(Gmac *pGmac, uint32_t mck)
 {
 	uint32_t clock_dividor;
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 
 	if (mck <= 20000000) {
 		clock_dividor = GMAC_NCFGR_CLK_MCK_8;          // MDC clock = MCK/8
@@ -117,7 +121,9 @@ uint8_t GMAC_SetMdcClock(Gmac *pGmac, uint32_t mck)
 	}
 
 	pGmac->GMAC_NCFGR = (pGmac->GMAC_NCFGR & (~GMAC_NCFGR_CLK_Msk)) | clock_dividor;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 	return 1;
 }
 
@@ -127,9 +133,15 @@ uint8_t GMAC_SetMdcClock(Gmac *pGmac, uint32_t mck)
  */
 void GMAC_EnableMdio(Gmac *pGmac)
 {
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 	pGmac->GMAC_NCR |= GMAC_NCR_MPE;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 }
 
 /**
@@ -138,9 +150,15 @@ void GMAC_EnableMdio(Gmac *pGmac)
  */
 void GMAC_DisableMdio(Gmac *pGmac)
 {
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 	pGmac->GMAC_NCR &= ~GMAC_NCR_MPE;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 }
 
 /**
@@ -149,9 +167,15 @@ void GMAC_DisableMdio(Gmac *pGmac)
  */
 void GMAC_EnableMII(Gmac *pGmac)
 {
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 	pGmac->GMAC_UR &= ~GMAC_UR_RMII;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 }
 
 /**
@@ -160,10 +184,16 @@ void GMAC_EnableMII(Gmac *pGmac)
  */
 void GMAC_EnableGMII(Gmac *pGmac)
 {
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 	/* RGMII disable */
 	pGmac->GMAC_UR &= ~GMAC_UR_RMII;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 }
 
 #define GMAC_NCFGR_GBE (0x1u << 10)
@@ -175,7 +205,11 @@ void GMAC_EnableGMII(Gmac *pGmac)
  */
 void GMAC_EnableRGMII(Gmac *pGmac, uint32_t duplex, uint32_t speed)
 {
+#ifndef __rtems__
 	pGmac->GMAC_NCR &=  ~(GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#else /* __rtems__ */
+	assert((pGmac->GMAC_NCR & (GMAC_NCR_RXEN | GMAC_NCR_TXEN)) == 0);
+#endif /* __rtems__ */
 
 	if (duplex == GMAC_DUPLEX_HALF)
 		pGmac->GMAC_NCFGR &= ~GMAC_NCFGR_FD;
@@ -193,7 +227,9 @@ void GMAC_EnableRGMII(Gmac *pGmac, uint32_t duplex, uint32_t speed)
 	/* RGMII enable */
 	pGmac->GMAC_UR = 0;
 	pGmac->GMAC_NCFGR &= ~GMAC_NCFGR_GBE;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 	return;
 }
 
@@ -216,7 +252,9 @@ void GMAC_SetLinkSpeed(Gmac *pGmac, uint8_t speed, uint8_t fullduplex)
 		ncfgr |= GMAC_NCFGR_FD;
 
 	pGmac->GMAC_NCFGR = ncfgr;
+#ifndef __rtems__
 	pGmac->GMAC_NCR |=  (GMAC_NCR_RXEN | GMAC_NCR_TXEN);
+#endif /* __rtems__ */
 }
 
 /**
