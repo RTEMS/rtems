@@ -2249,7 +2249,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #endif
   };
 
-  #define CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
+  #define _CONFIGURE_INITIAL_EXTENSION_TABLE Configuration_Initial_Extensions
   #define _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS \
     RTEMS_ARRAY_SIZE(Configuration_Initial_Extensions)
 
@@ -2259,7 +2259,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     RTEMS_SYSINIT_ORDER_MIDDLE
   );
 #else
-  #define CONFIGURE_INITIAL_EXTENSION_TABLE NULL
+  #define _CONFIGURE_INITIAL_EXTENSION_TABLE NULL
   #define _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
@@ -3107,7 +3107,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #endif
     #endif
     _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS,   /* number of static extensions */
-    CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
+    _CONFIGURE_INITIAL_EXTENSION_TABLE,        /* pointer to static extensions */
     #if defined(RTEMS_MULTIPROCESSING)
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
