@@ -183,6 +183,7 @@ librtems_a_SOURCES += src/modes.c
 
 librtems_a_SOURCES += src/status.c
 librtems_a_SOURCES += src/statustext.c
+librtems_a_SOURCES += src/statustoerrno.c
 
 librtems_a_SOURCES += src/getcurrentprocessor.c
 librtems_a_SOURCES += src/getprocessorcount.c
