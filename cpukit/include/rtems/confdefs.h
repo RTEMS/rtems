@@ -976,10 +976,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     CONFIGURE_SCHEDULER_TABLE_ENTRIES
   };
 
-  #define CONFIGURE_SCHEDULER_COUNT RTEMS_ARRAY_SIZE( _Scheduler_Table )
+  #define _CONFIGURE_SCHEDULER_COUNT RTEMS_ARRAY_SIZE( _Scheduler_Table )
 
   #if defined(RTEMS_SMP)
-    const size_t _Scheduler_Count = CONFIGURE_SCHEDULER_COUNT;
+    const size_t _Scheduler_Count = _CONFIGURE_SCHEDULER_COUNT;
 
     const Scheduler_Assignment _Scheduler_Initial_assignments[] = {
       #if defined(CONFIGURE_SCHEDULER_ASSIGNMENTS)
@@ -1864,7 +1864,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #define _CONFIGURE_MEMORY_FOR_PROXIES(_proxies) \
         _Configure_From_workspace((_proxies) \
           * (sizeof(Thread_Proxy_control) \
-            + THREAD_QUEUE_HEADS_SIZE(CONFIGURE_SCHEDULER_COUNT)))
+            + THREAD_QUEUE_HEADS_SIZE(_CONFIGURE_SCHEDULER_COUNT)))
 
       #ifndef CONFIGURE_MP_MPCI_TABLE_POINTER
         #include <mpci.h>
@@ -2640,7 +2640,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   ( \
     _Configure_Object_RAM(_tasks, sizeof(Configuration_Thread_control)) \
       + _Configure_From_workspace(_Configure_Max_Objects(_tasks) \
-        * THREAD_QUEUE_HEADS_SIZE(CONFIGURE_SCHEDULER_COUNT)) \
+        * THREAD_QUEUE_HEADS_SIZE(_CONFIGURE_SCHEDULER_COUNT)) \
       + _Configure_Max_Objects(_number_FP_tasks) \
         * _Configure_From_workspace(CONTEXT_FP_SIZE) \
   )
@@ -2961,7 +2961,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
       void *extensions[ CONFIGURE_MAXIMUM_USER_EXTENSIONS + 1 ];
     #endif
-    Configuration_Scheduler_node Scheduler_nodes[ CONFIGURE_SCHEDULER_COUNT ];
+    Configuration_Scheduler_node Scheduler_nodes[ _CONFIGURE_SCHEDULER_COUNT ];
     RTEMS_API_Control API_RTEMS;
     #ifdef RTEMS_POSIX_API
       POSIX_API_Control API_POSIX;
