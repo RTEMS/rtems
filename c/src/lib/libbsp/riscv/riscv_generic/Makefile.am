@@ -23,6 +23,7 @@ start.$(OBJEXT): ../../../../../../bsps/riscv/riscv_generic/start/start.S
 project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
+project_lib_DATA += ../../../../../../bsps/riscv/riscv/start/linkcmds.base
 
 ###############################################################################
 #                  LibBSP                                                     #

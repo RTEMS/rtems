@@ -34,15 +34,13 @@
 EXTERN(bsp_section_bss_begin)
 EXTERN(bsp_section_bss_end)
 EXTERN(ISR_Handler)
-EXTERN(bsp_start_vector_table_size)
-EXTERN(bsp_vector_table_size)
 EXTERN(bsp_section_stack_begin)
 
 PUBLIC(bsp_start_vector_table_begin)
 PUBLIC(bsp_start_vector_table_end)
 PUBLIC(_start)
 
-.section .start, "wax"
+.section .bsp_start_text, "wax"
 TYPE_FUNC(_start)
 SYM(_start):
   li x2, 0

@@ -1,0 +1,385 @@
+/* Copyright (C) 2014-2018 Free Software Foundation, Inc.
+   Copying and distribution of this script, with or without modification,
+   are permitted in any medium without royalty provided the copyright
+   notice and this notice are preserved.  */
+
+/*
+ * Copyright (c) 2018 embedded brains GmbH.
+ *
+ * Copyright (c) 2015 University of York.
+ * Hesham ALMatary <hmka501@york.ac.uk>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+OUTPUT_ARCH(riscv)
+ENTRY(_start)
+STARTUP(start.o)
+
+bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1;
+bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1;
+
+MEMORY {
+	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
+}
+
+SECTIONS {
+	.start : ALIGN_WITH_INPUT {
+		bsp_section_start_begin = .;
+		KEEP (*(.bsp_start_text))
+		KEEP (*(.bsp_start_data))
+		bsp_section_start_end = .;
+	} > REGION_START AT > REGION_START
+	bsp_section_start_size = bsp_section_start_end - bsp_section_start_begin;
+
+	.text : ALIGN_WITH_INPUT {
+		bsp_section_text_begin = .;
+		*(.text.unlikely .text.*_unlikely .text.unlikely.*)
+		*(.text.exit .text.exit.*)
+		*(.text.startup .text.startup.*)
+		*(.text.hot .text.hot.*)
+		*(.text .stub .text.* .gnu.linkonce.t.*)
+		/* .gnu.warning sections are handled specially by elf32.em.	*/
+		*(.gnu.warning)
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.init : ALIGN_WITH_INPUT {
+		KEEP (*(SORT_NONE(.init)))
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	.fini : ALIGN_WITH_INPUT {
+		KEEP (*(SORT_NONE(.fini)))
+		bsp_section_text_end = .;
+	} > REGION_TEXT AT > REGION_TEXT_LOAD
+	bsp_section_text_size = bsp_section_text_end - bsp_section_text_begin;
+	bsp_section_text_load_begin = LOADADDR (.text);
+	bsp_section_text_load_end = bsp_section_text_load_begin + bsp_section_text_size;
+
+	.robarrier : ALIGN_WITH_INPUT {
+		. = ALIGN (bsp_section_robarrier_align);
+	} > REGION_RODATA AT > REGION_RODATA
+
+	.rodata : ALIGN_WITH_INPUT {
+		bsp_section_rodata_begin = .;
+		*(.rodata .rodata.* .gnu.linkonce.r.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rodata1 : ALIGN_WITH_INPUT {
+		*(.rodata1)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.sdata2 : ALIGN_WITH_INPUT {
+		*(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.sbss2 : ALIGN_WITH_INPUT {
+		*(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.eh_frame_hdr : ALIGN_WITH_INPUT {
+		*(.eh_frame_hdr) *(.eh_frame_entry .eh_frame_entry.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.eh_frame : ALIGN_WITH_INPUT {
+		KEEP (*(.eh_frame)) *(.eh_frame.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gcc_except_table : ALIGN_WITH_INPUT {
+		*(.gcc_except_table .gcc_except_table.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu_extab : ALIGN_WITH_INPUT {
+		*(.gnu_extab*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tdata : ALIGN_WITH_INPUT {
+		_TLS_Data_begin = .;
+		*(.tdata .tdata.* .gnu.linkonce.td.*)
+		_TLS_Data_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tbss : ALIGN_WITH_INPUT {
+		_TLS_BSS_begin = .;
+		*(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon)
+		_TLS_BSS_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	_TLS_Data_size = _TLS_Data_end - _TLS_Data_begin;
+	_TLS_Data_begin = _TLS_Data_size != 0 ? _TLS_Data_begin : _TLS_BSS_begin;
+	_TLS_Data_end = _TLS_Data_size != 0 ? _TLS_Data_end : _TLS_BSS_begin;
+	_TLS_BSS_size = _TLS_BSS_end - _TLS_BSS_begin;
+	_TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
+	_TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
+	.preinit_array : ALIGN_WITH_INPUT {
+		PROVIDE_HIDDEN (__preinit_array_start = .);
+		KEEP (*(.preinit_array))
+		PROVIDE_HIDDEN (__preinit_array_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.init_array : ALIGN_WITH_INPUT {
+		PROVIDE_HIDDEN (__init_array_start = .);
+		KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+		KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
+		PROVIDE_HIDDEN (__init_array_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.fini_array : ALIGN_WITH_INPUT {
+		PROVIDE_HIDDEN (__fini_array_start = .);
+		KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+		KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+		PROVIDE_HIDDEN (__fini_array_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.ctors : ALIGN_WITH_INPUT {
+		/* gcc uses crtbegin.o to find the start of
+			 the constructors, so we make sure it is
+			 first.	Because this is a wildcard, it
+			 doesn't matter if the user does not
+			 actually link against crtbegin.o; the
+			 linker won't look for a file to match a
+			 wildcard.	The wildcard also means that it
+			 doesn't matter which directory crtbegin.o
+			 is in.	*/
+		KEEP (*crtbegin.o(.ctors))
+		KEEP (*crtbegin?.o(.ctors))
+		/* We don't want to include the .ctor section from
+			 the crtend.o file until after the sorted ctors.
+			 The .ctor section from the crtend file contains the
+			 end of ctors marker and it must be last */
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
+		KEEP (*(SORT(.ctors.*)))
+		KEEP (*(.ctors))
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dtors : ALIGN_WITH_INPUT {
+		KEEP (*crtbegin.o(.dtors))
+		KEEP (*crtbegin?.o(.dtors))
+		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
+		KEEP (*(SORT(.dtors.*)))
+		KEEP (*(.dtors))
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.data.rel.ro : ALIGN_WITH_INPUT {
+		*(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+		*(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.jcr : ALIGN_WITH_INPUT {
+		KEEP (*(.jcr))
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.interp : ALIGN_WITH_INPUT {
+		*(.interp)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.note.gnu.build-id : { *(.note.gnu.build-id)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.hash : ALIGN_WITH_INPUT {
+		*(.hash)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.hash : ALIGN_WITH_INPUT {
+		*(.gnu.hash)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynsym : ALIGN_WITH_INPUT {
+		*(.dynsym)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynstr : ALIGN_WITH_INPUT {
+		*(.dynstr)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version : ALIGN_WITH_INPUT {
+		*(.gnu.version)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_d : ALIGN_WITH_INPUT {
+		*(.gnu.version_d)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.gnu.version_r : ALIGN_WITH_INPUT {
+		*(.gnu.version_r)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.dyn : ALIGN_WITH_INPUT {
+		*(.rela.init)
+		*(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+		*(.rela.fini)
+		*(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+		*(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+		*(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+		*(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+		*(.rela.ctors)
+		*(.rela.dtors)
+		*(.rela.got)
+		*(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+		*(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+		*(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+		*(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+		*(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+		PROVIDE_HIDDEN (__rela_iplt_start = .);
+		*(.rela.iplt)
+		PROVIDE_HIDDEN (__rela_iplt_end = .);
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rela.plt : ALIGN_WITH_INPUT {
+			*(.rela.plt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.plt : ALIGN_WITH_INPUT {
+		*(.plt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.iplt : ALIGN_WITH_INPUT {
+		*(.iplt)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.dynamic : ALIGN_WITH_INPUT {
+		*(.dynamic)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tm_clone_table : ALIGN_WITH_INPUT {
+		*(.tm_clone_table)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.got : ALIGN_WITH_INPUT {
+		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.rtemsroset : ALIGN_WITH_INPUT {
+		/* Special FreeBSD linker set sections */
+		__start_set_sysctl_set = .;
+		*(set_sysctl_*);
+		__stop_set_sysctl_set = .;
+		*(set_domain_*);
+		*(set_pseudo_*);
+
+		KEEP (*(SORT(.rtemsroset.*)))
+		bsp_section_rodata_end = .;
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	bsp_section_rodata_size = bsp_section_rodata_end - bsp_section_rodata_begin;
+	bsp_section_rodata_load_begin = LOADADDR (.rodata);
+	bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
+
+	.rwbarrier : ALIGN_WITH_INPUT {
+		. = ALIGN (bsp_section_rwbarrier_align);
+	} > REGION_DATA AT > REGION_DATA
+
+	.fast_text : ALIGN_WITH_INPUT {
+		bsp_section_fast_text_begin = .;
+		*(.bsp_fast_text)
+		bsp_section_fast_text_end = .;
+	} > REGION_FAST_TEXT AT > REGION_FAST_TEXT_LOAD
+	bsp_section_fast_text_size = bsp_section_fast_text_end - bsp_section_fast_text_begin;
+	bsp_section_fast_text_load_begin = LOADADDR (.fast_text);
+	bsp_section_fast_text_load_end = bsp_section_fast_text_load_begin + bsp_section_fast_text_size;
+
+	.fast_data : ALIGN_WITH_INPUT {
+		bsp_section_fast_data_begin = .;
+		*(.bsp_fast_data)
+		bsp_section_fast_data_end = .;
+	} > REGION_FAST_DATA AT > REGION_FAST_DATA_LOAD
+	bsp_section_fast_data_size = bsp_section_fast_data_end - bsp_section_fast_data_begin;
+	bsp_section_fast_data_load_begin = LOADADDR (.fast_data);
+	bsp_section_fast_data_load_end = bsp_section_fast_data_load_begin + bsp_section_fast_data_size;
+
+	.data : ALIGN_WITH_INPUT {
+		bsp_section_data_begin = .;
+		*(.data .data.* .gnu.linkonce.d.*)
+		SORT(CONSTRUCTORS)
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.data1 : ALIGN_WITH_INPUT {
+		*(.data1)
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.rtemsrwset : ALIGN_WITH_INPUT {
+		KEEP (*(SORT(.rtemsrwset.*)))
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.htif ALIGN(4096) : ALIGN_WITH_INPUT {
+		*(.htif)
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	.sdata : ALIGN_WITH_INPUT {
+		__global_pointer$ = . + 0x800;
+		*(.srodata.cst16) *(.srodata.cst8) *(.srodata.cst4) *(.srodata.cst2) *(.srodata .srodata.*)
+		*(.sdata .sdata.* .gnu.linkonce.s.*)
+		bsp_section_data_end = .;
+	} > REGION_DATA AT > REGION_DATA_LOAD
+	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
+	bsp_section_data_load_begin = LOADADDR (.data);
+	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
+
+	.sbss : ALIGN_WITH_INPUT {
+		bsp_section_bss_begin = .;
+		*(.dynsbss)
+		*(.sbss .sbss.* .gnu.linkonce.sb.*)
+		*(.scommon)
+	} > REGION_DATA AT > REGION_DATA
+	.bss : ALIGN_WITH_INPUT {
+		*(.dynbss)
+		*(.bss .bss.* .gnu.linkonce.b.*)
+		*(COMMON)
+		bsp_section_bss_end = .;
+	} > REGION_DATA AT > REGION_DATA
+	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_rtemsstack_begin = .;
+		*(SORT(.rtemsstack.*))
+		bsp_section_rtemsstack_end = .;
+	} > REGION_RTEMSSTACK AT > REGION_RTEMSSTACK
+	bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
+
+	.work : ALIGN_WITH_INPUT {
+		/*
+		 * The work section will occupy the remaining REGION_WORK region and
+		 * contains the RTEMS work space and heap.
+		 */
+		bsp_section_work_begin = .;
+		. += ORIGIN (REGION_WORK) + LENGTH (REGION_WORK) - ABSOLUTE (.);
+		bsp_section_work_end = .;
+	} > REGION_WORK AT > REGION_WORK
+	bsp_section_work_size = bsp_section_work_end - bsp_section_work_begin;
+
+	/* FIXME */
+	RamBase = ORIGIN (REGION_WORK);
+	RamSize = LENGTH (REGION_WORK);
+	WorkAreaBase = bsp_section_work_begin;
+	HeapSize = 0;
+
+	/* Stabs debugging sections.	*/
+	.stab					0 : { *(.stab) }
+	.stabstr			 0 : { *(.stabstr) }
+	.stab.excl		 0 : { *(.stab.excl) }
+	.stab.exclstr	0 : { *(.stab.exclstr) }
+	.stab.index		0 : { *(.stab.index) }
+	.stab.indexstr 0 : { *(.stab.indexstr) }
+	.comment			 0 : { *(.comment) }
+	/* DWARF debug sections.
+		 Symbols in the DWARF debugging sections are relative to the beginning
+		 of the section so we begin them at 0.	*/
+	/* DWARF 1 */
+	.debug					0 : { *(.debug) }
+	.line					 0 : { *(.line) }
+	/* GNU DWARF 1 extensions */
+	.debug_srcinfo	0 : { *(.debug_srcinfo) }
+	.debug_sfnames	0 : { *(.debug_sfnames) }
+	/* DWARF 1.1 and DWARF 2 */
+	.debug_aranges	0 : { *(.debug_aranges) }
+	.debug_pubnames 0 : { *(.debug_pubnames) }
+	/* DWARF 2 */
+	.debug_info		 0 : { *(.debug_info .gnu.linkonce.wi.*) }
+	.debug_abbrev	 0 : { *(.debug_abbrev) }
+	.debug_line		 0 : { *(.debug_line .debug_line.* .debug_line_end ) }
+	.debug_frame		0 : { *(.debug_frame) }
+	.debug_str			0 : { *(.debug_str) }
+	.debug_loc			0 : { *(.debug_loc) }
+	.debug_macinfo	0 : { *(.debug_macinfo) }
+	/* SGI/MIPS DWARF 2 extensions */
+	.debug_weaknames 0 : { *(.debug_weaknames) }
+	.debug_funcnames 0 : { *(.debug_funcnames) }
+	.debug_typenames 0 : { *(.debug_typenames) }
+	.debug_varnames	0 : { *(.debug_varnames) }
+	/* DWARF 3 */
+	.debug_pubtypes 0 : { *(.debug_pubtypes) }
+	.debug_ranges	 0 : { *(.debug_ranges) }
+	/* DWARF Extension.	*/
+	.debug_macro		0 : { *(.debug_macro) }
+	.debug_addr		 0 : { *(.debug_addr) }
+	.gnu.attributes 0 : { KEEP (*(.gnu.attributes)) }
+	/DISCARD/ : { *(.note.GNU-stack) *(.gnu_debuglink) *(.gnu.lto_*) }
+
+	/*
+	 * This is a RTEMS specific section to catch all unexpected input
+	 * sections.  In case you get an error like
+	 *   "section `.unexpected_sections' will not fit in region
+	 *   `UNEXPECTED_SECTIONS'"
+	 * you have to figure out the offending input section and add it to the
+	 * appropriate output section definition above.
+	 */
+	.unexpected_sections : { *(*) } > UNEXPECTED_SECTIONS
+}

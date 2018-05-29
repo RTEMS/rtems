@@ -44,6 +44,7 @@
 
 volatile uint64_t tohost __attribute__((section(".htif")));
 volatile uint64_t fromhost __attribute__((section(".htif")));
+volatile uint64_t riscv_fill_up_htif_section[510] __attribute__((section(".htif")));
 volatile int htif_console_buf;
 
 static void __check_fromhost()
