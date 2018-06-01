@@ -9,7 +9,7 @@
 /*
  * Based on concepts of Pavel Pisa, Till Straumann and Eric Valette.
  *
- * Copyright (c) 2008, 2017 embedded brains GmbH.
+ * Copyright (c) 2008, 2018 embedded brains GmbH.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -30,6 +30,7 @@
 #include <rtems/score/apimutex.h>
 #include <rtems/score/processormask.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/malloc.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
   bsp_interrupt_handler_index_type bsp_interrupt_handler_index_table
@@ -141,7 +142,7 @@ static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry(void)
       return NULL;
     }
   #else
-    return malloc(sizeof(bsp_interrupt_handler_entry));
+    return rtems_heap_allocate_aligned_with_boundary(sizeof(bsp_interrupt_handler_entry), 0, 0);
   #endif
 }
 
