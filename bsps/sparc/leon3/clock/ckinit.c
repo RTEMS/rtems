@@ -267,12 +267,6 @@ static void leon3_clock_initialize(void)
 #define Clock_driver_support_initialize_hardware() \
   leon3_clock_initialize()
 
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    LEON_Mask_interrupt(LEON_TRAP_TYPE(clkirq)); \
-    LEON3_Timer_Regs->timer[LEON3_CLOCK_INDEX].ctrl = 0; \
-  } while (0)
-
 #define Clock_driver_timecounter_tick() leon3_tc_do_tick()
 
 #include "../../../shared/dev/clock/clockimpl.h"

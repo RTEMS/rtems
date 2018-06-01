@@ -79,14 +79,6 @@ static void uC5282_tc_tick(void)
     set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware()   \
-    do {                                           \
-        MCF5282_PIT3_PCSR &= ~MCF5282_PIT_PCSR_EN; \
-    } while(0)
-
-/*
  * Set up the clock hardware
  *
  * f_pit = f_clk / 2^(preScaleCode+1) / N  = 1/(us_per_tick/us_per_s)

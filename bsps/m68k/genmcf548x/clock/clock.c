@@ -73,14 +73,6 @@
     set_vector(_new, CLOCK_IRQ + 64, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware()                         \
-    do {                                                                 \
-        MCF548X_SLT_SCR0 &= ~(MCF548X_SLT_SCR_TEN | MCF548X_SLT_SCR_RUN | MCF548X_SLT_SCR_IEN); \
-    } while(0)
-
-/*
  * Set up the clock hardware
  *
  * We need to have 1 interrupt every 10,000 microseconds

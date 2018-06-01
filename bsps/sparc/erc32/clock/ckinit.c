@@ -122,15 +122,6 @@ uint32_t _CPU_Counter_frequency(void)
 
 #define Clock_driver_timecounter_tick() erc32_tc_tick()
 
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    ERC32_Mask_interrupt( ERC32_INTERRUPT_REAL_TIME_CLOCK ); \
-     \
-    ERC32_MEC_Set_Real_Time_Clock_Timer_Control( \
-      ERC32_MEC_TIMER_COUNTER_DISABLE_COUNTING \
-    ); \
-  } while (0)
-
 #include "../../../shared/dev/clock/clockimpl.h"
 
 SPARC_COUNTER_DEFINITION;

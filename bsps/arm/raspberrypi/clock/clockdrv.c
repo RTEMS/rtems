@@ -95,16 +95,9 @@ static void raspberrypi_clock_initialize_hardware(void)
   rtems_timecounter_install(&raspberrypi_tc);
 }
 
-static void raspberrypi_clock_cleanup(void)
-{
-  bsp_interrupt_vector_disable(BCM2835_IRQ_ID_GPU_TIMER_M3);
-}
-
 #define Clock_driver_support_at_tick() raspberrypi_clock_at_tick()
 
 #define Clock_driver_support_initialize_hardware() raspberrypi_clock_initialize_hardware()
-
-#define Clock_driver_support_shutdown_hardware() raspberrypi_clock_cleanup()
 
 #define Clock_driver_support_install_isr(clock_isr) \
   raspberrypi_clock_handler_install_isr(clock_isr)

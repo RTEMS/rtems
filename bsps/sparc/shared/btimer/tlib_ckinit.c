@@ -174,17 +174,6 @@ static rtems_device_driver tlib_clock_install_isr(rtems_isr *isr)
   return RTEMS_SUCCESSFUL;
 }
 
-static void tlib_clock_shutdown_hardware(void)
-{
-  if (priv.tlib_tick) {
-    tlib_stop(priv.tlib_tick);
-    priv.tlib_tick = NULL;
-  }
-  if (priv.ops->shutdown_hardware) {
-    priv.ops->shutdown_hardware();
-  }
-}
-
 /** Simple counter **/
 static uint32_t simple_tlib_tc_get(rtems_timecounter_simple *tc)
 {
@@ -431,9 +420,6 @@ static const struct ops ops_irqamp = {
       return ret; \
     } \
   } while (0)
-
-#define Clock_driver_support_shutdown_hardware() \
-  tlib_clock_shutdown_hardware()
 
 #define Clock_driver_timecounter_tick() \
   tlib_clock_timecounter_tick()

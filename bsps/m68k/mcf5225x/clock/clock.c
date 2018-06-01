@@ -53,14 +53,6 @@ static void mcf5225x_tc_tick(void)
   set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    MCF_PIT1_PCSR &= ~MCF_PIT_PCSR_EN; \
-  } while (0)
-
-/*
  * Set up the clock hardware
  *
  * We need to have 1 interrupt every BSP_rtems_configuration_get_microseconds_per_tick()

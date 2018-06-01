@@ -26,14 +26,6 @@
     set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware()   \
-    do {                                           \
-        MCF5235_PIT_PCSR3 &= ~MCF5235_PIT_PCSR_EN; \
-    } while(0)
-
-/*
  * Set up the clock hardware
  *
  * We need to have 1 interrupt every 10,000 microseconds

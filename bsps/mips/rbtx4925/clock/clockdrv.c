@@ -103,18 +103,6 @@
   } while(0)
 
 
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-  	uint32_t temp; \
-    temp = TX4925_REG_READ( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_ITMR ); /* Disable interval timer interrupt */ \
-    temp &= ~TIMER_INT_ENABLE_MASK; \
-    TX4925_REG_WRITE( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_ITMR, temp ); \
-    temp = TX4925_REG_READ( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_PGMR ); /* Disable pulse generator interrupt */ \
-    temp &= ~(TPIAE | TPIBE); \
-    TX4925_REG_WRITE( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_PGMR, temp ); \
-    TX4925_REG_WRITE( TX4925_REG_BASE, TX4925_TIMER0_BASE + TX4925_TIMER_TCR, 0x0 ); /* Disable timer */ \
-  } while(0)
-
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/dev/clock/clockimpl.h"

@@ -76,18 +76,6 @@ rtems_irq_connect_data clock_isr_data = {
     } while (0)
 
 /**
- * Do whatever you need to shut the clock down and remove the
- * interrupt handler. Since this normally only gets called on
- * RTEMS shutdown, you may not need to do anything other than
- * remove the ISR.
- */
-#define Clock_driver_support_shutdown_hardware()                        \
-  do {                                                                  \
-        /* Disable timer */ \
-        BSP_remove_rtems_irq_handler(&clock_isr_data);                  \
-     } while (0)
-
-/**
  * Enables clock interrupt.
  *
  * If the interrupt is always on, this can be a NOP.

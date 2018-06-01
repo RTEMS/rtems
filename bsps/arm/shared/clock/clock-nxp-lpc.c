@@ -105,30 +105,10 @@ static void lpc_clock_initialize(void)
   rtems_timecounter_install(&lpc_clock_tc);
 }
 
-static void lpc_clock_cleanup(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  /* Disable timer */
-  lpc_clock->tcr = 0x0;
-
-  /* Remove interrupt handler */
-  sc = rtems_interrupt_handler_remove(
-    LPC_CLOCK_INTERRUPT,
-    (rtems_interrupt_handler) Clock_isr,
-    NULL
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
-}
-
 #define Clock_driver_support_at_tick() lpc_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() lpc_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \
   lpc_clock_handler_install()
-
-#define Clock_driver_support_shutdown_hardware() lpc_clock_cleanup()
 
 /* Include shared source clock driver code */
 #include "../../../shared/dev/clock/clockimpl.h"

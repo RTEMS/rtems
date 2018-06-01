@@ -22,14 +22,6 @@
   set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    CLOCK_REGS->control = ALTERA_AVALON_TIMER_CONTROL_STOP_MSK; \
-  } while (0)
-
-/*
  * Set up the clock hardware
  */
 static void Clock_driver_support_initialize_hardware(void)

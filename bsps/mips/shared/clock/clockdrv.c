@@ -39,11 +39,6 @@ static uint32_t mips_timer_rate = 0;
     mips_enable_in_interrupt_mask(CLOCK_VECTOR_MASK); \
   } while(0)
 
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    mips_disable_in_interrupt_mask(CLOCK_VECTOR_MASK); \
-  } while (0)
-
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/dev/clock/clockimpl.h"

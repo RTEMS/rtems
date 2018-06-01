@@ -235,14 +235,6 @@ static void mpc55xx_clock_initialize(void)
   );
 }
 
-static void mpc55xx_clock_cleanup(void)
-{
-  volatile PIT_RTI_CHANNEL_tag *channel =
-    &PIT_RTI.CHANNEL [MPC55XX_CLOCK_PIT_CHANNEL];
-
-  channel->TCTRL.R = 0;
-}
-
 #endif
 
 #define Clock_driver_timecounter_tick() mpc55xx_tc_tick()
@@ -250,8 +242,6 @@ static void mpc55xx_clock_cleanup(void)
   mpc55xx_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \
   mpc55xx_clock_handler_install(isr)
-#define Clock_driver_support_shutdown_hardware() \
-  mpc55xx_clock_cleanup()
 
 /* Include shared source clock driver code */
 #include "../../../shared/dev/clock/clockimpl.h"

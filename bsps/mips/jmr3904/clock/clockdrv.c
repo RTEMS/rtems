@@ -43,8 +43,6 @@
     *((volatile uint32_t*) 0xFFFFC01C) = 0x00000700; \
   } while(0)
 
-#define Clock_driver_support_shutdown_hardware()
-
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/dev/clock/clockimpl.h"

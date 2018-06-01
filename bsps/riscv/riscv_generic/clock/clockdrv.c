@@ -104,13 +104,6 @@ static void riscv_generic_clock_initialize(void)
   rtems_timecounter_install(&riscv_generic_tc);
 }
 
-static void riscv_generic_clock_cleanup(void)
-{
-  /* Disable mtimer interrupts */
-  clear_csr(mie, MIP_MTIP);
-  clear_csr(mip, MIP_MTIP);
-}
-
 CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
@@ -125,7 +118,5 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #define Clock_driver_support_install_isr(isr) \
   riscv_generic_clock_handler_install(isr)
-
-#define Clock_driver_support_shutdown_hardware() riscv_generic_clock_cleanup()
 
 #include "../../../shared/dev/clock/clockimpl.h"

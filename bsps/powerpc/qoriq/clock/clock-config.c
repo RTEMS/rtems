@@ -144,30 +144,11 @@ static void qoriq_clock_initialize(void)
   rtems_timecounter_install(&qoriq_clock_tc);
 }
 
-static void qoriq_clock_cleanup(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  qoriq_clock->bcr = GTBCR_CI;
-
-  sc = rtems_interrupt_handler_remove(
-    CLOCK_INTERRUPT,
-    Clock_isr,
-    NULL
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
-}
-
 #define Clock_driver_support_install_isr(clock_isr) \
   qoriq_clock_handler_install()
 
 #define Clock_driver_support_set_interrupt_affinity(online_processors) \
   bsp_interrupt_set_affinity(CLOCK_INTERRUPT, online_processors)
-
-#define Clock_driver_support_shutdown_hardware() \
-  qoriq_clock_cleanup()
 
 #endif /* QORIQ_IS_HYPERVISOR_GUEST */
 

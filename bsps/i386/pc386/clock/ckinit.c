@@ -38,7 +38,6 @@ uint32_t pc386_clock_click_count;
 
 /* forward declaration */
 void Clock_isr(void *param);
-static void clockOff(void);
 static void Clock_isr_handler(void *param);
 
 /*
@@ -173,17 +172,6 @@ static void clockOn(void)
     calibrate_tsc();
 }
 
-static void clockOff(void)
-{
-  rtems_interrupt_lock_context lock_context;
-  rtems_interrupt_lock_acquire(&rtems_i386_i8254_access_lock, &lock_context);
-  /* reset timer mode to standard (BIOS) value */
-  outport_byte(TIMER_MODE, TIMER_SEL0 | TIMER_16BIT | TIMER_RATEGEN);
-  outport_byte(TIMER_CNTR0, 0);
-  outport_byte(TIMER_CNTR0, 0);
-  rtems_interrupt_lock_release(&rtems_i386_i8254_access_lock, &lock_context);
-} /* Clock_exit */
-
 bool Clock_isr_enabled = false;
 static void Clock_isr_handler(void *param)
 {
@@ -246,17 +234,5 @@ void Clock_driver_support_initialize_hardware(void)
   rtems_timecounter_install(&pc386_tc);
   Clock_isr_enabled = true;
 }
-
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    rtems_status_code status; \
-    clockOff(); \
-    status = rtems_interrupt_handler_remove(  \
-      BSP_PERIODIC_TIMER, \
-      Clock_isr_handler,  \
-      NULL  \
-    );  \
-    assert(status == RTEMS_SUCCESSFUL); \
-  } while (0)
 
 #include "../../../shared/dev/clock/clockimpl.h"

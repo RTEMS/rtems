@@ -159,28 +159,12 @@ static void tms570_clock_driver_support_install_isr(
   }
 }
 
-/**
- * @brief disables RTI interrupt
- *
- * Called when closing clock driver
- *
- * @retval Void
- */
-static void tms570_clock_driver_support_shutdown_hardware( void )
-{
-  /* turn off the timer interrupts */
-  TMS570_RTI.CLEARINTENA = TMS570_RTI_CLEARINTENA_CLEAROVL0INT |
-                           TMS570_RTI_CLEARINTENA_CLEARINT0;  
-}
-
 #define Clock_driver_support_initialize_hardware \
                         tms570_clock_driver_support_initialize_hardware
 #define Clock_driver_support_at_tick \
                         tms570_clock_driver_support_at_tick
 #define Clock_driver_support_initialize_hardware \
                         tms570_clock_driver_support_initialize_hardware
-#define Clock_driver_support_shutdown_hardware \
-                        tms570_clock_driver_support_shutdown_hardware
 
 #define Clock_driver_support_install_isr(Clock_isr) \
               tms570_clock_driver_support_install_isr( Clock_isr )

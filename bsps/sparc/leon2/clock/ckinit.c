@@ -91,12 +91,6 @@ extern int CLOCK_SPEED;
     ); \
   } while (0)
 
-#define Clock_driver_support_shutdown_hardware() \
-  do { \
-    LEON_Mask_interrupt( LEON_INTERRUPT_TIMER1 ); \
-    LEON_REG.Timer_Control_1 = 0; \
-  } while (0)
-
 #define Clock_driver_timecounter_tick() leon2_tc_tick()
 
 #include "../../../shared/dev/clock/clockimpl.h"

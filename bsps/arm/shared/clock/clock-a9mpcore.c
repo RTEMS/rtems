@@ -169,38 +169,6 @@ CPU_Counter_ticks _CPU_Counter_read(void)
   return gt->cntrlower;
 }
 
-static void a9mpcore_clock_cleanup_isr(void *arg)
-{
-  volatile a9mpcore_gt *gt = A9MPCORE_GT;
-
-  (void) arg;
-
-  gt->ctrl &= A9MPCORE_GT_CTRL_TMR_EN;
-  gt->irqst = A9MPCORE_GT_IRQST_EFLG;
-}
-
-static void a9mpcore_clock_cleanup(void)
-{
-  rtems_status_code sc;
-
-  /*
-   * The relevant registers / bits of the global timer are banked and chances
-   * are on an SPM system, that we are executing on the wrong CPU to reset
-   * them. Thus we will have the actual cleanup done with the next clock tick.
-   * The ISR will execute on the right CPU for the cleanup.
-   */
-  sc = rtems_interrupt_handler_install(
-    A9MPCORE_IRQ_GT,
-    "Clock",
-    RTEMS_INTERRUPT_REPLACE,
-    a9mpcore_clock_cleanup_isr,
-    NULL
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    bsp_fatal(BSP_ARM_A9MPCORE_FATAL_CLOCK_IRQ_REMOVE);
-  }
-}
-
 #define Clock_driver_support_at_tick() \
   a9mpcore_clock_at_tick()
 
@@ -209,9 +177,6 @@ static void a9mpcore_clock_cleanup(void)
 
 #define Clock_driver_support_install_isr(isr) \
   a9mpcore_clock_handler_install()
-
-#define Clock_driver_support_shutdown_hardware() \
-  a9mpcore_clock_cleanup()
 
 /* Include shared source clock driver code */
 #include "../../shared/dev/clock/clockimpl.h"

@@ -55,14 +55,6 @@ static unsigned long nsec;
     set_vector(_new, CLOCK_VECTOR, 1)
 
 /*
- * Turn off the clock
- */
-#define Clock_driver_support_shutdown_hardware() \
-    do {                       \
-        m360.pitr &= ~0xFF;    \
-    } while(0)
-
-/*
  * Set up the clock hardware
  *     The rate at which the periodic interval timer
  *     can generate interrupts is almost certainly not

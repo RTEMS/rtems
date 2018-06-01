@@ -290,34 +290,10 @@ static void beagle_clock_handler_install(rtems_interrupt_handler isr)
   clock_isr = isr;
 }
 
-static void beagle_clock_cleanup(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-
-  /* Disable timer */
-  mmio_clear(timer->base + timer->regs->TCLR, OMAP3_TCLR_ST);
-
-  /* Remove interrupt handler */
-  sc = rtems_interrupt_handler_remove(
-    timer->irq_nr,
-    clock_isr,
-    NULL
-  );
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
-  clock_isr = NULL;
-
-  /* stop frclock */
-  mmio_clear(fr_timer->base + fr_timer->regs->TCLR, OMAP3_TCLR_ST);
-}
-
 #define Clock_driver_support_at_tick() beagle_clock_at_tick()
 #define Clock_driver_support_initialize_hardware() beagle_clock_initialize()
 #define Clock_driver_support_install_isr(isr) \
   beagle_clock_handler_install(isr)
-
-#define Clock_driver_support_shutdown_hardware() beagle_clock_cleanup()
 
 /* Include shared source clock driver code */
 #include "../../shared/dev/clock/clockimpl.h"

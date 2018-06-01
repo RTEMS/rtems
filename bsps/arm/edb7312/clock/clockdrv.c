@@ -56,17 +56,6 @@ void Clock_isr(void * arg);
     *EP7312_TC1EOI = 0xFFFFFFFF;                    \
   } while (0)
 
-#define Clock_driver_support_shutdown_hardware()    \
-  do {                                              \
-    rtems_status_code status = RTEMS_SUCCESSFUL;    \
-    status = rtems_interrupt_handler_remove(        \
-        BSP_TC1OI,                                  \
-        Clock_isr,                                  \
-        NULL                                        \
-    );                                              \
-    assert(status == RTEMS_SUCCESSFUL);             \
-  } while (0)
-
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/dev/clock/clockimpl.h"

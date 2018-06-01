@@ -112,21 +112,6 @@ static void generic_or1k_clock_initialize(void)
   rtems_timecounter_install(&or1ksim_tc);
 }
 
-static void generic_or1k_clock_cleanup(void)
-{
- uint32_t sr;
-
-  sr = _OR1K_mfspr(CPU_OR1K_SPR_SR);
-
-  /* Disable tick timer exceptions */
-  _OR1K_mtspr(CPU_OR1K_SPR_SR, (sr & ~CPU_OR1K_SPR_SR_IEE)
-  & ~CPU_OR1K_SPR_SR_TEE);
-
-  /* Invalidate tick timer config registers */
-  _OR1K_mtspr(CPU_OR1K_SPR_TTCR, 0);
-  _OR1K_mtspr(CPU_OR1K_SPR_TTMR, 0);
-}
-
 CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,
   CPU_Counter_ticks first
@@ -141,7 +126,5 @@ CPU_Counter_ticks _CPU_Counter_difference(
 
 #define Clock_driver_support_install_isr(isr) \
   generic_or1k_clock_handler_install(isr)
-
-#define Clock_driver_support_shutdown_hardware() generic_or1k_clock_cleanup()
 
 #include "../../../shared/dev/clock/clockimpl.h"

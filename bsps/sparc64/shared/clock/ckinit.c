@@ -111,11 +111,6 @@ static void Clock_driver_support_initialize_hardware(void)
 #endif
 }
 
-#define Clock_driver_support_shutdown_hardware( ) \
-  do { \
-    \
-  } while ( 0 )
-
 #define CLOCK_DRIVER_USE_DUMMY_TIMECOUNTER
 
 #include "../../../shared/dev/clock/clockimpl.h"

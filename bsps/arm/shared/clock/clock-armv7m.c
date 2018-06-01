@@ -88,21 +88,11 @@ RTEMS_SYSINIT_ITEM(
   RTEMS_SYSINIT_ORDER_FIRST
 );
 
-static void _ARMV7M_Clock_cleanup(void)
-{
-  volatile ARMV7M_Systick *systick = _ARMV7M_Systick;
-
-  systick->csr = 0;
-}
-
 #define Clock_driver_support_initialize_hardware() \
   _ARMV7M_Clock_initialize()
 
 #define Clock_driver_support_install_isr(isr) \
   _ARMV7M_Clock_handler_install()
-
-#define Clock_driver_support_shutdown_hardware() \
-  _ARMV7M_Clock_cleanup()
 
 /* Include shared source clock driver code */
 #include "../../../shared/dev/clock/clockimpl.h"
