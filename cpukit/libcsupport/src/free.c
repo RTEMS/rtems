@@ -38,12 +38,7 @@ void free(
   }
 
   if ( !_Protected_heap_Free( RTEMS_Malloc_Heap, ptr ) ) {
-    printk( "Program heap: free of bad pointer %p -- range %p - %p \n",
-      ptr,
-      (void*) RTEMS_Malloc_Heap->area_begin,
-      (void*) RTEMS_Malloc_Heap->area_end
-    );
+    rtems_fatal( RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE, (rtems_fatal_code) ptr );
   }
-
 }
 #endif

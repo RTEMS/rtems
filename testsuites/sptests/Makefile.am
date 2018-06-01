@@ -1098,6 +1098,16 @@ spfatal31_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal31) \
 	$(support_includes)
 endif
 
+if TEST_spfatal32
+sp_tests += spfatal32
+sp_screens += spfatal32/spfatal32.scn
+sp_docs += spfatal32/spfatal32.doc
+spfatal32_SOURCES = spfatal_support/init.c spfatal_support/system.h \
+	spfatal32/testcase.h
+spfatal32_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal32) \
+	$(support_includes) -I$(top_srcdir)/spfatal32
+endif
+
 if TEST_spfifo01
 sp_tests += spfifo01
 sp_screens += spfifo01/spfifo01.scn

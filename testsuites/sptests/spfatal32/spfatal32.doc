@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spfatal32
+
+directives:
+
+  - free()
+
+concepts:
+
+  - Provoke an invalid free of heap memory and ensure that the right fatal
+    source and code occurs.

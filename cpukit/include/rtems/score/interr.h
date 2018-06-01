@@ -131,6 +131,13 @@ typedef enum {
   RTEMS_FATAL_SOURCE_PANIC = 11,
 
   /**
+   * @brief Fatal source for invalid C program heap frees via free().
+   *
+   * The fatal code is the bad pointer.
+   */
+  RTEMS_FATAL_SOURCE_INVALID_HEAP_FREE = 12,
+
+  /**
    * @brief The last available fatal source.
    *
    * This enum value ensures that the enum type needs at least 32-bits for
