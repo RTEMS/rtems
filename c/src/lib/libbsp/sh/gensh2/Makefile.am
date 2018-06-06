@@ -18,13 +18,6 @@ dist_project_lib_DATA += ../../../../../../bsps/sh/gensh2/start/linkcmds.rom
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
 
-SHGEN = $(PROJECT_TOPdir)/tools/cpu/sh/shgen
-
-scitab.c: $(SHGEN)
-	$(SHGEN) -H @CPU_CLOCK_RATE_HZ@ sci > $@
-BUILT_SOURCES = scitab.c
-CLEANFILES = scitab.c
-
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/hw_init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/start/bspstart.c
@@ -39,7 +32,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/cpu_asm.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/start/ispsh7045.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/btimer/btimer.c
 # scitab
-librtemsbsp_a_SOURCES += scitab.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/console/scitab.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/shared/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sh/gensh2/console/config.c

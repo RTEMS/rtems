@@ -72,8 +72,9 @@ extern void *CPU_Interrupt_stack_high;
  * BSP methods that cross file boundaries.
  */
 void bsp_hw_init(void);
-extern int _sci_get_brparms(
-  tcflag_t      cflag,
+
+int _sci_get_brparms(
+  unsigned int   spd,
   unsigned char *smr,
   unsigned char *brr
 );

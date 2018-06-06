@@ -18,7 +18,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems.h>
+#include <bsp.h>
 
 #include <stdlib.h>
 
@@ -52,12 +52,6 @@ struct scidev_t {
   { "/dev/sci0", SH_SCI_BASE_0, 0, 0, CS8, B9600 },
   { "/dev/sci1", SH_SCI_BASE_1, 1, 0, CS8, B9600 }
 } ;
-
-/*  imported from scitab.rel */
-extern int _sci_get_brparms(
-  speed_t       spd,
-  unsigned char *smr,
-  unsigned char *brr );
 
 /* Translate termios' tcflag_t into sci settings */
 static int _sci_set_cflags(

@@ -73,8 +73,7 @@
 #define SH_SCI_BASE_1   SCI_SMR1
 
 #define SH_SCI_DEF_COMM_0   CS8, B9600
-#define SH_SCI_DEF_COMM_1   CS8, B38400
-/*  #define SH_SCI_DEF_COMM_1   CS8, B9600 */
+#define SH_SCI_DEF_COMM_1   CS8, B9600
 
 struct scidev_t {
   char *                     name;
