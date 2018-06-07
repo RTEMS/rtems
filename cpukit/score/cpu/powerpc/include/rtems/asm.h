@@ -240,12 +240,6 @@
 
 /* end of IBM400 series register definitions */
 
-#elif defined(mpc555)
-/* The following registers are for the MPC5xx */
-#define eie     0x050   /* External Interrupt Enable Register */
-#define eid     0x051   /* External Interrupt Disable Register */
-#define nri     0x052   /* Non-Recoverable Interrupt Register */
-
 #elif defined(mpc860) || defined(mpc821)
 /* The following registers are for the MPC8x0 */
 #define der     0x095   /* Debug Enable Register */

@@ -19,9 +19,16 @@
 #ifndef LIBBSP_POWERPC_SS555_BSP_H
 #define LIBBSP_POWERPC_SS555_BSP_H
 
-#ifndef ASM
-
 #include <bspopts.h>
+
+#ifdef ASM
+
+#define eie     0x050   /* External Interrupt Enable Register */
+#define eid     0x051   /* External Interrupt Disable Register */
+#define nri     0x052   /* Non-Recoverable Interrupt Register */
+
+#else /* !ASM */
+
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
@@ -39,7 +46,7 @@ extern "C" {
  */
 
 #define BSP_CRYSTAL_HZ 	 4000000	/* crystal frequency, Hz */
-#define BSP_CLOCK_HZ	40000000	/* CPU clock frequency, Hz
+#define BSP_CLOCK_HZ	40000000	/* CPU clock frequency, Hz */
 
 /*
  * I/O definitions

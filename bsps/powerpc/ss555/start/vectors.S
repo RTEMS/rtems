@@ -16,6 +16,7 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 #include <libcpu/vectors.h>
+#include <bsp.h>
 
 #define SYNC \
 	sync; \

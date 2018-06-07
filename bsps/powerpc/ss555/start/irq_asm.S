@@ -27,7 +27,7 @@
 #include <rtems/score/percpu.h>
 #include <libcpu/vectors.h>
 #include <libcpu/raw_exception.h>
-
+#include <bsp.h>
 
 #define SYNC \
 	sync; \
