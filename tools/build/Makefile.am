@@ -1,9 +1,8 @@
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-bin_PROGRAMS = packhex unhex
+bin_PROGRAMS = packhex
 
 packhex_SOURCES = packhex.c
-unhex_SOURCES = unhex.c compat.c
 
 bin_SCRIPTS = install-if-change
 
