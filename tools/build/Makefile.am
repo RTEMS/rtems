@@ -1,8 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-bin_PROGRAMS = eolstrip packhex unhex
+bin_PROGRAMS = packhex unhex
 
-eolstrip_SOURCES = eolstrip.c compat.c
 packhex_SOURCES = packhex.c
 unhex_SOURCES = unhex.c compat.c
 
