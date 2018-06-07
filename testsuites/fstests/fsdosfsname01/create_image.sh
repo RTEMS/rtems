@@ -26,7 +26,7 @@ if [ -e "$1" ]
 
     sudo dd if="$1" of="$IMAGE_BIN"
 
-    /opt/rtems-4.11/bin/rtems-bin2c -C -c "$IMAGE_BIN" "$IMAGE"
+    rtems-bin2c -C -c "$IMAGE_BIN" "$IMAGE"
     mv "$IMAGE".c "$IMAGE".h
     rm -f "$IMAGE_BIN"
   else

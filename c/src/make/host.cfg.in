@@ -27,7 +27,7 @@ PACKHEX=$(PROJECT_BIN)/packhex
 endif
 
 ifndef BIN2C
-BIN2C=$(PROJECT_BIN)/rtems-bin2c
+BIN2C=rtems-bin2c
 endif
 
 ifndef INSTALL_CHANGE
