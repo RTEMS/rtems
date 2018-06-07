@@ -6,7 +6,7 @@ packhex_SOURCES = packhex.c
 
 bin_SCRIPTS = install-if-change
 
-noinst_SCRIPTS = multigen cvsignore-add.sh
+noinst_SCRIPTS = cvsignore-add.sh
 
 noinst_SCRIPTS += doxy-filter
 
