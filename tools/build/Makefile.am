@@ -6,8 +6,6 @@ packhex_SOURCES = packhex.c
 
 bin_SCRIPTS = install-if-change
 
-noinst_SCRIPTS = cvsignore-add.sh
-
-noinst_SCRIPTS += doxy-filter
+noinst_SCRIPTS = doxy-filter
 
 include $(top_srcdir)/../../automake/host.am
