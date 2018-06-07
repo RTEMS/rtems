@@ -22,9 +22,6 @@ CHMOD=chmod
 SED=sed
 
 # Global tools
-ifndef PACKHEX
-PACKHEX=$(PROJECT_BIN)/packhex
-endif
 
 ifndef BIN2C
 BIN2C=rtems-bin2c

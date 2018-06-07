@@ -10,13 +10,7 @@ AC_CANONICAL_HOST
 AM_INIT_AUTOMAKE([no-define foreign subdir-objects 1.12.2])
 AM_MAINTAINER_MODE
 
-AC_PROG_CC
-AC_CHECK_HEADERS([getopt.h libgen.h])
-AC_CHECK_FUNCS(strerror strtol basename strnlen)
-
 RTEMS_PATH_KSH
-
-AC_CONFIG_HEADERS([config.h])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

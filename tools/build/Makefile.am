@@ -1,9 +1,5 @@
 ACLOCAL_AMFLAGS = -I ../../aclocal
 
-bin_PROGRAMS = packhex
-
-packhex_SOURCES = packhex.c
-
 bin_SCRIPTS = install-if-change
 
 noinst_SCRIPTS = doxy-filter
