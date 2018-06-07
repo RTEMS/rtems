@@ -111,7 +111,24 @@ extern "C" {
  *  predefines.
  */
 
-#if defined(ppc403)
+/*
+ * FIXME: The ppc405 define must be checked before the ppc403 define.  The
+ * ppc405 define is provided by <bspopts.h>.  The ppc403 define is provided by
+ * GCC as a built-in define if no ppc* or mpc* define is set via the
+ * command line (see GCC sources "gcc/config/rs6000/rtems.h").
+ */
+#if defined(ppc405)
+
+#define PPC_CACHE_ALIGNMENT	32
+#define PPC_HAS_RI    	     0
+#define PPC_HAS_RFCI    	1
+#define PPC_USE_MULTIPLE	1
+#define PPC_I_CACHE		16384
+#define PPC_D_CACHE		16384		/* except GP/CR */
+#define PPC_HAS_EXCEPTION_PREFIX 0
+#define PPC_HAS_EVPR             1
+
+#elif defined(ppc403)
 /*
  *  IBM 403
  *
@@ -127,17 +144,6 @@ extern "C" {
 #define PPC_I_CACHE		2048
 #define PPC_D_CACHE		1024
 
-#define PPC_HAS_EXCEPTION_PREFIX 0
-#define PPC_HAS_EVPR             1
-
-#elif defined (ppc405)
-
-#define PPC_CACHE_ALIGNMENT	32
-#define PPC_HAS_RI    	     0
-#define PPC_HAS_RFCI    	1
-#define PPC_USE_MULTIPLE	1
-#define PPC_I_CACHE		16384
-#define PPC_D_CACHE		16384		/* except GP/CR */
 #define PPC_HAS_EXCEPTION_PREFIX 0
 #define PPC_HAS_EVPR             1
 
