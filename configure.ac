@@ -41,7 +41,6 @@ test -z "$RTEMS_CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 ## * tools/cpu are host-native or host-cross-target-tools
 
 RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
-RTEMS_BUILD_CONFIG_SUBDIRS([tools/cpu])
 
 # Some BSPs carelessly apply these tools as build-tools
 AS_IF([test $host != $build],[
