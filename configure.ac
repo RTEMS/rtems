@@ -32,21 +32,6 @@ RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_PARAVIRT
 RTEMS_ENABLE_DRVMGR
 
-## Check if there are valid tools install and in the path.
-RTEMS_CHECK_TOOL(RTEMS_CC,gcc)
-test -z "$RTEMS_CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
-
-## NOTES:
-## * tools/build are host-native tools to be installed on the host.
-## * tools/cpu are host-native or host-cross-target-tools
-
-RTEMS_BUILD_CONFIG_SUBDIRS([tools/build])
-
-# Some BSPs carelessly apply these tools as build-tools
-AS_IF([test $host != $build],[
-RTEMS_HOST_CONFIG_SUBDIRS([tools/build])
-])
-
 RTEMS_TARGET_CONFIG_SUBDIRS([c])
 
 AC_CONFIG_FILES([Makefile])

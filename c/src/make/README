@@ -426,24 +426,9 @@
                  the installation of libraries, executables, header files,
                  and other things that need to be installed:
 
-                    INSTALL_CHANGE  - install a file only if the source
-                                      file is actually different than
-                                      the installed copy or if there is
-                                      no installed copy.  USAGE:
+                    INSTALL_CHANGE  - set to host "install" program by default
 
-      usage: install-if-change [ -vmV ] file [ file ... ] dest-directory-or-file
-	-v	    -- verbose
-        -V suffix   -- suffix to append to targets (before any . suffix)
-                        eg: -V _g would change 'foo' to 'foo_g' and
-                                               'libfoo.a' to 'libfoo_g.a'
-        -m mode     -- mode for new file(s)
-
-                    INSTALL_VARIANT - installs the built file using the
-                                      proper variant suffix (e.g. _g
-                                      for debug turns libmine.a into libmine_g.a)
-                                      This is implemented as a macro that
-                                      invokes install-if-change with the
-                                      appropriate -V argument setting.
+                    INSTALL_VARIANT - set to host "install" program by default
 
             Special Directory Makefile Targets
             ----------------------------------

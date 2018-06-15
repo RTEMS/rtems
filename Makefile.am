@@ -11,7 +11,7 @@ noinst_SCRIPTS = bootstrap
 
 
 dist-hook:
-	@files=`(cd $(srcdir); find cpukit c testsuites tools \
+	@files=`(cd $(srcdir); find cpukit c testsuites \
 	   -name configure.ac -print | sed 's,/configure.ac,,' | sort)`; \
 	for i in $$files; do \
 	  if test -f $(distdir)/$$i/configure.ac; then : ; \

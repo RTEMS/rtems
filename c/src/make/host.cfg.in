@@ -28,9 +28,11 @@ BIN2C=rtems-bin2c
 endif
 
 ifndef INSTALL_CHANGE
-INSTALL_CHANGE=$(PROJECT_BIN)/install-if-change
+INSTALL_CHANGE=install
 endif
-INSTALL_VARIANT=$(INSTALL_CHANGE) -V "$(LIB_VARIANT)"
+ifndef INSTALL_VARIANT
+INSTALL_VARIANT=install
+endif
 
 # ksh (or bash) is used by some shell scripts; ref build-tools/scripts/Makefile
 #
