@@ -241,6 +241,8 @@
 /*
  * L2CACHE ACCESS CONTROL register fields 
  */
+#define L2C_ACCCTRL_DSC (0x1 << L2C_ACCCTRL_DSC_BIT)
+#define L2C_ACCCTRL_SH (0x1 << L2C_ACCCTRL_SH_BIT)
 #define L2C_ACCCTRL_SPLITQ (0x1 << L2C_ACCCTRL_SPLITQ_BIT)
 #define L2C_ACCCTRL_NHM (0x1 << L2C_ACCCTRL_NHM_BIT)
 #define L2C_ACCCTRL_BERR (0x1 << L2C_ACCCTRL_BERR_BIT)
@@ -251,6 +253,8 @@
 #define L2C_ACCCTRL_DBPWS (0x1 << L2C_ACCCTRL_DBPWS_BIT)
 #define L2C_ACCCTRL_SPLIT (0x1 << L2C_ACCCTRL_SPLIT_BIT)
 
+#define L2C_ACCCTRL_DSC_BIT 14
+#define L2C_ACCCTRL_SH_BIT 13
 #define L2C_ACCCTRL_SPLITQ_BIT 10
 #define L2C_ACCCTRL_NHM_BIT 9
 #define L2C_ACCCTRL_BERR_BIT 8
@@ -671,6 +675,10 @@ STATIC INLINE unsigned int l2cache_reg_scrub(void)
 STATIC INLINE int l2cache_reg_scrub_enable(int delay)
 {
 	struct l2cache_priv *priv = l2cachepriv;
+
+	unsigned int accc = REG_READ(&priv->regs->access_control);
+	REG_WRITE(&priv->regs->access_control,
+			accc | L2C_ACCCTRL_DSC | L2C_ACCCTRL_SH);
 
 	unsigned int ctrl = REG_READ(&priv->regs->scrub_control_status);
 	REG_WRITE(&priv->regs->scrub_delay, 
