@@ -10,7 +10,7 @@
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2010, 2017 embedded brains GmbH.
+ *  Copyright (c) 2010, 2018 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -247,6 +247,38 @@
   #define RTEMS_OBFUSCATE_VARIABLE( _var ) __asm__("" : "+r" (_var))
 #else
   #define RTEMS_OBFUSCATE_VARIABLE( _var ) (void) (_var)
+#endif
+
+/**
+ * @brief Declares a global symbol with the specified name.
+ *
+ * This macro must be placed at file scope.
+ *
+ * The name must be a valid designator.
+ */
+#define RTEMS_DECLARE_GLOBAL_SYMBOL( _name ) \
+  extern char _name[];
+
+/**
+ * @brief Defines a global symbol with the specified name and value.
+ *
+ * This macro must be placed at file scope.
+ *
+ * The name must be a valid designator.
+ *
+ * On the value parameters macro expansion is performed and afterwards it is
+ * stringified.  It must expand to an integer literal understood by the
+ * assembler.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value ) \
+    __asm__( \
+      "\t.globl " RTEMS_XSTRING( __USER_LABEL_PREFIX__ ) #_name \
+      "\n\t.set " RTEMS_XSTRING( __USER_LABEL_PREFIX__ ) #_name \
+      ", " RTEMS_STRING( _value ) "\n" \
+    )
+#else
+  #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value )
 #endif
 
 #if __cplusplus >= 201103L

@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spbasedefs01
+
+directives:
+
+  - RTEMS_DECLARE_GLOBAL_SYMBOL()
+  - RTEMS_DEFINE_GLOBAL_SYMBOL()
+
+concepts:
+
+  - Ensure that RTEMS_* defines and macros defined by <rtems/score/basedefs.h>
+    available via <rtems.h> work as expected.
