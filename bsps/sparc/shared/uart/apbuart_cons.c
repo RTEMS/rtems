@@ -515,57 +515,6 @@ static int read_task(rtems_termios_device_context *base)
 	return EOF;
 }
 
-
-struct apbuart_baud {
-	unsigned int num;
-	unsigned int baud;
-};
-static struct apbuart_baud apbuart_baud_table[] = {
-	{B50, 50},
-	{B75, 75},
-	{B110, 110},
-	{B134, 134},
-	{B150, 150},
-	{B200, 200},
-	{B300, 300},
-	{B600, 600},
-	{B1200, 1200},
-	{B1800, 1800},
-	{B2400, 2400},
-	{B4800, 4800},
-	{B9600, 9600},
-	{B19200, 19200},
-	{B38400, 38400},
-	{B57600, 57600},
-	{B115200, 115200},
-	{B230400, 230400},
-	{B460800, 460800},
-};
-#define BAUD_NUM (sizeof(apbuart_baud_table)/sizeof(struct apbuart_baud))
-
-static int apbuart_baud_num2baud(unsigned int num)
-{
-	int i;
-
-	for(i=0; i<BAUD_NUM; i++)
-		if (apbuart_baud_table[i].num == num)
-			return apbuart_baud_table[i].baud;
-	return -1;
-}
-
-static struct apbuart_baud *apbuart_baud_find_closest(unsigned int baud)
-{
-	int i, diff;
-
-	for(i=0; i<BAUD_NUM-1; i++) {
-		diff = apbuart_baud_table[i+1].baud -
-			apbuart_baud_table[i].baud;
-		if (baud < (apbuart_baud_table[i].baud + diff/2))
-			return &apbuart_baud_table[i];
-	}
-	return &apbuart_baud_table[BAUD_NUM-1];
-}
-
 int apbuart_get_baud(struct apbuart_priv *uart)
 {
 	unsigned int core_clk_hz;
@@ -579,11 +528,6 @@ int apbuart_get_baud(struct apbuart_priv *uart)
 
 	/* Calculate baud rate from generator "scaler" number */
 	return core_clk_hz / ((scaler + 1) * 8);
-}
-
-static struct apbuart_baud *apbuart_get_baud_closest(struct apbuart_priv *uart)
-{
-	return apbuart_baud_find_closest(apbuart_get_baud(uart));
 }
 
 static bool set_attributes(
@@ -644,7 +588,7 @@ static bool set_attributes(
 	rtems_termios_device_lock_release(base, &lock_context);
 
 	/* Baud rate */
-  baud = apbuart_baud_num2baud(t->c_ospeed);
+	baud = rtems_termios_baud_to_number(t->c_ospeed);
 	if (baud > 0){
 		/* Get APBUART core frequency */
 		drvmgr_freq_get(uart->dev, DEV_APB_SLV, &core_clk_hz);
@@ -666,9 +610,8 @@ static void get_attributes(
 {
 	struct apbuart_priv *uart = base_get_priv(base);
 	unsigned int ctrl;
-	struct apbuart_baud *baud;
 
-  t->c_cflag = t->c_cflag & ~(CSIZE|PARENB|PARODD|CLOCAL);
+	t->c_cflag = t->c_cflag & ~(CSIZE|PARENB|PARODD|CLOCAL);
 
 	/* Hardware support only CS8 */
 	t->c_cflag |= CS8;
@@ -685,8 +628,7 @@ static void get_attributes(
 	if ((ctrl & LEON_REG_UART_CTRL_FL) == 0)
 		t->c_cflag |= CLOCAL;
 
-	baud = apbuart_get_baud_closest(uart);
-	t->c_cflag |= baud->num;
+	rtems_termios_set_best_baud(t, apbuart_get_baud(uart));
 }
 
 static void write_polled(
