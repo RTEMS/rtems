@@ -328,10 +328,6 @@
             CFLAGS_DEBUG_V      -- value of debug flag for compiler
                                    [ eg: -g ]
 
-            CFLAGS_DEBUG_OPTIMIZE_V
-                                -- optimize flag if compiling for debug
-                                     [ eg: "" ]
-
             CFLAGS_DEBUG
             CFLAGS_OPTIMIZE     -- current values for each depending
                                     on make variant.
