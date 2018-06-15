@@ -194,6 +194,7 @@ struct greth_softc
    int auto_neg;
    unsigned int advmodes; /* advertise ethernet speed modes. 0 = all modes. */
    struct timespec auto_neg_time;
+   int mc_available;
 
    /*
     * Statistics
@@ -341,6 +342,78 @@ static void print_init_info(struct greth_softc *sc)
 #endif
 }
 
+/*
+ * Generates the hash words based on CRCs of the enabled MAC addresses that are
+ * allowed to be received. The allowed MAC addresses are maintained in a linked
+ * "multi-cast" list available in the arpcom structure.
+ *
+ * Returns the number of MAC addresses that were processed (in the list)
+ */
+static int
+greth_mac_filter_calc(struct arpcom *ac, uint32_t *msb, uint32_t *lsb)
+{
+    struct ether_multistep step;
+    struct ether_multi *enm;
+    int cnt = 0;
+    uint32_t crc, htindex, ht[2] = {0, 0};
+
+    /* Go through the Ethernet Multicast addresses one by one and add their
+     * CRC contribution to the MAC filter.
+     */
+    ETHER_FIRST_MULTI(step, ac, enm);
+    while (enm) {
+        crc = ether_crc32_be((uint8_t *)enm->enm_addrlo, 6);
+        htindex = crc & 0x3f;
+        ht[htindex >> 5] |= (1 << (htindex & 0x1F));
+        cnt++;
+        ETHER_NEXT_MULTI(step, enm);
+    }
+
+    if (cnt > 0) {
+        *msb = ht[1];
+        *lsb = ht[0];
+    }
+
+    return cnt;
+}
+
+/*
+ * Initialize the ethernet hardware
+ */
+static int greth_mac_filter_set(struct greth_softc *sc)
+{
+    struct ifnet *ifp = &sc->arpcom.ac_if;
+    uint32_t hash_msb, hash_lsb, ctrl;
+    SPIN_IRQFLAGS(flags);
+
+    hash_msb = 0;
+    hash_lsb = 0;
+    ctrl = 0;
+    if (ifp->if_flags & IFF_PROMISC) {
+        /* No need to enable multi-cast when promiscous mode accepts all */
+        ctrl |= GRETH_CTRL_PRO;
+    } else if(!sc->mc_available) {
+        return EINVAL; /* no hardware support for multicast filtering. */
+    } else if (ifp->if_flags & IFF_ALLMULTI) {
+        /* We should accept all multicast addresses */
+        ctrl |= GRETH_CTRL_MCE;
+        hash_msb = 0xFFFFFFFF;
+        hash_lsb = 0xFFFFFFFF;
+    } else if (greth_mac_filter_calc(&sc->arpcom, &hash_msb, &hash_lsb) > 0) {
+        /* Generate hash for MAC filtering out multicast addresses */
+        ctrl |= GRETH_CTRL_MCE;
+    } else {
+        /* Multicast list is empty .. disable multicast */
+    }
+    SPIN_LOCK_IRQ(&sc->devlock, flags);
+    sc->regs->ht_msb = hash_msb;
+    sc->regs->ht_lsb = hash_lsb;
+    sc->regs->ctrl = (sc->regs->ctrl & ~(GRETH_CTRL_PRO | GRETH_CTRL_MCE)) |
+                     ctrl;
+    SPIN_UNLOCK_IRQ(&sc->devlock, flags);
+
+    return 0;
+}
 
 /*
  * Initialize the ethernet hardware
@@ -1182,6 +1255,11 @@ greth_init (void *arg)
       }
 
     /*
+     * Setup promiscous/multi-cast MAC address filters if user enabled it
+     */
+    greth_mac_filter_set(sc);
+
+    /*
      * Tell the world that we're running.
      */
     ifp->if_flags |= IFF_RUNNING;
@@ -1240,6 +1318,7 @@ greth_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 {
     struct greth_softc *sc = ifp->if_softc;
     int error = 0;
+    struct ifreq *ifr;
 
     switch (command)
       {
@@ -1273,8 +1352,21 @@ greth_ioctl (struct ifnet *ifp, ioctl_command_t command, caddr_t data)
 	  break;
 
 	  /*
-	   * FIXME: All sorts of multicast commands need to be added here!
+	   * Multicast commands: Enabling/disabling filtering of MAC addresses
 	   */
+      case SIOCADDMULTI:
+      case SIOCDELMULTI:
+      ifr = (struct ifreq *)data;
+      if (command == SIOCADDMULTI) {
+        error = ether_addmulti(ifr, &sc->arpcom);
+      } else {
+        error = ether_delmulti(ifr, &sc->arpcom);
+      }
+      if (error == ENETRESET) {
+        error = greth_mac_filter_set(sc);
+      }
+      break;
+
       default:
 	  error = EINVAL;
 	  break;
@@ -1336,6 +1428,8 @@ greth_interface_driver_attach (
     ifp->if_start = greth_start;
     ifp->if_output = ether_output;
     ifp->if_flags = IFF_BROADCAST | IFF_SIMPLEX;
+    if (sc->mc_available)
+        ifp->if_flags |= IFF_MULTICAST;
     if (ifp->if_snd.ifq_maxlen == 0)
 	ifp->if_snd.ifq_maxlen = ifqmaxlen;
 
@@ -1539,6 +1633,9 @@ int greth_device_init(struct greth_softc *sc)
     value = drvmgr_dev_key_get(sc->dev, "advModes", DRVMGR_KT_INT);
     if ( value )
         sc->advmodes = value->i;
+
+    /* Check if multicast support is available */
+    sc->mc_available = sc->regs->ctrl & GRETH_CTRL_MC;
 
     return 0;
 }

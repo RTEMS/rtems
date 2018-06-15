@@ -24,6 +24,9 @@ typedef struct _greth_regs {
    volatile uint32_t mdio_ctrl;    /* MDIO control and status */
    volatile uint32_t txdesc;       /* Transmit descriptor pointer */
    volatile uint32_t rxdesc;       /* Receive descriptor pointer */
+   volatile uint32_t edcl;         /* EDCL IP register */
+   volatile uint32_t ht_msb;       /* Multicast MSB hash */
+   volatile uint32_t ht_lsb;       /* Multicast LSB hash */
 } greth_regs;
 
 #define GRETH_TOTAL_BD           128
@@ -83,8 +86,12 @@ typedef struct _greth_regs {
 #define GRETH_CTRL_RST          0x00000040 /* Reset MAC */
 #define GRETH_CTRL_SP           0x00000080 /* 100MBit speed mode */
 #define GRETH_CTRL_GB           0x00000100 /* 1GBit speed mode */
+#define GRETH_CTRL_MCE          0x00000800 /* Multicast Enable */
 #define GRETH_CTRL_DD           0x00001000 /* Disable EDCL Duplex Detection */
 #define GRETH_CTRL_ED           0x00004000 /* EDCL Disable */
+#define GRETH_CTRL_MC           0x02000000 /* Multicast available */
+#define GRETH_CTRL_ME           0x04000000 /* MDIO interrupts enabled */
+#define GRETH_CTRL_GA           0x08000000 /* Gigabit MAC available */
 
 /* Status Register */
 #define GRETH_STATUS_RXERR      0x00000001 /* Receive Error */
