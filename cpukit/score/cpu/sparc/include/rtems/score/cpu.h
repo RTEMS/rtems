@@ -823,6 +823,8 @@ extern const CPU_Trap_table_entry _CPU_Trap_slot_template;
  */
 #define CPU_STACK_ALIGNMENT CPU_ALIGNMENT
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 #ifndef ASM
 
 /*

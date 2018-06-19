@@ -165,6 +165,8 @@
 /* AAPCS, section 5.2.1.2, Stack constraints at a public interface */
 #define CPU_STACK_ALIGNMENT 8
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /*
  * Bitfield handler macros.
  *

@@ -761,6 +761,8 @@ void ppc_set_interrupt_level( uint32_t level );
 
 #define CPU_STACK_ALIGNMENT        (PPC_STACK_ALIGNMENT)
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 #ifndef ASM
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.

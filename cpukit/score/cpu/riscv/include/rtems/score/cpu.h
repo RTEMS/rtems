@@ -137,6 +137,8 @@ typedef Context_Control CPU_Interrupt_frame;
 #define CPU_CONTEXT_FP_SIZE  0
 Context_Control_fp  _CPU_Null_fp_context;
 
+#define CPU_CACHE_LINE_BYTES 64
+
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 #if __riscv_xlen == 32
 #define CPU_STACK_MINIMUM_SIZE  4096
@@ -148,6 +150,9 @@ Context_Control_fp  _CPU_Null_fp_context;
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 #define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
 #define CPU_STACK_ALIGNMENT        8
+
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 #define _CPU_Initialize_vectors()
 
 /*

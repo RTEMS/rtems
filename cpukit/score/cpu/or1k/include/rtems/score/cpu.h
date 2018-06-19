@@ -462,6 +462,8 @@ typedef Context_Control CPU_Interrupt_frame;
 
 #define CPU_STACK_ALIGNMENT        0
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /* ISR handler macros */
 
 /*

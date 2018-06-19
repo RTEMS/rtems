@@ -695,6 +695,14 @@ extern Context_Control_fp _CPU_Null_fp_context;
  */
 #define CPU_STACK_ALIGNMENT        0
 
+/**
+ * The alignment of the interrupt stack in bytes.
+ *
+ * The alignment should take the stack ABI and the cache line size into
+ * account.
+ */
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /*
  *  ISR handler macros
  */

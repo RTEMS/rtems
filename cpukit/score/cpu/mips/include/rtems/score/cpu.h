@@ -631,6 +631,8 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define CPU_STACK_ALIGNMENT        CPU_ALIGNMENT
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 void mips_vector_exceptions( CPU_Interrupt_frame *frame );
 
 /*

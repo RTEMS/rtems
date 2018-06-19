@@ -524,6 +524,8 @@ typedef struct {
  */
 #define CPU_STACK_ALIGNMENT        4
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /*
  *  ISR handler macros
  */

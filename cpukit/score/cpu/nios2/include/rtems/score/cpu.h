@@ -87,6 +87,8 @@ extern "C" {
  */
 #define CPU_STACK_ALIGNMENT 4
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /*
  * A Nios II configuration with an external interrupt controller (EIC) supports
  * up to 64 interrupt levels.  A Nios II configuration with an internal

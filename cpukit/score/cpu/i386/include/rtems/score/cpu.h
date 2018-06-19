@@ -383,6 +383,8 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define CPU_STACK_ALIGNMENT             16
 
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /* macros */
 
 #ifndef ASM
