@@ -37,8 +37,6 @@ bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 0;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
-bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : 1;
-
 SECTIONS {
 
   .vector : ALIGN_WITH_INPUT {

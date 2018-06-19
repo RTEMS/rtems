@@ -78,8 +78,6 @@ bsp_stack_align = DEFINED (bsp_stack_align) ? bsp_stack_align : 8;
 bsp_stack_main_size = DEFINED (bsp_stack_main_size) ? bsp_stack_main_size : 1024;
 bsp_stack_main_size = ALIGN (bsp_stack_main_size, bsp_stack_align);
 
-_bsp_processor_count = DEFINED (_bsp_processor_count) ? _bsp_processor_count : 1;
-
 SECTIONS {
 
   .vector :
