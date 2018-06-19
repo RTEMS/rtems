@@ -872,10 +872,8 @@ _ISR_Handler_1:
    *  save some or all context on stack
    *  may need to save some special interrupt information for exit
    *
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    if ( _ISR_Nest_level == 0 )
-   *      switch to software interrupt stack
-   *  #endif
+   *  if ( _ISR_Nest_level == 0 )
+   *    switch to software interrupt stack
    */
 
 
@@ -939,9 +937,7 @@ _ISR_Handler_1:
 
 
   /*
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    restore stack
-   *  #endif
+   *  restore stack
    *
    *  if !_Thread_Dispatch_necessary 
    *    goto the label "exit interrupt (simple case)"

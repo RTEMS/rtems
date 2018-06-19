@@ -87,18 +87,6 @@ void _CPU_ISR_install_vector(
 }
 
 /*
- *  _CPU_Install_interrupt_stack
- *
- *  NO_CPU Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-void _CPU_Install_interrupt_stack( void )
-{
-}
-
-/*
  *  _CPU_Thread_Idle_body
  *
  *  NOTES:

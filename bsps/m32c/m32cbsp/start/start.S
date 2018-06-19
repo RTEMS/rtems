@@ -48,7 +48,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 _start:
 .LFB2:
 	fset	U	/* User stack */
-	ldc	#__stack,sp
+	ldc	#__Configuration_Interrupt_stack_area_end,sp
 
 #ifdef A16
 	mov.b	#%hi8(__romdatastart),r1h

@@ -46,12 +46,6 @@ void *clock_driver_sim_idle_body(uintptr_t);
 #define BSP_IDLE_TASK_BODY clock_driver_sim_idle_body
 
 /*
- * Defined in the linker script 'linkcmds'
- */
-extern void *CPU_Interrupt_stack_low;
-extern void *CPU_Interrupt_stack_high;
-
-/*
  * BSP methods that cross file boundaries.
  */
 int _sys_exit (int n);

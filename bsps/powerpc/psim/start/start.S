@@ -47,7 +47,7 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 	.long	bsp_section_bss_end
 
 .Lstack = .-.LCTOC1			/* stack address if set by user */
-	.long	__stack
+	.long	_Configuration_Interrupt_stack_area_end
 
 	.text
 .Lptr:
@@ -89,7 +89,7 @@ _start:
 
 .Ldone:
 
-	lwz	r0,.Lstack(r5)		/* stack address or 0 */
+	lwz	r0,.Lstack(r5)	/* stack area or 0 */
 	cmplwi	1,r0,0			/* equal to 0? */
 	bc	12,6,.Lnostack		/* use default stack if == 0 */
 	mr	sp,r0			/* use user defined stack */
@@ -133,9 +133,3 @@ FUNC_NAME(bsp_reset):
 
 .Lstart:
 	.size	_start,.Lstart-_start
-
-	/* Start stack area */
-.section ".bsp_rwextra", "aw", @nobits
-.align 4
-.space 4096
-__stack:

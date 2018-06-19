@@ -55,7 +55,9 @@ _start:
 	bl	.Linitearly
 
 	/* Get start stack */
-	LA	START_STACK, start_stack_end
+	LA	START_STACK, _Configuration_Interrupt_stack_area_begin
+	LA	r3, _Configuration_Interrupt_stack_size
+	add	START_STACK, START_STACK, r3
 
 	bl	.Linitmore
 
@@ -226,12 +228,10 @@ _start:
 	isync
 
 	/*
-	 * Initialize start stack.  Make sure that we do not share a cache line
-	 * with the heap block management, since initial stacks for the
-	 * secondary processors are allocated from the workspace.
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
 	 */
-	subi	r1, START_STACK, 2 * PPC_DEFAULT_CACHE_LINE_SIZE
-	clrrwi	r1, r1, PPC_DEFAULT_CACHE_LINE_POWER
+	subi	r1, START_STACK, PPC_DEFAULT_CACHE_LINE_SIZE
 	li	r0, 0
 	PPC_REG_STORE	r0, 0(r1)
 
@@ -540,9 +540,3 @@ bsp_exc_vector_base:
 
 /* Symbol provided for debugging and tracing */
 bsp_exc_vector_end:
-
-	/* Start stack area */
-	.section ".bsp_rwextra", "aw", @nobits
-	.align 4
-	.space 4096
-start_stack_end:

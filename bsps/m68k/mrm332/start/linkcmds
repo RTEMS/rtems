@@ -32,7 +32,6 @@ __DYNAMIC  =  0;
  * |    heap space      |
  * |        _ENDHEAP    |
  * |    stack space     | 
- * |        __stack     | top of stack
  * +--------------------+ <- high memory
  */
 
@@ -52,7 +51,6 @@ MEMORY
 
 _copy_data_from_rom = 1;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
 
 /*
@@ -194,9 +192,6 @@ SECTIONS
     *(COMMON)
     . = ALIGN (16);
     PROVIDE (end = .);
-    . += _StackSize;
-    . = ALIGN (16);
-    _stack_init = .;
     _clear_end = .;
   } > ram
   .rtemsstack (NOLOAD) : {

@@ -139,7 +139,7 @@ zerobss:
 	bltu	v0,v1,3b
 	addiu	v0,v0,4				# executed in delay slot
 
-	la	t0, _stack_init			# initialize stack so we
+	la	t0, _Configuration_Interrupt_stack_area_end # initialize stack so we
 	/* We must subtract 24 bytes for the 3 8 byte arguments to main, in
 	   case main wants to write them back to the stack.  The caller is
 	   supposed to allocate stack space for parameters in registers in

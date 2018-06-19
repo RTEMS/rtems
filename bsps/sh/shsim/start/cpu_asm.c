@@ -18,9 +18,7 @@
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/sh.h>
 
-#if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  unsigned long    *_old_stack_ptr;
-#endif
+unsigned long  *_old_stack_ptr;
 
 register unsigned long  *stack_ptr __asm__ ("r15");
 
@@ -37,15 +35,12 @@ void __ISR_Handler( uint32_t   vector)
 
   _Thread_Dispatch_disable();
 
-#if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   if ( _ISR_Nest_level == 0 )
     {
       /* Install irq stack */
       _old_stack_ptr = stack_ptr;
       stack_ptr = _CPU_Interrupt_stack_high;
     }
-
-#endif
 
   _ISR_Nest_level++;
 
@@ -61,12 +56,9 @@ void __ISR_Handler( uint32_t   vector)
 
   _ISR_Nest_level--;
 
-#if (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-
   if ( _ISR_Nest_level == 0 )
     /* restore old stack pointer */
     stack_ptr = _old_stack_ptr;
-#endif
 
   _ISR_Local_enable( level );
 

@@ -63,8 +63,6 @@ _BootFlashSize  = DEFINED(_BootFlashSize)  ? _BootFlashSize : (2 * 1024*1024);
 _CodeFlashBase  = DEFINED(_CodeFlashBase)  ? _CodeFlashBase : 0xE0000000;
 _CodeFlashSize  = DEFINED(_CodeFlashSize)  ? _CodeFlashSize : (16 * 1024*1024);
 
-bsp_initstack_size = DEFINED(StackSize)    ? StackSize  : 0x800;  /* 2 kB   */
-
 _VBR            = DEFINED(_VBR)            ? _VBR       : _SdramBase;
 
 __MBAR          = DEFINED(__MBAR)          ? __MBAR     : 0x10000000;

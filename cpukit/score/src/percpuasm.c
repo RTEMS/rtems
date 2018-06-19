@@ -122,17 +122,14 @@ RTEMS_STATIC_ASSERT(
 );
 #endif
 
-#if CPU_ALLOCATE_INTERRUPT_STACK == TRUE \
-  || CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE
-  RTEMS_STATIC_ASSERT(
-    offsetof(Per_CPU_Control, interrupt_stack_low)
-      == PER_CPU_INTERRUPT_STACK_LOW,
-    PER_CPU_INTERRUPT_STACK_LOW
-  );
+RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, interrupt_stack_low)
+    == PER_CPU_INTERRUPT_STACK_LOW,
+  PER_CPU_INTERRUPT_STACK_LOW
+);
 
-  RTEMS_STATIC_ASSERT(
-    offsetof(Per_CPU_Control, interrupt_stack_high)
-      == PER_CPU_INTERRUPT_STACK_HIGH,
-    PER_CPU_INTERRUPT_STACK_HIGH
-  );
-#endif
+RTEMS_STATIC_ASSERT(
+  offsetof(Per_CPU_Control, interrupt_stack_high)
+    == PER_CPU_INTERRUPT_STACK_HIGH,
+  PER_CPU_INTERRUPT_STACK_HIGH
+);

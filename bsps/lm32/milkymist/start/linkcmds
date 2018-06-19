@@ -12,9 +12,7 @@ STARTUP(start.o)
 RamBase = DEFINED(RamBase) ? RamBase : 0x40000000;
 RamSize = DEFINED(RamSize) ? RamSize : 128M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 92M;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x2000;
 
-PROVIDE (__stack = 0);
 MEMORY {
 	sdram   : ORIGIN = 0x40000000 , LENGTH = 128M
 }
@@ -248,11 +246,7 @@ SECTIONS
   __rtems_end = . ;
   PROVIDE (end = .);
 
-  . += _StackSize;
-  _fstack = .;
-
     . = ALIGN (16);
-    _stack_init = .;
     _clear_end = .;
   } > sdram
 

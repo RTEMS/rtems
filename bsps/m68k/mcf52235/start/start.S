@@ -16,14 +16,12 @@
 
 #include <rtems/asm.h>
 
-.extern _StackInit
-
 BEGIN_CODE
 
     PUBLIC (_INTERRUPT_VECTOR)
 SYM(_INTERRUPT_VECTOR):
 
-    .long   _StackInit /* 00 Initial 'SSP' */
+    .long   _Configuration_Interrupt_stack_area_end /* 00 Initial 'SSP' */
     .long   SYM(start) /* 01 Initial PC */
     .long   SYM(_uhoh) /* 02 Access Error */
     .long   SYM(_uhoh) /* 03 Address Error */
@@ -357,7 +355,7 @@ SYM(start):
     movec   d0, %rambar
 
     /* Locate Stack Pointer */
-    move.l  #_StackInit, sp
+    move.l  #_Configuration_Interrupt_stack_area_end, sp
 
     /* Initialize FLASHBAR */
     move.l  #_FlashBase, d0
@@ -369,7 +367,7 @@ SYM(start):
 _continue_startup:
 
     /* Locate Stack Pointer */
-    move.l  #_StackInit, sp
+    move.l  #_Configuration_Interrupt_stack_area_end, sp
 
     /* Save off intial D0 and D1 to RAM */
     move.l  d6, SYM(_d0_reset)

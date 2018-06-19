@@ -17,7 +17,6 @@ EXTERN(__vectors)
  *      number used there is not constant.  If this happens to you, edit
  *      the lines marked XXX below to use a constant value.
  */
-StackSize   = DEFINED(StackSize) ? StackSize : 0x8000;
 RamBase     = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize     = DEFINED(RamSize) ? RamDiskSize : 0x0800000; /* 8M program ram */
 HeapSize    = DEFINED(HeapSize) ? HeapSize : 0x0;
@@ -288,16 +287,6 @@ SECTIONS
 	. = ALIGN (16);
         _startmalloc = .;
      } >ram
-
-
-    /*
-     * Interrupt stack setup
-     */
-    IntrStack_start = ALIGN(0x10);
-    . += 0x4000;
-    intrStack = .;
-    PROVIDE(intrStackPtr = intrStack);
-
 
     clear_end = .;
 

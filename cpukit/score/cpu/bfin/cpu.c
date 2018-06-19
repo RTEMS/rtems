@@ -198,17 +198,3 @@ void _CPU_Context_Initialize(
     the_context->register_rets = (uint32_t) entry_point;
     the_context->imask = new_level ? 0 : 0xffff;
 }
-
-
-
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  NO_CPU Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-void _CPU_Install_interrupt_stack( void )
-{
-}

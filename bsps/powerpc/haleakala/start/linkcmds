@@ -14,9 +14,6 @@ OUTPUT_ARCH(powerpc)
 ENTRY(download_entry)
 EXTERN(__vectors)
 
-kIntrStackSize = 16K;
-kMainStackSize = 64K;
-
 RamBase = DEFINED(RamBase) ? RamBase : 0;
 RamSize = DEFINED(RamSize) ? RamSize : 256M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
@@ -246,19 +243,6 @@ SECTIONS
 
     bss.size = bss.end - bss.start;
     sbss.size = sbss.end - sbss.start;
-	          	
-    /* Interrupt stack: align to a cache-line boundary */
-    IntrStack_start = ALIGN(0x20);
-    . += kIntrStackSize;
-    intrStack = .;
-    PROVIDE(intrStackPtr = intrStack);
-    PROVIDE(intrStack_start = IntrStack_start);
-    PROVIDE(intrStack_size = kIntrStackSize);
-
- 	/* Main stack: align to a cache-line boundary */
-	stack.start = ALIGN(0x20);
-	. += kMainStackSize;
-	stack.end   = .;
 
     .rtemsstack (NOLOAD) : {
         *(SORT(.rtemsstack.*))

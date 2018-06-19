@@ -15,8 +15,6 @@ EXTERN(__vectors)
 MsgAreaSize       = DEFINED(MsgAreaSize)   ? MsgAreaSize   : 1M;
 RamBase           = DEFINED(RamBase)       ? RamBase       : 0x0;
 RamSize           = DEFINED(RamSize)       ? RamSize       : 128M - MsgAreaSize;
-IntrStackSize     = DEFINED(IntrStackSize) ? IntrStackSize : 16K;
-StackSize         = DEFINED(StackSize)     ? StackSize     : 64K;
 HeapSize          = DEFINED(HeapSize)      ? HeapSize      : 0; /* 0=Use def */
 
 
@@ -250,15 +248,6 @@ SECTIONS
   __rtems_end     = .;
   .               = ALIGN(0x10);        /* Align to a cache-line boundary */
   PROVIDE(__bsp_ram_start = .);
-
-  /* Interrupt stack: aligned on a cache-line boundary */
-  .              += IntrStackSize;
-  __intrStack     = .;
-
-  /* Main stack lives here */
-  _stack          = ALIGN(0x10); 	/* Align to a cache-line boundary */
-  .              += StackSize;
-  __stack_base    = .;                  /* Initial stack builds downwards */
 
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))

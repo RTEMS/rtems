@@ -391,10 +391,8 @@ uninitialized =
 /* cpu.h */
 uninitialized += (sizeof _CPU_Null_fp_context);
 
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
 uninitialized += (sizeof _CPU_Interrupt_stack_low) +
                  (sizeof _CPU_Interrupt_stack_high);
-#endif
 
 #endif
 

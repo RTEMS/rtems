@@ -8,7 +8,6 @@
 RamBase = DEFINED(RamBase) ? RamBase : 0x88000000;
 RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 ENTRY(_start)
 STARTUP(start.o)
@@ -164,10 +163,6 @@ SECTIONS
     *(.bss*)
     *(COMMON)
     . = ALIGN (64);
-    _stack_limit = .;
-    . += _StackSize;
-    __stack = .;
-    _stack_init = .;
     _clear_end = .;
   }
 
@@ -181,9 +176,6 @@ SECTIONS
  _end = .;
 
 
-/* Put starting stack in SRAM (8 Kb); this size is the same as the stack from
-      the original script (when everything was in SRAM). */
-   /* __stack = 0x8000A000; */
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to
      the beginning of the section so we begin them at 0.  */

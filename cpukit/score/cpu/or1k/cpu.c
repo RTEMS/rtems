@@ -105,10 +105,6 @@ void _CPU_ISR_install_vector(
    _ISR_Local_enable( level );
 }
 
-void _CPU_Install_interrupt_stack( void )
-{
-}
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   do {

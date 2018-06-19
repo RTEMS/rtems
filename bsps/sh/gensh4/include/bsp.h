@@ -53,13 +53,6 @@ extern "C" {
 /* Constants */
 
 /*
- * Defined in the linker script 'linkcmds'
- */
-
-extern void *CPU_Interrupt_stack_low;
-extern void *CPU_Interrupt_stack_high;
-
-/*
  * Defined in start.S
  */
 extern uint32_t   boot_mode;

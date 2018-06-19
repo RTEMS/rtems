@@ -19,7 +19,6 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv
 dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit
-dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkcmds.altcycv_devkit_smp
 
 project_lib_LIBRARIES = librtemsbsp.a
 

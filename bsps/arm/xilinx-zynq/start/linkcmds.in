@@ -6,8 +6,6 @@ MEMORY {
    NOCACHE   : ORIGIN = @ZYNQ_RAM_ORIGIN_AVAILABLE@ + @ZYNQ_RAM_LENGTH_AVAILABLE@ - @ZYNQ_RAM_NOCACHE_LENGTH@, LENGTH = @ZYNQ_RAM_NOCACHE_LENGTH@
 }
 
-bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : @ZYNQ_CPUS@;
-
 REGION_ALIAS ("REGION_START",          RAM);
 REGION_ALIAS ("REGION_VECTOR",         RAM);
 REGION_ALIAS ("REGION_TEXT",           RAM);
@@ -26,7 +24,6 @@ REGION_ALIAS ("REGION_STACK",          RAM);
 REGION_ALIAS ("REGION_NOCACHE",        NOCACHE);
 REGION_ALIAS ("REGION_NOCACHE_LOAD",   NOCACHE);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 4096;
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
 bsp_section_rwbarrier_align = DEFINED (bsp_section_rwbarrier_align) ? bsp_section_rwbarrier_align : 1M;

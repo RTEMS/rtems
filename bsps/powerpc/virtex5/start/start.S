@@ -86,7 +86,7 @@
  *    .bss
  *  see linker command file for section placement
  *
- *  The initial stack is set to __stack_base
+ *  The initial stack is set to _Configuration_Interrupt_stack_area_end.
  *
  *  All the entry veneer has to do is to clear the BSS.
  */
@@ -114,7 +114,7 @@ bss_length:
 bss_addr:
         .long   __bss_start
 stack_top:
-        .long   __stack_base
+        .long   _Configuration_Interrupt_stack_area_end
 
 
         .eject

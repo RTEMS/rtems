@@ -20,6 +20,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/tls.h>
+#include <rtems/config.h>
 
 #if ( M68K_HAS_VBR == 0 )
 
@@ -58,6 +59,15 @@ int (*_FPSP_install_raw_handler)(
   uint32_t _CPU_cacr_shadow;
 #endif
 
+static void m68k_install_interrupt_stack( void )
+{
+#if ( M68K_HAS_SEPARATE_STACKS == 1 )
+  uintptr_t isp = (uintptr_t) _Configuration_Interrupt_stack_area_end;
+
+  __asm__ volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
+#endif
+}
+
 void _CPU_Initialize(void)
 {
 #if ( M68K_HAS_VBR == 0 )
@@ -74,6 +84,8 @@ void _CPU_Initialize(void)
     _CPU_ISR_jump_table[slot].isr_handler = (uint32_t) 0xDEADDEAD;
   }
 #endif /* M68K_HAS_VBR */
+
+  m68k_install_interrupt_stack();
 }
 
 uint32_t   _CPU_ISR_Get_level( void )
@@ -149,20 +161,6 @@ void _CPU_ISR_install_vector(
   _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 
   _ISR_Vector_table[ vector ] = new_handler;
-}
-
-
-/*
- *  _CPU_Install_interrupt_stack
- */
-
-void _CPU_Install_interrupt_stack( void )
-{
-#if ( M68K_HAS_SEPARATE_STACKS == 1 )
-  void *isp = _CPU_Interrupt_stack_high;
-
-  __asm__ volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
-#endif
 }
 
 #if ( M68K_HAS_BFFFO != 1 )

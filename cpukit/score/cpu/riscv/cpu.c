@@ -110,11 +110,6 @@ void _CPU_ISR_install_vector(
 
 }
 
-void _CPU_Install_interrupt_stack( void )
-{
-  /* Do nothing */
-}
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored )
 {
   do {

@@ -50,9 +50,6 @@ extern "C" {
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
-#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 #define CPU_ISR_PASSES_FRAME_POINTER 1
 #define CPU_HARDWARE_FP                  FALSE
 #define CPU_SOFTWARE_FP                  FALSE
@@ -349,18 +346,6 @@ void _CPU_ISR_install_vector(
   proc_ptr   new_handler,
   proc_ptr   *old_handler
 );
-
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- *
- */
-
-void _CPU_Install_interrupt_stack( void );
 
 /*
  *  _CPU_Thread_Idle_body

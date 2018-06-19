@@ -29,35 +29,6 @@ extern "C" {
 /* conditional compilation parameters */
 
 /**
- * Does RTEMS manage a dedicated interrupt stack in software?
- *
- * If TRUE, then a stack is allocated in @ref _ISR_Handler_initialization.
- * If FALSE, nothing is done.
- *
- * If the CPU supports a dedicated interrupt stack in hardware,
- * then it is generally the responsibility of the BSP to allocate it
- * and set it up.
- *
- * If the CPU does not support a dedicated interrupt stack, then
- * the porter has two options: (1) execute interrupts on the
- * stack of the interrupted task, and (2) have RTEMS manage a dedicated
- * interrupt stack.
- *
- * If this is TRUE, @ref CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- * Only one of @ref CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- * @ref CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- * possible that both are FALSE for a particular CPU.  Although it
- * is unclear what that would imply about the interrupt processing
- * procedure on that CPU.
- *
- * Port Specific Information:
- *
- * The v850 does not have support for a hardware interrupt stack.
- */
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
-
-/**
  * Does the CPU follow the simple vectored interrupt model?
  *
  * If TRUE, then RTEMS allocates the vector table it internally manages.
@@ -69,40 +40,6 @@ extern "C" {
  * This port uses the Progammable Interrupt Controller interrupt model.
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
-
-/**
- * Does this CPU have hardware support for a dedicated interrupt stack?
- *
- * If TRUE, then it must be installed during initialization.
- * If FALSE, then no installation is performed.
- *
- * If this is TRUE, @ref CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- * Only one of @ref CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- * @ref CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- * possible that both are FALSE for a particular CPU.  Although it
- * is unclear what that would imply about the interrupt processing
- * procedure on that CPU.
- *
- * Port Specific Information:
- *
- * The v850 does not have support for a hardware interrupt stack.
- */
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
-
-/**
- * Does RTEMS allocate a dedicated interrupt stack in the Interrupt Manager?
- *
- * If TRUE, then the memory is allocated during initialization.
- * If FALSE, then the memory is allocated during initialization.
- *
- * This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /**
  * @def CPU_HARDWARE_FP
@@ -389,21 +326,6 @@ typedef struct {
 
 /**
  * @defgroup CPUInterrupt Processor Dependent Interrupt Management
- *
- * On some CPUs, RTEMS supports a software managed interrupt stack.
- * This stack is allocated by the Interrupt Manager and the switch
- * is performed in @ref _ISR_Handler.  These variables contain pointers
- * to the lowest and highest addresses in the chunk of memory allocated
- * for the interrupt stack.  Since it is unknown whether the stack
- * grows up or down (in general), this give the CPU dependent
- * code the option of picking the version it wants to use.
- *
- * @note These two variables are required if the macro
- *       @ref CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
  */
 /**@{**/
 

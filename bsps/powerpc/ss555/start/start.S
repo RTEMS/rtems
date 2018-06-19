@@ -220,7 +220,7 @@ base_addr:
  * Parameters from linker
  */
 stack_top:
-	.long	initStackPtr
+	.long	_Configuration_Interrupt_stack_area_end
 
 toc_pointer:
         .long   __GOT_START__

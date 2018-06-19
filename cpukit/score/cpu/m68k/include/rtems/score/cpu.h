@@ -42,20 +42,6 @@ extern "C" {
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
 
 /*
- *  Use the m68k's hardware interrupt stack support and have the
- *  interrupt manager allocate the memory for it.
- */
-
-#if ( M68K_HAS_SEPARATE_STACKS == 1)
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK 0
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK 1
-#else
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK 1
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK 0
-#endif
-#define CPU_ALLOCATE_INTERRUPT_STACK     1
-
-/*
  *  Does the RTEMS invoke the user's ISR with the vector number and
  *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?
@@ -613,14 +599,6 @@ void _CPU_ISR_install_vector(
   proc_ptr         new_handler,
   proc_ptr        *old_handler
 );
-
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- */
-
-void _CPU_Install_interrupt_stack( void );
 
 /*
  *  _CPU_Context_switch

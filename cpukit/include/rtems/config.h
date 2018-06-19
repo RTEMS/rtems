@@ -184,13 +184,6 @@ typedef struct {
    */
   uint32_t                       idle_task_stack_size;
 
-  /** 
-   * This field specifies the size of the interrupt stack.  If less than or
-   * equal to the minimum stack size, then the interrupt stack will be of
-   * minimum stack size.
-   */
-  uint32_t                       interrupt_stack_size;
-
   /**
    * @brief Optional task stack allocator initialization hook.
    */
@@ -313,8 +306,34 @@ extern const rtems_configuration_table Configuration;
 #define rtems_configuration_get_idle_task_stack_size() \
         (Configuration.idle_task_stack_size)
 
+/**
+ * @brief Global symbol with a value equal to the configure interrupt stack size.
+ *
+ * This global symbol is defined by the application configuration option
+ * CONFIGURE_INIT_TASK_STACK_SIZE via <rtems/confdefs.h>.
+ */
+RTEMS_DECLARE_GLOBAL_SYMBOL( _Configuration_Interrupt_stack_size );
+
+/**
+ * @brief The interrupt stack area begin.
+ *
+ * The interrupt stack area is defined by the application configuration via
+ * <rtems/confdefs.h>.  The size of the area depends on
+ * CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_MAXIMUM_PROCESSORS.
+ */
+extern char _Configuration_Interrupt_stack_area_begin[];
+
+/**
+ * @brief The interrupt stack area end.
+ *
+ * The interrupt stack area is defined by the application configuration via
+ * <rtems/confdefs.h>.  The size of the area depends on
+ * CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_MAXIMUM_PROCESSORS.
+ */
+extern const char _Configuration_Interrupt_stack_area_end[];
+
 #define rtems_configuration_get_interrupt_stack_size() \
-        (Configuration.interrupt_stack_size)
+        ((size_t) _Configuration_Interrupt_stack_size)
 
 #define rtems_configuration_get_stack_allocate_init_hook() \
         (Configuration.stack_allocate_init_hook)

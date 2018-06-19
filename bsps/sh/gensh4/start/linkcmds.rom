@@ -193,17 +193,6 @@ SECTIONS
 
   _WorkAreaBase = . ;
 
-  . = ALIGN(16);
-  .stack . : {
-     stack_start = .;
-     . = . + 4096;
-     stack_end = .;
-  }
-
-  . = ALIGN(16);
-  _CPU_Interrupt_stack_low  = . ;
-  _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
-
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }
   .stabstr 0 : { *(.stabstr) }
@@ -237,6 +226,5 @@ SECTIONS
   .debug_funcnames 0 : { *(.debug_funcnames) }
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
-  .stack : { _stack = .; *(.stack) }
   /* These must appear regardless of  .  */
 }

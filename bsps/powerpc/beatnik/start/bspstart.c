@@ -177,8 +177,8 @@ void bsp_start( void )
 {
   unsigned char  *stack;
   char           *chpt;
-  uint32_t       intrStackStart;
-  uint32_t       intrStackSize;
+  uintptr_t       intrStackStart;
+  uintptr_t       intrStackSize;
 
   Triv121PgTbl	pt=0;
 
@@ -239,7 +239,7 @@ void bsp_start( void )
    * This could be done latter (e.g in IRQ_INIT) but it helps to understand
    * some settings below...
    */
-  intrStackStart = (uint32_t)__rtems_end;
+  intrStackStart = (uintptr_t)_Configuration_Interrupt_stack_area_begin;
   intrStackSize  = rtems_configuration_get_interrupt_stack_size();
 
   /*

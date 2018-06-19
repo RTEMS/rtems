@@ -42,8 +42,6 @@ uint32_t bsp_clicks_per_usec;
  * Memory on this board.
  */
 extern char RamSize[];
-extern char bsp_interrupt_stack_start[];
-extern char bsp_interrupt_stack_end[];
 uint32_t BSP_mem_size = (uint32_t)RamSize;
 
 /* Default decrementer exception handler */
@@ -89,8 +87,8 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uintptr_t) bsp_interrupt_stack_start;
-  intrStackSize =  (uintptr_t) bsp_interrupt_stack_end - intrStackStart;
+  intrStackStart = (uintptr_t) _Configuration_Interrupt_stack_area_begin;
+  intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
   BSP_mem_size = (uint32_t )RamSize;
 

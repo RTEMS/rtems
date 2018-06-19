@@ -417,7 +417,7 @@ start_code_in_ram:
 	li	r3, 0
 
 	/* Set start stack pointer */
-	LA	r1, start_stack_end
+	LA	r1, _Configuration_Interrupt_stack_area_end
 	stwu	r3, -4(r1)
 	stwu	r3, -4(r1)
 
@@ -520,10 +520,3 @@ mpc83xx_zero_4_tail:
 
 	/* Return */
 	blr
-
-.section ".bsp_rwextra", "aw", @nobits
-
-	/* Start stack area */
-.align 4
-.space 4096
-start_stack_end:

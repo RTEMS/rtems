@@ -181,7 +181,6 @@ bool rtems_stack_checker_create_extension(
 
 void rtems_stack_checker_begin_extension( Thread_Control *executing )
 {
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
   Per_CPU_Control *cpu_self;
   uint32_t         cpu_self_index;
   Stack_Control   *stack;
@@ -213,7 +212,6 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
 
 #if defined(RTEMS_SMP)
   _Thread_Dispatch_enable( cpu_self );
-#endif
 #endif
 }
 

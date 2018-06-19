@@ -32,9 +32,7 @@
  *  Upon entry, interrupts are disabled
  */
 
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  unsigned long    *_old_stack_ptr;
-#endif
+unsigned long *_old_stack_ptr;
 
 /*
  * Prototypes
@@ -98,13 +96,11 @@ void __ISR_Handler(void)
 
   /* Interrupts are disabled upon entry to this Handler */
 
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
   if ( _ISR_Nest_level == 0 ) {
     /* Install irq stack */
     _old_stack_ptr = stack_ptr;
     stack_ptr = _CPU_Interrupt_stack_high - 4;
   }
-#endif
 
   _ISR_Nest_level++;
 
@@ -120,9 +116,7 @@ void __ISR_Handler(void)
   _ISR_Nest_level--;
 
   if( _ISR_Nest_level == 0) {
-#if( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
     stack_ptr = _old_stack_ptr;
-#endif
 
     if( _Thread_Dispatch_is_enabled() )
     {

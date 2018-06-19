@@ -38,35 +38,6 @@ extern "C" {
 #define RTEMS_USE_32_BIT_OBJECT
 
 /*
- *  Does RTEMS manage a dedicated interrupt stack in software?
- *
- *  If TRUE, then a stack is allocated in _ISR_Handler_initialization.
- *  If FALSE, nothing is done.
- *
- *  If the CPU supports a dedicated interrupt stack in hardware,
- *  then it is generally the responsibility of the BSP to allocate it
- *  and set it up.
- *
- *  If the CPU does not support a dedicated interrupt stack, then
- *  the porter has two options: (1) execute interrupts on the
- *  stack of the interrupted task, and (2) have RTEMS manage a dedicated
- *  interrupt stack.
- *
- *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- *  possible that both are FALSE for a particular CPU.  Although it
- *  is unclear what that would imply about the interrupt processing
- *  procedure on that CPU.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
-
-/*
  *  Does the CPU follow the simple vectored interrupt model?
  *
  *  If TRUE, then RTEMS allocates the vector table it internally manages.
@@ -78,40 +49,6 @@ extern "C" {
  *  XXX document implementation including references if appropriate
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
-
-/*
- *  Does this CPU have hardware support for a dedicated interrupt stack?
- *
- *  If TRUE, then it must be installed during initialization.
- *  If FALSE, then no installation is performed.
- *
- *  If this is TRUE, CPU_ALLOCATE_INTERRUPT_STACK should also be TRUE.
- *
- *  Only one of CPU_HAS_SOFTWARE_INTERRUPT_STACK and
- *  CPU_HAS_HARDWARE_INTERRUPT_STACK should be set to TRUE.  It is
- *  possible that both are FALSE for a particular CPU.  Although it
- *  is unclear what that would imply about the interrupt processing
- *  procedure on that CPU.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
-
-/*
- *  Does RTEMS allocate a dedicated interrupt stack in the Interrupt Manager?
- *
- *  If TRUE, then the memory is allocated during initialization.
- *  If FALSE, then the memory is allocated during initialization.
- *
- *  This should be TRUE is CPU_HAS_SOFTWARE_INTERRUPT_STACK is TRUE.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-#define CPU_ALLOCATE_INTERRUPT_STACK TRUE
 
 /*
  *  Does the CPU have hardware floating point?
@@ -677,20 +614,6 @@ void _CPU_ISR_install_vector(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
-
-/*
- *  _CPU_Install_interrupt_stack
- *
- *  This routine installs the hardware interrupt stack pointer.
- *
- *  NOTE:  It need only be provided if CPU_HAS_HARDWARE_INTERRUPT_STACK
- *         is TRUE.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-void _CPU_Install_interrupt_stack( void );
 
 /*
  *  _CPU_Internal_threads_Idle_thread_body

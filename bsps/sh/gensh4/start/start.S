@@ -215,7 +215,7 @@ _vbr_base_k:
 __VBR_Saved_k:
         .long   SYM(_VBR_Saved)
 stack_k:
-        .long	SYM(stack)
+        .long	SYM(_Configuration_Interrupt_stack_area_end)
 __bss_start_k:
         .long   __bss_start
 __bss_end_k:
@@ -253,14 +253,6 @@ reset_pc_value_shift_8_k:
 
 boot_mode_k:
         .long   _boot_mode
-
-#ifdef __ELF__
-        .section .stack,"aw"
-#else
-        .section .stack
-#endif
-SYM(stack):
-        .long	0xdeaddead
 
 #ifdef __ELF__
         .section .bss,"aw"

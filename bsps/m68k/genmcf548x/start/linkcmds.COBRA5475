@@ -62,8 +62,6 @@ _CoreSramSize1  = DEFINED(_CoreSramSize1)  ? _CoreSramSize1 : (4 * 1024);
 _BootFlashBase  = DEFINED(_BootFlashBase)  ? _BootFlashBase : 0xFC000000;
 _BootFlashSize  = DEFINED(_BootFlashSize)  ? _BootFlashSize : (32 * 1024*1024);
 
-bsp_initstack_size = DEFINED(StackSize)    ? StackSize  : 0x800;  /* 2 kB   */
-
 _VBR            = DEFINED(_VBR)            ? _VBR       : _SdramBase;
 
 __MBAR          = DEFINED(__MBAR)          ? __MBAR     : 0xFE000000;

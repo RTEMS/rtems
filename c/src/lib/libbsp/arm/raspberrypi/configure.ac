@@ -10,6 +10,7 @@ AC_INIT([rtems-c-src-lib-libbsp-arm-raspberrypi],[_RTEMS_VERSION],[https://devel
 RTEMS_TOP(../../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
+RTEMS_BSP_LINKCMDS
 
 RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
@@ -36,21 +37,7 @@ RTEMS_BSPOPTS_SET([BSP_IS_RPI2],[*],[0])
 RTEMS_BSPOPTS_HELP([BSP_IS_RPI2],[Set if the BSP variant is Raspberry Pi 2.])
 AM_CONDITIONAL(RTEMS_RPI2,[test "$BSP_IS_RPI2" = "1"])
 
-# Hom many CPUs are used?
-RASPBERRYPI_CPUS="1"
-AS_IF([test "$rtems_cv_HAS_SMP" = "yes"],
-      [RASPBERRYPI_CPUS="4"])
-
-AC_DEFUN([RASPBERRYPI_LINKCMD],[
-AC_ARG_VAR([$1],[$2; default $3])dnl
-[$1]=[$]{[$1]:-[$3]}
-])
-
-RASPBERRYPI_LINKCMD([RASPBERRYPI_CPUS],[Number of active cores],[${RASPBERRYPI_CPUS}])
-
 RTEMS_BSP_CLEANUP_OPTIONS
 
-AC_CONFIG_FILES([
-Makefile
-linkcmds:../../../../../../bsps/arm/raspberrypi/start/linkcmds.in])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

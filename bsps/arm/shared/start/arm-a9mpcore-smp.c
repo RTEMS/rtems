@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,7 +19,6 @@
 #include <libcpu/arm-cp15.h>
 
 #include <bsp/irq.h>
-#include <bsp/linker-symbols.h>
 
 static void bsp_inter_processor_interrupt(void *arg)
 {
@@ -28,10 +27,7 @@ static void bsp_inter_processor_interrupt(void *arg)
 
 uint32_t _CPU_SMP_Initialize(void)
 {
-  uint32_t hardware_count = arm_gic_irq_processor_count();
-  uint32_t linker_count = (uint32_t) bsp_processor_count;
-
-  return hardware_count <= linker_count ? hardware_count : linker_count;
+  return arm_gic_irq_processor_count();
 }
 
 void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)

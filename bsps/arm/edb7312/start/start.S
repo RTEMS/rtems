@@ -12,21 +12,8 @@
  *  http://www.rtems.org/license/LICENSE.
 */
 
-#include <bsp/linker-symbols.h>
-
-/* Some standard definitions...*/
-
-.equ Mode_USR,        	     0x10
-.equ Mode_FIQ,        	     0x11
-.equ Mode_IRQ,        	     0x12
-.equ Mode_SVC,        	     0x13
-.equ Mode_ABT,        	     0x17
-.equ Mode_ABORT,             0x17
-.equ Mode_UNDEF,      	     0x1B
-.equ Mode_SYS,        	     0x1F /*only available on ARM Arch. v4*/
-
-.equ I_Bit,           	     0x80
-.equ F_Bit,           	     0x40
+#include <rtems/asm.h>
+#include <rtems/score/cpu.h>
 
 .section ".bsp_start_text", "ax"
 .arm
@@ -72,8 +59,44 @@ handler_addr_fiq:
 
 	.globl	_start
 _start:
-	/* store the sp */
-	mov	r12, sp
+        /* Set end of interrupt stack area */
+        ldr     r7, =_Configuration_Interrupt_stack_area_end
+
+        /* Enter FIQ mode and set up the FIQ stack pointer */
+        mov     r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        ldr     r1, =bsp_stack_fiq_size
+        mov     sp, r7
+        sub     r7, r7, r1
+
+        /* Enter ABT mode and set up the ABT stack pointer */
+        mov     r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        ldr     r1, =bsp_stack_abt_size
+        mov     sp, r7
+        sub     r7, r7, r1
+
+        /* Enter UND mode and set up the UND stack pointer */
+        mov     r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        ldr     r1, =bsp_stack_und_size
+        mov     sp, r7
+        sub     r7, r7, r1
+
+        /* Enter IRQ mode and set up the IRQ stack pointer */
+        mov     r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        mov     sp, r7
+
+        /*
+         * Enter SVC mode and set up the SVC stack pointer, reuse IRQ stack
+         * (interrupts are disabled).
+         */
+        mov     r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        mov     sp, r7
+
+        /* Stay in SVC mode */
 /*
  * Here is the code to initialize the low-level BSP environment
  * (Chip Select, PLL, ....?)
@@ -89,48 +112,7 @@ zi_init:
         STRLOT   r2, [r0], #4
         BLO     zi_init
 
-/* --- Initialise stack pointer registers */
-
-/* Enter IRQ mode and set up the IRQ stack pointer */
-    MOV     r0, #Mode_IRQ | I_Bit | F_Bit     /* No interrupts */
-    MSR     cpsr, r0
-    ldr	    r1, =bsp_stack_irq_size
-    LDR     sp, =bsp_stack_irq_begin
-    add	    sp, sp, r1
-    sub     sp, sp, #0x64
-
-/* Enter FIQ mode and set up the FIQ stack pointer */
-    MOV     r0, #Mode_FIQ | I_Bit | F_Bit     /* No interrupts */
-    MSR     cpsr, r0
-    ldr	    r1, =bsp_stack_fiq_size
-    LDR     sp, =bsp_stack_fiq_begin
-    add	    sp, sp, r1
-    sub     sp, sp, #0x64
-
-/* Enter ABT mode and set up the ABT stack pointer */
-    MOV     r0, #Mode_ABT | I_Bit | F_Bit     /* No interrupts */
-    MSR     cpsr, r0
-    ldr	    r1, =bsp_stack_abt_size
-    LDR     sp, =bsp_stack_abt_begin
-    add	    sp, sp, r1
-    sub     sp, sp, #0x64
-
-/* Set up the SVC stack pointer last and stay in SVC mode */
-    MOV     r0, #Mode_SVC | I_Bit | F_Bit     /* No interrupts */
-    MSR     cpsr, r0
-    ldr	    r1, =bsp_stack_svc_size
-    LDR     sp, =bsp_stack_svc_begin
-    add	    sp, sp, r1
-    sub     sp, sp, #0x64
-
-	/* save the original registers */
-	stmdb	sp!, {r4-r12, lr}
-
 /* --- Now we enter the C code */
 
 	mov     r0, #0
 	bl	boot_card
-
-	ldmia	sp!, {r4-r12, lr}
-	mov	sp, r12
-	mov	pc, lr

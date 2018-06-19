@@ -83,11 +83,6 @@ void _CPU_ISR_install_vector(
   /* Do nothing */
 }
 
-void _CPU_Install_interrupt_stack( void )
-{
-  /* Do nothing */
-}
-
 CPU_Counter_ticks _CPU_Counter_read( void )
 {
   static CPU_Counter_ticks counter;

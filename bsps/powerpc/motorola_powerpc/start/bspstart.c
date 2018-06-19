@@ -220,7 +220,7 @@ void bsp_start( void )
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = (uintptr_t) __rtems_end;
+  intrStackStart = (uintptr_t)_Configuration_Interrupt_stack_area_begin;
   intrStackSize = rtems_configuration_get_interrupt_stack_size();
 
   /*

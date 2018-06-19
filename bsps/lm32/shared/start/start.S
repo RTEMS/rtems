@@ -126,8 +126,8 @@ crt0:
 	nop
 	nop
 	/* Initialize stack pointer */
-	mvhi	sp, hi(_fstack-4)
-	ori	sp, sp, lo(_fstack-4)
+	mvhi	sp, hi(_Configuration_Interrupt_stack_area_end-4)
+	ori	sp, sp, lo(_Configuration_Interrupt_stack_area_end-4)
 	/* Initialize global pointer */
 	mvhi	gp, hi(_edata)
 	ori	gp, gp, lo(_edata)

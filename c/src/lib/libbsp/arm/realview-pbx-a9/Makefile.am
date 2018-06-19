@@ -26,7 +26,6 @@ project_lib_DATA = start.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 dist_project_lib_DATA += ../../../../../../bsps/arm/realview-pbx-a9/start/linkcmds.realview_pbx_a9_qemu
-dist_project_lib_DATA += ../../../../../../bsps/arm/realview-pbx-a9/start/linkcmds.realview_pbx_a9_qemu_smp
 
 ###############################################################################
 #                  LibBSP                                                     #

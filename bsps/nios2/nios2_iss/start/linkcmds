@@ -24,7 +24,6 @@ DO NOT MODIFY THIS FILE
 RamBase = DEFINED(RamBase) ? RamBase : 0x00000000;
 RamSize = DEFINED(RamSize) ? RamSize : 0x00800000;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-StackSize = DEFINED(StackSize) ? HeapSize : 1024;
 
 MEMORY
 {
@@ -265,13 +264,12 @@ SECTIONS
 
         . = ALIGN(32 / 8);
         __bss_end = ABSOLUTE(.);
-        _stack_low = ABSOLUTE(.);
-        . += StackSize;
-        _stack_high = ABSOLUTE(.);
     } > onchip_memory_0
 
     .rtemsstack (NOLOAD) : {
+        _stack_low = ABSOLUTE(.);
         *(SORT(.rtemsstack.*))
+        _stack_high = ABSOLUTE(.);
         WorkAreaBase = .;
     } > onchip_memory_0
 

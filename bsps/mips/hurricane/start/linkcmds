@@ -8,7 +8,6 @@
 RamBase = DEFINED(RamBase) ? RamBase : 0x80000000;
 RamSize = DEFINED(RamSize) ? RamSize : 4M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 ENTRY(start)
 STARTUP(start.o)
@@ -166,10 +165,6 @@ SECTIONS
     *(.bss)
     *(COMMON)
     . = ALIGN (64);
-    _stack_limit = .;
-    . += _StackSize;
-    __stack = .;
-    _stack_init = .;
      end = .;
     _end = .;
   }

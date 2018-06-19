@@ -8,20 +8,8 @@
  *  http://www.rtems.org/license/LICENSE.
 */
 
-#include <bsp/linker-symbols.h>
-
-/* Some standard definitions...*/
-.equ PSR_MODE_USR,       0x10
-.equ PSR_MODE_FIQ,       0x11
-.equ PSR_MODE_IRQ,       0x12
-.equ PSR_MODE_SVC,       0x13
-.equ PSR_MODE_ABT,       0x17
-.equ PSR_MODE_UNDEF,     0x1B
-.equ PSR_MODE_SYS,       0x1F
-
-.equ PSR_I,              0x80
-.equ PSR_F,              0x40
-.equ PSR_T,              0x20
+#include <rtems/asm.h>
+#include <rtems/score/cpu.h>
 
 .text
 .code	32
@@ -30,45 +18,46 @@ _start:
         /*
          * Since I don't plan to return to the bootloader,
          * I don't have to save the registers.
-         *
-         * I'll just set the CPSR for SVC mode, interrupts
-         * off, and ARM instructions.
          */
 
-        /* --- Initialize stack pointer registers */
-        /* Enter IRQ mode and set up the IRQ stack pointer */
-        mov     r0, #(PSR_MODE_IRQ | PSR_I | PSR_F)     /* No interrupts */
-        bic	r0, r0, #PSR_T
-        msr     cpsr, r0
-        ldr     r1, =bsp_stack_irq_size
-        ldr     sp, =bsp_stack_irq_begin
-        add     sp, sp, r1
+        /* Set end of interrupt stack area */
+        ldr     r7, =_Configuration_Interrupt_stack_area_end
 
         /* Enter FIQ mode and set up the FIQ stack pointer */
-        mov     r0, #(PSR_MODE_FIQ | PSR_I | PSR_F)     /* No interrupts */
-        bic	r0, r0, #PSR_T
+        mov     r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
         msr     cpsr, r0
         ldr     r1, =bsp_stack_fiq_size
-        ldr     sp, =bsp_stack_fiq_begin
-        add     sp, sp, r1
+        mov     sp, r7
+        sub     r7, r7, r1
 
         /* Enter ABT mode and set up the ABT stack pointer */
-        mov     r0, #(PSR_MODE_ABT | PSR_I | PSR_F)     /* No interrupts */
-        bic	r0, r0, #PSR_T
+        mov     r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
         msr     cpsr, r0
-        bic	r0, r0, #PSR_T
         ldr     r1, =bsp_stack_abt_size
-        ldr     sp, =bsp_stack_abt_begin
-        add     sp, sp, r1
+        mov     sp, r7
+        sub     r7, r7, r1
 
-        /* Set up the SVC stack pointer last and stay in SVC mode */
-        mov     r0, #(PSR_MODE_SVC | PSR_I | PSR_F)     /* No interrupts */
-        bic	r0, r0, #PSR_T
+        /* Enter UND mode and set up the UND stack pointer */
+        mov     r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
         msr     cpsr, r0
-        ldr     r1, =bsp_stack_svc_size
-        ldr     sp, =bsp_stack_svc_begin
-        add     sp, sp, r1
-        sub     sp, sp, #0x64
+        ldr     r1, =bsp_stack_und_size
+        mov     sp, r7
+        sub     r7, r7, r1
+
+        /* Enter IRQ mode and set up the IRQ stack pointer */
+        mov     r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        mov     sp, r7
+
+        /*
+         * Enter SVC mode and set up the SVC stack pointer, reuse IRQ stack
+         * (interrupts are disabled).
+         */
+        mov     r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
+        msr     cpsr, r0
+        mov     sp, r7
+
+        /* Stay in SVC mode */
 
         /*
          * Initialize the exception vectors. This includes the

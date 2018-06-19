@@ -49,14 +49,6 @@ void bsp_start( void )
   #endif
 
   /*
-   *  initialize the interrupt stack for this BSP
-   */
-  #if ( CPU_ALLOCATE_INTERRUPT_STACK == FALSE )
-    _CPU_Interrupt_stack_low = &CPU_Interrupt_stack_low;
-    _CPU_Interrupt_stack_high = &CPU_Interrupt_stack_high;
-  #endif
-
-  /*
    *  initialize the device driver parameters
    */
   bsp_clicks_per_second = CPU_CLOCK_RATE_HZ;

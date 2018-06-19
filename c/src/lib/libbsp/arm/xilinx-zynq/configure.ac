@@ -58,10 +58,6 @@ RTEMS_BSPOPTS_HELP([BSP_CONSOLE_MINOR],[minor number of console device])
 RTEMS_BSPOPTS_SET([ZYNQ_CONSOLE_USE_INTERRUPTS],[*],[1])
 RTEMS_BSPOPTS_HELP([ZYNQ_CONSOLE_USE_INTERRUPTS],[use interrupt driven mode for console devices (used by default)])
 
-ZYNQ_CPUS="1"
-AS_IF([test "$rtems_cv_HAS_SMP" = "yes"],
-      [ZYNQ_CPUS="2"])
-
 #
 # Zynq Memory map can be controlled from the configure command line. Use ...
 #
@@ -126,7 +122,6 @@ AC_ARG_VAR([$1],[$2; default $3])dnl
 [$1]=[$]{[$1]:-[$3]}
 ])
 
-ZYNQ_LINKCMD([ZYNQ_CPUS],[Number of active cores],[${ZYNQ_CPUS}])
 ZYNQ_LINKCMD([ZYNQ_RAM_ORIGIN],[normal RAM region origin],[${ZYNQ_RAM_ORIGIN}])
 ZYNQ_LINKCMD([ZYNQ_RAM_LENGTH],[normal RAM region length],[${BSP_ZYNQ_RAM_LENGTH}])
 ZYNQ_LINKCMD([ZYNQ_RAM_MMU],[MMU region origin],[${ZYNQ_RAM_MMU}])

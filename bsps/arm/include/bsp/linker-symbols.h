@@ -43,29 +43,10 @@ extern "C" {
   #define LINKER_SYMBOL(sym) .extern sym
 #endif
 
-LINKER_SYMBOL(bsp_stack_irq_begin)
-LINKER_SYMBOL(bsp_stack_irq_end)
-LINKER_SYMBOL(bsp_stack_irq_size)
-
-LINKER_SYMBOL(bsp_stack_fiq_begin)
-LINKER_SYMBOL(bsp_stack_fiq_end)
-LINKER_SYMBOL(bsp_stack_irq_size)
-
-LINKER_SYMBOL(bsp_stack_abt_begin)
-LINKER_SYMBOL(bsp_stack_abt_end)
+LINKER_SYMBOL(bsp_stack_fiq_size)
 LINKER_SYMBOL(bsp_stack_abt_size)
-
-LINKER_SYMBOL(bsp_stack_und_begin)
-LINKER_SYMBOL(bsp_stack_und_end)
 LINKER_SYMBOL(bsp_stack_und_size)
-
-LINKER_SYMBOL(bsp_stack_hyp_begin)
-LINKER_SYMBOL(bsp_stack_hyp_end)
 LINKER_SYMBOL(bsp_stack_hyp_size)
-
-LINKER_SYMBOL(bsp_stack_svc_begin)
-LINKER_SYMBOL(bsp_stack_svc_end)
-LINKER_SYMBOL(bsp_stack_svc_size)
 
 LINKER_SYMBOL(bsp_section_start_begin)
 LINKER_SYMBOL(bsp_section_start_end)
@@ -155,8 +136,6 @@ LINKER_SYMBOL(bsp_translation_table_end)
 
 #define BSP_NOCACHENOLOAD_SUBSECTION(subsection) \
   __attribute__((section(".bsp_noload_nocache." # subsection)))
-
-LINKER_SYMBOL(bsp_processor_count)
 
 /** @} */
 

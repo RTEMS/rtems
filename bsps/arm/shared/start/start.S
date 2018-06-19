@@ -5,7 +5,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -19,45 +19,10 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>	
 #include <rtems/score/percpu.h>
-	
+
 #include <bspopts.h>
 #include <bsp/irq.h>
-#include <bsp/linker-symbols.h>
-
-	/* External symbols */
-	.extern	bsp_reset
-	.extern	boot_card
-	.extern	bsp_start_hook_0
-	.extern	bsp_start_hook_1
-	.extern bsp_stack_irq_end
-	.extern bsp_stack_fiq_end
-	.extern bsp_stack_abt_end
-	.extern bsp_stack_und_end
-	.extern bsp_stack_svc_end
-#ifdef RTEMS_SMP
-	.extern bsp_stack_all_size
-#endif
-	.extern	_ARMV4_Exception_undef_default
-	.extern	_ARMV4_Exception_swi_default
-	.extern	_ARMV4_Exception_data_abort_default
-	.extern	_ARMV4_Exception_pref_abort_default
-	.extern	_ARMV4_Exception_reserved_default
-	.extern	_ARMV4_Exception_interrupt
-	.extern	_ARMV4_Exception_fiq_default
-	.extern	_ARMV7M_Exception_default
-
-#ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
-	.extern bsp_start_init_registers_core
-	.extern bsp_start_init_registers_banked_fiq
-	.extern bsp_start_init_registers_vfp
-#endif
-
-#ifdef BSP_START_IN_HYP_SUPPORT
-	.extern	bsp_start_arm_drop_hyp_mode
-	.globl	bsp_start_hyp_vector_table_begin
-#endif
 
 	/* Global symbols */
 	.globl	_start
@@ -65,11 +30,16 @@
 	.globl	bsp_start_vector_table_end
 	.globl	bsp_start_vector_table_size
 	.globl	bsp_vector_table_size
-	.globl	bsp_start_hook_0_done
 
 	.section	".bsp_start_text", "ax"
 
 #if defined(ARM_MULTILIB_ARCH_V4)
+
+	.globl	bsp_start_hook_0_done
+
+#ifdef BSP_START_IN_HYP_SUPPORT
+	.globl	bsp_start_hyp_vector_table_begin
+#endif
 
 	.arm
 
@@ -208,12 +178,20 @@ _start:
 	add	r1, r1, r7, asl #PER_CPU_CONTROL_SIZE_LOG2
 	mcr	p15, 0, r1, c13, c0, 4
 
-	/* Calculate stack offset */
-	ldr	r1, =bsp_stack_all_size
-	mul	r1, r7
 #endif
 
-	mrs	r4, cpsr	/* save original procesor status value  */
+	/* Calculate interrupt stack area end for current processor */
+	ldr	r1, =_Configuration_Interrupt_stack_size
+#ifdef RTEMS_SMP
+	add	r7, #1
+	mul	r1, r1, r7
+#endif
+	ldr	r2, =_Configuration_Interrupt_stack_area_begin
+	add	r7, r1, r2
+
+	/* Save original CPSR value */
+	mrs	r4, cpsr
+
 #ifdef BSP_START_IN_HYP_SUPPORT
 	orr	r0, r4, #(ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r4
@@ -222,38 +200,22 @@ _start:
 	cmp	r0, #ARM_PSR_M_HYP
 	bne	bsp_start_skip_hyp_svc_switch
 
-	/* Boot loader stats kernel in HYP mode, switch to SVC necessary */
-	ldr	sp, =bsp_stack_hyp_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
+	/* Boot loader starts kernel in HYP mode, switch to SVC necessary */
+	ldr	r1, =bsp_stack_hyp_size
+	mov	sp, r7
+	sub	r7, r7, r1
 	bl	bsp_start_arm_drop_hyp_mode
 
 bsp_start_skip_hyp_svc_switch:
 #endif
-	/*
-	 * Set SVC mode, disable interrupts and enable ARM instructions.
-	 */
-	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
-	msr	cpsr, r0
-
 	/* Initialize stack pointer registers for the various modes */
-
-	/* Enter IRQ mode and set up the IRQ stack pointer */
-	mov	r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
-	msr	cpsr, r0
-	ldr	sp, =bsp_stack_irq_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
 
 	/* Enter FIQ mode and set up the FIQ stack pointer */
 	mov	r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	ldr	sp, =bsp_stack_fiq_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
+	ldr	r1, =bsp_stack_fiq_size
+	mov	sp, r7
+	sub	r7, r7, r1
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
 	bl bsp_start_init_registers_banked_fiq
@@ -262,26 +224,29 @@ bsp_start_skip_hyp_svc_switch:
 	/* Enter ABT mode and set up the ABT stack pointer */
 	mov	r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	ldr	sp, =bsp_stack_abt_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
+	ldr	r1, =bsp_stack_abt_size
+	mov	sp, r7
+	sub	r7, r7, r1
 
 	/* Enter UND mode and set up the UND stack pointer */
 	mov	r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	ldr	sp, =bsp_stack_und_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
+	ldr	r1, =bsp_stack_und_size
+	mov	sp, r7
+	sub	r7, r7, r1
 
-	/* Enter SVC mode and set up the SVC stack pointer */
+	/* Enter IRQ mode and set up the IRQ stack pointer */
+	mov	r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
+	msr	cpsr, r0
+	mov	sp, r7
+
+	/*
+	 * Enter SVC mode and set up the SVC stack pointer, reuse IRQ stack
+	 * (interrupts are disabled).
+	 */
 	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	ldr	sp, =bsp_stack_svc_end
-#ifdef RTEMS_SMP
-	add	sp, r1
-#endif
+	mov	sp, r7
 
 	/* Stay in SVC mode */
 
@@ -333,7 +298,7 @@ bsp_start_skip_hyp_svc_switch:
 
 	SWITCH_FROM_ARM_TO_THUMB	r0
 
-	mov	r0, r4		/* original cpsr value */
+	mov	r0, r4		/* original CPSR value */
 	mov	r1, r5		/* machine type number or ~0 for DT boot */
 	mov	r2, r6		/* physical address of ATAGs or DTB */
 
@@ -385,13 +350,11 @@ twiddle:
 
 	.syntax	unified
 
-	.extern	bsp_stack_main_end
-
 	.thumb
 
 bsp_start_vector_table_begin:
 
-	.word	bsp_stack_main_end
+	.word	_Configuration_Interrupt_stack_area_end
 	.word	_start /* Reset */
 	.word	_ARMV7M_Exception_default /* NMI */
 	.word	_ARMV7M_Exception_default /* Hard Fault */
@@ -441,7 +404,7 @@ _start:
 
 #endif /* ARM_MULTILIB_VFP */
 
-	ldr	sp, =bsp_stack_main_end
+	ldr	sp, =_Configuration_Interrupt_stack_area_end
 	ldr	lr, =bsp_start_hook_0_done + 1
 	b	bsp_start_hook_0
 

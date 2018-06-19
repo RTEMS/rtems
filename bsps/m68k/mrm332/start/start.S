@@ -37,10 +37,10 @@ BEGIN_CODE
 	movel	#0x0,d0				/* Use the initial vectors until we get going */
 	movecl	d0,vbr
 
-	movel  #end, d0				/* Next 3 instructions set stack pointer    */
-	addl   #_StackSize,d0       /* sp = end + _StackSize from linker script */
-	movel  d0,sp
-	movel  d0,a6			
+	/* Set stack pointer */
+	movel	#_Configuration_Interrupt_stack_area_end,d0
+	movel	d0,sp
+	movel	d0,a6
 
   /* include in ram_init.S */
   /*

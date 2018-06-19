@@ -99,11 +99,6 @@ uint32_t _CPU_Counter_frequency(void)
 
 void bsp_start( void)
 {
-
-  uintptr_t interrupt_stack_start = (uintptr_t) bsp_interrupt_stack_start;
-  uintptr_t interrupt_stack_size = (uintptr_t) bsp_interrupt_stack_end
-    - interrupt_stack_start;
-
   /*
    * Get CPU identification dynamically. Note that the get_ppc_cpu_type()
    * function stores the result in global variables so that it can be used
@@ -149,7 +144,10 @@ void bsp_start( void)
   bsp_clicks_per_usec = bsp_time_base_frequency / 1000000;
 
   /* Initialize exception handler */
-  ppc_exc_initialize(interrupt_stack_start, interrupt_stack_size);
+  ppc_exc_initialize(
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
+    rtems_configuration_get_interrupt_stack_size()
+  );
 
   /* Initalize interrupt support */
   bsp_interrupt_initialize();

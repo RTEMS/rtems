@@ -259,7 +259,7 @@ SYM (_ISR_Handler):
         andl    #0x03fc,d0               | d0 = vector offset in vbr
 
 
-#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+#if ( M68K_HAS_SEPARATE_STACKS == 0 )
         | Make a0 point just above interrupt stack
         movel   INTERRUPT_STACK_HIGH,a0
         cmpl    INTERRUPT_STACK_LOW,a7  | stack below interrupt stack?
@@ -272,7 +272,7 @@ SYM (_ISR_Handler):
         movel   a1,a7@-                 | store task stack pointer
                                         |     on interrupt stack
 2:
-#endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
+#endif /* M68K_HAS_SEPARATE_STACKS == 0 */
 
         addql   #1,ISR_NEST_LEVEL        | one nest level deeper
 
@@ -285,14 +285,14 @@ SYM (_ISR_Handler):
         addql   #4,a7                    | remove vector number
         subql   #1,ISR_NEST_LEVEL        | Reduce interrupt-nesting count
 
-#if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 )
+#if ( M68K_HAS_SEPARATE_STACKS == 0 )
         movel   INTERRUPT_STACK_HIGH,a0
         subql   #4,a0
         cmpl    a0,a7                   | At top of interrupt stack?
         bne.b   1f                      | No, do not restore task stack pointer
         movel   (a7),a7                 | Restore task stack pointer
 1:
-#endif /* CPU_HAS_SOFTWARE_INTERRUPT_STACK == 1 */
+#endif /* M68K_HAS_SEPARATE_STACKS == 0 */
         subql   #1,THREAD_DISPATCH_DISABLE_LEVEL
                                          | unnest multitasking
         bne.b    exit                    | If dispatch disabled, exit

@@ -166,11 +166,6 @@ void _CPU_ISR_Set_level( uint32_t   new_level )
   mips_set_sr( sr );
 }
 
-void _CPU_Install_interrupt_stack( void )
-{
-/* we don't support this yet */
-}
-
 void _CPU_Context_Initialize(
   Context_Control  *the_context,
   uintptr_t        *stack_base,

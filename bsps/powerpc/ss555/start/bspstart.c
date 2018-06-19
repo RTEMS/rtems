@@ -32,8 +32,6 @@
 
 SPR_RW(SPRG1)
 
-extern unsigned long intrStackPtr;
-
 /*
  *  Driver configuration parameters
  */
@@ -67,7 +65,7 @@ uint32_t _CPU_Counter_frequency(void)
  */
 void bsp_start(void)
 {
-  register unsigned char* intrStack;
+  char* intrStack;
 
   /*
    * Get CPU identification dynamically.  Note that the get_ppc_cpu_type()
@@ -80,7 +78,8 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-  intrStack = (((unsigned char*)&intrStackPtr) - PPC_MINIMUM_STACK_FRAME_SIZE);
+  intrStack = (char *)_Configuration_Interrupt_stack_area_end -
+     PPC_MINIMUM_STACK_FRAME_SIZE;
   _write_SPRG1((unsigned int)intrStack);
 
   /*

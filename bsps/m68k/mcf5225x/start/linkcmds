@@ -16,7 +16,6 @@
 RamBase = DEFINED(RamBase) ? RamBase : 0x20000000;
 RamSize = DEFINED(RamSize) ? RamSize : 64K;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x400;
 _FlashBase = DEFINED(_FlashBase) ? _FlashBase : 0x00000000;
 
 _VBR = 0x20000000;
@@ -169,16 +168,6 @@ SECTIONS
         . = ALIGN (16);
         PROVIDE (_end = .);
         PROVIDE (_clear_end = .);
-    } >sram
-
-    .stack : 
-    {
-        /*
-         * Starting Stack
-         */ 
-        . += _StackSize;
-        . = ALIGN (16);
-        PROVIDE(_StackInit = .);
     } >sram
 
     .rtemsstack (NOLOAD) : {

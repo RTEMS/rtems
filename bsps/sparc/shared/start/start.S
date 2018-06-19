@@ -265,7 +265,6 @@ SYM(CLOCK_SPEED):
 
 #define PSR_INIT   0x10c0       /* Disable traps, set s and ps */
 #define WIM_INIT   2
-#define STACK_SIZE 16 * 1024
 
         PUBLIC(hard_reset)
 SYM(hard_reset):
@@ -317,9 +316,16 @@ SYM(hard_reset):
 	st	%o0, [%o1]
 #endif
 
-	set	(SYM(rdb_start)), %g5	! End of RAM
+	set	SYM(rdb_start), %g5	! End of RAM
 	st	%sp, [%g5]
-	sub	%sp, 4, %sp		! stack starts at end of RAM - 4
+	set	SYM(_Configuration_Interrupt_stack_size), %g5
+#if defined(START_LEON3_ENABLE_SMP)
+	add	%o0, 1, %o0
+	smul	%o0, %g5, %g5
+#endif
+	set	SYM(_Configuration_Interrupt_stack_area_begin), %sp
+	add	%sp, %g5, %sp
+	sub	%sp, 4, %sp		! stack starts at end of area - 4
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
         mov     %sp, %fp                ! Set frame pointer
         nop

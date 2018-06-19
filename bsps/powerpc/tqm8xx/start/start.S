@@ -26,8 +26,6 @@
 .extern boot_card
 
 PUBLIC_VAR (_start)
-PUBLIC_VAR (bsp_interrupt_stack_start)
-PUBLIC_VAR (bsp_interrupt_stack_end)
 
 .section ".bsp_start_text", "ax"
 _start:
@@ -119,8 +117,8 @@ start_code_in_ram:
 	 */
 
 	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_begin
-        addi    r1, r1, -0x10 /* Set up stack pointer = beginning of text section - 0x10 */
+	LA	r1, _Configuration_Interrupt_stack_area_end
+        addi    r1, r1, -0x10
 
 	/* Create NULL */
 	li r0, 0
@@ -285,10 +283,3 @@ mpc8xx_zero_4_tail:
 	blr
 
 end_reloc_startup:
-
-	/* Interrupt stack */
-	.section ".bsp_rwextra", "aw", @nobits
-	.align 4
-bsp_interrupt_stack_start:
-	.space 32768
-bsp_interrupt_stack_end:

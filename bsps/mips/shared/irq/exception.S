@@ -214,10 +214,8 @@ _chk_int:
 
   /*
    *
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    if ( _ISR_Nest_level == 0 )
-   *      switch to software interrupt stack
-   *  #endif
+   *  if ( _ISR_Nest_level == 0 )
+   *    switch to software interrupt stack
    */
 
   /*
@@ -307,9 +305,7 @@ _ISR_Handler_cleanup:
 
 
   /*
-   *  #if ( CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE )
-   *    restore stack
-   *  #endif
+   *  restore stack
    *
    *  if ( !_Thread_Dispatch_necessary )
    *    goto the label "exit interrupt (simple case)"

@@ -66,9 +66,6 @@
 #include <ppc4xx/ppc405ex.h>
 
 #include <stdio.h>
-
-LINKER_SYMBOL(intrStack_start);
-LINKER_SYMBOL(intrStack_size);
 /*
  *  Driver configuration parameters
  */
@@ -188,8 +185,8 @@ void bsp_start( void )
    * Initialize default raw exception handlers.
    */
   ppc_exc_initialize(
-    (uintptr_t) intrStack_start,
-    (uintptr_t) intrStack_size
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
+    rtems_configuration_get_interrupt_stack_size()
   );
 
   /*

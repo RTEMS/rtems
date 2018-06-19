@@ -23,7 +23,6 @@ _BootFlashBase = DEFINED(_FlashBase) ? _FlashBase : 0x00000000;
 _BootFlashSize = DEFINED(_FlashBase) ? _FlashBase : 2M;
 
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x400;
 
 _VBR = 0x40000000;
 
@@ -174,23 +173,12 @@ SECTIONS
         *(COMMON)
         . = ALIGN (16);
         PROVIDE (_end = .);
-
         _clear_end = .;
+        WorkAreaBase = .;
     } > dram
 
     .rtemsstack (NOLOAD) : {
         *(SORT(.rtemsstack.*))
-        WorkAreaBase = .;
-    } > dram
-
-    .start_stack :
-    {
-        /*
-         * Starting Stack
-         */ 
-        . += _StackSize;
-        . = ALIGN (16);
-        PROVIDE(_StackInit = .);
     } > core_sram
 
     /* Stabs debugging sections.  */

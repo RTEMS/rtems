@@ -41,8 +41,6 @@ MEMORY {
         RAM            (AIW) : ORIGIN = 0x00008000, LENGTH = 128M - 32k
 }
 
-bsp_processor_count = DEFINED (bsp_processor_count) ? bsp_processor_count : @RASPBERRYPI_CPUS@;
-
 REGION_ALIAS ("REGION_START", RAM);
 REGION_ALIAS ("REGION_VECTOR", VECTOR_RAM);
 REGION_ALIAS ("REGION_TEXT", RAM);
@@ -61,7 +59,6 @@ REGION_ALIAS ("REGION_STACK", RAM);
 REGION_ALIAS ("REGION_NOCACHE", RAM);
 REGION_ALIAS ("REGION_NOCACHE_LOAD", RAM);
 
-bsp_stack_irq_size = DEFINED (bsp_stack_irq_size) ? bsp_stack_irq_size : 3008;
 bsp_stack_abt_size = DEFINED (bsp_stack_abt_size) ? bsp_stack_abt_size : 1024;
 
 bsp_section_robarrier_align = DEFINED (bsp_section_robarrier_align) ? bsp_section_robarrier_align : 1M;

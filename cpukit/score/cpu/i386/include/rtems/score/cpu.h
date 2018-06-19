@@ -50,14 +50,6 @@ extern "C" {
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
 
 /*
- *  i386 has an RTEMS allocated and managed interrupt stack.
- */
-
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK TRUE
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK FALSE
-#define CPU_ALLOCATE_INTERRUPT_STACK     TRUE
-
-/*
  *  Does the RTEMS invoke the user's ISR with the vector number and
  *  a pointer to the saved interrupt frame (1) or just the vector
  *  number (0)?

@@ -80,7 +80,7 @@ SYM(_start):
   csrw mtvec, t0
 
   /* load stack and frame pointers */
-  la sp, bsp_section_stack_begin
+  la sp, _Configuration_Interrupt_stack_area_end
 
   /* Clearing .bss */
   la t0, bsp_section_bss_begin

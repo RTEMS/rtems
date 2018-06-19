@@ -321,7 +321,6 @@ SECTIONS {
 
 	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
 		bsp_section_rtemsstack_begin = .;
-		*(.bsp_rwextra)
 		*(SORT(.rtemsstack.*))
 		bsp_section_rtemsstack_end = .;
 	} > REGION_RTEMSSTACK AT > REGION_RTEMSSTACK

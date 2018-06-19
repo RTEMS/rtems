@@ -85,9 +85,6 @@ LINKER_SYMBOL(RamSize);
 LINKER_SYMBOL(__bsp_ram_start);
 LINKER_SYMBOL(__bsp_ram_end);
 LINKER_SYMBOL(__rtems_end);
-LINKER_SYMBOL(_stack);
-LINKER_SYMBOL(StackSize);
-LINKER_SYMBOL(__stack_base);
 LINKER_SYMBOL(WorkAreaBase);
 LINKER_SYMBOL(MsgAreaBase);
 LINKER_SYMBOL(MsgAreaSize);
@@ -174,7 +171,7 @@ void bsp_start(void)
   /*
    * Initialize the interrupt related settings.
    */
-  intrStackStart = CPU_UP_ALIGN((uint32_t)__bsp_ram_start);
+  intrStackStart = (uintptr_t) _Configuration_Interrupt_stack_area_begin;
   intrStackSize  = rtems_configuration_get_interrupt_stack_size();
 
   ppc_exc_initialize(intrStackStart, intrStackSize);
@@ -184,14 +181,12 @@ void bsp_start(void)
          "RAM:              %p                    %p\n"
          "RTEMS:                           %p\n"
          "Interrupt Stack:  0x%08x              0x%x\n"
-         "Stack:            %p             %p          %p\n"
          "Workspace:        %p             %p\n"
          "MsgArea:          %p             %p\n"
          "Physical RAM                     %p\n",
          RamBase,        RamSize,
          __rtems_end,
          intrStackStart,                intrStackSize,
-         __stack_base,   _stack,        StackSize,
          WorkAreaBase,   __bsp_ram_end,
          MsgAreaBase,    MsgAreaSize,
          __phy_ram_end);

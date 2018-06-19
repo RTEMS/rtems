@@ -27,13 +27,9 @@ extern uint32_t rdb_start;
  */
 void bsp_work_area_initialize(void)
 {
-  /* must be identical to STACK_SIZE in start.S */
-  #define STACK_SIZE (16 * 1024)
-
   /* Early dynamic memory allocator is placed just above _end  */
   void *work_area_start = (void *)&end;
-  uintptr_t work_area_size  =
-    (uintptr_t)rdb_start - (uintptr_t)&end - STACK_SIZE;
+  uintptr_t work_area_size = (uintptr_t)rdb_start - (uintptr_t)work_area_start;
 
   /*
    *  The following may be helpful in debugging what goes wrong when

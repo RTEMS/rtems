@@ -144,19 +144,11 @@ SECTIONS
    __bss_end = .;
   } > ram
 
-  .stack : {
-    . = . + 4096;
-  } > ram
-
   .rtemsstack (NOLOAD) : {
     *(SORT(.rtemsstack.*))
   } > ram
 
   _WorkAreaBase = . ;
-
-  . = ALIGN(16);
-  _CPU_Interrupt_stack_low  = . ;
-  _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
 
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }

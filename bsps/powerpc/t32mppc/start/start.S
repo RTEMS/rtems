@@ -34,7 +34,7 @@ _start:
 	mtspr	HID0, r0
 
 	/* Initialize start stack */
-	LWI	r1, start_stack_end
+	LA	r1, _Configuration_Interrupt_stack_area_end
 	subi	r1, r1, 16
 	li	r0, 0
 	stw	r0, 0(r1)
@@ -195,9 +195,3 @@ bsp_exc_vector_base:
 	PPC_REG_STORE	r3, GPR3_OFFSET(r1)
 	li	r3, 35
 	b	ppc_exc_fatal_normal
-
-	/* Start stack area */
-	.section ".bsp_rwextra", "aw", @nobits
-	.align 4
-	.space 4096
-start_stack_end:

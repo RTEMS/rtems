@@ -68,7 +68,7 @@ SYM (start):
 
 	.align 2
 stack_k:
-	.long	SYM(stack)
+	.long	SYM(_Configuration_Interrupt_stack_area_end)
 edata_k:
 	.long	SYM(edata)
 end_k:
@@ -82,13 +82,3 @@ vects_k:
 	.long	SYM(vectab)
 vects_size:
 	.word	255
-
-#ifdef __ELF__
-	.section .stack,"aw"
-#else
-	.section .stack
-#endif
-SYM(stack):
-	.long	0xdeaddead
-monvects_k:
-	.long	SYM(monvects)

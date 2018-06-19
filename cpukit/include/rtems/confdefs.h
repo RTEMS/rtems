@@ -1182,12 +1182,13 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #error "CONFIGURE_IDLE_TASK_STACK_SIZE less than CONFIGURE_MINIMUM_TASK_STACK_SIZE"
 #endif
 
-/**
- * @brief Interrupt stack size configuration.
+/*
+ * Interrupt stack configuration.
  *
  * By default, the interrupt stack will be of minimum size.
  * The BSP or application may override this value.
  */
+
 #ifndef CONFIGURE_INTERRUPT_STACK_SIZE
   #ifdef BSP_INTERRUPT_STACK_SIZE
     #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
@@ -1196,18 +1197,23 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #endif
 #endif
 
-/**
- * This reserves memory for the interrupt stack if it is to be allocated
- * by RTEMS rather than the BSP.
- *
- * @todo Try to get to the point where all BSPs support allocating the
- *       memory from the Workspace.
- */
-#if (CPU_ALLOCATE_INTERRUPT_STACK == 0)
-  #define _CONFIGURE_INTERRUPT_STACK_MEMORY 0
-#else
-  #define _CONFIGURE_INTERRUPT_STACK_MEMORY \
-     _Configure_From_workspace( CONFIGURE_INTERRUPT_STACK_SIZE )
+#if CONFIGURE_INTERRUPT_STACK_SIZE % CPU_INTERRUPT_STACK_ALIGNMENT != 0
+  #error "CONFIGURE_INTERRUPT_STACK_SIZE fails to meet the CPU port interrupt stack alignment"
+#endif
+
+#ifdef CONFIGURE_INIT
+  RTEMS_DEFINE_GLOBAL_SYMBOL(
+    _Configuration_Interrupt_stack_size,
+    CONFIGURE_INTERRUPT_STACK_SIZE
+  );
+
+  char _Configuration_Interrupt_stack_area_begin[
+    CONFIGURE_MAXIMUM_PROCESSORS * CONFIGURE_INTERRUPT_STACK_SIZE
+  ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
+  RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
+
+  const char _Configuration_Interrupt_stack_area_end[ 0 ]
+    RTEMS_SECTION( ".rtemsstack.interrupt.end" ) = { };
 #endif
 
 /**
@@ -2720,9 +2726,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This macro accounts for general RTEMS system overhead.
  */
 #define _CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD \
-  ( _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS + \
-    _CONFIGURE_INTERRUPT_STACK_MEMORY \
-  )
+  _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS
 
 /**
  * This macro reserves the memory required by the statically configured
@@ -2752,18 +2756,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    _CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(CONFIGURE_MAXIMUM_USER_EXTENSIONS) \
   )
 
-/*
- * This macro provides a summation of the memory required by SMP as configured.
- */
-#if defined(RTEMS_SMP)
-  #define _CONFIGURE_MEMORY_FOR_SMP \
-     (CONFIGURE_MAXIMUM_PROCESSORS * \
-      _Configure_From_workspace( CONFIGURE_INTERRUPT_STACK_SIZE ) \
-     )
-#else
-  #define _CONFIGURE_MEMORY_FOR_SMP 0
-#endif
-
 /**
  * This calculates the memory required for the executive workspace.
  *
@@ -2783,7 +2775,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    _CONFIGURE_MEMORY_FOR_POSIX + \
    _CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    _CONFIGURE_MEMORY_FOR_MP + \
-   _CONFIGURE_MEMORY_FOR_SMP + \
    CONFIGURE_MESSAGE_BUFFER_MEMORY + \
    (CONFIGURE_MEMORY_OVERHEAD * 1024) + \
    _CONFIGURE_HEAP_HANDLER_OVERHEAD \
@@ -3082,7 +3073,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
-    CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */
     CONFIGURE_TASK_STACK_ALLOCATOR_INIT,      /* stack allocator init */
     CONFIGURE_TASK_STACK_ALLOCATOR,           /* stack allocator */
     CONFIGURE_TASK_STACK_DEALLOCATOR,         /* stack deallocator */
@@ -3239,7 +3229,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     uint32_t POSIX;
 
     /* System overhead pieces */
-    uint32_t INTERRUPT_STACK_MEMORY;
     uint32_t MEMORY_FOR_IDLE_TASK;
 
     /* Classic API Pieces */
@@ -3288,7 +3277,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     _CONFIGURE_MEMORY_FOR_POSIX,
 
     /* System overhead pieces */
-    _CONFIGURE_INTERRUPT_STACK_MEMORY,
     _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS,
 
     /* Classic API Pieces */

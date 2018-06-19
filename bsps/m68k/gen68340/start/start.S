@@ -850,7 +850,7 @@ ZEROLOOPTEST:
 	cmpl	a1,a0						| Done?
 	bcs.s	ZEROLOOP					| No, skip
 
-	movel	#_stack_init,a7					| set master stack pointer
+	movel	#_Configuration_Interrupt_stack_area_end,a7		| set master stack pointer
 	movel	d0,a7@-						| command line
 	jsr	SYM(boot_card)					| Call C main
 

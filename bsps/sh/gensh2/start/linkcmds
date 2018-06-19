@@ -203,9 +203,6 @@ SECTIONS
     *(SORT(.rtemsstack.*))
   } > onchip_ram
 
-  _CPU_Interrupt_stack_low  = 0xFFFFF000;
-  _CPU_Interrupt_stack_high = 0xFFFFFFFF;
-
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }
   .stabstr 0 : { *(.stabstr) }
@@ -239,7 +236,5 @@ SECTIONS
   .debug_funcnames 0 : { *(.debug_funcnames) }
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
-
-  .stack 0xFFFFFEC0 : { _stack = .; *(.stack) } > onchip_ram
   /* These must appear regardless of  .  */
 }

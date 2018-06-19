@@ -49,13 +49,6 @@ extern "C" {
 /* Constants */
 
 /*
- * Defined in the linker script 'linkcmds'
- */
-
-extern void *CPU_Interrupt_stack_low;
-extern void *CPU_Interrupt_stack_high;
-
-/*
  * BSP methods that cross file boundaries.
  */
 void bsp_hw_init(void);

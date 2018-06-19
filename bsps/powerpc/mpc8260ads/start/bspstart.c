@@ -69,9 +69,6 @@ bool       bsp_serial_xon_xoff;
 bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
 
-extern char IntrStack_start [];
-extern char intrStack [];
-
 static void _BSP_GPLED0_on(void)
 {
   BCSR *csr;
@@ -142,10 +139,9 @@ void bsp_start(void)
 */
 
   /* Initialize exception handler */
-  /* FIXME: Interrupt stack begin and size */
   ppc_exc_initialize(
-    (uintptr_t) IntrStack_start,
-    (uintptr_t) intrStack - (uintptr_t) IntrStack_start
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
+    rtems_configuration_get_interrupt_stack_size()
   );
 
   /* Initalize interrupt support */

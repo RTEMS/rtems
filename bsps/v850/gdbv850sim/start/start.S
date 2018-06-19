@@ -9,7 +9,7 @@ _start:
 
 	movea   255,		r0,	r20
 	mov     65535,		r21
-	mov     hilo(_stack),	sp
+	mov     hilo(__Configuration_Interrupt_stack_area_end),	sp
 	mov     hilo(__ep),	ep
 	mov     hilo(__gp),	gp
 	mov     hilo(__ctbp),	r6
@@ -36,8 +36,8 @@ _start:
 	movea   255,		r0,	r20
 	mov     r0,		r21
 	ori     65535,		r0,	r21
-	movhi   hi(_stack),	r0,	sp
-	movea   lo(_stack),	sp,	sp
+	movhi   hi(__Configuration_Interrupt_stack_area_end),	r0,	sp
+	movea   lo(__Configuration_Interrupt_stack_area_end),	sp,	sp
 	movhi   hi(__ep),	r0,	ep
 	movea   lo(__ep),	ep,	ep
 	movhi   hi(__gp),	r0,	gp
@@ -65,11 +65,6 @@ _start:
 	br	.L2
 	/* jarl    _exit,		r31 */
 # endif
-
-#if 0
-	.section .stack
-_stack:	.long 	1
-#endif
 
 	.section .data
 	.global ___dso_handle

@@ -288,13 +288,6 @@ SECTIONS {
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_start;
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_start;
 
-	/*
-	 * BSP: Interrupt stack
-	 */
-	bsp_interrupt_stack_start = bsp_section_bss_end;
-	bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
-	bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
-
 	.rtemsstack (NOLOAD) : {
 		*(SORT(.rtemsstack.*))
 	} > RAM

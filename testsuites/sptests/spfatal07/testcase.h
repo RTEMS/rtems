@@ -9,28 +9,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/bspIo.h>
-
-/*
- *  Way too much stack space.  Should generate a fatal error
- *  on the init task create.
- */
-#define CONFIGURE_HAS_OWN_INIT_TASK_TABLE
-#define CONFIGURE_INIT_TASK_STACK_SIZE   RTEMS_MINIMUM_STACK_SIZE
-rtems_initialization_tasks_table Initialization_tasks[] = {
-  { rtems_build_name('I', 'N', 'I', ' '),
-    RTEMS_MINIMUM_STACK_SIZE,
-    1,
-    RTEMS_DEFAULT_ATTRIBUTES,
-    Init,
-    RTEMS_DEFAULT_MODES,
-    0
-  }
-};
-#define CONFIGURE_INIT_TASK_TABLE Initialization_tasks
-#define CONFIGURE_INIT_TASK_TABLE_SIZE \
-  sizeof(CONFIGURE_INIT_TASK_TABLE) / sizeof(rtems_initialization_tasks_table)
-
 #define FATAL_ERROR_TEST_NAME            "7"
 #define FATAL_ERROR_DESCRIPTION \
         "Core Configuration Invalid ISR stack size"
@@ -38,20 +16,9 @@ rtems_initialization_tasks_table Initialization_tasks[] = {
 #define FATAL_ERROR_EXPECTED_ERROR       \
           INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL
 
-#if CPU_ALLOCATE_INTERRUPT_STACK == TRUE
-  #define CONFIGURE_INTERRUPT_STACK_SIZE (STACK_MINIMUM_SIZE - 1)
-#endif
+#define CONFIGURE_INTERRUPT_STACK_SIZE CPU_INTERRUPT_STACK_ALIGNMENT
 
 void force_error()
 {
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-    /* we will not run this far */
-  #else
-    printk(
-      "WARNING - Test not applicable on this target architecture.\n"
-      "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE.\n"
-    );
-    TEST_END();
-    rtems_test_exit(0);
-  #endif
+  /* we will not run this far */
 }

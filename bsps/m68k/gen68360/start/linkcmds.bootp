@@ -20,7 +20,6 @@
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
 RamSize = DEFINED(RamSize) ? RamSize : 64M;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
-_StackSize = DEFINED(_StackSize) ? _StackSize : 0x1000;
 
 /*
  * Declare on-board memory.
@@ -152,10 +151,6 @@ SECTIONS {
                 *(COMMON)
                 . = ALIGN (16);
                 PROVIDE (end = .);
-
-                . += _StackSize;
-                . = ALIGN (16);
-                _stack_init = .;
                 _clear_end = .;
         } >myram
 

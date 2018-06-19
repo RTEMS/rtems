@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2008, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -18,8 +18,6 @@ OUTPUT_ARCH(m68k)
 
 ENTRY(start)
 STARTUP(start.o)
-
-bsp_initstack_size = DEFINED (bsp_initstack_size) ? bsp_initstack_size : 2048;
 
 MEMORY {
 	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
@@ -225,12 +223,6 @@ SECTIONS {
 		bsp_vector1_end = .;
 	} > REGION_DATA AT > REGION_DATA
 	bsp_vector1_size = bsp_vector1_end - bsp_vector1_begin;
-
-	.initstack : ALIGN_WITH_INPUT {
-		bsp_initstack_begin = .;
-		. = . + bsp_initstack_size;
-		bsp_initstack_end = .;
-	} > REGION_DATA AT > REGION_DATA
 
 	.data : ALIGN_WITH_INPUT {
 		bsp_section_data_begin = .;

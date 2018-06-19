@@ -69,17 +69,6 @@ extern "C" {
 #endif
 
 /**
- * Does the executive manage a dedicated interrupt stack in software?
- *
- * If TRUE, then a stack is allocated in _ISR_Handler_initialization.
- * If FALSE, nothing is done.
- *
- * The SPARC does not have a dedicated HW interrupt stack and one has
- * been implemented in SW.
- */
-#define CPU_HAS_SOFTWARE_INTERRUPT_STACK   TRUE
-
-/**
  * Does the CPU follow the simple vectored interrupt model?
  *
  * - If TRUE, then RTEMS allocates the vector table it internally manages.
@@ -90,29 +79,6 @@ extern "C" {
  * PIC and the CPU directly vectors the interrupts.
  */
 #define CPU_SIMPLE_VECTORED_INTERRUPTS TRUE
-
-/**
- * Does this CPU have hardware support for a dedicated interrupt stack?
- *
- * - If TRUE, then it must be installed during initialization.
- * - If FALSE, then no installation is performed.
- *
- * The SPARC does not have a dedicated HW interrupt stack.
- */
-#define CPU_HAS_HARDWARE_INTERRUPT_STACK  FALSE
-
-/**
- * Do we allocate a dedicated interrupt stack in the Interrupt Manager?
- *
- * - If TRUE, then the memory is allocated during initialization.
- * - If FALSE, then the memory is allocated during initialization.
- *
- * The SPARC does not have hardware support for switching to a
- * dedicated interrupt stack.  The port includes support for doing this
- * in software.
- *
- */
-#define CPU_ALLOCATE_INTERRUPT_STACK      TRUE
 
 /**
  * Does the RTEMS invoke the user's ISR with the vector number and

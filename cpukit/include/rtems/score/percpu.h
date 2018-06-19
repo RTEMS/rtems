@@ -293,20 +293,15 @@ typedef struct Per_CPU_Control {
     CPU_Per_CPU_control cpu_per_cpu;
   #endif
 
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
-      (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-    /**
-     * This contains a pointer to the lower range of the interrupt stack for
-     * this CPU.  This is the address allocated and freed.
-     */
-    void  *interrupt_stack_low;
+  /**
+   * @brief The interrupt stack low address for this processor.
+   */
+  void *interrupt_stack_low;
 
-    /**
-     * This contains a pointer to the interrupt stack pointer for this CPU.
-     * It will be loaded at the beginning on an ISR.
-     */
-    void  *interrupt_stack_high;
-  #endif
+  /**
+   * @brief The interrupt stack high address for this processor.
+   */
+  void *interrupt_stack_high;
 
   /**
    *  This contains the current interrupt nesting level on this
@@ -800,33 +795,21 @@ RTEMS_INLINE_ROUTINE struct _Thread_Control *_Thread_Get_executing( void )
 
 #if defined( ASM ) || defined( _RTEMS_PERCPU_DEFINE_OFFSETS )
 
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE) || \
-    (CPU_HAS_SOFTWARE_INTERRUPT_STACK == TRUE)
-  /*
-   *  If this CPU target lets RTEMS allocates the interrupt stack, then
-   *  we need to have places in the per CPU table to hold them.
-   */
-  #define PER_CPU_INTERRUPT_STACK_LOW \
-    CPU_PER_CPU_CONTROL_SIZE
-  #define PER_CPU_INTERRUPT_STACK_HIGH \
-    PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
-  #define PER_CPU_END_STACK             \
-    PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
+#define PER_CPU_INTERRUPT_STACK_LOW \
+  CPU_PER_CPU_CONTROL_SIZE
+#define PER_CPU_INTERRUPT_STACK_HIGH \
+  PER_CPU_INTERRUPT_STACK_LOW + CPU_SIZEOF_POINTER
 
-  #define INTERRUPT_STACK_LOW \
-    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
-  #define INTERRUPT_STACK_HIGH \
-    (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
-#else
-  #define PER_CPU_END_STACK \
-    CPU_PER_CPU_CONTROL_SIZE
-#endif
+#define INTERRUPT_STACK_LOW \
+  (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_LOW)
+#define INTERRUPT_STACK_HIGH \
+  (SYM(_Per_CPU_Information) + PER_CPU_INTERRUPT_STACK_HIGH)
 
 /*
  *  These are the offsets of the required elements in the per CPU table.
  */
 #define PER_CPU_ISR_NEST_LEVEL \
-  PER_CPU_END_STACK
+  PER_CPU_INTERRUPT_STACK_HIGH + CPU_SIZEOF_POINTER
 #define PER_CPU_ISR_DISPATCH_DISABLE \
   PER_CPU_ISR_NEST_LEVEL + 4
 #define PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL \

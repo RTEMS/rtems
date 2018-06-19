@@ -57,12 +57,7 @@ bool _CPU_SMP_Start_processor( uint32_t cpu_index )
 
 uint32_t _CPU_SMP_Initialize(void)
 {
-  uint32_t cpu_count = (uint32_t)bsp_processor_count;
-
-  if ( cpu_count > 4 )
-    cpu_count = 4;
-
-  return cpu_count;
+  return 4;
 }
 
 void _CPU_SMP_Finalize_initialization( uint32_t cpu_count )
