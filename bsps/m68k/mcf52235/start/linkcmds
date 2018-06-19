@@ -179,6 +179,10 @@ SECTIONS
         . += _StackSize;
         . = ALIGN (16);
         PROVIDE(_StackInit = .);
+    } >sram
+
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
         PROVIDE(WorkAreaBase = .);
     } >sram
 

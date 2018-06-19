@@ -260,8 +260,11 @@ SECTIONS
   .              += StackSize;
   __stack_base    = .;                  /* Initial stack builds downwards */
 
-  /* RTEMS workspace: size specified by application */
-  WorkAreaBase    = ALIGN(0x10); 	/* Align to a cache-line boundary */
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } >RAM
+
+  WorkAreaBase = .;
 
   /* The heap comes after the work space */
 

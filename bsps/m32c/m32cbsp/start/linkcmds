@@ -157,6 +157,11 @@ SECTIONS
 
   . += _StackSize;
   PROVIDE (__stack = .);
+
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > RAM
+
   PROVIDE (_WorkAreaBase = .);
   . = 0xa00000;
   PROVIDE (_WorkAreaEnd = .);

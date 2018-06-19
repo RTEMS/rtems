@@ -319,12 +319,13 @@ SECTIONS {
 	} > REGION_BSS AT > REGION_BSS
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
-	.rwextra : ALIGN_WITH_INPUT {
-		bsp_section_rwextra_begin = .;
+	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
+		bsp_section_rtemsstack_begin = .;
 		*(.bsp_rwextra)
-		bsp_section_rwextra_end = .;
-	} > REGION_RWEXTRA AT > REGION_RWEXTRA
-	bsp_section_rwextra_size = bsp_section_rwextra_end - bsp_section_rwextra_begin;
+		*(SORT(.rtemsstack.*))
+		bsp_section_rtemsstack_end = .;
+	} > REGION_RTEMSSTACK AT > REGION_RTEMSSTACK
+	bsp_section_rtemsstack_size = bsp_section_rtemsstack_end - bsp_section_rtemsstack_begin;
 
 	.work : ALIGN_WITH_INPUT {
 		/*

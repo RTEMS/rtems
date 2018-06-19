@@ -268,6 +268,10 @@ SECTIONS
         _stack_low = ABSOLUTE(.);
         . += StackSize;
         _stack_high = ABSOLUTE(.);
+    } > onchip_memory_0
+
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
         WorkAreaBase = .;
     } > onchip_memory_0
 

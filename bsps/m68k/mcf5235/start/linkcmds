@@ -187,7 +187,10 @@ SECTIONS
                 . = ALIGN (16);
                 PROVIDE (end = .);
                 _clear_end = .;
+        } > dram
 
+        .rtemsstack (NOLOAD) : {
+                *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;
         } > dram
   /* Stabs debugging sections.  */

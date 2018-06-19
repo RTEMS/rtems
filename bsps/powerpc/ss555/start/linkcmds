@@ -248,6 +248,10 @@ SECTIONS
   intrStack = .;
   PROVIDE(intrStackPtr = intrStack);
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  }
+
   /*
    * Work Area
    *

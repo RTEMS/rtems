@@ -260,8 +260,11 @@ SECTIONS
 	. += kMainStackSize;
 	stack.end   = .;
 
-	/* RTEMS workspace: size specified by application */
-	WorkAreaBase = ALIGN(0x20);
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
+    } >RAM
+
+    WorkAreaBase = .;
 
 	/* Debugging information */
     .line 0 : { *(.line) }

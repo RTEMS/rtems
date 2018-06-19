@@ -259,7 +259,7 @@ SECTIONS {
   bsp_section_rodata_load_begin = LOADADDR (.rodata);
   bsp_section_rodata_load_end = bsp_section_rodata_load_begin + bsp_section_rodata_size;
 
-.rwbarrier : ALIGN_WITH_INPUT {
+  .rwbarrier : ALIGN_WITH_INPUT {
     . = ALIGN (bsp_section_rwbarrier_align);
   } > REGION_DATA AT > REGION_DATA
 
@@ -287,6 +287,10 @@ SECTIONS {
     bsp_section_bss_end = .;
   } > REGION_BSS AT > REGION_BSS
   bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
+
+  .rtemsstack (NOLOAD) : ALIGN_WITH_INPUT{
+    *(SORT(.rtemsstack.*))
+  } > REGION_WORK AT > REGION_WORK
 
 .work : ALIGN_WITH_INPUT {
     /*

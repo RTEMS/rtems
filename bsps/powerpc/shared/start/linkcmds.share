@@ -98,6 +98,10 @@ SECTIONS
   _TLS_Size = _TLS_BSS_end - _TLS_Data_begin;
   _TLS_Alignment = MAX (ALIGNOF (.tdata), ALIGNOF (.tbss));
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } >CODE
+
   /* Adjust the address for the data segment.  We want to adjust up to
      the same address within the page on the next page up.  */
   . = ALIGN(0x10000) + (. & (0x10000 - 1));

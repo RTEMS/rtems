@@ -194,11 +194,12 @@ SECTIONS
     _clear_end = .;
     end = .;
     _end = .;
-    . = ALIGN (1024);
-    WorkAreaBase = .;
-    
-  } >ram   
+  } >ram
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+    WorkAreaBase = .;
+  } >ram
 
 /* 
 ** DWARF debug sections.

@@ -188,6 +188,10 @@ SECTIONS
 
   _WorkAreaBase = . ;
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > onchip_ram
+
   _CPU_Interrupt_stack_low  = 0x0f000000 ;
   _CPU_Interrupt_stack_high = _CPU_Interrupt_stack_low + 4096 ;
 

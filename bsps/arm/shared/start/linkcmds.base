@@ -335,6 +335,9 @@ SECTIONS {
 		bsp_stack_secondary_processors_end = .;
 
 		*(.bsp_vector)
+	} > REGION_VECTOR AT > REGION_VECTOR
+	.rtemsstack (NOLOAD) : {
+		*(SORT(.rtemsstack.*))
 		bsp_section_vector_end = .;
 	} > REGION_VECTOR AT > REGION_VECTOR
 	bsp_section_vector_size = bsp_section_vector_end - bsp_section_vector_begin;

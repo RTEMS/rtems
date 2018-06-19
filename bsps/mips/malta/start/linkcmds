@@ -169,9 +169,14 @@ SECTIONS
     . += _StackSize;
     __stack = .;
     _stack_init = .;
-    WorkAreaBase = .;
     _clear_end = .;
   }
+
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+    WorkAreaBase = .;
+  }
+
   . = 0x88400000; /* reserve some memory for Work Area */
  end = .;
  _end = .;

@@ -131,7 +131,7 @@ static entry DATA config[] = {
 	ENTRY_RW(bsp_section_data_begin, bsp_section_data_size),
 	ENTRY_RW(bsp_section_sbss_begin, bsp_section_sbss_size),
 	ENTRY_RW(bsp_section_bss_begin, bsp_section_bss_size),
-	ENTRY_RW(bsp_section_rwextra_begin, bsp_section_rwextra_size),
+	ENTRY_RW(bsp_section_rtemsstack_begin, bsp_section_rtemsstack_size),
 	ENTRY_RW(bsp_section_stack_begin, bsp_section_stack_size),
 	ENTRY_IO(bsp_section_nocache_begin, bsp_section_nocache_size),
 	ENTRY_IO(bsp_section_nocachenoload_begin, bsp_section_nocachenoload_size),

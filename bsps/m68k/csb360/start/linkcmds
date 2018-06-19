@@ -155,11 +155,12 @@ SECTIONS
 	_end = .;
     
 	clear_end = .;
-
-	WorkAreaBase = .;
-	WorkAreaBase = .;
-
   } > ram
+
+  .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
+        WorkAreaBase = .;
+  } >ram
 
   .stab 0 (NOLOAD) :
   {

@@ -180,6 +180,10 @@ SECTIONS
         PROVIDE (_end = .);
 
         _clear_end = .;
+    } > dram
+
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
         WorkAreaBase = .;
     } > dram
 

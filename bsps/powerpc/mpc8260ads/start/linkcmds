@@ -301,6 +301,10 @@ SECTIONS
 
     clear_end = .;
 
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
+    } >ram
+
     WorkAreaBase = .;
 
     /* Sections for compressed .text and .data         */

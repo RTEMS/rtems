@@ -257,6 +257,10 @@ SECTIONS {
 	} > REGION_DATA AT > REGION_DATA
 	bsp_section_bss_size = bsp_section_bss_end - bsp_section_bss_begin;
 
+	.rtemsstack (NOLOAD) : ALIGN_WITH_INPUT {
+		*(SORT(.rtemsstack.*))
+	} > REGION_DATA AT > REGION_DATA
+
 	.work : ALIGN_WITH_INPUT {
 		/*
 		 * The work section will occupy the remaining REGION_DATA region and

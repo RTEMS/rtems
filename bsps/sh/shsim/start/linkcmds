@@ -209,6 +209,10 @@ SECTIONS
   } > ram
   _stack = .;
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > ram
+
   _WorkAreaBase = . ;
 
   _CPU_Interrupt_stack_low  = 0x00080000 ;

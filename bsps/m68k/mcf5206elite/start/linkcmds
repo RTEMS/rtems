@@ -188,10 +188,11 @@ SECTIONS
     _end = .;
     
     clear_end = .;
+  } > ram
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
     WorkAreaBase = .;
-    WorkAreaBase = .;
-
   } > ram
 
   .stab 0 (NOLOAD) :

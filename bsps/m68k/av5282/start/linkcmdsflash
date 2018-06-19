@@ -180,7 +180,10 @@ SECTIONS
                 . = ALIGN (16);
                 PROVIDE (end = .);
                 _clear_end = .;
+        }
 
+        .rtemsstack (NOLOAD) : {
+                *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;
         }
   /* Stabs debugging sections.  */

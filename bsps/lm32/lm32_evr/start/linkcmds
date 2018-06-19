@@ -252,14 +252,16 @@ SECTIONS
   . += _StackSize;
   _fstack = .;
 
-  WorkAreaBase = .;
-
     . = ALIGN (16);
     _stack_init = .;
     _clear_end = .;
 
   } > sdram
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+    WorkAreaBase = .;
+  } > sdram
 
   /DISCARD/ : 
   {

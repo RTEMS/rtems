@@ -172,9 +172,12 @@ SECTIONS
     _stack_init = .;
      end = .;
     _end = .;
-    WorkAreaBase = .;
   }
 
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+    WorkAreaBase = .;
+  }
 
   /* Debug sections.  These should never be loadable, but they must have
      zero addresses for the debuggers to work correctly.  */

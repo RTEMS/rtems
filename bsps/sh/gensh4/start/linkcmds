@@ -144,11 +144,14 @@ SECTIONS
    __bss_end = .;
   } > ram
 
-  .stack . : {
+  .stack : {
     . = . + 4096;
-  }
+  } > ram
 
-  . = ALIGN(16);
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > ram
+
   _WorkAreaBase = . ;
 
   . = ALIGN(16);
@@ -188,6 +191,5 @@ SECTIONS
   .debug_funcnames 0 : { *(.debug_funcnames) }
   .debug_typenames 0 : { *(.debug_typenames) }
   .debug_varnames  0 : { *(.debug_varnames) }
-  .stack : { _stack = .; *(.stack) }
   /* These must appear regardless of  .  */
 }

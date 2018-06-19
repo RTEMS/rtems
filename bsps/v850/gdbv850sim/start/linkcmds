@@ -194,6 +194,9 @@ SECTIONS
   }
   . += _StackSize;
   _stack = .;
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  }
   _WorkAreaBase = .;
   _end = . ;
   PROVIDE (end = .);

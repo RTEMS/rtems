@@ -204,9 +204,10 @@ SECTIONS
    . = ALIGN(. != 0 ? 32 / 8 : 1);
   }
   . = ALIGN(32 / 8);
-  . = ALIGN(32 / 8);
   _end = .; PROVIDE (end = .);
-  . = ALIGN(0x10);
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  }
   WorkAreaBase = .;
   . = DATA_SEGMENT_END (.);
 

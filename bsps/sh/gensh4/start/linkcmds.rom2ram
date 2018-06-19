@@ -190,7 +190,10 @@ SECTIONS
       *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
       *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
     } >ram
-  . = ALIGN(16);
+
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > ram
 
   _WorkAreaBase = . ;
 

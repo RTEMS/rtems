@@ -206,9 +206,14 @@ SECTIONS
     end = .;
     _end = .;
     __end = .;
-  
-    . = ALIGN (16); /* arbitrary alignment */
+  } > ram
+
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
     PROVIDE (WorkAreaBase = .);
+  } > ram
+
+  .heap : {
     . += HeapSize;
     PROVIDE (HeapBase = .);
     . += HeapSize;

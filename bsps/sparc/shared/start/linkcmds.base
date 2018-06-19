@@ -154,6 +154,9 @@ SECTIONS
       *(.rela.rtemsroset*)
       *(.rela.rtemsrwset*)
     } >ram
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  } > ram
   .data :
   {
     data_start = .;

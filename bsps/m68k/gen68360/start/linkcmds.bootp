@@ -157,7 +157,10 @@ SECTIONS {
                 . = ALIGN (16);
                 _stack_init = .;
                 _clear_end = .;
+        } >myram
 
+        .rtemsstack (NOLOAD) : {
+                *(SORT(.rtemsstack.*))
                 WorkAreaBase = .;
         } >myram
 

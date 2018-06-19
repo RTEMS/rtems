@@ -229,6 +229,9 @@ SECTIONS
   _end = .;
   _bss_end__ = . ; __bss_end__ = . ; __end__ = . ;
   PROVIDE (end = .);
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
+  }
   WorkAreaBase = .;
   /* Stabs debugging sections.  */
   .stab 0 : { *(.stab) }

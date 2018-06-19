@@ -295,10 +295,14 @@ SECTIONS {
 	bsp_interrupt_stack_end = bsp_interrupt_stack_start + 32k;
 	bsp_interrupt_stack_size = bsp_interrupt_stack_end - bsp_interrupt_stack_start;
 
+	.rtemsstack (NOLOAD) : {
+		*(SORT(.rtemsstack.*))
+	} > RAM
+
 	/*
 	 * BSP: Work area start
 	 */
-	bsp_work_area_start = bsp_interrupt_stack_end;
+	bsp_work_area_start = .;
 	WorkAreaBase = bsp_work_area_start;
 	
 	/* Stabs debugging sections.  */

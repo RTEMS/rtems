@@ -134,11 +134,15 @@ SECTIONS
         _stack_init = .;
         . += _StackSize;
         _clear_end = .;
-        _WorkAreaBase = .;
          _end = .;
          __end = .;
     } > sdram
-    
+
+    .rtemsstack (NOLOAD) : {
+        *(SORT(.rtemsstack.*))
+        _WorkAreaBase = .;
+    } > sdram
+
 /* Debugging stuff follows */
 
   /* Stabs debugging sections.  */

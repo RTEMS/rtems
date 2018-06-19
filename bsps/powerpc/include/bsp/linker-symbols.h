@@ -81,9 +81,9 @@ LINKER_SYMBOL(bsp_section_sbss_begin)
 LINKER_SYMBOL(bsp_section_sbss_end)
 LINKER_SYMBOL(bsp_section_sbss_size)
 
-LINKER_SYMBOL(bsp_section_rwextra_begin)
-LINKER_SYMBOL(bsp_section_rwextra_end)
-LINKER_SYMBOL(bsp_section_rwextra_size)
+LINKER_SYMBOL(bsp_section_rtemsstack_begin)
+LINKER_SYMBOL(bsp_section_rtemsstack_end)
+LINKER_SYMBOL(bsp_section_rtemsstack_size)
 
 LINKER_SYMBOL(bsp_section_work_begin)
 LINKER_SYMBOL(bsp_section_work_end)

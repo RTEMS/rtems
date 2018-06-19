@@ -198,7 +198,9 @@ SECTIONS
     . = ALIGN (16);
     _stack_init = .;
     _clear_end = .;
-
+  } > ram
+  .rtemsstack (NOLOAD) : {
+    *(SORT(.rtemsstack.*))
     WorkAreaBase = .;
   } > ram
   .stab . (NOLOAD) :
