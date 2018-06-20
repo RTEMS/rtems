@@ -137,13 +137,7 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #define Stack_check_usable_stack_size(_the_stack) \
     ((_the_stack)->size - PATTERN_SIZE_BYTES)
 
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-  /*
-   *  Did RTEMS allocate the interrupt stack? If so, put it in
-   *  Stack_Control format.
-   */
-  Stack_Control Stack_check_Interrupt_stack;
-#endif
+static Stack_Control Stack_check_Interrupt_stack;
 
 /*
  *  Fill an entire stack area with BYTE_PATTERN.  This will be used
@@ -337,43 +331,18 @@ static inline void *Stack_check_find_high_water_mark(
   return (void *)0;
 }
 
-/*
- *  Stack_check_Dump_threads_usage
- *
- *  Try to print out how much stack was actually used by the task.
- */
-static bool Stack_check_Dump_threads_usage(
-  Thread_Control *the_thread,
-  void           *arg
+static bool Stack_check_Dump_stack_usage(
+  const Stack_Control *stack,
+  const void          *current,
+  const char          *name,
+  uint32_t             id,
+  const rtems_printer *printer
 )
 {
-  uint32_t             size, used;
-  void                *low;
-  void                *high_water_mark;
-  void                *current;
-  Stack_Control       *stack;
-  char                 name[ 22 ];
-  const rtems_printer *printer;
-  uint32_t             id;
-
-  printer = arg;
-
-  /*
-   *  Obtain interrupt stack information
-   */
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-    if (the_thread == (Thread_Control *) -1) {
-      if (!Stack_check_Interrupt_stack.area)
-        return false;
-      stack = &Stack_check_Interrupt_stack;
-      the_thread = 0;
-      current = 0;
-    } else
-  #endif
-    {
-      stack  = &the_thread->Start.Initial_stack;
-      current = (void *)_CPU_Context_Get_SP( &the_thread->Registers );
-    }
+  uint32_t  size;
+  uint32_t  used;
+  void     *low;
+  void     *high_water_mark;
 
   low  = Stack_check_usable_stack_start(stack);
   size = Stack_check_usable_stack_size(stack);
@@ -384,17 +353,6 @@ static bool Stack_check_Dump_threads_usage(
     used = Stack_check_Calculate_used( low, size, high_water_mark );
   else
     used = 0;
-
-#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-  if ( the_thread == NULL ) {
-    id = 0xffffffff;
-    strlcpy( name, "INTR", sizeof( name ) );
-  } else
-#endif
-  {
-    id = the_thread->Object.id;
-    _Thread_Get_name( the_thread, name, sizeof( name ) );
-  }
 
   rtems_printf(
     printer,
@@ -414,6 +372,40 @@ static bool Stack_check_Dump_threads_usage(
   }
 
   return false;
+}
+
+static bool Stack_check_Dump_threads_usage(
+  Thread_Control *the_thread,
+  void           *arg
+)
+{
+  char                 name[ 22 ];
+  const rtems_printer *printer;
+
+  printer = arg;
+  _Thread_Get_name( the_thread, name, sizeof( name ) );
+  Stack_check_Dump_stack_usage(
+    &the_thread->Start.Initial_stack,
+    (void *) _CPU_Context_Get_SP( &the_thread->Registers ),
+    name,
+    the_thread->Object.id,
+    printer
+  );
+  return false;
+}
+
+static void Stack_check_Dump_interrupt_stack_usage(
+  const Stack_Control *stack,
+  const rtems_printer *printer
+)
+{
+  Stack_check_Dump_stack_usage(
+    stack,
+    NULL,
+    "INTR",
+    0xffffffff,
+    printer
+  );
 }
 
 /*
@@ -436,13 +428,10 @@ void rtems_stack_checker_report_usage_with_plugin(
     RTEMS_DECONST( rtems_printer *, printer )
   );
 
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-    /* dump interrupt stack info if any */
-    Stack_check_Dump_threads_usage(
-      (Thread_Control *) -1,
-      RTEMS_DECONST( rtems_printer *, printer )
-    );
-  #endif
+  Stack_check_Dump_interrupt_stack_usage(
+    &Stack_check_Interrupt_stack,
+    printer
+  );
 }
 
 void rtems_stack_checker_report_usage( void )
