@@ -127,8 +127,8 @@ void rtems_stack_checker_switch_extension(
   rtems_stack_checker_switch_extension,        /* task_switch  */ \
   0,                                           /* task_begin   */ \
   0,                                           /* task_exitted */ \
-  0 /* rtems_stack_checker_fatal_extension */, /* fatal        */ \
-  0,                                           /* terminate    */ \
+  0,                                           /* fatal        */ \
+  0                                            /* terminate    */ \
 }
 
 #ifdef __cplusplus

@@ -27,15 +27,6 @@
 #include <rtems.h>
 #include <inttypes.h>
 
-/*
- * The stack dump information may be printed by a "fatal" extension.
- * Fatal extensions only get called via rtems_fatal_error_occurred()
- * and not when rtems_shutdown_executive() is called.
- * When that happens, this #define should be deleted and all the code
- * it marks.
- */
-#define DONT_USE_FATAL_EXTENSION
-
 #include <string.h>
 #include <stdlib.h>
 
@@ -424,21 +415,6 @@ static bool Stack_check_Dump_threads_usage(
 
   return false;
 }
-
-/*
- *  rtems_stack_checker_fatal_extension
- */
-#ifndef DONT_USE_FATAL_EXTENSION
-  void rtems_stack_checker_fatal_extension(
-    Internal_errors_Source  source,
-    bool                    always_set_to_false,
-    uint32_t                status
-  )
-  {
-    if (status == 0)
-      rtems_stack_checker_report_usage();
-  }
-#endif
 
 /*
  *  rtems_stack_checker_report_usage
