@@ -96,6 +96,8 @@ bool rtems_stack_checker_create_extension(
   Thread_Control *the_thread
 );
 
+void rtems_stack_checker_begin_extension( Thread_Control *executing );
+
 /**
  * @brief Stack Checker Task Context Switch Extension
  *
@@ -125,7 +127,7 @@ void rtems_stack_checker_switch_extension(
   0,                                           /* rtems_task_restart */ \
   0,                                           /* rtems_task_delete  */ \
   rtems_stack_checker_switch_extension,        /* task_switch  */ \
-  0,                                           /* task_begin   */ \
+  rtems_stack_checker_begin_extension,         /* task_begin   */ \
   0,                                           /* task_exitted */ \
   0,                                           /* fatal        */ \
   0                                            /* terminate    */ \

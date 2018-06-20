@@ -60,7 +60,7 @@
 /*
  *  Variable to indicate when the stack checker has been initialized.
  */
-static int   Stack_check_Initialized = 0;
+static bool Stack_check_Initialized;
 
 /*
  *  The "magic pattern" used to mark the end of the stack.
@@ -137,7 +137,11 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #define Stack_check_usable_stack_size(_the_stack) \
     ((_the_stack)->size - PATTERN_SIZE_BYTES)
 
-static Stack_Control Stack_check_Interrupt_stack;
+#if defined(RTEMS_SMP)
+static Stack_Control Stack_check_Interrupt_stack[ CPU_MAXIMUM_PROCESSORS ];
+#else
+static Stack_Control Stack_check_Interrupt_stack[ 1 ];
+#endif
 
 /*
  *  Fill an entire stack area with BYTE_PATTERN.  This will be used
@@ -145,30 +149,6 @@ static Stack_Control Stack_check_Interrupt_stack;
  */
 #define Stack_check_Dope_stack(_stack) \
   memset((_stack)->area, BYTE_PATTERN, (_stack)->size)
-
-/*
- *  Stack_check_Initialize
- */
-static void Stack_check_Initialize( void )
-{
-  if ( Stack_check_Initialized )
-    return;
-
-  /*
-   * If appropriate, setup the interrupt stack for high water testing
-   * also.
-   */
-  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
-    if (_CPU_Interrupt_stack_low && _CPU_Interrupt_stack_high) {
-      Stack_check_Interrupt_stack.area = _CPU_Interrupt_stack_low;
-      Stack_check_Interrupt_stack.size = (char *) _CPU_Interrupt_stack_high -
-                                  (char *) _CPU_Interrupt_stack_low;
-      Stack_check_Dope_stack(&Stack_check_Interrupt_stack);
-   }
-  #endif
-
-  Stack_check_Initialized = 1;
-}
 
 static bool Stack_check_Is_pattern_valid(const Thread_Control *the_thread)
 {
@@ -187,9 +167,9 @@ bool rtems_stack_checker_create_extension(
   Thread_Control *the_thread
 )
 {
-  Stack_check_Initialize();
-  Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
+  Stack_check_Initialized = true;
 
+  Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
   memcpy(
     Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
     Stack_check_Pattern,
@@ -197,6 +177,44 @@ bool rtems_stack_checker_create_extension(
   );
 
   return true;
+}
+
+void rtems_stack_checker_begin_extension( Thread_Control *executing )
+{
+#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+  Per_CPU_Control *cpu_self;
+  uint32_t         cpu_self_index;
+  Stack_Control   *stack;
+
+  /*
+   * If appropriate, set up the interrupt stack of the current processor for
+   * high water testing also.  This must be done after multi-threading started,
+   * since the initialization stacks may reuse the interrupt stacks.  Disable
+   * thread dispatching in SMP configurations to prevent thread migration.
+   * Writing to the interrupt stack is only safe if done from the corresponding
+   * processor in thread context.
+   */
+
+#if defined(RTEMS_SMP)
+  cpu_self = _Thread_Dispatch_disable();
+#else
+  cpu_self = _Per_CPU_Get();
+#endif
+
+  cpu_self_index = _Per_CPU_Get_index( cpu_self );
+  stack = &Stack_check_Interrupt_stack[ cpu_self_index ];
+
+  if ( stack->area == NULL ) {
+    stack->area = cpu_self->interrupt_stack_low;
+    stack->size = (size_t) ( (char *) cpu_self->interrupt_stack_high -
+      (char *) cpu_self->interrupt_stack_low );
+    Stack_check_Dope_stack( stack );
+  }
+
+#if defined(RTEMS_SMP)
+  _Thread_Dispatch_enable( cpu_self );
+#endif
+#endif
 }
 
 /*
@@ -365,10 +383,10 @@ static bool Stack_check_Dump_stack_usage(
     size
   );
 
-  if (Stack_check_Initialized == 0) {
-    rtems_printf( printer, "N/A\n" );
-  } else {
+  if (Stack_check_Initialized) {
     rtems_printf( printer, "%6" PRId32 "\n", used );
+  } else {
+    rtems_printf( printer, "N/A\n" );
   }
 
   return false;
@@ -396,14 +414,15 @@ static bool Stack_check_Dump_threads_usage(
 
 static void Stack_check_Dump_interrupt_stack_usage(
   const Stack_Control *stack,
+  uint32_t             id,
   const rtems_printer *printer
 )
 {
   Stack_check_Dump_stack_usage(
     stack,
     NULL,
-    "INTR",
-    0xffffffff,
+    "Interrupt Stack",
+    id,
     printer
   );
 }
@@ -416,6 +435,9 @@ void rtems_stack_checker_report_usage_with_plugin(
   const rtems_printer* printer
 )
 {
+  uint32_t cpu_max;
+  uint32_t cpu_index;
+
   rtems_printf(
      printer,
      "                             STACK USAGE BY THREAD\n"
@@ -428,10 +450,15 @@ void rtems_stack_checker_report_usage_with_plugin(
     RTEMS_DECONST( rtems_printer *, printer )
   );
 
-  Stack_check_Dump_interrupt_stack_usage(
-    &Stack_check_Interrupt_stack,
-    printer
-  );
+  cpu_max = rtems_get_processor_count();
+
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+    Stack_check_Dump_interrupt_stack_usage(
+      &Stack_check_Interrupt_stack[ cpu_index ],
+      cpu_index,
+      printer
+    );
+  }
 }
 
 void rtems_stack_checker_report_usage( void )
