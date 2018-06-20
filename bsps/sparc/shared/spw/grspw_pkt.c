@@ -2,7 +2,7 @@
  * Cobham Gaisler GRSPW/GRSPW2 SpaceWire Kernel Library Interface for RTEMS.
  *
  * This driver can be used to implement a standard I/O system "char"-driver
- * or used directly. NOTE SMP support has not been tested.
+ * or used directly.
  *
  * COPYRIGHT (c) 2011
  * Cobham Gaisler AB
