@@ -154,6 +154,29 @@ static inline void *fdt_offset_ptr_w(void *fdt, int offset, int checklen)
 
 uint32_t fdt_next_tag(const void *fdt, int offset, int *nextoffset);
 
+/*
+ * Alignment helpers:
+ *     These helpers access words from a device tree blob.  They're
+ *     built to work even with unaligned pointers on platforms (ike
+ *     ARM) that don't like unaligned loads and stores
+ */
+
+static inline uint32_t fdt32_ld(const fdt32_t *p)
+{
+	fdt32_t v;
+
+	memcpy(&v, p, sizeof(v));
+	return fdt32_to_cpu(v);
+}
+
+static inline uint64_t fdt64_ld(const fdt64_t *p)
+{
+	fdt64_t v;
+
+	memcpy(&v, p, sizeof(v));
+	return fdt64_to_cpu(v);
+}
+
 /**********************************************************************/
 /* Traversal functions                                                */
 /**********************************************************************/
@@ -214,7 +237,7 @@ int fdt_next_subnode(const void *fdt, int offset);
 /* General functions                                                  */
 /**********************************************************************/
 #define fdt_get_header(fdt, field) \
-	(fdt32_to_cpu(((const struct fdt_header *)(fdt))->field))
+	(fdt32_ld(&((const struct fdt_header *)(fdt))->field))
 #define fdt_magic(fdt)			(fdt_get_header(fdt, magic))
 #define fdt_totalsize(fdt)		(fdt_get_header(fdt, totalsize))
 #define fdt_off_dt_struct(fdt)		(fdt_get_header(fdt, off_dt_struct))
