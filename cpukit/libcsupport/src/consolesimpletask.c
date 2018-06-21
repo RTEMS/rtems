@@ -139,6 +139,8 @@ static int _Console_simple_task_Fsync( rtems_libio_t *iop )
 
   cons = IMFS_generic_get_context_by_iop( iop );
   _Console_simple_task_Put_chars( cons );
+
+  return 0;
 }
 
 static const rtems_filesystem_file_handlers_r _Console_simple_task_Handlers = {
