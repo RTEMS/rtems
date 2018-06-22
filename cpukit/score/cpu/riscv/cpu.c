@@ -59,15 +59,13 @@ void _CPU_Initialize(void)
   /* Do nothing */
 }
 
-void _CPU_ISR_Set_level(unsigned long level)
+uint32_t _CPU_ISR_Get_level( void )
 {
-  /* Do nothing */
-}
+  if ( _CPU_ISR_Is_enabled( read_csr( mstatus ) ) ) {
+    return 0;
+  }
 
-unsigned long  _CPU_ISR_Get_level( void )
-{
-  /* Do nothing */
-  return 0;
+  return 1;
 }
 
 void _CPU_ISR_install_raw_handler(

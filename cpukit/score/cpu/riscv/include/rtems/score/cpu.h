@@ -187,9 +187,20 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( unsigned long level )
   return ( level & MSTATUS_MIE ) != 0;
 }
 
-void _CPU_ISR_Set_level( unsigned long level );
+RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level( uint32_t level )
+{
+  if ( ( level & CPU_MODES_INTERRUPT_MASK) == 0 ) {
+    __asm__ volatile (
+      "csrrs zero, mstatus, " RTEMS_XSTRING( MSTATUS_MIE )
+    );
+  } else {
+    __asm__ volatile (
+      "csrrc zero, mstatus, " RTEMS_XSTRING( MSTATUS_MIE )
+    );
+  }
+}
 
-unsigned long _CPU_ISR_Get_level( void );
+uint32_t _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
