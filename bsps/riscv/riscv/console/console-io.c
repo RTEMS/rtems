@@ -47,7 +47,7 @@ volatile uint64_t fromhost __attribute__((section(".htif")));
 volatile uint64_t riscv_fill_up_htif_section[510] __attribute__((section(".htif")));
 volatile int htif_console_buf;
 
-static void __check_fromhost()
+static void __check_fromhost(void)
 {
   uint64_t fh = fromhost;
   if (!fh) {
@@ -76,7 +76,7 @@ static void __set_tohost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
   tohost = TOHOST_CMD(dev, cmd, data);
 }
 
-int htif_console_getchar()
+static int htif_console_getchar(void)
 {
   __check_fromhost();
   int ch = htif_console_buf;
@@ -88,28 +88,12 @@ int htif_console_getchar()
   return ch - 1;
 }
 
-static void do_tohost_fromhost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
-{
-  __set_tohost(dev, cmd, data);
-
-  while (1) {
-    uint64_t fh = fromhost;
-    if (fh) {
-      if (FROMHOST_DEV(fh) == dev && FROMHOST_CMD(fh) == cmd) {
-        fromhost = 0;
-        break;
-      }
-      __check_fromhost();
-    }
-  }
-}
-
-void htif_console_putchar(uint8_t ch)
+static void htif_console_putchar(uint8_t ch)
 {
   __set_tohost(1, 1, ch);
 }
 
-void htif_poweroff()
+void htif_poweroff(void)
 {
   while (1) {
     fromhost = 0;
