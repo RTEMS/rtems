@@ -42,7 +42,7 @@ PUBLIC(bsp_start_vector_table_begin)
 PUBLIC(bsp_start_vector_table_end)
 PUBLIC(_start)
 
-	.section	.bsp_start_text, "ax", @progbits
+	.section	.bsp_start_text, "wax", @progbits
 	.align	2
 
 TYPE_FUNC(_start)
@@ -55,7 +55,7 @@ SYM(_start):
 
 #ifdef RTEMS_SMP
 	csrr	s0, mhartid
-	bnez	s0, .Lloop_forever
+	bnez	s0, .Lwait_for_go
 #endif
 
 	/* load stack and frame pointers */
@@ -75,6 +75,13 @@ SYM(_start):
 	la	a2, bsp_section_bss_size
 	call	memset
 
+#ifdef RTEMS_SMP
+	/* Give go to secondary processors */
+	la	t0, .Lsecondary_processor_go
+	fence	iorw,ow
+	amoswap.w	zero, zero, 0(t0)
+#endif
+
 	/* Init FPU unit if it's there */
 	li	t0, MSTATUS_FS
 	csrs	mstatus, t0
@@ -82,8 +89,19 @@ SYM(_start):
 	j	boot_card
 
 #ifdef RTEMS_SMP
+	/* Wait for go issued by the boot processor (mhartid == 0) */
+.Lwait_for_go:
+	la	t0, .Lsecondary_processor_go
+.Lwait_for_go_again:
+	lw	t1, 0(t0)
+	fence	iorw, iorw
+	sext.w	t1, t1
+	bnez	t1, .Lwait_for_go_again
 .Lloop_forever:
 	j	.Lloop_forever
+
+.Lsecondary_processor_go:
+	.word	0xdeadbeef
 #endif
 
 	.align	4
