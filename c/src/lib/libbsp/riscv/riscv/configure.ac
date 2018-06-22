@@ -2,11 +2,11 @@
 #
 # @file
 #
-# @brief Configure script of LibBSP for riscv_generic BSP.
+# @brief Configure script of LibBSP for riscv BSP.
 #
 
 AC_PREREQ([2.69])
-AC_INIT([rtems-c-src-lib-libbsp-riscv_generic],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
+AC_INIT([rtems-c-src-lib-libbsp-riscv],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
 RTEMS_TOP(../../../../../..)
 RTEMS_SOURCE_TOP
 RTEMS_BUILD_TOP
