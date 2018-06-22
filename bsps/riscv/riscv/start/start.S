@@ -27,10 +27,11 @@
  * SUCH DAMAGE.
  */
 
-#include <bsp/linker-symbols.h>
-#include <rtems/score/riscv-utility.h>
-#include <rtems/score/cpu.h>
 #include <rtems/asm.h>
+#include <rtems/score/cpu.h>
+#include <rtems/score/riscv-utility.h>
+#include <bsp/linker-symbols.h>
+#include <bspopts.h>
 
 EXTERN(bsp_section_bss_begin)
 EXTERN(bsp_section_bss_end)
@@ -57,11 +58,16 @@ SYM(_start):
 	bnez	s0, .Lloop_forever
 #endif
 
-	la	t0, ISR_Handler
-	csrw	mtvec, t0
-
 	/* load stack and frame pointers */
 	la	sp, _Configuration_Interrupt_stack_area_end
+
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+	mv	a0, a1
+	call	bsp_fdt_copy
+#endif
+
+	la	t0, ISR_Handler
+	csrw	mtvec, t0
 
 	/* Clear .bss */
 	la	a0, bsp_section_bss_begin

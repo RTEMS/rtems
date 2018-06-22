@@ -44,6 +44,8 @@
 extern "C" {
 #endif
 
+#define BSP_FDT_IS_SUPPORTED
+
 /**
   * @defgroup riscv_generic Register Definitions
   *

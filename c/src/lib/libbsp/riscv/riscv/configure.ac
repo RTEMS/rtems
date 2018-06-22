@@ -15,6 +15,18 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
 RTEMS_BSP_CONFIGURE
 
+RTEMS_BSPOPTS_SET([BSP_START_COPY_FDT_FROM_U_BOOT],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_START_COPY_FDT_FROM_U_BOOT],[copy the U-Boot provided FDT to an internal storage])
+
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_SIZE_MAX],[*],[65536])
+RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_SIZE_MAX],[maximum size of the FDT blob in bytes])
+
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_READ_ONLY],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_READ_ONLY],[place the FDT blob into the read-only data area])
+
+RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[*],[1])
+RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[copy the FDT blob into the read-only load area via bsp_fdt_copy()])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 case "${RTEMS_BSP}" in
