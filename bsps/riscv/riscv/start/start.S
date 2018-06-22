@@ -52,16 +52,11 @@ SYM(_start):
 	/* load stack and frame pointers */
 	la	sp, _Configuration_Interrupt_stack_area_end
 
-	/* Clearing .bss */
-	la	t0, bsp_section_bss_begin
-	la	t1, bsp_section_bss_end
-
-_loop_clear_bss:
-	bge	t0, t1, _end_clear_bss
-	SREG	x0, 0(t0)
-	addi	t0, t0, CPU_SIZEOF_POINTER
-	j	_loop_clear_bss
-_end_clear_bss:
+	/* Clear .bss */
+	la	a0, bsp_section_bss_begin
+	li	a1, 0
+	la	a2, bsp_section_bss_size
+	call	memset
 
 	/* Init FPU unit if it's there */
 	li	t0, MSTATUS_FS
