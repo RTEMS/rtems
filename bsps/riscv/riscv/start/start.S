@@ -46,6 +46,12 @@ PUBLIC(_start)
 
 TYPE_FUNC(_start)
 SYM(_start):
+	/* Load global pointer */
+	.option	push
+	.option	norelax
+	la	gp, __global_pointer$
+	.option	pop
+
 	la	t0, ISR_Handler
 	csrw	mtvec, t0
 
