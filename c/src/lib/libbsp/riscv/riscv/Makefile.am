@@ -49,9 +49,6 @@ librtemsbsp_a_SOURCES +=../../../../../../bsps/riscv/riscv/clock/clockdrv.c
 # Timer
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/btimer/btimer.c
 
-# console
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-polled.c
-
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/irq/irq.c
@@ -59,8 +56,10 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/irq/irq.c
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-# debugio
-librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/console-io.c
+# Console
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/htif.c
 
 if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c

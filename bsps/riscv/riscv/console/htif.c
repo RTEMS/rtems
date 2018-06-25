@@ -27,12 +27,9 @@
  * SUCH DAMAGE.
  */
 
-#include <bsp.h>
-#include <bsp/console-polled.h>
-#include <rtems/libio.h>
-#include <stdlib.h>
+#include <dev/serial/htif.h>
+
 #include <assert.h>
-#include <stdio.h>
 
 /* Most of the code below is copied from riscv-pk project */
 # define TOHOST_CMD(dev, cmd, payload) \
@@ -76,7 +73,7 @@ static void __set_tohost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
   tohost = TOHOST_CMD(dev, cmd, data);
 }
 
-static int htif_console_getchar(void)
+int htif_console_poll_char(rtems_termios_device_context *base)
 {
   __check_fromhost();
   int ch = htif_console_buf;
@@ -88,9 +85,17 @@ static int htif_console_getchar(void)
   return ch - 1;
 }
 
-static void htif_console_putchar(uint8_t ch)
+void htif_console_write_polled(
+  rtems_termios_device_context *base,
+  const char *buf,
+  size_t len
+)
 {
-  __set_tohost(1, 1, ch);
+  size_t i;
+
+  for (i = 0; i < len; ++i) {
+    __set_tohost(1, 1, buf[i]);
+  }
 }
 
 void htif_poweroff(void)
@@ -101,62 +106,27 @@ void htif_poweroff(void)
   }
 }
 
-void console_initialize_hardware(void)
-{
-  /* Do nothing */
-}
-
-static void outbyte_console(char ch)
-{
-  htif_console_putchar(ch);
-}
-
-static char inbyte_console(void)
-{
-  return htif_console_getchar();
-}
-
-/*
- *  console_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-void console_outbyte_polled(
-  int  port,
-  char ch
+void htif_console_context_init(
+  rtems_termios_device_context *base,
+  int device_tree_node
 )
 {
-  outbyte_console( ch );
+  rtems_termios_device_context_initialize(base, "HTIF");
 }
 
-/*
- *  console_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-
-int console_inbyte_nonblocking(int port)
+static bool htif_console_first_open(
+  struct rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
+)
 {
-  char c;
-
-  c = inbyte_console();
-  if (!c) {
-    return -1;
-  }
-  return (int) c;
+  return true;
 }
 
-/*
- *  To support printk
- */
-
-#include <rtems/bspIo.h>
-
-static void RISCV_output_char(char c)
-{
-  console_outbyte_polled( 0, c );
-}
-
-BSP_output_char_function_type BSP_output_char = RISCV_output_char;
-BSP_polling_getchar_function_type BSP_poll_char =
-  (void *)console_inbyte_nonblocking;
+const rtems_termios_device_handler htif_console_handler = {
+  .first_open = htif_console_first_open,
+  .write = htif_console_write_polled,
+  .poll_read = htif_console_poll_char,
+  .mode = TERMIOS_POLLED
+};

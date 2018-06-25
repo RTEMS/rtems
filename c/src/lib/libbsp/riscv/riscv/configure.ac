@@ -27,6 +27,9 @@ RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_READ_ONLY],[place the FDT blob into the read-on
 RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[copy the FDT blob into the read-only load area via bsp_fdt_copy()])
 
+RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[1])
+RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (enabled by default)])
+
 RTEMS_BSP_CLEANUP_OPTIONS
 
 case "${RTEMS_BSP}" in
