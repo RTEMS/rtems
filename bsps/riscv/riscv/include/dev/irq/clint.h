@@ -1,10 +1,5 @@
 /*
- *
- * Copyright (c) 2015 University of York.
- * Hesham Almatary <hesham@alumni.york.ac.uk>
- *
- * COPYRIGHT (c) 1989-1999.
- * On-Line Applications Research Corporation (OAR).
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,26 +23,31 @@
  * SUCH DAMAGE.
  */
 
-#ifndef LIBBSP_RISCV_GENERIC_H
-#define LIBBSP_RISCV_GENERIC_H
+#include <stdint.h>
 
-#include <rtems.h>
-#include <rtems/clockdrv.h>
-#include <rtems/console.h>
-
-#include <bspopts.h>
-#include <bsp/default-initial-extension.h>
-
-#include <rtems/devnull.h>
+#ifndef DEV_IRQ_CLINT_H
+#define DEV_IRQ_CLINT_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
-#define BSP_FDT_IS_SUPPORTED
+typedef struct {
+  uint32_t msip[4096];
+  union {
+    uint64_t val_64;
+    uint32_t val_32[2];
+  } mtimecmp[2048];
+  uint32_t reserved_8000[4094];
+  union {
+    uint64_t val_64;
+    uint32_t val_32[2];
+  } mtime;
+  uint32_t reserved_c000[4096];
+} clint_regs;
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif /* LIBBSP_RISCV_GENERIC_H */
+#endif /* DEV_IRQ_CLINT_H */

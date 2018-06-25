@@ -7,8 +7,7 @@
  */
 
 /*
- * riscv_generic Clock driver
- *
+ * Copyright (c) 2018 embedded brains GmbH
  * COPYRIGHT (c) 2015 Hesham Alatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,75 +32,102 @@
  * SUCH DAMAGE.
  */
 
-#include <rtems.h>
-#include <bsp.h>
-#include <bsp/irq.h>
-#include <rtems/score/riscv-utility.h>
-#include <rtems/score/cpu.h>
 #include <rtems/timecounter.h>
 
-/* The number of clock cycles before generating a tick timer interrupt. */
-#define TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT     1000
-#define RISCV_CLOCK_CYCLE_TIME_NANOSECONDS    1
+#include <bsp.h>
+#include <bsp/fatal.h>
+#include <bsp/fdt.h>
+#include <bsp/irq.h>
 
-static struct timecounter riscv_generic_tc;
+#include <dev/irq/clint.h>
 
-/* CPU counter */
-static CPU_Counter_ticks cpu_counter_ticks;
+#include <libfdt.h>
 
-/* This prototype is added here to Avoid warnings */
+#define CLINT ((volatile clint_regs *) 0x02000000)
+
+/* This is defined in dev/clock/clockimpl.h */
 void Clock_isr(void *arg);
 
-static void riscv_generic_clock_at_tick(void)
-{
-  REG(MTIME_MM) = 0;
-  REG(MTIMECMP_MM) = TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
+static struct timecounter riscv_clock_tc;
 
-  cpu_counter_ticks += TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT * 10000;
+static uint32_t riscv_clock_interval;
+
+static void riscv_clock_at_tick(void)
+{
+  volatile clint_regs *clint;
+  uint64_t cmp;
+
+  clint = CLINT;
+
+  cmp = clint->mtimecmp[0].val_64;
+  cmp += riscv_clock_interval;
+
+#if __riscv_xlen == 32
+  clint->mtimecmp[0].val_32[0] = 0xffffffff;
+  clint->mtimecmp[0].val_32[1] = (uint32_t) (cmp >> 32);
+  clint->mtimecmp[0].val_32[0] = (uint32_t) cmp;
+#elif __riscv_xlen == 64
+  clint->mtimecmp[0].val_64 = cmp;
+#endif
 }
 
-static void riscv_generic_clock_handler_install(proc_ptr new_isr)
+static void riscv_clock_handler_install(proc_ptr new_isr)
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
   _CPU_ISR_install_vector(RISCV_MACHINE_TIMER_INTERRUPT,
                           new_isr,
                           NULL);
-
-  if (sc != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
 }
 
-static uint32_t riscv_generic_get_timecount(struct timecounter *tc)
+static uint32_t riscv_clock_get_timecount(struct timecounter *tc)
 {
-  uint32_t ticks_since_last_timer_interrupt = REG(MTIME_MM);
+  volatile clint_regs *clint;
 
-  return cpu_counter_ticks + ticks_since_last_timer_interrupt;
+  clint = CLINT;
+  return clint->mtime.val_32[0];
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)
 {
-  return riscv_generic_get_timecount(NULL);
+  return riscv_clock_get_timecount(NULL);
 }
 
-static void riscv_generic_clock_initialize(void)
+static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
 {
-  uint32_t mtimecmp = TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
-  uint64_t frequency = (1000000000 / RISCV_CLOCK_CYCLE_TIME_NANOSECONDS);
+  int node;
+  const uint32_t *val;
+  int len;
 
-  REG(MTIME_MM) = 0;
-  REG(MTIMECMP_MM) = TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
+  node = fdt_path_offset(fdt, "/cpus");
+  val = fdt_getprop(fdt, node, "timebase-frequency", &len);
+  if (val == NULL || len < 4) {
+    bsp_fatal(RISCV_FATAL_NO_TIMEBASE_FREQUENCY_IN_DEVICE_TREE);
+  }
+
+  return fdt32_to_cpu(*val);
+}
+
+static void riscv_clock_initialize(void)
+{
+  const char *fdt;
+  uint32_t tb_freq;
+  uint64_t us_per_tick;
+
+  fdt = bsp_fdt_get();
+  tb_freq = riscv_clock_get_timebase_frequency(fdt);
+  us_per_tick = rtems_configuration_get_microseconds_per_tick();
+  riscv_clock_interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
+
+  riscv_clock_at_tick();
 
   /* Enable mtimer interrupts */
   set_csr(mie, MIP_MTIP);
-  set_csr(mip, MIP_MTIP);
 
   /* Initialize timecounter */
-  riscv_generic_tc.tc_get_timecount = riscv_generic_get_timecount;
-  riscv_generic_tc.tc_counter_mask = 0xffffffff;
-  riscv_generic_tc.tc_frequency = frequency;
-  riscv_generic_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-  rtems_timecounter_install(&riscv_generic_tc);
+  riscv_clock_tc.tc_get_timecount = riscv_clock_get_timecount;
+  riscv_clock_tc.tc_counter_mask = 0xffffffff;
+  riscv_clock_tc.tc_frequency = tb_freq;
+  riscv_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&riscv_clock_tc);
 }
 
 CPU_Counter_ticks _CPU_Counter_difference(
@@ -112,11 +138,11 @@ CPU_Counter_ticks _CPU_Counter_difference(
   return second - first;
 }
 
-#define Clock_driver_support_at_tick() riscv_generic_clock_at_tick()
+#define Clock_driver_support_at_tick() riscv_clock_at_tick()
 
-#define Clock_driver_support_initialize_hardware() riscv_generic_clock_initialize()
+#define Clock_driver_support_initialize_hardware() riscv_clock_initialize()
 
 #define Clock_driver_support_install_isr(isr) \
-  riscv_generic_clock_handler_install(isr)
+  riscv_clock_handler_install(isr)
 
 #include "../../../shared/dev/clock/clockimpl.h"

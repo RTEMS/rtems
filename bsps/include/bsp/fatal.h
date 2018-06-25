@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -137,7 +137,10 @@ typedef enum {
   ATSAM_FATAL_PIO_CONFIGURE_IT,
 
   /* i.MX fatal codes */
-  IMX_FATAL_GENERIC_TIMER_FREQUENCY = BSP_FATAL_CODE_BLOCK(12)
+  IMX_FATAL_GENERIC_TIMER_FREQUENCY = BSP_FATAL_CODE_BLOCK(12),
+
+  /* RISC-V fatal codes */
+  RISCV_FATAL_NO_TIMEBASE_FREQUENCY_IN_DEVICE_TREE = BSP_FATAL_CODE_BLOCK(13)
 } bsp_fatal_code;
 
 RTEMS_NO_RETURN static inline void
