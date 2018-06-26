@@ -117,4 +117,12 @@
 #define EXTERN(sym)    .extern SYM (sym)
 #define TYPE_FUNC(sym) .type SYM (sym), %function
 
+.macro GET_SELF_CPU_CONTROL REG
+#ifdef RTEMS_SMP
+	csrr	\REG, mscratch
+#else
+	la	\REG, _Per_CPU_Information
+#endif
+.endm
+
 #endif

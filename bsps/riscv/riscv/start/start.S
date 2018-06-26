@@ -28,7 +28,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/riscv-utility.h>
 #include <bsp/linker-symbols.h>
 #include <bspopts.h>
@@ -55,6 +55,10 @@ SYM(_start):
 
 #ifdef RTEMS_SMP
 	csrr	s0, mhartid
+	la	t0, _Per_CPU_Information
+	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
+	add	t0, t0, t1
+	csrw	mscratch, t0
 	bnez	s0, .Lwait_for_go
 #endif
 
