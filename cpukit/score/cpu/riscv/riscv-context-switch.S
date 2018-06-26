@@ -1,5 +1,5 @@
 /*
- * riscv32 CPU Dependent Source
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham ALmatary <hesham@alumni.york.ac.uk>
@@ -31,8 +31,7 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
-#include <rtems/score/riscv-utility.h>
+#include <rtems/score/percpu.h>
 
 	.section	.text, "ax", @progbits
 	.align	2
@@ -41,14 +40,16 @@ PUBLIC(_CPU_Context_switch)
 PUBLIC(_CPU_Context_restore)
 PUBLIC(_CPU_Context_restore_fp)
 PUBLIC(_CPU_Context_save_fp)
-PUBLIC(restore)
 
 SYM(_CPU_Context_switch):
+	GET_SELF_CPU_CONTROL	a2
+	lw	a3, PER_CPU_ISR_DISPATCH_DISABLE(a2)
+
 	/* Disable interrupts and store all registers */
 	csrr	t0, mstatus
 	SREG	t0, (32 * CPU_SIZEOF_POINTER)(a0)
 
-	csrci	mstatus, MSTATUS_MIE
+	csrci	mstatus, RISCV_MSTATUS_MIE
 
 	SREG	x1, (1 * CPU_SIZEOF_POINTER)(a0)
 	SREG	x2, (2 * CPU_SIZEOF_POINTER)(a0)
@@ -81,7 +82,12 @@ SYM(_CPU_Context_switch):
 	SREG	x30, (30 * CPU_SIZEOF_POINTER)(a0)
 	SREG	x31, (31 * CPU_SIZEOF_POINTER)(a0)
 
-	SYM(restore):
+	sw	a3, RISCV_CONTEXT_ISR_DISPATCH_DISABLE(a0)
+
+.Lrestore:
+	lw	a3, RISCV_CONTEXT_ISR_DISPATCH_DISABLE(a1)
+
+	sw	a3, PER_CPU_ISR_DISPATCH_DISABLE(a2)
 
 	LREG	x1, (1 * CPU_SIZEOF_POINTER)(a1)
 	LREG	x2, (2 * CPU_SIZEOF_POINTER)(a1)
@@ -123,9 +129,10 @@ SYM(_CPU_Context_switch):
 
 	ret
 
-	SYM(_CPU_Context_restore):
+SYM(_CPU_Context_restore):
 	mv	a1, a0
-	j	restore
+	GET_SELF_CPU_CONTROL	a2
+	j	.Lrestore
 
 	/* TODO no FP support for riscv32 yet */
 	SYM(_CPU_Context_restore_fp):

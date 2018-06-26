@@ -7,6 +7,8 @@
  */
 
 /*
+ * Copyright (c) 2018 embedded brains GmbH
+
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
  *
@@ -35,8 +37,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#include <rtems/score/cpu.h>
 
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
@@ -95,18 +95,16 @@ SYM(ISR_Handler):
 	/* FIXME Only handle interrupts for now (MSB = 1) */
 	andi	a0, a0, 0xf
 
-	/* Increment nesting level */
-	la	t0, ISR_NEST_LEVEL
+	/* Get per-CPU control of current processor */
+	GET_SELF_CPU_CONTROL	s0
 
-	/* Disable multitasking */
-	la	t1, THREAD_DISPATCH_DISABLE_LEVEL
-
-	lw	t2, (t0)
-	lw	t3, (t1)
-	addi	t2, t2, 1
-	addi	t3, t3, 1
-	sw	t2, (t0)
-	sw	t3, (t1)
+	/* Increment interrupt nest and thread dispatch disable level */
+	lw	t0, PER_CPU_ISR_NEST_LEVEL(s0)
+	lw	t1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
+	addi	t2, t0, 1
+	addi	t1, t1, 1
+	sw	t2, PER_CPU_ISR_NEST_LEVEL(s0)
+	sw	t1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
 
 	/* Save interrupted task stack pointer */
 	addi	t4, sp, 36 * CPU_SIZEOF_POINTER
@@ -132,50 +130,67 @@ SYM(ISR_Handler):
 	add	t5, t5, t6
 	LREG	t5, (t5)
 
-	/* Do not switch stacks if we are in a nested interrupt. At
-		* this point t2 should be holding ISR_NEST_LEVEL value.
-		*/
-	li	s0, 1
-	bgtu	t2, s0, jump_to_c_handler
+	/* Switch to interrupt stack if necessary */
+	bnez	t0, .Linterrupt_stack_switch_done
+	LREG	sp, PER_CPU_INTERRUPT_STACK_HIGH(s0)
+.Linterrupt_stack_switch_done:
 
-	/* Switch to RTEMS dedicated interrupt stack */
-	la	sp, INTERRUPT_STACK_HIGH
-	LREG	sp, (sp)
-
-jump_to_c_handler:
 	jalr	t5
 
-	/* Switch back to the interrupted task stack */
+	/* Load some per-CPU variables */
+	lw	t0, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
+	lbu	t1, PER_CPU_DISPATCH_NEEDED(s0)
+	lw	t2, PER_CPU_ISR_DISPATCH_DISABLE(s0)
+	lw	t3, PER_CPU_ISR_NEST_LEVEL(s0)
+
+	/* Restore stack pointer */
 	mv	sp, s1
 
-	/* Decrement nesting level */
-	la	t0, ISR_NEST_LEVEL
-
-	/* Enable multitasking */
-	la	t1, THREAD_DISPATCH_DISABLE_LEVEL
-
-	Lw	t2, (t0)
-	lw	t3, (t1)
-	addi	t2, t2, -1
+	/* Decrement levels and determine thread dispatch state */
+	xor	t1, t1, t0
+	addi	t0, t0, -1
+	or	t1, t1, t0
+	or	t1, t1, t2
 	addi	t3, t3, -1
-	sw	t2, (t0)
-	sw	t3, (t1)
 
-	/* Check if _ISR_Nest_level > 0 */
-	bgtz	t2, exception_frame_restore
+	/* Store thread dispatch disable and ISR nest levels */
+	sw	t0, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
+	sw	t3, PER_CPU_ISR_NEST_LEVEL(s0)
 
-	/* Check if _Thread_Dispatch_disable_level > 0 */
-	bgtz	t3, exception_frame_restore
+	/*
+	 * Check thread dispatch necessary, ISR dispatch disable and thread
+	 * dispatch disable level.
+	 */
+	bnez	t1, .Lthread_dispatch_done
 
-	/* Check if dispatch needed */
-	la	x31, DISPATCH_NEEDED
-	lw	x31, (x31)
-	beqz	x31, exception_frame_restore
+.Ldo_thread_dispatch:
 
-	la	x31, _Thread_Dispatch
-	jalr	x31
+	/* Set ISR dispatch disable and thread dispatch disable level to one */
+	li	t0, 1
+	sw	t0, PER_CPU_ISR_DISPATCH_DISABLE(s0)
+	sw	t0, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
 
-	SYM(exception_frame_restore):
+	/* Call _Thread_Do_dispatch(), this function will enable interrupts */
+	mv	a0, s0
+	li	a1, RISCV_MSTATUS_MIE
+	call	_Thread_Do_dispatch
+
+	/* Disable interrupts */
+	csrrc	zero, mstatus, RISCV_MSTATUS_MIE
+
+#ifdef RTEMS_SMP
+	GET_SELF_CPU_CONTROL	s0
+#endif
+
+	/* Check if we have to do the thread dispatch again */
+	lbu	t0, PER_CPU_DISPATCH_NEEDED(s0)
+	bnez	t0, .Ldo_thread_dispatch
+
+	/* We are done with thread dispatching */
+	sw	zero, PER_CPU_ISR_DISPATCH_DISABLE(s0)
+
+.Lthread_dispatch_done:
+
 	LREG	x1, (1 * CPU_SIZEOF_POINTER)(sp)
 	/* Skip sp/x2 */
 	LREG	x3, (3 * CPU_SIZEOF_POINTER)(sp)

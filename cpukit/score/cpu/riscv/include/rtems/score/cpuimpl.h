@@ -38,9 +38,13 @@
 
 #if __riscv_xlen == 32
 
+#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 140
+
 #define CPU_INTERRUPT_FRAME_SIZE 144
 
 #elif __riscv_xlen == 64
+
+#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 280
 
 #define CPU_INTERRUPT_FRAME_SIZE 288
 

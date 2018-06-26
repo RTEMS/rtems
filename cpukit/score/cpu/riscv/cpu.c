@@ -1,5 +1,5 @@
 /*
- * RISC-V CPU Dependent Source
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham ALmatary <hesham@alumni.york.ac.uk>
@@ -29,9 +29,17 @@
  * SUCH DAMAGE.
  */
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/riscv-utility.h>
+
+#define RISCV_ASSERT_CONTEXT_OFFSET( field, off ) \
+  RTEMS_STATIC_ASSERT( \
+    offsetof( Context_Control, field) == RISCV_CONTEXT_ ## off, \
+    riscv_context_offset_ ## field \
+  )
+
+RISCV_ASSERT_CONTEXT_OFFSET( isr_dispatch_disable, ISR_DISPATCH_DISABLE );
 
 /* bsp_start_vector_table_begin is the start address of the vector table
  * containing addresses to ISR Handlers. It's defined at the BSP linkcmds

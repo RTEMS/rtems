@@ -3,6 +3,7 @@
  */
 
 /*
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -75,6 +76,7 @@ typedef struct {
   unsigned long mstatus;
   unsigned long mcause;
   unsigned long mepc;
+  uint32_t isr_dispatch_disable;
 #ifdef RTEMS_SMP
   volatile bool is_executing;
 #endif
