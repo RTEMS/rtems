@@ -26,6 +26,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+
 #include <bsp/linker-symbols.h>
 #include <rtems/score/riscv-utility.h>
 #include <rtems/score/cpu.h>
@@ -40,48 +41,50 @@ PUBLIC(bsp_start_vector_table_begin)
 PUBLIC(bsp_start_vector_table_end)
 PUBLIC(_start)
 
-.section .bsp_start_text, "wax"
+	.section	.bsp_start_text, "ax", @progbits
+	.align	2
+
 TYPE_FUNC(_start)
 SYM(_start):
-  la t0, ISR_Handler
-  csrw mtvec, t0
+	la	t0, ISR_Handler
+	csrw	mtvec, t0
 
-  /* load stack and frame pointers */
-  la sp, _Configuration_Interrupt_stack_area_end
+	/* load stack and frame pointers */
+	la	sp, _Configuration_Interrupt_stack_area_end
 
-  /* Clearing .bss */
-  la t0, bsp_section_bss_begin
-  la t1, bsp_section_bss_end
+	/* Clearing .bss */
+	la	t0, bsp_section_bss_begin
+	la	t1, bsp_section_bss_end
 
 _loop_clear_bss:
-  bge   t0, t1, _end_clear_bss
-  SREG    x0, 0(t0)
-  addi  t0, t0, CPU_SIZEOF_POINTER
-  j     _loop_clear_bss
+	bge	t0, t1, _end_clear_bss
+	SREG	x0, 0(t0)
+	addi	t0, t0, CPU_SIZEOF_POINTER
+	j	_loop_clear_bss
 _end_clear_bss:
 
-  /* Init FPU unit if it's there */
-  li t0, MSTATUS_FS
-  csrs mstatus, t0
+	/* Init FPU unit if it's there */
+	li	t0, MSTATUS_FS
+	csrs	mstatus, t0
 
-  j boot_card
+	j	boot_card
 
-  .align 4
+	.align	4
 bsp_start_vector_table_begin:
-  .word _RISCV_Exception_default /* User int */
-  .word _RISCV_Exception_default /* Supervisor int */
-  .word _RISCV_Exception_default /* Reserved */
-  .word _RISCV_Exception_default /* Machine int */
-  .word _RISCV_Exception_default /* User timer int */
-  .word _RISCV_Exception_default /* Supervisor Timer int */
-  .word _RISCV_Exception_default /* Reserved */
-  .word _RISCV_Exception_default /* Machine Timer int */
-  .word _RISCV_Exception_default /* User external int */
-  .word _RISCV_Exception_default /* Supervisor external int */
-  .word _RISCV_Exception_default /* Reserved */
-  .word _RISCV_Exception_default /* Machine external int */
-  .word _RISCV_Exception_default
-  .word _RISCV_Exception_default
-  .word _RISCV_Exception_default
-  .word _RISCV_Exception_default
+	.word	_RISCV_Exception_default /* User int */
+	.word	_RISCV_Exception_default /* Supervisor int */
+	.word	_RISCV_Exception_default /* Reserved */
+	.word	_RISCV_Exception_default /* Machine int */
+	.word	_RISCV_Exception_default /* User timer int */
+	.word	_RISCV_Exception_default /* Supervisor Timer int */
+	.word	_RISCV_Exception_default /* Reserved */
+	.word	_RISCV_Exception_default /* Machine Timer int */
+	.word	_RISCV_Exception_default /* User external int */
+	.word	_RISCV_Exception_default /* Supervisor external int */
+	.word	_RISCV_Exception_default /* Reserved */
+	.word	_RISCV_Exception_default /* Machine external int */
+	.word	_RISCV_Exception_default
+	.word	_RISCV_Exception_default
+	.word	_RISCV_Exception_default
+	.word	_RISCV_Exception_default
 bsp_start_vector_table_end:

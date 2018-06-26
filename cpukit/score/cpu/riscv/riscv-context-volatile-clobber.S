@@ -29,22 +29,23 @@
 
 #include <rtems/asm.h>
 
-.section .text
+	.section	.text, "ax", @progbits
+	.align	2
 
 PUBLIC(_CPU_Context_volatile_clobber)
 SYM(_CPU_Context_volatile_clobber):
 
-  .macro clobber_register reg
-  addi t0, t0, -1
-  mv  \reg, t0
-  .endm
+	.macro	clobber_register reg
+	addi	t0, t0, -1
+	mv	\reg, t0
+	.endm
 
-  clobber_register  a0
-  clobber_register  a1
-  clobber_register  a2
-  clobber_register  a3
-  clobber_register  a4
-  clobber_register  a5
-  clobber_register  a6
+	clobber_register	a0
+	clobber_register	a1
+	clobber_register	a2
+	clobber_register	a3
+	clobber_register	a4
+	clobber_register	a5
+	clobber_register	a6
 
-  ret
+	ret
