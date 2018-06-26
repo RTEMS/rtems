@@ -32,6 +32,7 @@
 
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/riscv-utility.h>
 
 	.section	.text, "ax", @progbits
 	.align	2

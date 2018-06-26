@@ -40,13 +40,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/basedefs.h>
-#include <rtems/score/riscv.h> /* pick up machine definitions */
-#include <rtems/score/riscv-utility.h>
-#ifndef ASM
-#include <rtems/bspIo.h>
-#include <stdint.h>
-#include <stdio.h> /* for printk */
-#endif
+#include <rtems/score/riscv.h>
 
 #define RISCV_MSTATUS_MIE 0x8
 

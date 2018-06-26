@@ -29,10 +29,9 @@
  * SUCH DAMAGE.
  */
 
-#include <rtems/system.h>
-#include <rtems/score/isr.h>
-#include <rtems/score/wkspace.h>
 #include <rtems/score/cpu.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/riscv-utility.h>
 
 /* bsp_start_vector_table_begin is the start address of the vector table
  * containing addresses to ISR Handlers. It's defined at the BSP linkcmds

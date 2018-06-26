@@ -33,6 +33,7 @@
  */
 
 #include <rtems/timecounter.h>
+#include <rtems/score/riscv-utility.h>
 
 #include <bsp.h>
 #include <bsp/fatal.h>
