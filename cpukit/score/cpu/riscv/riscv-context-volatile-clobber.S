@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2018 embedded brains GmbH
  * Copyright (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,17 +36,19 @@
 PUBLIC(_CPU_Context_volatile_clobber)
 SYM(_CPU_Context_volatile_clobber):
 
-	.macro	clobber_register reg
-	addi	t0, t0, -1
-	mv	\reg, t0
-	.endm
-
-	clobber_register	a0
-	clobber_register	a1
-	clobber_register	a2
-	clobber_register	a3
-	clobber_register	a4
-	clobber_register	a5
-	clobber_register	a6
+	addi	a1, a0, 1
+	addi	a2, a0, 2
+	addi	a3, a0, 3
+	addi	a4, a0, 4
+	addi	a5, a0, 5
+	addi	a6, a0, 6
+	addi	a7, a0, 7
+	addi	t0, a0, 8
+	addi	t1, a0, 9
+	addi	t2, a0, 10
+	addi	t3, a0, 11
+	addi	t4, a0, 12
+	addi	t5, a0, 13
+	addi	t6, a0, 14
 
 	ret
