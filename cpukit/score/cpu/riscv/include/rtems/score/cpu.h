@@ -415,12 +415,7 @@ static inline uint32_t CPU_swap_u32(
 
 void _CPU_Context_volatile_clobber( uintptr_t pattern );
 
-static inline void _CPU_Context_validate( uintptr_t pattern )
-{
-  while (1) {
-    /* TODO */
-  }
-}
+void _CPU_Context_validate( uintptr_t pattern );
 
 typedef uint32_t CPU_Counter_ticks;
 

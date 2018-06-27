@@ -1,5 +1,6 @@
 /*
- * Copyrigh (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
+ * Copyright (c) 2018 embedded brains GmbH
+ * Copyright (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,171 +31,183 @@
 #include <rtems/asm.h>
 #include <rtems/score/cpu.h>
 
+#define OFFSET(i) ((i) * CPU_SIZEOF_POINTER)
+
+#define RA_OFFSET OFFSET(0)
+#define T0_OFFSET OFFSET(1)
+#define T1_OFFSET OFFSET(2)
+#define T2_OFFSET OFFSET(3)
+#define S0_OFFSET OFFSET(4)
+#define S1_OFFSET OFFSET(5)
+#define A0_OFFSET OFFSET(6)
+#define A1_OFFSET OFFSET(7)
+#define A2_OFFSET OFFSET(8)
+#define A3_OFFSET OFFSET(9)
+#define A4_OFFSET OFFSET(10)
+#define A5_OFFSET OFFSET(11)
+#define A6_OFFSET OFFSET(12)
+#define A7_OFFSET OFFSET(13)
+#define S2_OFFSET OFFSET(14)
+#define S3_OFFSET OFFSET(15)
+#define S4_OFFSET OFFSET(16)
+#define S5_OFFSET OFFSET(17)
+#define S6_OFFSET OFFSET(18)
+#define S7_OFFSET OFFSET(19)
+#define S8_OFFSET OFFSET(20)
+#define S9_OFFSET OFFSET(21)
+#define S10_OFFSET OFFSET(22)
+#define S11_OFFSET OFFSET(23)
+#define T3_OFFSET OFFSET(24)
+#define T4_OFFSET OFFSET(25)
+#define T5_OFFSET OFFSET(26)
+#define T6_OFFSET OFFSET(27)
+
+#define FRAME_SIZE \
+  ((OFFSET(28) + CPU_STACK_ALIGNMENT - 1) & ~(CPU_STACK_ALIGNMENT - 1))
+
 	.section	.text, "ax", @progbits
 	.align	2
 
 PUBLIC(_CPU_Context_validate)
 SYM(_CPU_Context_validate):
-	/* RISC-V/RTEMS context has 36 registers of CPU_SIZEOF_POINTER size */
-	addi	sp, sp, -1 * 36 * CPU_SIZEOF_POINTER
+	addi	sp, sp, -FRAME_SIZE
 
-	SREG	x1, (1 * CPU_SIZEOF_POINTER)(sp)
-	/* Skip x2/sp */
-	SREG	x3, (3 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x4, (4 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x5, (5 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x6, (6 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x7, (7 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x8, (8 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x9, (9 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x10, (10 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x11, (11 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x12, (12 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x13, (13 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x14, (14 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x15, (15 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x16, (16 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x17, (17 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x18, (18 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x19, (19 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x20, (20 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x21, (21 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x22, (22 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x23, (23 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x24, (24 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x25, (25 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x26, (26 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x27, (27 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x28, (28 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x29, (28 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x30, (30 * CPU_SIZEOF_POINTER)(sp)
-	SREG	x31, (31 * CPU_SIZEOF_POINTER)(sp)
+	/* Save */
+	SREG	ra, RA_OFFSET(sp)
+	SREG	t0, T0_OFFSET(sp)
+	SREG	t1, T1_OFFSET(sp)
+	SREG	t2, T2_OFFSET(sp)
+	SREG	s0, S0_OFFSET(sp)
+	SREG	s1, S1_OFFSET(sp)
+	SREG	a0, A0_OFFSET(sp)
+	SREG	a1, A1_OFFSET(sp)
+	SREG	a2, A2_OFFSET(sp)
+	SREG	a3, A3_OFFSET(sp)
+	SREG	a4, A4_OFFSET(sp)
+	SREG	a5, A5_OFFSET(sp)
+	SREG	a6, A6_OFFSET(sp)
+	SREG	a7, A7_OFFSET(sp)
+	SREG	s2, S2_OFFSET(sp)
+	SREG	s3, S3_OFFSET(sp)
+	SREG	s4, S4_OFFSET(sp)
+	SREG	s5, S5_OFFSET(sp)
+	SREG	s6, S6_OFFSET(sp)
+	SREG	s7, S7_OFFSET(sp)
+	SREG	s8, S8_OFFSET(sp)
+	SREG	s9, S9_OFFSET(sp)
+	SREG	s10, S10_OFFSET(sp)
+	SREG	s11, S11_OFFSET(sp)
+	SREG	t3, T3_OFFSET(sp)
+	SREG	t4, T4_OFFSET(sp)
+	SREG	t5, T5_OFFSET(sp)
+	SREG	t6, T6_OFFSET(sp)
 
 	/* Fill */
-
+	addi	ra, a0, 1
+	/* sp must remain as is */
+	/* gp must remain as is */
+	/* tp must remain as is */
 	/* t0 is used for temporary values */
-	mv	t0, x0
+	addi	t1, a0, 2
+	addi	t2, a0, 3
+	addi	s0, a0, 4
+	addi	s1, a0, 5
+	/* a0 is the pattern */
+	addi	a1, a0, 6
+	addi	a2, a0, 7
+	addi	a3, a0, 8
+	addi	a4, a0, 9
+	addi	a5, a0, 10
+	addi	a6, a0, 11
+	addi	a7, a0, 12
+	addi	s2, a0, 13
+	addi	s3, a0, 14
+	addi	s4, a0, 15
+	addi	s5, a0, 16
+	addi	s6, a0, 17
+	addi	s7, a0, 18
+	addi	s8, a0, 19
+	addi	s9, a0, 20
+	addi	s10, a0, 21
+	addi	s11, a0, 22
+	addi	t3, a0, 23
 
-	/* x31 contains the stack pointer */
-	mv	x31, sp
-
-	.macro	fill_register reg
-	addi	t0,	t0,  1
-	mv	\reg,	t0
-	.endm
-
-	fill_register	x1
-	fill_register	x2
-	fill_register	x3
-	fill_register	x4
-	fill_register	x5
-	fill_register	x6
-	fill_register	x7
-	fill_register	x8
-	fill_register	x9
-	fill_register	x10
-	fill_register	x11
-	fill_register	x12
-	fill_register	x13
-	fill_register	x14
-	fill_register	x15
-	fill_register	x16
-	fill_register	x17
-	fill_register	x18
-	fill_register	x19
-	fill_register	x20
-	fill_register	x21
-	fill_register	x22
-	fill_register	x23
-	fill_register	x24
-	fill_register	x25
-	fill_register	x26
-	fill_register	x27
-	fill_register	x28
-	fill_register	x29
-	fill_register	x30
-	fill_register	x31
+	xor	t4, sp, a0
+	xor	t5, gp, a0
+	xor	t6, tp, a0
 
 	/* Check */
-check:
-
-	.macro	check_register reg
-	addi	t0, t0, 1
-	bne	\reg, t0, restore
+.Lcheck:
+	.macro	check_register reg, inc
+	addi	t0, a0, \inc
+	bne	\reg, t0, .Lrestore
 	.endm
 
-	bne	x31, sp, restore
+	check_register	ra, 1
+	check_register	t1, 2
+	check_register	t2, 3
+	check_register	s0, 4
+	check_register	s1, 5
+	check_register	a1, 6
+	check_register	a2, 7
+	check_register	a3, 8
+	check_register	a4, 9
+	check_register	a5, 10
+	check_register	a6, 11
+	check_register	a7, 12
+	check_register	s2, 13
+	check_register	s3, 14
+	check_register	s4, 15
+	check_register	s5, 16
+	check_register	s6, 17
+	check_register	s7, 18
+	check_register	s8, 19
+	check_register	s9, 20
+	check_register	s10, 21
+	check_register	s11, 22
+	check_register	t3, 23
 
-	mv	t0, x0
+	xor	t0, sp, a0
+	bne	t4, t0, .Lrestore
 
-	check_register	x1
-	check_register	x2
-	check_register	x3
-	check_register	x4
-	check_register	x5
-	check_register	x6
-	check_register	x7
-	check_register	x8
-	check_register	x9
-	check_register	x10
-	check_register	x11
-	check_register	x12
-	check_register	x13
-	check_register	x14
-	check_register	x15
-	check_register	x16
-	check_register	x17
-	check_register	x18
-	check_register	x19
-	check_register	x20
-	check_register	x21
-	check_register	x22
-	check_register	x23
-	check_register	x24
-	check_register	x25
-	check_register	x26
-	check_register	x27
-	check_register	x28
-	check_register	x29
-	check_register	x30
-	check_register	x31
+	xor	t0, gp, a0
+	bne	t5, t0, .Lrestore
 
-	j	check
+	xor	t0, tp, a0
+	bne	t6, t0, .Lrestore
+
+	j	.Lcheck
 
 	/* Restore */
-restore:
-	LREG	x1, (1 * CPU_SIZEOF_POINTER)(sp)
-	/* Skip sp/x2 */
-	LREG	x3, (3 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x4, (4 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x5, (5 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x6, (6 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x7, (7 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x8, (8 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x9, (9 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x10, (10 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x11, (11 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x12, (12 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x13, (13 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x14, (14 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x15, (15 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x16, (16 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x17, (17 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x18, (18 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x19, (19 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x20, (20 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x21, (21 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x22, (22 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x23, (23 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x24, (24 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x25, (25 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x26, (26 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x27, (27 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x28, (28 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x29, (29 * CPU_SIZEOF_POINTER)(sp)
-	LREG	x30, (30 * CPU_SIZEOF_POINTER)(sp)
+.Lrestore:
+	LREG	ra, RA_OFFSET(sp)
+	LREG	t0, T0_OFFSET(sp)
+	LREG	t1, T1_OFFSET(sp)
+	LREG	t2, T2_OFFSET(sp)
+	LREG	s0, S0_OFFSET(sp)
+	LREG	s1, S1_OFFSET(sp)
+	LREG	a0, A0_OFFSET(sp)
+	LREG	a1, A1_OFFSET(sp)
+	LREG	a2, A2_OFFSET(sp)
+	LREG	a3, A3_OFFSET(sp)
+	LREG	a4, A4_OFFSET(sp)
+	LREG	a5, A5_OFFSET(sp)
+	LREG	a6, A6_OFFSET(sp)
+	LREG	a7, A7_OFFSET(sp)
+	LREG	s2, S2_OFFSET(sp)
+	LREG	s3, S3_OFFSET(sp)
+	LREG	s4, S4_OFFSET(sp)
+	LREG	s5, S5_OFFSET(sp)
+	LREG	s6, S6_OFFSET(sp)
+	LREG	s7, S7_OFFSET(sp)
+	LREG	s8, S8_OFFSET(sp)
+	LREG	s9, S9_OFFSET(sp)
+	LREG	s10, S10_OFFSET(sp)
+	LREG	s11, S11_OFFSET(sp)
+	LREG	t3, T3_OFFSET(sp)
+	LREG	t4, T4_OFFSET(sp)
+	LREG	t5, T5_OFFSET(sp)
+	LREG	t6, T6_OFFSET(sp)
 
-	LREG	x31, (31 * CPU_SIZEOF_POINTER)(sp)
-
-	addi	sp, sp, 36 * CPU_SIZEOF_POINTER
+	addi	sp, sp, FRAME_SIZE
 	ret
