@@ -64,6 +64,40 @@ extern "C" {
 #define CPU_LITTLE_ENDIAN                        TRUE
 #define CPU_MODES_INTERRUPT_MASK   0x0000000000000001
 
+#define CPU_CONTEXT_FP_SIZE  0
+
+#define CPU_PER_CPU_CONTROL_SIZE 0
+
+#define CPU_CACHE_LINE_BYTES 64
+
+#if __riscv_xlen == 32
+
+#define CPU_SIZEOF_POINTER 4
+
+#define CPU_STACK_MINIMUM_SIZE 4096
+
+#define CPU_EXCEPTION_FRAME_SIZE 128
+
+#elif __riscv_xlen == 64
+
+#define CPU_SIZEOF_POINTER 8
+
+#define CPU_STACK_MINIMUM_SIZE 8192
+
+#define CPU_EXCEPTION_FRAME_SIZE 256
+
+#endif /* __riscv_xlen */
+
+#define CPU_ALIGNMENT 8
+
+#define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
+
+#define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
+
+#define CPU_STACK_ALIGNMENT 16
+
+#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
+
 /*
  *  Processor defined structures required for cpukit/score.
  */
@@ -88,25 +122,11 @@ typedef struct {
   double  some_float_register;
 } Context_Control_fp;
 
-#define CPU_CONTEXT_FP_SIZE  0
 Context_Control_fp  _CPU_Null_fp_context;
 
-#define CPU_CACHE_LINE_BYTES 64
-
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
-#if __riscv_xlen == 32
-#define CPU_STACK_MINIMUM_SIZE  4096
-#else
-#define CPU_STACK_MINIMUM_SIZE  4096 * 2
-#endif
-#define CPU_ALIGNMENT 8
+
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
-#define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
-#define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
-
-#define CPU_STACK_ALIGNMENT 16
-
-#define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
 
 #define _CPU_Initialize_vectors()
 
@@ -230,29 +250,7 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 typedef struct {
   /* There is no CPU specific per-CPU state */
 } CPU_Per_CPU_control;
-#endif /* ASM */
 
-#if __riscv_xlen == 32
-#define CPU_SIZEOF_POINTER 4
-
-/* 32-bit load/store instructions */
-#define LREG lw
-#define SREG sw
-
-#define CPU_EXCEPTION_FRAME_SIZE 128
-#else /* xlen = 64 */
-#define CPU_SIZEOF_POINTER 8
-
-/* 64-bit load/store instructions */
-#define LREG ld
-#define SREG sd
-
-#define CPU_EXCEPTION_FRAME_SIZE 256
-#endif
-
-#define CPU_PER_CPU_CONTROL_SIZE 0
-
-#ifndef ASM
 typedef uint16_t Priority_bit_map_Word;
 
 typedef struct {

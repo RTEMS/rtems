@@ -117,6 +117,20 @@
 #define EXTERN(sym)    .extern SYM (sym)
 #define TYPE_FUNC(sym) .type SYM (sym), %function
 
+#if __riscv_xlen == 32
+
+#define LREG lw
+
+#define SREG sw
+
+#elif __riscv_xlen == 64
+
+#define LREG ld
+
+#define SREG sd
+
+#endif /* __riscv_xlen */
+
 .macro GET_SELF_CPU_CONTROL REG
 #ifdef RTEMS_SMP
 	csrr	\REG, mscratch
