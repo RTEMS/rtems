@@ -76,15 +76,11 @@ extern "C" {
 
 #define CPU_STACK_MINIMUM_SIZE 4096
 
-#define CPU_EXCEPTION_FRAME_SIZE 128
-
 #elif __riscv_xlen == 64
 
 #define CPU_SIZEOF_POINTER 8
 
 #define CPU_STACK_MINIMUM_SIZE 8192
-
-#define CPU_EXCEPTION_FRAME_SIZE 256
 
 #endif /* __riscv_xlen */
 
@@ -219,47 +215,11 @@ void _CPU_Context_Initialize(
 
 extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 
-/* end of Fatal Error manager macros */
-
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
+
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
-
-#define _CPU_Bitfield_Find_first_bit( _value, _output ) \
-  { \
-    (_output) = 0;   /* do something to prevent warnings */ \
-  }
-#endif
-
-/* end of Bitfield handler macros */
-
-/*
- *  This routine builds the mask which corresponds to the bit fields
- *  as searched by _CPU_Bitfield_Find_first_bit().  See the discussion
- *  for that routine.
- *
- */
-
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
-
-#define _CPU_Priority_Mask( _bit_number ) \
-    (1 << _bit_number)
-
-#endif
-
-#if (CPU_USE_GENERIC_BITFIELD_CODE == FALSE)
-
-#define _CPU_Priority_bits_index( _priority ) \
-  (_priority)
-
-#endif
-
 #define CPU_MAXIMUM_PROCESSORS 32
-
-#define CPU_TIMESTAMP_USE_STRUCT_TIMESPEC FALSE
-#define CPU_TIMESTAMP_USE_INT64 TRUE
-#define CPU_TIMESTAMP_USE_INT64_INLINE FALSE
 
 typedef struct {
   /* There is no CPU specific per-CPU state */
