@@ -164,9 +164,6 @@ uint32_t _CPU_ISR_Get_level( void );
 
 /* end of ISR handler macros */
 
-/* Context handler macros */
-#define RISCV_GCC_RED_ZONE_SIZE 128
-
 void _CPU_Context_Initialize(
   Context_Control *context,
   void *stack_area_begin,

@@ -50,8 +50,7 @@ void _CPU_Context_Initialize(
 {
   uintptr_t stack = ((uintptr_t) stack_area_begin);
 
-  /* Account for red-zone */
-  uintptr_t stack_high = stack + stack_area_size - RISCV_GCC_RED_ZONE_SIZE;
+  uintptr_t stack_high = stack + stack_area_size;
 
   memset(context, 0, sizeof(*context));
 
