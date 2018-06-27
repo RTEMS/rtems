@@ -298,7 +298,6 @@ extern void*                     _VBR;
  *  bits out of a thread mode.
  */
 
-#define CPU_MODES_INTERRUPT_LEVEL  0x00000007 /* interrupt level in mode */
 #define CPU_MODES_INTERRUPT_MASK   0x00000007 /* interrupt level in mode */
 
 /*
