@@ -183,12 +183,12 @@ uint32_t _CPU_ISR_Get_level( void );
 
 void _CPU_Context_Initialize(
   Context_Control *context,
-  void *stack_area_begin,
-  size_t stack_area_size,
-  unsigned long new_level,
-  void (*entry_point)( void ),
-  bool is_fp,
-  void *tls_area
+  void            *stack_area_begin,
+  size_t           stack_area_size,
+  uint32_t         new_level,
+  void          ( *entry_point )( void ),
+  bool             is_fp,
+  void            *tls_area
 );
 
 #define _CPU_Context_Restart_self( _the_context ) \
