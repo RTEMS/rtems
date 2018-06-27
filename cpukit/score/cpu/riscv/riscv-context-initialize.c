@@ -32,11 +32,8 @@
 #include "config.h"
 #endif
 
-#include <string.h>
-
 #include <rtems/score/cpu.h>
 #include <rtems/score/riscv-utility.h>
-#include <rtems/score/interr.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -52,14 +49,14 @@ void _CPU_Context_Initialize(
 
   uintptr_t stack_high = stack + stack_area_size;
 
-  memset(context, 0, sizeof(*context));
-
   /* Stack Pointer - sp/x2 */
   context->x[2] = stack_high;
   /* Frame Pointer - fp/x8 */
   context->x[8] = stack_high;
   /* Return Address - ra/x1 */
   context->x[1] = (uintptr_t) entry_point;
+
+  context->isr_dispatch_disable = 0;
 
   /* Enable interrupts and FP */
   context->mstatus = MSTATUS_FS | MSTATUS_MIE;
