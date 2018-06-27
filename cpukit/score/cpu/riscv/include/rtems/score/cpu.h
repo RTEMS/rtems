@@ -105,17 +105,31 @@ extern "C" {
 #ifndef ASM
 
 typedef struct {
-  /* riscv has 32 xlen-bit (where xlen can be 32 or 64) general purpose registers (x0-x31)*/
-  unsigned long x[32];
-
-  uint32_t isr_dispatch_disable;
 #ifdef RTEMS_SMP
-  volatile bool is_executing;
+  volatile uint32_t is_executing;
+#else
+  uint32_t reserved;
 #endif
+  uint32_t isr_dispatch_disable;
+  uintptr_t ra;
+  uintptr_t sp;
+  uintptr_t tp;
+  uintptr_t s0;
+  uintptr_t s1;
+  uintptr_t s2;
+  uintptr_t s3;
+  uintptr_t s4;
+  uintptr_t s5;
+  uintptr_t s6;
+  uintptr_t s7;
+  uintptr_t s8;
+  uintptr_t s9;
+  uintptr_t s10;
+  uintptr_t s11;
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
-  (_context)->x[2]
+  (_context)->sp
 
 typedef struct {
   /** TODO FPU registers are listed here */

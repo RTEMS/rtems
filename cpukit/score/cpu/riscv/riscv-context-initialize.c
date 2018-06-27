@@ -51,11 +51,7 @@ void _CPU_Context_Initialize(
   stack = _Addresses_Add_offset( stack_area_begin, stack_area_size );
   stack = _Addresses_Align_down( stack, CPU_STACK_ALIGNMENT );
 
-  /* Stack Pointer - sp/x2 */
-  context->x[2] = (uintptr_t) stack;
-
-  /* Return Address - ra/x1 */
-  context->x[1] = (uintptr_t) entry_point;
-
+  context->ra = (uintptr_t) entry_point;
+  context->sp = (uintptr_t) stack;
   context->isr_dispatch_disable = 0;
 }
