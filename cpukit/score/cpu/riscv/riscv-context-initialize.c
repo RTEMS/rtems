@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -33,6 +34,7 @@
 #endif
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/address.h>
 #include <rtems/score/riscv-utility.h>
 
 void _CPU_Context_Initialize(
@@ -45,12 +47,14 @@ void _CPU_Context_Initialize(
   void *tls_area
 )
 {
-  uintptr_t stack = ((uintptr_t) stack_area_begin);
+  void *stack;
 
-  uintptr_t stack_high = stack + stack_area_size;
+  stack = _Addresses_Add_offset( stack_area_begin, stack_area_size );
+  stack = _Addresses_Align_down( stack, CPU_STACK_ALIGNMENT );
 
   /* Stack Pointer - sp/x2 */
-  context->x[2] = stack_high;
+  context->x[2] = (uintptr_t) stack;
+
   /* Frame Pointer - fp/x8 */
   context->x[8] = stack_high;
   /* Return Address - ra/x1 */
