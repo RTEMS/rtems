@@ -55,8 +55,6 @@ void _CPU_Context_Initialize(
   /* Stack Pointer - sp/x2 */
   context->x[2] = (uintptr_t) stack;
 
-  /* Frame Pointer - fp/x8 */
-  context->x[8] = stack_high;
   /* Return Address - ra/x1 */
   context->x[1] = (uintptr_t) entry_point;
 
