@@ -47,7 +47,9 @@ extern "C" {
 
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
-#define CPU_ISR_PASSES_FRAME_POINTER 1
+
+#define CPU_ISR_PASSES_FRAME_POINTER FALSE
+
 #define CPU_HARDWARE_FP                  FALSE
 #define CPU_SOFTWARE_FP                  FALSE
 #define CPU_ALL_TASKS_ARE_FP             FALSE
@@ -72,10 +74,6 @@ typedef struct {
   /* riscv has 32 xlen-bit (where xlen can be 32 or 64) general purpose registers (x0-x31)*/
   unsigned long x[32];
 
-  /* Special purpose registers */
-  unsigned long mstatus;
-  unsigned long mcause;
-  unsigned long mepc;
   uint32_t isr_dispatch_disable;
 #ifdef RTEMS_SMP
   volatile bool is_executing;
@@ -89,8 +87,6 @@ typedef struct {
   /** TODO FPU registers are listed here */
   double  some_float_register;
 } Context_Control_fp;
-
-typedef Context_Control CPU_Interrupt_frame;
 
 #define CPU_CONTEXT_FP_SIZE  0
 Context_Control_fp  _CPU_Null_fp_context;

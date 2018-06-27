@@ -45,12 +45,6 @@ SYM(_CPU_Context_switch):
 	GET_SELF_CPU_CONTROL	a2
 	lw	a3, PER_CPU_ISR_DISPATCH_DISABLE(a2)
 
-	/* Disable interrupts and store all registers */
-	csrr	t0, mstatus
-	SREG	t0, (32 * CPU_SIZEOF_POINTER)(a0)
-
-	csrci	mstatus, RISCV_MSTATUS_MIE
-
 	SREG	x1, (1 * CPU_SIZEOF_POINTER)(a0)
 	SREG	x2, (2 * CPU_SIZEOF_POINTER)(a0)
 	SREG	x4, (4 * CPU_SIZEOF_POINTER)(a0)
@@ -117,12 +111,6 @@ SYM(_CPU_Context_switch):
 	LREG	x27, (27 * CPU_SIZEOF_POINTER)(a1)
 	LREG	x28, (28 * CPU_SIZEOF_POINTER)(a1)
 	LREG	x29, (29 * CPU_SIZEOF_POINTER)(a1)
-	LREG	x30, (30 * CPU_SIZEOF_POINTER)(a1)
-
-	/* Load mstatus */
-	LREG	x31, (32 * CPU_SIZEOF_POINTER)(a1)
-	csrw	mstatus, x31
-
 	LREG	x30, (30 * CPU_SIZEOF_POINTER)(a1)
 
 	LREG	x11, (11 * CPU_SIZEOF_POINTER)(a1)

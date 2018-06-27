@@ -38,15 +38,15 @@
 
 #if __riscv_xlen == 32
 
-#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 140
+#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 128
 
-#define CPU_INTERRUPT_FRAME_SIZE 144
+#define CPU_INTERRUPT_FRAME_SIZE 140
 
 #elif __riscv_xlen == 64
 
-#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 280
+#define RISCV_CONTEXT_ISR_DISPATCH_DISABLE 256
 
-#define CPU_INTERRUPT_FRAME_SIZE 288
+#define CPU_INTERRUPT_FRAME_SIZE 280
 
 #endif /* __riscv_xlen */
 
@@ -55,6 +55,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct {
+  unsigned long x[32];
+  unsigned long mstatus;
+  unsigned long mcause;
+  unsigned long mepc;
+} CPU_Interrupt_frame;
 
 #ifdef RTEMS_SMP
 

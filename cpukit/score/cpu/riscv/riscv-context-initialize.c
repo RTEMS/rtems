@@ -35,7 +35,6 @@
 
 #include <rtems/score/cpu.h>
 #include <rtems/score/address.h>
-#include <rtems/score/riscv-utility.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -59,7 +58,4 @@ void _CPU_Context_Initialize(
   context->x[1] = (uintptr_t) entry_point;
 
   context->isr_dispatch_disable = 0;
-
-  /* Enable interrupts and FP */
-  context->mstatus = MSTATUS_FS | MSTATUS_MIE;
 }
