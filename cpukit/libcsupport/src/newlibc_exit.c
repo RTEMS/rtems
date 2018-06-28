@@ -20,7 +20,7 @@
 /* FIXME: These defines are a blatant hack */
 
   #if defined(__USE_INIT_FINI__)
-    #if defined(__ARM_EABI__)
+    #if defined(__ARM_EABI__) || defined(__riscv)
       #define FINI_SYMBOL __libc_fini_array
     #else
       #define FINI_SYMBOL _fini

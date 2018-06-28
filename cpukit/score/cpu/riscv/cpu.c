@@ -97,14 +97,15 @@ RTEMS_STATIC_ASSERT(
  */
 extern char bsp_start_vector_table_begin[];
 
-void init(void);
-void fini(void);
+void _init(void);
 
-void _init()
+void _fini(void);
+
+void _init(void)
 {
 }
 
-void _fini()
+void _fini(void)
 {
 }
 
