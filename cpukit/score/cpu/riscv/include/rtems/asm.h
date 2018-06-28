@@ -131,6 +131,38 @@
 
 #endif /* __riscv_xlen */
 
+#if __riscv_flen == 32
+
+#define FLREG flw
+
+#define FSREG fsw
+
+#define FMVYX fmv.s.x
+
+#define FMVXY fmv.x.s
+
+#elif __riscv_flen == 64
+
+#define FLREG fld
+
+#define FSREG fsd
+
+#if __riscv_xlen == 32
+
+#define FMVYX fmv.s.x
+
+#define FMVXY fmv.x.s
+
+#elif __riscv_xlen == 64
+
+#define FMVYX fmv.d.x
+
+#define FMVXY fmv.x.d
+
+#endif /* __riscv_xlen */
+
+#endif /* __riscv_flen */
+
 .macro GET_SELF_CPU_CONTROL REG
 #ifdef RTEMS_SMP
 	csrr	\REG, mscratch

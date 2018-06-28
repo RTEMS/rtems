@@ -64,8 +64,6 @@ extern "C" {
 #define CPU_LITTLE_ENDIAN                        TRUE
 #define CPU_MODES_INTERRUPT_MASK   0x0000000000000001
 
-#define CPU_CONTEXT_FP_SIZE  0
-
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #define CPU_CACHE_LINE_BYTES 64
@@ -100,6 +98,12 @@ extern "C" {
 
 #ifndef ASM
 
+#if __riscv_flen == 32
+typedef float RISCV_Float;
+#elif __riscv_flen == 64
+typedef double RISCV_Float;
+#endif
+
 typedef struct {
 #ifdef RTEMS_SMP
   volatile uint32_t is_executing;
@@ -122,17 +126,25 @@ typedef struct {
   uintptr_t s9;
   uintptr_t s10;
   uintptr_t s11;
+#if __riscv_flen > 0
+  uint32_t fcsr;
+  RISCV_Float fs0;
+  RISCV_Float fs1;
+  RISCV_Float fs2;
+  RISCV_Float fs3;
+  RISCV_Float fs4;
+  RISCV_Float fs5;
+  RISCV_Float fs6;
+  RISCV_Float fs7;
+  RISCV_Float fs8;
+  RISCV_Float fs9;
+  RISCV_Float fs10;
+  RISCV_Float fs11;
+#endif
 } Context_Control;
 
 #define _CPU_Context_Get_SP( _context ) \
   (_context)->sp
-
-typedef struct {
-  /** TODO FPU registers are listed here */
-  double  some_float_register;
-} Context_Control_fp;
-
-Context_Control_fp  _CPU_Null_fp_context;
 
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
@@ -203,15 +215,6 @@ void _CPU_Context_Initialize(
 
 #define _CPU_Context_Restart_self( _the_context ) \
    _CPU_Context_restore( (_the_context) )
-
-
-#define _CPU_Context_Fp_start( _base, _offset ) \
-   ( (void *) _Addresses_Add_offset( (_base), (_offset) ) )
-
-#define _CPU_Context_Initialize_fp( _destination ) \
-  { \
-   *(*(_destination)) = _CPU_Null_fp_context; \
-  }
 
 extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 
@@ -325,28 +328,6 @@ void _CPU_Context_switch(
 void _CPU_Context_restore(
   Context_Control *new_context
 ) RTEMS_NO_RETURN;
-
-/*
- *  _CPU_Context_save_fp
- *
- *  This routine saves the floating point context passed to it.
- *
- */
-
-void _CPU_Context_save_fp(
-  void **fp_context_ptr
-);
-
-/*
- *  _CPU_Context_restore_fp
- *
- *  This routine restores the floating point context passed to it.
- *
- */
-
-void _CPU_Context_restore_fp(
-  void **fp_context_ptr
-);
 
 /*  The following routine swaps the endian format of an unsigned int.
  *  It must be static because it is referenced indirectly.

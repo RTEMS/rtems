@@ -36,6 +36,52 @@
 PUBLIC(_CPU_Context_volatile_clobber)
 SYM(_CPU_Context_volatile_clobber):
 
+#if __riscv_flen > 0
+	andi	t0, a0, 0x1f
+	fsflags	t0
+
+	addi	t0, a0, 15
+	FMVYX	ft0, t0
+	addi	t0, a0, 16
+	FMVYX	ft1, t0
+	addi	t0, a0, 17
+	FMVYX	ft2, t0
+	addi	t0, a0, 18
+	FMVYX	ft3, t0
+	addi	t0, a0, 19
+	FMVYX	ft4, t0
+	addi	t0, a0, 20
+	FMVYX	ft5, t0
+	addi	t0, a0, 21
+	FMVYX	ft6, t0
+	addi	t0, a0, 22
+	FMVYX	ft7, t0
+	addi	t0, a0, 23
+	FMVYX	ft8, t0
+	addi	t0, a0, 24
+	FMVYX	ft9, t0
+	addi	t0, a0, 25
+	FMVYX	ft10, t0
+	addi	t0, a0, 26
+	FMVYX	ft11, t0
+	addi	t0, a0, 27
+	FMVYX	fa0, t0
+	addi	t0, a0, 28
+	FMVYX	fa1, t0
+	addi	t0, a0, 29
+	FMVYX	fa2, t0
+	addi	t0, a0, 30
+	FMVYX	fa3, t0
+	addi	t0, a0, 31
+	FMVYX	fa4, t0
+	addi	t0, a0, 32
+	FMVYX	fa5, t0
+	addi	t0, a0, 33
+	FMVYX	fa6, t0
+	addi	t0, a0, 34
+	FMVYX	fa7, t0
+#endif /* __riscv_flen */
+
 	addi	a1, a0, 1
 	addi	a2, a0, 2
 	addi	a3, a0, 3
