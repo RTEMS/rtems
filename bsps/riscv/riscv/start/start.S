@@ -104,22 +104,28 @@ SYM(_start):
 	.word	0xdeadbeef
 #endif
 
+#if __riscv_xlen == 32
+#define ADDR .word
+#elif __riscv_xlen == 64
+#define ADDR .quad
+#endif
+
 	.align	4
 bsp_start_vector_table_begin:
-	.word	_RISCV_Exception_default /* User int */
-	.word	_RISCV_Exception_default /* Supervisor int */
-	.word	_RISCV_Exception_default /* Reserved */
-	.word	_RISCV_Exception_default /* Machine int */
-	.word	_RISCV_Exception_default /* User timer int */
-	.word	_RISCV_Exception_default /* Supervisor Timer int */
-	.word	_RISCV_Exception_default /* Reserved */
-	.word	_RISCV_Exception_default /* Machine Timer int */
-	.word	_RISCV_Exception_default /* User external int */
-	.word	_RISCV_Exception_default /* Supervisor external int */
-	.word	_RISCV_Exception_default /* Reserved */
-	.word	_RISCV_Exception_default /* Machine external int */
-	.word	_RISCV_Exception_default
-	.word	_RISCV_Exception_default
-	.word	_RISCV_Exception_default
-	.word	_RISCV_Exception_default
+	ADDR	_RISCV_Exception_default /* User int */
+	ADDR	_RISCV_Exception_default /* Supervisor int */
+	ADDR	_RISCV_Exception_default /* Reserved */
+	ADDR	_RISCV_Exception_default /* Machine int */
+	ADDR	_RISCV_Exception_default /* User timer int */
+	ADDR	_RISCV_Exception_default /* Supervisor Timer int */
+	ADDR	_RISCV_Exception_default /* Reserved */
+	ADDR	_RISCV_Exception_default /* Machine Timer int */
+	ADDR	_RISCV_Exception_default /* User external int */
+	ADDR	_RISCV_Exception_default /* Supervisor external int */
+	ADDR	_RISCV_Exception_default /* Reserved */
+	ADDR	_RISCV_Exception_default /* Machine external int */
+	ADDR	_RISCV_Exception_default
+	ADDR	_RISCV_Exception_default
+	ADDR	_RISCV_Exception_default
+	ADDR	_RISCV_Exception_default
 bsp_start_vector_table_end:
