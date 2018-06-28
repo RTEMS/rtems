@@ -35,6 +35,7 @@
 
 #include <rtems/score/cpu.h>
 #include <rtems/score/address.h>
+#include <rtems/score/tls.h>
 
 void _CPU_Context_Initialize(
   Context_Control *context,
@@ -54,4 +55,11 @@ void _CPU_Context_Initialize(
   context->ra = (uintptr_t) entry_point;
   context->sp = (uintptr_t) stack;
   context->isr_dispatch_disable = 0;
+
+  if ( tls_area != NULL ) {
+    void *tls_block;
+
+    tls_block = _TLS_TCB_before_TLS_block_initialize( tls_area );
+    context->tp = (uintptr_t) tls_block;
+  }
 }
