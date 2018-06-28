@@ -48,6 +48,8 @@ extern "C" {
 #include <stdio.h> /* for printk */
 #endif
 
+#define RISCV_MSTATUS_MIE 0x8
+
 #define CPU_INLINE_ENABLE_DISPATCH       FALSE
 #define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
 #define CPU_ISR_PASSES_FRAME_POINTER 1
@@ -115,22 +117,21 @@ Context_Control_fp  _CPU_Null_fp_context;
 
 #define _CPU_Initialize_vectors()
 
-/*
- *  Disable all interrupts for an RTEMS critical section.  The previous
- *  level is returned in _level.
- *
- */
-
-static inline unsigned long riscv_interrupt_disable( void )
+static inline uint32_t riscv_interrupt_disable( void )
 {
-  unsigned long status = read_csr(mstatus);
-  clear_csr(mstatus, MSTATUS_MIE);
-  return status;
+  unsigned long mstatus;
+
+  __asm__ volatile (
+    "csrrc %0, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE ) :
+      "=&r" ( mstatus )
+  );
+
+  return mstatus & RISCV_MSTATUS_MIE;
 }
 
-static inline void riscv_interrupt_enable(unsigned long level)
+static inline void riscv_interrupt_enable( uint32_t level )
 {
-  write_csr(mstatus, level);
+  __asm__ volatile ( "csrrs zero, mstatus, %0" : : "r" ( level ) );
 }
 
 #define _CPU_ISR_Disable( _level ) \
@@ -147,18 +148,18 @@ static inline void riscv_interrupt_enable(unsigned long level)
 
 RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( unsigned long level )
 {
-  return ( level & MSTATUS_MIE ) != 0;
+  return ( level & RISCV_MSTATUS_MIE ) != 0;
 }
 
 RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level( uint32_t level )
 {
   if ( ( level & CPU_MODES_INTERRUPT_MASK) == 0 ) {
     __asm__ volatile (
-      "csrrs zero, mstatus, " RTEMS_XSTRING( MSTATUS_MIE )
+      "csrrs zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE )
     );
   } else {
     __asm__ volatile (
-      "csrrc zero, mstatus, " RTEMS_XSTRING( MSTATUS_MIE )
+      "csrrc zero, mstatus, " RTEMS_XSTRING( RISCV_MSTATUS_MIE )
     );
   }
 }
