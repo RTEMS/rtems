@@ -387,6 +387,7 @@ rtems_capture_record_open (rtems_tcb*                         tcb,
   if (ptr != NULL)
   {
     rtems_capture_record in;
+    rtems_capture_time time;
 
     ++cpu->count;
 
@@ -402,7 +403,8 @@ rtems_capture_record_open (rtems_tcb*                         tcb,
                   rtems_capture_task_real_priority (tcb) |
                   (rtems_capture_task_curr_priority (tcb) << 8));
 
-    rtems_capture_get_time (&in.time);
+    rtems_capture_get_time (&time);
+    in.time = time; /* need this since in is a packed struct */
 
     ptr = rtems_capture_record_append(ptr, &in, sizeof(in));
   }
