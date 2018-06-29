@@ -153,8 +153,8 @@ SYM(_CPU_Context_restore):
 	/* We may have a new heir */
 
 	/* Read the executing and heir */
-	lw	a4, PER_CPU_OFFSET_EXECUTING(a2)
-	lw	a5, PER_CPU_OFFSET_HEIR(a2)
+	LREG	a4, PER_CPU_OFFSET_EXECUTING(a2)
+	LREG	a5, PER_CPU_OFFSET_HEIR(a2)
 
 	/*
 	 * Update the executing only if necessary to avoid cache line
