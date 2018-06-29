@@ -27,10 +27,10 @@ class A {
       ++i;
     }
 
-    static int i;
+    static volatile int i;
 };
 
-int A::i;
+volatile int A::i;
 
 static A a;
 
