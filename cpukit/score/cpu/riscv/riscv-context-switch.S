@@ -80,7 +80,25 @@ SYM(_CPU_Context_switch):
 
 	sw	a3, RISCV_CONTEXT_ISR_DISPATCH_DISABLE(a0)
 
+#ifdef RTEMS_SMP
+	/*
+	 * The executing thread no longer executes on this processor.  Switch
+	 * the stack to the temporary interrupt stack of this processor.  Mark
+	 * the context of the executing thread as not executing.
+	 */
+	addi	sp, a2, PER_CPU_INTERRUPT_FRAME_AREA + CPU_INTERRUPT_FRAME_SIZE
+	amoswap.w.rl	zero, zero, RISCV_CONTEXT_IS_EXECUTING(a0)
+
+.Ltry_update_is_executing:
+
+	/* Try to update the is executing indicator of the heir context */
+	li	a3, 1
+	amoswap.w.aq	a3, a3, RISCV_CONTEXT_IS_EXECUTING(a1)
+	bnez	a3, .Lcheck_is_executing
+#endif
+
 .Lrestore:
+
 	lw	a3, RISCV_CONTEXT_ISR_DISPATCH_DISABLE(a1)
 
 	LREG	ra, RISCV_CONTEXT_RA(a1)
@@ -124,3 +142,32 @@ SYM(_CPU_Context_restore):
 	mv	a1, a0
 	GET_SELF_CPU_CONTROL	a2
 	j	.Lrestore
+
+#ifdef RTEMS_SMP
+.Lcheck_is_executing:
+
+	/* Check the is executing indicator of the heir context */
+	lw	a3, RISCV_CONTEXT_IS_EXECUTING(a1)
+	beqz	a3, .Ltry_update_is_executing
+
+	/* We may have a new heir */
+
+	/* Read the executing and heir */
+	lw	a4, PER_CPU_OFFSET_EXECUTING(a2)
+	lw	a5, PER_CPU_OFFSET_HEIR(a2)
+
+	/*
+	 * Update the executing only if necessary to avoid cache line
+	 * monopolization.
+	 */
+	beq	a4, a5, .Ltry_update_is_executing
+
+	/* Calculate the heir context pointer */
+	sub	a4, a1, a4
+	add	a1, a5, a4
+
+	/* Update the executing */
+	sw	a5, PER_CPU_OFFSET_EXECUTING(a2)
+
+	j	.Ltry_update_is_executing
+#endif
