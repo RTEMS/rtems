@@ -558,6 +558,72 @@ RTEMS_INLINE_ROUTINE void *_RBTree_Find_inline(
   return NULL;
 }
 
+/**
+ * @brief Returns the container of the first node of the specified red-black
+ * tree in postorder.
+ *
+ * Postorder traversal may be used to delete all nodes of a red-black tree.
+ *
+ * @param the_rbtree The red-black tree control.
+ * @param offset The offset to the red-black tree node in the container structure.
+ *
+ * @retval NULL The red-black tree is empty.
+ * @retval container The container of the first node of the specified red-black
+ *   tree in postorder.
+ *
+ * @see _RBTree_Postorder_next().
+ *
+ * @code
+ * #include <rtems/score/rbtree.h>
+ *
+ * typedef struct {
+ *   int         data;
+ *   RBTree_Node Node;
+ * } Container_Control;
+ *
+ * void visit( Container_Control *the_container );
+ *
+ * void postorder_traversal( RBTree_Control *the_rbtree )
+ * {
+ *   Container_Control *the_container;
+ *
+ *   the_container = _RBTree_Postorder_first(
+ *     the_rbtree,
+ *     offsetof( Container_Control, Node )
+ *   );
+ *
+ *   while ( the_container != NULL ) {
+ *     visit( the_container );
+ *
+ *     the_container = _RBTree_Postorder_next(
+ *       &the_container->Node,
+ *       offsetof( Container_Control, Node )
+ *     );
+ *   }
+ * }
+ * @endcode
+ */
+void *_RBTree_Postorder_first(
+  const RBTree_Control *the_rbtree,
+  size_t                offset
+);
+
+/**
+ * @brief Returns the container of the next node in postorder.
+ *
+ * @param the_node The red-black tree node.  The node must not be NULL.
+ * @param offset The offset to the red-black tree node in the container structure.
+ *
+ * @retval NULL The node is NULL or there is no next node in postorder.
+ * @retval container The container of the next node in postorder.
+ *
+ * @see _RBTree_Postorder_first().
+ */
+void *_RBTree_Postorder_next(
+  const RBTree_Node *the_node,
+  size_t             offset
+);
+
 /**@}*/
 
 #ifdef __cplusplus

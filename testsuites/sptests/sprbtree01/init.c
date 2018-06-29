@@ -1756,6 +1756,187 @@ static void test_rbtree_random_ops( void )
   }
 }
 
+typedef struct {
+  rtems_rbtree_node *parent;
+  rtems_rbtree_node *left;
+  rtems_rbtree_node *right;
+} postorder_node_description;
+
+static const postorder_node_description postorder_tree_1[] = {
+  { NULL, NULL, NULL }
+};
+
+/*
+ *   TN_1
+ *   /
+ * TN_0
+ */
+static const postorder_node_description postorder_tree_2[] = {
+  { TN( 1 ), NULL, NULL },
+  { NULL, TN( 0 ), NULL }
+};
+
+/*
+ * TN_1
+ *     \
+ *    TN_0
+ */
+static const postorder_node_description postorder_tree_3[] = {
+  { TN( 1 ), NULL, NULL },
+  { NULL, NULL, TN( 0 ) }
+};
+
+/*
+ *    TN_2
+ *   /    \
+ * TN_0  TN_1
+ */
+static const postorder_node_description postorder_tree_4[] = {
+  { TN( 2 ), NULL, NULL },
+  { TN( 2 ), NULL, NULL },
+  { NULL, TN( 0 ), TN( 1 ) }
+};
+
+/*
+ *       TN_3
+ *      /
+ *    TN_2
+ *   /    \
+ * TN_0  TN_1
+ */
+static const postorder_node_description postorder_tree_5[] = {
+  { TN( 2 ), NULL, NULL },
+  { TN( 2 ), NULL, NULL },
+  { TN( 3 ), TN( 0 ), TN( 1 ) },
+  { NULL, TN( 2 ), NULL }
+};
+
+/*
+ *      TN_10
+ *     /      \
+ *    TN_6     TN_9
+ *   /    \        \
+ * TN_0  TN_5       TN_8
+ *      /    \      /
+ *    TN_2   TN_4  TN_7
+ *   /      /
+ * TN_1   TN_3
+ */
+static const postorder_node_description postorder_tree_6[] = {
+  { TN( 6 ), NULL, NULL },
+  { TN( 2 ), NULL, NULL },
+  { TN( 5 ), TN( 1 ), NULL },
+  { TN( 4 ), NULL, NULL },
+  { TN( 5 ), TN( 3 ), NULL },
+  { TN( 6 ), TN( 2 ), TN( 4 ) },
+  { TN( 10 ), TN( 0 ), TN( 5 ) },
+  { TN( 8 ), NULL, NULL },
+  { TN( 9 ), TN( 7 ), NULL },
+  { TN( 10 ), NULL, TN( 8 ) },
+  { NULL, TN( 6 ), TN( 9 ) }
+};
+
+/*
+ *      TN_5
+ *     /
+ *    TN_4
+ *   /
+ * TN_3
+ *     \
+ *    TN_2
+ *        \
+ *       TN_1
+ *      /
+ *    TN_0
+ */
+static const postorder_node_description postorder_tree_7[] = {
+  { TN( 1 ), NULL, NULL },
+  { TN( 2 ), TN( 0 ), NULL },
+  { TN( 3 ), NULL, TN( 1 ) },
+  { TN( 4 ), NULL, TN( 2 ) },
+  { TN( 5 ), TN( 3 ), NULL },
+  { NULL, TN( 0 ), NULL }
+};
+
+typedef struct {
+  const postorder_node_description *tree;
+  size_t                            node_count;
+} postorder_tree;
+
+#define POSTORDER_TREE( idx ) \
+  { postorder_tree_##idx, RTEMS_ARRAY_SIZE( postorder_tree_##idx ) }
+
+static const postorder_tree postorder_trees[] = {
+  { NULL, 0 },
+  POSTORDER_TREE( 1 ),
+  POSTORDER_TREE( 2 ),
+  POSTORDER_TREE( 3 ),
+  POSTORDER_TREE( 4 ),
+  POSTORDER_TREE( 5 ),
+  POSTORDER_TREE( 6 ),
+  POSTORDER_TREE( 7 )
+};
+
+static void postorder_tree_init(
+  RBTree_Control       *tree,
+  const postorder_tree *pt
+)
+{
+  size_t i;
+
+  memset( node_array, 0, pt->node_count * sizeof( node_array[ 0 ] ) );
+
+  if ( pt->node_count > 0 ) {
+    _RBTree_Initialize_node( TN( 0 ) );
+    _RBTree_Initialize_one( tree, TN( 0 ) );
+  } else {
+    _RBTree_Initialize_empty( tree );
+  }
+
+  for ( i = 0; i < pt->node_count; ++i ) {
+    const postorder_node_description *pnd;
+
+    pnd = &pt->tree[ i ];
+    RB_PARENT( TN( i ), Node) = pnd->parent;
+    RB_LEFT( TN( i ), Node) = pnd->left;
+    RB_RIGHT( TN( i ), Node) = pnd->right;
+  }
+}
+
+static void postorder_tree_check(
+  RBTree_Control       *tree,
+  const postorder_tree *pt
+)
+{
+  test_node *node;
+  size_t i;
+
+  node = _RBTree_Postorder_first( tree, offsetof( test_node, Node ) );
+
+  for ( i = 0; i < pt->node_count; ++i ) {
+    rtems_test_assert( node == &node_array[ i ] );
+    node = _RBTree_Postorder_next( &node->Node, offsetof( test_node, Node ) );
+  }
+
+  rtems_test_assert( node == NULL );
+}
+
+static void test_rbtree_postorder( void )
+{
+  RBTree_Control tree;
+  size_t         i;
+
+  puts( "INIT - Postorder operations" );
+
+  for ( i = 0; i < RTEMS_ARRAY_SIZE( postorder_trees ); ++i ) {
+    const postorder_tree *pt;
+
+    pt = &postorder_trees[ i ];
+    postorder_tree_init( &tree, pt );
+    postorder_tree_check( &tree, pt );
+  }
+}
+
 rtems_task Init( rtems_task_argument ignored )
 {
   rtems_rbtree_control  rbtree1;
@@ -2295,6 +2476,7 @@ rtems_task Init( rtems_task_argument ignored )
     rtems_test_exit(0);
   }
 
+  test_rbtree_postorder();
   test_rbtree_init_one();
   test_rbtree_min_max();
   test_rbtree_insert_inline();
