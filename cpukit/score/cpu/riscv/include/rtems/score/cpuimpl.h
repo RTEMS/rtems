@@ -286,6 +286,15 @@ typedef struct {
   uintptr_t a1;
 } RTEMS_ALIGNED( CPU_STACK_ALIGNMENT ) CPU_Interrupt_frame;
 
+static inline uint32_t _RISCV_Read_FCSR( void )
+{
+  uint32_t fcsr;
+
+  __asm__ volatile ( "frcsr %0" : "=&r" ( fcsr ) );
+
+  return fcsr;
+}
+
 #ifdef RTEMS_SMP
 
 static inline struct Per_CPU_Control *_RISCV_Get_current_per_CPU_control( void )

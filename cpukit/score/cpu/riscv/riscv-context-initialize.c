@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/cpu.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/address.h>
 #include <rtems/score/tls.h>
 
@@ -55,6 +55,15 @@ void _CPU_Context_Initialize(
   context->ra = (uintptr_t) entry_point;
   context->sp = (uintptr_t) stack;
   context->isr_dispatch_disable = 0;
+
+#if __riscv_flen > 0
+  /*
+   * According to C11 section 7.6 "Floating-point environment <fenv.h>" the
+   * floating-point environment shall be initialized to the current state of
+   * the creating thread.
+   */
+  context->fcsr = _RISCV_Read_FCSR();
+#endif
 
   if ( tls_area != NULL ) {
     void *tls_block;
