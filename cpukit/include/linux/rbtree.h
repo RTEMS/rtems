@@ -17,40 +17,36 @@
 
 #include <rtems/score/rbtree.h>
 
-struct rb_node {
-  struct rb_node *rb_left;
-  struct rb_node *rb_right;
-  struct rb_node *rb_parent;
-  int rb_color;
-};
+#define rb_node RBTree_Node
 
-RTEMS_STATIC_ASSERT(
-  sizeof( struct rb_node ) == sizeof( RBTree_Node ),
-  rb_node_size
-);
+#define rb_left Node.rbe_left
 
-RTEMS_STATIC_ASSERT(
-  offsetof( struct rb_node, rb_left ) == offsetof( RBTree_Node, Node.rbe_left ),
-  rb_node_left
-);
+#define rb_right Node.rbe_right
 
-RTEMS_STATIC_ASSERT(
-  offsetof( struct rb_node, rb_right ) == offsetof( RBTree_Node, Node.rbe_right ),
-  rb_node_right
-);
-
-RTEMS_STATIC_ASSERT(
-  offsetof( struct rb_node, rb_parent ) == offsetof( RBTree_Node, Node.rbe_parent ),
-  rb_node_parent
-);
-
-RTEMS_STATIC_ASSERT(
-  offsetof( struct rb_node, rb_color ) == offsetof( RBTree_Node, Node.rbe_color ),
-  rb_node_color
-);
-
+/*
+ * Getting rid of this placeholder structure is a bit difficult.  The use of
+ * this placeholder struct may lead to bugs with link-time optimization due to
+ * a strict aliasing violation.
+ *
+ * A common use of this API is a direct access of the rb_node member to get the
+ * root node of the tree. So, this cannot be changed.
+ *
+ * The red-black tree implementation is provided by <sys/tree.h> and we have
+ *
+ * struct RBTree_Control {
+ *   struct RBTree_Node *rbh_root;
+ * };
+ *
+ * The member name rbh_root is fixed by the <sys/tree.h> API.  To use
+ * RBTree_Control directly we would need two defines:
+ *
+ * #define rb_root RBTree_Control
+ * #define rb_node rbh_root
+ *
+ * We already have an rb_node define to RBTree_Node, see above.
+ */
 struct rb_root {
-  struct rb_node *rb_node;
+  RBTree_Node *rb_node;
 };
 
 RTEMS_STATIC_ASSERT(
@@ -70,32 +66,32 @@ RTEMS_STATIC_ASSERT(
 
 static inline void rb_insert_color( struct rb_node *node, struct rb_root *root)
 {
-  _RBTree_Insert_color( (RBTree_Control *) root, (RBTree_Node *) node );
+  _RBTree_Insert_color( (RBTree_Control *) root, node );
 }
 
 static inline void rb_erase( struct rb_node *node, struct rb_root *root )
 {
-  _RBTree_Extract( (RBTree_Control *) root, (RBTree_Node *) node );
+  _RBTree_Extract( (RBTree_Control *) root, node );
 }
 
 static inline struct rb_node *rb_next( struct rb_node *node )
 {
-  return (struct rb_node *) _RBTree_Successor( (RBTree_Node *) node );
+  return _RBTree_Successor( node );
 }
 
 static inline struct rb_node *rb_prev( struct rb_node *node )
 {
-  return (struct rb_node *) _RBTree_Predecessor( (RBTree_Node *) node );
+  return _RBTree_Predecessor( node );
 }
 
 static inline struct rb_node *rb_first( struct rb_root *root )
 {
-  return (struct rb_node *) _RBTree_Minimum( (RBTree_Control *) root );
+  return _RBTree_Minimum( (RBTree_Control *) root );
 }
 
 static inline struct rb_node *rb_last( struct rb_root *root )
 {
-  return (struct rb_node *) _RBTree_Maximum( (RBTree_Control *) root );
+  return _RBTree_Maximum( (RBTree_Control *) root );
 }
 
 static inline void rb_replace_node(
@@ -106,8 +102,8 @@ static inline void rb_replace_node(
 {
   _RBTree_Replace_node(
     (RBTree_Control *) root,
-    (RBTree_Node *) victim,
-    (RBTree_Node *) replacement
+    victim,
+    replacement
   );
 }
 
@@ -117,17 +113,13 @@ static inline void rb_link_node(
   struct rb_node **link
 )
 {
-  _RBTree_Initialize_node( (RBTree_Node *) node );
-  _RBTree_Add_child(
-    (RBTree_Node *) node,
-    (RBTree_Node *) parent,
-    (RBTree_Node **) link
-  );
+  _RBTree_Initialize_node( node );
+  _RBTree_Add_child( node, parent, link );
 }
 
 static inline struct rb_node *rb_parent( struct rb_node *node )
 {
-  return (struct rb_node *) _RBTree_Parent( (RBTree_Node *) node );
+  return _RBTree_Parent( node );
 }
 
 #endif /* _LINUX_RBTREE_H */
