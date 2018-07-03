@@ -33,7 +33,7 @@
 static int _POSIX_Set_sched_param(
   Thread_Control                       *the_thread,
   int                                   policy,
-  struct sched_param                   *param,
+  const struct sched_param             *param,
   Thread_CPU_budget_algorithms          budget_algorithm,
   Thread_CPU_budget_algorithm_callout   budget_callout,
   Thread_queue_Context                 *queue_context
@@ -113,9 +113,13 @@ static int _POSIX_Set_sched_param(
 }
 
 int pthread_setschedparam(
-  pthread_t           thread,
-  int                 policy,
-  struct sched_param *param
+  pthread_t                 thread,
+  int                       policy,
+#ifdef HAVE_PTHREAD_SETSCHEDPARAM_CONST
+  const struct sched_param *param
+#else
+  struct sched_param       *param
+#endif
 )
 {
   Thread_CPU_budget_algorithms         budget_algorithm;

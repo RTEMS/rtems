@@ -115,6 +115,29 @@ RTEMS_CHECK_FUNC([pthread_getattr_np],[
   #define _GNU_SOURCE
   #include <pthread.h>])
 
+AC_LANG_PUSH(C)
+AC_MSG_CHECKING([for pthread_mutex_getprioceiling(const pthread_mutex_t *, ...)])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <pthread.h>
+int pthread_mutex_getprioceiling(const pthread_mutex_t *__restrict, int *);
+])],[
+AC_MSG_RESULT([yes])
+AC_DEFINE(HAVE_PTHREAD_MUTEX_GETCEILING_CONST, [], [pthread_mutex_getprioceiling(const pthread_mutex_t *, ...)])
+],[
+AC_MSG_RESULT([no])
+])
+AC_MSG_CHECKING([for pthread_setschedparam(..., const struct sched_param *)])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <pthread.h>
+int pthread_setschedparam(pthread_t, int, const struct sched_param *);
+])],[
+AC_MSG_RESULT([yes])
+AC_DEFINE(HAVE_PTHREAD_SETSCHEDPARAM_CONST, [], [pthread_setschedparam(..., const struct sched_param *)])
+],[
+AC_MSG_RESULT([no])
+])
+AC_LANG_POP(C)
+
 # Mandated by POSIX, not declared in some versions of newlib.
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 

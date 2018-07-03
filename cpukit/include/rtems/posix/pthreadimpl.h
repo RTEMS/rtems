@@ -97,7 +97,7 @@ int _POSIX_Thread_Translate_to_sched_policy(
  */
 int _POSIX_Thread_Translate_sched_param(
   int                                  policy,
-  struct sched_param                  *param,
+  const struct sched_param            *param,
   Thread_CPU_budget_algorithms        *budget_algorithm,
   Thread_CPU_budget_algorithm_callout *budget_callout
 );

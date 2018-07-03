@@ -26,8 +26,12 @@
  */
 
 int pthread_mutex_getprioceiling(
-  pthread_mutex_t   *mutex,
-  int               *prioceiling
+#ifdef HAVE_PTHREAD_MUTEX_GETCEILING_CONST
+  const pthread_mutex_t *mutex,
+#else
+  pthread_mutex_t       *mutex,
+#endif
+  int                   *prioceiling
 )
 {
   POSIX_Mutex_Control  *the_mutex;
@@ -38,7 +42,7 @@ int pthread_mutex_getprioceiling(
     return EINVAL;
   }
 
-  the_mutex = _POSIX_Mutex_Get( mutex );
+  the_mutex = _POSIX_Mutex_Get( RTEMS_DECONST( pthread_mutex_t *, mutex ) );
   POSIX_MUTEX_VALIDATE_OBJECT( the_mutex, flags );
 
   _POSIX_Mutex_Acquire( the_mutex, &queue_context );
