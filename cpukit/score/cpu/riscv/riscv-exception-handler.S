@@ -115,6 +115,8 @@ SYM(ISR_Handler):
 	sw	t2, PER_CPU_ISR_NEST_LEVEL(s0)
 	sw	t1, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
 
+	CLEAR_RESERVATIONS	s0
+
 	/* Keep sp (Exception frame address) in s1 */
 	mv	s1, sp
 

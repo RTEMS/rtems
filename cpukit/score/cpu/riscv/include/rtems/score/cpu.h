@@ -64,8 +64,6 @@ extern "C" {
 #define CPU_LITTLE_ENDIAN                        TRUE
 #define CPU_MODES_INTERRUPT_MASK   0x0000000000000001
 
-#define CPU_PER_CPU_CONTROL_SIZE 0
-
 #define CPU_CACHE_LINE_BYTES 64
 
 #if __riscv_xlen == 32
@@ -223,10 +221,6 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error) RTEMS_NO_RETURN;
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
 
 #define CPU_MAXIMUM_PROCESSORS 32
-
-typedef struct {
-  /* There is no CPU specific per-CPU state */
-} CPU_Per_CPU_control;
 
 typedef uint16_t Priority_bit_map_Word;
 

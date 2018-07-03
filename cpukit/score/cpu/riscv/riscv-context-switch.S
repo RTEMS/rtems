@@ -136,6 +136,8 @@ SYM(_CPU_Context_switch):
 
 	sw	a3, PER_CPU_ISR_DISPATCH_DISABLE(a2)
 
+	CLEAR_RESERVATIONS	a2
+
 	ret
 
 SYM(_CPU_Context_restore):

@@ -171,4 +171,14 @@
 #endif
 .endm
 
+.macro CLEAR_RESERVATIONS REG
+#ifdef __riscv_atomic
+	/*
+	 * Clear reservations, see also RISC-V User-Level ISA V2.3, comment in
+	 * section 8.2 "Load-Reserved/Store-Conditional Instructions".
+	 */
+	sc.w	zero, zero, (\REG)
+#endif
+.endm
+
 #endif

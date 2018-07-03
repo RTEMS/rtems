@@ -34,7 +34,11 @@
 
 #include <rtems/score/cpu.h>
 
+#ifdef __riscv_atomic
+#define CPU_PER_CPU_CONTROL_SIZE 16
+#else
 #define CPU_PER_CPU_CONTROL_SIZE 0
+#endif
 
 #ifdef RTEMS_SMP
 #define RISCV_CONTEXT_IS_EXECUTING 0
@@ -285,6 +289,13 @@ typedef struct {
   uintptr_t a0;
   uintptr_t a1;
 } RTEMS_ALIGNED( CPU_STACK_ALIGNMENT ) CPU_Interrupt_frame;
+
+#ifdef __riscv_atomic
+typedef struct {
+  uint64_t clear_reservations;
+  uint32_t reserved_for_alignment_of_interrupt_frame[ 2 ];
+} CPU_Per_CPU_control;
+#endif
 
 static inline uint32_t _RISCV_Read_FCSR( void )
 {
