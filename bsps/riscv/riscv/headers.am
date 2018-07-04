@@ -8,3 +8,11 @@ include_HEADERS += ../../../../../../bsps/riscv/riscv/include/tm27.h
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../../../../bsps/riscv/riscv/include/bsp/irq.h
+
+include_dev_irqdir = $(includedir)/dev/irq
+include_dev_irq_HEADERS =
+include_dev_irq_HEADERS += ../../../../../../bsps/riscv/riscv/include/dev/irq/clint.h
+
+include_dev_serialdir = $(includedir)/dev/serial
+include_dev_serial_HEADERS =
+include_dev_serial_HEADERS += ../../../../../../bsps/riscv/riscv/include/dev/serial/htif.h

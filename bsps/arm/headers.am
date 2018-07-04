@@ -29,6 +29,7 @@ include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/arm-pl111-fb.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/arm-pl111-regs.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/arm-release-id.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/armv7m-irq.h
+include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/clock-armv7m.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/linker-symbols.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/lpc-dma.h
 include_bsp_HEADERS += ../../../../../bsps/arm/include/bsp/lpc-emc.h
