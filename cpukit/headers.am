@@ -58,6 +58,7 @@ include_linuxdir = $(includedir)/linux
 include_linux_HEADERS =
 include_linux_HEADERS += include/linux/i2c-dev.h
 include_linux_HEADERS += include/linux/i2c.h
+include_linux_HEADERS += include/linux/rbtree.h
 
 include_linux_spidir = $(includedir)/linux/spi
 include_linux_spi_HEADERS =
