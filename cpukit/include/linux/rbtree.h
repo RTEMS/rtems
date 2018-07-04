@@ -122,4 +122,20 @@ static inline struct rb_node *rb_parent( struct rb_node *node )
   return _RBTree_Parent( node );
 }
 
+#define rbtree_postorder_for_each_entry_safe( node, next, root, field ) \
+  for ( \
+    node = _RBTree_Postorder_first( \
+      (RBTree_Control *) root, \
+      (size_t) ( (char *) &node->field - (char *) node ) \
+    ); \
+    node != NULL && ( \
+      next = _RBTree_Postorder_next( \
+        &node->field, \
+        (size_t) ( (char *) &node->field - (char *) node ) \
+      ), \
+      node != NULL \
+    ); \
+    node = next \
+  )
+
 #endif /* _LINUX_RBTREE_H */

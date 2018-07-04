@@ -14,6 +14,8 @@
 #include <rtems/rbtree.h>
 #include <rtems/score/rbtreeimpl.h>
 
+#include <linux/rbtree.h>
+
 const char rtems_test_name[] = "SPRBTREE 1";
 
 /* forward declarations to avoid warnings */
@@ -1909,6 +1911,7 @@ static void postorder_tree_check(
 )
 {
   test_node *node;
+  test_node *next;
   size_t i;
 
   node = _RBTree_Postorder_first( tree, offsetof( test_node, Node ) );
@@ -1919,6 +1922,25 @@ static void postorder_tree_check(
   }
 
   rtems_test_assert( node == NULL );
+
+  i = 0;
+  next = NULL;
+
+  rbtree_postorder_for_each_entry_safe( node, next, tree, Node ) {
+    rtems_test_assert( node == &node_array[ i ] );
+
+    if ( i < pt->node_count - 1 ) {
+      rtems_test_assert( next == &node_array[ i + 1 ] );
+    } else {
+      rtems_test_assert( next == NULL );
+    }
+
+    ++i;
+  }
+
+  rtems_test_assert( i == pt->node_count );
+  rtems_test_assert( node == NULL );
+  rtems_test_assert( next == NULL );
 }
 
 static void test_rbtree_postorder( void )
