@@ -87,11 +87,6 @@ static uint32_t riscv_clock_get_timecount(struct timecounter *tc)
   return clint->mtime.val_32[0];
 }
 
-CPU_Counter_ticks _CPU_Counter_read(void)
-{
-  return riscv_clock_get_timecount(NULL);
-}
-
 static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
 {
   int node;
@@ -131,12 +126,9 @@ static void riscv_clock_initialize(void)
   rtems_timecounter_install(&riscv_clock_tc);
 }
 
-CPU_Counter_ticks _CPU_Counter_difference(
-  CPU_Counter_ticks second,
-  CPU_Counter_ticks first
-)
+uint32_t _CPU_Counter_frequency( void )
 {
-  return second - first;
+  return riscv_clock_get_timebase_frequency(bsp_fdt_get());
 }
 
 #define Clock_driver_support_at_tick() riscv_clock_at_tick()
