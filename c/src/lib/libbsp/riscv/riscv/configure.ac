@@ -27,8 +27,14 @@ RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_READ_ONLY],[place the FDT blob into the read-on
 RTEMS_BSPOPTS_SET([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[*],[1])
 RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[copy the FDT blob into the read-only load area via bsp_fdt_copy()])
 
+RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[115200])
+RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console driver devices (default 115200)])
+
 RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[1])
 RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (enabled by default)])
+
+RTEMS_BSPOPTS_SET([RISCV_CONSOLE_MAX_NS16550_DEVICES],[*],[2])
+RTEMS_BSPOPTS_HELP([RISCV_CONSOLE_MAX_NS16550_DEVICES],[maximum number of NS16550 devices supported by the console driver (2 by default)])
 
 RTEMS_BSP_CLEANUP_OPTIONS
 
