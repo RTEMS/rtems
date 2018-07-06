@@ -128,7 +128,7 @@ SYM(ISR_Handler):
 	mv	a1, sp
 
 	/* calculate the offset */
-	la	t5, bsp_start_vector_table_begin
+	LADDR	t5, bsp_start_vector_table_begin
 #if	__riscv_xlen == 32
 	slli	t6, a0, 2
 #else	/* xlen = 64 */

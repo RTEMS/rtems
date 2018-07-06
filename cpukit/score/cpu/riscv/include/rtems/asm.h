@@ -131,6 +131,16 @@
 
 #endif /* __riscv_xlen */
 
+#ifdef __riscv_cmodel_medany
+
+#define LADDR lla
+
+#else /* !__riscv_cmodel_medany */
+
+#define LADDR la
+
+#endif /* __riscv_cmodel_medany */
+
 #if __riscv_flen == 32
 
 #define FLREG flw
@@ -167,7 +177,7 @@
 #ifdef RTEMS_SMP
 	csrr	\REG, mscratch
 #else
-	la	\REG, _Per_CPU_Information
+	LADDR	\REG, _Per_CPU_Information
 #endif
 .endm
 

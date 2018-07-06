@@ -50,12 +50,12 @@ SYM(_start):
 	/* Load global pointer */
 	.option	push
 	.option	norelax
-	la	gp, __global_pointer$
+	LADDR	gp, __global_pointer$
 	.option	pop
 
 #ifdef RTEMS_SMP
 	csrr	s0, mhartid
-	la	t0, _Per_CPU_Information
+	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
 	add	t0, t0, t1
 	csrw	mscratch, t0
@@ -63,25 +63,25 @@ SYM(_start):
 #endif
 
 	/* load stack and frame pointers */
-	la	sp, _Configuration_Interrupt_stack_area_end
+	LADDR	sp, _Configuration_Interrupt_stack_area_end
 
 #ifdef BSP_START_COPY_FDT_FROM_U_BOOT
 	mv	a0, a1
 	call	bsp_fdt_copy
 #endif
 
-	la	t0, ISR_Handler
+	LADDR	t0, ISR_Handler
 	csrw	mtvec, t0
 
 	/* Clear .bss */
-	la	a0, bsp_section_bss_begin
+	LADDR	a0, bsp_section_bss_begin
 	li	a1, 0
-	la	a2, bsp_section_bss_size
+	LADDR	a2, bsp_section_bss_size
 	call	memset
 
 #ifdef RTEMS_SMP
 	/* Give go to secondary processors */
-	la	t0, .Lsecondary_processor_go
+	LADDR	t0, .Lsecondary_processor_go
 	fence	iorw,ow
 	amoswap.w	zero, zero, 0(t0)
 #endif
@@ -95,7 +95,7 @@ SYM(_start):
 #ifdef RTEMS_SMP
 	/* Wait for go issued by the boot processor (mhartid == 0) */
 .Lwait_for_go:
-	la	t0, .Lsecondary_processor_go
+	LADDR	t0, .Lsecondary_processor_go
 .Lwait_for_go_again:
 	lw	t1, 0(t0)
 	fence	iorw, iorw
