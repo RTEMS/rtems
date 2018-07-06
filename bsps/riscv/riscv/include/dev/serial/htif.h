@@ -41,13 +41,9 @@ void htif_console_context_init(
   int device_tree_node
 );
 
-void htif_console_write_polled(
-  rtems_termios_device_context *base,
-  const char *buf,
-  size_t len
-);
+void htif_console_putchar(rtems_termios_device_context *base, char c);
 
-int htif_console_poll_char(rtems_termios_device_context *base);
+int htif_console_getchar(rtems_termios_device_context *base);
 
 const rtems_termios_device_handler htif_console_handler;
 

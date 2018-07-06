@@ -73,7 +73,7 @@ static void __set_tohost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
   tohost = TOHOST_CMD(dev, cmd, data);
 }
 
-int htif_console_poll_char(rtems_termios_device_context *base)
+int htif_console_getchar(rtems_termios_device_context *base)
 {
   __check_fromhost();
   int ch = htif_console_buf;
@@ -85,7 +85,12 @@ int htif_console_poll_char(rtems_termios_device_context *base)
   return ch - 1;
 }
 
-void htif_console_write_polled(
+void htif_console_putchar(rtems_termios_device_context *base, char c)
+{
+  __set_tohost(1, 1, c);
+}
+
+static void htif_console_write_polled(
   rtems_termios_device_context *base,
   const char *buf,
   size_t len
@@ -94,7 +99,7 @@ void htif_console_write_polled(
   size_t i;
 
   for (i = 0; i < len; ++i) {
-    __set_tohost(1, 1, buf[i]);
+    htif_console_putchar(base, buf[i]);
   }
 }
 
@@ -127,6 +132,6 @@ static bool htif_console_first_open(
 const rtems_termios_device_handler htif_console_handler = {
   .first_open = htif_console_first_open,
   .write = htif_console_write_polled,
-  .poll_read = htif_console_poll_char,
+  .poll_read = htif_console_getchar,
   .mode = TERMIOS_POLLED
 };

@@ -31,17 +31,13 @@ static htif_console_context htif_console_instance;
 
 static struct {
   rtems_termios_device_context *context;
-  void (*write_polled)(
-    rtems_termios_device_context *base,
-    const char *buf,
-    size_t len
-  );
-  int (*poll_char)(rtems_termios_device_context *base);
+  void (*putchar)(rtems_termios_device_context *base, char c);
+  int (*getchar)(rtems_termios_device_context *base);
 } riscv_console;
 
 static void riscv_output_char(char c)
 {
-  (*riscv_console.write_polled)(riscv_console.context, &c, 1);
+  (*riscv_console.putchar)(riscv_console.context, c);
 }
 
 static int riscv_get_console_node(const void *fdt)
@@ -76,8 +72,8 @@ static void riscv_console_probe(void)
       htif_console_context_init(&htif_console_instance.base, node);
 
       riscv_console.context = &htif_console_instance.base;
-      riscv_console.write_polled = htif_console_write_polled;
-      riscv_console.poll_char = htif_console_poll_char;
+      riscv_console.putchar = htif_console_putchar;
+      riscv_console.getchar = htif_console_getchar;
     };
 #endif
 
