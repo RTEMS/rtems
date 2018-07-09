@@ -76,7 +76,8 @@ static char *rcsid = "$FreeBSD: src/lib/libc/xdr/xdr_float.c,v 1.7 1999/08/28 00
     defined(__sh__) || \
     defined(__BFIN__) || \
     defined(__m32c__) || \
-    defined(__v850)
+    defined(__v850) || \
+    defined(__x86_64__)
 
 #include <rtems/endian.h>
 #if !defined(IEEEFP)
