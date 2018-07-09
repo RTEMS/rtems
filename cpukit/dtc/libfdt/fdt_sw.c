@@ -143,9 +143,11 @@ static void *fdt_grab_space_(void *fdt, size_t len)
 
 int fdt_create(void *buf, int bufsize)
 {
+	const size_t hdrsize = FDT_ALIGN(sizeof(struct fdt_header),
+					 sizeof(struct fdt_reserve_entry));
 	void *fdt = buf;
 
-	if (bufsize < sizeof(struct fdt_header))
+	if (bufsize < hdrsize)
 		return -FDT_ERR_NOSPACE;
 
 	memset(buf, 0, bufsize);
@@ -155,8 +157,7 @@ int fdt_create(void *buf, int bufsize)
 	fdt_set_last_comp_version(fdt, FDT_FIRST_SUPPORTED_VERSION);
 	fdt_set_totalsize(fdt,  bufsize);
 
-	fdt_set_off_mem_rsvmap(fdt, FDT_ALIGN(sizeof(struct fdt_header),
-					      sizeof(struct fdt_reserve_entry)));
+	fdt_set_off_mem_rsvmap(fdt, hdrsize);
 	fdt_set_off_dt_struct(fdt, fdt_off_mem_rsvmap(fdt));
 	fdt_set_off_dt_strings(fdt, 0);
 
@@ -172,6 +173,9 @@ int fdt_resize(void *fdt, void *buf, int bufsize)
 
 	headsize = fdt_off_dt_struct(fdt) + fdt_size_dt_struct(fdt);
 	tailsize = fdt_size_dt_strings(fdt);
+
+	if ((headsize + tailsize) > fdt_totalsize(fdt))
+		return -FDT_ERR_INTERNAL;
 
 	if ((headsize + tailsize) > bufsize)
 		return -FDT_ERR_NOSPACE;
