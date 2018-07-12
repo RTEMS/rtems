@@ -245,7 +245,7 @@ SYM(syscall_lazy_fp_switch):
 
 	/* Now, retry the floating point instruction with PSR[EF] == 1 */
 	jmp	%l1
-	 rett	%l1 + 4
+	 rett	%l2
 
 .Lillegal_use_of_floating_point_unit:
 
