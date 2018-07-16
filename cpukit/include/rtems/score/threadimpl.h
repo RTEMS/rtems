@@ -1788,7 +1788,6 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
   Thread_Wait_flags  desired_flags
 )
 {
-  bool success;
 #if defined(RTEMS_SMP)
   return _Atomic_Compare_exchange_uint(
     &the_thread->Wait.flags,
@@ -1798,6 +1797,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
     ATOMIC_ORDER_ACQUIRE
   );
 #else
+  bool      success;
   ISR_Level level;
 
   _ISR_Local_disable( level );
@@ -1809,9 +1809,8 @@ RTEMS_INLINE_ROUTINE bool _Thread_Wait_flags_try_change_acquire(
   );
 
   _ISR_Local_enable( level );
-#endif
-
   return success;
+#endif
 }
 
 /**
