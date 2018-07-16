@@ -259,6 +259,12 @@ static void test_rwlock_auto_initialization( void )
 
     eno = pthread_rwlock_rdlock( &rw );
     rtems_test_assert( eno == 0 );
+
+    eno = pthread_rwlock_unlock( &rw );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_rwlock_destroy( &rw );
+    rtems_test_assert( eno == 0 );
   }
 
   {

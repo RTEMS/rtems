@@ -374,6 +374,12 @@ static void test_mutex_auto_initialization( void )
 
     eno = pthread_mutex_lock( &mutex );
     rtems_test_assert( eno == 0 );
+
+    eno = pthread_mutex_unlock( &mutex );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_mutex_destroy( &mutex );
+    rtems_test_assert( eno == 0 );
   }
 
   {

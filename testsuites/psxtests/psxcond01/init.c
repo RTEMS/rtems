@@ -51,6 +51,41 @@ void *BlockingThread(
   return NULL;
 }
 
+static void test_cond_auto_initialization( void )
+{
+  int eno;
+
+  {
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+    eno = pthread_cond_destroy( &cond );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_cond_destroy( &cond );
+    rtems_test_assert( eno == EINVAL );
+  }
+
+  {
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+    eno = pthread_cond_signal( &cond );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_cond_destroy( &cond );
+    rtems_test_assert( eno == 0 );
+  }
+
+  {
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+    eno = pthread_cond_broadcast( &cond );
+    rtems_test_assert( eno == 0 );
+
+    eno = pthread_cond_destroy( &cond );
+    rtems_test_assert( eno == 0 );
+  }
+}
+
 void *POSIX_Init(
   void *argument
 )
@@ -59,6 +94,8 @@ void *POSIX_Init(
   pthread_t  Thread;
 
   TEST_BEGIN();
+
+  test_cond_auto_initialization();
 
   puts( "Init - pthread_mutex_init - Mutex1 - OK" );
   sc = pthread_mutex_init( &Mutex1, NULL );

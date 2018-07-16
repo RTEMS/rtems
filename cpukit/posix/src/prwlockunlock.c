@@ -35,7 +35,7 @@ bool _POSIX_RWLock_Auto_initialization( POSIX_RWLock_Control *the_rwlock )
     return false;
   }
 
-  the_rwlock->flags = POSIX_RWLOCK_MAGIC;
+  the_rwlock->flags = (uintptr_t) the_rwlock ^ POSIX_RWLOCK_MAGIC;
   return true;
 }
 
