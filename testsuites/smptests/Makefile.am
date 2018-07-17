@@ -479,6 +479,17 @@ endif
 endif
 
 if HAS_SMP
+if TEST_smpschededf04
+smp_tests += smpschededf04
+smp_screens += smpschededf04/smpschededf04.scn
+smp_docs += smpschededf04/smpschededf04.doc
+smpschededf04_SOURCES = smpschededf04/init.c
+smpschededf04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smpschededf04) \
+	$(support_includes)
+endif
+endif
+
+if HAS_SMP
 if TEST_smpschedsem01
 smp_tests += smpschedsem01
 smp_screens += smpschedsem01/smpschedsem01.scn

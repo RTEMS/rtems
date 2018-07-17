@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpschededf04
+
+directives:
+
+  - _Scheduler_EDF_SMP_Set_affinity()
+
+concepts:
+
+  - Ensure that _Scheduler_EDF_SMP_Set_affinity() works correctly in a
+    clustered scheduling setup.
