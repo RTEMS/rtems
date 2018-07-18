@@ -1,4 +1,6 @@
 /*-
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
  * Copyright (c) 1986, 1988, 1991, 1993
  *	The Regents of the University of California.  All rights reserved.
  * (c) UNIX System Laboratories, Inc.
@@ -37,7 +39,7 @@
 #include <rtems/score/io.h>
 
 #include <sys/cdefs.h>
-__FBSDID("$FreeBSD: head/sys/kern/subr_prf.c 320908 2017-07-12 07:30:14Z rlibby $");
+__FBSDID("$FreeBSD: head/sys/kern/subr_prf.c 336417 2018-07-17 14:56:54Z markj $");
 
 #include <sys/param.h>
 #include <string.h>
@@ -157,6 +159,7 @@ reswitch:	switch (ch = (u_char)*fmt++) {
 				padc = '0';
 				goto reswitch;
 			}
+			/* FALLTHROUGH */
 		case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
 				for (n = 0;; ++fmt) {
