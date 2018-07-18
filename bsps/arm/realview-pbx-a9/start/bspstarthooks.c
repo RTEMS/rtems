@@ -19,6 +19,10 @@
 #include <bsp/arm-cp15-start.h>
 #include <bsp/arm-a9mpcore-start.h>
 
+#ifdef RTEMS_SMP
+#include <rtems/score/smpimpl.h>
+#endif
+
 BSP_START_DATA_SECTION static const arm_cp15_start_section_config
 rvpbxa9_mmu_config_table[] = {
   ARMV7_CP15_START_DEFAULT_SECTIONS,
@@ -56,13 +60,17 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
 BSP_START_TEXT_SECTION void bsp_start_hook_0(void)
 {
 #ifdef RTEMS_SMP
-  uint32_t cpu_id = arm_cortex_a9_get_multiprocessor_cpu_id();
+  uint32_t cpu_index_self = _SMP_Get_current_processor();
 
   /*
    * QEMU jumps to the entry point of the ELF file on all processors.  Prevent
-   * a SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR this way.
+   * the fatal errors SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR and
+   * SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR this way.
    */
-  if ( cpu_id >= rtems_configuration_get_maximum_processors() ) {
+  if (
+    cpu_index_self >= rtems_configuration_get_maximum_processors()
+      || !_SMP_Should_start_processor(cpu_index_self)
+  ) {
     while (true) {
       _ARM_Wait_for_event();
     }
