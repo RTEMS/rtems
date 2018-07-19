@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -16,45 +16,17 @@
   #include "config.h"
 #endif
 
-#include "tmacros.h"
-
-#include <limits.h>
-
 #include <rtems.h>
+#include <rtems/score/cpuimpl.h>
+
+#include <tmacros.h>
 
 const char rtems_test_name[] = "SPFATAL 26";
-
-static void provoke_aligment_or_data_access_exception( void )
-{
-  uintptr_t one = 1;
-  int i = sizeof(void *) * CHAR_BIT;
-  uintptr_t n = 1;
-  uintptr_t base = 0;
-  uintptr_t inc;
-
-  *(volatile uint64_t *) base;
-
-  do {
-    int j;
-
-    --i;
-    base = one << i;
-    inc = base << 1;
-
-    for (j = 0; j < n; ++j, base += inc) {
-      *(volatile uint64_t *) base;
-    }
-
-    n <<= 1;
-  } while (i > 0);
-}
 
 static void Init( rtems_task_argument arg )
 {
   TEST_BEGIN();
-
-  provoke_aligment_or_data_access_exception();
-
+  _CPU_Instruction_illegal();
   rtems_test_assert( 0 );
 }
 

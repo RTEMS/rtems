@@ -105,6 +105,16 @@ void _CPU_Context_volatile_clobber( uintptr_t pattern );
 void _CPU_Context_validate( uintptr_t pattern );
 
 /**
+ * @brief Emits an illegal instruction.
+ *
+ * This function is used only in test sptests/spfatal26.
+ */
+RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
+{
+  __asm__ volatile ( ".word 0" );
+}
+
+/**
  * @brief Emits a no operation instruction (nop).
  *
  * This function is used only in test sptests/spcache01.

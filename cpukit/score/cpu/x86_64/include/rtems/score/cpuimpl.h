@@ -47,6 +47,11 @@ RTEMS_INLINE_ROUTINE void _CPU_Context_volatile_clobber( uintptr_t pattern )
   /* TODO */
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
+{
+  __asm__ volatile ( ".word 0" );
+}
+
 RTEMS_INLINE_ROUTINE void _CPU_Context_validate( uintptr_t pattern )
 {
   while (1) {
