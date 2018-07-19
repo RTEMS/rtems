@@ -36,6 +36,8 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 
+#include <string.h>
+
 /**
  *  @defgroup libmisc_capture RTEMS Capture Engine
  *
