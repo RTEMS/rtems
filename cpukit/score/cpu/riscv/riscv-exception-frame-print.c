@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2018 embedded brains GmbH
  * Copyright (c) 2015 Hesham Almatary <hesham@alumni.york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,15 +32,49 @@
 #include <rtems/bspIo.h>
 #include <inttypes.h>
 
+#if __riscv_xlen == 32
+#define PRINT_REG "0x%08" PRIxPTR
+#elif __riscv_xlen == 64
+#define PRINT_REG "0x%016" PRIxPTR
+#endif
+
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame )
 {
-  int i;
-
-  for ( i = 0; i < 32; ++i ) {
-#if __riscv_xlen == 32
-    printk( "x%02i = 0x%032" PRIx32 "\n", i, frame->x[i]);
-#else /* xlen == 64 */
-    printk( "x%02i = 0x%032" PRIx64 "\n", i, frame->x[i]);
-#endif
-  }
+  printk("mstatus 0x%08" PRIxPTR "\n", frame->Interrupt_frame.mstatus);
+  printk("mcause  " PRINT_REG "\n", frame->mcause);
+  printk("mepc    " PRINT_REG "\n", frame->Interrupt_frame.mepc);
+  printk("ra      " PRINT_REG "\n", frame->Interrupt_frame.ra);
+  printk("sp      " PRINT_REG "\n", frame->sp);
+  printk("gp      " PRINT_REG "\n", frame->gp);
+  printk("tp      " PRINT_REG "\n", frame->tp);
+  printk("t0      " PRINT_REG "\n", frame->Interrupt_frame.t0);
+  printk("t1      " PRINT_REG "\n", frame->Interrupt_frame.t1);
+  printk("t2      " PRINT_REG "\n", frame->Interrupt_frame.t2);
+  printk("s0      " PRINT_REG "\n", frame->Interrupt_frame.s0);
+  printk("s1      " PRINT_REG "\n", frame->Interrupt_frame.s1);
+  printk("a0      " PRINT_REG "\n", frame->Interrupt_frame.a0);
+  printk("a1      " PRINT_REG "\n", frame->Interrupt_frame.a1);
+  printk("a2      " PRINT_REG "\n", frame->Interrupt_frame.a2);
+  printk("a3      " PRINT_REG "\n", frame->Interrupt_frame.a3);
+  printk("a4      " PRINT_REG "\n", frame->Interrupt_frame.a4);
+  printk("a5      " PRINT_REG "\n", frame->Interrupt_frame.a5);
+  printk("a6      " PRINT_REG "\n", frame->Interrupt_frame.a6);
+  printk("a7      " PRINT_REG "\n", frame->Interrupt_frame.a7);
+  printk("s2      " PRINT_REG "\n", frame->s2);
+  printk("s3      " PRINT_REG "\n", frame->s3);
+  printk("s4      " PRINT_REG "\n", frame->s4);
+  printk("s5      " PRINT_REG "\n", frame->s5);
+  printk("s6      " PRINT_REG "\n", frame->s6);
+  printk("s7      " PRINT_REG "\n", frame->s7);
+  printk("s8      " PRINT_REG "\n", frame->s8);
+  printk("s9      " PRINT_REG "\n", frame->s9);
+  printk("s10     " PRINT_REG "\n", frame->s10);
+  printk("s11     " PRINT_REG "\n", frame->s11);
+  printk("t3      " PRINT_REG "\n", frame->Interrupt_frame.t3);
+  printk("t4      " PRINT_REG "\n", frame->Interrupt_frame.t4);
+  printk("t5      " PRINT_REG "\n", frame->Interrupt_frame.t5);
+  printk("t6      " PRINT_REG "\n", frame->Interrupt_frame.t6);
+#if __riscv_flen > 0
+  printk("fcsr    0x%08" PRIx32 "\n", frame->Interrupt_frame.fcsr);
+#endif /* __riscv_flen */
 }

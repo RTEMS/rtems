@@ -260,7 +260,81 @@ typedef enum {
 } RISCV_Exception_code;
 
 typedef struct {
-  unsigned long x[32];;
+  uintptr_t mstatus;
+  uintptr_t mepc;
+  uintptr_t a2;
+  uintptr_t s0;
+  uintptr_t s1;
+  uintptr_t ra;
+  uintptr_t a3;
+  uintptr_t a4;
+  uintptr_t a5;
+  uintptr_t a6;
+  uintptr_t a7;
+  uintptr_t t0;
+  uintptr_t t1;
+  uintptr_t t2;
+  uintptr_t t3;
+  uintptr_t t4;
+  uintptr_t t5;
+  uintptr_t t6;
+#if __riscv_flen > 0
+  uint32_t fcsr;
+  RISCV_Float ft0;
+  RISCV_Float ft1;
+  RISCV_Float ft2;
+  RISCV_Float ft3;
+  RISCV_Float ft4;
+  RISCV_Float ft5;
+  RISCV_Float ft6;
+  RISCV_Float ft7;
+  RISCV_Float ft8;
+  RISCV_Float ft9;
+  RISCV_Float ft10;
+  RISCV_Float ft11;
+  RISCV_Float fa0;
+  RISCV_Float fa1;
+  RISCV_Float fa2;
+  RISCV_Float fa3;
+  RISCV_Float fa4;
+  RISCV_Float fa5;
+  RISCV_Float fa6;
+  RISCV_Float fa7;
+#endif
+  uintptr_t a0;
+  uintptr_t a1;
+} RTEMS_ALIGNED( CPU_STACK_ALIGNMENT ) CPU_Interrupt_frame;
+
+typedef struct {
+  CPU_Interrupt_frame Interrupt_frame;
+  uintptr_t mcause;
+  uintptr_t sp;
+  uintptr_t gp;
+  uintptr_t tp;
+  uintptr_t s2;
+  uintptr_t s3;
+  uintptr_t s4;
+  uintptr_t s5;
+  uintptr_t s6;
+  uintptr_t s7;
+  uintptr_t s8;
+  uintptr_t s9;
+  uintptr_t s10;
+  uintptr_t s11;
+#if __riscv_flen > 0
+  RISCV_Float fs0;
+  RISCV_Float fs1;
+  RISCV_Float fs2;
+  RISCV_Float fs3;
+  RISCV_Float fs4;
+  RISCV_Float fs5;
+  RISCV_Float fs6;
+  RISCV_Float fs7;
+  RISCV_Float fs8;
+  RISCV_Float fs9;
+  RISCV_Float fs10;
+  RISCV_Float fs11;
+#endif
 } CPU_Exception_frame;
 
 /**

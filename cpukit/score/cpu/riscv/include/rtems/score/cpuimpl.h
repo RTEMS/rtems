@@ -94,11 +94,11 @@
 
 #define RISCV_CONTEXT_FCSR 68
 
-#define RISCV_CONTEXT_F( x ) (72 + 4 * (x))
+#define RISCV_CONTEXT_F( x ) ( 72 + 4 * x )
 
 #define RISCV_INTERRUPT_FRAME_FCSR 72
 
-#define RISCV_INTERRUPT_FRAME_F( x ) (76 + 4 * (x))
+#define RISCV_INTERRUPT_FRAME_F( x ) ( 76 + 4 * x )
 
 #define RISCV_INTERRUPT_FRAME_A0 156
 #define RISCV_INTERRUPT_FRAME_A1 160
@@ -109,11 +109,11 @@
 
 #define RISCV_CONTEXT_FCSR 68
 
-#define RISCV_CONTEXT_F( x ) (72 + 8 * (x))
+#define RISCV_CONTEXT_F( x ) ( 72 + 8 * x )
 
 #define RISCV_INTERRUPT_FRAME_FCSR 72
 
-#define RISCV_INTERRUPT_FRAME_F( x ) (80 + 8 * (x))
+#define RISCV_INTERRUPT_FRAME_F( x ) ( 80 + 8 * x )
 
 #define RISCV_INTERRUPT_FRAME_A0 240
 #define RISCV_INTERRUPT_FRAME_A1 244
@@ -121,6 +121,8 @@
 #define CPU_INTERRUPT_FRAME_SIZE 256
 
 #endif /* __riscv_flen */
+
+#define RISCV_EXCEPTION_FRAME_X( x ) ( CPU_INTERRUPT_FRAME_SIZE + 4 * x )
 
 #elif __riscv_xlen == 64
 
@@ -170,11 +172,11 @@
 
 #define RISCV_CONTEXT_FCSR 128
 
-#define RISCV_CONTEXT_F( x ) (132 + 4 * (x))
+#define RISCV_CONTEXT_F( x ) ( 132 + 4 * x )
 
 #define RISCV_INTERRUPT_FRAME_FCSR 144
 
-#define RISCV_INTERRUPT_FRAME_F( x ) (148 + 4 * (x))
+#define RISCV_INTERRUPT_FRAME_F( x ) ( 148 + 4 * x )
 
 #define RISCV_INTERRUPT_FRAME_A0 232
 #define RISCV_INTERRUPT_FRAME_A1 240
@@ -185,11 +187,11 @@
 
 #define RISCV_CONTEXT_FCSR 128
 
-#define RISCV_CONTEXT_F( x ) (136 + 8 * (x))
+#define RISCV_CONTEXT_F( x ) ( 136 + 8 * x )
 
 #define RISCV_INTERRUPT_FRAME_FCSR 144
 
-#define RISCV_INTERRUPT_FRAME_F( x ) (152 + 8 * (x))
+#define RISCV_INTERRUPT_FRAME_F( x ) ( 152 + 8 * x )
 
 #define RISCV_INTERRUPT_FRAME_A0 312
 #define RISCV_INTERRUPT_FRAME_A1 320
@@ -198,7 +200,24 @@
 
 #endif /* __riscv_flen */
 
+#define RISCV_EXCEPTION_FRAME_X( x ) ( CPU_INTERRUPT_FRAME_SIZE + 8 * x )
+
 #endif /* __riscv_xlen */
+
+#define RISCV_EXCEPTION_FRAME_MCAUSE RISCV_EXCEPTION_FRAME_X( 0 )
+#define RISCV_EXCEPTION_FRAME_SP RISCV_EXCEPTION_FRAME_X( 1 )
+#define RISCV_EXCEPTION_FRAME_GP RISCV_EXCEPTION_FRAME_X( 2 )
+#define RISCV_EXCEPTION_FRAME_TP RISCV_EXCEPTION_FRAME_X( 3 )
+#define RISCV_EXCEPTION_FRAME_S2 RISCV_EXCEPTION_FRAME_X( 4 )
+#define RISCV_EXCEPTION_FRAME_S3 RISCV_EXCEPTION_FRAME_X( 5 )
+#define RISCV_EXCEPTION_FRAME_S4 RISCV_EXCEPTION_FRAME_X( 6 )
+#define RISCV_EXCEPTION_FRAME_S5 RISCV_EXCEPTION_FRAME_X( 7 )
+#define RISCV_EXCEPTION_FRAME_S6 RISCV_EXCEPTION_FRAME_X( 8 )
+#define RISCV_EXCEPTION_FRAME_S7 RISCV_EXCEPTION_FRAME_X( 9 )
+#define RISCV_EXCEPTION_FRAME_S8 RISCV_EXCEPTION_FRAME_X( 10 )
+#define RISCV_EXCEPTION_FRAME_S9 RISCV_EXCEPTION_FRAME_X( 11 )
+#define RISCV_EXCEPTION_FRAME_S10 RISCV_EXCEPTION_FRAME_X( 12 )
+#define RISCV_EXCEPTION_FRAME_S11 RISCV_EXCEPTION_FRAME_X( 13 )
 
 #if __riscv_flen > 0
 
@@ -236,6 +255,25 @@
 #define RISCV_INTERRUPT_FRAME_FA6 RISCV_INTERRUPT_FRAME_F( 18 )
 #define RISCV_INTERRUPT_FRAME_FA7 RISCV_INTERRUPT_FRAME_F( 19 )
 
+#if __riscv_flen == 32
+#define RISCV_EXCEPTION_FRAME_F( x ) ( RISCV_EXCEPTION_FRAME_X( 14 ) + 4 * x )
+#elif __riscv_flen == 64
+#define RISCV_EXCEPTION_FRAME_F( x ) ( RISCV_EXCEPTION_FRAME_X( 14 ) + 8 * x )
+#endif
+
+#define RISCV_EXCEPTION_FRAME_FS0 RISCV_EXCEPTION_FRAME_F( 0 )
+#define RISCV_EXCEPTION_FRAME_FS1 RISCV_EXCEPTION_FRAME_F( 1 )
+#define RISCV_EXCEPTION_FRAME_FS2 RISCV_EXCEPTION_FRAME_F( 2 )
+#define RISCV_EXCEPTION_FRAME_FS3 RISCV_EXCEPTION_FRAME_F( 3 )
+#define RISCV_EXCEPTION_FRAME_FS4 RISCV_EXCEPTION_FRAME_F( 4 )
+#define RISCV_EXCEPTION_FRAME_FS5 RISCV_EXCEPTION_FRAME_F( 5 )
+#define RISCV_EXCEPTION_FRAME_FS6 RISCV_EXCEPTION_FRAME_F( 6 )
+#define RISCV_EXCEPTION_FRAME_FS7 RISCV_EXCEPTION_FRAME_F( 7 )
+#define RISCV_EXCEPTION_FRAME_FS8 RISCV_EXCEPTION_FRAME_F( 8 )
+#define RISCV_EXCEPTION_FRAME_FS9 RISCV_EXCEPTION_FRAME_F( 9 )
+#define RISCV_EXCEPTION_FRAME_FS10 RISCV_EXCEPTION_FRAME_F( 10 )
+#define RISCV_EXCEPTION_FRAME_FS11 RISCV_EXCEPTION_FRAME_F( 11 )
+
 #endif /* __riscv_flen */
 
 #ifndef ASM
@@ -243,52 +281,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct {
-  uintptr_t mstatus;
-  uintptr_t mepc;
-  uintptr_t a2;
-  uintptr_t s0;
-  uintptr_t s1;
-  uintptr_t ra;
-  uintptr_t a3;
-  uintptr_t a4;
-  uintptr_t a5;
-  uintptr_t a6;
-  uintptr_t a7;
-  uintptr_t t0;
-  uintptr_t t1;
-  uintptr_t t2;
-  uintptr_t t3;
-  uintptr_t t4;
-  uintptr_t t5;
-  uintptr_t t6;
-#if __riscv_flen > 0
-  uint32_t fcsr;
-  RISCV_Float ft0;
-  RISCV_Float ft1;
-  RISCV_Float ft2;
-  RISCV_Float ft3;
-  RISCV_Float ft4;
-  RISCV_Float ft5;
-  RISCV_Float ft6;
-  RISCV_Float ft7;
-  RISCV_Float ft8;
-  RISCV_Float ft9;
-  RISCV_Float ft10;
-  RISCV_Float ft11;
-  RISCV_Float fa0;
-  RISCV_Float fa1;
-  RISCV_Float fa2;
-  RISCV_Float fa3;
-  RISCV_Float fa4;
-  RISCV_Float fa5;
-  RISCV_Float fa6;
-  RISCV_Float fa7;
-#endif
-  uintptr_t a0;
-  uintptr_t a1;
-} RTEMS_ALIGNED( CPU_STACK_ALIGNMENT ) CPU_Interrupt_frame;
 
 #ifdef __riscv_atomic
 typedef struct {
