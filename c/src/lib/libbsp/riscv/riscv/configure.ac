@@ -33,8 +33,8 @@ RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console driver devices (
 RTEMS_BSPOPTS_SET([RISCV_MAXIMUM_EXTERNAL_INTERRUPTS],[*],[64])
 RTEMS_BSPOPTS_HELP([RISCV_MAXIMUM_EXTERNAL_INTERRUPTS],[maximum number of external interrupts supported by the BSP (default 64)])
 
-RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[1])
-RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (enabled by default)])
+RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[])
+RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (disabled by default)])
 
 RTEMS_BSPOPTS_SET([RISCV_CONSOLE_MAX_NS16550_DEVICES],[*],[2])
 RTEMS_BSPOPTS_HELP([RISCV_CONSOLE_MAX_NS16550_DEVICES],[maximum number of NS16550 devices supported by the console driver (2 by default)])
