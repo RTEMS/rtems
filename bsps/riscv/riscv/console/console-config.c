@@ -27,7 +27,7 @@
 
 #include <libfdt.h>
 
-#if RISCV_ENABLE_HTIF_SUPPORT > 0
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
 static htif_console_context htif_console_instance;
 #endif
 
@@ -97,7 +97,7 @@ static void riscv_console_probe(void)
   node = fdt_next_node(fdt, -1, NULL);
 
   while (node >= 0) {
-#if RISCV_ENABLE_HTIF_SUPPORT
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
     if (fdt_node_check_compatible(fdt, node, "ucb,htif0") == 0) {
       htif_console_context_init(&htif_console_instance.base, node);
 
@@ -175,8 +175,10 @@ rtems_status_code console_initialize(
   void *arg
 )
 {
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
   rtems_termios_device_context *base;
   char htif_path[] = "/dev/ttyShtif";
+#endif
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
   char path[] = "/dev/ttyS?";
   size_t i;
@@ -184,7 +186,7 @@ rtems_status_code console_initialize(
 
   rtems_termios_initialize();
 
-#if RISCV_ENABLE_HTIF_SUPPORT
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
   base = &htif_console_instance.base;
   rtems_termios_device_install(htif_path, &htif_console_handler, NULL, base);
 

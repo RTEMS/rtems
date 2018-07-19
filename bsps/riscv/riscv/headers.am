@@ -8,6 +8,7 @@ include_HEADERS += ../../../../../../bsps/riscv/riscv/include/tm27.h
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
 include_bsp_HEADERS += ../../../../../../bsps/riscv/riscv/include/bsp/irq.h
+include_bsp_HEADERS += ../../../../../../bsps/riscv/riscv/include/bsp/riscv.h
 
 include_dev_irqdir = $(includedir)/dev/irq
 include_dev_irq_HEADERS =
