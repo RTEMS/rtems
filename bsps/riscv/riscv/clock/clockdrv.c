@@ -35,30 +35,33 @@
 #include <rtems/timecounter.h>
 #include <rtems/score/riscv-utility.h>
 
-#include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
+#include <bsp/riscv.h>
 
 #include <dev/irq/clint.h>
 
 #include <libfdt.h>
 
-#define CLINT ((volatile clint_regs *) 0x02000000)
-
 /* This is defined in dev/clock/clockimpl.h */
 void Clock_isr(void *arg);
 
-static struct timecounter riscv_clock_tc;
+typedef struct {
+  struct timecounter base;
+  volatile clint_regs *clint;
+} riscv_timecounter;
+
+static riscv_timecounter riscv_clock_tc;
 
 static uint32_t riscv_clock_interval;
 
-static void riscv_clock_at_tick(void)
+static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
   volatile clint_regs *clint;
   uint64_t cmp;
 
-  clint = CLINT;
+  clint = tc->clint;
 
   cmp = clint->mtimecmp[0].val_64;
   cmp += riscv_clock_interval;
@@ -88,11 +91,13 @@ static void riscv_clock_handler_install(void)
   }
 }
 
-static uint32_t riscv_clock_get_timecount(struct timecounter *tc)
+static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 {
+  riscv_timecounter *tc;
   volatile clint_regs *clint;
 
-  clint = CLINT;
+  tc = (riscv_timecounter *) base;
+  clint = tc->clint;
   return clint->mtime.val_32[0];
 }
 
@@ -114,25 +119,36 @@ static uint32_t riscv_clock_get_timebase_frequency(const void *fdt)
 static void riscv_clock_initialize(void)
 {
   const char *fdt;
+  riscv_timecounter *tc;
+  int node;
   uint32_t tb_freq;
   uint64_t us_per_tick;
 
   fdt = bsp_fdt_get();
+  tc = &riscv_clock_tc;
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "riscv,clint0");
+  tc->clint = riscv_fdt_get_address(fdt, node);
+
+  if (tc->clint == NULL) {
+    bsp_fatal(RISCV_FATAL_NO_CLINT_REG_IN_DEVICE_TREE);
+  }
+
   tb_freq = riscv_clock_get_timebase_frequency(fdt);
   us_per_tick = rtems_configuration_get_microseconds_per_tick();
   riscv_clock_interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
 
-  riscv_clock_at_tick();
+  riscv_clock_at_tick(tc);
 
   /* Enable mtimer interrupts */
   set_csr(mie, MIP_MTIP);
 
   /* Initialize timecounter */
-  riscv_clock_tc.tc_get_timecount = riscv_clock_get_timecount;
-  riscv_clock_tc.tc_counter_mask = 0xffffffff;
-  riscv_clock_tc.tc_frequency = tb_freq;
-  riscv_clock_tc.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
-  rtems_timecounter_install(&riscv_clock_tc);
+  tc->base.tc_get_timecount = riscv_clock_get_timecount;
+  tc->base.tc_counter_mask = 0xffffffff;
+  tc->base.tc_frequency = tb_freq;
+  tc->base.tc_quality = RTEMS_TIMECOUNTER_QUALITY_CLOCK_DRIVER;
+  rtems_timecounter_install(&tc->base);
 }
 
 uint32_t _CPU_Counter_frequency( void )
@@ -140,7 +156,7 @@ uint32_t _CPU_Counter_frequency( void )
   return riscv_clock_get_timebase_frequency(bsp_fdt_get());
 }
 
-#define Clock_driver_support_at_tick() riscv_clock_at_tick()
+#define Clock_driver_support_at_tick() riscv_clock_at_tick(&riscv_clock_tc)
 
 #define Clock_driver_support_initialize_hardware() riscv_clock_initialize()
 

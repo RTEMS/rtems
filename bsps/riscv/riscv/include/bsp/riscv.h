@@ -32,6 +32,8 @@
 extern "C" {
 #endif
 
+void *riscv_fdt_get_address(const void *fdt, int node);
+
 #if RISCV_ENABLE_HTIF_SUPPORT != 0
 void htif_poweroff(void);
 #endif

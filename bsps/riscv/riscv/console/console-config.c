@@ -17,10 +17,10 @@
 #include <rtems/sysinit.h>
 #include <rtems/termiostypes.h>
 
-#include <bsp.h>
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
+#include <bsp/riscv.h>
 
 #include <dev/serial/htif.h>
 #include <libchip/ns16550.h>
@@ -119,16 +119,10 @@ static void riscv_console_probe(void)
         ctx->set_reg = set_register;
         ctx->initial_baud = BSP_CONSOLE_BAUD;
 
-        val = (fdt32_t *) fdt_getprop(fdt, node, "reg", &len);
+        ctx->port = (uintptr_t) riscv_fdt_get_address(fdt, node);
 
-        if (val == NULL || (len != 8 && len != 16)) {
+        if (ctx->port == 0) {
           bsp_fatal(RISCV_FATAL_NO_NS16550_REG_IN_DEVICE_TREE);
-        }
-
-        if (len == 16) {
-          ctx->port = fdt32_to_cpu(val[1]);
-        } else {
-          ctx->port = fdt32_to_cpu(val[0]);
         }
 
         val = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);

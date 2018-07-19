@@ -25,6 +25,49 @@
 
 #include <bsp/bootcard.h>
 #include <bsp/irq-generic.h>
+#include <bsp/riscv.h>
+
+#include <libfdt.h>
+
+void *riscv_fdt_get_address(const void *fdt, int node)
+{
+  int parent;
+  int ac;
+  int len;
+  const uint32_t *reg;
+  uint64_t addr;
+
+  parent = fdt_parent_offset(fdt, node);
+  if (parent < 0) {
+    return NULL;
+  }
+
+  ac = fdt_address_cells(fdt, parent);
+  if (ac != 1 && ac != 2) {
+    return NULL;
+  }
+
+  reg = fdt_getprop(fdt, node, "reg", &len);
+  if (reg == NULL || len < ac) {
+    return NULL;
+  }
+
+  addr = 0;
+
+  while (ac > 0) {
+    addr = (addr << 32) | fdt32_to_cpu(*reg);
+    ++reg;
+    --ac;
+  }
+
+#if __riscv_xlen < 64
+  if (addr > 0xffffffff) {
+    return NULL;
+  }
+#endif
+
+  return (void *)(uintptr_t) addr;
+}
 
 void bsp_start(void)
 {
