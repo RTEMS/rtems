@@ -7,7 +7,7 @@
  */
 
 /*
- * RISCV CPU Dependent Source
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -35,11 +35,33 @@
  */
 
 #include <bsp/irq.h>
+#include <bsp/fatal.h>
 #include <bsp/irq-generic.h>
 
-rtems_status_code bsp_interrupt_facility_initialize()
+#include <rtems/score/percpu.h>
+
+void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
 {
-  return RTEMS_NOT_IMPLEMENTED;
+  /*
+   * Get rid of the most significant bit which indicates if the exception was
+   * caused by an interrupt or not.
+   */
+  mcause <<= 1;
+
+  if (mcause == (RISCV_INTERRUPT_TIMER_MACHINE << 1)) {
+    bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_TIMER);
+  } else if (mcause == (RISCV_INTERRUPT_EXTERNAL_MACHINE << 1)) {
+    /* TODO: Handle PLIC interrupt */
+  } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
+    bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_SOFTWARE);
+  } else {
+    bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
+  }
+}
+
+rtems_status_code bsp_interrupt_facility_initialize(void)
+{
+  return RTEMS_SUCCESSFUL;
 }
 
 void bsp_interrupt_vector_enable(rtems_vector_number vector)

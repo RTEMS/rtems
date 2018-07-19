@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Hesham Almatary <heshamelmatary@gmail.com>
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -23,17 +23,10 @@
  * SUCH DAMAGE.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <bsp/bootcard.h>
+#include <bsp/irq-generic.h>
 
-#include <rtems/score/cpu.h>
-#include <rtems/fatal.h>
-#include <stdio.h>
-
-void _RISCV_Exception_default(uint32_t vector, CPU_Exception_frame *frame);
-
-void _RISCV_Exception_default(uint32_t vector, CPU_Exception_frame *frame)
+void bsp_start(void)
 {
-  rtems_fatal( RTEMS_FATAL_SOURCE_EXCEPTION, (rtems_fatal_code) frame );
+  bsp_interrupt_initialize();
 }

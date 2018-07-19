@@ -41,15 +41,13 @@
 #include <rtems/asm.h>
 #include <rtems/score/percpu.h>
 
-EXTERN(bsp_start_vector_table_begin)
-EXTERN(_Thread_Dispatch)
-PUBLIC(ISR_Handler)
+PUBLIC(_RISCV_Exception_handler)
 
 	.section	.text, "ax", @progbits
 	.align	2
 
-TYPE_FUNC(ISR_Handler)
-SYM(ISR_Handler):
+TYPE_FUNC(_RISCV_Exception_handler)
+SYM(_RISCV_Exception_handler):
 	addi	sp, sp, -CPU_INTERRUPT_FRAME_SIZE
 
 	/* Save */
@@ -104,8 +102,8 @@ SYM(ISR_Handler):
 	FSREG	fa7, RISCV_INTERRUPT_FRAME_FA7(sp)
 #endif
 
-	/* FIXME Only handle interrupts for now (MSB = 1) */
-	andi	a0, a0, 0xf
+	/* Check if this is a synchronous or interrupt exception */
+	bgez	a0, .Lsynchronous_exception
 
 	/* Increment interrupt nest and thread dispatch disable level */
 	lw	t0, PER_CPU_ISR_NEST_LEVEL(s0)
@@ -117,32 +115,17 @@ SYM(ISR_Handler):
 
 	CLEAR_RESERVATIONS	s0
 
-	/* Keep sp (Exception frame address) in s1 */
+	/*
+	 * Remember current stack pointer in non-volatile register s1.  Switch
+	 * to interrupt stack if necessary.
+	 */
 	mv	s1, sp
-
-	/* Call the exception handler from vector table */
-
-	/* First function arg for C handler is vector number,
-		* and the second is a pointer to exception frame.
-		* a0/mcause/vector number is already loaded above */
-	mv	a1, sp
-
-	/* calculate the offset */
-	LADDR	t5, bsp_start_vector_table_begin
-#if	__riscv_xlen == 32
-	slli	t6, a0, 2
-#else	/* xlen = 64 */
-	slli	t6, a0, 3
-#endif
-	add	t5, t5, t6
-	LREG	t5, (t5)
-
-	/* Switch to interrupt stack if necessary */
 	bnez	t0, .Linterrupt_stack_switch_done
 	LREG	sp, PER_CPU_INTERRUPT_STACK_HIGH(s0)
 .Linterrupt_stack_switch_done:
 
-	jalr	t5
+	mv	a1, s0
+	call	_RISCV_Interrupt_dispatch
 
 	/* Load some per-CPU variables */
 	lw	t0, PER_CPU_THREAD_DISPATCH_DISABLE_LEVEL(s0)
@@ -249,3 +232,39 @@ SYM(ISR_Handler):
 	addi	sp, sp, CPU_INTERRUPT_FRAME_SIZE
 
 	mret
+
+.Lsynchronous_exception:
+
+	SREG	a0, RISCV_EXCEPTION_FRAME_MCAUSE(sp)
+	addi	a0, sp, CPU_INTERRUPT_FRAME_SIZE
+	SREG	a0, RISCV_EXCEPTION_FRAME_SP(sp)
+	SREG	gp, RISCV_EXCEPTION_FRAME_GP(sp)
+	SREG	tp, RISCV_EXCEPTION_FRAME_TP(sp)
+	SREG	s2, RISCV_EXCEPTION_FRAME_S2(sp)
+	SREG	s3, RISCV_EXCEPTION_FRAME_S3(sp)
+	SREG	s4, RISCV_EXCEPTION_FRAME_S4(sp)
+	SREG	s5, RISCV_EXCEPTION_FRAME_S5(sp)
+	SREG	s6, RISCV_EXCEPTION_FRAME_S6(sp)
+	SREG	s7, RISCV_EXCEPTION_FRAME_S7(sp)
+	SREG	s8, RISCV_EXCEPTION_FRAME_S8(sp)
+	SREG	s9, RISCV_EXCEPTION_FRAME_S9(sp)
+	SREG	s10, RISCV_EXCEPTION_FRAME_S10(sp)
+	SREG	s11, RISCV_EXCEPTION_FRAME_S11(sp)
+#if __riscv_flen > 0
+	FSREG	fs0, RISCV_EXCEPTION_FRAME_FS0(sp)
+	FSREG	fs1, RISCV_EXCEPTION_FRAME_FS1(sp)
+	FSREG	fs2, RISCV_EXCEPTION_FRAME_FS2(sp)
+	FSREG	fs3, RISCV_EXCEPTION_FRAME_FS3(sp)
+	FSREG	fs4, RISCV_EXCEPTION_FRAME_FS4(sp)
+	FSREG	fs5, RISCV_EXCEPTION_FRAME_FS5(sp)
+	FSREG	fs6, RISCV_EXCEPTION_FRAME_FS6(sp)
+	FSREG	fs7, RISCV_EXCEPTION_FRAME_FS7(sp)
+	FSREG	fs8, RISCV_EXCEPTION_FRAME_FS8(sp)
+	FSREG	fs9, RISCV_EXCEPTION_FRAME_FS9(sp)
+	FSREG	fs10, RISCV_EXCEPTION_FRAME_FS10(sp)
+	FSREG	fs11, RISCV_EXCEPTION_FRAME_FS11(sp)
+#endif
+
+	li	a0, 9
+	mv	a1, sp
+	call	_Terminate

@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2018 embedded brains GmbH
+
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
  *
@@ -33,13 +35,6 @@
 #include <bsp/linker-symbols.h>
 #include <bspopts.h>
 
-EXTERN(bsp_section_bss_begin)
-EXTERN(bsp_section_bss_end)
-EXTERN(ISR_Handler)
-EXTERN(bsp_section_stack_begin)
-
-PUBLIC(bsp_start_vector_table_begin)
-PUBLIC(bsp_start_vector_table_end)
 PUBLIC(_start)
 
 	.section	.bsp_start_text, "wax", @progbits
@@ -70,7 +65,7 @@ SYM(_start):
 	call	bsp_fdt_copy
 #endif
 
-	LADDR	t0, ISR_Handler
+	LADDR	t0, _RISCV_Exception_handler
 	csrw	mtvec, t0
 
 	/* Clear .bss */
@@ -107,29 +102,3 @@ SYM(_start):
 .Lsecondary_processor_go:
 	.word	0xdeadbeef
 #endif
-
-#if __riscv_xlen == 32
-#define ADDR .word
-#elif __riscv_xlen == 64
-#define ADDR .quad
-#endif
-
-	.align	4
-bsp_start_vector_table_begin:
-	ADDR	_RISCV_Exception_default /* User int */
-	ADDR	_RISCV_Exception_default /* Supervisor int */
-	ADDR	_RISCV_Exception_default /* Reserved */
-	ADDR	_RISCV_Exception_default /* Machine int */
-	ADDR	_RISCV_Exception_default /* User timer int */
-	ADDR	_RISCV_Exception_default /* Supervisor Timer int */
-	ADDR	_RISCV_Exception_default /* Reserved */
-	ADDR	_RISCV_Exception_default /* Machine Timer int */
-	ADDR	_RISCV_Exception_default /* User external int */
-	ADDR	_RISCV_Exception_default /* Supervisor external int */
-	ADDR	_RISCV_Exception_default /* Reserved */
-	ADDR	_RISCV_Exception_default /* Machine external int */
-	ADDR	_RISCV_Exception_default
-	ADDR	_RISCV_Exception_default
-	ADDR	_RISCV_Exception_default
-	ADDR	_RISCV_Exception_default
-bsp_start_vector_table_end:

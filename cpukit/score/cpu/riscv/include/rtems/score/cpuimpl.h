@@ -289,6 +289,13 @@ typedef struct {
 } CPU_Per_CPU_control;
 #endif
 
+struct Per_CPU_Control;
+
+void _RISCV_Interrupt_dispatch(
+  uintptr_t               mcause,
+  struct Per_CPU_Control *cpu_self
+);
+
 static inline uint32_t _RISCV_Read_FCSR( void )
 {
   uint32_t fcsr;

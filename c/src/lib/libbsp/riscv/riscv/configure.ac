@@ -30,6 +30,9 @@ RTEMS_BSPOPTS_HELP([BSP_FDT_BLOB_COPY_TO_READ_ONLY_LOAD_AREA],[copy the FDT blob
 RTEMS_BSPOPTS_SET([BSP_CONSOLE_BAUD],[*],[115200])
 RTEMS_BSPOPTS_HELP([BSP_CONSOLE_BAUD],[default baud for console driver devices (default 115200)])
 
+RTEMS_BSPOPTS_SET([RISCV_MAXIMUM_EXTERNAL_INTERRUPTS],[*],[64])
+RTEMS_BSPOPTS_HELP([RISCV_MAXIMUM_EXTERNAL_INTERRUPTS],[maximum number of external interrupts supported by the BSP (default 64)])
+
 RTEMS_BSPOPTS_SET([RISCV_ENABLE_HTIF_SUPPORT],[*],[1])
 RTEMS_BSPOPTS_HELP([RISCV_ENABLE_HTIF_SUPPORT],[enables the HTIF support if defined to a non-zero value, otherwise it is disabled (enabled by default)])
 

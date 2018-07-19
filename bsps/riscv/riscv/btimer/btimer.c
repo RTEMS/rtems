@@ -29,8 +29,6 @@
 #include <rtems/btimer.h>
 #include <rtems/score/riscv-utility.h>
 
-extern char bsp_start_vector_table_begin[];
-
 bool benchmark_timer_find_average_overhead;
 
 static void benchmark_timer1_interrupt_handler(void)

@@ -173,12 +173,6 @@ RTEMS_STATIC_ASSERT(
   riscv_interrupt_frame_size
 );
 
-/* bsp_start_vector_table_begin is the start address of the vector table
- * containing addresses to ISR Handlers. It's defined at the BSP linkcmds
- * and may differ from one BSP to another.
- */
-extern char bsp_start_vector_table_begin[];
-
 void _init(void);
 
 void _fini(void);
@@ -206,46 +200,6 @@ uint32_t _CPU_ISR_Get_level( void )
   }
 
   return 1;
-}
-
-void _CPU_ISR_install_raw_handler(
-  uint32_t   vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /* Do nothing */
-}
-
-void _CPU_ISR_install_vector(
-  unsigned long    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  proc_ptr *table =
-    (proc_ptr *) bsp_start_vector_table_begin;
-  proc_ptr current_handler;
-
-  ISR_Level level;
-
-  _ISR_Local_disable( level );
-
-  current_handler = table [vector];
-
-  /* The current handler is now the old one */
-  if (old_handler != NULL) {
-    *old_handler = (proc_ptr) current_handler;
-  }
-
-  /* Write only if necessary to avoid writes to a maybe read-only
-   * memory */
-  if (current_handler != new_handler) {
-    table [vector] = new_handler;
-  }
-
-  _ISR_Local_enable( level );
-
 }
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )

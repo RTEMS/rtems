@@ -7,6 +7,7 @@
  */
 
 /*
+ * Copyright (c) 2018 embedded brains GmbH
  *
  * Copyright (c) 2015 University of York.
  * Hesham Almatary <hesham@alumni.york.ac.uk>
@@ -38,12 +39,20 @@
 
 #ifndef ASM
 
-#include <rtems.h>
+#include <bsp.h>
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
 
-#define BSP_INTERRUPT_VECTOR_MIN  0x0
-#define BSP_INTERRUPT_VECTOR_MAX  0x24
+#define RISCV_INTERRUPT_VECTOR_SOFTWARE 0
+
+#define RISCV_INTERRUPT_VECTOR_TIMER 1
+
+#define RISCV_INTERRUPT_VECTOR_EXTERNAL(x) ((x) + 2)
+
+#define BSP_INTERRUPT_VECTOR_MIN 0
+
+#define BSP_INTERRUPT_VECTOR_MAX RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS - 1)
 
 #endif /* ASM */
+
 #endif /* LIBBSP_GENERIC_RISCV_IRQ_H */

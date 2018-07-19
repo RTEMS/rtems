@@ -72,11 +72,20 @@ static void riscv_clock_at_tick(void)
 #endif
 }
 
-static void riscv_clock_handler_install(proc_ptr new_isr)
+static void riscv_clock_handler_install(void)
 {
-  _CPU_ISR_install_vector(RISCV_MACHINE_TIMER_INTERRUPT,
-                          new_isr,
-                          NULL);
+  rtems_status_code sc;
+
+  sc = rtems_interrupt_handler_install(
+    RISCV_INTERRUPT_VECTOR_TIMER,
+    "Clock",
+    RTEMS_INTERRUPT_UNIQUE,
+    (rtems_interrupt_handler) Clock_isr,
+    NULL
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    bsp_fatal(RISCV_FATAL_CLOCK_IRQ_INSTALL);
+  }
 }
 
 static uint32_t riscv_clock_get_timecount(struct timecounter *tc)
@@ -136,6 +145,6 @@ uint32_t _CPU_Counter_frequency( void )
 #define Clock_driver_support_initialize_hardware() riscv_clock_initialize()
 
 #define Clock_driver_support_install_isr(isr) \
-  riscv_clock_handler_install(isr)
+  riscv_clock_handler_install()
 
 #include "../../../shared/dev/clock/clockimpl.h"
