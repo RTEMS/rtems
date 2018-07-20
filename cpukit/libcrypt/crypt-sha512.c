@@ -269,8 +269,6 @@ crypt_sha512_r(const char *key, const char *salt, struct crypt_data *data)
 	memset(temp_result, '\0', sizeof(temp_result));
 	memset(p_bytes, '\0', key_len);
 	memset(s_bytes, '\0', salt_len);
-	memset(&ctx, '\0', sizeof(ctx));
-	memset(&alt_ctx, '\0', sizeof(alt_ctx));
 
 	return buffer;
 }
