@@ -34,10 +34,14 @@
 
 #include <rtems/score/cpu.h>
 
-#ifdef __riscv_atomic
+#if defined(__riscv_atomic) && __riscv_xlen == 64
+#define CPU_PER_CPU_CONTROL_SIZE 48
+#elif defined(__riscv_atomic) && __riscv_xlen == 32
+#define CPU_PER_CPU_CONTROL_SIZE 32
+#elif __riscv_xlen == 64
+#define CPU_PER_CPU_CONTROL_SIZE 32
+#elif __riscv_xlen == 32
 #define CPU_PER_CPU_CONTROL_SIZE 16
-#else
-#define CPU_PER_CPU_CONTROL_SIZE 0
 #endif
 
 #ifdef RTEMS_SMP
@@ -282,12 +286,48 @@
 extern "C" {
 #endif
 
-#ifdef __riscv_atomic
+/* Core Local Interruptor (CLINT) */
+
+typedef union {
+  uint64_t val_64;
+  uint32_t val_32[2];
+} RISCV_CLINT_timer_reg;
+
 typedef struct {
+  uint32_t msip[4096];
+  RISCV_CLINT_timer_reg mtimecmp[2048];
+  uint32_t reserved_8000[4094];
+  RISCV_CLINT_timer_reg mtime;
+  uint32_t reserved_c000[4096];
+} RISCV_CLINT_regs;
+
+/* Platform-Level Interrupt Controller (PLIC) */
+
+#define RISCV_PLIC_MAX_INTERRUPTS 1024
+
+typedef struct {
+  uint32_t priority_threshold;
+  uint32_t claim_complete;
+  uint32_t reserved_8[1022];
+} RISCV_PLIC_hart_regs;
+
+typedef struct {
+  uint32_t priority[RISCV_PLIC_MAX_INTERRUPTS];
+  uint32_t pending[1024];
+  uint32_t enable[16320][32];
+  RISCV_PLIC_hart_regs harts[CPU_MAXIMUM_PROCESSORS];
+} RISCV_PLIC_regs;
+
+typedef struct {
+#ifdef __riscv_atomic
   uint64_t clear_reservations;
   uint32_t reserved_for_alignment_of_interrupt_frame[ 2 ];
-} CPU_Per_CPU_control;
 #endif
+  volatile RISCV_PLIC_hart_regs *plic_hart_regs;
+  volatile uint32_t *plic_m_ie;
+  volatile RISCV_CLINT_timer_reg *clint_mtimecmp;
+  volatile uint32_t *clint_msip;
+} CPU_Per_CPU_control;
 
 struct Per_CPU_Control;
 

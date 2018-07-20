@@ -33,14 +33,13 @@
  */
 
 #include <rtems/timecounter.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/riscv-utility.h>
 
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
 #include <bsp/riscv.h>
-
-#include <dev/irq/clint.h>
 
 #include <libfdt.h>
 
@@ -49,7 +48,7 @@ void Clock_isr(void *arg);
 
 typedef struct {
   struct timecounter base;
-  volatile clint_regs *clint;
+  volatile RISCV_CLINT_regs *clint;
 } riscv_timecounter;
 
 static riscv_timecounter riscv_clock_tc;
@@ -58,7 +57,7 @@ static uint32_t riscv_clock_interval;
 
 static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
-  volatile clint_regs *clint;
+  volatile RISCV_CLINT_regs *clint;
   uint64_t cmp;
 
   clint = tc->clint;
@@ -94,7 +93,7 @@ static void riscv_clock_handler_install(void)
 static uint32_t riscv_clock_get_timecount(struct timecounter *base)
 {
   riscv_timecounter *tc;
-  volatile clint_regs *clint;
+  volatile RISCV_CLINT_regs *clint;
 
   tc = (riscv_timecounter *) base;
   clint = tc->clint;
