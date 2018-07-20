@@ -493,10 +493,6 @@ void _CPU_Context_restore( Context_Control *new_context )
   #define _CPU_Start_multitasking _ARMV7M_Start_multitasking
 #endif
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
-
-void _CPU_Context_validate( uintptr_t pattern );
-
 #ifdef RTEMS_SMP
   uint32_t _CPU_SMP_Initialize( void );
 

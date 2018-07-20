@@ -16,7 +16,9 @@
   #include "config.h"
 #endif
 
-#include "tmacros.h"
+#include <rtems/score/cpuimpl.h>
+
+#include <tmacros.h>
 
 const char rtems_test_name[] = "SPCONTEXT 1";
 

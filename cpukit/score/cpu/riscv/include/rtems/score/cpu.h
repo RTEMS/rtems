@@ -358,10 +358,6 @@ static inline uint32_t CPU_swap_u32(
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
-
-void _CPU_Context_validate( uintptr_t pattern );
-
 typedef uint32_t CPU_Counter_ticks;
 
 uint32_t _CPU_Counter_frequency( void );

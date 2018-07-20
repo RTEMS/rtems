@@ -42,6 +42,18 @@ static inline void outport_byte(uint16_t port, uint8_t val)
   __asm__ volatile ( "outb %0, %1" : : "a" (val), "Nd" (port) );
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Context_volatile_clobber( uintptr_t pattern )
+{
+  /* TODO */
+}
+
+RTEMS_INLINE_ROUTINE void _CPU_Context_validate( uintptr_t pattern )
+{
+  while (1) {
+    /* TODO */
+  }
+}
+
 #ifdef __cplusplus
 }
 #endif

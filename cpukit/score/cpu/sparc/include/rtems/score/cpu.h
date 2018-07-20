@@ -1068,10 +1068,6 @@ void _CPU_Context_restore(
   } while ( 0 )
 #endif
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
-
-void _CPU_Context_validate( uintptr_t pattern );
-
 typedef struct {
   uint32_t trap;
   CPU_Interrupt_frame *isf;

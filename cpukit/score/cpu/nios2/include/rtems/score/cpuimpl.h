@@ -25,6 +25,10 @@
 extern "C" {
 #endif
 
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
+
 #ifdef __cplusplus
 }
 #endif

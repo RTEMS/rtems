@@ -996,10 +996,6 @@ void _CPU_Context_restore_fp(
   Context_Control_fp **fp_context_ptr
 );
 
-void _CPU_Context_volatile_clobber( uintptr_t pattern );
-
-void _CPU_Context_validate( uintptr_t pattern );
-
 #ifdef RTEMS_SMP
   uint32_t _CPU_SMP_Initialize( void );
 

@@ -102,6 +102,10 @@ static inline struct Per_CPU_Control *_ARM_Get_current_per_CPU_control( void )
 
 #endif /* ARM_MULTILIB_ARCH_V4 */
 
+void _CPU_Context_volatile_clobber( uintptr_t pattern );
+
+void _CPU_Context_validate( uintptr_t pattern );
+
 #ifdef __cplusplus
 }
 #endif
