@@ -69,14 +69,11 @@ crypt_sha256_r(const char *key, const char *salt, struct crypt_data *data)
 	uint8_t alt_result[32], temp_result[32];
 	SHA256_CTX ctx, alt_ctx;
 	size_t salt_len, key_len, cnt, rounds;
-	char *cp, *copied_key, *copied_salt, *p_bytes, *s_bytes, *endp;
+	char *cp, *p_bytes, *s_bytes, *endp;
 	const char *num;
 	bool rounds_custom;
 	char *buffer = &data->buffer[0];
 	int buflen = (int)sizeof(data->buffer);
-
-	copied_key = NULL;
-	copied_salt = NULL;
 
 	/* Default number of rounds. */
 	rounds = ROUNDS_DEFAULT;
@@ -262,10 +259,6 @@ crypt_sha256_r(const char *key, const char *salt, struct crypt_data *data)
 	memset(s_bytes, '\0', salt_len);
 	memset(&ctx, '\0', sizeof(ctx));
 	memset(&alt_ctx, '\0', sizeof(alt_ctx));
-	if (copied_key != NULL)
-		memset(copied_key, '\0', key_len);
-	if (copied_salt != NULL)
-		memset(copied_salt, '\0', salt_len);
 
 	return buffer;
 }
