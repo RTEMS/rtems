@@ -360,16 +360,6 @@ void _CPU_Initialize(
   void
 );
 
-/*
- *  _CPU_Thread_Idle_body
- *
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
- *
- */
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /*
