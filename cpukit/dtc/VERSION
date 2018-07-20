@@ -4,15 +4,15 @@ git://git.kernel.org/pub/scm/utils/dtc/dtc.git
 
 Commit:
 
-9b0e4fe26093cf3846868543b24b874990ec76e1
+c12b2b0c20eb8fbe1a22065f1d5f0f155ab56b0a
 
 Date:
 
-Mon Jul 9 11:00:21 2018 +1000
+Thu Jul 19 08:19:43 2018 +0200
 
 Commands to generate update patches:
 
-git format-patch 9b0e4fe26093cf3846868543b24b874990ec76e1 -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
+git format-patch c12b2b0c20eb8fbe1a22065f1d5f0f155ab56b0a -- libfdt/fdt_addresses.c libfdt/fdt.c libfdt/fdt_empty_tree.c libfdt/fdt.h libfdt/fdt_ro.c libfdt/fdt_rw.c libfdt/fdt_strerror.c libfdt/fdt_sw.c libfdt/fdt_wip.c libfdt/libfdt_env.h libfdt/libfdt.h libfdt/libfdt_internal.h libfdt/TODO
 sed -i 's%/libfdt/fdt.h%/cpukit/include/fdt.h%g' 00*
 sed -i 's%/libfdt/libfdt.h%/cpukit/include/libfdt.h%g' 00*
 sed -i 's%/libfdt/libfdt_env.h%/cpukit/include/libfdt_env.h%g' 00*
