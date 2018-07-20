@@ -187,21 +187,6 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /*
- *  Define what is required to specify how the network to host conversion
- *  routines are handled.
- *
- *  epiphany Specific Information:
- *
- *  This version of RTEMS is designed specifically to run with
- *  big endian architectures. If you want little endian, you'll
- *  have to make the appropriate adjustments here and write
- *  efficient routines for byte swapping. The epiphany architecture
- *  doesn't do this very well.
- */
-
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
-
-/*
  *  The following defines the number of bits actually used in the
  *  interrupt field of the task mode.  How those bits map to the
  *  CPU interrupt levels is defined by the routine _CPU_ISR_Set_level().

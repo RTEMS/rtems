@@ -45,9 +45,6 @@ extern "C" {
 
 #define RISCV_MSTATUS_MIE 0x8
 
-#define CPU_INLINE_ENABLE_DISPATCH       FALSE
-#define CPU_UNROLL_ENQUEUE_PRIORITY      TRUE
-
 #define CPU_ISR_PASSES_FRAME_POINTER FALSE
 
 #define CPU_HARDWARE_FP                  FALSE
@@ -59,7 +56,6 @@ extern "C" {
 #define CPU_STACK_GROWS_UP               FALSE
 
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (64)))
-#define CPU_HAS_OWN_HOST_TO_NETWORK_ROUTINES     FALSE
 #define CPU_BIG_ENDIAN                           FALSE
 #define CPU_LITTLE_ENDIAN                        TRUE
 #define CPU_MODES_INTERRUPT_MASK   0x0000000000000001
