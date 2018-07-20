@@ -23,17 +23,14 @@
 
 #include <rtems.h>
 #include <rtems/counter.h>
+#include <rtems/score/cpuimpl.h>
 #include <rtems/score/sysstate.h>
 
 #include "tmacros.h"
 
 const char rtems_test_name[] = "SPCACHE 1";
 
-#ifdef __or1k__
-  #define I() __asm__ volatile ("l.nop")
-#else
-  #define I() __asm__ volatile ("nop")
-#endif
+#define I() _CPU_Instruction_no_operation()
 
 #define I8() I(); I(); I(); I(); I(); I(); I(); I()
 

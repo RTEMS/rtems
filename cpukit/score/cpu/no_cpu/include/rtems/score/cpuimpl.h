@@ -104,6 +104,16 @@ void _CPU_Context_volatile_clobber( uintptr_t pattern );
  */
 void _CPU_Context_validate( uintptr_t pattern );
 
+/**
+ * @brief Emits a no operation instruction (nop).
+ *
+ * This function is used only in test sptests/spcache01.
+ */
+RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
+{
+  __asm__ volatile ( "nop" );
+}
+
 #ifdef __cplusplus
 }
 #endif

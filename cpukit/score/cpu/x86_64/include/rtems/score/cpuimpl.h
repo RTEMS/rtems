@@ -54,6 +54,11 @@ RTEMS_INLINE_ROUTINE void _CPU_Context_validate( uintptr_t pattern )
   }
 }
 
+RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
+{
+  __asm__ volatile ( "nop" );
+}
+
 #ifdef __cplusplus
 }
 #endif
