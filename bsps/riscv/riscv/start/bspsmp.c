@@ -23,35 +23,55 @@
  * SUCH DAMAGE.
  */
 
-#ifndef BSP_RISCV_H
-#define BSP_RISCV_H
+#include <bsp/bootcard.h>
+#include <bsp/irq.h>
+#include <bsp/riscv.h>
 
-#include <bsp.h>
+#include <rtems/score/riscv-utility.h>
+#include <rtems/score/smpimpl.h>
 
-#include <rtems/score/cpuimpl.h>
+void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
+{
+  uint32_t cpu_index_self;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+  cpu_index_self = _Per_CPU_Get_index(cpu_self);
 
-extern volatile RISCV_CLINT_regs *riscv_clint;
-
-void *riscv_fdt_get_address(const void *fdt, int node);
-
-#ifdef RTEMS_SMP
-extern uint32_t riscv_hart_count;
-
-extern uint32_t riscv_hart_phandles[CPU_MAXIMUM_PROCESSORS];
-
-uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle);
-#endif
-
-#if RISCV_ENABLE_HTIF_SUPPORT != 0
-void htif_poweroff(void);
-#endif
-
-#ifdef __cplusplus
+  if (
+    cpu_index_self < rtems_configuration_get_maximum_processors()
+      && _SMP_Should_start_processor(cpu_index_self)
+  ) {
+    set_csr(mie, MIP_MSIP);
+    _SMP_Start_multitasking_on_secondary_processor(cpu_self);
+  } else {
+    _CPU_Thread_Idle_body(0);
+  }
 }
-#endif
 
-#endif /* BSP_RISCV_H */
+uint32_t _CPU_SMP_Initialize(void)
+{
+  return riscv_hart_count;
+}
+
+bool _CPU_SMP_Start_processor(uint32_t cpu_index)
+{
+  return true;
+}
+
+void _CPU_SMP_Finalize_initialization(uint32_t cpu_count)
+{
+  (void) cpu_count;
+  set_csr(mie, MIP_MSIP);
+}
+
+void _CPU_SMP_Prepare_start_multitasking(void)
+{
+  /* Do nothing */
+}
+
+void _CPU_SMP_Send_interrupt(uint32_t target_processor_index)
+{
+  Per_CPU_Control *cpu;
+
+  cpu = _Per_CPU_Get_by_index(target_processor_index);
+  *cpu->cpu_per_cpu.clint_msip = 0x1;
+}

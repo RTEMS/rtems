@@ -48,25 +48,33 @@ SYM(_start):
 	LADDR	gp, __global_pointer$
 	.option	pop
 
+	/* Init FPU unit if it's there */
+	li	t0, MSTATUS_FS
+	csrs	mstatus, t0
+
+	/* Set exception handler */
+	LADDR	t0, _RISCV_Exception_handler
+	csrw	mtvec, t0
+
+	/* Load stack pointer and branch to secondary processor start if necessary */
 #ifdef RTEMS_SMP
+	LADDR	sp, _Configuration_Interrupt_stack_area_begin
+	LADDR	t2, _Configuration_Interrupt_stack_size
 	csrr	s0, mhartid
 	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
-	add	t0, t0, t1
-	csrw	mscratch, t0
-	bnez	s0, .Lwait_for_go
-#endif
-
-	/* load stack and frame pointers */
+	add	s1, t0, t1
+	csrw	mscratch, s1
+	bnez	s0, .Lstart_on_secondary_processor
+	add	sp, sp, t2
+#else
 	LADDR	sp, _Configuration_Interrupt_stack_area_end
+#endif
 
 #ifdef BSP_START_COPY_FDT_FROM_U_BOOT
 	mv	a0, a1
 	call	bsp_fdt_copy
 #endif
-
-	LADDR	t0, _RISCV_Exception_handler
-	csrw	mtvec, t0
 
 	/* Clear .bss */
 	LADDR	a0, bsp_section_bss_begin
@@ -81,24 +89,55 @@ SYM(_start):
 	amoswap.w	zero, zero, 0(t0)
 #endif
 
-	/* Init FPU unit if it's there */
-	li	t0, MSTATUS_FS
-	csrs	mstatus, t0
-
 	j	boot_card
 
 #ifdef RTEMS_SMP
+
+.Lstart_on_secondary_processor:
+
+	/* Adjust stack pointer */
+#ifdef __riscv_mul
+	addi	t0, s0, 1
+	mul	t2, t2, t0
+#else
+	mv	t0, s0
+	mv	t3, t2
+
+.Ladd_more:
+
+	add	t2, t2, t3
+	addi	t0, t0, -1
+	bnez	t0, .Ladd_more
+#endif
+	add	sp, sp, t2
+
 	/* Wait for go issued by the boot processor (mhartid == 0) */
-.Lwait_for_go:
 	LADDR	t0, .Lsecondary_processor_go
+
 .Lwait_for_go_again:
+
 	lw	t1, 0(t0)
 	fence	iorw, iorw
-	sext.w	t1, t1
 	bnez	t1, .Lwait_for_go_again
-.Lloop_forever:
-	j	.Lloop_forever
+
+	mv	a0, s1
+	call	bsp_start_on_secondary_processor
+
+#if __riscv_xlen == 32
+	.align	2
+#elif __riscv_xlen == 64
+	.align	3
+#endif
 
 .Lsecondary_processor_go:
-	.word	0xdeadbeef
+
+	/*
+	 * These are ebreak instructions, just in case we end up here executing
+	 * code.
+	 */
+	.word	0x00100073
+#if __riscv_xlen == 64
+	.word	0x00100073
 #endif
+
+#endif /* RTEMS_SMP */

@@ -36,9 +36,17 @@
 
 #include <bsp/irq.h>
 #include <bsp/fatal.h>
+#include <bsp/fdt.h>
 #include <bsp/irq-generic.h>
+#include <bsp/riscv.h>
 
 #include <rtems/score/percpu.h>
+#include <rtems/score/riscv-utility.h>
+#include <rtems/score/smpimpl.h>
+
+#include <libfdt.h>
+
+volatile RISCV_CLINT_regs *riscv_clint;
 
 void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
 {
@@ -53,14 +61,62 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
   } else if (mcause == (RISCV_INTERRUPT_EXTERNAL_MACHINE << 1)) {
     /* TODO: Handle PLIC interrupt */
   } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
+#ifdef RTEMS_SMP
+    clear_csr(mip, MIP_MSIP);
+    _SMP_Inter_processor_interrupt_handler(cpu_self);
+#else
     bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_SOFTWARE);
+#endif
   } else {
     bsp_fatal(RISCV_FATAL_UNEXPECTED_INTERRUPT_EXCEPTION);
   }
 }
 
+static void riscv_clint_init(const void *fdt)
+{
+  volatile RISCV_CLINT_regs *clint;
+  int node;
+#ifdef RTEMS_SMP
+  const uint32_t *val;
+  int len;
+  int i;
+#endif
+
+  node = fdt_node_offset_by_compatible(fdt, -1, "riscv,clint0");
+
+  clint = riscv_fdt_get_address(fdt, node);
+  if (clint == NULL) {
+    bsp_fatal(RISCV_FATAL_NO_CLINT_REG_IN_DEVICE_TREE);
+  }
+
+  riscv_clint = clint;
+
+#ifdef RTEMS_SMP
+  val = fdt_getprop(fdt, node, "interrupts-extended", &len);
+
+  for (i = 0; i < len; i += 16) {
+    uint32_t hart_index;
+    Per_CPU_Control *cpu;
+
+    hart_index = riscv_get_hart_index_by_phandle(fdt32_to_cpu(val[i / 4]));
+    if (hart_index >= rtems_configuration_get_maximum_processors()) {
+      continue;
+    }
+
+    cpu = _Per_CPU_Get_by_index(hart_index);
+    cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
+    cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
+  }
+#endif
+}
+
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
+  const void *fdt;
+
+  fdt = bsp_fdt_get();
+  riscv_clint_init(fdt);
+
   return RTEMS_SUCCESSFUL;
 }
 

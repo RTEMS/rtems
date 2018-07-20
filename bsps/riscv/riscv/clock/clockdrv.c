@@ -119,19 +119,13 @@ static void riscv_clock_initialize(void)
 {
   const char *fdt;
   riscv_timecounter *tc;
-  int node;
   uint32_t tb_freq;
   uint64_t us_per_tick;
 
   fdt = bsp_fdt_get();
+
   tc = &riscv_clock_tc;
-
-  node = fdt_node_offset_by_compatible(fdt, -1, "riscv,clint0");
-  tc->clint = riscv_fdt_get_address(fdt, node);
-
-  if (tc->clint == NULL) {
-    bsp_fatal(RISCV_FATAL_NO_CLINT_REG_IN_DEVICE_TREE);
-  }
+  tc->clint = riscv_clint;
 
   tb_freq = riscv_clock_get_timebase_frequency(fdt);
   us_per_tick = rtems_configuration_get_microseconds_per_tick();

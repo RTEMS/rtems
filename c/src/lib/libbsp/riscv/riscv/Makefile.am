@@ -61,7 +61,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/console-conf
 librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/console/htif.c
 
 if HAS_SMP
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/riscv/riscv/start/bspsmp.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
