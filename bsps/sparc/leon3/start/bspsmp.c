@@ -32,7 +32,7 @@ static rtems_isr bsp_inter_processor_interrupt(
   rtems_vector_number vector
 )
 {
-  _SMP_Inter_processor_interrupt_handler();
+  _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
 void bsp_start_on_secondary_processor()

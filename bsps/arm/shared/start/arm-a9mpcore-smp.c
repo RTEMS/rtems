@@ -22,7 +22,7 @@
 
 static void bsp_inter_processor_interrupt(void *arg)
 {
-  _SMP_Inter_processor_interrupt_handler();
+  _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
 uint32_t _CPU_SMP_Initialize(void)

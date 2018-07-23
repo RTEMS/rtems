@@ -100,7 +100,7 @@ void bsp_interrupt_dispatch(uintptr_t exception_number)
 
 #ifdef RTEMS_SMP
 	if (exception_number == 36) {
-		_SMP_Inter_processor_interrupt_handler();
+		_SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 		return;
 	}
 #endif

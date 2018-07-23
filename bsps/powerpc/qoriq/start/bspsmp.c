@@ -101,7 +101,7 @@ void bsp_start_on_secondary_processor(void)
 #ifndef QORIQ_IS_HYPERVISOR_GUEST
 static void bsp_inter_processor_interrupt(void *arg)
 {
-  _SMP_Inter_processor_interrupt_handler();
+  _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 #endif
 

@@ -109,7 +109,9 @@ void bsp_interrupt_dispatch(void)
   if ( local_source & BCM2836_IRQ_SOURCE_MBOX3 ) {
     /* reset mailbox 3 contents to zero */
     BCM2835_REG(BCM2836_MAILBOX_3_READ_CLEAR_BASE + 0x10 * cpu_index_self) = 0xffffffff;
-    _SMP_Inter_processor_interrupt_handler();
+    _SMP_Inter_processor_interrupt_handler(
+      _Per_CPU_Get_by_index(cpu_index_self)
+    );
   }
   if ( cpu_index_self != 0 )
     return;

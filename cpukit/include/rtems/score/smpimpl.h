@@ -165,12 +165,11 @@ void _SMP_Multicast_actions_process( void );
  *
  * @return The received message.
  */
-static inline long unsigned _SMP_Inter_processor_interrupt_handler( void )
+static inline long unsigned _SMP_Inter_processor_interrupt_handler(
+  Per_CPU_Control *cpu_self
+)
 {
-  Per_CPU_Control *cpu_self;
-  unsigned long    message;
-
-  cpu_self = _Per_CPU_Get();
+  unsigned long message;
 
   /*
    * In the common case the inter-processor interrupt is issued to carry out a
