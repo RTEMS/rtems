@@ -156,4 +156,6 @@ uint32_t _CPU_Counter_frequency( void )
 #define Clock_driver_support_install_isr(isr) \
   riscv_clock_handler_install()
 
+#define CLOCK_DRIVER_USE_ONLY_BOOT_PROCESSOR
+
 #include "../../../shared/dev/clock/clockimpl.h"
