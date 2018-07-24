@@ -38,6 +38,7 @@
 #define START_STACK r15
 #define SAVED_LINK_REGISTER r16
 #define FDT_REGISTER r17
+#define CPU_SELF r18
 
 	.globl _start
 #ifdef RTEMS_SMP
@@ -195,7 +196,7 @@ _start:
 	LA	r13, _SDA_BASE_
 #endif
 
-	SET_SELF_CPU_CONTROL	r4, r5
+	SET_SELF_CPU_CONTROL	CPU_SELF, r5
 
 	blr
 
@@ -316,8 +317,7 @@ _start_thread:
 	bl	.Linitearly
 
 	/* Initialize start stack */
-	GET_SELF_CPU_CONTROL	r3
-	PPC_REG_LOAD	r3, PER_CPU_INTERRUPT_STACK_HIGH(r3)
+	PPC_REG_LOAD	r3, PER_CPU_INTERRUPT_STACK_HIGH(CPU_SELF)
 	subi	r1, r3, PPC_MINIMUM_STACK_FRAME_SIZE
 	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
@@ -327,6 +327,7 @@ _start_thread:
 	bl	.Linitfpu
 #endif
 
+	mr	r3, CPU_SELF
 	b	qoriq_start_thread
 	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif
@@ -339,6 +340,7 @@ _start_secondary_processor:
 	bl	.Linitmore
 	li	r3, 0
 	bl	.Linitmmu
+	mr	r3, CPU_SELF
 	b	bsp_start_on_secondary_processor
 	PPC64_NOP_FOR_LINKER_TOC_POINTER_RESTORE
 #endif /* RTEMS_SMP */

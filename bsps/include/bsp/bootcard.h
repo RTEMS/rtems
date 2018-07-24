@@ -167,6 +167,8 @@ static inline void bsp_work_area_initialize_with_table(
 
 void bsp_work_area_initialize(void);
 
+struct Per_CPU_Control;
+
 /**
  * @brief Standard start routine for secondary processors.
  *
@@ -175,7 +177,7 @@ void bsp_work_area_initialize(void);
  * of this function is a call to
  * _SMP_Start_multitasking_on_secondary_processor().
  */
-void bsp_start_on_secondary_processor(void);
+void bsp_start_on_secondary_processor(struct Per_CPU_Control *cpu_self);
 
 /** @} */
 

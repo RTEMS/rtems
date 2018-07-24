@@ -35,9 +35,9 @@ static rtems_isr bsp_inter_processor_interrupt(
   _SMP_Inter_processor_interrupt_handler(_Per_CPU_Get());
 }
 
-void bsp_start_on_secondary_processor()
+void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 {
-  uint32_t cpu_index_self = _CPU_SMP_Get_current_processor();
+  uint32_t cpu_index_self;
 
   /*
    * If data cache snooping is not enabled we terminate using BSP_fatal_exit()
@@ -49,6 +49,7 @@ void bsp_start_on_secondary_processor()
     BSP_fatal_exit( LEON3_FATAL_INVALID_CACHE_CONFIG_SECONDARY_PROCESSOR );
 
   /* Unmask IPI interrupts at Interrupt controller for this CPU */
+  cpu_index_self = _Per_CPU_Get_index(cpu_self);
   LEON3_IrqCtrl_Regs->mask[cpu_index_self] |= 1U << LEON3_mp_irq;
 
   _SMP_Start_multitasking_on_secondary_processor();

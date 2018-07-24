@@ -44,10 +44,8 @@ static bool is_started_by_u_boot(uint32_t cpu_index)
   return cpu_index % QORIQ_THREAD_COUNT == 0;
 }
 
-void qoriq_start_thread(void)
+void qoriq_start_thread(Per_CPU_Control *cpu_self)
 {
-  const Per_CPU_Control *cpu_self = _Per_CPU_Get();
-
   ppc_exc_initialize_interrupt_stack(
     (uintptr_t) cpu_self->interrupt_stack_low,
     rtems_configuration_get_interrupt_stack_size()
@@ -85,14 +83,14 @@ static void start_thread_if_necessary(uint32_t cpu_index_self)
 #endif
 }
 
-void bsp_start_on_secondary_processor(void)
+void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
 {
-  uint32_t cpu_index_self = _SMP_Get_current_processor();
-  const Per_CPU_Control *cpu_self = _Per_CPU_Get_by_index(cpu_index_self);
+  uint32_t cpu_index_self;
 
   qoriq_initialize_exceptions(cpu_self->interrupt_stack_low);
   bsp_interrupt_facility_initialize();
 
+  cpu_index_self = _Per_CPU_Get_index(cpu_self);
   start_thread_if_necessary(cpu_index_self);
 
   _SMP_Start_multitasking_on_secondary_processor();

@@ -105,7 +105,9 @@ typedef struct {
 extern qoriq_start_spin_table *
 qoriq_start_spin_table_addr[QORIQ_CPU_COUNT / QORIQ_THREAD_COUNT];
 
-void qoriq_start_thread(void);
+struct Per_CPU_Control;
+
+void qoriq_start_thread(struct Per_CPU_Control *);
 
 void qoriq_restart_secondary_processor(
   const qoriq_start_spin_table *spin_table

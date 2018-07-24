@@ -310,6 +310,7 @@ SYM(hard_reset):
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary
 	mov	%sp, %fp		! set frame pointer
 
+	mv	%o0, %g6
 	call	SYM(bsp_start_on_secondary_processor) ! does not return
 	 sub	%sp, SPARC_MINIMUM_STACK_FRAME_SIZE, %sp
 .Lbootcpu:
