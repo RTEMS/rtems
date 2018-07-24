@@ -209,7 +209,7 @@ typedef struct {
 
 /* sctlr */
 /* Read System Control Register */
-static inline uint32_t read_sctlr()
+static inline uint32_t read_sctlr(void)
 {
     uint32_t ctl;
 
@@ -227,7 +227,7 @@ static inline void write_sctlr(uint32_t ctl)
 }
 
 /* Read Auxiliary Control Register */
-static inline uint32_t read_actlr()
+static inline uint32_t read_actlr(void)
 {
     uint32_t ctl;
 
@@ -254,7 +254,7 @@ static inline void write_ttbcr(uint32_t bcr)
 }
 
 /* Read Domain Access Control Register */
-static inline uint32_t read_dacr()
+static inline uint32_t read_dacr(void)
 {
         uint32_t dacr;
 
@@ -296,7 +296,7 @@ static inline void refresh_tlb(void)
 }
 
 /* Read Translation Table Base Register 0 */
-static inline uint32_t read_ttbr0()
+static inline uint32_t read_ttbr0(void)
 {
     uint32_t bar;
 
@@ -308,7 +308,7 @@ static inline uint32_t read_ttbr0()
 
 
 /* Read Translation Table Base Register 0 */
-static inline uint32_t read_ttbr0_unmasked()
+static inline uint32_t read_ttbr0_unmasked(void)
 {
     uint32_t bar;
 
