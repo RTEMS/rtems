@@ -55,7 +55,7 @@ void *POSIX_Init (
   TEST_BEGIN();
 
   puts( "timer_create - bad clock id - EINVAL" );
-  status = timer_create( (timer_t) -1, &event, &timer );
+  status = timer_create( (clockid_t) -1, &event, &timer );
   fatal_posix_service_status_errno( status, EINVAL, "bad clock id" );
 
   puts( "timer_create - bad timer id pointer - EINVAL" );
