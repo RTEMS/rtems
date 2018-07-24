@@ -35,7 +35,7 @@ static void test(void)
   char name[sizeof(big_name)];
   int eno;
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(0xffffffff, name, MAX_NAME_SIZE);
   rtems_test_assert(eno == ESRCH);
   rtems_test_assert(strcmp(name, "") == 0);
@@ -43,12 +43,12 @@ static void test(void)
   eno = pthread_setname_np(0xffffffff, name);
   rtems_test_assert(eno == ESRCH);
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(pthread_self(), name, 0);
   rtems_test_assert(eno == ERANGE);
   rtems_test_assert(strcmp(name, "NO") == 0);
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(pthread_self(), name, sizeof(name));
   rtems_test_assert(eno == 0);
   rtems_test_assert(strcmp(name, "UI1 ") == 0);
@@ -56,7 +56,7 @@ static void test(void)
   eno = pthread_setname_np(pthread_self(), big_name);
   rtems_test_assert(eno == ERANGE);
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(pthread_self(), name, sizeof(name));
   rtems_test_assert(eno == 0);
   rtems_test_assert(strcmp(name, "abcdefghijkl") == 0);
@@ -64,12 +64,12 @@ static void test(void)
   eno = pthread_setname_np(pthread_self(), new_name);
   rtems_test_assert(eno == 0);
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(pthread_self(), name, sizeof(name));
   rtems_test_assert(eno == 0);
   rtems_test_assert(strcmp(name, "new") == 0);
 
-  memcpy(name, no_name, sizeof(name));
+  memcpy(name, no_name, sizeof(no_name));
   eno = pthread_getname_np(pthread_self(), name, 3);
   rtems_test_assert(eno == ERANGE);
   rtems_test_assert(strcmp(name, "ne") == 0);
