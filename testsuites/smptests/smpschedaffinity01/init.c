@@ -93,7 +93,11 @@ static void test(void)
 
       /* Skip if this cpu doesn't exist, don't create task */
       if ( task_data[i].expected_cpu >= cpu_count ) {
-        printf( "Skipping TA0%d because on a core we do not have\n", i );
+        printf(
+          "Skipping TA0%" PRIdrtems_task_argument
+            " because on a core we do not have\n",
+          i
+        );
         continue;
       }
 
@@ -106,34 +110,47 @@ static void test(void)
         &task_data[ i ].id
       );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-  
-      printf("Set TA%d affinity to cpu %d\n", i, task_data[i].expected_cpu );
+
+      printf(
+        "Set TA%" PRIdrtems_task_argument " affinity to cpu %d\n",
+        i,
+        task_data[i].expected_cpu
+      );
       sc = rtems_task_set_affinity( task_data[ i ].id, size, &task_data[i].cpuset );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-      
-      printf("Start TA%d on cpu %d\n", i, task_data[i].expected_cpu);
+
+      printf(
+        "Start TA%" PRIdrtems_task_argument " on cpu %d\n",
+        i,
+        task_data[i].expected_cpu
+      );
       sc = rtems_task_start( task_data[ i ].id, task, i );
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
   /* spin for 100 ticks */
   test_delay(100);
- 
+
   printf("Verify Tasks Ran\n");
   for (i = 0; i < NUM_CPUS; i++) {
 
     /* Skip if this cpu doesn't exist, task doesn't exist */
     if ( task_data[i].expected_cpu >= cpu_count ) {
-      printf( "Skipping TA0%d because on a core we do not have\n", i );
+      printf(
+        "Skipping TA0%" PRIdrtems_task_argument
+          " because on a core we do not have\n",
+        i
+      );
       continue;
     }
 
     /* print the expected and actual values */
-    printf( "TA0%d: ran=%d expected=%d actual=%d\n", 
-     i, 
-     task_data[i].ran,
-     task_data[i].expected_cpu,
-     task_data[i].actual_cpu
+    printf(
+      "TA0%" PRIdrtems_task_argument ": ran=%d expected=%d actual=%d\n",
+      i,
+      task_data[i].ran,
+      task_data[i].expected_cpu,
+      task_data[i].actual_cpu
     );
 
     /*  Abort test if values are not as expected */

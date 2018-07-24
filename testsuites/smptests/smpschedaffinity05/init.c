@@ -176,7 +176,8 @@ static void test(void)
       rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
       printf(
-        "Start TA%d at priority %" PRIu32 " on cpu %d\n",
+        "Start TA%" PRIdrtems_task_argument " at priority %"
+          PRIu32 " on cpu %d\n",
          i,
          task_data[i].priority,
          task_data[i].expected_cpu
@@ -192,7 +193,11 @@ static void test(void)
 
   i = TASK_COUNT - 1;
   task_data[ i ].priority = 4;
-  printf("Set TA%d priority %" PRIu32 "\n", i,task_data[i].priority );
+  printf(
+    "Set TA%" PRIdrtems_task_argument " priority %" PRIu32 "\n",
+    i,
+    task_data[i].priority
+  );
   sc = rtems_task_set_priority(
     task_data[ i ].id,
     task_data[ i ].priority,
