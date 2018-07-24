@@ -370,11 +370,6 @@ static void execute_test(unsigned i)
   ASSERT_SC(sc);
 }
 
-static const rtems_driver_address_table disk_ops = {
-  .initialization_entry = NULL,
-  RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES
-};
-
 static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
 {
   if (req == RTEMS_BLKIO_REQUEST) {
