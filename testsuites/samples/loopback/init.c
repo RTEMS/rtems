@@ -100,7 +100,7 @@ static rtems_task workerTask(rtems_task_argument arg)
 {
     int s = arg;
     char msg[80];
-    char reply[100];
+    char reply[120];
     int i;
 
     for (;;) {
@@ -156,7 +156,7 @@ static rtems_task serverTask(rtems_task_argument arg)
             else
                 rtems_panic("Can't accept connection: %s", strerror(errno));
         else
-            printf("ACCEPTED:%lX\n", ntohl(farAddr.sin_addr.s_addr));
+            printf("ACCEPTED:%" PRIu32 "\n", ntohl(farAddr.sin_addr.s_addr));
         spawnTask(workerTask, myPriority, s1);
     }
 }

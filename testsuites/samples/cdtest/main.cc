@@ -89,6 +89,10 @@ public:
         check_end_of_test();
     };
 
+#if __cplusplus >= 201103L
+    AClass& operator=(const AClass&) = default;
+#endif
+
     virtual void print()  { printf("%s\n", string); };
 
 protected:
