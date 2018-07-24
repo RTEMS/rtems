@@ -186,7 +186,7 @@ static inline long unsigned _SMP_Inter_processor_interrupt_handler(
     ATOMIC_ORDER_ACQUIRE
   );
 
-  if ( message != 0 ) {
+  if ( RTEMS_PREDICT_FALSE( message != 0 ) ) {
     if ( ( message & SMP_MESSAGE_SHUTDOWN ) != 0 ) {
       _SMP_Fatal( SMP_FATAL_SHUTDOWN_RESPONSE );
       /* does not continue past here */
