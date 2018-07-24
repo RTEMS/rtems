@@ -128,7 +128,7 @@ static void _Mutex_Release_critical(
   mutex->Queue.Queue.owner = NULL;
   _Thread_Resource_count_decrement( executing );
 
-  if ( __predict_true( heads == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( heads == NULL ) ) {
     _Mutex_Queue_release( mutex, level, queue_context );
   } else {
     _Thread_queue_Context_set_ISR_level( queue_context, level );
@@ -157,7 +157,7 @@ void _Mutex_Acquire( struct _Mutex_Control *_mutex )
 
   owner = mutex->Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( mutex, level, &queue_context );
@@ -185,7 +185,7 @@ int _Mutex_Acquire_timed(
 
   owner = mutex->Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( mutex, level, &queue_context );
@@ -218,7 +218,7 @@ int _Mutex_Try_acquire( struct _Mutex_Control *_mutex )
 
   owner = mutex->Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     eno = 0;
@@ -270,7 +270,7 @@ void _Mutex_recursive_Acquire( struct _Mutex_recursive_Control *_mutex )
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
@@ -301,7 +301,7 @@ int _Mutex_recursive_Acquire_timed(
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     _Mutex_Queue_release( &mutex->Mutex, level, &queue_context );
@@ -339,7 +339,7 @@ int _Mutex_recursive_Try_acquire( struct _Mutex_recursive_Control *_mutex )
 
   owner = mutex->Mutex.Queue.Queue.owner;
 
-  if ( __predict_true( owner == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( owner == NULL ) ) {
     mutex->Mutex.Queue.Queue.owner = executing;
     _Thread_Resource_count_increment( executing );
     eno = 0;
@@ -372,7 +372,7 @@ void _Mutex_recursive_Release( struct _Mutex_recursive_Control *_mutex )
 
   nest_level = mutex->nest_level;
 
-  if ( __predict_true( nest_level == 0 ) ) {
+  if ( RTEMS_PREDICT_TRUE( nest_level == 0 ) ) {
     _Mutex_Release_critical( &mutex->Mutex, executing, level, &queue_context );
   } else {
     mutex->nest_level = nest_level - 1;

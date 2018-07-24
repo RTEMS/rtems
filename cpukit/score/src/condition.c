@@ -279,7 +279,9 @@ static void _Condition_Wake( struct _Condition_Control *_condition, int count )
    * In common uses cases of condition variables there are normally no threads
    * on the queue, so check this condition early.
    */
-  if ( __predict_true( _Thread_queue_Is_empty( &condition->Queue.Queue ) ) ) {
+  if (
+    RTEMS_PREDICT_TRUE( _Thread_queue_Is_empty( &condition->Queue.Queue ) )
+  ) {
     _Condition_Queue_release( condition, &context.Base );
     return;
   }

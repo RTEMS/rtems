@@ -229,6 +229,31 @@ static void Init(rtems_task_argument arg)
   rtems_test_assert(RTEMS_XCONCAT(CON, CAT)() == 91);
   rtems_test_assert(strcmp(RTEMS_STRING(str), "str") == 0);
   rtems_test_assert(strcmp(RTEMS_XSTRING(STR), "ing") == 0);
+
+  if (RTEMS_PREDICT_TRUE(true)) {
+    rtems_test_assert(true);
+  } else {
+    rtems_test_assert(false);
+  }
+
+  if (RTEMS_PREDICT_FALSE(true)) {
+    rtems_test_assert(true);
+  } else {
+    rtems_test_assert(false);
+  }
+
+  if (RTEMS_PREDICT_TRUE(false)) {
+    rtems_test_assert(false);
+  } else {
+    rtems_test_assert(true);
+  }
+
+  if (RTEMS_PREDICT_FALSE(false)) {
+    rtems_test_assert(false);
+  } else {
+    rtems_test_assert(true);
+  }
+
   TEST_END();
   rtems_test_exit(0);
 }

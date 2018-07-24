@@ -281,6 +281,34 @@
   #define RTEMS_DEFINE_GLOBAL_SYMBOL( _name, _value )
 #endif
 
+/**
+ * @brief Returns the value of the specified integral expression and tells the
+ * compiler that the predicted value is true (1).
+ *
+ * @param[in] _exp The expression.
+ *
+ * @return The value of the expression.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_PREDICT_TRUE( _exp ) __builtin_expect( ( _exp ), 1 )
+#else
+  #define RTEMS_PREDICT_TRUE( _exp ) ( _exp )
+#endif
+
+/**
+ * @brief Returns the value of the specified integral expression and tells the
+ * compiler that the predicted value is false (0).
+ *
+ * @param[in] _exp The expression.
+ *
+ * @return The value of the expression.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_PREDICT_FALSE( _exp ) __builtin_expect( ( _exp ), 0 )
+#else
+  #define RTEMS_PREDICT_FALSE( _exp ) ( _exp )
+#endif
+
 #if __cplusplus >= 201103L
   #define RTEMS_STATIC_ASSERT(cond, msg) \
     static_assert(cond, # msg)

@@ -151,7 +151,7 @@ int _Futex_Wake( struct _Futex_Control *_futex, int count )
    * called in the fast path.  Normally there are no threads on the queue, so
    * check this condition early.
    */
-  if ( __predict_true( _Thread_queue_Is_empty( &futex->Queue.Queue ) ) ) {
+  if ( RTEMS_PREDICT_TRUE( _Thread_queue_Is_empty( &futex->Queue.Queue ) ) ) {
     _Futex_Queue_release( futex, level, &context.Base );
     return 0;
   }

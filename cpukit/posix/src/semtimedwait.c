@@ -46,7 +46,7 @@ int sem_timedwait(
   executing = _Sem_Queue_acquire_critical( sem, &queue_context );
 
   count = sem->count;
-  if ( __predict_true( count > 0 ) ) {
+  if ( RTEMS_PREDICT_TRUE( count > 0 ) ) {
     sem->count = count - 1;
     _Sem_Queue_release( sem, level, &queue_context );
     return 0;

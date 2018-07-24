@@ -53,7 +53,7 @@ void _Semaphore_Wait( struct _Semaphore_Control *_sem )
   executing = _Sem_Queue_acquire_critical( sem, &queue_context );
 
   count = sem->count;
-  if ( __predict_true( count > 0 ) ) {
+  if ( RTEMS_PREDICT_TRUE( count > 0 ) ) {
     sem->count = count - 1;
     _Sem_Queue_release( sem, level, &queue_context );
   } else {
@@ -86,7 +86,7 @@ int _Semaphore_Wait_timed_ticks( struct _Semaphore_Control *_sem, uint32_t ticks
   executing = _Sem_Queue_acquire_critical( sem, &queue_context );
 
   count = sem->count;
-  if ( __predict_true( count > 0 ) ) {
+  if ( RTEMS_PREDICT_TRUE( count > 0 ) ) {
     sem->count = count - 1;
     _Sem_Queue_release( sem, level, &queue_context );
     return 0;
@@ -121,7 +121,7 @@ int _Semaphore_Try_wait( struct _Semaphore_Control *_sem )
   _Sem_Queue_acquire_critical( sem, &queue_context );
 
   count = sem->count;
-  if ( __predict_true( count > 0 ) ) {
+  if ( RTEMS_PREDICT_TRUE( count > 0 ) ) {
     sem->count = count - 1;
     eno = 0;
   } else {
@@ -145,7 +145,7 @@ void _Semaphore_Post( struct _Semaphore_Control *_sem )
   _Sem_Queue_acquire_critical( sem, &queue_context );
 
   heads = sem->Queue.Queue.heads;
-  if ( __predict_true( heads == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( heads == NULL ) ) {
     ++sem->count;
     _Sem_Queue_release( sem, level, &queue_context );
   } else {
@@ -178,7 +178,7 @@ void _Semaphore_Post_binary( struct _Semaphore_Control *_sem )
   _Sem_Queue_acquire_critical( sem, &queue_context );
 
   heads = sem->Queue.Queue.heads;
-  if ( __predict_true( heads == NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( heads == NULL ) ) {
     sem->count = 1;
     _Sem_Queue_release( sem, level, &queue_context );
   } else {

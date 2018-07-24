@@ -40,13 +40,13 @@ int sem_post( sem_t *_sem )
   heads = sem->Queue.Queue.heads;
   count = sem->count;
 
-  if ( __predict_true( heads == NULL && count < SEM_VALUE_MAX ) ) {
+  if ( RTEMS_PREDICT_TRUE( heads == NULL && count < SEM_VALUE_MAX ) ) {
     sem->count = count + 1;
     _Sem_Queue_release( sem, level, &queue_context );
     return 0;
   }
 
-  if ( __predict_true( heads != NULL ) ) {
+  if ( RTEMS_PREDICT_TRUE( heads != NULL ) ) {
     const Thread_queue_Operations *operations;
     Thread_Control *first;
 
