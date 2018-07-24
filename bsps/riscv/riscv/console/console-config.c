@@ -133,6 +133,14 @@ static void riscv_console_probe(void)
 
         ctx->clock = fdt32_to_cpu(val[0]);
 
+        val = (fdt32_t *) fdt_getprop(fdt, node, "interrupts", &len);
+
+        if (val == NULL || len != 4) {
+          bsp_fatal(RISCV_FATAL_NO_NS16550_INTERRUPTS_IN_DEVICE_TREE);
+        }
+
+        ctx->irq = RISCV_INTERRUPT_VECTOR_EXTERNAL(fdt32_to_cpu(val[0]));
+
         if (node == console_node) {
           riscv_console.context = &ctx->base;
           riscv_console.putchar = ns16550_polled_putchar;
@@ -198,7 +206,7 @@ rtems_status_code console_initialize(
 
     rtems_termios_device_install(
       path,
-      &ns16550_handler_polled,
+      &ns16550_handler_interrupt,
       NULL,
       &ctx->base
     );
