@@ -42,6 +42,7 @@
 #include <bsp.h>
 #include <rtems/irq.h>
 #include <rtems/irq-extension.h>
+#include <rtems/score/processormask.h>
 
 #define RISCV_INTERRUPT_VECTOR_SOFTWARE 0
 
@@ -49,9 +50,23 @@
 
 #define RISCV_INTERRUPT_VECTOR_EXTERNAL(x) ((x) + 2)
 
+#define RISCV_INTERRUPT_VECTOR_IS_EXTERNAL(x) ((x) >= 2)
+
+#define RISCV_INTERRUPT_VECTOR_EXTERNAL_TO_INDEX(x) ((x) - 2)
+
 #define BSP_INTERRUPT_VECTOR_MIN 0
 
 #define BSP_INTERRUPT_VECTOR_MAX RISCV_INTERRUPT_VECTOR_EXTERNAL(RISCV_MAXIMUM_EXTERNAL_INTERRUPTS - 1)
+
+void bsp_interrupt_set_affinity(
+  rtems_vector_number vector,
+  const Processor_mask *affinity
+);
+
+void bsp_interrupt_get_affinity(
+  rtems_vector_number vector,
+  Processor_mask *affinity
+);
 
 #endif /* ASM */
 

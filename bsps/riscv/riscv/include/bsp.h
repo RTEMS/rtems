@@ -44,6 +44,8 @@
 extern "C" {
 #endif
 
+#define BSP_FEATURE_IRQ_EXTENSION
+
 #define BSP_FDT_IS_SUPPORTED
 
 #ifdef __cplusplus
