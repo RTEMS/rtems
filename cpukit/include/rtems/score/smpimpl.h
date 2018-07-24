@@ -134,9 +134,12 @@ extern Processor_mask _SMP_Online_processors;
  * uses _Thread_Start_multitasking() instead.
  *
  * This function does not return to the caller.
+ *
+ * @param[in] cpu_self The current processor control.
  */
-void _SMP_Start_multitasking_on_secondary_processor( void )
-  RTEMS_NO_RETURN;
+void _SMP_Start_multitasking_on_secondary_processor(
+  Per_CPU_Control *cpu_self
+) RTEMS_NO_RETURN;
 
 typedef void ( *SMP_Test_message_handler )( Per_CPU_Control *cpu_self );
 

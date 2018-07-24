@@ -53,7 +53,7 @@ void qoriq_start_thread(Per_CPU_Control *cpu_self)
 
   bsp_interrupt_facility_initialize();
 
-  _SMP_Start_multitasking_on_secondary_processor();
+  _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 #endif
 
@@ -93,7 +93,7 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   cpu_index_self = _Per_CPU_Get_index(cpu_self);
   start_thread_if_necessary(cpu_index_self);
 
-  _SMP_Start_multitasking_on_secondary_processor();
+  _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 
 #ifndef QORIQ_IS_HYPERVISOR_GUEST

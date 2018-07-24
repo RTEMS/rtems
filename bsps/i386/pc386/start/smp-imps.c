@@ -794,7 +794,7 @@ static void secondary_cpu_initialize(void)
   enable_sse();
 #endif
 
-  _SMP_Start_multitasking_on_secondary_processor();
+  _SMP_Start_multitasking_on_secondary_processor( _Per_CPU_Get() );
 }
 
 uint32_t _CPU_SMP_Initialize( void )

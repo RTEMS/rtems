@@ -109,7 +109,7 @@ arm_a9mpcore_start_on_secondary_processor(void)
   ctrl |= ARM_CP15_CTRL_I | ARM_CP15_CTRL_C | ARM_CP15_CTRL_M;
   arm_cp15_set_control(ctrl);
 
-  _SMP_Start_multitasking_on_secondary_processor();
+  _SMP_Start_multitasking_on_secondary_processor(_Per_CPU_Get());
 }
 
 BSP_START_TEXT_SECTION static inline void

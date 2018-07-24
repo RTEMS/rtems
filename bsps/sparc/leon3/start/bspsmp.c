@@ -52,7 +52,7 @@ void bsp_start_on_secondary_processor(Per_CPU_Control *cpu_self)
   cpu_index_self = _Per_CPU_Get_index(cpu_self);
   LEON3_IrqCtrl_Regs->mask[cpu_index_self] |= 1U << LEON3_mp_irq;
 
-  _SMP_Start_multitasking_on_secondary_processor();
+  _SMP_Start_multitasking_on_secondary_processor(cpu_self);
 }
 
 uint32_t _CPU_SMP_Initialize( void )

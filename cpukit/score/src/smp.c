@@ -145,14 +145,19 @@ void _SMP_Handler_initialize( void )
 
 void _SMP_Request_start_multitasking( void )
 {
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
-  uint32_t cpu_count = _SMP_Get_processor_count();
-  uint32_t cpu_index;
+  Per_CPU_Control *cpu_self;
+  uint32_t         cpu_count;
+  uint32_t         cpu_index;
 
-  _Per_CPU_State_change( self_cpu, PER_CPU_STATE_READY_TO_START_MULTITASKING );
+  cpu_self = _Per_CPU_Get();
+  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
+
+  cpu_count = _SMP_Get_processor_count();
 
   for ( cpu_index = 0 ; cpu_index < cpu_count ; ++cpu_index ) {
-    Per_CPU_Control *cpu = _Per_CPU_Get_by_index( cpu_index );
+    Per_CPU_Control *cpu;
+
+    cpu = _Per_CPU_Get_by_index( cpu_index );
 
     if ( _Per_CPU_Is_processor_online( cpu ) ) {
       _Per_CPU_State_change( cpu, PER_CPU_STATE_REQUEST_START_MULTITASKING );
@@ -168,10 +173,13 @@ bool _SMP_Should_start_processor( uint32_t cpu_index )
   return _Scheduler_Should_start_processor( assignment );
 }
 
-void _SMP_Start_multitasking_on_secondary_processor( void )
+void _SMP_Start_multitasking_on_secondary_processor(
+  Per_CPU_Control *cpu_self
+)
 {
-  Per_CPU_Control *self_cpu = _Per_CPU_Get();
-  uint32_t cpu_index_self = _Per_CPU_Get_index( self_cpu );
+  uint32_t cpu_index_self;
+
+  cpu_index_self = _Per_CPU_Get_index( cpu_self );
 
   if ( cpu_index_self >= rtems_configuration_get_maximum_processors() ) {
     _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_INVALID_PROCESSOR );
@@ -181,7 +189,7 @@ void _SMP_Start_multitasking_on_secondary_processor( void )
     _SMP_Fatal( SMP_FATAL_MULTITASKING_START_ON_UNASSIGNED_PROCESSOR );
   }
 
-  _Per_CPU_State_change( self_cpu, PER_CPU_STATE_READY_TO_START_MULTITASKING );
+  _Per_CPU_State_change( cpu_self, PER_CPU_STATE_READY_TO_START_MULTITASKING );
 
   _Thread_Start_multitasking();
 }
