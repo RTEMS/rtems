@@ -39,7 +39,7 @@ typedef struct {
  */
 
 BSP_NetIFDesc
-BSP_availableNetIFs();
+BSP_availableNetIFs(void);
 
 /* Define this macro so applications can conditionally compile this API */
 #define BSP_HAS_MULTIPLE_NETIFS(x)	BSP_availableNetIFs()	

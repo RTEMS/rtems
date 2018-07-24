@@ -48,7 +48,7 @@ void detect_host_bridge(void);
 void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
 
 /* FIXME: This probably belongs into rtems/pci.h */
-extern unsigned char pci_bus_count();
+extern unsigned char pci_bus_count(void);
 
 /* FIXME: This also is generic and could go into rtems/pci.h */
 

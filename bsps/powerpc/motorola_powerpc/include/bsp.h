@@ -129,17 +129,18 @@ extern "C" {
 #define BSP_CONSOLE_PORT	BSP_UART_COM1
 #define BSP_UART_BAUD_BASE	115200
 
-#if defined(MVME_HAS_DEC21140)
 struct rtems_bsdnet_ifconfig;
+
+#if defined(MVME_HAS_DEC21140)
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "dc1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_dec21140_driver_attach
-extern int rtems_dec21140_driver_attach();
+extern int rtems_dec21140_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #endif
 
 #ifdef qemu
 #define RTEMS_BSP_NETWORK_DRIVER_NAME "ne1"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH rtems_ne_driver_attach
-extern int rtems_ne_driver_attach();
+extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 
 RTEMS_INLINE_ROUTINE const char* bsp_cmdline_arg(const char* arg)
 {

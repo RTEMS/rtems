@@ -413,7 +413,7 @@ void FixupPCI( const struct _int_map *bspmap, int (*swizzler)(int,int) )
 /*
  * Return the number of PCI buses in the system
  */
-unsigned char pci_bus_count()
+unsigned char pci_bus_count(void)
 {
   return(ucMaxPCIBus);
 }

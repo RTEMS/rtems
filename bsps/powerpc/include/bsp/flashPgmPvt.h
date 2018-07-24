@@ -261,7 +261,7 @@ struct flash_bsp_ops {
  */
 	int              (*flash_wp)(int bank, int enbl);
 /* read a running us clock (for polling timeout) */
-	uint32_t         (*read_us_timer)();
+	uint32_t         (*read_us_timer)(void);
 };
 
 /* This must be provided by the BSP */

@@ -72,7 +72,7 @@ extern "C" {
  * VME windows and installs the VME interrupt manager.
  */
 
-void BSP_vme_config();
+void BSP_vme_config(void);
 
 /* translate through host bridge and vme master window of vme bridge */
 int

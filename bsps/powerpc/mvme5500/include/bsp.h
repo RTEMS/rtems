@@ -177,7 +177,9 @@ int I2Cread_eeprom(
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH  rtems_i82544EI_driver_attach
 #endif
 
-extern int RTEMS_BSP_NETWORK_DRIVER_ATTACH();
+struct rtems_bsdnet_ifconfig;
+
+extern int RTEMS_BSP_NETWORK_DRIVER_ATTACH(struct rtems_bsdnet_ifconfig *, int);
 
 #define gccMemBar() RTEMS_COMPILER_MEMORY_BARRIER()
 

@@ -57,7 +57,7 @@ struct pcibridge
 void FixupPCI( const struct _int_map *, int (*swizzler)(int,int) );
 
 /* FIXME: This probably belongs into rtems/pci.h */
-extern unsigned char pci_bus_count();
+extern unsigned char pci_bus_count(void);
 
 int indirect_pci_read_config_byte(
   unsigned char bus,
