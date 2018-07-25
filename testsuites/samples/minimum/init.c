@@ -65,6 +65,16 @@ static void *Init( uintptr_t ignored )
 #define CONFIGURE_MINIMUM_TASK_STACK_SIZE 512
 
 /*
+ * Keep the interrupt/initialization stack as is.  Otherwise, the test may fail
+ * in the low level system initialization.
+ */
+#ifdef BSP_INTERRUPT_STACK_SIZE
+  #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
+#else
+  #define CONFIGURE_INTERRUPT_STACK_SIZE CPU_STACK_MINIMUM_SIZE
+#endif
+
+/*
  *  This lowers the number of priorities that this test is able to
  *  use.  The Idle task will be running at the lowest priority.
  */
