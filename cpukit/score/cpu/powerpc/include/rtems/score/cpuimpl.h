@@ -244,7 +244,7 @@ void _CPU_Context_validate( uintptr_t pattern );
 
 RTEMS_INLINE_ROUTINE void _CPU_Instruction_illegal( void )
 {
-  __asm__ volatile ( ".word 0" );
+  __asm__ volatile ( ".long 0" );
 }
 
 RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
