@@ -32,14 +32,15 @@
  * SUCH DAMAGE.
  */
 
-#include <rtems/timecounter.h>
-#include <rtems/score/cpuimpl.h>
-#include <rtems/score/riscv-utility.h>
-
 #include <bsp/fatal.h>
 #include <bsp/fdt.h>
 #include <bsp/irq.h>
 #include <bsp/riscv.h>
+
+#include <rtems/sysinit.h>
+#include <rtems/timecounter.h>
+#include <rtems/score/cpuimpl.h>
+#include <rtems/score/riscv-utility.h>
 
 #include <libfdt.h>
 
@@ -144,10 +145,23 @@ static void riscv_clock_initialize(void)
   rtems_timecounter_install(&tc->base);
 }
 
+volatile uint32_t _RISCV_Counter_register;
+
+static void riscv_counter_initialize(void)
+{
+  _RISCV_Counter_mutable = &riscv_clint->mtime.val_32[0];
+}
+
 uint32_t _CPU_Counter_frequency( void )
 {
   return riscv_clock_get_timebase_frequency(bsp_fdt_get());
 }
+
+RTEMS_SYSINIT_ITEM(
+  riscv_counter_initialize,
+  RTEMS_SYSINIT_CPU_COUNTER,
+  RTEMS_SYSINIT_ORDER_FIRST
+);
 
 #define Clock_driver_support_at_tick() riscv_clock_at_tick(&riscv_clock_tc)
 

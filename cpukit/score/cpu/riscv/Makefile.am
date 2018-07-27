@@ -8,6 +8,7 @@ libscorecpu_a_SOURCES += riscv-context-switch.S
 libscorecpu_a_SOURCES += riscv-context-initialize.c
 libscorecpu_a_SOURCES += riscv-context-validate.S
 libscorecpu_a_SOURCES += riscv-context-volatile-clobber.S
+libscorecpu_a_SOURCES += riscv-counter.S
 
 include $(top_srcdir)/automake/local.am
 include $(srcdir)/headers.am

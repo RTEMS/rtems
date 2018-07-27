@@ -435,13 +435,11 @@ typedef uint32_t CPU_Counter_ticks;
 
 uint32_t _CPU_Counter_frequency( void );
 
+extern volatile uint32_t * const _RISCV_Counter;
+
 static inline CPU_Counter_ticks _CPU_Counter_read( void )
 {
-  unsigned long ticks;
-
-  __asm__ volatile ( "rdtime %0" : "=&r" ( ticks ) );
-
-  return (uint32_t) ticks;
+  return *_RISCV_Counter;
 }
 
 static inline CPU_Counter_ticks _CPU_Counter_difference(

@@ -345,6 +345,44 @@ static inline uint32_t _RISCV_Read_FCSR( void )
   return fcsr;
 }
 
+/*
+ * The RISC-V ISA provides a rdtime instruction, however, it is implemented in
+ * most chips via a trap-and-emulate.  Using this in machine mode makes no
+ * sense.  Use the memory-mapped mtime register directly instead.  The address
+ * of this register is platform-specific and provided via the device tree.
+ *
+ * To allow better code generation provide a const (_RISCV_Counter) and a
+ * mutable (_RISCV_Counter_mutable) declaration for this pointer variable
+ * (defined in assembler code).
+ *
+ * See code generated for this test case:
+ *
+ * extern volatile int * const c;
+ *
+ * extern volatile int *v;
+ *
+ * int fc(void)
+ * {
+ *   int a = *c;
+ *   __asm__ volatile("" ::: "memory");
+ *   return *c - a;
+ * }
+ *
+ * int fv(void)
+ * {
+ *   int a = *v;
+ *   __asm__ volatile("" ::: "memory");
+ *   return *v - a;
+ * }
+ */
+extern volatile uint32_t *_RISCV_Counter_mutable;
+
+/*
+ * Initial value of _RISCV_Counter and _RISCV_Counter_mutable.  Must be
+ * provided by the BSP.
+ */
+extern volatile uint32_t _RISCV_Counter_register;
+
 #ifdef RTEMS_SMP
 
 static inline struct Per_CPU_Control *_RISCV_Get_current_per_CPU_control( void )
