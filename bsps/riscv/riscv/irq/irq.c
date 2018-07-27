@@ -90,7 +90,13 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
     }
   } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
 #ifdef RTEMS_SMP
-    clear_csr(mip, MIP_MSIP);
+    /*
+     * Clear the software interrupt on this processor.  Synchronization of
+     * inter-processor interrupts is done via Per_CPU_Control::message in
+     * _SMP_Inter_processor_interrupt_handler().
+     */
+    *cpu_self->cpu_per_cpu.clint_msip = 0;
+
     _SMP_Inter_processor_interrupt_handler(cpu_self);
 #else
     bsp_interrupt_handler_dispatch(RISCV_INTERRUPT_VECTOR_SOFTWARE);
