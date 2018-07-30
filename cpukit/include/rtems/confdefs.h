@@ -178,8 +178,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
 #endif
 
-#ifndef CONFIGURE_MAXIMUM_PROCESSORS
-  #define CONFIGURE_MAXIMUM_PROCESSORS 1
+/* Ensure that _CONFIGURE_MAXIMUM_PROCESSORS > 1 only in SMP configurations */
+#if defined(CONFIGURE_MAXIMUM_PROCESSORS) && defined(RTEMS_SMP)
+  #define _CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_MAXIMUM_PROCESSORS
+#else
+  #define _CONFIGURE_MAXIMUM_PROCESSORS 1
 #endif
 
 /*
@@ -189,7 +192,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #ifdef RTEMS_SMP
   #if !defined(CONFIGURE_DISABLE_SMP_CONFIGURATION)
     #define _CONFIGURE_SMP_APPLICATION
-  #elif CONFIGURE_MAXIMUM_PROCESSORS > 1
+  #elif _CONFIGURE_MAXIMUM_PROCESSORS > 1
     #error "CONFIGURE_DISABLE_SMP_CONFIGURATION and CONFIGURE_MAXIMUM_PROCESSORS > 1 makes no sense"
   #endif
 #endif
@@ -739,7 +742,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     !defined(CONFIGURE_SCHEDULER_EDF) && \
     !defined(CONFIGURE_SCHEDULER_EDF_SMP) && \
     !defined(CONFIGURE_SCHEDULER_CBS)
-  #if defined(RTEMS_SMP) && CONFIGURE_MAXIMUM_PROCESSORS > 1
+  #if defined(RTEMS_SMP) && _CONFIGURE_MAXIMUM_PROCESSORS > 1
     /**
      * If no scheduler is specified in an SMP configuration, the
      * EDF scheduler is default.
@@ -924,7 +927,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #if !defined(CONFIGURE_SCHEDULER_TABLE_ENTRIES)
     /** Configure the context needed by the scheduler instance */
     #define CONFIGURE_SCHEDULER \
-      RTEMS_SCHEDULER_EDF_SMP(dflt, CONFIGURE_MAXIMUM_PROCESSORS)
+      RTEMS_SCHEDULER_EDF_SMP(dflt, _CONFIGURE_MAXIMUM_PROCESSORS)
 
     /** Configure the controls for this scheduler instance */
     #define CONFIGURE_SCHEDULER_TABLE_ENTRIES \
@@ -991,97 +994,97 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
             RTEMS_SCHEDULER_ASSIGN_PROCESSOR_OPTIONAL \
           )
         _CONFIGURE_SCHEDULER_ASSIGN
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 2
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 2
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 3
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 3
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 4
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 4
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 5
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 5
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 6
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 6
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 7
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 7
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 8
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 8
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 9
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 9
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 10
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 10
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 11
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 11
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 12
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 12
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 13
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 13
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 14
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 14
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 15
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 15
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 16
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 16
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 17
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 17
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 18
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 18
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 19
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 19
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 20
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 20
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 21
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 21
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 22
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 22
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 23
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 23
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 24
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 24
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 25
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 25
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 26
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 26
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 27
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 27
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 28
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 28
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 29
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 29
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 30
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 30
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 31
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 31
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
-        #if CONFIGURE_MAXIMUM_PROCESSORS >= 32
+        #if _CONFIGURE_MAXIMUM_PROCESSORS >= 32
           , _CONFIGURE_SCHEDULER_ASSIGN
         #endif
         #undef _CONFIGURE_SCHEDULER_ASSIGN
@@ -1089,7 +1092,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     };
 
     RTEMS_STATIC_ASSERT(
-      CONFIGURE_MAXIMUM_PROCESSORS
+      _CONFIGURE_MAXIMUM_PROCESSORS
         == RTEMS_ARRAY_SIZE( _Scheduler_Initial_assignments ),
       _Scheduler_Initial_assignments
     );
@@ -1208,7 +1211,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   );
 
   char _Configuration_Interrupt_stack_area_begin[
-    CONFIGURE_MAXIMUM_PROCESSORS * CONFIGURE_INTERRUPT_STACK_SIZE
+    _CONFIGURE_MAXIMUM_PROCESSORS * CONFIGURE_INTERRUPT_STACK_SIZE
   ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
   RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
 
@@ -2702,7 +2705,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This calculates the amount of memory reserved for the IDLE tasks.
  * In an SMP system, each CPU core has its own idle task.
  */
-#define _CONFIGURE_IDLE_TASKS_COUNT CONFIGURE_MAXIMUM_PROCESSORS
+#define _CONFIGURE_IDLE_TASKS_COUNT _CONFIGURE_MAXIMUM_PROCESSORS
 
 /**
  * This defines the formula used to compute the amount of memory
@@ -3102,7 +3105,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MULTIPROCESSING_TABLE,        /* pointer to MP config table */
     #endif
     #ifdef RTEMS_SMP
-      CONFIGURE_MAXIMUM_PROCESSORS,
+      _CONFIGURE_MAXIMUM_PROCESSORS,
     #endif
   };
 #endif
@@ -3114,7 +3117,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   * Instantiate the Per CPU information based upon the user configuration.
   */
  #if defined(CONFIGURE_INIT)
-   Per_CPU_Control_envelope _Per_CPU_Information[CONFIGURE_MAXIMUM_PROCESSORS];
+   Per_CPU_Control_envelope _Per_CPU_Information[_CONFIGURE_MAXIMUM_PROCESSORS];
  #endif
 
 #endif
