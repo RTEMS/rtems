@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -30,12 +30,12 @@
 #include <rtems/bspIo.h>
 #include <rtems/ramdisk.h>
 #include <rtems/bdbuf.h>
-#include <rtems/diskdevs.h>
+
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 const char rtems_test_name[] = "BLOCK 4";
-
-/* forward declarations to avoid warnings */
-static rtems_task Init(rtems_task_argument argument);
 
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
@@ -107,21 +107,37 @@ static void task_high(rtems_task_argument arg)
   exit(0);
 }
 
+static void do_ramdisk_register(
+  uint32_t media_block_size,
+  rtems_blkdev_bnum media_block_count,
+  const char *disk,
+  rtems_disk_device **dd
+)
+{
+  rtems_status_code sc;
+  int fd;
+  int rv;
+
+  sc = ramdisk_register(media_block_size, media_block_count, false, disk);
+  ASSERT_SC(sc);
+
+  fd = open(disk, O_RDWR);
+  rtems_test_assert(fd >= 0);
+
+  rv = rtems_disk_fd_get_disk_device(fd, dd);
+  rtems_test_assert(rv == 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+}
+
 static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  dev_t dev = 0;
 
   TEST_BEGIN();
 
-  sc = rtems_disk_io_initialize();
-  ASSERT_SC(sc);
-
-  sc = ramdisk_register(BLOCK_SIZE, BLOCK_COUNT, false, "/dev/rda", &dev);
-  ASSERT_SC(sc);
-
-  dd = rtems_disk_obtain(dev);
-  rtems_test_assert(dd != NULL);
+  do_ramdisk_register(BLOCK_SIZE, BLOCK_COUNT, "/dev/rda", &dd);
 
   sc = rtems_task_create(
     rtems_build_name(' ', 'L', 'O', 'W'),
@@ -159,8 +175,9 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+
 #define CONFIGURE_MAXIMUM_TASKS 3
-#define CONFIGURE_MAXIMUM_DRIVERS 2
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

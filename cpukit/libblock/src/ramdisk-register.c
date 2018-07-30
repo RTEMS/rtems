@@ -24,57 +24,35 @@
   #include "config.h"
 #endif
 
-#include <rtems.h>
 #include <rtems/ramdisk.h>
-
-const rtems_driver_address_table ramdisk_ops = {
-  .initialization_entry = NULL,
-  RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES
-};
 
 rtems_status_code ramdisk_register(
   uint32_t media_block_size,
   rtems_blkdev_bnum media_block_count,
   bool trace,
-  const char *disk,
-  dev_t *dev_ptr
+  const char *disk
 )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
   ramdisk *rd = NULL;
-  dev_t dev = 0;
-
-  sc = rtems_io_register_driver(0, &ramdisk_ops, &major);
-  if (sc != RTEMS_SUCCESSFUL) {
-    return RTEMS_UNSATISFIED;
-  }
 
   rd = ramdisk_allocate(NULL, media_block_size, media_block_count, trace);
   if (rd == NULL) {
-    rtems_io_unregister_driver(major);
-
     return RTEMS_UNSATISFIED;
   }
 
-  dev = rtems_filesystem_make_dev_t(major, 0);
-
-  sc = rtems_disk_create_phys(
-    dev,
+  sc = rtems_blkdev_create(
+    disk,
     media_block_size,
     media_block_count,
     ramdisk_ioctl,
-    rd,
-    disk
+    rd
   );
   if (sc != RTEMS_SUCCESSFUL) {
     ramdisk_free(rd);
-    rtems_io_unregister_driver(major);
 
     return RTEMS_UNSATISFIED;
   }
-
-  *dev_ptr = dev;
 
   return RTEMS_SUCCESSFUL;
 }

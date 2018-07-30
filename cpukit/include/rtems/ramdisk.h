@@ -84,8 +84,8 @@ rtems_device_driver ramdisk_initialize(
  */
 #define RAMDISK_DRIVER_TABLE_ENTRY \
   { \
-    .initialization_entry = ramdisk_initialize, \
-    RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES \
+    ramdisk_initialize, \
+    NULL, NULL, NULL, NULL, NULL \
   }
 
 #define RAMDISK_DEVICE_BASE_NAME "/dev/rd"
@@ -136,8 +136,6 @@ typedef struct ramdisk {
    */
   bool free_at_delete_request;
 } ramdisk;
-
-extern const rtems_driver_address_table ramdisk_ops;
 
 int ramdisk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp);
 
@@ -212,8 +210,7 @@ rtems_status_code ramdisk_register(
   uint32_t media_block_size,
   rtems_blkdev_bnum media_block_count,
   bool trace,
-  const char *disk,
-  dev_t *dev
+  const char *disk
 );
 
 /** @} */

@@ -43,38 +43,6 @@ const char rtems_test_name[] = "FILE I/O";
  */
 #define RTEMS_DRIVER_AUTO_MAJOR (0)
 
-/*
- * RAM disk driver so you can create a RAM disk from the shell prompt.
- */
-/**
- * The RAM Disk configuration.
- */
-rtems_ramdisk_config rtems_ramdisk_configuration[] =
-{
-  {
-    block_size: 512,
-    block_num:  1024,
-    location:   NULL
-  }
-};
-
-/**
- * The number of RAM Disk configurations.
- */
-size_t rtems_ramdisk_configuration_size = 1;
-
-/**
- * Create the RAM Disk Driver entry.
- */
-rtems_driver_address_table rtems_ramdisk_io_ops = {
-  initialization_entry: ramdisk_initialize,
-  open_entry:           rtems_blkdev_generic_open,
-  close_entry:          rtems_blkdev_generic_close,
-  read_entry:           rtems_blkdev_generic_read,
-  write_entry:          rtems_blkdev_generic_write,
-  control_entry:        rtems_blkdev_generic_ioctl
-};
-
 /**
  * The NV Device descriptor. For this test it is just DRAM.
  */
@@ -404,17 +372,20 @@ disk_test_block_sizes (int argc, char *argv[])
   return disk_test_write_blocks (st.st_rdev, start, count, size);
 }
 
-static size_t
+static uint32_t
 parse_size_arg (const char* arg)
 {
-  size_t size;
-  size_t scalar = 1;
-  
+  uint32_t size;
+  uint32_t scalar = 1;
+
   size = strtoul (arg, 0, 0);
   switch (arg[strlen (arg) - 1])
   {
+    case 'b':
+      scalar = 1;
+      break;
     case 'M':
-      scalar = (size_t) 1000 * 1024;
+      scalar = 1024000;
       break;
     case 'm':
       scalar = 1000000;
@@ -426,26 +397,26 @@ parse_size_arg (const char* arg)
       scalar = 1000;
       break;
     default:
-      printf ("error: invalid scalar (M/m/K/k): %c\n", arg[strlen (arg) - 1]);
+      printf ("error: invalid scalar (b,M/m/K/k): %c\n", arg[strlen (arg) - 1]);
       return 0;
   }
   return size * scalar;
- }
+}
 
 static int
 create_ramdisk (int argc, char *argv[])
 {
-  rtems_device_major_number major;
   rtems_status_code         sc;
   int                       arg;
-  size_t                    size = 0;
-  size_t                    block_size = 0;
+  uint32_t                  size = 524288;
+  uint32_t                  block_size = 512;
+  uint32_t                  block_count;
 
   for (arg = 0; arg < argc; ++arg)
   {
     if (argv[arg][0] == '-')
     {
-      switch (argv[arg][0])
+      switch (argv[arg][1])
       {
         case 's':
           ++arg;
@@ -476,30 +447,24 @@ create_ramdisk (int argc, char *argv[])
     }
   }
 
-  if (block_size)
-    rtems_ramdisk_configuration[0].block_size = block_size;
-  if (size)
-    rtems_ramdisk_configuration[0].block_num =
-      size / rtems_ramdisk_configuration[0].block_size;
-    
+  block_count = size / block_size;
+
   /*
    * Register the RAM Disk driver.
    */
   printf ("Register RAM Disk Driver [blocks=%" PRIu32 \
-          " block-size=%" PRIu32"]:",
-          rtems_ramdisk_configuration[0].block_num,
-          rtems_ramdisk_configuration[0].block_size);
-  
-  sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
-                                 &rtems_ramdisk_io_ops,
-                                 &major);
+          " block-size=%" PRIu32 "]:",
+          block_count,
+          block_size);
+
+  sc = ramdisk_register(block_size, block_count, false, "/dev/rda");
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: ramdisk driver not initialised: %s\n",
             rtems_status_text (sc));
     return 1;
   }
-  
+
   printf ("successful\n");
 
   return 0;
@@ -511,9 +476,9 @@ create_nvdisk (int argc, char *argv[])
   rtems_device_major_number major;
   rtems_status_code         sc;
   int                       arg;
-  size_t                    size = 0;
+  uint32_t                  size = 0;
 #if ADD_WHEN_NVDISK_HAS_CHANGED
-  size_t                    block_size = 0;
+  uint32_t                  block_size = 0;
 #endif
   
   for (arg = 0; arg < argc; ++arg)

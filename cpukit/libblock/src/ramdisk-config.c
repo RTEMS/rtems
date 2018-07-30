@@ -23,7 +23,7 @@
 
 rtems_device_driver
 ramdisk_initialize(
-    rtems_device_major_number major,
+    rtems_device_major_number major RTEMS_UNUSED,
     rtems_device_minor_number minor RTEMS_UNUSED,
     void *arg RTEMS_UNUSED)
 {
@@ -31,10 +31,6 @@ ramdisk_initialize(
     rtems_ramdisk_config *c = rtems_ramdisk_configuration;
     struct ramdisk *r;
     rtems_status_code rc;
-
-    rc = rtems_disk_io_initialize();
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
 
     /*
      * Coverity Id 27 notes that this calloc() is a resource leak.
@@ -48,7 +44,6 @@ ramdisk_initialize(
     r->trace = false;
     for (i = 0; i < rtems_ramdisk_configuration_size; i++, c++, r++)
     {
-        dev_t dev = rtems_filesystem_make_dev_t(major, i);
         char name [] = RAMDISK_DEVICE_BASE_NAME "a";
         name [sizeof(RAMDISK_DEVICE_BASE_NAME) - 1] += i;
         r->block_size = c->block_size;
@@ -73,8 +68,8 @@ ramdisk_initialize(
             r->initialized = true;
             r->area = c->location;
         }
-        rc = rtems_disk_create_phys(dev, c->block_size, c->block_num,
-                                    ramdisk_ioctl, r, name);
+        rc = rtems_blkdev_create(name, c->block_size, c->block_num,
+                                 ramdisk_ioctl, r);
         if (rc != RTEMS_SUCCESSFUL)
         {
             if (r->malloced)

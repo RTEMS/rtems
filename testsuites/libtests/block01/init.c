@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -35,9 +35,6 @@
 
 const char rtems_test_name[] = "BLOCK 1";
 
-/* forward declarations to avoid warnings */
-static rtems_task Init(rtems_task_argument argument);
-
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)
 
 #define ASSERT_SC_EQ(sc, sc_expected) rtems_test_assert((sc) == (sc_expected))
@@ -45,6 +42,11 @@ static rtems_task Init(rtems_task_argument argument);
 #define BLOCK_SIZE 512U
 
 #define BLOCK_COUNT 16U
+
+static const rtems_driver_address_table ramdisk_ops = {
+  .initialization_entry = NULL,
+  RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES
+};
 
 static void test_block_io_control_api(dev_t dev, ramdisk *rd)
 {
