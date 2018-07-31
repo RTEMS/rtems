@@ -153,9 +153,9 @@ bool ns16550_probe(rtems_termios_device_context *base)
   (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
 
   /* XXX */
-  (*setReg)(pNS16550,NS16550_TRANSMIT_BUFFER,(uint8_t)(ulBaudDivisor & 0xffU));
+  (*setReg)(pNS16550,NS16550_DIVISOR_LATCH_L,(uint8_t)(ulBaudDivisor & 0xffU));
   (*setReg)(
-    pNS16550,NS16550_INTERRUPT_ENABLE,
+    pNS16550,NS16550_DIVISOR_LATCH_M,
     (uint8_t)(( ulBaudDivisor >> 8 ) & 0xffU )
   );
 
@@ -660,8 +660,8 @@ static bool ns16550_set_attributes(
      */
 
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, SP_LINE_DLAB);
-    (*setReg)(pNS16550, NS16550_TRANSMIT_BUFFER, ulBaudDivisor&0xff);
-    (*setReg)(pNS16550, NS16550_INTERRUPT_ENABLE, (ulBaudDivisor>>8)&0xff);
+    (*setReg)(pNS16550, NS16550_DIVISOR_LATCH_L, ulBaudDivisor&0xff);
+    (*setReg)(pNS16550, NS16550_DIVISOR_LATCH_M, (ulBaudDivisor>>8)&0xff);
 
     /*
      *  Now write the line control
