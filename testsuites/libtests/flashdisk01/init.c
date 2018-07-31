@@ -325,14 +325,7 @@ rtems_flashdisk_configuration [FLASHDISK_CONFIG_COUNT] = {
 
 uint32_t rtems_flashdisk_configuration_size = FLASHDISK_CONFIG_COUNT;
 
-#define FLASHDISK_DRIVER { \
-  .initialization_entry = flashdisk_initialize, \
-  .open_entry = rtems_blkdev_generic_open, \
-  .close_entry = rtems_blkdev_generic_close, \
-  .read_entry = rtems_blkdev_generic_read, \
-  .write_entry = rtems_blkdev_generic_write, \
-  .control_entry = rtems_blkdev_generic_ioctl \
-}
+#define FLASHDISK_DRIVER { .initialization_entry = flashdisk_initialize }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
