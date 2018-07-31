@@ -53,20 +53,52 @@
 
 static uint32_t NS16550_GetBaudDivisor(ns16550_context *ctx, uint32_t baud)
 {
-  uint32_t clock = ctx->clock;
-  uint32_t baudDivisor = (clock != 0 ? clock : 115200) / (baud * 16);
+  uint32_t clock;
+  uint32_t baudDivisor;
+  uint32_t err;
+  uint32_t actual;
+  uint32_t newErr;
 
-  if (ctx->has_fractional_divider_register) {
+  if (ctx->clock != 0) {
+    clock = ctx->clock;
+  } else {
+    clock = 115200;
+  }
+
+  baudDivisor = clock / (baud * 16);
+
+  if (ctx->has_precision_clock_synthesizer) {
+    uint32_t i;
+
+    err = baud;
+    baudDivisor = 0x0001ffff;
+
+    for (i = 2; i <= 0x10000; i *= 2) {
+      uint32_t fout;
+      uint32_t fin;
+
+      fin = i - 1;
+      fout = (baud * fin * 16) / clock;
+      actual = (clock * fout) / (16 * fin);
+      newErr = actual > baud ? actual - baud : baud - actual;
+
+      if (newErr < err) {
+        err = newErr;
+        baudDivisor = fin | (fout << 16);
+      }
+    }
+  } else if (ctx->has_fractional_divider_register) {
     uint32_t fractionalDivider = 0x10;
-    uint32_t err = baud;
     uint32_t mulVal;
     uint32_t divAddVal;
 
+    err = baud;
     clock /= 16 * baudDivisor;
+
     for (mulVal = 1; mulVal < 16; ++mulVal) {
       for (divAddVal = 0; divAddVal < mulVal; ++divAddVal) {
-        uint32_t actual = (mulVal * clock) / (mulVal + divAddVal);
-        uint32_t newErr = actual > baud ? actual - baud : baud - actual;
+        actual = (mulVal * clock) / (mulVal + divAddVal);
+        newErr = actual > baud ? actual - baud : baud - actual;
 
         if (newErr < err) {
           err = newErr;
@@ -159,18 +191,34 @@ bool ns16550_probe(rtems_termios_device_context *base)
     (uint8_t)(( ulBaudDivisor >> 8 ) & 0xffU )
   );
 
-  /* Clear the divisor latch and set the character size to eight bits */
-  /* with one stop bit and no parity checking. */
-  ucDataByte = EIGHT_BITS;
-  ctx->line_control = ucDataByte;
-  (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
-
   /* Enable and reset transmit and receive FIFOs. TJA     */
   ucDataByte = SP_FIFO_ENABLE;
   (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
 
   ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
+
+  if (ctx->has_precision_clock_synthesizer) {
+    /*
+     * Enable precision clock synthesizer.  This must be done with DLAB == 1 in
+     * the line control register.
+     */
+    ucDataByte |= 0x10;
+  }
+
   (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
+
+  /* Clear the divisor latch and set the character size to eight bits */
+  /* with one stop bit and no parity checking. */
+  ucDataByte = EIGHT_BITS;
+  ctx->line_control = ucDataByte;
+
+  if (ctx->has_precision_clock_synthesizer) {
+    (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 24));
+    (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte );
+    (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 16));
+  } else {
+    (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
+  }
 
   ns16550_enable_interrupts(ctx, NS16550_DISABLE_ALL_INTR);
 
@@ -666,7 +714,13 @@ static bool ns16550_set_attributes(
     /*
      *  Now write the line control
      */
-    (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucLineControl );
+    if (ctx->has_precision_clock_synthesizer) {
+      (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 24));
+      (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucLineControl );
+      (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 16));
+    } else {
+      (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucLineControl );
+    }
 
     rtems_termios_device_lock_release(base, &lock_context);
   }

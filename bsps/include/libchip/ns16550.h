@@ -69,6 +69,7 @@ typedef struct {
   uint32_t clock;
   uint32_t initial_baud;
   bool has_fractional_divider_register;
+  bool has_precision_clock_synthesizer;
   uint8_t modem_control;
   uint8_t line_control;
   uint32_t baud_divisor;
