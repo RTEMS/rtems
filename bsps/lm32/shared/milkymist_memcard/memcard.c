@@ -13,7 +13,6 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
-#include <rtems/diskdevs.h>
 #include <rtems/blkdev.h>
 #include <rtems/status-checks.h>
 #include <errno.h>
@@ -326,45 +325,16 @@ static int memcard_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
   }
 }
 
-static rtems_status_code memcard_disk_init(
-  rtems_device_major_number major, rtems_device_minor_number minor,
-  void *arg)
+rtems_status_code memcard_register(void)
 {
   rtems_status_code sc;
-  dev_t dev;
-
-  sc = rtems_disk_io_initialize();
-  RTEMS_CHECK_SC(sc, "Initialize RTEMS disk IO");
-
-  dev = rtems_filesystem_make_dev_t(major, 0);
 
   sc = memcard_init();
   RTEMS_CHECK_SC(sc, "Initialize memory card");
 
-  sc = rtems_disk_create_phys(dev, BLOCK_SIZE, block_count, memcard_disk_ioctl,
-    NULL, "/dev/memcard");
+  sc = rtems_blkdev_create("/dev/memcard", BLOCK_SIZE, block_count,
+    memcard_disk_ioctl, NULL);
   RTEMS_CHECK_SC(sc, "Create disk device");
-
-  return RTEMS_SUCCESSFUL;
-}
-
-
-static const rtems_driver_address_table memcard_disk_ops = {
-  .initialization_entry = memcard_disk_init,
-  .open_entry = rtems_blkdev_generic_open,
-  .close_entry = rtems_blkdev_generic_close,
-  .read_entry = rtems_blkdev_generic_read,
-  .write_entry = rtems_blkdev_generic_write,
-  .control_entry = rtems_blkdev_generic_ioctl
-};
-
-rtems_status_code memcard_register(void)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-
-  sc = rtems_io_register_driver(0, &memcard_disk_ops, &major);
-  RTEMS_CHECK_SC(sc, "Register disk memory card driver");
 
   return RTEMS_SUCCESSFUL;
 }
