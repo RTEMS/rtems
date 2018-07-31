@@ -50,29 +50,55 @@ void Clock_isr(void *arg);
 typedef struct {
   struct timecounter base;
   volatile RISCV_CLINT_regs *clint;
+  uint32_t interval;
 } riscv_timecounter;
 
 static riscv_timecounter riscv_clock_tc;
 
-static uint32_t riscv_clock_interval;
+static void riscv_clock_write_mtimecmp(
+  volatile RISCV_CLINT_timer_reg *mtimecmp,
+  uint64_t value
+)
+{
+#if __riscv_xlen == 32
+  mtimecmp->val_32[0] = 0xffffffff;
+  mtimecmp->val_32[1] = (uint32_t) (value >> 32);
+  mtimecmp->val_32[0] = (uint32_t) value;
+#elif __riscv_xlen == 64
+  mtimecmp->val_64 = value;
+#endif
+}
+
+static uint64_t riscv_clock_read_mtime(volatile RISCV_CLINT_timer_reg *mtime)
+{
+#if __riscv_xlen == 32
+  uint32_t low;
+  uint32_t high_0;
+  uint32_t high_1;
+
+  do {
+    high_0 = mtime->val_32[1];
+    low = mtime->val_32[0];
+    high_1 = mtime->val_32[1];
+  } while (high_0 != high_1);
+
+  return (((uint64_t) high_0) << 32) | low;
+#elif __riscv_xlen == 64
+  return mtime->val_64;
+#endif
+}
 
 static void riscv_clock_at_tick(riscv_timecounter *tc)
 {
   volatile RISCV_CLINT_regs *clint;
-  uint64_t cmp;
+  uint64_t value;
 
   clint = tc->clint;
 
-  cmp = clint->mtimecmp[0].val_64;
-  cmp += riscv_clock_interval;
+  value = clint->mtimecmp[0].val_64;
+  value += tc->interval;
 
-#if __riscv_xlen == 32
-  clint->mtimecmp[0].val_32[0] = 0xffffffff;
-  clint->mtimecmp[0].val_32[1] = (uint32_t) (cmp >> 32);
-  clint->mtimecmp[0].val_32[0] = (uint32_t) cmp;
-#elif __riscv_xlen == 64
-  clint->mtimecmp[0].val_64 = cmp;
-#endif
+  riscv_clock_write_mtimecmp(&clint->mtimecmp[0], value);
 }
 
 static void riscv_clock_handler_install(void)
@@ -120,19 +146,25 @@ static void riscv_clock_initialize(void)
 {
   const char *fdt;
   riscv_timecounter *tc;
+  volatile RISCV_CLINT_regs *clint;
   uint32_t tb_freq;
   uint64_t us_per_tick;
+  uint32_t interval;
 
   fdt = bsp_fdt_get();
-
-  tc = &riscv_clock_tc;
-  tc->clint = riscv_clint;
-
   tb_freq = riscv_clock_get_timebase_frequency(fdt);
   us_per_tick = rtems_configuration_get_microseconds_per_tick();
-  riscv_clock_interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
+  interval = (uint32_t) ((tb_freq * us_per_tick) / 1000000);
+  clint = riscv_clint;
+  tc = &riscv_clock_tc;
 
-  riscv_clock_at_tick(tc);
+  tc->clint = clint;
+  tc->interval = interval;
+
+  riscv_clock_write_mtimecmp(
+    &clint->mtimecmp[0],
+    riscv_clock_read_mtime(&clint->mtime) + interval
+  );
 
   /* Enable mtimer interrupts */
   set_csr(mie, MIP_MTIP);
