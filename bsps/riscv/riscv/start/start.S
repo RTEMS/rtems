@@ -48,9 +48,12 @@ SYM(_start):
 	LADDR	gp, __global_pointer$
 	.option	pop
 
-	/* Init FPU unit if it's there */
+	/* Init FPU */
+#ifdef __riscv_flen
 	li	t0, MSTATUS_FS
 	csrs	mstatus, t0
+	csrw	fcsr, zero
+#endif
 
 	/* Set exception handler */
 	LADDR	t0, _RISCV_Exception_handler
