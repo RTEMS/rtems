@@ -75,58 +75,6 @@ const rtems_nvdisk_config rtems_nvdisk_configuration[] =
  */
 uint32_t rtems_nvdisk_configuration_size = 1;
 
-/**
- * Create the NV Disk Driver entry.
- */
-rtems_driver_address_table rtems_nvdisk_io_ops = {
-  initialization_entry: rtems_nvdisk_initialize,
-  open_entry:           rtems_blkdev_generic_open,
-  close_entry:          rtems_blkdev_generic_close,
-  read_entry:           rtems_blkdev_generic_read,
-  write_entry:          rtems_blkdev_generic_write,
-  control_entry:        rtems_blkdev_generic_ioctl
-};
-
-#if 0
-int
-setup_nvdisk (const char* mntpath)
-{
-  rtems_device_major_number major;
-  rtems_status_code         sc;
-
-  /*
-   * For our test we do not have any static RAM or EEPROM devices so
-   * we allocate the memory from the heap.
-   */
-  rtems_nv_heap_device_descriptor[0].base =
-    malloc (rtems_nv_heap_device_descriptor[0].size);
-
-  if (!rtems_nv_heap_device_descriptor[0].base)
-  {
-    printf ("error: no memory for NV disk\n");
-    return 1;
-  }
-  
-  /*
-   * Register the NV Disk driver.
-   */
-  printf ("Register NV Disk Driver: ");
-  sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
-                                 &rtems_nvdisk_io_ops,
-                                 &major);
-  if (sc != RTEMS_SUCCESSFUL)
-  {
-    printf ("error: nvdisk driver not initialised: %s\n",
-            rtems_status_text (sc));
-    return 1;
-  }
-  
-  printf ("successful\n");
-
-  return 0;
-}
-#endif
-
 /*
  * Table of FAT file systems that will be mounted
  * with the "fsmount" function.
@@ -473,7 +421,6 @@ create_ramdisk (int argc, char *argv[])
 static int
 create_nvdisk (int argc, char *argv[])
 {
-  rtems_device_major_number major;
   rtems_status_code         sc;
   int                       arg;
   uint32_t                  size = 0;
@@ -485,7 +432,7 @@ create_nvdisk (int argc, char *argv[])
   {
     if (argv[arg][0] == '-')
     {
-      switch (argv[arg][0])
+      switch (argv[arg][1])
       {
         case 's':
           ++arg;
@@ -545,10 +492,8 @@ create_nvdisk (int argc, char *argv[])
           " block-size=%" PRIu32"]:",
           rtems_nv_heap_device_descriptor[0].size,
           rtems_nvdisk_configuration[0].block_size);
-  
-  sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
-                                 &rtems_nvdisk_io_ops,
-                                 &major);
+
+  sc = rtems_nvdisk_initialize (0, 0, NULL);
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: nvdisk driver not initialised: %s\n",

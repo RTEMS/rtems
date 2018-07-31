@@ -35,7 +35,6 @@ rtems_task Init(
 #include <libchip/ide_ctrl.h> /* for general ide driver prototype */
 #endif
 
-#define CONFIGURE_MAXIMUM_DRIVERS           4
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #ifdef RTEMS_BSP_HAS_IDE_DRIVER
