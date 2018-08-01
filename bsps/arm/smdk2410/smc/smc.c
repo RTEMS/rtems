@@ -14,8 +14,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "rtems/blkdev.h"
-#include "rtems/diskdevs.h"
+#include <rtems/blkdev.h>
 #include "smc.h"
 #include <rtems/bspIo.h>
 #include <s3c24xx.h>
@@ -392,19 +391,12 @@ smc_initialize(
     void *arg)
 {
     rtems_status_code rc;
-    dev_t dev;
     uint32_t block_num;
-
-    rc = rtems_disk_io_initialize();
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
 
     smc_init();
     block_num = smc_info.blocks << 5;
 
-    dev = rtems_filesystem_make_dev_t(major, 0);
-    rc = rtems_disk_create_phys(dev, 512, block_num,
-                                    smc_ioctl, NULL, SMC_DEVICE_NAME);
+    rc = rtems_blkdev_create(SMC_DEVICE_NAME, 512, block_num, smc_ioctl, NULL);
 
-    return RTEMS_SUCCESSFUL;
+    return rc;
 }
