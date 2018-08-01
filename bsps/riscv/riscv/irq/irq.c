@@ -84,7 +84,15 @@ void _RISCV_Interrupt_dispatch(uintptr_t mcause, Per_CPU_Control *cpu_self)
       bsp_interrupt_handler_dispatch(
         RISCV_INTERRUPT_VECTOR_EXTERNAL(interrupt_index)
       );
+
       plic_hart_regs->claim_complete = interrupt_index;
+
+      /*
+       * FIXME: It is not clear which fence is necessary here or if a fence is
+       * necessary at all.  The goal is that the complete signal is somehow
+       * recognized by the PLIC before the next claim is issued.
+       */
+      __asm__ volatile ("fence o, i" : : : "memory");
     }
   } else if (mcause == (RISCV_INTERRUPT_SOFTWARE_MACHINE << 1)) {
 #ifdef RTEMS_SMP
