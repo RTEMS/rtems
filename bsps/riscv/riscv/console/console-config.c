@@ -26,6 +26,7 @@
 #include <libchip/ns16550.h>
 
 #include <libfdt.h>
+#include <string.h>
 
 #if RISCV_ENABLE_HTIF_SUPPORT != 0
 static htif_console_context htif_console_instance;
@@ -62,7 +63,7 @@ static int riscv_get_console_node(const void *fdt)
 }
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
-static uint8_t get_register(uintptr_t addr, uint8_t i)
+static uint8_t riscv_console_get_reg_8(uintptr_t addr, uint8_t i)
 {
   volatile uint8_t *reg;
 
@@ -70,14 +71,34 @@ static uint8_t get_register(uintptr_t addr, uint8_t i)
   return reg[i];
 }
 
-static void set_register(uintptr_t addr, uint8_t i, uint8_t val)
+static void riscv_console_set_reg_8(uintptr_t addr, uint8_t i, uint8_t val)
 {
   volatile uint8_t *reg;
 
   reg = (uint8_t *)addr;
   reg[i] = val;
 }
+
+static uint8_t riscv_console_get_reg_32(uintptr_t addr, uint8_t i)
+{
+  volatile uint32_t *reg;
+
+  reg = (uint32_t *) addr;
+  return reg[i];
+}
+
+static void riscv_console_set_reg_32(uintptr_t addr, uint8_t i, uint8_t val)
+{
+  volatile uint32_t *reg;
+
+  reg = (uint32_t *)addr;
+  reg[i] = val;
+}
 #endif
+
+#define RISCV_CONSOLE_IS_COMPATIBLE(actual, actual_len, desired) \
+  (actual_len == sizeof(desired) \
+     && memcmp(actual, desired, sizeof(desired) - 1) == 0)
 
 static void riscv_console_probe(void)
 {
@@ -97,8 +118,16 @@ static void riscv_console_probe(void)
   node = fdt_next_node(fdt, -1, NULL);
 
   while (node >= 0) {
+    const char *compat;
+    int compat_len;
+
+    compat = fdt_getprop(fdt, node, "compatible", &compat_len);
+    if (compat == NULL) {
+      compat_len = 0;
+    }
+
 #if RISCV_ENABLE_HTIF_SUPPORT != 0
-    if (fdt_node_check_compatible(fdt, node, "ucb,htif0") == 0) {
+    if (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ucb,htif0")) {
       htif_console_context_init(&htif_console_instance.base, node);
 
       riscv_console.context = &htif_console_instance.base;
@@ -108,50 +137,59 @@ static void riscv_console_probe(void)
 #endif
 
 #if RISCV_CONSOLE_MAX_NS16550_DEVICES > 0
-    if (fdt_node_check_compatible(fdt, node, "ns16550a") == 0) {
-      if (ns16550_devices < RISCV_CONSOLE_MAX_NS16550_DEVICES) {
-        ns16550_context *ctx;
-        fdt32_t *val;
-        int len;
+    if (
+      (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ns16550a")
+          || RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ns16750"))
+        && ns16550_devices < RISCV_CONSOLE_MAX_NS16550_DEVICES
+    ) {
+      ns16550_context *ctx;
+      fdt32_t *val;
+      int len;
 
-        ctx = &ns16550_instances[ns16550_devices];
-        ctx->get_reg = get_register;
-        ctx->set_reg = set_register;
-        ctx->initial_baud = BSP_CONSOLE_BAUD;
+      ctx = &ns16550_instances[ns16550_devices];
+      ctx->initial_baud = BSP_CONSOLE_BAUD;
 
-        ctx->port = (uintptr_t) riscv_fdt_get_address(fdt, node);
-
-        if (ctx->port == 0) {
-          bsp_fatal(RISCV_FATAL_NO_NS16550_REG_IN_DEVICE_TREE);
-        }
-
-        val = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);
-
-        if (val == NULL || len != 4) {
-          bsp_fatal(RISCV_FATAL_NO_NS16550_CLOCK_FREQUENCY_IN_DEVICE_TREE);
-        }
-
-        ctx->clock = fdt32_to_cpu(val[0]);
-
-        val = (fdt32_t *) fdt_getprop(fdt, node, "interrupts", &len);
-
-        if (val == NULL || len != 4) {
-          bsp_fatal(RISCV_FATAL_NO_NS16550_INTERRUPTS_IN_DEVICE_TREE);
-        }
-
-        ctx->irq = RISCV_INTERRUPT_VECTOR_EXTERNAL(fdt32_to_cpu(val[0]));
-
-        if (node == console_node) {
-          riscv_console.context = &ctx->base;
-          riscv_console.putchar = ns16550_polled_putchar;
-          riscv_console.getchar = ns16550_polled_getchar;
-        }
-
-        rtems_termios_device_context_initialize(&ctx->base, "NS16550");
-        ns16550_probe(&ctx->base);
-
-        ++ns16550_devices;
+      if (RISCV_CONSOLE_IS_COMPATIBLE(compat, compat_len, "ns16750")) {
+        ctx->has_precision_clock_synthesizer = true;
+        ctx->get_reg = riscv_console_get_reg_32;
+        ctx->set_reg = riscv_console_set_reg_32;
+      } else {
+        ctx->get_reg = riscv_console_get_reg_8;
+        ctx->set_reg = riscv_console_set_reg_8;
       }
+
+      ctx->port = (uintptr_t) riscv_fdt_get_address(fdt, node);
+
+      if (ctx->port == 0) {
+        bsp_fatal(RISCV_FATAL_NO_NS16550_REG_IN_DEVICE_TREE);
+      }
+
+      val = (fdt32_t *) fdt_getprop(fdt, node, "clock-frequency", &len);
+
+      if (val == NULL || len != 4) {
+        bsp_fatal(RISCV_FATAL_NO_NS16550_CLOCK_FREQUENCY_IN_DEVICE_TREE);
+      }
+
+      ctx->clock = fdt32_to_cpu(val[0]);
+
+      val = (fdt32_t *) fdt_getprop(fdt, node, "interrupts", &len);
+
+      if (val == NULL || len != 4) {
+        bsp_fatal(RISCV_FATAL_NO_NS16550_INTERRUPTS_IN_DEVICE_TREE);
+      }
+
+      ctx->irq = RISCV_INTERRUPT_VECTOR_EXTERNAL(fdt32_to_cpu(val[0]));
+
+      if (node == console_node) {
+        riscv_console.context = &ctx->base;
+        riscv_console.putchar = ns16550_polled_putchar;
+        riscv_console.getchar = ns16550_polled_getchar;
+      }
+
+      rtems_termios_device_context_initialize(&ctx->base, "NS16550");
+      ns16550_probe(&ctx->base);
+
+      ++ns16550_devices;
     }
 #endif
 
