@@ -1,512 +1,516 @@
-*** TEST BLOCK 6 ***
-lower priority to 31: successful completion
-register disk driver
-disk io init: successful completion
+*** BEGIN OF TEST BLOCK 6 ***
+*** TEST VERSION: 5.0.0.0875607358b38443acf395ad675a4f07794d5f95
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 6d9c77c77d271d1fc2dfe8493d6713930b52a6dd, Newlib 3.0.0)
+register disks
 disk init: /dev/bddisk0
-disk lock: successful completion
+disk lock: RTEMS_SUCCESSFUL
 disk init: /dev/bddisk1
-disk lock: successful completion
-creating task: bdt0: priority: 30: successful completion
-starting task: bdt0: successful completion
-creating task: bdt1: priority: 29: successful completion
-starting task: bdt1: successful completion
-creating task: bdt2: priority: 28: successful completion
-starting task: bdt2: successful completion
+disk lock: RTEMS_SUCCESSFUL
+lower priority to 31: RTEMS_SUCCESSFUL
+creating task: bdt0: priority: 30: RTEMS_SUCCESSFUL
+starting task: bdt0: RTEMS_SUCCESSFUL
+creating task: bdt1: priority: 29: RTEMS_SUCCESSFUL
+starting task: bdt1: RTEMS_SUCCESSFUL
+creating task: bdt2: priority: 28: RTEMS_SUCCESSFUL
+starting task: bdt2: RTEMS_SUCCESSFUL
 test 1: Task 0 get buffer 0 from pool 0
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_get[0]: successful completion
-bdt0: rtems_bdbuf_release[0]: successful completion
-bdt0: rtems_bdbuf_get[0]: successful completion
-bdt0: rtems_bdbuf_release[0]: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
 test 1: passed
 test 2: Task 0 get buffer 0 -> 4 from pool 0, task 2 and 1 block getting
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_get[0]: successful completion
-bdt0: rtems_bdbuf_get[1]: successful completion
-bdt0: rtems_bdbuf_get[2]: successful completion
-bdt0: rtems_bdbuf_get[3]: successful completion
-bdt0: rtems_bdbuf_get[4]: successful completion
-bdt0: wake master: 0a010001: successful completion
-master: wake task 1: 0a010004: successful completion
-master: wake task 2: 0a010005: successful completion
-master: wake task 0: 0a010003: successful completion
-bdt2: rtems_bdbuf_get[0]: blocking ...
-bdt1: rtems_bdbuf_get[0]: blocking ...
-bdt0: rtems_bdbuf_release[0]: unblocks task 1
-bdt2: rtems_bdbuf_get[0]: successful completion
-bdt2: rtems_bdbuf_release[0]: successful completion
-bdt2: wake master: 0a010001: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_get[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_get[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_get[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_get[4]: RTEMS_SUCCESSFUL
+bdt0: wake master: 0a010001: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 1: 0a010004: bdt1: rtems_bdbuf_get[0]: blocking ...
+RTEMS_SUCCESSFUL
+master: wake task 2: 0a010005: bdt2: rtems_bdbuf_get[0]: blocking ...
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_release[0]: unblocks task 1
+bdt2: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt2: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
+bdt2: wake master: 0a010001: RTEMS_SUCCESSFUL
 bdt2: rtems_bdbuf_get[1]: blocking ...
-bdt1: rtems_bdbuf_get[0]: successful completion
-bdt1: rtems_bdbuf_release[0]: successful completion
+bdt1: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[1]: blocking ...
-bdt0: rtems_bdbuf_release[0]: successful completion
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_release[1]: unblocks task 1
-bdt2: rtems_bdbuf_get[1]: successful completion
-bdt2: rtems_bdbuf_release[1]: successful completion
-bdt2: wake master: 0a010001: successful completion
+bdt0: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_release[1]: unblocks task 1
+bdt2: rtems_bdbuf_get[1]: RTEMS_SUCCESSFUL
+bdt2: rtems_bdbuf_release[1]: RTEMS_SUCCESSFUL
+bdt2: wake master: 0a010001: RTEMS_SUCCESSFUL
 bdt2: rtems_bdbuf_get[2]: blocking ...
-bdt1: rtems_bdbuf_get[1]: successful completion
-bdt1: rtems_bdbuf_release[1]: successful completion
+bdt1: rtems_bdbuf_get[1]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[1]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[2]: blocking ...
-bdt0: rtems_bdbuf_release[1]: successful completion
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_release[2]: unblocks task 1
-bdt2: rtems_bdbuf_get[2]: successful completion
-bdt2: rtems_bdbuf_release[2]: successful completion
-bdt2: wake master: 0a010001: successful completion
+bdt0: rtems_bdbuf_release[1]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_release[2]: unblocks task 1
+bdt2: rtems_bdbuf_get[2]: RTEMS_SUCCESSFUL
+bdt2: rtems_bdbuf_release[2]: RTEMS_SUCCESSFUL
+bdt2: wake master: 0a010001: RTEMS_SUCCESSFUL
 bdt2: rtems_bdbuf_get[3]: blocking ...
-bdt1: rtems_bdbuf_get[2]: successful completion
-bdt1: rtems_bdbuf_release[2]: successful completion
+bdt1: rtems_bdbuf_get[2]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[2]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[3]: blocking ...
-bdt0: rtems_bdbuf_release[2]: successful completion
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_release[3]: unblocks task 1
-bdt2: rtems_bdbuf_get[3]: successful completion
-bdt2: rtems_bdbuf_release[3]: successful completion
-bdt2: wake master: 0a010001: successful completion
+bdt0: rtems_bdbuf_release[2]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_release[3]: unblocks task 1
+bdt2: rtems_bdbuf_get[3]: RTEMS_SUCCESSFUL
+bdt2: rtems_bdbuf_release[3]: RTEMS_SUCCESSFUL
+bdt2: wake master: 0a010001: RTEMS_SUCCESSFUL
 bdt2: rtems_bdbuf_get[4]: blocking ...
-bdt1: rtems_bdbuf_get[3]: successful completion
-bdt1: rtems_bdbuf_release[3]: successful completion
+bdt1: rtems_bdbuf_get[3]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[3]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[4]: blocking ...
-bdt0: rtems_bdbuf_release[3]: successful completion
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_release[4]: unblocks task 1
-bdt2: rtems_bdbuf_get[4]: successful completion
-bdt2: rtems_bdbuf_release[4]: successful completion
-bdt2: wake master: 0a010001: successful completion
-bdt1: rtems_bdbuf_get[4]: successful completion
-bdt1: rtems_bdbuf_release[4]: successful completion
-bdt0: rtems_bdbuf_release[4]: successful completion
+bdt0: rtems_bdbuf_release[3]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_release[4]: unblocks task 1
+bdt2: rtems_bdbuf_get[4]: RTEMS_SUCCESSFUL
+bdt2: rtems_bdbuf_release[4]: RTEMS_SUCCESSFUL
+bdt2: wake master: 0a010001: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_get[4]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release[4]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
 test 2: passed
 test 3: Task 0 read buffer 5, modify and release modified
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[5]: successful completion
-bdt0: rtems_bdbuf_release_modified[5]: successful completion
-bdt0: rtems_bdbuf_read[5]: successful completion
-bdt0: rtems_bdbuf_release[5]: successful completion
-bdt0: disk ioctl: wake watcher: 0a010003: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[5]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[5]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[5]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release[5]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+bdt0: disk ioctl: wake watcher: 0a010003: RTEMS_SUCCESSFUL
 test 3: passed
 test 4: Task 0 read all buffers, task 1 blocks waiting for acessed buffer
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[0]: successful completion
-bdt0: rtems_bdbuf_read[1]: successful completion
-bdt0: rtems_bdbuf_read[2]: successful completion
-bdt0: rtems_bdbuf_read[3]: successful completion
-bdt0: rtems_bdbuf_read[4]: successful completion
-bdt0: rtems_bdbuf_read[5]: successful completion
-bdt0: rtems_bdbuf_read[6]: successful completion
-bdt0: rtems_bdbuf_read[7]: successful completion
-bdt0: rtems_bdbuf_read[8]: successful completion
-bdt0: rtems_bdbuf_read[9]: successful completion
-bdt0: rtems_bdbuf_read[10]: successful completion
-bdt0: rtems_bdbuf_read[11]: successful completion
-bdt0: rtems_bdbuf_read[12]: successful completion
-bdt0: rtems_bdbuf_read[13]: successful completion
-bdt0: rtems_bdbuf_read[14]: successful completion
-bdt0: rtems_bdbuf_read[15]: successful completion
-bdt0: rtems_bdbuf_read[16]: successful completion
-bdt0: rtems_bdbuf_read[17]: successful completion
-bdt0: rtems_bdbuf_read[18]: successful completion
-bdt0: rtems_bdbuf_read[19]: successful completion
-bdt0: rtems_bdbuf_read[20]: successful completion
-bdt0: rtems_bdbuf_read[21]: successful completion
-bdt0: rtems_bdbuf_read[22]: successful completion
-bdt0: rtems_bdbuf_read[23]: successful completion
-bdt0: rtems_bdbuf_read[24]: successful completion
-bdt0: rtems_bdbuf_read[25]: successful completion
-bdt0: rtems_bdbuf_read[26]: successful completion
-bdt0: rtems_bdbuf_read[27]: successful completion
-bdt0: rtems_bdbuf_read[28]: successful completion
-bdt0: rtems_bdbuf_read[29]: successful completion
-bdt0: rtems_bdbuf_read[30]: successful completion
-bdt0: rtems_bdbuf_read[31]: successful completion
-bdt0: rtems_bdbuf_read[32]: successful completion
-bdt0: rtems_bdbuf_read[33]: successful completion
-bdt0: rtems_bdbuf_read[34]: successful completion
-bdt0: rtems_bdbuf_read[35]: successful completion
-bdt0: rtems_bdbuf_read[36]: successful completion
-bdt0: rtems_bdbuf_read[37]: successful completion
-bdt0: rtems_bdbuf_read[38]: successful completion
-bdt0: rtems_bdbuf_read[39]: successful completion
-bdt0: rtems_bdbuf_read[40]: successful completion
-bdt0: rtems_bdbuf_read[41]: successful completion
-bdt0: rtems_bdbuf_read[42]: successful completion
-bdt0: rtems_bdbuf_read[43]: successful completion
-bdt0: rtems_bdbuf_read[44]: successful completion
-bdt0: rtems_bdbuf_read[45]: successful completion
-bdt0: rtems_bdbuf_read[46]: successful completion
-bdt0: rtems_bdbuf_read[47]: successful completion
-bdt0: rtems_bdbuf_read[48]: successful completion
-bdt0: rtems_bdbuf_read[49]: successful completion
-bdt0: rtems_bdbuf_read[50]: successful completion
-bdt0: rtems_bdbuf_read[51]: successful completion
-bdt0: rtems_bdbuf_read[52]: successful completion
-bdt0: rtems_bdbuf_read[53]: successful completion
-bdt0: rtems_bdbuf_read[54]: successful completion
-bdt0: rtems_bdbuf_read[55]: successful completion
-bdt0: rtems_bdbuf_read[56]: successful completion
-bdt0: rtems_bdbuf_read[57]: successful completion
-bdt0: rtems_bdbuf_read[58]: successful completion
-bdt0: rtems_bdbuf_read[59]: successful completion
-bdt0: rtems_bdbuf_read[60]: successful completion
-bdt0: rtems_bdbuf_read[61]: successful completion
-bdt0: rtems_bdbuf_read[62]: successful completion
-bdt0: rtems_bdbuf_read[63]: successful completion
-bdt0: wake master: 0a010001: successful completion
-master: wake task 1: 0a010004: successful completion
-bdt1: rtems_bdbuf_get[0]: blocking ...
-master: wake task 0: 0a010003: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[5]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[6]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[7]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[8]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[9]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[10]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[11]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[12]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[13]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[14]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[15]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[16]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[17]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[18]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[19]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[20]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[21]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[22]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[23]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[24]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[25]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[26]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[27]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[28]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[29]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[30]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[31]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[32]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[33]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[34]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[35]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[36]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[37]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[38]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[39]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[40]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[41]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[42]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[43]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[44]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[45]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[46]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[47]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[48]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[49]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[50]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[51]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[52]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[53]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[54]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[55]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[56]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[57]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[58]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[59]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[60]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[61]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[62]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[63]: RTEMS_SUCCESSFUL
+bdt0: wake master: 0a010001: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 1: 0a010004: bdt1: rtems_bdbuf_get[0]: blocking ...
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[0]: unblocks task 1
-bdt1: rtems_bdbuf_get[0]: successful completion
-bdt1: rtems_bdbuf_release[0]: successful completion
+bdt1: rtems_bdbuf_get[0]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[0]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[1]: blocking ...
-bdt0: rtems_bdbuf_release_modified[0]: successful completion
+bdt0: rtems_bdbuf_release_modified[0]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[1]: unblocks task 1
-bdt1: rtems_bdbuf_get[1]: successful completion
-bdt1: rtems_bdbuf_release[1]: successful completion
+bdt1: rtems_bdbuf_get[1]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[1]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[2]: blocking ...
-bdt0: rtems_bdbuf_release_modified[1]: successful completion
+bdt0: rtems_bdbuf_release_modified[1]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[2]: unblocks task 1
-bdt1: rtems_bdbuf_get[2]: successful completion
-bdt1: rtems_bdbuf_release[2]: successful completion
+bdt1: rtems_bdbuf_get[2]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[2]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[3]: blocking ...
-bdt0: rtems_bdbuf_release_modified[2]: successful completion
+bdt0: rtems_bdbuf_release_modified[2]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[3]: unblocks task 1
-bdt1: rtems_bdbuf_get[3]: successful completion
-bdt1: rtems_bdbuf_release[3]: successful completion
+bdt1: rtems_bdbuf_get[3]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[3]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[4]: blocking ...
-bdt0: rtems_bdbuf_release_modified[3]: successful completion
+bdt0: rtems_bdbuf_release_modified[3]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[4]: unblocks task 1
-bdt1: rtems_bdbuf_get[4]: successful completion
-bdt1: rtems_bdbuf_release[4]: successful completion
+bdt1: rtems_bdbuf_get[4]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[4]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[5]: blocking ...
-bdt0: rtems_bdbuf_release_modified[4]: successful completion
+bdt0: rtems_bdbuf_release_modified[4]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[5]: unblocks task 1
-bdt1: rtems_bdbuf_get[5]: successful completion
-bdt1: rtems_bdbuf_release[5]: successful completion
+bdt1: rtems_bdbuf_get[5]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[5]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[6]: blocking ...
-bdt0: rtems_bdbuf_release_modified[5]: successful completion
+bdt0: rtems_bdbuf_release_modified[5]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[6]: unblocks task 1
-bdt1: rtems_bdbuf_get[6]: successful completion
-bdt1: rtems_bdbuf_release[6]: successful completion
+bdt1: rtems_bdbuf_get[6]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[6]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[7]: blocking ...
-bdt0: rtems_bdbuf_release_modified[6]: successful completion
+bdt0: rtems_bdbuf_release_modified[6]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[7]: unblocks task 1
-bdt1: rtems_bdbuf_get[7]: successful completion
-bdt1: rtems_bdbuf_release[7]: successful completion
+bdt1: rtems_bdbuf_get[7]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[7]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[8]: blocking ...
-bdt0: rtems_bdbuf_release_modified[7]: successful completion
+bdt0: rtems_bdbuf_release_modified[7]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[8]: unblocks task 1
-bdt1: rtems_bdbuf_get[8]: successful completion
-bdt1: rtems_bdbuf_release[8]: successful completion
-bdt0: rtems_bdbuf_release_modified[8]: successful completion
+bdt1: rtems_bdbuf_get[8]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[8]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[8]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[9]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[9]: successful completion
+bdt0: rtems_bdbuf_release_modified[9]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[10]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[10]: successful completion
+bdt0: rtems_bdbuf_release_modified[10]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[11]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[11]: successful completion
+bdt0: rtems_bdbuf_release_modified[11]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[12]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[12]: successful completion
+bdt0: rtems_bdbuf_release_modified[12]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[13]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[13]: successful completion
+bdt0: rtems_bdbuf_release_modified[13]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[14]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[14]: successful completion
+bdt0: rtems_bdbuf_release_modified[14]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[15]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[15]: successful completion
+bdt0: rtems_bdbuf_release_modified[15]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[16]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[16]: successful completion
+bdt0: rtems_bdbuf_release_modified[16]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[17]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[17]: successful completion
+bdt0: rtems_bdbuf_release_modified[17]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[18]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[18]: successful completion
+bdt0: rtems_bdbuf_release_modified[18]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[19]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[19]: successful completion
+bdt0: rtems_bdbuf_release_modified[19]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[20]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[20]: successful completion
+bdt0: rtems_bdbuf_release_modified[20]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[21]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[21]: successful completion
+bdt0: rtems_bdbuf_release_modified[21]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[22]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[22]: successful completion
+bdt0: rtems_bdbuf_release_modified[22]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[23]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[23]: successful completion
+bdt0: rtems_bdbuf_release_modified[23]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[24]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[24]: successful completion
+bdt0: rtems_bdbuf_release_modified[24]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[25]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[25]: successful completion
+bdt0: rtems_bdbuf_release_modified[25]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[26]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[26]: successful completion
+bdt0: rtems_bdbuf_release_modified[26]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[27]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[27]: successful completion
+bdt0: rtems_bdbuf_release_modified[27]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[28]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[28]: successful completion
+bdt0: rtems_bdbuf_release_modified[28]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[29]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[29]: successful completion
+bdt0: rtems_bdbuf_release_modified[29]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[30]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[30]: successful completion
+bdt0: rtems_bdbuf_release_modified[30]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[31]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[31]: successful completion
-bdt0: disk ioctl: wake watcher: 0a010003: successful completion
-bdt0: rtems_bdbuf_release_modified[32]: successful completion
-bdt0: rtems_bdbuf_release_modified[33]: successful completion
-bdt0: rtems_bdbuf_release_modified[34]: successful completion
-bdt0: rtems_bdbuf_release_modified[35]: successful completion
-bdt0: rtems_bdbuf_release_modified[36]: successful completion
-bdt0: rtems_bdbuf_release_modified[37]: successful completion
-bdt0: rtems_bdbuf_release_modified[38]: successful completion
-bdt0: rtems_bdbuf_release_modified[39]: successful completion
-bdt0: rtems_bdbuf_release_modified[40]: successful completion
-bdt0: rtems_bdbuf_release_modified[41]: successful completion
-bdt0: rtems_bdbuf_release_modified[42]: successful completion
-bdt0: rtems_bdbuf_release_modified[43]: successful completion
-bdt0: rtems_bdbuf_release_modified[44]: successful completion
-bdt0: rtems_bdbuf_release_modified[45]: successful completion
-bdt0: rtems_bdbuf_release_modified[46]: successful completion
-bdt0: rtems_bdbuf_release_modified[47]: successful completion
-bdt0: rtems_bdbuf_release_modified[48]: successful completion
-bdt0: rtems_bdbuf_release_modified[49]: successful completion
-bdt0: rtems_bdbuf_release_modified[50]: successful completion
-bdt0: rtems_bdbuf_release_modified[51]: successful completion
-bdt0: rtems_bdbuf_release_modified[52]: successful completion
-bdt0: rtems_bdbuf_release_modified[53]: successful completion
-bdt0: rtems_bdbuf_release_modified[54]: successful completion
-bdt0: rtems_bdbuf_release_modified[55]: successful completion
-bdt0: rtems_bdbuf_release_modified[56]: successful completion
-bdt0: rtems_bdbuf_release_modified[57]: successful completion
-bdt0: rtems_bdbuf_release_modified[58]: successful completion
-bdt0: rtems_bdbuf_release_modified[59]: successful completion
-bdt0: rtems_bdbuf_release_modified[60]: successful completion
-bdt0: rtems_bdbuf_release_modified[61]: successful completion
-bdt0: rtems_bdbuf_release_modified[62]: successful completion
-bdt0: rtems_bdbuf_release_modified[63]: successful completion
-bdt0: disk ioctl: wake watcher: 0a010003: successful completion
+bdt0: rtems_bdbuf_release_modified[31]: RTEMS_SUCCESSFUL
+bdt0: disk ioctl: wake watcher: 0a010003: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[32]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[33]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[34]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[35]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[36]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[37]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[38]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[39]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[40]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[41]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[42]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[43]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[44]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[45]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[46]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[47]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[48]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[49]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[50]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[51]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[52]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[53]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[54]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[55]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[56]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[57]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[58]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[59]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[60]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[61]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[62]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[63]: RTEMS_SUCCESSFUL
+bdt0: disk ioctl: wake watcher: 0a010003: RTEMS_SUCCESSFUL
 test 4: passed
 test 5: Task 0 read all buffers, task 1 blocks waiting for new buffer
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[0]: successful completion
-bdt0: rtems_bdbuf_read[1]: successful completion
-bdt0: rtems_bdbuf_read[2]: successful completion
-bdt0: rtems_bdbuf_read[3]: successful completion
-bdt0: rtems_bdbuf_read[4]: successful completion
-bdt0: rtems_bdbuf_read[5]: successful completion
-bdt0: rtems_bdbuf_read[6]: successful completion
-bdt0: rtems_bdbuf_read[7]: successful completion
-bdt0: rtems_bdbuf_read[8]: successful completion
-bdt0: rtems_bdbuf_read[9]: successful completion
-bdt0: rtems_bdbuf_read[10]: successful completion
-bdt0: rtems_bdbuf_read[11]: successful completion
-bdt0: rtems_bdbuf_read[12]: successful completion
-bdt0: rtems_bdbuf_read[13]: successful completion
-bdt0: rtems_bdbuf_read[14]: successful completion
-bdt0: rtems_bdbuf_read[15]: successful completion
-bdt0: rtems_bdbuf_read[16]: successful completion
-bdt0: rtems_bdbuf_read[17]: successful completion
-bdt0: rtems_bdbuf_read[18]: successful completion
-bdt0: rtems_bdbuf_read[19]: successful completion
-bdt0: rtems_bdbuf_read[20]: successful completion
-bdt0: rtems_bdbuf_read[21]: successful completion
-bdt0: rtems_bdbuf_read[22]: successful completion
-bdt0: rtems_bdbuf_read[23]: successful completion
-bdt0: rtems_bdbuf_read[24]: successful completion
-bdt0: rtems_bdbuf_read[25]: successful completion
-bdt0: rtems_bdbuf_read[26]: successful completion
-bdt0: rtems_bdbuf_read[27]: successful completion
-bdt0: rtems_bdbuf_read[28]: successful completion
-bdt0: rtems_bdbuf_read[29]: successful completion
-bdt0: rtems_bdbuf_read[30]: successful completion
-bdt0: rtems_bdbuf_read[31]: successful completion
-bdt0: rtems_bdbuf_read[32]: successful completion
-bdt0: rtems_bdbuf_read[33]: successful completion
-bdt0: rtems_bdbuf_read[34]: successful completion
-bdt0: rtems_bdbuf_read[35]: successful completion
-bdt0: rtems_bdbuf_read[36]: successful completion
-bdt0: rtems_bdbuf_read[37]: successful completion
-bdt0: rtems_bdbuf_read[38]: successful completion
-bdt0: rtems_bdbuf_read[39]: successful completion
-bdt0: rtems_bdbuf_read[40]: successful completion
-bdt0: rtems_bdbuf_read[41]: successful completion
-bdt0: rtems_bdbuf_read[42]: successful completion
-bdt0: rtems_bdbuf_read[43]: successful completion
-bdt0: rtems_bdbuf_read[44]: successful completion
-bdt0: rtems_bdbuf_read[45]: successful completion
-bdt0: rtems_bdbuf_read[46]: successful completion
-bdt0: rtems_bdbuf_read[47]: successful completion
-bdt0: rtems_bdbuf_read[48]: successful completion
-bdt0: rtems_bdbuf_read[49]: successful completion
-bdt0: rtems_bdbuf_read[50]: successful completion
-bdt0: rtems_bdbuf_read[51]: successful completion
-bdt0: rtems_bdbuf_read[52]: successful completion
-bdt0: rtems_bdbuf_read[53]: successful completion
-bdt0: rtems_bdbuf_read[54]: successful completion
-bdt0: rtems_bdbuf_read[55]: successful completion
-bdt0: rtems_bdbuf_read[56]: successful completion
-bdt0: rtems_bdbuf_read[57]: successful completion
-bdt0: rtems_bdbuf_read[58]: successful completion
-bdt0: rtems_bdbuf_read[59]: successful completion
-bdt0: rtems_bdbuf_read[60]: successful completion
-bdt0: rtems_bdbuf_read[61]: successful completion
-bdt0: rtems_bdbuf_read[62]: successful completion
-bdt0: rtems_bdbuf_read[63]: successful completion
-bdt0: wake master: 0a010001: successful completion
-master: wake task 1: 0a010004: successful completion
-bdt1: rtems_bdbuf_get[20]: blocking ...
-master: wake task 0: 0a010003: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[5]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[6]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[7]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[8]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[9]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[10]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[11]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[12]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[13]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[14]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[15]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[16]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[17]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[18]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[19]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[20]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[21]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[22]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[23]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[24]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[25]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[26]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[27]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[28]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[29]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[30]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[31]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[32]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[33]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[34]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[35]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[36]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[37]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[38]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[39]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[40]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[41]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[42]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[43]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[44]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[45]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[46]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[47]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[48]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[49]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[50]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[51]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[52]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[53]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[54]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[55]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[56]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[57]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[58]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[59]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[60]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[61]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[62]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[63]: RTEMS_SUCCESSFUL
+bdt0: wake master: 0a010001: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
+master: wake task 1: 0a010004: bdt1: rtems_bdbuf_get[20]: blocking ...
+RTEMS_SUCCESSFUL
+master: wake task 0: 0a010003: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[0]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[0]: successful completion
+bdt0: rtems_bdbuf_release_modified[0]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[1]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[1]: successful completion
+bdt0: rtems_bdbuf_release_modified[1]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[2]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[2]: successful completion
+bdt0: rtems_bdbuf_release_modified[2]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[3]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[3]: successful completion
+bdt0: rtems_bdbuf_release_modified[3]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[4]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[4]: successful completion
+bdt0: rtems_bdbuf_release_modified[4]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[5]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[5]: successful completion
+bdt0: rtems_bdbuf_release_modified[5]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[6]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[6]: successful completion
+bdt0: rtems_bdbuf_release_modified[6]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[7]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[7]: successful completion
+bdt0: rtems_bdbuf_release_modified[7]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[8]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[8]: successful completion
+bdt0: rtems_bdbuf_release_modified[8]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[9]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[9]: successful completion
+bdt0: rtems_bdbuf_release_modified[9]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[10]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[10]: successful completion
+bdt0: rtems_bdbuf_release_modified[10]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[11]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[11]: successful completion
+bdt0: rtems_bdbuf_release_modified[11]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[12]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[12]: successful completion
+bdt0: rtems_bdbuf_release_modified[12]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[13]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[13]: successful completion
+bdt0: rtems_bdbuf_release_modified[13]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[14]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[14]: successful completion
+bdt0: rtems_bdbuf_release_modified[14]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[15]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[15]: successful completion
+bdt0: rtems_bdbuf_release_modified[15]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[16]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[16]: successful completion
+bdt0: rtems_bdbuf_release_modified[16]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[17]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[17]: successful completion
+bdt0: rtems_bdbuf_release_modified[17]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[18]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[18]: successful completion
+bdt0: rtems_bdbuf_release_modified[18]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[19]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[19]: successful completion
+bdt0: rtems_bdbuf_release_modified[19]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[20]: unblocks task 1
-bdt1: rtems_bdbuf_get[20]: successful completion
-bdt1: rtems_bdbuf_release[20]: successful completion
+bdt1: rtems_bdbuf_get[20]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[20]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[21]: blocking ...
-bdt0: rtems_bdbuf_release_modified[20]: successful completion
+bdt0: rtems_bdbuf_release_modified[20]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[21]: unblocks task 1
-bdt1: rtems_bdbuf_get[21]: successful completion
-bdt1: rtems_bdbuf_release[21]: successful completion
+bdt1: rtems_bdbuf_get[21]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[21]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[22]: blocking ...
-bdt0: rtems_bdbuf_release_modified[21]: successful completion
+bdt0: rtems_bdbuf_release_modified[21]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[22]: unblocks task 1
-bdt1: rtems_bdbuf_get[22]: successful completion
-bdt1: rtems_bdbuf_release[22]: successful completion
+bdt1: rtems_bdbuf_get[22]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[22]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[23]: blocking ...
-bdt0: rtems_bdbuf_release_modified[22]: successful completion
+bdt0: rtems_bdbuf_release_modified[22]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[23]: unblocks task 1
-bdt1: rtems_bdbuf_get[23]: successful completion
-bdt1: rtems_bdbuf_release[23]: successful completion
+bdt1: rtems_bdbuf_get[23]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[23]: RTEMS_SUCCESSFUL
 bdt1: rtems_bdbuf_get[24]: blocking ...
-bdt0: rtems_bdbuf_release_modified[23]: successful completion
+bdt0: rtems_bdbuf_release_modified[23]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[24]: unblocks task 1
-bdt1: rtems_bdbuf_get[24]: successful completion
-bdt1: rtems_bdbuf_release[24]: successful completion
-bdt0: rtems_bdbuf_release_modified[24]: successful completion
+bdt1: rtems_bdbuf_get[24]: RTEMS_SUCCESSFUL
+bdt1: rtems_bdbuf_release[24]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[24]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[25]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[25]: successful completion
+bdt0: rtems_bdbuf_release_modified[25]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[26]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[26]: successful completion
+bdt0: rtems_bdbuf_release_modified[26]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[27]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[27]: successful completion
+bdt0: rtems_bdbuf_release_modified[27]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[28]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[28]: successful completion
+bdt0: rtems_bdbuf_release_modified[28]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[29]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[29]: successful completion
+bdt0: rtems_bdbuf_release_modified[29]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[30]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[30]: successful completion
+bdt0: rtems_bdbuf_release_modified[30]: RTEMS_SUCCESSFUL
 bdt0: rtems_bdbuf_release_modified[31]: unblocks task 1
-bdt0: rtems_bdbuf_release_modified[31]: successful completion
-bdt0: disk ioctl: wake watcher: 0a010003: successful completion
-bdt0: rtems_bdbuf_release_modified[32]: successful completion
-bdt0: rtems_bdbuf_release_modified[33]: successful completion
-bdt0: rtems_bdbuf_release_modified[34]: successful completion
-bdt0: rtems_bdbuf_release_modified[35]: successful completion
-bdt0: rtems_bdbuf_release_modified[36]: successful completion
-bdt0: rtems_bdbuf_release_modified[37]: successful completion
-bdt0: rtems_bdbuf_release_modified[38]: successful completion
-bdt0: rtems_bdbuf_release_modified[39]: successful completion
-bdt0: rtems_bdbuf_release_modified[40]: successful completion
-bdt0: rtems_bdbuf_release_modified[41]: successful completion
-bdt0: rtems_bdbuf_release_modified[42]: successful completion
-bdt0: rtems_bdbuf_release_modified[43]: successful completion
-bdt0: rtems_bdbuf_release_modified[44]: successful completion
-bdt0: rtems_bdbuf_release_modified[45]: successful completion
-bdt0: rtems_bdbuf_release_modified[46]: successful completion
-bdt0: rtems_bdbuf_release_modified[47]: successful completion
-bdt0: rtems_bdbuf_release_modified[48]: successful completion
-bdt0: rtems_bdbuf_release_modified[49]: successful completion
-bdt0: rtems_bdbuf_release_modified[50]: successful completion
-bdt0: rtems_bdbuf_release_modified[51]: successful completion
-bdt0: rtems_bdbuf_release_modified[52]: successful completion
-bdt0: rtems_bdbuf_release_modified[53]: successful completion
-bdt0: rtems_bdbuf_release_modified[54]: successful completion
-bdt0: rtems_bdbuf_release_modified[55]: successful completion
-bdt0: rtems_bdbuf_release_modified[56]: successful completion
-bdt0: rtems_bdbuf_release_modified[57]: successful completion
-bdt0: rtems_bdbuf_release_modified[58]: successful completion
-bdt0: rtems_bdbuf_release_modified[59]: successful completion
-bdt0: rtems_bdbuf_release_modified[60]: successful completion
-bdt0: rtems_bdbuf_release_modified[61]: successful completion
-bdt0: rtems_bdbuf_release_modified[62]: successful completion
-bdt0: rtems_bdbuf_release_modified[63]: successful completion
-bdt0: disk ioctl: wake watcher: 0a010003: successful completion
+bdt0: rtems_bdbuf_release_modified[31]: RTEMS_SUCCESSFUL
+bdt0: disk ioctl: wake watcher: 0a010003: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[32]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[33]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[34]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[35]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[36]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[37]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[38]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[39]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[40]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[41]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[42]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[43]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[44]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[45]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[46]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[47]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[48]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[49]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[50]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[51]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[52]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[53]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[54]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[55]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[56]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[57]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[58]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[59]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[60]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[61]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[62]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[63]: RTEMS_SUCCESSFUL
+bdt0: disk ioctl: wake watcher: 0a010003: RTEMS_SUCCESSFUL
 test 5: passed
 test 6: Task 0 release modified 4 buffers then syncs a 5th buffer
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[0]: successful completion
-bdt0: rtems_bdbuf_read[1]: successful completion
-bdt0: rtems_bdbuf_read[2]: successful completion
-bdt0: rtems_bdbuf_read[3]: successful completion
-bdt0: rtems_bdbuf_read[4]: successful completion
-bdt0: rtems_bdbuf_release_modified[0]: successful completion
-bdt0: rtems_bdbuf_release_modified[1]: successful completion
-bdt0: rtems_bdbuf_release_modified[2]: successful completion
-bdt0: rtems_bdbuf_release_modified[3]: successful completion
-bdt0: rtems_bdbuf_sync[4]: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_sync[4]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
 test 6: passed
 test 7: Task 0 release modified 5 buffers then sync the device
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[0]: successful completion
-bdt0: rtems_bdbuf_read[1]: successful completion
-bdt0: rtems_bdbuf_read[2]: successful completion
-bdt0: rtems_bdbuf_read[3]: successful completion
-bdt0: rtems_bdbuf_read[4]: successful completion
-bdt0: rtems_bdbuf_release_modified[0]: successful completion
-bdt0: rtems_bdbuf_release_modified[1]: successful completion
-bdt0: rtems_bdbuf_release_modified[2]: successful completion
-bdt0: rtems_bdbuf_release_modified[3]: successful completion
-bdt0: rtems_bdbuf_release_modified[4]: successful completion
-bdt0: rtems_bdbuf_syncdev[5:2]: successful completion
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_syncdev[0: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
 test 7: passed
 test 8: Task 0 releases modified 5 buffers is out or order sequence and the driver checks the buffers are in order
-master: wake task 0: 0a010003: successful completion
-bdt0: rtems_bdbuf_read[0]: successful completion
-bdt0: rtems_bdbuf_read[1]: successful completion
-bdt0: rtems_bdbuf_read[2]: successful completion
-bdt0: rtems_bdbuf_read[3]: successful completion
-bdt0: rtems_bdbuf_read[4]: successful completion
-bdt0: rtems_bdbuf_release_modified[4]: successful completion
-bdt0: rtems_bdbuf_release_modified[3]: successful completion
-bdt0: rtems_bdbuf_release_modified[0]: successful completion
-bdt0: rtems_bdbuf_release_modified[1]: successful completion
-bdt0: rtems_bdbuf_release_modified[2]: successful completion
-bdt0: rtems_bdbuf_syncdev[3:2]: checking order
+master: wake task 0: 0a010003: bdt0: rtems_bdbuf_read[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_read[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[4]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[3]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[0]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[1]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_release_modified[2]: RTEMS_SUCCESSFUL
+bdt0: rtems_bdbuf_syncdev[0]: checking order
 disk ioctl: multi-block order check: count = 5
-bdt0: rtems_bdbuf_syncdev[3:2]: successful completion
+bdt0: rtems_bdbuf_syncdev[0]: RTEMS_SUCCESSFUL
+RTEMS_SUCCESSFUL
 test 8: passed
+
 *** END OF TEST BLOCK 6 ***

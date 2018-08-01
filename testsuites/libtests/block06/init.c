@@ -17,6 +17,7 @@
 #endif
 
 #include <errno.h>
+#include <fcntl.h>
 #include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +25,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <inttypes.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/chain.h>
@@ -59,11 +61,6 @@ const rtems_bdbuf_config rtems_bdbuf_configuration =
 #endif
 
 /**
- * Let the IO system allocation the next available major number.
- */
-#define RTEMS_DRIVER_AUTO_MAJOR (0)
-
-/**
  * The bdbuf disk driver base name.
  */
 #define BDBUF_DISK_DEVICE_BASE_NAME "/dev/bddisk"
@@ -84,17 +81,19 @@ typedef enum bdbuf_disk_action
  */
 typedef struct bdbuf_disk
 {
-  const char*       name;
-  rtems_id          lock;
-  uint32_t          block_size;
-  uint32_t          block_count;
-  bdbuf_disk_action driver_action;
-  const char*       watcher_name;
-  rtems_id          watcher;
-  int               watch_count;
-  const char*       waiting_name;
-  rtems_id          waiting;
-  uint32_t          driver_sleep;
+  const char*        name;
+  uint32_t           minor;
+  rtems_id           lock;
+  uint32_t           block_size;
+  uint32_t           block_count;
+  bdbuf_disk_action  driver_action;
+  const char*        watcher_name;
+  rtems_id           watcher;
+  int                watch_count;
+  const char*        waiting_name;
+  rtems_id           waiting;
+  uint32_t           driver_sleep;
+  rtems_disk_device* dd;
 } bdbuf_disk;
 
 /*
@@ -112,10 +111,8 @@ typedef struct bdbuf_task_control
   rtems_id                  task;
   rtems_id                  master;
   int                       test;
-  rtems_device_major_number major;
-  rtems_device_minor_number minor;
+  bdbuf_disk               *bdd;
   bool                      passed;
-  rtems_disk_device        *dd;
 } bdbuf_task_control;
 
 #define BDBUF_TEST_TASKS (3)
@@ -255,11 +252,11 @@ bdbuf_set_disk_driver_watch (bdbuf_task_control* tc, int count)
   /*
    * Set up a disk watch and wait for the write to happen.
    */
-  bdbuf_disk_lock (&bdbuf_disks[tc->minor]);
-  bdbuf_disks[tc->minor].watcher_name = tc->name;
-  bdbuf_disks[tc->minor].watcher = tc->task;
-  bdbuf_disks[tc->minor].watch_count = count;
-  bdbuf_disk_unlock (&bdbuf_disks[tc->minor]);
+  bdbuf_disk_lock (tc->bdd);
+  tc->bdd->watcher_name = tc->name;
+  tc->bdd->watcher = tc->task;
+  tc->bdd->watch_count = count;
+  bdbuf_disk_unlock (tc->bdd);
 }
 
 /**
@@ -271,11 +268,11 @@ bdbuf_clear_disk_driver_watch (bdbuf_task_control* tc)
   /*
    * Set up a disk watch and wait for the write to happen.
    */
-  bdbuf_disk_lock (&bdbuf_disks[tc->minor]);
-  bdbuf_disks[tc->minor].watcher_name = 0;
-  bdbuf_disks[tc->minor].watcher = 0;
-  bdbuf_disks[tc->minor].watch_count = 0;
-  bdbuf_disk_unlock (&bdbuf_disks[tc->minor]);
+  bdbuf_disk_lock (tc->bdd);
+  tc->bdd->watcher_name = 0;
+  tc->bdd->watcher = 0;
+  tc->bdd->watch_count = 0;
+  bdbuf_disk_unlock (tc->bdd);
 }
 
 /**
@@ -304,9 +301,9 @@ bdbuf_set_disk_driver_action (bdbuf_task_control* tc, bdbuf_disk_action action)
   /*
    * Set up a disk action.
    */
-  bdbuf_disk_lock (&bdbuf_disks[tc->minor]);
-  bdbuf_disks[tc->minor].driver_action = action;
-  bdbuf_disk_unlock (&bdbuf_disks[tc->minor]);
+  bdbuf_disk_lock (tc->bdd);
+  tc->bdd->driver_action = action;
+  bdbuf_disk_unlock (tc->bdd);
 }
 
 /**
@@ -332,9 +329,7 @@ bdbuf_sleep (unsigned long msecs)
 static void
 bdbuf_task_control_init (int                       task,
                          bdbuf_task_control*       tc,
-                         rtems_id                  master,
-                         rtems_device_major_number major,
-                         rtems_disk_device        *dd)
+                         rtems_id                  master)
 {
   char name[6];
   sprintf (name, "bdt%d", task);
@@ -344,10 +339,8 @@ bdbuf_task_control_init (int                       task,
   tc->task   = 0;
   tc->master = master;
   tc->test   = 0;
-  tc->major  = major;
-  tc->minor  = 0;
+  tc->bdd    = NULL;
   tc->passed = false;
-  tc->dd     = dd;
 }
 
 static bool
@@ -521,7 +514,7 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
         break;
 
       default:
-        errno = EINVAL;
+        rtems_blkdev_ioctl (dd, req, argp);
         break;
     }
 
@@ -532,35 +525,26 @@ bdbuf_disk_ioctl (rtems_disk_device *dd, uint32_t req, void* argp)
   return errno == 0 ? 0 : -1;
 }
 
-/**
- * BDBuf disk device driver initialization.
- *
- * @param major Disk major device number.
- * @param minor Minor device number, not applicable.
- * @param arg Initialization argument, not applicable.
- */
-static rtems_device_driver
-bdbuf_disk_initialize (rtems_device_major_number major,
-                       rtems_device_minor_number minor,
-                       void*                     arg)
+static rtems_status_code
+bdbuf_disk_initialize(void)
 {
-  rtems_status_code sc;
+  uint32_t minor;
 
-  printf ("disk io init: ");
-  sc = rtems_disk_io_initialize ();
-  if (!bdbuf_test_print_sc (sc, true))
-    return sc;
+  printf ("register disks\n");
 
   for (minor = 0; minor < BDBUF_DISKS; minor++)
   {
     char              name[sizeof (BDBUF_DISK_DEVICE_BASE_NAME) + 10];
     bdbuf_disk*       bdd = &bdbuf_disks[minor];
     rtems_status_code sc;
+    int               fd;
+    int               rv;
 
     snprintf (name, sizeof (name),
               BDBUF_DISK_DEVICE_BASE_NAME "%" PRIu32, minor);
 
     bdd->name = strdup (name);
+    bdd->minor = minor;
 
     printf ("disk init: %s\n", bdd->name);
     printf ("disk lock: ");
@@ -574,9 +558,8 @@ bdbuf_disk_initialize (rtems_device_major_number major,
     bdd->block_size  = 512 * (minor + 1);
     bdd->block_count = BDBUF_SIZE * (minor + 1);
 
-    sc = rtems_disk_create_phys(rtems_filesystem_make_dev_t (major, minor),
-                                bdd->block_size, bdd->block_count,
-                                bdbuf_disk_ioctl, bdd, name);
+    sc = rtems_blkdev_create(name, bdd->block_size, bdd->block_count,
+                             bdbuf_disk_ioctl, bdd);
     if (sc != RTEMS_SUCCESSFUL)
     {
       printf ("disk init: create phys failed: ");
@@ -584,49 +567,17 @@ bdbuf_disk_initialize (rtems_device_major_number major,
       return sc;
     }
 
+    fd = open(name, O_RDWR);
+    rtems_test_assert(fd >= 0);
+
+    rv = rtems_disk_fd_get_disk_device(fd, &bdd->dd);
+    rtems_test_assert(rv == 0);
+
+    rv = close(fd);
+    rtems_test_assert(rv == 0);
   }
+
   return RTEMS_SUCCESSFUL;
-}
-
-/**
- * Create the RAM Disk Driver entry.
- */
-static rtems_driver_address_table bdbuf_disk_io_ops = {
-  initialization_entry: bdbuf_disk_initialize,
-  open_entry:           rtems_blkdev_generic_open,
-  close_entry:          rtems_blkdev_generic_close,
-  read_entry:           rtems_blkdev_generic_read,
-  write_entry:          rtems_blkdev_generic_write,
-  control_entry:        rtems_blkdev_generic_ioctl
-};
-
-/**
- * Set up the disk.
- */
-
-static bool
-bdbuf_tests_setup_disk (rtems_device_major_number *major,
-                        rtems_disk_device        **dd_ptr)
-{
-  rtems_status_code sc;
-  bool ok;
-
-  /*
-   * Register the disk driver.
-   */
-  printf ("register disk driver\n");
-
-  sc = rtems_io_register_driver (RTEMS_DRIVER_AUTO_MAJOR,
-                                 &bdbuf_disk_io_ops,
-                                 major);
-  ok = sc == RTEMS_SUCCESSFUL;
-
-  if (ok) {
-    *dd_ptr = rtems_disk_obtain (rtems_filesystem_make_dev_t (*major, 0));
-    ok = *dd_ptr != NULL;
-  }
-
-  return ok;
 }
 
 static bool
@@ -678,7 +629,7 @@ bdbuf_tests_task_0_test_1 (bdbuf_task_control* tc)
   for (i = 0; (i < 2) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_get[0]: ", tc->name);
-    sc = rtems_bdbuf_get (tc->dd, 0, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, 0, &bd);
     if (!bdbuf_test_print_sc (sc, true))
     {
       passed = false;
@@ -726,7 +677,7 @@ bdbuf_tests_task_0_test_2 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (tc->dd, i, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -791,15 +742,15 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
   tc->passed = false;
   passed = true;
 
-  bdbuf_disk_lock (&bdbuf_disks[tc->minor]);
-  bdbuf_disks[tc->minor].driver_action = BDBUF_DISK_NOOP;
-  bdbuf_disk_unlock (&bdbuf_disks[tc->minor]);
+  bdbuf_disk_lock (tc->bdd);
+  tc->bdd->driver_action = BDBUF_DISK_NOOP;
+  bdbuf_disk_unlock (tc->bdd);
 
   /*
    * Read the buffer and then release it.
    */
   printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
-  sc = rtems_bdbuf_read (tc->dd, 5, &bd);
+  sc = rtems_bdbuf_read (tc->bdd->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
     printf ("%s: rtems_bdbuf_release_modified[5]: ", tc->name);
@@ -812,7 +763,7 @@ bdbuf_tests_task_0_test_3 (bdbuf_task_control* tc)
    * be maintained as modified.
    */
   printf ("%s: rtems_bdbuf_read[5]: ", tc->name);
-  sc = rtems_bdbuf_read (tc->dd, 5, &bd);
+  sc = rtems_bdbuf_read (tc->bdd->dd, 5, &bd);
   if ((passed = bdbuf_test_print_sc (sc, true)))
   {
     printf ("%s: rtems_bdbuf_release[5]: ", tc->name);
@@ -870,7 +821,7 @@ bdbuf_tests_task_0_test_4 (bdbuf_task_control* tc)
   for (i = 0; (i < num) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_read[%zd]: ", tc->name, i);
-    sc = rtems_bdbuf_read (tc->dd, i, &bd);
+    sc = rtems_bdbuf_read (tc->bdd->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -987,7 +938,7 @@ bdbuf_tests_task_0_test_6 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (tc->dd, i, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1044,7 +995,7 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (tc->dd, i, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1062,11 +1013,10 @@ bdbuf_tests_task_0_test_7 (bdbuf_task_control* tc)
 
   if (passed)
   {
-    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIuLEAST32 "]: ",
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIu32 ": ",
                        tc->name,
-                       tc->major,
-                       tc->minor);
-    passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (tc->dd), true);
+                       tc->bdd->minor);
+    passed = bdbuf_test_print_sc (rtems_bdbuf_syncdev (tc->bdd->dd), true);
   }
 
   tc->passed = passed;
@@ -1104,7 +1054,7 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
   for (i = 0; (i < 5) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_read[%d]: ", tc->name, i);
-    sc = rtems_bdbuf_get (tc->dd, i, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, i, &bd);
     if (!bdbuf_test_print_sc (sc, true))
       passed = false;
 
@@ -1144,15 +1094,13 @@ bdbuf_tests_task_0_test_8 (bdbuf_task_control* tc)
      */
     bdbuf_set_disk_driver_action (tc, BDBUF_DISK_BLOCKS_INORDER);
 
-    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIiLEAST32 "]: checking order\n",
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIu32 "]: checking order\n",
                        tc->name,
-                       tc->major,
-                       tc->minor);
-    sc = rtems_bdbuf_syncdev (tc->dd);
-    printf ("%s: rtems_bdbuf_syncdev[%" PRIuLEAST32 ":%" PRIuLEAST32 "]: ",
+                       tc->bdd->minor);
+    sc = rtems_bdbuf_syncdev (tc->bdd->dd);
+    printf ("%s: rtems_bdbuf_syncdev[%" PRIu32 "]: ",
                        tc->name,
-                       tc->major,
-                       tc->minor);
+                       tc->bdd->minor);
     passed = bdbuf_test_print_sc (sc, true);
   }
 
@@ -1247,7 +1195,7 @@ bdbuf_tests_ranged_get_release (bdbuf_task_control* tc,
   for (i = lower; (i < upper) && passed; i++)
   {
     printf ("%s: rtems_bdbuf_get[%d]: blocking ...\n", tc->name, i);
-    sc = rtems_bdbuf_get (tc->dd, i, &bd);
+    sc = rtems_bdbuf_get (tc->bdd->dd, i, &bd);
     printf ("%s: rtems_bdbuf_get[%d]: ", tc->name, i);
     if (!bdbuf_test_print_sc (sc, true))
     {
@@ -1436,7 +1384,7 @@ bdbuf_test_1 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
 
   bdbuf_send_wait_event ("master", "wake task 0", tasks[0].task);
 
@@ -1462,9 +1410,9 @@ bdbuf_test_2 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
-  tasks[1].minor = 0;
-  tasks[2].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
+  tasks[1].bdd = &bdbuf_disks[0];
+  tasks[2].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0 and wait for it to have all the buffers.
@@ -1517,7 +1465,7 @@ bdbuf_test_3 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1542,8 +1490,8 @@ bdbuf_test_4 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
-  tasks[1].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
+  tasks[1].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1588,8 +1536,8 @@ bdbuf_test_5 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
-  tasks[1].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
+  tasks[1].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1632,7 +1580,7 @@ bdbuf_test_6 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1655,7 +1603,7 @@ bdbuf_test_7 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1678,7 +1626,7 @@ bdbuf_test_8 (bdbuf_task_control* tasks)
   /*
    * Use pool 0.
    */
-  tasks[0].minor = 0;
+  tasks[0].bdd = &bdbuf_disks[0];
 
   /*
    * Wake task 0.
@@ -1750,12 +1698,14 @@ static bdbuf_test_ident bdbuf_tests[] =
 static void
 bdbuf_tester (void)
 {
-  rtems_device_major_number major;
   bdbuf_task_control        tasks[BDBUF_TEST_TASKS];
   rtems_task_priority       old_priority;
   int                       t;
   bool                      passed = true;
-  rtems_disk_device        *dd;
+  rtems_status_code         sc;
+
+  sc = bdbuf_disk_initialize();
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
   /*
    * Change priority to a lower one.
@@ -1765,15 +1715,6 @@ bdbuf_tester (void)
                                                 BDBUF_TESTS_PRI_HIGH + 1,
                                                 &old_priority),
                        true);
-
-  /*
-   * This sets up the buffer pools.
-   */
-  if (!bdbuf_tests_setup_disk (&major, &dd))
-  {
-    printf ("disk set up failed\n");
-    return;
-  }
 
   /*
    * Make sure the swapout task has run. The user could block
@@ -1789,9 +1730,7 @@ bdbuf_tester (void)
   for (t = 0; t < BDBUF_TEST_TASKS; t++)
   {
     bdbuf_task_control_init (t, &tasks[t],
-                             rtems_task_self (),
-                             major,
-                             dd);
+                             rtems_task_self ());
 
     if (!bdbuf_tests_create_task (&tasks[t],
                                   BDBUF_TESTS_PRI_HIGH - t,
@@ -1832,10 +1771,11 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+
 #define CONFIGURE_BDBUF_TASK_STACK_SIZE BDBUF_TEST_STACK_SIZE
 
 #define CONFIGURE_MAXIMUM_TASKS (1 + BDBUF_TEST_TASKS)
-#define CONFIGURE_MAXIMUM_DRIVERS 3
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 
 #define CONFIGURE_EXTRA_TASK_STACKS \
