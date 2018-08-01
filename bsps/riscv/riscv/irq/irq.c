@@ -48,8 +48,6 @@
 
 volatile RISCV_CLINT_regs *riscv_clint;
 
-static volatile RISCV_PLIC_regs *riscv_plic;
-
 /*
  * The lovely PLIC has an interrupt enable bit per hart for each interrupt
  * source.  This makes the interrupt enable/disable a bit difficult.  We have
@@ -161,8 +159,6 @@ static void riscv_plic_init(const void *fdt)
   if (plic == NULL) {
     bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
   }
-
-  riscv_plic = plic;
 
   val = fdt_getprop(fdt, node, "riscv,ndev", &len);
   if (val == NULL || len != 4) {
