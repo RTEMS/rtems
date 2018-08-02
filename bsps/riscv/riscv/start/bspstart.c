@@ -74,7 +74,10 @@ void *riscv_fdt_get_address(const void *fdt, int node)
 #ifdef RTEMS_SMP
 uint32_t riscv_hart_count;
 
-uint32_t riscv_hart_phandles[CPU_MAXIMUM_PROCESSORS];
+static uint32_t riscv_hart_phandles[CPU_MAXIMUM_PROCESSORS];
+#else
+static uint32_t riscv_hart_phandles[1];
+#endif
 
 static void riscv_find_harts(void)
 {
@@ -100,7 +103,7 @@ static void riscv_find_harts(void)
 
     hart_index = fdt32_to_cpu(val[0]);
 
-    if (hart_index >= CPU_MAXIMUM_PROCESSORS) {
+    if (hart_index >= RTEMS_ARRAY_SIZE(riscv_hart_phandles)) {
       continue;
     }
 
@@ -140,7 +143,9 @@ static void riscv_find_harts(void)
     riscv_hart_phandles[hart_index] = phandle;
   }
 
+#ifdef RTEMS_SMP
   riscv_hart_count = max_hart_index + 1;
+#endif
 }
 
 uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle)
@@ -155,12 +160,9 @@ uint32_t riscv_get_hart_index_by_phandle(uint32_t phandle)
 
   return UINT32_MAX;
 }
-#endif
 
 void bsp_start(void)
 {
-#ifdef RTEMS_SMP
   riscv_find_harts();
-#endif
   bsp_interrupt_initialize();
 }

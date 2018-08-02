@@ -116,11 +116,9 @@ static void riscv_clint_init(const void *fdt)
 {
   volatile RISCV_CLINT_regs *clint;
   int node;
-#ifdef RTEMS_SMP
   const uint32_t *val;
   int len;
   int i;
-#endif
 
   node = fdt_node_offset_by_compatible(fdt, -1, "riscv,clint0");
 
@@ -131,7 +129,6 @@ static void riscv_clint_init(const void *fdt)
 
   riscv_clint = clint;
 
-#ifdef RTEMS_SMP
   val = fdt_getprop(fdt, node, "interrupts-extended", &len);
 
   for (i = 0; i < len; i += 16) {
@@ -147,7 +144,6 @@ static void riscv_clint_init(const void *fdt)
     cpu->cpu_per_cpu.clint_msip = &clint->msip[i / 16];
     cpu->cpu_per_cpu.clint_mtimecmp = &clint->mtimecmp[i / 16];
   }
-#endif
 }
 
 static void riscv_plic_init(const void *fdt)
