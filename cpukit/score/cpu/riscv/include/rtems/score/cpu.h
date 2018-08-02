@@ -76,12 +76,14 @@ extern "C" {
 
 #endif /* __riscv_xlen */
 
-#define CPU_ALIGNMENT 8
+/* RISC-V ELF psABI specification */
+#define CPU_ALIGNMENT 16
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
 
 #define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
 
+/* RISC-V ELF psABI specification */
 #define CPU_STACK_ALIGNMENT 16
 
 #define CPU_INTERRUPT_STACK_ALIGNMENT CPU_CACHE_LINE_BYTES
