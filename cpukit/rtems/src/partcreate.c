@@ -79,8 +79,8 @@ rtems_status_code rtems_partition_create(
   if ( buffer_size < sizeof( Chain_Node ) )
     return RTEMS_INVALID_SIZE;
 
-  if ( !_Addresses_Is_aligned( starting_address ) )
-     return RTEMS_INVALID_ADDRESS;
+  if ( !_Partition_Is_buffer_area_aligned( starting_address ) )
+    return RTEMS_INVALID_ADDRESS;
 
 #if defined(RTEMS_MULTIPROCESSING)
   if ( _Attributes_Is_global( attribute_set ) &&
