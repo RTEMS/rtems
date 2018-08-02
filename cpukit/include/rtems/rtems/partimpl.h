@@ -110,18 +110,18 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_valid (
   );
 }
 
-/**
- *  @brief Checks if partition is buffer size aligned.
- *
- *  This function returns TRUE if the use of the specified buffer_size
- *  will result in the allocation of buffers whose first byte is
- *  properly aligned, and FALSE otherwise.
- */
-RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned (
-   uint32_t   buffer_size
+RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_size_aligned(
+  uint32_t buffer_size
 )
 {
-  return ((buffer_size % CPU_PARTITION_ALIGNMENT) == 0);
+  return (buffer_size % CPU_SIZEOF_POINTER) == 0;
+}
+
+RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_area_aligned(
+  const void *starting_address
+)
+{
+  return (((uintptr_t) starting_address) % CPU_SIZEOF_POINTER) == 0;
 }
 
 /**

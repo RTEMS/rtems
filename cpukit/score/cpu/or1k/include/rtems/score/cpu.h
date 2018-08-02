@@ -360,21 +360,6 @@ typedef Context_Control CPU_Interrupt_frame;
 #define CPU_HEAP_ALIGNMENT         CPU_ALIGNMENT
 
 /*
- *  This number corresponds to the byte alignment requirement for memory
- *  buffers allocated by the partition manager.  This alignment requirement
- *  may be stricter than that for the data types alignment specified by
- *  CPU_ALIGNMENT.  It is common for the partition to follow the same
- *  alignment requirement as CPU_ALIGNMENT.  If the CPU_ALIGNMENT is strict
- *  enough for the partition, then this should be set to CPU_ALIGNMENT.
- *
- *  NOTE:  This does not have to be a power of 2.  It does have to
- *         be greater or equal to than CPU_ALIGNMENT.
- *
- */
-
-#define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
-
-/*
  *  This number corresponds to the byte alignment requirement for the
  *  stack.  This alignment requirement may be stricter than that for the
  *  data types alignment specified by CPU_ALIGNMENT.  If the CPU_ALIGNMENT

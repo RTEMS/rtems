@@ -73,8 +73,6 @@ extern "C" {
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
 
-#define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
-
 /*
  * Alignment value according to "Nios II Processor Reference" chapter 7
  * "Application Binary Interface" section "Stacks".

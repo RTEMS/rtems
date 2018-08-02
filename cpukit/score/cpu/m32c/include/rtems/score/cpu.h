@@ -445,24 +445,6 @@ typedef struct {
 #define CPU_HEAP_ALIGNMENT         4
 
 /**
- * This number corresponds to the byte alignment requirement for memory
- * buffers allocated by the partition manager.  This alignment requirement
- * may be stricter than that for the data types alignment specified by
- * @ref CPU_ALIGNMENT.  It is common for the partition to follow the same
- * alignment requirement as @ref CPU_ALIGNMENT.  If the @ref CPU_ALIGNMENT is
- * strict enough for the partition, then this should be set to
- * @ref CPU_ALIGNMENT.
- *
- * NOTE:  This does not have to be a power of 2.  It does have to
- *        be greater or equal to than @ref CPU_ALIGNMENT.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_PARTITION_ALIGNMENT    CPU_ALIGNMENT
-
-/**
  * This number corresponds to the byte alignment requirement for the
  * stack.  This alignment requirement may be stricter than that for the
  * data types alignment specified by @ref CPU_ALIGNMENT.  If the

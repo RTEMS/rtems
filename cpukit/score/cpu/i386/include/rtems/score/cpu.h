@@ -362,7 +362,6 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 #define CPU_ALIGNMENT                    4
 #define CPU_HEAP_ALIGNMENT               CPU_ALIGNMENT
-#define CPU_PARTITION_ALIGNMENT          CPU_ALIGNMENT
 
 /*
  *  On i386 thread stacks require no further alignment after allocation

@@ -331,7 +331,6 @@ extern void*                     _VBR;
 
 #define CPU_ALIGNMENT                    4
 #define CPU_HEAP_ALIGNMENT               CPU_ALIGNMENT
-#define CPU_PARTITION_ALIGNMENT          CPU_ALIGNMENT
 
 /*
  *  On m68k thread stacks require no further alignment after allocation

@@ -64,8 +64,19 @@ rtems_status_code rtems_partition_create(
   if ( !id )
     return RTEMS_INVALID_ADDRESS;
 
-  if ( length == 0 || buffer_size == 0 || length < buffer_size ||
-         !_Partition_Is_buffer_size_aligned( buffer_size ) )
+  if ( length == 0 )
+    return RTEMS_INVALID_SIZE;
+
+  if ( buffer_size == 0 )
+    return RTEMS_INVALID_SIZE;
+
+  if ( length < buffer_size )
+    return RTEMS_INVALID_SIZE;
+
+  if ( !_Partition_Is_buffer_size_aligned( buffer_size ) )
+    return RTEMS_INVALID_SIZE;
+
+  if ( buffer_size < sizeof( Chain_Node ) )
     return RTEMS_INVALID_SIZE;
 
   if ( !_Addresses_Is_aligned( starting_address ) )

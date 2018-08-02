@@ -81,8 +81,6 @@ extern "C" {
 
 #define CPU_HEAP_ALIGNMENT CPU_ALIGNMENT
 
-#define CPU_PARTITION_ALIGNMENT CPU_ALIGNMENT
-
 /* RISC-V ELF psABI specification */
 #define CPU_STACK_ALIGNMENT 16
 
