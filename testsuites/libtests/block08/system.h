@@ -24,6 +24,8 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+
 #define CONFIGURE_MAXIMUM_TASKS               28
 #define CONFIGURE_MAXIMUM_TIMERS              10
 #define CONFIGURE_MAXIMUM_SEMAPHORES          20
@@ -39,13 +41,6 @@ rtems_task Init(
 #define CONFIGURE_BDBUF_CACHE_MEMORY_SIZE   (512)
 #define CONFIGURE_BDBUF_BUFFER_MIN_SIZE     (512)
 #define CONFIGURE_BDBUF_BUFFER_MAX_SIZE     (512)
-
-/* 
- * Define it here in order to be able to register
- * test driver after RTEMS initialization phase
- * (on test start-up).
- */
-#define CONFIGURE_MAXIMUM_DRIVERS 5
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

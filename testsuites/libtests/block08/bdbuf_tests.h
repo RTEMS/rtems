@@ -17,7 +17,6 @@
 #include <string.h>
 #include <errno.h>
 #include <rtems/bspIo.h>
-#include <rtems/diskdevs.h>
 #include <rtems/bdbuf.h>
 
 #ifdef __cplusplus
@@ -46,11 +45,7 @@ extern void bdbuf_test4_1_main(void);
 extern void bdbuf_test4_2_main(void);
 extern void bdbuf_test4_3_main(void);
 
-extern rtems_device_driver
-test_disk_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void *arg);
+extern rtems_status_code test_disk_initialize(void);
 
 #define ARRAY_NUM(a_) (sizeof(a_) / sizeof(a_[0]))
 

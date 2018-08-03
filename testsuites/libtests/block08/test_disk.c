@@ -21,8 +21,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "rtems/blkdev.h"
-#include "rtems/diskdevs.h"
+#include <rtems/blkdev.h>
 
 #include "bdbuf_tests.h"
 
@@ -58,9 +57,7 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
         }
 
         default:
-            printf("%s() Unexpected request comes %" PRIu32 "\n",
-                   __FUNCTION__, req);
-            return -1;
+            return rtems_blkdev_ioctl (dd, req, argp);
     }
 
     memset(&msg, 0, sizeof(msg));
@@ -107,25 +104,15 @@ test_disk_ioctl(rtems_disk_device *dd, uint32_t req, void *argp)
     return 0;
 }
 
-rtems_device_driver
-test_disk_initialize(
-    rtems_device_major_number major,
-    rtems_device_minor_number minor,
-    void *arg)
+rtems_status_code
+test_disk_initialize(void)
 {
     rtems_status_code rc;
-    dev_t             dev;
 
-    rc = rtems_disk_io_initialize();
-    if (rc != RTEMS_SUCCESSFUL)
-        return rc;
-
-    dev = rtems_filesystem_make_dev_t(major, minor);
-    rc = rtems_disk_create_phys(dev,
-                                TEST_DISK_BLOCK_SIZE, TEST_DISK_BLOCK_NUM,
-                                test_disk_ioctl,
-                                NULL,
-                                TEST_DISK_NAME);
+    rc = rtems_blkdev_create(TEST_DISK_NAME,
+                             TEST_DISK_BLOCK_SIZE, TEST_DISK_BLOCK_NUM,
+                             test_disk_ioctl,
+                             NULL);
     if (rc != RTEMS_SUCCESSFUL)
     {
         printf("Failed to create %s disk\n", TEST_DISK_NAME);

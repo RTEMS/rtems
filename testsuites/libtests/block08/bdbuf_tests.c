@@ -13,17 +13,20 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/io.h>
-#include <rtems/diskdevs.h>
 #include <rtems/bdbuf.h>
 #include <rtems/inttypes.h>
 #include "bdbuf_tests.h"
 
+#include <tmacros.h>
 
 struct bdbuf_test_descr {
     void (* main)(void);
@@ -105,17 +108,10 @@ bdbuf_test_start_aux_task(rtems_name name,
 void
 run_bdbuf_tests()
 {
-    rtems_disk_device  *disk;
-    rtems_status_code   sc;
-    dev_t               dev = -1;
-    dev_t               test_dev;
-    unsigned int        i;
-
-    rtems_device_major_number  major;
-    rtems_driver_address_table testdisk = {
-        test_disk_initialize,
-        RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES
-    };
+    rtems_status_code sc;
+    unsigned int      i;
+    int               fd;
+    int               rv;
 
     /* Create a message queue to get events from disk driver. */
     sc = rtems_message_queue_create(TEST_TASK_RX_MQUEUE_NAME,
@@ -130,40 +126,17 @@ run_bdbuf_tests()
         return;
     }
 
-    /* Register a disk device that is used in tests */
-    sc = rtems_io_register_driver(0, &testdisk, &major);
-    if (sc != RTEMS_SUCCESSFUL)
-    {
-        printf("Failed to register TEST DEVICE: %d\n", sc);
-        return;
-    }
+    sc = test_disk_initialize();
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-    test_dev = -1;
-    while ((disk = rtems_disk_next(dev)) != NULL)
-    {
-        printf(
-          "DEV: %s [%" PRIdrtems_blkdev_bnum "]\n",
-         disk->name,
-          disk->size
-        );
-        dev = disk->dev;
-        if (strcmp(disk->name, TEST_DISK_NAME) == 0)
-            test_dev = dev;
-        rtems_disk_release(disk);
-    }
+    fd = open(TEST_DISK_NAME, O_RDWR);
+    rtems_test_assert(fd >= 0);
 
-    if (test_dev == (dev_t)-1)
-    {
-        printf("Failed to find %s disk\n", TEST_DISK_NAME);
-        return;
-    }
+    rv = rtems_disk_fd_get_disk_device(fd, &test_dd);
+    rtems_test_assert(rv == 0);
 
-    test_dd = rtems_disk_obtain(test_dev);
-    if (test_dd == NULL)
-    {
-        printf("Failed to obtain %s disk\n", TEST_DISK_NAME);
-        return;
-    }
+    rv = close(fd);
+    rtems_test_assert(rv == 0);
 
     /*
      * On initialization test disk device driver registers
