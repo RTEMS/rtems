@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009-2012 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -26,21 +26,20 @@
 
 #include "tmacros.h"
 
+#include <sys/stat.h>
 #include <assert.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/bdbuf.h>
-#include <rtems/diskdevs.h>
 #include <rtems/test.h>
 
 #include <bsp.h>
 
 const char rtems_test_name[] = "BLOCK 9";
-
-/* forward declarations to avoid warnings */
-static rtems_task Init(rtems_task_argument argument);
 
 #define ASSERT_SC(sc) assert((sc) == RTEMS_SUCCESSFUL)
 
@@ -53,12 +52,9 @@ static rtems_task Init(rtems_task_argument argument);
 #define BLOCK_READ_SUCCESSFUL 2
 #define BLOCK_WRITE_IO_ERROR 3
 
-static char disk_data [BLOCK_COUNT];
+#define DISK_PATH "/disk"
 
-static const rtems_driver_address_table disk_ops = {
-  .initialization_entry = NULL,
-  RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES
-};
+static char disk_data [BLOCK_COUNT];
 
 static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
 {
@@ -123,34 +119,33 @@ static int disk_ioctl(rtems_disk_device *dd, uint32_t req, void *arg)
   }
 }
 
-static rtems_status_code disk_register(
+static void disk_register(
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
-  dev_t *dev_ptr
+  rtems_disk_device **dd
 )
 {
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_device_major_number major = 0;
-  dev_t dev = 0;
+  rtems_status_code sc;
+  int fd;
+  int rv;
 
-  sc = rtems_io_register_driver(0, &disk_ops, &major);
-  ASSERT_SC(sc);
-
-  dev = rtems_filesystem_make_dev_t(major, 0);
-
-  sc = rtems_disk_create_phys(
-    dev,
+  sc = rtems_blkdev_create(
+    DISK_PATH,
     block_size,
     block_count,
     disk_ioctl,
-    NULL,
     NULL
   );
   ASSERT_SC(sc);
 
-  *dev_ptr = dev;
+  fd = open(DISK_PATH, O_RDWR);
+  rtems_test_assert(fd >= 0);
 
-  return RTEMS_SUCCESSFUL;
+  rv = rtems_disk_fd_get_disk_device(fd, dd);
+  rtems_test_assert(rv == 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
 }
 
 static void check_read(
@@ -175,19 +170,11 @@ static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   rtems_bdbuf_buffer *bd = NULL;
-  dev_t dev = 0;
   rtems_disk_device *dd = NULL;
 
   TEST_BEGIN();
 
-  sc = rtems_disk_io_initialize();
-  ASSERT_SC(sc);
-
-  sc = disk_register(BLOCK_SIZE, BLOCK_COUNT, &dev);
-  ASSERT_SC(sc);
-
-  dd = rtems_disk_obtain(dev);
-  assert(dd != NULL);
+  disk_register(BLOCK_SIZE, BLOCK_COUNT, &dd);
 
   check_read(dd, BLOCK_READ_IO_ERROR, RTEMS_IO_ERROR);
   check_read(dd, BLOCK_READ_UNSATISFIED, RTEMS_UNSATISFIED);
@@ -217,13 +204,10 @@ static rtems_task Init(rtems_task_argument argument)
   sc = rtems_bdbuf_read(dd, BLOCK_READ_SUCCESSFUL, &bd);
   ASSERT_SC(sc);
 
-  sc = rtems_disk_delete(dev);
+  sc = unlink(DISK_PATH);
   ASSERT_SC(sc);
 
   sc = rtems_bdbuf_sync(bd);
-  ASSERT_SC(sc);
-
-  sc = rtems_disk_release(dd);
   ASSERT_SC(sc);
 
   TEST_END();
@@ -237,8 +221,9 @@ static rtems_task Init(rtems_task_argument argument)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
 
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
+
 #define CONFIGURE_MAXIMUM_TASKS 1
-#define CONFIGURE_MAXIMUM_DRIVERS 4
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
