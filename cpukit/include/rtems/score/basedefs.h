@@ -257,7 +257,7 @@
  * The name must be a valid designator.
  */
 #define RTEMS_DECLARE_GLOBAL_SYMBOL( _name ) \
-  extern char _name[];
+  extern char _name[]
 
 /**
  * @brief Defines a global symbol with the specified name and value.
