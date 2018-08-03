@@ -487,7 +487,6 @@ partition_table_get(const char *dev_name, rtems_disk_desc_t *disk_desc)
     }
 
     strncpy (disk_desc->dev_name, dev_name, 15);
-    disk_desc->dev = dev_stat.st_rdev;
     disk_desc->sector_size = (dev_stat.st_blksize) ? dev_stat.st_blksize :
                                               RTEMS_IDE_SECTOR_SIZE;
 
@@ -550,10 +549,7 @@ rtems_status_code
 rtems_ide_part_table_initialize(const char *dev_name)
 {
     int                         part_num;
-    dev_t                       dev;
     rtems_disk_desc_t          *disk_desc;
-    rtems_device_major_number   major;
-    rtems_device_minor_number   minor;
     rtems_status_code           rc;
     rtems_part_desc_t          *part_desc;
 
@@ -574,18 +570,10 @@ rtems_ide_part_table_initialize(const char *dev_name)
         return rc;
     }
 
-    /* To avoid device numbers conflicts we have to use for logic disk the same
-     * device major number as ATA device has, and minor number that equals to
-     * sum of logic disk partition number and the minor number of physical disk
-     */
-
-    rtems_filesystem_split_dev_t (disk_desc->dev, major, minor);
-
     /* create logical disks on the physical one */
     for (part_num = 0; part_num < disk_desc->last_log_id; part_num++)
     {
         sprintf(name, "%s%d", dev_name, part_num + 1);
-        dev = rtems_filesystem_make_dev_t(major, ++minor);
 
         part_desc = disk_desc->partitions[part_num];
         if (part_desc == NULL)
@@ -593,8 +581,8 @@ rtems_ide_part_table_initialize(const char *dev_name)
             continue;
         }
 
-        rc = rtems_disk_create_log(dev, disk_desc->dev, part_desc->start,
-                                   part_desc->size, name);
+        rc = rtems_blkdev_create_partition(name, dev_name, part_desc->start,
+                                           part_desc->size);
         if (rc != RTEMS_SUCCESSFUL)
         {
             fprintf(stdout,"Cannot create device %s, error code %d\n", name, rc);

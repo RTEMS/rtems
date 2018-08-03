@@ -126,8 +126,6 @@ typedef struct rtems_part_desc_s {
 
 
 typedef struct rtems_disk_desc_s {
-    dev_t        dev; /* device number */
-
     /* device name in /dev filesystem */
     char         dev_name[RTEMS_IDE_PARTITION_DEV_NAME_LENGTH_MAX];
 
