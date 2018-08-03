@@ -27,9 +27,7 @@
 
 #include <stdlib.h>
 
-#include <rtems/score/apimutex.h>
 #include <rtems/score/processormask.h>
-#include <rtems/score/sysstate.h>
 #include <rtems/malloc.h>
 
 #ifdef BSP_INTERRUPT_USE_INDEX_TABLE
@@ -153,20 +151,6 @@ static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
   #else
     free(e);
   #endif
-}
-
-void bsp_interrupt_lock(void)
-{
-  if (_System_state_Is_up(_System_state_Get())) {
-    _RTEMS_Lock_allocator();
-  }
-}
-
-void bsp_interrupt_unlock(void)
-{
-  if (_System_state_Is_up(_System_state_Get())) {
-    _RTEMS_Unlock_allocator();
-  }
 }
 
 void bsp_interrupt_initialize(void)

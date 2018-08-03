@@ -39,6 +39,11 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/btimer/btimer.c
 
 # IRQ
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-info.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-legacy.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-lock.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-server.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-shell.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/irq.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/irq/intc-icr-init-values.c
 
@@ -55,6 +60,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/net/network.c
 endif
 
 include $(top_srcdir)/../../../../automake/local.am
-include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am
