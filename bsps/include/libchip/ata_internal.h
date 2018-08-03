@@ -165,8 +165,6 @@ extern "C" {
  */
 #define ATA_REGISTERS_POSITION       0xfc
 
-#define ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE     64
-
 #define ATA_MAX_RTEMS_INT_VEC_NUMBER              255
 
 #define ATA_MAX_NAME_LENGTH                       10

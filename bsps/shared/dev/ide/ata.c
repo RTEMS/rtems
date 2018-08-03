@@ -18,7 +18,6 @@
 #include <assert.h>
 #include <string.h> /* for "memset" declaration */
 
-#include <rtems/diskdevs.h>
 #include <rtems/blkdev.h>
 #include <libchip/ide_ctrl_io.h>
 #include <libchip/ide_ctrl_cfg.h>
@@ -119,23 +118,17 @@ ata_add_to_controller_queue(rtems_device_minor_number  ctrl_minor,
  *     error occured
  */
 static rtems_status_code
-ata_io_data_request(dev_t device, rtems_blkdev_request *req)
+ata_io_data_request(ata_ide_dev_t *ata_dev, rtems_blkdev_request *req)
 {
     ata_req_t                 *areq; /* ATA request */
-    rtems_device_minor_number  rel_minor; /* relative minor which indexes
-                                           * ata_devs array
-                                           */
     rtems_device_minor_number  ctrl_minor;
     uint8_t                    dev;
 
-    rel_minor = (rtems_filesystem_dev_minor_t(device)) /
-                ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
-
     /* get controller which serves the ATA device */
-    ctrl_minor = ata_devs[rel_minor].ctrl_minor;
+    ctrl_minor = ata_dev->ctrl_minor;
 
     /* get ATA device identifier (0 or 1) */
-    dev = ata_devs[rel_minor].device;
+    dev = ata_dev->device;
 
     areq = malloc(sizeof(ata_req_t));
     if (areq == NULL)
@@ -251,25 +244,19 @@ ata_io_data_request(dev_t device, rtems_blkdev_request *req)
  *     error occured
  */
 static rtems_status_code
-ata_non_data_request(dev_t device, uint32_t cmd, void *argp)
+ata_non_data_request(ata_ide_dev_t *ata_dev, uint32_t cmd, void *argp)
 {
     rtems_status_code          rc;
     ata_req_t                 *areq;       /* ATA request */
-    rtems_device_minor_number  rel_minor; /* relative minor which indexes
-                                           * ata_devs array
-                                           */
     rtems_device_minor_number  ctrl_minor;
     uint8_t                    dev;
     ata_queue_msg_t            msg;
 
-    rel_minor = (rtems_filesystem_dev_minor_t(device)) /
-                ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
-
     /* get controller which serves the ATA device */
-    ctrl_minor = ata_devs[rel_minor].ctrl_minor;
+    ctrl_minor = ata_dev->ctrl_minor;
 
     /* get ATA device identifier (0 or 1) */
-    dev = ata_devs[rel_minor].device;
+    dev = ata_dev->device;
 
     /* form the request */
     areq = malloc(sizeof(ata_req_t));
@@ -943,18 +930,14 @@ ata_queue_task(rtems_task_argument arg)
 static int
 ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
 {
-    dev_t                     device = rtems_disk_get_device_identifier(dd);
-    rtems_status_code         status;
-    rtems_device_minor_number rel_minor;
-
-    rel_minor = (rtems_filesystem_dev_minor_t(device)) /
-                ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE;
+    ata_ide_dev_t     *ata_dev = rtems_disk_get_driver_data(dd);
+    rtems_status_code  status;
 
     /*
      * in most cases this means that device 'device' is not an registred ATA
      * device
      */
-    if (ata_devs[rel_minor].device == ATA_UNDEFINED_VALUE)
+    if (ata_dev->device == ATA_UNDEFINED_VALUE)
     {
         errno = ENODEV;
         return -1;
@@ -963,11 +946,11 @@ ata_ioctl(rtems_disk_device *dd, uint32_t cmd, void *argp)
     switch (cmd)
     {
         case RTEMS_BLKIO_REQUEST:
-            status = ata_io_data_request(device, (rtems_blkdev_request *)argp);
+            status = ata_io_data_request(ata_dev, (rtems_blkdev_request *)argp);
             break;
 
         case ATAIO_SET_MULTIPLE_MODE:
-            status = ata_non_data_request(device, cmd, argp);
+            status = ata_non_data_request(ata_dev, cmd, argp);
             break;
 
         case RTEMS_BLKIO_CAPABILITIES:
@@ -1102,7 +1085,6 @@ rtems_ata_initialize(rtems_device_major_number major,
     uint16_t          *buffer;
     int                i, dev = 0;
     char               name[ATA_MAX_NAME_LENGTH];
-    dev_t              device;
     ata_int_st_t      *int_st;
 
 #if CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE
@@ -1113,11 +1095,6 @@ rtems_ata_initialize(rtems_device_major_number major,
 
     if (ata_initialized)
         return RTEMS_SUCCESSFUL;
-
-    /* initialization of disk devices library */
-    status = rtems_disk_io_initialize();
-    if (status != RTEMS_SUCCESSFUL)
-        return status;
 
     status = rtems_semaphore_create (rtems_build_name ('A', 'T', 'A', 'L'),
                                      1, RTEMS_ATA_LOCK_ATTRIBS, 0,
@@ -1134,7 +1111,6 @@ rtems_ata_initialize(rtems_device_major_number major,
                  &ata_queue_id);
     if (status != RTEMS_SUCCESSFUL)
     {
-        rtems_disk_io_done();
         return status;
     }
 
@@ -1155,7 +1131,6 @@ rtems_ata_initialize(rtems_device_major_number major,
     if (status != RTEMS_SUCCESSFUL)
     {
         rtems_message_queue_delete(ata_queue_id);
-        rtems_disk_io_done();
         return status;
     }
 
@@ -1168,7 +1143,6 @@ rtems_ata_initialize(rtems_device_major_number major,
     {
         rtems_task_delete(ata_task_id);
         rtems_message_queue_delete(ata_queue_id);
-        rtems_disk_io_done();
         return status;
     }
 
@@ -1177,7 +1151,6 @@ rtems_ata_initialize(rtems_device_major_number major,
     {
         rtems_task_delete(ata_task_id);
         rtems_message_queue_delete(ata_queue_id);
-        rtems_disk_io_done();
         return RTEMS_NO_MEMORY;
     }
 
@@ -1221,7 +1194,6 @@ rtems_ata_initialize(rtems_device_major_number major,
                 free(buffer);
                 rtems_task_delete(ata_task_id);
                 rtems_message_queue_delete(ata_queue_id);
-                rtems_disk_io_done();
                 return RTEMS_NO_MEMORY;
             }
 
@@ -1275,7 +1247,6 @@ rtems_ata_initialize(rtems_device_major_number major,
                 free(buffer);
                 rtems_task_delete(ata_task_id);
                 rtems_message_queue_delete(ata_queue_id);
-                rtems_disk_io_done();
                 return status;
             }
 #if CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE
@@ -1328,17 +1299,13 @@ rtems_ata_initialize(rtems_device_major_number major,
             strcpy(name, "/dev/hd ");
             name[7] = 'a' + 2 * ctrl_minor + dev;
 
-            device = rtems_filesystem_make_dev_t(
-                         major,
-                         (ata_devs_number *
-                          ATA_MINOR_NUM_RESERVED_PER_ATA_DEVICE));
-            status = rtems_disk_create_phys(device, ATA_SECTOR_SIZE,
+            status = rtems_blkdev_create(name, ATA_SECTOR_SIZE,
                 ATA_DEV_INFO(ctrl_minor, dev).lba_avaible ?
                 ATA_DEV_INFO(ctrl_minor, dev).lba_sectors :
                 (ATA_DEV_INFO(ctrl_minor, dev).heads *
                  ATA_DEV_INFO(ctrl_minor, dev).cylinders *
                  ATA_DEV_INFO(ctrl_minor, dev).sectors),
-                ata_ioctl, NULL, name);
+                ata_ioctl, &ata_devs[ata_devs_number]);
             if (status != RTEMS_SUCCESSFUL)
             {
                 ata_devs[ata_devs_number].device = ATA_UNDEFINED_VALUE;
