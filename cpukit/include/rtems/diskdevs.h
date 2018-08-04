@@ -277,21 +277,24 @@ struct rtems_disk_device {
  */
 /**@{**/
 
-static inline dev_t rtems_disk_get_device_identifier(
+/* Use fstat() instead */
+RTEMS_DEPRECATED static inline dev_t rtems_disk_get_device_identifier(
   const rtems_disk_device *dd
 )
 {
   return dd->dev;
 }
 
-static inline rtems_device_major_number rtems_disk_get_major_number(
+/* Use fstat() instead */
+RTEMS_DEPRECATED static inline rtems_device_major_number rtems_disk_get_major_number(
   const rtems_disk_device *dd
 )
 {
   return rtems_filesystem_dev_major_t(dd->dev);
 }
 
-static inline rtems_device_minor_number rtems_disk_get_minor_number(
+/* Use fstat() instead */
+RTEMS_DEPRECATED static inline rtems_device_minor_number rtems_disk_get_minor_number(
   const rtems_disk_device *dd
 )
 {
@@ -340,27 +343,8 @@ static inline rtems_blkdev_bnum rtems_disk_get_block_count(
  */
 /**@{**/
 
-/**
- * @brief Creates a physical disk with device identifier @a dev.
- *
- * The block size @a block_size must be positive.  The disk will have
- * @a block_count blocks.  The block index starts with zero.  The associated disk
- * device driver will be invoked via the IO control handler @a handler.  A
- * device node will be registered in the file system with absolute path @a
- * name, if @a name is not @c NULL.  This function is usually invoked from a
- * block device driver during initialization when a physical device is detected
- * in the system.  The device driver provides an IO control handler to allow
- * block device operations.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
- * @retval RTEMS_INVALID_ADDRESS IO control handler is @c NULL.
- * @retval RTEMS_INVALID_NUMBER Block size is invalid.
- * @retval RTEMS_NO_MEMORY Not enough memory.
- * @retval RTEMS_RESOURCE_IN_USE Disk device descriptor is already in use.
- * @retval RTEMS_UNSATISFIED Cannot create device node.
- */
-rtems_status_code rtems_disk_create_phys(
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_status_code rtems_disk_create_phys(
   dev_t dev,
   uint32_t block_size,
   rtems_blkdev_bnum block_count,
@@ -369,28 +353,8 @@ rtems_status_code rtems_disk_create_phys(
   const char *name
 );
 
-/**
- * @brief Creates a logical disk with device identifier @a dev.
- *
- * A logical disk manages a subset of consecutive blocks contained in the
- * physical disk with identifier @a phys.  The start block index of the logical
- * disk device is @a block_begin.  The block count of the logcal disk will be
- * @a block_count.  The blocks must be within the range of blocks managed by
- * the associated physical disk device.  A device node will be registered in
- * the file system with absolute path @a name, if @a name is not @c NULL.  The
- * block size and IO control handler are inherited by the physical disk.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
- * @retval RTEMS_INVALID_ID Specified physical disk identifier does not
- * correspond to a physical disk.
- * @retval RTEMS_INVALID_NUMBER Begin block or block count are out of range.
- * @retval RTEMS_NO_MEMORY Not enough memory.
- * @retval RTEMS_RESOURCE_IN_USE Disk device descriptor for logical disk
- * identifier is already in use.
- * @retval RTEMS_UNSATISFIED Cannot create device node.
- */
-rtems_status_code rtems_disk_create_log(
+/* Use rtems_blkdev_create_partition() instead */
+RTEMS_DEPRECATED rtems_status_code rtems_disk_create_log(
   dev_t dev,
   dev_t phys,
   rtems_blkdev_bnum block_begin,
@@ -398,42 +362,23 @@ rtems_status_code rtems_disk_create_log(
   const char *name
 );
 
-/**
- * @brief Deletes a physical or logical disk device with identifier @a dev.
- *
- * Marks the disk device as deleted.  When a physical disk device is deleted,
- * all corresponding logical disk devices will marked as deleted too.  Disks
- * that are marked as deleted and have a usage counter of zero will be deleted.
- * The corresponding device nodes will be removed from the file system.  In
- * case of a physical disk deletion the IO control handler will be invoked with
- * a RTEMS_BLKIO_DELETED request.  Disks that are still in use will be deleted
- * upon release.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- * @retval RTEMS_NOT_CONFIGURED Cannot lock disk device operation mutex.
- * @retval RTEMS_INVALID_ID No disk for specified device identifier.
+/*
+ * Use rtems_blkdev_create() or rtems_blkdev_create_partition and unlink()
+ * instead.
  */
-rtems_status_code rtems_disk_delete(dev_t dev);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_delete(dev_t dev);
 
-/**
- * @brief Returns the disk device descriptor for the device identifier @a dev.
- *
- * Increments usage counter by one.  You should release the disk device
- * descriptor with rtems_disk_release().
- *
- * @return Pointer to the disk device descriptor or @c NULL if no corresponding
- * disk exists.
+/*
+ * Use rtems_blkdev_create() or rtems_blkdev_create_partition and open()
+ * instead.
  */
-rtems_disk_device *rtems_disk_obtain(dev_t dev);
+RTEMS_DEPRECATED rtems_disk_device *rtems_disk_obtain(dev_t dev);
 
-/**
- * @brief Releases the disk device descriptor @a dd.
- *
- * Decrements usage counter by one.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
+/*
+ * Use rtems_blkdev_create() or rtems_blkdev_create_partition and close()
+ * instead.
  */
-rtems_status_code rtems_disk_release(rtems_disk_device *dd);
+RTEMS_DEPRECATED rtems_status_code rtems_disk_release(rtems_disk_device *dd);
 
 /** @} */
 
@@ -442,50 +387,21 @@ rtems_status_code rtems_disk_release(rtems_disk_device *dd);
  */
 /**@{**/
 
-/**
- * @brief Initializes the disk device management.
- *
- * This functions returns successful if the disk device management is already
- * initialized.  There is no protection against concurrent access.
- *
- * @retval RTEMS_SUCCESSFUL Successful initialization.
- * @retval RTEMS_NO_MEMORY Not enough memory or no semaphore available.
- * @retval RTEMS_UNSATISFIED Block device buffer initialization failed.
- */
-rtems_status_code rtems_disk_io_initialize(void);
+/* Just remove calls to this function */
+RTEMS_DEPRECATED rtems_status_code rtems_disk_io_initialize(void);
 
-/**
- * @brief Releases all resources allocated for disk device management.
- *
- * There is no protection against concurrent access.  If parts of the system
- * are still in use the behaviour is undefined.
- *
- * @retval RTEMS_SUCCESSFUL Successful operation.
- */
-rtems_status_code rtems_disk_io_done(void);
+/* Just remove calls to this function */
+RTEMS_DEPRECATED rtems_status_code rtems_disk_io_done(void);
 
 /** @} */
 
 /** @} */
 
-/**
- * @brief Disk device iterator.
- *
- * Returns the next disk device descriptor with a device identifier larger than
- * @a dev.  If there is no such device, @c NULL will be returned.  Use minus
- * one to start the search.
- *
- * @code
- * rtems_status_code sc = RTEMS_SUCCESSFUL;
- * rtems_disk_device *dd = (dev_t) -1;
- *
- * while (sc == RTEMS_SUCCESSFUL && (dd = rtems_disk_next(dev)) != NULL) {
- *   dev = rtems_disk_get_device_identifier(dd);
- *   sc = rtems_disk_release(dd);
- * }
- * @endcode
+/*
+ * This functionality no longer available.  There is no global registration for
+ * disk devices.
  */
-rtems_disk_device *rtems_disk_next(dev_t dev);
+RTEMS_DEPRECATED rtems_disk_device *rtems_disk_next(dev_t dev);
 
 /* Internal function, do not use */
 rtems_status_code rtems_disk_init_phys(

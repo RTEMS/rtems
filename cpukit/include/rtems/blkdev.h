@@ -387,70 +387,48 @@ void rtems_blkstats(
   rtems_blkdev_generic_write, \
   rtems_blkdev_generic_ioctl
 
-/**
- * Generic block device read primitive.
- *
- * Implemented using block device buffer management primitives.
- */
-rtems_device_driver
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_device_driver
 rtems_blkdev_generic_read(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
 );
 
-/**
- * Generic block device write primitive.
- *
- * Implemented using block device buffer management primitives.
- */
-rtems_device_driver
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_device_driver
 rtems_blkdev_generic_write(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
 );
 
-/**
- * Generic block device open primitive.
- *
- * Implemented using block device buffer management primitives.
- */
-rtems_device_driver
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_device_driver
 rtems_blkdev_generic_open(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
 );
 
-/**
- * Generic block device close primitive.
- *
- * Implemented using block device buffer management primitives.
- */
-rtems_device_driver
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_device_driver
 rtems_blkdev_generic_close(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
 );
 
-/**
- * Generic block device IO control primitive.
- *
- * Implemented using block device buffer management primitives.
- */
-rtems_device_driver
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED rtems_device_driver
 rtems_blkdev_generic_ioctl(
     rtems_device_major_number major,
     rtems_device_minor_number minor,
     void                    * arg
 );
 
-/**
- * @brief Generic block operations driver address table.
- */
-extern const rtems_driver_address_table rtems_blkdev_generic_ops;
+/* Use rtems_blkdev_create() instead */
+RTEMS_DEPRECATED extern const rtems_driver_address_table rtems_blkdev_generic_ops;
 
 /** @} */
 

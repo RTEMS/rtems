@@ -28,6 +28,8 @@
 #include <rtems/bdbuf.h>
 #include <rtems/thread.h>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 #define DISKTAB_INITIAL_SIZE 8
 
 /* Table of disk devices having the same major number */

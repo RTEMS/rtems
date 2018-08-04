@@ -33,6 +33,8 @@
 #include <rtems/ramdisk.h>
 #include <rtems/diskdevs.h>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 const char rtems_test_name[] = "BLOCK 1";
 
 #define ASSERT_SC(sc) rtems_test_assert((sc) == RTEMS_SUCCESSFUL)

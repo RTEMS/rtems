@@ -24,6 +24,8 @@
 #include "rtems/diskdevs.h"
 #include "rtems/bdbuf.h"
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 /* rtems_blkdev_generic_read --
  *     Generic block device read primitive. Implemented using block device
  *     buffer management primitives.

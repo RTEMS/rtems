@@ -22,6 +22,8 @@
 
 #include <rtems/blkdev.h>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 const rtems_driver_address_table rtems_blkdev_generic_ops = {
 	.initialization_entry = NULL,
 	.open_entry = rtems_blkdev_generic_open,

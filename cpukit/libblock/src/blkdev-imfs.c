@@ -181,13 +181,18 @@ static int rtems_blkdev_imfs_fstat(
   struct stat *buf
 )
 {
-  rtems_blkdev_imfs_context *ctx =
-    IMFS_generic_get_context_by_location(loc);
-  rtems_disk_device *dd = &ctx->dd;
+  rtems_blkdev_imfs_context *ctx;
+  rtems_disk_device *dd;
+  IMFS_jnode_t *node;
 
-  buf->st_rdev = rtems_disk_get_device_identifier(dd);
+  ctx = IMFS_generic_get_context_by_location(loc);
+  dd = &ctx->dd;
+
   buf->st_blksize = rtems_disk_get_block_size(dd);
   buf->st_blocks = rtems_disk_get_block_count(dd);
+
+  node = loc->node_access;
+  buf->st_rdev = IMFS_generic_get_device_identifier_by_node(node);
 
   return IMFS_stat(loc, buf);
 }
