@@ -412,7 +412,7 @@ static void disk_register(
   ASSERT_SC(sc);
 
   fd = open(dev, O_RDWR);
-  rtems_test_assert(rv >= 0);
+  rtems_test_assert(fd >= 0);
 
   rv = rtems_disk_fd_get_disk_device(fd, dd_ptr);
   rtems_test_assert(rv == 0);
