@@ -17,6 +17,8 @@
 
 #include <libchip/ata.h>
 
+#include <rtems/bdbuf.h>
+
 #include <bsp.h>
 
 static ata_driver_dma_pio_single ata_driver_instance;
@@ -27,7 +29,7 @@ rtems_status_code rtems_ata_initialize(
   void *arg
 )
 {
-  rtems_status_code sc = rtems_disk_io_initialize();
+  rtems_status_code sc = rtems_bdbuf_init();
 
   if (sc == RTEMS_SUCCESSFUL) {
     bestcomm_glue_init();
