@@ -397,7 +397,6 @@ rtems_rfs_buffer_sync (rtems_rfs_file_system* fs)
               rtems_status_text (sc));
     result = EIO;
   }
-  rtems_disk_release (fs->disk);
 #else
   if (fsync (fs->device) < 0)
   {
