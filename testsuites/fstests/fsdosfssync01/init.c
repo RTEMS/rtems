@@ -100,9 +100,6 @@ static void test(const char *rda, const char *mnt, const char *file)
   int disk_fd;
   int rv;
 
-  sc = rtems_disk_io_initialize();
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
-
   disk_fd = open(rda, O_RDWR);
   rtems_test_assert(disk_fd >= 0);
 

@@ -176,9 +176,6 @@ static void test( void )
 
   memset( &rqdata, 0, sizeof( rqdata ) );
 
-  sc = rtems_disk_io_initialize();
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
   rv = mkdir( mount_dir, S_IRWXU | S_IRWXG | S_IRWXO );
   rtems_test_assert( 0 == rv );
 

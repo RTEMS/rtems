@@ -48,9 +48,6 @@ static void test(void)
   rtems_bdbuf_buffer *large_bd;
   rtems_blkdev_bnum i;
 
-  sc = rtems_disk_io_initialize();
-  ASSERT_SC(sc);
-
   for (i = 0; i < media_block_count; ++i) {
     buf [i] = i;
   }

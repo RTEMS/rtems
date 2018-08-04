@@ -401,22 +401,13 @@ static void test_blkdev_imfs_errors(void)
 
 static rtems_task Init(rtems_task_argument argument)
 {
-  rtems_status_code sc;
-
   TEST_BEGIN();
-
-  sc = rtems_disk_io_initialize();
-  ASSERT_SC(sc);
 
   test_blkdev_imfs_read_and_write();
   test_blkdev_imfs_parameters();
   test_blkdev_imfs_errors();
 
-  sc = rtems_disk_io_done();
-  ASSERT_SC(sc);
-
   TEST_END();
-
   exit(0);
 }
 

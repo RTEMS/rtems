@@ -358,10 +358,6 @@ void test( void )
   int               file_descriptor;
   uint8_t           fill_pattern = 0;
 
-
-  sc = rtems_disk_io_initialize();
-  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
-
   block_size       = 512;
   block_number     = 4 * 2 * 1024;
   blocks_allocated = 8;
