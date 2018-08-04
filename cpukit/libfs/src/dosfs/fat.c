@@ -505,6 +505,8 @@ fat_init_volume_info(fat_fs_info_t *fs_info, const char *device)
         rtems_set_errno_and_return_minus_one(ENXIO);
     }
 
+    vol->dev = stat_buf.st_dev;
+
     /* Read boot record */
     /* FIXME: Asserts FAT_MAX_BPB_SIZE < bdbuf block size */
     sc = rtems_bdbuf_read( vol->dd, 0, &block);

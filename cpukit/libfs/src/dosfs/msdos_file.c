@@ -130,7 +130,7 @@ msdos_file_stat(
 
     msdos_fs_lock(fs_info);
 
-    buf->st_dev = rtems_disk_get_device_identifier(fs_info->fat.vol.dd);
+    buf->st_dev = fs_info->fat.vol.dev;
     buf->st_ino = fat_fd->ino;
     buf->st_mode  = S_IFREG | S_IRWXU | S_IRWXG | S_IRWXO;
     buf->st_rdev = 0ll;

@@ -331,6 +331,7 @@ typedef struct fat_vol_s
     uint8_t            afat;           /* the number of active FAT */
     int                fd;             /* the disk device file descriptor */
     rtems_disk_device *dd;             /* disk device (see libblock) */
+    dev_t              dev;            /* device identifier of disk */
     void              *private_data;   /* reserved */
 } fat_vol_t;
 
