@@ -236,7 +236,7 @@ disk_test_set_block_size (rtems_disk_device *dd, size_t size)
 }
 
 static int
-disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
+disk_test_write_blocks (const char *name, int start, int count, size_t size)
 {
   int                 block;
   uint32_t*           ip;
@@ -245,15 +245,27 @@ disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
   rtems_bdbuf_buffer* bd;
   rtems_status_code   sc;
   int                 rv = 0;
-  rtems_disk_device* dd;
-  
-  dd = rtems_disk_obtain (dev);
-  if (!dd)
+  rtems_disk_device*  dd;
+  int                 fd;
+
+  fd = open(name, O_RDWR);
+  if (fd < 0) {
+    printf ("error: cannot open disk\n");
+    rv = 1;
+  }
+
+  if (rv == 0 && rtems_disk_fd_get_disk_device(fd, &dd) != 0)
   {
     printf ("error: cannot obtain disk\n");
     rv = 1;
   }
-  
+
+  if (fd >= 0 && close (fd) != 0)
+  {
+    printf ("error: close disk failed\n");
+    rv = 1;
+  }
+
   if (rv == 0 && disk_test_set_block_size (dd, size) < 0)
   {
     printf ("error: set block size failed: %s\n", strerror (errno));
@@ -285,20 +297,17 @@ disk_test_write_blocks (dev_t dev, int start, int count, size_t size)
     }
   }
 
-  rtems_disk_release (dd);
-
   return rv;
 }
 
 static int
 disk_test_block_sizes (int argc, char *argv[])
 {
-  struct stat st;
-  char*       name;
-  int         start;
-  int         count;
-  int         size;
-  
+  char* name;
+  int   start;
+  int   count;
+  int   size;
+
   if (argc != (4 + 1))
   {
     printf ("error: need to supply a device path, start, block and size\n");
@@ -306,18 +315,12 @@ disk_test_block_sizes (int argc, char *argv[])
   }
 
   name = argv[1];
-  
-  if (stat (name, &st) < 0)
-  {
-    printf ("error: stat '%s' failed: %s\n", name, strerror (errno));
-    return 1;
-  }
 
   start = strtoul (argv[2], 0, 0);
   count = strtoul (argv[3], 0, 0);
   size  = strtoul (argv[4], 0, 0);
-  
-  return disk_test_write_blocks (st.st_rdev, start, count, size);
+
+  return disk_test_write_blocks (name, start, count, size);
 }
 
 static uint32_t
