@@ -47,8 +47,8 @@
 rtems_status_code rtems_partition_create(
   rtems_name       name,
   void            *starting_address,
-  uint32_t         length,
-  uint32_t         buffer_size,
+  uintptr_t        length,
+  size_t           buffer_size,
   rtems_attribute  attribute_set,
   rtems_id        *id
 )

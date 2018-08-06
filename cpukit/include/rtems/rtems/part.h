@@ -61,13 +61,13 @@ typedef struct {
   /** This field is the physical starting address of the Partition. */
   void               *starting_address;
   /** This field is the size of the Partition in bytes. */
-  intptr_t            length;
+  uintptr_t           length;
   /** This field is the size of each buffer in bytes */
-  uint32_t            buffer_size;
+  size_t              buffer_size;
   /** This field is the attribute set provided at create time. */
   rtems_attribute     attribute_set;
   /** This field is the of allocated buffers. */
-  uint32_t            number_of_used_blocks;
+  uintptr_t           number_of_used_blocks;
   /** This field is the chain used to manage unallocated buffers. */
   Chain_Control       Memory;
 }   Partition_Control;
@@ -88,8 +88,8 @@ typedef struct {
 rtems_status_code rtems_partition_create(
   rtems_name       name,
   void            *starting_address,
-  uint32_t         length,
-  uint32_t         buffer_size,
+  uintptr_t        length,
+  size_t           buffer_size,
   rtems_attribute  attribute_set,
   rtems_id        *id
 );
