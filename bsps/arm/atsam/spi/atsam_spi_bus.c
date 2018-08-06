@@ -85,6 +85,23 @@ static uint8_t atsam_calculate_dlybcs(uint16_t delay_in_us)
     (BOARD_MCK / delay_in_us) : 0xFF;
 }
 
+static uint32_t atsam_calculate_scbr(uint32_t speed_hz)
+{
+  uint32_t scbr;
+
+  scbr = BOARD_MCK / speed_hz;
+  if (scbr > 0x0FF) {
+    /* Best estimation we can offer with the hardware. */
+    scbr = 0x0FF;
+  }
+  if (scbr == 0) {
+    /* SCBR = 0 isn't allowed. */
+    scbr = 1;
+  }
+
+  return scbr;
+}
+
 static void atsam_set_phase_and_polarity(uint32_t mode, uint32_t *csr)
 {
   uint32_t mode_mask = mode & SPI_MODE_3;
@@ -109,11 +126,13 @@ static void atsam_set_phase_and_polarity(uint32_t mode, uint32_t *csr)
 static void atsam_configure_spi(atsam_spi_bus *bus)
 {
   uint8_t delay_cs;
+  uint32_t scbr;
   uint32_t csr = 0;
   uint32_t mode = 0;
   uint32_t cs = bus->base.cs;
 
   delay_cs = atsam_calculate_dlybcs(bus->base.delay_usecs);
+  scbr = atsam_calculate_scbr(bus->base.speed_hz);
 
   mode |= SPI_MR_DLYBCS(delay_cs);
   mode |= SPI_MR_MSTR;
@@ -137,7 +156,7 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
   csr =
     SPI_DLYBCT(1000, BOARD_MCK) |
     SPI_DLYBS(1000, BOARD_MCK) |
-    SPI_SCBR(bus->base.speed_hz, BOARD_MCK) |
+    SPI_CSR_SCBR(scbr) |
     SPI_CSR_BITS(bus->base.bits_per_word - 8);
 
   atsam_set_phase_and_polarity(bus->base.mode, &csr);
