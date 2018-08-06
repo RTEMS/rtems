@@ -77,7 +77,7 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
 }
 
 /**
- * @brief Subtract two offsets.
+ * @brief Subtract two addresses.
  *
  * This function is used to subtract two addresses.  It returns the
  * resulting offset.
@@ -86,16 +86,13 @@ RTEMS_INLINE_ROUTINE void *_Addresses_Subtract_offset (
  * @param[in] right is the address on the right hand side of the subtraction.
  *
  * @return This method returns the resulting address.
- *
- * @note  The cast of an address to an uint32_t makes this code
- *        dependent on an addresses being thirty two bits.
  */
-RTEMS_INLINE_ROUTINE int32_t _Addresses_Subtract (
+RTEMS_INLINE_ROUTINE intptr_t _Addresses_Subtract(
   const void *left,
   const void *right
 )
 {
-  return (int32_t) ((const char *) left - (const char *) right);
+  return (intptr_t) ( (const char *) left - (const char *) right );
 }
 
 /**

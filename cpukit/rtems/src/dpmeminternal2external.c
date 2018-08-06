@@ -29,7 +29,7 @@ rtems_status_code rtems_port_internal_to_external(
 {
   Dual_ported_memory_Control *the_port;
   ISR_lock_Context            lock_context;
-  uint32_t                    ending;
+  uintptr_t                   length;
 
   if ( external == NULL ) {
     return RTEMS_INVALID_ADDRESS;
@@ -41,12 +41,12 @@ rtems_status_code rtems_port_internal_to_external(
     return RTEMS_INVALID_ID;
   }
 
-  ending = _Addresses_Subtract( internal, the_port->internal_base );
+  length = (uintptr_t) _Addresses_Subtract( internal, the_port->internal_base );
 
-  if ( ending > the_port->length ) {
+  if ( length > the_port->length ) {
     *external = internal;
   } else {
-    *external = _Addresses_Add_offset( the_port->external_base, ending );
+    *external = _Addresses_Add_offset( the_port->external_base, length );
   }
 
   _ISR_lock_ISR_enable( &lock_context );

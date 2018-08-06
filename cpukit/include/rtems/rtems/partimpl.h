@@ -77,9 +77,9 @@ RTEMS_INLINE_ROUTINE bool _Partition_Is_buffer_on_boundary (
   Partition_Control *the_partition
 )
 {
-  uint32_t     offset;
+  intptr_t offset;
 
-  offset = (uint32_t) _Addresses_Subtract(
+  offset = _Addresses_Subtract(
     the_buffer,
     the_partition->starting_address
   );
