@@ -236,8 +236,6 @@ static rtems_task Init(rtems_task_argument argument)
 
 #define CONFIGURE_FILESYSTEM_FTPFS
 
-#define CONFIGURE_MAXIMUM_DRIVERS 2
-
 #define CONFIGURE_MAXIMUM_TASKS (3 + FTP_WORKER_TASK_COUNT)
 #define CONFIGURE_MAXIMUM_SEMAPHORES 2
 

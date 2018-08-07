@@ -152,9 +152,6 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS \
   TERMIOS_TEST_DRIVER_TABLE_ENTRY
 
-/* include an extra slot for registering the termios one dynamically */
-#define CONFIGURE_MAXIMUM_DRIVERS 3
-
 /* we need to be able to open the test device */
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
