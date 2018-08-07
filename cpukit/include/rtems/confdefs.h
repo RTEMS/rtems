@@ -1165,8 +1165,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This specifies the default POSIX thread stack size. By default, it is
  * twice that recommended for the port.
  */
+#ifndef CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
 #define CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE \
   (2 * CONFIGURE_MINIMUM_TASK_STACK_SIZE)
+#endif
 
 /**
  * @brief Idle task stack size configuration.
@@ -3050,6 +3052,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE,
       CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME
     };
+
+    const size_t _Configuration_POSIX_Minimum_stack_size =
+      CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE;
   #endif
 
   /**

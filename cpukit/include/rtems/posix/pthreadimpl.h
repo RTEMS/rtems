@@ -40,7 +40,7 @@ extern "C" {
 /**
  * The following sets the minimum stack size for POSIX threads.
  */
-#define PTHREAD_MINIMUM_STACK_SIZE (_Stack_Minimum() * 2)
+#define PTHREAD_MINIMUM_STACK_SIZE _Configuration_POSIX_Minimum_stack_size
 
 /**
  * The following defines the information control block used to manage
