@@ -31,7 +31,11 @@
 #include <sys/mman.h>
 
 int mprotect(
+#ifdef HAVE_MPROTECT_CONST
   const void *addr,
+#else
+  void *addr,
+#endif
   size_t len,
   int prot
 )

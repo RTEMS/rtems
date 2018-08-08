@@ -116,6 +116,16 @@ RTEMS_CHECK_FUNC([pthread_getattr_np],[
   #include <pthread.h>])
 
 AC_LANG_PUSH(C)
+AC_MSG_CHECKING([for mprotect(const void *, ...)])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <sys/mman.h>
+int mprotect(const void *, size_t, int);
+])],[
+AC_MSG_RESULT([yes])
+AC_DEFINE(HAVE_MPROTECT_CONST, [], [mprotect(const void *, ...)])
+],[
+AC_MSG_RESULT([no])
+])
 AC_MSG_CHECKING([for pthread_mutex_getprioceiling(const pthread_mutex_t *, ...)])
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 #include <pthread.h>
