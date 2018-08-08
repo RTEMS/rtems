@@ -25,7 +25,7 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $FreeBSD: head/sys/sys/event.h 313704 2017-02-13 19:00:09Z ed $
+ * $FreeBSD: head/sys/sys/event.h 336457 2018-07-18 13:04:03Z dab $
  */
 
 #ifndef _SYS_EVENT_H_
