@@ -67,9 +67,13 @@ include_linux_spi_HEADERS += include/linux/spi/spidev.h
 include_machinedir = $(includedir)/machine
 include_machine_HEADERS =
 include_machine_HEADERS += include/machine/_kernel_cpuset.h
+include_machine_HEADERS += include/machine/_kernel_in.h
+include_machine_HEADERS += include/machine/_kernel_in6.h
+include_machine_HEADERS += include/machine/_kernel_mman.h
 include_machine_HEADERS += include/machine/_kernel_param.h
 include_machine_HEADERS += include/machine/_kernel_time.h
 include_machine_HEADERS += include/machine/_kernel_types.h
+include_machine_HEADERS += include/machine/_kernel_uio.h
 include_machine_HEADERS += include/machine/_timecounter.h
 
 include_mghttpddir = $(includedir)/mghttpd
