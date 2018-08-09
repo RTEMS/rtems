@@ -242,58 +242,6 @@ static void apbuart_last_close_interrupt(
   rtems_interrupt_handler_remove(uart->irq, apbuart_isr, tty);
 }
 
-/*
- *  apbuart_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent
-)
-{
-send:
-  while ( (regs->status & APBUART_STATUS_TE) == 0 ) {
-    /* Lower bus utilization while waiting for UART */
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-    __asm__ volatile ("nop"::); __asm__ volatile ("nop"::);
-  }
-
-  if ((ch == '\n') && do_cr_on_newline) {
-    regs->data = (unsigned int) '\r';
-    do_cr_on_newline = 0;
-    goto send;
-  }
-  regs->data = (unsigned int) ch;
-
-  /* Wait until the character has been sent? */
-  if (wait_sent) {
-    while ((regs->status & APBUART_STATUS_TE) == 0)
-      ;
-  }
-}
-
-/*
- *  apbuart_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
-{
-  /* Clear errors */
-  if (regs->status & APBUART_STATUS_ERR)
-    regs->status = ~APBUART_STATUS_ERR;
-
-  if ((regs->status & APBUART_STATUS_DR) == 0)
-    return -1;
-  else
-    return (int) regs->data;
-}
-
 const rtems_termios_device_handler apbuart_handler_interrupt = {
   .first_open = apbuart_first_open_interrupt,
   .last_close = apbuart_last_close_interrupt,

@@ -68,6 +68,8 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/console/console.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/uart/cons.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/uart/apbuart_cons.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/uart/apbuart_polled.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/uart/apbuart_termios.c
 # debugio
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/console/printk_support.c
 
@@ -116,9 +118,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/spw/grspw.c
 endif
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/spw/grspw_pkt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/spw/grspw_router.c
-
-# UART
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/uart/apbuart_termios.c
 
 # I2CMST
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/i2c/i2cmst.c

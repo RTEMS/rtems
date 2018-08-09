@@ -42,12 +42,6 @@
 #endif
 
 /* LEON3 Low level transmit/receive functions provided by debug-uart code */
-extern void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent);
-extern int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 #ifdef LEON3
 extern struct apbuart_regs *leon3_debug_uart; /* The debug UART */
 #endif
@@ -382,52 +376,6 @@ static int apbuart_info(
 	print_line(p, buf);
 
 	return DRVMGR_OK;
-}
-#endif
-
-#ifndef LEON3
-/* This routine transmits a character, it will busy-wait until on character
- * fits in the APBUART Transmit FIFO
- */
-void apbuart_outbyte_polled(
-  struct apbuart_regs *regs,
-  unsigned char ch,
-  int do_cr_on_newline,
-  int wait_sent)
-{
-send:
-	while ((regs->status & LEON_REG_UART_STATUS_THE) == 0) {
-		/* Lower bus utilization while waiting for UART */
-		asm volatile ("nop"::);	asm volatile ("nop"::);
-		asm volatile ("nop"::);	asm volatile ("nop"::);
-		asm volatile ("nop"::);	asm volatile ("nop"::);
-		asm volatile ("nop"::);	asm volatile ("nop"::);
-	}
-	regs->data = (unsigned int) ch;
-
-	if ((ch == '\n') && do_cr_on_newline) {
-		ch = '\r';
-		goto send;
-	}
-
-	/* Wait until the character has been sent? */
-	if (wait_sent) {
-		while ((regs->status & LEON_REG_UART_STATUS_THE) == 0)
-			;
-	}
-}
-
-/* This routine polls for one character, return EOF if no character is available */
-int apbuart_inbyte_nonblocking(struct apbuart_regs *regs)
-{
-	if (regs->status & LEON_REG_UART_STATUS_ERR) {
-		regs->status = ~LEON_REG_UART_STATUS_ERR;
-	}
-
-	if ((regs->status & LEON_REG_UART_STATUS_DR) == 0)
-		return EOF;
-
-	return (int)regs->data;
 }
 #endif
 

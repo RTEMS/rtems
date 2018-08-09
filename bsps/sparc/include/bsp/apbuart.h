@@ -20,6 +20,7 @@
 #define __APBUART_H__
 
 #include <ambapp.h>
+#include <grlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -52,6 +53,15 @@ extern "C" {
 #define APBUART_STATUS_RH 0x100
 #define APBUART_STATUS_TF 0x200
 #define APBUART_STATUS_RF 0x400
+
+void apbuart_outbyte_polled(
+  struct apbuart_regs *regs,
+  unsigned char ch,
+  int do_cr_on_newline,
+  int wait_sent
+);
+
+int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 
 #ifdef __cplusplus
 }
