@@ -78,12 +78,12 @@ static void qoriq_tm27_cause(uint32_t ipi_index)
   qoriq.pic.per_cpu[self].ipidr[ipi_index].reg = UINT32_C(1) << self;
 }
 
-static void Cause_tm27_intr()
+static void Cause_tm27_intr(void)
 {
   qoriq_tm27_cause(IPI_INDEX_LOW);
 }
 
-static void Clear_tm27_intr()
+static void Clear_tm27_intr(void)
 {
   /* Nothing to do */
 }
