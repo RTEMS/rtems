@@ -31,6 +31,7 @@
 #define	PRI_MAX_ITHD		0
 #define	PI_NET			0
 #define	PI_SWI(x)		0
+#define	PRI_MIN_KERN		0
 #define	PVM			0
 #define	PZERO			0
 #define	PSOCK			0
