@@ -38,7 +38,7 @@ static int tm27_exception_handler( BSP_Exception_frame *frame, unsigned number)
 	return 0;
 }
 
-void Install_tm27_vector( void (*handler)(rtems_vector_number))
+static void Install_tm27_vector( void (*handler)(rtems_vector_number))
 {
   int rv = 0;
 
