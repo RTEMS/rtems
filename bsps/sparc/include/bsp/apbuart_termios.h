@@ -30,9 +30,9 @@ struct apbuart_context {
   char *buf;
 };
 
-const rtems_termios_device_handler apbuart_handler_interrupt;
+extern const rtems_termios_device_handler apbuart_handler_interrupt;
 
-const rtems_termios_device_handler apbuart_handler_polled;
+extern const rtems_termios_device_handler apbuart_handler_polled;
 
 #ifdef __cplusplus
 }
