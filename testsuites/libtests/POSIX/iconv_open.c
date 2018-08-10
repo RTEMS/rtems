@@ -12,12 +12,11 @@
 
 #include <iconv.h>
 
-int
-main (void)
+int main(void)
 {
   iconv_t ret;
 
   ret = iconv_open("utf8", "ascii" );
 
-  return 0;
+  return (ret == 0);
 }

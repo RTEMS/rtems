@@ -12,11 +12,11 @@
 
 #include <dirent.h>
 
-int
-main (void)
+int main(void)
 {
   int status;
   int fd = 42;
 
-  status = getdents (fd, "/tmp/foo", 0);
+  status = getdents(fd, "/tmp/foo", 0);
+  return status;
 }

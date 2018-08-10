@@ -12,14 +12,18 @@
 
 #include <signal.h>
 
-int
-main (void)
+int main(void)
 {
   pid_t pid = 0;
+  int rc;
 
-  kill (pid, SIGHUP);
-  kill (pid, SIGKILL);
-  kill (pid, SIGTERM);
+  rc = kill(pid, SIGHUP);
+  (void) rc;
 
-  return 0;
+  rc = kill(pid, SIGKILL);
+  (void) rc;
+
+  rc = kill(pid, SIGTERM);
+
+  return rc;
 }

@@ -15,7 +15,5 @@
 int
 main (void)
 {
-  close (42);
-
-  return 0;
+  return close(42);
 }

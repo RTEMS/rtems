@@ -12,10 +12,9 @@
 
 #include <setjmp.h>
 
-int
-main (void)
+int main(void)
 {
   jmp_buf buf;
-  setjmp (buf);
+  setjmp(buf);
   return 0;
 }

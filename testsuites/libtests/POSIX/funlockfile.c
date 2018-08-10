@@ -15,6 +15,7 @@
 int main(void)
 {
   FILE *file = NULL;
+
   funlockfile(file);
   return 0;
 }

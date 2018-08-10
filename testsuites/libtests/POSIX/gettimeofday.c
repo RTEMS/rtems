@@ -12,8 +12,7 @@
 
 #include <sys/time.h>
 
-int
-main (void)
+int main(void)
 {
   struct timeval tv;
   struct timezone tz;

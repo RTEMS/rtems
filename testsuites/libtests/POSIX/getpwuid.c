@@ -13,8 +13,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-int
-main (void)
+int main(void)
 {
   struct passwd *pass;
   pass = getpwnam (0);

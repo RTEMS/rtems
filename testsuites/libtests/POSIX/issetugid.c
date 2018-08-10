@@ -12,11 +12,10 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main(void)
 {
   int status;
-  status = issetugid ();
+  status = issetugid();
 
-  return 0;
+  return status;
 }

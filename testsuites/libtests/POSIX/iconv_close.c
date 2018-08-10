@@ -12,13 +12,12 @@
 
 #include <iconv.h>
 
-int
-main (void)
+int main(void)
 {
   iconv_t cd = NULL;
   int ret;
 
   ret = iconv_close(cd);
 
-  return 0;
+  return ret;
 }

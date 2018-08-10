@@ -16,7 +16,7 @@ int
 main (void)
 {
   int status;
-  status = unlink ("/tmp/foo");
+  status = unlink("/tmp/foo");
 
-  return 0;
+  return status;
 }

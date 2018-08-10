@@ -12,11 +12,12 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main(void)
 {
   char *login;
+
   login = getlogin ();
+  (void) login;
 
   return 0;
 }

@@ -14,12 +14,13 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int
-main (void)
+int main (void)
 {
   struct stat buf;
   int fd = 42;
-  fstat (fd, &buf);
+  int rc;
 
-  return 0;
+  rc = fstat(fd, &buf);
+
+  return rc;
 }

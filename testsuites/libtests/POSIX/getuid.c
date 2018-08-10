@@ -13,11 +13,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-int
-main (void)
+int main(void)
 {
   uid_t uid;
-  uid = getuid ();
+  uid = getuid();
 
-  return 0;
+  return (uid != 0);
 }

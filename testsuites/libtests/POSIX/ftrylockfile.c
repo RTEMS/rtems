@@ -15,6 +15,8 @@
 int main(void)
 {
   FILE *file = NULL;
-  int ret = ftrylockfile(file);
+  int ret;
+
+  ret = ftrylockfile(file);
   return ret;
 }

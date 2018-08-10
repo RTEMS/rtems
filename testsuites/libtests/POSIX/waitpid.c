@@ -14,11 +14,11 @@
 #include <sys/wait.h>
 
 int
-main (void)
+main(void)
 {
   int status;
   pid_t pid;
-  pid = waitpid (-1, &status, WNOHANG);
+  pid = waitpid(-1, &status, WNOHANG);
 
-  return 0;
+  return (pid != 0);
 }

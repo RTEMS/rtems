@@ -12,10 +12,9 @@
 
 #include <setjmp.h>
 
-int
-main (void)
+int main(void)
 {
   jmp_buf buf;
-  longjmp (buf, 0);
+  longjmp(buf, 0);
   return 0;
 }

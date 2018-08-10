@@ -12,12 +12,11 @@
 
 #include <signal.h>
 
-int
-main (void)
+int main(void)
 {
   sigset_t set;
   int status;
-  status = sigaddset (&set, 21);
+  status = sigaddset(&set, 21);
 
   return status;
 }

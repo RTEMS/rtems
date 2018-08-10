@@ -18,7 +18,5 @@ main (void)
   int oldfd = 42;
   int newfd = 43;
 
-  dup2 (oldfd, newfd);
-
-  return 0;
+  return dup2 (oldfd, newfd);
 }

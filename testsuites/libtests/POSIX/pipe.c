@@ -12,13 +12,12 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main(void)
 {
   int filedes[2];
   int status;
 
-  status = pipe (filedes);
+  status = pipe(filedes);
 
-  return 0;
+  return status;
 }

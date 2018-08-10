@@ -15,7 +15,9 @@
 int
 main (void)
 {
-  fork ();
+  int rc;
 
-  return 0;
+  rc = fork();
+
+  return rc;
 }

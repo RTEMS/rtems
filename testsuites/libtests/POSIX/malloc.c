@@ -12,10 +12,9 @@
 
 #include <stdlib.h>
 
-int
-main (void)
+int main(void)
 {
-  void *ptr = malloc (42);
+  void *ptr = malloc(42);
 
   return (ptr != NULL);
 }

@@ -12,8 +12,7 @@
 
 #include <iconv.h>
 
-int
-main (void)
+int main(void)
 {
   iconv_t cd = NULL;
   char inbuf[42];
@@ -26,5 +25,5 @@ main (void)
   char *o = outbuf;
   ret = iconv(cd, &i, &isize, &o, &osize);
 
-  return 0;
+  return ret;
 }

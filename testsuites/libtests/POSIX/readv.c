@@ -12,14 +12,13 @@
 
 #include <sys/uio.h>
 
-int
-main (void)
+int main(void)
 {
   struct iovec iov;
   int count = 4;
   ssize_t ret;
 
-  ret = readv (0, &iov, count);
+  ret = readv(0, &iov, count);
 
   return ret;
 }

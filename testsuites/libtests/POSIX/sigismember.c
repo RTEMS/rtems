@@ -12,8 +12,7 @@
 
 #include <signal.h>
 
-int
-main (void)
+int main(void)
 {
   sigset_t set;
   int status;

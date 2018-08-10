@@ -12,14 +12,13 @@
 
 #include <unistd.h>
 
-int
-main (void)
+int main(void)
 {
   char string[] = "1234";
   size_t count = 4;
   ssize_t ret;
 
-  ret = write (0, &string, count);
+  ret = write(0, &string, count);
 
-  return 0;
+  return ret;
 }

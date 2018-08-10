@@ -12,14 +12,13 @@
 
 #include <time.h>
 
-int
-main (void)
+int main(void)
 {
   struct timespec req = { 0, 42 };
   struct timespec rem;
   int status;
 
-  status = nanosleep (&req, &rem);
+  status = nanosleep(&req, &rem);
 
-  return 0;
+  return status;
 }

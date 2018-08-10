@@ -12,11 +12,10 @@
 
 #include <stdlib.h>
 
-int
-main (void)
+int main(void)
 {
   void *a;
-  int ret = posix_memalign (&a, sizeof (void *) * 2, 42);
+  int ret = posix_memalign(&a, sizeof (void *) * 2, 42);
 
   return ret;
 }

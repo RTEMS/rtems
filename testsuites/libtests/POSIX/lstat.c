@@ -14,13 +14,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int
-main (void)
+int main(void)
 {
   struct stat buf;
   int status;
 
-  status = lstat ("/tmp/foo", &buf);
+  status = lstat("/tmp/foo", &buf);
 
-  return 0;
+  return status;
 }

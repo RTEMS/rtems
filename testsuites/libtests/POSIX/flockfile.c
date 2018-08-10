@@ -15,6 +15,7 @@
 int main(void)
 {
   FILE *file = NULL;
+
   flockfile(file);
   return 0;
 }

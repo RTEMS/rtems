@@ -12,15 +12,18 @@
 
 #include <signal.h>
 
-int
-main (void)
+int main(void)
 {
-  int status;
+  int rc;
   sigset_t set1, set2;
 
-  status = sigprocmask (SIG_BLOCK, &set1, &set2);
-  status = sigprocmask (SIG_UNBLOCK, &set1, &set2);
-  status = sigprocmask (SIG_SETMASK, &set1, &set2);
+  rc = sigprocmask(SIG_BLOCK, &set1, &set2);
+  (void) rc;
 
-  return 0;
+  rc = sigprocmask(SIG_UNBLOCK, &set1, &set2);
+  (void) rc;
+
+  rc = sigprocmask(SIG_SETMASK, &set1, &set2);
+
+  return rc;
 }

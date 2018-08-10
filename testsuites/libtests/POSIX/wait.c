@@ -13,12 +13,11 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int
-main (void)
+int main(void)
 {
   int status;
   pid_t pid;
   pid = wait(&status);
 
-  return 0;
+  return (pid != 0);
 }

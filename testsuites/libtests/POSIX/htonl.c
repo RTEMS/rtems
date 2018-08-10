@@ -12,17 +12,20 @@
 
 #include <arpa/inet.h>
 
-int
-main (void)
+int main(void)
 {
   uint32_t u32;
   uint16_t u16;
 
   u32 = htonl(0x12345678);
+  (void) u32;
   u16 = htons(0x1234);
+  (void) u16;
 
   u32 = ntohl(0x12345678);
+  (void) u32;
   u16 = ntohs(0x1234);
+  (void) u16;
   
   return 0;
 }

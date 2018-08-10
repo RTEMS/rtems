@@ -12,10 +12,9 @@
 
 #include <stdlib.h>
 
-int
-main (void)
+int main (void)
 {
-  free ((void *) 42);
+  free((void *) 42);
 
   return 0;
 }
