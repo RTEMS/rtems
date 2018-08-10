@@ -1,5 +1,5 @@
 /*  ADC / DAC (GRADCDAC) interface
-/*
+ *
  *  COPYRIGHT (c) 2009.
  *  Cobham Gaisler AB.
  *
