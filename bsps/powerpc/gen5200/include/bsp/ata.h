@@ -254,12 +254,14 @@ static inline void ata_driver_lock(const ata_driver *self)
 {
   rtems_status_code sc = rtems_semaphore_obtain(self->lock, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
   assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
 }
 
 static inline void ata_driver_unlock(const ata_driver *self)
 {
   rtems_status_code sc = rtems_semaphore_release(self->lock);
   assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
 }
 
 static inline bool ata_driver_is_card_present(const ata_driver *self)
