@@ -267,3 +267,30 @@ void _Thread_Dispatch_direct( Per_CPU_Control *cpu_self )
   _ISR_Local_disable( level );
   _Thread_Do_dispatch( cpu_self, level );
 }
+
+void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
+{
+  uint32_t disable_level = cpu_self->thread_dispatch_disable_level;
+
+  if ( disable_level == 1 ) {
+    ISR_Level level;
+
+    _ISR_Local_disable( level );
+
+    if (
+      cpu_self->dispatch_necessary
+#if defined(RTEMS_SCORE_ROBUST_THREAD_DISPATCH)
+        || !_ISR_Is_enabled( level )
+#endif
+    ) {
+      _Thread_Do_dispatch( cpu_self, level );
+    } else {
+      cpu_self->thread_dispatch_disable_level = 0;
+      _Profiling_Thread_dispatch_enable( cpu_self, 0 );
+      _ISR_Local_enable( level );
+    }
+  } else {
+    _Assert( disable_level > 0 );
+    cpu_self->thread_dispatch_disable_level = disable_level - 1;
+  }
+}

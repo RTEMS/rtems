@@ -205,36 +205,11 @@ RTEMS_INLINE_ROUTINE Per_CPU_Control *_Thread_Dispatch_disable( void )
 /**
  * @brief Enables thread dispatching.
  *
- * May perfrom a thread dispatch if necessary as a side-effect.
+ * May perform a thread dispatch if necessary as a side-effect.
  *
  * @param[in] cpu_self The current processor.
  */
-RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
-{
-  uint32_t disable_level = cpu_self->thread_dispatch_disable_level;
-
-  if ( disable_level == 1 ) {
-    ISR_Level level;
-
-    _ISR_Local_disable( level );
-
-    if (
-      cpu_self->dispatch_necessary
-#if defined(RTEMS_SCORE_ROBUST_THREAD_DISPATCH)
-        || !_ISR_Is_enabled( level )
-#endif
-    ) {
-      _Thread_Do_dispatch( cpu_self, level );
-    } else {
-      cpu_self->thread_dispatch_disable_level = 0;
-      _Profiling_Thread_dispatch_enable( cpu_self, 0 );
-      _ISR_Local_enable( level );
-    }
-  } else {
-    _Assert( disable_level > 0 );
-    cpu_self->thread_dispatch_disable_level = disable_level - 1;
-  }
-}
+void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self );
 
 /**
  * @brief Unnests thread dispatching.
