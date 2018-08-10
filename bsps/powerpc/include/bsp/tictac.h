@@ -22,7 +22,7 @@
 /**
  * @brief Reset reference ticks for tac().
  */
-static inline void tic()
+static inline void tic(void)
 {
 	uint32_t tmp;
 	asm volatile (
@@ -35,7 +35,7 @@ static inline void tic()
 /**
  * @brief Returns number of ticks since last tic().
  */
-static inline uint32_t tac()
+static inline uint32_t tac(void)
 {
 	uint32_t ticks;
 	uint32_t tmp;
@@ -51,7 +51,7 @@ static inline uint32_t tac()
 /**
  * @brief Reset reference ticks for bam().
  */
-static inline void boom()
+static inline void boom(void)
 {
 	uint32_t tmp;
 	asm volatile (
@@ -64,7 +64,7 @@ static inline void boom()
 /**
  * @brief Returns number of ticks since last boom().
  */
-static inline uint32_t bam()
+static inline uint32_t bam(void)
 {
 	uint32_t ticks;
 	uint32_t tmp;
