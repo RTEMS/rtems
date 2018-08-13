@@ -27,11 +27,13 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/start/page.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
+# interrupts
+librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/interrupts/pic.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/interrupts/idt.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/interrupts/isr_handler.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/irq/irq-default-handler.c
 # clock
-librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/clock/clock-simidle.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/clock/clock.c
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios-init.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/console-termios.c

@@ -67,6 +67,21 @@ RTEMS_INLINE_ROUTINE void cpuid(
                      : "a" (code) );
 }
 
+RTEMS_INLINE_ROUTINE uint64_t rdmsr(uint32_t msr)
+{
+  uint32_t low, high;
+  __asm__ volatile ( "rdmsr" :
+                     "=a" (low), "=d" (high) :
+                     "c" (msr) );
+   return low | (uint64_t) high << 32;
+}
+
+RTEMS_INLINE_ROUTINE void wrmsr(uint32_t msr, uint32_t low, uint32_t high)
+{
+  __asm__ volatile ( "wrmsr" : :
+                     "a" (low), "d" (high), "c" (msr) );
+}
+
 RTEMS_INLINE_ROUTINE void amd64_enable_interrupts(void)
 {
   __asm__ volatile ( "sti" );
@@ -76,6 +91,14 @@ RTEMS_INLINE_ROUTINE void amd64_disable_interrupts(void)
 {
   __asm__ volatile ( "cli" );
 }
+
+RTEMS_INLINE_ROUTINE void stub_io_wait(void)
+{
+  /* XXX: This likely won't be required on any modern boards, but this function
+   * exists so it's easier to find all the places it may be used.
+   */
+}
+
 #endif /* !ASM */
 
 #endif
