@@ -76,11 +76,14 @@ void _CPU_Context_Initialize(
   (void) is_fp;
 
   // XXX: Should be used in the future
-  (void) new_level;
   (void) tls_area;
 
-  // XXX: Leaving interrupts off regardless of `new_level` for now
-  the_context->rflags = CPU_EFLAGS_INTERRUPTS_OFF;
+  if ( new_level ) {
+    the_context->rflags = CPU_EFLAGS_INTERRUPTS_OFF;
+  }
+  else {
+    the_context->rflags = CPU_EFLAGS_INTERRUPTS_ON;
+  }
 
   _stack  = ((uintptr_t) stack_area_begin) + stack_area_size;
   _stack &= ~(CPU_STACK_ALIGNMENT - 1);

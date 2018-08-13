@@ -38,6 +38,7 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/score/idt.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/tls.h>
@@ -52,17 +53,17 @@ void _CPU_Initialize(void)
 {
 }
 
-uint32_t _CPU_ISR_Get_level(void)
-{
-  return 0;
-}
-
 void _CPU_ISR_install_raw_handler(
   uint32_t    vector,
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 )
 {
+  amd64_install_raw_interrupt(
+    vector,
+    (uintptr_t) new_handler,
+    (uintptr_t*) old_handler
+  );
 }
 
 void _CPU_ISR_install_vector(
@@ -73,11 +74,7 @@ void _CPU_ISR_install_vector(
 {
 }
 
-void _CPU_Install_interrupt_stack(void)
-{
-}
-
 void *_CPU_Thread_Idle_body(uintptr_t ignored)
 {
-  for( ; ; ) { }
+  for ( ; ; ) { }
 }

@@ -101,12 +101,57 @@ typedef struct {
   double      some_float_register;
 } Context_Control_fp;
 
+/*
+ * Caller-saved registers for interrupt frames
+ */
 typedef struct {
-    uint32_t   special_interrupt_register;
+  /**
+   * @note: rdi is a caller-saved register too, but it's used in function calls
+   * and is hence saved separately on the stack;
+   *
+   * @see DISTINCT_INTERRUPT_ENTRY
+   * @see _ISR_Handler
+   */
+
+  uint64_t rax;
+  uint64_t rcx;
+  uint64_t rdx;
+  uint64_t rsi;
+  uint64_t r8;
+  uint64_t r9;
+  uint64_t r10;
+  uint64_t r11;
+
+  /*
+   * This holds the rsp just before _ISR_Handler is called; it's needed because
+   * in the handler, we align the stack to make further calls, and we're not
+   * sure how alignment may move the stack-pointer around, leaving no way to get
+   * back to the stack, and therefore the interrupt frame.
+   */
+  uint64_t saved_rsp;
+
+  /* XXX:
+   * - FS segment selector for TLS
+   * - x87 status word?
+   * - MMX?
+   * - XMM?
+   */
 } CPU_Interrupt_frame;
 
 #endif /* !ASM */
 
+#define CPU_INTERRUPT_FRAME_SIZE 72
+
+/*
+ * When SMP is enabled, percpuasm.c has a similar assert, but since we use the
+ * interrupt frame regardless of SMP, we'll confirm it here.
+ */
+#ifndef ASM
+  RTEMS_STATIC_ASSERT(
+    sizeof(CPU_Interrupt_frame) == CPU_INTERRUPT_FRAME_SIZE,
+    CPU_INTERRUPT_FRAME_SIZE
+  );
+#endif
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
@@ -126,31 +171,55 @@ typedef struct {
 
 #define _CPU_Initialize_vectors()
 
-// XXX: For RTEMS critical sections
-#define _CPU_ISR_Disable( _isr_cookie ) \
-  { \
-    (_isr_cookie) = 0;   /* do something to prevent warnings */ \
-  }
-
-#define _CPU_ISR_Enable( _isr_cookie )  \
-  { \
-    (void) (_isr_cookie);   /* prevent warnings from -Wunused-but-set-variable */ \
-  }
-
-#define _CPU_ISR_Flash( _isr_cookie ) \
-  { \
-  }
-
-RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
-{
-  return false;
+#define _CPU_ISR_Enable(_level)                             \
+{                                                           \
+  amd64_enable_interrupts();                                \
+  _level = 0;                                               \
+  (void) _level; /* Prevent -Wunused-but-set-variable */    \
 }
 
-#define _CPU_ISR_Set_level( new_level ) \
-  { \
-  }
+#define _CPU_ISR_Disable(_level)                            \
+{                                                           \
+  amd64_enable_interrupts();                                \
+  _level = 1;                                               \
+  (void) _level; /* Prevent -Wunused-but-set-variable */    \
+}
 
-uint32_t   _CPU_ISR_Get_level( void );
+#define _CPU_ISR_Flash(_level)                              \
+{                                                           \
+  amd64_enable_interrupts();                                \
+  amd64_disable_interrupts();                               \
+  _level = 1;                                               \
+  (void) _level; /* Prevent -Wunused-but-set-variable */    \
+}
+
+RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled(uint32_t level)
+{
+  return (level & EFLAGS_INTR_ENABLE) != 0;
+}
+
+RTEMS_INLINE_ROUTINE void _CPU_ISR_Set_level(uint32_t new_level)
+{
+  if ( new_level ) {
+    amd64_disable_interrupts();
+  }
+  else {
+    amd64_enable_interrupts();
+  }
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _CPU_ISR_Get_level(void)
+{
+  uint64_t rflags;
+
+  __asm__ volatile ( "pushf; \
+                      popq %0"
+                     : "=rm" (rflags)
+  );
+
+  uint32_t level = (rflags & EFLAGS_INTR_ENABLE) ? 0 : 1;
+  return level;
+}
 
 /* end of ISR handler macros */
 
@@ -227,8 +296,6 @@ void _CPU_ISR_install_vector(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
-
-void _CPU_Install_interrupt_stack( void );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
