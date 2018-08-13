@@ -1470,7 +1470,8 @@ STATIC int grspw_tx_schedule_send(struct grspw_dma_priv *dma)
 					curr_pkt->flags &= ~PKT_FLAG_TR_HDR;
 			}
 			BD_WRITE(&curr_bd->bd->haddr, hwaddr);
-			ctrl = GRSPW_TXBD_EN | curr_pkt->hlen;
+			ctrl = GRSPW_TXBD_EN |
+			       (curr_pkt->hlen & GRSPW_TXBD_HLEN);
 		} else {
 			ctrl = GRSPW_TXBD_EN;
 		}
