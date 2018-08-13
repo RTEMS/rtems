@@ -45,6 +45,19 @@ RTEMS_INLINE_ROUTINE void outport_byte(uint16_t port, uint8_t val)
   __asm__ volatile ( "outb %0, %1" : : "a" (val), "Nd" (port) );
 }
 
+
+RTEMS_INLINE_ROUTINE void amd64_set_cr3(uint64_t segment)
+{
+  __asm__ volatile ( "movq %0, %%cr3" : "=r" (segment) : "0" (segment) );
+}
+
+RTEMS_INLINE_ROUTINE void cpuid(
+  uint32_t code, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx
+) {
+  __asm__ volatile ( "cpuid"
+                     : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
+                     : "a" (code) );
+}
 #endif /* !ASM */
 
 #endif
