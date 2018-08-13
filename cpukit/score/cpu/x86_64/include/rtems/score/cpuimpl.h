@@ -28,20 +28,6 @@
 extern "C" {
 #endif
 
-static inline uint8_t inport_byte(uint16_t port)
-{
-  uint8_t ret;
-  __asm__ volatile ( "inb %1, %0"
-                     : "=a" (ret)
-                     : "Nd" (port) );
-  return ret;
-}
-
-static inline void outport_byte(uint16_t port, uint8_t val)
-{
-  __asm__ volatile ( "outb %0, %1" : : "a" (val), "Nd" (port) );
-}
-
 RTEMS_INLINE_ROUTINE void _CPU_Context_volatile_clobber( uintptr_t pattern )
 {
   /* TODO */
@@ -68,6 +54,6 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 }
 #endif
 
-#endif /* ASM */
+#endif /* !ASM */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */

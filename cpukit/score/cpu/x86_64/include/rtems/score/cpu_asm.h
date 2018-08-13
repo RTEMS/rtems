@@ -24,30 +24,27 @@
  * SUCH DAMAGE.
  */
 
-#ifndef _RTEMS_SCORE_X86_64_H
-#define _RTEMS_SCORE_X86_64_H
+#ifndef _RTEMS_SCORE_CPU_ASM_H
+#define _RTEMS_SCORE_CPU_ASM_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#if !ASM
 
-#define CPU_NAME "x86-64"
-#define CPU_MODEL_NAME "amd64"
+#include <rtems/score/basedefs.h>
 
-#define COM1_BASE_IO    0x3F8
-#define COM1_CLOCK_RATE (115200 * 16)
-
-#define EFLAGS_INTR_ENABLE 0x200
-
-#if DEBUG
-#define DBG_PRINTF(format, args...)             \
-  printf(format, ## args)
-#else
-#define DBG_PRINTF(format, args...)
-#endif
-
-#ifdef __cplusplus
+RTEMS_INLINE_ROUTINE uint8_t inport_byte(uint16_t port)
+{
+  uint8_t ret;
+  __asm__ volatile ( "inb %1, %0"
+                     : "=a" (ret)
+                     : "Nd" (port) );
+  return ret;
 }
-#endif
 
-#endif /* _RTEMS_SCORE_X86_64_H */
+RTEMS_INLINE_ROUTINE void outport_byte(uint16_t port, uint8_t val)
+{
+  __asm__ volatile ( "outb %0, %1" : : "a" (val), "Nd" (port) );
+}
+
+#endif /* !ASM */
+
+#endif

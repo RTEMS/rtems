@@ -84,6 +84,16 @@
 #define r14 REG (r14)
 #define r15 REG (r15)
 
+/*
+ * Order of register usage for function arguments as per the calling convention
+ */
+#define REG_ARG0 rdi
+#define REG_ARG1 rsi
+#define REG_ARG2 rdx
+#define REG_ARG3 rcx
+#define REG_ARG4 r8
+#define REG_ARG5 r9
+
 // XXX: eax, ax, etc., segment registers
 
 /*

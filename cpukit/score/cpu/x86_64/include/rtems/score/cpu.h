@@ -40,6 +40,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/basedefs.h>
+#include <rtems/score/cpu_asm.h>
 #include <rtems/score/x86_64.h>
 
 #define CPU_SIMPLE_VECTORED_INTERRUPTS FALSE
@@ -54,7 +55,7 @@ extern "C" {
 #define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
 #define CPU_STACK_GROWS_UP               FALSE
 
-#define CPU_STRUCTURE_ALIGNMENT __attribute__((aligned ( 64 )))
+#define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED(64)
 #define CPU_CACHE_LINE_BYTES 64
 #define CPU_MODES_INTERRUPT_MASK   0x00000001
 #define CPU_MAXIMUM_PROCESSORS 32
@@ -104,7 +105,7 @@ typedef struct {
     uint32_t   special_interrupt_register;
 } CPU_Interrupt_frame;
 
-#endif /* ASM */
+#endif /* !ASM */
 
 
 #define CPU_CONTEXT_FP_SIZE sizeof( Context_Control_fp )
