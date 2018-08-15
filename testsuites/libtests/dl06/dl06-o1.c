@@ -34,7 +34,6 @@ int rtems_main (int argc, const char* argv[]);
 int rtems_main (int argc, const char* argv[])
 {
   func1_t        f1;
-  int            arg;
   double         d;
   unsigned short s[7] = { 12, 34, 56, 78, 90, 13, 57 };
 
@@ -47,7 +46,11 @@ int rtems_main (int argc, const char* argv[])
   f1 (s);
 
   d = dl_o2_func2 (7.1, 33.0);
+  (void) d;
+
   d = dl_o2_func3 (0.778899);
+  (void) d;
+
 
   return argc;
 }
