@@ -96,7 +96,6 @@ static void test(const char *rda, const char *mnt, const char *file)
     .sync_device = true
   };
 
-  rtems_status_code sc;
   int disk_fd;
   int rv;
 
