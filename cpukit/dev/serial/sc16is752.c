@@ -57,15 +57,15 @@ static void read_2_reg(
 
 static bool is_sleep_mode_enabled(sc16is752_context *ctx)
 {
-  return (ctx->ier & IER_SLEEP_MODE) != 0;
+  return (ctx->ier & SC16IS752_IER_SLEEP_MODE) != 0;
 }
 
 static void set_sleep_mode(sc16is752_context *ctx, bool enable)
 {
   if (enable) {
-    ctx->ier |= IER_SLEEP_MODE;
+    ctx->ier |= SC16IS752_IER_SLEEP_MODE;
   } else {
-    ctx->ier &= ~IER_SLEEP_MODE;
+    ctx->ier &= ~SC16IS752_IER_SLEEP_MODE;
   }
 
   write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
@@ -85,14 +85,14 @@ static void set_mcr_dll_dlh(
     set_sleep_mode(ctx, false);
   }
 
-  ctx->lcr |= LCR_ENABLE_DIVISOR;
+  ctx->lcr |= SC16IS752_LCR_ENABLE_DIVISOR;
   write_reg(ctx, SC16IS752_LCR, &ctx->lcr, 1);
 
   write_reg(ctx, SC16IS752_MCR, &mcr, 1);
   write_reg(ctx, SC16IS752_DLH, &dlh, 1);
   write_reg(ctx, SC16IS752_DLL, &dll, 1);
 
-  ctx->lcr &= ~LCR_ENABLE_DIVISOR;
+  ctx->lcr &= ~SC16IS752_LCR_ENABLE_DIVISOR;
   write_reg(ctx, SC16IS752_LCR, &ctx->lcr, 1);
 
   if (sleep_mode) {
@@ -127,10 +127,10 @@ static bool set_baud(sc16is752_context *ctx, rtems_termios_baud_t baud)
     if (divisor > 0xFFFF){
       return false;
     } else {
-      mcr |= MCR_PRESCALE_NEEDED;
+      mcr |= SC16IS752_MCR_PRESCALE_NEEDED;
     }
   } else {
-    mcr &= ~MCR_PRESCALE_NEEDED;
+    mcr &= ~SC16IS752_MCR_PRESCALE_NEEDED;
   }
 
   set_mcr_dll_dlh(ctx, mcr, divisor);
@@ -155,42 +155,42 @@ static bool sc16is752_set_attributes(
   }
 
   if ((term->c_cflag & CREAD) == 0){
-    ctx->efcr |= EFCR_RX_DISABLE;
+    ctx->efcr |= SC16IS752_EFCR_RX_DISABLE;
   } else {
-    ctx->efcr &= ~EFCR_RX_DISABLE;
+    ctx->efcr &= ~SC16IS752_EFCR_RX_DISABLE;
   }
 
   write_reg(ctx, SC16IS752_EFCR, &ctx->efcr, 1);
 
   switch (term->c_cflag & CSIZE) {
     case CS5:
-      ctx->lcr |= LCR_CHRL_5_BIT;
+      ctx->lcr |= SC16IS752_LCR_CHRL_5_BIT;
       break;
     case CS6:
-      ctx->lcr |= LCR_CHRL_6_BIT;
+      ctx->lcr |= SC16IS752_LCR_CHRL_6_BIT;
       break;
     case CS7:
-      ctx->lcr |= LCR_CHRL_7_BIT;
+      ctx->lcr |= SC16IS752_LCR_CHRL_7_BIT;
       break;
     case CS8:
-      ctx->lcr |= LCR_CHRL_8_BIT;
+      ctx->lcr |= SC16IS752_LCR_CHRL_8_BIT;
       break;
   }
 
   if ((term->c_cflag & PARENB) != 0){
     if ((term->c_cflag & PARODD) != 0) {
-      ctx->lcr &= ~LCR_EVEN_PARITY;
+      ctx->lcr &= ~SC16IS752_LCR_EVEN_PARITY;
     } else {
-      ctx->lcr |= LCR_EVEN_PARITY;
+      ctx->lcr |= SC16IS752_LCR_EVEN_PARITY;
     }
   } else {
-    ctx->lcr &= ~LCR_SET_PARITY;
+    ctx->lcr &= ~SC16IS752_LCR_SET_PARITY;
   }
 
   if ((term->c_cflag & CSTOPB) != 0) {
-    ctx->lcr |= LCR_2_STOP_BIT;
+    ctx->lcr |= SC16IS752_LCR_2_STOP_BIT;
   } else {
-    ctx->lcr &= ~LCR_2_STOP_BIT;
+    ctx->lcr &= ~SC16IS752_LCR_2_STOP_BIT;
   }
 
   write_reg(ctx, SC16IS752_LCR, &ctx->lcr, 1);
@@ -218,20 +218,23 @@ static bool sc16is752_first_open(
   }
 
   if (ctx->mode == SC16IS752_MODE_RS485) {
-    ctx->efcr = EFCR_RS485_ENABLE;
+    ctx->efcr = SC16IS752_EFCR_RS485_ENABLE;
   } else {
     ctx->efcr = 0;
   }
 
   write_reg(ctx, SC16IS752_FCR, &ctx->efcr, 1);
 
-  fcr = FCR_FIFO_EN | FCR_RX_FIFO_RST | FCR_TX_FIFO_RST
-    | FCR_RX_FIFO_TRG_16 | FCR_TX_FIFO_TRG_32;
+  fcr = SC16IS752_FCR_FIFO_EN
+    | SC16IS752_FCR_RX_FIFO_RST
+    | SC16IS752_FCR_TX_FIFO_RST
+    | SC16IS752_FCR_RX_FIFO_TRG_16
+    | SC16IS752_FCR_TX_FIFO_TRG_32;
   write_reg(ctx, SC16IS752_FCR, &fcr, 1);
 
-  ctx->ier = IER_RHR;
+  ctx->ier = SC16IS752_IER_RHR;
   write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
-  set_efr(ctx, EFR_ENHANCED_FUNC_ENABLE);
+  set_efr(ctx, SC16IS752_EFR_ENHANCED_FUNC_ENABLE);
 
   rtems_termios_set_initial_baud(tty, 115200);
   ok = sc16is752_set_attributes(base, term);
@@ -265,14 +268,14 @@ static void sc16is752_write(
   sc16is752_context *ctx = (sc16is752_context *)base;
 
   if (len > 0) {
-    ctx->ier |= IER_THR;
+    ctx->ier |= SC16IS752_IER_THR;
     len = MIN(len, 32);
     ctx->tx_in_progress = (uint8_t)len;
     write_reg(ctx, SC16IS752_THR, (const uint8_t *)&buf[0], len);
     write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
   } else {
     ctx->tx_in_progress = 0;
-    ctx->ier &= ~IER_THR;
+    ctx->ier &= ~SC16IS752_IER_THR;
     write_reg(ctx, SC16IS752_IER, &ctx->ier, 1);
   }
 }
@@ -286,22 +289,22 @@ static void sc16is752_get_modem_bits(sc16is752_context *ctx, int *bits)
   read_reg(ctx, SC16IS752_MSR, &msr, 1);
   read_reg(ctx, SC16IS752_MCR, &mcr, 1);
 
-  if (msr & MSR_CTS) {
+  if (msr & SC16IS752_MSR_CTS) {
     *bits |= TIOCM_CTS;
   }
-  if (msr & MSR_DSR) {
+  if (msr & SC16IS752_MSR_DSR) {
     *bits |= TIOCM_DSR;
   }
-  if (msr & MSR_RI) {
+  if (msr & SC16IS752_MSR_RI) {
     *bits |= TIOCM_RI;
   }
-  if (msr & MSR_CD) {
+  if (msr & SC16IS752_MSR_CD) {
     *bits |= TIOCM_CD;
   }
-  if ((mcr & MCR_DTR) == 0) {
+  if ((mcr & SC16IS752_MCR_DTR) == 0) {
     *bits |= TIOCM_DTR;
   }
-  if ((mcr & MCR_RTS) == 0) {
+  if ((mcr & SC16IS752_MCR_RTS) == 0) {
     *bits |= TIOCM_RTS;
   }
 }
@@ -316,29 +319,29 @@ static void sc16is752_set_modem_bits(
 
   if (bits != NULL) {
     if ((*bits & TIOCM_DTR) == 0) {
-      mcr |= MCR_DTR;
+      mcr |= SC16IS752_MCR_DTR;
     } else {
-      mcr &= ~MCR_DTR;
+      mcr &= ~SC16IS752_MCR_DTR;
     }
 
     if ((*bits & TIOCM_RTS) == 0) {
-      mcr |= MCR_RTS;
+      mcr |= SC16IS752_MCR_RTS;
     } else {
-      mcr &= ~MCR_RTS;
+      mcr &= ~SC16IS752_MCR_RTS;
     }
   }
 
   if ((set & TIOCM_DTR) != 0) {
-    mcr &= ~MCR_DTR;
+    mcr &= ~SC16IS752_MCR_DTR;
   }
   if ((set & TIOCM_RTS) != 0) {
-    mcr &= ~MCR_RTS;
+    mcr &= ~SC16IS752_MCR_RTS;
   }
   if ((clear & TIOCM_DTR) != 0) {
-    mcr |= MCR_DTR;
+    mcr |= SC16IS752_MCR_DTR;
   }
   if ((clear & TIOCM_RTS) != 0) {
-    mcr |= MCR_RTS;
+    mcr |= SC16IS752_MCR_RTS;
   }
 
   write_reg(ctx, SC16IS752_MCR, &mcr, 1);
@@ -416,11 +419,11 @@ void sc16is752_interrupt_handler(void *arg)
   read_2_reg(ctx, SC16IS752_IIR, SC16IS752_RXLVL, data);
   iir = data[0];
 
-  if ((iir & IIR_TX_INTERRUPT) != 0 && ctx->tx_in_progress > 0) {
+  if ((iir & SC16IS752_IIR_TX_INTERRUPT) != 0 && ctx->tx_in_progress > 0) {
     rtems_termios_dequeue_characters(ctx->tty, ctx->tx_in_progress);
   }
 
-  if ((iir & IIR_RX_INTERRUPT) != 0) {
+  if ((iir & SC16IS752_IIR_RX_INTERRUPT) != 0) {
     uint8_t buf[SC16IS752_FIFO_DEPTH];
     uint8_t rxlvl = data[1];
 
