@@ -117,7 +117,7 @@ static const pl111_fb_config fb_config = {
     | PL111_LCD_TIMING2_PCD_HI(0x0),
   .timing3 = 0x0,
   .control = PL111_LCD_CONTROL_LCD_TFT
-    | PL111_LCD_CONTROL_LCD_BPP(PL111_LCD_CONTROL_LCD_BPP_16)
+    | PL111_LCD_CONTROL_LCD_BPP(PL111_LCD_CONTROL_LCD_BPP_16_5_6_5)
     | PL111_LCD_CONTROL_BGR,
   .power_delay_in_us = 100000,
 
