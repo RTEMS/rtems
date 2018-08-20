@@ -314,9 +314,8 @@ RTEMS_INLINE_ROUTINE void _Thread_Dispatch_enable( Per_CPU_Control *cpu_self )
     } else {
       cpu_self->thread_dispatch_disable_level = 0;
       _Profiling_Thread_dispatch_enable( cpu_self, 0 );
+      _ISR_Enable_without_giant( level );
     }
-
-    _ISR_Enable_without_giant( level );
   } else {
     cpu_self->thread_dispatch_disable_level = disable_level - 1;
   }
