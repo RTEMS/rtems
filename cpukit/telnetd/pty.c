@@ -71,7 +71,7 @@ struct pty_tt;
 typedef struct pty_tt pty_t;
 
 struct pty_tt {
- char                     *devname;
+ char                      devname[17];
  struct rtems_termios_tty *ttyp;
  tcflag_t                  c_cflag;
  int                       opened;
@@ -432,8 +432,8 @@ rtems_device_driver my_pty_initialize(
    */
 
   for (ndx=0;ndx<rtems_telnetd_maximum_ptys;ndx++) {
-    telnet_ptys[ndx].devname = (char*)malloc(strlen("/dev/ptyXX")+1);
-    sprintf(telnet_ptys[ndx].devname,"/dev/pty%X",ndx);
+    /* devname is included in the structure */
+    sprintf(telnet_ptys[ndx].devname,"/dev/pty%02X",ndx);
     telnet_ptys[ndx].ttyp    =  NULL;
     telnet_ptys[ndx].c_cflag = CS8|B9600;
     telnet_ptys[ndx].socket  = -1;
@@ -491,8 +491,9 @@ static int pty_do_finalize(void)
         status = (rtems_status_code)unlink(telnet_ptys[ndx].devname);
         if (status != RTEMS_SUCCESSFUL)
           perror("removing pty device node from file system");
-        else
-          free(telnet_ptys[ndx].devname);
+        else {
+          telnet_ptys[ndx].devname[0] = '\0';
+        }
     };
 
     free ( telnet_ptys );
