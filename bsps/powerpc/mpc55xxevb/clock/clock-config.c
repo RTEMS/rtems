@@ -147,16 +147,6 @@ static void mpc55xx_clock_initialize(void)
   );
 }
 
-static void mpc55xx_clock_cleanup(void)
-{
-  volatile struct EMIOS_CH_tag *regs = &EMIOS.CH [MPC55XX_CLOCK_EMIOS_CHANNEL];
-  union EMIOS_CCR_tag ccr = MPC55XX_ZERO_FLAGS;
-
-  /* Set channel in GPIO mode */
-  ccr.B.MODE = MPC55XX_EMIOS_MODE_GPIO_INPUT;
-  regs->CCR.R = ccr.R;
-}
-
 #elif defined(MPC55XX_CLOCK_PIT_CHANNEL)
 
 static uint32_t mpc55xx_tc_get(rtems_timecounter_simple *tc)
