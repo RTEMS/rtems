@@ -40,7 +40,7 @@
 
 #define IPI_INDEX_HIGH 2
 
-static void Install_tm27_vector(void (*handler)(rtems_vector_number))
+RTEMS_INLINE_ROUTINE void Install_tm27_vector(void (*handler)(rtems_vector_number))
 {
   rtems_status_code sc;
   rtems_vector_number low = QORIQ_IRQ_IPI_0 + IPI_INDEX_LOW;
@@ -71,24 +71,24 @@ static void Install_tm27_vector(void (*handler)(rtems_vector_number))
   assert(sc == RTEMS_SUCCESSFUL);
 }
 
-static void qoriq_tm27_cause(uint32_t ipi_index)
+RTEMS_INLINE_ROUTINE void qoriq_tm27_cause(uint32_t ipi_index)
 {
   uint32_t self = ppc_processor_id();
 
   qoriq.pic.per_cpu[self].ipidr[ipi_index].reg = UINT32_C(1) << self;
 }
 
-static void Cause_tm27_intr(void)
+RTEMS_INLINE_ROUTINE void Cause_tm27_intr(void)
 {
   qoriq_tm27_cause(IPI_INDEX_LOW);
 }
 
-static void Clear_tm27_intr(void)
+RTEMS_INLINE_ROUTINE void Clear_tm27_intr(void)
 {
   /* Nothing to do */
 }
 
-static void Lower_tm27_intr(void)
+RTEMS_INLINE_ROUTINE inline void Lower_tm27_intr(void)
 {
   qoriq_tm27_cause(IPI_INDEX_HIGH);
 }
