@@ -28,6 +28,8 @@
 #error "must be included via <sys/types.h> in kernel space"
 #endif
 
+#include <stdbool.h>
+
 typedef	int		boolean_t;
 typedef	struct device	*device_t;
 typedef	char		vm_memattr_t;	/* memory attribute codes */
