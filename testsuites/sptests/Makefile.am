@@ -1594,6 +1594,15 @@ sppartition_err01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_sppartition_err01) $(support_includes)
 endif
 
+if TEST_sppercpudata01
+sp_tests += sppercpudata01
+sp_screens += sppercpudata01/sppercpudata01.scn
+sp_docs += sppercpudata01/sppercpudata01.doc
+sppercpudata01_SOURCES = sppercpudata01/init.c sppercpudata01/item.c
+sppercpudata01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_sppercpudata01) \
+	$(support_includes)
+endif
+
 if TEST_spport_err01
 sp_tests += spport_err01
 sp_screens += spport_err01/spport_err01.scn

@@ -1,0 +1,13 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smppercpudata01
+
+directives:
+
+  - PER_CPU_DATA_ITEM_DECLARE()
+  - PER_CPU_DATA_ITEM()
+  - PER_CPU_DATA_GET()
+
+concepts:
+
+  - Ensure that the flexible per-CPU data works.

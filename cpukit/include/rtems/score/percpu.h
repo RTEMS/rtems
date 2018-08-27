@@ -9,7 +9,7 @@
  *  COPYRIGHT (c) 1989-2011.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2012, 2016 embedded brains GmbH
+ *  Copyright (c) 2012, 2018 embedded brains GmbH
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -475,6 +475,13 @@ typedef struct Per_CPU_Control {
        */
       struct _Thread_Control *idle_if_online_and_unused;
     } Scheduler;
+
+    /**
+     * @brief Begin of the per-CPU data area.
+     *
+     * Contains items defined via PER_CPU_DATA_ITEM().
+     */
+    char *data;
 
     /**
      * @brief Indicates the current state of the CPU.
