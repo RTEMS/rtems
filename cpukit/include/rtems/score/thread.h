@@ -259,9 +259,14 @@ typedef struct {
   Thread_Scheduler_state state;
 
   /**
-   * @brief The home scheduler control of this thread.
+   * @brief The home scheduler of this thread.
    */
-  const struct _Scheduler_Control *home;
+  const struct _Scheduler_Control *home_scheduler;
+
+  /**
+   * @brief The pinned scheduler of this thread.
+   */
+  const struct _Scheduler_Control *pinned_scheduler;
 
   /**
    * @brief The processor assigned by the current scheduler.
@@ -270,12 +275,12 @@ typedef struct {
 
   /**
    * @brief Scheduler nodes immediately available to the thread by its home
-   * scheduler instance and due to thread queue ownerships.
+   * scheduler and due to thread queue ownerships.
    *
    * This chain is protected by the thread wait lock.
    *
    * This chain is never empty.  The first scheduler node on the chain is the
-   * scheduler node of the home scheduler instance.
+   * scheduler node of the home scheduler.
    */
   Chain_Control Wait_nodes;
 
@@ -285,8 +290,12 @@ typedef struct {
    *
    * This chain is protected by the thread state lock.
    *
-   * This chain is never empty.  The first scheduler node on the chain is the
-   * scheduler node of the home scheduler instance.
+   * This chain is never empty for normal threads (the only exception are idle
+   * threads associated with an online processor which is not used by a
+   * scheduler).  In case a pinned scheduler is set for this thread, then the
+   * first scheduler node of this chain belongs to the pinned scheduler,
+   * otherwise the first scheduler node of this chain belongs to the home
+   * scheduler.
    */
   Chain_Control Scheduler_nodes;
 
@@ -311,6 +320,28 @@ typedef struct {
    * This list is protected by the thread scheduler lock.
    */
   Scheduler_Node *requests;
+
+  /**
+   * @brief The thread pinning to current processor level.
+   *
+   * Must be touched only by the executing thread with thread dispatching
+   * disabled.  If non-zero, then the thread is pinned to its current
+   * processor.  The pin level is incremented and decremented by two.  The
+   * least-significant bit indicates that the thread was pre-empted and must
+   * undo the pinning with respect to the scheduler once the level changes from
+   * three to one.
+   *
+   * The thread pinning may be used to access per-processor data structures in
+   * critical sections with enabled thread dispatching, e.g. a pinned thread is
+   * allowed to block.
+   *
+   * Thread pinning should be used only for short critical sections and not all
+   * the time.  Thread pinning is a very low overhead operation in case the
+   * thread is not preempted during the pinning.
+   *
+   * @see _Thread_Pin() and _Thread_Unpin().
+   */
+  int pin_level;
 
   /**
    * @brief The thread processor affinity set.

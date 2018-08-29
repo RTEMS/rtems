@@ -73,7 +73,7 @@ rtems_status_code rtems_scheduler_add_processor(
     _Assert( idle != NULL );
     cpu->Scheduler.idle_if_online_and_unused = NULL;
 
-    idle->Scheduler.home = scheduler;
+    idle->Scheduler.home_scheduler = scheduler;
     idle->Start.initial_priority = idle_priority;
     scheduler_node =
       _Thread_Scheduler_get_node_by_index( idle, scheduler_index );

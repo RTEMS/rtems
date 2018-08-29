@@ -1025,7 +1025,7 @@ RTEMS_INLINE_ROUTINE const Scheduler_Control *_Thread_Scheduler_get_home(
 )
 {
 #if defined(RTEMS_SMP)
-  return the_thread->Scheduler.home;
+  return the_thread->Scheduler.home_scheduler;
 #else
   (void) the_thread;
   return &_Scheduler_Table[ 0 ];
@@ -1952,6 +1952,56 @@ size_t _Thread_Get_name(
   char                 *buffer,
   size_t                buffer_size
 );
+
+#if defined(RTEMS_SMP)
+#define THREAD_PIN_STEP 2
+
+#define THREAD_PIN_PREEMPTION 1
+
+void _Thread_Do_unpin(
+  Thread_Control  *executing,
+  Per_CPU_Control *cpu_self
+);
+#endif
+
+RTEMS_INLINE_ROUTINE void _Thread_Pin( Thread_Control *executing )
+{
+#if defined(RTEMS_SMP)
+  _Assert( executing == _Thread_Executing );
+
+  executing->Scheduler.pin_level += THREAD_PIN_STEP;
+#else
+  (void) executing;
+#endif
+}
+
+RTEMS_INLINE_ROUTINE void _Thread_Unpin(
+  Thread_Control  *executing,
+  Per_CPU_Control *cpu_self
+)
+{
+#if defined(RTEMS_SMP)
+  unsigned int pin_level;
+
+  _Assert( executing == _Thread_Executing );
+
+  pin_level = executing->Scheduler.pin_level;
+  _Assert( pin_level > 0 );
+
+  if (
+    RTEMS_PREDICT_TRUE(
+      pin_level != ( THREAD_PIN_STEP | THREAD_PIN_PREEMPTION )
+    )
+  ) {
+    executing->Scheduler.pin_level = pin_level - THREAD_PIN_STEP;
+  } else {
+    _Thread_Do_unpin( executing, cpu_self );
+  }
+#else
+  (void) executing;
+  (void) cpu_self;
+#endif
+}
 
 /** @}*/
 

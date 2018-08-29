@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013, 2016 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -89,6 +89,8 @@ typedef struct {
     _Scheduler_strong_APA_Ask_for_help, \
     _Scheduler_strong_APA_Reconsider_help_request, \
     _Scheduler_strong_APA_Withdraw_node, \
+    _Scheduler_default_Pin_or_unpin, \
+    _Scheduler_default_Pin_or_unpin, \
     _Scheduler_strong_APA_Add_processor, \
     _Scheduler_strong_APA_Remove_processor, \
     _Scheduler_strong_APA_Node_initialize, \

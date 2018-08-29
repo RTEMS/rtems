@@ -137,6 +137,36 @@ typedef struct {
   );
 
   /**
+   * @brief Pin thread operation.
+   *
+   * @param[in] scheduler The scheduler instance of the specified processor.
+   * @param[in] the_thread The thread to pin.
+   * @param[in] node The scheduler node of the thread.
+   * @param[in] cpu The processor to pin the thread.
+   */
+  void ( *pin )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    struct Per_CPU_Control  *cpu
+  );
+
+  /**
+   * @brief Unpin thread operation.
+   *
+   * @param[in] scheduler The scheduler instance of the specified processor.
+   * @param[in] the_thread The thread to unpin.
+   * @param[in] node The scheduler node of the thread.
+   * @param[in] cpu The processor to unpin the thread.
+   */
+  void ( *unpin )(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    struct Per_CPU_Control  *cpu
+  );
+
+  /**
    * @brief Add processor operation.
    *
    * @param[in] scheduler The scheduler instance to add the processor.
@@ -405,10 +435,28 @@ Priority_Control _Scheduler_default_Unmap_priority(
     Thread_Scheduler_state   next_state
   );
 
+  /**
+   * @brief Does nothing in a single processor system, otherwise a fatal error
+   * is issued.
+   *
+   * @param[in] scheduler Unused.
+   * @param[in] the_thread Unused.
+   * @param[in] node Unused.
+   * @param[in] cpu Unused.
+   */
+  void _Scheduler_default_Pin_or_unpin(
+    const Scheduler_Control *scheduler,
+    Thread_Control          *the_thread,
+    Scheduler_Node          *node,
+    struct Per_CPU_Control  *cpu
+  );
+
   #define SCHEDULER_OPERATION_DEFAULT_ASK_FOR_HELP \
     _Scheduler_default_Ask_for_help, \
     _Scheduler_default_Reconsider_help_request, \
     _Scheduler_default_Withdraw_node, \
+    _Scheduler_default_Pin_or_unpin, \
+    _Scheduler_default_Pin_or_unpin, \
     NULL, \
     NULL,
 #else

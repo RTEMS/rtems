@@ -9,7 +9,7 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2014, 2016 embedded brains GmbH.
+ *  Copyright (c) 2014, 2018 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -37,6 +37,80 @@ Thread_Control *_Thread_Allocated_fp;
 CHAIN_DEFINE_EMPTY( _User_extensions_Switches_list );
 
 #if defined(RTEMS_SMP)
+static ISR_Level _Thread_Check_pinning(
+  Thread_Control  *executing,
+  Per_CPU_Control *cpu_self,
+  ISR_Level        level
+)
+{
+  unsigned int pin_level;
+
+  pin_level = executing->Scheduler.pin_level;
+
+  if (
+    RTEMS_PREDICT_FALSE( pin_level != 0 )
+      && ( pin_level & THREAD_PIN_PREEMPTION ) == 0
+  ) {
+    ISR_lock_Context         state_lock_context;
+    ISR_lock_Context         scheduler_lock_context;
+    const Scheduler_Control *pinned_scheduler;
+    Scheduler_Node          *pinned_node;
+    const Scheduler_Control *home_scheduler;
+
+    _ISR_Local_enable( level );
+
+    executing->Scheduler.pin_level = pin_level | THREAD_PIN_PREEMPTION;
+
+    _Thread_State_acquire( executing, &state_lock_context );
+
+    pinned_scheduler = _Scheduler_Get_by_CPU( cpu_self );
+    pinned_node = _Thread_Scheduler_get_node_by_index(
+      executing,
+      _Scheduler_Get_index( pinned_scheduler )
+    );
+
+    if ( _Thread_Is_ready( executing ) ) {
+      _Scheduler_Block( executing);
+    }
+
+    home_scheduler = _Thread_Scheduler_get_home( executing );
+    executing->Scheduler.pinned_scheduler = pinned_scheduler;
+
+    if ( home_scheduler != pinned_scheduler ) {
+      _Chain_Extract_unprotected( &pinned_node->Thread.Scheduler_node.Chain );
+      _Chain_Prepend_unprotected(
+        &executing->Scheduler.Scheduler_nodes,
+        &pinned_node->Thread.Scheduler_node.Chain
+      );
+    }
+
+    _Scheduler_Acquire_critical( pinned_scheduler, &scheduler_lock_context );
+
+    ( *pinned_scheduler->Operations.pin )(
+      pinned_scheduler,
+      executing,
+      pinned_node,
+      cpu_self
+    );
+
+    if ( _Thread_Is_ready( executing ) ) {
+      ( *pinned_scheduler->Operations.unblock )(
+        pinned_scheduler,
+        executing,
+        pinned_node
+      );
+    }
+
+    _Scheduler_Release_critical( pinned_scheduler, &scheduler_lock_context );
+
+    _Thread_State_release( executing, &state_lock_context );
+
+    _ISR_Local_disable( level );
+  }
+
+  return level;
+}
+
 static void _Thread_Ask_for_help( Thread_Control *the_thread )
 {
   Chain_Node       *node;
@@ -77,9 +151,15 @@ static bool _Thread_Can_ask_for_help( const Thread_Control *executing )
 }
 #endif
 
-static void _Thread_Preemption_intervention( Per_CPU_Control *cpu_self )
+static ISR_Level _Thread_Preemption_intervention(
+  Thread_Control  *executing,
+  Per_CPU_Control *cpu_self,
+  ISR_Level        level
+)
 {
 #if defined(RTEMS_SMP)
+  level = _Thread_Check_pinning( executing, cpu_self, level );
+
   _Per_CPU_Acquire( cpu_self );
 
   while ( !_Chain_Is_empty( &cpu_self->Threads_in_need_for_help ) ) {
@@ -102,6 +182,8 @@ static void _Thread_Preemption_intervention( Per_CPU_Control *cpu_self )
 #else
   (void) cpu_self;
 #endif
+
+  return level;
 }
 
 static void _Thread_Post_switch_cleanup( Thread_Control *executing )
@@ -192,7 +274,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
   do {
     Thread_Control *heir;
 
-    _Thread_Preemption_intervention( cpu_self );
+    level = _Thread_Preemption_intervention( executing, cpu_self, level );
     heir = _Thread_Get_heir_and_make_it_executing( cpu_self );
 
     /*

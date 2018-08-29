@@ -1,0 +1,12 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpthreadpin01
+
+directives:
+
+  - _Thread_Pin()
+  - _Thread_Unpin()
+
+concepts:
+
+  - Ensure that the thread to processor pinning works.

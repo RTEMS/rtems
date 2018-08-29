@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2017 embedded brains GmbH.
+ * Copyright (c) 2017, 2018 embedded brains GmbH.
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -43,13 +43,24 @@ typedef struct {
   int64_t generation;
 
   /**
-   * @brief The ready queue index depending on the processor affinity of the thread.
+   * @brief The ready queue index depending on the processor affinity and
+   * pinning of the thread.
    *
    * The ready queue index zero is used for threads with a one-to-all thread
    * processor affinity.  Threads with a one-to-one processor affinity use the
    * processor index plus one as the ready queue index.
    */
-  uint32_t ready_queue_index;
+  uint8_t ready_queue_index;
+
+  /**
+   * @brief Ready queue index according to thread affinity.
+   */
+  uint8_t affinity_ready_queue_index;
+
+  /**
+   * @brief Ready queue index according to thread pinning.
+   */
+  uint8_t pinning_ready_queue_index;
 } Scheduler_EDF_SMP_Node;
 
 typedef struct {
@@ -105,6 +116,8 @@ typedef struct {
     _Scheduler_EDF_SMP_Ask_for_help, \
     _Scheduler_EDF_SMP_Reconsider_help_request, \
     _Scheduler_EDF_SMP_Withdraw_node, \
+    _Scheduler_EDF_SMP_Pin, \
+    _Scheduler_EDF_SMP_Unpin, \
     _Scheduler_EDF_SMP_Add_processor, \
     _Scheduler_EDF_SMP_Remove_processor, \
     _Scheduler_EDF_SMP_Node_initialize, \
@@ -160,6 +173,20 @@ void _Scheduler_EDF_SMP_Withdraw_node(
   Thread_Control          *the_thread,
   Scheduler_Node          *node,
   Thread_Scheduler_state   next_state
+);
+
+void _Scheduler_EDF_SMP_Pin(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  struct Per_CPU_Control  *cpu
+);
+
+void _Scheduler_EDF_SMP_Unpin(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *the_thread,
+  Scheduler_Node          *node,
+  struct Per_CPU_Control  *cpu
 );
 
 void _Scheduler_EDF_SMP_Add_processor(

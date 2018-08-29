@@ -1,0 +1,35 @@
+*** BEGIN OF TEST SMPTHREADPIN 1 ***
+*** TEST VERSION: 5.0.0.2d1c3dff12bbbfec63997985f11bc80edfc1e994
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_SMP
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 9670d7541e0621915e521fe76e7bb33de8cee661, Newlib d13c84eb07e35984bf7a974cd786a6cdac29e6b9)
+test simple wait unpin (run 1)
+test pin wait unpin (blocked, run 1)
+test pin wait unpin (ready, run 1)
+test pin preempt unpin (blocked, run 1)
+test pin preempt unpin (ready, run 1)
+test simple wait unpin (run 2)
+test pin wait unpin (blocked, run 2)
+test pin wait unpin (ready, run 2)
+test pin preempt unpin (blocked, run 2)
+test pin preempt unpin (ready, run 2)
+test simple wait unpin (run 3)
+test pin wait unpin (blocked, run 3)
+test pin wait unpin (ready, run 3)
+test pin preempt unpin (blocked, run 3)
+test pin preempt unpin (ready, run 3)
+reconfigure scheduler
+test pin home no help unpin (blocked, run 1)
+test pin home no help unpin (ready, run 1)
+test pin foreign no help unpin (blocked, run 1)
+test pin foreign no help unpin (ready, run 1)
+test pin home no help unpin (blocked, run 2)
+test pin home no help unpin (ready, run 2)
+test pin foreign no help unpin (blocked, run 2)
+test pin foreign no help unpin (ready, run 2)
+test pin home no help unpin (blocked, run 3)
+test pin home no help unpin (ready, run 3)
+test pin foreign no help unpin (blocked, run 3)
+test pin foreign no help unpin (ready, run 3)
+
+*** END OF TEST SMPTHREADPIN 1 ***

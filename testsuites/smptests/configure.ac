@@ -87,6 +87,7 @@ RTEMS_TEST_CHECK([smpsignal01])
 RTEMS_TEST_CHECK([smpstrongapa01])
 RTEMS_TEST_CHECK([smpswitchextension01])
 RTEMS_TEST_CHECK([smpthreadlife01])
+RTEMS_TEST_CHECK([smpthreadpin01])
 RTEMS_TEST_CHECK([smpunsupported01])
 RTEMS_TEST_CHECK([smpwakeafter01])
 

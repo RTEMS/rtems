@@ -1095,7 +1095,13 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     &the_thread->Real_priority
   );
 
-  if ( !_Priority_Is_empty( &old_scheduler_node->Wait.Priority ) ) {
+  if (
+    !_Priority_Is_empty( &old_scheduler_node->Wait.Priority )
+#if defined(RTEMS_SMP)
+      || !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes )
+      || the_thread->Scheduler.pin_level != 0
+#endif
+  ) {
     _Priority_Plain_insert(
       &old_scheduler_node->Wait.Priority,
       &the_thread->Real_priority,
@@ -1105,15 +1111,6 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
   }
 
 #if defined(RTEMS_SMP)
-  if ( !_Chain_Has_only_one_node( &the_thread->Scheduler.Wait_nodes ) ) {
-    _Priority_Plain_insert(
-      &old_scheduler_node->Wait.Priority,
-      &the_thread->Real_priority,
-      the_thread->Real_priority.priority
-    );
-    return STATUS_RESOURCE_IN_USE;
-  }
-
   old_scheduler = _Thread_Scheduler_get_home( the_thread );
   new_scheduler_node = _Thread_Scheduler_get_node_by_index(
     the_thread,
@@ -1140,7 +1137,8 @@ RTEMS_INLINE_ROUTINE Status_Control _Scheduler_Set(
     return STATUS_UNSATISFIED;
   }
 
-  the_thread->Scheduler.home = new_scheduler;
+  _Assert( the_thread->Scheduler.pinned_scheduler == NULL );
+  the_thread->Scheduler.home_scheduler = new_scheduler;
 
   _Scheduler_Release_critical( new_scheduler, &lock_context );
 

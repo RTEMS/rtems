@@ -622,6 +622,17 @@ endif
 endif
 
 if HAS_SMP
+if TEST_smpthreadpin01
+smp_tests += smpthreadpin01
+smp_screens += smpthreadpin01/smpthreadpin01.scn
+smp_docs += smpthreadpin01/smpthreadpin01.doc
+smpthreadpin01_SOURCES = smpthreadpin01/init.c
+smpthreadpin01_CPPFLAGS = $(AM_CPPFLAGS) \
+	$(TEST_FLAGS_smpthreadpin01) $(support_includes)
+endif
+endif
+
+if HAS_SMP
 if TEST_smpunsupported01
 smp_tests += smpunsupported01
 smp_screens += smpunsupported01/smpunsupported01.scn

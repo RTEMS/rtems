@@ -1185,6 +1185,14 @@ static inline bool _Scheduler_SMP_Ask_for_help(
   ISR_lock_Context  lock_context;
   bool              success;
 
+  if ( thread->Scheduler.pinned_scheduler != NULL ) {
+    /*
+     * Pinned threads are not allowed to ask for help.  Return success to break
+     * the loop in _Thread_Ask_for_help() early.
+     */
+    return true;
+  }
+
   lowest_scheduled = ( *get_lowest_scheduled )( context, node );
 
   _Thread_Scheduler_acquire_critical( thread, &lock_context );
@@ -1474,6 +1482,7 @@ static inline void _Scheduler_SMP_Set_affinity(
     ( *set_affinity )( context, node, arg );
     ( *enqueue )( context, node, insert_priority );
   } else {
+    _Assert( node_state == SCHEDULER_SMP_NODE_BLOCKED );
     ( *set_affinity )( context, node, arg );
   }
 }

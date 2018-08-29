@@ -143,7 +143,7 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_highest_ready(
   Scheduler_EDF_SMP_Context *self;
   Scheduler_EDF_SMP_Node    *highest_ready;
   Scheduler_EDF_SMP_Node    *node;
-  uint32_t                   rqi;
+  uint8_t                    rqi;
   const Chain_Node          *tail;
   Chain_Node                *next;
 
@@ -199,7 +199,7 @@ static inline void _Scheduler_EDF_SMP_Set_scheduled(
 
 static inline Scheduler_EDF_SMP_Node *_Scheduler_EDF_SMP_Get_scheduled(
   const Scheduler_EDF_SMP_Context *self,
-  uint32_t                         rqi
+  uint8_t                          rqi
 )
 {
   return self->Ready[ rqi ].scheduled;
@@ -211,7 +211,7 @@ static inline Scheduler_Node *_Scheduler_EDF_SMP_Get_lowest_scheduled(
 )
 {
   Scheduler_EDF_SMP_Node *filter;
-  uint32_t                rqi;
+  uint8_t                 rqi;
 
   filter = _Scheduler_EDF_SMP_Node_downcast( filter_base );
   rqi = filter->ready_queue_index;
@@ -240,7 +240,7 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
 {
   Scheduler_EDF_SMP_Context     *self;
   Scheduler_EDF_SMP_Node        *node;
-  uint32_t                       rqi;
+  uint8_t                        rqi;
   Scheduler_EDF_SMP_Ready_queue *ready_queue;
   int                            generation_index;
   int                            increment;
@@ -306,7 +306,7 @@ static inline void _Scheduler_EDF_SMP_Extract_from_ready(
 {
   Scheduler_EDF_SMP_Context     *self;
   Scheduler_EDF_SMP_Node        *node;
-  uint32_t                       rqi;
+  uint8_t                        rqi;
   Scheduler_EDF_SMP_Ready_queue *ready_queue;
 
   self = _Scheduler_EDF_SMP_Get_self( context );
@@ -369,7 +369,7 @@ static inline void _Scheduler_EDF_SMP_Allocate_processor(
 {
   Scheduler_EDF_SMP_Context     *self;
   Scheduler_EDF_SMP_Node        *scheduled;
-  uint32_t                       rqi;
+  uint8_t                        rqi;
 
   (void) victim_base;
   self = _Scheduler_EDF_SMP_Get_self( context );
@@ -647,7 +647,7 @@ static inline void _Scheduler_EDF_SMP_Do_set_affinity(
 )
 {
   Scheduler_EDF_SMP_Node *node;
-  const uint32_t         *rqi;
+  const uint8_t          *rqi;
 
   node = _Scheduler_EDF_SMP_Node_downcast( node_base );
   rqi = arg;
@@ -672,16 +672,61 @@ void _Scheduler_EDF_SMP_Start_idle(
   );
 }
 
+void _Scheduler_EDF_SMP_Pin(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node_base,
+  struct Per_CPU_Control  *cpu
+)
+{
+  Scheduler_EDF_SMP_Node *node;
+  uint8_t                 rqi;
+
+  (void) scheduler;
+  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+  rqi = (uint8_t) _Per_CPU_Get_index( cpu ) + 1;
+
+  _Assert(
+    _Scheduler_SMP_Node_state( &node->Base.Base ) == SCHEDULER_SMP_NODE_BLOCKED
+  );
+
+  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+  node->ready_queue_index = rqi;
+  node->pinning_ready_queue_index = rqi;
+}
+
+void _Scheduler_EDF_SMP_Unpin(
+  const Scheduler_Control *scheduler,
+  Thread_Control          *thread,
+  Scheduler_Node          *node_base,
+  struct Per_CPU_Control  *cpu
+)
+{
+  Scheduler_EDF_SMP_Node *node;
+
+  (void) scheduler;
+  (void) cpu;
+  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+
+  _Assert(
+    _Scheduler_SMP_Node_state( &node->Base.Base ) == SCHEDULER_SMP_NODE_BLOCKED
+  );
+
+  node->ready_queue_index = node->affinity_ready_queue_index;
+  node->pinning_ready_queue_index = 0;
+}
+
 bool _Scheduler_EDF_SMP_Set_affinity(
   const Scheduler_Control *scheduler,
   Thread_Control          *thread,
-  Scheduler_Node          *node,
+  Scheduler_Node          *node_base,
   const Processor_mask    *affinity
 )
 {
-  Scheduler_Context *context;
-  Processor_mask     local_affinity;
-  uint32_t           rqi;
+  Scheduler_Context      *context;
+  Scheduler_EDF_SMP_Node *node;
+  Processor_mask          local_affinity;
+  uint8_t                 rqi;
 
   context = _Scheduler_Get_context( scheduler );
   _Processor_mask_And( &local_affinity, &context->Processors, affinity );
@@ -696,18 +741,23 @@ bool _Scheduler_EDF_SMP_Set_affinity(
     rqi = _Processor_mask_Find_last_set( &local_affinity );
   }
 
-  _Scheduler_SMP_Set_affinity(
-    context,
-    thread,
-    node,
-    &rqi,
-    _Scheduler_EDF_SMP_Do_set_affinity,
-    _Scheduler_EDF_SMP_Extract_from_ready,
-    _Scheduler_EDF_SMP_Get_highest_ready,
-    _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
-    _Scheduler_EDF_SMP_Enqueue,
-    _Scheduler_EDF_SMP_Allocate_processor
-  );
+  node = _Scheduler_EDF_SMP_Node_downcast( node_base );
+  node->affinity_ready_queue_index = rqi;
+
+  if ( node->pinning_ready_queue_index == 0 ) {
+    _Scheduler_SMP_Set_affinity(
+      context,
+      thread,
+      node_base,
+      &rqi,
+      _Scheduler_EDF_SMP_Do_set_affinity,
+      _Scheduler_EDF_SMP_Extract_from_ready,
+      _Scheduler_EDF_SMP_Get_highest_ready,
+      _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,
+      _Scheduler_EDF_SMP_Enqueue,
+      _Scheduler_EDF_SMP_Allocate_processor
+    );
+  }
 
   return true;
 }
