@@ -25,14 +25,14 @@
 
 #define MUST_WAIT_FOR_INTERRUPT 1
 
-void nullFunc() {}
+static void nullFunc(void) {}
 static rtems_irq_connect_data clockIrqData = {BSP_DECREMENTER,
                                               0,
                                               (rtems_irq_enable)nullFunc,
                                               (rtems_irq_disable)nullFunc,
                                               (rtems_irq_is_enabled) nullFunc};
 
-void Install_tm27_vector(void (*_handler)())
+RTEMS_INLINE_ROUTINE void Install_tm27_vector(void (*_handler)())
 {
   clockIrqData.hdl = _handler;
   if (!BSP_install_rtems_irq_handler (&clockIrqData)) {
