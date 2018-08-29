@@ -28,7 +28,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/start/setvec.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/balloc.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/ofw.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/genarch/ofw_tree.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/generic/string.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwarch.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/main.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc64/shared/helenos/boot/sparc64/loader/ofwasm.S
