@@ -169,7 +169,7 @@ static inline uint32_t epiphany_coreid_to_rtems_map(uint32_t epiphany_id)
   return coreid;
 }
 
-static inline uint32_t _Epiphany_Get_current_processor()
+static inline uint32_t _Epiphany_Get_current_processor(void)
 {
   uint32_t coreid;
 
