@@ -169,7 +169,7 @@ void _CPU_ISR_install_vector(
 }
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-void *_CPU_Thread_Idle_body(uint32_t ignored)
+void *_CPU_Thread_Idle_body(uintptr_t ignored)
 {
   while (1) {
     __asm__ __volatile__("ssync; idle; ssync");
