@@ -148,16 +148,16 @@ extern unsigned long mon_assignhandler(long hnum,
 extern struct tfshdr *mon_tfsnext(struct tfshdr *tfp);
 extern struct tfshdr *mon_tfsstat(char *filename);
 
-#if SHOWVARARGS
+/*
+ * The external caller should see these as variable argument methods but
+ * they are not implemented that way, so let monlib.c prototype them internally
+ * when building that file.
+ */
+#ifndef _INSIDE_MONLIB
 extern void mon_memtrace(char *fmt, ...);
 extern int mon_printf(char *fmt, ...);
 extern int mon_cprintf(char *fmt, ...);
 extern int mon_sprintf(char *,char *fmt, ...);
-#else
-extern void mon_memtrace();
-extern int mon_printf();
-extern int mon_cprintf();
-extern int mon_sprintf();
 #endif
 
 #ifdef __cplusplus

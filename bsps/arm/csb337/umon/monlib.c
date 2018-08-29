@@ -43,6 +43,7 @@
  *  standards and to eliminate C++ style comments.
  */
 
+#define _INSIDE_MONLIB
 #include <umon/monlib.h>
 
 static int		(*_tfsseek)(int,int,int);
