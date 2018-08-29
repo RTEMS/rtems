@@ -24,7 +24,7 @@ force=0
 usage()
 {
   echo
-  echo "usage: ${progname} [-c|-p|-h] [-q][-v]"
+  echo "usage: ${progname} [-c|-h|-H] [-q][-v]"
   echo
   echo "options:"
   echo "	-c .. clean, remove all aclocal/autoconf/automake generated files"
