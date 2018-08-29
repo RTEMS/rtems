@@ -223,6 +223,7 @@ extern uint32_t lpc32xx_magic_zero_size [];
     uint32_t ctrl = 0; \
   \
     rtems_interrupt_disable(level); \
+    (void) level; /* avoid set but not used warning */ \
   \
     arm_cp15_data_cache_test_and_clean(); \
     arm_cp15_instruction_cache_invalidate(); \
