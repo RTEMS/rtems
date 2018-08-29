@@ -32,10 +32,10 @@
 
 extern void Fifo_Full_benchmark_timer_initialize (void);
 
-extern void (*Restart_Fifo_Full_A_Timer)();
-extern void (*Restart_Check_A_Timer)();
-extern void (*Restart_Fifo_Full_B_Timer)();
-extern void (*Restart_Check_B_Timer)();
+extern void (*Restart_Fifo_Full_A_Timer)(void);
+extern void (*Restart_Check_A_Timer)(void);
+extern void (*Restart_Fifo_Full_B_Timer)(void);
+extern void (*Restart_Check_B_Timer)(void);
 
 /*  CR */
 #define m340_SWR		(1<<15)
