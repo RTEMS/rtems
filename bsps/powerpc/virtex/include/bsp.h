@@ -59,8 +59,6 @@ extern "C" {
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
-#define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-
 /* Network Defines */
 #if 1 /* EB/doe changes */
 #define RTEMS_BSP_NETWORK_DRIVER_NAME     "eth0"

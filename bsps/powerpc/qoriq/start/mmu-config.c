@@ -344,9 +344,5 @@ void TEXT bsp_work_area_initialize(void)
 	uintptr_t begin = we->begin;
 	uintptr_t end = begin + we->size;
 
-#ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-	begin += rtems_configuration_get_interrupt_stack_size();
-#endif
-
 	bsp_work_area_initialize_default((void *) begin, end - begin);
 }

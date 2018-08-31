@@ -44,12 +44,12 @@ uint32_t bsp_time_base_frequency = 10000000;
     offset += VECTOR_TABLE_ENTRY_SIZE; \
   } while (0)
 
-static void t32mppc_initialize_exceptions(void *interrupt_stack_begin)
+static void t32mppc_initialize_exceptions(void)
 {
   uintptr_t addr;
 
   ppc_exc_initialize_interrupt_stack(
-    (uintptr_t) interrupt_stack_begin,
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
     rtems_configuration_get_interrupt_stack_size()
   );
 
@@ -86,6 +86,6 @@ void bsp_start(void)
 {
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
-  t32mppc_initialize_exceptions(bsp_section_work_begin);
+  t32mppc_initialize_exceptions();
   bsp_interrupt_initialize();
 }

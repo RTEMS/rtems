@@ -25,8 +25,6 @@
 
 #include <bspopts.h>
 
-#define BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-
 #define BSP_FEATURE_IRQ_EXTENSION
 
 #define MPC55XX_PERIPHERAL_CLOCK \

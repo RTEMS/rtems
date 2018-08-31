@@ -169,7 +169,9 @@ void bsp_start(void)
 
   initialize_frequency_parameters();
 
-  qoriq_initialize_exceptions(bsp_section_work_begin);
+  qoriq_initialize_exceptions(
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin
+  );
   bsp_interrupt_initialize();
 
   rtems_cache_coherent_add_area(

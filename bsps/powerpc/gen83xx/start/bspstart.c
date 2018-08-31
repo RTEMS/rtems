@@ -114,7 +114,7 @@ void bsp_start( void)
   ppc_exc_cache_wb_check = 0;
 #endif
   ppc_exc_initialize(
-    (uintptr_t) bsp_section_work_begin,
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
     rtems_configuration_get_interrupt_stack_size()
   );
 

@@ -91,7 +91,7 @@ void bsp_start( void )
    * Initialize default raw exception handlers.
    */
   ppc_exc_initialize_with_vector_base(
-    (uintptr_t) bsp_section_work_begin,
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
     rtems_configuration_get_interrupt_stack_size(),
     (void *) 0xfff00000
   );

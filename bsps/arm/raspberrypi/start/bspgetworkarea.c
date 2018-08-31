@@ -25,9 +25,6 @@
 #include <bsp.h>
 #include <bsp/bootcard.h>
 #include <bsp/vc.h>
-#ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-  #include <rtems/config.h>
-#endif
 
 #if defined(HAS_UBOOT) && !defined(BSP_DISABLE_UBOOT_WORK_AREA_CONFIG)
   #define USE_UBOOT
@@ -63,10 +60,6 @@ void bsp_work_area_initialize(void)
                           bsp_uboot_board_info.bi_memsize;
   #else
     ram_end = (uintptr_t)RamBase + (uintptr_t)RamSize;
-  #endif
-
-  #ifdef BSP_INTERRUPT_STACK_AT_WORK_AREA_BEGIN
-    work_base += rtems_configuration_get_interrupt_stack_size();
   #endif
 
   memset( &vc_entry, 0, sizeof(vc_entry) );
