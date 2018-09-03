@@ -276,6 +276,29 @@ static inline void _Scheduler_EDF_SMP_Insert_ready(
   }
 }
 
+static inline void _Scheduler_EDF_SMP_Extract_from_scheduled(
+  Scheduler_Context *context,
+  Scheduler_Node    *node_to_extract
+)
+{
+  Scheduler_EDF_SMP_Context     *self;
+  Scheduler_EDF_SMP_Node        *node;
+  uint8_t                        rqi;
+  Scheduler_EDF_SMP_Ready_queue *ready_queue;
+
+  self = _Scheduler_EDF_SMP_Get_self( context );
+  node = _Scheduler_EDF_SMP_Node_downcast( node_to_extract );
+
+  _Scheduler_SMP_Extract_from_scheduled( &self->Base.Base, &node->Base.Base );
+
+  rqi = node->ready_queue_index;
+  ready_queue = &self->Ready[ rqi ];
+
+  if ( rqi != 0 && !_RBTree_Is_empty( &ready_queue->Queue ) ) {
+    _Chain_Append_unprotected( &self->Affine_queues, &ready_queue->Node );
+  }
+}
+
 static inline void _Scheduler_EDF_SMP_Extract_from_ready(
   Scheduler_Context *context,
   Scheduler_Node    *node_to_extract
@@ -403,7 +426,7 @@ void _Scheduler_EDF_SMP_Block(
     context,
     thread,
     node,
-    _Scheduler_SMP_Extract_from_scheduled,
+    _Scheduler_EDF_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,

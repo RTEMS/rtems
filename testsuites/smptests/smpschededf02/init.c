@@ -156,6 +156,30 @@ static const test_action test_actions[] = {
   UNBLOCK(      0,              0, IDLE),
   SET_AFFINITY( 1,  A(1, 0),    0, IDLE),
   UNBLOCK(      1,              1,    0),
+  /*
+   * Block a one-to-one thread while having a non-empty affine ready queue on
+   * the same processor.
+   */
+  RESET,
+  SET_AFFINITY( 1,  A(1, 0), IDLE, IDLE),
+  SET_AFFINITY( 3,  A(1, 0), IDLE, IDLE),
+  UNBLOCK(      0,              0, IDLE),
+  UNBLOCK(      1,              1,    0),
+  UNBLOCK(      2,              1,    0),
+  UNBLOCK(      3,              1,    0),
+  BLOCK(        1,              2,    0),
+  BLOCK(        0,              3,    2),
+  /*
+   * Make sure that a one-to-one thread does not get the wrong processor
+   * allocated after selecting the highest ready thread.
+   */
+  RESET,
+  SET_AFFINITY( 1,  A(1, 0), IDLE, IDLE),
+  SET_AFFINITY( 2,  A(1, 0), IDLE, IDLE),
+  UNBLOCK(      0,              0, IDLE),
+  UNBLOCK(      1,              1,    0),
+  UNBLOCK(      2,              1,    0),
+  BLOCK(        0,              1, IDLE),
   RESET
 };
 
