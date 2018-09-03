@@ -102,6 +102,7 @@ void _Scheduler_priority_SMP_Block(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_priority_SMP_Extract_from_ready,
     _Scheduler_priority_SMP_Get_highest_ready,
     _Scheduler_priority_SMP_Move_from_ready_to_scheduled,

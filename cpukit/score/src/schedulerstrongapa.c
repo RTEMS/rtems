@@ -234,6 +234,7 @@ void _Scheduler_strong_APA_Block(
     context,
     the_thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_strong_APA_Extract_from_ready,
     _Scheduler_strong_APA_Get_highest_ready,
     _Scheduler_strong_APA_Move_from_ready_to_scheduled,

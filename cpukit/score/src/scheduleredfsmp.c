@@ -311,7 +311,7 @@ static inline void _Scheduler_EDF_SMP_Move_from_scheduled_to_ready(
 {
   Priority_Control insert_priority;
 
-  _Chain_Extract_unprotected( &scheduled_to_ready->Node.Chain );
+  _Scheduler_SMP_Extract_from_scheduled( context, scheduled_to_ready );
   insert_priority = _Scheduler_SMP_Node_priority( scheduled_to_ready );
   _Scheduler_EDF_SMP_Insert_ready(
     context,
@@ -403,6 +403,7 @@ void _Scheduler_EDF_SMP_Block(
     context,
     thread,
     node,
+    _Scheduler_SMP_Extract_from_scheduled,
     _Scheduler_EDF_SMP_Extract_from_ready,
     _Scheduler_EDF_SMP_Get_highest_ready,
     _Scheduler_EDF_SMP_Move_from_ready_to_scheduled,

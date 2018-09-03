@@ -867,9 +867,11 @@ static inline bool _Scheduler_SMP_Enqueue_scheduled(
 }
 
 static inline void _Scheduler_SMP_Extract_from_scheduled(
-  Scheduler_Node *node
+  Scheduler_Context *context,
+  Scheduler_Node    *node
 )
 {
+  (void) context;
   _Chain_Extract_unprotected( &node->Node.Chain );
 }
 
@@ -968,6 +970,8 @@ static inline void _Scheduler_SMP_Preempt_and_schedule_highest_ready(
  * @param[in] context The scheduler instance context.
  * @param[in] thread The thread of the scheduling operation.
  * @param[in] node The scheduler node of the thread to block.
+ * @param[in] extract_from_scheduled Function to extract a node from the set of
+ *   scheduled nodes.
  * @param[in] extract_from_ready Function to extract a node from the set of
  *   ready nodes.
  * @param[in] get_highest_ready Function to get the highest ready node.
@@ -978,6 +982,7 @@ static inline void _Scheduler_SMP_Block(
   Scheduler_Context                *context,
   Thread_Control                   *thread,
   Scheduler_Node                   *node,
+  Scheduler_SMP_Extract             extract_from_scheduled,
   Scheduler_SMP_Extract             extract_from_ready,
   Scheduler_SMP_Get_highest_ready   get_highest_ready,
   Scheduler_SMP_Move                move_from_ready_to_scheduled,
@@ -1001,7 +1006,7 @@ static inline void _Scheduler_SMP_Block(
     _Scheduler_SMP_Node_change_state( node, SCHEDULER_SMP_NODE_BLOCKED );
 
     if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-      _Scheduler_SMP_Extract_from_scheduled( node );
+      ( *extract_from_scheduled )( context, node );
       _Scheduler_SMP_Schedule_highest_ready(
         context,
         node,
@@ -1096,7 +1101,7 @@ static inline void _Scheduler_SMP_Update_priority(
   node_state = _Scheduler_SMP_Node_state( node );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( node );
+    _Scheduler_SMP_Extract_from_scheduled( context, node );
     ( *update )( context, node, priority );
     ( *enqueue_scheduled )( context, node, insert_priority );
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
@@ -1130,7 +1135,7 @@ static inline void _Scheduler_SMP_Yield(
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( node );
+    _Scheduler_SMP_Extract_from_scheduled( context, node );
     ( *enqueue_scheduled )( context, node, insert_priority );
     needs_help = false;
   } else if ( node_state == SCHEDULER_SMP_NODE_READY ) {
@@ -1299,7 +1304,7 @@ static inline void _Scheduler_SMP_Withdraw_node(
     _Scheduler_Thread_change_state( thread, next_state );
     _Thread_Scheduler_release_critical( thread, &lock_context );
 
-    _Scheduler_SMP_Extract_from_scheduled( node );
+    _Scheduler_SMP_Extract_from_scheduled( context, node );
     _Scheduler_SMP_Schedule_highest_ready(
       context,
       node,
@@ -1393,7 +1398,7 @@ static inline Thread_Control *_Scheduler_SMP_Remove_processor(
     chain_node = _Chain_Next( chain_node );
   } while ( _Thread_Get_CPU( victim_user ) != cpu );
 
-  _Scheduler_SMP_Extract_from_scheduled( victim_node );
+  _Scheduler_SMP_Extract_from_scheduled( context, victim_node );
   victim_owner = _Scheduler_Node_get_owner( victim_node );
 
   if ( !victim_owner->is_idle ) {
@@ -1452,7 +1457,7 @@ static inline void _Scheduler_SMP_Set_affinity(
   insert_priority = SCHEDULER_PRIORITY_APPEND( insert_priority );
 
   if ( node_state == SCHEDULER_SMP_NODE_SCHEDULED ) {
-    _Scheduler_SMP_Extract_from_scheduled( node );
+    _Scheduler_SMP_Extract_from_scheduled( context, node );
     _Scheduler_SMP_Preempt_and_schedule_highest_ready(
       context,
       node,
