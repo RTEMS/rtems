@@ -135,8 +135,6 @@ void bsp_start( void )
 #if !defined(mvme2100)
   unsigned l2cr;
 #endif
-  uintptr_t intrStackStart;
-  uintptr_t intrStackSize;
   prep_t boardManufacturer;
   motorolaBoard myBoard;
   Triv121PgTbl	pt=0;
@@ -217,16 +215,7 @@ void bsp_start( void )
     set_L2CR(0xb9A14000);
 #endif
 
-  /*
-   * Initialize the interrupt related settings.
-   */
-  intrStackStart = (uintptr_t)_Configuration_Interrupt_stack_area_begin;
-  intrStackSize = rtems_configuration_get_interrupt_stack_size();
-
-  /*
-   * Initialize default raw exception handlers.
-   */
-  ppc_exc_initialize(intrStackStart, intrStackSize);
+  ppc_exc_initialize();
 
   boardManufacturer   =  checkPrepBoardType(&residualCopy);
   if (boardManufacturer != PREP_Motorola) {
@@ -242,7 +231,6 @@ void bsp_start( void )
 #ifdef SHOW_MORE_INIT_SETTINGS
   printk("Residuals are located at %x\n", (unsigned) &residualCopy);
   printk("Additionnal boot options are %s\n", loaderParam);
-  printk("Software IRQ stack starts at %x with size %u\n", intrStackStart, intrStackSize);
   printk("-----------------------------------------\n");
 #endif
 

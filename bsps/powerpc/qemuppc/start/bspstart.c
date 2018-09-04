@@ -66,8 +66,6 @@ uint32_t _CPU_Counter_frequency(void)
 void bsp_start( void )
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
-  uintptr_t intrStackStart;
-  uintptr_t intrStackSize;
 
   /*
    * Note we can not get CPU identification dynamically, so
@@ -84,18 +82,9 @@ void bsp_start( void )
   bsp_time_base_frequency  = 20000000;
   bsp_clicks_per_usec      = BSP_bus_frequency;
 
-  /*
-   * Initialize the interrupt related settings.
-   */
-  intrStackStart = (uintptr_t) _Configuration_Interrupt_stack_area_begin;
-  intrStackSize = rtems_configuration_get_interrupt_stack_size();
-
   BSP_mem_size = (uint32_t )RamSize;
 
-  /*
-   * Initialize default raw exception handlers.
-   */
-  ppc_exc_initialize(intrStackStart, intrStackSize);
+  ppc_exc_initialize();
 
   /* Install default handler for the decrementer exception */
   sc = ppc_exc_set_handler( ASM_DEC_VECTOR, default_decrementer_exception_handler);

@@ -94,12 +94,8 @@ void bsp_start( void )
   get_ppc_cpu_type();
   get_ppc_cpu_revision();
 
-  /*
-   * Initialize default raw exception handlers.
-   */
   ppc_exc_initialize_with_vector_base(
     (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size(),
     virtex_exc_vector_base
   );
   __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));

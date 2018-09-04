@@ -155,9 +155,6 @@ uint32_t _CPU_Counter_frequency(void)
  */
 void bsp_start(void)
 {
-  uintptr_t          intrStackStart;
-  uintptr_t          intrStackSize;
-
   ppc_cpu_id_t       myCpu;
   ppc_cpu_revision_t myCpuRevision;
 
@@ -187,25 +184,17 @@ void bsp_start(void)
   /* Timebase register ticks/microsecond;  The application may override these */
   bsp_clicks_per_usec        = BSP_bus_frequency/(BSP_time_base_divisor * 1000);
 
-  /*
-   * Initialize the interrupt related settings.
-   */
-  intrStackStart = (uintptr_t)_Configuration_Interrupt_stack_area_begin;
-  intrStackSize  = rtems_configuration_get_interrupt_stack_size();
-
-  ppc_exc_initialize(intrStackStart, intrStackSize);
+  ppc_exc_initialize();
 
   /* Let the user know what parameters we were compiled with */
   printk("                  Base/Start     End         Size\n"
          "RAM:              %p                    %p\n"
          "RTEMS:                           %p\n"
-         "Interrupt Stack:  0x%08x              0x%x\n"
          "Workspace:        %p             %p\n"
          "MsgArea:          %p             %p\n"
          "Physical RAM                     %p\n",
          RamBase,        RamSize,
          __rtems_end,
-         intrStackStart,                intrStackSize,
          WorkAreaBase,   __bsp_ram_end,
          MsgAreaBase,    MsgAreaSize,
          __phy_ram_end);

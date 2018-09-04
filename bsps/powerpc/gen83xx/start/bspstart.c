@@ -113,10 +113,7 @@ void bsp_start( void)
 #ifndef BSP_DATA_CACHE_ENABLED
   ppc_exc_cache_wb_check = 0;
 #endif
-  ppc_exc_initialize(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size()
-  );
+  ppc_exc_initialize();
 
   /* Install default handler for the decrementer exception */
   sc = ppc_exc_set_handler( ASM_DEC_VECTOR, mpc83xx_decrementer_exception_handler);

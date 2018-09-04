@@ -47,8 +47,7 @@ static bool is_started_by_u_boot(uint32_t cpu_index)
 void qoriq_start_thread(Per_CPU_Control *cpu_self)
 {
   ppc_exc_initialize_interrupt_stack(
-    (uintptr_t) cpu_self->interrupt_stack_low,
-    rtems_configuration_get_interrupt_stack_size()
+    (uintptr_t) cpu_self->interrupt_stack_low
   );
 
   bsp_interrupt_facility_initialize();

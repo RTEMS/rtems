@@ -153,13 +153,10 @@ void bsp_start(void)
 
   /* Initialize exception handler */
   ppc_exc_cache_wb_check = 0;
-  ppc_exc_initialize(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size()
-  );
+  ppc_exc_initialize();
   ppc_exc_set_handler(ASM_ALIGN_VECTOR, ppc_exc_alignment_handler);
 
-  /* Initalize interrupt support */
+  /* Initialize interrupt support */
   bsp_interrupt_initialize();
 
   /*

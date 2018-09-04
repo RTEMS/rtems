@@ -26,8 +26,7 @@ static void bsp_work_area_initialize_later(void)
   uintptr_t work_size;
   uintptr_t work_area;
 
-  work_area = (uintptr_t)__rtems_end +
-              rtems_configuration_get_interrupt_stack_size();
+  work_area = (uintptr_t)__rtems_end;
   work_size = (uintptr_t)BSP_mem_size - work_area;
 
   bsp_work_area_initialize_default((void *) work_area, work_size);

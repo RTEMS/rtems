@@ -82,7 +82,6 @@ static void ppc_exc_fatal_error(void)
 
 void ppc_exc_initialize_with_vector_base(
   uintptr_t interrupt_stack_begin,
-  uintptr_t interrupt_stack_size,
   void *vector_base
 )
 {
@@ -110,7 +109,7 @@ void ppc_exc_initialize_with_vector_base(
     ppc_exc_fatal_error();
   }
 
-  ppc_exc_initialize_interrupt_stack(interrupt_stack_begin, interrupt_stack_size);
+  ppc_exc_initialize_interrupt_stack(interrupt_stack_begin);
 
 #ifndef PPC_EXC_CONFIG_BOOKE_ONLY
 

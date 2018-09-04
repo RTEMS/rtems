@@ -300,11 +300,9 @@ rtems_status_code ppc_exc_make_prologue(
   size_t *prologue_size
 );
 
-static inline void ppc_exc_initialize_interrupt_stack(
-  uintptr_t stack_begin,
-  uintptr_t stack_size
-)
+static inline void ppc_exc_initialize_interrupt_stack(uintptr_t stack_begin)
 {
+  uintptr_t stack_size = rtems_configuration_get_interrupt_stack_size();
   uintptr_t stack_end = stack_begin + stack_size;
   uintptr_t stack_pointer = stack_end - PPC_MINIMUM_STACK_FRAME_SIZE;
 
@@ -326,7 +324,6 @@ static inline void ppc_exc_initialize_interrupt_stack(
  */
 void ppc_exc_initialize_with_vector_base(
   uintptr_t interrupt_stack_begin,
-  uintptr_t interrupt_stack_size,
   void *vector_base
 );
 
@@ -343,14 +340,10 @@ void ppc_exc_initialize_with_vector_base(
  *   SVR4/EABI, or
  * - the minimal prologue creation failed.
  */
-static inline void ppc_exc_initialize(
-  uintptr_t interrupt_stack_begin,
-  uintptr_t interrupt_stack_size
-)
+static inline void ppc_exc_initialize(void)
 {
   ppc_exc_initialize_with_vector_base(
-    interrupt_stack_begin,
-    interrupt_stack_size,
+    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
     NULL
   );
 }

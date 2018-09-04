@@ -177,8 +177,6 @@ void bsp_start( void )
 {
   unsigned char  *stack;
   char           *chpt;
-  uintptr_t       intrStackStart;
-  uintptr_t       intrStackSize;
 
   Triv121PgTbl	pt=0;
 
@@ -231,21 +229,7 @@ void bsp_start( void )
 
   *((uint32_t *)stack) = 0;
 
-  /*
-   * Initialize the interrupt related settings
-   * SPRG0 = interrupt nesting level count
-   * SPRG1 = software managed IRQ stack
-   *
-   * This could be done latter (e.g in IRQ_INIT) but it helps to understand
-   * some settings below...
-   */
-  intrStackStart = (uintptr_t)_Configuration_Interrupt_stack_area_begin;
-  intrStackSize  = rtems_configuration_get_interrupt_stack_size();
-
-  /*
-   * Initialize default raw exception handlers. See vectors/vectors_init.c
-   */
-  ppc_exc_initialize(intrStackStart, intrStackSize);
+  ppc_exc_initialize();
 
   printk("CPU: %s\n", get_ppc_cpu_type_name(current_ppc_cpu));
 

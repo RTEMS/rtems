@@ -113,8 +113,7 @@ void qoriq_initialize_exceptions(void *interrupt_stack_begin)
   uintptr_t addr;
 
   ppc_exc_initialize_interrupt_stack(
-    (uintptr_t) interrupt_stack_begin,
-    rtems_configuration_get_interrupt_stack_size()
+    (uintptr_t) interrupt_stack_begin
   );
 
   addr = (uintptr_t) bsp_exc_vector_base;

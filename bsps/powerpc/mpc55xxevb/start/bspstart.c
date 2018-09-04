@@ -88,14 +88,10 @@ void bsp_start(void)
 	/* Time reference value */
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
 
-	/* Initialize exceptions */
 	ppc_exc_initialize_with_vector_base(
 		(uintptr_t) _Configuration_Interrupt_stack_area_begin,
-		rtems_configuration_get_interrupt_stack_size(),
 		mpc55xx_exc_vector_base
 	);
-
-	/* Initialize interrupts */
 	bsp_interrupt_initialize();
 
 	#if MPC55XX_CHIP_FAMILY != 566

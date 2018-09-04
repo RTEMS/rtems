@@ -87,12 +87,8 @@ void bsp_start( void )
   bsp_clicks_per_usec      = BSP_bus_frequency;
   BSP_time_base_divisor    = 1;
 
-  /*
-   * Initialize default raw exception handlers.
-   */
   ppc_exc_initialize_with_vector_base(
     (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size(),
     (void *) 0xfff00000
   );
 

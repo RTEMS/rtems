@@ -188,8 +188,6 @@ void bsp_start( void )
 #ifdef SHOW_LCR3_REGISTER
   unsigned l3cr;
 #endif
-  uintptr_t intrStackStart;
-  uintptr_t intrStackSize;
   Triv121PgTbl  pt=0;
 
   /* Till Straumann: 4/2005
@@ -222,16 +220,7 @@ void bsp_start( void )
   printk("Initial L1CR value = %x\n", l1cr);
 #endif
 
-  /*
-   * Initialize the interrupt related settings.
-   */
-  intrStackStart = (uintptr_t) _Configuration_Interrupt_stack_area_begin;
-  intrStackSize = rtems_configuration_get_interrupt_stack_size();
-
-  /*
-   * Initialize default raw exception handlers.
-   */
-  ppc_exc_initialize(intrStackStart, intrStackSize);
+  ppc_exc_initialize();
 
   /*
    * Init MMU block address translation to enable hardware

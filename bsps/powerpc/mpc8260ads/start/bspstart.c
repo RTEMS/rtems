@@ -138,13 +138,7 @@ void bsp_start(void)
   mmu_init();
 */
 
-  /* Initialize exception handler */
-  ppc_exc_initialize(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size()
-  );
-
-  /* Initalize interrupt support */
+  ppc_exc_initialize();
   bsp_interrupt_initialize();
 
 /*

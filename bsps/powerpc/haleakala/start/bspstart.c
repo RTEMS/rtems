@@ -181,13 +181,7 @@ void bsp_start( void )
   /* timebase register ticks/microsecond = CPU Clk in MHz */
   bsp_clicks_per_usec = 400;
 
-  /*
-   * Initialize default raw exception handlers.
-   */
-  ppc_exc_initialize(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
-    rtems_configuration_get_interrupt_stack_size()
-  );
+  ppc_exc_initialize();
 
   /*
    * Install our own set of exception vectors
