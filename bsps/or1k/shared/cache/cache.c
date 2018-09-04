@@ -96,30 +96,6 @@ static inline void _CPU_OR1K_Cache_instruction_block_lock
 
 /* Implement RTEMS cache manager functions */
 
-static void _CPU_cache_flush_1_data_line(const void *d_addr)
-{
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBFR, (uintptr_t) d_addr);
-
-  //__asm__ volatile("l.csync");
-
-  _ISR_Local_enable(level);
-}
-
-static void _CPU_cache_invalidate_1_data_line(const void *d_addr)
-{
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  _OR1K_mtspr(CPU_OR1K_SPR_DCBIR, (uintptr_t) d_addr);
-
-  _ISR_Local_enable(level);
-}
-
 static void _CPU_cache_freeze_data(void)
 {
   /* Do nothing */
@@ -128,17 +104,6 @@ static void _CPU_cache_freeze_data(void)
 static void _CPU_cache_unfreeze_data(void)
 {
   /* Do nothing */
-}
-
-static void _CPU_cache_invalidate_1_instruction_line(const void *d_addr)
-{
-  ISR_Level level;
-
-  _ISR_Local_disable (level);
-
-  _OR1K_mtspr(CPU_OR1K_SPR_ICBIR, (uintptr_t) d_addr);
-
-  _ISR_Local_enable(level);
 }
 
 static void _CPU_cache_freeze_instruction(void)
