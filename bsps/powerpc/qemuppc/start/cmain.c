@@ -18,15 +18,20 @@ __inb(int port)
 #endif
 
 static void
-__memcpy (unsigned char *d, unsigned char *s, int len)
+__memcpy (void *dv, void *sv, size_t len)
 {
+  unsigned char *d = (unsigned char *) dv;
+  unsigned char *s = (unsigned char *) sv;
+
   while (len--)
     *d++ = *s++;
 }
 
 static void
-__bzero (unsigned char *d, int len)
+__bzero (void *dv, size_t len)
 {
+  unsigned char *d = (unsigned char *) dv;
+
   while (len--)
     *d++ = 0;
 }
@@ -43,9 +48,13 @@ void cmain (void)
   /*
    * init variable sections
    */
-  __memcpy (bsp_section_data_begin, bsp_section_data_load_begin, (int)bsp_section_data_size);
-  __bzero (bsp_section_bss_begin, (int)bsp_section_bss_size);
-  __bzero (bsp_section_sbss_begin, (int)bsp_section_sbss_size);
+  __memcpy(
+    (char *)bsp_section_data_begin,
+    (char *) bsp_section_data_load_begin,
+    (int)bsp_section_data_size
+   );
+  __bzero((char *)bsp_section_bss_begin, (int)bsp_section_bss_size);
+  __bzero((char *)bsp_section_sbss_begin, (int)bsp_section_sbss_size);
   /* printk( "start of BSP\n"); */
   boot_card(0);
   /* printk( "end of BSP\n"); */
