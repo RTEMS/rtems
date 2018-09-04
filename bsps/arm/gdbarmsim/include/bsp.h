@@ -23,6 +23,8 @@
 
 #include <rtems.h>
 
+#include <sys/stat.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
