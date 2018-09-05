@@ -69,12 +69,15 @@ bool       bsp_serial_xon_xoff;
 bool       bsp_serial_cts_rts;
 uint32_t   bsp_serial_rate;
 
+/* leave in case needed in future */
+#if 0
 static void _BSP_GPLED0_on(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 &=  ~GP0_LED;		/* Turn on GP0 LED */
 }
+#endif
 
 static void _BSP_GPLED0_off(void)
 {
@@ -83,12 +86,15 @@ static void _BSP_GPLED0_off(void)
   csr->bcsr0 |=  GP0_LED;		/* Turn off GP0 LED */
 }
 
+/* leave in case needed in future */
+#if 0
 static void _BSP_GPLED1_on(void)
 {
   BCSR *csr;
   csr = (BCSR *)(m8260.memc[1].br & 0xFFFF8000);
   csr->bcsr0 &=  ~GP1_LED;		/* Turn on GP1 LED */
 }
+#endif
 
 static void _BSP_GPLED1_off(void)
 {
