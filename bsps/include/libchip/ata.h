@@ -29,7 +29,7 @@ rtems_device_driver rtems_ata_initialize(
         void *args);
 
 #define ATA_DRIVER_TABLE_ENTRY \
-    {rtems_ata_initialize, RTEMS_GENERIC_BLOCK_DEVICE_DRIVER_ENTRIES}
+  { rtems_ata_initialize, NULL, NULL, NULL, NULL, NULL }
 
 /* ATA IOCTL request codes */
 #define ATAIO_SET_MULTIPLE_MODE          _IO('A', 1)
