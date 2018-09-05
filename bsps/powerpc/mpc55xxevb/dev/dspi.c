@@ -31,6 +31,8 @@
 
 #include <rtems/status-checks.h>
 
+#include <inttypes.h>
+
 #define MPC55XX_DSPI_FIFO_SIZE 4
 
 #define MPC55XX_DSPI_CTAR_NUMBER 8
@@ -119,7 +121,7 @@ static void mpc55xx_dspi_edma_done( edma_channel_context *ctx, uint32_t error_st
 	rtems_semaphore_release( e->id);
 
 	if (error_status != 0) {
-		RTEMS_SYSLOG_ERROR( "eDMA error: 0x%08x\n", error_status);
+		RTEMS_SYSLOG_ERROR( "eDMA error: 0x%08" PRIx32 "\n", error_status);
 	}
 }
 
