@@ -708,6 +708,15 @@ spclock_err02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spclock_err02) \
 	$(support_includes)
 endif
 
+if TEST_spconfig01
+sp_tests += spconfig01
+sp_screens += spconfig01/spconfig01.scn
+sp_docs += spconfig01/spconfig01.doc
+spconfig01_SOURCES = spconfig01/init.c
+spconfig01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spconfig01) \
+	$(support_includes)
+endif
+
 if TEST_spconsole01
 sp_tests += spconsole01
 sp_screens += spconsole01/spconsole01.scn

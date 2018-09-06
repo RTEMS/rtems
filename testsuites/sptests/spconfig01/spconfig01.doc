@@ -1,0 +1,14 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spconfig01
+
+directives:
+
+  - CONFIGURE_APPLICATION_EXTRA_DRIVERS
+  - CONFIGURE_APPLICATION_NEEDS_STUB_DRIVER
+  - CONFIGURE_APPLICATION_PREREQUISITE_DRIVERS
+  - CONFIGURE_BSP_PREREQUISITE_DRIVERS
+
+concepts:
+
+  - Ensure that the driver initialization takes place in the right order.
