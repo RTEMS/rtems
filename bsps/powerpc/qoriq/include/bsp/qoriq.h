@@ -299,7 +299,7 @@ typedef struct {
   QORIQ_RESERVE(0x000000, 0x100000);
 } qoriq_fman;
 
-typedef struct {
+typedef struct qoriq_ccsr {
   qoriq_lcc lcc;
   QORIQ_FILL(0x000000, 0x000c00, qoriq_lcc);
   qoriq_law law [32];
@@ -436,7 +436,7 @@ typedef struct {
 typedef struct {
 } qoriq_boot_rom;
 
-typedef struct {
+typedef struct qoriq_ccsr {
   qoriq_lcc lcc;
   QORIQ_FILL(0x00000, 0x00c08, qoriq_lcc);
   qoriq_law law [12];
