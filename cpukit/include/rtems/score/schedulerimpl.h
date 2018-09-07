@@ -299,16 +299,22 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Block( Thread_Control *the_thread )
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock( Thread_Control *the_thread )
 {
+  Scheduler_Node          *scheduler_node;
   const Scheduler_Control *scheduler;
   ISR_lock_Context         lock_context;
 
-  scheduler = _Thread_Scheduler_get_home( the_thread );
-  _Scheduler_Acquire_critical( scheduler, &lock_context );
-  ( *scheduler->Operations.unblock )(
-    scheduler,
-    the_thread,
-    _Thread_Scheduler_get_home_node( the_thread )
+#if defined(RTEMS_SMP)
+  scheduler_node = SCHEDULER_NODE_OF_THREAD_SCHEDULER_NODE(
+    _Chain_First( &the_thread->Scheduler.Scheduler_nodes )
   );
+  scheduler = _Scheduler_Node_get_scheduler( scheduler_node );
+#else
+  scheduler_node = _Thread_Scheduler_get_home_node( the_thread );
+  scheduler = _Thread_Scheduler_get_home( the_thread );
+#endif
+
+  _Scheduler_Acquire_critical( scheduler, &lock_context );
+  ( *scheduler->Operations.unblock )( scheduler, the_thread, scheduler_node );
   _Scheduler_Release_critical( scheduler, &lock_context );
 }
 
