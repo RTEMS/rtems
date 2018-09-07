@@ -16,12 +16,6 @@ $(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtftpfs.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libtftpfs.a
 
-# poll is not supported
-UNUSED_FILES = poll.h
-# Original FreeBSD file
-UNUSED_FILES += sys/poll.h
-
-
 if LIBNETWORKING
 # Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
 libnetworking_CPPFLAGS = -DINET -DNFS \
@@ -119,10 +113,6 @@ libc_a_SOURCES += libc/getifaddrs.c
 libc_a_SOURCES += libc/if_indextoname.c
 libc_a_SOURCES += libc/if_nameindex.c
 endif
-
-UNUSED_FILES += libc/ether_addr.c libc/gethostname.c libc/inet_neta.c \
-    libc/inet_net_ntop.c libc/inet_net_pton.c libc/ns_addr.c \
-    libc/ns_ntoa.c
 
 libc_mans = libc/byteorder.3 libc/ethers.3 \
     libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
