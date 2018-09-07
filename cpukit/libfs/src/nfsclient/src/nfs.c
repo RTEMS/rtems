@@ -1002,7 +1002,6 @@ nfsInit(int smallPoolDepth, int bigPoolDepth)
 {
 static int initialised = 0;
 entry	dummy;
-rtems_status_code status;
 
 	if (initialised)
 		return 0;
