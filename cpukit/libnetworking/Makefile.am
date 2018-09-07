@@ -114,14 +114,7 @@ libc_a_SOURCES += libc/if_indextoname.c
 libc_a_SOURCES += libc/if_nameindex.c
 endif
 
-libc_mans = libc/byteorder.3 libc/ethers.3 \
-    libc/gethostbyname.3 libc/getnetent.3 libc/getprotoent.3 \
-    libc/getservent.3 libc/inet.3 libc/linkaddr.3 libc/ns.3 \
-    libc/rcmd.3 libc/resolver.3
-
 if LIBNETWORKING
-man_MANS = $(libc_MANS)
-
 ## lib
 
 
