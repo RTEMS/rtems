@@ -21,73 +21,12 @@ _SUBDIRS += libstdthreads
 _SUBDIRS += libdebugger
 _SUBDIRS += wrapup
 
+# other libraries
 _SUBDIRS += zlib
-
-# applications
 _SUBDIRS += ftpd
 _SUBDIRS += telnetd
 _SUBDIRS += pppd
 _SUBDIRS += mghttpd
-
-if LIBNETWORKING
-endif
-
-if LIBDL
-endif
-
-if LIBDEBUGGER
-endif
-
-if !LIBPCI
-endif
-## should be conditional and only installed for PowerPC, x86, and ARM
-## libfs
-## POSIX FIFO/pipe
-## devfs
-if LIBDOSFS
-endif
-
-# RFS
-# JFFS2
-## libblock
-## ftpd
-if LIBNETWORKING
-endif
-
-## bspcmdline
-## capture
-# tracing headers
-## cpuuse
-## devnull
-## dumpbuf
-## rtemsfdt
-## monitor
-## fb
-## mouse
-## libqos
-## redirector
-## shell
-if LIBSHELL
-endif
-
-## stringto
-## testsupport
-## i2c
-## serdbg
-if LIBSERDBG
-endif
-
-## stackchk
-## libuntar
-## fsmount
-## Driver manager
-if LIBDRVMGR
-endif
-
-if LIBGNAT
-endif
-
-## HACK: doxygen filter.
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
