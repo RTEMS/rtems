@@ -15,6 +15,7 @@ include_HEADERS += include/md5.h
 include_HEADERS += include/memory.h
 include_HEADERS += include/mqueue.h
 include_HEADERS += include/pci.h
+include_HEADERS += include/poll.h
 include_HEADERS += include/rtems.h
 include_HEADERS += include/sha256.h
 include_HEADERS += include/sha512.h

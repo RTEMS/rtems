@@ -5,7 +5,6 @@ include_HEADERS =
 include_HEADERS += ifaddrs.h
 include_HEADERS += librtemsNfs.h
 include_HEADERS += loop.h
-include_HEADERS += poll.h
 include_HEADERS += resolv.h
 
 include_arpadir = $(includedir)/arpa
