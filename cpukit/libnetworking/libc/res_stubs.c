@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-user-space.h>
+
 /*
  * Copyright (C) 1996 Peter Wemm <peter@freebsd.org>.
  * All rights reserved.

@@ -24,7 +24,7 @@
  * eric@skatter.usask.ca
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>

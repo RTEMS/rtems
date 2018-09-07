@@ -99,7 +99,7 @@
  *  from being compiled on systems which can't support this driver.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #if defined(DRIVER_SUPPORTED)
 	#undef DRIVER_SUPPORTED

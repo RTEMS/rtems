@@ -44,7 +44,7 @@
  * ------------------ SLAC Software Notices, Set 4 OTT.002a, 2004 FEB 03
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
@@ -55,13 +55,6 @@
 #include <errno.h>
 #include <assert.h>
 #include <bsp.h>
-
-#ifndef KERNEL
-#define KERNEL
-#endif
-#ifndef _KERNEL
-#define _KERNEL
-#endif
 
 #include <rtems/rtems_bsdnet.h>
 #include <sys/param.h>

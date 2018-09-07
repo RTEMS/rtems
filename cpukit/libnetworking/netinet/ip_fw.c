@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * Copyright (c) 1996 Alex Nash
  * Copyright (c) 1993 Daniel Boulet

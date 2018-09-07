@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-user-space.h>
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *

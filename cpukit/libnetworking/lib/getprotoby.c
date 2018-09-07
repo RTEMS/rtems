@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-user-space.h>
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

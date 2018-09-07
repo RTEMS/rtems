@@ -23,7 +23,7 @@
 
 */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <errno.h>
 #include <string.h>

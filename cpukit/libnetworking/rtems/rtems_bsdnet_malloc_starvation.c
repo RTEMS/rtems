@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  *  Routine called when malloc() is not succeeding.  This can be overridden
  *  by a BSP.

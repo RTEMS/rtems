@@ -47,14 +47,13 @@
  *	@(#)if_ethersubr.c	8.1 (Berkeley) 6/10/93
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <rtems/rtems_bsdnet.h>
 
 #include <sys/param.h>
 /*#include <sys/systm.h>
 #include <sys/kernel.h> */
-#define KERNEL
 #include <sys/malloc.h>
 #include <sys/mbuf.h>
 #include <sys/protosw.h>

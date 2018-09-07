@@ -10,7 +10,7 @@
  *  Copyright (C) 2011 Sebastien Bourdeauducq
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 #define RTEMS_STATUS_CHECKS_USE_PRINTK
 
 #include <bsp.h>

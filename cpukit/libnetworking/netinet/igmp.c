@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * Copyright (c) 1988 Stephen Deering.
  * Copyright (c) 1992, 1993

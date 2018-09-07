@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-user-space.h>
+
 /*
  * ++Copyright++ 1985, 1988, 1993
  * -

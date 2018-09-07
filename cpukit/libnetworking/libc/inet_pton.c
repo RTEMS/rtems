@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-user-space.h>
+
 /* Copyright (c) 1996 by Internet Software Consortium.
  *
  * Permission to use, copy, modify, and distribute this software for any

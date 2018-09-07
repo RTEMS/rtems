@@ -55,7 +55,7 @@
  *     Original RTEMS modifications.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #if defined(__i386__)
 

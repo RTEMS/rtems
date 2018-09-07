@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * if_ppp.c - Point-to-Point Protocol (PPP) Asynchronous driver.
  */

@@ -17,117 +17,123 @@ $(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
 TMPINSTALL_FILES += $(PROJECT_LIB)/libtftpfs.a
 
 if LIBNETWORKING
-# Add -DFORWARD_PROTOCOL to enable UDP forwarding -- requires missing net/pf.h
-libnetworking_CPPFLAGS = -DINET -DNFS \
-    -DDIAGNOSTIC -DBOOTP_COMPAT -D_KERNEL -D__BSD_VISIBLE
-
 noinst_LIBRARIES = libnetworking.a
-libnetworking_a_CPPFLAGS = $(AM_CPPFLAGS) $(libnetworking_CPPFLAGS)
-
-## poll.h is not in the list because RTEMS does not have poll()
-## and installing poll.h confuses autoconf.
-libnetworking_a_SOURCES = opt_atalk.h opt_bdg.h opt_compat.h opt_inet6.h \
-    opt_inet.h opt_ipfw.h opt_ipx.h opt_mac.h opt_mrouting.h opt_netgraph.h \
-    opt_tcpdebug.h opt_ipsec.h loop.h
-libnetworking_a_SOURCES += opt_ppp.h
-libnetworking_a_SOURCES += bpfilter.h
-
-# arpa
-
-## kern
-
-libnetworking_a_SOURCES += kern/kern_mib.c kern/kern_subr.c \
-    kern/kern_sysctl.c kern/uipc_domain.c kern/uipc_mbuf.c \
-    kern/uipc_socket.c kern/uipc_socket2.c
-
-## machine
-
-libnetworking_a_SOURCES += machine/limits.h
-
-## net
-
-libnetworking_a_SOURCES += net/if.c net/if_ethersubr.c net/if_loop.c \
-    net/radix.c net/route.c net/rtsock.c net/raw_cb.c net/raw_usrreq.c \
-    net/if_ppp.c net/ppp_tty.c net/slcompress.c
-
-## netinet
-
-libnetworking_a_SOURCES += netinet/if_ether.c netinet/igmp.c netinet/in.c \
-    netinet/in_cksum.c netinet/in_pcb.c netinet/in_proto.c netinet/in_rmx.c \
-    netinet/ip_divert.c netinet/ip_fw.c netinet/ip_icmp.c netinet/ip_input.c \
-    netinet/ip_mroute.c netinet/ip_output.c netinet/raw_ip.c \
-    netinet/tcp_debug.c netinet/tcp_input.c netinet/tcp_output.c \
-    netinet/tcp_subr.c netinet/tcp_timer.c netinet/tcp_usrreq.c \
-    netinet/udp_usrreq.c netinet/in_cksum_arm.h netinet/in_cksum_i386.h \
-    netinet/in_cksum_m68k.h netinet/in_cksum_powerpc.h
-
-## netinet6
-
-
-## nfs
-
+libnetworking_a_SOURCES =
+libnetworking_a_SOURCES += kern/kern_mib.c
+libnetworking_a_SOURCES += kern/kern_subr.c
+libnetworking_a_SOURCES += kern/kern_sysctl.c
+libnetworking_a_SOURCES += kern/uipc_domain.c
+libnetworking_a_SOURCES += kern/uipc_mbuf.c
+libnetworking_a_SOURCES += kern/uipc_socket2.c
+libnetworking_a_SOURCES += kern/uipc_socket.c
+libnetworking_a_SOURCES += libc/base64.c
+libnetworking_a_SOURCES += libc/gethostbydns.c
+libnetworking_a_SOURCES += libc/gethostbyht.c
+libnetworking_a_SOURCES += libc/gethostbynis.c
+libnetworking_a_SOURCES += libc/gethostnamadr.c
+libnetworking_a_SOURCES += libc/getifaddrs.c
+libnetworking_a_SOURCES += libc/getnameinfo.c
+libnetworking_a_SOURCES += libc/getnetbydns.c
+libnetworking_a_SOURCES += libc/getnetbyht.c
+libnetworking_a_SOURCES += libc/getnetbynis.c
+libnetworking_a_SOURCES += libc/getnetnamadr.c
+libnetworking_a_SOURCES += libc/getproto.c
+libnetworking_a_SOURCES += libc/getprotoent.c
+libnetworking_a_SOURCES += libc/getprotoname.c
+libnetworking_a_SOURCES += libc/getservbyname.c
+libnetworking_a_SOURCES += libc/getservbyport.c
+libnetworking_a_SOURCES += libc/getservent.c
+libnetworking_a_SOURCES += libc/herror.c
+libnetworking_a_SOURCES += libc/if_indextoname.c
+libnetworking_a_SOURCES += libc/if_nameindex.c
+libnetworking_a_SOURCES += libc/inet_addr.c
+libnetworking_a_SOURCES += libc/inet_lnaof.c
+libnetworking_a_SOURCES += libc/inet_makeaddr.c
+libnetworking_a_SOURCES += libc/inet_netof.c
+libnetworking_a_SOURCES += libc/inet_network.c
+libnetworking_a_SOURCES += libc/inet_ntoa.c
+libnetworking_a_SOURCES += libc/inet_ntop.c
+libnetworking_a_SOURCES += libc/inet_pton.c
+libnetworking_a_SOURCES += libc/linkaddr.c
+libnetworking_a_SOURCES += libc/map_v4v6.c
+libnetworking_a_SOURCES += libc/nsap_addr.c
+libnetworking_a_SOURCES += libc/ns_name.c
+libnetworking_a_SOURCES += libc/ns_netint.c
+libnetworking_a_SOURCES += libc/ns_parse.c
+libnetworking_a_SOURCES += libc/ns_print.c
+libnetworking_a_SOURCES += libc/ns_ttl.c
+libnetworking_a_SOURCES += libc/rcmd.c
+libnetworking_a_SOURCES += libc/recv.c
+libnetworking_a_SOURCES += libc/res_comp.c
+libnetworking_a_SOURCES += libc/res_data.c
+libnetworking_a_SOURCES += libc/res_debug.c
+libnetworking_a_SOURCES += libc/res_init.c
+libnetworking_a_SOURCES += libc/res_mkquery.c
+libnetworking_a_SOURCES += libc/res_mkupdate.c
+libnetworking_a_SOURCES += libc/res_query.c
+libnetworking_a_SOURCES += libc/res_send.c
+libnetworking_a_SOURCES += libc/res_stubs.c
+libnetworking_a_SOURCES += libc/res_update.c
+libnetworking_a_SOURCES += libc/send.c
+libnetworking_a_SOURCES += libc/strsep.c
+libnetworking_a_SOURCES += lib/getprotoby.c
+libnetworking_a_SOURCES += lib/rtems_bsdnet_ntp.c
+libnetworking_a_SOURCES += lib/syslog.c
+libnetworking_a_SOURCES += net/if.c
+libnetworking_a_SOURCES += net/if_ethersubr.c
+libnetworking_a_SOURCES += net/if_loop.c
+libnetworking_a_SOURCES += net/if_ppp.c
+libnetworking_a_SOURCES += netinet/if_ether.c
+libnetworking_a_SOURCES += netinet/igmp.c
+libnetworking_a_SOURCES += netinet/in.c
+libnetworking_a_SOURCES += netinet/in_cksum.c
+libnetworking_a_SOURCES += netinet/in_pcb.c
+libnetworking_a_SOURCES += netinet/in_proto.c
+libnetworking_a_SOURCES += netinet/in_rmx.c
+libnetworking_a_SOURCES += netinet/ip_divert.c
+libnetworking_a_SOURCES += netinet/ip_fw.c
+libnetworking_a_SOURCES += netinet/ip_icmp.c
+libnetworking_a_SOURCES += netinet/ip_input.c
+libnetworking_a_SOURCES += netinet/ip_mroute.c
+libnetworking_a_SOURCES += netinet/ip_output.c
+libnetworking_a_SOURCES += netinet/raw_ip.c
+libnetworking_a_SOURCES += netinet/tcp_debug.c
+libnetworking_a_SOURCES += netinet/tcp_input.c
+libnetworking_a_SOURCES += netinet/tcp_output.c
+libnetworking_a_SOURCES += netinet/tcp_subr.c
+libnetworking_a_SOURCES += netinet/tcp_timer.c
+libnetworking_a_SOURCES += netinet/tcp_usrreq.c
+libnetworking_a_SOURCES += netinet/udp_usrreq.c
+libnetworking_a_SOURCES += net/ppp_tty.c
+libnetworking_a_SOURCES += net/radix.c
+libnetworking_a_SOURCES += net/raw_cb.c
+libnetworking_a_SOURCES += net/raw_usrreq.c
+libnetworking_a_SOURCES += net/route.c
+libnetworking_a_SOURCES += net/rtsock.c
+libnetworking_a_SOURCES += net/slcompress.c
 libnetworking_a_SOURCES += nfs/bootp_subr.c
-
-## nfsclient
-## rtems
-
-libnetworking_a_SOURCES += rtems/sghostname.c \
-    rtems/rtems_glue.c rtems/rtems_malloc_mbuf.c rtems/rtems_syscall.c \
-    rtems/rtems_bootp.c rtems/rtems_dhcp.c rtems/rtems_dhcp_failsafe.c \
-    rtems/rtems_showmbuf.c rtems/rtems_showroute.c rtems/rtems_showifstat.c \
-    rtems/rtems_showipstat.c rtems/rtems_showicmpstat.c \
-    rtems/rtems_showtcpstat.c rtems/rtems_showudpstat.c rtems/rtems_select.c \
-    rtems/mkrootfs.c rtems/rtems_bsdnet_malloc_starvation.c \
-    rtems/rtems_mii_ioctl.c rtems/rtems_mii_ioctl_kern.c \
-    rtems/rtems_socketpair.c
-
-## sys
-
-# vm
-
-# dev
-## libc
-
-libc_CPPFLAGS = -DNOPOLL -DNOSELECT -D__BSD_VISIBLE -D_THREAD_SAFE
-
-noinst_LIBRARIES += libc.a
-libc_a_CPPFLAGS = $(AM_CPPFLAGS) $(libc_CPPFLAGS)
-
-libc_a_SOURCES = libc/base64.c \
-    libc/gethostbydns.c libc/gethostbyht.c libc/gethostbynis.c \
-    libc/gethostnamadr.c libc/getnetbydns.c libc/getnetbyht.c \
-    libc/getnetbynis.c libc/getnetnamadr.c libc/getnameinfo.c libc/getproto.c \
-    libc/getprotoent.c libc/getprotoname.c libc/getservbyname.c \
-    libc/getservbyport.c libc/getservent.c libc/herror.c libc/inet_addr.c \
-    libc/inet_lnaof.c libc/inet_makeaddr.c libc/inet_netof.c \
-    libc/inet_network.c libc/inet_ntoa.c libc/inet_ntop.c libc/inet_pton.c \
-    libc/linkaddr.c libc/map_v4v6.c libc/nsap_addr.c libc/ns_name.c \
-    libc/ns_netint.c libc/ns_parse.c libc/ns_print.c libc/ns_ttl.c \
-    libc/res_comp.c libc/res_data.c libc/res_debug.c libc/res_init.c \
-    libc/res_mkquery.c libc/res_mkupdate.c libc/res_query.c libc/res_send.c \
-    libc/res_stubs.c libc/res_update.c libc/strsep.c libc/rcmd.c
-libc_a_SOURCES += libc/res_config.h
-libc_a_SOURCES += libc/send.c
-libc_a_SOURCES += libc/recv.c
-libc_a_SOURCES += libc/getifaddrs.c
-libc_a_SOURCES += libc/if_indextoname.c
-libc_a_SOURCES += libc/if_nameindex.c
+libnetworking_a_SOURCES += rtems/mkrootfs.c
+libnetworking_a_SOURCES += rtems/rtems_bootp.c
+libnetworking_a_SOURCES += rtems/rtems_bsdnet_malloc_starvation.c
+libnetworking_a_SOURCES += rtems/rtems_dhcp.c
+libnetworking_a_SOURCES += rtems/rtems_dhcp_failsafe.c
+libnetworking_a_SOURCES += rtems/rtems_glue.c
+libnetworking_a_SOURCES += rtems/rtems_malloc_mbuf.c
+libnetworking_a_SOURCES += rtems/rtems_mii_ioctl.c
+libnetworking_a_SOURCES += rtems/rtems_mii_ioctl_kern.c
+libnetworking_a_SOURCES += rtems/rtems_select.c
+libnetworking_a_SOURCES += rtems/rtems_showicmpstat.c
+libnetworking_a_SOURCES += rtems/rtems_showifstat.c
+libnetworking_a_SOURCES += rtems/rtems_showipstat.c
+libnetworking_a_SOURCES += rtems/rtems_showmbuf.c
+libnetworking_a_SOURCES += rtems/rtems_showroute.c
+libnetworking_a_SOURCES += rtems/rtems_showtcpstat.c
+libnetworking_a_SOURCES += rtems/rtems_showudpstat.c
+libnetworking_a_SOURCES += rtems/rtems_socketpair.c
+libnetworking_a_SOURCES += rtems/rtems_syscall_api.c
+libnetworking_a_SOURCES += rtems/rtems_syscall.c
+libnetworking_a_SOURCES += rtems/sghostname.c
 endif
-
-if LIBNETWORKING
-## lib
-
-
-lib_CPPFLAGS = -DNOPOLL -DNOSELECT
-
-noinst_LIBRARIES += lib.a
-lib_a_CPPFLAGS = $(AM_CPPFLAGS) $(lib_CPPFLAGS) -D__BSD_VISIBLE
-
-lib_a_SOURCES = lib/getprotoby.c lib/rtems_bsdnet_ntp.c \
-    lib/syslog.c
-lib_a_SOURCES += rtems/rtems_syscall_api.c
-endif
-
 
 include $(top_srcdir)/automake/local.am
 if LIBNETWORKING

@@ -33,8 +33,7 @@
 #include <libchip/include/gmacd.h>
 #include <libchip/include/pio.h>
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__	1
-#define __BSD_VISIBLE				1
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>

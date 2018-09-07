@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * Copyright 1994, 1995 Massachusetts Institute of Technology
  *

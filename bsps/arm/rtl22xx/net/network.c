@@ -1,6 +1,6 @@
 /*Note: this file is copy from 7312 BSP, and untested yet*/
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <rtems.h>
 #include <sys/param.h>

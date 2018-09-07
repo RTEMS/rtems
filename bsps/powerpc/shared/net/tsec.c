@@ -17,7 +17,7 @@
 | this file contains the MPC83xx TSEC networking driver           |
 \*===============================================================*/
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <stdlib.h>
 #include <bsp.h>

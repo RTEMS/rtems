@@ -17,28 +17,6 @@ extern "C" {
 #endif
 
 /*
- *  If this file is included from inside the Network Stack proper or
- *  a device driver, then __INSIDE_RTEMS_BSD_TCPIP_STACK__ should be
- *  defined.  This triggers a number of internally used definitions.
- */
-
-#if defined(__INSIDE_RTEMS_BSD_TCPIP_STACK__)
-#undef _KERNEL
-#undef INET
-#undef NFS
-#undef DIAGNOSTIC
-#undef BOOTP_COMPAT
-#undef __BSD_VISIBLE
-
-#define _KERNEL
-#define INET
-#define NFS
-#define DIAGNOSTIC
-#define BOOTP_COMPAT
-#define __BSD_VISIBLE 1
-#endif
-
-/*
  * Values that may be obtained by BOOTP
  */
 extern struct in_addr rtems_bsdnet_bootp_server_address;

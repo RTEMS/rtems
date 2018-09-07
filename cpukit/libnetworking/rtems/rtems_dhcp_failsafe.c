@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
   Description: Wrapper around DHCP client to restart it when the interface
                moves to another network.

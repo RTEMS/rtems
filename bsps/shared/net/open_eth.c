@@ -19,7 +19,7 @@
  *        that used by this driver.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #if defined(__i386__) || defined(__arm__) || defined(__PPC__)
   #define OPENETH_NOT_SUPPORTED

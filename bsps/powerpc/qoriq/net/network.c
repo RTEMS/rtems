@@ -20,8 +20,7 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
-#define __BSD_VISIBLE 1
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <assert.h>
 #include <string.h>

@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * ppp_tty.c - Point-to-Point Protocol (PPP) driver for asynchronous
  * 	       tty devices.

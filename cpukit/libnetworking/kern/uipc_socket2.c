@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * This file has undergone several changes to reflect the
  * differences between the RTEMS and FreeBSD kernels.

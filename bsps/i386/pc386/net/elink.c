@@ -31,7 +31,7 @@
  * Common code for dealing with 3COM ethernet cards.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <sys/types.h>
 

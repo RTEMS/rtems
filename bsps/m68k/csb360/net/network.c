@@ -22,7 +22,7 @@
  *  Copyright (c) 1999, National Research Council of Canada
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <bsp.h>
 #include <stdio.h>

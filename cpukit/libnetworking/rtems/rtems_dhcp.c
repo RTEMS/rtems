@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  *  DCHP client for RTEMS
  *  Andrew Bythell, <abythell@nortelnetworks.com>
@@ -54,20 +56,7 @@
  *
  */
 
-/*
- * WARNING:
- *   This file should be moved into c/src/libnetworking/nfs
- *   and the following two #ifndef...#endif blocks and the #undefs at
- *   the end of the file should be removed
- */
-
-#ifndef __INSIDE_RTEMS_BSD_TCPIP_STACK__
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
-#endif
-
-#ifndef __BSD_VISIBLE
-#define __BSD_VISIBLE 1
-#endif
+#include <machine/rtems-bsd-kernel-space.h>
 
 #if HAVE_CONFIG_H
 #include "config.h"

@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*-
  * Copyright (c) 1989, 1993, 1994
  *	The Regents of the University of California.  All rights reserved.

@@ -17,7 +17,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <rtems.h>
 #include "lan91c11x.h"

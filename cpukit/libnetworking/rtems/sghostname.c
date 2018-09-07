@@ -1,3 +1,5 @@
+#include <machine/rtems-bsd-kernel-space.h>
+
 /*
  * RTEMS versions of hostname functions
  * FIXME: Not thread-safe

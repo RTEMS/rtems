@@ -10,7 +10,7 @@
  *
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 #define PPC_HAS_CLASSIC_EXCEPTIONS FALSE
 
 #include <bsp.h>

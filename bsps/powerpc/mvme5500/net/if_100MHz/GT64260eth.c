@@ -19,7 +19,7 @@
  *
  */
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__
+#include <machine/rtems-bsd-kernel-space.h>
 
 #define BYTE_ORDER BIG_ENDIAN
 

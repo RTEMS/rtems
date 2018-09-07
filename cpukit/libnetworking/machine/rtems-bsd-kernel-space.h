@@ -1,8 +1,11 @@
-#include <machine/rtems-bsd-user-space.h>
-
 /*
- * Copyright (c) 1988, 1993
- *	The Regents of the University of California.  All rights reserved.
+ * Copyright (c) 2018 embedded brains GmbH.  All rights reserved.
+ *
+ *  embedded brains GmbH
+ *  Dornierstr. 4
+ *  82178 Puchheim
+ *  Germany
+ *  <rtems@embedded-brains.de>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -12,18 +15,11 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 3. All advertising materials mentioning features or use of this software
- *    must display the following acknowledgement:
- *	This product includes software developed by the University of
- *	California, Berkeley and its contributors.
- * 4. Neither the name of the University nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
@@ -33,21 +29,14 @@
  * SUCH DAMAGE.
  */
 
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif
+#ifndef _RTEMS_BSD_MACHINE_RTEMS_BSD_KERNEL_SPACE_H_
+#define	_RTEMS_BSD_MACHINE_RTEMS_BSD_KERNEL_SPACE_H_
 
-#include <sys/types.h>
-#include <sys/socket.h>
+#define	BOOTP_COMPAT 1
+#define	DIAGNOSTIC 1
+#define	INET 1
+#define	__INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
+#define	_KERNEL 1
+#define	NFS 1
 
-#include <stddef.h>
-
-ssize_t
-recv(
-	int s,
-	void *buf,
-	size_t len,
-	int flags )
-{
-	return (recvfrom(s, buf, len, flags, NULL, 0));
-}
+#endif /* _RTEMS_BSD_MACHINE_RTEMS_BSD_KERNEL_SPACE_H_ */

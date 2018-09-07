@@ -84,8 +84,6 @@ endif
 
 if LIBNETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
-TMP_LIBS += ../libnetworking/libc.a
-TMP_LIBS += ../libnetworking/lib.a
 TMP_LIBS += ../librpc/librpc.a
 TMP_LIBS += ../librpc/libxdr.a
 endif

@@ -26,8 +26,7 @@
 
 #if defined(RTEMS_NETWORKING) && defined(MPC55XX_HAS_SIU)
 
-#define __INSIDE_RTEMS_BSD_TCPIP_STACK__ 1
-#define __BSD_VISIBLE 1
+#include <machine/rtems-bsd-kernel-space.h>
 
 #include <errno.h>
 #include <assert.h>
