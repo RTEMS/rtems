@@ -1,3 +1,5 @@
+#include "rtems-rpc-config.h"
+
 /*	$NetBSD: bindresvport.c,v 1.19 2000/07/06 03:03:59 christos Exp $	*/
 
 /*

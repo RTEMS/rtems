@@ -19,7 +19,7 @@ if LIBNETWORKING
 man_MANS += $(libxdr_mans)
 
 noinst_LIBRARIES += librpc.a
-librpc_a_CPPFLAGS = $(AM_CPPFLAGS) $(librpc_CPPFLAGS)
+librpc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 librpc_a_SOURCES = src/rpc/auth_none.c src/rpc/auth_unix.c \
     src/rpc/authunix_prot.c src/rpc/bindresvport.c src/rpc/clnt_generic.c \
@@ -34,9 +34,6 @@ librpc_a_SOURCES = src/rpc/auth_none.c src/rpc/auth_unix.c \
     src/rpc/svc_raw.c src/rpc/svc_run.c src/rpc/svc_simple.c \
     src/rpc/svc_tcp.c src/rpc/svc_udp.c src/rpc/rtems_portmapper.c \
     src/rpc/rtems_rpc.c
-
-librpc_CPPFLAGS = -D_RPC_read=read -D_RPC_write=write -D_RPC_close=close \
-    -D_RTEMS_RPC_INTERNAL_
 endif
 
 librpc_mans = src/rpc/bindresvport.3 src/rpc/getrpcent.3 src/rpc/publickey.3 \

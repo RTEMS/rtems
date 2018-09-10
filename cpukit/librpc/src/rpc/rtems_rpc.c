@@ -1,3 +1,5 @@
+#include "rtems-rpc-config.h"
+
 /*
  * RTEMS multi-tasking support
  */
