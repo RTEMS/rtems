@@ -492,28 +492,6 @@ RTEMS_AMPOLISH3
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
 Doxyfile
-Makefile
-score/Makefile
-score/cpu/Makefile
-score/cpu/arm/Makefile
-score/cpu/bfin/Makefile
-score/cpu/epiphany/Makefile
-score/cpu/i386/Makefile
-score/cpu/lm32/Makefile
-score/cpu/m68k/Makefile
-score/cpu/m32c/Makefile
-score/cpu/mips/Makefile
-score/cpu/moxie/Makefile
-score/cpu/nios2/Makefile
-score/cpu/or1k/Makefile
-score/cpu/powerpc/Makefile
-score/cpu/riscv/Makefile
-score/cpu/sh/Makefile
-score/cpu/sparc/Makefile
-score/cpu/sparc64/Makefile
-score/cpu/v850/Makefile
-score/cpu/x86_64/Makefile
-score/cpu/no_cpu/Makefile
-libnetworking/Makefile])
+Makefile])
 
 AC_OUTPUT

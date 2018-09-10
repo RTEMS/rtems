@@ -2,6 +2,17 @@ ACLOCAL_AMFLAGS = -I aclocal
 
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
+include $(srcdir)/header-dirs.am
+include $(srcdir)/headers.am
+
+if LIBNETWORKING
+
+include $(srcdir)/libnetworking/headers.am
+
+endif
+
+# This file is in the build tree
+include_rtems_score_HEADERS += ../include/rtems/score/cpuopts.h
 
 project_lib_LIBRARIES =
 
@@ -1505,6 +1516,8 @@ endif
 
 if CPU_ARM
 
+include $(srcdir)/score/cpu/arm/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/arm/__aeabi_read_tp.c
 librtemscpu_a_SOURCES += score/cpu/arm/arm-context-validate.S
 librtemscpu_a_SOURCES += score/cpu/arm/arm-context-volatile-clobber.S
@@ -1539,6 +1552,8 @@ endif
 
 if CPU_BFIN
 
+include $(srcdir)/score/cpu/bfin/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/bfin/bfin-exception-frame-print.c
 librtemscpu_a_SOURCES += score/cpu/bfin/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/bfin/cpu.c
@@ -1548,6 +1563,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 endif
 
 if CPU_EPIPHANY
+
+include $(srcdir)/score/cpu/epiphany/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/epiphany/cpu.c
 librtemscpu_a_SOURCES += score/cpu/epiphany/epiphany-context-initialize.c
@@ -1560,6 +1577,8 @@ endif
 
 if CPU_I386
 
+include $(srcdir)/score/cpu/i386/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/i386/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/i386/cpu.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
@@ -1569,6 +1588,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
 endif
 
 if CPU_LM32
+
+include $(srcdir)/score/cpu/lm32/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/lm32/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/lm32/cpu.c
@@ -1580,6 +1601,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 endif
 
 if CPU_M32C
+
+include $(srcdir)/score/cpu/m32c/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/m32c/context_init.c
 librtemscpu_a_SOURCES += score/cpu/m32c/context_switch.S
@@ -1594,6 +1617,8 @@ endif
 
 if CPU_M68K
 
+include $(srcdir)/score/cpu/m68k/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/m68k/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/m68k/cpu.c
 librtemscpu_a_SOURCES += score/cpu/m68k/m68k-exception-frame-print.c
@@ -1605,6 +1630,8 @@ endif
 
 if CPU_MIPS
 
+include $(srcdir)/score/cpu/mips/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/mips/cpu.c
 librtemscpu_a_SOURCES += score/cpu/mips/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
@@ -1613,6 +1640,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 endif
 
 if CPU_MOXIE
+
+include $(srcdir)/score/cpu/moxie/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/moxie/cpu.c
 librtemscpu_a_SOURCES += score/cpu/moxie/moxie-exception-frame-print.c
@@ -1624,6 +1653,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
 endif
 
 if CPU_NIOS2
+
+include $(srcdir)/score/cpu/nios2/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-context-initialize.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-context-switch.S
@@ -1655,6 +1686,8 @@ endif
 
 if CPU_NO_CPU
 
+include $(srcdir)/score/cpu/no_cpu/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpu.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpu_asm.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
@@ -1664,6 +1697,8 @@ librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
 endif
 
 if CPU_OR1K
+
+include $(srcdir)/score/cpu/or1k/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/or1k/cpu.c
@@ -1679,6 +1714,8 @@ endif
 
 if CPU_POWERPC
 
+include $(srcdir)/score/cpu/powerpc/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
 librtemscpu_a_SOURCES += score/cpu/powerpc/cpu.c
 librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-context-volatile-clobber.S
@@ -1689,6 +1726,8 @@ librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-isr-vector-install.c
 endif
 
 if CPU_RISCV
+
+include $(srcdir)/score/cpu/riscv/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/riscv/cpu.c
 librtemscpu_a_SOURCES += score/cpu/riscv/riscv-exception-handler.S
@@ -1703,6 +1742,8 @@ endif
 
 if CPU_SH
 
+include $(srcdir)/score/cpu/sh/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
@@ -1713,6 +1754,8 @@ librtemscpu_a_SOURCES += score/cpu/sh/sh-exception-frame-print.c
 endif
 
 if CPU_SPARC64
+
+include $(srcdir)/score/cpu/sparc64/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
@@ -1726,6 +1769,8 @@ librtemscpu_a_SOURCES += score/cpu/sparc64/sparc64-syscall.S
 endif
 
 if CPU_SPARC
+
+include $(srcdir)/score/cpu/sparc/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
 librtemscpu_a_SOURCES += score/cpu/sparc/access_le.c
@@ -1743,6 +1788,8 @@ endif
 
 if CPU_V850
 
+include $(srcdir)/score/cpu/v850/headers.am
+
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpuidle.c
@@ -1753,6 +1800,8 @@ librtemscpu_a_SOURCES += score/cpu/v850/v850-exception-frame-print.c
 endif
 
 if CPU_X86_64
+
+include $(srcdir)/score/cpu/x86_64/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
@@ -1795,10 +1844,6 @@ version-vc-key.h: generate-vc-key
 $(top_srcdir)/sapi/src/version.c: version-vc-key.h
 
 all-local: generate-vc-key
-
-# librtemscpu
-_SUBDIRS = . score
-_SUBDIRS += libnetworking
 
 project_lib_LIBRARIES += libftpd.a
 
@@ -1929,6 +1974,3 @@ libmghttpd_a_SOURCES += mghttpd/mongoose.c
 endif
 
 endif
-
-include $(top_srcdir)/automake/subdirs.am
-include $(srcdir)/headers.am
