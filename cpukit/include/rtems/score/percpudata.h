@@ -76,8 +76,14 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
  * @param type The type of the item.
  * @param offset The offset of the item.
  */
+#ifdef RTEMS_SMP
 #define PER_CPU_DATA_GET_BY_OFFSET( cpu, type, offset ) \
   (type *) ( cpu->data + offset )
+#else
+#define PER_CPU_DATA_GET_BY_OFFSET( cpu, type, offset ) \
+  (type *) ( (uintptr_t) RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ) + offset ), \
+    (void) cpu
+#endif
 
 /**
  * @brief Returns a pointer of the specified type to the specified per-CPU item
@@ -92,7 +98,7 @@ RTEMS_LINKER_RWSET_DECLARE( _Per_CPU_Data, char );
   PER_CPU_DATA_GET_BY_OFFSET( cpu, type, PER_CPU_DATA_OFFSET( item ) )
 #else
 #define PER_CPU_DATA_GET( cpu, type, item ) \
-  &_Linker_set__Per_CPU_Data_##item
+  &_Linker_set__Per_CPU_Data_##item, (void) cpu
 #endif
 
 /** @} */

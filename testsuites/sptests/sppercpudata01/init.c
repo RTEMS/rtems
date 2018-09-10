@@ -74,10 +74,15 @@ static void test_initial_values(void)
     unsigned short *s;
     unsigned int *i;
     unsigned long *l;
+    uintptr_t off;
     t *pt;
 
     set_affinity(cpu_index);
     cpu = _Per_CPU_Get_by_index(cpu_index);
+
+    off = PER_CPU_DATA_OFFSET(c);
+    c = PER_CPU_DATA_GET_BY_OFFSET(cpu, unsigned char, off);
+    rtems_test_assert(*c == 1);
 
     c = PER_CPU_DATA_GET(cpu, unsigned char, c);
     rtems_test_assert(*c == 1);
@@ -197,6 +202,7 @@ static void test_unique_values(unsigned int v)
     unsigned short *s;
     unsigned int *i;
     unsigned long *l;
+    uintptr_t off;
     t *pt;
 
     set_affinity(cpu_index);
@@ -204,6 +210,10 @@ static void test_unique_values(unsigned int v)
 
     c = PER_CPU_DATA_GET(cpu, unsigned char, c);
     ++v;
+    rtems_test_assert(*c == (unsigned char) v);
+
+    off = PER_CPU_DATA_OFFSET(c);
+    c = PER_CPU_DATA_GET_BY_OFFSET(cpu, unsigned char, off);
     rtems_test_assert(*c == (unsigned char) v);
 
     c = PER_CPU_DATA_GET(cpu, unsigned char, cz);
