@@ -25,6 +25,10 @@
 #if defined(__rtems__)
 #include <md5.h>
 #define HAVE_MD5
+#define NO_CGI
+#define NO_POPEN
+#define NO_SSL
+#define USE_WEBSOCKET
 #endif // __rtems__
 
 #if defined(_WIN32)
