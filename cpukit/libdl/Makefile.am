@@ -29,7 +29,6 @@ libdl_a_SOURCES = \
   rtl-unresolved.c
 
 libdl_a_SOURCES += rtl-mdreloc-@RTEMS_CPU@.c
-libdl_a_CPPFLAGS = $(AM_CPPFLAGS) -DRTEMS_RTL_RAP_LOADER=1 -DRTEMS_RTL_ELF_LOADER=1
 
 endif
 

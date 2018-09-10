@@ -33,6 +33,9 @@
 #include "rtl-string.h"
 #include <rtems/rtl/rtl-trace.h>
 
+#define RTEMS_RTL_ELF_LOADER 1
+#define RTEMS_RTL_RAP_LOADER 1
+
 #if RTEMS_RTL_RAP_LOADER
 #include "rtl-rap.h"
 #define RTEMS_RTL_RAP_LOADER_COUNT 1
