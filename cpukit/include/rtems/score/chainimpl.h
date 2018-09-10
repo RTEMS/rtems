@@ -562,6 +562,8 @@ RTEMS_INLINE_ROUTINE void _Chain_Extract_unprotected(
   Chain_Node *next;
   Chain_Node *previous;
 
+  _Assert( !_Chain_Is_node_off_chain( the_node ) );
+
   next           = the_node->next;
   previous       = the_node->previous;
   next->previous = previous;
