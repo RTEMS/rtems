@@ -12,7 +12,7 @@ libpppd_a_SOURCES = auth.c ccp.c ccp.h chap.c chap.h chap_ms.c chap_ms.h \
     options.c upap.c upap.h utils.c sys-rtems.c \
     rtemsmain.c rtemspppd.c rtemspppd.h pppd.h patchlevel.h pathnames.h \
     rtemsdialer.h
-libpppd_a_CPPFLAGS = $(AM_CPPFLAGS) -D__BSD_VISIBLE -I$(srcdir)/../libmd
+libpppd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 include $(top_srcdir)/automake/local.am
