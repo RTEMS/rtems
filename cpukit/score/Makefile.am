@@ -16,7 +16,6 @@ endif
 
 noinst_LIBRARIES = libscore.a
 libscore_a_SOURCES =
-libscore_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # We only build multiprocessing related files if HAS_MP was defined
 if HAS_MP

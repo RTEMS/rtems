@@ -6,7 +6,6 @@ if LIBNETWORKING
 man_MANS =
 
 noinst_LIBRARIES = libxdr.a
-libxdr_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 libxdr_a_SOURCES = src/xdr/xdr.c src/xdr/xdr_array.c src/xdr/xdr_float.c \
     src/xdr/xdr_mem.c src/xdr/xdr_rec.c src/xdr/xdr_reference.c \
@@ -19,7 +18,6 @@ if LIBNETWORKING
 man_MANS += $(libxdr_mans)
 
 noinst_LIBRARIES += librpc.a
-librpc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 librpc_a_SOURCES = src/rpc/auth_none.c src/rpc/auth_unix.c \
     src/rpc/authunix_prot.c src/rpc/bindresvport.c src/rpc/clnt_generic.c \

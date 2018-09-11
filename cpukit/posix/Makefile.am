@@ -3,7 +3,6 @@ include $(top_srcdir)/automake/compile.am
 
 
 noinst_LIBRARIES = libposix.a
-libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
 
 # Some POSIX functions that are nice to always have

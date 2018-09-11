@@ -1,6 +1,5 @@
 include $(top_srcdir)/automake/compile.am
 noinst_LIBRARIES = libscorecpu.a
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 libscorecpu_a_SOURCES =
 libscorecpu_a_SOURCES += __aeabi_read_tp.c
 libscorecpu_a_SOURCES += __tls_get_addr.c

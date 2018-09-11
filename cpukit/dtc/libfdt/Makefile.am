@@ -2,7 +2,6 @@ include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libfdt.a
 
-libfdt_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
 libfdt_a_SOURCES =
 libfdt_a_SOURCES += fdt_addresses.c
 libfdt_a_SOURCES += fdt.c

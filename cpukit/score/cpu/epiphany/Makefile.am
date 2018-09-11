@@ -11,8 +11,6 @@ libscorecpu_a_SOURCES += epiphany-context-initialize.c
 libscorecpu_a_SOURCES += ../no_cpu/cpucounterfrequency.c
 libscorecpu_a_SOURCES += setjmp.S
 
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 all-local: $(PREINSTALL_FILES)
 
 include $(top_srcdir)/automake/local.am

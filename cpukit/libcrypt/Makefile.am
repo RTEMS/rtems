@@ -2,8 +2,6 @@ include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libcrypt.a
 
-libcrypt_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 libcrypt_a_SOURCES =
 libcrypt_a_SOURCES += crypt.c
 libcrypt_a_SOURCES += crypt-md5.c

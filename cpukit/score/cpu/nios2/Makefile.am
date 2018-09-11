@@ -31,8 +31,6 @@ libscorecpu_a_SOURCES += nios2-mpu-disable-protected.c
 libscorecpu_a_SOURCES += nios2-mpu-reset.c
 libscorecpu_a_SOURCES += nios2-thread-dispatch-disabled.c
 
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 all-local: $(PREINSTALL_FILES)
 
 

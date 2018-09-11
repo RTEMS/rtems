@@ -3,7 +3,6 @@ include $(top_srcdir)/automake/compile.am
 noinst_LIBRARIES = libstdthreads.a
 
 libstdthreads_a_CFLAGS = -std=c11
-libstdthreads_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 libstdthreads_a_SOURCES =
 libstdthreads_a_SOURCES += call_once.c

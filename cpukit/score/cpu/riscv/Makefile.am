@@ -1,6 +1,5 @@
 include $(top_srcdir)/automake/compile.am
 noinst_LIBRARIES = libscorecpu.a
-libscorecpu_a_CPPFLAGS = $(AM_CPPFLAGS)
 libscorecpu_a_SOURCES  = cpu.c
 libscorecpu_a_SOURCES += riscv-exception-handler.S
 libscorecpu_a_SOURCES += riscv-exception-frame-print.c

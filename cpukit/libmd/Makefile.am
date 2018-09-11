@@ -9,7 +9,6 @@ if SHA
 libmd_a_SOURCES += sha256c.c
 libmd_a_SOURCES += sha512c.c
 endif
-libmd_a_CPPFLAGS = $(AM_CPPFLAGS)
 endif
 
 include $(top_srcdir)/automake/local.am

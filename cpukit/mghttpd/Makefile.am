@@ -8,8 +8,6 @@ $(PROJECT_LIB)/libmghttpd.a: libmghttpd.a
 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libmghttpd.a
 TMPINSTALL_FILES = $(PROJECT_LIB)/libmghttpd.a
 
-libmghttpd_a_CPPFLAGS = $(AM_CPPFLAGS)
-
 libmghttpd_a_SOURCES = mongoose.c mongoose.h
 endif
 endif

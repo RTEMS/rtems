@@ -2,8 +2,6 @@ include $(top_srcdir)/automake/multilib.am
 include $(top_srcdir)/automake/compile.am
 
 noinst_LIBRARIES = libcsupport.a libcalloc.a
-libcsupport_a_CPPFLAGS = $(AM_CPPFLAGS)
-libcalloc_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 ## rtems
 ##  General stuff
