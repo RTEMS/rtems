@@ -15,7 +15,6 @@ project_lib_DATA = start.$(OBJEXT)
 project_lib_DATA += linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a
-librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS) -DTX39
 librtemsbsp_a_SOURCES =
 
 # startup
