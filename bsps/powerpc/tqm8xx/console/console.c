@@ -114,9 +114,13 @@ typedef volatile char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
 /*
  * Interrupt-driven callback
  */
-static int m8xx_scc_mode[CONS_CHN_CNT];
-static void *sccttyp[CONS_CHN_CNT];
 typedef struct m8xx_console_chan_desc_s {
+  void *tty;
+  volatile m8xxBufferDescriptor_t *sccFrstRxBd;
+  volatile m8xxBufferDescriptor_t *sccCurrRxBd;
+  volatile m8xxBufferDescriptor_t *sccFrstTxBd;
+  volatile m8xxBufferDescriptor_t *sccPrepTxBd;
+  volatile m8xxBufferDescriptor_t *sccDequTxBd;
   bool is_scc;                  /* true for SCC */
   struct {
     volatile m8xxSCCparms_t *sccp;
@@ -126,6 +130,8 @@ typedef struct m8xx_console_chan_desc_s {
     volatile m8xxSCCRegisters_t *sccr;
     volatile m8xxSMCRegisters_t *smcr;
   } regs;
+  int chan;
+  rtems_termios_device_mode mode;
   rtems_vector_number ivec_src;
   int cr_chan_code;
   int brg_used;
@@ -137,6 +143,7 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = true,
    .parms = {(m8xxSCCparms_t *)&(m8xx.scc1p),NULL},
    .regs = {&(m8xx.scc1),NULL},
+   .chan = CONS_CHN_SCC1,
    .ivec_src = BSP_CPM_IRQ_SCC1,
    .cr_chan_code = M8xx_CR_CHAN_SCC1,
    .brg_used = -1},
@@ -144,6 +151,7 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = true,
    .parms = {&(m8xx.scc2p),NULL},
    .regs = {&(m8xx.scc2),NULL},
+   .chan = CONS_CHN_SCC2,
    .ivec_src = BSP_CPM_IRQ_SCC2,
    .cr_chan_code = M8xx_CR_CHAN_SCC2,
    .brg_used = -1},
@@ -151,6 +159,7 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = true,
    .parms = {&(m8xx.scc3p),NULL},
    .regs = {&(m8xx.scc3),NULL},
+   .chan = CONS_CHN_SCC3,
    .ivec_src = BSP_CPM_IRQ_SCC3,
    .cr_chan_code = M8xx_CR_CHAN_SCC3,
    .brg_used = -1},
@@ -158,6 +167,7 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = true,
    .parms = {&(m8xx.scc4p),NULL},
    .regs = {&(m8xx.scc4),NULL},
+   .chan = CONS_CHN_SCC4,
    .ivec_src = BSP_CPM_IRQ_SCC4,
    .cr_chan_code = M8xx_CR_CHAN_SCC4,
    .brg_used = -1},
@@ -165,6 +175,7 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = false,
    .parms = {NULL,&(m8xx.smc1p)},
    .regs = {NULL,&(m8xx.smc1)},
+   .chan = CONS_CHN_SMC1,
    .ivec_src = BSP_CPM_IRQ_SMC1,
    .cr_chan_code = M8xx_CR_CHAN_SMC1,
    .brg_used = -1},
@@ -172,54 +183,48 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   { .is_scc = false,
    .parms = {NULL,&(m8xx.smc2p)},
    .regs = {NULL,&(m8xx.smc2)},
+   .chan = CONS_CHN_SMC2,
    .ivec_src = BSP_CPM_IRQ_SMC2_OR_PIP,
    .cr_chan_code = M8xx_CR_CHAN_SMC2,
    .brg_used = -1}};
 
-#define CHN_PARAM_GET(chan,param)			\
-  (m8xx_console_chan_desc[chan].is_scc			\
-   ? m8xx_console_chan_desc[chan].parms.sccp->param	\
-   : m8xx_console_chan_desc[chan].parms.smcp->param)
+#define CHN_PARAM_GET(cd,param)	\
+  (cd->is_scc			\
+   ? cd->parms.sccp->param	\
+   : cd->parms.smcp->param)
 
-#define CHN_PARAM_SET(chan,param,value)				\
-  do {if (m8xx_console_chan_desc[chan].is_scc)			\
-      m8xx_console_chan_desc[chan].parms.sccp->param = value;	\
-    else							\
-      m8xx_console_chan_desc[chan].parms.smcp->param = value;	\
+#define CHN_PARAM_SET(cd,param,value)	\
+  do {if (cd->is_scc)			\
+      cd->parms.sccp->param = value;	\
+    else				\
+      cd->parms.smcp->param = value;	\
   } while (0)
 
-#define CHN_EVENT_GET(chan)				\
-  (m8xx_console_chan_desc[chan].is_scc			\
-   ? m8xx_console_chan_desc[chan].regs.sccr->scce	\
-   : m8xx_console_chan_desc[chan].regs.smcr->smce)
+#define CHN_EVENT_GET(cd)	\
+  (cd->is_scc			\
+   ? cd->regs.sccr->scce	\
+   : cd->regs.smcr->smce)
 
-#define CHN_EVENT_CLR(chan,mask) 				\
-  do {								\
-    if (m8xx_console_chan_desc[chan].is_scc) 			\
-      m8xx_console_chan_desc[chan].regs.sccr->scce = (mask);	\
-    else							\
-      m8xx_console_chan_desc[chan].regs.smcr->smce = (mask);	\
+#define CHN_EVENT_CLR(cd,mask)		\
+  do {					\
+    if (cd->is_scc) 			\
+      cd->regs.sccr->scce = (mask);	\
+    else				\
+      cd->regs.smcr->smce = (mask);	\
   }while (0)
 
-#define CHN_MASK_GET(chan)				\
-  (m8xx_console_chan_desc[chan].is_scc			\
-   ? m8xx_console_chan_desc[chan].regs.sccr->sccm	\
-   : m8xx_console_chan_desc[chan].regs.smcr->smcm)
+#define CHN_MASK_GET(cd)	\
+  (cd->is_scc			\
+   ? cd->regs.sccr->sccm	\
+   : cd->regs.smcr->smcm)
 
-#define CHN_MASK_SET(chan,mask) 				\
-  do {								\
-    if (m8xx_console_chan_desc[chan].is_scc) 			\
-      m8xx_console_chan_desc[chan].regs.sccr->sccm = (mask);	\
-    else							\
-      m8xx_console_chan_desc[chan].regs.smcr->smcm = (mask);	\
+#define CHN_MASK_SET(cd,mask) 		\
+  do {					\
+    if (cd->is_scc) 			\
+      cd->regs.sccr->sccm = (mask);	\
+    else				\
+      cd->regs.smcr->smcm = (mask);	\
   }while (0)
-
-
-static volatile m8xxBufferDescriptor_t *sccFrstRxBd[CONS_CHN_CNT];
-static volatile m8xxBufferDescriptor_t *sccCurrRxBd[CONS_CHN_CNT];
-static volatile m8xxBufferDescriptor_t *sccFrstTxBd[CONS_CHN_CNT];
-static volatile m8xxBufferDescriptor_t *sccPrepTxBd[CONS_CHN_CNT];
-static volatile m8xxBufferDescriptor_t *sccDequTxBd[CONS_CHN_CNT];
 
 /*
  * Compute baud-rate-generator configuration register value
@@ -285,10 +290,9 @@ static uint32_t clkin_frq[2][4] = {
  * FIXME: set pin to be clock input
  */
 
-static int sccBRGalloc(int chan,int baud)
+static int sccBRGalloc(m8xx_console_chan_desc_t *cd,int baud)
 {
   rtems_interrupt_level level;
-  m8xx_console_chan_desc_t *chan_desc = &(m8xx_console_chan_desc[chan]);
   uint32_t reg_val;
   int old_brg;
   int new_brg = -1;
@@ -298,7 +302,7 @@ static int sccBRGalloc(int chan,int baud)
   int clk_sel;
 #endif
 
-  old_brg = chan_desc->brg_used;
+  old_brg = cd->brg_used;
   /* compute brg register contents needed */
   reg_val = sccBRGval(baud);
 
@@ -363,20 +367,20 @@ static int sccBRGalloc(int chan,int baud)
 
   /* connect to scc/smc */
   if (new_brg >= 0) {
-    m8xx_console_chan_desc[chan].brg_used = new_brg;
+    cd->brg_used = new_brg;
     /*
      * Put SCC in NMSI mode, connect SCC to BRG or CLKx
      */
-    if (m8xx_console_chan_desc[chan].is_scc) {
-      m8xx.sicr = ((m8xx.sicr & ~(M8xx_SICR_SCCRX_MSK(chan) |
-				  M8xx_SICR_SCCTX_MSK(chan))) |
-		   M8xx_SICR_SCCRX(chan,new_brg)|
-		   M8xx_SICR_SCCTX(chan,new_brg));
+    if (cd->is_scc) {
+      m8xx.sicr = ((m8xx.sicr & ~(M8xx_SICR_SCCRX_MSK(cd->chan) |
+				  M8xx_SICR_SCCTX_MSK(cd->chan))) |
+		   M8xx_SICR_SCCRX(cd->chan,new_brg)|
+		   M8xx_SICR_SCCTX(cd->chan,new_brg));
     }
     else {
       /* connect SMC to BRGx or CLKx... */
-      m8xx.simode = ((m8xx.simode & ~(M8xx_SIMODE_SMCCS_MSK(chan - CONS_CHN_SMC1)))|
-		     M8xx_SIMODE_SMCCS(chan - CONS_CHN_SMC1,new_brg));
+      m8xx.simode = ((m8xx.simode & ~(M8xx_SIMODE_SMCCS_MSK(cd->chan - CONS_CHN_SMC1)))|
+		     M8xx_SIMODE_SMCCS(cd->chan - CONS_CHN_SMC1,new_brg));
     }
   }
   return (new_brg < 0);
@@ -389,6 +393,7 @@ static int sccBRGalloc(int chan,int baud)
 static int
 sccSetAttributes (int minor, const struct termios *t)
 {
+  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
   int baud;
 
   switch (t->c_ospeed) {
@@ -413,7 +418,7 @@ sccSetAttributes (int minor, const struct termios *t)
   case B230400:	baud = 230400;	break;
   case B460800:	baud = 460800;	break;
   }
-  return sccBRGalloc(minor,baud);
+  return sccBRGalloc(cd,baud);
   return 0;
 }
 
@@ -423,86 +428,86 @@ sccSetAttributes (int minor, const struct termios *t)
 static rtems_isr
 sccInterruptHandler (void *arg)
 {
-  int chan = (int)arg;
+  m8xx_console_chan_desc_t *cd = arg;
 
   /*
    * Buffer received?
    */
-  if (CHN_EVENT_GET(chan) & 0x1) {
+  if (CHN_EVENT_GET(cd) & 0x1) {
     /*
      * clear SCC event flag
      */
-    CHN_EVENT_CLR(chan,0x01);
+    CHN_EVENT_CLR(cd,0x01);
     /*
      * process event
      */
-    while ((sccCurrRxBd[chan]->status & M8xx_BD_EMPTY) == 0) {
-      if (sccttyp[chan] != NULL) {
-	rtems_cache_invalidate_multiple_data_lines((void *)sccCurrRxBd[chan]->buffer,
-						   sccCurrRxBd[chan]->length);
-	rtems_termios_enqueue_raw_characters (sccttyp[chan],
-					      (char *)sccCurrRxBd[chan]->buffer,
-					      sccCurrRxBd[chan]->length);
+    while ((cd->sccCurrRxBd->status & M8xx_BD_EMPTY) == 0) {
+      if (cd->tty != NULL) {
+	rtems_cache_invalidate_multiple_data_lines((void *)cd->sccCurrRxBd->buffer,
+						   cd->sccCurrRxBd->length);
+	rtems_termios_enqueue_raw_characters (cd->tty,
+					      (char *)cd->sccCurrRxBd->buffer,
+					      cd->sccCurrRxBd->length);
       }
       /*
        * clear status
        */
-      sccCurrRxBd[chan]->status =
-	(sccCurrRxBd[chan]->status
+      cd->sccCurrRxBd->status =
+	(cd->sccCurrRxBd->status
 	 & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
 	| M8xx_BD_EMPTY;
       /*
        * advance to next BD
        */
-      if ((sccCurrRxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-	sccCurrRxBd[chan] = sccFrstRxBd[chan];
+      if ((cd->sccCurrRxBd->status & M8xx_BD_WRAP) != 0) {
+	cd->sccCurrRxBd = cd->sccFrstRxBd;
       }
       else {
-	sccCurrRxBd[chan]++;
+	cd->sccCurrRxBd++;
       }
     }
   }
   /*
    * Buffer transmitted?
    */
-  if (CHN_EVENT_GET(chan) & 0x2) {
+  if (CHN_EVENT_GET(cd) & 0x2) {
     /*
      * then clear interrupt event bit
      */
-    CHN_EVENT_CLR(chan,0x2);
+    CHN_EVENT_CLR(cd,0x2);
     /*
      * and signal successful transmit to termios
      */
     /*
      * FIXME: multiple dequeue calls for multiple buffers
      */
-    while((sccDequTxBd[chan] != sccPrepTxBd[chan]) &&
-	  ((sccDequTxBd[chan]->status & M8xx_BD_READY) == 0)) {
-      if (sccttyp[chan] != NULL) {
-	rtems_termios_dequeue_characters (sccttyp[chan],
-					  sccDequTxBd[chan]->length);
+    while((cd->sccDequTxBd != cd->sccPrepTxBd) &&
+	  ((cd->sccDequTxBd->status & M8xx_BD_READY) == 0)) {
+      if (cd->tty != NULL) {
+	rtems_termios_dequeue_characters (cd->tty,
+					  cd->sccDequTxBd->length);
       }
       /*
        * advance to next BD
        */
-      if ((sccDequTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-	sccDequTxBd[chan] = sccFrstTxBd[chan];
+      if ((cd->sccDequTxBd->status & M8xx_BD_WRAP) != 0) {
+	cd->sccDequTxBd = cd->sccFrstTxBd;
       }
       else {
-	sccDequTxBd[chan]++;
+	cd->sccDequTxBd++;
       }
     }
   }
 }
 
 static void
-mpc8xx_console_irq_on(int chan)
+mpc8xx_console_irq_on(m8xx_console_chan_desc_t *cd)
 {
-    CHN_MASK_SET(chan, 3);	/* Enable TX and RX interrupts */
+    CHN_MASK_SET(cd, 3);	/* Enable TX and RX interrupts */
 }
 
 static void
-sccInitialize (m8xx_console_chan_desc_t *cd, int chan)
+sccInitialize (m8xx_console_chan_desc_t *cd)
 {
   int i;
   /*
@@ -517,12 +522,12 @@ sccInitialize (m8xx_console_chan_desc_t *cd, int chan)
   /*
    * Allocate buffer descriptors
    */
-  sccCurrRxBd[chan] =
-    sccFrstRxBd[chan] = m8xx_bd_allocate(SCC_RXBD_CNT);
-  sccPrepTxBd[chan] =
-    sccDequTxBd[chan] =
-    sccFrstTxBd[chan] = m8xx_bd_allocate(SCC_TXBD_CNT);
-  switch(chan) {
+  cd->sccCurrRxBd =
+    cd->sccFrstRxBd = m8xx_bd_allocate(SCC_RXBD_CNT);
+  cd->sccPrepTxBd =
+    cd->sccDequTxBd =
+    cd->sccFrstTxBd = m8xx_bd_allocate(SCC_TXBD_CNT);
+  switch(cd->chan) {
   case CONS_CHN_SCC1:
     /*
      * Configure port A pins to enable TXD1 and RXD1 pins
@@ -605,100 +610,99 @@ sccInitialize (m8xx_console_chan_desc_t *cd, int chan)
   /*
    * allocate and connect BRG
    */
-  sccBRGalloc(chan,9600);
+  sccBRGalloc(cd,9600);
 
 
   /*
    * Set up SCCx parameter RAM common to all protocols
    */
-  CHN_PARAM_SET(chan,rbase,(char *)sccFrstRxBd[chan] - (char *)&m8xx);
-  CHN_PARAM_SET(chan,tbase,(char *)sccFrstTxBd[chan] - (char *)&m8xx);
-  CHN_PARAM_SET(chan,rfcr ,M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0));
-  CHN_PARAM_SET(chan,tfcr ,M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0));
-  if (m8xx_scc_mode[chan] != TERMIOS_POLLED)
-    CHN_PARAM_SET(chan,mrblr,RXBUFSIZE);
+  CHN_PARAM_SET(cd,rbase,(char *)cd->sccFrstRxBd - (char *)&m8xx);
+  CHN_PARAM_SET(cd,tbase,(char *)cd->sccFrstTxBd - (char *)&m8xx);
+  CHN_PARAM_SET(cd,rfcr ,M8xx_RFCR_MOT | M8xx_RFCR_DMA_SPACE(0));
+  CHN_PARAM_SET(cd,tfcr ,M8xx_TFCR_MOT | M8xx_TFCR_DMA_SPACE(0));
+  if (cd->mode != TERMIOS_POLLED)
+    CHN_PARAM_SET(cd,mrblr,RXBUFSIZE);
   else
-    CHN_PARAM_SET(chan,mrblr,1);
+    CHN_PARAM_SET(cd,mrblr,1);
 
   /*
    * Set up SCCx parameter RAM UART-specific parameters
    */
-  CHN_PARAM_SET(chan,un.uart.max_idl ,MAX_IDL_DEFAULT);
-  CHN_PARAM_SET(chan,un.uart.brkln   ,0);
-  CHN_PARAM_SET(chan,un.uart.brkec   ,0);
-  CHN_PARAM_SET(chan,un.uart.brkcr   ,0);
-  if (m8xx_console_chan_desc[chan].is_scc) {
-    m8xx_console_chan_desc[chan].parms.sccp->un.uart.character[0]=0x8000; /* no char filter */
-    m8xx_console_chan_desc[chan].parms.sccp->un.uart.rccm=0x80FF; /* control character mask */
+  CHN_PARAM_SET(cd,un.uart.max_idl ,MAX_IDL_DEFAULT);
+  CHN_PARAM_SET(cd,un.uart.brkln   ,0);
+  CHN_PARAM_SET(cd,un.uart.brkec   ,0);
+  CHN_PARAM_SET(cd,un.uart.brkcr   ,0);
+  if (cd->is_scc) {
+    cd->parms.sccp->un.uart.character[0]=0x8000; /* no char filter */
+    cd->parms.sccp->un.uart.rccm=0x80FF; /* control character mask */
   }
 
   /*
    * Set up the Receive Buffer Descriptors
    */
   for (i = 0;i < SCC_RXBD_CNT;i++) {
-    sccFrstRxBd[chan][i].status = M8xx_BD_EMPTY | M8xx_BD_INTERRUPT;
+    cd->sccFrstRxBd[i].status = M8xx_BD_EMPTY | M8xx_BD_INTERRUPT;
     if (i == SCC_RXBD_CNT-1) {
-      sccFrstRxBd[chan][i].status |= M8xx_BD_WRAP;
+      cd->sccFrstRxBd[i].status |= M8xx_BD_WRAP;
     }
-    sccFrstRxBd[chan][i].length = 0;
-    sccFrstRxBd[chan][i].buffer = (*cd->rxBuf)[i];
+    cd->sccFrstRxBd[i].length = 0;
+    cd->sccFrstRxBd[i].buffer = (*cd->rxBuf)[i];
   }
   /*
    * Setup the Transmit Buffer Descriptor
    */
   for (i = 0;i < SCC_TXBD_CNT;i++) {
-    sccFrstTxBd[chan][i].status = M8xx_BD_INTERRUPT;
+    cd->sccFrstTxBd[i].status = M8xx_BD_INTERRUPT;
     if (i == SCC_TXBD_CNT-1) {
-      sccFrstTxBd[chan][i].status |= M8xx_BD_WRAP;
+      cd->sccFrstTxBd[i].status |= M8xx_BD_WRAP;
     }
-    sccFrstTxBd[chan][i].length = 0;
-    sccFrstTxBd[chan][i].buffer = NULL;
+    cd->sccFrstTxBd[i].length = 0;
+    cd->sccFrstTxBd[i].buffer = NULL;
   }
 
   /*
    * Set up SCC general and protocol-specific mode registers
    */
-  CHN_EVENT_CLR(chan,~0);	/* Clear any pending events */
-  CHN_MASK_SET(chan,0);	        /* Mask all interrupt/event sources */
+  CHN_EVENT_CLR(cd,~0);	/* Clear any pending events */
+  CHN_MASK_SET(cd,0);	        /* Mask all interrupt/event sources */
 
-  if (m8xx_console_chan_desc[chan].is_scc) {
-    m8xx_console_chan_desc[chan].regs.sccr->psmr = 0xb000; /* 8N1, CTS flow control */
-    m8xx_console_chan_desc[chan].regs.sccr->gsmr_h = 0x00000000;
-    m8xx_console_chan_desc[chan].regs.sccr->gsmr_l = 0x00028004; /* UART mode */
+  if (cd->is_scc) {
+    cd->regs.sccr->psmr = 0xb000; /* 8N1, CTS flow control */
+    cd->regs.sccr->gsmr_h = 0x00000000;
+    cd->regs.sccr->gsmr_l = 0x00028004; /* UART mode */
   }
   else {
-    m8xx_console_chan_desc[chan].regs.smcr->smcmr = 0x4820;
+    cd->regs.smcr->smcmr = 0x4820;
   }
   /*
    * Send "Init parameters" command
    */
-  m8xx_cp_execute_cmd(M8xx_CR_OP_INIT_RX_TX
-		      | m8xx_console_chan_desc[chan].cr_chan_code);
+  m8xx_cp_execute_cmd(M8xx_CR_OP_INIT_RX_TX | cd->cr_chan_code);
 
   /*
    * Enable receiver and transmitter
    */
-  if (m8xx_console_chan_desc[chan].is_scc) {
-    m8xx_console_chan_desc[chan].regs.sccr->gsmr_l |= 0x00000030;
+  if (cd->is_scc) {
+    cd->regs.sccr->gsmr_l |= 0x00000030;
   }
   else {
-    m8xx_console_chan_desc[chan].regs.smcr->smcmr |= 0x0003;
+    cd->regs.smcr->smcmr |= 0x0003;
   }
 
-  if (m8xx_scc_mode[chan] != TERMIOS_POLLED) {
+  if (cd->mode != TERMIOS_POLLED) {
     rtems_status_code sc;
 
     sc = rtems_interrupt_handler_install(
-      m8xx_console_chan_desc[chan].ivec_src,
+      cd->ivec_src,
       "SCC",
       RTEMS_INTERRUPT_UNIQUE,
       sccInterruptHandler,
-      (void *)chan
+      cd
     );
     if (sc != RTEMS_SUCCESSFUL) {
       rtems_panic("console: cannot install IRQ handler");
     }
-    mpc8xx_console_irq_on(chan);
+    mpc8xx_console_irq_on(cd);
   }
 }
 
@@ -708,39 +712,39 @@ sccInitialize (m8xx_console_chan_desc_t *cd, int chan)
 static int
 sccPollRead (int minor)
 {
+  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
   int c = -1;
-  int chan = minor;
 
   while(1) {
-    if ((sccCurrRxBd[chan]->status & M8xx_BD_EMPTY) != 0) {
+    if ((cd->sccCurrRxBd->status & M8xx_BD_EMPTY) != 0) {
       return -1;
     }
 
-    if (0 == (sccCurrRxBd[chan]->status & (M8xx_BD_OVERRUN
+    if (0 == (cd->sccCurrRxBd->status & (M8xx_BD_OVERRUN
 					   | M8xx_BD_PARITY_ERROR
 					   | M8xx_BD_FRAMING_ERROR
 					   | M8xx_BD_BREAK
 					   | M8xx_BD_IDLE))) {
       /* character received and no error detected */
-      rtems_cache_invalidate_multiple_data_lines((void *)sccCurrRxBd[chan]->buffer,
-						 sccCurrRxBd[chan]->length);
-      c = (unsigned)*((char *)sccCurrRxBd[chan]->buffer);
+      rtems_cache_invalidate_multiple_data_lines((void *)cd->sccCurrRxBd->buffer,
+						 cd->sccCurrRxBd->length);
+      c = (unsigned)*((char *)cd->sccCurrRxBd->buffer);
       /*
        * clear status
        */
     }
-    sccCurrRxBd[chan]->status =
-      (sccCurrRxBd[chan]->status
+    cd->sccCurrRxBd->status =
+      (cd->sccCurrRxBd->status
        & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
       | M8xx_BD_EMPTY;
     /*
      * advance to next BD
      */
-    if ((sccCurrRxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-      sccCurrRxBd[chan] = sccFrstRxBd[chan];
+    if ((cd->sccCurrRxBd->status & M8xx_BD_WRAP) != 0) {
+      cd->sccCurrRxBd = cd->sccFrstRxBd;
     }
     else {
-      sccCurrRxBd[chan]++;
+      cd->sccCurrRxBd++;
     }
     if (c >= 0) {
       return c;
@@ -760,24 +764,23 @@ static ssize_t
 sccInterruptWrite (int minor, const char *buf, size_t len)
 {
   if (len > 0) {
-    int chan = minor;
-
-    if ((sccPrepTxBd[chan]->status & M8xx_BD_READY) == 0) {
-      sccPrepTxBd[chan]->buffer = (char *)buf;
-      sccPrepTxBd[chan]->length = len;
+    m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
+    if ((cd->sccPrepTxBd->status & M8xx_BD_READY) == 0) {
+      cd->sccPrepTxBd->buffer = (char *)buf;
+      cd->sccPrepTxBd->length = len;
       rtems_cache_flush_multiple_data_lines((const void *)buf,len);
       /*
        * clear status, set ready bit
        */
-      sccPrepTxBd[chan]->status =
-        (sccPrepTxBd[chan]->status
+      cd->sccPrepTxBd->status =
+        (cd->sccPrepTxBd->status
          & M8xx_BD_WRAP)
         | M8xx_BD_READY | M8xx_BD_INTERRUPT;
-      if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-        sccPrepTxBd[chan] = sccFrstTxBd[chan];
+      if ((cd->sccPrepTxBd->status & M8xx_BD_WRAP) != 0) {
+        cd->sccPrepTxBd = cd->sccFrstTxBd;
       }
       else {
-        sccPrepTxBd[chan]++;
+        cd->sccPrepTxBd++;
       }
     }
   }
@@ -788,29 +791,30 @@ sccInterruptWrite (int minor, const char *buf, size_t len)
 static ssize_t
 sccPollWrite (int minor, const char *buf, size_t len)
 {
+  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
   static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
-  int chan = minor;
+  int chan = cd->chan;
   int bd_used;
   size_t retval = len;
 
   while (len--) {
-    while (sccPrepTxBd[chan]->status & M8xx_BD_READY)
+    while (cd->sccPrepTxBd->status & M8xx_BD_READY)
       continue;
-    bd_used = sccPrepTxBd[chan]-sccFrstTxBd[chan];
+    bd_used = cd->sccPrepTxBd - cd->sccFrstTxBd;
     txBuf[chan][bd_used] = *buf++;
       rtems_cache_flush_multiple_data_lines((const void *)&txBuf[chan][bd_used],
 					    sizeof(txBuf[chan][bd_used]));
-    sccPrepTxBd[chan]->buffer = &(txBuf[chan][bd_used]);
-    sccPrepTxBd[chan]->length = 1;
-    sccPrepTxBd[chan]->status =
-      (sccPrepTxBd[chan]->status
+    cd->sccPrepTxBd->buffer = &(txBuf[chan][bd_used]);
+    cd->sccPrepTxBd->length = 1;
+    cd->sccPrepTxBd->status =
+      (cd->sccPrepTxBd->status
        & M8xx_BD_WRAP)
       | M8xx_BD_READY;
-    if ((sccPrepTxBd[chan]->status & M8xx_BD_WRAP) != 0) {
-      sccPrepTxBd[chan] = sccFrstTxBd[chan];
+    if ((cd->sccPrepTxBd->status & M8xx_BD_WRAP) != 0) {
+      cd->sccPrepTxBd = cd->sccFrstTxBd;
     }
     else {
-      sccPrepTxBd[chan]++;
+      cd->sccPrepTxBd++;
     }
   }
   return retval;
@@ -865,7 +869,7 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
 				       )
 {
   rtems_status_code status = RTEMS_SUCCESSFUL;
-  int chan,entry,ttynum;
+  int entry,ttynum;
   char tty_name[] = "/dev/tty00";
 
   /*
@@ -882,12 +886,13 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
 	 && (status == RTEMS_SUCCESSFUL);
        entry++) {
     if (channel_list[entry].driver_mode != CONS_MODE_UNUSED) {
+      m8xx_console_chan_desc_t *cd =
+	&m8xx_console_chan_desc[channel_list[entry].driver_mode];
       /*
        * Do device-specific initialization
        */
-      chan = channel_list[entry].minor;
-      m8xx_scc_mode[chan] = channel_list[entry].driver_mode;
-      sccInitialize (&m8xx_console_chan_desc[chan], chan);
+      cd->mode = channel_list[entry].driver_mode;
+      sccInitialize (cd);
 
       /*
        * build device name
@@ -931,6 +936,7 @@ rtems_device_driver console_open(
 				 void                    * arg
 				 )
 {
+  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
   rtems_status_code status;
   int chan = minor;
   rtems_libio_open_close_args_t *args = (rtems_libio_open_close_args_t *)arg;
@@ -955,13 +961,13 @@ rtems_device_driver console_open(
     0			/* outputUsesInterrupts */
   };
 
-  if (m8xx_scc_mode[chan] == TERMIOS_IRQ_DRIVEN) {
+  if (cd->mode == TERMIOS_IRQ_DRIVEN) {
     status = rtems_termios_open (major, minor, arg, &interruptCallbacks);
-    sccttyp[chan] = args->iop->data1;
+    m8xx_console_chan_desc[chan].tty = args->iop->data1;
   }
   else {
     status = rtems_termios_open (major, minor, arg, &pollCallbacks);
-    sccttyp[chan] = args->iop->data1;
+    m8xx_console_chan_desc[chan].tty = args->iop->data1;
   }
   return status;
 }
@@ -978,7 +984,7 @@ rtems_device_driver console_close(
   rtems_status_code rc;
 
   rc = rtems_termios_close (arg);
-  sccttyp[minor] = NULL;
+  m8xx_console_chan_desc[minor].tty = NULL;
 
   return rc;
 
