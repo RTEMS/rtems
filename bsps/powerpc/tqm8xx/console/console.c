@@ -105,6 +105,13 @@
 #define DEVICEPREFIX "tty"
 
 /*
+ * I/O buffers and pointers to buffer descriptors
+ */
+#define SCC_RXBD_CNT 4
+#define SCC_TXBD_CNT 4
+typedef volatile char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
+
+/*
  * Interrupt-driven callback
  */
 static int m8xx_scc_mode[CONS_CHN_CNT];
@@ -122,51 +129,52 @@ typedef struct m8xx_console_chan_desc_s {
   rtems_vector_number ivec_src;
   int cr_chan_code;
   int brg_used;
+  sccRxBuf_t *rxBuf;
 } m8xx_console_chan_desc_t;
 
 m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
   /* SCC1 */
-  {TRUE,
-   {(m8xxSCCparms_t *)&(m8xx.scc1p),NULL},
-   {&(m8xx.scc1),NULL},
-   BSP_CPM_IRQ_SCC1,
-   M8xx_CR_CHAN_SCC1,
-   -1},
+  { .is_scc = true,
+   .parms = {(m8xxSCCparms_t *)&(m8xx.scc1p),NULL},
+   .regs = {&(m8xx.scc1),NULL},
+   .ivec_src = BSP_CPM_IRQ_SCC1,
+   .cr_chan_code = M8xx_CR_CHAN_SCC1,
+   .brg_used = -1},
   /* SCC2 */
-  {TRUE,
-   {&(m8xx.scc2p),NULL},
-   {&(m8xx.scc2),NULL},
-   BSP_CPM_IRQ_SCC2,
-   M8xx_CR_CHAN_SCC2,
-   -1},
+  { .is_scc = true,
+   .parms = {&(m8xx.scc2p),NULL},
+   .regs = {&(m8xx.scc2),NULL},
+   .ivec_src = BSP_CPM_IRQ_SCC2,
+   .cr_chan_code = M8xx_CR_CHAN_SCC2,
+   .brg_used = -1},
   /* SCC3 */
-  {TRUE,
-   {&(m8xx.scc3p),NULL},
-   {&(m8xx.scc3),NULL},
-   BSP_CPM_IRQ_SCC3,
-   M8xx_CR_CHAN_SCC3,
-   -1},
+  { .is_scc = true,
+   .parms = {&(m8xx.scc3p),NULL},
+   .regs = {&(m8xx.scc3),NULL},
+   .ivec_src = BSP_CPM_IRQ_SCC3,
+   .cr_chan_code = M8xx_CR_CHAN_SCC3,
+   .brg_used = -1},
   /* SCC4 */
-  {TRUE,
-   {&(m8xx.scc4p),NULL},
-   {&(m8xx.scc4),NULL},
-   BSP_CPM_IRQ_SCC4,
-   M8xx_CR_CHAN_SCC4,
-   -1},
+  { .is_scc = true,
+   .parms = {&(m8xx.scc4p),NULL},
+   .regs = {&(m8xx.scc4),NULL},
+   .ivec_src = BSP_CPM_IRQ_SCC4,
+   .cr_chan_code = M8xx_CR_CHAN_SCC4,
+   .brg_used = -1},
   /* SMC1 */
-  {FALSE,
-   {NULL,&(m8xx.smc1p)},
-   {NULL,&(m8xx.smc1)},
-   BSP_CPM_IRQ_SMC1,
-   M8xx_CR_CHAN_SMC1,
-   -1},
+  { .is_scc = false,
+   .parms = {NULL,&(m8xx.smc1p)},
+   .regs = {NULL,&(m8xx.smc1)},
+   .ivec_src = BSP_CPM_IRQ_SMC1,
+   .cr_chan_code = M8xx_CR_CHAN_SMC1,
+   .brg_used = -1},
   /* SMC2 */
-  {FALSE,
-   {NULL,&(m8xx.smc2p)},
-   {NULL,&(m8xx.smc2)},
-   BSP_CPM_IRQ_SMC2_OR_PIP,
-   M8xx_CR_CHAN_SMC2,
-   -1}};
+  { .is_scc = false,
+   .parms = {NULL,&(m8xx.smc2p)},
+   .regs = {NULL,&(m8xx.smc2)},
+   .ivec_src = BSP_CPM_IRQ_SMC2_OR_PIP,
+   .cr_chan_code = M8xx_CR_CHAN_SMC2,
+   .brg_used = -1}};
 
 #define CHN_PARAM_GET(chan,param)			\
   (m8xx_console_chan_desc[chan].is_scc			\
@@ -206,14 +214,6 @@ m8xx_console_chan_desc_t m8xx_console_chan_desc[CONS_CHN_CNT] = {
       m8xx_console_chan_desc[chan].regs.smcr->smcm = (mask);	\
   }while (0)
 
-
-/*
- * I/O buffers and pointers to buffer descriptors
- */
-#define SCC_RXBD_CNT 4
-#define SCC_TXBD_CNT 4
-typedef volatile char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
-static sccRxBuf_t *rxBuf[CONS_CHN_CNT];
 
 static volatile m8xxBufferDescriptor_t *sccFrstRxBd[CONS_CHN_CNT];
 static volatile m8xxBufferDescriptor_t *sccCurrRxBd[CONS_CHN_CNT];
@@ -502,26 +502,18 @@ mpc8xx_console_irq_on(int chan)
 }
 
 static void
-sccInitialize (int chan)
+sccInitialize (m8xx_console_chan_desc_t *cd, int chan)
 {
   int i;
   /*
    * allocate buffers
    * FIXME: use a cache-line size boundary alloc here
    */
-  rxBuf[chan] = malloc(sizeof(*rxBuf[chan]) + 2*PPC_CACHE_ALIGNMENT);
-  if (rxBuf[chan] == NULL) {
+  cd->rxBuf = rtems_cache_aligned_malloc(sizeof(*cd->rxBuf));
+  if (cd->rxBuf == NULL) {
     rtems_panic("Cannot allocate console rx buffer\n");
   }
-  else {
-    /*
-     * round up rxBuf[chan] to start at a cache line size
-     */
-    rxBuf[chan] = (sccRxBuf_t *)
-      (((uint32_t)rxBuf[chan]) +
-       (PPC_CACHE_ALIGNMENT
-	- ((uint32_t)rxBuf[chan]) % PPC_CACHE_ALIGNMENT));
-  }
+
   /*
    * Allocate buffer descriptors
    */
@@ -649,7 +641,7 @@ sccInitialize (int chan)
       sccFrstRxBd[chan][i].status |= M8xx_BD_WRAP;
     }
     sccFrstRxBd[chan][i].length = 0;
-    sccFrstRxBd[chan][i].buffer = (*rxBuf[chan])[i];
+    sccFrstRxBd[chan][i].buffer = (*cd->rxBuf)[i];
   }
   /*
    * Setup the Transmit Buffer Descriptor
@@ -895,7 +887,7 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
        */
       chan = channel_list[entry].minor;
       m8xx_scc_mode[chan] = channel_list[entry].driver_mode;
-      sccInitialize (chan);
+      sccInitialize (&m8xx_console_chan_desc[chan], chan);
 
       /*
        * build device name
