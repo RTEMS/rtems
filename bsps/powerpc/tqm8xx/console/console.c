@@ -46,14 +46,10 @@
  *  http://www.OARcorp.com/rtems/license.html.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <termios.h>
 #include <unistd.h>
 
 #include <rtems.h>
 #include <rtems/console.h>
-#include <rtems/libio.h>
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
@@ -115,7 +111,7 @@ typedef volatile char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
  * Interrupt-driven callback
  */
 typedef struct m8xx_console_chan_desc_s {
-  void *tty;
+  rtems_termios_device_context base;
   volatile m8xxBufferDescriptor_t *sccFrstRxBd;
   volatile m8xxBufferDescriptor_t *sccCurrRxBd;
   volatile m8xxBufferDescriptor_t *sccFrstTxBd;
@@ -290,7 +286,7 @@ static uint32_t clkin_frq[2][4] = {
  * FIXME: set pin to be clock input
  */
 
-static int sccBRGalloc(m8xx_console_chan_desc_t *cd,int baud)
+static bool sccBRGalloc(m8xx_console_chan_desc_t *cd,int baud)
 {
   rtems_interrupt_level level;
   uint32_t reg_val;
@@ -382,44 +378,35 @@ static int sccBRGalloc(m8xx_console_chan_desc_t *cd,int baud)
       m8xx.simode = ((m8xx.simode & ~(M8xx_SIMODE_SMCCS_MSK(cd->chan - CONS_CHN_SMC1)))|
 		     M8xx_SIMODE_SMCCS(cd->chan - CONS_CHN_SMC1,new_brg));
     }
+
+    return true;
+  } else {
+    return false;
   }
-  return (new_brg < 0);
 }
 
 
 /*
  * Hardware-dependent portion of tcsetattr().
  */
-static int
-sccSetAttributes (int minor, const struct termios *t)
+static bool
+sccSetAttributes (rtems_termios_device_context *base, const struct termios *t)
 {
-  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
-  int baud;
+  m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
+  speed_t speed;
+  rtems_termios_baud_t baud;
 
-  switch (t->c_ospeed) {
-  default:	baud = -1;	break;
-  case B50:	baud = 50;	break;
-  case B75:	baud = 75;	break;
-  case B110:	baud = 110;	break;
-  case B134:	baud = 134;	break;
-  case B150:	baud = 150;	break;
-  case B200:	baud = 200;	break;
-  case B300:	baud = 300;	break;
-  case B600:	baud = 600;	break;
-  case B1200:	baud = 1200;	break;
-  case B1800:	baud = 1800;	break;
-  case B2400:	baud = 2400;	break;
-  case B4800:	baud = 4800;	break;
-  case B9600:	baud = 9600;	break;
-  case B19200:	baud = 19200;	break;
-  case B38400:	baud = 38400;	break;
-  case B57600:	baud = 57600;	break;
-  case B115200:	baud = 115200;	break;
-  case B230400:	baud = 230400;	break;
-  case B460800:	baud = 460800;	break;
+  speed = cfgetispeed(t);
+  if (speed == B0) {
+        speed = cfgetospeed(t);
   }
+
+  baud = rtems_termios_baud_to_number(speed);
+  if (baud == 0) {
+    return false;
+  }
+
   return sccBRGalloc(cd,baud);
-  return 0;
 }
 
 /*
@@ -428,7 +415,8 @@ sccSetAttributes (int minor, const struct termios *t)
 static rtems_isr
 sccInterruptHandler (void *arg)
 {
-  m8xx_console_chan_desc_t *cd = arg;
+  rtems_termios_tty *tty = arg;
+  m8xx_console_chan_desc_t *cd = rtems_termios_get_device_context(tty);
 
   /*
    * Buffer received?
@@ -442,13 +430,11 @@ sccInterruptHandler (void *arg)
      * process event
      */
     while ((cd->sccCurrRxBd->status & M8xx_BD_EMPTY) == 0) {
-      if (cd->tty != NULL) {
-	rtems_cache_invalidate_multiple_data_lines((void *)cd->sccCurrRxBd->buffer,
-						   cd->sccCurrRxBd->length);
-	rtems_termios_enqueue_raw_characters (cd->tty,
-					      (char *)cd->sccCurrRxBd->buffer,
-					      cd->sccCurrRxBd->length);
-      }
+      rtems_cache_invalidate_multiple_data_lines((void *)cd->sccCurrRxBd->buffer,
+						  cd->sccCurrRxBd->length);
+      rtems_termios_enqueue_raw_characters (tty,
+					    (char *)cd->sccCurrRxBd->buffer,
+					    cd->sccCurrRxBd->length);
       /*
        * clear status
        */
@@ -483,10 +469,7 @@ sccInterruptHandler (void *arg)
      */
     while((cd->sccDequTxBd != cd->sccPrepTxBd) &&
 	  ((cd->sccDequTxBd->status & M8xx_BD_READY) == 0)) {
-      if (cd->tty != NULL) {
-	rtems_termios_dequeue_characters (cd->tty,
-					  cd->sccDequTxBd->length);
-      }
+      rtems_termios_dequeue_characters (tty, cd->sccDequTxBd->length);
       /*
        * advance to next BD
        */
@@ -688,31 +671,15 @@ sccInitialize (m8xx_console_chan_desc_t *cd)
   else {
     cd->regs.smcr->smcmr |= 0x0003;
   }
-
-  if (cd->mode != TERMIOS_POLLED) {
-    rtems_status_code sc;
-
-    sc = rtems_interrupt_handler_install(
-      cd->ivec_src,
-      "SCC",
-      RTEMS_INTERRUPT_UNIQUE,
-      sccInterruptHandler,
-      cd
-    );
-    if (sc != RTEMS_SUCCESSFUL) {
-      rtems_panic("console: cannot install IRQ handler");
-    }
-    mpc8xx_console_irq_on(cd);
-  }
 }
 
 /*
  * polled scc read function
  */
 static int
-sccPollRead (int minor)
+sccPollRead (rtems_termios_device_context *base)
 {
-  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
+  m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
   int c = -1;
 
   while(1) {
@@ -760,11 +727,11 @@ sccPollRead (int minor)
  * Polling devices:
  *	Transmit all characters.
  */
-static ssize_t
-sccInterruptWrite (int minor, const char *buf, size_t len)
+static void
+sccInterruptWrite (rtems_termios_device_context *base, const char *buf, size_t len)
 {
   if (len > 0) {
-    m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
+    m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
     if ((cd->sccPrepTxBd->status & M8xx_BD_READY) == 0) {
       cd->sccPrepTxBd->buffer = (char *)buf;
       cd->sccPrepTxBd->length = len;
@@ -784,18 +751,15 @@ sccInterruptWrite (int minor, const char *buf, size_t len)
       }
     }
   }
-
-  return 0;
 }
 
-static ssize_t
-sccPollWrite (int minor, const char *buf, size_t len)
+static void
+sccPollWrite (rtems_termios_device_context *base, const char *buf, size_t len)
 {
-  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
+  m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
   static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
   int chan = cd->chan;
   int bd_used;
-  size_t retval = len;
 
   while (len--) {
     while (cd->sccPrepTxBd->status & M8xx_BD_READY)
@@ -817,7 +781,6 @@ sccPollWrite (int minor, const char *buf, size_t len)
       cd->sccPrepTxBd++;
     }
   }
-  return retval;
 }
 
 /*
@@ -832,7 +795,7 @@ static void console_debug_putc_onlcr(const char c)
   if (BSP_output_chan != CONS_CHN_NONE) {
     rtems_interrupt_disable(irq_level);
 
-    sccPollWrite (BSP_output_chan,&c,1);
+    sccPollWrite (&m8xx_console_chan_desc[BSP_output_chan].base,&c,1);
     rtems_interrupt_enable(irq_level);
   }
 }
@@ -859,6 +822,49 @@ struct {
   {CONS_CHN_SCC4,CONS_SCC4_MODE}
 };
 
+static bool m8xx_console_first_open(
+  rtems_termios_tty *tty,
+  rtems_termios_device_context *base,
+  struct termios *term,
+  rtems_libio_open_close_args_t *args
+)
+{
+  m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
+
+  if (cd->mode == TERMIOS_IRQ_DRIVEN) {
+    rtems_status_code sc;
+
+    sc = rtems_interrupt_handler_install(
+      cd->ivec_src,
+      "SCC",
+      RTEMS_INTERRUPT_UNIQUE,
+      sccInterruptHandler,
+      tty
+    );
+    if (sc != RTEMS_SUCCESSFUL) {
+      return false;
+    }
+
+    mpc8xx_console_irq_on(cd);
+  }
+
+  return true;
+}
+
+static const rtems_termios_device_handler m8xx_console_handler_polled = {
+  .first_open = m8xx_console_first_open,
+  .set_attributes = sccSetAttributes,
+  .write = sccPollWrite,
+  .poll_read = sccPollRead,
+  .mode = TERMIOS_POLLED
+};
+
+static const rtems_termios_device_handler m8xx_console_handler_irq_driven = {
+  .first_open = m8xx_console_first_open,
+  .set_attributes = sccSetAttributes,
+  .write = sccInterruptWrite,
+  .mode = TERMIOS_IRQ_DRIVEN
+};
 
 /*
  * Initialize and register the device
@@ -887,7 +893,7 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
        entry++) {
     if (channel_list[entry].driver_mode != CONS_MODE_UNUSED) {
       m8xx_console_chan_desc_t *cd =
-	&m8xx_console_chan_desc[channel_list[entry].driver_mode];
+	&m8xx_console_chan_desc[channel_list[entry].minor];
       /*
        * Do device-specific initialization
        */
@@ -902,23 +908,28 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
       /*
        * Register the device
        */
-      status = rtems_io_register_name (tty_name,
-				       major,
-				       channel_list[entry].minor);
+      status = rtems_termios_device_install(
+	tty_name,
+	cd->mode == TERMIOS_IRQ_DRIVEN ?
+	  &m8xx_console_handler_irq_driven : &m8xx_console_handler_polled,
+	NULL,
+	&cd->base
+      );
       if (status != RTEMS_SUCCESSFUL) {
 	rtems_fatal_error_occurred (status);
       }
+
+      if (cd->chan == CONSOLE_CHN) {
+	int rv;
+
+	rv = link(tty_name, CONSOLE_DEVICE_NAME);
+	if (rv != 0) {
+	  rtems_fatal_error_occurred (RTEMS_IO_ERROR);
+	}
+      }
     }
   }
-  /*
-   * register /dev/console
-   */
-  status = rtems_io_register_name ("/dev/console",
-				   major,
-				   CONSOLE_CHN);
-  if (status != RTEMS_SUCCESSFUL) {
-    rtems_fatal_error_occurred (status);
-  }
+
   /*
    * enable printk support
    */
@@ -926,174 +937,3 @@ rtems_device_driver console_initialize(rtems_device_major_number  major,
 
   return RTEMS_SUCCESSFUL;
 }
-
-/*
- * Open the device
- */
-rtems_device_driver console_open(
-				 rtems_device_major_number major,
-				 rtems_device_minor_number minor,
-				 void                    * arg
-				 )
-{
-  m8xx_console_chan_desc_t *cd = &m8xx_console_chan_desc[minor];
-  rtems_status_code status;
-  int chan = minor;
-  rtems_libio_open_close_args_t *args = (rtems_libio_open_close_args_t *)arg;
-  static const rtems_termios_callbacks interruptCallbacks = {
-    NULL,		/* firstOpen */
-    NULL,		/* lastClose */
-    NULL,	        /* pollRead */
-    sccInterruptWrite,	/* write */
-    sccSetAttributes,	/* setAttributes */
-    NULL,		/* stopRemoteTx */
-    NULL,		/* startRemoteTx */
-    TERMIOS_IRQ_DRIVEN	/* outputUsesInterrupts */
-  };
-  static const rtems_termios_callbacks pollCallbacks = {
-    NULL,		/* firstOpen */
-    NULL,		/* lastClose */
-    sccPollRead,	/* pollRead */
-    sccPollWrite,	/* write */
-    sccSetAttributes,	/* setAttributes */
-    NULL,		/* stopRemoteTx */
-    NULL,		/* startRemoteTx */
-    0			/* outputUsesInterrupts */
-  };
-
-  if (cd->mode == TERMIOS_IRQ_DRIVEN) {
-    status = rtems_termios_open (major, minor, arg, &interruptCallbacks);
-    m8xx_console_chan_desc[chan].tty = args->iop->data1;
-  }
-  else {
-    status = rtems_termios_open (major, minor, arg, &pollCallbacks);
-    m8xx_console_chan_desc[chan].tty = args->iop->data1;
-  }
-  return status;
-}
-
-/*
- * Close the device
- */
-rtems_device_driver console_close(
-				  rtems_device_major_number major,
-				  rtems_device_minor_number minor,
-				  void                    * arg
-				  )
-{
-  rtems_status_code rc;
-
-  rc = rtems_termios_close (arg);
-  m8xx_console_chan_desc[minor].tty = NULL;
-
-  return rc;
-
-}
-
-/*
- * Read from the device
- */
-rtems_device_driver console_read(
-				 rtems_device_major_number major,
-				 rtems_device_minor_number minor,
-				 void                    * arg
-				 )
-{
-  return rtems_termios_read (arg);
-}
-
-/*
- * Write to the device
- */
-rtems_device_driver console_write(
-				  rtems_device_major_number major,
-				  rtems_device_minor_number minor,
-				  void                    * arg
-				  )
-{
-  return rtems_termios_write (arg);
-}
-
-#if 0
-static int scc_io_set_trm_char(rtems_device_minor_number minor,
-			       rtems_libio_ioctl_args_t *ioa)
-{
-  rtems_status_code rc                = RTEMS_SUCCESSFUL;
-  con360_io_trm_char_t *trm_char_info = ioa->buffer;
-
-  /*
-   * check, that parameter is non-NULL
-   */
-  if ((rc == RTEMS_SUCCESSFUL) &&
-      (trm_char_info == NULL)) {
-    rc = RTEMS_INVALID_ADDRESS;
-  }
-  /*
-   * transfer max_idl
-   */
-  if (rc == RTEMS_SUCCESSFUL) {
-    if (trm_char_info->max_idl >= 0x10000) {
-      rc = RTEMS_INVALID_NUMBER;
-    }
-    else if (trm_char_info->max_idl > 0) {
-      CHN_PARAM_SET(minor,un.uart.max_idl ,trm_char_info->max_idl);
-    }
-    else if (trm_char_info->max_idl == 0) {
-      CHN_PARAM_SET(minor,un.uart.max_idl ,MAX_IDL_DEFAULT);
-    }
-  }
-  /*
-   * transfer characters
-   */
-  if (rc == RTEMS_SUCCESSFUL) {
-    if (trm_char_info->char_cnt > CON8XX_TRM_CHAR_CNT) {
-      rc = RTEMS_TOO_MANY;
-    }
-    else if (trm_char_info->char_cnt >= 0) {
-      /*
-       * check, whether device is a SCC
-       */
-      if ((rc == RTEMS_SUCCESSFUL) &&
-	  !m8xx_console_chan_desc[minor].is_scc) {
-	rc = RTEMS_UNSATISFIED;
-      }
-      else {
-	int idx = 0;
-	for(idx = 0;idx < trm_char_info->char_cnt;idx++) {
-	  m8xx_console_chan_desc[minor].parms.sccp->un.uart.character[idx] =
-	    trm_char_info->character[idx] & 0x00ff;
-	}
-	if (trm_char_info->char_cnt < CON8XX_TRM_CHAR_CNT) {
-	  m8xx_console_chan_desc[minor].parms.sccp
-	    ->un.uart.character[trm_char_info->char_cnt] = 0x8000;
-	}
-      }
-    }
-  }
-
-  return rc;
-}
-#endif
-
-/*
- * Handle ioctl request.
- */
-rtems_device_driver console_control(
-				    rtems_device_major_number major,
-				    rtems_device_minor_number minor,
-				    void                    * arg
-				    )
-{
-  rtems_libio_ioctl_args_t *ioa=arg;
-
-  switch (ioa->command) {
-#if 0
-  case CON8XX_IO_SET_TRM_CHAR:
-    return scc_io_set_trm_char(minor, ioa);
-#endif
-  default:
-    return rtems_termios_ioctl (arg);
-    break;
-  }
-}
-
