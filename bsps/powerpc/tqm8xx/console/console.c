@@ -57,7 +57,6 @@
 #include <rtems/termiostypes.h>
 #include <rtems/bspIo.h>
 #include <rtems/error.h>
-#include <rtems/irq.h>
 
 #include <bsp.h>
 #include <mpc8xx.h>
@@ -120,7 +119,7 @@ typedef struct m8xx_console_chan_desc_s {
     volatile m8xxSCCRegisters_t *sccr;
     volatile m8xxSMCRegisters_t *smcr;
   } regs;
-  int ivec_src;
+  rtems_vector_number ivec_src;
   int cr_chan_code;
   int brg_used;
 } m8xx_console_chan_desc_t;
@@ -497,23 +496,9 @@ sccInterruptHandler (void *arg)
 }
 
 static void
-mpc8xx_console_irq_on(const rtems_irq_connect_data *irq)
+mpc8xx_console_irq_on(int chan)
 {
-    CHN_MASK_SET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET,
-		 3);	/* Enable TX and RX interrupts */
-}
-
-static void
-mpc8xx_console_irq_off(const rtems_irq_connect_data *irq)
-{
-    CHN_MASK_SET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET,
-		 0);	/* Disable TX and RX interrupts */
-}
-
-static int
-mpc8xx_console_irq_isOn(const rtems_irq_connect_data *irq)
-{
-  return (0 != CHN_MASK_GET(irq->name - BSP_CPM_IRQ_LOWEST_OFFSET)); /* Check TX and RX interrupts */
+    CHN_MASK_SET(chan, 3);	/* Enable TX and RX interrupts */
 }
 
 static void
@@ -709,18 +694,19 @@ sccInitialize (int chan)
   }
 
   if (m8xx_scc_mode[chan] != TERMIOS_POLLED) {
+    rtems_status_code sc;
 
-    rtems_irq_connect_data irq_conn_data = {
+    sc = rtems_interrupt_handler_install(
       m8xx_console_chan_desc[chan].ivec_src,
-      sccInterruptHandler,         /* rtems_irq_hdl           */
-      (rtems_irq_hdl_param)chan,   /* (rtems_irq_hdl_param)   */
-      mpc8xx_console_irq_on,       /* (rtems_irq_enable)      */
-      mpc8xx_console_irq_off,      /* (rtems_irq_disable)     */
-      mpc8xx_console_irq_isOn      /* (rtems_irq_is_enabled)  */
-    };
-    if (!BSP_install_rtems_irq_handler (&irq_conn_data)) {
+      "SCC",
+      RTEMS_INTERRUPT_UNIQUE,
+      sccInterruptHandler,
+      (void *)chan
+    );
+    if (sc != RTEMS_SUCCESSFUL) {
       rtems_panic("console: cannot install IRQ handler");
     }
+    mpc8xx_console_irq_on(chan);
   }
 }
 
