@@ -477,7 +477,6 @@ Makefile
 dev/Makefile
 dtc/libfdt/Makefile
 rtems/Makefile
-sapi/Makefile
 score/Makefile
 score/cpu/Makefile
 score/cpu/arm/Makefile
