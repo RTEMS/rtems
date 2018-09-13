@@ -168,7 +168,7 @@ libposix_a_SOURCES += src/sigpending.c \
     src/sigwait.c src/sigwaitinfo.c src/signal_2.c src/ualarm.c
 
 ## SEMAPHORE_C_FILES
-libposix_a_SOURCES += src/semaphore.c
+libposix_a_SOURCES += src/psxsemaphore.c
 libposix_a_SOURCES += src/semaphoredeletesupp.c
 libposix_a_SOURCES += src/semclose.c
 libposix_a_SOURCES += src/semopen.c
@@ -178,7 +178,7 @@ libposix_a_SOURCES += src/semunlink.c
 libposix_a_SOURCES += src/adjtime.c src/clockgetcpuclockid.c
 
 ## TIMER_C_FILES
-libposix_a_SOURCES += src/ptimer.c src/timercreate.c src/timerdelete.c \
+libposix_a_SOURCES += src/ptimer.c src/psxtimercreate.c src/psxtimerdelete.c \
     src/timergetoverrun.c src/timergettime.c src/timersettime.c
 
 ## ITIMER_C_FILES
