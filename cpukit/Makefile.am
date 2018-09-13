@@ -61,6 +61,11 @@ libcpukit_a_SOURCES += libblock/src/ramdisk-driver.c
 libcpukit_a_SOURCES += libblock/src/ramdisk-init.c
 libcpukit_a_SOURCES += libblock/src/ramdisk-register.c
 libcpukit_a_SOURCES += libblock/src/sparse-disk.c
+libcpukit_a_SOURCES += libcrypt/crypt.c
+libcpukit_a_SOURCES += libcrypt/crypt-md5.c
+libcpukit_a_SOURCES += libcrypt/crypt-sha256.c
+libcpukit_a_SOURCES += libcrypt/crypt-sha512.c
+libcpukit_a_SOURCES += libcrypt/misc.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -134,7 +139,6 @@ all-local: generate-vc-key
 
 # librtemscpu
 _SUBDIRS = . score rtems posix
-_SUBDIRS += libcrypt
 _SUBDIRS += libcsupport libfs
 _SUBDIRS += libdrvmgr
 _SUBDIRS += libnetworking librpc
