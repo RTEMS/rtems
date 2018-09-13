@@ -76,11 +76,28 @@ static const char *bsp_tqm_get_cib_string( const char *cib_id)
   }
 }
 
+static uint32_t str_to_u32(const char *s)
+{
+  uint32_t v = 0;
+
+  while (true) {
+    unsigned char digit = (unsigned char)*s - '0';
+
+    if (digit > 9) {
+      break;
+    }
+
+    v = (v * 10) + digit;
+    ++s;
+  }
+
+  return v;
+}
+
 static rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
 					   uint32_t   *result)
 {
   const char *item_ptr;
-  char *end_ptr;
   item_ptr = bsp_tqm_get_cib_string(cib_id);
   if (item_ptr == NULL) {
     return RTEMS_INVALID_ID;
@@ -88,7 +105,7 @@ static rtems_status_code  bsp_tqm_get_cib_uint32( const char *cib_id,
   /*
    * convert string to uint32
    */
-  *result = strtoul(item_ptr,&end_ptr,10);
+  *result = str_to_u32(item_ptr);
   return RTEMS_SUCCESSFUL;
 }
 
