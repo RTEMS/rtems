@@ -21,6 +21,7 @@
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_CALLOC)
 #include <stdlib.h>
 #include <string.h>
+#include <rtems/score/basedefs.h>
 
 void *calloc(
   size_t nelem,
@@ -32,6 +33,7 @@ void *calloc(
 
   length = nelem * elsize;
   cptr = malloc( length );
+  RTEMS_OBFUSCATE_VARIABLE( cptr );
   if ( cptr )
     memset( cptr, '\0', length );
 
