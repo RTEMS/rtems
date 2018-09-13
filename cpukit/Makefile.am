@@ -23,6 +23,14 @@ libcpukit_a_SOURCES += dev/i2c/xilinx-axi-i2c.c
 libcpukit_a_SOURCES += dev/serial/sc16is752.c
 libcpukit_a_SOURCES += dev/serial/sc16is752-spi.c
 libcpukit_a_SOURCES += dev/spi/spi-bus.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_addresses.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_empty_tree.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_ro.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_rw.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_strerror.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_sw.c
+libcpukit_a_SOURCES += dtc/libfdt/fdt_wip.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -96,7 +104,6 @@ all-local: generate-vc-key
 
 # librtemscpu
 _SUBDIRS = . score rtems posix
-_SUBDIRS += dtc/libfdt
 _SUBDIRS += libcrypt
 _SUBDIRS += libcsupport libblock libfs
 _SUBDIRS += libdrvmgr
