@@ -24,8 +24,6 @@ TMP_LIBS += ../libgnat/libgnat.a
 endif
 
 TMP_LIBS += ../libstdthreads/libstdthreads.a
-TMP_LIBS += ../libcsupport/libcsupport.a
-TMP_LIBS += ../libcsupport/libcalloc.a
 if LIBDOSFS
 TMP_LIBS += ../libfs/libdosfs.a
 endif
