@@ -55,15 +55,6 @@ typedef struct pipe_control {
 } pipe_control_t;
 
 /**
- * @brief Create an anonymous pipe.
- *
- * Called by pipe() to create an anonymous pipe.
- */
-extern int pipe_create(
-  int filsdes[2]
-);
-
-/**
  * @brief Release a pipe.
  *
  * Interface to file system close.
