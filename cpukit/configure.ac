@@ -515,7 +515,6 @@ libdl/Makefile
 libstdthreads/Makefile
 libdebugger/Makefile
 zlib/Makefile
-ftpd/Makefile
 telnetd/Makefile
 pppd/Makefile
 mghttpd/Makefile

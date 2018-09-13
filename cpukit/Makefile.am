@@ -3,6 +3,9 @@ ACLOCAL_AMFLAGS = -I aclocal
 include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
 
+project_lib_LIBRARIES =
+TMPINSTALL_FILES =
+
 noinst_LIBRARIES = libcpukit.a
 
 libcpukit_a_SOURCES =
@@ -110,10 +113,19 @@ _SUBDIRS += wrapup
 
 # other libraries
 _SUBDIRS += zlib
-_SUBDIRS += ftpd
 _SUBDIRS += telnetd
 _SUBDIRS += pppd
 _SUBDIRS += mghttpd
+
+project_lib_LIBRARIES += libftpd.a
+
+$(PROJECT_LIB)/libftpd.a: libftpd.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
+
+libftpd_a_SOURCES =
+libftpd_a_SOURCES += ftpd/ftpd.c
+libftpd_a_SOURCES += ftpd/ftpd-init.c
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am
