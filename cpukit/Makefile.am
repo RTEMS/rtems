@@ -6,6 +6,20 @@ include $(top_srcdir)/automake/multilib.am
 noinst_LIBRARIES = libcpukit.a
 
 libcpukit_a_SOURCES =
+libcpukit_a_SOURCES += dev/i2c/eeprom.c
+libcpukit_a_SOURCES += dev/i2c/fpga-i2c-slave.c
+libcpukit_a_SOURCES += dev/i2c/gpio-nxp-pca9535.c
+libcpukit_a_SOURCES += dev/i2c/i2c-bus.c
+libcpukit_a_SOURCES += dev/i2c/i2c-dev.c
+libcpukit_a_SOURCES += dev/i2c/sensor-lm75a.c
+libcpukit_a_SOURCES += dev/i2c/switch-nxp-pca9548a.c
+libcpukit_a_SOURCES += dev/i2c/ti-ads-16bit-adc.c
+libcpukit_a_SOURCES += dev/i2c/ti-lm25066a.c
+libcpukit_a_SOURCES += dev/i2c/ti-tmp112.c
+libcpukit_a_SOURCES += dev/i2c/xilinx-axi-i2c.c
+libcpukit_a_SOURCES += dev/serial/sc16is752.c
+libcpukit_a_SOURCES += dev/serial/sc16is752-spi.c
+libcpukit_a_SOURCES += dev/spi/spi-bus.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -79,7 +93,6 @@ all-local: generate-vc-key
 
 # librtemscpu
 _SUBDIRS = . score rtems posix
-_SUBDIRS += dev
 _SUBDIRS += dtc/libfdt
 _SUBDIRS += libcrypt
 _SUBDIRS += libcsupport libblock libfs
