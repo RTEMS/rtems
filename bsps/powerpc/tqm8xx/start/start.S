@@ -107,11 +107,14 @@ copy_rest_of_text:
 start_code_in_ram:
 
 	/*
-	 * ROM/RAM startup: clear bss in SDRAM
+	 * ROM/RAM startup: clear sbss/bss in SDRAM
 	 */
-	LA	r3, bsp_section_bss_begin  /* get start address of bss section */
-	LWI	r4, bsp_section_bss_size   /* get size of bss section */
-	bl	mpc8xx_zero_4          /* Clear the bss section */
+	LA	r3, bsp_section_sbss_begin
+	LWI	r4, bsp_section_sbss_size
+	bl	mpc8xx_zero_4
+	LA	r3, bsp_section_bss_begin
+	LWI	r4, bsp_section_bss_size
+	bl	mpc8xx_zero_4
 	/*
 	 * call boot_card
 	 */
