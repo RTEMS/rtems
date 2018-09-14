@@ -488,6 +488,32 @@ libcpukit_a_SOURCES += libgnat/adasupp.c
 
 endif
 
+if LIBPCI
+
+libcpukit_a_SOURCES += libpci/pci_access.c
+libcpukit_a_SOURCES += libpci/pci_access_func.c
+libcpukit_a_SOURCES += libpci/pci_access_io.c
+libcpukit_a_SOURCES += libpci/pci_access_mem_be.c
+libcpukit_a_SOURCES += libpci/pci_access_mem.c
+libcpukit_a_SOURCES += libpci/pci_access_mem_le.c
+libcpukit_a_SOURCES += libpci/pci_bus.c
+libcpukit_a_SOURCES += libpci/pci_cfg_auto.c
+libcpukit_a_SOURCES += libpci/pci_cfg.c
+libcpukit_a_SOURCES += libpci/pci_cfg_peripheral.c
+libcpukit_a_SOURCES += libpci/pci_cfg_print_code.c
+libcpukit_a_SOURCES += libpci/pci_cfg_read.c
+libcpukit_a_SOURCES += libpci/pci_cfg_static.c
+libcpukit_a_SOURCES += libpci/pci_find.c
+libcpukit_a_SOURCES += libpci/pci_find_dev.c
+libcpukit_a_SOURCES += libpci/pci_for_each.c
+libcpukit_a_SOURCES += libpci/pci_for_each_child.c
+libcpukit_a_SOURCES += libpci/pci_for_each_dev.c
+libcpukit_a_SOURCES += libpci/pci_get_dev.c
+libcpukit_a_SOURCES += libpci/pci_irq.c
+libcpukit_a_SOURCES += libpci/pci_print.c
+
+endif
+
 if SHA
 
 libcpukit_a_SOURCES += libmd/sha256c.c
@@ -531,7 +557,6 @@ all-local: generate-vc-key
 # librtemscpu
 _SUBDIRS = . score rtems posix
 _SUBDIRS += libnetworking librpc
-_SUBDIRS += libpci
 _SUBDIRS += libmisc
 _SUBDIRS += libstdthreads
 _SUBDIRS += wrapup

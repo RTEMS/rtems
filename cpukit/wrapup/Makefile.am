@@ -56,10 +56,6 @@ endif
 TMP_LIBS += ../libmisc/libuuid.a
 TMP_LIBS += ../libmisc/libxz.a
 
-if LIBPCI
-TMP_LIBS += ../libpci/libpci.a
-endif
-
 if LIBNETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
 TMP_LIBS += ../librpc/librpc.a
