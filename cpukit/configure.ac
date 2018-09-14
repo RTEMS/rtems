@@ -507,7 +507,6 @@ librpc/Makefile
 libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
-libdl/Makefile
 libstdthreads/Makefile
 zlib/Makefile
 telnetd/Makefile

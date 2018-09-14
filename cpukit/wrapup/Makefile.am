@@ -86,10 +86,6 @@ if NEWLIB
 TMP_LIBS += ../libmd/libmd.a
 endif
 
-if LIBDL
-TMP_LIBS += ../libdl/libdl.a
-endif
-
 librtemscpu.a: $(TMP_LIBS)
 	$(AM_V_GEN)rm -f $@
 	$(AM_V_GEN)$(MKDIR_P) $(ARCH)

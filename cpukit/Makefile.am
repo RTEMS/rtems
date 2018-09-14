@@ -298,6 +298,35 @@ libcpukit_a_SOURCES += sapi/src/sapirbtreeinsert.c
 libcpukit_a_SOURCES += sapi/src/tcsimpleinstall.c
 libcpukit_a_SOURCES += sapi/src/version.c
 
+if LIBDL
+
+libcpukit_a_SOURCES += libdl/dlfcn.c
+libcpukit_a_SOURCES += libdl/dlfcn-shell.c
+libcpukit_a_SOURCES += libdl/fastlz.c
+libcpukit_a_SOURCES += libdl/rap.c
+libcpukit_a_SOURCES += libdl/rap-shell.c
+libcpukit_a_SOURCES += libdl/rtl-allocator.c
+libcpukit_a_SOURCES += libdl/rtl-alloc-heap.c
+libcpukit_a_SOURCES += libdl/rtl.c
+libcpukit_a_SOURCES += libdl/rtl-chain-iterator.c
+libcpukit_a_SOURCES += libdl/rtl-debugger.c
+libcpukit_a_SOURCES += libdl/rtl-elf.c
+libcpukit_a_SOURCES += libdl/rtl-error.c
+libcpukit_a_SOURCES += libdl/rtl-find-file.c
+libcpukit_a_SOURCES += libdl/rtl-mdreloc-@RTEMS_CPU@.c
+libcpukit_a_SOURCES += libdl/rtl-obj.c
+libcpukit_a_SOURCES += libdl/rtl-obj-cache.c
+libcpukit_a_SOURCES += libdl/rtl-obj-comp.c
+libcpukit_a_SOURCES += libdl/rtl-rap.c
+libcpukit_a_SOURCES += libdl/rtl-shell.c
+libcpukit_a_SOURCES += libdl/rtl-string.c
+libcpukit_a_SOURCES += libdl/rtl-sym.c
+libcpukit_a_SOURCES += libdl/rtl-trace.c
+libcpukit_a_SOURCES += libdl/rtl-unresolved.c
+libcpukit_a_SOURCES += libdl/rtl-unwind-dw2.c
+
+endif
+
 #
 # Create a new Version VC Key header if the VC state has changed.
 #
@@ -341,7 +370,6 @@ _SUBDIRS += libi2c
 _SUBDIRS += libmisc
 _SUBDIRS += libmd
 _SUBDIRS += libgnat
-_SUBDIRS += libdl
 _SUBDIRS += libstdthreads
 _SUBDIRS += wrapup
 
