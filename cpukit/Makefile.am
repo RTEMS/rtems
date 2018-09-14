@@ -260,6 +260,107 @@ libcpukit_a_SOURCES += libcsupport/src/vprintk.c
 libcpukit_a_SOURCES += libcsupport/src/write.c
 libcpukit_a_SOURCES += libcsupport/src/write_r.c
 libcpukit_a_SOURCES += libcsupport/src/writev.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_are_nodes_equal.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_chown.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_clone.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_close.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_eval_path.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fchmod.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fcntl.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_freenode.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fstat.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fsunmount.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fsync.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_fsync_success.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_ftruncate.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_ftruncate_directory.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_handlers.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_ioctl.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_kqfilter.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_link.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_lock_and_unlock.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_lseek.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_lseek_directory.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_lseek_file.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_mknod.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_mmap.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_mount.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_open.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_ops.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_poll.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_read.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_readlink.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_readv.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_rename.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_rmnod.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_statvfs.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_symlink.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_unmount.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_utime.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_write.c
+libcpukit_a_SOURCES += libfs/src/defaults/default_writev.c
+libcpukit_a_SOURCES += libfs/src/devfs/devclose.c
+libcpukit_a_SOURCES += libfs/src/devfs/devfs_eval.c
+libcpukit_a_SOURCES += libfs/src/devfs/devfs_init.c
+libcpukit_a_SOURCES += libfs/src/devfs/devfs_mknod.c
+libcpukit_a_SOURCES += libfs/src/devfs/devfs_show.c
+libcpukit_a_SOURCES += libfs/src/devfs/devioctl.c
+libcpukit_a_SOURCES += libfs/src/devfs/devopen.c
+libcpukit_a_SOURCES += libfs/src/devfs/devread.c
+libcpukit_a_SOURCES += libfs/src/devfs/devstat.c
+libcpukit_a_SOURCES += libfs/src/devfs/devwrite.c
+libcpukit_a_SOURCES += libfs/src/imfs/deviceio.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_chown.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_config.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_creat.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_dir.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_dir_default.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_dir_minimal.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_eval.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_fchmod.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_fifo.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_fsunmount.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_handlers_device.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_init.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_initsupp.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_linfile.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_link.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_load_tar.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_make_generic_node.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_memfile.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_mknod.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_mount.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_node.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_rename.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_rmnod.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_stat.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_stat_file.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_symlink.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_unmount.c
+libcpukit_a_SOURCES += libfs/src/imfs/imfs_utime.c
+libcpukit_a_SOURCES += libfs/src/imfs/ioman.c
+libcpukit_a_SOURCES += libfs/src/pipe/fifo.c
+libcpukit_a_SOURCES += libfs/src/pipe/pipe.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-bitmaps.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-block.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-buffer-bdbuf.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-buffer.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-dir.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-dir-hash.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-file.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-file-system.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-format.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-group.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-inode.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-link.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-mutex.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-dev.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-dir.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-file.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-utils.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-shell.c
+libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-trace.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -327,6 +428,33 @@ libcpukit_a_SOURCES += libdl/rtl-unwind-dw2.c
 
 endif
 
+if LIBDOSFS
+
+libcpukit_a_SOURCES += libfs/src/dosfs/fat.c
+libcpukit_a_SOURCES += libfs/src/dosfs/fat_fat_operations.c
+libcpukit_a_SOURCES += libfs/src/dosfs/fat_file.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_conv.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_conv_default.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_conv_utf8.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_create.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_dir.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_eval.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_file.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_format.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_free.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_fsunmount.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_handlers_dir.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_handlers_file.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_init.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_initsupp.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_misc.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_mknod.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_rename.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_rmnod.c
+libcpukit_a_SOURCES += libfs/src/dosfs/msdos_statvfs.c
+
+endif
+
 if LIBDRVMGR
 
 libcpukit_a_SOURCES += libdrvmgr/drvmgr_by_id.c
@@ -385,7 +513,6 @@ all-local: generate-vc-key
 
 # librtemscpu
 _SUBDIRS = . score rtems posix
-_SUBDIRS += libfs
 _SUBDIRS += libnetworking librpc
 _SUBDIRS += libpci
 _SUBDIRS += libi2c
@@ -428,6 +555,55 @@ libdebugger_a_SOURCES += libdebugger/rtems-debugger-@RTEMS_CPU@.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-server.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-target.c
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-threads.c
+
+endif
+
+project_lib_LIBRARIES += libjffs2.a
+
+$(PROJECT_LIB)/libjffs2.a: libjffs2.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libjffs2.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libjffs2.a
+
+libjffs2_a_SOURCES =
+libjffs2_a_SOURCES += libfs/src/jffs2/src/build.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/compat-crc32.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/compr.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/compr_rtime.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/compr_zlib.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/debug.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/dir-rtems.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/erase.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/flashio.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/fs-rtems.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/gc.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/malloc-rtems.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/nodelist.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/nodemgmt.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/read.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/readinode.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/scan.c
+libjffs2_a_SOURCES += libfs/src/jffs2/src/write.c
+libjffs2_a_CFLAGS =
+libjffs2_a_CFLAGS += -Wno-pointer-sign
+libjffs2_a_CPPFLAGS =
+libjffs2_a_CPPFLAGS += $(AM_CPPFLAGS)
+libjffs2_a_CPPFLAGS += -I$(srcdir)/libfs/src/jffs2/include
+
+if LIBNETWORKING
+
+project_lib_LIBRARIES += libnfs.a
+
+$(PROJECT_LIB)/libnfs.a: libnfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libnfs.a
+
+libnfs_a_SOURCES =
+libnfs_a_SOURCES += libfs/src/nfsclient/proto/mount_prot_xdr.c
+libnfs_a_SOURCES += libfs/src/nfsclient/proto/nfs_prot_xdr.c
+libnfs_a_SOURCES += libfs/src/nfsclient/src/nfs.c
+libnfs_a_SOURCES += libfs/src/nfsclient/src/rpcio.c
+libnfs_a_SOURCES += libfs/src/nfsclient/src/sock_mbuf.c
+libnfs_a_SOURCES += libfs/src/nfsclient/src/xdr_mbuf.c
 
 endif
 
