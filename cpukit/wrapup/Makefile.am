@@ -58,8 +58,6 @@ TMP_LIBS += ../libmisc/libxz.a
 
 if LIBNETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
-TMP_LIBS += ../librpc/librpc.a
-TMP_LIBS += ../librpc/libxdr.a
 endif
 
 librtemscpu.a: $(TMP_LIBS)

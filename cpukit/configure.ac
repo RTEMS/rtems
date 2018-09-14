@@ -498,7 +498,6 @@ score/cpu/x86_64/Makefile
 score/cpu/no_cpu/Makefile
 posix/Makefile
 libnetworking/Makefile
-librpc/Makefile
 libmisc/Makefile
 libstdthreads/Makefile
 zlib/Makefile

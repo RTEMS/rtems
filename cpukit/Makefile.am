@@ -488,6 +488,56 @@ libcpukit_a_SOURCES += libgnat/adasupp.c
 
 endif
 
+if LIBNETWORKING
+
+libcpukit_a_SOURCES += librpc/src/rpc/auth_none.c
+libcpukit_a_SOURCES += librpc/src/rpc/auth_unix.c
+libcpukit_a_SOURCES += librpc/src/rpc/authunix_prot.c
+libcpukit_a_SOURCES += librpc/src/rpc/bindresvport.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_generic.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_perror.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_raw.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_simple.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_tcp.c
+libcpukit_a_SOURCES += librpc/src/rpc/clnt_udp.c
+libcpukit_a_SOURCES += librpc/src/rpc/get_myaddress.c
+libcpukit_a_SOURCES += librpc/src/rpc/getrpcent.c
+libcpukit_a_SOURCES += librpc/src/rpc/getrpcport.c
+libcpukit_a_SOURCES += librpc/src/rpc/netname.c
+libcpukit_a_SOURCES += librpc/src/rpc/netnamer.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_clnt.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_getmaps.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_getport.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_prot2.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_prot.c
+libcpukit_a_SOURCES += librpc/src/rpc/pmap_rmt.c
+libcpukit_a_SOURCES += librpc/src/rpc/rpc_callmsg.c
+libcpukit_a_SOURCES += librpc/src/rpc/rpc_commondata.c
+libcpukit_a_SOURCES += librpc/src/rpc/rpcdname.c
+libcpukit_a_SOURCES += librpc/src/rpc/rpc_dtablesize.c
+libcpukit_a_SOURCES += librpc/src/rpc/rpc_prot.c
+libcpukit_a_SOURCES += librpc/src/rpc/rtems_portmapper.c
+libcpukit_a_SOURCES += librpc/src/rpc/rtems_rpc.c
+libcpukit_a_SOURCES += librpc/src/rpc/rtime.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_auth.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_auth_unix.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_raw.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_run.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_simple.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_tcp.c
+libcpukit_a_SOURCES += librpc/src/rpc/svc_udp.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_array.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_float.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_mem.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_rec.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_reference.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_sizeof.c
+libcpukit_a_SOURCES += librpc/src/xdr/xdr_stdio.c
+
+endif
+
 if LIBPCI
 
 libcpukit_a_SOURCES += libpci/pci_access.c
@@ -556,7 +606,7 @@ all-local: generate-vc-key
 
 # librtemscpu
 _SUBDIRS = . score rtems posix
-_SUBDIRS += libnetworking librpc
+_SUBDIRS += libnetworking
 _SUBDIRS += libmisc
 _SUBDIRS += libstdthreads
 _SUBDIRS += wrapup
