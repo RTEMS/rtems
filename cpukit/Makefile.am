@@ -844,7 +844,6 @@ _SUBDIRS += wrapup
 # other libraries
 _SUBDIRS += zlib
 _SUBDIRS += telnetd
-_SUBDIRS += pppd
 
 project_lib_LIBRARIES += libftpd.a
 
@@ -922,6 +921,30 @@ libnfs_a_SOURCES += libfs/src/nfsclient/src/nfs.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/rpcio.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/sock_mbuf.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/xdr_mbuf.c
+
+project_lib_LIBRARIES += libpppd.a
+
+$(PROJECT_LIB)/libpppd.a: libpppd.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libpppd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libpppd.a
+
+libpppd_a_SOURCES =
+libpppd_a_SOURCES += pppd/auth.c
+libpppd_a_SOURCES += pppd/ccp.c
+libpppd_a_SOURCES += pppd/chap.c
+libpppd_a_SOURCES += pppd/chap_ms.c
+libpppd_a_SOURCES += pppd/chat.c
+libpppd_a_SOURCES += pppd/demand.c
+libpppd_a_SOURCES += pppd/fsm.c
+libpppd_a_SOURCES += pppd/ipcp.c
+libpppd_a_SOURCES += pppd/lcp.c
+libpppd_a_SOURCES += pppd/magic.c
+libpppd_a_SOURCES += pppd/options.c
+libpppd_a_SOURCES += pppd/rtemsmain.c
+libpppd_a_SOURCES += pppd/rtemspppd.c
+libpppd_a_SOURCES += pppd/sys-rtems.c
+libpppd_a_SOURCES += pppd/upap.c
+libpppd_a_SOURCES += pppd/utils.c
 
 if HAS_PTHREADS
 

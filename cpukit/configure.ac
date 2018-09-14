@@ -500,7 +500,6 @@ libnetworking/Makefile
 libmisc/Makefile
 zlib/Makefile
 telnetd/Makefile
-pppd/Makefile
 wrapup/Makefile])
 
 AC_OUTPUT
