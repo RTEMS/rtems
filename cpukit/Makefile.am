@@ -362,6 +362,8 @@ libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-utils.c
 libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-shell.c
 libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-trace.c
 libcpukit_a_SOURCES += libi2c/libi2c.c
+libcpukit_a_SOURCES += libmd/md4.c
+libcpukit_a_SOURCES += libmd/md5.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -486,6 +488,13 @@ libcpukit_a_SOURCES += libgnat/adasupp.c
 
 endif
 
+if SHA
+
+libcpukit_a_SOURCES += libmd/sha256c.c
+libcpukit_a_SOURCES += libmd/sha512c.c
+
+endif
+
 #
 # Create a new Version VC Key header if the VC state has changed.
 #
@@ -524,7 +533,6 @@ _SUBDIRS = . score rtems posix
 _SUBDIRS += libnetworking librpc
 _SUBDIRS += libpci
 _SUBDIRS += libmisc
-_SUBDIRS += libmd
 _SUBDIRS += libstdthreads
 _SUBDIRS += wrapup
 
