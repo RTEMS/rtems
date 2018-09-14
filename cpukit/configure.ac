@@ -499,7 +499,6 @@ score/cpu/no_cpu/Makefile
 posix/Makefile
 libnetworking/Makefile
 libmisc/Makefile
-libstdthreads/Makefile
 zlib/Makefile
 telnetd/Makefile
 pppd/Makefile

@@ -62,8 +62,8 @@ cnd_signal(cnd_t *cond)
 }
 
 int
-cnd_timedwait(cnd_t *restrict cond, mtx_t *restrict mtx,
-    const struct timespec *restrict ts)
+cnd_timedwait(cnd_t *__restrict cond, mtx_t *__restrict mtx,
+    const struct timespec *__restrict ts)
 {
 
 	switch (_Condition_Wait_recursive_timed(cond, mtx, ts)) {

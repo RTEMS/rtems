@@ -56,7 +56,7 @@ mtx_lock(mtx_t *mtx)
 }
 
 int
-mtx_timedlock(mtx_t *restrict mtx, const struct timespec *restrict ts)
+mtx_timedlock(mtx_t *__restrict mtx, const struct timespec *__restrict ts)
 {
 
 	switch (_Mutex_recursive_Acquire_timed(mtx, ts)) {

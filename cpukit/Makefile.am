@@ -364,6 +364,10 @@ libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-trace.c
 libcpukit_a_SOURCES += libi2c/libi2c.c
 libcpukit_a_SOURCES += libmd/md4.c
 libcpukit_a_SOURCES += libmd/md5.c
+libcpukit_a_SOURCES += libstdthreads/call_once.c
+libcpukit_a_SOURCES += libstdthreads/cnd.c
+libcpukit_a_SOURCES += libstdthreads/mtx.c
+libcpukit_a_SOURCES += libstdthreads/tss.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -401,6 +405,12 @@ libcpukit_a_SOURCES += sapi/src/rbtreefind.c
 libcpukit_a_SOURCES += sapi/src/sapirbtreeinsert.c
 libcpukit_a_SOURCES += sapi/src/tcsimpleinstall.c
 libcpukit_a_SOURCES += sapi/src/version.c
+
+if HAS_PTHREADS
+
+libcpukit_a_SOURCES += libstdthreads/thrd.c
+
+endif
 
 if LIBDL
 
@@ -608,7 +618,6 @@ all-local: generate-vc-key
 _SUBDIRS = . score rtems posix
 _SUBDIRS += libnetworking
 _SUBDIRS += libmisc
-_SUBDIRS += libstdthreads
 _SUBDIRS += wrapup
 
 # other libraries

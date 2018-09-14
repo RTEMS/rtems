@@ -19,8 +19,6 @@ TMP_LIBS += ../libcpukit.a
 TMP_LIBS += ../rtems/librtems.a
 TMP_LIBS += ../posix/libposix.a
 
-TMP_LIBS += ../libstdthreads/libstdthreads.a
-
 TMP_LIBS += ../libmisc/libmonitor.a
 TMP_LIBS += ../libmisc/libuntar.a
 TMP_LIBS += ../libmisc/libstackchk.a
