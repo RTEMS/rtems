@@ -19,10 +19,6 @@ TMP_LIBS += ../libcpukit.a
 TMP_LIBS += ../rtems/librtems.a
 TMP_LIBS += ../posix/libposix.a
 
-if LIBGNAT
-TMP_LIBS += ../libgnat/libgnat.a
-endif
-
 TMP_LIBS += ../libstdthreads/libstdthreads.a
 
 TMP_LIBS += ../libmisc/libmonitor.a

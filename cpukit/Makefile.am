@@ -478,6 +478,13 @@ libcpukit_a_SOURCES += libdrvmgr/drvmgr_unregister.c
 
 endif
 
+if LIBGNAT
+
+libcpukit_a_SOURCES += libgnat/ada_intrsupp.c
+libcpukit_a_SOURCES += libgnat/adasupp.c
+
+endif
+
 #
 # Create a new Version VC Key header if the VC state has changed.
 #
@@ -518,7 +525,6 @@ _SUBDIRS += libpci
 _SUBDIRS += libi2c
 _SUBDIRS += libmisc
 _SUBDIRS += libmd
-_SUBDIRS += libgnat
 _SUBDIRS += libstdthreads
 _SUBDIRS += wrapup
 
