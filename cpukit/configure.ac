@@ -496,7 +496,6 @@ score/cpu/sparc64/Makefile
 score/cpu/v850/Makefile
 score/cpu/x86_64/Makefile
 score/cpu/no_cpu/Makefile
-posix/Makefile
 libnetworking/Makefile
 libmisc/Makefile
 zlib/Makefile
