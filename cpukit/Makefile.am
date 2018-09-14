@@ -343,7 +343,6 @@ _SUBDIRS += libmd
 _SUBDIRS += libgnat
 _SUBDIRS += libdl
 _SUBDIRS += libstdthreads
-_SUBDIRS += libdebugger
 _SUBDIRS += wrapup
 
 # other libraries
@@ -361,6 +360,26 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
 libftpd_a_SOURCES =
 libftpd_a_SOURCES += ftpd/ftpd.c
 libftpd_a_SOURCES += ftpd/ftpd-init.c
+
+if LIBDEBUGGER
+
+project_lib_LIBRARIES += libdebugger.a
+
+$(PROJECT_LIB)/libdebugger.a: libdebugger.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libdebugger.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libdebugger.a
+
+libdebugger_a_SOURCES =
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-block.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-cmd.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-remote.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-remote-tcp.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-@RTEMS_CPU@.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-server.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-target.c
+libdebugger_a_SOURCES += libdebugger/rtems-debugger-threads.c
+
+endif
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

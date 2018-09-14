@@ -509,7 +509,6 @@ libi2c/Makefile
 libmd/Makefile
 libdl/Makefile
 libstdthreads/Makefile
-libdebugger/Makefile
 zlib/Makefile
 telnetd/Makefile
 pppd/Makefile
