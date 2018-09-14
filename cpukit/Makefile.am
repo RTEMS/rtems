@@ -361,6 +361,7 @@ libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-file.c
 libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-rtems-utils.c
 libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-shell.c
 libcpukit_a_SOURCES += libfs/src/rfs/rtems-rfs-trace.c
+libcpukit_a_SOURCES += libi2c/libi2c.c
 libcpukit_a_SOURCES += sapi/src/chainappendnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetnotify.c
 libcpukit_a_SOURCES += sapi/src/chaingetwait.c
@@ -522,7 +523,6 @@ all-local: generate-vc-key
 _SUBDIRS = . score rtems posix
 _SUBDIRS += libnetworking librpc
 _SUBDIRS += libpci
-_SUBDIRS += libi2c
 _SUBDIRS += libmisc
 _SUBDIRS += libmd
 _SUBDIRS += libstdthreads

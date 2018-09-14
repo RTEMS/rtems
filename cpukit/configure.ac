@@ -501,7 +501,6 @@ libnetworking/Makefile
 libpci/Makefile
 librpc/Makefile
 libmisc/Makefile
-libi2c/Makefile
 libmd/Makefile
 libstdthreads/Makefile
 zlib/Makefile
