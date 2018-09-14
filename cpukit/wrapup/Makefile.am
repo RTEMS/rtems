@@ -72,10 +72,6 @@ if LIBPCI
 TMP_LIBS += ../libpci/libpci.a
 endif
 
-if LIBDRVMGR
-TMP_LIBS += ../libdrvmgr/libdrvmgr.a
-endif
-
 if LIBNETWORKING
 TMP_LIBS += ../libnetworking/libnetworking.a
 TMP_LIBS += ../librpc/librpc.a

@@ -327,6 +327,29 @@ libcpukit_a_SOURCES += libdl/rtl-unwind-dw2.c
 
 endif
 
+if LIBDRVMGR
+
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_by_id.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_by_name.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_dev_by_name.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_drvinf.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_for_each_dev.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_for_each_list_dev.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_func.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_func_call.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_init.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_list.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_lock.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_print.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_res.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_rw.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_translate.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_translate_check.c
+libcpukit_a_SOURCES += libdrvmgr/drvmgr_unregister.c
+
+endif
+
 #
 # Create a new Version VC Key header if the VC state has changed.
 #
@@ -363,7 +386,6 @@ all-local: generate-vc-key
 # librtemscpu
 _SUBDIRS = . score rtems posix
 _SUBDIRS += libfs
-_SUBDIRS += libdrvmgr
 _SUBDIRS += libnetworking librpc
 _SUBDIRS += libpci
 _SUBDIRS += libi2c
