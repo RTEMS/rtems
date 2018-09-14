@@ -474,7 +474,6 @@ RTEMS_AMPOLISH3
 AC_CONFIG_FILES([
 Doxyfile
 Makefile
-rtems/Makefile
 score/Makefile
 score/cpu/Makefile
 score/cpu/arm/Makefile
