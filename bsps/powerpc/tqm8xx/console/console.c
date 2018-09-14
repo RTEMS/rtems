@@ -105,7 +105,7 @@
  */
 #define SCC_RXBD_CNT 4
 #define SCC_TXBD_CNT 4
-typedef volatile char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
+typedef char sccRxBuf_t[SCC_RXBD_CNT][RXBUFSIZE];
 
 /*
  * Interrupt-driven callback
@@ -417,6 +417,9 @@ sccInterruptHandler (void *arg)
 {
   rtems_termios_tty *tty = arg;
   m8xx_console_chan_desc_t *cd = rtems_termios_get_device_context(tty);
+  uint16_t status;
+  uint16_t length;
+  void *buffer;
 
   /*
    * Buffer received?
@@ -429,27 +432,30 @@ sccInterruptHandler (void *arg)
     /*
      * process event
      */
-    while ((cd->sccCurrRxBd->status & M8xx_BD_EMPTY) == 0) {
-      rtems_cache_invalidate_multiple_data_lines((void *)cd->sccCurrRxBd->buffer,
-						  cd->sccCurrRxBd->length);
-      rtems_termios_enqueue_raw_characters (tty,
-					    (char *)cd->sccCurrRxBd->buffer,
-					    cd->sccCurrRxBd->length);
+    while (true) {
+      status = cd->sccCurrRxBd->status;
+
+      if ((cd->sccCurrRxBd->status & M8xx_BD_EMPTY) != 0) {
+        break;
+      }
+
+      buffer = cd->sccCurrRxBd->buffer;
+      length = cd->sccCurrRxBd->length;
+      rtems_cache_invalidate_multiple_data_lines(buffer, length);
+      rtems_termios_enqueue_raw_characters (tty, buffer, length);
+
       /*
        * clear status
        */
-      cd->sccCurrRxBd->status =
-	(cd->sccCurrRxBd->status
-	 & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
-	| M8xx_BD_EMPTY;
+      cd->sccCurrRxBd->status = (status & (M8xx_BD_WRAP | M8xx_BD_INTERRUPT))
+        | M8xx_BD_EMPTY;
       /*
        * advance to next BD
        */
-      if ((cd->sccCurrRxBd->status & M8xx_BD_WRAP) != 0) {
-	cd->sccCurrRxBd = cd->sccFrstRxBd;
-      }
-      else {
-	cd->sccCurrRxBd++;
+      if ((status & M8xx_BD_WRAP) != 0) {
+        cd->sccCurrRxBd = cd->sccFrstRxBd;
+      } else {
+        cd->sccCurrRxBd++;
       }
     }
   }
@@ -467,17 +473,24 @@ sccInterruptHandler (void *arg)
     /*
      * FIXME: multiple dequeue calls for multiple buffers
      */
-    while((cd->sccDequTxBd != cd->sccPrepTxBd) &&
-	  ((cd->sccDequTxBd->status & M8xx_BD_READY) == 0)) {
-      rtems_termios_dequeue_characters (tty, cd->sccDequTxBd->length);
+    while (cd->sccDequTxBd != cd->sccPrepTxBd) {
+      status = cd->sccDequTxBd->status;
+
+      if ((status & M8xx_BD_READY) != 0) {
+        break;
+      }
+
+      if ((status & M8xx_BD_INTERRUPT) != 0) {
+        rtems_termios_dequeue_characters (tty, cd->sccDequTxBd->length);
+      }
+
       /*
        * advance to next BD
        */
-      if ((cd->sccDequTxBd->status & M8xx_BD_WRAP) != 0) {
-	cd->sccDequTxBd = cd->sccFrstTxBd;
-      }
-      else {
-	cd->sccDequTxBd++;
+      if ((status & M8xx_BD_WRAP) != 0) {
+        cd->sccDequTxBd = cd->sccFrstTxBd;
+      } else {
+        cd->sccDequTxBd++;
       }
     }
   }
@@ -730,23 +743,25 @@ sccPollRead (rtems_termios_device_context *base)
 static void
 sccInterruptWrite (rtems_termios_device_context *base, const char *buf, size_t len)
 {
+  m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
+
   if (len > 0) {
-    m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
-    if ((cd->sccPrepTxBd->status & M8xx_BD_READY) == 0) {
-      cd->sccPrepTxBd->buffer = (char *)buf;
+    uint16_t status = cd->sccPrepTxBd->status;
+
+    if ((status & M8xx_BD_READY) == 0) {
+      cd->sccPrepTxBd->buffer = RTEMS_DECONST(char*, buf);
       cd->sccPrepTxBd->length = len;
-      rtems_cache_flush_multiple_data_lines((const void *)buf,len);
+      rtems_cache_flush_multiple_data_lines(buf, len);
+
       /*
        * clear status, set ready bit
        */
-      cd->sccPrepTxBd->status =
-        (cd->sccPrepTxBd->status
-         & M8xx_BD_WRAP)
+      cd->sccPrepTxBd->status = (status & M8xx_BD_WRAP)
         | M8xx_BD_READY | M8xx_BD_INTERRUPT;
-      if ((cd->sccPrepTxBd->status & M8xx_BD_WRAP) != 0) {
+
+      if ((status & M8xx_BD_WRAP) != 0) {
         cd->sccPrepTxBd = cd->sccFrstTxBd;
-      }
-      else {
+      } else {
         cd->sccPrepTxBd++;
       }
     }
@@ -757,29 +772,38 @@ static void
 sccPollWrite (rtems_termios_device_context *base, const char *buf, size_t len)
 {
   m8xx_console_chan_desc_t *cd = (m8xx_console_chan_desc_t *)base;
-  static char txBuf[CONS_CHN_CNT][SCC_TXBD_CNT];
-  int chan = cd->chan;
-  int bd_used;
+  volatile m8xxBufferDescriptor_t *bd = NULL;
 
-  while (len--) {
-    while (cd->sccPrepTxBd->status & M8xx_BD_READY)
-      continue;
-    bd_used = cd->sccPrepTxBd - cd->sccFrstTxBd;
-    txBuf[chan][bd_used] = *buf++;
-      rtems_cache_flush_multiple_data_lines((const void *)&txBuf[chan][bd_used],
-					    sizeof(txBuf[chan][bd_used]));
-    cd->sccPrepTxBd->buffer = &(txBuf[chan][bd_used]);
-    cd->sccPrepTxBd->length = 1;
-    cd->sccPrepTxBd->status =
-      (cd->sccPrepTxBd->status
-       & M8xx_BD_WRAP)
-      | M8xx_BD_READY;
-    if ((cd->sccPrepTxBd->status & M8xx_BD_WRAP) != 0) {
-      cd->sccPrepTxBd = cd->sccFrstTxBd;
+  rtems_cache_flush_multiple_data_lines (buf, len);
+
+  while (bd == NULL) {
+    rtems_interrupt_level level;
+    uint16_t status;
+
+    rtems_interrupt_disable(level);
+
+    bd = cd->sccPrepTxBd;
+    status = bd->status;
+
+    if ((status & M8xx_BD_READY) == 0) {
+      bd->buffer = RTEMS_DECONST (char *, buf);
+      bd->length = len;
+      bd->status = (status & M8xx_BD_WRAP) | M8xx_BD_READY;
+
+      if ((status & M8xx_BD_WRAP) != 0) {
+        cd->sccPrepTxBd = cd->sccFrstTxBd;
+      } else {
+        cd->sccPrepTxBd++;
+      }
+    } else {
+      bd = NULL;
     }
-    else {
-      cd->sccPrepTxBd++;
-    }
+
+    rtems_interrupt_enable(level);
+  }
+
+  while ((bd->status & M8xx_BD_READY) != 0) {
+    /* Wait */
   }
 }
 

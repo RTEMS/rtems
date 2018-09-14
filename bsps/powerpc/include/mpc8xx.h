@@ -683,7 +683,7 @@ typedef struct m8xxSPIparms_ {
 typedef struct m8xxBufferDescriptor_ {
   volatile uint16_t          status;
   uint16_t          	   length;
-  volatile void           	   *buffer;
+  void           	   *buffer;
 } m8xxBufferDescriptor_t;
 
 /*
