@@ -502,7 +502,6 @@ libmisc/Makefile
 zlib/Makefile
 telnetd/Makefile
 pppd/Makefile
-mghttpd/Makefile
 wrapup/Makefile])
 
 AC_OUTPUT

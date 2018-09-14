@@ -624,7 +624,6 @@ _SUBDIRS += wrapup
 _SUBDIRS += zlib
 _SUBDIRS += telnetd
 _SUBDIRS += pppd
-_SUBDIRS += mghttpd
 
 project_lib_LIBRARIES += libftpd.a
 
@@ -702,6 +701,19 @@ libnfs_a_SOURCES += libfs/src/nfsclient/src/nfs.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/rpcio.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/sock_mbuf.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/xdr_mbuf.c
+
+if HAS_PTHREADS
+
+project_lib_LIBRARIES += libmghttpd.a
+
+$(PROJECT_LIB)/libmghttpd.a: libmghttpd.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libmghttpd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libmghttpd.a
+
+libmghttpd_a_SOURCES =
+libmghttpd_a_SOURCES += mghttpd/mongoose.c
+
+endif
 
 endif
 
