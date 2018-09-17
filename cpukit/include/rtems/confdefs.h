@@ -465,8 +465,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    * The default file system table. Must be terminated with the NULL entry if
    * you provide your own.
    */
-  #if !defined(CONFIGURE_HAS_OWN_FILESYSTEM_TABLE) && \
-    !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
+  #ifndef CONFIGURE_APPLICATION_DISABLE_FILESYSTEM
     const rtems_filesystem_table_t rtems_filesystem_table[] = {
       #if !defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         { "/", IMFS_initialize_support },
@@ -3438,6 +3437,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
+  #warning "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
