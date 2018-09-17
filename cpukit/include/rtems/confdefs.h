@@ -2008,222 +2008,222 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * of the Classic API services.
  */
 /**@{*/
-#ifndef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
 
-  /** This configures the maximum number of Classic API tasks. */
-  #ifndef CONFIGURE_MAXIMUM_TASKS
-    #define CONFIGURE_MAXIMUM_TASKS               0
-  #endif
+/** This configures the maximum number of Classic API tasks. */
+#ifndef CONFIGURE_MAXIMUM_TASKS
+  #define CONFIGURE_MAXIMUM_TASKS               0
+#endif
 
-  /*
-   * This is calculated to account for the maximum number of Classic API
-   * tasks used by the application and configured RTEMS capabilities.
-   */
-  #define _CONFIGURE_TASKS \
-    (CONFIGURE_MAXIMUM_TASKS + _CONFIGURE_LIBBLOCK_TASKS)
+/*
+ * This is calculated to account for the maximum number of Classic API
+ * tasks used by the application and configured RTEMS capabilities.
+ */
+#define _CONFIGURE_TASKS \
+  (CONFIGURE_MAXIMUM_TASKS + _CONFIGURE_LIBBLOCK_TASKS)
 
-  #ifndef CONFIGURE_MAXIMUM_TIMERS
-    /** This specifies the maximum number of Classic API timers. */
-    #define CONFIGURE_MAXIMUM_TIMERS             0
-    /*
-     * This macro is calculated to specify the memory required for
-     * Classic API timers.
-     */
-    #define _CONFIGURE_MEMORY_FOR_TIMERS(_timers) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
-      _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_SEMAPHORES
-    /** This specifies the maximum number of Classic API semaphores. */
-    #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
-  #endif
-
+#ifndef CONFIGURE_MAXIMUM_TIMERS
+  /** This specifies the maximum number of Classic API timers. */
+  #define CONFIGURE_MAXIMUM_TIMERS             0
   /*
    * This macro is calculated to specify the memory required for
-   * Classic API Semaphores using MRSP. This is only available in
-   * SMP configurations.
+   * Classic API timers.
    */
-  #if !defined(RTEMS_SMP) || \
-    !defined(CONFIGURE_MAXIMUM_MRSP_SEMAPHORES)
-    #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES \
-      CONFIGURE_MAXIMUM_MRSP_SEMAPHORES * \
-        _Configure_From_workspace( \
-          RTEMS_ARRAY_SIZE(_Scheduler_Table) * sizeof(Priority_Control) \
-        )
-  #endif
-
-  /*
-   * This macro is calculated to specify the memory required for
-   * Classic API Semaphores.
-   *
-   * If there are no user or support semaphores defined, then we can assume
-   * that no memory need be allocated at all for semaphores.
-   */
-  #if CONFIGURE_MAXIMUM_SEMAPHORES == 0
-    #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
-      _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) ) + \
-        _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API Message Queues.
-     */
-    #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES             0
-    /*
-     * This macro is calculated to specify the RTEMS Workspace required for
-     * the Classic API Message Queues.
-     */
-    #define _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
-      _Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_PARTITIONS
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API Partitions.
-     */
-    #define CONFIGURE_MAXIMUM_PARTITIONS                 0
-    /*
-     * This macro is calculated to specify the memory required for
-     * Classic API
-     */
-    #define _CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
-      _Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_REGIONS
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API Regions.
-     */
-    #define CONFIGURE_MAXIMUM_REGIONS              0
-    /*
-     * This macro is calculated to specify the memory required for
-     * Classic API Regions.
-     */
-    #define _CONFIGURE_MEMORY_FOR_REGIONS(_regions) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
-      _Configure_Object_RAM(_regions, sizeof(Region_Control) )
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_PORTS
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API Dual-Ported Memory Ports.
-     */
-    #define CONFIGURE_MAXIMUM_PORTS            0
-    /**
-     * This macro is calculated to specify the memory required for
-     * Classic API Dual-Ported Memory Ports.
-     */
-    #define _CONFIGURE_MEMORY_FOR_PORTS(_ports) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_PORTS(_ports) \
-      _Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
-  #endif
-
-  #ifndef CONFIGURE_MAXIMUM_PERIODS
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API Rate Monotonic Periods.
-     */
-    #define CONFIGURE_MAXIMUM_PERIODS              0
-    /*
-     * This macro is calculated to specify the memory required for
-     * Classic API Rate Monotonic Periods.
-     */
-  #define _CONFIGURE_MEMORY_FOR_PERIODS(_periods) 0
+  #define _CONFIGURE_MEMORY_FOR_TIMERS(_timers) 0
 #else
-    #define _CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
-      _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
-  #endif
+  #define _CONFIGURE_MEMORY_FOR_TIMERS(_timers) \
+    _Configure_Object_RAM(_timers, sizeof(Timer_Control) )
+#endif
 
+#ifndef CONFIGURE_MAXIMUM_SEMAPHORES
+  /** This specifies the maximum number of Classic API semaphores. */
+  #define CONFIGURE_MAXIMUM_SEMAPHORES                 0
+#endif
+
+/*
+ * This macro is calculated to specify the memory required for
+ * Classic API Semaphores using MRSP. This is only available in
+ * SMP configurations.
+ */
+#if !defined(RTEMS_SMP) || \
+  !defined(CONFIGURE_MAXIMUM_MRSP_SEMAPHORES)
+  #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES \
+    CONFIGURE_MAXIMUM_MRSP_SEMAPHORES * \
+      _Configure_From_workspace( \
+        RTEMS_ARRAY_SIZE(_Scheduler_Table) * sizeof(Priority_Control) \
+      )
+#endif
+
+/*
+ * This macro is calculated to specify the memory required for
+ * Classic API Semaphores.
+ *
+ * If there are no user or support semaphores defined, then we can assume
+ * that no memory need be allocated at all for semaphores.
+ */
+#if CONFIGURE_MAXIMUM_SEMAPHORES == 0
+  #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_SEMAPHORES(_semaphores) \
+    _Configure_Object_RAM(_semaphores, sizeof(Semaphore_Control) ) + \
+      _CONFIGURE_MEMORY_FOR_MRSP_SEMAPHORES
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
   /**
    * This configuration parameter specifies the maximum number of
-   * Classic API Barriers.
+   * Classic API Message Queues.
    */
-  #ifndef CONFIGURE_MAXIMUM_BARRIERS
-    #define CONFIGURE_MAXIMUM_BARRIERS               0
-  #endif
-
+  #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES             0
   /*
-   * This macro is calculated to specify the number of Classic API
-   * Barriers required by the application and configured capabilities.
+   * This macro is calculated to specify the RTEMS Workspace required for
+   * the Classic API Message Queues.
    */
-  #define _CONFIGURE_BARRIERS \
-     (CONFIGURE_MAXIMUM_BARRIERS + _CONFIGURE_BARRIERS_FOR_FIFOS)
+  #define _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_MESSAGE_QUEUES(_queues) \
+    _Configure_Object_RAM(_queues, sizeof(Message_queue_Control) )
+#endif
 
+#ifndef CONFIGURE_MAXIMUM_PARTITIONS
+  /**
+   * This configuration parameter specifies the maximum number of
+   * Classic API Partitions.
+   */
+  #define CONFIGURE_MAXIMUM_PARTITIONS                 0
   /*
    * This macro is calculated to specify the memory required for
-   * Classic API Barriers.
+   * Classic API
    */
-  #if _CONFIGURE_BARRIERS == 0
-    #define _CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
-      _Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
-  #endif
+  #define _CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_PARTITIONS(_partitions) \
+    _Configure_Object_RAM(_partitions, sizeof(Partition_Control) )
+#endif
 
-  #ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
-    /**
-     * This configuration parameter specifies the maximum number of
-     * Classic API User Extensions.
-     */
-    #define CONFIGURE_MAXIMUM_USER_EXTENSIONS                 0
-    /*
-     * This macro is calculated to specify the memory required for
-     * Classic API User Extensions.
-     */
-    #define _CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) 0
-  #else
-    #define _CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
-      _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
-  #endif
-  /**@}*/ /* end of Classic API Configuration */
-
+#ifndef CONFIGURE_MAXIMUM_REGIONS
   /**
-   * @defgroup ConfigurationGeneral General System Configuration
-   *
-   * @ingroup Configuration
-   *
-   * This module contains configuration parameters that are independent
-   * of any API but impact general system configuration.
+   * This configuration parameter specifies the maximum number of
+   * Classic API Regions.
    */
-  /**@{*/
+  #define CONFIGURE_MAXIMUM_REGIONS              0
+  /*
+   * This macro is calculated to specify the memory required for
+   * Classic API Regions.
+   */
+  #define _CONFIGURE_MEMORY_FOR_REGIONS(_regions) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_REGIONS(_regions) \
+    _Configure_Object_RAM(_regions, sizeof(Region_Control) )
+#endif
 
-  /** The configures the number of microseconds per clock tick. */
-  #ifndef CONFIGURE_MICROSECONDS_PER_TICK
-    #define CONFIGURE_MICROSECONDS_PER_TICK \
-            RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
-  #endif
+#ifndef CONFIGURE_MAXIMUM_PORTS
+  /**
+   * This configuration parameter specifies the maximum number of
+   * Classic API Dual-Ported Memory Ports.
+   */
+  #define CONFIGURE_MAXIMUM_PORTS            0
+  /**
+   * This macro is calculated to specify the memory required for
+   * Classic API Dual-Ported Memory Ports.
+   */
+  #define _CONFIGURE_MEMORY_FOR_PORTS(_ports) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_PORTS(_ports) \
+    _Configure_Object_RAM(_ports, sizeof(Dual_ported_memory_Control) )
+#endif
 
-  #if 1000000 % CONFIGURE_MICROSECONDS_PER_TICK != 0
-    #warning "The clock ticks per second is not an integer"
-  #endif
+#ifndef CONFIGURE_MAXIMUM_PERIODS
+  /**
+   * This configuration parameter specifies the maximum number of
+   * Classic API Rate Monotonic Periods.
+   */
+  #define CONFIGURE_MAXIMUM_PERIODS              0
+  /*
+   * This macro is calculated to specify the memory required for
+   * Classic API Rate Monotonic Periods.
+   */
+  #define _CONFIGURE_MEMORY_FOR_PERIODS(_periods) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_PERIODS(_periods) \
+    _Configure_Object_RAM(_periods, sizeof(Rate_monotonic_Control) )
+#endif
 
-  #if CONFIGURE_MICROSECONDS_PER_TICK <= 0
-    #error "The CONFIGURE_MICROSECONDS_PER_TICK must be positive"
-  #endif
+/**
+ * This configuration parameter specifies the maximum number of
+ * Classic API Barriers.
+ */
+#ifndef CONFIGURE_MAXIMUM_BARRIERS
+  #define CONFIGURE_MAXIMUM_BARRIERS               0
+#endif
 
-  #define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
+/*
+ * This macro is calculated to specify the number of Classic API
+ * Barriers required by the application and configured capabilities.
+ */
+#define _CONFIGURE_BARRIERS \
+   (CONFIGURE_MAXIMUM_BARRIERS + _CONFIGURE_BARRIERS_FOR_FIFOS)
 
-  /** The configures the number of clock ticks per timeslice. */
-  #ifndef CONFIGURE_TICKS_PER_TIMESLICE
-    #define CONFIGURE_TICKS_PER_TIMESLICE        50
-  #endif
+/*
+ * This macro is calculated to specify the memory required for
+ * Classic API Barriers.
+ */
+#if _CONFIGURE_BARRIERS == 0
+  #define _CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_BARRIERS(_barriers) \
+    _Configure_Object_RAM(_barriers, sizeof(Barrier_Control) )
+#endif
+
+#ifndef CONFIGURE_MAXIMUM_USER_EXTENSIONS
+  /**
+   * This configuration parameter specifies the maximum number of
+   * Classic API User Extensions.
+   */
+  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS                 0
+  /*
+   * This macro is calculated to specify the memory required for
+   * Classic API User Extensions.
+   */
+  #define _CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) 0
+#else
+  #define _CONFIGURE_MEMORY_FOR_USER_EXTENSIONS(_extensions) \
+    _Configure_Object_RAM(_extensions, sizeof(Extension_Control) )
+#endif
+
+/**@}*/ /* end of Classic API Configuration */
+
+/**
+ * @defgroup ConfigurationGeneral General System Configuration
+ *
+ * @ingroup Configuration
+ *
+ * This module contains configuration parameters that are independent
+ * of any API but impact general system configuration.
+ */
+/**@{*/
+
+/** The configures the number of microseconds per clock tick. */
+#ifndef CONFIGURE_MICROSECONDS_PER_TICK
+  #define CONFIGURE_MICROSECONDS_PER_TICK \
+          RTEMS_MILLISECONDS_TO_MICROSECONDS(10)
+#endif
+
+#if 1000000 % CONFIGURE_MICROSECONDS_PER_TICK != 0
+  #warning "The clock ticks per second is not an integer"
+#endif
+
+#if CONFIGURE_MICROSECONDS_PER_TICK <= 0
+  #error "The CONFIGURE_MICROSECONDS_PER_TICK must be positive"
+#endif
+
+#define _CONFIGURE_TICKS_PER_SECOND (1000000 / CONFIGURE_MICROSECONDS_PER_TICK)
+
+/** The configures the number of clock ticks per timeslice. */
+#ifndef CONFIGURE_TICKS_PER_TIMESLICE
+  #define CONFIGURE_TICKS_PER_TIMESLICE        50
+#endif
 
 /**@}*/ /* end of General Configuration */
 
@@ -3111,8 +3111,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   };
 #endif
 
-#endif /* CONFIGURE_HAS_OWN_CONFIGURATION_TABLE */
-
 #if defined(RTEMS_SMP)
  /*
   * Instantiate the Per CPU information based upon the user configuration.
@@ -3434,6 +3432,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #if (CONFIGURE_MAXIMUM_PRIORITY > PRIORITY_DEFAULT_MAXIMUM)
   #error "Maximum priority configured higher than supported by target."
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_CONFIGURATION_TABLE
+  #warning "The CONFIGURE_HAS_OWN_CONFIGURATION_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
