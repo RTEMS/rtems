@@ -161,7 +161,12 @@ static void riscv_plic_init(const void *fdt)
 
   plic = riscv_fdt_get_address(fdt, node);
   if (plic == NULL) {
+#if RISCV_ENABLE_HTIF_SUPPORT != 0
+    /* Spike platform has HTIF and does not have a PLIC */
+    return;
+#else
     bsp_fatal(RISCV_FATAL_NO_PLIC_REG_IN_DEVICE_TREE);
+#endif
   }
 
   val = fdt_getprop(fdt, node, "riscv,ndev", &len);
