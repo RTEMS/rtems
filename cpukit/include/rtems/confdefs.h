@@ -504,10 +504,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       #endif
       CONFIGURE_FILESYSTEM_NULL
     };
-  #endif
 
-  #if !defined(CONFIGURE_HAS_OWN_MOUNT_TABLE) && \
-    !defined(CONFIGURE_APPLICATION_DISABLE_FILESYSTEM)
     #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
       static devFS_node devFS_root_filesystem_nodes [CONFIGURE_MAXIMUM_DEVICES];
       static const devFS_data devFS_root_filesystem_data = {
@@ -3441,6 +3438,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef CONFIGURE_HAS_OWN_FILESYSTEM_TABLE
   #warning "The CONFIGURE_HAS_OWN_FILESYSTEM_TABLE configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_HAS_OWN_MOUNT_TABLE
+  #warning "The CONFIGURE_HAS_OWN_MOUNT_TABLE configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_NUMBER_OF_TERMIOS_PORTS
