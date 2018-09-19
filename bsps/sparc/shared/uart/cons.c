@@ -14,6 +14,7 @@
 
 #include <bsp.h>
 #include <stdlib.h>
+#include <string.h>
 #include <bsp/cons.h>
 #include <rtems/console.h>
 
