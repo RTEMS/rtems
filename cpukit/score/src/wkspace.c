@@ -129,22 +129,26 @@ static uintptr_t _Workspace_Space_for_per_CPU_data( uintptr_t page_size )
 static void _Workspace_Allocate_per_CPU_data( void )
 {
 #ifdef RTEMS_SMP
-  Per_CPU_Control *cpu;
-  uintptr_t        size;
-  uint32_t         cpu_index;
-  uint32_t         cpu_max;
-
-  cpu = _Per_CPU_Get_by_index( 0 );
-  cpu->data = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
+  uintptr_t size;
 
   size = RTEMS_LINKER_SET_SIZE( _Per_CPU_Data );
-  cpu_max = rtems_configuration_get_maximum_processors();
 
-  for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
-    cpu = _Per_CPU_Get_by_index( cpu_index );
-    cpu->data = _Workspace_Allocate_aligned( size, CPU_CACHE_LINE_BYTES );
-    _Assert( cpu->data != NULL );
-    memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
+  if ( size > 0 ) {
+    Per_CPU_Control *cpu;
+    uint32_t         cpu_index;
+    uint32_t         cpu_max;
+
+    cpu = _Per_CPU_Get_by_index( 0 );
+    cpu->data = RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data );
+
+    cpu_max = rtems_configuration_get_maximum_processors();
+
+    for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
+      cpu = _Per_CPU_Get_by_index( cpu_index );
+      cpu->data = _Workspace_Allocate_aligned( size, CPU_CACHE_LINE_BYTES );
+      _Assert( cpu->data != NULL );
+      memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
+    }
   }
 #endif
 }
