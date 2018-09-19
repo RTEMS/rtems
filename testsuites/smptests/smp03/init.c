@@ -96,7 +96,7 @@ rtems_task Init(
 
   /* Create/Start an aditional task with the highest priority */
   status = rtems_task_create(
-    rtems_build_name( 'T', 'A', ch, ' ' ),
+    rtems_build_name( 'T', 'A', ch + 1, ' ' ),
     3,
     RTEMS_MINIMUM_STACK_SIZE,
     RTEMS_PREEMPT,
