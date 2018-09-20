@@ -47,10 +47,6 @@ void _ISR_Handler_initialization( void )
 #endif
 
   stack_size = rtems_configuration_get_interrupt_stack_size();
-
-  if ( !_Stack_Is_enough( stack_size ) )
-    _Internal_error( INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL );
-
   cpu_max = rtems_configuration_get_maximum_processors();
   stack_low = _Configuration_Interrupt_stack_area_begin;
 

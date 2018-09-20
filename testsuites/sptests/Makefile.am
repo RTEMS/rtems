@@ -926,16 +926,6 @@ spfatal06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal06) \
 	$(support_includes) -I$(top_srcdir)/spfatal06
 endif
 
-if TEST_spfatal07
-sp_tests += spfatal07
-sp_screens += spfatal07/spfatal07.scn
-sp_docs += spfatal07/spfatal07.doc
-spfatal07_SOURCES = spfatal_support/init.c spfatal_support/system.h \
-	spfatal07/testcase.h
-spfatal07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spfatal07) \
-	$(support_includes) -I$(top_srcdir)/spfatal07
-endif
-
 if TEST_spfatal08
 sp_tests += spfatal08
 sp_screens += spfatal08/spfatal08.scn
