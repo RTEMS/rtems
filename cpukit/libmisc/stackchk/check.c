@@ -33,7 +33,10 @@
 #include <rtems/bspIo.h>
 #include <rtems/printer.h>
 #include <rtems/stackchk.h>
+#include <rtems/sysinit.h>
+#include <rtems/score/address.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/smp.h>
 #include <rtems/score/threadimpl.h>
 
 /*
@@ -65,12 +68,12 @@ static bool Stack_check_Initialized;
 /*
  *  The "magic pattern" used to mark the end of the stack.
  */
-static const uint32_t Stack_check_Pattern[] =
+static const uint32_t Stack_check_Sanity_pattern[] =
   CPU_STACK_CHECK_PATTERN_INITIALIZER;
 
-#define PATTERN_SIZE_BYTES sizeof(Stack_check_Pattern)
+#define SANITY_PATTERN_SIZE_BYTES sizeof(Stack_check_Sanity_pattern)
 
-#define PATTERN_SIZE_WORDS RTEMS_ARRAY_SIZE(Stack_check_Pattern)
+#define SANITY_PATTERN_SIZE_WORDS RTEMS_ARRAY_SIZE(Stack_check_Sanity_pattern)
 
 /*
  * Helper function to report if the actual stack pointer is in range.
@@ -104,12 +107,12 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #if (CPU_STACK_GROWS_UP == TRUE)
   #define Stack_check_Get_pattern( _the_stack ) \
     ((char *)(_the_stack)->area + \
-         (_the_stack)->size - PATTERN_SIZE_BYTES )
+         (_the_stack)->size - SANITY_PATTERN_SIZE_BYTES )
 
   #define Stack_check_Calculate_used( _low, _size, _high_water ) \
       ((char *)(_high_water) - (char *)(_low))
 
-  #define Stack_check_usable_stack_start(_the_stack) \
+  #define Stack_check_Usable_stack_start(_the_stack) \
     ((_the_stack)->area)
 
 #else
@@ -119,8 +122,8 @@ static inline bool Stack_check_Frame_pointer_in_range(
   #define Stack_check_Calculate_used( _low, _size, _high_water) \
       ( ((char *)(_low) + (_size)) - (char *)(_high_water) )
 
-  #define Stack_check_usable_stack_start(_the_stack) \
-      ((char *)(_the_stack)->area + PATTERN_SIZE_BYTES)
+  #define Stack_check_Usable_stack_start(_the_stack) \
+      ((char *)(_the_stack)->area + SANITY_PATTERN_SIZE_BYTES)
 
 #endif
 
@@ -128,8 +131,8 @@ static inline bool Stack_check_Frame_pointer_in_range(
  *  The assumption is that if the pattern gets overwritten, the task
  *  is too close.  This defines the usable stack memory.
  */
-#define Stack_check_usable_stack_size(_the_stack) \
-    ((_the_stack)->size - PATTERN_SIZE_BYTES)
+#define Stack_check_Usable_stack_size(_the_stack) \
+    ((_the_stack)->size - SANITY_PATTERN_SIZE_BYTES)
 
 #if defined(RTEMS_SMP)
 static Stack_Control Stack_check_Interrupt_stack[ CPU_MAXIMUM_PROCESSORS ];
@@ -141,15 +144,30 @@ static Stack_Control Stack_check_Interrupt_stack[ 1 ];
  *  Fill an entire stack area with BYTE_PATTERN.  This will be used
  *  to check for amount of actual stack used.
  */
-#define Stack_check_Dope_stack(_stack) \
-  memset((_stack)->area, BYTE_PATTERN, (_stack)->size)
+static void Stack_check_Dope_stack( Stack_Control *stack )
+{
+  memset(
+    Stack_check_Usable_stack_start( stack ),
+    BYTE_PATTERN,
+    Stack_check_Usable_stack_size( stack )
+  );
+}
 
-static bool Stack_check_Is_pattern_valid(const Thread_Control *the_thread)
+static void Stack_check_Add_sanity_pattern( Stack_Control *stack )
+{
+  memcpy(
+    Stack_check_Get_pattern( stack ),
+    Stack_check_Sanity_pattern,
+    SANITY_PATTERN_SIZE_BYTES
+  );
+}
+
+static bool Stack_check_Is_sanity_pattern_valid( const Stack_Control *stack )
 {
   return memcmp(
-    Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
-    Stack_check_Pattern,
-    PATTERN_SIZE_BYTES
+    Stack_check_Get_pattern( stack ),
+    Stack_check_Sanity_pattern,
+    SANITY_PATTERN_SIZE_BYTES
   ) == 0;
 }
 
@@ -163,12 +181,8 @@ bool rtems_stack_checker_create_extension(
 {
   Stack_check_Initialized = true;
 
-  Stack_check_Dope_stack(&the_thread->Start.Initial_stack);
-  memcpy(
-    Stack_check_Get_pattern(&the_thread->Start.Initial_stack),
-    Stack_check_Pattern,
-    PATTERN_SIZE_BYTES
-  );
+  Stack_check_Dope_stack( &the_thread->Start.Initial_stack );
+  Stack_check_Add_sanity_pattern( &the_thread->Start.Initial_stack );
 
   return true;
 }
@@ -201,6 +215,17 @@ void rtems_stack_checker_begin_extension( Thread_Control *executing )
     stack->area = cpu_self->interrupt_stack_low;
     stack->size = (size_t) ( (char *) cpu_self->interrupt_stack_high -
       (char *) cpu_self->interrupt_stack_low );
+
+    /*
+     * Sanity pattern has been added by Stack_check_Prepare_interrupt_stack()
+     */
+    if ( !Stack_check_Is_sanity_pattern_valid( stack ) ) {
+      rtems_fatal(
+        RTEMS_FATAL_SOURCE_STACK_CHECKER,
+        rtems_build_name( 'I', 'N', 'T', 'R' )
+      );
+    }
+
     Stack_check_Dope_stack( stack );
   }
 
@@ -245,9 +270,9 @@ static void Stack_check_report_blown_task(
   if (!pattern_ok) {
     printk(
       "damaged pattern area (%lu Bytes): 0x%08" PRIxPTR " .. 0x%08" PRIxPTR "\n",
-      (unsigned long) PATTERN_SIZE_BYTES,
+      (unsigned long) SANITY_PATTERN_SIZE_BYTES,
       (intptr_t) pattern_area,
-      (intptr_t) (pattern_area + PATTERN_SIZE_BYTES)
+      (intptr_t) (pattern_area + SANITY_PATTERN_SIZE_BYTES)
     );
   }
 
@@ -276,16 +301,26 @@ void rtems_stack_checker_switch_extension(
 {
   bool sp_ok;
   bool pattern_ok;
+  const Stack_Control *stack;
 
   /*
    *  Check for an out of bounds stack pointer or an overwrite
    */
   sp_ok = Stack_check_Frame_pointer_in_range( running );
 
-  pattern_ok = Stack_check_Is_pattern_valid( running );
+  pattern_ok = Stack_check_Is_sanity_pattern_valid( &running->Start.Initial_stack );
 
   if ( !sp_ok || !pattern_ok ) {
     Stack_check_report_blown_task( running, pattern_ok );
+  }
+
+  stack = &Stack_check_Interrupt_stack[ _SMP_Get_current_processor() ];
+
+  if ( stack->area != NULL && !Stack_check_Is_sanity_pattern_valid( stack ) ) {
+    rtems_fatal(
+      RTEMS_FATAL_SOURCE_STACK_CHECKER,
+      rtems_build_name( 'I', 'N', 'T', 'R' )
+    );
   }
 }
 
@@ -305,7 +340,7 @@ bool rtems_stack_checker_is_blown( void )
 /*
  * Stack_check_find_high_water_mark
  */
-static inline void *Stack_check_find_high_water_mark(
+static inline void *Stack_check_Find_high_water_mark(
   const void *s,
   size_t      n
 )
@@ -332,7 +367,7 @@ static inline void *Stack_check_find_high_water_mark(
      * match pattern
      */
 
-    base += PATTERN_SIZE_WORDS;
+    base += SANITY_PATTERN_SIZE_WORDS;
     for (ebase = base + length; base < ebase; base++)
       if (*base != U32_PATTERN)
         return (void *) base;
@@ -354,10 +389,10 @@ static bool Stack_check_Dump_stack_usage(
   void     *low;
   void     *high_water_mark;
 
-  low  = Stack_check_usable_stack_start(stack);
-  size = Stack_check_usable_stack_size(stack);
+  low  = Stack_check_Usable_stack_start(stack);
+  size = Stack_check_Usable_stack_size(stack);
 
-  high_water_mark = Stack_check_find_high_water_mark(low, size);
+  high_water_mark = Stack_check_Find_high_water_mark(low, size);
 
   if ( high_water_mark )
     used = Stack_check_Calculate_used( low, size, high_water_mark );
@@ -459,3 +494,23 @@ void rtems_stack_checker_report_usage( void )
   rtems_print_printer_printk(&printer);
   rtems_stack_checker_report_usage_with_plugin( &printer );
 }
+
+static void Stack_check_Prepare_interrupt_stack( void )
+{
+  uint32_t      cpu_self_index;
+  Stack_Control stack;
+
+  cpu_self_index = _SMP_Get_current_processor();
+  stack.size = rtems_configuration_get_interrupt_stack_size();
+  stack.area = _Addresses_Add_offset(
+    _Configuration_Interrupt_stack_area_begin,
+    cpu_self_index * stack.size
+  );
+  Stack_check_Add_sanity_pattern( &stack );
+}
+
+RTEMS_SYSINIT_ITEM(
+  Stack_check_Prepare_interrupt_stack,
+  RTEMS_SYSINIT_BSP_WORK_AREAS,
+  RTEMS_SYSINIT_ORDER_SECOND
+);
