@@ -22,7 +22,7 @@ static uint32_t leon3_counter_frequency = 1000000000;
 
 uint32_t _CPU_Counter_frequency(void)
 {
-  return leon3_up_counter_frequency;
+  return leon3_counter_frequency;
 }
 
 static void leon3_counter_initialize(void)
