@@ -31,3 +31,8 @@ uint32_t imx_ccm_ahb_hz(void)
 {
   return IMX_CCM_AHB_HZ;
 }
+
+uint32_t imx_ccm_sdhci_hz(void)
+{
+  return IMX_CCM_SDHCI_HZ;
+}
