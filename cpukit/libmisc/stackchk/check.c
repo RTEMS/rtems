@@ -495,22 +495,24 @@ void rtems_stack_checker_report_usage( void )
   rtems_stack_checker_report_usage_with_plugin( &printer );
 }
 
-static void Stack_check_Prepare_interrupt_stack( void )
+static void Stack_check_Prepare_interrupt_stacks( void )
 {
-  uint32_t      cpu_self_index;
   Stack_Control stack;
+  uint32_t      cpu_index;
+  uint32_t      cpu_max;
 
-  cpu_self_index = _SMP_Get_current_processor();
   stack.size = rtems_configuration_get_interrupt_stack_size();
-  stack.area = _Addresses_Add_offset(
-    _Configuration_Interrupt_stack_area_begin,
-    cpu_self_index * stack.size
-  );
-  Stack_check_Add_sanity_pattern( &stack );
+  stack.area = _Configuration_Interrupt_stack_area_begin;
+  cpu_max = rtems_configuration_get_maximum_processors();
+
+  for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {
+    Stack_check_Add_sanity_pattern( &stack );
+    stack.area = _Addresses_Add_offset( stack.area, stack.size );
+  }
 }
 
 RTEMS_SYSINIT_ITEM(
-  Stack_check_Prepare_interrupt_stack,
+  Stack_check_Prepare_interrupt_stacks,
   RTEMS_SYSINIT_BSP_WORK_AREAS,
   RTEMS_SYSINIT_ORDER_SECOND
 );
