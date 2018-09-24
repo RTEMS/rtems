@@ -9,7 +9,11 @@ AC_CACHE_CHECK([whether BSP supports networking],
   [dnl
     case "$RTEMS_CPU" in
     # do not have address space to hold BSD TCP/IP stack
-    m32c*)
+    epiphany* | m32c*)
+      rtems_cv_HAS_NETWORKING="no"
+      ;;
+    # Newer architecture ports that should only use new TCP/IP stack
+    x86_64*)
       rtems_cv_HAS_NETWORKING="no"
       ;;
     *)
