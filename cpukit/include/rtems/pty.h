@@ -16,58 +16,25 @@
 extern "C" {
 #endif	
 
-#include <rtems.h>	
+#include <rtems/termiostypes.h>
 
-/* Number of ptys to setup */
-extern size_t rtems_pty_maximum_ptys;
+#define RTEMS_PTY_SB_MAX 16
 
-/* Return the devname for a free pty slot.
- * If no slot available (socket>=0)
- * then the socket argument is closed
- */
-char * rtems_pty_get(int socket);
+typedef struct {
+  rtems_termios_device_context  base;
+  rtems_termios_tty            *ttyp;
+  tcflag_t                      c_cflag;
+  int                           socket;
+  int                           last_cr;
+  unsigned                      iac_mode;
+  unsigned char                 sb_buf[RTEMS_PTY_SB_MAX];
+  int                           sb_ind;
+  int                           width;
+  int                           height;
+  char                          name[sizeof("/dev/pty18446744073709551615")];
+} rtems_pty_context;
 
-
-/* OBSOLETE */
-#define get_pty		rtems_pty_get
-
-rtems_device_driver pty_initialize(
-  rtems_device_major_number  major,
-  rtems_device_minor_number  minor,
-  void                      *arg);
-rtems_device_driver pty_open(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_close(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_read(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_write(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-rtems_device_driver pty_control(
-  rtems_device_major_number major,
-  rtems_device_minor_number minor,
-  void                    * arg);
-
-
-#define PTY_DRIVER_TABLE_ENTRY \
-       { pty_initialize , pty_open , pty_close , \
-   pty_read , pty_write , pty_control }
-
-/* Internal functions */
-
-int telnet_pty_initialize(void);
-
-int telnet_pty_finalize(void);
-
-char *telnet_get_pty(int);
+char *telnet_get_pty(rtems_pty_context *ctx, int socket);
 
 #ifdef __cplusplus
 }
