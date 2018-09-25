@@ -443,20 +443,6 @@ setdtr(
     ioctl(fd, (on? TIOCMBIS: TIOCMBIC), &modembits);
 }
 
-/*
- * get_pty - get a pty master/slave pair and chown the slave side
- * to the uid given.  Assumes slave_name points to >= 12 bytes of space.
- */
-int
-get_pty(
-    int *master_fdp,
-    int *slave_fdp,
-    char *slave_name,
-    int uid)
-{
-    return 1;
-}
-
 
 /*
  * open_ppp_loopback - open the device we use for getting

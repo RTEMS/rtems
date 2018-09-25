@@ -365,7 +365,6 @@ void sys_cleanup(void);	/* Restore system state before exiting */
 int  sys_check_options(void); /* Check options specified */
 void sys_close(void);	/* Clean up in a child before execing */
 int  ppp_available(void);	/* Test whether ppp kernel support exists */
-int  get_pty(int *, int *, char *, int);	/* Get pty master/slave */
 int  open_ppp_loopback(void); /* Open loopback for demand-dialling */
 int  establish_ppp(int);	/* Turn serial port into a ppp interface */
 void restore_loop(void);	/* Transfer ppp unit back to loopback */
