@@ -175,34 +175,6 @@ void _CPU_ISR_install_vector(
  _ISR_Vector_table[ vector ] = new_handler;
 }
 
-/*
- *  _CPU_Thread_Idle_body
- *
- *  NOTES:
- *
- *  1. This is the same as the regular CPU independent algorithm.
- *
- *  2. If you implement this using a "halt", "idle", or "shutdown"
- *     instruction, then don't forget to put it in an infinite loop.
- *
- *  3. Be warned. Some processors with onboard DMA have been known
- *     to stop the DMA if the CPU were put in IDLE mode.  This might
- *     also be a problem with other on-chip peripherals.  So use this
- *     hook with caution.
- */
-
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-void *_CPU_Thread_Idle_body( uintptr_t ignored )
-{
-
-  for( ; ; )
-    {
-      __asm__ volatile("nop");
-    }
-    /* insert your "halt" instruction here */ ;
-}
-#endif
-
 void _CPU_Context_Initialize(
   Context_Control	*_the_context,
   void			*_stack_base,

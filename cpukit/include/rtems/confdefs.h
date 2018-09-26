@@ -1108,18 +1108,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 #ifndef CONFIGURE_IDLE_TASK_BODY
   #if defined(BSP_IDLE_TASK_BODY)
     #define CONFIGURE_IDLE_TASK_BODY BSP_IDLE_TASK_BODY
-  #elif (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-    #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
   #else
-    /* only instantiate and compile if used */
-    #ifdef CONFIGURE_INIT
-      void *_Thread_Idle_body(uintptr_t ignored)
-      {
-        for( ; ; ) ;
-        return 0;   /* to avoid warning */
-      }
-    #endif
-    #define CONFIGURE_IDLE_TASK_BODY _Thread_Idle_body
+    #define CONFIGURE_IDLE_TASK_BODY _CPU_Thread_Idle_body
   #endif
 #endif
 /**@}*/ /* end of IDLE thread configuration */

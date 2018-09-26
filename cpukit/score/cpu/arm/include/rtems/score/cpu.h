@@ -119,12 +119,6 @@
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH TRUE
 
-#if defined(ARM_MULTILIB_HAS_WFI)
-  #define CPU_PROVIDES_IDLE_THREAD_BODY TRUE
-#else
-  #define CPU_PROVIDES_IDLE_THREAD_BODY FALSE
-#endif
-
 #define CPU_STACK_GROWS_UP FALSE
 
 #if defined(ARM_MULTILIB_CACHE_LINE_MAX_64)
@@ -597,9 +591,7 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
   return second - first;
 }
 
-#if CPU_PROVIDES_IDLE_THREAD_BODY == TRUE
-  void *_CPU_Thread_Idle_body( uintptr_t ignored );
-#endif
+void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /** @} */
 

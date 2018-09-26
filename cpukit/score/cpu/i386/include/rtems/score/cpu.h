@@ -96,19 +96,6 @@ extern "C" {
 
 #define CPU_STRUCTURE_ALIGNMENT
 
-/*
- *  Does this port provide a CPU dependent IDLE task implementation?
- *
- *  If TRUE, then the routine _CPU_Thread_Idle_body
- *  must be provided and is the default IDLE thread body instead of
- *  _CPU_Thread_Idle_body.
- *
- *  If FALSE, then use the generic IDLE thread body if the BSP does
- *  not provide one.
- */
-
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
-
 #define CPU_MAXIMUM_PROCESSORS 32
 
 #define I386_CONTEXT_CONTROL_EFLAGS_OFFSET 0
@@ -577,17 +564,7 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 );
 
-/*
- *  _CPU_Thread_Idle_body
- *
- *  Use the halt instruction of low power mode of a particular i386 model.
- */
-
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
-
-#endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 
 /*
  *  _CPU_Context_switch

@@ -168,14 +168,12 @@ void _CPU_ISR_install_vector(
     _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 }
 
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
 void *_CPU_Thread_Idle_body(uintptr_t ignored)
 {
   while (1) {
     __asm__ __volatile__("ssync; idle; ssync");
   }
 }
-#endif
 
 /*
  * Copied from the arm port.

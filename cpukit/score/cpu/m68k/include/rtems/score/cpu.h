@@ -82,7 +82,6 @@ extern "C" {
 #define CPU_USE_DEFERRED_FP_SWITCH       TRUE
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
 #define CPU_STACK_GROWS_UP               FALSE
 
 /* FIXME: Is this the right value? */
@@ -400,15 +399,6 @@ void _CPU_Context_Initialize(
 );
 
 /* end of Context handler macros */
-
-/*
- *  _CPU_Thread_Idle_body
- *
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
- */
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 

@@ -245,13 +245,7 @@ static void busy_task(rtems_task_argument arg)
 {
   (void) arg;
 
-#if CPU_PROVIDES_IDLE_THREAD_BODY == TRUE
   _CPU_Thread_Idle_body(0);
-#else
-  while (true) {
-    /* Do nothing */
-  }
-#endif
 }
 
 static const char *blocked_or_ready(bool blocked)

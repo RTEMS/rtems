@@ -107,19 +107,6 @@ extern "C" {
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
 /*
- *  Does this port provide a CPU dependent IDLE task implementation?
- *
- *  If TRUE, then the routine _CPU_Thread_Idle_body
- *  must be provided and is the default IDLE thread body instead of
- *  _CPU_Thread_Idle_body.
- *
- *  If FALSE, then use the generic IDLE thread body if the BSP does
- *  not provide one.
- */
-
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
-
-/*
  *  Does the stack grow up (toward higher addresses) or down
  *  (toward lower addresses)?
  *
@@ -877,18 +864,7 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 );
 
-#if (CPU_PROVIDES_IDLE_THREAD_BODY == TRUE)
-
-/*
- *  _CPU_Thread_Idle_body
- *
- *  Some SPARC implementations have low power, sleep, or idle modes.  This
- *  tries to take advantage of those models.
- */
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
-
-#endif /* CPU_PROVIDES_IDLE_THREAD_BODY */
 
 /*
  *  _CPU_Context_switch

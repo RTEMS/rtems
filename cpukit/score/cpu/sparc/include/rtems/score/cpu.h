@@ -136,22 +136,6 @@ extern "C" {
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
 /**
- * Does this port provide a CPU dependent IDLE task implementation?
- *
- * - If TRUE, then the routine _CPU_Thread_Idle_body
- * must be provided and is the default IDLE thread body instead of
- * _CPU_Thread_Idle_body.
- *
- * - If FALSE, then use the generic IDLE thread body if the BSP does
- * not provide one.
- *
- * The SPARC architecture does not have a low power or halt instruction.
- * It is left to the BSP and/or CPU specific code to provide an IDLE
- * thread body which is aware of low power modes.
- */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
-
-/**
  * Does the stack grow up (toward higher addresses) or down
  * (toward lower addresses)?
  *
@@ -987,6 +971,8 @@ void _CPU_ISR_install_vector(
   proc_ptr    new_handler,
   proc_ptr   *old_handler
 );
+
+void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
  * @brief SPARC specific context switch.

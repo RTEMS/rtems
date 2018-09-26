@@ -189,32 +189,6 @@ extern "C" {
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
 /**
- * Does this port provide a CPU dependent IDLE task implementation?
- *
- * If TRUE, then the routine @ref _CPU_Thread_Idle_body
- * must be provided and is the default IDLE thread body instead of
- * @ref _CPU_Thread_Idle_body.
- *
- * If FALSE, then use the generic IDLE thread body if the BSP does
- * not provide one.
- *
- * This is intended to allow for supporting processors which have
- * a low power or idle mode.  When the IDLE thread is executed, then
- * the CPU can be powered down.
- *
- * The order of precedence for selecting the IDLE thread body is:
- *
- *   -#  BSP provided
- *   -#  CPU dependent (if provided)
- *   -#  generic (if no BSP and no CPU dependent)
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    TRUE
-
-/**
  * Does the stack grow up (toward higher addresses) or down
  * (toward lower addresses)?
  *
@@ -738,16 +712,6 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 );
 
-/**
- * This routine is the CPU dependent IDLE thread body.
- *
- * NOTE:  It need only be provided if @ref CPU_PROVIDES_IDLE_THREAD_BODY
- *        is TRUE.
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**

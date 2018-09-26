@@ -136,35 +136,6 @@ extern "C" {
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
 /*
- *  Does this port provide a CPU dependent IDLE task implementation?
- *
- *  If TRUE, then the routine _CPU_Internal_threads_Idle_thread_body
- *  must be provided and is the default IDLE thread body instead of
- *  _Internal_threads_Idle_thread_body.
- *
- *  If FALSE, then use the generic IDLE thread body if the BSP does
- *  not provide one.
- *
- *  This is intended to allow for supporting processors which have
- *  a low power or idle mode.  When the IDLE thread is executed, then
- *  the CPU can be powered down.
- *
- *  The order of precedence for selecting the IDLE thread body is:
- *
- *    1.  BSP provided
- *    2.  CPU dependent (if provided)
- *    3.  generic (if no BSP and no CPU dependent)
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- *  The port initially called a BSP dependent routine called
- *  IDLE_Monitor.  The idle task body can be overridden by
- *  the BSP in newer versions of RTEMS.
- */
-#define CPU_PROVIDES_IDLE_THREAD_BODY    FALSE
-
-/*
  *  Does the stack grow up (toward higher addresses) or down
  *  (toward lower addresses)?
  *
@@ -598,19 +569,7 @@ void _CPU_ISR_install_vector(
   proc_ptr   *old_handler
 );
 
-/*
- *  _CPU_Internal_threads_Idle_thread_body
- *
- *  This routine is the CPU dependent IDLE thread body.
- *
- *  NOTE:  It need only be provided if CPU_PROVIDES_IDLE_THREAD_BODY
- *         is TRUE.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-void *_CPU_Thread_Idle_body( uint32_t );
+void *_CPU_Thread_Idle_body( uintptr_t );
 
 /*
  *  _CPU_Context_switch

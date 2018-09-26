@@ -51,8 +51,6 @@ extern "C" {
 
 #define CPU_ENABLE_ROBUST_THREAD_DISPATCH FALSE
 
-#define CPU_PROVIDES_IDLE_THREAD_BODY FALSE
-
 #define CPU_STACK_GROWS_UP FALSE
 
 /* FIXME: Is this the right value? */
@@ -315,6 +313,8 @@ void _CPU_ISR_install_vector(
   proc_ptr new_handler,
   proc_ptr *old_handler
 );
+
+void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 void _CPU_Context_switch( Context_Control *run, Context_Control *heir );
 
