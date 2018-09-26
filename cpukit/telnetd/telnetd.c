@@ -40,12 +40,6 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
-#include <rtems/error.h>
-#include <rtems/pty.h>
-#include <rtems/shell.h>
-#include <rtems/telnetd.h>
-#include <rtems/bspIo.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -55,8 +49,12 @@
 #include <string.h>
 #include <syslog.h>
 
-#include <rtems/userenv.h>
+#include <rtems.h>
 #include <rtems/error.h>
+#include <rtems/pty.h>
+#include <rtems/shell.h>
+#include <rtems/telnetd.h>
+#include <rtems/userenv.h>
 
 #ifdef RTEMS_NETWORKING
 #include <rtems/rtems_bsdnet.h>
