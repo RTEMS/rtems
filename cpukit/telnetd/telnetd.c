@@ -62,11 +62,17 @@
 
 #define PARANOIA
 
+typedef struct telnetd_context telnetd_context;
+
 struct shell_args {
   rtems_pty_context  pty;
-  void              *arg;
   char               peername[16];
-  char               delete_myself;
+  telnetd_context   *ctx;
+};
+
+struct telnetd_context {
+  rtems_telnetd_config_table config;
+  uint16_t                   active_clients;
 };
 
 typedef union uni_sa {
@@ -85,7 +91,7 @@ rtems_id telnetd_dflt_spawn(
 );
 
 /***********************************************************/
-static rtems_telnetd_config_table *telnetd_config;
+static telnetd_context telnetd_instance;
 
 /*
  * chrisj: this variable was global and with no declared interface in a header
@@ -102,33 +108,39 @@ static const rtems_id (*telnetd_spawn_task)(
 ) = telnetd_dflt_spawn;
 
 static struct shell_args *grab_a_Connection(
+  telnetd_context *ctx,
   int des_socket,
   uni_sa *srv,
   char *peername,
   int sz
 )
 {
-  struct shell_args *args = NULL;
+  struct shell_args *args;
   socklen_t size_adr = sizeof(srv->sin);
   int acp_sock;
+
+  if (ctx->active_clients >= ctx->config.client_maximum) {
+    return NULL;
+  }
 
   args = malloc(sizeof(*args));
   if (args == NULL) {
     perror("telnetd:malloc");
-    goto bailout;
+    return NULL;
   }
 
   acp_sock = accept(des_socket,&srv->sa,&size_adr);
-
   if (acp_sock<0) {
     perror("telnetd:accept");
-    goto bailout;
+    free(args);
+    return NULL;
   };
 
   if (telnet_get_pty(&args->pty, acp_sock) == NULL) {
     syslog( LOG_DAEMON | LOG_ERR, "telnetd: unable to obtain PTY");
     /* NOTE: failing 'do_get_pty()' closed the socket */
-    goto bailout;
+    free(args);
+    return NULL;
   }
 
   if (sockpeername(acp_sock, peername, sz))
@@ -141,13 +153,14 @@ static struct shell_args *grab_a_Connection(
       args->pty.name);
 #endif
 
-bailout:
-
+  ++ctx->active_clients;
+  args->ctx = ctx;
   return args;
 }
 
 
-static void release_a_Connection(char *devname, char *peername, FILE **pstd, int n)
+static void release_a_Connection(telnetd_context *ctx, const char *devname,
+  const char *peername, FILE **pstd, int n)
 {
 
 #ifdef PARANOIA
@@ -156,6 +169,8 @@ static void release_a_Connection(char *devname, char *peername, FILE **pstd, int
       peername,
       devname );
 #endif
+
+  --ctx->active_clients;
 
   while (--n>=0)
     if (pstd[n]) fclose(pstd[n]);
@@ -192,6 +207,7 @@ rtems_task_telnetd(void *task_argument)
   int                size_adr;
   struct shell_args *arg = NULL;
   rtems_id           task_id;
+  telnetd_context   *ctx = task_argument;
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
@@ -218,21 +234,21 @@ rtems_task_telnetd(void *task_argument)
    * was started from the console anyway ..
    */
   do {
-    if (telnetd_config->keep_stdio) {
+    if (ctx->config.keep_stdio) {
       bool start = true;
       char device_name [32];
 
       ttyname_r( 1, device_name, sizeof( device_name));
-      if (telnetd_config->login_check != NULL) {
+      if (ctx->config.login_check != NULL) {
         start = rtems_shell_login_prompt(
           stdin,
           stderr,
           device_name,
-          telnetd_config->login_check
+          ctx->config.login_check
         );
       }
       if (start) {
-        telnetd_config->command( device_name, arg->arg);
+        ctx->config.command( device_name, ctx->config.arg);
       } else {
         syslog(
           LOG_AUTHPRIV | LOG_WARNING,
@@ -241,7 +257,8 @@ rtems_task_telnetd(void *task_argument)
         );
       }
     } else {
-      arg = grab_a_Connection(des_socket, &srv, peername, sizeof(peername));
+      arg = grab_a_Connection(ctx, des_socket, &srv, peername,
+        sizeof(peername));
 
       if (arg == NULL) {
         /* if something went wrong, sleep for some time */
@@ -249,13 +266,12 @@ rtems_task_telnetd(void *task_argument)
         continue;
       }
 
-      arg->arg = telnetd_config->arg;
       strncpy(arg->peername, peername, sizeof(arg->peername));
 
       task_id = telnetd_spawn_task(
         arg->pty.name,
-        telnetd_config->priority,
-        telnetd_config->stack_size,
+        ctx->config.priority,
+        ctx->config.stack_size,
         spawned_shell,
         arg
       );
@@ -275,7 +291,7 @@ rtems_task_telnetd(void *task_argument)
 
         if ( !(dummy=fopen(arg->pty.name,"r+")) )
           perror("Unable to dummy open the pty, losing a slot :-(");
-        release_a_Connection(arg->pty.name, peername, &dummy, 1);
+        release_a_Connection(ctx, arg->pty.name, peername, &dummy, 1);
         free(arg);
         sleep(2); /* don't accept connections too fast */
       }
@@ -293,62 +309,60 @@ rtems_task_telnetd(void *task_argument)
 
 rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
 {
+  telnetd_context *ctx = &telnetd_instance;
   rtems_id task_id;
-
-  if (telnetd_config != NULL) {
-    fprintf(stderr, "telnetd already started\n");
-    return RTEMS_RESOURCE_IN_USE;
-  }
 
   if (config->command == NULL) {
     fprintf(stderr, "telnetd setup with invalid command\n");
     return RTEMS_IO_ERROR;
   }
 
-  telnetd_config = calloc(1, sizeof(*telnetd_config));
-  if (telnetd_config == NULL) {
-    fprintf(stderr, "telnetd cannot alloc telnetd config table\n");
-    return RTEMS_NO_MEMORY;
+  if (ctx->config.command != NULL) {
+    fprintf(stderr, "telnetd already started\n");
+    return RTEMS_RESOURCE_IN_USE;
   }
 
-  *telnetd_config = *config;
+  ctx->config = *config;
 
   /* Check priority */
 #ifdef RTEMS_NETWORKING
-  if (telnetd_config->priority <= 0) {
-    telnetd_config->priority = rtems_bsdnet_config.network_task_priority;
+  if (ctx->config.priority == 0) {
+    ctx->config.priority = rtems_bsdnet_config.network_task_priority;
   }
 #endif
-  if (telnetd_config->priority < 2) {
-    telnetd_config->priority = 100;
+  if (ctx->config.priority == 0) {
+    ctx->config.priority = 100;
   }
 
   /* Check stack size */
-  if (telnetd_config->stack_size <= 0) {
-    telnetd_config->stack_size = (size_t)32 * 1024;
+  if (ctx->config.stack_size == 0) {
+    ctx->config.stack_size = (size_t)32 * 1024;
+  }
+
+  if (ctx->config.client_maximum == 0) {
+    ctx->config.client_maximum = 5;
   }
 
   /* Spawn task */
   task_id = telnetd_spawn_task(
     "TNTD",
-    telnetd_config->priority,
-    telnetd_config->stack_size,
+    ctx->config.priority,
+    ctx->config.stack_size,
     rtems_task_telnetd,
-    0
+    ctx
   );
   if (task_id == RTEMS_ID_NONE) {
-    free(telnetd_config);
-    telnetd_config = NULL;
+    ctx->config.command = NULL;
     return RTEMS_IO_ERROR;
   }
 
   /* Print status */
-  if (!telnetd_config->keep_stdio) {
+  if (!ctx->config.keep_stdio) {
     fprintf(
       stderr,
       "telnetd started with stacksize = %u and priority = %d\n",
-      (unsigned) telnetd_config->stack_size,
-      (unsigned) telnetd_config->priority
+      (unsigned) ctx->config.stack_size,
+      (unsigned) ctx->config.priority
     );
   }
 
@@ -364,6 +378,7 @@ spawned_shell(void *targ)
   FILE                *ostd[3]={ stdin, stdout, stderr };
   int                  i=0;
   struct shell_args  *arg = targ;
+  telnetd_context    *ctx = arg->ctx;
   bool login_failed = false;
   bool start = true;
 
@@ -395,17 +410,17 @@ spawned_shell(void *targ)
   stderr = nstd[2];
 
   /* call their routine */
-  if (telnetd_config->login_check != NULL) {
+  if (ctx->config.login_check != NULL) {
     start = rtems_shell_login_prompt(
       stdin,
       stderr,
       arg->pty.name,
-      telnetd_config->login_check
+      ctx->config.login_check
     );
     login_failed = !start;
   }
   if (start) {
-    telnetd_config->command( arg->pty.name, arg->arg);
+    ctx->config.command( arg->pty.name, ctx->config.arg);
   }
 
   stdin  = ostd[0];
@@ -421,7 +436,7 @@ spawned_shell(void *targ)
   }
 
 cleanup:
-  release_a_Connection(arg->pty.name, arg->peername, nstd, i);
+  release_a_Connection(ctx, arg->pty.name, arg->peername, nstd, i);
   free(arg);
 }
 

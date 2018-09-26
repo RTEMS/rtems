@@ -85,6 +85,14 @@ typedef struct {
    * create other tasks for the shell which listen on sockets.
    */
   bool keep_stdio;
+
+  /**
+   * @brief Maximum number of clients which can connect to the system at a
+   * time.
+   *
+   * Use 0 for the default value.
+   */
+  uint16_t client_maximum;
 } rtems_telnetd_config_table;
 
 /**

@@ -155,24 +155,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   const uint32_t rtems_libio_number_iops = RTEMS_ARRAY_SIZE(rtems_libio_iops);
 #endif
 
-/**
- * This macro specifies the number of PTYs that can be concurrently
- * active.
- */
-#ifndef CONFIGURE_MAXIMUM_PTYS
-  #define CONFIGURE_MAXIMUM_PTYS 0
-#endif
-
-/**
- * This variable contains the maximum number of PTYs that can be
- * concurrently active.
- */
-#ifdef CONFIGURE_INIT
-  int rtems_telnetd_maximum_ptys = CONFIGURE_MAXIMUM_PTYS;
-#else
-  extern int rtems_telnetd_maximum_ptys;
-#endif
-
 #ifdef CONFIGURE_SMP_MAXIMUM_PROCESSORS
   #warning "CONFIGURE_SMP_MAXIMUM_PROCESSORS has been renamed to CONFIGURE_MAXIMUM_PROCESSORS since RTEMS 5.1"
   #define CONFIGURE_MAXIMUM_PROCESSORS CONFIGURE_SMP_MAXIMUM_PROCESSORS
@@ -3472,6 +3454,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef CONFIGURE_MAXIMUM_POSIX_SPINLOCKS
   #warning "The CONFIGURE_MAXIMUM_POSIX_SPINLOCKS configuration option is obsolete since RTEMS 5.1"
+#endif
+
+#ifdef CONFIGURE_MAXIMUM_PTYS
+  #warning "The CONFIGURE_MAXIMUM_PTYS configuration option is obsolete since RTEMS 5.1"
 #endif
 
 #ifdef CONFIGURE_TERMIOS_DISABLED
