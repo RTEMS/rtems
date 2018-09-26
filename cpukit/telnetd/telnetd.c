@@ -88,7 +88,6 @@ rtems_id telnetd_dflt_spawn(
 
 /***********************************************************/
 static rtems_telnetd_config_table *telnetd_config;
-static rtems_id                    telnetd_task_id;
 
 /*
  * chrisj: this variable was global and with no declared interface in a header
@@ -194,10 +193,10 @@ rtems_task_telnetd(void *task_argument)
   int                i=1;
   int                size_adr;
   struct shell_args *arg = NULL;
+  rtems_id           task_id;
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
-    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
   setsockopt(des_socket,SOL_SOCKET,SO_KEEPALIVE,&i,sizeof(i));
@@ -209,13 +208,11 @@ rtems_task_telnetd(void *task_argument)
   if ((bind(des_socket,&srv.sa,size_adr))<0) {
     perror("telnetd:bind");
     close(des_socket);
-    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
   if ((listen(des_socket,5))<0) {
     perror("telnetd:listen");
           close(des_socket);
-    telnetd_task_id = RTEMS_ID_NONE;
     rtems_task_delete(RTEMS_SELF);
   };
 
@@ -257,14 +254,14 @@ rtems_task_telnetd(void *task_argument)
       arg->arg = telnetd_config->arg;
       strncpy(arg->peername, peername, sizeof(arg->peername));
 
-      telnetd_task_id = telnetd_spawn_task(
+      task_id = telnetd_spawn_task(
         arg->pty.name,
         telnetd_config->priority,
         telnetd_config->stack_size,
         spawned_shell,
         arg
       );
-      if (telnetd_task_id == RTEMS_ID_NONE) {
+      if (task_id == RTEMS_ID_NONE) {
         FILE *dummy;
 
         if ( telnetd_spawn_task != telnetd_dflt_spawn ) {
@@ -294,11 +291,12 @@ rtems_task_telnetd(void *task_argument)
    *       counts and eventually clean up...
    */
   close(des_socket);
-  telnetd_task_id = RTEMS_ID_NONE;
 }
 
 rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
 {
+  rtems_id task_id;
+
   if (telnetd_config != NULL) {
     fprintf(stderr, "telnetd already started\n");
     return RTEMS_RESOURCE_IN_USE;
@@ -333,14 +331,14 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
   }
 
   /* Spawn task */
-  telnetd_task_id = telnetd_spawn_task(
+  task_id = telnetd_spawn_task(
     "TNTD",
     telnetd_config->priority,
     telnetd_config->stack_size,
     rtems_task_telnetd,
     0
   );
-  if (telnetd_task_id == RTEMS_ID_NONE) {
+  if (task_id == RTEMS_ID_NONE) {
     free(telnetd_config);
     telnetd_config = NULL;
     return RTEMS_IO_ERROR;
