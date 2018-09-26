@@ -396,13 +396,6 @@ spawned_shell(void *targ)
   stdout = nstd[1];
   stderr = nstd[2];
 
-  #if 0
-    printk("STDOUT is now %x (%x) (FD %i/%i)\n",
-           stdout,nstd[1],fileno(stdout),fileno(nstd[1]));
-    printf("hello\n");
-    write(fileno(stdout),"hellofd\n",8);
-  #endif
-
   /* call their routine */
   if (telnetd_config->login_check != NULL) {
     start = rtems_shell_login_prompt(
