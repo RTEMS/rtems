@@ -31,13 +31,9 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup XXX
+ * @addtogroup RTEMSPrintSupport
  *
  * @{
- */
-
-/**
- * @defgroup RTEMSPrintSupport
  */
 
 /**
