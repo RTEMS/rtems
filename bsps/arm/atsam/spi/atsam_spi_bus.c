@@ -32,6 +32,8 @@
 #include <bsp/atsam-spi.h>
 #include <bsp/iocopy.h>
 
+#include <rtems/thread.h>
+
 #include <dev/spi/spi.h>
 
 #include <string.h>
@@ -53,12 +55,12 @@ struct atsam_spi_xdma_buf {
 
 typedef struct {
   spi_bus base;
+  rtems_binary_semaphore sem;
   bool msg_cs_change;
   const spi_ioc_transfer *msg_current;
   const spi_ioc_transfer *msg_next;
   uint32_t msg_todo;
   int msg_error;
-  rtems_id msg_task;
   Spid spi;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
@@ -72,10 +74,7 @@ typedef struct {
 
 static void atsam_spi_wakeup_task(atsam_spi_bus *bus)
 {
-  rtems_status_code sc;
-
-  sc = rtems_event_transient_send(bus->msg_task);
-  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_binary_semaphore_post(&bus->sem);
 }
 
 static uint8_t atsam_calculate_dlybcs(uint16_t delay_in_us)
@@ -269,7 +268,6 @@ static void atsam_spi_start_dma_transfer(
 )
 {
   Xdmac *pXdmac = XDMAC;
-  size_t i;
 
   atsam_spi_check_alignment_and_set_up_dma_descriptors(
     bus,
@@ -418,7 +416,6 @@ static int atsam_spi_transfer(
   uint32_t msg_count
 )
 {
-  rtems_status_code sc;
   atsam_spi_bus *bus = (atsam_spi_bus *)base;
 
   bus->msg_cs_change = false;
@@ -426,10 +423,8 @@ static int atsam_spi_transfer(
   bus->msg_current = NULL;
   bus->msg_todo = msg_count;
   bus->msg_error = 0;
-  bus->msg_task = rtems_task_self();
   atsam_spi_setup_transfer(bus);
-  sc = rtems_event_transient_receive(RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_binary_semaphore_wait(&bus->sem);
   return bus->msg_error;
 }
 
@@ -464,6 +459,7 @@ static void atsam_spi_destroy(spi_bus *base)
   rtems_cache_coherent_free(bus->dma_bufs);
 
   spi_bus_destroy_and_free(&bus->base);
+  rtems_binary_semaphore_destroy(&bus->sem);
 }
 
 static int atsam_spi_setup(spi_bus *base)
@@ -624,6 +620,7 @@ int spi_bus_register_atsam(
   bus->spi.pSpiHw = config->spi_regs;
   bus->chip_select_decode = config->chip_select_decode;
 
+  rtems_binary_semaphore_init(&bus->sem, "ATSAM SPI");
   PIO_Configure(config->pins, config->pin_count);
   PMC_EnablePeripheral(config->spi_peripheral_id);
   atsam_configure_spi(bus);
