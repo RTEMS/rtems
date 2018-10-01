@@ -19,6 +19,7 @@
 #include <libchip/include/pio.h>
 
 #include <bsp.h>
+#include <rtems/thread.h>
 #include <dev/i2c/i2c.h>
 
 #ifdef __cplusplus
@@ -54,9 +55,9 @@ typedef struct {
 	uint32_t msg_todo;
 	uint32_t current_msg_todo;
 	uint8_t *current_msg_byte;
-	uint32_t input_clock;
+	uint32_t output_clock;
 	bool read;
-	rtems_id task_id;
+	rtems_binary_semaphore sem;
 	rtems_vector_number irq;
 } atsam_i2c_bus;
 

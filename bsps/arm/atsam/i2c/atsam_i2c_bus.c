@@ -267,11 +267,8 @@ atsam_i2c_interrupt(void *arg)
 
 		atsam_i2c_next_packet(bus);
 		if (bus->msg_todo == 0 || err != 0) {
-			rtems_status_code sc;
-
 			atsam_i2c_disable_interrupts(regs);
-			sc = rtems_event_transient_send(bus->task_id);
-			assert(sc == RTEMS_SUCCESSFUL);
+			rtems_binary_semaphore_post(&bus->sem);
 		} else {
 			atsam_i2c_setup_transfer(bus, regs);
 		}
@@ -281,15 +278,13 @@ atsam_i2c_interrupt(void *arg)
 static int
 atsam_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 {
-	rtems_status_code sc;
 	atsam_i2c_bus *bus = (atsam_i2c_bus *)base;
 	Twihs *regs;
 	uint32_t i;
-
-	rtems_task_wake_after(1);
+	int eno;
 
 	if (msg_count < 1){
-		return 1;
+		return 0;
 	}
 
 	for (i = 0; i < msg_count; ++i) {
@@ -302,7 +297,6 @@ atsam_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 	bus->msg_todo = msg_count;
 	bus->current_msg_todo = msgs[0].len;
 	bus->current_msg_byte = msgs[0].buf;
-	bus->task_id = rtems_task_self();
 
 	regs = bus->regs;
 
@@ -310,9 +304,13 @@ atsam_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 
 	regs->TWIHS_IER = ATSAMV_I2C_IRQ_ERROR;
 
-	sc = rtems_event_transient_receive(RTEMS_WAIT, bus->base.timeout);
-	if (sc != RTEMS_SUCCESSFUL){
-		rtems_event_transient_clear();
+	eno = rtems_binary_semaphore_wait_timed_ticks(
+		&bus->sem,
+		bus->base.timeout
+	);
+	if (eno != 0) {
+		TWI_ConfigureMaster(bus->regs, bus->output_clock, BOARD_MCK);
+		rtems_binary_semaphore_try_wait(&bus->sem);
 		return -ETIMEDOUT;
 	}
 
@@ -323,8 +321,8 @@ static int
 atsam_i2c_set_clock(i2c_bus *base, unsigned long clock)
 {
 	atsam_i2c_bus *bus = (atsam_i2c_bus *)base;
-	Twihs *regs = bus->regs;
-	TWI_ConfigureMaster(regs, clock, BOARD_MCK);
+	bus->output_clock = clock;
+	TWI_ConfigureMaster(bus->regs, clock, BOARD_MCK);
 	return 0;
 }
 
@@ -341,8 +339,7 @@ atsam_i2c_destroy(i2c_bus *base)
 }
 
 static void
-atsam_i2c_init(atsam_i2c_bus *bus, uint32_t input_clock, Twihs *board_base,
-    uint32_t board_id, const Pin *pins)
+atsam_i2c_init(atsam_i2c_bus *bus, uint32_t board_id, const Pin *pins)
 {
 
 	/* Initialize the TWI */
@@ -351,7 +348,7 @@ atsam_i2c_init(atsam_i2c_bus *bus, uint32_t input_clock, Twihs *board_base,
 	/* Enable the TWI clock */
 	ENABLE_PERIPHERAL(board_id);
 
-	TWI_ConfigureMaster(board_base, input_clock, BOARD_MCK);
+	TWI_ConfigureMaster(bus->regs, bus->output_clock, BOARD_MCK);
 }
 
 int
@@ -364,22 +361,22 @@ i2c_bus_register_atsam(
 {
 	atsam_i2c_bus *bus;
 	rtems_status_code sc;
-	uint32_t board_id = (uint32_t) irq;
 
 	bus = (atsam_i2c_bus *) i2c_bus_alloc_and_init(sizeof(*bus));
 	if (bus == NULL){
 		return -1;
 	}
 
+	rtems_binary_semaphore_init(&bus->sem, "ATSAM I2C");
 	bus->regs = register_base;
 	bus->irq = irq;
+	bus->output_clock = I2C_BUS_CLOCK_DEFAULT;
 
-	atsam_i2c_init(bus, I2C_BUS_CLOCK_DEFAULT, bus->regs,
-	    board_id, pins);
+	atsam_i2c_init(bus, irq, pins);
 
 	sc = rtems_interrupt_handler_install(
 	    irq,
-	    "Atsamv_I2C",
+	    "ATSAM I2C",
 	    RTEMS_INTERRUPT_UNIQUE,
 	    atsam_i2c_interrupt,
 	    bus
