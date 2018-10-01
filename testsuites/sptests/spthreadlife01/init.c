@@ -153,9 +153,6 @@ static void restart_extension(
       rtems_test_assert(ctx->worker_task_id == rtems_task_self());
       ctx->current = RESTART_2;
       break;
-    case INIT:
-      /* Restart via _Thread_Global_construction() */
-      break;
     default:
       rtems_test_assert(0);
       break;
