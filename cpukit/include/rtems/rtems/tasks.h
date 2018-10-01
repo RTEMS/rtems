@@ -227,6 +227,8 @@ rtems_status_code rtems_task_delete(
   rtems_id   id
 );
 
+void rtems_task_exit( void ) RTEMS_NO_RETURN;
+
 /**
  * @brief RTEMS Task Mode
  *

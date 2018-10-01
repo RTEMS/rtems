@@ -33,6 +33,7 @@ librtems_a_SOURCES += src/rtemsobjectgetclassicname.c
 librtems_a_SOURCES += src/tasks.c
 librtems_a_SOURCES += src/taskcreate.c
 librtems_a_SOURCES += src/taskdelete.c
+librtems_a_SOURCES += src/taskexit.c
 librtems_a_SOURCES += src/taskgetaffinity.c
 librtems_a_SOURCES += src/taskgetpriority.c
 librtems_a_SOURCES += src/taskgetscheduler.c
