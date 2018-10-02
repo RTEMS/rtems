@@ -766,7 +766,7 @@ bail:
 		rtems_task_delete( hp_task );
 
 	if ( ! (flags & SSE_TEST_NO_DEL) )
-		rtems_task_delete( RTEMS_SELF );
+		rtems_task_exit();
 }
 
 static void

@@ -1694,7 +1694,7 @@ static void i82544EI_daemon(void *arg)
    * theoretically, that variable could already
    * hold a newly created TID
    */
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /*

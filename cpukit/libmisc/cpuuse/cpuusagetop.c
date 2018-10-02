@@ -495,7 +495,7 @@ rtems_cpuusage_top_thread (rtems_task_argument arg)
 
   data->thread_active = false;
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 void rtems_cpu_usage_top_with_plugin(

@@ -326,7 +326,7 @@ static void dhcp_monitor_task (rtems_task_argument ifp_arg)
 
 error_out:
   printf("Stopping dhcp monitoring application.\n");
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /*

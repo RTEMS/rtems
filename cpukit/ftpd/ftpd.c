@@ -2056,7 +2056,7 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
       }
     }
   }
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 

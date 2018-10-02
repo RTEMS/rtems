@@ -2745,7 +2745,7 @@ void grspw_work_func(rtems_id msgQ)
 		rtems_message_queue_delete(msgQ);
 
 	grspw_work_event(WORKTASK_EV_QUIT, message);
-	rtems_task_delete(RTEMS_SELF);
+	rtems_task_exit();
 }
 
 STATIC void grspw_isr(void *data)

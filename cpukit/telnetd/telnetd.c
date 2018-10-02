@@ -211,7 +211,7 @@ rtems_task_telnetd(void *task_argument)
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
-    rtems_task_delete(RTEMS_SELF);
+    rtems_task_exit();
   };
   setsockopt(des_socket,SOL_SOCKET,SO_KEEPALIVE,&i,sizeof(i));
 
@@ -222,12 +222,12 @@ rtems_task_telnetd(void *task_argument)
   if ((bind(des_socket,&srv.sa,size_adr))<0) {
     perror("telnetd:bind");
     close(des_socket);
-    rtems_task_delete(RTEMS_SELF);
+    rtems_task_exit();
   };
   if ((listen(des_socket,5))<0) {
     perror("telnetd:listen");
           close(des_socket);
-    rtems_task_delete(RTEMS_SELF);
+    rtems_task_exit();
   };
 
   /* we don't redirect stdio as this probably
@@ -457,7 +457,7 @@ wrap_delete(rtems_task_argument arg)
    */
   free(pwa);
   t(a);
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 rtems_id

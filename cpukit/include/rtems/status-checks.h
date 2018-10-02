@@ -188,7 +188,7 @@ extern "C" {
 #define RTEMS_CHECK_SC_TASK( sc, msg) \
   if ((rtems_status_code) (sc) != RTEMS_SUCCESSFUL) { \
     RTEMS_SYSLOG_ERROR_WITH_SC( sc, msg); \
-    (void) rtems_task_delete( RTEMS_SELF); \
+    rtems_task_exit(); \
     return; \
   } else { \
     RTEMS_DEBUG_OK( msg); \
@@ -237,7 +237,7 @@ extern "C" {
 #define RTEMS_CHECK_RV_TASK( rv, msg) \
   if ((int) (rv) < 0) { \
     RTEMS_SYSLOG_ERROR_WITH_RV( rv, msg); \
-    (void) rtems_task_delete( RTEMS_SELF); \
+    rtems_task_exit(); \
     return; \
   } else { \
     RTEMS_DEBUG_OK( msg); \

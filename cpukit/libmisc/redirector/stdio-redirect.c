@@ -97,7 +97,7 @@ rtems_stdio_redirect_reader(rtems_task_argument arg)
 
   sr->state |= RTEMS_STDIO_REDIRECT_FINISHED;
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 rtems_stdio_redirect*

@@ -1500,7 +1500,7 @@ static void smsc9218i_transmit_task(void *arg)
   rtems_bsdnet_semaphore_release();
 
   /* Terminate self */
-  (void) rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 #if defined(DEBUG)

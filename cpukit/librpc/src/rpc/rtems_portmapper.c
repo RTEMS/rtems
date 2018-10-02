@@ -63,7 +63,7 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 	rtems_rpc_task_init ();
 	if ((sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) {
 		perror("portmap cannot create socket");
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 
 	addr.sin_addr.s_addr = 0;
@@ -72,13 +72,13 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 	if (bind(sock, (struct sockaddr *)&addr, len) != 0) {
 		perror("portmap cannot bind");
 		close (sock);
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 
 	if ((xprt = svcudp_create(sock)) == (SVCXPRT *)NULL) {
 		fprintf(stderr, "couldn't do udp_create\n");
 		close (sock);
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 	/* make an entry for ourself */
 	pml = (struct pmaplist *)malloc(sizeof(struct pmaplist));
@@ -92,18 +92,18 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 	if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
 		perror("portmap cannot create socket");
 		close (sock);
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 	if (bind(sock, (struct sockaddr *)&addr, len) != 0) {
 		perror("portmap cannot bind");
 		close (sock);
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 	if ((xprt = svctcp_create(sock, RPCSMALLMSGSIZE, RPCSMALLMSGSIZE))
 	    == (SVCXPRT *)NULL) {
 		fprintf(stderr, "couldn't do tcp_create\n");
 		close (sock);
-		rtems_task_delete (RTEMS_SELF);
+		rtems_task_exit();
 	}
 	/* make an entry for ourself */
 	pml = (struct pmaplist *)malloc(sizeof(struct pmaplist));
@@ -119,7 +119,7 @@ static rtems_task rtems_portmapper (rtems_task_argument unused)
 	svc_run();
 	fprintf(stderr, "run_svc returned unexpectedly\n");
 	close (sock);
-	rtems_task_delete (RTEMS_SELF);
+	rtems_task_exit();
 }
 
 static struct pmaplist *

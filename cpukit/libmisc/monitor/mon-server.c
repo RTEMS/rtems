@@ -182,7 +182,7 @@ rtems_monitor_server_task(
     }
 
 failed:
-    rtems_task_delete(RTEMS_SELF);
+    rtems_task_exit();
 }
 
 

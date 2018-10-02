@@ -796,7 +796,7 @@ dhcp_task (rtems_task_argument _sdl)
 
   dhcp_task_id = 0;
   printf ("dhcpc: exiting lease renewal task.\n");
-  rtems_task_delete( RTEMS_SELF);
+  rtems_task_exit();
 
 }
 

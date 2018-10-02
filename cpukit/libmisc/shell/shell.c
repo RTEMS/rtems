@@ -680,7 +680,7 @@ static rtems_task rtems_shell_task(rtems_task_argument task_argument)
   rtems_shell_main_loop( shell_env );
   if (wake_on_end != RTEMS_INVALID_ID)
     rtems_event_send (wake_on_end, RTEMS_EVENT_1);
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static bool rtems_shell_init_user_env(void)

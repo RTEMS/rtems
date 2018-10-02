@@ -1926,7 +1926,7 @@ static rtems_task rtems_termios_txdaemon(rtems_task_argument argument)
     );
     if ((the_event & TERMIOS_TX_TERMINATE_EVENT) != 0) {
       tty->txTaskId = 0;
-      rtems_task_delete(RTEMS_SELF);
+      rtems_task_exit();
     }
 
     /*
@@ -1974,7 +1974,7 @@ static rtems_task rtems_termios_rxdaemon(rtems_task_argument argument)
     );
     if ((the_event & TERMIOS_RX_TERMINATE_EVENT) != 0) {
       tty->rxTaskId = 0;
-      rtems_task_delete(RTEMS_SELF);
+      rtems_task_exit();
     }
 
     /*

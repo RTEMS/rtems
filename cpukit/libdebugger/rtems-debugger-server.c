@@ -1691,7 +1691,7 @@ rtems_debugger_events(rtems_task_argument arg)
   if (rtems_debugger_verbose())
     rtems_debugger_printf("rtems-db: events finishing\n");
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static int
@@ -1913,7 +1913,7 @@ rtems_debugger_main(rtems_task_argument arg)
   rtems_debugger->server_finished = true;
   rtems_debugger_unlock();
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 int

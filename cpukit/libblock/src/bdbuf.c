@@ -2643,7 +2643,7 @@ rtems_bdbuf_swapout_worker_task (rtems_task_argument arg)
 
   free (worker);
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /**
@@ -2746,7 +2746,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
 
   free (transfer);
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void
@@ -2979,7 +2979,7 @@ rtems_bdbuf_read_ahead_task (rtems_task_argument arg)
     rtems_bdbuf_unlock_cache ();
   }
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 void rtems_bdbuf_get_device_stats (const rtems_disk_device *dd,

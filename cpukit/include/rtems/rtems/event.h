@@ -428,8 +428,7 @@ rtems_status_code rtems_event_system_receive(
  *   sc = rtems_event_transient_send(req->task_id);
  *   assert(sc == RTEMS_SUCCESSFUL);
  *
- *   sc = rtems_task_delete(RTEMS_SELF);
- *   assert(sc == RTEMS_SUCCESSFUL);
+ *   rtems_task_exit();
  * }
  *
  * void issue_request_and_wait_for_completion(void)

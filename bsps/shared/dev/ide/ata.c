@@ -908,7 +908,7 @@ ata_queue_task(rtems_task_argument arg)
             default:
 #if ATA_DEBUG
                 ata_printf("ata_queue_task: internal error\n");
-                rtems_task_delete (RTEMS_SELF);
+                rtems_task_exit();
 #endif
                 rtems_fatal_error_occurred(RTEMS_INTERNAL_ERROR);
                 break;
