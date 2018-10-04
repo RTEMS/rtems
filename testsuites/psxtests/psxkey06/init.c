@@ -74,7 +74,7 @@ static rtems_task Test_Thread1( rtems_task_argument argument )
   value = pthread_getspecific( key2 );
   rtems_test_assert( *value == Data_array[1] );
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static rtems_task Test_Thread2( rtems_task_argument argument )
@@ -98,7 +98,7 @@ static rtems_task Test_Thread2( rtems_task_argument argument )
   value = pthread_getspecific( key2 );
   rtems_test_assert( *value == Data_array[3] );
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static void Key3_Destructor( void *value )
@@ -125,7 +125,7 @@ static rtems_task Test_Thread3( rtems_task_argument argument )
     rtems_task_restart( RTEMS_SELF, 1 );
   } else if ( argument == 1 ) {
     Wake_Up_Master();
-    rtems_task_delete( RTEMS_SELF );
+    rtems_task_exit();
   }
 
   rtems_test_assert( false );

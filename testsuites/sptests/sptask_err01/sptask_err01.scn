@@ -2,6 +2,6 @@
 TA1 - rtems_task_create - TA2 created - RTEMS_SUCCESSFUL
 TA1 - rtems_task_start - start TA2 - RTEMS_SUCCESSFUL
 TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
-TA2 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+TA2 - rtems_task_exit
 TA1 - rtems_task_delete TA2 - already deleted RTEMS_INVALID_ID
 *** END TEST TASK ERROR 01 ***

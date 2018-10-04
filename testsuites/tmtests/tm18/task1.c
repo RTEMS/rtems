@@ -38,16 +38,13 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   Print_Warning();
 
   TEST_BEGIN();
 
   test_init();
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }
 
 void test_init(void)
@@ -85,14 +82,14 @@ rtems_task First_task(
 {
   benchmark_timer_initialize();
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Middle_tasks(
   rtems_task_argument argument
 )
 {
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Last_task(

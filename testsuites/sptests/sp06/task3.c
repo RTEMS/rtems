@@ -26,8 +26,5 @@ rtems_task Task_3(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

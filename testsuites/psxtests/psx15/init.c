@@ -60,7 +60,7 @@ static void suicide_task(rtems_task_argument arg)
 
   printf("suicide task %d\n", me);
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
   rtems_test_assert(false);
 }
 

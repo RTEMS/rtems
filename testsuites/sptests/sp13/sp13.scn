@@ -31,7 +31,7 @@ TA1 - rtems_task_delete - delete TA2
 TA1 - rtems_message_queue_send - BUFFER 1 TO Q 3
 TA1 - rtems_task_wake_after - sleep 5 seconds
 TA3 - buffer received: BUFFER 1 TO Q 3
-TA3 - rtems_task_delete - delete self
+TA3 - rtems_task_exit
 <pause>
 TA1 - rtems_message_queue_send - BUFFER 2 TO Q 3
 TA1 - rtems_message_queue_send - BUFFER 3 TO Q 3

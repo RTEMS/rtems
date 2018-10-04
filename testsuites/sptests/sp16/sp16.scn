@@ -20,7 +20,7 @@ TA1 - got segment from region 1 - 0x00000070
 TA1 - rtems_region_return_segment - return segment to region 2 - 0x00000040
 TA2 - got segment from region 2 - 0x00000040
 TA2 - rtems_region_return_segment - return segment to region 2 - 0x00000040
-TA2 - rtems_task_delete - delete self
+TA2 - rtems_task_exit
 TA1 - rtems_task_wake_after - yield processor
 TA3 - got segment from region 2 - 0x00000040
 TA3 - rtems_region_get_segment - wait on 2K segment from region 3
@@ -43,7 +43,7 @@ TA1 - rtems_region_return_segment - return segment to region 1 - 0x00000070
 TA1 - rtems_task_wake_after - yield processor
 TA5 - got segment from region 1 - 0x00000070
 TA5 - rtems_region_return_segment - return segment to region 1 - 0x00000070
-TA5 - rtems_task_delete - delete self
+TA5 - rtems_task_exit
 TA1 - rtems_region_delete - delete region 1
 TA1 - rtems_region_get_segment - get 3K segment from region 4
 TA1 - got segment from region 4 - 0x00000040

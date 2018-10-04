@@ -58,7 +58,7 @@ rtems_task Periodic_Task(
   }
 
   puts( "Periodic - Deleting self" );
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init(

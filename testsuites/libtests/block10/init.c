@@ -249,7 +249,7 @@ static void task_purger(rtems_task_argument arg)
     purge('P');
   }
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void activate_purger(rtems_task_priority prio)
@@ -270,7 +270,7 @@ static void task_waiter(rtems_task_argument arg)
     do_rel('W', bd);
   }
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void create_waiter(void)

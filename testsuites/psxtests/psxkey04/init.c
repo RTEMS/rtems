@@ -49,7 +49,7 @@ rtems_task Test_Thread1( rtems_task_argument argument )
   value = pthread_getspecific( Key );
   rtems_test_assert( *value == Data_array[0] );
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Test_Thread2( rtems_task_argument argument )
@@ -65,7 +65,7 @@ rtems_task Test_Thread2( rtems_task_argument argument )
   value = pthread_getspecific( Key );
   rtems_test_assert( *value == Data_array[1] );
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init( rtems_task_argument ignored )

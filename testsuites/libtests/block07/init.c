@@ -127,7 +127,7 @@ static void task_mid(rtems_task_argument arg)
 
   printf("M: release done: 0\n");
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void task_high(rtems_task_argument arg)
@@ -153,7 +153,7 @@ static void task_high(rtems_task_argument arg)
 
   printf("H: release done: 0\n");
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void do_ramdisk_register(
@@ -267,7 +267,7 @@ static rtems_task Init(rtems_task_argument argument)
 
   printf("I: release done: 0\n");
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 #define CONFIGURE_INIT

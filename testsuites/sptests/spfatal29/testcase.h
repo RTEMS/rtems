@@ -40,6 +40,5 @@ void force_error()
   sc = rtems_timer_fire_after(id, 1, timer, NULL);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_delete(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_task_exit();
 }

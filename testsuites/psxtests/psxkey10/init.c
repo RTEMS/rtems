@@ -49,7 +49,7 @@ rtems_task Test_Thread( rtems_task_argument arg )
   rtems_test_assert( sc == 0 );
 
   puts( "Test_Thread - exit but don't run key destructors - OK" );
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init( rtems_task_argument ignored )

@@ -55,8 +55,7 @@ rtems_task Test_task(
   if ( task_number(tid) == 1 ) {          /* TASK 1 */
     put_name( Task_name[ 1 ], FALSE );
     printf( " - deleting self\n" );
-    status = rtems_task_delete( RTEMS_SELF );
-    directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+    rtems_task_exit();
   }
   else if ( task_number(tid) == 2 ) {     /* TASK 2 */
     put_name( Task_name[ 2 ], FALSE );

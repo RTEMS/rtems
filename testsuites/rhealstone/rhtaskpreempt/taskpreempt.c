@@ -107,8 +107,7 @@ rtems_task Init( rtems_task_argument ignored )
   status = rtems_task_start( Task_id[0], Task01, 0 );
   directive_failed( status, "rtems_task_start of TA01");
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of INIT");
+  rtems_task_exit();
 }
 
 /* configuration information */

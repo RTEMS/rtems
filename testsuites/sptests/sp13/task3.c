@@ -73,7 +73,6 @@ rtems_task Task_3(
   Put_buffer( buffer );
   new_line;
 
-  puts( "TA3 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  puts( "TA3 - rtems_task_exit" );
+  rtems_task_exit();
 }

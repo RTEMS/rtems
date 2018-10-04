@@ -34,8 +34,7 @@ void force_error()
   );
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_delete(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_task_exit();
 #else
   _Terminate( INTERNAL_ERROR_CORE, INTERNAL_ERROR_RESOURCE_IN_USE );
 #endif

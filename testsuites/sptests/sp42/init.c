@@ -100,7 +100,7 @@ static rtems_task Locker_task(
     directive_failed( status, "rtems_event_transient_send" );
   }
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static void do_test(

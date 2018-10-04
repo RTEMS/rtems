@@ -271,9 +271,6 @@ rtems_task Init(
 
   printf( "INIT - timer 1 has id (0x%" PRIxrtems_id ")\n", Timer_id[ 1 ] );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
-
-
-  rtems_test_exit( 0 );
+  /* Task_1() will end the test */
+  rtems_task_exit();
 }

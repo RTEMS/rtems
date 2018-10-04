@@ -110,5 +110,5 @@ rtems_task Init(
    * times will not add up to the time since last CPU Usage Reset.
    */
   status = rtems_task_suspend( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  directive_failed( status, "rtems_task_suspend of RTEMS_SELF" );
 }

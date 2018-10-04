@@ -362,7 +362,7 @@ static void high_task(rtems_task_argument idx)
       val = tss_get(ctx->tss);
       rtems_test_assert(val == &tss_val);
 
-      rtems_task_delete(RTEMS_SELF);
+      rtems_task_exit();
       rtems_test_assert(0);
     }
   }

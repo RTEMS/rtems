@@ -121,7 +121,7 @@ rtems_task read_task(rtems_task_argument not_used)
   status = rtems_barrier_release( wBarrier, &released );
   rtems_test_assert( status == 0 );
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init(

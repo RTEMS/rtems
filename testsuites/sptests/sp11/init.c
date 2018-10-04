@@ -90,6 +90,5 @@ rtems_task Init(
   status = rtems_timer_create( Timer_name[ 6 ], &Timer_id[ 6 ] );
   directive_failed( status, "rtems_timer_create of TM6" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

@@ -66,7 +66,7 @@ rtems_task test_task(
 
   printf( "task %u ending.\n",  my_n);
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 void destroy_all_tasks(

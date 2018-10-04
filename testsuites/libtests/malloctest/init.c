@@ -1372,8 +1372,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 5 ], Task_1_through_5, 0 );
   directive_failed( status, "rtems_task_start of TA5" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }
 
 static void test_early_malloc( void )

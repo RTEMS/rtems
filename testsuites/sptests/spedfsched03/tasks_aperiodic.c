@@ -52,6 +52,5 @@ rtems_task Tasks_Aperiodic(
   /* delete SELF */
   fflush(stdout);
   printf( "Killing task %" PRIdPTR "\n", argument);
-  status = rtems_task_delete(RTEMS_SELF);
-  directive_failed(status, "rtems_task_delete of RTEMS_SELF");
+  rtems_task_exit();
 }

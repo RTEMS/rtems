@@ -404,8 +404,7 @@ rtems_task blocked_task(
   directive_failed( status, "rtems_task_suspend" );
 
   blocked_task_status = 3;
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete" );
+  rtems_task_exit();
 }
 
 /*

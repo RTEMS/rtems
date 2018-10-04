@@ -69,6 +69,5 @@ rtems_task Init(
   status = rtems_task_start( id, Task_1_through_3, 3 );
   directive_failed( status, "rtems_task_start of TA3" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

@@ -84,8 +84,7 @@ rtems_task Init(
   status = rtems_task_start( Task_id[ 2 ], Task_2, 0 );
   directive_failed( status, "rtems_task_start of TASK2" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }
 
 rtems_task Task_1(
@@ -442,8 +441,6 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   end_time = benchmark_timer_read();
 
   put_time(
@@ -471,6 +468,5 @@ rtems_task Task_2(
     0
   );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

@@ -1,6 +1,6 @@
 *** TEST 2 ***
 INIT - rtems_task_wake_after - yielding processor
-PREEMPT - rtems_task_delete - deleting self
+PREEMPT - rtems_task_exit
 INIT - suspending TA2 while middle task on a ready chain
 TA1 - rtems_task_wake_after - sleep 1 second
 TA2 - rtems_task_wake_after - sleep 1 minute
@@ -11,5 +11,5 @@ TA1 - rtems_task_set_priority - set TA3's priority to 2
 TA1 - rtems_task_suspend - suspend TA2
 TA1 - rtems_task_delete - delete TA2
 TA1 - rtems_task_wake_after - sleep for 5 seconds
-TA3 - rtems_task_delete - delete self
+TA3 - rtems_task_exit
 *** END OF TEST 2 ***

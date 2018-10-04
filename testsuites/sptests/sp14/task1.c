@@ -106,7 +106,6 @@ rtems_task Task_1(
   status = rtems_signal_catch( NULL, RTEMS_DEFAULT_MODES );
   directive_failed( status, "rtems_signal_catch" );
 
-  puts( "TA1 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  puts( "TA1 - rtems_task_exit" );
+  rtems_task_exit();
 }

@@ -1171,8 +1171,7 @@ Init (rtems_task_argument ignored)
     status = rtems_task_start( Task_id, fileio_task, 1 );
     directive_failed( status, "start" ); 
 
-    status = rtems_task_delete( RTEMS_SELF );
-    directive_failed( status, "delete" ); 
+    rtems_task_exit();
   } else {
     TEST_END();
 

@@ -57,5 +57,5 @@ rtems_task Init(rtems_task_argument argument)
   rtems_bsdnet_initialize_network();
   rtems_pppd_initialize();
   pppdapp_initialize();
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }

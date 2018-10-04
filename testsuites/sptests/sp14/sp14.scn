@@ -27,5 +27,5 @@ TA2 - rtems_task_wake_after - yield processor
 ASR - ENTRY - signal => 000e0000
 ASR - EXIT  - signal => 000e0000
 TA1 - rtems_signal_catch - asraddr of NULL
-TA1 - rtems_task_delete - delete self
+TA1 - rtems_task_exit
 *** END OF TEST 14 ***

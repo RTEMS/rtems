@@ -25,7 +25,7 @@ TA2 - rtems_event_receive - RTEMS_PENDING_EVENTS
 TA2 - eventout => 00080000
 TA2 - rtems_event_receive - RTEMS_EVENT_19 - RTEMS_NO_WAIT
 TA2 - RTEMS_EVENT_19 received - eventout => 00080000
-TA2 - rtems_task_delete - deletes self
+TA2 - rtems_task_exit
 TA1 - RTEMS_EVENT_18 received - eventout => 00040000
 TA1 - rtems_clock_get_tod - 08:15:05   02/12/1988
 TA1 - rtems_event_send - send RTEMS_EVENT_3 to self

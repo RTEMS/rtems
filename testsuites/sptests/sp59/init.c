@@ -43,7 +43,7 @@ rtems_task Blocking_task(
   puts( "Blocking_task - Got memory segment after freed" );
 
   puts( "Blocking_task - delete self" );
-  status = rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 rtems_task Init(

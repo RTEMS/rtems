@@ -48,8 +48,7 @@ rtems_task Task_1(
       status = rtems_task_delete( Task_id[ 2 ] );
       directive_failed( status, "rtems_task_delete of TA2" );
 
-      status = rtems_task_delete( RTEMS_SELF );
-      directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+      rtems_task_exit();
     }
 
     printf(

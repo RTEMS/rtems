@@ -60,7 +60,7 @@ rtems_task Waiter(
     );
   }
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 #include <rtems/confdefs.h>

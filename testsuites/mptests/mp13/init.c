@@ -111,6 +111,5 @@ rtems_task Init(
     rtems_test_exit( 0 );
   }
   puts( "Deleting initialization task" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

@@ -44,7 +44,7 @@ extern "C" void Init(rtems_task_argument argument)
 
   rtems_init_done = true;
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
   rtems_test_assert(0);
 }
 

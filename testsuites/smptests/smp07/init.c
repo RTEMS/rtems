@@ -68,7 +68,7 @@ rtems_task Test_task(
     name
   );
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 

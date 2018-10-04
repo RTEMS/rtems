@@ -264,15 +264,13 @@ static void test_set_life_protection(rtems_task_argument variant)
 static void delay_switch_task(rtems_task_argument arg)
 {
   test_context *ctx = &test_instance;
-  rtems_status_code sc;
 
   ctx->delay_switch_for_executing = _Thread_Get_executing();
 
   /* (D) */
   barrier(ctx, &ctx->worker_barrier_state);
 
-  sc = rtems_task_delete(RTEMS_SELF);
-  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_task_exit();
 }
 
 static void test_wait_for_execution_stop(void)

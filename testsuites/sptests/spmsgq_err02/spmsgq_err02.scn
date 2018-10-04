@@ -20,5 +20,5 @@ TA3 - rtems_message_queue_receive - Q 1 - RTEMS_WAIT FOREVER
 TA1 - rtems_message_queue_delete - delete Q 1 - RTEMS_SUCCESSFUL
 TA1 - rtems_task_wake_after - yield processor - RTEMS_SUCCESSFUL
 TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED
-TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+TA3 - rtems_task_exit
 *** END TEST MESSAGE QUEUE ERROR 02 ***

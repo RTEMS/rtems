@@ -67,7 +67,7 @@ rtems_task Init(
 
     setup_tasks_to_watch ();
 
-    rtems_task_delete (RTEMS_SELF);
+    rtems_task_exit();
   } else {
     TEST_END();
     rtems_test_exit( 0 );

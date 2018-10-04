@@ -50,7 +50,7 @@ rtems_task Blocker(
   puts( "Blocker - Got memory after resize" );
   case_hit = true;
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init(

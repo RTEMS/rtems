@@ -24,6 +24,5 @@ rtems_task Task_3(
   directive_failed( status, "rtems_task_wake_after in TA3" );
 
   puts( "TA3 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA3" );
+  rtems_task_exit();
 }

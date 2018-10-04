@@ -54,7 +54,6 @@ rtems_task First_FP_task(
     status = rtems_clock_set( &time );
     directive_failed( status, "rtems_clock_set" );
 
-    status = rtems_task_delete( RTEMS_SELF );
-    directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+    rtems_task_exit();
   }
 }

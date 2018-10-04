@@ -73,7 +73,7 @@ static void task(rtems_task_argument arg)
   task_data[arg].ran = true;
   task_data[arg].actual_cpu = cpu;
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static void test(void)

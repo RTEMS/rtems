@@ -66,7 +66,7 @@ capture_CT1a (rtems_task_argument arg)
 
   capture_CT1a_deleted = 1;
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void
@@ -79,7 +79,7 @@ capture_CT1b (rtems_task_argument arg)
 
   capture_CT1b_deleted = 1;
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void
@@ -102,7 +102,7 @@ capture_CT1c (rtems_task_argument arg)
 
   capture_CT1c_deleted = 1;
 
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 void capture_test_1 ()
@@ -149,7 +149,7 @@ void capture_test_1 ()
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: Test 1: cannot start CT1a: %s\n", rtems_status_text (sc));
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -166,7 +166,7 @@ void capture_test_1 ()
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: Test 1: cannot create CT1b: %s\n", rtems_status_text (sc));
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -176,8 +176,8 @@ void capture_test_1 ()
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: Test 1: cannot start CT1b: %s\n", rtems_status_text (sc));
-    rtems_task_delete (id[1]);
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
+    rtems_task_exit();
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -194,8 +194,8 @@ void capture_test_1 ()
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: Test 1: cannot create CT1c: %s\n", rtems_status_text (sc));
-    rtems_task_delete (id[1]);
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
+    rtems_task_exit();
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -205,9 +205,9 @@ void capture_test_1 ()
   if (sc != RTEMS_SUCCESSFUL)
   {
     printf ("error: Test 1: cannot start CT1c: %s\n", rtems_status_text (sc));
-    rtems_task_delete (id[2]);
-    rtems_task_delete (id[1]);
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
+    rtems_task_exit();
+    rtems_task_exit();
     rtems_semaphore_delete (mutex);
     return;
   }
@@ -224,9 +224,9 @@ void capture_test_1 ()
   if (!loops)
   {
     printf ("error: Test 1: test tasks did not delete\n");
-    rtems_task_delete (id[2]);
-    rtems_task_delete (id[1]);
-    rtems_task_delete (id[0]);
+    rtems_task_exit();
+    rtems_task_exit();
+    rtems_task_exit();
   }
 
   sc = rtems_semaphore_delete (mutex);

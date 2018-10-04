@@ -21,7 +21,7 @@ TA1 - rtems_rate_monotonic_period - 5 ticks - RTEMS_TIMEOUT
 TA1 - yielding to TA4
 TA4 - rtems_rate_monotonic_cancel - RTEMS_NOT_OWNER_OF_RESOURCE
 TA4 - rtems_rate_monotonic_period - RTEMS_NOT_OWNER_OF_RESOURCE
-TA4 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL
+TA4 - rtems_task_exit
 TA1 - rtems_rate_monotonic_delete - RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_delete - local RTEMS_INVALID_ID
 TA1 - rtems_rate_monotonic_delete - RTEMS_SUCCESSFUL

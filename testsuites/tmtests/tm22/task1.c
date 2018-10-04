@@ -79,8 +79,7 @@ rtems_task Init(
   status = rtems_task_start( id, Preempt_task, 0 );
   directive_failed( status, "rtems_task_start RTEMS_PREEMPT" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }
 
 rtems_task High_task(

@@ -137,6 +137,5 @@ rtems_task Task_Periodic(
     rtems_test_exit( 0 );
   }
   printf( "Periodic task: Deleting self\n" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

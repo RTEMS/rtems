@@ -57,7 +57,7 @@ TA1 - got SM1
 TA1 - rtems_semaphore_release - release SM2
 TA2 - got SM2
 TA2 - rtems_semaphore_release - release SM2
-TA2 - rtems_task_delete - delete self
+TA2 - rtems_task_exit
 TA1 - rtems_task_wake_after - sleep 5 seconds
 TA3 - got SM2
 TA3 - rtems_semaphore_release - release SM2
@@ -74,6 +74,6 @@ TA5 - got SM1
 TA5 - rtems_semaphore_obtain - wait forever on SM1
 TA1 - rtems_semaphore_delete - delete SM1
 TA1 - rtems_semaphore_delete - delete SM3
-TA1 - rtems_task_delete - delete self
+TA1 - rtems_task_exit
 TA5 - SM1 deleted by TA1
 *** END OF TEST 12 ***

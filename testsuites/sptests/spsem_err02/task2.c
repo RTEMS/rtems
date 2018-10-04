@@ -43,6 +43,5 @@ rtems_task Task_2(
     "TA2 - rtems_semaphore_obtain - woke up with RTEMS_OBJECT_WAS_DELETED"
   );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA2" );
+  rtems_task_exit();
 }

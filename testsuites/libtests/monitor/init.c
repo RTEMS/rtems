@@ -86,8 +86,7 @@ rtems_task Init(
   if (status == RTEMS_SUCCESSFUL) {
     rtems_monitor_init( 0 );
 
-    status = rtems_task_delete( RTEMS_SELF );
-    directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+    rtems_task_exit();
   } else {
     TEST_END();
 

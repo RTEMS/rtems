@@ -45,7 +45,6 @@ rtems_task Task_4(
   );
   puts( "TA4 - rtems_rate_monotonic_period - RTEMS_NOT_OWNER_OF_RESOURCE" );
 
-  puts( "TA4 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA4" );
+  puts( "TA4 - rtems_task_exit" );
+  rtems_task_exit();
 }

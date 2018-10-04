@@ -17,9 +17,6 @@ rtems_task Preempt_task(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   puts( "PREEMPT - rtems_task_delete - deleting self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_PREEMPT" );
+  rtems_task_exit();
 }

@@ -210,6 +210,5 @@ rtems_task Init(
   directive_failed( status, "rtems_task_restart of TA3" );
   assert_extension_counts( &Task_restarted[ 0 ], 0x0 );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

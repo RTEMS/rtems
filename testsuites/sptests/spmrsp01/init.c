@@ -250,7 +250,7 @@ static void test_mrsp_task(rtems_task_argument arg)
   sc = rtems_event_transient_send(ctx->task_id);
   rtems_test_assert(sc == RTEMS_SUCCESSFUL);
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
   rtems_test_assert(0);
 }
 

@@ -1168,7 +1168,7 @@ bdbuf_tests_task_0 (rtems_task_argument arg)
   }
 
   printf ("%s: delete task\n", tc->name);
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /**
@@ -1262,7 +1262,7 @@ bdbuf_tests_task_1 (rtems_task_argument arg)
   }
 
   printf ("%s: delete task\n", tc->name);
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /**
@@ -1310,7 +1310,7 @@ bdbuf_tests_task_2 (rtems_task_argument arg)
   }
 
   printf ("%s: delete task\n", tc->name);
-  rtems_task_delete (RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /**

@@ -148,7 +148,6 @@ rtems_test_pause();
   status = rtems_semaphore_delete( Semaphore_id[ 3 ] );
   directive_failed( status, "rtems_semaphore_delete of SM3" );
 
-  puts( "TA1 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA1" );
+  puts( "TA1 - rtems_task_exit" );
+  rtems_task_exit();
 }

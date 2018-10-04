@@ -127,7 +127,7 @@ static void task_high(rtems_task_argument arg)
 
   printk("H: release done: B0\n");
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 static void do_ramdisk_register(

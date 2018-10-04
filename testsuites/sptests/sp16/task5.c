@@ -68,7 +68,6 @@ rtems_task Task5(
   Put_address_from_area_1( segment_address_2 );
   new_line;
 
-  puts( "TA5 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  puts( "TA5 - rtems_task_exit" );
+  rtems_task_exit();
 }

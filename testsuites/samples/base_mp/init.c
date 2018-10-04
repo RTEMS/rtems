@@ -44,5 +44,5 @@ rtems_task Init(
   );
   rtems_test_assert(status == RTEMS_SUCCESSFUL);
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }

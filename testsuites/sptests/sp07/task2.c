@@ -46,9 +46,7 @@ rtems_task Task_2(
       directive_failed( status, "rtems_task_delete of TA3" );
       assert_extension_counts( &Task_deleted[ 0 ], 0x0 );
 
-      status = rtems_task_delete( RTEMS_SELF );
-      directive_failed( status, "rtems_task_delete of SELD" );
-
+      rtems_task_exit();
     } else {
 
       printf(

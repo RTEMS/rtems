@@ -52,9 +52,8 @@ rtems_task FP_task(
 
     if ( time.second >= 16 ) {
       if ( task_number( tid ) == 4 ) {
-        puts( "TA4 - rtems_task_delete - self" );
-        status = rtems_task_delete( RTEMS_SELF );
-        directive_failed( status, "rtems_task_delete of TA4" );
+        puts( "TA4 - rtems_task_exit" );
+        rtems_task_exit();
       }
       puts( "TA5 - rtems_task_delete - TA3" );
       status = rtems_task_delete( Task_id[ 3 ] );

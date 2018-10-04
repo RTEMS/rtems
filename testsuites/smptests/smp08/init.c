@@ -93,5 +93,5 @@ rtems_task Init(
     directive_failed( status, "task start" );
   }
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }

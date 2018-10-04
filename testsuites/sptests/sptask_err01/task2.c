@@ -26,9 +26,6 @@ rtems_task Task_2(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
-  puts( "TA2 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA2" );
+  puts( "TA2 - rtems_task_exit" );
+  rtems_task_exit();
 }

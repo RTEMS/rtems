@@ -445,7 +445,7 @@ extern bdbuf_test_msg test_drv_msg;
         {                                       \
             printk("TEST FAILED (Step %s)\n",   \
                    step_);                      \
-            rtems_task_delete(RTEMS_SELF);      \
+            rtems_task_exit();                  \
         }                                       \
         else                                    \
         {                                       \
@@ -475,7 +475,7 @@ extern bdbuf_test_msg test_drv_msg;
                    "main task: %d", rc_);                       \
             return;                                             \
         }                                                       \
-        rtems_task_delete(RTEMS_SELF);                          \
+        rtems_task_exit();                                      \
     } while (0)
 
 #define TEST_FAILED() \

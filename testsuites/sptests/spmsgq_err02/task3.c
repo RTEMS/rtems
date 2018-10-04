@@ -48,7 +48,6 @@ rtems_task Task_3(
     "TA3 - rtems_message_queue_receive - woke up with RTEMS_OBJECT_WAS_DELETED"
   );
 
-  puts( "TA3 - rtems_task_delete - delete self - RTEMS_SUCCESSFUL" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA3" );
+  puts( "TA3 - rtems_task_exit" );
+  rtems_task_exit();
 }

@@ -53,7 +53,7 @@ static rtems_task test_task(rtems_task_argument arg)
   rtems_test_assert( value_p == value_p2 );
   ++got_task_count;
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 static rtems_task Init(rtems_task_argument arg)

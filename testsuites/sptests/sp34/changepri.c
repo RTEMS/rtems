@@ -104,7 +104,7 @@ rtems_task BlockingTasks(rtems_task_argument arg)
     npri
   );
 
-  (void) rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 /*************************************************************************/

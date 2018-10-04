@@ -85,7 +85,7 @@ rtems_task read_task(rtems_task_argument not_used)
   puts("\nReader done!");
   status = rtems_barrier_wait( Barrier, RTEMS_NO_TIMEOUT );
   rtems_test_assert( status == RTEMS_SUCCESSFUL );
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 void test_main(void) /* Also acts as the write task */

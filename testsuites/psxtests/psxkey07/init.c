@@ -56,7 +56,7 @@ rtems_task Test_Thread(rtems_task_argument argument)
   rtems_test_assert( value_p == value_p2 );
   ++got_thread_count;
 
-  rtems_task_delete( RTEMS_SELF );
+  rtems_task_exit();
 }
 
 rtems_task Init(rtems_task_argument argument)

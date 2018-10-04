@@ -60,7 +60,6 @@ rtems_task Task_2(
   status = rtems_semaphore_release( Semaphore_id[ 2 ] );
   directive_failed( status, "rtems_semaphore_release on SM2" );
 
-  puts( "TA2 - rtems_task_delete - delete self" );
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of TA2" );
+  puts( "TA2 - rtems_task_exit" );
+  rtems_task_exit();
 }

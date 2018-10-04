@@ -57,7 +57,7 @@ rtems_task Init(rtems_task_argument ignored)
 
   rtems_task_start(ti, test_asr, 0);
 
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /* configuration stuff */

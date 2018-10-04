@@ -27,8 +27,7 @@ rtems_task_argument restart;
   rtems_status_code status;
 
   if ( restart == 1 ) {
-    status = rtems_task_delete( RTEMS_SELF );
-    directive_failed( status, "rtems_task_delete" );
+    rtems_task_exit();
   }
 
   puts( "Getting SMID of semaphore" );

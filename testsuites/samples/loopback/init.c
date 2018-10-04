@@ -120,7 +120,7 @@ static rtems_task workerTask(rtems_task_argument arg)
     if (close(s) < 0)
         printf("Can't close worker task socket: %s\n", strerror(errno));
     printf("Worker task terminating.\n");
-    rtems_task_delete(RTEMS_SELF);
+    rtems_task_exit();
 }
 
 /*
@@ -152,7 +152,7 @@ static rtems_task serverTask(rtems_task_argument arg)
         s1 = accept(s, (struct sockaddr *)&farAddr, &addrlen);
         if (s1 < 0)
             if (errno == ENXIO)
-                rtems_task_delete(RTEMS_SELF);
+                rtems_task_exit();
             else
                 rtems_panic("Can't accept connection: %s", strerror(errno));
         else
@@ -220,7 +220,7 @@ static rtems_task clientTask(rtems_task_argument arg)
 {
     clientWorker(arg);
     printf("Client task terminating.\n");
-    rtems_task_delete( RTEMS_SELF );
+    rtems_task_exit();
 }
 
 /*

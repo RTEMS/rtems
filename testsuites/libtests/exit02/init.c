@@ -79,8 +79,7 @@ static void Init(rtems_task_argument arg)
   sc = rtems_task_start(id, exit_task, 0);
   assert(sc == RTEMS_SUCCESSFUL);
 
-  sc = rtems_task_delete(RTEMS_SELF);
-  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_task_exit();
 }
 
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

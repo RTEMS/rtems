@@ -109,8 +109,7 @@ rtems_task Init(
   status = rtems_task_wake_after( RTEMS_YIELD_PROCESSOR );
   directive_failed( status, "wake after" );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "delete" );
+  rtems_task_exit();
 }
 
 /* configuration information */

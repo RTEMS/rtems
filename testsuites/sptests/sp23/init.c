@@ -67,6 +67,5 @@ rtems_task Init(
           External_port_area
   );
 
-  status = rtems_task_delete( RTEMS_SELF );
-  directive_failed( status, "rtems_task_delete of RTEMS_SELF" );
+  rtems_task_exit();
 }

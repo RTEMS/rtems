@@ -125,7 +125,7 @@ static rtems_task pppdapp(rtems_task_argument arg)
   }
 
   /* terminate myself */
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 int pppdapp_initialize(void)

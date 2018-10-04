@@ -427,7 +427,7 @@ rtems_task Init(rtems_task_argument ignored)
   directive_failed( status, "rtems_task_start (HWSM)" );
 
   /* Destroy the Init task (and let the ready tasks start running) */
-  rtems_task_delete(RTEMS_SELF);
+  rtems_task_exit();
 }
 
 /* configuration information */
