@@ -1217,7 +1217,6 @@ _SUBDIRS += wrapup
 
 # other libraries
 _SUBDIRS += zlib
-_SUBDIRS += telnetd
 
 project_lib_LIBRARIES += libftpd.a
 
@@ -1228,6 +1227,19 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
 libftpd_a_SOURCES =
 libftpd_a_SOURCES += ftpd/ftpd.c
 libftpd_a_SOURCES += ftpd/ftpd-init.c
+
+project_lib_LIBRARIES += libtelnetd.a
+
+$(PROJECT_LIB)/libtelnetd.a: libtelnetd.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtelnetd.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libtelnetd.a
+
+libtelnetd_a_SOURCES =
+libtelnetd_a_SOURCES += telnetd/check_passwd.c
+libtelnetd_a_SOURCES += telnetd/des.c
+libtelnetd_a_SOURCES += telnetd/pty.c
+libtelnetd_a_SOURCES += telnetd/telnetd.c
+libtelnetd_a_SOURCES += telnetd/telnetd-init.c
 
 if LIBDEBUGGER
 

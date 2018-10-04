@@ -498,7 +498,6 @@ score/cpu/no_cpu/Makefile
 libnetworking/Makefile
 libmisc/Makefile
 zlib/Makefile
-telnetd/Makefile
 wrapup/Makefile])
 
 AC_OUTPUT
