@@ -16,41 +16,6 @@ TMP_LIBS =
 TMP_LIBS += ../score/cpu/@RTEMS_CPU@/libscorecpu.a
 TMP_LIBS += ../libcpukit.a
 
-TMP_LIBS += ../libmisc/libmonitor.a
-TMP_LIBS += ../libmisc/libuntar.a
-TMP_LIBS += ../libmisc/libstackchk.a
-TMP_LIBS += ../libmisc/libcpuuse.a
-
-## XXX temporarily removed because it causes a
-## XXX number of BSPs to not link "main(){}" used by autoconf
-# if LIBSERDBG
-# TMP_LIBS += ../libmisc/libserdbg.a
-# endif
-
-if LIBSHELL
-TMP_LIBS += ../libmisc/libshell.a
-endif
-
-TMP_LIBS += ../libmisc/libbspcmdline.a
-TMP_LIBS += ../libmisc/libcapture.a
-TMP_LIBS += ../libmisc/libdumpbuf.a
-TMP_LIBS += ../libmisc/libdevnull.a
-TMP_LIBS += ../libmisc/libdummy.a
-TMP_LIBS += ../libmisc/libfsmount.a
-TMP_LIBS += ../libmisc/libmouse.a
-TMP_LIBS += ../libmisc/libmw-fb.a
-TMP_LIBS += ../libmisc/libredirector.a
-TMP_LIBS += ../libmisc/librtemsfdt.a
-TMP_LIBS += ../libmisc/libstringto.a
-TMP_LIBS += ../libmisc/libtestsupport.a
-
-if LIBUTF8PROC
-TMP_LIBS += ../libmisc/libutf8proc.a
-endif
-
-TMP_LIBS += ../libmisc/libuuid.a
-TMP_LIBS += ../libmisc/libxz.a
-
 librtemscpu.a: $(TMP_LIBS)
 	$(AM_V_GEN)rm -f $@
 	$(AM_V_GEN)$(MKDIR_P) $(ARCH)

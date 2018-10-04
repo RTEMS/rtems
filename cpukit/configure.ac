@@ -496,7 +496,6 @@ score/cpu/v850/Makefile
 score/cpu/x86_64/Makefile
 score/cpu/no_cpu/Makefile
 libnetworking/Makefile
-libmisc/Makefile
 wrapup/Makefile])
 
 AC_OUTPUT

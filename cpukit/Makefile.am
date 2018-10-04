@@ -260,6 +260,84 @@ libcpukit_a_SOURCES += libcsupport/src/vprintk.c
 libcpukit_a_SOURCES += libcsupport/src/write.c
 libcpukit_a_SOURCES += libcsupport/src/write_r.c
 libcpukit_a_SOURCES += libcsupport/src/writev.c
+libcpukit_a_SOURCES += libmisc/bspcmdline/bspcmdline_get.c
+libcpukit_a_SOURCES += libmisc/bspcmdline/bspcmdline_getparam.c
+libcpukit_a_SOURCES += libmisc/bspcmdline/bspcmdline_getparamraw.c
+libcpukit_a_SOURCES += libmisc/bspcmdline/bspcmdline_getparamrhs.c
+libcpukit_a_SOURCES += libmisc/capture/capture_buffer.c
+libcpukit_a_SOURCES += libmisc/capture/capture.c
+libcpukit_a_SOURCES += libmisc/capture/capture-cli.c
+libcpukit_a_SOURCES += libmisc/capture/capture_support.c
+libcpukit_a_SOURCES += libmisc/capture/capture_user_extension.c
+libcpukit_a_SOURCES += libmisc/capture/rtems-trace-buffer-vars.c
+libcpukit_a_SOURCES += libmisc/cpuuse/cpuinforeport.c
+libcpukit_a_SOURCES += libmisc/cpuuse/cpuusagedata.c
+libcpukit_a_SOURCES += libmisc/cpuuse/cpuusagereport.c
+libcpukit_a_SOURCES += libmisc/cpuuse/cpuusagereset.c
+libcpukit_a_SOURCES += libmisc/cpuuse/cpuusagetop.c
+libcpukit_a_SOURCES += libmisc/devnull/devnull.c
+libcpukit_a_SOURCES += libmisc/devnull/devzero.c
+libcpukit_a_SOURCES += libmisc/dummy/default-configuration.c
+libcpukit_a_SOURCES += libmisc/dummy/dummy-networking.c
+libcpukit_a_SOURCES += libmisc/dumpbuf/dumpbuf.c
+libcpukit_a_SOURCES += libmisc/fb/mw_print.c
+libcpukit_a_SOURCES += libmisc/fb/mw_uid.c
+libcpukit_a_SOURCES += libmisc/fsmount/fsmount.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-command.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-config.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-driver.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-editor.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-extension.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-itask.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-manager.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-monitor.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-object.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-part.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-prmisc.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-queue.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-region.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-sema.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-server.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-symbols.c
+libcpukit_a_SOURCES += libmisc/monitor/mon-task.c
+libcpukit_a_SOURCES += libmisc/mouse/mouse_parser.c
+libcpukit_a_SOURCES += libmisc/mouse/serial_mouse.c
+libcpukit_a_SOURCES += libmisc/redirector/stdio-redirect.c
+libcpukit_a_SOURCES += libmisc/rtems-fdt/rtems-fdt.c
+libcpukit_a_SOURCES += libmisc/rtems-fdt/rtems-fdt-shell.c
+libcpukit_a_SOURCES += libmisc/stackchk/check.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtodouble.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtofloat.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtoint.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtolong.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtolongdouble.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtolonglong.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtopointer.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtounsignedchar.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtounsignedint.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtounsignedlong.c
+libcpukit_a_SOURCES += libmisc/stringto/stringtounsignedlonglong.c
+libcpukit_a_SOURCES += libmisc/testsupport/testbeginend.c
+libcpukit_a_SOURCES += libmisc/testsupport/testbusy.c
+libcpukit_a_SOURCES += libmisc/testsupport/testextension.c
+libcpukit_a_SOURCES += libmisc/testsupport/testparallel.c
+libcpukit_a_SOURCES += libmisc/testsupport/testwrappers.c
+libcpukit_a_SOURCES += libmisc/untar/untar.c
+libcpukit_a_SOURCES += libmisc/untar/untar_tgz.c
+libcpukit_a_SOURCES += libmisc/untar/untar_txz.c
+libcpukit_a_SOURCES += libmisc/uuid/clear.c
+libcpukit_a_SOURCES += libmisc/uuid/compare.c
+libcpukit_a_SOURCES += libmisc/uuid/copy.c
+libcpukit_a_SOURCES += libmisc/uuid/gen_uuid.c
+libcpukit_a_SOURCES += libmisc/uuid/isnull.c
+libcpukit_a_SOURCES += libmisc/uuid/pack.c
+libcpukit_a_SOURCES += libmisc/uuid/parse.c
+libcpukit_a_SOURCES += libmisc/uuid/unpack.c
+libcpukit_a_SOURCES += libmisc/uuid/unparse.c
+libcpukit_a_SOURCES += libmisc/uuid/uuid_time.c
+libcpukit_a_SOURCES += libmisc/xz/xz_crc32.c
+libcpukit_a_SOURCES += libmisc/xz/xz_dec_lzma2.c
+libcpukit_a_SOURCES += libmisc/xz/xz_dec_stream.c
 libcpukit_a_SOURCES += libfs/src/defaults/default_are_nodes_equal.c
 libcpukit_a_SOURCES += libfs/src/defaults/default_chown.c
 libcpukit_a_SOURCES += libfs/src/defaults/default_clone.c
@@ -862,6 +940,7 @@ libcpukit_a_SOURCES += sapi/src/version.c
 
 if HAS_MP
 
+libcpukit_a_SOURCES += libmisc/monitor/mon-mpci.c
 libcpukit_a_SOURCES += rtems/src/eventmp.c
 libcpukit_a_SOURCES += rtems/src/mp.c
 libcpukit_a_SOURCES += rtems/src/msgmp.c
@@ -1095,6 +1174,7 @@ endif
 
 if LIBNETWORKING
 
+libcpukit_a_SOURCES += libmisc/monitor/mon-network.c
 libcpukit_a_SOURCES += libnetworking/kern/kern_mib.c
 libcpukit_a_SOURCES += libnetworking/kern/kern_subr.c
 libcpukit_a_SOURCES += libnetworking/kern/kern_sysctl.c
@@ -1283,6 +1363,140 @@ libcpukit_a_SOURCES += libpci/pci_print.c
 
 endif
 
+if LIBSHELL
+
+libcpukit_a_SOURCES += libmisc/shell/cat_file.c
+libcpukit_a_SOURCES += libmisc/shell/cmds.c
+libcpukit_a_SOURCES += libmisc/shell/main_alias.c
+libcpukit_a_SOURCES += libmisc/shell/main_cat.c
+libcpukit_a_SOURCES += libmisc/shell/main_cd.c
+libcpukit_a_SOURCES += libmisc/shell/cmp-ls.c
+libcpukit_a_SOURCES += libmisc/shell/main_chdir.c
+libcpukit_a_SOURCES += libmisc/shell/main_chmod.c
+libcpukit_a_SOURCES += libmisc/shell/main_chroot.c
+libcpukit_a_SOURCES += libmisc/shell/main_cp.c
+libcpukit_a_SOURCES += libmisc/shell/main_cpuuse.c
+libcpukit_a_SOURCES += libmisc/shell/main_date.c
+libcpukit_a_SOURCES += libmisc/shell/main_dir.c
+libcpukit_a_SOURCES += libmisc/shell/main_echo.c
+libcpukit_a_SOURCES += libmisc/shell/main_exit.c
+libcpukit_a_SOURCES += libmisc/shell/main_halt.c
+libcpukit_a_SOURCES += libmisc/shell/main_help.c
+libcpukit_a_SOURCES += libmisc/shell/main_id.c
+libcpukit_a_SOURCES += libmisc/shell/main_logoff.c
+libcpukit_a_SOURCES += libmisc/shell/main_ln.c
+libcpukit_a_SOURCES += libmisc/shell/main_ls.c
+libcpukit_a_SOURCES += libmisc/shell/main_mallocinfo.c
+libcpukit_a_SOURCES += libmisc/shell/main_md5.c
+libcpukit_a_SOURCES += libmisc/shell/main_mdump.c
+libcpukit_a_SOURCES += libmisc/shell/main_medit.c
+libcpukit_a_SOURCES += libmisc/shell/main_mfill.c
+libcpukit_a_SOURCES += libmisc/shell/main_mkdir.c
+libcpukit_a_SOURCES += libmisc/shell/main_mount.c
+libcpukit_a_SOURCES += libmisc/shell/main_mmove.c
+libcpukit_a_SOURCES += libmisc/shell/main_msdosfmt.c
+libcpukit_a_SOURCES += libmisc/shell/main_mv.c
+libcpukit_a_SOURCES += libmisc/shell/main_perioduse.c
+libcpukit_a_SOURCES += libmisc/shell/main_top.c
+libcpukit_a_SOURCES += libmisc/shell/main_pwd.c
+libcpukit_a_SOURCES += libmisc/shell/main_rm.c
+libcpukit_a_SOURCES += libmisc/shell/main_rmdir.c
+libcpukit_a_SOURCES += libmisc/shell/main_sleep.c
+libcpukit_a_SOURCES += libmisc/shell/main_stackuse.c
+libcpukit_a_SOURCES += libmisc/shell/main_tty.c
+libcpukit_a_SOURCES += libmisc/shell/main_umask.c
+libcpukit_a_SOURCES += libmisc/shell/main_unmount.c
+libcpukit_a_SOURCES += libmisc/shell/main_blksync.c
+libcpukit_a_SOURCES += libmisc/shell/main_whoami.c
+libcpukit_a_SOURCES += libmisc/shell/shell.c
+libcpukit_a_SOURCES += libmisc/shell/shell_cmdset.c
+libcpukit_a_SOURCES += libmisc/shell/shell_getchar.c
+libcpukit_a_SOURCES += libmisc/shell/shell_getprompt.c
+libcpukit_a_SOURCES += libmisc/shell/shellconfig.c
+libcpukit_a_SOURCES += libmisc/shell/shell_makeargs.c
+libcpukit_a_SOURCES += libmisc/shell/filemode.c
+libcpukit_a_SOURCES += libmisc/shell/pwcache.c
+libcpukit_a_SOURCES += libmisc/shell/print-ls.c
+libcpukit_a_SOURCES += libmisc/shell/write_file.c
+libcpukit_a_SOURCES += libmisc/shell/utils-cp.c
+libcpukit_a_SOURCES += libmisc/shell/utils-ls.c
+libcpukit_a_SOURCES += libmisc/shell/err.c
+libcpukit_a_SOURCES += libmisc/shell/errx.c
+libcpukit_a_SOURCES += libmisc/shell/verr.c
+libcpukit_a_SOURCES += libmisc/shell/vis.c
+libcpukit_a_SOURCES += libmisc/shell/verrx.c
+libcpukit_a_SOURCES += libmisc/shell/vwarn.c
+libcpukit_a_SOURCES += libmisc/shell/vwarnx.c
+libcpukit_a_SOURCES += libmisc/shell/warn.c
+libcpukit_a_SOURCES += libmisc/shell/warnx.c
+libcpukit_a_SOURCES += libmisc/shell/fts.c
+libcpukit_a_SOURCES += libmisc/shell/print_heapinfo.c
+libcpukit_a_SOURCES += libmisc/shell/main_wkspaceinfo.c
+libcpukit_a_SOURCES += libmisc/shell/shell_script.c
+libcpukit_a_SOURCES += libmisc/shell/login_prompt.c
+libcpukit_a_SOURCES += libmisc/shell/login_check.c
+libcpukit_a_SOURCES += libmisc/shell/fdisk.c
+libcpukit_a_SOURCES += libmisc/shell/main_rtc.c
+libcpukit_a_SOURCES += libmisc/shell/dd-args.c
+libcpukit_a_SOURCES += libmisc/shell/main_dd.c
+libcpukit_a_SOURCES += libmisc/shell/dd-conv.c
+libcpukit_a_SOURCES += libmisc/shell/dd-conv_tab.c
+libcpukit_a_SOURCES += libmisc/shell/dd-misc.c
+libcpukit_a_SOURCES += libmisc/shell/dd-position.c
+libcpukit_a_SOURCES += libmisc/shell/main_hexdump.c
+libcpukit_a_SOURCES += libmisc/shell/hexdump-conv.c
+libcpukit_a_SOURCES += libmisc/shell/hexdump-display.c
+libcpukit_a_SOURCES += libmisc/shell/hexdump-odsyntax.c
+libcpukit_a_SOURCES += libmisc/shell/hexdump-parse.c
+libcpukit_a_SOURCES += libmisc/shell/hexsyntax.c
+libcpukit_a_SOURCES += libmisc/shell/main_time.c
+libcpukit_a_SOURCES += libmisc/shell/main_mknod.c
+libcpukit_a_SOURCES += libmisc/shell/main_setenv.c
+libcpukit_a_SOURCES += libmisc/shell/main_getenv.c
+libcpukit_a_SOURCES += libmisc/shell/main_unsetenv.c
+libcpukit_a_SOURCES += libmisc/shell/main_mkrfs.c
+libcpukit_a_SOURCES += libmisc/shell/main_debugrfs.c
+libcpukit_a_SOURCES += libmisc/shell/main_df.c
+libcpukit_a_SOURCES += libmisc/shell/main_lsof.c
+libcpukit_a_SOURCES += libmisc/shell/main_edit.c
+libcpukit_a_SOURCES += libmisc/shell/main_blkstats.c
+libcpukit_a_SOURCES += libmisc/shell/main_rtrace.c
+libcpukit_a_SOURCES += libmisc/shell/shell-wait-for-input.c
+libcpukit_a_SOURCES += libmisc/shell/main_cmdls.c
+libcpukit_a_SOURCES += libmisc/shell/main_cmdchown.c
+libcpukit_a_SOURCES += libmisc/shell/main_cmdchmod.c
+libcpukit_a_SOURCES += libmisc/shell/main_cpuinfo.c
+libcpukit_a_SOURCES += libmisc/shell/main_profreport.c
+
+if LIBDRVMGR
+
+libcpukit_a_SOURCES += libmisc/shell/main_drvmgr.c
+
+endif
+
+if LIBPCI
+
+libcpukit_a_SOURCES += libmisc/shell/main_pci.c
+
+endif
+
+if LIBNETWORKING
+
+libcpukit_a_SOURCES += libmisc/shell/main_ifconfig.c
+libcpukit_a_SOURCES += libmisc/shell/main_route.c
+libcpukit_a_SOURCES += libmisc/shell/main_netstats.c
+libcpukit_a_SOURCES += libmisc/shell/main_ping.c
+
+endif
+
+endif
+
+if LIBUTF8PROC
+
+libcpukit_a_SOURCES += libmisc/utf8proc/utf8proc.c
+
+endif
+
 if SHA
 
 libcpukit_a_SOURCES += libmd/sha256c.c
@@ -1326,7 +1540,6 @@ all-local: generate-vc-key
 # librtemscpu
 _SUBDIRS = . score
 _SUBDIRS += libnetworking
-_SUBDIRS += libmisc
 _SUBDIRS += wrapup
 
 project_lib_LIBRARIES += libftpd.a
