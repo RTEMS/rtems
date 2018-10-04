@@ -284,6 +284,7 @@ typedef struct {
  * accessed directly.
  *
  * @see rtems_interrupt_server_request_initialize(),
+ *   rtems_interrupt_server_request_set_vector(),
  *   rtems_interrupt_server_request_submit(), and
  *   rtems_interrupt_server_request_destroy().
  */
@@ -587,6 +588,8 @@ void rtems_interrupt_server_entry_destroy(
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INCORRECT_STATE The interrupt servers are not initialized.
  * @retval RTEMS_INVALID_ID If the interrupt server index is invalid.
+ *
+ * @see rtems_interrupt_server_request_set_vector().
  */
 rtems_status_code rtems_interrupt_server_request_initialize(
   uint32_t                        server_index,
@@ -594,6 +597,30 @@ rtems_status_code rtems_interrupt_server_request_initialize(
   rtems_interrupt_handler         handler,
   void                           *arg
 );
+
+/**
+ * @brief Sets the interrupt vector in the specified interrupt server request.
+ *
+ * By default, the interrupt vector of an interrupt server request is set to a
+ * special value which is outside the range of vectors supported by the
+ * interrupt controller hardware.
+ *
+ * Calls to rtems_interrupt_server_request_submit() will disable the interrupt
+ * vector of the request.  After processing of the request by the interrupt
+ * server the interrupt vector will be enabled again.
+ *
+ * @param[in] request The initialized interrupt server request.
+ * @param[in] vector The interrupt vector number.
+ *
+ * @see rtems_interrupt_server_request_initialize().
+ */
+RTEMS_INLINE_ROUTINE void rtems_interrupt_server_request_set_vector(
+  rtems_interrupt_server_request *request,
+  rtems_vector_number             vector
+)
+{
+  request->entry.vector = vector;
+}
 
 /**
  * @brief Submits the specified interrupt server request so that its interrupt
