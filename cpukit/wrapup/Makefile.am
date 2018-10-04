@@ -51,10 +51,6 @@ endif
 TMP_LIBS += ../libmisc/libuuid.a
 TMP_LIBS += ../libmisc/libxz.a
 
-if LIBNETWORKING
-TMP_LIBS += ../libnetworking/libnetworking.a
-endif
-
 librtemscpu.a: $(TMP_LIBS)
 	$(AM_V_GEN)rm -f $@
 	$(AM_V_GEN)$(MKDIR_P) $(ARCH)

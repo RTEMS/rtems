@@ -1095,6 +1095,120 @@ endif
 
 if LIBNETWORKING
 
+libcpukit_a_SOURCES += libnetworking/kern/kern_mib.c
+libcpukit_a_SOURCES += libnetworking/kern/kern_subr.c
+libcpukit_a_SOURCES += libnetworking/kern/kern_sysctl.c
+libcpukit_a_SOURCES += libnetworking/kern/uipc_domain.c
+libcpukit_a_SOURCES += libnetworking/kern/uipc_mbuf.c
+libcpukit_a_SOURCES += libnetworking/kern/uipc_socket2.c
+libcpukit_a_SOURCES += libnetworking/kern/uipc_socket.c
+libcpukit_a_SOURCES += libnetworking/libc/base64.c
+libcpukit_a_SOURCES += libnetworking/libc/gethostbydns.c
+libcpukit_a_SOURCES += libnetworking/libc/gethostbyht.c
+libcpukit_a_SOURCES += libnetworking/libc/gethostbynis.c
+libcpukit_a_SOURCES += libnetworking/libc/gethostnamadr.c
+libcpukit_a_SOURCES += libnetworking/libc/getifaddrs.c
+libcpukit_a_SOURCES += libnetworking/libc/getnameinfo.c
+libcpukit_a_SOURCES += libnetworking/libc/getnetbydns.c
+libcpukit_a_SOURCES += libnetworking/libc/getnetbyht.c
+libcpukit_a_SOURCES += libnetworking/libc/getnetbynis.c
+libcpukit_a_SOURCES += libnetworking/libc/getnetnamadr.c
+libcpukit_a_SOURCES += libnetworking/libc/getproto.c
+libcpukit_a_SOURCES += libnetworking/libc/getprotoent.c
+libcpukit_a_SOURCES += libnetworking/libc/getprotoname.c
+libcpukit_a_SOURCES += libnetworking/libc/getservbyname.c
+libcpukit_a_SOURCES += libnetworking/libc/getservbyport.c
+libcpukit_a_SOURCES += libnetworking/libc/getservent.c
+libcpukit_a_SOURCES += libnetworking/libc/herror.c
+libcpukit_a_SOURCES += libnetworking/libc/if_indextoname.c
+libcpukit_a_SOURCES += libnetworking/libc/if_nameindex.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_addr.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_lnaof.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_makeaddr.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_netof.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_network.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_ntoa.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_ntop.c
+libcpukit_a_SOURCES += libnetworking/libc/inet_pton.c
+libcpukit_a_SOURCES += libnetworking/libc/linkaddr.c
+libcpukit_a_SOURCES += libnetworking/libc/map_v4v6.c
+libcpukit_a_SOURCES += libnetworking/libc/nsap_addr.c
+libcpukit_a_SOURCES += libnetworking/libc/ns_name.c
+libcpukit_a_SOURCES += libnetworking/libc/ns_netint.c
+libcpukit_a_SOURCES += libnetworking/libc/ns_parse.c
+libcpukit_a_SOURCES += libnetworking/libc/ns_print.c
+libcpukit_a_SOURCES += libnetworking/libc/ns_ttl.c
+libcpukit_a_SOURCES += libnetworking/libc/rcmd.c
+libcpukit_a_SOURCES += libnetworking/libc/recv.c
+libcpukit_a_SOURCES += libnetworking/libc/res_comp.c
+libcpukit_a_SOURCES += libnetworking/libc/res_data.c
+libcpukit_a_SOURCES += libnetworking/libc/res_debug.c
+libcpukit_a_SOURCES += libnetworking/libc/res_init.c
+libcpukit_a_SOURCES += libnetworking/libc/res_mkquery.c
+libcpukit_a_SOURCES += libnetworking/libc/res_mkupdate.c
+libcpukit_a_SOURCES += libnetworking/libc/res_query.c
+libcpukit_a_SOURCES += libnetworking/libc/res_send.c
+libcpukit_a_SOURCES += libnetworking/libc/res_stubs.c
+libcpukit_a_SOURCES += libnetworking/libc/res_update.c
+libcpukit_a_SOURCES += libnetworking/libc/send.c
+libcpukit_a_SOURCES += libnetworking/libc/strsep.c
+libcpukit_a_SOURCES += libnetworking/lib/getprotoby.c
+libcpukit_a_SOURCES += libnetworking/lib/rtems_bsdnet_ntp.c
+libcpukit_a_SOURCES += libnetworking/lib/syslog.c
+libcpukit_a_SOURCES += libnetworking/net/if.c
+libcpukit_a_SOURCES += libnetworking/net/if_ethersubr.c
+libcpukit_a_SOURCES += libnetworking/net/if_loop.c
+libcpukit_a_SOURCES += libnetworking/net/if_ppp.c
+libcpukit_a_SOURCES += libnetworking/netinet/if_ether.c
+libcpukit_a_SOURCES += libnetworking/netinet/igmp.c
+libcpukit_a_SOURCES += libnetworking/netinet/in.c
+libcpukit_a_SOURCES += libnetworking/netinet/in_cksum.c
+libcpukit_a_SOURCES += libnetworking/netinet/in_pcb.c
+libcpukit_a_SOURCES += libnetworking/netinet/in_proto.c
+libcpukit_a_SOURCES += libnetworking/netinet/in_rmx.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_divert.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_fw.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_icmp.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_input.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_mroute.c
+libcpukit_a_SOURCES += libnetworking/netinet/ip_output.c
+libcpukit_a_SOURCES += libnetworking/netinet/raw_ip.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_debug.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_input.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_output.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_subr.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_timer.c
+libcpukit_a_SOURCES += libnetworking/netinet/tcp_usrreq.c
+libcpukit_a_SOURCES += libnetworking/netinet/udp_usrreq.c
+libcpukit_a_SOURCES += libnetworking/net/ppp_tty.c
+libcpukit_a_SOURCES += libnetworking/net/radix.c
+libcpukit_a_SOURCES += libnetworking/net/raw_cb.c
+libcpukit_a_SOURCES += libnetworking/net/raw_usrreq.c
+libcpukit_a_SOURCES += libnetworking/net/route.c
+libcpukit_a_SOURCES += libnetworking/net/rtsock.c
+libcpukit_a_SOURCES += libnetworking/net/slcompress.c
+libcpukit_a_SOURCES += libnetworking/nfs/bootp_subr.c
+libcpukit_a_SOURCES += libnetworking/rtems/mkrootfs.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_bootp.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_bsdnet_malloc_starvation.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_dhcp.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_dhcp_failsafe.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_glue.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_malloc_mbuf.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_mii_ioctl.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_mii_ioctl_kern.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_select.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showicmpstat.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showifstat.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showipstat.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showmbuf.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showroute.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showtcpstat.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_showudpstat.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_socketpair.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_syscall_api.c
+libcpukit_a_SOURCES += libnetworking/rtems/rtems_syscall.c
+libcpukit_a_SOURCES += libnetworking/rtems/sghostname.c
 libcpukit_a_SOURCES += librpc/src/rpc/auth_none.c
 libcpukit_a_SOURCES += librpc/src/rpc/auth_unix.c
 libcpukit_a_SOURCES += librpc/src/rpc/authunix_prot.c
@@ -1224,6 +1338,24 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
 libftpd_a_SOURCES =
 libftpd_a_SOURCES += ftpd/ftpd.c
 libftpd_a_SOURCES += ftpd/ftpd-init.c
+
+project_lib_LIBRARIES += libftpfs.a
+
+$(PROJECT_LIB)/libftpfs.a: libftpfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libftpfs.a
+
+libftpfs_a_SOURCES =
+libftpfs_a_SOURCES += libnetworking/lib/ftpfs.c
+
+project_lib_LIBRARIES += libtftpfs.a
+
+$(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtftpfs.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libtftpfs.a
+
+libtftpfs_a_SOURCES =
+libtftpfs_a_SOURCES += libnetworking/lib/tftpDriver.c
 
 project_lib_LIBRARIES += libtelnetd.a
 
