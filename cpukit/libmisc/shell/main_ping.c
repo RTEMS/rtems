@@ -84,7 +84,7 @@ __FBSDID("$FreeBSD$");
 #endif /*IPSEC*/
 
 #include <ctype.h>
-//#include <err.h>
+//#include "err.h"
 #include <errno.h>
 #if !defined(__rtems__)
 #include <math.h>

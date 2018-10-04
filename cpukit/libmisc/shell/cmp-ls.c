@@ -50,7 +50,7 @@ __RCSID("$NetBSD: cmp.c,v 1.17 2003/08/07 09:05:14 agc Exp $");
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <fts.h>
+#include "fts.h"
 #include <string.h>
 
 #include "extern-ls.h"

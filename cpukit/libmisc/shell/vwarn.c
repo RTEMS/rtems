@@ -46,7 +46,7 @@ __RCSID("$NetBSD: vwarn.c,v 1.13 2005/09/13 01:44:09 christos Exp $");
 #endif
 #endif /* LIBC_SCCS and not lint */
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>

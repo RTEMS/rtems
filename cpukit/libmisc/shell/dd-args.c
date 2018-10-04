@@ -45,7 +45,7 @@ __FBSDID("$FreeBSD: src/bin/dd/args.c,v 1.40 2004/08/15 19:10:05 rwatson Exp $")
 
 #include <sys/types.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <inttypes.h>
 #include <limits.h>

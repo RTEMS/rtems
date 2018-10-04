@@ -55,9 +55,9 @@ __RCSID("$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $");
 #include <sys/param.h>
 #include <sys/stat.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
-#include <fts.h>
+#include "fts.h"
 #include <grp.h>
 #include <pwd.h>
 #include <stdio.h>

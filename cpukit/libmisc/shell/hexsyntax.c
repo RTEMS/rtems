@@ -45,7 +45,7 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/hexsyntax.c,v 1.12 2002/09/04 23:29:01 d
 
 #include <sys/types.h>
 
-#include <err.h>
+#include "err.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -50,7 +50,7 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/odsyntax.c,v 1.17 2004/07/22 13:14:42 jo
 #include <sys/types.h>
 
 #include <ctype.h>
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <float.h>
 #include <stdio.h>

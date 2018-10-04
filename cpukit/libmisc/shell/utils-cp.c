@@ -52,10 +52,10 @@ __RCSID("$NetBSD: utils.c,v 1.29 2005/10/15 18:22:18 christos Exp $");
 #include <sys/time.h>
 #include <utime.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <fts.h>
+#include "fts.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>

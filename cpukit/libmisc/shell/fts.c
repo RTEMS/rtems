@@ -57,7 +57,7 @@ __RCSID("$NetBSD: fts.c,v 1.40 2009/11/02 17:17:34 stacktic Exp $");
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <fts.h>
+#include "fts.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>

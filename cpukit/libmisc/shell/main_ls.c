@@ -64,9 +64,9 @@ __RCSID("$NetBSD: ls.c,v 1.58 2005/10/26 02:24:22 jschauma Exp $");
 #include <sys/ioctl.h>
 
 #include <dirent.h>
-#include <err.h>
+#include "err.h"
 #include <errno.h>
-#include <fts.h>
+#include "fts.h"
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>

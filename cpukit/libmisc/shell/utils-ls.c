@@ -51,13 +51,13 @@ __RCSID("$NetBSD: util.c,v 1.28 2005/06/17 14:36:16 hira Exp $");
 #include <sys/stat.h>
 
 #include <ctype.h>
-#include <err.h>
-#include <fts.h>
+#include "err.h"
+#include "fts.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <vis.h>
+#include "vis.h"
 
 #include "extern-ls.h"
 

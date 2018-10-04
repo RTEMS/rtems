@@ -78,7 +78,6 @@ libredirector_a_SOURCES = redirector/stdio-redirect.c redirector/stdio-redirect.
 ## shell
 if LIBSHELL
 noinst_LIBRARIES += libshell.a
-libshell_a_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/shell
 libshell_a_SOURCES = shell/cat_file.c shell/cmds.c shell/internal.h \
     shell/main_alias.c shell/main_cat.c shell/main_cd.c shell/cmp-ls.c \
     shell/main_chdir.c shell/main_chmod.c shell/main_chroot.c \

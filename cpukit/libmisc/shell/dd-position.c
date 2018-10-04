@@ -48,7 +48,7 @@ __FBSDID("$FreeBSD: src/bin/dd/position.c,v 1.23 2004/04/06 20:06:46 markm Exp $
 #include <sys/mtio.h>
 #endif
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <inttypes.h>
 #include <unistd.h>

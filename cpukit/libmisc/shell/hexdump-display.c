@@ -51,7 +51,7 @@ __FBSDID("$FreeBSD: src/usr.bin/hexdump/display.c,v 1.22 2004/08/04 02:47:32 tjr
 #include <stdint.h>
 
 #include <ctype.h>
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>

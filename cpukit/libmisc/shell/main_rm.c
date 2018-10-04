@@ -56,10 +56,10 @@ __FBSDID("$FreeBSD: src/bin/rm/rm.c,v 1.58 2006/10/31 02:22:36 delphij Exp $");
 #include <sys/stat.h>
 #include <sys/param.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <fcntl.h>
-#include <fts.h>
+#include "fts.h"
 #include <grp.h>
 #include <pwd.h>
 #include <stdio.h>

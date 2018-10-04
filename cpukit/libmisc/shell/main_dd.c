@@ -64,7 +64,7 @@ __FBSDID("$FreeBSD: src/bin/dd/dd.c,v 1.43 2004/08/15 19:10:05 rwatson Exp $");
 #include <sys/time.h>
 
 #include <ctype.h>
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>

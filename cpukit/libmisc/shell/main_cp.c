@@ -75,9 +75,9 @@ __RCSID("$NetBSD: cp.c,v 1.39 2005/10/24 12:59:07 kleink Exp $");
 #include <sys/param.h>
 #include <sys/stat.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
-#include <fts.h>
+#include "fts.h"
 #include <limits.h>
 #include <signal.h>
 #include <stdio.h>

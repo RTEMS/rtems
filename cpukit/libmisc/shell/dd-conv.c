@@ -45,7 +45,7 @@ __FBSDID("$FreeBSD: src/bin/dd/conv.c,v 1.19 2004/04/06 20:06:45 markm Exp $");
 
 #include <sys/param.h>
 
-#include <err.h>
+#include "err.h"
 #include <inttypes.h>
 #include <string.h>
 

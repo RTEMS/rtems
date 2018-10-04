@@ -58,7 +58,7 @@ __RCSID("$NetBSD: ln.c,v 1.34 2008/07/20 00:52:40 lukem Exp $");
 #include <sys/param.h>
 #include <sys/stat.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <locale.h>
 #include <stdio.h>

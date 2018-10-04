@@ -60,7 +60,7 @@ __RCSID("$NetBSD: mknod.c,v 1.39 2009/02/13 01:37:23 lukem Exp $");
 #include <sys/sysctl.h>
 #endif
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>

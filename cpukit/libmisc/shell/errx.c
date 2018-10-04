@@ -46,7 +46,7 @@ __RCSID("$NetBSD: errx.c,v 1.13 2005/09/13 13:51:50 christos Exp $");
 #endif
 #endif /* LIBC_SCCS and not lint */
 
-#include <err.h>
+#include "err.h"
 #include <stdarg.h>
 
 #ifdef __weak_alias

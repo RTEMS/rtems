@@ -63,7 +63,7 @@ __RCSID("$NetBSD: mv.c,v 1.41 2008/07/20 00:52:40 lukem Exp $");
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#include <err.h>
+#include "err.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <grp.h>
