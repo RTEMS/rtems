@@ -1215,9 +1215,6 @@ _SUBDIRS += libnetworking
 _SUBDIRS += libmisc
 _SUBDIRS += wrapup
 
-# other libraries
-_SUBDIRS += zlib
-
 project_lib_LIBRARIES += libftpd.a
 
 $(PROJECT_LIB)/libftpd.a: libftpd.a
@@ -1291,6 +1288,29 @@ libjffs2_a_CFLAGS += -Wno-pointer-sign
 libjffs2_a_CPPFLAGS =
 libjffs2_a_CPPFLAGS += $(AM_CPPFLAGS)
 libjffs2_a_CPPFLAGS += -I$(srcdir)/libfs/src/jffs2/include
+
+project_lib_LIBRARIES += libz.a
+
+$(PROJECT_LIB)/libz.a: libz.a
+	$(INSTALL_DATA) $< $(PROJECT_LIB)/libz.a
+TMPINSTALL_FILES += $(PROJECT_LIB)/libz.a
+
+libz_a_SOURCES =
+libz_a_SOURCES += zlib/adler32.c
+libz_a_SOURCES += zlib/compress.c
+libz_a_SOURCES += zlib/crc32.c
+libz_a_SOURCES += zlib/deflate.c
+libz_a_SOURCES += zlib/gzclose.c
+libz_a_SOURCES += zlib/gzlib.c
+libz_a_SOURCES += zlib/gzread.c
+libz_a_SOURCES += zlib/gzwrite.c
+libz_a_SOURCES += zlib/infback.c
+libz_a_SOURCES += zlib/inffast.c
+libz_a_SOURCES += zlib/inflate.c
+libz_a_SOURCES += zlib/inftrees.c
+libz_a_SOURCES += zlib/trees.c
+libz_a_SOURCES += zlib/uncompr.c
+libz_a_SOURCES += zlib/zutil.c
 
 if LIBNETWORKING
 
