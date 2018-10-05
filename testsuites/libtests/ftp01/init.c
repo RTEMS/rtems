@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2011 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2011, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -38,6 +38,24 @@ struct rtems_bsdnet_config rtems_bsdnet_config;
 
 #define FTP_WORKER_TASK_EXTRA_STACK (FTP_WORKER_TASK_COUNT * FTPD_STACKSIZE)
 
+static bool login_check(const char *user, const char *pass)
+{
+  rtems_test_assert(
+    strcmp(user, "anonymous") == 0 || strcmp(user, "user") == 0
+  );
+
+  if (pass != NULL) {
+    rtems_test_assert(
+      strcmp(pass, "anonymous") == 0 || strcmp(pass, "pass") == 0
+    );
+    printf("login check (2): user \"%s\", pass \"%s\"\n", user, pass);
+    return true;
+  } else {
+    printf("login check (1): user \"%s\"\n", user);
+    return strcmp(user, "anonymous") == 0;
+  }
+}
+
 struct rtems_ftpd_configuration rtems_ftpd_configuration = {
   .priority = 90,
   .max_hook_filesize = 0,
@@ -46,6 +64,7 @@ struct rtems_ftpd_configuration rtems_ftpd_configuration = {
   .root = NULL,
   .tasks_count = FTP_WORKER_TASK_COUNT,
   .idle = 0,
+  .login = login_check,
   .access = 0
 };
 
@@ -199,7 +218,7 @@ static void test(void)
 {
   int rv = 0;
   const char file_a [] = "/FTP/127.0.0.1/a.txt";
-  const char file_b [] = "/FTP/127.0.0.1/b.txt";
+  const char file_b [] = "/FTP/user:pass@127.0.0.1/b.txt";
 
   rv = rtems_bsdnet_initialize_network();
   rtems_test_assert(rv == 0);

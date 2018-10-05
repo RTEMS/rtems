@@ -265,7 +265,6 @@ typedef struct
   int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
   rtems_id            tid;         /* Task id */
   char                *user;       /* user name (0 if not supplied) */
-  char                *pass;       /* password (0 if not supplied) */
   bool                auth;        /* true if user/pass was valid, false if not or not supplied */
 } FTPD_SessionInfo_t;
 
@@ -1739,8 +1738,6 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   {
     sscanf(args, "%254s", fname);
     free(info->user);
-    free(info->pass);
-    info->pass = NULL;
     info->user = strdup(fname);
     if (ftpd_config->login &&
       !ftpd_config->login(info->user, NULL)) {
@@ -1753,14 +1750,11 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("PASS", cmd))
   {
-    sscanf(args, "%254s", fname);
-    free(info->pass);
-    info->pass = strdup(fname);
     if (!info->user) {
       send_reply(info, 332, "Need account to log in");
     } else {
       if (ftpd_config->login &&
-        !ftpd_config->login(info->user, info->pass)) {
+        !ftpd_config->login(info->user, args)) {
         info->auth = false;
         send_reply(info, 530, "Not logged in.");
       } else {
@@ -1951,7 +1945,6 @@ session(rtems_task_argument arg)
     close_data_socket(info);
     close_stream(info);
     free(info->user);
-    free(info->pass);
     task_pool_release(info);
   }
 }
@@ -2038,7 +2031,6 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
               htons(ntohs(info->ctrl_addr.sin_port) - 1);
             info->idle = ftpd_timeout;
             info->user = NULL;
-            info->pass = NULL;
             if (ftpd_config->login)
               info->auth = false;
             else

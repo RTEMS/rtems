@@ -1,10 +1,17 @@
-*** TEST FTP 1 ***
+*** BEGIN OF TEST FTP 1 ***
+*** TEST VERSION: 5.0.0.b38887ad22e2e28c15b4e248dac72f6eaff8cb13
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 9670d7541e0621915e521fe76e7bb33de8cee661, Newlib d13c84eb07e35984bf7a974cd786a6cdac29e6b9)
 syslog: ftpd: FTP daemon started (2 sessions max)
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
+login check (1): user "anonymous"
 USER anonymous
 230 User logged in.
 TYPE I
 200 Type set to I.
+SIZE a.txt
+550 Could not get file size.
 PASV
 227 Entering passive mode (127,0,0,1,4,1).
 STOR a.txt
@@ -13,6 +20,7 @@ STOR a.txt
 QUIT
 221 Goodbye.
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
+login check (1): user "anonymous"
 USER anonymous
 230 User logged in.
 TYPE I
@@ -24,10 +32,16 @@ PASV
 RETR a.txt
 150 Opening BINARY mode data connection.
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
-USER anonymous
+login check (1): user "user"
+USER user
+331 User name okay, need password.
+login check (2): user "user", pass "pass"
+PASS pass
 230 User logged in.
 TYPE I
 200 Type set to I.
+SIZE b.txt
+550 Could not get file size.
 PASV
 227 Entering passive mode (127,0,0,1,4,7).
 STOR b.txt
@@ -39,7 +53,11 @@ QUIT
 QUIT
 221 Goodbye.
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
-USER anonymous
+login check (1): user "user"
+USER user
+331 User name okay, need password.
+login check (2): user "user", pass "pass"
+PASS pass
 230 User logged in.
 TYPE I
 200 Type set to I.
@@ -53,6 +71,7 @@ RETR b.txt
 QUIT
 221 Goodbye.
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
+login check (1): user "anonymous"
 USER anonymous
 230 User logged in.
 TYPE I
@@ -62,7 +81,11 @@ SIZE a.txt
 QUIT
 221 Goodbye.
 220 RTEMS FTP server (Version 1.1-JWJ) ready.
-USER anonymous
+login check (1): user "user"
+USER user
+331 User name okay, need password.
+login check (2): user "user", pass "pass"
+PASS pass
 230 User logged in.
 TYPE I
 200 Type set to I.
@@ -70,4 +93,5 @@ SIZE b.txt
 213 1102
 QUIT
 221 Goodbye.
+
 *** END OF TEST FTP 1 ***
