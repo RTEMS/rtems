@@ -143,21 +143,26 @@ static bool sc16is752_set_attributes(
 )
 {
   sc16is752_context *ctx = (sc16is752_context *)base;
-  bool baud_successful;
   rtems_termios_baud_t baud;
 
   ctx->lcr = 0;
 
   baud = rtems_termios_baud_to_number(term->c_ospeed);
-  baud_successful = set_baud(ctx, baud);
-  if (!baud_successful){
-    return false;
-  }
 
-  if ((term->c_cflag & CREAD) == 0){
-    ctx->efcr |= SC16IS752_EFCR_RX_DISABLE;
+  if (baud > 0) {
+    if (!set_baud(ctx, baud)){
+      return false;
+    }
+
+    ctx->efcr &= ~SC16IS752_EFCR_TX_DISABLE;
+
+    if ((term->c_cflag & CREAD) == 0){
+      ctx->efcr |= SC16IS752_EFCR_RX_DISABLE;
+    } else {
+      ctx->efcr &= ~SC16IS752_EFCR_RX_DISABLE;
+    }
   } else {
-    ctx->efcr &= ~SC16IS752_EFCR_RX_DISABLE;
+    ctx->efcr |= SC16IS752_EFCR_RX_DISABLE | SC16IS752_EFCR_TX_DISABLE;
   }
 
   write_reg(ctx, SC16IS752_EFCR, &ctx->efcr, 1);
