@@ -373,10 +373,8 @@ task_pool_done(int count)
   int i;
   for(i = 0; i < count; ++i)
     rtems_task_delete(task_pool.info[i].tid);
-  if(task_pool.info)
-    free(task_pool.info);
-  if(task_pool.queue)
-    free(task_pool.queue);
+  free(task_pool.info);
+  free(task_pool.queue);
   rtems_mutex_destroy(&task_pool.mutex);
   rtems_counting_semaphore_destroy(&task_pool.sem);
   task_pool.info = 0;
@@ -1740,10 +1738,8 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   else if (!strcmp("USER", cmd))
   {
     sscanf(args, "%254s", fname);
-    if (info->user)
-      free(info->user);
-    if (info->pass)
-      free(info->pass);
+    free(info->user);
+    free(info->pass);
     info->pass = NULL;
     info->user = strdup(fname);
     if (ftpd_config->login &&
@@ -1758,8 +1754,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   else if (!strcmp("PASS", cmd))
   {
     sscanf(args, "%254s", fname);
-    if (info->pass)
-      free(info->pass);
+    free(info->pass);
     info->pass = strdup(fname);
     if (!info->user) {
       send_reply(info, 332, "Need account to log in");
