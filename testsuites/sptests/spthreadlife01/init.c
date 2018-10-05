@@ -199,7 +199,6 @@ static void delete_extension(
 static void terminate_extension(Thread_Control *executing)
 {
   test_context *ctx = &test_instance;
-  rtems_status_code sc;
 
   rtems_test_assert(ctx->worker_task_id == rtems_task_self());
 
@@ -207,8 +206,8 @@ static void terminate_extension(Thread_Control *executing)
     case DELETE_0:
       assert_priority(PRIO_INIT);
       ctx->current = DELETE_1;
-      sc = rtems_task_delete(RTEMS_SELF);
-      rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+      rtems_task_delete(RTEMS_SELF);
+      rtems_test_assert(0);
       break;
     case DELETE_1:
       assert_priority(PRIO_INIT);
@@ -306,6 +305,7 @@ static void worker_task(rtems_task_argument arg)
       case EXIT_0:
         ctx->current = EXIT_1;
         rtems_task_exit();
+        rtems_test_assert(0);
         break;
       default:
         rtems_test_assert(0);
