@@ -33,7 +33,11 @@
 static int check_node_data(struct jffs2_sb_info *c, struct jffs2_tmp_dnode_info *tn)
 {
 	struct jffs2_raw_node_ref *ref = tn->fn->raw;
+#ifndef __rtems__
 	int err = 0, pointed = 0;
+#else /* __rtems__ */
+	int err = 0;
+#endif /* __rtems__ */
 	struct jffs2_eraseblock *jeb;
 	unsigned char *buffer;
 	uint32_t crc, ofs, len;
@@ -77,7 +81,9 @@ static int check_node_data(struct jffs2_sb_info *c, struct jffs2_tmp_dnode_info 
 		pointed = 1; /* succefully pointed to device */
 #endif
 
+#ifndef __rtems__
 	if (!pointed) {
+#endif /* __rtems__ */
 		buffer = kmalloc(len, GFP_KERNEL);
 		if (unlikely(!buffer))
 			return -ENOMEM;
@@ -95,11 +101,15 @@ static int check_node_data(struct jffs2_sb_info *c, struct jffs2_tmp_dnode_info 
 			err = -EIO;
 			goto free_out;
 		}
+#ifndef __rtems__
 	}
+#endif /* __rtems__ */
 
 	/* Continue calculating CRC */
 	crc = crc32(tn->partial_crc, buffer, len);
+#ifndef __rtems__
 	if(!pointed)
+#endif /* __rtems__ */
 		kfree(buffer);
 #ifndef __ECOS
 	else
@@ -135,7 +145,9 @@ adj_acc:
 	return 0;
 
 free_out:
+#ifndef __rtems__
 	if(!pointed)
+#endif /* __rtems__ */
 		kfree(buffer);
 #ifndef __ECOS
 	else
