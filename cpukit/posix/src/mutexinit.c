@@ -40,7 +40,7 @@ RTEMS_STATIC_ASSERT(
 RTEMS_STATIC_ASSERT(
   offsetof( POSIX_Mutex_Control, Priority_ceiling )
     == offsetof( pthread_mutex_t, _Priority_ceiling ),
-  POSIX_MUTEX_CONTROL_SCHEDULER
+  POSIX_MUTEX_CONTROL_PRIORITY_CEILING
 );
 
 RTEMS_STATIC_ASSERT(

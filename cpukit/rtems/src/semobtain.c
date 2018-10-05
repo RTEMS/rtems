@@ -24,23 +24,27 @@
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.Wait_queue
+  Core_control.Wait_queue,
+  SEMAPHORE_CONTROL_GENERIC
 );
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.Mutex.Recursive.Mutex.Wait_queue
+  Core_control.Mutex.Recursive.Mutex.Wait_queue,
+  SEMAPHORE_CONTROL_MUTEX
 );
 
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.Semaphore.Wait_queue
+  Core_control.Semaphore.Wait_queue,
+  SEMAPHORE_CONTROL_SEMAPHORE
 );
 
 #if defined(RTEMS_SMP)
 THREAD_QUEUE_OBJECT_ASSERT(
   Semaphore_Control,
-  Core_control.MRSP.Wait_queue
+  Core_control.MRSP.Wait_queue,
+  SEMAPHORE_CONTROL_MRSP
 );
 #endif
 

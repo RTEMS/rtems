@@ -21,7 +21,11 @@
 #include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/statusimpl.h>
 
-THREAD_QUEUE_OBJECT_ASSERT( Barrier_Control, Barrier.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT(
+  Barrier_Control,
+  Barrier.Wait_queue,
+  BARRIER_CONTROL
+);
 
 rtems_status_code rtems_barrier_wait(
   rtems_id        id,

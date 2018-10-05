@@ -25,7 +25,8 @@
 
 THREAD_QUEUE_OBJECT_ASSERT(
   POSIX_Message_queue_Control,
-  Message_queue.Wait_queue
+  Message_queue.Wait_queue,
+  POSIX_MESSAGE_QUEUE_CONTROL
 );
 
 /*

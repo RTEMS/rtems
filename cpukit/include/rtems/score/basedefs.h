@@ -317,7 +317,8 @@
     _Static_assert(cond, # msg)
 #else
   #define RTEMS_STATIC_ASSERT(cond, msg) \
-    typedef int rtems_static_assert_ ## msg [(cond) ? 1 : -1]
+    struct rtems_static_assert_ ## msg \
+      { int rtems_static_assert_ ## msg : (cond) ? 1 : -1; }
 #endif
 
 #define RTEMS_ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))

@@ -22,7 +22,11 @@
 #include <rtems/rtems/optionsimpl.h>
 #include <rtems/rtems/statusimpl.h>
 
-THREAD_QUEUE_OBJECT_ASSERT( Message_queue_Control, message_queue.Wait_queue );
+THREAD_QUEUE_OBJECT_ASSERT(
+  Message_queue_Control,
+  message_queue.Wait_queue,
+  MESSAGE_QUEUE_CONTROL
+);
 
 rtems_status_code rtems_message_queue_receive(
   rtems_id        id,

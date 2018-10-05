@@ -1207,7 +1207,7 @@ typedef struct {
   Thread_queue_Control Wait_queue;
 } Thread_queue_Object;
 
-#define THREAD_QUEUE_OBJECT_ASSERT( object_type, wait_queue_member ) \
+#define THREAD_QUEUE_OBJECT_ASSERT( object_type, wait_queue_member, msg ) \
   RTEMS_STATIC_ASSERT( \
     offsetof( object_type, wait_queue_member ) \
       == offsetof( Thread_queue_Object, Wait_queue ) \
@@ -1217,7 +1217,7 @@ typedef struct {
       Thread_queue_Object, \
       Wait_queue \
     ), \
-    object_type \
+    msg \
   )
 
 #define THREAD_QUEUE_QUEUE_TO_OBJECT( queue ) \
