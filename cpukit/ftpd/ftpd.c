@@ -265,6 +265,7 @@ typedef struct
   int                 xfer_mode;   /* Transfer mode (ASCII/binary) */
   rtems_id            tid;         /* Task id */
   char                *user;       /* user name (0 if not supplied) */
+  char                user_buf[256]; /* user name buffer */
   bool                auth;        /* true if user/pass was valid, false if not or not supplied */
 } FTPD_SessionInfo_t;
 
@@ -1736,9 +1737,8 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("USER", cmd))
   {
-    sscanf(args, "%254s", fname);
-    free(info->user);
-    info->user = strdup(fname);
+    strlcpy(info->user_buf, args, sizeof(info->user_buf));
+    info->user = info->user_buf;
     if (ftpd_config->login &&
       !ftpd_config->login(info->user, NULL)) {
       info->auth = false;
@@ -1944,7 +1944,6 @@ session(rtems_task_argument arg)
     /* Close connection and put ourselves back into the task pool. */
     close_data_socket(info);
     close_stream(info);
-    free(info->user);
     task_pool_release(info);
   }
 }
