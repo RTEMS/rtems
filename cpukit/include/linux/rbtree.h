@@ -126,12 +126,12 @@ static inline struct rb_node *rb_parent( struct rb_node *node )
   for ( \
     node = _RBTree_Postorder_first( \
       (RBTree_Control *) root, \
-      (size_t) ( (char *) &node->field - (char *) node ) \
+      offsetof( __typeof__( *node ), field ) \
     ); \
     node != NULL && ( \
       next = _RBTree_Postorder_next( \
         &node->field, \
-        (size_t) ( (char *) &node->field - (char *) node ) \
+        offsetof( __typeof__( *node ), field ) \
       ), \
       node != NULL \
     ); \
