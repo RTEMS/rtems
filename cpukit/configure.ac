@@ -467,6 +467,25 @@ esac
 AM_CONDITIONAL(LIBDRVMGR,[test x"$HAVE_LIBDRVMGR" = x"yes"])
 AC_MSG_RESULT([$HAVE_LIBDRVMGR])
 
+AM_CONDITIONAL([CPU_ARM],[test $RTEMS_CPU = "arm"])
+AM_CONDITIONAL([CPU_BFIN],[test $RTEMS_CPU = "bfin"])
+AM_CONDITIONAL([CPU_EPIPHANY],[test $RTEMS_CPU = "epiphany"])
+AM_CONDITIONAL([CPU_I386],[test $RTEMS_CPU = "i386"])
+AM_CONDITIONAL([CPU_LM32],[test $RTEMS_CPU = "lm32"])
+AM_CONDITIONAL([CPU_M32C],[test $RTEMS_CPU = "m32c"])
+AM_CONDITIONAL([CPU_M68K],[test $RTEMS_CPU = "m68k"])
+AM_CONDITIONAL([CPU_MIPS],[test $RTEMS_CPU = "mips"])
+AM_CONDITIONAL([CPU_MOXIE],[test $RTEMS_CPU = "moxie"])
+AM_CONDITIONAL([CPU_NIOS2],[test $RTEMS_CPU = "nios2"])
+AM_CONDITIONAL([CPU_NO_CPU],[test $RTEMS_CPU = "no_cpu"])
+AM_CONDITIONAL([CPU_OR1K],[test $RTEMS_CPU = "or1k"])
+AM_CONDITIONAL([CPU_POWERPC],[test $RTEMS_CPU = "powerpc"])
+AM_CONDITIONAL([CPU_RISCV],[test $RTEMS_CPU = "riscv"])
+AM_CONDITIONAL([CPU_SH],[test $RTEMS_CPU = "sh"])
+AM_CONDITIONAL([CPU_SPARC64],[test $RTEMS_CPU = "sparc64"])
+AM_CONDITIONAL([CPU_SPARC],[test $RTEMS_CPU = "sparc"])
+AM_CONDITIONAL([CPU_V850],[test $RTEMS_CPU = "v850"])
+AM_CONDITIONAL([CPU_X86_64],[test $RTEMS_CPU = "x86_64"])
 
 RTEMS_AMPOLISH3
 
@@ -495,7 +514,6 @@ score/cpu/sparc64/Makefile
 score/cpu/v850/Makefile
 score/cpu/x86_64/Makefile
 score/cpu/no_cpu/Makefile
-libnetworking/Makefile
-wrapup/Makefile])
+libnetworking/Makefile])
 
 AC_OUTPUT
