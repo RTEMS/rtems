@@ -1968,19 +1968,16 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
   int                 s;
   socklen_t	      addrLen;
   struct sockaddr_in  addr;
-  FTPD_SessionInfo_t  *info = NULL;
 
-
-  s = socket(PF_INET, SOCK_STREAM, 0);
-  if (s < 0)
-    syslog(LOG_ERR, "ftpd: Error creating socket: %s", serr());
-
+  memset(&addr, 0, sizeof(addr));
   addr.sin_family      = AF_INET;
   addr.sin_port        = htons(ftpd_config->port);
   addr.sin_addr.s_addr = htonl(INADDR_ANY);
-  memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
 
-  if (0 > bind(s, (struct sockaddr *)&addr, sizeof(addr)))
+  s = socket(PF_INET, SOCK_STREAM, 0);
+  if (s < 0)
+    syslog(LOG_ERR, "ftpd: Error creating control socket: %s", serr());
+  else if (0 > bind(s, (struct sockaddr *)&addr, sizeof(addr)))
     syslog(LOG_ERR, "ftpd: Error binding control socket: %s", serr());
   else if (0 > listen(s, 1))
     syslog(LOG_ERR, "ftpd: Error listening on control socket: %s", serr());
@@ -1995,6 +1992,8 @@ ftpd_daemon(rtems_task_argument args RTEMS_UNUSED)
       close_socket(ss);
     else
     {
+      FTPD_SessionInfo_t *info;
+
       info = task_pool_obtain();
       if (NULL == info)
       {
