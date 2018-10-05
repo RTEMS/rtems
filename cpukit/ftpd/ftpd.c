@@ -1879,14 +1879,9 @@ static void
 session(rtems_task_argument arg)
 {
   FTPD_SessionInfo_t  *const info = (FTPD_SessionInfo_t  *)arg;
-  int chroot_made = 0;
+  bool chroot_made = false;
 
-  rtems_libio_set_private_env();
-
-  /* chroot() can fail here because the directory may not exist yet. */
-  chroot_made = chroot(ftpd_root) == 0;
-
-  while(1)
+  while (1)
   {
     rtems_event_set set;
     int rv;
@@ -1894,8 +1889,14 @@ session(rtems_task_argument arg)
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);
 
-    chroot_made = chroot_made || chroot(ftpd_root) == 0;
+    chroot_made = chroot_made
+      || (rtems_libio_set_private_env() == RTEMS_SUCCESSFUL
+        && chroot(ftpd_root) == 0);
 
+    /*
+     * The chdir() must immediatly follow the chroot(), otherwise static
+     * analysis tools may complain about a security issue.
+    */
     rv = chroot_made ? chdir("/") : -1;
 
     errno = 0;
