@@ -16,4 +16,3 @@ ada_nsecs_SOURCES = nsecs.adb config.h sptest.adb sptest.ads
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_nsecs.scn
 
-include $(top_srcdir)/../automake/local.am

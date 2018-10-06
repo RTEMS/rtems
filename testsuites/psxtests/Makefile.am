@@ -1191,4 +1191,3 @@ rtems_tests_PROGRAMS = $(psx_tests)
 noinst_LIBRARIES = $(psx_lib)
 dist_rtems_tests_DATA = $(psx_screens) $(psx_docs)
 
-include $(top_srcdir)/../automake/local.am

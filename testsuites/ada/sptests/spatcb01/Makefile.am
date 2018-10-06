@@ -13,4 +13,3 @@ ada_spatcb01$(EXEEXT): spatcb01.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_spatcb01.scn
 
-include $(top_srcdir)/../automake/local.am

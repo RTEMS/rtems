@@ -89,6 +89,5 @@ if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/lm32/shared/net/network.c
 endif
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/lm32/milkymist/headers.am

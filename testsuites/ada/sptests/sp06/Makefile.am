@@ -13,4 +13,3 @@ ada_sp06$(EXEEXT): sp06.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_sp06.scn
 
-include $(top_srcdir)/../automake/local.am

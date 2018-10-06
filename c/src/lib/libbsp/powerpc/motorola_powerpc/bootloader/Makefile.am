@@ -65,4 +65,3 @@ TMPINSTALL_FILES += $(PROJECT_LIB)/ppcboot.lds
 
 CLEANFILES = $(TMPINSTALL_FILES)
 
-include $(top_srcdir)/../../../../automake/local.am

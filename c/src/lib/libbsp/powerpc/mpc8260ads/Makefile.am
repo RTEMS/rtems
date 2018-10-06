@@ -55,7 +55,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/dpram.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/mpc8260ads/start/mmu.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

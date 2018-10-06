@@ -19,4 +19,3 @@ init.o: ../../../support/init.c
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_base_mp-node1.scn
 
-include $(top_srcdir)/../automake/local.am

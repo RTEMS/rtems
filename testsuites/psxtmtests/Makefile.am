@@ -659,4 +659,3 @@ endif
 rtems_tests_PROGRAMS = $(psxtm_tests)
 dist_rtems_tests_DATA = $(psxtm_screens) $(psxtm_docs)
 
-include $(top_srcdir)/../automake/local.am

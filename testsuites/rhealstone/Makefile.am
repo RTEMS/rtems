@@ -70,4 +70,3 @@ endif
 rtems_tests_PROGRAMS = $(rhealstones)
 dist_rtems_tests_DATA = $(rhealstone_screens) $(rhealstone_docs)
 
-include $(top_srcdir)/../automake/local.am

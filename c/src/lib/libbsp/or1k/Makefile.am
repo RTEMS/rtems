@@ -6,5 +6,4 @@ ACLOCAL_AMFLAGS = -I ../../../aclocal
 _SUBDIRS = @RTEMS_BSP_FAMILY@
 
 include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
 include $(srcdir)/../../../../../bsps/or1k/headers.am

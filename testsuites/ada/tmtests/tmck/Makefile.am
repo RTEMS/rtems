@@ -10,4 +10,3 @@ ada_tmck_SOURCES += ../../support/init.c
 ada_tmck$(EXEEXT): tmck.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

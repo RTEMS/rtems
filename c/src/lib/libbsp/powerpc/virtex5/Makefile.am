@@ -47,7 +47,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/clock/clock-ppc-d
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/btimer/btimer-ppc-dec.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/powerpc/shared/exceptions-sources.am

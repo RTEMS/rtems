@@ -10,4 +10,3 @@ ada_tm25_SOURCES += ../../support/init.c
 ada_tm25$(EXEEXT): tm25.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

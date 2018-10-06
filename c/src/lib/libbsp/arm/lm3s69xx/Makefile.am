@@ -76,7 +76,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/lm3s69xx/i2c/ssi.c
 ###############################################################################
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/lm3s69xx/headers.am

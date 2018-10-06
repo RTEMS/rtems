@@ -1,3 +1,0 @@
-PROJECT_TOOLS = $(PROJECT_RELEASE)/build-tools
-
-all-local: $(TMPINSTALL_FILES)

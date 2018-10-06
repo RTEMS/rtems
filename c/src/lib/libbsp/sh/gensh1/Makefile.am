@@ -41,6 +41,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/printk-dummy.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sh/gensh1/headers.am

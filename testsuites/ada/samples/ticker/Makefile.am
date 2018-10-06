@@ -16,4 +16,3 @@ ada_ticker_SOURCES = ticker.adb config.h sptest.adb sptest.ads
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_ticker.scn
 
-include $(top_srcdir)/../automake/local.am

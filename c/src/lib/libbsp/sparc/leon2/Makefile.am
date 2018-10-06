@@ -169,7 +169,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/shared/net/network_interfa
 endif
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sparc/leon2/headers.am

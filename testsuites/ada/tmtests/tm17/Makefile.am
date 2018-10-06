@@ -10,4 +10,3 @@ ada_tm17_SOURCES += ../../support/init.c
 ada_tm17$(EXEEXT): tm17.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

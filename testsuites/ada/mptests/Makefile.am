@@ -14,4 +14,3 @@ _SUBDIRS += mp13
 _SUBDIRS += mp14
 
 include $(top_srcdir)/../automake/subdirs.am
-include $(top_srcdir)/../automake/local.am

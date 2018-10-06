@@ -43,7 +43,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/btimer/btimer-stub.c
 # cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/x86_64/amd64/headers.am

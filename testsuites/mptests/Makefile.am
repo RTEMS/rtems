@@ -246,4 +246,3 @@ endif
 rtems_tests_PROGRAMS = $(mp_tests)
 dist_rtems_tests_DATA = $(mp_screens) $(mp_docs)
 
-include $(top_srcdir)/../automake/local.am

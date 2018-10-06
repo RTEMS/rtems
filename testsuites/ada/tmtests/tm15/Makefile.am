@@ -10,4 +10,3 @@ ada_tm15_SOURCES += ../../support/init.c
 ada_tm15$(EXEEXT): tm15.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

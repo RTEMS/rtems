@@ -13,4 +13,3 @@ ada_sp23$(EXEEXT): sp23.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_sp23.scn
 
-include $(top_srcdir)/../automake/local.am

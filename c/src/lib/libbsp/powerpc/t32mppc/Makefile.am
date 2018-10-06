@@ -56,7 +56,6 @@ if HAS_SMP
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspsmp-dummy.c
 endif
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am

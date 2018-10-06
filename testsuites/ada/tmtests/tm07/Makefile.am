@@ -10,4 +10,3 @@ ada_tm07_SOURCES += ../../support/init.c
 ada_tm07$(EXEEXT): tm07.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

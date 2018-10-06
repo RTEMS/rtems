@@ -1299,4 +1299,3 @@ endif
 rtems_tests_PROGRAMS = $(lib_tests)
 dist_rtems_tests_DATA = $(lib_screens) $(lib_docs)
 
-include $(top_srcdir)/../automake/local.am

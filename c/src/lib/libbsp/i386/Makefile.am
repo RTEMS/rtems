@@ -12,5 +12,4 @@ _SUBDIRS = @RTEMS_BSP_FAMILY@
 # shared/pci
 
 include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
 include $(srcdir)/../../../../../bsps/i386/headers.am

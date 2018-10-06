@@ -38,5 +38,4 @@ _SUBDIRS = @RTEMS_BSP_FAMILY@
 ## shared/vme
 
 include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
 include $(srcdir)/../../../../../bsps/powerpc/headers.am

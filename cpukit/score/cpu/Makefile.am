@@ -21,4 +21,3 @@ DIST_SUBDIRS += sparc64
 DIST_SUBDIRS += v850
 
 include $(top_srcdir)/automake/subdirs.am
-include $(top_srcdir)/automake/local.am

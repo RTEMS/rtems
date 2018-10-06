@@ -16,4 +16,3 @@ mp03_ada_mp03_node2$(EXEEXT): mp03_node2.adb ../mptest.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_mp03-node2.scn
 
-include $(top_srcdir)/../automake/local.am

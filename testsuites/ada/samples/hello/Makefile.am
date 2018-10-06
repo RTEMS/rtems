@@ -16,4 +16,3 @@ ada_hello_SOURCES = hello.adb config.h sptest.adb sptest.ads
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_hello.scn
 
-include $(top_srcdir)/../automake/local.am

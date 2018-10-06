@@ -15,4 +15,3 @@ init.$(OBJEXT): ../../support/init.c
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_spname01.scn
 
-include $(top_srcdir)/../automake/local.am

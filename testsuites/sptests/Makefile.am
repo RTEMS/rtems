@@ -2056,4 +2056,3 @@ rtems_tests_PROGRAMS = $(sp_tests)
 noinst_LIBRARIES = $(sp_libs)
 dist_rtems_tests_DATA = $(sp_screens) $(sp_docs)
 
-include $(top_srcdir)/../automake/local.am

@@ -197,7 +197,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/sparc/leon3/mpci/mpisr.c
 endif
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/sparc/leon3/headers.am

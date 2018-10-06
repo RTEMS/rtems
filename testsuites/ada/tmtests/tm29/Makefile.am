@@ -10,4 +10,3 @@ ada_tm29_SOURCES += ../../support/init.c
 ada_tm29$(EXEEXT): tm29.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

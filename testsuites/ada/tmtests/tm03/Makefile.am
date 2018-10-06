@@ -10,4 +10,3 @@ ada_tm03_SOURCES += ../../support/init.c
 ada_tm03$(EXEEXT): tm03.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

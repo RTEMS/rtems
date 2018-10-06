@@ -35,7 +35,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/networkconfi
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/bf537Stamp/net/ethernet.c
 endif
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/bf537Stamp/headers.am

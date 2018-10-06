@@ -18,4 +18,3 @@ ada_sp09$(EXEEXT): sp09.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_sp09.scn
 
-include $(top_srcdir)/../automake/local.am

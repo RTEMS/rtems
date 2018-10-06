@@ -16,4 +16,3 @@ mp09_ada_mp09_node1$(EXEEXT): mp09_node1.adb ../mptest.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_mp09-node1.scn
 
-include $(top_srcdir)/../automake/local.am

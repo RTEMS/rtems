@@ -34,6 +34,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/lock.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/no_cpu/no_bsp/mpci/mpisr.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/no_cpu/no_bsp/headers.am

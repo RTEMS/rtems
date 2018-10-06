@@ -9,5 +9,4 @@ dist_project_lib_DATA = ../../../../../bsps/m68k/shared/start/linkcmds.base
 
 
 include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
 include $(srcdir)/../../../../../bsps/m68k/headers.am

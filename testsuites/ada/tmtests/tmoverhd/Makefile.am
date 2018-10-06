@@ -11,4 +11,3 @@ ada_tmoverhd_SOURCES += ../../support/init.c
 ada_tmoverhd$(EXEEXT): tmoverhd.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

@@ -61,7 +61,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/epiphany/epiphany_sim/console/console-io.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/epiphany/epiphany_sim/headers.am

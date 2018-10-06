@@ -46,4 +46,3 @@ endif
 rtems_tests_PROGRAMS = $(benchmarks)
 dist_rtems_tests_DATA = $(benchmark_screens) $(benchmark_docs)
 
-include $(top_srcdir)/../automake/local.am

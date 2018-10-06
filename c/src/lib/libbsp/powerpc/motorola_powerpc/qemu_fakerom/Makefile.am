@@ -24,4 +24,3 @@ qemu_fakerom.elf: qemu_fakerom.$(OBJEXT) qemu_fakeres.$(OBJEXT)
 qemu_fakerom.bin: qemu_fakerom.$(OBJEXT) qemu_fakeres.$(OBJEXT)
 	$(LD) -o $@ $^ --oformat binary -nostdlib -Ttext 0xfff00000 --section-start=.romentry=0xfffffffc
 
-include $(top_srcdir)/../../../../automake/local.am

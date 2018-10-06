@@ -10,4 +10,3 @@ ada_tm21_SOURCES += ../../support/init.c
 ada_tm21$(EXEEXT): tm21.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

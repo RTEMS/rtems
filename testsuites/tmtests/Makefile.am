@@ -394,4 +394,3 @@ endif
 rtems_tests_PROGRAMS = $(tm_tests)
 dist_rtems_tests_DATA = $(tm_screens) $(tm_docs)
 
-include $(top_srcdir)/../automake/local.am

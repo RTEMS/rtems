@@ -10,4 +10,3 @@ ada_tm10_SOURCES += ../../support/init.c
 ada_tm10$(EXEEXT): tm10.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

@@ -643,4 +643,3 @@ endif
 rtems_tests_PROGRAMS = $(fs_tests)
 dist_rtems_tests_DATA = $(fs_screens) $(fs_docs)
 
-include $(top_srcdir)/../automake/local.am

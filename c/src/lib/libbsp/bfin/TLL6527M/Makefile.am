@@ -30,7 +30,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/shared/cache/cache.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/bfin/TLL6527M/start/interrupt.c
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/bfin/TLL6527M/headers.am

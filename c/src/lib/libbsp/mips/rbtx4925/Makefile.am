@@ -49,7 +49,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/irq/isr_entries.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/timer.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/mips/shared/timer/gettime.S
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/mips/rbtx4925/headers.am

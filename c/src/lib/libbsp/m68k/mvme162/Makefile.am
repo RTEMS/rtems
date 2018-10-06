@@ -51,6 +51,5 @@ include $(srcdir)/../../../../../../bsps/m68k/shared/fpsp-sources.am
 endif
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/mvme162/headers.am

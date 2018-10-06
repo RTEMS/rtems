@@ -59,6 +59,5 @@ if HAS_NETWORKING
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/genmcf548x/net/network.c
 endif
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/genmcf548x/headers.am

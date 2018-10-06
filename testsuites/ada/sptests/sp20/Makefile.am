@@ -13,4 +13,3 @@ ada_sp20$(EXEEXT): sp20.adb init.$(OBJEXT)
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_sp20.scn
 
-include $(top_srcdir)/../automake/local.am

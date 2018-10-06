@@ -8,5 +8,4 @@ DIST_SUBDIRS = @libbsp_cpu_subdir@
 
 
 
-include $(top_srcdir)/automake/local.am
 include $(top_srcdir)/automake/subdirs.am

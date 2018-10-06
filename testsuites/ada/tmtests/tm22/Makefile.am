@@ -10,4 +10,3 @@ ada_tm22_SOURCES += ../../support/init.c
 ada_tm22$(EXEEXT): tm22.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am

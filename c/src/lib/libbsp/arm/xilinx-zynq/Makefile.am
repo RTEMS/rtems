@@ -81,7 +81,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/xilinx-zynq/start/bspstartmm
 ###############################################################################
 
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/irq-sources.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/arm/xilinx-zynq/headers.am

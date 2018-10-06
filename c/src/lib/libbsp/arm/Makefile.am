@@ -13,5 +13,4 @@ dist_project_lib_DATA += ../../../../../bsps/arm/shared/start/linkcmds.armv7m
 # comm
 
 include $(top_srcdir)/../../../automake/subdirs.am
-include $(top_srcdir)/../../../automake/local.am
 include $(srcdir)/../../../../../bsps/arm/headers.am

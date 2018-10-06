@@ -41,6 +41,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/cache/cache-mcf5282.
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/m68kidle.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/m68k/shared/memProbe.c
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m68k/uC5282/headers.am

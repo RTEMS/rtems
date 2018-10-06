@@ -16,4 +16,3 @@ ada_base_sp_SOURCES = base_sp.adb config.h sptest.adb sptest.ads
 scndir = $(rtems_ada_testsdir)
 dist_scn_DATA = ada_base_sp.scn
 
-include $(top_srcdir)/../automake/local.am

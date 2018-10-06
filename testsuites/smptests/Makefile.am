@@ -657,4 +657,3 @@ endif
 rtems_tests_PROGRAMS = $(smp_tests)
 dist_rtems_tests_DATA = $(smp_screens) $(smp_docs)
 
-include $(top_srcdir)/../automake/local.am

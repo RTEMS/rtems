@@ -32,6 +32,5 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/m32c/m32cbsp/btimer/btimer.c
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/cache/nocache.c
 
-include $(top_srcdir)/../../../../automake/local.am
 include $(srcdir)/../../../../../../bsps/shared/shared-sources.am
 include $(srcdir)/../../../../../../bsps/m32c/m32cbsp/headers.am

@@ -10,4 +10,3 @@ ada_tm14_SOURCES += ../../support/init.c
 ada_tm14$(EXEEXT): tm14.adb init.$(OBJEXT)
 	$(GNATCOMPILE) -margs -a $< -o $@
 
-include $(top_srcdir)/../automake/local.am
