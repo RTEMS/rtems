@@ -8,13 +8,21 @@ NM = @NM@
 SIZE = @SIZE@
 STRIP = @STRIP@
 
-##
+TEST_LD_FLAGS = -Wl,--wrap=printf -Wl,--wrap=puts -Wl,--wrap=putchar
+
 AM_CPPFLAGS = $(TEST_FLAGS) @RTEMS_CPPFLAGS@ @RTEMS_BSP_CPPFLAGS@
 AM_CFLAGS   = $(TEST_C_FLAGS)
 AM_CXXFLAGS = $(TEST_CXX_FLAGS)
-AM_LDFLAGS  = -B$(RTEMS_BSP_LIBBSP_PATH) $(GCCSPECS) \
-              -L$(PROJECT_LIB) \
-              -L$(RTEMS_BSP_ARCH_LINKCMDS_PATH) \
-              $(TEST_LD_FLAGS)
+
+AM_LDFLAGS =
+AM_LDFLAGS += -B$(RTEMS_ROOT)lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@
+AM_LDFLAGS += $(GCCSPECS)
+AM_LDFLAGS += -L$(RTEMS_ROOT)cpukit
+AM_LDFLAGS += -L$(RTEMS_BSP_ARCH_LINKCMDS_PATH)
+AM_LDFLAGS += $(TEST_LD_FLAGS)
+
+LDADD =
+LDADD += $(RTEMS_ROOT)lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/librtemsbsp.a
+LDADD += $(RTEMS_ROOT)cpukit/librtemscpu.a
 
 CLEANFILES = *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf

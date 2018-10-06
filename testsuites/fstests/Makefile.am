@@ -133,7 +133,7 @@ fsjffs2gc01_SOURCES = fsjffs2gc01/init.c support/fstest_support.c \
 	jffs2_support/fs_config.h
 fsjffs2gc01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_fsjffs2gc01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/jffs2_support
-fsjffs2gc01_LDADD = -ljffs2
+fsjffs2gc01_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_fsnofs01
@@ -267,7 +267,7 @@ jffs2_fserror_SOURCES = fserror/test.c support/fstest_support.c \
 	jffs2_support/fs_config.h
 jffs2_fserror_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_jffs2_fserror) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/jffs2_support
-jffs2_fserror_LDADD = -ljffs2
+jffs2_fserror_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fslink
@@ -279,7 +279,7 @@ jffs2_fslink_SOURCES = fslink/test.c support/fstest_support.c \
 	jffs2_support/fs_config.h
 jffs2_fslink_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_jffs2_fslink) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/jffs2_support
-jffs2_fslink_LDADD = -ljffs2
+jffs2_fslink_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fspatheval
@@ -292,7 +292,7 @@ jffs2_fspatheval_SOURCES = fspatheval/test.c support/fstest_support.c \
 jffs2_fspatheval_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_jffs2_fspatheval) $(support_includes) $(test_includes) \
 	-I$(top_srcdir)/jffs2_support
-jffs2_fspatheval_LDADD = -ljffs2
+jffs2_fspatheval_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fspermission
@@ -305,7 +305,7 @@ jffs2_fspermission_SOURCES = fspermission/test.c \
 jffs2_fspermission_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_jffs2_fspermission) $(support_includes) $(test_includes) \
 	-I$(top_srcdir)/jffs2_support
-jffs2_fspermission_LDADD = -ljffs2
+jffs2_fspermission_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fsrdwr
@@ -317,7 +317,7 @@ jffs2_fsrdwr_SOURCES = fsrdwr/init.c support/fstest_support.c \
 	jffs2_support/fs_config.h
 jffs2_fsrdwr_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_jffs2_fsrdwr) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/jffs2_support
-jffs2_fsrdwr_LDADD = -ljffs2
+jffs2_fsrdwr_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fsscandir01
@@ -330,7 +330,7 @@ jffs2_fsscandir01_SOURCES = fsscandir01/init.c \
 jffs2_fsscandir01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_jffs2_fsscandir01) $(support_includes) $(test_includes) \
 	-I$(top_srcdir)/jffs2_support
-jffs2_fsscandir01_LDADD = -ljffs2
+jffs2_fsscandir01_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fssymlink
@@ -343,7 +343,7 @@ jffs2_fssymlink_SOURCES = fssymlink/test.c support/fstest_support.c \
 jffs2_fssymlink_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_jffs2_fssymlink) $(support_includes) $(test_includes) \
 	-I$(top_srcdir)/jffs2_support
-jffs2_fssymlink_LDADD = -ljffs2
+jffs2_fssymlink_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_jffs2_fstime
@@ -355,7 +355,7 @@ jffs2_fstime_SOURCES = fstime/test.c support/fstest_support.c \
 	jffs2_support/fs_config.h
 jffs2_fstime_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_jffs2_fstime) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/jffs2_support
-jffs2_fstime_LDADD = -ljffs2
+jffs2_fstime_LDADD = $(RTEMS_ROOT)cpukit/libjffs2.a $(LDADD)
 endif
 
 if TEST_mdosfs_fserror

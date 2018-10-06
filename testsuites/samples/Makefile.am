@@ -132,7 +132,7 @@ pppd_SOURCES = pppd/init.c pppd/pppdapp.c pppd/netconfig.h \
 	pppd/system.h
 pppd_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_pppd) $(support_includes) \
 	-I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-pppd_LDADD = -lpppd
+pppd_LDADD = $(RTEMS_ROOT)cpukit/libpppd.a $(LDADD)
 endif
 endif
 endif

@@ -246,7 +246,7 @@ debugger01_SOURCES = debugger01/init.c debugger01/remote.c \
 	debugger01/system.h
 debugger01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_debugger01) \
 	$(support_includes)
-debugger01_LDADD = -ldebugger
+debugger01_LDADD = $(RTEMS_ROOT)cpukit/libdebugger.a $(LDADD)
 endif
 endif
 
@@ -582,7 +582,7 @@ lib_docs += ftp01/ftp01.doc
 ftp01_SOURCES = ftp01/init.c
 ftp01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ftp01) \
 	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-ftp01_LDADD = -lftpd -lftpfs
+ftp01_LDADD = $(RTEMS_ROOT)cpukit/libftpd.a $(RTEMS_ROOT)cpukit/libftpfs.a $(LDADD)
 endif
 endif
 
@@ -794,7 +794,7 @@ mghttpd01_SOURCES = mghttpd01/init.c mghttpd01_tar.c \
 	mghttpd01/test-http-client.h
 mghttpd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mghttpd01) \
 	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
-mghttpd01_LDADD = -lmghttpd
+mghttpd01_LDADD = $(RTEMS_ROOT)cpukit/libmghttpd.a $(LDADD)
 mghttpd01_tar.c: mghttpd01/mghttpd01.tar
 	$(AM_V_GEN)$(BIN2C) -C $< $@
 mghttpd01_tar.h: mghttpd01/mghttpd01.tar
@@ -1056,7 +1056,7 @@ tar01_SOURCES += tar01_tar_xz.c tar01_tar_xz.h
 endif
 tar01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar01) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/include
-tar01_LDADD = -lrtemscpu -lz
+tar01_LDADD = $(RTEMS_ROOT)cpukit/librtemscpu.a $(RTEMS_ROOT)cpukit/libz.a $(LDADD)
 tar01.tar: Makefile
 	$(AM_V_GEN)rm -rf tar01_fs
 	$(AM_V_GEN)$(MKDIR_P) tar01_fs/home

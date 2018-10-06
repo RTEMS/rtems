@@ -4,13 +4,8 @@ include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
 
 project_lib_LIBRARIES =
-TMPINSTALL_FILES =
 
 project_lib_LIBRARIES += librtemscpu.a
-
-$(PROJECT_LIB)/librtemscpu.a: librtemscpu.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/librtemscpu.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/librtemscpu.a
 
 librtemscpu_a_SOURCES =
 librtemscpu_a_SOURCES += dev/i2c/eeprom.c
@@ -1807,37 +1802,21 @@ _SUBDIRS += libnetworking
 
 project_lib_LIBRARIES += libftpd.a
 
-$(PROJECT_LIB)/libftpd.a: libftpd.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpd.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libftpd.a
-
 libftpd_a_SOURCES =
 libftpd_a_SOURCES += ftpd/ftpd.c
 libftpd_a_SOURCES += ftpd/ftpd-init.c
 
 project_lib_LIBRARIES += libftpfs.a
 
-$(PROJECT_LIB)/libftpfs.a: libftpfs.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libftpfs.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libftpfs.a
-
 libftpfs_a_SOURCES =
 libftpfs_a_SOURCES += libnetworking/lib/ftpfs.c
 
 project_lib_LIBRARIES += libtftpfs.a
 
-$(PROJECT_LIB)/libtftpfs.a: libtftpfs.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtftpfs.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libtftpfs.a
-
 libtftpfs_a_SOURCES =
 libtftpfs_a_SOURCES += libnetworking/lib/tftpDriver.c
 
 project_lib_LIBRARIES += libtelnetd.a
-
-$(PROJECT_LIB)/libtelnetd.a: libtelnetd.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libtelnetd.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libtelnetd.a
 
 libtelnetd_a_SOURCES =
 libtelnetd_a_SOURCES += telnetd/check_passwd.c
@@ -1849,10 +1828,6 @@ libtelnetd_a_SOURCES += telnetd/telnetd-init.c
 if LIBDEBUGGER
 
 project_lib_LIBRARIES += libdebugger.a
-
-$(PROJECT_LIB)/libdebugger.a: libdebugger.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libdebugger.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libdebugger.a
 
 libdebugger_a_SOURCES =
 libdebugger_a_SOURCES += libdebugger/rtems-debugger-block.c
@@ -1867,10 +1842,6 @@ libdebugger_a_SOURCES += libdebugger/rtems-debugger-threads.c
 endif
 
 project_lib_LIBRARIES += libjffs2.a
-
-$(PROJECT_LIB)/libjffs2.a: libjffs2.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libjffs2.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libjffs2.a
 
 libjffs2_a_SOURCES =
 libjffs2_a_SOURCES += libfs/src/jffs2/src/build.c
@@ -1899,10 +1870,6 @@ libjffs2_a_CPPFLAGS += -I$(srcdir)/libfs/src/jffs2/include
 
 project_lib_LIBRARIES += libz.a
 
-$(PROJECT_LIB)/libz.a: libz.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libz.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libz.a
-
 libz_a_SOURCES =
 libz_a_SOURCES += zlib/adler32.c
 libz_a_SOURCES += zlib/compress.c
@@ -1924,10 +1891,6 @@ if LIBNETWORKING
 
 project_lib_LIBRARIES += libnfs.a
 
-$(PROJECT_LIB)/libnfs.a: libnfs.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libnfs.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libnfs.a
-
 libnfs_a_SOURCES =
 libnfs_a_SOURCES += libfs/src/nfsclient/proto/mount_prot_xdr.c
 libnfs_a_SOURCES += libfs/src/nfsclient/proto/nfs_prot_xdr.c
@@ -1937,10 +1900,6 @@ libnfs_a_SOURCES += libfs/src/nfsclient/src/sock_mbuf.c
 libnfs_a_SOURCES += libfs/src/nfsclient/src/xdr_mbuf.c
 
 project_lib_LIBRARIES += libpppd.a
-
-$(PROJECT_LIB)/libpppd.a: libpppd.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libpppd.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libpppd.a
 
 libpppd_a_SOURCES =
 libpppd_a_SOURCES += pppd/auth.c
@@ -1963,10 +1922,6 @@ libpppd_a_SOURCES += pppd/utils.c
 if HAS_PTHREADS
 
 project_lib_LIBRARIES += libmghttpd.a
-
-$(PROJECT_LIB)/libmghttpd.a: libmghttpd.a
-	$(INSTALL_DATA) $< $(PROJECT_LIB)/libmghttpd.a
-TMPINSTALL_FILES += $(PROJECT_LIB)/libmghttpd.a
 
 libmghttpd_a_SOURCES =
 libmghttpd_a_SOURCES += mghttpd/mongoose.c
