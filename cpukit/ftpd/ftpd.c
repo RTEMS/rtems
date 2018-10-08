@@ -1531,27 +1531,31 @@ command_pasv(FTPD_SessionInfo_t *info)
       syslog(LOG_ERR, "ftpd: Error binding PASV socket: %s", serr());
     else if (0 > listen(s, 1))
       syslog(LOG_ERR, "ftpd: Error listening on PASV socket: %s", serr());
-    else if(set_socket_timeout(s, info->idle))
+    else if (set_socket_timeout(s, info->idle))
     {
-      char buf[FTPD_BUFSIZE];
-      unsigned char const *ip, *p;
-
-      getsockname(s, (struct sockaddr *)&addr, &addrLen);
-      ip = (unsigned char const*)&(addr.sin_addr);
-      p  = (unsigned char const*)&(addr.sin_port);
-      snprintf(buf, FTPD_BUFSIZE, "Entering passive mode (%u,%u,%u,%u,%u,%u).",
-        ip[0], ip[1], ip[2], ip[3], p[0], p[1]);
-      send_reply(info, 227, buf);
-
-      info->pasv_socket = accept(s, (struct sockaddr *)&addr, &addrLen);
-      if (0 > info->pasv_socket)
-        syslog(LOG_ERR, "ftpd: Error accepting PASV connection: %s", serr());
-      else
+      if (0 == getsockname(s, (struct sockaddr *)&addr, &addrLen))
       {
-        close_socket(s);
-        s = -1;
-        err = 0;
+        char buf[FTPD_BUFSIZE];
+        unsigned char const *ip, *p;
+
+        ip = (unsigned char const*)&(addr.sin_addr);
+        p  = (unsigned char const*)&(addr.sin_port);
+        snprintf(buf, FTPD_BUFSIZE, "Entering passive mode (%u,%u,%u,%u,%u,%u).",
+          ip[0], ip[1], ip[2], ip[3], p[0], p[1]);
+        send_reply(info, 227, buf);
+
+        info->pasv_socket = accept(s, (struct sockaddr *)&addr, &addrLen);
+        if (0 > info->pasv_socket)
+          syslog(LOG_ERR, "ftpd: Error accepting PASV connection: %s", serr());
+        else
+        {
+          close_socket(s);
+          s = -1;
+          err = 0;
+        }
       }
+      else
+        syslog(LOG_ERR, "ftpd: Cannot get socket name: %s", serr());
     }
   }
   if(err)
