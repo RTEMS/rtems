@@ -522,7 +522,7 @@ task_pool_release(FTPD_SessionInfo_t* info)
  *   NONE
  */
 static void
-send_reply(FTPD_SessionInfo_t  *info, int code, char *text)
+send_reply(FTPD_SessionInfo_t  *info, int code, const char *text)
 {
   text = text != NULL ? text : "";
   fprintf(info->ctrl_fp, "%d %.70s\r\n", code, text);
@@ -1306,7 +1306,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
  *
  */
 static void
-command_cwd(FTPD_SessionInfo_t  *info, char *dir)
+command_cwd(FTPD_SessionInfo_t  *info, const char *dir)
 {
   if(!info->auth)
   {
@@ -1672,12 +1672,9 @@ split_command(char *buf, char **cmd, char **opts, char **args)
  *    NONE
  */
 static void
-exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
+exec_command(FTPD_SessionInfo_t *info, char *cmd, char *args)
 {
-  char fname[FTPD_BUFSIZE];
   int wrong_command = 0;
-
-  fname[0] = '\0';
 
   if (!strcmp("PORT", cmd))
   {
@@ -1689,33 +1686,27 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("RETR", cmd))
   {
-    strncpy(fname, args, 254);
-    command_retrieve(info, fname);
+    command_retrieve(info, args);
   }
   else if (!strcmp("STOR", cmd))
   {
-    strncpy(fname, args, 254);
-    command_store(info, fname);
+    command_store(info, args);
   }
   else if (!strcmp("LIST", cmd))
   {
-    strncpy(fname, args, 254);
-    command_list(info, fname, 1);
+    command_list(info, args, 1);
   }
   else if (!strcmp("NLST", cmd))
   {
-    strncpy(fname, args, 254);
-    command_list(info, fname, 0);
+    command_list(info, args, 0);
   }
   else if (!strcmp("MDTM", cmd))
   {
-    strncpy(fname, args, 254);
-    command_mdtm(info, fname);
+    command_mdtm(info, args);
   }
   else if (!strcmp("SIZE", cmd))
   {
-    strncpy(fname, args, 254);
-    command_size(info, fname);
+    command_size(info, args);
   }
   else if (!strcmp("SYST", cmd))
   {
@@ -1773,9 +1764,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
     {
       send_reply(info, 550, "Access denied.");
     }
-    else if (
-      strncpy(fname, args, 254) &&
-      unlink(fname) == 0)
+    else if (unlink(args) == 0)
     {
       send_reply(info, 257, "DELE successful.");
     }
@@ -1799,8 +1788,8 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
       else {
         char *c;
         c = strchr(args, ' ');
-        if((c != NULL) && (sscanf(args, "%o", &mask) == 1) && strncpy(fname, c+1, 254) 
-          && (chmod(fname, (mode_t)mask) == 0))
+        if((c != NULL) && (sscanf(args, "%o", &mask) == 1)
+          && (chmod(c + 1, (mode_t)mask) == 0))
           send_reply(info, 257, "CHMOD successful.");
         else
           send_reply(info, 550, "CHMOD failed.");
@@ -1815,9 +1804,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
     {
       send_reply(info, 550, "Access denied.");
     }
-    else if (
-      strncpy(fname, args, 254) &&
-      rmdir(fname) == 0)
+    else if (rmdir(args) == 0)
     {
       send_reply(info, 257, "RMD successful.");
     }
@@ -1832,9 +1819,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
     {
       send_reply(info, 550, "Access denied.");
     }
-    else if (
-      strncpy(fname, args, 254) &&
-      mkdir(fname, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
+    else if (mkdir(args, S_IRWXU | S_IRWXG | S_IRWXO) == 0)
     {
       send_reply(info, 257, "MKD successful.");
     }
@@ -1845,8 +1830,7 @@ exec_command(FTPD_SessionInfo_t *info, char* cmd, char* args)
   }
   else if (!strcmp("CWD", cmd))
   {
-    strncpy(fname, args, 254);
-    command_cwd(info, fname);
+    command_cwd(info, args);
   }
   else if (!strcmp("CDUP", cmd))
   {
