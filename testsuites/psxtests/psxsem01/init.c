@@ -193,6 +193,7 @@ static void test_sem_null(void)
   int val;
   struct timespec to;
 
+  /* This equality is important for POSIX_SEMAPHORE_VALIDATE_OBJECT() */
   rtems_test_assert( NULL == SEM_FAILED );
 
   errno = 0;

@@ -22,8 +22,6 @@
 
 #include <limits.h>
 
-RTEMS_STATIC_ASSERT(NULL == SEM_FAILED, sem_failed);
-
 /*
  *  11.2.1 Initialize an Unnamed Semaphore, P1003.1b-1993, p.219
  */
