@@ -117,7 +117,7 @@ char *telnet_get_pty(rtems_pty_context *pty, int socket)
   /* set a long polling interval to save CPU time */
   t.tv_sec=2;
   t.tv_usec=00000;
-  setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t));
+  (void)setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &t, sizeof(t));
 
   /* inform the client that we will echo */
   send_iac(pty, IAC_WILL, 1);

@@ -213,7 +213,7 @@ rtems_task_telnetd(void *task_argument)
     perror("telnetd:socket");
     rtems_task_exit();
   };
-  setsockopt(des_socket,SOL_SOCKET,SO_KEEPALIVE,&i,sizeof(i));
+  (void)setsockopt(des_socket,SOL_SOCKET,SO_KEEPALIVE,&i,sizeof(i));
 
   memset(&srv,0,sizeof(srv));
   srv.sin.sin_family=AF_INET;
