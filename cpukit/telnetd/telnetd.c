@@ -234,67 +234,43 @@ rtems_task_telnetd(void *task_argument)
    * was started from the console anyway ..
    */
   do {
-    if (ctx->config.keep_stdio) {
-      bool start = true;
-      char device_name [32];
+    arg = grab_a_Connection(ctx, des_socket, &srv, peername,
+      sizeof(peername));
 
-      ttyname_r( 1, device_name, sizeof( device_name));
-      if (ctx->config.login_check != NULL) {
-        start = rtems_shell_login_prompt(
-          stdin,
-          stderr,
-          device_name,
-          ctx->config.login_check
-        );
-      }
-      if (start) {
-        ctx->config.command( device_name, ctx->config.arg);
-      } else {
-        syslog(
-          LOG_AUTHPRIV | LOG_WARNING,
-          "telnetd: to many wrong passwords entered from %s",
-          device_name
-        );
-      }
-    } else {
-      arg = grab_a_Connection(ctx, des_socket, &srv, peername,
-        sizeof(peername));
+    if (arg == NULL) {
+      /* if something went wrong, sleep for some time */
+      sleep(10);
+      continue;
+    }
 
-      if (arg == NULL) {
-        /* if something went wrong, sleep for some time */
-        sleep(10);
-        continue;
+    strncpy(arg->peername, peername, sizeof(arg->peername));
+
+    task_id = telnetd_spawn_task(
+      arg->pty.name,
+      ctx->config.priority,
+      ctx->config.stack_size,
+      spawned_shell,
+      arg
+    );
+    if (task_id == RTEMS_ID_NONE) {
+      FILE *dummy;
+
+      if ( telnetd_spawn_task != telnetd_dflt_spawn ) {
+        fprintf(stderr,"Telnetd: Unable to spawn child task\n");
       }
 
-      strncpy(arg->peername, peername, sizeof(arg->peername));
+      /* hmm - the pty driver slot can only be
+       * released by opening and subsequently
+       * closing the PTY - this also closes
+       * the underlying socket. So we mock up
+       * a stream...
+       */
 
-      task_id = telnetd_spawn_task(
-        arg->pty.name,
-        ctx->config.priority,
-        ctx->config.stack_size,
-        spawned_shell,
-        arg
-      );
-      if (task_id == RTEMS_ID_NONE) {
-        FILE *dummy;
-
-        if ( telnetd_spawn_task != telnetd_dflt_spawn ) {
-          fprintf(stderr,"Telnetd: Unable to spawn child task\n");
-        }
-
-        /* hmm - the pty driver slot can only be
-         * released by opening and subsequently
-         * closing the PTY - this also closes
-         * the underlying socket. So we mock up
-         * a stream...
-         */
-
-        if ( !(dummy=fopen(arg->pty.name,"r+")) )
-          perror("Unable to dummy open the pty, losing a slot :-(");
-        release_a_Connection(ctx, arg->pty.name, peername, &dummy, 1);
-        free(arg);
-        sleep(2); /* don't accept connections too fast */
-      }
+      if ( !(dummy=fopen(arg->pty.name,"r+")) )
+        perror("Unable to dummy open the pty, losing a slot :-(");
+      release_a_Connection(ctx, arg->pty.name, peername, &dummy, 1);
+      free(arg);
+      sleep(2); /* don't accept connections too fast */
     }
   } while(1);
 
@@ -313,12 +289,12 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
   rtems_id task_id;
 
   if (config->command == NULL) {
-    fprintf(stderr, "telnetd setup with invalid command\n");
-    return RTEMS_IO_ERROR;
+    syslog(LOG_DAEMON | LOG_ERR, "telnetd: configuration with invalid command");
+    return RTEMS_INVALID_ADDRESS;
   }
 
   if (ctx->config.command != NULL) {
-    fprintf(stderr, "telnetd already started\n");
+    syslog(LOG_DAEMON | LOG_ERR, "telnetd: already started");
     return RTEMS_RESOURCE_IN_USE;
   }
 
@@ -353,19 +329,11 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
   );
   if (task_id == RTEMS_ID_NONE) {
     ctx->config.command = NULL;
-    return RTEMS_IO_ERROR;
+    syslog(LOG_DAEMON | LOG_ERR, "telnetd: cannot create server task");
+    return RTEMS_UNSATISFIED;
   }
 
-  /* Print status */
-  if (!ctx->config.keep_stdio) {
-    fprintf(
-      stderr,
-      "telnetd started with stacksize = %u and priority = %d\n",
-      (unsigned) ctx->config.stack_size,
-      (unsigned) ctx->config.priority
-    );
-  }
-
+  syslog(LOG_DAEMON | LOG_INFO, "telnetd: started successfully");
   return RTEMS_SUCCESSFUL;
 }
 

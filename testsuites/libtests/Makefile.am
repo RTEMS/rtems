@@ -1134,6 +1134,18 @@ tar03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tar03) \
 	$(support_includes)
 endif
 
+if NETTESTS
+if TEST_telnetd01
+lib_tests += telnetd01
+lib_screens += telnetd01/telnetd01.scn
+lib_docs += telnetd01/telnetd01.doc
+telnetd01_SOURCES = telnetd01/init.c
+telnetd01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_telnetd01) \
+	$(support_includes) -I$(RTEMS_SOURCE_ROOT)/cpukit/libnetworking
+telnetd01_LDADD = $(RTEMS_ROOT)cpukit/libtelnetd.a $(LDADD)
+endif
+endif
+
 if TEST_termios
 lib_tests += termios
 termios_SOURCES = termios/init.c
