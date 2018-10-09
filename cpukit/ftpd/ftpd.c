@@ -1872,7 +1872,6 @@ session(rtems_task_argument arg)
   while (1)
   {
     rtems_event_set set;
-    int rv;
 
     rtems_event_receive(FTPD_RTEMS_EVENT, RTEMS_EVENT_ANY, RTEMS_NO_TIMEOUT,
       &set);
@@ -1882,14 +1881,11 @@ session(rtems_task_argument arg)
         && chroot(ftpd_root) == 0);
 
     /*
-     * The chdir() must immediatly follow the chroot(), otherwise static
+     * The chdir() must immediately follow the chroot(), otherwise static
      * analysis tools may complain about a security issue.
-    */
-    rv = chroot_made ? chdir("/") : -1;
+     */
 
-    errno = 0;
-
-    if (rv == 0)
+    if (chroot_made && chdir("/") == 0)
     {
       send_reply(info, 220, FTPD_SERVER_MESSAGE);
 
