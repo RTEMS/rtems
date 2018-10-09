@@ -82,30 +82,8 @@ typedef union uni_sa {
 
 static int sockpeername(int sock, char *buf, int bufsz);
 
-rtems_id telnetd_dflt_spawn(
-  const char *name,
-  unsigned priority,
-  unsigned stackSize,
-  void (*fn)(void*),
-  void *fnarg
-);
-
 /***********************************************************/
 static telnetd_context telnetd_instance;
-
-/*
- * chrisj: this variable was global and with no declared interface in a header
- *         file and with no means to set it so I have stopped it being global;
- *         if this breaks any user they will have be to provide a formal
- *         interface to get this change reverted.
- */
-static const rtems_id (*telnetd_spawn_task)(
-  const char *,
-  unsigned,
-  unsigned,
-  void (*)(void*),
-  void *
-) = telnetd_dflt_spawn;
 
 static struct shell_args *grab_a_Connection(
   telnetd_context *ctx,
@@ -193,12 +171,39 @@ static int sockpeername(int sock, char *buf, int bufsz)
   return rval;
 }
 
+static rtems_id telnetd_spawn_task(
+  rtems_name name,
+  rtems_task_priority priority,
+  size_t stack_size,
+  rtems_task_entry entry,
+  void *arg
+)
+{
+  rtems_status_code sc;
+  rtems_id task_id;
+
+  sc = rtems_task_create(
+    name,
+    priority,
+    stack_size,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_FLOATING_POINT,
+    &task_id
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return RTEMS_ID_NONE;
+  }
+
+  (void)rtems_task_start(task_id, entry, (rtems_task_argument) arg);
+  return task_id;
+}
+
 static void
-spawned_shell(void *arg);
+spawned_shell(rtems_task_argument arg);
 
 /***********************************************************/
 static void
-rtems_task_telnetd(void *task_argument)
+telnetd_server_task(rtems_task_argument targ)
 {
   int                des_socket;
   uni_sa             srv;
@@ -207,7 +212,7 @@ rtems_task_telnetd(void *task_argument)
   int                size_adr;
   struct shell_args *arg = NULL;
   rtems_id           task_id;
-  telnetd_context   *ctx = task_argument;
+  telnetd_context   *ctx = (telnetd_context *) targ;
 
   if ((des_socket=socket(PF_INET,SOCK_STREAM,0))<0) {
     perror("telnetd:socket");
@@ -246,7 +251,7 @@ rtems_task_telnetd(void *task_argument)
     strncpy(arg->peername, peername, sizeof(arg->peername));
 
     task_id = telnetd_spawn_task(
-      arg->pty.name,
+      rtems_build_name('T', 'N', 'T', 'a'),
       ctx->config.priority,
       ctx->config.stack_size,
       spawned_shell,
@@ -254,10 +259,6 @@ rtems_task_telnetd(void *task_argument)
     );
     if (task_id == RTEMS_ID_NONE) {
       FILE *dummy;
-
-      if ( telnetd_spawn_task != telnetd_dflt_spawn ) {
-        fprintf(stderr,"Telnetd: Unable to spawn child task\n");
-      }
 
       /* hmm - the pty driver slot can only be
        * released by opening and subsequently
@@ -319,12 +320,11 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
     ctx->config.client_maximum = 5;
   }
 
-  /* Spawn task */
   task_id = telnetd_spawn_task(
-    "TNTD",
+    rtems_build_name('T', 'N', 'T', 'D'),
     ctx->config.priority,
-    ctx->config.stack_size,
-    rtems_task_telnetd,
+    RTEMS_MINIMUM_STACK_SIZE,
+    telnetd_server_task,
     ctx
   );
   if (task_id == RTEMS_ID_NONE) {
@@ -339,13 +339,13 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
 
 /* utility wrapper */
 static void
-spawned_shell(void *targ)
+spawned_shell(rtems_task_argument targ)
 {
   rtems_status_code    sc;
   FILE                *nstd[3]={0};
   FILE                *ostd[3]={ stdin, stdout, stderr };
   int                  i=0;
-  struct shell_args  *arg = targ;
+  struct shell_args  *arg = (struct shell_args *) targ;
   telnetd_context    *ctx = arg->ctx;
   bool login_failed = false;
   bool start = true;
@@ -406,60 +406,4 @@ spawned_shell(void *targ)
 cleanup:
   release_a_Connection(ctx, arg->pty.name, arg->peername, nstd, i);
   free(arg);
-}
-
-struct wrap_delete_args {
-  void (*t)(void *);
-  void           *a;
-};
-
-static rtems_task
-wrap_delete(rtems_task_argument arg)
-{
-  struct wrap_delete_args     *pwa = (struct wrap_delete_args *)arg;
-  register void              (*t)(void *) = pwa->t;
-  register void               *a   = pwa->a;
-
-  /* free argument before calling function (which may never return if
-   * they choose to delete themselves)
-   */
-  free(pwa);
-  t(a);
-  rtems_task_exit();
-}
-
-rtems_id
-telnetd_dflt_spawn(const char *name, unsigned int priority, unsigned int stackSize, void (*fn)(void *), void* fnarg)
-{
-  rtems_status_code        sc;
-  rtems_id                 task_id = RTEMS_ID_NONE;
-  char                     nm[4] = {'X','X','X','X' };
-  struct wrap_delete_args *pwa = malloc(sizeof(*pwa));
-
-  strncpy(nm, name, 4);
-
-  if ( !pwa ) {
-    perror("Telnetd: no memory\n");
-    return RTEMS_ID_NONE;
-  }
-
-  pwa->t = fn;
-  pwa->a = fnarg;
-
-  if ((sc=rtems_task_create(
-    rtems_build_name(nm[0], nm[1], nm[2], nm[3]),
-      (rtems_task_priority)priority,
-      stackSize,
-      RTEMS_DEFAULT_MODES,
-      RTEMS_DEFAULT_ATTRIBUTES | RTEMS_FLOATING_POINT,
-      &task_id)) ||
-    (sc=rtems_task_start(
-      task_id,
-      wrap_delete,
-      (rtems_task_argument)pwa))) {
-        free(pwa);
-        rtems_error(sc,"Telnetd: spawning task failed");
-        return RTEMS_ID_NONE;
-  }
-  return task_id;
 }
