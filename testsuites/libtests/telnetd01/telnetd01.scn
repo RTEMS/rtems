@@ -4,9 +4,8 @@
 *** TEST BUILD: RTEMS_NETWORKING
 *** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 9670d7541e0621915e521fe76e7bb33de8cee661, Newlib d13c84eb07e35984bf7a974cd786a6cdac29e6b9)
 syslog: telnetd: configuration with invalid command
-Telnetd: spawning task failed (status: RTEMS_INVALID_PRIORITY)
-syslog: telnetd: cannot create server task
+syslog: telnetd: cannot create session task
 syslog: telnetd: started successfully
-syslog: telnetd: already started
+syslog: telnetd: cannot bind server socket
 
 *** END OF TEST TELNETD 1 ***

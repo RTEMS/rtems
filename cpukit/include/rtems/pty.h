@@ -34,7 +34,16 @@ typedef struct {
   char                          name[sizeof("/dev/pty18446744073709551615")];
 } rtems_pty_context;
 
-char *telnet_get_pty(rtems_pty_context *ctx, int socket);
+const char *rtems_pty_initialize(rtems_pty_context *pty, uintptr_t unique);
+
+RTEMS_INLINE_ROUTINE const char *rtems_pty_get_path(const rtems_pty_context *pty)
+{
+  return pty->name;
+}
+
+void rtems_pty_close_socket(rtems_pty_context *pty);
+
+void rtems_pty_set_socket(rtems_pty_context *pty, int socket);
 
 #ifdef __cplusplus
 }

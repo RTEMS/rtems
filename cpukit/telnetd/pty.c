@@ -94,25 +94,36 @@ int send_iac(rtems_pty_context *pty, unsigned char mode, unsigned char option)
   return write(pty->socket, buf, sizeof(buf));
 }
 
-/* This procedure returns the devname for a pty slot free.
- * If not slot availiable (field socket>=0)
- *  then the socket argument is closed
- */
-
-char *telnet_get_pty(rtems_pty_context *pty, int socket)
+const char *rtems_pty_initialize(rtems_pty_context *pty, uintptr_t unique)
 {
   rtems_status_code sc;
-  struct timeval t;
 
   memset(pty, 0, sizeof(*pty));
-  snprintf(pty->name, sizeof(pty->name), "/dev/pty%" PRIuPTR, (uintptr_t)pty);
+  (void)snprintf(pty->name, sizeof(pty->name), "/dev/pty%" PRIuPTR, unique);
   rtems_termios_device_context_initialize(&pty->base, "pty");
-  pty->socket = socket;
+  pty->socket = -1;
   sc = rtems_termios_device_install(pty->name, &pty_handler, NULL, &pty->base);
   if (sc != RTEMS_SUCCESSFUL) {
-    close(socket);
     return NULL;
   }
+
+  return pty->name;
+}
+
+void rtems_pty_close_socket(rtems_pty_context *pty)
+{
+  if (pty->socket >= 0) {
+    (void)close(pty->socket);
+    pty->socket = -1;
+  }
+}
+
+void rtems_pty_set_socket(rtems_pty_context *pty, int socket)
+{
+  struct timeval t;
+
+  rtems_pty_close_socket(pty);
+  pty->socket = socket;
 
   /* set a long polling interval to save CPU time */
   t.tv_sec=2;
@@ -121,8 +132,6 @@ char *telnet_get_pty(rtems_pty_context *pty, int socket)
 
   /* inform the client that we will echo */
   send_iac(pty, IAC_WILL, 1);
-
-  return pty->name;
 }
 
 /*-----------------------------------------------------------*/
