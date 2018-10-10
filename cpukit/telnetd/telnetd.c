@@ -81,9 +81,6 @@ typedef union uni_sa {
   struct sockaddr     sa;
 } uni_sa;
 
-/***********************************************************/
-static telnetd_context telnetd_instance;
-
 static telnetd_session *grab_a_Connection(telnetd_context *ctx)
 {
   telnetd_session *session;
@@ -245,6 +242,8 @@ static void telnetd_destroy_context(telnetd_context *ctx)
   if (ctx->server_socket >= 0) {
     close(ctx->server_socket);
   }
+
+  free(ctx);
 }
 
 static rtems_status_code telnetd_create_server_socket(telnetd_context *ctx)
@@ -288,7 +287,7 @@ static rtems_status_code telnetd_create_server_socket(telnetd_context *ctx)
 
 rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
 {
-  telnetd_context *ctx = &telnetd_instance;
+  telnetd_context *ctx;
   rtems_id task_id;
   rtems_status_code sc;
 
@@ -297,12 +296,14 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
     return RTEMS_INVALID_ADDRESS;
   }
 
-  if (ctx->config.command != NULL) {
-    syslog(LOG_DAEMON | LOG_ERR, "telnetd: already started");
-    return RTEMS_RESOURCE_IN_USE;
+  ctx = calloc(1, sizeof(*ctx));
+  if (ctx == NULL) {
+    syslog(LOG_DAEMON | LOG_ERR, "telnetd: cannot allocate server context");
+    return RTEMS_UNSATISFIED;
   }
 
   ctx->config = *config;
+  ctx->server_socket = -1;
 
   /* Check priority */
 #ifdef RTEMS_NETWORKING
