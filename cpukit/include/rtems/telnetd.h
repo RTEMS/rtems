@@ -92,6 +92,13 @@ typedef struct {
    * Use 0 for the default value.
    */
   uint16_t client_maximum;
+
+  /**
+   * @brief Server port number in host byte order.
+   *
+   * Use 0 for the default value.
+   */
+  uint16_t port;
 } rtems_telnetd_config_table;
 
 /**
@@ -100,7 +107,7 @@ typedef struct {
  * @retval RTEMS_SUCCESSFUL Successful operation.
  * @retval RTEMS_INVALID_ADDRESS The command function in the configuration is
  *   @c NULL.
- * @retval RTEMS_RESOURCE_IN_USE The Telnet server was already started.
+ * @retval RTEMS_RESOURCE_IN_USE The server port is already in use.
  * @retval RTEMS_NOT_IMPLEMENTED The keep stdio configuration option is true.
  * @retval RTEMS_UNSATISFIED Not enough resources to start the Telnet server or
  *   task priority in configuration is invalid.

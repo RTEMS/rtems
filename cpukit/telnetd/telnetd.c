@@ -44,6 +44,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <inttypes.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -51,7 +52,6 @@
 #include <syslog.h>
 
 #include <rtems.h>
-#include <rtems/error.h>
 #include <rtems/pty.h>
 #include <rtems/shell.h>
 #include <rtems/telnetd.h>
@@ -295,7 +295,7 @@ static rtems_status_code telnetd_create_server_socket(telnetd_context *ctx)
 
   memset(&srv, 0, sizeof(srv));
   srv.sin.sin_family = AF_INET;
-  srv.sin.sin_port = htons(23);
+  srv.sin.sin_port = htons(ctx->config.port);
   address_len = sizeof(srv.sin);
 
   if (bind(ctx->server_socket, &srv.sa, address_len) != 0) {
@@ -415,6 +415,10 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
     ctx->config.stack_size = (size_t)32 * 1024;
   }
 
+  if (ctx->config.port == 0) {
+    ctx->config.port = 23;
+  }
+
   sc = telnetd_create_server_socket(ctx);
   if (sc != RTEMS_SUCCESSFUL) {
     telnetd_destroy_context(ctx);
@@ -447,6 +451,9 @@ rtems_status_code rtems_telnetd_start(const rtems_telnetd_config_table* config)
     (rtems_task_argument) ctx
   );
 
-  syslog(LOG_DAEMON | LOG_INFO, "telnetd: started successfully");
+  syslog(
+    LOG_DAEMON | LOG_INFO,
+    "telnetd: started successfully on port %" PRIu16, ctx->config.port
+  );
   return RTEMS_SUCCESSFUL;
 }
