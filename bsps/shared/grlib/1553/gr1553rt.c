@@ -147,7 +147,6 @@ static int gr1553rt_list_reg(struct gr1553rt_list *list)
 	return -1;
 }
 
-#if 0 /* unused for now */
 /* Unregister List from device */
 static void gr1553rt_list_unreg(struct gr1553rt_list *list)
 {
@@ -156,7 +155,6 @@ static void gr1553rt_list_unreg(struct gr1553rt_list *list)
 	priv->lists[list->listid] = NULL;
 	list->listid = -1;
 }
-#endif
 
 static int gr1553rt_bdid(void *rt, struct gr1553rt_sw_bd *bd)
 {
@@ -240,7 +238,7 @@ int gr1553rt_list_init
 {
 	struct gr1553rt_priv *priv = rt;
 	size_t size;
-	int i;
+	int i, malloc_used;
 	struct gr1553rt_sw_bd *swbd;
 	unsigned short index;
 	struct gr1553rt_list *list;
@@ -251,6 +249,7 @@ int gr1553rt_list_init
 	 * If the IN/OUT plist argument points to NULL a list
 	 * dynamically allocated here.
 	 */
+	malloc_used = 0;
 	list = *plist;
 	if ( list == NULL ) {
 		/* Dynamically allocate LIST */
@@ -258,20 +257,27 @@ int gr1553rt_list_init
 			(cfg->bd_cnt * sizeof(list->bds[0]));
 		list = grlib_malloc(size);
 		if ( list == NULL )
-			return -1;
+			return -1; /* Out of Memory */
 		*plist = list;
+		malloc_used = 1;
 	}
 
 	list->rt = rt;
 	list->subadr = -1;
 	list->listid = gr1553rt_list_reg(list);
-	if ( list->listid == -1 )
+	if ( list->listid == -1 ) {
+		if (malloc_used)
+			free(list);
 		return -2; /* Too many lists */
+	}
 	list->cfg = cfg;
 	list->bd_cnt = cfg->bd_cnt;
 
 	/* Allocate all BDs needed by list */
 	if ( gr1553rt_bd_alloc(rt, &swbd, list->bd_cnt) ) {
+		gr1553rt_list_unreg(list);
+		if (malloc_used)
+			free(list);
 		return -3; /* Too few descriptors */
 	}
 
