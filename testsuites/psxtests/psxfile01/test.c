@@ -130,6 +130,29 @@ void stat_a_file(
 
 }
 
+static void test_open_directory(void)
+{
+  static const char file[] = "somefile";
+  int status;
+  int fd;
+
+  fd = open( file, O_CREAT, S_IRWXU );
+  rtems_test_assert( fd >= 0 );
+
+  status = close( fd );
+  rtems_test_assert( status == 0 );
+
+#ifdef O_DIRECTORY
+  errno = 0;
+  fd = open( file, O_DIRECTORY, S_IRWXU );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == ENOTDIR );
+#endif
+
+  status = unlink( file );
+  rtems_test_assert( status == 0 );
+}
+
 /*
  *  Main entry point of the test
  */
@@ -160,6 +183,8 @@ int main(
   rtems_time_of_day time;
 
   TEST_BEGIN();
+
+  test_open_directory();
 
   /*
    *  Grab the maximum size of an in-memory file.
