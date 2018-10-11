@@ -371,6 +371,15 @@ tmfine01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tmfine01) \
 	$(support_includes)
 endif
 
+if TEST_tmonetoone
+tm_tests += tmonetoone
+tm_screens += tmonetoone/tmonetoone.scn
+tm_docs += tmonetoone/tmonetoone.doc
+tmonetoone_SOURCES = tmonetoone/init.c
+tmonetoone_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tmonetoone) \
+	$(support_includes)
+endif
+
 if TEST_tmoverhd
 tm_tests += tmoverhd
 tm_docs += tmoverhd/tmoverhd.doc

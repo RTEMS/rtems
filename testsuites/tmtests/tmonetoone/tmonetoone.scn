@@ -1,0 +1,19 @@
+*** BEGIN OF TEST TMONETOONE ***
+*** TEST VERSION: 5.0.0.629faf95046cddedc161ba9bc43fda925ca04ee5
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD:
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 9670d7541e0621915e521fe76e7bb33de8cee661, Newlib d13c84eb07e35984bf7a974cd786a6cdac29e6b9)
+event
+a 252994
+b 252994
+self-contained binary semaphore
+a 210823
+b 210822
+Classic binary semaphore (FIFO)
+a 172056
+b 172055
+Classic binary semaphore (priority)
+a 165889
+b 165888
+
+*** END OF TEST TMONETOONE ***

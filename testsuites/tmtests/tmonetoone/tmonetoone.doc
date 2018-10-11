@@ -1,0 +1,16 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: tmonetoone
+
+directives:
+
+  - rtems_event_send()
+  - rtems_event_receive()
+  - rtems_semaphore_obtain()
+  - rtems_semaphore_release()
+  - rtems_binary_semaphore_post()
+  - rtems_binary_semaphore_wait()
+
+concepts:
+
+  - Compare performance of different task/ISR synchronization primitives.
