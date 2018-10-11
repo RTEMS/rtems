@@ -1974,3 +1974,13 @@ libmghttpd_a_SOURCES += mghttpd/mongoose.c
 endif
 
 endif
+
+if HACK_TO_AVOID_LONG_ARG_LIST
+
+librtemscpu.a: $(librtemscpu_a_OBJECTS) $(librtemscpu_a_DEPENDENCIES) $(EXTRA_librtemscpu_a_DEPENDENCIES)
+	-rm -f librtemscpu.a librtemscpu.txt
+	for i in $(librtemscpu_a_OBJECTS) ; do echo "$$i" >>librtemscpu.txt ; done
+	$(librtemscpu_a_AR) librtemscpu.a @librtemscpu.txt $(librtemscpu_a_LIBADD)
+	$(RANLIB) librtemscpu.a
+
+endif

@@ -39,6 +39,20 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
 AC_PROG_RANLIB
 
+AC_MSG_CHECKING([for a need to avoid a long argument list])
+
+hack_to_avoid_long_arg_list=no
+case "${build_os}" in
+  *cygwin*|*mingw*|*msys*)
+     hack_to_avoid_long_arg_list=yes
+     ;;
+   *)
+     ;;
+esac
+
+AC_MSG_RESULT([${hack_to_avoid_long_arg_list}])
+AM_CONDITIONAL([HACK_TO_AVOID_LONG_ARG_LIST], [test "${hack_to_avoid_long_arg_list}" = yes])
+
 RTEMS_CHECK_NEWLIB
 
 # BSD-isms, used throughout the sources
