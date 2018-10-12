@@ -16,6 +16,8 @@
 #include "config.h"
 #endif
 
+#include <sched.h>
+
 #include <rtems.h>
 #include <rtems/test.h>
 #include <rtems/thread.h>
@@ -25,6 +27,7 @@
 const char rtems_test_name[] = "TMONETOONE";
 
 typedef enum {
+  TEST_YIELD,
   TEST_EVENTS,
   TEST_BSEM,
   TEST_CLASSIC_FIFO_BSEM,
@@ -50,6 +53,27 @@ typedef struct {
 } test_context;
 
 static test_context test_instance;
+
+static void test_yield(task_context *tc)
+{
+  rtems_event_set events;
+  uint32_t counter;
+
+  (void)rtems_event_receive(
+    RTEMS_EVENT_0,
+    RTEMS_WAIT | RTEMS_EVENT_ALL,
+    RTEMS_NO_TIMEOUT,
+    &events
+  );
+
+  counter = 0;
+
+  while (true) {
+    (void)sched_yield();
+    ++counter;
+    tc->counter = counter;
+  }
+}
 
 static void test_events(task_context *tc)
 {
@@ -133,6 +157,9 @@ static void worker_task(rtems_task_argument arg)
   tc = (task_context *) arg;
 
   switch (tc->variant) {
+    case TEST_YIELD:
+      test_yield(tc);
+      break;
     case TEST_EVENTS:
       test_events(tc);
       break;
@@ -190,6 +217,7 @@ static void create_task(task_context *tc)
 }
 
 static const char * const variant_names[] = {
+  "yield",
   "event",
   "self-contained binary semaphore",
   "Classic binary semaphore (FIFO)",
@@ -248,6 +276,15 @@ static void Init(rtems_task_argument arg)
   ctx->b.other_classic_fifo_bsem = ctx->a.classic_fifo_bsem;
   ctx->b.other_classic_prio_bsem = ctx->a.classic_prio_bsem;
 
+  prepare(ctx, TEST_YIELD);
+
+  sc = rtems_event_send(ctx->a.task, RTEMS_EVENT_0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_event_send(ctx->b.task, RTEMS_EVENT_0);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  run(ctx);
   prepare(ctx, TEST_EVENTS);
 
   sc = rtems_event_send(ctx->a.task, RTEMS_EVENT_0);
