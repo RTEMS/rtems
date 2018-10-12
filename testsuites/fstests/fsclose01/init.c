@@ -379,7 +379,7 @@ static void worker_task(rtems_task_argument arg)
         rtems_test_assert(rv == 0);
         break;
       case ACTION_LSEEK:
-        off = lseek(ctx->fd, off, SEEK_SET);
+        off = lseek(ctx->fd, 0, SEEK_SET);
         rtems_test_assert(off == 0);
         break;
       case ACTION_READ:
