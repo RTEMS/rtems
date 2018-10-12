@@ -34,8 +34,6 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  rtems_status_code status;
-
   Print_Warning();
 
   TEST_BEGIN();
