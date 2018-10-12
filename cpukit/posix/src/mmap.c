@@ -219,8 +219,8 @@ void *mmap(
   } else if ( map_private ) {
     /* private mappings of shared memory do not need special treatment. */
     is_shared_shm = false;
-    posix_memalign( &mapping->addr, PAGE_SIZE, len );
-    if ( !mapping->addr ) {
+    err = posix_memalign( &mapping->addr, PAGE_SIZE, len );
+    if ( err != 0 ) {
       free( mapping );
       errno = ENOMEM;
       return MAP_FAILED;
