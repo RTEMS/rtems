@@ -416,7 +416,7 @@ int gr1553rt_bd_update(
 		}
 		*dptr = (uint16_t *)tmp;
 	}
-	SPIN_LOCK_IRQ(&priv->devlock, irqflags);
+	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
 	return 0;
 }
