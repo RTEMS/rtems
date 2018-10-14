@@ -19,7 +19,6 @@
 #ifndef _RTEMS_POSIX_PTHREAD_H
 #define _RTEMS_POSIX_PTHREAD_H
 
-#include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 #include <rtems/score/thread.h>
 
@@ -38,6 +37,8 @@ extern "C" {
 /**@{**/
 
 extern const size_t _Configuration_POSIX_Minimum_stack_size;
+
+extern const uint32_t _Configuration_POSIX_Maximum_threads;
 
 /**
  * @brief POSIX threads initialize user threads body.

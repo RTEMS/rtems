@@ -103,7 +103,7 @@ static void _POSIX_signals_Manager_Initialization(void)
   uint32_t   signo;
   uint32_t   maximum_queued_signals;
 
-  maximum_queued_signals = Configuration_POSIX_API.maximum_queued_signals;
+  maximum_queued_signals = _Configuration_POSIX_Maximum_queued_signals;
 
   memcpy(
     _POSIX_signals_Vectors,

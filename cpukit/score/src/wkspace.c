@@ -25,6 +25,7 @@
 #include <rtems/score/percpudata.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/tls.h>
+#include <rtems/posix/pthread.h>
 #include <rtems/config.h>
 
 #include <string.h>
@@ -54,7 +55,7 @@ static uint32_t _Workspace_Get_maximum_thread_count( void )
 
 #if defined(RTEMS_POSIX_API)
   thread_count += rtems_resource_maximum_per_allocation(
-    Configuration_POSIX_API.maximum_threads
+    _Configuration_POSIX_Maximum_threads
   );
 #endif
 

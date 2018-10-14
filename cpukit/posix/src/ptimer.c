@@ -62,8 +62,7 @@ static void _POSIX_Timer_Manager_initialization(void)
     &_POSIX_Timer_Information,  /* object information table */
     OBJECTS_POSIX_API,          /* object API */
     OBJECTS_POSIX_TIMERS,       /* object class */
-    Configuration_POSIX_API.maximum_timers,
-                                /* maximum objects of this class */
+    _Configuration_POSIX_Maximum_timers,
     sizeof( POSIX_Timer_Control ),
                                 /* size of this object's control block */
     false,                      /* true if names for this object are strings */

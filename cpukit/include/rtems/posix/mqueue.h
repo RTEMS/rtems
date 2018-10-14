@@ -61,6 +61,8 @@ typedef struct {
    int                         oflag;
 }  POSIX_Message_queue_Control;
 
+extern const uint32_t _Configuration_POSIX_Maximum_message_queues;
+
 /** @} */
 
 #ifdef __cplusplus

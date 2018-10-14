@@ -46,6 +46,8 @@ typedef struct {
    uint32_t        open_count;
 }  POSIX_Semaphore_Control;
 
+extern const uint32_t _Configuration_POSIX_Maximum_named_semaphores;
+
 /** @} */
 
 #ifdef __cplusplus

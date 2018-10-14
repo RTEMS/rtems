@@ -46,70 +46,10 @@ typedef struct {
   int       stack_size;
 } posix_initialization_threads_table;
 
-/**
- *  The following records define the POSIX Configuration Table.
- *  The information contained in this table is required in all
- *  RTEMS systems which include POSIX threads support, whether
- *  single or multiprocessor.  This table primarily defines the
- *  following:
- *
- *     + required number of each object type
- */
-typedef struct {
-  /**
-   * This field contains the maximum number of POSIX API
-   * threads which are configured for this application.
-   */
-  uint32_t                            maximum_threads;
+extern posix_initialization_threads_table * const
+  _Configuration_POSIX_Initialization_threads;
 
-  /**
-   * This field contains the maximum number of POSIX API
-   * timers which are configured for this application.
-   */
-  uint32_t                            maximum_timers;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * queued signals which are configured for this application.
-   */
-  uint32_t                            maximum_queued_signals;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * message queues which are configured for this application.
-   */
-  uint32_t                            maximum_message_queues;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * semaphores which are configured for this application.
-   */
-  uint32_t                            maximum_semaphores;
-
-  /**
-   * Maximum configured number of POSIX Shared memory objects.
-   */
-  uint32_t                            maximum_shms;
-
-  /**
-   * This field contains the number of POSIX API Initialization
-   * threads listed in @a User_initialization_thread_table.
-   */
-  uint32_t                            number_of_initialization_threads;
-
-  /**
-   * This field contains the list of POSIX API Initialization threads.
-   */
-  posix_initialization_threads_table *User_initialization_threads_table;
-} posix_api_configuration_table;
-
-/**
- * @brief POSIX API configuration table.
- *
- * This is the POSIX API Configuration Table expected to be generated
- * by confdefs.h.
- */
-extern posix_api_configuration_table Configuration_POSIX_API;
+extern const size_t _Configuration_POSIX_Initialization_thread_count;
 
 /**@}*/
 #ifdef __cplusplus

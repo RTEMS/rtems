@@ -51,8 +51,7 @@ static void _POSIX_Message_queue_Manager_initialization(void)
     &_POSIX_Message_queue_Information, /* object information table */
     OBJECTS_POSIX_API,                 /* object API */
     OBJECTS_POSIX_MESSAGE_QUEUES,      /* object class */
-    Configuration_POSIX_API.maximum_message_queues,
-                                /* maximum objects of this class */
+    _Configuration_POSIX_Maximum_message_queues,
     sizeof( POSIX_Message_queue_Control ),
                                 /* size of this object's control block */
     true,                       /* true if names for this object are strings */

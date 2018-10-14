@@ -32,8 +32,7 @@ static void _POSIX_Shm_Manager_initialization( void )
     &_POSIX_Shm_Information,    /* object information table */
     OBJECTS_POSIX_API,          /* object API */
     OBJECTS_POSIX_SHMS,         /* object class */
-    Configuration_POSIX_API.maximum_shms,
-                                /* maximum objects of this class */
+    _Configuration_POSIX_Maximum_shms,
     sizeof( POSIX_Shm_Control ),
                                 /* size of this object's control block */
     true,                       /* true if names for this object are strings */

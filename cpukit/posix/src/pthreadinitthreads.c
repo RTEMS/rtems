@@ -41,8 +41,8 @@ void _POSIX_Threads_Initialize_user_threads_body(void)
   pthread_t                           thread_id;
   pthread_attr_t                      attr;
 
-  user_threads = Configuration_POSIX_API.User_initialization_threads_table;
-  maximum      = Configuration_POSIX_API.number_of_initialization_threads;
+  user_threads = _Configuration_POSIX_Initialization_threads;
+  maximum      = _Configuration_POSIX_Initialization_thread_count;
 
   if ( !user_threads )
     return;

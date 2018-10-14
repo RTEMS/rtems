@@ -50,6 +50,8 @@ typedef struct {
   struct timespec   time;       /* Time at which the timer was started   */
 } POSIX_Timer_Control;
 
+extern const uint32_t _Configuration_POSIX_Maximum_timers;
+
 /** @} */
 
 #ifdef __cplusplus

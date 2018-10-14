@@ -31,5 +31,7 @@ typedef struct {
   siginfo_t   Info;
 }  POSIX_signals_Siginfo_node;
 
+extern const uint32_t _Configuration_POSIX_Maximum_queued_signals;
+
 #endif
 /* end of file */

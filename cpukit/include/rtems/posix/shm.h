@@ -18,6 +18,8 @@
 #include <rtems/score/object.h>
 #include <rtems/score/threadq.h>
 
+#include <sys/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -123,6 +125,8 @@ typedef struct {
    time_t               mtime;
    time_t               ctime;
 } POSIX_Shm_Control;
+
+extern const uint32_t _Configuration_POSIX_Maximum_shms;
 
 /**
  * @brief object_create operation for shm objects stored in RTEMS Workspace.
