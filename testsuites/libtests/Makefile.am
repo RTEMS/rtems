@@ -487,7 +487,8 @@ dl06-o1.o: dl06/dl06-o1.c Makefile
 dl06-o2.o: dl06/dl06-o2.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl06.rap: dl06.pre dl06-o1.o dl06-o2.o
-	$(AM_V_GEN)rtems-ld -r $(RTEMS_BUILD_ROOT) -O rap -b $< -e rtems_main -s \
+	$(AM_V_GEN)rtems-ld -r $(RTEMS_BUILD_ROOT) -c "$(CPU_CFLAGS)" \
+	  -O rap -b $< -e rtems_main -s \
 	 -o $@ $(filter-out dl06.pre,$+) -lm
 dl06.tar: dl06.rap
 	@rm -f $@
