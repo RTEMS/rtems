@@ -32,6 +32,10 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/posix/key.h>
+#include <rtems/posix/semaphore.h>
+
+#include <limits.h>
 
 #ifdef CONFIGURE_DISABLE_BSP_SETTINGS
   #undef BSP_DEFAULT_UNIFIED_WORK_AREAS
@@ -1932,6 +1936,10 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS \
       rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
   #endif
+  #if !defined(CONFIGURE_MAXIMUM_POSIX_SEMAPHORES)
+    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
 
   #ifdef RTEMS_POSIX_API
     #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
@@ -1950,10 +1958,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 */
     #if !defined(CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES)
       #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_SEMAPHORES)
-      #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
     #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_SHMS)
@@ -2256,8 +2260,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  */
 /**@{*/
 
-#include <rtems/posix/key.h>
-
 /**
  * This configuration parameter specifies the maximum number of
  * POSIX API keys.
@@ -2297,30 +2299,44 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         * sizeof(POSIX_Keys_Key_value_pair)))
 
 /*
+ * Account for the object control structures plus the name
+ * of the object to be duplicated.
+ */
+#define _Configure_POSIX_Named_Object_RAM(_number, _size) \
+  (_Configure_Object_RAM(_number, _size) \
+    + _Configure_Max_Objects(_number) \
+      * _Configure_From_workspace(_POSIX_PATH_MAX + 1))
+
+/**
+ * This configuration parameter specifies the maximum number of
+ * POSIX API semaphores.
+ */
+#ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+  #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
+#endif
+
+/*
+ * This macro is calculated to specify the memory required for
+ * POSIX API semaphores.
+ */
+#define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
+  _Configure_POSIX_Named_Object_RAM( \
+     _semaphores, sizeof(POSIX_Semaphore_Control) )
+
+/*
  *  The rest of the POSIX threads API features are only available when
  *  POSIX is enabled.
  */
 #ifdef RTEMS_POSIX_API
   #include <sys/types.h>
   #include <signal.h>
-  #include <limits.h>
   #include <mqueue.h>
   #include <rtems/posix/mqueue.h>
   #include <rtems/posix/psignal.h>
   #include <rtems/posix/pthread.h>
-  #include <rtems/posix/semaphore.h>
   #include <rtems/posix/shm.h>
   #include <rtems/posix/threadsup.h>
   #include <rtems/posix/timer.h>
-
-  /*
-   * Account for the object control structures plus the name
-   * of the object to be duplicated.
-   */
-  #define _Configure_POSIX_Named_Object_RAM(_number, _size) \
-    (_Configure_Object_RAM(_number, _size) \
-      + _Configure_Max_Objects(_number) \
-        * _Configure_From_workspace(_POSIX_PATH_MAX + 1))
 
   /**
    * This configuration parameter specifies the maximum number of
@@ -2376,22 +2392,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(_message_queues) \
     _Configure_POSIX_Named_Object_RAM( \
        _message_queues, sizeof(POSIX_Message_queue_Control) )
-
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API semaphores.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
-    #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 0
-  #endif
-
-  /*
-   * This macro is calculated to specify the memory required for
-   * POSIX API semaphores.
-   */
-  #define _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES(_semaphores) \
-    _Configure_POSIX_Named_Object_RAM( \
-       _semaphores, sizeof(POSIX_Semaphore_Control) )
 
   /**
    * Configure the maximum number of POSIX shared memory objects.
@@ -2559,8 +2559,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
         CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES( \
         CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES) + \
-      _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
-        CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
       _CONFIGURE_MEMORY_FOR_POSIX_SHMS( \
         CONFIGURE_MAXIMUM_POSIX_SHMS) + \
       _CONFIGURE_MEMORY_FOR_POSIX_TIMERS(CONFIGURE_MAXIMUM_POSIX_TIMERS))
@@ -2721,6 +2719,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
    _CONFIGURE_MEMORY_FOR_POSIX_KEYS( \
       _CONFIGURE_POSIX_KEYS, \
       CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS ) + \
+   _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( \
+     CONFIGURE_MAXIMUM_POSIX_SEMAPHORES) + \
    _CONFIGURE_MEMORY_FOR_POSIX + \
    _CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS + \
    _CONFIGURE_MEMORY_FOR_MP + \
@@ -3219,12 +3219,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     /* POSIX API managers that are always enabled */
     uint32_t POSIX_KEYS;
 
-#ifdef RTEMS_POSIX_API
     /* POSIX API Pieces */
+#ifdef RTEMS_POSIX_API
     uint32_t POSIX_TIMERS;
     uint32_t POSIX_QUEUED_SIGNALS;
     uint32_t POSIX_MESSAGE_QUEUES;
+#endif
     uint32_t POSIX_SEMAPHORES;
+#ifdef RTEMS_POSIX_API
     uint32_t POSIX_SHMS;
 #endif
 
@@ -3272,7 +3274,9 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS ),
     _CONFIGURE_MEMORY_FOR_POSIX_MESSAGE_QUEUES(
       CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES ),
+#endif
     _CONFIGURE_MEMORY_FOR_POSIX_SEMAPHORES( CONFIGURE_MAXIMUM_POSIX_SEMAPHORES ),
+#ifdef RTEMS_POSIX_API
     _CONFIGURE_MEMORY_FOR_POSIX_SHMS( CONFIGURE_MAXIMUM_POSIX_SHMS ),
     _CONFIGURE_MEMORY_FOR_POSIX_TIMERS( CONFIGURE_MAXIMUM_POSIX_TIMERS ),
 #endif
@@ -3340,7 +3344,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
        (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_SEMAPHORES != 0) || \
        (CONFIGURE_MAXIMUM_POSIX_SHMS != 0) || \
       defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))
   #error "CONFIGURATION ERROR: POSIX API support not configured!!"

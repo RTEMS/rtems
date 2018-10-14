@@ -42,18 +42,20 @@ static const rtems_assoc_t rtems_object_api_classic_assoc[] = {
   { NULL,                      0, 0}
 };
 
-#ifdef RTEMS_POSIX_API
 static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
+#ifdef RTEMS_POSIX_API
   { "Thread",                  OBJECTS_POSIX_THREADS, 0},
   { "Key",                     OBJECTS_POSIX_KEYS, 0},
   { "Interrupt",               OBJECTS_POSIX_INTERRUPTS, 0},
   { "Message Queue",           OBJECTS_POSIX_MESSAGE_QUEUES, 0},
+#endif
   { "Semaphore",               OBJECTS_POSIX_SEMAPHORES, 0},
+#ifdef RTEMS_POSIX_API
   { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
   { "Shared Memory",           OBJECTS_POSIX_SHMS, 0},
+#endif
   { NULL,                      0, 0}
 };
-#endif
 
 const char *rtems_object_get_api_class_name(
   int the_api,
@@ -67,10 +69,8 @@ const char *rtems_object_get_api_class_name(
     api_assoc = rtems_object_api_internal_assoc;
   else if ( the_api == OBJECTS_CLASSIC_API )
     api_assoc = rtems_object_api_classic_assoc;
-#ifdef RTEMS_POSIX_API
   else if ( the_api == OBJECTS_POSIX_API )
     api_assoc = rtems_object_api_posix_assoc;
-#endif
   else
     return "BAD API";
   class_assoc = rtems_assoc_ptr_by_local( api_assoc, the_class );
