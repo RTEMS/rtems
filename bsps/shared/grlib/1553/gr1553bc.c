@@ -63,7 +63,7 @@ struct gr1553bc_priv {
  */
 #define NEXT_MINOR_MARKER 0x01
 
-/* To separate ASYNC list from SYNC list we mark them differently, but with 
+/* To separate ASYNC list from SYNC list we mark them differently, but with
  * LSB always set. This can be used to get the list the descriptor is a part
  * of.
  */
@@ -71,7 +71,7 @@ struct gr1553bc_priv {
 
 struct gr1553bc_list_cfg gr1553bc_def_cfg =
 {
-	.rt_timeout = 
+	.rt_timeout =
 		{
 			20, 20, 20, 20,
 			20, 20, 20, 20,
@@ -80,7 +80,7 @@ struct gr1553bc_list_cfg gr1553bc_def_cfg =
 			20, 20, 20, 20,
 			20, 20, 20, 20,
 			20, 20, 20, 20,
-			20, 20, 20			
+			20, 20, 20
 		},
 	.bc_timeout = 30,
 	.tropt_irq_on_err = 0,
@@ -132,7 +132,7 @@ int gr1553bc_list_config
 
 	/* RT Time Tolerances */
 	for (i=0; i<31; i++) {
-		/* 0=14us, 1=18us ... 0xf=74us 
+		/* 0=14us, 1=18us ... 0xf=74us
 		 * round upwards: 15us will be 18us
 		 */
 		timeout = ((cfg->rt_timeout[i] + 1)  - 14) / 4;
@@ -167,7 +167,7 @@ void gr1553bc_list_link_major(
 	if ( major ) {
 		major->next = next;
 		if ( next ) {
-			major->minors[major->cfg->minor_cnt-1]->next = 
+			major->minors[major->cfg->minor_cnt-1]->next =
 				next->minors[0];
 		} else {
 			major->minors[major->cfg->minor_cnt-1]->next = NULL;
@@ -195,7 +195,7 @@ int gr1553bc_list_set_major(
 		prev = list->majors[list->major_cnt-1];
 	}
 
-	/* Link to next Major if not the last one and if there is 
+	/* Link to next Major if not the last one and if there is
 	 * a next major
 	 */
 	if ( no == list->major_cnt-1 ) {
@@ -262,7 +262,7 @@ int gr1553bc_list_table_size(struct gr1553bc_list *list)
 		minor_cnt = major->cfg->minor_cnt;
 		for (j=0; j<minor_cnt; j++) {
 			/* 128-bit Alignment required by HW */
-			size += (GR1553BC_BD_ALIGN - 
+			size += (GR1553BC_BD_ALIGN -
 				(size & (GR1553BC_BD_ALIGN-1))) &
 				~(GR1553BC_BD_ALIGN-1);
 
@@ -284,6 +284,7 @@ int gr1553bc_list_table_alloc
 	int i, j, minor_cnt, size;
 	unsigned int table;
 	struct gr1553bc_priv *bcpriv = list->bc;
+	int retval = 0;
 
 	/* Free previous allocated descriptor table */
 	gr1553bc_list_table_free(list);
@@ -298,8 +299,8 @@ int gr1553bc_list_table_alloc
 		/* Address given in Hardware accessible address, we
 		 * convert it into CPU-accessible address.
 		 */
-		list->table_hw = (unsigned int)bdtab_custom & ~0x1;
-		list->_table = bdtab_custom;
+		list->_table = (void*)((unsigned int)bdtab_custom & ~0x1);
+		list->table_hw = (unsigned int)list->_table;
 		drvmgr_translate_check(
 			*bcpriv->pdev,
 			DMAMEM_TO_CPU,
@@ -310,16 +311,19 @@ int gr1553bc_list_table_alloc
 		if (bdtab_custom == NULL) {
 			/* Allocate descriptors */
 			list->_table = grlib_malloc(size + (GR1553BC_BD_ALIGN-1));
-			if ( list->_table == NULL )
-				return -1;
+			if ( list->_table == NULL ) {
+				retval = -1;
+				goto err;
+			}
+			/* 128-bit Alignment required by HW */
+			list->table_cpu =
+				(((unsigned int)list->_table + (GR1553BC_BD_ALIGN-1)) &
+				~(GR1553BC_BD_ALIGN-1));
 		} else {
 			/* Custom address, given in CPU-accessible address */
 			list->_table = bdtab_custom;
+			list->table_cpu = (unsigned int)list->_table;
 		}
-		/* 128-bit Alignment required by HW */
-		list->table_cpu =
-			(((unsigned int)list->_table + (GR1553BC_BD_ALIGN-1)) &
-			~(GR1553BC_BD_ALIGN-1));
 
 		/* We got CPU accessible descriptor table address, now we
 		 * translate that into an address that the Hardware can
@@ -336,6 +340,12 @@ int gr1553bc_list_table_alloc
 		} else {
 			list->table_hw = list->table_cpu;
 		}
+	}
+
+	/* Verify alignment */
+	if (list->table_hw & (GR1553BC_BD_ALIGN-1)) {
+		retval = -2;
+		goto err;
 	}
 
 	/* Write End-Of-List all over the descriptor table here,
@@ -359,8 +369,16 @@ int gr1553bc_list_table_alloc
 			table += gr1553bc_minor_table_size(major->minors[j]);
 		}
 	}
-
-	return 0;
+err:
+	if (retval) {
+		if (list->_table_custom == NULL && list->_table) {
+			free(list->_table);
+		}
+		list->table_hw = 0;
+		list->table_cpu = 0;
+		list->_table = NULL;
+	}
+	return retval;
 }
 
 void gr1553bc_list_table_free(struct gr1553bc_list *list)
@@ -399,7 +417,7 @@ int gr1553bc_list_table_build(struct gr1553bc_list *list)
 			bds = minor->bds;
 
 			/* BD[0..SLOTCNT-1] = message slots
-			 * BD[SLOTCNT+0] = END 
+			 * BD[SLOTCNT+0] = END
 			 * BD[SLOTCNT+1] = JUMP
 			 *
 			 * or if no optional time slot handling:
@@ -485,7 +503,7 @@ void gr1553bc_bd_init(
 		     ((word0 & GR1553BC_BD_TYPE) == 0) ) {
 			/* Don't touch timeslot previously allocated */
 			word0 &= ~GR1553BC_TR_TIME;
-			word0 |= GR1553BC_READ_MEM(&raw->words[0]) & 
+			word0 |= GR1553BC_READ_MEM(&raw->words[0]) &
 					GR1553BC_TR_TIME;
 		}
 		GR1553BC_WRITE_MEM(&raw->words[0], word0);
@@ -523,7 +541,7 @@ int gr1553bc_major_alloc_skel
 	maj->cfg = cfg;
 	maj->next = NULL;
 
-	/* Create links between minor frames, and from minor frames 
+	/* Create links between minor frames, and from minor frames
 	 * to configuration structure.
 	 */
 	minor = (struct gr1553bc_minor *)&maj->minors[cfg->minor_cnt];
@@ -697,7 +715,7 @@ int gr1553bc_slot_alloc2(
 			set0 = (set0 & ~GR1553BC_TR_TIME) | timefree;
 			GR1553BC_WRITE_MEM(&trbd->settings[0], set0);
 			/* Note: at the moment the minor frame can be executed faster
-			 *       than expected, we hurry up writing requested 
+			 *       than expected, we hurry up writing requested
 			 *       descriptor.
 			 */
 		}
@@ -886,7 +904,7 @@ int gr1553bc_slot_irq_prepare
 	union gr1553bc_bd *bd;
 	int slot_no, to_mid;
 
-	/* Build unconditional IRQ descriptor. The padding is used 
+	/* Build unconditional IRQ descriptor. The padding is used
 	 * for identifying the MINOR frame and function and custom data.
 	 *
 	 * The IRQ is disabled at first, a unconditional jump to next
@@ -1115,7 +1133,7 @@ int gr1553bc_slot_update
 		*stat = GR1553BC_READ_MEM(&bd->tr.status);
 		if ( status ) {
 			/* Clear status fields user selects, then
-			 * or bit31 if user wants that. The bit31 
+			 * or bit31 if user wants that. The bit31
 			 * may be used to indicate if the BC has
 			 * performed the access.
 			 */
@@ -1192,7 +1210,7 @@ int gr1553bc_mid_from_bd(
 found_mid:
 	/* Get MID of JUMP descriptor */
 	bdmid = word2 >> 8;
-	/* Subtract distance from JUMP descriptor to find MID 
+	/* Subtract distance from JUMP descriptor to find MID
 	 * of requested BD.
 	 */
 	slot_no = GR1553BC_SLOTID_FROM_ID(bdmid);
@@ -1445,7 +1463,7 @@ void gr1553bc_device_init(struct gr1553bc_priv *priv)
 	/* Stop BC if not already stopped */
 	GR1553BC_WRITE_REG(&priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204);
 
-	/* Since RT can not be used at the same time as BC, we stop 
+	/* Since RT can not be used at the same time as BC, we stop
 	 * RT rx, it should already be stopped...
 	 */
 	GR1553BC_WRITE_REG(&priv->regs->rt_cfg, GR1553RT_KEY);
@@ -1463,7 +1481,7 @@ void gr1553bc_device_init(struct gr1553bc_priv *priv)
 	priv->alist = NULL;
 
 	priv->irq_log_base = (uint32_t *)
-		(((uint32_t)priv->irq_log_p + (GR1553BC_IRQLOG_SIZE-1)) & 
+		(((uint32_t)priv->irq_log_p + (GR1553BC_IRQLOG_SIZE-1)) &
 		~(GR1553BC_IRQLOG_SIZE-1));
 	/* Translate into a hardware accessible address */
 	drvmgr_translate_check(
@@ -1487,7 +1505,7 @@ void gr1553bc_device_uninit(struct gr1553bc_priv *priv)
 	/* Stop BC if not already stopped */
 	GR1553BC_WRITE_REG(&priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204);
 
-	/* Since RT can not be used at the same time as BC, we stop 
+	/* Since RT can not be used at the same time as BC, we stop
 	 * RT rx, it should already be stopped...
 	 */
 	GR1553BC_WRITE_REG(&priv->regs->rt_cfg, GR1553RT_KEY);
@@ -1518,7 +1536,7 @@ void gr1553bc_isr(void *arg)
 	/* Clear handled IRQs */
 	GR1553BC_WRITE_REG(&priv->regs->irq, irq);
 
-	/* DMA error. This IRQ does not affect the IRQ log. 
+	/* DMA error. This IRQ does not affect the IRQ log.
 	 * We let standard IRQ handle handle it.
 	 */
 	if ( irq & GR1553B_IRQEN_BCDE ) {
@@ -1563,7 +1581,7 @@ void gr1553bc_isr(void *arg)
 			bd = NULL;
 		}
 
-		/* Handle Descriptor that cased IRQ 
+		/* Handle Descriptor that cased IRQ
 		 *
 		 * If someone have inserted an IRQ descriptor and tied
 		 * that to a custom function we call that function, otherwise

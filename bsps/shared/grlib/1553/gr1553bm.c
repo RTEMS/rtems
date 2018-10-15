@@ -89,7 +89,7 @@ static void gr1553bm_hw_start(struct gr1553bm_priv *priv)
 
 	/* Start logging */
 	priv->regs->bm_ctrl =
-		(priv->cfg.filt_error_options & 
+		(priv->cfg.filt_error_options &
 		(GR1553B_BM_CTRL_MANL|GR1553B_BM_CTRL_UDWL|GR1553B_BM_CTRL_IMCL))
 		| GR1553B_BM_CTRL_BMEN;
 
@@ -178,6 +178,7 @@ void gr1553bm_close(void *bm)
 /* Configure the BM driver */
 int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 {
+	int retval = 0;
 	struct gr1553bm_priv *priv = bm;
 
 	if ( priv->started )
@@ -193,12 +194,11 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 	}
 	priv->buffer_size = cfg->buffer_size & ~0x7; /* on 8 byte bounadry */
 	if ((unsigned int)cfg->buffer_custom & 1) {
-		/* Custom Address Given in Remote address. We need
-		 * to convert it intoTranslate into Hardware a
-		 * hardware accessible address
+		/* Custom address given in remote address. We need
+		 * to convert it into a hardware accessible address
 		 */
-		priv->buffer_base_hw = (unsigned int)cfg->buffer_custom & ~1;
-		priv->buffer = cfg->buffer_custom;
+		priv->buffer = (void*)((unsigned int)cfg->buffer_custom & ~1);
+		priv->buffer_base_hw = (unsigned int)priv->buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
@@ -209,17 +209,19 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 		if (cfg->buffer_custom == NULL) {
 			/* Allocate new buffer dynamically */
 			priv->buffer = grlib_malloc(priv->buffer_size + 8);
-			if (priv->buffer == NULL)
-				return -1;
+			if (priv->buffer == NULL) {
+				retval = -1;
+				goto err;
+			}
+			/* Align to 8 bytes */
+			priv->buffer_base = ((unsigned int)priv->buffer + (8-1)) & ~(8-1);
 		} else {
 			/* Address given in CPU accessible address, no
 			 * translation required.
 			 */
 			priv->buffer = cfg->buffer_custom;
+			priv->buffer_base = (unsigned int)priv->buffer;
 		}
-		/* Align to 16 bytes */
-		priv->buffer_base = ((unsigned int)priv->buffer + (8-1)) &
-					~(8-1);
 		/* Translate address of buffer base into address that Hardware must
 		 * use to access the buffer.
 		 */
@@ -229,13 +231,28 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 			(void *)priv->buffer_base,
 			(void **)&priv->buffer_base_hw,
 			priv->buffer_size);
-		
+
+	}
+
+	/* Verify alignment */
+	if (priv->buffer_base_hw & (8-1)) {
+		retval = -2;
+		goto err;
 	}
 
 	/* Copy valid config */
 	priv->cfg = *cfg;
 
-	return 0;
+err:
+	if (retval) {
+		if (cfg->buffer_custom == NULL && priv->buffer) {
+			free(priv->buffer);
+		}
+		priv->buffer_base_hw = (unsigned int)NULL;
+		priv->buffer_base = (unsigned int)NULL;
+		priv->buffer = NULL;
+	}
+	return retval;
 }
 
 /* Start logging */
@@ -249,7 +266,7 @@ int gr1553bm_start(void *bm)
 		return -2;
 
 	/* Start at Time = 0 */
-	priv->regs->bm_ttag = 
+	priv->regs->bm_ttag =
 		priv->cfg.time_resolution << GR1553B_BM_TTAG_RES_BIT;
 
 	/* Configure Filters */
@@ -282,7 +299,7 @@ void gr1553bm_stop(void *bm)
 	/* Stop Hardware */
 	gr1553bm_hw_stop(priv);
 
-	/* At this point the hardware must be stopped and IRQ 
+	/* At this point the hardware must be stopped and IRQ
 	 * sources unmasked.
 	 */
 
@@ -331,7 +348,7 @@ resample:
 		hwtime2 = priv->regs->bm_ttag & GR1553B_BM_TTAG_VAL;
 		if ( hwtime > hwtime2 ) {
 			/* priv->time and hwtime may be out of sync if
-			 * IRQ updated priv->time just after bm_ttag was read 
+			 * IRQ updated priv->time just after bm_ttag was read
 			 * here, we resample if we detect inconsistancy.
 			 */
 			goto resample;

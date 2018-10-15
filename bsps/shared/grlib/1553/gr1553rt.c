@@ -159,11 +159,11 @@ static void gr1553rt_list_unreg(struct gr1553rt_list *list)
 static int gr1553rt_bdid(void *rt, struct gr1553rt_sw_bd *bd)
 {
 	struct gr1553rt_priv *priv = rt;
-	
+
 	unsigned short index;
 
 	/* Get Index of Software BD */
-	index = ((unsigned int)bd - (unsigned int)&priv->swbds[0]) / 
+	index = ((unsigned int)bd - (unsigned int)&priv->swbds[0]) /
 		sizeof(struct gr1553rt_sw_bd);
 
 	return index;
@@ -195,10 +195,9 @@ static int gr1553rt_bd_alloc(void *rt, struct gr1553rt_sw_bd **bd, int cnt)
 	}
 
 	*bd = &priv->swbds[priv->swbd_free];
+	curr = &priv->swbds[priv->swbd_free];
 	for (i=0; i<cnt; i++) {
-		if ( i == 0) {
-			curr = &priv->swbds[priv->swbd_free];
-		} else {
+		if ( i != 0) {
 			curr = &priv->swbds[curr->this_next];
 		}
 		if ( curr->this_next == 0xffff ) {
@@ -358,7 +357,7 @@ int gr1553rt_bd_init(
 	bd->next = nextbd;
 	SPIN_UNLOCK_IRQ(&priv->devlock, irqflags);
 
-	return 0;	
+	return 0;
 }
 
 int gr1553rt_bd_update(
@@ -733,7 +732,7 @@ void gr1553rt_hw_stop(struct gr1553rt_priv *priv)
 	GR1553RT_WRITE_REG(&priv->regs->rt_cfg, GR1553RT_KEY);
 
 	/* Stop BC if not already stopped: BC can not be used simultaneously
-	 * as the RT anyway 
+	 * as the RT anyway
 	 */
 	GR1553RT_WRITE_REG(&priv->regs->bc_ctrl, GR1553BC_KEY | 0x0204);
 
@@ -772,17 +771,17 @@ void gr1553rt_sw_free(struct gr1553rt_priv *priv)
 	}
 }
 
-/* Free dynamically allocated buffers, if any */
 static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 {
 	int size;
+	int retval = 0;
 
 	/* Allocate Event log */
 	if ((unsigned int)priv->cfg.evlog_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
-		priv->evlog_hw_base = (unsigned int *)
+		priv->evlog_buffer = (void *)
 			((unsigned int)priv->cfg.evlog_buffer & ~0x1);
-		priv->evlog_buffer = priv->cfg.evlog_buffer;
+		priv->evlog_hw_base = (unsigned int*)priv->evlog_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
@@ -794,16 +793,19 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 		if (priv->cfg.evlog_buffer == NULL) {
 			priv->evlog_buffer = grlib_malloc(
 				priv->cfg.evlog_size * 2);
-			if (priv->evlog_buffer == NULL)
-				return -1;
+			if (priv->evlog_buffer == NULL) {
+				retval = -1;
+				goto err;
+			}
+			/* Align to SIZE bytes boundary */
+			priv->evlog_cpu_base = (unsigned int *)
+				(((unsigned int)priv->evlog_buffer +
+				(priv->cfg.evlog_size-1)) & ~(priv->cfg.evlog_size-1));
 		} else {
 			/* Addess already CPU-LOCAL */
 			priv->evlog_buffer = priv->cfg.evlog_buffer;
+			priv->evlog_cpu_base  = (unsigned int *)priv->evlog_buffer;
 		}
-		/* Align to SIZE bytes boundary */
-		priv->evlog_cpu_base = (unsigned int *)
-			(((unsigned int)priv->evlog_buffer +
-			(priv->cfg.evlog_size-1)) & ~(priv->cfg.evlog_size-1));
 
 		drvmgr_translate_check(
 			*priv->pdev,
@@ -813,6 +815,11 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			priv->cfg.evlog_size
 			);
 	}
+	/* Verify alignment */
+	if ((unsigned int)priv->evlog_hw_base & (priv->cfg.evlog_size-1)) {
+		retval = -2;
+		goto err;
+	}
 	priv->evlog_cpu_end = priv->evlog_cpu_base +
 				priv->cfg.evlog_size/sizeof(unsigned int *);
 
@@ -821,9 +828,9 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	size = priv->bds_cnt * sizeof(struct gr1553rt_bd);
 	if ((unsigned int)priv->cfg.bd_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
-		priv->bds_hw = (struct gr1553rt_bd *)
+		priv->bd_buffer = (void *)
 			((unsigned int)priv->cfg.bd_buffer & ~0x1);
-		priv->bd_buffer = priv->cfg.bd_buffer;
+		priv->bds_hw = (struct gr1553rt_bd *)priv->bd_buffer;
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
@@ -834,15 +841,18 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	} else {
 		if ( priv->cfg.bd_buffer == NULL ) {
 			priv->bd_buffer = grlib_malloc(size + 0xf);
-			if (priv->bd_buffer == NULL)
-				return -1;
+			if (priv->bd_buffer == NULL) {
+				retval = -1;
+				goto err;
+			}
+			/* Align to 16 bytes boundary */
+			priv->bds_cpu = (struct gr1553rt_bd *)
+				(((unsigned int)priv->bd_buffer + 0xf) & ~0xf);
 		} else {
 			/* Addess already CPU-LOCAL */
 			priv->bd_buffer	= priv->cfg.bd_buffer;
+			priv->bds_cpu = (struct gr1553rt_bd *)priv->bd_buffer;
 		}
-		/* Align to 16 bytes boundary */
-		priv->bds_cpu = (struct gr1553rt_bd *)
-				(((unsigned int)priv->bd_buffer + 0xf) & ~0xf);
 
 		/* Translate from CPU address to hardware address */
 		drvmgr_translate_check(
@@ -853,21 +863,28 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			size
 			);
 	}
+	/* Verify alignment */
+	if ((unsigned int)priv->bds_hw & (0xf)) {
+		retval = -2;
+		goto err;
+	}
 
 #if (RTBD_MAX == 0)
 	/* Allocate software description of */
 	priv->swbds = grlib_malloc(priv->cfg.bd_count * sizeof(*priv->swbds));
 	if ( priv->swbds == NULL ) {
-		return -1;
+		retval = -1;
+		goto err;
 	}
 #endif
 
 	/* Allocate Sub address table */
 	if ((unsigned int)priv->cfg.satab_buffer & 1) {
 		/* Translate Address from HARDWARE (REMOTE) to CPU-LOCAL */
-		priv->sas_hw = (struct gr1553rt_sa *)
+		priv->satab_buffer = (void *)
 			((unsigned int)priv->cfg.satab_buffer & ~0x1);
-		priv->satab_buffer = priv->cfg.satab_buffer;
+		priv->sas_hw = (struct gr1553rt_sa *)priv->satab_buffer;
+
 		drvmgr_translate_check(
 			*priv->pdev,
 			DMAMEM_TO_CPU,
@@ -877,16 +894,18 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 	} else {
 		if (priv->cfg.satab_buffer == NULL) {
 			priv->satab_buffer = grlib_malloc((16 * 32) * 2);
-			if (priv->satab_buffer == NULL)
-				return -1;
+			if (priv->satab_buffer == NULL) {
+				retval = -1;
+				goto err;
+			}
+			/* Align to 512 bytes boundary */
+			priv->sas_cpu = (struct gr1553rt_sa *)
+				(((unsigned int)priv->satab_buffer + 0x1ff) & ~0x1ff);
 		} else {
 			/* Addess already CPU-LOCAL */
 			priv->satab_buffer = priv->cfg.satab_buffer;
+			priv->sas_cpu = (struct gr1553rt_sa *)priv->satab_buffer;
 		}
-		/* Align to 512 bytes boundary */
-		priv->sas_cpu = (struct gr1553rt_sa *)
-				(((unsigned int)priv->satab_buffer + 0x1ff) &
-				~0x1ff);
 
 		/* Translate Address from CPU-LOCAL to HARDWARE (REMOTE) */
 		drvmgr_translate_check(
@@ -896,8 +915,17 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			(void **)&priv->sas_hw,
 			16 * 32);
 	}
+	/* Verify alignment */
+	if ((unsigned int)priv->sas_hw & (0x1ff)) {
+		retval = -2;
+		goto err;
+	}
 
-	return 0;
+err:
+	if (retval) {
+		gr1553rt_sw_free(priv);
+	}
+	return retval;
 }
 
 void gr1553rt_sw_init(struct gr1553rt_priv *priv)
@@ -943,7 +971,7 @@ void gr1553rt_sw_init(struct gr1553rt_priv *priv)
 int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg)
 {
 	struct gr1553rt_priv *priv = rt;
-
+	int retval = 0;
 	if ( priv->started )
 		return -1;
 
@@ -955,9 +983,9 @@ int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg)
 	if ( cfg->rtaddress > 30 )
 		return -1;
 	if ( (cfg->evlog_size & (cfg->evlog_size-1)) != 0)
-		return -1; /* SIZE: Not aligned to a power of 2 */
+		return -2; /* SIZE: Not aligned to a power of 2 */
 	if ( ((unsigned int)priv->cfg.evlog_buffer & (cfg->evlog_size-1)) != 0 )
-		return -1; /* Buffer: Not aligned to size */
+		return -2; /* Buffer: Not aligned to size */
 #if (RTBD_MAX > 0)
 	if ( cfg->bd_count > RTBD_MAX )
 		return -1;
@@ -968,8 +996,9 @@ int gr1553rt_config(void *rt, struct gr1553rt_cfg *cfg)
 
 	/*** Adapt to new config ***/
 
-	if ( gr1553rt_sw_alloc(priv) != 0 ) 
-		return -1;
+	if ( (retval=gr1553rt_sw_alloc(priv)) != 0 ) {
+		return retval;
+	}
 
 	gr1553rt_sw_init(priv);
 
