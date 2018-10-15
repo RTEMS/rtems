@@ -19,7 +19,6 @@ dist_project_lib_DATA += ../../../../../../bsps/m68k/genmcf548x/start/linkcmds.m
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
-librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c

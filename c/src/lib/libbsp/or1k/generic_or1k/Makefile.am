@@ -33,8 +33,6 @@ dist_project_lib_DATA += ../../../../../../bsps/or1k/shared/start/linkcmds.base
 project_lib_LIBRARIES = librtemsbsp.a
 
 librtemsbsp_a_SOURCES =
-librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
-librtemsbsp_a_LIBADD =
 
 # Startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c

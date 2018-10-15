@@ -17,7 +17,6 @@ project_lib_DATA += linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
-librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # startup
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c

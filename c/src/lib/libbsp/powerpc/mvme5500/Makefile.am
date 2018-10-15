@@ -66,7 +66,6 @@ project_lib_DATA = rtems_crti.$(OBJEXT)
 
 noinst_PROGRAMS += mvme5500start.$(OBJEXT)
 mvme5500start___OBJEXT__SOURCES = ../../../../../../bsps/powerpc/shared/start/preload.S ../../../../../../bsps/powerpc/mvme5500/start/start.S
-mvme5500start___OBJEXT__CPPFLAGS = $(AM_CPPFLAGS)
 mvme5500start___OBJEXT__LDFLAGS = $(RTEMS_RELLDFLAGS)
 
 project_lib_DATA += mvme5500start.$(OBJEXT)
