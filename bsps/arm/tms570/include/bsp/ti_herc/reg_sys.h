@@ -111,46 +111,57 @@ typedef struct{
 
 
 /*---------------------TMS570_SYS1_CSDIS---------------------*/
-/* field: CLKSROFF - Clock source[7-3] off. */
-#define TMS570_SYS1_CSDIS_CLKSROFF(val) BSP_FLD32(val,3, 7)
-#define TMS570_SYS1_CSDIS_CLKSROFF_GET(reg) BSP_FLD32GET(reg,3, 7)
-#define TMS570_SYS1_CSDIS_CLKSROFF_SET(reg,val) BSP_FLD32SET(reg, val,3, 7)
+/* field: CLKSROFF - Clock source[7-0] off. 2 reserved */
+#define TMS570_SYS1_CSDIS_CLKSROFF(val) BSP_FLD32(val,0, 7)
+#define TMS570_SYS1_CSDIS_CLKSROFF_GET(reg) BSP_FLD32GET(reg,0, 7)
+#define TMS570_SYS1_CSDIS_CLKSROFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
-/* field: CLKSROFF - Clock source[1-0] off. */
-#define TMS570_SYS1_CSDIS_CLKSROFF(val) BSP_FLD32(val,0, 1)
-#define TMS570_SYS1_CSDIS_CLKSROFF_GET(reg) BSP_FLD32GET(reg,0, 1)
-#define TMS570_SYS1_CSDIS_CLKSROFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
+/* Clock Source 0                    Oscillator */
+#define TMS570_SYS1_CSDIS_CLKSR_OSC_NUM       0
+#define TMS570_SYS1_CSDIS_CLKSROFF_OSC        BSP_BIT32(0)
 
+/* Clock Source 1                      PLL1 */
+#define TMS570_SYS1_CSDIS_CLKSR_PLL1_NUM      1
+#define TMS570_SYS1_CSDIS_CLKSROFF_PLL1       BSP_BIT32(1)
+
+/* Clock Source 3                  EXTCLKIN */
+#define TMS570_SYS1_CSDIS_CLKSR_EXTCLKIN_NUM  3
+#define TMS570_SYS1_CSDIS_CLKSROFF_EXTCLKIN   BSP_BIT32(3)
+
+/* Clock Source 4 Low Frequency LPO (Low Power Oscillator) clock */
+#define TMS570_SYS1_CSDIS_CLKSR_LPO_NUM       4
+#define TMS570_SYS1_CSDIS_CLKSROFF_LPO        BSP_BIT32(4)
+
+/* Clock Source 5 High Frequency LPO (Low Power Oscillator) clock */
+#define TMS570_SYS1_CSDIS_CLKSR_HPO_NUM       5
+#define TMS570_SYS1_CSDIS_CLKSROFF_HPO        BSP_BIT32(5)
+
+/* Clock Source 6                      PLL2 */
+#define TMS570_SYS1_CSDIS_CLKSR_PLL2_NUM      6
+#define TMS570_SYS1_CSDIS_CLKSROFF_PLL2       BSP_BIT32(6)
+
+/* Clock Source 7                  EXTCLKIN2 */
+#define TMS570_SYS1_CSDIS_CLKSR_EXTCLKIN2_NUM 7
+#define TMS570_SYS1_CSDIS_CLKSROFF_EXTCLKIN2  BSP_BIT32(7)
 
 /*--------------------TMS570_SYS1_CSDISSET--------------------*/
-/* field: SETCLKSR_OFF - Set clock source[7-3] to the disabled state. */
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF(val) BSP_FLD32(val,3, 7)
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,3, 7)
-
-/* field: SETCLKSR_OFF - Set clock source[1-0] to the disabled state. */
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF(val) BSP_FLD32(val,0, 1)
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,0, 1)
-#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
-
+/* field: SETCLKSR_OFF - Set clock source[7-0] to the disabled state. */
+#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF(val) BSP_FLD32(val,0, 7)
+#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,0, 7)
+#define TMS570_SYS1_CSDISSET_SETCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 /*--------------------TMS570_SYS1_CSDISCLR--------------------*/
-/* field: CLRCLKSR_OFF - Enables clock source[7-3]. */
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF(val) BSP_FLD32(val,3, 7)
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,3, 7)
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,3, 7)
-
-/* field: CLRCLKSR_OFF - Enables clock source[1-0]. */
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF(val) BSP_FLD32(val,0, 1)
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,0, 1)
-#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 1)
-
+/* field: CLRCLKSR_OFF - Enables clock source[7-0] */
+#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF(val) BSP_FLD32(val,0, 7)
+#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_GET(reg) BSP_FLD32GET(reg,0, 7)
+#define TMS570_SYS1_CSDISCLR_CLRCLKSR_OFF_SET(reg,val) BSP_FLD32SET(reg, val,0, 7)
 
 /*---------------------TMS570_SYS1_CDDIS---------------------*/
-/* field: VCLKAOFF - VCLKA[4-3] domain off. */
-#define TMS570_SYS1_CDDIS_VCLKAOFF(val) BSP_FLD32(val,10, 11)
-#define TMS570_SYS1_CDDIS_VCLKAOFF_GET(reg) BSP_FLD32GET(reg,10, 11)
-#define TMS570_SYS1_CDDIS_VCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,10, 11)
+/* field: VCLKAOFF - VCLKA4 domain off. */
+#define TMS570_SYS1_CDDIS_VCLKAOFF4 BSP_BIT32(11)
+
+/* field: VCLKAOFF - VCLKA3 domain off. */
+#define TMS570_SYS1_CDDIS_VCLKAOFF3 BSP_BIT32(10)
 
 /* field: VCLK3OFF - VCLK3 domain off. */
 #define TMS570_SYS1_CDDIS_VCLK3OFF BSP_BIT32(8)
@@ -158,10 +169,11 @@ typedef struct{
 /* field: RTICLK1OFF - RTICLK1 domain off. */
 #define TMS570_SYS1_CDDIS_RTICLK1OFF BSP_BIT32(6)
 
-/* field: VCLKAOFF - VCLKA[2-1] domain off. */
-#define TMS570_SYS1_CDDIS_VCLKAOFF(val) BSP_FLD32(val,4, 5)
-#define TMS570_SYS1_CDDIS_VCLKAOFF_GET(reg) BSP_FLD32GET(reg,4, 5)
-#define TMS570_SYS1_CDDIS_VCLKAOFF_SET(reg,val) BSP_FLD32SET(reg, val,4, 5)
+/* field: VCLKAOFF - VCLKA2 domain off. */
+#define TMS570_SYS1_CDDIS_VCLKAOFF2 BSP_BIT32(5)
+
+/* field: VCLKAOFF - VCLKA1 domain off. */
+#define TMS570_SYS1_CDDIS_VCLKAOFF1 BSP_BIT32(4)
 
 /* field: VCLK2OFF - VCLK2 domain off. */
 #define TMS570_SYS1_CDDIS_VCLK2OFF BSP_BIT32(3)
