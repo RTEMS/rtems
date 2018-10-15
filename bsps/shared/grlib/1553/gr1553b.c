@@ -206,6 +206,10 @@ static int gr1553_init2(struct drvmgr_dev *dev)
 	GR1553B_WRITE_REG(&regs->rt_cfg, 0x15530000);
 	/* Stop BM logging (just in case) */
 	GR1553B_WRITE_REG(&regs->bm_ctrl, 0);
+	/* Set codec version. This is only supported by some devices, i.e. GR740.
+	 * It will not have any effect on devices that does not support this bit. 
+	 */
+	GR1553B_WRITE_REG(&regs->hwcfg, 1<<12);
 
 	return DRVMGR_OK;
 }
