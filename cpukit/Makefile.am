@@ -281,7 +281,6 @@ librtemscpu_a_SOURCES += libmisc/cpuuse/cpuusagereset.c
 librtemscpu_a_SOURCES += libmisc/cpuuse/cpuusagetop.c
 librtemscpu_a_SOURCES += libmisc/devnull/devnull.c
 librtemscpu_a_SOURCES += libmisc/devnull/devzero.c
-librtemscpu_a_SOURCES += libmisc/dummy/default-configuration.c
 librtemscpu_a_SOURCES += libmisc/dummy/dummy-networking.c
 librtemscpu_a_SOURCES += libmisc/dumpbuf/dumpbuf.c
 librtemscpu_a_SOURCES += libmisc/fb/mw_print.c
@@ -1830,6 +1829,11 @@ version-vc-key.h: generate-vc-key
 $(top_srcdir)/sapi/src/version.c: version-vc-key.h
 
 all-local: generate-vc-key
+
+project_lib_LIBRARIES += librtemsdefaultconfig.a
+
+librtemsdefaultconfig_a_SOURCES =
+librtemsdefaultconfig_a_SOURCES += libmisc/dummy/default-configuration.c
 
 project_lib_LIBRARIES += libftpd.a
 
