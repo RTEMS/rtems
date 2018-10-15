@@ -233,6 +233,9 @@ SECTIONS {
 	.dynamic : ALIGN_WITH_INPUT {
 		*(.dynamic)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
+	.tm_clone_table : ALIGN_WITH_INPUT {
+		*(.tm_clone_table)
+	} > REGION_RODATA AT > REGION_RODATA_LOAD
 	.got : ALIGN_WITH_INPUT {
 		*(.got.plt) *(.igot.plt) *(.got) *(.igot)
 	} > REGION_RODATA AT > REGION_RODATA_LOAD
