@@ -33,9 +33,14 @@ ssize_t _Console_simple_Read(
   for ( i = 0; i < n; ++i ) {
     int c;
 
-    do {
+    while ( true ) {
       c = getchark();
-    } while (c == -1);
+      if ( c != -1 ) {
+        break;
+      }
+
+      (void) rtems_task_wake_after( 1 );
+    }
 
     buf[ i ] = (char) c;
   }
