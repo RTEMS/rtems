@@ -64,6 +64,19 @@ static void imx_uart_write_polled(rtems_termios_device_context *base, char c)
   regs->utxd = IMX_UART_UTXD_TX_DATA(c);
 }
 
+static int imx_uart_read_polled(rtems_termios_device_context *base)
+{
+  volatile imx_uart *regs;
+
+  regs = imx_uart_get_regs(base);
+
+  if ((regs->usr2 & IMX_UART_USR2_RDR) != 0) {
+    return IMX_UART_URXD_RX_DATA_GET(regs->urxd);
+  } else {
+    return -1;
+  }
+}
+
 void imx_uart_console_drain(void)
 {
   volatile imx_uart *regs;
@@ -80,6 +93,11 @@ void imx_uart_console_drain(void)
 static void imx_output_char(char c)
 {
   imx_uart_write_polled(&imx_uart_console->base, c);
+}
+
+static int imx_poll_char(void)
+{
+  return imx_uart_read_polled(&imx_uart_console->base);
 }
 
 static void imx_uart_init_context(
@@ -147,6 +165,7 @@ static void imx_uart_probe(void)
   }
 
   BSP_output_char = imx_output_char;
+  BSP_poll_char = imx_poll_char;
 }
 
 static void imx_output_char_init(char c)
@@ -315,21 +334,6 @@ static void imx_uart_write(
 #endif
 }
 
-#ifndef CONSOLE_USE_INTERRUPTS
-static int imx_uart_read(rtems_termios_device_context *base)
-{
-  volatile imx_uart *regs;
-
-  regs = imx_uart_get_regs(base);
-
-  if ((regs->usr2 & IMX_UART_USR2_RDR) != 0) {
-    return IMX_UART_URXD_RX_DATA_GET(regs->urxd);
-  } else {
-    return -1;
-  }
-}
-#endif
-
 static const rtems_termios_device_handler imx_uart_handler = {
   .first_open = imx_uart_first_open,
   .last_close = imx_uart_last_close,
@@ -338,7 +342,7 @@ static const rtems_termios_device_handler imx_uart_handler = {
 #ifdef CONSOLE_USE_INTERRUPTS
   .mode = TERMIOS_IRQ_DRIVEN
 #else
-  .poll_read = imx_uart_read,
+  .poll_read = imx_uart_read_polled,
   .mode = TERMIOS_POLLED
 #endif
 };
