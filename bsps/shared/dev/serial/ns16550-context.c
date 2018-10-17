@@ -191,34 +191,35 @@ bool ns16550_probe(rtems_termios_device_context *base)
     (uint8_t)(( ulBaudDivisor >> 8 ) & 0xffU )
   );
 
-  /* Enable and reset transmit and receive FIFOs. TJA     */
-  ucDataByte = SP_FIFO_ENABLE;
-  (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
-
-  ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
-
-  if (ctx->has_precision_clock_synthesizer) {
-    /*
-     * Enable precision clock synthesizer.  This must be done with DLAB == 1 in
-     * the line control register.
-     */
-    ucDataByte |= 0x10;
-  }
-
-  (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
-
   /* Clear the divisor latch and set the character size to eight bits */
   /* with one stop bit and no parity checking. */
   ucDataByte = EIGHT_BITS;
   ctx->line_control = ucDataByte;
 
   if (ctx->has_precision_clock_synthesizer) {
+    uint8_t fcr;
+
+    /*
+     * Enable precision clock synthesizer.  This must be done with DLAB == 1 in
+     * the line control register.
+     */
+    fcr = (*getReg)(pNS16550, NS16550_FIFO_CONTROL );
+    fcr |= 0x10;
+    (*setReg)(pNS16550, NS16550_FIFO_CONTROL, fcr);
+
     (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 24));
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte );
     (*setReg)(pNS16550, NS16550_SCRATCH_PAD, (uint8_t)(ulBaudDivisor >> 16));
   } else {
     (*setReg)(pNS16550, NS16550_LINE_CONTROL, ucDataByte);
   }
+
+  /* Enable and reset transmit and receive FIFOs. TJA     */
+  ucDataByte = SP_FIFO_ENABLE;
+  (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
+
+  ucDataByte = SP_FIFO_ENABLE | SP_FIFO_RXRST | SP_FIFO_TXRST;
+  (*setReg)(pNS16550, NS16550_FIFO_CONTROL, ucDataByte);
 
   ns16550_enable_interrupts(ctx, NS16550_DISABLE_ALL_INTR);
 
