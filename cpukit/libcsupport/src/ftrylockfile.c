@@ -10,7 +10,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FTRYLOCKFILE) && defined(HAVE_DECL_FTRYLOCKFILE)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_FTRYLOCKFILE)
 
 #include <stdio.h>
 #include <rtems/seterr.h>

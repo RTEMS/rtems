@@ -17,7 +17,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FUNLOCKFILE) && defined(HAVE_DECL_FUNLOCKFILE)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_FUNLOCKFILE)
 
 #include <stdio.h>
 

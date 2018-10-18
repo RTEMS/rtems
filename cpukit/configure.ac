@@ -75,11 +75,6 @@ AC_CHECK_FUNCS([creat \
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
 
-# Mandated by POSIX, decls not present in some versions of newlib
-AC_CHECK_DECLS([flockfile],[AC_CHECK_FUNCS([flockfile])],,[#include <stdio.h>])
-AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h>])
-AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
-
 # Newlib proprietary
 AC_CHECK_MEMBER([struct _Thread_queue_Queue._name],[],[RTEMS_TOOL_CHAIN_ERROR],[#include <sys/lock.h>])
 

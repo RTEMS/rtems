@@ -16,7 +16,7 @@
 #include "config.h"
 #endif
 
-#if defined(RTEMS_NEWLIB) && !defined(HAVE_FLOCKFILE) && defined(HAVE_DECL_FLOCKFILE)
+#if defined(RTEMS_NEWLIB) && !defined(HAVE_FLOCKFILE)
 
 #include <stdio.h>
 
