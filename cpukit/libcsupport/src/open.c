@@ -74,7 +74,12 @@ static int do_open(
   bool exclusive = (oflag & (O_CREAT | O_EXCL)) == (O_CREAT | O_EXCL);
   bool truncate = (oflag & O_TRUNC) == O_TRUNC;
   bool open_dir;
-  int eval_flags = RTEMS_FS_FOLLOW_LINK
+#ifdef O_NOFOLLOW
+  int follow = (oflag & O_NOFOLLOW) == O_NOFOLLOW ? 0 : RTEMS_FS_FOLLOW_LINK;
+#else
+  int follow = RTEMS_FS_FOLLOW_LINK;
+#endif
+  int eval_flags = follow
     | (read_access ? RTEMS_FS_PERMS_READ : 0)
     | (write_access ? RTEMS_FS_PERMS_WRITE : 0)
     | (make ? RTEMS_FS_MAKE : 0)
