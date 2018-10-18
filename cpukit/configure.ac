@@ -58,7 +58,7 @@ RTEMS_CHECK_NEWLIB
 # BSD-isms, used throughout the sources
 # Not really used by this configure script
 # FIXME: They should be eliminated if possible.
-AC_CHECK_FUNCS([strsep strcasecmp snprintf])
+AC_CHECK_FUNCS([strcasecmp snprintf])
 AC_CHECK_FUNCS([strdup strndup strncasecmp])
 AC_CHECK_FUNCS([bcopy bcmp])
 AC_CHECK_FUNCS([isascii fileno])
@@ -66,7 +66,7 @@ AC_CHECK_FUNCS([isascii fileno])
 # <FIXME>
 #   Check for functions supplied by newlib >= 1.17.0
 # Newlib's posix/ directory
-AC_CHECK_FUNCS([readdir_r isatty])
+AC_CHECK_FUNCS([isatty])
 AC_CHECK_FUNCS([creat \
   opendir closedir readdir rewinddir scandir seekdir \
   sleep \
@@ -373,9 +373,6 @@ AC_CHECK_DECLS([LONG_BIT],,,[#include <limits.h>])
 ## BSD-ism, excluded from POSIX, but available on most platforms
 AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 AC_CHECK_DECLS([rcmd],,,[#include <unistd.h>])
-
-## Check if libc provides BSD's strlcpy/strlcat
-AC_CHECK_FUNCS(strlcpy strlcat)
 
 ## Check if libc provides decl of utime
 ## FIXME: utime has been deprecated in SUSv4.
