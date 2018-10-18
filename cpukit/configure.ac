@@ -160,9 +160,6 @@ AC_MSG_RESULT([no])
 ])
 AC_LANG_POP(C)
 
-# Mandated by POSIX, not declared in some versions of newlib.
-AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
-
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([getcwd])
 # </FIXME>

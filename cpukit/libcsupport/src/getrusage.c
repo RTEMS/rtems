@@ -17,10 +17,6 @@
 #include <rtems.h>
 #include <rtems/seterr.h>
 
-#if !HAVE_DECL_GETRUSAGE
-extern int getrusage(int who, struct rusage *usage);
-#endif
-
 int getrusage(int who, struct rusage *usage)
 {
   struct timespec uptime;
