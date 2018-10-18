@@ -253,7 +253,6 @@ librtemscpu_a_SOURCES += libcsupport/src/termios_setbestbaud.c
 librtemscpu_a_SOURCES += libcsupport/src/termios_setinitialbaud.c
 librtemscpu_a_SOURCES += libcsupport/src/__times.c
 librtemscpu_a_SOURCES += libcsupport/src/truncate.c
-librtemscpu_a_SOURCES += libcsupport/src/ttyname.c
 librtemscpu_a_SOURCES += libcsupport/src/uenvgetgroups.c
 librtemscpu_a_SOURCES += libcsupport/src/umask.c
 librtemscpu_a_SOURCES += libcsupport/src/unlink.c

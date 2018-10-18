@@ -164,7 +164,7 @@ AC_LANG_POP(C)
 AC_CHECK_DECLS([getrusage],,,[#include sys/resource.h])
 
 # Newlib's unix/ directory
-AC_CHECK_FUNCS([ttyname getcwd])
+AC_CHECK_FUNCS([getcwd])
 # </FIXME>
 
 # Check if the installed toolchain provides these headers
