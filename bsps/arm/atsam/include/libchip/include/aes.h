@@ -54,7 +54,7 @@ extern void AES_EnableIt(uint32_t sources);
 extern void AES_DisableIt(uint32_t sources);
 extern uint32_t AES_GetStatus(void);
 extern void AES_WriteKey(const uint32_t *pKey, uint32_t keyLength);
-extern void AES_SetInput(uint32_t *data);
+extern void AES_SetInput(const uint32_t *data);
 extern void AES_GetOutput(uint32_t *data);
 extern void AES_SetVector(const uint32_t *pVector);
 extern void AES_SetAadLen(uint32_t len);

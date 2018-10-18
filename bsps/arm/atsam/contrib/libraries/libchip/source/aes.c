@@ -178,7 +178,7 @@ void AES_WriteKey(const uint32_t *pKey, uint32_t keyLength)
  * used for encryption/decryption.
  * \param data Pointer to the 16-bytes data to cipher/decipher.
  */
-void AES_SetInput(uint32_t *data)
+void AES_SetInput(const uint32_t *data)
 {
 	uint8_t i;
 
