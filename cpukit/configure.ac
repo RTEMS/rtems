@@ -66,7 +66,6 @@ AC_CHECK_FUNCS([isascii fileno])
 # <FIXME>
 #   Check for functions supplied by newlib >= 1.17.0
 # Newlib's posix/ directory
-AC_CHECK_FUNCS([isatty])
 AC_CHECK_FUNCS([creat \
   opendir closedir readdir rewinddir scandir seekdir \
   sleep \

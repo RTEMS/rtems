@@ -157,7 +157,6 @@ librtemscpu_a_SOURCES += libcsupport/src/__gettod.c
 librtemscpu_a_SOURCES += libcsupport/src/getuid.c
 librtemscpu_a_SOURCES += libcsupport/src/gxx_wrappers.c
 librtemscpu_a_SOURCES += libcsupport/src/ioctl.c
-librtemscpu_a_SOURCES += libcsupport/src/isatty.c
 librtemscpu_a_SOURCES += libcsupport/src/isatty_r.c
 librtemscpu_a_SOURCES += libcsupport/src/issetugid.c
 librtemscpu_a_SOURCES += libcsupport/src/kill_noposix.c
