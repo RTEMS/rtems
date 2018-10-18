@@ -72,7 +72,6 @@ AC_CHECK_FUNCS([creat \
   telldir \
   usleep],,
   [RTEMS_TOOL_CHAIN_ERROR])
-AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
 

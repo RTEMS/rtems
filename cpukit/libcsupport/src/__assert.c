@@ -52,18 +52,3 @@ void __assert_func(
   rtems_fatal( RTEMS_FATAL_SOURCE_ASSERT, (rtems_fatal_code) &assert_context );
 }
 #endif
-
-#if defined(RTEMS_NEWLIB) && !defined(HAVE___ASSERT)
-
-/**
- *  small RTEMS Specific Implementation
- */
-void __assert(
-  const char *file,
-  int         line,
-  const char *failedexpr
-)
-{
-  __assert_func (file, line, NULL, failedexpr);
-}
-#endif
