@@ -391,6 +391,28 @@ librtemscpu_a_SOURCES += libfs/src/devfs/devopen.c
 librtemscpu_a_SOURCES += libfs/src/devfs/devread.c
 librtemscpu_a_SOURCES += libfs/src/devfs/devstat.c
 librtemscpu_a_SOURCES += libfs/src/devfs/devwrite.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/fat.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/fat_fat_operations.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/fat_file.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv_default.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv_utf8.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_create.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_dir.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_eval.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_file.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_format.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_free.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_fsunmount.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_handlers_dir.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_handlers_file.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_init.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_initsupp.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_misc.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_mknod.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_rename.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_rmnod.c
+librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_statvfs.c
 librtemscpu_a_SOURCES += libfs/src/imfs/deviceio.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_chown.c
 librtemscpu_a_SOURCES += libfs/src/imfs/imfs_config.c
@@ -1116,33 +1138,6 @@ librtemscpu_a_SOURCES += libdl/rtl-sym.c
 librtemscpu_a_SOURCES += libdl/rtl-trace.c
 librtemscpu_a_SOURCES += libdl/rtl-unresolved.c
 librtemscpu_a_SOURCES += libdl/rtl-unwind-dw2.c
-
-endif
-
-if LIBDOSFS
-
-librtemscpu_a_SOURCES += libfs/src/dosfs/fat.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/fat_fat_operations.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/fat_file.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv_default.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_conv_utf8.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_create.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_dir.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_eval.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_file.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_format.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_free.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_fsunmount.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_handlers_dir.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_handlers_file.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_init.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_initsupp.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_misc.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_mknod.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_rename.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_rmnod.c
-librtemscpu_a_SOURCES += libfs/src/dosfs/msdos_statvfs.c
 
 endif
 
