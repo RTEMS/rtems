@@ -137,7 +137,6 @@ librtemscpu_a_SOURCES += libcsupport/src/ftruncate.c
 librtemscpu_a_SOURCES += libcsupport/src/ftrylockfile.c
 librtemscpu_a_SOURCES += libcsupport/src/funlockfile.c
 librtemscpu_a_SOURCES += libcsupport/src/getchark.c
-librtemscpu_a_SOURCES += libcsupport/src/getcwd.c
 librtemscpu_a_SOURCES += libcsupport/src/getdents.c
 librtemscpu_a_SOURCES += libcsupport/src/getegid.c
 librtemscpu_a_SOURCES += libcsupport/src/geteuid.c

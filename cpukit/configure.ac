@@ -160,10 +160,6 @@ AC_MSG_RESULT([no])
 ])
 AC_LANG_POP(C)
 
-# Newlib's unix/ directory
-AC_CHECK_FUNCS([getcwd])
-# </FIXME>
-
 # Check if the installed toolchain provides these headers
 # and error out if not.
 AC_CHECK_HEADERS([errno.h sched.h semaphore.h sys/cdefs.h sys/queue.h tar.h threads.h],,
