@@ -371,7 +371,13 @@ int main(
   rtems_test_assert ( status == 0 );
 
   printf("opendir, readdir and closedir %s\n", my_file);
+#ifdef O_DIRECTORY
+  fd = open( my_file, O_RDONLY );
+  rtems_test_assert( fd >= 0 );
+  directory_not = fdopendir( fd );
+#else
   directory_not = opendir (my_file);
+#endif
   rtems_test_assert( directory_not != NULL );
   d_not = readdir(directory_not);
   rtems_test_assert( d_not == NULL );
