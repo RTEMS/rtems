@@ -65,13 +65,13 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Initialize_attributes(
   );
 }
 
-#if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
   const Thread_Control    *the_thread,
   const Scheduler_Control *scheduler,
   struct sched_param      *param
 )
 {
+#if defined(RTEMS_POSIX_API)
   const POSIX_API_Control *api;
 
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
@@ -82,8 +82,12 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Get_sched_param_sporadic(
   param->sched_ss_repl_period = api->Sporadic.sched_ss_repl_period;
   param->sched_ss_init_budget = api->Sporadic.sched_ss_init_budget;
   param->sched_ss_max_repl = api->Sporadic.sched_ss_max_repl;
-}
+#else
+  (void) the_thread;
+  (void) scheduler;
+  (void) param;
 #endif
+}
 
 /** @} */
 
