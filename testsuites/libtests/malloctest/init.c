@@ -1173,21 +1173,20 @@ static void test_heap_size_with_overhead(void)
 static void test_posix_memalign(void)
 {
   void *p1;
+  void **p2;
   size_t i;
   int sc;
   int maximumShift;
 
   /*
    * posix_memalign() is declared as never having a NULL first parameter.
-   * We need to explicitly disable this compiler warning to make this code
-   * warning free.
+   * We need to hide the NULL value from the compiler.
    */
-  COMPILER_DIAGNOSTIC_SETTINGS_PUSH
-  COMPILER_DIAGNOSTIC_SETTINGS_DISABLE_NONNULL
   puts( "posix_memalign - NULL return pointer -- EINVAL" );
-  sc = posix_memalign( NULL, 32, 8 );
+  p2 = NULL;
+  RTEMS_OBFUSCATE_VARIABLE( p2 );
+  sc = posix_memalign( p2, 32, 8 );
   fatal_posix_service_status( sc, EINVAL, "posix_memalign NULL pointer" );
-  COMPILER_DIAGNOSTIC_SETTINGS_POP
 
   puts( "posix_memalign - alignment of 0 -- EINVAL" );
   sc = posix_memalign( &p1, 0, 8 );
