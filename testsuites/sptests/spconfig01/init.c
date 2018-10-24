@@ -12,12 +12,15 @@
  * http://www.rtems.com/license/LICENSE.
  */
 
+#define _GNU_SOURCE
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <sys/stat.h>
 #include <errno.h>
+#include <pthread.h>
 
 #include <bsp.h>
 
@@ -83,12 +86,39 @@ static rtems_status_code app_extra_drivers_init(
   return RTEMS_SUCCESSFUL;
 }
 
+static void test_stack_config(void)
+{
+  pthread_attr_t attr;
+  size_t stack_size;
+  int eno;
+
+  rtems_test_assert(
+    rtems_configuration_get_interrupt_stack_size() == CPU_STACK_MINIMUM_SIZE
+  );
+
+  eno = pthread_getattr_np(pthread_self(), &attr);
+  rtems_test_assert(eno == 0);
+
+  eno = pthread_attr_getstacksize(&attr, &stack_size);
+  rtems_test_assert(eno == 0);
+  rtems_test_assert(stack_size == 2 * CPU_STACK_MINIMUM_SIZE);
+
+  eno = pthread_attr_destroy(&attr);
+  rtems_test_assert(eno == 0);
+}
+
 static void Init(rtems_task_argument arg)
 {
   checkpoint(3);
+  test_stack_config();
   TEST_END();
   rtems_test_exit(0);
 }
+
+#ifdef BSP_INTERRUPT_STACK_SIZE
+#warning "BSP_INTERRUPT_STACK_SIZE will be #undef for this test"
+#undef BSP_INTERRUPT_STACK_SIZE
+#endif
 
 #ifdef CONFIGURE_BSP_PREREQUISITE_DRIVERS
 #warning "CONFIGURE_BSP_PREREQUISITE_DRIVERS will be #undef for this test"
@@ -109,6 +139,8 @@ static void Init(rtems_task_argument arg)
   { app_extra_drivers_init, NULL, NULL, NULL, NULL, NULL }
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_MINIMUM_TASK_STACK_SIZE (2 * CPU_STACK_MINIMUM_SIZE)
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

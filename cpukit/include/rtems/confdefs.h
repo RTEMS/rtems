@@ -1166,7 +1166,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #ifdef BSP_INTERRUPT_STACK_SIZE
     #define CONFIGURE_INTERRUPT_STACK_SIZE BSP_INTERRUPT_STACK_SIZE
   #else
-    #define CONFIGURE_INTERRUPT_STACK_SIZE CONFIGURE_MINIMUM_TASK_STACK_SIZE
+    #define CONFIGURE_INTERRUPT_STACK_SIZE CPU_STACK_MINIMUM_SIZE
   #endif
 #endif
 
