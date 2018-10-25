@@ -25,9 +25,7 @@
 #include <rtems/score/basedefs.h>
 #include <rtems/score/assert.h>
 #include <rtems/posix/priorityimpl.h>
-#if defined(RTEMS_POSIX_API)
 #include <rtems/posix/threadsup.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {

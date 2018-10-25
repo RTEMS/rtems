@@ -43,9 +43,7 @@ typedef enum {
     RTEMS_MONITOR_OBJECT_INIT_TASK,
     RTEMS_MONITOR_OBJECT_MPCI,
     RTEMS_MONITOR_OBJECT_SYMBOL,
-    #if defined(RTEMS_POSIX_API)
-      RTEMS_MONITOR_OBJECT_PTHREAD,
-    #endif
+    RTEMS_MONITOR_OBJECT_PTHREAD
 } rtems_monitor_object_type_t;
 
 /*

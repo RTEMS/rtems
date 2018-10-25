@@ -34,7 +34,9 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/priorityimpl.h>
+#if defined(RTEMS_POSIX_API)
 #include <rtems/posix/psignalimpl.h>
+#endif
 #include <rtems/posix/config.h>
 #include <rtems/posix/keyimpl.h>
 #include <rtems/score/assert.h>
@@ -42,6 +44,7 @@
 
 Thread_Information _POSIX_Threads_Information;
 
+#if defined(RTEMS_POSIX_API)
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog )
 {
   POSIX_API_Control    *api;
@@ -144,6 +147,7 @@ static void _POSIX_Threads_Terminate_extension( Thread_Control *executing )
   _Watchdog_Per_CPU_remove_ticks( &api->Sporadic.Timer );
   _Thread_State_release( executing, &lock_context );
 }
+#endif
 
 /*
  *  _POSIX_Threads_Exitted_extension
@@ -164,9 +168,11 @@ static void _POSIX_Threads_Exitted_extension(
 
 User_extensions_Control _POSIX_Threads_User_extensions = {
   .Callouts = {
+#if defined(RTEMS_POSIX_API)
     .thread_create    = _POSIX_Threads_Create_extension,
-    .thread_exitted   = _POSIX_Threads_Exitted_extension,
-    .thread_terminate = _POSIX_Threads_Terminate_extension
+    .thread_terminate = _POSIX_Threads_Terminate_extension,
+#endif
+    .thread_exitted   = _POSIX_Threads_Exitted_extension
   }
 };
 

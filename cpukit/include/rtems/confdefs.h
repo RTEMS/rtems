@@ -34,6 +34,7 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
+#include <rtems/posix/pthread.h>
 #include <rtems/posix/semaphore.h>
 #include <rtems/posix/shm.h>
 
@@ -1950,12 +1951,12 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
     #define CONFIGURE_MAXIMUM_POSIX_SHMS \
       rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
   #endif
+  #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
+    #define CONFIGURE_MAXIMUM_POSIX_THREADS \
+      rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
+  #endif
 
   #ifdef RTEMS_POSIX_API
-    #if !defined(CONFIGURE_MAXIMUM_POSIX_THREADS)
-      #define CONFIGURE_MAXIMUM_POSIX_THREADS \
-        rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
-    #endif
     #if !defined(CONFIGURE_MAXIMUM_POSIX_TIMERS)
       #define CONFIGURE_MAXIMUM_POSIX_TIMERS \
         rtems_resource_unlimited(CONFIGURE_UNLIMITED_ALLOCATION_SIZE)
@@ -2300,6 +2301,14 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       _Configure_Max_Objects(_key_value_pairs) \
         * sizeof(POSIX_Keys_Key_value_pair)))
 
+/**
+ * This configuration parameter specifies the maximum number of
+ * POSIX API threads.
+ */
+#ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
+  #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
+#endif
+
 /*
  * Account for the object control structures plus the name
  * of the object to be duplicated.
@@ -2363,17 +2372,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #include <sys/types.h>
   #include <signal.h>
   #include <rtems/posix/psignal.h>
-  #include <rtems/posix/pthread.h>
   #include <rtems/posix/threadsup.h>
   #include <rtems/posix/timer.h>
-
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API threads.
-   */
-  #ifndef CONFIGURE_MAXIMUM_POSIX_THREADS
-    #define CONFIGURE_MAXIMUM_POSIX_THREADS 0
-  #endif
 
   /**
    * This configuration parameter specifies the maximum number of
@@ -2405,42 +2405,36 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS(_queued_signals) \
     _Configure_From_workspace( \
       (_queued_signals) * (sizeof(POSIX_signals_Siginfo_node)) )
-
-  #ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
-    #ifndef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
-      #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
-        #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
-      #endif
-
-      #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
-        #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
-          CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
-      #endif
-
-      #ifdef CONFIGURE_INIT
-        posix_initialization_threads_table POSIX_Initialization_threads[] = {
-          { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT,
-            CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE }
-        };
-      #endif
-
-      #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME \
-        POSIX_Initialization_threads
-
-      #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
-        RTEMS_ARRAY_SIZE(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME)
-    #endif /* !CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
-  #else /* !CONFIGURE_POSIX_INIT_THREAD_TABLE */
-    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
-    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
-  #endif /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
-#else
-  /**
-   * This configuration parameter specifies the maximum number of
-   * POSIX API threads.
-   */
-  #define CONFIGURE_MAXIMUM_POSIX_THREADS         0
 #endif /* RTEMS_POSIX_API */
+
+#ifdef CONFIGURE_POSIX_INIT_THREAD_TABLE
+  #ifndef CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE
+    #ifndef CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT
+      #define CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT   POSIX_Init
+    #endif
+
+    #ifndef CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE
+      #define CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE \
+        CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE
+    #endif
+
+    #ifdef CONFIGURE_INIT
+      posix_initialization_threads_table POSIX_Initialization_threads[] = {
+        { CONFIGURE_POSIX_INIT_THREAD_ENTRY_POINT,
+          CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE }
+      };
+    #endif
+
+    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME \
+      POSIX_Initialization_threads
+
+    #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE \
+      RTEMS_ARRAY_SIZE(CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME)
+  #endif /* !CONFIGURE_POSIX_HAS_OWN_INIT_TASK_TABLE */
+#else /* !CONFIGURE_POSIX_INIT_THREAD_TABLE */
+  #define CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME NULL
+  #define CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE 0
+#endif /* CONFIGURE_POSIX_INIT_THREAD_TABLE */
 
 /**
  * This configuration parameter specifies the stack size of the
@@ -2736,8 +2730,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * This accounts for any extra memory required by the POSIX API
  * Initialization Thread.
  */
-#if defined(RTEMS_POSIX_API) && \
-    (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
+#if (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE > \
       CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE)
   #define _CONFIGURE_INITIALIZATION_THREADS_STACKS_POSIX_PART \
     (CONFIGURE_POSIX_INIT_THREAD_STACK_SIZE - \
@@ -2999,13 +2992,6 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
       const uint32_t _Configuration_POSIX_Maximum_timers =
         CONFIGURE_MAXIMUM_POSIX_TIMERS;
     #endif
-
-    posix_initialization_threads_table * const
-      _Configuration_POSIX_Initialization_threads =
-        CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME;
-
-    const size_t _Configuration_POSIX_Initialization_thread_count =
-      CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE;
   #endif
 
   const size_t _Configuration_POSIX_Minimum_stack_size =
@@ -3098,16 +3084,21 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *  If the user has configured a set of POSIX Initialization Threads,
  *  then we need to install the code that runs that loop.
  */
-#ifdef RTEMS_POSIX_API
-  #ifdef CONFIGURE_INIT
-    #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
-        defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
-      RTEMS_SYSINIT_ITEM(
-        _POSIX_Threads_Initialize_user_threads_body,
-        RTEMS_SYSINIT_POSIX_USER_THREADS,
-        RTEMS_SYSINIT_ORDER_MIDDLE
-      );
-    #endif
+#ifdef CONFIGURE_INIT
+  #if defined(CONFIGURE_POSIX_INIT_THREAD_TABLE) || \
+      defined(CONFIGURE_POSIX_HAS_OWN_INIT_THREAD_TABLE)
+    posix_initialization_threads_table * const
+      _Configuration_POSIX_Initialization_threads =
+        CONFIGURE_POSIX_INIT_THREAD_TABLE_NAME;
+
+    const size_t _Configuration_POSIX_Initialization_thread_count =
+      CONFIGURE_POSIX_INIT_THREAD_TABLE_SIZE;
+
+    RTEMS_SYSINIT_ITEM(
+      _POSIX_Threads_Initialize_user_threads_body,
+      RTEMS_SYSINIT_POSIX_USER_THREADS,
+      RTEMS_SYSINIT_ORDER_MIDDLE
+    );
   #endif
 #endif
 
@@ -3323,10 +3314,8 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *        CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS  are not in this list.
  */
 #if !defined(RTEMS_POSIX_API)
-  #if ((CONFIGURE_MAXIMUM_POSIX_THREADS != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
-       (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0) || \
-      defined(CONFIGURE_POSIX_INIT_THREAD_TABLE))
+  #if ((CONFIGURE_MAXIMUM_POSIX_TIMERS != 0) || \
+       (CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS != 0))
   #error "CONFIGURATION ERROR: POSIX API support not configured!!"
   #endif
 #endif

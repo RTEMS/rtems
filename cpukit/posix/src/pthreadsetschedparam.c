@@ -40,12 +40,14 @@ static int _POSIX_Set_sched_param(
 )
 {
   const Scheduler_Control *scheduler;
-  POSIX_API_Control       *api;
   int                      normal_prio;
-  int                      low_prio;
   bool                     valid;
   Priority_Control         core_normal_prio;
+#if defined(RTEMS_POSIX_API)
+  POSIX_API_Control       *api;
+  int                      low_prio;
   Priority_Control         core_low_prio;
+#endif
 
   normal_prio = param->sched_priority;
 
@@ -56,6 +58,7 @@ static int _POSIX_Set_sched_param(
     return EINVAL;
   }
 
+#if defined(RTEMS_POSIX_API)
   if ( policy == SCHED_SPORADIC ) {
     low_prio = param->sched_ss_low_priority;
   } else {
@@ -70,9 +73,11 @@ static int _POSIX_Set_sched_param(
   api = the_thread->API_Extensions[ THREAD_API_POSIX ];
 
   _Watchdog_Per_CPU_remove_ticks( &api->Sporadic.Timer );
+#endif
 
   _Priority_Node_set_priority( &the_thread->Real_priority, core_normal_prio );
 
+#if defined(RTEMS_POSIX_API)
   if ( _Priority_Node_is_active( &api->Sporadic.Low_priority ) ) {
     _Thread_Priority_add(
       the_thread,
@@ -86,17 +91,21 @@ static int _POSIX_Set_sched_param(
     );
     _Priority_Node_set_inactive( &api->Sporadic.Low_priority );
   } else {
+#endif
     _Thread_Priority_changed(
       the_thread,
       &the_thread->Real_priority,
       false,
       queue_context
     );
+#if defined(RTEMS_POSIX_API)
   }
+#endif
 
   the_thread->budget_algorithm = budget_algorithm;
   the_thread->budget_callout   = budget_callout;
 
+#if defined(RTEMS_POSIX_API)
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period = param->sched_ss_repl_period;
   api->Sporadic.sched_ss_init_budget = param->sched_ss_init_budget;
@@ -105,9 +114,12 @@ static int _POSIX_Set_sched_param(
   if ( policy == SCHED_SPORADIC ) {
     _POSIX_Threads_Sporadic_timer_insert( the_thread, api );
   } else {
+#endif
     the_thread->cpu_time_budget =
       rtems_configuration_get_ticks_per_timeslice();
+#if defined(RTEMS_POSIX_API)
   }
+#endif
 
   return 0;
 }

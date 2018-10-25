@@ -25,9 +25,7 @@
 #include <rtems/rtems/regionimpl.h>
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/tasksimpl.h>
-#if defined(RTEMS_POSIX_API)
-  #include <rtems/posix/pthreadimpl.h>
-#endif
+#include <rtems/posix/pthreadimpl.h>
 
 #include <stdio.h>
 #include <stdlib.h>             /* strtoul() */
@@ -130,7 +128,6 @@ static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_dump_header_fn) rtems_monitor_driver_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_driver_dump,
     },
-#if defined(RTEMS_POSIX_API)
     { RTEMS_MONITOR_OBJECT_PTHREAD,
       (void *) &_POSIX_Threads_Information.Objects,
       sizeof(rtems_monitor_task_t),
@@ -138,8 +135,7 @@ static const rtems_monitor_object_info_t rtems_monitor_object_info[] =
       (rtems_monitor_object_canonical_fn)   rtems_monitor_task_canonical,
       (rtems_monitor_object_dump_header_fn) rtems_monitor_task_dump_header,
       (rtems_monitor_object_dump_fn)        rtems_monitor_task_dump,
-    },
-#endif
+    }
 };
 
 /*

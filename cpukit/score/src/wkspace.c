@@ -53,11 +53,9 @@ static uint32_t _Workspace_Get_maximum_thread_count( void )
     Configuration_RTEMS_API.maximum_tasks
   );
 
-#if defined(RTEMS_POSIX_API)
   thread_count += rtems_resource_maximum_per_allocation(
     _Configuration_POSIX_Maximum_threads
   );
-#endif
 
   return thread_count;
 }

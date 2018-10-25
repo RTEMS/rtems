@@ -30,10 +30,8 @@ int _POSIX_Thread_Translate_to_sched_policy(
   switch ( budget_algorithm ) {
     case THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE:
       return SCHED_OTHER;
-#if defined(RTEMS_POSIX_API)
     case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
       return SCHED_RR;
-#endif
     case THREAD_CPU_BUDGET_ALGORITHM_CALLOUT:
       return SCHED_SPORADIC;
     default:
@@ -62,13 +60,12 @@ int _POSIX_Thread_Translate_sched_param(
     return 0;
   }
 
-#if defined(RTEMS_POSIX_API)
   if ( policy == SCHED_RR ) {
     *budget_algorithm = THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE;
     return 0;
   }
-#endif
 
+#if defined(RTEMS_POSIX_API)
   if ( policy == SCHED_SPORADIC ) {
     if ( (param->sched_ss_repl_period.tv_sec == 0) &&
          (param->sched_ss_repl_period.tv_nsec == 0) )
@@ -86,6 +83,7 @@ int _POSIX_Thread_Translate_sched_param(
     *budget_callout = _POSIX_Threads_Sporadic_budget_callout;
     return 0;
   }
+#endif
 
   return EINVAL;
 }

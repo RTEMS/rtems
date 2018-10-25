@@ -26,29 +26,7 @@
 #include <rtems/score/protectedheap.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/wkspace.h>
-
 #include <rtems/posix/keyimpl.h>
-
-#include <rtems/rtems/barrierimpl.h>
-#include <rtems/extensionimpl.h>
-#include <rtems/rtems/dpmemimpl.h>
-#include <rtems/rtems/messageimpl.h>
-#include <rtems/rtems/partimpl.h>
-#include <rtems/rtems/ratemonimpl.h>
-#include <rtems/rtems/regionimpl.h>
-#include <rtems/rtems/semimpl.h>
-#include <rtems/rtems/tasksimpl.h>
-#include <rtems/rtems/timerimpl.h>
-
-#ifdef RTEMS_POSIX_API
-  #include <rtems/posix/barrierimpl.h>
-  #include <rtems/posix/mqueueimpl.h>
-  #include <rtems/posix/muteximpl.h>
-  #include <rtems/posix/psignal.h>
-  #include <rtems/posix/pthreadimpl.h>
-  #include <rtems/posix/semaphoreimpl.h>
-  #include <rtems/posix/timerimpl.h>
-#endif
 
 static const struct {
   Objects_APIs api;
@@ -64,12 +42,12 @@ static const struct {
   { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_REGIONS },
   { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_SEMAPHORES },
   { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS },
-  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS }
+  { OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS },
+  { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
+  { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
+  { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS }
   #ifdef RTEMS_POSIX_API
     ,
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_MESSAGE_QUEUES },
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_SEMAPHORES },
-    { OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS },
     { OBJECTS_POSIX_API, OBJECTS_POSIX_TIMERS }
   #endif
 };

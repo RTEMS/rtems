@@ -29,11 +29,9 @@ void _Thread_Iterate(
     const Objects_Information *information;
     Objects_Maximum            i;
 
-#if !defined(RTEMS_POSIX_API)
     if ( _Objects_Information_table[ api_index ] == NULL ) {
       continue;
     }
-#endif
 
     information = _Objects_Information_table[ api_index ][ 1 ];
 

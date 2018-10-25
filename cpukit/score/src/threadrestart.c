@@ -77,12 +77,9 @@ static void _Thread_Raise_real_priority(
 
 typedef struct {
   Thread_queue_Context  Base;
-#if defined(RTEMS_POSIX_API)
   void                 *exit_value;
-#endif
 } Thread_Join_context;
 
-#if defined(RTEMS_POSIX_API)
 static Thread_Control *_Thread_Join_flush_filter(
   Thread_Control       *the_thread,
   Thread_queue_Queue   *queue,
@@ -97,26 +94,19 @@ static Thread_Control *_Thread_Join_flush_filter(
 
   return the_thread;
 }
-#endif
 
 static void _Thread_Wake_up_joining_threads( Thread_Control *the_thread )
 {
   Thread_Join_context join_context;
 
-#if defined(RTEMS_POSIX_API)
   join_context.exit_value = the_thread->Life.exit_value;
-#endif
 
   _Thread_queue_Context_initialize( &join_context.Base );
   _Thread_queue_Acquire( &the_thread->Join_queue, &join_context.Base );
   _Thread_queue_Flush_critical(
     &the_thread->Join_queue.Queue,
     THREAD_JOIN_TQ_OPERATIONS,
-#if defined(RTEMS_POSIX_API)
     _Thread_Join_flush_filter,
-#else
-    _Thread_queue_Flush_default_filter,
-#endif
     &join_context.Base
   );
 }
@@ -289,7 +279,6 @@ static Per_CPU_Control *_Thread_Wait_for_join(
   Per_CPU_Control *cpu_self
 )
 {
-#if defined(RTEMS_POSIX_API)
   ISR_lock_Context lock_context;
 
   _Thread_State_acquire( executing, &lock_context );
@@ -308,7 +297,6 @@ static Per_CPU_Control *_Thread_Wait_for_join(
   } else {
     _Thread_State_release( executing, &lock_context );
   }
-#endif
 
   return cpu_self;
 }
@@ -442,9 +430,7 @@ void _Thread_Join(
   _Assert( the_thread != executing );
   _Assert( _Thread_State_is_owner( the_thread ) );
 
-#if defined(RTEMS_POSIX_API)
   executing->Wait.return_argument = NULL;
-#endif
 
   _Thread_queue_Context_set_thread_state( queue_context, waiting_for_join );
   _Thread_queue_Enqueue(
@@ -460,9 +446,7 @@ static void _Thread_Set_exit_value(
   void           *exit_value
 )
 {
-#if defined(RTEMS_POSIX_API)
   the_thread->Life.exit_value = exit_value;
-#endif
 }
 
 void _Thread_Cancel(

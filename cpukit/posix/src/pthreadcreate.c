@@ -62,10 +62,8 @@ int pthread_create(
   };
   const pthread_attr_t               *the_attr;
   int                                 normal_prio;
-  int                                 low_prio;
   bool                                valid;
   Priority_Control                    core_normal_prio;
-  Priority_Control                    core_low_prio;
   Thread_CPU_budget_algorithms        budget_algorithm;
   Thread_CPU_budget_algorithm_callout budget_callout;
   bool                                is_fp;
@@ -73,14 +71,18 @@ int pthread_create(
   Thread_Control                     *the_thread;
   Thread_Control                     *executing;
   const Scheduler_Control            *scheduler;
-  POSIX_API_Control                  *api;
-  const POSIX_API_Control            *executing_api;
   int                                 schedpolicy = SCHED_RR;
   struct sched_param                  schedparam;
   size_t                              stacksize;
   Objects_Name                        name;
   int                                 error;
   ISR_lock_Context                    lock_context;
+#if defined(RTEMS_POSIX_API)
+  int                                 low_prio;
+  Priority_Control                    core_low_prio;
+  POSIX_API_Control                  *api;
+  const POSIX_API_Control            *executing_api;
+#endif
 
   if ( !start_routine )
     return EFAULT;
@@ -167,6 +169,7 @@ int pthread_create(
     return EINVAL;
   }
 
+#if defined(RTEMS_POSIX_API)
   if ( schedpolicy == SCHED_SPORADIC ) {
     low_prio = schedparam.sched_ss_low_priority;
   } else {
@@ -177,6 +180,7 @@ int pthread_create(
   if ( !valid ) {
     return EINVAL;
   }
+#endif
 
   if ( the_attr->affinityset == NULL ) {
     return EINVAL;
@@ -242,6 +246,10 @@ int pthread_create(
      return EINVAL;
    }
 
+  the_thread->was_created_with_inherited_scheduler =
+    ( the_attr->inheritsched == PTHREAD_INHERIT_SCHED );
+
+#if defined(RTEMS_POSIX_API)
   /*
    *  finish initializing the per API structure
    */
@@ -249,9 +257,6 @@ int pthread_create(
   executing_api = executing->API_Extensions[ THREAD_API_POSIX ];
 
   api->signals_unblocked = executing_api->signals_unblocked;
-
-  the_thread->was_created_with_inherited_scheduler =
-    ( the_attr->inheritsched == PTHREAD_INHERIT_SCHED );
 
   _Priority_Node_set_priority( &api->Sporadic.Low_priority, core_low_prio );
   api->Sporadic.sched_ss_repl_period =
@@ -264,6 +269,7 @@ int pthread_create(
   if ( schedpolicy == SCHED_SPORADIC ) {
     _POSIX_Threads_Sporadic_timer( &api->Sporadic.Timer );
   }
+#endif
 
   /*
    *  POSIX threads are allocated and started in one operation.

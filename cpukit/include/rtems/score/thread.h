@@ -69,9 +69,7 @@ extern "C" {
  */
 /**@{*/
 
-#if defined(RTEMS_POSIX_API)
-  #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
-#endif
+#define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
 
 /*
  * With the addition of the Constant Block Scheduler (CBS),
@@ -79,9 +77,7 @@ extern "C" {
  */
 #define RTEMS_SCORE_THREAD_ENABLE_SCHEDULER_CALLOUT
 
-#if defined(RTEMS_POSIX_API)
-  #define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
-#endif
+#define RTEMS_SCORE_THREAD_ENABLE_USER_PROVIDED_STACK_VIA_API
 
 #if defined(RTEMS_DEBUG)
 #define RTEMS_SCORE_THREAD_ENABLE_RESOURCE_COUNT
@@ -703,7 +699,6 @@ typedef struct {
    */
   uint32_t pending_life_change_requests;
 
-#if defined(RTEMS_POSIX_API)
   /**
    * @brief The thread exit value.
    *
@@ -713,7 +708,6 @@ typedef struct {
    * - NULL.
    */
   void *exit_value;
-#endif
 } Thread_Life_control;
 
 typedef struct  {
