@@ -14,14 +14,12 @@ psx_lib =
 
 support_includes = -I$(top_srcdir)/../support/include
 
-if HAS_POSIX
 if TEST_psx01
 psx_tests += psx01
 psx01_SOURCES = psx01/init.c psx01/task.c psx01/system.h \
 	include/pmacros.h
 psx01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if HAS_POSIX
@@ -57,7 +55,6 @@ psx04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx04) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psx05
 psx_tests += psx05
 psx_screens += psx05/psx05.scn
@@ -66,9 +63,7 @@ psx05_SOURCES = psx05/init.c psx05/task.c psx05/task2.c psx05/task3.c \
 psx05_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx05) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx06
 psx_tests += psx06
 psx_screens += psx06/psx06.scn
@@ -77,9 +72,7 @@ psx06_SOURCES = psx06/init.c psx06/task.c psx06/task2.c psx06/system.h \
 psx06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx06) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx07
 psx_tests += psx07
 psx_screens += psx07/psx07.scn
@@ -89,9 +82,7 @@ psx07_SOURCES = psx07/init.c psx07/task.c psx07/system.h \
 psx07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx07) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx08
 psx_tests += psx08
 psx_screens += psx08/psx08.scn
@@ -99,7 +90,6 @@ psx08_SOURCES = psx08/init.c psx08/task1.c psx08/task2.c psx08/task3.c \
 	psx08/system.h include/pmacros.h
 psx08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx08) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if HAS_POSIX
@@ -112,7 +102,6 @@ psx09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx09) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psx10
 psx_tests += psx10
 psx_screens += psx10/psx10.scn
@@ -121,9 +110,7 @@ psx10_SOURCES = psx10/init.c psx10/task.c psx10/task2.c psx10/task3.c \
 psx10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx10) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx11
 psx_tests += psx11
 psx_screens += psx11/psx11.scn
@@ -131,7 +118,6 @@ psx11_SOURCES = psx11/init.c psx11/task.c psx11/system.h \
 	include/pmacros.h
 psx11_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx11) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if HAS_POSIX
@@ -152,7 +138,6 @@ psx13_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx13) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psx14
 psx_tests += psx14
 psx_screens += psx14/psx14.scn
@@ -160,9 +145,7 @@ psx14_SOURCES = psx14/init.c psx14/system.h include/pmacros.h
 psx14_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx14) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx15
 psx_tests += psx15
 psx_screens += psx15/psx15.scn
@@ -170,16 +153,13 @@ psx15_SOURCES = psx15/init.c include/pmacros.h
 psx15_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx15) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psx16
 psx_tests += psx16
 psx_screens += psx16/psx16.scn
 psx16_SOURCES = psx16/init.c include/pmacros.h
 psx16_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psx16) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if HAS_POSIX
@@ -223,7 +203,6 @@ psxalarm01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxalarm01) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psxautoinit01
 psx_tests += psxautoinit01
 psx_screens += psxautoinit01/psxautoinit01.scn
@@ -231,9 +210,7 @@ psxautoinit01_SOURCES = psxautoinit01/init.c include/pmacros.h
 psxautoinit01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxautoinit01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxautoinit02
 psx_tests += psxautoinit02
 psx_screens += psxautoinit02/psxautoinit02.scn
@@ -242,9 +219,7 @@ psxautoinit02_SOURCES = psxautoinit02/init.c include/pmacros.h
 psxautoinit02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxautoinit02) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxbarrier01
 psx_tests += psxbarrier01
 psx_screens += psxbarrier01/psxbarrier01.scn
@@ -253,9 +228,7 @@ psxbarrier01_SOURCES = psxbarrier01/main.c psxbarrier01/test.c \
 psxbarrier01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxbarrier01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcancel
 psx_tests += psxcancel
 psx_screens += psxcancel/psxcancel.scn
@@ -264,9 +237,7 @@ psxcancel_SOURCES = psxcancel/init.c include/pmacros.h
 psxcancel_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcancel) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcancel01
 psx_tests += psxcancel01
 psx_screens += psxcancel01/psxcancel01.scn
@@ -274,7 +245,6 @@ psx_docs += psxcancel01/psxcancel01.doc
 psxcancel01_SOURCES = psxcancel01/init.c include/pmacros.h
 psxcancel01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcancel01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxchroot01
@@ -297,7 +267,6 @@ psxclassic01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxclassic01) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psxcleanup
 psx_tests += psxcleanup
 psx_screens += psxcleanup/psxcleanup.scn
@@ -306,9 +275,7 @@ psxcleanup_SOURCES = psxcleanup/psxcleanup.c psxcleanup/system.h \
 psxcleanup_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcleanup) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcleanup01
 psx_tests += psxcleanup01
 psx_screens += psxcleanup01/psxcleanup01.scn
@@ -317,9 +284,7 @@ psxcleanup01_SOURCES = psxcleanup01/init.c include/pmacros.h
 psxcleanup01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcleanup01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcleanup02
 psx_tests += psxcleanup02
 psx_screens += psxcleanup02/psxcleanup02.scn
@@ -327,7 +292,6 @@ psx_docs += psxcleanup02/psxcleanup02.doc
 psxcleanup02_SOURCES = psxcleanup02/init.c psxcleanup02/main.c
 psxcleanup02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcleanup02) \
 	$(support_includes)
-endif
 endif
 
 if TEST_psxclock
@@ -339,7 +303,6 @@ psxclock_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxclock) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxclock01
 psx_tests += psxclock01
 psx_screens += psxclock01/psxclock01.scn
@@ -348,9 +311,7 @@ psxclock01_SOURCES = psxclock01/init.c
 psxclock01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxclock01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxclockrealtime01
 psx_tests += psxclockrealtime01
 psx_screens += psxclockrealtime01/psxclockrealtime01.scn
@@ -359,9 +320,7 @@ psxclockrealtime01_SOURCES = psxclockrealtime01/init.c
 psxclockrealtime01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_psxclockrealtime01) $(support_includes)
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxconcurrency01
 psx_tests += psxconcurrency01
 psx_screens += psxconcurrency01/psxconcurrency01.scn
@@ -371,9 +330,7 @@ psxconcurrency01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_psxconcurrency01) $(support_includes) \
 	-I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcond01
 psx_tests += psxcond01
 psx_screens += psxcond01/psxcond01.scn
@@ -382,9 +339,7 @@ psxcond01_SOURCES = psxcond01/init.c include/pmacros.h
 psxcond01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcond01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxcond02
 psx_tests += psxcond02
 psx_screens += psxcond02/psxcond02.scn
@@ -393,9 +348,7 @@ psxcond02_SOURCES = psxcond02/init.c include/pmacros.h
 psxcond02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxcond02) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxconfig01
 psx_tests += psxconfig01
 psx_screens += psxconfig01/psxconfig01.scn
@@ -403,7 +356,6 @@ psx_docs += psxconfig01/psxconfig01.doc
 psxconfig01_SOURCES = psxconfig01/init.c include/pmacros.h
 psxconfig01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxconfig01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxdevctl01
@@ -426,7 +378,6 @@ psxeintr_join_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxeintr_join) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psxenosys
 psx_tests += psxenosys
 psx_screens += psxenosys/psxenosys.scn
@@ -436,9 +387,7 @@ psxenosys_SOURCES = psxenosys/init.c psxenosys/system.h \
 psxenosys_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxenosys) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxfatal01
 psx_tests += psxfatal01
 psx_screens += psxfatal01/psxfatal01.scn
@@ -447,9 +396,7 @@ psxfatal01_SOURCES = psxfatal_support/init.c psxfatal_support/system.h \
 psxfatal01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfatal01) \
 	$(support_includes) -I$(top_srcdir)/psxfatal01
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxfatal02
 psx_tests += psxfatal02
 psx_screens += psxfatal02/psxfatal02.scn
@@ -457,7 +404,6 @@ psxfatal02_SOURCES = psxfatal_support/init.c psxfatal_support/system.h \
 	psxfatal02/testcase.h
 psxfatal02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfatal02) \
 	$(support_includes) -I$(top_srcdir)/psxfatal02
-endif
 endif
 
 if TEST_psxfchx01
@@ -497,7 +443,6 @@ psxfilelock01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxfilelock01) \
 	$(support_includes)
 endif
 
-if HAS_POSIX
 if TEST_psxgetattrnp01
 psx_tests += psxgetattrnp01
 psx_screens += psxgetattrnp01/psxgetattrnp01.scn
@@ -505,7 +450,6 @@ psx_docs += psxgetattrnp01/psxgetattrnp01.doc
 psxgetattrnp01_SOURCES = psxgetattrnp01/init.c
 psxgetattrnp01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxgetattrnp01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxgetrusage01
@@ -517,7 +461,6 @@ psxgetrusage01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxgetrusage01) \
 	$(support_includes)
 endif
 
-if HAS_POSIX
 if HAS_CPLUSPLUS
 if TEST_psxglobalcon01
 psx_tests += psxglobalcon01
@@ -528,9 +471,7 @@ psxglobalcon01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxglobalcon01) \
 	$(support_includes)
 endif
 endif
-endif
 
-if HAS_POSIX
 if HAS_CPLUSPLUS
 if TEST_psxglobalcon02
 psx_tests += psxglobalcon02
@@ -539,7 +480,6 @@ psx_docs += psxglobalcon02/psxglobalcon02.doc
 psxglobalcon02_SOURCES = psxglobalcon02/init.cc
 psxglobalcon02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxglobalcon02) \
 	$(support_includes)
-endif
 endif
 endif
 
@@ -647,7 +587,6 @@ psxkey06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxkey06) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxkey07
 psx_tests += psxkey07
 psx_screens += psxkey07/psxkey07.scn
@@ -655,7 +594,6 @@ psx_docs += psxkey07/psxkey07.doc
 psxkey07_SOURCES = psxkey07/init.c
 psxkey07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxkey07) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxkey08
@@ -685,7 +623,6 @@ psxkey10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxkey10) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxmmap01
 psx_tests += psxmmap01
 psx_screens += psxmmap01/psxmmap01.scn
@@ -693,7 +630,6 @@ psxmmap01_SOURCES = psxmmap01/init.c psxmmap01/test_helper.c \
 	psxmmap01/test_driver.c psxmmap01/system.h
 psxmmap01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmmap01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxmount
@@ -704,7 +640,6 @@ psxmount_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmount) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxmsgq01
 psx_tests += psxmsgq01
 psx_screens += psxmsgq01/psxmsgq01.scn
@@ -713,9 +648,7 @@ psxmsgq01_SOURCES = psxmsgq01/init.c psxmsgq01/system.h \
 psxmsgq01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmsgq01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxmsgq02
 psx_tests += psxmsgq02
 psx_screens += psxmsgq02/psxmsgq02.scn
@@ -724,9 +657,7 @@ psxmsgq02_SOURCES = psxmsgq02/init.c psxmsgq02/system.h \
 psxmsgq02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmsgq02) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxmsgq03
 psx_tests += psxmsgq03
 psx_screens += psxmsgq03/psxmsgq03.scn
@@ -736,9 +667,7 @@ psxmsgq03_SOURCES = psxmsgq03/init.c psxmsgq03/system.h \
 psxmsgq03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmsgq03) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxmsgq04
 psx_tests += psxmsgq04
 psx_screens += psxmsgq04/psxmsgq04.scn
@@ -748,9 +677,7 @@ psxmsgq04_SOURCES = psxmsgq04/init.c include/pmacros.h \
 psxmsgq04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmsgq04) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxmutexattr01
 psx_tests += psxmutexattr01
 psx_screens += psxmutexattr01/psxmutexattr01.scn
@@ -759,9 +686,7 @@ psxmutexattr01_SOURCES = psxmutexattr01/init.c
 psxmutexattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxmutexattr01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxobj01
 psx_tests += psxobj01
 psx_screens += psxobj01/psxobj01.scn
@@ -769,7 +694,6 @@ psx_docs += psxobj01/psxobj01.doc
 psxobj01_SOURCES = psxobj01/init.c ../support/src/test_support.c
 psxobj01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxobj01) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxonce01
@@ -825,7 +749,6 @@ psxreaddir_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxreaddir) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxrwlock01
 psx_tests += psxrwlock01
 psx_screens += psxrwlock01/psxrwlock01.scn
@@ -834,9 +757,7 @@ psxrwlock01_SOURCES = psxrwlock01/main.c psxrwlock01/test.c \
 psxrwlock01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxrwlock01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxsem01
 psx_tests += psxsem01
 psx_screens += psxsem01/psxsem01.scn
@@ -845,9 +766,7 @@ psxsem01_SOURCES = psxsem01/init.c include/pmacros.h \
 psxsem01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsem01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxshm01
 psx_tests += psxshm01
 psx_screens += psxshm01/psxshm01.scn
@@ -855,16 +774,13 @@ psxshm01_SOURCES = psxshm01/init.c psxshm01/system.h
 psxshm01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxshm01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxshm02
 psx_tests += psxshm02
 psx_screens += psxshm02/psxshm02.scn
 psxshm02_SOURCES = psxshm02/init.c psxshm02/system.h
 psxshm02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxshm02) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if HAS_POSIX
@@ -935,7 +851,6 @@ psxsignal06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsignal06) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psxspin01
 psx_tests += psxspin01
 psx_screens += psxspin01/psxspin01.scn
@@ -944,9 +859,7 @@ psxspin01_SOURCES = psxspin01/main.c psxspin01/test.c \
 psxspin01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxspin01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxstack01
 psx_tests += psxstack01
 psx_screens += psxstack01/psxstack01.scn
@@ -955,9 +868,7 @@ psxstack01_SOURCES = psxstack01/init.c include/pmacros.h
 psxstack01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxstack01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxstack02
 psx_tests += psxstack02
 psx_screens += psxstack02/psxstack02.scn
@@ -965,7 +876,6 @@ psx_docs += psxstack02/psxstack02.doc
 psxstack02_SOURCES = psxstack02/init.c
 psxstack02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxstack02) \
 	$(support_includes) -I$(top_srcdir)/include
-endif
 endif
 
 if TEST_psxstat
@@ -976,7 +886,6 @@ psxstat_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxstat) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
 
-if HAS_POSIX
 if TEST_psxstrsignal01
 psx_tests += psxstrsignal01
 psx_screens += psxstrsignal01/psxstrsignal01.scn
@@ -985,9 +894,7 @@ psxstrsignal01_SOURCES = psxstrsignal01/init.c include/pmacros.h
 psxstrsignal01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxstrsignal01) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxsysconf
 psx_tests += psxsysconf
 psx_screens += psxsysconf/psxsysconf.scn
@@ -996,9 +903,7 @@ psxsysconf_SOURCES = psxsysconf/init.c psxsysconf/system.h \
 psxsysconf_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxsysconf) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxthreadname01
 psx_tests += psxthreadname01
 psx_screens += psxthreadname01/psxthreadname01.scn
@@ -1007,16 +912,13 @@ psxthreadname01_SOURCES = psxthreadname01/init.c
 psxthreadname01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_psxthreadname01) $(support_includes)
 endif
-endif
 
-if HAS_POSIX
 if TEST_psxtime
 psx_tests += psxtime
 psx_screens += psxtime/psxtime.scn
 psxtime_SOURCES = psxtime/main.c psxtime/test.c
 psxtime_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtime) \
 	$(support_includes)
-endif
 endif
 
 if HAS_POSIX
@@ -1061,7 +963,6 @@ psxualarm_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxualarm) \
 endif
 endif
 
-if HAS_POSIX
 if TEST_psxusleep
 psx_tests += psxusleep
 psx_screens += psxusleep/psxusleep.scn
@@ -1070,9 +971,7 @@ psxusleep_SOURCES = psxusleep/init.c include/pmacros.h
 psxusleep_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxusleep) \
 	$(support_includes) -I$(top_srcdir)/include
 endif
-endif
 
-if HAS_POSIX
 if TEST_lib_a
 psx_lib += lib.a
 lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
@@ -1184,7 +1083,6 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/socket/sendto.c psxhdrs/sys/socket/setsockopt.c \
 	psxhdrs/sys/socket/shutdown.c psxhdrs/sys/socket/socket.c \
 	psxhdrs/sys/socket/socketpair.c
-endif
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)

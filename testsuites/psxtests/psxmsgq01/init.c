@@ -940,6 +940,7 @@ void wait_for_signal(
 
 void verify_notify(void)
 {
+#if defined(RTEMS_POSIX_API)
   struct sigevent event;
   int             status;
   timer_t         timer_id;
@@ -1019,7 +1020,7 @@ void verify_notify(void)
   Show_send_msg_to_que( "Init:", RW_QUEUE, 0 );
   wait_for_signal( &set, 3, 0 );
   Read_msg_from_que( RW_QUEUE, 0 );
-
+#endif
 }
 
 void verify_with_threads(void)

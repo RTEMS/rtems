@@ -63,14 +63,18 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 17
 
 #define POSIX_MQ_COUNT 5
+#ifdef RTEMS_POSIX_API
 #define CONFIGURE_MAXIMUM_POSIX_QUEUED_SIGNALS 7
+#endif
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 41
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
 #define CONFIGURE_MINIMUM_POSIX_THREAD_STACK_SIZE CPU_STACK_MINIMUM_SIZE
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 3
+#ifdef RTEMS_POSIX_API
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS 47
+#endif
 
 #ifndef CONFIGURE_MAXIMUM_TASKS
   #define CONFIGURE_MAXIMUM_TASKS 1
@@ -242,7 +246,6 @@ static rtems_task Init(rtems_task_argument argument)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   int eno = 0;
-  int rv = 0;
   rtems_id id = RTEMS_ID_NONE;
   rtems_name name = rtems_build_name('C', 'O', 'N', 'F');
   rtems_extensions_table table;
@@ -491,6 +494,8 @@ static rtems_task Init(rtems_task_argument argument)
 #ifdef CONFIGURE_MAXIMUM_POSIX_TIMERS
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_TIMERS; ++i) {
     timer_t timer_id;
+    int rv;
+
     rv = timer_create(CLOCK_REALTIME, NULL, &timer_id);
     rtems_test_assert(rv == 0);
   }

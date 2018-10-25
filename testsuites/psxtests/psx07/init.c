@@ -556,6 +556,7 @@ void *POSIX_Init(
   status = pthread_setschedparam( (pthread_t) -1, SCHED_OTHER, &schedparam );
   fatal_directive_check_status_only( status, ESRCH, "invalid thread" );
 
+#if defined(RTEMS_POSIX_API)
   /* now get sporadic server errors */
 
   schedparam.sched_ss_repl_period.tv_sec = 0;
@@ -628,6 +629,7 @@ void *POSIX_Init(
 
   status = pthread_join( Task2_id, NULL );
   posix_service_failed( status, " pthread_join");
+#endif
 
   TEST_END();
   rtems_test_exit( 0 );
