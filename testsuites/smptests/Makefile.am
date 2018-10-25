@@ -338,7 +338,6 @@ endif
 endif
 
 if HAS_SMP
-if HAS_POSIX
 if TEST_smppsxaffinity01
 smp_tests += smppsxaffinity01
 smp_screens += smppsxaffinity01/smppsxaffinity01.scn
@@ -349,10 +348,8 @@ smppsxaffinity01_CPPFLAGS = $(AM_CPPFLAGS) \
 	-I$(top_srcdir)/include
 endif
 endif
-endif
 
 if HAS_SMP
-if HAS_POSIX
 if TEST_smppsxaffinity02
 smp_tests += smppsxaffinity02
 smp_screens += smppsxaffinity02/smppsxaffinity02.scn
@@ -362,10 +359,8 @@ smppsxaffinity02_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_smppsxaffinity02) $(support_includes)
 endif
 endif
-endif
 
 if HAS_SMP
-if HAS_POSIX
 if TEST_smppsxmutex01
 smp_tests += smppsxmutex01
 smp_screens += smppsxmutex01/smppsxmutex01.scn
@@ -373,7 +368,6 @@ smp_docs += smppsxmutex01/smppsxmutex01.doc
 smppsxmutex01_SOURCES = smppsxmutex01/init.c
 smppsxmutex01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smppsxmutex01) \
 	$(support_includes)
-endif
 endif
 endif
 
