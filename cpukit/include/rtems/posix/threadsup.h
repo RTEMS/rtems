@@ -35,6 +35,7 @@
 extern "C" {
 #endif
 
+#if defined(RTEMS_POSIX_API)
 /**
  * This defines the POSIX API support structure associated with
  * each thread in a system with POSIX configured.
@@ -87,6 +88,7 @@ typedef struct {
    */
   Thread_Action           Signal_action;
 } POSIX_API_Control;
+#endif
 
 /** @} */
 

@@ -48,6 +48,7 @@ extern "C" {
  */
 extern Thread_Information _POSIX_Threads_Information;
 
+#if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,
   POSIX_API_Control *api
@@ -62,6 +63,7 @@ RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
     _Timespec_To_ticks( &api->Sporadic.sched_ss_repl_period )
   );
 }
+#endif
 
 void _POSIX_Threads_Sporadic_timer( Watchdog_Control *watchdog );
 
