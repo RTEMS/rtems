@@ -140,6 +140,7 @@ static void benchmark_mq_unlink(void)
 
 static void benchmark_mq_notify(void)
 {
+#if defined(RTEMS_POSIX_API)
   benchmark_timer_t end_time;
   int             status;
   struct sigevent event;
@@ -159,6 +160,7 @@ static void benchmark_mq_notify(void)
     0,
     0
   );
+#endif
 }
 
 static void benchmark_mq_send(void)
