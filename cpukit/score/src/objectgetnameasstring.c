@@ -45,12 +45,9 @@ size_t _Objects_Name_to_string(
   char       *d;
   size_t      i;
 
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
   if ( is_string ) {
     s = name.name_p;
-  } else
-#endif
-  {
+  } else {
     lname[ 0 ] = (name.name_u32 >> 24) & 0xff;
     lname[ 1 ] = (name.name_u32 >> 16) & 0xff;
     lname[ 2 ] = (name.name_u32 >>  8) & 0xff;
@@ -93,10 +90,10 @@ char *_Objects_Get_name_as_string(
   char             *name
 )
 {
-  Objects_Information   *information;
-  Objects_Control       *the_object;
-  ISR_lock_Context       lock_context;
-  Objects_Id             tmpId;
+  const Objects_Information *information;
+  const Objects_Control     *the_object;
+  ISR_lock_Context           lock_context;
+  Objects_Id                 tmpId;
 
   if ( length == 0 )
     return NULL;
@@ -117,11 +114,7 @@ char *_Objects_Get_name_as_string(
 
   _Objects_Name_to_string(
     the_object->name,
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
     information->is_string,
-#else
-    false,
-#endif
     name,
     length
   );

@@ -156,8 +156,10 @@ RTEMS_INLINE_ROUTINE void _POSIX_Message_queue_Namespace_remove (
   POSIX_Message_queue_Control *the_mq
 )
 {
-  _Objects_Namespace_remove( 
-    &_POSIX_Message_queue_Information, &the_mq->Object );
+  _Objects_Namespace_remove_string(
+    &_POSIX_Message_queue_Information,
+    &the_mq->Object
+  );
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Message_queue_Control *

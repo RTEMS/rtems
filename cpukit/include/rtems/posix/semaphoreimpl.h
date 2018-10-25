@@ -107,8 +107,10 @@ RTEMS_INLINE_ROUTINE void _POSIX_Semaphore_Namespace_remove (
   POSIX_Semaphore_Control *the_semaphore
 )
 {
-  _Objects_Namespace_remove( 
-    &_POSIX_Semaphore_Information, &the_semaphore->Object );
+  _Objects_Namespace_remove_string(
+    &_POSIX_Semaphore_Information,
+    &the_semaphore->Object
+  );
 }
 
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *_POSIX_Semaphore_Get_by_name(

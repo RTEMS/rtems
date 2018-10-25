@@ -40,10 +40,8 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( !information )
     return OBJECTS_INVALID_ID;
 
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    if ( information->is_string )
-      return OBJECTS_INVALID_ID;
-  #endif
+  if ( information->is_string )
+    return OBJECTS_INVALID_ID;
 
   the_object = _Objects_Get(
     tmpId,

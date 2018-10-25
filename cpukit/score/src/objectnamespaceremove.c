@@ -22,24 +22,24 @@
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/wkspace.h>
 
-void _Objects_Namespace_remove(
-  Objects_Information  *information,
-  Objects_Control      *the_object
+void _Objects_Namespace_remove_u32(
+  const Objects_Information *information,
+  Objects_Control           *the_object
 )
 {
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /*
-     *  If this is a string format name, then free the memory.
-     */
-    if ( information->is_string )
-       _Workspace_Free( (void *)the_object->name.name_p );
-  #endif
-
-  /*
-   * Clear out either format.
-   */
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    the_object->name.name_p   = NULL;
-  #endif
+  _Assert( !information->is_string );
   the_object->name.name_u32 = 0;
+}
+
+void _Objects_Namespace_remove_string(
+  const Objects_Information *information,
+  Objects_Control           *the_object
+)
+{
+  char *name;
+
+  _Assert( information->is_string );
+  name = RTEMS_DECONST( char *, the_object->name.name_p );
+  the_object->name.name_p = NULL;
+  _Workspace_Free( name );
 }

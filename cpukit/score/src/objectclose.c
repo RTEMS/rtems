@@ -21,11 +21,11 @@
 #include <rtems/score/objectimpl.h>
 
 void _Objects_Close(
-  Objects_Information  *information,
-  Objects_Control      *the_object
+  const Objects_Information *information,
+  Objects_Control           *the_object
 )
 {
   _Objects_Invalidate_Id( information, the_object );
 
-  _Objects_Namespace_remove( information, the_object );
+  _Objects_Namespace_remove_u32( information, the_object );
 }

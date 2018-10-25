@@ -24,9 +24,9 @@
 #include <string.h>
 
 bool _Objects_Set_name(
-  Objects_Information *information,
-  Objects_Control     *the_object,
-  const char          *name
+  const Objects_Information *information,
+  Objects_Control           *the_object,
+  const char                *name
 )
 {
   size_t                 length;
@@ -35,7 +35,6 @@ bool _Objects_Set_name(
   s      = name;
   length = strnlen( name, information->name_length );
 
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
   if ( information->is_string ) {
     char *d;
 
@@ -49,16 +48,13 @@ bool _Objects_Set_name(
     strncpy( d, name, length );
     d[length] = '\0';
     the_object->name.name_p = d;
-  } else
-#endif
-  {
+  } else {
     the_object->name.name_u32 =  _Objects_Build_name(
       ((length)     ? s[ 0 ] : ' '),
       ((length > 1) ? s[ 1 ] : ' '),
       ((length > 2) ? s[ 2 ] : ' '),
       ((length > 3) ? s[ 3 ] : ' ')
     );
-
   }
 
   return true;

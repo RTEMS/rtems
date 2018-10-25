@@ -49,9 +49,7 @@ void _Objects_Do_initialize_information(
   information->inactive_per_block = 0;
   information->object_blocks      = 0;
   information->inactive           = 0;
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    information->is_string        = is_string;
-  #endif
+  information->is_string          = is_string;
 
   /*
    *  Set the maximum value to 0. It will be updated when objects are

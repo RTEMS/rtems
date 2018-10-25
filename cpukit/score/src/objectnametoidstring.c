@@ -22,7 +22,6 @@
 
 #include <string.h>
 
-#if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
 Objects_Control *_Objects_Get_by_name(
   const Objects_Information *information,
   const char                *name,
@@ -72,4 +71,3 @@ Objects_Control *_Objects_Get_by_name(
   *error = OBJECTS_GET_BY_NAME_NO_OBJECT;
   return NULL;
 }
-#endif

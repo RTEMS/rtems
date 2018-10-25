@@ -130,6 +130,8 @@ typedef struct {
   Objects_Id        maximum_id;
   /** This is the maximum number of objects in this class. */
   Objects_Maximum   maximum;
+  /** This is true if names are strings. */
+  bool              is_string;
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
   /** This is the number of objects in a block. */
@@ -146,10 +148,6 @@ typedef struct {
   uint32_t         *inactive_per_block;
   /** This is a table to the chain of inactive object memory blocks. */
   void            **object_blocks;
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /** This is true if names are strings. */
-    bool              is_string;
-  #endif
   /** This is the maximum length of names. */
   uint16_t          name_length;
   #if defined(RTEMS_MULTIPROCESSING)
@@ -685,22 +683,31 @@ size_t _Objects_Name_to_string(
  *  @retval If successful, true is returned.  Otherwise false is returned.
  */
 bool _Objects_Set_name(
-  Objects_Information *information,
-  Objects_Control     *the_object,
-  const char          *name
+  const Objects_Information *information,
+  Objects_Control           *the_object,
+  const char                *name
 );
 
 /**
- *  @brief Removes object from namespace.
+ * @brief Removes object with a 32-bit integer name from its namespace.
  *
- *  This function removes @a the_object from the namespace.
- *
- *  @param[in] information points to an Object Information Table.
- *  @param[in] the_object is a pointer to an object.
+ * @param[in] information The corresponding object information table.
+ * @param[in] the_object The object.
  */
-void _Objects_Namespace_remove(
-  Objects_Information  *information,
-  Objects_Control      *the_object
+void _Objects_Namespace_remove_u32(
+  const Objects_Information *information,
+  Objects_Control           *the_object
+);
+
+/**
+ * @brief Removes object with a string name from its namespace.
+ *
+ * @param[in] information The corresponding object information table.
+ * @param[in] the_object The object.
+ */
+void _Objects_Namespace_remove_string(
+  const Objects_Information *information,
+  Objects_Control           *the_object
 );
 
 /**
@@ -713,8 +720,8 @@ void _Objects_Namespace_remove(
  *  @param[in] the_object is a pointer to an object
  */
 void _Objects_Close(
-  Objects_Information  *information,
-  Objects_Control      *the_object
+  const Objects_Information *information,
+  Objects_Control           *the_object
 );
 
 /**
@@ -828,9 +835,9 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
-  Objects_Information *information,
-  uint32_t             index,
-  Objects_Control     *the_object
+  const Objects_Information *information,
+  uint32_t                   index,
+  Objects_Control           *the_object
 )
 {
   /*
@@ -838,10 +845,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
    *  where the Id is known to be good.  Therefore, this should NOT
    *  occur in normal situations.
    */
-  #if defined(RTEMS_DEBUG)
-    if ( index > information->maximum )
-      return;
-  #endif
+  _Assert( index <= information->maximum );
 
   information->local_table[ index ] = the_object;
 }
@@ -861,8 +865,8 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
  */
 
 RTEMS_INLINE_ROUTINE void _Objects_Invalidate_Id(
-  Objects_Information  *information,
-  Objects_Control      *the_object
+  const Objects_Information *information,
+  Objects_Control           *the_object
 )
 {
   _Assert( information != NULL );
@@ -910,12 +914,12 @@ RTEMS_INLINE_ROUTINE void _Objects_Open(
  * @param[in] name is the name of the object to make accessible
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
-  Objects_Information *information,
-  Objects_Control     *the_object,
-  uint32_t             name
+  const Objects_Information *information,
+  Objects_Control           *the_object,
+  uint32_t                   name
 )
 {
-  /* ASSERT: information->is_string == false */
+  _Assert( !information->is_string );
   the_object->name.name_u32 = name;
 
   _Objects_Set_local_object(
@@ -934,15 +938,13 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
  * @param[in] name is the name of the object to make accessible
  */
 RTEMS_INLINE_ROUTINE void _Objects_Open_string(
-  Objects_Information *information,
-  Objects_Control     *the_object,
-  const char          *name
+  const Objects_Information *information,
+  Objects_Control           *the_object,
+  const char                *name
 )
 {
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /* ASSERT: information->is_string */
-    the_object->name.name_p = name;
-  #endif
+  _Assert( information->is_string );
+  the_object->name.name_p = name;
 
   _Objects_Set_local_object(
     information,

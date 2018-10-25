@@ -23,7 +23,7 @@
 void _POSIX_Semaphore_Delete( POSIX_Semaphore_Control *the_semaphore )
 {
   if ( !the_semaphore->linked && !the_semaphore->open_count ) {
-    _Objects_Close( &_POSIX_Semaphore_Information, &the_semaphore->Object );
+    _Objects_Invalidate_Id( &_POSIX_Semaphore_Information, &the_semaphore->Object );
     _POSIX_Semaphore_Destroy( &the_semaphore->Semaphore );
     _POSIX_Semaphore_Free( the_semaphore );
   }

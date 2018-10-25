@@ -36,16 +36,6 @@ extern "C" {
  */
 /**@{*/
 
-#if defined(RTEMS_POSIX_API)
-  /**
-   *  This macro is defined when an API is enabled that requires the
-   *  use of strings for object names.  Since the Classic API uses
-   *  32-bit unsigned integers and not strings, this allows us to
-   *  disable this in the smallest RTEMS configuratinos.
-   */
-  #define RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES
-#endif
-
 /**
  * @defgroup ScoreCPU CPU Architecture Support
  *
@@ -67,10 +57,8 @@ extern "C" {
  *  object names.
  */
 typedef union {
-  #if defined(RTEMS_SCORE_OBJECT_ENABLE_STRING_NAMES)
-    /** This is a pointer to a string name. */
-    const char *name_p;
-  #endif
+  /** This is a pointer to a string name. */
+  const char *name_p;
   /** This is the actual 32-bit "raw" integer name. */
   uint32_t    name_u32;
 } Objects_Name;
