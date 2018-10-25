@@ -49,9 +49,7 @@ void _Thread_Initialize_information(
   Thread_Information  *information,
   Objects_APIs         the_api,
   uint16_t             the_class,
-  uint32_t             maximum,
-  bool                 is_string,
-  uint32_t             maximum_name_length
+  uint32_t             maximum
 )
 {
   _Objects_Initialize_information(
@@ -60,8 +58,8 @@ void _Thread_Initialize_information(
     the_class,
     maximum,
     _Thread_Control_size,
-    is_string,
-    maximum_name_length,
+    false,
+    RTEMS_MAXIMUM_NAME_LENGTH,
     NULL
   );
 
@@ -102,9 +100,7 @@ void _Thread_Handler_initialization(void)
     &_Thread_Internal_information,
     OBJECTS_INTERNAL_API,
     OBJECTS_INTERNAL_THREADS,
-    _Thread_Get_maximum_internal_threads(),
-    false,                      /* true if names for this object are strings */
-    8                           /* maximum length of each object's name */
+    _Thread_Get_maximum_internal_threads()
   );
 
 }

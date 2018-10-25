@@ -73,10 +73,8 @@ static void _RTEMS_tasks_Manager_initialization(void)
     &_RTEMS_tasks_Information, /* object information table */
     OBJECTS_CLASSIC_API,       /* object API */
     OBJECTS_RTEMS_TASKS,       /* object class */
-    Configuration_RTEMS_API.maximum_tasks,
+    Configuration_RTEMS_API.maximum_tasks
                                /* maximum objects of this class */
-    false,                     /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH  /* maximum length of an object name */
   );
 
   /*

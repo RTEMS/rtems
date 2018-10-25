@@ -103,9 +103,7 @@ void _Thread_Initialize_information(
   Thread_Information  *information,
   Objects_APIs         the_api,
   uint16_t             the_class,
-  uint32_t             maximum,
-  bool                 is_string,
-  uint32_t             maximum_name_length
+  uint32_t             maximum
 );
 
 /**

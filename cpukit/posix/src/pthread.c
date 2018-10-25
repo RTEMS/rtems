@@ -181,10 +181,8 @@ static void _POSIX_Threads_Manager_initialization(void)
     &_POSIX_Threads_Information, /* object information table */
     OBJECTS_POSIX_API,           /* object API */
     OBJECTS_POSIX_THREADS,       /* object class */
-    Configuration_POSIX_API.maximum_threads,
+    Configuration_POSIX_API.maximum_threads
                                  /* maximum objects of this class */
-    true,                        /* true if names for this object are strings */
-    _POSIX_PATH_MAX              /* maximum length of each object's name */
   );
 
   /*
