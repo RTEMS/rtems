@@ -52,8 +52,8 @@ static const rtems_assoc_t rtems_object_api_posix_assoc[] = {
   { "Semaphore",               OBJECTS_POSIX_SEMAPHORES, 0},
 #ifdef RTEMS_POSIX_API
   { "Timer",                   OBJECTS_POSIX_TIMERS, 0},
-  { "Shared Memory",           OBJECTS_POSIX_SHMS, 0},
 #endif
+  { "Shared Memory",           OBJECTS_POSIX_SHMS, 0},
   { NULL,                      0, 0}
 };
 
