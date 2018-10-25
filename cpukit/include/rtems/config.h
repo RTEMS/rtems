@@ -44,20 +44,8 @@ extern "C" {
   _Objects_Maximum_per_allocation(resource)
 
 #include <rtems/score/watchdog.h>
-
-/*
- *  This is kind of kludgy but it allows targets to totally ignore the
- *  optional APIs like POSIX safely.
- */
-
-#ifdef RTEMS_POSIX_API
-#include <rtems/posix/config.h>
-#else
-typedef void *posix_api_configuration_table;
-#endif
-
 #include <rtems/rtems/config.h>
-
+#include <rtems/posix/config.h>
 #include <rtems/extension.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
