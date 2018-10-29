@@ -33,15 +33,17 @@
 #include <rtems/sysinit.h>
 
 #include <rtems/extensionimpl.h>
-#ifdef RTEMS_POSIX_API
 #include <rtems/posix/barrierimpl.h>
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/posix/muteximpl.h>
+#ifdef RTEMS_POSIX_API
 #include <rtems/posix/psignalimpl.h>
+#endif /* RTEMS_POSIX_API */
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/rwlockimpl.h>
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/posix/shmimpl.h>
+#ifdef RTEMS_POSIX_API
 #include <rtems/posix/timerimpl.h>
 #endif /* RTEMS_POSIX_API */
 #include <rtems/posix/keyimpl.h>
@@ -100,23 +102,23 @@ typedef enum {
 #ifdef RTEMS_POSIX_API
   POSIX_SIGNALS_PRE,
   POSIX_SIGNALS_POST,
+#endif /* RTEMS_POSIX_API */
   POSIX_THREADS_PRE,
   POSIX_THREADS_POST,
   POSIX_MESSAGE_QUEUE_PRE,
   POSIX_MESSAGE_QUEUE_POST,
   POSIX_SEMAPHORE_PRE,
   POSIX_SEMAPHORE_POST,
+#ifdef RTEMS_POSIX_API
   POSIX_TIMER_PRE,
   POSIX_TIMER_POST,
+#endif /* RTEMS_POSIX_API */
   POSIX_SHM_PRE,
   POSIX_SHM_POST,
-#endif /* RTEMS_POSIX_API */
   POSIX_KEYS_PRE,
   POSIX_KEYS_POST,
-#ifdef RTEMS_POSIX_API
   POSIX_CLEANUP_PRE,
   POSIX_CLEANUP_POST,
-#endif /* RTEMS_POSIX_API */
   IDLE_THREADS_PRE,
   IDLE_THREADS_POST,
   LIBIO_PRE,
@@ -129,10 +131,8 @@ typedef enum {
   DEVICE_DRIVERS_POST,
   CLASSIC_USER_TASKS_PRE,
   CLASSIC_USER_TASKS_POST,
-#ifdef RTEMS_POSIX_API
   POSIX_USER_THREADS_PRE,
   POSIX_USER_THREADS_POST,
-#endif /* RTEMS_POSIX_API */
   STD_FILE_DESCRIPTORS_PRE,
   STD_FILE_DESCRIPTORS_POST,
   LAST_FIRST,
@@ -401,7 +401,6 @@ LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
 }
 
 #ifdef RTEMS_POSIX_API
-
 FIRST(RTEMS_SYSINIT_POSIX_SIGNALS)
 {
   assert(
@@ -425,6 +424,7 @@ LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
   );
   next_step(POSIX_SIGNALS_POST);
 }
+#endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_POSIX_THREADS)
 {
@@ -462,6 +462,7 @@ LAST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
   next_step(POSIX_SEMAPHORE_POST);
 }
 
+#ifdef RTEMS_POSIX_API
 FIRST(RTEMS_SYSINIT_POSIX_TIMER)
 {
   assert(_POSIX_Timer_Information.maximum == 0);
@@ -473,6 +474,7 @@ LAST(RTEMS_SYSINIT_POSIX_TIMER)
   assert(_POSIX_Timer_Information.maximum != 0);
   next_step(POSIX_TIMER_POST);
 }
+#endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_POSIX_SHM)
 {
@@ -503,8 +505,6 @@ LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
   );
   next_step(POSIX_CLEANUP_POST);
 }
-
-#endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_POSIX_KEYS)
 {
@@ -604,8 +604,6 @@ LAST(RTEMS_SYSINIT_CLASSIC_USER_TASKS)
   next_step(CLASSIC_USER_TASKS_POST);
 }
 
-#ifdef RTEMS_POSIX_API
-
 FIRST(RTEMS_SYSINIT_POSIX_USER_THREADS)
 {
   _Objects_Allocator_lock();
@@ -621,8 +619,6 @@ LAST(RTEMS_SYSINIT_POSIX_USER_THREADS)
   _Objects_Allocator_unlock();
   next_step(POSIX_USER_THREADS_POST);
 }
-
-#endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_STD_FILE_DESCRIPTORS)
 {
@@ -659,23 +655,17 @@ LAST_STEP(LAST);
 
 static void Init(rtems_task_argument arg)
 {
-#ifdef RTEMS_POSIX_API
   pthread_cleanup_push(NULL, NULL);
   pthread_cleanup_pop(0);
-#endif /* RTEMS_POSIX_API */
   next_step(INIT_TASK);
   TEST_END();
   exit(0);
 }
 
-#ifdef RTEMS_POSIX_API
-
 static void *POSIX_Init(void *arg)
 {
   return NULL;
 }
-
-#endif /* RTEMS_POSIX_API */
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
@@ -700,22 +690,19 @@ static void *POSIX_Init(void *arg)
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
-#ifdef RTEMS_POSIX_API
-
 #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
-
 
 #define CONFIGURE_MAXIMUM_POSIX_SEMAPHORES 1
 
 #define CONFIGURE_MAXIMUM_POSIX_SHMS 1
 
+#ifdef RTEMS_POSIX_API
 #define CONFIGURE_MAXIMUM_POSIX_TIMERS 1
+#endif /* RTEMS_POSIX_API */
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
-
-#endif /* RTEMS_POSIX_API */
 
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 

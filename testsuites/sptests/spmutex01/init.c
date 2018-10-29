@@ -16,16 +16,13 @@
   #include "config.h"
 #endif
 
-#include <threads.h>
+#include <errno.h>
+#include <pthread.h>
 #include <setjmp.h>
+#include <threads.h>
 
 #include <rtems.h>
 #include <rtems/libcsupport.h>
-
-#ifdef RTEMS_POSIX_API
-#include <errno.h>
-#include <pthread.h>
-#endif
 
 #include "tmacros.h"
 
@@ -70,9 +67,7 @@ typedef enum {
 typedef struct {
   rtems_id mtx[MTX_COUNT];
   mtx_t mtx_c11;
-#ifdef RTEMS_POSIX_API
   pthread_mutex_t mtx_posix;
-#endif
   rtems_id tasks[TASK_COUNT];
   int generation[TASK_COUNT];
   int expected_generation[TASK_COUNT];
@@ -222,7 +217,6 @@ static void release_c11(test_context *ctx)
   rtems_test_assert(status == thrd_success);
 }
 
-#ifdef RTEMS_POSIX_API
 static void obtain_posix(test_context *ctx)
 {
   int error;
@@ -246,7 +240,6 @@ static void release_posix(test_context *ctx)
   error = pthread_mutex_unlock(&ctx->mtx_posix);
   rtems_test_assert(error == 0);
 }
-#endif
 
 static void check_generations(test_context *ctx, task_id a, task_id b)
 {
@@ -368,7 +361,6 @@ static void worker(rtems_task_argument arg)
       ++ctx->generation[id];
     }
 
-#ifdef RTEMS_POSIX_API
     if ((events & REQ_MTX_POSIX_OBTAIN) != 0) {
       obtain_posix(ctx);
       ++ctx->generation[id];
@@ -378,7 +370,6 @@ static void worker(rtems_task_argument arg)
       release_posix(ctx);
       ++ctx->generation[id];
     }
-#endif
   }
 }
 
@@ -387,6 +378,8 @@ static void set_up(test_context *ctx)
   rtems_status_code sc;
   int status;
   size_t i;
+  int error;
+  pthread_mutexattr_t attr;
 
   ctx->tasks[M] = rtems_task_self();
   start_task(ctx, A_1, worker, 1);
@@ -408,24 +401,17 @@ static void set_up(test_context *ctx)
   status = mtx_init(&ctx->mtx_c11, mtx_plain);
   rtems_test_assert(status == thrd_success);
 
-#ifdef RTEMS_POSIX_API
-  {
-    int error;
-    pthread_mutexattr_t attr;
+  error = pthread_mutexattr_init(&attr);
+  rtems_test_assert(error == 0);
 
-    error = pthread_mutexattr_init(&attr);
-    rtems_test_assert(error == 0);
+  error = pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
+  rtems_test_assert(error == 0);
 
-    error = pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
-    rtems_test_assert(error == 0);
+  error = pthread_mutex_init(&ctx->mtx_posix, &attr);
+  rtems_test_assert(error == 0);
 
-    error = pthread_mutex_init(&ctx->mtx_posix, &attr);
-    rtems_test_assert(error == 0);
-
-    error = pthread_mutexattr_destroy(&attr);
-    rtems_test_assert(error == 0);
-  }
-#endif
+  error = pthread_mutexattr_destroy(&attr);
+  rtems_test_assert(error == 0);
 }
 
 static void test_inherit(test_context *ctx)
@@ -634,7 +620,6 @@ static void test_deadlock_classic_and_c11(test_context *ctx)
 
 static void test_deadlock_posix_and_classic(test_context *ctx)
 {
-#ifdef RTEMS_POSIX_API
   obtain_posix(ctx);
   request(ctx, A_1, REQ_MTX_0_OBTAIN);
   check_generations(ctx, A_1, NONE);
@@ -647,12 +632,10 @@ static void test_deadlock_posix_and_classic(test_context *ctx)
   check_generations(ctx, A_1, NONE);
   request(ctx, A_1, REQ_MTX_0_RELEASE);
   check_generations(ctx, A_1, NONE);
-#endif
 }
 
 static void test_deadlock_classic_and_posix(test_context *ctx)
 {
-#ifdef RTEMS_POSIX_API
   obtain(ctx, MTX_0);
   request(ctx, A_1, REQ_MTX_POSIX_OBTAIN);
   check_generations(ctx, A_1, NONE);
@@ -665,13 +648,13 @@ static void test_deadlock_classic_and_posix(test_context *ctx)
   check_generations(ctx, A_1, NONE);
   request(ctx, A_1, REQ_MTX_POSIX_RELEASE);
   check_generations(ctx, A_1, NONE);
-#endif
 }
 
 static void tear_down(test_context *ctx)
 {
   rtems_status_code sc;
   size_t i;
+  int error;
 
   for (i = 1; i < TASK_COUNT; ++i) {
     sc = rtems_task_delete(ctx->tasks[i]);
@@ -685,14 +668,8 @@ static void tear_down(test_context *ctx)
 
   mtx_destroy(&ctx->mtx_c11);
 
-#ifdef RTEMS_POSIX_API
-  {
-    int error;
-
-    error = pthread_mutex_destroy(&ctx->mtx_posix);
-    rtems_test_assert(error == 0);
-  }
-#endif
+  error = pthread_mutex_destroy(&ctx->mtx_posix);
+  rtems_test_assert(error == 0);
 }
 
 static void Init(rtems_task_argument arg)
@@ -747,9 +724,6 @@ static void fatal_extension(
 #define CONFIGURE_MAXIMUM_TASKS TASK_COUNT
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 3
-
-#ifdef RTEMS_POSIX_API
-#endif
 
 #define CONFIGURE_INITIAL_EXTENSIONS \
   { .fatal = fatal_extension }, \

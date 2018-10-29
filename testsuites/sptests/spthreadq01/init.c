@@ -19,13 +19,11 @@
 
 #include <rtems/score/threadimpl.h>
 
-#if defined(RTEMS_POSIX_API)
-  #include <fcntl.h>
-  #include <mqueue.h>
-  #include <semaphore.h>
-  #include <string.h>
-  #include <pthread.h>
-#endif
+#include <fcntl.h>
+#include <mqueue.h>
+#include <semaphore.h>
+#include <string.h>
+#include <pthread.h>
 
 const char rtems_test_name[] = "SPTHREADQ 1";
 
@@ -39,9 +37,7 @@ typedef struct {
   rtems_id mtx;
   rtems_id mq;
   rtems_id br;
-#if defined(RTEMS_POSIX_API)
   mqd_t pmq;
-#endif
 } test_context;
 
 static test_context test_instance;
@@ -111,7 +107,6 @@ static void classic_worker(test_context *ctx)
 
 static void posix_worker(test_context *ctx)
 {
-#if defined(RTEMS_POSIX_API)
   int rv;
   char buf[1];
 
@@ -121,7 +116,6 @@ static void posix_worker(test_context *ctx)
   buf[0] = 'x';
   rv = mq_send(ctx->pmq, &buf[0], sizeof(buf), 0);
   rtems_test_assert(rv == 0);
-#endif
 }
 
 static rtems_task worker(rtems_task_argument arg)
@@ -176,7 +170,6 @@ static void test_classic_init(test_context *ctx)
 
 static void test_posix_init(test_context *ctx)
 {
-#if defined(RTEMS_POSIX_API)
   struct mq_attr attr;
 
   memset(&attr, 0, sizeof(attr));
@@ -185,7 +178,6 @@ static void test_posix_init(test_context *ctx)
 
   ctx->pmq = mq_open("mq", O_CREAT | O_RDWR, 0x777, &attr);
   rtems_test_assert(ctx->mq != -1);
-#endif
 }
 
 static void test_context_init(test_context *ctx)
@@ -251,7 +243,6 @@ static void test_classic_obj(test_context *ctx)
 
 static void test_posix_obj(test_context *ctx)
 {
-#if defined(RTEMS_POSIX_API)
   char buf[1];
   unsigned prio;
   ssize_t n;
@@ -264,7 +255,6 @@ static void test_posix_obj(test_context *ctx)
   rtems_test_assert(n == (ssize_t) sizeof(buf));
   rtems_test_assert(buf[0] == 'x');
   rtems_test_assert(prio == 0);
-#endif
 }
 
 static rtems_task Init(
@@ -299,14 +289,9 @@ static rtems_task Init(
 #define CONFIGURE_MAXIMUM_MESSAGE_QUEUES  1
 #define CONFIGURE_MAXIMUM_BARRIERS  1
 
-#if defined(RTEMS_POSIX_API)
-  #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
-  #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-    (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1))
-#else
-  #define CONFIGURE_MESSAGE_BUFFER_MEMORY \
-    CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1)
-#endif
+#define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES 1
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  (2 * CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1))
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

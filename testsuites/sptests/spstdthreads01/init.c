@@ -244,16 +244,13 @@ static void test_tss(test_context *ctx)
   tss_delete(ctx->tss);
 }
 
-#if defined(RTEMS_POSIX_API)
 static int thrd(void *arg)
 {
   thrd_exit(123);
 }
-#endif
 
 static void test_thrd(test_context *ctx)
 {
-#if defined(RTEMS_POSIX_API)
   thrd_start_t thrd_start = thrd;
   int status;
   int exit_status;
@@ -292,7 +289,6 @@ static void test_thrd(test_context *ctx)
 
   status = thrd_detach(11235);
   rtems_test_assert(status == thrd_error);
-#endif
 }
 
 static void high_task(rtems_task_argument idx)
@@ -417,10 +413,7 @@ static void Init(rtems_task_argument arg)
 
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
 #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 1
-
-#if defined(RTEMS_POSIX_API)
 #define CONFIGURE_MAXIMUM_POSIX_THREADS 1
-#endif
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
