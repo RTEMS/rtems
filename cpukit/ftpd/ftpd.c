@@ -1132,42 +1132,42 @@ command_store(FTPD_SessionInfo_t *info, char const *filename)
  *   buf  - buffer for temporary data
  *
  * Output parameters:
- *   returns 0 on failure, 1 on success
+ *   returns false on failure, true on success
  *
  */
-static int
-send_dirline(int s, int wide, time_t curTime, char const* path,
+static bool
+send_dirline(int s, bool wide, time_t curTime, char const* path,
   char const* add, char const* fname, char* buf)
 {
-  if(wide)
-  {
-    struct stat stat_buf;
+  struct stat stat_buf;
+  size_t plen = strlen(path);
+  size_t alen = strlen(add);
+  int slen = 0;
 
-    int plen = strlen(path);
-    int alen = strlen(add);
-    if(plen == 0)
+  if(plen == 0)
+  {
+    buf[plen++] = '/';
+    buf[plen] = '\0';
+  }
+  else
+  {
+    buf = memcpy(buf, path, plen + 1);
+    if(alen > 0 && buf[plen - 1] != '/')
     {
       buf[plen++] = '/';
+      if(plen >= FTPD_BUFSIZE)
+        return 0;
       buf[plen] = '\0';
     }
-    else
-    {
-      strcpy(buf, path);
-      if(alen > 0 && buf[plen - 1] != '/')
-      {
-        buf[plen++] = '/';
-        if(plen >= FTPD_BUFSIZE)
-          return 0;
-        buf[plen] = '\0';
-      }
-    }
-    if(plen + alen >= FTPD_BUFSIZE)
-      return 0;
-    strcpy(buf + plen, add);
+  }
+  if(plen + alen >= FTPD_BUFSIZE)
+    return 0;
+  memcpy(buf + plen, add, alen + 1);
 
-    if (stat(buf, &stat_buf) == 0)
+  if (stat(buf, &stat_buf) == 0)
+  {
+    if (wide)
     {
-      int len;
       struct tm bt;
       time_t tf = stat_buf.st_mtime;
       enum { SIZE = 80 };
@@ -1179,7 +1179,7 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
       else
         strftime (timeBuf, SIZE, "%b %d %H:%M", &bt);
 
-      len = snprintf(buf, FTPD_BUFSIZE,
+      slen = snprintf(buf, FTPD_BUFSIZE,
         "%c%c%c%c%c%c%c%c%c%c  1 %5d %5d %11u %s %s\r\n",
         (S_ISLNK(stat_buf.st_mode)?('l'):
           (S_ISDIR(stat_buf.st_mode)?('d'):('-'))),
@@ -1198,18 +1198,33 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
         timeBuf,
         fname
       );
-
-      if(send(s, buf, len, 0) != len)
-        return 0;
+    }
+    else
+    {
+      slen = snprintf(buf, FTPD_BUFSIZE, "%s\r\n", fname);
     }
   }
   else
   {
-    int len = snprintf(buf, FTPD_BUFSIZE, "%s\r\n", fname);
-    if(send(s, buf, len, 0) != len)
-      return 0;
+    slen = snprintf(buf, FTPD_BUFSIZE, "%s: %s.\r\n", fname, strerror(errno));
   }
-  return 1;
+
+  if (slen >= FTPD_BUFSIZE)
+  {
+    static const char dots[] = { '.', '.', '.', '\r', '\n' };
+
+    /*
+     * The file name exceeds the send buffer, indicate this with a ... at the
+     * end of the line.
+     */
+    slen = FTPD_BUFSIZE - 1;
+    memcpy(&buf[slen - sizeof(dots)], dots, sizeof(dots));
+  }
+
+  if (slen > 0 && send(s, buf, (size_t) slen, 0) != slen)
+    return false;
+
+  return true;
 }
 
 /*
@@ -1225,7 +1240,7 @@ send_dirline(int s, int wide, time_t curTime, char const* path,
  *   NONE
  */
 static void
-command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
+command_list(FTPD_SessionInfo_t *info, char const *fname, bool wide)
 {
   int                 s;
   DIR                 *dirp = 0;
@@ -1233,7 +1248,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   struct stat         stat_buf;
   char                buf[FTPD_BUFSIZE];
   time_t curTime;
-  int sc = 1;
+  bool ok = true;
 
   if(!info->auth)
   {
@@ -1269,14 +1284,14 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
   {
     time(&curTime);
     if(!dirp && *fname)
-      sc = sc && send_dirline(s, wide, curTime, fname, "", fname, buf);
+      ok = ok && send_dirline(s, wide, curTime, fname, "", fname, buf);
     else {
       /* FIXME: need "." and ".." only when '-a' option is given */
-      sc = sc && send_dirline(s, wide, curTime, fname, "", ".", buf);
-      sc = sc && send_dirline(s, wide, curTime, fname,
+      ok = ok && send_dirline(s, wide, curTime, fname, "", ".", buf);
+      ok = ok && send_dirline(s, wide, curTime, fname,
         (strcmp(fname, ftpd_root) ? ".." : ""), "..", buf);
-      while (sc && (dp = readdir(dirp)) != NULL)
-        sc = sc &&
+      while (ok && (dp = readdir(dirp)) != NULL)
+        ok = ok &&
           send_dirline(s, wide, curTime, fname, dp->d_name, dp->d_name, buf);
     }
   }
@@ -1285,7 +1300,7 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, int wide)
     closedir(dirp);
   close_data_socket(info);
 
-  if(sc)
+  if (ok)
     send_reply(info, 226, "Transfer complete.");
   else
     send_reply(info, 426, "Connection aborted.");
@@ -1694,11 +1709,11 @@ exec_command(FTPD_SessionInfo_t *info, char *cmd, char *args)
   }
   else if (!strcmp("LIST", cmd))
   {
-    command_list(info, args, 1);
+    command_list(info, args, true);
   }
   else if (!strcmp("NLST", cmd))
   {
-    command_list(info, args, 0);
+    command_list(info, args, false);
   }
   else if (!strcmp("MDTM", cmd))
   {
