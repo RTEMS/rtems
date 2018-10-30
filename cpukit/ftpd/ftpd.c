@@ -1908,10 +1908,30 @@ session(rtems_task_argument arg)
       {
         char buf[FTPD_BUFSIZE];
         char *cmd, *opts, *args;
+        size_t len;
 
         if (fgets(buf, FTPD_BUFSIZE, info->ctrl_fp) == NULL)
         {
           syslog(LOG_INFO, "ftpd: Connection aborted.");
+          break;
+        }
+
+        len = strlen(buf);
+
+        if (len == 0)
+          continue;
+
+        if (buf[len - 1] != '\n')
+        {
+          send_reply(info, 501, "Command line too long.");
+
+          /*
+           * We could also try to continue here, however, discarding the rest
+           * of the current command line and figuring out when the next command
+           * starts with fgets() is not that easy.  It would be better to avoid
+           * the FILE stream and just use the socket directly with send() and
+           * recv().
+           */
           break;
         }
 
