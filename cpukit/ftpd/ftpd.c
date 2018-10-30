@@ -1245,7 +1245,6 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, bool wide)
   int                 s;
   DIR                 *dirp = 0;
   struct dirent       *dp = 0;
-  struct stat         stat_buf;
   char                buf[FTPD_BUFSIZE];
   time_t curTime;
   bool ok = true;
@@ -1265,39 +1264,29 @@ command_list(FTPD_SessionInfo_t *info, char const *fname, bool wide)
     return;
   }
 
-  if(fname[0] == '\0')
+  if (fname[0] == '\0')
     fname = ".";
 
-  if (0 > stat(fname, &stat_buf))
+  time(&curTime);
+  dirp = opendir(fname);
+  if (dirp != NULL)
   {
-    snprintf(buf, FTPD_BUFSIZE,
-      "%s: No such file or directory.\r\n", fname);
-    send(s, buf, strlen(buf), 0);
-  }
-  else if (S_ISDIR(stat_buf.st_mode) && (NULL == (dirp = opendir(fname))))
-  {
-    snprintf(buf, FTPD_BUFSIZE,
-      "%s: Can not open directory.\r\n", fname);
-    send(s, buf, strlen(buf), 0);
+    /* FIXME: need "." and ".." only when '-a' option is given */
+    ok = ok && send_dirline(s, wide, curTime, fname, "", ".", buf);
+    ok = ok && send_dirline(s, wide, curTime, fname,
+      (strcmp(fname, ftpd_root) ? ".." : ""), "..", buf);
+
+    while (ok && (dp = readdir(dirp)) != NULL)
+      ok = ok &&
+        send_dirline(s, wide, curTime, fname, dp->d_name, dp->d_name, buf);
+
+    closedir(dirp);
   }
   else
   {
-    time(&curTime);
-    if(!dirp && *fname)
-      ok = ok && send_dirline(s, wide, curTime, fname, "", fname, buf);
-    else {
-      /* FIXME: need "." and ".." only when '-a' option is given */
-      ok = ok && send_dirline(s, wide, curTime, fname, "", ".", buf);
-      ok = ok && send_dirline(s, wide, curTime, fname,
-        (strcmp(fname, ftpd_root) ? ".." : ""), "..", buf);
-      while (ok && (dp = readdir(dirp)) != NULL)
-        ok = ok &&
-          send_dirline(s, wide, curTime, fname, dp->d_name, dp->d_name, buf);
-    }
+    send_dirline(s, wide, curTime, fname, "", fname, buf);
   }
 
-  if(dirp)
-    closedir(dirp);
   close_data_socket(info);
 
   if (ok)
