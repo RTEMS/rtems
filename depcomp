@@ -67,7 +67,7 @@ set_dir_from ()
   esac
 }
 
-# Get the suffix-stripped basename of the given path, and save it the
+# Get the suffix-stripped basename of the given path, and save it in the
 # global variable '$base'.
 set_base_from ()
 {
