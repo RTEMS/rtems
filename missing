@@ -83,7 +83,7 @@ esac
 # If it succeeded, we are done.
 test $st -eq 0 && exit 0
 
-# Also exit now if we it failed (or wasn't found), and '--version' was
+# Also exit now if it failed (or wasn't found), and '--version' was
 # passed; such an option is passed most likely to detect whether the
 # program is present and works.
 case $2 in --version|--help) exit $st;; esac
