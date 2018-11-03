@@ -1,3 +1,20 @@
+/**
+  * @file
+  *
+  * @ingroup altera-cyclone-v_tm27
+  *
+  * @brief GIC tmtests/tm27 support.
+  */
+
+
+/**
+ * @defgroup altera-cyclone-v_tm27 GIC tmtests/tm27
+ *
+ * @ingroup altera-cyclone-v
+ *
+ * @brief GIC tmtests/tm27 support.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
