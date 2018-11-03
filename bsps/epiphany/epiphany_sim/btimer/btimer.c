@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015 University of York.
- * Hesham ALMatary <hmka501@york.ac.uk>
+ * Hesham Almatary <hmka501@york.ac.uk>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -51,7 +51,7 @@ static void benchmark_timer1_interrupt_handler(void)
                 :: [event_type] "r" (event_type));
 }
 
-/* Start eCore tiemr 1 usef for profiling and timing analysis */
+/* Start eCore timer 1 used for profiling and timing analysis */
 void benchmark_timer_initialize( void )
 {
   /* Install interrupt handler for timer 1 */
