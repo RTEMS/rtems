@@ -201,8 +201,8 @@ case $3 in
 	 Nov) nummonthtod=11;;
 	 Dec) nummonthtod=12;;
        esac
-       # For the first six month of the year the time notation can also
-       # be used for files modified in the last year.
+       # For the first six months of the year, the time notation can also
+       # be used for files modified in the previous year.
        if (expr $nummonth \> $nummonthtod) > /dev/null;
        then
 	 year=`expr $year - 1`
