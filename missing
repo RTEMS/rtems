@@ -4,14 +4,14 @@
 scriptversion=2012-06-26.16; # UTC
 
 # Copyright (C) 1996-2013 Free Software Foundation, Inc.
-# Originally written by Fran,cois Pinard <pinard@iro.umontreal.ca>, 1996.
+# Originally written by Francois Pinard <pinard@iro.umontreal.ca>, 1996.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2, or (at your option)
 # any later version.
 
-# This program is distributed in the hope that it will be useful,
+# This program is distributed in the hopes that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -80,10 +80,10 @@ esac
 # Run the given program, remember its exit status.
 "$@"; st=$?
 
-# If it succeeded, we are done.
+# If it has succeeded, we are done.
 test $st -eq 0 && exit 0
 
-# Also exit now if we it failed (or wasn't found), and '--version' was
+# Also exit now if it has failed (or wasn't found), and '--version' was
 # passed; such an option is passed most likely to detect whether the
 # program is present and works.
 case $2 in --version|--help) exit $st;; esac
