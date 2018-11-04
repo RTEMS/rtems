@@ -1,4 +1,4 @@
-Real-Time Executive for Multiprocessing Systems (RTEMS)
+Real-Time Executive for Multiprocessor Systems (RTEMS)
 -------------------------------------------------------
 
 RTEMS, Real-Time Executive for Multiprocessor Systems, is a real-time executive
@@ -17,7 +17,7 @@ applications with the following features:
  - high level of user configurability
  - open source with a friendly user license
 
-Project git repositories are located at https://git.rtems.org/
+Project git repositories are located at https://git.rtems.org/.
 
  RTEMS Kernel: https  : https://git.rtems.org/rtems/
  RTEMS Source Builder : https://git.rtems.org/rtems-source-builder/
@@ -25,7 +25,7 @@ Project git repositories are located at https://git.rtems.org/
  RTEMS Documentation  : https://git.rtems.org/rtems-docs/
  RTEMS FreeBSD        : https://git.rtems.org/rtems-libbsd/
 
-Online documentation is available at https://docs.rtems.org/
+Online documentation is available at https://docs.rtems.org/.
 
  RTEMS User Manual : https://docs.rtems.org/branches/master/user/index.html
  RTEMS RSB Manual  : https://docs.rtems.org/branches/master/rsb/index.html
