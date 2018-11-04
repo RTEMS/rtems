@@ -1012,13 +1012,13 @@ rtems_bdbuf_add_to_modified_list_after_access (rtems_bdbuf_buffer *bd)
 
   /*
    * Only the first modified release sets the timer and any further user
-   * accesses do not change the timer value which should move down. This
+   * accesses does not change the timer value which should move down. This
    * assumes the user's hold of the buffer is much less than the time on the
-   * modified list. Resetting the timer on each access which could result in a
+   * modified list. Resetting the timer on each access could result in a
    * buffer never getting to 0 and never being forced onto disk. This raises a
    * difficult question. Is a snapshot of a block that is changing better than
    * nothing being written? We have tended to think we should hold changes for
-   * only a specific period of time even if still changing and get onto disk
+   * only a specific period of time, even if it's still changing, and get it onto the disk
    * and letting the file system try and recover this position if it can.
    */
   if (bd->state == RTEMS_BDBUF_STATE_ACCESS_CACHED
@@ -1215,7 +1215,7 @@ rtems_bdbuf_swapout_transfer_alloc (void)
 {
   /*
    * @note chrisj The rtems_blkdev_request and the array at the end is a hack.
-   * I am disappointment at finding code like this in RTEMS. The request should
+   * I am disappointed at finding code like this in RTEMS. The request should
    * have been a rtems_chain_control. Simple, fast and less storage as the node
    * is already part of the buffer structure.
    */
@@ -1379,7 +1379,7 @@ rtems_bdbuf_do_init (void)
 
   /*
    * The cache is empty after opening so we need to add all the buffers to it
-   * and initialise the groups.
+   * and initialize the groups.
    */
   for (b = 0, group = bdbuf_cache.groups,
          bd = bdbuf_cache.bds, buffer = bdbuf_cache.buffers;
@@ -1819,7 +1819,7 @@ rtems_bdbuf_get (rtems_disk_device   *dd,
       case RTEMS_BDBUF_STATE_MODIFIED:
         /*
          * To get a modified buffer could be considered a bug in the caller
-         * because you should not be getting an already modified buffer but
+         * because you should not be getting an already modified buffer, but
          * user may have modified a byte in a block then decided to seek the
          * start and write the whole block and the file system will have no
          * record of this so just gets the block to fill.
@@ -2293,7 +2293,7 @@ rtems_bdbuf_swapout_write (rtems_bdbuf_swapout_transfer* transfer)
     /*
      * Take as many buffers as configured and pass to the driver. Note, the
      * API to the drivers has an array of buffers and if a chain was passed
-     * we could have just passed the list. If the driver API is updated it
+     * we could have just passed the list. If the driver API is updated, it
      * should be possible to make this change with little effect in this
      * code. The array that is passed is broken in design and should be
      * removed. Merging members of a struct into the first member is
@@ -2493,7 +2493,7 @@ rtems_bdbuf_swapout_modified_processing (rtems_disk_device  **dd_ptr,
  * Process the cache's modified buffers. Check the sync list first then the
  * modified list extracting the buffers suitable to be written to disk. We have
  * a device at a time. The task level loop will repeat this operation while
- * there are buffers to be written. If the transfer fails place the buffers
+ * there are buffers to be written. If the transfer fails, place the buffers
  * back on the modified list and try again later. The cache is unlocked while
  * the buffers are being written to disk.
  *
@@ -2522,12 +2522,12 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   sync_active = bdbuf_cache.sync_active;
 
   /*
-   * If a sync is active do not use a worker because the current code does not
-   * cleaning up after. We need to know the buffers have been written when
+   * If a sync is active, do not use a worker because the current code does not
+   * clean up after. We need to know the buffers have been written when
    * syncing to release sync lock and currently worker threads do not return to
    * here. We do not know the worker is the last in a sequence of sync writes
    * until after we have it running so we do not know to tell it to release the
-   * lock. The simplest solution is to get the main swap out task perform all
+   * lock. The simplest solution is to get the main swap out task to perform all
    * sync operations.
    */
   if (sync_active)
@@ -2545,15 +2545,15 @@ rtems_bdbuf_swapout_processing (unsigned long                 timer_delta,
   transfer->syncing = sync_active;
 
   /*
-   * When the sync is for a device limit the sync to that device. If the sync
-   * is for a buffer handle process the devices in the order on the sync
+   * When the sync is for a device, limit the sync to that device. If the sync
+   * is for a buffer handle, process the devices in the order on the sync
    * list. This means the dev is BDBUF_INVALID_DEV.
    */
   if (sync_active)
     transfer->dd = bdbuf_cache.sync_device;
 
   /*
-   * If we have any buffers in the sync queue move them to the modified
+   * If we have any buffers in the sync queue, move them to the modified
    * list. The first sync buffer will select the device we use.
    */
   rtems_bdbuf_swapout_modified_processing (&transfer->dd,
@@ -2669,7 +2669,7 @@ rtems_bdbuf_swapout_workers_close (void)
 }
 
 /**
- * Body of task which takes care on flushing modified buffers to the disk.
+ * Body of task which takes care of flushing modified buffers to the disk.
  *
  * @param arg A pointer to the global cache data. Use the global variable and
  *            not this.
@@ -2704,7 +2704,7 @@ rtems_bdbuf_swapout_task (rtems_task_argument arg)
     bool update_timers = true;
 
     /*
-     * If we write buffers to any disk perform a check again. We only write a
+     * If we write buffers to any disk, perform a check again. We only write a
      * single device at a time and the cache may have more than one device's
      * buffers modified waiting to be written.
      */
