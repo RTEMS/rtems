@@ -2,7 +2,7 @@ HWLIB
 =====
 Hwlib is a collection of sources provided by Altera for the Cyclone-V.
 
-As hwlib is third party software, please keep modifications and additions 
+As hwlib is a third party software, please keep modifications and additions 
 to the sources to a minimum for easy maintenance. Otherwise updating to a 
 new version of hwlib released by Altera can become difficult.
 
