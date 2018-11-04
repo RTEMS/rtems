@@ -228,14 +228,14 @@ gcc)
       -e 's/^['$alpha']:\/[^:]*: / /' < "$tmpdepfile" >> "$depfile"
 ## This next piece of magic avoids the "deleted header file" problem.
 ## The problem is that when a header file which appears in a .P file
-## is deleted, the dependency causes make to die (because there is
+## is deleted, the dependency causes cause it to die (because there is
 ## typically no way to rebuild the header).  We avoid this by adding
 ## dummy dependencies for each header file.  Too bad gcc doesn't do
 ## this for us directly.
 ## Some versions of gcc put a space before the ':'.  On the theory
 ## that the space means something, we add a space to the output as
 ## well.  hp depmode also adds that space, but also prefixes the VPATH
-## to the object.  Take care to not repeat it in the output.
+## to the object.  Take care not to repeat it in the output.
 ## Some versions of the HPUX 10.20 sed can't process this invocation
 ## correctly.  Breaking it into two sed invocations is a workaround.
   tr ' ' "$nl" < "$tmpdepfile" \
@@ -264,7 +264,7 @@ sgi)
   fi
   rm -f "$depfile"
 
-  if test -f "$tmpdepfile"; then  # yes, the sourcefile depend on other files
+  if test -f "$tmpdepfile"; then  # yes, the sourcefile depends on other files
     echo "$object : \\" > "$depfile"
     # Clip off the initial element (the dependent).  Don't try to be
     # clever and replace this with sed code, as IRIX sed won't handle
@@ -326,8 +326,8 @@ aix)
   ;;
 
 tcc)
-  # tcc (Tiny C Compiler) understand '-MD -MF file' since version 0.9.26
-  # FIXME: That version still under development at the moment of writing.
+  # tcc (Tiny C Compiler) understands '-MD -MF file' since version 0.9.26
+  # FIXME: That version is still under development at the moment of writing.
   #        Make that this statement remains true also for stable, released
   #        versions.
   # It will wrap lines (doesn't matter whether long or short) with a
@@ -361,9 +361,9 @@ tcc)
 ## listed in this file.  A plain '-MD' option would be understood by many
 ## compilers, so we must ensure this comes after the gcc and icc options.
 pgcc)
-  # Portland's C compiler understands '-MD'.
-  # Will always output deps to 'file.d' where file is the root name of the
-  # source file under compilation, even if file resides in a subdirectory.
+  # Portland's C compiler understands '-MD'
+  # will always output deps to 'file.d' where the file is the root name of the
+  # source file under compilation, even if the file resides in a subdirectory.
   # The object file name does not affect the name of the '.d' file.
   # pgcc 10.2 will output
   #    foo.o: sub/foo.c sub/foo.h
@@ -601,7 +601,7 @@ dashmstdout)
 
   test -z "$dashmflag" && dashmflag=-M
   # Require at least two characters before searching for ':'
-  # in the target name.  This is to cope with DOS-style filenames:
+  # in the target name.  This is to cope with DOS-style filenames;
   # a dependency such as 'c:/foo/bar' could be seen as target 'c' otherwise.
   "$@" $dashmflag |
     sed "s|^[$tab ]*[^:$tab ][^:][^:]*:[$tab ]*|$object: |" > "$tmpdepfile"
