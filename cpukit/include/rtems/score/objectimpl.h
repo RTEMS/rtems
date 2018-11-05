@@ -120,36 +120,36 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
  *  manage each class of objects.
  */
 typedef struct {
-  /** This field indicates the API of this object class. */
-  Objects_APIs      the_api;
-  /** This is the class of this object set. */
-  uint16_t          the_class;
   /** This is the minimum valid id of this object class. */
   Objects_Id        minimum_id;
   /** This is the maximum valid id of this object class. */
   Objects_Id        maximum_id;
+  /** This points to the table of local objects. */
+  Objects_Control **local_table;
   /** This is the maximum number of objects in this class. */
   Objects_Maximum   maximum;
+  /** This is the number of objects on the Inactive list. */
+  Objects_Maximum   inactive;
+  /** This is the number of objects in a block. */
+  Objects_Maximum   allocation_size;
+  /** This is the maximum length of names. */
+  uint16_t          name_length;
+  /** This field indicates the API of this object class. */
+  uint8_t           the_api;
+  /** This is the class of this object set. */
+  uint8_t           the_class;
   /** This is true if names are strings. */
   bool              is_string;
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
-  /** This is the number of objects in a block. */
-  Objects_Maximum   allocation_size;
   /** This is the size in bytes of each object instance. */
   size_t            size;
-  /** This points to the table of local objects. */
-  Objects_Control **local_table;
   /** This is the chain of inactive control blocks. */
   Chain_Control     Inactive;
-  /** This is the number of objects on the Inactive list. */
-  Objects_Maximum   inactive;
   /** This is the number of inactive objects per block. */
-  uint32_t         *inactive_per_block;
+  Objects_Maximum  *inactive_per_block;
   /** This is a table to the chain of inactive object memory blocks. */
-  void            **object_blocks;
-  /** This is the maximum length of names. */
-  uint16_t          name_length;
+  Objects_Control **object_blocks;
   #if defined(RTEMS_MULTIPROCESSING)
     /** This is this object class' method called when extracting a thread. */
     Objects_Thread_queue_Extract_callout extract;
