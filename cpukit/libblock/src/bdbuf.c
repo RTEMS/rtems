@@ -1012,7 +1012,7 @@ rtems_bdbuf_add_to_modified_list_after_access (rtems_bdbuf_buffer *bd)
 
   /*
    * Only the first modified release sets the timer and any further user
-   * accesses does not change the timer value which should move down. This
+   * accesses do not change the timer value which should move down. This
    * assumes the user's hold of the buffer is much less than the time on the
    * modified list. Resetting the timer on each access could result in a
    * buffer never getting to 0 and never being forced onto disk. This raises a
