@@ -10,7 +10,7 @@
 /**
  * @defgroup altera-cyclone-v_tm27 GIC tmtests/tm27
  *
- * @ingroup altera-cyclone-v
+ * @ingroup arm_altera-cyclone-v
  *
  * @brief GIC tmtests/tm27 support.
  */
