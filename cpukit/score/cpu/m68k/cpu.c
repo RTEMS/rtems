@@ -62,7 +62,7 @@ int (*_FPSP_install_raw_handler)(
 static void m68k_install_interrupt_stack( void )
 {
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
-  uintptr_t isp = (uintptr_t) _Configuration_Interrupt_stack_area_end;
+  uintptr_t isp = (uintptr_t) _ISR_Stack_area_end;
 
   __asm__ volatile ( "movec %0,%%isp" : "=r" (isp) : "0" (isp) );
 #endif

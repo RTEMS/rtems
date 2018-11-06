@@ -78,7 +78,7 @@ void bsp_start(void)
   /*
    * Initialize some SPRG registers related to irq handling
    */
-  intrStack = (char *)_Configuration_Interrupt_stack_area_end -
+  intrStack = (char *)_ISR_Stack_area_end -
      PPC_MINIMUM_STACK_FRAME_SIZE;
   _write_SPRG1((unsigned int)intrStack);
 

@@ -77,6 +77,32 @@ extern ISR_Handler_entry _ISR_Vector_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
 #endif
 
 /**
+ * @brief Global symbol with a value equal to the configure interrupt stack size.
+ *
+ * This global symbol is defined by the application configuration option
+ * CONFIGURE_INIT_TASK_STACK_SIZE via <rtems/confdefs.h>.
+ */
+RTEMS_DECLARE_GLOBAL_SYMBOL( _ISR_Stack_size );
+
+/**
+ * @brief The interrupt stack area begin.
+ *
+ * The interrupt stack area is defined by the application configuration via
+ * <rtems/confdefs.h>.  The size of the area depends on
+ * CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_MAXIMUM_PROCESSORS.
+ */
+extern char _ISR_Stack_area_begin[];
+
+/**
+ * @brief The interrupt stack area end.
+ *
+ * The interrupt stack area is defined by the application configuration via
+ * <rtems/confdefs.h>.  The size of the area depends on
+ * CONFIGURE_INIT_TASK_STACK_SIZE and CONFIGURE_MAXIMUM_PROCESSORS.
+ */
+extern const char _ISR_Stack_area_end[];
+
+/**
  *  @brief Initialize the ISR handler.
  *
  *  This routine performs the initialization necessary for the ISR handler.

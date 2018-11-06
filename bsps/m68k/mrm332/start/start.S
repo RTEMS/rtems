@@ -38,7 +38,7 @@ BEGIN_CODE
 	movecl	d0,vbr
 
 	/* Set stack pointer */
-	movel	#_Configuration_Interrupt_stack_area_end,d0
+	movel	#_ISR_Stack_area_end,d0
 	movel	d0,sp
 	movel	d0,a6
 

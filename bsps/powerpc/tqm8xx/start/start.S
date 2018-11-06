@@ -120,7 +120,7 @@ start_code_in_ram:
 	 */
 
 	/* Set stack pointer (common for RAM/ROM startup) */
-	LA	r1, _Configuration_Interrupt_stack_area_end
+	LA	r1, _ISR_Stack_area_end
         addi    r1, r1, -0x10
 
 	/* Create NULL */

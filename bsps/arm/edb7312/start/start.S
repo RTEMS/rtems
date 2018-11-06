@@ -60,7 +60,7 @@ handler_addr_fiq:
 	.globl	_start
 _start:
         /* Set end of interrupt stack area */
-        ldr     r7, =_Configuration_Interrupt_stack_area_end
+        ldr     r7, =_ISR_Stack_area_end
 
         /* Enter FIQ mode and set up the FIQ stack pointer */
         mov     r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)

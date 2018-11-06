@@ -502,7 +502,7 @@ static void Stack_check_Prepare_interrupt_stacks( void )
   uint32_t      cpu_max;
 
   stack.size = rtems_configuration_get_interrupt_stack_size();
-  stack.area = _Configuration_Interrupt_stack_area_begin;
+  stack.area = _ISR_Stack_area_begin;
   cpu_max = rtems_configuration_get_maximum_processors();
 
   for ( cpu_index = 0; cpu_index < cpu_max; ++cpu_index ) {

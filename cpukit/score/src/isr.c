@@ -48,7 +48,7 @@ void _ISR_Handler_initialization( void )
 
   stack_size = rtems_configuration_get_interrupt_stack_size();
   cpu_max = rtems_configuration_get_maximum_processors();
-  stack_low = _Configuration_Interrupt_stack_area_begin;
+  stack_low = _ISR_Stack_area_begin;
 
   for ( cpu_index = 0 ; cpu_index < cpu_max; ++cpu_index ) {
     Per_CPU_Control *cpu;

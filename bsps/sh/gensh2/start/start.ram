@@ -158,7 +158,7 @@ SYM (start):
 
 	.align 2
 stack_k:
-	.long	SYM(_Configuration_Interrupt_stack_area_end)
+	.long	SYM(_ISR_Stack_area_end)
 edata_k:
 	.long	SYM(edata)
 end_k:

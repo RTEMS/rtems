@@ -169,7 +169,7 @@ void bsp_start(void)
   initialize_frequency_parameters();
 
   qoriq_initialize_exceptions(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin
+    (uintptr_t) _ISR_Stack_area_begin
   );
   bsp_interrupt_initialize();
 

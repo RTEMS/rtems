@@ -343,7 +343,7 @@ void ppc_exc_initialize_with_vector_base(
 static inline void ppc_exc_initialize(void)
 {
   ppc_exc_initialize_with_vector_base(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
+    (uintptr_t) _ISR_Stack_area_begin,
     NULL
   );
 }

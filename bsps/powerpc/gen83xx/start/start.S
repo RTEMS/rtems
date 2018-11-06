@@ -417,7 +417,7 @@ start_code_in_ram:
 	li	r3, 0
 
 	/* Set start stack pointer */
-	LA	r1, _Configuration_Interrupt_stack_area_end
+	LA	r1, _ISR_Stack_area_end
 	stwu	r3, -4(r1)
 	stwu	r3, -4(r1)
 

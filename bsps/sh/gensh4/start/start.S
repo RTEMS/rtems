@@ -215,7 +215,7 @@ _vbr_base_k:
 __VBR_Saved_k:
         .long   SYM(_VBR_Saved)
 stack_k:
-        .long	SYM(_Configuration_Interrupt_stack_area_end)
+        .long	SYM(_ISR_Stack_area_end)
 __bss_start_k:
         .long   __bss_start
 __bss_end_k:

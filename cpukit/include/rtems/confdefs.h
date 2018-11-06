@@ -1176,16 +1176,16 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
 
 #ifdef CONFIGURE_INIT
   RTEMS_DEFINE_GLOBAL_SYMBOL(
-    _Configuration_Interrupt_stack_size,
+    _ISR_Stack_size,
     CONFIGURE_INTERRUPT_STACK_SIZE
   );
 
-  char _Configuration_Interrupt_stack_area_begin[
+  char _ISR_Stack_area_begin[
     _CONFIGURE_MAXIMUM_PROCESSORS * CONFIGURE_INTERRUPT_STACK_SIZE
   ] RTEMS_ALIGNED( CPU_INTERRUPT_STACK_ALIGNMENT )
   RTEMS_SECTION( ".rtemsstack.interrupt.begin" );
 
-  const char _Configuration_Interrupt_stack_area_end[ 0 ]
+  const char _ISR_Stack_area_end[ 0 ]
     RTEMS_SECTION( ".rtemsstack.interrupt.end" ) = { };
 #endif
 

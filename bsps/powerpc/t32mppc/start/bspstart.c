@@ -49,7 +49,7 @@ static void t32mppc_initialize_exceptions(void)
   uintptr_t addr;
 
   ppc_exc_initialize_interrupt_stack(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin
+    (uintptr_t) _ISR_Stack_area_begin
   );
 
   addr = (uintptr_t) bsp_exc_vector_base;

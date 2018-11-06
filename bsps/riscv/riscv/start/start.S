@@ -61,8 +61,8 @@ SYM(_start):
 
 	/* Load stack pointer and branch to secondary processor start if necessary */
 #ifdef RTEMS_SMP
-	LADDR	sp, _Configuration_Interrupt_stack_area_begin
-	LADDR	t2, _Configuration_Interrupt_stack_size
+	LADDR	sp, _ISR_Stack_area_begin
+	LADDR	t2, _ISR_Stack_size
 	csrr	s0, mhartid
 	LADDR	t0, _Per_CPU_Information
 	slli	t1, s0, PER_CPU_CONTROL_SIZE_LOG2
@@ -71,7 +71,7 @@ SYM(_start):
 	bnez	s0, .Lstart_on_secondary_processor
 	add	sp, sp, t2
 #else
-	LADDR	sp, _Configuration_Interrupt_stack_area_end
+	LADDR	sp, _ISR_Stack_area_end
 #endif
 
 #ifdef BSP_START_COPY_FDT_FROM_U_BOOT

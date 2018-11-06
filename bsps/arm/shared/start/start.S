@@ -181,12 +181,12 @@ _start:
 #endif
 
 	/* Calculate interrupt stack area end for current processor */
-	ldr	r1, =_Configuration_Interrupt_stack_size
+	ldr	r1, =_ISR_Stack_size
 #ifdef RTEMS_SMP
 	add	r7, #1
 	mul	r1, r1, r7
 #endif
-	ldr	r2, =_Configuration_Interrupt_stack_area_begin
+	ldr	r2, =_ISR_Stack_area_begin
 	add	r7, r1, r2
 
 	/* Save original CPSR value */
@@ -354,7 +354,7 @@ twiddle:
 
 bsp_start_vector_table_begin:
 
-	.word	_Configuration_Interrupt_stack_area_end
+	.word	_ISR_Stack_area_end
 	.word	_start /* Reset */
 	.word	_ARMV7M_Exception_default /* NMI */
 	.word	_ARMV7M_Exception_default /* Hard Fault */
@@ -404,7 +404,7 @@ _start:
 
 #endif /* ARM_MULTILIB_VFP */
 
-	ldr	sp, =_Configuration_Interrupt_stack_area_end
+	ldr	sp, =_ISR_Stack_area_end
 	ldr	lr, =bsp_start_hook_0_done + 1
 	b	bsp_start_hook_0
 

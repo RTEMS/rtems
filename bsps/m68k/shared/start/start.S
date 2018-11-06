@@ -74,7 +74,7 @@ loop:   movel   #0,a1@+                 | to zero out uninitialized
         cmpal   a0,a1
         jlt     loop                    | loop until _end reached
 
-        movel   # SYM (_Configuration_Interrupt_stack_area_end),d0 | d0 = stop of stack
+        movel   # SYM (_ISR_Stack_area_end),d0 | d0 = stop of stack
         movw    #0x3700,sr              | SUPV MODE,INTERRUPTS OFF!!!
         movel   d0,a7                   | set master stack pointer
         movel   d0,a6                   | set base pointer

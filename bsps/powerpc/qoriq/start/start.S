@@ -56,8 +56,8 @@ _start:
 	bl	.Linitearly
 
 	/* Get start stack */
-	LA	START_STACK, _Configuration_Interrupt_stack_area_begin
-	LA	r3, _Configuration_Interrupt_stack_size
+	LA	START_STACK, _ISR_Stack_area_begin
+	LA	r3, _ISR_Stack_size
 	add	START_STACK, START_STACK, r3
 
 	bl	.Linitmore

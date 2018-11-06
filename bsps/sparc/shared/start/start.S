@@ -319,12 +319,12 @@ SYM(hard_reset):
 
 	set	SYM(rdb_start), %g5	! End of RAM
 	st	%sp, [%g5]
-	set	SYM(_Configuration_Interrupt_stack_size), %g5
+	set	SYM(_ISR_Stack_size), %g5
 #if defined(START_LEON3_ENABLE_SMP)
 	add	%o0, 1, %o0
 	smul	%o0, %g5, %g5
 #endif
-	set	SYM(_Configuration_Interrupt_stack_area_begin), %sp
+	set	SYM(_ISR_Stack_area_begin), %sp
 	add	%sp, %g5, %sp
 	sub	%sp, 4, %sp		! stack starts at end of area - 4
 	andn	%sp, 0x0f, %sp		! align stack on 16-byte boundary

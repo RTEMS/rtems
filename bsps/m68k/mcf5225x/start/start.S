@@ -21,7 +21,7 @@ BEGIN_CODE
     PUBLIC (_INTERRUPT_VECTOR)
 SYM(_INTERRUPT_VECTOR):
 
-    .long   _Configuration_Interrupt_stack_area_end /* 00 Initial 'SSP' */
+    .long   _ISR_Stack_area_end /* 00 Initial 'SSP' */
     .long   SYM(start) /* 01 Initial PC */
     .long   SYM(_uhoh) /* 02 Access Error */
     .long   SYM(_uhoh) /* 03 Address Error */
@@ -359,7 +359,7 @@ SYM(start):
     movec   d7, %rambar
 
     /* Locate Stack Pointer */ 
-    move.l  #_Configuration_Interrupt_stack_area_end, sp
+    move.l  #_ISR_Stack_area_end, sp
 
     /* Initialize FLASHBAR */
     move.l  #_FlashBase, d7
@@ -371,7 +371,7 @@ SYM(start):
 _continue_startup:
 
     /* Locate Stack Pointer */ 
-//    move.l  #_Configuration_Interrupt_stack_area_end, sp		//is done automatically by the CPU
+//    move.l  #_ISR_Stack_area_end, sp		//is done automatically by the CPU
 
     /*
      * Remainder of the startup code is handled by C code

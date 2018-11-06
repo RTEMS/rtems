@@ -95,7 +95,7 @@ void bsp_start( void )
   get_ppc_cpu_revision();
 
   ppc_exc_initialize_with_vector_base(
-    (uintptr_t) _Configuration_Interrupt_stack_area_begin,
+    (uintptr_t) _ISR_Stack_area_begin,
     virtex_exc_vector_base
   );
   __asm__ volatile ("mtevpr %0" : : "r" (virtex_exc_vector_base));

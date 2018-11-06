@@ -228,7 +228,7 @@ zero_intermediate_stack_loop:
 	bl	mpc55xx_start_early
 
 	/* Initialize start stack */
-	LA	r1, _Configuration_Interrupt_stack_area_end
+	LA	r1, _ISR_Stack_area_end
 	subi	r1, r1, 16
 	li	r0, 0
 	stw	r0, 0(r1)

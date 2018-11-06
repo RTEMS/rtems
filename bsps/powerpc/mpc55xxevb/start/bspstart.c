@@ -89,7 +89,7 @@ void bsp_start(void)
 	bsp_clicks_per_usec = bsp_clock_speed / 1000000;
 
 	ppc_exc_initialize_with_vector_base(
-		(uintptr_t) _Configuration_Interrupt_stack_area_begin,
+		(uintptr_t) _ISR_Stack_area_begin,
 		mpc55xx_exc_vector_base
 	);
 	bsp_interrupt_initialize();

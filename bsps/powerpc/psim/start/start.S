@@ -47,7 +47,7 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 	.long	bsp_section_bss_end
 
 .Lstack = .-.LCTOC1			/* stack address if set by user */
-	.long	_Configuration_Interrupt_stack_area_end
+	.long	_ISR_Stack_area_end
 
 	.text
 .Lptr:
