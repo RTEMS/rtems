@@ -32,6 +32,14 @@ extern "C" {
  */
 
 #include <rtems/score/object.h>
+#include <rtems/score/watchdog.h>
+#include <rtems/rtems/config.h>
+#include <rtems/posix/config.h>
+#include <rtems/extension.h>
+#if defined(RTEMS_MULTIPROCESSING)
+#include <rtems/score/mpci.h>
+#endif
+
 #define RTEMS_UNLIMITED_OBJECTS OBJECTS_UNLIMITED_OBJECTS
 
 #define rtems_resource_unlimited(resource) \
@@ -42,14 +50,6 @@ extern "C" {
 
 #define rtems_resource_maximum_per_allocation(resource) \
   _Objects_Maximum_per_allocation(resource)
-
-#include <rtems/score/watchdog.h>
-#include <rtems/rtems/config.h>
-#include <rtems/posix/config.h>
-#include <rtems/extension.h>
-#if defined(RTEMS_MULTIPROCESSING)
-#include <rtems/score/mpci.h>
-#endif
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*
