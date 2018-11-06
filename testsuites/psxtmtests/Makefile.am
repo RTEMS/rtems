@@ -338,6 +338,17 @@ psxtmnanosleep02_CPPFLAGS = $(AM_CPPFLAGS) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
+if TEST_psxtmonce01
+psxtm_tests += psxtmonce01
+psxtm_docs += psxtmonce01/psxtmonce01.doc
+psxtmonce01_SOURCES = psxtmonce01/init.c \
+	../tmtests/include/timesys.h ../support/src/tmtests_empty_function.c \
+	../support/src/tmtests_support.c
+psxtmonce01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmonce01) \
+	$(support_includes) -I$(top_srcdir)/../tmtests/include \
+	-DOPERATION_COUNT=$(OPERATION_COUNT)
+endif
+
 if TEST_psxtmrwlock01
 psxtm_tests += psxtmrwlock01
 psxtm_docs += psxtmrwlock01/psxtmrwlock01.doc
