@@ -151,6 +151,7 @@ librtemscpu_a_SOURCES += libcsupport/src/__getpid.c
 librtemscpu_a_SOURCES += libcsupport/src/getpid.c
 librtemscpu_a_SOURCES += libcsupport/src/getppid.c
 librtemscpu_a_SOURCES += libcsupport/src/getpwent.c
+librtemscpu_a_SOURCES += libcsupport/src/getreentglobal.c
 librtemscpu_a_SOURCES += libcsupport/src/getrusage.c
 librtemscpu_a_SOURCES += libcsupport/src/__gettod.c
 librtemscpu_a_SOURCES += libcsupport/src/getuid.c

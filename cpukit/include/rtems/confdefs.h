@@ -2242,15 +2242,11 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
   #define _CONFIGURE_NUMBER_OF_INITIAL_EXTENSIONS 0
 #endif
 
-#if defined(RTEMS_NEWLIB)
-  struct _reent *__getreent(void)
-  {
-    #ifdef CONFIGURE_DISABLE_NEWLIB_REENTRANCY
-      return _GLOBAL_REENT;
-    #else
-      return _Thread_Get_executing()->libc_reent;
-    #endif
-  }
+#if defined(RTEMS_NEWLIB) && !defined(CONFIGURE_DISABLE_NEWLIB_REENTRANCY)
+struct _reent *__getreent(void)
+{
+  return _Thread_Get_executing()->libc_reent;
+}
 #endif
 
 #endif
