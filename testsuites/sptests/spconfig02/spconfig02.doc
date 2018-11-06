@@ -1,0 +1,32 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spconfig02
+
+directives:
+
+  - rtems_barrier_create()
+  - rtems_extension_create()
+  - rtems_extension_delete()
+  - rtems_message_queue_create()
+  - rtems_message_queue_delete()
+  - rtems_object_get_classic_name()
+  - rtems_partition_create()
+  - rtems_partition_delete()
+  - rtems_rate_monotonic_create()
+  - rtems_rate_monotonic_delete()
+  - rtems_region_create()
+  - rtems_region_delete()
+  - rtems_semaphore_create()
+  - rtems_semaphore_delete()
+  - rtems_task_create()
+  - rtems_timer_create()
+  - rtems_timer_delete()
+
+concepts:
+
+  - Ensure that the creation of Classic API objects fails with the expected
+    status code in the default configuration.
+  - Ensure that the deletion of Classic API objects fails with the expected
+    status code in the default configuration if the identifier is invalid.
+  - Ensure that only the expected objects are present in the default
+    configuration via rtems_object_get_classic_name().

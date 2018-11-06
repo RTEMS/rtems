@@ -717,6 +717,15 @@ spconfig01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spconfig01) \
 	$(support_includes)
 endif
 
+if TEST_spconfig02
+sp_tests += spconfig02
+sp_screens += spconfig02/spconfig02.scn
+sp_docs += spconfig02/spconfig02.doc
+spconfig02_SOURCES = spconfig02/init.c
+spconfig02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spconfig02) \
+	$(support_includes)
+endif
+
 if TEST_spconsole01
 sp_tests += spconsole01
 sp_screens += spconsole01/spconsole01.scn
