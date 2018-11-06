@@ -350,8 +350,7 @@ PUBLIC(_ISR_Handler)
     /*
      *  Invoke interrupt dispatcher.
      */
-PUBLIC(_ISR_Dispatch)
-  SYM(_ISR_Dispatch):
+
     ! Set ISR dispatch nesting prevention flag
       mov      1, %o1
       setx     SYM(_CPU_ISR_Dispatch_disable), %o5, %o2

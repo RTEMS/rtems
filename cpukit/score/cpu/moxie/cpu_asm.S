@@ -87,21 +87,6 @@ SYM(_ISR_Handler):
         brk
 
 
-/*
-        Called from ISR_Handler as a way of ending IRQ
-        but allowing dispatch to another task.
-        Must use RTE as CCR is still on stack but IRQ has been serviced.
-        CCR and PC occupy same word so rte can be used.
-        now using task stack
-*/
-
-        .align 2
-        .global SYM(_ISR_Dispatch)
-
-SYM(_ISR_Dispatch):
-        brk
-
-
         .align 2
         .global SYM(_CPU_Context_save_fp)
 

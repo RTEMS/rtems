@@ -1599,7 +1599,6 @@ include $(srcdir)/score/cpu/m32c/headers.am
 
 librtemscpu_a_SOURCES += score/cpu/m32c/context_init.c
 librtemscpu_a_SOURCES += score/cpu/m32c/context_switch.S
-librtemscpu_a_SOURCES += score/cpu/m32c/cpu_asm.c
 librtemscpu_a_SOURCES += score/cpu/m32c/cpu.c
 librtemscpu_a_SOURCES += score/cpu/m32c/m32c-exception-frame-print.c
 librtemscpu_a_SOURCES += score/cpu/m32c/varvects.S

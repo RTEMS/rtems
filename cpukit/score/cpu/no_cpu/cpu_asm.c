@@ -171,9 +171,9 @@ void _ISR_Handler(void)
    *    goto the label "exit interrupt (simple case)"
    *
    *  if ( _Thread_Dispatch_necessary ) {
-   *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+   *    call _Thread_Dispatch() or prepare to return from interrupt
    *    prepare to get out of interrupt
-   *    return from interrupt  (maybe to _ISR_Dispatch)
+   *    return from interrupt
    *
    *  LABEL "exit interrupt (simple case):
    *  if outermost interrupt

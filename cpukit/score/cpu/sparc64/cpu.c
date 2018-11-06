@@ -60,7 +60,7 @@ void _CPU_Initialize(void)
   /*
    *  Since no tasks have been created yet and no interrupts have occurred,
    *  there is no way that the currently executing thread can have an
-   *  _ISR_Dispatch stack frame on its stack.
+   *  interrupt stack frame on its stack.
    */
   _CPU_ISR_Dispatch_disable = 0;
 }
@@ -100,7 +100,7 @@ void _CPU_Context_Initialize(
 
   /*
    *  Since THIS thread is being created, there is no way that THIS
-   *  thread can have an _ISR_Dispatch stack frame on its stack.
+   *  thread can have an interrupt stack frame on its stack.
    */
     the_context->isr_dispatch_disable = 0;
 

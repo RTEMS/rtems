@@ -1049,7 +1049,7 @@ _ISR_Handler_1:
 
   /*
    *  prepare to get out of interrupt
-   *  return from interrupt  (maybe to _ISR_Dispatch)
+   *  return from interrupt
    *
    *  LABEL "exit interrupt (simple case):"
    *  prepare to get out of interrupt

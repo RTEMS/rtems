@@ -412,9 +412,9 @@ void _CPU_Context_Initialize(
 
   /*
    *  Since THIS thread is being created, there is no way that THIS
-   *  thread can have an _ISR_Dispatch stack frame on its stack.
+   *  thread can have an interrupt stack frame on its stack.
    */
-    the_context->isr_dispatch_disable = 0;
+  the_context->isr_dispatch_disable = 0;
 
   if ( tls_area != NULL ) {
     void *tcb = _TLS_TCB_after_TLS_block_initialize( tls_area );

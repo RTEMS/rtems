@@ -146,21 +146,6 @@ void _ISR_Handler_initialization ( void );
 void _ISR_Handler( void );
 
 /**
- *  @brief ISR wrapper for thread dispatcher.
- *
- *  This routine provides a wrapper so that the routine
- *  @ref _Thread_Dispatch can be invoked when a reschedule is necessary
- *  at the end of the outermost interrupt service routine.  This
- *  wrapper is necessary to establish the processor context needed
- *  by _Thread_Dispatch and to save the processor context which is
- *  corrupted by _Thread_Dispatch.  This context typically consists
- *  of registers which are not preserved across routine invocations.
- *
- *  @note  Typically mplemented in assembly language.
- */
-void _ISR_Dispatch( void );
-
-/**
  *  @brief Checks if an ISR in progress.
  *
  *  This function returns true if the processor is currently servicing

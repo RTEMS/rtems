@@ -324,7 +324,7 @@ bframe:
 #if ( M68K_HAS_SEPARATE_STACKS == 1 )
         movec   msp,a0                   | a0 = master stack pointer
         movew   #0,a0@-                  | push format word
-        movel   #SYM(_ISR_Dispatch),a0@- | push return addr
+        movel   #thread_dispatch,a0@-    | push return addr
         movew   a0@(6),a0@-              | push saved sr
         movec   a0,msp                   | set master stack pointer
 #else
@@ -344,8 +344,8 @@ exit:   moveml  a7@,d0-d1/a0-a1          | restore d0-d1,a0-a1
         rte                              | return to thread
                                          |   OR _Isr_dispatch
 
-/*void _ISR_Dispatch()
- *
+#if ( M68K_HAS_SEPARATE_STACKS == 1 )
+/*
  *  Entry point from the outermost interrupt service routine exit.
  *  The current stack is the supervisor mode stack if this processor
  *  has separate stacks.
@@ -357,8 +357,7 @@ exit:   moveml  a7@,d0-d1/a0-a1          | restore d0-d1,a0-a1
  *    4.  return from interrupt
  */
 
-        .global SYM (_ISR_Dispatch)
-SYM (_ISR_Dispatch):
+thread_dispatch:
 #if ( !defined(__mcoldfire__) )
         movml   d0-d1/a0-a1,a7@-
         jsr     SYM (_Thread_Dispatch)
@@ -375,3 +374,4 @@ SYM (_ISR_Dispatch):
         addql   #2,a7                    | pop format/id
 #endif /* M68K_HAS_VBR */
         rte
+#endif /* M68K_HAS_SEPARATE_STACKS */

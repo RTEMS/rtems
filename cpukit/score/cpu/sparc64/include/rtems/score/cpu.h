@@ -487,7 +487,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 
 /*
  *  This flag is context switched with each thread.  It indicates
- *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
+ *  that THIS thread has an interrupt stack frame on its stack.
  *  By using this flag, we can avoid nesting more interrupt dispatching
  *  attempts on a previously interrupted thread's stack.
  */
