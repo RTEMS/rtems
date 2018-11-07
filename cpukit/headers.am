@@ -251,6 +251,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/part.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/partimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/partmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemon.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/ratemondata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemonimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/region.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/regionimpl.h

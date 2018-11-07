@@ -22,6 +22,7 @@
  *  RTEMS basic type definitions
  */
 
+#include <sys/_timespec.h>
 #include <stdint.h>
 #include <rtems/score/heap.h>
 #include <rtems/score/object.h>

@@ -19,7 +19,7 @@
 #ifndef _RTEMS_RTEMS_RATEMONIMPL_H
 #define _RTEMS_RTEMS_RATEMONIMPL_H
 
-#include <rtems/rtems/ratemon.h>
+#include <rtems/rtems/ratemondata.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>

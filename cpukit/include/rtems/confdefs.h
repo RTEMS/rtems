@@ -32,6 +32,7 @@
 #include <rtems/score/percpu.h>
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/rtems/ratemondata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/pthread.h>
