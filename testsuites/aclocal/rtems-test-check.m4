@@ -5,7 +5,7 @@ AC_DEFUN([RTEMS_TEST_CHECK],
 [AC_REQUIRE([RTEMS_ENV_RTEMSBSP])
  AC_REQUIRE([RTEMS_SOURCE_TOP])
  AC_MSG_CHECKING([${RTEMS_CPU}/${RTEMS_BSP} $1 test])
- tcheck="${RTEMS_SOURCE_ROOT}/testsuites/rtems-test-check.py"
+ tcheck="${RTEMS_SOURCE_ROOT}/testsuites/rtems-test-check"
  tdata="${RTEMS_BSP}-testsuite.tcfg"
  tincludes="${RTEMS_SOURCE_ROOT}/bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/config:${RTEMS_SOURCE_ROOT}/testsuites"
  if test -f $tcheck; then
