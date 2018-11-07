@@ -16,17 +16,10 @@
 #include <rtems/bspIo.h>
 
 #include <bsp.h>
-#include <bsp/irq.h>
-#include <bsp/arm-pl011.h>
 #include <bsp/arm-pl050.h>
+#include <bsp/console.h>
 #include <bsp/console-termios.h>
-
-static arm_pl011_context pl011_context = {
-  .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL011"),
-  .regs = (volatile pl011 *) 0x10009000,
-  .irq = RVPBXA9_IRQ_UART_0,
-  .initial_baud = 115200
-};
+#include <bsp/irq.h>
 
 static arm_pl050_context pl050_context = {
   .base = RTEMS_TERMIOS_DEVICE_CONTEXT_INITIALIZER("PL050"),
@@ -35,34 +28,12 @@ static arm_pl050_context pl050_context = {
   .initial_baud = 115200
 };
 
-static void output_char(char c)
-{
-  arm_pl011_write_polled(&pl011_context.base, c);
-}
-
-static bool pl011_probe(rtems_termios_device_context *base)
-{
-  BSP_output_char = output_char;
-
-  return arm_pl011_probe(base);
-}
-
-static void output_char_init(char c)
-{
-  pl011_probe(&pl011_context.base);
-  output_char(c);
-}
-
-BSP_output_char_function_type BSP_output_char = output_char_init;
-
-BSP_polling_getchar_function_type BSP_poll_char = NULL;
-
 const console_device console_device_table[] = {
   {
     .device_file = "/dev/ttyS0",
-    .probe = pl011_probe,
+    .probe = rvpbx_pl011_probe,
     .handler = &arm_pl011_fns,
-    .context = &pl011_context.base
+    .context = &rvpbx_pl011_context.base
   }, {
     .device_file = SERIAL_MOUSE_DEVICE_PS2,
     .probe = console_device_probe_default,

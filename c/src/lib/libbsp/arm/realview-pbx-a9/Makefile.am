@@ -65,6 +65,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/serial/getserialmouse
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl011.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/serial/arm-pl050.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/console/console-config.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/realview-pbx-a9/console/console-polled.c
 
 # Clock
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-a9mpcore.c
