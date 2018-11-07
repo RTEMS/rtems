@@ -25,3 +25,21 @@
 #include <rtems/termiostypes.h>
 
 rtems_mutex rtems_termios_ttyMutex = RTEMS_MUTEX_INITIALIZER( "termios" );
+
+void
+rtems_termios_device_lock_acquire_default(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_interrupt_lock_acquire (&ctx->lock.interrupt, lock_context);
+}
+
+void
+rtems_termios_device_lock_release_default(
+  rtems_termios_device_context *ctx,
+  rtems_interrupt_lock_context *lock_context
+)
+{
+  rtems_interrupt_lock_release (&ctx->lock.interrupt, lock_context);
+}
