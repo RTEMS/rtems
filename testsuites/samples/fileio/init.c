@@ -721,7 +721,7 @@ static void fileio_list_file(void)
     printf("\n Trying to open file \"%s\" for read\n",fname);
     fd = open(fname,O_RDONLY);
     if (fd < 0) {
-      printf("*** file open failed, errno = %d(%s)\n",errno,strerror(errno));
+      printf("*** file failed to open, errno = %d(%s)\n",errno,strerror(errno));
     }
   }
 
@@ -1014,7 +1014,7 @@ static void fileio_read_file(void)
     printf("... opening file \"%s\"\n",fname);
     fd = open(fname,O_RDONLY);
     if (fd < 0) {
-      printf("*** file open failed, errno = %d(%s)\n",errno,strerror(errno));
+      printf("*** failed to open file, errno = %d(%s)\n",errno,strerror(errno));
       failed = true;
     }
   }

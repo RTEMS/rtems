@@ -502,7 +502,7 @@ xilinx_axi_i2c_read_rx_fifo(xilinx_axi_i2c_bus* bus)
          * One more byte to be received. This is set up by programming the RX
          * FIFO programmable depth interrupt register with a value that is 2
          * less than the number we need (the register is minus 1). When we have
-         * one byte left disable the TX error interrupt because setting the NO
+         * one byte left, disable the TX error interrupt because setting the NO
          * ACK bit in the command register causes a TX error interrupt. Set the
          * TXAK bit in the CR to not-acknowledge the next byte received telling
          * the slave sender the master accepts no more data, then read the
