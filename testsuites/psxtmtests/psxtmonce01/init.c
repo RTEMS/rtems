@@ -26,18 +26,13 @@
 
 const char rtems_test_name[] = "PSXTMONCE01";
 
-/* forward declarations to avoid warnings */
-void *POSIX_Init(void *argument);
-void benchmark_first_time(void);
-void initRoutine(void);
+static pthread_once_t once_control = PTHREAD_ONCE_INIT;
 
-pthread_once_t once_control = PTHREAD_ONCE_INIT;
-
-void initRoutine(void)
+static void initRoutine(void)
 {
 }
 
-void benchmark_first_time(void)
+static void benchmark_first_time(void)
 {
   long end_time;
   int  status;
@@ -56,7 +51,7 @@ void benchmark_first_time(void)
   );
 }
 
-void *POSIX_Init(
+static void *POSIX_Init(
   void *argument
 )
 {
@@ -70,7 +65,7 @@ void *POSIX_Init(
 
 /* configuration information */
 
-#define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
+#define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_TIMER_DRIVER
 
 #define CONFIGURE_MAXIMUM_POSIX_THREADS     1
