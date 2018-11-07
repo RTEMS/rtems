@@ -37,7 +37,7 @@
 "pthread_setschedparam: lower own priority: preempt","psxtmthread05","psxtmtest_single","Yes"
 "pthread_setschedparam: raise other priority: preempt","psxtmthread06","psxtmtest_single","Yes"
 
-"pthread_once: first time","psxtmonce01","psxtmtest_single","No"
+"pthread_once: first time","psxtmonce01","psxtmtest_single","Yes"
 "pthread_once: second time","psxtmonce02","psxtmtest_single","No"
 
 "pthread_key_create: only case","psxtmkey01","psxtmtest_single","Yes"
