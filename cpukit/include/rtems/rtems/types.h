@@ -47,21 +47,21 @@ extern "C" {
  *
  * @deprecated Use @c float instead.
  */
-typedef single_precision rtems_single;
+typedef single_precision rtems_single RTEMS_DEPRECATED;
 
 /**
  * @brief Double precision float type.
  *
  * @deprecated Use @c double instead.
  */
-typedef double_precision rtems_double;
+typedef double_precision rtems_double RTEMS_DEPRECATED;
 
 /**
  * @brief RTEMS boolean type.
  *
  * @deprecated Use @c bool instead
  */
-typedef boolean          rtems_boolean;
+typedef boolean          rtems_boolean RTEMS_DEPRECATED;
 #endif
 
 /**

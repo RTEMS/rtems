@@ -460,9 +460,9 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
 
 #ifndef ASM
   #ifdef RTEMS_DEPRECATED_TYPES
-    typedef bool boolean;
-    typedef float single_precision;
-    typedef double double_precision;
+    typedef bool boolean RTEMS_DEPRECATED;
+    typedef float single_precision RTEMS_DEPRECATED;
+    typedef double double_precision RTEMS_DEPRECATED;
   #endif
 
   /**
