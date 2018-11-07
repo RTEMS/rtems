@@ -16,6 +16,8 @@
 #include "config.h"
 #endif
 
+#include <rtems.h>
+
 #if defined(RTEMS_NEWLIB)
 #include <sys/reent.h>
 
