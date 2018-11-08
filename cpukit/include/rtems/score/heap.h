@@ -19,7 +19,6 @@
 #define _RTEMS_SCORE_HEAP_H
 
 #include <rtems/score/cpu.h>
-#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -163,10 +162,12 @@ typedef struct Heap_Block Heap_Block;
     uintptr_t delayed_free_fraction;
   } Heap_Protection;
 
+  struct _Thread_Control;
+
   typedef struct {
     uintptr_t protector [HEAP_PROTECTOR_COUNT];
     Heap_Block *next_delayed_free_block;
-    Thread_Control *task;
+    struct _Thread_Control *task;
     void *tag;
   } Heap_Protection_block_begin;
 
