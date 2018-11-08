@@ -19,10 +19,6 @@
 #ifndef _RTEMS_CONFIG_H
 #define _RTEMS_CONFIG_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  *  Unlimited object support. Changes the configuration table entry for POSIX
  *  or RTEMS APIs to bounded only by the memory of the work-space.
@@ -39,6 +35,10 @@ extern "C" {
 #include <rtems/extension.h>
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #define RTEMS_UNLIMITED_OBJECTS OBJECTS_UNLIMITED_OBJECTS
