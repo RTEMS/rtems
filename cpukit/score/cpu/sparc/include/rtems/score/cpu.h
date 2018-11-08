@@ -940,6 +940,8 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
  */
 void _CPU_Initialize(void);
 
+typedef void ( *CPU_ISR_raw_handler )( void );
+
 /**
  * @brief SPARC specific raw ISR installer.
  *
@@ -951,10 +953,12 @@ void _CPU_Initialize(void);
  * @param[in] old_handler will contain the old ISR handler
  */
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
+
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
 /**
  * @brief SPARC specific RTEMS ISR installer.
@@ -967,9 +971,9 @@ void _CPU_ISR_install_raw_handler(
  */
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );

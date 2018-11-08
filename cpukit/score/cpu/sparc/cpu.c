@@ -236,9 +236,9 @@ uint32_t   _CPU_ISR_Get_level( void )
  */
 
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 )
 {
   uint32_t               real_vector;
@@ -282,7 +282,7 @@ void _CPU_ISR_install_raw_handler(
     u32_handler =
       (slot->sethi_of_handler_to_l4 << HIGH_BITS_SHIFT) |
       (slot->jmp_to_low_of_handler_plus_l4 & LOW_BITS_MASK);
-    *old_handler = (proc_ptr) u32_handler;
+    *old_handler = (CPU_ISR_raw_handler) u32_handler;
   } else
     *old_handler = 0;
 
@@ -317,13 +317,13 @@ void _CPU_ISR_install_raw_handler(
 }
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
-   uint32_t   real_vector;
-   proc_ptr   ignored;
+   uint32_t            real_vector;
+   CPU_ISR_raw_handler ignored;
 
   /*
    *  Get the "real" trap number for this vector ignoring the synchronous
