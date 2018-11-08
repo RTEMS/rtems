@@ -7,6 +7,7 @@
 #endif
 
 #include <rtems.h>
+#include <rtems/extensiondata.h>
 #include <rtems/monitor.h>
 
 #include <stdio.h>

@@ -91,6 +91,7 @@ include_rtems_HEADERS += include/rtems/dumpbuf.h
 include_rtems_HEADERS += include/rtems/endian.h
 include_rtems_HEADERS += include/rtems/error.h
 include_rtems_HEADERS += include/rtems/extension.h
+include_rtems_HEADERS += include/rtems/extensiondata.h
 include_rtems_HEADERS += include/rtems/extensionimpl.h
 include_rtems_HEADERS += include/rtems/fatal.h
 include_rtems_HEADERS += include/rtems/fb.h

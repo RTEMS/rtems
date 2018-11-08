@@ -1,6 +1,8 @@
 /**
  * @file
- * 
+ *
+ * @ingroup ClassicUserExtensions
+ *
  * @brief User Extensions API.
  */
 
@@ -16,19 +18,13 @@
 #ifndef _RTEMS_EXTENSION_H
 #define _RTEMS_EXTENSION_H
 
-#include <rtems/score/object.h>
-#include <rtems/score/userext.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+#include <rtems/score/userext.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct {
-  Objects_Control          Object;
-  User_extensions_Control  Extension;
-}   Extension_Control;
 
 typedef User_extensions_routine
   rtems_extension RTEMS_DEPRECATED;

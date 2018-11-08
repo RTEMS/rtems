@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup ClassicUserExtensions
+ * @ingroup ClassicUserExtensionsImpl
  *
- * @brief User Extensions API
+ * @brief Classic User Extensions Implementation
  */
 
 /*
@@ -18,12 +18,20 @@
 #ifndef _RTEMS_EXTENSIONIMPL_H
 #define _RTEMS_EXTENSIONIMPL_H
 
-#include <rtems/extension.h>
+#include <rtems/extensiondata.h>
 #include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup ClassicUserExtensionsImpl User Extensions Implementation
+ *
+ * @ingroup ClassicUserExtensions
+ *
+ * @{
+ */
 
 extern Objects_Information  _Extension_Information;
 
@@ -44,6 +52,8 @@ RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Get( Objects_Id id )
   return (Extension_Control *)
     _Objects_Get_no_protection( id, &_Extension_Information );
 }
+
+/** @} */ 
 
 #ifdef __cplusplus
 }
