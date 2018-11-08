@@ -223,6 +223,7 @@ include_rtems_rfs_HEADERS += include/rtems/rfs/rtems-rfs-link.h
 include_rtems_rfs_HEADERS += include/rtems/rfs/rtems-rfs-mutex.h
 include_rtems_rfs_HEADERS += include/rtems/rfs/rtems-rfs-trace.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/asr.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/asrdata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/asrimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/attr.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/attrimpl.h

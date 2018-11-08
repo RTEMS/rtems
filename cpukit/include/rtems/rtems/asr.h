@@ -57,25 +57,6 @@ typedef rtems_asr ( *rtems_asr_entry )(
                  rtems_signal_set
              );
 
-/**
- *  The following defines the control structure used to manage
- *  signals.  Each thread has a copy of this record.
- */
-typedef struct {
-  /** This field indicates if are ASRs enabled currently. */
-  bool              is_enabled;
-  /** This field indicates if address of the signal handler function. */
-  rtems_asr_entry   handler;
-  /** This field indicates if the task mode the signal will run with. */
-  Modes_Control     mode_set;
-  /** This field indicates the signal set that is posted. */
-  rtems_signal_set  signals_posted;
-  /** This field indicates the signal set that is pending. */
-  rtems_signal_set  signals_pending;
-  /** This field indicates if nest level of signals being processed */
-  uint32_t          nest_level;
-}   ASR_Information;
-
 /*
  *  The following constants define the individual signals which may
  *  be used to compose a signal set.

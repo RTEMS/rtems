@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_ASRIMPL_H
 #define _RTEMS_RTEMS_ASRIMPL_H
 
-#include <rtems/rtems/asr.h>
+#include <rtems/rtems/asrdata.h>
 
 #include <string.h>
 

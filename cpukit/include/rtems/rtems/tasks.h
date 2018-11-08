@@ -42,7 +42,7 @@
 #include <rtems/score/thread.h>
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/event.h>
-#include <rtems/rtems/asr.h>
+#include <rtems/rtems/asrdata.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 
