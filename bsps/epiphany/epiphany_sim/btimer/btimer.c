@@ -56,8 +56,7 @@ void benchmark_timer_initialize( void )
 {
   /* Install interrupt handler for timer 1 */
 
-  proc_ptr *table =
-    (proc_ptr *) bsp_start_vector_table_begin;
+  void (**table)(void) = (void (**)(void)) bsp_start_vector_table_begin;
 
   table[TIMER1] = benchmark_timer1_interrupt_handler;
 

@@ -65,24 +65,6 @@ uint32_t  _CPU_ISR_Get_level( void )
   return 0;
 }
 
-void _CPU_ISR_install_raw_handler(
-  uint32_t   vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /* Do nothing */
-}
-
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /* Do nothing */
-}
-
 CPU_Counter_ticks _CPU_Counter_read( void )
 {
   static CPU_Counter_ticks counter;
