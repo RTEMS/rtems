@@ -56,41 +56,13 @@ uint32_t   _CPU_ISR_Get_level( void )
   return 0;
 }
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  LM32 Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /*
-   *  This is where we install the interrupt handler into the "raw" interrupt
-   *  table used by the CPU to dispatch interrupt handlers.
-   */
-}
-
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
    *old_handler = _ISR_Vector_table[ vector ];
-
-   /*
-    *  If the interrupt vector table is a table of pointer to isr entry
-    *  points, then we need to install the appropriate RTEMS interrupt
-    *  handler for this vector number.
-    */
-
-   _CPU_ISR_install_raw_handler( vector, new_handler, old_handler );
 
    /*
     *  We put the actual user ISR address in '_ISR_vector_table'.  This will
