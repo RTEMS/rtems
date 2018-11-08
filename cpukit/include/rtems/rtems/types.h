@@ -95,7 +95,7 @@ typedef Context_Control            rtems_context RTEMS_DEPRECATED;
 /**
  * @brief Public name for task floating point context area.
  */
-typedef Context_Control_fp         rtems_context_fp;
+typedef Context_Control_fp         rtems_context_fp RTEMS_DEPRECATED;
 #endif
 
 #if (CPU_ISR_PASSES_FRAME_POINTER == TRUE)
