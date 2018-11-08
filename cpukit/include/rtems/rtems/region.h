@@ -1,22 +1,9 @@
 /**
- * @file rtems/rtems/region.h
+ * @file
  *
- * @defgroup ClassicRegion Regions
+ * @ingroup ClassicRegion
  *
- * @ingroup ClassicRTEMS
- * @brief Region Manager
- *
- * This include file contains all the constants and structures associated
- * with the Region Manager. This manager provides facilities to dynamically
- * allocate memory in variable sized units which are returned as segments.
- *
- * Directives provided are:
- *
- * - create a region
- * - get an ID of a region
- * - delete a region
- * - get a segment from a region
- * - return a segment to a region
+ * @brief Classic Region Manager API
  */
 
 /* COPYRIGHT (c) 1989-2013.
@@ -34,8 +21,6 @@
 #include <rtems/rtems/options.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
-#include <rtems/score/heap.h>
-#include <rtems/score/threadq.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,20 +35,6 @@ extern "C" {
  *  Manager.
  */
 /**@{*/
-
-/**
- *  The following records define the control block used to manage
- *  each region.
- */
-
-typedef struct {
-  Objects_Control       Object;
-  Thread_queue_Control  Wait_queue;            /* waiting threads        */
-  const Thread_queue_Operations *wait_operations;
-  uintptr_t             maximum_segment_size;  /* in bytes               */
-  rtems_attribute       attribute_set;
-  Heap_Control          Memory;
-}  Region_Control;
 
 /**
  *  @brief rtems_region_create

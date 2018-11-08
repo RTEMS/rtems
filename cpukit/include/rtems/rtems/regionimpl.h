@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_REGIONIMPL_H
 #define _RTEMS_RTEMS_REGIONIMPL_H
 
-#include <rtems/rtems/region.h>
+#include <rtems/rtems/regiondata.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/heapimpl.h>
 #include <rtems/score/objectimpl.h>
