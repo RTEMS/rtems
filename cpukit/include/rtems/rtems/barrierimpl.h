@@ -1,13 +1,9 @@
 /**
- * @file rtems/rtems/barrier.inl
+ * @file
  *
- * @defgroup ClassicBarrier Barriers
+ * @ingroup ClassicBarrierImpl
  *
- * @ingroup ClassicRTEMS
- * @brief Inline Implementation from Barrier Manager
- *
- * This file contains the static inlin implementation of the inlined
- * routines from the Barrier Manager.
+ * @brief Classic Barrier Manager Implementation
  */
 
 /*
@@ -22,7 +18,7 @@
 #ifndef _RTEMS_RTEMS_BARRIERIMPL_H
 #define _RTEMS_RTEMS_BARRIERIMPL_H
 
-#include <rtems/rtems/barrier.h>
+#include <rtems/rtems/barrierdata.h>
 #include <rtems/score/corebarrierimpl.h>
 #include <rtems/score/objectimpl.h>
 

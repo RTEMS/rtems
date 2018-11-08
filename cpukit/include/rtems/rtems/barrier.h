@@ -1,21 +1,9 @@
 /**
- * @file rtems/rtems/barrier.h
+ * @file
  *
- * @defgroup ClassicBarrier Barriers
+ * @ingroup ClassicBarrier
  *
- * @ingroup ClassicRTEMS
- * @brief Classic API Barrier Manager
- *
- * This include file contains all the constants and structures associated
- * with the Barrier Manager.
- *
- * Directives provided are:
- *
- * - create a barrier
- * - get an ID of a barrier
- * - delete a barrier
- * - wait for a barrier
- * - signal a barrier
+ * @brief Classic Barrier Manager API
  */
 
 /* COPYRIGHT (c) 1989-2008.
@@ -29,11 +17,9 @@
 #ifndef _RTEMS_RTEMS_BARRIER_H
 #define _RTEMS_RTEMS_BARRIER_H
 
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/status.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/corebarrier.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,18 +34,6 @@ extern "C" {
  * Barrier Manager.
  */
 /**@{*/
-
-/**
- *  This type defines the control block used to manage each barrier.
- */
-typedef struct {
-  /** This is used to manage a barrier as an object. */
-  Objects_Control          Object;
-  /** This is used to implement the barrier. */
-  CORE_barrier_Control     Barrier;
-  /** This is used to specify the attributes of a barrier. */
-  rtems_attribute          attribute_set;
-}   Barrier_Control;
 
 /**
  * @brief RTEMS Create Barrier
