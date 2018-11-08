@@ -35,6 +35,7 @@
 #include <rtems/rtems/barrierdata.h>
 #include <rtems/rtems/dpmemdata.h>
 #include <rtems/rtems/messagedata.h>
+#include <rtems/rtems/partdata.h>
 #include <rtems/rtems/ratemondata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>

@@ -253,6 +253,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/object.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/options.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/optionsimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/part.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/partdata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/partimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/partmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/ratemon.h

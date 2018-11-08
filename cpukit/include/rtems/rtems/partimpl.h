@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_PARTIMPL_H
 #define _RTEMS_RTEMS_PARTIMPL_H
 
-#include <rtems/rtems/part.h>
+#include <rtems/rtems/partdata.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/objectimpl.h>
 

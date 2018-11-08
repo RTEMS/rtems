@@ -9,6 +9,7 @@
 #include <rtems.h>
 #include <rtems/monitor.h>
 #include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/partdata.h>
 #include <stdio.h>
 #include <string.h>    /* memcpy() */
 
