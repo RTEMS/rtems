@@ -284,18 +284,6 @@ void _CPU_Context_Initialize(
 
 void _CPU_Initialize(void);
 
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-);
-
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-);
-
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 void _CPU_Context_switch(

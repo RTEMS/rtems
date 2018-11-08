@@ -52,24 +52,3 @@ void _CPU_Exception_frame_print(const CPU_Exception_frame *ctx)
 void _CPU_Initialize(void)
 {
 }
-
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  amd64_install_raw_interrupt(
-    vector,
-    (uintptr_t) new_handler,
-    (uintptr_t*) old_handler
-  );
-}
-
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-}
