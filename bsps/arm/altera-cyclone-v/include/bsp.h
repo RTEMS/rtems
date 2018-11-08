@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup arm_altera-cyclone-v
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Copyright (c) 2013, 2018 embedded brains GmbH.  All rights reserved.
  *
@@ -50,3 +58,13 @@ extern "C" {
 #endif /* ASM */
 
 #endif /* LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H */
+
+/**
+ * @defgroup arm_altera-cyclone-v Altera Cyclone V Support
+ *
+ * @ingroup bsp_arm
+ *
+ * @brief Altera Cyclone V support package.
+ *
+ * @{
+ */

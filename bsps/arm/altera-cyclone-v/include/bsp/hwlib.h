@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup altera-cyclone-v_hwlib
+ *
+ * @brief The type definition for status codes returned by the HWLIB.
+ */
+
 /******************************************************************************
 *
 * Copyright 2013 Altera Corporation. All Rights Reserved.
@@ -47,6 +55,14 @@
 extern "C"
 {
 #endif  /* __cplusplus */
+
+/**
+ * @defgroup altera-cyclone-v_hwlib Hwlib
+ *
+ * @ingroup arm_altera-cyclone-v
+ *
+ * @brief The type definition for status codes returned by the HWLIB.
+ */
 
 /*!
  * The type definition for status codes returned by the HWLIB.

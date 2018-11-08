@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup altera-cyclone-v_i2c
+ *
+ * @brief Drivers for I2C
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *
@@ -20,6 +28,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup altera-cyclone-v_i2c I2C Support
+ *
+ * @ingroup arm_altera-cyclone-v
+ *
+ * @brief I2C Support
+ *
+ */
 
 rtems_device_driver i2cdrv_initialize(
   rtems_device_major_number major,

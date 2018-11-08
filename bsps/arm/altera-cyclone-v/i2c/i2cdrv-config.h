@@ -1,3 +1,12 @@
+/**
+ * @file
+ *
+ * @ingroup altera-cyclone-v_i2c
+ *
+ * @brief Drivers for I2C
+ *
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *

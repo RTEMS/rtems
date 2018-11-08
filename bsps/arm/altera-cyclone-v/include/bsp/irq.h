@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup altera-cyclone-v_interrupt
+ *
+ * @brief Interrupt definitions.
+ */
+
 /*
  * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
  *
@@ -27,6 +35,18 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+/**
+ * @defgroup altera-cyclone-v_interrupt Interrupt Support
+ *
+ * @ingroup arm_altera-cyclone-v
+ *
+ * @ingroup bsp_interrupt
+ *
+ * @brief Interrupt Support for Altera Cyclone V
+ *
+ * @{
+ */
 
 /* Use interrupt IDs as defined in alt_interrupt_common.h */
 #define BSP_INTERRUPT_VECTOR_MIN ALT_INT_INTERRUPT_SGI0
