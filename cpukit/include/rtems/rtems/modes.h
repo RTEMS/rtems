@@ -41,7 +41,7 @@ extern "C" {
  *  The following type defines the control block used to manage
  *  each a mode set.
  */
-typedef uint32_t   Modes_Control;
+typedef uint32_t   rtems_mode;
 
 /**
  *  The following constants define the individual modes and masks
@@ -118,7 +118,7 @@ extern const uint32_t rtems_interrupt_mask;
  * @note This variable is used by bindings from languages other than
  *       C and C++.
  */
-Modes_Control rtems_interrupt_level_body(
+rtems_mode rtems_interrupt_level_body(
   uint32_t   level
 );
 

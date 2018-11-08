@@ -39,8 +39,8 @@ extern "C" {
  *  are set in mode_set, and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Modes_Mask_changed (
-  Modes_Control mode_set,
-  Modes_Control masks
+  rtems_mode mode_set,
+  rtems_mode masks
 )
 {
    return ( mode_set & masks ) ? true : false;
@@ -53,7 +53,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Mask_changed (
  *  Signal Processing is disabled, and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
-  Modes_Control mode_set
+  rtems_mode mode_set
 )
 {
    return (mode_set & RTEMS_ASR_MASK) == RTEMS_NO_ASR;
@@ -66,7 +66,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_asr_disabled (
  *  is enabled, and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
-  Modes_Control mode_set
+  rtems_mode mode_set
 )
 {
    return (mode_set & RTEMS_PREEMPT_MASK) == RTEMS_PREEMPT;
@@ -79,7 +79,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_preempt (
  *  is enabled, and FALSE otherwise.
  */
 RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
-  Modes_Control mode_set
+  rtems_mode mode_set
 )
 {
   return (mode_set & RTEMS_TIMESLICE_MASK) == RTEMS_TIMESLICE;
@@ -91,7 +91,7 @@ RTEMS_INLINE_ROUTINE bool _Modes_Is_timeslice (
  *  This function returns the interrupt level portion of the mode_set.
  */
 RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
-  Modes_Control mode_set
+  rtems_mode mode_set
 )
 {
   return ( mode_set & RTEMS_INTERRUPT_MASK );
@@ -104,7 +104,7 @@ RTEMS_INLINE_ROUTINE ISR_Level _Modes_Get_interrupt_level (
  *  in the mode_set.
  */
 RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
-  Modes_Control mode_set
+  rtems_mode mode_set
 )
 {
   _ISR_Set_level( _Modes_Get_interrupt_level( mode_set ) );
@@ -120,14 +120,14 @@ RTEMS_INLINE_ROUTINE void _Modes_Set_interrupt_level (
  *  is returned in changed.
  */
 RTEMS_INLINE_ROUTINE void _Modes_Change (
-  Modes_Control  old_mode_set,
-  Modes_Control  new_mode_set,
-  Modes_Control  mask,
-  Modes_Control *out_mode_set,
-  Modes_Control *changed
+  rtems_mode  old_mode_set,
+  rtems_mode  new_mode_set,
+  rtems_mode  mask,
+  rtems_mode *out_mode_set,
+  rtems_mode *changed
 )
 {
-  Modes_Control _out_mode;
+  rtems_mode _out_mode;
 
   _out_mode      =  old_mode_set;
   _out_mode     &= ~mask;

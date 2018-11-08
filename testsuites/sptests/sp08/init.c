@@ -20,8 +20,7 @@ const char rtems_test_name[] = "SP 8";
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);
 
-#define PRIxModes_Control 	PRIx32
-#define PRIxrtems_mode		PRIxModes_Control
+#define PRIxrtems_mode 	PRIx32
 
 #define put_mode( _comment, _output_mode ) \
    printf( "%s %08" PRIxrtems_mode "\n", _comment, _output_mode );

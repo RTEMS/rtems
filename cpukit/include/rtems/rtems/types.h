@@ -167,11 +167,6 @@ typedef struct {
   uint32_t   ticks;
 }   rtems_time_of_day;
 
-/**
- * @brief Task mode type.
- */
-typedef Modes_Control rtems_mode;
-
 /*
  *  MPCI related entries
  */

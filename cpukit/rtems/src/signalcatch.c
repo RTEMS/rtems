@@ -36,7 +36,7 @@ void _Signal_Action_handler(
   RTEMS_API_Control *api;
   ASR_Information   *asr;
   rtems_signal_set   signal_set;
-  Modes_Control      prev_mode;
+  rtems_mode      prev_mode;
 
   (void) action;
 

@@ -39,7 +39,7 @@ typedef struct {
   /** This field indicates if address of the signal handler function. */
   rtems_asr_entry   handler;
   /** This field indicates if the task mode the signal will run with. */
-  Modes_Control     mode_set;
+  rtems_mode        mode_set;
   /** This field indicates the signal set that is posted. */
   rtems_signal_set  signals_posted;
   /** This field indicates the signal set that is pending. */
