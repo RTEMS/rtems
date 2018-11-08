@@ -518,13 +518,6 @@ rtems_monitor_task(
     rtems_task_argument monitor_flags
 )
 {
-#if UNUSED
-    rtems_tcb *debugee = 0;
-    rtems_context *rp;
-#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
-    rtems_context_fp *fp;
-#endif
-#endif
     char command_buffer[513];
     int argc;
     char *argv[64];
@@ -573,13 +566,6 @@ rtems_monitor_task(
     {
         const rtems_monitor_command_entry_t *command;
 
-#if UNUSED
-        debugee = _Thread_Executing;
-        rp = &debugee->Registers;
-#if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
-        fp = debugee->fp_context;  /* possibly 0 */
-#endif
-#endif
         if (0 == rtems_monitor_command_read(command_buffer, &argc, argv))
             continue;
         if (argc < 1

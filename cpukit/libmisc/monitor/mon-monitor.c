@@ -32,11 +32,6 @@
 
 #include <rtems/monitor.h>
 
-/* set by trap handler */
-extern rtems_tcb       *debugger_interrupted_task;
-extern rtems_context   *debugger_interrupted_task_context;
-extern uint32_t   debugger_trap;
-
 /*
  * Various id's for the monitor
  * They need to be public variables for access by other agencies
