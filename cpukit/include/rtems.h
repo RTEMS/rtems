@@ -58,6 +58,7 @@
 #include <rtems/rtems/smp.h>
 
 #include <rtems/rtems/support.h>
+#include <rtems/score/stack.h>
 
 #ifdef __cplusplus
 extern "C" {
