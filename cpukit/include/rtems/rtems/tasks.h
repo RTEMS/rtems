@@ -40,11 +40,11 @@
 #include <rtems/score/object.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/event.h>
 #include <rtems/rtems/asrdata.h>
 #include <rtems/rtems/attr.h>
+#include <rtems/rtems/eventdata.h>
 #include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {

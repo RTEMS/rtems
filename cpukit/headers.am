@@ -237,6 +237,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/dpmem.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/dpmemdata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/dpmemimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/event.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/eventdata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/eventimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/eventmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/intr.h

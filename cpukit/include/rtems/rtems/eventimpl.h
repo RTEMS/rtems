@@ -3,7 +3,7 @@
  *
  * @ingroup ClassicEventImpl
  *
- * @brief Classic Event Implementation
+ * @brief Classic Event Manager Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_EVENTIMPL_H
 #define _RTEMS_RTEMS_EVENTIMPL_H
 
-#include <rtems/rtems/event.h>
+#include <rtems/rtems/eventdata.h>
 #include <rtems/score/thread.h>
 
 #ifdef __cplusplus
