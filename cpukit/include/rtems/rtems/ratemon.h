@@ -66,7 +66,7 @@ extern "C" {
  */
 #include <rtems/score/timespec.h>
 
-typedef struct timespec rtems_rate_monotonic_period_time_t;
+typedef struct timespec rtems_rate_monotonic_period_time_t RTEMS_DEPRECATED;
 
 /**
  *  This is the internal type used for the rate monotonic timing
@@ -127,11 +127,11 @@ typedef struct {
   struct timespec total_cpu_time;
 
   /** This field contains the least amount of wall time used in a period. */
-  rtems_rate_monotonic_period_time_t   min_wall_time;
+  struct timespec min_wall_time;
   /** This field contains the highest amount of wall time used in a period. */
-  rtems_rate_monotonic_period_time_t   max_wall_time;
+  struct timespec max_wall_time;
   /** This field contains the total amount of CPU time used in a period. */
-  rtems_rate_monotonic_period_time_t   total_wall_time;
+  struct timespec total_wall_time;
 }  rtems_rate_monotonic_period_statistics;
 
 /**
@@ -174,7 +174,7 @@ typedef struct {
    *  was last initiated.  If the period is expired or has not been initiated,
    *  then this field has no meaning.
    */
-  rtems_rate_monotonic_period_time_t   since_last_period;
+  struct timespec                      since_last_period;
 
   /**
    *  This is the amount of CPU time that has been used since this period
