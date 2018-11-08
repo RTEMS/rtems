@@ -30,7 +30,6 @@
 #define _RTEMS_RTEMS_CLOCK_H
 
 #include <rtems/score/watchdog.h>
-#include <rtems/score/tod.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/config.h>

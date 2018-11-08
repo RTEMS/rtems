@@ -18,7 +18,6 @@
 #ifndef _RTEMS_SCORE_TODIMPL_H
 #define _RTEMS_SCORE_TODIMPL_H
 
-#include <rtems/score/tod.h>
 #include <rtems/score/timestamp.h>
 #include <rtems/score/timecounterimpl.h>
 #include <rtems/score/watchdog.h>
