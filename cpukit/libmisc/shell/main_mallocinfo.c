@@ -31,7 +31,7 @@ static int rtems_shell_main_malloc_info(
   if ( argc == 2 && strcmp( argv[ 1 ], "walk" ) == 0 ) {
     malloc_walk( 0, true );
   } else {
-    region_information_block info;
+    Heap_Information_block info;
 
     rtems_shell_print_unified_work_area_message();
     malloc_info( &info );
