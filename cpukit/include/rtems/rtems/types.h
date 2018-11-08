@@ -89,7 +89,7 @@ typedef Objects_Id       rtems_id;
 /**
  * @brief Public name for task context area.
  */
-typedef Context_Control            rtems_context;
+typedef Context_Control            rtems_context RTEMS_DEPRECATED;
 
 #if (CPU_HARDWARE_FP == TRUE) || (CPU_SOFTWARE_FP == TRUE)
 /**
