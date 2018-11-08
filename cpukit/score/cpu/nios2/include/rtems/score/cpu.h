@@ -296,22 +296,12 @@ void _CPU_Fatal_halt( uint32_t _source, uint32_t _error )
  */
 void _CPU_Initialize( void );
 
-/**
- * @brief CPU ISR install raw handler.
- */
-void _CPU_ISR_install_raw_handler(
-  uint32_t vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
-);
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
-/**
- * @brief CPU ISR install vector.
- */
 void _CPU_ISR_install_vector(
-  uint32_t vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );

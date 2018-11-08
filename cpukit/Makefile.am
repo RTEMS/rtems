@@ -1643,7 +1643,6 @@ librtemscpu_a_SOURCES += score/cpu/nios2/nios2-iic-low-level.S
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-iic-irq.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-initialize.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-isr-get-level.c
-librtemscpu_a_SOURCES += score/cpu/nios2/nios2-isr-install-raw-handler.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-isr-install-vector.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-isr-is-in-progress.c
 librtemscpu_a_SOURCES += score/cpu/nios2/nios2-isr-set-level.c
