@@ -7,4 +7,5 @@ include_HEADERS += ../../../../../../bsps/arm/realview-pbx-a9/include/tm27.h
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../../bsps/arm/realview-pbx-a9/include/bsp/console.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/realview-pbx-a9/include/bsp/irq.h
