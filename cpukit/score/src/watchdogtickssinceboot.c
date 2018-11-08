@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 
 /*
  * This is defined in a separate module to allow the new network to define it

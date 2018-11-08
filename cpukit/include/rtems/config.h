@@ -29,7 +29,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/isr.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/config.h>
 #include <rtems/posix/config.h>
 #include <rtems/extension.h>

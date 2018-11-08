@@ -25,11 +25,13 @@
 #include <rtems/score/priority.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/states.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct Per_CPU_Control;
 
 struct Scheduler_Node;
 

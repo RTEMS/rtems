@@ -35,7 +35,6 @@
 
 #include <rtems/rtems/types.h>
 #include <rtems/rtems/status.h>
-#include <rtems/score/watchdog.h>
 
 struct rtems_printer;
 

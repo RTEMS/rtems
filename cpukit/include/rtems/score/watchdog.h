@@ -1,5 +1,7 @@
 /**
- *  @file  rtems/score/watchdog.h
+ *  @file
+ *
+ *  @ingroup ScoreWatchdog
  *
  *  @brief Constants and Structures Associated with Watchdog Timers
  *
@@ -44,18 +46,6 @@ extern "C" {
 /**@{*/
 
 typedef struct Watchdog_Control Watchdog_Control;
-
-/**
- *  @brief Type is used to specify the length of intervals.
- *
- *  This type is used to specify the length of intervals.
- */
-typedef uint32_t   Watchdog_Interval;
-
-/**
- * @brief Special watchdog ticks value to indicate an infinite wait.
- */
-#define WATCHDOG_NO_TIMEOUT 0
 
 /**
  *  @brief Return type from a Watchdog Service Routine.
@@ -123,29 +113,6 @@ struct Watchdog_Control {
   /** @brief This field is the expiration time point. */
   uint64_t expire;
 };
-
-/**
- * @brief The watchdog ticks counter.
- *
- * With a 1ms watchdog tick, this counter overflows after 50 days since boot.
- */
-extern volatile Watchdog_Interval _Watchdog_Ticks_since_boot;
-
-/**
- * @brief The watchdog nanoseconds per tick.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const uint32_t _Watchdog_Nanoseconds_per_tick;
-
-/**
- * @brief The watchdog ticks per second.
- *
- * This constant is defined by the application configuration via
- * <rtems/confdefs.h>.
- */
-extern const uint32_t _Watchdog_Ticks_per_second;
 
 /**@}*/
 

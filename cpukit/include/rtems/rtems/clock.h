@@ -29,7 +29,6 @@
 #ifndef _RTEMS_RTEMS_CLOCK_H
 #define _RTEMS_RTEMS_CLOCK_H
 
-#include <rtems/score/watchdog.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 #include <rtems/config.h>

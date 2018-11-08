@@ -24,7 +24,7 @@
 
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 
 #ifdef __cplusplus
 extern "C" {

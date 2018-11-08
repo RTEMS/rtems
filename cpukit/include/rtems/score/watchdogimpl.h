@@ -20,6 +20,7 @@
 #define _RTEMS_SCORE_WATCHDOGIMPL_H
 
 #include <rtems/score/watchdog.h>
+#include <rtems/score/watchdogticks.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/percpu.h>
