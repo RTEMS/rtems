@@ -1,30 +1,9 @@
 /**
- * @file rtems/rtems/timer.h
+ * @file
  *
- * @defgroup ClassicTimer Timers
+ * @ingroup ClassicTimer
  *
- * @ingroup ClassicRTEMS
- * @brief Instantiate RTEMS Timer Data
- *
- * This include file contains all the constants, structures, and
- * prototypes associated with the Timer Manager. This manager provides
- * facilities to configure, initiate, cancel, and delete timers which will
- * fire at specified intervals of time.
- *
- * Directives provided are:
- *
- * - create a timer
- * - get an ID of a timer
- * - delete a timer
- * - set timer to fire in context of clock tick
- * - after a number of ticks have passed
- * - when a specified date and time has been reached
- * - initiate the timer server task
- * - set timer to fire in context of the timer server task
- * - after a number of ticks have passed
- * - when a specified date and time has been reached
- * - reset a timer
- * - cancel a time
+ * @brief Classic Timer Manager API
  */
 
 /*
@@ -123,29 +102,6 @@ typedef rtems_timer_service_routine ( *rtems_timer_service_routine_entry )(
                  rtems_id,
                  void *
              );
-
-/**
- *  The following records define the control block used to manage
- *  each timer.
- */
-typedef struct {
-  /** This field is the object management portion of a Timer instance. */
-  Objects_Control  Object;
-  /** This field is the Watchdog instance which will be the scheduled. */
-  Watchdog_Control Ticker;
-  /** This field indicates what type of timer this currently is. */
-  Timer_Classes    the_class;
-  /** This field is the timer service routine. */
-  rtems_timer_service_routine_entry routine;
-  /** This field is the timer service routine user data. */
-  void *user_data;
-  /** This field is the timer interval in ticks or seconds. */
-  Watchdog_Interval initial;
-  /** This field is the timer start time point in ticks. */
-  Watchdog_Interval start_time;
-  /** This field is the timer stop time point in ticks. */
-  Watchdog_Interval stop_time;
-}   Timer_Control;
 
 /**
  * @brief RTEMS Create Timer

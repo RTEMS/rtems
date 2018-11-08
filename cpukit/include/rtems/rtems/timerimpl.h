@@ -20,7 +20,7 @@
 #ifndef _RTEMS_RTEMS_TIMER_INL
 #define _RTEMS_RTEMS_TIMER_INL
 
-#include <rtems/rtems/timer.h>
+#include <rtems/rtems/timerdata.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
