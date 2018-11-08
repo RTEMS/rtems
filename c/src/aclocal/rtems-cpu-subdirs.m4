@@ -15,7 +15,6 @@ _RTEMS_CPU_SUBDIR([bfin],[$1]);;
 _RTEMS_CPU_SUBDIR([epiphany],[$1]);;
 _RTEMS_CPU_SUBDIR([i386],[$1]);;
 _RTEMS_CPU_SUBDIR([lm32],[$1]);;
-_RTEMS_CPU_SUBDIR([m32c],[$1]);;
 _RTEMS_CPU_SUBDIR([m68k],[$1]);;
 _RTEMS_CPU_SUBDIR([mips],[$1]);;
 _RTEMS_CPU_SUBDIR([moxie],[$1]);;

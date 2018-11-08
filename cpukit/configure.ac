@@ -335,16 +335,6 @@ esac
 AM_CONDITIONAL(LIBDEBUGGER,[test x"$HAVE_LIBDEBUGGER" = x"yes"])
 AC_MSG_RESULT([$HAVE_LIBDEBUGGER])
 
-AC_MSG_CHECKING([whether CPU supports SHA])
-case $RTEMS_CPU in
-  m32c)
-   HAVE_SHA=no ;;
-  *)
-   HAVE_SHA=yes ;;
-esac
-AM_CONDITIONAL(SHA,[test x"$HAVE_SHA" = x"yes"])
-AC_MSG_RESULT([$HAVE_SHA])
-
 # Filter libpci to only build for architectures that have support for it
 AC_MSG_CHECKING([whether CPU supports libpci])
 case $RTEMS_CPU in
@@ -372,7 +362,6 @@ AM_CONDITIONAL([CPU_BFIN],[test $RTEMS_CPU = "bfin"])
 AM_CONDITIONAL([CPU_EPIPHANY],[test $RTEMS_CPU = "epiphany"])
 AM_CONDITIONAL([CPU_I386],[test $RTEMS_CPU = "i386"])
 AM_CONDITIONAL([CPU_LM32],[test $RTEMS_CPU = "lm32"])
-AM_CONDITIONAL([CPU_M32C],[test $RTEMS_CPU = "m32c"])
 AM_CONDITIONAL([CPU_M68K],[test $RTEMS_CPU = "m68k"])
 AM_CONDITIONAL([CPU_MIPS],[test $RTEMS_CPU = "mips"])
 AM_CONDITIONAL([CPU_MOXIE],[test $RTEMS_CPU = "moxie"])

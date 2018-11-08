@@ -10,7 +10,7 @@ AC_CACHE_CHECK([whether CPU supports networking],
   [dnl
     case "$host" in
     # do not have address space to hold BSD TCP/IP stack
-    epiphany* | m32c*)
+    epiphany*)
       rtems_cv_HAS_NETWORKING="no"
       ;;
     # Newer architecture ports that should only use new TCP/IP stack

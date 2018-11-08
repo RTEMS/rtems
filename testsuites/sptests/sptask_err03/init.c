@@ -73,17 +73,11 @@ rtems_task Init(
   /*
    * If the bsp provides its own stack allocator, then
    * skip the test that tries to allocate a stack that is too big.
-   *
-   * If on the m32c, we can't even ask for enough memory to trip this
-   * error.
    */
 
   skipUnsatisfied = false;
   if (rtems_configuration_get_stack_allocate_hook())
     skipUnsatisfied = true;
-  #if defined(__m32c__)
-    skipUnsatisfied = true;
-  #endif
 
   if ( skipUnsatisfied ) {
     puts(

@@ -33,7 +33,6 @@ rtems_task Init(
   rtems_time_of_day        time;
   rtems_id                 timer_id;
   rtems_name               timer_name;
-  bool                     skipUnsatisfied;
 
   /* Set System time */
   build_time( &time, 12, 31, 1992, 9, 0, 0, 0 );
@@ -74,25 +73,17 @@ rtems_task Init(
   );
   puts( "TA1 - rtems_timer_initiate_server - RTEMS_INVALID_PRIORITY" );
 
-  skipUnsatisfied = false;
-  #if defined(__m32c__)
-    skipUnsatisfied = true;
-  #endif
-  if (skipUnsatisfied) {
-    puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED -- SKIPPED" );
-  } else {
-    status = rtems_timer_initiate_server(
-      RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
-      0x10000000,
-      0
-    );
-    fatal_directive_status(
-      status,
-      RTEMS_UNSATISFIED,
-      "rtems_timer_initiate_server too much stack "
-    );
-    puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
-  }
+  status = rtems_timer_initiate_server(
+    RTEMS_TIMER_SERVER_DEFAULT_PRIORITY,
+    0x10000000,
+    0
+  );
+  fatal_directive_status(
+    status,
+    RTEMS_UNSATISFIED,
+    "rtems_timer_initiate_server too much stack "
+  );
+  puts( "TA1 - rtems_timer_initiate_server - RTEMS_UNSATISFIED" );
 
   status =
     rtems_timer_initiate_server( RTEMS_TIMER_SERVER_DEFAULT_PRIORITY, 0, 0 );

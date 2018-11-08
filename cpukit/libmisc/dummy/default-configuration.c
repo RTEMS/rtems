@@ -90,14 +90,10 @@ static void Init( rtems_task_argument arg )
 #define CONFIGURE_STACK_CHECKER_ENABLED
 
 /* on smaller architectures lower the number or resources */
-#if defined(__m32c__)
-  #define CONFIGURE_MAXIMUM_TASKS 3
-#else
-  #define CONFIGURE_UNLIMITED_OBJECTS
-  #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 8
-  #define CONFIGURE_MAXIMUM_DRIVERS 16
-  #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 32
-#endif
+#define CONFIGURE_UNLIMITED_OBJECTS
+#define CONFIGURE_MAXIMUM_USER_EXTENSIONS 8
+#define CONFIGURE_MAXIMUM_DRIVERS 16
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 32
 
 /* Include basic device drivers needed to call delays */
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER

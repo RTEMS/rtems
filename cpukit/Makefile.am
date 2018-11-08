@@ -468,6 +468,8 @@ librtemscpu_a_SOURCES += libfs/src/rfs/rtems-rfs-trace.c
 librtemscpu_a_SOURCES += libi2c/libi2c.c
 librtemscpu_a_SOURCES += libmd/md4.c
 librtemscpu_a_SOURCES += libmd/md5.c
+librtemscpu_a_SOURCES += libmd/sha256c.c
+librtemscpu_a_SOURCES += libmd/sha512c.c
 librtemscpu_a_SOURCES += libstdthreads/call_once.c
 librtemscpu_a_SOURCES += libstdthreads/cnd.c
 librtemscpu_a_SOURCES += libstdthreads/mtx.c
@@ -1500,13 +1502,6 @@ librtemscpu_a_SOURCES += libmisc/utf8proc/utf8proc.c
 
 endif
 
-if SHA
-
-librtemscpu_a_SOURCES += libmd/sha256c.c
-librtemscpu_a_SOURCES += libmd/sha512c.c
-
-endif
-
 if CPU_ARM
 
 include $(srcdir)/score/cpu/arm/headers.am
@@ -1588,20 +1583,6 @@ librtemscpu_a_SOURCES += score/cpu/lm32/cpu_asm.S
 librtemscpu_a_SOURCES += score/cpu/lm32/cpu.c
 librtemscpu_a_SOURCES += score/cpu/lm32/irq.c
 librtemscpu_a_SOURCES += score/cpu/lm32/lm32-exception-frame-print.c
-librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
-librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
-
-endif
-
-if CPU_M32C
-
-include $(srcdir)/score/cpu/m32c/headers.am
-
-librtemscpu_a_SOURCES += score/cpu/m32c/context_init.c
-librtemscpu_a_SOURCES += score/cpu/m32c/context_switch.S
-librtemscpu_a_SOURCES += score/cpu/m32c/cpu.c
-librtemscpu_a_SOURCES += score/cpu/m32c/m32c-exception-frame-print.c
-librtemscpu_a_SOURCES += score/cpu/m32c/varvects.S
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterfrequency.c
 librtemscpu_a_SOURCES += score/cpu/no_cpu/cpucounterread.c
 
