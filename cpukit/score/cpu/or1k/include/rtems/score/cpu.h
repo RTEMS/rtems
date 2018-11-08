@@ -590,35 +590,28 @@ void _CPU_Initialize(
   void
 );
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  This routine installs a "raw" interrupt handler directly into the
- *  processor's vector table.
- *
- */
+typedef void ( *CPU_ISR_raw_handler )( uint32_t, CPU_Exception_frame * );
 
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 
-/*
- *  _CPU_ISR_install_vector
- *
- *  This routine installs an interrupt vector.
- *
- *  NO_CPU Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
-void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr   new_handler,
-  proc_ptr   *old_handler
-);
+RTEMS_INLINE_ROUTINE void _CPU_ISR_install_vector(
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
+)
+{
+  _CPU_ISR_install_raw_handler(
+    vector,
+    (CPU_ISR_raw_handler) new_handler,
+    (CPU_ISR_raw_handler *) old_handler
+  );
+}
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 

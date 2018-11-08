@@ -33,9 +33,6 @@ static struct timecounter or1ksim_tc;
 /* CPU counter */
 static CPU_Counter_ticks cpu_counter_ticks;
 
-/* This prototype is added here to Avoid warnings */
-void Clock_isr(void *arg);
-
 static void generic_or1k_clock_at_tick(void)
 {
   uint32_t TTMR;
@@ -56,7 +53,7 @@ static void generic_or1k_clock_at_tick(void)
   cpu_counter_ticks += TTMR_NUM_OF_CLOCK_TICKS_INTERRUPT;
 }
 
-static void generic_or1k_clock_handler_install(proc_ptr new_isr)
+static void generic_or1k_clock_handler_install(CPU_ISR_handler new_isr)
 {
   rtems_status_code sc = RTEMS_SUCCESSFUL;
   _CPU_ISR_install_vector(OR1K_EXCEPTION_TICK_TIMER,
