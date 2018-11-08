@@ -33,6 +33,7 @@
 #include <rtems/score/userextimpl.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/rtems/barrierdata.h>
+#include <rtems/rtems/dpmemdata.h>
 #include <rtems/rtems/ratemondata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>

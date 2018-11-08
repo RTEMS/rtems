@@ -1,24 +1,9 @@
 /**
- * @file rtems/rtems/dpmem.h
+ * @file
  *
- * @defgroup ClassicDPMEM Dual Ported Memory
+ * @ingroup ClassicDPMEM
  *
- * @ingroup ClassicRTEMS
- * @brief Dual Ported Memory Manager
- *
- * This include file contains all the constants and structures associated
- * with the Dual Ported Memory Manager. This manager provides a mechanism
- * for converting addresses between internal and external representations
- * for multiple dual-ported memory areas.
- *
- * Directives provided are:
- *
- * - create a port
- * - get ID of a port
- * - delete a port
- * - convert external to internal address
- * - convert internal to external address
- *
+ * @brief Classic Dual Ported Memory Manager API
  */
 
 /* COPYRIGHT (c) 1989-2008.
@@ -48,22 +33,6 @@ extern "C" {
  *  Classic API Dual Ported Memory Manager.
  */
 /**@{*/
-
-/**
- *  The following structure defines the port control block.  Each port
- *  has a control block associated with it.  This control block contains
- *  all information required to support the port related operations.
- */
-typedef struct {
-  /** This field is the object management portion of a Port instance. */
-  Objects_Control  Object;
-  /** This field is the base internal address of the port. */
-  void            *internal_base;
-  /** This field is the base external address of the port. */
-  void            *external_base;
-  /** This field is the length of dual-ported area of the port. */
-  uint32_t         length;
-}   Dual_ported_memory_Control;
 
 /**
  * @brief Creates a port into a dual-ported memory area.

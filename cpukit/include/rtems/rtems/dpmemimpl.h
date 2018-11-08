@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_DPMEM_INL
 #define _RTEMS_RTEMS_DPMEM_INL
 
-#include <rtems/rtems/dpmem.h>
+#include <rtems/rtems/dpmemdata.h>
 #include <rtems/score/objectimpl.h>
 
 #ifdef __cplusplus
