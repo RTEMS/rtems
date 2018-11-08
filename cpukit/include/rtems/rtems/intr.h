@@ -21,13 +21,13 @@
 #ifndef _RTEMS_RTEMS_INTR_H
 #define _RTEMS_RTEMS_INTR_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/rtems/status.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/isrlock.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  *  @defgroup ClassicINTR Interrupts

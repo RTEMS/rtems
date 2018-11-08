@@ -28,13 +28,13 @@
 #ifndef _RTEMS_INIT_H
 #define _RTEMS_INIT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/rtems/types.h>
 #include <rtems/config.h>
 #include <rtems/rtems/intr.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Initializes the system and starts multitasking.

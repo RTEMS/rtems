@@ -16,14 +16,14 @@
 #ifndef _RTEMS_EXTENSION_H
 #define _RTEMS_EXTENSION_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/object.h>
 #include <rtems/score/userext.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
   Objects_Control          Object;
