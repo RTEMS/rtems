@@ -21,6 +21,7 @@
 #include <rtems/rtems/tasks.h>
 #include <rtems/rtems/asrdata.h>
 #include <rtems/rtems/eventdata.h>
+#include <rtems/score/thread.h>
 
 #ifdef __cplusplus
 extern "C" {

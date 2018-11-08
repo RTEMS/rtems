@@ -18,7 +18,6 @@
 #ifndef _RTEMS_RTEMS_TASKS_H
 #define _RTEMS_RTEMS_TASKS_H
 
-#include <rtems/score/scheduler.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -66,10 +65,12 @@ typedef uint32_t rtems_task_priority;
  *  This constant is the least valid value for a Classic API
  *  task priority.
  */
-#define RTEMS_MINIMUM_PRIORITY      (PRIORITY_MINIMUM + 1)
+#define RTEMS_MINIMUM_PRIORITY      1
+
+rtems_task_priority _RTEMS_Maximum_priority( void );
 
 /**
- *  This constant is the maximum valid value for a Classic API
+ *  This run-time constant is the maximum valid value for a Classic API
  *  task priority.
  *
  *  @note This is actually the priority of the IDLE thread so
@@ -78,13 +79,13 @@ typedef uint32_t rtems_task_priority;
  *        want to ensure that a task does not executes during
  *        certain operations such as a system mode change.
  */
-#define RTEMS_MAXIMUM_PRIORITY      ((rtems_task_priority) PRIORITY_MAXIMUM)
+#define RTEMS_MAXIMUM_PRIORITY      _RTEMS_Maximum_priority()
 
 /**
  *  The following constant is passed to rtems_task_set_priority when the
  *  caller wants to obtain the current priority.
  */
-#define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM
+#define RTEMS_CURRENT_PRIORITY      0
 
 struct _Thread_Control;
 

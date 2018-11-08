@@ -22,6 +22,7 @@
  *  RTEMS basic type definitions
  */
 
+#include <sys/cpuset.h>
 #include <sys/_timespec.h>
 #include <sys/_timeval.h>
 #include <stdint.h>
