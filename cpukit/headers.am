@@ -243,6 +243,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/eventmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/intr.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/mainpage.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/message.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/messagedata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/messageimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/modes.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/modesimpl.h

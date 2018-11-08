@@ -1,25 +1,9 @@
 /**
- * @file rtems/rtems/message.h
+ * @file
  *
- * @defgroup ClassicMessageQueue Message Queues
+ * @ingroup ClassicMessageQueue
  *
- * @ingroup ClassicRTEMS
- * @brief Message Queue Manager
- *
- * This include file contains all the constants and structures associated
- * with the Message Queue Manager. This manager provides a mechanism for
- * communication and synchronization between tasks using messages.
- *
- * Directives provided are:
- *
- * - create a queue
- * - get ID of a queue
- * - delete a queue
- * - put a message at the rear of a queue
- * - put a message at the front of a queue
- * - broadcast N messages to a queue
- * - receive message from a queue
- * - flush all messages on a queue
+ * @brief Classic Message Queue Manager API
  */
 
 /* COPYRIGHT (c) 1989-2013.
@@ -33,31 +17,14 @@
 #ifndef _RTEMS_RTEMS_MESSAGE_H
 #define _RTEMS_RTEMS_MESSAGE_H
 
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/options.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/score/object.h>
-#include <rtems/score/coremsg.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- *  @ingroup ClassicMessageQueueImpl
- *
- *  The following records define the control block used to manage
- *  each message queue.
- */
-typedef struct {
-  /** This field is the inherited object characteristics. */
-  Objects_Control             Object;
-  /** This field is the instance of the SuperCore Message Queue. */
-  CORE_message_queue_Control  message_queue;
-  /** This field is the attribute set as defined by the API. */
-  rtems_attribute             attribute_set;
-}   Message_queue_Control;
 
 /**
  *  @defgroup ClassicMessageQueue Message Queues
