@@ -6,14 +6,18 @@
 /*
  * User exception handlers
  */
-proc_ptr M68040FPSPUserExceptionHandlers[9];
+CPU_ISR_raw_handler M68040FPSPUserExceptionHandlers[9];
 
 /*
  * Intercept requests to install an exception handler.
  * FPSP exceptions get special treatment.
  */
 static int
-FPSP_install_raw_handler (uint32_t   vector, proc_ptr new_handler, proc_ptr *old_handler)
+FPSP_install_raw_handler(
+  uint32_t vector,
+  CPU_ISR_raw_handler new_handler,
+  CPU_ISR_raw_handler *old_handler
+)
 {
   int fpspVector;
 
@@ -71,7 +75,7 @@ M68KFPSPInstallExceptionHandlers (void)
     { 55,  _fpspEntry_unsupp },
   };
   int i;
-  proc_ptr oldHandler;
+  CPU_ISR_raw_handler oldHandler;
 
   for (i = 0 ; i < sizeof fpspHandlers / sizeof fpspHandlers[0] ; i++) {
     _CPU_ISR_install_raw_handler(fpspHandlers[i].vector_number, fpspHandlers[i].handler, &oldHandler);

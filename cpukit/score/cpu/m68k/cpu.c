@@ -50,8 +50,8 @@ _CPU_ISR_jump_table[ CPU_INTERRUPT_NUMBER_OF_VECTORS ];
 #if (M68K_HAS_FPSP_PACKAGE == 1)
 int (*_FPSP_install_raw_handler)(
   uint32_t   vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
+  CPU_ISR_raw_handler new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 #endif
 
@@ -97,17 +97,17 @@ uint32_t   _CPU_ISR_Get_level( void )
   return level;
 }
 
-/*
- *  _CPU_ISR_install_raw_handler
- */
-
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 )
 {
-  proc_ptr *interrupt_table = NULL;
+#if ( M68K_HAS_VBR == 1 )
+  CPU_ISR_raw_handler *interrupt_table = NULL;
+#else
+  _CPU_ISR_handler_entry *interrupt_table = NULL;
+#endif
 
 #if (M68K_HAS_FPSP_PACKAGE == 1)
   /*
@@ -141,20 +141,20 @@ void _CPU_ISR_install_raw_handler(
    *  load it appropriately to vector to the RTEMS jump table.
    */
 
-  *old_handler = (proc_ptr) _CPU_ISR_jump_table[vector].isr_handler;
+  *old_handler = (CPU_ISR_raw_handler) _CPU_ISR_jump_table[vector].isr_handler;
   _CPU_ISR_jump_table[vector].isr_handler = (uint32_t) new_handler;
   if ( (uint32_t) interrupt_table != 0xFFFFFFFF )
-    interrupt_table[ vector ] = (proc_ptr) &_CPU_ISR_jump_table[vector];
+    interrupt_table[ vector ] = &_CPU_ISR_jump_table[vector];
 #endif /* M68K_HAS_VBR */
 }
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
-  proc_ptr ignored = 0;  /* to avoid warning */
+  CPU_ISR_raw_handler ignored = 0;  /* to avoid warning */
 
   *old_handler = _ISR_Vector_table[ vector ];
 

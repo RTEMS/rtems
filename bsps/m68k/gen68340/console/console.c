@@ -308,7 +308,7 @@ dbugInitialise (void)
 	      it may be usefull to do so to check for performances with an oscilloscope */
 	   /*
 	   {
-	    proc_ptr ignored;
+	    CPU_ISR_raw_handler ignored;
 	    _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
 	   }
 	   */
@@ -391,7 +391,7 @@ dbugInitialise (void)
 	      it may be usefull to do so to check for performances with an oscilloscope */
 	   /*
 	   {
-	    proc_ptr ignored;
+	    CPU_ISR_raw_handler ignored;
 	    _CPU_ISR_install_raw_handler( CONSOLE_VECTOR, _Debug_ISR_Handler_Console, &ignored );
 	   }
 	   */

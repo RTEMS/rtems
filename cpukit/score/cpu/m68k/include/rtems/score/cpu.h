@@ -564,29 +564,20 @@ extern const unsigned char _CPU_m68k_BFFFO_table[256];
 
 void _CPU_Initialize(void);
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  This routine installs a "raw" interrupt handler directly into the
- *  processor's vector table.
- */
+typedef void ( *CPU_ISR_raw_handler )( void );
 
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 
-/*
- *  _CPU_ISR_install_vector
- *
- *  This routine installs an interrupt vector.
- */
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
 void _CPU_ISR_install_vector(
   uint32_t         vector,
-  proc_ptr         new_handler,
-  proc_ptr        *old_handler
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 /*
@@ -677,8 +668,8 @@ void M68KFPSPInstallExceptionHandlers (void);
 
 extern int (*_FPSP_install_raw_handler)(
   uint32_t   vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
+  CPU_ISR_raw_handler new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 
 #endif
