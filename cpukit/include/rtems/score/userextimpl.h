@@ -19,8 +19,9 @@
 #define _RTEMS_SCORE_USEREXTIMPL_H
 
 #include <rtems/score/userext.h>
-#include <rtems/score/isrlock.h>
 #include <rtems/score/chainimpl.h>
+#include <rtems/score/isrlock.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/percpu.h>
 
 #ifdef __cplusplus
