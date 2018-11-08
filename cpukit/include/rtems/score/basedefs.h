@@ -468,7 +468,7 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
   /**
    * XXX: Eventually proc_ptr needs to disappear!!!
    */
-  typedef void * proc_ptr;
+  typedef void * proc_ptr RTEMS_DEPRECATED;
 #endif
 
 /**@}*/
