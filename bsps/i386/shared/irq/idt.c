@@ -104,8 +104,8 @@ int i386_set_idt_entry  (const rtems_raw_irq_connect_data* irq)
 }
 
 void _CPU_ISR_install_vector (uint32_t vector,
-			      proc_ptr hdl,
-			      proc_ptr * oldHdl)
+			      CPU_ISR_handler hdl,
+			      CPU_ISR_handler * oldHdl)
 {
     interrupt_gate_descriptor* 	idt_entry_tbl;
     unsigned			limit;
@@ -121,8 +121,8 @@ void _CPU_ISR_install_vector (uint32_t vector,
       return;
     }
     rtems_interrupt_lock_acquire(&rtems_idt_access_lock, &lock_context);
-    * ((unsigned int *) oldHdl) = idt_entry_tbl[vector].low_offsets_bits |
-	(idt_entry_tbl[vector].high_offsets_bits << 16);
+    *oldHdl = (CPU_ISR_handler) (idt_entry_tbl[vector].low_offsets_bits |
+	(idt_entry_tbl[vector].high_offsets_bits << 16));
 
     create_interrupt_gate_descriptor(&new,  hdl);
     idt_entry_tbl[vector] = new;

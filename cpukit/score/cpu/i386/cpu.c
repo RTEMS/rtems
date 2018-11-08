@@ -171,8 +171,8 @@ void _CPU_Context_Initialize(
 
   _stack  = ((uint32_t)(_stack_base)) + (_size);
   _stack &= ~ (CPU_STACK_ALIGNMENT - 1);
-  _stack -= 2*sizeof(proc_ptr*); /* see above for why we need to do this */
-  *((proc_ptr *)(_stack)) = (_entry_point);
+  _stack -= 2*sizeof(void *); /* see above for why we need to do this */
+  *((void (**)(void))(_stack)) = (_entry_point);
   the_context->ebp     = (void *) 0;
   the_context->esp     = (void *) _stack;
 

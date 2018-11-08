@@ -539,29 +539,12 @@ extern void _CPU_Fatal_halt(uint32_t source, uint32_t error)
 
 void _CPU_Initialize(void);
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  This routine installs a "raw" interrupt handler directly into the
- *  processor's vector table.
- */
-
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-);
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This routine installs an interrupt vector.
- */
+typedef void ( *CPU_ISR_handler )( void );
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
