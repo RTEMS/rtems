@@ -19,7 +19,6 @@
 #define _RTEMS_RTEMS_TASKS_H
 
 #include <rtems/score/scheduler.h>
-#include <rtems/score/thread.h>
 #include <rtems/rtems/attr.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
@@ -87,10 +86,12 @@ typedef uint32_t rtems_task_priority;
  */
 #define RTEMS_CURRENT_PRIORITY      PRIORITY_MINIMUM
 
+struct _Thread_Control;
+
 /**
  *  External API name for Thread_Control
  */
-typedef Thread_Control rtems_tcb;
+typedef struct _Thread_Control rtems_tcb;
 
 /**
  *  The following defines the "return type" of an RTEMS task.
@@ -100,7 +101,7 @@ typedef void rtems_task;
 /**
  *  The following defines the argument to an RTEMS task.
  */
-typedef Thread_Entry_numeric_type rtems_task_argument;
+typedef CPU_Uint32ptr rtems_task_argument;
 
 /**
  *  The following defines the type for the entry point of an RTEMS task.
