@@ -67,7 +67,7 @@
 
 /**
  *  The following macro is a compiler specific way to ensure that memory
- *  writes are not reordered around certian points.  This specifically can
+ *  writes are not reordered around certain points.  This specifically can
  *  impact interrupt disable and thread dispatching critical sections.
  */
 #ifdef __GNUC__
