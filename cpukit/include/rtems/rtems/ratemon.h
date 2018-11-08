@@ -120,11 +120,11 @@ typedef struct {
   uint32_t     missed_count;
 
   /** This field contains the least amount of CPU time used in a period. */
-  rtems_thread_cpu_usage_t             min_cpu_time;
+  struct timespec min_cpu_time;
   /** This field contains the highest amount of CPU time used in a period. */
-  rtems_thread_cpu_usage_t             max_cpu_time;
+  struct timespec max_cpu_time;
   /** This field contains the total amount of wall time used in a period. */
-  rtems_thread_cpu_usage_t             total_cpu_time;
+  struct timespec total_cpu_time;
 
   /** This field contains the least amount of wall time used in a period. */
   rtems_rate_monotonic_period_time_t   min_wall_time;
@@ -181,7 +181,7 @@ typedef struct {
    *  was last initiated.  If the period is expired or has not been initiated,
    *  then this field has no meaning.
    */
-  rtems_thread_cpu_usage_t             executed_since_last_period;
+  struct timespec                      executed_since_last_period;
 
   /** This is the count of postponed jobs of this period. */
   uint32_t                             postponed_jobs_count;
