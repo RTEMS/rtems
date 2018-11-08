@@ -25,7 +25,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/system.h>
+#include <rtems/score/cpu.h>
 #include <rtems/score/ispsh7032.h>
 
 /*
@@ -33,7 +33,7 @@
  *
  * It has the same structure like the actual vector table (vectab)
  */
-proc_ptr _Hardware_isr_Table[256]={
+CPU_ISR_raw_handler _Hardware_isr_Table[256]={
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
 _dummy_isp, _dummy_isp, _dummy_isp,

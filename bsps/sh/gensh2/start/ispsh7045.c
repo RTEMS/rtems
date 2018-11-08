@@ -37,7 +37,7 @@
  *	by the authors or by TGA Technologies.
  */
 
-#include <rtems/system.h>
+#include <rtems/score/cpu.h>
 
 /*
  * This is a exception vector table
@@ -49,7 +49,7 @@
 /* SH-2 ISR Table */
 #include <rtems/score/ispsh7045.h>
 
-proc_ptr _Hardware_isr_Table[256]={
+CPU_ISR_raw_handler _Hardware_isr_Table[256]={
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,		/* PWRon Reset, Maual Reset,...*/
 _dummy_isp, _dummy_isp, _dummy_isp, _dummy_isp,
 _dummy_isp, _dummy_isp, _dummy_isp,

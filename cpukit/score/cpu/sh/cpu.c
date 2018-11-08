@@ -37,11 +37,7 @@
 #include <rtems/score/sh.h>
 
 /* referenced in start.S */
-extern proc_ptr vectab[] ;
-
-proc_ptr vectab[256] ;
-
-extern proc_ptr _Hardware_isr_Table[];
+CPU_ISR_raw_handler vectab[256] ;
 
 #if SH_HAS_FPU
 Context_Control_fp _CPU_Null_fp_context;
@@ -98,21 +94,18 @@ uint32_t   _CPU_ISR_Get_level( void )
   return ( _mask);
 }
 
-/*
- *  _CPU_ISR_install_raw_handler
- */
-
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 )
+
 {
   /*
    *  This is where we install the interrupt handler into the "raw" interrupt
    *  table used by the CPU to dispatch interrupt handlers.
    */
-  volatile proc_ptr	*vbr ;
+  volatile CPU_ISR_raw_handler *vbr ;
 
 #if SH_PARANOID_ISR
   uint32_t  		level ;
@@ -131,30 +124,14 @@ void _CPU_ISR_install_raw_handler(
 #endif
 }
 
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
-
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
 #if defined(__sh1__) || defined(__sh2__)
-   proc_ptr ignored ;
+   CPU_ISR_raw_handler ignored ;
 #endif
    *old_handler = _ISR_Vector_table[ vector ];
 

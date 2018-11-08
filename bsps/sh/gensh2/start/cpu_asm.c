@@ -39,9 +39,6 @@
 #include <rtems/score/iosh7045.h>
 #include <rtems/score/sh_io.h>
 
-/* from cpu_isps.c */
-extern proc_ptr         _Hardware_isr_Table[];
-
 unsigned long *_old_stack_ptr;
 
 register unsigned long  *stack_ptr __asm__ ("r15");
