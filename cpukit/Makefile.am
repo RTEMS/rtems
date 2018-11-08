@@ -675,6 +675,7 @@ librtemscpu_a_SOURCES += rtems/src/clockgettod.c
 librtemscpu_a_SOURCES += rtems/src/clockgettodtimeval.c
 librtemscpu_a_SOURCES += rtems/src/clockgetuptime.c
 librtemscpu_a_SOURCES += rtems/src/clockgetuptimenanoseconds.c
+librtemscpu_a_SOURCES += rtems/src/clockgetuptimeseconds.c
 librtemscpu_a_SOURCES += rtems/src/clockgetuptimetimeval.c
 librtemscpu_a_SOURCES += rtems/src/clockset.c
 librtemscpu_a_SOURCES += rtems/src/clocktick.c

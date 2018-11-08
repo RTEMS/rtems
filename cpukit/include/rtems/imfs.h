@@ -21,6 +21,7 @@
 
 #include <rtems/libio_.h>
 #include <rtems/pipe.h>
+#include <rtems/score/timecounter.h>
 
 /**
  * @brief In-Memory File System Support.
