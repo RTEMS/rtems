@@ -3,22 +3,7 @@
  *
  * @ingroup ClassicSem
  *
- * @brief Classic Semaphores API
- *
- * This include file contains all the constants and structures associated
- * with the Semaphore Manager. This manager utilizes standard Dijkstra
- * counting semaphores to provide synchronization and mutual exclusion
- * capabilities.
- *
- * Directives provided are:
- *
- * - create a semaphore
- * - get an ID of a semaphore
- * - delete a semaphore
- * - acquire a semaphore
- * - release a semaphore
- * - flush a semaphore
- * - set ceiling priority for a semaphore
+ * @brief Classic Semaphores Manager API
  */
 
 /*
@@ -33,15 +18,10 @@
 #ifndef _RTEMS_RTEMS_SEM_H
 #define _RTEMS_RTEMS_SEM_H
 
-#include <rtems/rtems/types.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/support.h>
-#include <rtems/rtems/tasks.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/score/coremutex.h>
-#include <rtems/score/object.h>
-#include <rtems/score/coresem.h>
-#include <rtems/score/mrsp.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/types.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,64 +36,6 @@ extern "C" {
  *  Semaphore Manager.
  */
 /**@{*/
-
-/**
- *  The following defines the control block used to manage each semaphore.
- */
-typedef struct {
-  /** This field is the object management portion of a Semaphore instance. */
-  Objects_Control          Object;
-
-  /**
-   *  This contains the memory associated with the SuperCore Semaphore or
-   *  Mutex instance that provides the primary functionality of each
-   *  Classic API Semaphore instance.  The structure used is dependent
-   *  on the attributes specified by the user on the create directive.
-   *
-   *  @note Only one of these has meaning in a particular Classic API
-   *        Semaphore instance.
-   */
-  union {
-    /**
-     * @brief The thread queue present in all other variants.
-     */
-    Thread_queue_Control Wait_queue;
-
-    /**
-     *  This is the SuperCore Mutex instance associated with this Classic
-     *  API Semaphore instance.
-     */
-    CORE_ceiling_mutex_Control Mutex;
-
-    /**
-     *  This is the SuperCore Semaphore instance associated with this Classic
-     *  API Semaphore instance.
-     */
-    CORE_semaphore_Control Semaphore;
-
-#if defined(RTEMS_SMP)
-    MRSP_Control MRSP;
-#endif
-  } Core_control;
-
-  /**
-   * @brief The semaphore variant.
-   *
-   * @see Semaphore_Variant.
-   */
-  unsigned int variant : 3;
-
-  /**
-   * @brief The semaphore thread queue discipline.
-   *
-   * @see Semaphore_Discipline.
-   */
-  unsigned int discipline : 1;
-
-#if defined(RTEMS_MULTIPROCESSING)
-  unsigned int is_global : 1;
-#endif
-}   Semaphore_Control;
 
 /**
  *  @brief rtems_semaphore_create

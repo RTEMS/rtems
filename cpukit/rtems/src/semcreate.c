@@ -21,6 +21,7 @@
 #include <rtems/rtems/semimpl.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/rtems/statusimpl.h>
+#include <rtems/rtems/support.h>
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/sysstate.h>

@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup ClassicSem
+ * @ingroup ClassicSemImpl
  *
- * @brief Classic Semaphores Implementation
+ * @brief Classic Semaphore Manager Implementation
  */
 
 /*  COPYRIGHT (c) 1989-2008.
@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_SEMIMPL_H
 #define _RTEMS_RTEMS_SEMIMPL_H
 
-#include <rtems/rtems/sem.h>
+#include <rtems/rtems/semdata.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/coresemimpl.h>
 #include <rtems/score/mrspimpl.h>
@@ -25,6 +25,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @defgroup ClassicSemImpl Semaphore Manager Implementation
+ *
+ * @ingroup ClassicSem
+ *
+ * @{
+ */
 
 /**
  * @brief Classic semaphore variants.
@@ -107,6 +115,8 @@ RTEMS_INLINE_ROUTINE Semaphore_Control *_Semaphore_Get(
     &_Semaphore_Information
   );
 }
+
+/** @} */
 
 #ifdef __cplusplus
 }

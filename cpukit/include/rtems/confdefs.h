@@ -38,6 +38,7 @@
 #include <rtems/rtems/partdata.h>
 #include <rtems/rtems/ratemondata.h>
 #include <rtems/rtems/regiondata.h>
+#include <rtems/rtems/semdata.h>
 #include <rtems/posix/key.h>
 #include <rtems/posix/mqueue.h>
 #include <rtems/posix/pthread.h>
