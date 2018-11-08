@@ -188,7 +188,7 @@ endif
 if TEST_calloc
 lib_tests += calloc.norun
 calloc_norun_SOURCES = POSIX/calloc.c
-calloc_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+calloc_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_capture01
@@ -204,13 +204,13 @@ endif
 if TEST_clock_gettime
 lib_tests += clock_gettime.norun
 clock_gettime_norun_SOURCES = POSIX/clock_gettime.c
-clock_gettime_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+clock_gettime_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_close
 lib_tests += close.norun
 close_norun_SOURCES = POSIX/close.c
-close_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+close_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_complex
@@ -260,7 +260,7 @@ lib_docs += defaultconfig01/defaultconfig01.doc
 defaultconfig01_SOURCES = defaultconfig01/init.c
 defaultconfig01_CPPFLAGS = $(AM_CPPFLAGS) \
 	$(TEST_FLAGS_defaultconfig01) $(support_includes)
-defaultconfig01_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+defaultconfig01_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_devfs01
@@ -524,7 +524,7 @@ endif
 if TEST_dup2
 lib_tests += dup2.norun
 dup2_norun_SOURCES = POSIX/dup2.c
-dup2_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+dup2_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_exit01
@@ -548,7 +548,7 @@ endif
 if TEST_fcntl
 lib_tests += fcntl.norun
 fcntl_norun_SOURCES = POSIX/fcntl.c
-fcntl_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+fcntl_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_flashdisk01
@@ -564,25 +564,25 @@ endif
 if TEST_flockfile
 lib_tests += flockfile.norun
 flockfile_norun_SOURCES = POSIX/flockfile.c
-flockfile_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+flockfile_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_fork
 lib_tests += fork.norun
 fork_norun_SOURCES = POSIX/fork.c
-fork_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+fork_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_free
 lib_tests += free.norun
 free_norun_SOURCES = POSIX/free.c
-free_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+free_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_fstat
 lib_tests += fstat.norun
 fstat_norun_SOURCES = POSIX/fstat.c
-fstat_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+fstat_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if NETTESTS
@@ -600,13 +600,13 @@ endif
 if TEST_ftrylockfile
 lib_tests += ftrylockfile.norun
 ftrylockfile_norun_SOURCES = POSIX/ftrylockfile.c
-ftrylockfile_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+ftrylockfile_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_funlockfile
 lib_tests += funlockfile.norun
 funlockfile_norun_SOURCES = POSIX/funlockfile.c
-funlockfile_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+funlockfile_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_getentropy01
@@ -621,31 +621,31 @@ endif
 if TEST_getlogin
 lib_tests += getlogin.norun
 getlogin_norun_SOURCES = POSIX/getlogin.c
-getlogin_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+getlogin_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_getpwnam
 lib_tests += getpwnam.norun
 getpwnam_norun_SOURCES = POSIX/getpwnam.c
-getpwnam_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+getpwnam_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_getpwuid
 lib_tests += getpwuid.norun
 getpwuid_norun_SOURCES = POSIX/getpwuid.c
-getpwuid_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+getpwuid_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_gettimeofday
 lib_tests += gettimeofday.norun
 gettimeofday_norun_SOURCES = POSIX/gettimeofday.c
-gettimeofday_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+gettimeofday_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_getuid
 lib_tests += getuid.norun
 getuid_norun_SOURCES = POSIX/getuid.c
-getuid_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+getuid_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_gxx01
@@ -668,7 +668,7 @@ endif
 if TEST_htonl
 lib_tests += htonl.norun
 htonl_norun_SOURCES = POSIX/htonl.c
-htonl_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+htonl_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_i2c01
@@ -683,25 +683,25 @@ endif
 if TEST_iconv
 lib_tests += iconv.norun
 iconv_norun_SOURCES = POSIX/iconv.c
-iconv_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+iconv_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_iconv_close
 lib_tests += iconv_close.norun
 iconv_close_norun_SOURCES = POSIX/iconv_close.c
-iconv_close_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+iconv_close_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_iconv_open
 lib_tests += iconv_open.norun
 iconv_open_norun_SOURCES = POSIX/iconv_open.c
-iconv_open_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+iconv_open_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_kill
 lib_tests += kill.norun
 kill_norun_SOURCES = POSIX/kill.c
-kill_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+kill_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_libfdt01
@@ -716,25 +716,25 @@ endif
 if TEST_longjmp
 lib_tests += longjmp.norun
 longjmp_norun_SOURCES = POSIX/longjmp.c
-longjmp_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+longjmp_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_lseek
 lib_tests += lseek.norun
 lseek_norun_SOURCES = POSIX/lseek.c
-lseek_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+lseek_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_lstat
 lib_tests += lstat.norun
 lstat_norun_SOURCES = POSIX/lstat.c
-lstat_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+lstat_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_malloc
 lib_tests += malloc.norun
 malloc_norun_SOURCES = POSIX/malloc.c
-malloc_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+malloc_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_malloc02
@@ -861,7 +861,7 @@ endif
 if TEST_nanosleep
 lib_tests += nanosleep.norun
 nanosleep_norun_SOURCES = POSIX/nanosleep.c
-nanosleep_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+nanosleep_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if NETTESTS
@@ -887,19 +887,19 @@ endif
 if TEST_open
 lib_tests += open.norun
 open_norun_SOURCES = POSIX/open.c
-open_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+open_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_pipe
 lib_tests += pipe.norun
 pipe_norun_SOURCES = POSIX/pipe.c
-pipe_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+pipe_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_posix_memalign
 lib_tests += posix_memalign.norun
 posix_memalign_norun_SOURCES = POSIX/posix_memalign.c
-posix_memalign_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+posix_memalign_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_putenvtest
@@ -940,19 +940,19 @@ endif
 if TEST_read
 lib_tests += read.norun
 read_norun_SOURCES = POSIX/read.c
-read_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+read_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_readv
 lib_tests += readv.norun
 readv_norun_SOURCES = POSIX/readv.c
-readv_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+readv_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_realloc
 lib_tests += realloc.norun
 realloc_norun_SOURCES = POSIX/realloc.c
-realloc_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+realloc_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_rtmonuse
@@ -967,7 +967,7 @@ endif
 if TEST_setjmp
 lib_tests += setjmp.norun
 setjmp_norun_SOURCES = POSIX/setjmp.c
-setjmp_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+setjmp_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sha
@@ -990,37 +990,37 @@ endif
 if TEST_sigaddset
 lib_tests += sigaddset.norun
 sigaddset_norun_SOURCES = POSIX/sigaddset.c
-sigaddset_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigaddset_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sigdelset
 lib_tests += sigdelset.norun
 sigdelset_norun_SOURCES = POSIX/sigdelset.c
-sigdelset_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigdelset_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sigemptyset
 lib_tests += sigemptyset.norun
 sigemptyset_norun_SOURCES = POSIX/sigemptyset.c
-sigemptyset_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigemptyset_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sigfillset
 lib_tests += sigfillset.norun
 sigfillset_norun_SOURCES = POSIX/sigfillset.c
-sigfillset_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigfillset_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sigismember
 lib_tests += sigismember.norun
 sigismember_norun_SOURCES = POSIX/sigismember.c
-sigismember_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigismember_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sigprocmask
 lib_tests += sigprocmask.norun
 sigprocmask_norun_SOURCES = POSIX/sigprocmask.c
-sigprocmask_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+sigprocmask_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_sparsedisk01
@@ -1062,7 +1062,7 @@ endif
 if TEST_stat
 lib_tests += stat.norun
 stat_norun_SOURCES = POSIX/stat.c
-stat_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+stat_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_stringto01
@@ -1314,7 +1314,7 @@ endif
 if TEST_unlink
 lib_tests += unlink.norun
 unlink_norun_SOURCES = POSIX/unlink.c
-unlink_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+unlink_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_utf8proc01
@@ -1329,31 +1329,31 @@ endif
 if TEST_vfork
 lib_tests += vfork.norun
 vfork_norun_SOURCES = POSIX/vfork.c
-vfork_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+vfork_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_wait
 lib_tests += wait.norun
 wait_norun_SOURCES = POSIX/wait.c
-wait_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+wait_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_waitpid
 lib_tests += waitpid.norun
 waitpid_norun_SOURCES = POSIX/waitpid.c
-waitpid_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+waitpid_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_write
 lib_tests += write.norun
 write_norun_SOURCES = POSIX/write.c
-write_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+write_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 if TEST_writev
 lib_tests += writev.norun
 writev_norun_SOURCES = POSIX/writev.c
-writev_norun_LDADD = $(LDADD) $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a
+writev_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
 rtems_tests_PROGRAMS = $(lib_tests)
