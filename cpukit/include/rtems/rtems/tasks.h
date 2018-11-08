@@ -1,28 +1,9 @@
 /**
- * @file rtems/rtems/tasks.h
+ * @file
  *
- * @defgroup ClassicTasks Tasks
+ * @ingroup ClassicTasks
  *
- * @ingroup ClassicRTEMS
- * @brief RTEMS Tasks
- *
- * This include file contains all constants and structures associated
- * with RTEMS tasks. This manager provides a comprehensive set of directives
- * to create, delete, and administer tasks.
- *
- * Directives provided are:
- *
- * - create a task
- * - get an ID of a task
- * - start a task
- * - restart a task
- * - delete a task
- * - suspend a task
- * - resume a task
- * - set a task's priority
- * - change the current task's mode
- * - wake up after interval
- * - wake up when specified
+ * @brief Classic Task Manager API
  */
 
 /*
@@ -37,12 +18,9 @@
 #ifndef _RTEMS_RTEMS_TASKS_H
 #define _RTEMS_RTEMS_TASKS_H
 
-#include <rtems/score/object.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
-#include <rtems/rtems/asrdata.h>
 #include <rtems/rtems/attr.h>
-#include <rtems/rtems/eventdata.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/types.h>
 
@@ -675,40 +653,6 @@ rtems_status_code rtems_scheduler_remove_processor(
 );
 
 /**@}*/
-
-/**
- *  This is the API specific information required by each thread for
- *  the RTEMS API to function correctly.
- *
- */
-typedef struct {
-  /** This field contains the event control for this task. */
-  Event_Control            Event;
-  /** This field contains the system event control for this task. */
-  Event_Control            System_event;
-  /** This field contains the Classic API Signal information for this task. */
-  ASR_Information          Signal;
-
-  /**
-   * @brief Signal post-switch action in case signals are pending.
-   */
-  Thread_Action            Signal_action;
-}  RTEMS_API_Control;
-
-/**
- *  @brief _RTEMS_tasks_Initialize_user_tasks_body
- *
- *  This routine creates and starts all configured user
- *  initialization threads.
- *
- *  Input parameters: NONE
- *
- *  Output parameters:  NONE
- *
- *  RTEMS Task Manager
- */
-
-extern void _RTEMS_tasks_Initialize_user_tasks_body( void );
 
 #ifdef __cplusplus
 }

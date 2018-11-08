@@ -18,7 +18,7 @@
 #include "config.h"
 #endif
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/rtems/asrimpl.h>
 #include <rtems/rtems/modesimpl.h>
 #include <rtems/rtems/signalimpl.h>

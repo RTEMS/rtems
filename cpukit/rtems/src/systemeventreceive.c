@@ -25,7 +25,7 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/threadimpl.h>
 

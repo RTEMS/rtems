@@ -275,6 +275,7 @@ include_rtems_rtems_HEADERS += include/rtems/rtems/statusimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/support.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/taskmp.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasks.h
+include_rtems_rtems_HEADERS += include/rtems/rtems/tasksdata.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/tasksimpl.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timer.h
 include_rtems_rtems_HEADERS += include/rtems/rtems/timerimpl.h

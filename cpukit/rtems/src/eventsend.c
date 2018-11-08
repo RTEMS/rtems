@@ -19,7 +19,7 @@
 #endif
 
 #include <rtems/rtems/eventimpl.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_event_send(

@@ -8,6 +8,7 @@
 
 #include <rtems.h>
 #include <rtems/monitor.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>

@@ -17,7 +17,7 @@
 #ifndef _RTEMS_RTEMS_TASKSIMPL_H
 #define _RTEMS_RTEMS_TASKSIMPL_H
 
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/score/objectimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/threadimpl.h>

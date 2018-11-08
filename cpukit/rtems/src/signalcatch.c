@@ -21,7 +21,7 @@
 #include <rtems/sysinit.h>
 #include <rtems/rtems/signalimpl.h>
 #include <rtems/rtems/asrimpl.h>
-#include <rtems/rtems/tasks.h>
+#include <rtems/rtems/tasksdata.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/threadimpl.h>
 
