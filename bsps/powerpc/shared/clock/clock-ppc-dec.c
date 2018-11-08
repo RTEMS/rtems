@@ -31,6 +31,7 @@
 #include <libcpu/powerpc-utility.h>
 #include <rtems/timecounter.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/thread.h>
 
 #include <bspopts.h>   /* for CLOCK_DRIVER_USE_FAST_IDLE */
 

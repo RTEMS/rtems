@@ -33,6 +33,8 @@
 
 #include <rtems/debugger/rtems-debugger-server.h>
 
+#include <rtems/score/thread.h>
+
 #include "rtems-debugger-block.h"
 
 #ifdef __cplusplus

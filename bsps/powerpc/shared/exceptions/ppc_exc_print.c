@@ -19,6 +19,7 @@
 
 #include <bsp/vectors.h>
 
+#include <rtems/score/thread.h>
 #include <rtems/score/threaddispatch.h>
 
 #include <inttypes.h>
