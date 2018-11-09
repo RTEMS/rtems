@@ -25,6 +25,8 @@
 #include <bsp.h>
 #include <bsp/lpc32xx.h>
 
+#include <time.h>
+
 #define LPC32XX_RTC_COUNT 1U
 
 #define LPC32XX_RTC_COUNTER_DELTA 0xfffffffeU
