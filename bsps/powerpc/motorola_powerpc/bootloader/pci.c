@@ -13,6 +13,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <sys/param.h>
 #include <sys/types.h>
 #include <rtems/bspIo.h>
 #include <libcpu/spr.h>

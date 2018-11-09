@@ -14,6 +14,7 @@
  */
 
 #include <rtems/system.h>
+#include <sys/param.h>
 #include <sys/types.h>
 #include <string.h>
 #include "bootldr.h"
