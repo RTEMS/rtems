@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_at91rm9200
+ *
+ * @brief Atmel AT91RM9200 Register Definitions
+ */
+
 /*
  * Atmel AT91RM9200 Register definitions, used in KIT637_V6 (CSB637)
  *
@@ -341,4 +349,12 @@ typedef volatile unsigned long vulong;
 #define SDRC_REG(_x_)           *(vulong *)(EBI_BASE + 0x30 + _x_)
 
 #endif /* __AT91RM9200_H__ */
+
+/**
+ * @defgroup csb337_at91rm9200 AT91RM9200
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief Atmel Register Definitions, Used In KIT637_V6 (CSB637)
+ */
 

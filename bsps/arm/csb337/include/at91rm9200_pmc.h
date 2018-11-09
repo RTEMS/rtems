@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_at91rm9200
+ *
+ * @brief AT91RM9200 Power Management and Clock definitions
+ */
+
 /*
  * AT91RM9200 Power Management and Clock definitions
  *

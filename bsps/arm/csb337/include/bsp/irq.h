@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_interrupt
+ *
+ * @brief Interrupt Support.
+ */
+
 /*
  * Interrupt handler Header file
  *
@@ -20,6 +28,14 @@
 #include <rtems/irq-extension.h>
 
 #endif /* __asm__ */
+
+/**
+ * @defgroup csb337_interrupt Interrrupt Support
+ *
+ * @ingroup arm_csb337
+ *
+ * @brief Interrupt Support.
+ */
 
 /* possible interrupt sources on the AT91RM9200 */
 #define AT91RM9200_INT_FIQ        0

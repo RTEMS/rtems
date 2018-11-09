@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_at91rm9200
+ *
+ * @brief Atmel AT91RM9200_USART Register definitions
+ */
+
 /*
  * Atmel AT91RM9200_USART Register definitions, used in KIT637_V6 (CSB637)
  *

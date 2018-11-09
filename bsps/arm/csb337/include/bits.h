@@ -1,3 +1,12 @@
+/**
+ *@file
+ *
+ *@ingroup csb337_bits
+ *
+ *@brief Contains Defined Bits.
+ *
+ */
+
 /*
  * Bit position definitions
  *
@@ -46,3 +55,11 @@
 
 #endif /* __BITS_H__ */
 
+/**
+ *@defgroup csb337_bits Bits
+ *
+ *@ingroup arm_csb337
+ *
+ *@brief
+ *
+ */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_at91rm9200
+ *
+ * @brief AT91RM9200 Memory Controller definitions
+ */
+
 /*
  * AT91RM9200 Memory Controller definitions
  *

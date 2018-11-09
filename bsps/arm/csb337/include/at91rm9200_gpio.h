@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup csb337_at91rm9200
+ *
+ * @brief AT91RM9200 GPIO definitions
+ */
+
 /*
  * AT91RM9200 GPIO definitions
  *
