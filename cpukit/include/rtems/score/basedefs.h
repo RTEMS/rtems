@@ -238,6 +238,56 @@
 #endif
 
 /**
+ * @brief Tells the compiler that this function is a memory allocation function
+ * similar to malloc().
+ */
+#if defined(__GNUC__)
+  #define RTEMS_MALLOCLIKE __attribute__((__malloc__))
+#else
+  #define RTEMS_MALLOCLIKE
+#endif
+
+/**
+ * @brief Tells the compiler the memory allocation size parameter of this
+ * function similar to malloc().
+ */
+#if defined(__GNUC__)
+  #define RTEMS_ALLOC_SIZE( _index ) __attribute__((__alloc_size__(_index)))
+#else
+  #define RTEMS_ALLOC_SIZE( _index )
+#endif
+
+/**
+ * @brief Tells the compiler the memory allocation item count and item size
+ * parameter of this function similar to calloc().
+ */
+#if defined(__GNUC__)
+  #define RTEMS_ALLOC_SIZE_2( _count_index, _size_index ) \
+     __attribute__((__alloc_size__(_count_index, _size_index)))
+#else
+  #define RTEMS_ALLOC_SIZE_2( _count_index, _size_index )
+#endif
+
+/**
+ * @brief Tells the compiler the memory allocation alignment parameter of this
+ * function similar to aligned_alloc().
+ */
+#if defined(__GNUC__)
+  #define RTEMS_ALLOC_ALIGN( _index ) __attribute__((__alloc_align__(_index)))
+#else
+  #define RTEMS_ALLOC_ALIGN( _index )
+#endif
+
+/**
+ * @brief Tells the compiler that the result of this function should be used.
+ */
+#if defined(__GNUC__)
+  #define RTEMS_WARN_UNUSED_RESULT __attribute__((__warn_unused_result__))
+#else
+  #define RTEMS_WARN_UNUSED_RESULT
+#endif
+
+/**
  * @brief Obfuscates the variable so that the compiler cannot perform
  * optimizations based on the variable value.
  *
