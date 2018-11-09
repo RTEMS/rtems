@@ -243,6 +243,10 @@ BSP_mve_stop_hw(struct mveth_private *mp);
 int
 BSP_mve_detach(struct mveth_private *mp);
 
+int
+BSP_mve_send_buf_raw(struct mveth_private *mp, void *head_p, int h_len,
+    void *data_p, int d_len);
+
 /*
  * Enqueue a mbuf chain or a raw data buffer for transmission;
  * RETURN: #bytes sent or -1 if there are not enough free descriptors

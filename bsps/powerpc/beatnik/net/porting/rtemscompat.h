@@ -255,8 +255,6 @@ register u_int32_t rval;
 #define __FBSDID(arg)
 #endif
 
-#define _KERNEL
-
 #define device_printf(device,format,args...) printk(format,## args)
 
 static inline u_int8_t bus_space_do_read_1(u_long handle, unsigned reg)

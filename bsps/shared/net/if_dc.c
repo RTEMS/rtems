@@ -1913,7 +1913,7 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	struct ifnet		*ifp;
 	struct dc_type		*t;
 	uint32_t		revision;
-	int			error = 0, mac_offset;
+	int			mac_offset;
 	uint32_t		value;
 
 	/*
@@ -1976,13 +1976,11 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 #ifdef DC_USEIOSPACE
 	if (!(command & PCI_COMMAND_IO)) {
 		printk("dc%d: failed to enable I/O ports!\n", sc->dc_unit);
-		error = ENXIO;
 		goto fail;
 	}
 #else
 	if (!(command & PCI_COMMAND_MEMORY)) {
 		printk("dc%d: failed to enable memory mapping!\n", sc->dc_unit);
-		error = ENXIO;
 		goto fail;
 	}
 #endif
@@ -1994,7 +1992,6 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 
 	if (sc->dc_res == NULL) {
 		printk("dc%d: couldn't map ports/memory\n", unit);
-		error = ENXIO;
 		goto fail;
 	}
 	sc->dc_btag = rman_get_bustag(sc->dc_res);
@@ -2038,7 +2035,6 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 	if (sc->dc_irq == NULL) {
 		printk("dc%d: couldn't map interrupt\n", unit);
 		bus_release_resource(dev, DC_RES, DC_RID, sc->dc_res);
-		error = ENXIO;
 		goto fail;
 	}
 
@@ -2270,7 +2266,6 @@ rtems_dc_driver_attach(struct rtems_bsdnet_ifconfig *config, int attaching)
 		bus_release_resource(dev, SYS_RES_IRQ, 0, sc->dc_irq);
 		bus_release_resource(dev, DC_RES, DC_RID, sc->dc_res);
 #endif
-		error = ENXIO;
 		goto fail;
 	}
 

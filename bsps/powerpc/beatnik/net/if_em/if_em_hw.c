@@ -95,18 +95,6 @@ uint16_t em_igp_cable_length_table[IGP01E1000_AGC_LENGTH_TABLE_SIZE] =
       100, 100, 100, 100, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110, 110,
       110, 110, 110, 110, 110, 110, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120};
 
-static const
-uint16_t em_igp_2_cable_length_table[IGP02E1000_AGC_LENGTH_TABLE_SIZE] =
-    { 8, 13, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43,
-      22, 24, 27, 30, 32, 35, 37, 40, 42, 44, 47, 49, 51, 54, 56, 58,
-      32, 35, 38, 41, 44, 47, 50, 53, 55, 58, 61, 63, 66, 69, 71, 74,
-      43, 47, 51, 54, 58, 61, 64, 67, 71, 74, 77, 80, 82, 85, 88, 90,
-      57, 62, 66, 70, 74, 77, 81, 85, 88, 91, 94, 97, 100, 103, 106, 108,
-      73, 78, 82, 87, 91, 95, 98, 102, 105, 109, 112, 114, 117, 119, 122, 124,
-      91, 96, 101, 105, 109, 113, 116, 119, 122, 125, 127, 128, 128, 128, 128, 128,
-      108, 113, 117, 121, 124, 127, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128};
-
-
 /******************************************************************************
  * Set the phy type member in the hw struct.
  *
@@ -153,7 +141,6 @@ em_set_phy_type(struct em_hw *hw)
 static void
 em_phy_init_script(struct em_hw *hw)
 {
-    uint32_t ret_val;
     uint16_t phy_saved_data;
 
     DEBUGFUNC("em_phy_init_script");
@@ -163,7 +150,7 @@ em_phy_init_script(struct em_hw *hw)
 
         /* Save off the current value of register 0x2F5B to be restored at
          * the end of this routine. */
-        ret_val = em_read_phy_reg(hw, 0x2F5B, &phy_saved_data);
+        em_read_phy_reg(hw, 0x2F5B, &phy_saved_data);
 
         /* Disabled the PHY transmitter */
         em_write_phy_reg(hw, 0x2F5B, 0x0003);
@@ -396,7 +383,6 @@ em_reset_hw(struct em_hw *hw)
 {
     uint32_t ctrl;
     uint32_t ctrl_ext;
-    uint32_t icr;
     uint32_t manc;
     uint32_t led_ctrl;
     uint32_t timeout;
@@ -565,7 +551,7 @@ em_reset_hw(struct em_hw *hw)
     E1000_WRITE_REG(hw, IMC, 0xffffffff);
 
     /* Clear any pending interrupt events. */
-    icr = E1000_READ_REG(hw, ICR);
+    E1000_READ_REG(hw, ICR);
 
     /* If MWI was previously enabled, reenable it. */
     if(hw->mac_type == em_82542_rev2_0) {
@@ -1273,9 +1259,9 @@ em_copper_link_mgp_setup(struct em_hw *hw)
     phy_data &= ~M88E1000_PSCR_POLARITY_REVERSAL;
     if(hw->disable_polarity_correction == 1)
         phy_data |= M88E1000_PSCR_POLARITY_REVERSAL;
-        ret_val = em_write_phy_reg(hw, M88E1000_PHY_SPEC_CTRL, phy_data);
-        if(ret_val)
-            return ret_val;
+    ret_val = em_write_phy_reg(hw, M88E1000_PHY_SPEC_CTRL, phy_data);
+    if(ret_val)
+        return ret_val;
 
     /* Force TX_CLK in the Extended PHY Specific Control Register
      * to 25MHz clock.
@@ -1507,10 +1493,10 @@ em_phy_setup_autoneg(struct em_hw *hw)
     if(ret_val)
         return ret_val;
 
-        /* Read the MII 1000Base-T Control Register (Address 9). */
-        ret_val = em_read_phy_reg(hw, PHY_1000T_CTRL, &mii_1000t_ctrl_reg);
-        if(ret_val)
-            return ret_val;
+    /* Read the MII 1000Base-T Control Register (Address 9). */
+    ret_val = em_read_phy_reg(hw, PHY_1000T_CTRL, &mii_1000t_ctrl_reg);
+    if(ret_val)
+        return ret_val;
 
     /* Need to parse both autoneg_advertised and fc and set up
      * the appropriate PHY registers.  First we will parse for
@@ -4918,84 +4904,82 @@ em_led_off(struct em_hw *hw)
 void
 em_clear_hw_cntrs(struct em_hw *hw)
 {
-    volatile uint32_t temp;
-
-    temp = E1000_READ_REG(hw, CRCERRS);
-    temp = E1000_READ_REG(hw, SYMERRS);
-    temp = E1000_READ_REG(hw, MPC);
-    temp = E1000_READ_REG(hw, SCC);
-    temp = E1000_READ_REG(hw, ECOL);
-    temp = E1000_READ_REG(hw, MCC);
-    temp = E1000_READ_REG(hw, LATECOL);
-    temp = E1000_READ_REG(hw, COLC);
-    temp = E1000_READ_REG(hw, DC);
-    temp = E1000_READ_REG(hw, SEC);
-    temp = E1000_READ_REG(hw, RLEC);
-    temp = E1000_READ_REG(hw, XONRXC);
-    temp = E1000_READ_REG(hw, XONTXC);
-    temp = E1000_READ_REG(hw, XOFFRXC);
-    temp = E1000_READ_REG(hw, XOFFTXC);
-    temp = E1000_READ_REG(hw, FCRUC);
-    temp = E1000_READ_REG(hw, PRC64);
-    temp = E1000_READ_REG(hw, PRC127);
-    temp = E1000_READ_REG(hw, PRC255);
-    temp = E1000_READ_REG(hw, PRC511);
-    temp = E1000_READ_REG(hw, PRC1023);
-    temp = E1000_READ_REG(hw, PRC1522);
-    temp = E1000_READ_REG(hw, GPRC);
-    temp = E1000_READ_REG(hw, BPRC);
-    temp = E1000_READ_REG(hw, MPRC);
-    temp = E1000_READ_REG(hw, GPTC);
-    temp = E1000_READ_REG(hw, GORCL);
-    temp = E1000_READ_REG(hw, GORCH);
-    temp = E1000_READ_REG(hw, GOTCL);
-    temp = E1000_READ_REG(hw, GOTCH);
-    temp = E1000_READ_REG(hw, RNBC);
-    temp = E1000_READ_REG(hw, RUC);
-    temp = E1000_READ_REG(hw, RFC);
-    temp = E1000_READ_REG(hw, ROC);
-    temp = E1000_READ_REG(hw, RJC);
-    temp = E1000_READ_REG(hw, TORL);
-    temp = E1000_READ_REG(hw, TORH);
-    temp = E1000_READ_REG(hw, TOTL);
-    temp = E1000_READ_REG(hw, TOTH);
-    temp = E1000_READ_REG(hw, TPR);
-    temp = E1000_READ_REG(hw, TPT);
-    temp = E1000_READ_REG(hw, PTC64);
-    temp = E1000_READ_REG(hw, PTC127);
-    temp = E1000_READ_REG(hw, PTC255);
-    temp = E1000_READ_REG(hw, PTC511);
-    temp = E1000_READ_REG(hw, PTC1023);
-    temp = E1000_READ_REG(hw, PTC1522);
-    temp = E1000_READ_REG(hw, MPTC);
-    temp = E1000_READ_REG(hw, BPTC);
+    E1000_READ_REG(hw, CRCERRS);
+    E1000_READ_REG(hw, SYMERRS);
+    E1000_READ_REG(hw, MPC);
+    E1000_READ_REG(hw, SCC);
+    E1000_READ_REG(hw, ECOL);
+    E1000_READ_REG(hw, MCC);
+    E1000_READ_REG(hw, LATECOL);
+    E1000_READ_REG(hw, COLC);
+    E1000_READ_REG(hw, DC);
+    E1000_READ_REG(hw, SEC);
+    E1000_READ_REG(hw, RLEC);
+    E1000_READ_REG(hw, XONRXC);
+    E1000_READ_REG(hw, XONTXC);
+    E1000_READ_REG(hw, XOFFRXC);
+    E1000_READ_REG(hw, XOFFTXC);
+    E1000_READ_REG(hw, FCRUC);
+    E1000_READ_REG(hw, PRC64);
+    E1000_READ_REG(hw, PRC127);
+    E1000_READ_REG(hw, PRC255);
+    E1000_READ_REG(hw, PRC511);
+    E1000_READ_REG(hw, PRC1023);
+    E1000_READ_REG(hw, PRC1522);
+    E1000_READ_REG(hw, GPRC);
+    E1000_READ_REG(hw, BPRC);
+    E1000_READ_REG(hw, MPRC);
+    E1000_READ_REG(hw, GPTC);
+    E1000_READ_REG(hw, GORCL);
+    E1000_READ_REG(hw, GORCH);
+    E1000_READ_REG(hw, GOTCL);
+    E1000_READ_REG(hw, GOTCH);
+    E1000_READ_REG(hw, RNBC);
+    E1000_READ_REG(hw, RUC);
+    E1000_READ_REG(hw, RFC);
+    E1000_READ_REG(hw, ROC);
+    E1000_READ_REG(hw, RJC);
+    E1000_READ_REG(hw, TORL);
+    E1000_READ_REG(hw, TORH);
+    E1000_READ_REG(hw, TOTL);
+    E1000_READ_REG(hw, TOTH);
+    E1000_READ_REG(hw, TPR);
+    E1000_READ_REG(hw, TPT);
+    E1000_READ_REG(hw, PTC64);
+    E1000_READ_REG(hw, PTC127);
+    E1000_READ_REG(hw, PTC255);
+    E1000_READ_REG(hw, PTC511);
+    E1000_READ_REG(hw, PTC1023);
+    E1000_READ_REG(hw, PTC1522);
+    E1000_READ_REG(hw, MPTC);
+    E1000_READ_REG(hw, BPTC);
 
     if(hw->mac_type < em_82543) return;
 
-    temp = E1000_READ_REG(hw, ALGNERRC);
-    temp = E1000_READ_REG(hw, RXERRC);
-    temp = E1000_READ_REG(hw, TNCRS);
-    temp = E1000_READ_REG(hw, CEXTERR);
-    temp = E1000_READ_REG(hw, TSCTC);
-    temp = E1000_READ_REG(hw, TSCTFC);
+    E1000_READ_REG(hw, ALGNERRC);
+    E1000_READ_REG(hw, RXERRC);
+    E1000_READ_REG(hw, TNCRS);
+    E1000_READ_REG(hw, CEXTERR);
+    E1000_READ_REG(hw, TSCTC);
+    E1000_READ_REG(hw, TSCTFC);
 
     if(hw->mac_type <= em_82544) return;
 
-    temp = E1000_READ_REG(hw, MGTPRC);
-    temp = E1000_READ_REG(hw, MGTPDC);
-    temp = E1000_READ_REG(hw, MGTPTC);
+    E1000_READ_REG(hw, MGTPRC);
+    E1000_READ_REG(hw, MGTPDC);
+    E1000_READ_REG(hw, MGTPTC);
 
     if(hw->mac_type <= em_82547_rev_2) return;
 
-    temp = E1000_READ_REG(hw, IAC);
-    temp = E1000_READ_REG(hw, ICRXOC);
-    temp = E1000_READ_REG(hw, ICRXPTC);
-    temp = E1000_READ_REG(hw, ICRXATC);
-    temp = E1000_READ_REG(hw, ICTXPTC);
-    temp = E1000_READ_REG(hw, ICTXATC);
-    temp = E1000_READ_REG(hw, ICTXQEC);
-    temp = E1000_READ_REG(hw, ICTXQMTC);
-    temp = E1000_READ_REG(hw, ICRXDMTC);
+    E1000_READ_REG(hw, IAC);
+    E1000_READ_REG(hw, ICRXOC);
+    E1000_READ_REG(hw, ICRXPTC);
+    E1000_READ_REG(hw, ICRXATC);
+    E1000_READ_REG(hw, ICTXPTC);
+    E1000_READ_REG(hw, ICTXATC);
+    E1000_READ_REG(hw, ICTXQEC);
+    E1000_READ_REG(hw, ICTXQMTC);
+    E1000_READ_REG(hw, ICRXDMTC);
 
 }
 
@@ -5832,9 +5816,9 @@ em_set_d0_lplu_state(struct em_hw *hw,
     if(hw->mac_type <= em_82547_rev_2)
         return E1000_SUCCESS;
 
-        ret_val = em_read_phy_reg(hw, IGP02E1000_PHY_POWER_MGMT, &phy_data);
-        if(ret_val)
-            return ret_val;
+    ret_val = em_read_phy_reg(hw, IGP02E1000_PHY_POWER_MGMT, &phy_data);
+    if(ret_val)
+        return ret_val;
 
     if (!active) {
             phy_data &= ~IGP02E1000_PM_D0_LPLU;

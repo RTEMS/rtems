@@ -229,6 +229,8 @@ STATIC void gfe_mii_statchg (struct device *);
 STATIC void gfe_tick(void *arg);
 
 STATIC void gfe_tx_restart(void *);
+STATIC void gfe_assign_desc(volatile struct gt_eth_desc *, struct mbuf *,
+	uint32_t);
 STATIC int gfe_tx_enqueue(struct gfe_softc *, enum gfe_txprio);
 STATIC uint32_t gfe_tx_done(struct gfe_softc *, enum gfe_txprio, uint32_t);
 STATIC void gfe_tx_cleanup(struct gfe_softc *, enum gfe_txprio, int);
@@ -2395,7 +2397,9 @@ gfe_hash_entry_op(struct gfe_softc *sc, enum gfe_hash_op op,
 	uint64_t *maybe_he_p = NULL;
 	int limit;
 	int hash;
+#ifndef __rtems__
 	int maybe_hash = 0;
+#endif /* __rtems__ */
 
 	GE_FUNC_ENTER(sc, "gfe_hash_entry_op");
 
@@ -2467,7 +2471,9 @@ gfe_hash_entry_op(struct gfe_softc *sc, enum gfe_hash_op op,
 		 */
 		if (maybe_he_p == NULL && (thishe & HSH_S)) {
 			maybe_he_p = he_p;
+#ifndef __rtems__
 			maybe_hash = hash;
+#endif /* __rtems__ */
 		}
 
 		hash = (hash + 1) & (sc->sc_hashmask / sizeof(he));

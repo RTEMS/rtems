@@ -1,3 +1,4 @@
+#include <sys/param.h>
 #include <rtems.h>
 #include <libcpu/mmu.h>
 #include <rtems/bspIo.h>
