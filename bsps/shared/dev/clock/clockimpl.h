@@ -21,6 +21,8 @@
 #include <rtems/clockdrv.h>
 #include <rtems/score/percpu.h>
 #include <rtems/score/smpimpl.h>
+#include <rtems/score/timecounter.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
 
 #ifdef Clock_driver_nanoseconds_since_last_tick
