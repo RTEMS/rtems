@@ -51,9 +51,9 @@ uint32_t   _CPU_ISR_Get_level( void )
  */
 
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 )
 {
   /*
@@ -63,27 +63,29 @@ void _CPU_ISR_install_raw_handler(
 }
 
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
-   *old_handler = _ISR_Vector_table[ vector ];
+  CPU_ISR_raw_handler ignored;
 
-   /*
-    *  If the interrupt vector table is a table of pointer to isr entry
-    *  points, then we need to install the appropriate RTEMS interrupt
-    *  handler for this vector number.
-    */
+  *old_handler = _ISR_Vector_table[ vector ];
 
-   _CPU_ISR_install_raw_handler( vector, new_handler, old_handler );
+  /*
+   *  If the interrupt vector table is a table of pointer to isr entry
+   *  points, then we need to install the appropriate RTEMS interrupt
+   *  handler for this vector number.
+   */
 
-   /*
-    *  We put the actual user ISR address in '_ISR_vector_table'.  This will
-    *  be used by the _ISR_Handler so the user gets control.
-    */
+  _CPU_ISR_install_raw_handler( vector, _ISR_Handler, &ignored );
 
-    _ISR_Vector_table[ vector ] = new_handler;
+  /*
+   *  We put the actual user ISR address in '_ISR_vector_table'.  This will
+   *  be used by the _ISR_Handler so the user gets control.
+   */
+
+   _ISR_Vector_table[ vector ] = new_handler;
 }
 
 /*

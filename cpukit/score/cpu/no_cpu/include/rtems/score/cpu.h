@@ -976,11 +976,15 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 void _CPU_Initialize(void);
 
+typedef void ( *CPU_ISR_raw_handler )( void );
+
 /**
  * @ingroup CPUInterrupt
  * 
  * This routine installs a "raw" interrupt handler directly into the
  * processor's vector table.
+ *
+ * This routine is not used by architecture-independent code and thus optional.
  *
  * @param[in] vector is the vector number
  * @param[in] new_handler is the raw ISR handler to install
@@ -991,15 +995,20 @@ void _CPU_Initialize(void);
  * XXX document implementation including references if appropriate
  */
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
+
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
 /**
  * @ingroup CPUInterrupt
  * 
  * This routine installs an interrupt vector.
+ *
+ * This routine is only used by architecture-independent code if
+ * CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE, otherwise it is optional.
  *
  * @param[in] vector is the vector number
  * @param[in] new_handler is the RTEMS ISR handler to install
@@ -1010,9 +1019,9 @@ void _CPU_ISR_install_raw_handler(
  * XXX document implementation including references if appropriate
  */
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 /**
