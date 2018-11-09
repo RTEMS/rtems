@@ -839,29 +839,20 @@ void _CPU_Context_Initialize(
 
 void _CPU_Initialize(void);
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  This routine installs new_handler to be directly called from the trap
- *  table.
- */
+typedef void ( *CPU_ISR_raw_handler )( void );
 
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 
-/*
- *  _CPU_ISR_install_vector
- *
- *  This routine installs an interrupt vector.
- */
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
 void _CPU_ISR_install_vector(
-  uint64_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
