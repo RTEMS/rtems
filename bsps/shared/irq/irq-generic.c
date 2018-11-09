@@ -132,16 +132,21 @@ static inline bool bsp_interrupt_allocate_handler_index(
 
 static bsp_interrupt_handler_entry *bsp_interrupt_allocate_handler_entry(void)
 {
+  bsp_interrupt_handler_entry *e;
+
   #ifdef BSP_INTERRUPT_NO_HEAP_USAGE
     rtems_vector_number index = 0;
+
     if (bsp_interrupt_allocate_handler_index(0, &index)) {
-      return &bsp_interrupt_handler_table [index];
+      e = &bsp_interrupt_handler_table [index];
     } else {
-      return NULL;
+      e = NULL;
     }
   #else
-    return rtems_heap_allocate_aligned_with_boundary(sizeof(bsp_interrupt_handler_entry), 0, 0);
+    e = rtems_malloc(sizeof(*e));
   #endif
+
+  return e;
 }
 
 static void bsp_interrupt_free_handler_entry(bsp_interrupt_handler_entry *e)
