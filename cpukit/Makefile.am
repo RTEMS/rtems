@@ -1695,7 +1695,6 @@ librtemscpu_a_SOURCES += score/cpu/powerpc/cpu.c
 librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-context-volatile-clobber.S
 librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-context-validate.S
 librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-isr-disable-mask.S
-librtemscpu_a_SOURCES += score/cpu/powerpc/ppc-isr-vector-install.c
 
 endif
 
