@@ -464,10 +464,12 @@ void _CPU_Context_Initialize(
  */
 void _CPU_Initialize( void );
 
+typedef void ( *CPU_ISR_handler )( void );
+
 void _CPU_ISR_install_vector(
-  uint32_t vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 /**

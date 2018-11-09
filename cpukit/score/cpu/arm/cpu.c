@@ -144,24 +144,24 @@ uint32_t _CPU_ISR_Get_level( void )
 }
 
 void _CPU_ISR_install_vector(
-  uint32_t vector,
-  proc_ptr new_handler,
-  proc_ptr *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
   /* Redirection table starts at the end of the vector table */
-  volatile uint32_t *table = (volatile uint32_t *) (MAX_EXCEPTIONS * 4);
+  CPU_ISR_handler *table = (CPU_ISR_handler *) (MAX_EXCEPTIONS * 4);
 
-  uint32_t current_handler = table [vector];
+  CPU_ISR_handler current_handler = table [vector];
 
   /* The current handler is now the old one */
   if (old_handler != NULL) {
-    *old_handler = (proc_ptr) current_handler;
+    *old_handler = current_handler;
   }
 
   /* Write only if necessary to avoid writes to a maybe read-only memory */
-  if (current_handler != (uint32_t) new_handler) {
-    table [vector] = (uint32_t) new_handler;
+  if (current_handler != new_handler) {
+    table [vector] = new_handler;
   }
 }
 
