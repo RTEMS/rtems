@@ -656,41 +656,20 @@ void _CPU_Context_Initialize(
  */
 void _CPU_Initialize(void);
 
-/**
- * @ingroup CPUInterrupt
- * This routine installs a "raw" interrupt handler directly into the
- * processor's vector table.
- *
- * @param[in] vector is the vector number
- * @param[in] new_handler is the raw ISR handler to install
- * @param[in] old_handler is the previously installed ISR Handler
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
+typedef void ( *CPU_ISR_raw_handler )( void );
+
 void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t             vector,
+  CPU_ISR_raw_handler  new_handler,
+  CPU_ISR_raw_handler *old_handler
 );
 
-/**
- * @ingroup CPUInterrupt
- * This routine installs an interrupt vector.
- *
- * @param[in] vector is the vector number
- * @param[in] new_handler is the RTEMS ISR handler to install
- * @param[in] old_handler is the previously installed ISR Handler
- *
- * Port Specific Information:
- *
- * XXX document implementation including references if appropriate
- */
+typedef void ( *CPU_ISR_handler )( uint32_t );
+
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
