@@ -478,7 +478,7 @@ uint32_t   _CPU_ISR_Get_level( void );
     (void) _is_fp; /* avoid warning for being unused */            \
     (void) _isr;   /* avoid warning for being unused */            \
     _stack = ((uintptr_t)(_stack_base)) + (_size) - 8;             \
-    *((proc_ptr *)(_stack)) = (_entry_point);                      \
+    *((void (**)(void))(_stack)) = (_entry_point);                 \
     _stack -= 4;                                                   \
     (_the_context)->fp = (void *)_stack;                           \
     (_the_context)->sp = (void *)_stack;                           \
@@ -538,35 +538,12 @@ uint32_t   _CPU_ISR_Get_level( void );
  */
 void _CPU_Initialize(void);
 
-/*
- *  _CPU_ISR_install_raw_handler
- *
- *  This routine installs a "raw" interrupt handler directly into the
- *  processor's vector table.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-);
+typedef void ( *CPU_ISR_handler )( uint32_t );
 
-/*
- *  _CPU_ISR_install_vector
- *
- *  This routine installs an interrupt vector.
- *
- *  MOXIE Specific Information:
- *
- *  XXX
- */
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 );
 
 void *_CPU_Thread_Idle_body( uintptr_t );

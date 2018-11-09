@@ -49,59 +49,14 @@ uint32_t   _CPU_ISR_Get_level( void )
   return 0;
 }
 
-/*
- *  _CPU_ISR_install_raw_handler
- */
-void _CPU_ISR_install_raw_handler(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
-)
-{
-  /*
-   *  This is where we install the interrupt handler into the "raw" interrupt
-   *  table used by the CPU to dispatch interrupt handlers.
-   *  Use Debug level IRQ Handlers
-   */
-  /* H8BD_Install_IRQ(vector,new_handler,old_handler); */
-}
-
-/*
- *  _CPU_ISR_install_vector
- *
- *  This kernel routine installs the RTEMS handler for the
- *  specified vector.
- *
- *  Input parameters:
- *    vector      - interrupt vector number
- *    old_handler - former ISR for this vector number
- *    new_handler - replacement ISR for this vector number
- *
- *  Output parameters:  NONE
- *
- */
 void _CPU_ISR_install_vector(
-  uint32_t    vector,
-  proc_ptr    new_handler,
-  proc_ptr   *old_handler
+  uint32_t         vector,
+  CPU_ISR_handler  new_handler,
+  CPU_ISR_handler *old_handler
 )
 {
-   *old_handler = _ISR_Vector_table[ vector ];
-
-   /*
-    *  If the interrupt vector table is a table of pointer to isr entry
-    *  points, then we need to install the appropriate RTEMS interrupt
-    *  handler for this vector number.
-    */
-
-   _CPU_ISR_install_raw_handler( vector, new_handler, old_handler );
-
-   /*
-    *  We put the actual user ISR address in '_ISR_vector_table'.  This will
-    *  be used by the _ISR_Handler so the user gets control.
-    */
-
-    _ISR_Vector_table[ vector ] = new_handler;
+  *old_handler = _ISR_Vector_table[ vector ];
+  _ISR_Vector_table[ vector ] = new_handler;
 }
 
 /*
