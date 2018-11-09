@@ -1148,6 +1148,55 @@ static void test_rtems_heap_allocate_aligned_with_boundary(void)
   rtems_test_assert( p == NULL );
 }
 
+static void test_rtems_malloc(void)
+{
+  void *p;
+
+  p = rtems_malloc(0);
+  rtems_test_assert(p == NULL);
+
+  errno = 0;
+  p = rtems_malloc(SIZE_MAX / 2);
+  rtems_test_assert(p == NULL);
+  rtems_test_assert(errno == 0);
+
+  p = rtems_malloc(1);
+  rtems_test_assert(p != NULL);
+
+  free(p);
+}
+
+static void test_rtems_calloc(void)
+{
+  void *p;
+  int *i;
+
+  p = rtems_calloc(0, 0);
+  rtems_test_assert(p == NULL);
+
+  p = rtems_calloc(0, 1);
+  rtems_test_assert(p == NULL);
+
+  p = rtems_calloc(1, 0);
+  rtems_test_assert(p == NULL);
+
+  errno = 0;
+  p = rtems_calloc(1, SIZE_MAX / 2);
+  rtems_test_assert(p == NULL);
+  rtems_test_assert(errno == 0);
+
+  errno = 0;
+  p = rtems_calloc(SIZE_MAX / 2, 1);
+  rtems_test_assert(p == NULL);
+  rtems_test_assert(errno == 0);
+
+  i = rtems_calloc(1, sizeof(*i));
+  rtems_test_assert(i != NULL);
+  rtems_test_assert(*i == 0);
+
+  free(i);
+}
+
 static void test_heap_size_with_overhead(void)
 {
   uintptr_t s;
@@ -1296,6 +1345,8 @@ rtems_task Init(
   test_heap_size_with_overhead();
   test_protected_heap_info();
   test_rtems_heap_allocate_aligned_with_boundary();
+  test_rtems_malloc();
+  test_rtems_calloc();
   test_greedy_allocate();
 
   test_posix_memalign();

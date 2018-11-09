@@ -142,6 +142,39 @@ void *rtems_heap_allocate_aligned_with_boundary(
   RTEMS_WARN_UNUSED_RESULT;
 
 /**
+ * @brief Allocates a memory area of the specified size from the heap.
+ *
+ * This function is almost identical to malloc(). The only exception is that
+ * errno is not set in case of a memory allocation failure.
+ *
+ * @param[in] size The memory area size in bytes.
+ *
+ * @retval NULL The memory allocation failed or @a size is zero.
+ * @retval otherwise The begin address of the allocated memory area.
+ */
+void *rtems_malloc(size_t size)
+  RTEMS_MALLOCLIKE RTEMS_ALLOC_SIZE(1) RTEMS_WARN_UNUSED_RESULT;
+
+/**
+ * @brief Allocates a memory area for the specified count of elements from the
+ * heap.
+ *
+ * The allocated memory area is fully filled with zero bits.
+ *
+ * This function is almost identical to calloc(). The only exception is that
+ * errno is not set in case of a memory allocation failure.
+ *
+ * @param[in] nelem The count of elements.
+ * @param[in] elsize The size of each elements.
+ *
+ * @retval NULL The memory allocation failed or @a nelem is zero or @a elsize
+ *   is zero.
+ * @retval otherwise The begin address of the allocated memory area.
+ */
+void *rtems_calloc(size_t nelem, size_t elsize)
+  RTEMS_MALLOCLIKE RTEMS_ALLOC_SIZE_2(1, 2) RTEMS_WARN_UNUSED_RESULT;
+
+/**
  * @brief Extends the memory available for the heap using the memory area
  * starting at @a area_begin of size @a area_size bytes.
  *

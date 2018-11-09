@@ -23,6 +23,7 @@
 
 #ifdef RTEMS_NEWLIB
 #include <stdlib.h>
+#include <string.h>
 
 #include "malloc_p.h"
 
@@ -135,5 +136,29 @@ void _Malloc_Deferred_free( void *p )
   rtems_chain_initialize_node( node );
   rtems_chain_append_unprotected( &_Malloc_GC_list, node );
   rtems_interrupt_lock_release( &_Malloc_GC_lock, &lock_context );
+}
+
+void *rtems_malloc( size_t size )
+{
+  if ( size == 0 ) {
+    return NULL;
+  }
+
+  return rtems_heap_allocate_aligned_with_boundary( size, 0, 0 );
+}
+
+void *rtems_calloc( size_t nelem, size_t elsize )
+{
+  size_t  length;
+  void   *p;
+
+  length = nelem * elsize;
+  p = rtems_malloc( length );
+  RTEMS_OBFUSCATE_VARIABLE( p );
+  if ( RTEMS_PREDICT_FALSE( p == NULL ) ) {
+    return p;
+  }
+
+  return memset( p, 0, length );
 }
 #endif
