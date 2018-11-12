@@ -21,9 +21,11 @@
 
 #if defined(RTEMS_SMP)
 
+#if defined(RTEMS_PROFILING)
 #include <rtems/score/chainimpl.h>
 
 #include <stdint.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {
