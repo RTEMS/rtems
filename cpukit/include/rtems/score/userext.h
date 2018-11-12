@@ -19,7 +19,6 @@
 #define _RTEMS_SCORE_USEREXT_H
 
 #include <rtems/score/interr.h>
-#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -241,28 +240,6 @@ typedef struct {
   User_extensions_fatal_extension          fatal;
   User_extensions_thread_terminate_extension thread_terminate;
 }   User_extensions_Table;
-
-/**
- * @brief Manages the switch callouts.
- *
- * They are managed separately from other extensions for performance reasons.
- */
-typedef struct {
-  Chain_Node                              Node;
-  User_extensions_thread_switch_extension thread_switch;
-}   User_extensions_Switch_control;
-
-/**
- * @brief Manages each user extension set.
- *
- * The switch control is part of the extensions control even if not used due to
- * the extension not having a switch handler.
- */
-typedef struct {
-  Chain_Node                     Node;
-  User_extensions_Switch_control Switch;
-  User_extensions_Table          Callouts;
-}   User_extensions_Control;
 
 /** @} */
 

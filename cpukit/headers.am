@@ -393,6 +393,7 @@ include_rtems_score_HEADERS += include/rtems/score/timestamp.h
 include_rtems_score_HEADERS += include/rtems/score/tls.h
 include_rtems_score_HEADERS += include/rtems/score/todimpl.h
 include_rtems_score_HEADERS += include/rtems/score/userext.h
+include_rtems_score_HEADERS += include/rtems/score/userextdata.h
 include_rtems_score_HEADERS += include/rtems/score/userextimpl.h
 include_rtems_score_HEADERS += include/rtems/score/watchdog.h
 include_rtems_score_HEADERS += include/rtems/score/watchdogimpl.h

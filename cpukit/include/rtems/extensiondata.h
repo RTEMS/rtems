@@ -20,6 +20,7 @@
 
 #include <rtems/extension.h>
 #include <rtems/score/objectdata.h>
+#include <rtems/score/userextdata.h>
 
 #ifdef __cplusplus
 extern "C" {
