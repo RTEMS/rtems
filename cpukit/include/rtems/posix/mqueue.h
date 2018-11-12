@@ -34,7 +34,7 @@
 #include <signal.h>
 #include <mqueue.h> /* struct mq_attr */
 #include <rtems/score/coremsg.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

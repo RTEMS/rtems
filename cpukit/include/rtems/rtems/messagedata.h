@@ -18,8 +18,8 @@
 #define _RTEMS_RTEMS_MESSAGEDATA_H
 
 #include <rtems/rtems/message.h>
-#include <rtems/score/object.h>
 #include <rtems/score/coremsg.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

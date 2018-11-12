@@ -19,7 +19,7 @@
 
 #include <rtems/rtems/region.h>
 #include <rtems/score/heap.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/threadq.h>
 
 #ifdef __cplusplus

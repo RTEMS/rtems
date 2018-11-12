@@ -20,7 +20,7 @@
 #define _RTEMS_POSIX_SEMAPHORE_H
 
 #include <semaphore.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

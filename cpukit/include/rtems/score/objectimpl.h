@@ -19,7 +19,7 @@
 #ifndef _RTEMS_SCORE_OBJECTIMPL_H
 #define _RTEMS_SCORE_OBJECTIMPL_H
 
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/isrlock.h>
 #include <rtems/score/threaddispatch.h>

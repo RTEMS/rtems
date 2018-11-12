@@ -19,7 +19,7 @@
 
 #include <rtems/rtems/part.h>
 #include <rtems/score/isrlock.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

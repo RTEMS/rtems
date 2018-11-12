@@ -19,7 +19,7 @@
 #ifndef _RTEMS_POSIX_TIMER_H
 #define _RTEMS_POSIX_TIMER_H
 
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/watchdog.h>
 
 #include <pthread.h>

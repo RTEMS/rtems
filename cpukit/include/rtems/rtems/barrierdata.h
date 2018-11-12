@@ -19,7 +19,7 @@
 #define _RTEMS_RTEMS_BARRIERDATA_H
 
 #include <rtems/rtems/barrier.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/corebarrier.h>
 
 #ifdef __cplusplus

@@ -27,7 +27,7 @@
 #include <rtems/score/mppkt.h>
 #endif
 #include <rtems/score/isrlock.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/schedulernode.h>
 #include <rtems/score/stack.h>

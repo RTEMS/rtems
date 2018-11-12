@@ -21,7 +21,7 @@
 #define _RTEMS_RTEMS_TIMERDATA_H
 
 #include <rtems/rtems/timer.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/watchdog.h>
 
 #ifdef __cplusplus

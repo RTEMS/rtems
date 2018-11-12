@@ -19,7 +19,7 @@
 #define _RTEMS_EXTENSIONDATA_H
 
 #include <rtems/extension.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

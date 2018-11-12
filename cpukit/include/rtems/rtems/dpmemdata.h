@@ -18,7 +18,7 @@
 #define _RTEMS_RTEMS_DPMEMDATA_H
 
 #include <rtems/rtems/dpmem.h>
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 
 #ifdef __cplusplus
 extern "C" {

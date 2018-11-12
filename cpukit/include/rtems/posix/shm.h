@@ -15,7 +15,7 @@
 #ifndef _RTEMS_POSIX_SHM_H
 #define _RTEMS_POSIX_SHM_H
 
-#include <rtems/score/object.h>
+#include <rtems/score/objectdata.h>
 #include <rtems/score/threadq.h>
 
 #include <sys/types.h>
