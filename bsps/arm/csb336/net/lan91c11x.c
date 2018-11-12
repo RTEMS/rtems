@@ -19,6 +19,7 @@
 
 #include <machine/rtems-bsd-kernel-space.h>
 
+#include <sys/types.h>
 #include <rtems.h>
 #include "lan91c11x.h"
 

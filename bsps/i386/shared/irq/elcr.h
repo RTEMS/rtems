@@ -7,7 +7,7 @@
 #ifndef _IRQ_ELCR_H_
 #define _IRQ_ELCR_H_
 
-#include <sys/cdefs.h>
+#include <sys/types.h>
 
 enum intr_trigger {
   INTR_TRIGGER_EDGE,

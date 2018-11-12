@@ -7,10 +7,10 @@
  */
 
 /*
- * Copyright (c) 2009, 2010 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
- *  Obere Lagerstr. 30
+ *  Dornierstr. 4
  *  82178 Puchheim
  *  Germany
  *  <rtems@embedded-brains.de>
@@ -23,6 +23,7 @@
 #ifndef RTEMS_MEDIA_H
 #define RTEMS_MEDIA_H
 
+#include <sys/types.h>
 #include <rtems.h>
 
 #ifdef __cplusplus

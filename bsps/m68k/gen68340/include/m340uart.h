@@ -31,6 +31,8 @@
 #ifndef __m340uart_H__
 #define __m340uart_H__
 
+#include <sys/types.h>
+
 /* UART initialisation */
 #define UART_CHANNEL_A			0
 #define UART_CHANNEL_B			1
