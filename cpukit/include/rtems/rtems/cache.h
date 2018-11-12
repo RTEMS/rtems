@@ -19,8 +19,7 @@
 extern "C" {
 #endif
 
-#include <rtems/system.h>
-#include <sys/types.h>
+#include <rtems/score/basedefs.h>
 
 /**
  * @defgroup ClassicCache Cache
