@@ -72,7 +72,8 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj* obj,
 {
   rtems_rtl_obj_sect* sect;
 
-  if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE)
+  if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE ||
+      sym->st_shndx == SHN_COMMON)
   {
     /*
      * Search the object file then the global table for the symbol.
@@ -185,9 +186,10 @@ rtems_rtl_elf_relocator (rtems_rtl_obj*      obj,
       return false;
 
     /*
-     * Only need the name of the symbol if global.
+     * Only need the name of the symbol if global or a common symbol.
      */
-    if (ELF_ST_TYPE (sym.st_info) == STT_NOTYPE)
+    if (ELF_ST_TYPE (sym.st_info) == STT_NOTYPE ||
+        sym.st_shndx == SHN_COMMON)
     {
       size_t len;
       off = obj->ooffset + strtab->offset + sym.st_name;
@@ -337,6 +339,68 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
   return true;
 }
 
+/**
+ * Common symbol iterator data.
+ */
+typedef struct
+{
+  size_t   size;      /**< The size of the common section */
+  uint32_t alignment; /**< The alignment of the common section. */
+} rtems_rtl_elf_common_data;
+
+static bool
+rtems_rtl_elf_common (rtems_rtl_obj*      obj,
+                      int                 fd,
+                      rtems_rtl_obj_sect* sect,
+                      void*               data)
+{
+  rtems_rtl_elf_common_data* common = (rtems_rtl_elf_common_data*) data;
+  rtems_rtl_obj_cache*       symbols;
+  int                        sym;
+
+  rtems_rtl_obj_caches (&symbols, NULL, NULL);
+
+  if (!symbols)
+    return false;
+
+  /*
+   * Find the number size of the common section by finding all symbols that
+   * reference the SHN_COMMON section.
+   */
+  for (sym = 0; sym < (sect->size / sizeof (Elf_Sym)); ++sym)
+  {
+    Elf_Sym symbol;
+    off_t   off;
+
+    off = obj->ooffset + sect->offset + (sym * sizeof (symbol));
+
+    if (!rtems_rtl_obj_cache_read_byval (symbols, fd, off,
+                                         &symbol, sizeof (symbol)))
+      return false;
+
+    if ((symbol.st_shndx == SHN_COMMON) &&
+        ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_COMMON)))
+    {
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+        printf ("rtl: com:elf:%-2d bind:%-2d type:%-2d size:%d value:%d\n",
+                sym, (int) ELF_ST_BIND (symbol.st_info),
+                (int) ELF_ST_TYPE (symbol.st_info),
+                (int) symbol.st_size, (int) symbol.st_value);
+      /*
+       * If the size is zero this is the first entry, it defines the common
+       * section's aligment. The symbol's value is the alignment.
+       */
+      if (common->size == 0)
+        common->alignment = symbol.st_value;
+      common->size +=
+        rtems_rtl_obj_align (common->size, symbol.st_value) + symbol.st_size;
+    }
+  }
+
+  return true;
+}
+
 static bool
 rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
                        int                 fd,
@@ -354,6 +418,7 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
   int                  global_string_space;
   rtems_rtl_obj_sym*   gsym;
   char*                gstring;
+  size_t               common_offset;
   int                  sym;
 
   strtab = rtems_rtl_obj_find_section (obj, ".strtab");
@@ -403,15 +468,28 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
      * object file has been loaded. Undefined symbols are NOTYPE so for locals
      * we need to make sure there is a valid seciton.
      */
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+      printf ("rtl: sym:elf:%-2d name:%-2d:%-20s bind:%-2d " \
+              "type:%-2d sect:%d size:%d\n",
+              sym, (int) symbol.st_name, name,
+              (int) ELF_ST_BIND (symbol.st_info),
+              (int) ELF_ST_TYPE (symbol.st_info),
+              symbol.st_shndx,
+              (int) symbol.st_size);
+
     if ((symbol.st_shndx != 0) &&
         ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_COMMON) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_FUNC) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_NOTYPE)))
     {
+      /*
+       * There needs to be a valid section for the symbol.
+       */
       rtems_rtl_obj_sect* symsect;
 
       symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
-      if (symsect)
+      if (symsect != NULL)
       {
         if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
             (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
@@ -431,12 +509,18 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
           }
           else
           {
+            if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+              printf ("rtl: sym:elf:%-2d name:%-2d:%-20s: global\n",
+                      sym, (int) symbol.st_name, name);
             ++globals;
             global_string_space += strlen (name) + 1;
           }
         }
         else if (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)
         {
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+            printf ("rtl: sym:elf:%-2d name:%-2d:%-20s: local\n",
+                    sym, (int) symbol.st_name, name);
           ++locals;
           local_string_space += strlen (name) + 1;
         }
@@ -487,6 +571,8 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
   gstring =
     (((char*) obj->global_table) + (globals * sizeof (rtems_rtl_obj_sym)));
 
+  common_offset = 0;
+
   for (sym = 0; sym < (sect->size / sizeof (Elf_Sym)); ++sym)
   {
     Elf_Sym     symbol;
@@ -524,6 +610,7 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
 
     if ((symbol.st_shndx != 0) &&
         ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
+         (ELF_ST_TYPE (symbol.st_info) == STT_COMMON) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_FUNC) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_NOTYPE)) &&
          ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
@@ -533,6 +620,7 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
         rtems_rtl_obj_sect* symsect;
         rtems_rtl_obj_sym*  osym;
         char*               string;
+        Elf_Word            value;
 
         symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
         if (symsect)
@@ -553,10 +641,25 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
             ++lsym;
           }
 
+          /*
+           * Allocate any common symbols in the common section.
+           */
+          if (symbol.st_shndx == SHN_COMMON)
+          {
+            size_t value_off = rtems_rtl_obj_align (common_offset,
+                                                    symbol.st_value);
+            common_offset = value_off + symbol.st_size;
+            value = value_off;
+          }
+          else
+          {
+            value = symbol.st_value;
+          }
+
           rtems_chain_set_off_chain (&osym->node);
           memcpy (string, name, strlen (name) + 1);
           osym->name = string;
-          osym->value = symbol.st_value + (uint8_t*) symsect->base;
+          osym->value = value + (uint8_t*) symsect->base;
           osym->data = symbol.st_info;
 
           if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
@@ -656,12 +759,12 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
     if (!rtems_rtl_obj_cache_read_byval (sects, fd, off, &shdr, sizeof (shdr)))
       return false;
 
-    flags = 0;
-
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
       printf ("rtl: section: %2d: type=%d flags=%08x link=%d info=%d\n",
               section, (int) shdr.sh_type, (unsigned int) shdr.sh_flags,
               (int) shdr.sh_link, (int) shdr.sh_info);
+
+    flags = 0;
 
     switch (shdr.sh_type)
     {
@@ -768,6 +871,19 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
     }
   }
 
+  return true;
+}
+
+static bool
+rtems_rtl_elf_add_common (rtems_rtl_obj* obj, size_t size, uint32_t alignment)
+{
+  if (size > 0)
+  {
+    if (!rtems_rtl_obj_add_section (obj, SHN_COMMON, ".common.rtems.rtl",
+                                    size, 0, alignment, 0, 0,
+                                    RTEMS_RTL_OBJ_SECT_BSS | RTEMS_RTL_OBJ_SECT_ZERO))
+      return false;
+  }
   return true;
 }
 
@@ -906,8 +1022,9 @@ rtems_rtl_elf_load_linkmap (rtems_rtl_obj* obj)
 bool
 rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
 {
-  rtems_rtl_obj_cache* header;
-  Elf_Ehdr             ehdr;
+  rtems_rtl_obj_cache*      header;
+  Elf_Ehdr                  ehdr;
+  rtems_rtl_elf_common_data common = { .size = 0, .alignment = 0 };
 
   rtems_rtl_obj_caches (&header, NULL, NULL);
 
@@ -965,8 +1082,23 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   if (!rtems_rtl_elf_parse_sections (obj, fd, &ehdr))
     return false;
 
+  /*
+   * See if there are any common variables and if there are add a common
+   * section.
+   */
+  if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_common, &common))
+    return false;
+  if (!rtems_rtl_elf_add_common (obj, common.size, common.alignment))
+    return false;
+
+  /*
+   * Set the entry point if there is one.
+   */
   obj->entry = (void*)(uintptr_t) ehdr.e_entry;
 
+  /*
+   * Load the sections and symbols and then relocation to the base address.
+   */
   if (!rtems_rtl_obj_load_sections (obj, fd, rtems_rtl_elf_loader, &ehdr))
     return false;
 

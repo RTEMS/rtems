@@ -294,6 +294,23 @@ static inline bool rtems_rtl_obj_text_inside (const rtems_rtl_obj* obj,
 }
 
 /**
+ * Align the size to the next alignment point. Assume the alignment is a
+ * positive integral power of 2 if not 0 or 1. If 0 or 1 then there is no
+ * alignment.
+ *
+ * @param offset Offset to align up from.
+ * @param alignment The alignment.
+ * @return size_t Aligned offset.
+ */
+static inline size_t rtems_rtl_obj_align (size_t   offset,
+                                          uint32_t alignment)
+{
+  if ((alignment > 1) && ((offset & (alignment - 1)) != 0))
+    offset = (offset + alignment) & ~(alignment - 1);
+  return offset;
+}
+
+/**
  * Allocate an object structure on the heap.
  *
  * @retval NULL No memory for the object.
@@ -408,6 +425,22 @@ rtems_rtl_obj_sect* rtems_rtl_obj_find_section (const rtems_rtl_obj* obj,
  */
 rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* obj,
                                                          int                  index);
+
+/**
+ * Find a section given a section's mask. The index is the section after which
+ * the mask is matched. An index of -1 starts the search from the beginning of
+ * the section list. You can find multiple matches for a mask by passing the
+ * index of the last section that matched the mask on a subsequent call.
+ *
+ * @param obj The object file's descriptor.
+ * @param index The section's index to start searching from, -1 for the start.
+ * @param mask The section's mask to match against the section's flags.
+ * @retval NULL The section was not found.
+ * @return rtems_rtl_obj_sect_t* The found section.
+ */
+rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
+                                                        int                  index,
+                                                        uint32_t             mask);
 
 /**
  * The text section size. Only use once all the sections has been added. It

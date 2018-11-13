@@ -246,19 +246,6 @@ rtems_rtl_scan_decimal (const uint8_t* string, size_t len)
 }
 
 /**
- * Align the size to the next alignment point. Assume the alignment is a
- * positive integral power of 2 if not 0 or 1. If 0 or 1 then there is no
- * alignment.
- */
-static size_t
-rtems_rtl_sect_align (size_t offset, uint32_t alignment)
-{
-  if ((alignment > 1) && ((offset & (alignment - 1)) != 0))
-    offset = (offset + alignment) & ~(alignment - 1);
-  return offset;
-}
-
-/**
  * Section size summer iterator data.
  */
 typedef struct
@@ -274,7 +261,7 @@ rtems_rtl_obj_sect_summer (rtems_chain_node* node, void* data)
   rtems_rtl_obj_sect_summer_data* summer = data;
   if ((sect->flags & summer->mask) == summer->mask)
     summer->size =
-      rtems_rtl_sect_align (summer->size, sect->alignment) + sect->size;
+      rtems_rtl_obj_align (summer->size, sect->alignment) + sect->size;
   return true;
 }
 
@@ -438,9 +425,9 @@ rtems_rtl_obj_add_section (rtems_rtl_obj* obj,
     rtems_chain_append (&obj->sections, &sect->node);
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_SECTION))
-      printf ("rtl: sect: %-2d: %s (%zu)\n", section, name, size);
+      printf ("rtl: sect: add: %-2d: %s (%zu) 0x%08lx\n",
+              section, name, size, flags);
   }
-
   return true;
 }
 
@@ -467,6 +454,8 @@ typedef struct
   rtems_rtl_obj_sect*  sect;  /**< The matching section. */
   const char*          name;  /**< The name to match. */
   int                  index; /**< The index to match. */
+  uint32_t             mask;  /**< The mask to match. */
+  unsigned int         flags; /**< The flags to use when matching. */
 } rtems_rtl_obj_sect_finder;
 
 static bool
@@ -489,6 +478,8 @@ rtems_rtl_obj_find_section (const rtems_rtl_obj* obj,
   rtems_rtl_obj_sect_finder match;
   match.sect = NULL;
   match.name = name;
+  match.mask = 0;
+  match.flags = 0;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
                            rtems_rtl_obj_sect_match_name,
                            &match);
@@ -515,8 +506,46 @@ rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* obj,
   rtems_rtl_obj_sect_finder match;
   match.sect = NULL;
   match.index = index;
+  match.mask = 0;
+  match.flags = 0;
   rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
                            rtems_rtl_obj_sect_match_index,
+                           &match);
+  return match.sect;
+}
+
+static bool
+rtems_rtl_obj_sect_match_mask (rtems_chain_node* node, void* data)
+{
+  rtems_rtl_obj_sect*        sect = (rtems_rtl_obj_sect*) node;
+  rtems_rtl_obj_sect_finder* match = data;
+  if (match->flags == 0)
+  {
+    if (match->index < 0 || sect->section == match->index)
+      match->flags = 1;
+    if (match->index >= 0)
+      return true;
+  }
+  if ((sect->flags & match->mask) != 0)
+  {
+    match->sect = sect;
+    return false;
+  }
+  return true;
+}
+
+rtems_rtl_obj_sect*
+rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
+                                    int                  index,
+                                    uint32_t             mask)
+{
+  rtems_rtl_obj_sect_finder match;
+  match.sect = NULL;
+  match.index = index;
+  match.mask = mask;
+  match.flags = 0;
+  rtems_rtl_chain_iterate ((rtems_chain_control*) &obj->sections,
+                           rtems_rtl_obj_sect_match_mask,
                            &match);
   return match.sect;
 }
@@ -775,7 +804,7 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
       if (sect->load_order == order)
       {
         if (!first)
-          base_offset = rtems_rtl_sect_align (base_offset, sect->alignment);
+          base_offset = rtems_rtl_obj_align (base_offset, sect->alignment);
 
         first = false;
 
