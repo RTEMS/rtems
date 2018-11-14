@@ -29,7 +29,7 @@
   .extern  bsp_start_vector_table_end
   .extern  bsp_start_vector_table_size
   .extern  bsp_vector_table_size
-  .extern  bsp_section_stack_begin
+  .extern  _ISR_Stack_area_end
 
   .extern exception_frame_save
   .extern _OR1K_Exception_Process
@@ -150,8 +150,8 @@ _start:
   l.mtspr r0, r1, 17
 
   /* load stack and frame pointers */
-  l.movhi r1, hi(bsp_section_stack_begin)
-  l.ori   r1, r1, lo(bsp_section_stack_begin)
+  l.movhi r1, hi(_ISR_Stack_area_end)
+  l.ori   r1, r1, lo(_ISR_Stack_area_end)
   l.add   r2, r0, r1
 
 /* Clearing .bss */
