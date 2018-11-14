@@ -29,7 +29,8 @@
  *  initialization this target and compiler version uses.
  */
 #if defined(__USE_INIT_FINI__)
-  #if defined(__ARM_EABI__) || defined(__riscv)
+  #if defined(__ARM_EABI__) || defined(__riscv) \
+    || defined(__or1k__) || defined(__or1knd__)
     #define INIT_NAME __libc_init_array
   #else
     #define INIT_NAME _init
