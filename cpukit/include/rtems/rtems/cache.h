@@ -15,11 +15,15 @@
 #ifndef _RTEMS_RTEMS_CACHE_H
 #define _RTEMS_RTEMS_CACHE_H
 
+#include <rtems/score/basedefs.h>
+
+#if defined( RTEMS_SMP )
+#include <sys/cpuset.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <rtems/score/basedefs.h>
 
 /**
  * @defgroup ClassicCache Cache
