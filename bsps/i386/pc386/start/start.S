@@ -51,8 +51,6 @@
 #error  "Missing header ? CPU_STACK_ALIGNMENT NOT DEFINED"
 #endif
 
-.set STACK_SIZE, 0x1000
-
 /*----------------------------------------------------------------------------+
 | CODE section
 +----------------------------------------------------------------------------*/
@@ -176,9 +174,9 @@ speakl:	jmp	speakl             # and SPIN!!!
 	PUBLIC (_establish_stack)
 SYM (_establish_stack):
 
-	movl	$_end, eax		# eax = end of bss/start of heap
-	addl	$STACK_SIZE, eax	# make room for stack
-	subl    $4,          eax    # reserve room for arg to 'boot_card'
+	movl	$_ISR_Stack_area_begin, eax # eax = end of bss/start of heap
+	addl	$_ISR_Stack_size, eax	# make room for stack
+	subl	$4, eax			# reserve room for arg to 'boot_card'
 	andl	$ - CPU_STACK_ALIGNMENT, eax	# align SP on CPU_STACK_ALIGNMENT boundary
 	movl	eax, esp		# set stack pointer
 	movl	eax, ebp		# set base pointer
@@ -304,10 +302,6 @@ SYM(_boot_multiboot_cmdline):
 	.rept 256 /* cmd line */
 	.byte 0
 	.endr
-
-	PUBLIC(_stack_size)
-SYM(_stack_size):
-	.long STACK_SIZE
 
 #ifdef DEBUG_EARLY_START
 

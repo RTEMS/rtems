@@ -49,15 +49,12 @@ static uintptr_t rtemsWorkAreaStart;
  */
 uint32_t bsp_mem_size = 0;
 
-/* Size of stack used during initialization. Defined in 'start.s'.  */
-extern uint32_t _stack_size;
-
 static void bsp_size_memory(void)
 {
   uintptr_t topAddr;
 
   /* Set the value of start of free memory. */
-  rtemsWorkAreaStart = (uint32_t)WorkAreaBase + _stack_size;
+  rtemsWorkAreaStart = (uint32_t)WorkAreaBase;
 
   /* Align the RTEMS Work Area at beginning of free memory. */
   if (rtemsWorkAreaStart & (CPU_ALIGNMENT - 1))  /* not aligned => align it */
