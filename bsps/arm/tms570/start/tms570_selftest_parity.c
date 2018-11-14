@@ -22,8 +22,8 @@
 #include <stddef.h>
 #include <bsp/tms570.h>
 #include <rtems.h>
-#include "tms570_selftest.h"
-#include "tms570_selftest_parity.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_selftest_parity.h>
 
 /* HCG:het1ParityCheck */
 const tms570_selftest_par_desc_t

@@ -24,8 +24,8 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <bsp/tms570.h>
-#include "tms570_selftest.h"
-#include "tms570_selftest_parity.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_selftest_parity.h>
 
 /**
  * @brief run test to check that parity protection works for CAN modules RAM

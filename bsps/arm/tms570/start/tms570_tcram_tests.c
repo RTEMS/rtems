@@ -56,8 +56,8 @@
 
 #include <stdint.h>
 #include <bsp/tms570.h>
-#include "tms570_selftest.h"
-#include "tms570_hwinit.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_hwinit.h>
 
 #define tcramA1bitError (*(volatile uint32_t *)(0x08400000U))
 #define tcramA2bitError (*(volatile uint32_t *)(0x08400010U))

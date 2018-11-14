@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 #include <bsp/tms570.h>
-#include "tms570_hwinit.h"
+#include <bsp/tms570_hwinit.h>
 
 /**
  * @brief Error signaling module initialization (HCG:esmInit)

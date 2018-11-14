@@ -3,9 +3,9 @@
 #include <bsp/start.h>
 #include <bsp/tms570.h>
 
-#include "tms570_selftest.h"
-#include "tms570_selftest_parity.h"
-#include "tms570_hwinit.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_selftest_parity.h>
+#include <bsp/tms570_hwinit.h>
 
 void bsp_start_hook_0_done( void );
 

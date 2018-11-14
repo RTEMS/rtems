@@ -41,8 +41,8 @@
 #include <stdbool.h>
 #include <bsp/tms570.h>
 #include <bsp/tms570-pinmux.h>
-#include "tms570_selftest.h"
-#include "tms570_hwinit.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_hwinit.h>
 
 /**
  * @brief Setup all system PLLs (HCG:setupPLL)

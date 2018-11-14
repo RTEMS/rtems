@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <bsp/tms570.h>
-#include "tms570_selftest.h"
+#include <bsp/tms570_selftest.h>
 
 void bsp_selftest_fail_notification( uint32_t flag )
 {

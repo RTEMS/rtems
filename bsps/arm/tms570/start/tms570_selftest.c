@@ -43,8 +43,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <bsp/tms570.h>
-#include "tms570_selftest.h"
-#include "tms570_hwinit.h"
+#include <bsp/tms570_selftest.h>
+#include <bsp/tms570_hwinit.h>
 
 /**
  * @brief Checks to see if the EFUSE Stuck at zero test is completed successfully (HCG:efcStuckZeroTest).
