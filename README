@@ -2,10 +2,10 @@ Real-Time Executive for Multiprocessing Systems (RTEMS)
 -------------------------------------------------------
 
 RTEMS, Real-Time Executive for Multiprocessor Systems, is a real-time executive
-(kernel) which provides a high performance environment for embedded
+(kernel) which provides a high-performance environment for embedded
 applications with the following features:
 
- - standards based user interfaces
+ - standards-based user interfaces
  - multitasking capabilities
  - homogeneous and heterogeneous multiprocessor systems
  - event-driven, priority-based, preemptive scheduling
@@ -14,7 +14,7 @@ applications with the following features:
  - priority inheritance
  - responsive interrupt management
  - dynamic memory allocation
- - high level of user configurability
+ - high level of user configuration
  - open source with a friendly user license
 
 Project git repositories are located at https://git.rtems.org/
@@ -41,7 +41,7 @@ RTEMS POSIX 1003.1 Compliance Guide :
 
 RTEMS Developers Wiki : http://devel.rtems.org
 
- - Bug reporting, community knowledge and tutorials.
+ - Bug reporting, community knowledge, and tutorials.
 
 RTEMS Mailing Lists : https://lists.rtems.org/mailman/listinfo
 
@@ -51,7 +51,7 @@ RTEMS Mailing Lists : https://lists.rtems.org/mailman/listinfo
    * For general-purpose questions related to using RTEMS, use the rtems-users
      ml: https://lists.rtems.org/mailman/listinfo/users
 
-   * For questions and discussion related to development of RTEMS, use the
+   * For questions and discussion related to the development of RTEMS, use the
      rtems-devel ml: https://lists.rtems.org/mailman/listinfo/devel
 
 The version number for this software is indicated in the VERSION file.
