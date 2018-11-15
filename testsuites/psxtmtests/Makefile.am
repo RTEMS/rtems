@@ -569,6 +569,17 @@ psxtmthread06_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmthread06) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
+if TEST_psxtmthreadattr01
+psxtm_tests += psxtmthreadattr01
+psxtm_docs += psxtmthreadattr01/psxtmthreadattr01.doc
+psxtmthreadattr01_SOURCES = psxtmthreadattr01/init.c \
+	../tmtests/include/timesys.h ../support/src/tmtests_empty_function.c \
+	../support/src/tmtests_support.c
+psxtmthreadattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmthreadattr01) \
+	$(support_includes) -I$(top_srcdir)/../tmtests/include \
+	-DOPERATION_COUNT=$(OPERATION_COUNT)
+endif
+
 rtems_tests_PROGRAMS = $(psxtm_tests)
 dist_rtems_tests_DATA = $(psxtm_screens) $(psxtm_docs)
 

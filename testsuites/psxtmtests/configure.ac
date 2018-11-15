@@ -80,6 +80,7 @@ RTEMS_TEST_CHECK([psxtmthread03])
 RTEMS_TEST_CHECK([psxtmthread04])
 RTEMS_TEST_CHECK([psxtmthread05])
 RTEMS_TEST_CHECK([psxtmthread06])
+RTEMS_TEST_CHECK([psxtmthreadattr01])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
