@@ -5,11 +5,13 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = ../../../../../../bsps/powerpc/ss555/start/bsp_specs
 
-
+start.$(OBJEXT): ../../../../../../bsps/powerpc/ss555/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
 
 rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
-project_lib_DATA = rtems_crti.$(OBJEXT)
+project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
@@ -26,7 +28,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/bspstart.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/iss555.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/ss555/start/start.S
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspreset-empty.c
 # tm27supp

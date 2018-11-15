@@ -5,11 +5,13 @@ include $(top_srcdir)/../../bsp.am
 
 dist_project_lib_DATA = ../../../../../../bsps/powerpc/haleakala/start/bsp_specs
 
-
+start.$(OBJEXT): ../../../../../../bsps/powerpc/haleakala/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
 
 rtems_crti.$(OBJEXT): ../../../../../../bsps/powerpc/shared/start/rtems_crti.S
 	$(CPPASCOMPILE) -o $@ -c $<
-project_lib_DATA = rtems_crti.$(OBJEXT)
+project_lib_DATA += rtems_crti.$(OBJEXT)
 
 project_lib_DATA += linkcmds
 
@@ -25,9 +27,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-defa
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/start/mmu_405.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/start/mmu_405asm.S 
-
-# dlentry
-librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/haleakala/start/dlentry.S
 
 # console
 librtemsbsp_a_SOURCES += ../../../../../../bsps/powerpc/shared/console/uart.c

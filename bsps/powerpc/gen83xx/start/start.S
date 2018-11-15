@@ -413,13 +413,16 @@ start_code_in_ram:
 	/* Read-write small data */
 	LA r13, _SDA_BASE_
 
-        /* Clear cmdline */
+	/* Clear cmdline */
 	li	r3, 0
 
-	/* Set start stack pointer */
+	/*
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
+	 */
 	LA	r1, _ISR_Stack_area_end
-	stwu	r3, -4(r1)
-	stwu	r3, -4(r1)
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	stw	r3, 0(r1)
 
 	/* Call the first C routine */
         bl      SYM (boot_card)

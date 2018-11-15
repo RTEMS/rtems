@@ -12,8 +12,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/score/cpu.h>
-#include <rtems/powerpc/powerpc.h>
+#include <libcpu/powerpc-utility.h>
 
 #include <bspopts.h>
 
@@ -71,15 +70,15 @@ __rtems_entry_point:
 	mr	r6,r28
 	mr	r7,r27
 	bl	save_boot_params
-	addis	r9,r0, (__stack-PPC_MINIMUM_STACK_FRAME_SIZE)@ha
-	addi	r9,r9, (__stack-PPC_MINIMUM_STACK_FRAME_SIZE)@l
-	/* align down to 16-bytes */
-	li  r5, (CPU_STACK_ALIGNMENT - 1)
-	andc r1, r9, r5
 
-	/* NULL ptr to back chain */
-	li  r0, 0
-	stw r0, 0(r1)
+	/*
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
+	 */
+	LA	r1, _ISR_Stack_area_end
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	li	r0, 0
+	stw	r0, 0(r1)
 
 	/*
 	 * We are now in a environment that is totally independent from

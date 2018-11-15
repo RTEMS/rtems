@@ -10,12 +10,6 @@ RTEMS_CANONICAL_TARGET_CPU
 AM_INIT_AUTOMAKE([no-define nostdinc foreign 1.12.2])
 RTEMS_BSP_CONFIGURE
 
-
-
-
-RTEMS_BSPOPTS_SET([BSP_START_STACK_SIZE],[*],[4096])
-RTEMS_BSPOPTS_HELP([BSP_START_STACK_SIZE],[size of low-level start stack])
-
 RTEMS_BSPOPTS_SET([RTEMS_XPARAMETERS_H],[*],[\<xparameters_dflt.h\>])
 RTEMS_BSPOPTS_HELP([RTEMS_XPARAMETERS_H],
 [This defines the location of the hardware specific "xparameters.h" file.

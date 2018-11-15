@@ -30,11 +30,9 @@
  */
 
 #include <rtems/asm.h>
+#include <libcpu/powerpc-utility.h>
 
 /*
- *  The initial stack is set to run BELOW the code base address.
- *  (between the vectors and text sections)
- *
  *  The entry veneer has to clear the BSS and copy the read only
  *  version of the data segment to the correct location.
  */
@@ -134,11 +132,16 @@ text_length:
         /* set toc */
         lwz r2, toc_pointer-base_addr(r1)
 
-        /* Set up stack pointer = beginning of text section - 56 */
-        addi    r1, r1, -56-4
+	/* Clear cmdline */
+	li	r3, 0
 
-        /* Clear cmdline */
-        xor r3, r3, r3
+	/*
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
+	 */
+	LA	r1, _ISR_Stack_area_end
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	stw	r3, 0(r1)
 
         .extern SYM (boot_card)
         bl       SYM (boot_card)	/* call the first C routine */

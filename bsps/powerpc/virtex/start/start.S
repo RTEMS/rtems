@@ -47,11 +47,6 @@ virtex_exc_vector_base:
 	b	twiddle
 .endr
 
-	/* Start stack area */
-.rept BSP_START_STACK_SIZE / 4
-	b	twiddle
-.endr
-
 _start:
 
 	/* Reset time base */
@@ -59,10 +54,13 @@ _start:
 	mtspr	TBWU, r0
 	mtspr	TBWL, r0
 
-	/* Initialize start stack */
-	LWI	r1, _start
-	stwu	r0, -4(r1)
-	stwu	r0, -4(r1)
+	/*
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
+	 */
+	LA	r1, _ISR_Stack_area_end
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	stw	r0, 0(r1)
 
 	/* Copy fast text */
 	LWI	r3, bsp_section_fast_text_begin

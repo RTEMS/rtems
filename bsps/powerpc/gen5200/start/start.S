@@ -90,7 +90,9 @@
 /*                                                                     */
 /***********************************************************************/
 
+#include <rtems/asm.h>
 #include <rtems/powerpc/cache.h>
+#include <libcpu/powerpc-utility.h>
 
 #include <bsp.h>
 #include <bsp/mpc5200.h>
@@ -470,12 +472,14 @@ skip_ROM_start:
 	bl	bsp_uboot_copy_board_info
 #endif /* HAS_UBOOT */
 
-/* set stack pointer (common for RAM/ROM startup) */
-	LA	r1, bsp_section_text_start
-	addi    r1, r1, -0x10			/* Set up stack pointer = beginning of text section - 0x10 */
-	/* tag TOS with a NULL pointer (termination mark for stack dump) */
-	li  r0, 0
-	stw r0, 0(r1)
+	/*
+	 * Initialize start stack (common for RAM/ROM startup).  The stacks are
+	 * statically allocated and properly aligned.
+	 */
+	LA	r1, _ISR_Stack_area_end
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	li	r0, 0
+	stw	r0, 0(r1)
 
 	bl	__eabi				/* Set up EABI and SYSV environment */
 

@@ -3,7 +3,6 @@ OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
 OUTPUT_ARCH(powerpc)
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
-PROVIDE (__stack = 0);
 MEMORY {
 	VECTORS	: ORIGIN = 0x0 ,  LENGTH = 0x3000
 	CODE : ORIGIN = 0x3000 , LENGTH = 32M - 0x3000
@@ -247,8 +246,6 @@ SECTIONS
    PROVIDE (__bss_end = .);
   } > CODE
   . = ALIGN(16);
-  . += 0x1000;
-  __stack = .;
   _end = . ;
   __rtems_end = . ;
   PROVIDE (end = .);
