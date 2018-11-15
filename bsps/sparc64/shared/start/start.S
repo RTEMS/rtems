@@ -103,8 +103,8 @@ zerobss:
 	nop
 
   /* Install stack */
-setstack:
-	set SYM(StackStart), %sp
+	set SYM(_ISR_Stack_area_end), %sp
+	add %sp, -SPARC64_MINIMUM_STACK_FRAME_SIZE, %sp
 	add %sp, -STACK_BIAS, %sp
 
   /* BSP-specific pre-bootcard initializations */
@@ -137,13 +137,6 @@ setstack:
 
 halted:	nop
 	    b SYM(halted)
-
-.section BOOTSTRAP
-  .align CPU_ALIGNMENT
-  .space 32768 - SPARC64_MINIMUM_STACK_FRAME_SIZE ! 32K boot stack grows down
-  .global StackStart
-  StackStart:
-    .space SPARC64_MINIMUM_STACK_FRAME_SIZE ! initial stack frame
 
 .section BOOTSTRAP
   .align CPU_ALIGNMENT
