@@ -25,6 +25,7 @@
 #include <pthread.h>
 #include <timesys.h>
 #include <sched.h>
+
 #define GUARDSIZE_TEST_VALUE 512
 #define STACKSIZE_TEST_VALUE 1024
 
@@ -37,7 +38,6 @@ static pthread_attr_t attr;
 static size_t guardsize = GUARDSIZE_TEST_VALUE;
 static size_t stacksize = STACKSIZE_TEST_VALUE;
 static struct sched_param param;
-static int var = 2;
 static void *stackaddr;
 
 static void benchmark_create_pthread_attr(void)
@@ -84,13 +84,13 @@ static void benchmark_pthread_attr_getdetachstate(void)
 {
   benchmark_timer_t end_time;
   int  status;
-  int tmp_var;
+  int detachstate;
 
   benchmark_timer_initialize();
-  status = pthread_attr_getdetachstate(&attr, &tmp_var);
+  status = pthread_attr_getdetachstate(&attr, &detachstate);
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
-  rtems_test_assert( tmp_var == PTHREAD_CREATE_DETACHED );
+  rtems_test_assert( detachstate == PTHREAD_CREATE_DETACHED );
 
   put_time(
     "pthread_attr_getdetachstate: only case",
@@ -168,13 +168,13 @@ static void benchmark_pthread_attr_getinheritsched(void)
 {
   benchmark_timer_t end_time;
   int  status;
-  int tmp_var;
+  int inheritsched;
 
   benchmark_timer_initialize();
-  status = pthread_attr_getinheritsched(&attr, &tmp_var);
+  status = pthread_attr_getinheritsched(&attr, &inheritsched);
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
-  rtems_test_assert( tmp_var == PTHREAD_EXPLICIT_SCHED );
+  rtems_test_assert( inheritsched == PTHREAD_EXPLICIT_SCHED );
 
   put_time(
     "pthread_attr_getinheritsched: only case",
@@ -240,7 +240,7 @@ static void benchmark_pthread_attr_setschedpolicy(void)
   int  status;
 
   benchmark_timer_initialize();
-  status = pthread_attr_setschedpolicy(&attr, var);
+  status = pthread_attr_setschedpolicy(&attr, SCHED_RR);
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
 
@@ -258,13 +258,13 @@ static void benchmark_pthread_attr_getschedpolicy(void)
 {
   benchmark_timer_t end_time;
   int  status;
-  int tmp_var;
+  int policy;
 
   benchmark_timer_initialize();
-  status = pthread_attr_getschedpolicy(&attr, &tmp_var);
+  status = pthread_attr_getschedpolicy(&attr, &policy);
   end_time = benchmark_timer_read();
   rtems_test_assert( status == 0 );
-  rtems_test_assert( tmp_var == var );
+  rtems_test_assert( policy == SCHED_RR );
 
   put_time(
     "pthread_attr_getschedpolicy: only case",
