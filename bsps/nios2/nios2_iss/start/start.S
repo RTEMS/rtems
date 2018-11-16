@@ -104,6 +104,9 @@ dcache_init_loop:
 1:
     #------------------------------------------------------
     # jump to (shared) boot_card (never comes back)
+    # use configuration defined stack
+    movhi   sp, %hiadj(_ISR_Stack_area_end - 4)
+    addi    sp, sp, %lo(_ISR_Stack_area_end - 4)
     mov r4, zero
     mov r5, zero
     mov r6, zero
