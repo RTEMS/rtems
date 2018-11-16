@@ -19,8 +19,8 @@ __start:
 	cli r0;
 
 	/* setup an initial stack */
-	sp.h = 0xFFB0;
-	sp.l = 0x0F00;
+	sp.h = __ISR_Stack_area_end;
+	sp.l = __ISR_Stack_area_end;
 
 	/* disable timer interrupts */
 	p0.h = HI(TCNTL);

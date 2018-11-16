@@ -22,8 +22,8 @@
 __start:
 
     /* Start by setting up a stack */
-    sp.h = 0xFFB0;
-    sp.l = 0x0F00;
+    sp.h = __ISR_Stack_area_end;
+    sp.l = __ISR_Stack_area_end;
 
     /* Maybe we should zero the memory in the .bss section.  */
 
