@@ -11,7 +11,7 @@
         .text
         .global _start
 _start:
-        ldi.l   $sp, _stack     /* load up stack pointer */
+        ldi.l   $sp, _ISR_Stack_area_end /* load up stack pointer */
         xor     $fp, $fp        /* zero fp to allow unwinders to stop */
 
         /* zero the bss area */
