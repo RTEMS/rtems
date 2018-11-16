@@ -57,7 +57,7 @@ CREATE_SUBDIRS         = NO
 # Croatian, Czech, Danish, Dutch, Esperanto, Farsi, Finnish, French, German,
 # Greek, Hungarian, Italian, Japanese, Japanese-en (Japanese with English
 # messages), Korean, Korean-en, Lithuanian, Norwegian, Macedonian, Persian,
-# Polish, Portuguese, Romanian, Russian, Serbian, Serbian-Cyrilic, Slovak,
+# Polish, Portuguese, Romanian, Russian, Serbian, Serbian-Cyrillic, Slovak,
 # Slovene, Spanish, Swedish, Ukrainian, and Vietnamese.
 
 OUTPUT_LANGUAGE        = English
@@ -79,7 +79,7 @@ REPEAT_BRIEF           = YES
 # This tag implements a quasi-intelligent brief description abbreviator
 # that is used to form the text in various listings. Each string
 # in this list, if found as the leading text of the brief description, will be
-# stripped from the text and the result after processing the whole list, is
+# stripped from the text and the result after processing the whole list is
 # used as the annotated text. Otherwise, the brief description is used as-is.
 # If left blank, the following values are used ("$name" is automatically
 # replaced with the name of the entity): "The $name class" "The $name widget"
@@ -222,7 +222,7 @@ EXTENSION_MAPPING      =
 # to include (a tag file for) the STL sources as input, then you should
 # set this tag to YES in order to let doxygen match functions declarations and
 # definitions whose arguments contain STL classes (e.g. func(std::string); v.s.
-# func(std::string) {}). This also make the inheritance and collaboration
+# func(std::string) {}). This also makes the inheritance and collaboration
 # diagrams that involve STL classes more complete and accurate.
 
 BUILTIN_STL_SUPPORT    = NO
@@ -276,12 +276,12 @@ TYPEDEF_HIDES_STRUCT   = NO
 # determine which symbols to keep in memory and which to flush to disk.
 # When the cache is full, less often used symbols will be written to disk.
 # For small to medium size projects (<1000 input files) the default value is
-# probably good enough. For larger projects a too small cache size can cause
+# probably good enough. For larger projects, a too small cache size can cause
 # doxygen to be busy swapping symbols to and from disk most of the time
-# causing a significant performance penality.
+# causing a significant performance penalty.
 # If the system has enough physical memory increasing the cache will improve the
 # performance by keeping more symbols in memory. Note that the value works on
-# a logarithmic scale so increasing the size by one will rougly double the
+# a logarithmic scale so increasing the size by one will roughly double the
 # memory usage. The cache size is given by this formula:
 # 2^(16+SYMBOL_CACHE_SIZE). The valid range is 0..9, the default is 0,
 # corresponding to a cache size of 2^16 = 65536 symbols
@@ -324,7 +324,7 @@ EXTRACT_LOCAL_METHODS  = NO
 
 # If this flag is set to YES, the members of anonymous namespaces will be
 # extracted and appear in the documentation as a namespace called
-# 'anonymous_namespace{file}', where file will be replaced with the base
+# 'anonymous_namespace{file}', where the file will be replaced with the base
 # name of the file that contains the anonymous namespace. By default
 # anonymous namespace are hidden.
 
@@ -542,7 +542,7 @@ WARN_IF_UNDOCUMENTED   = YES
 
 WARN_IF_DOC_ERROR      = YES
 
-# This WARN_NO_PARAMDOC option can be abled to get warnings for
+# This WARN_NO_PARAMDOC option can be enabled to get warnings for
 # functions that are documented, but have no documentation for their parameters
 # or return value. If set to NO (the default) doxygen will only warn about
 # wrong or incomplete parameter documentation, but not about the absence of
@@ -595,7 +595,7 @@ FILE_PATTERNS          = *.h \
                          *.inl \
 			 *.c
 
-# The RECURSIVE tag can be used to turn specify whether or not subdirectories
+# The RECURSIVE tag can be used to turn to specify whether or not subdirectories
 # should be searched for input files as well. Possible values are YES and NO.
 # If left blank NO is used.
 
@@ -616,7 +616,7 @@ EXCLUDE_SYMLINKS       = NO
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
 # certain files from those directories. Note that the wildcards are matched
-# against the file with absolute path, so to exclude all test directories
+# against the file with an absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
 EXCLUDE_PATTERNS       =
@@ -650,7 +650,7 @@ EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
 
 # The IMAGE_PATH tag can be used to specify one or more files or
-# directories that contain image that are included in the documentation (see
+# directories that contain images that are included in the documentation (see
 # the \image command).
 
 IMAGE_PATH             =
@@ -796,7 +796,7 @@ HTML_HEADER            =
 HTML_FOOTER            =
 
 # If the HTML_TIMESTAMP tag is set to YES then the generated HTML
-# documentation will contain the timesstamp.
+# documentation will contain the timestamp.
 
 HTML_TIMESTAMP         = NO
 
@@ -825,7 +825,7 @@ HTML_ALIGN_MEMBERS     = YES
 # documentation will contain sections that can be hidden and shown after the
 # page has loaded. For this to work a browser that supports
 # JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox
-# Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari).
+# Netscape 6.0+, Internet Explorer 5.0+, Konqueror, or Safari).
 
 HTML_DYNAMIC_SECTIONS  = NO
 
@@ -1012,7 +1012,7 @@ FORMULA_FONTSIZE       = 10
 SEARCHENGINE           = NO
 
 # When the SERVER_BASED_SEARCH tag is enabled the search engine will be implemented using a PHP enabled web server instead of at the web client using Javascript. Doxygen will generate the search PHP script and index
-# file to put on the web server. The advantage of the server based approach is that it scales better to large projects and allows full text search. The disadvances is that it is more difficult to setup
+# file to put on the web server. The advantage of the server-based approach is that it scales better to large projects and allows full-text search. The disadvances is that it is more difficult to setup
 # and does not have live searching capabilities.
 
 SERVER_BASED_SEARCH    = NO
@@ -1131,7 +1131,7 @@ COMPACT_RTF            = NO
 
 RTF_HYPERLINKS         = NO
 
-# Load stylesheet definitions from file. Syntax is similar to doxygen's
+# Load stylesheet definitions from file. The syntax is similar to doxygen's
 # config file, i.e. a series of assignments. You only have to provide
 # replacements, missing definitions are set to their default value.
 
@@ -1165,7 +1165,7 @@ MAN_EXTENSION          = .3
 # If the MAN_LINKS tag is set to YES and Doxygen generates man output,
 # then it will generate one additional man file for each entity
 # documented in the real man page(s). These additional files
-# only source the real man page, but without them the man command
+# only source the real man page, but without them, the man command
 # would be unable to find the correct page. The default is NO.
 
 MAN_LINKS              = NO
