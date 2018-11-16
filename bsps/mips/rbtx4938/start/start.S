@@ -316,6 +316,8 @@ FRAME(start,sp,0,ra)
 ** End of CPU initialization, ready to start kernel
 */
 	move	a0,zero		/* Set command line passed to boot_card */
+	la	sp,_ISR_Stack_area_end # Use configuration defined stack
+	subu	sp,sp,32
 	jal	boot_card
 	nop
 

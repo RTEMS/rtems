@@ -293,6 +293,8 @@ FRAME(start,sp,0,ra)
 
 
 	move	a0,zero		/* Set command line passed to main */
+	la	sp,_ISR_Stack_area_end # Use configuration defined stack
+	subu	sp,sp,32
 	jal	boot_card
 	nop
 
