@@ -32,7 +32,7 @@ EXTERN(_ISR_Handler)
 EXTERN(bsp_start_vector_table_end)
 EXTERN(bsp_start_vector_table_size)
 EXTERN(bsp_vector_table_size)
-EXTERN(bsp_section_stack_begin)
+EXTERN(_ISR_Stack_area_end)
 
 PUBLIC(_EPIPHANY_Exception_default)
 PUBLIC(bsp_start_vector_table_begin)
@@ -92,8 +92,8 @@ _bsp_start_vector_table_end:
 .type   _external_start, %function
 .normal_start:
   /* Initialize the stack and frame pointers */
-  mov  sp, %low(bsp_section_stack_begin)
-  movt sp, %high(bsp_section_stack_begin)
+  mov  sp, %low(_ISR_Stack_area_end)
+  movt sp, %high(_ISR_Stack_area_end)
   mov  fp, sp
 
 cpu0:
