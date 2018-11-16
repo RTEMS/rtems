@@ -97,11 +97,7 @@ extern "C" {
  * certain system types on different targets.
  */
 
-#if defined(RTEMS_USE_16_BIT_OBJECT)
-#define PRIxrtems_id PRIx16
-#else
 #define PRIxrtems_id PRIx32
-#endif
 
 /* c.f. cpukit/score/include/rtems/score/priority.h */
 #define PRIdPriority_Control PRIu64

@@ -61,42 +61,6 @@ typedef union {
   uint32_t    name_u32;
 } Objects_Name;
 
-#if defined(RTEMS_USE_16_BIT_OBJECT)
-/**
- *  The following type defines the control block used to manage
- *  object IDs.  The format is as follows (0=LSB):
- *
- *     Bits  0 ..  7    = index  (up to 254 objects of a type)
- *     Bits  8 .. 10    = API    (up to 7 API classes)
- *     Bits 11 .. 15    = class  (up to 31 object types per API)
- */
-typedef uint16_t   Objects_Id;
-
-/**
- * This type is used to store the maximum number of allowed objects
- * of each type.
- */
-typedef uint8_t    Objects_Maximum;
-
-#define OBJECTS_INDEX_START_BIT  0U
-#define OBJECTS_API_START_BIT    8U
-#define OBJECTS_CLASS_START_BIT 11U
-
-#define OBJECTS_INDEX_MASK      (Objects_Id)0x00ffU
-#define OBJECTS_API_MASK        (Objects_Id)0x0700U
-#define OBJECTS_CLASS_MASK      (Objects_Id)0xF800U
-
-#define OBJECTS_INDEX_VALID_BITS  (Objects_Id)0x00ffU
-#define OBJECTS_API_VALID_BITS    (Objects_Id)0x0007U
-/* OBJECTS_NODE_VALID_BITS should not be used with 16 bit Ids */
-#define OBJECTS_CLASS_VALID_BITS  (Objects_Id)0x001fU
-
-#define OBJECTS_UNLIMITED_OBJECTS 0x8000U
-
-#define OBJECTS_ID_INITIAL_INDEX  (0)
-#define OBJECTS_ID_FINAL_INDEX    (0xff)
-
-#else
 /**
  *  The following type defines the control block used to manage
  *  object IDs.  The format is as follows (0=LSB):
@@ -196,7 +160,6 @@ typedef uint16_t   Objects_Maximum;
  *  This is the highest value for the index portion of an object Id.
  */
 #define OBJECTS_ID_FINAL_INDEX    (0xffffU)
-#endif
 
 /**
  *  This enumerated type is used in the class field of the object ID.
@@ -313,15 +276,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Objects_Get_node(
   Objects_Id id
 )
 {
-  /*
-   * If using 16-bit Ids, then there is no node field and it MUST
-   * be a single processor system.
-   */
-  #if defined(RTEMS_USE_16_BIT_OBJECT)
-    return 1;
-  #else
-    return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
-  #endif
+  return (id >> OBJECTS_NODE_START_BIT) & OBJECTS_NODE_VALID_BITS;
 }
 
 /**
@@ -361,9 +316,7 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
 {
   return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
          (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
-         #if !defined(RTEMS_USE_16_BIT_OBJECT)
-           (( (Objects_Id) node )    << OBJECTS_NODE_START_BIT)  |
-         #endif
+         (( (Objects_Id) node )      << OBJECTS_NODE_START_BIT)  |
          (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
 }
 
