@@ -7,7 +7,11 @@ dist_project_lib_DATA = ../../../../../../bsps/x86_64/amd64/start/bsp_specs
 
 noinst_PROGRAMS =
 
-project_lib_DATA = linkcmds
+start.$(OBJEXT): ../../../../../../bsps/x86_64/amd64/start/start.S
+	$(CPPASCOMPILE) -o $@ -c $<
+project_lib_DATA = start.$(OBJEXT)
+
+project_lib_DATA += linkcmds
 
 project_lib_LIBRARIES = librtemsbsp.a
 librtemsbsp_a_SOURCES =
@@ -22,7 +26,6 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspfatal-default.c
 #
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/bspgetworkarea-default.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/start/bspstart.c
-librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/start/start.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/x86_64/amd64/start/page.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/start/sbrk.c
 librtemsbsp_a_SOURCES += ../../../../../../bsps/shared/dev/getentropy/getentropy-cpucounter.c
