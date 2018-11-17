@@ -69,8 +69,8 @@
 "pthread_setcancelstate"
 "pthread_setcanceltype"
 "pthread_testcancel"
-"pthread_cleanup_push: only case","psxtmcleanup01","psxtmtest_single","No"
-"pthread_cleanup_pop: only case","psxtmcleanup01","psxtmtest_single","No"
+"pthread_cleanup_push: only case","psxtmcleanup01","psxtmtest_single","Yes"
+"pthread_cleanup_pop: only case","psxtmcleanup01","psxtmtest_single","Yes"
 
 "pthread_getcpuclockid"
 
