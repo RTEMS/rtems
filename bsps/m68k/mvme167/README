@@ -33,7 +33,7 @@ Public License along with RTEMS; see file COPYING. If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
 Under no circumstances will the National Research Council of Canada
-nor Her Majesty the Queen in right of Canada assume any liablility
+nor Her Majesty the Queen in right of Canada assume any liability
 for the use this software, nor any responsibility for its quality or
 its support.
 
@@ -131,7 +131,7 @@ Floating-point
 
 The MC68040 has a built-in FPU. This FPU does not implement all the
 instruction of the MC68881/MC68882 floating-point coprocessors in
-hardware. The -m68040 compilation options instructs gcc to not generate
+hardware. The -m68040 compilation options instruct gcc to not generate
 the missing instructions. All of the RTEMS code is built this way. Some
 of the missing functionality must be supplied by external libraries. The
 required functions are part of libgcc.a.
@@ -175,7 +175,7 @@ size of the executable by about 60KB and that it relies on run time
 exceptions.
 
 If your application does not do any floating-point operations at all, you
-should consider disabling the FPSP. In bsp_start(), emove the call to
+should consider disabling the FPSP. In bsp_start(), remove the call to
 M68KFPSPInstallExceptionHandlers(), and uncomment the three lines in
 mvme167.cfg that redefine which variants of libc, libm and libgcc to link
 against.
@@ -188,7 +188,7 @@ If Jumper J1-4 is installed, certain configuration parameters may be read from
 the first 31 bytes of User Area NVRAM starting at 0xFFFC0000. In this case, the
 remaining J1-[5-7] jumpers are ignored, and the user is responsible for writing
 the appropriate values in NVRAM (via 167-Bug) in order to alter the default
-behaviour. A zero value in NVRAM results in the default behaviour. The paramaters
+behaviour. A zero value in NVRAM results in the default behaviour. The parameters
 that are configurable and their default settings are described below. 
 		
 	Cache Mode (0xFFFC0000 - 1 byte)
@@ -227,7 +227,7 @@ that are configurable and their default settings are described below.
         10 - /dev/tty2, Serial Port 3 on the MVME712M.
         11 - /dev/tty3, Serial Port 4 on the MVME712M.
     If the printk port is the same as some other port that will be opened by an
-    RTEMS application, then the driver must use polled I/O, or the printk port
+    RTEMS application, then the driver must use polled I/O or the printk port
     must not be used.
     
 	IP Address (0xFFFC0004 - 4 bytes)
@@ -258,10 +258,10 @@ that are configurable and their default settings are described below.
 		reserved for future use
 
 
-Cache Control and Memory Mapping
+Cache-Control and Memory Mapping
 --------------------------------
 
-If configuration is not obtained from non-volatile RAM (ie. J1-4 is off),
+If the configuration is not obtained from non-volatile RAM (ie. J1-4 is off),
 cache control is done through the remaining J1 jumpers as follows:
 
 If Jumper J1-7 is installed, the data cache will be turned on. If Jumper
@@ -280,16 +280,16 @@ non-existent memory. Caching is not controllable on a finer grain.
 Networking
 ----------
 
-If configuration is not obtained from non-volatile RAM (ie. J1-4 is off),
+If the configuration is not obtained from non-volatile RAM (ie. J1-4 is off),
 the networking parameters shown above must be specified in an initialized
 rtems_bsdnet_ifconfig struct. This structure is declared and initialized to
 specify any network devices and includes entries for ip_address, ip_netmask
 and hardware_address. See the Network Device Configuration section of the
 RTEMS Networking Supplement.
 
-When non-default (non-zero) networking paramaters are provided in NVRAM (ie.
+When non-default (non-zero) networking parameters are provided in NVRAM (ie.
 j1-4 is on), the user MUST ensure that the corresponding entries in the
-ifconfig struct are NULL. Failing to do so is an error, because it causes
+ifconfig struct are NULL. Failing to do so is an error because it causes
 the memory allocated for the initialized struct values to be lost.
 
 
@@ -324,12 +324,12 @@ and the Cygnus Cygwin32 release b20.1 environment, with the following tools:
     - GNU binutils 2.9.4 configured for a i586-cygwin32 host and m68k-rtems
       target;
 
-With the latter environment, be patient; builds take a very looong time...
+With the latter environment, be patient; builds take a very long time...
 
 Current development is done on a Pentium III PC running RedHat Linux 6.1.
 At the time this README was composed, the latest working compiler that was
 used successfully was gcc version 2.96 20000213 (experimental). Both the C
-and C++ compilers were working. Binutils 2.10 are used.
+and C++ compilers were working. Binutils 2.10 is used.
 
 
 Known Problems
@@ -337,8 +337,8 @@ Known Problems
 
 Polled I/O without termios may not work very well on input. The problem
 is that input processing is not done: applications may get characters too
-early, and may get characters that they normally would not get, such as
-backspace or delete. Furthermore, input is not buffered at all. The latest
+early and may get characters that they normally would not get, such as
+backspace or delete. Furthermore, the input is not buffered at all. The latest
 versions of rtems seem to set the count field in the rtems_libio_rw_args_t
 argument to the buffer size, not to the number of characters expected on
 input. Rather than wait for 1024 characters on each call, the driver
@@ -346,7 +346,7 @@ returns each character when it is received.
 
 The cdtest will not run with interrupt-driven I/O. The reason is that the
 constructors for the static objects are called at boot time when the
-interrupts are still disabled. The output buffer fills up, but never empties,
+interrupts are still disabled. The output buffer fills up but never empties,
 and the application goes into an infinite loop waiting for buffer space. This
 should have been documented in the rtems/c/src/tests/PROBLEMS file. The moral
 of this story is: do not do I/O from the constructors or destructors of static
@@ -365,16 +365,16 @@ a way to detect whether characters are still in the FIFO and to wait for them
 to be transmitted.
 
 The first raw buffer to be transmitted after the console is re-initialized
-with tcsetattr() is garbled. At this time, it does not seem worth while to
+with tcsetattr() is garbled. At this time, it does not seem worthwhile to
 track this problem down.
 
 In the stackchk test, an access fault exception is raised after the stack is
-blown. This is one case were overwritting the first or last 16 bytes of the
+blown. This is one case were overwriting the first or last 16 bytes of the
 stack does cause problems (but hey, an exception occurred, which is better
 than propagating the error).
 
 In the stackchk test, an access fault exception is raised after the stack is
-blown. This is one case were overwritting the first or last 16 bytes of the
+blown. This is one case were overwriting the first or last 16 bytes of the
 stack does cause problems (but hey, an exception occurred, which is better
 than propagating the error).
 
