@@ -1,13 +1,13 @@
 dnl
 dnl RTEMS Include paths.
 dnl
-dnl This is messy because the linkcmds have no clear and defined structure.
-dnl There are BSP named linkcmds files, plain linkcmds file, configure template
-dnl .in files configure changes and shared versions of these. The approach to have
-dnl a single file for a number of BSPs in a family is sound, the lack of rules
-dnl means we have a range of variants and this results in following code.
+dnl This is messy because the linkcmds have no clearly defined structure.
+dnl There are BSPs named linkcmds file, plain linkcmds file, configure template,
+dnl .in file and configure changes, and we have shared versions of these. The approach of
+dnl using a single file for a number of BSPs in a family is sound. The lack of rules
+dnl means we have a range of variants, and this results in the following code.
 dnl
-dnl The preinstall hid a number of questionable things and preinstall has gone.
+dnl The preinstall hid a number of questionable things and preinstall is past.
 dnl
 AC_DEFUN([RTEMS_BSP_LINKCMDS],
 [
