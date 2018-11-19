@@ -39,7 +39,7 @@ then
       AC_MSG_ERROR([***]
        [Inconsistency in compiler configuration:]
        [Target C compiler and target C++ compiler]
-       [must both either be cross compilers or native compilers])
+       [both must be either cross compilers or native compilers])
     fi
   fi
 else
