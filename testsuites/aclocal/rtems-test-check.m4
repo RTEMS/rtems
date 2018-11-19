@@ -1,5 +1,5 @@
 dnl
-dnl Check a test getting it's status.
+dnl Check a test, getting its status.
 dnl
 AC_DEFUN([RTEMS_TEST_CHECK],
 [AC_REQUIRE([RTEMS_ENV_RTEMSBSP])
