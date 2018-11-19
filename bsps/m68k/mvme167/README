@@ -131,7 +131,7 @@ Floating-point
 
 The MC68040 has a built-in FPU. This FPU does not implement all the
 instruction of the MC68881/MC68882 floating-point coprocessors in
-hardware. The -m68040 compilation options instruct gcc to not generate
+hardware. The -m68040 compilation option instructs gcc to not generate
 the missing instructions. All of the RTEMS code is built this way. Some
 of the missing functionality must be supplied by external libraries. The
 required functions are part of libgcc.a.
