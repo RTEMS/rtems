@@ -1,10 +1,10 @@
 This is the directory under which the RTEMS
-test programs provided with the release are located.  The
+test programs along with their releases are located. The
 following is a description of the contents of each file and
-subdirectory directly in this directory:
+subdirectory that are present in this directory:
 
-NOTE: Other than the 'samples' directory these tests are intended
-      only to exercise RTEMS features and are *not* good examples
+NOTE: Except the **samples** directory, these tests are intended
+      only to exercise RTEMS features and are **not** good examples
       of programming for RTEMS.
 
     samples
@@ -16,7 +16,7 @@ NOTE: Other than the 'samples' directory these tests are intended
     mptests
 
        This directory contains the RTEMS Multiprocessor Test Suite.
-       The tests in this directory provide near complete (98%+) test
+       The tests in this directory provide nearly (98%+) test
        coverage of the multiprocessor specific code in RTEMS.
 
     psxtests
@@ -27,7 +27,7 @@ NOTE: Other than the 'samples' directory these tests are intended
     sptests
 
        This directory contains the RTEMS Single Processor Test Suite.
-       The tests in this directory provide near complete (98%+) test
+       The tests in this directory provide nearly (98%+) test
        coverage of the non-multiprocessor code in RTEMS.
 
     tmtests
@@ -36,5 +36,5 @@ NOTE: Other than the 'samples' directory these tests are intended
        The tests in this directory are used to measure the execution
        time of RTEMS directive and some critical internal functions.
        The results of these test are reported in the Fact Sheets
-       and Supplental Manuals.
+       and Supplemental Manuals.
 
