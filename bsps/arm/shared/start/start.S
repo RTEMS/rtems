@@ -276,33 +276,32 @@ _start:
 #endif /* ARM_MULTILIB_VFP */
 
 	/*
-	 * Branch to start hook 0.
+	 * Invoke the start hook 0.
 	 *
 	 * The previous code and parts of the start hook 0 may run with an
-	 * address offset.  This implies that only branches relative to the
-	 * program counter are allowed.  After the start hook 0 it is assumed
+	 * address offset.  After the return from start hook 0 it is assumed
 	 * that the code can run at its intended position.  Thus the link
-	 * register will be loaded with the absolute address.  In THUMB mode
-	 * the start hook 0 must be within a 2kByte range due to the branch
-	 * instruction limitation.
+	 * register will be loaded with the absolute address and the branch
+	 * link instruction cannot be used.  In THUMB mode the branch
+	 * instruction as a very limited address range of 2KiB.  Use a bx to
+	 * the start hook 0 address instead corrected by the address offset.
 	 */
 
 	ldr	lr, =.Lstart_hook_0_done
-#ifdef __thumb__
-	orr	lr, #1
-#endif
-
-	SWITCH_FROM_ARM_TO_THUMB	r0
+	mov	r0, pc
+	ldr	r1, =.Lget_absolute_pc
+.Lget_absolute_pc:
+	sub	r1, r0
+	ldr	r7, =bsp_start_hook_0
+	add	r7, r1
 
 	mov	r0, r4		/* original CPSR value */
 	mov	r1, r5		/* machine type number or ~0 for DT boot */
 	mov	r2, r6		/* physical address of ATAGs or DTB */
 
-	b	bsp_start_hook_0
+	bx	r7
 
 .Lstart_hook_0_done:
-
-	SWITCH_FROM_THUMB_TO_ARM
 
 	/*
 	 * Initialize the exception vectors.  This includes the exceptions
