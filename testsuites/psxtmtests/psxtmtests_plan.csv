@@ -13,6 +13,17 @@
 "pthread_mutex_setprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 "pthread_mutex_getprioceiling","psxtmmutex07","psxtmtest_single","Yes"
 
+"pthread_mutexattr_init: only case","psxtmmutexattr01","psxtmtest_init_destroy","Yes"
+"pthread_mutexattr_destroy: only case","psxtmmutexattr01","psxtmtest_init_destroy","Yes"
+"pthread_mutexattr_getprioceiling: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_getprotocol: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_getpshared: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_gettype: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_setprioceiling: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_setprotocol: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_setpshared: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+"pthread_mutexattr_settype: only case","psxtmmutexattr01","psxtmtest_single","Yes"
+
 "pthread_cond_init: only case","psxtmcond01","psxtmtest_init_destroy","Yes"
 "pthread_cond_destroy: only case","psxtmcond01","psxtmtest_init_destroy","Yes"
 "pthread_cond_signal: no threads waiting","psxtmcond02","psxtmtest_single","Yes"

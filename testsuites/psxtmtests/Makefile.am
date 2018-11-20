@@ -326,6 +326,17 @@ psxtmmutex07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmmutex07) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
+if TEST_psxtmmutexattr01
+psxtm_tests += psxtmmutexattr01
+psxtm_docs += psxtmmutexattr01/psxtmmutexattr01.doc
+psxtmmutexattr01_SOURCES = psxtmmutexattr01/init.c \
+	../tmtests/include/timesys.h ../support/src/tmtests_empty_function.c \
+	../support/src/tmtests_support.c
+psxtmmutexattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmmutexattr01) \
+	$(support_includes) -I$(top_srcdir)/../tmtests/include \
+	-DOPERATION_COUNT=$(OPERATION_COUNT)
+endif
+
 if TEST_psxtmnanosleep01
 psxtm_tests += psxtmnanosleep01
 psxtm_docs += psxtmnanosleep01/psxtmnanosleep01.doc
