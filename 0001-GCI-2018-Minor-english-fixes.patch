@@ -1,0 +1,58 @@
+From a4cc87771cd80b0e40519dcd1256edfbc51ab47f Mon Sep 17 00:00:00 2001
+From: Yash Garg <ben10.yashgarg@gmail.com>
+Date: Wed, 21 Nov 2018 01:08:58 +0530
+Subject: [PATCH] GCI-2018: Minor english fixes
+
+Signed-off-by: Yash-Garg <ben10.yashgarg@gmail.com>
+---
+ c/src/README      |  5 ++---
+ testsuites/README | 10 +++++-----
+ 2 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/c/src/README b/c/src/README
+index 02be3ca603..19326afd77 100644
+--- a/c/src/README
++++ b/c/src/README
+@@ -1,6 +1,6 @@
+-This is the top level directory of the C RTEMS environment.  The
++This is the top level directory of the C RTEMS environment. The
+ following is a description of the contents of each file and
+-subdirectory directly in this directory:
++subdirectory that are present in this directory:
+ 
+     tests
+ 
+@@ -20,4 +20,3 @@ subdirectory directly in this directory:
+     exec
+ 
+        This directory contains the source code for the RTEMS executive.
+-
+diff --git a/testsuites/README b/testsuites/README
+index 2e17b30d04..d51bca52c1 100644
+--- a/testsuites/README
++++ b/testsuites/README
+@@ -1,10 +1,10 @@
+ This is the directory under which the RTEMS
+-test programs provided with the release are located.  The
++test programs along with their releases are located. The
+ following is a description of the contents of each file and
+-subdirectory directly in this directory:
++subdirectory that are present in this directory:
+ 
+-NOTE: Other than the 'samples' directory these tests are intended
+-      only to exercise RTEMS features and are *not* good examples
++NOTE: Except the **samples** directory, these tests are intended
++      only to exercise RTEMS features and are **not** good examples
+       of programming for RTEMS.
+ 
+     samples
+@@ -36,5 +36,5 @@ NOTE: Other than the 'samples' directory these tests are intended
+        The tests in this directory are used to measure the execution
+        time of RTEMS directive and some critical internal functions.
+        The results of these test are reported in the Fact Sheets
+-       and Supplental Manuals.
++       and Supplemental Manuals.
+ 
+-- 
+2.17.1
+

@@ -1,6 +1,6 @@
-This is the top level directory of the C RTEMS environment.  The
+This is the top level directory of the C RTEMS environment. The
 following is a description of the contents of each file and
-subdirectory directly in this directory:
+subdirectory that are present in this directory:
 
     tests
 
@@ -20,4 +20,3 @@ subdirectory directly in this directory:
     exec
 
        This directory contains the source code for the RTEMS executive.
-
