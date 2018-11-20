@@ -337,13 +337,6 @@ bsp_vector_table_copy_done:
 	mov	r0, #0
 	bl	boot_card
 
-twiddle:
-
-	/* Branch to reset function */
-	bl	bsp_reset
-
-	b	twiddle
-
 #elif defined(ARM_MULTILIB_ARCH_V7M)
 
 #include <rtems/score/armv7m.h>
@@ -413,11 +406,6 @@ bsp_start_hook_0_done:
 	bl	bsp_start_hook_1
 	movs	r0, #0
 	bl	boot_card
-
-twiddle:
-
-	bl	bsp_reset
-	b	twiddle
 
 #endif /* defined(ARM_MULTILIB_ARCH_V7M) */
 
