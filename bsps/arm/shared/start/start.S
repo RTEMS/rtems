@@ -35,8 +35,6 @@
 
 #if defined(ARM_MULTILIB_ARCH_V4)
 
-	.globl	bsp_start_hook_0_done
-
 #ifdef BSP_START_IN_HYP_SUPPORT
 	.globl	bsp_start_hyp_vector_table_begin
 #endif
@@ -50,19 +48,19 @@
 
 bsp_start_vector_table_begin:
 
-	ldr	pc, handler_addr_reset
-	ldr	pc, handler_addr_undef
-	ldr	pc, handler_addr_swi
-	ldr	pc, handler_addr_prefetch
-	ldr	pc, handler_addr_abort
+	ldr	pc, .Lhandler_addr_reset
+	ldr	pc, .Lhandler_addr_undef
+	ldr	pc, .Lhandler_addr_swi
+	ldr	pc, .Lhandler_addr_prefetch
+	ldr	pc, .Lhandler_addr_abort
 
 	/* Program signature checked by boot loader */
 	.word	0xb8a06f58
 
-	ldr	pc, handler_addr_irq
-	ldr	pc, handler_addr_fiq
+	ldr	pc, .Lhandler_addr_irq
+	ldr	pc, .Lhandler_addr_fiq
 
-handler_addr_reset:
+.Lhandler_addr_reset:
 
 #ifdef BSP_START_RESET_VECTOR
 	.word	BSP_START_RESET_VECTOR
@@ -70,31 +68,31 @@ handler_addr_reset:
 	.word	_start
 #endif
 
-handler_addr_undef:
+.Lhandler_addr_undef:
 
 	.word	_ARMV4_Exception_undef_default
 
-handler_addr_swi:
+.Lhandler_addr_swi:
 
 	.word	_ARMV4_Exception_swi_default
 
-handler_addr_prefetch:
+.Lhandler_addr_prefetch:
 
 	.word	_ARMV4_Exception_pref_abort_default
 
-handler_addr_abort:
+.Lhandler_addr_abort:
 
 	.word	_ARMV4_Exception_data_abort_default
 
-handler_addr_reserved:
+.Lhandler_addr_reserved:
 
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_irq:
+.Lhandler_addr_irq:
 
 	.word	_ARMV4_Exception_interrupt
 
-handler_addr_fiq:
+.Lhandler_addr_fiq:
 
 	.word	_ARMV4_Exception_fiq_default
 
@@ -102,40 +100,38 @@ bsp_start_vector_table_end:
 
 #ifdef BSP_START_IN_HYP_SUPPORT
 bsp_start_hyp_vector_table_begin:
-	ldr	pc, handler_addr_hyp_reset
-	ldr	pc, handler_addr_hyp_undef
-	ldr	pc, handler_addr_hyp_swi
-	ldr	pc, handler_addr_hyp_prefetch
-	ldr	pc, handler_addr_hyp_abort
-	ldr	pc, handler_addr_hyp_hyp
-	ldr	pc, handler_addr_hyp_irq
-	ldr	pc, handler_addr_hyp_fiq
+	ldr	pc, .Lhandler_addr_hyp_reset
+	ldr	pc, .Lhandler_addr_hyp_undef
+	ldr	pc, .Lhandler_addr_hyp_swi
+	ldr	pc, .Lhandler_addr_hyp_prefetch
+	ldr	pc, .Lhandler_addr_hyp_abort
+	ldr	pc, .Lhandler_addr_hyp_hyp
+	ldr	pc, .Lhandler_addr_hyp_irq
+	ldr	pc, .Lhandler_addr_hyp_fiq
 
-handler_addr_hyp_reset:
+.Lhandler_addr_hyp_reset:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_undef:
+.Lhandler_addr_hyp_undef:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_swi:
+.Lhandler_addr_hyp_swi:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_prefetch:
+.Lhandler_addr_hyp_prefetch:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_abort:
+.Lhandler_addr_hyp_abort:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_hyp:
+.Lhandler_addr_hyp_hyp:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_irq:
+.Lhandler_addr_hyp_irq:
 	.word	_ARMV4_Exception_reserved_default
 
-handler_addr_hyp_fiq:
+.Lhandler_addr_hyp_fiq:
 	.word	_ARMV4_Exception_reserved_default
-
-bsp_start_hyp_vector_table_end:
 #endif
 
 /* Start entry */
@@ -198,7 +194,7 @@ _start:
 
 	and	r0, r4, #ARM_PSR_M_MASK
 	cmp	r0, #ARM_PSR_M_HYP
-	bne	bsp_start_skip_hyp_svc_switch
+	bne	.L_skip_hyp_svc_switch
 
 	/* Boot loader starts kernel in HYP mode, switch to SVC necessary */
 	ldr	r1, =bsp_stack_hyp_size
@@ -206,7 +202,7 @@ _start:
 	sub	r7, r7, r1
 	bl	bsp_start_arm_drop_hyp_mode
 
-bsp_start_skip_hyp_svc_switch:
+.L_skip_hyp_svc_switch:
 #endif
 	/* Initialize stack pointer registers for the various modes */
 
@@ -291,7 +287,7 @@ bsp_start_skip_hyp_svc_switch:
 	 * instruction limitation.
 	 */
 
-	ldr	lr, =bsp_start_hook_0_done
+	ldr	lr, =.Lstart_hook_0_done
 #ifdef __thumb__
 	orr	lr, #1
 #endif
@@ -304,7 +300,7 @@ bsp_start_skip_hyp_svc_switch:
 
 	b	bsp_start_hook_0
 
-bsp_start_hook_0_done:
+.Lstart_hook_0_done:
 
 	SWITCH_FROM_THUMB_TO_ARM
 
@@ -318,13 +314,13 @@ bsp_start_hook_0_done:
 	ldr	r0, =bsp_vector_table_begin
 	adr	r1, bsp_start_vector_table_begin
 	cmp	r0, r1
-	beq	bsp_vector_table_copy_done
+	beq	.Lvector_table_copy_done
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
 	ldmia	r1!, {r2-r9}
 	stmia	r0!, {r2-r9}
 
-bsp_vector_table_copy_done:
+.Lvector_table_copy_done:
 
 	ldmia	sp!, {r0, r1, r2}
 
@@ -398,10 +394,10 @@ _start:
 #endif /* ARM_MULTILIB_VFP */
 
 	ldr	sp, =_ISR_Stack_area_end
-	ldr	lr, =bsp_start_hook_0_done + 1
+	ldr	lr, =.Lstart_hook_0_done + 1
 	b	bsp_start_hook_0
 
-bsp_start_hook_0_done:
+.Lstart_hook_0_done:
 
 	bl	bsp_start_hook_1
 	movs	r0, #0
