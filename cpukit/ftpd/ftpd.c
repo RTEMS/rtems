@@ -1,6 +1,6 @@
 /* FIXME: 1. Parse command is a hack.  We can do better.
  *        2. OSV: hooks support seems to be bad, as it requires storing of
- *           entire input file in memory.  Seem to be better to change it to
+ *           entire input file in memory.  Seems to be better to change it to
  *           something more reasonable, like having
  *           'hook_write(void const *buf, int count)' routine that will be
  *           called multiple times while file is being received.
@@ -34,7 +34,7 @@
  *
  *      * Bug in `close_data_socket()' introduced by previous change fixed.
  *      * `command_pasv()' changed to set timeout on socket we are listening on
- *        and code fixed to don't close socket twice on error.
+ *        and code fixed to not close socket twice on error.
  *      * `serr()' changed to clear `errno'.
  *      * `data_socket()' changed to clear `errno' before `bind()'.
  *      * `session()' changed to clear `errno' before processing session.
@@ -67,7 +67,7 @@
  *      * Command parsing a little bit improved: command names are now
  *        converted to upper-case to be more compatible with RFC (command
  *        names are not case-sensitive.)
- *      * Reformat comments so that they have RTEMS look-and-feel.
+ *      * Reformat comments so that they have RTEMS look and feel.
  *
  *    2001-01-16        Sergei Organov <osv@javad.ru>
  *
@@ -227,7 +227,7 @@
 
 #define FTPD_SYSTYPE "UNIX Type: L8"
 
-/* Seem to be unused */
+/* Seems to be unused */
 #if 0
 #define FTPD_WELCOME_MESSAGE \
    "Welcome to the RTEMS FTP server.\n" \
@@ -309,7 +309,7 @@ static void
 yield(void)
 {
 /*
- * If we build not for the legacy network stack, then we use the libbsd.  In
+ * If we do not build for the legacy network stack, then we use the libbsd.  In
  * the libbsd there is no global network stack semaphore which provides round
  * robin fairness for threads of equal priority.
  */
@@ -1475,8 +1475,8 @@ command_port(FTPD_SessionInfo_t *info, char const *args)
 
     if(i == NUM_FIELDS)
     {
-      /* Note: while it contradicts with RFC959, we don't allow PORT command
-       * to specify IP address different than those of the originating client
+      /* Note: while it contradicts RFC959, we don't allow PORT command
+       * to specify IP address different from that of the originating client
        * for the sake of safety. */
       if (ip_info.u.ip == info->def_addr.sin_addr.s_addr)
       {
@@ -1855,7 +1855,7 @@ exec_command(FTPD_SessionInfo_t *info, char *cmd, char *args)
 /*
  * session
  *
- * This task handles single session.  It is waked up when the FTP daemon gets a
+ * This task handles single session.  It is woken up when the FTP daemon gets a
  * service request from a remote machine.  Here, we watch for commands that
  * will come through the control connection.  These commands are then parsed
  * and executed until the connection is closed, either unintentionally or
@@ -1915,7 +1915,7 @@ session(rtems_task_argument arg)
           send_reply(info, 501, "Command line too long.");
 
           /*
-           * We could also try to continue here, however, discarding the rest
+           * We could also try to continue here; however, discarding the rest
            * of the current command line and figuring out when the next command
            * starts with fgets() is not that easy.  It would be better to avoid
            * the FILE stream and just use the socket directly with send() and

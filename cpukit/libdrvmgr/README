@@ -7,7 +7,7 @@ http://www.gaisler.com/anonftp/rcc/doc/.
 
 INITIALIZATION
 ==============
-The Driver Manager can be intialized in two different ways:
+The Driver Manager can be initialized in two different ways:
  1. during RTEMS startup
  2. started by user, typically in the Init task
 
@@ -33,11 +33,11 @@ Most of the problems above are solved for the two methods by
 specifying in which initialization levels IRQ handling is done.
 See Level 1 and Level 2 below.
 
-Other differences is that IRQ, System Clock Timer, debug Console
-and Console can be initialized by the help of the driver manager
+Other differences are that IRQ, System Clock Timer, debug Console
+and Console can be initialized with the help of the driver manager
 when initialized during start up. Between Level0 and Level1 the
-RTEMS I/O Manager drivers are initialized. The LEON3 BSP has
-therefore two different versions of the basic drivers.
+RTEMS I/O Manager drivers are initialized. The LEON3 BSP therefore
+has two different versions of the basic drivers.
 
 
 LEVEL0
@@ -48,7 +48,7 @@ driver.
 
 LEVEL1 - FIND/RESET/IRQ Clear
 -----------------------------
-The driver is for the first time informed of the presence of a
+The driver is, for the first time, informed of the presence of a
 device. Only basic initialization.
 
 - Find all hardware needed for IRQ, Console, Timer and hardware
@@ -65,14 +65,14 @@ device. Only basic initialization.
 - Register Timer for system clock
 - Register Console UART
 
-During this intialization level interrupts may not be registered, 
-enabled or disabled at the IRQ controller. But, all IRQ sources
+During this initialization level interrupts may not be registered, 
+enabled or disabled at the IRQ controller, but all IRQ sources
 should be cleared to avoid spurious interrupts later on.
 
 
 AFTER LEVEL1 - if initialized during startup
 --------------------------------------------
-The statically configured drivers are initialized as normally by RTEMS. The
+The statically configured drivers are initialized as normal by RTEMS. The
 hardware was found in LEVEL1.
 
 CONFIGURE_BSP_PREREQUISITE_DRIVERS may initialize IRQ driver, or 
