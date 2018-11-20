@@ -128,7 +128,7 @@ typedef struct rtems_rtl_unresolv_block
  */
 typedef struct rtems_rtl_unresolved
 {
-  uint32_t marker;
+  uint32_t            marker;     /**< Block marker. */
   size_t              block_recs; /**< The records per blocks allocated. */
   rtems_chain_control blocks;     /**< List of blocks. */
 } rtems_rtl_unresolved;
@@ -204,6 +204,11 @@ bool rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
                                   const char*           name,
                                   const uint16_t        sect,
                                   const rtems_rtl_word* rel);
+
+/**
+ * Dump the RTL unresolved data.
+ */
+void rtems_rtl_unresolved_dump (void);
 
 #ifdef __cplusplus
 }

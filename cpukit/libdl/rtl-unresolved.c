@@ -40,7 +40,11 @@ rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved* unresolved)
   rtems_rtl_unresolv_block* block =
     rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_EXTERNAL, size, true);
   if (block)
+  {
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+      printf ("rtl: unresolv: block-alloc %p\n", block);
     rtems_chain_append (&unresolved->blocks, &block->link);
+  }
   else
     rtems_rtl_set_error (ENOMEM, "no memory for unresolved block");
   return block;
@@ -70,7 +74,6 @@ rtems_rtl_unresolved_rec_first (rtems_rtl_unresolv_block* block)
 static rtems_rtl_unresolv_rec*
 rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec* rec)
 {
-
   switch (rec->type)
   {
     case rtems_rtl_unresolved_empty:
@@ -118,7 +121,7 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
                                 const char*           name,
                                 bool                  update_refcount)
 {
-  size_t length = strlen (name);
+  size_t length = strlen (name) + 1;
   int    index = 1;
 
   rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
@@ -132,7 +135,7 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
       if (rec->type == rtems_rtl_unresolved_name)
       {
         if ((rec->rec.name.length == length)
-            && (strcmp (rec->rec.name.name, name)))
+            && (strcmp (rec->rec.name.name, name) == 0))
         {
           if (update_refcount)
             ++rec->rec.name.refs;
@@ -154,7 +157,7 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
  */
 typedef struct rtems_rtl_unresolved_reloc_data
 {
-  uint16_t                  name;     /**< Name index. */
+  uint16_t                name;     /**< Name index. */
   rtems_rtl_unresolv_rec* name_rec; /**< Name record. */
   rtems_rtl_obj_sym*      sym;      /**< The symbol record. */
 } rtems_rtl_unresolved_reloc_data;
@@ -233,7 +236,7 @@ rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block* block,
     (block->recs - index - count) * sizeof (rtems_rtl_unresolv_rec);
   if (bytes)
     memmove (rec, rec + count, bytes);
-  --block->recs;
+  block->recs -= count;
   bytes = count * sizeof (rtems_rtl_unresolv_rec);
   memset (&block->rec + block->recs, 0, bytes);
 }
@@ -245,51 +248,97 @@ rtems_rtl_unresolved_compact (void)
   if (unresolved)
   {
     /*
-     * Iterate backwards over the blocks removing any used records. A block is
-     * compacted moving up the block.
+     * Iterate over the blocks removing any empty strings. If a string is removed
+     * update the indexes of all strings above this level.
      */
-    rtems_chain_node* node = rtems_chain_last (&unresolved->blocks);
-    while (!rtems_chain_is_head (&unresolved->blocks, node))
+    rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
+    uint16_t          index = 0;
+    while (!rtems_chain_is_tail (&unresolved->blocks, node))
     {
-      rtems_chain_node*         prev = rtems_chain_previous (node);
       rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
       rtems_rtl_unresolv_rec*   rec = rtems_rtl_unresolved_rec_first (block);
 
       while (!rtems_rtl_unresolved_rec_is_last (block, rec))
       {
-        bool next = true;
-
+        bool next_rec = true;
         if (rec->type == rtems_rtl_unresolved_name)
         {
+          ++index;
           if (rec->rec.name.refs == 0)
           {
-            size_t name_recs = rtems_rtl_unresolved_name_recs (rec->rec.name.name);
+            /*
+             * Iterate over the remainnig reloc records and update the index.
+             */
+            rtems_chain_node*       reindex_node;
+            rtems_rtl_unresolv_rec* reindex_first;
+            size_t                  name_recs;
+            if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+              printf ("rtl: unresolv: remove name: %s\n", rec->rec.name.name);
+            reindex_node = node;
+            reindex_first = rtems_rtl_unresolved_rec_next (rec);
+            while (!rtems_chain_is_tail (&unresolved->blocks, reindex_node))
+            {
+              rtems_rtl_unresolv_rec*   reindex_rec;
+              rtems_rtl_unresolv_block* reindex_block;
+              reindex_block = (rtems_rtl_unresolv_block*) reindex_node;
+              if (reindex_first != NULL)
+              {
+                reindex_rec = reindex_first;
+                reindex_first = NULL;
+              }
+              else
+              {
+                reindex_rec = rtems_rtl_unresolved_rec_first (reindex_block);
+              }
+              while (!rtems_rtl_unresolved_rec_is_last (reindex_block,
+                                                        reindex_rec))
+              {
+                if (reindex_rec->type == rtems_rtl_unresolved_reloc)
+                {
+                  if (reindex_rec->rec.reloc.name >= index)
+                    --reindex_rec->rec.reloc.name;
+                }
+                reindex_rec = rtems_rtl_unresolved_rec_next (reindex_rec);
+              }
+              reindex_node = rtems_chain_next (reindex_node);
+            }
+            /*
+             * Compact the block removing the name record.
+             */
+            name_recs = rtems_rtl_unresolved_name_recs (rec->rec.name.name);
             rtems_rtl_unresolved_clean_block (block, rec, name_recs,
                                               unresolved->block_recs);
-            next = false;
+            --index;
+            next_rec = false;
           }
         }
         else if (rec->type == rtems_rtl_unresolved_reloc)
         {
-          if (!rec->rec.reloc.obj)
+          if (rec->rec.reloc.obj == NULL)
           {
             rtems_rtl_unresolved_clean_block (block, rec, 1,
                                               unresolved->block_recs);
-            next = false;
+            next_rec = false;
           }
         }
 
-        if (next)
+        if (next_rec)
           rec = rtems_rtl_unresolved_rec_next (rec);
       }
 
       if (block->recs == 0)
       {
+        rtems_chain_node* next_node = rtems_chain_next (node);
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+          printf ("rtl: unresolv: block-del %p\n", block);
         rtems_chain_extract (node);
-        free (block);
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_EXTERNAL, block);
+        node = next_node;
       }
-
-      node = prev;
+      else
+      {
+        node = rtems_chain_next (node);
+      }
     }
   }
 }
@@ -455,6 +504,8 @@ rtems_rtl_unresolved_resolve (void)
   rd.sym = NULL;
   rtems_rtl_unresolved_interate (rtems_rtl_unresolved_resolve_iterator, &rd);
   rtems_rtl_unresolved_compact ();
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+    rtems_rtl_unresolved_dump ();
 }
 
 bool
@@ -468,4 +519,53 @@ rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
   if (!unresolved)
     return false;
   return false;
+}
+
+/**
+ * Struct to pass relocation data in the iterator.
+ */
+typedef struct rtems_rtl_unresolved_dump_data
+{
+  size_t rec;
+  size_t names;
+} rtems_rtl_unresolved_dump_data;
+
+static bool
+rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
+                                    void*                   data)
+{
+  rtems_rtl_unresolved_dump_data* dd;
+  dd = (rtems_rtl_unresolved_dump_data*) data;
+  switch (rec->type)
+  {
+  case rtems_rtl_unresolved_empty:
+    printf (" %03zu: 0: empty\n", dd->rec);
+    break;
+  case rtems_rtl_unresolved_name:
+    ++dd->names;
+    printf (" %3zu: 1:  name: %3d refs: %2d: %2d: %s\n",
+            dd->rec, dd->names,
+            rec->rec.name.refs, rec->rec.name.length, rec->rec.name.name);
+    break;
+  case rtems_rtl_unresolved_reloc:
+    printf (" %3zu: 2: reloc: obj:%s name:%2d: sect:%d\n",
+            dd->rec,
+            rec->rec.reloc.obj->oname,
+            rec->rec.reloc.name,
+            rec->rec.reloc.sect);
+    break;
+  default:
+    printf (" %03zu: %d: unknown\n", dd->rec, rec->type);
+    break;
+  }
+  ++dd->rec;
+  return false;
+}
+
+void
+rtems_rtl_unresolved_dump (void)
+{
+  rtems_rtl_unresolved_dump_data dd = { 0 };
+  printf ("RTL Unresolved data:\n");
+  rtems_rtl_unresolved_interate (rtems_rtl_unresolved_dump_iterator, &dd);
 }
