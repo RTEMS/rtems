@@ -92,7 +92,7 @@ bool rtems_rtl_symbol_global_add (rtems_rtl_obj*       obj,
  *
  * @param name The name as an ASCIIZ string.
  * @retval NULL No symbol found.
- * @return rtems_rtl_obj_sym_t* Reference to the symbol.
+ * @return rtems_rtl_obj_sym* Reference to the symbol.
  */
 rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
 
@@ -102,7 +102,7 @@ rtems_rtl_obj_sym* rtems_rtl_symbol_global_find (const char* name);
  * @param obj The object file to search.
  * @param name The name as an ASCIIZ string.
  * @retval NULL No symbol found.
- * @return rtems_rtl_obj_sym_t* Reference to the symbol.
+ * @return rtems_rtl_obj_sym* Reference to the symbol.
  */
 rtems_rtl_obj_sym* rtems_rtl_symbol_obj_find (rtems_rtl_obj* obj,
                                               const char*    name);

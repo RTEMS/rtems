@@ -216,6 +216,11 @@ rtems_rtl_data_init (void)
        */
       rtl->base->oname = rtems_rtl_strdup ("rtems-kernel");
 
+      /*
+       * Lock the base image and flag it as the base image.
+       */
+      rtl->base->flags |= RTEMS_RTL_OBJ_LOCKED | RTEMS_RTL_OBJ_BASE;
+
       rtems_chain_append (&rtl->objects, &rtl->base->link);
     }
 
@@ -312,6 +317,21 @@ rtems_rtl_obj_decompress (rtems_rtl_obj_comp** decomp,
   }
 }
 
+void
+rtems_rtl_obj_update_flags (uint32_t clear, uint32_t set)
+{
+  rtems_chain_node* node  = rtems_chain_first (&rtl->objects);
+  while (!rtems_chain_is_tail (&rtl->objects, node))
+  {
+    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
+    if (clear != 0)
+      obj->flags &= ~clear;
+    if (set != 0)
+      obj->flags |= set;
+    node = rtems_chain_next (node);
+  }
+}
+
 rtems_rtl_data*
 rtems_rtl_lock (void)
 {
@@ -383,6 +403,21 @@ rtems_rtl_find_obj (const char* name)
     rtems_rtl_alloc_del(RTEMS_RTL_ALLOC_OBJECT, (void*) oname);
 
   return found;
+}
+
+rtems_rtl_obj*
+rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym)
+{
+  rtems_chain_node* node = rtems_chain_first (&rtl->objects);
+  while (!rtems_chain_is_tail (&rtl->objects, node))
+  {
+    rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
+    if (sym >= obj->global_table &&
+        sym < (obj->global_table + obj->global_syms))
+      return obj;
+    node = rtems_chain_next (node);
+  }
+  return NULL;
 }
 
 rtems_rtl_obj*
@@ -489,6 +524,11 @@ rtems_rtl_unload_object (rtems_rtl_obj* obj)
 
   if (obj->users == 0)
   {
+    if (obj->refs != 0)
+    {
+      rtems_rtl_set_error (EBUSY, "object file referenced");
+      return false;
+    }
     obj->flags |= RTEMS_RTL_OBJ_LOCKED;
     rtems_rtl_unlock ();
     rtems_rtl_obj_run_dtors (obj);
@@ -618,5 +658,11 @@ rtems_rtl_base_sym_global_add (const unsigned char* esyms,
 rtems_rtl_obj*
 rtems_rtl_baseimage (void)
 {
-  return NULL;
+  rtems_rtl_obj* base = NULL;
+  if (rtems_rtl_lock ())
+  {
+    base = rtl->base;
+    rtems_rtl_unlock ();
+  }
+  return base;
 }

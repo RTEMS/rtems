@@ -123,28 +123,6 @@ bool rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
                                   const Elf_Word            symvalue);
 
 /**
- * Find the symbol. The symbol is passed as an ELF type symbol with the name
- * and the value returned is the absolute address of the symbol.
- *
- * If the symbol type is STT_NOTYPE the symbol references a global symbol. The
- * gobal symbol table is searched to find it and that value returned. If the
- * symbol is local to the object module the section for the symbol is located
- * and it's base added to the symbol's value giving an absolute location.
- *
- * @param obj The object the symbol is being resolved for.
- * @param sym The ELF type symbol.
- * @param symname The sym's name read from the symbol string table.
- * @param value Return the value of the symbol. Only valid if the return value
- *              is true.
- * @retval true The symbol resolved.
- * @retval false The symbol could not be result. The RTL error is set.
- */
-bool rtems_rtl_elf_find_symbol (rtems_rtl_obj* obj,
-                                const Elf_Sym* sym,
-                                const char*    symname,
-                                Elf_Word*      value);
-
-/**
  * The ELF format check handler.
  *
  * @param obj The object being checked.

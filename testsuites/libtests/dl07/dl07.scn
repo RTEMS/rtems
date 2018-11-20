@@ -1,0 +1,510 @@
+*** BEGIN OF TEST libdl (RTL) 7 ***
+*** TEST VERSION: 5.0.0.6de8cc8ad871a197d7233a9221786d8efee87840-modified
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING RTEMS_POSIX_API
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 30da0c720b78eba16a3f5272206c07415368617b, Newlib 2ab57ad59bc35dafffa69cd4da5e228971de069f)
+--------------------------------------------------
+ Run: 0
+load: /dl07-o1.o
+handle: 0x2091160 loaded
+load: /dl07-o2.o
+handle: 0x2091ef8 loaded
+load: /dl07-o3.o
+handle: 0x2092c88 loaded
+load: /dl07-o4.o
+handle: 0x2094190 loaded
+load: /dl07-o5.o
+handle: 0x2095008 loaded
+
+
+Run mains in each module:
+
+dlo1: module: testsuites/libtests/dl07/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2091bd0: 0
+dlo1:         dl01_bss2:    4: 0x2091bd4: %f
+dlo1:         dl01_bss3:    1: 0x2091c50: 00
+dlo1:        dl01_data1:    4: 0x2091bbc: 1
+dlo1:        dl01_data2:    4: 0x2091bb8: %f
+dlo1:       dl01_const1:    4: 0x2091b98: 3
+dlo1:       dl01_const2:    4: 0x2091b94: %f
+dlo1:        dl01_func1:    1: 0x2091888
+dlo2: module: testsuites/libtests/dl07/dl-o2.c
+dlo2:         dl01_bss1:    4: 0x2091bd0: 0
+dlo2:         dl01_bss2:    4: 0x2091bd4: %f
+dlo2:         dl01_bss3:    1: 0x2091c50: 00
+dlo2:        dl01_data1:    4: 0x2091bbc: 1
+dlo2:        dl01_data2:    4: 0x2091bb8: %f
+dlo2:       dl01_const1:    4: 0x2091b98: 3
+dlo2:       dl01_const2:    4: 0x2091b94: %f
+dlo2:        dl01_func1:    1: 0x2091888
+dlo2:         dl02_bss1:    4: 0x2092928: 0
+dlo2:         dl02_bss2:    4: 0x209292c: %f
+dlo2:         dl02_bss3:    1: 0x2092948: 00
+dlo2:        dl02_data1:    4: 0x2092960: 0
+dlo2:        dl02_data2:    4: 0x2092964: %f
+dlo3: module: testsuites/libtests/dl07/dl-o3.c
+dlo3:         dl01_bss1:    4: 0x2091bd0: 0
+dlo3:         dl01_bss2:    4: 0x2091bd4: %f
+dlo3:         dl01_bss3:    1: 0x2091c50: 00
+dlo3:        dl01_data1:    4: 0x2091bbc: 1
+dlo3:        dl01_data2:    4: 0x2091bb8: %f
+dlo3:       dl01_const1:    4: 0x2091b98: 3
+dlo3:       dl01_const2:    4: 0x2091b94: %f
+dlo3:        dl01_func1:    1: 0x2091888
+dlo3:         dl02_bss1:    4: 0x2092928: 0
+dlo3:         dl02_bss2:    4: 0x209292c: %f
+dlo3:         dl02_bss3:    1: 0x2092948: 00
+dlo3:        dl02_data1:    4: 0x2092960: 0
+dlo3:        dl02_data2:    4: 0x2092964: %f
+dlo3:   dl04_unresolv_1:    4: 0x2094d98: 0
+dlo3:   dl04_unresolv_2:    4: 0x2094d9c: %f
+dlo3:   dl04_unresolv_3:    1: 0x2094da0: 00
+dlo3:   dl04_unresolv_4:    4: 0x2094da4: 0
+dlo3:   dl04_unresolv_5:    4: 0x2094d68: 4
+dlo3:   dl04_unresolv_6:    4: 0x2094d88: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x2095a20: 0
+dlo3:   dl05_unresolv_2:    2: 0x2095a28: 0
+dlo3:   dl05_unresolv_3:    4: 0x2095a2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x2095a30: 0
+dlo3:   dl05_unresolv_5:    8: 0x2095a38: 0
+dlo4: module: testsuites/libtests/dl07/dl-o4.c
+dlo4:         dl01_bss1:    4: 0x2091bd0: 0
+dlo4:         dl01_bss2:    4: 0x2091bd4: %f
+dlo4:         dl01_bss3:    1: 0x2091c50: 00
+dlo4:        dl01_data1:    4: 0x2091bbc: 1
+dlo4:        dl01_data2:    4: 0x2091bb8: %f
+dlo4:       dl01_const1:    4: 0x2091b98: 3
+dlo4:       dl01_const2:    4: 0x2091b94: %f
+dlo4:        dl01_func1:    1: 0x2091888
+dlo4:   dl04_unresolv_1:    4: 0x2094d98: 0
+dlo4:   dl04_unresolv_2:    4: 0x2094d9c: %f
+dlo4:   dl04_unresolv_3:    1: 0x2094da0: 00
+dlo4:   dl04_unresolv_4:    4: 0x2094da4: 0
+dlo4:   dl04_unresolv_5:    4: 0x2094d68: 4
+dlo4:   dl04_unresolv_6:    4: 0x2094d88: dl-O4
+dlo5: module: testsuites/libtests/dl07/dl-o5.c
+dlo5:         dl01_bss1:    4: 0x2091bd0: 0
+dlo5:         dl01_bss2:    4: 0x2091bd4: %f
+dlo5:         dl01_bss3:    1: 0x2091c50: 00
+dlo5:        dl01_data1:    4: 0x2091bbc: 1
+dlo5:        dl01_data2:    4: 0x2091bb8: %f
+dlo5:       dl01_const1:    4: 0x2091b98: 3
+dlo5:       dl01_const2:    4: 0x2091b94: %f
+dlo5:        dl01_func1:    1: 0x2091888
+dlo5:   dl05_unresolv_1:    8: 0x2095a20: 0
+dlo5:   dl05_unresolv_2:    2: 0x2095a28: 0
+dlo5:   dl05_unresolv_3:    4: 0x2095a2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x2095a30: 0
+dlo5:   dl05_unresolv_5:    8: 0x2095a38: 0
+handle: 0x2092c88 closing
+handle: 0x2094190 closing
+handle: 0x2095008 closing
+handle: 0x2091ef8 closing
+handle: 0x2091160 closing
+--------------------------------------------------
+ Run: 1
+load: /dl07-o1.o
+handle: 0x2091178 loaded
+load: /dl07-o2.o
+handle: 0x2091f40 loaded
+load: /dl07-o3.o
+handle: 0x2095010 loaded
+load: /dl07-o4.o
+handle: 0x20964e0 loaded
+load: /dl07-o5.o
+handle: 0x2097358 loaded
+
+
+Run mains in each module:
+
+dlo1: module: testsuites/libtests/dl07/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2091d00: 0
+dlo1:         dl01_bss2:    4: 0x2091d04: %f
+dlo1:         dl01_bss3:    1: 0x2091d80: 00
+dlo1:        dl01_data1:    4: 0x2091bd4: 1
+dlo1:        dl01_data2:    4: 0x2091bd0: %f
+dlo1:       dl01_const1:    4: 0x2091bb0: 3
+dlo1:       dl01_const2:    4: 0x2091bac: %f
+dlo1:        dl01_func1:    1: 0x20918a0
+dlo2: module: testsuites/libtests/dl07/dl-o2.c
+dlo2:         dl01_bss1:    4: 0x2091d00: 0
+dlo2:         dl01_bss2:    4: 0x2091d04: %f
+dlo2:         dl01_bss3:    1: 0x2091d80: 00
+dlo2:        dl01_data1:    4: 0x2091bd4: 1
+dlo2:        dl01_data2:    4: 0x2091bd0: %f
+dlo2:       dl01_const1:    4: 0x2091bb0: 3
+dlo2:       dl01_const2:    4: 0x2091bac: %f
+dlo2:        dl01_func1:    1: 0x20918a0
+dlo2:         dl02_bss1:    4: 0x2094df8: 0
+dlo2:         dl02_bss2:    4: 0x2094dfc: %f
+dlo2:         dl02_bss3:    1: 0x2094e18: 00
+dlo2:        dl02_data1:    4: 0x2094e30: 0
+dlo2:        dl02_data2:    4: 0x2094e34: %f
+dlo3: module: testsuites/libtests/dl07/dl-o3.c
+dlo3:         dl01_bss1:    4: 0x2091d00: 0
+dlo3:         dl01_bss2:    4: 0x2091d04: %f
+dlo3:         dl01_bss3:    1: 0x2091d80: 00
+dlo3:        dl01_data1:    4: 0x2091bd4: 1
+dlo3:        dl01_data2:    4: 0x2091bd0: %f
+dlo3:       dl01_const1:    4: 0x2091bb0: 3
+dlo3:       dl01_const2:    4: 0x2091bac: %f
+dlo3:        dl01_func1:    1: 0x20918a0
+dlo3:         dl02_bss1:    4: 0x2094df8: 0
+dlo3:         dl02_bss2:    4: 0x2094dfc: %f
+dlo3:         dl02_bss3:    1: 0x2094e18: 00
+dlo3:        dl02_data1:    4: 0x2094e30: 0
+dlo3:        dl02_data2:    4: 0x2094e34: %f
+dlo3:   dl04_unresolv_1:    4: 0x20970e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x20970ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x20970f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x20970f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x20970b8: 4
+dlo3:   dl04_unresolv_6:    4: 0x20970d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x2097d70: 0
+dlo3:   dl05_unresolv_2:    2: 0x2097d78: 0
+dlo3:   dl05_unresolv_3:    4: 0x2097d7c: 0
+dlo3:   dl05_unresolv_4:    1: 0x2097d80: 0
+dlo3:   dl05_unresolv_5:    8: 0x2097d88: 0
+dlo4: module: testsuites/libtests/dl07/dl-o4.c
+dlo4:         dl01_bss1:    4: 0x2091d00: 0
+dlo4:         dl01_bss2:    4: 0x2091d04: %f
+dlo4:         dl01_bss3:    1: 0x2091d80: 00
+dlo4:        dl01_data1:    4: 0x2091bd4: 1
+dlo4:        dl01_data2:    4: 0x2091bd0: %f
+dlo4:       dl01_const1:    4: 0x2091bb0: 3
+dlo4:       dl01_const2:    4: 0x2091bac: %f
+dlo4:        dl01_func1:    1: 0x20918a0
+dlo4:   dl04_unresolv_1:    4: 0x20970e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x20970ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x20970f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x20970f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x20970b8: 4
+dlo4:   dl04_unresolv_6:    4: 0x20970d8: dl-O4
+dlo5: module: testsuites/libtests/dl07/dl-o5.c
+dlo5:         dl01_bss1:    4: 0x2091d00: 0
+dlo5:         dl01_bss2:    4: 0x2091d04: %f
+dlo5:         dl01_bss3:    1: 0x2091d80: 00
+dlo5:        dl01_data1:    4: 0x2091bd4: 1
+dlo5:        dl01_data2:    4: 0x2091bd0: %f
+dlo5:       dl01_const1:    4: 0x2091bb0: 3
+dlo5:       dl01_const2:    4: 0x2091bac: %f
+dlo5:        dl01_func1:    1: 0x20918a0
+dlo5:   dl05_unresolv_1:    8: 0x2097d70: 0
+dlo5:   dl05_unresolv_2:    2: 0x2097d78: 0
+dlo5:   dl05_unresolv_3:    4: 0x2097d7c: 0
+dlo5:   dl05_unresolv_4:    1: 0x2097d80: 0
+dlo5:   dl05_unresolv_5:    8: 0x2097d88: 0
+handle: 0x2095010 closing
+handle: 0x20964e0 closing
+handle: 0x2097358 closing
+handle: 0x2091f40 closing
+handle: 0x2091178 closing
+--------------------------------------------------
+ Run: 2
+load: /dl07-o1.o
+handle: 0x2091190 loaded
+load: /dl07-o2.o
+handle: 0x2092000 loaded
+load: /dl07-o3.o
+handle: 0x20951b0 loaded
+load: /dl07-o4.o
+handle: 0x2095b40 loaded
+load: /dl07-o5.o
+handle: 0x20989a0 loaded
+
+
+Run mains in each module:
+
+dlo1: module: testsuites/libtests/dl07/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2091d00: 0
+dlo1:         dl01_bss2:    4: 0x2091d04: %f
+dlo1:         dl01_bss3:    1: 0x2091d80: 00
+dlo1:        dl01_data1:    4: 0x2091bec: 1
+dlo1:        dl01_data2:    4: 0x2091be8: %f
+dlo1:       dl01_const1:    4: 0x2091bc8: 3
+dlo1:       dl01_const2:    4: 0x2091bc4: %f
+dlo1:        dl01_func1:    1: 0x20918b8
+dlo2: module: testsuites/libtests/dl07/dl-o2.c
+dlo2:         dl01_bss1:    4: 0x2091d00: 0
+dlo2:         dl01_bss2:    4: 0x2091d04: %f
+dlo2:         dl01_bss3:    1: 0x2091d80: 00
+dlo2:        dl01_data1:    4: 0x2091bec: 1
+dlo2:        dl01_data2:    4: 0x2091be8: %f
+dlo2:       dl01_const1:    4: 0x2091bc8: 3
+dlo2:       dl01_const2:    4: 0x2091bc4: %f
+dlo2:        dl01_func1:    1: 0x20918b8
+dlo2:         dl02_bss1:    4: 0x2092738: 0
+dlo2:         dl02_bss2:    4: 0x209273c: %f
+dlo2:         dl02_bss3:    1: 0x2092758: 00
+dlo2:        dl02_data1:    4: 0x2092770: 0
+dlo2:        dl02_data2:    4: 0x2092774: %f
+dlo3: module: testsuites/libtests/dl07/dl-o3.c
+dlo3:         dl01_bss1:    4: 0x2091d00: 0
+dlo3:         dl01_bss2:    4: 0x2091d04: %f
+dlo3:         dl01_bss3:    1: 0x2091d80: 00
+dlo3:        dl01_data1:    4: 0x2091bec: 1
+dlo3:        dl01_data2:    4: 0x2091be8: %f
+dlo3:       dl01_const1:    4: 0x2091bc8: 3
+dlo3:       dl01_const2:    4: 0x2091bc4: %f
+dlo3:        dl01_func1:    1: 0x20918b8
+dlo3:         dl02_bss1:    4: 0x2092738: 0
+dlo3:         dl02_bss2:    4: 0x209273c: %f
+dlo3:         dl02_bss3:    1: 0x2092758: 00
+dlo3:        dl02_data1:    4: 0x2092770: 0
+dlo3:        dl02_data2:    4: 0x2092774: %f
+dlo3:   dl04_unresolv_1:    4: 0x2098730: 0
+dlo3:   dl04_unresolv_2:    4: 0x2098734: %f
+dlo3:   dl04_unresolv_3:    1: 0x2098738: 00
+dlo3:   dl04_unresolv_4:    4: 0x209873c: 0
+dlo3:   dl04_unresolv_5:    4: 0x2098700: 4
+dlo3:   dl04_unresolv_6:    4: 0x2098720: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x20993b8: 0
+dlo3:   dl05_unresolv_2:    2: 0x20993c0: 0
+dlo3:   dl05_unresolv_3:    4: 0x20993c4: 0
+dlo3:   dl05_unresolv_4:    1: 0x20993c8: 0
+dlo3:   dl05_unresolv_5:    8: 0x20993d0: 0
+dlo4: module: testsuites/libtests/dl07/dl-o4.c
+dlo4:         dl01_bss1:    4: 0x2091d00: 0
+dlo4:         dl01_bss2:    4: 0x2091d04: %f
+dlo4:         dl01_bss3:    1: 0x2091d80: 00
+dlo4:        dl01_data1:    4: 0x2091bec: 1
+dlo4:        dl01_data2:    4: 0x2091be8: %f
+dlo4:       dl01_const1:    4: 0x2091bc8: 3
+dlo4:       dl01_const2:    4: 0x2091bc4: %f
+dlo4:        dl01_func1:    1: 0x20918b8
+dlo4:   dl04_unresolv_1:    4: 0x2098730: 0
+dlo4:   dl04_unresolv_2:    4: 0x2098734: %f
+dlo4:   dl04_unresolv_3:    1: 0x2098738: 00
+dlo4:   dl04_unresolv_4:    4: 0x209873c: 0
+dlo4:   dl04_unresolv_5:    4: 0x2098700: 4
+dlo4:   dl04_unresolv_6:    4: 0x2098720: dl-O4
+dlo5: module: testsuites/libtests/dl07/dl-o5.c
+dlo5:         dl01_bss1:    4: 0x2091d00: 0
+dlo5:         dl01_bss2:    4: 0x2091d04: %f
+dlo5:         dl01_bss3:    1: 0x2091d80: 00
+dlo5:        dl01_data1:    4: 0x2091bec: 1
+dlo5:        dl01_data2:    4: 0x2091be8: %f
+dlo5:       dl01_const1:    4: 0x2091bc8: 3
+dlo5:       dl01_const2:    4: 0x2091bc4: %f
+dlo5:        dl01_func1:    1: 0x20918b8
+dlo5:   dl05_unresolv_1:    8: 0x20993b8: 0
+dlo5:   dl05_unresolv_2:    2: 0x20993c0: 0
+dlo5:   dl05_unresolv_3:    4: 0x20993c4: 0
+dlo5:   dl05_unresolv_4:    1: 0x20993c8: 0
+dlo5:   dl05_unresolv_5:    8: 0x20993d0: 0
+handle: 0x20951b0 closing
+handle: 0x2095b40 closing
+handle: 0x20989a0 closing
+handle: 0x2092000 closing
+handle: 0x2091190 closing
+--------------------------------------------------
+ Run: 3
+load: /dl07-o1.o
+handle: 0x20911a8 loaded
+load: /dl07-o2.o
+handle: 0x2092040 loaded
+load: /dl07-o3.o
+handle: 0x2095290 loaded
+load: /dl07-o4.o
+handle: 0x2095890 loaded
+load: /dl07-o5.o
+handle: 0x209a338 loaded
+
+
+Run mains in each module:
+
+dlo1: module: testsuites/libtests/dl07/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2091d18: 0
+dlo1:         dl01_bss2:    4: 0x2091d1c: %f
+dlo1:         dl01_bss3:    1: 0x2091d98: 00
+dlo1:        dl01_data1:    4: 0x2091d04: 1
+dlo1:        dl01_data2:    4: 0x2091d00: %f
+dlo1:       dl01_const1:    4: 0x2091be0: 3
+dlo1:       dl01_const2:    4: 0x2091bdc: %f
+dlo1:        dl01_func1:    1: 0x20918d0
+dlo2: module: testsuites/libtests/dl07/dl-o2.c
+dlo2:         dl01_bss1:    4: 0x2091d18: 0
+dlo2:         dl01_bss2:    4: 0x2091d1c: %f
+dlo2:         dl01_bss3:    1: 0x2091d98: 00
+dlo2:        dl01_data1:    4: 0x2091d04: 1
+dlo2:        dl01_data2:    4: 0x2091d00: %f
+dlo2:       dl01_const1:    4: 0x2091be0: 3
+dlo2:       dl01_const2:    4: 0x2091bdc: %f
+dlo2:        dl01_func1:    1: 0x20918d0
+dlo2:         dl02_bss1:    4: 0x2095078: 0
+dlo2:         dl02_bss2:    4: 0x209507c: %f
+dlo2:         dl02_bss3:    1: 0x2095098: 00
+dlo2:        dl02_data1:    4: 0x20950b0: 0
+dlo2:        dl02_data2:    4: 0x20950b4: %f
+dlo3: module: testsuites/libtests/dl07/dl-o3.c
+dlo3:         dl01_bss1:    4: 0x2091d18: 0
+dlo3:         dl01_bss2:    4: 0x2091d1c: %f
+dlo3:         dl01_bss3:    1: 0x2091d98: 00
+dlo3:        dl01_data1:    4: 0x2091d04: 1
+dlo3:        dl01_data2:    4: 0x2091d00: %f
+dlo3:       dl01_const1:    4: 0x2091be0: 3
+dlo3:       dl01_const2:    4: 0x2091bdc: %f
+dlo3:        dl01_func1:    1: 0x20918d0
+dlo3:         dl02_bss1:    4: 0x2095078: 0
+dlo3:         dl02_bss2:    4: 0x209507c: %f
+dlo3:         dl02_bss3:    1: 0x2095098: 00
+dlo3:        dl02_data1:    4: 0x20950b0: 0
+dlo3:        dl02_data2:    4: 0x20950b4: %f
+dlo3:   dl04_unresolv_1:    4: 0x209a0c8: 0
+dlo3:   dl04_unresolv_2:    4: 0x209a0cc: %f
+dlo3:   dl04_unresolv_3:    1: 0x209a0d0: 00
+dlo3:   dl04_unresolv_4:    4: 0x209a0d4: 0
+dlo3:   dl04_unresolv_5:    4: 0x209a098: 4
+dlo3:   dl04_unresolv_6:    4: 0x209a0b8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x209ad50: 0
+dlo3:   dl05_unresolv_2:    2: 0x209ad58: 0
+dlo3:   dl05_unresolv_3:    4: 0x209ad5c: 0
+dlo3:   dl05_unresolv_4:    1: 0x209ad60: 0
+dlo3:   dl05_unresolv_5:    8: 0x209ad68: 0
+dlo4: module: testsuites/libtests/dl07/dl-o4.c
+dlo4:         dl01_bss1:    4: 0x2091d18: 0
+dlo4:         dl01_bss2:    4: 0x2091d1c: %f
+dlo4:         dl01_bss3:    1: 0x2091d98: 00
+dlo4:        dl01_data1:    4: 0x2091d04: 1
+dlo4:        dl01_data2:    4: 0x2091d00: %f
+dlo4:       dl01_const1:    4: 0x2091be0: 3
+dlo4:       dl01_const2:    4: 0x2091bdc: %f
+dlo4:        dl01_func1:    1: 0x20918d0
+dlo4:   dl04_unresolv_1:    4: 0x209a0c8: 0
+dlo4:   dl04_unresolv_2:    4: 0x209a0cc: %f
+dlo4:   dl04_unresolv_3:    1: 0x209a0d0: 00
+dlo4:   dl04_unresolv_4:    4: 0x209a0d4: 0
+dlo4:   dl04_unresolv_5:    4: 0x209a098: 4
+dlo4:   dl04_unresolv_6:    4: 0x209a0b8: dl-O4
+dlo5: module: testsuites/libtests/dl07/dl-o5.c
+dlo5:         dl01_bss1:    4: 0x2091d18: 0
+dlo5:         dl01_bss2:    4: 0x2091d1c: %f
+dlo5:         dl01_bss3:    1: 0x2091d98: 00
+dlo5:        dl01_data1:    4: 0x2091d04: 1
+dlo5:        dl01_data2:    4: 0x2091d00: %f
+dlo5:       dl01_const1:    4: 0x2091be0: 3
+dlo5:       dl01_const2:    4: 0x2091bdc: %f
+dlo5:        dl01_func1:    1: 0x20918d0
+dlo5:   dl05_unresolv_1:    8: 0x209ad50: 0
+dlo5:   dl05_unresolv_2:    2: 0x209ad58: 0
+dlo5:   dl05_unresolv_3:    4: 0x209ad5c: 0
+dlo5:   dl05_unresolv_4:    1: 0x209ad60: 0
+dlo5:   dl05_unresolv_5:    8: 0x209ad68: 0
+handle: 0x2095290 closing
+handle: 0x2095890 closing
+handle: 0x209a338 closing
+handle: 0x2092040 closing
+handle: 0x20911a8 closing
+--------------------------------------------------
+
+  REPEAT 100 TIMES
+
+--------------------------------------------------
+ Run: 99
+load: /dl07-o1.o
+handle: 0x211fbc0 loaded
+load: /dl07-o2.o
+handle: 0x212ed58 loaded
+load: /dl07-o3.o
+handle: 0x214d6d0 loaded
+load: /dl07-o4.o
+handle: 0x214eba0 loaded
+load: /dl07-o5.o
+handle: 0x214fa18 loaded
+
+
+Run mains in each module:
+
+dlo1: module: testsuites/libtests/dl07/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2136578: 0
+dlo1:         dl01_bss2:    4: 0x213657c: %f
+dlo1:         dl01_bss3:    1: 0x21365f8: 00
+dlo1:        dl01_data1:    4: 0x2136564: 1
+dlo1:        dl01_data2:    4: 0x2136560: %f
+dlo1:       dl01_const1:    4: 0x213fa18: 3
+dlo1:       dl01_const2:    4: 0x213fa14: %f
+dlo1:        dl01_func1:    1: 0x213f560
+dlo2: module: testsuites/libtests/dl07/dl-o2.c
+dlo2:         dl01_bss1:    4: 0x2136578: 0
+dlo2:         dl01_bss2:    4: 0x213657c: %f
+dlo2:         dl01_bss3:    1: 0x21365f8: 00
+dlo2:        dl01_data1:    4: 0x2136564: 1
+dlo2:        dl01_data2:    4: 0x2136560: %f
+dlo2:       dl01_const1:    4: 0x213fa18: 3
+dlo2:       dl01_const2:    4: 0x213fa14: %f
+dlo2:        dl01_func1:    1: 0x213f560
+dlo2:         dl02_bss1:    4: 0x214d460: 0
+dlo2:         dl02_bss2:    4: 0x214d464: %f
+dlo2:         dl02_bss3:    1: 0x214d480: 00
+dlo2:        dl02_data1:    4: 0x214d498: 0
+dlo2:        dl02_data2:    4: 0x214d49c: %f
+dlo3: module: testsuites/libtests/dl07/dl-o3.c
+dlo3:         dl01_bss1:    4: 0x2136578: 0
+dlo3:         dl01_bss2:    4: 0x213657c: %f
+dlo3:         dl01_bss3:    1: 0x21365f8: 00
+dlo3:        dl01_data1:    4: 0x2136564: 1
+dlo3:        dl01_data2:    4: 0x2136560: %f
+dlo3:       dl01_const1:    4: 0x213fa18: 3
+dlo3:       dl01_const2:    4: 0x213fa14: %f
+dlo3:        dl01_func1:    1: 0x213f560
+dlo3:         dl02_bss1:    4: 0x214d460: 0
+dlo3:         dl02_bss2:    4: 0x214d464: %f
+dlo3:         dl02_bss3:    1: 0x214d480: 00
+dlo3:        dl02_data1:    4: 0x214d498: 0
+dlo3:        dl02_data2:    4: 0x214d49c: %f
+dlo3:   dl04_unresolv_1:    4: 0x214f7a8: 0
+dlo3:   dl04_unresolv_2:    4: 0x214f7ac: %f
+dlo3:   dl04_unresolv_3:    1: 0x214f7b0: 00
+dlo3:   dl04_unresolv_4:    4: 0x214f7b4: 0
+dlo3:   dl04_unresolv_5:    4: 0x214f778: 4
+dlo3:   dl04_unresolv_6:    4: 0x214f798: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x2150430: 0
+dlo3:   dl05_unresolv_2:    2: 0x2150438: 0
+dlo3:   dl05_unresolv_3:    4: 0x215043c: 0
+dlo3:   dl05_unresolv_4:    1: 0x2150440: 0
+dlo3:   dl05_unresolv_5:    8: 0x2150448: 0
+dlo4: module: testsuites/libtests/dl07/dl-o4.c
+dlo4:         dl01_bss1:    4: 0x2136578: 0
+dlo4:         dl01_bss2:    4: 0x213657c: %f
+dlo4:         dl01_bss3:    1: 0x21365f8: 00
+dlo4:        dl01_data1:    4: 0x2136564: 1
+dlo4:        dl01_data2:    4: 0x2136560: %f
+dlo4:       dl01_const1:    4: 0x213fa18: 3
+dlo4:       dl01_const2:    4: 0x213fa14: %f
+dlo4:        dl01_func1:    1: 0x213f560
+dlo4:   dl04_unresolv_1:    4: 0x214f7a8: 0
+dlo4:   dl04_unresolv_2:    4: 0x214f7ac: %f
+dlo4:   dl04_unresolv_3:    1: 0x214f7b0: 00
+dlo4:   dl04_unresolv_4:    4: 0x214f7b4: 0
+dlo4:   dl04_unresolv_5:    4: 0x214f778: 4
+dlo4:   dl04_unresolv_6:    4: 0x214f798: dl-O4
+dlo5: module: testsuites/libtests/dl07/dl-o5.c
+dlo5:         dl01_bss1:    4: 0x2136578: 0
+dlo5:         dl01_bss2:    4: 0x213657c: %f
+dlo5:         dl01_bss3:    1: 0x21365f8: 00
+dlo5:        dl01_data1:    4: 0x2136564: 1
+dlo5:        dl01_data2:    4: 0x2136560: %f
+dlo5:       dl01_const1:    4: 0x213fa18: 3
+dlo5:       dl01_const2:    4: 0x213fa14: %f
+dlo5:        dl01_func1:    1: 0x213f560
+dlo5:   dl05_unresolv_1:    8: 0x2150430: 0
+dlo5:   dl05_unresolv_2:    2: 0x2150438: 0
+dlo5:   dl05_unresolv_3:    4: 0x215043c: 0
+dlo5:   dl05_unresolv_4:    1: 0x2150440: 0
+dlo5:   dl05_unresolv_5:    8: 0x2150448: 0
+handle: 0x214d6d0 closing
+handle: 0x214eba0 closing
+handle: 0x214fa18 closing
+handle: 0x212ed58 closing
+handle: 0x211fbc0 closing
+
+*** END OF TEST libdl (RTL) 7 ***
+
+
+*** FATAL ***
+fatal source: 5 (RTEMS_FATAL_SOURCE_EXIT)
+fatal code: 0 (0x00000000)
+RTEMS version: 5.0.0.6de8cc8ad871a197d7233a9221786d8efee87840-modified
+RTEMS tools: 7.3.0 20180125 (RTEMS 5, RSB 30da0c720b78eba16a3f5272206c07415368617b, Newlib 2ab57ad59bc35dafffa69cd4da5e228971de069f)
+executing thread ID: 0x08a010001
+executing thread name: UI1

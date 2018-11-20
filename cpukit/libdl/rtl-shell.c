@@ -117,13 +117,14 @@ rtems_rtl_shell_status (rtems_rtl_data* rtl, int argc, char *argv[])
  */
 typedef struct
 {
-  rtems_rtl_data* rtl;        /**< The RTL data. */
-  int             indent;     /**< Spaces to indent. */
-  bool            oname;      /**< Print object names. */
-  bool            names;      /**< Print details of all names. */
-  bool            memory_map; /**< Print the memory map. */
-  bool            symbols;    /**< Print the global symbols. */
-  bool            base;       /**< Include the base object file. */
+  rtems_rtl_data* rtl;          /**< The RTL data. */
+  int             indent;       /**< Spaces to indent. */
+  bool            oname;        /**< Print object names. */
+  bool            names;        /**< Print details of all names. */
+  bool            memory_map;   /**< Print the memory map. */
+  bool            symbols;      /**< Print the global symbols. */
+  bool            dependencies; /**< Print any dependencies. */
+  bool            base;         /**< Include the base object file. */
 } rtems_rtl_obj_print;
 
 /**
@@ -166,6 +167,29 @@ static bool
 rtems_rtl_symbols_arg (int argc, char *argv[])
 {
   return rtems_rtl_parse_arg ("-s", argc, argv);
+}
+
+/**
+ * Dependenncies printer.
+ */
+typedef struct
+{
+  bool   first;   /**< Is this the first line printed. */
+  size_t indent;  /**< The indent. */
+} rtems_rtl_dep_data;
+
+static bool
+rtems_rtl_dependencies (rtems_rtl_obj* obj,
+                        rtems_rtl_obj* dependent,
+                        void*          data)
+{
+  rtems_rtl_dep_data* dd = (rtems_rtl_dep_data*) data;
+  if (!dd->first)
+    printf ("\n%-*c: ", dd->indent, ' ');
+  else
+    dd->first = false;
+  printf ("%s", dependent->oname);
+  return false;
 }
 
 /**
@@ -214,7 +238,9 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
     printf ("%-*cbss base      : %p (%zi)\n", print->indent, ' ',
             obj->bss_base, obj->bss_size);
   }
-  printf ("%-*cunresolved    : %" PRIu32 "\n", print->indent, ' ', obj->unresolved);
+  printf ("%-*cunresolved    : %zu\n", print->indent, ' ', obj->unresolved);
+  printf ("%-*cusers         : %zu\n", print->indent, ' ', obj->users);
+  printf ("%-*creferences    : %zu\n", print->indent, ' ', obj->refs);
   printf ("%-*csymbols       : %zi\n", print->indent, ' ', obj->global_syms);
   printf ("%-*csymbol memory : %zi\n", print->indent, ' ', obj->global_size);
   if (print->symbols)
@@ -230,6 +256,16 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
     for (s = 0; s < obj->global_syms; ++s)
       printf ("%-*c%-*s = %p\n", print->indent + 2, ' ',
               max_len, obj->global_table[s].name, obj->global_table[s].value);
+  }
+  if (print->dependencies)
+  {
+    rtems_rtl_dep_data dd = {
+      .first = true,
+      .indent = strlen ("dependencies :") + print->indent
+    };
+    printf ("%-*cdependencies  : ", print->indent, ' ');
+    rtems_rtl_obj_iterate_dependents (obj, rtems_rtl_dependencies, &dd);
+    printf ("\n");
   }
   printf ("\n");
   return true;
@@ -269,6 +305,7 @@ rtems_rtl_shell_list (rtems_rtl_data* rtl, int argc, char *argv[])
   print.names = true;
   print.memory_map = true;
   print.symbols = rtems_rtl_symbols_arg (argc, argv);
+  print.dependencies = true;
   print.base = false;
   rtems_rtl_chain_iterate (&rtl->objects,
                            rtems_rtl_obj_print_iterator,
@@ -286,6 +323,7 @@ rtems_rtl_shell_sym (rtems_rtl_data* rtl, int argc, char *argv[])
   print.names = false;
   print.memory_map = false;
   print.symbols = true;
+  print.dependencies = false;
   print.base = rtems_rtl_base_arg (argc, argv);
   rtems_rtl_chain_iterate (&rtl->objects,
                            rtems_rtl_obj_print_iterator,

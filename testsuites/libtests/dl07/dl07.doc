@@ -1,0 +1,27 @@
+# Copyright (c) 2018 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl07
+
+directives:
+
+  dlopen
+  dlinfo
+  dlsym
+  dlclose
+
+concepts:
+
++ Load 5 interdependent ELF object files.
++ Check there are no unreolved externals. There should be unresolved
+  externals after dl07-o3.c is loaded but resolved with o4 and o5.
++ Locate the main symbol in each lodaed object file and call.
++ Unload the ELF files in an order that checks dependent objects cannot
+  be unloaded until the references have been unloaded.
++ Repeat 100 times.

@@ -139,12 +139,35 @@ struct rtems_rtl_obj_sect
 };
 
 /**
+ * Object file dependents. This is a list of tables of pointers to the object
+ * modules the object file depends on. The table is a list of tables because
+ * unresolved externals can exist when an object file is loaded and resolved
+ * later when the dependent object file is loaded.
+ */
+struct rtems_rtl_obj_depends
+{
+  rtems_chain_node node;        /**< The node's link in the chain. */
+  size_t           dependents;  /**< The number of dependent object pointers. */
+  rtems_rtl_obj*   depends[];   /**< Dependtent objects. More follow. */
+};
+
+/**
+ * Dependency iterator.
+ */
+typedef bool (*rtems_rtl_obj_depends_iterator) (rtems_rtl_obj* obj,
+                                                rtems_rtl_obj* dependent,
+                                                void*          data);
+
+/**
  * Object file descriptor flags.
  */
-#define RTEMS_RTL_OBJ_LOCKED     (1 << 0) /**< Lock the object file so it cannot
-                                           *   be unloaded. */
-#define RTEMS_RTL_OBJ_UNRESOLVED (1 << 1) /**< The object file has unresolved
-                                           *   external symbols. */
+#define RTEMS_RTL_OBJ_LOCKED       (1 << 0) /**< Lock the object file so it cannot
+                                             *   be unloaded. */
+#define RTEMS_RTL_OBJ_UNRESOLVED   (1 << 1) /**< The object file has unresolved
+                                             *   external symbols. */
+#define RTEMS_RTL_OBJ_BASE         (1 << 2) /**< The base image. */
+#define RTEMS_RTL_OBJ_RELOC_TAG    (1 << 3) /**< Tag the object as visited when reloc
+                                             *   parsing. */
 
 /**
  * RTL Object. There is one for each object module loaded plus one for the base
@@ -154,7 +177,8 @@ struct rtems_rtl_obj
 {
   rtems_chain_node    link;         /**< The node's link in the chain. */
   uint32_t            flags;        /**< The status of the object file. */
-  uint32_t            users;        /**< References to the object file. */
+  size_t              users;        /**< Users of this object file, number of loads. */
+  size_t              refs;         /**< References to the object file. */
   int                 format;       /**< The format of the object file. */
   const char*         fname;        /**< The file name for the object. */
   const char*         oname;        /**< The object file name. Can be
@@ -164,27 +188,28 @@ struct rtems_rtl_obj
                                      *   in a lib */
   off_t               ooffset;      /**< The object offset in the archive. */
   size_t              fsize;        /**< Size of the object file. */
-  rtems_chain_control sections;     /**< The sections of interest in the
-                                     *   object file. */
+  rtems_chain_control sections;     /**< The sections of interest in the object
+                                     *   file. */
+  rtems_chain_control dependents;   /**< The dependent object files. */
   rtems_rtl_obj_sym*  local_table;  /**< Local symbol table. */
   size_t              local_syms;   /**< Local symbol count. */
   size_t              local_size;   /**< Local symbol memory usage. */
   rtems_rtl_obj_sym*  global_table; /**< Global symbol table. */
   size_t              global_syms;  /**< Global symbol count. */
   size_t              global_size;  /**< Global symbol memory usage. */
-  uint32_t            unresolved;   /**< The number of unresolved relocations. */
+  size_t              unresolved;   /**< The number of unresolved relocations. */
   void*               text_base;    /**< The base address of the text section
                                      *   in memory. */
   size_t              text_size;    /**< The size of the text section. */
   void*               const_base;   /**< The base address of the const section
                                      *   in memory. */
-  void*               eh_base;      /**< The base address of the eh section
-                                     *   in memory. */
+  void*               eh_base;      /**< The base address of the eh section in
+                                     *   memory. */
   size_t              eh_size;      /**< The size of the eh section. */
   void*               data_base;    /**< The base address of the data section
                                      *   in memory. */
-  void*               bss_base;     /**< The base address of the bss section
-                                     *   in memory. */
+  void*               bss_base;     /**< The base address of the bss section in
+                                     *   memory. */
   size_t              bss_size;     /**< The size of the bss section. */
   size_t              exec_size;    /**< The amount of executable memory
                                      *   allocated */
@@ -192,9 +217,11 @@ struct rtems_rtl_obj
   uint32_t            checksum;     /**< The checksum of the text sections. A
                                      *   zero means do not checksum. */
   uint32_t*           sec_num;      /**< The sec nums of each obj. */
-  uint32_t            obj_num;      /**< The count of elf files in an rtl obj. */
+  uint32_t            obj_num;      /**< The count of elf files in an rtl
+                                     *   obj. */
   struct link_map*    linkmap;      /**< For GDB. */
-  void*               loader;       /**< The file details specific to a loader. */
+  void*               loader;       /**< The file details specific to a
+                                     *   loader. */
 };
 
 /**
@@ -443,6 +470,46 @@ rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj
                                                         uint32_t             mask);
 
 /**
+ * Allocate a table for dependent objects.
+ *
+ * @param obj The object file's descriptor.
+ * @param dependents The size of the table.
+ * @retval true The table was allocated.
+ * @retval false The alloction failed.
+ */
+bool rtems_rtl_obj_alloc_dependents (rtems_rtl_obj* obj, size_t dependents);
+
+/**
+ * Erase the object file descriptor's dependents.
+ *
+ * @param obj The object file's descriptor.
+ */
+void rtems_rtl_obj_erase_dependents (rtems_rtl_obj* obj);
+
+/**
+ * Add an object file to the dependents table.
+ *
+ * @param obj The object file's descriptor.
+ * @param dependent The dependent object file to add.
+ * @retval true The dependent has been added to the table.
+ * @retval false There is no space in the table.
+ */
+bool rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent);
+
+/**
+ * Iterate over the module dependenices.
+ *
+ * @param obj The object file's descriptor.
+ * @param handler The iterator handler. Returns true to end.
+ * @param data User data passed to the iterator.
+ * @retval true The iterator handler returned true.
+ * @retval false The iterator handler returned false.
+ */
+bool rtems_rtl_obj_iterate_dependents (rtems_rtl_obj*                 obj,
+                                       rtems_rtl_obj_depends_iterator iterator,
+                                       void*                          data);
+
+/**
  * The text section size. Only use once all the sections has been added. It
  * includes alignments between sections that are part of the object's text
  * area. The consts sections are included in this section.
@@ -641,6 +708,20 @@ void rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj);
  * @param obj The object file's descriptor.
  */
 void rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj);
+
+/**
+ * Increment the object file reference count.
+ *
+ * @param obj The object file's descriptor.
+ */
+void rtems_rtl_obj_inc_reference (rtems_rtl_obj* obj);
+
+/**
+ * Decrement the object file reference count.
+ *
+ * @param obj The object file's descriptor.
+ */
+void rtems_rtl_obj_dec_reference (rtems_rtl_obj* obj);
 
 /**
  * Load the object file, reading all sections into memory, symbols and

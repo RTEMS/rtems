@@ -83,6 +83,7 @@ rtems_rtl_obj_alloc (void)
      * Initialise the chains.
      */
     rtems_chain_initialize_empty (&obj->sections);
+    rtems_chain_initialize_empty (&obj->dependents);
     /*
      * No valid format.
      */
@@ -114,6 +115,8 @@ rtems_rtl_obj_free (rtems_rtl_obj* obj)
     rtems_chain_extract (&obj->link);
   rtems_rtl_alloc_module_del (&obj->text_base, &obj->const_base, &obj->eh_base,
                               &obj->data_base, &obj->bss_base);
+  rtems_rtl_obj_erase_sections (obj);
+  rtems_rtl_obj_erase_dependents (obj);
   rtems_rtl_symbol_obj_erase (obj);
   rtems_rtl_obj_free_names (obj);
   if (obj->sec_num)
@@ -548,6 +551,110 @@ rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
                            rtems_rtl_obj_sect_match_mask,
                            &match);
   return match.sect;
+}
+
+bool
+rtems_rtl_obj_alloc_dependents (rtems_rtl_obj* obj, size_t dependents)
+{
+  rtems_rtl_obj_depends* depends;
+  size_t                 size;
+
+  size = sizeof (rtems_rtl_obj_depends) + sizeof (rtems_rtl_obj*) * dependents;
+
+  depends = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                 size,
+                                 true);
+  if (depends == NULL)
+  {
+    rtems_rtl_set_error (ENOMEM, "no memory for the dependency");
+  }
+  else
+  {
+    depends->dependents = dependents;
+    rtems_chain_append (&obj->dependents, &depends->node);
+  }
+
+  return depends != NULL;
+}
+
+void
+rtems_rtl_obj_erase_dependents (rtems_rtl_obj* obj)
+{
+  rtems_chain_node* node = rtems_chain_first (&obj->dependents);
+  while (!rtems_chain_is_tail (&obj->dependents, node))
+  {
+    rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
+    rtems_chain_node*      next_node = rtems_chain_next (node);
+    rtems_chain_extract (node);
+    rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, depends);
+    node = next_node;
+  }
+}
+
+bool
+rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent)
+{
+  rtems_rtl_obj**   free_slot;
+  rtems_chain_node* node;
+  if (obj == dependent || dependent == rtems_rtl_baseimage ())
+    return false;
+  free_slot = NULL;
+  node = rtems_chain_first (&obj->dependents);
+  while (!rtems_chain_is_tail (&obj->dependents, node))
+  {
+    rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
+    size_t                 d;
+    for (d = 0; d < depends->dependents; ++d)
+    {
+      if (free_slot == NULL && depends->depends[d] == NULL)
+        free_slot = &(depends->depends[d]);
+      if (depends->depends[d] == dependent)
+        return false;
+    }
+    node = rtems_chain_next (node);
+  }
+  if (free_slot == NULL)
+  {
+    if (rtems_rtl_obj_alloc_dependents (obj,
+                                        RTEMS_RTL_DEPENDENCY_BLOCK_SIZE))
+    {
+      rtems_rtl_obj_depends* depends;
+      node = rtems_chain_last (&obj->dependents);
+      depends = (rtems_rtl_obj_depends*) node;
+      free_slot = &(depends->depends[0]);
+      if (*free_slot != NULL)
+      {
+        rtems_rtl_set_error (EINVAL, "new dependency node not empty");
+        free_slot = NULL;
+      }
+    }
+  }
+  if (free_slot != NULL)
+    *free_slot = dependent;
+  return free_slot != NULL;
+}
+
+bool
+rtems_rtl_obj_iterate_dependents (rtems_rtl_obj*                 obj,
+                                  rtems_rtl_obj_depends_iterator iterator,
+                                  void*                          data)
+{
+  rtems_chain_node* node = rtems_chain_first (&obj->dependents);
+  while (!rtems_chain_is_tail (&obj->dependents, node))
+  {
+    rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
+    size_t                 d;
+    for (d = 0; d < depends->dependents; ++d)
+    {
+      if (depends->depends[d])
+      {
+        if (iterator (obj, depends->depends[d], data))
+          return true;
+      }
+    }
+    node = rtems_chain_next (node);
+  }
+  return false;
 }
 
 size_t
@@ -1220,8 +1327,40 @@ static bool
 rtems_rtl_obj_file_unload (rtems_rtl_obj* obj)
 {
   if (obj->format >= 0 && obj->format < RTEMS_RTL_LOADERS)
-      return loaders[obj->format].unload (obj);
+  {
+    rtems_chain_node* node;
+
+    if (!loaders[obj->format].unload (obj))
+      return false;
+
+    node = rtems_chain_first (&obj->dependents);
+    while (!rtems_chain_is_tail (&obj->dependents, node))
+    {
+      rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
+      size_t                 d;
+      for (d = 0; d < depends->dependents; ++d)
+      {
+        if (depends->depends[d] != NULL)
+          rtems_rtl_obj_dec_reference (depends->depends[d]);
+      }
+      node = rtems_chain_next (node);
+    }
+  }
+
   return false;
+}
+
+void
+rtems_rtl_obj_inc_reference (rtems_rtl_obj* obj)
+{
+  ++obj->refs;
+}
+
+void
+rtems_rtl_obj_dec_reference (rtems_rtl_obj* obj)
+{
+  if (obj->refs)
+    --obj->refs;
 }
 
 bool

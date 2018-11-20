@@ -512,6 +512,45 @@ CLEANFILES += dl06.pre dl06-sym.o dl06-o1.o dl06-o2.o dl06.tar dl06-tar.h
 endif
 endif
 
+if DLTESTS
+if TEST_dl07
+lib_tests += dl07
+lib_screens += dl07/dl07.scn
+lib_docs += dl07/dl07.doc
+dl07_SOURCES = dl07/init.c dl07/dl-load.c dl07-tar.c dl07-tar.h
+dl07_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl07) $(support_includes)
+dl07/init.c: dl07-tar.o
+dl07.pre: $(dl07_OBJECTS) $(dl07_DEPENDENCIES)
+	@rm -f dl07.pre
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl07-o1.o: dl07/dl-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07-o2.o: dl07/dl-o2.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07-o3.o: dl07/dl-o3.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07-o4.o: dl07/dl-o4.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07-o5.o: dl07/dl-o5.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07.tar: dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o dl07-o5.o
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ $+
+dl07-tar.c: dl07.tar
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+dl07-tar.h: dl07.tar
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+dl07-tar.o: dl07-tar.c dl07-tar.h
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl07-sym.o: dl07.pre
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+dl07$(EXEEXT):  $(dl07_OBJECTS) $(dl07_DEPENDENCIES) dl07-sym.o
+	@rm -f $@
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+CLEANFILES += dl07.pre dl07-sym.o dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o dl07-o5.o dl07.tar dl07-tar.h
+endif
+endif
+
 if TEST_dumpbuf01
 lib_tests += dumpbuf01
 lib_screens += dumpbuf01/dumpbuf01.scn
@@ -1358,4 +1397,3 @@ endif
 
 rtems_tests_PROGRAMS = $(lib_tests)
 dist_rtems_tests_DATA = $(lib_screens) $(lib_docs)
-

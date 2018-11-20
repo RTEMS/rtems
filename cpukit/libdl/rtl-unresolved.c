@@ -171,7 +171,7 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
     rtems_rtl_unresolved_reloc_data* rd;
     rd = (rtems_rtl_unresolved_reloc_data*) data;
 
-    if (rec->rec.reloc.name == rd->name)
+    if (rec->rec.reloc.name == rd->name && rec->rec.reloc.obj != NULL)
     {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
         printf ("rtl: unresolv: resolve reloc: %s\n", rd->name_rec->rec.name.name);
@@ -185,7 +185,7 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
        * names with a reference count of 0.
        */
       rec->rec.reloc.obj = NULL;
-      if (rd->name_rec && rd->name_rec->rec.name.refs)
+      if (rd->name_rec != NULL && rd->name_rec->rec.name.refs > 0)
         --rd->name_rec->rec.name.refs;
     }
   }

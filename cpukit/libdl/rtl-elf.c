@@ -64,30 +64,39 @@ rtems_rtl_elf_machine_check (Elf_Ehdr* ehdr)
   return true;
 }
 
-bool
-rtems_rtl_elf_find_symbol (rtems_rtl_obj* obj,
-                           const Elf_Sym* sym,
-                           const char*    symname,
-                           Elf_Word*      value)
+static bool
+rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
+                           const Elf_Sym*      sym,
+                           const char*         symname,
+                           rtems_rtl_obj_sym** symbol,
+                           Elf_Word*           value)
 {
   rtems_rtl_obj_sect* sect;
 
-  if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE ||
-      sym->st_shndx == SHN_COMMON)
+  /*
+   * If the symbol type is STT_NOTYPE the symbol references a global
+   * symbol. The gobal symbol table is searched to find it and that value
+   * returned. If the symbol is local to the object module the section for the
+   * symbol is located and it's base added to the symbol's value giving an
+   * absolute location.
+   */
+  if (ELF_ST_TYPE(sym->st_info) == STT_NOTYPE || sym->st_shndx == SHN_COMMON)
   {
     /*
      * Search the object file then the global table for the symbol.
      */
-    rtems_rtl_obj_sym* symbol = rtems_rtl_symbol_obj_find (obj, symname);
-    if (!symbol)
+    *symbol = rtems_rtl_symbol_obj_find (obj, symname);
+    if (!*symbol)
     {
       rtems_rtl_set_error (EINVAL, "global symbol not found: %s", symname);
       return false;
     }
 
-    *value = (Elf_Addr) symbol->value;
+    *value = (Elf_Addr) (*symbol)->value;
     return true;
   }
+
+  *symbol = NULL;
 
   sect = rtems_rtl_obj_find_section_by_index (obj, sym->st_shndx);
   if (!sect)
@@ -100,11 +109,161 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj* obj,
   return true;
 }
 
+/**
+ * Relocation worker routine.
+ */
+typedef bool (*rtems_rtl_elf_reloc_handler)(rtems_rtl_obj*      obj,
+                                            bool                is_rela,
+                                            void*               relbuf,
+                                            rtems_rtl_obj_sect* targetsect,
+                                            rtems_rtl_obj_sym*  symbol,
+                                            Elf_Sym*            sym,
+                                            const char*         symname,
+                                            Elf_Word            symvalue,
+                                            bool                resolved,
+                                            void*               data);
+
+/**
+ * Relocation parser data.
+ */
+typedef struct
+{
+  size_t dependents; /**< The number of dependent object files. */
+  size_t unresolved; /**< The number of unresolved symbols. */
+} rtems_rtl_elf_reloc_data;
+
 static bool
-rtems_rtl_elf_relocator (rtems_rtl_obj*      obj,
-                         int                 fd,
-                         rtems_rtl_obj_sect* sect,
-                         void*               data)
+rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
+                            bool                is_rela,
+                            void*               relbuf,
+                            rtems_rtl_obj_sect* targetsect,
+                            rtems_rtl_obj_sym*  symbol,
+                            Elf_Sym*            sym,
+                            const char*         symname,
+                            Elf_Word            symvalue,
+                            bool                resolved,
+                            void*               data)
+{
+  rtems_rtl_elf_reloc_data* rd = (rtems_rtl_elf_reloc_data*) data;
+  /*
+   * If the symbol has been resolved and there is a symbol name it is a global
+   * symbol and from another object file so add it as a dependency.
+   */
+  if (!resolved)
+  {
+    ++rd->unresolved;
+  }
+  else if (resolved && symname != NULL)
+  {
+    /*
+     * Find the symbol's object file. It cannot be NULL so ignore that result
+     * if returned, it means something is corrupted. We are in an iterator.
+     */
+    rtems_rtl_obj*  sobj = rtems_rtl_find_obj_with_symbol (symbol);
+    if (sobj != NULL)
+    {
+      /*
+       * A dependency is not the base kernel image or itself. Tag the object as
+       * having been visited so we count it only once.
+       */
+      if (sobj != rtems_rtl_baseimage () && obj != sobj &&
+          (sobj->flags & RTEMS_RTL_OBJ_RELOC_TAG) == 0)
+      {
+        sobj->flags |= RTEMS_RTL_OBJ_RELOC_TAG;
+        ++rd->dependents;
+      }
+    }
+  }
+  return true;
+}
+
+static bool
+rtems_rtl_elf_reloc_relocator (rtems_rtl_obj*      obj,
+                               bool                is_rela,
+                               void*               relbuf,
+                               rtems_rtl_obj_sect* targetsect,
+                               rtems_rtl_obj_sym*  symbol,
+                               Elf_Sym*            sym,
+                               const char*         symname,
+                               Elf_Word            symvalue,
+                               bool                resolved,
+                               void*               data)
+{
+  const Elf_Rela* rela = (const Elf_Rela*) relbuf;
+  const Elf_Rel*  rel = (const Elf_Rel*) relbuf;
+
+  if (!resolved)
+  {
+    uint16_t       flags = 0;
+    rtems_rtl_word rel_words[3];
+
+    if (is_rela)
+    {
+      flags = 1;
+      rel_words[REL_R_OFFSET] = rela->r_offset;
+      rel_words[REL_R_INFO] = rela->r_info;
+      rel_words[REL_R_ADDEND] = rela->r_addend;
+    }
+    else
+    {
+      rel_words[REL_R_OFFSET] = rel->r_offset;
+      rel_words[REL_R_INFO] = rel->r_info;
+      rel_words[REL_R_ADDEND] = 0;
+    }
+
+    if (!rtems_rtl_unresolved_add (obj,
+                                   flags,
+                                   symname,
+                                   targetsect->section,
+                                   rel_words))
+      return false;
+
+    ++obj->unresolved;
+  }
+  else
+  {
+    rtems_rtl_obj* sobj;
+
+    if (is_rela)
+    {
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf ("rtl: rela: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
+                symname, (int) ELF_R_SYM (rela->r_info),
+                (uintmax_t) symvalue, (int) ELF_R_TYPE (rela->r_info),
+                (uintmax_t) rela->r_offset, (int) rela->r_addend);
+      if (!rtems_rtl_elf_relocate_rela (obj, rela, targetsect,
+                                        symname, sym->st_info, symvalue))
+        return false;
+    }
+    else
+    {
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf ("rtl: rel: sym:%s(%d)=%08jx type:%d off:%08jx\n",
+                symname, (int) ELF_R_SYM (rel->r_info),
+                (uintmax_t) symvalue, (int) ELF_R_TYPE (rel->r_info),
+                (uintmax_t) rel->r_offset);
+      if (!rtems_rtl_elf_relocate_rel (obj, rel, targetsect,
+                                       symname, sym->st_info, symvalue))
+        return false;
+    }
+
+    sobj = rtems_rtl_find_obj_with_symbol (symbol);
+    if (sobj != NULL)
+    {
+      if (rtems_rtl_obj_add_dependent (obj, sobj))
+        rtems_rtl_obj_inc_reference (sobj);
+    }
+  }
+
+  return true;
+}
+
+static bool
+rtems_rtl_elf_relocate_worker (rtems_rtl_obj*              obj,
+                               int                         fd,
+                               rtems_rtl_obj_sect*         sect,
+                               rtems_rtl_elf_reloc_handler handler,
+                               void*                       data)
 {
   rtems_rtl_obj_cache* symbols;
   rtems_rtl_obj_cache* strings;
@@ -155,15 +314,16 @@ rtems_rtl_elf_relocator (rtems_rtl_obj*      obj,
 
   for (reloc = 0; reloc < (sect->size / reloc_size); ++reloc)
   {
-    uint8_t         relbuf[reloc_size];
-    const Elf_Rela* rela = (const Elf_Rela*) relbuf;
-    const Elf_Rel*  rel = (const Elf_Rel*) relbuf;
-    Elf_Sym         sym;
-    const char*     symname = NULL;
-    off_t           off;
-    Elf_Word        type;
-    Elf_Word        symvalue = 0;
-    bool            relocate;
+    uint8_t            relbuf[reloc_size];
+    const Elf_Rela*    rela = (const Elf_Rela*) relbuf;
+    const Elf_Rel*     rel = (const Elf_Rel*) relbuf;
+    rtems_rtl_obj_sym* symbol = NULL;
+    Elf_Sym            sym;
+    const char*        symname = NULL;
+    off_t              off;
+    Elf_Word           rel_type;
+    Elf_Word           symvalue = 0;
+    bool               resolved;
 
     off = obj->ooffset + sect->offset + (reloc * reloc_size);
 
@@ -203,75 +363,26 @@ rtems_rtl_elf_relocator (rtems_rtl_obj*      obj,
     /*
      * See if the record references an external symbol. If it does find the
      * symbol value. If the symbol cannot be found flag the object file as
-     * having unresolved externals and store the externals. The load of an
+     * having unresolved externals and store the external. The load of an
      * object after this one may provide the unresolved externals.
      */
     if (is_rela)
-      type = ELF_R_TYPE(rela->r_info);
+      rel_type = ELF_R_TYPE(rela->r_info);
     else
-      type = ELF_R_TYPE(rel->r_info);
+      rel_type = ELF_R_TYPE(rel->r_info);
 
-    relocate = true;
+    resolved = true;
 
-    if (rtems_rtl_elf_rel_resolve_sym (type))
-    {
-      if (!rtems_rtl_elf_find_symbol (obj, &sym, symname, &symvalue))
-      {
-        uint16_t       flags = 0;
-        rtems_rtl_word rel_words[3];
+    if (rtems_rtl_elf_rel_resolve_sym (rel_type))
+      resolved = rtems_rtl_elf_find_symbol (obj,
+                                            &sym, symname,
+                                            &symbol, &symvalue);
 
-        relocate = false;
-
-        if (is_rela)
-        {
-          flags = 1;
-          rel_words[REL_R_OFFSET] = rela->r_offset;
-          rel_words[REL_R_INFO] = rela->r_info;
-          rel_words[REL_R_ADDEND] = rela->r_addend;
-        }
-        else
-        {
-          rel_words[REL_R_OFFSET] = rel->r_offset;
-          rel_words[REL_R_INFO] = rel->r_info;
-          rel_words[REL_R_ADDEND] = 0;
-        }
-
-        if (!rtems_rtl_unresolved_add (obj,
-                                       flags,
-                                       symname,
-                                       targetsect->section,
-                                       rel_words))
-          return false;
-
-        ++obj->unresolved;
-      }
-    }
-
-    if (relocate)
-    {
-      if (is_rela)
-      {
-        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: rela: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
-                  symname, (int) ELF_R_SYM (rela->r_info),
-                  (uintmax_t) symvalue, (int) ELF_R_TYPE (rela->r_info),
-                  (uintmax_t) rela->r_offset, (int) rela->r_addend);
-        if (!rtems_rtl_elf_relocate_rela (obj, rela, targetsect,
-                                          symname, sym.st_info, symvalue))
-          return false;
-      }
-      else
-      {
-        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-          printf ("rtl: rel: sym:%s(%d)=%08jx type:%d off:%08jx\n",
-                  symname, (int) ELF_R_SYM (rel->r_info),
-                  (uintmax_t) symvalue, (int) ELF_R_TYPE (rel->r_info),
-                  (uintmax_t) rel->r_offset);
-        if (!rtems_rtl_elf_relocate_rel (obj, rel, targetsect,
-                                         symname, sym.st_info, symvalue))
-          return false;
-      }
-    }
+    if (!handler (obj,
+                  is_rela, relbuf, targetsect,
+                  symbol, &sym, symname, symvalue, resolved,
+                  data))
+      return false;
   }
 
   /*
@@ -283,6 +394,28 @@ rtems_rtl_elf_relocator (rtems_rtl_obj*      obj,
   return true;
 }
 
+static bool
+rtems_rtl_elf_relocs_parser (rtems_rtl_obj*      obj,
+                             int                 fd,
+                             rtems_rtl_obj_sect* sect,
+                             void*               data)
+{
+  bool r = rtems_rtl_elf_relocate_worker (obj, fd, sect,
+                                          rtems_rtl_elf_reloc_parser, data);
+  rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_RELOC_TAG, 0);
+  return r;
+}
+
+static bool
+rtems_rtl_elf_relocs_locator (rtems_rtl_obj*      obj,
+                              int                 fd,
+                              rtems_rtl_obj_sect* sect,
+                              void*               data)
+{
+  return rtems_rtl_elf_relocate_worker (obj, fd, sect,
+                                        rtems_rtl_elf_reloc_relocator, data);
+}
+
 bool
 rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
                                    rtems_rtl_obj_sym*        sym)
@@ -290,8 +423,9 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
   rtems_rtl_obj_sect* sect;
   bool                is_rela;
   Elf_Word            symvalue;
+  rtems_rtl_obj*      sobj;
 
-  is_rela =reloc->flags & 1;
+  is_rela = reloc->flags & 1;
 
   sect = rtems_rtl_obj_find_section_by_index (reloc->obj, reloc->sect);
   if (!sect)
@@ -329,11 +463,18 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
       return false;
   }
 
-  if (reloc->obj->unresolved)
+  if (reloc->obj->unresolved > 0)
   {
     --reloc->obj->unresolved;
-    if (!reloc->obj->unresolved)
+    if (reloc->obj->unresolved == 0)
       reloc->obj->flags &= ~RTEMS_RTL_OBJ_UNRESOLVED;
+  }
+
+  sobj = rtems_rtl_find_obj_with_symbol (sym);
+  if (sobj != NULL)
+  {
+    if (rtems_rtl_obj_add_dependent (reloc->obj, sobj))
+      rtems_rtl_obj_inc_reference (sobj);
   }
 
   return true;
@@ -398,6 +539,24 @@ rtems_rtl_elf_common (rtems_rtl_obj*      obj,
     }
   }
 
+  return true;
+}
+
+static bool
+rtems_rtl_elf_dependents (rtems_rtl_obj* obj, rtems_rtl_elf_reloc_data* reloc)
+{
+  /*
+   * If there are dependencies and no unresolved externals allocate and size
+   * the dependency table to the number of dependent object files. If there are
+   * unresolved externals the number of dependencies is unknown at this point
+   * in time so use dynamic allocation to allocate the block size number of
+   * entries when the entries are added.
+   */
+  if (reloc->dependents > 0 && reloc->unresolved == 0)
+  {
+    if (!rtems_rtl_obj_alloc_dependents (obj, reloc->dependents))
+      return false;
+  }
   return true;
 }
 
@@ -1024,7 +1183,8 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
 {
   rtems_rtl_obj_cache*      header;
   Elf_Ehdr                  ehdr;
-  rtems_rtl_elf_common_data common = { .size = 0, .alignment = 0 };
+  rtems_rtl_elf_reloc_data  relocs = { 0 };
+  rtems_rtl_elf_common_data common = { 0 };
 
   rtems_rtl_obj_caches (&header, NULL, NULL);
 
@@ -1102,10 +1262,16 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   if (!rtems_rtl_obj_load_sections (obj, fd, rtems_rtl_elf_loader, &ehdr))
     return false;
 
+  if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocs_parser, &relocs))
+    return false;
+
+  if (!rtems_rtl_elf_dependents (obj, &relocs))
+    return false;
+
   if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_symbols, &ehdr))
     return false;
 
-  if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocator, &ehdr))
+  if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocs_locator, &ehdr))
     return false;
 
   rtems_rtl_obj_synchronize_cache (obj);

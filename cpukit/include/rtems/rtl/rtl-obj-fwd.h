@@ -27,6 +27,12 @@ struct rtems_rtl_obj_sect;
 typedef struct rtems_rtl_obj_sect rtems_rtl_obj_sect;
 
 /**
+ * The forward declaration of the obj depends structure.
+ */
+struct rtems_rtl_obj_depends;
+typedef struct rtems_rtl_obj_depends rtems_rtl_obj_depends;
+
+/**
  * The forward declaration of the obj structure.
  */
 struct rtems_rtl_obj;

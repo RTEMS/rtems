@@ -28,6 +28,7 @@
 #include <rtems/rtl/rtl-obj.h>
 #include <rtems/rtl/rtl-obj-cache.h>
 #include <rtems/rtl/rtl-obj-comp.h>
+#include <rtems/rtl/rtl-sym.h>
 #include <rtems/rtl/rtl-unresolved.h>
 
 #ifdef __cplusplus
@@ -69,6 +70,11 @@ extern "C" {
  * The number of relocation record per block in the unresolved table.
  */
 #define RTEMS_RTL_UNRESOLVED_BLOCK_SIZE (64)
+
+/**
+ * The number of dependency record per block in the dependency table.
+ */
+#define RTEMS_RTL_DEPENDENCY_BLOCK_SIZE (16)
 
 /**
  * The global debugger interface variable.
@@ -173,6 +179,16 @@ void rtems_rtl_obj_decompress (rtems_rtl_obj_comp** decomp,
                                off_t                offset);
 
 /**
+ * Update the mask in the object files. You can clear flags and then set
+ * flags. A zero (0) does not clear or set the flags. This is global to all
+ * object files that are laoded.
+ *
+ * @param clear The flag's clear mask, a 0 does not clear any flags.
+ * @param set The flag's set mask, a 0 does not set any flags.
+ */
+void rtems_rtl_obj_update_flags (uint32_t clear, uint32_t set);
+
+/**
  * Lock the Run-time Linker.
  *
  * @return rtems_rtl_data* The RTL data after being locked.
@@ -205,6 +221,15 @@ rtems_rtl_obj* rtems_rtl_check_handle (void* handle);
  * @return rtems_rtl_obj* The object file descriptor.
  */
 rtems_rtl_obj* rtems_rtl_find_obj (const char* name);
+
+/**
+ * Find the object file a symbol is exported from.
+ *
+ * @param sym The symbol to search with.
+ * @retval NULL No object file found.
+ * @return rtems_rtl_obj* Reference to the symbol.
+ */
+rtems_rtl_obj* rtems_rtl_find_obj_with_symbol (const rtems_rtl_obj_sym* sym);
 
 /**
  * Load an object file into memory relocating it. It will not be resolved
