@@ -318,6 +318,7 @@ include_rtems_score_HEADERS += include/rtems/score/cpustdatomic.h
 include_rtems_score_HEADERS += include/rtems/score/freechain.h
 include_rtems_score_HEADERS += include/rtems/score/heap.h
 include_rtems_score_HEADERS += include/rtems/score/heapimpl.h
+include_rtems_score_HEADERS += include/rtems/score/heapinfo.h
 include_rtems_score_HEADERS += include/rtems/score/interr.h
 include_rtems_score_HEADERS += include/rtems/score/io.h
 include_rtems_score_HEADERS += include/rtems/score/isr.h

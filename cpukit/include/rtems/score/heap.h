@@ -19,6 +19,7 @@
 #define _RTEMS_SCORE_HEAP_H
 
 #include <rtems/score/cpu.h>
+#include <rtems/score/heapinfo.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -249,95 +250,6 @@ struct Heap_Block {
 };
 
 /**
- * @brief Run-time heap statistics.
- *
- * The value @a searches / @a allocs gives the mean number of searches per
- * allocation, while @a max_search gives maximum number of searches ever
- * performed on a single allocation call.
- */
-typedef struct {
-  /**
-   * @brief Lifetime number of bytes allocated from this heap.
-   *
-   * This value is an integral multiple of the page size.
-   */
-  uint64_t lifetime_allocated;
-
-  /**
-   * @brief Lifetime number of bytes freed to this heap.
-   *
-   * This value is an integral multiple of the page size.
-   */
-  uint64_t lifetime_freed;
-
-  /**
-   * @brief Size of the allocatable area in bytes.
-   *
-   * This value is an integral multiple of the page size.
-   */
-  uintptr_t size;
-
-  /**
-   * @brief Current free size in bytes.
-   *
-   * This value is an integral multiple of the page size.
-   */
-  uintptr_t free_size;
-
-  /**
-   * @brief Minimum free size ever in bytes.
-   *
-   * This value is an integral multiple of the page size.
-   */
-  uintptr_t min_free_size;
-
-  /**
-   * @brief Current number of free blocks.
-   */
-  uint32_t free_blocks;
-
-  /**
-   * @brief Maximum number of free blocks ever.
-   */
-  uint32_t max_free_blocks;
-
-  /**
-   * @brief Current number of used blocks.
-   */
-  uint32_t used_blocks;
-
-  /**
-   * @brief Maximum number of blocks searched ever.
-   */
-  uint32_t max_search;
-
-  /**
-   * @brief Total number of searches.
-   */
-  uint32_t searches;
-
-  /**
-   * @brief Total number of successful allocations.
-   */
-  uint32_t allocs;
-
-  /**
-   * @brief Total number of failed allocations.
-   */
-  uint32_t failed_allocs;
-
-  /**
-   * @brief Total number of successful frees.
-   */
-  uint32_t frees;
-
-  /**
-   * @brief Total number of successful resizes.
-   */
-  uint32_t resizes;
-} Heap_Statistics;
-
-/**
  * @brief Control block used to manage a heap.
  */
 struct Heap_Control {
@@ -353,35 +265,6 @@ struct Heap_Control {
     Heap_Protection Protection;
   #endif
 };
-
-/**
- * @brief Information about blocks.
- */
-typedef struct {
-  /**
-   * @brief Number of blocks of this type.
-   */
-  uintptr_t number;
-
-  /**
-   * @brief Largest block of this type.
-   */
-  uintptr_t largest;
-
-  /**
-   * @brief Total size of the blocks of this type.
-   */
-  uintptr_t total;
-} Heap_Information;
-
-/**
- * @brief Information block returned by _Heap_Get_information().
- */
-typedef struct {
-  Heap_Information Free;
-  Heap_Information Used;
-  Heap_Statistics Stats;
-} Heap_Information_block;
 
 /**
  * @brief Heap area structure for table based heap initialization and

@@ -26,7 +26,7 @@
 #include <sys/_timespec.h>
 #include <sys/_timeval.h>
 #include <stdint.h>
-#include <rtems/score/heap.h>
+#include <rtems/score/heapinfo.h>
 #include <rtems/score/object.h>
 #include <rtems/score/watchdogticks.h>
 #include <rtems/rtems/modes.h>

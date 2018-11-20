@@ -17,6 +17,7 @@
 
 #include <rtems.h>
 #include <rtems/stackchk.h>
+#include <rtems/score/heap.h>
 #include <rtems/score/percpu.h>
 
 /* forward declarations to avoid warnings */
