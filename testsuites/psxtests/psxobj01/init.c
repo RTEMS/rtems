@@ -45,7 +45,6 @@ rtems_task Init(
     4,           /* the_class */
     0,           /* maximum */
     4,           /* size */
-    true,        /* is_string */
     10,          /* maximum_name_length */
     NULL         /* Objects_Thread_queue_Extract_callout extract */
   );

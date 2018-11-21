@@ -45,7 +45,6 @@ static void _POSIX_Semaphore_Manager_initialization(void)
     _Configuration_POSIX_Maximum_named_semaphores,
     sizeof( POSIX_Semaphore_Control ),
                                 /* size of this object's control block */
-    true,                       /* true if names for this object are strings */
     _POSIX_PATH_MAX,            /* maximum length of each object's name */
     NULL                        /* Proxy extraction support callout */
   );

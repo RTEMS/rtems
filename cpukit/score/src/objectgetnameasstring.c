@@ -114,7 +114,7 @@ char *_Objects_Get_name_as_string(
 
   _Objects_Name_to_string(
     the_object->name,
-    information->is_string,
+    _Objects_Has_string_name( information ),
     name,
     length
   );

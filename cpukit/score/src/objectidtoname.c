@@ -40,7 +40,7 @@ Objects_Name_or_id_lookup_errors _Objects_Id_to_name (
   if ( !information )
     return OBJECTS_INVALID_ID;
 
-  if ( information->is_string )
+  if ( _Objects_Has_string_name( information ) )
     return OBJECTS_INVALID_ID;
 
   the_object = _Objects_Get(

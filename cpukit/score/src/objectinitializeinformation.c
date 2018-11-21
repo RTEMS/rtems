@@ -30,8 +30,7 @@ void _Objects_Do_initialize_information(
   uint16_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
-  bool                 is_string,
-  uint32_t             maximum_name_length
+  uint16_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   Objects_Thread_queue_Extract_callout extract
@@ -49,7 +48,6 @@ void _Objects_Do_initialize_information(
   information->inactive_per_block = 0;
   information->object_blocks      = 0;
   information->inactive           = 0;
-  information->is_string          = is_string;
 
   /*
    *  Set the maximum value to 0. It will be updated when objects are

@@ -37,8 +37,7 @@ static void _Dual_ported_memory_Manager_initialization(void)
                                   /* maximum objects of this class */
     sizeof( Dual_ported_memory_Control ),
                                   /* size of this object's control block */
-    false,                        /* true if names of this object are strings */
-    RTEMS_MAXIMUM_NAME_LENGTH,    /* maximum length of each object's name */
+    OBJECTS_NO_STRING_NAME,       /* maximum length of an object name */
     NULL                          /* Proxy extraction support callout */
   );
 }

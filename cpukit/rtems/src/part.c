@@ -36,8 +36,7 @@ static void _Partition_Manager_initialization(void)
     Configuration_RTEMS_API.maximum_partitions,
                                  /* maximum objects of this class */
     sizeof( Partition_Control ), /* size of this object's control block */
-    false,                       /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH,   /* maximum length of an object name */
+    OBJECTS_NO_STRING_NAME,      /* maximum length of an object name */
     _Partition_MP_Send_extract_proxy  /* Proxy extraction support callout */
   );
 

@@ -65,8 +65,7 @@ static void _POSIX_Timer_Manager_initialization(void)
     _Configuration_POSIX_Maximum_timers,
     sizeof( POSIX_Timer_Control ),
                                 /* size of this object's control block */
-    false,                      /* true if names for this object are strings */
-    0,                          /* maximum length of each object's name */
+    OBJECTS_NO_STRING_NAME,     /* maximum length of an object name */
     NULL                        /* Proxy extraction support callout */
   );
 }

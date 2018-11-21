@@ -36,8 +36,7 @@ static void _Rate_monotonic_Manager_initialization(void)
     Configuration_RTEMS_API.maximum_periods,
                                      /* maximum objects of this class */
     sizeof( Rate_monotonic_Control ),/* size of this object's control block */
-    false,                           /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH,       /* maximum length of an object name */
+    OBJECTS_NO_STRING_NAME,          /* maximum length of an object name */
     NULL                             /* Proxy extraction support callout */
   );
 }

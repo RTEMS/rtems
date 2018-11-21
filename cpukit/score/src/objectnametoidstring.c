@@ -33,7 +33,7 @@ Objects_Control *_Objects_Get_by_name(
   size_t   max_name_length;
   uint32_t index;
 
-  _Assert( information->is_string );
+  _Assert( _Objects_Has_string_name( information ) );
   _Assert( _Objects_Allocator_is_owner() );
 
   if ( name == NULL ) {

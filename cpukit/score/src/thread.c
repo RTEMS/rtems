@@ -58,8 +58,7 @@ void _Thread_Initialize_information(
     the_class,
     maximum,
     _Thread_Control_size,
-    false,
-    RTEMS_MAXIMUM_NAME_LENGTH,
+    OBJECTS_NO_STRING_NAME,
     NULL
   );
 

@@ -35,8 +35,7 @@ static void _Extension_Manager_initialization(void)
     OBJECTS_RTEMS_EXTENSIONS,
     rtems_configuration_get_maximum_extensions(),
     sizeof( Extension_Control ),
-    false,                     /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH, /* maximum length of an object name */
+    OBJECTS_NO_STRING_NAME,    /* maximum length of an object name */
     NULL                       /* Proxy extraction support callout */
   );
 }

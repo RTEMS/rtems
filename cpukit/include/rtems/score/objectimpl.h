@@ -132,14 +132,17 @@ typedef struct {
   Objects_Maximum   inactive;
   /** This is the number of objects in a block. */
   Objects_Maximum   allocation_size;
-  /** This is the maximum length of names. */
+  /**
+   * @brief This is the maximum length of names.
+   *
+   * A length of zero indicates that this object has a no string name
+   * (OBJECTS_NO_STRING_NAME).
+   */
   uint16_t          name_length;
   /** This field indicates the API of this object class. */
   uint8_t           the_api;
   /** This is the class of this object set. */
   uint8_t           the_class;
-  /** This is true if names are strings. */
-  bool              is_string;
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
   /** This is the size in bytes of each object instance. */
@@ -225,13 +228,18 @@ void _Objects_Do_initialize_information(
   uint16_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
-  bool                 is_string,
-  uint32_t             maximum_name_length
+  uint16_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
   Objects_Thread_queue_Extract_callout extract
 #endif
 );
+
+/**
+ * @brief Constant for the object information string name length to indicate
+ * that this object class has no string names.
+ */
+#define OBJECTS_NO_STRING_NAME 0
 
 /**
  *  @brief Initialize object Information
@@ -261,7 +269,6 @@ void _Objects_Do_initialize_information(
     the_class, \
     maximum, \
     size, \
-    is_string, \
     maximum_name_length, \
     extract \
   ) \
@@ -271,7 +278,6 @@ void _Objects_Do_initialize_information(
       the_class, \
       maximum, \
       size, \
-      is_string, \
       maximum_name_length, \
       extract \
     )
@@ -282,7 +288,6 @@ void _Objects_Do_initialize_information(
     the_class, \
     maximum, \
     size, \
-    is_string, \
     maximum_name_length, \
     extract \
   ) \
@@ -292,7 +297,6 @@ void _Objects_Do_initialize_information(
       the_class, \
       maximum, \
       size, \
-      is_string, \
       maximum_name_length \
     )
 #endif
@@ -735,6 +739,13 @@ Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 );
 
+RTEMS_INLINE_ROUTINE bool _Objects_Has_string_name(
+  const Objects_Information *information
+)
+{
+  return information->name_length > 0;
+}
+
 RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
   const Objects_Information *information
 )
@@ -919,7 +930,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_u32(
   uint32_t                   name
 )
 {
-  _Assert( !information->is_string );
+  _Assert( !_Objects_Has_string_name( information ) );
   the_object->name.name_u32 = name;
 
   _Objects_Set_local_object(
@@ -943,7 +954,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Open_string(
   const char                *name
 )
 {
-  _Assert( information->is_string );
+  _Assert( _Objects_Has_string_name( information ) );
   the_object->name.name_p = name;
 
   _Objects_Set_local_object(
