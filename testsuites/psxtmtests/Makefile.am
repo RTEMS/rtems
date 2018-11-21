@@ -57,6 +57,17 @@ psxtmbarrier04_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmbarrier04) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
+if TEST_psxtmbarrierattr01
+psxtm_tests += psxtmbarrierattr01
+psxtm_docs += psxtmbarrierattr01/psxtmbarrierattr01.doc
+psxtmbarrierattr01_SOURCES = psxtmbarrierattr01/init.c \
+	../tmtests/include/timesys.h ../support/src/tmtests_empty_function.c \
+	../support/src/tmtests_support.c
+psxtmbarrierattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmbarrierattr01) \
+	$(support_includes) -I$(top_srcdir)/../tmtests/include \
+	-DOPERATION_COUNT=$(OPERATION_COUNT)
+endif
+
 if TEST_psxtmcleanup01
 psxtm_tests += psxtmcleanup01
 psxtm_docs += psxtmcleanup01/psxtmcleanup01.doc

@@ -91,6 +91,11 @@
 "pthread_barrier_wait: releasing: no preempt","psxtmbarrier03","psxtmtest_unblocking_nopreempt","Yes"
 "pthread_barrier_wait: releasing: preempt","psxtmbarrier04","psxtmtest_unblocking_preempt","Yes"
 
+"pthread_barrierattr_init: only case","psxtmbarrierattr01","psxtmtest_init_destroy","Yes"
+"pthread_barrierattr_destroy: only case","psxtmbarrierattr01","psxtmtest_init_destroy","Yes"
+"pthread_barrierattr_getpshared: only case","psxtmbarrierattr01","psxtmtest_single","Yes"
+"pthread_barrierattr_setpshared: only case","psxtmbarrierattr01","psxtmtest_single","Yes"
+
 "pthread_spin_init: only case","psxspin01","psxtmtest_init_destroy","Yes"
 "pthread_spin_destroy: only case","psxspin01","psxtmtest_init_destroy","Yes"
 "pthread_spin_lock: available","psxspin02","psxtmtest_single w/multiple timings","Yes"
