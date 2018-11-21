@@ -30,15 +30,16 @@
 
 char *_Workspace_String_duplicate(
   const char *string,
-  size_t len
+  size_t      len
 )
 {
-  char *dup = _Workspace_Allocate(len + 1);
+  char *dup;
 
-  if (dup != NULL) {
-    dup [len] = '\0';
-    memcpy(dup, string, len);
+  dup = _Workspace_Allocate( len + 1 );
+  if ( dup == NULL ) {
+    return NULL;
   }
 
-  return dup;
+  dup[ len ] = '\0';
+  return memcpy( dup, string, len );
 }
