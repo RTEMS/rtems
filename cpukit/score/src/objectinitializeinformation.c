@@ -29,7 +29,7 @@ void _Objects_Do_initialize_information(
   Objects_APIs         the_api,
   uint16_t             the_class,
   uint32_t             maximum,
-  uint16_t             size,
+  uint16_t             object_size,
   uint16_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
@@ -43,7 +43,7 @@ void _Objects_Do_initialize_information(
 
   information->the_api            = the_api;
   information->the_class          = the_class;
-  information->size               = size;
+  information->object_size        = object_size;
   information->local_table        = 0;
   information->inactive_per_block = 0;
   information->object_blocks      = 0;

@@ -47,7 +47,7 @@ Objects_Control *_Objects_Allocate_unprotected(
    *  should be all zeroed out because it is in the BSS.  So let's
    *  check that code for this manager is even present.
    */
-  if ( information->size == 0 )
+  if ( information->object_size == 0 )
     return NULL;
 
   /*

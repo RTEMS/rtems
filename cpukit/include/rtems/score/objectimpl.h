@@ -132,6 +132,8 @@ typedef struct {
   Objects_Maximum   inactive;
   /** This is the number of objects in a block. */
   Objects_Maximum   allocation_size;
+  /** This is the size in bytes of each object instance. */
+  uint16_t          object_size;
   /**
    * @brief This is the maximum length of names.
    *
@@ -145,8 +147,6 @@ typedef struct {
   uint8_t           the_class;
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
-  /** This is the size in bytes of each object instance. */
-  size_t            size;
   /** This is the chain of inactive control blocks. */
   Chain_Control     Inactive;
   /** This is the number of inactive objects per block. */
@@ -227,7 +227,7 @@ void _Objects_Do_initialize_information(
   Objects_APIs         the_api,
   uint16_t             the_class,
   uint32_t             maximum,
-  uint16_t             size,
+  uint16_t             object_size,
   uint16_t             maximum_name_length
 #if defined(RTEMS_MULTIPROCESSING)
   ,
@@ -258,7 +258,7 @@ void _Objects_Do_initialize_information(
  *             by this information block.  It is specific to @a the_api.
  *  @param[in] maximum is the maximum number of instances of this object
  *             class which may be concurrently active.
- *  @param[in] size is the size of the data structure for this class.
+ *  @param[in] object_size is the size of the data structure for this class.
  *  @param[in] is_string is true if this object uses string style names.
  *  @param[in] maximum_name_length is the maximum length of object names.
  */
@@ -268,7 +268,7 @@ void _Objects_Do_initialize_information(
     the_api, \
     the_class, \
     maximum, \
-    size, \
+    object_size, \
     maximum_name_length, \
     extract \
   ) \
@@ -277,7 +277,7 @@ void _Objects_Do_initialize_information(
       the_api, \
       the_class, \
       maximum, \
-      size, \
+      object_size, \
       maximum_name_length, \
       extract \
     )
@@ -287,7 +287,7 @@ void _Objects_Do_initialize_information(
     the_api, \
     the_class, \
     maximum, \
-    size, \
+    object_size, \
     maximum_name_length, \
     extract \
   ) \
@@ -296,7 +296,7 @@ void _Objects_Do_initialize_information(
       the_api, \
       the_class, \
       maximum, \
-      size, \
+      object_size, \
       maximum_name_length \
     )
 #endif

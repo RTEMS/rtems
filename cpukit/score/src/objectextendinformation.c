@@ -100,7 +100,7 @@ void _Objects_Extend_information(
    * Allocate the name table, and the objects and if it fails either return or
    * generate a fatal error depending on auto-extending being active.
    */
-  object_block_size = information->allocation_size * information->size;
+  object_block_size = information->allocation_size * information->object_size;
   if ( information->auto_extend ) {
     new_object_block = _Workspace_Allocate( object_block_size );
     if ( !new_object_block )
@@ -261,6 +261,6 @@ void _Objects_Extend_information(
     _Chain_Initialize_node( &the_object->Node );
     _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
-    the_object = _Addresses_Add_offset( the_object, information->size );
+    the_object = _Addresses_Add_offset( the_object, information->object_size );
   }
 }
