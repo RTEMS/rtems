@@ -24,7 +24,7 @@ extern "C" {
 /**
  * @brief Connect RTEMS Application to MicroMonitor
  *
- * RTEMS uMonitor wrapper for monConnect().  This will deal with the
+ * RTEMS uMonitor wrapper for monConnect().  This deals with
  * getting MONCOMPTR as well as providing the locking routines.
  */
 void rtems_umon_connect(void);
