@@ -68,7 +68,7 @@ SECTIONS
       PROVIDE_HIDDEN (__rela_iplt_end = .);
     }
   .rtemsroset : {
-    /* for pre rtems-libbsd FreeBSD code */
+    /* for pre–RTEMS libbsd FreeBSD code */
     __start_set_sysctl_set = .;
     *(set_sysctl_*);
     __stop_set_sysctl_set = .;
@@ -160,13 +160,12 @@ SECTIONS
   {
     /* gcc uses crtbegin.o to find the start of
        the constructors, so we make sure it is
-       first.  Because this is a wildcard, it
+       the first.  Because this is a wildcard, it
        doesn't matter if the user does not
        actually link against crtbegin.o; the
        linker won't look for a file to match a
-       wildcard.  The wildcard also means that it
-       doesn't matter which directory crtbegin.o
-       is in.  */
+       wildcard.  The wildcard also means that which
+       directory crtbegin.o is in doesn't matter */
     KEEP (*crtbegin.o(.ctors))
     KEEP (*crtbegin?.o(.ctors))
     /* We don't want to include the .ctor section from
