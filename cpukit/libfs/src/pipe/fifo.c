@@ -100,7 +100,6 @@ static int pipe_alloc(
     c = 'a';
   return 0;
 
-  rtems_barrier_delete(pipe->writeBarrier);
 err_wbar:
   rtems_barrier_delete(pipe->readBarrier);
 err_rbar:
