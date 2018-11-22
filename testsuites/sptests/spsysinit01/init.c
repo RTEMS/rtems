@@ -19,12 +19,18 @@
 #include "tmacros.h"
 
 #include <sys/types.h>
+#include <sys/mman.h>
 #include <sys/stat.h>
 
 #include <assert.h>
+#include <fcntl.h>
+#include <mqueue.h>
 #include <pthread.h>
-#include <string.h>
+#include <semaphore.h>
+#include <signal.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #include <rtems.h>
@@ -188,6 +194,16 @@ static void next_step(init_step expected)
   step = expected + 1;
 }
 
+static bool info_not_init(const Objects_Information *info)
+{
+  return _Chain_Is_empty(&info->Inactive);
+}
+
+static bool info_is_init(const Objects_Information *info, size_t count)
+{
+  return _Chain_Node_count_unprotected(&info->Inactive) == count;
+}
+
 FIRST(RTEMS_SYSINIT_BSP_WORK_AREAS)
 {
   assert(_Workspace_Area.area_begin == 0);
@@ -248,53 +264,49 @@ LAST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
 
 FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(
-    _Objects_Get_maximum_index(&_Thread_Internal_information.Objects) == 0
-  );
+  assert(info_not_init(&_Thread_Information.Objects));
   next_step(DATA_STRUCTURES_PRE);
 }
 
 LAST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(
-    _Objects_Get_maximum_index(&_Thread_Internal_information.Objects) != 0
-  );
+  assert(info_is_init(&_Thread_Information.Objects, 1));
   next_step(DATA_STRUCTURES_POST);
 }
 
 FIRST(RTEMS_SYSINIT_USER_EXTENSIONS)
 {
-  assert(_Objects_Get_maximum_index(&_Extension_Information) == 0);
+  assert(info_not_init(&_Extension_Information));
   next_step(USER_EXTENSIONS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_USER_EXTENSIONS)
 {
-  assert(_Objects_Get_maximum_index(&_Extension_Information) != 0);
+  assert(info_is_init(&_Extension_Information, 1));
   next_step(USER_EXTENSIONS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_TASKS)
 {
-  assert(_Objects_Get_maximum_index(&_RTEMS_tasks_Information.Objects) == 0);
+  assert(info_not_init(&_RTEMS_tasks_Information.Objects));
   next_step(CLASSIC_TASKS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_TASKS)
 {
-  assert(_Objects_Get_maximum_index(&_RTEMS_tasks_Information.Objects) != 0);
+  assert(info_is_init(&_RTEMS_tasks_Information.Objects, 2));
   next_step(CLASSIC_TASKS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_TIMER)
 {
-  assert(_Objects_Get_maximum_index(&_Timer_Information) == 0);
+  assert(info_not_init(&_Timer_Information));
   next_step(CLASSIC_TIMER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_TIMER)
 {
-  assert(_Objects_Get_maximum_index(&_Timer_Information) != 0);
+  assert(info_is_init(&_Timer_Information, 1));
   next_step(CLASSIC_TIMER_POST);
 }
 
@@ -322,85 +334,85 @@ LAST(RTEMS_SYSINIT_CLASSIC_EVENT)
 
 FIRST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
 {
-  assert(_Objects_Get_maximum_index(&_Message_queue_Information) == 0);
+  assert(info_not_init(&_Message_queue_Information));
   next_step(CLASSIC_MESSAGE_QUEUE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
 {
-  assert(_Objects_Get_maximum_index(&_Message_queue_Information) != 0);
+  assert(info_is_init(&_Message_queue_Information, 1));
   next_step(CLASSIC_MESSAGE_QUEUE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Objects_Get_maximum_index(&_Semaphore_Information) == 0);
+  assert(_Semaphore_Information.initial_objects[0].id == 0);
   next_step(CLASSIC_SEMAPHORE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Objects_Get_maximum_index(&_Semaphore_Information) != 0);
+  assert(_Semaphore_Information.initial_objects[0].id != 0);
   next_step(CLASSIC_SEMAPHORE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_PARTITION)
 {
-  assert(_Objects_Get_maximum_index(&_Partition_Information) == 0);
+  assert(info_not_init(&_Partition_Information));
   next_step(CLASSIC_PARTITION_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_PARTITION)
 {
-  assert(_Objects_Get_maximum_index(&_Partition_Information) != 0);
+  assert(info_is_init(&_Partition_Information, 1));
   next_step(CLASSIC_PARTITION_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_REGION)
 {
-  assert(_Objects_Get_maximum_index(&_Region_Information) == 0);
+  assert(info_not_init(&_Region_Information));
   next_step(CLASSIC_REGION_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_REGION)
 {
-  assert(_Objects_Get_maximum_index(&_Region_Information) != 0);
+  assert(info_is_init(&_Region_Information, 1));
   next_step(CLASSIC_REGION_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
 {
-  assert(_Objects_Get_maximum_index(&_Dual_ported_memory_Information) == 0);
+  assert(info_not_init(&_Dual_ported_memory_Information));
   next_step(CLASSIC_DUAL_PORTED_MEMORY_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
 {
-  assert(_Objects_Get_maximum_index(&_Dual_ported_memory_Information) != 0);
+  assert(info_is_init(&_Dual_ported_memory_Information, 1));
   next_step(CLASSIC_DUAL_PORTED_MEMORY_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
 {
-  assert(_Objects_Get_maximum_index(&_Rate_monotonic_Information) == 0);
+  assert(info_not_init(&_Rate_monotonic_Information));
   next_step(CLASSIC_RATE_MONOTONIC_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
 {
-  assert(_Objects_Get_maximum_index(&_Rate_monotonic_Information) != 0);
+  assert(info_is_init(&_Rate_monotonic_Information, 1));
   next_step(CLASSIC_RATE_MONOTONIC_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_BARRIER)
 {
-  assert(_Objects_Get_maximum_index(&_Barrier_Information) == 0);
+  assert(info_not_init(&_Barrier_Information));
   next_step(CLASSIC_BARRIER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
 {
-  assert(_Objects_Get_maximum_index(&_Barrier_Information) != 0);
+  assert(info_is_init(&_Barrier_Information, 1));
   next_step(CLASSIC_BARRIER_POST);
 }
 
@@ -432,63 +444,63 @@ LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
 
 FIRST(RTEMS_SYSINIT_POSIX_THREADS)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Threads_Information.Objects) == 0);
+  assert(info_not_init(&_POSIX_Threads_Information.Objects));
   next_step(POSIX_THREADS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_THREADS)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Threads_Information.Objects) != 0);
+  assert(info_is_init(&_POSIX_Threads_Information.Objects, 1));
   next_step(POSIX_THREADS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Message_queue_Information) == 0);
+  assert(info_not_init(&_POSIX_Message_queue_Information));
   next_step(POSIX_MESSAGE_QUEUE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Message_queue_Information) != 0);
+  assert(info_is_init(&_POSIX_Message_queue_Information, 1));
   next_step(POSIX_MESSAGE_QUEUE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Semaphore_Information) == 0);
+  assert(info_not_init(&_POSIX_Semaphore_Information));
   next_step(POSIX_SEMAPHORE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Semaphore_Information) != 0);
+  assert(info_is_init(&_POSIX_Semaphore_Information, 1));
   next_step(POSIX_SEMAPHORE_POST);
 }
 
 #ifdef RTEMS_POSIX_API
 FIRST(RTEMS_SYSINIT_POSIX_TIMER)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Timer_Information) == 0);
+  assert(info_not_init(&_POSIX_Timer_Information));
   next_step(POSIX_TIMER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_TIMER)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Timer_Information) != 0);
+  assert(info_is_init(&_POSIX_Timer_Information, 1));
   next_step(POSIX_TIMER_POST);
 }
 #endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_POSIX_SHM)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Shm_Information) == 0);
+  assert(info_not_init(&_POSIX_Shm_Information));
   next_step(POSIX_SHM_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_SHM)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Shm_Information) != 0);
+  assert(info_is_init(&_POSIX_Shm_Information, 1));
   next_step(POSIX_SHM_POST);
 }
 
@@ -512,13 +524,13 @@ LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
 
 FIRST(RTEMS_SYSINIT_POSIX_KEYS)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Keys_Information) == 0);
+  assert(info_not_init(&_POSIX_Keys_Information));
   next_step(POSIX_KEYS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_KEYS)
 {
-  assert(_Objects_Get_maximum_index(&_POSIX_Keys_Information) != 0);
+  assert(info_is_init(&_POSIX_Keys_Information, 2));
   next_step(POSIX_KEYS_POST);
 }
 
@@ -657,11 +669,268 @@ LAST_STEP(TENTH);
 LAST_STEP(MIDDLE);
 LAST_STEP(LAST);
 
-static void Init(rtems_task_argument arg)
+static void do_barrier_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_barrier_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    RTEMS_DEFAULT_ATTRIBUTES,
+    1,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_barrier_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_extensions_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+  rtems_extensions_table table;
+
+  memset(&table, 0, sizeof(table));
+  sc = rtems_extension_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    &table,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_extension_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_message_queue_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_message_queue_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    1,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_message_queue_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_partition_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+  long buf[32];
+
+  sc = rtems_partition_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    buf,
+    sizeof(buf),
+    sizeof(buf),
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_partition_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_period_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_rate_monotonic_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_rate_monotonic_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_port_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_port_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    NULL,
+    NULL,
+    1,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_port_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_region_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+  long buf[32];
+
+  sc = rtems_region_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    buf,
+    sizeof(buf),
+    1,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_region_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_semaphore_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_semaphore_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    0,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    0,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_semaphore_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_task_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_task_create(
+    rtems_build_name('T', 'E', 'S', 'T'),
+    1,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_timer_create(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_timer_create(rtems_build_name('T', 'E', 'S', 'T'), &id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_timer_delete(id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+}
+
+static void do_cleanup_push_pop(void)
 {
   pthread_cleanup_push(NULL, NULL);
   pthread_cleanup_pop(0);
+}
+
+static void do_posix_mq_open(void)
+{
+  struct mq_attr attr;
+  mqd_t mq;
+  int rv;
+
+  memset(&attr, 0, sizeof(attr));
+  attr.mq_maxmsg = 1;
+  attr.mq_msgsize = 1;
+  mq = mq_open("mq", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO, &attr);
+  rtems_test_assert(mq != (mqd_t) -1);
+
+  rv = mq_close(mq);
+  rtems_test_assert(rv == 0);
+
+  rv = mq_unlink("mq");
+  rtems_test_assert(rv == 0);
+}
+
+static void do_posix_sem_open(void)
+{
+  sem_t *sem;
+  int rv;
+
+  sem = sem_open("sem", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+  rtems_test_assert(sem != SEM_FAILED);
+
+  rv = sem_close(sem);
+  rtems_test_assert(rv == 0);
+
+  rv = sem_unlink("sem");
+  rtems_test_assert(rv == 0);
+}
+
+static void do_posix_shm_open(void)
+{
+  int fd;
+  int rv;
+
+  fd = shm_open("/shm", O_CREAT | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+  rtems_test_assert(fd >= 0);
+
+  rv = close(fd);
+  rtems_test_assert(rv == 0);
+
+  rv = shm_unlink("/shm");
+  rtems_test_assert(rv == 0);
+}
+
+static void do_posix_timer_create(void)
+{
+#ifdef RTEMS_POSIX_API
+  int rv;
+  timer_t timer;
+
+  rv = timer_create(CLOCK_REALTIME, NULL, &timer);
+  rtems_test_assert(rv == 0);
+
+  rv = timer_delete(timer);
+  rtems_test_assert(rv == 0);
+#endif /* RTEMS_POSIX_API */
+}
+
+static void Init(rtems_task_argument arg)
+{
   next_step(INIT_TASK);
+  do_barrier_create();
+  do_extensions_create();
+  do_message_queue_create();
+  do_partition_create();
+  do_period_create();
+  do_port_create();
+  do_region_create();
+  do_semaphore_create();
+  do_task_create();
+  do_timer_create();
+  do_cleanup_push_pop();
+  do_posix_mq_open();
+  do_posix_sem_open();
+  do_posix_shm_open();
+  do_posix_timer_create();
   TEST_END();
   exit(0);
 }
@@ -672,7 +941,10 @@ static void *POSIX_Init(void *arg)
 }
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
+
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
+
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 
 #define CONFIGURE_MAXIMUM_USER_EXTENSIONS 1
 
@@ -690,7 +962,7 @@ static void *POSIX_Init(void *arg)
 
 #define CONFIGURE_MAXIMUM_SEMAPHORES 1
 
-#define CONFIGURE_MAXIMUM_TASKS 1
+#define CONFIGURE_MAXIMUM_TASKS 2
 
 #define CONFIGURE_MAXIMUM_TIMERS 1
 
@@ -709,6 +981,9 @@ static void *POSIX_Init(void *arg)
 #define CONFIGURE_POSIX_INIT_THREAD_TABLE
 
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 1
+
+#define CONFIGURE_MESSAGE_BUFFER_MEMORY \
+  CONFIGURE_MESSAGE_BUFFERS_FOR_QUEUE(1, 1)
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 

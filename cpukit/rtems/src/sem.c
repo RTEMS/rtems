@@ -1,57 +1,47 @@
 /**
- *  @file
+ * @file
  *
- *  @brief Semaphore Manager Initialization
- *  @ingroup ClassicSem
+ * @ingroup ClassicSem
+ *
+ * @brief Classic Semaphore Information with Zero Objects
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Copyright (C) 2018 embedded brains GmbH
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <rtems/config.h>
-#include <rtems/sysinit.h>
-#include <rtems/rtems/semimpl.h>
+#include <rtems/rtems/semdata.h>
 
-Objects_Information _Semaphore_Information;
-
-static void _Semaphore_Manager_initialization(void)
-{
-  _Objects_Initialize_information(
-    &_Semaphore_Information,     /* object information table */
-    OBJECTS_CLASSIC_API,         /* object API */
-    OBJECTS_RTEMS_SEMAPHORES,    /* object class */
-     Configuration_RTEMS_API.maximum_semaphores,
-                                 /* maximum objects of this class */
-    sizeof( Semaphore_Control ), /* size of this object's control block */
-    OBJECTS_NO_STRING_NAME,      /* maximum length of an object name */
-    _Semaphore_MP_Send_extract_proxy /* Proxy extraction support callout */
-  );
-
-  /*
-   *  Register the MP Process Packet routine.
-   */
-
-#if defined(RTEMS_MULTIPROCESSING)
-  _MPCI_Register_packet_processor(
-    MP_PACKET_SEMAPHORE,
-    _Semaphore_MP_Process_packet
-  );
-#endif
-
-}
-
-RTEMS_SYSINIT_ITEM(
-  _Semaphore_Manager_initialization,
-  RTEMS_SYSINIT_CLASSIC_SEMAPHORE,
-  RTEMS_SYSINIT_ORDER_MIDDLE
+OBJECTS_INFORMATION_DEFINE_ZERO(
+  _Semaphore,
+  OBJECTS_CLASSIC_API,
+  OBJECTS_RTEMS_SEMAPHORES,
+  OBJECTS_NO_STRING_NAME
 );

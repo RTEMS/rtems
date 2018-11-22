@@ -44,6 +44,31 @@ typedef struct {
   rtems_attribute          attribute_set;
 }   Barrier_Control;
 
+/**
+ * @brief The Classic Barrier objects information.
+ */
+extern Objects_Information _Barrier_Information;
+
+/**
+ * @brief Macro to define the objects information for the Classic Barrier
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define BARRIER_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Barrier, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_BARRIERS, \
+    Barrier_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

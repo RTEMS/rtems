@@ -35,12 +35,6 @@ extern "C" {
  */
 
 /**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _Barrier_Information;
-
-/**
  *  @brief _Barrier_Allocate
  *
  *  This function allocates a barrier control block from

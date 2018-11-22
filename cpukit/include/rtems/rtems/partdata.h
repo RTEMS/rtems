@@ -53,6 +53,45 @@ typedef struct {
   Chain_Control       Memory;
 }   Partition_Control;
 
+/**
+ * @brief The Classic Partition objects information.
+ */
+extern Objects_Information _Partition_Information;
+
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ *  @brief Partition_MP_Send_extract_proxy
+ *
+ *  This routine is invoked when a task is deleted and it
+ *  has a proxy which must be removed from a thread queue and
+ *  the remote node must be informed of this.
+ */
+void _Partition_MP_Send_extract_proxy (
+  Thread_Control *the_thread,
+  Objects_Id      id
+);
+#endif
+
+/**
+ * @brief Macro to define the objects information for the Classic Partition
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define PARTITION_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Partition, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_PARTITIONS, \
+    Partition_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    _Partition_MP_Send_extract_proxy \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

@@ -49,14 +49,6 @@ extern "C" {
   ( THREAD_WAIT_CLASS_PERIOD | THREAD_WAIT_STATE_READY_AGAIN )
 
 /**
- *  @brief Rate Monotonic Period Class Management Structure
- *
- *  This instance of Objects_Information is used to manage the
- *  set of rate monotonic period instances.
- */
-extern Objects_Information _Rate_monotonic_Information;
-
-/**
  *  @brief Allocates a period control block from
  *  the inactive chain of free period control blocks.
  *

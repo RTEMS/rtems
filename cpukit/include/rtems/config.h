@@ -127,18 +127,6 @@ typedef struct {
    */
   uintptr_t                      stack_space_size;
 
-  /** 
-   * This field specifies the maximum number of dynamically installed
-   * used extensions.
-   */
-  uint32_t                       maximum_extensions;
-
-  /**
-   * This field contains the maximum number of POSIX API
-   * keys which are configured for this application.
-   */
-  uint32_t                       maximum_keys;
-
   /**
    * This field contains the maximum number of POSIX API
    * key value pairs which are configured for this application.

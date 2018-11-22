@@ -54,8 +54,7 @@ void _Thread_MP_Handler_initialization (
     return;
   }
 
-  proxy_size = sizeof( Thread_Proxy_control )
-    + THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count );
+  proxy_size = sizeof( Thread_Proxy_control ) + _Thread_queue_Heads_size;
   alloc_size = maximum_proxies * proxy_size;
   proxies = _Workspace_Allocate_or_fatal_error( alloc_size );
   memset( proxies, 0, alloc_size );

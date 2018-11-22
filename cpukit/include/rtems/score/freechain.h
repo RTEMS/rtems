@@ -17,7 +17,7 @@
 #define _RTEMS_SCORE_FREECHAIN_H
 
 #include <rtems/score/basedefs.h>
-#include <rtems/score/chain.h>
+#include <rtems/score/chainimpl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,16 +58,24 @@ typedef struct {
  * get more nodes.
  *
  * @param[in] freechain The freechain control to initialize.
- * @param[in] allocator The allocator function.
+ * @param[in] initial_nodes Array with the initial nodes.
  * @param[in] number_nodes The initial number of nodes.
  * @param[in] node_size The node size.
  */
-void _Freechain_Initialize(
+RTEMS_INLINE_ROUTINE void _Freechain_Initialize(
   Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
+  void                *initial_nodes,
   size_t               number_nodes,
   size_t               node_size
-);
+)
+{
+  _Chain_Initialize(
+    &freechain->Free,
+    initial_nodes,
+    number_nodes,
+    node_size
+  );
+}
 
 /**
  * @brief Gets a node from the freechain.

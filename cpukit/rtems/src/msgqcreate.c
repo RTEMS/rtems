@@ -18,18 +18,18 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/rtems/messageimpl.h>
+#include <rtems/rtems/status.h>
+#include <rtems/rtems/attrimpl.h>
+#include <rtems/rtems/options.h>
+#include <rtems/rtems/support.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/wkspace.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/attrimpl.h>
-#include <rtems/rtems/messageimpl.h>
-#include <rtems/rtems/options.h>
-#include <rtems/rtems/support.h>
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_message_queue_create(
   rtems_name       name,
@@ -143,3 +143,26 @@ rtems_status_code rtems_message_queue_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Message_queue_Manager_initialization(void)
+{
+   _Objects_Initialize_information( &_Message_queue_Information);
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+#if defined(RTEMS_MULTIPROCESSING)
+  _MPCI_Register_packet_processor(
+    MP_PACKET_MESSAGE_QUEUE,
+    _Message_queue_MP_Process_packet
+  );
+#endif
+
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Message_queue_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

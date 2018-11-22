@@ -92,6 +92,45 @@ typedef struct {
 #endif
 }   Semaphore_Control;
 
+/**
+ * @brief The Classic Semaphore objects information.
+ */
+extern Objects_Information _Semaphore_Information;
+
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ *  @brief Semaphore MP Send Extract Proxy
+ *
+ *  This routine is invoked when a task is deleted and it
+ *  has a proxy which must be removed from a thread queue and
+ *  the remote node must be informed of this.
+ */
+void _Semaphore_MP_Send_extract_proxy (
+  Thread_Control *the_thread,
+  Objects_Id      id
+);
+#endif
+
+/**
+ * @brief Macro to define the objects information for the Classic Semaphore
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define SEMAPHORE_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Semaphore, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_SEMAPHORES, \
+    Semaphore_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    _Semaphore_MP_Send_extract_proxy \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

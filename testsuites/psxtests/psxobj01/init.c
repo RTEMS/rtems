@@ -22,15 +22,18 @@
 
 const char rtems_test_name[] = "PSXOBJ 1";
 
-/* forward declarations to avoid warnings */
-rtems_task Init(rtems_task_argument ignored);
+typedef struct {
+  Objects_Control Object;
+} Test_Control;
 
-rtems_task Init(
+/* very fake object class to test with */
+OBJECTS_INFORMATION_DEFINE( Test, 1, 4, Test_Control, 0, 10, NULL );
+
+static rtems_task Init(
   rtems_task_argument ignored
 )
 {
   Objects_Get_by_name_error  error;
-  Objects_Information        TestClass;
   Objects_Control           *the_object;
   char                       name[64];
   size_t                     name_len;
@@ -38,21 +41,9 @@ rtems_task Init(
 
   TEST_BEGIN();
 
-  /* very fake object class to test with */
-  _Objects_Initialize_information(
-    &TestClass,
-    1,           /* the_api */
-    4,           /* the_class */
-    0,           /* maximum */
-    4,           /* size */
-    10,          /* maximum_name_length */
-    NULL         /* Objects_Thread_queue_Extract_callout extract */
-  );
-
-
   puts( "INIT - _Objects_Get_by_name - NULL name" );
   _Objects_Allocator_lock();
-  the_object = _Objects_Get_by_name( &TestClass, NULL, NULL, &error );
+  the_object = _Objects_Get_by_name( &Test_Information, NULL, NULL, &error );
   _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_INVALID_NAME );
@@ -60,7 +51,7 @@ rtems_task Init(
   puts( "INIT - _Objects_Get_by_name - name too long" );
   strcpy( name, "TOOOOOOOOOOOOOOOOOO LONG" );
   _Objects_Allocator_lock();
-  the_object = _Objects_Get_by_name( &TestClass, name, NULL, &error );
+  the_object = _Objects_Get_by_name( &Test_Information, name, NULL, &error );
   _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_NAME_TOO_LONG );
@@ -69,7 +60,7 @@ rtems_task Init(
   strcpy( name, "NOT FOUND" );
   name_len = 123;
   _Objects_Allocator_lock();
-  the_object = _Objects_Get_by_name( &TestClass, name, &name_len, &error );
+  the_object = _Objects_Get_by_name( &Test_Information, name, &name_len, &error );
   _Objects_Allocator_unlock();
   rtems_test_assert( the_object == NULL );
   rtems_test_assert( error == OBJECTS_GET_BY_NAME_NO_OBJECT );
@@ -79,7 +70,11 @@ rtems_task Init(
   puts( "INIT - _Objects_Set_name fails - out of memory" );
   rtems_workspace_greedy_allocate( NULL, 0 );
 
-  bc = _Objects_Set_name( &TestClass, &_Thread_Get_executing()->Object, name );
+  bc = _Objects_Set_name(
+    &Test_Information,
+    &_Thread_Get_executing()->Object,
+    name
+  );
   rtems_test_assert( bc == false );
 
   TEST_END();

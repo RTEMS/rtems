@@ -37,11 +37,6 @@ extern "C" {
  */
 
 /**
- * @brief The information control block used to manage this class of objects.
- */
-extern Objects_Information _POSIX_Keys_Information;
-
-/**
  * @brief This freechain is used as a memory pool for POSIX_Keys_Key_value_pair.
  */
 extern Freechain_Control _POSIX_Keys_Keypool;

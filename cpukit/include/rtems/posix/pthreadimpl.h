@@ -42,12 +42,6 @@ extern "C" {
  */
 #define PTHREAD_MINIMUM_STACK_SIZE _Configuration_POSIX_Minimum_stack_size
 
-/**
- * The following defines the information control block used to manage
- * this class of objects.
- */
-extern Thread_Information _POSIX_Threads_Information;
-
 #if defined(RTEMS_POSIX_API)
 RTEMS_INLINE_ROUTINE void _POSIX_Threads_Sporadic_timer_insert(
   Thread_Control    *the_thread,

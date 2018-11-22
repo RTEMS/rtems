@@ -23,26 +23,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/apimutex.h>
 #include <rtems/score/threadqimpl.h>
-
-/*
- *  rtems_region_create
- *
- *  This directive creates a region of physical contiguous memory area
- *  from which variable sized segments can be allocated.
- *
- *  Input parameters:
- *    name             - user defined region name
- *    starting_address - physical start address of region
- *    length           - physical length in bytes
- *    page_size        - page size in bytes
- *    attribute_set    - region attributes
- *    id               - address of region id to set
- *
- *  Output parameters:
- *    id               - region id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_region_create(
   rtems_name          name,
@@ -104,3 +85,14 @@ rtems_status_code rtems_region_create(
 
   return return_status;
 }
+
+static void _Region_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Region_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Region_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_REGION,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

@@ -31,8 +31,6 @@ extern "C" {
  * @{
  */
 
-extern Objects_Information _POSIX_Shm_Information;
-
 RTEMS_INLINE_ROUTINE POSIX_Shm_Control *_POSIX_Shm_Allocate_unprotected( void )
 {
   return (POSIX_Shm_Control *)

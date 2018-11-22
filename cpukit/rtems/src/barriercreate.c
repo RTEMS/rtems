@@ -18,30 +18,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/rtems/barrierimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/attrimpl.h>
 #include <rtems/score/isr.h>
-#include <rtems/rtems/barrierimpl.h>
-
-/*
- *  rtems_barrier_create
- *
- *  This directive creates a barrier.  A barrier id is returned.
- *
- *  Input parameters:
- *    name             - user defined barrier name
- *    attribute_set    - barrier attributes
- *    maximum_waiters  - number of threads before automatic release
- *    priority_ceiling - barrier's ceiling priority
- *    id               - pointer to barrier id
- *
- *  Output parameters:
- *    id               - barrier id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_barrier_create(
   rtems_name           name,
@@ -90,3 +72,14 @@ rtems_status_code rtems_barrier_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Barrier_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Barrier_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Barrier_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_BARRIER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

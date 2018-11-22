@@ -130,6 +130,31 @@ typedef struct {
   uint64_t                                latest_deadline;
 }   Rate_monotonic_Control;
 
+/**
+ * @brief The Classic Rate Monotonic objects information.
+ */
+extern Objects_Information _Rate_monotonic_Information;
+
+/**
+ * @brief Macro to define the objects information for the Classic Rate
+ * Monotonic objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define RATE_MONOTONIC_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Rate_monotonic, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_PERIODS, \
+    Rate_monotonic_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

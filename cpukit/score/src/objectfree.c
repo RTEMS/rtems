@@ -38,21 +38,24 @@ void _Objects_Free(
 
     objects_per_block = information->objects_per_block;
     block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
-    block /= objects_per_block;
 
-    ++information->inactive_per_block[ block ];
+    if ( block > objects_per_block ) {
+      block /= objects_per_block;
 
-    inactive = information->inactive;
-    ++inactive;
-    information->inactive = inactive;
+      ++information->inactive_per_block[ block ];
 
-    /*
-     *  Check if the threshold level has been met of
-     *  1.5 x objects_per_block are free.
-     */
+      inactive = information->inactive;
+      ++inactive;
+      information->inactive = inactive;
 
-    if ( inactive > ( objects_per_block + ( objects_per_block >> 1 ) ) ) {
-      _Objects_Shrink_information( information );
+      /*
+       *  Check if the threshold level has been met of
+       *  1.5 x objects_per_block are free.
+       */
+
+      if ( inactive > ( objects_per_block + ( objects_per_block >> 1 ) ) ) {
+        _Objects_Shrink_information( information );
+      }
     }
   }
 }

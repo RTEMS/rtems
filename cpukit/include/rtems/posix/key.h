@@ -71,6 +71,24 @@ typedef struct {
 } POSIX_Keys_Key_value_pair;
 
 /**
+ * @brief The initial set of POSIX key and value pairs.
+ *
+ * This array is provided via <rtems/confdefs.h> in case POSIX key and value
+ * pairs are configured.  The POSIX key and value pair count in this array must
+ * be equal to
+ * _Objects_Maximum_per_allocation( _POSIX_Keys_Key_value_pair_maximum ).
+ */
+extern POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[];
+
+/**
+ * @brief The POSIX key and value pairs maximum.
+ *
+ * This value is provided via <rtems/confdefs.h> in case POSIX key and value
+ * pairs are configured.  The OBJECTS_UNLIMITED_OBJECTS flag may be set.
+ */
+extern const uint32_t _POSIX_Keys_Key_value_pair_maximum;
+
+/**
  * @brief The data structure used to manage a POSIX key.
  */
 typedef struct {
@@ -84,6 +102,30 @@ typedef struct {
     */
    Chain_Control Key_value_pairs;
  }  POSIX_Keys_Control;
+
+/**
+ * @brief The POSIX Key objects information.
+ */
+extern Objects_Information _POSIX_Keys_Information;
+
+/**
+ * @brief Macro to define the objects information for the POSIX Key objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define POSIX_KEYS_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _POSIX_Keys, \
+    OBJECTS_POSIX_API, \
+    OBJECTS_POSIX_KEYS, \
+    POSIX_Keys_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
 
 /** @} */
 

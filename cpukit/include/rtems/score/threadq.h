@@ -394,15 +394,6 @@ typedef struct _Thread_queue_Heads {
 #endif
 } Thread_queue_Heads;
 
-#if defined(RTEMS_SMP)
-  #define THREAD_QUEUE_HEADS_SIZE( scheduler_count ) \
-    ( sizeof( Thread_queue_Heads ) \
-      + ( scheduler_count ) * sizeof( Thread_queue_Priority_queue ) )
-#else
-  #define THREAD_QUEUE_HEADS_SIZE( scheduler_count ) \
-    sizeof( Thread_queue_Heads )
-#endif
-
 struct Thread_queue_Queue {
   /**
    * @brief Lock to protect this thread queue.

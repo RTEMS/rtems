@@ -25,6 +25,7 @@
 #include <rtems/rtems/tasksimpl.h>
 #include <rtems/score/schedulerimpl.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/sysinit.h>
 
 #define SEMAPHORE_KIND_MASK ( RTEMS_SEMAPHORE_CLASS | RTEMS_INHERIT_PRIORITY \
   | RTEMS_PRIORITY_CEILING | RTEMS_MULTIPROCESSOR_RESOURCE_SHARING )
@@ -254,3 +255,21 @@ rtems_status_code rtems_semaphore_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Semaphore_Manager_initialization(void)
+{
+  _Objects_Initialize_information( &_Semaphore_Information );
+
+#if defined(RTEMS_MULTIPROCESSING)
+  _MPCI_Register_packet_processor(
+    MP_PACKET_SEMAPHORE,
+    _Semaphore_MP_Process_packet
+  );
+#endif
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Semaphore_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_SEMAPHORE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

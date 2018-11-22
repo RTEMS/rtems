@@ -307,18 +307,11 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_index(
  *
  * @return This method returns an object Id constructed from the arguments.
  */
-RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
-  Objects_APIs     the_api,
-  uint16_t         the_class,
-  uint8_t          node,
-  uint16_t         index
-)
-{
-  return (( (Objects_Id) the_api )   << OBJECTS_API_START_BIT)   |
-         (( (Objects_Id) the_class ) << OBJECTS_CLASS_START_BIT) |
-         (( (Objects_Id) node )      << OBJECTS_NODE_START_BIT)  |
-         (( (Objects_Id) index )     << OBJECTS_INDEX_START_BIT);
-}
+#define _Objects_Build_id( the_api, the_class, node, index ) \
+  ( (Objects_Id) ( (Objects_Id) the_api   << OBJECTS_API_START_BIT )   | \
+                 ( (Objects_Id) the_class << OBJECTS_CLASS_START_BIT ) | \
+                 ( (Objects_Id) node      << OBJECTS_NODE_START_BIT )  | \
+                 ( (Objects_Id) index     << OBJECTS_INDEX_START_BIT ) )
 
 /**
  * Returns if the object maximum specifies unlimited objects.
@@ -328,10 +321,8 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Build_id(
  * @retval true Unlimited objects are available.
  * @retval false The object count is fixed.
  */
-RTEMS_INLINE_ROUTINE bool _Objects_Is_unlimited( uint32_t maximum )
-{
-  return (maximum & OBJECTS_UNLIMITED_OBJECTS) != 0;
-}
+#define _Objects_Is_unlimited( maximum ) \
+  ( ( ( maximum ) & OBJECTS_UNLIMITED_OBJECTS ) != 0 )
 
 /*
  * We cannot use an inline function for this since it may be evaluated at

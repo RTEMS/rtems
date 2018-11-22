@@ -37,6 +37,31 @@ typedef struct {
   User_extensions_Control  Extension;
 }   Extension_Control;
 
+/**
+ * @brief The Classic Extensions objects information.
+ */
+extern Objects_Information _Extension_Information;
+
+/**
+ * @brief Macro to define the objects information for the Classic Extensions
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define EXTENSION_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Extension, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_EXTENSIONS, \
+    Extension_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

@@ -24,12 +24,12 @@
 #include <errno.h>
 #include <signal.h>
 
-#include <rtems/system.h>
-#include <rtems/seterr.h>
-#include <rtems/score/thread.h>
 #include <rtems/posix/sigset.h>
 #include <rtems/posix/timerimpl.h>
+#include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/seterr.h>
+#include <rtems/sysinit.h>
 
 int timer_create(
   clockid_t        clock_id,
@@ -99,3 +99,14 @@ int timer_create(
   _Objects_Allocator_unlock();
   return 0;
 }
+
+static void _POSIX_Timer_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_POSIX_Timer_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Timer_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_TIMER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

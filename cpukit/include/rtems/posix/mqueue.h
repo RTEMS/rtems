@@ -31,10 +31,12 @@
 #ifndef _RTEMS_POSIX_MQUEUE_H
 #define _RTEMS_POSIX_MQUEUE_H
 
-#include <signal.h>
-#include <mqueue.h> /* struct mq_attr */
 #include <rtems/score/coremsg.h>
 #include <rtems/score/objectdata.h>
+
+#include <limits.h>
+#include <mqueue.h>
+#include <signal.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -61,7 +63,30 @@ typedef struct {
    int                         oflag;
 }  POSIX_Message_queue_Control;
 
-extern const uint32_t _Configuration_POSIX_Maximum_message_queues;
+/**
+ * @brief The POSIX Message Queue objects information.
+ */
+extern Objects_Information _POSIX_Message_queue_Information;
+
+/**
+ * @brief Macro to define the objects information for the POSIX Message Queue
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define POSIX_MESSAGE_QUEUE_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _POSIX_Message_queue, \
+    OBJECTS_POSIX_API, \
+    OBJECTS_POSIX_MESSAGE_QUEUES, \
+    POSIX_Message_queue_Control, \
+    max, \
+    _POSIX_PATH_MAX, \
+    NULL \
+  )
 
 /** @} */
 

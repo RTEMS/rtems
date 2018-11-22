@@ -34,12 +34,6 @@ extern "C" {
  */
 
 /**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-extern Objects_Information _Partition_Information;
-
-/**
  *  @brief Allocate a buffer from the_partition.
  *
  *  This function attempts to allocate a buffer from the_partition.

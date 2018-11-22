@@ -38,8 +38,6 @@ extern "C" {
 
 extern const size_t _Configuration_POSIX_Minimum_stack_size;
 
-extern const uint32_t _Configuration_POSIX_Maximum_threads;
-
 /**
  * @brief POSIX threads initialize user threads body.
  *
@@ -47,6 +45,12 @@ extern const uint32_t _Configuration_POSIX_Maximum_threads;
  * initialization threads.
  */
 extern void _POSIX_Threads_Initialize_user_threads_body(void);
+
+/**
+ * The following defines the information control block used to manage
+ * this class of objects.
+ */
+extern Thread_Information _POSIX_Threads_Information;
 
 /** @} */
 

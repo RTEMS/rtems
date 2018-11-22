@@ -145,10 +145,10 @@ bool _Thread_Initialize(
    *  Get thread queue heads
    */
   the_thread->Wait.spare_heads = _Freechain_Get(
-    &information->Free_thread_queue_heads,
+    &information->Thread_queue_heads.Free,
     _Workspace_Allocate,
     _Objects_Extend_size( &information->Objects ),
-    THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count )
+    _Thread_queue_Heads_size
   );
   if ( the_thread->Wait.spare_heads == NULL ) {
     goto failed;
@@ -308,7 +308,7 @@ failed:
   _Workspace_Free( the_thread->Start.tls_area );
 
   _Freechain_Put(
-    &information->Free_thread_queue_heads,
+    &information->Thread_queue_heads.Free,
     the_thread->Wait.spare_heads
   );
 

@@ -50,7 +50,29 @@ typedef struct {
   struct timespec   time;       /* Time at which the timer was started   */
 } POSIX_Timer_Control;
 
-extern const uint32_t _Configuration_POSIX_Maximum_timers;
+/**
+ * @brief The POSIX Timer objects information.
+ */
+extern Objects_Information _POSIX_Timer_Information;
+
+/**
+ * @brief Macro to define the objects information for the POSIX Timer objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define POSIX_TIMER_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _POSIX_Timer, \
+    OBJECTS_POSIX_API, \
+    OBJECTS_POSIX_TIMERS, \
+    POSIX_Timer_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
 
 /** @} */
 

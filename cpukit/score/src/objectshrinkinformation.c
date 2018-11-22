@@ -33,6 +33,7 @@ void _Objects_Shrink_information(
   Objects_Maximum index_base;
 
   _Assert( _Objects_Allocator_is_owner() );
+  _Assert( _Objects_Is_auto_extend( information ) );
 
   /*
    * Search the list to find block or chunk with all objects inactive.
@@ -40,9 +41,9 @@ void _Objects_Shrink_information(
 
   objects_per_block = information->objects_per_block;
   block_count = _Objects_Get_maximum_index( information ) / objects_per_block;
-  index_base = 0;
+  index_base = objects_per_block;
 
-  for ( block = 0; block < block_count; block++ ) {
+  for ( block = 1; block < block_count; block++ ) {
     if ( information->inactive_per_block[ block ] == objects_per_block ) {
       Chain_Node       *node;
       const Chain_Node *tail;

@@ -120,18 +120,6 @@ void _Semaphore_MP_Send_object_was_deleted (
 );
 
 /**
- *  @brief Semaphore MP Send Extract Proxy
- *
- *  This routine is invoked when a task is deleted and it
- *  has a proxy which must be removed from a thread queue and
- *  the remote node must be informed of this.
- */
-void _Semaphore_MP_Send_extract_proxy (
-  Thread_Control *the_thread,
-  Objects_Id      id
-);
-
-/**
  * @brief Semaphore Core Mutex MP Support
  *
  * This function processes the global actions necessary for remote

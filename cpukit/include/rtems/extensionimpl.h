@@ -33,8 +33,6 @@ extern "C" {
  * @{
  */
 
-extern Objects_Information  _Extension_Information;
-
 RTEMS_INLINE_ROUTINE Extension_Control *_Extension_Allocate( void )
 {
   return (Extension_Control *) _Objects_Allocate( &_Extension_Information );

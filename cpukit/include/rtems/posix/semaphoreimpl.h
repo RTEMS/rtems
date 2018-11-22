@@ -34,12 +34,6 @@ extern "C" {
  */
 #define POSIX_SEMAPHORE_MAGIC 0x5d367fe7UL
 
-/**
- *  This defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _POSIX_Semaphore_Information;
-
 RTEMS_INLINE_ROUTINE POSIX_Semaphore_Control *
   _POSIX_Semaphore_Allocate_unprotected( void )
 {

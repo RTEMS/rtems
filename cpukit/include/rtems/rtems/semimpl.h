@@ -56,12 +56,6 @@ typedef enum {
   SEMAPHORE_DISCIPLINE_FIFO
 } Semaphore_Discipline;
 
-/**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _Semaphore_Information;
-
 RTEMS_INLINE_ROUTINE const Thread_queue_Operations *_Semaphore_Get_operations(
   const Semaphore_Control *the_semaphore
 )

@@ -509,6 +509,7 @@ librtemscpu_a_SOURCES += posix/src/keycreate.c
 librtemscpu_a_SOURCES += posix/src/keydelete.c
 librtemscpu_a_SOURCES += posix/src/keygetspecific.c
 librtemscpu_a_SOURCES += posix/src/keysetspecific.c
+librtemscpu_a_SOURCES += posix/src/keyzerokvp.c
 librtemscpu_a_SOURCES += posix/src/lio_listio.c
 librtemscpu_a_SOURCES += posix/src/mlockall.c
 librtemscpu_a_SOURCES += posix/src/mlock.c

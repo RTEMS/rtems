@@ -31,12 +31,6 @@ extern "C" {
 #endif
 
 /**
- *  This defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _POSIX_Message_queue_Information;
-
-/**
  * @brief Delete a POSIX Message Queue
  *
  * This routine supports the mq_unlink and mq_close routines by

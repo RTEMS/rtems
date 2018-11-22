@@ -34,7 +34,6 @@
 #include <rtems/score/timestampimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
-#include <rtems/score/freechain.h>
 #include <rtems/score/watchdogimpl.h>
 #include <rtems/config.h>
 
@@ -57,18 +56,6 @@ extern "C" {
  *  Self for the GNU Ada Run-Time
  */
 extern void *rtems_ada_self;
-
-typedef struct {
-  Objects_Information Objects;
-
-  Freechain_Control Free_thread_queue_heads;
-} Thread_Information;
-
-/**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-extern Thread_Information _Thread_Internal_information;
 
 /**
  * @brief Object identifier of the global constructor thread.
@@ -100,12 +87,7 @@ void _Thread_Iterate(
   void           *arg
 );
 
-void _Thread_Initialize_information(
-  Thread_Information  *information,
-  Objects_APIs         the_api,
-  uint16_t             the_class,
-  uint32_t             maximum
-);
+void _Thread_Initialize_information( Thread_Information *information );
 
 /**
  *  @brief Initialize thread handler.
@@ -828,7 +810,7 @@ RTEMS_INLINE_ROUTINE uint32_t _Thread_Get_maximum_internal_threads(void)
 RTEMS_INLINE_ROUTINE Thread_Control *_Thread_Internal_allocate( void )
 {
   return (Thread_Control *)
-    _Objects_Allocate_unprotected( &_Thread_Internal_information.Objects );
+    _Objects_Allocate_unprotected( &_Thread_Information.Objects );
 }
 
 /**

@@ -24,83 +24,50 @@
 #include <rtems/score/sysstate.h>
 #include <rtems/score/wkspace.h>
 
-void _Objects_Do_initialize_information(
-  Objects_Information *information,
-  Objects_APIs         the_api,
-  uint16_t             the_class,
-  uint32_t             maximum,
-  uint16_t             object_size,
-  uint16_t             maximum_name_length
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Objects_Thread_queue_Extract_callout extract
-#endif
+void _Objects_Initialize_information(
+  Objects_Information *information
 )
 {
-  Objects_Maximum maximum_per_allocation;
+  Objects_Id       maximum_id;
+  Objects_Id       api_class_and_node;
+  Objects_Maximum  maximum;
+  Objects_Maximum  index;
+  Chain_Node      *head;
+  Chain_Node      *tail;
+  Chain_Node      *current;
+  Objects_Control *next;
 
-  maximum_per_allocation = _Objects_Maximum_per_allocation( maximum );
-  information->maximum_id = _Objects_Build_id(
-    the_api,
-    the_class,
-    _Objects_Local_node,
-    maximum_per_allocation
-  );
-  information->object_size = object_size;
+  maximum_id = information->maximum_id;
+
+#if defined(RTEMS_MULTIPROCESSING)
+  maximum_id |= _Objects_Local_node << OBJECTS_NODE_START_BIT;
+  information->maximum_id = maximum_id;
+#endif
+
+  maximum = _Objects_Get_index( maximum_id );
+  api_class_and_node = maximum_id & ~OBJECTS_INDEX_MASK;
 
   /*
    *  Register this Object Class in the Object Information Table.
    */
-  _Objects_Information_table[ the_api ][ the_class ] = information;
+  _Objects_Information_table[ _Objects_Get_API( maximum_id ) ]
+    [ _Objects_Get_class( maximum_id ) ] = information;
 
-  /*
-   *  Are we operating in limited or unlimited (e.g. auto-extend) mode.
-   */
-  if ( _Objects_Is_unlimited( maximum ) ) {
-    /*
-     *  Unlimited and maximum of zero is illogical.
-     */
-    if ( maximum_per_allocation == 0) {
-      _Internal_error( INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0 );
-    }
+  head = _Chain_Head( &information->Inactive );
+  tail = _Chain_Tail( &information->Inactive );
+  current = head;
+  next = information->initial_objects;
 
-    /*
-     *  The allocation unit is the maximum value
-     */
-    information->objects_per_block = maximum_per_allocation;
+  head->previous = NULL;
+
+  for ( index = OBJECTS_INDEX_MINIMUM; index <= maximum ; ++index ) {
+    current->next = &next->Node;
+    next->Node.previous = current;
+    current = &next->Node;
+    next->id = api_class_and_node | ( index << OBJECTS_INDEX_START_BIT );
+    next = _Addresses_Add_offset( next, information->object_size );
   }
 
-
-  /*
-   *  Calculate the maximum name length
-   *
-   *  NOTE: Either 4 bytes for Classic API names or an arbitrary
-   *        number for POSIX names which are strings that may be
-   *        an odd number of bytes.
-   */
-
-  information->name_length = maximum_name_length;
-
-  _Chain_Initialize_empty( &information->Inactive );
-
-  /*
-   *  Initialize objects .. if there are any
-   */
-  if ( maximum_per_allocation ) {
-    /*
-     *  Always have the maximum size available so the current performance
-     *  figures are create are met.  If the user moves past the maximum
-     *  number then a performance hit is taken.
-     */
-    _Objects_Extend_information( information );
-  }
-
-  /*
-   *  Take care of multiprocessing
-   */
-  #if defined(RTEMS_MULTIPROCESSING)
-    information->extract = extract;
-    _RBTree_Initialize_empty( &information->Global_by_id );
-    _RBTree_Initialize_empty( &information->Global_by_name );
-  #endif
+  current->next = tail;
+  tail->previous = current;
 }

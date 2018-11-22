@@ -19,11 +19,10 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
-#include <rtems/rtems/support.h>
-#include <rtems/score/thread.h>
-#include <rtems/score/userextimpl.h>
 #include <rtems/extensionimpl.h>
+#include <rtems/rtems/support.h>
+#include <rtems/score/userextimpl.h>
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_extension_create(
   rtems_name                    name,
@@ -58,3 +57,14 @@ rtems_status_code rtems_extension_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Extension_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Extension_Information);
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Extension_Manager_initialization,
+  RTEMS_SYSINIT_USER_EXTENSIONS,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

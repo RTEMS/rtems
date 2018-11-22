@@ -25,6 +25,7 @@
 
 #include <rtems/posix/shmimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/sysinit.h>
 
 static const rtems_filesystem_file_handlers_r shm_handlers;
 
@@ -314,3 +315,14 @@ static const rtems_filesystem_file_handlers_r shm_handlers = {
   .readv_h = rtems_filesystem_default_readv,
   .writev_h = rtems_filesystem_default_writev
 };
+
+static void _POSIX_Shm_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_POSIX_Shm_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Shm_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_SHM,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

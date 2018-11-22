@@ -67,6 +67,12 @@ typedef struct {
 
 extern void _RTEMS_tasks_Initialize_user_tasks_body( void );
 
+/**
+ *  The following instantiates the information control block used to
+ *  manage this class of objects.
+ */
+extern Thread_Information _RTEMS_tasks_Information;
+
 /** @} */
 
 #ifdef __cplusplus

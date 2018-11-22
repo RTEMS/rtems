@@ -19,8 +19,10 @@
 #ifndef _RTEMS_POSIX_SEMAPHORE_H
 #define _RTEMS_POSIX_SEMAPHORE_H
 
-#include <semaphore.h>
 #include <rtems/score/objectdata.h>
+
+#include <limits.h>
+#include <semaphore.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,7 +48,30 @@ typedef struct {
    uint32_t        open_count;
 }  POSIX_Semaphore_Control;
 
-extern const uint32_t _Configuration_POSIX_Maximum_named_semaphores;
+/**
+ * @brief The POSIX Semaphore objects information.
+ */
+extern Objects_Information _POSIX_Semaphore_Information;
+
+/**
+ * @brief Macro to define the objects information for the POSIX Semaphore
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define POSIX_SEMAPHORE_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _POSIX_Semaphore, \
+    OBJECTS_POSIX_API, \
+    OBJECTS_POSIX_SEMAPHORES, \
+    POSIX_Semaphore_Control, \
+    max, \
+    _POSIX_PATH_MAX, \
+    NULL \
+  )
 
 /** @} */
 

@@ -23,26 +23,8 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/threaddispatch.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/sysinit.h>
 
-/*
- *  rtems_partition_create
- *
- *  This directive creates a partiton of fixed sized buffers from the
- *  given contiguous memory area.
- *
- *  Input parameters:
- *    name             - user defined partition name
- *    starting_address - physical start address of partition
- *    length           - physical length in bytes
- *    buffer_size      - size of buffers in bytes
- *    attribute_set    - partition attributes
- *    id               - pointer to partition id
- *
- *  Output parameters:
- *    id               - partition id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
 
 rtems_status_code rtems_partition_create(
   rtems_name       name,
@@ -133,3 +115,26 @@ rtems_status_code rtems_partition_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Partition_Manager_initialization(void)
+{
+  _Objects_Initialize_information( &_Partition_Information );
+
+  /*
+   *  Register the MP Process Packet routine.
+   */
+
+#if defined(RTEMS_MULTIPROCESSING)
+  _MPCI_Register_packet_processor(
+    MP_PACKET_PARTITION,
+    _Partition_MP_Process_packet
+  );
+#endif
+
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Partition_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_PARTITION,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

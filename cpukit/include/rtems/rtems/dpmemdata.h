@@ -46,6 +46,31 @@ typedef struct {
   uint32_t         length;
 }   Dual_ported_memory_Control;
 
+/**
+ * @brief The Classic Dual Ported Memory objects information.
+ */
+extern Objects_Information _Dual_ported_memory_Information;
+
+/**
+ * @brief Macro to define the objects information for the Classic Dual Ported
+ * Memory objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define DUAL_PORTED_MEMORY_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Dual_ported_memory, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_PORTS, \
+    Dual_ported_memory_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

@@ -1,57 +1,49 @@
 /**
  * @file
  *
- * @brief POSIX Function Initializes Semaphore Manager
- * @ingroup POSIXAPI
+ * @ingroup POSIXSemaphorePrivate
+ *
+ * @brief POSIX Semaphore Information with Zero Objects
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- *  The license and distribution terms for this file may be
- *  found in the file LICENSE in this distribution or at
- *  http://www.rtems.org/license/LICENSE.
+ * Copyright (C) 2018 embedded brains GmbH
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <rtems/posix/semaphoreimpl.h>
-#include <rtems/config.h>
-#include <rtems/sysinit.h>
+#include <rtems/posix/semaphore.h>
 
 #include <limits.h>
 
-Objects_Information _POSIX_Semaphore_Information;
-
-/*
- *  _POSIX_Semaphore_Manager_initialization
- *
- *  This routine initializes all semaphore manager related data structures.
- *
- *  Input parameters:   NONE
- *
- *  Output parameters:  NONE
- */
-
-static void _POSIX_Semaphore_Manager_initialization(void)
-{
-  _Objects_Initialize_information(
-    &_POSIX_Semaphore_Information, /* object information table */
-    OBJECTS_POSIX_API,          /* object API */
-    OBJECTS_POSIX_SEMAPHORES,   /* object class */
-    _Configuration_POSIX_Maximum_named_semaphores,
-    sizeof( POSIX_Semaphore_Control ),
-                                /* size of this object's control block */
-    _POSIX_PATH_MAX,            /* maximum length of each object's name */
-    NULL                        /* Proxy extraction support callout */
-  );
-}
-
-RTEMS_SYSINIT_ITEM(
-  _POSIX_Semaphore_Manager_initialization,
-  RTEMS_SYSINIT_POSIX_SEMAPHORE,
-  RTEMS_SYSINIT_ORDER_MIDDLE
+OBJECTS_INFORMATION_DEFINE_ZERO(
+  _POSIX_Semaphore,
+  OBJECTS_POSIX_API,
+  OBJECTS_POSIX_SEMAPHORES,
+  _POSIX_PATH_MAX
 );

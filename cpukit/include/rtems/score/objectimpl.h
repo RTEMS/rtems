@@ -43,53 +43,11 @@ typedef bool    (*Objects_Name_comparators)(
   uint16_t     /* length */
 );
 
-/**
- *  This enumerated type is used in the class field of the object ID
- *  for RTEMS internal object classes.
- */
-typedef enum {
-  OBJECTS_INTERNAL_NO_CLASS =  0,
-  OBJECTS_INTERNAL_THREADS  =  1
-} Objects_Internal_API;
-
 /** This macro is used to generically specify the last API index. */
 #define OBJECTS_INTERNAL_CLASSES_LAST OBJECTS_INTERNAL_THREADS
 
-/**
- *  This enumerated type is used in the class field of the object ID
- *  for the RTEMS Classic API.
- */
-typedef enum {
-  OBJECTS_CLASSIC_NO_CLASS     = 0,
-  OBJECTS_RTEMS_TASKS          = 1,
-  OBJECTS_RTEMS_TIMERS         = 2,
-  OBJECTS_RTEMS_SEMAPHORES     = 3,
-  OBJECTS_RTEMS_MESSAGE_QUEUES = 4,
-  OBJECTS_RTEMS_PARTITIONS     = 5,
-  OBJECTS_RTEMS_REGIONS        = 6,
-  OBJECTS_RTEMS_PORTS          = 7,
-  OBJECTS_RTEMS_PERIODS        = 8,
-  OBJECTS_RTEMS_EXTENSIONS     = 9,
-  OBJECTS_RTEMS_BARRIERS       = 10
-} Objects_Classic_API;
-
 /** This macro is used to generically specify the last API index. */
 #define OBJECTS_RTEMS_CLASSES_LAST OBJECTS_RTEMS_BARRIERS
-
-/**
- *  This enumerated type is used in the class field of the object ID
- *  for the POSIX API.
- */
-typedef enum {
-  OBJECTS_POSIX_NO_CLASS            = 0,
-  OBJECTS_POSIX_THREADS             = 1,
-  OBJECTS_POSIX_KEYS                = 2,
-  OBJECTS_POSIX_INTERRUPTS          = 3,
-  OBJECTS_POSIX_MESSAGE_QUEUES      = 5,
-  OBJECTS_POSIX_SEMAPHORES          = 7,
-  OBJECTS_POSIX_TIMERS              = 9,
-  OBJECTS_POSIX_SHMS                = 12
-} Objects_POSIX_API;
 
 /** This macro is used to generically specify the last API index. */
 #define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_SHMS
@@ -102,71 +60,6 @@ typedef enum {
   OBJECTS_FAKE_OBJECTS_NO_CLASS   = 0,
   OBJECTS_FAKE_OBJECTS_SCHEDULERS = 1
 } Objects_Fake_objects_API;
-
-#if defined(RTEMS_MULTIPROCESSING)
-/**
- *  The following type defines the callout used when a local task
- *  is extracted from a remote thread queue (i.e. it's proxy must
- *  extracted from the remote queue).
- */
-typedef void ( *Objects_Thread_queue_Extract_callout )(
-  Thread_Control *,
-  Objects_Id
-);
-#endif
-
-/**
- *  The following defines the structure for the information used to
- *  manage each class of objects.
- */
-typedef struct {
-  /** This is the maximum valid id of this object class. */
-  Objects_Id        maximum_id;
-  /** This points to the table of local objects. */
-  Objects_Control **local_table;
-  /** This is the number of objects on the Inactive list. */
-  Objects_Maximum   inactive;
-  /**
-   * @brief This is the number of objects in a block if the automatic extension
-   * is enabled.
-   *
-   * This member is zero if the automatic extension is disabled.
-   */
-  Objects_Maximum   objects_per_block;
-  /** This is the size in bytes of each object instance. */
-  uint16_t          object_size;
-  /**
-   * @brief This is the maximum length of names.
-   *
-   * A length of zero indicates that this object has a no string name
-   * (OBJECTS_NO_STRING_NAME).
-   */
-  uint16_t          name_length;
-  /** This is the chain of inactive control blocks. */
-  Chain_Control     Inactive;
-  /** This is the number of inactive objects per block. */
-  Objects_Maximum  *inactive_per_block;
-  /** This is a table to the chain of inactive object memory blocks. */
-  Objects_Control **object_blocks;
-  #if defined(RTEMS_MULTIPROCESSING)
-    /** This is this object class' method called when extracting a thread. */
-    Objects_Thread_queue_Extract_callout extract;
-
-    /**
-     * @brief The global objects of this object information sorted by object
-     * identifier.
-     */
-    RBTree_Control   Global_by_id;
-
-    /**
-     * @brief The global objects of this object information sorted by object
-     * name.
-     *
-     * Objects with the same name are sorted according to their identifier.
-     */
-    RBTree_Control   Global_by_name;
-  #endif
-}   Objects_Information;
 
 /**
  *  The following is referenced to the node number of the local node.
@@ -222,84 +115,13 @@ void _Objects_Shrink_information(
   Objects_Information *information
 );
 
-void _Objects_Do_initialize_information(
-  Objects_Information *information,
-  Objects_APIs         the_api,
-  uint16_t             the_class,
-  uint32_t             maximum,
-  uint16_t             object_size,
-  uint16_t             maximum_name_length
-#if defined(RTEMS_MULTIPROCESSING)
-  ,
-  Objects_Thread_queue_Extract_callout extract
-#endif
-);
-
 /**
- * @brief Constant for the object information string name length to indicate
- * that this object class has no string names.
- */
-#define OBJECTS_NO_STRING_NAME 0
-
-/**
- *  @brief Initialize object Information
+ * @brief Initializes the specified objects information.
  *
- *  This function initializes an object class information record.
- *  SUPPORTS_GLOBAL is true if the object class supports global
- *  objects, and false otherwise.  Maximum indicates the number
- *  of objects required in this class and size indicates the size
- *  in bytes of each control block for this object class.  The
- *  name length and string designator are also set.  In addition,
- *  the class may be a task, therefore this information is also included.
- *
- *  @param[in] information points to an object class information block.
- *  @param[in] the_api indicates the API associated with this information block.
- *  @param[in] the_class indicates the class of object being managed
- *             by this information block.  It is specific to @a the_api.
- *  @param[in] maximum is the maximum number of instances of this object
- *             class which may be concurrently active.
- *  @param[in] object_size is the size of the data structure for this class.
- *  @param[in] is_string is true if this object uses string style names.
- *  @param[in] maximum_name_length is the maximum length of object names.
+ * The objects information must be statically pre-initialized with the
+ * OBJECTS_INFORMATION_DEFINE() macro before this function is called.
  */
-#if defined(RTEMS_MULTIPROCESSING)
-  #define _Objects_Initialize_information( \
-    information, \
-    the_api, \
-    the_class, \
-    maximum, \
-    object_size, \
-    maximum_name_length, \
-    extract \
-  ) \
-    _Objects_Do_initialize_information( \
-      information, \
-      the_api, \
-      the_class, \
-      maximum, \
-      object_size, \
-      maximum_name_length, \
-      extract \
-    )
-#else
-  #define _Objects_Initialize_information( \
-    information, \
-    the_api, \
-    the_class, \
-    maximum, \
-    object_size, \
-    maximum_name_length, \
-    extract \
-  ) \
-    _Objects_Do_initialize_information( \
-      information, \
-      the_api, \
-      the_class, \
-      maximum, \
-      object_size, \
-      maximum_name_length \
-    )
-#endif
+void _Objects_Initialize_information( Objects_Information *information );
 
 /**
  *  @brief Object API Maximum Class

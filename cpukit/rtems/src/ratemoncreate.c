@@ -18,29 +18,13 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
-#include <rtems/rtems/ratemonimpl.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>
-
-/*
- *  rtems_rate_monotonic_create
- *
- *  This directive creates a rate monotonic timer and performs
- *  some initialization.
- *
- *  Input parameters:
- *    name - name of period
- *    id   - pointer to rate monotonic id
- *
- *  Output parameters:
- *    id               - rate monotonic id
- *    RTEMS_SUCCESSFUL - if successful
- *    error code       - if unsuccessful
- */
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_rate_monotonic_create(
   rtems_name  name,
@@ -84,3 +68,14 @@ rtems_status_code rtems_rate_monotonic_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Rate_monotonic_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Rate_monotonic_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Rate_monotonic_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

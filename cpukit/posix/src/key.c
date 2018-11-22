@@ -1,158 +1,47 @@
 /**
  * @file
  *
- * @brief POSIX Keys Manager Initialization
- * @ingroup POSIX_KEY Key
+ * @ingroup POSIX_KEY
+ *
+ * @brief POSIX Keys Information with Zero Objects
  */
 
 /*
- * Copyright (c) 2012 Zhongwei Yao.
- * COPYRIGHT (c) 1989-2014.
- * On-Line Applications Research Corporation (OAR).
- * Copyright (c) 2016 embedded brains GmbH.
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Copyright (C) 2018 embedded brains GmbH
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <limits.h>
+#include <rtems/posix/key.h>
 
-#include <rtems/config.h>
-#include <rtems/sysinit.h>
-
-#include <rtems/posix/keyimpl.h>
-#include <rtems/score/userextimpl.h>
-#include <rtems/score/wkspace.h>
-
-Objects_Information _POSIX_Keys_Information;
-
-Freechain_Control _POSIX_Keys_Keypool;
-
-static uint32_t _POSIX_Keys_Get_keypool_bump_count( void )
-{
-  uint32_t max = Configuration.maximum_key_value_pairs;
-
-  return _Objects_Is_unlimited( max ) ?
-    _Objects_Maximum_per_allocation( max ) : 0;
-}
-
-static uint32_t _POSIX_Keys_Get_initial_keypool_size( void )
-{
-  uint32_t max = Configuration.maximum_key_value_pairs;
-
-  return _Objects_Maximum_per_allocation( max );
-}
-
-static void _POSIX_Keys_Initialize_keypool( void )
-{
-  _Freechain_Initialize(
-    &_POSIX_Keys_Keypool,
-    _Workspace_Allocate_or_fatal_error,
-    _POSIX_Keys_Get_initial_keypool_size(),
-    sizeof( POSIX_Keys_Key_value_pair )
-  );
-}
-
-POSIX_Keys_Key_value_pair * _POSIX_Keys_Key_value_allocate( void )
-{
-  return (POSIX_Keys_Key_value_pair *) _Freechain_Get(
-    &_POSIX_Keys_Keypool,
-    _Workspace_Allocate,
-    _POSIX_Keys_Get_keypool_bump_count(),
-    sizeof( POSIX_Keys_Key_value_pair )
-  );
-}
-
-static void _POSIX_Keys_Run_destructors( Thread_Control *the_thread )
-{
-  while ( true ) {
-    ISR_lock_Context  lock_context;
-    RBTree_Node      *node;
-
-    _Objects_Allocator_lock();
-    _POSIX_Keys_Key_value_acquire( the_thread, &lock_context );
-
-    node = _RBTree_Root( &the_thread->Keys.Key_value_pairs );
-    if ( node != NULL ) {
-      POSIX_Keys_Key_value_pair *key_value_pair;
-      pthread_key_t              key;
-      void                      *value;
-      POSIX_Keys_Control        *the_key;
-      void                    ( *destructor )( void * );
-
-      key_value_pair = POSIX_KEYS_RBTREE_NODE_TO_KEY_VALUE_PAIR( node );
-      key = key_value_pair->key;
-      value = key_value_pair->value;
-      _RBTree_Extract(
-        &the_thread->Keys.Key_value_pairs,
-        &key_value_pair->Lookup_node
-      );
-
-      _POSIX_Keys_Key_value_release( the_thread, &lock_context );
-      _POSIX_Keys_Key_value_free( key_value_pair );
-
-      the_key = _POSIX_Keys_Get( key );
-      _Assert( the_key != NULL );
-      destructor = the_key->destructor;
-
-      _Objects_Allocator_unlock();
-
-      if ( destructor != NULL && value != NULL ) {
-        ( *destructor )( value );
-      }
-    } else {
-      _POSIX_Keys_Key_value_release( the_thread, &lock_context );
-      _Objects_Allocator_unlock();
-      break;
-    }
-  }
-}
-
-static void _POSIX_Keys_Restart_run_destructors(
-  Thread_Control *executing,
-  Thread_Control *the_thread
-)
-{
-  (void) executing;
-  _POSIX_Keys_Run_destructors( the_thread );
-}
-
-static User_extensions_Control _POSIX_Keys_Extensions = {
-  .Callouts = {
-    .thread_restart = _POSIX_Keys_Restart_run_destructors,
-    .thread_terminate = _POSIX_Keys_Run_destructors
-  }
-};
-
-/**
- * @brief This routine performs the initialization necessary for this manager.
- */
-static void _POSIX_Keys_Manager_initialization(void)
-{
-  _Objects_Initialize_information(
-    &_POSIX_Keys_Information,   /* object information table */
-    OBJECTS_POSIX_API,          /* object API */
-    OBJECTS_POSIX_KEYS,         /* object class */
-    Configuration.maximum_keys,
-                                /* maximum objects of this class */
-    sizeof( POSIX_Keys_Control ),
-                                /* size of this object's control block */
-    OBJECTS_NO_STRING_NAME,     /* maximum length of each object's name */
-    NULL                        /* Proxy extraction support callout */
-  );
-
-  _POSIX_Keys_Initialize_keypool();
-
-  _User_extensions_Add_API_set( &_POSIX_Keys_Extensions );
-}
-
-RTEMS_SYSINIT_ITEM(
-  _POSIX_Keys_Manager_initialization,
-  RTEMS_SYSINIT_POSIX_KEYS,
-  RTEMS_SYSINIT_ORDER_MIDDLE
+OBJECTS_INFORMATION_DEFINE_ZERO(
+  _POSIX_Keys,
+  OBJECTS_POSIX_API,
+  OBJECTS_POSIX_KEYS,
+  OBJECTS_NO_STRING_NAME
 );

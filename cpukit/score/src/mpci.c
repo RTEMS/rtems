@@ -146,7 +146,7 @@ static void _MPCI_Create_server( void )
 
   name.name_u32 = _Objects_Build_name( 'M', 'P', 'C', 'I' );
   _Thread_Initialize(
-    &_Thread_Internal_information,
+    &_Thread_Information,
     _MPCI_Receive_server_tcb,
     &_Scheduler_Table[ 0 ],
     NULL,        /* allocate the stack */

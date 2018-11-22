@@ -126,7 +126,30 @@ typedef struct {
    time_t               ctime;
 } POSIX_Shm_Control;
 
-extern const uint32_t _Configuration_POSIX_Maximum_shms;
+/**
+ * @brief The POSIX Shared Memory objects information.
+ */
+extern Objects_Information _POSIX_Shm_Information;
+
+/**
+ * @brief Macro to define the objects information for the POSIX Shared Memory
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define POSIX_SHM_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _POSIX_Shm, \
+    OBJECTS_POSIX_API, \
+    OBJECTS_POSIX_SHMS, \
+    POSIX_Shm_Control, \
+    max, \
+    _POSIX_PATH_MAX, \
+    NULL \
+  )
 
 /**
  * @brief object_create operation for shm objects stored in RTEMS Workspace.

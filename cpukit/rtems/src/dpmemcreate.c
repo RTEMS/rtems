@@ -18,12 +18,12 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/address.h>
-#include <rtems/rtems/dpmemimpl.h>
 #include <rtems/score/thread.h>
+#include <rtems/sysinit.h>
 
 rtems_status_code rtems_port_create(
   rtems_name    name,
@@ -66,3 +66,14 @@ rtems_status_code rtems_port_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Dual_ported_memory_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Dual_ported_memory_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Dual_ported_memory_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

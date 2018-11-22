@@ -52,12 +52,6 @@ extern "C" {
 #endif
 
 /**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information _POSIX_Timer_Information;
-
-/**
  *  @brief POSIX Timer Allocate
  *
  *  This function allocates a timer control block from

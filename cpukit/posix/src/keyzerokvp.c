@@ -1,11 +1,3 @@
-/**
- * @file
- *
- * @ingroup ClassicUserExtensions
- *
- * @brief Extension Manager Information with Zero Objects
- */
-
 /*
  * SPDX-License-Identifier: BSD-2-Clause
  *
@@ -37,11 +29,8 @@
 #include "config.h"
 #endif
 
-#include <rtems/extensiondata.h>
+#include <rtems/posix/key.h>
 
-OBJECTS_INFORMATION_DEFINE_ZERO(
-  _Extension,
-  OBJECTS_CLASSIC_API,
-  OBJECTS_RTEMS_EXTENSIONS,
-  OBJECTS_NO_STRING_NAME
-);
+POSIX_Keys_Key_value_pair _POSIX_Keys_Key_value_pairs[ 0 ];
+
+const uint32_t _POSIX_Keys_Key_value_pair_maximum;

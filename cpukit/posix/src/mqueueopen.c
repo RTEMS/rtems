@@ -32,6 +32,7 @@
 
 #include <rtems/posix/mqueueimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/sysinit.h>
 
 #include <stdarg.h>
 #include <fcntl.h>
@@ -191,3 +192,14 @@ mqd_t mq_open(
   _Objects_Allocator_unlock();
   return status;
 }
+
+static void _POSIX_Message_queue_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_POSIX_Message_queue_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Message_queue_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

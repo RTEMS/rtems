@@ -53,12 +53,6 @@ typedef struct Timer_server_Control {
 extern Timer_server_Control *volatile _Timer_server;
 
 /**
- *  The following defines the information control block used to manage
- *  this class of objects.
- */
-extern Objects_Information  _Timer_Information;
-
-/**
  *  @brief Timer_Allocate
  *
  *  This function allocates a timer control block from

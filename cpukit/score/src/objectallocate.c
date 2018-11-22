@@ -68,13 +68,18 @@ Objects_Control *_Objects_Allocate_unprotected(
     }
 
     if ( the_object != NULL ) {
+      Objects_Maximum objects_per_block;
       Objects_Maximum block;
 
+      objects_per_block = information->objects_per_block;
       block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
-      block /= information->objects_per_block;
 
-      information->inactive_per_block[ block ]--;
-      information->inactive--;
+      if ( block > objects_per_block ) {
+        block /= objects_per_block;
+
+        information->inactive_per_block[ block ]--;
+        information->inactive--;
+      }
     }
   }
 

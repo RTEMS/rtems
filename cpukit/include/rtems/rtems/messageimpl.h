@@ -52,12 +52,6 @@ typedef enum {
 }  Message_queue_Submit_types;
 
 /**
- *  The following defines the information control block used to
- *  manage this class of objects.
- */
-extern Objects_Information _Message_queue_Information;
-
-/**
  *  @brief Message_queue_Submit
  *
  *  This routine implements the directives rtems_message_queue_send

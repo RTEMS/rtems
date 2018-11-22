@@ -33,12 +33,6 @@ extern "C" {
  */
 
 /**
- *  @brief Define the internal Dual Ported Memory information
- *  The following define the internal Dual Ported Memory information.
- */
-extern Objects_Information _Dual_ported_memory_Information;
-
-/**
  *  @brief Allocates a port control block from the inactive chain
  *  of free port control blocks.
  *

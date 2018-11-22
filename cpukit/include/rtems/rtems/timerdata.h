@@ -57,6 +57,31 @@ typedef struct {
   Watchdog_Interval stop_time;
 }   Timer_Control;
 
+/**
+ * @brief The Classic Timer objects information.
+ */
+extern Objects_Information  _Timer_Information;
+
+/**
+ * @brief Macro to define the objects information for the Classic Timer
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define TIMER_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Timer, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_TIMERS, \
+    Timer_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    NULL \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

@@ -27,11 +27,14 @@
 #include <rtems/score/thread.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/watchdogimpl.h>
+#include <rtems/sysinit.h>
 
 RTEMS_STATIC_ASSERT(
   PER_CPU_WATCHDOG_REALTIME == TIMER_CLASS_BIT_TIME_OF_DAY,
   TIMER_CLASS_BIT_TIME_OF_DAY
 );
+
+Timer_server_Control *volatile _Timer_server;
 
 void _Timer_Routine_adaptor( Watchdog_Control *the_watchdog )
 {
@@ -212,3 +215,14 @@ rtems_status_code rtems_timer_create(
   _Objects_Allocator_unlock();
   return RTEMS_SUCCESSFUL;
 }
+
+static void _Timer_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_Timer_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _Timer_Manager_initialization,
+  RTEMS_SYSINIT_CLASSIC_TIMER,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

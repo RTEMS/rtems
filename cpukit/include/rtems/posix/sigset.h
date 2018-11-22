@@ -19,7 +19,8 @@
 #ifndef _RTEMS_POSIX_SIGSET_H
 #define _RTEMS_POSIX_SIGSET_H
 
-#include <signal.h> // sigset_t
+#include <stdbool.h>
+#include <signal.h>
 
 /*
  *  Currently 32 signals numbered 1-32 are defined

@@ -42,24 +42,6 @@ RTEMS_LINKER_RWSET(
 
 Heap_Control _Workspace_Area;
 
-static uint32_t _Workspace_Get_maximum_thread_count( void )
-{
-  uint32_t thread_count;
-
-  thread_count = 0;
-  thread_count += _Thread_Get_maximum_internal_threads();
-
-  thread_count += rtems_resource_maximum_per_allocation(
-    Configuration_RTEMS_API.maximum_tasks
-  );
-
-  thread_count += rtems_resource_maximum_per_allocation(
-    _Configuration_POSIX_Maximum_threads
-  );
-
-  return thread_count;
-}
-
 static uintptr_t _Workspace_Space_for_TLS( uintptr_t page_size )
 {
   uintptr_t tls_size;
@@ -86,7 +68,7 @@ static uintptr_t _Workspace_Space_for_TLS( uintptr_t page_size )
      */
     space = _Heap_Min_block_size( page_size );
 
-    space += _Workspace_Get_maximum_thread_count()
+    space += _Thread_Initial_thread_count
       * _Heap_Size_with_overhead( page_size, tls_alloc, tls_align );
   } else {
     space = 0;

@@ -51,7 +51,7 @@ static void _Thread_Create_idle_for_CPU( Per_CPU_Control *cpu )
   _Assert( idle != NULL );
 
   _Thread_Initialize(
-    &_Thread_Internal_information,
+    &_Thread_Information,
     idle,
     scheduler,
     NULL,        /* allocate the stack */

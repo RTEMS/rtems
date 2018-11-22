@@ -44,6 +44,45 @@ typedef struct {
   rtems_attribute             attribute_set;
 }   Message_queue_Control;
 
+/**
+ * @brief The Classic Message Queue objects information.
+ */
+extern Objects_Information _Message_queue_Information;
+
+#if defined(RTEMS_MULTIPROCESSING)
+/**
+ *  @brief _Message_queue_MP_Send_extract_proxy
+ *
+ *  This routine is invoked when a task is deleted and it
+ *  has a proxy which must be removed from a thread queue and
+ *  the remote node must be informed of this.
+ */
+void _Message_queue_MP_Send_extract_proxy (
+  Thread_Control *the_thread,
+  Objects_Id      id
+);
+#endif
+
+/**
+ * @brief Macro to define the objects information for the Classic Message Queue
+ * objects.
+ *
+ * This macro should only be used by <rtems/confdefs.h>.
+ *
+ * @param max The configured object maximum (the OBJECTS_UNLIMITED_OBJECTS flag
+ * may be set).
+ */
+#define MESSAGE_QUEUE_INFORMATION_DEFINE( max ) \
+  OBJECTS_INFORMATION_DEFINE( \
+    _Message_queue, \
+    OBJECTS_CLASSIC_API, \
+    OBJECTS_RTEMS_MESSAGE_QUEUES, \
+    Message_queue_Control, \
+    max, \
+    OBJECTS_NO_STRING_NAME, \
+    _Message_queue_MP_Send_extract_proxy \
+  )
+
 /** @} */
 
 #ifdef __cplusplus

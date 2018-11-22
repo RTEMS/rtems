@@ -61,7 +61,11 @@ void _Objects_Extend_information(
     _Objects_Allocator_is_owner()
       || !_System_state_Is_up( _System_state_Get() )
   );
+  _Assert( _Objects_Is_auto_extend( information ) );
 
+  extend_count = _Objects_Extend_size( information );
+  old_maximum = _Objects_Get_maximum_index( information );
+  new_maximum = (uint32_t) old_maximum + extend_count;
   api_class_and_node = information->maximum_id & ~OBJECTS_INDEX_MASK;
 
   /*
@@ -69,16 +73,12 @@ void _Objects_Extend_information(
    *  extend the block table, then we will change do_extend.
    */
   do_extend     = true;
-  index_base    = 0;
-  block         = 0;
+  index_base    = extend_count;
+  block         = 1;
 
   if ( information->object_blocks == NULL ) {
-    extend_count = _Objects_Get_maximum_index( information );
-    old_maximum = 0;
-    block_count = 0;
+    block_count = 1;
   } else {
-    extend_count = information->objects_per_block;
-    old_maximum = _Objects_Get_maximum_index( information );
     block_count = old_maximum / extend_count;
 
     for ( ; block < block_count; block++ ) {
@@ -90,7 +90,6 @@ void _Objects_Extend_information(
     }
   }
 
-  new_maximum = (uint32_t) old_maximum + extend_count;
   index_end = index_base + extend_count;
 
   /*
@@ -107,12 +106,9 @@ void _Objects_Extend_information(
    * generate a fatal error depending on auto-extending being active.
    */
   object_block_size = extend_count * information->object_size;
-  if ( _Objects_Is_auto_extend( information ) ) {
-    new_object_block = _Workspace_Allocate( object_block_size );
-    if ( !new_object_block )
-      return;
-  } else {
-    new_object_block = _Workspace_Allocate_or_fatal_error( object_block_size );
+  new_object_block = _Workspace_Allocate( object_block_size );
+  if ( new_object_block == NULL ) {
+    return;
   }
 
   /*
@@ -158,14 +154,10 @@ void _Objects_Extend_information(
     table_size = object_blocks_size
       + local_table_size
       + block_count * sizeof( *inactive_per_block );
-    if ( _Objects_Is_auto_extend( information ) ) {
-      object_blocks = _Workspace_Allocate( table_size );
-      if ( !object_blocks ) {
-        _Workspace_Free( new_object_block );
-        return;
-      }
-    } else {
-      object_blocks = _Workspace_Allocate_or_fatal_error( table_size );
+    object_blocks = _Workspace_Allocate( table_size );
+    if ( object_blocks == NULL ) {
+      _Workspace_Free( new_object_block );
+      return;
     }
 
     /*
@@ -186,7 +178,7 @@ void _Objects_Extend_information(
      */
     block_count--;
 
-    if ( old_maximum > 0 ) {
+    if ( old_maximum > extend_count ) {
       /*
        *  Copy each section of the table over. This has to be performed as
        *  separate parts as size of each block has changed.
@@ -201,12 +193,16 @@ void _Objects_Extend_information(
         information->inactive_per_block,
         block_count * sizeof( *inactive_per_block )
       );
-      memcpy(
-        local_table,
-        information->local_table,
-        old_maximum * sizeof( *local_table )
-      );
+    } else {
+      object_blocks[ 0 ] = NULL;
+      inactive_per_block[ 0 ] = 0;
     }
+
+    memcpy(
+      local_table,
+      information->local_table,
+      old_maximum * sizeof( *local_table )
+    );
 
     /*
      *  Initialise the new entries in the table.

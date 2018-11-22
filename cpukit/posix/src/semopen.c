@@ -20,6 +20,7 @@
 
 #include <rtems/posix/semaphoreimpl.h>
 #include <rtems/score/wkspace.h>
+#include <rtems/sysinit.h>
 
 #include <stdarg.h>
 #include <fcntl.h>
@@ -172,3 +173,14 @@ sem_t *sem_open(
   _Objects_Allocator_unlock();
   return sem;
 }
+
+static void _POSIX_Semaphore_Manager_initialization( void )
+{
+  _Objects_Initialize_information( &_POSIX_Semaphore_Information );
+}
+
+RTEMS_SYSINIT_ITEM(
+  _POSIX_Semaphore_Manager_initialization,
+  RTEMS_SYSINIT_POSIX_SEMAPHORE,
+  RTEMS_SYSINIT_ORDER_MIDDLE
+);

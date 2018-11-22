@@ -20,31 +20,6 @@
 
 #include <rtems/score/freechain.h>
 #include <rtems/score/assert.h>
-#include <rtems/score/chainimpl.h>
-
-void _Freechain_Initialize(
-  Freechain_Control   *freechain,
-  Freechain_Allocator  allocator,
-  size_t               number_nodes,
-  size_t               node_size
-)
-{
-  void *starting_address;
-
-  if ( number_nodes > 0 ) {
-    starting_address = ( *allocator )( number_nodes * node_size );
-    number_nodes *= ( starting_address != NULL );
-  } else {
-    starting_address = NULL;
-  }
-
-  _Chain_Initialize(
-    &freechain->Free,
-    starting_address,
-    number_nodes,
-    node_size
-  );
-}
 
 void *_Freechain_Get(
   Freechain_Control   *freechain,

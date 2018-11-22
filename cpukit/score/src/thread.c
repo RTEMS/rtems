@@ -20,6 +20,7 @@
 
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/interr.h>
+#include <rtems/score/objectimpl.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/wkspace.h>
 
@@ -43,30 +44,15 @@ THREAD_OFFSET_ASSERT( Timer );
 THREAD_OFFSET_ASSERT( receive_packet );
 #endif
 
-Thread_Information _Thread_Internal_information;
-
-void _Thread_Initialize_information(
-  Thread_Information  *information,
-  Objects_APIs         the_api,
-  uint16_t             the_class,
-  uint32_t             maximum
-)
+void _Thread_Initialize_information( Thread_Information *information )
 {
-  _Objects_Initialize_information(
-    &information->Objects,
-    the_api,
-    the_class,
-    maximum,
-    _Thread_Control_size,
-    OBJECTS_NO_STRING_NAME,
-    NULL
-  );
+  _Objects_Initialize_information( &information->Objects );
 
   _Freechain_Initialize(
-    &information->Free_thread_queue_heads,
-    _Workspace_Allocate_or_fatal_error,
-    _Objects_Maximum_per_allocation( maximum ),
-    THREAD_QUEUE_HEADS_SIZE( _Scheduler_Count )
+    &information->Thread_queue_heads.Free,
+    information->Thread_queue_heads.initial,
+    _Objects_Get_maximum_index( &information->Objects ),
+    _Thread_queue_Heads_size
   );
 }
 
@@ -95,11 +81,5 @@ void _Thread_Handler_initialization(void)
    *  per CPU in an SMP system.  In addition, if this is a loosely
    *  coupled multiprocessing system, account for the MPCI Server Thread.
    */
-  _Thread_Initialize_information(
-    &_Thread_Internal_information,
-    OBJECTS_INTERNAL_API,
-    OBJECTS_INTERNAL_THREADS,
-    _Thread_Get_maximum_internal_threads()
-  );
-
+  _Thread_Initialize_information( &_Thread_Information );
 }
