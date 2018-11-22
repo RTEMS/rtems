@@ -131,7 +131,7 @@ typedef struct {
   /** This is the number of objects on the Inactive list. */
   Objects_Maximum   inactive;
   /** This is the number of objects in a block. */
-  Objects_Maximum   allocation_size;
+  Objects_Maximum   objects_per_block;
   /** This is the size in bytes of each object instance. */
   uint16_t          object_size;
   /**
@@ -750,7 +750,7 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
   const Objects_Information *information
 )
 {
-  return information->auto_extend ? information->allocation_size : 0;
+  return information->auto_extend ? information->objects_per_block : 0;
 }
 
 /**

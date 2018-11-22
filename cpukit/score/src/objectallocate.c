@@ -72,7 +72,7 @@ Objects_Control *_Objects_Allocate_unprotected(
 
       block = (uint32_t) _Objects_Get_index( the_object->id ) -
               _Objects_Get_index( information->minimum_id );
-      block /= information->allocation_size;
+      block /= information->objects_per_block;
 
       information->inactive_per_block[ block ]--;
       information->inactive--;

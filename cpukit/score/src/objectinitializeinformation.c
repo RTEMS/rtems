@@ -76,7 +76,7 @@ void _Objects_Do_initialize_information(
   /*
    *  The allocation unit is the maximum value
    */
-  information->allocation_size = maximum_per_allocation;
+  information->objects_per_block = maximum_per_allocation;
 
   /*
    *  Provide a null local table entry for the case of any empty table.

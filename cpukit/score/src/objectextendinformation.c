@@ -73,19 +73,19 @@ void _Objects_Extend_information(
   if ( information->object_blocks == NULL )
     block_count = 0;
   else {
-    block_count = information->maximum / information->allocation_size;
+    block_count = information->maximum / information->objects_per_block;
 
     for ( ; block < block_count; block++ ) {
       if ( information->object_blocks[ block ] == NULL ) {
         do_extend = false;
         break;
       } else
-        index_base += information->allocation_size;
+        index_base += information->objects_per_block;
     }
   }
-  index_end = index_base + information->allocation_size;
+  index_end = index_base + information->objects_per_block;
 
-  maximum = (uint32_t) information->maximum + information->allocation_size;
+  maximum = (uint32_t) information->maximum + information->objects_per_block;
 
   /*
    *  We need to limit the number of objects to the maximum number
@@ -100,7 +100,8 @@ void _Objects_Extend_information(
    * Allocate the name table, and the objects and if it fails either return or
    * generate a fatal error depending on auto-extending being active.
    */
-  object_block_size = information->allocation_size * information->object_size;
+  object_block_size = information->objects_per_block
+    * information->object_size;
   if ( information->auto_extend ) {
     new_object_block = _Workspace_Allocate( object_block_size );
     if ( !new_object_block )
@@ -243,8 +244,8 @@ void _Objects_Extend_information(
    *  Assign the new object block to the object block table.
    */
   information->object_blocks[ block ] = new_object_block;
-  information->inactive_per_block[ block ] = information->allocation_size;
-  information->inactive += information->allocation_size;
+  information->inactive_per_block[ block ] = information->objects_per_block;
+  information->inactive += information->objects_per_block;
 
   /*
    *  Append to inactive chain.
