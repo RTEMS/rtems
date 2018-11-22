@@ -200,8 +200,8 @@ MDblock(
 **        count -- the number of bits of X to use.
 **          (if not a multiple of 8, uses high bits of last byte.)
 ** Update MDp using the number of bits of X given by count.
-** This is the basic input routine for an MD4 user.
-** The routine completes the MD computation when count < 512, so
+** This is the basic input routine for MD4 users.
+** The routine completes the MD computation when counting < 512, so
 ** every MD computation should end with one call to MD4Update with a
 ** count less than 512.  A call with count 0 will be ignored if the
 ** MD has already been terminated (done != 0), so an extra call with
@@ -257,7 +257,7 @@ MD4Update(
     /* Add padding '1' bit and low-order zeros in last byte */
     mask = 1 << (7 - bit);
     XX[byte] = (XX[byte] | mask) & ~( mask - 1);
-    /* If room for bit count, finish up with this block */
+    /* If there is room for bit count, finish up with this block */
     if (byte <= 55)
     {
       for (i=0;i<8;i++) XX[56+i] = MDp->count[i];
