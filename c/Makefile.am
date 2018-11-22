@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-## NOTE: This Makefile.am is rather fragile to the value of RTEMS_BSP
-## Esp. make clean and make distclean have unwanted side-effects
+## NOTE: This Makefile.am is sensitive to the value of RTEMS_BSP
+## Esp. make clean and make distclean will have unwanted side-effects
 ## if RTEMS_BSP is not properly set up.
 
 RTEMS_BSP = $(RTEMS_BSP_LIST)
