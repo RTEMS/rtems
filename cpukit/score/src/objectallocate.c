@@ -23,12 +23,6 @@
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 
-/* #define RTEMS_DEBUG_OBJECT_ALLOCATION */
-
-#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
-#include <rtems/bspIo.h>
-#endif
-
 static Objects_Control *_Objects_Get_inactive(
   Objects_Information *information
 )
@@ -84,16 +78,6 @@ Objects_Control *_Objects_Allocate_unprotected(
       information->inactive--;
     }
   }
-
-#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
-  if ( !the_object ) {
-    printk(
-      "OBJECT ALLOCATION FAILURE! API/Class %d/%d\n",
-      information->the_api,
-      information->the_class
-    );
-  }
-#endif
 
   return the_object;
 }
