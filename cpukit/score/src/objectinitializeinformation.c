@@ -37,9 +37,7 @@ void _Objects_Do_initialize_information(
 #endif
 )
 {
-  static Objects_Control *null_local_table = NULL;
-  uint32_t                minimum_index;
-  Objects_Maximum         maximum_per_allocation;
+  Objects_Maximum maximum_per_allocation;
 
   information->the_api            = the_api;
   information->the_class          = the_class;
@@ -48,6 +46,7 @@ void _Objects_Do_initialize_information(
   information->inactive_per_block = 0;
   information->object_blocks      = 0;
   information->inactive           = 0;
+  information->local_table        = NULL;
 
   /*
    *  Set the maximum value to 0. It will be updated when objects are
@@ -77,18 +76,6 @@ void _Objects_Do_initialize_information(
    *  The allocation unit is the maximum value
    */
   information->objects_per_block = maximum_per_allocation;
-
-  /*
-   *  Provide a null local table entry for the case of any empty table.
-   */
-  information->local_table = &null_local_table;
-
-  /*
-   *  Calculate minimum and maximum Id's
-   */
-  minimum_index = (maximum_per_allocation == 0) ? 0 : 1;
-  information->minimum_id =
-    _Objects_Build_id( the_api, the_class, _Objects_Local_node, minimum_index );
 
   /*
    *  Calculate the maximum name length

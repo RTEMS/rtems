@@ -210,7 +210,7 @@ int _POSIX_signals_Send(
     maximum = the_info->maximum;
     object_table = the_info->local_table;
 
-    for ( index = 1 ; index <= maximum ; index++ ) {
+    for ( index = 0 ; index < maximum ; ++index ) {
       the_thread = (Thread_Control *) object_table[ index ];
 
       if ( !the_thread )

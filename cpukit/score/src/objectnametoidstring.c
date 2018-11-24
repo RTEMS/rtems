@@ -52,7 +52,7 @@ Objects_Control *_Objects_Get_by_name(
     *name_length_p = name_length;
   }
 
-  for ( index = 1; index <= information->maximum; index++ ) {
+  for ( index = 0; index < information->maximum; ++index ) {
     Objects_Control *the_object;
 
     the_object = information->local_table[ index ];

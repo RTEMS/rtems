@@ -48,7 +48,6 @@ void _Objects_Extend_information(
   uint32_t          block;
   uint32_t          index_base;
   uint32_t          index_end;
-  uint32_t          minimum_index;
   uint32_t          index;
   uint32_t          maximum;
   size_t            object_block_size;
@@ -65,11 +64,9 @@ void _Objects_Extend_information(
    *  extend the block table, then we will change do_extend.
    */
   do_extend     = true;
-  minimum_index = _Objects_Get_index( information->minimum_id );
-  index_base    = minimum_index;
+  index_base    = 0;
   block         = 0;
 
-  /* if ( information->maximum < minimum_index ) */
   if ( information->object_blocks == NULL )
     block_count = 0;
   else {
@@ -149,7 +146,7 @@ void _Objects_Extend_information(
      *  Allocate the tables and break it up.
      */
     object_blocks_size = block_count * sizeof( *object_blocks );
-    local_table_size = ( maximum + minimum_index ) * sizeof( *local_table );
+    local_table_size =  maximum * sizeof( *local_table );
     table_size = object_blocks_size
       + local_table_size
       + block_count * sizeof( *inactive_per_block );
@@ -181,7 +178,7 @@ void _Objects_Extend_information(
      */
     block_count--;
 
-    if ( information->maximum > minimum_index ) {
+    if ( information->maximum > 0 ) {
       /*
        *  Copy each section of the table over. This has to be performed as
        *  separate parts as size of each block has changed.
@@ -199,15 +196,8 @@ void _Objects_Extend_information(
       memcpy(
         local_table,
         information->local_table,
-        ( information->maximum + minimum_index ) * sizeof( *local_table )
+        information->maximum * sizeof( *local_table )
       );
-    } else {
-      /*
-       *  Deal with the special case of the 0 to minimum_index
-       */
-      for ( index = 0; index < minimum_index; index++ ) {
-        local_table[ index ] = NULL;
-      }
     }
 
     /*
@@ -256,7 +246,7 @@ void _Objects_Extend_information(
       information->the_api,
       information->the_class,
       _Objects_Local_node,
-      index
+      index + OBJECTS_INDEX_MINIMUM
     );
 
     _Chain_Initialize_node( &the_object->Node );

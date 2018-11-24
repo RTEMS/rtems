@@ -25,7 +25,8 @@
  */
 void rtems_rate_monotonic_reset_all_statistics( void )
 {
-  Objects_Id        id;
+  rtems_id maximum_id;
+  rtems_id id;
 
    /*
     * Prevent allocation or deallocation of any of the periods while we are
@@ -37,9 +38,12 @@ void rtems_rate_monotonic_reset_all_statistics( void )
      * Cycle through all possible ids and try to reset each one.  If it
      * is a period that is inactive, we just get an error back.  No big deal.
      */
-    for ( id=_Rate_monotonic_Information.minimum_id ;
-          id <= _Rate_monotonic_Information.maximum_id ;
-          id++ ) {
+    maximum_id = _Rate_monotonic_Information.maximum_id;
+    for (
+      id = _Objects_Get_minimum_id( maximum_id ) ;
+      id <= maximum_id ;
+      ++id
+    ) {
       (void) rtems_rate_monotonic_reset_statistics( id );
     }
 

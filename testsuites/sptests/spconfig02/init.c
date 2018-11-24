@@ -18,6 +18,7 @@
 
 #include <rtems.h>
 #include <rtems/score/objectimpl.h>
+#include <rtems/sysinit.h>
 
 #include <tmacros.h>
 
@@ -25,7 +26,7 @@ const char rtems_test_name[] = "SPCONFIG 2";
 
 static const rtems_name name = rtems_build_name('N', 'A', 'M', 'E');
 
-static void test_barrier(void)
+static void test_barrier_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -34,7 +35,33 @@ static void test_barrier(void)
   rtems_test_assert(sc == RTEMS_TOO_MANY);
 }
 
-static void test_message_queue(void)
+static void test_barrier_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_barrier_delete(0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS, 1, 0);
+  sc = rtems_barrier_delete(id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_barrier_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_barrier_wait(0, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_BARRIERS, 1, 0);
+  sc = rtems_barrier_wait(id, RTEMS_NO_TIMEOUT);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_message_queue_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -47,6 +74,12 @@ static void test_message_queue(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_message_queue_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_message_queue_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -56,7 +89,21 @@ static void test_message_queue(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_partition(void)
+static void test_message_queue_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+  uint32_t count;
+
+  sc = rtems_message_queue_flush(0, &count);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_MESSAGE_QUEUES, 1, 0);
+  sc = rtems_message_queue_flush(id, &count);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_partition_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -71,6 +118,12 @@ static void test_partition(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_partition_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_partition_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -80,13 +133,32 @@ static void test_partition(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_rate_monotonic(void)
+static void test_partition_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_partition_return_buffer(0, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PARTITIONS, 1, 0);
+  sc = rtems_partition_return_buffer(id, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_rate_monotonic_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
 
   sc = rtems_rate_monotonic_create(name, &id);
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_rate_monotonic_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_rate_monotonic_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -96,7 +168,20 @@ static void test_rate_monotonic(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_region(void)
+static void test_rate_monotonic_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_rate_monotonic_cancel(0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_PERIODS, 1, 0);
+  sc = rtems_rate_monotonic_cancel(id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_region_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -111,6 +196,12 @@ static void test_region(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_region_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_region_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -120,7 +211,20 @@ static void test_region(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_semaphore(void)
+static void test_region_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_region_return_segment(0, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_REGIONS, 1, 0);
+  sc = rtems_region_return_segment(id, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_semaphore_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -133,6 +237,12 @@ static void test_semaphore(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_semaphore_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_semaphore_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -142,7 +252,20 @@ static void test_semaphore(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_task(void)
+static void test_semaphore_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_semaphore_release(0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_SEMAPHORES, 1, 0);
+  sc = rtems_semaphore_release(id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_task_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -156,19 +279,41 @@ static void test_task(void)
     &id
   );
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_task_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, 1, 0);
   sc = rtems_task_delete(id);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_timer(void)
+static void test_task_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TASKS, 1, 0);
+  sc = rtems_task_resume(id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_timer_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
 
   sc = rtems_timer_create(name, &id);
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_timer_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_timer_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -178,7 +323,20 @@ static void test_timer(void)
   rtems_test_assert(sc == RTEMS_INVALID_ID);
 }
 
-static void test_user_extensions(void)
+static void test_timer_get(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_timer_reset(0);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+
+  id = rtems_build_id(OBJECTS_CLASSIC_API, OBJECTS_RTEMS_TIMERS, 1, 0);
+  sc = rtems_timer_reset(id);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+}
+
+static void test_user_extensions_create(void)
 {
   rtems_status_code sc;
   rtems_id id;
@@ -187,6 +345,12 @@ static void test_user_extensions(void)
   memset(&table, 0, sizeof(table));
   sc = rtems_extension_create(name, &table, &id);
   rtems_test_assert(sc == RTEMS_TOO_MANY);
+}
+
+static void test_user_extensions_delete(void)
+{
+  rtems_status_code sc;
+  rtems_id id;
 
   sc = rtems_extension_delete(0);
   rtems_test_assert(sc == RTEMS_INVALID_ID);
@@ -246,21 +410,55 @@ static void test_some_id_to_name(void)
 
 static void Init(rtems_task_argument arg)
 {
-  rtems_print_printer_printk(&rtems_test_printer);
-  TEST_BEGIN();
-  test_barrier();
-  test_message_queue();
-  test_partition();
-  test_rate_monotonic();
-  test_region();
-  test_semaphore();
-  test_task();
-  test_timer();
-  test_user_extensions();
+  test_barrier_create();
+  test_barrier_delete();
+  test_barrier_get();
+  test_message_queue_create();
+  test_message_queue_delete();
+  test_message_queue_get();
+  test_partition_create();
+  test_partition_delete();
+  test_partition_get();
+  test_rate_monotonic_create();
+  test_rate_monotonic_delete();
+  test_rate_monotonic_get();
+  test_region_create();
+  test_region_delete();
+  test_region_get();
+  test_semaphore_create();
+  test_semaphore_delete();
+  test_semaphore_get();
+  test_task_create();
+  test_task_delete();
+  test_task_get();
+  test_timer_create();
+  test_timer_delete();
+  test_timer_get();
+  test_user_extensions_create();
+  test_user_extensions_delete();
   test_some_id_to_name();
   TEST_END();
   rtems_test_exit(0);
 }
+
+static void before_object_information_initialization(void)
+{
+  rtems_print_printer_printk(&rtems_test_printer);
+  TEST_BEGIN();
+  test_barrier_get();
+  test_message_queue_get();
+  test_partition_get();
+  test_rate_monotonic_get();
+  test_semaphore_get();
+  test_task_get();
+  test_timer_get();
+}
+
+RTEMS_SYSINIT_ITEM(
+  before_object_information_initialization,
+  RTEMS_SYSINIT_INITIAL_EXTENSIONS,
+  RTEMS_SYSINIT_ORDER_LAST
+);
 
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 

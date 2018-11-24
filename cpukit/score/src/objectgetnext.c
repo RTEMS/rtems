@@ -36,7 +36,7 @@ Objects_Control *_Objects_Get_next(
       return NULL;
 
     if (_Objects_Get_index(id) == OBJECTS_ID_INITIAL_INDEX)
-        next_id = information->minimum_id;
+        next_id = _Objects_Get_minimum_id( information->maximum_id );
     else
         next_id = id;
 

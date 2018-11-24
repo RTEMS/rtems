@@ -44,7 +44,7 @@ rtems_status_code rtems_object_get_class_information(
   /*
    * Return information about this object class to the user.
    */
-  info->minimum_id  = obj_info->minimum_id;
+  info->minimum_id  = _Objects_Get_minimum_id( obj_info->maximum_id );
   info->maximum_id  = obj_info->maximum_id;
   info->auto_extend = obj_info->auto_extend;
   info->maximum     = obj_info->maximum;

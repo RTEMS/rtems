@@ -37,8 +37,7 @@ void _Objects_Free(
     Objects_Maximum inactive;
 
     objects_per_block = information->objects_per_block;
-    block = _Objects_Get_index( the_object->id );
-    block -= _Objects_Get_index( information->minimum_id );
+    block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
     block /= objects_per_block;
 
     ++information->inactive_per_block[ block ];

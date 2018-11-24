@@ -39,7 +39,7 @@ void _Thread_Iterate(
       continue;
     }
 
-    for ( i = 1 ; i <= information->maximum ; ++i ) {
+    for ( i = 0 ; i < information->maximum ; ++i ) {
       Thread_Control *the_thread;
 
       the_thread = (Thread_Control *) information->local_table[ i ];

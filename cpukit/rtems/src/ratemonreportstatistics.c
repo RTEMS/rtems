@@ -35,6 +35,7 @@ void rtems_rate_monotonic_report_statistics_with_plugin(
 )
 {
   rtems_status_code                      status;
+  rtems_id                               maximum_id;
   rtems_id                               id;
   rtems_rate_monotonic_period_statistics the_stats;
   rtems_rate_monotonic_period_status     the_status;
@@ -67,9 +68,12 @@ ididididid NNNN ccccc mmmmmm X
    * Cycle through all possible ids and try to report on each one.  If it
    * is a period that is inactive, we just get an error back.  No big deal.
    */
-  for ( id=_Rate_monotonic_Information.minimum_id ;
-        id <= _Rate_monotonic_Information.maximum_id ;
-        id++ ) {
+  maximum_id = _Rate_monotonic_Information.maximum_id;
+  for (
+    id = _Objects_Get_minimum_id( maximum_id ) ;
+    id <= maximum_id ;
+    ++id
+  ) {
     status = rtems_rate_monotonic_get_statistics( id, &the_stats );
     if ( status != RTEMS_SUCCESSFUL )
       continue;

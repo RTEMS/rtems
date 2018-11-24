@@ -29,7 +29,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 {
   bool                       search_local_node;
   Objects_Control           *the_object;
-  uint32_t                   index;
+  Objects_Maximum            index;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Name               name_for_mp;
 #endif
@@ -52,7 +52,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
    search_local_node = true;
 
   if ( search_local_node ) {
-    for ( index = 1; index <= information->maximum; index++ ) {
+    for ( index = 0; index < information->maximum; ++index ) {
       the_object = information->local_table[ index ];
       if ( !the_object )
         continue;

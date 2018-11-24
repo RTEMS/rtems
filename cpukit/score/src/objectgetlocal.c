@@ -31,22 +31,29 @@ Objects_Control *_Objects_Get(
   const Objects_Information *information
 )
 {
-  uint32_t index;
+  Objects_Id delta;
+  Objects_Id maximum_id;
+  Objects_Id end;
 
-  index = id - information->minimum_id + 1;
+  maximum_id = information->maximum_id;
+  delta = maximum_id - id;
+  end = _Objects_Get_index( maximum_id );
 
-  if ( information->maximum >= index ) {
+  if ( RTEMS_PREDICT_TRUE( delta < end ) ) {
+    ISR_Level        level;
     Objects_Control *the_object;
 
-    _ISR_lock_ISR_disable( lock_context );
+    _ISR_Local_disable( level );
+    _ISR_lock_Context_set_level( lock_context, level );
 
-    the_object = information->local_table[ index ];
-    if ( the_object != NULL ) {
+    the_object =
+      information->local_table[ end - OBJECTS_INDEX_MINIMUM - delta ];
+    if ( RTEMS_PREDICT_TRUE( the_object != NULL ) ) {
       /* ISR disabled on behalf of caller */
       return the_object;
     }
 
-    _ISR_lock_ISR_enable( lock_context );
+    _ISR_Local_enable( level );
   }
 
   return NULL;

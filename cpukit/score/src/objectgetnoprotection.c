@@ -25,19 +25,16 @@ Objects_Control *_Objects_Get_no_protection(
   const Objects_Information *information
 )
 {
-  Objects_Control *the_object;
-  uint32_t         index;
+  Objects_Id delta;
+  Objects_Id maximum_id;
+  Objects_Id end;
 
-  /*
-   * You can't just extract the index portion or you can get tricked
-   * by a value between 1 and maximum.
-   */
-  index = id - information->minimum_id + 1;
+  maximum_id = information->maximum_id;
+  delta = maximum_id - id;
+  end = _Objects_Get_index( maximum_id );
 
-  if ( information->maximum >= index ) {
-    if ( (the_object = information->local_table[ index ]) != NULL ) {
-      return the_object;
-    }
+  if ( RTEMS_PREDICT_TRUE( delta < end ) ) {
+    return information->local_table[ end - OBJECTS_INDEX_MINIMUM - delta ];
   }
 
   /*

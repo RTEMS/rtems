@@ -62,16 +62,15 @@ Objects_Control *_Objects_Allocate_unprotected(
      *  extend information base.
      */
 
-    if ( !the_object ) {
+    if ( the_object == NULL ) {
       _Objects_Extend_information( information );
       the_object = _Objects_Get_inactive( information );
     }
 
-    if ( the_object ) {
-      uint32_t   block;
+    if ( the_object != NULL ) {
+      Objects_Maximum block;
 
-      block = (uint32_t) _Objects_Get_index( the_object->id ) -
-              _Objects_Get_index( information->minimum_id );
+      block = _Objects_Get_index( the_object->id ) - OBJECTS_INDEX_MINIMUM;
       block /= information->objects_per_block;
 
       information->inactive_per_block[ block ]--;

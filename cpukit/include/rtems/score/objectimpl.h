@@ -120,8 +120,6 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
  *  manage each class of objects.
  */
 typedef struct {
-  /** This is the minimum valid id of this object class. */
-  Objects_Id        minimum_id;
   /** This is the maximum valid id of this object class. */
   Objects_Id        maximum_id;
   /** This points to the table of local objects. */
@@ -190,6 +188,11 @@ extern uint16_t _Objects_Maximum_nodes;
 #else
 #define _Objects_Maximum_nodes 1
 #endif
+
+/**
+ * This is the minimum object ID index associated with an object.
+ */
+#define OBJECTS_INDEX_MINIMUM 1U
 
 /**
  *  The following is the list of information blocks per API for each object
@@ -832,6 +835,22 @@ RTEMS_INLINE_ROUTINE bool _Objects_Are_ids_equal(
 }
 
 /**
+ * Returns the identifier with the minimum index for the specified identifier.
+ *
+ * The specified identifier must have valid API, class and node fields.
+ *
+ * @param[in] id The identifier to be processed.
+ *
+ * @return The corresponding ID with the minimum index.
+ */
+RTEMS_INLINE_ROUTINE Objects_Id _Objects_Get_minimum_id( Objects_Id id )
+{
+  id &= ~OBJECTS_INDEX_MASK;
+  id += (Objects_Id) OBJECTS_INDEX_MINIMUM << OBJECTS_INDEX_START_BIT;
+  return id;
+}
+
+/**
  * This function sets the pointer to the local_table object
  * referenced by the index.
  *
@@ -856,9 +875,10 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
    *  where the Id is known to be good.  Therefore, this should NOT
    *  occur in normal situations.
    */
+  _Assert( index >= OBJECTS_INDEX_MINIMUM );
   _Assert( index <= information->maximum );
 
-  information->local_table[ index ] = the_object;
+  information->local_table[ index - OBJECTS_INDEX_MINIMUM ] = the_object;
 }
 
 /**
