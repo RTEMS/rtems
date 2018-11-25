@@ -39,8 +39,12 @@ void _Objects_Do_initialize_information(
 {
   Objects_Maximum maximum_per_allocation;
 
-  information->the_api     = the_api;
-  information->the_class   = the_class;
+  information->maximum_id = _Objects_Build_id(
+    the_api,
+    the_class,
+    _Objects_Local_node,
+    0
+  );
   information->object_size = object_size;
 
   /*

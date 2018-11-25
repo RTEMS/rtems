@@ -137,10 +137,6 @@ typedef struct {
    * (OBJECTS_NO_STRING_NAME).
    */
   uint16_t          name_length;
-  /** This field indicates the API of this object class. */
-  uint8_t           the_api;
-  /** This is the class of this object set. */
-  uint8_t           the_class;
   /** This is the true if unlimited objects in this class. */
   bool              auto_extend;
   /** This is the chain of inactive control blocks. */

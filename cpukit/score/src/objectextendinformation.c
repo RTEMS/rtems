@@ -54,12 +54,14 @@ void _Objects_Extend_information(
   size_t            object_block_size;
   Objects_Control  *new_object_block;
   bool              do_extend;
+  Objects_Id        api_class_and_node;
 
   _Assert(
     _Objects_Allocator_is_owner()
       || !_System_state_Is_up( _System_state_Get() )
   );
 
+  api_class_and_node = information->maximum_id & ~OBJECTS_INDEX_MASK;
   old_maximum = _Objects_Get_maximum_index( information );
 
   /*
@@ -218,12 +220,8 @@ void _Objects_Extend_information(
     information->object_blocks = object_blocks;
     information->inactive_per_block = inactive_per_block;
     information->local_table = local_table;
-    information->maximum_id = _Objects_Build_id(
-      information->the_api,
-      information->the_class,
-      _Objects_Local_node,
-      new_maximum
-    );
+    information->maximum_id = api_class_and_node
+      | (new_maximum << OBJECTS_INDEX_START_BIT);
 
     _ISR_lock_ISR_enable( &lock_context );
 
@@ -244,12 +242,8 @@ void _Objects_Extend_information(
    */
   the_object = new_object_block;
   for ( index = index_base ; index < index_end ; ++index ) {
-    the_object->id = _Objects_Build_id(
-      information->the_api,
-      information->the_class,
-      _Objects_Local_node,
-      index + OBJECTS_INDEX_MINIMUM
-    );
+    the_object->id = api_class_and_node
+      | ( ( index + OBJECTS_INDEX_MINIMUM ) << OBJECTS_INDEX_START_BIT );
 
     _Chain_Initialize_node( &the_object->Node );
     _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
