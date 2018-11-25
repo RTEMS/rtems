@@ -24,13 +24,14 @@ Objects_Maximum _Objects_Active_count(
   const Objects_Information *information
 )
 {
-  size_t inactive;
-  size_t maximum;
+  Objects_Maximum inactive;
+  Objects_Maximum maximum;
 
   _Assert( _Objects_Allocator_is_owner() );
 
-  inactive = _Chain_Node_count_unprotected( &information->Inactive );
-  maximum  = information->maximum;
+  inactive = (Objects_Maximum)
+    _Chain_Node_count_unprotected( &information->Inactive );
+  maximum  = _Objects_Get_maximum_index( information );
 
-  return (Objects_Maximum) ( maximum - inactive );
+  return maximum - inactive;
 }

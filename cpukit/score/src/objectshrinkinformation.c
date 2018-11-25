@@ -39,7 +39,7 @@ void _Objects_Shrink_information(
    */
 
   objects_per_block = information->objects_per_block;
-  block_count = information->maximum / objects_per_block;
+  block_count = _Objects_Get_maximum_index( information ) / objects_per_block;
   index_base = 0;
 
   for ( block = 0; block < block_count; block++ ) {

@@ -29,9 +29,10 @@ Objects_Control *_Objects_Get_by_name(
   Objects_Get_by_name_error *error
 )
 {
-  size_t   name_length;
-  size_t   max_name_length;
-  uint32_t index;
+  size_t          name_length;
+  size_t          max_name_length;
+  Objects_Maximum maximum;
+  Objects_Maximum index;
 
   _Assert( _Objects_Has_string_name( information ) );
   _Assert( _Objects_Allocator_is_owner() );
@@ -52,7 +53,9 @@ Objects_Control *_Objects_Get_by_name(
     *name_length_p = name_length;
   }
 
-  for ( index = 0; index < information->maximum; ++index ) {
+  maximum = _Objects_Get_maximum_index( information );
+
+  for ( index = 0; index < maximum; ++index ) {
     Objects_Control *the_object;
 
     the_object = information->local_table[ index ];

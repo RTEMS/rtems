@@ -49,7 +49,8 @@ void _Objects_Extend_information(
   uint32_t          index_base;
   uint32_t          index_end;
   uint32_t          index;
-  uint32_t          maximum;
+  Objects_Maximum   old_maximum;
+  uint32_t          new_maximum;
   size_t            object_block_size;
   Objects_Control  *new_object_block;
   bool              do_extend;
@@ -58,6 +59,8 @@ void _Objects_Extend_information(
     _Objects_Allocator_is_owner()
       || !_System_state_Is_up( _System_state_Get() )
   );
+
+  old_maximum = _Objects_Get_maximum_index( information );
 
   /*
    *  Search for a free block of indexes. If we do NOT need to allocate or
@@ -70,7 +73,7 @@ void _Objects_Extend_information(
   if ( information->object_blocks == NULL )
     block_count = 0;
   else {
-    block_count = information->maximum / information->objects_per_block;
+    block_count = old_maximum / information->objects_per_block;
 
     for ( ; block < block_count; block++ ) {
       if ( information->object_blocks[ block ] == NULL ) {
@@ -82,14 +85,14 @@ void _Objects_Extend_information(
   }
   index_end = index_base + information->objects_per_block;
 
-  maximum = (uint32_t) information->maximum + information->objects_per_block;
+  new_maximum = (uint32_t) old_maximum + information->objects_per_block;
 
   /*
    *  We need to limit the number of objects to the maximum number
    *  representable in the index portion of the object Id.  In the
    *  case of 16-bit Ids, this is only 256 object instances.
    */
-  if ( maximum > OBJECTS_ID_FINAL_INDEX ) {
+  if ( new_maximum > OBJECTS_ID_FINAL_INDEX ) {
     return;
   }
 
@@ -146,7 +149,7 @@ void _Objects_Extend_information(
      *  Allocate the tables and break it up.
      */
     object_blocks_size = block_count * sizeof( *object_blocks );
-    local_table_size =  maximum * sizeof( *local_table );
+    local_table_size =  new_maximum * sizeof( *local_table );
     table_size = object_blocks_size
       + local_table_size
       + block_count * sizeof( *inactive_per_block );
@@ -178,7 +181,7 @@ void _Objects_Extend_information(
      */
     block_count--;
 
-    if ( information->maximum > 0 ) {
+    if ( old_maximum > 0 ) {
       /*
        *  Copy each section of the table over. This has to be performed as
        *  separate parts as size of each block has changed.
@@ -196,7 +199,7 @@ void _Objects_Extend_information(
       memcpy(
         local_table,
         information->local_table,
-        information->maximum * sizeof( *local_table )
+        old_maximum * sizeof( *local_table )
       );
     }
 
@@ -215,12 +218,11 @@ void _Objects_Extend_information(
     information->object_blocks = object_blocks;
     information->inactive_per_block = inactive_per_block;
     information->local_table = local_table;
-    information->maximum = (Objects_Maximum) maximum;
     information->maximum_id = _Objects_Build_id(
       information->the_api,
       information->the_class,
       _Objects_Local_node,
-      information->maximum
+      new_maximum
     );
 
     _ISR_lock_ISR_enable( &lock_context );

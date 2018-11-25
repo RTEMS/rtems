@@ -39,20 +39,9 @@ void _Objects_Do_initialize_information(
 {
   Objects_Maximum maximum_per_allocation;
 
-  information->the_api            = the_api;
-  information->the_class          = the_class;
-  information->object_size        = object_size;
-  information->local_table        = 0;
-  information->inactive_per_block = 0;
-  information->object_blocks      = 0;
-  information->inactive           = 0;
-  information->local_table        = NULL;
-
-  /*
-   *  Set the maximum value to 0. It will be updated when objects are
-   *  added to the inactive set from _Objects_Extend_information()
-   */
-  information->maximum = 0;
+  information->the_api     = the_api;
+  information->the_class   = the_class;
+  information->object_size = object_size;
 
   /*
    *  Register this Object Class in the Object Information Table.

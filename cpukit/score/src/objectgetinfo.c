@@ -55,7 +55,7 @@ Objects_Information *_Objects_Get_information(
    *  pointer.
    */
   #if !defined(RTEMS_MULTIPROCESSING)
-    if ( info->maximum == 0 )
+    if ( _Objects_Get_maximum_index( info ) == 0 )
       return NULL;
   #endif
 

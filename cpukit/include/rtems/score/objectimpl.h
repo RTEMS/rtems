@@ -124,8 +124,6 @@ typedef struct {
   Objects_Id        maximum_id;
   /** This points to the table of local objects. */
   Objects_Control **local_table;
-  /** This is the maximum number of objects in this class. */
-  Objects_Maximum   maximum;
   /** This is the number of objects on the Inactive list. */
   Objects_Maximum   inactive;
   /** This is the number of objects in a block. */
@@ -851,6 +849,20 @@ RTEMS_INLINE_ROUTINE Objects_Id _Objects_Get_minimum_id( Objects_Id id )
 }
 
 /**
+ * Returns the maximum index of the specified object class.
+ *
+ * @param[in] information The object information.
+ *
+ * @return The maximum index of the specified object class.
+ */
+RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
+  const Objects_Information *information
+)
+{
+  return _Objects_Get_index( information->maximum_id );
+}
+
+/**
  * This function sets the pointer to the local_table object
  * referenced by the index.
  *
@@ -876,7 +888,7 @@ RTEMS_INLINE_ROUTINE void _Objects_Set_local_object(
    *  occur in normal situations.
    */
   _Assert( index >= OBJECTS_INDEX_MINIMUM );
-  _Assert( index <= information->maximum );
+  _Assert( index <= _Objects_Get_maximum_index( information ) );
 
   information->local_table[ index - OBJECTS_INDEX_MINIMUM ] = the_object;
 }

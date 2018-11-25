@@ -29,6 +29,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
 {
   bool                       search_local_node;
   Objects_Control           *the_object;
+  Objects_Maximum            maximum;
   Objects_Maximum            index;
 #if defined(RTEMS_MULTIPROCESSING)
   Objects_Name               name_for_mp;
@@ -42,9 +43,10 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
   if ( name == 0 )
     return OBJECTS_INVALID_NAME;
 
+  maximum = _Objects_Get_maximum_index( information );
   search_local_node = false;
 
-  if ( information->maximum != 0 &&
+  if ( maximum > 0 &&
       (node == OBJECTS_SEARCH_ALL_NODES ||
        node == OBJECTS_SEARCH_LOCAL_NODE ||
        _Objects_Is_local_node( node )
@@ -52,7 +54,7 @@ Objects_Name_or_id_lookup_errors _Objects_Name_to_id_u32(
    search_local_node = true;
 
   if ( search_local_node ) {
-    for ( index = 0; index < information->maximum; ++index ) {
+    for ( index = 0; index < maximum; ++index ) {
       the_object = information->local_table[ index ];
       if ( !the_object )
         continue;

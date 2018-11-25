@@ -248,49 +248,53 @@ LAST(RTEMS_SYSINIT_INITIAL_EXTENSIONS)
 
 FIRST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(_Thread_Internal_information.Objects.maximum == 0);
+  assert(
+    _Objects_Get_maximum_index(&_Thread_Internal_information.Objects) == 0
+  );
   next_step(DATA_STRUCTURES_PRE);
 }
 
 LAST(RTEMS_SYSINIT_DATA_STRUCTURES)
 {
-  assert(_Thread_Internal_information.Objects.maximum != 0);
+  assert(
+    _Objects_Get_maximum_index(&_Thread_Internal_information.Objects) != 0
+  );
   next_step(DATA_STRUCTURES_POST);
 }
 
 FIRST(RTEMS_SYSINIT_USER_EXTENSIONS)
 {
-  assert(_Extension_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Extension_Information) == 0);
   next_step(USER_EXTENSIONS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_USER_EXTENSIONS)
 {
-  assert(_Extension_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Extension_Information) != 0);
   next_step(USER_EXTENSIONS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_TASKS)
 {
-  assert(_RTEMS_tasks_Information.Objects.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_RTEMS_tasks_Information.Objects) == 0);
   next_step(CLASSIC_TASKS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_TASKS)
 {
-  assert(_RTEMS_tasks_Information.Objects.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_RTEMS_tasks_Information.Objects) != 0);
   next_step(CLASSIC_TASKS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_TIMER)
 {
-  assert(_Timer_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Timer_Information) == 0);
   next_step(CLASSIC_TIMER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_TIMER)
 {
-  assert(_Timer_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Timer_Information) != 0);
   next_step(CLASSIC_TIMER_POST);
 }
 
@@ -318,85 +322,85 @@ LAST(RTEMS_SYSINIT_CLASSIC_EVENT)
 
 FIRST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
 {
-  assert(_Message_queue_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Message_queue_Information) == 0);
   next_step(CLASSIC_MESSAGE_QUEUE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_MESSAGE_QUEUE)
 {
-  assert(_Message_queue_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Message_queue_Information) != 0);
   next_step(CLASSIC_MESSAGE_QUEUE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Semaphore_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Semaphore_Information) == 0);
   next_step(CLASSIC_SEMAPHORE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_SEMAPHORE)
 {
-  assert(_Semaphore_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Semaphore_Information) != 0);
   next_step(CLASSIC_SEMAPHORE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_PARTITION)
 {
-  assert(_Partition_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Partition_Information) == 0);
   next_step(CLASSIC_PARTITION_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_PARTITION)
 {
-  assert(_Partition_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Partition_Information) != 0);
   next_step(CLASSIC_PARTITION_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_REGION)
 {
-  assert(_Region_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Region_Information) == 0);
   next_step(CLASSIC_REGION_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_REGION)
 {
-  assert(_Region_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Region_Information) != 0);
   next_step(CLASSIC_REGION_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
 {
-  assert(_Dual_ported_memory_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Dual_ported_memory_Information) == 0);
   next_step(CLASSIC_DUAL_PORTED_MEMORY_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_DUAL_PORTED_MEMORY)
 {
-  assert(_Dual_ported_memory_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Dual_ported_memory_Information) != 0);
   next_step(CLASSIC_DUAL_PORTED_MEMORY_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
 {
-  assert(_Rate_monotonic_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Rate_monotonic_Information) == 0);
   next_step(CLASSIC_RATE_MONOTONIC_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_RATE_MONOTONIC)
 {
-  assert(_Rate_monotonic_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Rate_monotonic_Information) != 0);
   next_step(CLASSIC_RATE_MONOTONIC_POST);
 }
 
 FIRST(RTEMS_SYSINIT_CLASSIC_BARRIER)
 {
-  assert(_Barrier_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_Barrier_Information) == 0);
   next_step(CLASSIC_BARRIER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_CLASSIC_BARRIER)
 {
-  assert(_Barrier_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_Barrier_Information) != 0);
   next_step(CLASSIC_BARRIER_POST);
 }
 
@@ -428,63 +432,63 @@ LAST(RTEMS_SYSINIT_POSIX_SIGNALS)
 
 FIRST(RTEMS_SYSINIT_POSIX_THREADS)
 {
-  assert(_POSIX_Threads_Information.Objects.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Threads_Information.Objects) == 0);
   next_step(POSIX_THREADS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_THREADS)
 {
-  assert(_POSIX_Threads_Information.Objects.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Threads_Information.Objects) != 0);
   next_step(POSIX_THREADS_POST);
 }
 
 FIRST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
 {
-  assert(_POSIX_Message_queue_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Message_queue_Information) == 0);
   next_step(POSIX_MESSAGE_QUEUE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_MESSAGE_QUEUE)
 {
-  assert(_POSIX_Message_queue_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Message_queue_Information) != 0);
   next_step(POSIX_MESSAGE_QUEUE_POST);
 }
 
 FIRST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
 {
-  assert(_POSIX_Semaphore_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Semaphore_Information) == 0);
   next_step(POSIX_SEMAPHORE_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_SEMAPHORE)
 {
-  assert(_POSIX_Semaphore_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Semaphore_Information) != 0);
   next_step(POSIX_SEMAPHORE_POST);
 }
 
 #ifdef RTEMS_POSIX_API
 FIRST(RTEMS_SYSINIT_POSIX_TIMER)
 {
-  assert(_POSIX_Timer_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Timer_Information) == 0);
   next_step(POSIX_TIMER_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_TIMER)
 {
-  assert(_POSIX_Timer_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Timer_Information) != 0);
   next_step(POSIX_TIMER_POST);
 }
 #endif /* RTEMS_POSIX_API */
 
 FIRST(RTEMS_SYSINIT_POSIX_SHM)
 {
-  assert(_POSIX_Shm_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Shm_Information) == 0);
   next_step(POSIX_SHM_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_SHM)
 {
-  assert(_POSIX_Shm_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Shm_Information) != 0);
   next_step(POSIX_SHM_POST);
 }
 
@@ -508,13 +512,13 @@ LAST(RTEMS_SYSINIT_POSIX_CLEANUP)
 
 FIRST(RTEMS_SYSINIT_POSIX_KEYS)
 {
-  assert(_POSIX_Keys_Information.maximum == 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Keys_Information) == 0);
   next_step(POSIX_KEYS_PRE);
 }
 
 LAST(RTEMS_SYSINIT_POSIX_KEYS)
 {
-  assert(_POSIX_Keys_Information.maximum != 0);
+  assert(_Objects_Get_maximum_index(&_POSIX_Keys_Information) != 0);
   next_step(POSIX_KEYS_POST);
 }
 

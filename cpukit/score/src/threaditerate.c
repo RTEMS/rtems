@@ -27,7 +27,8 @@ void _Thread_Iterate(
 
   for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; ++api_index ) {
     const Objects_Information *information;
-    Objects_Maximum            i;
+    Objects_Maximum            maximum;
+    Objects_Maximum            index;
 
     if ( _Objects_Information_table[ api_index ] == NULL ) {
       continue;
@@ -39,10 +40,12 @@ void _Thread_Iterate(
       continue;
     }
 
-    for ( i = 0 ; i < information->maximum ; ++i ) {
+    maximum = _Objects_Get_maximum_index( information );
+
+    for ( index = 0 ; index < maximum ; ++index ) {
       Thread_Control *the_thread;
 
-      the_thread = (Thread_Control *) information->local_table[ i ];
+      the_thread = (Thread_Control *) information->local_table[ index ];
 
       if ( the_thread != NULL ) {
         bool done;
