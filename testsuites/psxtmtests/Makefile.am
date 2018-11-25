@@ -471,6 +471,17 @@ psxtmmqrcvblock01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmmqrcvblock01) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
+if TEST_psxtmmqrcvblock02
+psxtm_tests += psxtmmqrcvblock02
+psxtm_docs += psxtmmqrcvblock02/psxtmmqrcvblock02.doc
+psxtmmqrcvblock02_SOURCES = psxtmmqrcvblock02/init.c \
+	../tmtests/include/timesys.h ../support/src/tmtests_empty_function.c \
+	../support/src/tmtests_support.c
+psxtmmqrcvblock02_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmmqrcvblock02) \
+	$(support_includes) -I$(top_srcdir)/../tmtests/include \
+	-DOPERATION_COUNT=$(OPERATION_COUNT)
+endif
+
 if TEST_psxtmsem01
 psxtm_tests += psxtmsem01
 psxtm_docs += psxtmsem01/psxtmsem01.doc
