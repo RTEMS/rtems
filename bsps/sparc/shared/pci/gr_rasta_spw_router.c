@@ -21,7 +21,6 @@
 
 #include <bsp.h>
 #include <rtems/bspIo.h>
-#include <rtems/score/isrlock.h> /* spin-lock */
 #include <pci.h>
 
 #include <ambapp.h>
@@ -33,15 +32,7 @@
 #include <bsp/genirq.h>
 #include <bsp/gr_rasta_spw_router.h>
 
-/* map via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
+#include <grlib_impl.h>
 
 /* Determines which PCI address the AHB masters will access, it should be
  * set so that the masters can access the CPU RAM. Default is base of CPU RAM,

@@ -20,6 +20,8 @@
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/occan.h>
 
+#include <grlib_impl.h>
+
 /* RTEMS -> ERRNO decoding table
 
 rtems_assoc_t errno_assoc[] = {
@@ -70,16 +72,6 @@ rtems_assoc_t errno_assoc[] = {
 #else
 	#define DBG(fmt, vargs...)
 #endif
-
-/* Spin locks mapped via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
 
 /* fifo interface */
 typedef struct {

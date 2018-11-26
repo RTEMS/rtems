@@ -13,11 +13,12 @@
 #include <rtems/bspIo.h>
 #include <stdio.h>
 #include <bsp.h>
-#include <rtems/bspIo.h> /* printk */
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grspw_router.h>
+
+#include <grlib_impl.h>
 
 //#define STATIC
 #define STATIC static
@@ -33,56 +34,6 @@
 #endif
 
 #define THREAD_SAFE 1
-
-/* Use interrupt lock privmitives compatible with SMP defined in
- * RTEMS 4.11.99 and higher.
- */
-#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
-
-#ifdef THREAD_SAFE
-/* map via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
-#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
-#else
-#define SPIN_DECLARE(lock)
-#define SPIN_INIT(lock, name)
-#define SPIN_LOCK(lock, level)
-#define SPIN_LOCK_IRQ(lock, level)
-#define SPIN_UNLOCK(lock, level)
-#define SPIN_UNLOCK_IRQ(lock, level)
-#define SPIN_IRQFLAGS(k)
-#define SPIN_ISR_IRQFLAGS(k)
-#define SPIN_FREE(lock)
-#endif
-
-#else
-
-#ifdef THREAD_SAFE
-#error THREAD SAFE operation not supported on this RTEMS version
-#else
-#define SPIN_DECLARE(lock)
-#define SPIN_INIT(lock, name)
-#define SPIN_LOCK(lock, level)
-#define SPIN_LOCK_IRQ(lock, level)
-#define SPIN_UNLOCK(lock, level)
-#define SPIN_UNLOCK_IRQ(lock, level)
-#define SPIN_IRQFLAGS(k)
-#define SPIN_ISR_IRQFLAGS(k)
-#define SPIN_FREE(lock)
-#endif
-
-#ifdef RTEMS_SMP
-#error SMP mode not compatible with these interrupt lock primitives
-#endif
-
-#endif
 
 #define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
 #define REG_READ(addr) (*(volatile unsigned int *)(addr))

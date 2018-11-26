@@ -23,20 +23,7 @@
 #include <ambapp.h>
 #include <bsp/grtc.h>
 
-/* map via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
-
-/* turn on/off local CPU's interrupt to ensure HW timing - not SMP safe. */
-#define IRQ_LOCAL_DECLARE(_level) rtems_interrupt_level _level
-#define IRQ_LOCAL_DISABLE(_level) rtems_interrupt_local_disable(_level)
-#define IRQ_LOCAL_ENABLE(_level) rtems_interrupt_local_enable(_level)
+#include <grlib_impl.h>
 
 /*
 #define DEBUG

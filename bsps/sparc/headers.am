@@ -4,6 +4,7 @@ include_HEADERS =
 include_HEADERS += ../../../../../bsps/sparc/include/ambapp.h
 include_HEADERS += ../../../../../bsps/sparc/include/ambapp_ids.h
 include_HEADERS += ../../../../../bsps/sparc/include/grlib.h
+include_HEADERS += ../../../../../bsps/sparc/include/grlib_impl.h
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =

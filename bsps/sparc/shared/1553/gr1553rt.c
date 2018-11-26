@@ -19,22 +19,13 @@
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 
+#include <grlib_impl.h>
+
 #define GR1553RT_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553RT_READ_MEM(adr) (*(volatile uint32_t *)(adr))
 
 #define GR1553RT_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553RT_READ_REG(adr) (*(volatile uint32_t *)(adr))
-
-/* map via rtems_interrupt_lock_* API: */
-#define SPIN_DECLARE(lock) RTEMS_INTERRUPT_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_LOCK(lock, level) rtems_interrupt_lock_acquire_isr(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_lock_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) rtems_interrupt_lock_release_isr(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_lock_release(lock, &level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_lock_context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
-#define SPIN_FREE(lock) rtems_interrupt_lock_destroy(lock)
 
 /* Software representation of one hardware descriptor */
 struct gr1553rt_sw_bd {

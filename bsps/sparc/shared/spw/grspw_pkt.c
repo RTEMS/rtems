@@ -28,40 +28,7 @@
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grspw_pkt.h>
 
-/* Use interrupt lock privmitives compatible with SMP defined in
- * RTEMS 4.11.99 and higher.
- */
-#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x040b63)
-
-#include <rtems/score/isrlock.h> /* spin-lock */
-
-/* map via ISR lock: */
-#define SPIN_DECLARE(lock) ISR_LOCK_MEMBER(lock)
-#define SPIN_INIT(lock, name) _ISR_lock_Initialize(lock, name)
-#define SPIN_LOCK(lock, level) _ISR_lock_Acquire_inline(lock, &level)
-#define SPIN_LOCK_IRQ(lock, level) _ISR_lock_ISR_disable_and_acquire(lock, &level)
-#define SPIN_UNLOCK(lock, level) _ISR_lock_Release_inline(lock, &level)
-#define SPIN_UNLOCK_IRQ(lock, level) _ISR_lock_Release_and_ISR_enable(lock, &level)
-#define SPIN_IRQFLAGS(k) ISR_lock_Context k
-#define SPIN_ISR_IRQFLAGS(k) SPIN_IRQFLAGS(k)
-
-#else
-
-/* maintain single-core compatibility with older versions of RTEMS: */
-#define SPIN_DECLARE(name)
-#define SPIN_INIT(lock, name)
-#define SPIN_LOCK(lock, level)
-#define SPIN_LOCK_IRQ(lock, level) rtems_interrupt_disable(level)
-#define SPIN_UNLOCK(lock, level)
-#define SPIN_UNLOCK_IRQ(lock, level) rtems_interrupt_enable(level)
-#define SPIN_IRQFLAGS(k) rtems_interrupt_level k
-#define SPIN_ISR_IRQFLAGS(k)
-
-#ifdef RTEMS_SMP
-#error SMP mode not compatible with these interrupt lock primitives
-#endif
-
-#endif
+#include <grlib_impl.h>
 
 /*#define STATIC*/
 #define STATIC static

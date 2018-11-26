@@ -17,13 +17,7 @@
 
 #include <bsp/ahbstat.h>
 
-#define SPIN_IRQ_DECLARE(name)          RTEMS_INTERRUPT_LOCK_DECLARE(, name)
-#define SPIN_IRQ_INIT(lock, name)       rtems_interrupt_lock_initialize(lock, name)
-#define SPIN_IRQ_LOCK(lock, ctx)        rtems_interrupt_lock_acquire(lock, &(ctx))
-#define SPIN_IRQ_UNLOCK(lock, ctx)      rtems_interrupt_lock_release(lock, &(ctx))
-#define SPIN_IRQ_LOCK_ISR(lock, ctx)    rtems_interrupt_lock_acquire_isr(lock, &(ctx))
-#define SPIN_IRQ_UNLOCK_ISR(lock, ctx)  rtems_interrupt_lock_release_isr(lock, &(ctx))
-#define SPIN_IRQ_CTX                    rtems_interrupt_lock_context
+#include <grlib_impl.h>
 
 #define REG_WRITE(addr, val) (*(volatile uint32_t *)(addr) = (uint32_t)(val))
 #define REG_READ(addr) (*(volatile uint32_t *)(addr))
@@ -74,7 +68,7 @@ struct ahbstat_priv {
 	uint32_t last_status;
 	uint32_t last_address;
 	/* Spin-lock ISR protection */
-	SPIN_IRQ_DECLARE(devlock);
+	SPIN_DECLARE(devlock);
 };
 
 static int ahbstat_init2(struct drvmgr_dev *dev);
@@ -137,7 +131,7 @@ static int ahbstat_init2(struct drvmgr_dev *dev)
 	 * Initialize spinlock for AHBSTAT Device. It is used to protect user
 	 * API calls involivng priv structure from updates in ISR.
 	 */
-	SPIN_IRQ_INIT(&priv->devlock, priv->devname);
+	SPIN_INIT(&priv->devlock, priv->devname);
 
 	/* Initialize hardware */
 	REG_WRITE(&priv->regs->status, 0);
@@ -153,7 +147,7 @@ void ahbstat_isr(void *arg)
 	struct ahbstat_priv *priv = arg;
 	uint32_t fadr, status;
 	int rc;
-	SPIN_IRQ_CTX lock_context;
+	SPIN_ISR_IRQFLAGS(lock_context);
 
 	/* Get hardware status */
 	status = REG_READ(&priv->regs->status);
@@ -165,10 +159,10 @@ void ahbstat_isr(void *arg)
 	/* Get Failing address */
 	fadr = REG_READ(&priv->regs->failing);
 
-	SPIN_IRQ_LOCK_ISR(&priv->devlock, lock_context);
+	SPIN_LOCK(&priv->devlock, lock_context);
 	priv->last_status = status;
 	priv->last_address = fadr;
-	SPIN_IRQ_UNLOCK_ISR(&priv->devlock, lock_context);
+	SPIN_UNLOCK(&priv->devlock, lock_context);
 
 	/* Let user handle error, default to print the error and reenable HW
 	 *
@@ -211,7 +205,7 @@ int ahbstat_last_error(int minor, uint32_t *status, uint32_t *address)
 	struct ahbstat_priv *priv;
 	uint32_t last_status;
 	uint32_t last_address;
-	SPIN_IRQ_CTX lock_context;
+	SPIN_IRQFLAGS(lock_context);
 
 	if (drvmgr_get_dev(&ahbstat_drv_info.general, minor, &dev)) {
 		return -1;
@@ -219,10 +213,10 @@ int ahbstat_last_error(int minor, uint32_t *status, uint32_t *address)
 	priv = (struct ahbstat_priv *)dev->priv;
 
 	/* Read information cached by ISR */
-	SPIN_IRQ_LOCK(&priv->devlock, lock_context);
+	SPIN_LOCK_IRQ(&priv->devlock, lock_context);
 	last_status = REG_READ(&priv->last_status);
 	last_address = REG_READ(&priv->last_address);
-	SPIN_IRQ_UNLOCK(&priv->devlock, lock_context);
+	SPIN_UNLOCK_IRQ(&priv->devlock, lock_context);
 
 	*status = last_status;
 	*address = last_address;
