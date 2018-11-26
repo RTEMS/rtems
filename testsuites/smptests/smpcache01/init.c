@@ -23,8 +23,6 @@
 
 const char rtems_test_name[] = "SMPCACHE 1";
 
-CPU_STRUCTURE_ALIGNMENT static int data_to_flush[1024];
-
 #define CPU_COUNT 32
 
 #define WORKER_PRIORITY 100
@@ -54,43 +52,12 @@ static void test_action( void *arg )
 
 typedef void ( *test_case )(
   size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
+  const cpu_set_t *cpu_set
 );
-
-static void test_cache_flush_multiple_data_lines(
-  size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
-)
-{
-  rtems_cache_flush_multiple_data_lines_processor_set( &data_to_flush,
-      sizeof(data_to_flush), set_size, cpu_set );
-}
-
-static void test_cache_invalidate_multiple_data_lines(
-  size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
-)
-{
-  rtems_cache_invalidate_multiple_data_lines_processor_set( &data_to_flush,
-      sizeof(data_to_flush), set_size, cpu_set );
-}
-
-static void test_cache_flush_entire_data(
-  size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
-)
-{
-  rtems_cache_flush_entire_data_processor_set( set_size, cpu_set );
-}
 
 static void test_cache_invalidate_entire_instruction(
   size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
+  const cpu_set_t *cpu_set
 )
 {
   rtems_cache_invalidate_entire_instruction();
@@ -98,8 +65,7 @@ static void test_cache_invalidate_entire_instruction(
 
 static void test_cache_invalidate_multiple_instruction_lines(
   size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
+  const cpu_set_t *cpu_set
 )
 {
   uint32_t self = rtems_get_current_processor();
@@ -126,8 +92,7 @@ static void broadcast_test_init( void )
 
 static void broadcast_test_body(
   size_t set_size,
-  const cpu_set_t *cpu_set,
-  SMP_barrier_State *bs
+  const cpu_set_t *cpu_set
 )
 {
   _SMP_Multicast_action( set_size, cpu_set, test_action, &ctx );
@@ -141,9 +106,6 @@ static void broadcast_test_fini( void )
 }
 
 static test_case test_cases[] = {
-  test_cache_flush_multiple_data_lines,
-  test_cache_invalidate_multiple_data_lines,
-  test_cache_flush_entire_data,
   test_cache_invalidate_entire_instruction,
   test_cache_invalidate_multiple_instruction_lines,
   broadcast_test_body
@@ -158,7 +120,7 @@ static void call_tests( size_t set_size,
 
   for (i = 0; i < RTEMS_ARRAY_SIZE( test_cases ); ++i) {
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set, bs );
+    ( *test_cases[ i ] )( set_size, cpu_set );
     barrier( bs );
   }
 
@@ -177,7 +139,7 @@ static void call_tests_isr_disabled( size_t set_size,
 
     _ISR_Local_disable( isr_level );
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set, bs );
+    ( *test_cases[ i ] )( set_size, cpu_set );
     _ISR_Local_enable( isr_level );
     barrier( bs );
   }
@@ -197,7 +159,7 @@ static void call_tests_with_thread_dispatch_disabled( size_t set_size,
 
     cpu_self = _Thread_Dispatch_disable();
     barrier( bs );
-    ( *test_cases[ i ] )( set_size, cpu_set, bs );
+    ( *test_cases[ i ] )( set_size, cpu_set );
     barrier( bs );
     _Thread_Dispatch_enable( cpu_self );
   }
