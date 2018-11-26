@@ -83,6 +83,10 @@ static rtems_status_code _Semaphore_MP_Send_request_packet(
   Semaphore_MP_Packet *the_packet;
   Status_Control       status;
 
+  if ( !_Semaphore_MP_Is_remote( semaphore_id ) ) {
+    return RTEMS_INVALID_ID;
+  }
+
   switch ( operation ) {
 
     case SEMAPHORE_MP_OBTAIN_REQUEST:
