@@ -256,10 +256,9 @@ int grcan_init2(struct drvmgr_dev *dev)
 	DBG("GRCAN[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 	if (GRCAN_COUNT_MAX <= grcan_count)
 		return DRVMGR_ENORES;
-	priv = dev->priv = malloc(sizeof(struct grcan_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */
@@ -1113,7 +1112,7 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 			pDev->tx = (struct grcan_msg *)pDev->_tx;
 		} else {
 			if (adr == 0) {
-				pDev->_tx = malloc(pDev->txbuf_size +
+				pDev->_tx = grlib_malloc(pDev->txbuf_size +
 				                   BUFFER_ALIGNMENT_NEEDS);
 				if (!pDev->_tx)
 					return -1;
@@ -1157,7 +1156,7 @@ static int grcan_alloc_buffers(struct grcan_priv *pDev, int rx, int tx)
 			pDev->rx = (struct grcan_msg *)pDev->_rx;
 		} else {
 			if (adr == 0) {
-				pDev->_rx = malloc(pDev->rxbuf_size +
+				pDev->_rx = grlib_malloc(pDev->rxbuf_size +
 				                   BUFFER_ALIGNMENT_NEEDS);
 				if (!pDev->_rx)
 					return -1;

@@ -74,7 +74,7 @@ struct gr1553rt_list {
 	/* !!Must be last in data structure!! 
 	 * !!Array must at least be of length bd_cnt!!
 	 */
-	unsigned short bds[1];		/* Array of BDIDs, -1 unused/end */
+	unsigned short bds[0];		/* Array of BDIDs */
 };
 
 /* GR1553B-RT Driver configuration options used when calling gr1553rt_config().

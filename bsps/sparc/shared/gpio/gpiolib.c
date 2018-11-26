@@ -14,6 +14,8 @@
 
 #include <bsp/gpiolib.h>
 
+#include <grlib_impl.h>
+
 struct gpiolib_port;
 
 struct gpiolib_port {
@@ -78,11 +80,10 @@ int gpiolib_drv_register(struct gpiolib_drv *drv, void *handle)
 	if ( !drv || !drv->ops )
 		return -1;
 
-	port = malloc(sizeof(*port));
+	port = grlib_calloc(1, sizeof(*port));
 	if ( port == NULL )
 		return -1;
 
-	memset(port, 0, sizeof(*port));
 	port->handle = handle;
 	port->minor = port_nr++;
 	port->drv = drv;

@@ -26,6 +26,8 @@
 #include <bsp/grslink.h>
 #include <ambapp.h>
 
+#include <grlib_impl.h>
+
 #ifndef GAISLER_SLINK
 #define GAISLER_SLINK 0x02F
 #endif
@@ -101,12 +103,12 @@ static int SLINK_createqueues(int size)
 	SLINK_queue *q;
 	int i, j;
 
-	if ((q = malloc(SLINK_NUMQUEUES*sizeof(SLINK_queue))) == NULL)
+	if ((q = grlib_malloc(SLINK_NUMQUEUES*sizeof(*q))) == NULL)
 		goto slink_qiniterr1;
 		
 	for (i = 0; i < SLINK_NUMQUEUES; i++) {
 		q[i].size = size;
-		if ((q[i].buf = malloc(size*sizeof(int))) == NULL)
+		if ((q[i].buf = grlib_malloc(size*sizeof(int))) == NULL)
 			goto slink_qiniterr2;
 		q[i].first = q[i].last = q[i].buf;
 		q[i].max = q[i].buf + (size-1);
@@ -345,7 +347,7 @@ int SLINK_init(unsigned int nullwrd, int parity, int qsize,
 	rtems_status_code st;
 
 	/* Allocate private config structure */
-	if (cfg == NULL && (cfg = malloc(sizeof(SLINK_cfg))) == NULL) {
+	if (cfg == NULL && (cfg = grlib_malloc(sizeof(*cfg))) == NULL) {
 		DBG("SLINK_init: Could not allocate cfg structure\n");
 		goto slink_initerr1;
 	}
@@ -369,7 +371,7 @@ int SLINK_init(unsigned int nullwrd, int parity, int qsize,
 	cfg->reg = (SLINK_regs*)base;
 
 	/* Allocate status structure and initialize members */
-	if ((cfg->status = calloc(1, sizeof(SLINK_status))) == NULL) {
+	if ((cfg->status = grlib_calloc(1, sizeof(*cfg->status))) == NULL) {
 		DBG("SLINK_init: Could not allocate status structure\n");
 		goto slink_initerr2;
 	}
@@ -378,7 +380,7 @@ int SLINK_init(unsigned int nullwrd, int parity, int qsize,
 
 #ifdef SLINK_COLLECT_STATISTICS
 	/* Allocate statistics structure and initialize members */
-	if ((cfg->stats = calloc(1, sizeof(SLINK_stats))) == NULL) {
+	if ((cfg->stats = grlib_calloc(1, sizeof(*cfg->stats))) == NULL) {
 		DBG("SLINK_init: Could not allocate statistics structure\n");
 		goto slink_initerr3;
 	}

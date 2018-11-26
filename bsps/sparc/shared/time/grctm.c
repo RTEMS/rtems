@@ -15,6 +15,8 @@
 
 #include <bsp/grctm.h>
 
+#include <grlib_impl.h>
+
 /* Private structure of GRCTM driver */
 struct grctm_priv {
 	struct drvmgr_dev *dev;
@@ -351,10 +353,9 @@ static int grctm_init2(struct drvmgr_dev *dev)
 	struct grctm_priv *priv;
 	struct grctm_regs *regs;
 
-	priv = (struct grctm_priv *)malloc(sizeof(*priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( priv == NULL )
 		return -1;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 	dev->priv = priv;
 

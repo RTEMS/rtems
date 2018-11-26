@@ -31,6 +31,8 @@
 #include <ambapp.h>
 #include <drvmgr/ambapp_bus.h>
 
+#include <grlib_impl.h>
+
 /* Uncomment for debug output */
 /*#define DEBUG 1
 #define FUNCDEBUG 1*/
@@ -309,10 +311,9 @@ int b1553brm_init2(struct drvmgr_dev *dev)
 	brm_priv *priv;
 
 	DBG("B1553BRM[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(brm_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */
@@ -472,7 +473,7 @@ int b1553brm_device_init(brm_priv *pDev)
 			/* Use dynamically allocated memory + 128k for
 			 * alignment
 			 */
-			mem = (unsigned int)malloc(size + 128 * 1024);
+			mem = (unsigned int)grlib_malloc(size + 128 * 1024);
 			if (!mem){
 				printk("BRM: Failed to allocate HW memory\n\r");
 				return -1;
@@ -631,7 +632,7 @@ static rtems_device_driver rt_init(brm_priv *brm) {
 	brm->bcmem = NULL;
 	brm->rtmem = (void *)brm->mem;
 
-	brm->rt_event = (struct rt_msg *) malloc(EVENT_QUEUE_SIZE*sizeof(struct rt_msg));
+	brm->rt_event = grlib_malloc(EVENT_QUEUE_SIZE*sizeof(*brm->rt_event));
   
 	if (brm->rt_event == NULL) {
 		DBG("BRM driver failed to allocated memory.");
@@ -759,7 +760,7 @@ static rtems_device_driver bm_init(brm_priv *brm) {
 	brm->bcmem = NULL;
 	brm->rtmem = NULL;
 	
-	brm->bm_event	 = (struct bm_msg *) malloc(EVENT_QUEUE_SIZE*sizeof(struct bm_msg));
+	brm->bm_event	 = grlib_malloc(EVENT_QUEUE_SIZE*sizeof(*brm->bm_event));
  
 	if (brm->bm_event == NULL) {
 		DBG("BRM driver failed to allocated memory.");

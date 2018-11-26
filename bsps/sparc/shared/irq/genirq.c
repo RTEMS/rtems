@@ -15,6 +15,8 @@
 #include <string.h>
 #include <bsp/genirq.h>
 
+#include <grlib_impl.h>
+
 struct genirq_handler_entry {
 	struct genirq_handler_entry	*next;		/* Next ISR entry for this IRQ number */
 	genirq_handler			isr;		/* ISR function called upon IRQ */
@@ -31,21 +33,20 @@ struct genirq_priv {
 	/* Maximum number of interrupt */
 	int				genirq_max;
 	/* IRQ Table index N reflect IRQ number N */
-	struct genirq_irq_entry		genirq_table[1]; /* Length depends on */
+	struct genirq_irq_entry		genirq_table[0]; /* Length depends on */
 };
 
 genirq_t genirq_init(int number_of_irqs)
 {
-	int size;
+	size_t size;
 	struct genirq_priv *priv;
 
-	size = sizeof(int) +
-	       number_of_irqs * sizeof(struct genirq_irq_entry);
+	size = sizeof(*priv) +
+	       number_of_irqs * sizeof(priv->genirq_table[0]);
 
-	priv = (struct genirq_priv *)malloc(size);
+	priv = grlib_calloc(1, size);
 	if ( !priv )
 		return NULL;
-	memset(priv, 0, size);
 	priv->genirq_max = number_of_irqs - 1;
 
 	return priv;
@@ -86,7 +87,7 @@ void *genirq_alloc_handler(genirq_handler isr, void *arg)
 {
 	struct genirq_handler_entry *newentry;
 
-	newentry = malloc(sizeof(struct genirq_handler_entry));
+	newentry = grlib_malloc(sizeof(*newentry));
 	if ( newentry ) {
 		/* Initialize ISR entry */
 		newentry->isr     = isr;

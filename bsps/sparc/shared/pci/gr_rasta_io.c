@@ -559,11 +559,10 @@ int gr_rasta_io_init1(struct drvmgr_dev *dev)
 	union drvmgr_key_value *value;
 	int resources_cnt;
 
-	priv = malloc(sizeof(struct gr_rasta_io_priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
 
-	memset(priv, 0, sizeof(*priv));
 	dev->priv = priv;
 	priv->dev = dev;
 

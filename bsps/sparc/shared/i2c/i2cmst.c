@@ -22,6 +22,8 @@
 
 #include <bsp/i2cmst.h>
 
+#include <grlib_impl.h>
+
 /* Enable debug printks? */
 /*#define DEBUG*/
 
@@ -339,10 +341,9 @@ int i2cmst_init2(struct drvmgr_dev *dev)
 
 	DBG("I2CMST[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
-	priv = dev->priv = malloc(sizeof(gr_i2cmst_prv_t));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */

@@ -22,6 +22,8 @@
 
 #include <bsp/mctrl.h>
 
+#include <grlib_impl.h>
+
 #define MEMSET(priv, start, c, length) memset((void *)start, c, length)
 
 #define DBG(args...)
@@ -105,10 +107,9 @@ static int mctrl_init1(struct drvmgr_dev *dev)
 	unsigned int start, length;
 
 	DBG("MCTRL[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(struct mctrl_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* Get device information from AMBA PnP information */

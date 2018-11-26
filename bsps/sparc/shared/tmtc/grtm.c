@@ -15,7 +15,6 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
-#include <malloc.h>
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
@@ -449,10 +448,9 @@ static int grtm_init2(struct drvmgr_dev *dev)
 	struct grtm_priv *priv;
 
 	DBG("GRTM[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(struct grtm_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */
@@ -584,7 +582,7 @@ static int grtm_device_init(struct grtm_priv *pDev)
 	}
 	memset(pDev->bds, 0, 0x400);
 
-	pDev->_ring = malloc(sizeof(struct grtm_ring) * 128);
+	pDev->_ring = grlib_malloc(sizeof(*pDev->_ring) * 128);
 	if ( !pDev->_ring ) {
 		return -1;
 	}
@@ -692,7 +690,7 @@ static void grtm_hw_get_default_modes(struct grtm_ioc_config *cfg, struct grtm_i
 
 static void *grtm_memalign(unsigned int boundary, unsigned int length, void *realbuf)
 {
-	*(int *)realbuf = (int)malloc(length+boundary);
+	*(int *)realbuf = (int)grlib_malloc(length+boundary);
 	DBG("GRTM: Alloced %d (0x%x) bytes, requested: %d\n",length+boundary,length+boundary,length);
 	return (void *)(((*(unsigned int *)realbuf)+boundary) & ~(boundary-1));
 }

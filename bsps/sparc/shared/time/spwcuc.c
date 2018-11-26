@@ -13,8 +13,10 @@
 #include <drvmgr/ambapp_bus.h>
 #include <stdlib.h>
 #include <string.h>
- 
+
 #include <bsp/spwcuc.h>
+
+#include <grlib_impl.h>
 
 /* Private structure of SPWCUC driver. */
 struct spwcuc_priv {
@@ -311,10 +313,9 @@ static int spwcuc_init2(struct drvmgr_dev *dev)
 	struct spwcuc_priv *priv;
 	struct spwcuc_regs *regs;
 
-	priv = (struct spwcuc_priv *)malloc(sizeof(*priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( priv == NULL )
 		return -1;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 	dev->priv = priv;
 

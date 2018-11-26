@@ -29,6 +29,8 @@
 */
 #include <bsp/debug_defs.h>
 
+#include <grlib_impl.h>
+
 struct gradcdac_priv {
 	struct gradcdac_regs *regs;	/* Must be first */
 	struct drvmgr_dev *dev;
@@ -99,10 +101,9 @@ int gradcdac_init2(struct drvmgr_dev *dev)
 
 	DBG("GRADCDAC[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
-	priv = dev->priv = malloc(sizeof(struct gradcdac_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */

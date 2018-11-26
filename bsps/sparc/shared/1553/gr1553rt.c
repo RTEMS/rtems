@@ -239,7 +239,8 @@ int gr1553rt_list_init
 	)
 {
 	struct gr1553rt_priv *priv = rt;
-	int i, size;
+	size_t size;
+	int i;
 	struct gr1553rt_sw_bd *swbd;
 	unsigned short index;
 	struct gr1553rt_list *list;
@@ -253,9 +254,9 @@ int gr1553rt_list_init
 	list = *plist;
 	if ( list == NULL ) {
 		/* Dynamically allocate LIST */
-		size = offsetof(struct gr1553rt_list, bds) +
-			(cfg->bd_cnt * sizeof(unsigned short));
-		list = (struct gr1553rt_list *)malloc(size);
+		size = sizeof(*list) +
+			(cfg->bd_cnt * sizeof(list->bds[0]));
+		list = grlib_malloc(size);
 		if ( list == NULL )
 			return -1;
 		*plist = list;
@@ -661,10 +662,9 @@ void *gr1553rt_open(int minor)
 	if ( pdev == NULL )
 		goto fail;
 
-	priv = malloc(sizeof(struct gr1553rt_priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( priv == NULL )
 		goto fail;
-	memset(priv, 0, sizeof(struct gr1553rt_priv));
 
 	/* Assign a device private to RT device */
 	priv->pdev = pdev;
@@ -786,7 +786,8 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			);
 	} else {
 		if (priv->cfg.evlog_buffer == NULL) {
-			priv->evlog_buffer = malloc(priv->cfg.evlog_size * 2);
+			priv->evlog_buffer = grlib_malloc(
+				priv->cfg.evlog_size * 2);
 			if (priv->evlog_buffer == NULL)
 				return -1;
 		} else {
@@ -826,7 +827,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			);
 	} else {
 		if ( priv->cfg.bd_buffer == NULL ) {
-			priv->bd_buffer = malloc(size + 0xf);
+			priv->bd_buffer = grlib_malloc(size + 0xf);
 			if (priv->bd_buffer == NULL)
 				return -1;
 		} else {
@@ -849,7 +850,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 
 #if (RTBD_MAX == 0)
 	/* Allocate software description of */
-	priv->swbds = malloc(priv->cfg.bd_count * sizeof(struct gr1553rt_sw_bd));
+	priv->swbds = grlib_malloc(priv->cfg.bd_count * sizeof(*priv->swbds));
 	if ( priv->swbds == NULL ) {
 		return -1;
 	}
@@ -869,7 +870,7 @@ static int gr1553rt_sw_alloc(struct gr1553rt_priv *priv)
 			16 * 32);
 	} else {
 		if (priv->cfg.satab_buffer == NULL) {
-			priv->satab_buffer = malloc((16 * 32) * 2);
+			priv->satab_buffer = grlib_malloc((16 * 32) * 2);
 			if (priv->satab_buffer == NULL)
 				return -1;
 		} else {

@@ -22,6 +22,7 @@
 #include <bsp/gpiolib.h>
 #include <ambapp.h>
 #include <grlib.h>
+#include <grlib_impl.h>
 
 /*#define DEBUG 1*/
 
@@ -117,10 +118,9 @@ int grgpio_init1(struct drvmgr_dev *dev)
 	if ( status < 0 )
 		return DRVMGR_FAIL;
 
-	priv = dev->priv = malloc(sizeof(struct grgpio_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	if ( grgpio_device_init(priv) ) {

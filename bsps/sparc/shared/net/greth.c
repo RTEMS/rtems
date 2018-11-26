@@ -43,14 +43,14 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 
-#include <grlib_impl.h>
-
 #ifdef malloc
 #undef malloc
 #endif
 #ifdef free
 #undef free
 #endif
+
+#include <grlib_impl.h>
 
 #if defined(__m68k__)
 extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
@@ -216,7 +216,7 @@ int greth_process_tx(struct greth_softc *sc);
 static char *almalloc(int sz, int alignment)
 {
         char *tmp;
-        tmp = calloc(1, sz + (alignment-1));
+        tmp = grlib_calloc(1, sz + (alignment-1));
         tmp = (char *) (((int)tmp+alignment) & ~(alignment -1));
         return(tmp);
 }
@@ -635,8 +635,8 @@ auto_neg_done:
     regs->txdesc = (int) sc->txdesc_remote;
     regs->rxdesc = (int) sc->rxdesc_remote;
 
-    sc->rxmbuf = calloc(sc->rxbufs, sizeof(*sc->rxmbuf));
-    sc->txmbuf = calloc(sc->txbufs, sizeof(*sc->txmbuf));
+    sc->rxmbuf = grlib_calloc(sc->rxbufs, sizeof(*sc->rxmbuf));
+    sc->txmbuf = grlib_calloc(sc->txbufs, sizeof(*sc->txmbuf));
 
     for (i = 0; i < sc->txbufs; i++)
       {
@@ -645,7 +645,7 @@ auto_neg_done:
             drvmgr_translate_check(
                 sc->dev, 
                 CPUMEM_TO_DMA,
-                (void *)malloc(GRETH_MAXBUF_LEN),
+                (void *)grlib_malloc(GRETH_MAXBUF_LEN),
                 (void **)&sc->txdesc[i].addr,
                 GRETH_MAXBUF_LEN);
         }
@@ -1503,10 +1503,9 @@ int greth_init2(struct drvmgr_dev *dev)
 	struct greth_softc *priv;
 
 	DBG("GRETH[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(struct greth_softc));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init3() */
@@ -1535,8 +1534,7 @@ int greth_init3(struct drvmgr_dev *dev)
     SPIN_INIT(&sc->devlock, sc->devName);
 
     /* Register GRETH device as an Network interface */
-    ifp = malloc(sizeof(struct rtems_bsdnet_ifconfig));
-    memset(ifp, 0, sizeof(*ifp));
+    ifp = grlib_cmalloc(1, sizeof(*ifp));
 
     ifp->name = sc->devName;
     ifp->drv_ctrl = sc;

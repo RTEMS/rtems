@@ -316,11 +316,10 @@ int gr701_init1(struct drvmgr_dev *dev)
 	uint32_t bar0, bar1, bar0_size, bar1_size;
 	int resources_cnt;
 
-	priv = malloc(sizeof(struct gr701_priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
 
-	memset(priv, 0, sizeof(*priv));
 	dev->priv = priv;
 	priv->dev = dev;
 

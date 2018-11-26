@@ -20,7 +20,6 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
-#include <malloc.h>
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
@@ -549,7 +548,7 @@ void *grspw_open(int dev_no)
 			goto out;
 		}
 	} else {
-		priv->bd_mem_alloced = (unsigned int)malloc(bdtabsize + BDTAB_ALIGN - 1);
+		priv->bd_mem_alloced = (unsigned int)grlib_malloc(bdtabsize + BDTAB_ALIGN - 1);
 		if (priv->bd_mem_alloced == 0) {
 			priv = NULL;
 			goto out;
@@ -1685,7 +1684,7 @@ void *grspw_dma_open(void *d, int chan_no)
 
 	/* Allocate memory for the two descriptor rings */
 	size = sizeof(struct grspw_ring) * (GRSPW_RXBD_NR + GRSPW_TXBD_NR);
-	dma->rx_ring_base = (struct grspw_rxring *)malloc(size);
+	dma->rx_ring_base = grlib_malloc(size);
 	dma->tx_ring_base = (struct grspw_txring *)&dma->rx_ring_base[GRSPW_RXBD_NR];
 	if (dma->rx_ring_base == NULL)
 		goto err;
@@ -3056,7 +3055,7 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 	struct grspw_priv *priv;
 	struct amba_dev_info *ambadev;
 	struct ambapp_core *pnpinfo;
-	int i, size;
+	int i;
 	unsigned int ctrl, icctrl, numi;
 	union drvmgr_key_value *value;
 
@@ -3144,11 +3143,9 @@ static int grspw2_init3(struct drvmgr_dev *dev)
 		priv->hwsup.ndma_chans = value->i;
 
 	/* Allocate and init Memory for all DMA channels */
-	size = sizeof(struct grspw_dma_priv) * priv->hwsup.ndma_chans;
-	priv->dma = (struct grspw_dma_priv *) malloc(size);
+	priv->dma = grlib_calloc(priv->hwsup.ndma_chans, sizeof(*priv->dma));
 	if (priv->dma == NULL)
 		return DRVMGR_NOMEM;
-	memset(priv->dma, 0, size);
 	for (i=0; i<priv->hwsup.ndma_chans; i++) {
 		priv->dma[i].core = priv;
 		priv->dma[i].index = i;

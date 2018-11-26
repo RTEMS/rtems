@@ -15,7 +15,6 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
-#include <malloc.h>
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
@@ -617,7 +616,7 @@ static int grtc_data_avail(struct grtc_priv *pDev)
 
 static void *grtc_memalign(unsigned int boundary, unsigned int length, void *realbuf)
 {
-	*(int *)realbuf = (int)malloc(length+(~GRTC_ASR_BUFST)+1);
+	*(int *)realbuf = (int)grlib_malloc(length+(~GRTC_ASR_BUFST)+1);
 	DBG("GRTC: Alloced %d (0x%x) bytes, requested: %d\n",length+(~GRTC_ASR_BUFST)+1,length+(~GRTC_ASR_BUFST)+1,length);
 	return (void *)(((*(unsigned int *)realbuf)+(~GRTC_ASR_BUFST)+1) & ~(boundary-1));
 }
@@ -1779,7 +1778,7 @@ static rtems_device_driver grtc_ioctl(rtems_device_major_number major, rtems_dev
 		if ( pDev->pools ) {
 			free(pDev->pools);
 		}
-		pDev->pools = malloc(pocfg->pool_cnt * sizeof(struct grtc_frame_pool));
+		pDev->pools = grlib_malloc(pocfg->pool_cnt * sizeof(*pDev->pools));
 		if ( !pDev->pools ) {
 			pDev->pool_cnt = 0;
 			return RTEMS_NO_MEMORY;

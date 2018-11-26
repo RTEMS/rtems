@@ -1285,7 +1285,7 @@ STATIC int grpci2dma_data_print(struct grpci2_bd_data * data)
 void * grpci2dma_channel_new(int number)
 {
 	/* Allocate memory */
-	unsigned int * orig_ptr = (unsigned int *) malloc(
+	unsigned int * orig_ptr = (unsigned int *) grlib_malloc(
 			(GRPCI2DMA_BD_CHAN_SIZE)*number + GRPCI2DMA_BD_CHAN_ALIGN);
 	if (orig_ptr == NULL) return NULL;
 
@@ -1317,7 +1317,7 @@ void grpci2dma_channel_delete(void * chan)
 void * grpci2dma_data_new(int number)
 {
 	/* Allocate memory */
-	unsigned int * orig_ptr = (unsigned int *) malloc(
+	unsigned int * orig_ptr = (unsigned int *) grlib_malloc(
 			(GRPCI2DMA_BD_DATA_SIZE)*number + GRPCI2DMA_BD_DATA_ALIGN);
 	if (orig_ptr == NULL) return NULL;
 
@@ -1375,13 +1375,10 @@ int grpci2dma_init(
 		return -1;
 
 	/* Allocate and init Memory for DMA */
-	int size = sizeof(struct grpci2dma_priv);
-	priv = (struct grpci2dma_priv *) malloc(size);
+	priv = grlib_calloc(1, sizeof(*priv));
 	if (priv == NULL)
 		return DRVMGR_NOMEM;
 
-	/* Initialize all fields */
-	memset(priv, 0, size);
 	priv->regs = regs;
 	strncpy(&priv->devname[0], "grpci2dma0", DEVNAME_LEN);
 

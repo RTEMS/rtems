@@ -80,7 +80,7 @@ typedef struct {
 	int full; /* 1 = base contain cnt CANMsgs, tail==head */
 	CANMsg *tail, *head;
 	CANMsg *base;
-	char fifoarea[0];
+	CANMsg fifoarea[0];
 } occan_fifo;
 
 /* PELICAN */
@@ -448,10 +448,9 @@ int occan_init2(struct drvmgr_dev *dev)
 	occan_priv *priv;
 
 	DBG("OCCAN[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(occan_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	return DRVMGR_OK;
@@ -1881,15 +1880,11 @@ void occan_interrupt(void *arg)
 static occan_fifo *occan_fifo_create(int cnt)
 {
 	occan_fifo *fifo;
-	fifo = malloc(sizeof(occan_fifo)+cnt*sizeof(CANMsg));
+	fifo = grlib_calloc(1, sizeof(*fifo)+cnt*sizeof(CANMsg));
 	if ( fifo ){
 		fifo->cnt = cnt;
-		fifo->full = 0;
-		fifo->ovcnt = 0;
-		fifo->base = (CANMsg *)&fifo->fifoarea[0];
+		fifo->base = &fifo->fifoarea[0];
 		fifo->tail = fifo->head = fifo->base;
-		/* clear CAN Messages */
-		memset(fifo->base,0,cnt * sizeof(CANMsg));
 	}
 	return fifo;
 }

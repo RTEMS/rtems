@@ -129,10 +129,9 @@ void *gr1553bm_open(int minor)
 	if ( pdev == NULL )
 		goto fail;
 
-	priv = malloc(sizeof(struct gr1553bm_priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( priv == NULL )
 		goto fail;
-	memset(priv, 0, sizeof(struct gr1553bm_priv));
 
 	/* Init BC device */
 	priv->pdev = pdev;
@@ -209,7 +208,7 @@ int gr1553bm_config(void *bm, struct gr1553bm_config *cfg)
 	} else {
 		if (cfg->buffer_custom == NULL) {
 			/* Allocate new buffer dynamically */
-			priv->buffer = malloc(priv->buffer_size + 8);
+			priv->buffer = grlib_malloc(priv->buffer_size + 8);
 			if (priv->buffer == NULL)
 				return -1;
 		} else {

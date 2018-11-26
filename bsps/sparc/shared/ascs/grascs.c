@@ -13,6 +13,8 @@
 #include <ambapp.h>
 #include <bsp/grascs.h>
 
+#include <grlib_impl.h>
+
 #ifndef GAISLER_ASCS
 #define GAISLER_ASCS 0x043
 #endif
@@ -196,12 +198,12 @@ int ASCS_init(void) {
   DBG("ASCS_init: Starting initialization of ASCS core\n");
   
   /* Allocate memory for config, status and capability struct */
-  if((cfg = (GRASCS_cfg*)malloc(sizeof(GRASCS_cfg))) == NULL) {
+  if((cfg = grlib_malloc(sizeof(*cfg))) == NULL) {
     DBG("ASCS_init: Could not allocate memory for cfg struc\n");
     return -1;
   }
   
-  if((cfg->caps = (GRASCS_caps*)calloc(1,sizeof(GRASCS_caps))) == NULL) {
+  if((cfg->caps = grlib_calloc(1,sizeof(*cfg->caps))) == NULL) {
     DBG("ASCS_init: Could not allocate memory for caps struc\n");
     goto init_error1;
   }

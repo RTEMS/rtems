@@ -16,6 +16,8 @@
 #include <ambapp.h>
 #include <bsp.h>
 
+#include <grlib_impl.h>
+
 #define AMBA_CONF_AREA 0xff000
 #define AMBA_AHB_SLAVE_CONF_AREA (1 << 11)
 #define AMBA_APB_SLAVES 16
@@ -30,7 +32,7 @@ static struct ambapp_dev *ambapp_alloc_dev_struct(int dev_type)
     size += sizeof(struct ambapp_apb_info);
   else
     size += sizeof(struct ambapp_ahb_info); /* AHB */
-  dev = (struct ambapp_dev *)calloc(1, size);
+  dev = grlib_calloc(1, size);
   if (dev != NULL)
     dev->dev_type = dev_type;
   return dev;

@@ -13,6 +13,8 @@
 
 #include <bsp/gr1553b.h>
 
+#include <grlib_impl.h>
+
 /* Driver Manager interface for BC, RT, BM, BRM, BC-BM and RT-BM */
 
 #define GR1553B_WRITE_REG(adr, val) *(volatile uint32_t *)(adr) = (val)
@@ -219,7 +221,7 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 	struct gr1553_device_feature *feat;
 	struct gr1553b_regs *regs;
 
-	priv = malloc(sizeof(struct gr1553_device));
+	priv = grlib_malloc(sizeof(*priv));
 	if ( priv == NULL )
 		return DRVMGR_NOMEM;
 	priv->dev = dev;
@@ -234,7 +236,7 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 
 	if ( GR1553B_READ_REG(&regs->bm_stat) & GR1553B_BM_STAT_BMSUP ) {
 		priv->features |= FEAT_BM;
-		feat = malloc(sizeof(struct gr1553_device_feature));
+		feat = grlib_malloc(sizeof(*feat));
 		feat->dev = priv;
 		/* Init Minor and Next */
 		gr1553_list_add(&gr1553_bm_root, feat);
@@ -242,7 +244,7 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 
 	if ( GR1553B_READ_REG(&regs->bc_stat) & GR1553B_BC_STAT_BCSUP ) {
 		priv->features |= FEAT_BC;
-		feat = malloc(sizeof(struct gr1553_device_feature));
+		feat = grlib_malloc(sizeof(*feat));
 		feat->dev = priv;
 		/* Init Minor and Next */
 		gr1553_list_add(&gr1553_bc_root, feat);
@@ -250,7 +252,7 @@ static int gr1553_init3(struct drvmgr_dev *dev)
 
 	if ( GR1553B_READ_REG(&regs->rt_stat) & GR1553B_RT_STAT_RTSUP ) {
 		priv->features |= FEAT_RT;
-		feat = malloc(sizeof(struct gr1553_device_feature));
+		feat = grlib_malloc(sizeof(*feat));
 		feat->dev = priv;
 		/* Init Minor and Next */
 		gr1553_list_add(&gr1553_rt_root, feat);

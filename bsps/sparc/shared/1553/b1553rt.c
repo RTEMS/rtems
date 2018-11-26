@@ -23,6 +23,8 @@
 #include <ambapp.h>
 #include <drvmgr/ambapp_bus.h>
 
+#include <grlib_impl.h>
+
 /* Uncomment for debug output */
 /*#define DEBUG 1*/
 
@@ -167,10 +169,9 @@ int b1553rt_init2(struct drvmgr_dev *dev)
     rt_priv *priv;
 
     DBG("B1553RT[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
-    priv = dev->priv = malloc(sizeof(rt_priv));
+    priv = dev->priv = grlib_calloc(1, sizeof(*priv));
     if ( !priv )
         return DRVMGR_NOMEM;
-    memset(priv, 0, sizeof(*priv));
     priv->dev = dev;
 
     /* This core will not find other cores, so we wait for init2() */
@@ -318,7 +319,7 @@ int b1553rt_device_init(rt_priv *pDev)
             /* Use dynamically allocated memory,
              * 4k DMA memory + 4k for alignment 
              */
-            mem = (unsigned int)malloc(4 * 1024 * 2);
+            mem = (unsigned int)grlib_malloc(4 * 1024 * 2);
             if ( !mem ){
                 printk("RT: Failed to allocate HW memory\n\r");
                 return -1;
@@ -458,7 +459,7 @@ static rtems_device_driver rt_init(rt_priv *rt)
         free(rt->rt_event);
     rt->rt_event = NULL;
 
-    rt->rt_event = (struct rt_msg *) malloc(EVENT_QUEUE_SIZE*sizeof(struct rt_msg));
+    rt->rt_event = grlib_malloc(EVENT_QUEUE_SIZE*sizeof(*rt->rt_event));
 
     if (rt->rt_event == NULL) {
         DBG("RT driver failed to allocated memory.");

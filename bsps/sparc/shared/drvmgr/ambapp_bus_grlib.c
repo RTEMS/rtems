@@ -24,6 +24,8 @@
 #include <bsp.h>
 #include <bsp/irq.h>
 
+#include <grlib_impl.h>
+
 #define DBG(args...)
 /*#define DBG(args...) printk(args)*/
 
@@ -151,7 +153,7 @@ static int ambapp_grlib_init1(struct drvmgr_dev *dev)
 
 	DBG("AMBAPP GRLIB: intializing\n");
 
-	config = malloc(sizeof(struct ambapp_config));
+	config = grlib_malloc(sizeof(*config));
 	if ( !config )
 		return RTEMS_NO_MEMORY;
 

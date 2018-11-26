@@ -24,6 +24,8 @@
 
 #include <rtems/libi2c.h>
 
+#include <grlib_impl.h>
+
 /*#define DEBUG 1*/
 
 #ifdef DEBUG
@@ -216,10 +218,9 @@ int spictrl_init2(struct drvmgr_dev *dev)
 
 	DBG("SPICTRL[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
-	priv = dev->priv = malloc(sizeof(struct spictrl_priv));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */

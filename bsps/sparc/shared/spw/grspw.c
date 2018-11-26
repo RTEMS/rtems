@@ -17,12 +17,13 @@
 #include <assert.h>
 #include <ctype.h>
 #include <rtems/bspIo.h>
-#include <rtems/malloc.h>
 #include <ambapp.h>
 
 #include <drvmgr/drvmgr.h>
 #include <drvmgr/ambapp_bus.h>
 #include <bsp/grspw.h>
+
+#include <grlib_impl.h>
 
 #define DBGSPW_IOCALLS 1
 #define DBGSPW_TX 2
@@ -385,10 +386,9 @@ int grspw_init2(struct drvmgr_dev *dev)
 
 	SPACEWIRE_DBG("GRSPW[%d] on bus %s\n", dev->minor_drv,
 		dev->parent->dev->name);
-	priv = dev->priv = malloc(sizeof(GRSPW_DEV));
+	priv = dev->priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, sizeof(*priv));
 	priv->dev = dev;
 
 	/* This core will not find other cores, so we wait for init2() */
@@ -628,7 +628,8 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 		if (pDev->rx_dma_area == 0) {
 			if (pDev->_ptr_rxbuf0)
 				free((void *)pDev->_ptr_rxbuf0);
-			pDev->_ptr_rxbuf0 = (unsigned int) malloc(pDev->rxbufsize * pDev->rxbufcnt+4);
+			pDev->_ptr_rxbuf0 = (unsigned int) grlib_malloc(
+				pDev->rxbufsize * pDev->rxbufcnt+4);
 			pDev->ptr_rxbuf0 = (char *)((pDev->_ptr_rxbuf0+7)&~7);
 			if ( !pDev->ptr_rxbuf0 )
 				return 1;
@@ -657,7 +658,8 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 		if (pDev->tx_data_dma_area == 0) {
 			if (pDev->ptr_txdbuf0)
 				free(pDev->ptr_txdbuf0);
-			pDev->ptr_txdbuf0 = (char *) malloc(pDev->txdbufsize * pDev->txbufcnt);
+			pDev->ptr_txdbuf0 = (char *) grlib_malloc(
+				pDev->txdbufsize * pDev->txbufcnt);
 			if (!pDev->ptr_txdbuf0)
 				return 1;
 		} else {
@@ -685,7 +687,8 @@ static int grspw_buffer_alloc(GRSPW_DEV *pDev)
 		if (pDev->tx_hdr_dma_area == 0) {
 			if (pDev->ptr_txhbuf0)
 				free(pDev->ptr_txhbuf0);
-			pDev->ptr_txhbuf0 = (char *) malloc(pDev->txhbufsize * pDev->txbufcnt);
+			pDev->ptr_txhbuf0 = (char *) grlib_malloc(
+				pDev->txhbufsize * pDev->txbufcnt);
 			if (!pDev->ptr_txhbuf0)
 				return 1;
 		} else {

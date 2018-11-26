@@ -10,6 +10,7 @@
 #define GRLIB_IMPL_H
 
 #include <rtems/score/basedefs.h>
+#include <rtems/malloc.h>
 
 /*
  * Use interrupt lock primitives compatible with SMP defined in RTEMS 4.11.99
@@ -61,6 +62,32 @@
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#if (((__RTEMS_MAJOR__ << 16) | (__RTEMS_MINOR__ << 8) | __RTEMS_REVISION__) >= 0x050000)
+
+RTEMS_INLINE_ROUTINE void *grlib_malloc(size_t size)
+{
+ return rtems_malloc(size);
+}
+
+RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
+{
+ return rtems_calloc(nelem, elsize);
+}
+
+#else
+
+RTEMS_INLINE_ROUTINE void *grlib_malloc(size_t size)
+{
+ return malloc(size);
+}
+
+RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
+{
+ return calloc(nelem, elsize);
+}
+
 #endif
 
 #ifdef __cplusplus

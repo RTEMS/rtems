@@ -19,6 +19,8 @@
 #include <bsp/canmux.h>
 #include <ambapp.h>
 
+#include <grlib_impl.h>
+
 #ifndef GAISLER_CANMUX
 #define GAISLER_CANMUX 0x081
 #endif
@@ -140,7 +142,7 @@ static rtems_device_driver canmux_initialize(rtems_device_major_number major, rt
 		rtems_fatal_error_occurred(status);
 
 	/* Create private structure */
-	if ((priv = malloc(sizeof(struct canmux_priv))) == NULL) {
+	if ((priv = grlib_malloc(sizeof(*priv))) == NULL) {
 		printk("CAN_MUX driver could not allocate memory for priv structure\n\r");
 		return -1;
 	}

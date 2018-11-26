@@ -19,6 +19,8 @@
 #include <bsp/satcan.h>
 #include <ambapp.h>
 
+#include <grlib_impl.h>
+
 #ifndef GAISLER_SATCAN
 #define GAISLER_SATCAN 0x080
 #endif
@@ -146,7 +148,7 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
  */
 static void almalloc(unsigned char **alptr, void **ptr, int sz)
 {
-  *ptr = calloc(1,2*sz);
+  *ptr = rtems_calloc(1,2*sz);
   *alptr = (unsigned char *) (((int)*ptr+sz) & ~(sz-1));
 }
 
@@ -682,13 +684,13 @@ int satcan_register(satcan_config *conf)
 	DBG("SatCAN: satcan_register called\n\r");
 
 	/* Create private structure */
-	if ((priv = malloc(sizeof(struct satcan_priv))) == NULL) {
+	if ((priv = grlib_malloc(sizeof(*priv))) == NULL) {
 		printk("SatCAN driver could not allocate memory for priv structure\n\r");
 		return -1;
 	}
 
 	DBG("SatCAN: Creating local copy of config structure\n\r");
-	if ((priv->cfg = malloc(sizeof(satcan_config))) == NULL) {
+	if ((priv->cfg = grlib_malloc(sizeof(*priv->cfg))) == NULL) {
 		printk("SatCAN driver could not allocate memory for cfg structure\n\r");
 		return 1;
 	}

@@ -54,6 +54,8 @@
 #include <rtems/score/smpimpl.h>
 #endif
 
+#include <grlib_impl.h>
+
 /* GPTIMER Core Configuration Register (READ-ONLY) */
 #define GPTIMER_CFG_TIMERS_BIT	0
 #define GPTIMER_CFG_IRQ_BIT	3
@@ -231,10 +233,9 @@ int gptimer_init1(struct drvmgr_dev *dev)
 	 */
 	size = sizeof(struct gptimer_priv) +
 		timer_cnt*sizeof(struct gptimer_timer);
-	priv = dev->priv = (struct gptimer_priv *)malloc(size);
+	priv = dev->priv = grlib_calloc(1, size);
 	if ( !priv )
 		return DRVMGR_NOMEM;
-	memset(priv, 0, size);
 	priv->dev = dev;
 	priv->regs = regs;
 

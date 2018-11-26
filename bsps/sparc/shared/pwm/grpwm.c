@@ -22,6 +22,8 @@
 #include <bsp/grpwm.h>
 #include <ambapp.h>
 
+#include <grlib_impl.h>
+
 /* #define DEBUG 1 */
 
 #ifdef DEBUG
@@ -222,7 +224,7 @@ int grpwm_init2(struct drvmgr_dev *dev)
 
 	DBG("GRPWM[%d] on bus %s\n", dev->minor_drv, dev->parent->dev->name);
 
-	priv = dev->priv = malloc(sizeof(struct grpwm_priv));
+	priv = dev->priv = grlib_malloc(sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
 	memset(priv, 0, sizeof(*priv));
@@ -789,10 +791,9 @@ int grpwm_device_init(struct grpwm_priv *priv)
 
 	/* Find the number of PWM channels */
 	priv->channel_cnt = 1 + ((regs->cap1 & GRPWM_CAP_NPWM) >> GRPWM_CAP_NPWM_BIT);
-	pwm = malloc(sizeof(*pwm)*priv->channel_cnt);
+	pwm = grlib_calloc(priv->channel_cnt, sizeof(*pwm));
 	if ( !pwm )
 		return -1;
-	memset(pwm, 0, sizeof(*pwm)*priv->channel_cnt);
 
 	/* Init all PWM channels */
 	sepirq = ((regs->cap1 & GRPWM_CAP_SEP) >> GRPWM_CAP_SEP_BIT);

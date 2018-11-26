@@ -299,11 +299,10 @@ int gr_tmtc_1553_init1(struct drvmgr_dev *dev)
 	 */
 	((struct pci_dev_info *)dev->businfo)->irq = ((struct amba_dev_info *)dev->parent->dev->businfo)->info.irq; 
 
-	priv = malloc(sizeof(struct gr_tmtc_1553_priv));
+	priv = grlib_calloc(1, sizeof(*priv));
 	if ( !priv )
 		return DRVMGR_NOMEM;
 
-	memset(priv, 0, sizeof(*priv));
 	dev->priv = priv;
 	priv->dev = dev;
 
