@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013, 2016 embedded brains GmbH
+ * Copyright (c) 2013, 2018 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -17,15 +17,11 @@
 #ifndef _RTEMS_SCORE_SMPLOCKSTATS_H
 #define _RTEMS_SCORE_SMPLOCKSTATS_H
 
-#include <rtems/score/cpuopts.h>
+#include <rtems/score/cpu.h>
 
 #if defined(RTEMS_SMP)
 
-#if defined(RTEMS_PROFILING)
-#include <rtems/score/chainimpl.h>
-
-#include <stdint.h>
-#endif
+#include <rtems/score/chain.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -171,7 +167,10 @@ static inline void _SMP_lock_Stats_initialize(
  */
 void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats );
 
-void _SMP_lock_Stats_register( SMP_lock_Stats *stats );
+void _SMP_lock_Stats_register_or_max_section_time(
+  SMP_lock_Stats    *stats,
+  CPU_Counter_ticks  max_section_time
+);
 
 typedef struct {
   CPU_Counter_ticks first;
@@ -223,19 +222,20 @@ static inline void _SMP_lock_Stats_release_update(
   const SMP_lock_Stats_context *stats_context
 )
 {
-  SMP_lock_Stats *stats = stats_context->stats;
-  CPU_Counter_ticks first = stats_context->acquire_instant;
-  CPU_Counter_ticks second = _CPU_Counter_read();
-  CPU_Counter_ticks delta = _CPU_Counter_difference( second, first );
+  SMP_lock_Stats    *stats;
+  CPU_Counter_ticks  first;
+  CPU_Counter_ticks  second;
+  CPU_Counter_ticks  delta;
+
+  stats = stats_context->stats;
+  first = stats_context->acquire_instant;
+  second = _CPU_Counter_read();
+  delta = _CPU_Counter_difference( second, first );
 
   stats->total_section_time += delta;
 
   if ( stats->max_section_time < delta ) {
-    stats->max_section_time = delta;
-
-    if ( _Chain_Is_node_off_chain( &stats->Node ) ) {
-      _SMP_lock_Stats_register( stats );
-    }
+    _SMP_lock_Stats_register_or_max_section_time( stats, delta );
   }
 }
 

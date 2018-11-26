@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -17,6 +17,7 @@
 #endif
 
 #include <rtems/score/smplock.h>
+#include <rtems/score/chainimpl.h>
 
 #include <string.h>
 
@@ -81,14 +82,22 @@ void _SMP_lock_Stats_destroy( SMP_lock_Stats *stats )
   }
 }
 
-void _SMP_lock_Stats_register( SMP_lock_Stats *stats )
+void _SMP_lock_Stats_register_or_max_section_time(
+  SMP_lock_Stats    *stats,
+  CPU_Counter_ticks  max_section_time
+)
 {
-      SMP_lock_Stats_control *control = &_SMP_lock_Stats_control;
-      SMP_lock_Context lock_context;
+  stats->max_section_time = max_section_time;
 
-      _SMP_lock_ISR_disable_and_acquire( &control->Lock, &lock_context );
-      _Chain_Append_unprotected( &control->Stats_chain, &stats->Node );
-      _SMP_lock_Release_and_ISR_enable( &control->Lock, &lock_context );
+  if ( _Chain_Is_node_off_chain( &stats->Node ) ) {
+    SMP_lock_Stats_control *control;
+    SMP_lock_Context        lock_context;
+
+    control = &_SMP_lock_Stats_control;
+    _SMP_lock_ISR_disable_and_acquire( &control->Lock, &lock_context );
+    _Chain_Append_unprotected( &control->Stats_chain, &stats->Node );
+    _SMP_lock_Release_and_ISR_enable( &control->Lock, &lock_context );
+  }
 }
 
 void _SMP_lock_Stats_iteration_start(
