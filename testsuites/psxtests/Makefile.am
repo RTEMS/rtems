@@ -1082,7 +1082,18 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/socket/send.c psxhdrs/sys/socket/sendmsg.c \
 	psxhdrs/sys/socket/sendto.c psxhdrs/sys/socket/setsockopt.c \
 	psxhdrs/sys/socket/shutdown.c psxhdrs/sys/socket/socket.c \
-	psxhdrs/sys/socket/socketpair.c
+	psxhdrs/sys/socket/socketpair.c \
+	psxhdrs/dirent/alphasort.c \
+	psxhdrs/dirent/closedir.c \
+	psxhdrs/dirent/dirfd.c \
+	psxhdrs/dirent/fdopendir.c \
+	psxhdrs/dirent/opendir.c \
+	psxhdrs/dirent/readdir.c \
+	psxhdrs/dirent/readdir_r.c \
+	psxhdrs/dirent/rewinddir.c \
+	psxhdrs/dirent/scandir.c \
+	psxhdrs/dirent/seekdir.c \
+	psxhdrs/dirent/telldir.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
