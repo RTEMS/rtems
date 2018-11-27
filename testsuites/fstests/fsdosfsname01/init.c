@@ -29,6 +29,7 @@
 #include <rtems/dosfs.h>
 #include <rtems/ramdisk.h>
 #include <rtems/libcsupport.h>
+#include <rtems/userenv.h>
 #include "image.h"
 #include "image_bin_le_singlebyte.h"
 #include "image_bin_le_multibyte.h"
@@ -1143,6 +1144,44 @@ static void test_file_with_same_name_as_volume_label( void )
   rtems_test_assert( rc == 0 );
 }
 
+static void test_getcwd( void )
+{
+  const char *dir_path = MOUNT_DIR "/somedir";
+  char cwd_buf[128];
+  char *cwd;
+  int rc;
+  rtems_status_code sc;
+
+  sc = rtems_libio_set_private_env();
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  cwd = getcwd( cwd_buf, sizeof( cwd_buf ) );
+  rtems_test_assert( cwd != NULL );
+  rtems_test_assert( strcmp( cwd, "/" ) == 0 );
+
+  rc = mkdir( dir_path, S_IRWXU | S_IRWXG | S_IRWXO );
+  rtems_test_assert( rc == 0 );
+
+  rc = chdir( dir_path );
+  rtems_test_assert( rc == 0 );
+
+  cwd = getcwd( cwd_buf, sizeof( cwd_buf ) );
+  rtems_test_assert( cwd != NULL );
+  rtems_test_assert( strcmp( cwd, dir_path ) == 0 );
+
+  rc = chdir( "/" );
+  rtems_test_assert( rc == 0 );
+
+  rc = unlink( dir_path );
+  rtems_test_assert( rc == 0 );
+
+  cwd = getcwd( cwd_buf, sizeof( cwd_buf ) );
+  rtems_test_assert( cwd != NULL );
+  rtems_test_assert( strcmp( cwd, "/" ) == 0 );
+
+  rtems_libio_use_global_env();
+}
+
 static void test_special_cases( void )
 {
   test_end_of_string_matches();
@@ -1150,6 +1189,7 @@ static void test_special_cases( void )
   test_full_8_3_name();
   test_file_with_same_name_as_volume_label();
   test_dir_with_same_name_as_volume_label();
+  test_getcwd();
 }
 
 /*
@@ -1397,6 +1437,7 @@ size_t rtems_ramdisk_configuration_size = RTEMS_ARRAY_SIZE(rtems_ramdisk_configu
 #define CONFIGURE_APPLICATION_DOES_NOT_NEED_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 #define CONFIGURE_MAXIMUM_SEMAPHORES (2 * RTEMS_DOSFS_SEMAPHORES_PER_INSTANCE)
+#define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS 2
 #define CONFIGURE_APPLICATION_EXTRA_DRIVERS RAMDISK_DRIVER_TABLE_ENTRY
 
 #define CONFIGURE_APPLICATION_NEEDS_LIBBLOCK
