@@ -423,7 +423,7 @@ static int rtems_jffs2_fstat(
 	return 0;
 }
 
-static int rtems_jffs2_fill_dirent(struct dirent *de, off_t off, uint32_t ino, const char *name)
+static int rtems_jffs2_fill_dirent(struct dirent *de, off_t off, uint32_t ino, const char *name, unsigned char type)
 {
 	int eno = 0;
 	size_t len;
@@ -433,6 +433,9 @@ static int rtems_jffs2_fill_dirent(struct dirent *de, off_t off, uint32_t ino, c
 	de->d_off = off * sizeof(*de);
 	de->d_reclen = sizeof(*de);
 	de->d_ino = ino;
+#ifdef RTEMS_JFFS2_HAVE_D_TYPE
+	de->d_type = type;
+#endif
 
 	len = strlen(name);
 	de->d_namlen = len;
@@ -466,14 +469,14 @@ static ssize_t rtems_jffs2_dir_read(rtems_libio_t *iop, void *buf, size_t len)
 	off = begin;
 
 	if (off == 0 && off < end) {
-		eno = rtems_jffs2_fill_dirent(de, off, inode->i_ino, ".");
+		eno = rtems_jffs2_fill_dirent(de, off, inode->i_ino, ".", DT_DIR);
 		assert(eno == 0);
 		++off;
 		++de;
 	}
 
 	if (off == 1 && off < end) {
-		eno = rtems_jffs2_fill_dirent(de, off, inode->i_parent->i_ino, "..");
+		eno = rtems_jffs2_fill_dirent(de, off, inode->i_parent->i_ino, "..", DT_DIR);
 		assert(eno == 0);
 		++off;
 		++de;
@@ -482,7 +485,7 @@ static ssize_t rtems_jffs2_dir_read(rtems_libio_t *iop, void *buf, size_t len)
 	while (eno == 0 && off < end && fd != NULL) {
 		if (fd->ino != 0) {
 			if (off == fd_off) {
-				eno = rtems_jffs2_fill_dirent(de, off, fd->ino, fd->name);
+				eno = rtems_jffs2_fill_dirent(de, off, fd->ino, fd->name, fd->type);
 				++off;
 				++de;
 			}

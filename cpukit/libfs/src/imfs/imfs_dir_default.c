@@ -74,6 +74,9 @@ static ssize_t IMFS_dir_read(
          dir_ent->d_off = current_entry;
          dir_ent->d_reclen = sizeof( *dir_ent );
          dir_ent->d_ino = IMFS_node_to_ino( imfs_node );
+#ifdef DT_DIR
+         dir_ent->d_type = IFTODT( imfs_node->st_mode );
+#endif
          dir_ent->d_namlen =
            MIN( imfs_node->namelen, sizeof( dir_ent->d_name ) - 1 );
          dir_ent->d_name[ dir_ent->d_namlen ] = '\0';

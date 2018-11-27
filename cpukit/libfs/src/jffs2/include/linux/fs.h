@@ -3,12 +3,17 @@
 
 #include <linux/stat.h>
 #include <sys/types.h>
+#include <sys/dirent.h>
 #include <sys/time.h>
 
+#ifdef DT_DIR
+#define RTEMS_JFFS2_HAVE_D_TYPE
+#else
 #define DT_UNKNOWN	0
 #define DT_DIR		4
 #define DT_REG		8
 #define DT_LNK		10
+#endif
 
 #define ATTR_MODE	(1U << 0)
 #define ATTR_UID	(1U << 1)

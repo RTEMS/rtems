@@ -327,6 +327,9 @@ nfscookie		*pcookie;
 		pde->d_ino    = fileid;
 		pde->d_namlen = nlen;
 		pde->d_off	  = di->ptr - di->buf;
+#ifdef DT_UNKNOWN
+		pde->d_type = DT_UNKNOWN;
+#endif
 		if (name == dummy.nambuf) {
 			memcpy(pde->d_name, dummy.nambuf, nlen + 1);
 		}

@@ -236,6 +236,17 @@ msdos_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
                     continue;
                 }
 
+#ifdef DT_DIR
+                if ((*MSDOS_DIR_ATTR(entry)) & MSDOS_ATTR_DIRECTORY)
+                {
+                    tmp_dirent.d_type = DT_DIR;
+                }
+                else
+                {
+                    tmp_dirent.d_type = DT_REG;
+                }
+#endif
+
                 /*
                  * Move the entry to the return buffer
                  *
