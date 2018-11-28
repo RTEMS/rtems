@@ -1093,7 +1093,17 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dirent/rewinddir.c \
 	psxhdrs/dirent/scandir.c \
 	psxhdrs/dirent/seekdir.c \
-	psxhdrs/dirent/telldir.c
+	psxhdrs/dirent/telldir.c \
+	psxhdrs/mqueue/mq_open.c \
+	psxhdrs/mqueue/mq_close.c \
+	psxhdrs/mqueue/mq_getattr.c \
+	psxhdrs/mqueue/mq_setattr.c \
+	psxhdrs/mqueue/mq_notify.c \
+	psxhdrs/mqueue/mq_receive.c \
+	psxhdrs/mqueue/mq_send.c \
+	psxhdrs/mqueue/mq_timedreceive.c \
+	psxhdrs/mqueue/mq_timedsend.c \
+	psxhdrs/mqueue/mq_unlink.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
