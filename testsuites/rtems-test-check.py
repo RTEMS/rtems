@@ -35,6 +35,7 @@
 
 from __future__ import print_function
 
+import os
 import os.path
 import sys
 
@@ -69,7 +70,7 @@ if sys_args[1] == '-v':
 
 mode = sys_args[args + 1]
 bsp = sys_args[args + 2]
-includepaths = sys_args[args + 4].split(':')
+includepaths = sys_args[args + 4].split(os.pathsep)
 testconfig = [find_testdata(includepaths, sys_args[args + 3])]
 tests = sys_args[args + 5:]
 
