@@ -41,6 +41,10 @@
 
 #include <rtems.h>
 
+#if defined(RTEMS_SMP) && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
+#include <rtems/score/smpimpl.h>
+#endif
+
 #if CPU_DATA_CACHE_ALIGNMENT > CPU_CACHE_LINE_BYTES
 #error "CPU_DATA_CACHE_ALIGNMENT is greater than CPU_CACHE_LINE_BYTES"
 #endif
@@ -233,6 +237,11 @@ rtems_cache_disable_data( void )
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT) \
   && defined(RTEMS_SMP) \
   && defined(CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING)
+
+typedef struct {
+  const void *addr;
+  size_t size;
+} smp_cache_area;
 
 static void smp_cache_inst_inv(void *arg)
 {
