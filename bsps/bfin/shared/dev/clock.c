@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <rtems/libio.h>
 #include <rtems/score/percpu.h>
+#include <rtems/score/thread.h>
 #include <bsp.h>
 #include <rtems/clockdrv.h>
 
