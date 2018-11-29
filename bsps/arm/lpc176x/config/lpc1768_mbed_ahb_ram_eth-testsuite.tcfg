@@ -7,6 +7,7 @@
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
 
+exclude: dl07
 exclude: fileio
 exclude: ftp01
 exclude: cdtest
