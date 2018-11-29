@@ -1103,7 +1103,17 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/mqueue/mq_send.c \
 	psxhdrs/mqueue/mq_timedreceive.c \
 	psxhdrs/mqueue/mq_timedsend.c \
-	psxhdrs/mqueue/mq_unlink.c
+	psxhdrs/mqueue/mq_unlink.c \
+	psxhdrs/semaphore/sem_init.c \
+	psxhdrs/semaphore/sem_destroy.c \
+	psxhdrs/semaphore/sem_open.c \
+	psxhdrs/semaphore/sem_close.c \
+	psxhdrs/semaphore/sem_getvalue.c \
+	psxhdrs/semaphore/sem_unlink.c \
+	psxhdrs/semaphore/sem_post.c \
+	psxhdrs/semaphore/sem_wait.c \
+	psxhdrs/semaphore/sem_trywait.c \
+	psxhdrs/semaphore/sem_timedwait.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
