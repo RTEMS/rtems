@@ -4,5 +4,3 @@
 
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-intrcritical-tests.tcfg
-
-exclude: sptls02
