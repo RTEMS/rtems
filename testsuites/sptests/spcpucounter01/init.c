@@ -53,13 +53,24 @@ static rtems_interval sync_with_clock_tick(void)
 
 static void test_converter(void)
 {
-  CPU_Counter_ticks frequency = rtems_counter_nanoseconds_to_ticks(1000000000);
-  uint64_t ns = rtems_counter_ticks_to_nanoseconds(frequency);
+  CPU_Counter_ticks frequency;
+  CPU_Counter_ticks frequency2;
+  uint64_t ns;
+  int64_t sbt;
+
+  frequency = rtems_counter_nanoseconds_to_ticks(1000000000);
+  ns = rtems_counter_ticks_to_nanoseconds(frequency);
 
   printf("CPU counter frequency: %" PRIu32 "Hz\n", frequency);
   printf("nanoseconds for frequency count ticks: %" PRIu64 "\n", ns);
 
   rtems_test_assert(ns == 1000000000);
+
+  sbt = rtems_counter_ticks_to_sbintime(frequency);
+  rtems_test_assert(sbt == (INT64_C(1) << 32));
+
+  frequency2 = rtems_counter_sbintime_to_ticks(sbt);
+  rtems_test_assert(frequency == frequency2);
 }
 
 static void test_delay_nanoseconds(test_context *ctx)
