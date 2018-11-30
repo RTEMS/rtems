@@ -10,6 +10,7 @@ include: testdata/disable-jffs2-tests.tcfg
 exclude: capture
 exclude: cdtest
 exclude: dl05
+exclude: dl07
 exclude: fileio
 exclude: flashdisk01
 exclude: fsdosfsformat01
