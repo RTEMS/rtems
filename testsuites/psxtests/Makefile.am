@@ -1113,7 +1113,16 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/semaphore/sem_post.c \
 	psxhdrs/semaphore/sem_wait.c \
 	psxhdrs/semaphore/sem_trywait.c \
-	psxhdrs/semaphore/sem_timedwait.c
+	psxhdrs/semaphore/sem_timedwait.c \
+	psxhdrs/strings/bcmp.c \
+	psxhdrs/strings/bcopy.c \
+	psxhdrs/strings/ffs.c \
+	psxhdrs/strings/index.c \
+	psxhdrs/strings/rindex.c \
+	psxhdrs/strings/strcasecmp.c \
+	psxhdrs/strings/strcasecmp_l.c \
+	psxhdrs/strings/strncasecmp.c \
+	psxhdrs/strings/strncasecmp_l.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
