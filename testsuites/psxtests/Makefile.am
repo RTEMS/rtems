@@ -1122,7 +1122,11 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/strings/strcasecmp.c \
 	psxhdrs/strings/strcasecmp_l.c \
 	psxhdrs/strings/strncasecmp.c \
-	psxhdrs/strings/strncasecmp_l.c
+	psxhdrs/strings/strncasecmp_l.c \
+	psxhdrs/dlfcn/dlopen.c \
+	psxhdrs/dlfcn/dlclose.c \
+	psxhdrs/dlfcn/dlerror.c \
+	psxhdrs/dlfcn/dlsym.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
