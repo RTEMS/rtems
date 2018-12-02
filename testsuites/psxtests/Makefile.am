@@ -1126,7 +1126,13 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dlfcn/dlopen.c \
 	psxhdrs/dlfcn/dlclose.c \
 	psxhdrs/dlfcn/dlerror.c \
-	psxhdrs/dlfcn/dlsym.c
+	psxhdrs/dlfcn/dlsym.c \
+	psxhdrs/locale/newlocale.c \
+	psxhdrs/locale/freelocale.c \
+	psxhdrs/locale/uselocale.c \
+	psxhdrs/locale/setlocale.c \
+	psxhdrs/locale/duplocale.c \
+	psxhdrs/locale/localeconv.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
