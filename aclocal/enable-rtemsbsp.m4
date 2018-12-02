@@ -38,7 +38,7 @@ AC_ARG_ENABLE(rtemsbsp,
              ${cfg_arch}* )
                ;;
              * )
-               AC_MSG_ERROR([BSP '$bsp' architecture does not match the --target architecture, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
+               AC_MSG_ERROR([BSP '$bsp' architecture does not match the --target architecture, run 'rtems-bsps' (in the top of the source tree) for a valid BSP list])
                ;;
            esac
            found=yes
@@ -46,7 +46,7 @@ AC_ARG_ENABLE(rtemsbsp,
          fi
        done
        if test $found = no; then
-         AC_MSG_ERROR([BSP '$bsp' not found, run 'rtems-bsp' (in the top of the source tree) for a valid BSP list])
+         AC_MSG_ERROR([BSP '$bsp' not found, run 'rtems-bsps' (in the top of the source tree) for a valid BSP list])
        fi
      done
      ;;
