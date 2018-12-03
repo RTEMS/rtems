@@ -574,7 +574,7 @@ static int msdos_format_determine_fmt_params
     fmt_params->sectors_per_cluster = 1;
     /*
      * limiting values for disk size, fat type, sectors per cluster
-     * NOTE: maximum sect_per_clust is arbitrarily choosen with values that
+     * NOTE: maximum sect_per_clust is arbitrarily chosen with values that
      * are a compromise concerning capacity and efficency
      */
     uint32_t fat12_sect_per_clust = 8;

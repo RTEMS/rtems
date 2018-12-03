@@ -42,12 +42,12 @@ extern "C" {
  * dlclose family of functions.
  *
  * The runtime link editor is different to that found on Unix type systems. The
- * object modules are compiled for PIC or position indepentent code and
+ * object modules are compiled for PIC or position independent code and
  * therefore require relocating when loaded.
  *
  * The object file format is currently ELF and object files can be separate
  * files or in an archive. Object files in an archive are referenced by
- * specifing 'archive:object' format. For example 'libfoo.a:bar.o'.
+ * specifying 'archive:object' format. For example 'libfoo.a:bar.o'.
  */
 
 /**

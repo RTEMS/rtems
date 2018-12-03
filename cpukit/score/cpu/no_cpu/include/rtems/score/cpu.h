@@ -437,7 +437,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  * by hardware or the interrupt processing code.  These variables contain
  * pointers to the lowest and highest addresses in the chunk of memory
  * allocated for the interrupt stack.  Since it is unknown whether the stack
- * grows up or down (in general), this give the CPU dependent code the option
+ * grows up or down (in general), this gives the CPU dependent code the option
  * of picking the version it wants to use.
  *
  * Port Specific Information:

@@ -1129,7 +1129,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  *
  * @addtogroup Configuration
  *
- * This module contains parameters related to thread aand interrupt stacks.
+ * This module contains parameters related to thread and interrupt stacks.
  */
 
 /**
@@ -1523,7 +1523,7 @@ extern rtems_initialization_tasks_table Initialization_tasks[];
  * Table.
  *
  * Default Device Driver Table.  Each driver needed by the test is explicitly
- * choosen by the application.  There is always a null driver entry.
+ * chosen by the application.  There is always a null driver entry.
  */
 /**@{*/
 

@@ -359,7 +359,7 @@
  * Since memory is a critical resource in many real-time embedded systems,
  * RTEMS was specifically designed to automatically leave out all services that
  * are not required from the run-time environment. Features such as networking,
- * various fileystems, and many other features are completely optional. This
+ * various filesystems, and many other features are completely optional. This
  * allows the application designer the flexibility to tailor RTEMS to most
  * efficiently meet system requirements while still satisfying even the most
  * stringent memory constraints. As a result, the size of the RTEMS executive
@@ -502,7 +502,7 @@
  * </table>
  *
  * The 16-bit format is designed to be as similar as possible to the 32-bit
- * format. The differences are limited to the eliminatation of the node field
+ * format. The differences are limited to the elimination of the node field
  * and reduction of the index field from 16-bits to 8-bits.  Thus the 16-bit
  * format only supports up to 255 object instances per API/Class combination
  * and single processor systems. As this format is typically utilized by 16-bit

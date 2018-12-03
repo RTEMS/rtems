@@ -44,7 +44,7 @@ void bsp_fatal_extension(
 
     if (irqmp != NULL) {
       /*
-       * Value was choosen to get something in the magnitude of 1ms on a 200MHz
+       * Value was chosen to get something in the magnitude of 1ms on a 200MHz
        * processor.
        */
       uint32_t max_wait = 1234567;

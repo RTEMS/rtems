@@ -31,7 +31,7 @@
 #include <bsp/vectors.h>
 
 /*
- * XXX: These values are choosen to directly generate the vector offsets for an
+ * XXX: These values are chosen to directly generate the vector offsets for an
  * e200z1 which has hard wired IVORs (IVOR0=0x00, IVOR1=0x10, IVOR2=0x20, ...).
  */
 static const uint8_t ivor_values [] = {

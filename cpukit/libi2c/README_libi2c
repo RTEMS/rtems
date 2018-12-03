@@ -224,7 +224,7 @@ rtems_libi2c_drv_t data structure passed the libi2c when the device is
 registered (see "Device registration" above). These function directly match
 the RTEMS I/O Mangers calls "open", "close", "read", "write",
 "control", and they are passed the same arguments. Functions not
-needed may be ommited (and replaced by a NULL pointer in
+needed may be omited (and replaced by a NULL pointer in
 rtems_libi2c_drv_t).
 
 ======================================================================

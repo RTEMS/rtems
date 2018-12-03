@@ -30,7 +30,7 @@ const char rtems_test_name[] = "SMPMUTEX 1";
 
 #define PRIO_NONE 0
 
-/* Value choosen for Qemu, 2 would be sufficient for real targets */
+/* Value chosen for Qemu, 2 would be sufficient for real targets */
 #define TIMEOUT_IN_TICKS 10
 
 typedef enum {
