@@ -31,6 +31,7 @@
 #include <rtems/score/statesimpl.h>
 #include <rtems/score/status.h>
 #include <rtems/score/sysstate.h>
+#include <rtems/score/timestampimpl.h>
 #include <rtems/score/threadqimpl.h>
 #include <rtems/score/todimpl.h>
 #include <rtems/score/freechain.h>

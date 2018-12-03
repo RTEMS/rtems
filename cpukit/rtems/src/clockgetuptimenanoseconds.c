@@ -18,6 +18,7 @@
 #endif
 
 #include <rtems/rtems/clock.h>
+#include <rtems/score/timestampimpl.h>
 #include <rtems/score/todimpl.h>
 
 uint64_t rtems_clock_get_uptime_nanoseconds( void )

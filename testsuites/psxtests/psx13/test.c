@@ -29,6 +29,7 @@
 
 #include <rtems.h>
 #include <rtems/libio.h>
+#include <sys/time.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>

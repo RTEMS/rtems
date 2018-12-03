@@ -398,9 +398,7 @@ RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_timespec(
   return ticks;
 }
 
-RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime(
-  sbintime_t sbt
-)
+RTEMS_INLINE_ROUTINE uint64_t _Watchdog_Ticks_from_sbintime( int64_t sbt )
 {
   uint64_t ticks = ( sbt >> 32 ) << WATCHDOG_BITS_FOR_1E9_NANOSECONDS;
 
