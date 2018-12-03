@@ -18,6 +18,7 @@
 
 #include <rtems/test.h>
 #include <rtems/profiling.h>
+#include <rtems/bspIo.h>
 
 #if defined(RTEMS_PROFILING)
 static bool report_done;
