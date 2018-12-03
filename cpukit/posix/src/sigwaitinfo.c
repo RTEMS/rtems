@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @brief Suspends Execution of Calling Thread until Signals in set Deleivered
+ * @brief Suspends Execution of Calling Thread until Signals in set Delivered
  */
 
 /*

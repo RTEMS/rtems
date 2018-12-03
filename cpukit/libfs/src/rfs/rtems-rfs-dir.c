@@ -7,7 +7,7 @@
  * These functions manage blocks in the directory format. A directory entry is
  * a variable length record in the block. The entry consists of a length, hash
  * and the string. The length allows the next entry to be located and the hash
- * allows a simple check to be performed wihtout a string compare. Directory
+ * allows a simple check to be performed without a string compare. Directory
  * entries do not span a block and removal of an entry results in the space in
  * the block being compacted and the spare area being initialised to ones.
  *

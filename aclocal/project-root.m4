@@ -5,7 +5,7 @@ dnl                       installation directory inside the build-tree
 dnl RTEMS_TOPdir       .. relative path of a subpackage's configure.ac to the
 dnl                       toplevel configure.ac of the source-tree
 dnl RTEMS_ROOT         .. path to the top of a bsp's build directory
-dnl                       [Applied by custom/*.cfg, depredicated otherwise]
+dnl                       [Applied by custom/*.cfg, deprecated otherwise]
 dnl
 
 AC_DEFUN([RTEMS_PROJECT_ROOT],

@@ -153,7 +153,7 @@ rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
 }
 
 /**
- * Struct to pass relocation data in the interator.
+ * Struct to pass relocation data in the iterator.
  */
 typedef struct rtems_rtl_unresolved_reloc_data
 {
@@ -267,7 +267,7 @@ rtems_rtl_unresolved_compact (void)
           if (rec->rec.name.refs == 0)
           {
             /*
-             * Iterate over the remainnig reloc records and update the index.
+             * Iterate over the remaining reloc records and update the index.
              */
             rtems_chain_node*       reindex_node;
             rtems_rtl_unresolv_rec* reindex_first;
