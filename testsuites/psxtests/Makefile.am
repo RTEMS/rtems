@@ -1149,9 +1149,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/time/getitimer.c \
 	psxhdrs/sys/time/gettimeofday.c
 
-
-## Not supported yet
+## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
+## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
+## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
