@@ -54,7 +54,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   openpic_init(1,0,0,16,0,0);
 
   /*
-   * Initialize Rtems management interrupt table
+   * Initialize RTEMS management interrupt table
    */
   /*
    * re-init the rtemsIrq table

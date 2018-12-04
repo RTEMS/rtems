@@ -75,7 +75,7 @@ int i;
 	 */
 
 	/*
-	 * Initialize Rtems management interrupt table
+	 * Initialize RTEMS management interrupt table
 	 */
 
 	/*

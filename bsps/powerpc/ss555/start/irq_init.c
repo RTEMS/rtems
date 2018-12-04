@@ -119,7 +119,7 @@ void CPU_rtems_irq_mng_init(unsigned cpuId)
   CPU_USIU_irq_init();
   CPU_UIMB_irq_init();
   /*
-   * Initialize Rtems management interrupt table
+   * Initialize RTEMS management interrupt table
    */
     /*
      * re-init the rtemsIrq table

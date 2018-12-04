@@ -106,7 +106,7 @@ void BSP_rtems_irq_mng_init(unsigned cpuId)
   printk("Going to re-initialize the rtemsIrq table %d\n",BSP_IRQ_NUMBER);
 #endif
   /*
-   * Initialize Rtems management interrupt table
+   * Initialize RTEMS management interrupt table
    */
   /*
    * re-init the rtemsIrq table
