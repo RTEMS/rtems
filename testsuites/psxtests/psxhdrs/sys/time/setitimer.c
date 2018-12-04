@@ -29,13 +29,10 @@ int test(void);
 
 int test(void)
 {
-  int which,callback;
-  struct itimerval timeval;
-  it_interval interval = 0;
-  it_value value = 0;
+  int which = ITIMER_REAL;
+  int callback;
+  struct itimerval timeval = { {0,0}, {0,0} };
 
-  timeval.it_interval = interval;
-  timeval.it_value = value;
   setitimer(which, &timeval, NULL);
   callback = getitimer(which, &timeval);
   return (callback == 0);

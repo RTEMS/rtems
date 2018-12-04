@@ -29,13 +29,10 @@ int test(void);
 
 int test(void)
 {
-  int which,callback;
-  struct itimerval timeval;
-  it_interval interval = 0;
-  it_value value = 0;
+  struct timeval tv;
+  struct timezone tz;
+  int callback;
 
-  timeval.it_interval = interval;
-  timeval.it_value = value;
-  callback = gettimeofday(&timeval);
+  callback = gettimeofday(&tv, &tz);
   return (callback == 0);
 }
