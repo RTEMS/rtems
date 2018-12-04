@@ -1148,6 +1148,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/time/setitimer.c \
 	psxhdrs/sys/time/getitimer.c \
 	psxhdrs/sys/time/gettimeofday.c
+
+
+## Not supported yet
+## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
