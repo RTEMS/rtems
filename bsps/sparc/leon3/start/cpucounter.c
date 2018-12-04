@@ -71,7 +71,7 @@ static void leon3_counter_initialize(void)
     );
 
     leon3_counter_frequency = ambapp_freq_get(&ambapp_plb, LEON3_Timer_Adev) /
-      (gpt->scaler_reload - 1);
+      (gpt->scaler_reload + 1);
   }
 }
 
