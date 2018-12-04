@@ -1137,7 +1137,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/regex/regcomp.c \
 	psxhdrs/regex/regerror.c \
 	psxhdrs/regex/regexec.c \
-	psxhdrs/regex/regfree.c
+	psxhdrs/regex/regfree.c \
+	psxhdrs/fnmatch/fnmatch.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
