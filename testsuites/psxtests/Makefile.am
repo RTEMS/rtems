@@ -1141,7 +1141,13 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/fnmatch/fnmatch.c \
 	psxhdrs/iconv/iconv.c \
 	psxhdrs/iconv/iconv_close.c \
-	psxhdrs/iconv/iconv_open.c
+	psxhdrs/iconv/iconv_open.c \
+	psxhdrs/regex/regfree.c \
+	psxhdrs/sys/time/select.c \
+	psxhdrs/sys/time/utimes.c \
+	psxhdrs/sys/time/setitimer.c \
+	psxhdrs/sys/time/getitimer.c \
+	psxhdrs/sys/time/gettimeofday.c
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
