@@ -65,6 +65,8 @@ static rtems_task Task(
   status = rtems_rate_monotonic_create( Task_name[ argument ], &RM_period );
   directive_failed( status, "rtems_rate_monotonic_create" );
 
+  rtems_test_spin_until_next_tick();
+
   while ( FOREVER ) {
     status = rtems_rate_monotonic_period( RM_period, Periods[ argument ] );
 

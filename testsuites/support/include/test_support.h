@@ -11,6 +11,7 @@
 #define __TEST_SUPPORT_h
 
 #include <stdarg.h>
+#include <rtems.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,9 +29,10 @@ const char *Get_Too_Long_Name(void);
 const char *Get_Longest_Name(void);
 
 /*
- *  Spin for specified number of ticks.
+ *  Spin for specified number of ticks.  The first tick we spin through is a
+ *  partial one.
  */
-void rtems_test_spin_for_ticks(int ticks);
+void rtems_test_spin_for_ticks(rtems_interval ticks);
 
 /*
  *  Spin until the next clock tick
