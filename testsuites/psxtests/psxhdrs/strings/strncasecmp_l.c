@@ -2,6 +2,7 @@
  *  @file
  *  @brief strcasecmp_l() API Conformance Test
  */
+
 /*
  *  COPYRIGHT (c) 2018.
  *  Himanshu Sekhar Nayak
@@ -31,9 +32,10 @@
  {
    char *string1 = "STRING";
    char *string2 = "string";
+   locale_t locale = NULL;
    int result;
 
-   result = strncasecmp_l( string1, string2, 6, LC_CTYPE );
+   result = strncasecmp_l( string1, string2, 6, locale );
 
    return result;
  }
