@@ -48,7 +48,7 @@ rtems_task Init(
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EFAULT );
 
-  while ( rtems_clock_get_ticks_since_boot() == 0 )
+  while ( rtems_clock_get_ticks_since_boot() <= 2 )
     ;
 
   puts( "_times( &start_tm ) -- OK" );
