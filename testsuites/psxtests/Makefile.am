@@ -1086,8 +1086,6 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/socket/socketpair.c \
 	psxhdrs/dirent/alphasort.c \
 	psxhdrs/dirent/closedir.c \
-	psxhdrs/dirent/dirfd.c \
-	psxhdrs/dirent/fdopendir.c \
 	psxhdrs/dirent/opendir.c \
 	psxhdrs/dirent/readdir.c \
 	psxhdrs/dirent/readdir_r.c \
@@ -1155,6 +1153,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
+## lib_a_SOURCES += psxhdrs/dirent/dirfd.c       See ticket #3371
+## lib_a_SOURCES += psxhdrs/dirent/fdopendir.c   See ticket #3371
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
