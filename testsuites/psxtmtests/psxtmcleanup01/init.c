@@ -35,7 +35,7 @@ static void routine(void *arg)
 {
 }
 
-void benchmark_pthread_cleanup_push_pull(void)
+static void benchmark_pthread_cleanup_push_pull(void)
 {
   long end_time;
   int execute = 1;
