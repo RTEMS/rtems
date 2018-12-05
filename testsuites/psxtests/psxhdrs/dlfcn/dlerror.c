@@ -26,14 +26,11 @@
 
  int test( void );
 
- int result = 1;
-
  int test( void )
  {
-   char *errstr;
+   const char *errstr;
 
    errstr = dlerror();
-   result = 0;
 
-   return result;
+   return (errstr != NULL);
  }

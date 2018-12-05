@@ -2,6 +2,7 @@
  *  @file
  *  @brief strcasecmp_l() API Conformance Test
  */
+
 /*
  *  COPYRIGHT (c) 2018.
  *  Himanshu Sekhar Nayak
@@ -18,22 +19,25 @@
  *  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
- #ifdef HAVE_CONFIG_H
- #include "config.h"
- #endif
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
- #include <strings.h>
- #include <locale.h>
+#define _POSIX_C_SOURCE 200809L
 
- int test( void );
+#include <strings.h>
+#include <locale.h>
 
- int test( void )
- {
-   char *string1 = "STRING";
-   char *string2 = "string";
-   int result;
+int test( void );
 
-   result = strcasecmp_l( string1, string2, LC_CTYPE );
+int test( void )
+{
+  char *string1 = "STRING";
+  char *string2 = "string";
+  locale_t locale = NULL;
+  int result;
 
-   return result;
- }
+  result = strcasecmp_l( string1, string2, locale );
+
+  return result;
+}
