@@ -1113,6 +1113,74 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/semaphore/sem_wait.c \
 	psxhdrs/semaphore/sem_trywait.c \
 	psxhdrs/semaphore/sem_timedwait.c \
+	psxhdrs/stdio/clearerr.c \
+	psxhdrs/stdio/ctermid.c \
+	psxhdrs/stdio/dprintf.c \
+	psxhdrs/stdio/fclose.c \
+	psxhdrs/stdio/fdopen.c \
+	psxhdrs/stdio/feof.c \
+	psxhdrs/stdio/ferror.c \
+	psxhdrs/stdio/fflush.c \
+	psxhdrs/stdio/fgetc.c \
+	psxhdrs/stdio/fgetpos.c \
+	psxhdrs/stdio/fgets.c \
+	psxhdrs/stdio/fileno.c \
+	psxhdrs/stdio/flockfile.c \
+	psxhdrs/stdio/fmemopen.c \
+	psxhdrs/stdio/fopen.c \
+	psxhdrs/stdio/fprintf.c \
+	psxhdrs/stdio/fputc.c \
+	psxhdrs/stdio/fputs.c \
+	psxhdrs/stdio/fread.c \
+	psxhdrs/stdio/freopen.c \
+	psxhdrs/stdio/fscanf.c \
+	psxhdrs/stdio/fseek.c \
+	psxhdrs/stdio/fseeko.c \
+	psxhdrs/stdio/fsetpos.c \
+	psxhdrs/stdio/ftell.c \
+	psxhdrs/stdio/ftello.c \
+	psxhdrs/stdio/ftrylockfile.c \
+	psxhdrs/stdio/funlockfile.c \
+	psxhdrs/stdio/fwrite.c \
+	psxhdrs/stdio/getc.c \
+	psxhdrs/stdio/getc_unlocked.c \
+	psxhdrs/stdio/getchar.c \
+	psxhdrs/stdio/getchar_unlocked.c \
+	psxhdrs/stdio/gets.c \
+	psxhdrs/stdio/open_memstream.c \
+	psxhdrs/stdio/perror.c \
+	psxhdrs/stdio/printf.c \
+	psxhdrs/stdio/putc.c \
+	psxhdrs/stdio/putc_unlocked.c \
+	psxhdrs/stdio/putchar.c \
+	psxhdrs/stdio/putchar_unlocked.c \
+	psxhdrs/stdio/puts.c \
+	psxhdrs/stdio/remove.c \
+	psxhdrs/stdio/rename.c \
+	psxhdrs/stdio/rewind.c \
+	psxhdrs/stdio/scanf.c \
+	psxhdrs/stdio/setbuf.c \
+	psxhdrs/stdio/setvbuf.c \
+	psxhdrs/stdio/snprintf.c \
+	psxhdrs/stdio/sprintf.c \
+	psxhdrs/stdio/sscanf.c \
+	psxhdrs/stdio/stderr.c \
+	psxhdrs/stdio/stdin.c \
+	psxhdrs/stdio/stdout.c \
+	psxhdrs/stdio/tempnam.c \
+	psxhdrs/stdio/tmpfile.c \
+	psxhdrs/stdio/tmpnam.c \
+	psxhdrs/stdio/ungetc.c \
+	psxhdrs/stdio/vdprintf.c \
+	psxhdrs/stdio/vfprintf.c \
+	psxhdrs/stdio/vfscanf.c \
+	psxhdrs/stdio/vprintf.c \
+	psxhdrs/stdio/vscanf.c \
+	psxhdrs/stdio/vsnprintf.c \
+	psxhdrs/stdio/vsprintf.c \
+	psxhdrs/stdio/vsscanf.c \
+	psxhdrs/stdio/pclose.c \
+	psxhdrs/stdio/popen.c \
 	psxhdrs/strings/bcmp.c \
 	psxhdrs/strings/bcopy.c \
 	psxhdrs/strings/ffs.c \
@@ -1155,8 +1223,12 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
+
+## Specific issues that tickets are tracking
 ## lib_a_SOURCES += psxhdrs/dirent/dirfd.c       See ticket #3371
 ## lib_a_SOURCES += psxhdrs/dirent/fdopendir.c   See ticket #3371
+## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	 See ticket #3633
+## lib_a_SOURCES += psxhdrs/stdio/getline.c      See ticket #3633
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
