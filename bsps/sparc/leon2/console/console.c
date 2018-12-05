@@ -20,30 +20,7 @@
 
 #include <rtems/console.h>
 #include <rtems/libio.h>
-#include <rtems/bspIo.h>
 #include <bsp.h>
-
-/*
- *  console_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-void console_outbyte_polled(
-  int           port,
-  unsigned char ch
-);
-
-/* body is in debugputs.c */
-
-/*
- *  console_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-
-int console_inbyte_nonblocking( int port );
-
-/* body is in debugputs.c */
 
 /*
  *  Interrupt driven console IO
@@ -416,22 +393,3 @@ rtems_device_driver console_control(
 {
   return rtems_termios_ioctl (arg);
 }
-
-/* putchar/getchar for printk */
-
-static void bsp_out_char (char c)
-{
-  console_outbyte_polled(0, c);
-}
-
-BSP_output_char_function_type BSP_output_char = bsp_out_char;
-
-static int bsp_in_char(void)
-{
-  int tmp;
-
-  while ((tmp = console_inbyte_nonblocking(0)) < 0);
-  return tmp;
-}
-
-BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;

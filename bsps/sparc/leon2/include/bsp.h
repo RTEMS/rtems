@@ -213,6 +213,10 @@ int cchip1_register(void);
 #define GPTIMER_INFO_AVAIL            /* GPTIMER Timer driver */
 #define GRETH_INFO_AVAIL              /* GRETH Ethernet driver */
 
+void console_outbyte_polled( int port, unsigned char ch );
+
+int console_inbyte_nonblocking( int port );
+
 #ifdef __cplusplus
 }
 #endif

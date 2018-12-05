@@ -18,26 +18,9 @@
  */
 
 #include <bsp.h>
-#include <rtems/libio.h>
-#include <stdlib.h>
-#include <assert.h>
+#include <rtems/bspIo.h>
 
-/*
- *  Method is shared with console.c
- */
-void console_outbyte_polled( int port, unsigned char ch );
-int console_inbyte_nonblocking( int port );
-
-/*
- *  console_outbyte_polled
- *
- *  This routine transmits a character using polling.
- */
-
-void console_outbyte_polled(
-  int  port,
-  unsigned char ch
-)
+void console_outbyte_polled( int port, unsigned char ch )
 {
   if ( port == 0 ) {
     while ( (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_THE) == 0 );
@@ -49,39 +32,37 @@ void console_outbyte_polled(
   LEON_REG.UART_Channel_2 = (unsigned int) ch;
 }
 
-/*
- *  console_inbyte_nonblocking
- *
- *  This routine polls for a character.
- */
-
 int console_inbyte_nonblocking( int port )
 {
+  if ( port == 0 ) {
+    if (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_ERR) {
+      LEON_REG.UART_Status_1 = ~LEON_REG_UART_STATUS_ERR;
+    }
 
-  switch (port) {
-
-    case 0:
-      if (LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_ERR) {
-        LEON_REG.UART_Status_1 = ~LEON_REG_UART_STATUS_ERR;
-      }
-
-      if ((LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_DR) == 0)
-         return -1;
-      return (int) LEON_REG.UART_Channel_1;
-      return 1;
-
-    case 1:
-      if (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_ERR) {
-        LEON_REG.UART_Status_2 = ~LEON_REG_UART_STATUS_ERR;
-      }
-
-      if ((LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_DR) == 0)
-         return -1;
-      return (int) LEON_REG.UART_Channel_2;
-
-    default:
-      assert( 0 );
+    if ((LEON_REG.UART_Status_1 & LEON_REG_UART_STATUS_DR) == 0)
+       return -1;
+    return (int) LEON_REG.UART_Channel_1;
   }
 
-  return -1;
+  if (LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_ERR) {
+    LEON_REG.UART_Status_2 = ~LEON_REG_UART_STATUS_ERR;
+  }
+
+  if ((LEON_REG.UART_Status_2 & LEON_REG_UART_STATUS_DR) == 0)
+     return -1;
+  return (int) LEON_REG.UART_Channel_2;
 }
+
+static void bsp_out_char( char c )
+{
+  console_outbyte_polled( 0, c );
+}
+
+BSP_output_char_function_type BSP_output_char = bsp_out_char;
+
+static int bsp_in_char( void )
+{
+  return console_inbyte_nonblocking( 0 );
+}
+
+BSP_polling_getchar_function_type BSP_poll_char = bsp_in_char;
