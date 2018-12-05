@@ -2,7 +2,8 @@
  *  @file
  *  @brief dlopen() API Conformance Test
  */
- /*
+
+/*
  *  COPYRIGHT (c) 2018.
  *  Himanshu Sekhar Nayak
  *
@@ -18,23 +19,20 @@
  *  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
- #ifdef HAVE_CONFIG_H
- #include "config.h"
- #endif
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
- #include <dlfcn.h>
+#include <dlfcn.h>
 
- int test( void );
+int test( void );
 
- int result = 1;
+int test( void )
+{
+  void *filename;
 
- int test( void )
- {
-   void *filename;
+  filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
+  (void) filename;
 
-   filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
-   (void) filename;
-   result = 0;
-
-   return result;
- }
+  return (filename != NULL);
+}

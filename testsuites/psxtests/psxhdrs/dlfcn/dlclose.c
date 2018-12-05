@@ -2,7 +2,8 @@
  *  @file
  *  @brief dlclose() API Conformance Test
  */
- /*
+
+/*
  *  COPYRIGHT (c) 2018.
  *  Himanshu Sekhar Nayak
  *
@@ -18,21 +19,21 @@
  *  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
- #ifdef HAVE_CONFIG_H
- #include "config.h"
- #endif
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
- #include <dlfcn.h>
+#include <dlfcn.h>
 
- int test( void );
+int test( void );
 
- int test( void )
- {
-   void *filename;
-   int result;
+int test( void )
+{
+  void *filename;
+  int result;
 
-   filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
-   result = dlclose( filename );
+  filename = dlopen( "mylib.so", RTLD_LOCAL | RTLD_LAZY );
+  result = dlclose( filename );
 
-   return result;
- }
+  return result;
+}
