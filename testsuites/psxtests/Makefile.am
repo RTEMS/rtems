@@ -1217,7 +1217,73 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/langinfo/nl_langinfo.c \
 	psxhdrs/langinfo/nl_langinfo_l.c \
 	psxhdrs/assert/assert.c \
-	psxhdrs/sys/utsname/uname.c
+	psxhdrs/sys/utsname/uname.c \
+	psxhdrs/complex/cabs.c \
+	psxhdrs/complex/cabsf.c \
+	psxhdrs/complex/cabsl.c \
+	psxhdrs/complex/cacos.c \
+	psxhdrs/complex/cacosf.c \
+	psxhdrs/complex/cacosh.c \
+	psxhdrs/complex/cacoshf.c \
+	psxhdrs/complex/cacoshl.c \
+	psxhdrs/complex/cacosl.c \
+	psxhdrs/complex/carg.c \
+	psxhdrs/complex/cargf.c \
+	psxhdrs/complex/cargl.c \
+	psxhdrs/complex/casin.c \
+	psxhdrs/complex/casinf.c \
+	psxhdrs/complex/casinh.c \
+	psxhdrs/complex/casinhf.c \
+	psxhdrs/complex/casinhl.c \
+	psxhdrs/complex/casinl.c \
+	psxhdrs/complex/catan.c \
+	psxhdrs/complex/catanf.c \
+	psxhdrs/complex/catanh.c \
+	psxhdrs/complex/catanhf.c \
+	psxhdrs/complex/catanhl.c \
+	psxhdrs/complex/catanl.c \
+	psxhdrs/complex/ccos.c \
+	psxhdrs/complex/ccosf.c \
+	psxhdrs/complex/ccosh.c \
+	psxhdrs/complex/ccoshf.c \
+	psxhdrs/complex/ccoshl.c \
+	psxhdrs/complex/ccosl.c \
+	psxhdrs/complex/cexp.c \
+	psxhdrs/complex/cexpf.c \
+	psxhdrs/complex/cexpl.c \
+	psxhdrs/complex/cimag.c \
+	psxhdrs/complex/cimagf.c \
+	psxhdrs/complex/cimagl.c \
+	psxhdrs/complex/clog.c \
+	psxhdrs/complex/clogf.c \
+	psxhdrs/complex/clogl.c \
+	psxhdrs/complex/conj.c \
+	psxhdrs/complex/conjf.c \
+	psxhdrs/complex/conjl.c \
+	psxhdrs/complex/cpow.c \
+	psxhdrs/complex/cpowf.c \
+	psxhdrs/complex/cpowl.c \
+	psxhdrs/complex/cproj.c \
+	psxhdrs/complex/cprojf.c \
+	psxhdrs/complex/cprojl.c \
+	psxhdrs/complex/creal.c \
+	psxhdrs/complex/crealf.c \
+	psxhdrs/complex/creall.c \
+	psxhdrs/complex/csin.c \
+	psxhdrs/complex/csinf.c \
+	psxhdrs/complex/csinh.c \
+	psxhdrs/complex/csinhf.c \
+	psxhdrs/complex/csinhl.c \
+	psxhdrs/complex/csinl.c \
+	psxhdrs/complex/csqrt.c \
+	psxhdrs/complex/csqrtf.c \
+	psxhdrs/complex/csqrtl.c \
+	psxhdrs/complex/ctan.c \
+	psxhdrs/complex/ctanf.c \
+	psxhdrs/complex/ctanh.c \
+	psxhdrs/complex/ctanhf.c \
+	psxhdrs/complex/ctanhl.c \
+	psxhdrs/complex/ctanl.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
