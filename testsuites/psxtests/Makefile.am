@@ -1148,7 +1148,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/time/gettimeofday.c \
 	psxhdrs/langinfo/nl_langinfo.c \
 	psxhdrs/langinfo/nl_langinfo_l.c \
-	psxhdrs/assert/assert.c
+	psxhdrs/assert/assert.c \
+	psxhdrs/sys/utsname/uname.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
