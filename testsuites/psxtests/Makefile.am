@@ -1573,7 +1573,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/wctype/wctrans.c \
 	psxhdrs/wctype/wctrans_l.c \
 	psxhdrs/wctype/wctype.c \
-	psxhdrs/wctype/wctype_l.c
+	psxhdrs/wctype/wctype_l.c \
+        psxhdrs/fmtmsg/fmtmsg.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
@@ -1600,6 +1601,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ftw/nftw.c             See ticket #2970
 ## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   See ticket #3633
 ## lib_a_SOURCES += psxhdrs/stdio/getline.c        See ticket #3633
+## lib_a_SOURCES += psxhdrs/fmtmsg/fmtmsg.c        See ticket #3639
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
