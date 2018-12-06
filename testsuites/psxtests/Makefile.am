@@ -1285,7 +1285,41 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/complex/ctanh.c \
 	psxhdrs/complex/ctanhf.c \
 	psxhdrs/complex/ctanhl.c \
-	psxhdrs/complex/ctanl.c
+	psxhdrs/complex/ctanl.c \
+	psxhdrs/wctype/iswalnum.c \
+	psxhdrs/wctype/iswalnum_l.c \
+	psxhdrs/wctype/iswalpha.c \
+	psxhdrs/wctype/iswalpha_l.c \
+	psxhdrs/wctype/iswblank.c \
+	psxhdrs/wctype/iswblank_l.c \
+	psxhdrs/wctype/iswcntrl.c \
+	psxhdrs/wctype/iswcntrl_l.c \
+	psxhdrs/wctype/iswctype.c \
+	psxhdrs/wctype/iswctype_l.c \
+	psxhdrs/wctype/iswdigit.c \
+	psxhdrs/wctype/iswdigit_l.c \
+	psxhdrs/wctype/iswgraph.c \
+	psxhdrs/wctype/iswgraph_l.c \
+	psxhdrs/wctype/iswlower.c \
+	psxhdrs/wctype/iswlower_l.c \
+	psxhdrs/wctype/iswprint.c \
+	psxhdrs/wctype/iswprint_l.c \
+	psxhdrs/wctype/iswpunct.c \
+	psxhdrs/wctype/iswpunct_l.c \
+	psxhdrs/wctype/iswspace.c \
+	psxhdrs/wctype/iswspace_l.c \
+	psxhdrs/wctype/iswupper.c \
+	psxhdrs/wctype/iswupper_l.c \
+	psxhdrs/wctype/iswxdigit.c \
+	psxhdrs/wctype/iswxdigit_l.c \
+	psxhdrs/wctype/towctrans.c \
+	psxhdrs/wctype/towctrans_l.c \
+	psxhdrs/wctype/towlower.c \
+	psxhdrs/wctype/towlower_l.c \
+	psxhdrs/wctype/wctrans.c \
+	psxhdrs/wctype/wctrans_l.c \
+	psxhdrs/wctype/wctype.c \
+	psxhdrs/wctype/wctype_l.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
