@@ -1325,14 +1325,24 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
-## lib_a_SOURCES += psxhdrs/ftw/ftw.c            See ticket #2970
-## lib_a_SOURCES += psxhdrs/ftw/nftw.c           See ticket #2970
 
 ## Specific issues that tickets are tracking
-## lib_a_SOURCES += psxhdrs/dirent/dirfd.c       See ticket #3371
-## lib_a_SOURCES += psxhdrs/dirent/fdopendir.c   See ticket #3371
-## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	 See ticket #3633
-## lib_a_SOURCES += psxhdrs/stdio/getline.c      See ticket #3633
+## lib_a_SOURCES += psxhdrs/dirent/dirfd.c         See ticket #3371
+## lib_a_SOURCES += psxhdrs/dirent/fdopendir.c     See ticket #3371
+## lib_a_SOURCES += psxhdrs/fenv/feclearexcept.c   See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fegetenv.c        See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fegetexceptflag.c See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fegetround.c      See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/feholdexcept.c    See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/feraiseexcept.c   See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fesetenv.c        See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fesetexceptflag.c See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fesetround.c      See ticket #2971
+## lib_a_SOURCES += psxhdrs/fenv/fetestexcept.c    See ticket #2971
+## lib_a_SOURCES += psxhdrs/ftw/ftw.c              See ticket #2970
+## lib_a_SOURCES += psxhdrs/ftw/nftw.c             See ticket #2970
+## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   See ticket #3633
+## lib_a_SOURCES += psxhdrs/stdio/getline.c        See ticket #3633
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
