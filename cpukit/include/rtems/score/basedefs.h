@@ -397,7 +397,7 @@
 
 /* The reference type idea based on libHX by Jan Engelhardt */
 #define RTEMS_TYPEOF_REFX(_ptr_level, _ptr_type) \
-  typeof(_ptr_level(union { int z; typeof(_ptr_type) x; }){0}.x)
+  __typeof__(_ptr_level(union { int z; __typeof__(_ptr_type) x; }){0}.x)
 
 #if defined(__GNUC__) && !defined(ASM)
 #if  ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4004)
@@ -480,8 +480,8 @@ extern void RTEMS_DEQUALIFY_types_not_compatible(void);
 #ifdef __GNUC__
   #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) \
     __builtin_types_compatible_p( \
-      __typeof( ( (_t_lhs *) 0 )->_m_lhs ), \
-      __typeof( ( (_t_rhs *) 0 )->_m_rhs ) \
+      __typeof__( ( (_t_lhs *) 0 )->_m_lhs ), \
+      __typeof__( ( (_t_rhs *) 0 )->_m_rhs ) \
     )
 #else
   #define RTEMS_HAVE_MEMBER_SAME_TYPE( _t_lhs, _m_lhs, _t_rhs, _m_rhs ) \
