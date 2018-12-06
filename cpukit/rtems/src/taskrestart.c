@@ -22,8 +22,8 @@
 #include <rtems/score/threadimpl.h>
 
 rtems_status_code rtems_task_restart(
-  rtems_id  id,
-  uint32_t  argument
+  rtems_id            id,
+  rtems_task_argument argument
 )
 {
   Thread_Control           *the_thread;

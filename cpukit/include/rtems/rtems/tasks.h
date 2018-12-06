@@ -238,13 +238,13 @@ rtems_status_code rtems_task_mode(
  * point with the new argument.
  *
  * @param[in] id is the thread id
- * @param[in] arg is the thread argument
+ * @param[in] argument is the thread argument
  *
  * @retval RTEMS_SUCCESSFUL if successful or error code if unsuccessful
  */
 rtems_status_code rtems_task_restart(
-  rtems_id   id,
-  uint32_t   arg
+  rtems_id            id,
+  rtems_task_argument argument
 );
 
 /**
