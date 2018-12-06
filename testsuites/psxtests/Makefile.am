@@ -1223,6 +1223,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon_l.c
+## lib_a_SOURCES += psxhdrs/ftw/ftw.c            See ticket #2970
+## lib_a_SOURCES += psxhdrs/ftw/nftw.c           See ticket #2970
 
 ## Specific issues that tickets are tracking
 ## lib_a_SOURCES += psxhdrs/dirent/dirfd.c       See ticket #3371
