@@ -1372,6 +1372,40 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/stdio/vsscanf.c \
 	psxhdrs/stdio/pclose.c \
 	psxhdrs/stdio/popen.c \
+	psxhdrs/string/memccpy.c \
+	psxhdrs/string/memchr.c \
+	psxhdrs/string/memcmp.c \
+	psxhdrs/string/memcpy.c \
+	psxhdrs/string/memmove.c \
+	psxhdrs/string/memset.c \
+	psxhdrs/string/stpcpy.c \
+	psxhdrs/string/stpncpy.c \
+	psxhdrs/string/strcat.c \
+	psxhdrs/string/strchr.c \
+	psxhdrs/string/strcmp.c \
+	psxhdrs/string/strcoll.c \
+	psxhdrs/string/strcoll_l.c \
+	psxhdrs/string/strcpy.c \
+	psxhdrs/string/strcspn.c \
+	psxhdrs/string/strdup.c \
+	psxhdrs/string/strerror.c \
+	psxhdrs/string/strerror_l.c \
+	psxhdrs/string/strerror_r.c \
+	psxhdrs/string/strlen.c \
+	psxhdrs/string/strncat.c \
+	psxhdrs/string/strncmp.c \
+	psxhdrs/string/strncpy.c \
+	psxhdrs/string/strndup.c \
+	psxhdrs/string/strnlen.c \
+	psxhdrs/string/strpbrk.c \
+	psxhdrs/string/strrchr.c \
+	psxhdrs/string/strsignal.c \
+	psxhdrs/string/strspn.c \
+	psxhdrs/string/strstr.c \
+	psxhdrs/string/strtok.c \
+	psxhdrs/string/strtok_r.c \
+	psxhdrs/string/strxfrm.c \
+	psxhdrs/string/strxfrm_l.c \
 	psxhdrs/strings/bcmp.c \
 	psxhdrs/strings/bcopy.c \
 	psxhdrs/strings/ffs.c \
