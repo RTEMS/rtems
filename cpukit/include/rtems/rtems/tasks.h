@@ -654,6 +654,21 @@ rtems_status_code rtems_scheduler_remove_processor(
   uint32_t cpu_index
 );
 
+/**
+ * @brief Gets the maximum task priority of the specified scheduler instance.
+ *
+ * @param[in] scheduler_id Identifier of the scheduler instance.
+ * @param[out] priority Pointer to a task priority value.
+ *
+ * @retval RTEMS_SUCCESSFUL Successful operation.
+ * @retval RTEMS_INVALID_ADDRESS The @a priority parameter is @c NULL.
+ * @retval RTEMS_INVALID_ID Invalid scheduler instance identifier.
+ */
+rtems_status_code rtems_scheduler_get_maximum_priority(
+  rtems_id             scheduler_id,
+  rtems_task_priority *priority
+);
+
 /**@}*/
 
 #ifdef __cplusplus

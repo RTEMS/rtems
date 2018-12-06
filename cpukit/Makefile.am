@@ -755,6 +755,7 @@ librtemscpu_a_SOURCES += rtems/src/rtemsobjectidgetnode.c
 librtemscpu_a_SOURCES += rtems/src/rtemsobjectsetname.c
 librtemscpu_a_SOURCES += rtems/src/rtemstimer.c
 librtemscpu_a_SOURCES += rtems/src/scheduleraddprocessor.c
+librtemscpu_a_SOURCES += rtems/src/schedulergetmaxprio.c
 librtemscpu_a_SOURCES += rtems/src/schedulergetprocessorset.c
 librtemscpu_a_SOURCES += rtems/src/scheduleridentbyprocessor.c
 librtemscpu_a_SOURCES += rtems/src/scheduleridentbyprocessorset.c

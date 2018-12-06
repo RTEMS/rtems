@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -474,6 +474,29 @@ static void test_scheduler_ident(void)
   rtems_test_assert(scheduler_id == expected_id);
 }
 
+static void test_scheduler_get_max_prio(void)
+{
+  rtems_status_code sc;
+  rtems_task_priority priority;
+  rtems_id scheduler_id;
+
+  priority = 0;
+  sc = rtems_scheduler_get_maximum_priority(invalid_id, &priority);
+  rtems_test_assert(sc == RTEMS_INVALID_ID);
+  rtems_test_assert(priority == 0);
+
+  sc = rtems_task_get_scheduler(RTEMS_SELF, &scheduler_id);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_scheduler_get_maximum_priority(scheduler_id, NULL);
+  rtems_test_assert(sc == RTEMS_INVALID_ADDRESS);
+
+  priority = 0;
+  sc = rtems_scheduler_get_maximum_priority(scheduler_id, &priority);
+  rtems_test_assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert(priority == 255);
+}
+
 static void test_scheduler_get_processors(void)
 {
   rtems_status_code sc;
@@ -601,6 +624,7 @@ static void Init(rtems_task_argument arg)
   test_task_get_set_affinity();
   test_task_get_set_scheduler();
   test_scheduler_ident();
+  test_scheduler_get_max_prio();
   test_scheduler_get_processors();
   test_scheduler_add_remove_processors();
   test_task_get_priority();
