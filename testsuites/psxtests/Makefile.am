@@ -1093,6 +1093,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dirent/scandir.c \
 	psxhdrs/dirent/seekdir.c \
 	psxhdrs/dirent/telldir.c \
+	psxhdrs/glob/glob.c \
+	psxhdrs/glob/globfree.c \
 	psxhdrs/mqueue/mq_open.c \
 	psxhdrs/mqueue/mq_close.c \
 	psxhdrs/mqueue/mq_getattr.c \
