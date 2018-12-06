@@ -1475,6 +1475,37 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/complex/ctanhf.c \
 	psxhdrs/complex/ctanhl.c \
 	psxhdrs/complex/ctanl.c \
+	psxhdrs/complex/ctanl.c \
+	psxhdrs/ctype/isalnum.c \
+	psxhdrs/ctype/isalnum_l.c \
+	psxhdrs/ctype/isalpha.c \
+	psxhdrs/ctype/isalpha_l.c \
+	psxhdrs/ctype/isascii.c \
+	psxhdrs/ctype/isblank.c \
+	psxhdrs/ctype/isblank_l.c \
+	psxhdrs/ctype/iscntrl.c \
+	psxhdrs/ctype/iscntrl_l.c \
+	psxhdrs/ctype/isdigit.c \
+	psxhdrs/ctype/isdigit_l.c \
+	psxhdrs/ctype/isgraph.c \
+	psxhdrs/ctype/isgraph_l.c \
+	psxhdrs/ctype/islower.c \
+	psxhdrs/ctype/islower_l.c \
+	psxhdrs/ctype/isprint.c \
+	psxhdrs/ctype/isprint_l.c \
+	psxhdrs/ctype/ispunct.c \
+	psxhdrs/ctype/ispunct_l.c \
+	psxhdrs/ctype/isspace.c \
+	psxhdrs/ctype/isspace_l.c \
+	psxhdrs/ctype/isupper.c \
+	psxhdrs/ctype/isupper_l.c \
+	psxhdrs/ctype/isxdigit.c \
+	psxhdrs/ctype/isxdigit_l.c \
+	psxhdrs/ctype/toascii.c \
+	psxhdrs/ctype/tolower.c \
+	psxhdrs/ctype/tolower_l.c \
+	psxhdrs/ctype/toupper.c \
+	psxhdrs/ctype/toupper_l.c \
 	psxhdrs/wctype/iswalnum.c \
 	psxhdrs/wctype/iswalnum_l.c \
 	psxhdrs/wctype/iswalpha.c \
