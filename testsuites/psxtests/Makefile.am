@@ -1573,7 +1573,14 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/wctype/wctrans.c \
 	psxhdrs/wctype/wctrans_l.c \
 	psxhdrs/wctype/wctype.c \
-	psxhdrs/wctype/wctype_l.c
+	psxhdrs/wctype/wctype_l.c \
+	psxhdrs/inttypes/imaxabs.c \
+	psxhdrs/inttypes/imaxdiv.c \
+	psxhdrs/inttypes/strtoimax.c \
+	psxhdrs/inttypes/strtoumax.c \
+	psxhdrs/inttypes/wcstoimax.c \
+	psxhdrs/inttypes/wcstoumax.c
+
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
