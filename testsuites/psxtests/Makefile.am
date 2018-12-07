@@ -1304,6 +1304,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/semaphore/sem_wait.c \
 	psxhdrs/semaphore/sem_trywait.c \
 	psxhdrs/semaphore/sem_timedwait.c \
+	psxhdrs/stddef/offsetof.c \
 	psxhdrs/stdio/clearerr.c \
 	psxhdrs/stdio/ctermid.c \
 	psxhdrs/stdio/dprintf.c \
