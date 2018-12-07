@@ -1579,7 +1579,30 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/inttypes/strtoimax.c \
 	psxhdrs/inttypes/strtoumax.c \
 	psxhdrs/inttypes/wcstoimax.c \
-	psxhdrs/inttypes/wcstoumax.c
+	psxhdrs/inttypes/wcstoumax.c \
+	psxhdrs/netdb/endhostent.c \
+	psxhdrs/netdb/endnetent.c \
+	psxhdrs/netdb/endprotoent.c \
+	psxhdrs/netdb/endservent.c \
+	psxhdrs/netdb/sethostent.c \
+	psxhdrs/netdb/setnetent.c \
+	psxhdrs/netdb/setservent.c \
+	psxhdrs/netdb/gethostent.c \
+	psxhdrs/netdb/getprotoent.c \
+	psxhdrs/netdb/getnetent.c \
+	psxhdrs/netdb/getservent.c \
+	psxhdrs/netdb/freeaddrinfo.c \
+	psxhdrs/netdb/gai_strerror.c \
+	psxhdrs/netdb/getaddrinfo.c \
+	psxhdrs/netdb/gethostbyaddr.c \
+	psxhdrs/netdb/gethostbyname.c \
+	psxhdrs/netdb/getnameinfo.c \
+	psxhdrs/netdb/getnetbyname.c \
+	psxhdrs/netdb/getprotobyname.c \
+	psxhdrs/netdb/getprotobynumber.c \
+	psxhdrs/netdb/getservbyname.c \
+	psxhdrs/netdb/getservbyport.c \
+	psxhdrs/netdb/h_errno.c
 
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
