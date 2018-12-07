@@ -1612,6 +1612,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ucontext/makecontext.c See ticket #3640
 ## lib_a_SOURCES += psxhdrs/ucontext/setcontext.c  See ticket #3640
 ## lib_a_SOURCES += psxhdrs/ucontext/swapcontext.c See ticket #3640
+## lib_a_SOURCES += psxhdrs/c11/uchar/c16rtomb.c   See ticket #3643
+## lib_a_SOURCES += psxhdrs/c11/uchar/c32rtomb.c   See ticket #3643
+## lib_a_SOURCES += psxhdrs/c11/uchar/c32rtomb.c   See ticket #3643
+## lib_a_SOURCES += psxhdrs/c11/uchar/mbrtoc32.c   See ticket #3643
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
