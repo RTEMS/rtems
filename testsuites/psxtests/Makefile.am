@@ -1600,6 +1600,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/fenv/fesetexceptflag.c See ticket #2971
 ## lib_a_SOURCES += psxhdrs/fenv/fesetround.c      See ticket #2971
 ## lib_a_SOURCES += psxhdrs/fenv/fetestexcept.c    See ticket #2971
+## lib_a_SOURCES += psxhdrs/fmtmsg/fmtmsg.c        See ticket #3639
 ## lib_a_SOURCES += psxhdrs/ftw/ftw.c              See ticket #2970
 ## lib_a_SOURCES += psxhdrs/math/y0l.c             See ticket #3638
 ## lib_a_SOURCES += psxhdrs/math/y1l.c             See ticket #3638
@@ -1607,7 +1608,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/ftw/nftw.c             See ticket #2970
 ## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   See ticket #3633
 ## lib_a_SOURCES += psxhdrs/stdio/getline.c        See ticket #3633
-## lib_a_SOURCES += psxhdrs/fmtmsg/fmtmsg.c        See ticket #3639
+## lib_a_SOURCES += psxhdrs/ucontext/getcontext.c  See ticket #3632
+## lib_a_SOURCES += psxhdrs/ucontext/makecontext.c See ticket #3632
+## lib_a_SOURCES += psxhdrs/ucontext/setcontext.c  See ticket #3632
+## lib_a_SOURCES += psxhdrs/ucontext/swapcontext.c See ticket #3632
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
