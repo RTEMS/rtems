@@ -1695,7 +1695,67 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/wchar/wmemmove.c \
 	psxhdrs/wchar/wmemset.c \
 	psxhdrs/wchar/wprintf.c \
-	psxhdrs/wchar/wscanf.c
+	psxhdrs/wchar/wscanf.c \
+	psxhdrs/stdlib/_Exit.c \
+	psxhdrs/stdlib/a64l.c \
+	psxhdrs/stdlib/abort.c \
+	psxhdrs/stdlib/abs.c \
+	psxhdrs/stdlib/atexit.c \
+	psxhdrs/stdlib/atof.c \
+	psxhdrs/stdlib/atoi.c \
+	psxhdrs/stdlib/atol.c \
+	psxhdrs/stdlib/atoll.c \
+	psxhdrs/stdlib/bsearch.c \
+	psxhdrs/stdlib/calloc.c \
+	psxhdrs/stdlib/div.c \
+	psxhdrs/stdlib/drand48.c \
+	psxhdrs/stdlib/erand48.c \
+	psxhdrs/stdlib/exit.c \
+	psxhdrs/stdlib/free.c \
+	psxhdrs/stdlib/getenv.c \
+	psxhdrs/stdlib/initstate.c \
+	psxhdrs/stdlib/jrand48.c \
+	psxhdrs/stdlib/l64a.c \
+	psxhdrs/stdlib/labs.c \
+	psxhdrs/stdlib/lcong48.c \
+	psxhdrs/stdlib/ldiv.c \
+	psxhdrs/stdlib/llabs.c \
+	psxhdrs/stdlib/lldiv.c \
+	psxhdrs/stdlib/lrand48.c \
+	psxhdrs/stdlib/malloc.c \
+	psxhdrs/stdlib/mblen.c \
+	psxhdrs/stdlib/mbstowcs.c \
+	psxhdrs/stdlib/mbtowc.c \
+	psxhdrs/stdlib/mkdtemp.c \
+	psxhdrs/stdlib/mkstemp.c \
+	psxhdrs/stdlib/mrand48.c \
+	psxhdrs/stdlib/nrand48.c \
+	psxhdrs/stdlib/posix_memalign.c \
+	psxhdrs/stdlib/putenv.c \
+	psxhdrs/stdlib/qsort.c \
+	psxhdrs/stdlib/rand.c \
+	psxhdrs/stdlib/rand_r.c \
+	psxhdrs/stdlib/random.c \
+	psxhdrs/stdlib/realloc.c \
+	psxhdrs/stdlib/realpath.c \
+	psxhdrs/stdlib/seed48.c \
+	psxhdrs/stdlib/setenv.c \
+	psxhdrs/stdlib/setkey.c \
+	psxhdrs/stdlib/setstate.c \
+	psxhdrs/stdlib/srand.c \
+	psxhdrs/stdlib/srand48.c \
+	psxhdrs/stdlib/srandom.c \
+	psxhdrs/stdlib/strtod.c \
+	psxhdrs/stdlib/strtof.c \
+	psxhdrs/stdlib/strtol.c \
+	psxhdrs/stdlib/strtold.c \
+	psxhdrs/stdlib/strtoll.c \
+	psxhdrs/stdlib/strtoul.c \
+	psxhdrs/stdlib/strtoull.c \
+	psxhdrs/stdlib/system.c \
+	psxhdrs/stdlib/unsetenv.c \
+	psxhdrs/stdlib/wcstombs.c \
+	psxhdrs/stdlib/wctomb.c
 
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
@@ -1722,7 +1782,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/math/y1l.c             See ticket #3638
 ## lib_a_SOURCES += psxhdrs/math/ynl.c             See ticket #3638
 ## lib_a_SOURCES += psxhdrs/ftw/nftw.c             See ticket #2970
-## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   	 See ticket #3633
+## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   See ticket #3633
 ## lib_a_SOURCES += psxhdrs/stdio/getline.c        See ticket #3633
 ## lib_a_SOURCES += psxhdrs/ucontext/getcontext.c  See ticket #3640
 ## lib_a_SOURCES += psxhdrs/ucontext/makecontext.c See ticket #3640
@@ -1732,6 +1792,12 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/c11/uchar/c32rtomb.c   See ticket #3643
 ## lib_a_SOURCES += psxhdrs/c11/uchar/c32rtomb.c   See ticket #3643
 ## lib_a_SOURCES += psxhdrs/c11/uchar/mbrtoc32.c   See ticket #3643
+## lib_a_SOURCES += psxhdrs/stdlib/getsubopt.c 	   See ticket #3644
+## lib_a_SOURCES += psxhdrs/stdlib/grantpt.c 	   See ticket #3645
+## lib_a_SOURCES += psxhdrs/stdlib/posix_openpt.c  See ticket #3646
+## lib_a_SOURCES += psxhdrs/stdlib/posix_openpt.c  See ticket #3646
+## lib_a_SOURCES += psxhdrs/stdlib/ptsname.c       See ticket #3647
+## lib_a_SOURCES += psxhdrs/stdlib/unlockpt.c      See ticket #3648
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
