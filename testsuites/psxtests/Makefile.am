@@ -1095,6 +1095,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dirent/telldir.c \
 	psxhdrs/glob/glob.c \
 	psxhdrs/glob/globfree.c \
+	psxhdrs/libgen/basename.c \
+	psxhdrs/libgen/dirname.c \
 	psxhdrs/math/acos.c \
 	psxhdrs/math/acosf.c \
 	psxhdrs/math/acosh.c \
@@ -1716,7 +1718,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/math/y1l.c             See ticket #3638
 ## lib_a_SOURCES += psxhdrs/math/ynl.c             See ticket #3638
 ## lib_a_SOURCES += psxhdrs/ftw/nftw.c             See ticket #2970
-## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   See ticket #3633
+## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	   	 See ticket #3633
 ## lib_a_SOURCES += psxhdrs/stdio/getline.c        See ticket #3633
 ## lib_a_SOURCES += psxhdrs/ucontext/getcontext.c  See ticket #3640
 ## lib_a_SOURCES += psxhdrs/ucontext/makecontext.c See ticket #3640
