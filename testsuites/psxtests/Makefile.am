@@ -1602,7 +1602,11 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/netdb/getprotobynumber.c \
 	psxhdrs/netdb/getservbyname.c \
 	psxhdrs/netdb/getservbyport.c \
-	psxhdrs/netdb/h_errno.c
+	psxhdrs/netdb/h_errno.c \
+	psxhdrs/arpa/inet/inet_addr.c \
+	psxhdrs/arpa/inet/inet_ntop.c \
+	psxhdrs/arpa/inet/inet_ntoa.c \
+	psxhdrs/arpa/inet/inet_pton.c
 
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
