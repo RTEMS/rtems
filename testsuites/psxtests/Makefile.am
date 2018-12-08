@@ -1607,7 +1607,89 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/arpa/inet/inet_addr.c \
 	psxhdrs/arpa/inet/inet_ntop.c \
 	psxhdrs/arpa/inet/inet_ntoa.c \
-	psxhdrs/arpa/inet/inet_pton.c
+	psxhdrs/arpa/inet/inet_pton.c \
+	psxhdrs/wchar/btowc.c \
+	psxhdrs/wchar/fgetwc.c \
+	psxhdrs/wchar/fgetws.c \
+	psxhdrs/wchar/fputwc.c \
+	psxhdrs/wchar/fputws.c \
+	psxhdrs/wchar/fwide.c \
+	psxhdrs/wchar/fwprintf.c \
+	psxhdrs/wchar/fwscanf.c \
+	psxhdrs/wchar/getwc.c \
+	psxhdrs/wchar/getwchar.c \
+	psxhdrs/wchar/iswalnum.c \
+	psxhdrs/wchar/iswalpha.c \
+	psxhdrs/wchar/iswcntrl.c \
+	psxhdrs/wchar/iswctype.c \
+	psxhdrs/wchar/iswdigit.c \
+	psxhdrs/wchar/iswgraph.c \
+	psxhdrs/wchar/iswlower.c \
+	psxhdrs/wchar/iswprint.c \
+	psxhdrs/wchar/iswpunct.c \
+	psxhdrs/wchar/iswspace.c \
+	psxhdrs/wchar/iswupper.c \
+	psxhdrs/wchar/iswxdigit.c \
+	psxhdrs/wchar/mbrlen.c \
+	psxhdrs/wchar/mbrtowc.c \
+	psxhdrs/wchar/mbsinit.c \
+	psxhdrs/wchar/mbsnrtowcs.c \
+	psxhdrs/wchar/mbsrtowcs.c \
+	psxhdrs/wchar/open_wmemstream.c \
+	psxhdrs/wchar/putwc.c \
+	psxhdrs/wchar/putwchar.c \
+	psxhdrs/wchar/swprintf.c \
+	psxhdrs/wchar/swscanf.c \
+	psxhdrs/wchar/towlower.c \
+	psxhdrs/wchar/towupper.c \
+	psxhdrs/wchar/ungetwc.c \
+	psxhdrs/wchar/vfwprintf.c \
+	psxhdrs/wchar/vfwscanf.c \
+	psxhdrs/wchar/vswprintf.c \
+	psxhdrs/wchar/vswscanf.c \
+	psxhdrs/wchar/vwprintf.c \
+	psxhdrs/wchar/vwscanf.c \
+	psxhdrs/wchar/wcpcpy.c \
+	psxhdrs/wchar/wcpncpy.c \
+	psxhdrs/wchar/wcrtomb.c \
+	psxhdrs/wchar/wcscasecmp.c \
+	psxhdrs/wchar/wcscasecmp_l.c \
+	psxhdrs/wchar/wcscat.c \
+	psxhdrs/wchar/wcschr.c \
+	psxhdrs/wchar/wcscmp.c \
+	psxhdrs/wchar/wcscoll.c \
+	psxhdrs/wchar/wcscoll_l.c \
+	psxhdrs/wchar/wcscpy.c \
+	psxhdrs/wchar/wcscspn.c \
+	psxhdrs/wchar/wcsdup.c \
+	psxhdrs/wchar/wcsnlen.c \
+	psxhdrs/wchar/wcsnrtombs.c \
+	psxhdrs/wchar/wcspbrk.c \
+	psxhdrs/wchar/wcsrchr.c \
+	psxhdrs/wchar/wcsrtombs.c \
+	psxhdrs/wchar/wcsspn.c \
+	psxhdrs/wchar/wcsstr.c \
+	psxhdrs/wchar/wcstod.c \
+	psxhdrs/wchar/wcstof.c \
+	psxhdrs/wchar/wcstok.c \
+	psxhdrs/wchar/wcstol.c \
+	psxhdrs/wchar/wcstold.c \
+	psxhdrs/wchar/wcstoll.c \
+	psxhdrs/wchar/wcstoul.c \
+	psxhdrs/wchar/wcstoull.c \
+	psxhdrs/wchar/wcswidth.c \
+	psxhdrs/wchar/wcsxfrm.c \
+	psxhdrs/wchar/wcsxfrm_l.c \
+	psxhdrs/wchar/wctob.c \
+	psxhdrs/wchar/wctype.c \
+	psxhdrs/wchar/wcwidth.c \
+	psxhdrs/wchar/wmemchr.c \
+	psxhdrs/wchar/wmemcmp.c \
+	psxhdrs/wchar/wmemcpy.c \
+	psxhdrs/wchar/wmemmove.c \
+	psxhdrs/wchar/wmemset.c \
+	psxhdrs/wchar/wprintf.c \
+	psxhdrs/wchar/wscanf.c
 
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
