@@ -1084,6 +1084,28 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/sys/socket/sendto.c psxhdrs/sys/socket/setsockopt.c \
 	psxhdrs/sys/socket/shutdown.c psxhdrs/sys/socket/socket.c \
 	psxhdrs/sys/socket/socketpair.c \
+	psxhdrs/sys/stat/chmod.c \
+	psxhdrs/sys/stat/fchmodat.c \
+	psxhdrs/sys/stat/fchmod.c \
+	psxhdrs/sys/stat/fstatat.c \
+	psxhdrs/sys/stat/fstat.c \
+	psxhdrs/sys/stat/futimens.c \
+	psxhdrs/sys/stat/lstat.c \
+	psxhdrs/sys/stat/mkdirat.c \
+	psxhdrs/sys/stat/mkdir.c \
+	psxhdrs/sys/stat/mkfifoat.c \
+	psxhdrs/sys/stat/mkfifo.c \
+	psxhdrs/sys/stat/mknodat.c \
+	psxhdrs/sys/stat/mknod.c \
+	psxhdrs/sys/stat/stat.c \
+	psxhdrs/sys/stat/umask.c \
+	psxhdrs/sys/stat/utimensat.c \
+	psxhdrs/sys/time/select.c \
+	psxhdrs/sys/time/utimes.c \
+	psxhdrs/sys/time/setitimer.c \
+	psxhdrs/sys/time/getitimer.c \
+	psxhdrs/sys/time/gettimeofday.c \
+	psxhdrs/sys/utsname/uname.c \
 	psxhdrs/dirent/alphasort.c \
 	psxhdrs/dirent/closedir.c \
 	psxhdrs/dirent/opendir.c \
@@ -1437,15 +1459,9 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/iconv/iconv_close.c \
 	psxhdrs/iconv/iconv_open.c \
 	psxhdrs/regex/regfree.c \
-	psxhdrs/sys/time/select.c \
-	psxhdrs/sys/time/utimes.c \
-	psxhdrs/sys/time/setitimer.c \
-	psxhdrs/sys/time/getitimer.c \
-	psxhdrs/sys/time/gettimeofday.c \
 	psxhdrs/langinfo/nl_langinfo.c \
 	psxhdrs/langinfo/nl_langinfo_l.c \
 	psxhdrs/assert/assert.c \
-	psxhdrs/sys/utsname/uname.c \
 	psxhdrs/complex/cabs.c \
 	psxhdrs/complex/cabsf.c \
 	psxhdrs/complex/cabsl.c \
