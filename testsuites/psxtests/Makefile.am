@@ -1614,6 +1614,31 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/syslog/openlog.c \
 	psxhdrs/syslog/setlogmask.c \
 	psxhdrs/syslog/syslog.c \
+	psxhdrs/c11/threads/call_once.c \
+	psxhdrs/c11/threads/cnd_broadcast.c \
+	psxhdrs/c11/threads/cnd_destroy.c \
+	psxhdrs/c11/threads/cnd_init.c \
+	psxhdrs/c11/threads/cnd_signal.c \
+	psxhdrs/c11/threads/cnd_timedwait.c \
+	psxhdrs/c11/threads/cnd_wait.c \
+	psxhdrs/c11/threads/mtx_init.c \
+	psxhdrs/c11/threads/mtx_destroy.c \
+	psxhdrs/c11/threads/mtx_lock.c \
+	psxhdrs/c11/threads/mtx_timedlock.c \
+	psxhdrs/c11/threads/mtx_trylock.c \
+	psxhdrs/c11/threads/mtx_unlock.c \
+	psxhdrs/c11/threads/thrd_create.c \
+	psxhdrs/c11/threads/thrd_current.c \
+	psxhdrs/c11/threads/thrd_detach.c \
+	psxhdrs/c11/threads/thrd_equal.c \
+	psxhdrs/c11/threads/thrd_exit.c \
+	psxhdrs/c11/threads/thrd_join.c \
+	psxhdrs/c11/threads/thrd_sleep.c \
+	psxhdrs/c11/threads/thrd_yield.c \
+	psxhdrs/c11/threads/tss_create.c \
+	psxhdrs/c11/threads/tss_delete.c \
+	psxhdrs/c11/threads/tss_get.c \
+	psxhdrs/c11/threads/tss_set.c \
 	psxhdrs/wchar/btowc.c \
 	psxhdrs/wchar/fgetwc.c \
 	psxhdrs/wchar/fgetws.c \
