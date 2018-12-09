@@ -1798,7 +1798,6 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/stdlib/wcstombs.c \
 	psxhdrs/stdlib/wctomb.c
 
-
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
 ## lib_a_SOURCES += psxhdrs/monetary/strfmon.c
@@ -1839,6 +1838,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/stdlib/posix_openpt.c  See ticket #3646
 ## lib_a_SOURCES += psxhdrs/stdlib/ptsname.c       See ticket #3647
 ## lib_a_SOURCES += psxhdrs/stdlib/unlockpt.c      See ticket #3648
+## lib_a_SOURCES += psxhdrs/sys/ftok.c             See ticket #3650
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
