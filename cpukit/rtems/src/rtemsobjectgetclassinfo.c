@@ -46,7 +46,7 @@ rtems_status_code rtems_object_get_class_information(
    */
   info->minimum_id  = _Objects_Get_minimum_id( obj_info->maximum_id );
   info->maximum_id  = obj_info->maximum_id;
-  info->auto_extend = obj_info->auto_extend;
+  info->auto_extend = _Objects_Is_auto_extend( obj_info );
   info->maximum     = _Objects_Get_maximum_index( obj_info );
 
   for ( unallocated=0, i=1 ; i <= info->maximum ; i++ )

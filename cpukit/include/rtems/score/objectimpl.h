@@ -126,7 +126,12 @@ typedef struct {
   Objects_Control **local_table;
   /** This is the number of objects on the Inactive list. */
   Objects_Maximum   inactive;
-  /** This is the number of objects in a block. */
+  /**
+   * @brief This is the number of objects in a block if the automatic extension
+   * is enabled.
+   *
+   * This member is zero if the automatic extension is disabled.
+   */
   Objects_Maximum   objects_per_block;
   /** This is the size in bytes of each object instance. */
   uint16_t          object_size;
@@ -137,8 +142,6 @@ typedef struct {
    * (OBJECTS_NO_STRING_NAME).
    */
   uint16_t          name_length;
-  /** This is the true if unlimited objects in this class. */
-  bool              auto_extend;
   /** This is the chain of inactive control blocks. */
   Chain_Control     Inactive;
   /** This is the number of inactive objects per block. */
@@ -747,7 +750,7 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Extend_size(
   const Objects_Information *information
 )
 {
-  return information->auto_extend ? information->objects_per_block : 0;
+  return information->objects_per_block;
 }
 
 /**
@@ -856,6 +859,22 @@ RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Get_maximum_index(
 )
 {
   return _Objects_Get_index( information->maximum_id );
+}
+
+/**
+ * @brief Returns true if the automatic object extension (unlimited objects) is
+ * enabled, otherwise false.
+ *
+ * @param[in] information The object information.
+ *
+ * @retval true The automatic object extension (unlimited objects) is enabled.
+ * @retval false Otherwise.
+ */
+RTEMS_INLINE_ROUTINE Objects_Maximum _Objects_Is_auto_extend(
+  const Objects_Information *information
+)
+{
+  return information->objects_per_block != 0;
 }
 
 /**

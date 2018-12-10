@@ -56,7 +56,7 @@ Objects_Control *_Objects_Allocate_unprotected(
    */
   the_object = _Objects_Get_inactive( information );
 
-  if ( information->auto_extend ) {
+  if ( _Objects_Is_auto_extend( information ) ) {
     /*
      *  If the list is empty then we are out of objects and need to
      *  extend information base.

@@ -49,6 +49,7 @@ void _Objects_Extend_information(
   uint32_t          index_base;
   uint32_t          index_end;
   uint32_t          index;
+  Objects_Maximum   extend_count;
   Objects_Maximum   old_maximum;
   uint32_t          new_maximum;
   size_t            object_block_size;
@@ -62,7 +63,6 @@ void _Objects_Extend_information(
   );
 
   api_class_and_node = information->maximum_id & ~OBJECTS_INDEX_MASK;
-  old_maximum = _Objects_Get_maximum_index( information );
 
   /*
    *  Search for a free block of indexes. If we do NOT need to allocate or
@@ -72,22 +72,26 @@ void _Objects_Extend_information(
   index_base    = 0;
   block         = 0;
 
-  if ( information->object_blocks == NULL )
+  if ( information->object_blocks == NULL ) {
+    extend_count = _Objects_Get_maximum_index( information );
+    old_maximum = 0;
     block_count = 0;
-  else {
-    block_count = old_maximum / information->objects_per_block;
+  } else {
+    extend_count = information->objects_per_block;
+    old_maximum = _Objects_Get_maximum_index( information );
+    block_count = old_maximum / extend_count;
 
     for ( ; block < block_count; block++ ) {
       if ( information->object_blocks[ block ] == NULL ) {
         do_extend = false;
         break;
       } else
-        index_base += information->objects_per_block;
+        index_base += extend_count;
     }
   }
-  index_end = index_base + information->objects_per_block;
 
-  new_maximum = (uint32_t) old_maximum + information->objects_per_block;
+  new_maximum = (uint32_t) old_maximum + extend_count;
+  index_end = index_base + extend_count;
 
   /*
    *  We need to limit the number of objects to the maximum number
@@ -102,9 +106,8 @@ void _Objects_Extend_information(
    * Allocate the name table, and the objects and if it fails either return or
    * generate a fatal error depending on auto-extending being active.
    */
-  object_block_size = information->objects_per_block
-    * information->object_size;
-  if ( information->auto_extend ) {
+  object_block_size = extend_count * information->object_size;
+  if ( _Objects_Is_auto_extend( information ) ) {
     new_object_block = _Workspace_Allocate( object_block_size );
     if ( !new_object_block )
       return;
@@ -155,7 +158,7 @@ void _Objects_Extend_information(
     table_size = object_blocks_size
       + local_table_size
       + block_count * sizeof( *inactive_per_block );
-    if ( information->auto_extend ) {
+    if ( _Objects_Is_auto_extend( information ) ) {
       object_blocks = _Workspace_Allocate( table_size );
       if ( !object_blocks ) {
         _Workspace_Free( new_object_block );

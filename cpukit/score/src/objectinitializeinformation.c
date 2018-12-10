@@ -39,11 +39,12 @@ void _Objects_Do_initialize_information(
 {
   Objects_Maximum maximum_per_allocation;
 
+  maximum_per_allocation = _Objects_Maximum_per_allocation( maximum );
   information->maximum_id = _Objects_Build_id(
     the_api,
     the_class,
     _Objects_Local_node,
-    0
+    maximum_per_allocation
   );
   information->object_size = object_size;
 
@@ -55,20 +56,20 @@ void _Objects_Do_initialize_information(
   /*
    *  Are we operating in limited or unlimited (e.g. auto-extend) mode.
    */
-  information->auto_extend = _Objects_Is_unlimited( maximum );
-  maximum_per_allocation = _Objects_Maximum_per_allocation( maximum );
+  if ( _Objects_Is_unlimited( maximum ) ) {
+    /*
+     *  Unlimited and maximum of zero is illogical.
+     */
+    if ( maximum_per_allocation == 0) {
+      _Internal_error( INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0 );
+    }
 
-  /*
-   *  Unlimited and maximum of zero is illogical.
-   */
-  if ( information->auto_extend && maximum_per_allocation == 0) {
-    _Internal_error( INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0 );
+    /*
+     *  The allocation unit is the maximum value
+     */
+    information->objects_per_block = maximum_per_allocation;
   }
 
-  /*
-   *  The allocation unit is the maximum value
-   */
-  information->objects_per_block = maximum_per_allocation;
 
   /*
    *  Calculate the maximum name length

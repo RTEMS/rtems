@@ -31,7 +31,7 @@ void _Objects_Free(
 
   _Chain_Append_unprotected( &information->Inactive, &the_object->Node );
 
-  if ( information->auto_extend ) {
+  if ( _Objects_Is_auto_extend( information ) ) {
     Objects_Maximum objects_per_block;
     Objects_Maximum block;
     Objects_Maximum inactive;

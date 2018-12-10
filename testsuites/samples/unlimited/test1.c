@@ -30,7 +30,7 @@
 
 void test1()
 {
-  bool                 auto_extend;
+  Objects_Maximum      objects_per_block;
   rtems_status_code    result;
   uint32_t             task_count = 0;
   Objects_Information *the_information;
@@ -49,8 +49,8 @@ void test1()
 
   the_information =
     _Objects_Information_table[OBJECTS_CLASSIC_API][OBJECTS_RTEMS_TASKS];
-  auto_extend = the_information->auto_extend;
-  the_information->auto_extend = false;
+  objects_per_block = the_information->objects_per_block;
+  the_information->objects_per_block = 0;
 
   while (task_count < MAX_TASKS)
   {
@@ -101,7 +101,7 @@ void test1()
 
   destroy_all_tasks("TEST1");
 
-  the_information->auto_extend = auto_extend;
+  the_information->objects_per_block = objects_per_block;
 
   printf( " TEST1 : completed\n" );
 }
