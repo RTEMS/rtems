@@ -1630,6 +1630,13 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/arpa/inet/inet_ntop.c \
 	psxhdrs/arpa/inet/inet_ntoa.c \
 	psxhdrs/arpa/inet/inet_pton.c \
+	psxhdrs/pwd/endpwent.c \
+	psxhdrs/pwd/getpwent.c \
+	psxhdrs/pwd/getpwnam.c \
+	psxhdrs/pwd/getpwnam_r.c \
+	psxhdrs/pwd/setpwent.c \
+	psxhdrs/pwd/getpwuid.c \
+	psxhdrs/pwd/getpwuid_r.c \
 	psxhdrs/syslog/closelog.c \
 	psxhdrs/syslog/openlog.c \
 	psxhdrs/syslog/setlogmask.c \
