@@ -1797,7 +1797,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/stdlib/unsetenv.c \
 	psxhdrs/stdlib/wcstombs.c \
 	psxhdrs/stdlib/wctomb.c \
-	psxhdrs/sys/times/times.c
+	psxhdrs/sys/times/times.c \
+	psxhdrs/sys/resource/getrusage.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
@@ -1840,6 +1841,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/stdlib/ptsname.c       See ticket #3647
 ## lib_a_SOURCES += psxhdrs/stdlib/unlockpt.c      See ticket #3648
 ## lib_a_SOURCES += psxhdrs/sys/ftok.c             See ticket #3650
+## lib_a_SOURCES += psxhdrs/sys/resource/getpriority.c    See ticket #3652
+## lib_a_SOURCES += psxhdrs/sys/resource/getrlimit.c    See ticket #3653
+## lib_a_SOURCES += psxhdrs/sys/resource/setpriority.c    See ticket #3654
+## lib_a_SOURCES += psxhdrs/sys/resource/setrlimit.c    See ticket #3655
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
