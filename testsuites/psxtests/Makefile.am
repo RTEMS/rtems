@@ -1444,6 +1444,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dlfcn/dlclose.c \
 	psxhdrs/dlfcn/dlerror.c \
 	psxhdrs/dlfcn/dlsym.c \
+	psxhdrs/fcntl/creat.c \
+	psxhdrs/fcntl/fcntl.c \
+	psxhdrs/fcntl/open.c \
+	psxhdrs/fcntl/openat.c \
 	psxhdrs/locale/newlocale.c \
 	psxhdrs/locale/freelocale.c \
 	psxhdrs/locale/uselocale.c \
@@ -1808,6 +1812,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## Specific issues that tickets are tracking
 ## lib_a_SOURCES += psxhdrs/dirent/dirfd.c               See ticket #3371
 ## lib_a_SOURCES += psxhdrs/dirent/fdopendir.c           See ticket #3371
+## lib_a_SOURCES += psxhdrs/fcntl/posix_fadvise.c        See ticket #3656
+## lib_a_SOURCES += psxhdrs/fcntl/posix_fallocate.c      See ticket #3656
 ## lib_a_SOURCES += psxhdrs/fenv/feclearexcept.c         See ticket #2971
 ## lib_a_SOURCES += psxhdrs/fenv/fegetenv.c              See ticket #2971
 ## lib_a_SOURCES += psxhdrs/fenv/fegetexceptflag.c       See ticket #2971
