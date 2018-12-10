@@ -34,15 +34,15 @@ rtems_monitor_config_canonical(
     rtems_api_configuration_table *r = &Configuration_RTEMS_API;
 
     canonical_config->work_space_size = c->work_space_size;
-    canonical_config->maximum_tasks = r->maximum_tasks;
-    canonical_config->maximum_timers = r->maximum_timers;
-    canonical_config->maximum_semaphores = r->maximum_semaphores;
-    canonical_config->maximum_message_queues = r->maximum_message_queues;
-    canonical_config->maximum_partitions = r->maximum_partitions;
-    canonical_config->maximum_regions = r->maximum_regions;
-    canonical_config->maximum_ports = r->maximum_ports;
-    canonical_config->maximum_periods = r->maximum_periods;
-    canonical_config->maximum_extensions = c->maximum_extensions;
+    canonical_config->maximum_tasks = rtems_configuration_get_maximum_tasks();
+    canonical_config->maximum_timers = rtems_configuration_get_maximum_timers();
+    canonical_config->maximum_semaphores = rtems_configuration_get_maximum_semaphores();
+    canonical_config->maximum_message_queues = rtems_configuration_get_maximum_message_queues();
+    canonical_config->maximum_partitions = rtems_configuration_get_maximum_partitions();
+    canonical_config->maximum_regions = rtems_configuration_get_maximum_regions();
+    canonical_config->maximum_ports = rtems_configuration_get_maximum_ports();
+    canonical_config->maximum_periods = rtems_configuration_get_maximum_periods();
+    canonical_config->maximum_extensions = rtems_configuration_get_maximum_extensions();
     canonical_config->microseconds_per_tick = c->microseconds_per_tick;
     canonical_config->ticks_per_timeslice = c->ticks_per_timeslice;
     canonical_config->number_of_initialization_tasks = r->number_of_initialization_tasks;

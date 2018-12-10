@@ -276,8 +276,7 @@ extern const rtems_configuration_table Configuration;
           (rtems_configuration_get_stack_allocator_avoids_work_space() ? \
             0 : rtems_configuration_get_stack_space_size()))
 
-#define rtems_configuration_get_maximum_extensions() \
-        (Configuration.maximum_extensions)
+uint32_t rtems_configuration_get_maximum_extensions( void );
 
 #define rtems_configuration_get_microseconds_per_tick() \
         (Configuration.microseconds_per_tick)

@@ -33,7 +33,7 @@ static void _Extension_Manager_initialization(void)
     &_Extension_Information,
     OBJECTS_CLASSIC_API,                 /* object API */
     OBJECTS_RTEMS_EXTENSIONS,
-    rtems_configuration_get_maximum_extensions(),
+    Configuration.maximum_extensions,
     sizeof( Extension_Control ),
     OBJECTS_NO_STRING_NAME,    /* maximum length of an object name */
     NULL                       /* Proxy extraction support callout */

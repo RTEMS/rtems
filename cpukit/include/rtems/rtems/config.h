@@ -126,11 +126,23 @@ extern rtems_api_configuration_table Configuration_RTEMS_API;
 
 /**@}*/
 
-/**
- *  This macro returns the number of Classic API semaphores configured.
- */
-#define rtems_configuration_get_maximum_semaphores() \
-        rtems_configuration_get_rtems_api_configuration()->maximum_semaphores
+uint32_t rtems_configuration_get_maximum_barriers( void );
+
+uint32_t rtems_configuration_get_maximum_message_queues( void );
+
+uint32_t rtems_configuration_get_maximum_partitions( void );
+
+uint32_t rtems_configuration_get_maximum_periods( void );
+
+uint32_t rtems_configuration_get_maximum_ports( void );
+
+uint32_t rtems_configuration_get_maximum_regions( void );
+
+uint32_t rtems_configuration_get_maximum_semaphores( void );
+
+uint32_t rtems_configuration_get_maximum_timers( void );
+
+uint32_t rtems_configuration_get_maximum_tasks( void );
 
 #ifdef __cplusplus
 }
