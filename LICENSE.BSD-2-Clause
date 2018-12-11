@@ -8,8 +8,20 @@ which you want to use this license for your contribution.  Replace the
 to this file.  Update the <LAST YEAR> with the year of your last substantial
 contribution to this file.  If the first and last years are the same, then
 remove the <LAST YEAR> placeholder with the comma.  Replace the
-<COPYRIGHT HOLDER> placeholder with your name.  You must not alter anything
-else in the license comment.
+<COPYRIGHT HOLDER> placeholder with your name.  In case you are a real person,
+then use the following format for <COPYRIGHT HOLDER>:
+
+<FIRST NAME> <MIDDLE NAMES> <LAST NAME>
+
+The <FIRST NAME> is your first name (also known as given name), the
+<MIDDLE NAMES> are your optional middle names, the <LAST NAME> is your last
+name (also known as family name).
+
+If more than one copyright holder exists for a file, then sort the copyright
+lines by the first year (earlier years are below later years) followed by the
+copyright holder in alphabetical order (A is above B).
+
+You must not alter anything else in the license comment.
 
 /*
  * SPDX-License-Identifier: BSD-2-Clause
