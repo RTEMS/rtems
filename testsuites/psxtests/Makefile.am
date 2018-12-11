@@ -1838,6 +1838,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/math/y0l.c                   See ticket #3638
 ## lib_a_SOURCES += psxhdrs/math/y1l.c                   See ticket #3638
 ## lib_a_SOURCES += psxhdrs/math/ynl.c                   See ticket #3638
+## lib_a_SOURCES += psxhdrs/poll/poll.c                  See ticket #3657
 ## lib_a_SOURCES += psxhdrs/ftw/nftw.c                   See ticket #2970
 ## lib_a_SOURCES += psxhdrs/stdio/getdelim.c	         See ticket #3633
 ## lib_a_SOURCES += psxhdrs/stdio/getline.c              See ticket #3633
