@@ -1811,7 +1811,11 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/stdlib/wcstombs.c \
 	psxhdrs/stdlib/wctomb.c \
 	psxhdrs/sys/times/times.c \
-	psxhdrs/sys/resource/getrusage.c
+	psxhdrs/sys/resource/getrusage.c \
+	psxhdrs/setjmp/longjmp.c \
+	psxhdrs/setjmp/setjmp.c \
+	psxhdrs/setjmp/siglongjmp.c \
+	psxhdrs/setjmp/sigsetjmp.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
