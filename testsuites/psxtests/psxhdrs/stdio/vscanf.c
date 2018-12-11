@@ -30,10 +30,10 @@ int test( void );
 
 int test( void )
 {
-  char *fmt1 = " %d %99s ";
+  va_list ap;
   int result;
 
-  result = vscanf( fmt1, NULL );
+  result = vscanf( " %d %99s ", ap );
 
   return result;
 }

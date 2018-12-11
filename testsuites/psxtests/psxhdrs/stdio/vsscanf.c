@@ -31,10 +31,10 @@ int test( void );
 int test( void )
 {
   char *tokenstring = "15 12 14";
-  char *fmt1 = " %d %99s ";
+  va_list ap;
   int result;
 
-  result = vsscanf( tokenstring, fmt1, NULL );
+  result = vsscanf( tokenstring, " %d %99s ", ap );
 
   return result;
 }

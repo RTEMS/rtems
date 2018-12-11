@@ -30,10 +30,10 @@ int test( void );
 
 int test( void )
 {
-  char *fmt1 = "%d";
+  va_list ap;
   int result;
 
-  result = vdprintf( 2, fmt1, NULL );
+  result = vdprintf( 2, "%d", ap );
 
   return result;
 }

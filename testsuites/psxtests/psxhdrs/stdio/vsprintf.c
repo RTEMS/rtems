@@ -30,11 +30,11 @@ int test( void );
 
 int test( void )
 {
-  char *fmt1 = " %d %99s ";
+  va_list ap;
   char string[128];
   int result;
 
-  result = vsprintf( string, fmt1, NULL );
+  result = vsprintf( string, " %d %99s ", ap );
 
   return result;
 }

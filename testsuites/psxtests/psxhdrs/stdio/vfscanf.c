@@ -31,11 +31,11 @@ int test( void );
 int test( void )
 {
   FILE *stream;
-  char *fmt1 = " %d %99s ";
+  va_list ap;
   int result;
 
   stream = fopen( "myfile.dat", "w" );
-  result = vfscanf( stream, fmt1, NULL );
+  result = vfscanf( stream, " %d %99s ", ap );
 
   return result;
 }
