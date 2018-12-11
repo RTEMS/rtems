@@ -46,12 +46,20 @@ int (*ahbstat_error)(
 	uint32_t failing_address
 	) __attribute__((weak)) = NULL;
 
+#define AHBSTAT_STS_ME_BIT 13
+#define AHBSTAT_STS_FW_BIT 12
+#define AHBSTAT_STS_CF_BIT 11
+#define AHBSTAT_STS_AF_BIT 10
 #define AHBSTAT_STS_CE_BIT 9
 #define AHBSTAT_STS_NE_BIT 8
 #define AHBSTAT_STS_HW_BIT 7
 #define AHBSTAT_STS_HM_BIT 3
 #define AHBSTAT_STS_HS_BIT 0
 
+#define AHBSTAT_STS_ME (1 << AHBSTAT_STS_ME_BIT)
+#define AHBSTAT_STS_FW (1 << AHBSTAT_STS_FW_BIT)
+#define AHBSTAT_STS_CF (1 << AHBSTAT_STS_CF_BIT)
+#define AHBSTAT_STS_AF (1 << AHBSTAT_STS_AF_BIT)
 #define AHBSTAT_STS_CE (1 << AHBSTAT_STS_CE_BIT)
 #define AHBSTAT_STS_NE (1 << AHBSTAT_STS_NE_BIT)
 #define AHBSTAT_STS_HW (1 << AHBSTAT_STS_HW_BIT)

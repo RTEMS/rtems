@@ -21,6 +21,8 @@ extern "C" {
 struct ahbstat_regs {
 	volatile uint32_t status;
 	volatile uint32_t failing;
+	volatile uint32_t status2;
+	volatile uint32_t failing2;
 };
 
 /* AHB fail interrupt callback to user. This function is declared weak so that
