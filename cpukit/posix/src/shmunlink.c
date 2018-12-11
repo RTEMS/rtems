@@ -26,6 +26,8 @@ int shm_unlink( const char *name )
   int err = 0;
   POSIX_Shm_Control *shm;
 
+  _Objects_Allocator_lock();
+
   shm = _POSIX_Shm_Get_by_name( name, 0, &obj_err );
   switch ( obj_err ) {
     case OBJECTS_GET_BY_NAME_INVALID_NAME:
@@ -38,7 +40,11 @@ int shm_unlink( const char *name )
 
     case OBJECTS_GET_BY_NAME_NO_OBJECT:
     default:
-      _Objects_Close( &_POSIX_Shm_Information, &shm->Object );
+      _Objects_Namespace_remove_string(
+        &_POSIX_Shm_Information,
+        &shm->Object
+      );
+
       if ( shm->reference_count == 0 ) {
         /* Only remove the shm object if no references exist to it. Otherwise,
          * the shm object will be freed later in _POSIX_Shm_Attempt_delete */
@@ -46,6 +52,9 @@ int shm_unlink( const char *name )
       }
       break;
   }
+
+  _Objects_Allocator_unlock();
+
   if ( err != 0 )
     rtems_set_errno_and_return_minus_one( err );
   return 0;
