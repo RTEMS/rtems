@@ -1070,6 +1070,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/unistd/sleep.c psxhdrs/unistd/sync.c psxhdrs/unistd/ualarm.c \
 	psxhdrs/unistd/usleep.c psxhdrs/sys/mman/mlockall.c \
         psxhdrs/utime/utime.c \
+        psxhdrs/wordexp/wordexp.c \
+        psxhdrs/wordexp/wordfree.c \
 	psxhdrs/sys/mman/mlock.c psxhdrs/sys/mman/mmap.c \
 	psxhdrs/sys/mman/mprotect.c psxhdrs/sys/mman/msync.c \
 	psxhdrs/sys/mman/munlockall.c psxhdrs/sys/mman/munlock.c \
