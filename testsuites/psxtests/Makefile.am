@@ -1871,6 +1871,12 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/sys/resource/setrlimit.c     See ticket #3655
 ## lib_a_SOURCES += psxhdrs/sys/statvfs/statvfs.c        See ticket #3660
 ## lib_a_SOURCES += psxhdrs/sys/statvfs/fstatvfs.c       See ticket #3660
+## lib_a_SOURCES += psxhdrs/utmpx/setutxent.c            See ticket #3661
+## lib_a_SOURCES += psxhdrs/utmpx/endutxent.c            See ticket #3661
+## lib_a_SOURCES += psxhdrs/utmpx/getutxent.c            See ticket #3661
+## lib_a_SOURCES += psxhdrs/utmpx/getutxid.c             See ticket #3661
+## lib_a_SOURCES += psxhdrs/utmpx/getutxline.c           See ticket #3661
+## lib_a_SOURCES += psxhdrs/utmpx/pututxline.c           See ticket #3661
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
