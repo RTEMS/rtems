@@ -1628,6 +1628,10 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/netdb/getservbyname.c \
 	psxhdrs/netdb/getservbyport.c \
 	psxhdrs/netdb/h_errno.c \
+	psxhdrs/net/if/if_freenameindex.c \
+	psxhdrs/net/if/if_indextoname.c \
+	psxhdrs/net/if/if_nameindex.c \
+	psxhdrs/net/if/if_nametoindex.c \
 	psxhdrs/arpa/inet/inet_addr.c \
 	psxhdrs/arpa/inet/inet_ntop.c \
 	psxhdrs/arpa/inet/inet_ntoa.c \
