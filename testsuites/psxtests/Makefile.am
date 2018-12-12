@@ -1869,6 +1869,8 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/sys/resource/getrlimit.c     See ticket #3653
 ## lib_a_SOURCES += psxhdrs/sys/resource/setpriority.c   See ticket #3654
 ## lib_a_SOURCES += psxhdrs/sys/resource/setrlimit.c     See ticket #3655
+## lib_a_SOURCES += psxhdrs/sys/statvfs/statvfs.c        See ticket #3660
+## lib_a_SOURCES += psxhdrs/sys/statvfs/fstatvfs.c       See ticket #3660
 endif
 
 rtems_tests_PROGRAMS = $(psx_tests)
