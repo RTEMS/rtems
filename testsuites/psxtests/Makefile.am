@@ -1819,7 +1819,13 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/setjmp/longjmp.c \
 	psxhdrs/setjmp/setjmp.c \
 	psxhdrs/setjmp/siglongjmp.c \
-	psxhdrs/setjmp/sigsetjmp.c
+	psxhdrs/setjmp/sigsetjmp.c \
+	psxhdrs/sys/select/FD_CLR.c \
+	psxhdrs/sys/select/FD_ISSET.c \
+	psxhdrs/sys/select/FD_SET.c \
+	psxhdrs/sys/select/FD_ZERO.c \
+	psxhdrs/sys/select/pselect.c \
+	psxhdrs/sys/select/select.c
 
 ## Not supported by RTEMS, but POSIX API Compliance tests exist.
 ## lib_a_SOURCES += psxhdrs/ulimit/ulimit.c
