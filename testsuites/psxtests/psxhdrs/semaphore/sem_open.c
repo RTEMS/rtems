@@ -40,8 +40,6 @@
 
 int test( void );
 
-int result = 1;
-
 int test( void )
 {
   sem_t *sem1;
@@ -51,7 +49,6 @@ int test( void )
   value = 1;
 
   sem1 = sem_open( "sem", oflag, 0777, value );
-  (void) sem1;
 
-  return result;
+  return ( sem1 != NULL );
 }

@@ -38,15 +38,12 @@
 
 int test( void );
 
-int result = 1;
-
 int test( void )
 {
   auto char buffer[50];
 
   bcopy( "Hello ", buffer, 6 );
   bcopy( "world", &buffer[6], 6 );
-  result = 0;
 
-  return result;
+  return 0;
 }

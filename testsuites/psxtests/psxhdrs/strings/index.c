@@ -38,16 +38,12 @@
 
 int test( void );
 
-int result = 1;
-
 int test( void )
 {
   char *p;
   char *string = "This is a string for testing";
 
   p = index( string, 'i' );
-  (void) p;
-  result = 0;
 
-  return result;
+  return ( p != NULL );
 }
