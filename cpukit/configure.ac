@@ -376,8 +376,6 @@ AM_CONDITIONAL([CPU_SPARC],[test $RTEMS_CPU = "sparc"])
 AM_CONDITIONAL([CPU_V850],[test $RTEMS_CPU = "v850"])
 AM_CONDITIONAL([CPU_X86_64],[test $RTEMS_CPU = "x86_64"])
 
-RTEMS_AMPOLISH3
-
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([
 Doxyfile
