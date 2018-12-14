@@ -3073,65 +3073,6 @@ struct _reent *__getreent(void)
  ******************************************************************
  */
 
-#if defined(CONFIGURE_CONFDEFS_DEBUG) && defined(CONFIGURE_INIT)
-  /**
-   * This is a debug mechanism, so if you need to, the executable will
-   * have a structure with various partial values.  Add to this as you
-   * need to.  Viewing this structure in gdb combined with dumping
-   * the Configuration structures generated should help a lot in tracing
-   * down errors and analyzing where over and under allocations are.
-   */
-  typedef struct {
-    uint32_t SYSTEM_OVERHEAD;
-    uint32_t STATIC_EXTENSIONS;
-    uint32_t INITIALIZATION_THREADS_STACKS;
-
-    uint32_t PER_INTEGER_TASK;
-    uint32_t FP_OVERHEAD;
-
-    /* System overhead pieces */
-    uint32_t MEMORY_FOR_IDLE_TASK;
-
-    /* POSIX API Pieces */
-    uint32_t POSIX_QUEUED_SIGNALS;
-
-    /* Stack space sizes */
-    uint32_t IDLE_TASKS_STACK;
-    uint32_t INITIALIZATION_THREADS_EXTRA_STACKS;
-    uint32_t TASKS_STACK;
-    uint32_t POSIX_THREADS_STACK;
-    uint32_t GOROUTINES_STACK;
-    uint32_t ADA_TASKS_STACK;
-    uint32_t EXTRA_MPCI_RECEIVE_SERVER_STACK;
-    uint32_t EXTRA_TASK_STACKS;
-  } Configuration_Debug_t;
-
-  Configuration_Debug_t Configuration_Memory_Debug = {
-    /* General Information */
-    _CONFIGURE_MEMORY_FOR_SYSTEM_OVERHEAD,
-    _CONFIGURE_MEMORY_FOR_STATIC_EXTENSIONS,
-    _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS,
-    _CONFIGURE_MEMORY_FOR_TASKS(1, 0),
-    _CONFIGURE_MEMORY_FOR_TASKS(0, 1),
-
-    /* System overhead pieces */
-    _CONFIGURE_MEMORY_FOR_INTERNAL_TASKS,
-
-    /* POSIX API Pieces */
-    _CONFIGURE_MEMORY_FOR_POSIX_QUEUED_SIGNALS,
-
-    /* Stack space sizes */
-    _CONFIGURE_IDLE_TASKS_STACK,
-    _CONFIGURE_INITIALIZATION_THREADS_EXTRA_STACKS,
-    _CONFIGURE_TASKS_STACK,
-    _CONFIGURE_POSIX_THREADS_STACK,
-    _CONFIGURE_GOROUTINES_STACK,
-    _CONFIGURE_ADA_TASKS_STACK,
-    CONFIGURE_EXTRA_MPCI_RECEIVE_SERVER_STACK,
-    CONFIGURE_EXTRA_TASK_STACKS
-  };
-#endif
-
 /*
  *  Make sure a task/thread of some sort is configured.
  *
