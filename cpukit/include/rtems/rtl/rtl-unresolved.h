@@ -71,21 +71,30 @@ typedef uint32_t rtems_rtl_word;
 typedef enum rtems_rtl_unresolved_rtype
 {
   rtems_rtl_unresolved_empty = 0,  /**< The records is empty. Must always be 0 */
-  rtems_rtl_unresolved_name = 1,   /**< The record is a name. */
+  rtems_rtl_unresolved_symbol = 1, /**< The record is a symbol. */
   rtems_rtl_unresolved_reloc = 2   /**< The record is a relocation record. */
 } rtems_rtl_unresolved_rtype;
 
 /**
- * Unresolved externals symbol names. The names are reference counted and
- * separate from the relocation records because a number of records could
- * reference the same symbol name.
+ * Unresolved external symbol flags.
  */
-typedef struct rtems_rtl_unresolv_name
+#define RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE (1 << 0) /**< Search the archive. */
+
+/**
+ * Unresolved externals symbols. The symbols are reference counted and separate
+ * from the relocation records because a number of records could reference the
+ * same symbol.
+ *
+ * The name is extended in the allocator of the record in the unresolved data
+ * block. The 10 is a minimum that is added to by joining more than one record.
+ */
+typedef struct rtems_rtl_unresolv_symbol
 {
   uint16_t   refs;     /**< The number of references to this name. */
+  uint16_t   flags;    /**< Flags to manage the symbol. */
   uint16_t   length;   /**< The length of this name. */
-  const char name[12]; /**< The symbol name. */
-} rtems_rtl_unresolv_name;
+  const char name[10]; /**< The symbol name. */
+} rtems_rtl_unresolv_symbol;
 
 /**
  * Unresolved externals symbols require the relocation records to be held
@@ -108,8 +117,8 @@ typedef struct rtems_rtl_unresolv_rec
   rtems_rtl_unresolved_rtype type;
   union
   {
-    rtems_rtl_unresolv_name  name;   /**< The name, or */
-    rtems_rtl_unresolv_reloc reloc;  /**< the relocation record. */
+    rtems_rtl_unresolv_symbol name;   /**< The symnbol, or */
+    rtems_rtl_unresolv_reloc  reloc;  /**< the relocation record. */
   } rec;
 } rtems_rtl_unresolv_rec;
 
@@ -166,8 +175,8 @@ void rtems_rtl_unresolved_table_close (rtems_rtl_unresolved* unresolved);
 /**
  * Iterate over the table of unresolved entries.
  */
-bool rtems_rtl_unresolved_interate (rtems_rtl_unresolved_iterator iterator,
-                                    void*                         data);
+bool rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_iterator iterator,
+                                   void*                         data);
 
 /**
  * Add a relocation to the list of unresolved relocations.
@@ -204,6 +213,12 @@ bool rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
                                   const char*           name,
                                   const uint16_t        sect,
                                   const rtems_rtl_word* rel);
+
+/**
+ * Set all symbols to be archive searchable. This is done when the available
+ * archives have been refreshed and there are new archives to search for.
+ */
+void rtems_rtl_unresolved_set_archive_search (void);
 
 /**
  * Dump the RTL unresolved data.

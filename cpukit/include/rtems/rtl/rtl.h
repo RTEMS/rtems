@@ -24,6 +24,7 @@
 #include <rtems/thread.h>
 
 #include <rtems/rtl/rtl-allocator.h>
+#include <rtems/rtl/rtl-archive.h>
 #include <rtems/rtl/rtl-fwd.h>
 #include <rtems/rtl/rtl-obj.h>
 #include <rtems/rtl/rtl-obj-cache.h>
@@ -105,8 +106,10 @@ struct rtems_rtl_data
   rtems_recursive_mutex lock;           /**< The RTL lock */
   rtems_rtl_alloc_data  allocator;      /**< The allocator data. */
   rtems_chain_control   objects;        /**< List if loaded object files. */
+  rtems_chain_control   pending;        /**< Listof object files needing work. */
   const char*           paths;          /**< Search paths for archives. */
   rtems_rtl_symbols     globals;        /**< Global symbol table. */
+  rtems_rtl_archives    archives;       /**< Archive search and loader. */
   rtems_rtl_unresolved  unresolved;     /**< Unresolved symbols. */
   rtems_rtl_obj*        base;           /**< Base object file. */
   rtems_rtl_obj_cache   symbols;        /**< Symbols object file cache. */
@@ -126,8 +129,8 @@ struct rtems_rtl_data
 rtems_rtl_data* rtems_rtl_data_unprotected (void);
 
 /**
- * Get the RTL global symbol table with out locking. This call assmes the RTL
- * is locked.
+ * Get the RTL global symbol table with out locking. This call assumes
+ * the RTL is locked.
  *
  * @return rtems_rtl_symbols* The RTL global symbols after being locked.
  * @retval NULL The RTL data is not initialised.
@@ -135,13 +138,38 @@ rtems_rtl_data* rtems_rtl_data_unprotected (void);
 rtems_rtl_symbols* rtems_rtl_global_symbols (void);
 
 /**
- * Get the RTL resolved table with out locking. This call assmes the RTL
+ * Get the RTL objects table with out locking. This call assumes the RTL
+ * is locked.
+ *
+ * @return rtems_chain_control* The RTL objects chain.
+ * @retval NULL The RTL data is not initialised.
+ */
+rtems_chain_control* rtems_rtl_objects_unprotected (void);
+
+/**
+ * Get the RTL pending with out locking. This call assumes the RTL is locked.
+ *
+ * @return rtems_chain_control* The RTL pending list control.
+ * @retval NULL The RTL data is not initialised.
+ */
+rtems_chain_control* rtems_rtl_pending_unprotected (void);
+
+/**
+ * Get the RTL unresolved table with out locking. This call assumes the RTL
  * is locked.
  *
  * @return rtems_rtl_unresolv* The RTL unresolved symbols and reloc records.
  * @retval NULL The RTL data is not initialised.
  */
 rtems_rtl_unresolved* rtems_rtl_unresolved_unprotected (void);
+
+/**
+ * Get the RTL archives with out locking. This call assumes the RTL is locked.
+ *
+ * @return rtems_rtl_archives* The RTL acrhives.
+ * @retval NULL The RTL data is not initialised.
+ */
+rtems_rtl_archives* rtems_rtl_archives_unprotected (void);
 
 /**
  * Get the RTL symbols, strings, or relocations object file caches. This call
@@ -276,12 +304,26 @@ rtems_rtl_obj* rtems_rtl_load_object (const char* name, int mode);
 bool rtems_rtl_unload_object (rtems_rtl_obj* obj);
 
 /**
- * Run any constructor functions the object file may contain. This call
- * assumes the linker is unlocked.
+ * Load an object file.  This is the user accessable interface to unloading an
+ * object file. See @rtems_rtl_load_object.
  *
- * @param obj The object file.
+ * @param name The name of the object file.
+ * @param mode The mode of the load as defined by the dlopen call.
+ * @return rtl_obj* The object file descriptor. NULL is returned if the load fails.
  */
-void rtems_rtl_run_ctors (rtems_rtl_obj* obj);
+rtems_rtl_obj* rtems_rtl_load (const char* name, int mode);
+
+/**
+ * Unload an object file. This is the user accessable interface to unloading an
+ * object file. See @rtems_rtl_unload_object.
+ *
+ * Assumes the RTL has been locked.
+ *
+ * @param obj The object file descriptor.
+ * @retval true The object file has been unloaded.
+ * @retval false The object file could not be unloaded.
+ */
+bool rtems_rtl_unload (rtems_rtl_obj* obj);
 
 /**
  * Get the last error message clearing it. This operation locks the run time

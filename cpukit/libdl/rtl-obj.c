@@ -106,7 +106,7 @@ rtems_rtl_obj_free_names (rtems_rtl_obj* obj)
 bool
 rtems_rtl_obj_free (rtems_rtl_obj* obj)
 {
-  if (obj->users || ((obj->flags & RTEMS_RTL_OBJ_LOCKED) != 0))
+  if (obj->users > 0 || ((obj->flags & RTEMS_RTL_OBJ_LOCKED) != 0))
   {
     rtems_rtl_set_error (EINVAL, "cannot free obj still in use");
     return false;
@@ -119,18 +119,63 @@ rtems_rtl_obj_free (rtems_rtl_obj* obj)
   rtems_rtl_obj_erase_dependents (obj);
   rtems_rtl_symbol_obj_erase (obj);
   rtems_rtl_obj_free_names (obj);
-  if (obj->sec_num)
+  if (obj->sec_num != NULL)
     free (obj->sec_num);
-  if (obj->linkmap)
+  if (obj->linkmap != NULL)
     rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, (void*) obj->linkmap);
   rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, obj);
   return true;
 }
 
+typedef struct rtems_rtl_obj_unresolved_data
+{
+  bool has_unresolved;
+} rtems_rtl_obj_unresolved_data;
+
+static bool
+rtems_rtl_obj_unresolved_dependent (rtems_rtl_obj* obj,
+                                    rtems_rtl_obj* dependent,
+                                    void*          data)
+{
+  rtems_rtl_obj_unresolved_data* ud;
+  ud = (rtems_rtl_obj_unresolved_data*) data;
+  if ((dependent->flags & RTEMS_RTL_OBJ_DEP_VISITED) == 0)
+  {
+    dependent->flags |= RTEMS_RTL_OBJ_DEP_VISITED;
+    if ((dependent->flags & RTEMS_RTL_OBJ_UNRESOLVED) != 0)
+      ud->has_unresolved = true;
+    else
+    {
+      rtems_rtl_obj_iterate_dependents (dependent,
+                                        rtems_rtl_obj_unresolved_dependent,
+                                        ud);
+    }
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+      printf ("rtl: obj: unresolved: dep: %s is %s\n",
+              dependent->oname, ud->has_unresolved ? "unresolved" : "resolved");
+  }
+  return ud->has_unresolved;
+}
+
 bool
 rtems_rtl_obj_unresolved (rtems_rtl_obj* obj)
 {
-  return (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED) != 0 ? true : false;
+  rtems_rtl_obj_unresolved_data ud = {
+    .has_unresolved = (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED) != 0
+  };
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
+    printf ("rtl: obj: unresolved: dep: %s is %s\n",
+            obj->oname, ud.has_unresolved ? "unresolved" : "resolved");
+  if (!ud.has_unresolved)
+  {
+    rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
+    obj->flags |= RTEMS_RTL_OBJ_DEP_VISITED;
+    rtems_rtl_obj_iterate_dependents (obj,
+                                      rtems_rtl_obj_unresolved_dependent,
+                                      &ud);
+    rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
+  }
+  return ud.has_unresolved;
 }
 
 bool
@@ -148,6 +193,9 @@ rtems_rtl_parse_name (const char*  name,
    * Parse the name to determine if the object file is part of an archive or it
    * is an object file. If an archive check the name for a '@' to see if the
    * archive contains an offset.
+   *
+   * Note, if an archive the object file oofset may be know but the
+   *       object file is not. Leave the object name as a NULL.
    */
   end = name + strlen (name);
   colon = strrchr (name, ':');
@@ -155,7 +203,7 @@ rtems_rtl_parse_name (const char*  name,
     colon = end;
 
   loname = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT, colon - name + 1, true);
-  if (!oname)
+  if (!loname)
   {
     rtems_rtl_set_error (ENOMEM, "no memory for object file name");
     return false;
@@ -217,35 +265,6 @@ static bool
 rtems_rtl_obj_parse_name (rtems_rtl_obj* obj, const char* name)
 {
   return rtems_rtl_parse_name (name, &(obj->aname), &(obj->oname), &(obj->ooffset));
-}
-
-static bool
-rtems_rtl_seek_read (int fd, off_t off, size_t len, uint8_t* buffer)
-{
-  if (lseek (fd, off, SEEK_SET) < 0)
-    return false;
-  if (read (fd, buffer, len) != len)
-    return false;
-  return true;
-}
-
-/**
- * Scan the decimal number returning the value found.
- */
-static uint64_t
-rtems_rtl_scan_decimal (const uint8_t* string, size_t len)
-{
-  uint64_t value = 0;
-
-  while (len && (*string != ' '))
-  {
-    value *= 10;
-    value += *string - '0';
-    ++string;
-    --len;
-  }
-
-  return value;
 }
 
 /**
@@ -337,22 +356,6 @@ rtems_rtl_obj_section_handler (uint32_t                   mask,
     node = rtems_chain_next (node);
   }
   return true;
-}
-
-bool
-rtems_rtl_match_name (rtems_rtl_obj* obj, const char* name)
-{
-  const char* n1 = obj->oname;
-  while ((*n1 != '\0') && (*n1 != '\n') && (*n1 != '/') &&
-         (*name != '\0') && (*name != '/') && (*n1 == *name))
-  {
-    ++n1;
-    ++name;
-  }
-  if (((*n1 == '\0') || (*n1 == '\n') || (*n1 == '/')) &&
-      ((*name == '\0') || (*name == '/')))
-    return true;
-  return false;
 }
 
 bool
@@ -596,9 +599,15 @@ rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent)
 {
   rtems_rtl_obj**   free_slot;
   rtems_chain_node* node;
+
   if (obj == dependent || dependent == rtems_rtl_baseimage ())
     return false;
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_DEPENDENCY))
+    printf ("rtl: depend: add: %s -> %s\n", obj->oname, dependent->oname);
+
   free_slot = NULL;
+
   node = rtems_chain_first (&obj->dependents);
   while (!rtems_chain_is_tail (&obj->dependents, node))
   {
@@ -613,6 +622,7 @@ rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent)
     }
     node = rtems_chain_next (node);
   }
+
   if (free_slot == NULL)
   {
     if (rtems_rtl_obj_alloc_dependents (obj,
@@ -629,9 +639,45 @@ rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent)
       }
     }
   }
+
   if (free_slot != NULL)
     *free_slot = dependent;
+
   return free_slot != NULL;
+}
+
+
+bool
+rtems_rtl_obj_remove_dependencies (rtems_rtl_obj* obj)
+{
+  /*
+   * If there are no references unload the object.
+   */
+  if (obj->refs == 0)
+  {
+    /*
+     * Remove the refences from the object files this file depend on. The
+     * unload happens once the list of objects to be unloaded has been made and
+     * the destructors have been called for all those modules.
+     */
+    rtems_chain_node* node = rtems_chain_first (&obj->dependents);
+    while (!rtems_chain_is_tail (&obj->dependents, node))
+    {
+      rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
+      size_t                 d;
+      for (d = 0; d < depends->dependents; ++d)
+      {
+        if (depends->depends[d] != NULL)
+        {
+          rtems_rtl_obj_dec_reference (depends->depends[d]);
+          depends->depends[d] = NULL;
+        }
+      }
+      node = rtems_chain_next (node);
+    }
+    return true;
+  }
+  return false;
 }
 
 bool
@@ -1065,244 +1111,42 @@ rtems_rtl_obj_run_cdtors (rtems_rtl_obj* obj, uint32_t mask)
   }
 }
 
+static bool
+rtems_rtl_obj_cdtors_to_run (rtems_rtl_obj* obj, uint32_t mask)
+{
+  rtems_chain_node* node = rtems_chain_first (&obj->sections);
+  while (!rtems_chain_is_tail (&obj->sections, node))
+  {
+    rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
+    if ((sect->flags & mask) == mask)
+      return true;
+    node = rtems_chain_next (node);
+  }
+  return false;
+}
+
+bool
+rtems_rtl_obj_ctors_to_run (rtems_rtl_obj* obj)
+{
+  return rtems_rtl_obj_cdtors_to_run (obj, RTEMS_RTL_OBJ_SECT_CTOR);
+}
+
 void
 rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_CTOR);
+  rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_CTOR);
+}
+
+bool
+rtems_rtl_obj_dtors_to_run (rtems_rtl_obj* obj)
+{
+  return rtems_rtl_obj_cdtors_to_run (obj, RTEMS_RTL_OBJ_SECT_DTOR);
 }
 
 void
 rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_DTOR);
-}
-
-/**
- * Find a module in an archive returning the offset in the archive in the
- * object descriptor.
- */
-static bool
-rtems_rtl_obj_archive_find (rtems_rtl_obj* obj, int fd)
-{
-#define RTEMS_RTL_AR_IDENT      "!<arch>\n"
-#define RTEMS_RTL_AR_IDENT_SIZE (sizeof (RTEMS_RTL_AR_IDENT) - 1)
-#define RTEMS_RTL_AR_FHDR_BASE  RTEMS_RTL_AR_IDENT_SIZE
-#define RTEMS_RTL_AR_FNAME      (0)
-#define RTEMS_RTL_AR_FNAME_SIZE (16)
-#define RTEMS_RTL_AR_SIZE       (48)
-#define RTEMS_RTL_AR_SIZE_SIZE  (10)
-#define RTEMS_RTL_AR_MAGIC      (58)
-#define RTEMS_RTL_AR_MAGIC_SIZE (2)
-#define RTEMS_RTL_AR_FHDR_SIZE  (60)
-
-  size_t  fsize = obj->fsize;
-  off_t   extended_file_names;
-  uint8_t header[RTEMS_RTL_AR_FHDR_SIZE];
-  bool    scanning;
-
-  if (read (fd, &header[0], RTEMS_RTL_AR_IDENT_SIZE) !=  RTEMS_RTL_AR_IDENT_SIZE)
-  {
-    rtems_rtl_set_error (errno, "reading archive identifer");
-    return false;
-  }
-
-  if (memcmp (header, RTEMS_RTL_AR_IDENT, RTEMS_RTL_AR_IDENT_SIZE) != 0)
-  {
-    rtems_rtl_set_error (EINVAL, "invalid archive identifer");
-    return false;
-  }
-
-  /*
-   * Seek to the current offset in the archive and if we have a valid archive
-   * file header present check the file name for a match with the oname field
-   * of the object descriptor. If the archive header is not valid and it is the
-   * first pass reset the offset and start the search again in case the offset
-   * provided is not valid any more.
-   *
-   * The archive can have a symbol table at the start. Ignore it. A symbol
-   * table has the file name '/'.
-   *
-   * The archive can also have the GNU extended file name table. This
-   * complicates the processing. If the object's file name starts with '/' the
-   * remainder of the file name is an offset into the extended file name
-   * table. To find the extended file name table we need to scan from start of
-   * the archive for a file name of '//'. Once found we remeber the table's
-   * start and can direct seek to file name location. In other words the scan
-   * only happens once.
-   *
-   * If the name had the offset encoded we go straight to that location.
-   */
-
-  if (obj->ooffset != 0)
-    scanning = false;
-  else
-  {
-    scanning = true;
-    obj->ooffset = RTEMS_RTL_AR_FHDR_BASE;
-  }
-
-  extended_file_names = 0;
-
-  while (obj->ooffset < fsize)
-  {
-    /*
-     * Clean up any existing data.
-     */
-    memset (header, 0, sizeof (header));
-
-    if (!rtems_rtl_seek_read (fd, obj->ooffset, RTEMS_RTL_AR_FHDR_SIZE, &header[0]))
-    {
-      rtems_rtl_set_error (errno, "seek/read archive file header");
-      obj->ooffset = 0;
-      obj->fsize = 0;
-      return false;
-    }
-
-    if ((header[RTEMS_RTL_AR_MAGIC] != 0x60) ||
-        (header[RTEMS_RTL_AR_MAGIC + 1] != 0x0a))
-    {
-      if (scanning)
-      {
-        rtems_rtl_set_error (EINVAL, "invalid archive file header");
-        obj->ooffset = 0;
-        obj->fsize = 0;
-        return false;
-      }
-
-      scanning = true;
-      obj->ooffset = RTEMS_RTL_AR_FHDR_BASE;
-      continue;
-    }
-
-    /*
-     * The archive header is always aligned to an even address.
-     */
-    obj->fsize = (rtems_rtl_scan_decimal (&header[RTEMS_RTL_AR_SIZE],
-                                          RTEMS_RTL_AR_SIZE_SIZE) + 1) & ~1;
-
-    /*
-     * Check for the GNU extensions.
-     */
-    if (header[0] == '/')
-    {
-      off_t extended_off;
-
-      switch (header[1])
-      {
-        case ' ':
-          /*
-           * Symbols table. Ignore the table.
-           */
-          break;
-        case '/':
-          /*
-           * Extended file names table. Remember.
-           */
-          extended_file_names = obj->ooffset + RTEMS_RTL_AR_FHDR_SIZE;
-          break;
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-          /*
-           * Offset into the extended file name table. If we do not have the
-           * offset to the extended file name table find it.
-           */
-          extended_off =
-            rtems_rtl_scan_decimal (&header[1], RTEMS_RTL_AR_FNAME_SIZE);
-
-          if (extended_file_names == 0)
-          {
-            off_t off = obj->ooffset;
-            while (extended_file_names == 0)
-            {
-              off_t esize =
-                (rtems_rtl_scan_decimal (&header[RTEMS_RTL_AR_SIZE],
-                                         RTEMS_RTL_AR_SIZE_SIZE) + 1) & ~1;
-              off += esize + RTEMS_RTL_AR_FHDR_SIZE;
-
-              if (!rtems_rtl_seek_read (fd, off,
-                                        RTEMS_RTL_AR_FHDR_SIZE, &header[0]))
-              {
-                rtems_rtl_set_error (errno,
-                                     "seeking/reading archive ext file name header");
-                obj->ooffset = 0;
-                obj->fsize = 0;
-                return false;
-              }
-
-              if ((header[RTEMS_RTL_AR_MAGIC] != 0x60) ||
-                  (header[RTEMS_RTL_AR_MAGIC + 1] != 0x0a))
-              {
-                rtems_rtl_set_error (errno, "invalid archive file header");
-                obj->ooffset = 0;
-                obj->fsize = 0;
-                return false;
-              }
-
-              if ((header[0] == '/') && (header[1] == '/'))
-              {
-                extended_file_names = off + RTEMS_RTL_AR_FHDR_SIZE;
-                break;
-              }
-            }
-          }
-
-          if (extended_file_names)
-          {
-            /*
-             * We know the offset in the archive to the extended file. Read the
-             * name from the table and compare with the name we are after.
-             */
-#define RTEMS_RTL_MAX_FILE_SIZE (256)
-            char name[RTEMS_RTL_MAX_FILE_SIZE];
-
-            if (!rtems_rtl_seek_read (fd, extended_file_names + extended_off,
-                                      RTEMS_RTL_MAX_FILE_SIZE, (uint8_t*) &name[0]))
-            {
-              rtems_rtl_set_error (errno,
-                                   "invalid archive ext file seek/read");
-              obj->ooffset = 0;
-              obj->fsize = 0;
-              return false;
-            }
-
-            if (rtems_rtl_match_name (obj, name))
-            {
-              obj->ooffset += RTEMS_RTL_AR_FHDR_SIZE;
-              return true;
-            }
-          }
-          break;
-        default:
-          /*
-           * Ignore the file because we do not know what it it.
-           */
-          break;
-      }
-    }
-    else
-    {
-      if (rtems_rtl_match_name (obj, (const char*) &header[RTEMS_RTL_AR_FNAME]))
-      {
-        obj->ooffset += RTEMS_RTL_AR_FHDR_SIZE;
-        return true;
-      }
-    }
-
-    obj->ooffset += obj->fsize + RTEMS_RTL_AR_FHDR_SIZE;
-  }
-
-  rtems_rtl_set_error (ENOENT, "object file not found");
-  obj->ooffset = 0;
-  obj->fsize = 0;
-  return false;
+  rtems_rtl_obj_run_cdtors (obj, RTEMS_RTL_OBJ_SECT_DTOR);
 }
 
 static bool
@@ -1323,31 +1167,16 @@ rtems_rtl_obj_file_load (rtems_rtl_obj* obj, int fd)
   return false;
 }
 
-static bool
-rtems_rtl_obj_file_unload (rtems_rtl_obj* obj)
+static void
+rtems_rtl_obj_set_error (int num, const char* text)
 {
-  if (obj->format >= 0 && obj->format < RTEMS_RTL_LOADERS)
-  {
-    rtems_chain_node* node;
+  rtems_rtl_set_error (num, text);
+}
 
-    if (!loaders[obj->format].unload (obj))
-      return false;
-
-    node = rtems_chain_first (&obj->dependents);
-    while (!rtems_chain_is_tail (&obj->dependents, node))
-    {
-      rtems_rtl_obj_depends* depends = (rtems_rtl_obj_depends*) node;
-      size_t                 d;
-      for (d = 0; d < depends->dependents; ++d)
-      {
-        if (depends->depends[d] != NULL)
-          rtems_rtl_obj_dec_reference (depends->depends[d]);
-      }
-      node = rtems_chain_next (node);
-    }
-  }
-
-  return false;
+size_t
+rtems_rtl_obj_get_reference (rtems_rtl_obj* obj)
+{
+  return obj->refs;
 }
 
 void
@@ -1364,6 +1193,14 @@ rtems_rtl_obj_dec_reference (rtems_rtl_obj* obj)
 }
 
 bool
+rtems_rtl_obj_orphaned (rtems_rtl_obj* obj)
+{
+  return ((obj->flags & RTEMS_RTL_OBJ_LOCKED) == 0 &&
+          obj->users == 0 &&
+          rtems_rtl_obj_get_reference (obj) == 0);
+}
+
+bool
 rtems_rtl_obj_load (rtems_rtl_obj* obj)
 {
   int fd;
@@ -1377,7 +1214,7 @@ rtems_rtl_obj_load (rtems_rtl_obj* obj)
   fd = open (rtems_rtl_obj_fname (obj), O_RDONLY);
   if (fd < 0)
   {
-    rtems_rtl_set_error (ENOMEM, "opening for object file");
+    rtems_rtl_set_error (errno, "opening for object file");
     return false;
   }
 
@@ -1387,7 +1224,14 @@ rtems_rtl_obj_load (rtems_rtl_obj* obj)
    */
   if (rtems_rtl_obj_aname_valid (obj))
   {
-    if (!rtems_rtl_obj_archive_find (obj, fd))
+    off_t enames = 0;
+    if (!rtems_rtl_obj_archive_find_obj (fd,
+                                         obj->fsize,
+                                         &obj->oname,
+                                         &obj->ooffset,
+                                         &obj->fsize,
+                                         &enames,
+                                         rtems_rtl_obj_set_error))
     {
       close (fd);
       return false;
@@ -1403,7 +1247,10 @@ rtems_rtl_obj_load (rtems_rtl_obj* obj)
     return false;
   }
 
-  if (!_rtld_linkmap_add (obj)) /* For GDB */
+   /*
+    * For GDB
+    */
+  if (!_rtld_linkmap_add (obj))
   {
     close (fd);
     return false;
@@ -1417,7 +1264,15 @@ rtems_rtl_obj_load (rtems_rtl_obj* obj)
 bool
 rtems_rtl_obj_unload (rtems_rtl_obj* obj)
 {
-  _rtld_linkmap_delete(obj);
-  rtems_rtl_obj_file_unload (obj);
-  return true;
+  bool ok = false;
+  if (obj->format >= 0 && obj->format < RTEMS_RTL_LOADERS)
+  {
+    _rtld_linkmap_delete(obj);
+    ok = loaders[obj->format].unload (obj);
+  }
+  else
+  {
+    rtems_rtl_set_error (EINVAL, "invalid object loader format");
+  }
+  return ok;
 }

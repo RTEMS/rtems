@@ -16,8 +16,6 @@
 #if !defined (_RTEMS_RTL_STRING_H_)
 #define _RTEMS_RTL_STRING_H_
 
-#include <rtems/rtl/rtl-indirect-ptr.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

@@ -69,7 +69,9 @@ rtems_rtl_trace_shell_command (int argc, char *argv[])
     "load-sect",
     "allocator",
     "unresolved",
-    "cache"
+    "cache",
+    "archives",
+    "dependency"
   };
 
   rtems_rtl_trace_mask set_value = 0;

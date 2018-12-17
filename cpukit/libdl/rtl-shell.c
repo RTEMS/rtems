@@ -26,9 +26,9 @@
 #include <string.h>
 
 #include <rtems/rtl/rtl.h>
-#include "rtl-chain-iterator.h"
-#include "rtl-shell.h"
+#include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
+#include "rtl-chain-iterator.h"
 
 /**
  * The type of the shell handlers we have.
@@ -119,6 +119,7 @@ typedef struct
 {
   rtems_rtl_data* rtl;          /**< The RTL data. */
   int             indent;       /**< Spaces to indent. */
+  bool            sep1;         /**< Print a separator. */
   bool            oname;        /**< Print object names. */
   bool            names;        /**< Print details of all names. */
   bool            memory_map;   /**< Print the memory map. */
@@ -206,6 +207,10 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
   if (!print->base && (obj == print->rtl->base))
       return true;
 
+  if (print->sep1)
+  {
+    printf ("%-*c--------------\n", print->indent, ' ');
+  }
   if (print->oname)
   {
     printf ("%-*cobject name   : %s\n",
@@ -279,7 +284,7 @@ rtems_rtl_unresolved_printer (rtems_rtl_unresolv_rec* rec,
                               void*                   data)
 {
   rtems_rtl_obj_print* print = (rtems_rtl_obj_print*) data;
-  if (rec->type == rtems_rtl_unresolved_name)
+  if (rec->type == rtems_rtl_unresolved_symbol)
     printf ("%-*c%s\n", print->indent + 2, ' ', rec->rec.name.name);
   return false;
 }
@@ -301,6 +306,7 @@ rtems_rtl_shell_list (rtems_rtl_data* rtl, int argc, char *argv[])
   rtems_rtl_obj_print print;
   print.rtl = rtl;
   print.indent = 1;
+  print.sep1 = true;
   print.oname = true;
   print.names = true;
   print.memory_map = true;
@@ -319,6 +325,7 @@ rtems_rtl_shell_sym (rtems_rtl_data* rtl, int argc, char *argv[])
   rtems_rtl_obj_print print;
   print.rtl = rtl;
   print.indent = 1;
+  print.sep1 = true;
   print.oname = true;
   print.names = false;
   print.memory_map = false;
@@ -329,7 +336,7 @@ rtems_rtl_shell_sym (rtems_rtl_data* rtl, int argc, char *argv[])
                            rtems_rtl_obj_print_iterator,
                            &print);
   printf ("Unresolved:\n");
-  rtems_rtl_unresolved_interate (rtems_rtl_unresolved_printer, &print);
+  rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_printer, &print);
   return 0;
 }
 

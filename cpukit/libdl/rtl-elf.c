@@ -248,6 +248,13 @@ rtems_rtl_elf_reloc_relocator (rtems_rtl_obj*      obj,
     }
 
     sobj = rtems_rtl_find_obj_with_symbol (symbol);
+
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_DEPENDENCY))
+      printf ("rtl: depend: %s -> %s:%s\n",
+              obj->oname,
+              sobj == NULL ? "not-found" : sobj->oname,
+              symname);
+
     if (sobj != NULL)
     {
       if (rtems_rtl_obj_add_dependent (obj, sobj))
@@ -471,6 +478,13 @@ rtems_rtl_obj_relocate_unresolved (rtems_rtl_unresolv_reloc* reloc,
   }
 
   sobj = rtems_rtl_find_obj_with_symbol (sym);
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_DEPENDENCY))
+    printf ("rtl: depend: %s -> %s:%s\n",
+            reloc->obj->oname,
+            sobj == NULL ? "not-found" : sobj->oname,
+            sym->name);
+
   if (sobj != NULL)
   {
     if (rtems_rtl_obj_add_dependent (reloc->obj, sobj))
@@ -1273,8 +1287,6 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
 
   if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocs_locator, &ehdr))
     return false;
-
-  rtems_rtl_obj_synchronize_cache (obj);
 
   rtems_rtl_symbol_obj_erase_local (obj);
 

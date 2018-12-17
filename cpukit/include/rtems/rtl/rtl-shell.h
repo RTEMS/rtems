@@ -20,8 +20,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <stdint.h>
-
 /**
  * The RTL single shell command contains sub-commands.
  *

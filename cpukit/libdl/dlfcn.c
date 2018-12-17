@@ -52,7 +52,7 @@ dlopen (const char* name, int mode)
   _rtld_debug_state ();
 
   if (name)
-    obj = rtems_rtl_load_object (name, mode);
+    obj = rtems_rtl_load (name, mode);
   else
     obj = rtems_rtl_baseimage ();
 
@@ -83,7 +83,7 @@ dlclose (void* handle)
   _rtld_debug.r_state = RT_DELETE;
   _rtld_debug_state ();
 
-  r = rtems_rtl_unload_object (obj) ? 0 : -1;
+  r = rtems_rtl_unload (obj) ? 0 : -1;
 
   _rtld_debug.r_state = RT_CONSISTENT;
   _rtld_debug_state ();

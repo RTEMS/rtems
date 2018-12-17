@@ -92,9 +92,8 @@ typedef struct rtems_rtl_loader_table
 #define RTEMS_RTL_OBJ_SECT_DATA  (1 << 2)  /**< Section holds program data. */
 #define RTEMS_RTL_OBJ_SECT_BSS   (1 << 3)  /**< Section holds program bss. */
 #define RTEMS_RTL_OBJ_SECT_EH    (1 << 4)  /**< Section holds exception data. */
-#define RTEMS_RTL_OBJ_SECT_REL   (1 << 5)  /**< Section holds relocation records. */
-#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 6)  /**< Section holds relocation addend
-                                            *   records. */
+#define RTEMS_RTL_OBJ_SECT_REL   (1 << 5)  /**< Section holds relocation recs. */
+#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 6)  /**< Section holds reloc addend recs. */
 #define RTEMS_RTL_OBJ_SECT_SYM   (1 << 7)  /**< Section holds symbols. */
 #define RTEMS_RTL_OBJ_SECT_STR   (1 << 8)  /**< Section holds strings. */
 #define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 9)  /**< Section allocates runtime memory. */
@@ -168,6 +167,7 @@ typedef bool (*rtems_rtl_obj_depends_iterator) (rtems_rtl_obj* obj,
 #define RTEMS_RTL_OBJ_BASE         (1 << 2) /**< The base image. */
 #define RTEMS_RTL_OBJ_RELOC_TAG    (1 << 3) /**< Tag the object as visited when reloc
                                              *   parsing. */
+#define RTEMS_RTL_OBJ_DEP_VISITED  (1 << 4) /**< Dependency loop detection. */
 
 /**
  * RTL Object. There is one for each object module loaded plus one for the base
@@ -338,6 +338,20 @@ static inline size_t rtems_rtl_obj_align (size_t   offset,
 }
 
 /**
+ * Is the symbol in this object's files globa symbol table?
+ *
+ * @param obj The object file's descriptor to search.
+ * @param sym The symbol to check.
+ * @retval bool Returns @true if present else @false is returned.
+ */
+static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
+                                             const rtems_rtl_obj_sym* sym)
+{
+  return (sym >= obj->global_table &&
+          sym < (obj->global_table + obj->global_syms));
+}
+
+/**
  * Allocate an object structure on the heap.
  *
  * @retval NULL No memory for the object.
@@ -378,14 +392,6 @@ bool rtems_rtl_parse_name (const char*  name,
                            const char** aname,
                            const char** oname,
                            off_t*       ooffset);
-
-/**
- * Check of the name matches the object file's object name.
- *
- * @param obj The object file's descriptor.
- * @param name The name to match.
- */
-bool rtems_rtl_match_name (rtems_rtl_obj* obj, const char* name);
 
 /**
  * Find an object file on disk that matches the name. The object descriptor is
@@ -495,6 +501,15 @@ void rtems_rtl_obj_erase_dependents (rtems_rtl_obj* obj);
  * @retval false There is no space in the table.
  */
 bool rtems_rtl_obj_add_dependent (rtems_rtl_obj* obj, rtems_rtl_obj* dependent);
+
+/**
+ * Remove dependencies. This decrements the dependent object file references.
+ *
+ * @param obj The object file's descriptor.
+ * @retval true The dependencies have been removed.
+ * @retval false There is no space in the table.
+ */
+bool rtems_rtl_obj_remove_dependencies (rtems_rtl_obj* obj);
 
 /**
  * Iterate over the module dependenices.
@@ -690,6 +705,13 @@ bool rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
                                   void*                      data);
 
 /**
+ * Does the object have constructors to run?
+ *
+ * @return bool True if there are constructors to run.
+ */
+bool rtems_rtl_obj_ctors_to_run (rtems_rtl_obj* obj);
+
+/**
  * Invoke the constructors the object has. Constructors are a table of pointers
  * to "void (*)(void);" where NULL pointers are skipped. The table's size is
  * taken from the section's size. The objet ELF specific code is responisble
@@ -700,6 +722,13 @@ bool rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
 void rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj);
 
 /**
+ * Does the object have destructors to run?
+ *
+ * @return bool True if there are destructors to run.
+ */
+bool rtems_rtl_obj_dtors_to_run (rtems_rtl_obj* obj);
+
+/**
  * Invoke the destructors the object has. Destructors are a table of pointers
  * to "void (*)(void);" where NULL pointers are skipped. The table's size is
  * taken from the section's size. The objet ELF specific code is responisble
@@ -708,6 +737,13 @@ void rtems_rtl_obj_run_ctors (rtems_rtl_obj* obj);
  * @param obj The object file's descriptor.
  */
 void rtems_rtl_obj_run_dtors (rtems_rtl_obj* obj);
+
+/**
+ * Get the object file reference count.
+ *
+ * @retval int The object file's reference count.
+ */
+size_t rtems_rtl_obj_get_reference (rtems_rtl_obj* obj);
 
 /**
  * Increment the object file reference count.
@@ -722,6 +758,14 @@ void rtems_rtl_obj_inc_reference (rtems_rtl_obj* obj);
  * @param obj The object file's descriptor.
  */
 void rtems_rtl_obj_dec_reference (rtems_rtl_obj* obj);
+
+/**
+ * Is the object file orphaned? An orphaned object file is not locked, has no
+ * users and it not being referenced.
+ *
+ * @param obj The object file's descriptor.
+ */
+bool rtems_rtl_obj_orphaned (rtems_rtl_obj* obj);
 
 /**
  * Load the object file, reading all sections into memory, symbols and
