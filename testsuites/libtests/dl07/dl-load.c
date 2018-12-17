@@ -16,11 +16,10 @@
 
 #include <tmacros.h>
 
+#include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
 
 typedef int (*call_sig)(void);
-
-int rtems_rtl_shell_command (int argc, char* argv[]);
 
 static void dl_load_dump (void)
 {
@@ -76,10 +75,10 @@ static void* dl_load_obj(const char* name, bool has_unresolved)
   return handle;
 }
 
-static void dl_close (void* handle)
+static void dl_close (void* handle, const char* msg)
 {
   int r;
-  printf ("handle: %p closing\n", handle);
+  printf ("%s: handle: %p closing\n", msg, handle);
   r = dlclose (handle);
   if (r != 0)
     printf("dlclose failed: %s\n", dlerror());
@@ -147,19 +146,23 @@ int dl_load_test(void)
   /*
    * Try and close the dependent modules, we should get an error.
    */
+  printf ("unload test: o1\n");
   rtems_test_assert (dlclose (o1) != 0);
+  printf ("unload test: o2\n");
   rtems_test_assert (dlclose (o2) != 0);
+  printf ("unload test: o4\n");
   rtems_test_assert (dlclose (o4) != 0);
+  printf ("unload test: o5\n");
   rtems_test_assert (dlclose (o5) != 0);
 
-  dl_close (o3);
+  dl_close (o3, "o3");
   rtems_test_assert (dlclose (o1) != 0);
-  dl_close (o4);
+  dl_close (o4, "o4");
   rtems_test_assert (dlclose (o1) != 0);
-  dl_close (o5);
+  dl_close (o5, "o5");
   rtems_test_assert (dlclose (o1) != 0);
-  dl_close (o2);
-  dl_close (o1);
+  dl_close (o2, "o2");
+  dl_close (o1, "o1");
 
   return 0;
 }
