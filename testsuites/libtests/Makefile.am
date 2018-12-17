@@ -548,7 +548,60 @@ dl07-sym.o: dl07.pre
 dl07$(EXEEXT):  $(dl07_OBJECTS) $(dl07_DEPENDENCIES) dl07-sym.o
 	@rm -f $@
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
-CLEANFILES += dl07.pre dl07-sym.o dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o dl07-o5.o dl07.tar dl07-tar.h
+CLEANFILES += dl07.pre dl07-sym.o dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o \
+		dl07-o5.o dl07.tar dl07-tar.h
+endif
+endif
+
+if DLTESTS
+if TEST_dl08
+lib_tests += dl08
+lib_screens += dl08/dl08.scn
+lib_docs += dl08/dl08.doc
+dl08_SOURCES = dl08/init.c dl08/dl-load.c dl08-tar.c dl08-tar.h
+dl08_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl08) $(support_includes)
+dl08/init.c: dl08-tar.o
+dl08.pre: $(dl08_OBJECTS) $(dl08_DEPENDENCIES)
+	@rm -f dl08.pre
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl08-o1.o: dl08/dl-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-o2.o: dl08/dl-o2.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-o3.o: dl08/dl-o3.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-o4.o: dl08/dl-o4.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-o5.o: dl08/dl-o5.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-o6-123456789-123456789.o: dl08/dl-o6-123456789-123456789.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+#	echo "#" > etc/rtl-libs.conf
+#	echo "  # blah blah" >> etc/rtl-libs.conf
+etc/rtl-libs.conf:
+	mkdir etc; \
+	echo "/libdl08*.a" >> etc/rtl-libs.conf
+noinst_LIBRARIES = libdl08_1.a libdl08_2.a
+libdl08_1_a_SOURCES = dl08-o2.c dl08-o4.c
+libdl08_2_a_SOURCES = dl08-o3.c dl08-o5.c \
+			dl08-o6-123456789-123456789.c
+dl08.tar: etc/rtl-libs.conf dl08-o1.o libdl08_1.a libdl08_2.a
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ $+
+dl08-tar.c: dl08.tar
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+dl08-tar.h: dl08.tar
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+dl08-tar.o: dl08-tar.c dl08-tar.h
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl08-sym.o: dl08.pre
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+dl08$(EXEEXT):  $(dl08_OBJECTS) $(dl08_DEPENDENCIES) dl08-sym.o
+	@rm -f $@
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+CLEANFILES += dl08.pre dl08-sym.o libdl08_1.a libdl08_2.a dl08-o1.o dl08-o2.o \
+		dl08-o3.o dl08-o4.o dl08-o5.o dl08-o6-123456789-123456789.o \
+		dl08.tar dl08-tar.h etc/rtl-libs.conf
 endif
 endif
 

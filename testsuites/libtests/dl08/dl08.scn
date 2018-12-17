@@ -1,0 +1,273 @@
+*** BEGIN OF TEST libdl (RTL) 8 ***
+*** TEST VERSION: 5.0.0.e6835265a37d465b9100d7d4d234fece18e4626c-modified
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING RTEMS_POSIX_API
+*** TEST TOOLS: 7.3.0 20180125 (RTEMS 5, RSB 30da0c720b78eba16a3f5272206c07415368617b, Newlib 2ab57ad59bc35dafffa69cd4da5e228971de069f)
+--------------------------------------------------
+ Run: 0
+Test source (link in strstr): testsuites/libtests/dl08/dl-load.c
+load: /dl08-o1.o
+handel: 0x2077328: no unresolved externals
+handle: 0x2077328 loaded
+handel: 0x2077328: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl08/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2077d70: 0
+dlo1:         dl01_bss2:    4: 0x2077d74: %f
+dlo1:         dl01_bss3:    1: 0x2077df0: 00
+dlo1:        dl01_data1:    4: 0x2077d5c: 1
+dlo1:        dl01_data2:    4: 0x2077d58: %f
+dlo1:       dl01_const1:    4: 0x2077d38: 3
+dlo1:       dl01_const2:    4: 0x2077d34: %f
+dlo1:        dl01_func1:    1: 0x2077a20
+dlo2: module: testsuites/libtests/dl08/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2078f30: 0
+dlo2:         dl02_bss2:    4: 0x2078f34: %f
+dlo2:         dl02_bss3:    1: 0x2078f50: 00
+dlo2:        dl02_data1:    4: 0x2078f68: 0
+dlo2:        dl02_data2:    4: 0x2078f6c: %f
+dlo3: module: testsuites/libtests/dl08/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x207a5a8: 0
+dlo3:   dl04_unresolv_2:    4: 0x207a5ac: %f
+dlo3:   dl04_unresolv_3:    1: 0x207a5b0: 00
+dlo3:   dl04_unresolv_4:    4: 0x207a5b4: 0
+dlo3:   dl04_unresolv_5:    4: 0x207a578: 4
+dlo3:   dl04_unresolv_6:    4: 0x207a598: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo3:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo3:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo3:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo3:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo4: module: testsuites/libtests/dl08/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x207a5a8: 0
+dlo4:   dl04_unresolv_2:    4: 0x207a5ac: %f
+dlo4:   dl04_unresolv_3:    1: 0x207a5b0: 00
+dlo4:   dl04_unresolv_4:    4: 0x207a5b4: 0
+dlo4:   dl04_unresolv_5:    4: 0x207a578: 4
+dlo4:   dl04_unresolv_6:    4: 0x207a598: dl-O4
+dlo5: module: testsuites/libtests/dl08/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo5:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo5:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo5:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo5:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo5: module: testsuites/libtests/dl08/dl-o6-123456789-123456789.c
+dlo5:  long file name to test extended name loading
+handle: 0x2077328 closing
+--------------------------------------------------
+ Run: 1
+Test source (link in strstr): testsuites/libtests/dl08/dl-load.c
+load: /dl08-o1.o
+handel: 0x207a630: no unresolved externals
+handle: 0x207a630 loaded
+handel: 0x207a630: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl08/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2077b30: 0
+dlo1:         dl01_bss2:    4: 0x2077b34: %f
+dlo1:         dl01_bss3:    1: 0x2077bb0: 00
+dlo1:        dl01_data1:    4: 0x2077b1c: 1
+dlo1:        dl01_data2:    4: 0x2077b18: %f
+dlo1:       dl01_const1:    4: 0x2077af8: 3
+dlo1:       dl01_const2:    4: 0x2077af4: %f
+dlo1:        dl01_func1:    1: 0x20777e0
+dlo2: module: testsuites/libtests/dl08/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2078cf0: 0
+dlo2:         dl02_bss2:    4: 0x2078cf4: %f
+dlo2:         dl02_bss3:    1: 0x2078d10: 00
+dlo2:        dl02_data1:    4: 0x2078d28: 0
+dlo2:        dl02_data2:    4: 0x2078d2c: %f
+dlo3: module: testsuites/libtests/dl08/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x207a3c0: 0
+dlo3:   dl04_unresolv_2:    4: 0x207a3c4: %f
+dlo3:   dl04_unresolv_3:    1: 0x207a3c8: 00
+dlo3:   dl04_unresolv_4:    4: 0x207a3cc: 0
+dlo3:   dl04_unresolv_5:    4: 0x207a390: 4
+dlo3:   dl04_unresolv_6:    4: 0x207a3b0: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo3:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo3:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo3:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo3:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo4: module: testsuites/libtests/dl08/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x207a3c0: 0
+dlo4:   dl04_unresolv_2:    4: 0x207a3c4: %f
+dlo4:   dl04_unresolv_3:    1: 0x207a3c8: 00
+dlo4:   dl04_unresolv_4:    4: 0x207a3cc: 0
+dlo4:   dl04_unresolv_5:    4: 0x207a390: 4
+dlo4:   dl04_unresolv_6:    4: 0x207a3b0: dl-O4
+dlo5: module: testsuites/libtests/dl08/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo5:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo5:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo5:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo5:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo5: module: testsuites/libtests/dl08/dl-o6-123456789-123456789.c
+dlo5:  long file name to test extended name loading
+handle: 0x207a630 closing
+--------------------------------------------------
+ Run: 2
+Test source (link in strstr): testsuites/libtests/dl08/dl-load.c
+load: /dl08-o1.o
+handel: 0x207a648: no unresolved externals
+handle: 0x207a648 loaded
+handel: 0x207a648: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl08/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2077bb0: 0
+dlo1:         dl01_bss2:    4: 0x2077bb4: %f
+dlo1:         dl01_bss3:    1: 0x2077c30: 00
+dlo1:        dl01_data1:    4: 0x2077b9c: 1
+dlo1:        dl01_data2:    4: 0x2077b98: %f
+dlo1:       dl01_const1:    4: 0x2077b78: 3
+dlo1:       dl01_const2:    4: 0x2077b74: %f
+dlo1:        dl01_func1:    1: 0x2077860
+dlo2: module: testsuites/libtests/dl08/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2078d70: 0
+dlo2:         dl02_bss2:    4: 0x2078d74: %f
+dlo2:         dl02_bss3:    1: 0x2078d90: 00
+dlo2:        dl02_data1:    4: 0x2078da8: 0
+dlo2:        dl02_data2:    4: 0x2078dac: %f
+dlo3: module: testsuites/libtests/dl08/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x207a440: 0
+dlo3:   dl04_unresolv_2:    4: 0x207a444: %f
+dlo3:   dl04_unresolv_3:    1: 0x207a448: 00
+dlo3:   dl04_unresolv_4:    4: 0x207a44c: 0
+dlo3:   dl04_unresolv_5:    4: 0x207a410: 4
+dlo3:   dl04_unresolv_6:    4: 0x207a430: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo3:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo3:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo3:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo3:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo4: module: testsuites/libtests/dl08/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x207a440: 0
+dlo4:   dl04_unresolv_2:    4: 0x207a444: %f
+dlo4:   dl04_unresolv_3:    1: 0x207a448: 00
+dlo4:   dl04_unresolv_4:    4: 0x207a44c: 0
+dlo4:   dl04_unresolv_5:    4: 0x207a410: 4
+dlo4:   dl04_unresolv_6:    4: 0x207a430: dl-O4
+dlo5: module: testsuites/libtests/dl08/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo5:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo5:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo5:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo5:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo5: module: testsuites/libtests/dl08/dl-o6-123456789-123456789.c
+dlo5:  long file name to test extended name loading
+handle: 0x207a648 closing
+--------------------------------------------------
+ Run: 3
+Test source (link in strstr): testsuites/libtests/dl08/dl-load.c
+load: /dl08-o1.o
+handel: 0x207a648: no unresolved externals
+handle: 0x207a648 loaded
+handel: 0x207a648: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl08/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x2077b60: 0
+dlo1:         dl01_bss2:    4: 0x2077b64: %f
+dlo1:         dl01_bss3:    1: 0x2077be0: 00
+dlo1:        dl01_data1:    4: 0x2077b4c: 1
+dlo1:        dl01_data2:    4: 0x2077b48: %f
+dlo1:       dl01_const1:    4: 0x2077b28: 3
+dlo1:       dl01_const2:    4: 0x2077b24: %f
+dlo1:        dl01_func1:    1: 0x2077810
+dlo2: module: testsuites/libtests/dl08/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2078d20: 0
+dlo2:         dl02_bss2:    4: 0x2078d24: %f
+dlo2:         dl02_bss3:    1: 0x2078d40: 00
+dlo2:        dl02_data1:    4: 0x2078d58: 0
+dlo2:        dl02_data2:    4: 0x2078d5c: %f
+dlo3: module: testsuites/libtests/dl08/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x207a3f0: 0
+dlo3:   dl04_unresolv_2:    4: 0x207a3f4: %f
+dlo3:   dl04_unresolv_3:    1: 0x207a3f8: 00
+dlo3:   dl04_unresolv_4:    4: 0x207a3fc: 0
+dlo3:   dl04_unresolv_5:    4: 0x207a3c0: 4
+dlo3:   dl04_unresolv_6:    4: 0x207a3e0: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo3:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo3:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo3:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo3:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo4: module: testsuites/libtests/dl08/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x207a3f0: 0
+dlo4:   dl04_unresolv_2:    4: 0x207a3f4: %f
+dlo4:   dl04_unresolv_3:    1: 0x207a3f8: 00
+dlo4:   dl04_unresolv_4:    4: 0x207a3fc: 0
+dlo4:   dl04_unresolv_5:    4: 0x207a3c0: 4
+dlo4:   dl04_unresolv_6:    4: 0x207a3e0: dl-O4
+dlo5: module: testsuites/libtests/dl08/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo5:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo5:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo5:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo5:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo5: module: testsuites/libtests/dl08/dl-o6-123456789-123456789.c
+dlo5:  long file name to test extended name loading
+handle: 0x207a648 closing
+--------------------------------------------------
+
+  REPEAT 100 TIMES
+
+--------------------------------------------------
+ Run: 99
+Test source (link in strstr): testsuites/libtests/dl08/dl-load.c
+load: /dl08-o1.o
+handel: 0x207ca80: no unresolved externals
+handle: 0x207ca80 loaded
+handel: 0x207ca80: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl08/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x207d4f8: 0
+dlo1:         dl01_bss2:    4: 0x207d4fc: %f
+dlo1:         dl01_bss3:    1: 0x207d578: 00
+dlo1:        dl01_data1:    4: 0x207d4e4: 1
+dlo1:        dl01_data2:    4: 0x207d4e0: %f
+dlo1:       dl01_const1:    4: 0x207d4c0: 3
+dlo1:       dl01_const2:    4: 0x207d4bc: %f
+dlo1:        dl01_func1:    1: 0x207d1a8
+dlo2: module: testsuites/libtests/dl08/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x207e6b8: 0
+dlo2:         dl02_bss2:    4: 0x207e6bc: %f
+dlo2:         dl02_bss3:    1: 0x207e6d8: 00
+dlo2:        dl02_data1:    4: 0x207e6f0: 0
+dlo2:        dl02_data2:    4: 0x207e6f4: %f
+dlo3: module: testsuites/libtests/dl08/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x207fd88: 0
+dlo3:   dl04_unresolv_2:    4: 0x207fd8c: %f
+dlo3:   dl04_unresolv_3:    1: 0x207fd90: 00
+dlo3:   dl04_unresolv_4:    4: 0x207fd94: 0
+dlo3:   dl04_unresolv_5:    4: 0x207fd58: 4
+dlo3:   dl04_unresolv_6:    4: 0x207fd78: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo3:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo3:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo3:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo3:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo4: module: testsuites/libtests/dl08/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x207fd88: 0
+dlo4:   dl04_unresolv_2:    4: 0x207fd8c: %f
+dlo4:   dl04_unresolv_3:    1: 0x207fd90: 00
+dlo4:   dl04_unresolv_4:    4: 0x207fd94: 0
+dlo4:   dl04_unresolv_5:    4: 0x207fd58: 4
+dlo4:   dl04_unresolv_6:    4: 0x207fd78: dl-O4
+dlo5: module: testsuites/libtests/dl08/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x207af78: 0
+dlo5:   dl05_unresolv_2:    2: 0x207af80: 0
+dlo5:   dl05_unresolv_3:    4: 0x207af84: 0
+dlo5:   dl05_unresolv_4:    1: 0x207af88: 0
+dlo5:   dl05_unresolv_5:    8: 0x207af90: 0
+dlo5: module: testsuites/libtests/dl08/dl-o6-123456789-123456789.c
+dlo5:  long file name to test extended name loading
+handle: 0x207ca80 closing
+*** END OF TEST libdl (RTL) 8 ***
+*** FATAL ***
+fatal source: 5 (RTEMS_FATAL_SOURCE_EXIT)
+fatal code: 0 (0x00000000)
+RTEMS version: 5.0.0.e6835265a37d465b9100d7d4d234fece18e4626c-modified
+RTEMS tools: 7.3.0 20180125 (RTEMS 5, RSB 30da0c720b78eba16a3f5272206c07415368617b, Newlib 2ab57ad59bc35dafffa69cd4da5e228971de069f)
+executing thread ID: 0x08a010001
+executing thread name: UI1
+Run time     : 0:00:04.208332

@@ -295,6 +295,7 @@ include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-obj-cache.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-obj-comp.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-obj-fwd.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-obj.h
+include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-shell.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-sym.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-trace.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-unresolved.h

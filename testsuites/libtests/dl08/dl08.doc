@@ -1,0 +1,27 @@
+# Copyright (c) 2018 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl08
+
+directives:
+
+  dlopen
+  dlinfo
+  dlsym
+  dlclose
+
+concepts:
+
++ Provide an archive config file. Parse and load the archive symbol table.
++ Load 1 ELF object file which loads 5 object files from 2 archives.
++ Check there are no unreolved externals.
++ Locate the main symbol in the lodaed object file and call. This will call
+  each loaded object file.
++ Unload the ELF file which unloads the orphaned object files.
++ Repeat 100 times.
