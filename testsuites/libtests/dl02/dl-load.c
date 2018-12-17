@@ -12,6 +12,7 @@
 
 #include "dl-load.h"
 
+#include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
 
 #define DL02_DEBUG_TRACE 0 /* RTEMS_RTL_TRACE_ALL */
