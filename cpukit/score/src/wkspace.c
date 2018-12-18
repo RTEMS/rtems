@@ -77,37 +77,43 @@ static uintptr_t _Workspace_Space_for_TLS( uintptr_t page_size )
   return space;
 }
 
-static uintptr_t _Workspace_Space_for_per_CPU_data( uintptr_t page_size )
-{
-  uintptr_t space;
-
 #ifdef RTEMS_SMP
-  uintptr_t size;
+static void *_Workspace_Allocate_from_areas(
+  Heap_Area *areas,
+  size_t     area_count,
+  uintptr_t  size,
+  uintptr_t  alignment
+)
+{
+  size_t i;
 
-  size = RTEMS_LINKER_SET_SIZE( _Per_CPU_Data );
-  _Assert( size % CPU_CACHE_LINE_BYTES == 0 );
+  for ( i = 0; i < area_count; ++i ) {
+    Heap_Area *area;
+    uintptr_t  alloc_begin;
+    uintptr_t  alloc_size;
 
-  if ( size > 0 ) {
-    /*
-     * Memory allocated with an alignment constraint is allocated from the end of
-     * a free block.  The last allocation may need one free block of minimum
-     * size.
-     */
-    space = _Heap_Min_block_size( page_size );
+    area = &areas[ i ];
+    alloc_begin = (uintptr_t) area->begin;
+    alloc_begin = ( alloc_begin + alignment - 1 ) & ~( alignment - 1 );
+    alloc_size = size;
+    alloc_size += alloc_begin - (uintptr_t) area->begin;
 
-    space += ( rtems_configuration_get_maximum_processors() - 1 )
-      * _Heap_Size_with_overhead( page_size, size, CPU_CACHE_LINE_BYTES );
-  } else {
-    space = 0;
+    if ( area->size >= alloc_size ) {
+      area->begin = (void *) ( alloc_begin + size );
+      area->size -= alloc_size;
+
+      return (void *) alloc_begin;
+    }
   }
-#else
-  space = 0;
+
+  return NULL;
+}
 #endif
 
-  return space;
-}
-
-static void _Workspace_Allocate_per_CPU_data( void )
+static void _Workspace_Allocate_per_CPU_data(
+  Heap_Area *areas,
+  size_t area_count
+)
 {
 #ifdef RTEMS_SMP
   uintptr_t size;
@@ -126,11 +132,23 @@ static void _Workspace_Allocate_per_CPU_data( void )
 
     for ( cpu_index = 1 ; cpu_index < cpu_max ; ++cpu_index ) {
       cpu = _Per_CPU_Get_by_index( cpu_index );
-      cpu->data = _Workspace_Allocate_aligned( size, CPU_CACHE_LINE_BYTES );
-      _Assert( cpu->data != NULL );
+      cpu->data = _Workspace_Allocate_from_areas(
+        areas,
+        area_count,
+        size,
+        CPU_CACHE_LINE_BYTES
+      );
+
+      if( cpu->data == NULL ) {
+        _Internal_error( INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA );
+      }
+
       memcpy( cpu->data, RTEMS_LINKER_SET_BEGIN( _Per_CPU_Data ), size);
     }
   }
+#else
+  (void) areas;
+  (void) area_count;
 #endif
 }
 
@@ -148,11 +166,12 @@ void _Workspace_Handler_initialization(
   uintptr_t                             overhead;
   size_t                                i;
 
+  _Workspace_Allocate_per_CPU_data( areas, area_count );
+
   page_size = CPU_HEAP_ALIGNMENT;
 
   remaining = rtems_configuration_get_work_space_size();
   remaining += _Workspace_Space_for_TLS( page_size );
-  remaining += _Workspace_Space_for_per_CPU_data( page_size );
 
   init_or_extend = _Heap_Initialize;
   do_zero = rtems_configuration_get_do_zero_of_workspace();
@@ -208,7 +227,6 @@ void _Workspace_Handler_initialization(
   }
 
   _Heap_Protection_set_delayed_free_fraction( &_Workspace_Area, 1 );
-  _Workspace_Allocate_per_CPU_data();
 }
 
 void *_Workspace_Allocate(

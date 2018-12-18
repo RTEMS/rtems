@@ -36,7 +36,7 @@ static void test_internal_error_text(void)
   } while ( text != text_last );
 
   rtems_test_assert(
-    error - 3 == INTERNAL_ERROR_ARC4RANDOM_GETENTROPY_FAIL
+    error - 3 == INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA
   );
 }
 

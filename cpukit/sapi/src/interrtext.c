@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2012, 2018 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -66,7 +66,8 @@ static const char *const internal_error_text[] = {
   "INTERNAL_ERROR_LIBIO_STDOUT_FD_OPEN_FAILED",
   "INTERNAL_ERROR_LIBIO_STDERR_FD_OPEN_FAILED",
   "INTERNAL_ERROR_ILLEGAL_USE_OF_FLOATING_POINT_UNIT",
-  "INTERNAL_ERROR_ARC4RANDOM_GETENTROPY_FAIL"
+  "INTERNAL_ERROR_ARC4RANDOM_GETENTROPY_FAIL",
+  "INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA"
 };
 
 const char *rtems_internal_error_text( rtems_fatal_code error )

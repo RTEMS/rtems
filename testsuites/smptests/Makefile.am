@@ -238,6 +238,17 @@ endif
 endif
 
 if HAS_SMP
+if TEST_smpfatal09
+smp_tests += smpfatal09
+smp_screens += smpfatal09/smpfatal09.scn
+smp_docs += smpfatal09/smpfatal09.doc
+smpfatal09_SOURCES = smpfatal09/init.c
+smpfatal09_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smpfatal09) \
+	$(support_includes)
+endif
+endif
+
+if HAS_SMP
 if TEST_smpipi01
 smp_tests += smpipi01
 smp_screens += smpipi01/smpipi01.scn

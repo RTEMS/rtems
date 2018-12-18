@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: smpfatal09
+
+directives:
+
+  - _Workspace_Handler_initialization()
+
+concepts:
+
+  - Provoke the INTERNAL_ERROR_NO_MEMORY_FOR_PER_CPU_DATA fatal error.
