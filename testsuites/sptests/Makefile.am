@@ -772,6 +772,18 @@ spcpuset01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spcpuset01) \
 	$(support_includes) -DSMPTEST
 endif
 
+if HAS_CPLUSPLUS
+if TEST_spcxx01
+sp_tests += spcxx01
+sp_screens += spcxx01/spcxx01.scn
+sp_docs += spcxx01/spcxx01.doc
+spcxx01_SOURCES = spcxx01/init.cc
+spcxx01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spcxx01) \
+	$(support_includes)
+spcxx01_CXXFLAGS = $(AM_CXXFLAGS) -std=gnu++17
+endif
+endif
+
 if TEST_spedfsched01
 sp_tests += spedfsched01
 sp_screens += spedfsched01/spedfsched01.scn

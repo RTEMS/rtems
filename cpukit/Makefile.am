@@ -78,6 +78,7 @@ librtemscpu_a_SOURCES += libcrypt/crypt-sha512.c
 librtemscpu_a_SOURCES += libcrypt/misc.c
 librtemscpu_a_SOURCES += libcsupport/src/access.c
 librtemscpu_a_SOURCES += libcsupport/src/arc4random_getentropy_fail.c
+librtemscpu_a_SOURCES += libcsupport/src/alignedalloc.c
 librtemscpu_a_SOURCES += libcsupport/src/__assert.c
 librtemscpu_a_SOURCES += libcsupport/src/assoc32tostring.c
 librtemscpu_a_SOURCES += libcsupport/src/assoclocalbyname.c

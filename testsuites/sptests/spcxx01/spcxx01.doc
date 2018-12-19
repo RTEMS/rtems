@@ -1,0 +1,11 @@
+This file describes the directives and concepts tested by this test set.
+
+test set name: spcxx01
+
+directives:
+
+  - ::operator new()
+
+concepts:
+
+  - Ensure that the aligned new operator works.
