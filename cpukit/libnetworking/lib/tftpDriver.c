@@ -186,21 +186,28 @@ int rtems_tftpfs_initialize(
 {
   const char *device = mt_entry->dev;
   size_t devicelen = strlen (device);
-  tftpfs_info_t *fs;
+  tftpfs_info_t *fs = NULL;
   char *root_path;
 
-  if (devicelen == 0)
-      rtems_set_errno_and_return_minus_one (ENXIO);
-
-  fs = malloc (sizeof (*fs));
-  root_path = malloc (devicelen + 2);
-  if (root_path == NULL || fs == NULL)
+  if (devicelen == 0) {
+    root_path = malloc (1);
+    if (root_path == NULL)
+      goto error;
+    root_path [0] = '\0';
+  }
+  else {
+    root_path = malloc (devicelen + 2);
+    if (root_path == NULL)
       goto error;
 
-  root_path = memcpy (root_path, device, devicelen);
-  root_path [devicelen] = '/';
-  root_path [devicelen + 1] = '\0';
+    root_path = memcpy (root_path, device, devicelen);
+    root_path [devicelen] = '/';
+    root_path [devicelen + 1] = '\0';
+  }
 
+  fs = malloc (sizeof (*fs));
+  if (fs == NULL)
+    goto error;
   fs->flags = 0;
   fs->nStreams = 0;
   fs->tftpStreams = 0;
@@ -538,6 +545,9 @@ static int rtems_tftp_open_worker(
     /*
      * Extract the host name component
      */
+    if (*full_path_name == '/')
+      full_path_name++;
+
     hostname = full_path_name;
     cp1 = strchr (full_path_name, ':');
     if (!cp1) {
