@@ -63,6 +63,11 @@ BSP_START_TEXT_SECTION static void setup_mmu_and_cache(void)
       begin = fdt32_to_cpu(((fdt32_t *) val)[0]);
       size = fdt32_to_cpu(((fdt32_t *) val)[1]);
 
+      /* The heap code does not like an end address of zero */
+      if (begin + size == 0) {
+        size -= 4;
+      }
+
       imx_mmu_config_table[WORKSPACE_ENTRY_INDEX].end = begin + size;
     }
   }
