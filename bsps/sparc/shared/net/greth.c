@@ -1534,7 +1534,7 @@ int greth_init3(struct drvmgr_dev *dev)
     SPIN_INIT(&sc->devlock, sc->devName);
 
     /* Register GRETH device as an Network interface */
-    ifp = grlib_cmalloc(1, sizeof(*ifp));
+    ifp = grlib_calloc(1, sizeof(*ifp));
 
     ifp->name = sc->devName;
     ifp->drv_ctrl = sc;
