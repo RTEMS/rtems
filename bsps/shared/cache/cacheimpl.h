@@ -63,6 +63,13 @@
  *
  * The cache implementation source file shall define
  *
+ *  #define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
+ *
+ * if an external implementation of rtems_cache_disable_data() is provided,
+ * e.g. as an implementation in assembly code.
+ *
+ * The cache implementation source file shall define
+ *
  *  #define CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING
  *
  * if the hardware provides no instruction cache snooping and the instruction
@@ -241,6 +248,7 @@ rtems_cache_enable_data( void )
 #endif
 }
 
+#if !defined(CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA)
 void
 rtems_cache_disable_data( void )
 {
@@ -248,6 +256,7 @@ rtems_cache_disable_data( void )
   _CPU_cache_disable_data();
 #endif
 }
+#endif
 
 /*
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE AN INSTRUCTION CACHE
