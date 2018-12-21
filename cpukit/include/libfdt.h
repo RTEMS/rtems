@@ -669,7 +669,7 @@ static inline struct fdt_property *fdt_get_property_w(void *fdt, int nodeoffset,
 /**
  * fdt_getprop_by_offset - retrieve the value of a property at a given offset
  * @fdt: pointer to the device tree blob
- * @ffset: offset of the property to read
+ * @offset: offset of the property to read
  * @namep: pointer to a string variable (will be overwritten) or NULL
  * @lenp: pointer to an integer variable (will be overwritten) or NULL
  *
