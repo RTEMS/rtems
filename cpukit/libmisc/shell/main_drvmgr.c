@@ -13,6 +13,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -196,7 +197,7 @@ static void shell_drvmgr_print_res_array(struct drvmgr_drv_res *resources)
       drv_name = drv->name;
     else
       drv_name = "UNKNOWN";
-    printf(" RESOURCES FOR DEVICE[%02d] DRIVER[0x%llx (%s)]\n",
+    printf(" RESOURCES FOR DEVICE[%02d] DRIVER[0x%" PRIu64 " (%s)]\n",
             res->minor_bus, res->drv_id, drv_name);
     shell_drvmgr_print_key_array(res->keys);
     res++;

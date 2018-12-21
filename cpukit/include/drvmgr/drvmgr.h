@@ -512,8 +512,8 @@ RTEMS_INLINE_ROUTINE struct drvmgr_drv *drvmgr_get_drv(struct drvmgr_dev *dev)
  */
 #define DRVMGR_FED_BF 1		/* Breadth-first search */
 #define DRVMGR_FED_DF 0		/* Depth first search */
-extern int drvmgr_for_each_dev(
-	int (*func)(struct drvmgr_dev *dev, void *arg),
+extern intptr_t drvmgr_for_each_dev(
+	intptr_t (*func)(struct drvmgr_dev *dev, void *arg),
 	void *arg,
 	int options);
 

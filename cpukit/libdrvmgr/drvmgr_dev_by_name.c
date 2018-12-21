@@ -12,12 +12,12 @@
 #include <drvmgr/drvmgr.h>
 #include "drvmgr_internal.h"
 
-static int dev_name_compare(struct drvmgr_dev *dev, void *arg)
+static intptr_t dev_name_compare(struct drvmgr_dev *dev, void *arg)
 {
 	const char *name = arg;
 
 	if (dev->name && (strcmp(dev->name, name) == 0))
-		return (int)dev;
+		return (intptr_t)dev;
 	else
 		return 0;
 }

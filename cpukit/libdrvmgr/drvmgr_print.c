@@ -13,6 +13,7 @@
  *
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,7 +79,7 @@ void drvmgr_print_devs(unsigned int options)
 	printf("\n\n");
 }
 
-static int drvmgr_topo_func(struct drvmgr_dev *dev, void *arg)
+static intptr_t drvmgr_topo_func(struct drvmgr_dev *dev, void *arg)
 {
 	char prefix[32];
 	int depth = dev->parent->depth;
@@ -341,7 +342,7 @@ void drvmgr_info_drv(struct drvmgr_drv *drv, unsigned int options)
 
 	/* Print Driver */
 	printf(" -- DRIVER %p --\n", drv);
-	printf("  DRIVER ID:   0x%llx\n", drv->drv_id);
+	printf("  DRIVER ID:   0x%" PRIx64 "\n", drv->drv_id);
 	printf("  NAME:        %s\n", drv->name ? drv->name : "NO_NAME");
 	printf("  BUS TYPE:    %d\n", drv->bus_type);
 	printf("  OPERATIONS:\n");

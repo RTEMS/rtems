@@ -13,8 +13,8 @@
 #include "drvmgr_internal.h"
 
 /* Traverse device tree breadth-first. Supports up to 31 buses */
-static int drvmgr_for_each_dev_breadth(
-	int (*func)(struct drvmgr_dev *dev, void *arg),
+static intptr_t drvmgr_for_each_dev_breadth(
+	intptr_t (*func)(struct drvmgr_dev *dev, void *arg),
 	void *arg
 	)
 {
@@ -43,8 +43,8 @@ static int drvmgr_for_each_dev_breadth(
 }
 
 /* Traverse device tree depth-first. */
-static int drvmgr_for_each_dev_depth(
-	int (*func)(struct drvmgr_dev *dev, void *arg),
+static intptr_t drvmgr_for_each_dev_depth(
+	intptr_t (*func)(struct drvmgr_dev *dev, void *arg),
 	void *arg
 	)
 {
@@ -78,13 +78,13 @@ next_dev:
 }
 
 /* Traverse device tree depth-first or breadth-first */
-int drvmgr_for_each_dev(
-	int (*func)(struct drvmgr_dev *dev, void *arg),
+intptr_t drvmgr_for_each_dev(
+	intptr_t (*func)(struct drvmgr_dev *dev, void *arg),
 	void *arg,
 	int options
 	)
 {
-	int ret;
+	intptr_t ret;
 
 	DRVMGR_LOCK_READ();
 
