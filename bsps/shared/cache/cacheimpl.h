@@ -1,42 +1,77 @@
 /*
  *  Cache Manager
  *
+ *  Copyright (C) 2014, 2018 embedded brains GmbH
+ *
  *  COPYRIGHT (c) 1989-1999.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.org/license/LICENSE.
+ */
+
+/*
+ * The functions in this file implement the API to the RTEMS Cache Manager.
+ * This file is intended to be included in a cache implemention source file
+ * provided by the architecture or BSP, e.g.
  *
+ *  - bsps/${RTEMS_CPU}/shared/cache/cache.c
+ *  - bsps/${RTEMS_CPU}/${RTEMS_BSP_FAMILY}/start/cache.c
  *
- *  The functions in this file implement the API to the RTEMS Cache Manager and
- *  are divided into data cache and instruction cache functions. Data cache
- *  functions only have bodies if a data cache is supported. Instruction
- *  cache functions only have bodies if an instruction cache is supported.
- *  Support for a particular cache exists only if CPU_x_CACHE_ALIGNMENT is
- *  defined, where x E {DATA, INSTRUCTION}. These definitions are found in
- *  the Cache Manager Wrapper header files, often
+ * In this file a couple of defines and inline functions may be provided and
+ * afterwards this file is included, e.g.
  *
- *  rtems/c/src/lib/libcpu/CPU/cache_.h
+ *  #define CPU_DATA_CACHE_ALIGNMENT XYZ
+ *  ...
+ *  #include "../../../bsps/shared/cache/cacheimpl.h"
  *
- *  The cache implementation header file can define
+ * The cache implementation source file shall define
  *
- *    #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *  #define CPU_DATA_CACHE_ALIGNMENT <POSITIVE INTEGER>
  *
- *  if it provides cache maintenance functions which operate on multiple lines.
- *  Otherwise a generic loop with single line operations will be used.  It is
- *  strongly recommended to provide the implementation in terms of static
- *  inline functions for performance reasons.
+ * to enable the data cache support.
  *
- *  The functions below are implemented with CPU dependent inline routines
- *  found in the cache.c files for each CPU. In the event that a CPU does
- *  not support a specific function for a cache it has, the CPU dependent
- *  routine does nothing (but does exist).
+ * The cache implementation source file shall define
  *
- *  At this point, the Cache Manager makes no considerations, and provides no
- *  support for BSP specific issues such as a secondary cache. In such a system,
- *  the CPU dependent routines would have to be modified, or a BSP layer added
- *  to this Manager.
+ *  #define CPU_INSTRUCTION_CACHE_ALIGNMENT <POSITIVE INTEGER>
+ *
+ * to enable the instruction cache support.
+ *
+ * The cache implementation source file shall define
+ *
+ *  #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+ *
+ * if it provides cache maintenance functions which operate on multiple lines.
+ * Otherwise a generic loop with single line operations will be used.  It is
+ * strongly recommended to provide the implementation in terms of static inline
+ * functions for performance reasons.
+ *
+ * The cache implementation source file shall define
+ *
+ *  #define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
+ *
+ * if it provides functions to get the data and instruction cache sizes by
+ * level.
+ *
+ * The cache implementation source file shall define
+ *
+ *  #define CPU_CACHE_SUPPORT_PROVIDES_INSTRUCTION_SYNC_FUNCTION
+ *
+ * if special instructions must be used to synchronize the instruction caches
+ * after a code change.
+ *
+ * The cache implementation source file shall define
+ *
+ *  #define CPU_CACHE_NO_INSTRUCTION_CACHE_SNOOPING
+ *
+ * if the hardware provides no instruction cache snooping and the instruction
+ * cache invalidation needs software support.
+ *
+ * The functions below are implemented with inline routines found in the cache
+ * implementation source file for each architecture or BSP.  In the event that
+ * not support for a specific function for a cache is provided, the API routine
+ * does nothing (but does exist).
  */
 
 #include <rtems.h>
