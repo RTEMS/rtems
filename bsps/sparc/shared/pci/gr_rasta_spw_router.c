@@ -13,6 +13,7 @@
  *  GR-RASTA-IO driver.
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -422,7 +423,8 @@ int gr_rasta_spw_router_init1(struct drvmgr_dev *dev)
 		PCI_DEV_EXPAND(priv->pcidev));
 	printk(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n",
 		devinfo->id.vendor, devinfo->id.device);
-	printk(" PCI BAR[0]: 0x%08lx - 0x%08lx\n", bar0, bar0 + bar0_size - 1);
+	printk(" PCI BAR[0]: 0x%08" PRIx32 " - 0x%08" PRIx32 "\n",
+		bar0, bar0 + bar0_size - 1);
 	printk(" IRQ: %d\n\n\n", devinfo->irq);
 
 	/* all neccessary space assigned to GR-RASTA-SPW-ROUTER target? */
@@ -655,8 +657,9 @@ void gr_rasta_spw_router_print_dev(struct drvmgr_dev *dev, int options)
 
 	bar0 = devinfo->resources[0].address;
 	bar0_size = devinfo->resources[0].size;
-	printf(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
-	printf(" IRQ REGS:        0x%x\n", (unsigned int)priv->irq);
+	printf(" PCI BAR[0]: 0x%" PRIx32 " - 0x%" PRIx32 "\n",
+		bar0, bar0 + bar0_size - 1);
+	printf(" IRQ REGS:        0x%" PRIxPTR "\n", (uintptr_t)priv->irq);
 	printf(" IRQ:             %d\n", devinfo->irq);
 	printf(" PCI REVISION:    %d\n", devinfo->rev);
 	printf(" FREQ:            %d Hz\n", priv->version->amba_freq_hz);

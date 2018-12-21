@@ -327,7 +327,8 @@ static void print_init_info(struct greth_softc *sc)
     }
 #ifdef GRETH_AUTONEGO_PRINT_TIME
     if ( sc->auto_neg ) {
-        printf("Autonegotiation Time: %ldms\n", sc->auto_neg_time.tv_sec * 1000 +
+        printf("Autonegotiation Time: %" PRIdMAX "ms\n",
+               (intmax_t)sc->auto_neg_time.tv_sec * 1000 +
                sc->auto_neg_time.tv_nsec / 1000000);
     }
 #endif

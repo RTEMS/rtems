@@ -15,6 +15,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -344,8 +345,10 @@ int gr701_init1(struct drvmgr_dev *dev)
 		PCI_DEV_EXPAND(priv->pcidev));
 	printk(" PCI VENDOR: 0x%04x, DEVICE: 0x%04x\n\n\n",
 		devinfo->id.vendor, devinfo->id.device);
-	printk(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
-	printk(" PCI BAR[1]: 0x%lx - 0x%lx\n", bar1, bar1 + bar1_size - 1);
+	printk(" PCI BAR[0]: 0x%" PRIx32 " - 0x%" PRIx32 "\n",
+		bar0, bar0 + bar0_size - 1);
+	printk(" PCI BAR[1]: 0x%" PRIx32 " - 0x%" PRIx32 "\n",
+		bar1, bar1 + bar1_size - 1);
 	printk(" IRQ: %d\n\n\n", devinfo->irq);
 
 	/* all neccessary space assigned to GR-701 target? */
@@ -572,8 +575,10 @@ void gr701_print_dev(struct drvmgr_dev *dev, int options)
 	bar1 = devinfo->resources[1].address;
 	bar1_size = devinfo->resources[1].size;
 
-	printf(" PCI BAR[0]: 0x%lx - 0x%lx\n", bar0, bar0 + bar0_size - 1);
-	printf(" PCI BAR[1]: 0x%lx - 0x%lx\n", bar1, bar1 + bar1_size - 1);
+	printf(" PCI BAR[0]: 0x%" PRIx32 " - 0x%" PRIx32 "\n",
+		bar0, bar0 + bar0_size - 1);
+	printf(" PCI BAR[1]: 0x%" PRIx32 " - 0x%" PRIx32 "\n",
+		bar1, bar1 + bar1_size - 1);
 	printf(" IRQ:             %d\n", devinfo->irq);
 
 	/* Frequency is the same as the PCI bus frequency */

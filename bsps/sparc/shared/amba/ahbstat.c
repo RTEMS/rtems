@@ -8,7 +8,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <stdint.h>
+#include <inttypes.h>
 #include <string.h>
 #include <rtems.h>
 #include <rtems/bspIo.h>
@@ -177,8 +177,8 @@ void ahbstat_isr(void *arg)
 		rc = ahbstat_error(priv->minor, priv->regs, status, fadr);
 
 	if ((rc & 0x1) == 0) {
-		printk("\n### AHBSTAT: %s %s error of size %ld by master %ld"
-			" at 0x%08lx\n",
+		printk("\n### AHBSTAT: %s %s error of size %" PRId32
+			" by master %" PRId32 " at 0x%08" PRIx32 "\n",
 			status & AHBSTAT_STS_CE ? "single" : "non-correctable",
 			status & AHBSTAT_STS_HW ? "write" : "read",
 			(status & AHBSTAT_STS_HS) >> AHBSTAT_STS_HS_BIT,
