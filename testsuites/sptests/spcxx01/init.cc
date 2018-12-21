@@ -37,6 +37,10 @@
 
 const char rtems_test_name[] = "SPCXX 1";
 
+struct alignas(256) S {
+  int i;
+};
+
 extern "C" void Init(rtems_task_argument arg)
 {
   TEST_BEGIN();
@@ -48,6 +52,12 @@ extern "C" void Init(rtems_task_argument arg)
   rtems_test_assert(i != nullptr);
   rtems_test_assert(reinterpret_cast<uintptr_t>(i) % 256 == 0);
   ::delete(i);
+
+  S *s = new S;
+  RTEMS_OBFUSCATE_VARIABLE(s);
+  rtems_test_assert(s != nullptr);
+  rtems_test_assert(reinterpret_cast<uintptr_t>(s) % 256 == 0);
+  delete s;
 
   TEST_END();
   exit(0);
