@@ -29,6 +29,8 @@
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
+#define CPU_CACHE_SUPPORT_PROVIDES_CACHE_SIZE_FUNCTIONS
+
 #if __ARM_ARCH >= 7 && (__ARM_ARCH_PROFILE == 65 || __ARM_ARCH_PROFILE == 82)
 #define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
 #endif
@@ -178,6 +180,45 @@ static inline void _CPU_cache_disable_instruction(void)
   ctrl &= ~ARM_CP15_CTRL_I;
   arm_cp15_set_control(ctrl);
   rtems_interrupt_local_enable(level);
+}
+
+static inline size_t arm_cp15_get_cache_size(
+  uint32_t level,
+  uint32_t which
+)
+{
+  uint32_t clidr;
+  uint32_t loc;
+  uint32_t ccsidr;
+
+  clidr = arm_cp15_get_cache_level_id();
+  loc = arm_clidr_get_level_of_coherency(clidr);
+
+  if (level >= loc) {
+    return 0;
+  }
+
+  if (level == 0) {
+    level = loc - 1;
+  }
+
+  ccsidr = arm_cp15_get_cache_size_id_for_level(
+    ARM_CP15_CACHE_CSS_LEVEL(level) | which
+  );
+
+  return (1U << arm_ccsidr_get_line_power(ccsidr))
+    * arm_ccsidr_get_associativity(ccsidr)
+    * arm_ccsidr_get_num_sets(ccsidr);
+}
+
+static inline size_t _CPU_cache_get_data_cache_size(uint32_t level)
+{
+  return arm_cp15_get_cache_size(level, ARM_CP15_CACHE_CSS_ID_DATA);
+}
+
+static inline size_t _CPU_cache_get_instruction_cache_size(uint32_t level)
+{
+  return arm_cp15_get_cache_size(level, ARM_CP15_CACHE_CSS_ID_INSTRUCTION);
 }
 
 #include "../../shared/cache/cacheimpl.h"
