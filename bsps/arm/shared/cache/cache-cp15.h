@@ -33,7 +33,6 @@ extern "C" {
 /* These two defines also ensure that the rtems_cache_* functions have bodies */
 #define ARM_CACHE_L1_CPU_DATA_ALIGNMENT 32
 #define ARM_CACHE_L1_CPU_INSTRUCTION_ALIGNMENT 32
-#define ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
 #define ARM_CACHE_L1_CSS_ID_DATA \
           (ARM_CP15_CACHE_CSS_ID_DATA | ARM_CP15_CACHE_CSS_LEVEL(0))

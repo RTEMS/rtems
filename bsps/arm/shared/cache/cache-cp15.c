@@ -30,8 +30,7 @@
 #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
 #endif
 
-#define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS \
-          ARM_CACHE_L1_CPU_SUPPORT_PROVIDES_RANGE_FUNCTIONS
+#define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
 
 static inline void _CPU_cache_flush_1_data_line(const void *d_addr)
