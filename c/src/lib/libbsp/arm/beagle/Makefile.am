@@ -84,6 +84,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/clock/clock.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7ar-disable-data.S
 
 ###############################################################################
 #                  Special Rules                                              #

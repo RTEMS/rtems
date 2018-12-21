@@ -62,6 +62,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/clock/clock-generic-t
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7ar-disable-data.S
 
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/imx/i2c/imx-i2c.c

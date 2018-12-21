@@ -103,6 +103,7 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/spi/spi.c
 
 # Cache
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-cp15.c
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/shared/cache/cache-v7ar-disable-data.S
 
 # Start hooks
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/raspberrypi/start/bspstarthooks.c

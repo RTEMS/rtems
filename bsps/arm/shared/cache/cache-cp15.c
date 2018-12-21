@@ -7,13 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
- *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2009, 2018 embedded brains GmbH
  *
  * The license and distribution terms for this file may be
  * found in the file LICENSE in this distribution or at
@@ -21,10 +15,13 @@
  */
 
 #include <libcpu/arm-cp15.h>
+
 #include "cache-cp15.h"
 
 #define CPU_DATA_CACHE_ALIGNMENT 32
+
 #define CPU_INSTRUCTION_CACHE_ALIGNMENT 32
+
 #if defined(__ARM_ARCH_7A__)
 /* Some/many ARM Cortex-A cores have L1 data line length 64 bytes */
 #define CPU_MAXIMAL_CACHE_ALIGNMENT 64
@@ -32,6 +29,9 @@
 
 #define CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS
 
+#if __ARM_ARCH >= 7 && (__ARM_ARCH_PROFILE == 65 || __ARM_ARCH_PROFILE == 82)
+#define CPU_CACHE_SUPPORT_PROVIDES_DISABLE_DATA
+#endif
 
 static inline void _CPU_cache_flush_1_data_line(const void *d_addr)
 {
