@@ -349,7 +349,7 @@ AC_MSG_RESULT([$HAVE_LIBPCI])
 # Filter libdrvmgr to only build for architectures that have support for it
 AC_MSG_CHECKING([whether CPU supports libdrvmgr])
 case $RTEMS_CPU in
-  sparc)
+  riscv | sparc)
    HAVE_LIBDRVMGR=yes ;;
   *)
    HAVE_LIBDRVMGR=no ;;
