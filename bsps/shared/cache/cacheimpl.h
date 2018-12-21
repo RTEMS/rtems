@@ -91,13 +91,11 @@ rtems_cache_flush_multiple_data_lines( const void * d_addr, size_t n_bytes )
 #endif
 }
 
-
 /*
  * This function is responsible for performing a data cache invalidate.
  * It must determine how many cache lines need to be invalidated and then
  * perform the invalidations.
  */
-
 void
 rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes )
 {
@@ -127,7 +125,6 @@ rtems_cache_invalidate_multiple_data_lines( const void * d_addr, size_t n_bytes 
 #endif
 }
 
-
 /*
  * This function is responsible for performing a data cache flush.
  * It flushes the entire cache.
@@ -142,7 +139,6 @@ rtems_cache_flush_entire_data( void )
    _CPU_cache_flush_entire_data();
 #endif
 }
-
 
 /*
  * This function is responsible for performing a data cache
@@ -160,7 +156,6 @@ rtems_cache_invalidate_entire_data( void )
 #endif
 }
 
-
 /*
  * This function returns the data cache granularity.
  */
@@ -173,7 +168,6 @@ rtems_cache_get_data_line_size( void )
   return 0;
 #endif
 }
-
 
 size_t
 rtems_cache_get_data_cache_size( uint32_t level )
@@ -197,10 +191,6 @@ rtems_cache_freeze_data( void )
 #endif
 }
 
-
-/*
- * This function unfreezes the instruction cache.
- */
 void rtems_cache_unfreeze_data( void )
 {
 #if defined(CPU_DATA_CACHE_ALIGNMENT)
@@ -208,8 +198,6 @@ void rtems_cache_unfreeze_data( void )
 #endif
 }
 
-
-/* Turn on the data cache. */
 void
 rtems_cache_enable_data( void )
 {
@@ -218,8 +206,6 @@ rtems_cache_enable_data( void )
 #endif
 }
 
-
-/* Turn off the data cache. */
 void
 rtems_cache_disable_data( void )
 {
@@ -227,8 +213,6 @@ rtems_cache_disable_data( void )
   _CPU_cache_disable_data();
 #endif
 }
-
-
 
 /*
  * THESE FUNCTIONS ONLY HAVE BODIES IF WE HAVE AN INSTRUCTION CACHE
@@ -262,7 +246,6 @@ static void smp_cache_inst_inv_all(void *arg)
  * invalidate. It must determine how many cache lines need to be invalidated
  * and then perform the invalidations.
  */
-
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT) \
   && !defined(CPU_CACHE_SUPPORT_PROVIDES_RANGE_FUNCTIONS)
 static void
@@ -309,7 +292,6 @@ rtems_cache_invalidate_multiple_instruction_lines(
 #endif
 }
 
-
 /*
  * This function is responsible for performing an instruction cache
  * invalidate. It invalidates the entire cache.
@@ -326,7 +308,6 @@ rtems_cache_invalidate_entire_instruction( void )
 #endif
 }
 
-
 /*
  * This function returns the instruction cache granularity.
  */
@@ -340,7 +321,6 @@ rtems_cache_get_instruction_line_size( void )
 #endif
 }
 
-
 size_t
 rtems_cache_get_instruction_cache_size( uint32_t level )
 {
@@ -350,7 +330,6 @@ rtems_cache_get_instruction_cache_size( uint32_t level )
   return 0;
 #endif
 }
-
 
 /*
  * This function freezes the instruction cache; cache lines
@@ -364,10 +343,6 @@ rtems_cache_freeze_instruction( void )
 #endif
 }
 
-
-/*
- * This function unfreezes the instruction cache.
- */
 void rtems_cache_unfreeze_instruction( void )
 {
 #if defined(CPU_INSTRUCTION_CACHE_ALIGNMENT)
@@ -375,8 +350,6 @@ void rtems_cache_unfreeze_instruction( void )
 #endif
 }
 
-
-/* Turn on the instruction cache. */
 void
 rtems_cache_enable_instruction( void )
 {
@@ -385,8 +358,6 @@ rtems_cache_enable_instruction( void )
 #endif
 }
 
-
-/* Turn off the instruction cache. */
 void
 rtems_cache_disable_instruction( void )
 {
@@ -426,8 +397,10 @@ size_t rtems_cache_get_maximal_line_size( void )
  * which does not need flush and invalidate all cache levels
  * when code is changed.
  */
-void
-rtems_cache_instruction_sync_after_code_change( const void * code_addr, size_t n_bytes )
+void rtems_cache_instruction_sync_after_code_change(
+  const void *code_addr,
+  size_t      n_bytes
+)
 {
 #if defined(CPU_CACHE_SUPPORT_PROVIDES_INSTRUCTION_SYNC_FUNCTION)
   _CPU_cache_instruction_sync_after_code_change( code_addr, n_bytes );
