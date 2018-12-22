@@ -10,7 +10,7 @@
  */
 
 #include <stdio.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 struct ambapp_dev_print_arg {
   int show_depth;

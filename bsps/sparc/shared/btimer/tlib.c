@@ -10,7 +10,7 @@
  */
 
 #include <rtems.h>
-#include <bsp/tlib.h>
+#include <grlib/tlib.h>
 
 struct tlib_dev *tlib_dev_head = NULL;
 struct tlib_dev *tlib_dev_tail = NULL;

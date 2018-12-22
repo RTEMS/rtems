@@ -19,7 +19,7 @@
 #define __AMBAPP_H__
 
 /* Include VENDOR and DEVICE definitions */
-#include <ambapp_ids.h>
+#include "ambapp_ids.h"
 
 #ifdef __cplusplus
 extern "C" {

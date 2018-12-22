@@ -23,7 +23,7 @@
 #include <string.h>
 #include <libcpu/access.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 #include <drvmgr/leon2_amba_bus.h>
 
 #define DBG(args...)

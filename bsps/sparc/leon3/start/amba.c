@@ -14,7 +14,7 @@
 #include <bsp.h>
 #include <bsp/fatal.h>
 #include <leon.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <rtems/sysinit.h>
 
 unsigned int leon3_timer_prescaler __attribute__((weak)) = 0;
@@ -32,7 +32,7 @@ struct ambapp_bus ambapp_plb;
  */
 #ifdef RTEMS_DRVMGR_STARTUP
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus_grlib.h>
+#include <grlib/ambapp_bus_grlib.h>
 
 extern void gptimer_register_drv (void);
 extern void apbuart_cons_register_drv(void);

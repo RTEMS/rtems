@@ -19,7 +19,7 @@
 #define _I2CMST_H
 
 #include <rtems/libi2c.h>
-#include <ambapp.h>
+#include "ambapp.h"
 
 #ifdef __cplusplus
 extern "C" {

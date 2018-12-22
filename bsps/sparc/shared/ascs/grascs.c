@@ -10,10 +10,11 @@
 
 #include <stdlib.h>
 #include <bsp.h>
-#include <ambapp.h>
-#include <bsp/grascs.h>
+#include <grlib/ambapp.h>
+#include <grlib/grascs.h>
+#include <grlib/grlib.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #ifndef GAISLER_ASCS
 #define GAISLER_ASCS 0x043

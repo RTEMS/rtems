@@ -14,9 +14,9 @@
 #include <string.h>
 #include <rtems/bspIo.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/memscrub.h>
+#include <grlib/memscrub.h>
 
 /*#define STATIC*/
 #define STATIC static

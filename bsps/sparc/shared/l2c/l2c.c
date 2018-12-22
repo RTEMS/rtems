@@ -12,13 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
 #include <rtems.h>
 #include <rtems/bspIo.h>
-#include <grlib.h>
+#include <grlib/grlib.h>
 #include <bsp.h>
-#include <bsp/l2c.h>
+#include <grlib/l2c.h>
 
 /*#define STATIC*/
 #define STATIC static

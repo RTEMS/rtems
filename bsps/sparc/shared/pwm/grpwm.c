@@ -18,11 +18,11 @@
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grpwm.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grpwm.h>
+#include <grlib/ambapp.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* #define DEBUG 1 */
 

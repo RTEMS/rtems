@@ -18,7 +18,7 @@
 #ifndef __GRSPW_H__
 #define __GRSPW_H__
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 #ifdef __cplusplus
 extern "C" {

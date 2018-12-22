@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 /* Get bus depth a device is located at */
 int ambapp_depth(struct ambapp_dev *dev)

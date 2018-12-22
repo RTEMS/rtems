@@ -27,11 +27,11 @@
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
-#include <bsp/b1553brm.h>
-#include <ambapp.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/b1553brm.h>
+#include <grlib/ambapp.h>
+#include <grlib/ambapp_bus.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Uncomment for debug output */
 /*#define DEBUG 1

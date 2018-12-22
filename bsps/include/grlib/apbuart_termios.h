@@ -15,7 +15,7 @@
 #define APBUART_TERMIOS_H
 
 #include <rtems/termiostypes.h>
-#include <grlib.h>
+#include "grlib.h"
 
 #ifdef __cplusplus
 extern "C" {

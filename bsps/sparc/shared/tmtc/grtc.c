@@ -18,18 +18,18 @@
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
-#include <bsp/grtc.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
+#include <grlib/grtc.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /*
 #define DEBUG
 #define DEBUGFUNCS
 */
 
-#include <bsp/debug_defs.h>
+#include <grlib/debug_defs.h>
 
 #ifdef DEBUG_ERROR
 #define DEBUG_ERR_LOG(device,error) grtc_log_error(device,error)

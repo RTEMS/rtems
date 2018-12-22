@@ -16,10 +16,10 @@
 #include <bsp.h>
 #include <rtems/bspIo.h> /* printk */
 
-#include <bsp/canmux.h>
-#include <ambapp.h>
+#include <grlib/canmux.h>
+#include <grlib/ambapp.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #ifndef GAISLER_CANMUX
 #define GAISLER_CANMUX 0x081

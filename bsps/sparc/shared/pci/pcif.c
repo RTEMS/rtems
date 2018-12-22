@@ -26,10 +26,10 @@
 #include <pci/cfg.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
 #include <drvmgr/pci_bus.h>
-#include <bsp/pcif.h>
+#include <grlib/pcif.h>
 
 
 /* Configuration options */

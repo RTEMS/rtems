@@ -18,11 +18,11 @@
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/mctrl.h>
+#include <grlib/mctrl.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define MEMSET(priv, start, c, length) memset((void *)start, c, length)
 

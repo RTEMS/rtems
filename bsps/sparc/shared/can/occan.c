@@ -17,10 +17,10 @@
 #include <rtems/bspIo.h> /* printk */
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/occan.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/occan.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* RTEMS -> ERRNO decoding table
 

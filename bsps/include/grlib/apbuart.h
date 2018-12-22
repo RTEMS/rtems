@@ -19,8 +19,8 @@
 #ifndef __APBUART_H__
 #define __APBUART_H__
 
-#include <ambapp.h>
-#include <grlib.h>
+#include "ambapp.h"
+#include "grlib.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -22,7 +22,7 @@
 #include <rtems/clockdrv.h>
 #include <stdlib.h>
 #include <bsp.h>
-#include <bsp/tlib.h>
+#include <grlib/tlib.h>
 
 #ifdef RTEMS_DRVMGR_STARTUP
 

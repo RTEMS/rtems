@@ -22,7 +22,7 @@
 /*** Cores location and IRQs hardcoded ***/
 
 #include <drvmgr/drvmgr.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 #ifdef __cplusplus
 extern "C" {

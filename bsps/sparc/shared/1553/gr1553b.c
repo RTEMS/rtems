@@ -9,11 +9,11 @@
  */
 
 #include <stdlib.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/gr1553b.h>
+#include <grlib/gr1553b.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Driver Manager interface for BC, RT, BM, BRM, BC-BM and RT-BM */
 

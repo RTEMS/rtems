@@ -12,7 +12,7 @@
 
 #include <bsp.h>
 #include <bsp/watchdog.h>
-#include <grlib.h>
+#include <grlib/grlib.h>
 
 extern volatile struct gptimer_regs *LEON3_Timer_Regs;
 

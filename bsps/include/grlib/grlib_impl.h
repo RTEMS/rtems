@@ -90,6 +90,8 @@ RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
 
 #endif
 
+extern struct ambapp_bus ambapp_plb;
+
 #ifdef __cplusplus
 }
 #endif

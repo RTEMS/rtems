@@ -15,10 +15,10 @@
 #include <bsp.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grspw_router.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grspw_router.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 //#define STATIC
 #define STATIC static

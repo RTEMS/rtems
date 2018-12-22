@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 int ambapp_alloc_dev(struct ambapp_dev *dev, void *owner)
 {

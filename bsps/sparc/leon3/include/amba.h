@@ -31,8 +31,8 @@
 #define LEON3_AHB_SLAVES 64
 #define LEON3_APB_SLAVES 16
 
-#include <ambapp.h>
-#include <grlib.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
 
 #ifdef __cplusplus
 extern "C" {

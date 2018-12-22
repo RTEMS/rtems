@@ -17,12 +17,12 @@
 #include <ctype.h>
 #include <rtems/bspIo.h>
 
-#include <bsp/grcan.h>
+#include <grlib/grcan.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Maximum number of GRCAN devices supported by driver */
 #define GRCAN_COUNT_MAX 8
@@ -77,7 +77,7 @@
 #define DEBUG
 #define DEBUGFUNCS
 */
-#include <bsp/debug_defs.h>
+#include <grlib/debug_defs.h>
 
 /*********************************************************/
 

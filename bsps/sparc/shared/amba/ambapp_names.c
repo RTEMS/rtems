@@ -12,8 +12,8 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
-#include <ambapp_ids.h>
+#include <grlib/ambapp.h>
+#include <grlib/ambapp_ids.h>
 #include <string.h>
 
 #ifndef NULL

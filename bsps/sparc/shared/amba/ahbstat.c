@@ -13,11 +13,11 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/ahbstat.h>
+#include <grlib/ahbstat.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define REG_WRITE(addr, val) (*(volatile uint32_t *)(addr) = (uint32_t)(val))
 #define REG_READ(addr) (*(volatile uint32_t *)(addr))

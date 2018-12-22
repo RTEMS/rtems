@@ -15,14 +15,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <rtems/libi2c.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/i2cmst.h>
+#include <grlib/i2cmst.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Enable debug printks? */
 /*#define DEBUG*/

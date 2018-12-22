@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <bsp/gpiolib.h>
+#include <grlib/gpiolib.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 struct gpiolib_port;
 

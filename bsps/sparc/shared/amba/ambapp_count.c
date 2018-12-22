@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 /* Get number of devices matching search options */
 int ambapp_dev_count(struct ambapp_bus *abus, unsigned int options,

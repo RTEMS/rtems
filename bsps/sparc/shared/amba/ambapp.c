@@ -13,10 +13,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <bsp.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define AMBA_CONF_AREA 0xff000
 #define AMBA_AHB_SLAVE_CONF_AREA (1 << 11)

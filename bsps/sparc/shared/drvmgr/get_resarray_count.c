@@ -9,7 +9,7 @@
  */
 
 #include <stdlib.h>
-#include <drvmgr/bspcommon.h>
+#include <grlib/bspcommon.h>
 
 int get_resarray_count(struct drvmgr_bus_res **array)
 {

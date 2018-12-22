@@ -18,18 +18,18 @@
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
-#include <ambapp.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grtm.h>
+#include <grlib/ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grtm.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /*
 #define DEBUG
 #define DEBUGFUNCS
 */
 
-#include <bsp/debug_defs.h>
+#include <grlib/debug_defs.h>
 
 /* GRTM register map */
 struct grtm_regs {

@@ -7,7 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <bsp/apbuart.h>
+#include <grlib/apbuart.h>
 
 void apbuart_outbyte_polled(
   struct apbuart_regs *regs,

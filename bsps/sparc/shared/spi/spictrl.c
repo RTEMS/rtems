@@ -18,13 +18,13 @@
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/spictrl.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/spictrl.h>
+#include <grlib/ambapp.h>
 
 #include <rtems/libi2c.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /*#define DEBUG 1*/
 

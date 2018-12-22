@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 /* Calculate AHB Bus frequency of
  *   - Bus[0] (inverse=1), relative to the frequency of Bus[ahbidx]

@@ -35,17 +35,17 @@
 #include <rtems/bspIo.h>
 #include <pci.h>
 
-#include <ambapp.h>
-#include <grlib.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
-#include <drvmgr/bspcommon.h>
-#include <bsp/genirq.h>
+#include <grlib/bspcommon.h>
+#include <grlib/genirq.h>
 
 #include <bsp/gr_leon4_n2x.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Determines which PCI address the AHB masters on the LEON-N2X board will
  * access when accessing the AHB to PCI window, it should be set so that the

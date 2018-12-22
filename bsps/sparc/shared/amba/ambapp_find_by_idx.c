@@ -9,7 +9,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 /* AMBAPP helper routine to find a device by index. The function is given to
  * ambapp_for_each, the argument may be NULL (find first device) or a pointer

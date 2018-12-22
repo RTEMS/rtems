@@ -28,7 +28,7 @@
 
 #include <bsp.h>
 #include <bsp/fatal.h>
-#include <bsp/apbuart_termios.h>
+#include <grlib/apbuart_termios.h>
 #include <rtems/console.h>
 #include <string.h>
 

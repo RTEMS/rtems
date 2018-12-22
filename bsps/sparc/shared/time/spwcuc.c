@@ -10,13 +10,13 @@
  */
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <bsp/spwcuc.h>
+#include <grlib/spwcuc.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Private structure of SPWCUC driver. */
 struct spwcuc_priv {

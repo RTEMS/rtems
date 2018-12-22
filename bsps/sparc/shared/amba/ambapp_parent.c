@@ -10,7 +10,7 @@
  */
 
 #include <stdlib.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 struct ambapp_dev *ambapp_find_parent(struct ambapp_dev *dev)
 {

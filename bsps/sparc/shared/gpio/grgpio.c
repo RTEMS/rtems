@@ -17,12 +17,12 @@
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grgpio.h>
-#include <bsp/gpiolib.h>
-#include <ambapp.h>
-#include <grlib.h>
-#include <grlib_impl.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grgpio.h>
+#include <grlib/gpiolib.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
+#include <grlib/grlib_impl.h>
 
 /*#define DEBUG 1*/
 

@@ -23,10 +23,11 @@
 #include <stdlib.h>
 
 #include <bsp.h>
-#include <bsp/grslink.h>
-#include <ambapp.h>
+#include <grlib/grslink.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #ifndef GAISLER_SLINK
 #define GAISLER_SLINK 0x02F

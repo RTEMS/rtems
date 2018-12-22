@@ -17,14 +17,14 @@
 #include <stdint.h>
 #include <libcpu/access.h>
 
-#include <drvmgr/ambapp_bus.h>
-#include <drvmgr/ambapp_bus_grlib.h>
-#include <bsp/genirq.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp_bus_grlib.h>
+#include <grlib/genirq.h>
 
 #include <bsp.h>
 #include <bsp/irq.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define DBG(args...)
 /*#define DBG(args...) printk(args)*/

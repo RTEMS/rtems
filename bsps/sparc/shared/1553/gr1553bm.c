@@ -11,12 +11,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
-#include <bsp/gr1553b.h>
-#include <bsp/gr1553bm.h>
+#include <grlib/gr1553b.h>
+#include <grlib/gr1553bm.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define GR1553BM_WRITE_MEM(adr, val) *(volatile uint32_t *)(adr) = (uint32_t)(val)
 #define GR1553BM_READ_MEM(adr) (*(volatile uint32_t *)(adr))

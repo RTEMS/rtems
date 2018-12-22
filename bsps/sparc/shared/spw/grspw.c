@@ -17,13 +17,13 @@
 #include <assert.h>
 #include <ctype.h>
 #include <rtems/bspIo.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grspw.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grspw.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #define DBGSPW_IOCALLS 1
 #define DBGSPW_TX 2

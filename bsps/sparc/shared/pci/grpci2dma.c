@@ -16,9 +16,9 @@
 #include <rtems.h>
 #include <rtems/bspIo.h>  /* for printk */
 #include <bsp.h>
-#include <bsp/grpci2dma.h>
+#include <grlib/grpci2dma.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* This driver has been prepared for SMP operation
  */

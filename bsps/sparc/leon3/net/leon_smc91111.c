@@ -18,7 +18,7 @@
 #include <bsp.h>
 #include <libchip/smc91111exp.h>
 #include <rtems/bspIo.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
 #define SMC91111_BASE_ADDR (void*)0x20000300
 #define SMC91111_BASE_IRQ  4

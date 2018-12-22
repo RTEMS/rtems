@@ -15,8 +15,8 @@
 #include <rtems/bspIo.h> /* printk */
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/l4stat.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/l4stat.h>
 
 /*#define STATIC*/
 #define STATIC static

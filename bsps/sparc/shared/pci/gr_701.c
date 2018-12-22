@@ -27,18 +27,18 @@
 #include <pci.h>
 #include <pci/access.h>
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
-#include <drvmgr/bspcommon.h>
-#include <bsp/genirq.h>
+#include <grlib/bspcommon.h>
+#include <grlib/genirq.h>
 
-#include <bsp/gr_701.h>
+#include <grlib/gr_701.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* Offset from 0x80000000 (dual bus version) */
 #define AHB1_BASE_ADDR 0x80000000

@@ -36,10 +36,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <grlib.h>
-#include <bsp/gptimer.h>
-#include <bsp/tlib.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grlib.h>
+#include <grlib/gptimer.h>
+#include <grlib/tlib.h>
 
 #if defined(LEON3)
 #include <leon.h>
@@ -54,7 +54,7 @@
 #include <rtems/score/smpimpl.h>
 #endif
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* GPTIMER Core Configuration Register (READ-ONLY) */
 #define GPTIMER_CFG_TIMERS_BIT	0

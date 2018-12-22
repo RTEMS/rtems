@@ -23,11 +23,11 @@
 #include <rtems/bspIo.h>
 
 #include <drvmgr/drvmgr.h>
-#include <ambapp.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/grspw_pkt.h>
+#include <grlib/ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/grspw_pkt.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /*#define STATIC*/
 #define STATIC static

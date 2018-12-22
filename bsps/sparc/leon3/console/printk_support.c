@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
-#include <bsp/apbuart.h>
+#include <grlib/apbuart.h>
 
 int leon3_debug_uart_index __attribute__((weak)) = 0;
 struct apbuart_regs *leon3_debug_uart = NULL;

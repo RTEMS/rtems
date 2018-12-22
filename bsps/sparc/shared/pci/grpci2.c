@@ -38,12 +38,12 @@
 #include <pci/cfg.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
 #include <drvmgr/pci_bus.h>
-#include <bsp/grpci2.h>
+#include <grlib/grpci2.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /* If defined to 1 - byte twisting is enabled by default */
 #define DEFAULT_BT_ENABLED 0

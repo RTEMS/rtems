@@ -25,7 +25,7 @@
 #include <bspopts.h>
 #include <bsp/fatal.h>
 #include <rtems/rtems/intr.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <rtems/score/profiling.h>
 #include <rtems/score/sparcimpl.h>
 #include <rtems/timecounter.h>

@@ -27,17 +27,17 @@
 #include <pci.h>
 #include <pci/access.h>
 
-#include <ambapp.h>
-#include <grlib.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 #include <drvmgr/pci_bus.h>
-#include <drvmgr/bspcommon.h>
-#include <bsp/genirq.h>
+#include <grlib/bspcommon.h>
+#include <grlib/genirq.h>
 
-#include <bsp/gr_tmtc_1553.h>
+#include <grlib/gr_tmtc_1553.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 /*#define DEBUG 1 */
 

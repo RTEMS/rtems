@@ -16,10 +16,10 @@
 #include <bsp.h>
 #include <rtems/bspIo.h> /* printk */
 
-#include <bsp/satcan.h>
-#include <ambapp.h>
+#include <grlib/satcan.h>
+#include <grlib/ambapp.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #ifndef GAISLER_SATCAN
 #define GAISLER_SATCAN 0x080

@@ -25,13 +25,13 @@
 #include <stdio.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <bsp/apbuart.h>
-#include <ambapp.h>
-#include <grlib.h>
-#include <bsp/cons.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/apbuart.h>
+#include <grlib/ambapp.h>
+#include <grlib/grlib.h>
+#include <grlib/cons.h>
 #include <rtems/termiostypes.h>
-#include <bsp/apbuart_cons.h>
+#include <grlib/apbuart_cons.h>
 
 /*#define DEBUG 1  */
 

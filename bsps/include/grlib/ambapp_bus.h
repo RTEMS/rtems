@@ -17,7 +17,7 @@
 #define __AMBAPP_BUS_H__
 
 #include <drvmgr/drvmgr.h>
-#include <ambapp.h>
+#include "ambapp.h"
 
 #ifdef __cplusplus
 extern "C" {

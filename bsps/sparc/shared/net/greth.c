@@ -29,10 +29,10 @@
 #include <rtems/error.h>
 #include <rtems/rtems_bsdnet.h>
 
-#include <bsp/greth.h>
+#include <grlib/greth.h>
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
-#include <ambapp.h>
+#include <grlib/ambapp_bus.h>
+#include <grlib/ambapp.h>
 
 #include <sys/param.h>
 #include <sys/mbuf.h>
@@ -50,7 +50,7 @@
 #undef free
 #endif
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 #if defined(__m68k__)
 extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );

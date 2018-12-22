@@ -13,9 +13,9 @@
 #include <rtems/bspIo.h>
 #include <stdlib.h>
 #include <string.h>
-#include <bsp/genirq.h>
+#include <grlib/genirq.h>
 
-#include <grlib_impl.h>
+#include <grlib/grlib_impl.h>
 
 struct genirq_handler_entry {
 	struct genirq_handler_entry	*next;		/* Next ISR entry for this IRQ number */

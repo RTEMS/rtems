@@ -21,10 +21,10 @@
 #include <string.h>
 
 #include <drvmgr/drvmgr.h>
-#include <drvmgr/ambapp_bus.h>
+#include <grlib/ambapp_bus.h>
 
 #include <bsp.h>
-#include <ambapp.h>
+#include <grlib/ambapp.h>
 #include <rtems/bspIo.h>
 
 /*#define DEBUG 1*/
