@@ -18,6 +18,7 @@
 #define _RTEMS_RTEMS_PARTIMPL_H
 
 #include <rtems/rtems/partdata.h>
+#include <rtems/score/address.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/objectimpl.h>
 

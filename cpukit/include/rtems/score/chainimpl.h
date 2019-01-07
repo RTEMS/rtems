@@ -19,7 +19,6 @@
 #define _RTEMS_SCORE_CHAINIMPL_H
 
 #include <rtems/score/chain.h>
-#include <rtems/score/address.h>
 #include <rtems/score/assert.h>
 
 #ifdef __cplusplus
