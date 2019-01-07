@@ -12,6 +12,7 @@
 #include "config.h"
 #endif
 
+#include <inttypes.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -136,7 +137,8 @@ static int shell_pci_rX(
     case 4:
       result = pci_cfg_r32(pciid, offset, &data32);
       if (result == PCISTS_OK)
-        printf(" r32[0x%02x]: 0x%08lx  DEC=%lu\n", offset, data32, data32);
+        printf(" r32[0x%02x]: 0x%08" PRIx32 "  DEC=%" PRIu32 "\n",
+               offset, data32, data32);
       break;
 
     default:
@@ -177,7 +179,8 @@ static int shell_pci_wX(
     case 4:
       result = pci_cfg_w32(pciid, offset, data);
       if (result == PCISTS_OK)
-        printf(" w32[0x%02x]: 0x%08lx  DEC=%lu\n", offset, data, data);
+        printf(" w32[0x%02x]: 0x%08" PRIx32 "  DEC=%" PRIu32 "\n",
+               offset, data, data);
       break;
 
     default:
@@ -362,8 +365,8 @@ static int shell_pci_infodev(
   printf(" DEVICE:        0x%04x\n", dev->device);
   printf(" SUB VENDOR:    0x%04x\n", dev->subvendor);
   printf(" SUB DEVICE:    0x%04x\n", dev->subdevice);
-  printf(" CLASS:         0x%06lx\n", dev->classrev >> 8);
-  printf(" REVISION:      0x%02lx\n", dev->classrev & 0xff);
+  printf(" CLASS:         0x%06" PRIx32 "\n", dev->classrev >> 8);
+  printf(" REVISION:      0x%02" PRIx32 "\n", dev->classrev & 0xff);
   printf(" IRQ:           %d\n", dev->sysirq);
 
   res_avail = 0;
@@ -387,7 +390,8 @@ static int shell_pci_infodev(
       continue;
     }
 
-    printf("  %s[%d]:  %08lx-%08lx\n", str1, i, res->start, res->end - 1);
+    printf("  %s[%d]:  %08" PRIx32 "-%08" PRIx32 "\n",
+           str1, i, res->start, res->end - 1);
   }
 
   if (res_avail == 0)

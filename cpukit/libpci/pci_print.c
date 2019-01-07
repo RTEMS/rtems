@@ -7,6 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <pci.h>
 #include <pci/access.h>
@@ -42,11 +43,12 @@ void pci_print_dev(pci_dev_t dev)
 	PCI_CFG_R32(dev, PCIR_VENDOR, &id);
 	printf("\nBus %x Slot %x function: %x [0x%x] %s\n",
 		PCI_DEV_EXPAND(dev), dev, str);
-	printf("\tVendor id: 0x%lx, device id: 0x%lx\n",
+	printf("\tVendor id: 0x%" PRIx32 ", device id: 0x%" PRIx32 "\n",
 		id & 0xffff, id >> 16);
 	if (maxbars == 2) {
 		PCI_CFG_R32(dev, PCIR_PRIBUS_1, &tmp);
-		printf("\tPrimary: %lx  Secondary: %lx  Subordinate: %lx\n",
+		printf("\tPrimary: %" PRIx32 "  Secondary: %" PRIx32
+			"  Subordinate: %" PRIx32 "\n",
 			tmp & 0xff, (tmp >> 8) & 0xff, (tmp >> 16) & 0xff);
 	}
 
@@ -82,7 +84,8 @@ void pci_print_dev(pci_dev_t dev)
 				str = "MB";
 				tmp2 = tmp2 / (1024*1024);
 			}
-			printf("\tBAR %d: %lx [%lu%s]\n", pos, tmp, tmp2, str);
+			printf("\tBAR %d: %" PRIx32 " [%" PRIu32 "%s]\n",
+				pos, tmp, tmp2, str);
 		}
 	}
 
@@ -105,7 +108,7 @@ void pci_print_dev(pci_dev_t dev)
 			tmp2 = tmp2 / (1024*1024);
 		}
 		str2 = tmp & 1 ? "ENABLED" : "DISABLED";
-		printf("\tROM:   %08lx [%lu%s] (%s)\n",
+		printf("\tROM:   %08" PRIx32 " [%" PRIu32 "%s] (%s)\n",
 			tmp, tmp2, str, str2);
 	}
 
@@ -122,8 +125,8 @@ void pci_print_dev(pci_dev_t dev)
 			str = "ENABLED";
 			if (limit < base)
 				str = "DISABLED";
-			printf("\tI/O:   BASE: 0x%08lx, LIMIT: 0x%08lx (%s)\n",
-				base, limit, str);
+			printf("\tI/O:   BASE: 0x%08" PRIx32 ", LIMIT: 0x%08"
+				PRIx32 " (%s)\n", base, limit, str);
 		}
 
 		PCI_CFG_R32(dev, 0x20, &tmp);
@@ -133,8 +136,8 @@ void pci_print_dev(pci_dev_t dev)
 			str = "ENABLED";
 			if (limit < base)
 				str = "DISABLED";
-			printf("\tMEMIO: BASE: 0x%08lx, LIMIT: 0x%08lx (%s)\n",
-				base, limit, str);
+			printf("\tMEMIO: BASE: 0x%08" PRIx32 ", LIMIT: 0x%08"
+				PRIx32 " (%s)\n", base, limit, str);
 		}
 
 		PCI_CFG_R32(dev, 0x24, &tmp);
@@ -144,8 +147,8 @@ void pci_print_dev(pci_dev_t dev)
 			str = "ENABLED";
 			if (limit < base)
 				str = "DISABLED";
-			printf("\tMEM:   BASE: 0x%08lx, LIMIT: 0x%08lx (%s)\n",
-					base, limit, str);
+			printf("\tMEM:   BASE: 0x%08" PRIx32 ", LIMIT: 0x%08"
+				PRIx32 " (%s)\n", base, limit, str);
 		}
 	}
 	printf("\n");

@@ -9,6 +9,7 @@
  */
 
 #include <rtems.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <pci/cfg.h>
@@ -49,12 +50,12 @@ static void pci_cfg_print_resources(struct pci_res *resources, char *prefix)
 		}
 		printf("%s{\n", prefix);
 		printf("%s\t.next = NULL,\n", prefix);
-		printf("%s\t.size = 0x%08lx,\n", prefix, res->size);
-		printf("%s\t.boundary = 0x%08lx,\n", prefix, res->boundary);
+		printf("%s\t.size = 0x%08" PRIx32 ",\n", prefix, res->size);
+		printf("%s\t.boundary = 0x%08" PRIx32 ",\n", prefix, res->boundary);
 		printf("%s\t.flags = 0x%x,\n", prefix, res->flags);
 		printf("%s\t.bar = %d,\n", prefix, i);
-		printf("%s\t.start = 0x%08lx,\n", prefix, res->start);
-		printf("%s\t.end = 0x%08lx,\n", prefix, res->end);
+		printf("%s\t.start = 0x%08" PRIx32 ",\n", prefix, res->start);
+		printf("%s\t.end = 0x%08" PRIx32 ",\n", prefix, res->end);
 		printf("%s},\n", prefix);
 	}
 }
@@ -88,7 +89,7 @@ static void pci_cfg_print_device(struct pci_dev *dev, char *prefix)
 	printf("%s.device = 0x%04x,\n", prefix, dev->device);
 	printf("%s.subvendor = 0x%04x,\n", prefix, dev->subvendor);
 	printf("%s.subdevice = 0x%04x,\n", prefix, dev->subdevice);
-	printf("%s.classrev = 0x%08lx,\n", prefix, dev->classrev);
+	printf("%s.classrev = 0x%08" PRIx32 ",\n", prefix, dev->classrev);
 	printf("%s.command = 0,\n", prefix);
 }
 

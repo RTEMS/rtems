@@ -35,6 +35,7 @@
 
 #include <sys/cdefs.h>
 
+#include <inttypes.h>
 #include <stdio.h>
 
 #include <rtems/rtl/rtl.h>
@@ -215,8 +216,8 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
 #ifdef DIAGNOSTIC
     if (value != 0 && *where != 0) {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-        printf("rtl: reloc base_rel(%s): where=%p, *where 0x%lx, "
-               "addend=0x%lx, base %p\n",
+        printf("rtl: reloc base_rel(%s): where=%p, *where 0x%" PRIu32 ", "
+               "addend=0x%" PRIu32 ", base %p\n",
                rtems_rtl_obj_oname (obj),
                where, *where, rela->r_addend, sect->base);
     }

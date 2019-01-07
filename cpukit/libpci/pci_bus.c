@@ -26,6 +26,7 @@
 /* On small systems undefine PCIBUS_INFO to avoid sprintf get dragged in */
 #define PCIBUS_INFO
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -301,7 +302,7 @@ void pcibus_dev_info(
 	sprintf(buf, "LOCATION:    BUS:SLOT:FUNCTION [%x:%x:%x]",
 			PCI_DEV_EXPAND(devinfo->pcidev));
 	print_line(p, buf);
-	sprintf(buf, "PCIID        0x%lx", (uint32_t)devinfo->pcidev);
+	sprintf(buf, "PCIID        0x%" PRIx16 "", devinfo->pcidev);
 	print_line(p, buf);
 	sprintf(buf, "VENDOR ID:   %04x", devinfo->id.vendor);
 	print_line(p, buf);
@@ -311,7 +312,7 @@ void pcibus_dev_info(
 	print_line(p, buf);
 	sprintf(buf, "SUBDEV ID:   %04x", devinfo->id.subdevice);
 	print_line(p, buf);
-	sprintf(buf, "CLASS:       %lx", devinfo->id.class);
+	sprintf(buf, "CLASS:       %" PRIx32, devinfo->id.class);
 	print_line(p, buf);
 	sprintf(buf, "REVISION:    %x", devinfo->rev);
 	print_line(p, buf);
@@ -343,7 +344,8 @@ void pcibus_dev_info(
 		if (!pcibusres->size)
 			continue;
 
-		sprintf(buf, " %s[%d]:  %08lx-%08lx [PCIADR %lx]",
+		sprintf(buf, " %s[%d]:  %08" PRIx32 "-%08" PRIx32
+			" [PCIADR %" PRIx32 "]",
 			str1, i, pcibusres->address,
 			pcibusres->address + pcibusres->size - 1, pcistart);
 		print_line(p, buf);

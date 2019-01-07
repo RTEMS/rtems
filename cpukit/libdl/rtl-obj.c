@@ -428,7 +428,7 @@ rtems_rtl_obj_add_section (rtems_rtl_obj* obj,
     rtems_chain_append (&obj->sections, &sect->node);
 
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_SECTION))
-      printf ("rtl: sect: add: %-2d: %s (%zu) 0x%08lx\n",
+      printf ("rtl: sect: add: %-2d: %s (%zu) 0x%08" PRIu32 "\n",
               section, name, size, flags);
   }
   return true;

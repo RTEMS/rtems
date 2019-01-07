@@ -486,7 +486,7 @@ rtems_fdt_shell_tst (int argc, char *argv[])
   start = time (NULL);
 
   printf ("0x%08" PRIx32 " => (value & 0x%08" PRIx32 ") == 0x%08" PRIx32 \
-          " for %" PRIu32 " seconds\n",
+          " for %ld seconds\n",
           address, mask, test, rtems_fdt_test_timeout);
 
   while ((time (NULL) - start) < rtems_fdt_test_timeout)
@@ -533,7 +533,7 @@ rtems_fdt_shell_to (int argc, char *argv[])
 
   if (argc == 1)
   {
-    printf ("timeout: %" PRIu32 " seconds\n", rtems_fdt_test_timeout);
+    printf ("timeout: %ld seconds\n", rtems_fdt_test_timeout);
     return 0;
   }
 
