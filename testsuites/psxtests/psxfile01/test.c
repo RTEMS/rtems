@@ -696,7 +696,7 @@ since new path is not valid");
   ctime2 = buf.st_ctime;
 
 
-  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() );
+  status = rtems_task_wake_after( rtems_clock_get_ticks_per_second() + 1);
   rewind( file );
   while ( fgets(buffer, 128, file) )
     printf( "%s", buffer );
