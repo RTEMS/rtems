@@ -344,7 +344,7 @@ dl01-tar.h: dl01.tar
 dl01-tar.o: dl01-tar.c dl01-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl01-sym.o: dl01.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl01$(EXEEXT):  $(dl01_OBJECTS) $(dl01_DEPENDENCIES) dl01-sym.o
 	@rm -f $@
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
@@ -377,7 +377,7 @@ dl02-tar.h: dl02.tar
 dl02-tar.o: dl02-tar.c dl02-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl02-sym.o: dl02.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl02$(EXEEXT):  $(dl02_OBJECTS) $(dl02_DEPENDENCIES) dl02-sym.o
 	@rm -f $@
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
@@ -420,7 +420,7 @@ dl04-tar.h: dl04.tar
 dl04-tar.o: dl04-tar.c dl04-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl04-sym.o: dl04.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl04$(EXEEXT):  $(dl04_OBJECTS) $(dl04_DEPENDENCIES) dl04-sym.o
 	@rm -f $@
 	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
@@ -454,7 +454,7 @@ dl05-tar.h: dl05.tar
 dl05-tar.o: dl05-tar.c dl05-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl05-sym.o: dl05.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl05$(EXEEXT): $(dl05_OBJECTS) $(dl05_DEPENDENCIES) dl05-sym.o
 	@rm -f $@
 	$(AM_V_CXXLD)$(LINK.cc) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
@@ -504,7 +504,7 @@ dl06-tar.h: dl06.tar
 dl06-tar.o: dl06-tar.c dl06-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl06-sym.o: dl06.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl06$(EXEEXT): $(dl06_OBJECTS) dl06-sym.o
 	@rm -f $@
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
@@ -543,7 +543,7 @@ dl07-tar.h: dl07.tar
 dl07-tar.o: dl07-tar.c dl07-tar.h
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl07-sym.o: dl07.pre
-	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl07$(EXEEXT):  $(dl07_OBJECTS) $(dl07_DEPENDENCIES) dl07-sym.o
 	@rm -f $@
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
