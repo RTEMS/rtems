@@ -1117,6 +1117,7 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 	psxhdrs/dirent/scandir.c \
 	psxhdrs/dirent/seekdir.c \
 	psxhdrs/dirent/telldir.c \
+	psxhdrs/errno/errno.c \
 	psxhdrs/glob/glob.c \
 	psxhdrs/glob/globfree.c \
 	psxhdrs/libgen/basename.c \
