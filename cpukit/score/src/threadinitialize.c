@@ -58,15 +58,18 @@ bool _Thread_Initialize(
   size_t                   scheduler_index;
   Per_CPU_Control         *cpu = _Per_CPU_Get_by_index( 0 );
 
-#if defined( RTEMS_SMP )
-  if ( rtems_configuration_is_smp_enabled() ) {
-    if ( !is_preemptible ) {
-      return false;
-    }
+#if defined(RTEMS_SMP)
+  if ( !is_preemptible && rtems_configuration_is_smp_enabled() ) {
+    return false;
+  }
+#endif
 
-    if ( isr_level != 0 ) {
-      return false;
-    }
+#if defined(RTEMS_SMP)
+  if (
+    isr_level != 0
+      && rtems_configuration_is_smp_enabled()
+  ) {
+    return false;
   }
 #endif
 

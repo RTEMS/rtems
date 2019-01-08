@@ -43,22 +43,22 @@ rtems_status_code rtems_task_mode(
   if ( !previous_mode_set )
     return RTEMS_INVALID_ADDRESS;
 
-#if defined( RTEMS_SMP )
-  /*
-   * When in SMP, you cannot disable preemption for a thread or 
-   * alter its interrupt level. It must be fully preemptible with
-   * all interrupts enabled.
-   */
-  if ( rtems_configuration_is_smp_enabled() ) {
-    if ( mask & RTEMS_PREEMPT_MASK ) {
-      if ( !_Modes_Is_preempt( mode_set ) ) {
-        return RTEMS_NOT_IMPLEMENTED;
-      }
-    }
+#if defined(RTEMS_SMP)
+  if (
+    ( mask & RTEMS_PREEMPT_MASK ) != 0
+      && !_Modes_Is_preempt( mode_set )
+      && rtems_configuration_is_smp_enabled()
+  ) {
+    return RTEMS_NOT_IMPLEMENTED;
+  }
+#endif
 
-    if ( mask & RTEMS_INTERRUPT_MASK ) {
-      return RTEMS_NOT_IMPLEMENTED;
-    }
+#if defined(RTEMS_SMP)
+  if (
+    ( mask & RTEMS_INTERRUPT_MASK ) != 0
+      && rtems_configuration_is_smp_enabled()
+  ) {
+    return RTEMS_NOT_IMPLEMENTED;
   }
 #endif
 
