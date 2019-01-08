@@ -76,10 +76,18 @@ static void test_isr_level_for_new_threads( ISR_Level last_proper_level )
   };
 
   for ( current = 0 ; current <= mask ; ++current ) {
-    rtems_mode initial_modes = RTEMS_INTERRUPT_LEVEL(current);
+    rtems_mode initial_modes;
     rtems_id id;
     rtems_status_code sc;
     rtems_event_set events;
+
+    initial_modes = RTEMS_INTERRUPT_LEVEL(current);
+
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+    if ( initial_modes != 0 ) {
+      break;
+    }
+#endif
 
     ctx.actual_level = 0xffffffff;
 

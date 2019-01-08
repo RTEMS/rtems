@@ -261,7 +261,7 @@ void _Thread_Do_dispatch( Per_CPU_Control *cpu_self, ISR_Level level )
 #if defined(RTEMS_SCORE_ROBUST_THREAD_DISPATCH)
   if (
     !_ISR_Is_enabled( level )
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) && CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
       && rtems_configuration_is_smp_enabled()
 #endif
   ) {

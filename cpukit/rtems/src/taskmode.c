@@ -53,11 +53,13 @@ rtems_status_code rtems_task_mode(
   }
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
     ( mask & RTEMS_INTERRUPT_MASK ) != 0
       && _Modes_Get_interrupt_level( mode_set ) != 0
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
       && rtems_configuration_is_smp_enabled()
+#endif
   ) {
     return RTEMS_NOT_IMPLEMENTED;
   }

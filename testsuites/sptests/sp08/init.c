@@ -175,7 +175,7 @@ rtems_task Init(
 /* END OF RTEMS_PREEMPT */
 
 /* BEGINNING OF RTEMS_INTERRUPT_LEVEL */
-#if !defined(RTEMS_SMP)
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
   status = rtems_task_mode(
     RTEMS_INTERRUPT_LEVEL(3),
     RTEMS_INTERRUPT_MASK,
@@ -197,13 +197,25 @@ rtems_task Init(
     "TA1 - rtems_task_mode - RTEMS_INTERRUPT_LEVEL( 5 ) - previous mode: ",
     previous_mode
   );
+#else
+  status = rtems_task_mode(
+    RTEMS_INTERRUPT_LEVEL( 1 ),
+    RTEMS_INTERRUPT_MASK,
+    &previous_mode
+  );
+  fatal_directive_status( status, RTEMS_NOT_IMPLEMENTED, "rtems_task_mode" );
 #endif
 /* END OF RTEMS_INTERRUPT_LEVEL */
 
 /* BEGINNING OF COMBINATIONS */
 
   status = rtems_task_mode(
-    RTEMS_INTERRUPT_LEVEL(3) | RTEMS_NO_ASR |
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+    RTEMS_INTERRUPT_LEVEL(0) |
+#else
+    RTEMS_INTERRUPT_LEVEL(3) |
+#endif
+      RTEMS_NO_ASR |
       RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
     RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK |
       RTEMS_TIMESLICE_MASK | RTEMS_PREEMPT_MASK,
@@ -216,7 +228,12 @@ rtems_task Init(
   );
 
   status = rtems_task_mode(
-    RTEMS_INTERRUPT_LEVEL(3) | RTEMS_NO_ASR |
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
+    RTEMS_INTERRUPT_LEVEL(0) |
+#else
+    RTEMS_INTERRUPT_LEVEL(3) |
+#endif
+      RTEMS_NO_ASR |
       RTEMS_TIMESLICE | RTEMS_NO_PREEMPT,
     RTEMS_INTERRUPT_MASK | RTEMS_ASR_MASK |
       RTEMS_TIMESLICE_MASK | RTEMS_PREEMPT_MASK,

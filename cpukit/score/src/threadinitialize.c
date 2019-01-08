@@ -64,10 +64,12 @@ bool _Thread_Initialize(
   }
 #endif
 
-#if defined(RTEMS_SMP)
+#if defined(RTEMS_SMP) || CPU_ENABLE_ROBUST_THREAD_DISPATCH == TRUE
   if (
     isr_level != 0
+#if CPU_ENABLE_ROBUST_THREAD_DISPATCH == FALSE
       && rtems_configuration_is_smp_enabled()
+#endif
   ) {
     return false;
   }
