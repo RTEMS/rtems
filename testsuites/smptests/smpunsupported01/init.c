@@ -45,7 +45,7 @@ static void test(void)
   mode = RTEMS_INTERRUPT_LEVEL(0);
   if (mode == 0) {
     sc = rtems_task_mode(mode, RTEMS_INTERRUPT_MASK, &mode);
-    rtems_test_assert(sc == RTEMS_NOT_IMPLEMENTED);
+    rtems_test_assert(sc == RTEMS_SUCCESSFUL);
   }
 
   mode = RTEMS_INTERRUPT_LEVEL(1);

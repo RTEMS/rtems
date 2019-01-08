@@ -56,6 +56,7 @@ rtems_status_code rtems_task_mode(
 #if defined(RTEMS_SMP)
   if (
     ( mask & RTEMS_INTERRUPT_MASK ) != 0
+      && _Modes_Get_interrupt_level( mode_set ) != 0
       && rtems_configuration_is_smp_enabled()
   ) {
     return RTEMS_NOT_IMPLEMENTED;
