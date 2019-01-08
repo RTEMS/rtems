@@ -167,7 +167,7 @@ rtems_task Init(
 			     readTaskName,
 			     1,
 			     RTEMS_MINIMUM_STACK_SIZE * 2,
-			     RTEMS_INTERRUPT_LEVEL(31),
+			     RTEMS_DEFAULT_MODES,
 			     RTEMS_DEFAULT_ATTRIBUTES,
 			     &readTaskID
 			     );

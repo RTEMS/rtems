@@ -49,7 +49,7 @@ rtems_task Init(
      Task_name[ 1 ],
      1,
      RTEMS_MINIMUM_STACK_SIZE * 2,
-     RTEMS_INTERRUPT_LEVEL(31),
+     RTEMS_DEFAULT_MODES,
      RTEMS_DEFAULT_ATTRIBUTES,
      &Task_id[ 1 ]
   );
