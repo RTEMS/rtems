@@ -92,6 +92,7 @@ SYM(_start):
 	amoswap.w	zero, zero, 0(t0)
 #endif
 
+	li	a0, 0
 	j	boot_card
 
 #ifdef RTEMS_SMP
