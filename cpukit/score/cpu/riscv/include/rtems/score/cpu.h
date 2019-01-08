@@ -52,6 +52,9 @@ extern "C" {
 #define CPU_ALL_TASKS_ARE_FP             FALSE
 #define CPU_IDLE_TASK_IS_FP              FALSE
 #define CPU_USE_DEFERRED_FP_SWITCH       FALSE
+
+#define CPU_ENABLE_ROBUST_THREAD_DISPATCH TRUE
+
 #define CPU_STACK_GROWS_UP               FALSE
 
 #define CPU_STRUCTURE_ALIGNMENT __attribute__ ((aligned (64)))
