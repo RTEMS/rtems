@@ -993,6 +993,24 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
         flags = RTEMS_RTL_OBJ_SECT_STR;
         break;
 
+      case SHT_INIT_ARRAY:
+        /*
+         * Constructors are text and need to be loaded.
+         */
+        flags = (RTEMS_RTL_OBJ_SECT_CTOR |
+                 RTEMS_RTL_OBJ_SECT_TEXT |
+                 RTEMS_RTL_OBJ_SECT_LOAD);
+        break;
+
+      case SHT_FINI_ARRAY:
+        /*
+         * Destructors are text and need to be loaded.
+         */
+        flags = (RTEMS_RTL_OBJ_SECT_DTOR |
+                 RTEMS_RTL_OBJ_SECT_TEXT |
+                 RTEMS_RTL_OBJ_SECT_LOAD);
+        break;
+
       default:
         /*
          * See if there are architecture specific flags?
@@ -1019,6 +1037,9 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
       if ((shdr.sh_flags & SHF_LINK_ORDER) != 0)
         flags |= RTEMS_RTL_OBJ_SECT_LINK;
 
+      /*
+       * Some architexctures support a named PROGBIT section for INIT/FINI.
+       */
       len = RTEMS_RTL_ELF_STRING_MAX;
       if (!rtems_rtl_obj_cache_read (strings, fd,
                                      sectstroff + shdr.sh_name,

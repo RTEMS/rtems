@@ -7,6 +7,7 @@
 #include <sys/cdefs.h>
 
 #include <errno.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -193,6 +194,7 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
     case R_TYPE(ABS32):     /* word32 (S + A) | T */
     case R_TYPE(GLOB_DAT):  /* word32 (S + A) | T */
     case R_TYPE(PREL31):    /* word32 (S + A) | T - P */
+    case R_TYPE(TARGET1):   /* Equivalent to ABS32 */
     case R_TYPE(TARGET2):   /* Equivalent to REL32 */
       if (__predict_true(RELOC_ALIGNED_P(where))) {
         tmp = *where + symvalue;
@@ -249,8 +251,8 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
       break;
 
     case R_TYPE(THM_JUMP24):
-      /* same to THM_CALL; insn b.w */
-    case R_TYPE(THM_CALL):
+      /* same as THM_PC22; insn b.w */
+    case R_TYPE(THM_PC22):
       upper_insn = *(uint16_t *)where;
       lower_insn = *((uint16_t *)where + 1);
       sign = (upper_insn & (1 << 10)) >> 10;
@@ -322,7 +324,7 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
       tmp = tmp - (Elf_Addr)where;
 
       if (((Elf_Sword)tmp > 0x7ffffe) || ((Elf_Sword)tmp < -0x800000)) {
-        rtems_rtl_set_error (EINVAL, "%s: Overflow %ld "
+        rtems_rtl_set_error (EINVAL, "%s: Overflow %" PRIu32 " "
                              "THM_JUMP19 relocations",
                              sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
         return false;
@@ -342,12 +344,12 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
       break;
 
     default:
-      printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
+      printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p, "
               "contents = %p\n",
               ELF_R_SYM(rel->r_info), (uint32_t) ELF_R_TYPE(rel->r_info),
               (void *)rel->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
-                           "%s: Unsupported relocation type %ld "
+                           "%s: Unsupported relocation type %" PRIu32 " "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
       return false;

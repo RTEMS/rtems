@@ -512,6 +512,8 @@ rtems_rtl_load_object (const char* name, int mode)
       return NULL;
     }
 
+    rtems_chain_append (&rtl->pending, &obj->link);
+
     /*
      * Find the file in the file system using the search path. The fname field
      * will point to a valid file name if found.
@@ -523,14 +525,22 @@ rtems_rtl_load_object (const char* name, int mode)
       return NULL;
     }
 
-    rtems_chain_append (&rtl->pending, &obj->link);
-
     if (!rtems_rtl_obj_load (obj))
     {
       rtems_chain_extract (&obj->link);
       rtems_rtl_obj_free (obj);
       rtems_rtl_obj_caches_flush ();
       return NULL;
+    }
+
+    /*
+     * If there are unresolved externals remove from the pending queue and place
+     * on the objects list until the symbols are resolved.
+     */
+    if (obj->unresolved != 0)
+    {
+      rtems_chain_extract (&obj->link);
+      rtems_chain_append (&rtl->objects, &obj->link);
     }
 
     rtems_rtl_obj_caches_flush ();
@@ -572,34 +582,34 @@ rtems_rtl_load (const char* name, int mode)
     node = rtems_chain_first (&rtl->pending);
     while (!rtems_chain_is_tail (&rtl->pending, node))
     {
-      rtems_rtl_obj* obj = (rtems_rtl_obj*) node;
+      rtems_rtl_obj* pobj = (rtems_rtl_obj*) node;
 
       /*
        * Move to the next pending object file and place this object file on the
        * RTL's objects list.
        */
-      node = rtems_chain_next (&obj->link);
-      rtems_chain_extract (&obj->link);
-      rtems_chain_append (&rtl->objects, &obj->link);
+      node = rtems_chain_next (&pobj->link);
+      rtems_chain_extract (&pobj->link);
+      rtems_chain_append (&rtl->objects, &pobj->link);
 
       /*
        * Make sure the object file and cache is synchronized.
        */
-      rtems_rtl_obj_synchronize_cache (obj);
+      rtems_rtl_obj_synchronize_cache (pobj);
 
       /*
-       * Run any local constructors if this is the first user because the
-       * object file will have just been loaded. Unlock the linker to avoid any
-       * dead locks if the object file needs to load files or update the symbol
-       * table. We also do not want a constructor to unload this object file.
+       * Run any local constructors if they have not been run. Unlock the linker
+       * to avoid any dead locks if the object file needs to load files or
+       * update the symbol table. We also do not want a constructor to unload
+       * this object file.
        */
-      if (obj->users == 1)
+      if ((pobj->flags & RTEMS_RTL_OBJ_CTOR_RUN) == 0)
       {
-        obj->flags |= RTEMS_RTL_OBJ_LOCKED;
+        pobj->flags |= RTEMS_RTL_OBJ_LOCKED | RTEMS_RTL_OBJ_CTOR_RUN;
         rtems_rtl_unlock ();
-        rtems_rtl_obj_run_ctors (obj);
+        rtems_rtl_obj_run_ctors (pobj);
         rtems_rtl_lock ();
-        obj->flags &= ~RTEMS_RTL_OBJ_LOCKED;
+        pobj->flags &= ~RTEMS_RTL_OBJ_LOCKED;
       }
     }
   }
@@ -623,7 +633,7 @@ rtems_rtl_unload_object (rtems_rtl_obj* obj)
   }
 
   /*
-   * Move the object file from the objects list to the pending list if unloaded.
+   * The object file cannot be unloaded if it is referenced.
    */
   if (rtems_rtl_obj_get_reference (obj) > 0)
   {
@@ -649,30 +659,43 @@ rtems_rtl_unload (rtems_rtl_obj* obj)
   {
     rtems_chain_control unloading;
     rtems_chain_node*   node;
+    bool                orphaned_found = true;
+    int                 loop = 0;
 
     /*
-     * Remove the orphaned object files from the objects list. This makes the
-     * list private and any changes in any desctructors will effect the run.
+     * Remove the orphaned object files from the objects list. The unloading is
+     * private so any changes in any desctructors will not effect the list as it
+     * is being iterated over.
+     *
+     * To avoid maintaining a complex tree loop while oprhans are still be found.
      */
+
     rtems_chain_initialize_empty (&unloading);
 
-    node = rtems_chain_first (&rtl->objects);
-    while (!rtems_chain_is_tail (&rtl->objects, node))
+    while (orphaned_found)
     {
-      rtems_chain_node* next_node = rtems_chain_next (node);
-      rtems_rtl_obj* uobj = (rtems_rtl_obj*) node;
-      if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNLOAD))
-        printf ("rtl: unload object: %s: %s\n",
-                rtems_rtl_obj_oname (obj),
-                rtems_rtl_obj_orphaned (uobj) ? "orphaned" : "inuse");
-      if (rtems_rtl_obj_orphaned (uobj))
+      orphaned_found = false;
+      ++loop;
+      node = rtems_chain_first (&rtl->objects);
+      while (!rtems_chain_is_tail (&rtl->objects, node))
       {
-        rtems_rtl_obj_remove_dependencies (uobj);
-        rtems_chain_extract (&uobj->link);
-        rtems_chain_append (&unloading, &uobj->link);
-        uobj->flags |= RTEMS_RTL_OBJ_LOCKED;
+        rtems_chain_node* next_node = rtems_chain_next (node);
+        rtems_rtl_obj* uobj = (rtems_rtl_obj*) node;
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNLOAD))
+          printf ("rtl: unload object: %3i: %9s: %s\n",
+                  loop,
+                  rtems_rtl_obj_orphaned (uobj) ? "orphaned" : "inuse",
+                  rtems_rtl_obj_oname (uobj));
+        if (rtems_rtl_obj_orphaned (uobj))
+        {
+          orphaned_found = true;
+          rtems_rtl_obj_remove_dependencies (uobj);
+          rtems_chain_extract (&uobj->link);
+          rtems_chain_append (&unloading, &uobj->link);
+          uobj->flags |= RTEMS_RTL_OBJ_LOCKED;
+        }
+        node = next_node;
       }
-      node = next_node;
     }
 
     /*
@@ -684,7 +707,11 @@ rtems_rtl_unload (rtems_rtl_obj* obj)
     while (!rtems_chain_is_tail (&unloading, node))
     {
       rtems_rtl_obj* uobj = (rtems_rtl_obj*) node;
-      rtems_rtl_obj_run_dtors (uobj);
+      if ((uobj->flags & RTEMS_RTL_OBJ_CTOR_RUN) != 0)
+      {
+        rtems_rtl_obj_run_dtors (uobj);
+        uobj->flags &= ~RTEMS_RTL_OBJ_CTOR_RUN;
+      }
       node = rtems_chain_next (node);
     }
 

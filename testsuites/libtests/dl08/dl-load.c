@@ -126,7 +126,7 @@ int dl_load_test(void)
 
   dl_load_dump ();
 
-  printf ("\n\n\nRunning rtems_main_o1:\n\n");
+  printf ("Running rtems_main_o1:\n");
   if (dl_call (o1, "rtems_main_o1"))
     return 1;
 

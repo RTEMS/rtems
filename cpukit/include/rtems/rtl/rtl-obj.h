@@ -168,6 +168,7 @@ typedef bool (*rtems_rtl_obj_depends_iterator) (rtems_rtl_obj* obj,
 #define RTEMS_RTL_OBJ_RELOC_TAG    (1 << 3) /**< Tag the object as visited when reloc
                                              *   parsing. */
 #define RTEMS_RTL_OBJ_DEP_VISITED  (1 << 4) /**< Dependency loop detection. */
+#define RTEMS_RTL_OBJ_CTOR_RUN     (1 << 5) /**< Constructors have been called. */
 
 /**
  * RTL Object. There is one for each object module loaded plus one for the base

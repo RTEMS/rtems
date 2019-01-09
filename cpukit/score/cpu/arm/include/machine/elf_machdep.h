@@ -1,4 +1,7 @@
-/*	$NetBSD: elf_machdep.h,v 1.8 2009/05/30 05:56:52 skrll Exp $	*/
+/*	$NetBSD: elf_machdep.h,v 1.19 2017/11/06 03:47:45 christos Exp $	*/
+
+#ifndef _ARM_ELF_MACHDEP_H_
+#define _ARM_ELF_MACHDEP_H_
 
 #if defined(__ARMEB__)
 #define ELF32_MACHDEP_ENDIANNESS	ELFDATA2MSB
@@ -24,7 +27,13 @@
 #define EF_ARM_NEW_ABI		0x00000080
 #define EF_ARM_OLD_ABI		0x00000100
 #define EF_ARM_SOFT_FLOAT	0x00000200
+#define EF_ARM_BE8		0x00800000
 #define EF_ARM_EABIMASK		0xff000000
+#define	EF_ARM_EABI_VER1	0x01000000
+#define	EF_ARM_EABI_VER2	0x02000000
+#define	EF_ARM_EABI_VER3	0x03000000
+#define	EF_ARM_EABI_VER4	0x04000000
+#define	EF_ARM_EABI_VER5	0x05000000
 
 #define	ELF32_MACHDEP_ID_CASES						\
 		case EM_ARM:						\
@@ -32,6 +41,7 @@
 
 #define	ELF32_MACHDEP_ID	EM_ARM
 
+#define	KERN_ELFSIZE		32
 #define ARCH_ELFSIZE		32	/* MD native binary size */
 
 /* Processor specific relocation types */
@@ -46,7 +56,7 @@
 #define R_ARM_THM_ABS5		7
 #define R_ARM_ABS8		8
 #define R_ARM_SBREL32		9
-#define R_ARM_THM_CALL  10
+#define R_ARM_THM_PC22		10
 #define R_ARM_THM_PC8		11
 #define R_ARM_AMP_VCALL9	12
 #define R_ARM_SWI24		13
@@ -68,34 +78,36 @@
 #define R_ARM_GOTPC		25
 #define R_ARM_GOT32		26
 #define R_ARM_PLT32		27
-#define R_ARM_CALL        28
-#define R_ARM_JUMP24      29
+#define R_ARM_CALL		28
+#define R_ARM_JUMP24		29
 #define R_ARM_THM_JUMP24	30
-#define R_ARM_BASE_ABS  	31
-
+#define R_ARM_BASE_ABS		31
 #define R_ARM_ALU_PCREL_7_0	32
 #define R_ARM_ALU_PCREL_15_8	33
 #define R_ARM_ALU_PCREL_23_15	34
 #define R_ARM_ALU_SBREL_11_0	35
 #define R_ARM_ALU_SBREL_19_12	36
-#define R_ARM_ALU_SBREL_27_20	37
-#define R_ARM_V4BX        40
-#define R_ARM_TARGET2     41
-#define R_ARM_PREL31      42
-
-#define R_ARM_MOVW_ABS_NC     43
-#define R_ARM_MOVT_ABS        44
-
-#define R_ARM_THM_MOVW_ABS_NC 47
-#define R_ARM_THM_MOVT_ABS    48
-
-#define R_ARM_THM_JUMP19      51
+#define R_ARM_ALU_SBREL_27_20	37	// depcreated
+#define R_ARM_TARGET1		38
+#define R_ARM_SBREL31		39	// deprecated
+#define R_ARM_V4BX		40
+#define R_ARM_TARGET2		41
+#define R_ARM_PREL31		42
+#define R_ARM_MOVW_ABS_NC	43
+#define R_ARM_MOVT_ABS		44
+#define R_ARM_MOVW_PREL_NC	45
+#define R_ARM_MOVT_PREL		46
+#define R_ARM_THM_MOVW_ABS_NC	47
+#define R_ARM_THM_MOVT_ABS	48
+#define R_ARM_THM_MOVW_PREL_NC	49
+#define R_ARM_THM_MOVT_PREL	50
+#define R_ARM_THM_JUMP19	51
 
 /* 96-111 are reserved to G++. */
 #define R_ARM_GNU_VTENTRY	100
 #define R_ARM_GNU_VTINHERIT	101
-#define R_ARM_THM_JUMP11		102
-#define R_ARM_THM_JUMP8		103
+#define R_ARM_THM_PC11		102
+#define R_ARM_THM_PC9		103
 
 /* More TLS relocations */
 #define R_ARM_TLS_GD32		104	/* PC-rel 32 bit for global dynamic */
@@ -108,6 +120,8 @@
 #define R_ARM_TLS_IE12GP	111
 
 /* 112-127 are reserved for private experiments. */
+
+#define R_ARM_IRELATIVE		160
 
 #define R_ARM_RXPC25		249
 #define R_ARM_RSBREL32		250
@@ -124,9 +138,27 @@
 #define PF_ARM_PI		0x20000000
 #define PF_ARM_ENTRY		0x80000000
 
+/* Processor specific program header types */
+#define PT_ARM_EXIDX		(PT_LOPROC + 1)
+
 /* Processor specific section header flags */
 #define SHF_ENTRYSECT		0x10000000
 #define SHF_COMDEF		0x80000000
 
 /* Processor specific symbol types */
 #define STT_ARM_TFUNC		STT_LOPROC
+
+#ifdef _KERNEL
+#ifdef ELFSIZE
+#define	ELF_MD_PROBE_FUNC	ELFNAME2(arm_netbsd,probe)
+#define	ELF_MD_COREDUMP_SETUP	ELFNAME2(arm_netbsd,coredump_setup)
+#endif
+
+struct exec_package;
+
+int arm_netbsd_elf32_probe(struct lwp *, struct exec_package *, void *, char *,
+	vaddr_t *);
+void arm_netbsd_elf32_coredump_setup(struct lwp *, void *);
+#endif
+
+#endif /* _ARM_ELF_MACHDEP_H_ */

@@ -181,7 +181,8 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
     if (rec->rec.reloc.name == rd->name && rec->rec.reloc.obj != NULL)
     {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
-        printf ("rtl: unresolv: resolve reloc: %s\n", rd->name_rec->rec.name.name);
+        printf ("rtl: unresolv: resolve reloc: %s\n",
+                rd->name_rec->rec.name.name);
 
       rtems_rtl_obj_relocate_unresolved (&rec->rec.reloc, rd->sym);
 
@@ -193,6 +194,7 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
       if (rec->rec.reloc.obj->unresolved == 0)
       {
         pending = rtems_rtl_pending_unprotected ();
+        rtems_chain_extract (&rec->rec.reloc.obj->link);
         rtems_chain_append (pending, &rec->rec.reloc.obj->link);
       }
 
