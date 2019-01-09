@@ -15,40 +15,28 @@
 #include "config.h"
 #endif
 
-#include <rtems.h>
 #include <rtems/stackchk.h>
-#include <rtems/score/heap.h>
-#include <rtems/score/percpu.h>
 
-/* forward declarations to avoid warnings */
-void b(void);
-void blow_stack(void);
-
-void b(void)
-{
-}
+#include "system.h"
 
 void blow_stack(void)
 {
-  volatile uint32_t   *low, *high;
-  unsigned char *area;
   Thread_Control *executing;
+  char *area;
+  volatile uintptr_t *low;
+  volatile uintptr_t *high;
 
-  b();
+  executing = _Thread_Get_executing();
 
   /*
-   *  Destroy the first and last 16 bytes of our stack... Hope it
+   *  Destroy the first and last 4 words of our stack area... Hope it
    *  does not cause problems :)
    */
 
-  executing = _Thread_Get_executing();
-  area = (unsigned char *)executing->Start.Initial_stack.area;
-
-  /* Look in the stack checker implementation for this magic offset */
-  low  = (volatile uint32_t *) \
-     (area + sizeof(Heap_Block) - HEAP_BLOCK_HEADER_SIZE);
-  high = (volatile uint32_t *)
-             (area + executing->Start.Initial_stack.size - 16);
+  area = (char *) executing->Start.Initial_stack.area;
+  low  = (uintptr_t *) area;
+  high = (uintptr_t *)
+    (area + executing->Start.Initial_stack.size - 4 * sizeof(*high));
 
   low[0] = 0x11111111;
   low[1] = 0x22222222;
@@ -59,5 +47,6 @@ void blow_stack(void)
   high[1] = 0x66666666;
   high[2] = 0x77777777;
   high[3] = 0x88888888;
+
   rtems_stack_checker_report_usage();
 }
