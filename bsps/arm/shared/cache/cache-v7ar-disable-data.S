@@ -27,6 +27,7 @@
 
 #include <rtems/asm.h>
 
+#if __ARM_ARCH >= 7 && (__ARM_ARCH_PROFILE == 65 || __ARM_ARCH_PROFILE == 82)
 	.globl	rtems_cache_disable_data
 
 	.syntax	unified
@@ -118,3 +119,4 @@ FUNCTION_ENTRY(rtems_cache_disable_data)
 	msr	CPSR_fc, r0
 
 	ldmia	sp!, {r4 - r11, pc}
+#endif
