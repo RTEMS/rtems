@@ -73,7 +73,7 @@ FUNCTION_ENTRY(rtems_cache_disable_data)
 
 	/* Read CCSIDR */
 	lsl	r4, r3, #1
-	mcr	p15, 2, r5, c0, c0, 0
+	mcr	p15, 2, r4, c0, c0, 0
 	isb
 	mrc	p15, 1, r5, c0, c0, 0
 
