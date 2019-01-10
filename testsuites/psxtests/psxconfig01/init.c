@@ -48,7 +48,7 @@ const char rtems_test_name[] = "PSXCONFIG 1";
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 5
 
 #define CONFIGURE_MAXIMUM_POSIX_KEYS 23
-#ifdef CONFIGURE_MAXIMUM_POSIX_KEYS
+#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
   #define CONFIGURE_MAXIMUM_POSIX_KEY_VALUE_PAIRS CONFIGURE_MAXIMUM_POSIX_KEYS
 #endif
 
@@ -80,7 +80,7 @@ const char rtems_test_name[] = "PSXCONFIG 1";
   #define CONFIGURE_MAXIMUM_TASKS 1
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+#if CONFIGURE_MAXIMUM_MESSAGE_QUEUES > 0
   #define MQ_0_COUNT 2
   #define MQ_1_COUNT 3
   #define MQ_2_COUNT 5
@@ -129,7 +129,7 @@ const char rtems_test_name[] = "PSXCONFIG 1";
   #define MQ_BUFFER_MEMORY 0
 #endif
 
-#ifdef POSIX_MQ_COUNT
+#if POSIX_MQ_COUNT > 0
   #define CONFIGURE_MAXIMUM_POSIX_MESSAGE_QUEUES POSIX_MQ_COUNT
 
   #define POSIX_MQ_0_COUNT 2
@@ -190,11 +190,11 @@ typedef struct {
   uint64_t data [16];
 } area;
 
-#ifdef CONFIGURE_MAXIMUM_PARTITIONS
+#if CONFIGURE_MAXIMUM_PARTITIONS > 0
   static area partition_areas [CONFIGURE_MAXIMUM_PARTITIONS];
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_REGIONS
+#if CONFIGURE_MAXIMUM_REGIONS > 0
   static area region_areas [CONFIGURE_MAXIMUM_REGIONS];
 #endif
 
@@ -263,7 +263,7 @@ static rtems_task Init(rtems_task_argument argument)
   rtems_test_assert(rtems_resource_snapshot_equal(&snapshot, &snapshot));
   rtems_test_assert(rtems_resource_snapshot_check(&snapshot));
 
-#ifdef CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS
+#if CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS > 0
   for (i = 3; i < CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS; ++i) {
     int oflag = O_WRONLY | O_CREAT | O_TRUNC;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -277,7 +277,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_USER_EXTENSIONS
+#if CONFIGURE_MAXIMUM_USER_EXTENSIONS > 0
   memset(&table, 0, sizeof(table));
   for (i = 0; i < CONFIGURE_MAXIMUM_USER_EXTENSIONS; ++i) {
     sc = rtems_extension_create(name, &table, &id);
@@ -289,7 +289,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_POSIX_KEYS
+#if CONFIGURE_MAXIMUM_POSIX_KEYS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_KEYS; ++i) {
     eno = pthread_key_create(&key, posix_key_dtor);
     rtems_test_assert(eno == 0);
@@ -310,7 +310,7 @@ static rtems_task Init(rtems_task_argument argument)
   (void) key;
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_BARRIERS
+#if CONFIGURE_MAXIMUM_BARRIERS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_BARRIERS; ++i) {
     sc = rtems_barrier_create(name, RTEMS_DEFAULT_ATTRIBUTES, 1, &id);
     directive_failed(sc, "rtems_barrier_create");
@@ -321,7 +321,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_MESSAGE_QUEUES
+#if CONFIGURE_MAXIMUM_MESSAGE_QUEUES > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_MESSAGE_QUEUES; ++i) {
     sc = rtems_message_queue_create(
       name,
@@ -339,7 +339,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_PARTITIONS
+#if CONFIGURE_MAXIMUM_PARTITIONS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_PARTITIONS; ++i) {
     sc = rtems_partition_create(
       name,
@@ -357,7 +357,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_PERIODS
+#if CONFIGURE_MAXIMUM_PERIODS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_PERIODS; ++i) {
     sc = rtems_rate_monotonic_create(name, &id);
     directive_failed(sc, "rtems_rate_monotonic_create");
@@ -368,7 +368,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_REGIONS
+#if CONFIGURE_MAXIMUM_REGIONS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_REGIONS; ++i) {
     sc = rtems_region_create(
       name,
@@ -386,7 +386,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_SEMAPHORES
+#if CONFIGURE_MAXIMUM_SEMAPHORES > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_SEMAPHORES; ++i) {
     sc = rtems_semaphore_create(
       name,
@@ -403,7 +403,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_TASKS
+#if CONFIGURE_MAXIMUM_TASKS > 0
   for (i = 1; i < CONFIGURE_MAXIMUM_TASKS; ++i) {
     sc = rtems_task_create(
       name,
@@ -421,7 +421,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_TIMERS
+#if CONFIGURE_MAXIMUM_TIMERS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_TIMERS; ++i) {
     sc = rtems_timer_create(name, &id);
     directive_failed(sc, "rtems_timer_create");
@@ -432,7 +432,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef POSIX_MQ_COUNT
+#if POSIX_MQ_COUNT > 0
   for (i = 0; i < POSIX_MQ_COUNT; ++i) {
     int oflag = O_RDWR | O_CREAT | O_EXCL;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -451,7 +451,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_POSIX_SEMAPHORES
+#if CONFIGURE_MAXIMUM_POSIX_SEMAPHORES > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_SEMAPHORES; ++i) {
     int oflag = O_RDWR | O_CREAT | O_EXCL;
     mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
@@ -466,7 +466,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_POSIX_THREADS
+#if CONFIGURE_MAXIMUM_POSIX_THREADS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_THREADS; ++i) {
     pthread_t thread;
     pthread_attr_t attr;
@@ -491,7 +491,7 @@ static rtems_task Init(rtems_task_argument argument)
   );
 #endif
 
-#ifdef CONFIGURE_MAXIMUM_POSIX_TIMERS
+#if CONFIGURE_MAXIMUM_POSIX_TIMERS > 0
   for (i = 0; i < CONFIGURE_MAXIMUM_POSIX_TIMERS; ++i) {
     timer_t timer_id;
     int rv;
