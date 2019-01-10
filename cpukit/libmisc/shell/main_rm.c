@@ -48,6 +48,7 @@ __FBSDID("$FreeBSD: src/bin/rm/rm.c,v 1.58 2006/10/31 02:22:36 delphij Exp $");
 #endif
 
 #include <rtems.h>
+#include <rtems/inttypes.h>
 #include <rtems/shell.h>
 #include <rtems/shellconfig.h>
 #define __need_getopt_newlib
@@ -493,8 +494,9 @@ rm_overwrite_rm(rtems_shell_rm_globals* globals, char *file, struct stat *sbp)
 	if (!S_ISREG(sbp->st_mode))
 		return (1);
 	if (sbp->st_nlink > 1 && !fflag) {
-		warnx("%s (inode %lu): not overwritten due to multiple links",
-		    file, sbp->st_ino);
+		warnx("%s (inode %" PRIuino_t
+		    "): not overwritten due to multiple links", file,
+		    sbp->st_ino);
 		return (0);
 	}
 	if ((fd = open(file, O_WRONLY, 0)) == -1)

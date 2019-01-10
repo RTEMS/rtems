@@ -80,7 +80,7 @@ void printdir( DIR *directory )
   d = readdir(directory);
 
   while (d) {
-    printf( "%-20s %8ld %8" PRIdoff_t " %6d   0x%04x\n",
+    printf( "%-20s %8" PRIuino_t " %8" PRIdoff_t " %6d   0x%04x\n",
        d->d_name, d->d_ino, d->d_off, d->d_reclen, d->d_type );
     d = readdir(directory);
 

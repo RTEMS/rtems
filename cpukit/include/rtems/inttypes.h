@@ -127,8 +127,11 @@ extern "C" {
 /* rtems_signal_set is a typedef to uint32_t */
 #define PRIxrtems_signal_set PRIx32
 
-/* newlib's ino_t is a typedef to "unsigned long" */
-#define PRIxino_t "lx"
+/* newlib's ino_t is a typedef to __uint64_t */
+#define PRIuino_t PRIu64
+
+/* newlib's ino_t is a typedef to __uint64_t */
+#define PRIxino_t PRIx64
 
 /* ioctl_command_t */
 #define PRIdioctl_command_t "ld"

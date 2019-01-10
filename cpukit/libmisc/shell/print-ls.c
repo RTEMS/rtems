@@ -50,6 +50,7 @@ __RCSID("$NetBSD: print.c,v 1.40 2004/11/17 17:00:00 mycroft Exp $");
 #include <inttypes.h>
 
 #include <rtems.h>
+#include <rtems/inttypes.h>
 #include <rtems/libio.h>
 
 #include <sys/param.h>
@@ -135,7 +136,8 @@ printlong(rtems_shell_ls_globals* globals, DISPLAY *dp)
 			continue;
 		sp = p->fts_statp;
 		if (f_inode)
-			(void)printf("%*lu ", dp->s_inode, sp->st_ino);
+			(void)printf("%*" PRIuino_t " ", dp->s_inode,
+			    sp->st_ino);
 		if (f_size && !f_humanize) {
 			(void)printf("%*llu ", dp->s_block,
 			    (unsigned long long)howmany(sp->st_blocks, blocksize));
@@ -385,7 +387,7 @@ printaname(rtems_shell_ls_globals* globals,
 	sp = p->fts_statp;
 	chcnt = 0;
 	if (f_inode)
-		chcnt += printf("%*lu ", inodefield, sp->st_ino);
+		chcnt += printf("%*" PRIuino_t " ", inodefield, sp->st_ino);
 	if (f_size) {
 #if RTEMS_REMOVED
 		if (f_humanize) {

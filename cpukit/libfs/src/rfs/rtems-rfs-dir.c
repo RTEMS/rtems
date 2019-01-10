@@ -622,7 +622,8 @@ rtems_rfs_dir_read (rtems_rfs_file_system*  fs,
       dirent->d_namlen = elength;
 
       if (rtems_rfs_trace (RTEMS_RFS_TRACE_DIR_READ))
-        printf ("rtems-rfs: dir-read: found off:%" PRIooff_t " ino:%ld name=%s\n",
+        printf ("rtems-rfs: dir-read: found off:%" PRIooff_t
+                " ino:%" PRIuino_t " name=%s\n",
                 dirent->d_off, dirent->d_ino, dirent->d_name);
       break;
     }
