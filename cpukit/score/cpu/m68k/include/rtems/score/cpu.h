@@ -222,6 +222,8 @@ typedef struct {
     #define _CPU_Context_Initialize_fp( _fp_area ) \
       memset( *(_fp_area), 0, sizeof( Context_Control_fp ) )
   #else
+    #include <rtems/score/address.h>
+
     /*
      *  FP context save area for the M68881/M68882 and 68060 numeric
      *  coprocessors.
