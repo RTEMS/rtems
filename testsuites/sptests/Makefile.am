@@ -1648,7 +1648,6 @@ spqreslib_SOURCES = spqreslib/init.c spqreslib/task_periodic.c \
 	spqreslib/system.h
 spqreslib_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spqreslib) \
 	$(support_includes)
-spqreslib_LDADD = $(MANAGERS_NOT_WANTED:%=$(PROJECT_LIB)/no-%.rel)
 endif
 
 if TEST_spratemon_err01
