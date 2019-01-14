@@ -220,7 +220,7 @@ complex_SOURCES = complex/init.c complex/docomplex.c \
 	complex/docomplexf.c complex/docomplexl.c
 complex_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_complex) \
 	$(support_includes) -DNO_LONG_DOUBLE
-complex_LDADD = -lm
+complex_LDADD = -lm $(LDADD)
 endif
 
 if TEST_cpuuse
@@ -485,7 +485,7 @@ dl06-pre-init.o: dl06-pre-tar.o
 		-DDL06_PRE -c -o $@ $(srcdir)/dl06/init.c
 dl06.pre: dl06-pre-init.o dl06/dl06-dl-load.o dl06-pre-tar.o
 	@rm -f $@
-	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+ $(LDADD)
 dl06-o1.o: dl06/dl06-o1.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl06-o2.o: dl06/dl06-o2.c Makefile
@@ -508,7 +508,7 @@ dl06-sym.o: dl06.pre
 	$(AM_V_GEN)rtems-syms -e -C $(CC) -c "$(CFLAGS)" -o $@ $<
 dl06$(EXEEXT): $(dl06_OBJECTS) dl06-sym.o
 	@rm -f $@
-	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+ $(LDADD)
 CLEANFILES += dl06.pre dl06-sym.o dl06-o1.o dl06-o2.o dl06.tar dl06-tar.h
 endif
 endif
@@ -819,7 +819,7 @@ lib_screens += math/math.scn
 math_SOURCES = math/init.c math/domath.c
 math_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_math) $(support_includes) \
 	-I$(top_srcdir)/math
-math_LDADD = -lm
+math_LDADD = -lm $(LDADD)
 endif
 
 if TEST_mathf
@@ -828,7 +828,7 @@ lib_screens += mathf/mathf.scn
 mathf_SOURCES = mathf/init.c mathf/domathf.c
 mathf_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mathf) \
 	$(support_includes) -I$(top_srcdir)/math
-mathf_LDADD = -lm
+mathf_LDADD = -lm $(LDADD)
 endif
 
 if TEST_mathl
@@ -838,7 +838,7 @@ mathl_SOURCES = mathl/init.c mathl/domathl.c
 mathl_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mathl) \
 	$(support_includes) -I$(top_srcdir)/math \
 	-DNO_LONG_DOUBLE
-mathl_LDADD = -lm
+mathl_LDADD = -lm $(LDADD)
 endif
 
 if TEST_md501

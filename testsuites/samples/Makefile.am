@@ -121,7 +121,7 @@ paranoia_SOURCES = paranoia/init.c paranoia/paranoia.c \
 	paranoia/system.h
 paranoia_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_paranoia) \
 	$(support_includes) -DCYGNUS -DNOMAIN -DNOSIGNAL
-paranoia_LDADD = -lm
+paranoia_LDADD = -lm $(LDADD)
 endif
 
 if NETTESTS

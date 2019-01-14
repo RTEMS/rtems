@@ -733,7 +733,7 @@ sp_docs += spconsole01/spconsole01.doc
 spconsole01_SOURCES = spconsole01/init.c
 spconsole01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_spconsole01) \
 	$(support_includes)
-spconsole01_LDADD = -lm
+spconsole01_LDADD = -lm $(LDADD)
 endif
 
 if TEST_spcontext01
@@ -1491,7 +1491,7 @@ sp_docs += splinkersets01/splinkersets01.doc
 splinkersets01_SOURCES = splinkersets01/init.c
 splinkersets01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_splinkersets01) \
 	$(support_includes)
-splinkersets01_LDADD = libsplinkersets01.a
+splinkersets01_LDADD = libsplinkersets01.a $(LDADD)
 endif
 
 if TEST_spmkdir
