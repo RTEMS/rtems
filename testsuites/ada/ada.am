@@ -9,7 +9,7 @@ GNATCOMPILE = $(GNATMAKE) \
 -bargs -Mgnat_main \
 -margs $(AM_ADAFLAGS) $(ADAFLAGS) \
 -cargs $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
--largs $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) init.o
+-largs $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -lrtemstest init.o
 
 CLEANFILES += *.ali *.o b~*.adb b~*.ads
 

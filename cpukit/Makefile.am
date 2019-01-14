@@ -322,11 +322,6 @@ librtemscpu_a_SOURCES += libmisc/stringto/stringtounsignedchar.c
 librtemscpu_a_SOURCES += libmisc/stringto/stringtounsignedint.c
 librtemscpu_a_SOURCES += libmisc/stringto/stringtounsignedlong.c
 librtemscpu_a_SOURCES += libmisc/stringto/stringtounsignedlonglong.c
-librtemscpu_a_SOURCES += libmisc/testsupport/testbeginend.c
-librtemscpu_a_SOURCES += libmisc/testsupport/testbusy.c
-librtemscpu_a_SOURCES += libmisc/testsupport/testextension.c
-librtemscpu_a_SOURCES += libmisc/testsupport/testparallel.c
-librtemscpu_a_SOURCES += libmisc/testsupport/testwrappers.c
 librtemscpu_a_SOURCES += libmisc/untar/untar.c
 librtemscpu_a_SOURCES += libmisc/untar/untar_tgz.c
 librtemscpu_a_SOURCES += libmisc/untar/untar_txz.c
@@ -1833,6 +1828,15 @@ project_lib_LIBRARIES += librtemsdefaultconfig.a
 
 librtemsdefaultconfig_a_SOURCES =
 librtemsdefaultconfig_a_SOURCES += libmisc/dummy/default-configuration.c
+
+project_lib_LIBRARIES += librtemstest.a
+
+librtemstest_a_SOURCES =
+librtemstest_a_SOURCES += libtest/testbeginend.c
+librtemstest_a_SOURCES += libtest/testbusy.c
+librtemstest_a_SOURCES += libtest/testextension.c
+librtemstest_a_SOURCES += libtest/testparallel.c
+librtemstest_a_SOURCES += libtest/testwrappers.c
 
 project_lib_LIBRARIES += libftpd.a
 

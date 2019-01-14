@@ -24,5 +24,6 @@ AM_LDFLAGS += $(TEST_LD_FLAGS)
 LDADD =
 LDADD += $(RTEMS_ROOT)lib/libbsp/@RTEMS_CPU@/@RTEMS_BSP_FAMILY@/librtemsbsp.a
 LDADD += $(RTEMS_ROOT)cpukit/librtemscpu.a
+LDADD += $(RTEMS_ROOT)cpukit/librtemstest.a
 
 CLEANFILES = *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf
