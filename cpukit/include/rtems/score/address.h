@@ -107,15 +107,11 @@ RTEMS_INLINE_ROUTINE intptr_t _Addresses_Subtract(
  * @retval true The @a address is aligned.
  * @retval false The @a address is not aligned.
  */
-RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned (
+RTEMS_INLINE_ROUTINE bool _Addresses_Is_aligned(
   const void *address
 )
 {
-#if (CPU_ALIGNMENT == 0)
-    return true;
-#else
-    return (((uintptr_t)address % CPU_ALIGNMENT) == 0);
-#endif
+  return ( (uintptr_t) address % CPU_ALIGNMENT ) == 0;
 }
 
 /**
