@@ -30,7 +30,7 @@ benchmark_docs += linpack/linpack.doc
 linpack_SOURCES = linpack/init.c linpack/linpack-pc.c
 linpack_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_linpack) \
 	$(support_includes)
-linpack_LDADD = -lm
+linpack_LDADD = -lm $(LDADD)
 endif
 
 if TEST_whetstone
@@ -40,7 +40,7 @@ benchmark_docs += whetstone/whetstone.doc
 whetstone_SOURCES = whetstone/init.c whetstone/whetstone.c
 whetstone_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_whetstone) \
 	$(support_includes)
-whetstone_LDADD = -lm
+whetstone_LDADD = -lm $(LDADD)
 endif
 
 rtems_tests_PROGRAMS = $(benchmarks)
