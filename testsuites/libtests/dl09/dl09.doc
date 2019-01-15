@@ -1,0 +1,23 @@
+# Copyright (c) 2019 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl09
+
+directives:
+
+  dlopen
+  dlinfo
+  dlsym
+  dlclose
+
+concepts:
+
++ Load modules with a space between then so short address range relative
+  instructions require trampolines.
++ Repeat 100 times.

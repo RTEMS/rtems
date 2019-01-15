@@ -52,6 +52,16 @@ extern "C" {
  **/
 
 /**
+ * Relocation trampoline relocation data.
+ */
+typedef struct rtems_rtl_mdreloc_trmap
+{
+  bool   parsing;     /**< The reloc records are being parsed. */
+  void*  tampolines;  /**< The trampoline memory. */
+  size_t size;        /**< The trampoline size. */
+} rtems_rtl_mdreloc_tramp;
+
+/**
  * Maximum string length. This a read buffering limit rather than a
  * specific ELF length. I hope this is ok as I am concerned about
  * some C++ symbol lengths.
@@ -81,6 +91,56 @@ uint32_t rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
 bool rtems_rtl_elf_rel_resolve_sym (Elf_Word type);
 
 /**
+ * Architecture specific relocation maximum trampoline size. A trampoline entry
+ * of this size is allocated for each unresolved external.
+ *
+ * @return size_t The maximum size of a trampoline for this architecture.
+ */
+size_t rtems_rtl_elf_relocate_tramp_max_size (void);
+
+/**
+ * Architecture specific relocation trampoline handler compiled in for a
+ * specific architecture by the build system. The handler determines if the
+ * relocation record requires a trampoline.
+ *
+ * @param obj The object file being relocated.
+ * @param rel The ELF relocation record.
+ * @param sect The section of the object file the relocation is for.
+ * @param symname The symbol's name.
+ * @param syminfo The ELF symbol info field.
+ * @param symvalue If a symbol is referenced, this is the symbols value.
+ * @retval bool The relocation is valid.
+ * @retval bool The relocation is not valid.
+ */
+bool rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
+                                       const Elf_Rel*            rel,
+                                       const rtems_rtl_obj_sect* sect,
+                                       const char*               symname,
+                                       const Elf_Byte            syminfo,
+                                       const Elf_Word            symvalue);
+
+/**
+ * Architecture specific relocation handler compiled in for a specific
+ * architecture by the build system. The handler applies the relocation
+ * to the target.
+ *
+ * @param obj The object file being relocated.
+ * @param rela The ELF addend relocation record.
+ * @param sect The section of the object file the relocation is for.
+ * @param symname The symbol's name.
+ * @param syminfo The ELF symbol info field.
+ * @param symvalue If a symbol is referenced, this is the symbols value.
+ * @retval bool The relocation is valid.
+ * @retval bool The relocation is not valid.
+ */
+bool rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
+                                        const Elf_Rela*           rela,
+                                        const rtems_rtl_obj_sect* sect,
+                                        const char*               symname,
+                                        const Elf_Byte            syminfo,
+                                        const Elf_Word            symvalue);
+
+/**
  * Architecture specific relocation handler compiled in for a specific
  * architecture by the build system. The handler applies the relocation
  * to the target.
@@ -94,7 +154,7 @@ bool rtems_rtl_elf_rel_resolve_sym (Elf_Word type);
  * @retval bool The relocation has been applied.
  * @retval bool The relocation could not be applied.
  */
-bool rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+bool rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                                  const Elf_Rel*            rel,
                                  const rtems_rtl_obj_sect* sect,
                                  const char*               symname,
@@ -115,7 +175,7 @@ bool rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
  * @retval bool The relocation has been applied.
  * @retval bool The relocation could not be applied.
  */
-bool rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+bool rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                                   const Elf_Rela*           rela,
                                   const rtems_rtl_obj_sect* sect,
                                   const char*               symname,

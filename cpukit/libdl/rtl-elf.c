@@ -87,10 +87,7 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
      */
     *symbol = rtems_rtl_symbol_obj_find (obj, symname);
     if (!*symbol)
-    {
-      rtems_rtl_set_error (EINVAL, "global symbol not found: %s", symname);
       return false;
-    }
 
     *value = (Elf_Addr) (*symbol)->value;
     return true;
@@ -100,10 +97,7 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
 
   sect = rtems_rtl_obj_find_section_by_index (obj, sym->st_shndx);
   if (!sect)
-  {
-    rtems_rtl_set_error (EINVAL, "reloc symbol's section not found");
     return false;
-  }
 
   *value = sym->st_value + (Elf_Addr) sect->base;
   return true;
@@ -145,6 +139,35 @@ rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
                             void*               data)
 {
   rtems_rtl_elf_reloc_data* rd = (rtems_rtl_elf_reloc_data*) data;
+
+  /*
+   * Check the reloc record to see if a trampoline is needed.
+   */
+  if (is_rela)
+  {
+    const Elf_Rela* rela = (const Elf_Rela*) relbuf;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: rela tramp: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
+              symname, (int) ELF_R_SYM (rela->r_info),
+              (uintmax_t) symvalue, (int) ELF_R_TYPE (rela->r_info),
+              (uintmax_t) rela->r_offset, (int) rela->r_addend);
+    if (!rtems_rtl_elf_relocate_rela_tramp (obj, rela, targetsect,
+                                            symname, sym->st_info, symvalue))
+      return false;
+  }
+  else
+  {
+    const Elf_Rel* rel = (const Elf_Rel*) relbuf;
+    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+      printf ("rtl: rel tramp: sym:%s(%d)=%08jx type:%d off:%08jx\n",
+              symname, (int) ELF_R_SYM (rel->r_info),
+              (uintmax_t) symvalue, (int) ELF_R_TYPE (rel->r_info),
+              (uintmax_t) rel->r_offset);
+    if (!rtems_rtl_elf_relocate_rel_tramp (obj, rel, targetsect,
+                                           symname, sym->st_info, symvalue))
+      return false;
+  }
+
   /*
    * If the symbol has been resolved and there is a symbol name it is a global
    * symbol and from another object file so add it as a dependency.
@@ -153,7 +176,7 @@ rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
   {
     ++rd->unresolved;
   }
-  else if (resolved && symname != NULL)
+  else if (symname != NULL)
   {
     /*
      * Find the symbol's object file. It cannot be NULL so ignore that result
@@ -554,6 +577,19 @@ rtems_rtl_elf_common (rtems_rtl_obj*      obj,
   }
 
   return true;
+}
+
+static bool
+rtems_rtl_elf_alloc_trampoline (rtems_rtl_obj* obj, size_t unresolved)
+{
+  /*
+   * Add on enough space to handle the unresolved externals that need to be
+   * resolved at some point in time. They could all require fixups and
+   * trampolines.
+   */
+  obj->tramp_size +=
+    rtems_rtl_elf_relocate_tramp_max_size () * unresolved;
+  return rtems_rtl_obj_alloc_trampoline (obj);
 }
 
 static bool
@@ -1297,10 +1333,17 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   if (!rtems_rtl_obj_load_sections (obj, fd, rtems_rtl_elf_loader, &ehdr))
     return false;
 
+  /*
+   * Parse the relocation records. It lets us know how many dependents
+   * and fixup trampolines there are.
+   */
   if (!rtems_rtl_obj_relocate (obj, fd, rtems_rtl_elf_relocs_parser, &relocs))
     return false;
 
   if (!rtems_rtl_elf_dependents (obj, &relocs))
+    return false;
+
+  if (!rtems_rtl_elf_alloc_trampoline (obj, relocs.unresolved))
     return false;
 
   if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_symbols, &ehdr))

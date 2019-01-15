@@ -118,6 +118,7 @@ rtems_rtl_obj_free (rtems_rtl_obj* obj)
   rtems_rtl_obj_erase_sections (obj);
   rtems_rtl_obj_erase_dependents (obj);
   rtems_rtl_symbol_obj_erase (obj);
+  rtems_rtl_obj_erase_trampoline (obj);
   rtems_rtl_obj_free_names (obj);
   if (obj->sec_num != NULL)
     free (obj->sec_num);
@@ -557,6 +558,26 @@ rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
 }
 
 bool
+rtems_rtl_obj_alloc_trampoline (rtems_rtl_obj* obj)
+{
+  if (obj->tramp_size == 0)
+    return true;
+  obj->trampoline = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT,
+                                         obj->tramp_size,
+                                         true);
+  if (obj->trampoline == NULL)
+    rtems_rtl_set_error (ENOMEM, "no memory for the trampoline");
+  obj->tramp_brk = obj->trampoline;
+  return obj->trampoline != NULL;
+}
+
+void
+rtems_rtl_obj_erase_trampoline (rtems_rtl_obj* obj)
+{
+  rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, obj->trampoline);
+}
+
+bool
 rtems_rtl_obj_alloc_dependents (rtems_rtl_obj* obj, size_t dependents)
 {
   rtems_rtl_obj_depends* depends;
@@ -837,9 +858,17 @@ rtems_rtl_obj_synchronize_cache (rtems_rtl_obj* obj)
                            rtems_rtl_obj_sect_sync_handler,
                            &sync_ctx);
 
-  if (sync_ctx.end_va != sync_ctx.start_va) {
+  if (sync_ctx.end_va != sync_ctx.start_va)
+  {
+    size_t size = sync_ctx.end_va - sync_ctx.start_va;
     rtems_cache_instruction_sync_after_code_change(sync_ctx.start_va,
-                              sync_ctx.end_va - sync_ctx.start_va);
+                                                   size);
+  }
+
+  if (obj->trampoline != NULL)
+  {
+    rtems_cache_instruction_sync_after_code_change(obj->trampoline,
+                                                   obj->tramp_size);
   }
 }
 

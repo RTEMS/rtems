@@ -144,8 +144,34 @@ rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
   return RELOC_RESOLVE_SYMBOL (type) ? true : false;
 }
 
+size_t
+rtems_rtl_elf_relocate_tramp_max_size (void)
+{
+  /*
+   * Disable by returning 0.
+   */
+  return 0;
+}
+
 bool
-rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
+                                   const Elf_Rela*           rela,
+                                   const rtems_rtl_obj_sect* sect,
+                                   const char*               symname,
+                                   const Elf_Byte            syminfo,
+                                   const Elf_Word            symvalue)
+{
+  (void) obj;
+  (void) rela;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+  return true;
+}
+
+bool
+rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
                              const char*               symname,
@@ -261,13 +287,37 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
 }
 
 bool
-rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
+                                  const Elf_Rel*            rel,
+                                  const rtems_rtl_obj_sect* sect,
+                                  const char*               symname,
+                                  const Elf_Byte            syminfo,
+                                  const Elf_Word            symvalue)
+{
+  (void) obj;
+  (void) rel;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+  rtems_rtl_set_error (EINVAL, "rel type record not supported");
+  return false;
+}
+
+bool
+rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
                             const char*               symname,
                             const Elf_Byte            syminfo,
                             const Elf_Word            symvalue)
 {
+  (void) obj;
+  (void) rel;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
   printf ("rtl: rel type record not supported; please report\n");
   return false;
 }

@@ -1,5 +1,5 @@
 /*
- *  COPYRIGHT (c) 2012 Chris Johns <chrisj@rtems.org>
+ *  COPYRIGHT (c) 2012,2019 Chris Johns <chrisj@rtems.org>
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -220,6 +220,12 @@ struct rtems_rtl_obj
   uint32_t*           sec_num;      /**< The sec nums of each obj. */
   uint32_t            obj_num;      /**< The count of elf files in an rtl
                                      *   obj. */
+  void*               trampoline;   /**< Trampoline memory. Used for fixups or
+                                     *   veneers */
+  size_t              tramp_size;   /**< Size of the tramopline memory. */
+  void*               tramp_brk;    /**< Trampoline memory allocator. MD
+                                     *   relocators can take memory from the
+                                     *   break upto the size. */
   struct link_map*    linkmap;      /**< For GDB. */
   void*               loader;       /**< The file details specific to a
                                      *   loader. */
@@ -353,6 +359,20 @@ static inline bool rtems_rtl_obj_has_symbol (const rtems_rtl_obj*     obj,
 }
 
 /**
+ * Is there space in the trampoline memory for a trapoline.
+ *
+ * @param obj The object file's descriptor to check for available space.
+ * @param size The size to be allocated.
+ * @retval bool Returns @true if the space is available.
+ */
+static inline bool rtems_rtl_obj_has_ramp_space (const rtems_rtl_obj* obj,
+                                                 const size_t         size)
+{
+  return (obj->trampoline != NULL &&
+          ((obj->tramp_brk - obj->trampoline) + size) <= obj->tramp_size);
+}
+
+/**
  * Allocate an object structure on the heap.
  *
  * @retval NULL No memory for the object.
@@ -475,6 +495,22 @@ rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_index (const rtems_rtl_obj* ob
 rtems_rtl_obj_sect* rtems_rtl_obj_find_section_by_mask (const rtems_rtl_obj* obj,
                                                         int                  index,
                                                         uint32_t             mask);
+
+/**
+ * Allocate a table for trampoline fixup calls.
+ *
+ * @param obj The object file's descriptor.
+ * @retval true The table was allocated.
+ * @retval false The alloction failed.
+ */
+bool rtems_rtl_obj_alloc_trampoline (rtems_rtl_obj* obj);
+
+/**
+ * Erase the object file descriptor's trampoline table..
+ *
+ * @param obj The object file's descriptor.
+ */
+void rtems_rtl_obj_erase_trampoline (rtems_rtl_obj* obj);
 
 /**
  * Allocate a table for dependent objects.

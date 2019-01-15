@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 Chris Johns <chrisj@rtems.org>.
+ * Copyright (c) 2019 Chris Johns <chrisj@rtems.org>.
  * All rights reserved.
  *
  * The license and distribution terms for this file may be
@@ -19,11 +19,11 @@
                       RTEMS_RTL_TRACE_UNRESOLVED | \
                       RTEMS_RTL_TRACE_ARCHIVES | \
                       RTEMS_RTL_TRACE_DEPENDENCY)
- #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
- #define DL_RTL_CMDS    1
+ #define DL09_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
+ #define DL09_RTL_CMDS    1
 #else
- #define DL_DEBUG_TRACE 0
- #define DL_RTL_CMDS    0
+ #define DL09_DEBUG_TRACE 0
+ #define DL09_RTL_CMDS    0
 #endif
 
 #include <dlfcn.h>
@@ -32,20 +32,46 @@
 
 #include <tmacros.h>
 
+#include <rtems/malloc.h>
 #include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
+
+extern void rtems_shell_print_heap_info(
+  const char             *c,
+  const Heap_Information *h
+);
+
+typedef struct
+{
+  void* handle;
+  void* space;
+} objects;
+
+typedef struct
+{
+  const char* name;
+  bool        has_unresolved;
+  size_t      space;
+} object_def;
+
+#define MBYTES(_m) ((_m) * 1024UL * 1024UL)
+#define NUMOF(_a)  (sizeof(_a) / sizeof(_a[0]))
 
 typedef int (*call_sig)(void);
 
 static void dl_load_dump (void)
 {
-#if DL_RTL_CMDS
+#if DL09_RTL_CMDS
   char* list[] = { "rtl", "list", NULL };
   char* sym[] = { "rtl", "sym", NULL };
+  Heap_Information_block info;
+  malloc_info( &info );
   printf ("RTL List:\n");
   rtems_rtl_shell_command (2, list);
   printf ("RTL Sym:\n");
   rtems_rtl_shell_command (2, sym);
+  printf ("Malloc:\n");
+  rtems_shell_print_heap_info("free", &info.Free);
 #endif
 }
 
@@ -69,7 +95,8 @@ static void dl_check_resolved(void* handle, bool has_unresolved)
       rtems_test_assert (unresolved == 0);
     }
   }
-  printf ("handel: %p: no unresolved externals\n", handle);
+  printf ("handel: %p: %sunresolved externals\n",
+          handle, unresolved != 0 ? "" : "no ");
 }
 
 static void* dl_load_obj(const char* name, bool has_unresolved)
@@ -114,29 +141,55 @@ static int dl_call (void* handle, const char* func)
   return 0;
 }
 
+static void dl_object_open (object_def* od, objects* o)
+{
+  o->handle = dl_load_obj(od->name, od->has_unresolved);
+  rtems_test_assert (o->handle != NULL);
+  if (!od->has_unresolved)
+    dl_check_resolved (o->handle, false);
+  if (od->space != 0)
+  {
+    o->space = malloc (od->space);
+    printf("space alloc: %s: %d: %p\n", od->name, od->space, o->space);
+    rtems_test_assert (o->space != NULL);
+  }
+  dl_load_dump ();
+}
+
+static void dl_object_close (objects* o)
+{
+  dl_close (o->handle);
+  printf("space dealloc: %p\n", o->space);
+  free (o->space);
+}
+
 int dl_load_test(void)
 {
-  void* o1;
+  object_def od[5] = { { "/dl09-o1.o", true,  MBYTES(32) },
+                       { "/dl09-o2.o", true,  MBYTES(32) },
+                       { "/dl09-o3.o", true,  MBYTES(32) },
+                       { "/dl09-o4.o", true,  MBYTES(32) },
+                       { "/dl09-o5.o", false, 0          } };
+  objects o[5] = { 0 };
+  size_t  i;
 
   printf ("Test source (link in strstr): %s\n", dl_localise_file (__FILE__));
 
-#if DL_DEBUG_TRACE
-  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
+#if DL09_DEBUG_TRACE
+  rtems_rtl_trace_set_mask (DL09_DEBUG_TRACE);
 #endif
 
-  o1 = dl_load_obj("/dl08-o1.o", false);
-  if (!o1)
-    return 1;
-
-  dl_check_resolved (o1, false);
+  for (i = 0; i < NUMOF(od); ++i)
+    dl_object_open (&od[i], &o[i]);
 
   dl_load_dump ();
 
   printf ("Running rtems_main_o1:\n");
-  if (dl_call (o1, "rtems_main_o1"))
+  if (dl_call (o[0].handle, "rtems_main_o1"))
     return 1;
 
-  dl_close (o1);
+  for (i = 0; i < NUMOF(od); ++i)
+    dl_object_close (&o[i]);
 
   return 0;
 }

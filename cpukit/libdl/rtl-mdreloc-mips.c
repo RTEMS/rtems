@@ -25,16 +25,66 @@ rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
   return true;
 }
 
+size_t
+rtems_rtl_elf_relocate_tramp_max_size (void)
+{
+  /*
+   * Disable by returning 0.
+   */
+  return 0;
+}
+
 bool
-rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
+rtems_rtl_elf_relocate_rela_tramp (rtems_rtl_obj*            obj,
+                                   const Elf_Rela*           rela,
+                                   const rtems_rtl_obj_sect* sect,
+                                   const char*               symname,
+                                   const Elf_Byte            syminfo,
+                                   const Elf_Word            symvalue)
+{
+  (void) obj;
+  (void) rela;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+  rtems_rtl_set_error (EINVAL, "rela type record not supported");
+  return false;
+}
+
+bool
+rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
                              const Elf_Rela*           rela,
                              const rtems_rtl_obj_sect* sect,
                              const char*               symname,
                              const Elf_Byte            syminfo,
                              const Elf_Word            symvalue)
 {
+  (void) obj;
+  (void) rela;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
   rtems_rtl_set_error (EINVAL, "rela type record not supported");
   return false;
+}
+
+bool
+rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
+                                  const Elf_Rel*            rel,
+                                  const rtems_rtl_obj_sect* sect,
+                                  const char*               symname,
+                                  const Elf_Byte            syminfo,
+                                  const Elf_Word            symvalue)
+{
+  (void) obj;
+  (void) rel;
+  (void) sect;
+  (void) symname;
+  (void) syminfo;
+  (void) symvalue;
+  return true;
 }
 
 /*
@@ -46,7 +96,7 @@ rtems_rtl_elf_relocate_rela (const rtems_rtl_obj*      obj,
  * just consider symtype here.
  */
 bool
-rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
+rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Rel*            rel,
                             const rtems_rtl_obj_sect* sect,
                             const char*               symname,
@@ -183,16 +233,16 @@ rtems_rtl_elf_relocate_rel (const rtems_rtl_obj*      obj,
 
       break;
 
-		default:
-     printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
-             "contents = %p\n",
+    default:
+      printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
+              "contents = %p\n",
               ELF_R_SYM(rel->r_info), (uint32_t) ELF_R_TYPE(rel->r_info),
               (void *)rel->r_offset, (void *)*where);
-     rtems_rtl_set_error (EINVAL,
-                          "%s: Unsupported relocation type %ld "
-                          "in non-PLT relocations",
-                          sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
-     return false;
+      rtems_rtl_set_error (EINVAL,
+                           "%s: Unsupported relocation type %ld "
+                           "in non-PLT relocations",
+                           sect->name, (uint32_t) ELF_R_TYPE(rel->r_info));
+      return false;
   }
 
   return true;

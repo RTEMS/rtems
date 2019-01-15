@@ -1,0 +1,390 @@
+*** BEGIN OF TEST libdl (RTL) 9 ***
+*** TEST VERSION: 5.0.0.ab08681fe52cad071f3a8d554af28c8bfc53b28f-modified
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_POSIX_API
+*** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB 257c9267cfce362138a265764c6a799c12c6b181, Newlib dc6e94551f09d3a983afd571478d63a09d6f66fa)
+--------------------------------------------------
+ Run: 0
+Test source (link in strstr): testsuites/libtests/dl09/dl-load.c
+load: /dl09-o1.o
+handel: 0x123510: unresolved externals
+handle: 0x123510 loaded
+space alloc: /dl09-o1.o: 33554432: 0x124d10
+load: /dl09-o2.o
+handel: 0x124390: unresolved externals
+handle: 0x124390 loaded
+space alloc: /dl09-o2.o: 33554432: 0x2125978
+load: /dl09-o3.o
+handel: 0x4125980: unresolved externals
+handle: 0x4125980 loaded
+space alloc: /dl09-o3.o: 33554432: 0x41267f0
+load: /dl09-o4.o
+handel: 0x41266b0: unresolved externals
+handle: 0x41266b0 loaded
+space alloc: /dl09-o4.o: 33554432: 0x6127528
+load: /dl09-o5.o
+handel: 0x8127530: no unresolved externals
+handle: 0x8127530 loaded
+handel: 0x8127530: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl09/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x124088: 0
+dlo1:         dl01_bss2:    4: 0x12408c: %f
+dlo1:         dl01_bss3:    1: 0x124104: 00
+dlo1:        dl01_data1:    4: 0x124070: 1
+dlo1:        dl01_data2:    4: 0x124074: %f
+dlo1:       dl01_const1:    4: 0x124050: 3
+dlo1:       dl01_const2:    4: 0x124054: %f
+dlo1:        dl01_func1:    1: 0x123cf9
+dlo2: module: testsuites/libtests/dl09/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2125468: 0
+dlo2:         dl02_bss2:    4: 0x212546c: %f
+dlo2:         dl02_bss3:    1: 0x2125488: 00
+dlo2:        dl02_data1:    4: 0x21254a0: 0
+dlo2:        dl02_data2:    4: 0x21254a4: %f
+dlo3: module: testsuites/libtests/dl09/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo3:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo3:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo3:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo3:   dl05_unresolv_5:    8: 0x8127d38: 0
+dlo4: module: testsuites/libtests/dl09/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo4:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo5: module: testsuites/libtests/dl09/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo5:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo5:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo5:   dl05_unresolv_5:    8: 0x8127d38: 0
+handle: 0x123510 closing
+space dealloc: 0x124d10
+handle: 0x124390 closing
+space dealloc: 0x2125978
+handle: 0x4125980 closing
+space dealloc: 0x41267f0
+handle: 0x41266b0 closing
+space dealloc: 0x6127528
+handle: 0x8127530 closing
+space dealloc: 0
+--------------------------------------------------
+ Run: 1
+Test source (link in strstr): testsuites/libtests/dl09/dl-load.c
+load: /dl09-o1.o
+handel: 0x123510: unresolved externals
+handle: 0x123510 loaded
+space alloc: /dl09-o1.o: 33554432: 0x124d10
+load: /dl09-o2.o
+handel: 0x124390: unresolved externals
+handle: 0x124390 loaded
+space alloc: /dl09-o2.o: 33554432: 0x2125978
+load: /dl09-o3.o
+handel: 0x4125980: unresolved externals
+handle: 0x4125980 loaded
+space alloc: /dl09-o3.o: 33554432: 0x41267f0
+load: /dl09-o4.o
+handel: 0x41266b0: unresolved externals
+handle: 0x41266b0 loaded
+space alloc: /dl09-o4.o: 33554432: 0x6127528
+load: /dl09-o5.o
+handel: 0x8127530: no unresolved externals
+handle: 0x8127530 loaded
+handel: 0x8127530: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl09/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x124088: 0
+dlo1:         dl01_bss2:    4: 0x12408c: %f
+dlo1:         dl01_bss3:    1: 0x124104: 00
+dlo1:        dl01_data1:    4: 0x124070: 1
+dlo1:        dl01_data2:    4: 0x124074: %f
+dlo1:       dl01_const1:    4: 0x124050: 3
+dlo1:       dl01_const2:    4: 0x124054: %f
+dlo1:        dl01_func1:    1: 0x123cf9
+dlo2: module: testsuites/libtests/dl09/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2125468: 0
+dlo2:         dl02_bss2:    4: 0x212546c: %f
+dlo2:         dl02_bss3:    1: 0x2125488: 00
+dlo2:        dl02_data1:    4: 0x21254a0: 0
+dlo2:        dl02_data2:    4: 0x21254a4: %f
+dlo3: module: testsuites/libtests/dl09/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo3:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo3:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo3:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo3:   dl05_unresolv_5:    8: 0x8127d38: 0
+dlo4: module: testsuites/libtests/dl09/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo4:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo5: module: testsuites/libtests/dl09/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo5:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo5:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo5:   dl05_unresolv_5:    8: 0x8127d38: 0
+handle: 0x123510 closing
+space dealloc: 0x124d10
+handle: 0x124390 closing
+space dealloc: 0x2125978
+handle: 0x4125980 closing
+space dealloc: 0x41267f0
+handle: 0x41266b0 closing
+space dealloc: 0x6127528
+handle: 0x8127530 closing
+space dealloc: 0
+--------------------------------------------------
+ Run: 2
+Test source (link in strstr): testsuites/libtests/dl09/dl-load.c
+load: /dl09-o1.o
+handel: 0x123510: unresolved externals
+handle: 0x123510 loaded
+space alloc: /dl09-o1.o: 33554432: 0x124d10
+load: /dl09-o2.o
+handel: 0x124390: unresolved externals
+handle: 0x124390 loaded
+space alloc: /dl09-o2.o: 33554432: 0x2125978
+load: /dl09-o3.o
+handel: 0x4125980: unresolved externals
+handle: 0x4125980 loaded
+space alloc: /dl09-o3.o: 33554432: 0x41267f0
+load: /dl09-o4.o
+handel: 0x41266b0: unresolved externals
+handle: 0x41266b0 loaded
+space alloc: /dl09-o4.o: 33554432: 0x6127528
+load: /dl09-o5.o
+handel: 0x8127530: no unresolved externals
+handle: 0x8127530 loaded
+handel: 0x8127530: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl09/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x124088: 0
+dlo1:         dl01_bss2:    4: 0x12408c: %f
+dlo1:         dl01_bss3:    1: 0x124104: 00
+dlo1:        dl01_data1:    4: 0x124070: 1
+dlo1:        dl01_data2:    4: 0x124074: %f
+dlo1:       dl01_const1:    4: 0x124050: 3
+dlo1:       dl01_const2:    4: 0x124054: %f
+dlo1:        dl01_func1:    1: 0x123cf9
+dlo2: module: testsuites/libtests/dl09/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2125468: 0
+dlo2:         dl02_bss2:    4: 0x212546c: %f
+dlo2:         dl02_bss3:    1: 0x2125488: 00
+dlo2:        dl02_data1:    4: 0x21254a0: 0
+dlo2:        dl02_data2:    4: 0x21254a4: %f
+dlo3: module: testsuites/libtests/dl09/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo3:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo3:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo3:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo3:   dl05_unresolv_5:    8: 0x8127d38: 0
+dlo4: module: testsuites/libtests/dl09/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo4:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo5: module: testsuites/libtests/dl09/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo5:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo5:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo5:   dl05_unresolv_5:    8: 0x8127d38: 0
+handle: 0x123510 closing
+space dealloc: 0x124d10
+handle: 0x124390 closing
+space dealloc: 0x2125978
+handle: 0x4125980 closing
+space dealloc: 0x41267f0
+handle: 0x41266b0 closing
+space dealloc: 0x6127528
+handle: 0x8127530 closing
+space dealloc: 0
+--------------------------------------------------
+ Run: 3
+Test source (link in strstr): testsuites/libtests/dl09/dl-load.c
+load: /dl09-o1.o
+handel: 0x123510: unresolved externals
+handle: 0x123510 loaded
+space alloc: /dl09-o1.o: 33554432: 0x124d10
+load: /dl09-o2.o
+handel: 0x124390: unresolved externals
+handle: 0x124390 loaded
+space alloc: /dl09-o2.o: 33554432: 0x2125978
+load: /dl09-o3.o
+handel: 0x4125980: unresolved externals
+handle: 0x4125980 loaded
+space alloc: /dl09-o3.o: 33554432: 0x41267f0
+load: /dl09-o4.o
+handel: 0x41266b0: unresolved externals
+handle: 0x41266b0 loaded
+space alloc: /dl09-o4.o: 33554432: 0x6127528
+load: /dl09-o5.o
+handel: 0x8127530: no unresolved externals
+handle: 0x8127530 loaded
+handel: 0x8127530: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl09/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x124088: 0
+dlo1:         dl01_bss2:    4: 0x12408c: %f
+dlo1:         dl01_bss3:    1: 0x124104: 00
+dlo1:        dl01_data1:    4: 0x124070: 1
+dlo1:        dl01_data2:    4: 0x124074: %f
+dlo1:       dl01_const1:    4: 0x124050: 3
+dlo1:       dl01_const2:    4: 0x124054: %f
+dlo1:        dl01_func1:    1: 0x123cf9
+dlo2: module: testsuites/libtests/dl09/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2125468: 0
+dlo2:         dl02_bss2:    4: 0x212546c: %f
+dlo2:         dl02_bss3:    1: 0x2125488: 00
+dlo2:        dl02_data1:    4: 0x21254a0: 0
+dlo2:        dl02_data2:    4: 0x21254a4: %f
+dlo3: module: testsuites/libtests/dl09/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo3:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo3:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo3:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo3:   dl05_unresolv_5:    8: 0x8127d38: 0
+dlo4: module: testsuites/libtests/dl09/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo4:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo5: module: testsuites/libtests/dl09/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo5:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo5:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo5:   dl05_unresolv_5:    8: 0x8127d38: 0
+handle: 0x123510 closing
+space dealloc: 0x124d10
+handle: 0x124390 closing
+space dealloc: 0x2125978
+handle: 0x4125980 closing
+space dealloc: 0x41267f0
+handle: 0x41266b0 closing
+space dealloc: 0x6127528
+handle: 0x8127530 closing
+space dealloc: 0
+--------------------------------------------------
+
+  REPEAT 100 TIMES
+
+--------------------------------------------------
+ Run: 99
+Test source (link in strstr): testsuites/libtests/dl09/dl-load.c
+load: /dl09-o1.o
+handel: 0x123510: unresolved externals
+handle: 0x123510 loaded
+space alloc: /dl09-o1.o: 33554432: 0x124d10
+load: /dl09-o2.o
+handel: 0x124390: unresolved externals
+handle: 0x124390 loaded
+space alloc: /dl09-o2.o: 33554432: 0x2125978
+load: /dl09-o3.o
+handel: 0x4125980: unresolved externals
+handle: 0x4125980 loaded
+space alloc: /dl09-o3.o: 33554432: 0x41267f0
+load: /dl09-o4.o
+handel: 0x41266b0: unresolved externals
+handle: 0x41266b0 loaded
+space alloc: /dl09-o4.o: 33554432: 0x6127528
+load: /dl09-o5.o
+handel: 0x8127530: no unresolved externals
+handle: 0x8127530 loaded
+handel: 0x8127530: no unresolved externals
+Running rtems_main_o1:
+dlo1: module: testsuites/libtests/dl09/dl-o1.c
+dlo1:         dl01_bss1:    4: 0x124088: 0
+dlo1:         dl01_bss2:    4: 0x12408c: %f
+dlo1:         dl01_bss3:    1: 0x124104: 00
+dlo1:        dl01_data1:    4: 0x124070: 1
+dlo1:        dl01_data2:    4: 0x124074: %f
+dlo1:       dl01_const1:    4: 0x124050: 3
+dlo1:       dl01_const2:    4: 0x124054: %f
+dlo1:        dl01_func1:    1: 0x123cf9
+dlo2: module: testsuites/libtests/dl09/dl-o2.c
+dlo2:         dl02_bss1:    4: 0x2125468: 0
+dlo2:         dl02_bss2:    4: 0x212546c: %f
+dlo2:         dl02_bss3:    1: 0x2125488: 00
+dlo2:        dl02_data1:    4: 0x21254a0: 0
+dlo2:        dl02_data2:    4: 0x21254a4: %f
+dlo3: module: testsuites/libtests/dl09/dl-o3.c
+dlo3:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo3:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo3:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo3:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo3:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo3:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo3:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo3:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo3:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo3:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo3:   dl05_unresolv_5:    8: 0x8127d38: 0
+dlo4: module: testsuites/libtests/dl09/dl-o4.c
+dlo4:   dl04_unresolv_1:    4: 0x61270e8: 0
+dlo4:   dl04_unresolv_2:    4: 0x61270ec: %f
+dlo4:   dl04_unresolv_3:    1: 0x61270f0: 00
+dlo4:   dl04_unresolv_4:    4: 0x61270f4: 0
+dlo4:   dl04_unresolv_5:    4: 0x61270bc: 4
+dlo4:   dl04_unresolv_6:    4: 0x61270d8: dl-O4
+dlo5: module: testsuites/libtests/dl09/dl-o5.c
+dlo5:   dl05_unresolv_1:    8: 0x8127d20: 0
+dlo5:   dl05_unresolv_2:    2: 0x8127d28: 0
+dlo5:   dl05_unresolv_3:    4: 0x8127d2c: 0
+dlo5:   dl05_unresolv_4:    1: 0x8127d30: 0
+dlo5:   dl05_unresolv_5:    8: 0x8127d38: 0
+handle: 0x123510 closing
+space dealloc: 0x124d10
+handle: 0x124390 closing
+space dealloc: 0x2125978
+handle: 0x4125980 closing
+space dealloc: 0x41267f0
+handle: 0x41266b0 closing
+space dealloc: 0x6127528
+handle: 0x8127530 closing
+space dealloc: 0
+
+*** END OF TEST libdl (RTL) 9 ***
+
+
+*** FATAL ***
+fatal source: 5 (RTEMS_FATAL_SOURCE_EXIT)
+fatal code: 0 (0x00000000)
+RTEMS version: 5.0.0.ab08681fe52cad071f3a8d554af28c8bfc53b28f-modified
+RTEMS tools: 7.4.0 20181206 (RTEMS 5, RSB 257c9267cfce362138a265764c6a799c12c6b181, Newlib dc6e94551f09d3a983afd571478d63a09d6f66fa)
+executing thread ID: 0x08a010001
+executing thread name: UI1

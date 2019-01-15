@@ -12,8 +12,41 @@
 
 #include "dl-load.h"
 
-typedef int (*call_t)(int argc, const char* argv[]);
+#include <rtems/rtl/rtl-shell.h>
+#include <rtems/rtl/rtl-trace.h>
 
+#define TEST_TRACE 0
+#if TEST_TRACE
+ #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
+                      RTEMS_RTL_TRACE_WARNING | \
+                      RTEMS_RTL_TRACE_LOAD | \
+                      RTEMS_RTL_TRACE_UNLOAD | \
+                      RTEMS_RTL_TRACE_SYMBOL | \
+                      RTEMS_RTL_TRACE_RELOC | \
+                      RTEMS_RTL_TRACE_ALLOCATOR | \
+                      RTEMS_RTL_TRACE_UNRESOLVED | \
+                      RTEMS_RTL_TRACE_ARCHIVES | \
+                      RTEMS_RTL_TRACE_DEPENDENCY)
+ #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
+ #define DL_RTL_CMDS    1
+#else
+ #define DL_DEBUG_TRACE 0
+ #define DL_RTL_CMDS    0
+#endif
+
+static void dl_load_dump (void)
+{
+#if DL_RTL_CMDS
+  char* list[] = { "rtl", "list", NULL };
+  char* sym[] = { "rtl", "sym", NULL };
+  printf ("RTL List:\n");
+  rtems_rtl_shell_command (2, list);
+  printf ("RTL Sym:\n");
+  rtems_rtl_shell_command (2, sym);
+#endif
+}
+
+typedef int (*call_t)(int argc, const char* argv[]);
 
 static const char* call_1[] = { "Line 1", "Line 2" };
 static const char* call_2[] = { "Call 2, line 1",
@@ -27,6 +60,10 @@ int dl_load_test(void)
   int    call_ret;
   int    unresolved;
   char*  message = "loaded";
+
+#if DL_DEBUG_TRACE
+  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
+#endif
 
   printf("load: /dl01-o1.o\n");
 
@@ -43,6 +80,8 @@ int dl_load_test(void)
     message = "has unresolved externals";
 
   printf ("handle: %p %s\n", handle, message);
+
+  dl_load_dump ();
 
   call = dlsym (handle, "rtems_main");
   if (call == NULL)
