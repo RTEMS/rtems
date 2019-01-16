@@ -55,9 +55,20 @@ static void _CPU_cache_flush_entire_data(void)
 {
   __asm__ volatile ("wbinvd");
 }
+
 static void _CPU_cache_invalidate_entire_data(void)
 {
   __asm__ volatile ("invd");
+}
+
+static void _CPU_cache_invalidate_entire_instruction(void)
+{
+  __asm__ volatile ("invd");
+}
+
+static void _CPU_cache_invalidate_1_instruction_line(const void *i_addr)
+{
+  _CPU_cache_invalidate_entire_instruction();
 }
 
 static void _CPU_cache_enable_data(void)
@@ -68,6 +79,24 @@ static void _CPU_cache_enable_data(void)
 static void _CPU_cache_disable_data(void)
 {
   _CPU_disable_cache();
+}
+
+static void _CPU_cache_enable_instruction(void)
+{
+  _CPU_enable_cache();
+}
+
+static void _CPU_cache_disable_instruction(void)
+{
+  _CPU_disable_cache();
+}
+
+static void _CPU_cache_freeze_instruction(void)
+{
+}
+
+static void _CPU_cache_unfreeze_instruction(void)
+{
 }
 
 #endif
