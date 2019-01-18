@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013-2015 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -267,13 +267,16 @@ RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Acquire( _lock, _context ) \
-    _SMP_lock_Acquire( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+    do { \
+      _Assert( _ISR_Get_level() != 0 ); \
+      _SMP_lock_Acquire( \
+        &( _lock )->Lock, \
+        &( _context )->Lock_context \
+      ); \
+    } while ( 0 )
 #else
   #define _ISR_lock_Acquire( _lock, _context ) \
-    (void) _context;
+    do { (void) _context; } while ( 0 )
 #endif
 
 /**
@@ -296,7 +299,7 @@ RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
     )
 #else
   #define _ISR_lock_Release( _lock, _context ) \
-    (void) _context;
+    do { (void) _context; } while ( 0 )
 #endif
 
 /**
@@ -306,13 +309,16 @@ RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
  */
 #if defined( RTEMS_SMP )
   #define _ISR_lock_Acquire_inline( _lock, _context ) \
-    _SMP_lock_Acquire_inline( \
-      &( _lock )->Lock, \
-      &( _context )->Lock_context \
-    )
+    do { \
+      _Assert( _ISR_Get_level() != 0 ); \
+      _SMP_lock_Acquire_inline( \
+        &( _lock )->Lock, \
+        &( _context )->Lock_context \
+      ); \
+    } while ( 0 )
 #else
   #define _ISR_lock_Acquire_inline( _lock, _context ) \
-    (void) _context;
+    do { (void) _context; } while ( 0 )
 #endif
 
 /**
@@ -328,7 +334,7 @@ RTEMS_INLINE_ROUTINE void _ISR_lock_Context_set_level(
     )
 #else
   #define _ISR_lock_Release_inline( _lock, _context ) \
-    (void) _context;
+    do { (void) _context; } while ( 0 )
 #endif
 
 #if defined( RTEMS_DEBUG )

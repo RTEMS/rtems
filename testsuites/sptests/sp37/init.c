@@ -178,6 +178,7 @@ static void test_isr_locks( void )
   ISR_lock_Context lock_context;
   size_t i;
   const uint8_t *initialized_bytes;
+  ISR_Level interrupt_level;
 
   memset( &container, 0xff, sizeof( container ) );
   _ISR_lock_Initialize( &container.lock, "test" );
@@ -203,9 +204,20 @@ static void test_isr_locks( void )
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
 
+#if defined(RTEMS_DEBUG)
+  _ISR_lock_ISR_disable( &lock_context );
+#endif
+  interrupt_level = _ISR_Get_level();
   _ISR_lock_Acquire( &container.lock, &lock_context );
+  rtems_test_assert( interrupt_level == _ISR_Get_level() );
+#if !defined(RTEMS_DEBUG)
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
+#endif
   _ISR_lock_Release( &container.lock, &lock_context );
+  rtems_test_assert( interrupt_level == _ISR_Get_level() );
+#if defined(RTEMS_DEBUG)
+  _ISR_lock_ISR_enable( &lock_context );
+#endif
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
 

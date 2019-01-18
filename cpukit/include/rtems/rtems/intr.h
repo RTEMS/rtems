@@ -342,8 +342,16 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @see rtems_interrupt_lock_release_isr().
  */
-#define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
-  _ISR_lock_Acquire( _lock, _lock_context )
+#if defined(RTEMS_SMP)
+  #define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
+    _SMP_lock_Acquire( \
+      &( _lock )->Lock, \
+      &( _lock_context )->Lock_context \
+    )
+#else
+  #define rtems_interrupt_lock_acquire_isr( _lock, _lock_context ) \
+    do { (void) _lock_context; } while ( 0 )
+#endif
 
 /**
  * @brief Releases an interrupt lock in the corresponding interrupt service
@@ -358,8 +366,16 @@ typedef ISR_lock_Context rtems_interrupt_lock_context;
  *
  * @see rtems_interrupt_lock_acquire_isr().
  */
-#define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
-  _ISR_lock_Release( _lock, _lock_context )
+#if defined(RTEMS_SMP)
+  #define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
+    _SMP_lock_Release( \
+      &( _lock )->Lock, \
+      &( _lock_context )->Lock_context \
+    )
+#else
+  #define rtems_interrupt_lock_release_isr( _lock, _lock_context ) \
+    do { (void) _lock_context; } while ( 0 )
+#endif
 
 /** @} */
 
