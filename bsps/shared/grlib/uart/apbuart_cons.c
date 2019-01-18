@@ -260,10 +260,10 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	db = 0;
 #ifdef LEON3
 	if (priv->regs == leon3_debug_uart) {
-		db = priv->regs->ctrl & (LEON_REG_UART_CTRL_RE |
-					LEON_REG_UART_CTRL_TE |
-					LEON_REG_UART_CTRL_PE |
-					LEON_REG_UART_CTRL_PS);
+		db = priv->regs->ctrl & (APBUART_CTRL_RE |
+					APBUART_CTRL_TE |
+					APBUART_CTRL_PE |
+					APBUART_CTRL_PS);
 	}
 #endif
 	/* Let UART debug tunnelling be untouched if Flow-control is set.
@@ -273,9 +273,9 @@ int apbuart_init1(struct drvmgr_dev *dev)
 	 * guess that we are debugging if FL is already set, the debugger set
 	 * either LB or DB depending on UART capabilities.
 	 */
-	if (priv->regs->ctrl & LEON_REG_UART_CTRL_FL) {
-		db |= priv->regs->ctrl & (LEON_REG_UART_CTRL_DB |
-		      LEON_REG_UART_CTRL_LB | LEON_REG_UART_CTRL_FL);
+	if (priv->regs->ctrl & APBUART_CTRL_FL) {
+		db |= priv->regs->ctrl & (APBUART_CTRL_DB |
+		      APBUART_CTRL_LB | APBUART_CTRL_FL);
 	}
 
 	priv->regs->ctrl = db;
@@ -561,26 +561,26 @@ static bool set_attributes(
 	switch(t->c_cflag & (PARENB|PARODD)){
 		case (PARENB|PARODD):
 			/* Odd parity */
-			ctrl |= LEON_REG_UART_CTRL_PE|LEON_REG_UART_CTRL_PS;
+			ctrl |= APBUART_CTRL_PE|APBUART_CTRL_PS;
 			break;
 
 		case PARENB:
 			/* Even parity */
-			ctrl &= ~LEON_REG_UART_CTRL_PS;
-			ctrl |= LEON_REG_UART_CTRL_PE;
+			ctrl &= ~APBUART_CTRL_PS;
+			ctrl |= APBUART_CTRL_PE;
 			break;
 
 		default:
 		case 0:
 		case PARODD:
 			/* No Parity */
-			ctrl &= ~(LEON_REG_UART_CTRL_PS|LEON_REG_UART_CTRL_PE);
+			ctrl &= ~(APBUART_CTRL_PS|APBUART_CTRL_PE);
 	}
 
 	if (!(t->c_cflag & CLOCAL))
-		ctrl |= LEON_REG_UART_CTRL_FL;
+		ctrl |= APBUART_CTRL_FL;
 	else
-		ctrl &= ~LEON_REG_UART_CTRL_FL;
+		ctrl &= ~APBUART_CTRL_FL;
 
 	/* Update new settings */
 	uart->regs->ctrl = ctrl;
@@ -618,14 +618,14 @@ static void get_attributes(
 
 	/* Read out current parity */
 	ctrl = uart->regs->ctrl;
-	if (ctrl & LEON_REG_UART_CTRL_PE) {
-		if (ctrl & LEON_REG_UART_CTRL_PS)
+	if (ctrl & APBUART_CTRL_PE) {
+		if (ctrl & APBUART_CTRL_PS)
 			t->c_cflag |= PARENB|PARODD; /* Odd parity */
 		else
 			t->c_cflag |= PARENB; /* Even parity */
 	}
 
-	if ((ctrl & LEON_REG_UART_CTRL_FL) == 0)
+	if ((ctrl & APBUART_CTRL_FL) == 0)
 		t->c_cflag |= CLOCAL;
 
 	rtems_termios_set_best_baud(t, apbuart_get_baud(uart));

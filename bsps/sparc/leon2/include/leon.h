@@ -266,7 +266,6 @@ typedef struct {
 #define LEON_REG_UART_CTRL_PE     0x00000020 /* Parity enable */
 #define LEON_REG_UART_CTRL_FL     0x00000040 /* Flow control enable */
 #define LEON_REG_UART_CTRL_LB     0x00000080 /* Loop Back enable */
-#define LEON_REG_UART_CTRL_DB     0x00000800 /* Debug FIFO enable */
 
 #ifndef ASM
 
