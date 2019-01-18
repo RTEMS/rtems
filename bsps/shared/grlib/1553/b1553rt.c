@@ -52,16 +52,7 @@
 #define FUNCDBG(x...) 
 #endif
 
-#define READ_DMA(address) _READ16((unsigned int)address)
-
-static __inline__ unsigned short _READ16(unsigned int addr) {
-    unsigned short tmp;
-    asm(" lduha [%1]1, %0 "
-        : "=r"(tmp)
-        : "r"(addr)
-	);
-    return tmp;
-}
+#define READ_DMA(address) grlib_read_uncached16((unsigned int)address)
 
 static rtems_device_driver rt_initialize(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);
 static rtems_device_driver rt_open(rtems_device_major_number major, rtems_device_minor_number minor, void *arg);

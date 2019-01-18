@@ -98,7 +98,7 @@
 /* Memory and HW Registers Access routines. All 32-bit access routines */
 #define BD_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
 /*#define BD_READ(addr) (*(volatile unsigned int *)(addr))*/
-#define BD_READ(addr) leon_r32_no_cache((unsigned long)(addr))
+#define BD_READ(addr) grlib_read_uncached32((unsigned long)(addr))
 #define REG_WRITE(addr, val) (*(volatile unsigned int *)(addr) = (unsigned int)(val))
 #define REG_READ(addr) (*(volatile unsigned int *)(addr))
 

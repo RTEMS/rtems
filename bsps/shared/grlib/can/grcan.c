@@ -165,38 +165,17 @@ static void grcan_hw_sync(
 static void grcan_interrupt(void *arg);
 
 #ifdef GRCAN_REG_BYPASS_CACHE
-#define READ_REG(address) _grcan_read_nocache((unsigned int)(address))
+#define READ_REG(address) grlib_read_uncached32((unsigned int)(address))
 #else
 #define READ_REG(address) (*(volatile unsigned int *)(address))
 #endif
 
 #ifdef GRCAN_DMA_BYPASS_CACHE
-#define READ_DMA_WORD(address) _grcan_read_nocache((unsigned int)(address))
-#define READ_DMA_BYTE(address) _grcan_read_nocache_byte((unsigned int)(address))
-static unsigned char __inline__ _grcan_read_nocache_byte(unsigned int address)
-{
-	unsigned char tmp;
-	__asm__ (" lduba [%1]1, %0 "
-	    : "=r"(tmp)
-	    : "r"(address)
-	);
-	return tmp;
-}
+#define READ_DMA_WORD(address) grlib_read_uncached32((unsigned int)(address))
+#define READ_DMA_BYTE(address) grlib_read_uncached8((unsigned int)(address))
 #else
 #define READ_DMA_WORD(address) (*(volatile unsigned int *)(address))
 #define READ_DMA_BYTE(address) (*(volatile unsigned char *)(address))
-#endif
-
-#if defined(GRCAN_REG_BYPASS_CACHE) || defined(GRCAN_DMA_BYPASS_CACHE)
-static unsigned int __inline__ _grcan_read_nocache(unsigned int address)
-{
-	unsigned int tmp;
-	__asm__ (" lda [%1]1, %0 "
-	        : "=r"(tmp)
-	        : "r"(address)
-	);
-	return tmp;
-}
 #endif
 
 #define NELEM(a) ((int) (sizeof (a) / sizeof (a[0])))

@@ -90,6 +90,58 @@ RTEMS_INLINE_ROUTINE void *grlib_calloc(size_t nelem, size_t elsize)
 
 #endif
 
+#ifdef __sparc__
+
+RTEMS_INLINE_ROUTINE unsigned char grlib_read_uncached8(unsigned int address)
+{
+       unsigned char tmp;
+       __asm__ (" lduba [%1]1, %0 "
+           : "=r"(tmp)
+           : "r"(address)
+       );
+       return tmp;
+}
+
+RTEMS_INLINE_ROUTINE unsigned short grlib_read_uncached16(unsigned int addr) {
+       unsigned short tmp;
+       __asm__ (" lduha [%1]1, %0 "
+         : "=r"(tmp)
+         : "r"(addr)
+       );
+       return tmp;
+}
+
+
+RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
+{
+	unsigned int tmp;
+	__asm__ (" lda [%1]1, %0 "
+	        : "=r"(tmp)
+	        : "r"(address)
+	);
+	return tmp;
+}
+#else
+
+static unsigned char __inline__ grlib_read_uncached8(unsigned int address)
+{
+	unsigned char tmp = (*(volatile unsigned char *)(address));
+	return tmp;
+}
+
+static __inline__ unsigned short grlib_read_uncached16(unsigned int address) {
+	unsigned short tmp = (*(volatile unsigned short *)(address));
+	return tmp;
+}
+
+RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
+{
+	unsigned int tmp = (*(volatile unsigned int *)(address));
+	return tmp;
+}
+
+#endif
+
 extern struct ambapp_bus ambapp_plb;
 
 #ifdef __cplusplus

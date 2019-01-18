@@ -152,32 +152,9 @@ void (*grspw_timecode_callback)
 #define _MEM_READ8(address) (*(volatile unsigned char *)(address))
 #define _MEM_READ32(address) (*(volatile unsigned int *)(address))
 #else
-static inline unsigned int _SPW_READ(volatile void *addr) {
-        unsigned int tmp;
-        __asm__ (" lda [%1]1, %0 "
-            : "=r"(tmp)
-            : "r"(addr)
-           );
-        return tmp;
-}
-
-static inline unsigned int _MEM_READ8(volatile void *addr) {
-        unsigned int tmp;
-        __asm__ (" lduba [%1]1, %0 "
-            : "=r"(tmp)
-            : "r"(addr)
-           );
-        return tmp;
-}
-
-static inline unsigned int _MEM_READ32(volatile void *addr) {
-        unsigned int tmp;
-        __asm__ (" lda [%1]1, %0 "
-            : "=r"(tmp)
-            : "r"(addr)
-           );
-        return tmp;
-}
+#define _SPW_READ(address) grlib_read_uncached32((unsigned int) address)
+#define _MEM_READ8(address) grlib_read_uncached8((unsigned int) address)
+#define _MEM_READ32(address) grlib_read_uncached32((unsigned int) address)
 #endif
 
 #define MEM_READ8(addr) _MEM_READ8((volatile void *)(addr))
