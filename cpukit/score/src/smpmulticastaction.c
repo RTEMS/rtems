@@ -11,7 +11,7 @@
 #endif
 
 #include <rtems/score/smpimpl.h>
-#include <rtems/score/smplock.h>
+#include <rtems/score/isrlock.h>
 #include <rtems/score/chainimpl.h>
 #include <rtems/score/sysstate.h>
 
@@ -24,23 +24,23 @@ typedef struct {
 } SMP_Multicast_action;
 
 typedef struct {
-  SMP_lock_Control Lock;
+  ISR_lock_Control Lock;
   Chain_Control    Actions;
 } SMP_Multicast_context;
 
 static SMP_Multicast_context _SMP_Multicast = {
-  .Lock = SMP_LOCK_INITIALIZER( "SMP Multicast Action" ),
+  .Lock = ISR_LOCK_INITIALIZER( "SMP Multicast Action" ),
   .Actions = CHAIN_INITIALIZER_EMPTY( _SMP_Multicast.Actions )
 };
 
 void _SMP_Multicast_actions_process( void )
 {
-  SMP_lock_Context      lock_context;
+  ISR_lock_Context      lock_context;
   uint32_t              cpu_self_index;
   SMP_Multicast_action *node;
   SMP_Multicast_action *next;
 
-  _SMP_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
+  _ISR_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
   cpu_self_index = _SMP_Get_current_processor();
   node = (SMP_Multicast_action *) _Chain_First( &_SMP_Multicast.Actions );
 
@@ -61,7 +61,7 @@ void _SMP_Multicast_actions_process( void )
     node = next;
   }
 
-  _SMP_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
+  _ISR_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
 }
 
 static void
@@ -97,7 +97,7 @@ void _SMP_Multicast_action(
 {
   SMP_Multicast_action node;
   Processor_mask       targets;
-  SMP_lock_Context     lock_context;
+  ISR_lock_Context     lock_context;
   uint32_t             i;
 
   if ( ! _System_state_Is_up( _System_state_Get() ) ) {
@@ -123,9 +123,9 @@ void _SMP_Multicast_action(
   _Processor_mask_Assign( &node.targets, &targets );
   _Atomic_Store_ulong( &node.done, 0, ATOMIC_ORDER_RELAXED );
 
-  _SMP_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
+  _ISR_lock_ISR_disable_and_acquire( &_SMP_Multicast.Lock, &lock_context );
   _Chain_Prepend_unprotected( &_SMP_Multicast.Actions, &node.Node );
-  _SMP_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
+  _ISR_lock_Release_and_ISR_enable( &_SMP_Multicast.Lock, &lock_context );
 
   _SMP_Send_message_multicast( &targets, SMP_MESSAGE_MULTICAST_ACTION );
   _SMP_Multicasts_try_process();
