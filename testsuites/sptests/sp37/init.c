@@ -192,8 +192,6 @@ static void test_isr_locks( void )
 
   _ISR_lock_ISR_disable_and_acquire( &container.lock, &lock_context );
   rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
-  _ISR_lock_Flash( &container.lock, &lock_context );
-  rtems_test_assert( normal_interrupt_level != _ISR_Get_level() );
   _ISR_lock_Release_and_ISR_enable( &container.lock, &lock_context );
 
   rtems_test_assert( normal_interrupt_level == _ISR_Get_level() );
