@@ -130,7 +130,7 @@ static int ASCS_get_sysfreq(void) {
                 appropriate bits in the core's STS register and releases
 		the associated semaphore
 */
-static rtems_isr ASCS_irqhandler(rtems_vector_number v) {
+static rtems_isr ASCS_irqhandler(void *v) {
 
   if(cfg->regs->sts & GRASCS_STS_TCDONE) {
     /* Clear TC done bit */
@@ -271,7 +271,9 @@ int ASCS_init(void) {
     GRASCS_CMD_TCDONE | GRASCS_CMD_TMDONE;
 
   /* Register interrupt routine */
-  set_vector(ASCS_irqhandler,irq+0x10,2);
+  rtems_interrupt_handler_install(irq, "grascs",
+		  RTEMS_INTERRUPT_SHARED,
+		  ASCS_irqhandler, NULL);
   
   return 0;
 

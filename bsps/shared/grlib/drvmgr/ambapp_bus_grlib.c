@@ -188,7 +188,8 @@ static int ambapp_grlib_int_register
 	void *arg
 	)
 {
-	return BSP_shared_interrupt_register(irq, info, isr, arg);
+	return rtems_interrupt_handler_install(irq, info,
+			RTEMS_INTERRUPT_SHARED, isr, arg);
 }
 
 static int ambapp_grlib_int_unregister
@@ -199,7 +200,7 @@ static int ambapp_grlib_int_unregister
 	void *arg
 	)
 {
-	return BSP_shared_interrupt_unregister(irq, isr, arg);
+	return rtems_interrupt_handler_remove(irq, isr, arg);
 }
 
 static int ambapp_grlib_int_clear

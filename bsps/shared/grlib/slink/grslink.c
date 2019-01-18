@@ -236,7 +236,7 @@ static int SLINK_getsysfreq(void)
  * variable. SLAVE-WORD-SEND transfers are placed in the IO card's receive
  * queue.
  */
-static rtems_isr SLINK_interrupt_handler(rtems_vector_number v)
+static rtems_isr SLINK_interrupt_handler(void *v)
 {
 	unsigned int sts;
 	unsigned int wrd;
@@ -407,7 +407,9 @@ int SLINK_init(unsigned int nullwrd, int parity, int qsize,
 	cfg->slink_seq_change = sequence_callback;
 
 	/* Set-up IRQ handling */
-	set_vector(SLINK_interrupt_handler,irq+0x10,2);
+	rtems_interrupt_handler_install(irq, "slink",
+			RTEMS_INTERRUPT_SHARED,
+			SLINK_interrupt_handler, NULL);
 	
 	return 0;
 

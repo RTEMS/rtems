@@ -152,7 +152,7 @@ static void almalloc(unsigned char **alptr, void **ptr, int sz)
   *alptr = (unsigned char *) (((int)*ptr+sz) & ~(sz-1));
 }
 
-static rtems_isr satcan_interrupt_handler(rtems_vector_number v)
+static rtems_isr satcan_interrupt_handler(void *v)
 {
 	unsigned int irq;
 	unsigned int fifo;
@@ -665,7 +665,9 @@ static rtems_device_driver satcan_initialize(rtems_device_major_number major, rt
 	priv->dmamode = SATCAN_DMA_MODE_SYSTEM;
 
 	/* Register interrupt handler */
-	set_vector(satcan_interrupt_handler, d.irq+0x10, 2);
+	rtems_interrupt_handler_install(d.irq, "satcan",
+			RTEMS_INTERRUPT_SHARED,
+			satcan_interrupt_handler, NULL);
 
 	return RTEMS_SUCCESSFUL;
 }
