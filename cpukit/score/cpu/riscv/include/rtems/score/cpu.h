@@ -439,10 +439,7 @@ uint32_t _CPU_Counter_frequency( void );
 
 extern volatile uint32_t * const _RISCV_Counter;
 
-static inline CPU_Counter_ticks _CPU_Counter_read( void )
-{
-  return *_RISCV_Counter;
-}
+CPU_Counter_ticks _CPU_Counter_read( void );
 
 static inline CPU_Counter_ticks _CPU_Counter_difference(
   CPU_Counter_ticks second,

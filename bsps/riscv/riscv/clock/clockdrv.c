@@ -189,6 +189,11 @@ uint32_t _CPU_Counter_frequency( void )
   return riscv_clock_get_timebase_frequency(bsp_fdt_get());
 }
 
+CPU_Counter_ticks _CPU_Counter_read( void )
+{
+  return *_RISCV_Counter;
+}
+
 RTEMS_SYSINIT_ITEM(
   riscv_counter_initialize,
   RTEMS_SYSINIT_CPU_COUNTER,
