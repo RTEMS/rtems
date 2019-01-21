@@ -144,7 +144,7 @@ rtems_rtl_data_init (void)
       /*
        * Open the archives.
        */
-      rtems_rtl_archives_open (&rtl->archives, "/etc/rtl-libs.conf");
+      rtems_rtl_archives_open (&rtl->archives, "/etc/libdl.conf");
 
       /*
        * Open the unresolved table.
@@ -263,6 +263,14 @@ rtems_rtl_global_symbols (void)
     return NULL;
   }
   return &rtl->globals;
+}
+
+const char*
+rtems_rtl_last_error_unprotected (void)
+{
+  if (!rtl)
+    return NULL;
+  return rtl->last_error;
 }
 
 rtems_chain_control*

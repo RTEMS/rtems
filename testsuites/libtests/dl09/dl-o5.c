@@ -7,6 +7,7 @@
  */
 
 #include "dl-load.h"
+#include "dl-o4.h"
 #include "dl-o5.h"
 
 #include <inttypes.h>

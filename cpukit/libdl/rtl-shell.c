@@ -129,17 +129,6 @@ typedef struct
 } rtems_rtl_obj_print;
 
 /**
- * Return the different between 2 void*.
- */
-static size_t
-rtems_rtl_delta_voids (void* higher, void* lower)
-{
-  char* ch = higher;
-  char* cl = lower;
-  return ch - cl;
-}
-
-/**
  * Parse an argument.
  */
 static bool
@@ -235,11 +224,11 @@ rtems_rtl_obj_printer (rtems_rtl_obj_print* print, rtems_rtl_obj* obj)
   {
     printf ("%-*cexec size     : %zi\n", print->indent, ' ', obj->exec_size);
     printf ("%-*ctext base     : %p (%zi)\n", print->indent, ' ',
-            obj->text_base, rtems_rtl_delta_voids (obj->const_base, obj->text_base));
+            obj->text_base, obj->text_size);
     printf ("%-*cconst base    : %p (%zi)\n", print->indent, ' ',
-            obj->const_base, rtems_rtl_delta_voids (obj->data_base, obj->const_base));
+            obj->const_base, obj->const_size);
     printf ("%-*cdata base     : %p (%zi)\n", print->indent, ' ',
-            obj->data_base, rtems_rtl_delta_voids (obj->bss_base, obj->data_base));
+            obj->data_base, obj->data_size);
     printf ("%-*cbss base      : %p (%zi)\n", print->indent, ' ',
             obj->bss_base, obj->bss_size);
   }

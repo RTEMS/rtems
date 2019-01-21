@@ -22,6 +22,12 @@
 #include "rtl-unwind.h"
 
 /*
+ * Set to 1 to allow untested relocations. If you tested one and it
+ * works or you fixed the relocation please remove the guard.
+ */
+#define ALLOW_UNTESTED_RELOCS 1
+
+/*
  * It is possible for the compiler to emit relocations for unaligned data.
  * We handle this situation with these inlines.
  */
@@ -341,8 +347,10 @@ rtems_rtl_elf_relor_rel (rtems_rtl_obj*            obj,
       else {
         if (ELF_R_TYPE(rel->r_info) == R_TYPE(THM_JUMP24)) {
           tmp = (tmp + 2) & ~3; /* aligned to 4 bytes only for JUMP24 */
+#if !ALLOW_UNTESTED_RELOCS
           printf("THM_JUMP24 to arm not supported\n");
           return false;
+#endif
         }
         else {
           /* THM_CALL bl-->blx */
@@ -440,11 +448,33 @@ rtems_rtl_elf_relor_rel (rtems_rtl_obj*            obj,
                 (void *)*where, where, rtems_rtl_obj_oname (obj));
       break;
 
+    case R_TYPE(TLS_LE32):
+#if ALLOW_UNTESTED_RELOCS
+      if (!parsing) {
+        addend = *where;
+        *where = symvalue + addend;
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+          printf ("rtl: TLS_LE32 %p @ %p in %s\n",
+                  (void *)*where, where, rtems_rtl_obj_oname (obj));
+      }
+      break;
+#endif
+    case R_TYPE(TLS_GD32):
+    case R_TYPE(TLS_LDM32):
+    case R_TYPE(TLS_LDO32):
+    case R_TYPE(TLS_IE32):
+    case R_TYPE(TLS_LDO12):
+    case R_TYPE(TLS_LE12):
+    case R_TYPE(TLS_IE12GP):
+      printf("TSL relocations not supported\n");
+
     default:
-      printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p, "
-              "contents = %p\n",
+      printf ("rtl: reloc unknown: sym = %" PRIu32 ", type = %" PRIu32 ", offset = %p",
               ELF_R_SYM(rel->r_info), (uint32_t) ELF_R_TYPE(rel->r_info),
-              (void *)rel->r_offset, (void *)*where);
+                (void *)rel->r_offset);
+      if (!parsing)
+        printf("contents = %p", (void *)*where);
+      printf("\n");
       rtems_rtl_set_error (EINVAL,
                            "%s: Unsupported relocation type %" PRIu32 " "
                            "in non-PLT relocations",

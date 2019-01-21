@@ -138,6 +138,15 @@ rtems_rtl_data* rtems_rtl_data_unprotected (void);
 rtems_rtl_symbols* rtems_rtl_global_symbols (void);
 
 /**
+ * Get the RTL last error string with out locking. This call assumes the RTL is
+ * locked.
+ *
+ * @return const char* The RTL's laste error.
+ * @retval NULL The RTL data is not initialised.
+ */
+const char* rtems_rtl_last_error_unprotected (void);
+
+/**
  * Get the RTL objects table with out locking. This call assumes the RTL
  * is locked.
  *

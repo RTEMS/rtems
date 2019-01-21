@@ -293,32 +293,22 @@ rtems_rtl_archive_obj_finder (rtems_rtl_archive* archive, void* data)
     }
     else
     {
-      ssize_t entry = symbols->entries / 2;
-      ssize_t offset = entry;
-      ssize_t last_entry = -1;
-      while (entry >= 0 &&
-             entry < symbols->entries &&
-             entry != last_entry &&
-             offset > 0)
+      rtems_rtl_archive_symbol*      match;
+      const rtems_rtl_archive_symbol key = {
+        .entry = -1,
+        .label = search->symbol
+      };
+      match = bsearch (&key,
+                       symbols->symbols,
+                       symbols->entries,
+                       sizeof (symbols->symbols[0]),
+                       rtems_rtl_archive_symbol_compare);
+      if (match != NULL)
       {
-        int cmp = strcmp (search->symbol, symbols->symbols[entry].label);
-        if (cmp == 0)
-        {
-          entry = symbols->symbols[entry].entry;
           search->archive = archive;
           search->offset =
-            rtems_rtl_archive_read_32 (symbols->base + (entry * 4));
+            rtems_rtl_archive_read_32 (symbols->base + (match->entry * 4));
           return false;
-        }
-        last_entry = entry;
-        if (offset == 1)
-          offset = 0;
-        else
-          offset = ((offset - 1) / 2) + 1;
-        if (cmp < 0)
-          entry -= offset;
-        else
-          entry += offset;
       }
     }
   }
@@ -452,7 +442,7 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
     rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_OBJECT, (void*) archives->config);
     archives->config_length = 0;
     archives->config =
-      rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT, sb.st_size, false);
+      rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_OBJECT, sb.st_size + 1, true);
     if (archives->config == NULL)
     {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
@@ -519,45 +509,29 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
      * Remove leading and trailing white space.
      */
     s = (char*) archives->config;
-    for (r = 0; r < archives->config_length; ++r)
+    r = 0;
+    while (r < archives->config_length)
     {
-      if (s[r] != '\0')
+      if (s[r] == '\0')
+      {
+        ++r;
+      }
+      else
       {
         size_t ls = strlen (&s[r]);
         size_t b = 0;
         while (b < ls && isspace (s[r + b]))
         {
+          s[r + b] = '\0';
           ++b;
         }
-        if (b > 0)
-          memmove (&s[r], &s[r + b], ls - b);
         b = ls - 1;
-        while (b > 0 && isspace (s[r + b]))
+        while (b > 0 && isspace (s[b]))
         {
-          s[r + b] = '\0';
+          s[b] = '\0';
           --b;
         }
-      }
-    }
-
-    /*
-     * Compact the lines so there is only a single nul separator.
-     */
-    s = (char*) archives->config;
-    for (r = 0; r < archives->config_length; ++r)
-    {
-      if (s[r] == '\0')
-      {
-        size_t e = r + 1;
-        while (e < archives->config_length)
-        {
-          if (s[e] != '\0')
-          {
-            if (archives->config_length - e - 1 > 0)
-              memmove (&s[r + 1], &s[e], archives->config_length - e - 1);
-            break;
-          }
-        }
+        r += ls;
       }
     }
 
@@ -565,13 +539,17 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
     {
       int line = 1;
       printf ("rtl: archive: config:\n");
-      s = (char*) archives->config;
-      for (r = 0; r < archives->config_length; ++r, ++line)
+      r = 0;
+      while (r < archives->config_length)
       {
-        size_t len = strlen (s);
-        printf (" %3d: %s\n", line, s);
-        s += len + 2;
-        r += len;
+        const char* cs = &archives->config[r];
+        size_t      len = strlen (cs);
+        if (len > 0)
+        {
+          printf (" %3d: %s\n", line, cs);
+          ++line;
+        }
+        r += len + 1;
       }
     }
   }
@@ -740,6 +718,19 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
                 archive->symbols.names,
                 (archive->symbols.entries + 1) * 4,
                 archive->symbols.symbols);
+
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVE_SYMS) &&
+          archive->symbols.entries > 0)
+      {
+        size_t e;
+        printf ("rtl: archive: symbols: %s\n", archive->name );
+        for (e = 0; e < archive->symbols.entries; ++e)
+        {
+          printf(" %6zu: %6zu %s\n", e + 1,
+                 archive->symbols.symbols[e].entry,
+                 archive->symbols.symbols[e].label);
+        }
+      }
     }
 
     close (fd);
@@ -851,19 +842,16 @@ rtems_rtl_archives_refresh (rtems_rtl_archives* archives)
           break;
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
-          printf ("rtl: archive: refresh: checking: %s\n", entry.d_name);
+          printf ("rtl: archive: refresh: checking: %s (pattern: %s)\n",
+                  entry.d_name, basename);
 
         if (fnmatch (basename, entry.d_name, 0) == 0)
         {
-          struct stat sb;
-          if (stat (entry.d_name, &sb) == 0)
-          {
-            rtems_rtl_archive* archive;
-            archive = rtems_rtl_archive_get (archives, dirname, entry.d_name);
-            if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
-              printf ("rtl: archive: refresh: %s: %sfound\n",
-                      entry.d_name, archive == NULL ? ": not " : "");
-          }
+          rtems_rtl_archive* archive;
+          archive = rtems_rtl_archive_get (archives, dirname, entry.d_name);
+          if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
+            printf ("rtl: archive: refresh: %s: %sfound\n",
+                    entry.d_name, archive == NULL ? ": not " : "");
         }
       }
       closedir (dir);
@@ -1028,8 +1016,9 @@ rtems_rtl_archive_obj_load (rtems_rtl_archives* archives,
   if (!rtems_rtl_obj_load (obj))
   {
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
-      printf ("rtl: archive: loading: error: %s:%s@0x%08jx\n",
-              obj->aname, obj->oname, obj->ooffset);
+      printf ("rtl: archive: loading: error: %s:%s@0x%08jx: %s\n",
+              obj->aname, obj->oname, obj->ooffset,
+              rtems_rtl_last_error_unprotected ());
     rtems_chain_extract (&obj->link);
     rtems_rtl_obj_free (obj);
     rtems_rtl_obj_caches_flush ();

@@ -99,7 +99,7 @@ static void dl_check_resolved(void* handle, bool has_unresolved)
           handle, unresolved != 0 ? "" : "no ");
 }
 
-static void* dl_load_obj(const char* name, bool has_unresolved)
+static void* dl_load_obj (const char* name, bool has_unresolved)
 {
   void* handle;
 
@@ -184,11 +184,17 @@ int dl_load_test(void)
 
   dl_load_dump ();
 
+  /*
+   * Check for any resolved externals.
+   */
+  printf ("Check is any unresolved externals exist:\n");
+  dl_check_resolved (RTLD_SELF, false);
+
   printf ("Running rtems_main_o1:\n");
   if (dl_call (o[0].handle, "rtems_main_o1"))
     return 1;
 
-  for (i = 0; i < NUMOF(od); ++i)
+  for (i = 0; i < NUMOF (od); ++i)
     dl_object_close (&o[i]);
 
   return 0;

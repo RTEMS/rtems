@@ -576,16 +576,19 @@ dl08-o5.o: dl08/dl-o5.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl08-o6-123456789-123456789.o: dl08/dl-o6-123456789-123456789.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
-#	echo "#" > etc/rtl-libs.conf
-#	echo "  # blah blah" >> etc/rtl-libs.conf
-etc/rtl-libs.conf:
+etc/libdl.conf:
 	mkdir etc; \
-	echo "/libdl08*.a" >> etc/rtl-libs.conf
+	echo "#" > etc/libdl.conf
+	echo "  # blah blah" >> etc/libdl.conf
+	echo "/libdl08*.a" >> etc/libdl.conf
+	echo "" >> etc/libdl.conf
+	echo "x" >> etc/libdl.conf
+	echo "" >> etc/libdl.conf
 noinst_LIBRARIES = libdl08_1.a libdl08_2.a
 libdl08_1_a_SOURCES = dl08-o2.c dl08-o4.c
 libdl08_2_a_SOURCES = dl08-o3.c dl08-o5.c \
 			dl08-o6-123456789-123456789.c
-dl08.tar: etc/rtl-libs.conf dl08-o1.o libdl08_1.a libdl08_2.a
+dl08.tar: etc/libdl.conf dl08-o1.o libdl08_1.a libdl08_2.a
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ $+
 dl08-tar.c: dl08.tar
@@ -601,7 +604,7 @@ dl08$(EXEEXT):  $(dl08_OBJECTS) $(dl08_DEPENDENCIES) dl08-sym.o
 	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
 CLEANFILES += dl08.pre dl08-sym.o libdl08_1.a libdl08_2.a dl08-o1.o dl08-o2.o \
 		dl08-o3.o dl08-o4.o dl08-o5.o dl08-o6-123456789-123456789.o \
-		dl08.tar dl08-tar.h etc/rtl-libs.conf
+		dl08.tar dl08-tar.h etc/libdl.conf
 endif
 endif
 

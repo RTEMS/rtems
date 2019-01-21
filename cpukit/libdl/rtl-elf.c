@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -64,6 +65,31 @@ rtems_rtl_elf_machine_check (Elf_Ehdr* ehdr)
   return true;
 }
 
+static const char*
+rtems_rtl_elf_separated_section (const char* name)
+{
+  struct {
+    const char* label;
+    size_t      len;
+  } prefix[] = {
+    #define SEPARATED_PREFIX(_p) { _p, sizeof (_p) - 1 }
+    SEPARATED_PREFIX (".text."),
+    SEPARATED_PREFIX (".rel.text."),
+    SEPARATED_PREFIX (".data."),
+    SEPARATED_PREFIX (".rel.data."),
+    SEPARATED_PREFIX (".rodata."),
+    SEPARATED_PREFIX (".rel.rodata.")
+  };
+  const size_t prefixes = sizeof (prefix) / sizeof (prefix[0]);
+  size_t       p;
+  for (p = 0; p < prefixes; ++p)
+  {
+    if (strncmp (name, prefix[p].label, prefix[p].len) == 0)
+      return name + prefix[p].len;
+  }
+  return NULL;
+}
+
 static bool
 rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
                            const Elf_Sym*      sym,
@@ -100,6 +126,7 @@ rtems_rtl_elf_find_symbol (rtems_rtl_obj*      obj,
     return false;
 
   *value = sym->st_value + (Elf_Addr) sect->base;
+
   return true;
 }
 
@@ -141,62 +168,68 @@ rtems_rtl_elf_reloc_parser (rtems_rtl_obj*      obj,
   rtems_rtl_elf_reloc_data* rd = (rtems_rtl_elf_reloc_data*) data;
 
   /*
-   * Check the reloc record to see if a trampoline is needed.
-   */
-  if (is_rela)
-  {
-    const Elf_Rela* rela = (const Elf_Rela*) relbuf;
-    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: rela tramp: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
-              symname, (int) ELF_R_SYM (rela->r_info),
-              (uintmax_t) symvalue, (int) ELF_R_TYPE (rela->r_info),
-              (uintmax_t) rela->r_offset, (int) rela->r_addend);
-    if (!rtems_rtl_elf_relocate_rela_tramp (obj, rela, targetsect,
-                                            symname, sym->st_info, symvalue))
-      return false;
-  }
-  else
-  {
-    const Elf_Rel* rel = (const Elf_Rel*) relbuf;
-    if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
-      printf ("rtl: rel tramp: sym:%s(%d)=%08jx type:%d off:%08jx\n",
-              symname, (int) ELF_R_SYM (rel->r_info),
-              (uintmax_t) symvalue, (int) ELF_R_TYPE (rel->r_info),
-              (uintmax_t) rel->r_offset);
-    if (!rtems_rtl_elf_relocate_rel_tramp (obj, rel, targetsect,
-                                           symname, sym->st_info, symvalue))
-      return false;
-  }
-
-  /*
-   * If the symbol has been resolved and there is a symbol name it is a global
-   * symbol and from another object file so add it as a dependency.
+   * The symbol has to have been resolved to parse the reloc record. Unresolved
+   * symbols are handled in the relocator but we need to count them here so a
+   * trampoline is accounted for. We have to assume the unresolved may be out of
+   * of range.
    */
   if (!resolved)
   {
     ++rd->unresolved;
   }
-  else if (symname != NULL)
+  else
   {
     /*
-     * Find the symbol's object file. It cannot be NULL so ignore that result
-     * if returned, it means something is corrupted. We are in an iterator.
+     * Check the reloc record to see if a trampoline is needed.
      */
-    rtems_rtl_obj*  sobj = rtems_rtl_find_obj_with_symbol (symbol);
-    if (sobj != NULL)
+    if (is_rela)
+    {
+      const Elf_Rela* rela = (const Elf_Rela*) relbuf;
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf ("rtl: rela tramp: sym:%s(%d)=%08jx type:%d off:%08jx addend:%d\n",
+                symname, (int) ELF_R_SYM (rela->r_info),
+                (uintmax_t) symvalue, (int) ELF_R_TYPE (rela->r_info),
+                (uintmax_t) rela->r_offset, (int) rela->r_addend);
+      if (!rtems_rtl_elf_relocate_rela_tramp (obj, rela, targetsect,
+                                              symname, sym->st_info, symvalue))
+        return false;
+    }
+    else
+    {
+      const Elf_Rel* rel = (const Elf_Rel*) relbuf;
+      if (rtems_rtl_trace (RTEMS_RTL_TRACE_RELOC))
+        printf ("rtl: rel tramp: sym:%s(%d)=%08jx type:%d off:%08jx\n",
+                symname, (int) ELF_R_SYM (rel->r_info),
+                (uintmax_t) symvalue, (int) ELF_R_TYPE (rel->r_info),
+                (uintmax_t) rel->r_offset);
+      if (!rtems_rtl_elf_relocate_rel_tramp (obj, rel, targetsect,
+                                             symname, sym->st_info, symvalue))
+        return false;
+    }
+
+    if (symname != NULL)
     {
       /*
-       * A dependency is not the base kernel image or itself. Tag the object as
-       * having been visited so we count it only once.
+       * Find the symbol's object file. It cannot be NULL so ignore that result
+       * if returned, it means something is corrupted. We are in an iterator.
        */
-      if (sobj != rtems_rtl_baseimage () && obj != sobj &&
-          (sobj->flags & RTEMS_RTL_OBJ_RELOC_TAG) == 0)
+      rtems_rtl_obj*  sobj = rtems_rtl_find_obj_with_symbol (symbol);
+      if (sobj != NULL)
       {
-        sobj->flags |= RTEMS_RTL_OBJ_RELOC_TAG;
-        ++rd->dependents;
+        /*
+         * A dependency is not the base kernel image or itself. Tag the object as
+         * having been visited so we count it only once.
+         */
+        if (sobj != rtems_rtl_baseimage () && obj != sobj &&
+            (sobj->flags & RTEMS_RTL_OBJ_RELOC_TAG) == 0)
+        {
+          sobj->flags |= RTEMS_RTL_OBJ_RELOC_TAG;
+          ++rd->dependents;
+        }
       }
     }
   }
+
   return true;
 }
 
@@ -313,6 +346,14 @@ rtems_rtl_elf_relocate_worker (rtems_rtl_obj*              obj,
   if (!targetsect)
     return true;
 
+  /*
+   * The section muct has been loaded. It could be a separate section in an
+   * archive and not loaded.
+   */
+  if ((targetsect->flags & RTEMS_RTL_OBJ_SECT_LOAD) == 0)
+    return true;
+
+
   rtems_rtl_obj_caches (&symbols, &strings, &relocs);
 
   if (!symbols || !strings || !relocs)
@@ -379,6 +420,7 @@ rtems_rtl_elf_relocate_worker (rtems_rtl_obj*              obj,
      * Only need the name of the symbol if global or a common symbol.
      */
     if (ELF_ST_TYPE (sym.st_info) == STT_NOTYPE ||
+        ELF_ST_TYPE (sym.st_info) == STT_TLS ||
         sym.st_shndx == SHN_COMMON)
     {
       size_t len;
@@ -686,6 +728,12 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
               symbol.st_shndx,
               (int) symbol.st_size);
 
+            /*
+         * If a duplicate forget it.
+         */
+        if (rtems_rtl_symbol_global_find (name))
+          continue;
+
     if ((symbol.st_shndx != 0) &&
         ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_COMMON) ||
@@ -705,16 +753,24 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
         {
           /*
            * If there is a globally exported symbol already present and this
-           * symbol is not weak raise an error. If the symbol is weak and
-           * present globally ignore this symbol and use the global one and if
-           * it is not present take this symbol global or weak. We accept the
-           * first weak symbol we find and make it globally exported.
+           * symbol is not weak raise check if the object file being loaded is
+           * from an archive. If the base image is built with text sections a
+           * symbol with it's section will be linked into the base image and not
+           * another symbol. If not an archive rause an error.
+           *
+           * If the symbol is weak and present globally ignore this symbol and
+           * use the global one and if it is not present take this symbol global
+           * or weak. We accept the first weak symbol we find and make it
+           * globally exported.
            */
           if (rtems_rtl_symbol_global_find (name) &&
               (ELF_ST_BIND (symbol.st_info) != STB_WEAK))
           {
-            rtems_rtl_set_error (ENOMEM, "duplicate global symbol: %s", name);
-            return false;
+            if (!rtems_rtl_obj_aname_valid (obj))
+            {
+              rtems_rtl_set_error (ENOMEM, "duplicate global symbol: %s", name);
+              return false;
+            }
           }
           else
           {
@@ -784,10 +840,9 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
 
   for (sym = 0; sym < (sect->size / sizeof (Elf_Sym)); ++sym)
   {
-    Elf_Sym     symbol;
-    off_t       off;
-    const char* name;
-    size_t      len;
+    Elf_Sym symbol;
+    off_t   off;
+    size_t  len;
 
     off = obj->ooffset + sect->offset + (sym * sizeof (symbol));
 
@@ -811,12 +866,6 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
       return false;
     }
 
-    off = obj->ooffset + strtab->offset + symbol.st_name;
-    len = RTEMS_RTL_ELF_STRING_MAX;
-
-    if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
-      return false;
-
     if ((symbol.st_shndx != 0) &&
         ((ELF_ST_TYPE (symbol.st_info) == STT_OBJECT) ||
          (ELF_ST_TYPE (symbol.st_info) == STT_COMMON) ||
@@ -825,62 +874,76 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
          ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
           (ELF_ST_BIND (symbol.st_info) == STB_WEAK) ||
           (ELF_ST_BIND (symbol.st_info) == STB_LOCAL)))
+    {
+      rtems_rtl_obj_sect* symsect;
+      rtems_rtl_obj_sym*  osym;
+      char*               string;
+      Elf_Word            value;
+
+      symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
+      if (symsect)
       {
-        rtems_rtl_obj_sect* symsect;
-        rtems_rtl_obj_sym*  osym;
-        char*               string;
-        Elf_Word            value;
+        const char* name;
 
-        symsect = rtems_rtl_obj_find_section_by_index (obj, symbol.st_shndx);
-        if (symsect)
+        off = obj->ooffset + strtab->offset + symbol.st_name;
+        len = RTEMS_RTL_ELF_STRING_MAX;
+
+        if (!rtems_rtl_obj_cache_read (strings, fd, off, (void**) &name, &len))
+          return false;
+
+        /*
+         * If a duplicate forget it.
+         */
+        if (rtems_rtl_symbol_global_find (name))
+          continue;
+
+        if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
+            (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
         {
-          if ((ELF_ST_BIND (symbol.st_info) == STB_GLOBAL) ||
-              (ELF_ST_BIND (symbol.st_info) == STB_WEAK))
-          {
-            osym = gsym;
-            string = gstring;
-            gstring += strlen (name) + 1;
-            ++gsym;
-          }
-          else
-          {
-            osym = lsym;
-            string = lstring;
-            lstring += strlen (name) + 1;
-            ++lsym;
-          }
-
-          /*
-           * Allocate any common symbols in the common section.
-           */
-          if (symbol.st_shndx == SHN_COMMON)
-          {
-            size_t value_off = rtems_rtl_obj_align (common_offset,
-                                                    symbol.st_value);
-            common_offset = value_off + symbol.st_size;
-            value = value_off;
-          }
-          else
-          {
-            value = symbol.st_value;
-          }
-
-          rtems_chain_set_off_chain (&osym->node);
-          memcpy (string, name, strlen (name) + 1);
-          osym->name = string;
-          osym->value = value + (uint8_t*) symsect->base;
-          osym->data = symbol.st_info;
-
-          if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-            printf ("rtl: sym:add:%-2d name:%-2d:%-20s bind:%-2d " \
-                    "type:%-2d val:%8p sect:%d size:%d\n",
-                    sym, (int) symbol.st_name, osym->name,
-                    (int) ELF_ST_BIND (symbol.st_info),
-                    (int) ELF_ST_TYPE (symbol.st_info),
-                    osym->value, symbol.st_shndx,
-                    (int) symbol.st_size);
+          osym = gsym;
+          string = gstring;
+          gstring += strlen (name) + 1;
+          ++gsym;
         }
+        else
+        {
+          osym = lsym;
+          string = lstring;
+          lstring += strlen (name) + 1;
+          ++lsym;
+        }
+
+        /*
+         * Allocate any common symbols in the common section.
+         */
+        if (symbol.st_shndx == SHN_COMMON)
+        {
+          size_t value_off = rtems_rtl_obj_align (common_offset,
+                                                  symbol.st_value);
+          common_offset = value_off + symbol.st_size;
+          value = value_off;
+        }
+        else
+        {
+          value = symbol.st_value;
+        }
+
+        rtems_chain_set_off_chain (&osym->node);
+        memcpy (string, name, strlen (name) + 1);
+        osym->name = string;
+        osym->value = value + (uint8_t*) symsect->base;
+        osym->data = symbol.st_info;
+
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
+          printf ("rtl: sym:add:%-2d name:%-2d:%-20s bind:%-2d " \
+                  "type:%-2d val:%8p sect:%d size:%d\n",
+                  sym, (int) symbol.st_name, osym->name,
+                  (int) ELF_ST_BIND (symbol.st_info),
+                  (int) ELF_ST_TYPE (symbol.st_info),
+                  osym->value, symbol.st_shndx,
+                  (int) symbol.st_size);
       }
+    }
   }
 
   if (globals)
@@ -955,6 +1018,8 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
 
   for (section = 0; section < ehdr->e_shnum; ++section)
   {
+    char*    name;
+    size_t   len;
     uint32_t flags;
 
     /*
@@ -968,9 +1033,15 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
     if (!rtems_rtl_obj_cache_read_byval (sects, fd, off, &shdr, sizeof (shdr)))
       return false;
 
+    len = RTEMS_RTL_ELF_STRING_MAX;
+    if (!rtems_rtl_obj_cache_read (strings, fd,
+                                   sectstroff + shdr.sh_name,
+                                   (void**) &name, &len))
+      return false;
+
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
-      printf ("rtl: section: %2d: type=%d flags=%08x link=%d info=%d\n",
-              section, (int) shdr.sh_type, (unsigned int) shdr.sh_flags,
+      printf ("rtl: section: %2d: name=%s type=%d flags=%08x link=%d info=%d\n",
+              section, name, (int) shdr.sh_type, (unsigned int) shdr.sh_flags,
               (int) shdr.sh_link, (int) shdr.sh_info);
 
     flags = 0;
@@ -1010,7 +1081,7 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
         break;
 
       case SHT_RELA:
-        flags = RTEMS_RTL_OBJ_SECT_RELA;
+        flags = RTEMS_RTL_OBJ_SECT_RELA | RTEMS_RTL_OBJ_SECT_LOAD;
         break;
 
       case SHT_REL:
@@ -1018,7 +1089,7 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
          * The sh_link holds the section index for the symbol table. The sh_info
          * holds the section index the relocations apply to.
          */
-        flags = RTEMS_RTL_OBJ_SECT_REL;
+        flags = RTEMS_RTL_OBJ_SECT_REL | RTEMS_RTL_OBJ_SECT_LOAD;
         break;
 
       case SHT_SYMTAB:
@@ -1063,8 +1134,18 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
 
     if (flags != 0)
     {
-      char*  name;
-      size_t len;
+      /*
+       * If the object file is part of a library check the section's name. If it
+       * starts with '.text.*' see if the last part is a global symbol. If a
+       * global symbol exists we have to assume the symbol in the archive is a
+       * duplicate can can be ignored.
+       */
+      if (rtems_rtl_obj_aname_valid (obj))
+      {
+        const char* symname = rtems_rtl_elf_separated_section (name);
+        if (symname != NULL && rtems_rtl_symbol_global_find (symname))
+          flags &= ~RTEMS_RTL_OBJ_SECT_LOAD;
+      }
 
       /*
        * If link ordering this section must appear in the same order in memory
@@ -1074,14 +1155,8 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
         flags |= RTEMS_RTL_OBJ_SECT_LINK;
 
       /*
-       * Some architexctures support a named PROGBIT section for INIT/FINI.
+       * Some architexctures have a named PROGBIT section for INIT/FINI.
        */
-      len = RTEMS_RTL_ELF_STRING_MAX;
-      if (!rtems_rtl_obj_cache_read (strings, fd,
-                                     sectstroff + shdr.sh_name,
-                                     (void**) &name, &len))
-        return false;
-
       if (strcmp (".ctors", name) == 0)
         flags |= RTEMS_RTL_OBJ_SECT_CTOR;
       if (strcmp (".dtors", name) == 0)
@@ -1153,25 +1228,34 @@ rtems_rtl_elf_load_linkmap (rtems_rtl_obj* obj)
 {
   rtems_chain_control* sections = NULL;
   rtems_chain_node*    node = NULL;
-  size_t               mask = 0;
   int                  sec_num = 0;
   section_detail*      sd;
   int                  i = 0;
+  size_t               m;
+
+  /*
+   * The section masks to add to the linkmap.
+   */
+  const uint32_t       sect_mask[] = {
+    RTEMS_RTL_OBJ_SECT_TEXT | RTEMS_RTL_OBJ_SECT_LOAD,
+    RTEMS_RTL_OBJ_SECT_CONST | RTEMS_RTL_OBJ_SECT_LOAD,
+    RTEMS_RTL_OBJ_SECT_DATA | RTEMS_RTL_OBJ_SECT_LOAD,
+    RTEMS_RTL_OBJ_SECT_BSS
+  };
+  const size_t sect_masks = sizeof (sect_mask) / sizeof (sect_mask[0]);
 
   /*
    * Caculate the size of sections' name.
    */
-
-  for (mask = RTEMS_RTL_OBJ_SECT_TEXT;
-       mask <= RTEMS_RTL_OBJ_SECT_BSS;
-       mask <<= 1)
+  for (m = 0; m < sect_masks; ++m)
   {
     sections = &obj->sections;
     node = rtems_chain_first (sections);
     while (!rtems_chain_is_tail (sections, node))
     {
       rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
-      if ((sect->size != 0) && ((sect->flags & mask) != 0))
+      const uint32_t      mask = sect_mask[m];
+      if ((sect->size != 0) && ((sect->flags & mask) == mask))
       {
         ++sec_num;
       }
@@ -1205,36 +1289,35 @@ rtems_rtl_elf_load_linkmap (rtems_rtl_obj* obj)
   sections = &obj->sections;
   node = rtems_chain_first (sections);
 
-  for (mask = RTEMS_RTL_OBJ_SECT_TEXT;
-       mask <= RTEMS_RTL_OBJ_SECT_BSS;
-       mask <<= 1)
+  for (m = 0; m < sect_masks; ++m)
   {
     sections = &obj->sections;
     node = rtems_chain_first (sections);
     while (!rtems_chain_is_tail (sections, node))
     {
       rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
+      const uint32_t      mask = sect_mask[m];
 
-      if ((sect->size != 0) && ((sect->flags & mask) != 0))
+      if ((sect->size != 0) && ((sect->flags & mask) == mask))
       {
         sd[i].name = sect->name;
         sd[i].size = sect->size;
-        if (mask == RTEMS_RTL_OBJ_SECT_TEXT)
+        if ((mask & RTEMS_RTL_OBJ_SECT_TEXT) != 0)
         {
           sd[i].rap_id = rap_text;
           sd[i].offset = sect->base - obj->text_base;
         }
-        if (mask == RTEMS_RTL_OBJ_SECT_CONST)
+        if ((mask & RTEMS_RTL_OBJ_SECT_CONST) != 0)
         {
           sd[i].rap_id = rap_const;
           sd[i].offset = sect->base - obj->const_base;
         }
-        if (mask == RTEMS_RTL_OBJ_SECT_DATA)
+        if ((mask & RTEMS_RTL_OBJ_SECT_DATA) != 0)
         {
           sd[i].rap_id = rap_data;
           sd[i].offset = sect->base - obj->data_base;
         }
-        if (mask == RTEMS_RTL_OBJ_SECT_BSS)
+        if ((mask & RTEMS_RTL_OBJ_SECT_BSS) != 0)
         {
           sd[i].rap_id = rap_bss;
           sd[i].offset = sect->base - obj->bss_base;

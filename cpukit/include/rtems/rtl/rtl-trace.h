@@ -49,8 +49,11 @@ typedef uint32_t rtems_rtl_trace_mask;
 #define RTEMS_RTL_TRACE_UNRESOLVED             (1UL << 10)
 #define RTEMS_RTL_TRACE_CACHE                  (1UL << 11)
 #define RTEMS_RTL_TRACE_ARCHIVES               (1UL << 12)
-#define RTEMS_RTL_TRACE_DEPENDENCY             (1UL << 13)
-#define RTEMS_RTL_TRACE_ALL                    (0xffffffffUL & ~(RTEMS_RTL_TRACE_CACHE))
+#define RTEMS_RTL_TRACE_ARCHIVE_SYMS           (1UL << 13)
+#define RTEMS_RTL_TRACE_DEPENDENCY             (1UL << 14)
+#define RTEMS_RTL_TRACE_ALL                    (0xffffffffUL & ~(RTEMS_RTL_TRACE_CACHE | \
+                                                                 RTEMS_RTL_TRACE_GLOBAL_SYM | \
+                                                                 RTEMS_RTL_TRACE_ARCHIVE_SYMS))
 
 /**
  * Call to check if this part is bring traced. If RTEMS_RTL_TRACE is defined to

@@ -92,19 +92,20 @@ typedef struct rtems_rtl_loader_table
 #define RTEMS_RTL_OBJ_SECT_DATA  (1 << 2)  /**< Section holds program data. */
 #define RTEMS_RTL_OBJ_SECT_BSS   (1 << 3)  /**< Section holds program bss. */
 #define RTEMS_RTL_OBJ_SECT_EH    (1 << 4)  /**< Section holds exception data. */
-#define RTEMS_RTL_OBJ_SECT_REL   (1 << 5)  /**< Section holds relocation recs. */
-#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 6)  /**< Section holds reloc addend recs. */
-#define RTEMS_RTL_OBJ_SECT_SYM   (1 << 7)  /**< Section holds symbols. */
-#define RTEMS_RTL_OBJ_SECT_STR   (1 << 8)  /**< Section holds strings. */
-#define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 9)  /**< Section allocates runtime memory. */
-#define RTEMS_RTL_OBJ_SECT_LOAD  (1 << 10) /**< Section is loaded from object file. */
-#define RTEMS_RTL_OBJ_SECT_WRITE (1 << 11) /**< Section is writable, ie data. */
-#define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 12) /**< Section is executable. */
-#define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 13) /**< Section is preset to zero. */
-#define RTEMS_RTL_OBJ_SECT_LINK  (1 << 14) /**< Section is link-ordered. */
-#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 15) /**< Section contains constructors. */
-#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 16) /**< Section contains destructors. */
-#define RTEMS_RTL_OBJ_SECT_LOCD  (1 << 17) /**< Section has been located. */
+#define RTEMS_RTL_OBJ_SECT_TLS   (1 << 5)  /**< Section holds TLS data. */
+#define RTEMS_RTL_OBJ_SECT_REL   (1 << 6)  /**< Section holds relocation recs. */
+#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 7)  /**< Section holds reloc addend recs. */
+#define RTEMS_RTL_OBJ_SECT_SYM   (1 << 8)  /**< Section holds symbols. */
+#define RTEMS_RTL_OBJ_SECT_STR   (1 << 9)  /**< Section holds strings. */
+#define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 10  /**< Section allocates runtime memory. */
+#define RTEMS_RTL_OBJ_SECT_LOAD  (1 << 11) /**< Section is loaded from object file. */
+#define RTEMS_RTL_OBJ_SECT_WRITE (1 << 12) /**< Section is writable, ie data. */
+#define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 13) /**< Section is executable. */
+#define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 14) /**< Section is preset to zero. */
+#define RTEMS_RTL_OBJ_SECT_LINK  (1 << 15) /**< Section is link-ordered. */
+#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 16) /**< Section contains constructors. */
+#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 17) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_LOCD  (1 << 18) /**< Section has been located. */
 
 /**
  * Section types mask.
@@ -113,6 +114,7 @@ typedef struct rtems_rtl_loader_table
                                   RTEMS_RTL_OBJ_SECT_CONST | \
                                   RTEMS_RTL_OBJ_SECT_DATA | \
                                   RTEMS_RTL_OBJ_SECT_BSS | \
+                                  RTEMS_RTL_OBJ_SECT_TLS | \
                                   RTEMS_RTL_OBJ_SECT_EH)
 
 /**
@@ -204,11 +206,13 @@ struct rtems_rtl_obj
   size_t              text_size;    /**< The size of the text section. */
   void*               const_base;   /**< The base address of the const section
                                      *   in memory. */
+  size_t              const_size;    /**< The size of the const section. */
   void*               eh_base;      /**< The base address of the eh section in
                                      *   memory. */
   size_t              eh_size;      /**< The size of the eh section. */
   void*               data_base;    /**< The base address of the data section
                                      *   in memory. */
+  size_t              data_size;    /**< The size of the data section. */
   void*               bss_base;     /**< The base address of the bss section in
                                      *   memory. */
   size_t              bss_size;     /**< The size of the bss section. */

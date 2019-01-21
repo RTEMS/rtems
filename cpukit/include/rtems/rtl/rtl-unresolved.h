@@ -53,6 +53,7 @@
 #define _RTEMS_RTL_UNRESOLVED_H_
 
 #include <rtems.h>
+#include <rtems/chain.h>
 #include "rtl-obj-fwd.h"
 
 #ifdef __cplusplus
@@ -79,6 +80,8 @@ typedef enum rtems_rtl_unresolved_rtype
  * Unresolved external symbol flags.
  */
 #define RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE (1 << 0) /**< Search the archive. */
+#define RTEMS_RTL_UNRESOLV_SYM_HAS_ERROR      (1 << 1) /**< The symbol load
+                                                        *   has an error. */
 
 /**
  * Unresolved externals symbols. The symbols are reference counted and separate
@@ -93,7 +96,7 @@ typedef struct rtems_rtl_unresolv_symbol
   uint16_t   refs;     /**< The number of references to this name. */
   uint16_t   flags;    /**< Flags to manage the symbol. */
   uint16_t   length;   /**< The length of this name. */
-  const char name[10]; /**< The symbol name. */
+  const char name[];   /**< The symbol name. */
 } rtems_rtl_unresolv_symbol;
 
 /**
@@ -117,7 +120,7 @@ typedef struct rtems_rtl_unresolv_rec
   rtems_rtl_unresolved_rtype type;
   union
   {
-    rtems_rtl_unresolv_symbol name;   /**< The symnbol, or */
+    rtems_rtl_unresolv_symbol name;   /**< The symbol, or */
     rtems_rtl_unresolv_reloc  reloc;  /**< the relocation record. */
   } rec;
 } rtems_rtl_unresolv_rec;
@@ -127,9 +130,9 @@ typedef struct rtems_rtl_unresolv_rec
  */
 typedef struct rtems_rtl_unresolv_block
 {
-  rtems_chain_node       link; /**< Blocks are chained. */
-  uint32_t               recs; /**< The number of records in the block. */
-  rtems_rtl_unresolv_rec rec;  /**< The records. More follow. */
+  rtems_chain_node       link;  /**< Blocks are chained. */
+  uint32_t               recs;  /**< The number of records in the block. */
+  rtems_rtl_unresolv_rec rec[]; /**< The records. More follow. */
 } rtems_rtl_unresolv_block;
 
 /**

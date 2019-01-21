@@ -15,11 +15,13 @@
                       RTEMS_RTL_TRACE_UNLOAD | \
                       RTEMS_RTL_TRACE_SYMBOL | \
                       RTEMS_RTL_TRACE_RELOC | \
+                      RTEMS_RTL_TRACE_LOAD_SECT | \
                       RTEMS_RTL_TRACE_ALLOCATOR | \
                       RTEMS_RTL_TRACE_UNRESOLVED | \
                       RTEMS_RTL_TRACE_ARCHIVES | \
                       RTEMS_RTL_TRACE_DEPENDENCY)
- #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
+ /* RTEMS_RTL_TRACE_ALL */
+ #define DL_DEBUG_TRACE DEBUG_TRACE
  #define DL_RTL_CMDS    1
 #else
  #define DL_DEBUG_TRACE 0

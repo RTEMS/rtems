@@ -158,6 +158,16 @@ rtems_rtl_obj_unresolved_dependent (rtems_rtl_obj* obj,
   return ud->has_unresolved;
 }
 
+static bool
+rtems_rtl_obj_unresolved_object (rtems_chain_node* node, void* data)
+{
+  rtems_rtl_obj*                 obj = (rtems_rtl_obj*) node;
+  rtems_rtl_obj_unresolved_data* ud;
+  ud = (rtems_rtl_obj_unresolved_data*) data;
+  ud->has_unresolved = (obj->flags & RTEMS_RTL_OBJ_UNRESOLVED) != 0;
+  return !ud->has_unresolved;
+}
+
 bool
 rtems_rtl_obj_unresolved (rtems_rtl_obj* obj)
 {
@@ -169,12 +179,22 @@ rtems_rtl_obj_unresolved (rtems_rtl_obj* obj)
             obj->oname, ud.has_unresolved ? "unresolved" : "resolved");
   if (!ud.has_unresolved)
   {
-    rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
-    obj->flags |= RTEMS_RTL_OBJ_DEP_VISITED;
-    rtems_rtl_obj_iterate_dependents (obj,
-                                      rtems_rtl_obj_unresolved_dependent,
-                                      &ud);
-    rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
+    if ((obj->flags & RTEMS_RTL_OBJ_BASE) != 0)
+    {
+      rtems_rtl_data* rtl = rtems_rtl_data_unprotected ();
+      rtems_rtl_chain_iterate (&rtl->objects,
+                               rtems_rtl_obj_unresolved_object,
+                               &ud);
+    }
+    else
+    {
+      rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
+      obj->flags |= RTEMS_RTL_OBJ_DEP_VISITED;
+      rtems_rtl_obj_iterate_dependents (obj,
+                                        rtems_rtl_obj_unresolved_dependent,
+                                        &ud);
+      rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_DEP_VISITED, 0);
+    }
   }
   return ud.has_unresolved;
 }
@@ -727,49 +747,57 @@ rtems_rtl_obj_iterate_dependents (rtems_rtl_obj*                 obj,
 size_t
 rtems_rtl_obj_text_size (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_TEXT);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_TEXT;
+  return rtems_rtl_obj_section_size (obj, flags);
 }
 
 uint32_t
 rtems_rtl_obj_text_alignment (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_TEXT);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_TEXT;
+  return rtems_rtl_obj_section_alignment (obj, flags);
 }
 
 size_t
 rtems_rtl_obj_const_size (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_CONST);
-}
-
-uint32_t
-rtems_rtl_obj_eh_alignment (const rtems_rtl_obj* obj)
-{
-  return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_EH);
-}
-
-size_t
-rtems_rtl_obj_eh_size (const rtems_rtl_obj* obj)
-{
-  return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_EH);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_CONST;
+  return rtems_rtl_obj_section_size (obj, flags);
 }
 
 uint32_t
 rtems_rtl_obj_const_alignment (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_CONST);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_CONST;
+  return rtems_rtl_obj_section_alignment (obj, flags);
+}
+
+uint32_t
+rtems_rtl_obj_eh_alignment (const rtems_rtl_obj* obj)
+{
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_EH;
+  return rtems_rtl_obj_section_alignment (obj, flags);
+}
+
+size_t
+rtems_rtl_obj_eh_size (const rtems_rtl_obj* obj)
+{
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_EH;
+  return rtems_rtl_obj_section_size (obj, flags);
 }
 
 size_t
 rtems_rtl_obj_data_size (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_size (obj, RTEMS_RTL_OBJ_SECT_DATA);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_DATA;
+  return rtems_rtl_obj_section_size (obj, flags);
 }
 
 uint32_t
 rtems_rtl_obj_data_alignment (const rtems_rtl_obj* obj)
 {
-  return rtems_rtl_obj_section_alignment (obj, RTEMS_RTL_OBJ_SECT_DATA);
+  const uint32_t flags = RTEMS_RTL_OBJ_SECT_LOAD | RTEMS_RTL_OBJ_SECT_DATA;
+  return rtems_rtl_obj_section_alignment (obj, flags);
 }
 
 size_t
@@ -790,8 +818,10 @@ rtems_rtl_obj_relocate (rtems_rtl_obj*             obj,
                         rtems_rtl_obj_sect_handler handler,
                         void*                      data)
 {
-  uint32_t mask = RTEMS_RTL_OBJ_SECT_REL | RTEMS_RTL_OBJ_SECT_RELA;
-  return rtems_rtl_obj_section_handler (mask, obj, fd, handler, data);
+  const uint32_t flags = (RTEMS_RTL_OBJ_SECT_LOAD |
+                          RTEMS_RTL_OBJ_SECT_REL |
+                          RTEMS_RTL_OBJ_SECT_RELA);
+  return rtems_rtl_obj_section_handler (flags, obj, fd, handler, data);
 }
 
 /**
@@ -1012,12 +1042,14 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
         }
         else
         {
+          /*
+           * This section is not to be loaded, clear the base.
+           */
           sect->base = 0;
-          rtems_rtl_set_error (errno, "section has no load/clear op");
-          return false;
         }
 
-        base_offset += sect->size;
+        if (sect->base)
+          base_offset += sect->size;
 
         ++order;
 
@@ -1053,9 +1085,11 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
   /*
    * Set the sizes held in the object data. We need this for a fast reference.
    */
-  obj->text_size = text_size;
-  obj->eh_size   = eh_size;
-  obj->bss_size  = bss_size;
+  obj->text_size  = text_size;
+  obj->const_size = const_size;
+  obj->data_size  = data_size;
+  obj->eh_size    = eh_size;
+  obj->bss_size   = bss_size;
 
   /*
    * Let the allocator manage the actual allocation. The user can use the

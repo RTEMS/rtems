@@ -36,13 +36,13 @@ rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved* unresolved)
    */
   size_t size =
     (sizeof(rtems_rtl_unresolv_block) +
-     (sizeof(rtems_rtl_unresolv_rec) * (unresolved->block_recs - 1)));
+     (sizeof(rtems_rtl_unresolv_rec) * unresolved->block_recs));
   rtems_rtl_unresolv_block* block =
     rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_EXTERNAL, size, true);
   if (block)
   {
     if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
-      printf ("rtl: unresolv: block-alloc %p\n", block);
+      printf ("rtl: unresolv: block-alloc %p (%p)\n", block, block + size);
     rtems_chain_append (&unresolved->blocks, &block->link);
   }
   else
@@ -53,28 +53,31 @@ rtems_rtl_unresolved_block_alloc (rtems_rtl_unresolved* unresolved)
 static size_t
 rtems_rtl_unresolved_symbol_rec_count (size_t length)
 {
-  return ((length + sizeof(rtems_rtl_unresolv_symbol) - 1) /
-          sizeof(rtems_rtl_unresolv_symbol));
+  const size_t rec_size = sizeof(rtems_rtl_unresolv_rec);
+  const size_t rec_name_header = offsetof(rtems_rtl_unresolv_rec, rec.name.name);
+  /*
+   * Add on the nul and rmeove 1 to be inside a record.
+   */
+  return ((length + rec_name_header - 1) / rec_size) + 1;
 }
-
 
 static size_t
 rtems_rtl_unresolved_symbol_recs (const char* name)
 {
-  return rtems_rtl_unresolved_symbol_rec_count (strlen (name));
+  return rtems_rtl_unresolved_symbol_rec_count (strlen (name) + 1);
 }
 
 static int
 rtems_rtl_unresolved_rec_index (rtems_rtl_unresolv_block* block,
                                 rtems_rtl_unresolv_rec* rec)
 {
-  return (rec - &block->rec) / sizeof (rtems_rtl_unresolv_rec);
+  return rec - &block->rec[0];
 }
 
 static rtems_rtl_unresolv_rec*
 rtems_rtl_unresolved_rec_first (rtems_rtl_unresolv_block* block)
 {
-  return &block->rec;
+  return &block->rec[0];
 }
 
 static rtems_rtl_unresolv_rec*
@@ -83,6 +86,7 @@ rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec* rec)
   switch (rec->type)
   {
     case rtems_rtl_unresolved_empty:
+    default:
       /*
        * Empty returns NULL. The end of the records in the block.
        */
@@ -99,9 +103,6 @@ rtems_rtl_unresolved_rec_next (rtems_rtl_unresolv_rec* rec)
     case rtems_rtl_unresolved_reloc:
       ++rec;
       break;
-
-    default:
-      break;
   }
 
   return rec;
@@ -111,50 +112,121 @@ static bool
 rtems_rtl_unresolved_rec_is_last (rtems_rtl_unresolv_block* block,
                                   rtems_rtl_unresolv_rec*   rec)
 {
-  int index = (rec - &block->rec) / sizeof (rec);
-  return !rec || (index >= block->recs) || (rec->type == rtems_rtl_unresolved_empty);
+  int index = rtems_rtl_unresolved_rec_index (block, rec);
+  return (rec == NULL ||
+          (index < 0) ||
+          (index >= block->recs) ||
+          (rec->type == rtems_rtl_unresolved_empty));
 }
 
 static rtems_rtl_unresolv_rec*
 rtems_rtl_unresolved_rec_first_free (rtems_rtl_unresolv_block* block)
 {
-  return &block->rec + block->recs;
+  return &block->rec[0] + block->recs;
+}
+
+/**
+ * Name management iterator data.
+ */
+typedef struct
+{
+  const char*             name;   /**< The name being searched for. */
+  size_t                  length; /**< The length of the name. */
+  rtems_rtl_unresolv_rec* rec;    /**< The record being searched for. */
+  int                     index;  /**< The name's index. */
+  int                     offset; /**< The offset to move the index. */
+} rtl_unresolved_name_data;
+
+static bool
+rtems_rtl_unresolved_find_name_iterator (rtems_rtl_unresolv_rec* rec,
+                                         void*                   data)
+{
+  rtl_unresolved_name_data* nd = (rtl_unresolved_name_data*) data;
+  if (rec->type == rtems_rtl_unresolved_symbol)
+  {
+    if ((rec->rec.name.length == nd->length)
+        && (strcmp (rec->rec.name.name, nd->name) == 0))
+    {
+      ++rec->rec.name.refs;
+      return true;
+    }
+    ++nd->index;
+  }
+  return false;
 }
 
 static int
-rtems_rtl_unresolved_find_name (rtems_rtl_unresolved* unresolved,
-                                const char*           name,
-                                bool                  update_refcount)
+rtems_rtl_unresolved_find_name (const char* name)
 {
-  size_t length = strlen (name) + 1;
-  int    index = 1;
+  rtl_unresolved_name_data nd = {
+    .name = name,
+    .length = strlen (name) + 1,
+    .rec = NULL,
+    .index = 1,
+    .offset = 0
+  };
+  if (rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_find_name_iterator,
+                                    &nd))
+    return nd.index;
+  return -1;
+}
 
-  rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
-  while (!rtems_chain_is_tail (&unresolved->blocks, node))
+static bool
+rtems_rtl_unresolved_find_index_iterator (rtems_rtl_unresolv_rec* rec,
+                                          void*                   data)
+{
+  rtl_unresolved_name_data* nd = (rtl_unresolved_name_data*) data;
+  if (rec == nd->rec)
+    return true;
+  if (rec->type == rtems_rtl_unresolved_symbol)
+    ++nd->index;
+  return false;
+}
+
+static int
+rtems_rtl_unresolved_find_index (rtems_rtl_unresolv_rec* rec)
+{
+  rtl_unresolved_name_data nd = {
+    .name = NULL,
+    .length = 0,
+    .rec = rec,
+    .index = 1,
+    .offset = 0
+  };
+  if (rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_find_index_iterator,
+                                    &nd))
+    return nd.index;
+  return -1;
+}
+
+static bool
+rtems_rtl_unresolved_reindex_iterator (rtems_rtl_unresolv_rec* rec,
+                                       void*                   data)
+{
+  rtl_unresolved_name_data* nd = (rtl_unresolved_name_data*) data;
+  /*
+   * Reindexing only effects the reloc records.
+   */
+  if (rec->type == rtems_rtl_unresolved_reloc)
   {
-    rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
-    rtems_rtl_unresolv_rec* rec = rtems_rtl_unresolved_rec_first (block);
-
-    while (!rtems_rtl_unresolved_rec_is_last (block, rec))
-    {
-      if (rec->type == rtems_rtl_unresolved_symbol)
-      {
-        if ((rec->rec.name.length == length)
-            && (strcmp (rec->rec.name.name, name) == 0))
-        {
-          if (update_refcount)
-            ++rec->rec.name.refs;
-          return index;
-        }
-        ++index;
-      }
-      rec = rtems_rtl_unresolved_rec_next (rec);
-    }
-
-    node = rtems_chain_next (node);
+    if (rec->rec.reloc.name >= nd->index)
+      rec->rec.reloc.name += nd->offset;
   }
+  return false;
+}
 
-  return 0 - index;
+static void
+rtems_rtl_unresolved_reindex_names (uint16_t index, int offset)
+{
+  rtl_unresolved_name_data nd = {
+    .name = NULL,
+    .length = 0,
+    .rec = NULL,
+    .index = index,
+    .offset = offset
+  };
+  rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_reindex_iterator,
+                                &nd);
 }
 
 /**
@@ -184,29 +256,31 @@ rtems_rtl_unresolved_resolve_reloc (rtems_rtl_unresolv_rec* rec,
         printf ("rtl: unresolv: resolve reloc: %s\n",
                 rd->name_rec->rec.name.name);
 
-      rtems_rtl_obj_relocate_unresolved (&rec->rec.reloc, rd->sym);
-
-      /*
-       * If all unresolved externals are resolved add the obj module
-       * to the pending queue. This will flush the object module's
-       * data from the cache and call it's constructors.
-       */
-      if (rec->rec.reloc.obj->unresolved == 0)
+      if (rtems_rtl_obj_relocate_unresolved (&rec->rec.reloc, rd->sym))
       {
-        pending = rtems_rtl_pending_unprotected ();
-        rtems_chain_extract (&rec->rec.reloc.obj->link);
-        rtems_chain_append (pending, &rec->rec.reloc.obj->link);
-      }
+        /*
+         * If all unresolved externals are resolved add the obj module
+         * to the pending queue. This will flush the object module's
+         * data from the cache and call it's constructors.
+         */
+        if (rec->rec.reloc.obj->unresolved == 0)
+        {
+          pending = rtems_rtl_pending_unprotected ();
+          rtems_chain_extract (&rec->rec.reloc.obj->link);
+          rtems_chain_append (pending, &rec->rec.reloc.obj->link);
+        }
 
-      /*
-       * Check Set the object pointer to NULL to indicate the record is not used
-       * anymore. Update the reference count of the name. The sweep after
-       * relocating will remove the reloc records with obj set to NULL and
-       * names with a reference count of 0.
-       */
-      rec->rec.reloc.obj = NULL;
-      if (rd->name_rec != NULL && rd->name_rec->rec.name.refs > 0)
-        --rd->name_rec->rec.name.refs;
+        /*
+         * Set the object pointer to NULL to indicate the record is
+         * not used anymore. Update the reference count of the name so
+         * it can garbage collected if not referenced. The sweep after
+         * relocating will remove the reloc records with obj set to
+         * NULL and names with a reference count of 0.
+         */
+        rec->rec.reloc.obj = NULL;
+        if (rd->name_rec != NULL && rd->name_rec->rec.name.refs > 0)
+          --rd->name_rec->rec.name.refs;
+      }
     }
   }
   return false;
@@ -250,9 +324,9 @@ rtems_rtl_unresolved_resolve_iterator (rtems_rtl_unresolv_rec* rec,
  */
 typedef struct rtems_rtl_unresolved_archive_reloc_data
 {
-  uint16_t            name;     /**< Name index. */
-  bool                loaded;   /**< Object file loaded. */
-  rtems_rtl_archives* archives; /**< The archives to search. */
+  uint16_t                 name;     /**< Name index. */
+  rtems_rtl_archive_search result;   /**< The result of the load. */
+  rtems_rtl_archives*      archives; /**< The archives to search. */
 } rtems_rtl_unresolved_archive_reloc_data;
 
 static bool
@@ -268,17 +342,18 @@ rtems_rtl_unresolved_archive_iterator (rtems_rtl_unresolv_rec* rec,
 
     if ((rec->rec.name.flags & RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE) != 0)
     {
-      rtems_rtl_archive_search load;
+      rtems_rtl_archive_search result;
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
         printf ("rtl: unresolv: archive lookup: %d: %s\n",
                 ard->name, rec->rec.name.name);
 
-      load = rtems_rtl_archive_obj_load (ard->archives,
-                                         rec->rec.name.name, true);
-      if (load == rtems_rtl_archive_search_loaded)
+      result = rtems_rtl_archive_obj_load (ard->archives,
+                                           rec->rec.name.name, true);
+      if (result != rtems_rtl_archive_search_not_found)
       {
-        ard->loaded = true;
+        rec->rec.name.flags &= ~RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
+        ard->result = result;
         return true;
       }
     }
@@ -292,8 +367,24 @@ rtems_rtl_unresolved_archive_search_iterator (rtems_rtl_unresolv_rec* rec,
                                               void*                   data)
 {
   if (rec->type == rtems_rtl_unresolved_symbol)
-    rec->rec.name.flags = RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
+    rec->rec.name.flags |= RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
   return false;
+}
+
+static rtems_rtl_unresolv_block*
+rtems_rtl_unresolved_alloc_recs (rtems_rtl_unresolved* unresolved,
+                                 size_t                count)
+{
+  rtems_chain_node* node = rtems_chain_first (&unresolved->blocks);
+  while (!rtems_chain_is_tail (&unresolved->blocks, node))
+  {
+    rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
+
+    if (block->recs + count <= unresolved->block_recs)
+      return block;
+    node = rtems_chain_next (node);
+  }
+  return NULL;
 }
 
 static void
@@ -309,7 +400,7 @@ rtems_rtl_unresolved_clean_block (rtems_rtl_unresolv_block* block,
     memmove (rec, rec + count, bytes);
   block->recs -= count;
   bytes = count * sizeof (rtems_rtl_unresolv_rec);
-  memset (&block->rec + block->recs, 0, bytes);
+  memset (&block->rec[block->recs], 0, bytes);
 }
 
 static void
@@ -328,51 +419,19 @@ rtems_rtl_unresolved_compact (void)
     {
       rtems_rtl_unresolv_block* block = (rtems_rtl_unresolv_block*) node;
       rtems_rtl_unresolv_rec*   rec = rtems_rtl_unresolved_rec_first (block);
-
       while (!rtems_rtl_unresolved_rec_is_last (block, rec))
       {
         bool next_rec = true;
+
         if (rec->type == rtems_rtl_unresolved_symbol)
         {
           ++index;
           if (rec->rec.name.refs == 0)
           {
-            /*
-             * Iterate over the remaining reloc records and update the index.
-             */
-            rtems_chain_node*       reindex_node;
-            rtems_rtl_unresolv_rec* reindex_first;
-            size_t                  name_recs;
+            size_t name_recs;
             if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
               printf ("rtl: unresolv: remove name: %s\n", rec->rec.name.name);
-            reindex_node = node;
-            reindex_first = rtems_rtl_unresolved_rec_next (rec);
-            while (!rtems_chain_is_tail (&unresolved->blocks, reindex_node))
-            {
-              rtems_rtl_unresolv_rec*   reindex_rec;
-              rtems_rtl_unresolv_block* reindex_block;
-              reindex_block = (rtems_rtl_unresolv_block*) reindex_node;
-              if (reindex_first != NULL)
-              {
-                reindex_rec = reindex_first;
-                reindex_first = NULL;
-              }
-              else
-              {
-                reindex_rec = rtems_rtl_unresolved_rec_first (reindex_block);
-              }
-              while (!rtems_rtl_unresolved_rec_is_last (reindex_block,
-                                                        reindex_rec))
-              {
-                if (reindex_rec->type == rtems_rtl_unresolved_reloc)
-                {
-                  if (reindex_rec->rec.reloc.name >= index)
-                    --reindex_rec->rec.reloc.name;
-                }
-                reindex_rec = rtems_rtl_unresolved_rec_next (reindex_rec);
-              }
-              reindex_node = rtems_chain_next (reindex_node);
-            }
+            rtems_rtl_unresolved_reindex_names (index, -1);
             /*
              * Compact the block removing the name record.
              */
@@ -470,11 +529,9 @@ rtems_rtl_unresolved_add (rtems_rtl_obj*        obj,
                           const rtems_rtl_word* rel)
 {
   rtems_rtl_unresolved*     unresolved;
-  rtems_chain_node*         node;
   rtems_rtl_unresolv_block* block;
   rtems_rtl_unresolv_rec*   rec;
   int                       name_index;
-  size_t                    name_recs;
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
     printf ("rtl: unresolv: add: %s(s:%d) -> %s\n",
@@ -485,69 +542,69 @@ rtems_rtl_unresolved_add (rtems_rtl_obj*        obj,
     return false;
 
   /*
-   * Find the first block with a spare record.
+   * Is the name present?
    */
-  node = rtems_chain_first (&unresolved->blocks);
-  block = NULL;
-  while (!rtems_chain_is_tail (&unresolved->blocks, node))
-  {
-    block = (rtems_rtl_unresolv_block*) node;
-    if (block->recs < unresolved->block_recs)
-      break;
-    block = NULL;
-    node = rtems_chain_next (node);
-  }
+  name_index = rtems_rtl_unresolved_find_name (name);
 
   /*
-   * No blocks with any spare records, allocate a new block.
-   */
-  if (!block)
-  {
-    block = rtems_rtl_unresolved_block_alloc (unresolved);
-    if (!block)
-      return false;
-  }
-
-  name_index = rtems_rtl_unresolved_find_name (unresolved, name, true);
-  name_recs = rtems_rtl_unresolved_symbol_recs (name);
-
-  /*
-   * An index less than 0 means the name is present and "0 - index" is the next
-   * index to use.
+   * An index less than 0 means the name was not found.
    */
   if (name_index < 0)
   {
-    rtems_rtl_unresolv_block* name_block = block;
+    size_t name_recs;
+
+    name_recs = rtems_rtl_unresolved_symbol_recs (name);
 
     /*
      * Is there enough room to fit the name ? It not add a new block.
      */
-    if (name_recs > (unresolved->block_recs - block->recs))
-    {
-      name_block = rtems_rtl_unresolved_block_alloc (unresolved);
-      if (!name_block)
-        return false;
-    }
-
-    rec = rtems_rtl_unresolved_rec_first_free (name_block);
-    rec->type = rtems_rtl_unresolved_symbol;
-    rec->rec.name.refs = 1;
-    rec->rec.name.flags = RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
-    rec->rec.name.length = strlen (name) + 1;
-    memcpy ((void*) &rec->rec.name.name[0], name, rec->rec.name.length + 1);
-    block->recs += name_recs;
-    name_index = 0 - name_index;
-
-    /*
-     * If the name block is the reloc block and it is full allocate a new
-     * block for the relocation record.
-     */
-    if ((block == name_block) && (block->recs >= unresolved->block_recs))
+    block = rtems_rtl_unresolved_alloc_recs (unresolved, name_recs);
+    if (block == NULL)
     {
       block = rtems_rtl_unresolved_block_alloc (unresolved);
       if (!block)
         return false;
     }
+
+    /*
+     * Find the record in the block.
+     */
+    rec = rtems_rtl_unresolved_rec_first_free (block);
+
+    /*
+     * Enter the new record before reindexing so the iterator can see
+     * it and the iterator is called.
+     */
+    rec->type = rtems_rtl_unresolved_symbol;
+    rec->rec.name.refs = 1;
+    rec->rec.name.flags = RTEMS_RTL_UNRESOLV_SYM_SEARCH_ARCHIVE;
+    rec->rec.name.length = strlen (name) + 1;
+    memcpy ((void*) &rec->rec.name.name[0], name, rec->rec.name.length);
+    block->recs += name_recs;
+
+    /*
+     * Find the name index for the name and then reindex the names which
+     * are moved up because of the insertion.
+     */
+    name_index = rtems_rtl_unresolved_find_index (rec);
+    if (name_index < 0)
+    {
+      rtems_rtl_set_error (ENOMEM, "internal unresolved block error");
+      return false;
+    }
+
+    rtems_rtl_unresolved_reindex_names (name_index, 1);
+  }
+
+  /*
+   * Find the first block with a spare record.
+   */
+  block = rtems_rtl_unresolved_alloc_recs (unresolved, 1);
+  if (block == NULL)
+  {
+    block = rtems_rtl_unresolved_block_alloc (unresolved);
+    if (!block)
+      return false;
   }
 
   rec = rtems_rtl_unresolved_rec_first_free (block);
@@ -592,7 +649,7 @@ rtems_rtl_unresolved_resolve (void)
     };
     rtems_rtl_unresolved_archive_reloc_data ard = {
       .name = 0,
-      .loaded = false,
+      .result = rtems_rtl_archive_search_not_found,
       .archives = rtems_rtl_archives_unprotected ()
     };
 
@@ -600,7 +657,7 @@ rtems_rtl_unresolved_resolve (void)
     rtems_rtl_unresolved_compact ();
     rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_archive_iterator, &ard);
 
-    resolving = ard.loaded;
+    resolving = ard.result == rtems_rtl_archive_search_loaded;
   }
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_UNRESOLVED))
@@ -627,6 +684,7 @@ typedef struct rtems_rtl_unresolved_dump_data
 {
   size_t rec;
   size_t names;
+  bool   show_relocs;
 } rtems_rtl_unresolved_dump_data;
 
 static bool
@@ -642,16 +700,20 @@ rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
     break;
   case rtems_rtl_unresolved_symbol:
     ++dd->names;
-    printf (" %3zu: 1:  name: %3d refs: %2d: %2d: %s\n",
+    printf (" %3zu: 1:  name: %3d refs:%4d: flags:%04x %s (%d)\n",
             dd->rec, dd->names,
-            rec->rec.name.refs, rec->rec.name.length, rec->rec.name.name);
+            rec->rec.name.refs,
+            rec->rec.name.flags,
+            rec->rec.name.name,
+            rec->rec.name.length);
     break;
   case rtems_rtl_unresolved_reloc:
-    printf (" %3zu: 2: reloc: obj:%s name:%2d: sect:%d\n",
-            dd->rec,
-            rec->rec.reloc.obj->oname,
-            rec->rec.reloc.name,
-            rec->rec.reloc.sect);
+    if (dd->show_relocs)
+      printf (" %3zu: 2: reloc: obj:%s name:%2d: sect:%d\n",
+              dd->rec,
+              rec->rec.reloc.obj == NULL ? "resolved" : rec->rec.reloc.obj->oname,
+              rec->rec.reloc.name,
+              rec->rec.reloc.sect);
     break;
   default:
     printf (" %03zu: %d: unknown\n", dd->rec, rec->type);
@@ -662,16 +724,16 @@ rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
 }
 
 void
-rtems_rtl_unresolved_set_archive_search (void)
-{
-  rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_archive_search_iterator,
-                                NULL);
-}
-
-void
 rtems_rtl_unresolved_dump (void)
 {
   rtems_rtl_unresolved_dump_data dd = { 0 };
   printf ("RTL Unresolved data:\n");
   rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_dump_iterator, &dd);
+}
+
+void
+rtems_rtl_unresolved_set_archive_search (void)
+{
+  rtems_rtl_unresolved_iterate (rtems_rtl_unresolved_archive_search_iterator,
+                                NULL);
 }
