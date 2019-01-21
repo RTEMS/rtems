@@ -121,6 +121,9 @@ RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
 	);
 	return tmp;
 }
+
+#define GRLIB_DMA_IS_CACHE_COHERENT CPU_SPARC_HAS_SNOOPING
+
 #else
 
 static unsigned char __inline__ grlib_read_uncached8(unsigned int address)
@@ -139,6 +142,8 @@ RTEMS_INLINE_ROUTINE unsigned int grlib_read_uncached32(unsigned int address)
 	unsigned int tmp = (*(volatile unsigned int *)(address));
 	return tmp;
 }
+
+#define GRLIB_DMA_IS_CACHE_COHERENT 1
 
 #endif
 

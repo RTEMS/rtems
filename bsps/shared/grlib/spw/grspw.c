@@ -1893,7 +1893,7 @@ static int grspw_hw_receive(GRSPW_DEV *pDev, char *b, int c) {
 		if (rxlen > c) {
 			rxlen = c;
 		}
-		if (CPU_SPARC_HAS_SNOOPING) {
+		if (GRLIB_DMA_IS_CACHE_COHERENT) {
 /*		if ( 1 ) {*/
 			/*printf("RX_MEMCPY(0x%x, 0x%x, 0x%x)\n", (unsigned int)b, (unsigned int)(rxb+pDev->rxbufcur), (unsigned int)rxlen);*/
 			memcpy(b, rxb+pDev->rxbufcur, rxlen);
