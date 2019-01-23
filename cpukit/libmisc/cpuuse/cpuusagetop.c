@@ -530,8 +530,8 @@ void rtems_cpu_usage_top_with_plugin(
   name = rtems_build_name('C', 'P', 'l', 't');
 
   sc = rtems_task_create (name, priority, 4 * 1024,
-                          RTEMS_NO_FLOATING_POINT | RTEMS_LOCAL,
                           RTEMS_PREEMPT | RTEMS_TIMESLICE | RTEMS_NO_ASR,
+                          RTEMS_FLOATING_POINT | RTEMS_LOCAL,
                           &id);
 
   if (sc != RTEMS_SUCCESSFUL)
