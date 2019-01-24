@@ -21,7 +21,7 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/powerpc/powerpc.h>
+#include <libcpu/powerpc-utility.h>
 #include <bspopts.h>
 
 	.globl bsp_start_zero
@@ -35,10 +35,10 @@ bsp_start_zero:
 bsp_start_zero_begin:
 	li	r0, 0
 	subi	r11, r3, 1
-	clrrwi	r11, r11, PPC_CACHE_ALIGN_POWER
+	CLEAR_RIGHT_IMMEDIATE	r11, r11, PPC_CACHE_ALIGN_POWER
 	addi	r10, r11, PPC_CACHE_ALIGNMENT
 	subf	r11, r3, r10
-	cmplw	cr7, r11, r4
+	COMPARE_LOGICAL	cr7, r11, r4
 	add	r9, r3, r4
 	ble-	cr7, head_end_done
 	mr	r10, r9
@@ -56,7 +56,7 @@ head_loop_update:
 	bdnz+	head_loop_begin
 
 	subf	r11, r3, r9
-	srwi	r11, r11, PPC_CACHE_ALIGN_POWER
+	SHIFT_RIGHT_IMMEDIATE	r11, r11, PPC_CACHE_ALIGN_POWER
 	addi	r11, r11, 1
 	mtctr	r11
 

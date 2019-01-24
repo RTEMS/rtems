@@ -106,7 +106,7 @@ _start:
 	cmpwi	r3, 0
 	bne	.Lnull_area_setup_done
 	LA	r3, bsp_section_start_begin
-	srawi	r3, r3, 2
+	SHIFT_RIGHT_IMMEDIATE	r3, r3, 2
 	mtctr	r3
 	li	r3, -4
 	LWI	r4, 0x44000002
@@ -319,7 +319,7 @@ _start_thread:
 	/* Initialize start stack */
 	PPC_REG_LOAD	r3, PER_CPU_INTERRUPT_STACK_HIGH(CPU_SELF)
 	subi	r1, r3, PPC_MINIMUM_STACK_FRAME_SIZE
-	clrrwi	r1, r1, PPC_STACK_ALIGN_POWER
+	CLEAR_RIGHT_IMMEDIATE	r1, r1, PPC_STACK_ALIGN_POWER
 	li	r0, 0
 	PPC_REG_STORE	r0, 0(r1)
 

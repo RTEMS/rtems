@@ -266,8 +266,8 @@ PROC (_CPU_Context_switch):
 #endif
 
 	/* Align to a cache line */
-	clrrwi	r3, r3, PPC_DEFAULT_CACHE_LINE_POWER
-	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
+	CLEAR_RIGHT_IMMEDIATE	r3, r3, PPC_DEFAULT_CACHE_LINE_POWER
+	CLEAR_RIGHT_IMMEDIATE	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	DATA_CACHE_ZERO_AND_TOUCH(r10, PPC_CONTEXT_CACHE_LINE_0)
 
@@ -557,7 +557,7 @@ restore_context:
 	PUBLIC_PROC (_CPU_Context_restore)
 PROC (_CPU_Context_restore):
 	/* Align to a cache line */
-	clrrwi	r5, r3, PPC_DEFAULT_CACHE_LINE_POWER
+	CLEAR_RIGHT_IMMEDIATE	r5, r3, PPC_DEFAULT_CACHE_LINE_POWER
 
 	GET_SELF_CPU_CONTROL	r12
 
@@ -586,7 +586,7 @@ PROC (_CPU_Context_restore):
 	/* Calculate the heir context pointer */
 	sub	r7, r4, r7
 	add	r4, r8, r7
-	clrrwi	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
+	CLEAR_RIGHT_IMMEDIATE	r5, r4, PPC_DEFAULT_CACHE_LINE_POWER
 
 	/* Update the executing */
 	PPC_REG_STORE	r8, PER_CPU_OFFSET_EXECUTING(r12)

@@ -974,6 +974,30 @@ void ShowBATS(void);
 #endif
 .endm
 
+.macro SHIFT_RIGHT_IMMEDIATE rd, rs, imm
+#if defined(__powerpc64__)
+	srdi	\rd, \rs, \imm
+#else
+	srwi	\rd, \rs, \imm
+#endif
+.endm
+
+.macro COMPARE_LOGICAL cr, ra, rb
+#if defined(__powerpc64__)
+	cmpld	\cr, \ra, \rb
+#else
+	cmplw	\cr, \ra, \rb
+#endif
+.endm
+
+.macro CLEAR_RIGHT_IMMEDIATE rd, rs, imm
+#if defined(__powerpc64__)
+	clrrdi	\rd, \rs, \imm
+#else
+	clrrwi	\rd, \rs, \imm
+#endif
+.endm
+
 #define LINKER_SYMBOL(sym) .extern sym
 
 #endif /* ASM */
