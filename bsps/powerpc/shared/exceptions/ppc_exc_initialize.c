@@ -34,8 +34,8 @@ uint32_t ppc_exc_cache_wb_check = 1;
 
 static void ppc_exc_initialize_booke(void *vector_base)
 {
-  /* Interupt vector prefix register */
-  MTIVPR((uint32_t) vector_base);
+  /* Interrupt vector prefix register */
+  MTIVPR((uintptr_t) vector_base);
 
   if (
     ppc_cpu_is_specific_e200(PPC_e200z0)

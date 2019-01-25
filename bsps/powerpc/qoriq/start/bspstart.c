@@ -168,9 +168,7 @@ void bsp_start(void)
 
   initialize_frequency_parameters();
 
-  qoriq_initialize_exceptions(
-    (uintptr_t) _ISR_Stack_area_begin
-  );
+  qoriq_initialize_exceptions(_ISR_Stack_area_begin);
   bsp_interrupt_initialize();
 
   rtems_cache_coherent_add_area(
