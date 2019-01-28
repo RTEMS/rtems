@@ -400,6 +400,4 @@ tmtimer01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_tmtimer01) \
 	$(support_includes)
 endif
 
-rtems_tests_PROGRAMS = $(tm_tests)
-dist_rtems_tests_DATA = $(tm_screens) $(tm_docs)
-
+noinst_PROGRAMS = $(tm_tests)

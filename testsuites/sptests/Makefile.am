@@ -2062,7 +2062,5 @@ libsplinkersets01_a_SOURCES = splinkersets01/sets.c \
 	splinkersets01/items.c
 endif
 
-rtems_tests_PROGRAMS = $(sp_tests)
+noinst_PROGRAMS = $(sp_tests)
 noinst_LIBRARIES = $(sp_libs)
-dist_rtems_tests_DATA = $(sp_screens) $(sp_docs)
-

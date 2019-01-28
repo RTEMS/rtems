@@ -1414,5 +1414,4 @@ writev_norun_SOURCES = POSIX/writev.c
 writev_norun_LDADD = $(RTEMS_ROOT)cpukit/librtemsdefaultconfig.a $(LDADD)
 endif
 
-rtems_tests_PROGRAMS = $(lib_tests)
-dist_rtems_tests_DATA = $(lib_screens) $(lib_docs)
+noinst_PROGRAMS = $(lib_tests)

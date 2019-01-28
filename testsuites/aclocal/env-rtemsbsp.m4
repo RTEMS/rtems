@@ -24,6 +24,4 @@ AC_SUBST(RTEMS_BSP)
 AC_SUBST([PROJECT_INCLUDE],["\$(PROJECT_ROOT)/lib/include"])
 AC_SUBST([PROJECT_LIB],["\$(PROJECT_ROOT)/lib"])
 AC_SUBST([PROJECT_RELEASE],["\$(PROJECT_ROOT)"])
-
-AC_SUBST([rtems_testsdir],["\$(libdir)/rtems-][_RTEMS_API][/tests"])
 ])

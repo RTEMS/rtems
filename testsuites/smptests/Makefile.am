@@ -659,6 +659,4 @@ smpwakeafter01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_smpwakeafter01) \
 endif
 endif
 
-rtems_tests_PROGRAMS = $(smp_tests)
-dist_rtems_tests_DATA = $(smp_screens) $(smp_docs)
-
+noinst_PROGRAMS = $(smp_tests)

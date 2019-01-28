@@ -43,6 +43,4 @@ whetstone_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_whetstone) \
 whetstone_LDADD = -lm $(LDADD)
 endif
 
-rtems_tests_PROGRAMS = $(benchmarks)
-dist_rtems_tests_DATA = $(benchmark_screens) $(benchmark_docs)
-
+noinst_PROGRAMS = $(benchmarks)

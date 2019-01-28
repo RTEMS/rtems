@@ -636,5 +636,4 @@ psxtmthreadattr01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_psxtmthreadattr01) \
 	-DOPERATION_COUNT=$(OPERATION_COUNT)
 endif
 
-rtems_tests_PROGRAMS = $(psxtm_tests)
-dist_rtems_tests_DATA = $(psxtm_screens) $(psxtm_docs)
+noinst_PROGRAMS = $(psxtm_tests)

@@ -1894,7 +1894,5 @@ lib_a_SOURCES = psxhdrs/devctl/posix_devctl.c \
 ## lib_a_SOURCES += psxhdrs/utmpx/pututxline.c           See ticket #3661
 endif
 
-rtems_tests_PROGRAMS = $(psx_tests)
+noinst_PROGRAMS = $(psx_tests)
 noinst_LIBRARIES = $(psx_lib)
-dist_rtems_tests_DATA = $(psx_screens) $(psx_docs)
-

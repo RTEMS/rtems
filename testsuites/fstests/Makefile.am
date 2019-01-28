@@ -640,6 +640,4 @@ mrfs_fstime_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_mrfs_fstime) \
 	$(support_includes) $(test_includes) -I$(top_srcdir)/mrfs_support
 endif
 
-rtems_tests_PROGRAMS = $(fs_tests)
-dist_rtems_tests_DATA = $(fs_screens) $(fs_docs)
-
+noinst_PROGRAMS = $(fs_tests)

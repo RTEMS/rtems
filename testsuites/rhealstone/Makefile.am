@@ -67,6 +67,4 @@ rhtaskswitch_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_rhtaskswitch) \
 	$(support_includes) -I$(top_srcdir)/../tmtests/include
 endif
 
-rtems_tests_PROGRAMS = $(rhealstones)
-dist_rtems_tests_DATA = $(rhealstone_screens) $(rhealstone_docs)
-
+noinst_PROGRAMS = $(rhealstones)

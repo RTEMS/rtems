@@ -243,6 +243,4 @@ mp14_node2_CPPFLAGS = -DNODE_NUMBER=2 $(AM_CPPFLAGS) $(TEST_FLAGS_mp14) \
 endif
 endif
 
-rtems_tests_PROGRAMS = $(mp_tests)
-dist_rtems_tests_DATA = $(mp_screens) $(mp_docs)
-
+noinst_PROGRAMS = $(mp_tests)
