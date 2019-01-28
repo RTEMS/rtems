@@ -44,8 +44,8 @@ static pthread_barrierattr_t attr;
 
 static void benchmark_create_barrierattr(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_barrierattr_init( &attr );
@@ -64,8 +64,8 @@ static void benchmark_create_barrierattr(void)
 
 static void benchmark_barrierattr_setpshared(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_barrierattr_setpshared( &attr, PTHREAD_PROCESS_SHARED );
@@ -84,9 +84,9 @@ static void benchmark_barrierattr_setpshared(void)
 
 static void benchmark_barrierattr_getpshared(void)
 {
-  long end_time;
-  int  status;
-  int pshared;
+  benchmark_timer_t end_time;
+  int               status;
+  int               pshared;
 
   benchmark_timer_initialize();
   status = pthread_barrierattr_getpshared( &attr, &pshared );
@@ -106,8 +106,8 @@ static void benchmark_barrierattr_getpshared(void)
 
 static void benchmark_destroy_barrierattr(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_barrierattr_destroy( &attr );

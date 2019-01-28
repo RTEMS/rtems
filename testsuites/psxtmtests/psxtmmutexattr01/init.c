@@ -45,8 +45,8 @@ static pthread_mutexattr_t attr;
 
 static void benchmark_create_pthread_mutexattr(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_init( &attr );
@@ -65,8 +65,8 @@ static void benchmark_create_pthread_mutexattr(void)
 
 static void benchmark_pthread_mutexattr_setprioceiling(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_setprioceiling( &attr, SCHED_FIFO);
@@ -85,9 +85,9 @@ static void benchmark_pthread_mutexattr_setprioceiling(void)
 
 static void benchmark_pthread_mutexattr_getprioceiling(void)
 {
-  long end_time;
-  int  status;
-  int prioceiling;
+  benchmark_timer_t end_time;
+  int               status;
+  int               prioceiling;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_getprioceiling( &attr, &prioceiling);
@@ -107,8 +107,8 @@ static void benchmark_pthread_mutexattr_getprioceiling(void)
 
 static void benchmark_pthread_mutexattr_setprotocol(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_setprotocol( &attr, PTHREAD_PRIO_INHERIT );
@@ -127,9 +127,9 @@ static void benchmark_pthread_mutexattr_setprotocol(void)
 
 static void benchmark_pthread_mutexattr_getprotocol(void)
 {
-  long end_time;
-  int  status;
-  int protocol;
+  benchmark_timer_t end_time;
+  int               status;
+  int               protocol;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_getprotocol( &attr, &protocol );
@@ -149,8 +149,8 @@ static void benchmark_pthread_mutexattr_getprotocol(void)
 
 static void benchmark_pthread_mutexattr_setpshared(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_setpshared( &attr, PTHREAD_PROCESS_PRIVATE );
@@ -169,9 +169,9 @@ static void benchmark_pthread_mutexattr_setpshared(void)
 
 static void benchmark_pthread_mutexattr_getpshared(void)
 {
-  long end_time;
-  int  status;
-  int pshared;
+  benchmark_timer_t end_time;
+  int               status;
+  int               pshared;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_getpshared( &attr, &pshared );
@@ -191,8 +191,8 @@ static void benchmark_pthread_mutexattr_getpshared(void)
 
 static void benchmark_pthread_mutexattr_settype(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_settype( &attr, PTHREAD_MUTEX_DEFAULT );
@@ -211,9 +211,9 @@ static void benchmark_pthread_mutexattr_settype(void)
 
 static void benchmark_pthread_mutexattr_gettype(void)
 {
-  long end_time;
-  int  status;
-  int type;
+  benchmark_timer_t end_time;
+  int               status;
+  int               type;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_gettype( &attr, &type );
@@ -233,8 +233,8 @@ static void benchmark_pthread_mutexattr_gettype(void)
 
 static void benchmark_destroy_pthread_mutexattr(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_mutexattr_destroy( &attr );

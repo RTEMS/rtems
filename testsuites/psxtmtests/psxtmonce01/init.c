@@ -45,8 +45,8 @@ static void initRoutine(void)
 
 static void benchmark_first_time(void)
 {
-  long end_time;
-  int  status;
+  benchmark_timer_t end_time;
+  int               status;
 
   benchmark_timer_initialize();
   status = pthread_once( &once_control, initRoutine );
