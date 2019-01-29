@@ -27,13 +27,11 @@ extern int pppdapp_initialize(void);
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
-#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
-
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 8
 
-#define CONFIGURE_EXECUTIVE_RAM_SIZE (512*1024)
-#define CONFIGURE_MAXIMUM_SEMAPHORES 20
-#define CONFIGURE_MAXIMUM_TASKS      20
+#define CONFIGURE_UNIFIED_WORK_AREAS
+
+#define CONFIGURE_UNLIMITED_OBJECTS
 
 #define CONFIGURE_MICROSECONDS_PER_TICK 10000
 
@@ -43,6 +41,7 @@ extern int pppdapp_initialize(void);
                                            RTEMS_NO_TIMESLICE | \
                                            RTEMS_NO_ASR | \
                                            RTEMS_INTERRUPT_LEVEL(0))
+#define CONFIGURE_INIT_TASK_ATTRIBUTES RTEMS_FLOATING_POINT
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 
