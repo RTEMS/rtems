@@ -54,8 +54,6 @@ static rtems_record_client_status client_handler(
   void               *arg
 )
 {
-  const char *event_text;
-
   (void) arg;
 
   if ( seconds != 0 && nanoseconds != 0 ) {
@@ -64,13 +62,12 @@ static rtems_record_client_status client_handler(
     printf( "*:" );
   }
 
-  event_text = rtems_record_event_text( event );
-
-  if ( event_text != NULL ) {
-    printf( "%" PRIu32 ":%s:%" PRIx64 "\n", cpu, event_text, data );
-  } else {
-    printf( "%" PRIu32 ":%i:%" PRIx64 "\n", cpu, event, data );
-  }
+  printf(
+    "%" PRIu32 ":%s:%" PRIx64 "\n",
+    cpu,
+    rtems_record_event_text( event ),
+    data
+  );
 
   return RTEMS_RECORD_CLIENT_SUCCESS;
 }

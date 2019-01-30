@@ -61,7 +61,7 @@ static test_context test_instance;
 
 const unsigned int _Record_Item_count = ITEM_COUNT;
 
-#define UE(user) (RTEMS_RECORD_USER + (user))
+#define UE(user) RTEMS_RECORD_USER(user)
 
 #define TE(t, e) RTEMS_RECORD_TIME_EVENT(t, e)
 

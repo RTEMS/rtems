@@ -35,6 +35,15 @@
 
 #include <string.h>
 
+RTEMS_STATIC_ASSERT( RTEMS_RECORD_USER_0 == 512, RTEMS_RECORD_USER_0 );
+
+RTEMS_STATIC_ASSERT( RTEMS_RECORD_LAST == 1023, RTEMS_RECORD_LAST );
+
+RTEMS_STATIC_ASSERT(
+  RTEMS_RECORD_LAST + 1 == ( 1 << RTEMS_RECORD_EVENT_BITS ),
+  RTEMS_RECORD_EVENT_BITS
+);
+
 void rtems_record_produce( rtems_record_event event, rtems_record_data data )
 {
   rtems_record_context context;
