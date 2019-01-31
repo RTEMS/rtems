@@ -67,6 +67,13 @@ int rtems_version_revision( void );
  */
 const char *rtems_version_control_key( void );
 
+/**
+ * @brief Returns the board support package name.
+ *
+ * @return The board support package name.
+ */
+const char *rtems_board_support_package( void );
+
 /** @} */
 
 #ifdef __cplusplus

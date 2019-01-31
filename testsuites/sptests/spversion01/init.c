@@ -29,6 +29,7 @@ static rtems_task Init(
   printf("Minor    : %d\n", rtems_version_minor());
   printf("Revision : %d\n", rtems_version_revision());
   printf("VC Key   : %s\n", rtems_version_control_key());
+  printf("BSP      : %s\n", rtems_board_support_package());
 
   TEST_END();
 

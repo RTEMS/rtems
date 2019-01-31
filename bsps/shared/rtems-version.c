@@ -7,6 +7,7 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#include <rtems/version.h>
 #include <rtems/system.h>
 
 #include <bspopts.h>
@@ -27,3 +28,8 @@
 const char _RTEMS_version[] =
   "rtems-" RTEMS_VERSION " (" CPU_NAME "/" CPU_MODEL_NAME "/"
   RTEMS_XSTRING( RTEMS_BSP ) ")";
+
+const char *rtems_board_support_package( void )
+{
+  return RTEMS_XSTRING( RTEMS_BSP );
+}
