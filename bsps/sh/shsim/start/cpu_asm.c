@@ -11,7 +11,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/percpu.h>

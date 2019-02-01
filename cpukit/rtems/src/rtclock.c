@@ -18,7 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/clock.h>
 #include <rtems/score/isr.h>

@@ -18,7 +18,6 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
 #include <rtems/score/cpu.h>
 
 #include <bspopts.h>

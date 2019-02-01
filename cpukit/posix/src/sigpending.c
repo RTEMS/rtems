@@ -21,7 +21,6 @@
 #include <signal.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 #include <rtems/seterr.h>

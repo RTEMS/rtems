@@ -52,7 +52,6 @@ extern "C" {
 #if !defined(ASM)
 
 #include <rtems/bspIo.h>
-#include <rtems/system.h>
 
 #include <libcpu/cpuIdent.h>
 

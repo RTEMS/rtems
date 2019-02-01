@@ -20,7 +20,6 @@
 
 #include <pthread.h>
 
-#include <rtems/system.h>
 
 /*
  *  The default condition variable attributes structure.

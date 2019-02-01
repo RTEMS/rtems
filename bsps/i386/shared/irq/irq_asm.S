@@ -14,7 +14,6 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
 #include <bspopts.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/percpu.h>

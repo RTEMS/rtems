@@ -18,7 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/score/protectedheap.h>
 #include <rtems/score/interr.h>

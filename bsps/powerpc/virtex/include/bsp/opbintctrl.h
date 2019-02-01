@@ -15,7 +15,6 @@
 #define _INCLUDE_OPBINTCTRL_H
 
 #include <rtems.h>
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/irq.h>
 #include <bspopts.h>

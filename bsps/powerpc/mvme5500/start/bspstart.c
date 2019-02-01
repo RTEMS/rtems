@@ -26,7 +26,6 @@
 #include <ctype.h>
 
 #include <rtems/sysinit.h>
-#include <rtems/system.h>
 #include <rtems/powerpc/powerpc.h>
 
 #include <libcpu/spr.h>   /* registers.h is included here */

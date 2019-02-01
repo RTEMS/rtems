@@ -21,7 +21,6 @@
 #include <rtems/posix/aio_misc.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 
 int aio_cancel(int fildes, struct aiocb  *aiocbp)

@@ -29,7 +29,6 @@
  *  implementation in assembly should include "cpu_asm.h"
  */
 
-#include <rtems/system.h>
 #include <rtems/score/cpu.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/threaddispatch.h>

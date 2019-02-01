@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/coremsgimpl.h>

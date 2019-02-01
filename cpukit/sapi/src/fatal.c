@@ -22,7 +22,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/fatal.h>
 #include <rtems/score/interr.h>
 

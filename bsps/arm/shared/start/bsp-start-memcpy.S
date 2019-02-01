@@ -19,7 +19,6 @@
  */
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
 #include <rtems/score/cpu.h>
 
 	.section	".bsp_start_text", "ax"

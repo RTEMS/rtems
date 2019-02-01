@@ -21,7 +21,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 
 int pthread_condattr_getpshared(
   const pthread_condattr_t *attr,

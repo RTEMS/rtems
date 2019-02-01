@@ -14,7 +14,6 @@
 #include <sys/types.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/userenv.h>
 

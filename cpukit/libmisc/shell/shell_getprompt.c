@@ -17,7 +17,6 @@
 #include <rtems/error.h>
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
-#include <rtems/system.h>
 #include <rtems/shell.h>
 #include "internal.h"
 

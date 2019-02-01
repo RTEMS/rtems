@@ -22,7 +22,7 @@
   #include "config.h"
 #endif
 
-#include <rtems/system.h>
+#include <rtems/score/cpu.h>
 #include <rtems/score/nios2-utility.h>
 
 #define NIOS2_ASSERT_OFFSET(field, off) \

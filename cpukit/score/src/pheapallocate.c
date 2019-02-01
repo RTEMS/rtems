@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
 void *_Protected_heap_Allocate_aligned_with_boundary(

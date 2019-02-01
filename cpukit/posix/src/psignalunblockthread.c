@@ -22,7 +22,6 @@
 #include <pthread.h>
 #include <signal.h>
 
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/score/threadqimpl.h>

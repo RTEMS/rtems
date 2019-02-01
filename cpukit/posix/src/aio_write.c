@@ -22,7 +22,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <rtems/posix/aio_misc.h>
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <stdlib.h>
 #include <limits.h>

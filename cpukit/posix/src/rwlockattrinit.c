@@ -21,7 +21,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 
 /*
  *  RWLock Attributes Initialization

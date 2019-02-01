@@ -23,7 +23,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/posix/psignalimpl.h>
 

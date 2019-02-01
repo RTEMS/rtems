@@ -22,7 +22,6 @@
 #include <pthread.h>
 #include <limits.h>
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/thread.h>

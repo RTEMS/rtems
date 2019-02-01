@@ -18,7 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulercbs.h>

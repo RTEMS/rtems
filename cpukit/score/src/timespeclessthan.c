@@ -20,7 +20,6 @@
 
 #include <sys/types.h>
 
-#include <rtems/system.h>
 #include <rtems/score/timespec.h>
 
 bool _Timespec_Less_than(

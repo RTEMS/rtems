@@ -38,7 +38,6 @@
 #include <fcntl.h>
 #include <mqueue.h>
 
-#include <rtems/system.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/seterr.h>
 #include <rtems/posix/mqueueimpl.h>

@@ -21,7 +21,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/heapimpl.h>
 
 static void _Heap_Free_block( Heap_Control *heap, Heap_Block *block )

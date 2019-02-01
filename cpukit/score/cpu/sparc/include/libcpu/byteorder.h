@@ -12,7 +12,6 @@
 #ifndef _LIBCPU_BYTEORDER_H
 #define _LIBCPU_BYTEORDER_H
 
-#include <rtems/system.h>
 #include <rtems/score/cpu.h>
 
 #ifdef __cplusplus

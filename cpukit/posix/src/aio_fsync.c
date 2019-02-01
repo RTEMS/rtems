@@ -21,7 +21,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <rtems/posix/aio_misc.h>
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 
 /*

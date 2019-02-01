@@ -18,7 +18,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/rtems/statusimpl.h>
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/options.h>

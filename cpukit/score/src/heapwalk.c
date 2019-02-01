@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/address.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/heapimpl.h>

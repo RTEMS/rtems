@@ -16,7 +16,6 @@
 
 #include <bsp.h>
 #include <rtems.h>
-#include <rtems/system.h>
 #include <rtems/btimer.h>
 #include <assert.h>
 #include <libcpu/powerpc-utility.h>

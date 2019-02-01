@@ -21,8 +21,6 @@
 #include <pthread.h>
 #include <errno.h>
 
-#include <rtems/system.h>
-
 int pthread_barrierattr_init(
   pthread_barrierattr_t *attr
 )

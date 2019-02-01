@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/rtems/tasks.h>
 #include <rtems/score/stack.h>
 #include <rtems/rtems/modes.h>

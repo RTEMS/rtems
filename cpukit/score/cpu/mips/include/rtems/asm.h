@@ -37,7 +37,6 @@
 #ifndef ASM
 #define ASM
 #endif
-#include <rtems/system.h>
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/mips.h>
 

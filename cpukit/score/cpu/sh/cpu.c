@@ -30,7 +30,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/sh_io.h>
 #include <rtems/score/cpu.h>

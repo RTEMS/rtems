@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include <rtems/system.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
 #include <rtems/bspIo.h>

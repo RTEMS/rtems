@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/heapimpl.h>
 
 void _Heap_Get_free_information(

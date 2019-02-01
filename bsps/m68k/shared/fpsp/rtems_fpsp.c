@@ -1,7 +1,4 @@
-#include <rtems/system.h>
-/*
-#include <rtems/score/isr.h>
-*/
+#include <rtems/score/cpu.h>
 
 /*
  * User exception handlers

@@ -20,7 +20,6 @@
 #include <inttypes.h>
 
 #include <rtems.h>
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/idtr.h>
 #include <rtems/score/tls.h>

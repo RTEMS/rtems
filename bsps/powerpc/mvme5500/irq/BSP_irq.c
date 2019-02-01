@@ -29,7 +29,6 @@
 
 #include <inttypes.h>
 #include <stdio.h>
-#include <rtems/system.h>
 #include <bsp.h>
 #include <bsp/irq.h>
 #include <rtems/score/thread.h>

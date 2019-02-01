@@ -35,7 +35,6 @@
  *	by the authors or by TGA Technologies.
  */
 
-#include <rtems/system.h>
 #include <rtems/score/isr.h>
 
 /*

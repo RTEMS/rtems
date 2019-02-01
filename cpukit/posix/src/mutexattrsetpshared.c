@@ -21,7 +21,6 @@
 #include <errno.h>
 #include <pthread.h>
 
-#include <rtems/system.h>
 #include <rtems/score/coremuteximpl.h>
 #include <rtems/score/watchdog.h>
 #include <rtems/posix/muteximpl.h>

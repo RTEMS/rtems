@@ -15,7 +15,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/system.h>
 #include <rtems/score/thread.h>
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored )

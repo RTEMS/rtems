@@ -21,7 +21,7 @@
 #include <sched.h>
 #include <errno.h>
 
-#include <rtems/system.h>
+#include <rtems/score/basedefs.h>
 #include <rtems/seterr.h>
 
 /**

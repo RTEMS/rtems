@@ -17,7 +17,6 @@
 
 #include <rtems.h>
 #include <rtems/error.h>
-#include <rtems/system.h>
 #include <rtems/shell.h>
 
 #include "internal.h"

@@ -23,7 +23,6 @@
 #include <pthread.h>
 #include <rtems.h>
 #include <rtems/chain.h>
-#include <rtems/system.h>
 #include <rtems/seterr.h>
   
 #ifdef __cplusplus

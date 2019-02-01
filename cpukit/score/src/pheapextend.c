@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
 bool _Protected_heap_Extend(

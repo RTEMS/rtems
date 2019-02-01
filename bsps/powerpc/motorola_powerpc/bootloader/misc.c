@@ -13,7 +13,6 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
-#include <rtems/system.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <string.h>

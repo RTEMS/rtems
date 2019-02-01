@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/score/protectedheap.h>
 
 uintptr_t _Protected_heap_Get_size(

@@ -24,7 +24,6 @@
 #endif
 
 #include <rtems/asm.h>
-#include <rtems/system.h>
 
 #ifdef ARM_MULTILIB_ARCH_V4
 

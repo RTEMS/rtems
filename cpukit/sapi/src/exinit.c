@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/extensionimpl.h>
 #include <rtems/init.h>

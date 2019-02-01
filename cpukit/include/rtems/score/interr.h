@@ -19,10 +19,7 @@
 #ifndef _RTEMS_SCORE_INTERR_H
 #define _RTEMS_SCORE_INTERR_H
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include <rtems/system.h>
+#include <rtems/score/cpu.h>
 
 /**
  *  @defgroup ScoreIntErr Internal Error Handler

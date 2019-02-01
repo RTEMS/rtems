@@ -24,7 +24,6 @@
 #include <errno.h>
 #include <pthread.h>
 
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/watchdogimpl.h>

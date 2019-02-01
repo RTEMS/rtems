@@ -21,7 +21,6 @@
 #include <time.h>
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/seterr.h>
 #include <rtems/score/thread.h>
 #include <rtems/posix/timerimpl.h>

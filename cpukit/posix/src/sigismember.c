@@ -20,7 +20,6 @@
 
 #include <errno.h>
 
-#include <rtems/system.h>
 #include <rtems/posix/sigset.h>
 #include <rtems/seterr.h>
 

@@ -5,7 +5,6 @@
 #include <errno.h>
 #include <pthread.h>
 
-#include <rtems/system.h>
 #include <rtems/config.h>
 #include <rtems/posix/pthreadimpl.h>
 #include <rtems/score/stackimpl.h>
