@@ -30,7 +30,7 @@ int pthread_barrierattr_init(
   if ( !attr )
     return EINVAL;
 
-  attr->is_initialized = true;
+  attr->is_initialized = 1;
   attr->process_shared = PTHREAD_PROCESS_PRIVATE;
   return 0;
 }

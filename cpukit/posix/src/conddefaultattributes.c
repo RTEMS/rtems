@@ -27,7 +27,7 @@
  */
 
 const pthread_condattr_t _POSIX_Condition_variables_Default_attributes = {
-  .is_initialized = true,
+  .is_initialized = 1,
   .clock          = CLOCK_REALTIME,
 #if defined(_POSIX_THREAD_PROCESS_SHARED)
   .process_shared = PTHREAD_PROCESS_PRIVATE
