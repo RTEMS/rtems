@@ -129,7 +129,10 @@ const char*
 dlerror (void)
 {
   static char msg[64];
-  rtems_rtl_get_error (msg, sizeof (msg));
+  int         eno;
+  eno = rtems_rtl_get_error (msg, sizeof (msg));
+  if (eno == 0)
+    return NULL;
   return msg;
 }
 
