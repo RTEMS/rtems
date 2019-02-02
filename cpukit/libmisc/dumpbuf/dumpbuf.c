@@ -88,7 +88,7 @@ static void Dump_Line(const unsigned char *buffer, const unsigned int length)
     unsigned char c = buffer[i];
 
     rtems_putc(hexlist[(c >> 4) & 0xf]);
-    rtems_putc(hexlist[0xf]);
+    rtems_putc(hexlist[c & 0xf]);
     rtems_putc(' ');
   }
 
