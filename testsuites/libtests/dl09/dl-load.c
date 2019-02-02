@@ -18,7 +18,9 @@
                       RTEMS_RTL_TRACE_ALLOCATOR | \
                       RTEMS_RTL_TRACE_UNRESOLVED | \
                       RTEMS_RTL_TRACE_ARCHIVES | \
-                      RTEMS_RTL_TRACE_DEPENDENCY)
+                      RTEMS_RTL_TRACE_DEPENDENCY | \
+                      RTEMS_RTL_TRACE_LOAD_SECT | \
+                      RTEMS_RTL_TRACE_BIT_ALLOC)
  #define DL09_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
  #define DL09_RTL_CMDS    1
 #else

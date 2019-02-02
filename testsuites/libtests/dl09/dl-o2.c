@@ -17,7 +17,7 @@
 int   dl02_bss1;
 float dl02_bss2[7];
 char  dl02_bss3[21];
-int   dl02_data1;
+int   dl02_data1 = 0x12345678;
 float dl02_data2;
 
 #define DL_NAME       "dlo2"
@@ -25,13 +25,14 @@ float dl02_data2;
 
 int rtems_main_o2 (void)
 {
-  printf (DL_NAME ": module: %s\n", dl_localise_file (__FILE__));
-  printf (DL_NAME ":         dl02_bss1: %4u: %p: %d\n",   PAINT_VAR (dl02_bss1));
-  printf (DL_NAME ":         dl02_bss2: %4u: %p: %f\n",   PAINT_VAR (dl02_bss2[0]));
-  printf (DL_NAME ":         dl02_bss3: %4u: %p: %02x\n", PAINT_VAR (dl02_bss3[0]));
-  printf (DL_NAME ":        dl02_data1: %4u: %p: %d\n",   PAINT_VAR (dl02_data1));
+  printf (DL_NAME ": module: %s @ %p\n",
+	  dl_localise_file (__FILE__), rtems_main_o2);
+  printf (DL_NAME ":         dl02_bss1: %4zu: %p: %d\n",   PAINT_VAR (dl02_bss1));
+  printf (DL_NAME ":         dl02_bss2: %4zu: %p: %f\n",   PAINT_VAR (dl02_bss2[0]));
+  printf (DL_NAME ":         dl02_bss3: %4zu: %p: %02x\n", PAINT_VAR (dl02_bss3[0]));
+  printf (DL_NAME ":        dl02_data1: %4zu: %p: %08x\n", PAINT_VAR (dl02_data1));
   /* no %f in the rtems test printer */
-  printf (DL_NAME ":        dl02_data2: %4u: %p: %f\n",   PAINT_VAR (dl02_data2));
+  printf (DL_NAME ":        dl02_data2: %4zu: %p: %f\n",   PAINT_VAR (dl02_data2));
 
   rtems_main_o3 ();
 

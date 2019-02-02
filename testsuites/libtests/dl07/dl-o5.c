@@ -34,19 +34,19 @@ int rtems_main_o5 (int argc, const char* argv[]);
 int rtems_main_o5 (int argc, const char* argv[])
 {
   printf (DL_NAME ": module: %s\n", dl_localise_file (__FILE__));
-  printf (DL_NAME ":         dl01_bss1: %4u: %p: %d\n",          PAINT_VAR (dl01_bss1));
-  printf (DL_NAME ":         dl01_bss2: %4u: %p: %f\n",          PAINT_VAR (dl01_bss2[0]));
-  printf (DL_NAME ":         dl01_bss3: %4u: %p: %02x\n",        PAINT_VAR (dl01_bss3[0]));
-  printf (DL_NAME ":        dl01_data1: %4u: %p: %d\n",          PAINT_VAR (dl01_data1));
+  printf (DL_NAME ":         dl01_bss1: %4zu: %p: %d\n",          PAINT_VAR (dl01_bss1));
+  printf (DL_NAME ":         dl01_bss2: %4zu: %p: %f\n",          PAINT_VAR (dl01_bss2[0]));
+  printf (DL_NAME ":         dl01_bss3: %4zu: %p: %02x\n",        PAINT_VAR (dl01_bss3[0]));
+  printf (DL_NAME ":        dl01_data1: %4zu: %p: %d\n",          PAINT_VAR (dl01_data1));
   /* no  %f in the rtems test printer */
-  printf (DL_NAME ":        dl01_data2: %4u: %p: %f\n",          PAINT_VAR (dl01_data2));
-  printf (DL_NAME ":       dl01_const1: %4u: %p: %d\n",          PAINT_VAR (dl01_const1));
-  printf (DL_NAME ":       dl01_const2: %4u: %p: %f\n",          PAINT_VAR (dl01_const2));
-  printf (DL_NAME ":        dl01_func1: %4u: %p\n",              sizeof(dl01_func1), &dl01_func1);
-  printf (DL_NAME ":   dl05_unresolv_1: %4u: %p: %" PRIu64 "\n", PAINT_VAR (dl05_unresolv_1));
-  printf (DL_NAME ":   dl05_unresolv_2: %4u: %p: %" PRIu16 "\n", PAINT_VAR (dl05_unresolv_2));
-  printf (DL_NAME ":   dl05_unresolv_3: %4u: %p: %" PRIu32 "\n", PAINT_VAR (dl05_unresolv_3));
-  printf (DL_NAME ":   dl05_unresolv_4: %4u: %p: %" PRIu8  "\n", PAINT_VAR (dl05_unresolv_4));
-  printf (DL_NAME ":   dl05_unresolv_5: %4u: %p: %" PRIi64 "\n", PAINT_VAR (dl05_unresolv_5));
+  printf (DL_NAME ":        dl01_data2: %4zu: %p: %f\n",          PAINT_VAR (dl01_data2));
+  printf (DL_NAME ":       dl01_const1: %4zu: %p: %d\n",          PAINT_VAR (dl01_const1));
+  printf (DL_NAME ":       dl01_const2: %4zu: %p: %f\n",          PAINT_VAR (dl01_const2));
+  printf (DL_NAME ":        dl01_func1: %4zu: %p\n",              sizeof(dl01_func1), &dl01_func1);
+  printf (DL_NAME ":   dl05_unresolv_1: %4zu: %p: %" PRIu64 "\n", PAINT_VAR (dl05_unresolv_1));
+  printf (DL_NAME ":   dl05_unresolv_2: %4zu: %p: %" PRIu16 "\n", PAINT_VAR (dl05_unresolv_2));
+  printf (DL_NAME ":   dl05_unresolv_3: %4zu: %p: %" PRIu32 "\n", PAINT_VAR (dl05_unresolv_3));
+  printf (DL_NAME ":   dl05_unresolv_4: %4zu: %p: %" PRIu8  "\n", PAINT_VAR (dl05_unresolv_4));
+  printf (DL_NAME ":   dl05_unresolv_5: %4zu: %p: %" PRIi64 "\n", PAINT_VAR (dl05_unresolv_5));
   return 0;
 }

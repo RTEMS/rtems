@@ -15,8 +15,14 @@
 #include <rtems/rtl/rtl-shell.h>
 #include <rtems/rtl/rtl-trace.h>
 
-#define DL02_DEBUG_TRACE 0 /* RTEMS_RTL_TRACE_ALL */
-#define DL02_RTL_CMDS    0
+#define TEST_TRACE 0
+#if TEST_TRACE
+ #define DL_DEBUG_TRACE (RTEMS_RTL_TRACE_ALL & ~RTEMS_RTL_TRACE_ALLOCATOR)
+ #define DL_RTL_CMDS    1
+#else
+ #define DL_DEBUG_TRACE 0
+ #define DL_RTL_CMDS    0
+#endif
 
 typedef int (*call_t)(int argc, const char* argv[]);
 
@@ -55,8 +61,8 @@ int dl_load_test(void)
   int    call_ret;
   int    ret;
 
-#if DL02_DEBUG_TRACE
-  rtems_rtl_trace_set_mask (DL02_DEBUG_TRACE);
+#if DL_DEBUG_TRACE
+  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
 #endif
 
   o1 = dl_load_obj("/dl02-o1.o");
@@ -66,7 +72,7 @@ int dl_load_test(void)
   if (!o1)
     return 1;
 
-#if DL02_RTL_CMDS
+#if DL_RTL_CMDS
   {
     char* list[] = { "rtl", "list", NULL };
     rtems_rtl_shell_command (2, list);

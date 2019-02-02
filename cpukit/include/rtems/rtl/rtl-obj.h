@@ -87,25 +87,26 @@ typedef struct rtems_rtl_loader_table
 /**
  * Flags for the various section types.
  */
-#define RTEMS_RTL_OBJ_SECT_TEXT  (1 << 0)  /**< Section holds program text. */
-#define RTEMS_RTL_OBJ_SECT_CONST (1 << 1)  /**< Section holds program text. */
-#define RTEMS_RTL_OBJ_SECT_DATA  (1 << 2)  /**< Section holds program data. */
-#define RTEMS_RTL_OBJ_SECT_BSS   (1 << 3)  /**< Section holds program bss. */
-#define RTEMS_RTL_OBJ_SECT_EH    (1 << 4)  /**< Section holds exception data. */
-#define RTEMS_RTL_OBJ_SECT_TLS   (1 << 5)  /**< Section holds TLS data. */
-#define RTEMS_RTL_OBJ_SECT_REL   (1 << 6)  /**< Section holds relocation recs. */
-#define RTEMS_RTL_OBJ_SECT_RELA  (1 << 7)  /**< Section holds reloc addend recs. */
-#define RTEMS_RTL_OBJ_SECT_SYM   (1 << 8)  /**< Section holds symbols. */
-#define RTEMS_RTL_OBJ_SECT_STR   (1 << 9)  /**< Section holds strings. */
-#define RTEMS_RTL_OBJ_SECT_ALLOC (1 << 10  /**< Section allocates runtime memory. */
-#define RTEMS_RTL_OBJ_SECT_LOAD  (1 << 11) /**< Section is loaded from object file. */
-#define RTEMS_RTL_OBJ_SECT_WRITE (1 << 12) /**< Section is writable, ie data. */
-#define RTEMS_RTL_OBJ_SECT_EXEC  (1 << 13) /**< Section is executable. */
-#define RTEMS_RTL_OBJ_SECT_ZERO  (1 << 14) /**< Section is preset to zero. */
-#define RTEMS_RTL_OBJ_SECT_LINK  (1 << 15) /**< Section is link-ordered. */
-#define RTEMS_RTL_OBJ_SECT_CTOR  (1 << 16) /**< Section contains constructors. */
-#define RTEMS_RTL_OBJ_SECT_DTOR  (1 << 17) /**< Section contains destructors. */
-#define RTEMS_RTL_OBJ_SECT_LOCD  (1 << 18) /**< Section has been located. */
+#define RTEMS_RTL_OBJ_SECT_TEXT       (1 << 0)  /**< Section holds program text. */
+#define RTEMS_RTL_OBJ_SECT_CONST      (1 << 1)  /**< Section holds program text. */
+#define RTEMS_RTL_OBJ_SECT_DATA       (1 << 2)  /**< Section holds program data. */
+#define RTEMS_RTL_OBJ_SECT_BSS        (1 << 3)  /**< Section holds program bss. */
+#define RTEMS_RTL_OBJ_SECT_EH         (1 << 4)  /**< Section holds exception data. */
+#define RTEMS_RTL_OBJ_SECT_TLS        (1 << 5)  /**< Section holds TLS data. */
+#define RTEMS_RTL_OBJ_SECT_REL        (1 << 6)  /**< Section holds relocation recs. */
+#define RTEMS_RTL_OBJ_SECT_RELA       (1 << 7)  /**< Section holds reloc addend recs. */
+#define RTEMS_RTL_OBJ_SECT_SYM        (1 << 8)  /**< Section holds symbols. */
+#define RTEMS_RTL_OBJ_SECT_STR        (1 << 9)  /**< Section holds strings. */
+#define RTEMS_RTL_OBJ_SECT_ALLOC      (1 << 10  /**< Section allocates runtime memory. */
+#define RTEMS_RTL_OBJ_SECT_LOAD       (1 << 11) /**< Section is loaded from object file. */
+#define RTEMS_RTL_OBJ_SECT_WRITE      (1 << 12) /**< Section is writable, ie data. */
+#define RTEMS_RTL_OBJ_SECT_EXEC       (1 << 13) /**< Section is executable. */
+#define RTEMS_RTL_OBJ_SECT_ZERO       (1 << 14) /**< Section is preset to zero. */
+#define RTEMS_RTL_OBJ_SECT_LINK       (1 << 15) /**< Section is link-ordered. */
+#define RTEMS_RTL_OBJ_SECT_CTOR       (1 << 16) /**< Section contains constructors. */
+#define RTEMS_RTL_OBJ_SECT_DTOR       (1 << 17) /**< Section contains destructors. */
+#define RTEMS_RTL_OBJ_SECT_LOCD       (1 << 18) /**< Section has been located. */
+#define RTEMS_RTL_OBJ_SECT_ARCH_ALLOC (1 << 19) /**< Section use arch allocator. */
 
 /**
  * Section types mask.
@@ -237,7 +238,7 @@ struct rtems_rtl_obj
 
 /**
  * A section handler is called once for each section that needs to be
- * processed by this handler.
+ * processed by this handler. The handler is specific to a task.
  *
  * @param obj The object file's descriptor the section belongs too.
  * @param fd The file descriptor of the object file beling loaded.
@@ -374,6 +375,17 @@ static inline bool rtems_rtl_obj_has_ramp_space (const rtems_rtl_obj* obj,
 {
   return (obj->trampoline != NULL &&
           ((obj->tramp_brk - obj->trampoline) + size) <= obj->tramp_size);
+}
+
+/**
+ * Does the section require architecture specific allocations?
+ *
+ * @param sect The section.
+ * @retval bool Returns @true if the section requires arch allocation.
+ */
+static inline bool rtems_rtl_obj_sect_is_arch_alloc (rtems_rtl_obj_sect* sect)
+{
+  return (sect->flags & RTEMS_RTL_OBJ_SECT_ARCH_ALLOC) != 0;
 }
 
 /**
@@ -727,6 +739,23 @@ bool rtems_rtl_obj_load_symbols (rtems_rtl_obj*             obj,
                                  int                        fd,
                                  rtems_rtl_obj_sect_handler handler,
                                  void*                      data);
+
+/**
+ * Allocate the sections. If a handler is provided (not NULL) it is called for
+ * all section.
+ *
+ * @param obj The object file's descriptor.
+ * @param fd The object file's file descriptor.
+ * @param handler The object file's format specific allocation handler.
+ * @param data User specific data handle.
+ * @retval true The object has been sucessfully loaded.
+ * @retval false The load failed. The RTL error has been set.
+ */
+bool
+rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
+                              int                        fd,
+                              rtems_rtl_obj_sect_handler handler,
+                              void*                      data);
 
 /**
  * Load the sections that have been allocated memory in the target. The bss

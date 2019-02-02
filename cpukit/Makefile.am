@@ -1141,6 +1141,7 @@ librtemscpu_a_SOURCES += libdl/rap-shell.c
 librtemscpu_a_SOURCES += libdl/rtl-allocator.c
 librtemscpu_a_SOURCES += libdl/rtl-alloc-heap.c
 librtemscpu_a_SOURCES += libdl/rtl-archive.c
+librtemscpu_a_SOURCES += libdl/rtl-bit-alloc.c
 librtemscpu_a_SOURCES += libdl/rtl.c
 librtemscpu_a_SOURCES += libdl/rtl-chain-iterator.c
 librtemscpu_a_SOURCES += libdl/rtl-debugger.c

@@ -27,12 +27,12 @@ const char* dl04_unresolv_6 = "dl-O4";
 int rtems_main_o4 (void)
 {
   printf (DL_NAME ": module: %s\n", dl_localise_file (__FILE__));
-  printf (DL_NAME ":   dl04_unresolv_1: %4u: %p: %d\n",   PAINT_VAR (dl04_unresolv_1));
-  printf (DL_NAME ":   dl04_unresolv_2: %4u: %p: %f\n",   PAINT_VAR (dl04_unresolv_2));
-  printf (DL_NAME ":   dl04_unresolv_3: %4u: %p: %02x\n", PAINT_VAR (dl04_unresolv_3));
-  printf (DL_NAME ":   dl04_unresolv_4: %4u: %p: %p\n",   PAINT_VAR (dl04_unresolv_4));
-  printf (DL_NAME ":   dl04_unresolv_5: %4u: %p: %d\n",   PAINT_VAR (dl04_unresolv_5));
-  printf (DL_NAME ":   dl04_unresolv_6: %4u: %p: %s\n",   PAINT_VAR (dl04_unresolv_6));
+  printf (DL_NAME ":   dl04_unresolv_1: %4zu: %p: %d\n",   PAINT_VAR (dl04_unresolv_1));
+  printf (DL_NAME ":   dl04_unresolv_2: %4zu: %p: %f\n",   PAINT_VAR (dl04_unresolv_2));
+  printf (DL_NAME ":   dl04_unresolv_3: %4zu: %p: %02x\n", PAINT_VAR (dl04_unresolv_3));
+  printf (DL_NAME ":   dl04_unresolv_4: %4zu: %p: %p\n",   PAINT_VAR (dl04_unresolv_4));
+  printf (DL_NAME ":   dl04_unresolv_5: %4zu: %p: %d\n",   PAINT_VAR (dl04_unresolv_5));
+  printf (DL_NAME ":   dl04_unresolv_6: %4zu: %p: %s\n",   PAINT_VAR (dl04_unresolv_6));
 
   rtems_main_o5 ();
 

@@ -10,7 +10,7 @@
 
 #include <rtems/test.h>
 
-#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__);
+#define printf(...) rtems_printf(&rtems_test_printer, __VA_ARGS__)
 
 int dl_o2_func1 (int argc, char* argv[])
 {
@@ -21,13 +21,17 @@ int dl_o2_func1 (int argc, char* argv[])
   return argc;
 }
 
+#define PDOUBLE(_d) ((int) (_d)), (int) (((_d) + 0.005) * 100.0) % 100
+
 double dl_o2_func2 (double d1, double d2)
 {
-  return d1 * d2;
+  double ret = d1 * d2;
+  printf("dl_o2_func2: d1=%d.%02d d2=%d.%d ret=%d.%02d\n",
+	 PDOUBLE(d1), PDOUBLE(d2), PDOUBLE(ret));
+  return ret;
 }
 
 int dl_o2_func3 (dl_o2_call_t callback, int count)
 {
   return callback ("string in dl_o2", count + 1);
 }
-

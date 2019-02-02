@@ -293,20 +293,33 @@ SECTIONS {
 		KEEP (*(SORT(.rtemsrwset.*)))
 	} > REGION_DATA AT > REGION_DATA_LOAD
 	.sdata : ALIGN_WITH_INPUT {
+		bsp_section_sdata_begin = .;
 		PROVIDE (_SDA_BASE_ = 32768);
 		*(.sdata .sdata.* .gnu.linkonce.s.*)
+		bsp_section_sdata_end = .;
 		bsp_section_data_end = .;
 	} > REGION_DATA AT > REGION_DATA_LOAD
+	bsp_section_sdata_size = bsp_section_sdata_end - bsp_section_sdata_begin;
 	bsp_section_data_size = bsp_section_data_end - bsp_section_data_begin;
 	bsp_section_data_load_begin = LOADADDR (.data);
 	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
 
+	/*
+	 * Set bsp_section_set_sdata_bss_size to the system's sdata and bss data size, eg:
+	 *
+	 *  bsp_section_set_sdata_sbss_size = 65536;
+	 */
+	bsp_section_sdata_sbss_size = DEFINED(bsp_section_set_sdata_sbss_size) ?
+							bsp_section_set_sdata_sbss_size : 0;
 	.sbss : ALIGN_WITH_INPUT {
 		bsp_section_sbss_begin = .;
 		*(.dynsbss)
 		*(.sbss .sbss.* .gnu.linkonce.sb.*)
 		*(.scommon)
 		bsp_section_sbss_end = .;
+		bsp_section_sdata_libdl_begin = .;
+		. += bsp_section_sdata_sbss_size - (bsp_section_sdata_size + bsp_section_sbss_size);
+		bsp_section_sdata_libdl_end = .;
 	} > REGION_DATA AT > REGION_DATA
 	bsp_section_sbss_size = bsp_section_sbss_end - bsp_section_sbss_begin;
 

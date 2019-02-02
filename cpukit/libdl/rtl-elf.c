@@ -474,7 +474,6 @@ rtems_rtl_elf_relocs_parser (rtems_rtl_obj*      obj,
 {
   bool r = rtems_rtl_elf_relocate_worker (obj, fd, sect,
                                           rtems_rtl_elf_reloc_parser, data);
-  rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_RELOC_TAG, 0);
   return r;
 }
 
@@ -603,10 +602,11 @@ rtems_rtl_elf_common (rtems_rtl_obj*      obj,
          (ELF_ST_TYPE (symbol.st_info) == STT_COMMON)))
     {
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_SYMBOL))
-        printf ("rtl: com:elf:%-2d bind:%-2d type:%-2d size:%d value:%d\n",
+        printf ("rtl: com:elf:%-2d bind:%-2d type:%-2d size:%d value:%d name:%d\n",
                 sym, (int) ELF_ST_BIND (symbol.st_info),
                 (int) ELF_ST_TYPE (symbol.st_info),
-                (int) symbol.st_size, (int) symbol.st_value);
+                (int) symbol.st_size, (int) symbol.st_value,
+                (int) symbol.st_name);
       /*
        * If the size is zero this is the first entry, it defines the common
        * section's aligment. The symbol's value is the alignment.
@@ -953,6 +953,36 @@ rtems_rtl_elf_symbols (rtems_rtl_obj*      obj,
 }
 
 static bool
+rtems_rtl_elf_arch_alloc (rtems_rtl_obj*      obj,
+                          int                 fd,
+                          rtems_rtl_obj_sect* sect,
+                          void*               data)
+{
+  if (rtems_rtl_obj_sect_is_arch_alloc (sect))
+    return rtems_rtl_elf_arch_section_alloc (obj, sect);
+  return true;
+}
+
+static bool
+rtems_rtl_elf_arch_free (rtems_rtl_obj* obj)
+{
+  int index = -1;
+  while (true)
+  {
+    rtems_rtl_obj_sect* sect;
+    sect = rtems_rtl_obj_find_section_by_mask (obj,
+                                               index,
+                                               RTEMS_RTL_OBJ_SECT_ARCH_ALLOC);
+    if (sect == NULL)
+      break;
+    if (!rtems_rtl_elf_arch_section_free (obj, sect))
+      return false;
+    index = sect->section;
+  }
+  return true;
+}
+
+static bool
 rtems_rtl_elf_loader (rtems_rtl_obj*      obj,
                       int                 fd,
                       rtems_rtl_obj_sect* sect,
@@ -1168,6 +1198,22 @@ rtems_rtl_elf_parse_sections (rtems_rtl_obj* obj, int fd, Elf_Ehdr* ehdr)
         flags |= RTEMS_RTL_OBJ_SECT_EH;
       }
 
+      /*
+       * Architecture specific parsing. Modified or extends the flags.
+       */
+      flags = rtems_rtl_elf_arch_parse_section (obj, section, name, &shdr, flags);
+      if (flags == 0)
+      {
+        if (rtems_rtl_trace (RTEMS_RTL_TRACE_WARNING))
+          printf ("rtl: unsupported section: %2d: type=%02d flags=%02x\n",
+                  section, (int) shdr.sh_type, (int) shdr.sh_flags);
+        rtems_rtl_set_error (ENOMEM, "invalid architecture section: %s", name);
+        return false;
+      }
+
+      /*
+       * Add the section.
+       */
       if (!rtems_rtl_obj_add_section (obj, section, name,
                                       shdr.sh_size, shdr.sh_offset,
                                       shdr.sh_addralign, shdr.sh_link,
@@ -1411,6 +1457,12 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   obj->entry = (void*)(uintptr_t) ehdr.e_entry;
 
   /*
+   * Allocate the sections.
+   */
+  if (!rtems_rtl_obj_alloc_sections (obj, fd, rtems_rtl_elf_arch_alloc, &ehdr))
+    return false;
+
+  /*
    * Load the sections and symbols and then relocation to the base address.
    */
   if (!rtems_rtl_obj_load_sections (obj, fd, rtems_rtl_elf_loader, &ehdr))
@@ -1453,6 +1505,7 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
 bool
 rtems_rtl_elf_file_unload (rtems_rtl_obj* obj)
 {
+  rtems_rtl_elf_arch_free (obj);
   rtems_rtl_elf_unwind_deregister (obj);
   return true;
 }

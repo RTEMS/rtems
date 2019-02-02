@@ -175,7 +175,7 @@ rtems_rtl_dependencies (rtems_rtl_obj* obj,
 {
   rtems_rtl_dep_data* dd = (rtems_rtl_dep_data*) data;
   if (!dd->first)
-    printf ("\n%-*c: ", dd->indent, ' ');
+    printf ("\n%-*c: ", (int) dd->indent, ' ');
   else
     dd->first = false;
   printf ("%s", dependent->oname);

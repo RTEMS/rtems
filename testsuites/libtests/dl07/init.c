@@ -56,7 +56,7 @@ static void Init(rtems_task_argument arg)
     exit (1);
   }
 
-  for (i = 0; i < 100; ++i)
+  for (i = 0; i < 1; ++i)
   {
     printf ("--------------------------------------------------\n");
     printf (" Run: %d\n", i);

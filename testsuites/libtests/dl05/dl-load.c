@@ -20,6 +20,24 @@
 
 #include "dl-load.h"
 
+#define TEST_TRACE 0
+#if TEST_TRACE
+ #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
+                      RTEMS_RTL_TRACE_WARNING | \
+                      RTEMS_RTL_TRACE_LOAD | \
+                      RTEMS_RTL_TRACE_UNLOAD | \
+                      RTEMS_RTL_TRACE_SYMBOL | \
+                      RTEMS_RTL_TRACE_RELOC | \
+                      RTEMS_RTL_TRACE_ALLOCATOR | \
+                      RTEMS_RTL_TRACE_UNRESOLVED | \
+                      RTEMS_RTL_TRACE_ARCHIVES | \
+                      RTEMS_RTL_TRACE_GLOBAL_SYM | \
+                      RTEMS_RTL_TRACE_DEPENDENCY)
+ #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
+#else
+ #define DL_DEBUG_TRACE 0
+#endif
+
 int dl_load_test(void)
 {
   void*       handle;
@@ -34,7 +52,9 @@ int dl_load_test(void)
   bool        throw_runtime = true;
 #endif
 
-  rtems_rtl_trace_set_mask(RTEMS_RTL_TRACE_ALL);
+#if DL_DEBUG_TRACE
+  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
+#endif
 
   handle = dlopen("/dl05-o5.o", RTLD_GLOBAL | RTLD_NOW);
   if (handle == NULL)

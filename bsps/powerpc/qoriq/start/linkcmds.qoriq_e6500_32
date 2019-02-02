@@ -38,4 +38,9 @@ qoriq = 0xffe000000;
 qoriq_bman_portal = 0xff4000000;
 qoriq_qman_portal = 0xff6000000;
 
+/*
+ * Allocate the maximum size to the small data sdata/sbss section.
+ */
+bsp_section_set_sdata_sbss_size = 65536;
+
 INCLUDE linkcmds.base

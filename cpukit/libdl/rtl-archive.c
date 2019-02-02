@@ -21,6 +21,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fnmatch.h>
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -572,7 +573,7 @@ rtems_rtl_archives_close (rtems_rtl_archives* archives)
 {
   rtems_chain_node* node;
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
-    printf ("rtl: archive: close: count=%ds\n",
+    printf ("rtl: archive: close: count=%zu\n",
             rtems_chain_node_count_unprotected (&archives->archives));
   node = rtems_chain_first (&archives->archives);
   while (!rtems_chain_is_tail (&archives->archives, node))
@@ -591,7 +592,7 @@ rtems_rtl_archives_remove (rtems_rtl_archives* archives)
 {
   rtems_chain_node* node = rtems_chain_first (&archives->archives);
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
-    printf ("rtl: archive: refresh: remove: checking %d archive(s)\n",
+    printf ("rtl: archive: refresh: remove: checking %zu archive(s)\n",
             rtems_chain_node_count_unprotected (&archives->archives));
   while (!rtems_chain_is_tail (&archives->archives, node))
   {
@@ -716,7 +717,7 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
                 archive->symbols.base,
                 archive->symbols.entries,
                 archive->symbols.names,
-                (archive->symbols.entries + 1) * 4,
+                (unsigned int) (archive->symbols.entries + 1) * 4,
                 archive->symbols.symbols);
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVE_SYMS) &&

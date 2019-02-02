@@ -390,8 +390,9 @@ if TEST_dl03
 lib_tests += dl03
 lib_screens += dl03/dl03.scn
 lib_docs += dl03/dl03.doc
-dl03_SOURCES = dl03/init.c dl03/dl-cache.c
-dl03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl03) $(support_includes)
+dl03_SOURCES = dl03/init.c dl03/dl-cache.c dl03/dl-bit-alloc.c
+dl03_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl03) $(support_includes) \
+	-I$(top_srcdir)/../../cpukit/libdl
 endif
 endif
 
@@ -533,7 +534,7 @@ dl07-o3.o: dl07/dl-o3.c Makefile
 dl07-o4.o: dl07/dl-o4.c Makefile
 	$(AM_V_CC)$(COMPILE) -c -o $@ $<
 dl07-o5.o: dl07/dl-o5.c Makefile
-	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+	$(AM_V_CC) $(COMPILE) -c -o $@ $<
 dl07.tar: dl07-o1.o dl07-o2.o dl07-o3.o dl07-o4.o dl07-o5.o
 	@rm -f $@
 	$(AM_V_GEN)$(PAX) -w -f $@ $+

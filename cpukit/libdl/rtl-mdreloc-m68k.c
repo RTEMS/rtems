@@ -39,6 +39,38 @@ rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
   return 0;
 }
 
+uint32_t
+rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
+                                  int                  section,
+                                  const char*          name,
+                                  const Elf_Shdr*      shdr,
+                                  const uint32_t       flags)
+{
+  (void) obj;
+  (void) section;
+  (void) name;
+  (void) shdr;
+  return flags;
+}
+
+bool
+rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
+                                  rtems_rtl_obj_sect*  sect)
+{
+  (void) obj;
+  (void) sect;
+  return false;
+}
+
+bool
+rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
+                                  rtems_rtl_obj_sect*  sect)
+{
+  (void) obj;
+  (void) sect;
+  return false;
+}
+
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
@@ -156,12 +188,12 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
 			break;
 
 		default:
-      printf ("rtl: reloc unknown: sym = %lu, type = %lu, offset = %p, "
+      printf ("rtl: reloc unknown: sym = %u, type = %u, offset = %p, "
               "contents = %p\n",
               ELF_R_SYM(rela->r_info), (uint32_t) ELF_R_TYPE(rela->r_info),
               (void *)rela->r_offset, (void *)*where);
       rtems_rtl_set_error (EINVAL,
-                           "%s: Unsupported relocation type %ld "
+                           "%s: Unsupported relocation type %d "
                            "in non-PLT relocations",
                            sect->name, (uint32_t) ELF_R_TYPE(rela->r_info));
       return false;

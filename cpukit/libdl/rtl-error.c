@@ -44,6 +44,7 @@ rtems_rtl_get_error (char* message, size_t max_message)
   if (rtl != NULL)
   {
     int last_errno = rtl->last_errno;
+    rtl->last_errno = 0;
     strlcpy (message, rtl->last_error, max_message);
     rtems_rtl_unlock ();
     return last_errno;

@@ -7,8 +7,25 @@
  * http://www.rtems.org/license/LICENSE.
  */
 
-#define DL07_DEBUG_TRACE 0 /* RTEMS_RTL_TRACE_ALL */
-#define DL07_RTL_CMDS    0
+#define TEST_TRACE 0
+#if TEST_TRACE
+ #define DEBUG_TRACE (RTEMS_RTL_TRACE_DETAIL | \
+                      RTEMS_RTL_TRACE_WARNING | \
+                      RTEMS_RTL_TRACE_LOAD | \
+                      RTEMS_RTL_TRACE_UNLOAD | \
+                      RTEMS_RTL_TRACE_SYMBOL | \
+                      RTEMS_RTL_TRACE_RELOC | \
+                      RTEMS_RTL_TRACE_ALLOCATOR | \
+                      RTEMS_RTL_TRACE_UNRESOLVED | \
+                      RTEMS_RTL_TRACE_ARCHIVES | \
+                      RTEMS_RTL_TRACE_GLOBAL_SYM | \
+                      RTEMS_RTL_TRACE_DEPENDENCY)
+ #define DL_DEBUG_TRACE DEBUG_TRACE /* RTEMS_RTL_TRACE_ALL */
+ #define DL_RTL_CMDS    1
+#else
+ #define DL_DEBUG_TRACE 0
+ #define DL_RTL_CMDS    0
+#endif
 
 #include <dlfcn.h>
 
@@ -23,7 +40,7 @@ typedef int (*call_sig)(void);
 
 static void dl_load_dump (void)
 {
-#if DL07_RTL_CMDS
+#if DL_RTL_CMDS
   char* list[] = { "rtl", "list", NULL };
   char* sym[] = { "rtl", "sym", NULL };
   printf ("RTL List:\n");
@@ -107,8 +124,8 @@ int dl_load_test(void)
 
   printf ("Test source (link in strstr): %s\n", dl_localise_file (__FILE__));
 
-#if DL07_DEBUG_TRACE
-  rtems_rtl_trace_set_mask (DL07_DEBUG_TRACE);
+#if DL_DEBUG_TRACE
+  rtems_rtl_trace_set_mask (DL_DEBUG_TRACE);
 #endif
 
   o1 = dl_load_obj("/dl07-o1.o", false);

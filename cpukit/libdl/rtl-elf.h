@@ -70,7 +70,7 @@ typedef struct rtems_rtl_mdreloc_trmap
 
 /**
  * Architecture specific handler to translate unknown section flags to RTL
- * section flags.
+ * section flags. If this function returns 0 an error is raised.
  *
  * @param obj The object file being relocated.
  * @param shdr The ELF section header.
@@ -79,6 +79,45 @@ typedef struct rtems_rtl_mdreloc_trmap
  */
 uint32_t rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
                                       const Elf_Shdr*      shdr);
+
+/**
+ * Architecture specific handler to parse the section and add any flags that
+ * may be need to handle the section.
+ *
+ * @param obj The object file being relocated.
+ * @param seciton The section index.
+ * @param name The name of the section
+ * @param shdr The ELF section header.
+ * @param flags The standard ELF parsed flags.
+ * @retval uint32_t Extra RTL object file flags.
+ */
+uint32_t rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
+                                           int                  section,
+                                           const char*          name,
+                                           const Elf_Shdr*      shdr,
+                                           const uint32_t       flags);
+
+/**
+ * Architecture specific handler to allocate a section. Some sections are
+ * specific to an architecture and need special allocators.
+ *
+ * @param obj The object file being relocated.
+ * @param sect The section data.
+ * @retval true The allocator was successful.
+ */
+bool rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
+                                       rtems_rtl_obj_sect* sect);
+
+/**
+ * Architecture specific handler to free a section. Some sections are
+ * specific to an architecture and need special allocators.
+ *
+ * @param obj The object file being relocated.
+ * @param sect The section data.
+ * @retval true The allocator was successful.
+ */
+bool rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
+                                      rtems_rtl_obj_sect* sect);
 
 /**
  * Architecture specific handler to check is a relocation record's type is

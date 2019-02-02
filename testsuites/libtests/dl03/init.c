@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "dl-cache.h"
+#include "dl-bit-alloc.h"
 
 const char rtems_test_name[] = "libdl (RTL) 3";
 
@@ -28,6 +29,9 @@ static int test(void)
 {
   int ret;
   ret = dl_cache_test();
+  if (ret)
+    rtems_test_exit(ret);
+  ret = dl_bit_alloc_test();
   if (ret)
     rtems_test_exit(ret);
   return 0;

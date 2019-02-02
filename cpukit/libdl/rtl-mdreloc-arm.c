@@ -109,6 +109,38 @@ rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
   return flags;
 }
 
+uint32_t
+rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
+                                  int                  section,
+                                  const char*          name,
+                                  const Elf_Shdr*      shdr,
+                                  const uint32_t       flags)
+{
+  (void) obj;
+  (void) section;
+  (void) name;
+  (void) shdr;
+  return flags;
+}
+
+bool
+rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
+                                  rtems_rtl_obj_sect*  sect)
+{
+  (void) obj;
+  (void) sect;
+  return false;
+}
+
+bool
+rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
+                                  rtems_rtl_obj_sect*  sect)
+{
+  (void) obj;
+  (void) sect;
+  return false;
+}
+
 bool
 rtems_rtl_elf_rel_resolve_sym (Elf_Word type)
 {
@@ -152,7 +184,7 @@ rtems_rtl_elf_relocate_rela (rtems_rtl_obj*            obj,
 }
 
 static bool
-rtems_rtl_elf_relor_rel (rtems_rtl_obj*            obj,
+rtems_rtl_elf_reloc_rel (rtems_rtl_obj*            obj,
                          const Elf_Rel*            rel,
                          const rtems_rtl_obj_sect* sect,
                          const char*               symname,
@@ -493,7 +525,7 @@ rtems_rtl_elf_relocate_rel_tramp (rtems_rtl_obj*            obj,
                                   const Elf_Byte            syminfo,
                                   const Elf_Word            symvalue)
 {
-  return rtems_rtl_elf_relor_rel (obj,
+  return rtems_rtl_elf_reloc_rel (obj,
                                   rel,
                                   sect,
                                   symname,
@@ -510,7 +542,7 @@ rtems_rtl_elf_relocate_rel (rtems_rtl_obj*            obj,
                             const Elf_Byte            syminfo,
                             const Elf_Word            symvalue)
 {
-  return rtems_rtl_elf_relor_rel (obj,
+  return rtems_rtl_elf_reloc_rel (obj,
                                   rel,
                                   sect,
                                   symname,

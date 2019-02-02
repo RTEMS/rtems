@@ -300,11 +300,14 @@ typedef struct
 static bool
 rtems_rtl_obj_sect_summer (rtems_chain_node* node, void* data)
 {
-  rtems_rtl_obj_sect*             sect = (rtems_rtl_obj_sect*) node;
-  rtems_rtl_obj_sect_summer_data* summer = data;
-  if ((sect->flags & summer->mask) == summer->mask)
-    summer->size =
-      rtems_rtl_obj_align (summer->size, sect->alignment) + sect->size;
+  rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
+  if ((sect->flags & RTEMS_RTL_OBJ_SECT_ARCH_ALLOC) == 0)
+  {
+    rtems_rtl_obj_sect_summer_data* summer = data;
+    if ((sect->flags & summer->mask) == summer->mask)
+      summer->size =
+        rtems_rtl_obj_align (summer->size, sect->alignment) + sect->size;
+  }
   return true;
 }
 
@@ -821,7 +824,9 @@ rtems_rtl_obj_relocate (rtems_rtl_obj*             obj,
   const uint32_t flags = (RTEMS_RTL_OBJ_SECT_LOAD |
                           RTEMS_RTL_OBJ_SECT_REL |
                           RTEMS_RTL_OBJ_SECT_RELA);
-  return rtems_rtl_obj_section_handler (flags, obj, fd, handler, data);
+  bool r = rtems_rtl_obj_section_handler (flags, obj, fd, handler, data);
+  rtems_rtl_obj_update_flags (RTEMS_RTL_OBJ_RELOC_TAG, 0);
+  return r;
 }
 
 /**
@@ -993,7 +998,7 @@ rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj* obj)
   }
 }
 
-static size_t
+static bool
 rtems_rtl_obj_sections_loader (uint32_t                   mask,
                                rtems_rtl_obj*             obj,
                                int                        fd,
@@ -1004,26 +1009,27 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
   rtems_chain_control* sections = &obj->sections;
   rtems_chain_node*    node = rtems_chain_first (sections);
   size_t               base_offset = 0;
-  bool                 first = true;
   int                  order = 0;
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
+    printf ("rtl: loading section: mask:%08" PRIx32 " base:%p\n", mask, base);
 
   while (!rtems_chain_is_tail (sections, node))
   {
     rtems_rtl_obj_sect* sect = (rtems_rtl_obj_sect*) node;
 
-    if ((sect->size != 0) && ((sect->flags & mask) != 0))
+    if ((sect->size != 0) && ((sect->flags & mask) == mask))
     {
       if (sect->load_order == order)
       {
-        if (!first)
+        if ((sect->flags & RTEMS_RTL_OBJ_SECT_ARCH_ALLOC) == 0)
+        {
           base_offset = rtems_rtl_obj_align (base_offset, sect->alignment);
-
-        first = false;
-
-        sect->base = base + base_offset;
+          sect->base = base + base_offset;
+        }
 
         if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
-          printf ("rtl: loading:%2d: %s -> %8p (s:%zi f:%04" PRIx32
+          printf ("rtl: loading:%2d: %s -> %p (s:%zi f:%04" PRIx32
                   " a:%" PRIu32 " l:%02d)\n",
                   order, sect->name, sect->base, sect->size,
                   sect->flags, sect->alignment, sect->link);
@@ -1038,7 +1044,7 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
         }
         else if ((sect->flags & RTEMS_RTL_OBJ_SECT_ZERO) == RTEMS_RTL_OBJ_SECT_ZERO)
         {
-          memset (base + base_offset, 0, sect->size);
+          memset (sect->base, 0, sect->size);
         }
         else
         {
@@ -1065,10 +1071,10 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
 }
 
 bool
-rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
-                             int                        fd,
-                             rtems_rtl_obj_sect_handler handler,
-                             void*                      data)
+rtems_rtl_obj_alloc_sections (rtems_rtl_obj*             obj,
+                              int                        fd,
+                              rtems_rtl_obj_sect_handler handler,
+                              void*                      data)
 {
   size_t text_size;
   size_t const_size;
@@ -1090,6 +1096,22 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
   obj->data_size  = data_size;
   obj->eh_size    = eh_size;
   obj->bss_size   = bss_size;
+
+  /*
+   * Perform any specific allocations for sections.
+   */
+  if (handler != NULL)
+  {
+    if (!rtems_rtl_obj_section_handler (RTEMS_RTL_OBJ_SECT_TYPES,
+                                        obj,
+                                        fd,
+                                        handler,
+                                        data))
+    {
+      obj->exec_size = 0;
+      return false;
+    }
+  }
 
   /*
    * Let the allocator manage the actual allocation. The user can use the
@@ -1129,10 +1151,21 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_CONST, obj);
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_EH,    obj);
   rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_DATA,  obj);
+  rtems_rtl_obj_sections_link_order (RTEMS_RTL_OBJ_SECT_BSS,   obj);
 
+  return true;
+}
+
+bool
+rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
+                             int                        fd,
+                             rtems_rtl_obj_sect_handler handler,
+                             void*                      data)
+{
   /*
-   * Load all text then data then bss sections in seperate operations so each
-   * type of section is grouped together.
+   * Load all text, data and bsssections in seperate operations so each type of
+   * section is grouped together. Finish by loading any architecure specific
+   * sections.
    */
   if (!rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_TEXT,
                                       obj, fd, obj->text_base, handler, data) ||

@@ -38,8 +38,8 @@ PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 PSIM = 0x0c000000;
 
 /*
- * Allocate the maximum memory to the sdata/sbss section.
+ * Allocate the maximum size to the small data sdata/sbss section.
  */
-bsp_section_sdata_bss_maximum_size = 1;
+bsp_section_set_sdata_sbss_size = 65536;
 
 INCLUDE linkcmds.base

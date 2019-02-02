@@ -26,12 +26,13 @@ int64_t  dl05_unresolv_5;
 
 int rtems_main_o5 (void)
 {
-  printf (DL_NAME ": module: %s\n", dl_localise_file (__FILE__));
-  printf (DL_NAME ":   dl05_unresolv_1: %4u: %p: %" PRIu64 "\n", PAINT_VAR (dl05_unresolv_1));
-  printf (DL_NAME ":   dl05_unresolv_2: %4u: %p: %" PRIu16 "\n", PAINT_VAR (dl05_unresolv_2));
-  printf (DL_NAME ":   dl05_unresolv_3: %4u: %p: %" PRIu32 "\n", PAINT_VAR (dl05_unresolv_3));
-  printf (DL_NAME ":   dl05_unresolv_4: %4u: %p: %" PRIu8  "\n", PAINT_VAR (dl05_unresolv_4));
-  printf (DL_NAME ":   dl05_unresolv_5: %4u: %p: %" PRIi64 "\n", PAINT_VAR (dl05_unresolv_5));
+  printf (DL_NAME ": module: %s @ %p\n",
+	  dl_localise_file (__FILE__), rtems_main_o5);
+  printf (DL_NAME ":   dl05_unresolv_1: %4zu: %p: %" PRIu64 "\n", PAINT_VAR (dl05_unresolv_1));
+  printf (DL_NAME ":   dl05_unresolv_2: %4zu: %p: %" PRIu16 "\n", PAINT_VAR (dl05_unresolv_2));
+  printf (DL_NAME ":   dl05_unresolv_3: %4zu: %p: %" PRIu32 "\n", PAINT_VAR (dl05_unresolv_3));
+  printf (DL_NAME ":   dl05_unresolv_4: %4zu: %p: %" PRIu8  "\n", PAINT_VAR (dl05_unresolv_4));
+  printf (DL_NAME ":   dl05_unresolv_5: %4zu: %p: %" PRIi64 "\n", PAINT_VAR (dl05_unresolv_5));
 
   return 0;
 }

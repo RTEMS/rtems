@@ -700,7 +700,7 @@ rtems_rtl_unresolved_dump_iterator (rtems_rtl_unresolv_rec* rec,
     break;
   case rtems_rtl_unresolved_symbol:
     ++dd->names;
-    printf (" %3zu: 1:  name: %3d refs:%4d: flags:%04x %s (%d)\n",
+    printf (" %3zu: 1:  name: %3zu refs:%4d: flags:%04x %s (%d)\n",
             dd->rec, dd->names,
             rec->rec.name.refs,
             rec->rec.name.flags,

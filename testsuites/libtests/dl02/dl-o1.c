@@ -36,9 +36,12 @@ static int dl_o1_callback(const char* message, int count)
  */
 int rtems_main (int argc, const char* argv[]);
 
+#define PDOUBLE(_d) ((int) (_d)), (int) ((_d) * 100.0) % 100
+
 int rtems_main (int argc, const char* argv[])
 {
   func1_t f1;
+  double  f2_ret;
   int     arg;
   int     ret;
 
@@ -56,9 +59,12 @@ int rtems_main (int argc, const char* argv[])
     return 0;
   }
 
-  if (dl_o2_func2 (7.1, 33.0) != (7.1 * 33.0))
+  f2_ret = dl_o2_func2 (7.1, 33.0);
+  printf("rtems_main: dl_o2_func2 returned: %d.%02d\n",
+         PDOUBLE(f2_ret));
+  if (f2_ret != (7.1 * 33.0))
   {
-    printf("rtems_main: dl_o2_func1 returned bad value\n");
+    printf("rtems_main: dl_o2_func2 returned a bad\n");
     return 0;
   }
 
