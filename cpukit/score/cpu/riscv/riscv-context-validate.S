@@ -66,7 +66,7 @@
 #if __riscv_flen == 32
 #define FOFFSET(i) (OFFSET(29) + (i) * 4)
 #elif __riscv_flen == 64
-#define FOFFSET(i) (OFFSET(29) + (i) * 8)
+#define FOFFSET(i) (OFFSET(30) + (i) * 8)
 #else
 #define FOFFSET(i) OFFSET(29)
 #endif /* __riscv_flen */
