@@ -10,7 +10,7 @@
 EXTERN (__vectors)
 
 MEMORY {
-	RAM       : ORIGIN = 0, LENGTH = 16M
+	RAM       : ORIGIN = 0, LENGTH = 256M
 	EMPTY     : ORIGIN = 0x0, LENGTH = 0
 }
 
@@ -36,5 +36,10 @@ REGION_ALIAS ("REGION_NVRAM", EMPTY);
 PROVIDE (PSIM_INSTRUCTIONS_PER_MICROSECOND = 10000);
 
 PSIM = 0x0c000000;
+
+/*
+ * Allocate the maximum memory to the sdata/sbss section.
+ */
+bsp_section_sdata_bss_maximum_size = 1;
 
 INCLUDE linkcmds.base

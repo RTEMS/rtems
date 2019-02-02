@@ -101,8 +101,8 @@ void bsp_start( void )
    * Setup BATs and enable MMU
    */
   /* Memory */
-  setdbat(0, 0x0<<24, 0x0<<24, 2<<24, _PAGE_RW);
-  setibat(0, 0x0<<24, 0x0<<24, 2<<24,        0);
+  setdbat(0, 0x0<<28, 0x0<<28, 1<<28, _PAGE_RW);
+  setibat(0, 0x0<<28, 0x0<<28, 1<<28,        0);
   /* PCI    */
   setdbat(1, 0x8<<24, 0x8<<24, 1<<24,  IO_PAGE);
   setdbat(2, 0xc<<24, 0xc<<24, 1<<24,  IO_PAGE);
