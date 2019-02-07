@@ -687,6 +687,67 @@ static void test_mixed_queue_two_scheduler_instances_sem_only(test_context *ctx)
   sem_release(ctx);
 }
 
+static void test_two_scheduler_instances_sem_with_inheritance(test_context *ctx)
+{
+  sem_obtain(ctx);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN);
+  check_generations(ctx, B_4, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+
+  request(ctx, B_4, REQ_SEM_OBTAIN_RELEASE);
+  check_generations(ctx, NONE, NONE);
+
+  request(ctx, A_1, REQ_MTX_OBTAIN);
+  check_generations(ctx, NONE, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, 1);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+
+  sem_release(ctx);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_4, REQ_MTX_RELEASE);
+  check_generations(ctx, B_4, A_1);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+
+  request(ctx, A_1, REQ_MTX_RELEASE);
+  check_generations(ctx, A_1, NONE);
+}
+
+static void test_two_scheduler_instances_sem_with_inheritance_timeout(test_context *ctx)
+{
+  sem_obtain(ctx);
+
+  request(ctx, B_4, REQ_MTX_OBTAIN);
+  check_generations(ctx, B_4, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+
+  request(ctx, B_4, REQ_SEM_OBTAIN_RELEASE);
+  check_generations(ctx, NONE, NONE);
+
+  request(ctx, A_1, REQ_MTX_OBTAIN_TIMEOUT);
+  check_generations(ctx, NONE, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, 1);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+  wait();
+  check_generations(ctx, A_1, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+
+  sem_release(ctx);
+  sync_with_helper(ctx);
+  check_generations(ctx, B_4, NONE);
+
+  request(ctx, B_4, REQ_MTX_RELEASE);
+  check_generations(ctx, B_4, NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_A, PRIO_NONE);
+  assert_prio_by_scheduler(ctx, B_4, SCHED_B, 4);
+}
+
 static void test_simple_inheritance_two_scheduler_instances(test_context *ctx)
 {
   obtain(ctx);
@@ -1010,6 +1071,8 @@ static void test(test_context *ctx)
     test_dequeue_order_one_scheduler_instance(ctx);
     test_mixed_queue_two_scheduler_instances(ctx);
     test_mixed_queue_two_scheduler_instances_sem_only(ctx);
+    test_two_scheduler_instances_sem_with_inheritance(ctx);
+    test_two_scheduler_instances_sem_with_inheritance_timeout(ctx);
     test_simple_inheritance_two_scheduler_instances(ctx);
     test_nested_inheritance_two_scheduler_instances(ctx);
     test_dequeue_order_two_scheduler_instances(ctx);

@@ -360,6 +360,10 @@ static void _Thread_queue_Priority_priority_actions(
     switch ( priority_action_type ) {
 #if defined(RTEMS_SMP)
       case PRIORITY_ACTION_ADD:
+        if ( _Priority_Is_empty( &priority_queue->Queue ) ) {
+          _Chain_Append_unprotected( &heads->Heads.Fifo, &priority_queue->Node );
+        }
+
         _Priority_Plain_insert(
           &priority_queue->Queue,
           &scheduler_node->Wait.Priority.Node,
@@ -371,6 +375,10 @@ static void _Thread_queue_Priority_priority_actions(
           &priority_queue->Queue,
           &scheduler_node->Wait.Priority.Node
         );
+
+        if ( _Priority_Is_empty( &priority_queue->Queue ) ) {
+          _Chain_Extract_unprotected( &priority_queue->Node );
+        }
         break;
 #endif
       default:
