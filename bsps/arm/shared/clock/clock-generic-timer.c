@@ -168,7 +168,7 @@ static void arm_gt_clock_initialize(void)
 
 uint32_t _CPU_Counter_frequency(void)
 {
-  return arm_gt_clock_instance.interval;
+  return (uint32_t) arm_gt_clock_instance.tc.tc_frequency;
 }
 
 CPU_Counter_ticks _CPU_Counter_read(void)
