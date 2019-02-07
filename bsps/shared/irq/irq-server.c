@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2009, 2017 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2009, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -550,15 +550,18 @@ rtems_status_code rtems_interrupt_server_initialize(
 
 #if defined(RTEMS_SMP)
     sc = rtems_scheduler_ident_by_processor(cpu_index, &scheduler);
-    _Assert(sc == RTEMS_SUCCESSFUL);
+    if (sc != RTEMS_SUCCESSFUL) {
+      /* Do not start an interrupt server on a processor without a scheduler */
+      continue;
+    }
 
     sc = rtems_task_set_scheduler(s->server, scheduler, priority);
     _Assert(sc == RTEMS_SUCCESSFUL);
 
+    /* Set the task to processor affinity on a best-effort basis */
     CPU_ZERO(&cpu);
     CPU_SET(cpu_index, &cpu);
-    sc = rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
-    _Assert(sc == RTEMS_SUCCESSFUL);
+    (void) rtems_task_set_affinity(s->server, sizeof(cpu), &cpu);
 #endif
 
     sc = rtems_task_start(
