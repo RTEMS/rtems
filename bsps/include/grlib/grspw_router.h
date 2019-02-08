@@ -343,6 +343,7 @@ extern int router_port_enable(void *d, int port);
 extern int router_port_disable(void *d, int port);
 extern int router_port_link_stop(void *d, int port);
 extern int router_port_link_start(void *d, int port);
+extern int router_port_link_div(void *d, int port, int rundiv);
 extern int router_port_link_receive_spill(void *d, int port);
 extern int router_port_link_transmit_reset(void *d, int port);
 
