@@ -256,9 +256,13 @@ static inline void _User_extensions_Thread_switch(
   Thread_Control *heir
 )
 {
-  const Chain_Control *chain = &_User_extensions_Switches_list;
-  const Chain_Node    *tail = _Chain_Immutable_tail( chain );
-  const Chain_Node    *node = _Chain_Immutable_first( chain );
+  const Chain_Control *chain;
+  const Chain_Node    *tail;
+  const Chain_Node    *node;
+
+  chain = &_User_extensions_Switches_list;
+  tail = _Chain_Immutable_tail( chain );
+  node = _Chain_Immutable_first( chain );
 
   if ( node != tail ) {
     Per_CPU_Control *cpu_self;
@@ -272,6 +276,10 @@ static inline void _User_extensions_Thread_switch(
     _ISR_Local_disable( level );
 #endif
     _Per_CPU_Acquire( cpu_self );
+
+#if defined(RTEMS_SMP)
+    node = _Chain_Immutable_first( chain );
+#endif
 
     while ( node != tail ) {
       const User_extensions_Switch_control *extension =
