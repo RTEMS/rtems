@@ -1431,6 +1431,11 @@ int router_port_link_start(void *d, int port)
 	return router_port_ctrl_rmw(d, port, NULL, PCTRL_LD | PCTRL_LS, PCTRL_LS);
 }
 
+int router_port_link_div(void *d, int port, int rundiv)
+{
+	return router_port_ctrl_rmw(d, port, NULL, PCTRL_RD, (rundiv << PCTRL_RD_BIT) & PCTRL_RD);
+}
+
 int router_port_link_receive_spill(void *d, int port)
 {
 	struct router_priv *priv = d;
