@@ -35,9 +35,7 @@ bsp_section_robarrier_align = 0x1000000;
 bsp_section_rwbarrier_align = 0x1000000;
 qoriq = 0xffe00000;
 
-/*
- * Allocate the maximum size to the small data sdata/sbss section.
- */
-bsp_section_set_sdata_sbss_size = 65536;
+/* Allocate the maximum size to the small data area */
+bsp_section_small_data_area_size = 65536;
 
 INCLUDE linkcmds.base

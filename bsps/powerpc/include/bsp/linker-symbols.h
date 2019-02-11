@@ -77,9 +77,17 @@ LINKER_SYMBOL(bsp_section_bss_begin)
 LINKER_SYMBOL(bsp_section_bss_end)
 LINKER_SYMBOL(bsp_section_bss_size)
 
+LINKER_SYMBOL(bsp_section_sdata_begin)
+LINKER_SYMBOL(bsp_section_sdata_end)
+LINKER_SYMBOL(bsp_section_sdata_size)
+
 LINKER_SYMBOL(bsp_section_sbss_begin)
 LINKER_SYMBOL(bsp_section_sbss_end)
 LINKER_SYMBOL(bsp_section_sbss_size)
+
+LINKER_SYMBOL(bsp_section_sdata_libdl_begin)
+LINKER_SYMBOL(bsp_section_sdata_libdl_end)
+LINKER_SYMBOL(bsp_section_sdata_libdl_size)
 
 LINKER_SYMBOL(bsp_section_rtemsstack_begin)
 LINKER_SYMBOL(bsp_section_rtemsstack_end)

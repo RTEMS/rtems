@@ -24,6 +24,15 @@ ENTRY (_start)
 STARTUP (start.o)
 
 /*
+ * The upper layer linker command file may optionally define the symbol
+ * bsp_section_small_data_area_size.  By default, the small data area is
+ * defined by the .sdata and .sbss input sections.  Define
+ * bsp_section_small_data_area_size, if you want to make space available for
+ * dynamically loaded libraries (libdl).  Small memory targets which do not use
+ * libdl, should not define this symbol.
+ */
+
+/*
  * Global symbols that may be defined externally
  */
 
@@ -304,13 +313,6 @@ SECTIONS {
 	bsp_section_data_load_begin = LOADADDR (.data);
 	bsp_section_data_load_end = bsp_section_data_load_begin + bsp_section_data_size;
 
-	/*
-	 * Set bsp_section_set_sdata_bss_size to the system's sdata and bss data size, eg:
-	 *
-	 *  bsp_section_set_sdata_sbss_size = 65536;
-	 */
-	bsp_section_sdata_sbss_size = DEFINED(bsp_section_set_sdata_sbss_size) ?
-							bsp_section_set_sdata_sbss_size : 0;
 	.sbss : ALIGN_WITH_INPUT {
 		bsp_section_sbss_begin = .;
 		*(.dynsbss)
@@ -318,10 +320,12 @@ SECTIONS {
 		*(.scommon)
 		bsp_section_sbss_end = .;
 		bsp_section_sdata_libdl_begin = .;
-		. += bsp_section_sdata_sbss_size - (bsp_section_sdata_size + bsp_section_sbss_size);
+		. = DEFINED(bsp_section_small_data_area_size) ?
+			bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
 		bsp_section_sdata_libdl_end = .;
 	} > REGION_DATA AT > REGION_DATA
 	bsp_section_sbss_size = bsp_section_sbss_end - bsp_section_sbss_begin;
+	bsp_section_sdata_libdl_size = bsp_section_sdata_libdl_end - bsp_section_sdata_libdl_begin;
 
 	.bss : ALIGN_WITH_INPUT {
 		bsp_section_bss_begin = .;
