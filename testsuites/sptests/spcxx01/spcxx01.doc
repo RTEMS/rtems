@@ -5,7 +5,9 @@ test set name: spcxx01
 directives:
 
   - ::operator new()
+  - std::async()
 
 concepts:
 
   - Ensure that the aligned new operator works.
+  - Ensure that std::async() works.

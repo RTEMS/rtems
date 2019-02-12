@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2014, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -23,6 +23,8 @@
 #ifndef _RTEMS_ONCE_H
 #define _RTEMS_ONCE_H
 
+#include <rtems/score/thread.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -37,11 +39,11 @@ extern "C" {
  * @{
  */
 
-int _Once( unsigned char *once_state, void (*init_routine)(void) );
+int _Once( unsigned char *once_state, void ( *init_routine )( void ) );
 
-void _Once_Lock( void );
+Thread_Life_state _Once_Lock( void );
 
-void _Once_Unlock( void );
+void _Once_Unlock( Thread_Life_state thread_life_state );
 
 /** @} */
 

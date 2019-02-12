@@ -1,4 +1,7 @@
 /*
+ *  Copyright (C) 2019 embedded brains GmbH
+ *  Copyright (C) 2019 Sebastian Huber
+ *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -16,16 +19,11 @@
 
 const char rtems_test_name[] = "PSXONCE 1";
 
-static pthread_once_t nesting_once = PTHREAD_ONCE_INIT;
+static pthread_once_t once_a = PTHREAD_ONCE_INIT;
 
-static void Test_init_routine_nesting( void )
-{
-  int status;
-  puts( "Test_init_routine_nesting: invoked" );
-  puts( "Test_init_routine_nesting: pthread_once - EINVAL (init_routine_nesting does not execute)" );
-  status = pthread_once( &nesting_once, Test_init_routine_nesting );
-  rtems_test_assert( status == EINVAL );
-}
+static pthread_once_t once_b = PTHREAD_ONCE_INIT;
+
+static rtems_id master;
 
 static int test_init_routine_call_counter = 0;
 
@@ -33,6 +31,66 @@ static void Test_init_routine( void )
 {
   puts( "Test_init_routine: invoked" );
   ++test_init_routine_call_counter;
+}
+
+static void routine_b( void )
+{
+  rtems_status_code sc;
+
+  rtems_test_assert( test_init_routine_call_counter == 2 );
+  ++test_init_routine_call_counter;
+
+  sc = rtems_event_send( master, RTEMS_EVENT_0 );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+}
+
+static void use_b( rtems_task_argument arg )
+{
+  int status;
+
+  (void) arg;
+
+  status = pthread_once( &once_b, routine_b );
+  rtems_test_assert( status == 0 );
+
+  rtems_task_exit();
+}
+
+static void routine_a( void )
+{
+  rtems_status_code sc;
+  rtems_id id;
+  rtems_event_set events;
+
+  rtems_test_assert( test_init_routine_call_counter == 1 );
+  ++test_init_routine_call_counter;
+
+  master = rtems_task_self();
+
+  sc = rtems_task_create(
+    rtems_build_name( 'T', 'A', 'S', 'K' ),
+    RTEMS_MINIMUM_PRIORITY,
+    RTEMS_MINIMUM_STACK_SIZE,
+    RTEMS_DEFAULT_MODES,
+    RTEMS_DEFAULT_ATTRIBUTES,
+    &id
+  );
+  assert(sc == RTEMS_SUCCESSFUL);
+
+  sc = rtems_task_start( id, use_b, 0 );
+  assert( sc == RTEMS_SUCCESSFUL );
+
+  events = 0;
+  sc = rtems_event_receive(
+    RTEMS_EVENT_0,
+    RTEMS_EVENT_ANY | RTEMS_WAIT,
+    RTEMS_NO_TIMEOUT,
+    &events
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( events == RTEMS_EVENT_0 );
+
+  rtems_test_assert( test_init_routine_call_counter == 3 );
 }
 
 rtems_task Init(rtems_task_argument argument)
@@ -62,9 +120,9 @@ rtems_task Init(rtems_task_argument argument)
   printf( "Init: call counter: %d\n", test_init_routine_call_counter );
   rtems_test_assert( test_init_routine_call_counter == 1 );
 
-  puts( "Init: pthread_once - SUCCESSFUL (init_routine_nesting executes)" );
-  status = pthread_once( &nesting_once, Test_init_routine_nesting );
-  rtems_test_assert( !status );
+  status = pthread_once( &once_a, routine_a );
+  rtems_test_assert( status == 0 );
+  rtems_test_assert( test_init_routine_call_counter == 3 );
 
   TEST_END();
   rtems_test_exit( 0 );

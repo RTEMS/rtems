@@ -29,6 +29,7 @@
 #include "config.h"
 #endif
 
+#include <future>
 #include <new>
 
 #include <rtems.h>
@@ -41,10 +42,8 @@ struct alignas(256) S {
   int i;
 };
 
-extern "C" void Init(rtems_task_argument arg)
+static void test_aligned_new(void)
 {
-  TEST_BEGIN();
-
   int *i = static_cast<decltype(i)>(
     ::operator new(sizeof(*i), std::align_val_t(256))
   );
@@ -58,6 +57,20 @@ extern "C" void Init(rtems_task_argument arg)
   rtems_test_assert(s != nullptr);
   rtems_test_assert(reinterpret_cast<uintptr_t>(s) % 256 == 0);
   delete s;
+}
+
+static void test_future(void)
+{
+  std::future<int> f = std::async(std::launch::async, []{ return 12358; });
+  rtems_test_assert(f.get() == 12358);
+}
+
+extern "C" void Init(rtems_task_argument arg)
+{
+  TEST_BEGIN();
+
+  test_aligned_new();
+  test_future();
 
   TEST_END();
   exit(0);
@@ -68,6 +81,8 @@ extern "C" void Init(rtems_task_argument arg)
 #define CONFIGURE_APPLICATION_NEEDS_SIMPLE_CONSOLE_DRIVER
 
 #define CONFIGURE_MAXIMUM_TASKS 1
+
+#define CONFIGURE_MAXIMUM_POSIX_THREADS 1
 
 #define CONFIGURE_INITIAL_EXTENSIONS RTEMS_TEST_INITIAL_EXTENSION
 

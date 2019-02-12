@@ -228,10 +228,11 @@ rtems_status_code rtems_timer_initiate_server(
 )
 {
   rtems_status_code status;
+  Thread_Life_state thread_life_state;
 
-  _Once_Lock();
+  thread_life_state = _Once_Lock();
   status = _Timer_server_Initiate( priority, stack_size, attribute_set );
-  _Once_Unlock();
+  _Once_Unlock( thread_life_state );
 
   return status;
 }
