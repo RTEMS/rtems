@@ -22,7 +22,6 @@
 #include <rtems/config.h>
 #include <rtems/score/assert.h>
 #include <rtems/score/objectimpl.h>
-#include <rtems/score/onceimpl.h>
 #include <rtems/score/threadimpl.h>
 #include <rtems/seterr.h>
 
@@ -86,46 +85,6 @@ RTEMS_INLINE_ROUTINE int _POSIX_Zero_or_minus_one_plus_errno(
 
   rtems_set_errno_and_return_minus_one( _POSIX_Get_error( status ) );
 }
-
-/**
- * @brief Macro to generate a function body to get a POSIX object by
- * identifier.
- *
- * Generates a function body to get the object for the specified identifier.
- * Performs automatic initialization if requested and necessary.  This is an
- * ugly macro, since C lacks support for templates.
- */
-#define _POSIX_Get_object_body( \
-  type, \
-  id, \
-  queue_context, \
-  info, \
-  initializer, \
-  init \
-) \
-  Objects_Control *the_object; \
-  if ( id == NULL ) { \
-    return NULL; \
-  } \
-  _Thread_queue_Context_initialize( queue_context ); \
-  the_object = _Objects_Get( \
-    (Objects_Id) *id, \
-    &queue_context->Lock_context.Lock_context, \
-    info \
-  ); \
-  if ( the_object == NULL ) { \
-    _Once_Lock(); \
-    if ( *id == initializer ) { \
-      init( id, NULL ); \
-    } \
-    _Once_Unlock(); \
-    the_object = _Objects_Get( \
-      (Objects_Id) *id, \
-      &queue_context->Lock_context.Lock_context, \
-      info \
-    ); \
-  } \
-  return (type *) the_object
 
 /*
  * See also The Open Group Base Specifications Issue 7, IEEE Std 1003.1-2008,
