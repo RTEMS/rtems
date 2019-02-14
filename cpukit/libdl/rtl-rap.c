@@ -967,6 +967,12 @@ rtems_rtl_rap_file_load (rtems_rtl_obj* obj, int fd)
 
   /** obj->entry = (void*)(uintptr_t) ehdr.e_entry; */
 
+  /*
+   * Allocate the sections.
+   */
+  if (!rtems_rtl_obj_alloc_sections (obj, fd, NULL, &rap))
+    return false;
+
   if (!rtems_rtl_obj_load_sections (obj, fd, rtems_rtl_rap_loader, &rap))
     return false;
 
