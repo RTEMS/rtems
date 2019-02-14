@@ -57,8 +57,8 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero)
    * Obtain memory from the allocator. The address field is set by the
    * allocator.
    */
-  if (rtl)
-    rtl->allocator.allocator (true, tag, &address, size);
+  if (rtl != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_NEW, tag, &address, size);
 
   rtems_rtl_unlock ();
 
@@ -69,7 +69,7 @@ rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero)
   /*
    * Only zero the memory if asked to and the allocation was successful.
    */
-  if (address && zero)
+  if (address != NULL && zero)
     memset (address, 0, size);
 
   return address;
@@ -84,8 +84,42 @@ rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address)
     printf ("rtl: alloc: del: %s addr=%p\n",
             rtems_rtl_trace_tag_label (tag), address);
 
-  if (rtl && address)
-    rtl->allocator.allocator (false, tag, &address, 0);
+  if (rtl != NULL && address != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_DEL, tag, &address, 0);
+
+  rtems_rtl_unlock ();
+}
+
+void
+rtems_rtl_alloc_wr_enable (rtems_rtl_alloc_tag tag, void* address)
+{
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
+    printf ("rtl: alloc: wr-enable: addr=%p\n", address);
+
+  if (rtl != NULL && address != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_WR_ENABLE,
+                              tag,
+                              address,
+                              0);
+
+  rtems_rtl_unlock ();
+}
+
+void
+rtems_rtl_alloc_wr_disable (rtems_rtl_alloc_tag tag, void* address)
+{
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
+    printf ("rtl: alloc: wr-enable: addr=%p\n", address);
+
+  if (rtl != NULL && address != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_WR_DISABLE,
+                              tag,
+                              address,
+                              0);
 
   rtems_rtl_unlock ();
 }
@@ -150,6 +184,36 @@ rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag tag,
   }
 }
 
+rtems_rtl_alloc_tag
+rtems_rtl_alloc_text_tag (void)
+{
+  return RTEMS_RTL_ALLOC_READ_EXEC;
+}
+
+rtems_rtl_alloc_tag
+rtems_rtl_alloc_const_tag (void)
+{
+  return RTEMS_RTL_ALLOC_READ;
+}
+
+rtems_rtl_alloc_tag
+rtems_rtl_alloc_eh_tag (void)
+{
+  return RTEMS_RTL_ALLOC_READ;
+}
+
+rtems_rtl_alloc_tag
+rtems_rtl_alloc_data_tag (void)
+{
+  return RTEMS_RTL_ALLOC_READ_WRITE;
+}
+
+rtems_rtl_alloc_tag
+rtems_rtl_alloc_bss_tag (void)
+{
+  return RTEMS_RTL_ALLOC_READ_WRITE;
+}
+
 bool
 rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
                             void** const_base, size_t const_size,
@@ -161,7 +225,7 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 
   if (text_size)
   {
-    *text_base = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_READ_EXEC,
+    *text_base = rtems_rtl_alloc_new (rtems_rtl_alloc_text_tag (),
                                       text_size, false);
     if (!*text_base)
     {
@@ -171,7 +235,7 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 
   if (const_size)
   {
-    *const_base = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_READ,
+    *const_base = rtems_rtl_alloc_new (rtems_rtl_alloc_const_tag (),
                                        const_size, false);
     if (!*const_base)
     {
@@ -183,7 +247,7 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 
   if (eh_size)
   {
-    *eh_base = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_READ,
+    *eh_base = rtems_rtl_alloc_new (rtems_rtl_alloc_eh_tag (),
                                     eh_size, false);
     if (!*eh_base)
     {
@@ -195,7 +259,7 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 
   if (data_size)
   {
-    *data_base = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_READ_WRITE,
+    *data_base = rtems_rtl_alloc_new (rtems_rtl_alloc_data_tag (),
                                       data_size, false);
     if (!*data_base)
     {
@@ -207,7 +271,7 @@ rtems_rtl_alloc_module_new (void** text_base, size_t text_size,
 
   if (bss_size)
   {
-    *bss_base = rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_READ_WRITE,
+    *bss_base = rtems_rtl_alloc_new (rtems_rtl_alloc_bss_tag (),
                                      bss_size, false);
     if (!*bss_base)
     {

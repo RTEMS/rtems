@@ -1000,6 +1000,7 @@ rtems_rtl_obj_sections_link_order (uint32_t mask, rtems_rtl_obj* obj)
 
 static bool
 rtems_rtl_obj_sections_loader (uint32_t                   mask,
+                               rtems_rtl_alloc_tag        tag,
                                rtems_rtl_obj*             obj,
                                int                        fd,
                                uint8_t*                   base,
@@ -1013,6 +1014,8 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
 
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_LOAD_SECT))
     printf ("rtl: loading section: mask:%08" PRIx32 " base:%p\n", mask, base);
+
+  rtems_rtl_alloc_wr_enable (tag, base);
 
   while (!rtems_chain_is_tail (sections, node))
   {
@@ -1039,6 +1042,7 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
           if (!handler (obj, fd, sect, data))
           {
             sect->base = 0;
+            rtems_rtl_alloc_wr_disable (tag, base);
             return false;
           }
         }
@@ -1066,6 +1070,8 @@ rtems_rtl_obj_sections_loader (uint32_t                   mask,
 
     node = rtems_chain_next (node);
   }
+
+  rtems_rtl_alloc_wr_disable (tag, base);
 
   return true;
 }
@@ -1168,14 +1174,19 @@ rtems_rtl_obj_load_sections (rtems_rtl_obj*             obj,
    * sections.
    */
   if (!rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_TEXT,
+                                      rtems_rtl_alloc_text_tag (),
                                       obj, fd, obj->text_base, handler, data) ||
       !rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_CONST,
+                                      rtems_rtl_alloc_const_tag (),
                                       obj, fd, obj->const_base, handler, data) ||
       !rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_EH,
+                                      rtems_rtl_alloc_eh_tag (),
                                       obj, fd, obj->eh_base, handler, data) ||
       !rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_DATA,
+                                      rtems_rtl_alloc_data_tag (),
                                       obj, fd, obj->data_base, handler, data) ||
       !rtems_rtl_obj_sections_loader (RTEMS_RTL_OBJ_SECT_BSS,
+                                      rtems_rtl_alloc_bss_tag (),
                                       obj, fd, obj->bss_base, handler, data))
   {
     rtems_rtl_alloc_module_del (&obj->text_base, &obj->const_base, &obj->eh_base,

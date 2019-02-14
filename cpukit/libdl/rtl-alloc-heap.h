@@ -25,7 +25,7 @@ extern "C" {
 /**
  * Allocator handler for the standard libc heap.
  *
- * @param allocation If true the request is to allocate memory else free.
+ * @param cmd The allocation command.
  * @param tag The type of allocation request.
  * @param address Pointer to the memory address. If an allocation the value is
  *                unspecific on entry and the allocated address or NULL on
@@ -35,7 +35,7 @@ extern "C" {
  * @param size The size of the allocation if an allocation request and
  *             not used if deleting or freeing a previous allocation.
  */
-void rtems_rtl_alloc_heap(bool                allocate,
+void rtems_rtl_alloc_heap(rtems_rtl_alloc_cmd cmd,
                           rtems_rtl_alloc_tag tag,
                           void**              address,
                           size_t              size);

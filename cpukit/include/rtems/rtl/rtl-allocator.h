@@ -45,6 +45,21 @@ enum rtems_rtl_alloc_tags {
 typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
 
 /**
+ * Define the allocation command the loader requires.
+ */
+enum rtems_rtl_alloc_cmd {
+  RTEMS_RTL_ALLOC_NEW,        /**< Allocate new memory. */
+  RTEMS_RTL_ALLOC_DEL,        /**< Delete allocated memory. */
+  RTEMS_RTL_ALLOC_WR_ENABLE,  /**< Enable writes to the memory. */
+  RTEMS_RTL_ALLOC_WR_DISABLE, /**< Disable writes to the memory. */
+};
+
+/**
+ * The allocator command type.
+ */
+typedef enum rtems_rtl_alloc_cmd rtems_rtl_alloc_cmd;
+
+/**
  * The number of tags.
  */
 #define RTEMS_RTL_ALLOC_TAGS ((size_t) (RTEMS_RTL_ALLOC_READ_EXEC + 1))
@@ -53,7 +68,7 @@ typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
  * Allocator handler handles all RTL allocations. It can be hooked and
  * overridded for customised allocation schemes or memory maps.
  *
- * @param allocation If true the request is to allocate memory else free.
+ * @param allocation The request command.
  * @param tag The type of allocation request.
  * @param address Pointer to the memory address. If an allocation the value is
  *                unspecific on entry and the allocated address or NULL on
@@ -63,7 +78,7 @@ typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
  * @param size The size of the allocation if an allocation request and
  *             not used if deleting or freeing a previous allocation.
  */
-typedef void (*rtems_rtl_allocator)(bool                allocate,
+typedef void (*rtems_rtl_allocator)(rtems_rtl_alloc_cmd cmd,
                                     rtems_rtl_alloc_tag tag,
                                     void**              address,
                                     size_t              size);
@@ -107,6 +122,22 @@ void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
 void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
 
 /**
+ * The Runtime Loader allocator enable write on a bloc of allocated memory.
+ *
+ * @param tag The type of allocation request. Must match the address.
+ * @param address The memory address to write enable. A NULL is ignored.
+ */
+void rtems_rtl_alloc_wr_enable (rtems_rtl_alloc_tag tag, void* address);
+
+/**
+ * The Runtime Loader allocator disable write on a bloc of allocated memory.
+ *
+ * @param tag The type of allocation request. Must match the address.
+ * @param address The memory address to write disable. A NULL is ignored.
+ */
+void rtems_rtl_alloc_wr_disable (rtems_rtl_alloc_tag tag, void* address);
+
+/**
  * Hook the Runtime Loader allocatior. A handler can call the previous handler
  * in the chain to use it for specific tags. The default handler uses the
  * system heap. Do not unhook your handler if memory it allocates has not been
@@ -136,6 +167,41 @@ void rtems_rtl_alloc_indirect_new (rtems_rtl_alloc_tag tag,
  */
 void rtems_rtl_alloc_indirect_del (rtems_rtl_alloc_tag tag,
                                    rtems_rtl_ptr*      handle);
+
+/**
+ * Return the default tag for text sections.
+ *
+ * @return The text tag.
+ */
+rtems_rtl_alloc_tag rtems_rtl_alloc_text_tag (void);
+
+/**
+ * Return the default tag for const sections.
+ *
+ * @return The const tag.
+ */
+rtems_rtl_alloc_tag rtems_rtl_alloc_const_tag (void);
+
+/**
+ * Return the default tag for exception sections.
+ *
+ * @return The eh tag.
+ */
+rtems_rtl_alloc_tag rtems_rtl_alloc_eh_tag (void);
+
+/**
+ * Return the default tag for data sections.
+ *
+ * @return The data tag.
+ */
+rtems_rtl_alloc_tag rtems_rtl_alloc_data_tag (void);
+
+/**
+ * Return the default tag for bss sections.
+ *
+ * @return The bss tag.
+ */
+rtems_rtl_alloc_tag rtems_rtl_alloc_bss_tag (void);
 
 /**
  * Allocate the memory for a module given the size of the text, const, data and

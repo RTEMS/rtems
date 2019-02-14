@@ -18,14 +18,14 @@
 #include "rtl-alloc-heap.h"
 
 void
-rtems_rtl_alloc_heap (bool                allocate,
+rtems_rtl_alloc_heap (rtems_rtl_alloc_cmd cmd,
                       rtems_rtl_alloc_tag tag,
                       void**              address,
                       size_t              size)
 {
-  if (allocate)
+  if (cmd == RTEMS_RTL_ALLOC_NEW)
     *address = malloc (size);
-  else
+  else if (cmd == RTEMS_RTL_ALLOC_DEL)
   {
     free (*address);
     *address = NULL;
