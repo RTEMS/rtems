@@ -21,6 +21,7 @@
 
 #include <libfdt.h>
 
+#ifdef BSP_FDT_IS_SUPPORTED
 uint32_t bsp_fdt_map_intr(const uint32_t *intr, size_t icells)
 {
   return intr[1] + 32;
@@ -90,10 +91,13 @@ static void update_clocks(void)
   set_clock_by_output_name(fdt, ALT_CLK_F2H_PERIPH_REF, "hps_0_f2s_periph_ref_clk-clk");
   set_clock_by_output_name(fdt, ALT_CLK_F2H_SDRAM_REF, "hps_0_f2s_sdram_ref_clk-clk");
 }
+#endif
 
 void bsp_start(void)
 {
+#ifdef BSP_FDT_IS_SUPPORTED
   update_clocks();
+#endif
   bsp_interrupt_initialize();
   rtems_cache_coherent_add_area(
     bsp_section_nocacheheap_begin,

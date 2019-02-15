@@ -15,6 +15,8 @@
 
 #include <libfdt.h>
 
+#ifdef BSP_FDT_IS_SUPPORTED
+
 #define AREA_COUNT_MAX 16
 
 static const char memory_path[] = "/memory";
@@ -147,17 +149,26 @@ static size_t remove_reserved_memory(
   return area_count;
 }
 
+#else /* !BSP_FDT_IS_SUPPORTED */
+
+#define AREA_COUNT_MAX 1
+
+#endif /* BSP_FDT_IS_SUPPORTED */
+
 void bsp_work_area_initialize(void)
 {
-  const void *fdt;
   Heap_Area areas[AREA_COUNT_MAX];
   size_t area_count;
+#ifdef BSP_FDT_IS_SUPPORTED
+  const void *fdt;
   size_t i;
+#endif
 
   areas[0].begin = bsp_section_work_begin;
   areas[0].size = (uintptr_t) bsp_section_work_size;
   area_count = 1;
 
+#ifdef BSP_FDT_IS_SUPPORTED
   fdt = bsp_fdt_get();
 
   adjust_memory_size(fdt, &areas[0]);
@@ -170,6 +181,7 @@ void bsp_work_area_initialize(void)
       ARMV7_MMU_READ_WRITE_CACHED
     );
   }
+#endif
 
   bsp_work_area_initialize_with_table(areas, area_count);
 }
