@@ -528,9 +528,9 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
           ++b;
         }
         b = ls - 1;
-        while (b > 0 && isspace (s[b]))
+        while (b > 0 && isspace (s[r + b]))
         {
-          s[b] = '\0';
+          s[r + b] = '\0';
           --b;
         }
         r += ls;

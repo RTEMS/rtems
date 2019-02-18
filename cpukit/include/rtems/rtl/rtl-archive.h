@@ -103,7 +103,7 @@ typedef struct rtems_rtl_archives
   const char*         config_name;    /**< Config file name. */
   time_t              config_mtime;   /**< Config last modified time. */
   size_t              config_length;  /**< Length the config data. */
-  const char*         config;         /**< Config file contents. */
+  char*               config;         /**< Config file contents. */
   rtems_chain_control archives;       /**< The located archives. */
 } rtems_rtl_archives;
 
