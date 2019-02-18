@@ -43,6 +43,12 @@ extern "C" {
 
 #define BSP_ARM_A9MPCORE_GT_BASE ( BSP_ARM_A9MPCORE_SCU_BASE + 0x00000200 )
 
+#ifndef BSP_ARM_A9MPCORE_PERIPHCLK
+extern uint32_t altera_cyclone_v_a9mpcore_periphclk;
+#define BSP_ARM_A9MPCORE_PERIPHCLK altera_cyclone_v_a9mpcore_periphclk
+#define ALTERA_CYCLONE_V_NEED_A9MPCORE_PERIPHCLK
+#endif
+
 #define BSP_ARM_GIC_DIST_BASE ( BSP_ARM_A9MPCORE_SCU_BASE + 0x00001000 )
 
 #define BSP_ARM_L2C_310_BASE 0xfffef000

@@ -93,10 +93,17 @@ static void update_clocks(void)
 }
 #endif
 
+#ifdef ALTERA_CYCLONE_V_NEED_A9MPCORE_PERIPHCLK
+uint32_t altera_cyclone_v_a9mpcore_periphclk;
+#endif
+
 void bsp_start(void)
 {
 #ifdef BSP_FDT_IS_SUPPORTED
   update_clocks();
+#endif
+#ifdef ALTERA_CYCLONE_V_NEED_A9MPCORE_PERIPHCLK
+  alt_clk_freq_get(ALT_CLK_MPU_PERIPH, &altera_cyclone_v_a9mpcore_periphclk);
 #endif
   bsp_interrupt_initialize();
   rtems_cache_coherent_add_area(
