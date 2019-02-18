@@ -672,9 +672,9 @@ rtems_rtl_unresolved_remove (rtems_rtl_obj*        obj,
 {
   rtems_rtl_unresolved* unresolved;
   unresolved = rtems_rtl_unresolved_unprotected ();
-  if (!unresolved)
+  if (unresolved == NULL)
     return false;
-  return false;
+  return true;
 }
 
 /**
