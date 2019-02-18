@@ -678,10 +678,20 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
       }
 
       /*
-       * The first 4 byte value is the number of entries.
+       * The first 4 byte value is the number of entries. Range check the
+       * value so the alloc size does not overflow (Coverity 1442636).
        */
       archive->symbols.entries =
         rtems_rtl_archive_read_32 (archive->symbols.base);
+      if (archive->symbols.entries >= (SIZE_MAX / sizeof (rtems_rtl_archive_symbol)))
+      {
+        rtems_rtl_alloc_del (RTEMS_RTL_ALLOC_SYMBOL, archive->symbols.base);
+        close (fd);
+        memset (&archive->symbols, 0, sizeof (archive->symbols));
+        rtems_rtl_archive_set_error (errno, "too many symbols");
+        return true;
+      }
+
       archive->symbols.size   = size;
       archive->symbols.names  = archive->symbols.base;
       archive->symbols.names += (archive->symbols.entries + 1) * 4;
@@ -691,8 +701,7 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
        */
       if (archive->symbols.entries > RTEMS_RTL_ARCHIVE_SYMBOLS_SORT)
       {
-        const size_t size =
-          archive->symbols.entries * sizeof (rtems_rtl_archive_symbol);
+        size = archive->symbols.entries * sizeof (rtems_rtl_archive_symbol);
         archive->symbols.symbols =
           rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL, size, true);
         if (archive->symbols.symbols != NULL)
