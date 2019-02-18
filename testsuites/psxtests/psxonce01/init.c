@@ -75,10 +75,10 @@ static void routine_a( void )
     RTEMS_DEFAULT_ATTRIBUTES,
     &id
   );
-  assert(sc == RTEMS_SUCCESSFUL);
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   sc = rtems_task_start( id, use_b, 0 );
-  assert( sc == RTEMS_SUCCESSFUL );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
 
   events = 0;
   sc = rtems_event_receive(
