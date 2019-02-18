@@ -50,6 +50,8 @@ typedef enum rtems_rtl_alloc_tags rtems_rtl_alloc_tag;
 enum rtems_rtl_alloc_cmd {
   RTEMS_RTL_ALLOC_NEW,        /**< Allocate new memory. */
   RTEMS_RTL_ALLOC_DEL,        /**< Delete allocated memory. */
+  RTEMS_RTL_ALLOC_LOCK,       /**< Lock the allocator. */
+  RTEMS_RTL_ALLOC_UNLOCK,     /**< Unlock the allocator. */
   RTEMS_RTL_ALLOC_WR_ENABLE,  /**< Enable writes to the memory. */
   RTEMS_RTL_ALLOC_WR_DISABLE, /**< Disable writes to the memory. */
 };
@@ -120,6 +122,24 @@ void* rtems_rtl_alloc_new (rtems_rtl_alloc_tag tag, size_t size, bool zero);
  * @param address The memory address to delete. A NULL is ignored.
  */
 void rtems_rtl_alloc_del (rtems_rtl_alloc_tag tag, void* address);
+
+/**
+ * The Runtime Loader allocator lock. An allocator that depends on a
+ * separate allocation process, for example the heap, may need to be
+ * locked during loading of an object file to make sure the locality
+ * of the memory. This call be used to lock such an allocator.
+ *  Allocator calls in this interface are protected by the RTL lock.
+ */
+void rtems_rtl_alloc_lock (void);
+
+/**
+ * The Runtime Loader allocator unlock. An allocator that depends on a
+ * separate allocation process, for example the heap, may need to be
+ * locked during loading of an object file to make sure the locality
+ * of the memory. This call can be used to unlock such an allocator.
+ * Allocator calls in this interface are protected by the RTL lock.
+ */
+void rtems_rtl_alloc_unlock (void);
 
 /**
  * The Runtime Loader allocator enable write on a bloc of allocated memory.

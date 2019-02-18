@@ -1457,6 +1457,12 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
   obj->entry = (void*)(uintptr_t) ehdr.e_entry;
 
   /*
+   * Lock the allocator so the section memory and the trampoline memory are as
+   * clock as possible.
+   */
+  rtems_rtl_alloc_lock ();
+
+  /*
    * Allocate the sections.
    */
   if (!rtems_rtl_obj_alloc_sections (obj, fd, rtems_rtl_elf_arch_alloc, &ehdr))
@@ -1480,6 +1486,11 @@ rtems_rtl_elf_file_load (rtems_rtl_obj* obj, int fd)
 
   if (!rtems_rtl_elf_alloc_trampoline (obj, relocs.unresolved))
     return false;
+
+  /*
+   * Unlock the allocator.
+   */
+  rtems_rtl_alloc_unlock ();
 
   if (!rtems_rtl_obj_load_symbols (obj, fd, rtems_rtl_elf_symbols, &ehdr))
     return false;

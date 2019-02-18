@@ -108,6 +108,40 @@ rtems_rtl_alloc_wr_enable (rtems_rtl_alloc_tag tag, void* address)
 }
 
 void
+rtems_rtl_alloc_lock (void)
+{
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
+    printf ("rtl: alloc: lock\n");
+
+  if (rtl != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_LOCK,
+                              RTEMS_RTL_ALLOC_OBJECT, /* should be ignored */
+                              NULL,
+                              0);
+
+  rtems_rtl_unlock ();
+}
+
+
+void
+rtems_rtl_alloc_unlock (void)
+{
+  rtems_rtl_data* rtl = rtems_rtl_lock ();
+
+  if (rtems_rtl_trace (RTEMS_RTL_TRACE_ALLOCATOR))
+    printf ("rtl: alloc: unlock\n");
+
+  if (rtl != NULL)
+    rtl->allocator.allocator (RTEMS_RTL_ALLOC_UNLOCK,
+                              RTEMS_RTL_ALLOC_OBJECT, /* should be ignored */
+                              NULL,
+                              0);
+
+  rtems_rtl_unlock ();
+}
+void
 rtems_rtl_alloc_wr_disable (rtems_rtl_alloc_tag tag, void* address)
 {
   rtems_rtl_data* rtl = rtems_rtl_lock ();
