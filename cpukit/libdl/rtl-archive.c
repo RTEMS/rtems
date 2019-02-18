@@ -474,6 +474,7 @@ rtems_rtl_archives_load_config (rtems_rtl_archives* archives)
       archives->config_length = 0;
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))
         printf ("rtl: archive: config read error: %s\n", strerror (errno));
+      return false;
     }
 
     close (fd);
