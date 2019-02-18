@@ -155,16 +155,6 @@ _start:
 	and	r7, #0xff
 #endif
 
-#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
-#ifdef RTEMS_SMP
-	cmp	r7, #0
-	bne	1f
-#endif
-	mov	r0, r6
-	bl	bsp_fdt_copy
-1:
-#endif
-
 #ifdef RTEMS_SMP
         /*
          * Get current per-CPU control and store it in PL1 only Thread ID
@@ -179,11 +169,11 @@ _start:
 	/* Calculate interrupt stack area end for current processor */
 	ldr	r1, =_ISR_Stack_size
 #ifdef RTEMS_SMP
-	add	r7, #1
-	mul	r1, r1, r7
+	add	r3, r7, #1
+	mul	r1, r1, r3
 #endif
 	ldr	r2, =_ISR_Stack_area_begin
-	add	r7, r1, r2
+	add	r3, r1, r2
 
 	/* Save original CPSR value */
 	mrs	r4, cpsr
@@ -198,8 +188,8 @@ _start:
 
 	/* Boot loader starts kernel in HYP mode, switch to SVC necessary */
 	ldr	r1, =bsp_stack_hyp_size
-	mov	sp, r7
-	sub	r7, r7, r1
+	mov	sp, r3
+	sub	r3, r3, r1
 	bl	bsp_start_arm_drop_hyp_mode
 
 .L_skip_hyp_svc_switch:
@@ -210,8 +200,8 @@ _start:
 	mov	r0, #(ARM_PSR_M_FIQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	r1, =bsp_stack_fiq_size
-	mov	sp, r7
-	sub	r7, r7, r1
+	mov	sp, r3
+	sub	r3, r3, r1
 
 #ifdef BSP_START_NEEDS_REGISTER_INITIALIZATION
 	bl bsp_start_init_registers_banked_fiq
@@ -221,20 +211,20 @@ _start:
 	mov	r0, #(ARM_PSR_M_ABT | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	r1, =bsp_stack_abt_size
-	mov	sp, r7
-	sub	r7, r7, r1
+	mov	sp, r3
+	sub	r3, r3, r1
 
 	/* Enter UND mode and set up the UND stack pointer */
 	mov	r0, #(ARM_PSR_M_UND | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
 	ldr	r1, =bsp_stack_und_size
-	mov	sp, r7
-	sub	r7, r7, r1
+	mov	sp, r3
+	sub	r3, r3, r1
 
 	/* Enter IRQ mode and set up the IRQ stack pointer */
 	mov	r0, #(ARM_PSR_M_IRQ | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	mov	sp, r7
+	mov	sp, r3
 
 	/*
 	 * Enter SVC mode and set up the SVC stack pointer, reuse IRQ stack
@@ -242,9 +232,20 @@ _start:
 	 */
 	mov	r0, #(ARM_PSR_M_SVC | ARM_PSR_I | ARM_PSR_F)
 	msr	cpsr, r0
-	mov	sp, r7
+	mov	sp, r3
 
 	/* Stay in SVC mode */
+
+	/* Copy device tree from boot loader */
+#ifdef BSP_START_COPY_FDT_FROM_U_BOOT
+#ifdef RTEMS_SMP
+	cmp	r7, #0
+	bne	1f
+#endif
+	mov	r0, r6
+	bl	bsp_fdt_copy
+1:
+#endif
 
 #ifdef ARM_MULTILIB_VFP
 #ifdef ARM_MULTILIB_HAS_CPACR
