@@ -2067,7 +2067,7 @@ arm_cp15_get_counter_pl1_virtual_timer_value(void)
 
   __asm__ volatile (
     ARM_SWITCH_TO_ARM
-    "mrc p15, 0, %[val], c14, c2, 0\n"
+    "mrc p15, 0, %[val], c14, c3, 0\n"
     ARM_SWITCH_BACK
     : [val] "=&r" (val) ARM_SWITCH_ADDITIONAL_OUTPUT
   );
