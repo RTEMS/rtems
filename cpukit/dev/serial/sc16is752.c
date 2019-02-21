@@ -183,6 +183,7 @@ static bool sc16is752_set_attributes(
   }
 
   if ((term->c_cflag & PARENB) != 0){
+    ctx->lcr |= SC16IS752_LCR_SET_PARITY;
     if ((term->c_cflag & PARODD) != 0) {
       ctx->lcr &= ~SC16IS752_LCR_EVEN_PARITY;
     } else {
