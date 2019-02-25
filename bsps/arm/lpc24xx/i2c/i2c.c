@@ -1,324 +1,490 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMLPC24XX_libi2c
- *
- * @brief LibI2C bus driver for the I2C modules.
+ * @ingroup RTEMSBSPsARMLPC24XXI2C
  */
 
 /*
- * Copyright (c) 2009-2011 embedded brains GmbH.  All rights reserved.
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- *  embedded brains GmbH
- *  Obere Lagerstr. 30
- *  82178 Puchheim
- *  Germany
- *  <rtems@embedded-brains.de>
+ * Copyright (C) 2009, 2019 embedded brains GmbH
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <bsp.h>
 #include <bsp/i2c.h>
+#include <bsp.h>
+#include <bsp/io.h>
 #include <bsp/irq.h>
 #include <bsp/irq-generic.h>
-#include <bsp/system-clocks.h>
 
-#define RTEMS_STATUS_CHECKS_USE_PRINTK
+#include <rtems/score/assert.h>
 
-#include <rtems/status-checks.h>
+#include <dev/i2c/i2c.h>
 
-static void lpc24xx_i2c_handler(void *arg)
+RTEMS_STATIC_ASSERT(I2C_M_RD == 1, lpc24xx_i2c_read_flag);
+
+typedef struct {
+  i2c_bus base;
+  volatile lpc24xx_i2c *regs;
+  uint8_t *buf;
+  const uint8_t *buf_end;
+  size_t todo;
+  const i2c_msg *msg;
+  const i2c_msg *msg_end;
+  int error;
+  rtems_binary_semaphore sem;
+  lpc24xx_module module;
+  rtems_vector_number irq;
+} lpc24xx_i2c_bus;
+
+typedef struct {
+  volatile lpc24xx_i2c *regs;
+  lpc24xx_module module;
+  rtems_vector_number irq;
+} lpc24xx_i2c_config;
+
+static const i2c_msg *lpc24xx_i2c_msg_inc(lpc24xx_i2c_bus *bus)
 {
-  lpc24xx_i2c_bus_entry *e = arg;
-  volatile lpc24xx_i2c *regs = e->regs;
-  unsigned state = regs->stat;
-  uint8_t *data = e->data;
-  uint8_t *end = e->end;
-  bool notify = true;
+  const i2c_msg *msg;
 
-  switch (state) {
-    case 0x28U:
-      /* Data has been transmitted successfully */
-      if (data != end) {
-        regs->dat = *data;
-        ++data;
+  msg = bus->msg + 1;
+  bus->msg = msg;
+  return msg;
+}
+
+static void lpc24xx_i2c_msg_inc_and_set_buf(lpc24xx_i2c_bus *bus)
+{
+  const i2c_msg *msg;
+
+  msg = lpc24xx_i2c_msg_inc(bus);
+  bus->buf = msg->buf;
+  bus->buf_end = bus->buf + msg->len;
+}
+
+static void lpc24xx_i2c_buf_inc(lpc24xx_i2c_bus *bus)
+{
+  ++bus->buf;
+  --bus->todo;
+}
+
+static void lpc24xx_i2c_buf_push(lpc24xx_i2c_bus *bus, uint8_t c)
+{
+  while (true) {
+    if (bus->buf != bus->buf_end) {
+      bus->buf[0] = c;
+      lpc24xx_i2c_buf_inc(bus);
+      break;
+    }
+
+    lpc24xx_i2c_msg_inc_and_set_buf(bus);
+  }
+}
+
+static uint8_t lpc24xx_i2c_buf_pop(lpc24xx_i2c_bus *bus)
+{
+  while (true) {
+    if (bus->buf != bus->buf_end) {
+      uint8_t c;
+
+      c = bus->buf[0];
+      lpc24xx_i2c_buf_inc(bus);
+      return c;
+    }
+
+    lpc24xx_i2c_msg_inc_and_set_buf(bus);
+  }
+}
+
+static void lpc24xx_i2c_setup_msg(lpc24xx_i2c_bus *bus, const i2c_msg *msg)
+{
+  int can_continue;
+  size_t todo;
+
+  bus->msg = msg;
+  bus->buf = msg->buf;
+  todo = msg->len;
+  bus->buf_end = bus->buf + todo;
+
+  can_continue = (msg->flags & I2C_M_RD) | I2C_M_NOSTART;
+  ++msg;
+
+  while (msg != bus->msg_end) {
+    if ((msg->flags & (I2C_M_RD | I2C_M_NOSTART)) != can_continue) {
+      break;
+    }
+
+    todo += msg->len;
+    ++msg;
+  }
+
+  bus->todo = todo;
+}
+
+static int lpc24xx_i2c_next_msg(
+  lpc24xx_i2c_bus *bus,
+  volatile lpc24xx_i2c *regs
+)
+{
+  const i2c_msg *msg;
+  int error;
+
+  msg = bus->msg + 1;
+  error = 1;
+
+  if (msg != bus->msg_end) {
+    lpc24xx_i2c_setup_msg(bus, msg);
+
+    if ((msg->flags & I2C_M_NOSTART) == 0) {
+      regs->conset = LPC24XX_I2C_STA;
+      regs->conclr = LPC24XX_I2C_SI;
+    } else {
+      regs->conset = LPC24XX_I2C_STO;
+      regs->conclr = LPC24XX_I2C_SI;
+      error = -EINVAL;
+    }
+  } else {
+    regs->conset = LPC24XX_I2C_STO;
+    regs->conclr = LPC24XX_I2C_SI;
+    error = 0;
+  }
+
+  return error;
+}
+
+static void lpc24xx_i2c_interrupt(void *arg)
+{
+  lpc24xx_i2c_bus *bus;
+  volatile lpc24xx_i2c *regs;
+  const i2c_msg *msg;
+  int error;
+
+  bus = arg;
+  regs = bus->regs;
+  error = 1;
+
+  switch (regs->stat) {
+    case 0x00:
+      /* Bus error */
+    case 0x20:
+      /* Slave address plus write sent, NACK received */
+    case 0x48:
+      /* Slave address plus read sent, NACK received */
+      regs->conset = LPC24XX_I2C_STO | LPC24XX_I2C_AA;
+      regs->conclr = LPC24XX_I2C_SI;
+      error = -EIO;
+      break;
+    case 0x08:
+      /* Start sent */
+    case 0x10:
+      /* Repeated start sent */
+      msg = bus->msg;
+      regs->dat = (uint8_t) ((msg->addr << 1) | (msg->flags & I2C_M_RD));
+      regs->conset = LPC24XX_I2C_AA;
+      regs->conclr = LPC24XX_I2C_STA | LPC24XX_I2C_SI;
+      break;
+    case 0x18:
+      /* Slave address plus write sent, ACK received */
+    case 0x28:
+      /* Data sent, ACK received */
+      if (bus->todo > 0) {
+        regs->dat = lpc24xx_i2c_buf_pop(bus);
         regs->conset = LPC24XX_I2C_AA;
         regs->conclr = LPC24XX_I2C_SI;
-        notify = false;
-        e->data = data;
+      } else {
+        error = lpc24xx_i2c_next_msg(bus, regs);
       }
       break;
-    case 0x50U:
-      /* Data has been received */
-      if (data != end) {
-        *data = (uint8_t) regs->dat;
-        ++data;
-        if (data != end) {
-          if (data + 1 != end) {
-            regs->conset = LPC24XX_I2C_AA;
-          } else {
-            regs->conclr = LPC24XX_I2C_AA;
-          }
-          regs->conclr = LPC24XX_I2C_SI;
-          notify = false;
-          e->data = data;
-        } else {
-          /* This is an error and should never happen */
-        }
+    case 0x30:
+      /* Data sent, NACK received */
+      if (bus->todo == 0) {
+        error = lpc24xx_i2c_next_msg(bus, regs);
+      } else {
+        regs->conset = LPC24XX_I2C_STO;
+        regs->conclr = LPC24XX_I2C_SI;
+        error = -EIO;
       }
       break;
-    case 0x58U:
-      /* Last data has been received */
-      if (data != end) {
-        *data = (uint8_t) regs->dat;
+    case 0x40:
+      /* Slave address plus read sent, ACK received */
+      if (bus->todo > 1) {
+        regs->conset = LPC24XX_I2C_AA;
+        regs->conclr = LPC24XX_I2C_SI;
+      } else {
+        regs->conclr = LPC24XX_I2C_SI | LPC24XX_I2C_AA;
       }
       break;
-    default:
+    case 0x50:
+      /* Data received, ACK returned */
+    case 0x58:
+      /* Data received, NACK returned */
+      lpc24xx_i2c_buf_push(bus, regs->dat);
+
+      if (bus->todo > 1) {
+        regs->conset = LPC24XX_I2C_AA;
+        regs->conclr = LPC24XX_I2C_SI;
+      } else if (bus->todo == 1) {
+        regs->conclr = LPC24XX_I2C_SI | LPC24XX_I2C_AA;
+      } else {
+        error = lpc24xx_i2c_next_msg(bus, regs);
+      }
+      break;
+    case 0xF8:
       /* Do nothing */
       break;
+    default:
+      error = -EIO;
+      break;
   }
 
-  /* Notify task if necessary */
-  if (notify) {
-    bsp_interrupt_vector_disable(e->vector);
-
-    rtems_semaphore_release(e->state_update);
+  if (error <= 0) {
+    bus->error = error;
+    bsp_interrupt_vector_disable(bus->irq);
+    rtems_binary_semaphore_post(&bus->sem);
   }
 }
 
-static rtems_status_code lpc24xx_i2c_wait(lpc24xx_i2c_bus_entry *e)
+static int
+lpc24xx_i2c_transfer(i2c_bus *base, i2c_msg *msgs, uint32_t msg_count)
 {
-  bsp_interrupt_vector_enable(e->vector);
+  lpc24xx_i2c_bus *bus;
+  volatile lpc24xx_i2c *regs;
+  uint16_t supported;
+  uint32_t i;
+  int eno;
 
-  return rtems_semaphore_obtain(e->state_update, RTEMS_WAIT, RTEMS_NO_TIMEOUT);
-}
+  if (msg_count == 0){
+    return 0;
+  }
 
-static rtems_status_code lpc24xx_i2c_init(rtems_libi2c_bus_t *bus)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
-  unsigned cycles = LPC24XX_CCLK / (8U * 100000U * 2U);
+  supported = I2C_M_RD;
 
-  /* Create semaphore */
-  sc = rtems_semaphore_create (
-    rtems_build_name ('I', '2', 'C', '0' + e->index),
-    0,
-    RTEMS_SIMPLE_BINARY_SEMAPHORE,
-    0,
-    &e->state_update
-  );
-  RTEMS_CHECK_SC(sc, "create status update semaphore");
+  for (i = 0; i < msg_count; ++i) {
+    if ((msgs[i].flags & ~supported) != 0) {
+      return -EINVAL;
+    }
 
-  /* Enable module power */
-  sc = lpc24xx_module_enable(LPC24XX_MODULE_I2C_0 + e->index, LPC24XX_MODULE_CCLK_8);
-  RTEMS_CHECK_SC(sc, "enable module");
+    supported |= I2C_M_NOSTART;
+  }
 
-  /* Pin configuration */
-  sc = lpc24xx_pin_config(e->pins, LPC24XX_PIN_SET_FUNCTION);
-  RTEMS_CHECK_SC(sc, "pin configuration");
+  bus = (lpc24xx_i2c_bus *) base;
+  bus->msg_end = msgs + msg_count;
+  lpc24xx_i2c_setup_msg(bus, msgs);
 
-  /* Clock high and low duty cycles */
-  regs->sclh = cycles;
-  regs->scll = cycles;
-
-  /* Disable module */
-  regs->conclr = LPC24XX_I2C_EN;
-
-  /* Install interrupt handler and disable this vector */
-  sc = rtems_interrupt_handler_install(
-    e->vector,
-    "I2C",
-    RTEMS_INTERRUPT_UNIQUE,
-    lpc24xx_i2c_handler,
-    e
-  );
-  RTEMS_CHECK_SC(sc, "install interrupt handler");
-  bsp_interrupt_vector_disable(e->vector);
-
-  /* Enable module in master mode */
-  regs->conset = LPC24XX_I2C_EN;
-
-  /* Set self address */
-  regs->adr = 0;
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static rtems_status_code lpc24xx_i2c_send_start(rtems_libi2c_bus_t *bus)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
+  regs = bus->regs;
 
   /* Start */
-  regs->conclr = LPC24XX_I2C_STA | LPC24XX_I2C_AA | LPC24XX_I2C_SI;
   regs->conset = LPC24XX_I2C_STA;
 
-  /* Wait */
-  sc = lpc24xx_i2c_wait(e);
-  RTEMS_CHECK_SC(sc, "wait for state update");
+  bsp_interrupt_vector_enable(bus->irq);
+  eno = rtems_binary_semaphore_wait_timed_ticks(
+    &bus->sem,
+    bus->base.timeout
+  );
+  if (eno != 0) {
+    regs->conclr = LPC24XX_I2C_EN;
+    regs->conset = LPC24XX_I2C_EN;
+    rtems_binary_semaphore_try_wait(&bus->sem);
+    return -ETIMEDOUT;
+  }
 
-  return RTEMS_SUCCESSFUL;
+  return bus->error;
 }
 
-static rtems_status_code lpc24xx_i2c_send_stop(rtems_libi2c_bus_t *bus)
-{
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
-
-  /* Stop */
-  regs->conset = LPC24XX_I2C_STO | LPC24XX_I2C_AA;
-  regs->conclr = LPC24XX_I2C_STA | LPC24XX_I2C_SI;
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static rtems_status_code lpc24xx_i2c_send_addr(
-  rtems_libi2c_bus_t *bus,
-  uint32_t addr,
-  int rw
-)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
-  unsigned state = regs->stat;
-
-  /* Check state */
-  if (state != 0x8U && state != 0x10U) {
-    return -RTEMS_IO_ERROR;
-  }
-
-  /* Send address */
-  regs->dat = (uint8_t) ((addr << 1U) | ((rw != 0) ? 1U : 0U));
-  regs->conset = LPC24XX_I2C_AA;
-  regs->conclr = LPC24XX_I2C_STA | LPC24XX_I2C_SI;
-
-  /* Wait */
-  sc = lpc24xx_i2c_wait(e);
-  RTEMS_CHECK_SC_RV(sc, "wait for state update");
-
-  /* Check state */
-  state = regs->stat;
-  if (state != 0x18U && state != 0x40U) {
-    return -RTEMS_IO_ERROR;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static int lpc24xx_i2c_read(rtems_libi2c_bus_t *bus, unsigned char *in, int n)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
-  unsigned state = regs->stat;
-  uint8_t *data = in;
-  uint8_t *end = in + n;
-
-  if (n <= 0) {
-    return n;
-  } else if (state != 0x40U) {
-    return -RTEMS_IO_ERROR;
-  }
-
-  /* Setup receive buffer */
-  e->data = data;
-  e->end = end;
-
-  /* Ready to receive data */
-  if (data + 1 != end) {
-    regs->conset = LPC24XX_I2C_AA;
-  } else {
-    regs->conclr = LPC24XX_I2C_AA;
-  }
-  regs->conclr = LPC24XX_I2C_SI;
-
-  /* Wait */
-  sc = lpc24xx_i2c_wait(e);
-  RTEMS_CHECK_SC_RV(sc, "wait for state update");
-
-  /* Check state */
-  state = regs->stat;
-  if (state != 0x58U) {
-    return -RTEMS_IO_ERROR;
-  }
-
-  return n;
-}
-
-static int lpc24xx_i2c_write(
-  rtems_libi2c_bus_t *bus,
-  unsigned char *out,
-  int n
-)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  lpc24xx_i2c_bus_entry *e = (lpc24xx_i2c_bus_entry *) bus;
-  volatile lpc24xx_i2c *regs = e->regs;
-  unsigned state = 0;
-
-  if (n <= 0) {
-    return n;
-  }
-
-  /* Setup transmit buffer */
-  e->data = out + 1;
-  e->end = out + n;
-
-  /* Transmit first byte */
-  regs->dat = *out;
-  regs->conset = LPC24XX_I2C_AA;
-  regs->conclr = LPC24XX_I2C_SI;
-
-  /* Wait */
-  sc = lpc24xx_i2c_wait(e);
-  RTEMS_CHECK_SC_RV(sc, "wait for state update");
-
-  /* Check state */
-  state = regs->stat;
-  if (state != 0x28U) {
-    return -RTEMS_IO_ERROR;
-  }
-
-  return n;
-}
-
-static int lpc24xx_i2c_set_transfer_mode(
-  rtems_libi2c_bus_t *bus,
-  const rtems_libi2c_tfr_mode_t *mode
-)
-{
-  return -RTEMS_NOT_IMPLEMENTED;
-}
-
-static int lpc24xx_i2c_ioctl(rtems_libi2c_bus_t *bus, int cmd, void *arg)
-{
-  int rv = -1;
-  const rtems_libi2c_tfr_mode_t *tm = (const rtems_libi2c_tfr_mode_t *) arg;
-
-  switch (cmd) {
-    case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-      rv = lpc24xx_i2c_set_transfer_mode(bus, tm);
-      break;
-    default:
-      rv = -RTEMS_NOT_DEFINED;
-      break;
-  }
-
-  return rv;
-}
-
-const rtems_libi2c_bus_ops_t lpc24xx_i2c_ops = {
-  .init = lpc24xx_i2c_init,
-  .send_start = lpc24xx_i2c_send_start,
-  .send_stop = lpc24xx_i2c_send_stop,
-  .send_addr = lpc24xx_i2c_send_addr,
-  .read_bytes = lpc24xx_i2c_read,
-  .write_bytes = lpc24xx_i2c_write,
-  .ioctl = lpc24xx_i2c_ioctl
+/* I2C-Bus Specification and User Manual, Table 10 */
+static const uint16_t lpc24xx_i2c_t_low_high[3][2] = {
+  { 4700, 4000 },
+  { 1300,  600 },
+  {  500,  260 }
 };
+
+static uint32_t lpc24xx_i2c_cycle_count(uint32_t scl, uint32_t x, uint32_t t)
+{
+  scl = (scl * x + t - 1) / t;
+
+  if (scl <= 4) {
+    scl = 4;
+  } else if (scl >= 0xffff) {
+    scl = 0xffff;
+  }
+
+  return scl;
+}
+
+static int lpc24xx_i2c_set_clock(i2c_bus *base, unsigned long clock)
+{
+  lpc24xx_i2c_bus *bus;
+  volatile lpc24xx_i2c *regs;
+  size_t i;
+  uint32_t low;
+  uint32_t high;
+  uint32_t t;
+  uint32_t scl;
+
+  if (clock <= 100000) {
+    i = 0;
+  } else if (clock <= 400000) {
+    i = 1;
+  } else {
+    i = 2;
+  }
+
+  low = lpc24xx_i2c_t_low_high[i][0];
+  high = lpc24xx_i2c_t_low_high[i][1];
+  t = low + high;
+  scl = (LPC24XX_PCLK + clock - 1) / clock;
+
+  bus = (lpc24xx_i2c_bus *) base;
+  regs = bus->regs;
+
+  regs->scll = lpc24xx_i2c_cycle_count(scl, low, t);
+  regs->sclh = lpc24xx_i2c_cycle_count(scl, high, t);
+
+  return 0;
+}
+
+static void
+lpc24xx_i2c_destroy(i2c_bus *base)
+{
+  lpc24xx_i2c_bus *bus;
+  rtems_status_code sc;
+
+  bus = (lpc24xx_i2c_bus *) base;
+
+  sc = rtems_interrupt_handler_remove(bus->irq, lpc24xx_i2c_interrupt, bus);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  /* Disable I2C module */
+  bus->regs->conclr = LPC24XX_I2C_EN;
+
+  sc = lpc24xx_module_disable(bus->module);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  rtems_binary_semaphore_destroy(&bus->sem);
+  i2c_bus_destroy_and_free(&bus->base);
+}
+
+static int lpc24xx_i2c_init(lpc24xx_i2c_bus *bus)
+{
+  rtems_status_code sc;
+
+  sc = lpc24xx_module_enable(bus->module, LPC24XX_MODULE_PCLK_DEFAULT);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  /* Disable I2C module */
+  bus->regs->conclr = LPC24XX_I2C_EN;
+
+  sc = rtems_interrupt_handler_install(
+    bus->irq,
+    "I2C",
+    RTEMS_INTERRUPT_UNIQUE,
+    lpc24xx_i2c_interrupt,
+    bus
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return EAGAIN;
+  }
+
+  rtems_binary_semaphore_init(&bus->sem, "I2C");
+
+  lpc24xx_i2c_set_clock(&bus->base, I2C_BUS_CLOCK_DEFAULT);
+
+  /* Initialize I2C module */
+  bus->regs->conset = LPC24XX_I2C_EN;
+
+  return 0;
+}
+
+static int i2c_bus_register_lpc24xx(
+  const char *bus_path,
+  const lpc24xx_i2c_config *config
+)
+{
+  lpc24xx_i2c_bus *bus;
+  int eno;
+
+  bus = (lpc24xx_i2c_bus *) i2c_bus_alloc_and_init(sizeof(*bus));
+  if (bus == NULL){
+    return -1;
+  }
+
+  bus->regs = config->regs;
+  bus->module = config->module;
+  bus->irq = config->irq;
+
+  eno = lpc24xx_i2c_init(bus);
+  if (eno != 0) {
+    (*bus->base.destroy)(&bus->base);
+    rtems_set_errno_and_return_minus_one(eno);
+  }
+
+  bus->base.transfer = lpc24xx_i2c_transfer;
+  bus->base.set_clock = lpc24xx_i2c_set_clock;
+  bus->base.destroy = lpc24xx_i2c_destroy;
+
+  return i2c_bus_register(&bus->base, bus_path);
+}
+
+int lpc24xx_register_i2c_0(void)
+{
+  static const lpc24xx_i2c_config config = {
+    .regs = (volatile lpc24xx_i2c *) I2C0_BASE_ADDR,
+    .module = LPC24XX_MODULE_I2C_0,
+    .irq = LPC24XX_IRQ_I2C_0
+  };
+
+  return i2c_bus_register_lpc24xx(
+    LPC24XX_I2C_0_BUS_PATH,
+    &config
+  );
+}
+
+int lpc24xx_register_i2c_1(void)
+{
+  static const lpc24xx_i2c_config config = {
+    .regs = (volatile lpc24xx_i2c *) I2C1_BASE_ADDR,
+    .module = LPC24XX_MODULE_I2C_1,
+    .irq = LPC24XX_IRQ_I2C_1
+  };
+
+  return i2c_bus_register_lpc24xx(
+    LPC24XX_I2C_2_BUS_PATH,
+    &config
+  );
+}
+
+int lpc24xx_register_i2c_2(void)
+{
+  static const lpc24xx_i2c_config config = {
+    .regs = (volatile lpc24xx_i2c *) I2C2_BASE_ADDR,
+    .module = LPC24XX_MODULE_I2C_2,
+    .irq = LPC24XX_IRQ_I2C_2
+  };
+
+  return i2c_bus_register_lpc24xx(
+    LPC24XX_I2C_2_BUS_PATH,
+    &config
+  );
+}
