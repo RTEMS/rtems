@@ -70,6 +70,9 @@ librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/console/console-confi
 # I2C
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/i2c/bbb-i2c.c
 
+# SPI
+librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/spi/spi.c
+
 # GPIO
 librtemsbsp_a_SOURCES += ../../../../../../bsps/arm/beagle/gpio/bbb-gpio.c
 

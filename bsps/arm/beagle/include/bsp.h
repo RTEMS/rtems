@@ -52,7 +52,9 @@
 
 #define REG16(x)(*((volatile uint16_t *)(x)))
 #define REG(x)(*((volatile uint32_t *)(x)))
-#define BIT(x)(0x1 << x)
+#define BIT(x)(0x1 << (x))
+// Start and End included
+#define BITS(Start, End) (((1 << (End+1)) - 1) & ~((1 << (Start)) - 1))
 
 #define udelay(u) rtems_task_wake_after(1 + ((u)/rtems_configuration_get_microseconds_per_tick()))
 

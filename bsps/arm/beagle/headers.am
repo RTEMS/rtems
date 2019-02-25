@@ -12,3 +12,4 @@ include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/bbb-pwm.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/beagleboneblack.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/i2c.h
 include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/irq.h
+include_bsp_HEADERS += ../../../../../../bsps/arm/beagle/include/bsp/spi.h
