@@ -9,9 +9,10 @@ UENV=uEnv.txt
 
 rm -rf $TMPDIR
 mkdir -p $TMPDIR
+trap 'rm -rf $TMPDIR' EXIT
 
-if [ $# -ne 2 ]
-then	echo "Usage: $0 <RTEMS prefix> <RTEMS executable>"
+if [ $# -ne 3 ]
+then	echo "Usage: $0 <RTEMS prefix> <RTEMS executable> <Device Tree Blob>"
 	exit 1
 fi
 
@@ -39,6 +40,8 @@ case "$2" in
 		;;
 esac
 
+dtb="$3"
+
 app=rtems-app.img
 
 if [ ! -f "$executable" ]
@@ -59,26 +62,25 @@ $PREFIX/bin/newfs_msdos -r 1 -m 0xf8 -c 4 -F16  -h 64 -u 32 -S 512 -s $FATSIZE -
 
 # Prepare the executable.
 base=`basename $executable`
-$PREFIX/bin/arm-rtems4.12-objcopy $executable -O binary $TMPDIR/$base.bin
+$PREFIX/bin/arm-rtems5-objcopy $executable -O binary $TMPDIR/$base.bin
 gzip -9 $TMPDIR/$base.bin
 $PREFIX/bin/mkimage -A arm -O rtems -T kernel -a 0x80000000 -e 0x80000000 -n RTEMS -d $TMPDIR/$base.bin.gz $TMPDIR/$app
 echo "setenv bootdelay 5
 uenvcmd=run boot
-boot=fatload mmc 0 0x80800000 $app ; bootm 0x80800000" >$TMPDIR/$UENV
+boot=fatload mmc 0 0x80800000 $app ; fatload mmc 0 0x88000000 $(basename "$dtb") ; bootm 0x80800000 - 0x88000000" >$TMPDIR/$UENV
 
 # Copy the uboot and app image onto the FAT image
 $PREFIX/bin/mcopy -bsp -i $FATIMG $PREFIX/uboot/$ubootcfg/MLO ::MLO
 $PREFIX/bin/mcopy -bsp -i $FATIMG $PREFIX/uboot/$ubootcfg/u-boot.img ::u-boot.img
 $PREFIX/bin/mcopy -bsp -i $FATIMG $TMPDIR/$app ::$app
 $PREFIX/bin/mcopy -bsp -i $FATIMG $TMPDIR/$UENV ::$UENV
+# Copy DTB
+$PREFIX/bin/mcopy -bsp -i $FATIMG "$dtb" ::"$(basename "$dtb")"
 
 # Just a single FAT partition (type C) that uses all of the image
 $PREFIX/bin/partition -m $IMG $OFFSET c:${FATSIZE}\*
 
 # Put the FAT image into the SD image
 dd if=$FATIMG of=$IMG seek=$OFFSET
-
-# cleanup
-rm -rf $TMPDIR
 
 echo "Result is in $IMG."
