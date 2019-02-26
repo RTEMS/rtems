@@ -43,7 +43,7 @@ struct rtems_bsdnet_ifconfig;
 /**
  * @defgroup arm_lpc32xx LPC32XX Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief LPC32XX support package.
  *

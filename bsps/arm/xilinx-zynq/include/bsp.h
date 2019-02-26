@@ -38,7 +38,7 @@ extern "C" {
 
 /**
  * @defgroup arm_zynq Xilinx-Zynq Support
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  * @brief Xilinz-Zynq Board Support Package
  * @{
  */

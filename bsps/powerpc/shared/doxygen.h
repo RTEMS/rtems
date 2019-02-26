@@ -1,10 +1,10 @@
-  /**
-  *  @defgroup bsp_powerpc PowerPC
-  *
-  *  @ingroup bsp_kit
-  *
-  *  @brief PowerPC Board Support Packages
-  */
+/**
+ * @defgroup RTEMSBSPsPowerPc PowerPC
+ *
+ * @ingroup RTEMSBSPs
+ *
+ * @brief PowerPC Board Support Packages.
+ */
 
  /**
   *  @defgroup powerpc_shared PowerPC Shared Modules

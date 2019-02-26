@@ -42,7 +42,7 @@ extern "C" {
 /**
  *  @defgroup sparc_leon2 LEON2 Support
  *
- *  @ingroup bsp_sparc
+ *  @ingroup RTEMSBSPsSPARC
  *
  *  @brief LEON2 Support Package
  *

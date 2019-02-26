@@ -1,7 +1,9 @@
 /**
- *  @defgroup bsp_i386 i386
- *  @ingroup bsp_kit
- *  @brief i386 Board Support Packages
+ * @defgroup RTEMSBSPsI386 i386
+ *
+ * @ingroup RTEMSBSPs
+ *
+ * @brief i386 Board Support Packages.
  */
 
 /**

@@ -30,7 +30,7 @@
 /**
  * @defgroup lm32_evr EVR Support
  *
- * @ingroup bsp_lm32
+ * @ingroup RTEMSBSPsLM32
  *
  * @brief EVR support package.
  */

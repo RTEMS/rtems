@@ -20,7 +20,7 @@
 
 /**
  * @defgroup arm_stm32f4 STM32F4 Support
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  * @brief STM32f4 Support Package
  * @{
  */

@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup arm_csb336 CSB336 Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief CSB336 support package.
  *

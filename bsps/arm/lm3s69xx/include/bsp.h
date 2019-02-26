@@ -46,7 +46,7 @@
 /**
  * @defgroup arm_lm3s69xx LM3S69XX Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief LM3S69XX Support Package
  */

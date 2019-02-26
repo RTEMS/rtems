@@ -1,11 +1,13 @@
-  /**
-  *  @defgroup bsp_mips MIPS
-  *  @ingroup bsp_kit
-  *  @brief MIPS Board Support Packages
-  */
+/**
+ * @defgroup RTEMSBSPsMIPS MIPS
+ *
+ * @ingroup RTEMSBSPs
+ *
+ * @brief MIPS Board Support Packages.
+ */
 
  /**
   *  @defgroup mips_shared MIPS Shared Modules
-  *  @ingroup bsp_mips
+  *  @ingroup RTEMSBSPsMIPS
   *  @brief mips Shared Modules
   */

@@ -60,7 +60,7 @@
 /**
  * @defgroup m68k_genmcf548x MCF548X Support
  *
- * @ingroup bsp_m68k
+ * @ingroup RTEMSBSPsM68k
  *
  * @brief MCT548X support.
  */

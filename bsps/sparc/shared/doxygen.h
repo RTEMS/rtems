@@ -1,15 +1,15 @@
- /**
-  *  @defgroup bsp_sparc SPARC
-  *
-  *  @ingroup bsp_kit
-  *
-  *  @brief SPARC Board Support Packages
-  */
+/**
+ * @defgroup RTEMSBSPsSPARC SPARC
+ *
+ * @ingroup RTEMSBSPs
+ *
+ * @brief SPARC Board Support Packages.
+ */
 
  /**
   *  @defgroup sparc_shared SPARC Shared Modules
   *
-  *  @ingroup bsp_sparc
+  *  @ingroup RTEMSBSPsSPARC
   *
   *  @brief SPARC Shared Modules
   */

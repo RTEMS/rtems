@@ -32,7 +32,7 @@
 /**
  * @defgroup bsp_clock Clock Support
  *
- * @ingroup bsp_shared
+ * @ingroup RTEMSBSPsShared
  *
  * @brief Clock support 
  *

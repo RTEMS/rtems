@@ -1,15 +1,14 @@
 /**
- *  @defgroup bsp_shared SHARED
+ * @defgroup RTEMSBSPs Board Support Packages
  *
- *  @ingroup bsp_kit
- *
- *  @brief SHARED Board Support Packages
+ * @brief Board Support Packages and Support Modules
+ * (BSPs).
  */
 
 /**
- *  @defgroup shared_tod SHARED TOD Modules
+ * @defgroup RTEMSBSPsShared Shared
  *
- *  @ingroup bsp_shared
+ * @ingroup RTEMSBSPs
  *
- *  @brief SHARED TOD Modules
+ * @brief Shared Support for Board Support Packages
  */

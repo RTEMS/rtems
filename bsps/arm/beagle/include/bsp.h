@@ -350,7 +350,7 @@ static inline void write_ttbr0(uint32_t bar)
 /**
  * @defgroup arm_beagle Beaglebone, Beagleboard Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief Beaglebones and beagleboards support package
  *

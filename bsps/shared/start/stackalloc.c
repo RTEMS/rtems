@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_shared
+ * @ingroup bsp_stack
  *
  * @brief Stack initialization, allocation and free functions.
  */

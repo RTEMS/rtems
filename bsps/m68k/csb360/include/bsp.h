@@ -31,7 +31,7 @@
 /**
  * @defgroup m68k_csb360 CSB360 Support
  *
- * @ingroup bsp_m68k
+ * @ingroup RTEMSBSPsM68k
  *
  * @brief CSB360 support.
  */

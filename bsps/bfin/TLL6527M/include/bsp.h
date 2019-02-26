@@ -33,7 +33,7 @@ extern "C" {
 
 /**
  * @defgroup bfin_tll6527m TLL6527M Support
- * @ingroup bsp_bfin
+ * @ingroup RTEMSBSPsBfin
  * @brief TLL6527M Support Package
  * @{
  */

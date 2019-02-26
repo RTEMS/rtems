@@ -38,7 +38,7 @@ extern "C" {
 
 /**
  * @defgroup bfin_ezkit533 eZKit533 Support
- * @ingroup bsp_bfin
+ * @ingroup RTEMSBSPsBfin
  * @brief eZKit533 Board Support Package
  * @{
  */

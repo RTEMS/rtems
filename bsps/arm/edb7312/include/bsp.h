@@ -31,7 +31,7 @@ extern "C" {
 
 /**
  * @defgroup arm_edb7312 EDB7312 Support
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  * @brief EDB7312 Support Package
  * @{
  */

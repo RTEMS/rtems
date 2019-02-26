@@ -26,7 +26,7 @@ extern "C" {
 
 /**
  * @defgroup arm_gumstix Gumstix Support
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  * @brief Gumstix support package
  * @{
  */

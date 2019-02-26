@@ -31,7 +31,7 @@ extern "C" {
 /**
  * @defgroup arm_csb337 CSB337 Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief CSB337 support package.
  *

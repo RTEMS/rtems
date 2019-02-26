@@ -39,7 +39,7 @@ extern "C" {
 /**
  * @defgroup sparc_erc32 ERC32 Support
  *
- * @ingroup bsp_sparc
+ * @ingroup RTEMSBSPsSPARC
  *
  * @brief ERC32 Support Package
  */

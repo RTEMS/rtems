@@ -81,7 +81,7 @@ void Init52235(void);
 /**
  * @defgroup m68k_mcf52235 MCF52235 Support
  *
- * @ingroup bsp_m68k
+ * @ingroup RTEMSBSPsM68k
  *
  * @brief MCF52235 Support Package
  */

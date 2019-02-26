@@ -62,7 +62,7 @@ void rpi_start_rtems_on_secondary_processor(void);
 /**
  * @defgroup arm_raspberrypi Raspberry Pi Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief Raspberry Pi support package
  *

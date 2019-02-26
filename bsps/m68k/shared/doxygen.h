@@ -1,15 +1,15 @@
 /**
-  *  @defgroup bsp_m68k M68K
-  *
-  *  @ingroup bsp_kit
-  *
-  *  @brief M68K Board Support Packages
-  */
+ * @defgroup RTEMSBSPsM68k Motorola 68000 and NXP ColdFire (m68k)
+ *
+ * @ingroup RTEMSBSPs
+ *
+ * @brief Motorola 68000 and NXP ColdFire Board Support Packagess.
+ */
 
 /**
   *  @defgroup m68k_shared M68K Shared Modules
   *
-  *  @ingroup bsp_m68k
+  *  @ingroup RTEMSBSPsM68k
   *
   *  @brief M68K Shared Modules
   */

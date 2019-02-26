@@ -47,7 +47,7 @@ struct rtems_bsdnet_ifconfig;
 /**
  * @defgroup lpc176x LPC176X Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief LPC176X support package.
  *

@@ -57,8 +57,6 @@
 /**
  *  @defgroup shared_vmeuniverse Register definitions
  *
- *  @ingroup bsp_shared
- *
  *  @brief all registers contents in PCI space are LITTLE ENDIAN
  */
 

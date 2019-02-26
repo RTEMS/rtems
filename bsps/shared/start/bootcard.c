@@ -1,20 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_bootcard
- *
- * @brief Standard system startup.
- *
- *  This is the C entry point for ALL RTEMS BSPs.  It is invoked
- *  from the assembly language initialization file usually called
- *  start.S.  It provides the framework for the BSP initialization
- *  sequence.  For the basic flow of initialization see RTEMS C User's Guide,
- *  Initialization Manager.
- *
- *  This style of initialization ensures that the C++ global
- *  constructors are executed after RTEMS is initialized.
- *  Thanks to Chris Johns <cjohns@plessey.com.au> for the idea
- *  to move C++ global constructors into the first task.
+ * @ingroup RTEMSBSPsSharedStartup
  */
 
 /*

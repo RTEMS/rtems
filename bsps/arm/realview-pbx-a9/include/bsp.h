@@ -60,7 +60,7 @@ extern "C" {
 /**
  * @defgroup arm_realview-pbx-a9 Realview PBX-A9
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief Realview PBX-A9 support package
  *

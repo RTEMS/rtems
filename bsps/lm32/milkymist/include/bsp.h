@@ -29,7 +29,7 @@
 /**
  * @defgroup lm32_milkymist Milkymist Support
  * 
- * @ingroup bsp_lm32
+ * @ingroup RTEMSBSPsLM32
  * 
  * @brief Milkymist support package.
  */

@@ -21,7 +21,7 @@
 
 /**
  * @defgroup arm_rtl22xx RTL22XX Support
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  * @brief RTL22XX Support Package
  * @{
  */

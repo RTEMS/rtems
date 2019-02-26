@@ -40,7 +40,7 @@ extern "C" {
 /**
  * @defgroup m68k_gen68340 Motorola MC68340 Support
  *
- * @ingroup bsp_m68k
+ * @ingroup RTEMSBSPsM68k
  *
  * @brief Motorola MC68340 support.
  */

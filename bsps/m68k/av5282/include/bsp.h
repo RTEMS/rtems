@@ -13,7 +13,7 @@
 /**
  * @defgroup m68k_av5282 AV5282 Support
  *
- * @ingroup bsp_m68k
+ * @ingroup RTEMSBSPsM68k
  *
  * @brief AV5282 support.
  */

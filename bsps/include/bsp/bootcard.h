@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup bsp_bootcard
- *
- * @brief Standard system startup.
+ * @ingroup RTEMSBSPsSharedStartup
  */
 
 /*
@@ -37,9 +35,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup shared_bootcard Bootcard
+ * @defgroup RTEMSBSPsSharedStartup Bootcard
  *
- * @ingroup bsp_shared
+ * @ingroup RTEMSBSPsShared
  *
  * @brief Standard system startup.
  *

@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup arm_gdbarmsim GDBARMSIM Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief GDBARMSIM support package.
  *

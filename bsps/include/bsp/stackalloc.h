@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup bsp_stack Task Stack Allocator
  *
- * @ingroup bsp_shared
+ * @ingroup RTEMSBSPsShared
  *
  * @brief Task stack initialization, allocation and free functions.
  *

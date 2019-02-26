@@ -56,7 +56,7 @@ struct rtems_termios_device_context;
 /**
  * @defgroup lpc24xx LPC24XX Support
  *
- * @ingroup bsp_arm
+ * @ingroup RTEMSBSPsARM
  *
  * @brief LPC24XX support package.
  *

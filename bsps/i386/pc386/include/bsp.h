@@ -62,9 +62,9 @@ extern "C" {
 #endif
 
 /**
- * @degroup pc386_i386 PC386 Support
+ * @degroup i386_pc386 PC386 Support
  *
- * @ingroup bsp_i386
+ * @ingroup RTEMSBSPsI386
  *
  * @brief PC386 support.
  */
