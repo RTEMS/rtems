@@ -1,10 +1,7 @@
 /**
  * @file
  *
- * @ingroup altera-cyclone-v_i2c
- *
- * @brief Drivers for I2C
- *
+ * @ingroup RTEMSBSPsARMCycVI2C
  */
 
 /*

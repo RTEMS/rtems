@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup altera-cyclone-v_i2c
- *
- * @brief Drivers for I2C
+ * @ingroup RTEMSBSPsARMCycVI2C
  */
 
 /*
@@ -30,12 +28,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup altera-cyclone-v_i2c I2C Support
+ * @defgroup RTEMSBSPsARMCycVI2C I2C Driver
  *
- * @ingroup arm_altera-cyclone-v
+ * @ingroup RTEMSBSPsARMCycV
  *
- * @brief I2C Support
+ * @brief I2C Driver.
  *
+ * @{
  */
 
 rtems_device_driver i2cdrv_initialize(
@@ -85,6 +84,8 @@ rtems_device_driver i2cdrv_ioctl(
   }
 
 #define I2C_IOC_SET_SLAVE_ADDRESS 1
+
+/** @} */
 
 #ifdef __cplusplus
 }

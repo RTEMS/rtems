@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_altera-cyclone-v
- *
- * @brief Global BSP definitions.
+ * @ingroup RTEMSBSPsARMCycV
  */
 
 /*
@@ -22,6 +20,16 @@
 
 #ifndef LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H
 #define LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMCycV Intel Cyclone V
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Intel Cyclone V Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -63,14 +71,6 @@ extern uint32_t altera_cyclone_v_a9mpcore_periphclk;
 
 #endif /* ASM */
 
-#endif /* LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H */
+/* @} */
 
-/**
- * @defgroup arm_altera-cyclone-v Altera Cyclone V Support
- *
- * @ingroup bsp_arm
- *
- * @brief Altera Cyclone V support package.
- *
- * @{
- */
+#endif /* LIBBSP_ARM_ALTERA_CYCLONE_V_BSP_H */

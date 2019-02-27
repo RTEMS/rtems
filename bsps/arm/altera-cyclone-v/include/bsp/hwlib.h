@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup altera-cyclone-v_hwlib
- *
- * @brief The type definition for status codes returned by the HWLIB.
+ * @ingroup RTEMSBSPsARMCycVContrib
  */
 
 /******************************************************************************
@@ -57,11 +55,11 @@ extern "C"
 #endif  /* __cplusplus */
 
 /**
- * @defgroup altera-cyclone-v_hwlib Hwlib
+ * @defgroup RTEMSBSPsARMCycVContrib Contributed Code
  *
- * @ingroup arm_altera-cyclone-v
+ * @ingroup RTEMSBSPsARMCycV
  *
- * @brief The type definition for status codes returned by the HWLIB.
+ * @brief Contributed code from Altera.
  */
 
 /*!

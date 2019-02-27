@@ -1,9 +1,7 @@
 /**
  * @file
  *
- * @ingroup altera-cyclone-v_interrupt
- *
- * @brief Interrupt definitions.
+ * @ingroup RTEMSBSPsARMCycVIRQ
  */
 
 /*
@@ -37,13 +35,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup altera-cyclone-v_interrupt Interrupt Support
+ * @defgroup RTEMSBSPsARMCycVIRQ Interrupt Support
  *
- * @ingroup arm_altera-cyclone-v
+ * @ingroup RTEMSBSPsARMCycV
  *
  * @ingroup bsp_interrupt
  *
- * @brief Interrupt Support for Altera Cyclone V
+ * @brief Intel Cyclone V Interrupt Support.
  *
  * @{
  */
@@ -51,6 +49,8 @@ extern "C" {
 /* Use interrupt IDs as defined in alt_interrupt_common.h */
 #define BSP_INTERRUPT_VECTOR_MIN ALT_INT_INTERRUPT_SGI0
 #define BSP_INTERRUPT_VECTOR_MAX ALT_INT_INTERRUPT_RAM_ECC_UNCORRECTED_IRQ
+
+/** @} */
 
 #ifdef __cplusplus
 }

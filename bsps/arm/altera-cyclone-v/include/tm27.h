@@ -1,18 +1,7 @@
 /**
-  * @file
-  *
-  * @ingroup altera-cyclone-v_tm27
-  *
-  * @brief GIC tmtests/tm27 support.
-  */
-
-
-/**
- * @defgroup altera-cyclone-v_tm27 GIC tmtests/tm27
+ * @file
  *
- * @ingroup arm_altera-cyclone-v
- *
- * @brief GIC tmtests/tm27 support.
+ * @ingroup RTEMSBSPsARMCycTM27
  */
 
 /*
@@ -36,6 +25,16 @@
 #ifndef __tm27_h
 #define __tm27_h
 
+/**
+ * @defgroup RTEMSBSPsARMCycTM27 TM27 Support
+ *
+ * @ingroup RTEMSBSPsARMCycV
+ *
+ * @brief Intel Cyclone V TM27 Support.
+ */
+
 #include <bsp/arm-gic-tm27.h>
+
+/** @} */
 
 #endif /* __tm27_h */
