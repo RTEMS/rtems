@@ -23,10 +23,8 @@ dist_project_lib_DATA += ../../../../../../bsps/arm/altera-cyclone-v/start/linkc
 project_lib_LIBRARIES = librtemsbsp.a
 
 librtemsbsp_a_SOURCES =
-librtemsbsp_a_CPPFLAGS = $(AM_CPPFLAGS)
 
 # for the Altera hwlib
-librtemsbsp_a_CPPFLAGS += -I$(RTEMS_SOURCE_ROOT)/bsps/arm/altera-cyclone-v/contrib/hwlib/include
 CFLAGS += -Wno-missing-prototypes
 
 # hwlib from Altera
