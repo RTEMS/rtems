@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /*
  * Altera - SoC UART Manager
  */

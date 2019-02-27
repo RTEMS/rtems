@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /******************************************************************************
  *
  * alt_address_space.c - API for the Altera SoC FPGA address space.

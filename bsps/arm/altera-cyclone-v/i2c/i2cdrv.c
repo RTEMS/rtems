@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVI2C
+ */
+
 /*
  * Copyright (c) 2014 embedded brains GmbH.  All rights reserved.
  *

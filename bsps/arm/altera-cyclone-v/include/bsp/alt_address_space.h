@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /*! \file
  *  Altera - SoC FPGA Address Space Manager
  */

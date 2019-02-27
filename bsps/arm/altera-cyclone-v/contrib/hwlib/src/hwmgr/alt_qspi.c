@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /******************************************************************************
 *
 * alt_qspi.c - API for the Altera SoC FPGA QSPI device.

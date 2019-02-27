@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /******************************************************************************
 *
 * Copyright 2013 Altera Corporation. All Rights Reserved.

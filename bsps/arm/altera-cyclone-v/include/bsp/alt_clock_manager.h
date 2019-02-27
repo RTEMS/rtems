@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMCycVContrib
+ */
+
 /*! \file
  *  Contains definitions for the Altera Hardware Libraries Clock Manager
  *  Application Programming Interface
