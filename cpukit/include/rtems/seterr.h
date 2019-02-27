@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/seterr.h
+ *  @file
  *
  *  @brief Data which Ease the Burden of Consistently Setting Errno
  *

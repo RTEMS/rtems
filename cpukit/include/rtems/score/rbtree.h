@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/rbtree.h
+ *  @file
  *
  *  @brief Constants and Structures Associated with the Red-Black Tree Handler
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/asr.h
+ * @file
  *
  * @defgroup ClassicASR ASR Support
  *

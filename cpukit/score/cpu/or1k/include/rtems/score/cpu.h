@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/cpu.h
+ * @file
  */
 
 /*

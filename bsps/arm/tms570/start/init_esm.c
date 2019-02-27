@@ -1,5 +1,5 @@
 /**
- * @file init_esm.c
+ * @file
  *
  * @ingroup tms570
  *

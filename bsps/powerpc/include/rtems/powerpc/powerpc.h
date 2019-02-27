@@ -1,5 +1,5 @@
 /**
- * @file rtems/powerpc/powerpc.h
+ * @file
  */
 
 /*

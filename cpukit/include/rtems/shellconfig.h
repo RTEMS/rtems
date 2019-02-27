@@ -1,5 +1,5 @@
 /**
- * @file rtems/shellconfig.h
+ * @file
  *
  * RTEMS Shell Command Set Configuration
  */

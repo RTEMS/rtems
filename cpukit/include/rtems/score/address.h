@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/address.h
+ *  @file
  *
  *  @brief Information Required to Manipulate Physical Addresses
  *

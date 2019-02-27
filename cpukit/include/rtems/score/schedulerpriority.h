@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/schedulerpriority.h
+ *  @file
  *
  *  @brief Thread Manipulation with the Priority-Based Scheduler
  *

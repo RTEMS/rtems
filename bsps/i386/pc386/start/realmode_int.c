@@ -1,5 +1,5 @@
 /**
- * @file realmode_int.c
+ * @file
  *
  * @ingroup i386_shared
  *

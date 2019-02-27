@@ -1,5 +1,5 @@
 /**
- * @file raspberrypi.h
+ * @file
  *
  * @ingroup raspberrypi_reg
  *

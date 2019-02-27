@@ -1,5 +1,5 @@
 /**
- * @file common-types.h
+ * @file
  *
  * @ingroup lpc176x
  *

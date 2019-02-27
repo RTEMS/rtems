@@ -1,5 +1,5 @@
 /**
- *  @file idtcpu.h
+ *  @file
  *
  *  @brief CPU Related Definitions
  *

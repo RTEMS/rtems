@@ -1,5 +1,5 @@
 /**
- *  @file rtems/rtems/intr.h
+ *  @file
  *
  * @defgroup ClassicINTR Interrupts
  *

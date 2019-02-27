@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/msgmp.h
+ * @file
  *
  * @brief Message Manager MP Support
  *

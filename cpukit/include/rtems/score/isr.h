@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/isr.h
+ *  @file
  *
  *  @brief Data Related to the Management of Processor Interrupt Levels
  *

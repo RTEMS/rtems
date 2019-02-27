@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/interr.h
+ *  @file
  *
  *  @brief Constants and Prototypes Related to the Internal Error Handler
  *

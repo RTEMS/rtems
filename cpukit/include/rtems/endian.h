@@ -1,5 +1,5 @@
 /**
- * @file rtems/endian.h
+ * @file
  *
  * This include file provides endian information about the target.
  */

@@ -1,5 +1,5 @@
 /**
- * @file clock.c
+ * @file
  *
  * @ingroup tms570
  *

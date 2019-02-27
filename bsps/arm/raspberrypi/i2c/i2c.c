@@ -1,5 +1,5 @@
 /**
- * @file i2c.c
+ * @file
  *
  * @ingroup raspberrypi_i2c
  *

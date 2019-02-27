@@ -1,4 +1,4 @@
-/*!@file      start.S
+/*!@file
 *
 *  @brief     Initialization code to set up the CPU and call boot_card()
 *

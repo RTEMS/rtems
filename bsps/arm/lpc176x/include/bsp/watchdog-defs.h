@@ -1,5 +1,5 @@
 /**
- * @file watchdog-defs.h
+ * @file
  *
  * @ingroup lpc176x
  *

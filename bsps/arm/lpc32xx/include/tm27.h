@@ -1,4 +1,4 @@
-/* @file 
+/* @file
  *
  * @ingroup arm_lpc32xx
  *

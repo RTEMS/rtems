@@ -1,5 +1,5 @@
 /**
- * @file pinmux.c
+ * @file
  *
  * @ingroup tms570
  *

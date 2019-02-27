@@ -1,5 +1,5 @@
 /**
- * @file memory.h
+ * @file
  *
  * Dummy include file for FreeBSD routines
  */

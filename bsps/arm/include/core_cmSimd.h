@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     core_cmSimd.h
+ * @file
  * @brief    CMSIS Cortex-M SIMD Header File
  * @version  V4.30
  * @date     20. October 2015

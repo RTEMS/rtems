@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/scheduleredf.h
+ *  @file
  *
  *  @brief Data Related to the Manipulation of Threads for the EDF Scheduler
  *

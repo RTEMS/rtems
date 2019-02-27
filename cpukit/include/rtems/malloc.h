@@ -1,5 +1,5 @@
 /**
- * @file rtems/malloc.h
+ * @file
  *
  * This file defines the interface to RTEMS extensions to the Malloc Family.
  */

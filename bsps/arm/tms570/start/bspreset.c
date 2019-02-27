@@ -1,5 +1,5 @@
 /**
- * @file bspreset.c
+ * @file
  *
  * @ingroup tms570
  *

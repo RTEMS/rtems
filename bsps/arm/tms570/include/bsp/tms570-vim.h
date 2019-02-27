@@ -1,5 +1,5 @@
 /**
- * @file tms570-vim.h
+ * @file
  *
  * @ingroup tms570
  *

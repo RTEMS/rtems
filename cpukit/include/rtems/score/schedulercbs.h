@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/schedulercbs.h
+ *  @file
  *
  *  @brief Thread manipulation for the CBS scheduler
  *

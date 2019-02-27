@@ -1,5 +1,5 @@
 /**
- * @file bspstart.c
+ * @file
  *
  * @ingroup tms570
  *

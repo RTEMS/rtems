@@ -1,5 +1,5 @@
 /**
- * @file tms570-rti.h
+ * @file
  *
  * @ingroup tms570
  *

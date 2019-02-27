@@ -1,5 +1,5 @@
 /**
- * @file rtems/gxx_wrappers.h
+ * @file
  *
  * RTEMS threads compatibility routines for libgcc2.
  */

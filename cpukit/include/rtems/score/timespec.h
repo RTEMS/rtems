@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/timespec.h
+ *  @file
  *
  *  This include file contains helpers for manipulating timespecs.
  */

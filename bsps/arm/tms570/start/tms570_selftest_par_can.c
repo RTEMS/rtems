@@ -1,5 +1,5 @@
 /**
- * @file tms570_selftest_par_can.c
+ * @file
  *
  * @ingroup tms570
  *

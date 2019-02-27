@@ -1,5 +1,5 @@
 /**
- * @file tms570-pom.h
+ * @file
  * @ingroup tms570
  * @brief Parameter Overlay Module (POM) header file
  */

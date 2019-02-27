@@ -1,5 +1,5 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
  *  This include file attempts to address the problems
  *  caused by incompatible flavors of assemblers and

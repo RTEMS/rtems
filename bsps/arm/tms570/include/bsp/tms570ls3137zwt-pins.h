@@ -1,5 +1,5 @@
 /**
- * @file tms570ls3137zwt-pins.h
+ * @file
  *
  * @ingroup tms570
  *

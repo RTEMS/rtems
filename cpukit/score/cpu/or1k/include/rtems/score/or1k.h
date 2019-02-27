@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/or1k.h
+ * @file
  */
 
 /*

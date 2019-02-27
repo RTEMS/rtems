@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/percpu.h
+ *  @file
  *
  *  This include file defines the per CPU information required
  *  by RTEMS.

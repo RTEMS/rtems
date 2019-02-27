@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/coresem.h
+ *  @file
  *
  *  @brief Data Associated with the Counting Semaphore Handler
  *

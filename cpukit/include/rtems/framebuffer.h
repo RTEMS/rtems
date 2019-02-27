@@ -1,5 +1,5 @@
 /**
- * @file rtems/framebuffer.h
+ * @file
  *
  * @brief Frame Buffer Device Driver for all Boards
  *

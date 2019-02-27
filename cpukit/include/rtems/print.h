@@ -1,5 +1,5 @@
 /**
- * @file rtems/print.h
+ * @file
  *
  * @brief User print interface to the bspIO print plug in.
  *

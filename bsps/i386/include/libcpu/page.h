@@ -1,5 +1,5 @@
 /*
- * @file page.h
+ * @file
  *
  * Copyright (C) 1998  Eric Valette (valette@crf.canon.fr)
  *                     Canon Centre Recherche France.

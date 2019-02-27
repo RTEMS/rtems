@@ -1,5 +1,5 @@
 /**
- * @file  rtems/score/object.h
+ * @file
  *
  * @brief Constants and Structures Associated with the Object Handler
  *

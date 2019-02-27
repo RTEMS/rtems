@@ -1,5 +1,5 @@
 /**
- * @file rtems/btimer.h
+ * @file
  *
  * @brief RTEMS Benchmark Timer API for all Boards
  */

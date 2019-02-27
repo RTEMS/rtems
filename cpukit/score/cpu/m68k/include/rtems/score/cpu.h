@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  * 
  * @brief Motorola M68K CPU Dependent Source
  * 

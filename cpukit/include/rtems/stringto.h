@@ -1,5 +1,5 @@
 /**
- * @file rtems/stringto.h
+ * @file
  *
  * @defgroup libmisc_conv_help Conversion Helpers
  *

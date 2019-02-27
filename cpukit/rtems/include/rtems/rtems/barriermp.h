@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/barriermp.h
+ * @file
  *
  * @brief MP Support in the Barrier Manager
  *

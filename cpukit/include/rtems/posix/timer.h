@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  * 
  * @brief POSIX Timers Internal Support
  *

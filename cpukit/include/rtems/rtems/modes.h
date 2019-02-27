@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/modes.h
+ * @file
  *
  * @defgroup ClassicModes Modes
  *

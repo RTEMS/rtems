@@ -1,5 +1,5 @@
 /**
- * @file can.c
+ * @file
  *
  * @ingroup lpc176x
  *

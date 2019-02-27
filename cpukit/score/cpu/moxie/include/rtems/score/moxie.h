@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/moxie.h
+ * @file
  */
 
 /*

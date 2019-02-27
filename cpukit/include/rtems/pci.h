@@ -1,5 +1,5 @@
 /**
- * @file rtems/pci.h
+ * @file
  *
  * PCI defines and function prototypes
  */

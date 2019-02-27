@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/mppkt.h
+ *  @file
  *
  *  @brief Specification for the Packet Handler
  *

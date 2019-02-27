@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  * 
  * @brief Scheduler Simple Handler / Unblock
  * @ingroup ScoreScheduler

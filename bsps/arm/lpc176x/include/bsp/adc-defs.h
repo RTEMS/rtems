@@ -1,5 +1,5 @@
 /**
- * @file adc-defs.h
+ * @file
  *
  * @ingroup lpc176x
  *

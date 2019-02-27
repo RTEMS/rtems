@@ -1,5 +1,5 @@
 /** 
- * @file rtems/fb.h
+ * @file
  *
  * @brief Frame Buffer Device Driver
  *

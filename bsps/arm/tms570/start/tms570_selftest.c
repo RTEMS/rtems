@@ -1,5 +1,5 @@
 /**
- * @file tms570_selftest.c
+ * @file
  *
  * @ingroup tms570
  *

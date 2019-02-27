@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/schedulersimple.h
+ *  @file
  *
  *  @brief Manipulation of Threads Simple-Priority-Based Ready Queue
  *

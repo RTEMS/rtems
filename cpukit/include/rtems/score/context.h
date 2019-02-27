@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/context.h
+ *  @file
  *
  *  @brief Information About Each Thread's Context
  *

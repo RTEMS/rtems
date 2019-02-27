@@ -1,5 +1,5 @@
 /**
- *  @file rtems/score/wkspace.h
+ *  @file
  *
  *  @brief Information Related to the RAM Workspace
  *

@@ -1,5 +1,5 @@
 /**
- * @file tms570-sci.h
+ * @file
  *
  * @ingroup tms570
  *

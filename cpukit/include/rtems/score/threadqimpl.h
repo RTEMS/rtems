@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/threadq.h
+ *  @file
  *
  *  Constants and Structures Associated with the Manipulation of Objects
  *

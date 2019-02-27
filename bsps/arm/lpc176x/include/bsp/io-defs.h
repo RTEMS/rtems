@@ -1,5 +1,5 @@
 /**
- * @file io-defs.h
+ * @file
  *
  * @ingroup lpc176x
  *

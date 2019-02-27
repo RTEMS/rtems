@@ -1,5 +1,5 @@
 /**
- * @file init_emif_sdram.c
+ * @file
  *
  * @ingroup tms570
  *

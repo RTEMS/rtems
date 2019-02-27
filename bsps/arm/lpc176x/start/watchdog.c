@@ -1,5 +1,5 @@
 /**
- * @file watchdog.c
+ * @file
  *
  * @ingroup lpc176x
  *

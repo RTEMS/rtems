@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/mips.h
+ * @file
  *
  * @brief Information to build RTEMS for a "no cpu" while in protected mode.
  *

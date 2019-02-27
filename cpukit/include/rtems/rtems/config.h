@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/config.h
+ * @file
  *
  * @defgroup ClassicConfig Configuration
  *

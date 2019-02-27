@@ -1,5 +1,5 @@
 /**
- * @file rtems/watchdogdrv.h
+ * @file
  *
  *  This file describes the Watchdog Driver for all boards.
  *  A watchdog is a hardware device that will reset the board

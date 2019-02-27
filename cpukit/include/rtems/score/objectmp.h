@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/objectmp.h
+ *  @file
  *
  *  @brief Data Associated with the Manipulation of Global RTEMS Objects
  *

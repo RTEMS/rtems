@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/object.h
+ * @file
  *
  * @defgroup ClassicClassInfo Object Class Information
  *

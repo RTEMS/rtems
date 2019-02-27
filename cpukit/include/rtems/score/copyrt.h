@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/copyrt.h
+ *  @file
  *
  *  @brief Copyright Notice for RTEMS
  *

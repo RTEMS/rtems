@@ -1,5 +1,5 @@
 /**
- * @file rtems/iosupp.h
+ * @file
  *
  * This include file defines some special characters of interest.
  */

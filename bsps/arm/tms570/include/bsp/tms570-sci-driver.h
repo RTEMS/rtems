@@ -1,5 +1,5 @@
 /**
- * @file tms570-sci-driver.h
+ * @file
  *
  * @ingroup tms570
  *

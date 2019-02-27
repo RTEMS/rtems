@@ -1,5 +1,5 @@
 /**
- * @file rtems/bspcmdline.h
+ * @file
  *
  * @defgroup BSPCommandLine BSP Command Line Helpers
  *

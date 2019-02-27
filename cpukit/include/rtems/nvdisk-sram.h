@@ -1,5 +1,5 @@
 /**
- * @file rtems/nvdisk-sram.h
+ * @file
  *
  * This driver maps an NV disk to static RAM. You can use this
  */

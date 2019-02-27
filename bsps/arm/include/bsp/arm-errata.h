@@ -1,5 +1,5 @@
 /**
- * @file arm-errata.h
+ * @file
  *
  * @ingroup arm_shared
  *

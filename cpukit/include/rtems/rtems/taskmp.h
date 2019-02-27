@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/taskmp.h
+ * @file
  *
  * @defgroup ClassicTaskMP Task MP Support
  *

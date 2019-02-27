@@ -1,5 +1,5 @@
 /**
- * @file timer.c
+ * @file
  *
  * @ingroup lpc176x
  *

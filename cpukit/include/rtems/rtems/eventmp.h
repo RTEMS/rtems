@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/eventmp.h
+ * @file
  *
  * @defgroup ClassicEventMP Event MP Support
  *

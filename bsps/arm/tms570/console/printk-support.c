@@ -1,5 +1,5 @@
 /**
- * @file printk-support.c
+ * @file
  *
  * @ingroup tms570
  *

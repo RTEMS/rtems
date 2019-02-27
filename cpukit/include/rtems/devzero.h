@@ -1,5 +1,5 @@
 /**
- * @file rtems/devzero.h
+ * @file
  *
  * @brief RTEMS /dev/zero Device Driver
  *

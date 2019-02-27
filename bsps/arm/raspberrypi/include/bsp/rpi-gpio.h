@@ -1,5 +1,5 @@
 /**
- * @file rpi-gpio.h
+ * @file
  *
  * @ingroup raspberrypi_gpio
  *

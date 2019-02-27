@@ -1,5 +1,5 @@
 /**
- * @file gpio-interfaces-pi1-rev2.c
+ * @file
  *
  * @ingroup raspberrypi_gpio
  *

@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/timestamp.h
+ *  @file
  *
  *  @brief Helpers for Manipulating Timestamps
  *

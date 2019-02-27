@@ -1,5 +1,5 @@
 /**
- * @file spi.c
+ * @file
  *
  * @ingroup raspberrypi_spi
  *

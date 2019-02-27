@@ -1,5 +1,5 @@
 /**
- * @file rtems/mw_uid.h
+ * @file
  *
  * @defgroup libmisc_fb_mw Input Devices for MicroWindows
  *

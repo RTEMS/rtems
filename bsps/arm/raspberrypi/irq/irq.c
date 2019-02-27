@@ -1,5 +1,5 @@
 /**
- * @file irq.c
+ * @file
  *
  * @ingroup raspberrypi_interrupt
  *

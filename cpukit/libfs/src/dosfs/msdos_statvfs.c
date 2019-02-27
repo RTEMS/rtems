@@ -1,5 +1,5 @@
 /**
- * @file msdos_statvfs.c
+ * @file
  *
  * @brief Obtain MS-DOS filesystem information
  * @ingroup libfs_msdos MSDOS FileSystem

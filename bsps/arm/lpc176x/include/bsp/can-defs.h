@@ -1,5 +1,5 @@
 /**
- * @file can-defs.h
+ * @file
  *
  * @ingroup lpc176x
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/cpuuse.h
+ * @file
  *
  * @defgroup libmisc_cpuuse CPU Usage
  *

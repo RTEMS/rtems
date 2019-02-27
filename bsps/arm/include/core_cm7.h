@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     core_cm7.h
+ * @file
  * @brief    CMSIS Cortex-M7 Core Peripheral Access Layer Header File
  * @version  V4.30
  * @date     20. October 2015

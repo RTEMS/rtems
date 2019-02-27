@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/thread.h
+ *  @file
  *
  *  @brief Constants and Structures Related with the Thread Control Block
  *

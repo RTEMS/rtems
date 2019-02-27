@@ -1,5 +1,5 @@
 /**
- * @file rtems/concat.h
+ * @file
  *
  * This include file defines ANSI concatenation macros.
  */

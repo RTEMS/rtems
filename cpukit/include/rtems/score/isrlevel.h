@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/isrlevel.h
+ *  @file
  *
  *  @brief ISR Level Type
  *

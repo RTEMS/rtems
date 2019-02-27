@@ -1,5 +1,5 @@
 /**
- * @file bspstarthooks.c
+ * @file
  *
  * @ingroup lpc176x
  *

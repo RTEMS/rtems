@@ -1,5 +1,5 @@
 /**
- * @file timerbenchmark.c
+ * @file
  *
  * @ingroup lpc176x
  *

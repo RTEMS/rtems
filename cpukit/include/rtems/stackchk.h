@@ -1,5 +1,5 @@
 /**
- * @file rtems/stackchk.h
+ * @file
  *
  * @defgroup libmisc_stackchk Stack Checker Mechanism
  *

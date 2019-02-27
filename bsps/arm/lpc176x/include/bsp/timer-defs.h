@@ -1,5 +1,5 @@
 /**
- * @file timer-defs.h
+ * @file
  *
  * @ingroup lpc176x
  *

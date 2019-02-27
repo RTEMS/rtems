@@ -1,4 +1,4 @@
-/** @file init_system.c
+/** @file
 
    based on Ti HalCoGen generated file
  */

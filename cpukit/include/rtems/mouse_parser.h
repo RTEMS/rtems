@@ -1,5 +1,5 @@
 /**
- * @file rtems/mouse_parser.h
+ * @file
  *
  * @brief Initialize Mouse Parser Engine
  *

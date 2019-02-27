@@ -1,5 +1,5 @@
 /**
- * @file rtems/bspIo.h
+ * @file
  *
  * @brief Interface to Kernel Print Methods
  *

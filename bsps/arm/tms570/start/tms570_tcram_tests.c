@@ -1,5 +1,5 @@
 /**
- * @file tms570_tcram_tests.c
+ * @file
  *
  * @ingroup tms570
  *

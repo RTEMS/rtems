@@ -1,5 +1,5 @@
 /**
- *@file console.c
+ *@file
  *
  *@brief
  *  - This file implements uart console for TLL6527M. TLL6527M has BF527 with

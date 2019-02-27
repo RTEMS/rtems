@@ -1,5 +1,5 @@
 /**
- * @file rtems/error.h
+ * @file
  *
  * @brief RTEMS Error Reporting
  *

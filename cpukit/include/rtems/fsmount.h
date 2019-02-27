@@ -1,5 +1,5 @@
 /**
- * @file rtems/fsmount.h
+ * @file
  *
  * @defgroup rtems_fstab File System Mount Support
  *

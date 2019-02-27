@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  * 
  * @brief Obtain RWLock for reading
  * @ingroup ScoreRWLock

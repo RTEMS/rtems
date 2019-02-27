@@ -1,5 +1,5 @@
 /**
- *@file interrupt.h
+ *@file
  *
  *@brief
  *  - This file implements interrupt dispatcher. The init code is taken from

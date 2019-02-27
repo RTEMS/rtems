@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/attr.h
+ * @file
  *
  * @defgroup ClassicAttributes Attributes
  *

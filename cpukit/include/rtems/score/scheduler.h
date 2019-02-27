@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/scheduler.h
+ *  @file
  *
  *  @brief Constants and Structures Associated with the Scheduler
  *

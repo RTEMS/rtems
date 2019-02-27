@@ -1,5 +1,5 @@
 /**
- * @file gpio.h
+ * @file
  *
  * @ingroup rtems_gpio
  *

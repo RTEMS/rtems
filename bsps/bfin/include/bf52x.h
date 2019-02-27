@@ -1,5 +1,5 @@
 /**
- *@file bf52x.h
+ *@file
  *
  *@brief
  *  - This file provides the register address for the 52X model. The file is

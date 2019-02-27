@@ -1,5 +1,5 @@
 /**
- * @file rtems/assoc.h
+ * @file
  *
  * @brief RTEMS Associativity Routines
  *

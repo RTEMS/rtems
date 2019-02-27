@@ -1,5 +1,5 @@
 /**
- * @file rtems/fs.h
+ * @file
  *
  * @brief Basic Filesystem Types
  *

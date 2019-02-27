@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/clock.h
+ * @file
  *
  * @defgroup ClassicClock Clocks
  *

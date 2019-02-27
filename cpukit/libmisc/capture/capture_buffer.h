@@ -1,5 +1,5 @@
 /**
- * @file capture_buffer.h
+ * @file
  *
  * @brief Capture buffer
  *

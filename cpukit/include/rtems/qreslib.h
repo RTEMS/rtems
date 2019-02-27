@@ -1,5 +1,5 @@
 /**
- * @file qreslib.h
+ * @file
  *
  * @brief Constants and Structures Associated
  * with the QoS RES library in RTEMS

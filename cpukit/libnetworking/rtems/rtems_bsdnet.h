@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems_bsdnet.h
+ * @file
  */
 
 

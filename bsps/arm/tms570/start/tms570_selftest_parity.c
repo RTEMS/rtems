@@ -1,5 +1,5 @@
 /**
- * @file tms570_selftest_parity.c
+ * @file
  *
  * @ingroup tms570
  *

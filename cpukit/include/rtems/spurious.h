@@ -1,5 +1,5 @@
 /**
- * @file rtems/spurious.h
+ * @file
  *
  * This file describes the Spurious Interrupt Driver for all boards.
  */

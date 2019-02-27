@@ -1,5 +1,5 @@
 /**
- *  @file  score/src/timespectoticks.c
+ *  @file
  */
 
 /*

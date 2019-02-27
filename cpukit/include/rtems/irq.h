@@ -1,5 +1,5 @@
 /**
- * @file rtems/irq.h
+ * @file
  *
  * This include file describe the data structure and the functions implemented
  * by rtems to write interrupt handlers.

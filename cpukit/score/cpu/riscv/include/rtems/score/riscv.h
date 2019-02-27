@@ -1,5 +1,5 @@
 /**
- * @file rtems/score/riscv.h
+ * @file
  */
 
 /*

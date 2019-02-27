@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/mainpage.h
+ * @file
  *
  * This file exists to provide a top level description of RTEMS for Doxygen.
  */

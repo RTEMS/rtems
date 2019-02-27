@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/status.h
+ * @file
  *
  * @defgroup ClassicStatus Status Codes
  *

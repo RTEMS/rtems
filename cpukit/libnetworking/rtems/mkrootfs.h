@@ -1,5 +1,5 @@
 /**
- * @file rtems/mkrootfs.h
+ * @file
  *
  * RTEMS Root FS creation support.
  */

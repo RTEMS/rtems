@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/threadmp.h
+ *  @file
  *
  *  @brief Multiprocessing Portion of the Thread Package
  *

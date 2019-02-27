@@ -1,5 +1,5 @@
 /**
- * @file fb_vesa_rm.c
+ * @file
  *
  * @ingroup i386_pc386
  *

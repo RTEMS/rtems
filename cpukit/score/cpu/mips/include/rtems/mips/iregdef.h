@@ -1,5 +1,5 @@
 /**
- *  @file iregdef.h
+ *  @file
  *
  *  @brief IDT R3000 Register Structure
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/options.h
+ * @file
  *
  * @defgroup ClassicOptions Classic API Options
  *

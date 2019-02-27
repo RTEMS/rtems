@@ -1,5 +1,5 @@
 /**
- * @file rtems/inttypes.h
+ * @file
  *
  * @brief Provide printf() PRIxxx Constante Beyond Standards
  *

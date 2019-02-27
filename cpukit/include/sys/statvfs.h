@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  *
  * @brief Interface to the statvfs() Set of API Methods
  *

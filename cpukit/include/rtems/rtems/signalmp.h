@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/signalmp.h
+ * @file
  *
  * @brief Signal MP Support
  *

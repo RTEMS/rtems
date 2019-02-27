@@ -1,5 +1,5 @@
 /**
- *  @file timerserver.c
+ *  @file
  *
  *  Timer Manager - rtems_timer_initiate_server directive along with
  *  the Timer Server Body and support routines

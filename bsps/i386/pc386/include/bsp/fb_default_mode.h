@@ -1,5 +1,5 @@
 /**
- * @file fb_default_mode.h
+ * @file
  *
  * @ingroup i386_pc386
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/partmp.h
+ * @file
  *
  * @brief MP Support in Partition Manager
  *

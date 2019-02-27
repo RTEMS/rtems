@@ -1,5 +1,5 @@
 /**
- * @file rtems/asm.h
+ * @file
  *
  * @brief Addresses Incompatible Flavors Problems
  *

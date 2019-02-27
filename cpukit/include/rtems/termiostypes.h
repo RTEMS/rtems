@@ -1,5 +1,5 @@
 /**
- * @file rtems/termiostypes.h
+ * @file
  *
  * RTEMS termios device support internal data structures
  */

@@ -1,5 +1,5 @@
 /**
- * @file rtems/shell.h
+ * @file
  *
  * @brief Instantatiate a New Terminal Shell
  */

@@ -1,5 +1,5 @@
 /**
- * @file io.h
+ * @file
  *
  * @ingroup lpc176x
  *

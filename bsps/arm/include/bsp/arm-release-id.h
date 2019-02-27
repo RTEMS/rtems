@@ -1,5 +1,5 @@
 /**
- * @file arm-release-id.h
+ * @file
  *
  * @ingroup arm_shared
  *

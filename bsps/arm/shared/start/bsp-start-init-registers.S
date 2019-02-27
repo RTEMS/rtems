@@ -1,5 +1,5 @@
 /**
- * @file bsp-start-init-registers.S
+ * @file
  *
  * @brief ARM register initialization routines.
  */

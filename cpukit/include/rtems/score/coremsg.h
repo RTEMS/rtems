@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/coremsg.h
+ *  @file
  *
  *  @brief Constants and Structures Associated with the Message Queue Handler.
  *

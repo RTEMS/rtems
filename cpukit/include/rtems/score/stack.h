@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/stack.h
+ *  @file
  *
  *  @brief Information About the Thread Stack Handler
  *

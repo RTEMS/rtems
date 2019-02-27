@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/semmp.h
+ * @file
  *
  * @defgroup ClassicSEM Semaphore MP Support
  *

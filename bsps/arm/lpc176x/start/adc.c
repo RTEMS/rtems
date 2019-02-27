@@ -1,5 +1,5 @@
 /**
- * @file adc.c
+ * @file
  *
  * @ingroup lpc176x
  *

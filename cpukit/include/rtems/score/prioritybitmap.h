@@ -1,5 +1,5 @@
 /**
- *  @file  rtems/score/prioritybitmap.h
+ *  @file
  *
  *  @brief Manipulation Routines for the Bitmap Priority Queue Implementation
  *

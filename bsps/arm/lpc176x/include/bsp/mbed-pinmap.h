@@ -1,5 +1,5 @@
 /**
- * @file mbed-pinmap.h
+ * @file
  *
  * @ingroup lpc176x
  *

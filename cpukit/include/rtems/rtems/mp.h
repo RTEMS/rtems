@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/mp.h
+ * @file
  *
  * @defgroup ClassicMP Multiprocessing
  *

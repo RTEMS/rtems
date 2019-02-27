@@ -1,5 +1,5 @@
 /**
- * @file benchmark_timer.c
+ * @file
  *
  * @ingroup tms570
  *

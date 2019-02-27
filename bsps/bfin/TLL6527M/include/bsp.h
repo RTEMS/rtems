@@ -1,5 +1,5 @@
 /**
- * @file bsp.h
+ * @file
  * @ingroup bfin_tll6527m
  * @brief Global BSP definitions.
  *

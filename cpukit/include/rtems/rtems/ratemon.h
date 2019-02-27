@@ -1,5 +1,5 @@
 /**
- * @file rtems/rtems/ratemon.h
+ * @file
  *
  * @defgroup ClassicRateMon Rate Monotonic Scheduler
  *

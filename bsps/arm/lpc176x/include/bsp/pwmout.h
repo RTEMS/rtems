@@ -1,5 +1,5 @@
 /**
- * @file pwmout.h
+ * @file
  *
  * @ingroup lpc176x
  *

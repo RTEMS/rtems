@@ -1,5 +1,5 @@
 /**
- * @file irq.h
+ * @file
  *
  * @ingroup tms570
  *

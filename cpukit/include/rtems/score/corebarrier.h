@@ -1,5 +1,5 @@
 /**
- *  @file rtems/score/corebarrier.h
+ *  @file
  *
  *  @brief Constants and Structures Associated with the Barrier Handler
  *

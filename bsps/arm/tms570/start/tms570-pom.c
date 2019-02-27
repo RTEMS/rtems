@@ -1,5 +1,5 @@
 /**
- * @file tms570-pom.c
+ * @file
  *
  * @ingroup tms570
  *

@@ -1,5 +1,5 @@
 /**
- * @file rtems/captureimpl.h
+ * @file
  *
  * @brief Capture Implementation file
  *

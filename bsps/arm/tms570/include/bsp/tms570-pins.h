@@ -1,5 +1,5 @@
 /**
- * @file tms570-pins.h
+ * @file
  *
  * @ingroup tms570
  *

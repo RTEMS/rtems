@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     core_cmInstr.h
+ * @file
  * @brief    CMSIS Cortex-M Core Instruction Access Header File
  * @version  V4.30
  * @date     20. October 2015

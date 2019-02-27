@@ -1,5 +1,5 @@
 /**************************************************************************//**
- * @file     cmsis_gcc.h
+ * @file
  * @brief    CMSIS Cortex-M Core Function/Instruction Header File
  * @version  V4.30
  * @date     20. October 2015
