@@ -377,8 +377,6 @@ AM_CONDITIONAL([CPU_V850],[test $RTEMS_CPU = "v850"])
 AM_CONDITIONAL([CPU_X86_64],[test $RTEMS_CPU = "x86_64"])
 
 # Explicitly list all Makefiles here
-AC_CONFIG_FILES([
-Doxyfile
-Makefile])
+AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT
