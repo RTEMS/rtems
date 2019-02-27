@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -27,6 +27,10 @@
 
 typedef struct {
   uint32_t iccicr;
+#define GIC_CPUIF_ICCICR_CBPR BSP_BIT32(4)
+#define GIC_CPUIF_ICCICR_FIQ_EN BSP_BIT32(3)
+#define GIC_CPUIF_ICCICR_ACK_CTL BSP_BIT32(2)
+#define GIC_CPUIF_ICCICR_ENABLE_GRP_1 BSP_BIT32(1)
 #define GIC_CPUIF_ICCICR_ENABLE BSP_BIT32(0)
   uint32_t iccpmr;
 #define GIC_CPUIF_ICCPMR_PRIORITY(val) BSP_FLD32(val, 0, 7)
@@ -83,6 +87,7 @@ typedef struct {
 
 typedef struct {
   uint32_t icddcr;
+#define GIC_DIST_ICDDCR_ENABLE_GRP_1 BSP_BIT32(1)
 #define GIC_DIST_ICDDCR_ENABLE BSP_BIT32(0)
   uint32_t icdictr;
 #define GIC_DIST_ICDICTR_LSPI(val) BSP_FLD32(val, 11, 15)
@@ -109,7 +114,7 @@ typedef struct {
 #define GIC_DIST_ICDIIDR_IMPLEMENTER_GET(reg) BSP_FLD32GET(reg, 0, 11)
 #define GIC_DIST_ICDIIDR_IMPLEMENTER_SET(reg, val) BSP_FLD32SET(reg, val, 0, 11)
   uint32_t reserved_0c[29];
-  uint32_t icdisr[32];
+  uint32_t icdigr[32];
   uint32_t icdiser[32];
   uint32_t icdicer[32];
   uint32_t icdispr[32];

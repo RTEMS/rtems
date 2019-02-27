@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -150,6 +150,42 @@ rtems_status_code arm_gic_irq_get_priority(
     volatile gic_dist *dist = ARM_GIC_DIST;
 
     *priority = gic_id_get_priority(dist, vector);
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}
+
+rtems_status_code arm_gic_irq_set_group(
+  rtems_vector_number vector,
+  gic_group group
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    gic_id_set_group(dist, vector, group);
+  } else {
+    sc = RTEMS_INVALID_ID;
+  }
+
+  return sc;
+}
+
+rtems_status_code arm_gic_irq_get_group(
+  rtems_vector_number vector,
+  gic_group *group
+)
+{
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+
+  if (bsp_interrupt_is_valid_vector(vector)) {
+    volatile gic_dist *dist = ARM_GIC_DIST;
+
+    *group = gic_id_get_group(dist, vector);
   } else {
     sc = RTEMS_INVALID_ID;
   }

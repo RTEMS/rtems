@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -57,6 +57,16 @@ rtems_status_code arm_gic_irq_set_priority(
 rtems_status_code arm_gic_irq_get_priority(
   rtems_vector_number vector,
   uint8_t *priority
+);
+
+rtems_status_code arm_gic_irq_set_group(
+  rtems_vector_number vector,
+  gic_group group
+);
+
+rtems_status_code arm_gic_irq_get_group(
+  rtems_vector_number vector,
+  gic_group *group
 );
 
 void bsp_interrupt_set_affinity(

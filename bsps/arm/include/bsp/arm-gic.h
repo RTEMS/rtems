@@ -7,7 +7,7 @@
  */
 
 /*
- * Copyright (c) 2013 embedded brains GmbH.  All rights reserved.
+ * Copyright (c) 2013, 2019 embedded brains GmbH.  All rights reserved.
  *
  *  embedded brains GmbH
  *  Dornierstr. 4
@@ -99,6 +99,41 @@ static inline bool gic_id_is_active(volatile gic_dist *dist, uint32_t id)
   uint32_t bit = GIC_ID_TO_ONE_BIT_REG_BIT(id);
 
   return (dist->icdabr[i] & bit) != 0;
+}
+
+typedef enum {
+  GIC_GROUP_0,
+  GIC_GROUP_1
+} gic_group;
+
+static inline gic_group gic_id_get_group(
+  volatile gic_dist *dist,
+  uint32_t id
+)
+{
+  uint32_t i = GIC_ID_TO_ONE_BIT_REG_INDEX(id);
+  uint32_t bit = GIC_ID_TO_ONE_BIT_REG_BIT(id);
+
+  return (dist->icdigr[i] & bit) != 0 ?  GIC_GROUP_1 : GIC_GROUP_0;
+}
+
+static inline void gic_id_set_group(
+  volatile gic_dist *dist,
+  uint32_t id,
+  gic_group group
+)
+{
+  uint32_t i = GIC_ID_TO_ONE_BIT_REG_INDEX(id);
+  uint32_t bit = GIC_ID_TO_ONE_BIT_REG_BIT(id);
+  uint32_t icdigr = dist->icdigr[i];
+
+  icdigr &= ~bit;
+
+  if (group == GIC_GROUP_1) {
+    icdigr |= bit;
+  }
+
+  dist->icdigr[i] = icdigr;
 }
 
 static inline void gic_id_set_priority(
