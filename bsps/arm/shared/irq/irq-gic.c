@@ -26,6 +26,33 @@
 
 #define PRIORITY_DEFAULT 127
 
+/*
+ * The following variants
+ *
+ *  - GICv1 with Security Extensions,
+ *  - GICv2 without Security Extensions, or
+ *  - within Secure processor mode
+ *
+ * have the ability to assign group 0 or 1 to individual interrupts.  Group
+ * 0 interrupts can be configured to raise an FIQ exception.  This enables
+ * the use of NMIs with respect to RTEMS.
+ *
+ * BSPs can enable this feature with the BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+ * define.  Use arm_gic_irq_set_group() to change the group of an
+ * interrupt (default group is 1, if BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0 is
+ * defined).
+ */
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+#define DIST_ICDDCR (GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE)
+#define CPUIF_ICCICR \
+  (GIC_CPUIF_ICCICR_CBPR | GIC_CPUIF_ICCICR_FIQ_EN \
+    | GIC_CPUIF_ICCICR_ACK_CTL | GIC_CPUIF_ICCICR_ENABLE_GRP_1 \
+    | GIC_CPUIF_ICCICR_ENABLE)
+#else
+#define DIST_ICDDCR GIC_DIST_ICDDCR_ENABLE
+#define CPUIF_ICCICR GIC_CPUIF_ICCICR_ENABLE
+#endif
+
 void bsp_interrupt_dispatch(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
@@ -72,6 +99,17 @@ static inline uint32_t get_id_count(volatile gic_dist *dist)
   return id_count;
 }
 
+static void enable_fiq(void)
+{
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+  rtems_interrupt_level level;
+
+  rtems_interrupt_local_disable(level);
+  level &= ~ARM_PSR_F;
+  rtems_interrupt_local_enable(level);
+#endif
+}
+
 rtems_status_code bsp_interrupt_facility_initialize(void)
 {
   volatile gic_cpuif *cpuif = GIC_CPUIF;
@@ -85,6 +123,9 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
   );
 
   for (id = 0; id < id_count; id += 32) {
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+    dist->icdigr[id / 32] = 0xffffffff;
+#endif
     dist->icdicer[id / 32] = 0xffffffff;
   }
 
@@ -98,10 +139,11 @@ rtems_status_code bsp_interrupt_facility_initialize(void)
 
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
-  cpuif->iccicr = GIC_CPUIF_ICCICR_ENABLE;
+  cpuif->iccicr = CPUIF_ICCICR;
 
-  dist->icddcr = GIC_DIST_ICDDCR_ENABLE;
+  dist->icddcr = GIC_DIST_ICDDCR_ENABLE_GRP_1 | GIC_DIST_ICDDCR_ENABLE;
 
+  enable_fiq();
   return RTEMS_SUCCESSFUL;
 }
 
@@ -115,9 +157,15 @@ BSP_START_TEXT_SECTION void arm_gic_irq_initialize_secondary_cpu(void)
     /* Wait */
   }
 
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+  dist->icdigr[0] = 0xffffffff;
+#endif
+
   cpuif->iccpmr = GIC_CPUIF_ICCPMR_PRIORITY(0xff);
   cpuif->iccbpr = GIC_CPUIF_ICCBPR_BINARY_POINT(0x0);
-  cpuif->iccicr = GIC_CPUIF_ICCICR_ENABLE;
+  cpuif->iccicr = CPUIF_ICCICR;
+
+  enable_fiq();
 }
 #endif
 

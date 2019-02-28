@@ -98,6 +98,9 @@ static inline rtems_status_code arm_gic_irq_generate_software_irq(
 
     dist->icdsgir = GIC_DIST_ICDSGIR_TARGET_LIST_FILTER(filter)
       | GIC_DIST_ICDSGIR_CPU_TARGET_LIST(targets)
+#ifdef BSP_ARM_GIC_ENABLE_FIQ_FOR_GROUP_0
+      | GIC_DIST_ICDSGIR_NSATT
+#endif
       | GIC_DIST_ICDSGIR_SGIINTID(vector);
   } else {
     sc = RTEMS_INVALID_ID;
