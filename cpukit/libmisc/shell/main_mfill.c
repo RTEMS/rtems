@@ -60,7 +60,7 @@ static int rtems_shell_main_mfill(
   /*
    *  Now fill the memory.
    */
-  memset(addr, size, value);
+  memset(addr, value, size);
 
   return 0;
 }
