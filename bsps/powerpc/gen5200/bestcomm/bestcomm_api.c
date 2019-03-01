@@ -23,13 +23,6 @@
 ******************************************************************************/
 
 /*!
- * \mainpage	Introduction
- *
- * \author	Motorola Semiconductor Products Sector
- * \date	2 Apr 2004
- */
-
-/*!
  * \file	bestcomm_api.c
  *
  * Bestcomm_api.c implements most of the BestComm C API. The
