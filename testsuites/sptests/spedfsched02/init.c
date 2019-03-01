@@ -30,6 +30,21 @@ const char rtems_test_name[] = "SPEDFSCHED 2";
 
 rtems_task_priority Prio[7] = { 0,   2,   2,   2,   2,  100, 1 };
 
+static void test_period_create_delete( void )
+{
+  rtems_status_code sc;
+  rtems_id id;
+
+  sc = rtems_rate_monotonic_create(
+    rtems_build_name( 'R', 'T', 'M', 'N' ),
+    &id
+  );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+
+  sc = rtems_rate_monotonic_delete( id );
+  rtems_test_assert( sc == RTEMS_SUCCESSFUL );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
@@ -40,6 +55,8 @@ rtems_task Init(
   Priorities = Prio;
 
   TEST_BEGIN();
+
+  test_period_create_delete();
 
   Task_name[ 1 ] =  rtems_build_name( 'T', 'A', '1', ' ' );
   Task_name[ 2 ] =  rtems_build_name( 'T', 'A', '2', ' ' );

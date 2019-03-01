@@ -84,8 +84,10 @@ void _Scheduler_EDF_Cancel_job(
 
   _Thread_Wait_acquire_critical( the_thread, queue_context );
 
-  _Thread_Priority_remove( the_thread, priority_node, queue_context );
-  _Priority_Node_set_inactive( priority_node );
+  if ( _Priority_Node_is_active( priority_node ) ) {
+    _Thread_Priority_remove( the_thread, priority_node, queue_context );
+    _Priority_Node_set_inactive( priority_node );
+  }
 
   _Thread_Wait_release_critical( the_thread, queue_context );
 }

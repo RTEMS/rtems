@@ -17,3 +17,5 @@ directives:
 concepts:
 
   a.  Verifies EDF Scheduling behavior.
+
+  b.  Verifies that a period object can be deleted immediatley after creation.
