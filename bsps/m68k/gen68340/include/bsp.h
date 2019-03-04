@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup m68k_gen68340
+ * @ingroup RTEMSBSPsM68kGen68340
  *
  * @brief Global BSP definitions.
  */
@@ -26,6 +26,16 @@
 #ifndef LIBBSP_M68K_GEN68340_BSP_H
 #define LIBBSP_M68K_GEN68340_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsM68kGen68340 Motorola 68340
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief Motorola 68340 Board Support Package.
+ *
+ * @{
+ */
+
 #ifndef ASM
 
 #include <bspopts.h>
@@ -36,14 +46,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup m68k_gen68340 Motorola MC68340 Support
- *
- * @ingroup RTEMSBSPsM68k
- *
- * @brief Motorola MC68340 support.
- */
 
 /* Constants */
 
@@ -77,5 +79,7 @@ void _Init68340 (void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

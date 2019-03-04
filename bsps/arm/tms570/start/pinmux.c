@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief I/O Multiplexing Module (IOMM) basic support
  */

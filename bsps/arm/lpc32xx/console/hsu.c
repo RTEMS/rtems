@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief High speed UART driver (14-clock).
  */

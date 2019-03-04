@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_clocks
+ * @ingroup RTEMSBSPsARMLPC24XX_clocks
  *
  * @brief System clocks.
  */

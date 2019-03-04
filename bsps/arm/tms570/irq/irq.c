@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief TMS570 interrupt support functions definitions.
  */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSHSim
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  SH-gdb simulator BSP
  *
@@ -23,6 +31,16 @@
 
 #ifndef LIBBSP_SH_SHSIM_BSP_H
 #define LIBBSP_SH_SHSIM_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsSHSim Simulator
+ *
+ * @ingroup RTEMSBSPsSH
+ *
+ * @brief Simulator Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -56,4 +74,7 @@ void bsp_hw_init(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
+
 #endif

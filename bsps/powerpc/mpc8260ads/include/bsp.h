@@ -1,5 +1,23 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMPC8260ADS
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This include file contains all board IO definitions.
+ */
+
+/**
+ * @defgroup RTEMSBSPsPowerPCMPC8260ADS NXP MPC8260ADS
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief NXP MPC8260ADS Board Support Package.
+ *
+ * @{
  */
 
 /*
@@ -82,5 +100,7 @@ int mbx8xx_console_get_configuration(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

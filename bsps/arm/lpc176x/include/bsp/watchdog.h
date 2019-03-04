@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief API of the Watchdog driver for the lpc176x bsp in RTEMS.
  */

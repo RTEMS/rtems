@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMotorola
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *
  *  The license and distribution terms for this file may be
@@ -6,6 +14,16 @@
  */
 #ifndef LIBBSP_POWERPC_MOTOROLA_POWERPC_BSP_H
 #define LIBBSP_POWERPC_MOTOROLA_POWERPC_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCMotorola Motorola
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Motorola Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -250,5 +268,7 @@ void VIA_isa_bridge_interrupts_setup(void);
 #ifdef __cplusplus
 };
 #endif
+
+/** @} */
 
 #endif

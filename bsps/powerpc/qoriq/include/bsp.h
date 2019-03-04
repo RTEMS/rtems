@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
- * @brief BSP API.
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -22,6 +22,16 @@
 
 #ifndef LIBBSP_POWERPC_QORIQ_BSP_H
 #define LIBBSP_POWERPC_QORIQ_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCQorIQ NXP QorIQ
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief NXP QorIQ Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -126,5 +136,7 @@ extern uint32_t qoriq_clock_frequency;
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_POWERPC_QORIQ_BSP_H */

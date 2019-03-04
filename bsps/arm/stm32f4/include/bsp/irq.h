@@ -39,7 +39,7 @@ extern "C" {
 
 /**
  * @defgroup stm32f4_interrupt Interrupt Support
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief Interrupt Support
  * @{
  */

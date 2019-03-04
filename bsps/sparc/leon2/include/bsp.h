@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup sparc_leon2
+ * @ingroup RTEMSBSPsSPARCLEON2
  *
- * @brief Global BSP Definitions.
+ * @brief Global BSP definitions.
  */
 
 /*  bsp.h
@@ -40,12 +40,13 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup sparc_leon2 LEON2 Support
+ * @defgroup RTEMSBSPsSPARCLEON2 LEON2
  *
- *  @ingroup RTEMSBSPsSPARC
+ * @ingroup RTEMSBSPsSPARC
  *
- *  @brief LEON2 Support Package
+ * @brief LEON2 Board Support Package.
  *
+ * @{
  */
 
 /* SPARC CPU variant: LEON2 */
@@ -220,5 +221,7 @@ int console_inbyte_nonblocking( int port );
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

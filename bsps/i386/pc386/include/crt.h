@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup i386_pc386
+ * @ingroup RTEMSBSPsI386
  *
  * @brief CRT controller definitions.
  */

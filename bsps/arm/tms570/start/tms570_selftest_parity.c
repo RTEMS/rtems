@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief Check of module parity based protection logic to work.
  */

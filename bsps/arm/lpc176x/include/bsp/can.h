@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief CAN controller for the mbed lpc1768 board.
  */

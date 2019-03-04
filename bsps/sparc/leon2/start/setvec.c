@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup sparc_leon2
+ * @ingroup RTEMSBSPsSPARCLEON2
  * @brief Installs an interrupt vector on the SPARC simulator
  */
 

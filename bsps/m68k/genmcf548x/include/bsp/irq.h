@@ -30,7 +30,7 @@
 /**
  * @defgroup genmcf548x_interrupt Interrupt Support
  *
- * @ingroup m68k_genmcf548x
+ * @ingroup RTEMSBSPsM68kGenMCF548X
  *
  * @brief Interrupt support.
  */

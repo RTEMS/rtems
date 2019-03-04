@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCTQM8XX
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  RTEMS TQM8xx BSP
  *  This include file contains all board IO definitions.
@@ -23,6 +31,16 @@
 
 #ifndef LIBBSP_POWERPC_TQM8XX_BSP_H
 #define LIBBSP_POWERPC_TQM8XX_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCTQM8XX TQM8XX
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief TQM8XX Board Support Package.
+ *
+ * @{
+ */
 
 /*
  * indicate, that BSP is booted via TQMMon
@@ -162,4 +180,7 @@ void cpu_init(void);
 #endif
 
 #endif
+
+/** @} */
+
 #endif

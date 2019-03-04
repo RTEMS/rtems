@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup sparc_erc32
+ * @ingroup RTEMSBSPsSPARCERC32
  *
- * @brief Global BSP Definitions.
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -25,6 +25,16 @@
 #ifndef LIBBSP_SPARC_ERC32_BSP_H
 #define LIBBSP_SPARC_ERC32_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsSPARCERC32 ERC32
+ *
+ * @ingroup RTEMSBSPsSPARC
+ *
+ * @brief ERC32 Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -35,14 +45,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup sparc_erc32 ERC32 Support
- *
- * @ingroup RTEMSBSPsSPARC
- *
- * @brief ERC32 Support Package
- */
 
 /*
  *  BSP provides its own Idle thread body
@@ -180,5 +182,7 @@ int console_inbyte_nonblocking(int port);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

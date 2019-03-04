@@ -110,7 +110,7 @@ extern int BSP_VMEIrqMgrInstall(void);
 /**
  *  @defgroup powerpc_vme BSP_VME_INSTALL_IRQ_MGR Support
  *
- *  @ingroup powerpc_mvme3100
+ *  @ingroup RTEMSBSPsPowerPCMVME3100
  *
  *  @brief BSP_VME_INSTALL_IRQ_MGR Support Package
  */

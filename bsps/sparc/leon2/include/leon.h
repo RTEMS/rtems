@@ -1,10 +1,7 @@
 /**
- * @defgroup leon1 Leon-1 Handler
- * @ingroup sparc_leon2
- *
  * @file
- * @ingroup leon1
- * @brief Handlers Leon-1
+ *
+ * @ingroup RTEMSBSPsSPARCLEON2
  *
  *  This include file contains information pertaining to the LEON-1.
  *  The LEON-1 is a custom SPARC V7 implementation.

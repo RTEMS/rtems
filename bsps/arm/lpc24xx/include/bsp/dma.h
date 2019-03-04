@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_dma
+ * @ingroup RTEMSBSPsARMLPC24XX_dma
  *
  * @brief Direct memory access (DMA) support.
  */
@@ -31,7 +31,7 @@ extern "C" {
 /**
  * @defgroup lpc24xx_dma DMA Support
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief Direct memory access (DMA) support.
  *

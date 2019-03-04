@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup arm_edb7312
+ * @ingroup RTEMSBSPsARMEDB7312
  * @brief Global BSP definitions.
  */
 
@@ -16,6 +16,16 @@
 #ifndef LIBBSP_ARM_EDB7312_BSP_H
 #define LIBBSP_ARM_EDB7312_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMEDB7312 EDB7312
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief EDB7312 Board Support Package.
+ *
+ * @{
+ */
+
 #ifndef ASM
 
 #include <bspopts.h>
@@ -28,13 +38,6 @@ extern "C" {
 #endif
 
 #define BSP_FEATURE_IRQ_EXTENSION
-
-/**
- * @defgroup arm_edb7312 EDB7312 Support
- * @ingroup RTEMSBSPsARM
- * @brief EDB7312 Support Package
- * @{
- */
 
 /**
  * @brief Define the interrupt mechanism for Time Test 27
@@ -61,12 +64,12 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
  */
 void edb7312_interrupt_dispatch(rtems_vector_number vector);
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif /* _BSP_H */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsRISCVGeneric
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *
  * Copyright (c) 2015 University of York.
@@ -31,6 +39,16 @@
 #ifndef LIBBSP_RISCV_GENERIC_H
 #define LIBBSP_RISCV_GENERIC_H
 
+/**
+ * @defgroup RTEMSBSPsRISCVGeneric Generic
+ *
+ * @ingroup RTEMSBSPsRISCV
+ *
+ * @brief Generic RISC-V Board Support Package.
+ *
+ * @{
+ */
+
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
@@ -51,5 +69,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* LIBBSP_RISCV_GENERIC_H */

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief Definition of TMS570 selftest error codes, addresses and functions.
  */

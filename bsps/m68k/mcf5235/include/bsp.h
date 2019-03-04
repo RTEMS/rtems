@@ -1,9 +1,27 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMCF5235
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  mcf5235 BSP header file
  */
 
 #ifndef LIBBSP_M68K_MCF5235_BSP_H
 #define LIBBSP_M68K_MCF5235_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMCF5235 MCF5235
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MCF5235 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -66,5 +84,7 @@ void Init5235(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMCF5225X
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -6,6 +14,16 @@
  
 #ifndef LIBBSP_M68K_MCF5225X_BSP_H
 #define LIBBSP_M68K_MCF5225X_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMCF5225X MCF5225X
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MCF5225X Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -86,5 +104,7 @@ void Init5225x(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

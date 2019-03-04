@@ -17,7 +17,7 @@ extern "C" {
 
 /**
  * @defgroup smdk2410_smc SMC Disk Driver
- * @ingroup arm_smdk2410
+ * @ingroup RTEMSBSPsARMSMDK2410
  * @brief SMC Disk Driver Support
  * @{
  */

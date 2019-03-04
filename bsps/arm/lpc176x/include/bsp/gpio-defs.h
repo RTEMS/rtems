@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief API definitions of the GPIO driver for the lpc176x bsp in RTEMS.
  */

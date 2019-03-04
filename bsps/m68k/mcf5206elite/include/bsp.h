@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMCF5206Elite
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Board Support Package for MCF5206eLITE evaluation board
  * BSP definitions
@@ -13,6 +21,16 @@
 
 #ifndef LIBBSP_M68K_MCF5206ELITE_BSP_H
 #define LIBBSP_M68K_MCF5206ELITE_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMCF5206Elite MCF5206eLite
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MCF5206eLite Board Support Package.
+ *
+ * @{
+ */
 
 #include "mcf5206/mcf5206e.h"
 
@@ -177,5 +195,7 @@ void Init5206e(void);
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif

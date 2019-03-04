@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSH4
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  generic sh4 BSP
  *
@@ -40,6 +48,16 @@
 #ifndef LIBBSP_SH_GENSH4_BSP_H
 #define LIBBSP_SH_GENSH4_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsSH4 SH-4
+ *
+ * @ingroup RTEMSBSPsSH
+ *
+ * @brief SH-4 Board Support Package.
+ *
+ * @{
+ */
+
 #include <rtems.h>
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -81,5 +99,7 @@ void bsp_cache_on(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

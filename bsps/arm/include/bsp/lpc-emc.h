@@ -32,8 +32,8 @@ extern "C" {
 /**
  * @defgroup lpc_emc EMC Support
  *
- * @ingroup arm_lpc24xx
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC24XX
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief EMC Support
  *

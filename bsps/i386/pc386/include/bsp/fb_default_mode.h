@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup i386_pc386
+ * @ingroup RTEMSBSPsI386
  *
  * @brief Variable for the definition of the default graphical mode to be
  *     initialized.

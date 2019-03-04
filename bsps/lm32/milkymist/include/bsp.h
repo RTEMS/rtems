@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lm32_milkymist
+ * @ingroup RTEMSBSPsLM32Milkymist
  *
  * @brief Global BSP definitions.
  */
@@ -27,11 +27,13 @@
 #include <rtems.h>
 
 /**
- * @defgroup lm32_milkymist Milkymist Support
+ * @defgroup RTEMSBSPsLM32Milkymist Milkymist
  * 
  * @ingroup RTEMSBSPsLM32
  * 
- * @brief Milkymist support package.
+ * @brief Milkymist Board Support Package.
+ *
+ * @{
  */
 
 #ifdef __cplusplus
@@ -58,5 +60,7 @@ extern int rtems_minimac_driver_attach (struct rtems_bsdnet_ifconfig *config,
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARC64USIII
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all SPARC64 simulator definitions.
@@ -12,6 +20,16 @@
 
 #ifndef LIBBSP_SPARC64_USIII_BSP_H
 #define LIBBSP_SPARC64_USIII_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsSPARC64USIII USIII
+ *
+ * @ingroup RTEMSBSPsSPARC64
+ *
+ * @brief USIII Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -38,5 +56,7 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

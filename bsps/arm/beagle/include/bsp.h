@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_beagle
+ * @ingroup RTEMSBSPsARMBeagle
  *
  * @brief Global BSP definitions.
  */
@@ -26,6 +26,16 @@
 
 #ifndef LIBBSP_ARM_BEAGLE_BSP_H
 #define LIBBSP_ARM_BEAGLE_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMBeagle Beaglebone
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Beaglebone Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <stdint.h>
@@ -346,21 +356,13 @@ static inline void write_ttbr0(uint32_t bar)
 #define    BSP_RESET_BOARD_AT_EXIT 1
     /* causes qemu to exit, signaling end of test */
 
-
-/**
- * @defgroup arm_beagle Beaglebone, Beagleboard Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief Beaglebones and beagleboards support package
- *
- */
-
 /**
  * @brief Beagleboard specific set up of the MMU.
  *
  * Provide in the application to override.
  */
 BSP_START_TEXT_SECTION void beagle_setup_mmu_and_cache(void);
+
+/* @} */
 
 #endif /* LIBBSP_ARM_BEAGLE_BSP_H */

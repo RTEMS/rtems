@@ -1,9 +1,28 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMCF5329
+ *
+ * @brief Global BSP definitions.
+ */
+
+
 /*
  *  mcf52235 BSP header file
  */
 
 #ifndef LIBBSP_M68K_MCF5329_BSP_H
 #define LIBBSP_M68K_MCF5329_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMCF5329 MCF5329
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MCF5329 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -66,5 +85,7 @@ void Init5329(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief Pins of the mbed lpc1768
  * See http://mbed.org/media/uploads/chris/mbed-005.1.pdf for references

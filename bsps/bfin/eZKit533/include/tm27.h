@@ -21,7 +21,7 @@
 
 /**
  * @defgroup ezkit533_tm27 TM27 Test Support
- * @ingroup bfin_ezkit533
+ * @ingroup RTEMSBSPsBfinEZKit533
  * @brief Interrupt Mechanisms for TM27
  * @{
  */

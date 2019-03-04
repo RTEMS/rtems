@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup BestComm BestComm Support
  *
- * @ingroup BestCommm
+ * @ingroup RTEMSBSPsPowerPCGen5200
  *
  * @brief BestComm support.
  *

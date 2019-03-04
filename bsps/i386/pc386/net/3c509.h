@@ -58,7 +58,7 @@
 /**
  * @defgroup pc386_3c509 3C509 Support
  *
- * @ingroup i386_pc386
+ * @ingroup RTEMSBSPsI386
  *
  * @brief 3C509 support.
  */

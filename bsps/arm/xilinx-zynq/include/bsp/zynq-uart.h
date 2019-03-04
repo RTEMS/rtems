@@ -29,7 +29,7 @@ extern "C" {
 
 /**
  * @defgroup zynq_uart UART Support
- * @ingroup arm_zynq
+ * @ingroup RTEMSBSPsARMZynq
  * @brief UART Support
  */
 

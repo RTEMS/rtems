@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief GPIO library for the lpc176x bsp.
  */

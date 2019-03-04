@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup m68k_av5282
+ * @ingroup RTEMSBSPsM68kAV5282
  *
  * @brief Global BSP definitions.
  */
@@ -10,16 +10,18 @@
  *  av5282 BSP header file
  */
 
+#ifndef LIBBSP_M68K_AV5282_BSP_H
+#define LIBBSP_M68K_AV5282_BSP_H
+
 /**
- * @defgroup m68k_av5282 AV5282 Support
+ * @defgroup RTEMSBSPsM68kAV5282 AV5282
  *
  * @ingroup RTEMSBSPsM68k
  *
- * @brief AV5282 support.
+ * @brief AV5282 Board Support Package.
+ *
+ * @{
  */
-
-#ifndef LIBBSP_M68K_AV5282_BSP_H
-#define LIBBSP_M68K_AV5282_BSP_H
 
 #ifndef ASM
 
@@ -94,4 +96,7 @@ void Init5282(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
+
 #endif

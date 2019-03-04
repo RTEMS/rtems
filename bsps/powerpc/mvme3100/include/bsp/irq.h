@@ -42,7 +42,7 @@ extern "C" {
 /**
  *  @defgroup powerpc_irq Definitions
  *
- *  @ingroup powerpc_mvme3100
+ *  @ingroup RTEMSBSPsPowerPCMVME3100
  *
  *  @brief rtems_irq_number Definitions
  */

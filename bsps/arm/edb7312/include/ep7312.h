@@ -28,7 +28,7 @@
 
 /**
  * @defgroup edb7312_registers Register Definitions
- * @ingroup arm_edb7312
+ * @ingroup RTEMSBSPsARMEDB7312
  * @brief Cirrus EP7312 Register Definitions
  * @{
  */

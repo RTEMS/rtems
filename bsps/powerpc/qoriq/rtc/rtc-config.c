@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief RTC configuration.
  */

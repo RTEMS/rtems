@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup generic_or1k
+ * @ingroup RTEMSBSPsOR1K
  *
  * @brief Benchmark timer support.
  */

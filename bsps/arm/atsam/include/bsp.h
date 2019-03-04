@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMAtsam
+ */
+
 /*
  * Copyright (c) 2016 embedded brains GmbH.  All rights reserved.
  *
@@ -14,6 +20,16 @@
 
 #ifndef LIBBSP_ARM_ATSAM_BSP_H
 #define LIBBSP_ARM_ATSAM_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMAtsam Atmel/Microchip SAM E70, S70, V70 and V71
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Atmel/Microchip SAM E70, S70, V70 and V71 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -93,10 +109,10 @@ void atsam_rtc_get_time(rtems_time_of_day *tod);
 
 void bsp_restart( const void *const addr );
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* LIBBSP_ARM_ATSAM_BSP_H */

@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup sparc_leon2
+ * @ingroup RTEMSBSPsSPARCLEON2
  * @brief Interrupts definitions
  *
  * Based on libbsp/shared/include/irq.h.

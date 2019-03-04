@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup sparc_leon2
+ * @ingroup RTEMSBSPsSPARCLEON2
  *
  * @brief Support for gnat/rtems iterrupts and exception handling
  */

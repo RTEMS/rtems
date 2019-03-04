@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief Global BSP definitions.
  */
@@ -25,6 +25,16 @@
 #ifndef LIBBSP_ARM_TMS570_BSP_H
 #define LIBBSP_ARM_TMS570_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMTMS570 TMS570
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief TMS570 Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
@@ -38,5 +48,7 @@
 #define BSP_PLL_OUT_CLOCK 160000000
 
 #endif /* ASM */
+
+/* @} */
 
 #endif /* LIBBSP_ARM_TMS570_BSP_H */

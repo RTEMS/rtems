@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief Ethernet driver configuration.
  */

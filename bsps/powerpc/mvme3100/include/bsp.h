@@ -1,9 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  @ingroup mvme3100_bsp
+ * @ingroup RTEMSBSPsPowerPCMVME3100
  *
- *  @brief This file contains BSP API definition.
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -28,11 +28,13 @@
 #include <bsp/vectors.h>
 
 /**
- *  @defgroup mvme3100_bsp confdefs.h overrides
+ * @defgroup RTEMSBSPsPowerPCMVME3100 MVME3100
  *
- *  @ingroup powerpc_mvme3100
+ * @ingroup RTEMSBSPsPowerPC
  *
- *  @brief confdefs.h overrides for this BSP:
+ * @brief MVME3100 Board Support Package.
+ *
+ * @{
  */
 
 #define BSP_INTERRUPT_STACK_SIZE          (16 * 1024)
@@ -336,5 +338,7 @@ extern void BSP_pciConfigDump_early( void );
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

@@ -1,8 +1,7 @@
 /**
  * @file
- * @defgroup amba AMBA Driver Handler
- * @ingroup sparc_leon3
- * @brief AMBA Plag & Play Bus Driver Macros
+ *
+ * @ingroup RTEMSBSPsRISCVGRLIBAMBA
  */
 
 /*
@@ -20,6 +19,18 @@
 
 #ifndef __AMBA_H__
 #define __AMBA_H__
+
+/**
+ * @defgroup RTEMSBSPsRISCVGRLIBAMBA RISC-V AMBA Driver Handler
+ *
+ * @ingroup RTEMSBSPsRISCVGRLIB
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief AMBA Plag & Play Bus Driver Macros
+ *
+ * @{
+ */
 
 #ifndef GRLIB_IO_AREA
 #define GRLIB_IO_AREA 0xfff00000
@@ -139,5 +150,7 @@ static inline uint32_t grlib_get_cpu_count(
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __AMBA_H__ */

@@ -1,7 +1,9 @@
 /**
- *  @file
- *  
- *  This include file contains some definitions specific to the RBTX4925.
+ * @file
+ *
+ * @ingroup RTEMSBSPsMIPSRBTX4925
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -15,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_RBTX4925_BSP_H
 #define LIBBSP_MIPS_RBTX4925_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSRBTX4925 RBTX4925
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief RBTX4925 Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -42,5 +54,7 @@ void resettlb(int i);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

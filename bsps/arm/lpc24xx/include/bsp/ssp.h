@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_libi2c
+ * @ingroup RTEMSBSPsARMLPC24XX_libi2c
  *
  * @brief LibI2C bus driver for the Synchronous Serial Port (SSP).
  */
@@ -29,7 +29,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @ingroup lpc24xx_libi2c
+ * @ingroup RTEMSBSPsARMLPC24XX_libi2c
  *
  * @{
  */

@@ -37,7 +37,7 @@ extern "C" {
 
 /**
  * @defgroup stm32f4_i2c I2C Support
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief I2C Module
  * @{
  */

@@ -1,5 +1,5 @@
 /**
- * @defgroup RTEMSBSPsPowerPc PowerPC
+ * @defgroup RTEMSBSPsPowerPC PowerPC
  *
  * @ingroup RTEMSBSPs
  *

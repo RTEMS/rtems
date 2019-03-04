@@ -23,7 +23,7 @@
 
 /**
  * @defgroup tll6527m_tm27 TM27 Test Support
- * @ingroup bfin_tll6527m
+ * @ingroup RTEMSBSPsBfinTLL6527M
  * @brief Interrupt Mechanisms for TM27
  * @{
  */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCSS555
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This file includes definitions for the Intec SS555.
  */
@@ -18,6 +26,16 @@
 
 #ifndef LIBBSP_POWERPC_SS555_BSP_H
 #define LIBBSP_POWERPC_SS555_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCSS555 SS555
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief SS555 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -94,5 +112,7 @@ void _InitSS555(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

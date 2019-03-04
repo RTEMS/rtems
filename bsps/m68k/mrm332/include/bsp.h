@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMRM332
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all mrm board IO definitions.
@@ -14,6 +22,16 @@
 
 #ifndef LIBBSP_M68K_MRM332_BSP_H
 #define LIBBSP_M68K_MRM332_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMRM332 MRM332
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MRM332 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -86,5 +104,7 @@ void outbyte(char);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

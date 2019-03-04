@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_raspberrypi
+ * @ingroup RTEMSBSPsARMRaspberryPi
  *
  * @brief Global BSP definitions.
  */
@@ -19,6 +19,15 @@
 
 #ifndef LIBBSP_ARM_RASPBERRYPI_BSP_H
 #define LIBBSP_ARM_RASPBERRYPI_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMRaspberryPi Raspberry Pi
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Raspberry Pi Board Support Package.
+ *
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -57,13 +66,7 @@ void rpi_start_rtems_on_secondary_processor(void);
 }
 #endif /* __cplusplus */
 
+/* @} */
+
 #endif /* LIBBSP_ARM_RASPBERRYPI_BSP_H */
 
-/**
- * @defgroup arm_raspberrypi Raspberry Pi Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief Raspberry Pi support package
- *
- */

@@ -27,7 +27,9 @@
 #include <bsp/mpc5200.h>
 
 /**
- * @defgroup m MSCAN
+ * @defgroup RTEMSBSPsPowerPCGen5200MSCAN MSCAN
+ *
+ * @ingroup RTEMSBSPsPowerPCGen5200
  *
  * @{
  */

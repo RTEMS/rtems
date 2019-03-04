@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_lcd
+ * @ingroup RTEMSBSPsARMLPC24XX_lcd
  *
  * @brief LCD support.
  */

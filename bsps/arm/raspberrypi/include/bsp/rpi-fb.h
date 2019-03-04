@@ -25,7 +25,7 @@
 /**
  * @defgroup raspberrypi_fb
  *
- * @ingroup arm_raspberrypi
+ * @ingroup RTEMSBSPsARMRaspberryPi
  *
  * @brief Framebuffer support and setup
  *

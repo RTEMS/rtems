@@ -38,7 +38,7 @@ extern "C" {
 /**
  * @defgroup lpc_eth Ethernet Support
  *
- * @ingroup lpc
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief Ethernet support.
  *

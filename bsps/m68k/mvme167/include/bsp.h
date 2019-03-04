@@ -1,10 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  Following defines must reflect the setup of the particular MVME167.
- *  All page references are to the MVME166/MVME167/MVME187 Single Board
- *  Computer Programmer's Reference Guide (MVME187PG/D2) with the April
- *  1993 supplements/addenda (MVME187PG/D2A1).
+ * @ingroup RTEMSBSPsM68kMVME167
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -21,6 +20,16 @@
 
 #ifndef LIBBSP_M68K_MVME167_BSP_H
 #define LIBBSP_M68K_MVME167_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMVME162 MVME167
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MVME167 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -314,5 +323,7 @@ extern void *M68Kvec[];   /* vector table address */
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

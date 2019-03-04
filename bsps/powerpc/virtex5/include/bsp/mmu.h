@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Virtex5MMU
+ * @ingroup RTEMSBSPsPowerPCVirtex5MMU
  *
  * @brief Routines to manipulate the PPC 440 MMU.
  */
@@ -66,7 +66,7 @@ extern "C" {
 /**
  * @defgroup Virtex5MMU Virtex 5 - MMU Support
  *
- * @ingroup Virtex5
+ * @ingroup RTEMSBSPsPowerPCVirtex5
  *
  * @brief MMU support.
  *

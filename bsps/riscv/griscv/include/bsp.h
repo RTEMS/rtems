@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsRISCVGRLIB
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *
  * Copyright (c) 2015 University of York.
@@ -31,6 +39,17 @@
 #ifndef LIBBSP_RISCV_GRISCV_H
 #define LIBBSP_RISCV_GRISCV_H
 
+/**
+ * @defgroup RTEMSBSPsRISCVGRLIB GRLIB
+ *
+ * @ingroup RTEMSBSPsRISCV
+ *
+ * @brief GRLIB RISC-V Board Support Package.
+ *
+ * @{
+ */
+
+
 #include <rtems.h>
 #include <rtems/clockdrv.h>
 #include <rtems/console.h>
@@ -62,5 +81,7 @@ extern void BSP_shared_interrupt_unmask(int irq);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* LIBBSP_RISCV_GRISCV_H */

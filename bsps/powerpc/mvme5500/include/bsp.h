@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCMVME5500
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  Copyright (C) 1999 Eric Valette. valette@crf.canon.fr
  *
@@ -10,6 +18,16 @@
 
 #ifndef LIBBSP_POWERPC_MVME5500_BSP_H
 #define LIBBSP_POWERPC_MVME5500_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCMVME5500 MVME5500
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief MVME5500 Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -204,5 +222,7 @@ static inline void ioBar(void)
 }
 
 #endif
+
+/** @} */
 
 #endif /* !ASM */

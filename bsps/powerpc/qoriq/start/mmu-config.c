@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQMMU
+ * @ingroup RTEMSBSPsPowerPCQorIQMMU
  *
  * @brief MMU implementation.
  */

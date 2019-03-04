@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsMoxieMoxieSim
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This include file contains some definitions specific to the
  *  moxie simulator in gdb.
@@ -15,6 +23,16 @@
 #ifndef LIBBSP_MOXIE_MOXIESIM_BSP_H
 #define LIBBSP_MOXIE_MOXIESIM_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsMoxieMoxieSim Simulator
+ *
+ * @ingroup RTEMSBSPsMoxie
+ *
+ * @brief Simulator Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #include <rtems.h>
@@ -31,5 +49,7 @@ void *clock_driver_sim_idle_body(uintptr_t);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

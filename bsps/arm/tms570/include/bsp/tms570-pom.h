@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  * @brief Parameter Overlay Module (POM) header file
  */
 

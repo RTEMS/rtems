@@ -35,7 +35,7 @@ extern "C" {
 
 /**
  * @defgroup zynq_interrupt Interrupt Support
- * @ingroup arm_zynq
+ * @ingroup RTEMSBSPsARMZynq
  * @brief Interrupt Support
  * @{
  */

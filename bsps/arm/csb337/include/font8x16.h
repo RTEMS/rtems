@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief Simple 8 x 16 font, printable characters only.
  */
@@ -9,7 +9,7 @@
 /**
  * @defgroup csb337_font Simple 8 x 16 font
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief Simple 8 x 16 font, printable characters only.
  */

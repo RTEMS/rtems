@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsNoCPUNoBsp
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -16,6 +24,12 @@
 
 #ifndef LIBBSP_NO_CPU_NO_BSP_BSP_H
 #define LIBBSP_NO_CPU_NO_BSP_BSP_H
+
+/**
+ * @addtogroup RTEMSBSPsNoCPU
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -37,5 +51,7 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,3 +1,9 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsARMimx
+ */
+
 /*
  * Copyright (c) 2017 embedded brains GmbH.  All rights reserved.
  *
@@ -14,6 +20,16 @@
 
 #ifndef LIBBSP_ARM_IMX_BSP_H
 #define LIBBSP_ARM_IMX_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMimx NXP i.MX
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief NXP i.MX Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -80,5 +96,7 @@ int spi_bus_register_imx(const char *bus_path, const char *alias_or_path);
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/* @} */
 
 #endif /* LIBBSP_ARM_IMX_BSP_H */

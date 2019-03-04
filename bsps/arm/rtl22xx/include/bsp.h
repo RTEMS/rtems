@@ -1,6 +1,8 @@
 /**
  * @file
- * @ingroup arm_rtl22xx
+ *
+ * @ingroup RTEMSBSPsARMRTL22XX
+ *
  * @brief Global BSP definitions.
  */
 
@@ -16,15 +18,18 @@
 #ifndef LIBBSP_ARM_RTL22XX_BSP_H
 #define LIBBSP_ARM_RTL22XX_BSP_H
 
-#include <bspopts.h>
-#include <bsp/default-initial-extension.h>
-
 /**
- * @defgroup arm_rtl22xx RTL22XX Support
+ * @defgroup RTEMSBSPsARMRTL22XX RTL22XX
+ *
  * @ingroup RTEMSBSPsARM
- * @brief RTL22XX Support Package
+ *
+ * @brief RTL22XX Board Support Package.
+ *
  * @{
  */
+
+#include <bspopts.h>
+#include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
 
@@ -217,10 +222,10 @@ int cs8900_driver_attach (struct rtems_bsdnet_ifconfig *config,
  */
 extern void  UART0_Ini(void);
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */

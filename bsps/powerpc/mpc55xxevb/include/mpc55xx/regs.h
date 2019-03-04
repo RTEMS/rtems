@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  * @brief Register definitions for the MPC55xx and MPC56xx microcontroller
  * family.

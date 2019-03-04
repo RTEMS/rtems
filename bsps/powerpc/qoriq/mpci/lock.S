@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQInterCom
+ * @ingroup RTEMSBSPsPowerPCQorIQInterCom
  *
  * @brief qoriq_spin_lock() and qoriq_spin_unlock() implementation.
  */

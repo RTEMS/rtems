@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQMMU
+ * @ingroup RTEMSBSPsPowerPCQorIQMMU
  *
  * @brief MMU API.
  */
@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @defgroup QorIQMMU QorIQ - MMU Support
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief MMU support.
  *

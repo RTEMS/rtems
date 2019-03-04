@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCGen5200
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*===============================================================*\
 | Project: RTEMS generic MPC5200 BSP                              |
 +-----------------------------------------------------------------+
@@ -22,6 +30,16 @@
 
 #ifndef LIBBSP_POWERPC_GEN5200_BSP_H
 #define LIBBSP_POWERPC_GEN5200_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCGen5200 NXP MPC5200
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief NXP MPC5200 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -258,5 +276,7 @@ int mpc5200_eth_mii_read(
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* GEN5200 */

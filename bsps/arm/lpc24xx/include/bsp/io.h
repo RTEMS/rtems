@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_io
+ * @ingroup RTEMSBSPsARMLPC24XX_io
  *
  * @brief Input and output module.
  */
@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup lpc24xx_io IO Support and Configuration
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief Input and output module.
  *

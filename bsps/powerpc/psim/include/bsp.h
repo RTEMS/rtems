@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCPSIM
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all Papyrus board IO definitions.
@@ -29,6 +37,16 @@
 
 #ifndef LIBBSP_POWERPC_PSIM_BSP_H
 #define LIBBSP_POWERPC_PSIM_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCPSIM PSIM
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief PSIM Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -86,5 +104,7 @@ int BSP_connect_clock_handler(void);
 #endif /* ASM */
 
 #define BSP_HAS_NO_VME
+
+/** @} */
 
 #endif

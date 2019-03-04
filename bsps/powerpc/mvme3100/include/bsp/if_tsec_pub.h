@@ -71,7 +71,7 @@ struct tsec_private;
 /**
  *  @defgroup powerpc_iftsecpub Low-level Driver API
  *
- *  @ingroup powerpc_mvme3100
+ *  @ingroup RTEMSBSPsPowerPCMVME3100
  *
  *  @brief This API provides driver access to applications that
  * want to use e.g., the second ethernet interface

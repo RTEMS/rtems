@@ -21,7 +21,7 @@
 /**
  * @defgroup lm3s69xx_ssi SSI Support
  *
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief SSI Support
  */

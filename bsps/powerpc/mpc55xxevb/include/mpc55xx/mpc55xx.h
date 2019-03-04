@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  * @brief Documentation for this file
  */
@@ -21,13 +21,9 @@
  */
 
 /**
- * @defgroup mpc55xx BSP for MPC55xx boards
- */
-
-/**
  * @defgroup mpc55xx_config Configuration files
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  * Makefiles, configure scripts etc.
  */

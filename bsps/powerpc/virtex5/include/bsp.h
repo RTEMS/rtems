@@ -1,6 +1,9 @@
-/*  @file
+/**
+ * @file
  *
- *  This include file contains all GEN405 board IO definitions.
+ * @ingroupRTEMSBSPsPowerPCVirtex5
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -42,6 +45,16 @@
 
 #ifndef LIBBSP_POWERPC_VIRTEX5_BSP_H
 #define LIBBSP_POWERPC_VIRTEX5_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCVirtex5 Xilinx Virtex-5
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Xilinx Virtex-5 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -100,5 +113,7 @@ void BSP_ask_for_reset(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

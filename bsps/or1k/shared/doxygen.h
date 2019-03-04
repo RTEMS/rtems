@@ -3,5 +3,5 @@
  *
  * @ingroup RTEMSBSPs
  *
- * @brief OpenRISC 1000 Board Support Packages.
+ * @brief OpenRISC 1000 Board Support Package.
  */

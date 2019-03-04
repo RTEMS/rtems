@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMVME147
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all MVME147 board IO definitions.
@@ -16,6 +24,16 @@
 
 #ifndef LIBBSP_M68K_MVME147_BSP_H
 #define LIBBSP_M68K_MVME147_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMVME147 MVME147
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MVME147 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -113,5 +131,7 @@ rtems_isr_entry set_vector(
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

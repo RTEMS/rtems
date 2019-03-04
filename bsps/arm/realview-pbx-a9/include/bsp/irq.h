@@ -34,7 +34,7 @@
 /**
  * @defgroup realview-pbx-a9_interrupt Interrrupt Support
  *
- * @ingroup arm_realview-pbx-a9
+ * @ingroup RTEMSBSPsARMRealviewPBXA9
  *
  * @brief Interrupt support.
  */

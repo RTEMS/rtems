@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief Generic parity based protection logic check applicable to HETx, HTUx, ADC, DMA and VIM.
  */

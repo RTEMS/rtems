@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief Global BSP definitions.
  */
@@ -19,6 +19,16 @@
 #ifndef LIBBSP_ARM_CSB337_BSP_H
 #define LIBBSP_ARM_CSB337_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMCSB337 CSB337
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief CSB337 Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -27,16 +37,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup arm_csb337 CSB337 Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief CSB337 support package.
- *
- * @{
- */
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
@@ -68,11 +68,11 @@ int rtems_at91rm9200_emac_attach(struct rtems_bsdnet_ifconfig *config, int attac
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_at91rm9200_emac_attach
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */
 

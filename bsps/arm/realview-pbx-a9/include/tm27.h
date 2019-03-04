@@ -10,7 +10,7 @@
 /**
  * @defgroup realview-pbx-a9_tm27 GIC tmtests/tm27
  *
- * @ingroup arm_realview-pbx-a9
+ * @ingroup RTEMSBSPsARMRealviewPBXA9
  *
  * @brief GIC tmtests/tm27 support.
  */

@@ -1,8 +1,9 @@
 /**
- *  @file
- *  
- *  This include file contains some definitions specific to the
- *  Cogent CSB350 Board.
+ * @file
+ *
+ * @ingroup RTEMSBSPsMIPSCSB350
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -16,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_CSB350_BSP_H
 #define LIBBSP_MIPS_CSB350_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSCSB350 CSB350
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief CSB350 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -43,5 +54,7 @@ int rtems_au1x00_emac_attach(struct rtems_bsdnet_ifconfig *config,
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,5 +1,9 @@
 /**
- *  @file
+ * @file
+ *
+ * @ingroup RTEMSBSPsMIPSHurricane
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -13,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_HURRICANE_BSP_H
 #define LIBBSP_MIPS_HURRICANE_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSHurricane Hurricane
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief Hurricane Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -75,5 +89,7 @@ void resettlb(int i);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif	/* __HURRICANE_BSP_h */

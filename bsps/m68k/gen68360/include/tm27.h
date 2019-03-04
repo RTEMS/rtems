@@ -22,7 +22,7 @@
 /**
  *  @defgroup m68k_tm27 Stuff for Time Test 27
  *
- *  @ingroup m68k_gen68360
+ *  @ingroup RTEMSBSPsM68kGen68360
  *
  *  @brief Don't bother with hardware -- just use a software-interrupt
  */

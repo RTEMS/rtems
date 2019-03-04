@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  * @brief bsp_idle_thread() implementation.
  */

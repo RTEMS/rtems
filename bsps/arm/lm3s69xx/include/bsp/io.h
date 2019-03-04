@@ -22,7 +22,7 @@
 /**
  * @defgroup lm3s69xx_io IO Support
  *
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief IO support.
  */

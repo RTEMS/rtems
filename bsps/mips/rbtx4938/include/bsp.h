@@ -1,7 +1,9 @@
 /**
- *  @file
- *  
- *  This include file contains some definitions specific to the RBTX4938.
+ * @file
+ *
+ * @ingroup RTEMSBSPsMIPSRBTX4938
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -15,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_RBTX4938_BSP_H
 #define LIBBSP_MIPS_RBTX4938_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSRBTX4938 RBTX4938
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief RBTX4938 Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -42,5 +54,7 @@ void resettlb(int i);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

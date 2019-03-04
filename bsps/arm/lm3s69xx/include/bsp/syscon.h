@@ -20,7 +20,7 @@
 /**
  * @defgroup lm3s69xx_syscon Syscon Support
  *
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief Syscon Support
  */

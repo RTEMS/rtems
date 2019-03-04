@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  * @brief System Integration Unit Access (SIU).
  */

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCGen83XX
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*===============================================================*\
 | Project: RTEMS generic MPC83xx BSP                              |
 +-----------------------------------------------------------------+
@@ -20,6 +28,16 @@
 
 #ifndef LIBBSP_POWERPC_GEN83XX_BSP_H
 #define LIBBSP_POWERPC_GEN83XX_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCGen83XX NXP MPC83XX
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief NXP MPC83XX Board Support Package.
+ *
+ * @{
+ */
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
@@ -155,5 +173,7 @@ void bsp_restart(void *addr);
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* GEN83xx */

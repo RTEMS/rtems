@@ -1,8 +1,9 @@
 /**
- *  @file
+ * @file
  *
- *  This include file contains some definitions specific to the
- *  MIPS Malta Board.
+ * @ingroup RTEMSBSPsMIPSMalta
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -16,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_MALTA_BSP_H
 #define LIBBSP_MIPS_MALTA_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSMalta Malta
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief Malta Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -109,5 +120,7 @@ void resettlb(int i);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

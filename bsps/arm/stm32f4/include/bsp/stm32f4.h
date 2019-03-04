@@ -30,7 +30,7 @@
 
 /**
  * @defgroup stm32f4_reg Register Defintions
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief Register Definitions
  * @{
  */

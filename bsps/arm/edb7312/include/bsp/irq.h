@@ -31,7 +31,7 @@
 
 /**
  * @defgroup edb7312_interrupt Interrupt Support
- * @ingroup arm_edb7312
+ * @ingroup RTEMSBSPsARMEDB7312
  * @brief Interrupt Support
  * @{
  */

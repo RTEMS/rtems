@@ -1,6 +1,6 @@
 /* @file
  *
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief Implementations of interrupt mechanisms for Time Test 27
  */

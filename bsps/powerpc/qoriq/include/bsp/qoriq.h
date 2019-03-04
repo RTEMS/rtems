@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief QorIQ Configuration, Control and Status Registers.
  */

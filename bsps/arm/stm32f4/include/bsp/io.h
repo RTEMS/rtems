@@ -31,7 +31,7 @@ extern "C" {
 
 /**
  * @defgroup stm32f4_io IO Support
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief IO Support
  * @{
  */

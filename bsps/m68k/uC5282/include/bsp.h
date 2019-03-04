@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kUC5282
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  uC5282 BSP header file
  *
@@ -13,6 +21,16 @@
 
 #ifndef LIBBSP_M68K_UC5282_BSP_H
 #define LIBBSP_M68K_UC5282_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kUC5282 uC5282
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief uC5282 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -171,5 +189,7 @@ extern struct {
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

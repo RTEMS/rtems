@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
- * @brief Global BSP variables and functions
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -22,6 +22,16 @@
 
 #ifndef LIBBSP_POWERPC_MPC55XXEVB_BSP_H
 #define LIBBSP_POWERPC_MPC55XXEVB_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCMPC55XX NXP MPC55XX and MPC56XX
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief NXP MPC55XX and MPC56XX Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -98,5 +108,7 @@ LINKER_SYMBOL(bsp_section_sysram_load_end)
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_POWERPC_MPC55XXEVB_BSP_H */

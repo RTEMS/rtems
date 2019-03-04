@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCHaleakala
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  Generic 405EX bsp.h
@@ -45,6 +53,16 @@
 #ifndef LIBBSP_POWERPC_HALEAKALA_BSP_H
 #define LIBBSP_POWERPC_HALEAKALA_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsPowerPCHaleakala Haleakala
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Haleakala Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #ifdef ASM
@@ -83,5 +101,7 @@
   }
   #endif
 #endif /* ASM */
+
+/** @} */
 
 #endif /* BSP_H */

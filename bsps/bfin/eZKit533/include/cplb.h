@@ -18,7 +18,7 @@
 
 /**
  * @defgroup ezkit533_cplb CPLB Configuration
- * @ingroup bfin_ezkit533
+ * @ingroup RTEMSBSPsBfinEZKit533
  * @brief CPLB Configuration
  * @{
  */

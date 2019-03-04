@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief Global BSP definitions.
  */
@@ -23,6 +23,16 @@
 #ifndef LIBBSP_ARM_LPC176X_BSP_H
 #define LIBBSP_ARM_LPC176X_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMLPC176X NXP LPC176X
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief NXP LPC176X Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #define LPC176X_PCLK ( LPC176X_CCLK / LPC176X_PCLKDIV )
@@ -43,16 +53,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct rtems_bsdnet_ifconfig;
-
-/**
- * @defgroup lpc176x LPC176X Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief LPC176X support package.
- *
- * @{
- */
 
 /**
  * @brief Optimized idle task.
@@ -84,12 +84,12 @@ void*bsp_idle_thread( uintptr_t ignored );
  */
 void bsp_restart( const void *addr );
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_ARM_LPC176X_BSP_H */

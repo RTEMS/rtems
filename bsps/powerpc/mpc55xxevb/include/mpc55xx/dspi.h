@@ -22,7 +22,7 @@
 /**
  * @defgroup mpc55xx_dspi Deserial Serial Peripheral Interface (DSPI)
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  */
 
 #ifndef LIBCPU_POWERPC_MPC55XX_DSPI_H

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief SED1356 LCD/CRT Controllers for KIT637_V6 (CSB637)
  *        16-Bit access mode
@@ -10,7 +10,7 @@
 /**
  * @defgroup csb337_sed1356 SED Video Controller.
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief SED1356 LCD/CRT Controllers for KIT637_V6 (CSB637)
  *        16-Bit access mode

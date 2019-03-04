@@ -30,7 +30,7 @@
 /**
  * @defgroup lm3s69xx_reg Register Definitions
  *
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief Register Definitions 
  */

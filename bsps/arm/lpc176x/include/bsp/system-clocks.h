@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x_clocks
+ * @ingroup RTEMSBSPsARMLPC176X_clocks
  *
  * @brief System clocks.
  */
@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup lpc176x_clock System Clocks
  *
- * @ingroup lpc176x
+ * @ingroup RTEMSBSPsARMLPC176X
  *
  * @brief System clocks.
  *

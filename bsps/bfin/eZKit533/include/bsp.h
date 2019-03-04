@@ -1,7 +1,11 @@
 /**
  * @file
- * @ingroup bfin_ezkit533
+ *
+ * @ingroup RTEMSBSPsBfinEZKit533
+ *
  * @brief Global BSP definitions.
+ *
+ * This include file contains all board IO definitions for TLL6527M.
  */
 
 /*  bsp.h
@@ -37,9 +41,12 @@ extern "C" {
 #endif
 
 /**
- * @defgroup bfin_ezkit533 eZKit533 Support
+ * @defgroup RTEMSBSPsBfinEZKit533 BF533 EZ-KIT
+ *
  * @ingroup RTEMSBSPsBfin
- * @brief eZKit533 Board Support Package
+ *
+ * @brief BF533 EZ-KIT Board Support Package.
+ *
  * @{
  */
 
@@ -162,5 +169,7 @@ void bfin_null_isr(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

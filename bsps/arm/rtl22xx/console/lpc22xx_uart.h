@@ -9,7 +9,7 @@
 
 /**
  * @defgroup rtl22xx_uart UART Support
- * @ingroup arm_rtl22xx
+ * @ingroup RTEMSBSPsARMRTL22XX
  * @brief UART (Universal Asynchronous Reciever/Transmitter) Support
  * @{
  */

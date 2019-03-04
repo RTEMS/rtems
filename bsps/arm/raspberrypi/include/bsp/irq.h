@@ -28,7 +28,7 @@
 /**
  * @defgroup raspberrypi_interrupt Interrrupt Support
  *
- * @ingroup arm_raspberrypi
+ * @ingroup RTEMSBSPsARMRaspberryPi
  *
  * @brief Interrupt support.
  */

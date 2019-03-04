@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup arm_smdk2410
+ * @ingroup RTEMSBSPsARMSMDK2410
  * @brief Global BSP definitons.
  */
 
@@ -15,6 +15,16 @@
 
 #ifndef LIBBSP_ARM_SMDK2410_BSP_H
 #define LIBBSP_ARM_SMDK2410_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMSMDK2410 SMDK2410
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief SMDK2410 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -75,6 +85,8 @@ void *bsp_idle_thread(uintptr_t ignored);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */
 

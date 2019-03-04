@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup m68k_csb360
+ * @ingroup RTEMSBSPsM68kCSB3602
  *
  * @brief Global BSP definitions.
  */
@@ -26,16 +26,17 @@
 #ifndef LIBBSP_M68K_CSB360_BSP_H
 #define LIBBSP_M68K_CSB360_BSP_H
 
-#include <mcf5272/mcf5272.h>
-
 /**
- * @defgroup m68k_csb360 CSB360 Support
+ * @defgroup RTEMSBSPsM68kCSB3602 CSB3602
  *
  * @ingroup RTEMSBSPsM68k
  *
- * @brief CSB360 support.
+ * @brief CSB3602 Board Support Package.
+ *
+ * @{
  */
 
+#include <mcf5272/mcf5272.h>
 
 /*** Board resources allocation ***/
 #define BSP_MEM_ADDR_SRAM 0x20000000
@@ -185,5 +186,7 @@ void init5272(void);
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif

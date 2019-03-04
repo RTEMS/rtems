@@ -26,7 +26,7 @@
 /**
  *  @defgroup m68k_m360spi M360_SPIDRV Support
  *
- *  @ingroup m68k_gen68360
+ *  @ingroup RTEMSBSPsM68kGen68360
  *
  *  @brief M360_SPIDRV Support Package
  */

@@ -32,7 +32,7 @@
 /**
  * @defgroup csb337_interrupt Interrrupt Support
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief Interrupt Support.
  */

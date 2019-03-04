@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup m68k_mcf52235
+ * @ingroup RTEMSBSPsM68kMCF52235
  *
- * @brief Global BSP definitions
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -12,6 +12,16 @@
 
 #ifndef LIBBSP_M68K_MCF52235_BSP_H
 #define LIBBSP_M68K_MCF52235_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMCF52235 MCF52235
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MCF52235 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -76,12 +86,7 @@ void Init52235(void);
 }
 #endif
 
+/** @} */
+
 #endif
 
-/**
- * @defgroup m68k_mcf52235 MCF52235 Support
- *
- * @ingroup RTEMSBSPsM68k
- *
- * @brief MCF52235 Support Package
- */

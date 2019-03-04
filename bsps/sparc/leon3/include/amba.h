@@ -1,8 +1,7 @@
 /**
  * @file
- * @defgroup amba AMBA Driver Handler
- * @ingroup sparc_leon3
- * @brief AMBA Plag & Play Bus Driver Macros
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3AMBA
  */
 
 /*
@@ -20,6 +19,18 @@
 
 #ifndef __AMBA_H__
 #define __AMBA_H__
+
+/**
+ * @defgroup RTEMSBSPsSPARCLEON3AMBA LEON3 AMBA Driver Handler
+ *
+ * @ingroup RTEMSBSPsSPARCLEON3
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief AMBA Plag & Play Bus Driver Macros
+ *
+ * @{
+ */
 
 #define LEON3_IO_AREA 0xfff00000
 #define LEON3_CONF_AREA 0xff000
@@ -44,5 +55,7 @@ extern struct ambapp_bus ambapp_plb;
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __AMBA_H__ */

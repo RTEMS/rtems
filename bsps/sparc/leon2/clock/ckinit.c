@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup sparc_leon2
+ * @ingroup RTEMSBSPsSPARCLEON2
  * @brief Clock Tick Device Driver
  *
  *  This routine initializes LEON timer 1 which used for the clock tick.

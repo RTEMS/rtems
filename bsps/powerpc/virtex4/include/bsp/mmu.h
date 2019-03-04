@@ -3,7 +3,7 @@
 /**
  * @file
  *
- * @ingroup Virtex4MMU
+ * @ingroup RTEMSBSPsPowerPCVirtex4MMU
  *
  * @brief Routines to manipulate the PPC 405 MMU.
  */
@@ -66,7 +66,7 @@ extern "C" {
 /**
  * @defgroup Virtex4MMU Virtex 4 - MMU Support
  *
- * @ingroup Virtex4
+ * @ingroup RTEMSBSPsPowerPCVirtex4
  *
  * @brief MMU support.
  *

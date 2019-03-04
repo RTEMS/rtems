@@ -353,7 +353,7 @@ typedef volatile unsigned long vulong;
 /**
  * @defgroup csb337_at91rm9200 AT91RM9200
  *
- * @ingroup arm_csb337
+ * @ingroup RTEMSBSPsARMCSB337
  *
  * @brief Atmel Register Definitions, Used In KIT637_V6 (CSB637)
  */

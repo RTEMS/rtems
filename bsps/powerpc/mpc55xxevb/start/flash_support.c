@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  *
  *  @brief MPC55XX flash memory support.
  *

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief Global BSP definitions.
  */
@@ -23,6 +23,16 @@
 #ifndef LIBBSP_ARM_LPC32XX_BSP_H
 #define LIBBSP_ARM_LPC32XX_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMLPC32XX NXP LPC32XX
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief NXP LPC32XX Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
@@ -39,16 +49,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 struct rtems_bsdnet_ifconfig;
-
-/**
- * @defgroup arm_lpc32xx LPC32XX Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief LPC32XX support package.
- *
- * @{
- */
 
 /**
  * @brief Network driver attach and detach function.
@@ -241,20 +241,12 @@ extern uint32_t lpc32xx_magic_zero_size [];
     ); \
   } while (0)
 
-/** @} */
-
-/**
- * @defgroup lpc LPC Support
- *
- * @ingroup arm_lpc32xx
- *
- * @brief LPC support package.
- */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_ARM_LPC32XX_BSP_H */

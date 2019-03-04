@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQMMU
+ * @ingroup RTEMSBSPsPowerPCQorIQMMU
  *
  * @brief qoriq_tlb1_write() and qoriq_tlb1_invalidate() implementation.
  */

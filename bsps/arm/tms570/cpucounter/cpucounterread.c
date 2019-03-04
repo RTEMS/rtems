@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570_clocks
+ * @ingroup RTEMSBSPsARMTMS570_clocks
  *
  * @brief Cortex-R performace counters
  *

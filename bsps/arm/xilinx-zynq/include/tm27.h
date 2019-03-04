@@ -27,7 +27,7 @@
 
 /**
  * @defgroup zynq_tm27 TM27 Test Support
- * @ingroup arm_zynq
+ * @ingroup RTEMSBSPsARMZynq
  * @brief Interrupt Mechanisms for tm27 test
  */
 

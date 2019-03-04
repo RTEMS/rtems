@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup gen68360_bsp
+ *  @ingroup RTEMSBSPsM68kGen68360
  *
  *  @brief Board Support Package for `Generic' Motorola MC68360
  */
@@ -31,6 +31,16 @@
 #ifndef LIBBSP_M68K_GEN68360_BSP_H
 #define LIBBSP_M68K_GEN68360_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsM68kGen68360 Motorola 68360
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief Motorola 68360 Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -39,14 +49,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- *  @defgroup gen68360_bsp Network driver
- *
- *  @ingroup m68k_gen68360
- *
- *  @brief Network driver configuration
- */
 
 struct rtems_bsdnet_ifconfig;
 extern int rtems_scc1_driver_attach (struct rtems_bsdnet_ifconfig *config, int attaching);
@@ -107,5 +109,7 @@ void _Init68360(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

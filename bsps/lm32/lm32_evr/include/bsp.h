@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lm32_evr
+ * @ingroup RTEMSBSPsLM32EVR
  *
  * @brief Global BSP definitions.
  */
@@ -21,19 +21,20 @@
 #ifndef LIBBSP_LM32_LM32_EVR_BSP_H
 #define LIBBSP_LM32_LM32_EVR_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsLM32EVR LM32 EVR
+ *
+ * @ingroup RTEMSBSPsLM32
+ *
+ * @brief LM32 EVR Board Support Package.
+ *
+ * @{
+ */
 #include <stdint.h>
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
 #include <rtems.h>
-
-/**
- * @defgroup lm32_evr EVR Support
- *
- * @ingroup RTEMSBSPsLM32
- *
- * @brief EVR support package.
- */
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,6 +81,8 @@ char BSP_uart_is_character_ready(char *ch);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif
 /* end of include file */

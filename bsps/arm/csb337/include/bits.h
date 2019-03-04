@@ -58,7 +58,7 @@
 /**
  *@defgroup csb337_bits Bits
  *
- *@ingroup arm_csb337
+ *@ingroup RTEMSBSPsARMCSB337
  *
  *@brief
  *

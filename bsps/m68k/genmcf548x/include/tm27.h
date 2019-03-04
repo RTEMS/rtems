@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup m68k_genmcf548x
+ * @ingroup RTEMSBSPsM68kGenMCF548X
  *
  * @brief Time Test 27 routines.
  */

@@ -1,9 +1,7 @@
 /**
- * @defgroup bsp_epiphany Epiphany
+ * @file
  *
- * @ingroup bsp_epiphany
- *
- * @brief Epiphany Support Package
+ * @ingroup RTEMSBSPsEpiphanySim
  */
 
 /*
@@ -38,6 +36,16 @@
 #ifndef LIBBSP_EPIPHANY_EPIPHANY_SIM_H
 #define LIBBSP_EPIPHANY_EPIPHANY_SIM_H
 
+/**
+ * @defgroup RTEMSBSPsEpiphanySim Simulator
+ *
+ * @ingroup RTEMSBSPsEpiphany
+ *
+ * @brief Simulator Board Support Package.
+ *
+ * @{
+ */
+
 #include <rtems.h>
 
 #include <bspopts.h>
@@ -61,5 +69,6 @@ void *clock_driver_sim_idle_body(uintptr_t);
 #ifdef __cplusplus
 }
 #endif
+/** @} */
 
 #endif /* LIBBSP_EPIPHANY_EPIPHANY_SIM_H */

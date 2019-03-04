@@ -22,7 +22,7 @@
 /**
  * @defgroup generic_or1k_reg Register Definitions
  *
- * @ingroup generic_or1k
+ * @ingroup RTEMSBSPsOR1K
  *
  * @brief Shared register definitions for or1k systems.
  *

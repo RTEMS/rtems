@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup generic_or1k
+ * @ingroup RTEMSBSPsOR1K
  *
  * @brief Global BSP definitions.
  */
@@ -16,6 +16,12 @@
 
 #ifndef LIBBSP_GENERIC_OR1K_H
 #define LIBBSP_GENERIC_OR1K_H
+
+/**
+ * @addtogroup RTEMSBSPsOR1K
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <rtems.h>
@@ -33,13 +39,7 @@ extern "C" {
 }
 #endif /* __cplusplus */
 
+/** @} */
+
 #endif /* LIBBSP_GENERIC_OR1K_H */
 
-/**
- * @defgroup generic_or1k support
- *
- * @ingroup bsp_or1k
- *
- * @brief generic_or1k support package
- *
- */

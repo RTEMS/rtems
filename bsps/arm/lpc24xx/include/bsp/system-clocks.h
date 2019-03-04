@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_clocks
+ * @ingroup RTEMSBSPsARMLPC24XX_clocks
  *
  * @brief System clocks.
  */
@@ -31,7 +31,7 @@ extern "C" {
 /**
  * @defgroup lpc24xx_clock System Clocks
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief System clocks.
  *

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_gdbarmsim
+ * @ingroup RTEMSBSPsARMGDBSim
  *
  * @brief Software interrupt definitions.
  */
@@ -9,7 +9,7 @@
 /**
  * @defgroup gdbarmsim_swi SWI Definitions
  *
- * @ingroup arm_gdbarmsim
+ * @ingroup RTEMSBSPsARMGDBSim
  *
  * @brief Software interrupt definitions.
  */

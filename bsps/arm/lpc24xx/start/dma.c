@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_dma
+ * @ingroup RTEMSBSPsARMLPC24XX_dma
  *
  * @brief Direct memory access (DMA) support.
  */

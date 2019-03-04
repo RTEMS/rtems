@@ -28,7 +28,7 @@
 /**
  * defgroup lm3s69xx_uart UART Support
  *
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief UART support.
  */

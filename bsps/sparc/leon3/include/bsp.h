@@ -1,9 +1,9 @@
 /**
  * @file
  *
- * @ingroup sparc_leon3
+ * @ingroup RTEMSBSPsSPARCLEON3
  *
- * @brief Global BSP Definitions.
+ * @brief Global BSP definitions.
  */
 
 /*  bsp.h
@@ -40,12 +40,13 @@ extern "C" {
 #endif
 
 /**
- *  @defgroup sparc_leon3 LEON3 Support
+ * @defgroup RTEMSBSPsSPARCLEON3 LEON3 and LEON4
  *
- *  @ingroup RTEMSBSPsSPARC
+ * @ingroup RTEMSBSPsSPARC
  *
- *  @brief LEON3 support package
+ * @brief LEON3 and LEON4 Board Support Package.
  *
+ * @{
  */
 
 /* SPARC CPU variant: LEON3 */
@@ -246,5 +247,7 @@ extern const unsigned char LEON3_irq_to_cpu[32];
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

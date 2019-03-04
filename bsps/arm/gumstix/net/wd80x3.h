@@ -15,7 +15,7 @@
 
 /**
  * @defgroup gumstix_dp8390 DP8390 Support
- * @ingroup arm_gumstix
+ * @ingroup RTEMSBSPsARMGumstix
  * @brief DP8390 Ethernet Controller Support
  * @{
  */

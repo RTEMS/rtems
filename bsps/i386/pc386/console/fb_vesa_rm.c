@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup i386_pc386
+ * @ingroup RTEMSBSPsI386
  *
  * @brief FB driver for graphic hardware compatible with VESA Bios Extension
  *     Real mode interface utilized

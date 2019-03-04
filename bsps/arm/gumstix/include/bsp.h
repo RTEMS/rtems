@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup arm_gumstix
+ * @ingroup RTEMSBSPsARMGumstix
  * @brief Global BSP definitions.
  */
 
@@ -15,6 +15,16 @@
 #ifndef LIBBSP_ARM_GUMSTIX_BSP_H
 #define LIBBSP_ARM_GUMSTIX_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMGumstix Gumstix
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Gumstix Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -23,13 +33,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup arm_gumstix Gumstix Support
- * @ingroup RTEMSBSPsARM
- * @brief Gumstix support package
- * @{
- */
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
@@ -71,11 +74,11 @@ extern int rtems_ne_driver_attach(struct rtems_bsdnet_ifconfig *, int);
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH BSP_NE2000_NETWORK_DRIVER_ATTACH
 #endif
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */
 

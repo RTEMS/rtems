@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCVirtex
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all GEN405 board IO definitions.
@@ -41,6 +49,16 @@
 #ifndef LIBBSP_POWERPC_VIRTEX_BSP_H
 #define LIBBSP_POWERPC_VIRTEX_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsPowerPCVirtex Xilinx Virtex
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Xilinx Virtex Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #ifdef ASM
@@ -75,5 +93,7 @@ extern int xilTemac_driver_attach(struct rtems_bsdnet_ifconfig*, int );
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif

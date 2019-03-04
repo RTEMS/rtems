@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc176x_dma
+ * @ingroup RTEMSBSPsARMLPC176X_dma
  *
  * @brief Direct memory access (DMA) support.
  */

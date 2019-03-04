@@ -28,7 +28,7 @@
 /**
  * @defgroup raspberrypi_reg Register Definitions
  *
- * @ingroup arm_raspberrypi
+ * @ingroup RTEMSBSPsARMRaspberryPi
  *
  * @brief Register Definitions
  *

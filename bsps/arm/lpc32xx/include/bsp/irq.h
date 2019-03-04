@@ -35,7 +35,7 @@ extern "C" {
 /**
  * @defgroup lpc32xx_interrupt Interrupt Support
  *
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @ingroup bsp_interrupt
  *

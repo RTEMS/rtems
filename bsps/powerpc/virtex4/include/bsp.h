@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCVirtex4
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This include file contains all Virtex4 board IO definitions.
  */
@@ -42,6 +50,16 @@
 #ifndef LIBBSP_POWERPC_VIRTEX4_BSP_H
 #define LIBBSP_POWERPC_VIRTEX4_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsPowerPCVirtex4 Xilinx Virtex-4
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Xilinx Virtex-4 Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 /*
@@ -75,5 +93,7 @@ void zero_bss(void);
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif

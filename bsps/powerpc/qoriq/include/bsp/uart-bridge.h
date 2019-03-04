@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQUartBridge
+ * @ingroup RTEMSBSPsPowerPCQorIQUartBridge
  *
  * @brief UART to Intercom bridge API.
  */
@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup QorIQUartBridge QorIQ - UART to Intercom Bridge Support
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief UART to Intercom bridge support.
  *

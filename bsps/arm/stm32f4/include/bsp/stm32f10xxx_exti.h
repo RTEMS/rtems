@@ -25,7 +25,7 @@
 
 /**
  * @defgroup stm32f4_exti EXTI Support
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief STM32F10XXX EXTI Support
  * @{
  */

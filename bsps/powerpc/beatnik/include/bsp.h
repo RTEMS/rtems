@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCBeatnik
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  bsp.h  -- contain BSP API definition.
  */
@@ -16,6 +24,16 @@
 
 #ifndef LIBBSP_BEATNIK_BSP_H
 #define LIBBSP_BEATNIK_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCBeatnik Beatnik (MVME5500 and MVME6100)
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Beatnik (MVME5500 and MVME6100) Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -295,5 +313,7 @@ uint32_t probeMemoryEnd(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

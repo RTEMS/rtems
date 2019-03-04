@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup Virtex4MMU
+ * @ingroup RTEMSBSPsPowerPCVirtex4MMU
  *
  * @brief Implementation of routines to manipulate the PPC 405 mmu.
  *

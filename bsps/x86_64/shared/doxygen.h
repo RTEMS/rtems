@@ -3,5 +3,5 @@
  *
  * @ingroup RTEMSBSPs
  *
- * @brief x86-64 Board Support Packages.
+ * @brief x86-64 Board Support Package.
  */

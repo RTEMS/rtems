@@ -30,7 +30,7 @@ extern "C" {
 
 /**
  * @defgroup stm32f4_rcc RCC Support
- * @ingroup arm_stm32f4
+ * @ingroup RTEMSBSPsARMSTM32F4
  * @brief RCC Support
  * @{
  */

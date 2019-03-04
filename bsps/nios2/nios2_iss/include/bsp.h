@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsNios2ISS
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -14,6 +22,16 @@
 
 #ifndef LIBBSP_NIOS2_NIOS2_ISS_BSP_H
 #define LIBBSP_NIOS2_NIOS2_ISS_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsNios2ISS ISS
+ *
+ * @ingroup RTEMSBSPsNios2
+ *
+ * @brief ISS Board Support Package.
+ *
+ * @{
+ */
 
 #include <stdint.h>
 #include <bspopts.h>
@@ -125,6 +143,8 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif
 /* end of include file */

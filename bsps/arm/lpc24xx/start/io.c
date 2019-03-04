@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_io
+ * @ingroup RTEMSBSPsARMLPC24XX_io
  *
  * @brief Input and output module.
  */

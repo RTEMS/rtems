@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSH1
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  generic sh1
  *
@@ -24,6 +32,16 @@
 
 #ifndef LIBBSP_SH_GENSH1_BSP_H
 #define LIBBSP_SH_GENSH1_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsSH1 SH-1
+ *
+ * @ingroup RTEMSBSPsSH
+ *
+ * @brief SH-1 Board Support Package.
+ *
+ * @{
+ */
 
 #include <rtems.h>
 #include <termios.h> /* for tcflag_t */
@@ -62,5 +80,7 @@ int _sci_get_brparms(
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

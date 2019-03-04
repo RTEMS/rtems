@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup arm_zynq
+ * @ingroup RTEMSBSPsARMZynq
  * @brief Global BSP definitions.
  */
 
@@ -21,6 +21,16 @@
 #ifndef LIBBSP_ARM_XILINX_ZYNQ_BSP_H
 #define LIBBSP_ARM_XILINX_ZYNQ_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMZynq Xilinx Zynq
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Xilinx Zynq Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
@@ -35,13 +45,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-
-/**
- * @defgroup arm_zynq Xilinx-Zynq Support
- * @ingroup RTEMSBSPsARM
- * @brief Xilinz-Zynq Board Support Package
- * @{
- */
 
 #define BSP_ARM_A9MPCORE_SCU_BASE 0xf8f00000
 
@@ -69,12 +72,12 @@ BSP_START_TEXT_SECTION void zynq_setup_mmu_and_cache(void);
 
 uint32_t zynq_clock_cpu_1x(void);
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_ARM_XILINX_ZYNQ_BSP_H */

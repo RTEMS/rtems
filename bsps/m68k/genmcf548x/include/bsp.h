@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup m68k_genmcf548x
+ * @ingroup RTEMSBSPsM68kGenMCF548X
  *
  * @brief Global BSP definitions.
  */
@@ -58,11 +58,13 @@
 #include <bsp/default-initial-extension.h>
 
 /**
- * @defgroup m68k_genmcf548x MCF548X Support
+ * @defgroup RTEMSBSPsM68kGenMCF548X MCF548X
  *
  * @ingroup RTEMSBSPsM68k
  *
- * @brief MCT548X support.
+ * @brief MCF548X Board Support Package.
+ *
+ * @{
  */
 
 #include <rtems.h>
@@ -130,5 +132,7 @@ void bsp_cacr_clear_flags(uint32_t flags);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

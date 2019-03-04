@@ -1,6 +1,8 @@
 /**
  * @file
- * @ingroup bfin_tll6527m
+ *
+ * @ingroup RTEMSBSPsBfinTLL6527M
+ *
  * @brief Global BSP definitions.
  *
  * This include file contains all board IO definitions for TLL6527M.
@@ -17,6 +19,16 @@
 #ifndef LIBBSP_BFIN_TLL6527M_BSP_H
 #define LIBBSP_BFIN_TLL6527M_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsBfinTLL6527M TLL6527M
+ *
+ * @ingroup RTEMSBSPsBfin
+ *
+ * @brief TLL6527M Board Support Package.
+ *
+ * @{
+ */
+
 #ifndef ASM
 
 #include <bspopts.h>
@@ -30,13 +42,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup bfin_tll6527m TLL6527M Support
- * @ingroup RTEMSBSPsBfin
- * @brief TLL6527M Support Package
- * @{
- */
 
 /*
  * PLL and clock setup values:
@@ -118,12 +123,12 @@ void Init_RTC(void);
  */
 void bfin_null_isr(void);
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

@@ -32,7 +32,7 @@ extern "C" {
 /**
  * @defgroup lpc32xx_mmu MMU Support
  *
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief MMU support.
  *

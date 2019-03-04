@@ -18,7 +18,7 @@
 
 /**
  * @defgroup tll6527m_cplb CPLB Configuration
- * @ingroup bfin_tll6527m
+ * @ingroup RTEMSBSPsBfinTLL6527M
  * @brief CPLB Configuration
  * @{
  */

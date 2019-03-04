@@ -32,8 +32,8 @@ extern "C" {
 /**
  * @defgroup lpc_lcd LCD Support
  *
- * @ingroup lpc
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC24XX
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief LCD support.
  *

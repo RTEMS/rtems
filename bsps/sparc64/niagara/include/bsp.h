@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsSPARC64Niagara
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all SPARC64 simulator definitions.
@@ -11,6 +19,16 @@
 
 #ifndef LIBBSP_SPARC64_NIAGARA_BSP_H
 #define LIBBSP_SPARC64_NIAGARA_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsSPARC64Niagara Niagara
+ *
+ * @ingroup RTEMSBSPsSPARC64
+ *
+ * @brief Niagara
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -37,5 +55,7 @@ rtems_isr_entry set_vector(                     /* returns old vector */
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

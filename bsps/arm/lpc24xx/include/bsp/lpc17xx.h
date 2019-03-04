@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_regs
+ * @ingroup RTEMSBSPsARMLPC24XX_regs
  *
  * @brief Register definitions.
  */

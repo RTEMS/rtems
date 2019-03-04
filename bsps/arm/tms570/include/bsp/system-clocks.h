@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief System clocks.
  */
@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup tms570_clock System Clocks
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief System clocks.
  *

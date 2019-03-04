@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsX8664Amd64
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions.
@@ -35,6 +43,12 @@
 #ifndef LIBBSP_X86_64_AMD64_BSP_H
 #define LIBBSP_X86_64_AMD64_BSP_H
 
+/**
+ * @addtogroup RTEMSBSPsX8664
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -47,5 +61,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

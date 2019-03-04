@@ -1,7 +1,7 @@
 /**
  * @file
  * 
- * @ingroup arm_lm3s69xx
+ * @ingroup RTEMSBSPsARMLM3S69XX
  *
  * @brief Global BSP Definitions
  */
@@ -23,6 +23,14 @@
 #ifndef LIBBSP_ARM_LM3S69XX_BSP_H
 #define LIBBSP_ARM_LM3S69XX_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMLM3S69XX LM3S69XX
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief LM3S69XX Board Support Package.
+ */
+
 #include <bspopts.h>
 
 #define BSP_FEATURE_IRQ_EXTENSION
@@ -41,12 +49,7 @@
 
 #endif /* ASM */
 
+/* @} */
+
 #endif /* LIBBSP_ARM_LM3S69XX_BSP_H */
 
-/**
- * @defgroup arm_lm3s69xx LM3S69XX Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief LM3S69XX Support Package
- */

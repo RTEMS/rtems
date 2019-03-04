@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsM68kMVME162
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This include file contains all MVME162fx board IO definitions.
  */
@@ -20,6 +28,16 @@
 
 #ifndef LIBBSP_M68K_MVME162_BSP_H
 #define LIBBSP_M68K_MVME162_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsM68kMVME162 MVME162
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief MVME162 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -200,5 +218,7 @@ bool char_ready(int port, char *ch);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

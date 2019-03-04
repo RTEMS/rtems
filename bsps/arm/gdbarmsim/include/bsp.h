@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_gdbarmsim
+ * @ingroup RTEMSBSPsARMGDBSim
  *
  * @brief Global BSP definitions.
  */
@@ -18,6 +18,16 @@
 #ifndef LIBBSP_ARM_GDBARMSIM_BSP_H
 #define LIBBSP_ARM_GDBARMSIM_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMGDBSim GDB Simulator
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief GDB Simulator Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -28,16 +38,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup arm_gdbarmsim GDBARMSIM Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief GDBARMSIM support package.
- *
- * @{
- */
 
 //#define BSP_GET_WORK_AREA_DEBUG 1
 
@@ -76,11 +76,12 @@ int     gdbarmsim_read(int, char *, int);
 int     gdbarmsim_swiread(int, char *, int);
 void    initialise_monitor_handles(void);
 
-/** @} */
 
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */
 

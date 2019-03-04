@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_csb336
+ * @ingroup RTEMSBSPsARMCSB336
  *
  * @brief Helper functions for SMSC LAN91C11x
  */

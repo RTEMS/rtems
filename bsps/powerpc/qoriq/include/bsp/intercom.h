@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQInterCom
+ * @ingroup RTEMSBSPsPowerPCQorIQInterCom
  *
  * @brief Inter-Processor Communication API.
  */
@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup QorIQInterCom QorIQ - Inter-Processor Communication Support
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief Inter-processor communication support.
  *

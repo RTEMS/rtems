@@ -1,8 +1,9 @@
 /**
- *  @file
- *  
- *  This include file contains some definitions specific to the
- *  JMR3904 simulator in gdb.
+ * @file
+ *
+ * @ingroup RTEMSBSPsMIPSJMR3904
+ *
+ * @brief Global BSP definitions.
  */
 
 /*
@@ -16,6 +17,16 @@
 
 #ifndef LIBBSP_MIPS_JMR3904_BSP_H
 #define LIBBSP_MIPS_JMR3904_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsMIPSJMR3904 JMR3904
+ *
+ * @ingroup RTEMSBSPsMIPS
+ *
+ * @brief JMR3904 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
@@ -33,5 +44,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_realview-pbx-a9
+ * @ingroup RTEMSBSPsARMRealviewPBXA9
  *
  * @brief Global BSP definitions.
  */
@@ -22,6 +22,15 @@
 
 #ifndef LIBBSP_ARM_REALVIEW_PBX_A9_BSP_H
 #define LIBBSP_ARM_REALVIEW_PBX_A9_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMRealviewPBXA9 Realview PBX-A9
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Realview PBX-A9 Board Support Package.
+ *
+ */
 
 #include <bspopts.h>
 
@@ -55,13 +64,8 @@ extern "C" {
 
 #endif /* ASM */
 
+/* @} */
+
 #endif /* LIBBSP_ARM_REALVIEW_PBX_A9_BSP_H */
 
-/**
- * @defgroup arm_realview-pbx-a9 Realview PBX-A9
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief Realview PBX-A9 support package
- *
- */
+

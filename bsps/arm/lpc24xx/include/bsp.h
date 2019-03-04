@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief Global BSP definitions.
  */
@@ -22,6 +22,16 @@
 
 #ifndef LIBBSP_ARM_LPC24XX_BSP_H
 #define LIBBSP_ARM_LPC24XX_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsARMLPC24XX NXP LPC17XX, LPC23XX, LPC24XX and LPC40XX
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief NXP LPC17XX, LPC23XX, LPC24XX and LPC40XX Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -52,16 +62,6 @@ extern "C" {
 struct rtems_bsdnet_ifconfig;
 
 struct rtems_termios_device_context;
-
-/**
- * @defgroup lpc24xx LPC24XX Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief LPC24XX support package.
- *
- * @{
- */
 
 /**
  * @brief Network driver attach and detach function.
@@ -117,12 +117,12 @@ bool lpc24xx_uart_probe_2(struct rtems_termios_device_context *context);
 
 bool lpc24xx_uart_probe_3(struct rtems_termios_device_context *context);
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* LIBBSP_ARM_LPC24XX_BSP_H */

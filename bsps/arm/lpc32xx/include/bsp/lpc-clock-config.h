@@ -33,7 +33,7 @@ extern "C" {
 /**
  * @defgroup lpc_clock Clock Support
  *
- * @ingroup lpc
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief Clock support.
  *

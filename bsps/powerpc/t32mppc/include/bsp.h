@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCT32MPPC
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  * Copyright (c) 2012, 2017 embedded brains GmbH.  All rights reserved.
  *
@@ -14,6 +22,16 @@
 
 #ifndef LIBBSP_POWERPC_T32MPPC_BSP_H
 #define LIBBSP_POWERPC_T32MPPC_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCT32MPPC t32mppc
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Lauterbach Trace32 Board Support Package.
+ *
+ * @{
+ */
 
 #include <bspopts.h>
 
@@ -38,5 +56,7 @@ void t32mppc_decrementer_dispatch(void);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/** @} */
 
 #endif /* LIBBSP_POWERPC_T32MPPC_BSP_H */

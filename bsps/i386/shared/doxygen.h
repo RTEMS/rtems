@@ -3,7 +3,7 @@
  *
  * @ingroup RTEMSBSPs
  *
- * @brief i386 Board Support Packages.
+ * @brief i386 Board Support Package.
  */
 
 /**

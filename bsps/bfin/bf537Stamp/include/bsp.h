@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsBfinBF537Stamp
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*  bsp.h
  *
  *  This include file contains all board IO definitions for bf537Stamp.
@@ -14,6 +22,16 @@
 
 #ifndef LIBBSP_BFIN_BF537STAMP_BSP_H
 #define LIBBSP_BFIN_BF537STAMP_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsBfinBF537Stamp BF537-STAMP
+ *
+ * @ingroup RTEMSBSPsBfin
+ *
+ * @brief BF537-STAMP Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -118,5 +136,7 @@ extern int bf537Stamp_network_driver_attach(struct rtems_bsdnet_ifconfig *, int)
 #endif
 
 #endif /* !ASM */
+
+/* @} */
 
 #endif

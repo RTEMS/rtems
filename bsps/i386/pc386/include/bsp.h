@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup i386_pc386
+ * @ingroup RTEMSBSPsI386Pc386
  *
  * @brief Global BSP definitions.
  */
@@ -47,6 +47,11 @@
 #ifndef LIBBSP_I386_PC386_BSP_H
 #define LIBBSP_I386_PC386_BSP_H
 
+/**
+ * @addtogroup RTEMSBSPsI386
+ *
+ * @{
+ */
 #ifndef ASM
 
 #include <bspopts.h>
@@ -61,13 +66,7 @@
 extern "C" {
 #endif
 
-/**
- * @degroup i386_pc386 PC386 Support
- *
- * @ingroup RTEMSBSPsI386
- *
- * @brief PC386 support.
- */
+
 
 #define BSP_HAS_FRAME_BUFFER 1
 
@@ -260,5 +259,7 @@ void C_dispatch_isr(int vector);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif /* _BSP_H */

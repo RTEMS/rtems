@@ -1,3 +1,10 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsV850GDBSim
+ *
+ * @brief Global BSP definitions.
+ */
 /*
  *  This include file contains some definitions specific to the
  *  GDB simulator in gdb.
@@ -15,6 +22,16 @@
 #ifndef LIBBSP_V850_GDBV850SIM_BSP_H
 #define LIBBSP_V850_GDBV850SIM_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsV850GDBSim GDB Simulator
+ *
+ * @ingroup RTEMSBSPsV850
+ *
+ * @brief GDB Simulator Board Support Package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -31,5 +48,7 @@ void *clock_driver_sim_idle_body(uintptr_t);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_csb336
+ * @ingroup RTEMSBSPsARMCSB336
  *
  * @brief Global BSP definitions.
  */
@@ -19,6 +19,16 @@
 #ifndef LIBBSP_ARM_CSB336_BSP_H
 #define LIBBSP_ARM_CSB336_BSP_H
 
+/**
+ * @defgroup RTEMSBSPsARMCSB336 CSB336
+ *
+ * @ingroup RTEMSBSPsARM Board Support Package
+ *
+ * @brief CSB336 support package.
+ *
+ * @{
+ */
+
 #include <bspopts.h>
 #include <bsp/default-initial-extension.h>
 
@@ -28,16 +38,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @defgroup arm_csb336 CSB336 Support
- *
- * @ingroup RTEMSBSPsARM
- *
- * @brief CSB336 support package.
- *
- * @{
- */
 
 #define BSP_FEATURE_IRQ_EXTENSION
 
@@ -58,11 +58,11 @@ int rtems_mc9328mxl_enet_attach(struct rtems_bsdnet_ifconfig *config,
 #define RTEMS_BSP_NETWORK_DRIVER_NAME	"eth0"
 #define RTEMS_BSP_NETWORK_DRIVER_ATTACH	rtems_mc9328mxl_enet_attach
 
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* _BSP_H */
 

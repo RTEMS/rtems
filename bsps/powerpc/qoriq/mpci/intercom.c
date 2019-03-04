@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQInterCom
+ * @ingroup RTEMSBSPsPowerPCQorIQInterCom
  *
  * @brief Inter-Processor Communication implementation.
  */

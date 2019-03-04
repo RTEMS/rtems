@@ -17,7 +17,7 @@
 /**
  * @defgroup generic_or1k_uart UART Support
  *
- * @ingroup generic_or1k
+ * @ingroup RTEMSBSPsOR1K
  *
  * @brief Universal Asynchronous Receiver/Transmitter (UART) Support
  */

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup tms570
+ * @ingroup RTEMSBSPsARMTMS570
  *
  * @brief Select pin mapping according to selected chip.
  *        Defaults to TMS570LS3137ZWT for now.

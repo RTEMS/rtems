@@ -23,7 +23,7 @@
 /**
  * @defgroup mpc55xx_asm Assembler files
  *
- * @ingroup mpc55xx
+ * @ingroup RTEMSBSPsPowerPCMPC55XX
  */
 
 #include <bspopts.h>

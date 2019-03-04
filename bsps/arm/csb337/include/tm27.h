@@ -1,7 +1,7 @@
 /**
  *@file
  *
- *@ingroup arm_csb337
+ *@ingroup RTEMSBSPsARMCSB337
  *
  *@brief Implementations of interrupt mechanisms for Time Test 27.
  *

@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @ingroup RTEMSBSPsPowerPCQemu
+ *
+ * @brief Global BSP definitions.
+ */
+
 /*
  *  This include file contains some definitions specific to the
  *  qemu powerpc Prep simulator
@@ -14,6 +22,16 @@
 
 #ifndef LIBBSP_POWERPC_QEMUPPC_BSP_H
 #define LIBBSP_POWERPC_QEMUPPC_BSP_H
+
+/**
+ * @defgroup RTEMSBSPsPowerPCQemu Qemu
+ *
+ * @ingroup RTEMSBSPsPowerPC
+ *
+ * @brief Qemu Board Support Package.
+ *
+ * @{
+ */
 
 #ifndef ASM
 
@@ -43,5 +61,7 @@ void cmain(void);
 #endif
 
 #endif /* !ASM */
+
+/** @} */
 
 #endif

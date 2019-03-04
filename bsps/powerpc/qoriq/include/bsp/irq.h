@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Interrupt API.
  */
@@ -148,7 +148,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptP1020 QorIQ - P1020 Internal Interrupt Sources
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief P1020 internal interrupt sources.
  *
@@ -172,7 +172,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptP2020 QorIQ - P2020 Internal Interrupt Sources
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief P2020 internal interrupt sources.
  *
@@ -198,7 +198,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptAll QorIQ - Internal Interrupt Sources
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Internal interrupt sources.
  *
@@ -246,7 +246,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptExternal QorIQ - External Interrupt Sources
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief External interrupt sources.
  *
@@ -271,7 +271,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptIPI QorIQ - Interprocessor Interrupts
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Interprocessor interrupts.
  *
@@ -289,7 +289,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptIPI QorIQ - Message Interrupts
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Message interrupts.
  *
@@ -311,7 +311,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptIPI QorIQ - Shared Message Signaled Interrupts
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Shared message signaled interrupts.
  *
@@ -333,7 +333,7 @@ extern "C" {
 /**
  * @defgroup QoriqInterruptIPI QorIQ - Global Timer Interrupts
  *
- * @ingroup QorIQInterrupt
+ * @ingroup RTEMSBSPsPowerPCQorIQInterrupt
  *
  * @brief Global Timer interrupts.
  *
@@ -357,9 +357,9 @@ extern "C" {
 #endif /* QORIQ_IS_HYPERVISOR_GUEST */
 
 /**
- * @defgroup QorIQInterrupt QorIQ - Interrupt Support
+ * @defgroup RTEMSBSPsPowerPCQorIQInterrupt QorIQ - Interrupt Support
  *
- * @ingroup QorIQ
+ * @ingroup RTEMSBSPsPowerPCQorIQ
  *
  * @brief Interrupt support.
  *

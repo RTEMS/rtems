@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup QorIQUartBridge
+ * @ingroup RTEMSBSPsPowerPCQorIQUartBridge
  *
  * @brief UART bridge master implementation.
  */

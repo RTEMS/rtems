@@ -31,8 +31,8 @@ extern "C" {
 /**
  * @defgroup lpc_timer Timer Support
  *
- * @ingroup arm_lpc24xx
- * @ingroup arm_lpc32xx
+ * @ingroup RTEMSBSPsARMLPC24XX
+ * @ingroup RTEMSBSPsARMLPC32XX
  *
  * @brief Timer support.
  *

@@ -10,7 +10,7 @@
 /**
  * @defgroup raspberrypi_usart USART Support
  *
- * @ingroup arm_raspberrypi
+ * @ingroup RTEMSBSPsARMRaspberryPi
  *
  * @brief Universal Synchronous/Asynchronous Receiver/Transmitter (USART) Support
  */

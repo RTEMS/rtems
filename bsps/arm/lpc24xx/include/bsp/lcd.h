@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup lpc24xx_lcd
+ * @ingroup RTEMSBSPsARMLPC24XX_lcd
  *
  * @brief LCD support.
  */
@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup lpc_dma LCD Support
  *
- * @ingroup lpc24xx
+ * @ingroup RTEMSBSPsARMLPC24XX
  *
  * @brief LCD support.
  *
