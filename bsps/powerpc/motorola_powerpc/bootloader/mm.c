@@ -45,7 +45,7 @@
 #include <limits.h>
 
 /* to align the pointer to the (next) page boundary */
-#define PAGE_ALIGN(addr)	(((addr)+PAGE_SIZE-1)&PAGE_MASK)
+#define PAGE_ALIGN(addr)	(((addr) + PAGE_MASK) & ~PAGE_MASK)
 
 extern void (tlb_handlers)(void);
 extern void (_handler_glue)(void);
