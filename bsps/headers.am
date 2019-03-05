@@ -6,10 +6,7 @@ include_HEADERS += ../../bsps/include/shm_driver.h
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
-include_bsp_HEADERS += ../../bsps/include/bsp/VME.h
-include_bsp_HEADERS += ../../bsps/include/bsp/VMEDMA.h
 include_bsp_HEADERS += ../../bsps/include/bsp/bootcard.h
-include_bsp_HEADERS += ../../bsps/include/bsp/bspVmeDmaList.h
 include_bsp_HEADERS += ../../bsps/include/bsp/console-polled.h
 include_bsp_HEADERS += ../../bsps/include/bsp/console-termios.h
 include_bsp_HEADERS += ../../bsps/include/bsp/default-initial-extension.h

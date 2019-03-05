@@ -9,6 +9,9 @@ include_HEADERS += ../../../../../bsps/powerpc/include/nvram.h
 
 include_bspdir = $(includedir)/bsp
 include_bsp_HEADERS =
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/VME.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/VMEDMA.h
+include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/bspVmeDmaList.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/consoleIo.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/flashPgm.h
 include_bsp_HEADERS += ../../../../../bsps/powerpc/include/bsp/flashPgmPvt.h
