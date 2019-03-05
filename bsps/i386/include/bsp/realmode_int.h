@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup i386_shared
+ * @ingroup RTEMSBSPsI386
  *
  * @brief Definitioins supporting real mode interrupt calls.
  *

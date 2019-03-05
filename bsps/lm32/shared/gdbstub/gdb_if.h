@@ -20,7 +20,7 @@
 
 /**
  * @defgroup lm32_gdb LM32 GDB Interface
- * @ingroup lm32_shared
+ * @ingroup RTEMSBSPsLM32Shared
  * @brief Definition of the interface between the stub and gdb,
  * @{
  */

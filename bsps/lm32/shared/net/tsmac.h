@@ -20,7 +20,7 @@
 
 /**
  * @defgroup lm32_tsmac LM32 TSMAC
- * @ingroup lm32_shared
+ * @ingroup RTEMSBSPsLM32Shared
  * @brief LatticeMico32 TSMAC (Tri-Speed MAC) definitions.
  * @{
  */

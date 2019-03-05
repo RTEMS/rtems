@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_dmx lm32_milkymist_shared
+ * @ingroup lm32_milkymist_dmx RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist DMX512 driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_dmx Milkymist DMX512
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist DMX512 driver
  * @{
  */

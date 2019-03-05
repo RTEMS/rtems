@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_gpio lm32_milkymist_shared
+ * @ingroup lm32_milkymist_gpio RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist GPIO driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_gpio Milkymist GPIO
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist GPIO driver
  * @{
  */

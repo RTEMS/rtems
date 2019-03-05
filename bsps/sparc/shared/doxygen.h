@@ -6,10 +6,10 @@
  * @brief SPARC Board Support Packages.
  */
 
- /**
-  *  @defgroup sparc_shared SPARC Shared Modules
-  *
-  *  @ingroup RTEMSBSPsSPARC
-  *
-  *  @brief SPARC Shared Modules
-  */
+/**
+ * @defgroup RTEMSBSPsSPARCShared Shared
+ *
+ * @ingroup RTEMSBSPsSPARC
+ *
+ * @brief Shared Support for SPARC Board Support Packages.
+ */

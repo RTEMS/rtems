@@ -30,7 +30,7 @@ extern "C" {
 /**
  * @defgroup arm_linker Linker Support
  *
- * @ingroup arm_shared
+ * @ingroup RTEMSBSPsARMShared
  *
  * @brief Linker support.
  *

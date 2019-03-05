@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_flash lm32_milkymist_shared
+ * @ingroup lm32_milkymist_flash RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist Flash
  */
 
@@ -16,7 +16,7 @@
 
 /**
  * @defgroup lm32_milkymist_flash Milkymist Flash
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist Flash
  * @{
  */

@@ -3,13 +3,13 @@
  *
  * @ingroup RTEMSBSPs
  *
- * @brief Motorola 68000 and NXP ColdFire Board Support Packagess.
+ * @brief Motorola 68000 and NXP ColdFire Board Support Packages.
  */
 
 /**
-  *  @defgroup m68k_shared M68K Shared Modules
-  *
-  *  @ingroup RTEMSBSPsM68k
-  *
-  *  @brief M68K Shared Modules
-  */
+ * @defgroup RTEMSBSPsM68kShared Shared
+ *
+ * @ingroup RTEMSBSPsM68k
+ *
+ * @brief Shared Support for Motorola 68000 and NXP ColdFire Board Support Packages.
+ */

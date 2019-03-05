@@ -1,5 +1,7 @@
 /**
- *  @defgroup shared_vmeuniverse SHARED VMEUNIVERSE Modules
+ *  @defgroup shared_vmeuniverse VME Universe Modules
  *
- *  @brief SHARED VMEUNIVERSE Modules
+ *  @brief VME Universe Modules
+ *
+ *  @ingroup RTEMSBSPsPowerPCShared
  */

@@ -53,7 +53,7 @@
 
 /**
  * @defgroup mips_ops MIPS Opcodes
- * @ingroup mips_shared
+ * @ingroup RTEMSBSPsMIPSShared
  * @brief MIPS Instruction Formats and Opcode Values
  * @{
  */

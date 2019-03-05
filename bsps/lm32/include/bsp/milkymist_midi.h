@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_midi lm32_milkymist_shared
+ * @ingroup lm32_milkymist_midi RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist MIDI driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_midi Milkymist MIDI
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist MIDI driver
  * @{
  */

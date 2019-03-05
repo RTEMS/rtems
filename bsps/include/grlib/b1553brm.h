@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup 1553 B1553BRM
  * @ingroup 1553
- * @brief B1553BRM device driver
  */
 
 /*
@@ -17,6 +14,16 @@
 
 #ifndef __B1553BRM_H__
 #define __B1553BRM_H__
+
+/**
+ * @defgroup 1553 B1553BRM
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief B1553BRM device driver
+ *
+ * @{
+ */
 
 #include <drvmgr/drvmgr.h>
 
@@ -173,6 +180,8 @@ void b1553brm_print_dev(struct drvmgr_dev *dev, int options);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __BRM_H__ */
 

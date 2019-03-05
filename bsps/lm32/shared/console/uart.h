@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_shared lm32_uart
+ * @ingroup RTEMSBSPsLM32Shared lm32_uart
  * @brief LatticeMico32 UART definitions
  */
 
@@ -20,7 +20,7 @@
 
 /**
  * @defgroup lm32_uart LM32 UART
- * @ingroup lm32_shared
+ * @ingroup RTEMSBSPsLM32Shared
  * @brief LatticeMico32 UART definitions
  * @{
  */

@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup i2c I2C-master
  * @ingroup i2c
- * @brief Driver for GRLIB port of OpenCores I2C-master
  */
 
 /*
@@ -17,6 +14,16 @@
 
 #ifndef _I2CMST_H
 #define _I2CMST_H
+
+/**
+ * @defgroup i2c I2C-master
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief Driver for GRLIB port of OpenCores I2C-master
+ *
+ * @{
+ */
 
 #include <rtems/libi2c.h>
 #include "ambapp.h"
@@ -61,5 +68,7 @@ void i2cmst_register_drv (void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /*  _I2CMST_H */

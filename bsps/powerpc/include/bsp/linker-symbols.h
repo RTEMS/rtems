@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup powerpc_linker Linker Support
+ * @defgroup RTEMSBSPsPowerPCSharedLinker Linker Support
  *
- * @ingroup powerpc_shared
+ * @ingroup RTEMSBSPsPowerPCShared
  *
  * @brief Linker support.
  *

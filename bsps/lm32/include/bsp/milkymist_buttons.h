@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_buttons lm32_milkymist_shared
+ * @ingroup lm32_milkymist_buttons RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist buttons driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_buttons Milkymist buttons
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist buttons driver
  * @{
  */

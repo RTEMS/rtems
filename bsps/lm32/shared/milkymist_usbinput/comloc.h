@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_usbinput lm32_milkymist_shared
+ * @ingroup lm32_milkymist_usbinput RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist USB input devices driver
  */
 

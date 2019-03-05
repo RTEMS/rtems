@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_versions lm32_milkymist_shared
+ * @ingroup lm32_milkymist_versions RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist versioning driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_versions Milkymist versioning
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist versioning driver
  * @{
  */

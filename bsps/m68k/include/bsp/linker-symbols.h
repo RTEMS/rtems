@@ -28,9 +28,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup bsp_linker Linker Support
+ * @defgroup RTEMSBSPsM68kSharedLinker Linker Support
  *
- * @ingroup bsp_kit
+ * @ingroup RTEMSBSPsM68kShared
  *
  * @brief Linker support.
  *

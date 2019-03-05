@@ -6,18 +6,18 @@
  * @brief LatticeMicro32 Board Support Packages.
  */
 
- /**
-  *  @defgroup lm32_shared Lattice Mico32 Shared Modules
-  *
-  *  @ingroup RTEMSBSPsLM32
-  *
-  *  @brief Lattice Mico32 Shared Modules
-  */
+/**
+ * @defgroup RTEMSBSPsLM32Shared Shared
+ *
+ * @ingroup RTEMSBSPsLM32
+ *
+ * @brief Shared Support for LatticeMicro32 Board Support Packages.
+ */
 
- /**
-  *  @defgroup lm32_milkymist_shared LM32 Milkymist One
-  *
-  *  @ingroup lm32_shared
-  *
-  *  @brief Lattice Mico32 Milkymist One
-  */
+/**
+ * @defgroup RTEMSBSPsLM32SharedMilkymistOne Milkymist One
+ *
+ * @ingroup RTEMSBSPsLM32Shared
+ *
+ * @brief Shared Support for Milkymist One Board Support Packages.
+ */

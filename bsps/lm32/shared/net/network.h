@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_network lm32_milkymist_shared
+ * @ingroup lm32_milkymist_network RTEMSBSPsLM32SharedMilkymistOne
  * @brief Driver for Minimac ethernet
  */
 
@@ -18,7 +18,7 @@
 
 /**
  * @defgroup lm32_milkymist_network Minimac ethernet driver
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Driver for Minimac ethernet IP-core of Milkymist SoC
  * @{
  */

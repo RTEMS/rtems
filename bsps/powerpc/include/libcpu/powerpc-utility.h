@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup powerpc_shared
+ * @ingroup RTEMSBSPsPowerPCShared
  *
  * @brief General purpose assembler macros, linker command file support and
  * some inline functions for direct register access.
@@ -25,7 +25,13 @@
  */
 
 /**
- * @defgroup powerpc_shared Shared PowerPC Code
+ * @defgroup RTEMSBSPsPowerPCSharedUtility PowerPC Utility Module
+ *
+ * @ingroup RTEMSBSPsPowerPCShared
+ *
+ * @brief PowerPC Utility Module.
+ *
+ * @{
  */
 
 #ifndef __LIBCPU_POWERPC_UTILITY_H
@@ -1005,5 +1011,7 @@ void ShowBATS(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __LIBCPU_POWERPC_UTILITY_H */

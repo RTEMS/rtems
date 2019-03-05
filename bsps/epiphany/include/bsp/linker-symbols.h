@@ -8,7 +8,7 @@ extern "C" {
 /**
  * @defgroup epiphany_linker Linker Support
  *
- * @ingroup epiphany_shared
+ * @ingroup RTEMSBSPsEpiphanyShared
  *
  * @brief Linker support.
  *

@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_memcard lm32_milkymist_shared
+ * @ingroup lm32_milkymist_memcard RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist memory card driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_memcard Milkymist memory card
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist memory card driver
  * @{
  */

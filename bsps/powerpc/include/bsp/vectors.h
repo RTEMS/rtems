@@ -46,7 +46,7 @@ extern "C" {
 /**
  * @defgroup ppc_exc PowerPC Exceptions
  *
- * @brief XXX
+ * @ingroup RTEMSBSPsPowerPCShared
  *
  * @{
  */
@@ -146,7 +146,7 @@ extern "C" {
 /**
  * @defgroup ppc_exc_frame PowerPC Exception Frame
  *
- * @brief XXX
+ * @ingroup ppc_exc
  *
  * @{
  */
@@ -188,7 +188,7 @@ extern "C" {
 #ifndef ASM
 
 /**
- * @ingroup ppc_exc_frame
+ * @addtogroup ppc_exc_frame
  *
  * @{
  */
@@ -198,7 +198,7 @@ typedef CPU_Exception_frame BSP_Exception_frame;
 /** @} */
 
 /**
- * @ingroup ppc_exc
+ * @addtogroup ppc_exc
  *
  * @{
  */

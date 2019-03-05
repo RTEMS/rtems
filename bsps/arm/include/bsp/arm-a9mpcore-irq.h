@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup arm_shared
+ *  @ingroup RTEMSBSPsARMShared
  *
  *  @brief ARM_A9MPCORE_IRQ Support
  */

@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
+ * @ingroup RTEMSBSPsSPARCShared
  * @brief ERC32/LEON2 BSP Fatal_halt handler.
  *
  *  COPYRIGHT (c) 2014.

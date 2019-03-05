@@ -34,7 +34,7 @@ extern "C" {
 /**
  * @defgroup arm_start System Start
  *
- * @ingroup arm_shared
+ * @ingroup RTEMSBSPsARMShared
  *
  * @brief ARM system low level start.
  *

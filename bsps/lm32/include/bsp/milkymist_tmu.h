@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_tmu lm32_milkymist_shared
+ * @ingroup lm32_milkymist_tmu RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist TMU driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_tmu Milkymist TMU
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist TMU driver
  * @{
  */

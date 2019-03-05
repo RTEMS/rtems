@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup amba AMBA
  * @ingroup amba
- * @brief AMBA Plug &Play routines
  */
 
 /*
@@ -17,6 +14,16 @@
 
 #ifndef __AMBAPP_H__
 #define __AMBAPP_H__
+
+/**
+ * @defgroup amba AMBA
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief AMBA Plug & Play routines
+ *
+ * @{
+ */
 
 /* Include VENDOR and DEVICE definitions */
 #include "ambapp_ids.h"
@@ -372,5 +379,7 @@ extern int ambapp_get_number_apbslv_devices(
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

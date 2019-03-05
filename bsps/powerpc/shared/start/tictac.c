@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup powerpc_shared
+ * @ingroup RTEMSBSPsPowerPCShared
  *
  * @brief Source file for tic-tac code.
  */

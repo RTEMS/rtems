@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_video lm32_milkymist_shared
+ * @ingroup lm32_milkymist_video RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist video input driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_video Milkymist Video
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist video input driver
  * @{
  */

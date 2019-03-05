@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_ir lm32_milkymist_shared
+ * @ingroup lm32_milkymist_ir RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist RC5 IR driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_ir Milkymist IR
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist RC5 IR driver
  * @{
  */

@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
+ * @ingroup RTEMSBSPsSPARCShared
  * @brief ERC32/LEON2/LEON3 BSP specific exit handler.
  */
 

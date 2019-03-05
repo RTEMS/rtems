@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_pfpu lm32_milkymist_shared
+ * @ingroup lm32_milkymist_pfpu RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist PFPU driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_pfpu Milkymist PFPU
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist PFPU driver
  * @{
  */

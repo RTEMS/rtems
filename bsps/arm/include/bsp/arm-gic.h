@@ -34,7 +34,7 @@ extern "C" {
 /**
  *  @defgroup arm_gic ARM GIC
  *
- *  @ingroup arm_shared
+ *  @ingroup RTEMSBSPsARMShared
  *
  *  @brief ARM_GIC Support Package
  */

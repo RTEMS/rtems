@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_clock lm32_milkymist_shared
+ * @ingroup lm32_clock RTEMSBSPsLM32SharedMilkymistOne
  * @brief LatticeMico32 Timer (Clock) definitions
  */
 

@@ -60,7 +60,7 @@
 
 /**
  *  @defgroup i386_smp SMP
- *  @ingroup i386_shared
+ *  @ingroup RTEMSBSPsI386
  *  @brief
  *  Header file implementing Intel MultiProcessor Specification (MPS)
  *  version 1.1 and 1.4 SMP hardware control for Intel Architecture CPUs,

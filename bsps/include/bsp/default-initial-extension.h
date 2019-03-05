@@ -32,7 +32,7 @@ extern "C" {
 /**
  *  @defgroup shared_defaultinitialextension DEFAULT_INITIAL_EXTENSION Support
  *
- *  @ingroup shared_include
+ *  @ingroup RTEMSBSPsShared
  *
  *  @brief DEFAULT_INITIAL_EXTENSION Support Package
  */

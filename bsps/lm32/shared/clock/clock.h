@@ -20,7 +20,7 @@
 
 /**
  * @defgroup lm32_clock LM32 Clock
- * @ingroup lm32_shared
+ * @ingroup RTEMSBSPsLM32Shared
  * @brief LatticeMico32 Timer (Clock) definitions.
  * @{
  */

@@ -45,7 +45,7 @@ extern bd_t bsp_uboot_board_info;
 /**
  *  @defgroup shared_uboot U_BOOT Support
  *
- *  @ingroup shared_include
+ *  @ingroup RTEMSBSPsShared
  *
  *  @brief U_BOOT Support Package
  */

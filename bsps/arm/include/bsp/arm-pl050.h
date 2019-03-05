@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup arm_shared
+ *  @ingroup RTEMSBSPsARMShared
  *
  *  @brief ARM PL050 Support
  */

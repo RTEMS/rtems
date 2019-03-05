@@ -1,5 +1,5 @@
 /**
- * @ingroup arm_shared
+ * @ingroup RTEMSBSPsARMShared
  *
  * @brief Level 1 Cache definitions and functions.
  * 

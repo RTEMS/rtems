@@ -27,7 +27,7 @@
 
 /**
  * @defgroup mips_i8259_irq i8259 Chip Support
- * @ingroup mips_shared
+ * @ingroup RTEMSBSPsMIPSShared
  * @brief i8259 Chip Support
  * @{
  */

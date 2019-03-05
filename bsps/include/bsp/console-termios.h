@@ -24,7 +24,7 @@ extern "C" {
 /**
  * @defgroup ConsoleTermios Termios Console Driver
  *
- * @ingroup TermiostypesSupport
+ * @ingroup RTEMSBSPsSharedConsole
  *
  * @brief Console driver for Termios devices.
  *

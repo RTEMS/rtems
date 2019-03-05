@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup arm_shared
+ *  @ingroup RTEMSBSPsARMShared
  *
  *  @brief ARMV7M Support
  */

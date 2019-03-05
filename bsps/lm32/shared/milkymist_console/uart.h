@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_uart lm32_milkymist_shared
+ * @ingroup lm32_uart RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist UART definitions
  */
 

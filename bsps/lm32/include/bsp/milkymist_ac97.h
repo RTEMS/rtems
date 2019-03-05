@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup lm32_milkymist_ac97 lm32_milkymist_shared
+ * @ingroup lm32_milkymist_ac97 RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist AC97 driver
  */
 
@@ -17,7 +17,7 @@
 
 /**
  * @defgroup lm32_milkymist_ac97 Milkymist AC97
- * @ingroup lm32_milkymist_shared
+ * @ingroup RTEMSBSPsLM32SharedMilkymistOne
  * @brief Milkymist AC97 driver
  * @{
  */

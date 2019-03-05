@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup bsp_kit
- * @defgroup sparc_bsp SPARC
- * @ingroup sparc_bsp
- * @brief Debug Definitions
+ * @ingroup RTEMSBSPsSharedGRLIB
  */
 
 #ifndef __DEBUG_DEFS_H__

@@ -30,9 +30,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @defgroup powerpc_start PowerPC System Start
+ * @defgroup RTEMSBSPsPowerPCSharedStart PowerPC System Start
  *
- * @ingroup powerpc_shared
+ * @ingroup RTEMSBSPsPowerPCShared
  *
  * @brief PowerPC low level start.
  *

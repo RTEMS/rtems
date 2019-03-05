@@ -53,7 +53,7 @@
 
 /**
  * @defgroup mips_limits Address Limits
- * @ingroup mips_shared
+ * @ingroup RTEMSBSPsMIPSShared
  * @brief Address Limits
  */
 

@@ -6,10 +6,10 @@
  * @brief ARM Board Support Packages.
  */
 
- /**
-  *  @defgroup arm_shared ARM Shared Modules
-  *
-  *  @ingroup RTEMSBSPsARM
-  *
-  *  @brief ARM Shared Modules
-  */
+/**
+ * @defgroup RTEMSBSPsARMShared Shared
+ *
+ * @ingroup RTEMSBSPsARM
+ *
+ * @brief Shared Support for ARM Board Support Packages.
+ */

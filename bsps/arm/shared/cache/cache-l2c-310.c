@@ -97,7 +97,7 @@
 
 /**
  * @defgroup L2C-310_cache Cache Support
- * @ingroup arm_shared
+ * @ingroup RTEMSBSPsARMShared
  * @brief Cache Functions and Defitions
  * @{
  */

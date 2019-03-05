@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup can GRCAN
  * @ingroup can
- * @brief Macros used for grcan controller
  */
 
 /*
@@ -17,6 +14,16 @@
 
 #ifndef __GRCAN_H__
 #define __GRCAN_H__
+
+/**
+ * @defgroup can GRCAN
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief Macros used for grcan controller
+ *
+ * @{
+ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -338,5 +345,7 @@ void grcan_register_drv(void);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif

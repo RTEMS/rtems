@@ -20,6 +20,14 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup RTEMSBSPsSharedGRLIB GRLIB
+ *
+ * @ingroup RTEMSBSPsShared
+ *
+ * @brief Driver support for GRLIB IP Library.
+ */
+
 /* ESA MEMORY CONTROLLER */
 struct mctrl_regs {
   unsigned int mcfg1;

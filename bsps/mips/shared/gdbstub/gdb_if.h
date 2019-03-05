@@ -20,7 +20,7 @@
 
 /**
  * @defgroup mips_gdb GDB Interface
- * @ingroup mips_shared
+ * @ingroup RTEMSBSPsMIPSShared
  * @brief GDB Interface
  * @{
  */

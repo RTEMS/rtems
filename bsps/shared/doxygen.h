@@ -12,3 +12,11 @@
  *
  * @brief Shared Support for Board Support Packages
  */
+
+/**
+ * @defgroup RTEMSBSPsSharedConsole Console Driver Support
+ *
+ * @ingroup RTEMSBSPsShared
+ *
+ * @brief Console Driver Support for Board Support Packages.
+ */

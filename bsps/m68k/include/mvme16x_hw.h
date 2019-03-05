@@ -32,7 +32,7 @@ extern "C" {
 /**
  *  @defgroup m68k_mvme MVME16X IO Support
  *
- *  @ingroup m68k_shared
+ *  @ingroup RTEMSBSPsM68kShared
  *
  *  @brief IO Support Package
  */

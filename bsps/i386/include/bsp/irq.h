@@ -24,7 +24,7 @@
 
 /**
  * @defgroup i386_irq Interrupt handlers
- * @ingroup i386_shared
+ * @ingroup RTEMSBSPsI386
  * @brief Data structure and the functions to write interrupt handlers
  * @{
  */

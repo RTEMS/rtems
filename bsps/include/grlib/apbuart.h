@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup uart UART
  * @ingroup uart
- * @brief Driver interface for APBUART
  */
 
 /*
@@ -18,6 +15,16 @@
 
 #ifndef __APBUART_H__
 #define __APBUART_H__
+
+/**
+ * @defgroup uart UART
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief Driver interface for APBUART
+ *
+ * @{
+ */
 
 #include "ambapp.h"
 #include "grlib.h"
@@ -67,5 +74,7 @@ int apbuart_inbyte_nonblocking(struct apbuart_regs *regs);
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __APBUART_H__ */

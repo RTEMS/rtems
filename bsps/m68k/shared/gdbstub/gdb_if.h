@@ -24,7 +24,7 @@
 /**
  *  @defgroup m68k_gdbstub GDB Stub
  *
- *  @ingroup m68k_shared
+ *  @ingroup RTEMSBSPsM68kShared
  *
  *  @brief GDB Stub interface support
  */

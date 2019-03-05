@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @ingroup arm_shared
+ *  @ingroup RTEMSBSPsARMShared
  *
  *  @brief A9MPCORE_START Support
  */

@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup arm_shared
+ * @ingroup RTEMSBSPsARMShared
  *
  * @brief Create #defines which state which erratas shall get applied
  */

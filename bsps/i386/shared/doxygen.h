@@ -7,19 +7,13 @@
  */
 
 /**
- *  @defgroup i386_shared i386 Shared Modules
- *  @ingroup bsp_i386
- *  @brief i386 Shared Modules
- */
-
-/**
  *  @defgroup i386_comm Comm
- *  @ingroup i386_shared
+ *  @ingroup RTEMSBSPsI386
  *  @brief Comm
  */
 
 /**
  *  @defgroup i386_pci PCI
- *  @ingroup i386_shared
+ *  @ingroup RTEMSBSPsI386
  *  @brief PCI
  */

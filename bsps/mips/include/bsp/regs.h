@@ -22,7 +22,7 @@
 
 /**
  * @defgroup mips_regs MIPS Registers
- * @ingroup mips_shared
+ * @ingroup RTEMSBSPsMIPSShared
  * @brief MIPS Registers
  * @{
  */

@@ -1,9 +1,6 @@
 /**
  * @file
- * @ingroup sparc_bsp
- * @defgroup spw SpaceWire
  * @ingroup spw
- * @brief GRSPW Device Driver
  */
 
 /*
@@ -17,6 +14,16 @@
 
 #ifndef __GRSPW_H__
 #define __GRSPW_H__
+
+/**
+ * @defgroup spw SpaceWire
+ *
+ * @ingroup RTEMSBSPsSharedGRLIB
+ *
+ * @brief GRSPW Device Driver
+ *
+ * @{
+ */
 
 #include <grlib/ambapp.h>
 
@@ -164,5 +171,7 @@ extern void (*grspw_timecode_callback)
 #ifdef __cplusplus
 }
 #endif
+
+/** @} */
 
 #endif /* __GRSPW_H__ */
