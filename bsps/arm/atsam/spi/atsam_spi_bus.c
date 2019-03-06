@@ -56,9 +56,7 @@ struct atsam_spi_xdma_buf {
 typedef struct {
   spi_bus base;
   rtems_binary_semaphore sem;
-  bool msg_cs_change;
   const spi_ioc_transfer *msg_current;
-  const spi_ioc_transfer *msg_next;
   uint32_t msg_todo;
   int msg_error;
   Spi *spi_regs;
@@ -68,7 +66,6 @@ typedef struct {
   size_t leadbuf_rx_buffered_len;
   size_t trailbuf_rx_buffered_len;
   int transfer_in_progress;
-  bool chip_select_active;
   bool chip_select_decode;
   uint8_t spi_id;
   uint32_t peripheral_clk_per_us;
@@ -320,27 +317,6 @@ static void atsam_spi_start_dma_transfer(
   XDMAC_StartTransfer(pXdmac, bus->dma_tx_channel);
 }
 
-static void atsam_spi_do_transfer(
-  atsam_spi_bus *bus,
-  const spi_ioc_transfer *msg
-)
-{
-  if (!bus->chip_select_active){
-    Spi *spi_regs = bus->spi_regs;
-
-    bus->chip_select_active = true;
-
-    if (bus->chip_select_decode) {
-      spi_regs->SPI_MR = (spi_regs->SPI_MR & ~SPI_MR_PCS_Msk) | SPI_MR_PCS(msg->cs);
-    } else {
-      SPI_ChipSelect(spi_regs, 1 << msg->cs);
-    }
-    SPI_Enable(spi_regs);
-  }
-
-  atsam_spi_start_dma_transfer(bus, msg);
-}
-
 static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer *msg)
 {
   if (
@@ -374,24 +350,14 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 
   bus->transfer_in_progress = 2;
 
-  if (bus->msg_cs_change) {
-    bus->chip_select_active = false;
-    SPI_ReleaseCS(bus->spi_regs);
-    SPI_Disable(bus->spi_regs);
-  }
-
   if (msg_todo > 0) {
-    const spi_ioc_transfer *msg = bus->msg_next;
+    const spi_ioc_transfer *msg;
     int error;
 
-    bus->msg_cs_change = msg->cs_change;
-    bus->msg_next = msg + 1;
-    bus->msg_current = msg;
-    bus->msg_todo = msg_todo - 1;
-
+    msg = bus->msg_current;
     error = atsam_check_configure_spi(bus, msg);
     if (error == 0) {
-      atsam_spi_do_transfer(bus, msg);
+      atsam_spi_start_dma_transfer(bus, msg);
     } else {
       bus->msg_error = error;
       atsam_spi_wakeup_task(bus);
@@ -424,7 +390,15 @@ static void atsam_spi_dma_callback(uint32_t channel, void *arg)
       bus->spi_regs->SPI_MR = mr;
     }
 
+    if (msg->cs_change) {
+      bus->spi_regs->SPI_CR = SPI_CR_LASTXFER;
+    }
+
     atsam_spi_copy_back_rx_after_dma_transfer(bus);
+
+    bus->msg_current = msg + 1;
+    --bus->msg_todo;
+
     atsam_spi_setup_transfer(bus);
   }
 }
@@ -437,9 +411,7 @@ static int atsam_spi_transfer(
 {
   atsam_spi_bus *bus = (atsam_spi_bus *)base;
 
-  bus->msg_cs_change = false;
-  bus->msg_next = &msgs[0];
-  bus->msg_current = NULL;
+  bus->msg_current = msgs;
   bus->msg_todo = msg_count;
   bus->msg_error = 0;
   atsam_spi_setup_transfer(bus);
