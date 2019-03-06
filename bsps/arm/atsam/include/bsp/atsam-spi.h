@@ -27,6 +27,12 @@ typedef struct {
   Spi        *spi_regs;
   size_t      pin_count;
   bool        chip_select_decode;
+
+  /* Delay before SCLK in ns */
+  uint32_t    dlybs_in_ns[4];
+
+  /* Delay before consecutive word transfers in ns */
+  uint32_t    dlybct_in_ns[4];
 } atsam_spi_config;
 
 int spi_bus_register_atsam(

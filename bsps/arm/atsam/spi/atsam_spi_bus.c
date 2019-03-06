@@ -148,11 +148,9 @@ static void atsam_configure_spi(atsam_spi_bus *bus)
 
   bus->spi_regs->SPI_MR = mode;
 
-  csr =
-    SPI_DLYBCT(1000, BOARD_MCK) |
-    SPI_DLYBS(1000, BOARD_MCK) |
-    SPI_CSR_SCBR(scbr) |
-    SPI_CSR_BITS(bus->base.bits_per_word - 8);
+  csr = bus->spi_csr[cs]
+    | SPI_CSR_SCBR(scbr)
+    | SPI_CSR_BITS(bus->base.bits_per_word - 8);
 
   atsam_set_phase_and_polarity(bus->base.mode, &csr);
 
@@ -606,6 +604,7 @@ int spi_bus_register_atsam(
 )
 {
   atsam_spi_bus *bus;
+  size_t i;
 
   bus = (atsam_spi_bus *) spi_bus_alloc_and_init(sizeof(*bus));
   if (bus == NULL) {
@@ -623,6 +622,16 @@ int spi_bus_register_atsam(
   bus->spi_id = config->spi_peripheral_id;
   bus->spi_regs = config->spi_regs;
   bus->chip_select_decode = config->chip_select_decode;
+
+  for (i = 0; i < RTEMS_ARRAY_SIZE(bus->spi_csr); ++i) {
+    if (config->dlybs_in_ns[i] != 0) {
+      bus->spi_csr[i] |= SPI_DLYBS(config->dlybs_in_ns[i], BOARD_MCK);
+    }
+
+    if (config->dlybct_in_ns[i] != 0) {
+      bus->spi_csr[i] |= SPI_DLYBCT(config->dlybct_in_ns[i], BOARD_MCK);
+    }
+  }
 
   rtems_binary_semaphore_init(&bus->sem, "ATSAM SPI");
   PIO_Configure(config->pins, config->pin_count);
