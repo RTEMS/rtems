@@ -326,8 +326,7 @@ static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer 
       || msg->cs != bus->base.cs
   ) {
     if (
-      msg->bits_per_word < 8
-        || msg->bits_per_word > 16
+      (msg->bits_per_word != 8 && msg->bits_per_word != 16)
         || msg->mode > 3
         || msg->speed_hz > bus->base.max_speed_hz
     ) {
@@ -458,9 +457,8 @@ static int atsam_spi_setup(spi_bus *base)
   atsam_spi_bus *bus = (atsam_spi_bus *)base;
 
   if (
-    bus->base.speed_hz > MAX_SPI_FREQUENCY ||
-    bus->base.bits_per_word < 8 ||
-    bus->base.bits_per_word > 16
+    bus->base.speed_hz > MAX_SPI_FREQUENCY
+      || (bus->base.bits_per_word != 8 && bus->base.bits_per_word != 16)
   ) {
       return -EINVAL;
   }
