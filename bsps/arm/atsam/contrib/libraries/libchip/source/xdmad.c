@@ -307,10 +307,7 @@ static void XDMAD_Handler(void *arg)
 {
 	sXdmad *pDmad;
 	Xdmac *pXdmac;
-	sXdmadChannel *pCh;
-	uint32_t xdmaChannelIntStatus, xdmaGlobaIntStatus, xdmaGlobalChStatus;
-	uint8_t bExec;
-	uint8_t _iChannel;
+	uint32_t xdmaGlobaIntStatus, xdmaGlobalChStatus;
 
 	pDmad = arg;
 	pXdmac = pDmad->pXdmacs;
@@ -318,17 +315,26 @@ static void XDMAD_Handler(void *arg)
 	xdmaGlobalChStatus = XDMAC_GetGlobalChStatus(pXdmac);
 
 	while (xdmaGlobaIntStatus != 0) {
-		_iChannel = 31 - __builtin_clz(xdmaGlobaIntStatus);
-		xdmaGlobaIntStatus &= ~(UINT32_C(1) << _iChannel);
+		uint8_t _iChannel;
+		sXdmadChannel *pCh;
+		uint8_t bExec;
 
+		_iChannel = 31 - __builtin_clz(xdmaGlobaIntStatus);
 		pCh = &pDmad->XdmaChannels[_iChannel];
 		bExec = 0;
 
+		xdmaGlobaIntStatus &= ~(UINT32_C(1) << _iChannel);
+
 		if ((xdmaGlobalChStatus & (XDMAC_GS_ST0 << _iChannel)) == 0) {
-			xdmaChannelIntStatus = XDMAC_GetMaskChannelIsr(pXdmac, _iChannel);
+			uint32_t xdmaChannelIntMask;
+			uint32_t xdmaChannelIntStatus;
+
+			xdmaChannelIntMask = XDMAC_GetChannelItMask(pXdmac, _iChannel);
+			xdmaChannelIntStatus = XDMAC_GetChannelIsr(pXdmac, _iChannel);
+			xdmaChannelIntStatus &= xdmaChannelIntMask;
 
 			if (xdmaChannelIntStatus & XDMAC_CIS_BIS) {
-				if ((XDMAC_GetChannelItMask(pXdmac, _iChannel) & XDMAC_CIM_LIM) == 0) {
+				if ((xdmaChannelIntMask & XDMAC_CIM_LIM) == 0) {
 					pCh->state = XDMAD_STATE_DONE;
 					bExec = 1;
 				}
