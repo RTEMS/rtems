@@ -37,6 +37,8 @@ from __future__ import print_function
 
 import os
 import os.path
+import re
+import sre_constants
 import sys
 
 def eprint(*args, **kwargs):
@@ -82,7 +84,7 @@ if verbose:
 #
 if mode == 'exclude':
     pass
-elif mode == 'flags':
+elif mode == 'cflags':
     if len(tests) != 1:
         eprint('error: test count not 1 for mode: %s' % (mode))
         print('INVALID-TEST-DATA')
@@ -103,13 +105,19 @@ states = ['exclude',
           'expected-fail',
           'user-input',
           'indeterminate',
-          'benchmark']
+          'benchmark',
+          'rexclude',
+          'rinclude']
+flags = ['cflags']
 defines = { 'expected-fail' : '-DTEST_STATE_EXPECTED_FAIL=1',
             'user-input'    : '-DTEST_STATE_USER_INPUT=1',
             'indeterminate' : '-DTEST_STATE_INDETERMINATE=1',
             'benchmark'     : '-DTEST_STATE_BENCHMARK=1' }
 output = []
-testdata = {}
+testdata = { 'flags': {} }
+
+for f in flags:
+    testdata['flags'][f] = {}
 
 if verbose:
     eprint('mode: %s' % (mode))
@@ -145,9 +153,9 @@ while len(testconfig):
     lc = 0
     for line in tdata:
         lc += 1
-        ls = [s.strip() for s in line.split(':')]
         if len(line) == 0:
             continue
+        ls = [s.strip() for s in line.split(':', 1)]
         if verbose:
             eprint('%4d: %s' % (lc, line))
         if len(ls) != 2:
@@ -161,27 +169,91 @@ while len(testconfig):
             if td is None:
                 eprint('error: include not found: %s:%d' % (tc, lc))
                 print('INVALID-TEST-DATA')
+                sys.exit(1)
             testconfig.insert(0, td)
             if verbose:
                 eprint('include: %s' % (', '.join(testconfig)))
+        elif state in flags:
+            fs = test.split(':', 1)
+            if len(fs) != 2:
+                eprint('error: syntax error: %s:%d' % (tc, lc))
+                print('INVALID-TEST-DATA')
+                sys.exit(1)
+            ftests = [t.strip() for t in fs[0].split(',')]
+            if verbose:
+                eprint('%4d: %r : %s' % (lc, ftests, fs[1]))
+            for test in ftests:
+                if test not in testdata['flags'][state]:
+                    testdata['flags'][state][test] = [fs[1]]
+                else:
+                    testdata['flags'][state][test] += [fs[1]]
         elif state in states:
+            stests = [t.strip() for t in test.split(',')]
             if state not in testdata:
-                testdata[state] = [test]
+                testdata[state] = stests
             else:
-                testdata[state] += [test]
+                testdata[state] += stests
         else:
             eprint('error: invalid test state: %s in %s:%d' % (state, tc, lc))
             print('INVALID-TEST-DATA')
             sys.exit(1)
 
+if mode in flags:
+    for state in ['exclude', 'rexclude', 'rinclude']:
+        states.remove(state)
+
 for test in tests:
     if mode == 'exclude':
-        if 'exclude' not in testdata or test not in testdata['exclude']:
+        #
+        # Exclude is the highest priority, do this first
+        #
+        if 'exclude' in testdata and test in testdata['exclude']:
+            exclude = True
+        else:
+            #
+            # Regx exclude then regx include so you can filter a whole
+            # group and add back some.
+            #
+            exclude = False
+            if 'rexclude' in testdata:
+                for e in testdata['rexclude']:
+                    try:
+                        m = re.compile(e).match(test)
+                    except sre_constants.error as ree:
+                        eprint('error: invalid rexclude regx: %s: %s' % (e, ree))
+                        print('INVALID-TEST-DATA')
+                        sys.exit(1)
+                    if m:
+                        exclude = True
+                        if 'rinclude' in testdata:
+                            for i in testdata['rinclude']:
+                                try:
+                                    m = re.compile(i).match(test)
+                                except sre_constants.error as ree:
+                                    eprint('error: invalid rinclude regx: %s: %s' % (i, ree))
+                                    print('INVALID-TEST-DATA')
+                                    sys.exit(1)
+                                if m:
+                                    exclude = False
+        #
+        # If not excluded add the test to the output
+        #
+        if not exclude:
             output += [test]
-    elif mode == 'flags':
-        for state in states:
-            if state != 'exclude' and state in testdata and test in testdata[state]:
-                output += [defines[state]]
+    elif mode in flags:
+        if mode == 'cflags':
+            for state in states:
+                if state in testdata and test in testdata[state]:
+                    output += [defines[state]]
+        for ftest in testdata['flags'][mode]:
+            try:
+                m = re.compile(ftest).match(test)
+            except sre_constants.error as ref:
+                eprint('error: invalid flags test regx: %s: %s' % (ftest, ref))
+                print('INVALID-TEST-DATA')
+                sys.exit(1)
+            if m:
+                output += testdata['flags'][mode][ftest]
 
 print(' '.join(sorted(set(output))))
 
