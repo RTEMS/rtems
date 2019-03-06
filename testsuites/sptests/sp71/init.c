@@ -7,6 +7,10 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(PER_ALLOCATION)
+#define PER_ALLOCATION 8000
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -15,8 +19,6 @@
 #include "test_support.h"
 
 const char rtems_test_name[] = "SP 71";
-
-#define PER_ALLOCATION 8000
 
 /* forward declarations to avoid warnings */
 rtems_task Init(rtems_task_argument argument);

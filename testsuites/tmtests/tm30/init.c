@@ -7,6 +7,10 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(OPERATION_COUNT)
+#define OPERATION_COUNT 100
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -76,7 +80,7 @@ rtems_task Init(
     OPERATION_COUNT,
     0
   );
-  
+
   rtems_time_test_measure_operation(
     "rtems_barrier_ident: only case",
     benchmark_barrier_ident,
@@ -84,7 +88,7 @@ rtems_task Init(
     OPERATION_COUNT,
     0
   );
-  
+
   rtems_time_test_measure_operation(
     "rtems_barrier_delete: only case",
     benchmark_barrier_delete,
@@ -92,7 +96,7 @@ rtems_task Init(
     OPERATION_COUNT,
     0
   );
-  
+
   TEST_END();
 
   rtems_test_exit(0);

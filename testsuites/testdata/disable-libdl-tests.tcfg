@@ -4,9 +4,4 @@
 # This file should be included by those BSPs which have dl* test issues
 # which remain to be investigated and solved.
 #
-exclude: dl01
-exclude: dl02
-exclude: dl03
-exclude: dl04
-exclude: dl05
-exclude: dl06
+rexclude: dl[0-9][0-9]

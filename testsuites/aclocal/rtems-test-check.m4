@@ -15,17 +15,17 @@ AC_DEFUN([RTEMS_TEST_CHECK],
  fi
  if test "$1" = "$check_result"; then
   if test -f $tcheck; then
-   test_FLAGS=`$tcheck flags ${RTEMS_BSP} $tdata $tincludes $1`
+   test_CFLAGS=`$tcheck cflags ${RTEMS_BSP} $tdata $tincludes $1`
   fi
-  if test -z "$test_FLAGS"; then
+  if test -z "$test_CFLAGS"; then
    result_msg="PASS"
   else
-   result_msg="$test_FLAGS"
+   result_msg="$test_CFLAGS"
   fi
  else
    result_msg="EXCLUDED"
  fi
  AC_MSG_RESULT([$result_msg])
  AM_CONDITIONAL([TEST_$1], [test "$result_msg" != "EXCLUDED"])
- AC_SUBST([TEST_FLAGS_$1], [$test_FLAGS])
+ AC_SUBST([TEST_FLAGS_$1], [$test_CFLAGS])
 ])

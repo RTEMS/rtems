@@ -7,6 +7,10 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(OPERATION_COUNT)
+#define OPERATION_COUNT 100
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -130,7 +134,7 @@ void *POSIX_Init(
     );
     rtems_test_assert( status == 0 );
   }
-  
+
   /*
    * Now start the timer which will be stopped in Low
    */

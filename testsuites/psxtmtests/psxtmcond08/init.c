@@ -7,6 +7,10 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(OPERATION_COUNT)
+#define OPERATION_COUNT 100
+#endif
+
 #if   defined(USE_WAIT)
   #define TEST_NUMBER "08"
   #define TEST_CASE "pthread_cond_wait: blocking"

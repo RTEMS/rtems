@@ -1,0 +1,19 @@
+#
+# Small Memory RTEMS Test Database.
+#
+
+include: testdata/disable-iconv-tests.tcfg
+include: testdata/disable-libdl-tests.tcfg
+include: testdata/disable-jffs2-tests.tcfg
+
+exclude: flashdisk01
+exclude: fsdosfsname01
+exclude: linpack
+exclude: spstkalloc02
+exclude: sp47
+exclude: psxusleep
+exclude: psxconfig01
+
+cflags: sp71 : -DPER_ALLOCATION=10
+cflags: psxtm.*, tm.* : -DOPERATION_COUNT=3
+cflags: tmck : -DMAXIMUM_DISTRIBUTION=10

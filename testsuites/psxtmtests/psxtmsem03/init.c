@@ -7,6 +7,10 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(OPERATION_COUNT)
+#define OPERATION_COUNT 100
+#endif
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -93,7 +97,7 @@ void *POSIX_Init(
     status = pthread_create( &threadId, NULL, Middle, NULL );
     rtems_test_assert( status == 0 );
   }
-  
+
   status = pthread_create( &threadId, NULL, Low, NULL );
   rtems_test_assert( status == 0 );
 

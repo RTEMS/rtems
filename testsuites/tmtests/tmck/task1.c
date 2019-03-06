@@ -7,6 +7,9 @@
  *  http://www.rtems.org/license/LICENSE.
  */
 
+#if !defined(OPERATION_COUNT)
+#define OPERATION_COUNT 100
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,10 +18,9 @@
 #define CONFIGURE_INIT
 #include "system.h"
 
+#if !defined(MAXIMUM_DISTRIBUTION)
 #define MAXIMUM_DISTRIBUTION 1000
-
-#undef OPERATION_COUNT
-#define OPERATION_COUNT    100000
+#endif
 
 const char rtems_test_name[] = "TIME CHECKER";
 
