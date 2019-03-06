@@ -209,13 +209,18 @@ SECTIONS
    * we can shorten the on-disk segment size.
    */
   /* Initialised small data addressed as offsets from r13 */
-  .sdata          : { PROVIDE (_SDA_BASE_ = 32768); *(.sdata* .gnu.linkonce.s.*)                     } > RAM
+  .sdata          : {
+	bsp_section_sdata_begin = .;
+  	PROVIDE (_SDA_BASE_ = 32768); *(.sdata* .gnu.linkonce.s.*);
+	bsp_section_sdata_end = .;
+   } > RAM
 
   _edata          = .;
   PROVIDE (edata  = .);
 
   /* Zeroed small data addressed as offsets from r13 */
   .sbss           : { PROVIDE (__sbss_start = .);
+  		      bsp_section_sbss_begin = .;
                       *(.dynsbss)
                       *(.sbss*)
                       *(.gnu.linkonce.sb.*)
@@ -228,6 +233,11 @@ SECTIONS
 
                       PROVIDE (__SBSS_END__ = .);
                       PROVIDE (__sbss_end   = .);
+		      bsp_section_sbss_end = .;
+		      bsp_section_sdata_libdl_begin = .;
+		      . = DEFINED(bsp_section_small_data_area_size) ?
+			bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+		      bsp_section_sdata_libdl_end = .;
                     } > RAM
 
   .plt            : { *(.plt)                                          } > RAM

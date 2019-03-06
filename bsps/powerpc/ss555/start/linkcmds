@@ -15,7 +15,7 @@
  */
 
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc", "elf32-powerpc")
-OUTPUT_ARCH(powerpc) 
+OUTPUT_ARCH(powerpc)
 STARTUP(start.o)
 ENTRY(start)
 EXTERN(_vectors)
@@ -35,14 +35,14 @@ SECTIONS
     /*
      * For the MPC555, we use the compressed vector table format which puts
      * all of the exception vectors before 0x100.
-     */ 
+     */
     *(.vectors)
   }
 
   .text 0x100:
   {
     /* Read-only sections, merged into text segment: */
-    
+
     text.start = .;
 
     /* Entry point is the .entry section */
@@ -54,7 +54,7 @@ SECTIONS
 
     /* C++ constructors/destructors */
     *(.gnu.linkonce.t*)
-	     
+
     /*  Initialization and finalization code.
      *
      *  Various files can provide initialization and finalization functions.
@@ -65,32 +65,32 @@ SECTIONS
      *  doesn't matter if the user does not actually link against ecrti.o and
      *  ecrtn.o; the linker won't look for a file to match a wildcard.  The
      *  wildcard also means that it doesn't matter which directory ecrti.o
-     *  and ecrtn.o are in. 
+     *  and ecrtn.o are in.
      */
     PROVIDE (_init = .);
     *ecrti.o(.init)
     *(.init)
     *ecrtn.o(.init)
-    
+
     PROVIDE (_fini = .);
     *ecrti.o(.fini)
     *(.fini)
     *ecrtn.o(.init)
 
-    /* 
+    /*
      *  C++ constructors and destructors for static objects.
      *  PowerPC EABI does not use crtstuff yet, so we build "old-style"
      *  constructor and destructor lists that begin with the list length
      *  end terminate with a NULL entry.
      */
-    PROVIDE (__CTOR_LIST__ = .);	     
+    PROVIDE (__CTOR_LIST__ = .);
     /* LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2) */
     *crtbegin.o(.ctors)
     *(.ctors)
     *crtend.o(.ctors)
     LONG(0)
     PROVIDE (__CTOR_END__ = .);
-	
+
     PROVIDE (__DTOR_LIST__ = .);
     /* LONG((__DTOR_END__ - __DTOR_LIST__) / 4 - 2) */
     *crtbegin.o(.dtors)
@@ -98,7 +98,7 @@ SECTIONS
     *crtend.o(.dtors)
     LONG(0)
     PROVIDE (__DTOR_END__ = .);
-	
+
     /*
      * Special FreeBSD sysctl sections.
      */
@@ -139,8 +139,8 @@ SECTIONS
     *(.tdata .tdata.* .gnu.linkonce.td.*)
     _TLS_Data_end = .;
 
-    /* 
-     * .data section contents, copied to RAM at system startup. 
+    /*
+     * .data section contents, copied to RAM at system startup.
      */
     . = ALIGN(0x20);
     data.contents.start = .;
@@ -163,37 +163,37 @@ SECTIONS
    * internal RAM.
    */
   . = DEFINED(RTEMS_DEBUG) ? . : int_ram_org;
- 
+
   .data : AT (data.contents.start)
   {
     data.start = .;
-    
+
     *(.data)
     *(.data.*)
     KEEP (*(SORT(.rtemsrwset.*)))
     *(.data1)
-    
+
     PROVIDE (__SDATA_START__ = .);
     *(.sdata .sdata.* .gnu.linkonce.s.*)
     PROVIDE (__SDATA_END__ = .);
-    
+
     PROVIDE (__EXCEPT_START__ = .);
     *(.gcc_except_table*)
     PROVIDE (__EXCEPT_END__ = .);
-    
+
     PROVIDE(__GOT_START__ = .);
-    *(.got.plt) 
+    *(.got.plt)
     *(.got)
     PROVIDE(__GOT_END__ = .);
-	
+
     *(.got1)
-    
+
     PROVIDE (__GOT2_START__ = .);
     PROVIDE (_GOT2_START_ = .);
     *(.got2)
     PROVIDE (__GOT2_END__ = .);
     PROVIDE (_GOT2_END_ = .);
-	
+
     PROVIDE (__FIXUP_START__ = .);
     PROVIDE (_FIXUP_START_ = .);
     *(.fixup)
@@ -204,9 +204,11 @@ SECTIONS
      *   offsets can access them all.
      */
     PROVIDE (__SDATA2_START__ = .);
+    bsp_section_sdata_begin = .;
     *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
     *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
     PROVIDE (__SDATA2_END__ = .);
+    bsp_section_sdata_end = .;
 
     data.end = .;
   }
@@ -216,14 +218,20 @@ SECTIONS
   .sbss          :
   {
     PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
+    bsp_section_sbss_begin = .;
     *(.dynsbss)
     *(.sbss .sbss.* .gnu.linkonce.sb.*)
     *(.scommon)
     PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+    bsp_section_sbss_end = .;
+    bsp_section_sdata_libdl_begin = .;
+    . = DEFINED(bsp_section_small_data_area_size) ?
+          bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+    bsp_section_sdata_libdl_end = .;
   }
   .bss :
   {
-    *(.dynbss)	
+    *(.dynbss)
     *(.bss .bss* .gnu.linkonce.b*)
     *(COMMON)
     . = ALIGN(4);
@@ -247,9 +255,9 @@ SECTIONS
   . = DEFINED(RTEMS_DEBUG) ? 0 + ext_ram_size : int_ram_top + ext_ram_size;
   WorkAreaBase = .;
 
- 
-  /* 
-   * Internal I/O devices 
+
+  /*
+   * Internal I/O devices
    */
   .usiu 0x002FC000:		/* unified system interface unit */
   {
@@ -283,22 +291,22 @@ SECTIONS
   .stab.index 0 : { *(.stab.index) }
   .stab.indexstr 0 : { *(.stab.indexstr) }
   .comment 0 : { *(.comment) }
-  
+
   /* DWARF debug sections.
      Symbols in the DWARF debugging sections are relative to the beginning
      of the section so we begin them at 0.  */
   /* DWARF 1 */
   .debug          0 : { *(.debug) }
   .line           0 : { *(.line) }
-  
+
   /* GNU DWARF 1 extensions */
   .debug_srcinfo  0 : { *(.debug_srcinfo) }
   .debug_sfnames  0 : { *(.debug_sfnames) }
-  
+
   /* DWARF 1.1 and DWARF 2 */
   .debug_aranges  0 : { *(.debug_aranges) }
   .debug_pubnames 0 : { *(.debug_pubnames) }
-  
+
   /* DWARF 2 */
   .debug_info     0 : { *(.debug_info) }
   .debug_abbrev   0 : { *(.debug_abbrev) }
@@ -307,7 +315,7 @@ SECTIONS
   .debug_str      0 : { *(.debug_str) }
   .debug_loc      0 : { *(.debug_loc) }
   .debug_macinfo  0 : { *(.debug_macinfo) }
-  
+
   /* SGI/MIPS DWARF 2 extensions */
   .debug_weaknames 0 : { *(.debug_weaknames) }
   .debug_funcnames 0 : { *(.debug_funcnames) }

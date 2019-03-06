@@ -100,7 +100,7 @@ SECTIONS
      *  end terminate with a NULL entry.
      */
 
-    PROVIDE (__CTOR_LIST__ = .);	
+    PROVIDE (__CTOR_LIST__ = .);
     /* LONG((__CTOR_END__ - __CTOR_LIST__) / 4 - 2) */
     *crtbegin.o(.ctors)
     *(.ctors)
@@ -227,28 +227,36 @@ SECTIONS
     .fixup	  : { *(.fixup) 	} >ram
     PROVIDE (_FIXUP_END_ = .);
     PROVIDE (__FIXUP_END__ = .);
-  
+
     .sdata : {
+      bsp_section_sdata_begin = .;
       PROVIDE (_SDA_BASE_ = 32768);
       *(.sdata .sdata.* .gnu.linkonce.s.*)
-    } > ram
- 
+      bsp_section_sdata_end = .;
+  } > ram
+
     .sbss : {
       __bss_start = .;
- 
+      bsp_section_sbss_begin = .;
+
       PROVIDE (__sbss_start = .); PROVIDE (___sbss_start = .);
       *(.scommon)
       *(.dynsbss)
       *(.sbss .sbss.* .gnu.linkonce.sb.*)
       PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+      bsp_section_sbss_end = .;
+      bsp_section_sdata_libdl_begin = .;
+      . = DEFINED(bsp_section_small_data_area_size) ?
+	      bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+      bsp_section_sdata_libdl_end = .;
     } > ram
- 
+
     .sdata2 : {
       PROVIDE (_SDA2_BASE_ = 32768);
- 
+
       *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
     } > ram =0
- 
+
     .sbss2 : {
       *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
     } > ram =0

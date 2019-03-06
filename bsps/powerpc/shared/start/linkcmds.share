@@ -1,12 +1,23 @@
 OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
               "elf32-powerpc")
 OUTPUT_ARCH(powerpc)
+
 /* Do we need any of these for elf?
    __DYNAMIC = 0;    */
 MEMORY {
 	VECTORS	: ORIGIN = 0x0 ,  LENGTH = 0x3000
 	CODE : ORIGIN = 0x3000 , LENGTH = 32M - 0x3000
 }
+
+/*
+ * The upper layer linker command file may optionally define the symbol
+ * bsp_section_small_data_area_size.  By default, the small data area is
+ * defined by the .sdata and .sbss input sections.  Define
+ * bsp_section_small_data_area_size, if you want to make space available for
+ * dynamically loaded libraries (libdl).  Small memory targets which do not use
+ * libdl, should not define this symbol.
+ */
+
 SECTIONS
 {
   .entry_point_section :
@@ -215,11 +226,17 @@ SECTIONS
   /* We want the small data sections together, so single-instruction offsets
      can access them all, and initialized data all before uninitialized, so
      we can shorten the on-disk segment size.  */
-  .sdata	  : { PROVIDE (_SDA_BASE_ = 32768); *(.sdata*) *(.gnu.linkonce.s.*)	} >CODE
+  .sdata : {
+    bsp_section_sdata_begin = .;
+    PROVIDE (_SDA_BASE_ = 32768);
+    *(.sdata*) *(.gnu.linkonce.s.*)
+    bsp_section_sdata_end = .;
+  } > CODE
   _edata  =  .;
   PROVIDE (edata = .);
   .sbss      :
   {
+    bsp_section_sbss_begin = .;
     PROVIDE (__sbss_start = .);
     *(.dynsbss)
     *(.sbss* .gnu.linkonce.sb.*)
@@ -230,6 +247,11 @@ SECTIONS
     . += 1;
     PROVIDE (__SBSS_END__ = .);
     PROVIDE (__sbss_end = .);
+    bsp_section_sbss_end = .;
+    bsp_section_sdata_libdl_begin = .;
+     . = DEFINED(bsp_section_small_data_area_size) ?
+         bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+    bsp_section_sdata_libdl_end = .;
   } > CODE
   .plt   : { *(.plt) }	> CODE
   .bss       :

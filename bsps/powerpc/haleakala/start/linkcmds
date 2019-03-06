@@ -24,6 +24,10 @@ MEMORY {
         /*FLASH : ORIGIN = 0xFFE00000, LENGTH = 16M*/
 }
 
+/*
+ * Max sdata/bss.
+ */
+bsp_section_small_data_area_size = 65536;
 
 SECTIONS
 {
@@ -217,19 +221,27 @@ SECTIONS
 	.sdata : {
       . = ALIGN (4);
 	  PROVIDE (__SDATA_START__ = .);
+      bsp_section_sdata_begin = .;
       sdata.start = .;
 	  *(.sdata*)
       *(.gnu.linkonce.s.*)
 	  sdata.end = .;
+      bsp_section_sdata_end = .;
 	} > RAM
 
 	/* Zeroed small data addressed as offsets from r13 */
    .sbss : {
       . = ALIGN (4);
 	  PROVIDE(__SBSS_START__ = .);
+      bsp_section_sbss_begin = .;
 	  sbss.start = .;
       *(.sbss .sbss.* *.gnu.linkonce.sb.*);
 	  sbss.end = .;
+      bsp_section_sbss_end = .;
+      bsp_section_sdata_libdl_begin = .;
+      . = DEFINED(bsp_section_small_data_area_size) ?
+            bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+      bsp_section_sdata_libdl_end = .;
     } > RAM
     PROVIDE(__SBSS_END__ = .);
 

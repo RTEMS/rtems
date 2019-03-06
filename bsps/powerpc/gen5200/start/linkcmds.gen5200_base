@@ -27,6 +27,15 @@ RamBase = bsp_ram_start;
 RamSize = bsp_ram_size;
 HeapSize = DEFINED(HeapSize) ? HeapSize : 0x0;
 
+/*
+ * The upper layer linker command file may optionally define the symbol
+ * bsp_section_small_data_area_size.  By default, the small data area is
+ * defined by the .sdata and .sbss input sections.  Define
+ * bsp_section_small_data_area_size, if you want to make space available for
+ * dynamically loaded libraries (libdl).  Small memory targets which do not use
+ * libdl, should not define this symbol.
+ */
+
 MEMORY {
 	UNEXPECTED_SECTIONS : ORIGIN = 0xffffffff, LENGTH = 0
 }
@@ -233,6 +242,7 @@ SECTIONS {
 	} > RAM
 
 	.sdata : {
+		bsp_section_sdata_begin = .;
 		PROVIDE (_SDA_BASE_ = 32768);
 		*(.sdata .sdata.* .gnu.linkonce.s.*)
 
@@ -245,13 +255,14 @@ SECTIONS {
 		 * BSP: End of data section
 		 */
 		bsp_section_data_end = .;
+		bsp_section_sdata_end = .;
 	} > RAM
 
 	.sbss : {
 		/*
 		 * BSP: Start of bss section
 		 */
-		bsp_section_bss_start = .;
+		bsp_section_sbss_begin = .;
 
 		__bss_start = .;
 
@@ -260,11 +271,17 @@ SECTIONS {
 		*(.dynsbss)
 		*(.sbss .sbss.* .gnu.linkonce.sb.*)
 		PROVIDE (__sbss_end = .); PROVIDE (___sbss_end = .);
+		bsp_section_sbss_end = .;
+		bsp_section_sdata_libdl_begin = .;
+		. = DEFINED(bsp_section_small_data_area_size) ?
+		      bsp_section_sdata_begin + bsp_section_small_data_area_size : .;
+		bsp_section_sdata_libdl_end = .;
 
 		. = ALIGN (bsp_section_align);
 	} > RAM
 
 	.bss : {
+		bsp_section_bss_start = .;
 		*(COMMON)
 		*(.dynbss)
 		*(.bss .bss.* .gnu.linkonce.b.*)

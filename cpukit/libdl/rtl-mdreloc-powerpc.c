@@ -50,11 +50,16 @@ get_sda_base (void)
 static void*
 get_sdata_start (void)
 {
+#if _ARCH_PPC64
+  return NULL;
+#else
   Elf_Addr addr;
   GET_ADDR(__SDATA_START__, addr);
   return (void*) addr;
+#endif
 }
 
+#if !_ARCH_PPC64
 static size_t
 get_sdata_sbss_size (void)
 {
@@ -74,6 +79,7 @@ get_sdata_libdl_size (void)
   GET_ADDR(bsp_section_sdata_libdl_end, end);
   return end - begin;
 }
+#endif
 
 uint32_t
 rtems_rtl_elf_section_flags (const rtems_rtl_obj* obj,
@@ -89,6 +95,7 @@ rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
                                   const Elf_Shdr*      shdr,
                                   const uint32_t       flags)
 {
+#if !_ARCH_PPC64
   struct {
     const char* label;
     size_t      len;
@@ -104,6 +111,7 @@ rtems_rtl_elf_arch_parse_section (const rtems_rtl_obj* obj,
     if (strncmp (name, prefix[p].label, prefix[p].len) == 0)
       return flags | RTEMS_RTL_OBJ_SECT_ARCH_ALLOC;
   }
+#endif
   return flags;
 }
 
@@ -111,6 +119,10 @@ bool
 rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
                                   rtems_rtl_obj_sect*  sect)
 {
+#if _ARCH_PPC64
+    rtems_rtl_set_error (ENOMEM, ".sdata no supported by ABI");
+    return false;
+#else
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     printf ("rtl: section: arch: alloc: name=%s size=%zu flags=%08" PRIx32 \
             " order=%i link=%d info=%d\n",
@@ -138,16 +150,19 @@ rtems_rtl_elf_arch_section_alloc (const rtems_rtl_obj* obj,
   }
 
   return true;
+#endif
 }
 
 bool
 rtems_rtl_elf_arch_section_free (const rtems_rtl_obj* obj,
                                   rtems_rtl_obj_sect*  sect)
 {
+#if !_ARCH_PPC64
   if (rtems_rtl_trace (RTEMS_RTL_TRACE_DETAIL))
     printf ("rtl: section: arch: free: name=%s size=%zu\n", sect->name, sect->size);
   if (sdata != NULL)
     rtems_rtl_bit_alloc_bfree (sdata, sect->base, sect->size);
+#endif
   return true;
 }
 
