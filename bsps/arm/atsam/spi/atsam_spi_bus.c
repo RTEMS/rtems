@@ -71,6 +71,8 @@ typedef struct {
   bool chip_select_active;
   bool chip_select_decode;
   uint8_t spi_id;
+  uint32_t peripheral_clk_per_us;
+  uint32_t spi_mr;
   uint32_t spi_csr[4];
 } atsam_spi_bus;
 
@@ -79,11 +81,15 @@ static void atsam_spi_wakeup_task(atsam_spi_bus *bus)
   rtems_binary_semaphore_post(&bus->sem);
 }
 
-static uint8_t atsam_calculate_dlybcs(uint16_t delay_in_us)
+static uint8_t atsam_calculate_dlybcs(const atsam_spi_bus *bus)
 {
-  return (
-    (BOARD_MCK / delay_in_us) < 0xFF) ?
-    (BOARD_MCK / delay_in_us) : 0xFF;
+  uint32_t dlybcs = bus->base.delay_usecs * bus->peripheral_clk_per_us;
+
+  if (dlybcs > 0xff) {
+    dlybcs = 0xff;
+  }
+
+  return dlybcs;
 }
 
 static uint32_t atsam_calculate_scbr(uint32_t speed_hz)
@@ -126,27 +132,24 @@ static void atsam_set_phase_and_polarity(uint32_t mode, uint32_t *csr)
 
 static void atsam_configure_spi(atsam_spi_bus *bus)
 {
-  uint8_t delay_cs;
   uint32_t scbr;
   uint32_t csr = 0;
-  uint32_t mode = 0;
+  uint32_t mr;
   uint32_t cs = bus->base.cs;
 
-  delay_cs = atsam_calculate_dlybcs(bus->base.delay_usecs);
   scbr = atsam_calculate_scbr(bus->base.speed_hz);
 
-  mode |= SPI_MR_DLYBCS(delay_cs);
-  mode |= SPI_MR_MSTR;
-  mode |= SPI_MR_MODFDIS;
+  mr = bus->spi_mr;
+
   if (bus->chip_select_decode) {
-    mode |= SPI_MR_PCS(bus->base.cs);
-    mode |= SPI_MR_PCSDEC;
+    mr |= SPI_MR_PCS(bus->base.cs);
+    mr |= SPI_MR_PCSDEC;
     cs /= 4;
   } else {
-    mode |= SPI_PCS(bus->base.cs);
+    mr |= SPI_PCS(bus->base.cs);
   }
 
-  bus->spi_regs->SPI_MR = mode;
+  bus->spi_regs->SPI_MR = mr;
 
   csr = bus->spi_csr[cs]
     | SPI_CSR_SCBR(scbr)
@@ -345,7 +348,6 @@ static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer 
       || msg->speed_hz != bus->base.speed_hz
       || msg->bits_per_word != bus->base.bits_per_word
       || msg->cs != bus->base.cs
-      || msg->delay_usecs != bus->base.delay_usecs
   ) {
     if (
       msg->bits_per_word < 8
@@ -360,7 +362,6 @@ static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer 
     bus->base.speed_hz = msg->speed_hz;
     bus->base.bits_per_word = msg->bits_per_word;
     bus->base.cs = msg->cs;
-    bus->base.delay_usecs = msg->delay_usecs;
     atsam_configure_spi(bus);
   }
 
@@ -407,6 +408,22 @@ static void atsam_spi_dma_callback(uint32_t channel, void *arg)
   --bus->transfer_in_progress;
 
   if (bus->transfer_in_progress == 0) {
+    const spi_ioc_transfer *msg = bus->msg_current;
+
+    if (msg->delay_usecs != bus->base.delay_usecs) {
+      uint32_t mr;
+      uint32_t mr_dlybcs;
+
+      bus->base.delay_usecs = msg->delay_usecs;
+      mr_dlybcs = SPI_MR_DLYBCS(atsam_calculate_dlybcs(bus));
+      bus->spi_mr = mr_dlybcs | SPI_MR_MSTR | SPI_MR_MODFDIS;
+
+      mr = bus->spi_regs->SPI_MR;
+      mr &= ~SPI_MR_DLYBCS_Msk;
+      mr |= mr_dlybcs;
+      bus->spi_regs->SPI_MR = mr;
+    }
+
     atsam_spi_copy_back_rx_after_dma_transfer(bus);
     atsam_spi_setup_transfer(bus);
   }
@@ -617,11 +634,12 @@ int spi_bus_register_atsam(
   bus->base.max_speed_hz = MAX_SPI_FREQUENCY;
   bus->base.bits_per_word = 8;
   bus->base.speed_hz = bus->base.max_speed_hz;
-  bus->base.delay_usecs = 1;
   bus->base.cs = 1;
   bus->spi_id = config->spi_peripheral_id;
   bus->spi_regs = config->spi_regs;
   bus->chip_select_decode = config->chip_select_decode;
+  bus->peripheral_clk_per_us = BOARD_MCK / 1000000;
+  bus->spi_mr = SPI_MR_MSTR | SPI_MR_MODFDIS;
 
   for (i = 0; i < RTEMS_ARRAY_SIZE(bus->spi_csr); ++i) {
     if (config->dlybs_in_ns[i] != 0) {
