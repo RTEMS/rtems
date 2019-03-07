@@ -53,25 +53,6 @@ include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/spr.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/stackTrace.h
 include_libcpu_HEADERS += ../../../../../bsps/powerpc/include/libcpu/vectors.h
 
-include_mpc55xxdir = $(includedir)/mpc55xx
-include_mpc55xx_HEADERS =
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/dspi.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/edma.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/emios.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc551x.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc555x.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc556x.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc564xL.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc5668.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/fsl-mpc567x.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/mpc55xx.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/reg-defs.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/regs-edma.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/regs-mmu.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/regs.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/siu.h
-include_mpc55xx_HEADERS += ../../../../../bsps/powerpc/include/mpc55xx/watchdog.h
-
 include_mpc5xxdir = $(includedir)/mpc5xx
 include_mpc5xx_HEADERS =
 include_mpc5xx_HEADERS += ../../../../../bsps/powerpc/include/mpc5xx/console.h
