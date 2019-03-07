@@ -44,6 +44,7 @@
 
 /* ##########################  Core Instruction Access  ######################### */
 /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  \ingroup CMSIS
   Access to dedicated instructions
   @{
 */

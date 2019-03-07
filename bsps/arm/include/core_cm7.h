@@ -272,6 +272,7 @@
 /* IO definitions (access restrictions to peripheral registers) */
 /**
     \defgroup CMSIS_glob_defs CMSIS Global Defines
+    \ingroup CMSIS
 
     <strong>IO Type Qualifiers</strong> are used
     \li to specify the access to peripheral variables.
@@ -307,6 +308,7 @@
  ******************************************************************************/
 /**
   \defgroup CMSIS_core_register Defines and Type Definitions
+  \ingroup CMSIS
   \brief Type definitions and defines for Cortex-M processor based devices.
 */
 
@@ -1780,6 +1782,7 @@ typedef struct
  ******************************************************************************/
 /**
   \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+  \ingroup CMSIS
 */
 
 

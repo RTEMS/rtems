@@ -13,3 +13,11 @@
  *
  * @brief Shared Support for ARM Board Support Packages.
  */
+
+/**
+ * @defgroup CMSIS CMSIS
+ *
+ * @ingroup RTEMSBSPsARMShared
+ *
+ * @brief Cortex Microcontroller Software Interface Standard (CMSIS).
+ */

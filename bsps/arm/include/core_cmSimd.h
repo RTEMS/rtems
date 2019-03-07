@@ -48,6 +48,7 @@
 
 /* ###################  Compiler specific Intrinsics  ########################### */
 /** \defgroup CMSIS_SIMD_intrinsics CMSIS SIMD Intrinsics
+  \ingroup CMSIS
   Access to dedicated SIMD instructions
   @{
 */
