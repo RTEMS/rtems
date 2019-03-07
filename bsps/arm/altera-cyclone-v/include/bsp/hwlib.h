@@ -54,14 +54,6 @@ extern "C"
 {
 #endif  /* __cplusplus */
 
-/**
- * @defgroup RTEMSBSPsARMCycVContrib Contributed Code
- *
- * @ingroup RTEMSBSPsARMCycV
- *
- * @brief Contributed code from Altera.
- */
-
 /*!
  * The type definition for status codes returned by the HWLIB.
  */
