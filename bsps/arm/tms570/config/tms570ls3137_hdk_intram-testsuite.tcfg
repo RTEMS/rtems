@@ -5,6 +5,8 @@
 #
 
 include: testdata/disable-iconv-tests.tcfg
+include: testdata/small-memory-testsuite.tcfg
+
 exclude: fileio
 exclude: iostream
 exclude: pppd
