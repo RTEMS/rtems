@@ -7,7 +7,9 @@
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
 include: testdata/disable-mrfs-tests.tcfg
+include: testdata/small-memory-testsuite.tcfg
 
+exclude: block08
 exclude: capture
 exclude: cdtest
 exclude: complex
@@ -41,13 +43,27 @@ exclude: mdosfs_fspatheval
 exclude: mdosfs_fstime
 exclude: paranoia
 exclude: pppd
+exclude: psxaio01
+exclude: psxaio02
 exclude: psxmsgq01
+exclude: record01
 exclude: rtems++
 exclude: shell01
+exclude: sp16
+exclude: sp25
+exclude: sp42
+exclude: sp48
+exclude: spcxx01
+exclude: sptimecounter02
+exclude: sptimecounter03
 exclude: sptls02
 exclude: spstkalloc02
 exclude: syscall01
 exclude: tar01
+exclude: telnetd01
 exclude: termios
+exclude: tmcontext01
 exclude: tmfine01
+exclude: top
 exclude: utf8proc01
+
