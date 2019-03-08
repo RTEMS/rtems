@@ -1,652 +1,472 @@
 /**
  * @file
  *
- * @ingroup RTEMSBSPsARMLPC24XX_libi2c
- *
- * @brief LibI2C bus driver for the Synchronous Serial Port (SSP).
+ * @ingroup RTEMSBSPsARMLPC24XXSSP
  */
 
 /*
- * Copyright (c) 2008
- * Embedded Brains GmbH
- * Obere Lagerstr. 30
- * D-82178 Puchheim
- * Germany
- * rtems@embedded-brains.de
+ * SPDX-License-Identifier: BSD-2-Clause
  *
- * The license and distribution terms for this file may be
- * found in the file LICENSE in this distribution or at
- * http://www.rtems.org/license/LICENSE.
+ * Copyright (C) 2008, 2019 embedded brains GmbH
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdbool.h>
-
 #include <bsp/ssp.h>
-#include <bsp/lpc24xx.h>
-#include <bsp/irq.h>
-#include <bsp/system-clocks.h>
-#include <bsp/dma.h>
+#include <bsp.h>
 #include <bsp/io.h>
+#include <bsp/irq.h>
+#include <bsp/lpc24xx.h>
 
-#define RTEMS_STATUS_CHECKS_USE_PRINTK
+#include <rtems/score/assert.h>
 
-#include <rtems/status-checks.h>
-
-#define LPC24XX_SSP_NUMBER 2
-
-#define LPC24XX_SSP_FIFO_SIZE 8
-
-#define LPC24XX_SSP_BAUD_RATE 2000000
-
-typedef enum {
-  LPC24XX_SSP_DMA_INVALID = 0,
-  LPC24XX_SSP_DMA_AVAILABLE = 1,
-  LPC24XX_SSP_DMA_NOT_INITIALIZED = 2,
-  LPC24XX_SSP_DMA_INITIALIZATION = 3,
-  LPC24XX_SSP_DMA_TRANSFER_FLAG = 0x80000000U,
-  LPC24XX_SSP_DMA_WAIT = 1 | LPC24XX_SSP_DMA_TRANSFER_FLAG,
-  LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_0 = 2 | LPC24XX_SSP_DMA_TRANSFER_FLAG,
-  LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_1 = 3 | LPC24XX_SSP_DMA_TRANSFER_FLAG,
-  LPC24XX_SSP_DMA_ERROR = 4 | LPC24XX_SSP_DMA_TRANSFER_FLAG,
-  LPC24XX_SSP_DMA_DONE = 5 | LPC24XX_SSP_DMA_TRANSFER_FLAG
-} lpc24xx_ssp_dma_status;
+#include <dev/spi/spi.h>
 
 typedef struct {
-  rtems_libi2c_bus_t bus;
+  spi_bus base;
   volatile lpc24xx_ssp *regs;
-  unsigned clock;
-  uint32_t idle_char;
-} lpc24xx_ssp_bus_entry;
+  size_t tx_todo;
+  const uint8_t *tx_buf;
+  size_t tx_inc;
+  size_t rx_todo;
+  uint8_t *rx_buf;
+  size_t rx_inc;
+  const spi_ioc_transfer *msg;
+  uint32_t msg_todo;
+  int msg_error;
+  rtems_binary_semaphore sem;
+  lpc24xx_module module;
+  rtems_vector_number irq;
+} lpc24xx_ssp_bus;
 
 typedef struct {
-  lpc24xx_ssp_dma_status status;
-  lpc24xx_ssp_bus_entry *bus;
-  rtems_libi2c_read_write_done_t done;
-  int n;
-  void *arg;
-} lpc24xx_ssp_dma_entry;
+  volatile lpc24xx_ssp *regs;
+  lpc24xx_module module;
+  rtems_vector_number irq;
+} lpc24xx_ssp_config;
 
-static lpc24xx_ssp_dma_entry lpc24xx_ssp_dma_data = {
-  .status = LPC24XX_SSP_DMA_NOT_INITIALIZED,
-  .bus = NULL,
-  .done = NULL,
-  .n = 0,
-  .arg = NULL
-};
+static uint8_t lpc24xx_ssp_trash;
 
-static uint32_t lpc24xx_ssp_trash = 0;
+static const uint8_t lpc24xx_ssp_idle = 0xff;
 
-static inline bool lpc24xx_ssp_is_busy(const lpc24xx_ssp_bus_entry *bus)
+static void lpc24xx_ssp_done(lpc24xx_ssp_bus *bus, int error)
 {
-  return lpc24xx_ssp_dma_data.bus == bus
-    && lpc24xx_ssp_dma_data.status != LPC24XX_SSP_DMA_AVAILABLE;
+  bus->msg_error = error;
+  rtems_binary_semaphore_post(&bus->sem);
 }
 
-static void lpc24xx_ssp_handler(void *arg)
+static int lpc24xx_ssp_do_setup(
+  lpc24xx_ssp_bus *bus,
+  uint32_t speed_hz,
+  uint32_t mode
+)
 {
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) arg;
-  volatile lpc24xx_ssp *regs = e->regs;
-  uint32_t mis = regs->mis;
-  uint32_t icr = 0;
+  volatile lpc24xx_ssp *regs;
+  uint32_t clk;
+  uint32_t scr_plus_one;
+  uint32_t cr0;
 
-  if ((mis & SSP_MIS_RORRIS) != 0) {
-    /* TODO */
-    icr |= SSP_ICR_RORRIS;
+  if (speed_hz > bus->base.max_speed_hz || speed_hz == 0) {
+    return -EINVAL;
   }
 
-  regs->icr = icr;
-}
-
-static void lpc24xx_ssp_dma_handler(void *arg)
-{
-  lpc24xx_ssp_dma_entry *e = (lpc24xx_ssp_dma_entry *) arg;
-  lpc24xx_ssp_dma_status status = e->status;
-  uint32_t tc = 0;
-  uint32_t err = 0;
-  int rv = 0;
-
-  /* Return if we are not in a transfer status */
-  if ((status & LPC24XX_SSP_DMA_TRANSFER_FLAG) == 0) {
-    return;
+  if ((mode & ~(SPI_CPOL | SPI_CPHA)) != 0) {
+    return -EINVAL;
   }
 
-  /* Get interrupt status */
-  tc = GPDMA_INT_TCSTAT;
-  err = GPDMA_INT_ERR_STAT;
+  regs = bus->regs;
+  clk = bus->base.max_speed_hz;
+  scr_plus_one = (clk + speed_hz - 1) / speed_hz;
 
-  /* Clear interrupt status */
-  GPDMA_INT_TCCLR = tc;
-  GPDMA_INT_ERR_CLR = err;
+  if (scr_plus_one > 256) {
+    uint32_t pre;
 
-  /* Change status */
-  if (err == 0) {
-    switch (status) {
-      case LPC24XX_SSP_DMA_WAIT:
-        if ((tc & (GPDMA_STATUS_CH_0 | GPDMA_STATUS_CH_1)) != 0) {
-          status = LPC24XX_SSP_DMA_DONE;
-        } else if ((tc & GPDMA_STATUS_CH_0) != 0) {
-          status = LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_1;
-        } else if ((tc & GPDMA_STATUS_CH_1) != 0) {
-          status = LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_0;
-        }
-        break;
-      case LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_0:
-        if ((tc & GPDMA_STATUS_CH_1) != 0) {
-          status = LPC24XX_SSP_DMA_ERROR;
-        } else if ((tc & GPDMA_STATUS_CH_0) != 0) {
-          status = LPC24XX_SSP_DMA_DONE;
-        }
-        break;
-      case LPC24XX_SSP_DMA_WAIT_FOR_CHANNEL_1:
-        if ((tc & GPDMA_STATUS_CH_0) != 0) {
-          status = LPC24XX_SSP_DMA_ERROR;
-        } else if ((tc & GPDMA_STATUS_CH_1) != 0) {
-          status = LPC24XX_SSP_DMA_DONE;
-        }
-        break;
-      default:
-        status = LPC24XX_SSP_DMA_ERROR;
-        break;
-    }
-  } else {
-    status = LPC24XX_SSP_DMA_ERROR;
-  }
+    pre = (scr_plus_one + 255) / 256;
 
-  /* Error cleanup */
-  if (status == LPC24XX_SSP_DMA_ERROR) {
-    lpc24xx_dma_channel_disable(0, true);
-    lpc24xx_dma_channel_disable(1, true);
-    status = LPC24XX_SSP_DMA_DONE;
-    rv = -RTEMS_IO_ERROR;
-  }
-
-  /* Done */
-  if (status == LPC24XX_SSP_DMA_DONE) {
-    status = LPC24XX_SSP_DMA_AVAILABLE;
-    if (e->done != NULL) {
-      e->done(rv, e->n, e->arg);
-      e->done = NULL;
-    }
-  }
-
-  /* Set status */
-  e->status = status;
-}
-
-static rtems_status_code lpc24xx_ssp_init(rtems_libi2c_bus_t *bus)
-{
-  rtems_status_code sc = RTEMS_SUCCESSFUL;
-  rtems_interrupt_level level;
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-  volatile lpc24xx_ssp *regs = e->regs;
-  unsigned pclk = lpc24xx_cclk();
-  unsigned pre =
-    ((pclk + LPC24XX_SSP_BAUD_RATE - 1) / LPC24XX_SSP_BAUD_RATE + 1) & ~1U;
-  lpc24xx_module module = LPC24XX_MODULE_SSP_0;
-  rtems_vector_number vector = UINT32_MAX;
-
-  if (lpc24xx_ssp_dma_data.status == LPC24XX_SSP_DMA_NOT_INITIALIZED) {
-    lpc24xx_ssp_dma_status status = LPC24XX_SSP_DMA_INVALID;
-
-    /* Test and set DMA support status */
-    rtems_interrupt_disable(level);
-    status = lpc24xx_ssp_dma_data.status;
-    if (status == LPC24XX_SSP_DMA_NOT_INITIALIZED) {
-      lpc24xx_ssp_dma_data.status = LPC24XX_SSP_DMA_INITIALIZATION;
-    }
-    rtems_interrupt_enable(level);
-
-    if (status == LPC24XX_SSP_DMA_NOT_INITIALIZED) {
-      /* Install DMA interrupt handler */
-      sc = rtems_interrupt_handler_install(
-        LPC24XX_IRQ_DMA,
-        "SSP DMA",
-        RTEMS_INTERRUPT_SHARED,
-        lpc24xx_ssp_dma_handler,
-        &lpc24xx_ssp_dma_data
-      );
-      RTEMS_CHECK_SC(sc, "install DMA interrupt handler");
-
-      /* Set DMA support status */
-      lpc24xx_ssp_dma_data.status = LPC24XX_SSP_DMA_AVAILABLE;
-    }
-  }
-
-  /* Disable module */
-  regs->cr1 = 0;
-
-  switch ((uintptr_t) regs) {
-    case SSP0_BASE_ADDR:
-      module = LPC24XX_MODULE_SSP_0;
-      vector = LPC24XX_IRQ_SPI_SSP_0;
-      break;
-    case SSP1_BASE_ADDR:
-      module = LPC24XX_MODULE_SSP_1;
-      vector = LPC24XX_IRQ_SSP_1;
-      break;
-    default:
-      return RTEMS_IO_ERROR;
-  }
-
-  /* Set clock select */
-  sc = lpc24xx_module_enable(module, LPC24XX_MODULE_PCLK_DEFAULT);
-  RTEMS_CHECK_SC(sc, "enable module clock");
-
-  /* Set serial clock rate to save value */
-  regs->cr0 = SET_SSP_CR0_SCR(0, 255);
-
-  /* Set clock prescaler */
-  if (pre > 254) {
-    pre = 254;
-  } else if (pre < 2) {
-    pre = 2;
-  }
-  regs->cpsr = pre;
-
-  /* Save clock value */
-  e->clock = pclk / pre;
-
-  /* Enable module and loop back mode */
-  regs->cr1 = SSP_CR1_LBM | SSP_CR1_SSE;
-
-  /* Install interrupt handler */
-  sc = rtems_interrupt_handler_install(
-    vector,
-    "SSP",
-    RTEMS_INTERRUPT_UNIQUE,
-    lpc24xx_ssp_handler,
-    e
-  );
-  RTEMS_CHECK_SC(sc, "install interrupt handler");
-
-  /* Enable receiver overrun interrupts */
-  e->regs->imsc = SSP_IMSC_RORIM;
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static rtems_status_code lpc24xx_ssp_send_start(rtems_libi2c_bus_t *bus)
-{
-  return RTEMS_SUCCESSFUL;
-}
-
-static rtems_status_code lpc24xx_ssp_send_stop(rtems_libi2c_bus_t *bus)
-{
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-
-  /* Release DMA support */
-  if (lpc24xx_ssp_dma_data.bus == e) {
-    if (lpc24xx_ssp_dma_data.status == LPC24XX_SSP_DMA_AVAILABLE) {
-      lpc24xx_dma_channel_release(0);
-      lpc24xx_dma_channel_release(1);
-      lpc24xx_ssp_dma_data.bus = NULL;
+    if (pre <= 127) {
+      scr_plus_one = (clk / pre + speed_hz - 1) / speed_hz;
     } else {
-      return RTEMS_RESOURCE_IN_USE;
-    }
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static rtems_status_code lpc24xx_ssp_send_addr(
-  rtems_libi2c_bus_t *bus,
-  uint32_t addr,
-  int rw
-)
-{
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-
-  if (lpc24xx_ssp_is_busy(e)) {
-    return RTEMS_RESOURCE_IN_USE;
-  }
-
-  return RTEMS_SUCCESSFUL;
-}
-
-static int lpc24xx_ssp_set_transfer_mode(
-  rtems_libi2c_bus_t *bus,
-  const rtems_libi2c_tfr_mode_t *mode
-)
-{
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-  volatile lpc24xx_ssp *regs = e->regs;
-  unsigned clk = e->clock;
-  unsigned br = mode->baudrate;
-  unsigned scr = (clk + br - 1) / br;
-
-  if (lpc24xx_ssp_is_busy(e)) {
-    return -RTEMS_RESOURCE_IN_USE;
-  }
-
-  if (mode->bits_per_char != 8) {
-    return -RTEMS_INVALID_NUMBER;
-  }
-
-  if (mode->lsb_first) {
-    return -RTEMS_INVALID_NUMBER;
-  }
-
-  if (br == 0) {
-    return -RTEMS_INVALID_NUMBER;
-  }
-
-  /* Compute new prescaler if necessary */
-  if (scr > 256 || scr < 1) {
-    unsigned pre = regs->cpsr;
-    unsigned pclk = clk * pre;
-
-    while (scr > 256) {
-      if (pre > 252) {
-        return -RTEMS_INVALID_NUMBER;
-      }
-      pre += 2;
-      clk = pclk / pre;
-      scr = (clk + br - 1) / br;
+      pre = 127;
+      scr_plus_one = 256;
     }
 
-    while (scr < 1) {
-      if (pre < 4) {
-        return -RTEMS_INVALID_NUMBER;
-      }
-      pre -= 2;
-      clk = pclk / pre;
-      scr = (clk + br - 1) / br;
-    }
-
-    regs->cpsr = pre;
-    e->clock = clk;
+    regs->cpsr = 2 * pre;
   }
 
-  /* Adjust SCR */
-  --scr;
+  cr0 = SET_SSP_CR0_DSS(0, 0x7) | SET_SSP_CR0_SCR(0, scr_plus_one - 1);
 
-  e->idle_char = mode->idle_char;
-
-  while ((regs->sr & SSP_SR_TFE) == 0) {
-    /* Wait */
+  if ((mode & SPI_CPOL) != 0) {
+    cr0 |= SSP_CR0_CPOL;
   }
 
-  regs->cr0 = SET_SSP_CR0_DSS(0, 0x7)
-    | SET_SSP_CR0_SCR(0, scr)
-    | (mode->clock_inv ? SSP_CR0_CPOL : 0)
-    | (mode->clock_phs ? SSP_CR0_CPHA : 0);
+  if ((mode & SPI_CPHA) != 0) {
+    cr0 |= SSP_CR0_CPHA;
+  }
 
+  regs->cr0 = cr0;
+
+  bus->base.speed_hz = speed_hz;
+  bus->base.mode = mode;
   return 0;
 }
 
-static int lpc24xx_ssp_read_write(
-  rtems_libi2c_bus_t *bus,
-  unsigned char *in,
-  const unsigned char *out,
-  int n
+static bool lpc24xx_ssp_msg_setup(
+  lpc24xx_ssp_bus *bus,
+  const spi_ioc_transfer *msg
 )
 {
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-  volatile lpc24xx_ssp *regs = e->regs;
-  int r = 0;
-  int w = 0;
-  int dr = 1;
-  int dw = 1;
-  int m = 0;
-  uint32_t sr = regs->sr;
-  unsigned char trash = 0;
-  unsigned char idle_char = (unsigned char) e->idle_char;
-
-  if (lpc24xx_ssp_is_busy(e)) {
-    return -RTEMS_RESOURCE_IN_USE;
+  if (msg->cs_change == 0 || msg->bits_per_word != 8) {
+    lpc24xx_ssp_done(bus, -EINVAL);
+    return false;
   }
 
-  if (n < 0) {
-    return -RTEMS_INVALID_SIZE;
+  if (msg->speed_hz != bus->base.speed_hz || msg->mode != bus->base.mode) {
+    int error;
+
+    error = lpc24xx_ssp_do_setup(bus, msg->speed_hz, msg->mode);
+    if (error != 0) {
+      lpc24xx_ssp_done(bus, error);
+      return false;
+    }
   }
 
-  /* Disable DMA on SSP */
-  regs->dmacr = 0;
+  bus->tx_todo = msg->len;
+  bus->rx_todo = msg->len;
 
-  if (in == NULL) {
-    dr = 0;
-    in = &trash;
+  if (msg->tx_buf != NULL) {
+    bus->tx_buf = msg->tx_buf;
+    bus->tx_inc = 1;
+  } else {
+    bus->tx_buf = &lpc24xx_ssp_idle;
+    bus->tx_inc = 0;
   }
 
-  if (out == NULL) {
-    dw = 0;
-    out = &idle_char;
+  if (msg->rx_buf != NULL) {
+    bus->rx_buf = msg->rx_buf;
+    bus->rx_inc = 1;
+  } else {
+    bus->rx_buf = &lpc24xx_ssp_trash;
+    bus->rx_inc = 0;
   }
 
-  /*
-   * Assumption: The transmit and receive FIFOs are empty.  If this assumption
-   * is not true an input buffer overflow may occur or we may never exit the
-   * loop due to data loss.  This is only possible if entities external to this
-   * driver operate on the SSP.
-   */
+  return true;
+}
 
-  while (w < n) {
-    /* FIFO capacity */
-    m = w - r;
+static bool lpc24xx_ssp_do_tx_and_rx(
+  lpc24xx_ssp_bus *bus,
+  volatile lpc24xx_ssp *regs,
+  uint32_t sr
+)
+{
+  size_t tx_todo;
+  const uint8_t *tx_buf;
+  size_t tx_inc;
+  size_t rx_todo;
+  uint8_t *rx_buf;
+  size_t rx_inc;
+  uint32_t imsc;
 
-    /* Write */
-    if ((sr & SSP_SR_TNF) != 0 && m < LPC24XX_SSP_FIFO_SIZE) {
-      regs->dr = *out;
-      ++w;
-      out += dw;
+  tx_todo = bus->tx_todo;
+  tx_buf = bus->tx_buf;
+  tx_inc = bus->tx_inc;
+  rx_todo = bus->rx_todo;
+  rx_buf = bus->rx_buf;
+  rx_inc = bus->rx_inc;
+
+  while (tx_todo > 0 && (sr & SSP_SR_TNF) != 0) {
+    regs->dr = *tx_buf;
+    --tx_todo;
+    tx_buf += tx_inc;
+
+    if (rx_todo > 0 && (sr & SSP_SR_RNE) != 0) {
+      *rx_buf = regs->dr;
+      --rx_todo;
+      rx_buf += rx_inc;
     }
 
-    /* Read */
-    if ((sr & SSP_SR_RNE) != 0) {
-      *in = (unsigned char) regs->dr;
-      ++r;
-      in += dr;
-    }
-
-    /* New status */
     sr = regs->sr;
   }
 
-  /* Read outstanding input */
-  while (r < n) {
-    /* Wait */
-    do {
-      sr = regs->sr;
-    } while ((sr & SSP_SR_RNE) == 0);
+  while (rx_todo > 0 && (sr & SSP_SR_RNE) != 0) {
+    *rx_buf = regs->dr;
+    --rx_todo;
+    rx_buf += rx_inc;
 
-    /* Read */
-    *in = (unsigned char) regs->dr;
-    ++r;
-    in += dr;
+    sr = regs->sr;
   }
 
-  return n;
+  bus->tx_todo = tx_todo;
+  bus->tx_buf = tx_buf;
+  bus->rx_todo = rx_todo;
+  bus->rx_buf = rx_buf;
+
+  imsc = 0;
+
+  if (tx_todo > 0) {
+    imsc |= SSP_IMSC_TXIM;
+  } else if (rx_todo > 0) {
+    imsc |= SSP_IMSC_RXIM | SSP_IMSC_RTIM;
+    regs->icr = SSP_ICR_RTRIS;
+  }
+
+  regs->imsc = imsc;
+
+  return tx_todo == 0 && rx_todo == 0;
 }
 
-static int lpc24xx_ssp_read_write_async(
-  rtems_libi2c_bus_t *bus,
-  unsigned char *in,
-  const unsigned char *out,
-  int n,
-  rtems_libi2c_read_write_done_t done,
-  void *arg
+static void lpc24xx_ssp_start(
+  lpc24xx_ssp_bus *bus,
+  const spi_ioc_transfer *msg
 )
 {
-  rtems_interrupt_level level;
-  lpc24xx_ssp_bus_entry *e = (lpc24xx_ssp_bus_entry *) bus;
-  volatile lpc24xx_ssp *ssp = e->regs;
-  volatile lpc24xx_dma_channel *receive_channel = GPDMA_CH_BASE_ADDR(0);
-  volatile lpc24xx_dma_channel *transmit_channel = GPDMA_CH_BASE_ADDR(1);
-  uint32_t di = GPDMA_CH_CTRL_DI;
-  uint32_t si = GPDMA_CH_CTRL_SI;
+  while (true) {
+    if (lpc24xx_ssp_msg_setup(bus, msg)) {
+      volatile lpc24xx_ssp *regs;
+      uint32_t sr;
+      bool next_msg;
 
-  if (n < 0 || n > (int) GPDMA_CH_CTRL_TSZ_MAX) {
-    return -RTEMS_INVALID_SIZE;
-  }
+      regs = bus->regs;
+      sr = regs->sr;
 
-  /* Try to reserve DMA support for this bus */
-  if (lpc24xx_ssp_dma_data.bus == NULL) {
-    rtems_interrupt_disable(level);
-    if (lpc24xx_ssp_dma_data.bus == NULL) {
-      lpc24xx_ssp_dma_data.bus = e;
-    }
-    rtems_interrupt_enable(level);
-
-    /* Try to obtain DMA channels */
-    if (lpc24xx_ssp_dma_data.bus == e) {
-      rtems_status_code cs0 = lpc24xx_dma_channel_obtain(0);
-      rtems_status_code cs1 = lpc24xx_dma_channel_obtain(1);
-
-      if (cs0 != RTEMS_SUCCESSFUL || cs1 != RTEMS_SUCCESSFUL) {
-        if (cs0 == RTEMS_SUCCESSFUL) {
-          lpc24xx_dma_channel_release(0);
-        }
-        if (cs1 == RTEMS_SUCCESSFUL) {
-          lpc24xx_dma_channel_release(1);
-        }
-        lpc24xx_ssp_dma_data.bus = NULL;
+      if ((sr & (SSP_SR_RNE | SSP_SR_TFE)) != SSP_SR_TFE) {
+        lpc24xx_ssp_done(bus, -EIO);
+        break;
       }
+
+      next_msg = lpc24xx_ssp_do_tx_and_rx(bus, regs, sr);
+      if (!next_msg) {
+        break;
+      }
+
+      --bus->msg_todo;
+
+      if (bus->msg_todo == 0) {
+        lpc24xx_ssp_done(bus, 0);
+        break;
+      }
+
+      ++msg;
+      bus->msg = msg;
+    } else {
+      break;
     }
   }
+}
 
-  /* Check if DMA support is available */
-  if (lpc24xx_ssp_dma_data.bus != e
-    || lpc24xx_ssp_dma_data.status != LPC24XX_SSP_DMA_AVAILABLE) {
-    return -RTEMS_RESOURCE_IN_USE;
+static void lpc24xx_ssp_interrupt(void *arg)
+{
+  lpc24xx_ssp_bus *bus;
+  volatile lpc24xx_ssp *regs;
+
+  bus = arg;
+  regs = bus->regs;
+
+  while (true) {
+    if (lpc24xx_ssp_do_tx_and_rx(bus, regs, regs->sr)) {
+      --bus->msg_todo;
+
+      if (bus->msg_todo > 0) {
+        ++bus->msg;
+
+        if (!lpc24xx_ssp_msg_setup(bus, bus->msg)) {
+          break;
+        }
+      } else {
+        lpc24xx_ssp_done(bus, 0);
+        break;
+      }
+    } else {
+      break;
+    }
+  }
+}
+
+static int lpc24xx_ssp_transfer(
+  spi_bus *base,
+  const spi_ioc_transfer *msgs,
+  uint32_t msg_count
+)
+{
+  lpc24xx_ssp_bus *bus;
+
+  if (msg_count == 0) {
+    return 0;
   }
 
-  /* Set DMA support status and parameter */
-  lpc24xx_ssp_dma_data.status = LPC24XX_SSP_DMA_WAIT;
-  lpc24xx_ssp_dma_data.done = done;
-  lpc24xx_ssp_dma_data.n = n;
-  lpc24xx_ssp_dma_data.arg = arg;
+  bus = (lpc24xx_ssp_bus *) base;
+  bus->msg = msgs;
+  bus->msg_todo = msg_count;
+  lpc24xx_ssp_start(bus, msgs);
+  rtems_binary_semaphore_wait(&bus->sem);
 
-  /* Enable DMA on SSP */
-  ssp->dmacr = SSP_DMACR_RXDMAE | SSP_DMACR_TXDMAE;
+  return bus->msg_error;
+}
 
-  /* Receive */
-  if (in != NULL) {
-    receive_channel->desc.dest = (uint32_t) in;
-  } else {
-    receive_channel->desc.dest = (uint32_t) &lpc24xx_ssp_trash;
-    di = 0;
+static void lpc24xx_ssp_destroy(spi_bus *base)
+{
+  lpc24xx_ssp_bus *bus;
+  rtems_status_code sc;
+
+  bus = (lpc24xx_ssp_bus *) base;
+
+  sc = rtems_interrupt_handler_remove(
+    bus->irq,
+    lpc24xx_ssp_interrupt,
+    bus
+  );
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  /* Disable SSP module */
+  bus->regs->cr1 = 0;
+
+  sc = lpc24xx_module_disable(bus->module);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  rtems_binary_semaphore_destroy(&bus->sem);
+  spi_bus_destroy_and_free(&bus->base);
+}
+
+static int lpc24xx_ssp_setup(spi_bus *base)
+{
+  lpc24xx_ssp_bus *bus;
+
+  bus = (lpc24xx_ssp_bus *) base;
+
+  if (bus->base.bits_per_word != 8) {
+    return -EINVAL;
   }
-  receive_channel->desc.src = (uint32_t) &ssp->dr;
-  receive_channel->desc.lli = 0;
-  receive_channel->desc.ctrl = SET_GPDMA_CH_CTRL_TSZ(0, n)
-    | SET_GPDMA_CH_CTRL_SBSZ(0, GPDMA_CH_CTRL_BSZ_4)
-    | SET_GPDMA_CH_CTRL_DBSZ(0, GPDMA_CH_CTRL_BSZ_4)
-    | SET_GPDMA_CH_CTRL_SW(0, GPDMA_CH_CTRL_W_8)
-    | SET_GPDMA_CH_CTRL_DW(0, GPDMA_CH_CTRL_W_8)
-    | GPDMA_CH_CTRL_ITC
-    | di;
-  receive_channel->cfg = SET_GPDMA_CH_CFG_SRCPER(0, GPDMA_CH_CFG_PER_SSP1_RX)
-    | SET_GPDMA_CH_CFG_FLOW(0, GPDMA_CH_CFG_FLOW_PER_TO_MEM_DMA)
-    | GPDMA_CH_CFG_IE
-    | GPDMA_CH_CFG_ITC
-    | GPDMA_CH_CFG_EN;
 
-  /* Transmit */
-  if (out != NULL) {
-    transmit_channel->desc.src = (uint32_t) out;
-  } else {
-    transmit_channel->desc.src = (uint32_t) &e->idle_char;
-    si = 0;
+  return lpc24xx_ssp_do_setup(bus, bus->base.speed_hz, bus->base.mode);
+}
+
+static int lpc24xx_ssp_init(lpc24xx_ssp_bus *bus)
+{
+  rtems_status_code sc;
+
+  sc = lpc24xx_module_enable(bus->module, LPC24XX_MODULE_PCLK_DEFAULT);
+  _Assert(sc == RTEMS_SUCCESSFUL);
+  (void) sc;
+
+  /* Disable SSP module */
+  bus->regs->cr1 = 0;
+
+  sc = rtems_interrupt_handler_install(
+    bus->irq,
+    "SSP",
+    RTEMS_INTERRUPT_UNIQUE,
+    lpc24xx_ssp_interrupt,
+    bus
+  );
+  if (sc != RTEMS_SUCCESSFUL) {
+    return EAGAIN;
   }
-  transmit_channel->desc.dest = (uint32_t) &ssp->dr;
-  transmit_channel->desc.lli = 0;
-  transmit_channel->desc.ctrl = SET_GPDMA_CH_CTRL_TSZ(0, n)
-    | SET_GPDMA_CH_CTRL_SBSZ(0, GPDMA_CH_CTRL_BSZ_4)
-    | SET_GPDMA_CH_CTRL_DBSZ(0, GPDMA_CH_CTRL_BSZ_4)
-    | SET_GPDMA_CH_CTRL_SW(0, GPDMA_CH_CTRL_W_8)
-    | SET_GPDMA_CH_CTRL_DW(0, GPDMA_CH_CTRL_W_8)
-    | GPDMA_CH_CTRL_ITC
-    | si;
-  transmit_channel->cfg = SET_GPDMA_CH_CFG_DESTPER(0, GPDMA_CH_CFG_PER_SSP1_TX)
-    | SET_GPDMA_CH_CFG_FLOW(0, GPDMA_CH_CFG_FLOW_MEM_TO_PER_DMA)
-    | GPDMA_CH_CFG_IE
-    | GPDMA_CH_CFG_ITC
-    | GPDMA_CH_CFG_EN;
+
+  rtems_binary_semaphore_init(&bus->sem, "SSP");
+
+  /* Initialize SSP module */
+  bus->regs->dmacr = 0;
+  bus->regs->imsc = 0;
+  bus->regs->cpsr = 2;
+  bus->regs->cr0 = SET_SSP_CR0_DSS(0, 0x7);
+  bus->regs->cr1 = SSP_CR1_SSE;
 
   return 0;
 }
 
-static int lpc24xx_ssp_read(rtems_libi2c_bus_t *bus, unsigned char *in, int n)
-{
-  return lpc24xx_ssp_read_write(bus, in, NULL, n);
-}
-
-static int lpc24xx_ssp_write(
-  rtems_libi2c_bus_t *bus,
-  unsigned char *out,
-  int n
+static int spi_bus_register_lpc24xx_ssp(
+  const char *bus_path,
+  const lpc24xx_ssp_config *config
 )
 {
-  return lpc24xx_ssp_read_write(bus, NULL, out, n);
+  lpc24xx_ssp_bus *bus;
+  int eno;
+
+  bus = (lpc24xx_ssp_bus *) spi_bus_alloc_and_init(sizeof(*bus));
+  if (bus == NULL) {
+    return -1;
+  }
+
+  bus->base.max_speed_hz = LPC24XX_PCLK / 2;
+  bus->base.bits_per_word = 8;
+  bus->base.speed_hz = bus->base.max_speed_hz;
+  bus->regs = config->regs;
+  bus->module = config->module;
+  bus->irq = config->irq;
+
+  eno = lpc24xx_ssp_init(bus);
+  if (eno != 0) {
+    (*bus->base.destroy)(&bus->base);
+    rtems_set_errno_and_return_minus_one(eno);
+  }
+
+  bus->base.transfer = lpc24xx_ssp_transfer;
+  bus->base.destroy = lpc24xx_ssp_destroy;
+  bus->base.setup = lpc24xx_ssp_setup;
+
+  return spi_bus_register(&bus->base, bus_path);
 }
 
-static int lpc24xx_ssp_ioctl(rtems_libi2c_bus_t *bus, int cmd, void *arg)
+int lpc24xx_register_ssp_0(void)
 {
-  int rv = -1;
-  const rtems_libi2c_tfr_mode_t *tm = (const rtems_libi2c_tfr_mode_t *) arg;
-  rtems_libi2c_read_write_t *rw = (rtems_libi2c_read_write_t *) arg;
-  rtems_libi2c_read_write_async_t *rwa =
-    (rtems_libi2c_read_write_async_t *) arg;
+  static const lpc24xx_ssp_config config = {
+    .regs = (volatile lpc24xx_ssp *) SSP0_BASE_ADDR,
+    .module = LPC24XX_MODULE_SSP_0,
+    .irq = LPC24XX_IRQ_SPI_SSP_0
+  };
 
-  switch (cmd) {
-    case RTEMS_LIBI2C_IOCTL_READ_WRITE:
-      rv = lpc24xx_ssp_read_write(bus, rw->rd_buf, rw->wr_buf, rw->byte_cnt);
-      break;
-    case RTEMS_LIBI2C_IOCTL_READ_WRITE_ASYNC:
-      rv = lpc24xx_ssp_read_write_async(
-        bus,
-        rwa->rd_buf,
-        rwa->wr_buf,
-        rwa->byte_cnt,
-        rwa->done,
-        rwa->arg
-      );
-      break;
-    case RTEMS_LIBI2C_IOCTL_SET_TFRMODE:
-      rv = lpc24xx_ssp_set_transfer_mode(bus, tm);
-      break;
-    default:
-      rv = -RTEMS_NOT_DEFINED;
-      break;
-  }
-
-  return rv;
+  return spi_bus_register_lpc24xx_ssp(
+    LPC24XX_SSP_0_BUS_PATH,
+    &config
+  );
 }
 
-static const rtems_libi2c_bus_ops_t lpc24xx_ssp_ops = {
-  .init = lpc24xx_ssp_init,
-  .send_start = lpc24xx_ssp_send_start,
-  .send_stop = lpc24xx_ssp_send_stop,
-  .send_addr = lpc24xx_ssp_send_addr,
-  .read_bytes = lpc24xx_ssp_read,
-  .write_bytes = lpc24xx_ssp_write,
-  .ioctl = lpc24xx_ssp_ioctl
-};
-
-static lpc24xx_ssp_bus_entry lpc24xx_ssp_bus_table [LPC24XX_SSP_NUMBER] = {
-  {
-    /* SSP 0 */
-    .bus = {
-      .ops = &lpc24xx_ssp_ops,
-      .size = sizeof(lpc24xx_ssp_bus_entry)
-    },
-    .regs = (volatile lpc24xx_ssp *) SSP0_BASE_ADDR,
-    .clock = 0,
-    .idle_char = 0xffffffff
-  }, {
-    /* SSP 1 */
-    .bus = {
-      .ops = &lpc24xx_ssp_ops,
-      .size = sizeof(lpc24xx_ssp_bus_entry)
-    },
+int lpc24xx_register_ssp_1(void)
+{
+  static const lpc24xx_ssp_config config = {
     .regs = (volatile lpc24xx_ssp *) SSP1_BASE_ADDR,
-    .clock = 0,
-    .idle_char = 0xffffffff
-  }
-};
+    .module = LPC24XX_MODULE_SSP_1,
+    .irq = LPC24XX_IRQ_SSP_1
+  };
 
-rtems_libi2c_bus_t * const lpc24xx_ssp_0 =
-  (rtems_libi2c_bus_t *) &lpc24xx_ssp_bus_table [0];
+  return spi_bus_register_lpc24xx_ssp(
+    LPC24XX_SSP_2_BUS_PATH,
+    &config
+  );
+}
 
-rtems_libi2c_bus_t * const lpc24xx_ssp_1 =
-  (rtems_libi2c_bus_t *) &lpc24xx_ssp_bus_table [1];
+#ifdef ARM_MULTILIB_ARCH_V7M
+int lpc24xx_register_ssp_2(void)
+{
+  static const lpc24xx_ssp_config config = {
+    .regs = (volatile lpc24xx_ssp *) SSP2_BASE_ADDR,
+    .module = LPC24XX_MODULE_SSP_2,
+    .irq = LPC24XX_IRQ_SSP_2
+  };
+
+  return spi_bus_register_lpc24xx_ssp(
+    LPC24XX_SSP_2_BUS_PATH,
+    &config
+  );
+}
+#endif
