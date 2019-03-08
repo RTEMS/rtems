@@ -6,7 +6,9 @@
 
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
+include: testdata/small-memory-testsuite.tcfg
 
+exclude: cxx_iostream
 exclude: fileio
 exclude: iostream
 exclude: flashdisk01
