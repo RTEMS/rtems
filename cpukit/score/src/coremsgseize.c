@@ -1,7 +1,7 @@
 /**
  *  @file
  *
- *  @brief Size a Message from the Message Queue
+ *  @brief Seize a Message from the Message Queue
  *  @ingroup ScoreMessageQueue
  */
 
