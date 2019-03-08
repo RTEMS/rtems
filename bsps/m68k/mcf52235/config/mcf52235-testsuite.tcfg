@@ -6,7 +6,9 @@
 
 include: testdata/disable-iconv-tests.tcfg
 include: testdata/disable-jffs2-tests.tcfg
+include: testdata/small-memory-testsuite.tcfg
 
+exclude: block08
 exclude: capture
 exclude: cdtest
 exclude: dl05
@@ -24,6 +26,10 @@ exclude: monitor02
 exclude: paranoia
 exclude: pppd
 exclude: spstkalloc02
+exclude: sptimecounter02
+exclude: sptimecounter03
 exclude: syscall01
+exclude: tmcontext01
 exclude: tmfine01
+exclude: top
 exclude: utf8proc01
