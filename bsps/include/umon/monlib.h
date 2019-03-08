@@ -48,6 +48,14 @@ extern "C" {
 #endif
 
 /**
+ *  @defgroup shared_umon MicroMonitor
+ *
+ *  @ingroup RTEMSBSPsShared
+ *
+ *  @brief shared_umon MicroMonitor (uMon) Bootloader Support
+ */
+
+/**
  *  @defgroup shared_monlib MONLIB Support
  *
  *  @ingroup shared_umon
