@@ -23,6 +23,8 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
+#include <rtems/printer.h>
+
 /**
  * Set to 1 to build trace support in to the RTL code.
  */
@@ -98,7 +100,9 @@ rtems_rtl_trace_mask rtems_rtl_trace_clear_mask (rtems_rtl_trace_mask mask);
  * Add shell trace shell command.
  */
 #if RTEMS_RTL_TRACE
-int rtems_rtl_trace_shell_command (int argc, char *argv[]);
+int rtems_rtl_trace_shell_command (const rtems_printer* printer,
+				   int                  argc,
+				   char*                argv[]);
 #endif
 
 #ifdef __cplusplus

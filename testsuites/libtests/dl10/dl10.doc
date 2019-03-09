@@ -1,0 +1,22 @@
+# Copyright (c) 2019 Chris Johns <chrisj@rtems.org>
+#
+# The license and distribution terms for this file may be
+# found in the file LICENSE in this distribution or at
+# http://www.rtems.org/license/LICENSE.
+#
+
+This file describes the directives and concepts tested by this test set.
+
+test set name: dl10
+
+directives:
+
+  dlopen
+  dlinfo
+  dlsym
+  dlclose
+
+concepts:
+
++ Load modules from archives that have duplicate symbols.
++ Wait a shell prompt to test the RTL commands.

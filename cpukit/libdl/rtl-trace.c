@@ -54,7 +54,9 @@ rtems_rtl_trace_clear_mask (rtems_rtl_trace_mask mask)
 }
 
 int
-rtems_rtl_trace_shell_command (int argc, char *argv[])
+rtems_rtl_trace_shell_command (const rtems_printer* printer,
+                               int                  argc,
+                               char*                argv[])
 {
   const char* table[] =
   {
@@ -71,7 +73,9 @@ rtems_rtl_trace_shell_command (int argc, char *argv[])
     "unresolved",
     "cache",
     "archives",
-    "dependency"
+    "archive-syms",
+    "dependency",
+    "bit-alloc"
   };
 
   rtems_rtl_trace_mask set_value = 0;
@@ -87,15 +91,15 @@ rtems_rtl_trace_shell_command (int argc, char *argv[])
       switch (argv[arg][1])
       {
         case 'h':
-          printf ("usage: %s [-hl] [set/clear] [flags]\n", argv[0]);
+          rtems_printf (printer, "usage: %s [-hl] [set/clear] [flags]\n", argv[0]);
           return 0;
         case 'l':
-          printf ("%s: valid flags to set or clear are:\n", argv[0]);
+          rtems_printf (printer, "%s: valid flags to set or clear are:\n", argv[0]);
           for (t = 0; t < (sizeof (table) / sizeof (const char*)); t++)
-            printf ("  %s\n", table[t]);
+            rtems_printf (printer, "  %s\n", table[t]);
           return 0;
         default:
-          printf ("error: unknown option\n");
+          rtems_printf (printer, "error: unknown option\n");
           return 1;
       }
     }

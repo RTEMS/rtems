@@ -19,6 +19,7 @@ user-input: fileio
 user-input: monitor
 user-input: termios
 user-input: top
+user-input: dl10
 
 #
 # Benchmarks

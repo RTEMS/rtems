@@ -16,6 +16,8 @@
 #if !defined (_RTEMS_RTL_SHELL_H_)
 #define _RTEMS_RTL_SHELL_H_
 
+#include <rtems/print.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -29,6 +31,32 @@ extern "C" {
  * @return int The exit code.
  */
 int rtems_rtl_shell_command (int argc, char* argv[]);
+
+/**
+ * List object files.
+ */
+int rtems_rtl_shell_list (const rtems_printer* printer, int argc, char* argv[]);
+
+/**
+ * Symbols.
+ */
+int rtems_rtl_shell_sym (const rtems_printer* printer, int argc, char* argv[]);
+
+/**
+ * Object files.
+ */
+int rtems_rtl_shell_object (const rtems_printer* printer, int argc, char* argv[]);
+
+
+/**
+ * Archive files.
+ */
+int rtems_rtl_shell_archive (const rtems_printer* printer, int argc, char* argv[]);
+
+/**
+ * Call text symbol.
+ */
+int rtems_rtl_shell_call (const rtems_printer* printer, int argc, char* argv[]);
 
 #ifdef __cplusplus
 }

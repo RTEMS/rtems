@@ -34,12 +34,6 @@
 #include "rtl-error.h"
 
 /**
- * The archive symbols threshold after which a sorted symbol table is
- * created.
- */
-#define RTEMS_RTL_ARCHIVE_SYMBOLS_SORT (8)
-
-/**
  * Archive headers.
  */
 #define RTEMS_RTL_AR_IDENT      "!<arch>\n"
@@ -223,8 +217,8 @@ rtems_rtl_archive_find (rtems_rtl_archives* archives,
  *
  * The symbol search is performance sensitive. The archive's symbol table being
  * searched is the symbol table in the archive created by ranlib. This table is
- * not sorted so a sorted table of pointered to the symbols is generated after
- * loading if there are enough symbols. For small symbol tables the searc is
+ * not sorted so a sorted table of pointeres to the symbols is generated after
+ * loading if there are enough symbols. For small symbol tables the search is
  * linear. The entire table is held in memory. At the time of writing this code
  * the symbol table for the SPARC architecture's libc is 16k.
  *
@@ -286,7 +280,7 @@ rtems_rtl_archive_obj_finder (rtems_rtl_archive* archive, void* data)
         {
           search->archive = archive;
           search->offset =
-            rtems_rtl_archive_read_32 (symbols->base + (entry * 4));
+            rtems_rtl_archive_read_32 (symbols->base + ((entry + 1) * 4));
           return false;
         }
         symbol += strlen (symbol) + 1;
@@ -647,8 +641,8 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
                 offset, size);
 
       /*
-       * Reallocation the symbol table memory if it has changed size.
-       * Note, an updated library may have te same symbol table.
+       * Reallocate the symbol table memory if it has changed size.
+       * Note, an updated library may have the same symbol table.
        */
       if (archive->symbols.size != size)
       {
@@ -697,28 +691,25 @@ rtems_rtl_archive_loader (rtems_rtl_archive* archive, void* data)
       archive->symbols.names += (archive->symbols.entries + 1) * 4;
 
       /*
-       * Created a sorted symbol table if over the threshold number of symbols.
+       * Create a sorted symbol table.
        */
-      if (archive->symbols.entries > RTEMS_RTL_ARCHIVE_SYMBOLS_SORT)
+      size = archive->symbols.entries * sizeof (rtems_rtl_archive_symbol);
+      archive->symbols.symbols =
+        rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL, size, true);
+      if (archive->symbols.symbols != NULL)
       {
-        size = archive->symbols.entries * sizeof (rtems_rtl_archive_symbol);
-        archive->symbols.symbols =
-          rtems_rtl_alloc_new (RTEMS_RTL_ALLOC_SYMBOL, size, true);
-        if (archive->symbols.symbols != NULL)
+        const char* symbol = archive->symbols.names;
+        size_t      e;
+        for (e = 0; e < archive->symbols.entries; ++e)
         {
-          const char* symbol = archive->symbols.names;
-          size_t      e;
-          for (e = 0; e < archive->symbols.entries; ++e)
-          {
-            archive->symbols.symbols[e].entry = e + 1;
-            archive->symbols.symbols[e].label = symbol;
-            symbol += strlen (symbol) + 1;
-          }
-          qsort (archive->symbols.symbols,
-                 archive->symbols.entries,
-                 sizeof (rtems_rtl_archive_symbol),
-                 rtems_rtl_archive_symbol_compare);
+          archive->symbols.symbols[e].entry = e + 1;
+          archive->symbols.symbols[e].label = symbol;
+          symbol += strlen (symbol) + 1;
         }
+        qsort (archive->symbols.symbols,
+               archive->symbols.entries,
+               sizeof (rtems_rtl_archive_symbol),
+               rtems_rtl_archive_symbol_compare);
       }
 
       if (rtems_rtl_trace (RTEMS_RTL_TRACE_ARCHIVES))

@@ -649,6 +649,58 @@ CLEANFILES += dl09.pre dl09-sym.o dl09-o1.o dl09-o2.o dl09-o3.o dl09-o4.o \
 endif
 endif
 
+if DLTESTS
+if TEST_dl10
+lib_tests += dl10
+lib_screens += dl10/dl10.scn
+lib_docs += dl10/dl10.doc
+dl10_SOURCES = dl10/init.c dl10/dl-load.c dl10-tar.c dl10-tar.h
+dl10_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_dl10) $(support_includes)
+dl10/init.c: dl10-tar.o
+dl10.pre: $(dl10_OBJECTS) $(dl10_DEPENDENCIES)
+	@rm -f dl10.pre dl10-syms.o
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+dl10-o1.o: dl10/dl-o1.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-o2.o: dl10/dl-o2.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-o3.o: dl10/dl-o3.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-o4.o: dl10/dl-o4.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-o5.o: dl10/dl-o5.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-o6.o: dl10/dl-o6.c Makefile
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+etc/libdl-dl10.conf:
+	mkdir etc; \
+	echo "#" > $@
+	echo "  # blah blah" >>  $@
+	echo "/libdl10*.a" >> $@
+	echo "" >> $@
+noinst_LIBRARIES = libdl10_1.a libdl10_2.a
+libdl10_1_a_SOURCES = dl10-o2.c dl10-o4.c
+libdl10_2_a_SOURCES = dl10-o3.c dl10-o5.c dl10-o6.c
+dl10.tar: etc/libdl-dl10.conf dl10-o1.o libdl10_1.a libdl10_2.a
+	@rm -f $@
+	$(AM_V_GEN)$(PAX) -w -f $@ $+
+dl10-tar.c: dl10.tar
+	$(AM_V_GEN)$(BIN2C) -C $< $@
+dl10-tar.h: dl10.tar
+	$(AM_V_GEN)$(BIN2C) -H $< $@
+dl10-tar.o: dl10-tar.c dl10-tar.h
+	$(AM_V_CC)$(COMPILE) -c -o $@ $<
+dl10-sym.o: dl10.pre
+	$(AM_V_GEN)rtems-syms -e -c "$(CFLAGS)" -o $@ $<
+dl10$(EXEEXT):  $(dl10_OBJECTS) $(dl10_DEPENDENCIES) dl10-sym.o
+	@rm -f $@
+	$(AM_V_CCLD)$(LINK.c) $(CPU_CFLAGS) $(AM_CFLAGS) $(AM_LDFLAGS) -o $@ $+
+CLEANFILES += dl10.pre dl10-sym.o libdl10_1.a libdl10_2.a dl10-o1.o dl10-o2.o \
+		dl10-o3.o dl10-o4.o dl10-o5.o dl10-o6.o \
+		dl10.tar dl10-tar.h etc/libdl-dl10.conf
+endif
+endif
+
 if TEST_dumpbuf01
 lib_tests += dumpbuf01
 lib_screens += dumpbuf01/dumpbuf01.scn

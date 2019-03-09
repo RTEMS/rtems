@@ -31,6 +31,7 @@
 
 #include <rtems.h>
 #include <rtems/chain.h>
+#include <rtems/printer.h>
 
 #ifdef __cplusplus
 extern "C" {

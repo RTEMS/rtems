@@ -1,0 +1,41 @@
+*** BEGIN OF TEST libdl (RTL) 10 ***
+*** TEST VERSION: 5.0.0.c1aa9685eaa9d5d321c965a2aa44f868b7834c23
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_NETWORKING RTEMS_POSIX_API
+*** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB 98588a55961a92f5d27bfd756dfc9e31b2b1bf98, Newlib 3e24fbf6f)
+RTL (libdl) commands: dl, rtl
+
+
+RTEMS Shell on /dev/foobar. Use 'help' to list commands.
+SHLL [/] # rtl obj load dl10-o1.o
+SHLL [/] # rtl list -l
+ dl10-o1.o
+  unresolved    : 0
+  users         : 1
+  references    : 0
+  symbols       : 9
+  symbol memory : 281
+ /libdl10_1.a:dl10-o2.o
+  unresolved    : 0
+  users         : 0
+  references    : 1
+  symbols       : 6
+  symbol memory : 186
+ /libdl10_2.a:dl10-o5.o
+  unresolved    : 0
+  users         : 0
+  references    : 2
+  symbols       : 6
+  symbol memory : 214
+ /libdl10_2.a:dl10-o3.o
+  unresolved    : 0
+  users         : 0
+  references    : 1
+  symbols       : 1
+  symbol memory : 34
+ /libdl10_1.a:dl10-o4.o
+  unresolved    : 0
+  users         : 0
+  references    : 1
+  symbols       : 7
+  symbol memory : 250
