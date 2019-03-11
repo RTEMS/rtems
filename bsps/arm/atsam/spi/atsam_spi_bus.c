@@ -447,9 +447,8 @@ static void atsam_spi_destroy(spi_bus *base)
   PMC_DisablePeripheral(bus->spi_id);
 
   rtems_cache_coherent_free(bus->dma_bufs);
-
-  spi_bus_destroy_and_free(&bus->base);
   rtems_binary_semaphore_destroy(&bus->sem);
+  spi_bus_destroy_and_free(&bus->base);
 }
 
 static int atsam_spi_setup(spi_bus *base)
