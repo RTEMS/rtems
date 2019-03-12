@@ -5,3 +5,7 @@
 #
 
 include: testdata/small-memory-testsuite.tcfg
+
+exclude: pppd
+# psxaio02 when debug
+exclude: psxaio02
