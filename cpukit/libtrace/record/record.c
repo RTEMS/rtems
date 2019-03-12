@@ -115,9 +115,9 @@ void rtems_record_drain( rtems_record_drain_visitor visitor, void *arg )
 
     control->Header[ 0 ].event = RTEMS_RECORD_PROCESSOR;
     control->Header[ 0 ].data = cpu_index;
-    control->Header[ 1 ].event = RTEMS_RECORD_TAIL;
+    control->Header[ 1 ].event = RTEMS_RECORD_PER_CPU_TAIL;
     control->Header[ 1 ].data = tail;
-    control->Header[ 2 ].event = RTEMS_RECORD_HEAD;
+    control->Header[ 2 ].event = RTEMS_RECORD_PER_CPU_HEAD;
     control->Header[ 2 ].data = head;
     ( *visitor )( control->Header, RTEMS_ARRAY_SIZE( control->Header ), arg );
 

@@ -111,8 +111,8 @@ static const rtems_record_item expected_items_7[ITEM_COUNT] = {
 
 static const rtems_record_item expected_items_8[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_TAIL), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_HEAD), .data = 3 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 0 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_HEAD), .data = 3 },
   { .event = TE(2, UE(1)), .data = 3 },
   { .event = TE(5, UE(4)), .data = 6 },
   { .event = TE(8, UE(7)), .data = 9 }
@@ -120,16 +120,16 @@ static const rtems_record_item expected_items_8[] = {
 
 static const rtems_record_item expected_items_9[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_TAIL), .data = 3 },
-  { .event = TE(0, RTEMS_RECORD_HEAD), .data = 5 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 3 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_HEAD), .data = 5 },
   { .event = TE(11, UE(10)), .data = 12 },
   { .event = TE(14, UE(13)), .data = 15 }
 };
 
 static const rtems_record_item expected_items_10[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_TAIL), .data = 5 },
-  { .event = TE(0, RTEMS_RECORD_HEAD), .data = 8 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 5 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_HEAD), .data = 8 },
   { .event = TE(17, UE(16)), .data = 18 },
   { .event = TE(20, UE(19)), .data = 21 },
   { .event = TE(23, UE(22)), .data = 24 }
@@ -137,15 +137,15 @@ static const rtems_record_item expected_items_10[] = {
 
 static const rtems_record_item expected_items_11[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_TAIL), .data = 8 },
-  { .event = TE(0, RTEMS_RECORD_HEAD), .data = 9 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 8 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_HEAD), .data = 9 },
   { .event = TE(26, UE(25)), .data = 27 }
 };
 
 static const rtems_record_item expected_items_12[] = {
   { .event = TE(0, RTEMS_RECORD_PROCESSOR), .data = 0 },
-  { .event = TE(0, RTEMS_RECORD_TAIL), .data = 9 },
-  { .event = TE(0, RTEMS_RECORD_HEAD), .data = 15 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_TAIL), .data = 9 },
+  { .event = TE(0, RTEMS_RECORD_PER_CPU_HEAD), .data = 15 },
   { .event = TE(38, UE(37)), .data = 39 },
   { .event = TE(41, UE(40)), .data = 42 },
   { .event = TE(44, UE(43)), .data = 45 }
@@ -552,7 +552,7 @@ static int connect_client(void)
 
   n = read(fd, &item, sizeof(item));
   rtems_test_assert(n == (ssize_t) sizeof(item));
-  rtems_test_assert(item.event == TE(0, RTEMS_RECORD_COUNT));
+  rtems_test_assert(item.event == TE(0, RTEMS_RECORD_PER_CPU_COUNT));
   rtems_test_assert(item.data == ITEM_COUNT);
 
   n = read(fd, &item, sizeof(item));

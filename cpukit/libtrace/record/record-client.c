@@ -104,7 +104,7 @@ static void check_overflow(
   call_handler(
     ctx,
     bt,
-    RTEMS_RECORD_OVERFLOW,
+    RTEMS_RECORD_PER_CPU_OVERFLOW,
     new_content - capacity
   );
 }
@@ -142,15 +142,15 @@ static rtems_record_client_status visit( rtems_record_client_context *ctx )
       per_cpu->uptime.bt += (int64_t) data << 32;
       time = 0;
       break;
-    case RTEMS_RECORD_TAIL:
+    case RTEMS_RECORD_PER_CPU_TAIL:
       per_cpu->tail[ per_cpu->index ] = (uint32_t) data;
       break;
-    case RTEMS_RECORD_HEAD:
+    case RTEMS_RECORD_PER_CPU_HEAD:
       per_cpu->head[ per_cpu->index ]= (uint32_t) data;
       per_cpu->index ^= 1;
       check_overflow( ctx, per_cpu, (uint32_t) data );
       break;
-    case RTEMS_RECORD_COUNT:
+    case RTEMS_RECORD_PER_CPU_COUNT:
       ctx->count = (uint32_t) data;
       break;
     case RTEMS_RECORD_FREQUENCY:
