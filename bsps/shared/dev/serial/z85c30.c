@@ -456,6 +456,15 @@ Z85C30_STATIC int z85c30_set_attributes(
   baud_number = (uint32_t) rtems_termios_baud_to_number( baud_requested );
   _Assert( baud_number != 0 );
 
+  /*
+   * POSIX says baud rate of zero is a request to hang up or disconnect.
+   * This is not supported by this driver.
+   */
+  _Assert( baud_number != 0 );
+  if (baud_number == 0) {
+    return -1;
+  }
+
   ulBaudDivisor = Z85C30_Baud(
     (uint32_t) Console_Port_Tbl[minor]->ulClock,
     baud_number
