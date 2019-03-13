@@ -10,7 +10,7 @@ include: testdata/small-memory-testsuite.tcfg
 
 exclude: block08
 exclude: capture
-exclude: cxx_iostream
+exclude: iostream
 exclude: fileio
 exclude: flashdisk01
 exclude: fsdosfsname01
