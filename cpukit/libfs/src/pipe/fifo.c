@@ -149,18 +149,15 @@ static int pipe_new(
   pipe = *pipep;
   if (pipe == NULL) {
     err = pipe_alloc(&pipe);
-    if (err)
-      goto out;
+    if (err) {
+      pipe_unlock();
+      return err;
+    }
   }
 
   PIPE_LOCK(pipe);
 
-  if (*pipep == NULL) {
-    if (err)
-      pipe_free(pipe);
-    else
-      *pipep = pipe;
-  }
+  *pipep = pipe;
 
 out:
   pipe_unlock();
