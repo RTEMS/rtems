@@ -286,7 +286,7 @@ static struct editor *find_editor(struct env *env, char *filename) {
   struct editor *ed = env->current;
   struct editor *start = ed;
 
-  if (!realpath(filename, fn)) strcpy(fn, filename);
+  if (!realpath(filename, fn)) strncpy(fn, filename, FILENAME_MAX);
 
   do {
     if (strcmp(fn, ed->filename) == 0) return ed;
@@ -297,7 +297,7 @@ static struct editor *find_editor(struct env *env, char *filename) {
 
 static int new_file(struct editor *ed, char *filename) {
   if (*filename) {
-    strcpy(ed->filename, filename);
+    strncpy(ed->filename, filename, FILENAME_MAX);
   } else {
     sprintf(ed->filename, "Untitled-%d", ++ed->env->untitled);
     ed->newfile = 1;
@@ -1752,7 +1752,7 @@ static void read_from_stdin(struct editor *ed) {
     insert(ed, pos, (unsigned char*) buffer, n);
     pos += n;
   }
-  strcpy(ed->filename, "<stdin>");
+  strncpy(ed->filename, "<stdin>", FILENAME_MAX);
   ed->newfile = 1;
   ed->dirty = 0;
 }
@@ -1775,7 +1775,8 @@ static void save_editor(struct editor *ed) {
         return;
       }
     }
-    strcpy(ed->filename, (const char*) ed->env->linebuf);
+    strncpy(
+      ed->filename, (const char*) ed->env->linebuf, FILENAME_MAX);
     ed->newfile = 0;
   }
 
