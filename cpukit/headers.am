@@ -289,6 +289,7 @@ include_rtems_rtl_HEADERS += include/rtems/rtl/dlfcn-shell.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rap-shell.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rap.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-allocator.h
+include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-archive.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-fwd.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-indirect-ptr.h
 include_rtems_rtl_HEADERS += include/rtems/rtl/rtl-obj-cache.h
