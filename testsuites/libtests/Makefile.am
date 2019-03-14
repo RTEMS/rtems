@@ -1500,6 +1500,16 @@ top_SOURCES = top/init.c top/task1.c top/task2.c top/task3.c \
 top_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_top) $(support_includes)
 endif
 
+if TEST_ttest01
+lib_tests += ttest01
+lib_screens += ttest01/ttest01.scn
+lib_docs += ttest01/ttest01.doc
+ttest01_SOURCES = ttest01/init.c
+ttest01_SOURCES += ttest01/test-example.c
+ttest01_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_FLAGS_ttest01) \
+	$(support_includes)
+endif
+
 if TEST_tztest
 lib_tests += tztest
 lib_screens += tztest/tztest.scn

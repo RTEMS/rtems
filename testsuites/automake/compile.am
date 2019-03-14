@@ -11,6 +11,7 @@ STRIP = @STRIP@
 TEST_LD_FLAGS = -Wl,--wrap=printf -Wl,--wrap=puts -Wl,--wrap=putchar
 
 AM_CPPFLAGS = $(TEST_FLAGS) @RTEMS_CPPFLAGS@ @RTEMS_BSP_CPPFLAGS@
+AM_CPPFLAGS += -DT_FILE_NAME='"$(notdir $<)"'
 AM_CFLAGS   = $(TEST_C_FLAGS)
 AM_CXXFLAGS = $(TEST_CXX_FLAGS)
 

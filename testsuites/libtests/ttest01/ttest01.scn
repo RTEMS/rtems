@@ -1,0 +1,27 @@
+*** BEGIN OF TEST TTEST 1 ***
+*** TEST VERSION: 5.0.0.cfcc2cbf7aa4e6aeb6dca83d57cf2dae610d4d65
+*** TEST STATE: EXPECTED-PASS
+*** TEST BUILD: RTEMS_DEBUG RTEMS_NETWORKING RTEMS_POSIX_API RTEMS_SMP
+*** TEST TOOLS: 7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
+A:ttest01
+S:Platform:RTEMS
+S:Compiler:7.4.0 20181206 (RTEMS 5, RSB e0aec65182449a4e22b820e773087636edaf5b32, Newlib 1d35a003f)
+S:Version:5.0.0.cfcc2cbf7aa4e6aeb6dca83d57cf2dae610d4d65
+S:BSP:erc32
+S:RTEMS_DEBUG:1
+S:RTEMS_MULTIPROCESSING:0
+S:RTEMS_POSIX_API:1
+S:RTEMS_PROFILING:0
+S:RTEMS_SMP:1
+B:example
+P:0:0:UI1:test-example.c:5
+F:1:0:UI1:test-example.c:6:test fails
+F:*:0:UI1:test-example.c:8:quiet test fails
+P:2:0:UI1:test-example.c:9
+F:3:0:UI1:test-example.c:10:step test fails
+F:4:0:UI1:test-example.c:11:this is a format string
+E:example:N:5:F:4:D:0.001000
+Z:ttest01:C:1:N:5:F:4:D:0.003000
+Y:ReportHash:SHA256:4fe7850e583f4114c4c12b369da33809c35843b09c691e9a6c7d28e1a7cdbebd
+
+*** END OF TEST TTEST 1 ***
