@@ -17,7 +17,6 @@
  */
 
 #include <rtems/system.h>
-#include <rtems/asm.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/tls.h>
 #include <rtems/rtems/cache.h>
