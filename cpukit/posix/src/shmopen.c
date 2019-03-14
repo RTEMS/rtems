@@ -195,7 +195,8 @@ static inline POSIX_Shm_Control *shm_allocate(
 static inline bool shm_access_ok( POSIX_Shm_Control *shm, int oflag )
 {
   int flags;
-  if ( oflag & O_RDONLY ) {
+
+  if ( (oflag & O_ACCMODE) == O_RDONLY ) {
     flags = RTEMS_FS_PERMS_READ;
   } else {
     flags = RTEMS_FS_PERMS_WRITE;
@@ -286,7 +287,7 @@ int shm_open( const char *name, int oflag, mode_t mode )
   rtems_filesystem_location_add_to_mt_entry( &iop->pathinfo );
 
   flags = LIBIO_FLAGS_CLOSE_ON_EXEC;
-  if ( oflag & O_RDONLY ) {
+  if ( (oflag & O_ACCMODE) == O_RDONLY ) {
     flags |= LIBIO_FLAGS_READ;
   } else {
     flags |= LIBIO_FLAGS_READ_WRITE;
