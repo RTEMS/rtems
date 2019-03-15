@@ -137,6 +137,7 @@ int pthread_create(
         &schedparam
       );
       _Assert( error == 0 );
+      (void) error; /* error only used when debug enabled */
       break;
 
     case PTHREAD_EXPLICIT_SCHED:
