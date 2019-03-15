@@ -120,6 +120,15 @@ __rtems_entry_point:
  */
 
 enter_C_code:
+	/*
+	 * Initialize start stack.  The stacks are statically allocated and
+	 * properly aligned.
+	 */
+	LA	r1, _ISR_Stack_area_end
+	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
+	li	r0, 0
+	stw	r0, 0(r1)
+
 	bl	MMUon
 	bl      __eabi	/* setup EABI and SYSV environment */
 	bl	zero_bss
@@ -132,15 +141,6 @@ enter_C_code:
 	mr	r6,r28
 	mr	r7,r27
 	bl	save_boot_params
-
-	/*
-	 * Initialize start stack.  The stacks are statically allocated and
-	 * properly aligned.
-	 */
-	LA	r1, _ISR_Stack_area_end
-	subi	r1, r1, PPC_DEFAULT_CACHE_LINE_SIZE
-	li	r0, 0
-	stw	r0, 0(r1)
 
 	/*
 	 * We are now in a environment that is totally independent from
