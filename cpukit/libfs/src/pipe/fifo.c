@@ -158,8 +158,6 @@ static int pipe_new(
   PIPE_LOCK(pipe);
 
   *pipep = pipe;
-
-out:
   pipe_unlock();
   return err;
 }
