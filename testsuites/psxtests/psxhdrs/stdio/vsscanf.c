@@ -37,14 +37,15 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-int test( void );
+int test( int arg1, ... );
 
-int test( void )
+int test( int arg1, ... )
 {
   char *tokenstring = "15 12 14";
   va_list ap;
   int result;
 
+  va_start(ap, arg1);
   result = vsscanf( tokenstring, " %d %99s ", ap );
 
   return result;

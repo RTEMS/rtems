@@ -37,13 +37,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-int test( void );
+int test( int arg1, ... );
 
-int test( void )
+int test( int arg1, ... )
 {
   va_list ap;
   int result;
 
+  va_start(ap, arg1);
   result = vscanf( " %d %99s ", ap );
 
   return result;
