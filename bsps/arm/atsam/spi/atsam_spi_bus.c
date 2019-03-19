@@ -40,31 +40,25 @@
 
 #define MAX_SPI_FREQUENCY 50000000
 
-#define DMA_NR_DESC_PER_DIR 3
-#define DMA_DESC_ALLIGNMENT 4
-
-#define DMA_BUF_RX 0
-#define DMA_BUF_TX 1
-#define DMA_BUF_DIRS 2
-
-struct atsam_spi_xdma_buf {
-  LinkedListDescriporView0 desc[DMA_NR_DESC_PER_DIR];
-  uint8_t leadbuf[CPU_CACHE_LINE_BYTES];
-  uint8_t trailbuf[CPU_CACHE_LINE_BYTES];
-};
+typedef struct {
+  volatile LinkedListDescriporView0 tx_desc;
+  volatile LinkedListDescriporView0 rx_desc[3];
+  uint8_t rx_bounce_head_buf[CPU_CACHE_LINE_BYTES];
+  uint8_t rx_bounce_tail_buf[CPU_CACHE_LINE_BYTES];
+} atsam_spi_dma;
 
 typedef struct {
   spi_bus base;
   rtems_binary_semaphore sem;
   const spi_ioc_transfer *msg_current;
   uint32_t msg_todo;
-  int msg_error;
+  int error;
   Spi *spi_regs;
   uint32_t dma_tx_channel;
   uint32_t dma_rx_channel;
-  struct atsam_spi_xdma_buf *dma_bufs;
-  size_t leadbuf_rx_buffered_len;
-  size_t trailbuf_rx_buffered_len;
+  atsam_spi_dma *dma;
+  size_t rx_bounce_head_len;
+  size_t rx_bounce_tail_len;
   int transfer_in_progress;
   bool chip_select_decode;
   uint8_t spi_id;
@@ -165,103 +159,116 @@ static void atsam_reset_spi(atsam_spi_bus *bus)
   bus->spi_regs->SPI_CR = SPI_CR_SPIEN;
 }
 
-static void atsam_spi_check_alignment_and_set_up_dma_descriptors(
-  atsam_spi_bus *bus,
-  struct atsam_spi_xdma_buf *buf,
-  const uint8_t *start,
-  size_t len,
-  bool tx
+static void atsam_spi_copy_rx_bounce_bufs(
+  const atsam_spi_bus *bus,
+  const spi_ioc_transfer *msg
 )
 {
-  LinkedListDescriporView0 *curdesc = buf->desc;
-  size_t misaligned_begin;
-  size_t misaligned_end;
-  size_t len_main;
-  const uint8_t *start_main;
-  const uint8_t *start_trail;
-
-  /* Check alignments. */
-  if (len < CPU_CACHE_LINE_BYTES) {
-    misaligned_begin = len;
-    misaligned_end = 0;
-    len_main = 0;
-  } else {
-    misaligned_begin = ((uint32_t) start) % CPU_CACHE_LINE_BYTES;
-    misaligned_end = (((uint32_t) start) + len) % CPU_CACHE_LINE_BYTES;
-    len_main = len - misaligned_begin - misaligned_end;
-  }
-  start_main = start + misaligned_begin;
-  start_trail = start_main + len_main;
-
-  /* Store length for copying data back. */
-  if (!tx) {
-    bus->leadbuf_rx_buffered_len = misaligned_begin;
-    bus->trailbuf_rx_buffered_len = misaligned_end;
+  if (bus->rx_bounce_head_len > 0) {
+    atsam_copy_from_io(
+      msg->rx_buf,
+      bus->dma->rx_bounce_head_buf,
+      bus->rx_bounce_head_len
+    );
   }
 
-  /* Handle misalignment on begin. */
-  if (misaligned_begin != 0) {
-    if (tx) {
-      atsam_copy_to_io(buf->leadbuf, start, misaligned_begin);
-    }
-    curdesc->mbr_nda = (uint32_t) (&curdesc[1]);
-    curdesc->mbr_ta = (uint32_t) buf->leadbuf;
-    curdesc->mbr_ubc = misaligned_begin;
-  }
-
-  /* Main part */
-  if (len_main > 0) {
-    curdesc->mbr_ubc |= tx ? XDMA_UBC_NSEN_UPDATED : XDMA_UBC_NDEN_UPDATED;
-    curdesc->mbr_ubc |= XDMA_UBC_NVIEW_NDV0;
-    curdesc->mbr_ubc |= XDMA_UBC_NDE_FETCH_EN;
-    ++curdesc;
-
-    curdesc->mbr_nda = (uint32_t) (&curdesc[1]);
-    curdesc->mbr_ta = (uint32_t) start_main;
-    curdesc->mbr_ubc = len_main;
-    if (tx) {
-      rtems_cache_flush_multiple_data_lines(start_main, len_main);
-    } else {
-      rtems_cache_invalidate_multiple_data_lines(start_main, len_main);
-    }
-  }
-
-  /* Handle misalignment on end */
-  if (misaligned_end != 0) {
-    curdesc->mbr_ubc |= tx ? XDMA_UBC_NSEN_UPDATED : XDMA_UBC_NDEN_UPDATED;
-    curdesc->mbr_ubc |= XDMA_UBC_NVIEW_NDV0;
-    curdesc->mbr_ubc |= XDMA_UBC_NDE_FETCH_EN;
-    ++curdesc;
-
-    if (tx) {
-      atsam_copy_to_io(buf->trailbuf, start_trail, misaligned_end);
-    }
-    curdesc->mbr_nda = 0;
-    curdesc->mbr_ta = (uint32_t) buf->trailbuf;
-    curdesc->mbr_ubc = misaligned_end;
-    curdesc->mbr_ubc |= XDMA_UBC_NDE_FETCH_DIS;
+  if (bus->rx_bounce_tail_len > 0) {
+    atsam_copy_from_io(
+      msg->rx_buf + msg->len - bus->rx_bounce_tail_len,
+      bus->dma->rx_bounce_tail_buf,
+      bus->rx_bounce_tail_len
+    );
   }
 }
 
-static void atsam_spi_copy_back_rx_after_dma_transfer(
-  atsam_spi_bus *bus
+static void atsam_spi_setup_rx_dma_desc(
+  atsam_spi_bus *bus,
+  atsam_spi_dma *dma,
+  const uint8_t *buf,
+  size_t n
 )
 {
-  if (bus->leadbuf_rx_buffered_len != 0) {
-    atsam_copy_from_io(
-      bus->msg_current->rx_buf,
-      bus->dma_bufs[DMA_BUF_RX].leadbuf,
-      bus->leadbuf_rx_buffered_len
-    );
+  volatile LinkedListDescriporView0 *desc;
+  uintptr_t m;
+  uintptr_t b;
+  uintptr_t a;
+  uintptr_t ae;
+  uintptr_t e;
+
+  desc = &dma->rx_desc[0];
+  m = CPU_CACHE_LINE_BYTES - 1;
+  b = (uintptr_t) buf;
+  e = b + n;
+  a = (b + m) & ~m;
+  ae = e & ~m;
+
+  if (n <= m) {
+    bus->rx_bounce_head_len = n;
+    bus->rx_bounce_tail_len = 0;
+
+    desc[0].mbr_ta = (uint32_t) dma->rx_bounce_head_buf;
+    desc[0].mbr_ubc = n;
+  } else {
+    bus->rx_bounce_head_len = a - b;
+    bus->rx_bounce_tail_len = e & m;
+
+    if ((b & m) == 0) {
+      if ((n & m) == 0) {
+        desc[0].mbr_ta = a;
+        desc[0].mbr_ubc = n;
+      } else {
+        desc[0].mbr_ta = a;
+        desc[0].mbr_ubc = (ae - a) | XDMA_UBC_NDEN_UPDATED
+          | XDMA_UBC_NVIEW_NDV0
+          | XDMA_UBC_NDE_FETCH_EN;
+        desc[1].mbr_ta = (uint32_t) dma->rx_bounce_tail_buf;
+        desc[1].mbr_ubc = n & m;
+      }
+    } else {
+      if ((e & m) == 0) {
+        desc[0].mbr_ta = (uint32_t) dma->rx_bounce_head_buf;
+        desc[0].mbr_ubc = (a - b) | XDMA_UBC_NDEN_UPDATED
+          | XDMA_UBC_NVIEW_NDV0
+          | XDMA_UBC_NDE_FETCH_EN;
+        desc[1].mbr_ta = a;
+        desc[1].mbr_ubc = ae - a;
+      } else if ((ae - a) == 0) {
+        bus->rx_bounce_head_len = n;
+        bus->rx_bounce_tail_len = 0;
+
+        desc[0].mbr_ta = (uint32_t) dma->rx_bounce_head_buf;
+        desc[0].mbr_ubc = n;
+      } else {
+        desc[0].mbr_ta = (uint32_t) dma->rx_bounce_head_buf;
+        desc[0].mbr_ubc = (a - b) | XDMA_UBC_NDEN_UPDATED
+          | XDMA_UBC_NVIEW_NDV0
+          | XDMA_UBC_NDE_FETCH_EN;
+        desc[1].mbr_ta = a;
+        desc[1].mbr_ubc = (ae - a) | XDMA_UBC_NDEN_UPDATED
+          | XDMA_UBC_NVIEW_NDV0
+          | XDMA_UBC_NDE_FETCH_EN;
+        desc[2].mbr_ta = (uint32_t) dma->rx_bounce_tail_buf;
+        desc[2].mbr_ubc = e - ae;
+      }
+    }
+
+    rtems_cache_invalidate_multiple_data_lines((void *) a, ae - a);
   }
-  if (bus->trailbuf_rx_buffered_len != 0) {
-    atsam_copy_from_io(
-      bus->msg_current->rx_buf + bus->msg_current->len -
-        bus->trailbuf_rx_buffered_len,
-      bus->dma_bufs[DMA_BUF_RX].trailbuf,
-      bus->trailbuf_rx_buffered_len
-    );
-  }
+}
+
+static void atsam_spi_setup_tx_dma_desc(
+  atsam_spi_dma *dma,
+  const uint8_t *buf,
+  size_t n
+)
+{
+  volatile LinkedListDescriporView0 *desc;
+
+  desc = &dma->tx_desc;
+  desc->mbr_ta = (uint32_t) buf;
+  desc->mbr_ubc = n;
+
+  rtems_cache_flush_multiple_data_lines(buf, n);
 }
 
 static void atsam_spi_start_dma_transfer(
@@ -269,27 +276,21 @@ static void atsam_spi_start_dma_transfer(
   const spi_ioc_transfer *msg
 )
 {
-  Xdmac *pXdmac = XDMAC;
+  atsam_spi_dma *dma;
+  Xdmac *pXdmac;
 
-  atsam_spi_check_alignment_and_set_up_dma_descriptors(
-    bus,
-    &bus->dma_bufs[DMA_BUF_RX],
-    msg->rx_buf,
-    msg->len,
-    false
-  );
-  atsam_spi_check_alignment_and_set_up_dma_descriptors(
-    bus,
-    &bus->dma_bufs[DMA_BUF_TX],
-    msg->tx_buf,
-    msg->len,
-    true
-  );
+  dma = bus->dma;
+  pXdmac = XDMAC;
+
+  bus->transfer_in_progress = 2;
+
+  atsam_spi_setup_rx_dma_desc(bus, dma, msg->rx_buf, msg->len);
+  atsam_spi_setup_tx_dma_desc(dma, msg->tx_buf, msg->len);
 
   XDMAC_SetDescriptorAddr(
     pXdmac,
     bus->dma_rx_channel,
-    (uint32_t) bus->dma_bufs[DMA_BUF_RX].desc,
+    (uint32_t) &dma->rx_desc[0],
     0
   );
   XDMAC_SetDescriptorControl(
@@ -302,7 +303,7 @@ static void atsam_spi_start_dma_transfer(
   XDMAC_SetDescriptorAddr(
     pXdmac,
     bus->dma_tx_channel,
-    (uint32_t) bus->dma_bufs[DMA_BUF_TX].desc,
+    (uint32_t) &dma->tx_desc,
     0
   );
   XDMAC_SetDescriptorControl(
@@ -326,7 +327,7 @@ static int atsam_check_configure_spi(atsam_spi_bus *bus, const spi_ioc_transfer 
       || msg->cs != bus->base.cs
   ) {
     if (
-      (msg->bits_per_word != 8 && msg->bits_per_word != 16)
+      msg->bits_per_word != 8
         || msg->mode > 3
         || msg->speed_hz > bus->base.max_speed_hz
     ) {
@@ -347,8 +348,6 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
 {
   uint32_t msg_todo = bus->msg_todo;
 
-  bus->transfer_in_progress = 2;
-
   if (msg_todo > 0) {
     const spi_ioc_transfer *msg;
     int error;
@@ -358,7 +357,7 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
     if (error == 0) {
       atsam_spi_start_dma_transfer(bus, msg);
     } else {
-      bus->msg_error = error;
+      bus->error = error;
       atsam_spi_wakeup_task(bus);
     }
   } else {
@@ -366,9 +365,18 @@ static void atsam_spi_setup_transfer(atsam_spi_bus *bus)
   }
 }
 
-static void atsam_spi_dma_callback(uint32_t channel, void *arg)
+static void atsam_spi_dma_callback(uint32_t ch, void *arg, uint32_t status)
 {
-  atsam_spi_bus *bus = (atsam_spi_bus *)arg;
+  atsam_spi_bus *bus;
+  uint32_t dma_errors;
+
+  bus = arg;
+  dma_errors = XDMAC_CIE_DIE | XDMAC_CIE_FIE | XDMAC_CIE_RBIE | XDMAC_CIE_WBIE
+    | XDMAC_CIE_ROIE;
+
+  if ((status & dma_errors) != 0) {
+    bus->error = -EIO;
+  }
 
   --bus->transfer_in_progress;
 
@@ -393,12 +401,16 @@ static void atsam_spi_dma_callback(uint32_t channel, void *arg)
       bus->spi_regs->SPI_CR = SPI_CR_LASTXFER;
     }
 
-    atsam_spi_copy_back_rx_after_dma_transfer(bus);
+    atsam_spi_copy_rx_bounce_bufs(bus, msg);
 
     bus->msg_current = msg + 1;
     --bus->msg_todo;
 
-    atsam_spi_setup_transfer(bus);
+    if (bus->error == 0) {
+      atsam_spi_setup_transfer(bus);
+    } else {
+      atsam_spi_wakeup_task(bus);
+    }
   }
 }
 
@@ -412,10 +424,10 @@ static int atsam_spi_transfer(
 
   bus->msg_current = msgs;
   bus->msg_todo = msg_count;
-  bus->msg_error = 0;
+  bus->error = 0;
   atsam_spi_setup_transfer(bus);
   rtems_binary_semaphore_wait(&bus->sem);
-  return bus->msg_error;
+  return bus->error;
 }
 
 
@@ -446,7 +458,7 @@ static void atsam_spi_destroy(spi_bus *base)
   SPI_Disable(bus->spi_regs);
   PMC_DisablePeripheral(bus->spi_id);
 
-  rtems_cache_coherent_free(bus->dma_bufs);
+  rtems_cache_coherent_free(bus->dma);
   rtems_binary_semaphore_destroy(&bus->sem);
   spi_bus_destroy_and_free(&bus->base);
 }
@@ -457,7 +469,7 @@ static int atsam_spi_setup(spi_bus *base)
 
   if (
     bus->base.speed_hz > MAX_SPI_FREQUENCY
-      || (bus->base.bits_per_word != 8 && bus->base.bits_per_word != 16)
+      || bus->base.bits_per_word != 8
   ) {
       return -EINVAL;
   }
@@ -467,18 +479,21 @@ static int atsam_spi_setup(spi_bus *base)
 
 static void atsam_spi_init_xdma(atsam_spi_bus *bus)
 {
+  atsam_spi_dma *dma;
   sXdmadCfg cfg;
   uint32_t xdmaInt;
   uint8_t channel;
   eXdmadRC rc;
   uint32_t xdma_cndc;
 
-  bus->dma_bufs = rtems_cache_coherent_allocate(
-    DMA_BUF_DIRS * sizeof(*(bus->dma_bufs)),
-    DMA_DESC_ALLIGNMENT,
-    0
-  );
-  assert(bus->dma_bufs != NULL);
+  dma = rtems_cache_coherent_allocate(sizeof(*dma), 0, 0);
+  assert(dma != NULL);
+  bus->dma = dma;
+
+  dma->tx_desc.mbr_nda = 0;
+  dma->rx_desc[0].mbr_nda = (uint32_t) &dma->rx_desc[1];
+  dma->rx_desc[1].mbr_nda = (uint32_t) &dma->rx_desc[2];
+  dma->rx_desc[2].mbr_nda = 0;
 
   bus->dma_tx_channel = XDMAD_AllocateChannel(
     &XDMAD_Instance,
@@ -517,13 +532,8 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
   assert(rc == XDMAD_OK);
 
   /* Put all relevant interrupts on */
-  xdmaInt =  (
-    XDMAC_CIE_BIE |
-    XDMAC_CIE_DIE |
-    XDMAC_CIE_FIE |
-    XDMAC_CIE_RBIE |
-    XDMAC_CIE_WBIE |
-    XDMAC_CIE_ROIE);
+  xdmaInt = XDMAC_CIE_LIE | XDMAC_CIE_DIE | XDMAC_CIE_FIE | XDMAC_CIE_RBIE
+    | XDMAC_CIE_WBIE | XDMAC_CIE_ROIE;
 
   /* Setup RX */
   memset(&cfg, 0, sizeof(cfg));
@@ -549,7 +559,7 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
     bus->dma_rx_channel,
     &cfg,
     xdma_cndc,
-    (uint32_t) bus->dma_bufs[DMA_BUF_RX].desc,
+    (uint32_t) &bus->dma->rx_desc[0],
     xdmaInt
   );
   assert(rc == XDMAD_OK);
@@ -578,7 +588,7 @@ static void atsam_spi_init_xdma(atsam_spi_bus *bus)
     bus->dma_tx_channel,
     &cfg,
     xdma_cndc,
-    (uint32_t) bus->dma_bufs[DMA_BUF_TX].desc,
+    (uint32_t) &bus->dma->tx_desc,
     xdmaInt
   );
   assert(rc == XDMAD_OK);
