@@ -107,7 +107,7 @@ typedef enum _XdmadProgState {
 } eXdmadProgState;
 
 /** DMA transfer callback */
-typedef void (*XdmadTransferCallback)(uint32_t Channel, void *pArg);
+typedef void (*XdmadTransferCallback)(uint32_t Channel, void *pArg, uint32_t status);
 
 /** DMA driver channel */
 typedef struct _XdmadChannel {
@@ -239,7 +239,7 @@ extern eXdmadRC XDMAD_IsTransferDone(sXdmad *pXdmad, uint32_t dwChannel);
 
 extern eXdmadRC XDMAD_StartTransfer(sXdmad *pXdmad, uint32_t dwChannel);
 
-extern void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg);
+extern void XDMAD_DoNothingCallback(uint32_t Channel, void *pArg, uint32_t status);
 
 extern eXdmadRC XDMAD_SetCallback(sXdmad *pXdmad,
 								   uint32_t dwChannel,
