@@ -149,53 +149,132 @@ typedef void ( *Objects_Thread_queue_Extract_callout )(
 #endif
 
 /**
- *  The following defines the structure for the information used to
- *  manage each class of objects.
+ * @brief The information structure used to manage each API class of objects.
+ *
+ * If objects for the API class are configured, an instance of this structure
+ * is statically allocated and pre-initialized by OBJECTS_INFORMATION_DEFINE()
+ * through <rtems/confdefs.h>.  The RTEMS library contains a statically
+ * allocated and pre-initialized instance for each API class providing zero
+ * objects, see OBJECTS_INFORMATION_DEFINE_ZERO().
  */
 typedef struct {
-  /** This is the maximum valid id of this object class. */
-  Objects_Id        maximum_id;
-  /** This points to the table of local objects. */
+  /**
+   * @brief This is the maximum valid ID of this object API class.
+   *
+   * This member is statically initialized and provides also the object API,
+   * class and multiprocessing node information.
+   *
+   * It is used by _Objects_Get() to validate an object ID.
+   */
+  Objects_Id maximum_id;
+
+  /**
+   * @brief This points to the table of local object control blocks.
+   *
+   * This member is statically initialized.  In case objects for this API class
+   * are configured, it initially points to a statically allocated table
+   * defined by <rtems/confdefs.h>.  _Objects_Extend_information() may replace
+   * the table with a larger one on demand.
+   */
   Objects_Control **local_table;
-  /** This is the number of objects on the Inactive list. */
-  Objects_Maximum   inactive;
-  /** This is the number of objects in a block. */
-  Objects_Maximum   objects_per_block;
-  /** This is the size in bytes of each object instance. */
-  uint16_t          object_size;
+
+  /**
+   * @brief This is the number of object control blocks on the inactive chain.
+   *
+   * This member is only used if unlimited objects are configured for this API
+   * class.  It is used to trigger calls to _Objects_Shrink_information() in
+   * _Objects_Free().
+   */
+  Objects_Maximum inactive;
+
+  /**
+   * @brief This is the number of object control blocks in an allocation block.
+   *
+   * This member is statically initialized and read-only.  It is only used if
+   * unlimited objects are configured for this API class.  It defines the count
+   * of object control blocks used to extend and shrink this API class.
+   */
+  Objects_Maximum objects_per_block;
+
+  /**
+   * @brief This is the size in bytes of each object control block.
+   *
+   * This member is statically initialized and read-only.
+   */
+  uint16_t object_size;
+
   /**
    * @brief This is the maximum length of names.
    *
-   * A length of zero indicates that this object has a no string name
+   * This member is statically initialized and read-only.  A length of zero
+   * indicates that this API class has a no string name
    * (OBJECTS_NO_STRING_NAME).
    */
-  uint16_t          name_length;
-  /** This is the chain of inactive control blocks. */
-  Chain_Control     Inactive;
-  /** This is the number of inactive objects per block. */
-  Objects_Maximum  *inactive_per_block;
-  /** This is a table to the chain of inactive object memory blocks. */
+  uint16_t name_length;
+
+  /**
+   * @brief This is the chain of inactive object control blocks.
+   *
+   * This member is statically initialized to an empty chain.  The
+   * _Objects_Initialize_information() will populate this chain with the
+   * object control blocks initially configured.
+   */
+  Chain_Control Inactive;
+
+  /**
+   * @brief This is the number of inactive object control blocks per allocation
+   * block.
+   *
+   * It is only used if unlimited objects are configured for this API class.
+   */
+  Objects_Maximum *inactive_per_block;
+
+  /**
+   * @brief This is a table to allocation blocks of object control blocks.
+   *
+   * It is only used if unlimited objects are configured for this API class.
+   * The object control blocks extend and shrink by these allocation blocks.
+   */
   Objects_Control **object_blocks;
-  Objects_Control  *initial_objects;
-  #if defined(RTEMS_MULTIPROCESSING)
-    /** This is this object class' method called when extracting a thread. */
-    Objects_Thread_queue_Extract_callout extract;
 
-    /**
-     * @brief The global objects of this object information sorted by object
-     * identifier.
-     */
-    RBTree_Control   Global_by_id;
+  /**
+   * @brief This points to the object control blocks initially available.
+   *
+   * This member is statically initialized and read-only.  In case objects for
+   * this API class are configured, it points to a statically allocated table
+   * of object control blocks defined by <rtems/confdefs.h>, otherwise this
+   * member is NULL.
+   */
+  Objects_Control *initial_objects;
 
-    /**
-     * @brief The global objects of this object information sorted by object
-     * name.
-     *
-     * Objects with the same name are sorted according to their identifier.
-     */
-    RBTree_Control   Global_by_name;
-  #endif
-}   Objects_Information;
+#if defined(RTEMS_MULTIPROCESSING)
+  /**
+   * @brief This method is used by _Thread_queue_Extract_with_proxy().
+   *
+   * This member is statically initialized and read-only.
+   */
+  Objects_Thread_queue_Extract_callout extract;
+
+  /**
+   * @brief The global objects of this object information sorted by object ID.
+   *
+   * This member is statically initialized to an empty tree.  The
+   * _Objects_MP_Open() and _Objects_MP_Close() functions alter this tree.
+   */
+  RBTree_Control Global_by_id;
+
+  /**
+   * @brief The global objects of this object information sorted by object
+   * name.
+   *
+   * This member is statically initialized to an empty tree.  The
+   * _Objects_MP_Open() and _Objects_MP_Close() functions alter this tree.
+   *
+   * Objects with the same name are sorted according to their ID.
+   */
+  RBTree_Control Global_by_name;
+#endif
+} Objects_Information;
 
 #if defined(RTEMS_MULTIPROCESSING)
 #define OBJECTS_INFORMATION_MP( name, extract ) \
