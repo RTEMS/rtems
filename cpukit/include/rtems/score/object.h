@@ -30,6 +30,8 @@ extern "C" {
 /**
  * @defgroup Score SuperCore
  *
+ * @ingroup RTEMSInternal
+ *
  * @brief Provides services for all APIs.
  */
 /**@{*/
