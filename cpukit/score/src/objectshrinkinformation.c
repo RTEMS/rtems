@@ -2,7 +2,6 @@
  * @file
  *
  * @brief Shrink an Object Class Information Record
- * @ingroup ScoreCPU
  */
 
 /*

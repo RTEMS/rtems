@@ -40,7 +40,7 @@
 /**
  * @defgroup ScoreCPUARM ARM Specific Support
  *
- * @ingroup ScoreCPU
+ * @ingroup RTEMSScoreCPU
  *
  * @brief ARM specific support.
  */
@@ -96,7 +96,7 @@
 #endif /* defined(ARM_MULTILIB_ARCH_V4) */
 
 /**
- * @addtogroup ScoreCPU
+ * @addtogroup RTEMSScoreCPU
  */
 /**@{**/
 
@@ -206,7 +206,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreCPU
+ * @addtogroup RTEMSScoreCPU
  */
 /**@{**/
 

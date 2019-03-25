@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
+ * @ingroup RTEMSScoreCPU
  *
  * @brief ARM architecture support implementation.
  */

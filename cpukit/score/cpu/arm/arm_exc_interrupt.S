@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
+ * @ingroup RTEMSScoreCPU
  *
  * @brief ARM interrupt exception prologue and epilogue.
  */

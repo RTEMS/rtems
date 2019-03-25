@@ -46,7 +46,7 @@
 /**
  * @defgroup ScoreCPUARMASM ARM Assembler Support
  *
- * @ingroup ScoreCPU
+ * @ingroup RTEMSScoreCPU
  *
  * @brief ARM Assembler Support
  */

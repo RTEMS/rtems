@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup ScoreCPU
+ * @ingroup RTEMSScoreCPU
  *
  * @brief OR1K exception support implementation.
  */

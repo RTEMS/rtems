@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /**
- * @addtogroup ScoreCPU
+ * @addtogroup RTEMSScoreCPU
  */
 /**@{**/
 

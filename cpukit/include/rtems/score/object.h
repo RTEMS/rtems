@@ -37,7 +37,7 @@ extern "C" {
 /**@{*/
 
 /**
- * @defgroup ScoreCPU CPU Architecture Support
+ * @defgroup RTEMSScoreCPU CPU Architecture Support
  *
  * @ingroup Score
  *
