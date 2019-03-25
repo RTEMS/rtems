@@ -1902,6 +1902,11 @@ libjffs2_a_CPPFLAGS =
 libjffs2_a_CPPFLAGS += $(AM_CPPFLAGS)
 libjffs2_a_CPPFLAGS += -I$(srcdir)/libfs/src/jffs2/include
 
+project_lib_LIBRARIES += libmghttpd.a
+
+libmghttpd_a_SOURCES =
+libmghttpd_a_SOURCES += mghttpd/mongoose.c
+
 project_lib_LIBRARIES += libz.a
 
 libz_a_SOURCES =
@@ -1952,15 +1957,6 @@ libpppd_a_SOURCES += pppd/rtemspppd.c
 libpppd_a_SOURCES += pppd/sys-rtems.c
 libpppd_a_SOURCES += pppd/upap.c
 libpppd_a_SOURCES += pppd/utils.c
-
-if HAS_PTHREADS
-
-project_lib_LIBRARIES += libmghttpd.a
-
-libmghttpd_a_SOURCES =
-libmghttpd_a_SOURCES += mghttpd/mongoose.c
-
-endif
 
 endif
 
