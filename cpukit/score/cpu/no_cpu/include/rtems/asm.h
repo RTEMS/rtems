@@ -29,9 +29,9 @@
 #define _RTEMS_ASM_H
 
 /**
- *  @defgroup no_cpuAsm Address Incompatible Flavors Problems
+ *  @defgroup RTEMSScoreCPUExampleASM Example Assembler Support
  *
- *  @ingroup no_cpu
+ *  @ingroup RTEMSScoreCPUExample
  */
 /**@{*/
 

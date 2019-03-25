@@ -18,6 +18,16 @@
 #include <rtems/score/cpu.h>
 
 /**
+ * @defgroup RTEMSScoreCPUExample Example
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief Example CPU Architecture Support.
+ *
+ * @{
+ */
+
+/**
  * @brief The size of the CPU specific per-CPU control.
  *
  * This define must be visible to assember files since it is used to derive
@@ -129,5 +139,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */
