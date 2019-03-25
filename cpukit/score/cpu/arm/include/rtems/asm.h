@@ -44,9 +44,9 @@
 #include <rtems/score/percpu.h>
 
 /**
- * @defgroup ScoreCPUARMASM ARM Assembler Support
+ * @defgroup RTEMSScoreCPUARMASM ARM Assembler Support
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUARM
  *
  * @brief ARM Assembler Support
  */

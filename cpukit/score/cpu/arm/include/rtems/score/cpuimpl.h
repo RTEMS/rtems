@@ -17,6 +17,16 @@
 
 #include <rtems/score/cpu.h>
 
+/**
+ * @defgroup RTEMSScoreCPUARM ARM
+ *
+ * @ingroup RTEMSScoreCPU
+ *
+ * @brief ARM Architecture Support
+ *
+ * @{
+ */
+
 #define CPU_PER_CPU_CONTROL_SIZE 0
 
 #ifdef ARM_MULTILIB_ARCH_V4
@@ -121,5 +131,7 @@ RTEMS_INLINE_ROUTINE void _CPU_Instruction_no_operation( void )
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPUIMPL_H */

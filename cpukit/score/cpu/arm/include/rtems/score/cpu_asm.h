@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUARM
  *
  * @brief ARM Assembler Support API
  */

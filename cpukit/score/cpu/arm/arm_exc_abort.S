@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @ingroup RTEMSScoreCPUARM
  *
  * @brief ARM data and prefetch abort exception prologue and epilogue.
  */

@@ -25,9 +25,9 @@
 #define _RTEMS_SCORE_PARAVIRT_H
 
 /**
- * @defgroup ParavirtARM Paravirtualization ARM Support
+ * @defgroup RTEMSScoreCPUARMParavirt ARM Paravirtualization Support
  *
- * @ingroup Score
+ * @ingroup RTEMSScoreCPUARM
  *
  * This handler encapulates the functionality (primarily conditional
  * feature defines) related to paravirtualization on the ARM.
@@ -38,19 +38,9 @@
  *   - Interrupt enable/disable support using the MSR must be disabled
  *     and replaced with BSP provided methods which are adapted to the
  *     hosting environment.
+ *
+ * @{
  */
-
-#ifndef ASM
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif  /* !ASM */
 
 /**
  * In a paravirtualized environment, RTEMS executes in user space
@@ -71,5 +61,7 @@ extern "C" {
  * - Opcode_2 = 4: This register is privileged R/W accessible only.
  */
 #define ARM_DISABLE_THREAD_ID_REGISTER_USE
+
+/** @} */
 
 #endif

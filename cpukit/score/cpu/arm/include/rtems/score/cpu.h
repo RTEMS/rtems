@@ -35,16 +35,13 @@
 #endif
 #include <rtems/score/arm.h>
 
-#if defined(ARM_MULTILIB_ARCH_V4)
-
 /**
- * @defgroup ScoreCPUARM ARM Specific Support
+ * @addtogroup RTEMSScoreCPUARM
  *
- * @ingroup RTEMSScoreCPU
- *
- * @brief ARM specific support.
+ * @{
  */
-/**@{**/
+
+#if defined(ARM_MULTILIB_ARCH_V4)
 
 #if defined(__thumb__) && !defined(__thumb2__)
   #define ARM_SWITCH_REGISTERS uint32_t arm_switch_reg
@@ -91,14 +88,7 @@
 
 /** @} */
 
-/** @} */
-
 #endif /* defined(ARM_MULTILIB_ARCH_V4) */
-
-/**
- * @addtogroup RTEMSScoreCPU
- */
-/**@{**/
 
 /*
  *  The ARM uses the PIC interrupt model.
@@ -167,8 +157,6 @@
 
 #define CPU_MAXIMUM_PROCESSORS 32
 
-/** @} */
-
 #ifdef ARM_MULTILIB_HAS_THREAD_ID_REGISTER
   #define ARM_CONTEXT_CONTROL_THREAD_ID_OFFSET 44
 #endif
@@ -204,11 +192,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @addtogroup RTEMSScoreCPU
- */
-/**@{**/
 
 typedef struct {
 #if defined(ARM_MULTILIB_ARCH_V4)
@@ -595,13 +578,6 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
-/** @} */
-
-/**
- * @addtogroup ScoreCPUARM
- */
-/**@{**/
-
 #if defined(ARM_MULTILIB_ARCH_V4)
 
 typedef enum {
@@ -688,8 +664,6 @@ void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 void _ARM_Exception_default( CPU_Exception_frame *frame );
 
-/** @} */
-
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;
 
@@ -698,5 +672,7 @@ typedef uintptr_t CPU_Uint32ptr;
 #endif
 
 #endif /* ASM */
+
+/** @} */
 
 #endif /* _RTEMS_SCORE_CPU_H */
