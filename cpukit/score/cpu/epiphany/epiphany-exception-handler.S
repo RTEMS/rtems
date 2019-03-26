@@ -1,7 +1,7 @@
 /**
  * @file
  *
- * @ingroup RTEMSScoreCPU
+ * @addtogroup RTEMSScoreCPU
  *
  * @brief Epiphany exception support implementation.
  */

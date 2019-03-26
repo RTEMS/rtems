@@ -46,6 +46,11 @@ extern "C" {
 #include <stdint.h>
 #include <stdio.h> /* for printk */
 #endif
+    
+/**
+ * @addtogroup RTEMSScoreCPUEpiphany
+ */
+/**@{**/
 
 /* conditional compilation parameters */
 
@@ -699,3 +704,5 @@ typedef uintptr_t CPU_Uint32ptr;
 #endif
 
 #endif
+
+/**@}*/
