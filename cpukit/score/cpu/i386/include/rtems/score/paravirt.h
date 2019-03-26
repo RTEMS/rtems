@@ -25,10 +25,12 @@
 #define _RTEMS_SCORE_PARAVIRT_H
 
 /**
- * @defgroup Paravirti386 Paravirtualization i386 Support
+ * @defgroup RTEMSScoreCPUi386Paravirt i386 Paravirtualization Support
  *
- * @ingroup Score
+ * @ingroup RTEMSScoreCPUi386
  *
+ * @{
+ * 
  * This handler encapulates the functionality (primarily conditional
  * feature defines) related to paravirtualization on the i386.
  *
@@ -39,6 +41,7 @@
  *     and replaced with BSP provided methods which are adapted to the
  *     hosting environment.
  */
+
 
 #ifndef ASM
 
@@ -61,3 +64,5 @@ extern "C" {
 #define I386_DISABLE_INLINE_ISR_DISABLE_ENABLE
 
 #endif
+
+/** @} */

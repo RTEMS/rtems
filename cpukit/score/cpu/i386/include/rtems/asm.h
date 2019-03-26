@@ -39,6 +39,15 @@
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/i386.h>
 
+/**
+ * @defgroup RTEMSScoreCPUi386ASM i386 Assembler Support
+ *
+ * @ingroup RTEMSScoreCPUi386
+ *
+ * @brief i386 Assembler Support
+ */
+/**@{**/
+
 /*
  *  Recent versions of GNU cpp define variables which indicate the
  *  need for underscores and percents.  If not using GNU cpp or
@@ -136,5 +145,7 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
+
+/**@}**/
 
 #endif

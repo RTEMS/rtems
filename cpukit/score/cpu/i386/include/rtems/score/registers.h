@@ -3,6 +3,8 @@
  * 
  * @brief Intel CPU Constants and Definitions
  * 
+ * @addtogroup RTEMSScoreCPUi386
+ * 
  * This file contains definition and constants related to Intel Cpu
  */
 

@@ -16,6 +16,15 @@
  *  Applications must not include this file directly.
  */
 
+/**
+ * @defgroup RTEMSScoreCPUi386Interrupt Processor Dependent Interrupt Management
+ *
+ * @ingroup RTEMSScoreCPUi386
+ *
+ * @brief i386 Interrupt Management
+ */
+/**@{**/
+
 #ifndef _RTEMS_SCORE_INTERRUPTS_H
 #define _RTEMS_SCORE_INTERRUPTS_H
 
@@ -81,5 +90,6 @@ uint32_t i386_get_interrupt_level( void );
 
 /** @} */
 
+/**@}**/
 #endif
 #endif

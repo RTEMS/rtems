@@ -32,6 +32,15 @@ extern "C" {
 #include <rtems/score/paravirt.h>
 #endif
 #include <rtems/score/i386.h>
+    
+/**
+ * @defgroup ScoreCPUi386 i386 Specific Support
+ *
+ * @ingroup RTEMSScoreCPUi386
+ *
+ * @brief i386 specific support.
+ */
+/**@{**/
 
 /* conditional compilation parameters */
 
@@ -648,6 +657,8 @@ static inline CPU_Counter_ticks _CPU_Counter_difference(
 {
   return second - first;
 }
+
+/**@}**/
 
 /** Type that can store a 32-bit integer or a pointer. */
 typedef uintptr_t CPU_Uint32ptr;

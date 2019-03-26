@@ -2,6 +2,8 @@
  * @file
  *
  * @brief Intel I386 CPU Dependent Source
+ * 
+ * @addtogroup RTEMSScoreCPUi386
  *
  * This include file contains information pertaining to the Intel
  * i386 processor.
