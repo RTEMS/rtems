@@ -231,7 +231,7 @@ extern "C" {
 #define CPU_STRUCTURE_ALIGNMENT RTEMS_ALIGNED( CPU_CACHE_LINE_BYTES )
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * The following defines the number of bits actually used in the
  * interrupt field of the task mode.  How those bits map to the
@@ -260,7 +260,9 @@ extern "C" {
 /* may need to put some structures here.  */
 
 /**
- * @defgroup CPUContext Processor Dependent Context Management
+ * @defgroup RTEMSScoreCPUExampleContext Processor Dependent Context Management
+ * 
+ * @ingroup RTEMSScoreCPUExample
  *
  * From the highest level viewpoint, there are 2 types of context to save.
  *
@@ -301,10 +303,11 @@ extern "C" {
  * XXX document implementation including references if appropriate
  * 
  */
-/**@{**/
+/** @{ **/
+/** @} */
 
 /**
- * @ingroup Management
+ * @addtogroup Management
  * This defines the minimal set of integer and processor state registers
  * that must be saved during a voluntary context switch from one thread
  * to another.
@@ -377,7 +380,7 @@ typedef struct {
 } Context_Control;
 
 /**
- * @ingroup Management
+ * @addtogroup Management
  *
  * This macro returns the stack pointer associated with @a _context.
  *
@@ -389,7 +392,7 @@ typedef struct {
   (_context)->stack_pointer
 
 /**
- * @ingroup Management
+ * @addtogroup Management
  * 
  * This defines the complete set of floating point registers that must
  * be saved during any context switch from one thread to another.
@@ -400,7 +403,7 @@ typedef struct {
 } Context_Control_fp;
 
 /**
- * @ingroup Management
+ * @addtogroup Management
  * 
  * This defines the set of integer and processor state registers that must
  * be saved during an interrupt.  This set does not include any which are
@@ -427,10 +430,10 @@ typedef struct {
  */
 extern Context_Control_fp _CPU_Null_fp_context;
 
-/** @} */
-
 /**
- * @defgroup CPUInterrupt Processor Dependent Interrupt Management
+ * @defgroup RTEMSScoreCPUExampleInterrupt Processor Dependent Interrupt Management
+ * 
+ * @ingroup RTEMSScoreCPUExample
  *
  * RTEMS supports a software managed interrupt stack.  The interrupt stacks
  * are statically allocated by <rtems/confdefs.h> and the switch is performed
@@ -456,7 +459,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 /* XXX: if needed, put more variables here */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * The size of the floating point context area.  On some CPUs this
  * will not be a "sizeof" because the format of the floating point
@@ -481,7 +484,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_MPCI_RECEIVE_SERVER_EXTRA_STACK 0
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This defines the number of entries in the _ISR_Vector_table managed by RTEMS
  * in case CPU_SIMPLE_VECTORED_INTERRUPTS is defined to TRUE.  It must be a
@@ -493,7 +496,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_INTERRUPT_NUMBER_OF_VECTORS      32
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This defines the highest interrupt vector number for this port in case
  * CPU_SIMPLE_VECTORED_INTERRUPTS is defined to TRUE.  It must be less than
@@ -505,7 +508,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER  (CPU_INTERRUPT_NUMBER_OF_VECTORS - 1)
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This is defined if the port has a special way to report the ISR nesting
  * level.  Most ports maintain the variable @a _ISR_Nest_level.
@@ -513,7 +516,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define CPU_PROVIDES_ISR_IS_IN_PROGRESS FALSE
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * Should be large enough to run all RTEMS tests.  This ensures
  * that a "reasonable" small application should not have any problems.
@@ -598,7 +601,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
  */
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * Support routine to initialize the RTEMS vector table after it is allocated.
  *
@@ -609,7 +612,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
 #define _CPU_Initialize_vectors()
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * Disable all interrupts for an RTEMS critical section.  The previous
  * level is returned in @a _isr_cookie.
@@ -626,7 +629,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
   }
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * Enable interrupts to the previous level (returned by _CPU_ISR_Disable).
  * This indicates the end of an RTEMS critical section.  The parameter
@@ -643,7 +646,7 @@ extern Context_Control_fp _CPU_Null_fp_context;
   }
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This temporarily restores the interrupt to @a _isr_cookie before immediately
  * disabling them again.  This is used to divide long RTEMS critical
@@ -675,7 +678,7 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
 }
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  *
  * This routine and @ref _CPU_ISR_Get_level
  * Map the interrupt level in task mode onto the hardware that the CPU
@@ -696,7 +699,7 @@ RTEMS_INLINE_ROUTINE bool _CPU_ISR_Is_enabled( uint32_t level )
   }
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * Return the current interrupt disable level for this task in
  * the format used by the interrupt level portion of the task mode.
@@ -714,7 +717,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Context handler macros */
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  *
  * @brief Destroys the context of the thread.
  *
@@ -733,7 +736,7 @@ uint32_t   _CPU_ISR_Get_level( void );
   }
 
 /**
- *  @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * Initialize the context to a state suitable for starting a
  * task after a context restore operation.  Generally, this
@@ -837,7 +840,9 @@ uint32_t   _CPU_ISR_Get_level( void );
 /* Bitfield handler macros */
 
 /**
- * @defgroup CPUBitfield Processor Dependent Bitfield Manipulation
+ * @defgroup RTEMSScoreCPUExampleBitfield Processor Dependent Bitfield Manipulation
+ * 
+ * @ingroup RTEMSScoreCPUExample
  *
  * This set of routines are used to implement fast searches for
  * the most important ready task.
@@ -943,7 +948,7 @@ uint32_t   _CPU_ISR_Get_level( void );
 #endif
 
 /**
- * @ingroup CPUBitfield
+ * @addtogroup RTEMSScoreCPUExampleBitfield
  * 
  * This routine translates the bit numbers returned by
  * @ref _CPU_Bitfield_Find_first_bit into something suitable for use as
@@ -979,7 +984,7 @@ void _CPU_Initialize(void);
 typedef void ( *CPU_ISR_raw_handler )( void );
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This routine installs a "raw" interrupt handler directly into the
  * processor's vector table.
@@ -1003,7 +1008,7 @@ void _CPU_ISR_install_raw_handler(
 typedef void ( *CPU_ISR_handler )( uint32_t );
 
 /**
- * @ingroup CPUInterrupt
+ * @addtogroup RTEMSScoreCPUExampleInterrupt
  * 
  * This routine installs an interrupt vector.
  *
@@ -1034,7 +1039,7 @@ void _CPU_ISR_install_vector(
 void *_CPU_Thread_Idle_body( uintptr_t ignored );
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * This routine switches from the run context to the heir context.
  *
@@ -1051,7 +1056,7 @@ void _CPU_Context_switch(
 );
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * This routine is generally used only to restart self in an
  * efficient manner.  It may simply be a label in @ref _CPU_Context_switch.
@@ -1069,7 +1074,7 @@ void _CPU_Context_restore(
 ) RTEMS_NO_RETURN;
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * This routine saves the floating point context passed to it.
  *
@@ -1088,7 +1093,7 @@ void _CPU_Context_save_fp(
 );
 
 /**
- * @ingroup CPUContext
+ * @addtogroup RTEMSScoreCPUExampleContext
  * 
  * This routine restores the floating point context passed to it.
  *
@@ -1129,8 +1134,16 @@ typedef struct {
 void _CPU_Exception_frame_print( const CPU_Exception_frame *frame );
 
 /**
- * @ingroup CPUEndian
+ * @defgroup RTEMSScoreCPUExampleCPUEndian CPUEndian
  * 
+ * @ingroup RTEMSScoreCPUExample
+ * 
+ * @brief CPUEndian
+ *
+ */
+/** @{ */
+
+/**
  * The following routine swaps the endian format of an unsigned int.
  * It must be static because it is referenced indirectly.
  *
@@ -1173,8 +1186,6 @@ static inline uint32_t CPU_swap_u32(
 }
 
 /**
- * @ingroup CPUEndian
- * 
  * This routine swaps a 16 bir quantity.
  *
  * @param[in] value is the value to be swapped
@@ -1182,6 +1193,8 @@ static inline uint32_t CPU_swap_u32(
  */
 #define CPU_swap_u16( value ) \
   (((value&0xff) << 8) | ((value >> 8)&0xff))
+  
+/** @} */
 
 /**
  * @brief Unsigned integer type for CPU counter values.
